@@ -65,14 +65,39 @@ namespace castor3d::shader
 		sdw::Array< sdw::UVec4 > m_data;
 	};
 
+	struct PipelineObjectsIds
+		: public sdw::StructInstance
+	{
+		C3D_API PipelineObjectsIds( sdw::ShaderWriter & writer
+			, ast::expr::ExprPtr expr
+			, bool enabled );
+		SDW_DeclStructInstance( C3D_API, PipelineObjectsIds );
+
+		C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
+
+		C3D_API sdw::UInt getNodeId( sdw::UInt const & pipelineID
+			, sdw::UInt const & instanceID )const;
+
+	private:
+		using sdw::StructInstance::getMember;
+		using sdw::StructInstance::getMemberArray;
+
+	public:
+		C3D_API static castor::String const BufferName;
+		C3D_API static castor::String const DataName;
+
+	private:
+		sdw::Array< sdw::UVec4 > m_data;
+	};
+
 	template< ast::var::Flag FlagT >
 	static sdw::UInt getNodeId( sdw::Array< shader::ObjectsIds > const & data
 		, shader::VertexSurfaceT< FlagT > const & surface
 		, sdw::UInt pipelineID
 		, sdw::UInt drawID
-		, ProgramFlags const & flags )
+		, PipelineFlags const & flags )
 	{
-		if ( checkFlag( flags, ProgramFlag::eInstantiation ) )
+		if ( flags.enableInstantiation() )
 		{
 			return surface.objectIds.x();
 		}
@@ -83,14 +108,17 @@ namespace castor3d::shader
 	C3D_API sdw::UInt getNodeId( sdw::Array< shader::ObjectsIds > const & data
 		, sdw::UInt pipelineID
 		, sdw::UInt drawID );
+	C3D_API sdw::UInt getNodeId( sdw::Array< shader::PipelineObjectsIds > const & data
+		, sdw::UInt pipelineID
+		, sdw::UInt drawID );
 
 	inline sdw::UInt getNodeId( sdw::Array< shader::ObjectsIds > const & data
 		, sdw::Array< sdw::UVec4 > const & instances
 		, sdw::UInt pipelineID
 		, sdw::UInt drawID
-		, ProgramFlags const & flags )
+		, PipelineFlags const & flags )
 	{
-		if ( checkFlag( flags, ProgramFlag::eInstantiation ) )
+		if ( flags.enableInstantiation() )
 		{
 			return instances[drawID].x();
 		}
@@ -99,24 +127,26 @@ namespace castor3d::shader
 	}
 }
 
-#define C3D_ObjectIdsData( writer, binding, set )\
+#define C3D_ObjectIdsData( writer, flags, binding, set )\
 	sdw::StorageBuffer objectIdsDataBuffer{ writer\
 		, castor3d::shader::ObjectsIds::BufferName\
 		, uint32_t( binding )\
 		, uint32_t( set )\
 		, ast::type::MemoryLayout::eStd430\
-		, true };\
-	auto c3d_objectIdsData = objectIdsDataBuffer.declMemberArray< castor3d::shader::ObjectsIds >( castor3d::shader::ObjectsIds::DataName );\
+		, !flags.enableInstantiation() };\
+	auto c3d_objectIdsData = objectIdsDataBuffer.declMemberArray< castor3d::shader::ObjectsIds >( castor3d::shader::ObjectsIds::DataName\
+		, !flags.enableInstantiation() );\
 	objectIdsDataBuffer.end()
 
-#define C3D_ObjectIdsDataOpt( writer, binding, set, enable )\
-	sdw::StorageBuffer objectIdsDataBuffer{ writer\
-		, castor3d::shader::ObjectsIds::BufferName\
+#define C3D_ObjectsIdsData( writer, flags, binding, set )\
+	sdw::StorageBuffer objectsIdsDataBuffer{ writer\
+		, castor3d::shader::PipelineObjectsIds::BufferName\
 		, uint32_t( binding )\
 		, uint32_t( set )\
 		, ast::type::MemoryLayout::eStd430\
-		, enable };\
-	auto c3d_objectIdsData = objectIdsDataBuffer.declMemberArray< castor3d::shader::ObjectsIds >( castor3d::shader::ObjectsIds::DataName, enable );\
-	objectIdsDataBuffer.end()
+		, !flags.enableInstantiation() };\
+	auto c3d_objectsIdsData = objectsIdsDataBuffer.declMemberArray< castor3d::shader::PipelineObjectsIds >( castor3d::shader::PipelineObjectsIds::DataName\
+		, !flags.enableInstantiation() );\
+	objectsIdsDataBuffer.end()
 
 #endif

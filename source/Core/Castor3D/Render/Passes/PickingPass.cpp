@@ -65,7 +65,7 @@ namespace castor3d
 			, device
 			, Type
 			, nullptr
-			, RenderNodesPassDesc{ { size.getWidth(), size.getHeight(), 1u }, matrixUbo, sceneUbo, culler, RenderMode::eBoth, true, false }
+			, RenderNodesPassDesc{ { size.getWidth(), size.getHeight(), 1u }, matrixUbo, sceneUbo, culler, RenderFilter::eNone, true, false }
 				.meshShading( true ) }
 	{
 	}
@@ -85,22 +85,14 @@ namespace castor3d
 		return TextureFlags{ TextureFlag::eOpacity };
 	}
 
-	SubmeshFlags PickingPass::doAdjustSubmeshFlags( SubmeshFlags flags )const
-	{
-		remFlag( flags, SubmeshFlag::eNormals );
-		remFlag( flags, SubmeshFlag::eTangents );
-		remFlag( flags, SubmeshFlag::eColours );
-		return flags;
-	}
-
 	bool PickingPass::doIsValidPass( Pass const & pass )const
 	{
-		if ( !checkFlag( pass.getPassFlags(), PassFlag::ePickable) )
+		if ( !checkFlag( pass.getPassFlags(), PassFlag::ePickable ) )
 		{
 			return false;
 		}
 
-		return RenderNodesPass::doAreValidPassFlags( pass.getPassFlags() );
+		return areValidPassFlags( pass.getPassFlags() );
 	}
 
 	void PickingPass::doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const
@@ -112,12 +104,40 @@ namespace castor3d
 	{
 	}
 
+	SubmeshFlags PickingPass::doAdjustSubmeshFlags( SubmeshFlags flags )const
+	{
+		remFlag( flags, SubmeshFlag::eNormals );
+		remFlag( flags, SubmeshFlag::eTangents );
+		remFlag( flags, SubmeshFlag::eColours );
+		return flags;
+	}
+
+	PassFlags PickingPass::doAdjustPassFlags( PassFlags flags )const
+	{
+		remFlag( flags, PassFlag::eAlphaBlending );
+		return flags;
+	}
+
+	ProgramFlags PickingPass::doAdjustProgramFlags( ProgramFlags flags )const
+	{
+		return flags;
+	}
+
+	ashes::PipelineDepthStencilStateCreateInfo PickingPass::doCreateDepthStencilState( PipelineFlags const & flags )const
+	{
+		return ashes::PipelineDepthStencilStateCreateInfo{ 0u, true, true };
+	}
+
+	ashes::PipelineColorBlendStateCreateInfo PickingPass::doCreateBlendState( PipelineFlags const & flags )const
+	{
+		return RenderNodesPass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 1u );
+	}
+
 	ShaderPtr PickingPass::doGetPixelShaderSource( PipelineFlags const & flags )const
 	{
 		using namespace sdw;
 		FragmentWriter writer;
-		auto textureFlags = filterTexturesFlags( flags.textures );
-		bool hasTextures = flags.hasTextures() && !textureFlags.empty();
+		bool enableTextures = flags.enableTextures();
 
 		shader::Utils utils{ writer };
 
@@ -131,16 +151,16 @@ namespace castor3d
 		shader::TextureConfigurations textureConfigs{ writer
 			, uint32_t( GlobalBuffersIdx::eTexConfigs )
 			, RenderPipeline::eBuffers
-			, hasTextures };
+			, enableTextures };
 		shader::TextureAnimations textureAnims{ writer
 			, uint32_t( GlobalBuffersIdx::eTexAnims )
 			, RenderPipeline::eBuffers
-			, hasTextures };
+			, enableTextures };
 
 		auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
 			, 0u
 			, RenderPipeline::eTextures
-			, hasTextures ) );
+			, enableTextures ) );
 
 		sdw::PushConstantBuffer pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
@@ -150,12 +170,7 @@ namespace castor3d
 		auto pxl_fragColor( writer.declOutput< UVec4 >( "pxl_fragColor", 0 ) );
 
 		writer.implementMainT< shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer
-				, flags.submeshFlags
-				, flags.programFlags
-				, getShaderFlags()
-				, textureFlags
-				, flags.passFlags
-				, hasTextures }
+				, flags }
 			, FragmentOut{ writer }
 			, [&]( FragmentInT< shader::FragmentSurfaceT > in
 				, FragmentOut out )
@@ -167,46 +182,19 @@ namespace castor3d
 					, in.texture0
 					, 1.0_f };
 				materials.blendMaterials( utils
-					, flags.alphaFunc
-					, flags.passFlags
-					, flags.submeshFlags
-					, flags.textures
-					, hasTextures
+					, flags
 					, textureConfigs
 					, textureAnims
 					, c3d_maps
 					, modelData.getMaterialId()
 					, in.passMultipliers
 					, components );
-				pxl_fragColor = uvec4( ( checkFlag( flags.programFlags, ProgramFlag::eBillboards ) ? 2_u : 1_u )
+				pxl_fragColor = uvec4( ( flags.isBillboard() ? 2_u : 1_u )
 					, in.nodeId
 					, writer.cast< sdw::UInt >( in.primitiveID )
 					, 0_u );
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-	}
-
-	PassFlags PickingPass::doAdjustPassFlags( PassFlags flags )const
-	{
-		remFlag( flags, PassFlag::eAlphaBlending );
-		return flags;
-	}
-
-	ProgramFlags PickingPass::doAdjustProgramFlags( ProgramFlags flags )const
-	{
-		remFlag( flags, ProgramFlag::eLighting );
-		addFlag( flags, ProgramFlag::ePicking );
-		return flags;
-	}
-
-	ashes::PipelineDepthStencilStateCreateInfo PickingPass::doCreateDepthStencilState( PipelineFlags const & flags )const
-	{
-		return ashes::PipelineDepthStencilStateCreateInfo{ 0u, true, true };
-	}
-
-	ashes::PipelineColorBlendStateCreateInfo PickingPass::doCreateBlendState( PipelineFlags const & flags )const
-	{
-		return RenderNodesPass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 1u );
 	}
 }

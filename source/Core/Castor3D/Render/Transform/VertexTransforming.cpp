@@ -457,7 +457,7 @@ namespace castor3d
 				c3d_outVelocity[index].xyz() = oldPosition.xyz() - position.xyz();
 
 				auto curMtxNormal = writer.declLocale< Mat3 >( "curMtxNormal"
-					, modelData.getNormalMtx( pipeline.submeshFlags, curMtxModel ) );
+					, modelData.getNormalMtx( checkFlag( pipeline.submeshFlags, SubmeshFlag::eSkin ), curMtxModel ) );
 				c3d_outNormal[index].xyz() = normalize( curMtxNormal * normal.xyz() );
 				c3d_outTangent[index].xyz() = normalize( curMtxNormal * tangent.xyz() );
 			} );

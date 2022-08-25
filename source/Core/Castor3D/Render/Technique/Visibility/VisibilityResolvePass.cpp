@@ -293,11 +293,7 @@ namespace castor3d
 
 		static ShaderPtr getProgram( RenderDevice const & device
 			, VkExtent3D const & imageSize
-			, PassTypeID passType
-			, TextureFlags textureFlags
-			, SubmeshFlags submeshFlags
-			, PassFlags passFlags
-			, ProgramFlags programFlags
+			, PipelineFlags const & flags
 			, uint32_t stride
 			, bool blend )
 		{
@@ -307,53 +303,53 @@ namespace castor3d
 			DeclareSsbo( c3d_inIndices
 				, sdw::UInt
 				, VtxBindings::eInIndices
-				, checkFlag( submeshFlags, SubmeshFlag::eIndex ) );
+				, flags.enableIndices() );
 			sdw::StorageBuffer c3d_inPositionBuffer{ writer
 				, std::string{ "c3d_inPositionBuffer" }
 				, VtxBindings::eInPosition
 				, Sets::eVtx
 				, ast::type::MemoryLayout::eStd430
-				, checkFlag( submeshFlags, SubmeshFlag::ePositions ) };
+				, flags.enablePosition() };
 			auto c3d_inPosition = c3d_inPositionBuffer.declMemberArray< Position >( "c3d_inPosition"
-				, checkFlag( submeshFlags, SubmeshFlag::ePositions )
+				, flags.enablePosition()
 				, stride );
 			c3d_inPositionBuffer.end();
 			DeclareSsbo( c3d_inNormal
 				, sdw::Vec4
 				, VtxBindings::eInNormal
-				, checkFlag( submeshFlags, SubmeshFlag::eNormals ) );
+				, flags.enableNormal() );
 			DeclareSsbo( c3d_inTangent
 				, sdw::Vec4
 				, VtxBindings::eInTangent
-				, checkFlag( submeshFlags, SubmeshFlag::eTangents ) );
+				, flags.enableTangentSpace() );
 			DeclareSsbo( c3d_inTexcoord0
 				, sdw::Vec4
 				, VtxBindings::eInTexcoord0
-				, checkFlag( submeshFlags, SubmeshFlag::eTexcoords0 ) && ( stride == 0u ) );
+				, flags.enableTexcoord0() && ( stride == 0u ) );
 			DeclareSsbo( c3d_inTexcoord1
 				, sdw::Vec4
 				, VtxBindings::eInTexcoord1
-				, checkFlag( submeshFlags, SubmeshFlag::eTexcoords1 ) );
+				, flags.enableTexcoord1() );
 			DeclareSsbo( c3d_inTexcoord2
 				, sdw::Vec4
 				, VtxBindings::eInTexcoord2
-				, checkFlag( submeshFlags, SubmeshFlag::eTexcoords2 ) );
+				, flags.enableTexcoord2() );
 			DeclareSsbo( c3d_inTexcoord3
 				, sdw::Vec4
 				, VtxBindings::eInTexcoord3
-				, checkFlag( submeshFlags, SubmeshFlag::eTexcoords3 ) );
+				, flags.enableTexcoord3() );
 			DeclareSsbo( c3d_inColour
 				, sdw::Vec4
 				, VtxBindings::eInColour
-				, checkFlag( submeshFlags, SubmeshFlag::eColours ) );
+				, flags.enableColours() );
 			DeclareSsbo( c3d_inVelocity
 				, sdw::Vec4
 				, VtxBindings::eInVelocity
-				, checkFlag( submeshFlags, SubmeshFlag::eVelocity ) );
+				, flags.hasWorldPosInputs() );
 			DeclareSsbo( c3d_inPassMasks
 				, sdw::UVec4
 				, VtxBindings::eInPassMasks
-				, checkFlag( submeshFlags, SubmeshFlag::ePassMasks ) );
+				, flags.enablePassMasks() );
 
 			C3D_Matrix( writer
 				, InOutBindings::eMatrix
@@ -391,7 +387,7 @@ namespace castor3d
 
 			shader::Utils utils{ writer };
 			auto lightingModel = utils.createLightingModel( engine
-				, shader::getLightingModelName( engine, passType )
+				, shader::getLightingModelName( engine, flags.passType )
 				, {}
 				, nullptr
 				, true );
@@ -404,49 +400,65 @@ namespace castor3d
 					, sdw::Vec2 const & winSize )
 				{
 					auto result = writer.declLocale< BarycentricFullDerivatives >( "result" );
+					result.dx() = vec3( 0.0_f );
+					result.dy() = vec3( 0.0_f );
+					result.lambda() = vec3( 0.0_f );
+					auto w = writer.declLocale( "w"
+						, vec3( pt0.w(), pt1.w(), pt2.w() ) );
 
-					auto invW = writer.declLocale( "invW"
-						, vec3( 1.0_f ) / vec3( pt0.w(), pt1.w(), pt2.w() ) );
+					IF( writer, !any( w == vec3( 0.0_f ) ) )
+					{
+						auto invW = writer.declLocale( "invW"
+							, vec3( 1.0_f ) / w );
 
-					auto ndc0 = writer.declLocale( "ndc0"
-						, pt0.xy() * invW.x() );
-					auto ndc1 = writer.declLocale( "ndc1"
-						, pt1.xy() * invW.y() );
-					auto ndc2 = writer.declLocale( "ndc2"
-						, pt2.xy() * invW.z() );
+						auto ndc0 = writer.declLocale( "ndc0"
+							, pt0.xy() * invW.x() );
+						auto ndc1 = writer.declLocale( "ndc1"
+							, pt1.xy() * invW.y() );
+						auto ndc2 = writer.declLocale( "ndc2"
+							, pt2.xy() * invW.z() );
 
-					auto invDet = writer.declLocale( "invDet"
-						, 1.0_f / determinant( mat2( ndc2 - ndc1, ndc0 - ndc1 ) ) );
-					result.dx() = vec3( ndc1.y() - ndc2.y(), ndc2.y() - ndc0.y(), ndc0.y() - ndc1.y() ) * invDet * invW;
-					result.dy() = vec3( ndc2.x() - ndc1.x(), ndc0.x() - ndc2.x(), ndc1.x() - ndc0.x() ) * invDet * invW;
-					auto ddxSum = writer.declLocale( "ddxSum"
-						, dot( result.dx(), vec3( 1.0_f ) ) );
-					auto ddySum = writer.declLocale( "ddySum"
-						, dot( result.dy(), vec3( 1.0_f ) ) );
+						auto det = writer.declLocale( "det"
+							, determinant( mat2( ndc2 - ndc1, ndc0 - ndc1 ) ) );
 
-					auto deltaVec = writer.declLocale( "deltaVec"
-						, pixelNdc - ndc0 );
-					auto interpInvW = writer.declLocale( "interpInvW"
-						, invW.x() + deltaVec.x() * ddxSum + deltaVec.y() * ddySum );
-					auto interpW = writer.declLocale( "interpW"
-						, 1.0_f / interpInvW );
+						IF( writer, det != 0.0_f )
+						{
+							auto invDet = writer.declLocale( "invDet"
+								, 1.0_f / det );
+							result.dx() = vec3( ndc1.y() - ndc2.y(), ndc2.y() - ndc0.y(), ndc0.y() - ndc1.y() ) * invDet * invW;
+							result.dy() = vec3( ndc2.x() - ndc1.x(), ndc0.x() - ndc2.x(), ndc1.x() - ndc0.x() ) * invDet * invW;
+							auto ddxSum = writer.declLocale( "ddxSum"
+								, dot( result.dx(), vec3( 1.0_f ) ) );
+							auto ddySum = writer.declLocale( "ddySum"
+								, dot( result.dy(), vec3( 1.0_f ) ) );
 
-					result.lambda() = vec3( interpW * ( invW[0] + deltaVec.x() * result.dx().x() + deltaVec.y() * result.dy().x() )
-						, interpW * ( 0.0_f + deltaVec.x() * result.dx().y() + deltaVec.y() * result.dy().y() )
-						, interpW * ( 0.0_f + deltaVec.x() * result.dx().z() + deltaVec.y() * result.dy().z() ) );
+							auto deltaVec = writer.declLocale( "deltaVec"
+								, pixelNdc - ndc0 );
+							auto interpInvW = writer.declLocale( "interpInvW"
+								, invW.x() + deltaVec.x() * ddxSum + deltaVec.y() * ddySum );
+							auto interpW = writer.declLocale( "interpW"
+								, 1.0_f / interpInvW );
 
-					result.dx() *= ( 2.0_f / winSize.x() );
-					result.dy() *= ( 2.0_f / winSize.y() );
-					ddxSum *= ( 2.0_f / winSize.x() );
-					ddySum *= ( 2.0_f / winSize.y() );
+							result.lambda() = vec3( interpW * ( invW[0] + deltaVec.x() * result.dx().x() + deltaVec.y() * result.dy().x() )
+								, interpW * ( 0.0_f + deltaVec.x() * result.dx().y() + deltaVec.y() * result.dy().y() )
+								, interpW * ( 0.0_f + deltaVec.x() * result.dx().z() + deltaVec.y() * result.dy().z() ) );
 
-					auto interpW_ddx = writer.declLocale( "interpW_ddx"
-						, 1.0_f / ( interpInvW + ddxSum ) );
-					auto interpW_ddy = writer.declLocale( "interpW_ddy"
-						, 1.0_f / ( interpInvW + ddySum ) );
+							result.dx() *= ( 2.0_f / winSize.x() );
+							result.dy() *= ( 2.0_f / winSize.y() );
+							ddxSum *= ( 2.0_f / winSize.x() );
+							ddySum *= ( 2.0_f / winSize.y() );
 
-					result.dx() = interpW_ddx * ( result.lambda() * interpInvW + result.dx() ) - result.lambda();
-					result.dy() = interpW_ddy * ( result.lambda() * interpInvW + result.dy() ) - result.lambda();
+							auto interpW_ddx = writer.declLocale( "interpW_ddx"
+								, 1.0_f / ( interpInvW + ddxSum ) );
+							auto interpW_ddy = writer.declLocale( "interpW_ddy"
+								, 1.0_f / ( interpInvW + ddySum ) );
+
+							result.dx() = interpW_ddx * ( result.lambda() * interpInvW + result.dx() ) - result.lambda();
+							result.dy() = interpW_ddy * ( result.lambda() * interpInvW + result.dy() ) - result.lambda();
+						}
+						FI;
+					}
+					FI;
 
 					writer.returnStmt( result );
 				}
@@ -612,7 +624,7 @@ namespace castor3d
 					auto v2 = writer.declLocale< shader::VertexSurface >( "v2" );
 					loadVertices( nodeId, primitiveId, modelData, v0, v1, v2 );
 
-					bool isWorldPos = checkFlag( submeshFlags, SubmeshFlag::eVelocity )
+					bool isWorldPos = flags.hasWorldPosInputs()
 						|| ( stride != 0u );
 
 					// Transform positions to clip space
@@ -633,35 +645,35 @@ namespace castor3d
 						, calcFullBarycentric( p0, p1, p2, screenCoords, c3d_sceneData.renderSize ) );
 
 					// Interpolate texture coordinates and calculate the gradients for texture sampling with mipmapping support
-					if ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords0 ) )
+					if ( flags.enableTexcoord0() )
 					{
 						result.texture0 = derivatives.computeGradient( v0.texture0
 							, v1.texture0
 							, v2.texture0 );
 					}
 
-					if ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords1 ) )
+					if ( flags.enableTexcoord1() )
 					{
 						result.texture1 = derivatives.computeGradient( v0.texture1
 							, v1.texture1
 							, v2.texture1 );
 					}
 
-					if ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords2 ) )
+					if ( flags.enableTexcoord2() )
 					{
 						result.texture2 = derivatives.computeGradient( v0.texture2
 							, v1.texture2
 							, v2.texture2 );
 					}
 
-					if ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords3 ) )
+					if ( flags.enableTexcoord3() )
 					{
 						result.texture3 = derivatives.computeGradient( v0.texture3
 							, v1.texture3
 							, v2.texture3 );
 					}
 
-					if ( checkFlag( submeshFlags, SubmeshFlag::eColours ) )
+					if ( flags.enableColours() )
 					{
 						result.colour = derivatives.interpolate( v0.colour.xyz()
 							, v1.colour.xyz()
@@ -670,9 +682,9 @@ namespace castor3d
 
 					auto normal = writer.declLocale< sdw::Vec3 >( "normal"
 						, vec3( 0.0_f )
-						, checkFlag( submeshFlags, SubmeshFlag::eNormals ) );
+						, flags.enableNormal() );
 
-					if ( checkFlag( submeshFlags, SubmeshFlag::eNormals ) )
+					if ( flags.enableNormal() )
 					{
 						normal = derivatives.interpolate( v0.normal.xyz()
 							, v1.normal.xyz()
@@ -681,27 +693,27 @@ namespace castor3d
 
 					auto tangent = writer.declLocale< sdw::Vec3 >( "tangent"
 						, vec3( 0.0_f )
-						, checkFlag( submeshFlags, SubmeshFlag::eTangents ) );
+						, flags.enableTangentSpace() );
 
-					if ( checkFlag( submeshFlags, SubmeshFlag::eTangents ) )
+					if ( flags.enableTangentSpace() )
 					{
 						tangent = derivatives.interpolate( v0.tangent.xyz()
 							, v1.tangent.xyz()
 							, v2.tangent.xyz() );
 					}
 
-					if ( checkFlag( submeshFlags, SubmeshFlag::ePassMasks ) )
+					if ( flags.enablePassMasks() )
 					{
 						auto passMultipliers0 = writer.declLocaleArray< sdw::Vec4 >( "passMultipliers0", 4u );
 						auto passMultipliers1 = writer.declLocaleArray< sdw::Vec4 >( "passMultipliers1", 4u );
 						auto passMultipliers2 = writer.declLocaleArray< sdw::Vec4 >( "passMultipliers2", 4u );
-						material.getPassMultipliers( submeshFlags
+						material.getPassMultipliers( flags
 							, v0.passMasks
 							, passMultipliers0 );
-						material.getPassMultipliers( submeshFlags
+						material.getPassMultipliers( flags
 							, v1.passMasks
 							, passMultipliers1 );
-						material.getPassMultipliers( submeshFlags
+						material.getPassMultipliers( flags
 							, v2.passMasks
 							, passMultipliers2 );
 
@@ -715,6 +727,13 @@ namespace castor3d
 
 					auto curProjPosition = writer.declLocale( "curProjPosition"
 						, derivatives.interpolate( p0, p1, p2 ) );
+
+					IF( writer, curProjPosition.w() == 0.0_f )
+					{
+						curProjPosition.w() = 1.0_f;
+					}
+					FI;
+
 					depth = ( curProjPosition.z() / curProjPosition.w() );
 					auto curPosition = writer.declLocale( "curPosition"
 						, c3d_matrixData.projToView( curProjPosition ) );
@@ -728,7 +747,7 @@ namespace castor3d
 
 					if ( stride == 0u )
 					{
-						if ( checkFlag( submeshFlags, SubmeshFlag::eVelocity ) )
+						if ( flags.hasWorldPosInputs() )
 						{
 							auto velocity = writer.declLocale( "velocity"
 								, derivatives.interpolate( v0.velocity.xyz()
@@ -736,16 +755,16 @@ namespace castor3d
 									, v2.velocity.xyz() ) );
 							prvPosition.xyz() += velocity;
 						}
-						else if ( checkFlag( submeshFlags, SubmeshFlag::eNormals )
-							&& checkFlag( submeshFlags, SubmeshFlag::eTangents ) )
+						else if ( flags.enableNormal()
+							&& flags.enableTangentSpace() )
 						{
 							auto curMtxModel = writer.declLocale( "curMtxModel"
 								, modelData.getModelMtx() );
 							auto prvMtxModel = writer.declLocale( "prvMtxModel"
-								, modelData.getPrvModelMtx( programFlags, curMtxModel ) );
+								, modelData.getPrvModelMtx( flags, curMtxModel ) );
 							prvPosition = prvMtxModel * prvPosition;
 							auto mtxNormal = writer.declLocale( "mtxNormal"
-								, modelData.getNormalMtx( programFlags, curMtxModel ) );
+								, modelData.getNormalMtx( flags, curMtxModel ) );
 							normal = normalize( mtxNormal * normal );
 							tangent = normalize( mtxNormal * tangent );
 						}
@@ -756,10 +775,9 @@ namespace castor3d
 						, curProjPosition
 						, prvPosition );
 
-					if ( checkFlag( submeshFlags, SubmeshFlag::eNormals ) )
+					if ( flags.enableNormal() )
 					{
-						result.computeTangentSpace( submeshFlags
-							, programFlags
+						result.computeTangentSpace( flags
 							, c3d_sceneData.cameraPosition
 							, result.worldPosition.xyz()
 							, normal
@@ -806,24 +824,21 @@ namespace castor3d
 							, depth ) );
 					shader::VisibilityBlendComponents components{ writer
 						, "out"
-						, { surface.texture0, checkFlag( submeshFlags, SubmeshFlag::eTexcoords0 ) }
-						, { surface.texture1, checkFlag( submeshFlags, SubmeshFlag::eTexcoords1 ) }
-						, { surface.texture2, checkFlag( submeshFlags, SubmeshFlag::eTexcoords2 ) }
-						, { surface.texture3, checkFlag( submeshFlags, SubmeshFlag::eTexcoords3 ) }
+						, { surface.texture0, flags.enableTexcoord0() }
+						, { surface.texture1, flags.enableTexcoord1() }
+						, { surface.texture2, flags.enableTexcoord2() }
+						, { surface.texture3, flags.enableTexcoord3() }
 						, 1.0_f
-						, { normalize( surface.normal ), checkFlag( submeshFlags, SubmeshFlag::eNormals ) }
-						, { normalize( surface.tangent ), checkFlag( submeshFlags, SubmeshFlag::eTangents ) }
-						, { normalize( surface.bitangent ), checkFlag( submeshFlags, SubmeshFlag::eTangents ) }
-						, { surface.tangentSpaceViewPosition, checkFlag( submeshFlags, SubmeshFlag::eTangents ) }
-						, { surface.tangentSpaceFragPosition, checkFlag( submeshFlags, SubmeshFlag::eTangents ) }
+						, { normalize( surface.normal ), flags.enableNormal() }
+						, { normalize( surface.tangent ), flags.enableTangentSpace() }
+						, { normalize( surface.bitangent ), flags.enableTangentSpace() }
+						, { surface.tangentSpaceViewPosition, flags.enableTangentSpace() }
+						, { surface.tangentSpaceFragPosition, flags.enableTangentSpace() }
 						, 1.0_f
 						, 1.0_f
 						, vec3( 0.0_f ) };
 					auto lightMat = materials.blendMaterials( utils
-						, passFlags
-						, submeshFlags
-						, textureFlags
-						, checkFlag( submeshFlags, SubmeshFlag::eTexcoords0 )
+						, flags
 						, textureConfigs
 						, textureAnims
 						, *lightingModel
@@ -1107,84 +1122,84 @@ namespace castor3d
 
 		static ashes::DescriptorSetLayoutPtr createVtxDescriptorLayout( RenderDevice const & device
 			, std::string const & name
-			, SubmeshFlags const & submeshFlags )
+			, PipelineFlags const & flags )
 		{
 			auto stages = VkShaderStageFlags( VisibilityResolvePass::useCompute
 				? VK_SHADER_STAGE_COMPUTE_BIT
 				: VK_SHADER_STAGE_FRAGMENT_BIT );
 			ashes::VkDescriptorSetLayoutBindingArray bindings;
 
-			if ( checkFlag( submeshFlags, SubmeshFlag::eIndex ) )
+			if ( flags.enableIndices() )
 			{
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( VtxBindings::eInIndices
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 					, stages ) );
 			}
 
-			if ( checkFlag( submeshFlags, SubmeshFlag::ePositions ) )
+			if ( flags.enablePosition() )
 			{
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( VtxBindings::eInPosition
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 					, stages ) );
 			}
 
-			if ( checkFlag( submeshFlags, SubmeshFlag::eNormals ) )
+			if ( flags.enableNormal() )
 			{
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( VtxBindings::eInNormal
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 					, stages ) );
 			}
 
-			if ( checkFlag( submeshFlags, SubmeshFlag::eTangents ) )
+			if ( flags.enableTangentSpace() )
 			{
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( VtxBindings::eInTangent
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 					, stages ) );
 			}
 
-			if ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords0 ) )
+			if ( flags.enableTexcoord0() )
 			{
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( VtxBindings::eInTexcoord0
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 					, stages ) );
 			}
 
-			if ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords1 ) )
+			if ( flags.enableTexcoord1() )
 			{
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( VtxBindings::eInTexcoord1
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 					, stages ) );
 			}
 
-			if ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords2 ) )
+			if ( flags.enableTexcoord2() )
 			{
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( VtxBindings::eInTexcoord2
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 					, stages ) );
 			}
 
-			if ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords3 ) )
+			if ( flags.enableTexcoord3() )
 			{
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( VtxBindings::eInTexcoord3
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 					, stages ) );
 			}
 
-			if ( checkFlag( submeshFlags, SubmeshFlag::eColours ) )
+			if ( flags.enableColours() )
 			{
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( VtxBindings::eInColour
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 					, stages ) );
 			}
 
-			if ( checkFlag( submeshFlags, SubmeshFlag::ePassMasks ) )
+			if ( flags.enablePassMasks() )
 			{
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( VtxBindings::eInPassMasks
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 					, stages ) );
 			}
 
-			if ( checkFlag( submeshFlags, SubmeshFlag::eVelocity ) )
+			if ( flags.hasWorldPosInputs() )
 			{
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( VtxBindings::eInVelocity
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
@@ -1211,72 +1226,74 @@ namespace castor3d
 		}
 
 		static ashes::DescriptorSetPtr createVtxDescriptorSet( std::string const & name
+			, PipelineFlags const & flags
 			, ashes::DescriptorSetPool const & pool
 			, ObjectBufferPool::ModelBuffers const & modelBuffers
 			, ashes::BufferBase const * indexBuffer )
 		{
 			ashes::WriteDescriptorSetArray writes;
 
-			if ( indexBuffer )
+			if ( flags.enableIndices() )
 			{
+				CU_Require( indexBuffer );
 				writes.emplace_back( makeDescriptorWrite( *indexBuffer, VtxBindings::eInIndices, 0u, indexBuffer->getSize() ) );
 			}
 
-			if ( modelBuffers.buffers[size_t( SubmeshData::ePositions )] )
+			if ( flags.enablePosition() )
 			{
 				auto & buffer = modelBuffers.buffers[size_t( SubmeshData::ePositions )]->getBuffer().getBuffer();
 				writes.emplace_back( makeDescriptorWrite( buffer, VtxBindings::eInPosition, 0u, buffer.getSize() ) );
 			}
 
-			if ( modelBuffers.buffers[size_t( SubmeshData::eNormals )] )
+			if ( flags.enableNormal() )
 			{
 				auto & buffer = modelBuffers.buffers[size_t( SubmeshData::eNormals )]->getBuffer().getBuffer();
 				writes.emplace_back( makeDescriptorWrite( buffer, VtxBindings::eInNormal, 0u, buffer.getSize() ) );
 			}
 
-			if ( modelBuffers.buffers[size_t( SubmeshData::eTangents )] )
+			if ( flags.enableTangentSpace() )
 			{
 				auto & buffer = modelBuffers.buffers[size_t( SubmeshData::eTangents )]->getBuffer().getBuffer();
 				writes.emplace_back( makeDescriptorWrite( buffer, VtxBindings::eInTangent, 0u, buffer.getSize() ) );
 			}
 
-			if ( modelBuffers.buffers[size_t( SubmeshData::eTexcoords0 )] )
+			if ( flags.enableTexcoord0() )
 			{
 				auto & buffer = modelBuffers.buffers[size_t( SubmeshData::eTexcoords0 )]->getBuffer().getBuffer();
 				writes.emplace_back( makeDescriptorWrite( buffer, VtxBindings::eInTexcoord0, 0u, buffer.getSize() ) );
 			}
 
-			if ( modelBuffers.buffers[size_t( SubmeshData::eTexcoords1 )] )
+			if ( flags.enableTexcoord1() )
 			{
 				auto & buffer = modelBuffers.buffers[size_t( SubmeshData::eTexcoords1 )]->getBuffer().getBuffer();
 				writes.emplace_back( makeDescriptorWrite( buffer, VtxBindings::eInTexcoord1, 0u, buffer.getSize() ) );
 			}
 
-			if ( modelBuffers.buffers[size_t( SubmeshData::eTexcoords2 )] )
+			if ( flags.enableTexcoord2() )
 			{
 				auto & buffer = modelBuffers.buffers[size_t( SubmeshData::eTexcoords2 )]->getBuffer().getBuffer();
 				writes.emplace_back( makeDescriptorWrite( buffer, VtxBindings::eInTexcoord2, 0u, buffer.getSize() ) );
 			}
 
-			if ( modelBuffers.buffers[size_t( SubmeshData::eTexcoords3 )] )
+			if ( flags.enableTexcoord3() )
 			{
 				auto & buffer = modelBuffers.buffers[size_t( SubmeshData::eTexcoords3 )]->getBuffer().getBuffer();
 				writes.emplace_back( makeDescriptorWrite( buffer, VtxBindings::eInTexcoord3, 0u, buffer.getSize() ) );
 			}
 
-			if ( modelBuffers.buffers[size_t( SubmeshData::eColours )] )
+			if ( flags.enableColours() )
 			{
 				auto & buffer = modelBuffers.buffers[size_t( SubmeshData::eColours )]->getBuffer().getBuffer();
 				writes.emplace_back( makeDescriptorWrite( buffer, VtxBindings::eInColour, 0u, buffer.getSize() ) );
 			}
 
-			if ( modelBuffers.buffers[size_t( SubmeshData::ePassMasks )] )
+			if ( flags.enablePassMasks() )
 			{
 				auto & buffer = modelBuffers.buffers[size_t( SubmeshData::ePassMasks )]->getBuffer().getBuffer();
 				writes.emplace_back( makeDescriptorWrite( buffer, VtxBindings::eInPassMasks, 0u, buffer.getSize() ) );
 			}
 
-			if ( modelBuffers.buffers[size_t( SubmeshData::eVelocity )] )
+			if ( flags.hasWorldPosInputs() )
 			{
 				auto & buffer = modelBuffers.buffers[size_t( SubmeshData::eVelocity )]->getBuffer().getBuffer();
 				writes.emplace_back( makeDescriptorWrite( buffer, VtxBindings::eInVelocity, 0u, buffer.getSize() ) );
@@ -1516,11 +1533,11 @@ namespace castor3d
 				auto buffer = bufferIt.second;
 				auto pipelineHash = bufferIt.first;
 				auto pipelineId = index++;
-				auto [submeshFlags, programFlags, passType, passFlags, maxTexcoordSet, texturesCount, textureFlags] = getPipelineHashDetails( pipelineHash );
+				PipelineFlags pipelineFlags{ getPipelineHashDetails( pipelineHash, getShaderFlags() ) };
 
-				if ( !checkFlag( programFlags, ProgramFlag::eBillboards ) )
+				if ( !pipelineFlags.isBillboard() )
 				{
-					auto & pipeline = doCreatePipeline( pipelineHash );
+					auto & pipeline = doCreatePipeline( pipelineHash, pipelineFlags );
 					auto it = m_activePipelines.emplace( &pipeline
 						, SubmeshPipelinesNodesDescriptors{} ).first;
 
@@ -1533,12 +1550,14 @@ namespace castor3d
 						auto & modelBuffers = m_device.geometryPools->getBuffers( *buffer );
 						ashes::BufferBase const * indexBuffer{};
 
-						if ( checkFlag( submeshFlags, SubmeshFlag::eIndex ) )
+						if ( pipelineFlags.enableIndices() )
 						{
 							indexBuffer = &m_device.geometryPools->getIndexBuffer( *buffer );
 						}
 
-						ires.first->second = visres::createVtxDescriptorSet( getName(), *pipeline.descriptorPool
+						ires.first->second = visres::createVtxDescriptorSet( getName()
+							, pipelineFlags
+							, *pipeline.descriptorPool
 							, modelBuffers
 							, indexBuffer );
 					}
@@ -1557,7 +1576,9 @@ namespace castor3d
 					{
 						auto & culled = sidedCulled.first;
 						auto & positionsBuffer = culled.node->data.getVertexBuffer();
+						PipelineFlags pipelineFlags{ getPipelineHashDetails( pipelineHash, getShaderFlags() ) };
 						auto & pipeline = doCreatePipeline( pipelineHash
+							, pipelineFlags
 							, culled.node->data.getVertexStride() );
 						auto it = m_activeBillboardPipelines.emplace( &pipeline
 							, BillboardPipelinesNodesDescriptors{} ).first;
@@ -1582,7 +1603,59 @@ namespace castor3d
 					}
 				}
 			}
+
+			m_commandsChanged = false;
 		}
+	}
+
+	PipelineFlags VisibilityResolvePass::createPipelineFlags( BlendMode colourBlendMode
+		, BlendMode alphaBlendMode
+		, PassFlags passFlags
+		, RenderPassTypeID renderPassTypeID
+		, PassTypeID passTypeID
+		, VkCompareOp alphaFunc
+		, VkCompareOp blendAlphaFunc
+		, TextureFlagsArray const & textures
+		, SubmeshFlags const & submeshFlags
+		, ProgramFlags const & programFlags
+		, SceneFlags const & sceneFlags
+		, VkPrimitiveTopology topology
+		, bool isFrontCulled
+		, uint32_t passLayerIndex
+		, GpuBufferOffsetT< castor::Point4f > const & morphTargets )const
+	{
+		auto result = m_nodesPass.createPipelineFlags( colourBlendMode
+			, alphaBlendMode
+			, passFlags
+			, renderPassTypeID
+			, passTypeID
+			, alphaFunc
+			, blendAlphaFunc
+			, textures
+			, submeshFlags
+			, programFlags
+			, sceneFlags
+			, topology
+			, isFrontCulled
+			, passLayerIndex
+			, morphTargets );
+		result.m_shaderFlags = getShaderFlags();
+		return result;
+	}
+
+	bool VisibilityResolvePass::areValidPassFlags( PassFlags const & passFlags )const
+	{
+		return m_nodesPass.areValidPassFlags( passFlags );
+	}
+
+	C3D_API ShaderFlags VisibilityResolvePass::getShaderFlags()const
+	{
+		return ShaderFlag::eNormal
+			| ShaderFlag::eTangentSpace
+			| ShaderFlag::eWorldSpace
+			| ShaderFlag::eViewSpace
+			| ShaderFlag::eVelocity
+			| ShaderFlag::eOpacity;
 	}
 
 	void VisibilityResolvePass::doInitialise()
@@ -1862,36 +1935,33 @@ namespace castor3d
 	}
 
 	VisibilityResolvePass::Pipeline & VisibilityResolvePass::doCreatePipeline( PipelineBaseHash const & hash
+		, PipelineFlags const & flags
 		, uint32_t stride )
 	{
-		auto real = hash;
-
-		if ( stride )
-		{
-			real.hi = castor::hashCombine64( real.hi, stride );
-		}
-
-		return doCreatePipeline( real
+		return doCreatePipeline( hash
+			, flags
 			, stride
 			, m_billboardPipelines );
 	}
 
-	VisibilityResolvePass::Pipeline & VisibilityResolvePass::doCreatePipeline( PipelineBaseHash const & hash )
+	VisibilityResolvePass::Pipeline & VisibilityResolvePass::doCreatePipeline( PipelineBaseHash const & hash
+		, PipelineFlags const & flags )
 	{
 		return doCreatePipeline( hash
+			, flags
 			, 0u
 			, m_pipelines );
 	}
 
 	VisibilityResolvePass::Pipeline & VisibilityResolvePass::doCreatePipeline( PipelineBaseHash const & hash
+		, PipelineFlags const & flags
 		, uint32_t stride
 		, PipelineContainer & pipelines )
 	{
 		auto it = pipelines.find( hash );
 
 		if ( it == pipelines.end() )
-		{
-			auto [submeshFlags, programFlags, passType, passFlags, maxTexcoordSet, texturesCount, textureFlags] = getPipelineHashDetails( hash );
+		{;
 			auto stageBit = VisibilityResolvePass::useCompute
 				? VK_SHADER_STAGE_COMPUTE_BIT
 				: VK_SHADER_STAGE_FRAGMENT_BIT;
@@ -1899,7 +1969,7 @@ namespace castor3d
 			auto extent = m_parent->getNormalTexture().getExtent();
 			auto result = std::make_unique< Pipeline >();
 			result->descriptorLayout = stride == 0u
-				? visres::createVtxDescriptorLayout( m_device, getName(), submeshFlags )
+				? visres::createVtxDescriptorLayout( m_device, getName(), flags )
 				: visres::createVtxDescriptorLayout( m_device, getName() );
 			result->pipelineLayout = m_device->createPipelineLayout( getName()
 				, { *m_inOutsDescriptorLayout, *result->descriptorLayout, *getScene().getBindlessTexDescriptorLayout() }
@@ -1907,10 +1977,10 @@ namespace castor3d
 
 			result->shaders[0].shader = ShaderModule{ stageBit
 				, getName()
-				, visres::getProgram( m_device, extent, passType, textureFlags, submeshFlags, passFlags, programFlags, stride, false ) };
+				, visres::getProgram( m_device, extent, flags, stride, false ) };
 			result->shaders[1].shader = ShaderModule{ stageBit
 				, getName()
-				, visres::getProgram( m_device, extent, passType, textureFlags, submeshFlags, passFlags, programFlags, stride, true ) };
+				, visres::getProgram( m_device, extent, flags, stride, true ) };
 
 			if constexpr ( useCompute )
 			{

@@ -133,6 +133,7 @@ namespace castor3d
 		//!\~english	Voxel Cone Tracing enabling.
 		//!\~french		Activation du Voxel Cone Tracing.
 		eVoxelConeTracing = 0x0001 << 8,
+		eGIAny = eLpvGI | eLayeredLpvGI | eVoxelConeTracing,
 		//!\~english	All flags.
 		//!\~french		Tous les indicateurs.
 		eAll = 0x01FF,

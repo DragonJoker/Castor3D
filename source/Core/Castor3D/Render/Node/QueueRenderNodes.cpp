@@ -87,7 +87,7 @@ namespace castor3d
 			auto baseHash = getPipelineBaseHash( *pipeline.getOwner()
 				, node.data
 				, *node.pass
-				, checkFlag( flags.programFlags, ProgramFlag::eInvertNormals ) );
+				, flags.hasInvertNormals() );
 
 			auto & bufferChunk = node.getFinalBufferOffsets().getBufferChunk( SubmeshFlag::ePositions );
 			auto buffer = &bufferChunk.buffer->getBuffer().getBuffer();
@@ -113,7 +113,7 @@ namespace castor3d
 			auto baseHash = getPipelineBaseHash( *pipeline.getOwner()
 				, node.data
 				, *node.pass
-				, checkFlag( flags.programFlags, ProgramFlag::eInvertNormals ) );
+				, flags.hasInvertNormals() );
 
 			auto & bufferChunk = node.getFinalBufferOffsets().getBufferChunk( SubmeshFlag::ePositions );
 			auto buffer = &bufferChunk.buffer->getBuffer().getBuffer();
@@ -171,7 +171,7 @@ namespace castor3d
 					, node.data
 					, *node.pass
 					, buffer
-					, checkFlag( pipeline.getFlags().programFlags, ProgramFlag::eInvertNormals ) );
+					, pipeline.getFlags().hasInvertNormals() );
 
 				if ( !pipeline.hasMeshletDescriptorSetLayout() )
 				{
@@ -188,62 +188,51 @@ namespace castor3d
 		}
 
 		static bool isBufferEnabled( uint32_t submeshFlagIndex
-			, ShaderFlags shaderFlags
 			, PipelineFlags const & pipelineFlags )
 		{
 			if ( submeshFlagIndex == getIndex( SubmeshFlag::ePositions ) )
 			{
-				return checkFlag( pipelineFlags.submeshFlags, SubmeshFlag::ePositions );
+				return pipelineFlags.enablePosition();
 			}
 
 			if ( submeshFlagIndex == getIndex( SubmeshFlag::eNormals ) )
 			{
-				return checkFlag( pipelineFlags.submeshFlags, SubmeshFlag::eNormals )
-					&& checkFlag( shaderFlags, ShaderFlag::eNormal );
+				return pipelineFlags.enableNormal();
 			}
 
 			if ( submeshFlagIndex == getIndex( SubmeshFlag::eTangents ) )
 			{
-				return checkFlag( pipelineFlags.submeshFlags, SubmeshFlag::eTangents )
-					&& checkFlag( shaderFlags, ShaderFlag::eTangentSpace );
+				return pipelineFlags.enableTangentSpace();
 			}
-
-			bool hasTextures = !pipelineFlags.textures.empty()
-				|| checkFlag( pipelineFlags.programFlags, ProgramFlag::eForceTexCoords );
 
 			if ( submeshFlagIndex == getIndex( SubmeshFlag::eTexcoords0 ) )
 			{
-				return hasTextures
-					&& checkFlag( pipelineFlags.submeshFlags, SubmeshFlag::eTexcoords0 );
+				return pipelineFlags.enableTexcoord0();
 			}
 
 			if ( submeshFlagIndex == getIndex( SubmeshFlag::eTexcoords1 ) )
 			{
-				return hasTextures
-					&& checkFlag( pipelineFlags.submeshFlags, SubmeshFlag::eTexcoords1 );
+				return pipelineFlags.enableTexcoord1();
 			}
 
 			if ( submeshFlagIndex == getIndex( SubmeshFlag::eTexcoords2 ) )
 			{
-				return hasTextures
-					&& checkFlag( pipelineFlags.submeshFlags, SubmeshFlag::eTexcoords2 );
+				return pipelineFlags.enableTexcoord2();
 			}
 
 			if ( submeshFlagIndex == getIndex( SubmeshFlag::eTexcoords3 ) )
 			{
-				return hasTextures
-					&& checkFlag( pipelineFlags.submeshFlags, SubmeshFlag::eTexcoords3 );
+				return pipelineFlags.enableTexcoord3();
 			}
 
 			if ( submeshFlagIndex == getIndex( SubmeshFlag::eColours ) )
 			{
-				return checkFlag( pipelineFlags.submeshFlags, SubmeshFlag::eColours );
+				return pipelineFlags.enableColours();
 			}
 
 			if ( submeshFlagIndex == getIndex( SubmeshFlag::eVelocity ) )
 			{
-				return checkFlag( pipelineFlags.submeshFlags, SubmeshFlag::eVelocity )
-					&& checkFlag( shaderFlags, ShaderFlag::eVelocity );
+				return pipelineFlags.hasWorldPosInputs();
 			}
 
 			return true;
@@ -260,16 +249,13 @@ namespace castor3d
 			, uint32_t & idxIndex
 			, uint32_t & nidxIndex )
 		{
-			GeometryBuffers const & geometryBuffers = node.getGeometryBuffers( nodesPass.getShaderFlags()
-				, pipeline.getFlags().submeshFlags
-				, pipeline.getFlags().programFlags
-				, node.pass->getTexturesMask() );
+			GeometryBuffers const & geometryBuffers = node.getGeometryBuffers( pipeline.getFlags() );
 			uint32_t currentLayout = 0u;
 
 			for ( uint32_t i = 1u; i < uint32_t( SubmeshData::eCount ); ++i )
 			{
 				if ( geometryBuffers.bufferOffset.buffers[i].buffer
-					&& isBufferEnabled( i, pipeline.getOwner()->getShaderFlags(), pipeline.getFlags() ) )
+					&& isBufferEnabled( i, pipeline.getFlags() ) )
 				{
 					commandBuffer.bindVertexBuffer( geometryBuffers.layouts[currentLayout].get().vertexBindingDescriptions[0].binding
 						, geometryBuffers.bufferOffset.buffers[i].getBuffer()
@@ -646,10 +632,7 @@ namespace castor3d
 							, submesh.getTopology()
 							, sidedCulled.second
 							, submesh.getMorphTargets() );
-						auto vertexLayouts = culledNode->getGeometryBuffers( renderPass.getShaderFlags()
-							, pipelineFlags.submeshFlags
-							, pipelineFlags.programFlags
-							, textures ).layouts;
+						auto vertexLayouts = culledNode->getGeometryBuffers( pipelineFlags ).layouts;
 						auto & pipeline = sidedCulled.second
 							? renderPass.prepareFrontPipeline( pipelineFlags
 								, vertexLayouts
@@ -665,7 +648,7 @@ namespace castor3d
 							, shadowMaps
 							, submesh.getMorphTargets() );
 
-						if ( checkFlag( pipelineFlags.programFlags, ProgramFlag::eHasMesh ) )
+						if ( pipelineFlags.usesMesh() )
 						{
 							culledNode->createMeshletDescriptorSet();
 						}
@@ -704,10 +687,7 @@ namespace castor3d
 									, submesh.getTopology()
 									, sidedCulled.second
 									, submesh.getMorphTargets() );
-								auto vertexLayouts = culledNode->getGeometryBuffers( renderPass.getShaderFlags()
-									, pipelineFlags.submeshFlags
-									, pipelineFlags.programFlags
-									, textures ).layouts;
+								auto vertexLayouts = culledNode->getGeometryBuffers( pipelineFlags ).layouts;
 								auto & pipeline = sidedCulled.second
 									? renderPass.prepareFrontPipeline( pipelineFlags
 										, vertexLayouts
@@ -723,7 +703,7 @@ namespace castor3d
 									, shadowMaps
 									, submesh.getMorphTargets() );
 
-								if ( checkFlag( pipelineFlags.programFlags, ProgramFlag::eHasMesh ) )
+								if ( pipelineFlags.usesMesh() )
 								{
 									culledNode->createMeshletDescriptorSet();
 								}

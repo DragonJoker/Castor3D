@@ -60,7 +60,7 @@ namespace castor3d
 			return m_lightProjection * pos;
 		}
 
-		sdw::Float ShadowMapData::getLinearisedDepth( sdw::Vec3 const & pos )const
+		sdw::Float ShadowMapData::getNormalisedDepth( sdw::Vec3 const & pos )const
 		{
 			return length( pos - m_lightPosFarPlane.xyz() ) / m_lightPosFarPlane.w();
 		}

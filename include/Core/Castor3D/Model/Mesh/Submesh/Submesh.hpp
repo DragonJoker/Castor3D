@@ -253,10 +253,7 @@ namespace castor3d
 		 *\param[in]	mask			Le masque de textures.
 		*/
 		C3D_API GeometryBuffers const & getGeometryBuffers( SubmeshRenderNode const & node
-			, ShaderFlags const & shaderFlags
-			, ProgramFlags const & programFlags
-			, SubmeshFlags const & submeshFlags
-			, TextureFlagsArray const & mask )const;
+			, PipelineFlags const & flags )const;
 		/**
 		*\~english
 		*name

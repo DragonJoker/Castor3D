@@ -71,6 +71,9 @@ namespace castor3d
 
 	TextureFlags VisibilityPass::getTexturesMask()const
 	{
+		// Normally, ( TextureFlag::eOpacity | TextureFlag::eHeight ) would be enough,
+		// but to have the pipeline ID order synchronization with visibility resolve,
+		// allow all.
 		return TextureFlags{ TextureFlag::eAll };
 	}
 
@@ -78,7 +81,9 @@ namespace castor3d
 	{
 		return ShaderFlag::eWorldSpace
 			| ShaderFlag::eTangentSpace
-			| ShaderFlag::eVelocity;
+			| ShaderFlag::eOpacity
+			| ShaderFlag::eVelocity
+			| ShaderFlag::eVisibility;
 	}
 
 	PassFlags VisibilityPass::doAdjustPassFlags( PassFlags flags )const
@@ -88,8 +93,6 @@ namespace castor3d
 
 	ProgramFlags VisibilityPass::doAdjustProgramFlags( ProgramFlags flags )const
 	{
-		remFlag( flags, ProgramFlag::eLighting );
-		addFlag( flags, ProgramFlag::eVisibilityPass );
 		return flags;
 	}
 
@@ -128,8 +131,7 @@ namespace castor3d
 	{
 		using namespace sdw;
 		FragmentWriter writer;
-		auto textureFlags = filterTexturesFlags( flags.textures );
-		bool hasTextures = flags.hasTextures() && !textureFlags.empty();
+		bool enableTextures = flags.enableTextures();
 
 		C3D_Scene( writer
 			, GlobalBuffersIdx::eScene
@@ -143,16 +145,16 @@ namespace castor3d
 		shader::TextureConfigurations textureConfigs{ writer
 			, uint32_t( GlobalBuffersIdx::eTexConfigs )
 			, RenderPipeline::eBuffers
-			, hasTextures };
+			, enableTextures };
 		shader::TextureAnimations textureAnims{ writer
 			, uint32_t( GlobalBuffersIdx::eTexAnims )
 			, RenderPipeline::eBuffers
-			, hasTextures };
+			, enableTextures };
 
 		auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
 			, 0u
 			, RenderPipeline::eTextures
-			, hasTextures ) );
+			, enableTextures ) );
 
 		sdw::PushConstantBuffer pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
@@ -162,22 +164,16 @@ namespace castor3d
 		// Outputs
 		auto depthObj = writer.declOutput< Vec4 >( "depthObj", 0u );
 		auto data = writer.declOutput< UVec2 >( "data", 1u );
-		auto velocity = writer.declOutput< Vec2 >( "velocity", 2u );
+		auto velocity = writer.declOutput< Vec2 >( "velocity", 2u, flags.writeVelocity() );
 
 		shader::Utils utils{ writer };
 
 		writer.implementMainT< shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer
-				, flags.submeshFlags
-				, flags.programFlags
-				, getShaderFlags()
-				, textureFlags
-				, flags.passFlags
-				, hasTextures }
+				, flags }
 			, FragmentOut{ writer }
 			, [&]( FragmentInT< shader::FragmentSurfaceT > in
 				, FragmentOut out )
 			{
-				auto usedTextureFlags = textureFlags & ( TextureFlag::eOpacity | TextureFlag::eHeight );
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[in.nodeId - 1u] );
 				shader::GeometryBlendComponents components{ writer
@@ -193,11 +189,7 @@ namespace castor3d
 					, in.tangentSpaceViewPosition
 					, in.tangentSpaceFragPosition };
 				materials.blendMaterials( utils
-					, flags.alphaFunc
-					, flags.passFlags
-					, flags.submeshFlags
-					, usedTextureFlags
-					, !usedTextureFlags.empty()
+					, flags
 					, textureConfigs
 					, textureAnims
 					, c3d_maps
@@ -209,7 +201,7 @@ namespace castor3d
 					, writer.cast< sdw::Float >( in.nodeId )
 					, 0.0_f );
 				data = uvec2( ( in.nodeId << maxPipelinesSize ) | ( pipelineID )
-					, ( checkFlag( flags.programFlags, ProgramFlag::eBillboards )
+					, ( flags.isBillboard()
 						? in.vertexId * 2_u + writer.cast< sdw::UInt >( in.primitiveID )
 						: writer.cast< sdw::UInt >( in.primitiveID ) ) );
 				velocity = in.getVelocity();

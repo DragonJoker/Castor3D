@@ -11,6 +11,21 @@ namespace castor3d::shader
 {
 	//*****************************************************************************************
 
+	namespace surface
+	{
+		template< typename TypeT >
+		sdw::Array< TypeT > getMemberArray( sdw::StorageBuffer const & buffer
+			, std::string const & name
+			, bool enable )
+		{
+			auto result = buffer.declMemberArray< TypeT >( name, enable );
+			buffer.end();
+			return result;
+		}
+	}
+
+	//*****************************************************************************************
+
 	template< ast::var::Flag FlagT >
 	SurfaceT< FlagT >::SurfaceT( sdw::ShaderWriter & writer
 		, ast::expr::ExprPtr expr
@@ -112,14 +127,8 @@ namespace castor3d::shader
 
 	template< ast::var::Flag FlagT >
 	ast::type::IOStructPtr VertexSurfaceT< FlagT >::makeIOType( ast::type::TypesCache & cache
-		, SubmeshFlags submeshFlags
-		, ProgramFlags programFlags
-		, ShaderFlags shaderFlags
-		, TextureFlags textureFlags
-		, PassFlags passFlags
-		, bool hasTextures )
+		, PipelineFlags const & flags )
 	{
-		hasTextures = hasTextures || checkFlag( programFlags, ProgramFlag::eForceTexCoords );
 		auto result = cache.getIOStruct( ast::type::MemoryLayout::eC
 			, "C3D_" + ( FlagT == sdw::var::Flag::eShaderOutput
 				? std::string{ "Output" }
@@ -138,36 +147,36 @@ namespace castor3d::shader
 				, index++ );
 			result->declMember( "normal", ast::type::Kind::eVec3F
 				, ast::type::NotArray
-				, ( ( checkFlag( submeshFlags, SubmeshFlag::eNormals ) && checkFlag( shaderFlags, ShaderFlag::eNormal ) ) ? index++ : 0 )
-				, ( checkFlag( submeshFlags, SubmeshFlag::eNormals ) && checkFlag( shaderFlags, ShaderFlag::eNormal ) ) );
+				, ( flags.enableNormal() ? index++ : 0 )
+				, flags.enableNormal() );
 			result->declMember( "tangent", ast::type::Kind::eVec3F
 				, ast::type::NotArray
-				, ( ( checkFlag( submeshFlags, SubmeshFlag::eTangents ) && checkFlag( shaderFlags, ShaderFlag::eTangentSpace ) ) ? index++ : 0 )
-				, ( checkFlag( submeshFlags, SubmeshFlag::eTangents ) && checkFlag( shaderFlags, ShaderFlag::eTangentSpace ) ) );
+				, ( flags.enableTangentSpace() ? index++ : 0 )
+				, flags.enableTangentSpace() );
 			result->declMember( "texcoord0", ast::type::Kind::eVec3F
 				, ast::type::NotArray
-				, ( ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords0 ) && hasTextures ) ? index++ : 0 )
-				, checkFlag( submeshFlags, SubmeshFlag::eTexcoords0 ) && hasTextures );
+				, ( flags.enableTexcoord0() ? index++ : 0 )
+				, flags.enableTexcoord0() );
 			result->declMember( "texcoord1", ast::type::Kind::eVec3F
 				, ast::type::NotArray
-				, ( ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords1 ) && hasTextures ) ? index++ : 0 )
-				, checkFlag( submeshFlags, SubmeshFlag::eTexcoords1 ) && hasTextures );
+				, ( flags.enableTexcoord1() ? index++ : 0 )
+				, flags.enableTexcoord1() );
 			result->declMember( "texcoord2", ast::type::Kind::eVec3F
 				, ast::type::NotArray
-				, ( ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords2 ) && hasTextures ) ? index++ : 0 )
-				, checkFlag( submeshFlags, SubmeshFlag::eTexcoords2 ) && hasTextures );
+				, ( flags.enableTexcoord2() ? index++ : 0 )
+				, flags.enableTexcoord2() );
 			result->declMember( "texcoord3", ast::type::Kind::eVec3F
 				, ast::type::NotArray
-				, ( ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords3 ) && hasTextures ) ? index++ : 0 )
-				, checkFlag( submeshFlags, SubmeshFlag::eTexcoords3 ) && hasTextures );
+				, ( flags.enableTexcoord3() ? index++ : 0 )
+				, flags.enableTexcoord3() );
 			result->declMember( "colour", ast::type::Kind::eVec3F
 				, ast::type::NotArray
-				, ( checkFlag( submeshFlags, SubmeshFlag::eColours ) ? index++ : 0 )
-				, checkFlag( submeshFlags, SubmeshFlag::eColours ) );
+				, ( flags.enableColours() ? index++ : 0 )
+				, flags.enableColours() );
 			result->declMember( "passMasks", ast::type::Kind::eVec4U
 				, ast::type::NotArray
-				, ( checkFlag( submeshFlags, SubmeshFlag::ePassMasks ) ? index++ : 0 )
-				, checkFlag( submeshFlags, SubmeshFlag::ePassMasks ) );
+				, ( flags.enablePassMasks() ? index++ : 0 )
+				, flags.enablePassMasks() );
 			//@}
 			/**
 			*	Velocity
@@ -175,8 +184,8 @@ namespace castor3d::shader
 			//@{
 			result->declMember( "velocity", ast::type::Kind::eVec3F
 				, ast::type::NotArray
-				, ( ( checkFlag( submeshFlags, SubmeshFlag::eVelocity ) && checkFlag( shaderFlags, ShaderFlag::eVelocity ) ) ? index++ : 0 )
-				, checkFlag( submeshFlags, SubmeshFlag::eVelocity ) && checkFlag( shaderFlags, ShaderFlag::eVelocity ) );
+				, ( flags.hasWorldPosInputs() ? index++ : 0 )
+				, flags.hasWorldPosInputs() );
 			//@}
 			/**
 			*	Instantiation
@@ -184,8 +193,8 @@ namespace castor3d::shader
 			//@{
 			result->declMember( "objectIds", ast::type::Kind::eVec4U
 				, ast::type::NotArray
-				, ( checkFlag( programFlags, ProgramFlag::eInstantiation ) ? index++ : 0 )
-				, checkFlag( programFlags, ProgramFlag::eInstantiation ) );
+				, ( flags.enableInstantiation() ? index++ : 0 )
+				, flags.enableInstantiation() );
 			//@}
 		}
 
@@ -244,7 +253,7 @@ namespace castor3d::shader
 	//*****************************************************************************************
 
 	template< typename TexcoordT, ast::var::Flag FlagT >
-	FragmentSurfaceUvT< TexcoordT, FlagT >::FragmentSurfaceUvT( sdw::ShaderWriter & writer
+	RasterizerSurfaceT< TexcoordT, FlagT >::RasterizerSurfaceT( sdw::ShaderWriter & writer
 		, sdw::expr::ExprPtr expr
 		, bool enabled )
 		: StructInstance{ writer, std::move( expr ), enabled }
@@ -264,119 +273,107 @@ namespace castor3d::shader
 		, colour{ this->getMember< sdw::Vec3 >( "colour", true ) }
 		, passMultipliers{ this->getMemberArray< sdw::Vec4 >( "passMultipliers", true ) }
 		, nodeId{ this->getMember< sdw::UInt >( "nodeId", true ) }
-		, drawId{ this->getMember< sdw::UInt >( "drawId", true ) }
 		, vertexId{ this->getMember< sdw::UInt >( "vertexId", true ) }
 	{
 	}
 
 	template< typename TexcoordT, ast::var::Flag FlagT >
-	ast::type::IOStructPtr FragmentSurfaceUvT< TexcoordT, FlagT >::makeIOType( ast::type::TypesCache & cache
-		, SubmeshFlags submeshFlags
-		, ProgramFlags programFlags
-		, ShaderFlags shaderFlags
-		, TextureFlags textureFlags
-		, PassFlags passFlags
-		, bool hasTextures )
+	ast::type::IOStructPtr RasterizerSurfaceT< TexcoordT, FlagT >::makeIOType( ast::type::TypesCache & cache
+		, PipelineFlags const & flags )
 	{
-		hasTextures = hasTextures || checkFlag( programFlags, ProgramFlag::eForceTexCoords );
 		auto result = cache.getIOStruct( ast::type::MemoryLayout::eC
 			, "C3D_" + ( FlagT == sdw::var::Flag::eShaderOutput
 				? std::string{ "Output" }
-				: std::string{ "Input" } ) + "FragSurface"
+				: std::string{ "Input" } ) + "RasterSurface"
 			, FlagT );
 
 		if ( result->empty() )
 		{
 			auto texType = TexcoordT::makeType( cache );
-			bool hasParallaxOcclusionMapping = checkFlag( textureFlags, TextureFlag::eHeight )
-				&& ( checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingOne )
-					|| checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingRepeat ) );
 			uint32_t index = 0u;
 			result->declMember( "worldPosition", ast::type::Kind::eVec4F
 				, ast::type::NotArray
-				, ( checkFlag( shaderFlags, ShaderFlag::eWorldSpace ) ? index++ : 0 )
-				, checkFlag( shaderFlags, ShaderFlag::eWorldSpace ) );
+				, ( flags.usesWorldSpace() ? index++ : 0 )
+				, flags.usesWorldSpace() );
 			result->declMember( "viewPosition", ast::type::Kind::eVec4F
 				, ast::type::NotArray
-				, ( checkFlag( shaderFlags, ShaderFlag::eViewSpace ) ? index++ : 0 )
-				, checkFlag( shaderFlags, ShaderFlag::eViewSpace ) );
+				, ( flags.usesViewSpace() ? index++ : 0 )
+				, flags.usesViewSpace() );
 			result->declMember( "curPosition", ast::type::Kind::eVec4F
 				, ast::type::NotArray
-				, ( checkFlag( shaderFlags, ShaderFlag::eVelocity ) ? index++ : 0 )
-				, checkFlag( shaderFlags, ShaderFlag::eVelocity ) );
+				, ( flags.writeVelocity() ? index++ : 0 )
+				, flags.writeVelocity() );
 			result->declMember( "prvPosition", ast::type::Kind::eVec4F
 				, ast::type::NotArray
-				, ( checkFlag( shaderFlags, ShaderFlag::eVelocity ) ? index++ : 0 )
-				, checkFlag( shaderFlags, ShaderFlag::eVelocity ) );
+				, ( flags.writeVelocity() ? index++ : 0 )
+				, flags.writeVelocity() );
 			result->declMember( "tangentSpaceFragPosition"
 				, ast::type::Kind::eVec3F
 				, ast::type::NotArray
-				, ( ( checkFlag( submeshFlags, SubmeshFlag::eTangents ) && checkFlag( shaderFlags, ShaderFlag::eTangentSpace ) && hasParallaxOcclusionMapping ) ? index++ : 0 )
-				, ( checkFlag( submeshFlags, SubmeshFlag::eTangents ) && checkFlag( shaderFlags, ShaderFlag::eTangentSpace ) && hasParallaxOcclusionMapping ) );
+				, ( flags.enableParallaxOcclusionMapping() ? index++ : 0 )
+				, flags.enableParallaxOcclusionMapping() );
 			result->declMember( "tangentSpaceViewPosition"
 				, ast::type::Kind::eVec3F
 				, ast::type::NotArray
-				, ( ( checkFlag( submeshFlags, SubmeshFlag::eTangents ) && checkFlag(shaderFlags, ShaderFlag::eTangentSpace ) && hasParallaxOcclusionMapping ) ? index++ : 0 )
-				, ( checkFlag( submeshFlags, SubmeshFlag::eTangents ) && checkFlag( shaderFlags, ShaderFlag::eTangentSpace ) && hasParallaxOcclusionMapping ) );
+				, ( flags.enableParallaxOcclusionMapping() ? index++ : 0 )
+				, flags.enableParallaxOcclusionMapping() );
 			result->declMember( "normal"
 				, ast::type::Kind::eVec3F
 				, ast::type::NotArray
-				, ( ( checkFlag( submeshFlags, SubmeshFlag::eNormals ) && checkFlag( shaderFlags, ShaderFlag::eNormal ) ) ? index++ : 0 )
-				, ( checkFlag( submeshFlags, SubmeshFlag::eNormals ) && checkFlag( shaderFlags, ShaderFlag::eNormal ) ) );
+				, ( flags.enableNormal() ? index++ : 0 )
+				, flags.enableNormal() );
 			result->declMember( "tangent", ast::type::Kind::eVec3F
 				, ast::type::NotArray
-				, ( ( checkFlag( submeshFlags, SubmeshFlag::eTangents ) && checkFlag( shaderFlags, ShaderFlag::eTangentSpace ) ) ? index++ : 0 )
-				, ( checkFlag( submeshFlags, SubmeshFlag::eTangents ) && checkFlag( shaderFlags, ShaderFlag::eTangentSpace ) ) );
+				, ( flags.enableTangentSpace() ? index++ : 0 )
+				, flags.enableTangentSpace() );
 			result->declMember( "bitangent", ast::type::Kind::eVec3F
 				, ast::type::NotArray
-				, ( ( checkFlag( submeshFlags, SubmeshFlag::eTangents ) && checkFlag( shaderFlags, ShaderFlag::eTangentSpace ) ) ? index++ : 0 )
-				, ( checkFlag( submeshFlags, SubmeshFlag::eTangents ) && checkFlag( shaderFlags, ShaderFlag::eTangentSpace ) ) );
+				, ( flags.enableTangentSpace() ? index++ : 0 )
+				, flags.enableTangentSpace() );
 			result->declMember( "texcoord0", texType
 				, ast::type::NotArray
-				, ( ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords0 ) && hasTextures ) ? index++ : 0 )
-				, checkFlag( submeshFlags, SubmeshFlag::eTexcoords0 ) && hasTextures );
+				, ( flags.enableTexcoord0() ? index++ : 0 )
+				, flags.enableTexcoord0() );
 			result->declMember( "texcoord1", texType
 				, ast::type::NotArray
-				, ( ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords1 ) && hasTextures ) ? index++ : 0 )
-				, checkFlag( submeshFlags, SubmeshFlag::eTexcoords1 ) && hasTextures );
+				, ( flags.enableTexcoord1() ? index++ : 0 )
+				, flags.enableTexcoord1() );
 			result->declMember( "texcoord2", texType
 				, ast::type::NotArray
-				, ( ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords2 ) && hasTextures ) ? index++ : 0 )
-				, checkFlag( submeshFlags, SubmeshFlag::eTexcoords2 ) && hasTextures );
+				, ( flags.enableTexcoord2() ? index++ : 0 )
+				, flags.enableTexcoord2() );
 			result->declMember( "texcoord3", texType
 				, ast::type::NotArray
-				, ( ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords3 ) && hasTextures ) ? index++ : 0 )
-				, checkFlag( submeshFlags, SubmeshFlag::eTexcoords3 ) && hasTextures );
-			result->declMember( "colour", texType
+				, ( flags.enableTexcoord3() ? index++ : 0 )
+				, flags.enableTexcoord3() );
+			result->declMember( "colour", ast::type::Kind::eVec3F
 				, ast::type::NotArray
-				, ( checkFlag( submeshFlags, SubmeshFlag::eColours ) ? index++ : 0 )
-				, checkFlag( submeshFlags, SubmeshFlag::eColours ) );
+				, ( flags.enableColours() ? index++ : 0 )
+				, flags.enableColours() );
 			result->declMember( "passMultipliers", ast::type::Kind::eVec4F
 				, 4u
-				, ( checkFlag( submeshFlags, SubmeshFlag::ePassMasks ) ? index : 0 )
-				, checkFlag( submeshFlags, SubmeshFlag::ePassMasks ) );
-			if ( checkFlag( submeshFlags, SubmeshFlag::ePassMasks ) )
+				, ( flags.enablePassMasks() ? index : 0 )
+				, flags.enablePassMasks() );
+
+			if ( flags.enablePassMasks() )
 			{
 				index += 4u;
 			}
+
 			result->declMember( "nodeId", ast::type::Kind::eUInt
 				, ast::type::NotArray
 				, index++ );
-			result->declMember( "drawId", ast::type::Kind::eUInt
-				, ast::type::NotArray
-				, ( checkFlag( programFlags, ProgramFlag::eVisibilityPass ) ? index++ : 0 )
-				, checkFlag( programFlags, ProgramFlag::eVisibilityPass ) );
 			result->declMember( "vertexId", ast::type::Kind::eUInt
 				, ast::type::NotArray
-				, ( ( checkFlag( programFlags, ProgramFlag::eBillboards ) && checkFlag( programFlags, ProgramFlag::eVisibilityPass ) ) ? index++ : 0 )
-				, checkFlag( programFlags, ProgramFlag::eBillboards ) && checkFlag( programFlags, ProgramFlag::eVisibilityPass ) );
+				, ( flags.enableVertexID() ? index : 0 )
+				, flags.enableVertexID() );
 		}
 
 		return result;
 	}
 
 	template< typename TexcoordT, ast::var::Flag FlagT >
-	ast::type::BaseStructPtr FragmentSurfaceUvT< TexcoordT, FlagT >::makeType( ast::type::TypesCache & cache )
+	ast::type::BaseStructPtr RasterizerSurfaceT< TexcoordT, FlagT >::makeType( ast::type::TypesCache & cache )
 	{
 		auto result = cache.getStruct( ast::type::MemoryLayout::eC, "C3D_FragSurface" );
 
@@ -423,7 +420,7 @@ namespace castor3d::shader
 	}
 
 	template< typename TexcoordT, ast::var::Flag FlagT >
-	void FragmentSurfaceUvT< TexcoordT, FlagT >::computeVelocity( MatrixData const & matrixData
+	void RasterizerSurfaceT< TexcoordT, FlagT >::computeVelocity( MatrixData const & matrixData
 		, sdw::Vec4 & csCurPos
 		, sdw::Vec4 & csPrvPos )
 	{
@@ -446,21 +443,20 @@ namespace castor3d::shader
 	}
 
 	template< typename TexcoordT, ast::var::Flag FlagT >
-	void FragmentSurfaceUvT< TexcoordT, FlagT >::computeTangentSpace( SubmeshFlags submeshFlags
-		, ProgramFlags programFlags
+	void RasterizerSurfaceT< TexcoordT, FlagT >::computeTangentSpace( PipelineFlags const & flags
 		, sdw::Vec3 const & cameraPosition
 		, sdw::Vec3 const & worldPos
 		, sdw::Vec3 const & nml
 		, sdw::Vec3 const & tan )
 	{
-		if ( checkFlag( submeshFlags, SubmeshFlag::eTangents ) )
+		if ( flags.enableTangentSpace() )
 		{
 			normal = nml;
 			tangent = tan;
 			tangent = normalize( sdw::fma( -normal, vec3( dot( tangent, normal ) ), tangent ) );
 			bitangent = cross( normal, tangent );
 
-			if ( checkFlag( programFlags, ProgramFlag::eInvertNormals ) )
+			if ( flags.hasInvertNormals() )
 			{
 				normal = -normal;
 				tangent = -tangent;
@@ -481,7 +477,7 @@ namespace castor3d::shader
 		{
 			normal = nml;
 
-			if ( checkFlag( programFlags, ProgramFlag::eInvertNormals ) )
+			if ( flags.hasInvertNormals() )
 			{
 				normal = -normal;
 			}
@@ -489,16 +485,14 @@ namespace castor3d::shader
 	}
 
 	template< typename TexcoordT, ast::var::Flag FlagT >
-	void FragmentSurfaceUvT< TexcoordT, FlagT >::computeTangentSpace( SubmeshFlags submeshFlags
-		, ProgramFlags programFlags
+	void RasterizerSurfaceT< TexcoordT, FlagT >::computeTangentSpace( PipelineFlags const & flags
 		, sdw::Vec3 const & cameraPosition
 		, sdw::Vec3 const & worldPos
 		, sdw::Mat3 const & mtx
 		, sdw::Vec3 const & nml
 		, sdw::Vec3 const & tan )
 	{
-		return computeTangentSpace( submeshFlags
-			, programFlags
+		return computeTangentSpace( flags
 			, cameraPosition
 			, worldPos
 			, normalize( mtx * nml )
@@ -506,14 +500,14 @@ namespace castor3d::shader
 	}
 
 	template< typename TexcoordT, ast::var::Flag FlagT >
-	void FragmentSurfaceUvT< TexcoordT, FlagT >::computeTangentSpace( SubmeshFlags submeshFlags
+	void RasterizerSurfaceT< TexcoordT, FlagT >::computeTangentSpace( PipelineFlags const & flags
 		, sdw::Vec3 const & cameraPosition
 		, sdw::Vec3 const & worldPos
 		, sdw::Vec3 const & nml
 		, sdw::Vec3 const & tan
 		, sdw::Vec3 const & bin )
 	{
-		if ( checkFlag( submeshFlags, SubmeshFlag::eTangents ) )
+		if ( flags.enableTangentSpace() )
 		{
 			normal = nml;
 			tangent = tan;
@@ -536,10 +530,43 @@ namespace castor3d::shader
 	}
 
 	template< typename TexcoordT, ast::var::Flag FlagT >
-	sdw::Vec2 FragmentSurfaceUvT< TexcoordT, FlagT >::getVelocity()const
+	sdw::Vec2 RasterizerSurfaceT< TexcoordT, FlagT >::getVelocity()const
 	{
 		return ( curPosition.xy() / curPosition.z() ) - ( prvPosition.xy() / prvPosition.z() );
 	}
+
+	//*****************************************************************************************
+
+#define DefineSsbo( Name, Type, Enable )\
+		m_##Name##Buffer{ writer\
+			, #Name + std::string{ "Buffer" }\
+			, binding++\
+			, set\
+			, ast::type::MemoryLayout::eStd430\
+			, Enable }\
+		, ##Name{ getMemberArray< Type >( m_##Name##Buffer, #Name, Enable ) }
+
+	template< typename PositionT >
+	ComputeSurfaceT< PositionT >::ComputeSurfaceT( sdw::ShaderWriter & writer
+		, PipelineFlags const & flags
+		, uint32_t stride
+		, uint32_t binding
+		, uint32_t set )
+		: DefineSsbo( indices, sdw::UInt, flags.enableIndices() )
+		, DefineSsbo( positions, PositionT, flags.enablePosition() )
+		, DefineSsbo( normals, sdw::Vec4, flags.enableNormal() )
+		, DefineSsbo( tangents, sdw::Vec4, flags.enableTangentSpace() )
+		, DefineSsbo( texcoords0, sdw::Vec4, flags.enableTexcoord0() && ( stride == 0u ) )
+		, DefineSsbo( texcoords1, sdw::Vec4, flags.enableTexcoord1() )
+		, DefineSsbo( texcoords2, sdw::Vec4, flags.enableTexcoord2() )
+		, DefineSsbo( texcoords3, sdw::Vec4, flags.enableTexcoord3() )
+		, DefineSsbo( colours, sdw::Vec4, flags.enableColours() )
+		, DefineSsbo( velocities, sdw::Vec4, flags.hasWorldPosInputs() )
+		, DefineSsbo( passMasks, sdw::UVec4, flags.enablePassMasks() )
+	{
+	}
+
+#undef DefineSsbo
 
 	//*****************************************************************************************
 }

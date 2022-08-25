@@ -393,7 +393,7 @@ namespace water
 	{
 		return pass.getRenderPassInfo()
 			&& pass.getRenderPassInfo()->name == Type
-			&& doAreValidPassFlags( pass.getPassFlags() );
+			&& areValidPassFlags( pass.getPassFlags() );
 	}
 
 	void WaterRenderPass::doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const
@@ -507,15 +507,12 @@ namespace water
 		remFlag( flags, castor3d::PassFlag::eSubsurfaceScattering );
 		remFlag( flags, castor3d::PassFlag::eAlphaBlending );
 		remFlag( flags, castor3d::PassFlag::eAlphaTest );
-		remFlag( flags, castor3d::PassFlag::eBlendAlphaTest );
 		return flags;
 	}
 
 	castor3d::ProgramFlags WaterRenderPass::doAdjustProgramFlags( castor3d::ProgramFlags flags )const
 	{
 		remFlag( flags, castor3d::ProgramFlag::eInstantiation );
-		addFlag( flags, castor3d::ProgramFlag::eForceTexCoords );
-		addFlag( flags, castor3d::ProgramFlag::eLighting );
 		return flags;
 	}
 
@@ -537,11 +534,8 @@ namespace water
 		using namespace castor3d;
 		FragmentWriter writer;
 
-		auto textureFlags = filterTexturesFlags( flags.textures );
-		bool hasTextures = flags.hasTextures() && !textureFlags.empty();
-		bool hasDiffuseGI = checkFlag( flags.sceneFlags, SceneFlag::eVoxelConeTracing )
-			|| checkFlag( flags.sceneFlags, SceneFlag::eLpvGI )
-			|| checkFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI );
+		bool enableTextures = flags.enableTextures();
+		bool hasDiffuseGI = flags.hasDiffuseGI();
 
 		shader::Utils utils{ writer };
 		shader::CookTorranceBRDF cookTorrance{ writer, utils };
@@ -562,11 +556,11 @@ namespace water
 		shader::TextureConfigurations textureConfigs{ writer
 			, uint32_t( GlobalBuffersIdx::eTexConfigs )
 			, RenderPipeline::eBuffers
-			, hasTextures };
+			, enableTextures };
 		shader::TextureAnimations textureAnims{ writer
 			, uint32_t( GlobalBuffersIdx::eTexAnims )
 			, RenderPipeline::eBuffers
-			, hasTextures };
+			, enableTextures };
 		auto index = uint32_t( GlobalBuffersIdx::eCount );
 		auto lightsIndex = index++;
 		C3D_Water( writer
@@ -598,7 +592,7 @@ namespace water
 			, getScene().getLightingModel()
 			, lightsIndex
 			, RenderPipeline::eBuffers
-			, shader::ShadowOptions{ flags.sceneFlags, true, false }
+			, shader::ShadowOptions{ flags.getShadowFlags(), true, false }
 			, nullptr
 			, index
 			, RenderPipeline::eBuffers
@@ -614,23 +608,18 @@ namespace water
 		shader::GlobalIllumination indirect{ writer, utils };
 		indirect.declare( index
 			, RenderPipeline::eBuffers
-			, flags.sceneFlags );
+			, flags.getGlobalIlluminationFlags() );
 
 		auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
 			, 0u
 			, RenderPipeline::eTextures
-			, hasTextures ) );
+			, enableTextures ) );
 
 		// Fragment Outputs
 		auto pxl_colour( writer.declOutput< Vec4 >( "pxl_colour", 0 ) );
 
 		writer.implementMainT< castor3d::shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< castor3d::shader::FragmentSurfaceT >{ writer
-				, flags.submeshFlags
-				, flags.programFlags
-				, getShaderFlags()
-				, textureFlags
-				, flags.passFlags
-				, true }
+				, flags }
 			, FragmentOut{ writer }
 			, [&]( FragmentInT< castor3d::shader::FragmentSurfaceT > in
 				, FragmentOut out )
@@ -640,11 +629,9 @@ namespace water
 				auto normal = writer.declLocale( "normal"
 					, normalize( in.normal ) );
 				auto tangent = writer.declLocale( "tangent"
-					, normalize( in.tangent )
-					, checkFlag( flags.submeshFlags, SubmeshFlag::eTangents ) );
+					, normalize( in.tangent ) );
 				auto bitangent = writer.declLocale( "bitangent"
-					, normalize( in.bitangent )
-					, checkFlag( flags.submeshFlags, SubmeshFlag::eTangents ) );
+					, normalize( in.bitangent ) );
 
 				auto normalMapCoords1 = writer.declLocale( "normalMapCoords1"
 					, in.texture0.xy() + c3d_waterData.time * c3d_waterData.normalMapScroll.xy() * c3d_waterData.normalMapScrollSpeed.x() );
@@ -665,7 +652,7 @@ namespace water
 				finalNormal = normalize( finalNormal );
 				displayDebugData( eFinalNormal, finalNormal, 1.0_f );
 
-				if ( checkFlag( flags.programFlags, castor3d::ProgramFlag::eInvertNormals ) )
+				if ( flags.hasInvertNormals() )
 				{
 					finalNormal = -finalNormal;
 				}
@@ -723,12 +710,12 @@ namespace water
 					// Indirect Lighting
 					auto indirectOcclusion = writer.declLocale( "indirectOcclusion"
 						, 1.0_f );
-					auto lightIndirectDiffuse = indirect.computeDiffuse( flags.sceneFlags
+					auto lightIndirectDiffuse = indirect.computeDiffuse( flags.getGlobalIlluminationFlags()
 						, surface
 						, indirectOcclusion );
 					displayDebugData( eIndirectOcclusion, vec3( indirectOcclusion ), 1.0_f );
 					displayDebugData( eLightIndirectDiffuse, lightIndirectDiffuse.xyz(), 1.0_f );
-					auto lightIndirectSpecular = indirect.computeSpecular( flags.sceneFlags
+					auto lightIndirectSpecular = indirect.computeSpecular( flags.getGlobalIlluminationFlags()
 						, worldEye
 						, c3d_sceneData.getPosToCamera( surface.worldPosition )
 						, surface
@@ -738,7 +725,7 @@ namespace water
 						, c3d_mapBrdf );
 					displayDebugData( eLightIndirectSpecular, lightIndirectSpecular, 1.0_f );
 					auto indirectAmbient = writer.declLocale( "indirectAmbient"
-						, lightMat->getIndirectAmbient( indirect.computeAmbient( flags.sceneFlags, lightIndirectDiffuse.xyz() ) ) );
+						, lightMat->getIndirectAmbient( indirect.computeAmbient( flags.getGlobalIlluminationFlags(), lightIndirectDiffuse.xyz() ) ) );
 					displayDebugData( eIndirectAmbient, indirectAmbient, 1.0_f );
 					auto indirectDiffuse = writer.declLocale( "indirectDiffuse"
 						, ( hasDiffuseGI
@@ -842,7 +829,7 @@ namespace water
 				}
 				FI;
 
-				if ( getFogType( flags.sceneFlags ) != FogType::eDisabled )
+				if ( flags.hasFog() )
 				{
 					pxl_colour = fog.apply( c3d_sceneData.getBackgroundColour( utils )
 						, pxl_colour

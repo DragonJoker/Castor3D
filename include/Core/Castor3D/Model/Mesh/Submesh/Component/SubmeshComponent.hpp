@@ -65,11 +65,8 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief			Gathers buffers that need to go in a vertex layout.
-		 *\param[in]		shaderFlags		The shader flags.
-		 *\param[in]		programFlags	The program flags.
-		 *\param[in]		submeshFlags	The submesh flags.
+		 *\param[in]		flags			The pipeline flags.
 		 *\param[in]		material		The material.
-		 *\param[in]		mask			The textures mask.
 		 *\param[in,out]	buffers			Receives the buffers.
 		 *\param[in,out]	offsets			Receives the buffers offsets.
 		 *\param[in,out]	layouts			Receives the vertex layouts.
@@ -77,22 +74,16 @@ namespace castor3d
 		 *\param[in,out]	currentLocation	The current attribute location.
 		 *\~french
 		 *\brief		Récupère les tampons qui doivent aller dans un vertex layout.
-		 *\param[in]		shaderFlags		Les shader flags.
-		 *\param[in]		programFlags	Les program flags.
-		 *\param[in]		submeshFlags	Les submesh flags.
+		 *\param[in]		flags			Les flags de pipeline.
 		 *\param[in]		material		Les matériau.
-		 *\param[in]		mask			Le masque de textures.
 		 *\param[in,out]	buffers			Reçoit les buffers.
 		 *\param[in,out]	offsets			Reçoit les offsets dans les buffers.
 		 *\param[in,out]	layouts			Reçoit les vertex layouts.
 		 *\param[in,out]	currentBinding	L'index de binging actuel des buffers.
 		 *\param[in,out]	currentLocation	La position actuelle des attributs.
 		 */
-		C3D_API virtual void gather( ShaderFlags const & shaderFlags
-			, ProgramFlags const & programFlags
-			, SubmeshFlags const & submeshFlags
+		C3D_API virtual void gather( PipelineFlags const & flags
 			, MaterialRPtr material
-			, TextureFlagsArray const & mask
 			, ashes::BufferCRefArray & buffers
 			, std::vector< uint64_t > & offsets
 			, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts

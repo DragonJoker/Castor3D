@@ -316,130 +316,101 @@ namespace castor3d
 	*	Les indicateurs de shader des passes.
 	*/
 	enum class ShaderFlag
-		: uint8_t
+		: uint32_t
 	{
-		eNone = 0x00,
-		eNormal = 0x01,
-		eTangentSpace = 0x02 | eNormal,
-		eVelocity = 0x04,
-		eWorldSpace = 0x08,
-		eViewSpace = 0x10,
+		eNone = 0x00000000,
+		//!\~english	Shader using normals.
+		//\~french		Shader utilisant les normales.
+		eNormal = 0x00000001,
+		//!\~english	Shader using tangents.
+		//\~french		Shader utilisant les tangentes.
+		eTangent = 0x00000002,
+		//!\~english	Shader using tangent space.
+		//\~french		Shader utilisant l'espace tangent.
+		eTangentSpace = eTangent | eNormal,
+		//!\~english	Shader using velocity.
+		//\~french		Shader utilisant la vélocité.
+		eVelocity = 0x00000004,
+		//!\~english	Shader using world space positions.
+		//\~french		Shader utilisant les positions en espace monde.
+		eWorldSpace = 0x00000008,
+		//!\~english	Shader using view space positions.
+		//\~french		Shader utilisant les positions en espace vue.
+		eViewSpace = 0x00000010,
+		//!\~english	Shader for the depth pre-pass.
+		//\~french		Shader pour la pré-passe de profondeur.
+		eDepth = 0x00000020,
+		//!\~english	Shader for the visibility pre-pass.
+		//\~french		Shader pour la pré-passe de visibilité.
+		eVisibility = 0x00000040,
+		//!\~english	Shader for the picking pass.
+		//\~french		Shader pour la passe de picking.
+		ePicking = 0x00000080,
+		//!\~english	Shader supporting lighting.
+		//\~french		Shader supportant les éclairages.
+		eLighting = 0x00000100,
+		//!\~english	Shader used to render a shadow map for directional light.
+		//\~french		Shader utilisé pour dessiner la shadow map d'une lumière directionnalle.
+		eShadowMapDirectional = 0x00000200,
+		//!\~english	Shader used to render a shadow map for spot light.
+		//\~french		Shader utilisé pour dessiner la shadow map d'une lumière projecteur.
+		eShadowMapSpot = 0x00000400,
+		//!\~english	Shader used to render a shadow map for point light.
+		//\~french		Shader utilisé pour dessiner la shadow map d'une lumière omnidirectionnelle.
+		eShadowMapPoint = 0x00000800,
+		//!\~english	Writes to Variance shadow map.
+		//\~french		Ecrit dans la Variance shadow map.
+		eVsmShadowMap = 0x00001000,
+		//!\~english	Writes to Reflective shadow map.
+		//\~french		Ecrit dans la Reflective shadow map.
+		eRsmShadowMap = 0x00002000,
+		//!\~english	Shader used to render an environment map.
+		//\~french		Shader utilisé pour dessiner une texture d'environnement.
+		eEnvironmentMapping = 0x00004000,
+		//!\~english	Shader using opacity.
+		//\~french		Shader utilisant l'opacité.
+		eOpacity = 0x00008000,
+		//!\~english	Uses a geometry shader.
+		//\~french		Utilise un geometry shader.
+		eGeometry = 0x00010000,
+		//!\~english	Uses tessellation shaders.
+		//\~french		Utilise des tessellation shaders.
+		eTessellation = 0x00020000,
+		//!\~english	Forces texcoords binding.
+		//\~french		Force le binding des UV.
+		eForceTexCoords = 0x00040000,
+		//!\~english	All shader flags.
+		//\~french		Tous les indicateurs de shader.
+		eAll = 0x0004FFFF,
 	};
 	CU_ImplementFlags( ShaderFlag )
 	/**
 	*\~english
 	*\brief
-	*	The render pass modes, regarding transparency.
+	*	Filters out the opacity channels a render pass doesn't use.
 	*\~french
 	*\brief
-	*	Les modes de rendu des passes, par rapport à la transparence.
+	*	Filte les canaux d'opacité que la render pass n'utilise pas.
 	*/
-	enum class RenderMode
+	enum class RenderFilter
 		: uint8_t
 	{
-		eOpaqueOnly,
-		eTransparentOnly,
-		eBoth,
-		CU_ScopedEnumBounds( eOpaqueOnly )
+		eNone = 0x00,
+		//!\~english	Alpha blended opacity.
+		//\~french		Opacité de mélange d'alpha.
+		eAlphaBlend = 0x01 << 0u,
+		//!\~english	Alpha test opacity.
+		//\~french		Opacité de test d'alpha.
+		eAlphaTest = 0x01 << 1u,
+		//!\~english	Fully opaque (no opacity at all).
+		//\~french		Complètement opaque (pas d'opacité du tout).
+		eOpaque = 0x01 << 2u,
 	};
-	C3D_API castor::String getName( RenderMode value );
+	CU_ImplementFlags( RenderFilter )
+
+	C3D_API castor::String getName( RenderFilter value );
 
 	C3D_API TextureFlags merge( TextureFlagsArray const & flags );
-
-	struct PipelineBaseHash
-	{
-		uint64_t hi;
-		uint64_t lo;
-	};
-
-	inline bool operator<( PipelineBaseHash const & lhs
-		, PipelineBaseHash const & rhs )
-	{
-		return lhs.hi < rhs.hi
-			|| ( ( lhs.hi == rhs.hi ) && ( lhs.lo < rhs.lo ) );
-	}
-
-	inline bool operator==( PipelineBaseHash const & lhs
-		, PipelineBaseHash const & rhs )
-	{
-		return lhs.hi == rhs.hi
-			&& lhs.lo == rhs.lo;
-	}
-	/**
-	*\~english
-	*\brief
-	*	Pipeline flags.
-	*\~french
-	*\brief
-	*	Indicateurs de pipeline.
-	*/
-	struct PipelineFlags
-	{
-		PipelineFlags( BlendMode colourBlendMode = BlendMode::eNoBlend
-			, BlendMode alphaBlendMode = BlendMode::eNoBlend
-			, PassFlags passFlags = PassFlag::eNone
-			, RenderPassTypeID renderPassType = 0u
-			, PassTypeID passType = 0u
-			, uint32_t heightMapIndex = InvalidIndex
-			, SubmeshFlags submeshFlags = SubmeshFlag::eIndex
-			, ProgramFlags programFlags = ProgramFlag::eNone
-			, SceneFlags sceneFlags = SceneFlag::eNone
-			, VkPrimitiveTopology topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST
-			, uint32_t patchVertices = 3u
-			, VkCompareOp alphaFunc = VK_COMPARE_OP_ALWAYS
-			, VkCompareOp blendAlphaFunc = VK_COMPARE_OP_ALWAYS
-			, TextureFlagsArray textures = {}
-			, uint32_t passLayerIndex = {}
-			, VkDeviceSize morphTargetsOffset = {} )
-			: colourBlendMode{ colourBlendMode }
-			, alphaBlendMode{ alphaBlendMode }
-			, passFlags{ passFlags }
-			, renderPassType{ renderPassType }
-			, passType{ passType }
-			, heightMapIndex{ heightMapIndex }
-			, submeshFlags{ submeshFlags }
-			, programFlags{ programFlags }
-			, sceneFlags{ sceneFlags }
-			, topology{ topology }
-			, patchVertices{ patchVertices }
-			, alphaFunc{ alphaFunc }
-			, blendAlphaFunc{ blendAlphaFunc }
-			, textures{ textures }
-			, texturesFlags{ merge( textures ) }
-			, passLayerIndex{ passLayerIndex }
-			, morphTargetsOffset{ morphTargetsOffset }
-		{
-		}
-
-		BlendMode colourBlendMode;
-		BlendMode alphaBlendMode;
-		PassFlags passFlags;
-		RenderPassTypeID renderPassType;
-		PassTypeID passType;
-		uint32_t heightMapIndex;
-		SubmeshFlags submeshFlags;
-		ProgramFlags programFlags;
-		SceneFlags sceneFlags;
-		VkPrimitiveTopology topology;
-		uint32_t patchVertices;
-		VkCompareOp alphaFunc;
-		VkCompareOp blendAlphaFunc;
-		TextureFlagsArray textures;
-		TextureFlags texturesFlags;
-		uint32_t passLayerIndex;
-		VkDeviceSize morphTargetsOffset;
-
-		bool hasTextures()const
-		{
-			return checkFlag( programFlags, ProgramFlag::eForceTexCoords )
-				|| ( !textures.empty()
-					&& ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords0 )
-						|| checkFlag( submeshFlags, SubmeshFlag::eTexcoords1 )
-						|| checkFlag( submeshFlags, SubmeshFlag::eTexcoords2 )
-						|| checkFlag( submeshFlags, SubmeshFlag::eTexcoords3 ) ) );
-		}
-	};
-	C3D_API bool operator==( PipelineFlags const & lhs, PipelineFlags const & rhs );
 	/**
 	*\~english
 	*\brief
@@ -1111,6 +1082,7 @@ namespace castor3d
 CU_DeclareExportedOwnedBy( C3D_API, castor3d::RenderSystem, RenderSystem )
 CU_DeclareExportedOwnedBy( C3D_API, castor3d::RenderDevice, RenderDevice )
 
+#include "PipelineFlags.hpp"
 #include "Texture.hpp"
 
 #endif

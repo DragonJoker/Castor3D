@@ -117,18 +117,20 @@ namespace castor3d
 		}
 	}
 
-	castor::String getName( RenderMode value )
+	castor::String getName( RenderFilter value )
 	{
 		switch ( value )
 		{
-		case RenderMode::eOpaqueOnly:
-			return cuT( "opaque_only" );
-		case RenderMode::eTransparentOnly:
-			return cuT( "transparent_only" );
-		case RenderMode::eBoth:
-			return cuT( "both" );
+		case RenderFilter::eNone:
+			return cuT( "none" );
+		case RenderFilter::eAlphaBlend:
+			return cuT( "alpha_blend" );
+		case RenderFilter::eAlphaTest:
+			return cuT( "alpha_test" );
+		case RenderFilter::eOpaque:
+			return cuT( "opaque" );
 		default:
-			CU_Failure( "Unsupported RenderMode" );
+			CU_Failure( "Unsupported RenderFilter" );
 			return castor::cuEmptyString;
 		}
 	}
@@ -237,27 +239,6 @@ namespace castor3d
 			, image
 			, texture.wholeView
 			, texture.wholeViewId );
-	}
-
-	bool operator==( PipelineFlags const & lhs, PipelineFlags const & rhs )
-	{
-		return lhs.colourBlendMode == rhs.colourBlendMode
-			&& lhs.alphaBlendMode == rhs.alphaBlendMode
-			&& lhs.passFlags == rhs.passFlags
-			&& lhs.renderPassType == rhs.renderPassType
-			&& lhs.passType == rhs.passType
-			&& lhs.heightMapIndex == rhs.heightMapIndex
-			&& lhs.submeshFlags == rhs.submeshFlags
-			&& lhs.programFlags == rhs.programFlags
-			&& lhs.sceneFlags == rhs.sceneFlags
-			&& lhs.topology == rhs.topology
-			&& lhs.patchVertices == rhs.patchVertices
-			&& lhs.alphaFunc == rhs.alphaFunc
-			&& lhs.blendAlphaFunc == rhs.blendAlphaFunc
-			&& lhs.textures.size() == rhs.textures.size()
-			&& lhs.texturesFlags == rhs.texturesFlags
-			&& lhs.passLayerIndex == rhs.passLayerIndex
-			&& lhs.morphTargetsOffset == rhs.morphTargetsOffset;
 	}
 
 	//*********************************************************************************************

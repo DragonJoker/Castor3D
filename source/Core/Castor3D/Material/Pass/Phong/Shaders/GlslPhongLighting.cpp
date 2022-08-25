@@ -61,24 +61,22 @@ namespace castor3d::shader
 		return m_writer.declDerivedLocale< LightMaterial, PhongLightMaterial >( name, enabled );
 	}
 
-	void PhongLightingModel::modifyMaterial( PassFlags const & passFlags
-		, TextureFlags const & textureFlags
+	void PhongLightingModel::modifyMaterial( PipelineFlags const & flags
 		, sdw::Vec4 const & sampled
 		, TextureConfigData const & config
 		, LightMaterial & lightMat )const
 	{
 		auto & phongLightMat = static_cast< PhongLightMaterial & >( lightMat );
-		config.applyAlbedo( textureFlags, sampled, phongLightMat.albedo );
-		config.applySpecular( textureFlags, sampled, phongLightMat.specular );
-		config.applyShininess( textureFlags, sampled, phongLightMat.shininess );
+		config.applyAlbedo( flags, sampled, phongLightMat.albedo );
+		config.applySpecular( flags, sampled, phongLightMat.specular );
+		config.applyShininess( flags, sampled, phongLightMat.shininess );
 	}
 
-	void PhongLightingModel::updateMaterial( PassFlags const & passFlags
-		, TextureFlags const & textureFlags
+	void PhongLightingModel::updateMaterial( PipelineFlags const & flags
 		, LightMaterial & lightMat
 		, sdw::Vec3 & emissive )const
 	{
-		if ( !checkFlag( textureFlags, castor3d::TextureFlag::eEmissive ) )
+		if ( !flags.hasEmissiveMap() )
 		{
 			auto & phongLightMat = static_cast< PhongLightMaterial & >( lightMat );
 			emissive *= phongLightMat.albedo;

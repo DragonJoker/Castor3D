@@ -44,10 +44,7 @@ namespace castor3d
 		C3D_API SubmeshFlags getSubmeshFlags()const;
 		C3D_API MorphFlags getMorphFlags()const;
 		C3D_API ProgramFlags getProgramFlags()const;
-		C3D_API GeometryBuffers const & getGeometryBuffers( ShaderFlags const & shaderFlags
-			, SubmeshFlags const & submeshFlags
-			, ProgramFlags const & programFlags
-			, TextureFlagsArray const & texturesMask )const;
+		C3D_API GeometryBuffers const & getGeometryBuffers( PipelineFlags const & flags )const;
 		C3D_API void createMeshletDescriptorSet()const;
 		C3D_API ashes::DescriptorSetLayout const * getMeshletDescriptorLayout()const;
 		C3D_API ashes::DescriptorSet const & getMeshletDescriptorSet()const;

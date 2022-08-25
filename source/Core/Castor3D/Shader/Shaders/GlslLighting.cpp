@@ -2,6 +2,7 @@
 
 #include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Limits.hpp"
 #include "Castor3D/Material/Pass/PassFactory.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslShadow.hpp"
@@ -49,8 +50,7 @@ namespace castor3d::shader
 		void computeMapContributions( LightingModel const & lightingModel
 			, sdw::ShaderWriter & writer
 			, Utils & utils
-			, PassFlags const & passFlags
-			, TextureFlags const & textureFlags
+			, PipelineFlags const & flags
 			, TextureConfigurations const & textureConfigs
 			, TextureAnimations const & textureAnims
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
@@ -72,33 +72,31 @@ namespace castor3d::shader
 		{
 			if ( !textureConfigs.isEnabled() )
 			{
-				lightingModel.updateMaterial( passFlags
-					, textureFlags
+				lightingModel.updateMaterial( flags
 					, lightMat
 					, emissive );
 				return;
 			}
 
-			FOR( writer, sdw::UInt, index, 0u, index < material.texturesCount(), ++index )
+			FOR( writer, sdw::UInt, index, 0u, index < material.texturesCount() && index < MaxPassTextures, ++index )
 			{
 				auto id = writer.declLocale( "c3d_id"
 					, material.getTexture( index ) );
 
 				IF( writer, id > 0_u )
 				{
-					auto config = writer.declLocale( "config"
+					auto config = writer.declLocale( "c3d_config"
 						, textureConfigs.getTextureConfiguration( id ) );
-					auto anim = writer.declLocale( "anim"
+					auto anim = writer.declLocale( "c3d_anim"
 						, textureAnims.getTextureAnimation( id ) );
-					auto texcoord = writer.declLocale( "tex"
+					auto texcoord = writer.declLocale( "c3d_tex"
 						, textureConfigs.getTexcoord( config
 							, texCoords0
 							, texCoords1
 							, texCoords2
 							, texCoords3 ) );
 					auto sampled = config.computeCommonMapContribution( utils
-						, passFlags
-						, textureFlags
+						, flags
 						, anim
 						, maps[id - 1_u]
 						, texcoord
@@ -117,8 +115,7 @@ namespace castor3d::shader
 						, texCoords1
 						, texCoords2
 						, texCoords3 );
-					lightingModel.modifyMaterial( passFlags
-						, textureFlags
+					lightingModel.modifyMaterial( flags
 						, sampled
 						, config
 						, lightMat );
@@ -127,8 +124,7 @@ namespace castor3d::shader
 			}
 			ROF;
 
-			lightingModel.updateMaterial( passFlags
-				, textureFlags
+			lightingModel.updateMaterial( flags
 				, lightMat
 				, emissive );
 		}
@@ -228,6 +224,11 @@ namespace castor3d::shader
 	sdw::Float LightMaterial::computeRoughness( sdw::Float const & glossiness )
 	{
 		return 1.0_f - glossiness;
+	}
+
+	sdw::Float LightMaterial::computeGlossiness( sdw::Float const & roughness )
+	{
+		return 1.0_f - roughness;
 	}
 
 	//*********************************************************************************************
@@ -543,8 +544,7 @@ namespace castor3d::shader
 		}
 	}
 
-	void LightingModel::computeMapContributions( PassFlags const & passFlags
-		, TextureFlags const & textureFlags
+	void LightingModel::computeMapContributions( PipelineFlags const & flags
 		, TextureConfigurations const & textureConfigs
 		, TextureAnimations const & textureAnims
 		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
@@ -567,8 +567,7 @@ namespace castor3d::shader
 		lighting::computeMapContributions( *this
 			, m_writer
 			, m_utils
-			, passFlags
-			, textureFlags
+			, flags
 			, textureConfigs
 			, textureAnims
 			, maps
@@ -589,8 +588,7 @@ namespace castor3d::shader
 			, tangentSpaceFragPosition );
 	}
 
-	void LightingModel::computeMapContributions( PassFlags const & passFlags
-		, TextureFlags const & textureFlags
+	void LightingModel::computeMapContributions( PipelineFlags const & flags
 		, TextureConfigurations const & textureConfigs
 		, TextureAnimations const & textureAnims
 		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
@@ -613,8 +611,7 @@ namespace castor3d::shader
 		lighting::computeMapContributions( *this
 			, m_writer
 			, m_utils
-			, passFlags
-			, textureFlags
+			, flags
 			, textureConfigs
 			, textureAnims
 			, maps
@@ -635,8 +632,7 @@ namespace castor3d::shader
 			, tangentSpaceFragPosition );
 	}
 
-	void LightingModel::computeMapDiffuseContributions( PassFlags const & passFlags
-		, TextureFlags const & textureFlags
+	void LightingModel::computeMapDiffuseContributions( PipelineFlags const & flags
 		, TextureConfigurations const & textureConfigs
 		, TextureAnimations const & textureAnims
 		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
@@ -652,14 +648,13 @@ namespace castor3d::shader
 	{
 		if ( !textureConfigs.isEnabled() )
 		{
-			updateMaterial( passFlags
-				, textureFlags
+			updateMaterial( flags
 				, lightMat
 				, emissive );
 			return;
 		}
 
-		FOR( m_writer, sdw::UInt, index, 0u, index < material.texturesCount(), ++index )
+		FOR( m_writer, sdw::UInt, index, 0u, index < material.texturesCount() && index < MaxPassTextures, ++index )
 		{
 			auto id = m_writer.declLocale( "c3d_id"
 				, material.getTexture( index ) );
@@ -677,8 +672,7 @@ namespace castor3d::shader
 						, texCoords2
 						, texCoords3 ) );
 				auto sampled = config.computeCommonMapVoxelContribution( m_utils
-					, passFlags
-					, textureFlags
+					, flags
 					, anim
 					, maps[id - 1_u]
 					, texcoord
@@ -691,8 +685,7 @@ namespace castor3d::shader
 					, texCoords1
 					, texCoords2
 					, texCoords3 );
-				modifyMaterial( passFlags
-					, textureFlags
+				modifyMaterial( flags
 					, sampled
 					, config
 					, lightMat );
@@ -701,8 +694,7 @@ namespace castor3d::shader
 		}
 		ROF;
 
-		updateMaterial( passFlags
-			, textureFlags
+		updateMaterial( flags
 			, lightMat
 			, emissive );
 	}

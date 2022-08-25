@@ -29,7 +29,7 @@ namespace castor3d
 
 			C3D_API sdw::Vec4 worldToView( sdw::Vec4 const & pos )const;
 			C3D_API sdw::Vec4 viewToProj( sdw::Vec4 const & pos )const;
-			C3D_API sdw::Float getLinearisedDepth( sdw::Vec3 const & pos )const;
+			C3D_API sdw::Float getNormalisedDepth( sdw::Vec3 const & pos )const;
 			C3D_API DirectionalLight getDirectionalLight( LightingModel const & lighting )const;
 			C3D_API PointLight getPointLight( LightingModel const & lighting )const;
 			C3D_API SpotLight getSpotLight( LightingModel const & lighting )const;

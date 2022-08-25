@@ -271,7 +271,7 @@ namespace atmosphere_scattering
 				, { castor::makeParameter< castor::ParameterType::eFloat >() } );
 			addParser( result
 				, uint32_t( AtmosphereSection::eClouds )
-				, cuT( "cripsiness" )
+				, cuT( "crispiness" )
 				, &parserCloudsCrispiness
 				, { castor::makeParameter< castor::ParameterType::eFloat >() } );
 			addParser( result

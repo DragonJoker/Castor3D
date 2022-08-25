@@ -60,7 +60,21 @@ namespace castor3d
 
 	TextureFlags DepthPass::getTexturesMask()const
 	{
+#if !C3D_UseDeferredRendering
+		return TextureFlags{ TextureFlag::eGeometry
+			| TextureFlag::eNormal };
+#else
 		return TextureFlags{ TextureFlag::eGeometry };
+#endif
+	}
+
+	ShaderFlags DepthPass::getShaderFlags()const
+	{
+		return ShaderFlag::eWorldSpace
+			| ShaderFlag::eTangentSpace
+			| ShaderFlag::eVelocity
+			| ShaderFlag::eOpacity
+			| ShaderFlag::eDepth;
 	}
 
 	PassFlags DepthPass::doAdjustPassFlags( PassFlags flags )const
@@ -71,8 +85,6 @@ namespace castor3d
 
 	ProgramFlags DepthPass::doAdjustProgramFlags( ProgramFlags flags )const
 	{
-		remFlag( flags, ProgramFlag::eLighting );
-		addFlag( flags, ProgramFlag::eDepthPass );
 		return flags;
 	}
 
@@ -107,8 +119,7 @@ namespace castor3d
 	{
 		using namespace sdw;
 		FragmentWriter writer;
-		auto textureFlags = filterTexturesFlags( flags.textures );
-		bool hasTextures = flags.hasTextures() && !textureFlags.empty();
+		bool enableTextures = flags.enableTextures();
 
 		C3D_Scene( writer
 			, GlobalBuffersIdx::eScene
@@ -122,16 +133,16 @@ namespace castor3d
 		shader::TextureConfigurations textureConfigs{ writer
 			, uint32_t( GlobalBuffersIdx::eTexConfigs )
 			, RenderPipeline::eBuffers
-			, hasTextures };
+			, enableTextures };
 		shader::TextureAnimations textureAnims{ writer
 			, uint32_t( GlobalBuffersIdx::eTexAnims )
 			, RenderPipeline::eBuffers
-			, hasTextures };
+			, enableTextures };
 
 		auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
 			, 0u
 			, RenderPipeline::eTextures
-			, hasTextures ) );
+			, enableTextures ) );
 
 		sdw::PushConstantBuffer pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
@@ -141,18 +152,13 @@ namespace castor3d
 		auto depthObj = writer.declOutput< Vec4 >( "depthObj", 0u );
 		auto velocity = writer.declOutput< Vec2 >( "velocity", 1u );
 #if !C3D_UseDeferredRendering
-		auto data1 = writer.declOutput< Vec4 >( "data1", 2u );
+		auto nmlOcc = writer.declOutput< Vec4 >( "nmlOcc", 2u );
 #endif
 
 		shader::Utils utils{ writer };
 
 		writer.implementMainT< shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer
-				, flags.submeshFlags
-				, flags.programFlags
-				, getShaderFlags()
-				, textureFlags
-				, flags.passFlags
-				, hasTextures }
+				, flags }
 			, FragmentOut{ writer }
 			, [&]( FragmentInT< shader::FragmentSurfaceT > in
 				, FragmentOut out )
@@ -172,11 +178,7 @@ namespace castor3d
 					, in.tangentSpaceViewPosition
 					, in.tangentSpaceFragPosition };
 				materials.blendMaterials( utils
-					, flags.alphaFunc
-					, flags.passFlags
-					, flags.submeshFlags
-					, flags.textures
-					, hasTextures
+					, flags
 					, textureConfigs
 					, textureAnims
 					, c3d_maps
@@ -189,7 +191,7 @@ namespace castor3d
 					, 0.0_f );
 				velocity = in.getVelocity();
 #if !C3D_UseDeferredRendering
-				data1 = vec4( components.normal(), 0.0_f );
+				nmlOcc = vec4( components.normal(), 0.0_f );
 #endif
 			} );
 

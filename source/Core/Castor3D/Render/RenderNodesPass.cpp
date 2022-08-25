@@ -77,12 +77,11 @@ namespace castor3d
 				} );
 		}
 
-		static size_t makeHash( ProgramFlags const & programFlags
-			, SceneFlags const & sceneFlags )
+		static size_t makeHash( PipelineFlags const & flags )
 		{
-			auto nodeType = getRenderNodeType( programFlags );
+			auto nodeType = getRenderNodeType( flags.m_programFlags );
 			return size_t( nodeType )
-				| ( size_t( sceneFlags ) << 8u );
+				| ( size_t( flags.m_sceneFlags ) << 8u );
 		}
 	}
 
@@ -114,10 +113,10 @@ namespace castor3d
 		, m_targetImage{ targetImage }
 		, m_typeName{ typeName }
 		, m_typeID{ getEngine()->getRenderPassTypeID( m_typeName ) }
-		, m_renderQueue{ castor::makeUnique< RenderQueue >( *this, desc.m_mode, desc.m_ignored ) }
+		, m_filters{ desc.m_filters }
+		, m_renderQueue{ castor::makeUnique< RenderQueue >( *this, desc.m_ignored ) }
 		, m_category{ pass.group.getFullName() }
 		, m_size{ desc.m_size.width, desc.m_size.height }
-		, m_mode{ desc.m_mode }
 		, m_oit{ desc.m_oit }
 		, m_forceTwoSided{ desc.m_forceTwoSided }
 		, m_safeBand{ desc.m_safeBand }
@@ -166,7 +165,7 @@ namespace castor3d
 	{
 		ShaderPtr result;
 
-		if ( checkFlag( flags.programFlags, ProgramFlag::eBillboards ) )
+		if ( flags.isBillboard() )
 		{
 			result = doGetBillboardShaderSource( flags );
 		}
@@ -223,12 +222,33 @@ namespace castor3d
 		return doAdjustSceneFlags( flags );
 	}
 
+	TextureFlags RenderNodesPass::adjustFlags( TextureFlags texturesFlags )const
+	{
+		return texturesFlags & getTexturesMask();
+	}
+
+	VkCompareOp RenderNodesPass::adjustAlphaFunc( PassFlags passFlags
+		, VkCompareOp alphaFunc
+		, VkCompareOp blendAlphaFunc )const
+	{
+		if ( checkFlag( passFlags, PassFlag::eAlphaTest ) )
+		{
+			if ( !checkFlag( m_filters, RenderFilter::eAlphaBlend ) )
+			{
+				return blendAlphaFunc;
+			}
+			
+			return alphaFunc;
+		}
+
+		return VK_COMPARE_OP_ALWAYS;
+	}
+
 	PipelineFlags RenderNodesPass::createPipelineFlags( BlendMode colourBlendMode
 		, BlendMode alphaBlendMode
 		, PassFlags passFlags
 		, RenderPassTypeID renderPassTypeID
 		, PassTypeID passTypeID
-		, uint32_t heightTextureIndex
 		, VkCompareOp alphaFunc
 		, VkCompareOp blendAlphaFunc
 		, TextureFlagsArray const & textures
@@ -238,31 +258,36 @@ namespace castor3d
 		, VkPrimitiveTopology topology
 		, bool isFrontCulled
 		, uint32_t passLayerIndex
-		, GpuBufferOffsetT< castor::Point4f > const & morphTargets )
+		, GpuBufferOffsetT< castor::Point4f > const & morphTargets )const
 	{
-		auto result = PipelineFlags{ colourBlendMode
+		auto result = PipelineFlags{ passTypeID
+			, colourBlendMode
 			, alphaBlendMode
 			, passFlags
 			, renderPassTypeID
-			, passTypeID
-			, heightTextureIndex
 			, submeshFlags
 			, programFlags
 			, sceneFlags
+			, getShaderFlags()
 			, topology
 			, 3u
 			, alphaFunc
-			, blendAlphaFunc
 			, textures
 			, checkFlag( submeshFlags, SubmeshFlag::ePassMasks ) ? 0u : passLayerIndex
 			, morphTargets.getOffset() };
 
 		if ( isFrontCulled )
 		{
-			addFlag( result.programFlags, ProgramFlag::eInvertNormals );
+			addFlag( result.m_programFlags, ProgramFlag::eInvertNormals );
 		}
 
 		doUpdateFlags( result );
+
+		if ( checkFlag( result.m_passFlags, PassFlag::eAlphaBlending ) )
+		{
+			result.alphaFunc = blendAlphaFunc;
+		}
+
 		return result;
 	}
 
@@ -273,7 +298,7 @@ namespace castor3d
 		, SceneFlags const & sceneFlags
 		, VkPrimitiveTopology topology
 		, bool isFrontCulled
-		, GpuBufferOffsetT< castor::Point4f > const & morphTargets )
+		, GpuBufferOffsetT< castor::Point4f > const & morphTargets )const
 	{
 		return createPipelineFlags( pass.getColourBlendMode()
 			, pass.getAlphaBlendMode()
@@ -282,7 +307,6 @@ namespace castor3d
 				? pass.getRenderPassInfo()->id
 				: RenderPassTypeID{} )
 			, pass.getTypeID()
-			, pass.getHeightTextureIndex()
 			, pass.getAlphaFunc()
 			, pass.getBlendAlphaFunc()
 			, textures
@@ -317,7 +341,7 @@ namespace castor3d
 
 	TextureFlags RenderNodesPass::filterTexturesFlags( TextureFlagsArray const & textures )const
 	{
-		return merge( textures ) & getTexturesMask();
+		return adjustFlags( merge( textures ) );
 	}
 
 	ashes::PipelineColorBlendStateCreateInfo RenderNodesPass::createBlendState( BlendMode colourBlendMode
@@ -433,6 +457,23 @@ namespace castor3d
 		return TextureFlags{ TextureFlag::eAll };
 	}
 
+	bool RenderNodesPass::areValidPassFlags( PassFlags const & passFlags )const
+	{
+		if ( checkFlag( passFlags, PassFlag::eAlphaTest ) )
+		{
+			// Blend alpha test with alpha blending,
+			// alpha test without.
+			return !checkFlag( m_filters, RenderFilter::eAlphaTest );
+		}
+
+		if ( checkFlag( passFlags, PassFlag::eAlphaBlending ) )
+		{
+			return !checkFlag( m_filters, RenderFilter::eAlphaBlend );
+		}
+
+		return !checkFlag( m_filters, RenderFilter::eOpaque );
+	}
+
 	bool RenderNodesPass::isValidPass( Pass const & pass )const
 	{
 		return doIsValidPass( pass );
@@ -476,10 +517,7 @@ namespace castor3d
 		, ShadowMapLightTypeArray const & shadowMaps
 		, GpuBufferOffsetT< castor::Point4f > const & morphTargets )
 	{
-		auto programFlags = pipeline.getFlags().programFlags;
-		programFlags = doAdjustProgramFlags( programFlags );
-		auto sceneFlags = doAdjustSceneFlags( pipeline.getFlags().sceneFlags );
-		auto descLayoutIt = m_additionalDescriptors.emplace( rendndpass::makeHash( programFlags, sceneFlags )
+		auto descLayoutIt = m_additionalDescriptors.emplace( rendndpass::makeHash( pipeline.getFlags() )
 			, PassDescriptors{} ).first;
 		auto & descriptors = descLayoutIt->second;
 
@@ -521,7 +559,7 @@ namespace castor3d
 			descriptorWrites.push_back( matCache.getTexConfigBuffer().getBinding( uint32_t( GlobalBuffersIdx::eTexConfigs ) ) );
 			descriptorWrites.push_back( matCache.getTexAnimBuffer().getBinding( uint32_t( GlobalBuffersIdx::eTexAnims ) ) );
 
-			if ( checkFlag( programFlags, ProgramFlag::eBillboards ) )
+			if ( pipeline.getFlags().isBillboard() )
 			{
 				auto & billboardDatas = scene.getBillboardsBuffer();
 				auto write = ashes::WriteDescriptorSet{ uint32_t( GlobalBuffersIdx::eBillboardsData )
@@ -565,7 +603,7 @@ namespace castor3d
 	bool RenderNodesPass::doIsValidPass( Pass const & pass )const
 	{
 		return ( pass.getRenderPassInfo() == nullptr || pass.getRenderPassInfo()->create == nullptr )
-			&& doAreValidPassFlags( pass.getPassFlags() );
+			&& areValidPassFlags( pass.getPassFlags() );
 	}
 
 	bool RenderNodesPass::doIsValidRenderable( RenderedObject const & object )const
@@ -593,23 +631,6 @@ namespace castor3d
 		return flags;
 	}
 
-	bool RenderNodesPass::doAreValidPassFlags( PassFlags const & passFlags )const
-	{
-		if ( checkFlag( passFlags, PassFlag::eAlphaBlending ) )
-		{
-			if ( checkFlag( passFlags, PassFlag::eAlphaTest ) )
-			{
-				return true;
-			}
-
-			return m_mode == RenderMode::eBoth
-				|| m_mode == RenderMode::eTransparentOnly;
-		}
-
-		return m_mode == RenderMode::eBoth
-			|| m_mode == RenderMode::eOpaqueOnly;
-	}
-
 	ShaderProgramSPtr RenderNodesPass::doGetProgram( PipelineFlags const & flags
 		, VkCullModeFlags cullMode )
 	{
@@ -618,27 +639,39 @@ namespace castor3d
 
 	void RenderNodesPass::doUpdateFlags( PipelineFlags & flags )const
 	{
-		if ( m_mode != RenderMode::eTransparentOnly )
+		if ( checkFlag( m_filters, RenderFilter::eAlphaTest ) )
+		{
+			flags.alphaFunc = VK_COMPARE_OP_ALWAYS;
+		}
+
+		if ( checkFlag( m_filters, RenderFilter::eAlphaBlend ) )
 		{
 			flags.alphaBlendMode = BlendMode::eNoBlend;
 		}
 
-		flags.submeshFlags = adjustFlags( flags.submeshFlags );
-		flags.programFlags = adjustFlags( flags.programFlags );
-		flags.passFlags = adjustFlags( flags.passFlags );
-		flags.sceneFlags = adjustFlags( flags.sceneFlags );
-		auto textureFlags = filterTexturesFlags( flags.textures );
-
-		if ( textureFlags.empty()
-			&& !checkFlag( flags.programFlags, ProgramFlag::eForceTexCoords ) )
+		if ( checkFlag( m_filters, RenderFilter::eAlphaBlend )
+			&& checkFlag( m_filters, RenderFilter::eAlphaTest ) )
 		{
-			remFlag( flags.submeshFlags, SubmeshFlag::eTexcoords0 );
-			remFlag( flags.submeshFlags, SubmeshFlag::eTexcoords1 );
-			remFlag( flags.submeshFlags, SubmeshFlag::eTexcoords2 );
-			remFlag( flags.submeshFlags, SubmeshFlag::eTexcoords3 );
+			remFlag( flags.m_shaderFlags, ShaderFlag::eOpacity );
+		}
+		else
+		{
+			addFlag( flags.m_shaderFlags, ShaderFlag::eOpacity );
 		}
 
-		if ( checkFlag( flags.submeshFlags, SubmeshFlag::ePassMasks ) )
+		flags.m_submeshFlags = adjustFlags( flags.m_submeshFlags );
+		flags.m_programFlags = adjustFlags( flags.m_programFlags );
+		flags.m_passFlags = adjustFlags( flags.m_passFlags );
+		flags.m_sceneFlags = adjustFlags( flags.m_sceneFlags );
+		flags.m_texturesFlags = adjustFlags( flags.m_texturesFlags );
+
+		if ( flags.m_texturesFlags.empty()
+			&& !flags.forceTexCoords() )
+		{
+			remFlag( flags.m_submeshFlags, SubmeshFlag::eTexcoords );
+		}
+
+		if ( checkFlag( flags.m_submeshFlags, SubmeshFlag::ePassMasks ) )
 		{
 			flags.alphaFunc = VK_COMPARE_OP_GREATER;
 		}
@@ -650,7 +683,7 @@ namespace castor3d
 	{
 		VkShaderStageFlags stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
 
-		if ( checkFlag( flags.programFlags, ProgramFlag::eHasMesh ) )
+		if ( flags.usesMesh() )
 		{
 			stageFlags |= VK_SHADER_STAGE_MESH_BIT_NV
 				| VK_SHADER_STAGE_TASK_BIT_NV;
@@ -659,12 +692,12 @@ namespace castor3d
 		{
 			stageFlags |= VK_SHADER_STAGE_VERTEX_BIT;
 
-			if ( checkFlag( flags.programFlags, ProgramFlag::eHasGeometry ) )
+			if ( flags.usesGeometry() )
 			{
 				stageFlags |= VK_SHADER_STAGE_GEOMETRY_BIT;
 			}
 
-			if ( checkFlag( flags.programFlags, ProgramFlag::eHasTessellation ) )
+			if ( flags.usesTessellation() )
 			{
 				stageFlags |= VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT;
 				stageFlags |= VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT;
@@ -699,7 +732,7 @@ namespace castor3d
 		addBindings.emplace_back( matCache.getTexAnimBuffer().createLayoutBinding( uint32_t( GlobalBuffersIdx::eTexAnims )
 			, stageFlags ) );
 
-		if ( checkFlag( flags.programFlags, ProgramFlag::eBillboards ) )
+		if ( flags.isBillboard() )
 		{
 			addBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( GlobalBuffersIdx::eBillboardsData )
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
@@ -732,17 +765,17 @@ namespace castor3d
 
 	RenderPipeline & RenderNodesPass::doPreparePipeline( ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
 		, ashes::DescriptorSetLayout const * meshletDescriptorLayout
-		, PipelineFlags flags
+		, PipelineFlags const & flags
 		, VkCullModeFlags cullMode )
 	{
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		auto & device = renderSystem.getRenderDevice();
 		RenderPipeline * result{};
 		auto program = doGetProgram( flags, cullMode );
+		CU_Require( areValidPassFlags( flags.m_passFlags ) );
 
-		if ( doAreValidPassFlags( flags.passFlags )
-			&& ( !checkFlag( flags.programFlags, ProgramFlag::eBillboards )
-				|| !isShadowMapProgram( flags.programFlags ) ) )
+		if ( !flags.isBillboard()
+			|| !flags.writeShadowMap() )
 		{
 			auto & pipelines = castor::checkFlag( cullMode, VK_CULL_MODE_FRONT_BIT )
 				? doGetFrontPipelines()
@@ -761,12 +794,12 @@ namespace castor3d
 					, flags );
 				pipeline->setViewport( makeViewport( m_size ) );
 
-				if ( !checkFlag( flags.programFlags, ProgramFlag::ePicking ) )
+				if ( !flags.writePicking() )
 				{
 					pipeline->setScissor( makeScissor( m_size ) );
 				}
 
-				auto addDescLayoutIt = m_additionalDescriptors.emplace( rendndpass::makeHash( flags.programFlags, flags.sceneFlags )
+				auto addDescLayoutIt = m_additionalDescriptors.emplace( rendndpass::makeHash( flags )
 					, PassDescriptors{} ).first;
 				auto & addDescriptors = addDescLayoutIt->second;
 
@@ -780,7 +813,7 @@ namespace castor3d
 
 				pipeline->setAdditionalDescriptorSetLayout( *addDescriptors.layout );
 
-				if ( checkFlag( flags.programFlags, ProgramFlag::eHasMesh )
+				if ( flags.usesMesh()
 					&& meshletDescriptorLayout )
 				{
 					pipeline->setMeshletDescriptorSetLayout( *meshletDescriptorLayout );
@@ -817,8 +850,8 @@ namespace castor3d
 	{
 		using namespace sdw;
 		TaskWriter writer;
-		bool checkCones = checkFlag( flags.submeshFlags, SubmeshFlag::eNormals )
-			&& !checkFlag( flags.submeshFlags, SubmeshFlag::eVelocity );
+		bool checkCones = flags.hasSubmeshData( SubmeshFlag::eNormals )
+			&& !flags.hasWorldPosInputs();
 
 		C3D_Matrix( writer
 			, GlobalBuffersIdx::eMatrix
@@ -826,10 +859,10 @@ namespace castor3d
 		C3D_Scene( writer
 			, GlobalBuffersIdx::eScene
 			, RenderPipeline::eBuffers );
-		C3D_ObjectIdsDataOpt( writer
+		C3D_ObjectIdsData( writer
+			, flags
 			, GlobalBuffersIdx::eObjectsNodeID
-			, RenderPipeline::eBuffers
-			, !checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) );
+			, RenderPipeline::eBuffers );
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::eBuffers );
@@ -838,9 +871,9 @@ namespace castor3d
 			, uint32_t( MeshBuffersIdx::eInstances )
 			, RenderPipeline::eMeshBuffers
 			, ast::type::MemoryLayout::eStd430
-			, checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) };
+			, flags.enableInstantiation() };
 		auto c3d_instances = instancesBuffer.declMemberArray< sdw::UVec4 >( "c3d_instances"
-			, checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) );
+			, flags.enableInstantiation() );
 		instancesBuffer.end();
 
 		sdw::PushConstantBuffer pcb{ writer, "DrawData" };
@@ -868,7 +901,7 @@ namespace castor3d
 				auto cullData = writer.declLocale( "cullData"
 					, c3d_cullData[meshletId] );
 
-				if ( checkFlag( flags.submeshFlags, SubmeshFlag::eVelocity ) )
+				if ( flags.hasWorldPosInputs() )
 				{
 					auto sphereCenter = writer.declLocale( "sphereCenter"
 						, cullData.sphere.xyz() );
@@ -958,7 +991,7 @@ namespace castor3d
 						, c3d_instances
 						, pipelineID
 						, drawId
-						, flags.programFlags ) );
+						, flags ) );
 				auto render = writer.declLocale( "render"
 					, checkVisible( nodeId, meshletId ) );
 				auto vote = writer.declLocale( "vote"
@@ -988,8 +1021,6 @@ namespace castor3d
 	{
 		using namespace sdw;
 		MeshWriter writer;
-		auto textureFlags = filterTexturesFlags( flags.textures );
-		bool hasTextures = flags.hasTextures() && !textureFlags.empty();
 
 		C3D_Matrix( writer
 			, GlobalBuffersIdx::eMatrix
@@ -997,10 +1028,10 @@ namespace castor3d
 		C3D_Scene( writer
 			, GlobalBuffersIdx::eScene
 			, RenderPipeline::eBuffers );
-		C3D_ObjectIdsDataOpt( writer
+		C3D_ObjectIdsData( writer
+			, flags
 			, GlobalBuffersIdx::eObjectsNodeID
-			, RenderPipeline::eBuffers
-			, !checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) );
+			, RenderPipeline::eBuffers );
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::eBuffers );
@@ -1031,47 +1062,47 @@ namespace castor3d
 		DeclareSsbo( c3d_position
 			, sdw::Vec4
 			, MeshBuffersIdx::ePosition
-			, checkFlag( flags.submeshFlags, SubmeshFlag::ePositions ) );
+			, flags.enablePosition() );
 		DeclareSsbo( c3d_normal
 			, sdw::Vec4
 			, MeshBuffersIdx::eNormal
-			, checkFlag( flags.submeshFlags, SubmeshFlag::eNormals ) );
+			, flags.enableNormal() );
 		DeclareSsbo( c3d_tangent
 			, sdw::Vec4
 			, MeshBuffersIdx::eTangent
-			, checkFlag( flags.submeshFlags, SubmeshFlag::eTangents ) );
+			, flags.enableTangentSpace() );
 		DeclareSsbo( c3d_texcoord0
 			, sdw::Vec4
 			, MeshBuffersIdx::eTexcoord0
-			, checkFlag( flags.submeshFlags, SubmeshFlag::eTexcoords0 ) );
+			, flags.enableTexcoord0() );
 		DeclareSsbo( c3d_texcoord1
 			, sdw::Vec4
 			, MeshBuffersIdx::eTexcoord1
-			, checkFlag( flags.submeshFlags, SubmeshFlag::eTexcoords1 ) );
+			, flags.enableTexcoord1() );
 		DeclareSsbo( c3d_texcoord2
 			, sdw::Vec4
 			, MeshBuffersIdx::eTexcoord2
-			, checkFlag( flags.submeshFlags, SubmeshFlag::eTexcoords2 ) );
+			, flags.enableTexcoord2() );
 		DeclareSsbo( c3d_texcoord3
 			, sdw::Vec4
 			, MeshBuffersIdx::eTexcoord3
-			, checkFlag( flags.submeshFlags, SubmeshFlag::eTexcoords3 ) );
+			, flags.enableTexcoord3() );
 		DeclareSsbo( c3d_colour
 			, sdw::Vec4
 			, MeshBuffersIdx::eColour
-			, checkFlag( flags.submeshFlags, SubmeshFlag::eColours ) );
+			, flags.enableColours() );
 		DeclareSsbo( c3d_passMasks
 			, sdw::UVec4
 			, MeshBuffersIdx::ePassMasks
-			, checkFlag( flags.submeshFlags, SubmeshFlag::ePassMasks ) );
+			, flags.enablePassMasks() );
 		DeclareSsbo( c3d_velocity
 			, sdw::Vec4
 			, MeshBuffersIdx::eVelocity
-			, checkFlag( flags.submeshFlags, SubmeshFlag::eVelocity ) );
+			, flags.hasWorldPosInputs() );
 		DeclareSsbo( c3d_instances
 			, sdw::UVec4
 			, MeshBuffersIdx::eInstances
-			, checkFlag( flags.programFlags, ProgramFlag::eInstantiation ) );
+			, flags.enableInstantiation() );
 
 #undef DeclareSsbo
 
@@ -1089,7 +1120,7 @@ namespace castor3d
 					, c3d_instances
 					, pipelineID
 					, drawId
-					, flags.programFlags ) );
+					, flags ) );
 			auto meshlet = writer.declLocale( "meshlet"
 				, c3d_meshlets[meshletIndex] );
 			auto triangleCount = writer.declLocale( "triangleCount"
@@ -1135,7 +1166,7 @@ namespace castor3d
 						, vec4( 0.0_f )
 						, vec4( 0.0_f )
 						, vec4( 0.0_f ) } );
-				material.getPassMultipliers( flags.submeshFlags
+				material.getPassMultipliers( flags
 					, c3d_passMasks[vertexIndex]
 					, passMultipliers );
 				vtxOut[i].passMultipliers[0] = passMultipliers[0];
@@ -1149,12 +1180,11 @@ namespace castor3d
 					, curPosition );
 				prvPosition.xyz() += c3d_velocity[vertexIndex].xyz();
 
-				if ( checkFlag( flags.submeshFlags, SubmeshFlag::eVelocity ) )
+				if ( flags.hasWorldPosInputs() )
 				{
 					auto worldPos = writer.declLocale( "worldPos"
 						, curPosition );
-					vtxOut[i].computeTangentSpace( flags.submeshFlags
-						, flags.programFlags
+					vtxOut[i].computeTangentSpace( flags
 						, c3d_sceneData.cameraPosition
 						, worldPos.xyz()
 						, curNormal
@@ -1163,14 +1193,13 @@ namespace castor3d
 				else
 				{
 					auto prvMtxModel = writer.declLocale( "prvMtxModel"
-						, modelData.getPrvModelMtx( flags.programFlags, curMtxModel ) );
+						, modelData.getPrvModelMtx( flags, curMtxModel ) );
 					prvPosition = c3d_matrixData.worldToPrvProj( prvMtxModel * prvPosition );
 					auto worldPos = writer.declLocale( "worldPos"
 						, curMtxModel * curPosition );
 					auto mtxNormal = writer.declLocale( "mtxNormal"
-						, modelData.getNormalMtx( flags.programFlags, curMtxModel ) );
-					vtxOut[i].computeTangentSpace( flags.submeshFlags
-						, flags.programFlags
+						, modelData.getNormalMtx( flags, curMtxModel ) );
+					vtxOut[i].computeTangentSpace( flags
 						, c3d_sceneData.cameraPosition
 						, worldPos.xyz()
 						, mtxNormal
@@ -1191,18 +1220,13 @@ namespace castor3d
 			ROF;
 		};
 
-		if ( checkFlag( flags.programFlags, ProgramFlag::eHasTask ) )
+		if ( flags.usesTask() )
 		{
 			writer.implementMainT< shader::PayloadT, shader::FragmentSurfaceT, VoidT >( 32u
 				, sdw::TaskPayloadInT< shader::PayloadT >{ writer }
 				, sdw::MeshVertexListOutT< shader::FragmentSurfaceT >{ writer
 					, MaxMeshletVertexCount
-					, flags.submeshFlags
-					, flags.programFlags
-					, getShaderFlags()
-					, textureFlags
-					, flags.passFlags
-					, hasTextures }
+					, flags }
 				, sdw::TrianglesMeshPrimitiveListOutT< VoidT >{ writer
 					, MaxMeshletTriangleCount }
 				, [&]( sdw::MeshSubgroupIn in
@@ -1221,12 +1245,7 @@ namespace castor3d
 				, sdw::TaskPayloadIn{ writer }
 				, sdw::MeshVertexListOutT< shader::FragmentSurfaceT >{ writer
 					, MaxMeshletVertexCount
-					, flags.submeshFlags
-					, flags.programFlags
-					, getShaderFlags()
-					, textureFlags
-					, flags.passFlags
-					, hasTextures }
+					, flags }
 				, sdw::TrianglesMeshPrimitiveListOutT< VoidT >{ writer
 					, MaxMeshletTriangleCount }
 				, [&]( sdw::MeshSubgroupIn in
@@ -1247,8 +1266,6 @@ namespace castor3d
 	{
 		using namespace sdw;
 		VertexWriter writer;
-		auto textureFlags = filterTexturesFlags( flags.textures );
-		bool hasTextures = flags.hasTextures() && !textureFlags.empty();
 
 		C3D_Matrix( writer
 			, GlobalBuffersIdx::eMatrix
@@ -1257,6 +1274,7 @@ namespace castor3d
 			, GlobalBuffersIdx::eScene
 			, RenderPipeline::eBuffers );
 		C3D_ObjectIdsData( writer
+			, flags
 			, GlobalBuffersIdx::eObjectsNodeID
 			, RenderPipeline::eBuffers );
 		C3D_ModelsData( writer
@@ -1271,19 +1289,9 @@ namespace castor3d
 		pcb.end();
 
 		writer.implementMainT< shader::VertexSurfaceT, shader::FragmentSurfaceT >( sdw::VertexInT< shader::VertexSurfaceT >{ writer
-				, flags.submeshFlags
-				, flags.programFlags
-				, getShaderFlags()
-				, textureFlags
-				, flags.passFlags
-				, hasTextures }
+				, flags }
 			, sdw::VertexOutT< shader::FragmentSurfaceT >{ writer
-				, flags.submeshFlags
-				, flags.programFlags
-				, getShaderFlags()
-				, textureFlags
-				, flags.passFlags
-				, hasTextures }
+				, flags }
 			, [&]( VertexInT< shader::VertexSurfaceT > in
 				, VertexOutT< shader::FragmentSurfaceT > out )
 			{
@@ -1292,7 +1300,7 @@ namespace castor3d
 						, in
 						, pipelineID
 						, writer.cast< sdw::UInt >( in.drawID )
-						, flags.programFlags ) );
+						, flags ) );
 				auto curPosition = writer.declLocale( "curPosition"
 					, in.position );
 				auto curNormal = writer.declLocale( "curNormal"
@@ -1309,7 +1317,7 @@ namespace castor3d
 					, c3d_modelsData[nodeId - 1u] );
 				auto material = writer.declLocale( "material"
 					, materials.getMaterial( modelData.getMaterialId() ) );
-				material.getPassMultipliers( flags.submeshFlags
+				material.getPassMultipliers( flags
 					, in.passMasks
 					, out.passMultipliers );
 
@@ -1319,12 +1327,11 @@ namespace castor3d
 					, curPosition );
 				prvPosition.xyz() += in.velocity;
 
-				if ( checkFlag( flags.submeshFlags, SubmeshFlag::eVelocity ) )
+				if ( flags.hasWorldPosInputs() )
 				{
 					auto worldPos = writer.declLocale( "worldPos"
 						, curPosition );
-					out.computeTangentSpace( flags.submeshFlags
-						, flags.programFlags
+					out.computeTangentSpace( flags
 						, c3d_sceneData.cameraPosition
 						, worldPos.xyz()
 						, curNormal
@@ -1333,14 +1340,13 @@ namespace castor3d
 				else
 				{
 					auto prvMtxModel = writer.declLocale( "prvMtxModel"
-						, modelData.getPrvModelMtx( flags.programFlags, curMtxModel ) );
+						, modelData.getPrvModelMtx( flags, curMtxModel ) );
 					prvPosition = c3d_matrixData.worldToPrvProj( prvMtxModel * prvPosition );
 					auto worldPos = writer.declLocale( "worldPos"
 						, curMtxModel * curPosition );
 					auto mtxNormal = writer.declLocale( "mtxNormal"
-						, modelData.getNormalMtx( flags.programFlags, curMtxModel ) );
-					out.computeTangentSpace( flags.submeshFlags
-						, flags.programFlags
+						, modelData.getNormalMtx( flags, curMtxModel ) );
+					out.computeTangentSpace( flags
 						, c3d_sceneData.cameraPosition
 						, worldPos.xyz()
 						, mtxNormal
@@ -1352,7 +1358,6 @@ namespace castor3d
 				out.worldPosition = worldPos;
 				out.viewPosition = c3d_matrixData.worldToCurView( worldPos );
 				curPosition = c3d_matrixData.worldToCurProj( worldPos );
-				out.drawId = in.drawID;
 				out.vertexId = in.vertexIndex - in.baseVertex;
 				out.computeVelocity( c3d_matrixData
 					, curPosition
@@ -1382,12 +1387,11 @@ namespace castor3d
 	{
 		using namespace sdw;
 		VertexWriter writer;
-		auto textureFlags = filterTexturesFlags( flags.textures );
-		bool hasTextures = flags.hasTextures() && !textureFlags.empty();
+		bool enableTexcoords = flags.enableTexcoords();
 
 		// Shader inputs
 		auto position = writer.declInput< Vec4 >( "position", 0u );
-		auto uv = writer.declInput< Vec2 >( "uv", 1u, hasTextures );
+		auto uv = writer.declInput< Vec2 >( "uv", 1u, enableTexcoords );
 		auto center = writer.declInput< Vec3 >( "center", 2u );
 
 		C3D_Matrix( writer
@@ -1397,6 +1401,7 @@ namespace castor3d
 			, GlobalBuffersIdx::eScene
 			, RenderPipeline::eBuffers );
 		C3D_ObjectIdsData( writer
+			, flags
 			, GlobalBuffersIdx::eObjectsNodeID
 			, RenderPipeline::eBuffers );
 		C3D_ModelsData( writer
@@ -1412,12 +1417,7 @@ namespace castor3d
 
 		writer.implementMainT< VoidT, shader::FragmentSurfaceT >( sdw::VertexInT< sdw::VoidT >{ writer }
 			, sdw::VertexOutT< shader::FragmentSurfaceT >{ writer
-				, flags.submeshFlags
-				, flags.programFlags
-				, getShaderFlags()
-				, textureFlags
-				, flags.passFlags
-				, hasTextures }
+				, flags }
 			, [&]( VertexInT< VoidT > in
 				, VertexOutT< shader::FragmentSurfaceT > out )
 			{
@@ -1463,11 +1463,7 @@ namespace castor3d
 				auto worldPos = writer.declLocale( "worldPos"
 					, vec4( ( curBbcenter + scaledRight + scaledUp ), 1.0_f ) );
 				out.worldPosition = worldPos;
-
-				if ( hasTextures )
-				{
-					out.texture0 = vec3( uv, 0.0_f );
-				}
+				out.texture0 = vec3( uv, 0.0_f );
 
 				auto prvPosition = writer.declLocale( "prvPosition"
 					, c3d_matrixData.worldToPrvProj( vec4( prvBbcenter + scaledRight + scaledUp, 1.0_f ) ) );
@@ -1478,9 +1474,8 @@ namespace castor3d
 					, curPosition
 					, prvPosition );
 				out.vtx.position = curPosition;
-				out.drawId = in.drawID;
 				out.vertexId = in.instanceIndex - in.baseInstance;
-				out.computeTangentSpace( flags.submeshFlags
+				out.computeTangentSpace( flags
 					, c3d_sceneData.cameraPosition
 					, worldPos.xyz()
 					, curToCamera

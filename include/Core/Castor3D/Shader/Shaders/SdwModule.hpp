@@ -76,6 +76,7 @@ namespace castor3d::shader
 		}
 	};
 
+	struct DerivTex;
 	struct DirectionalLight;
 	struct Intersection;
 	struct Light;
@@ -97,11 +98,14 @@ namespace castor3d::shader
 	template< ast::var::Flag FlagT >
 	struct SurfaceT;
 	template< typename TexcoordT, ast::var::Flag FlagT >
-	struct FragmentSurfaceUvT;
+	struct RasterizerSurfaceT;
 	template< ast::var::Flag FlagT >
 	struct VertexSurfaceT;
 
 	using Surface = SurfaceT< ast::var::Flag::eNone >;
+	template< ast::var::Flag FlagT >
+	using FragmentSurfaceT = RasterizerSurfaceT< sdw::Vec3, FlagT >;
+	using DerivFragmentSurface = RasterizerSurfaceT< DerivTex, ast::var::Flag::eNone >;
 
 	class BackgroundModel;
 	class Fog;

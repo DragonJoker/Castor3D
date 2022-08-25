@@ -75,7 +75,10 @@ namespace castor3d
 		C3D_API ShaderFlags getShaderFlags()const override
 		{
 			return ShaderFlag::eWorldSpace
-				| ShaderFlag::eNormal;
+				| ShaderFlag::eNormal
+				| ShaderFlag::eLighting
+				| ShaderFlag::eOpacity
+				| ShaderFlag::eGeometry;
 		}
 		/**@}*/
 

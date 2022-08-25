@@ -122,7 +122,7 @@ namespace ocean_fft
 			SDW_DeclStructInstance( , PatchT );
 
 			static ast::type::IOStructPtr makeIOType( ast::type::TypesCache & cache
-				, castor3d::SubmeshFlags submeshFlags )
+				, castor3d::PipelineFlags flags )
 			{
 				auto result = cache.getIOStruct( ast::type::MemoryLayout::eC
 					, "C3DORFFT_" + ( FlagT == sdw::var::Flag::eShaderOutput
@@ -144,8 +144,8 @@ namespace ocean_fft
 					result->declMember( "colour"
 						, ast::type::Kind::eVec3F
 						, ast::type::NotArray
-						, ( checkFlag( submeshFlags, castor3d::SubmeshFlag::eColours ) ? index++ : 0 )
-						, checkFlag( submeshFlags, castor3d::SubmeshFlag::eColours ) );
+						, ( flags.enableColours() ? index++ : 0 )
+						, flags.enableColours() );
 					result->declMember( "nodeId"
 						, ast::type::Kind::eInt
 						, ast::type::NotArray
@@ -519,7 +519,7 @@ namespace ocean_fft
 	{
 		return pass.getRenderPassInfo()
 			&& pass.getRenderPassInfo()->name == Type
-			&& doAreValidPassFlags( pass.getPassFlags() );
+			&& areValidPassFlags( pass.getPassFlags() );
 	}
 
 	void OceanRenderPass::doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const
@@ -630,10 +630,7 @@ namespace ocean_fft
 	{
 		remFlag( flags, castor3d::SubmeshFlag::eNormals );
 		remFlag( flags, castor3d::SubmeshFlag::eTangents );
-		remFlag( flags, castor3d::SubmeshFlag::eTexcoords0 );
-		remFlag( flags, castor3d::SubmeshFlag::eTexcoords1 );
-		remFlag( flags, castor3d::SubmeshFlag::eTexcoords2 );
-		remFlag( flags, castor3d::SubmeshFlag::eTexcoords3 );
+		remFlag( flags, castor3d::SubmeshFlag::eTexcoords );
 		return flags;
 	}
 
@@ -645,16 +642,12 @@ namespace ocean_fft
 		remFlag( flags, castor3d::PassFlag::eSubsurfaceScattering );
 		remFlag( flags, castor3d::PassFlag::eAlphaBlending );
 		remFlag( flags, castor3d::PassFlag::eAlphaTest );
-		remFlag( flags, castor3d::PassFlag::eBlendAlphaTest );
 		return flags;
 	}
 
 	castor3d::ProgramFlags OceanRenderPass::doAdjustProgramFlags( castor3d::ProgramFlags flags )const
 	{
 		remFlag( flags, castor3d::ProgramFlag::eInstantiation );
-		remFlag( flags, castor3d::ProgramFlag::eForceTexCoords );
-		addFlag( flags, castor3d::ProgramFlag::eLighting );
-		addFlag( flags, castor3d::ProgramFlag::eHasTessellation );
 		return flags;
 	}
 
@@ -670,8 +663,6 @@ namespace ocean_fft
 		using namespace castor3d;
 		VertexWriter writer;
 
-		auto textureFlags = filterTexturesFlags( flags.textures );
-
 		C3D_Matrix( writer
 			, GlobalBuffersIdx::eMatrix
 			, RenderPipeline::eBuffers );
@@ -679,6 +670,7 @@ namespace ocean_fft
 			, GlobalBuffersIdx::eScene
 			, RenderPipeline::eBuffers );
 		C3D_ObjectIdsData( writer
+			, flags
 			, GlobalBuffersIdx::eObjectsNodeID
 			, RenderPipeline::eBuffers );
 		C3D_ModelsData( writer
@@ -693,14 +685,9 @@ namespace ocean_fft
 		pcb.end();
 
 		writer.implementMainT< castor3d::shader::VertexSurfaceT, rdpass::PatchT >( sdw::VertexInT< castor3d::shader::VertexSurfaceT >{ writer
-				, flags.submeshFlags
-				, flags.programFlags
-				, getShaderFlags()
-				, textureFlags
-				, flags.passFlags
-				, false /* force no texcoords*/ }
+				, flags }
 			, sdw::VertexOutT< rdpass::PatchT >{ writer
-				, flags.submeshFlags }
+				, flags }
 			, [&]( VertexInT< castor3d::shader::VertexSurfaceT > in
 				, VertexOutT< rdpass::PatchT > out )
 			{
@@ -713,7 +700,7 @@ namespace ocean_fft
 						, in
 						, pipelineID
 						, writer.cast< sdw::UInt >( in.drawID )
-						, flags.programFlags ) );
+						, flags ) );
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[nodeId - 1u] );
 				out.colour = in.colour;
@@ -740,6 +727,7 @@ namespace ocean_fft
 			, GlobalBuffersIdx::eScene
 			, RenderPipeline::eBuffers );
 		C3D_ObjectIdsData( writer
+			, flags
 			, GlobalBuffersIdx::eObjectsNodeID
 			, RenderPipeline::eBuffers );
 		C3D_ModelsData( writer
@@ -758,7 +746,7 @@ namespace ocean_fft
 
 		writer.implementMainT< VoidT, rdpass::PatchT >( sdw::VertexInT< sdw::VoidT >{ writer }
 			, sdw::VertexOutT< rdpass::PatchT >{ writer
-				, flags.submeshFlags }
+				, flags }
 			, [&]( VertexInT< VoidT > in
 				, VertexOutT< rdpass::PatchT > out )
 			{
@@ -858,10 +846,10 @@ namespace ocean_fft
 
 		writer.implementPatchRoutineT< rdpass::PatchT, rdpass::OutputVertices, rdpass::PatchT >( TessControlListInT< rdpass::PatchT, rdpass::OutputVertices >{ writer
 				, false
-				, flags.submeshFlags }
+				, flags }
 			, sdw::QuadsTessPatchOutT< rdpass::PatchT >{ writer
 				, 9u
-				, flags.submeshFlags }
+				, flags }
 			, [&]( sdw::TessControlPatchRoutineIn in
 				, sdw::TessControlListInT< rdpass::PatchT, rdpass::OutputVertices > listIn
 				, sdw::QuadsTessPatchOutT<rdpass::PatchT > patchOut )
@@ -922,7 +910,7 @@ namespace ocean_fft
 
 		writer.implementMainT< rdpass::PatchT, rdpass::OutputVertices, VoidT >( TessControlListInT< rdpass::PatchT, rdpass::OutputVertices >{ writer
 				, true
-				, flags.submeshFlags }
+				, flags }
 			, TrianglesTessControlListOut{ writer
 				, ast::type::Partitioning::eFractionalEven
 				, ast::type::OutputTopology::eQuad
@@ -943,7 +931,6 @@ namespace ocean_fft
 		using namespace sdw;
 		using namespace castor3d;
 		TessellationEvaluationWriter writer;
-		auto textureFlags = filterTexturesFlags( flags.textures );
 
 		castor3d::shader::Utils utils{ writer };
 
@@ -1010,17 +997,12 @@ namespace ocean_fft
 				, ast::type::PatchDomain::eQuads
 				, type::Partitioning::eFractionalEven
 				, type::PrimitiveOrdering::eCW
-				, flags.submeshFlags }
+				, flags }
 			, QuadsTessPatchInT< rdpass::PatchT >{ writer
 				, 9u
-				, flags.submeshFlags }
+				, flags }
 			, TessEvalDataOutT< castor3d::shader::FragmentSurfaceT >{ writer
-				, flags.submeshFlags
-				, flags.programFlags
-				, getShaderFlags()
-				, textureFlags
-				, flags.passFlags
-				, false /* force no texcoords*/ }
+				, flags }
 			, [&]( TessEvalMainIn mainIn
 				, TessEvalListInT< rdpass::PatchT, rdpass::OutputVertices > listIn
 				, QuadsTessPatchInT< rdpass::PatchT > patchIn
@@ -1080,10 +1062,7 @@ namespace ocean_fft
 		using namespace castor3d;
 		FragmentWriter writer;
 
-		auto textureFlags = filterTexturesFlags( flags.textures );
-		bool hasDiffuseGI = checkFlag( flags.sceneFlags, SceneFlag::eVoxelConeTracing )
-			|| checkFlag( flags.sceneFlags, SceneFlag::eLpvGI )
-			|| checkFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI );
+		bool hasDiffuseGI = flags.hasDiffuseGI();
 
 		shader::Utils utils{ writer };
 		shader::CookTorranceBRDF cookTorrance{ writer, utils };
@@ -1138,7 +1117,7 @@ namespace ocean_fft
 			, getScene().getLightingModel()
 			, lightsIndex
 			, RenderPipeline::eBuffers
-			, shader::ShadowOptions{ flags.sceneFlags, true, false }
+			, shader::ShadowOptions{ flags.getShadowFlags(), true, false }
 			, nullptr
 			, index
 			, RenderPipeline::eBuffers
@@ -1154,7 +1133,7 @@ namespace ocean_fft
 		shader::GlobalIllumination indirect{ writer, utils };
 		indirect.declare( index
 			, RenderPipeline::eBuffers
-			, flags.sceneFlags );
+			, flags.getGlobalIlluminationFlags() );
 
 		// Fragment Outputs
 		auto pxl_colour( writer.declOutput< Vec4 >( "pxl_colour", 0 ) );
@@ -1173,12 +1152,7 @@ namespace ocean_fft
 			, sdw::InVec3{ writer, "diffuseColour" } );
 
 		writer.implementMainT< castor3d::shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< castor3d::shader::FragmentSurfaceT >{ writer
-				, flags.submeshFlags
-				, flags.programFlags
-				, getShaderFlags()
-				, textureFlags
-				, flags.passFlags
-				, false /* force no texcoords*/ }
+				, flags }
 			, FragmentOut{ writer }
 			, [&]( FragmentInT< castor3d::shader::FragmentSurfaceT > in
 				, FragmentOut out )
@@ -1208,7 +1182,7 @@ namespace ocean_fft
 				finalNormal.xz() -= noiseGradient;
 				finalNormal = normalize( finalNormal );
 
-				if ( checkFlag( flags.programFlags, castor3d::ProgramFlag::eInvertNormals ) )
+				if ( flags.hasInvertNormals() )
 				{
 					finalNormal = -finalNormal;
 				}
@@ -1268,12 +1242,12 @@ namespace ocean_fft
 					// Indirect Lighting
 					auto indirectOcclusion = writer.declLocale( "indirectOcclusion"
 						, 1.0_f );
-					auto lightIndirectDiffuse = indirect.computeDiffuse( flags.sceneFlags
+					auto lightIndirectDiffuse = indirect.computeDiffuse( flags.getGlobalIlluminationFlags()
 						, surface
 						, indirectOcclusion );
 					displayDebugData( eIndirectOcclusion, vec3( indirectOcclusion ), 1.0_f );
 					displayDebugData( eLightIndirectDiffuse, lightIndirectDiffuse.xyz(), 1.0_f );
-					auto lightIndirectSpecular = indirect.computeSpecular( flags.sceneFlags
+					auto lightIndirectSpecular = indirect.computeSpecular( flags.getGlobalIlluminationFlags()
 						, worldEye
 						, worldToCam
 						, surface
@@ -1283,7 +1257,7 @@ namespace ocean_fft
 						, c3d_mapBrdf );
 					displayDebugData( eLightIndirectSpecular, lightIndirectSpecular, 1.0_f );
 					auto indirectAmbient = writer.declLocale( "indirectAmbient"
-						, lightMat->getIndirectAmbient( indirect.computeAmbient( flags.sceneFlags, lightIndirectDiffuse.xyz() ) ) );
+						, lightMat->getIndirectAmbient( indirect.computeAmbient( flags.getGlobalIlluminationFlags(), lightIndirectDiffuse.xyz() ) ) );
 					displayDebugData( eIndirectAmbient, indirectAmbient, 1.0_f );
 					auto indirectDiffuse = writer.declLocale( "indirectDiffuse"
 						, ( hasDiffuseGI
@@ -1401,7 +1375,7 @@ namespace ocean_fft
 				}
 				FI;
 
-				if ( getFogType( flags.sceneFlags ) != FogType::eDisabled )
+				if ( flags.hasFog() )
 				{
 					pxl_colour = fog.apply( c3d_sceneData.getBackgroundColour( utils )
 						, pxl_colour

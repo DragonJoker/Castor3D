@@ -71,7 +71,7 @@ namespace castor3d
 			SDW_DeclStructInstance( , SurfaceT );
 
 			static sdw::type::IOStructPtr makeIOType( sdw::type::TypesCache & cache
-				, SubmeshFlags submeshFlags )
+				, PipelineFlags const & flags )
 			{
 				auto result = cache.getIOStruct( sdw::type::MemoryLayout::eStd430
 					, ( FlagT == sdw::var::Flag::eShaderOutput
@@ -101,23 +101,23 @@ namespace castor3d
 					result->declMember( "texcoord1"
 						, sdw::type::Kind::eVec3F
 						, sdw::type::NotArray
-						, ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords1 ) ? index++ : 0u )
-						, checkFlag( submeshFlags, SubmeshFlag::eTexcoords1 ) );
+						, ( flags.enableTexcoord1() ? index++ : 0 )
+						, flags.enableTexcoord1() );
 					result->declMember( "texcoord2"
 						, sdw::type::Kind::eVec3F
 						, sdw::type::NotArray
-						, ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords2 ) ? index++ : 0u )
-						, checkFlag( submeshFlags, SubmeshFlag::eTexcoords2 ) );
+						, ( flags.enableTexcoord2() ? index++ : 0 )
+						, flags.enableTexcoord2() );
 					result->declMember( "texcoord3"
 						, sdw::type::Kind::eVec3F
 						, sdw::type::NotArray
-						, ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords3 ) ? index++ : 0u )
-						, checkFlag( submeshFlags, SubmeshFlag::eTexcoords3 ) );
+						, ( flags.enableTexcoord3() ? index++ : 0 )
+						, flags.enableTexcoord3() );
 					result->declMember( "colour"
 						, sdw::type::Kind::eVec3F
 						, sdw::type::NotArray
-						, ( checkFlag( submeshFlags, SubmeshFlag::eColours ) ? index++ : 0u )
-						, checkFlag( submeshFlags, SubmeshFlag::eColours ) );
+						, ( flags.enableColours() ? index++ : 0 )
+						, flags.enableColours() );
 					result->declMember( "nodeId"
 						, sdw::type::Kind::eUInt
 						, sdw::type::NotArray
@@ -159,7 +159,7 @@ namespace castor3d
 			, device
 			, Type
 			, nullptr
-			, RenderNodesPassDesc{ { voxelConfig.gridSize.value(), voxelConfig.gridSize.value(), 1u }, matrixUbo, sceneUbo, culler, RenderMode::eBoth, true, true } }
+			, RenderNodesPassDesc{ { voxelConfig.gridSize.value(), voxelConfig.gridSize.value(), 1u }, matrixUbo, sceneUbo, culler, RenderFilter::eNone, true, true } }
 		, m_scene{ culler.getScene() }
 		, m_camera{ culler.getCamera() }
 		, m_voxels{ voxels }
@@ -205,14 +205,11 @@ namespace castor3d
 		remFlag( flags, PassFlag::eSubsurfaceScattering );
 		remFlag( flags, PassFlag::eAlphaBlending );
 		remFlag( flags, PassFlag::eAlphaTest );
-		remFlag( flags, PassFlag::eBlendAlphaTest );
 		return flags;
 	}
 
 	ProgramFlags VoxelizePass::doAdjustProgramFlags( ProgramFlags flags )const
 	{
-		addFlag( flags, ProgramFlag::eHasGeometry );
-		addFlag( flags, ProgramFlag::eLighting );
 		return flags;
 	}
 
@@ -305,13 +302,12 @@ namespace castor3d
 	{
 		using namespace sdw;
 		VertexWriter writer;
-		auto textureFlags = filterTexturesFlags( flags.textures );
-		bool hasTextures = flags.hasTextures() && !textureFlags.empty();
 
 		C3D_Matrix( writer
 			, GlobalBuffersIdx::eMatrix
 			, RenderPipeline::eBuffers );
 		C3D_ObjectIdsData( writer
+			, flags
 			, GlobalBuffersIdx::eObjectsNodeID
 			, RenderPipeline::eBuffers );
 		C3D_ModelsData( writer
@@ -323,14 +319,9 @@ namespace castor3d
 		pcb.end();
 
 		writer.implementMainT< shader::VertexSurfaceT, vxlpass::SurfaceT >( sdw::VertexInT< shader::VertexSurfaceT >{ writer
-				, flags.submeshFlags
-				, flags.programFlags
-				, getShaderFlags()
-				, textureFlags
-				, flags.passFlags
-				, hasTextures }
+				, flags }
 			, sdw::VertexOutT< vxlpass::SurfaceT >{ writer
-				, flags.submeshFlags }
+				, flags }
 			, [&]( VertexInT< shader::VertexSurfaceT > in
 				, VertexOutT< vxlpass::SurfaceT > out )
 			{
@@ -339,7 +330,7 @@ namespace castor3d
 						, in
 						, pipelineID
 						, writer.cast< sdw::UInt >( in.drawID )
-						, flags.programFlags ) );
+						, flags ) );
 				auto curPosition = writer.declLocale( "curPosition"
 					, in.position );
 				auto curNormal = writer.declLocale( "curNormal"
@@ -347,19 +338,14 @@ namespace castor3d
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[nodeId - 1u] );
 				out.nodeId = writer.cast< sdw::Int >( nodeId );
-
-				if ( hasTextures )
-				{
-					out.texture0 = in.texture0;
-					out.texture1 = in.texture1;
-					out.texture2 = in.texture2;
-					out.texture3 = in.texture3;
-				}
-
+				out.texture0 = in.texture0;
+				out.texture1 = in.texture1;
+				out.texture2 = in.texture2;
+				out.texture3 = in.texture3;
 				auto modelMtx = writer.declLocale< Mat4 >( "modelMtx"
 					, modelData.getModelMtx() );
 
-				if ( checkFlag( flags.submeshFlags, SubmeshFlag::eVelocity ) )
+				if ( flags.hasWorldPosInputs() )
 				{
 					out.vtx.position = curPosition;
 					out.normal = curNormal;
@@ -380,12 +366,10 @@ namespace castor3d
 	{
 		using namespace sdw;
 		VertexWriter writer;
-		auto textureFlags = filterTexturesFlags( flags.textures );
-		bool hasTextures = flags.hasTextures() && !textureFlags.empty();
 
 		// Shader inputs
 		auto inPosition = writer.declInput< Vec4 >( "inPosition", 0u );
-		auto inTexcoord = writer.declInput< Vec2 >( "inTexcoord", 1u, hasTextures );
+		auto inTexcoord = writer.declInput< Vec2 >( "inTexcoord", 1u, flags.enableTexcoords() );
 		auto inCenter = writer.declInput< Vec3 >( "inCenter", 2u );
 
 		C3D_Matrix( writer
@@ -395,6 +379,7 @@ namespace castor3d
 			, GlobalBuffersIdx::eScene
 			, RenderPipeline::eBuffers );
 		C3D_ObjectIdsData( writer
+			, flags
 			, GlobalBuffersIdx::eObjectsNodeID
 			, RenderPipeline::eBuffers );
 		C3D_ModelsData( writer
@@ -410,7 +395,7 @@ namespace castor3d
 
 		writer.implementMainT< VoidT, vxlpass::SurfaceT >( sdw::VertexInT< VoidT >{ writer }
 			, sdw::VertexOutT< vxlpass::SurfaceT >{ writer
-				, SubmeshFlags{} }
+				, flags }
 			,[&]( VertexIn in
 			, VertexOutT< vxlpass::SurfaceT > out )
 			{
@@ -440,19 +425,19 @@ namespace castor3d
 				auto height = writer.declLocale( "height"
 					, billboardData.getHeight( c3d_sceneData ) );
 
-				if ( hasTextures )
+				if ( flags.enableTextures() )
 				{
 					out.texture0 = vec3( inTexcoord, 0.0_f );
 				}
 
 				out.vtx.position = vec4( curBbcenter
-						+ right * inPosition.x() * width
-						+ up * inPosition.y() * height
+					+ right * inPosition.x() * width
+					+ up * inPosition.y() * height
 					, 1.0_f );
+				out.worldPosition = out.vtx.position.xyz();
 				auto viewPosition = writer.declLocale( "viewPosition"
 					, c3d_matrixData.worldToCurView( out.vtx.position ) );
 				out.viewPosition = viewPosition.xyz();
-				out.worldPosition = out.viewPosition;
 				out.normal = normalize( c3d_sceneData.getPosToCamera( curBbcenter ) );
 			} );
 
@@ -463,8 +448,6 @@ namespace castor3d
 	{
 		using namespace sdw;
 		GeometryWriter writer;
-		auto textureFlags = filterTexturesFlags( flags.textures );
-		bool hasTextures = flags.hasTextures() && !textureFlags.empty();
 
 		C3D_Voxelizer( writer
 			, uint32_t( GlobalBuffersIdx::eCount ) + 1u
@@ -472,10 +455,10 @@ namespace castor3d
 			, true );
 
 		writer.implementMainT< TriangleListT< vxlpass::SurfaceT >, TriangleStreamT< vxlpass::SurfaceT > >( TriangleListT< vxlpass::SurfaceT >{ writer
-				, flags.submeshFlags }
+				, flags }
 			, TriangleStreamT< vxlpass::SurfaceT >{ writer
 				, 3u
-				, flags.submeshFlags }
+				, flags }
 			, [&]( GeometryIn in
 				, TriangleListT< vxlpass::SurfaceT > list
 				, TriangleStreamT< vxlpass::SurfaceT > out )
@@ -489,7 +472,7 @@ namespace castor3d
 
 				FOR( writer, UInt, i, 0_u, i < 3_u, ++i )
 				{
-					positions[i] = list[i].vtx.position.xyz() * c3d_voxelData.worldToGrid;
+					positions[i] = list[i].worldPosition * c3d_voxelData.worldToGrid;
 
 					// Project onto dominant axis:
 					IF( writer, maxi == 0_u )
@@ -529,14 +512,10 @@ namespace castor3d
 					out.normal = list[i].normal;
 					out.nodeId = list[i].nodeId;
 					out.vtx.position = vec4( positions[i], 1.0f );
-
-					if ( hasTextures )
-					{
-						out.texture0 = list[i].texture0;
-						out.texture1 = list[i].texture1;
-						out.texture2 = list[i].texture2;
-						out.texture3 = list[i].texture3;
-					}
+					out.texture0 = list[i].texture0;
+					out.texture1 = list[i].texture1;
+					out.texture2 = list[i].texture2;
+					out.texture3 = list[i].texture3;
 
 					out.append();
 				}
@@ -552,8 +531,7 @@ namespace castor3d
 	{
 		using namespace sdw;
 		FragmentWriter writer;
-		auto textureFlags = filterTexturesFlags( flags.textures );
-		bool hasTextures = flags.hasTextures() && !textureFlags.empty();
+		bool enableTextures = flags.enableTextures();
 		shader::Utils utils{ writer };
 
 		C3D_Scene( writer
@@ -568,11 +546,11 @@ namespace castor3d
 		shader::TextureConfigurations textureConfigs{ writer
 			, uint32_t( GlobalBuffersIdx::eTexConfigs )
 			, RenderPipeline::eBuffers
-			, hasTextures };
+			, enableTextures };
 		shader::TextureAnimations textureAnims{ writer
 			, uint32_t( GlobalBuffersIdx::eTexAnims )
 			, RenderPipeline::eBuffers
-			, hasTextures };
+			, enableTextures };
 		auto addIndex = uint32_t( GlobalBuffersIdx::eCount );
 		auto lightsIndex = addIndex++;
 		C3D_Voxelizer( writer
@@ -587,20 +565,20 @@ namespace castor3d
 			, shader::getLightingModelName( *getEngine(), flags.passType )
 			, lightsIndex
 			, RenderPipeline::eBuffers
-			, shader::ShadowOptions{ flags.sceneFlags, true, false }
+			, shader::ShadowOptions{ flags.getShadowFlags(), true, false }
 			, addIndex
 			, RenderPipeline::eBuffers
-			, m_mode != RenderMode::eTransparentOnly );
+			, false );
 
 		auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
 			, 0u
 			, RenderPipeline::eTextures
-			, hasTextures ) );
+			, enableTextures ) );
 
 		writer.implementMainT< vxlpass::SurfaceT, VoidT >( FragmentInT< vxlpass::SurfaceT >{ writer
 				, FragmentOrigin::eUpperLeft
 				, FragmentCenter::eHalfPixel
-				, flags.submeshFlags }
+				, flags }
 			, FragmentOutT< VoidT >{ writer }
 			, [&]( FragmentInT< vxlpass::SurfaceT > in
 				, FragmentOut out )
@@ -628,7 +606,7 @@ namespace castor3d
 					auto occlusion = writer.declLocale( "occlusion"
 						, 1.0_f );
 
-					if ( hasTextures )
+					if ( c3d_maps.isEnabled() )
 					{
 						auto texCoord0 = writer.declLocale( "texCoord0"
 							, in.texture0 );
@@ -638,8 +616,7 @@ namespace castor3d
 							, in.texture2 );
 						auto texCoord3 = writer.declLocale( "texCoord3"
 							, in.texture3 );
-						lightingModel->computeMapDiffuseContributions( flags.passFlags
-							, flags.texturesFlags
+						lightingModel->computeMapDiffuseContributions( flags
 							, textureConfigs
 							, textureAnims
 							, c3d_maps

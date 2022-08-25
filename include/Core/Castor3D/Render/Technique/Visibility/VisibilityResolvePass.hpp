@@ -55,6 +55,32 @@ namespace castor3d
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
 		C3D_API void update( CpuUpdater & updater )override;
+		/**
+		 *\copydoc		castor3d::RenderTechniquePass::createPipelineFlags
+		 */
+		C3D_API PipelineFlags createPipelineFlags( BlendMode colourBlendMode
+			, BlendMode alphaBlendMode
+			, PassFlags passFlags
+			, RenderPassTypeID renderPassTypeID
+			, PassTypeID passTypeID
+			, VkCompareOp alphaFunc
+			, VkCompareOp blendAlphaFunc
+			, TextureFlagsArray const & textures
+			, SubmeshFlags const & submeshFlags
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags
+			, VkPrimitiveTopology topology
+			, bool isFrontCulled
+			, uint32_t passLayerIndex
+			, GpuBufferOffsetT< castor::Point4f > const & morphTargets )const;
+		/**
+		 *\copydoc	RenderNodesPass::areValidPassFlags
+		 */
+		C3D_API bool areValidPassFlags( PassFlags const & passFlags )const override;
+		/**
+		 *\copydoc		castor3d::RenderTechniquePass::getShaderFlags
+		 */
+		C3D_API ShaderFlags getShaderFlags()const override;
 
 		static constexpr bool useCompute{ false };
 
@@ -94,10 +120,13 @@ namespace castor3d
 			, VkCommandBuffer commandBuffer );
 		void doRecordGraphics( crg::RecordContext & context
 			, VkCommandBuffer commandBuffer );
-		Pipeline & doCreatePipeline( PipelineBaseHash const & hash );
 		Pipeline & doCreatePipeline( PipelineBaseHash const & hash
+			, PipelineFlags const & flags );
+		Pipeline & doCreatePipeline( PipelineBaseHash const & hash
+			, PipelineFlags const & flags
 			, uint32_t stride );
 		Pipeline & doCreatePipeline( PipelineBaseHash const & hash
+			, PipelineFlags const & flags
 			, uint32_t stride
 			, PipelineContainer & pipelines );
 		void doOnCullerCompute( SceneCuller const & culler );

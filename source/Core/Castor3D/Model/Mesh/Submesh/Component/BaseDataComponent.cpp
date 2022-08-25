@@ -33,14 +33,6 @@ namespace castor3d
 			return ashes::PipelineVertexInputStateCreateInfo{ 0u, bindings, attributes };
 		}
 
-		static bool isTexcoordComponent( SubmeshFlag submeshData )
-		{
-			return submeshData == SubmeshFlag::eTexcoords0
-				|| submeshData == SubmeshFlag::eTexcoords1
-				|| submeshData == SubmeshFlag::eTexcoords2
-				|| submeshData == SubmeshFlag::eTexcoords3;
-		}
-
 		static castor::Point4fArray convert( castor::Point3fArray const & src )
 		{
 			castor::Point4fArray result;
@@ -54,20 +46,12 @@ namespace castor3d
 			return result;
 		}
 
-		static bool hasMatchingFlag( SubmeshFlag submeshFlag
-			, ShaderFlags const & shaderFlags )
+		static bool isTexcoordComponent( SubmeshFlag submeshData )
 		{
-			switch ( submeshFlag )
-			{
-			case castor3d::SubmeshFlag::eNormals:
-				return checkFlag( shaderFlags, ShaderFlag::eNormal );
-			case castor3d::SubmeshFlag::eTangents:
-				return checkFlag( shaderFlags, ShaderFlag::eTangentSpace );
-			case castor3d::SubmeshFlag::eVelocity:
-				return checkFlag( shaderFlags, ShaderFlag::eVelocity );
-			default:
-				return true;
-			}
+			return submeshData == SubmeshFlag::eTexcoords0
+				|| submeshData == SubmeshFlag::eTexcoords1
+				|| submeshData == SubmeshFlag::eTexcoords2
+				|| submeshData == SubmeshFlag::eTexcoords3;
 		}
 	}
 
@@ -90,21 +74,15 @@ namespace castor3d
 	}
 
 	void gatherBaseDataBuffer( SubmeshFlag submeshData
-		, ProgramFlags const & programFlags
-		, SubmeshFlags const & submeshFlags
-		, ShaderFlags const & shaderFlags
-		, bool hasTextures
+		, PipelineFlags const & flags
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
 		, uint32_t & currentBinding
 		, uint32_t & currentLocation
 		, std::unordered_map< size_t, ashes::PipelineVertexInputStateCreateInfo > & cache )
 	{
-		if ( ( smshbase::isTexcoordComponent( submeshData )
-				&& ( checkFlag( programFlags, ProgramFlag::eForceTexCoords )
-					|| ( checkFlag( submeshFlags, submeshData ) && hasTextures ) ) )
-			|| ( !smshbase::isTexcoordComponent( submeshData )
-				&& checkFlag( submeshFlags, submeshData )
-				&& smshbase::hasMatchingFlag( submeshData, shaderFlags ) ) )
+		if ( smshbase::isTexcoordComponent( submeshData )
+			? flags.enableTexcoord( submeshData )
+			: flags.enableNonTexcoord( submeshData ) )
 		{
 			auto hash = std::hash< uint32_t >{}( currentBinding );
 			hash = castor::hashCombine( hash, currentLocation );

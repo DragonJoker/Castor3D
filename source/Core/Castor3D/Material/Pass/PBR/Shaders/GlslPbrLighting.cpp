@@ -57,52 +57,38 @@ namespace castor3d::shader
 		return m_writer.declDerivedLocale< LightMaterial, PbrLightMaterial >( name, enabled );
 	}
 
-	void PbrLightingModel::modifyMaterial( PassFlags const & passFlags
-		, TextureFlags const & textureFlags
+	void PbrLightingModel::modifyMaterial( PipelineFlags const & flags
 		, sdw::Vec4 const & sampled
 		, TextureConfigData const & config
 		, LightMaterial & lightMat )const
 	{
 		auto & pbrLightMat = static_cast< PbrLightMaterial & >( lightMat );
-		config.applyAlbedo( textureFlags, sampled, pbrLightMat.albedo );
-		config.applySpecular( textureFlags, sampled, pbrLightMat.specular );
-
-		if ( checkFlag( textureFlags, TextureFlag::eGlossiness ) )
-		{
-			IF( m_writer, config.isGlossiness() )
-			{
-				auto gloss = m_writer.declLocale( "gloss"
-					, LightMaterial::computeRoughness( pbrLightMat.roughness ) );
-				gloss = config.getGlossiness( sampled, gloss );
-				pbrLightMat.roughness = LightMaterial::computeRoughness( gloss );
-			}
-			FI;
-		}
-
-		config.applyMetalness( textureFlags, sampled, pbrLightMat.metalness );
-		config.applyRoughness( textureFlags, sampled, pbrLightMat.roughness );
+		config.applyAlbedo( flags, sampled, pbrLightMat.albedo );
+		config.applySpecular( flags, sampled, pbrLightMat.specular );
+		config.applyGlossiness( flags, sampled, pbrLightMat.roughness );
+		config.applyMetalness( flags, sampled, pbrLightMat.metalness );
+		config.applyRoughness( flags, sampled, pbrLightMat.roughness );
 	}
 
-	void PbrLightingModel::updateMaterial( PassFlags const & passFlags
-		, TextureFlags const & textureFlags
+	void PbrLightingModel::updateMaterial( PipelineFlags const & flags
 		, LightMaterial & lightMat
 		, sdw::Vec3 & emissive )const
 	{
 		auto & pbrLightMat = static_cast< PbrLightMaterial & >( lightMat );
 
-		if ( !checkFlag( textureFlags, TextureFlag::eSpecular )
-			&& ( checkFlag( textureFlags, TextureFlag::eMetalness ) || checkFlag( textureFlags, castor3d::TextureFlag::eAlbedo ) ) )
+		if ( !flags.hasSpecularMap()
+			&& ( flags.hasMetalnessMap() || flags.hasAlbedoMap() ) )
 		{
 			pbrLightMat.specular = LightMaterial::computeF0( pbrLightMat.albedo, pbrLightMat.metalness );
 		}
 
-		if ( !checkFlag( textureFlags, TextureFlag::eMetalness )
-			&& ( checkFlag( textureFlags, TextureFlag::eSpecular ) || checkFlag( textureFlags, castor3d::TextureFlag::eAlbedo ) ) )
+		if ( !flags.hasMetalnessMap()
+			&& ( flags.hasSpecularMap() || flags.hasAlbedoMap() ) )
 		{
 			pbrLightMat.metalness = LightMaterial::computeMetalness( pbrLightMat.albedo, pbrLightMat.specular );
 		}
 
-		if ( !checkFlag( textureFlags, castor3d::TextureFlag::eEmissive ) )
+		if ( !flags.hasEmissiveMap() )
 		{
 			emissive *= pbrLightMat.albedo;
 		}

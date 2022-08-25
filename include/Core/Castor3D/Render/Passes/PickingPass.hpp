@@ -83,7 +83,8 @@ namespace castor3d
 
 		C3D_API ShaderFlags getShaderFlags()const override
 		{
-			return ShaderFlag::eNone;
+			return ShaderFlag::ePicking
+				| ShaderFlag::eOpacity;
 		}
 		/**@}*/
 
@@ -93,11 +94,11 @@ namespace castor3d
 		void doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
 			, ShadowMapLightTypeArray const & shadowMaps )override;
 		SubmeshFlags doAdjustSubmeshFlags( SubmeshFlags flags )const override;
-		ShaderPtr doGetPixelShaderSource( PipelineFlags const & flags )const override;
 		PassFlags doAdjustPassFlags( PassFlags flags )const override;
 		ProgramFlags doAdjustProgramFlags( ProgramFlags flags )const override;
 		ashes::PipelineDepthStencilStateCreateInfo doCreateDepthStencilState( PipelineFlags const & flags )const override;
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
+		ShaderPtr doGetPixelShaderSource( PipelineFlags const & flags )const override;
 
 	public:
 		C3D_API static castor::String const Type;

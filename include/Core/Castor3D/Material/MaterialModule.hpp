@@ -129,7 +129,7 @@ namespace castor3d
 		eRoughness = 0x0001 << uint16_t( TextureChannel::eRoughness ),
 		//!\~english	Mask for all the texture channels affecting geometry.
 		//!\~french		Masque pour les canaux de texture affectant la géométrie.
-		eGeometry = eNormal | eOpacity | eHeight,
+		eGeometry = eOpacity | eHeight,
 		//!\~english	Mask for all the texture channels.
 		//!\~french		Masque pour les canaux de texture.
 		eAll = ( 0x0001 << uint16_t( TextureChannel::eCount ) ) - 1u,

@@ -80,12 +80,12 @@ namespace castor3d
 
 	ShaderFlags OpaquePass::getShaderFlags()const
 	{
-		return ShaderFlag::eTangentSpace;
+		return ShaderFlag::eTangentSpace
+			| ShaderFlag::eOpacity;
 	}
 
 	ProgramFlags OpaquePass::doAdjustProgramFlags( ProgramFlags flags )const
 	{
-		remFlag( flags, ProgramFlag::eLighting );
 		return flags;
 	}
 
@@ -117,8 +117,7 @@ namespace castor3d
 
 		using namespace sdw;
 		FragmentWriter writer;
-		auto textureFlags = filterTexturesFlags( flags.textures );
-		bool hasTextures = flags.hasTextures() && !textureFlags.empty();
+		bool enableTextures = flags.enableTextures();
 
 		C3D_Scene( writer
 			, GlobalBuffersIdx::eScene
@@ -132,16 +131,16 @@ namespace castor3d
 		shader::TextureConfigurations textureConfigs{ writer
 			, uint32_t( GlobalBuffersIdx::eTexConfigs )
 			, RenderPipeline::eBuffers
-			, hasTextures };
+			, enableTextures };
 		shader::TextureAnimations textureAnims{ writer
 			, uint32_t( GlobalBuffersIdx::eTexAnims )
 			, RenderPipeline::eBuffers
-			, hasTextures };
+			, enableTextures };
 
 		auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
 			, 0u
 			, RenderPipeline::eTextures
-			, hasTextures ) );
+			, enableTextures ) );
 
 		sdw::PushConstantBuffer pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
@@ -162,12 +161,7 @@ namespace castor3d
 			, true );
 
 		writer.implementMainT< shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer
-				, flags.submeshFlags
-				, flags.programFlags
-				, getShaderFlags()
-				, textureFlags
-				, flags.passFlags
-				, hasTextures }
+				, flags }
 				, FragmentOut{ writer }
 			, [&]( FragmentInT< shader::FragmentSurfaceT > in
 				, FragmentOut out )
@@ -190,11 +184,7 @@ namespace castor3d
 					, 1.0_f
 					, vec3( 0.0_f ) };
 				auto lightMat = materials.blendMaterials( utils
-					, flags.alphaFunc
-					, flags.passFlags
-					, flags.submeshFlags
-					, flags.textures
-					, hasTextures
+					, flags
 					, textureConfigs
 					, textureAnims
 					, *lightingModel

@@ -57,8 +57,6 @@ namespace castor3d
 			return cuT( "untile" );
 		case PassFlag::eAlphaTest:
 			return cuT( "alpha_test" );
-		case PassFlag::eBlendAlphaTest:
-			return cuT( "blend_alpha_test" );
 		case PassFlag::eImageBasedLighting:
 			return cuT( "image_based_lighing" );
 		case PassFlag::eSubsurfaceScattering:

@@ -29,13 +29,11 @@ namespace castor3d::shader
 
 		C3D_API std::unique_ptr< LightMaterial > declMaterial( std::string const & name
 			, bool enabled )override;
-		C3D_API void modifyMaterial( PassFlags const & passFlags
-			, TextureFlags const & textureFlags
+		C3D_API void modifyMaterial( PipelineFlags const & flags
 			, sdw::Vec4 const & sampled
 			, TextureConfigData const & config
 			, LightMaterial & lightMat )const override;
-		C3D_API void updateMaterial( PassFlags const & passFlags
-			, TextureFlags const & textureFlags
+		C3D_API void updateMaterial( PipelineFlags const & flags
 			, LightMaterial & lightMat
 			, sdw::Vec3 & emissive )const override;
 

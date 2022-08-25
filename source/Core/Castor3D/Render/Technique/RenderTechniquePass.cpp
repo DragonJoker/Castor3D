@@ -143,8 +143,7 @@ namespace castor3d
 		: RenderNodesPass{ pass, context, graph, device, typeName, targetImage, renderPassDesc }
 		, RenderTechniquePass{ parent, renderPassDesc.m_culler.getScene() }
 		, m_camera{ renderPassDesc.m_culler.hasCamera() ? &renderPassDesc.m_culler.getCamera() : nullptr }
-		, m_environment{ techniquePassDesc.m_environment }
-		, m_hasVelocity{ techniquePassDesc.m_hasVelocity }
+		, m_shaderFlags{ techniquePassDesc.m_shaderFlags }
 		, m_ssaoConfig{ techniquePassDesc.m_ssaoConfig }
 		, m_ssao{ techniquePassDesc.m_ssao }
 		, m_lpvConfigUbo{ techniquePassDesc.m_lpvConfigUbo }
@@ -166,15 +165,41 @@ namespace castor3d
 		RenderNodesPass::update( updater );
 	}
 
+	PipelineFlags RenderTechniqueNodesPass::createPipelineFlags( BlendMode colourBlendMode
+		, BlendMode alphaBlendMode
+		, PassFlags passFlags
+		, RenderPassTypeID renderPassTypeID
+		, PassTypeID passTypeID
+		, VkCompareOp alphaFunc
+		, VkCompareOp blendAlphaFunc
+		, TextureFlagsArray const & textures
+		, SubmeshFlags const & submeshFlags
+		, ProgramFlags const & programFlags
+		, SceneFlags const & sceneFlags
+		, VkPrimitiveTopology topology
+		, bool isFrontCulled
+		, uint32_t passLayerIndex
+		, GpuBufferOffsetT< castor::Point4f > const & morphTargets )const
+	{
+		return RenderNodesPass::createPipelineFlags( colourBlendMode
+			, alphaBlendMode
+			, passFlags
+			, renderPassTypeID
+			, passTypeID
+			, alphaFunc
+			, blendAlphaFunc
+			, textures
+			, submeshFlags
+			, programFlags
+			, sceneFlags
+			, topology
+			, isFrontCulled
+			, passLayerIndex
+			, morphTargets );
+	}
+
 	ProgramFlags RenderTechniqueNodesPass::doAdjustProgramFlags( ProgramFlags flags )const
 	{
-		addFlag( flags, ProgramFlag::eLighting );
-
-		if ( m_environment )
-		{
-			addFlag( flags, ProgramFlag::eEnvironmentMapping );
-		}
-
 		return flags;
 	}
 
@@ -455,18 +480,18 @@ namespace castor3d
 
 	ashes::PipelineDepthStencilStateCreateInfo RenderTechniqueNodesPass::doCreateDepthStencilState( PipelineFlags const & flags )const
 	{
-		if ( m_environment )
+		if ( flags.writeEnvironmentMap() )
 		{
 			return ashes::PipelineDepthStencilStateCreateInfo{ 0u
 				, VK_TRUE
-				, m_mode != RenderMode::eTransparentOnly };
+				, checkFlag( m_filters, RenderFilter::eAlphaBlend ) };
 		}
 		else
 		{
 			return ashes::PipelineDepthStencilStateCreateInfo{ 0u
 				, VK_TRUE
 				, VK_FALSE
-				, ( m_mode != RenderMode::eTransparentOnly
+				, ( checkFlag( m_filters, RenderFilter::eAlphaBlend )
 					? VK_COMPARE_OP_EQUAL
 					: VK_COMPARE_OP_LESS_OR_EQUAL ) };
 		}

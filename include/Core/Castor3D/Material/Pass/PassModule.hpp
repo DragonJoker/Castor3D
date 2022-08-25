@@ -92,30 +92,27 @@ namespace castor3d
 		//!\~english	All flags used in visibility pipelines.
 		//\~french		Tous les indicateurs utilisés dans les pipelines de visibilité.
 		eAllVisibility = 0x000F,
-		//!\~english	Shader using alpha test.
-		//\~french		Shader utilisant un test alpha.
-		eBlendAlphaTest = 0x0010,
 		//!\~english	Shader with Image Based Lighting support.
 		//\~french		Shader supportant l'Image Based Lighting.
-		eImageBasedLighting = 0x0020,
+		eImageBasedLighting = 0x0010,
 		//!\~english	Shader for Subsurface Scattering.
 		//\~french		Shader pour le subsurface scattering.
-		eSubsurfaceScattering = 0x0040,
+		eSubsurfaceScattering = 0x0020,
 		//!\~english	Shader using distance based transmittance when computing Subsurface Scattering.
 		//\~french		Shader utilisant la transmission basée sur la distance, lors du calcul du Subsurface Scattering.
-		eDistanceBasedTransmittance = 0x0080,
+		eDistanceBasedTransmittance = 0x0040,
 		//!\~english	The pass sets an object as pickable.
 		//!\~french		La passe rend l'objet sélectionnable.
-		ePickable = 0x0100,
+		ePickable = 0x0080,
 		//!\~english	Shader using alpha blending.
 		//\~french		Shader utilisant le mélange alpha.
-		eAlphaBlending = 0x0200,
+		eAlphaBlending = 0x0100,
 		//!\~english	All flags used in base pipeline flags hashing.
 		//\~french		Tous les indicateurs utilisés dans le hash des indicateurs de pipeline.
-		eAllBase = 0x03FF,
+		eAllBase = 0x01FF,
 		//!\~english	The pass needs an edge to be drawn.
 		//!\~french		La passe demande qu'une bordure soit dessinée.
-		eDrawEdge = 0x0400,
+		eDrawEdge = 0x0200,
 		//!\~english	All other flags.
 		//\~french		Tous les autres indicateurs.
 		eAllOptional = eDrawEdge,

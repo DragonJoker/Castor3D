@@ -72,71 +72,32 @@ namespace castor3d
 	*	Indicateurs à utiliser lors de la recherche de programme généré automatiquement
 	*/
 	enum class ProgramFlag
-		: uint32_t
+		: uint16_t
 	{
 		//!\~english	No flag.
 		//!\~french		Aucun indicateur.
-		eNone = 0x00000,
+		eNone = 0x0000,
 		//!\~english	Program using instanciation.
 		//!\~french		Programme utilisant l'instanciation.
-		eInstantiation = 0x00001,
+		eInstantiation = 0x0001,
 		//!\~english	Program used by billboards.
 		//!\~french		Programme utilisé par des billboards.
-		eBillboards = 0x00002,
-		//!\~english	Picking pass program.
-		//\~french		Programme de passe de picking.
-		ePicking = 0x00004,
+		eBillboards = 0x0002,
 		//!\~english	Vertex shader inverts normals (for front culling).
 		//\~french		Le vertex shader inverse les normales (pour le front culling).
-		eInvertNormals = 0x00008,
-		//!\~english	Forces texcoords binding.
-		//\~french		Force le binding des UV.
-		eForceTexCoords = 0x00010,
-		//!\~english	Shader supporting lighting.
-		//\~french		Shader supportant les éclairages.
-		eLighting = 0x00020,
-		//!\~english	Writes to Variance shadow map.
-		//\~french		Ecrit dans la Variance shadow map.
-		eVsmShadowMap = 0x00040,
-		//!\~english	Writes to Reflective shadow map.
-		//\~french		Ecrit dans la Reflective shadow map.
-		eRsmShadowMap = 0x00080,
+		eInvertNormals = 0x0004,
 		//!\~english	Render pass uses a mesh shader.
 		//\~french		La passe de rendu utilise un mesh shader.
-		eHasMesh = 0x00100,
-		//!\~english	Shader for the depth pre-pass.
-		//\~french		Shader pour la pré-passe de profondeur.
-		eDepthPass = 0x00200,
-		//!\~english	Shader for the depth pre-pass.
-		//\~french		Shader pour la pré-passe de profondeur.
-		eVisibilityPass = 0x00400,
+		eHasMesh = 0x0008,
 		//!\~english	All flags used in base pipeline flags hashing.
 		//\~french		Tous les indicateurs utilisés dans le hash des indicateurs de pipeline.
-		eAllBase = 0x007FF,
-		//!\~english	Shader used to render a shadow map for directional light.
-		//\~french		Shader utilisé pour dessiner la shadow map d'une lumière directionnalle.
-		eShadowMapDirectional = 0x00800,
-		//!\~english	Shader used to render a shadow map for spot light.
-		//\~french		Shader utilisé pour dessiner la shadow map d'une lumière projecteur.
-		eShadowMapSpot = 0x01000,
-		//!\~english	Shader used to render a shadow map for point light.
-		//\~french		Shader utilisé pour dessiner la shadow map d'une lumière omnidirectionnelle.
-		eShadowMapPoint = 0x02000,
-		//!\~english	Shader used to render an environment map.
-		//\~french		Shader utilisé pour dessiner une texture d'environnement.
-		eEnvironmentMapping = 0x04000,
-		//!\~english	Render pass uses a geometry shader.
-		//\~french		La passe de rendu utilise un geometry shader.
-		eHasGeometry = 0x08000,
-		//!\~english	Render pass uses tessellation shaders.
-		//\~french		La passe de rendu utilise des tessellation shaders.
-		eHasTessellation = 0x10000,
+		eAllBase = 0x000F,
 		//!\~english	Render pass uses a task shader.
 		//\~french		La passe de rendu utilise un task shader.
-		eHasTask = 0x20000,
+		eHasTask = 0x0010,
 		//!\~english	All other flags.
 		//\~french		Tous les autres indicateurs.
-		eAllOptional = 0x3F000,
+		eAllOptional = 0x0010,
 		//!\~english	All flags.
 		//\~french		Tous les indicateurs.
 		eAll = eAllBase | eAllOptional,
@@ -145,23 +106,6 @@ namespace castor3d
 		eAllVisibility = eInvertNormals | eBillboards,
 	};
 	CU_ImplementFlags( ProgramFlag )
-	/**
-	*\~english
-	*\brief
-	*	Tells if the given flags contain a shadow map flag.
-	*\param[in] flags
-	*	The flags to check.
-	*\return
-	*	\p true if flags contain one of ProgramFlag::eShadowMapDirectional, ProgramFlag::eShadowMapSpot, or ProgramFlag::eShadowMapPoint.
-	*\~french
-	*\brief
-	*	Dit si les indicateurs donnés contiennent un indicateur de shadow map.
-	*\param[in] flags
-	*	Les indicateurs à vérifier.
-	*\return
-	*	\p true si flags contient l'un de ProgramFlag::eShadowMapDirectional, ProgramFlag::eShadowMapSpot, ou ProgramFlag::eShadowMapPoint.
-	*/
-	C3D_API bool isShadowMapProgram( ProgramFlags const & flags );
 	/**
 	*\~english
 	*\brief
