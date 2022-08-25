@@ -438,40 +438,57 @@ namespace castor3d
 
 			auto progress = m_progressBar.get();
 			incProgressBarRange( progress, 6u + target->countInitialisationSteps() );
-			getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
-				, [this]( RenderDevice const & device, QueueData const & queueData )
+			getEngine()->postEvent( makeCpuFunctorEvent( EventType::ePreRender
+				, [this]()
 				{
 					auto target = m_renderTarget.lock();
 
 					if ( target )
 					{
 						auto progress = m_progressBar.get();
-						target->initialise( device, queueData, progress );
 						setProgressBarTitle( progress, "Initialising: Render Window" );
-						stepProgressBar( progress, "Loading picking" );
-						doCreatePickingPass( queueData );
-						stepProgressBar( progress, "Loading intermediate views" );
-						doCreateIntermediateViews( queueData );
-						stepProgressBar( progress, "Loading combine quad" );
-						doCreateRenderQuad( queueData );
-						stepProgressBar( progress, "Loading command buffers" );
-						doCreateCommandBuffers( queueData );
-						stepProgressBar( progress, "Loading save data" );
-						doCreateSaveData( queueData );
-						stepProgressBar( progress, "Finalising..." );
-					}
-
-					getListener()->postEvent( makeCpuFunctorEvent( EventType::ePostRender
-						, [this]()
-						{
-							if ( m_loadingScreen )
+						target->initialise( [this, progress]( RenderTarget const & rt, QueueData const & queue )
 							{
-								m_loadingScreen->disable();
-							}
+								stepProgressBar( progress, "Loading picking" );
+								doCreatePickingPass( queue );
+								stepProgressBar( progress, "Loading intermediate views" );
+								doCreateIntermediateViews( queue );
+								stepProgressBar( progress, "Loading combine quad" );
+								doCreateRenderQuad( queue );
+								stepProgressBar( progress, "Loading command buffers" );
+								doCreateCommandBuffers( queue );
+								stepProgressBar( progress, "Loading save data" );
+								doCreateSaveData( queue );
+								stepProgressBar( progress, "Finalising..." );
 
-							m_loading = false;
-							m_initialised = true;
-						} ) );
+								getListener()->postEvent( makeCpuFunctorEvent( EventType::ePostRender
+									, [this]()
+									{
+										if ( m_loadingScreen )
+										{
+											m_loadingScreen->disable();
+										}
+
+										m_loading = false;
+										m_initialised = true;
+									} ) );
+							}
+							, progress );
+					}
+					else
+					{
+						getListener()->postEvent( makeCpuFunctorEvent( EventType::ePostRender
+							, [this]()
+							{
+								if ( m_loadingScreen )
+								{
+									m_loadingScreen->disable();
+								}
+
+								m_loading = false;
+								m_initialised = true;
+							} ) );
+					}
 				} ) );
 		}
 		else
@@ -637,7 +654,16 @@ namespace castor3d
 			queueData = m_queues->getQueue();
 		}
 
-		if ( m_loadingScreen && m_loadingScreen->isEnabled() )
+		RenderTargetSPtr target = getRenderTarget();
+		auto needLoadingScreen = ( !m_initialised
+			|| !target
+			|| target->isInitialising()
+			|| !target->isInitialised() );
+		auto useLoadingScreen = needLoadingScreen
+			&& m_loadingScreen
+			&& m_loadingScreen->isEnabled();
+
+		if ( useLoadingScreen )
 		{
 			if ( auto resources = doGetResources() )
 			{
@@ -653,52 +679,48 @@ namespace castor3d
 					, std::move( toWait ) );
 			}
 		}
-		else if ( m_initialised )
+		else if ( !needLoadingScreen )
 		{
-			RenderTargetSPtr target = getRenderTarget();
-			if ( target && target->isInitialised() )
-			{
-				auto toWait = target->render( m_device
-					, info
-					, *queueData->queue
-					, baseToWait );
-				baseToWait.clear();
+			auto toWait = target->render( m_device
+				, info
+				, *queueData->queue
+				, baseToWait );
+			baseToWait.clear();
 
 #if C3D_DebugPicking || C3D_DebugBackgroundPicking
-				m_picking->pick( m_device
-					, m_mousePosition
-					, *target->getCamera() );
-				auto pickingToWait = m_picking->getSemaphoreWait();
-				toWait.insert( toWait.end(), pickingToWait.begin(), pickingToWait.end() );
+			m_picking->pick( m_device
+				, m_mousePosition
+				, *target->getCamera() );
+			auto pickingToWait = m_picking->getSemaphoreWait();
+			toWait.insert( toWait.end(), pickingToWait.begin(), pickingToWait.end() );
 #endif
 
-				if ( waitOnly )
+			if ( waitOnly )
+			{
+				doWaitFrame( *queueData, toWait );
+			}
+			else if ( auto resources = doGetResources() )
+			{
+				try
 				{
-					doWaitFrame( *queueData, toWait );
+					doSubmitFrame( *queueData, resources, toWait );
+					doPresentFrame( *queueData, resources );
 				}
-				else if ( auto resources = doGetResources() )
+				catch ( ashes::Exception & exc )
 				{
-					try
-					{
-						doSubmitFrame( *queueData, resources, toWait );
-						doPresentFrame( *queueData, resources );
-					}
-					catch ( ashes::Exception & exc )
-					{
-						std::cerr << "Can't render: " << exc.what() << std::endl;
+					std::cerr << "Can't render: " << exc.what() << std::endl;
 
-						if ( exc.getResult() == VK_ERROR_DEVICE_LOST )
-						{
-							m_skip = true;
-						}
-
-						throw;
+					if ( exc.getResult() == VK_ERROR_DEVICE_LOST )
+					{
+						m_skip = true;
 					}
+
+					throw;
 				}
-				else
-				{
-					std::cerr << "Can't render" << std::endl;
-				}
+			}
+			else
+			{
+				std::cerr << "Can't render" << std::endl;
 			}
 		}
 

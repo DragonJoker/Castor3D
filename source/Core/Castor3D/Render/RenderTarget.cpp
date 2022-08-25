@@ -420,125 +420,45 @@ namespace castor3d
 		if ( !m_initialised
 			&& !m_initialising.exchange( true ) )
 		{
-			m_hdrConfigUbo = std::make_unique< HdrConfigUbo >( device );
-			m_culler = std::make_unique< FrustumCuller >( *getScene(), *getCamera() );
-			doInitCombineProgram( progress );
-			auto result = doInitialiseTechnique( device, queueData, progress );
-			setProgressBarTitle( progress, "Initialising: Render Target" );
-			auto * previousPass = &m_renderTechnique->getLastPass();
-
-			if ( !m_hdrPostEffects.empty() )
-			{
-				auto const * sourceView = &m_renderTechnique->getResultImgView();
-
-				for ( auto effect : m_hdrPostEffects )
-				{
-					if ( result )
-					{
-						stepProgressBar( progress, "Initialising post effect " + effect->getName() );
-						result = effect->initialise( device
-							, *sourceView
-							, *previousPass );
-						previousPass = &effect->getPass();
-						sourceView = &effect->getResult();
-					}
-				}
-
-				if ( result )
-				{
-					previousPass = &doInitialiseCopyCommands( device
-						, "HDR"
-						, *sourceView
-						, m_renderTechnique->getResultImgView()
-						, *previousPass
-						, progress );
-				}
-			}
-
-			if ( result )
-			{
-				m_hdrLastPass = previousPass;
-				stepProgressBar( progress, "Creating tone mapping pass" );
-				m_toneMapping = std::make_shared< ToneMapping >( *getEngine()
-					, device
-					, m_size
-					, m_graph
-					, m_renderTechnique->getResultImgView()
-					, m_objects.wholeViewId
-					, *m_hdrLastPass
-					, *m_hdrConfigUbo
-					, Parameters{}
-					, progress );
-				m_toneMapping->initialise( m_toneMappingName );
-				previousPass = &m_toneMapping->getPass();
-			}
-
-			if ( !m_srgbPostEffects.empty() ) 
-			{
-				auto const * sourceView = &m_objects.wholeViewId;
-
-				for ( auto effect : m_srgbPostEffects )
-				{
-					if ( result )
-					{
-						stepProgressBar( progress, "Initialising post effect " + effect->getName() );
-						result = effect->initialise( device
-							, *sourceView
-							, *previousPass );
-						previousPass = &effect->getPass();
-						sourceView = &effect->getResult();
-					}
-				}
-
-				if ( result )
-				{
-					previousPass = &doInitialiseCopyCommands( device
-						, "SRGB"
-						, *sourceView
-						, m_objects.wholeViewId
-						, *previousPass
-						, progress );
-				}
-			}
-
-			if ( result )
-			{
-				stepProgressBar( progress, "Compiling render graph" );
-				m_combinePass.addDependency( *previousPass );
-				m_runnable = m_graph.compile( device.makeContext() );
-				printGraph( *m_runnable );
-
-				m_objects.create();
-				m_overlays.create();
-				m_velocity->create();
-				m_combined.create();
-				auto runnable = m_runnable.get();
-				device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
-					, [runnable, result, this]( RenderDevice const &
-						, QueueData const & )
-					{
-						runnable->record();
-						m_initialised = result;
-					} ) );
-			}
-
-			stepProgressBar( progress, "Creating overlay renderer" );
-			m_overlaysTimer = castor::makeUnique< FramePassTimer >( device.makeContext(), getName() + cuT( "/Overlays" ) );
-			m_overlayRenderer = std::make_shared< OverlayRenderer >( device
-				, m_overlays
-				, VK_COMMAND_BUFFER_LEVEL_PRIMARY );
-			getEngine()->registerTimer( getName() + cuT( "/Overlays/Overlays" ), *m_overlaysTimer );
-#if C3D_DebugTimers
-			m_testTimer = castor::makeUnique< FramePassTimer >( device.makeContext(), cuT( "AAATests" ) );
-			getEngine()->registerTimer( cuT( "AAATests" ), *m_testTimer );
-#endif
-			m_signalReady = device->createSemaphore( getName() + "Ready" );
-			m_initialising = false;
+			doInitialise( device, queueData, progress );
 		}
 
 		while ( m_initialising )
 		{
 			std::this_thread::sleep_for( 1_ms );
+		}
+	}
+
+	void RenderTarget::initialise( OnInitialisedFunc onInitialised
+		, ProgressBar * progress )
+	{
+		if ( !m_initialising.exchange( true ) )
+		{
+			if ( !m_initialised )
+			{
+				getEngine()->pushCpuJob( [this, progress]()
+					{
+						auto &device = getEngine()->getRenderSystem()->getRenderDevice();
+						auto queueWrapper = device.graphicsData();
+						auto & queue = *queueWrapper;
+						doInitialise( device, queue, progress );
+						m_onInitialised( *this, queue );
+						m_onTargetInitialised.clear();
+					} );
+			}
+		}
+
+		if ( m_initialising )
+		{
+			m_onTargetInitialised.push_back( m_onInitialised.connect( onInitialised ) );
+		}
+
+		if ( m_initialised )
+		{
+			auto & device = getEngine()->getRenderSystem()->getRenderDevice();
+			auto queueWrapper = device.graphicsData();
+			auto & queue = *queueWrapper;
+			onInitialised( *this, queue );
 		}
 	}
 
@@ -872,6 +792,126 @@ namespace castor3d
 	crg::FramePass const & RenderTarget::createVertexTransformPass()
 	{
 		return getScene()->getRenderNodes().createVertexTransformPass( m_graph );
+	}
+
+	void RenderTarget::doInitialise( RenderDevice const & device
+		, QueueData const & queueData
+		, ProgressBar * progress )
+	{
+		m_hdrConfigUbo = std::make_unique< HdrConfigUbo >( device );
+		m_culler = std::make_unique< FrustumCuller >( *getScene(), *getCamera() );
+		doInitCombineProgram( progress );
+		auto result = doInitialiseTechnique( device, queueData, progress );
+		setProgressBarTitle( progress, "Initialising: Render Target" );
+		auto * previousPass = &m_renderTechnique->getLastPass();
+
+		if ( !m_hdrPostEffects.empty() )
+		{
+			auto const * sourceView = &m_renderTechnique->getResultImgView();
+
+			for ( auto effect : m_hdrPostEffects )
+			{
+				if ( result )
+				{
+					stepProgressBar( progress, "Initialising post effect " + effect->getName() );
+					result = effect->initialise( device
+						, *sourceView
+						, *previousPass );
+					previousPass = &effect->getPass();
+					sourceView = &effect->getResult();
+				}
+			}
+
+			if ( result )
+			{
+				previousPass = &doInitialiseCopyCommands( device
+					, "HDR"
+					, *sourceView
+					, m_renderTechnique->getResultImgView()
+					, *previousPass
+					, progress );
+			}
+		}
+
+		if ( result )
+		{
+			m_hdrLastPass = previousPass;
+			stepProgressBar( progress, "Creating tone mapping pass" );
+			m_toneMapping = std::make_shared< ToneMapping >( *getEngine()
+				, device
+				, m_size
+				, m_graph
+				, m_renderTechnique->getResultImgView()
+				, m_objects.wholeViewId
+				, *m_hdrLastPass
+				, *m_hdrConfigUbo
+				, Parameters{}
+				, progress );
+			m_toneMapping->initialise( m_toneMappingName );
+			previousPass = &m_toneMapping->getPass();
+		}
+
+		if ( !m_srgbPostEffects.empty() )
+		{
+			auto const * sourceView = &m_objects.wholeViewId;
+
+			for ( auto effect : m_srgbPostEffects )
+			{
+				if ( result )
+				{
+					stepProgressBar( progress, "Initialising post effect " + effect->getName() );
+					result = effect->initialise( device
+						, *sourceView
+						, *previousPass );
+					previousPass = &effect->getPass();
+					sourceView = &effect->getResult();
+				}
+			}
+
+			if ( result )
+			{
+				previousPass = &doInitialiseCopyCommands( device
+					, "SRGB"
+					, *sourceView
+					, m_objects.wholeViewId
+					, *previousPass
+					, progress );
+			}
+		}
+
+		if ( result )
+		{
+			stepProgressBar( progress, "Compiling render graph" );
+			m_combinePass.addDependency( *previousPass );
+			m_runnable = m_graph.compile( device.makeContext() );
+			printGraph( *m_runnable );
+
+			m_objects.create();
+			m_overlays.create();
+			m_velocity->create();
+			m_combined.create();
+			auto runnable = m_runnable.get();
+			device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
+				, [runnable, result, this]( RenderDevice const &
+					, QueueData const & )
+				{
+					runnable->record();
+					m_initialised = result;
+				} ) );
+		}
+
+		stepProgressBar( progress, "Creating overlay renderer" );
+		m_overlaysTimer = castor::makeUnique< FramePassTimer >( device.makeContext(), getName() + cuT( "/Overlays" ) );
+		m_overlayRenderer = std::make_shared< OverlayRenderer >( device
+			, m_overlays
+			, VK_COMMAND_BUFFER_LEVEL_PRIMARY );
+		getEngine()->registerTimer( getName() + cuT( "/Overlays/Overlays" ), *m_overlaysTimer );
+#if C3D_DebugTimers
+		m_testTimer = castor::makeUnique< FramePassTimer >( device.makeContext(), cuT( "AAATests" ) );
+		getEngine()->registerTimer( cuT( "AAATests" ), *m_testTimer );
+#endif
+		m_signalReady = device->createSemaphore( getName() + "Ready" );
+		m_initialising = false;
 	}
 
 	crg::FramePass & RenderTarget::doCreateCombinePass( ProgressBar * progress )

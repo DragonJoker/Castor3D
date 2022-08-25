@@ -34,6 +34,10 @@ namespace castor3d
 		: public std::enable_shared_from_this< RenderTarget >
 		, public castor::OwnedBy< Engine >
 	{
+		using OnInitialisedFunc = std::function< void( RenderTarget const &, QueueData const & ) >;
+		using OnInitialised = castor::SignalT< OnInitialisedFunc >;
+		using OnInitialisedConnection = castor::ConnectionT< OnInitialised >;
+
 	public:
 		/**
 		 *\~english
@@ -128,6 +132,20 @@ namespace castor3d
 		 */
 		C3D_API void initialise( RenderDevice const & device
 			, QueueData const & queueData
+			, ProgressBar * progress = nullptr );
+		/**
+		 *\~english
+		 *\brief		Initialisation function.
+		 *\param[in]	device		The GPU device.
+		 *\param[in]	queueData	The queue receiving the GPU commands.
+		 *\param[in]	progress	The optional progress bar.
+		 *\~french
+		 *\brief		Fonction d'initialisation.
+		 *\param[in]	device		Le device GPU.
+		 *\param[in]	queueData	La queue recevant les commandes GPU.
+		 *\param[in]	progress	La barre de progression optionnelle.
+		 */
+		C3D_API void initialise( OnInitialisedFunc onInitialised
 			, ProgressBar * progress = nullptr );
 		/**
 		 *\~english
@@ -348,6 +366,11 @@ namespace castor3d
 		{
 			return m_graph;
 		}
+
+		bool isInitialising()const
+		{
+			return m_initialising;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -373,6 +396,9 @@ namespace castor3d
 		/**@}*/
 
 	private:
+		void doInitialise( RenderDevice const & device
+			, QueueData const & queueData
+			, ProgressBar * progress = nullptr );
 		crg::FramePass & doCreateCombinePass( ProgressBar * progress );
 		bool doInitialiseTechnique( RenderDevice const & device
 			, QueueData const & queueData
@@ -436,6 +462,8 @@ namespace castor3d
 		crg::FramePass const * m_hdrLastPass{};
 		crg::RunnableGraphPtr m_runnable;
 		ashes::SemaphorePtr m_combineSemaphore;
+		OnInitialised m_onInitialised;
+		std::vector< OnInitialisedConnection > m_onTargetInitialised;
 	};
 }
 
