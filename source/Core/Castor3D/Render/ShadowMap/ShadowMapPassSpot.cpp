@@ -302,7 +302,7 @@ namespace castor3d
 					, in.texture2
 					, in.texture3
 					, { 1.0_f, flags.enableOpacity() }
-					, { normalize( in.normal ), needsRsm }
+					, normalize( in.normal )
 					, normalize( in.tangent )
 					, normalize( in.bitangent )
 					, in.tangentSpaceViewPosition
