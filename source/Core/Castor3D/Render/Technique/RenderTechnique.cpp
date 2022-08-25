@@ -561,20 +561,32 @@ namespace castor3d
 			, *m_renderTarget.getScene()
 			, progress ) }
 #endif
-		, m_opaquePassDesc{ ( m_visibilityResolveDesc
-			? m_visibilityResolveDesc 
-			: &doCreateOpaquePass( progress ) ) }
+#if C3D_UseDeferredRendering
+		, m_ssao{ ( m_visibilityResolveDesc 
+			? castor::makeUnique< SsaoPass >( m_renderTarget.getGraph()
+				, m_device
+				, progress
+				, *m_visibilityResolveDesc
+				, makeSize( m_colour.getExtent() )
+				, getSsaoConfig()
+				, *m_depth
+				, *m_normal
+				, m_gpInfoUbo )
+			: nullptr ) }
+#else
 		, m_ssao{ castor::makeUnique< SsaoPass >( m_renderTarget.getGraph()
 			, m_device
 			, progress
-			, ( C3D_UseDeferredRendering
-				? *m_opaquePassDesc
-				: *m_depthPassDesc )
+			, *m_depthPassDesc
 			, makeSize( m_colour.getExtent() )
 			, getSsaoConfig()
 			, *m_depth
 			, *m_normal
 			, m_gpInfoUbo ) }
+#endif
+		, m_opaquePassDesc{ ( m_visibilityResolveDesc
+			? m_visibilityResolveDesc 
+			: &doCreateOpaquePass( progress ) ) }
 #if C3D_UseDeferredRendering
 		, m_deferredRendering{ castor::makeUnique< DeferredRendering >( m_renderTarget.getGraph().createPassGroup( "Opaque" )
 			, crg::FramePassArray{ m_opaquePassDesc, &m_backgroundRenderer->getPass() }
@@ -678,6 +690,9 @@ namespace castor3d
 		m_visibilityReorder.reset();
 		m_visibility->destroy();
 #	endif
+#else
+		m_normal->destroy();
+		m_depthObj->destroy();
 #endif
 		m_llpvResult.clear();
 		m_lpvResult.reset();
@@ -1399,7 +1414,7 @@ namespace castor3d
 					.lpvResult( *m_lpvResult )
 					.llpvResult( m_llpvResult )
 					.vctFirstBounce( m_voxelizer->getFirstBounce() )
-					.vctSecondaryBounce( m_voxelizer->getSecondaryBounce() ) )
+					.vctSecondaryBounce( m_voxelizer->getSecondaryBounce() );
 #endif
 				auto res = std::make_unique< rendtech::OpaquePassType >( this
 					, framePass
@@ -1429,6 +1444,17 @@ namespace castor3d
 			, getClearValue( DsTexture::eSpcMtl ) );
 		result.addOutputColourView( opaquePassResult[DsTexture::eEmsTrn].targetViewId
 			, getClearValue( DsTexture::eEmsTrn ) );
+
+		CU_Require( !m_ssao );
+		m_ssao = castor::makeUnique< SsaoPass >( m_renderTarget.getGraph()
+			, m_device
+			, progress
+			, result
+			, makeSize( m_colour.getExtent() )
+			, getSsaoConfig()
+			, *m_depth
+			, *m_normal
+			, m_gpInfoUbo );
 #else
 		result.addDependency( m_ssao->getLastPass() );
 		result.addSampledView( m_ssao->getResult().sampledViewId, 0u );
