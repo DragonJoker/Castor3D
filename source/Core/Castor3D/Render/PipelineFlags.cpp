@@ -25,6 +25,8 @@ namespace castor3d
 				return checkFlag( shaderFlags, ShaderFlag::eNormal );
 			case castor3d::SubmeshFlag::eTangents:
 				return checkFlag( shaderFlags, ShaderFlag::eTangent );
+			case castor3d::SubmeshFlag::eVelocity:
+				return checkFlag( shaderFlags, ShaderFlag::eVelocity );
 			default:
 				return true;
 			}
@@ -170,6 +172,14 @@ namespace castor3d
 			result.hi = getHiHash( flags );
 			return result;
 		}
+
+		static bool isTexcoordComponent( SubmeshFlag submeshData )
+		{
+			return submeshData == SubmeshFlag::eTexcoords0
+				|| submeshData == SubmeshFlag::eTexcoords1
+				|| submeshData == SubmeshFlag::eTexcoords2
+				|| submeshData == SubmeshFlag::eTexcoords3;
+		}
 	}
 
 	//*********************************************************************************************
@@ -201,30 +211,61 @@ namespace castor3d
 			|| ( !m_texturesFlags.empty() && ( hasAny( m_submeshFlags, SubmeshFlag::eTexcoords ) ) );
 	}
 
-	bool PipelineFlags::enableTexcoord( SubmeshFlag data )const
+	bool PipelineFlags::enableVertexInput( SubmeshFlag data )const
 	{
-		CU_Require( uint32_t( data ) >= uint32_t( SubmeshFlag::eTexcoords0 )
-			&& uint32_t( data ) <= uint32_t( SubmeshFlag::eTexcoords3 ) );
-		return forceTexCoords()
-			|| ( !m_texturesFlags.empty() && hasSubmeshData( data ) );
-	}
-
-	bool PipelineFlags::enableNonTexcoord( SubmeshFlag data )const
-	{
-		CU_Require( uint32_t( data ) < uint32_t( SubmeshFlag::eTexcoords0 )
-			|| uint32_t( data ) > uint32_t( SubmeshFlag::eTexcoords3 ) );
-		return hasSubmeshData( data )
-			&& pipflags::hasMatchingFlag( data, m_shaderFlags );
+		return pipflags::isTexcoordComponent( data )
+			? enableTexcoord( data )
+			: enableNonTexcoord( data );
 	}
 
 	bool PipelineFlags::enableIndices()const
 	{
-		return checkFlag( m_submeshFlags, SubmeshFlag::eIndex );
+		return enableVertexInput( SubmeshFlag::eIndex );
 	}
 
 	bool PipelineFlags::enablePosition()const
 	{
-		return checkFlag( m_submeshFlags, SubmeshFlag::ePositions );
+		return enableVertexInput( SubmeshFlag::ePositions );
+	}
+
+	bool PipelineFlags::enableNormal()const
+	{
+		return enableVertexInput( SubmeshFlag::eNormals );
+	}
+
+	bool PipelineFlags::enableTangentSpace()const
+	{
+		return enableVertexInput( SubmeshFlag::eTangents );
+	}
+
+	bool PipelineFlags::enableColours()const
+	{
+		return enableVertexInput( SubmeshFlag::eColours );
+	}
+
+	bool PipelineFlags::enablePassMasks()const
+	{
+		return enableVertexInput( SubmeshFlag::ePassMasks );
+	}
+
+	bool PipelineFlags::enableTexcoord0()const
+	{
+		return enableVertexInput( SubmeshFlag::eTexcoords0 );
+	}
+
+	bool PipelineFlags::enableTexcoord1()const
+	{
+		return enableVertexInput( SubmeshFlag::eTexcoords1 );
+	}
+
+	bool PipelineFlags::enableTexcoord2()const
+	{
+		return enableVertexInput( SubmeshFlag::eTexcoords2 );
+	}
+
+	bool PipelineFlags::enableTexcoord3()const
+	{
+		return enableVertexInput( SubmeshFlag::eTexcoords3 );
 	}
 
 	bool PipelineFlags::enableTextures()const
@@ -243,28 +284,6 @@ namespace castor3d
 			&& ( checkFlag( m_texturesFlags, TextureFlag::eOpacity )
 				&& ( checkFlag( m_passFlags, PassFlag::eAlphaBlending )
 					|| ( checkFlag( m_passFlags, PassFlag::eAlphaTest ) && ( alphaFunc != VK_COMPARE_OP_ALWAYS ) ) ) );
-	}
-
-	bool PipelineFlags::enableNormal()const
-	{
-		return checkFlag( m_shaderFlags, ShaderFlag::eNormal )
-			&& checkFlag( m_submeshFlags, SubmeshFlag::eNormals );
-	}
-
-	bool PipelineFlags::enableTangentSpace()const
-	{
-		return checkFlag( m_shaderFlags, ShaderFlag::eTangentSpace )
-			&& checkFlag( m_submeshFlags, SubmeshFlag::eTangents );
-	}
-
-	bool PipelineFlags::enableColours()const
-	{
-		return checkFlag( m_submeshFlags, SubmeshFlag::eColours );
-	}
-
-	bool PipelineFlags::enablePassMasks()const
-	{
-		return checkFlag( m_submeshFlags, SubmeshFlag::ePassMasks );
 	}
 
 	bool PipelineFlags::enableInstantiation()const
@@ -287,33 +306,31 @@ namespace castor3d
 			&& checkFlag( m_passFlags, PassFlag::eParallaxOcclusionMappingOne );
 	}
 
-	bool PipelineFlags::enableTexcoord0()const
+	bool PipelineFlags::enableVelocity()const
 	{
-		return enableTexcoords()
-			&& checkFlag( m_submeshFlags, SubmeshFlag::eTexcoords0 );
-	}
-
-	bool PipelineFlags::enableTexcoord1()const
-	{
-		return enableTexcoords()
-			&& checkFlag( m_submeshFlags, SubmeshFlag::eTexcoords1 );
-	}
-
-	bool PipelineFlags::enableTexcoord2()const
-	{
-		return enableTexcoords()
-			&& checkFlag( m_submeshFlags, SubmeshFlag::eTexcoords2 );
-	}
-
-	bool PipelineFlags::enableTexcoord3()const
-	{
-		return enableTexcoords()
-			&& checkFlag( m_submeshFlags, SubmeshFlag::eTexcoords3 );
+		return hasWorldPosInputs()
+			&& writeVelocity();
 	}
 
 	bool PipelineFlags::hasFog()const
 	{
 		return getFogType( m_sceneFlags ) != FogType::eDisabled;
+	}
+
+	bool PipelineFlags::enableTexcoord( SubmeshFlag data )const
+	{
+		CU_Require( uint32_t( data ) >= uint32_t( SubmeshFlag::eTexcoords0 )
+			&& uint32_t( data ) <= uint32_t( SubmeshFlag::eTexcoords3 ) );
+		return forceTexCoords()
+			|| ( !m_texturesFlags.empty() && hasSubmeshData( data ) );
+	}
+
+	bool PipelineFlags::enableNonTexcoord( SubmeshFlag data )const
+	{
+		CU_Require( uint32_t( data ) < uint32_t( SubmeshFlag::eTexcoords0 )
+			|| uint32_t( data ) > uint32_t( SubmeshFlag::eTexcoords3 ) );
+		return hasSubmeshData( data )
+			&& pipflags::hasMatchingFlag( data, m_shaderFlags );
 	}
 
 	//*********************************************************************************************

@@ -88,24 +88,6 @@ namespace castor3d
 		m_shadowMapUbo.update( *updater.light, updater.index );
 	}
 
-	void ShadowMapPassDirectional::doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const
-	{
-		auto index = uint32_t( GlobalBuffersIdx::eCount );
-		bindings.emplace_back( m_shadowMap.getScene().getLightCache().createLayoutBinding( index++ ) );
-		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		m_initialised = true;
-	}
-
-	void ShadowMapPassDirectional::doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
-		, ShadowMapLightTypeArray const & shadowMaps )
-	{
-		auto index = uint32_t( GlobalBuffersIdx::eCount );
-		descriptorWrites.push_back( getCuller().getScene().getLightCache().getBinding( index++ ) );
-		descriptorWrites.push_back( m_shadowMapUbo.getDescriptorWrite( index++ ) );
-	}
-
 	ashes::PipelineDepthStencilStateCreateInfo ShadowMapPassDirectional::doCreateDepthStencilState( PipelineFlags const & flags )const
 	{
 		return ashes::PipelineDepthStencilStateCreateInfo{ 0u, true, true };
