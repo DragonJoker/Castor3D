@@ -5,6 +5,8 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Log/LoggerImpl.hpp>
 
+#include <RenderGraph/Log.hpp>
+
 namespace castor3d
 {
 	castor::LoggerInstance * log::m_logger{ nullptr };
@@ -42,11 +44,50 @@ namespace castor3d
 			{
 				m_logger->pushMessage( castor::LogType::eError, msg, newLine );
 			} );
+		crg::Logger::setTraceCallback( []( std::string const & msg, bool newLine )
+			{
+				m_logger->pushMessage( castor::LogType::eTrace, msg, newLine );
+			} );
+		crg::Logger::setDebugCallback( []( std::string const & msg, bool newLine )
+			{
+				m_logger->pushMessage( castor::LogType::eDebug, msg, newLine );
+			} );
+		crg::Logger::setInfoCallback( []( std::string const & msg, bool newLine )
+			{
+				m_logger->pushMessage( castor::LogType::eInfo, msg, newLine );
+			} );
+		crg::Logger::setWarningCallback( []( std::string const & msg, bool newLine )
+			{
+				m_logger->pushMessage( castor::LogType::eWarning, msg, newLine );
+			} );
+		crg::Logger::setErrorCallback( []( std::string const & msg, bool newLine )
+			{
+				m_logger->pushMessage( castor::LogType::eError, msg, newLine );
+			} );
 		return m_logger;
 	}
 
 	void log::cleanup()
 	{
+		crg::Logger::setTraceCallback( []( std::string const & msg, bool newLine )
+			{
+			} );
+		crg::Logger::setDebugCallback( []( std::string const & msg, bool newLine )
+			{
+				std::clog << msg << ( newLine ? "\n" : "" );
+			} );
+		crg::Logger::setInfoCallback( []( std::string const & msg, bool newLine )
+			{
+				std::cout << msg << ( newLine ? "\n" : "" );
+			} );
+		crg::Logger::setWarningCallback( []( std::string const & msg, bool newLine )
+			{
+				std::cout << msg << ( newLine ? "\n" : "" );
+			} );
+		crg::Logger::setErrorCallback( []( std::string const & msg, bool newLine )
+			{
+				std::cerr << msg << ( newLine ? "\n" : "" );
+			} );
 		ashes::Logger::setTraceCallback( []( std::string const & msg, bool newLine )
 			{
 			} );
