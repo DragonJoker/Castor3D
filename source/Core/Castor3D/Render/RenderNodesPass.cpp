@@ -1098,7 +1098,7 @@ namespace castor3d
 		DeclareSsbo( c3d_velocity
 			, sdw::Vec4
 			, MeshBuffersIdx::eVelocity
-			, flags.hasWorldPosInputs() );
+			, flags.enableVelocity() );
 		DeclareSsbo( c3d_instances
 			, sdw::UVec4
 			, MeshBuffersIdx::eInstances

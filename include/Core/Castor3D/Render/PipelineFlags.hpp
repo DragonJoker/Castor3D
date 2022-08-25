@@ -161,26 +161,27 @@ namespace castor3d
 		{
 			CU_Require( passType != 0 );
 		}
-
+		/* Vertex inputs */
 		C3D_API bool enableTexcoords()const;
-		C3D_API bool enableTexcoord( SubmeshFlag data )const;
-		C3D_API bool enableNonTexcoord( SubmeshFlag data )const;
+		C3D_API bool enableVertexInput( SubmeshFlag data )const;
 		C3D_API bool enableIndices()const;
 		C3D_API bool enablePosition()const;
-		C3D_API bool enableTextures()const;
-		C3D_API bool enableVertexID()const;
-		C3D_API bool enableOpacity()const;
 		C3D_API bool enableNormal()const;
 		C3D_API bool enableTangentSpace()const;
 		C3D_API bool enableColours()const;
 		C3D_API bool enablePassMasks()const;
-		C3D_API bool enableInstantiation()const;
-		C3D_API bool enableParallaxOcclusionMapping()const;
-		C3D_API bool enableParallaxOcclusionMappingOne()const;
 		C3D_API bool enableTexcoord0()const;
 		C3D_API bool enableTexcoord1()const;
 		C3D_API bool enableTexcoord2()const;
 		C3D_API bool enableTexcoord3()const;
+		/**/
+		C3D_API bool enableTextures()const;
+		C3D_API bool enableVertexID()const;
+		C3D_API bool enableOpacity()const;
+		C3D_API bool enableInstantiation()const;
+		C3D_API bool enableParallaxOcclusionMapping()const;
+		C3D_API bool enableParallaxOcclusionMappingOne()const;
+		C3D_API bool enableVelocity()const;
 
 		C3D_API bool hasFog()const;
 
@@ -391,6 +392,10 @@ namespace castor3d
 		RenderPassTypeID renderPassType;
 		VkPrimitiveTopology topology;
 		uint32_t patchVertices;
+
+	private:
+		bool enableTexcoord( SubmeshFlag data )const;
+		bool enableNonTexcoord( SubmeshFlag data )const;
 	};
 
 	C3D_API bool operator==( PipelineFlags const & lhs, PipelineFlags const & rhs );

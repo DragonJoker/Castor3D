@@ -345,7 +345,7 @@ namespace castor3d
 			DeclareSsbo( c3d_inVelocity
 				, sdw::Vec4
 				, VtxBindings::eInVelocity
-				, flags.hasWorldPosInputs() );
+				, flags.enableVelocity() );
 			DeclareSsbo( c3d_inPassMasks
 				, sdw::UVec4
 				, VtxBindings::eInPassMasks
@@ -1199,7 +1199,7 @@ namespace castor3d
 					, stages ) );
 			}
 
-			if ( flags.hasWorldPosInputs() )
+			if ( flags.enableVelocity() )
 			{
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( VtxBindings::eInVelocity
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
@@ -1293,7 +1293,7 @@ namespace castor3d
 				writes.emplace_back( makeDescriptorWrite( buffer, VtxBindings::eInPassMasks, 0u, buffer.getSize() ) );
 			}
 
-			if ( flags.hasWorldPosInputs() )
+			if ( flags.enableVelocity() )
 			{
 				auto & buffer = modelBuffers.buffers[size_t( SubmeshData::eVelocity )]->getBuffer().getBuffer();
 				writes.emplace_back( makeDescriptorWrite( buffer, VtxBindings::eInVelocity, 0u, buffer.getSize() ) );

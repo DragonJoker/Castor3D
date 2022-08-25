@@ -45,14 +45,6 @@ namespace castor3d
 
 			return result;
 		}
-
-		static bool isTexcoordComponent( SubmeshFlag submeshData )
-		{
-			return submeshData == SubmeshFlag::eTexcoords0
-				|| submeshData == SubmeshFlag::eTexcoords1
-				|| submeshData == SubmeshFlag::eTexcoords2
-				|| submeshData == SubmeshFlag::eTexcoords3;
-		}
 	}
 
 	void uploadBaseData( SubmeshFlag submeshData
@@ -80,9 +72,7 @@ namespace castor3d
 		, uint32_t & currentLocation
 		, std::unordered_map< size_t, ashes::PipelineVertexInputStateCreateInfo > & cache )
 	{
-		if ( smshbase::isTexcoordComponent( submeshData )
-			? flags.enableTexcoord( submeshData )
-			: flags.enableNonTexcoord( submeshData ) )
+		if ( flags.enableVertexInput( submeshData ) )
 		{
 			auto hash = std::hash< uint32_t >{}( currentBinding );
 			hash = castor::hashCombine( hash, currentLocation );

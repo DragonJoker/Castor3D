@@ -184,8 +184,8 @@ namespace castor3d::shader
 			//@{
 			result->declMember( "velocity", ast::type::Kind::eVec3F
 				, ast::type::NotArray
-				, ( flags.hasWorldPosInputs() ? index++ : 0 )
-				, flags.hasWorldPosInputs() );
+				, ( flags.enableVelocity() ? index++ : 0 )
+				, flags.enableVelocity() );
 			//@}
 			/**
 			*	Instantiation
@@ -561,7 +561,7 @@ namespace castor3d::shader
 		, DefineSsbo( texcoords2, sdw::Vec4, flags.enableTexcoord2() )
 		, DefineSsbo( texcoords3, sdw::Vec4, flags.enableTexcoord3() )
 		, DefineSsbo( colours, sdw::Vec4, flags.enableColours() )
-		, DefineSsbo( velocities, sdw::Vec4, flags.hasWorldPosInputs() )
+		, DefineSsbo( velocities, sdw::Vec4, flags.enableVelocity() )
 		, DefineSsbo( passMasks, sdw::UVec4, flags.enablePassMasks() )
 	{
 	}

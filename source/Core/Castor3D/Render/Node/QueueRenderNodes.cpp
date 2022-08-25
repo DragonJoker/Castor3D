@@ -232,7 +232,7 @@ namespace castor3d
 
 			if ( submeshFlagIndex == getIndex( SubmeshFlag::eVelocity ) )
 			{
-				return pipelineFlags.hasWorldPosInputs();
+				return pipelineFlags.enableVelocity();
 			}
 
 			return true;
