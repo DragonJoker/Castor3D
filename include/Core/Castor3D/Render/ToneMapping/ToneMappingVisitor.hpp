@@ -14,8 +14,8 @@ namespace castor3d
 		: public PipelineVisitor
 	{
 	protected:
-		ToneMappingVisitor()
-			: PipelineVisitor{ { false, true } }
+		ToneMappingVisitor( Config config = { false, true, false } )
+			: PipelineVisitor{ std::move( config ) }
 		{
 		}
 

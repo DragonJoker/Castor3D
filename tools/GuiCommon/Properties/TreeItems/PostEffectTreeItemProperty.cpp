@@ -21,7 +21,7 @@ namespace GuiCommon
 		{
 		private:
 			explicit PostEffectShaderGatherer( ShaderSources & sources )
-				: castor3d::PipelineVisitor{ { false, true } }
+				: castor3d::PipelineVisitor{ { false, true, true } }
 				, m_sources{ sources }
 			{
 			}
@@ -35,7 +35,8 @@ namespace GuiCommon
 				return result;
 			}
 
-			void visit( castor3d::ShaderModule const & module )override
+			void visit( castor3d::ShaderModule const & module
+				, bool forceShaderVisit )override
 			{
 				doGetSource( module.name ).sources[module.stage] = &module;
 			}
@@ -318,7 +319,7 @@ namespace GuiCommon
 		private:
 			explicit PostEffectConfigurationBuilder( wxPropertyGrid * grid
 				, TreeItemProperty & prop )
-				: castor3d::PipelineVisitor{ { false, false } }
+				: castor3d::PipelineVisitor{ { false, false, false } }
 				, m_grid{ grid }
 				, m_prop{ prop }
 			{
@@ -331,10 +332,6 @@ namespace GuiCommon
 			{
 				PostEffectConfigurationBuilder vis{ grid, prop };
 				postEffect.accept( vis );
-			}
-
-			void visit( castor3d::ShaderModule const & module )override
-			{
 			}
 
 		private:

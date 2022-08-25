@@ -192,7 +192,7 @@ namespace GuiCommon
 			PassShaderGatherer( castor3d::PipelineFlags flags
 				, castor3d::Scene const & scene
 				, ShaderSources & sources )
-				: castor3d::RenderTechniqueVisitor{ std::move( flags ), scene }
+				: castor3d::RenderTechniqueVisitor{ std::move( flags ), scene, { false, true, true } }
 				, m_sources{ sources }
 			{
 			}
@@ -232,7 +232,8 @@ namespace GuiCommon
 			}
 
 		private:
-			void visit( castor3d::ShaderModule const & module )override
+			void visit( castor3d::ShaderModule const & module
+				, bool forceProgramsVisit )override
 			{
 				doGetSource( module.name ).sources[module.stage] = &module;
 			}

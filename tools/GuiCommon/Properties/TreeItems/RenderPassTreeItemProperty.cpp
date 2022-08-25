@@ -25,7 +25,7 @@ namespace GuiCommon
 				, castor3d::Scene const & scene
 				, wxPropertyGrid * grid
 				, TreeItemProperty & prop )
-				: castor3d::RenderTechniqueVisitor{ std::move( flags ), scene, { false, true } }
+				: castor3d::RenderTechniqueVisitor{ std::move( flags ), scene, { false, true, false } }
 				, m_grid{ grid }
 				, m_prop{ prop }
 			{
@@ -57,10 +57,6 @@ namespace GuiCommon
 					, grid
 					, prop };
 				renderPass.accept( vis );
-			}
-
-			void visit( castor3d::ShaderModule const & module )override
-			{
 			}
 
 		private:

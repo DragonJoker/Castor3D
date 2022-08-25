@@ -17,7 +17,7 @@ namespace castor3d
 	protected:
 		inline RenderTechniqueVisitor( PipelineFlags flags
 			, Scene const & scene
-			, Config config = { false, true } )
+			, Config config = { false, true, false } )
 			: PipelineVisitor{ std::move( config ) }
 			, m_flags{ std::move( flags ) }
 			, m_scene{ scene }
@@ -34,7 +34,8 @@ namespace castor3d
 		*	Source de shader.
 		**/
 		/**@{*/
-		void visit( ShaderModule const & shader )override
+		void visit( ShaderModule const & shader
+			, bool forceProgramsVisit )override
 		{
 		}
 		/**@}*/

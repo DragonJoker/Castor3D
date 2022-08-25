@@ -23,7 +23,7 @@ namespace GuiCommon
 		{
 		private:
 			explicit ToneMappingShaderGatherer( ShaderSources & sources )
-				: castor3d::ToneMappingVisitor{}
+				: castor3d::ToneMappingVisitor{ { false, true, true } }
 				, m_sources{ sources }
 			{
 			}
@@ -37,7 +37,8 @@ namespace GuiCommon
 				return result;
 			}
 
-			void visit( castor3d::ShaderModule const & module )override
+			void visit( castor3d::ShaderModule const & module
+				, bool forceProgramsVisit )override
 			{
 				doGetSource( module.name ).sources[module.stage] = &module;
 			}
