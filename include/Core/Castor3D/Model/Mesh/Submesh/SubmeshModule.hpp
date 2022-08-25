@@ -37,7 +37,7 @@ namespace castor3d
 	*	Liste les types de données supportés par un submesh.
 	*/
 	enum class SubmeshData
-		: uint32_t
+		: uint8_t
 	{
 		//!\~english	The submesh has indices.
 		//!\~french		Le submesh a des indices.
@@ -66,9 +66,12 @@ namespace castor3d
 		//!\~english	Submesh has colours.
 		//!\~french		Le submesh a des couleurs.
 		eColours,
+		//!\~english	Minimum value for components not derived from BaseDataComponentT.
+		//!\~french		Valeur minimale pour les composants n'héritant pas de BaseDataComponentT.
+		eOtherMin,
 		//!\~english	Submesh has skin data.
 		//!\~french		Le submesh a des données de skin.
-		eSkin,
+		eSkin = eOtherMin,
 		//!\~english	Submesh has subpasses masks.
 		//!\~french		Le submesh a des masques de subpasses.
 		ePassMasks,
@@ -164,6 +167,9 @@ namespace castor3d
 		//!\~english	Submesh has a 4th set of texture coordinates.
 		//!\~french		Le submesh a un 4e set de coordonnées de texture.
 		eTexcoords3 = 0x0001 << int( SubmeshData::eTexcoords3 ),
+		//!\~english	Submesh has texture coordinates.
+		//!\~french		Le submesh a des coordonnées de texture.
+		eTexcoords = ( eTexcoords0  | eTexcoords1 | eTexcoords2 | eTexcoords3 ),
 		//!\~english	Submesh has colours.
 		//!\~french		Le submesh a des couleurs.
 		eColours = 0x0001 << int( SubmeshData::eColours ),

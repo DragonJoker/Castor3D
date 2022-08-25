@@ -31,16 +31,13 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor
 		 *\param[in]	renderPass	The parent render pass.
-		 *\param[in]	mode		The render mode for this render queue.
 		 *\param[in]	ignored		The geometries attached to this node will be ignored in the render.
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	renderPass	La passe de rendu parente.
-		 *\param[in]	mode		Le mode de rendu de cette file de rendu.
 		 *\param[in]	ignored		Les géométries attachées à ce noeud seront ignorées lors du rendu.
 		 */
 		C3D_API RenderQueue( RenderNodesPass & renderPass
-			, RenderMode mode
 			, SceneNode const * ignored );
 		C3D_API ~RenderQueue();
 		/**
@@ -112,7 +109,7 @@ namespace castor3d
 		*/
 		/**@{*/
 		C3D_API bool hasNodes()const;
-		C3D_API RenderMode getMode()const;
+		C3D_API RenderFilters getFilters()const;
 		C3D_API ashes::CommandBuffer const & initCommandBuffer();
 
 		bool hasCommandBuffer()const

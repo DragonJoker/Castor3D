@@ -53,10 +53,7 @@ namespace castor3d
 		return data.getProgramFlags();
 	}
 
-	GeometryBuffers const & BillboardRenderNode::getGeometryBuffers( ShaderFlags const & shaderFlags
-		, SubmeshFlags const & submeshFlags
-		, ProgramFlags const & programFlags
-		, TextureFlagsArray const & texturesMask )const
+	GeometryBuffers const & BillboardRenderNode::getGeometryBuffers( PipelineFlags const & flags )const
 	{
 		return data.getGeometryBuffers();
 	}

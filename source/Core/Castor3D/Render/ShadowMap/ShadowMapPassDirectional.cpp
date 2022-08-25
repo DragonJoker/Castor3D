@@ -114,13 +114,15 @@ namespace castor3d
 	ashes::PipelineColorBlendStateCreateInfo ShadowMapPassDirectional::doCreateBlendState( PipelineFlags const & flags )const
 	{
 		uint32_t result = 1u;
+		auto needsVsm = flags.writeShadowVSM();
+		auto needsRsm = flags.writeShadowRSM();
 
-		if ( m_needsVsm )
+		if ( needsVsm )
 		{
 			++result;
 		}
 
-		if ( m_needsRsm )
+		if ( needsRsm )
 		{
 			result += 3;
 		}
@@ -138,19 +140,6 @@ namespace castor3d
 
 	ProgramFlags ShadowMapPassDirectional::doAdjustProgramFlags( ProgramFlags flags )const
 	{
-		addFlag( flags, ProgramFlag::eLighting );
-		addFlag( flags, ProgramFlag::eShadowMapDirectional );
-
-		if ( m_needsVsm )
-		{
-			addFlag( flags, ProgramFlag::eVsmShadowMap );
-		}
-
-		if ( m_needsRsm )
-		{
-			addFlag( flags, ProgramFlag::eRsmShadowMap );
-		}
-
 		return flags;
 	}
 
@@ -158,10 +147,9 @@ namespace castor3d
 	{
 		using namespace sdw;
 		VertexWriter writer;
-		auto textureFlags = filterTexturesFlags( flags.textures );
-		bool hasTextures = flags.hasTextures() && !textureFlags.empty();
 
 		C3D_ObjectIdsData( writer
+			, flags
 			, GlobalBuffersIdx::eObjectsNodeID
 			, RenderPipeline::eBuffers );
 		C3D_ModelsData( writer
@@ -180,19 +168,9 @@ namespace castor3d
 		pcb.end();
 
 		writer.implementMainT< shader::VertexSurfaceT, shader::FragmentSurfaceT >( sdw::VertexInT< shader::VertexSurfaceT >{ writer
-				, flags.submeshFlags
-				, flags.programFlags
-				, getShaderFlags()
-				, textureFlags
-				, flags.passFlags
-				, hasTextures }
+				, flags }
 			, sdw::VertexOutT< shader::FragmentSurfaceT >{ writer
-				, flags.submeshFlags
-				, flags.programFlags
-				, getShaderFlags()
-				, textureFlags
-				, flags.passFlags
-				, hasTextures }
+				, flags }
 			, [&]( VertexInT< shader::VertexSurfaceT > in
 			, VertexOutT< shader::FragmentSurfaceT > out )
 			{
@@ -201,7 +179,7 @@ namespace castor3d
 						, in
 						, pipelineID
 						, writer.cast< sdw::UInt >( in.drawID )
-						, flags.programFlags ) );
+						, flags ) );
 				auto curPosition = writer.declLocale( "curPosition"
 					, in.position );
 				auto curNormal = writer.declLocale( "curNormal"
@@ -217,7 +195,7 @@ namespace castor3d
 					, c3d_modelsData[nodeId - 1u] );
 				auto material = writer.declLocale( "material"
 					, materials.getMaterial( modelData.getMaterialId() ) );
-				material.getPassMultipliers( flags.submeshFlags
+				material.getPassMultipliers( flags
 					, in.passMasks
 					, out.passMultipliers );
 				out.nodeId = writer.cast< sdw::Int >( nodeId );
@@ -225,12 +203,11 @@ namespace castor3d
 				auto mtxModel = writer.declLocale< Mat4 >( "mtxModel"
 					, modelData.getModelMtx() );
 
-				if ( checkFlag( flags.submeshFlags, SubmeshFlag::eVelocity ) )
+				if ( flags.hasWorldPosInputs() )
 				{
 					auto worldPos = writer.declLocale( "worldPos"
 						, curPosition );
-					out.computeTangentSpace( flags.submeshFlags
-						, flags.programFlags
+					out.computeTangentSpace( flags
 						, vec3( 0.0_f )
 						, worldPos.xyz()
 						, curNormal
@@ -241,9 +218,8 @@ namespace castor3d
 					auto worldPos = writer.declLocale( "worldPos"
 						, mtxModel * curPosition );
 					auto mtxNormal = writer.declLocale< Mat3 >( "mtxNormal"
-						, modelData.getNormalMtx( flags.programFlags, mtxModel ) );
-					out.computeTangentSpace( flags.submeshFlags
-						, flags.programFlags
+						, modelData.getNormalMtx( flags, mtxModel ) );
+					out.computeTangentSpace( flags
 						, vec3( 0.0_f )
 						, worldPos.xyz()
 						, mtxNormal
@@ -265,10 +241,11 @@ namespace castor3d
 
 		using namespace sdw;
 		FragmentWriter writer;
-		auto textureFlags = filterTexturesFlags( flags.textures );
-		bool hasTextures = flags.hasTextures() && !textureFlags.empty();
+		auto enableTextures = flags.enableTextures();
 
 		shader::Utils utils{ writer };
+		auto needsVsm = flags.writeShadowVSM();
+		auto needsRsm = flags.writeShadowRSM();
 
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
@@ -276,17 +253,15 @@ namespace castor3d
 		shader::Materials materials{ writer
 			, uint32_t( GlobalBuffersIdx::eMaterials )
 			, RenderPipeline::eBuffers
-			, ( m_needsRsm
-				|| ( checkFlag( flags.texturesFlags, TextureFlag::eOpacity )
-					&& flags.alphaFunc != VK_COMPARE_OP_ALWAYS ) ) };
+			, needsRsm || flags.enableOpacity() };
 		shader::TextureConfigurations textureConfigs{ writer
 			, uint32_t( GlobalBuffersIdx::eTexConfigs )
 			, RenderPipeline::eBuffers
-			, hasTextures };
+			, enableTextures };
 		shader::TextureAnimations textureAnims{ writer
 			, uint32_t( GlobalBuffersIdx::eTexAnims )
 			, RenderPipeline::eBuffers
-			, hasTextures };
+			, enableTextures };
 		auto index = uint32_t( GlobalBuffersIdx::eCount );
 		auto lightsIndex = index++;
 		C3D_ShadowMap( writer
@@ -307,7 +282,7 @@ namespace castor3d
 		auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
 			, 0u
 			, RenderPipeline::eTextures
-			, hasTextures ) );
+			, enableTextures ) );
 
 		sdw::PushConstantBuffer pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
@@ -316,18 +291,13 @@ namespace castor3d
 		// Fragment Outputs
 		uint32_t outIndex{};
 		auto pxl_linear( writer.declOutput< Float >( "pxl_linear", outIndex++ ) );
-		auto pxl_variance( writer.declOutput< Vec2 >( "pxl_variance", m_needsVsm ? outIndex++ : 0u, m_needsVsm ) );
-		auto pxl_normal( writer.declOutput< Vec4 >( "pxl_normal", m_needsRsm ? outIndex++ : 0u, m_needsRsm ) );
-		auto pxl_position( writer.declOutput< Vec4 >( "pxl_position", m_needsRsm ? outIndex++ : 0u, m_needsRsm ) );
-		auto pxl_flux( writer.declOutput< Vec4 >( "pxl_flux", m_needsRsm ? outIndex++ : 0u, m_needsRsm ) );
+		auto pxl_variance( writer.declOutput< Vec2 >( "pxl_variance", needsVsm ? outIndex++ : 0u, needsVsm ) );
+		auto pxl_normal( writer.declOutput< Vec4 >( "pxl_normal", needsRsm ? outIndex++ : 0u, needsRsm ) );
+		auto pxl_position( writer.declOutput< Vec4 >( "pxl_position", needsRsm ? outIndex++ : 0u, needsRsm ) );
+		auto pxl_flux( writer.declOutput< Vec4 >( "pxl_flux", needsRsm ? outIndex++ : 0u, needsRsm ) );
 
 		writer.implementMainT< shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer
-				, flags.submeshFlags
-				, flags.programFlags
-				, getShaderFlags()
-				, textureFlags
-				, flags.passFlags
-				, hasTextures }
+				, flags }
 			, FragmentOut{ writer }
 			, [&]( FragmentInT< shader::FragmentSurfaceT > in
 				, FragmentOut out )
@@ -346,22 +316,18 @@ namespace castor3d
 					, in.texture1
 					, in.texture2
 					, in.texture3
-					, { 1.0_f, ( checkFlag( flags.texturesFlags, TextureFlag::eOpacity ) && flags.alphaFunc != VK_COMPARE_OP_ALWAYS ) }
-					, { normalize( in.normal ), m_needsRsm }
+					, { 1.0_f, flags.enableOpacity() }
+					, { normalize( in.normal ), needsRsm }
 					, normalize( in.tangent )
 					, normalize( in.bitangent )
 					, in.tangentSpaceViewPosition
 					, in.tangentSpaceFragPosition
 					, { 1.0_f, false }
 					, { 1.0_f, false }
-					, { vec3( 0.0_f ), m_needsRsm } };
+					, { vec3( 0.0_f ), needsRsm } };
 				auto lightMat = materials.blendMaterials( utils
-					, m_needsRsm
-					, flags.alphaFunc
-					, flags.passFlags
-					, flags.submeshFlags
-					, flags.textures
-					, hasTextures
+					, needsRsm
+					, flags
 					, textureConfigs
 					, textureAnims
 					, *lightingModel
@@ -374,7 +340,7 @@ namespace castor3d
 					, in.fragCoord.z() );
 				pxl_linear = depth;
 
-				if ( m_needsVsm )
+				if ( needsVsm )
 				{
 					pxl_variance.x() = depth;
 					pxl_variance.y() = depth * depth;
@@ -386,7 +352,7 @@ namespace castor3d
 					pxl_variance.y() += 0.25_f * ( dx * dx + dy * dy );
 				}
 
-				if ( m_needsRsm )
+				if ( needsRsm )
 				{
 					auto light = writer.declLocale( "light"
 						, c3d_shadowMapData.getDirectionalLight( *lightingModel ) );

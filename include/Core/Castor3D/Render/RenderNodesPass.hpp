@@ -32,14 +32,14 @@ namespace castor3d
 			, MatrixUbo & matrixUbo
 			, SceneUbo * sceneUbo
 			, SceneCuller & culler
-			, RenderMode mode
+			, RenderFilters filters
 			, bool oit
 			, bool forceTwoSided )
 			: m_size{ std::move( size ) }
 			, m_matrixUbo{ matrixUbo }
 			, m_sceneUbo{ sceneUbo }
 			, m_culler{ culler }
-			, m_mode{ mode }
+			, m_filters{ filters }
 			, m_oit{ oit }
 			, m_forceTwoSided{ forceTwoSided }
 		{
@@ -50,14 +50,14 @@ namespace castor3d
 			, MatrixUbo & matrixUbo
 			, SceneUbo & sceneUbo
 			, SceneCuller & culler
-			, RenderMode mode
+			, RenderFilters filters
 			, bool oit
 			, bool forceTwoSided )
 			: RenderNodesPassDesc{ std::move( size )
 				, matrixUbo
 				, & sceneUbo
 				, culler
-				, mode
+				, filters
 				, oit
 				, forceTwoSided }
 		{
@@ -81,7 +81,7 @@ namespace castor3d
 				, matrixUbo
 				, nullptr
 				, culler
-				, RenderMode::eBoth
+				, RenderFilter::eNone
 				, true
 				, false }
 		{
@@ -108,7 +108,7 @@ namespace castor3d
 				, matrixUbo
 				, sceneUbo
 				, culler
-				, RenderMode::eOpaqueOnly
+				, RenderFilter::eAlphaBlend
 				, true
 				, false }
 		{
@@ -136,7 +136,7 @@ namespace castor3d
 				, matrixUbo
 				, sceneUbo
 				, culler
-				, RenderMode::eTransparentOnly
+				, RenderFilter::eOpaque
 				, oit
 				, false }
 		{
@@ -215,7 +215,7 @@ namespace castor3d
 		MatrixUbo & m_matrixUbo;
 		SceneUbo * m_sceneUbo{};
 		SceneCuller & m_culler;
-		RenderMode m_mode;
+		RenderFilters m_filters;
 		bool m_oit;
 		bool m_forceTwoSided;
 		bool m_safeBand{};
@@ -239,7 +239,7 @@ namespace castor3d
 		 *\param[in]	graph		The runnable graph.
 		 *\param[in]	device		The GPU device.
 		 *\param[in]	typeName	The pass type name.
-		 *\param[in]	category	The pass category.
+		 *\param[in]	targetImage	The main image to which this pass draws to.
 		 *\param[in]	desc		The construction data.
 		 *\~french
 		 *\brief		Constructeur.
@@ -248,7 +248,7 @@ namespace castor3d
 		 *\param[in]	graph		Le runnable graph.
 		 *\param[in]	device		Le device GPU.
 		 *\param[in]	typeName	Le nom du type de la passe.
-		 *\param[in]	category	La catégorie de la passe.
+		 *\param[in]	targetImage	L'image principale sur laquelle cette passe dessine.
 		 *\param[in]	desc		Les données de construction.
 		 */
 		C3D_API RenderNodesPass( crg::FramePass const & pass
@@ -377,6 +377,30 @@ namespace castor3d
 		C3D_API SceneFlags adjustFlags( SceneFlags flags )const;
 		/**
 		 *\~english
+		 *\brief		Filters the given textures flags using this pass needed textures.
+		 *\param[in]	texturesFlags	The textures flags.
+		 *\return		The filtered flags.
+		 *\~french
+		 *\brief		Filtre les indicateurs de textures donnés en utilisant ceux voulus par cette passe.
+		 *\param[in]	texturesFlags	Les indicateurs de textures.
+		 *\return		Les indicateurs filtrés.
+		 */
+		C3D_API TextureFlags adjustFlags( TextureFlags texturesFlags )const;
+		/**
+		 *\~english
+		 *\brief		Filters the given textures flags using this pass needed textures.
+		 *\param[in]	texturesFlags	The textures flags.
+		 *\return		The filtered flags.
+		 *\~french
+		 *\brief		Filtre les indicateurs de textures donnés en utilisant ceux voulus par cette passe.
+		 *\param[in]	texturesFlags	Les indicateurs de textures.
+		 *\return		Les indicateurs filtrés.
+		 */
+		C3D_API VkCompareOp adjustAlphaFunc( PassFlags passFlags
+			, VkCompareOp alphaFunc
+			, VkCompareOp blendAlphaFunc )const;
+		/**
+		 *\~english
 		 *\brief		Creates the pipeline flags for given configuration.
 		 *\param[in]	colourBlendMode		The colour blending mode.
 		 *\param[in]	alphaBlendMode		The alpha blending mode.
@@ -414,7 +438,6 @@ namespace castor3d
 			, PassFlags passFlags
 			, RenderPassTypeID renderPassTypeID
 			, PassTypeID passTypeID
-			, uint32_t heightTextureIndex
 			, VkCompareOp alphaFunc
 			, VkCompareOp blendAlphaFunc
 			, TextureFlagsArray const & textures
@@ -424,7 +447,7 @@ namespace castor3d
 			, VkPrimitiveTopology topology
 			, bool isFrontCulled
 			, uint32_t passLayerIndex
-			, GpuBufferOffsetT< castor::Point4f > const & morphTargets );
+			, GpuBufferOffsetT< castor::Point4f > const & morphTargets )const;
 		/**
 		 *\~english
 		 *\brief		Creates the pipeline flags for given configuration.
@@ -454,7 +477,7 @@ namespace castor3d
 			, SceneFlags const & sceneFlags
 			, VkPrimitiveTopology topology
 			, bool isFrontCulled
-			, GpuBufferOffsetT< castor::Point4f > const & morphTargets );
+			, GpuBufferOffsetT< castor::Point4f > const & morphTargets )const;
 		/**
 		 *\~english
 		 *\brief			Prepares the pipeline matching the given flags, for back face culling nodes.
@@ -549,6 +572,7 @@ namespace castor3d
 		*/
 		/**@{*/
 		C3D_API virtual TextureFlags getTexturesMask()const;
+		C3D_API virtual bool areValidPassFlags( PassFlags const & passFlags )const;
 		C3D_API bool isValidPass( Pass const & pass )const;
 		C3D_API bool isValidRenderable( RenderedObject const & object )const;
 		C3D_API bool hasNodes()const;
@@ -556,7 +580,6 @@ namespace castor3d
 		C3D_API Scene & getScene()const;
 		C3D_API SceneNode const * getIgnoredNode()const;
 		C3D_API bool isMeshShading()const;
-
 
 		C3D_API virtual ShaderFlags getShaderFlags()const
 		{
@@ -595,9 +618,9 @@ namespace castor3d
 			return m_forceTwoSided;
 		}
 
-		RenderMode getRenderMode()const
+		RenderFilters getRenderFilters()const
 		{
-			return m_mode;
+			return m_filters;
 		}
 
 		castor::String const & getTypeName()const
@@ -636,7 +659,6 @@ namespace castor3d
 		 *\param[in,out]	bindings	Reçoit les attaches additionnelles.
 		 */
 		C3D_API virtual void doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const = 0;
-		C3D_API virtual bool doAreValidPassFlags( PassFlags const & passFlags )const;
 		C3D_API virtual bool doIsValidPass( Pass const & pass )const;
 		C3D_API virtual bool doIsValidRenderable( RenderedObject const & object )const;
 		C3D_API virtual SubmeshFlags doAdjustSubmeshFlags( SubmeshFlags flags )const;
@@ -655,7 +677,7 @@ namespace castor3d
 		std::vector< RenderPipelineUPtr > const & doGetBackPipelines()const;
 		RenderPipeline & doPreparePipeline( ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
 			, ashes::DescriptorSetLayout const * meshletDescriptorLayout
-			, PipelineFlags flags
+			, PipelineFlags const & flags
 			, VkCullModeFlags cullMode );
 		/**
 		 *\~english
@@ -777,10 +799,10 @@ namespace castor3d
 		crg::ImageData const * m_targetImage;
 		castor::String m_typeName;
 		RenderPassTypeID m_typeID{};
+		RenderFilters m_filters{ RenderFilter::eNone };
 		RenderQueueUPtr m_renderQueue;
 		castor::String m_category;
 		castor::Size m_size;
-		RenderMode m_mode{ RenderMode::eBoth };
 		bool m_oit{ false };
 		bool m_forceTwoSided{ false };
 		bool m_safeBand{ false };

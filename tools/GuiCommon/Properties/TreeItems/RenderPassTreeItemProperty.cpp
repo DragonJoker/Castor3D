@@ -42,7 +42,6 @@ namespace GuiCommon
 						, castor3d::PassFlag::eNone
 						, engine.getRenderPassTypeID( renderPass.getTypeName() )
 						, 0u
-						, castor3d::InvalidIndex
 						, VK_COMPARE_OP_ALWAYS
 						, VK_COMPARE_OP_ALWAYS
 						, castor3d::TextureFlagsArray{}

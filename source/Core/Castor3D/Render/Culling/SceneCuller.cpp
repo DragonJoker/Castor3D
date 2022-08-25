@@ -1103,7 +1103,7 @@ namespace castor3d
 			&& renderPass.isValidRenderable( node.instance )
 			&& node.instance.getParent() != renderPass.getIgnoredNode() )
 		{
-			bool needsFront = renderPass.getRenderMode() == RenderMode::eTransparentOnly
+			bool needsFront = ( !checkFlag( renderPass.getRenderFilters(), RenderFilter::eAlphaBlend ) )
 				|| renderPass.forceTwoSided()
 				|| node.pass->isTwoSided()
 				|| node.pass->hasAlphaBlending();

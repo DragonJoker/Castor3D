@@ -112,7 +112,7 @@ namespace castor3d::shader
 			, sdw::Float const & passMultiplier
 			, bool opaque = true );
 
-		C3D_API void getPassMultipliers( SubmeshFlags submeshFlags
+		C3D_API void getPassMultipliers( PipelineFlags const & flags
 			, sdw::UVec4 const & passMasks
 			, sdw::Array< sdw::Vec4 > & passMultipliers )const;
 		C3D_API sdw::UInt getTexture( uint32_t index )const;
@@ -441,23 +441,7 @@ namespace castor3d::shader
 
 		// Used by picking pass (opacity only)
 		C3D_API void blendMaterials( Utils & utils
-			, VkCompareOp alphaFunc
-			, PassFlags const & passFlags
-			, SubmeshFlags const & submeshFlags
-			, TextureFlags const & textures
-			, bool hasTextures
-			, shader::TextureConfigurations const & textureConfigs
-			, shader::TextureAnimations const & textureAnims
-			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-			, sdw::UInt const & materialId
-			, sdw::Array< sdw::Vec4 > const & passMultipliers
-			, OpacityBlendComponents & output )const;
-		C3D_API void blendMaterials( Utils & utils
-			, VkCompareOp alphaFunc
-			, PassFlags const & passFlags
-			, SubmeshFlags const & submeshFlags
-			, TextureFlagsArray const & textures
-			, bool hasTextures
+			, PipelineFlags const & flags
 			, shader::TextureConfigurations const & textureConfigs
 			, shader::TextureAnimations const & textureAnims
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
@@ -466,23 +450,7 @@ namespace castor3d::shader
 			, OpacityBlendComponents & output )const;
 		// Used by depth pass (opacity and tangent space only)
 		C3D_API void blendMaterials( Utils & utils
-			, VkCompareOp alphaFunc
-			, PassFlags const & passFlags
-			, SubmeshFlags const & submeshFlags
-			, TextureFlags const & textures
-			, bool hasTextures
-			, shader::TextureConfigurations const & textureConfigs
-			, shader::TextureAnimations const & textureAnims
-			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-			, sdw::UInt const & materialId
-			, sdw::Array< sdw::Vec4 > const & passMultipliers
-			, GeometryBlendComponents & output )const;
-		C3D_API void blendMaterials( Utils & utils
-			, VkCompareOp alphaFunc
-			, PassFlags const & passFlags
-			, SubmeshFlags const & submeshFlags
-			, TextureFlagsArray const & textures
-			, bool hasTextures
+			, PipelineFlags const & flags
 			, shader::TextureConfigurations const & textureConfigs
 			, shader::TextureAnimations const & textureAnims
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
@@ -492,26 +460,7 @@ namespace castor3d::shader
 		// Used by shadow passes
 		C3D_API std::unique_ptr< LightMaterial > blendMaterials( Utils & utils
 			, bool needsRsm
-			, VkCompareOp alphaFunc
-			, PassFlags const & passFlags
-			, SubmeshFlags const & submeshFlags
-			, TextureFlags const & textures
-			, bool hasTextures
-			, shader::TextureConfigurations const & textureConfigs
-			, shader::TextureAnimations const & textureAnims
-			, shader::LightingModel & lightingModel
-			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-			, sdw::UInt const & materialId
-			, sdw::Array< sdw::Vec4 > const & passMultipliers
-			, sdw::Vec3 const & vertexColour
-			, OpaqueBlendComponents & output )const;
-		C3D_API std::unique_ptr< LightMaterial > blendMaterials( Utils & utils
-			, bool needsRsm
-			, VkCompareOp alphaFunc
-			, PassFlags const & passFlags
-			, SubmeshFlags const & submeshFlags
-			, TextureFlagsArray const & textures
-			, bool hasTextures
+			, PipelineFlags const & flags
 			, shader::TextureConfigurations const & textureConfigs
 			, shader::TextureAnimations const & textureAnims
 			, shader::LightingModel & lightingModel
@@ -522,10 +471,7 @@ namespace castor3d::shader
 			, OpaqueBlendComponents & output )const;
 		// Used by visibility resolve pass
 		C3D_API std::unique_ptr< LightMaterial > blendMaterials( Utils & utils
-			, PassFlags const & passFlags
-			, SubmeshFlags const & submeshFlags
-			, TextureFlags const & textures
-			, bool hasTextures
+			, PipelineFlags const & flags
 			, shader::TextureConfigurations const & textureConfigs
 			, shader::TextureAnimations const & textureAnims
 			, shader::LightingModel & lightingModel
@@ -537,25 +483,7 @@ namespace castor3d::shader
 			, VisibilityBlendComponents & output )const;
 		// Used by opaque pass
 		C3D_API std::unique_ptr< LightMaterial > blendMaterials( Utils & utils
-			, VkCompareOp alphaFunc
-			, PassFlags const & passFlags
-			, SubmeshFlags const & submeshFlags
-			, TextureFlags const & textures
-			, bool hasTextures
-			, shader::TextureConfigurations const & textureConfigs
-			, shader::TextureAnimations const & textureAnims
-			, shader::LightingModel & lightingModel
-			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-			, sdw::UInt const & materialId
-			, sdw::Array< sdw::Vec4 > const & passMultipliers
-			, sdw::Vec3 const & vertexColour
-			, OpaqueBlendComponents & output )const;
-		C3D_API std::unique_ptr< LightMaterial > blendMaterials( Utils & utils
-			, VkCompareOp alphaFunc
-			, PassFlags const & passFlags
-			, SubmeshFlags const & submeshFlags
-			, TextureFlagsArray const & textures
-			, bool hasTextures
+			, PipelineFlags const & flags
 			, shader::TextureConfigurations const & textureConfigs
 			, shader::TextureAnimations const & textureAnims
 			, shader::LightingModel & lightingModel
@@ -567,26 +495,7 @@ namespace castor3d::shader
 		// Used by forward passes
 		C3D_API std::pair< Material, std::unique_ptr< LightMaterial > > blendMaterials( Utils & utils
 			, bool opaque
-			, VkCompareOp alphaFunc
-			, PassFlags const & passFlags
-			, SubmeshFlags const & submeshFlags
-			, TextureFlags const & textures
-			, bool hasTextures
-			, shader::TextureConfigurations const & textureConfigs
-			, shader::TextureAnimations const & textureAnims
-			, shader::LightingModel & lightingModel
-			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-			, sdw::UInt const & materialId
-			, sdw::Array< sdw::Vec4 > const & passMultipliers
-			, sdw::Vec3 const & vertexColour
-			, LightingBlendComponents & output )const;
-		C3D_API std::pair< Material, std::unique_ptr< LightMaterial > > blendMaterials( Utils & utils
-			, bool opaque
-			, VkCompareOp alphaFunc
-			, PassFlags const & passFlags
-			, SubmeshFlags const & submeshFlags
-			, TextureFlagsArray const & textures
-			, bool hasTextures
+			, PipelineFlags const & flags
 			, shader::TextureConfigurations const & textureConfigs
 			, shader::TextureAnimations const & textureAnims
 			, shader::LightingModel & lightingModel
@@ -597,9 +506,7 @@ namespace castor3d::shader
 			, LightingBlendComponents & output )const;
 
 		C3D_API Material applyMaterial( std::string const & matName
-			, PassFlags const & passFlags
-			, TextureFlags const & textures
-			, bool hasTextures
+			, PipelineFlags const & flags
 			, shader::TextureConfigurations const & textureConfigs
 			, shader::TextureAnimations const & textureAnims
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
@@ -607,9 +514,7 @@ namespace castor3d::shader
 			, OpacityBlendComponents & output
 			, Utils & utils )const;
 		C3D_API Material applyMaterial( std::string const & matName
-			, PassFlags const & passFlags
-			, TextureFlags const & textures
-			, bool hasTextures
+			, PipelineFlags const & flags
 			, shader::TextureConfigurations const & textureConfigs
 			, shader::TextureAnimations const & textureAnims
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
@@ -618,9 +523,7 @@ namespace castor3d::shader
 			, Utils & utils )const;
 		C3D_API std::pair< Material, std::unique_ptr< LightMaterial > > applyMaterial( std::string const & matName
 			, std::string const & lgtMatName
-			, PassFlags const & passFlags
-			, TextureFlags const & textures
-			, bool hasTextures
+			, PipelineFlags const & flags
 			, shader::TextureConfigurations const & textureConfigs
 			, shader::TextureAnimations const & textureAnims
 			, shader::LightingModel & lightingModel
@@ -631,9 +534,7 @@ namespace castor3d::shader
 			, Utils & utils
 			, bool needsRsm )const;
 		C3D_API std::unique_ptr< LightMaterial > applyMaterial( std::string const & lgtMatName
-			, PassFlags const & passFlags
-			, TextureFlags const & textures
-			, bool hasTextures
+			, PipelineFlags const & flags
 			, shader::TextureConfigurations const & textureConfigs
 			, shader::TextureAnimations const & textureAnims
 			, shader::LightingModel & lightingModel
@@ -643,9 +544,7 @@ namespace castor3d::shader
 			, VisibilityBlendComponents & output )const;
 		C3D_API std::pair< Material, std::unique_ptr< LightMaterial > > applyMaterial( std::string const & matName
 			, std::string const & lgtMatName
-			, PassFlags const & passFlags
-			, TextureFlags const & textures
-			, bool hasTextures
+			, PipelineFlags const & flags
 			, shader::TextureConfigurations const & textureConfigs
 			, shader::TextureAnimations const & textureAnims
 			, shader::LightingModel & lightingModel
@@ -655,9 +554,7 @@ namespace castor3d::shader
 			, OpaqueBlendComponents & output )const;
 		C3D_API std::pair< Material, std::unique_ptr< LightMaterial > > applyMaterial( std::string const & matName
 			, std::string const & lgtMatName
-			, PassFlags const & passFlags
-			, TextureFlags const & textures
-			, bool hasTextures
+			, PipelineFlags const & flags
 			, shader::TextureConfigurations const & textureConfigs
 			, shader::TextureAnimations const & textureAnims
 			, shader::LightingModel & lightingModel

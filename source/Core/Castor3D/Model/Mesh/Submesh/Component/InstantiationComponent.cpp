@@ -53,8 +53,7 @@ namespace castor3d
 			return result;
 		}
 
-		static ashes::PipelineVertexInputStateCreateInfo getInstantiationLayout( SubmeshFlags const & submeshFlags
-			, uint32_t & currentBinding
+		static ashes::PipelineVertexInputStateCreateInfo getInstantiationLayout( uint32_t & currentBinding
 			, uint32_t & currentLocation )
 		{
 			ashes::VkVertexInputBindingDescriptionArray bindings{ { currentBinding
@@ -165,34 +164,29 @@ namespace castor3d
 		return count;
 	}
 
-	void InstantiationComponent::gather( ShaderFlags const & shaderFlags
-		, ProgramFlags const & programFlags
-		, SubmeshFlags const & submeshFlags
+	void InstantiationComponent::gather( PipelineFlags const & flags
 		, MaterialRPtr material
-		, TextureFlagsArray const & mask
 		, ashes::BufferCRefArray & buffers
 		, std::vector< uint64_t > & offsets
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
 		, uint32_t & currentBinding
 		, uint32_t & currentLocation )
 	{
-		if ( checkFlag( programFlags, ProgramFlag::eInstantiation ) )
+		if ( flags.enableInstantiation() )
 		{
 			auto it = m_instances.find( material );
 
 			if ( it != m_instances.end()
 				&& it->second.buffer )
 			{
-				auto hash = std::hash< SubmeshFlags::BaseType >{}( submeshFlags );
-				hash = castor::hashCombine( hash, mask.empty() );
-				hash = castor::hashCombine( hash, currentBinding );
+				auto hash = std::hash< uint32_t >{}( currentBinding );
 				hash = castor::hashCombine( hash, currentLocation );
 				auto layoutIt = m_mtxLayouts.find( hash );
 
 				if ( layoutIt == m_mtxLayouts.end() )
 				{
 					layoutIt = m_mtxLayouts.emplace( hash
-						, smshcompinst::getInstantiationLayout( submeshFlags, currentBinding, currentLocation ) ).first;
+						, smshcompinst::getInstantiationLayout( currentBinding, currentLocation ) ).first;
 				}
 				else
 				{

@@ -76,12 +76,6 @@ namespace castor3d
 		{
 			return ShadowMap::textureFlags;
 		}
-
-		ShaderFlags getShaderFlags()const override
-		{
-			return ShaderFlag::eWorldSpace
-				| ShaderFlag::eTangentSpace;
-		}
 		/**@}*/
 		/**
 		*\~english
@@ -96,6 +90,17 @@ namespace castor3d
 		{
 			m_outOfDate = false;
 		}
+
+		ShaderFlags getShaderFlags()const override
+		{
+			return ShaderFlag::eLighting
+				| ShaderFlag::eWorldSpace
+				| ShaderFlag::eTangentSpace
+				| ShaderFlag::eOpacity
+				| ( m_needsVsm ? ShaderFlag::eVsmShadowMap : ShaderFlag::eNone )
+				| ( m_needsRsm ? ShaderFlag::eRsmShadowMap : ShaderFlag::eNone )
+				| doGetShaderFlags();
+		}
 		/**@}*/
 
 	private:
@@ -105,13 +110,17 @@ namespace castor3d
 		void doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
 			, ShadowMapLightTypeArray const & shadowMaps )override;
 
+		C3D_API virtual ShaderFlags doGetShaderFlags()const = 0;
+
 	protected:
 		ShadowMap const & m_shadowMap;
-		bool m_needsVsm;
-		bool m_needsRsm;
 		mutable bool m_initialised{ false };
 		bool m_outOfDate{ true };
 		ShadowMapUbo m_shadowMapUbo;
+
+	private:
+		bool m_needsVsm;
+		bool m_needsRsm;
 	};
 }
 

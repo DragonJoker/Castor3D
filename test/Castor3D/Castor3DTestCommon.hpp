@@ -367,22 +367,47 @@ namespace Testing
 	};
 
 	template<>
+	struct Stringifier< castor3d::ShaderFlag >
+	{
+		static std::string get( castor3d::ShaderFlag const & value )
+		{
+			static std::map< castor3d::ShaderFlag, std::string > Names
+			{
+				{ castor3d::ShaderFlag::eNormal, "eNormal" },
+				{ castor3d::ShaderFlag::eTangentSpace, "eTangentSpace" },
+				{ castor3d::ShaderFlag::eVelocity, "eVelocity" },
+				{ castor3d::ShaderFlag::eWorldSpace, "eWorldSpace" },
+				{ castor3d::ShaderFlag::eViewSpace, "eViewSpace" },
+				{ castor3d::ShaderFlag::eDepth, "eDepth" },
+				{ castor3d::ShaderFlag::eVisibility, "eVisibility" },
+				{ castor3d::ShaderFlag::ePicking, "ePicking" },
+				{ castor3d::ShaderFlag::eLighting, "eLighting" },
+				{ castor3d::ShaderFlag::eShadowMapDirectional, "eShadowMapDirectional" },
+				{ castor3d::ShaderFlag::eShadowMapSpot, "eShadowMapSpot" },
+				{ castor3d::ShaderFlag::eShadowMapPoint, "eShadowMapPoint" },
+				{ castor3d::ShaderFlag::eVsmShadowMap, "eVsmShadowMap" },
+				{ castor3d::ShaderFlag::eRsmShadowMap, "eRsmShadowMap" },
+				{ castor3d::ShaderFlag::eEnvironmentMapping, "eEnvironmentMapping" },
+				{ castor3d::ShaderFlag::eGeometry, "eGeometry" },
+				{ castor3d::ShaderFlag::eTessellation, "eTessellation" },
+				{ castor3d::ShaderFlag::eForceTexCoords, "eForceTexCoords" },
+			};
+			return Names[value];
+		}
+	};
+
+	template<>
 	struct Stringifier< castor3d::ProgramFlag >
 	{
 		static std::string get( castor3d::ProgramFlag const & value )
 		{
 			static std::map< castor3d::ProgramFlag, std::string > Names
 			{
-				{ castor3d::ProgramFlag::eBillboards, "eBillboards" },
-				{ castor3d::ProgramFlag::eEnvironmentMapping, "eEnvironmentMapping" },
-				{ castor3d::ProgramFlag::eLighting, "eLighting" },
-				{ castor3d::ProgramFlag::eDepthPass, "eDepthPass" },
-				{ castor3d::ProgramFlag::ePicking, "ePicking" },
-				{ castor3d::ProgramFlag::eShadowMapDirectional, "eShadowMapDirectional" },
-				{ castor3d::ProgramFlag::eShadowMapPoint, "eShadowMapPoint" },
-				{ castor3d::ProgramFlag::eShadowMapSpot, "eShadowMapSpot" },
 				{ castor3d::ProgramFlag::eInstantiation, "eInstantiation" },
-				{ castor3d::ProgramFlag::eForceTexCoords, "eForceTexCoords" },
+				{ castor3d::ProgramFlag::eBillboards, "eBillboards" },
+				{ castor3d::ProgramFlag::eInvertNormals, "eInvertNormals" },
+				{ castor3d::ProgramFlag::eHasMesh, "eHasMesh" },
+				{ castor3d::ProgramFlag::eHasTask, "eHasTask" },
 			};
 			return Names[value];
 		}

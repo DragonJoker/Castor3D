@@ -613,7 +613,6 @@ namespace castor3d
 		void setBlendAlphaFunc( VkCompareOp value )
 		{
 			m_blendAlphaFunc = value;
-			updateFlag( PassFlag::eBlendAlphaTest, hasBlendAlphaTest() );
 		}
 
 		void setBWAccumulationOperator( uint32_t value )

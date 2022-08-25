@@ -42,7 +42,7 @@ namespace castor3d
 			std::vector< meshopt_Stream > result;
 			remapped.indices = triangles.getFaces();
 
-			for ( uint32_t i = 1u; i < uint32_t( SubmeshData::eSkin ); ++i )
+			for ( uint32_t i = 1u; i < uint32_t( SubmeshData::eOtherMin ); ++i )
 			{
 				auto submeshData = SubmeshData( i );
 

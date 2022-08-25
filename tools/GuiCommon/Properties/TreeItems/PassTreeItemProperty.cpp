@@ -202,19 +202,18 @@ namespace GuiCommon
 				, castor3d::Scene const & scene )
 			{
 				ShaderSources result;
-				PassShaderGatherer vis{ { pass.getColourBlendMode()
+				PassShaderGatherer vis{ { pass.getTypeID()
+						, pass.getColourBlendMode()
 						, pass.getAlphaBlendMode()
 						, pass.getPassFlags()
 						, ( pass.getRenderPassInfo()? pass.getRenderPassInfo()->id: castor3d::RenderPassTypeID{} )
-						, pass.getTypeID()
-						, pass.getHeightTextureIndex()
 						, castor3d::SubmeshFlag::ePosNmlTanTex
 						, castor3d::ProgramFlags{}
 						, scene.getFlags()
+						, castor3d::ShaderFlag::eNone
 						, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST
 						, 3u
 						, pass.getAlphaFunc()
-						, pass.getBlendAlphaFunc()
 						, pass.getTexturesMask()
 						, 0u }
 					, scene

@@ -92,12 +92,19 @@ namespace castor3d
 			{
 				ImageViewCache cache;
 
-				PipelineFlags flags{};
-				flags.passType = technique.getEngine()->getPassesType();
+				PipelineFlags flags{ scene.getPassesType()
+					, castor3d::PassFlag::eNone
+					, castor3d::SubmeshFlag::ePosNmlTanTex
+					, castor3d::ProgramFlag::eNone
+					, castor3d::TextureFlag::eNone
+					, castor3d::ShaderFlag::eNone
+					, VK_COMPARE_OP_ALWAYS };
 				IntermediatesLister visOpaque{ flags, scene, cache, intermediates };
 				technique.accept( visOpaque );
 
-				flags.passFlags |= PassFlag::eAlphaBlending;
+				flags.m_shaderFlags |= ShaderFlag::eOpacity;
+				flags.m_passFlags |= PassFlag::eAlphaBlending;
+				flags.alphaFunc = VK_COMPARE_OP_LESS;
 				IntermediatesLister visTransparent{ flags, scene, cache, intermediates };
 				technique.accept( visTransparent );
 			}
@@ -109,7 +116,13 @@ namespace castor3d
 			{
 				ImageViewCache cache;
 
-				PipelineFlags flags{};
+				PipelineFlags flags{ scene.getPassesType()
+					, castor3d::PassFlag::eNone
+					, castor3d::SubmeshFlag::ePosNmlTanTex
+					, castor3d::ProgramFlag::eNone
+					, castor3d::TextureFlag::eNone
+					, castor3d::ShaderFlag::eNone
+					, VK_COMPARE_OP_ALWAYS };
 				IntermediatesLister vis{ flags, scene, cache, intermediates };
 				value.accept( vis );
 			}

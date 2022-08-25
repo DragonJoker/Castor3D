@@ -185,20 +185,20 @@ namespace castor3d::shader
 			, clamp( fma( cosTheta, 0.5_f, 0.5_f ), 0.0_f, 1.0_f ) );
 	}
 
-	sdw::Vec4 Utils::sampleMap( PassFlags const & passFlags
+	sdw::Vec4 Utils::sampleMap( PipelineFlags const & flags
 		, sdw::CombinedImage2DRgba32 const map
 		, sdw::Vec2 const texCoords )
 	{
-		return ( checkFlag( passFlags, PassFlag::eUntile )
+		return ( flags.hasUntile()
 			? sampleUntiled( map, texCoords )
 			: map.sample( texCoords ) );
 	}
 
-	sdw::Vec4 Utils::sampleMap( PassFlags const & passFlags
+	sdw::Vec4 Utils::sampleMap( PipelineFlags const & flags
 		, sdw::CombinedImage2DRgba32 const map
 		, DerivTex const texCoords )
 	{
-		return ( checkFlag( passFlags, PassFlag::eUntile )
+		return ( flags.hasUntile()
 			? sampleUntiled( map, texCoords )
 			: map.grad( texCoords.uv(), texCoords.dPdx(), texCoords.dPdy() ) );
 	}

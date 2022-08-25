@@ -1,5 +1,6 @@
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 
+#include "Castor3D/Limits.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
@@ -17,14 +18,14 @@ namespace castor3d::shader
 		return colourDiv().rgb();
 	}
 
-	void Material::getPassMultipliers( SubmeshFlags submeshFlags
+	void Material::getPassMultipliers( PipelineFlags const & flags
 		, sdw::UVec4 const & passMasks
 		, sdw::Array< sdw::Vec4 > & passMultipliers )const
 	{
-		if ( checkFlag( submeshFlags, SubmeshFlag::ePassMasks )
+		if ( flags.enablePassMasks()
 			&& passMasks.isEnabled() )
 		{
-			FOR( *m_writer, sdw::UInt, passIdx, 0_u, passIdx < passCount(), ++passIdx )
+			FOR( *m_writer, sdw::UInt, passIdx, 0_u, passIdx < passCount() && passIdx < MaxPassLayers, ++passIdx )
 			{
 				auto mask32 = passMasks[passIdx / 4_u];
 				auto mask8 = ( mask32 >> ( ( passIdx % 4_u ) * 8_u ) ) & 0xFF_u;
@@ -436,6 +437,12 @@ namespace castor3d::shader
 
 	void VisibilityBlendComponents::set( VisResult const & rhs )
 	{
+		opacity() = rhs.opa;
+		normal() = normalize( rhs.nml );
+		tangent() = normalize( rhs.tan );
+		bitangent() = normalize( rhs.bit );
+		tangentSpaceViewPosition() = rhs.tvp;
+		tangentSpaceFragPosition() = rhs.tfp;
 		occlusion() = rhs.occ;
 		transmittance() = rhs.trn;
 		emissive() = rhs.ems;
@@ -543,11 +550,7 @@ namespace castor3d::shader
 		static void blendMaterialsT( sdw::ShaderWriter & writer
 			, Materials const & materials
 			, Utils & utils
-			, VkCompareOp alphaFunc
-			, PassFlags const & passFlags
-			, SubmeshFlags const & submeshFlags
-			, TextureFlags const & textureFlags
-			, bool hasTextures
+			, PipelineFlags const & flags
 			, shader::TextureConfigurations const & textureConfigs
 			, shader::TextureAnimations const & textureAnims
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
@@ -555,12 +558,12 @@ namespace castor3d::shader
 			, sdw::Array< sdw::Vec4 > const & passMultipliers
 			, ComponentT & output )
 		{
-			if ( checkFlag( submeshFlags, SubmeshFlag::ePassMasks ) )
+			if ( flags.enablePassMasks() )
 			{
 				ComponentT firstComponents{ writer, "first", output };
 				auto result = firstComponents.createResult( writer, output );
 				auto material = materials.applyMaterial( "firstMaterial"
-					, passFlags, textureFlags, hasTextures
+					, flags
 					, textureConfigs, textureAnims, maps
 					, materialId
 					, firstComponents
@@ -574,7 +577,7 @@ namespace castor3d::shader
 				}
 				FI;
 
-				FOR( writer, sdw::UInt, passIdx, 1_u, passIdx < material.passCount(), ++passIdx )
+				FOR( writer, sdw::UInt, passIdx, 1_u, passIdx < material.passCount() && passIdx < MaxPassLayers, ++passIdx )
 				{
 					passMultiplier = passMultipliers[passIdx / 4_u][passIdx % 4_u];
 
@@ -582,7 +585,7 @@ namespace castor3d::shader
 					{
 						ComponentT passComponents{ writer, "pass", output };
 						materials.applyMaterial( "passMaterial"
-							, passFlags, textureFlags, hasTextures
+							, flags
 							, textureConfigs, textureAnims, maps
 							, materialId + passIdx
 							, passComponents
@@ -595,7 +598,7 @@ namespace castor3d::shader
 
 				output.set( result );
 				Material::applyAlphaFunc( writer
-					, alphaFunc
+					, flags.alphaFunc
 					, output.opacity()
 					, 0.0_f
 					, 1.0_f );
@@ -603,12 +606,12 @@ namespace castor3d::shader
 			else
 			{
 				auto material = materials.applyMaterial( "passMaterial"
-					, passFlags, textureFlags, hasTextures
+					, flags
 					, textureConfigs, textureAnims, maps
 					, materialId
 					, output
 					, utils );
-				material.applyAlphaFunc( alphaFunc
+				material.applyAlphaFunc( flags.alphaFunc
 					, output.opacity()
 					, 1.0_f );
 			}
@@ -617,12 +620,8 @@ namespace castor3d::shader
 		template< typename ComponentT, typename ... ParamsT >
 		std::pair< Material, std::unique_ptr< LightMaterial > > blendMaterialsT( sdw::ShaderWriter & writer
 			, Materials const & materials
-			, VkCompareOp alphaFunc
 			, bool opaque
-			, PassFlags const & passFlags
-			, SubmeshFlags const & submeshFlags
-			, TextureFlags const & textureFlags
-			, bool hasTextures
+			, PipelineFlags const & flags
 			, shader::TextureConfigurations const & textureConfigs
 			, shader::TextureAnimations const & textureAnims
 			, shader::LightingModel & lightingModel
@@ -633,7 +632,7 @@ namespace castor3d::shader
 			, ComponentT & output
 			, ParamsT && ... params )
 		{
-			if ( checkFlag( submeshFlags, SubmeshFlag::ePassMasks ) )
+			if ( flags.enablePassMasks() )
 			{
 				auto lightMat = lightingModel.declMaterial( "lightMat" );
 				lightMat->create( vec3( 0.0_f )
@@ -647,7 +646,7 @@ namespace castor3d::shader
 				ComponentT firstComponents{ writer, "first", output };
 				auto result = firstComponents.createResult( writer, output );
 				auto firstMats = materials.applyMaterial( "firstMaterial", "firstLightMat"
-					, passFlags, textureFlags, hasTextures
+					, flags
 					, textureConfigs, textureAnims, lightingModel, maps
 					, materialId, vertexColour
 					, firstComponents
@@ -664,7 +663,7 @@ namespace castor3d::shader
 				}
 				FI;
 
-				FOR( writer, sdw::UInt, passIdx, 1_u, passIdx < material.passCount(), ++passIdx )
+				FOR( writer, sdw::UInt, passIdx, 1_u, passIdx < material.passCount() && passIdx < MaxPassLayers, ++passIdx )
 				{
 					passMultiplier = passMultipliers[passIdx / 4_u][passIdx % 4_u];
 
@@ -672,7 +671,7 @@ namespace castor3d::shader
 					{
 						ComponentT passComponents{ writer, "pass", output };
 						auto curMats = materials.applyMaterial( "passMaterial", "passLightMat"
-							, passFlags, textureFlags, hasTextures
+							, flags
 							, textureConfigs, textureAnims, lightingModel, maps
 							, materialId + passIdx, vertexColour
 							, passComponents
@@ -690,7 +689,7 @@ namespace castor3d::shader
 
 				output.set( result );
 				Material::applyAlphaFunc( writer
-					, alphaFunc
+					, flags.alphaFunc
 					, output.opacity()
 					, 0.0_f
 					, 1.0_f
@@ -700,14 +699,14 @@ namespace castor3d::shader
 			}
 
 			auto mats = materials.applyMaterial( "passMaterial", "passLightMat"
-				, passFlags, textureFlags, hasTextures
+				, flags
 				, textureConfigs, textureAnims, lightingModel, maps
 				, materialId, vertexColour
 				, output
 				, std::forward< ParamsT >( params )... );
 			auto material = std::move( mats.first );
 			auto result = std::move( mats.second );
-			material.applyAlphaFunc( alphaFunc
+			material.applyAlphaFunc( flags.alphaFunc
 				, output.opacity()
 				, 1.0_f
 				, opaque );
@@ -731,11 +730,7 @@ namespace castor3d::shader
 	}
 
 	void Materials::blendMaterials( Utils & utils
-		, VkCompareOp alphaFunc
-		, PassFlags const & passFlags
-		, SubmeshFlags const & submeshFlags
-		, TextureFlags const & textureFlags
-		, bool hasTextures
+		, PipelineFlags const & flags
 		, shader::TextureConfigurations const & textureConfigs
 		, shader::TextureAnimations const & textureAnims
 		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
@@ -744,38 +739,14 @@ namespace castor3d::shader
 		, OpacityBlendComponents & output )const
 	{
 		mats::blendMaterialsT( m_writer, *this, utils
-			, alphaFunc, passFlags, submeshFlags, textureFlags, hasTextures
+			, flags
 			, textureConfigs, textureAnims, maps
 			, materialId, passMultipliers
 			, output );
 	}
 
 	void Materials::blendMaterials( Utils & utils
-		, VkCompareOp alphaFunc
-		, PassFlags const & passFlags
-		, SubmeshFlags const & submeshFlags
-		, TextureFlagsArray const & textures
-		, bool hasTextures
-		, shader::TextureConfigurations const & textureConfigs
-		, shader::TextureAnimations const & textureAnims
-		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-		, sdw::UInt const & materialId
-		, sdw::Array< sdw::Vec4 > const & passMultipliers
-		, OpacityBlendComponents & output )const
-	{
-		blendMaterials( utils
-			, alphaFunc, passFlags, submeshFlags, merge( textures ), hasTextures
-			, textureConfigs, textureAnims, maps
-			, materialId, passMultipliers
-			, output );
-	}
-
-	void Materials::blendMaterials( Utils & utils
-		, VkCompareOp alphaFunc
-		, PassFlags const & passFlags
-		, SubmeshFlags const & submeshFlags
-		, TextureFlags const & textureFlags
-		, bool hasTextures
+		, PipelineFlags const & flags
 		, shader::TextureConfigurations const & textureConfigs
 		, shader::TextureAnimations const & textureAnims
 		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
@@ -784,27 +755,7 @@ namespace castor3d::shader
 		, GeometryBlendComponents & output )const
 	{
 		mats::blendMaterialsT( m_writer, *this, utils
-			, alphaFunc, passFlags, submeshFlags, textureFlags, hasTextures
-			, textureConfigs, textureAnims, maps
-			, materialId, passMultipliers
-			, output );
-	}
-		
-	void Materials::blendMaterials( Utils & utils
-		, VkCompareOp alphaFunc
-		, PassFlags const & passFlags
-		, SubmeshFlags const & submeshFlags
-		, TextureFlagsArray const & textures
-		, bool hasTextures
-		, shader::TextureConfigurations const & textureConfigs
-		, shader::TextureAnimations const & textureAnims
-		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-		, sdw::UInt const & materialId
-		, sdw::Array< sdw::Vec4 > const & passMultipliers
-		, GeometryBlendComponents & output )const
-	{
-		blendMaterials( utils
-			, alphaFunc, passFlags, submeshFlags, merge( textures ), hasTextures
+			, flags
 			, textureConfigs, textureAnims, maps
 			, materialId, passMultipliers
 			, output );
@@ -812,11 +763,7 @@ namespace castor3d::shader
 
 	std::unique_ptr< LightMaterial > Materials::blendMaterials( Utils & utils
 		, bool needsRsm
-		, VkCompareOp alphaFunc
-		, PassFlags const & passFlags
-		, SubmeshFlags const & submeshFlags
-		, TextureFlags const & textureFlags
-		, bool hasTextures
+		, PipelineFlags const & flags
 		, shader::TextureConfigurations const & textureConfigs
 		, shader::TextureAnimations const & textureAnims
 		, shader::LightingModel & lightingModel
@@ -827,8 +774,8 @@ namespace castor3d::shader
 		, OpaqueBlendComponents & output )const
 	{
 		return mats::blendMaterialsT( m_writer, *this
-			, alphaFunc, true
-			, passFlags, submeshFlags, textureFlags, hasTextures
+			, true
+			, flags
 			, textureConfigs, textureAnims, lightingModel, maps
 			, materialId, passMultipliers, vertexColour
 			, output
@@ -836,33 +783,7 @@ namespace castor3d::shader
 	}
 
 	std::unique_ptr< LightMaterial > Materials::blendMaterials( Utils & utils
-		, bool needsRsm
-		, VkCompareOp alphaFunc
-		, PassFlags const & passFlags
-		, SubmeshFlags const & submeshFlags
-		, TextureFlagsArray const & textures
-		, bool hasTextures
-		, shader::TextureConfigurations const & textureConfigs
-		, shader::TextureAnimations const & textureAnims
-		, shader::LightingModel & lightingModel
-		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-		, sdw::UInt const & materialId
-		, sdw::Array< sdw::Vec4 > const & passMultipliers
-		, sdw::Vec3 const & vertexColour
-		, OpaqueBlendComponents & output )const
-	{
-		return blendMaterials( utils, needsRsm
-			, alphaFunc, passFlags, submeshFlags, merge( textures ), hasTextures
-			, textureConfigs, textureAnims, lightingModel, maps
-			, materialId, passMultipliers, vertexColour
-			, output );
-	}
-
-	std::unique_ptr< LightMaterial > Materials::blendMaterials( Utils & utils
-		, PassFlags const & passFlags
-		, SubmeshFlags const & submeshFlags
-		, TextureFlags const & textureFlags
-		, bool hasTextures
+		, PipelineFlags const & flags
 		, shader::TextureConfigurations const & textureConfigs
 		, shader::TextureAnimations const & textureAnims
 		, shader::LightingModel & lightingModel
@@ -873,7 +794,7 @@ namespace castor3d::shader
 		, sdw::Vec3 const & vertexColour
 		, VisibilityBlendComponents & output )const
 	{
-		if ( checkFlag( submeshFlags, SubmeshFlag::ePassMasks ) )
+		if ( flags.enablePassMasks() )
 		{
 			auto lightMat = lightingModel.declMaterial( "lightMat" );
 			lightMat->create( vec3( 0.0_f )
@@ -887,7 +808,7 @@ namespace castor3d::shader
 			VisibilityBlendComponents firstComponents{ m_writer, "first", output };
 			auto result = firstComponents.createResult( m_writer, output );
 			auto firstLightMat = applyMaterial( "firstLightMat"
-				, passFlags, textureFlags, hasTextures
+				, flags
 				, textureConfigs, textureAnims, lightingModel, maps
 				, material, vertexColour
 				, firstComponents );
@@ -901,7 +822,7 @@ namespace castor3d::shader
 			}
 			FI;
 
-			FOR( m_writer, sdw::UInt, passIdx, 1_u, passIdx < material.passCount(), ++passIdx )
+			FOR( m_writer, sdw::UInt, passIdx, 1_u, passIdx < material.passCount() && passIdx < MaxPassLayers, ++passIdx )
 			{
 				passMultiplier = passMultipliers[passIdx / 4_u][passIdx % 4_u];
 
@@ -911,7 +832,7 @@ namespace castor3d::shader
 					auto curMaterial = m_writer.declLocale( "passMaterial"
 						, getMaterial( materialId + passIdx ) );
 					auto curLightMat = applyMaterial( "passLightMat"
-						, passFlags, textureFlags, hasTextures
+						, flags
 						, textureConfigs, textureAnims, lightingModel, maps
 						, curMaterial, vertexColour
 						, passComponents );
@@ -929,18 +850,14 @@ namespace castor3d::shader
 		}
 
 		return applyMaterial( "passLightMat"
-			, passFlags, textureFlags, hasTextures
+			, flags
 			, textureConfigs, textureAnims, lightingModel, maps
 			, material, vertexColour
 			, output );
 	}
 
 	std::unique_ptr< LightMaterial > Materials::blendMaterials( Utils & utils
-		, VkCompareOp alphaFunc
-		, PassFlags const & passFlags
-		, SubmeshFlags const & submeshFlags
-		, TextureFlags const & textureFlags
-		, bool hasTextures
+		, PipelineFlags const & flags
 		, shader::TextureConfigurations const & textureConfigs
 		, shader::TextureAnimations const & textureAnims
 		, shader::LightingModel & lightingModel
@@ -951,42 +868,16 @@ namespace castor3d::shader
 		, OpaqueBlendComponents & output )const
 	{
 		return mats::blendMaterialsT( m_writer, *this
-			, alphaFunc, true
-			, passFlags, submeshFlags, textureFlags, hasTextures
+			, true
+			, flags
 			, textureConfigs, textureAnims, lightingModel, maps
 			, materialId, passMultipliers, vertexColour
 			, output ).second;
 	}
 
-	std::unique_ptr< LightMaterial > Materials::blendMaterials( Utils & utils
-		, VkCompareOp alphaFunc
-		, PassFlags const & passFlags
-		, SubmeshFlags const & submeshFlags
-		, TextureFlagsArray const & textures
-		, bool hasTextures
-		, shader::TextureConfigurations const & textureConfigs
-		, shader::TextureAnimations const & textureAnims
-		, shader::LightingModel & lightingModel
-		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-		, sdw::UInt const & materialId
-		, sdw::Array< sdw::Vec4 > const & passMultipliers
-		, sdw::Vec3 const & vertexColour
-		, OpaqueBlendComponents & output )const
-	{
-		return blendMaterials( utils
-			, alphaFunc, passFlags, submeshFlags, merge( textures ), hasTextures
-			, textureConfigs, textureAnims, lightingModel, maps
-			, materialId, passMultipliers, vertexColour
-			, output );
-	}
-
 	std::pair< Material, std::unique_ptr< LightMaterial > > Materials::blendMaterials( Utils & utils
 		, bool opaque
-		, VkCompareOp alphaFunc
-		, PassFlags const & passFlags
-		, SubmeshFlags const & submeshFlags
-		, TextureFlags const & textureFlags
-		, bool hasTextures
+		, PipelineFlags const & flags
 		, shader::TextureConfigurations const & textureConfigs
 		, shader::TextureAnimations const & textureAnims
 		, shader::LightingModel & lightingModel
@@ -997,40 +888,15 @@ namespace castor3d::shader
 		, LightingBlendComponents & output )const
 	{
 		return mats::blendMaterialsT( m_writer, *this
-			, alphaFunc, opaque
-			, passFlags, submeshFlags, textureFlags, hasTextures
-			, textureConfigs, textureAnims, lightingModel, maps
-			, materialId, passMultipliers, vertexColour
-			, output );
-	}
-
-	std::pair< Material, std::unique_ptr< LightMaterial > > Materials::blendMaterials( Utils & utils
-		, bool opaque
-		, VkCompareOp alphaFunc
-		, PassFlags const & passFlags
-		, SubmeshFlags const & submeshFlags
-		, TextureFlagsArray const & textures
-		, bool hasTextures
-		, shader::TextureConfigurations const & textureConfigs
-		, shader::TextureAnimations const & textureAnims
-		, shader::LightingModel & lightingModel
-		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-		, sdw::UInt const & materialId
-		, sdw::Array< sdw::Vec4 > const & passMultipliers
-		, sdw::Vec3 const & vertexColour
-		, LightingBlendComponents & output )const
-	{
-		return blendMaterials( utils
-			, opaque, alphaFunc, passFlags, submeshFlags, merge( textures ), hasTextures
+			, opaque
+			, flags
 			, textureConfigs, textureAnims, lightingModel, maps
 			, materialId, passMultipliers, vertexColour
 			, output );
 	}
 
 	Material Materials::applyMaterial( std::string const & matName
-		, PassFlags const & passFlags
-		, TextureFlags const & textureFlags
-		, bool hasTextures
+		, PipelineFlags const & flags
 		, shader::TextureConfigurations const & textureConfigs
 		, shader::TextureAnimations const & textureAnims
 		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
@@ -1042,45 +908,43 @@ namespace castor3d::shader
 			, getMaterial( materialId ) );
 		output.opacity() = material.opacity();
 
-		if ( hasTextures
+		if ( maps.isEnabled()
 			&& textureConfigs.isEnabled()
-			&& checkFlag( textureFlags, TextureFlag::eOpacity ) )
+			&& flags.enableOpacity() )
 		{
-			for ( uint32_t index = 0u; index < textureFlags.size(); ++index )
+			FOR( m_writer, sdw::UInt, index, 0u, index < material.texturesCount() && index < MaxPassTextures, ++index )
 			{
-				auto name = castor::string::stringCast< char >( castor::string::toString( index ) );
-				auto id = m_writer.declLocale( "id" + name
+				auto id = m_writer.declLocale( "c3d_id"
 					, material.getTexture( index ) );
 
 				IF( m_writer, id > 0_u )
 				{
-					auto config = m_writer.declLocale( "config" + name
+					auto config = m_writer.declLocale( "c3d_config"
 						, textureConfigs.getTextureConfiguration( id ) );
 
 					IF( m_writer, config.isOpacity() )
 					{
-						auto anim = m_writer.declLocale( "anim" + name
+						auto anim = m_writer.declLocale( "c3d_anim"
 							, textureAnims.getTextureAnimation( id ) );
-						auto texCoord = m_writer.declLocale( "texCoord" + name
+						auto texCoord = m_writer.declLocale( "c3d_texCoord"
 							, output.texCoord0().xy() );
 						texCoord = utils.transformUV( config, anim, texCoord );
-						auto sampledOpacity = m_writer.declLocale( "sampled" + name
-							, utils.sampleMap( passFlags, maps[id - 1_u], texCoord ) );
+						auto sampledOpacity = m_writer.declLocale( "c3d_sampled"
+							, utils.sampleMap( flags, maps[id - 1_u], texCoord ) );
 						output.opacity() = config.getOpacity( sampledOpacity, output.opacity() );
 					}
 					FI;
 				}
 				FI;
 			}
+			ROF;
 		}
 
 		return material;
 	}
 
 	Material Materials::applyMaterial( std::string const & matName
-		, PassFlags const & passFlags
-		, TextureFlags const & textureFlags
-		, bool hasTextures
+		, PipelineFlags const & flags
 		, shader::TextureConfigurations const & textureConfigs
 		, shader::TextureAnimations const & textureAnims
 		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
@@ -1092,55 +956,53 @@ namespace castor3d::shader
 			, getMaterial( materialId ) );
 		output.opacity() = material.opacity();
 
-		if ( hasTextures && textureConfigs.isEnabled() )
+		if ( maps.isEnabled()
+			&& textureConfigs.isEnabled()
+			&& flags.hasGeometryMaps() )
 		{
-			if ( ( textureFlags & TextureFlag::eGeometry ) != 0 )
+			FOR( m_writer, sdw::UInt, index, 0u, index < material.texturesCount() && index < MaxPassTextures, ++index )
 			{
-				FOR( m_writer, sdw::UInt, index, 0u, index < material.texturesCount(), ++index )
+				auto id = m_writer.declLocale( "c3d_id"
+					, material.getTexture( index ) );
+
+				IF( m_writer, id > 0_u )
 				{
-					auto id = m_writer.declLocale( "c3d_id"
-						, material.getTexture( index ) );
+					auto config = m_writer.declLocale( "c3d_config"
+						, textureConfigs.getTextureConfiguration( id ) );
 
-					IF( m_writer, id > 0_u )
+					IF( m_writer, config.isGeometry() )
 					{
-						auto config = m_writer.declLocale( "config"
-							, textureConfigs.getTextureConfiguration( id ) );
-
-						IF( m_writer, config.isGeometry() )
-						{
-							auto anim = m_writer.declLocale( "anim"
-								, textureAnims.getTextureAnimation( id ) );
-							auto texcoord = m_writer.declLocale( "tex"
-								, textureConfigs.getTexcoord( config
-									, output.texCoord0()
-									, output.texCoord1()
-									, output.texCoord2()
-									, output.texCoord3() ) );
-							config.computeGeometryMapContribution( utils
-								, passFlags
-								, textureFlags
-								, anim
-								, maps[id - 1_u]
-								, texcoord
-								, output.opacity()
-								, output.normal()
-								, output.tangent()
-								, output.bitangent()
-								, output.tangentSpaceViewPosition()
-								, output.tangentSpaceFragPosition() );
-							textureConfigs.setTexcoord( config
-								, texcoord
+						auto anim = m_writer.declLocale( "c3d_anim"
+							, textureAnims.getTextureAnimation( id ) );
+						auto texcoord = m_writer.declLocale( "c3d_tex"
+							, textureConfigs.getTexcoord( config
 								, output.texCoord0()
 								, output.texCoord1()
 								, output.texCoord2()
-								, output.texCoord3() );
-						}
-						FI;
+								, output.texCoord3() ) );
+						config.computeGeometryMapContribution( utils
+							, flags
+							, anim
+							, maps[id - 1_u]
+							, texcoord
+							, output.opacity()
+							, output.normal()
+							, output.tangent()
+							, output.bitangent()
+							, output.tangentSpaceViewPosition()
+							, output.tangentSpaceFragPosition() );
+						textureConfigs.setTexcoord( config
+							, texcoord
+							, output.texCoord0()
+							, output.texCoord1()
+							, output.texCoord2()
+							, output.texCoord3() );
 					}
 					FI;
 				}
-				ROF;
+				FI;
 			}
+			ROF;
 		}
 
 		return material;
@@ -1148,9 +1010,7 @@ namespace castor3d::shader
 
 	std::pair< Material, std::unique_ptr< LightMaterial > > Materials::applyMaterial( std::string const & matName
 		, std::string const & lgtMatName
-		, PassFlags const & passFlags
-		, TextureFlags const & textureFlags
-		, bool hasTextures
+		, PipelineFlags const & flags
 		, shader::TextureConfigurations const & textureConfigs
 		, shader::TextureAnimations const & textureAnims
 		, shader::LightingModel & lightingModel
@@ -1165,9 +1025,7 @@ namespace castor3d::shader
 		{
 			return applyMaterial( matName
 				, lgtMatName
-				, passFlags
-				, textureFlags
-				, hasTextures
+				, flags
 				, textureConfigs
 				, textureAnims
 				, lightingModel
@@ -1186,11 +1044,11 @@ namespace castor3d::shader
 		lightMat->create( vertexColour
 			, material );
 
-		if ( hasTextures )
+		if ( maps.isEnabled()
+			&& textureConfigs.isEnabled() )
 		{
 			textureConfigs.computeGeometryMapContributions( utils
-				, passFlags
-				, textureFlags
+				, flags
 				, textureAnims
 				, maps
 				, material
@@ -1207,9 +1065,7 @@ namespace castor3d::shader
 	}
 
 	std::unique_ptr< LightMaterial > Materials::applyMaterial( std::string const & lgtMatName
-		, PassFlags const & passFlags
-		, TextureFlags const & textureFlags
-		, bool hasTextures
+		, PipelineFlags const & flags
 		, shader::TextureConfigurations const & textureConfigs
 		, shader::TextureAnimations const & textureAnims
 		, shader::LightingModel & lightingModel
@@ -1224,10 +1080,9 @@ namespace castor3d::shader
 		output.emissive() = vec3( material.emissive() );
 		output.opacity() = material.opacity();
 
-		if ( hasTextures )
+		if ( maps.isEnabled() )
 		{
-			lightingModel.computeMapContributions( passFlags
-				, textureFlags
+			lightingModel.computeMapContributions( flags
 				, textureConfigs
 				, textureAnims
 				, maps
@@ -1253,9 +1108,7 @@ namespace castor3d::shader
 
 	std::pair< Material, std::unique_ptr< LightMaterial > > Materials::applyMaterial( std::string const & matName
 		, std::string const & lgtMatName
-		, PassFlags const & passFlags
-		, TextureFlags const & textureFlags
-		, bool hasTextures
+		, PipelineFlags const & flags
 		, shader::TextureConfigurations const & textureConfigs
 		, shader::TextureAnimations const & textureAnims
 		, shader::LightingModel & lightingModel
@@ -1272,10 +1125,9 @@ namespace castor3d::shader
 		output.emissive() = vec3( material.emissive() );
 		output.opacity() = material.opacity();
 
-		if ( hasTextures )
+		if ( maps.isEnabled() )
 		{
-			lightingModel.computeMapContributions( passFlags
-				, textureFlags
+			lightingModel.computeMapContributions( flags
 				, textureConfigs
 				, textureAnims
 				, maps
@@ -1301,9 +1153,7 @@ namespace castor3d::shader
 
 	std::pair< Material, std::unique_ptr< LightMaterial > > Materials::applyMaterial( std::string const & matName
 		, std::string const & lgtMatName
-		, PassFlags const & passFlags
-		, TextureFlags const & textureFlags
-		, bool hasTextures
+		, PipelineFlags const & flags
 		, shader::TextureConfigurations const & textureConfigs
 		, shader::TextureAnimations const & textureAnims
 		, shader::LightingModel & lightingModel
@@ -1325,10 +1175,9 @@ namespace castor3d::shader
 		output.hasReflection() = material.hasReflection();
 		output.bwAccumulationOperator() = material.bwAccumulationOperator();
 
-		if ( hasTextures )
+		if ( maps.isEnabled() )
 		{
-			lightingModel.computeMapContributions( passFlags
-				, textureFlags
+			lightingModel.computeMapContributions( flags
 				, textureConfigs
 				, textureAnims
 				, maps

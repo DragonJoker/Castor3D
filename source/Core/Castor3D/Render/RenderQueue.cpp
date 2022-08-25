@@ -21,7 +21,6 @@ CU_ImplementCUSmartPtr( castor3d, RenderQueue )
 namespace castor3d
 {
 	RenderQueue::RenderQueue( RenderNodesPass & renderPass
-		, RenderMode mode
 		, SceneNode const * ignored )
 		: OwnedBy< RenderNodesPass >{ renderPass }
 		, m_culler{ getOwner()->getCuller() }
@@ -117,9 +116,9 @@ namespace castor3d
 		return getCuller().hasCulledNodes( *getOwner() );
 	}
 
-	RenderMode RenderQueue::getMode()const
+	RenderFilters RenderQueue::getFilters()const
 	{
-		return getOwner()->getRenderMode();
+		return getOwner()->getRenderFilters();
 	}
 
 	ashes::CommandBuffer const & RenderQueue::initCommandBuffer()

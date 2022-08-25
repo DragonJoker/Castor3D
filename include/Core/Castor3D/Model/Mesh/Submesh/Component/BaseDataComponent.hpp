@@ -18,10 +18,7 @@ namespace castor3d
 		, Submesh const & submesh
 		, castor::Point3fArray const & data );
 	C3D_API void gatherBaseDataBuffer( SubmeshFlag submeshData
-		, ProgramFlags const & programFlags
-		, SubmeshFlags const & submeshFlags
-		, ShaderFlags const & shaderFlags
-		, bool hasTextures
+		, PipelineFlags const & flags
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
 		, uint32_t & currentBinding
 		, uint32_t & currentLocation
@@ -47,11 +44,8 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::gather
 		 */
-		void gather( ShaderFlags const & shaderFlags
-			, ProgramFlags const & programFlags
-			, SubmeshFlags const & submeshFlags
+		void gather( PipelineFlags const & flags
 			, MaterialRPtr material
-			, TextureFlagsArray const & mask
 			, ashes::BufferCRefArray & buffers
 			, std::vector< uint64_t > & offsets
 			, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
@@ -59,10 +53,7 @@ namespace castor3d
 			, uint32_t & currentLocation )override
 		{
 			gatherBaseDataBuffer( SubmeshFlagT
-				, programFlags
-				, submeshFlags
-				, shaderFlags
-				, !mask.empty()
+				, flags
 				, layouts
 				, currentBinding
 				, currentLocation

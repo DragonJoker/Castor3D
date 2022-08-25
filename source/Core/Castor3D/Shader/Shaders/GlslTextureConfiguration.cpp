@@ -1,5 +1,6 @@
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 
+#include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
@@ -130,11 +131,11 @@ namespace castor3d
 			return opacity * getFloat( sampled, opaMask );
 		}
 
-		void TextureConfigData::applyDiffuse( TextureFlags const & textureFlags
+		void TextureConfigData::applyDiffuse( PipelineFlags const & flags
 			, sdw::Vec4 const & sampled
 			, sdw::Vec3 & diffuse )const
 		{
-			if ( checkFlag( textureFlags, TextureFlag::eDiffuse ) )
+			if ( flags.hasDiffuseMap() )
 			{
 				IF( *getWriter(), isDiffuse() )
 				{
@@ -144,11 +145,11 @@ namespace castor3d
 			}
 		}
 
-		void TextureConfigData::applyAlbedo( TextureFlags const & textureFlags
+		void TextureConfigData::applyAlbedo( PipelineFlags const & flags
 			, sdw::Vec4 const & sampled
 			, sdw::Vec3 & albedo )const
 		{
-			if ( checkFlag( textureFlags, TextureFlag::eAlbedo ) )
+			if ( flags.hasAlbedoMap() )
 			{
 				IF( *getWriter(), isAlbedo() )
 				{
@@ -158,11 +159,11 @@ namespace castor3d
 			}
 		}
 
-		void TextureConfigData::applyEmissive( TextureFlags const & textureFlags
+		void TextureConfigData::applyEmissive( PipelineFlags const & flags
 			, sdw::Vec4 const & sampled
 			, sdw::Vec3 & emissive )const
 		{
-			if ( checkFlag( textureFlags, TextureFlag::eEmissive ) )
+			if ( flags.hasEmissiveMap() )
 			{
 				IF( *getWriter(), isEmissive() )
 				{
@@ -172,11 +173,11 @@ namespace castor3d
 			}
 		}
 
-		void TextureConfigData::applySpecular( TextureFlags const & textureFlags
+		void TextureConfigData::applySpecular( PipelineFlags const & flags
 			, sdw::Vec4 const & sampled
 			, sdw::Vec3 & specular )const
 		{
-			if ( checkFlag( textureFlags, TextureFlag::eSpecular ) )
+			if ( flags.hasSpecularMap() )
 			{
 				IF( *getWriter(), isSpecular() )
 				{
@@ -186,11 +187,11 @@ namespace castor3d
 			}
 		}
 
-		void TextureConfigData::applyMetalness( TextureFlags const & textureFlags
+		void TextureConfigData::applyMetalness( PipelineFlags const & flags
 			, sdw::Vec4 const & sampled
 			, sdw::Float & metalness )const
 		{
-			if ( checkFlag( textureFlags, TextureFlag::eMetalness ) )
+			if ( flags.hasMetalnessMap() )
 			{
 				IF( *getWriter(), isMetalness() )
 				{
@@ -200,11 +201,11 @@ namespace castor3d
 			}
 		}
 
-		void TextureConfigData::applyShininess( TextureFlags const & textureFlags
+		void TextureConfigData::applyShininess( PipelineFlags const & flags
 			, sdw::Vec4 const & sampled
 			, sdw::Float & shininess )const
 		{
-			if ( checkFlag( textureFlags, TextureFlag::eShininess ) )
+			if ( flags.hasShininessMap() )
 			{
 				IF( *getWriter(), isShininess() )
 				{
@@ -216,11 +217,11 @@ namespace castor3d
 			}
 		}
 
-		void TextureConfigData::applyRoughness( TextureFlags const & textureFlags
+		void TextureConfigData::applyRoughness( PipelineFlags const & flags
 			, sdw::Vec4 const & sampled
 			, sdw::Float & roughness )const
 		{
-			if ( checkFlag( textureFlags, TextureFlag::eRoughness ) )
+			if ( flags.hasRoughnessMap() )
 			{
 				IF( *getWriter(), isRoughness() )
 				{
@@ -230,11 +231,28 @@ namespace castor3d
 			}
 		}
 
-		void TextureConfigData::applyOpacity( TextureFlags const & textureFlags
+		void TextureConfigData::applyGlossiness( PipelineFlags const & flags
+			, sdw::Vec4 const & sampled
+			, sdw::Float & roughness )const
+		{
+			if ( flags.hasGlossinessMap() )
+			{
+				IF( *getWriter(), isGlossiness() )
+				{
+					auto gloss = getWriter()->declLocale( "gloss"
+						, LightMaterial::computeGlossiness( roughness ) );
+					gloss = getGlossiness( sampled, gloss );
+					roughness = LightMaterial::computeRoughness( gloss );
+				}
+				FI;
+			}
+		}
+
+		void TextureConfigData::applyOpacity( PipelineFlags const & flags
 			, sdw::Vec4 const & sampled
 			, sdw::Float & opacity )const
 		{
-			if ( checkFlag( textureFlags, TextureFlag::eOpacity ) )
+			if ( flags.enableOpacity() )
 			{
 				IF( *getWriter(), isOpacity() )
 				{
@@ -244,12 +262,13 @@ namespace castor3d
 			}
 		}
 
-		void TextureConfigData::applyNormal( TextureFlags const & textureFlags
+		void TextureConfigData::applyNormal( PipelineFlags const & flags
 			, sdw::Vec4 const & sampled
 			, sdw::Mat3 const & tbn
 			, sdw::Vec3 & normal )const
 		{
-			if ( checkFlag( textureFlags, TextureFlag::eNormal ) )
+			if ( flags.hasNormalMap()
+				&& flags.enableTangentSpace() )
 			{
 				IF( *getWriter(), isNormal() )
 				{
@@ -262,14 +281,15 @@ namespace castor3d
 			}
 		}
 
-		void TextureConfigData::applyNormal( TextureFlags const & textureFlags
+		void TextureConfigData::applyNormal( PipelineFlags const & flags
 			, sdw::Vec4 const & sampled
 			, sdw::Vec3 const & normal
 			, sdw::Vec3 const & tangent
 			, sdw::Vec3 const & bitangent
 			, sdw::Vec3 & result )const
 		{
-			if ( checkFlag( textureFlags, TextureFlag::eNormal ) )
+			if ( flags.hasNormalMap()
+				&& flags.enableNormal() )
 			{
 				IF( *getWriter(), isNormal() )
 				{
@@ -282,11 +302,11 @@ namespace castor3d
 			}
 		}
 
-		void TextureConfigData::applyHeight( TextureFlags const & textureFlags
+		void TextureConfigData::applyHeight( PipelineFlags const & flags
 			, sdw::Vec4 const & sampled
 			, sdw::Float & height )const
 		{
-			if ( checkFlag( textureFlags, TextureFlag::eHeight ) )
+			if ( flags.hasHeightMap() )
 			{
 				IF( *getWriter(), isHeight() )
 				{
@@ -296,11 +316,11 @@ namespace castor3d
 			}
 		}
 
-		void TextureConfigData::applyOcclusion( TextureFlags const & textureFlags
+		void TextureConfigData::applyOcclusion( PipelineFlags const & flags
 			, sdw::Vec4 const & sampled
 			, sdw::Float & occlusion )const
 		{
-			if ( checkFlag( textureFlags, TextureFlag::eOcclusion ) )
+			if ( flags.hasOcclusionMap() )
 			{
 				IF( *getWriter(), isOcclusion() )
 				{
@@ -310,11 +330,11 @@ namespace castor3d
 			}
 		}
 
-		void TextureConfigData::applyTransmittance( TextureFlags const & textureFlags
+		void TextureConfigData::applyTransmittance( PipelineFlags const & flags
 			, sdw::Vec4 const & sampled
 			, sdw::Float & transmittance )const
 		{
-			if ( checkFlag( textureFlags, TextureFlag::eTransmittance ) )
+			if ( flags.hasTransmittanceMap() )
 			{
 				IF( *getWriter(), isTransmittance() )
 				{

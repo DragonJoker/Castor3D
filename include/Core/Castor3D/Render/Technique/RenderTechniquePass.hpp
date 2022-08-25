@@ -19,9 +19,12 @@ namespace castor3d
 	{
 		RenderTechniquePassDesc( bool environment
 			, SsaoConfig const & ssaoConfig )
-			: m_environment{ environment }
-			, m_ssaoConfig{ ssaoConfig }
+			: m_ssaoConfig{ ssaoConfig }
 		{
+			if ( environment )
+			{
+				addFlag( m_shaderFlags, ShaderFlag::eEnvironmentMapping );
+			}
 		}
 		/**
 		 *\~english
@@ -119,11 +122,40 @@ namespace castor3d
 		 */
 		RenderTechniquePassDesc & hasVelocity( bool value )
 		{
-			m_hasVelocity = value;
+			if ( value )
+			{
+				addFlag( m_shaderFlags, ShaderFlag::eVelocity );
+			}
+			else
+			{
+				remFlag( m_shaderFlags, ShaderFlag::eVelocity );
+			}
+
+			return *this;
+		}
+		/**
+		 *\~english
+		 *\param[in]	value	\p true if the pass writes to velocity texture.
+		 *\~french
+		 *\param[in]	value	\p true si la passe écrit dans la texture de vélocité.
+		 */
+		RenderTechniquePassDesc & addShaderFlag( ShaderFlags value )
+		{
+			m_shaderFlags |= value;
+			return *this;
+		}
+		/**
+		 *\~english
+		 *\param[in]	value	\p true if the pass writes to velocity texture.
+		 *\~french
+		 *\param[in]	value	\p true si la passe écrit dans la texture de vélocité.
+		 */
+		RenderTechniquePassDesc & shaderFlags( ShaderFlags value )
+		{
+			m_shaderFlags = value;
 			return *this;
 		}
 
-		bool m_environment;
 		SsaoConfig const & m_ssaoConfig;
 		Texture const * m_ssao{};
 		LpvGridConfigUbo const * m_lpvConfigUbo{};
@@ -133,7 +165,11 @@ namespace castor3d
 		LightVolumePassResultArray const * m_llpvResult{};
 		Texture const * m_vctFirstBounce{};
 		Texture const * m_vctSecondaryBounce{};
-		bool m_hasVelocity{};
+		ShaderFlags m_shaderFlags{ ShaderFlag::eWorldSpace
+			| ShaderFlag::eViewSpace
+			| ShaderFlag::eTangentSpace
+			| ShaderFlag::eLighting
+			| ShaderFlag::eOpacity };
 	};
 
 	class RenderTechniquePass
@@ -155,27 +191,43 @@ namespace castor3d
 	public:
 		C3D_API virtual ~RenderTechniquePass() = default;
 		/**
-		 *\~english
-		 *\brief		Visitor acceptance function.
-		 *\param		visitor	The ... visitor.
-		 *\~french
-		 *\brief		Fonction d'acceptation de visiteur.
-		 *\param		visitor	Le ... visiteur.
+		 *\copydoc	RenderNodesPass::accept
 		 */
-		virtual void accept( RenderTechniqueVisitor & visitor )
+		C3D_API virtual void accept( RenderTechniqueVisitor & visitor )
 		{
 		}
 		/**
-		 *\~english
-		 *\brief			Updates the render pass, CPU wise.
-		 *\param[in, out]	updater	The update data.
-		 *\~french
-		 *\brief			Met à jour la passe de rendu, au niveau CPU.
-		 *\param[in, out]	updater	Les données d'update.
+		 *\copydoc	RenderNodesPass::accept
 		 */
-		virtual void update( CpuUpdater & updater )
+		C3D_API virtual void update( CpuUpdater & updater )
 		{
 		}
+		/**
+		 *\copydoc	RenderNodesPass::createPipelineFlags
+		 */
+		C3D_API virtual PipelineFlags createPipelineFlags( BlendMode colourBlendMode
+			, BlendMode alphaBlendMode
+			, PassFlags passFlags
+			, RenderPassTypeID renderPassTypeID
+			, PassTypeID passTypeID
+			, VkCompareOp alphaFunc
+			, VkCompareOp blendAlphaFunc
+			, TextureFlagsArray const & textures
+			, SubmeshFlags const & submeshFlags
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags
+			, VkPrimitiveTopology topology
+			, bool isFrontCulled
+			, uint32_t passLayerIndex
+			, GpuBufferOffsetT< castor::Point4f > const & morphTargets )const = 0;
+		/**
+		 *\copydoc	RenderNodesPass::areValidPassFlags
+		 */
+		C3D_API virtual bool areValidPassFlags( PassFlags const & passFlags )const = 0;
+		/**
+		 *\copydoc	RenderNodesPass::getShaderFlags
+		 */
+		C3D_API virtual ShaderFlags getShaderFlags()const = 0u;
 		/**
 		*\~english
 		*name
@@ -247,23 +299,45 @@ namespace castor3d
 
 	public:
 		/**
-		 *\~english
-		 *\brief		Visitor acceptance function.
-		 *\param		visitor	The ... visitor.
-		 *\~french
-		 *\brief		Fonction d'acceptation de visiteur.
-		 *\param		visitor	Le ... visiteur.
+		 *\copydoc	RenderNodesPass::accept
 		 */
 		C3D_API void accept( RenderTechniqueVisitor & visitor )override;
 		/**
-		 *\~english
-		 *\brief			Updates the render pass, CPU wise.
-		 *\param[in, out]	updater	The update data.
-		 *\~french
-		 *\brief			Met à jour la passe de rendu, au niveau CPU.
-		 *\param[in, out]	updater	Les données d'update.
+		 *\copydoc	RenderNodesPass::accept
 		 */
 		C3D_API void update( CpuUpdater & updater )override;
+		/**
+		 *\copydoc	RenderNodesPass::createPipelineFlags
+		 */
+		C3D_API PipelineFlags createPipelineFlags( BlendMode colourBlendMode
+			, BlendMode alphaBlendMode
+			, PassFlags passFlags
+			, RenderPassTypeID renderPassTypeID
+			, PassTypeID passTypeID
+			, VkCompareOp alphaFunc
+			, VkCompareOp blendAlphaFunc
+			, TextureFlagsArray const & textures
+			, SubmeshFlags const & submeshFlags
+			, ProgramFlags const & programFlags
+			, SceneFlags const & sceneFlags
+			, VkPrimitiveTopology topology
+			, bool isFrontCulled
+			, uint32_t passLayerIndex
+			, GpuBufferOffsetT< castor::Point4f > const & morphTargets )const override;
+		/**
+		 *\copydoc	RenderNodesPass::getShaderFlags
+		 */
+		C3D_API ShaderFlags getShaderFlags()const override
+		{
+			return m_shaderFlags;
+		}
+		/**
+		 *\copydoc	RenderNodesPass::areValidPassFlags
+		 */
+		C3D_API bool areValidPassFlags( PassFlags const & passFlags )const override
+		{
+			return RenderNodesPass::areValidPassFlags( passFlags );
+		}
 		/**
 		*\~english
 		*name
@@ -273,14 +347,6 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		C3D_API ShaderFlags getShaderFlags()const override
-		{
-			return ShaderFlag::eWorldSpace
-				| ShaderFlag::eTangentSpace
-				| ( m_hasVelocity ? ShaderFlag::eVelocity : ShaderFlag::eNone )
-				| ShaderFlag::eViewSpace;
-		}
-
 		Engine * getEngine()const
 		{
 			return RenderTechniquePass::getEngine();
@@ -333,8 +399,7 @@ namespace castor3d
 
 	protected:
 		Camera * m_camera{ nullptr };
-		bool m_environment{ false };
-		bool m_hasVelocity{ false };
+		ShaderFlags m_shaderFlags{};
 		SsaoConfig m_ssaoConfig;
 		Texture const * m_ssao;
 		LpvGridConfigUbo const * m_lpvConfigUbo;

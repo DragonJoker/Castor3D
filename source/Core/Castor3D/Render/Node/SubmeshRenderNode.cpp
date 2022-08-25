@@ -64,16 +64,10 @@ namespace castor3d
 		return data.getProgramFlags( *getMaterial() );
 	}
 
-	GeometryBuffers const & SubmeshRenderNode::getGeometryBuffers( ShaderFlags const & shaderFlags
-		, SubmeshFlags const & submeshFlags
-		, ProgramFlags const & programFlags
-		, TextureFlagsArray const & texturesMask )const
+	GeometryBuffers const & SubmeshRenderNode::getGeometryBuffers( PipelineFlags const & flags )const
 	{
 		return data.getGeometryBuffers( *this
-			, shaderFlags
-			, programFlags
-			, submeshFlags
-			, texturesMask );
+			, flags );
 	}
 
 	void SubmeshRenderNode::createMeshletDescriptorSet()const

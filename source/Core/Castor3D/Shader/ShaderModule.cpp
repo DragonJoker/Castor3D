@@ -12,15 +12,6 @@ namespace castor3d
 {
 	//*************************************************************************
 
-	bool isShadowMapProgram( ProgramFlags const & flags )
-	{
-		return checkFlag( flags, ProgramFlag::eShadowMapDirectional )
-			|| checkFlag( flags, ProgramFlag::eShadowMapSpot )
-			|| checkFlag( flags, ProgramFlag::eShadowMapPoint );
-	}
-
-	//*************************************************************************
-
 	ShaderModule::ShaderModule( ShaderModule && rhs )noexcept
 		: stage{ rhs.stage }
 		, name{ std::move( rhs.name ) }

@@ -923,12 +923,10 @@ namespace castor3d
 				renderPass.accept( visitor );
 			} );
 
-		if ( !checkFlag( visitor.getFlags().passFlags, PassFlag::eAlphaBlending ) )
+		if ( m_opaquePass
+			&& m_opaquePass->areValidPassFlags( visitor.getFlags().m_passFlags ) )
 		{
-			if ( m_opaquePass )
-			{
-				m_opaquePass->accept( visitor );
-			}
+			m_opaquePass->accept( visitor );
 
 #if C3D_UseDeferredRendering
 			if ( m_deferredRendering )
@@ -944,12 +942,10 @@ namespace castor3d
 				renderPass.accept( visitor );
 			} );
 
-		if ( checkFlag( visitor.getFlags().passFlags, PassFlag::eAlphaBlending ) )
+		if ( m_transparentPass
+			&& m_transparentPass->areValidPassFlags( visitor.getFlags().m_passFlags ) )
 		{
-			if ( m_transparentPass )
-			{
-				m_transparentPass->accept( visitor );
-			}
+			m_transparentPass->accept( visitor );
 
 #if C3D_UseWeightedBlendedRendering
 			if ( m_weightedBlendRendering )
@@ -1145,7 +1141,8 @@ namespace castor3d
 						.implicitAction( depthObjIt->view(), crg::RecordContext::clearAttachment( *depthObjIt ) )
 						.implicitAction( dataIt->view(), crg::RecordContext::clearAttachment( *dataIt ) )
 						.implicitAction( velocityIt->view(), crg::RecordContext::clearAttachment( *velocityIt ) )
-					, RenderTechniquePassDesc{ false, getSsaoConfig() } );
+					, RenderTechniquePassDesc{ false, getSsaoConfig() }
+						.hasVelocity( true ) );
 				m_visibilityPass = res.get();
 				getEngine()->registerTimer( framePass.getFullName()
 					, res->getTimer() );

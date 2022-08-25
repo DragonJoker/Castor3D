@@ -138,11 +138,8 @@ namespace castor3d
 	{
 		using namespace sdw;
 		FragmentWriter writer;
-		auto textureFlags = filterTexturesFlags( flags.textures );
-		bool hasTextures = flags.hasTextures() && !textureFlags.empty();
-		bool hasDiffuseGI = checkFlag( flags.sceneFlags, SceneFlag::eVoxelConeTracing )
-			|| checkFlag( flags.sceneFlags, SceneFlag::eLpvGI )
-			|| checkFlag( flags.sceneFlags, SceneFlag::eLayeredLpvGI );
+		bool enableTextures = flags.enableTextures();
+		bool hasDiffuseGI = flags.hasDiffuseGI();
 
 		shader::Utils utils{ writer };
 		shader::CookTorranceBRDF cookTorrance{ writer, utils };
@@ -162,11 +159,11 @@ namespace castor3d
 		shader::TextureConfigurations textureConfigs{ writer
 			, uint32_t( GlobalBuffersIdx::eTexConfigs )
 			, RenderPipeline::eBuffers
-			, hasTextures };
+			, enableTextures };
 		shader::TextureAnimations textureAnims{ writer
 			, uint32_t( GlobalBuffersIdx::eTexAnims )
 			, RenderPipeline::eBuffers
-			, hasTextures };
+			, enableTextures };
 		auto index = uint32_t( GlobalBuffersIdx::eCount );
 		auto lightsIndex = index++;
 		auto c3d_mapOcclusion = writer.declCombinedImg< FImg2DR32 >( "c3d_mapOcclusion"
@@ -181,7 +178,7 @@ namespace castor3d
 			, getScene().getLightingModel()
 			, lightsIndex
 			, RenderPipeline::eBuffers
-			, shader::ShadowOptions{ flags.sceneFlags, true, false }
+			, shader::ShadowOptions{ flags.getShadowFlags(), true, false }
 			, nullptr
 			, index
 			, RenderPipeline::eBuffers
@@ -197,12 +194,12 @@ namespace castor3d
 		shader::GlobalIllumination indirect{ writer, utils };
 		indirect.declare( index
 			, RenderPipeline::eBuffers
-			, flags.sceneFlags );
+			, flags.getGlobalIlluminationFlags() );
 
 		auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
 			, 0u
 			, RenderPipeline::eTextures
-			, hasTextures ) );
+			, enableTextures ) );
 
 		sdw::PushConstantBuffer pcb{ writer, "DrawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
@@ -214,12 +211,7 @@ namespace castor3d
 		auto pxl_velocity( writer.declOutput< Vec2 >( "pxl_velocity", 2 ) );
 
 		writer.implementMainT< shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer
-				, flags.submeshFlags
-				, flags.programFlags
-				, getShaderFlags()
-				, textureFlags
-				, flags.passFlags
-				, hasTextures }
+				, flags }
 			, FragmentOut{ writer }
 			, [&]( FragmentInT< shader::FragmentSurfaceT > in
 				, FragmentOut out )
@@ -250,11 +242,7 @@ namespace castor3d
 					, 1.0_f }; // acc
 				auto mats = materials.blendMaterials( utils
 					, false
-					, flags.blendAlphaFunc
-					, flags.passFlags
-					, flags.submeshFlags
-					, flags.textures
-					, hasTextures
+					, flags
 					, textureConfigs
 					, textureAnims
 					, *lightingModel
@@ -314,10 +302,10 @@ namespace castor3d
 
 					auto indirectOcclusion = writer.declLocale( "indirectOcclusion"
 						, 1.0_f );
-					auto lightIndirectDiffuse = indirect.computeDiffuse( flags.sceneFlags
+					auto lightIndirectDiffuse = indirect.computeDiffuse( flags.getGlobalIlluminationFlags()
 						, surface
 						, indirectOcclusion );
-					auto lightIndirectSpecular = indirect.computeSpecular( flags.sceneFlags
+					auto lightIndirectSpecular = indirect.computeSpecular( flags.getGlobalIlluminationFlags()
 						, worldEye
 						, c3d_sceneData.getPosToCamera( surface.worldPosition )
 						, surface
@@ -326,7 +314,7 @@ namespace castor3d
 						, lightIndirectDiffuse.w()
 						, c3d_mapBrdf );
 					auto indirectAmbient = writer.declLocale( "indirectAmbient"
-						, lightMat->getIndirectAmbient( indirect.computeAmbient( flags.sceneFlags, lightIndirectDiffuse.xyz() ) ) );
+						, lightMat->getIndirectAmbient( indirect.computeAmbient( flags.getGlobalIlluminationFlags(), lightIndirectDiffuse.xyz() ) ) );
 					auto indirectDiffuse = writer.declLocale( "indirectDiffuse"
 						, ( hasDiffuseGI
 							? cookTorrance.computeDiffuse( lightIndirectDiffuse.xyz()

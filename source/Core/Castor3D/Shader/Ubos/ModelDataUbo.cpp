@@ -10,10 +10,10 @@ namespace castor3d::shader
 	castor::String const ModelIndices::BufferName = cuT( "ModelsIndices" );
 	castor::String const ModelIndices::DataName = cuT( "c3d_modelsData" );
 
-	sdw::Mat4 ModelIndices::getPrvModelMtx( ProgramFlags programsFlags
+	sdw::Mat4 ModelIndices::getPrvModelMtx( PipelineFlags const & flags
 		, sdw::Mat4 const & curModelMatrix )const
 	{
-		if ( checkFlag( programsFlags, ProgramFlag::eInstantiation ) )
+		if ( flags.enableInstantiation() )
 		{
 			return curModelMatrix;
 		}
@@ -21,10 +21,10 @@ namespace castor3d::shader
 		return prvMtxModel();
 	}
 
-	sdw::Mat3 ModelIndices::getNormalMtx( SubmeshFlags submeshFlags
+	sdw::Mat3 ModelIndices::getNormalMtx( bool hasSkin
 		, sdw::Mat4 const & curModelMatrix )const
 	{
-		if ( checkFlag( submeshFlags, SubmeshFlag::eSkin ) )
+		if ( hasSkin )
 		{
 			return transpose( inverse( mat3( curModelMatrix ) ) );
 		}
@@ -32,10 +32,11 @@ namespace castor3d::shader
 		return mat3( mtxNormal() );
 	}
 
-	sdw::Mat3 ModelIndices::getNormalMtx( ProgramFlags programsFlags
+	sdw::Mat3 ModelIndices::getNormalMtx( PipelineFlags const & flags
 		, sdw::Mat4 const & curModelMatrix )const
 	{
-		if ( checkFlag( programsFlags, ProgramFlag::eInstantiation ) )
+		if ( flags.enableInstantiation()
+			|| ( flags.hasSkinData() && !flags.hasWorldPosInputs() ) )
 		{
 			return transpose( inverse( mat3( curModelMatrix ) ) );
 		}
@@ -63,10 +64,10 @@ namespace castor3d::shader
 		return prvMtxModel() * pos;
 	}
 
-	sdw::Mat4 ModelIndices::getCurModelMtx( ProgramFlags programsFlags
+	sdw::Mat4 ModelIndices::getCurModelMtx( PipelineFlags const & flags
 		, sdw::Mat4 const & transform )const
 	{
-		if ( checkFlag( programsFlags, ProgramFlag::eInstantiation ) )
+		if ( flags.enableInstantiation() )
 		{
 			return transform;
 		}

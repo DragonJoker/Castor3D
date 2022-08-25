@@ -48,12 +48,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::getShaderFlags
 		 */
-		C3D_API ShaderFlags getShaderFlags()const override
-		{
-			return ShaderFlag::eWorldSpace
-				| ShaderFlag::eTangentSpace
-				| ShaderFlag::eVelocity;
-		}
+		C3D_API ShaderFlags getShaderFlags()const override;
 
 	private:
 		PassFlags doAdjustPassFlags( PassFlags flags )const override;

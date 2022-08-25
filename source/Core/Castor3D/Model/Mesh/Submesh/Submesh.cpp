@@ -28,24 +28,21 @@ namespace castor3d
 	namespace smsh
 	{
 		static size_t hash( SubmeshRenderNode const & node
-			, ShaderFlags const & shaderFlags
-			, ProgramFlags const & programFlags
-			, SubmeshFlags const & submeshFlags
-			, TextureFlagsArray const & mask )
+			, PipelineFlags const & flags )
 		{
 			size_t result = node.data.isDynamic()
 				? std::hash< Geometry const * >{}( &node.instance )
 				: std::hash< MaterialRPtr >{}( node.pass->getOwner() );
 
-			for ( auto const & flagId : mask )
-			{
-				result = castor::hashCombine( result, flagId.id );
-				result = castor::hashCombine( result, flagId.flags.value() );
-			}
+			//for ( auto const & flagId : flags.m_texturesFlags )
+			//{
+			//	result = castor::hashCombine( result, flagId.id );
+			//	result = castor::hashCombine( result, flagId.flags.value() );
+			//}
 
-			result = castor::hashCombine( result, shaderFlags.value() );
-			result = castor::hashCombine( result, programFlags.value() );
-			result = castor::hashCombine( result, submeshFlags.value() );
+			result = castor::hashCombine( result, flags.m_shaderFlags.value() );
+			result = castor::hashCombine( result, flags.m_programFlags.value() );
+			result = castor::hashCombine( result, flags.m_submeshFlags.value() );
 			return result;
 		}
 
@@ -301,6 +298,7 @@ namespace castor3d
 
 	VkDeviceSize Submesh::getVertexOffset( Geometry const & geometry )const
 	{
+		CU_Require( m_sourceBufferOffset );
 		return m_sourceBufferOffset
 			? getFinalBufferOffsets( geometry ).getFirstVertex< castor::Point4f >()
 			: 0u;
@@ -308,6 +306,7 @@ namespace castor3d
 
 	VkDeviceSize Submesh::getIndexOffset()const
 	{
+		CU_Require( m_sourceBufferOffset );
 		return m_sourceBufferOffset
 			? m_sourceBufferOffset.getFirstIndex< uint32_t >()
 			: 0u;
@@ -628,16 +627,9 @@ namespace castor3d
 	}
 
 	GeometryBuffers const & Submesh::getGeometryBuffers( SubmeshRenderNode const & node
-		, ShaderFlags const & shaderFlags
-		, ProgramFlags const & programFlags
-		, SubmeshFlags const & submeshFlags
-		, TextureFlagsArray const & mask )const
+		, PipelineFlags const & flags )const
 	{
-		auto key = smsh::hash( node
-			, shaderFlags
-			, programFlags
-			, submeshFlags
-			, mask );
+		auto key = smsh::hash( node, flags );
 		auto it = m_geometryBuffers.find( key );
 
 		if ( it == m_geometryBuffers.end() )
@@ -650,11 +642,8 @@ namespace castor3d
 
 			for ( auto & component : m_components )
 			{
-				component.second->gather( shaderFlags
-					, programFlags
-					, submeshFlags
+				component.second->gather( flags
 					, node.pass->getOwner()
-					, mask
 					, buffers
 					, offsets
 					, layouts

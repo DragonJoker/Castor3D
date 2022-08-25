@@ -23,7 +23,7 @@ namespace castor3d
 			, uint32_t & currentLocation )
 		{
 			ashes::VkVertexInputBindingDescriptionArray bindings{ { currentBinding
-				, sizeof( castor::Point4f ), VK_VERTEX_INPUT_RATE_VERTEX } };
+				, sizeof( castor::Point4ui ), VK_VERTEX_INPUT_RATE_VERTEX } };
 			ashes::VkVertexInputAttributeDescriptionArray attributes{ 1u, { currentLocation++
 				, currentBinding
 				, VK_FORMAT_R32G32B32A32_UINT
@@ -65,18 +65,15 @@ namespace castor3d
 	{
 	}
 
-	void PassMasksComponent::gather( ShaderFlags const & shaderFlags
-		, ProgramFlags const & programFlags
-		, SubmeshFlags const & submeshFlags
+	void PassMasksComponent::gather( PipelineFlags const & flags
 		, MaterialRPtr material
-		, TextureFlagsArray const & mask
 		, ashes::BufferCRefArray & buffers
 		, std::vector< uint64_t > & offsets
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
 		, uint32_t & currentBinding
 		, uint32_t & currentLocation )
 	{
-		if ( checkFlag( submeshFlags, SubmeshFlag::ePassMasks ) )
+		if ( flags.enablePassMasks() )
 		{
 			auto hash = std::hash< uint32_t >{}( currentBinding );
 			hash = castor::hashCombine( hash, currentLocation );

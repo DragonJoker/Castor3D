@@ -31,7 +31,8 @@ namespace castor3d
 			eTextures,
 			eBuffers,
 			eMeshBuffers,
-			CU_EnumBounds( Descriptor, eBuffers )
+			eVertexBuffers,
+			CU_EnumBounds( Descriptor, eTextures )
 #pragma clang pop
 		};
 

@@ -55,10 +55,10 @@ namespace castor3d::shader
 		C3D_API sdw::Float powder( sdw::Float const d );
 		C3D_API sdw::Float powder( sdw::Float const d
 			, sdw::Float const cosTheta );
-		C3D_API sdw::Vec4 sampleMap( PassFlags const & passFlags
+		C3D_API sdw::Vec4 sampleMap( PipelineFlags const & flags
 			, sdw::CombinedImage2DRgba32 const map
 			, sdw::Vec2 const texCoords );
-		C3D_API sdw::Vec4 sampleMap( PassFlags const & passFlags
+		C3D_API sdw::Vec4 sampleMap( PipelineFlags const & flags
 			, sdw::CombinedImage2DRgba32 const map
 			, DerivTex const texCoords );
 		C3D_API sdw::RetVec2 transformUV( TextureConfigData const & config

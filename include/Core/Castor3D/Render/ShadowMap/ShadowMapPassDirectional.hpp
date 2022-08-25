@@ -62,13 +62,6 @@ namespace castor3d
 		 */
 		C3D_API void update( CpuUpdater & updater )override;
 
-		ShaderFlags getShaderFlags()const override
-		{
-			return ( m_needsRsm
-				? ( ShaderFlag::eTangentSpace | ShaderFlag::eWorldSpace )
-				: ShaderFlag::eNone );
-		}
-
 	private:
 		void doUpdateUbos( CpuUpdater & updater )override;
 		void doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const override;
@@ -80,6 +73,11 @@ namespace castor3d
 		ProgramFlags doAdjustProgramFlags( ProgramFlags flags )const override;
 		ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const override;
 		ShaderPtr doGetPixelShaderSource( PipelineFlags const & flags )const override;
+
+		ShaderFlags doGetShaderFlags()const override
+		{
+			return ShaderFlag::eShadowMapDirectional;
+		}
 
 	public:
 		C3D_API static castor::String const Type;

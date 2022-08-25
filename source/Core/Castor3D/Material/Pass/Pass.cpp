@@ -881,8 +881,7 @@ namespace castor3d
 	void Pass::doUpdateAlphaFlags()
 	{
 		updateFlag( PassFlag::eAlphaBlending, hasAlphaBlending() );
-		updateFlag( PassFlag::eAlphaTest, hasAlphaTest() );
-		updateFlag( PassFlag::eBlendAlphaTest, hasBlendAlphaTest() );
+		updateFlag( PassFlag::eAlphaTest, hasAlphaTest() || hasBlendAlphaTest() );
 	}
 
 	void Pass::doUpdateTextureFlags()

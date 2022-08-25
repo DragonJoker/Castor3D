@@ -1,5 +1,6 @@
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 
+#include "Castor3D/Limits.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
@@ -10,8 +11,7 @@ namespace castor3d
 	{
 		template< typename TexcoordT >
 		void TextureConfigData::computeGeometryMapContribution( Utils & utils
-			, PassFlags const & passFlags
-			, TextureFlags const & textureFlags
+			, PipelineFlags const & flags
 			, shader::TextureAnimData const & anim
 			, sdw::CombinedImage2DRgba32 const & map
 			, TexcoordT & texCoords
@@ -23,50 +23,16 @@ namespace castor3d
 			auto texCoord = writer.declLocale( "c3d_texCoord"
 				, toUv( texCoords ) );
 			transformUV( utils, anim, texCoord );
+			applyParallax( utils,  flags, map, texCoords, texCoord, tangentSpaceViewPosition, tangentSpaceFragPosition );
 
-			if ( checkFlag( textureFlags, TextureFlag::eHeight )
-				&& ( checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingOne )
-					|| checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingRepeat ) ) )
-			{
-				IF( writer, isHeight() )
-				{
-					utils.parallaxMapping( texCoord
-						, normalize( tangentSpaceViewPosition - tangentSpaceFragPosition )
-						, map
-						, *this );
-					setUv( texCoords, texCoord );
-
-					if ( checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingOne ) )
-					{
-						IF( writer, getUv( texCoords ).x() > 1.0_f
-							|| getUv( texCoords ).y() > 1.0_f
-							|| getUv( texCoords ).x() < 0.0_f
-							|| getUv( texCoords ).y() < 0.0_f )
-						{
-							writer.demote();
-						}
-						FI;
-					}
-				}
-				FI;
-			}
-
-			if ( checkFlag( textureFlags, TextureFlag::eOpacity ) )
-			{
-				IF( *getWriter(), isOpacity() )
-				{
-					auto sampled = writer.declLocale( "c3d_sampled"
-						, utils.sampleMap( passFlags, map, texCoord ) );
-					opacity = opacity * getFloat( sampled, opaMask );
-				}
-				FI;
-			}
+			auto sampled = writer.declLocale( "c3d_sampled"
+				, utils.sampleMap( flags, map, texCoord ) );
+			applyOpacity( flags, sampled, opacity );
 		}
 
 		template< typename TexcoordT >
 		void TextureConfigData::computeGeometryMapContribution( Utils & utils
-			, PassFlags const & passFlags
-			, TextureFlags const & textureFlags
+			, PipelineFlags const & flags
 			, shader::TextureAnimData const & anim
 			, sdw::CombinedImage2DRgba32 const & map
 			, TexcoordT & texCoords
@@ -81,44 +47,17 @@ namespace castor3d
 			auto texCoord = writer.declLocale( "c3d_texCoord"
 				, toUv( texCoords ) );
 			transformUV( utils, anim, texCoord );
-
-			if ( checkFlag( textureFlags, TextureFlag::eHeight )
-				&& ( checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingOne )
-					|| checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingRepeat ) ) )
-			{
-				IF( writer, isHeight() )
-				{
-					utils.parallaxMapping( texCoord
-						, normalize( tangentSpaceViewPosition - tangentSpaceFragPosition )
-						, map
-						, *this );
-					setUv( texCoords, texCoord );
-
-					if ( checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingOne ) )
-					{
-						IF( writer, getUv( texCoords ).x() > 1.0_f
-							|| getUv( texCoords ).y() > 1.0_f
-							|| getUv( texCoords ).x() < 0.0_f
-							|| getUv( texCoords ).y() < 0.0_f )
-						{
-							writer.demote();
-						}
-						FI;
-					}
-				}
-				FI;
-			}
+			applyParallax( utils, flags, map, texCoords, texCoord, tangentSpaceViewPosition, tangentSpaceFragPosition );
 
 			auto sampled = writer.declLocale( "c3d_sampled"
-				, utils.sampleMap( passFlags, map, texCoord ) );
-			applyNormal( textureFlags, sampled, normal, tangent, bitangent, normal );
-			applyOpacity( textureFlags, sampled, opacity );
+				, utils.sampleMap( flags, map, texCoord ) );
+			applyNormal( flags, sampled, normal, tangent, bitangent, normal );
+			applyOpacity( flags, sampled, opacity );
 		}
 
 		template< typename TexcoordT >
 		sdw::Vec4 TextureConfigData::computeCommonMapContribution( Utils & utils
-			, PassFlags const & passFlags
-			, TextureFlags const & textureFlags
+			, PipelineFlags const & flags
 			, shader::TextureAnimData const & anim
 			, sdw::CombinedImage2DRgba32 const & map
 			, TexcoordT & texCoords
@@ -136,48 +75,21 @@ namespace castor3d
 			auto texCoord = writer.declLocale( "c3d_texCoord"
 				, toUv( texCoords ) );
 			transformUV( utils, anim, texCoord );
-
-			if ( checkFlag( textureFlags, TextureFlag::eHeight )
-				&& ( checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingOne )
-					|| checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingRepeat ) ) )
-			{
-				IF( writer, isHeight() )
-				{
-					utils.parallaxMapping( texCoord
-						, normalize( tangentSpaceViewPosition - tangentSpaceFragPosition )
-						, map
-						, *this );
-					setUv( texCoords, texCoord );
-
-					if ( checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingOne ) )
-					{
-						IF( writer, getUv( texCoords ).x() > 1.0_f
-							|| getUv( texCoords ).y() > 1.0_f
-							|| getUv( texCoords ).x() < 0.0_f
-							|| getUv( texCoords ).y() < 0.0_f )
-						{
-							writer.demote();
-						}
-						FI;
-					}
-				}
-				FI;
-			}
+			applyParallax( utils, flags, map, texCoords, texCoord, tangentSpaceViewPosition, tangentSpaceFragPosition );
 
 			auto result = writer.declLocale( "c3d_sampled"
-				, utils.sampleMap( passFlags, map, texCoord ) );
-			applyNormal( textureFlags, result, normal, tangent, bitangent, normal );
-			applyOpacity( textureFlags, result, opacity );
-			applyEmissive( textureFlags, result, emissive );
-			applyOcclusion( textureFlags, result, occlusion );
-			applyTransmittance( textureFlags, result, transmittance );
+				, utils.sampleMap( flags, map, texCoord ) );
+			applyNormal( flags, result, normal, tangent, bitangent, normal );
+			applyOpacity( flags, result, opacity );
+			applyEmissive( flags, result, emissive );
+			applyOcclusion( flags, result, occlusion );
+			applyTransmittance( flags, result, transmittance );
 			return result;
 		}
 
 		template< typename TexcoordT >
 		sdw::Vec4 TextureConfigData::computeCommonMapVoxelContribution( Utils & utils
-			, PassFlags const & passFlags
-			, TextureFlags const & textureFlags
+			, PipelineFlags const & flags
 			, shader::TextureAnimData const & anim
 			, sdw::CombinedImage2DRgba32 const & map
 			, TexcoordT & texCoords
@@ -190,19 +102,55 @@ namespace castor3d
 				, toUv( texCoords ) );
 			transformUV( utils, anim, texCoord );
 			auto result = writer.declLocale( "c3d_sampled"
-				, utils.sampleMap( passFlags, map, texCoord ) );
-			applyOpacity( textureFlags, result, opacity );
-			applyEmissive( textureFlags, result, emissive );
-			applyOcclusion( textureFlags, result, occlusion );
+				, utils.sampleMap( flags, map, texCoord ) );
+			applyOpacity( flags, result, opacity );
+			applyEmissive( flags, result, emissive );
+			applyOcclusion( flags, result, occlusion );
 			return result;
+		}
+
+		template< typename TexcoordsT, typename TexcoordT >
+		void TextureConfigData::applyParallax( Utils & utils
+			, PipelineFlags const & flags
+			, sdw::CombinedImage2DRgba32 const & map
+			, TexcoordsT & texCoords
+			, TexcoordT & texCoord
+			, sdw::Vec3 & tangentSpaceViewPosition
+			, sdw::Vec3 & tangentSpaceFragPosition )
+		{
+			if ( flags.enableParallaxOcclusionMapping() )
+			{
+				auto & writer = findWriterMandat( *this );
+
+				IF( writer, isHeight() )
+				{
+					utils.parallaxMapping( texCoord
+						, normalize( tangentSpaceViewPosition - tangentSpaceFragPosition )
+						, map
+						, *this );
+					setUv( texCoords, texCoord );
+
+					if ( flags.enableParallaxOcclusionMappingOne() )
+					{
+						IF( writer, this->getUv( texCoords ).x() > 1.0_f
+							|| this->getUv( texCoords ).y() > 1.0_f
+							|| this->getUv( texCoords ).x() < 0.0_f
+							|| this->getUv( texCoords ).y() < 0.0_f )
+						{
+							writer.demote();
+						}
+						FI;
+					}
+				}
+				FI;
+			}
 		}
 
 		//*********************************************************************************************
 
 		template< typename TexcoordT >
 		void TextureConfigurations::computeGeometryMapContributions( Utils & utils
-			, PassFlags const & passFlags
-			, TextureFlags const & textureFlags
+			, PipelineFlags const & flags
 			, TextureAnimations const & textureAnims
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 			, shader::Material const & material
@@ -219,12 +167,10 @@ namespace castor3d
 				return;
 			}
 
-			if ( ( checkFlag( textureFlags, TextureFlag::eHeight )
-				&& ( checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingOne )
-					|| checkFlag( passFlags, PassFlag::eParallaxOcclusionMappingRepeat ) ) )
-				|| checkFlag( textureFlags, TextureFlag::eOpacity ) )
+			if ( flags.enableParallaxOcclusionMapping()
+				|| flags.enableOpacity() )
 			{
-				FOR( m_writer, sdw::UInt, index, 0u, index < material.texturesCount(), ++index )
+				FOR( m_writer, sdw::UInt, index, 0u, index < material.texturesCount() && index < MaxPassTextures, ++index )
 				{
 					auto id = m_writer.declLocale( "c3d_id"
 						, material.getTexture( index ) );
@@ -242,8 +188,7 @@ namespace castor3d
 								, texCoords2
 								, texCoords3 ) );
 						config.computeGeometryMapContribution( utils
-							, passFlags
-							, textureFlags
+							, flags
 							, anim
 							, maps[id - 1_u]
 							, texcoordi

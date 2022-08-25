@@ -76,9 +76,9 @@ namespace castor3d
 		ShaderProgramSPtr result = std::make_shared< ShaderProgram >( renderPass.getName(), *getEngine()->getRenderSystem() );
 
 		if ( getEngine()->hasMeshShaders()
-			&& checkFlag( flags.programFlags, ProgramFlag::eHasMesh ) )
+			&& flags.usesMesh() )
 		{
-			if ( checkFlag( flags.programFlags, ProgramFlag::eHasTask ) )
+			if ( flags.usesTask() )
 			{
 				auto task = renderPass.getTaskShaderSource( flags );
 

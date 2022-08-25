@@ -76,6 +76,11 @@ namespace castor3d
 		ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const override;
 		ShaderPtr doGetPixelShaderSource( PipelineFlags const & flags )const override;
 
+		ShaderFlags doGetShaderFlags()const override
+		{
+			return ShaderFlag::eShadowMapPoint;
+		}
+
 	public:
 		C3D_API static castor::String const Type;
 

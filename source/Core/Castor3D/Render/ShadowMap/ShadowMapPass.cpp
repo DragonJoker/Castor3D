@@ -42,9 +42,9 @@ namespace castor3d
 				, matrixUbo
 				, culler } }
 		, m_shadowMap{ shadowMap }
+		, m_shadowMapUbo{ device }
 		, m_needsVsm{ needsVsm }
 		, m_needsRsm{ needsRsm }
-		, m_shadowMapUbo{ device }
 	{
 	}
 

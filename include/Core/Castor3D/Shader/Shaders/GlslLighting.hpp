@@ -60,6 +60,7 @@ namespace castor3d::shader
 		static C3D_API sdw::Float computeMetalness( sdw::Vec3 const & albedo
 			, sdw::Vec3 const & specular );
 		static C3D_API sdw::Float computeRoughness( sdw::Float const & glossiness );
+		static C3D_API sdw::Float computeGlossiness( sdw::Float const & roughness );
 		//\}
 
 		sdw::Float edgeWidth;
@@ -108,13 +109,11 @@ namespace castor3d::shader
 			, sdw::Vec3 const & materialAlbedo ) = 0;
 		C3D_API virtual std::unique_ptr< LightMaterial > declMaterial( std::string const & name
 			, bool enabled = true ) = 0;
-		C3D_API virtual void modifyMaterial( PassFlags const & passFlags
-			, TextureFlags const & textureFlags
+		C3D_API virtual void modifyMaterial( PipelineFlags const & flags
 			, sdw::Vec4 const & sampled
 			, TextureConfigData const & config
 			, LightMaterial & lightMat )const = 0;
-		C3D_API virtual void updateMaterial( PassFlags const & passFlags
-			, TextureFlags const & textureFlags
+		C3D_API virtual void updateMaterial( PipelineFlags const & flags
 			, LightMaterial & lightMat
 			, sdw::Vec3 & emissive )const = 0;
 		C3D_API virtual ReflectionModelPtr getReflectionModel( uint32_t & envMapBinding
@@ -289,8 +288,7 @@ namespace castor3d::shader
 			, sdw::Vec3 const & worldEye
 			, sdw::UInt const & receivesShadows
 			, OutputComponents & output ) = 0;
-		C3D_API void computeMapContributions( PassFlags const & passFlags
-			, TextureFlags const & textureFlags
+		C3D_API void computeMapContributions( PipelineFlags const & flags
 			, TextureConfigurations const & textureConfigs
 			, TextureAnimations const & textureAnims
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
@@ -309,8 +307,7 @@ namespace castor3d::shader
 			, LightMaterial & lightMat
 			, sdw::Vec3 & tangentSpaceViewPosition
 			, sdw::Vec3 & tangentSpaceFragPosition );
-		C3D_API void computeMapContributions( PassFlags const & passFlags
-			, TextureFlags const & textureFlags
+		C3D_API void computeMapContributions( PipelineFlags const & flags
 			, TextureConfigurations const & textureConfigs
 			, TextureAnimations const & textureAnims
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
@@ -350,8 +347,7 @@ namespace castor3d::shader
 			, Surface const & surface
 			, sdw::Vec3 const & worldEye
 			, sdw::UInt const & receivesShadows ) = 0;
-		C3D_API void computeMapDiffuseContributions( PassFlags const & passFlags
-			, TextureFlags const & textureFlags
+		C3D_API void computeMapDiffuseContributions( PipelineFlags const & flags
 			, TextureConfigurations const & textureConfigs
 			, TextureAnimations const & textureAnims
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps

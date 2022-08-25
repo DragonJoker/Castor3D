@@ -58,7 +58,10 @@ namespace ocean_fft
 		{
 			return castor3d::ShaderFlag::eWorldSpace
 				| castor3d::ShaderFlag::eViewSpace
-				| castor3d::ShaderFlag::eVelocity;
+				| castor3d::ShaderFlag::eVelocity
+				| castor3d::ShaderFlag::eLighting
+				| castor3d::ShaderFlag::eTessellation
+				| castor3d::ShaderFlag::eForceTexCoords;
 		}
 		/**@}*/
 

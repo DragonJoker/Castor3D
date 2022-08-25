@@ -60,8 +60,7 @@ namespace castor3d
 
 			template< typename TexcoordT >
 			void computeGeometryMapContribution( Utils &  utils
-				, PassFlags const & passFlags
-				, TextureFlags const & textureFlags
+				, PipelineFlags const & flags
 				, shader::TextureAnimData const & anim
 				, sdw::CombinedImage2DRgba32 const & map
 				, TexcoordT & texCoords
@@ -70,8 +69,7 @@ namespace castor3d
 				, sdw::Vec3 & tangentSpaceFragPosition );
 			template< typename TexcoordT >
 			void computeGeometryMapContribution( Utils &  utils
-				, PassFlags const & passFlags
-				, TextureFlags const & textureFlags
+				, PipelineFlags const & flags
 				, shader::TextureAnimData const & anim
 				, sdw::CombinedImage2DRgba32 const & map
 				, TexcoordT & texCoords
@@ -83,8 +81,7 @@ namespace castor3d
 				, sdw::Vec3 & tangentSpaceFragPosition );
 			template< typename TexcoordT >
 			sdw::Vec4 computeCommonMapContribution( Utils & utils
-				, PassFlags const & passFlags
-				, TextureFlags const & textureFlags
+				, PipelineFlags const & flags
 				, shader::TextureAnimData const & anim
 				, sdw::CombinedImage2DRgba32 const & map
 				, TexcoordT & texCoords
@@ -99,8 +96,7 @@ namespace castor3d
 				, sdw::Vec3 & tangentSpaceFragPosition );
 			template< typename TexcoordT >
 			sdw::Vec4 computeCommonMapVoxelContribution( Utils & utils
-				, PassFlags const & passFlags
-				, TextureFlags const & textureFlags
+				, PipelineFlags const & flags
 				, shader::TextureAnimData const & anim
 				, sdw::CombinedImage2DRgba32 const & map
 				, TexcoordT & texCoords
@@ -125,47 +121,59 @@ namespace castor3d
 			C3D_API sdw::Float getOpacity( sdw::Vec4 const & sampled
 				, sdw::Float const & opacity )const;
 
-			C3D_API void applyDiffuse( TextureFlags const & textureFlags
+			template< typename TexcoordsT, typename TexcoordT >
+			void applyParallax( Utils & utils
+				, PipelineFlags const & flags
+				, sdw::CombinedImage2DRgba32 const & map
+				, TexcoordsT & texCoords
+				, TexcoordT & texCoord
+				, sdw::Vec3 & tangentSpaceViewPosition
+				, sdw::Vec3 & tangentSpaceFragPosition );
+
+			C3D_API void applyDiffuse( PipelineFlags const & flags
 				, sdw::Vec4 const & sampled
 				, sdw::Vec3 & diffuse )const;
-			C3D_API void applyAlbedo( TextureFlags const & textureFlags
+			C3D_API void applyAlbedo( PipelineFlags const & flags
 				, sdw::Vec4 const & sampled
 				, sdw::Vec3 & diffuse )const;
-			C3D_API void applyEmissive( TextureFlags const & textureFlags
+			C3D_API void applyEmissive( PipelineFlags const & flags
 				, sdw::Vec4 const & sampled
 				, sdw::Vec3 & emissive )const;
-			C3D_API void applySpecular( TextureFlags const & textureFlags
+			C3D_API void applySpecular( PipelineFlags const & flags
 				, sdw::Vec4 const & sampled
 				, sdw::Vec3 & specular )const;
-			C3D_API void applyMetalness( TextureFlags const & textureFlags
+			C3D_API void applyMetalness( PipelineFlags const & flags
 				, sdw::Vec4 const & sampled
 				, sdw::Float & metalness )const;
-			C3D_API void applyShininess( TextureFlags const & textureFlags
+			C3D_API void applyShininess( PipelineFlags const & flags
 				, sdw::Vec4 const & sampled
 				, sdw::Float & shininess )const;
-			C3D_API void applyRoughness( TextureFlags const & textureFlags
+			C3D_API void applyRoughness( PipelineFlags const & flags
 				, sdw::Vec4 const & sampled
 				, sdw::Float & roughness )const;
-			C3D_API void applyOpacity( TextureFlags const & textureFlags
+			C3D_API void applyGlossiness( PipelineFlags const & flags
+				, sdw::Vec4 const & sampled
+				, sdw::Float & glossiness )const;
+			C3D_API void applyOpacity( PipelineFlags const & flags
 				, sdw::Vec4 const & sampled
 				, sdw::Float & opacity )const;
-			C3D_API void applyNormal( TextureFlags const & textureFlags
+			C3D_API void applyNormal( PipelineFlags const & flags
 				, sdw::Vec4 const & sampled
 				, sdw::Mat3 const & tbn
 				, sdw::Vec3 & normal )const;
-			C3D_API void applyNormal( TextureFlags const & textureFlags
+			C3D_API void applyNormal( PipelineFlags const & flags
 				, sdw::Vec4 const & sampled
 				, sdw::Vec3 const & normal
 				, sdw::Vec3 const & tangent
 				, sdw::Vec3 const & bitangent
 				, sdw::Vec3 & result )const;
-			C3D_API void applyHeight( TextureFlags const & textureFlags
+			C3D_API void applyHeight( PipelineFlags const & flags
 				, sdw::Vec4 const & sampled
 				, sdw::Float & height )const;
-			C3D_API void applyOcclusion( TextureFlags const & textureFlags
+			C3D_API void applyOcclusion( PipelineFlags const & flags
 				, sdw::Vec4 const & sampled
 				, sdw::Float & occlusion )const;
-			C3D_API void applyTransmittance( TextureFlags const & textureFlags
+			C3D_API void applyTransmittance( PipelineFlags const & flags
 				, sdw::Vec4 const & sampled
 				, sdw::Float & transmittance )const;
 
@@ -352,8 +360,7 @@ namespace castor3d
 				, bool enable = true );
 			template< typename TexcoordT >
 			void computeGeometryMapContributions( Utils & utils
-				, PassFlags const & passFlags
-				, TextureFlags const & textureFlags
+				, PipelineFlags const & flags
 				, TextureAnimations const & textureAnims
 				, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 				, shader::Material const & material
