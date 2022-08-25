@@ -78,7 +78,8 @@ namespace castor3d
 				| ShaderFlag::eNormal
 				| ShaderFlag::eLighting
 				| ShaderFlag::eOpacity
-				| ShaderFlag::eGeometry;
+				| ShaderFlag::eGeometry
+				| ShaderFlag::eColour;
 		}
 		/**@}*/
 

@@ -99,6 +99,7 @@ namespace castor3d
 				| ( m_needsVsm ? ShaderFlag::eVsmShadowMap : ShaderFlag::eNone )
 				| ( m_needsRsm ? ShaderFlag::eRsmShadowMap : ShaderFlag::eNone )
 				| ( m_needsRsm ? ShaderFlag::eWorldSpace : ShaderFlag::eNone )
+				| ( m_needsRsm ? ShaderFlag::eColour : ShaderFlag::eNone )
 				| doGetShaderFlags();
 		}
 		/**@}*/

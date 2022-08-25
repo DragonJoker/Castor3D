@@ -169,7 +169,8 @@ namespace castor3d
 			| ShaderFlag::eViewSpace
 			| ShaderFlag::eTangentSpace
 			| ShaderFlag::eLighting
-			| ShaderFlag::eOpacity };
+			| ShaderFlag::eOpacity
+			| ShaderFlag::eColour };
 	};
 
 	class RenderTechniquePass

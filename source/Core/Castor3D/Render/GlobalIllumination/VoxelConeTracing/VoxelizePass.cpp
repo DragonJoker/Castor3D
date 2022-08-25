@@ -59,11 +59,11 @@ namespace castor3d
 				, worldPosition{ getMember< sdw::Vec3 >( "worldPosition" ) }
 				, viewPosition{ getMember< sdw::Vec3 >( "viewPosition" ) }
 				, normal{ getMember< sdw::Vec3 >( "normal" ) }
-				, texture0{ getMember< sdw::Vec3 >( "texcoord0" ) }
-				, texture1{ getMember< sdw::Vec3 >( "texcoord1" ) }
-				, texture2{ getMember< sdw::Vec3 >( "texcoord2" ) }
-				, texture3{ getMember< sdw::Vec3 >( "texcoord3" ) }
-				, colour{ getMember< sdw::Vec3 >( "colour" ) }
+				, texture0{ getMember< sdw::Vec3 >( "texcoord0", true ) }
+				, texture1{ getMember< sdw::Vec3 >( "texcoord1", true ) }
+				, texture2{ getMember< sdw::Vec3 >( "texcoord2", true ) }
+				, texture3{ getMember< sdw::Vec3 >( "texcoord3", true ) }
+				, colour{ getMember< sdw::Vec3 >( "colour", true ) }
 				, nodeId{ getMember< sdw::UInt >( "nodeId" ) }
 			{
 			}
@@ -97,7 +97,8 @@ namespace castor3d
 					result->declMember( "texcoord0"
 						, sdw::type::Kind::eVec3F
 						, sdw::type::NotArray
-						, index++ );
+						, ( flags.enableTexcoord0() ? index++ : 0 )
+						, flags.enableTexcoord0() );
 					result->declMember( "texcoord1"
 						, sdw::type::Kind::eVec3F
 						, sdw::type::NotArray
@@ -425,11 +426,7 @@ namespace castor3d
 				auto height = writer.declLocale( "height"
 					, billboardData.getHeight( c3d_sceneData ) );
 
-				if ( flags.enableTextures() )
-				{
-					out.texture0 = vec3( inTexcoord, 0.0_f );
-				}
-
+				out.texture0 = vec3( inTexcoord, 0.0_f );
 				out.vtx.position = vec4( curBbcenter
 					+ right * inPosition.x() * width
 					+ up * inPosition.y() * height

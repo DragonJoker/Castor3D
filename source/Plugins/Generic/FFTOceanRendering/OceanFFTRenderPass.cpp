@@ -459,6 +459,17 @@ namespace ocean_fft
 		return castor3d::TextureFlags{ castor3d::TextureFlag::eAll };
 	}
 
+	castor3d::ShaderFlags OceanRenderPass::getShaderFlags()const
+	{
+		return castor3d::ShaderFlag::eWorldSpace
+			| castor3d::ShaderFlag::eViewSpace
+			| castor3d::ShaderFlag::eVelocity
+			| castor3d::ShaderFlag::eLighting
+			| castor3d::ShaderFlag::eTessellation
+			| castor3d::ShaderFlag::eForceTexCoords
+			| castor3d::ShaderFlag::eColour;
+	}
+
 	void OceanRenderPass::accept( castor3d::RenderTechniqueVisitor & visitor )
 	{
 		if ( visitor.getFlags().renderPassType == m_typeID )

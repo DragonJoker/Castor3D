@@ -676,6 +676,11 @@ namespace castor3d
 			flags.alphaFunc = VK_COMPARE_OP_GREATER;
 		}
 
+		if ( !checkFlag( flags.m_submeshFlags, SubmeshFlag::eColours ) )
+		{
+			remFlag( flags.m_shaderFlags, ShaderFlag::eColour );
+		}
+
 		doAdjustFlags( flags );
 	}
 

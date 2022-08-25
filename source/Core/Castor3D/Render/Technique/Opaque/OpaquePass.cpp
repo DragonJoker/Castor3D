@@ -81,7 +81,8 @@ namespace castor3d
 	ShaderFlags OpaquePass::getShaderFlags()const
 	{
 		return ShaderFlag::eTangentSpace
-			| ShaderFlag::eOpacity;
+			| ShaderFlag::eOpacity
+			| ShaderFlag::eColour;
 	}
 
 	ProgramFlags OpaquePass::doAdjustProgramFlags( ProgramFlags flags )const

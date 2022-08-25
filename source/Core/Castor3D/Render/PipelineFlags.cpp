@@ -27,6 +27,8 @@ namespace castor3d
 				return checkFlag( shaderFlags, ShaderFlag::eTangent );
 			case castor3d::SubmeshFlag::eVelocity:
 				return checkFlag( shaderFlags, ShaderFlag::eVelocity );
+			case castor3d::SubmeshFlag::eColours:
+				return checkFlag( shaderFlags, ShaderFlag::eColour );
 			default:
 				return true;
 			}
@@ -321,8 +323,9 @@ namespace castor3d
 	{
 		CU_Require( uint32_t( data ) >= uint32_t( SubmeshFlag::eTexcoords0 )
 			&& uint32_t( data ) <= uint32_t( SubmeshFlag::eTexcoords3 ) );
-		return forceTexCoords()
-			|| ( !m_texturesFlags.empty() && hasSubmeshData( data ) );
+		return hasSubmeshData( data )
+			&& ( forceTexCoords()
+				|| ( !m_texturesFlags.empty() && hasSubmeshData( data ) ) );
 	}
 
 	bool PipelineFlags::enableNonTexcoord( SubmeshFlag data )const

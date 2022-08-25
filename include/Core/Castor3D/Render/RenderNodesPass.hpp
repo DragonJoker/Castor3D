@@ -584,7 +584,8 @@ namespace castor3d
 		C3D_API virtual ShaderFlags getShaderFlags()const
 		{
 			return ShaderFlag::eWorldSpace
-				| ShaderFlag::eTangentSpace;
+				| ShaderFlag::eTangentSpace
+				| ShaderFlag::eColour;
 		}
 
 		bool isOrderIndependent()const
