@@ -27,7 +27,6 @@ namespace draw_edges
 			eMaterials,
 			eModels,
 			eDepthObj,
-			eData1,
 			eSource,
 			eEdgeDN,
 			eEdgeO,
@@ -243,7 +242,7 @@ namespace draw_edges
 		auto & technique = m_renderTarget.getTechnique();
 		auto & passBuffer = engine.getMaterialCache().getPassBuffer();
 		auto & depthObj = technique.getDepthObjImgView();
-		auto & data1 = technique.getNormalImgView();
+		auto & nmlOcc = technique.getNormalImgView();
 		auto & depthRange = technique.getDepthRange();
 		auto previous = &previousPass;
 
@@ -253,7 +252,7 @@ namespace draw_edges
 			, device
 			, passBuffer
 			, depthObj
-			, data1
+			, nmlOcc
 			, depthRange
 			, &isEnabled() );
 		m_objectID = std::make_unique< ObjectIDEdgeDetection >( m_graph
@@ -312,7 +311,6 @@ namespace draw_edges
 			, 0u
 			, uint32_t( modelBuffer.getSize() ) );
 		pass.addSampledView( depthObj, px::eDepthObj );
-		pass.addSampledView( data1, px::eData1 );
 		pass.addSampledView( *m_target, px::eSource );
 		pass.addSampledView( m_depthNormal->getResult(), px::eEdgeDN );
 		pass.addSampledView( m_objectID->getResult(), px::eEdgeO );

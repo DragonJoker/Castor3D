@@ -57,7 +57,7 @@ namespace castor3d
 			BlurGpInfoUboId,
 			BlurSssUboId,
 			BlurDepthObjImgId,
-			BlurData4ImgId,
+			BlurEmsTrnImgId,
 			BlurLgtDiffImgId,
 		};
 
@@ -66,7 +66,7 @@ namespace castor3d
 			CombMaterialsUboId,
 			CombModelsUboId,
 			CombDepthObjImgId,
-			CombData4ImgId,
+			CombEmsTrnImgId,
 			CombBlur1ImgId,
 			CombBlur2ImgId,
 			CombBlur3ImgId,
@@ -109,7 +109,7 @@ namespace castor3d
 			auto c3d_correction = config.declMember< Float >( SubsurfaceScatteringPass::Correction );
 			config.end();
 			auto c3d_mapDepthObj = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapDepthObj", BlurDepthObjImgId, 0u );
-			auto c3d_mapData4 = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eData4 ), BlurData4ImgId, 0u );
+			auto c3d_mapEmsTrn = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eEmsTrn ), BlurEmsTrnImgId, 0u );
 			auto c3d_mapLightDiffuse = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapLightDiffuse", BlurLgtDiffImgId, 0u );
 
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
@@ -177,10 +177,10 @@ namespace castor3d
 					//     step = sssStrength * gaussianWidth * pixelSize * dir
 					// The closer the pixel, the stronger the effect needs to be, hence
 					// the factor 1.0 / depthM.
-					auto data4 = writer.declLocale( "data4"
-						, c3d_mapData4.lod( vtx_texture, 0.0_f ) );
+					auto emsTrn = writer.declLocale( "emsTrn"
+						, c3d_mapEmsTrn.lod( vtx_texture, 0.0_f ) );
 					auto translucency = writer.declLocale( "translucency"
-						, data4.w() );
+						, emsTrn.w() );
 					auto finalStep = writer.declLocale( "finalStep"
 						, translucency * step * sssProfile.subsurfaceScatteringStrength * sssProfile.gaussianWidth / depthM );
 
@@ -230,7 +230,7 @@ namespace castor3d
 			C3D_ModelsData( writer, CombModelsUboId, 0u );
 
 			auto c3d_mapDepthObj = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapDepthObj", CombDepthObjImgId, 0u );
-			auto c3d_mapData4 = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eData4 ), CombData4ImgId, 0u );
+			auto c3d_mapEmsTrn = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eEmsTrn ), CombEmsTrnImgId, 0u );
 			auto c3d_mapBlur1 = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapBlur1", CombBlur1ImgId, 0u );
 			auto c3d_mapBlur2 = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapBlur2", CombBlur2ImgId, 0u );
 			auto c3d_mapBlur3 = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapBlur3", CombBlur3ImgId, 0u );
@@ -293,10 +293,10 @@ namespace castor3d
 							, c3d_mapBlur2.lod( vtx_texture, 0.0_f ) );
 						auto blur3 = writer.declLocale( "blur3"
 							, c3d_mapBlur3.lod( vtx_texture, 0.0_f ) );
-						auto data4 = writer.declLocale( "data4"
-							, c3d_mapData4.lod( vtx_texture, 0.0_f ) );
+						auto emsTrn = writer.declLocale( "emsTrn"
+							, c3d_mapEmsTrn.lod( vtx_texture, 0.0_f ) );
 						auto translucency = writer.declLocale( "translucency"
-							, data4.w() );
+							, emsTrn.w() );
 						pxl_fragColor = original * originalWeight
 							+ blur1 * blurWeights[0]
 							+ blur2 * blurWeights[1]
@@ -441,8 +441,8 @@ namespace castor3d
 				, sssss::BlurSssUboId );
 			blurX.addSampledView( depthObj.sampledViewId
 				, sssss::BlurDepthObjImgId );
-			blurX.addSampledView( m_gpResult[DsTexture::eData4].sampledViewId
-				, sssss::BlurData4ImgId );
+			blurX.addSampledView( m_gpResult[DsTexture::eEmsTrn].sampledViewId
+				, sssss::BlurEmsTrnImgId );
 			blurX.addSampledView( blurXSource->sampledViewId
 				, sssss::BlurLgtDiffImgId );
 			blurX.addOutputColourView( m_intermediate->targetViewId );
@@ -480,8 +480,8 @@ namespace castor3d
 				, sssss::BlurSssUboId );
 			blurY.addSampledView( depthObj.sampledViewId
 				, sssss::BlurDepthObjImgId );
-			blurY.addSampledView( m_gpResult[DsTexture::eData4].sampledViewId
-				, sssss::BlurData4ImgId );
+			blurY.addSampledView( m_gpResult[DsTexture::eEmsTrn].sampledViewId
+				, sssss::BlurEmsTrnImgId );
 			blurY.addSampledView( m_intermediate->sampledViewId
 				, sssss::BlurLgtDiffImgId );
 			blurY.addOutputColourView( blurYDestination->targetViewId );
@@ -522,8 +522,8 @@ namespace castor3d
 			, uint32_t( modelBuffer.getSize() ) );
 		pass.addSampledView( depthObj.sampledViewId
 			, sssss::CombDepthObjImgId );
-		pass.addSampledView( m_gpResult[DsTexture::eData4].sampledViewId
-			, sssss::CombData4ImgId );
+		pass.addSampledView( m_gpResult[DsTexture::eEmsTrn].sampledViewId
+			, sssss::CombEmsTrnImgId );
 		pass.addSampledView( m_blurImages[0]->sampledViewId
 			, sssss::CombBlur1ImgId );
 		pass.addSampledView( m_blurImages[1]->sampledViewId

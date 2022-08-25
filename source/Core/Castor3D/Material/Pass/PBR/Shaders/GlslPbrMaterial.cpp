@@ -16,15 +16,15 @@ namespace castor3d::shader
 	}
 
 	void PbrLightMaterial::create( sdw::Vec3 const & newAlbedo
-		, sdw::Vec4 const & data3
-		, sdw::Vec4 const & data2
+		, sdw::Vec4 const & spcMtl
+		, sdw::Vec4 const & colRgh
 		, Material const & material )
 	{
 		if ( isEnabled() )
 		{
 			create( newAlbedo
-				, data3
-				, data2
+				, spcMtl
+				, colRgh
 				, 0.0_f );
 			edgeWidth = material.edgeWidth();
 			depthFactor = material.depthFactor();
@@ -36,16 +36,16 @@ namespace castor3d::shader
 	}
 
 	void PbrLightMaterial::create( sdw::Vec3 const & newAlbedo
-		, sdw::Vec4 const & data3
-		, sdw::Vec4 const & data2
+		, sdw::Vec4 const & spcMtl
+		, sdw::Vec4 const & colRgh
 		, sdw::Float const & ambient )
 	{
 		if ( isEnabled() )
 		{
 			albedo = newAlbedo;
-			specular = data3.rgb();
-			metalness = data3.a();
-			roughness = data2.a();
+			specular = spcMtl.rgb();
+			metalness = spcMtl.a();
+			roughness = colRgh.a();
 		}
 	}
 
@@ -68,10 +68,10 @@ namespace castor3d::shader
 		}
 	}
 
-	void PbrLightMaterial::output( sdw::Vec4 & outData2, sdw::Vec4 & outData3 )const
+	void PbrLightMaterial::output( sdw::Vec4 & outColRgh, sdw::Vec4 & outSpcMtl )const
 	{
-		outData2 = vec4( albedo, roughness );
-		outData3 = vec4( specular, metalness );
+		outColRgh = vec4( albedo, roughness );
+		outSpcMtl = vec4( specular, metalness );
 	}
 
 	sdw::Vec3 PbrLightMaterial::getAmbient( sdw::Vec3 const & ambientLight )const

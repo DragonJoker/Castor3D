@@ -117,10 +117,10 @@ namespace castor3d
 			eGpInfo,
 			eHdrConfig,
 			eDepthObj,
-			eData1,
-			eData2,
-			eData3,
-			eData4,
+			eNmlOcc,
+			eColRgh,
+			eSpcMtl,
+			eEmsTrn,
 			eSsao,
 			eBrdf,
 			eDirectDiffuse,
@@ -152,10 +152,10 @@ namespace castor3d
 			C3D_HdrConfig( writer, ResolveBind::eHdrConfig, 0u );
 
 			auto c3d_mapDepthObj = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapDepthObj", uint32_t( ResolveBind::eDepthObj ), 0u );
-			auto c3d_mapData1 = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eData1 ), uint32_t( ResolveBind::eData1 ), 0u );
-			auto c3d_mapData2 = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eData2 ), uint32_t( ResolveBind::eData2 ), 0u );
-			auto c3d_mapData3 = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eData3 ), uint32_t( ResolveBind::eData3 ), 0u );
-			auto c3d_mapData4 = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eData4 ), uint32_t( ResolveBind::eData4 ), 0u );
+			auto c3d_mapNmlOcc = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eNmlOcc ), uint32_t( ResolveBind::eNmlOcc ), 0u );
+			auto c3d_mapColRgh = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eColRgh ), uint32_t( ResolveBind::eColRgh ), 0u );
+			auto c3d_mapSpcMtl = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eSpcMtl ), uint32_t( ResolveBind::eSpcMtl ), 0u );
+			auto c3d_mapEmsTrn = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eEmsTrn ), uint32_t( ResolveBind::eEmsTrn ), 0u );
 			auto c3d_mapSsao = writer.declCombinedImg< FImg2DRg32 >( "c3d_mapSsao", uint32_t( ResolveBind::eSsao ), 0u, config.hasSsao );
 			auto c3d_mapBrdf = writer.declCombinedImg< FImg2DRg32 >( "c3d_mapBrdf", uint32_t( ResolveBind::eBrdf ), 0u );
 			auto c3d_mapLightDiffuse = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapLightDiffuse", uint32_t( ResolveBind::eDirectDiffuse ), 0u );
@@ -208,38 +208,38 @@ namespace castor3d
 						, writer.cast< UInt >( modelData.getMaterialId() ) );
 					auto material = writer.declLocale( "material"
 						, materials.getMaterial( materialId ) );
-					auto data1 = writer.declLocale( "data1"
-						, c3d_mapData1.lod( vtx_texture, 0.0_f ) );
-					auto data2 = writer.declLocale( "data2"
-						, c3d_mapData2.lod( vtx_texture, 0.0_f ) );
+					auto nmlOcc = writer.declLocale( "nmlOcc"
+						, c3d_mapNmlOcc.lod( vtx_texture, 0.0_f ) );
+					auto colRgh = writer.declLocale( "colRgh"
+						, c3d_mapColRgh.lod( vtx_texture, 0.0_f ) );
 					auto envMapIndex = writer.declLocale( "envMapIndex"
 						, modelData.getEnvMapIndex() );
 					auto depth = writer.declLocale( "depth"
 						, depthObj.x() );
 					auto albedo = writer.declLocale( "albedo"
-						, data2.rgb() );
+						, colRgh.rgb() );
 					auto surface = writer.declLocale< shader::Surface >( "surface" );
 					surface.create( vec3( in.fragCoord.xy(), depth )
 						, vec3( 0.0_f )
 						, c3d_gpInfoData.projToWorld( utils, vtx_texture, depth )
-						, data1.rgb()
+						, nmlOcc.rgb()
 						, vec3( vtx_texture, 0.0_f ) );
 
 					IF( writer, material.lighting() != 0_u )
 					{
-						auto data3 = writer.declLocale( "data3"
-							, c3d_mapData3.lod( vtx_texture, 0.0_f ) );
-						auto data4 = writer.declLocale( "data4"
-							, c3d_mapData4.lod( vtx_texture, 0.0_f ) );
+						auto spcMtl = writer.declLocale( "spcMtl"
+							, c3d_mapSpcMtl.lod( vtx_texture, 0.0_f ) );
+						auto emsTrn = writer.declLocale( "emsTrn"
+							, c3d_mapEmsTrn.lod( vtx_texture, 0.0_f ) );
 
 						auto occlusion = writer.declLocale( "occlusion"
-							, data1.w() );
+							, nmlOcc.w() );
 						auto emissive = writer.declLocale( "emissive"
-							, data4.xyz() );
+							, emsTrn.xyz() );
 						auto lightMat = lightingModel->declMaterial( "lightMat" );
 						lightMat->create( albedo
-							, data3
-							, data2
+							, spcMtl
+							, colRgh
 							, material );
 
 						auto ambient = writer.declLocale( "ambient"
@@ -434,14 +434,14 @@ namespace castor3d
 
 		pass.addSampledView( m_depthObj.sampledViewId
 			, uint32_t( dropqrslv::ResolveBind::eDepthObj ) );
-		pass.addSampledView( m_opaquePassResult[DsTexture::eData1].sampledViewId
-			, uint32_t( dropqrslv::ResolveBind::eData1 ) );
-		pass.addSampledView( m_opaquePassResult[DsTexture::eData2].sampledViewId
-			, uint32_t( dropqrslv::ResolveBind::eData2 ) );
-		pass.addSampledView( m_opaquePassResult[DsTexture::eData3].sampledViewId
-			, uint32_t( dropqrslv::ResolveBind::eData3 ) );
-		pass.addSampledView( m_opaquePassResult[DsTexture::eData4].sampledViewId
-			, uint32_t( dropqrslv::ResolveBind::eData4 ) );
+		pass.addSampledView( m_opaquePassResult[DsTexture::eNmlOcc].sampledViewId
+			, uint32_t( dropqrslv::ResolveBind::eNmlOcc ) );
+		pass.addSampledView( m_opaquePassResult[DsTexture::eColRgh].sampledViewId
+			, uint32_t( dropqrslv::ResolveBind::eColRgh ) );
+		pass.addSampledView( m_opaquePassResult[DsTexture::eSpcMtl].sampledViewId
+			, uint32_t( dropqrslv::ResolveBind::eSpcMtl ) );
+		pass.addSampledView( m_opaquePassResult[DsTexture::eEmsTrn].sampledViewId
+			, uint32_t( dropqrslv::ResolveBind::eEmsTrn ) );
 		pass.addSampledView( m_ssaoResult.sampledViewId
 			, uint32_t( dropqrslv::ResolveBind::eSsao ) );
 		pass.addSampledView( m_device.renderSystem.getPrefilteredBrdfTexture().sampledViewId

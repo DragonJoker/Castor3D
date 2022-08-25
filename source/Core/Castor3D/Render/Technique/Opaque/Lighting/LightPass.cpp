@@ -129,10 +129,10 @@ namespace castor3d
 		C3D_Scene( writer, LightPassIdx::eScene, 0u );
 
 		auto c3d_mapDepthObj = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapDepthObj", uint32_t( LightPassIdx::eDepthObj ), 0u );
-		auto c3d_mapData1 = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eData1 ), uint32_t( LightPassIdx::eData1 ), 0u );
-		auto c3d_mapData2 = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eData2 ), uint32_t( LightPassIdx::eData2 ), 0u );
-		auto c3d_mapData3 = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eData3 ), uint32_t( LightPassIdx::eData3 ), 0u );
-		auto c3d_mapData4 = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eData4 ), uint32_t( LightPassIdx::eData4 ), 0u );
+		auto c3d_mapNmlOcc = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eNmlOcc ), uint32_t( LightPassIdx::eNmlOcc ), 0u );
+		auto c3d_mapColRgh = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eColRgh ), uint32_t( LightPassIdx::eColRgh ), 0u );
+		auto c3d_mapSpcMtl = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eSpcMtl ), uint32_t( LightPassIdx::eSpcMtl ), 0u );
+		auto c3d_mapEmsTrn = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eEmsTrn ), uint32_t( LightPassIdx::eEmsTrn ), 0u );
 
 		shadowType = shadows
 			? shadowType
@@ -182,29 +182,29 @@ namespace castor3d
 					, modelData.getMaterialId() );
 				auto material = writer.declLocale( "material"
 					, materials.getMaterial( materialId ) );
-				auto data2 = writer.declLocale( "data2"
-					, c3d_mapData2.lod( texCoord, 0.0_f ) );
+				auto colRgh = writer.declLocale( "colRgh"
+					, c3d_mapColRgh.lod( texCoord, 0.0_f ) );
 				auto shadowReceiver = writer.declLocale( "shadowReceiver"
 					, modelData.isShadowReceiver() );
 				auto albedo = writer.declLocale( "albedo"
-					, data2.xyz() );
+					, colRgh.xyz() );
 
 				IF( writer, material.lighting() != 0_u )
 				{
-					auto data1 = writer.declLocale( "data1"
-						, c3d_mapData1.lod( texCoord, 0.0_f ) );
-					auto data3 = writer.declLocale( "data3"
-						, c3d_mapData3.lod( texCoord, 0.0_f ) );
-					auto data4 = writer.declLocale( "data4"
-						, c3d_mapData4.lod( texCoord, 0.0_f ) );
+					auto nmlOcc = writer.declLocale( "nmlOcc"
+						, c3d_mapNmlOcc.lod( texCoord, 0.0_f ) );
+					auto spcMtl = writer.declLocale( "spcMtl"
+						, c3d_mapSpcMtl.lod( texCoord, 0.0_f ) );
+					auto emsTrn = writer.declLocale( "emsTrn"
+						, c3d_mapEmsTrn.lod( texCoord, 0.0_f ) );
 
 					auto lightMat = lightingModel->declMaterial( "lightMat" );
 					lightMat->create( albedo
-						, data3
-						, data2
+						, spcMtl
+						, colRgh
 						, material );
 					lightMat->sssProfileIndex = writer.cast< sdw::Float >( material.sssProfileIndex() );
-					lightMat->sssTransmittance = data4.w();
+					lightMat->sssTransmittance = emsTrn.w();
 
 					auto eye = writer.declLocale( "eye"
 						, c3d_sceneData.cameraPosition );
@@ -215,7 +215,7 @@ namespace castor3d
 					auto wsPosition = writer.declLocale( "wsPosition"
 						, c3d_gpInfoData.projToWorld( utils, texCoord, depth ) );
 					auto wsNormal = writer.declLocale( "wsNormal"
-						, data1.xyz() );
+						, nmlOcc.xyz() );
 
 					auto lightDiffuse = writer.declLocale( "lightDiffuse"
 						, vec3( 0.0_f ) );

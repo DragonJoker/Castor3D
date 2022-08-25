@@ -32,16 +32,16 @@ namespace castor3d::shader
 			, sdw::Float const & weight );
 
 		C3D_API virtual void create( sdw::Vec3 const & albedo
-			, sdw::Vec4 const & data3
-			, sdw::Vec4 const & data2
+			, sdw::Vec4 const & spcMtl
+			, sdw::Vec4 const & colRgh
 			, Material const & material ) = 0;
 		C3D_API virtual void create( sdw::Vec3 const & albedo
-			, sdw::Vec4 const & data3
-			, sdw::Vec4 const & data2
+			, sdw::Vec4 const & spcMtl
+			, sdw::Vec4 const & colRgh
 			, sdw::Float const & ambient = 0.0_f ) = 0;
 		C3D_API virtual void create( sdw::Vec3 const & vtxColour
 			, Material const & material ) = 0;
-		C3D_API virtual void output( sdw::Vec4 & outData2, sdw::Vec4 & outData3 )const = 0;
+		C3D_API virtual void output( sdw::Vec4 & outColRgh, sdw::Vec4 & outSpcMtl )const = 0;
 		C3D_API virtual sdw::Vec3 getAmbient( sdw::Vec3 const & ambientLight )const = 0;
 		C3D_API virtual void adjustDirectSpecular( sdw::Vec3 & directSpecular )const = 0;
 		C3D_API virtual sdw::Vec3 getIndirectAmbient( sdw::Vec3 const & indirectAmbient )const = 0;

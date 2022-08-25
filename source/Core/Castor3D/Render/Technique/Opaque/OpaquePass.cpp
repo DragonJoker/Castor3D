@@ -33,10 +33,10 @@ namespace castor3d
 {
 	namespace dropqpass
 	{
-		static castor::String const Output1 = "outData1";
-		static castor::String const Output2 = "outData2";
-		static castor::String const Output3 = "outData3";
-		static castor::String const Output4 = "outData4";
+		static castor::String const OutputNmlOcc = "outNmlOcc";
+		static castor::String const OutputColRgh = "outColRgh";
+		static castor::String const OutputSpcMtl = "outSpcMtl";
+		static castor::String const OutputEmsTrn = "outEmsTrn";
 	}
 
 	castor::String const OpaquePass::Type = "c3d.deferred.geometry";
@@ -149,10 +149,10 @@ namespace castor3d
 
 		// Fragment Outputs
 		auto index = 0u;
-		auto outData1 = writer.declOutput< Vec4 >( dropqpass::Output1, index++ );
-		auto outData2 = writer.declOutput< Vec4 >( dropqpass::Output2, index++ );
-		auto outData3 = writer.declOutput< Vec4 >( dropqpass::Output3, index++ );
-		auto outData4 = writer.declOutput< Vec4 >( dropqpass::Output4, index++ );
+		auto outNmlOcc = writer.declOutput< Vec4 >( dropqpass::OutputNmlOcc, index++ );
+		auto outColRgh = writer.declOutput< Vec4 >( dropqpass::OutputColRgh, index++ );
+		auto outSpcMtl = writer.declOutput< Vec4 >( dropqpass::OutputSpcMtl, index++ );
+		auto outEmsTrn = writer.declOutput< Vec4 >( dropqpass::OutputEmsTrn, index++ );
 
 		shader::Utils utils{ writer };
 		auto lightingModel = utils.createLightingModel( *renderSystem.getEngine()
@@ -203,9 +203,9 @@ namespace castor3d
 					, in.passMultipliers
 					, in.colour
 					, components );
-				outData1 = vec4( components.normal(), components.occlusion() );
-				lightMat->output( outData2, outData3 );
-				outData4 = vec4( components.emissive(), components.transmittance() );
+				outNmlOcc = vec4( components.normal(), components.occlusion() );
+				lightMat->output( outColRgh, outSpcMtl );
+				outEmsTrn = vec4( components.emissive(), components.transmittance() );
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

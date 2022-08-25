@@ -23,7 +23,7 @@ namespace draw_edges
 			eMaterials,
 			eModels,
 			eDepthObj,
-			eData1,
+			eNmlOcc,
 			eDepthRange,
 		};
 
@@ -34,7 +34,7 @@ namespace draw_edges
 			, castor3d::RenderDevice const & device
 			, castor3d::PassBuffer const & passBuffer
 			, crg::ImageViewId const & depthObj
-			, crg::ImageViewId const & data1
+			, crg::ImageViewId const & nmlOcc
 			, ashes::Buffer< int32_t > const & depthRange
 			, bool const * enabled );
 		~DepthNormalEdgeDetection();

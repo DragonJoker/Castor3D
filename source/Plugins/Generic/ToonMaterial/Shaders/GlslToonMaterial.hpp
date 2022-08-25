@@ -23,16 +23,16 @@ namespace toon::shader
 			, bool enabled );
 
 		void create( sdw::Vec3 const & albedo
-			, sdw::Vec4 const & data3
-			, sdw::Vec4 const & data2
+			, sdw::Vec4 const & spcMtl
+			, sdw::Vec4 const & colRgh
 			, c3d::Material const & material )override;
 		void create( sdw::Vec3 const & albedo
-			, sdw::Vec4 const & data3
-			, sdw::Vec4 const & data2
+			, sdw::Vec4 const & spcMtl
+			, sdw::Vec4 const & colRgh
 			, sdw::Float const & ambient )override;
 		void create( sdw::Vec3 const & vtxColour
 			, c3d::Material const & material )override;
-		void output( sdw::Vec4 & outData2, sdw::Vec4 & outData3 )const override;
+		void output( sdw::Vec4 & outColRgh, sdw::Vec4 & outSpcMtl )const override;
 		sdw::Vec3 getAmbient( sdw::Vec3 const & ambientLight )const override;
 		void adjustDirectSpecular( sdw::Vec3 & directSpecular )const override;
 		sdw::Vec3 getIndirectAmbient( sdw::Vec3 const & indirectAmbient )const override;
@@ -58,16 +58,16 @@ namespace toon::shader
 			, bool enabled );
 
 		void create( sdw::Vec3 const & albedo
-			, sdw::Vec4 const & data3
-			, sdw::Vec4 const & data2
+			, sdw::Vec4 const & spcMtl
+			, sdw::Vec4 const & colRgh
 			, c3d::Material const & material )override;
 		void create( sdw::Vec3 const & albedo
-			, sdw::Vec4 const & data3
-			, sdw::Vec4 const & data2
+			, sdw::Vec4 const & spcMtl
+			, sdw::Vec4 const & colRgh
 			, sdw::Float const & ambient )override;
 		void create( sdw::Vec3 const & vtxColour
 			, c3d::Material const & material )override;
-		void output( sdw::Vec4 & outData2, sdw::Vec4 & outData3 )const override;
+		void output( sdw::Vec4 & outColRgh, sdw::Vec4 & outSpcMtl )const override;
 		sdw::Vec3 getAmbient( sdw::Vec3 const & ambientLight )const override;
 		void adjustDirectSpecular( sdw::Vec3 & directSpecular )const override;
 		sdw::Vec3 getIndirectAmbient( sdw::Vec3 const & indirectAmbient )const override;
