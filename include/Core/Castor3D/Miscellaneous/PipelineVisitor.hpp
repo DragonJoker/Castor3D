@@ -26,6 +26,7 @@ namespace castor3d
 		{
 			bool forceSubPassesVisit;
 			bool forceMiplevelsVisit;
+			bool allowProgramsVisit;
 		};
 
 	protected:
@@ -45,7 +46,19 @@ namespace castor3d
 		*	Source de shader.
 		**/
 		/**@{*/
-		C3D_API virtual void visit( ShaderModule const & shader ) = 0;
+		C3D_API virtual void visit( ShaderModule const & shader
+			, bool forceProgramsVisit ) = 0;
+
+		void visit( ShaderModule const & shader )
+		{
+			if ( !config.allowProgramsVisit )
+			{
+				return;
+			}
+
+			visit( shader, config.allowProgramsVisit );
+		}
+
 		C3D_API virtual void visit( DebugConfig const & config ) = 0;
 		/**@}*/
 		/**
@@ -377,7 +390,8 @@ namespace castor3d
 		*	Source de shader.
 		**/
 		/**@{*/
-		void visit( ShaderModule const & value )override
+		void visit( ShaderModule const & value
+			, bool forceProgramsVisit )override
 		{
 		}
 

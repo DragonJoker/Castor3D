@@ -62,7 +62,8 @@ namespace castor3d
 
 	void OpaquePass::accept( RenderTechniqueVisitor & visitor )
 	{
-		if ( visitor.getFlags().renderPassType == m_typeID )
+		if ( visitor.getFlags().renderPassType == m_typeID
+			&& visitor.config.allowProgramsVisit )
 		{
 			auto flags = visitor.getFlags();
 			doUpdateFlags( flags );

@@ -193,7 +193,10 @@ namespace castor3d
 
 	void VoxelBufferToTexture::accept( RenderTechniqueVisitor & visitor )
 	{
-		visitor.visit( m_pipelines[doGetPassIndex()].shader );
+		if ( visitor.config.allowProgramsVisit )
+		{
+			visitor.visit( m_pipelines[doGetPassIndex()].shader );
+		}
 	}
 
 	void VoxelBufferToTexture::doInitialise()

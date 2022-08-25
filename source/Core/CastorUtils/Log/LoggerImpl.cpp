@@ -130,7 +130,7 @@ namespace castor
 
 			{
 				auto lock( makeUniqueLock( m_mutexFiles ) );
-				int i = 0;
+				size_t i = 0;
 
 				for ( auto const & stream : logs )
 				{
@@ -140,7 +140,7 @@ namespace castor
 					{
 						try
 						{
-							TextFile file{ Path{ m_logFilePath[size_t( i++ )] }, File::OpenMode::eAppend };
+							TextFile file{ Path{ m_logFilePath[i] }, File::OpenMode::eAppend };
 							file.writeText( text );
 						}
 						catch ( Exception & exc )
@@ -148,6 +148,8 @@ namespace castor
 							printf( "Unexpected exception while writing log messages: %s", exc.what() );
 						}
 					}
+
+					++i;
 				}
 			}
 		}
