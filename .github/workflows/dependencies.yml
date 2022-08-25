@@ -1,0 +1,90 @@
+name: Dependencies
+
+on:
+  workflow_dispatch
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [[ubuntu-latest,x64-linux,gcc], [ubuntu-latest,x64-linux,clang], [windows-latest,x64-windows,msvc], [macos-latest,x64-osx,clang]]
+        buildType: [Release]
+
+    runs-on: ${{ matrix.os[0] }}
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup vcpkg
+      uses: lukka/run-vcpkg@v4
+      with:
+        vcpkgGitCommitId: '${{ secrets.VCPKG_COMMIT_ID }}'
+        setupOnly: true
+  
+    - name: Install necessary G++ version (Linux)
+      if: runner.os == 'Linux' && matrix.os[2] == 'gcc'
+      shell: bash
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y --no-install-recommends ccache gcc-10 g++-10
+
+    - name: Install necessary Clang++ version (Linux)
+      if: runner.os == 'Linux' && matrix.os[2] == 'clang'
+      shell: bash
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y --no-install-recommends ccache clang-12 clang++-12
+
+    - name: Create Build Environment
+      run: cmake -E make_directory ${{runner.workspace}}/build-${{ matrix.buildType }}
+
+    - name: Configure Warnings as errors (OFF)
+      if: github.event_name == 'push' || runner.os == 'macOS'
+      shell: bash
+      working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
+      run: echo "PROJ_WAE=OFF" >> $GITHUB_ENV
+
+    - name: Configure Warnings as errors (ON)
+      if: github.event_name == 'pull_request' && runner.os != 'macOS'
+      shell: bash
+      working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
+      run: echo "PROJ_WAE=ON" >> $GITHUB_ENV
+
+    - name: Configure GCC version (Linux)
+      if: runner.os == 'Linux' && matrix.os[2] == 'gcc'
+      shell: bash
+      working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
+      run: echo "CC=gcc-10" >> $GITHUB_ENV
+
+    - name: Configure G++ version (Linux)
+      if: runner.os == 'Linux' && matrix.os[2] == 'gcc'
+      shell: bash
+      working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
+      run: echo "CXX=g++-10" >> $GITHUB_ENV
+
+    - name: Configure Clang version (Linux)
+      if: runner.os == 'Linux' && matrix.os[2] == 'clang'
+      shell: bash
+      working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
+      run: echo "CC=clang-12" >> $GITHUB_ENV
+
+    - name: Configure Clang++ version (Linux)
+      if: runner.os == 'Linux' && matrix.os[2] == 'clang'
+      shell: bash
+      working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
+      run: echo "CXX=clang++-12" >> $GITHUB_ENV
+
+    - name: Install necessary packages version (Linux)
+      if: runner.os == 'Linux'
+      shell: bash
+      run: |
+        sudo apt-get install -y --no-install-recommends libxi-dev libgl1-mesa-dev libglu1-mesa-dev mesa-common-dev libxrandr-dev libxxf86vm-dev libxaw7-dev libwayland-dev libxcb1-dev libx11-xcb-dev libassimp-dev libfreeimage-dev
+
+    - name: Install vcpkg packages
+      shell: bash
+      run: $VCPKG_ROOT/vcpkg install spirv-cross:${{ matrix.os[1] }} freetype:${{ matrix.os[1] }} zlib:${{ matrix.os[1] }} minizip:${{ matrix.os[1] }} vkfft:${{ matrix.os[1] }} convectionkernels:${{ matrix.os[1] }} meshoptimizer:${{ matrix.os[1] }} gli:${{ matrix.os[1] }}
+
+    - name: Install vcpkg packages (Windows)
+      if: runner.os == 'Windows'
+      shell: bash
+      run: $VCPKG_ROOT/vcpkg install assimp:${{ matrix.os[1] }}
