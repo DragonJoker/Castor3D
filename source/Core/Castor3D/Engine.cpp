@@ -58,10 +58,15 @@ namespace castor3d
 		static castor::String const samplerName = cuT( "C3D_Lights" );
 
 		static castor::LoggerInstancePtr createLogger( castor::LogType type
-			, castor::Path const & filePath )
+			, castor::Path const & filePath
+			, castor::Path const & debugFilePath )
 		{
 			auto result = castor::Logger::createInstance( type );
-			result->setFileName( filePath );
+			result->setFileName( filePath, castor::LogType::eError );
+			result->setFileName( filePath, castor::LogType::eWarning );
+			result->setFileName( filePath, castor::LogType::eInfo );
+			result->setFileName( debugFilePath, castor::LogType::eDebug );
+			result->setFileName( debugFilePath, castor::LogType::eTrace );
 			return result;
 		}
 	}
@@ -145,7 +150,9 @@ namespace castor3d
 		: Engine{ appName
 			, appVersion
 			, enableValidation
-			, eng::createLogger( castor::Logger::getLevel(), getEngineDirectory() / cuT( "Castor3D.log" ) )
+			, eng::createLogger( castor::Logger::getLevel()
+				, getEngineDirectory() / cuT( "Castor3D.log" )
+				, getEngineDirectory() / cuT( "Castor3D-Debug.log" ) )
 			, nullptr }
 	{
 	}
