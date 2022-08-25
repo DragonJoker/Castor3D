@@ -207,6 +207,11 @@ namespace castor3d
 			return checkFlag( m_shaderFlags, ShaderFlag::eTessellation );
 		}
 
+		bool usesColour()const
+		{
+			return checkFlag( m_shaderFlags, ShaderFlag::eColour );
+		}
+
 		bool forceTexCoords()const
 		{
 			return checkFlag( m_shaderFlags, ShaderFlag::eForceTexCoords );

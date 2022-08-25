@@ -391,6 +391,7 @@ namespace Testing
 				{ castor3d::ShaderFlag::eGeometry, "eGeometry" },
 				{ castor3d::ShaderFlag::eTessellation, "eTessellation" },
 				{ castor3d::ShaderFlag::eForceTexCoords, "eForceTexCoords" },
+				{ castor3d::ShaderFlag::eColour, "eColour" },
 			};
 			return Names[value];
 		}

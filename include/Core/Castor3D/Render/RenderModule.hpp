@@ -379,9 +379,12 @@ namespace castor3d
 		//!\~english	Forces texcoords binding.
 		//\~french		Force le binding des UV.
 		eForceTexCoords = 0x00040000,
+		//!\~english	Shader uses the colour component.
+		//\~french		Le shader utilise la composante couleur.
+		eColour = 0x00080000,
 		//!\~english	All shader flags.
 		//\~french		Tous les indicateurs de shader.
-		eAll = 0x0004FFFF,
+		eAll = 0x000FFFFF,
 	};
 	CU_ImplementFlags( ShaderFlag )
 	/**

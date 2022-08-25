@@ -1655,7 +1655,8 @@ namespace castor3d
 			| ShaderFlag::eWorldSpace
 			| ShaderFlag::eViewSpace
 			| ShaderFlag::eVelocity
-			| ShaderFlag::eOpacity;
+			| ShaderFlag::eOpacity
+			| ShaderFlag::eColour;
 	}
 
 	void VisibilityResolvePass::doInitialise()

@@ -73,16 +73,7 @@ namespace water
 		*/
 		/**@{*/
 		castor3d::TextureFlags getTexturesMask()const override;
-
-		castor3d::ShaderFlags getShaderFlags()const override
-		{
-			return castor3d::ShaderFlag::eWorldSpace
-				| castor3d::ShaderFlag::eViewSpace
-				| castor3d::ShaderFlag::eNormal
-				| castor3d::ShaderFlag::eTangentSpace
-				| castor3d::ShaderFlag::eLighting
-				| castor3d::ShaderFlag::eForceTexCoords;
-		}
+		castor3d::ShaderFlags getShaderFlags()const override;
 		/**@}*/
 
 	public:
