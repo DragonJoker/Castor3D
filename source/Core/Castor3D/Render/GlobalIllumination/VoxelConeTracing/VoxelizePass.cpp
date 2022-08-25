@@ -357,8 +357,8 @@ namespace castor3d
 					out.normal = normalize( mat3( transpose( inverse( modelMtx ) ) ) * curNormal );
 				}
 
+				out.worldPosition = out.vtx.position.xyz();
 				out.viewPosition = c3d_matrixData.worldToCurView( out.vtx.position ).xyz();
-				out.worldPosition = out.viewPosition;
 			} );
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}

@@ -741,9 +741,9 @@ namespace castor3d
 					curPosition = c3d_matrixData.curViewToWorld( curPosition );
 					result.worldPosition = curPosition;
 
-					curPosition = modelData.worldToModel( curPosition );
 					auto prvPosition = writer.declLocale( "prvPosition"
 						, curPosition );
+					curPosition = modelData.worldToModel( curPosition );
 
 					if ( stride == 0u )
 					{
@@ -762,7 +762,7 @@ namespace castor3d
 								, modelData.getModelMtx() );
 							auto prvMtxModel = writer.declLocale( "prvMtxModel"
 								, modelData.getPrvModelMtx( flags, curMtxModel ) );
-							prvPosition = prvMtxModel * prvPosition;
+							prvPosition = prvMtxModel * curPosition;
 							auto mtxNormal = writer.declLocale( "mtxNormal"
 								, modelData.getNormalMtx( flags, curMtxModel ) );
 							normal = normalize( mtxNormal * normal );
