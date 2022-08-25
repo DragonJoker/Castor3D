@@ -296,7 +296,17 @@ namespace castor3d
 
 		if ( target )
 		{
-			target->initialise( device, queueData );
+			std::atomic_bool isInitialised = false;
+			target->initialise( [&isInitialised]( RenderTarget const & rt, QueueData const & queue )
+				{
+					isInitialised = true;
+				} );
+
+			while ( !isInitialised )
+			{
+				std::this_thread::sleep_for( 5_ms );
+			}
+
 			m_texture = std::make_shared< TextureLayout >( device.renderSystem
 				, target->getTexture().image
 				, target->getTexture().wholeViewId );
