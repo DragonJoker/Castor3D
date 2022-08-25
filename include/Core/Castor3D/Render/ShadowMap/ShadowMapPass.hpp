@@ -98,7 +98,6 @@ namespace castor3d
 				| ShaderFlag::eOpacity
 				| ( m_needsVsm ? ShaderFlag::eVsmShadowMap : ShaderFlag::eNone )
 				| ( m_needsRsm ? ShaderFlag::eRsmShadowMap : ShaderFlag::eNone )
-				| ( m_needsRsm ? ShaderFlag::eWorldSpace : ShaderFlag::eNone )
 				| ( m_needsRsm ? ShaderFlag::eColour : ShaderFlag::eNone )
 				| doGetShaderFlags();
 		}
@@ -118,8 +117,6 @@ namespace castor3d
 		mutable bool m_initialised{ false };
 		bool m_outOfDate{ true };
 		ShadowMapUbo m_shadowMapUbo;
-
-	private:
 		bool m_needsVsm;
 		bool m_needsRsm;
 	};

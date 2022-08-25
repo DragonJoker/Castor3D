@@ -73,7 +73,8 @@ namespace castor3d
 
 		ShaderFlags doGetShaderFlags()const override
 		{
-			return ShaderFlag::eShadowMapDirectional;
+			return ShaderFlag::eShadowMapDirectional
+				| ( m_needsRsm ? ShaderFlag::eWorldSpace : ShaderFlag::eNone );
 		}
 
 	public:
