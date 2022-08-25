@@ -39,10 +39,10 @@ namespace castor3d
 		eGpInfo,
 		eScene,
 		eDepthObj,
-		eData1,
-		eData2,
-		eData3,
-		eData4,
+		eNmlOcc,
+		eColRgh,
+		eSpcMtl,
+		eEmsTrn,
 	};
 	/**
 	*\~english

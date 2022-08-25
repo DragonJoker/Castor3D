@@ -87,9 +87,9 @@ namespace castor3d
 				, nullptr
 				, true );
 			auto c3d_mapDepthObj = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapDepthObj", uint32_t( IndirectLightingPass::eDepthObj ), 0u );
-			auto c3d_mapData1 = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eData1 ), uint32_t( IndirectLightingPass::eData1 ), 0u );
-			auto c3d_mapData2 = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eData2 ), uint32_t( IndirectLightingPass::eData2 ), 0u );
-			auto c3d_mapData3 = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eData3 ), uint32_t( IndirectLightingPass::eData3 ), 0u );
+			auto c3d_mapNmlOcc = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eNmlOcc ), uint32_t( IndirectLightingPass::eNmlOcc ), 0u );
+			auto c3d_mapColRgh = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eColRgh ), uint32_t( IndirectLightingPass::eColRgh ), 0u );
+			auto c3d_mapSpcMtl = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eSpcMtl ), uint32_t( IndirectLightingPass::eSpcMtl ), 0u );
 			auto c3d_brdfMap = writer.declCombinedImg< FImg2DRg32 >( "c3d_brdfMap", uint32_t( IndirectLightingPass::eBrdf ), 0u );
 
 			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
@@ -118,14 +118,14 @@ namespace castor3d
 
 					IF( writer, material.lighting() != 0_u )
 					{
-						auto data1 = writer.declLocale( "data1"
-							, c3d_mapData1.lod( texCoord, 0.0_f ) );
-						auto data2 = writer.declLocale( "data2"
-							, c3d_mapData2.lod( texCoord, 0.0_f ) );
-						auto data3 = writer.declLocale( "data3"
-							, c3d_mapData3.lod( texCoord, 0.0_f ) );
+						auto nmlOcc = writer.declLocale( "nmlOcc"
+							, c3d_mapNmlOcc.lod( texCoord, 0.0_f ) );
+						auto colRgh = writer.declLocale( "colRgh"
+							, c3d_mapColRgh.lod( texCoord, 0.0_f ) );
+						auto spcMtl = writer.declLocale( "spcMtl"
+							, c3d_mapSpcMtl.lod( texCoord, 0.0_f ) );
 						auto lightMat = lightingModel->declMaterial( "lightMat" );
-						lightMat->create( data2.rgb(), data3, data2 );
+						lightMat->create( colRgh.rgb(), spcMtl, colRgh );
 						auto eye = writer.declLocale( "eye"
 							, c3d_sceneData.cameraPosition );
 						auto depth = writer.declLocale( "depth"
@@ -135,7 +135,7 @@ namespace castor3d
 						auto wsPosition = writer.declLocale( "wsPosition"
 							, c3d_gpInfoData.projToWorld( utils, texCoord, depth ) );
 						auto wsNormal = writer.declLocale( "wsNormal"
-							, data1.xyz() );
+							, nmlOcc.xyz() );
 						auto surface = writer.declLocale< shader::Surface >( "surface" );
 						surface.create( vec3( in.fragCoord.xy(), depth )
 							, vsPosition
@@ -381,12 +381,12 @@ namespace castor3d
 			, uint32_t( IndirectLightingPass::eVoxelData ) );
 		pass.addSampledView( m_depthObj.sampledViewId
 			, uint32_t( IndirectLightingPass::eDepthObj ) );
-		pass.addSampledView( m_gpResult[DsTexture::eData1].sampledViewId
-			, uint32_t( IndirectLightingPass::eData1 ) );
-		pass.addSampledView( m_gpResult[DsTexture::eData2].sampledViewId
-			, uint32_t( IndirectLightingPass::eData2 ) );
-		pass.addSampledView( m_gpResult[DsTexture::eData3].sampledViewId
-			, uint32_t( IndirectLightingPass::eData3 ) );
+		pass.addSampledView( m_gpResult[DsTexture::eNmlOcc].sampledViewId
+			, uint32_t( IndirectLightingPass::eNmlOcc ) );
+		pass.addSampledView( m_gpResult[DsTexture::eColRgh].sampledViewId
+			, uint32_t( IndirectLightingPass::eColRgh ) );
+		pass.addSampledView( m_gpResult[DsTexture::eSpcMtl].sampledViewId
+			, uint32_t( IndirectLightingPass::eSpcMtl ) );
 		pass.addSampledView( m_brdf.sampledViewId
 			, uint32_t( IndirectLightingPass::eBrdf )
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );

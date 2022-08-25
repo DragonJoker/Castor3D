@@ -55,7 +55,7 @@ namespace draw_edges
 			castor3d::shader::Materials materials{ writer, DepthNormalEdgeDetection::eMaterials, 0u };
 			C3D_ModelsData( writer, DepthNormalEdgeDetection::eModels, 0u );
 			auto depthObj( writer.declCombinedImg< FImg2DRgba32 >( "depthObj", DepthNormalEdgeDetection::eDepthObj, 0u ) );
-			auto data1( writer.declCombinedImg< FImg2DRgba32 >( "data1", DepthNormalEdgeDetection::eData1, 0u ) );
+			auto nmlOcc( writer.declCombinedImg< FImg2DRgba32 >( "nmlOcc", DepthNormalEdgeDetection::eNmlOcc, 0u ) );
 			auto depthRangeBuffer( writer.declStorageBuffer( "DepthRangeBuffer", DepthNormalEdgeDetection::eDepthRange, 0u ) );
 			auto minmax = depthRangeBuffer.declMember< sdw::Int >( "minmax", 2u );
 			depthRangeBuffer.end();
@@ -86,14 +86,14 @@ namespace draw_edges
 					auto w = 1_i;
 					auto h = 1_i;
 
-					auto An = writer.declLocale( "An", data1.fetch( texCoord + ivec2(   -w,   +h ), 0_i ).xyz() );  //  +---+---+---+
-					auto Bn = writer.declLocale( "Bn", data1.fetch( texCoord + ivec2( +0_i,   +h ), 0_i ).xyz() );  //  | A | B | C |
-					auto Cn = writer.declLocale( "Cn", data1.fetch( texCoord + ivec2(   +w,   +h ), 0_i ).xyz() );  //  +---+---+---+
-					auto Dn = writer.declLocale( "Dn", data1.fetch( texCoord + ivec2(   -w, +0_i ), 0_i ).xyz() );  //  | D | X | E |
-					auto En = writer.declLocale( "En", data1.fetch( texCoord + ivec2(   +w, +0_i ), 0_i ).xyz() );  //  +---+---+---+
-					auto Fn = writer.declLocale( "Fn", data1.fetch( texCoord + ivec2(   -w,   -h ), 0_i ).xyz() );  //  | F | G | H |
-					auto Gn = writer.declLocale( "Gn", data1.fetch( texCoord + ivec2( +0_i,   -h ), 0_i ).xyz() );  //  +---+---+---+
-					auto Hn = writer.declLocale( "Hn", data1.fetch( texCoord + ivec2(   +w,   -h ), 0_i ).xyz() );
+					auto An = writer.declLocale( "An", nmlOcc.fetch( texCoord + ivec2(   -w,   +h ), 0_i ).xyz() );  //  +---+---+---+
+					auto Bn = writer.declLocale( "Bn", nmlOcc.fetch( texCoord + ivec2( +0_i,   +h ), 0_i ).xyz() );  //  | A | B | C |
+					auto Cn = writer.declLocale( "Cn", nmlOcc.fetch( texCoord + ivec2(   +w,   +h ), 0_i ).xyz() );  //  +---+---+---+
+					auto Dn = writer.declLocale( "Dn", nmlOcc.fetch( texCoord + ivec2(   -w, +0_i ), 0_i ).xyz() );  //  | D | X | E |
+					auto En = writer.declLocale( "En", nmlOcc.fetch( texCoord + ivec2(   +w, +0_i ), 0_i ).xyz() );  //  +---+---+---+
+					auto Fn = writer.declLocale( "Fn", nmlOcc.fetch( texCoord + ivec2(   -w,   -h ), 0_i ).xyz() );  //  | F | G | H |
+					auto Gn = writer.declLocale( "Gn", nmlOcc.fetch( texCoord + ivec2( +0_i,   -h ), 0_i ).xyz() );  //  +---+---+---+
+					auto Hn = writer.declLocale( "Hn", nmlOcc.fetch( texCoord + ivec2(   +w,   -h ), 0_i ).xyz() );
 
 					// Normal Gradient
 					auto Ngrad = writer.declLocale( "Ngrad", 0.0_f );
@@ -171,7 +171,7 @@ namespace draw_edges
 					FI;
 
 					auto Xn = writer.declLocale( "Xn"
-						, data1.fetch( texelCoord, 0_i ) );
+						, nmlOcc.fetch( texelCoord, 0_i ) );
 					auto depthRange = writer.declLocale( "depthRange"
 						, vec2( intBitsToFloat( minmax[0] )
 							, intBitsToFloat( minmax[1] ) ) );
@@ -196,7 +196,7 @@ namespace draw_edges
 		, castor3d::RenderDevice const & device
 		, castor3d::PassBuffer const & passBuffer
 		, crg::ImageViewId const & depthObj
-		, crg::ImageViewId const & data1
+		, crg::ImageViewId const & nmlOcc
 		, ashes::Buffer< int32_t > const & depthRange
 		, bool const * enabled )
 		: m_device{ device }
@@ -248,7 +248,7 @@ namespace draw_edges
 			, 0u
 			, uint32_t( modelBuffer.getSize() ) );
 		m_pass.addSampledView( depthObj, eDepthObj );
-		m_pass.addSampledView( data1, eData1 );
+		m_pass.addSampledView( nmlOcc, eNmlOcc );
 		m_pass.addInputStorageBuffer( { depthRange.getBuffer(), "DepthRange" }, eDepthRange, 0u, depthRange.getBuffer().getSize() );
 		m_pass.addOutputColourView( m_result.targetViewId
 			, castor3d::transparentBlackClearColor );

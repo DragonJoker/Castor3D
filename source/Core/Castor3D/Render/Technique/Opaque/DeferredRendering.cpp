@@ -142,22 +142,13 @@ namespace castor3d
 
 	void DeferredRendering::accept( RenderTechniqueVisitor & visitor )
 	{
-		visitor.visit( "Opaque Data1"
-			, m_opaquePassResult[DsTexture::eData1].sampledViewId
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-			, TextureFactors{}.invert( true ) );
-		visitor.visit( "Opaque Data2"
-			, m_opaquePassResult[DsTexture::eData2].sampledViewId
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-			, TextureFactors{}.invert( true ) );
-		visitor.visit( "Opaque Data3"
-			, m_opaquePassResult[DsTexture::eData3].sampledViewId
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-			, TextureFactors{}.invert( true ) );
-		visitor.visit( "Opaque Data4"
-			, m_opaquePassResult[DsTexture::eData4].sampledViewId
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-			, TextureFactors{}.invert( true ) );
+		for ( auto texture = DsTexture::eMin; texture < DsTexture::eCount; texture = DsTexture( size_t( texture ) + 1u ) )
+		{
+			visitor.visit( "Opaque " + getTexName( texture )
+				, m_opaquePassResult[texture].sampledViewId
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, TextureFactors{}.invert( true ) );
+		}
 
 		m_lightingPass->accept( visitor );
 		m_indirectLightingPass->accept( visitor );

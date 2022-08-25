@@ -205,14 +205,14 @@ namespace castor3d
 			, uint32_t( LightPassIdx::eScene ) );
 		pass.addSampledView( m_depthObj.sampledViewId
 			, uint32_t( LightPassIdx::eDepthObj ) );
-		pass.addSampledView( m_gpResult[DsTexture::eData1].sampledViewId
-			, uint32_t( LightPassIdx::eData1 ) );
-		pass.addSampledView( m_gpResult[DsTexture::eData2].sampledViewId
-			, uint32_t( LightPassIdx::eData2 ) );
-		pass.addSampledView( m_gpResult[DsTexture::eData3].sampledViewId
-			, uint32_t( LightPassIdx::eData3 ) );
-		pass.addSampledView( m_gpResult[DsTexture::eData4].sampledViewId
-			, uint32_t( LightPassIdx::eData4 ) );
+		pass.addSampledView( m_gpResult[DsTexture::eNmlOcc].sampledViewId
+			, uint32_t( LightPassIdx::eNmlOcc ) );
+		pass.addSampledView( m_gpResult[DsTexture::eColRgh].sampledViewId
+			, uint32_t( LightPassIdx::eColRgh ) );
+		pass.addSampledView( m_gpResult[DsTexture::eSpcMtl].sampledViewId
+			, uint32_t( LightPassIdx::eSpcMtl ) );
+		pass.addSampledView( m_gpResult[DsTexture::eEmsTrn].sampledViewId
+			, uint32_t( LightPassIdx::eEmsTrn ) );
 
 		pass.addInOutDepthStencilView( m_lpResult[LpTexture::eDepth].targetViewId );
 		pass.addOutputColourView( m_lpResult[LpTexture::eDiffuse].targetViewId );

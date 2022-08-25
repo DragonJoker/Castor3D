@@ -20,10 +20,10 @@ namespace castor3d
 		static std::array< castor::String, size_t( DsTexture::eCount ) > Values
 		{
 			{
-				cuT( "Data1" ),
-				cuT( "Data2" ),
-				cuT( "Data3" ),
-				cuT( "Data4" ),
+				cuT( "NmlOcc" ),
+				cuT( "ColRgh" ),
+				cuT( "SpcMtl" ),
+				cuT( "EmsTrn" ),
 			}
 		};
 
@@ -90,13 +90,13 @@ namespace castor3d
 
 	OpaquePassResult::OpaquePassResult( crg::ResourceHandler & handler
 		, RenderDevice const & device
-		, TexturePtr data1Texture )
+		, TexturePtr nmlOccTexture )
 		: GBufferT< DsTexture >{ handler
 			, device
 			, cuT( "GPResult" )
-			, { data1Texture, nullptr, nullptr, nullptr }
+			, { nmlOccTexture, nullptr, nullptr, nullptr }
 			, 0u
-			, makeSize( getExtent( data1Texture->imageId ) ) }
+			, makeSize( getExtent( nmlOccTexture->imageId ) ) }
 	{
 	}
 

@@ -436,14 +436,14 @@ namespace castor3d
 			, VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE ) }
 		, m_normal{ std::make_shared< Texture >( m_device
 			, getOwner()->getGraphResourceHandler()
-			, getName() + "/Data1"
+			, getName() + "/NmlOcc"
 			, 0u
 			, m_colour.getExtent()
 			, 1u
 			, 1u
-			, getFormat( m_device, DsTexture::eData1 )
-			, getUsageFlags( DsTexture::eData1 )
-			, getBorderColor( DsTexture::eData1 ) ) }
+			, getFormat( m_device, DsTexture::eNmlOcc )
+			, getUsageFlags( DsTexture::eNmlOcc )
+			, getBorderColor( DsTexture::eNmlOcc ) ) }
 		, m_matrixUbo{ m_device }
 		, m_sceneUbo{ m_device }
 		, m_gpInfoUbo{ m_device }
@@ -487,7 +487,7 @@ namespace castor3d
 			? castor::makeUnique< ShaderBuffer >( *getEngine()
 				, m_device
 				, MaxObjectNodesCount * sizeof( uint32_t )
-				, "MaterialsPipelinesIds" )
+				, getName() + "/MaterialsPipelinesIds" )
 			: nullptr ) }
 		, m_visibility{ ( m_device.hasBindless()
 			? std::make_shared< Texture >( m_device
@@ -1082,7 +1082,7 @@ namespace castor3d
 		if ( m_opaquePassResult )
 		{
 			m_opaquePassResult->create();
-			return ( *m_opaquePassResult )[DsTexture::eData2];
+			return ( *m_opaquePassResult )[DsTexture::eColRgh];
 		}
 
 		return m_colour;
@@ -1179,14 +1179,14 @@ namespace castor3d
 				if ( !VisibilityResolvePass::useCompute )
 				{
 					auto dataIt = framePass.images.begin();
-					auto data1It = std::next( dataIt );
-					auto data2It = std::next( data1It );
-					auto data3It = std::next( data2It );
-					auto data4It = std::next( data3It );
-					renderPassDesc.implicitAction( data1It->view(), crg::RecordContext::clearAttachment( *data1It ) )
-						.implicitAction( data2It->view(), crg::RecordContext::clearAttachment( *data2It ) )
-						.implicitAction( data3It->view(), crg::RecordContext::clearAttachment( *data3It ) )
-						.implicitAction( data4It->view(), crg::RecordContext::clearAttachment( *data4It ) );
+					auto nmlOccIt = std::next( dataIt );
+					auto colRghIt = std::next( nmlOccIt );
+					auto spcMtlIt = std::next( colRghIt );
+					auto emsTrnIt = std::next( spcMtlIt );
+					renderPassDesc.implicitAction( nmlOccIt->view(), crg::RecordContext::clearAttachment( *nmlOccIt ) )
+						.implicitAction( colRghIt->view(), crg::RecordContext::clearAttachment( *colRghIt ) )
+						.implicitAction( spcMtlIt->view(), crg::RecordContext::clearAttachment( *spcMtlIt ) )
+						.implicitAction( emsTrnIt->view(), crg::RecordContext::clearAttachment( *emsTrnIt ) );
 				}
 
 				auto res = std::make_unique< VisibilityResolvePass >( this
@@ -1230,25 +1230,25 @@ namespace castor3d
 				, index++
 				, 0u
 				, uint32_t( m_pixelsXY->getBuffer().getSize() ) );
-			result.addOutputStorageView( opaquePassResult[DsTexture::eData1].targetViewId
+			result.addOutputStorageView( opaquePassResult[DsTexture::eNmlOcc].targetViewId
 				, index++ );
-			result.addOutputStorageView( opaquePassResult[DsTexture::eData2].targetViewId
+			result.addOutputStorageView( opaquePassResult[DsTexture::eColRgh].targetViewId
 				, index++ );
-			result.addOutputStorageView( opaquePassResult[DsTexture::eData3].targetViewId
+			result.addOutputStorageView( opaquePassResult[DsTexture::eSpcMtl].targetViewId
 				, index++ );
-			result.addOutputStorageView( opaquePassResult[DsTexture::eData4].targetViewId
+			result.addOutputStorageView( opaquePassResult[DsTexture::eEmsTrn].targetViewId
 				, index++ );
 		}
 		else
 		{
-			result.addOutputColourView( opaquePassResult[DsTexture::eData1].targetViewId
-				, getClearValue( DsTexture::eData1 ) );
-			result.addOutputColourView( opaquePassResult[DsTexture::eData2].targetViewId
-				, getClearValue( DsTexture::eData2 ) );
-			result.addOutputColourView( opaquePassResult[DsTexture::eData3].targetViewId
-				, getClearValue( DsTexture::eData3 ) );
-			result.addOutputColourView( opaquePassResult[DsTexture::eData4].targetViewId
-				, getClearValue( DsTexture::eData4 ) );
+			result.addOutputColourView( opaquePassResult[DsTexture::eNmlOcc].targetViewId
+				, getClearValue( DsTexture::eNmlOcc ) );
+			result.addOutputColourView( opaquePassResult[DsTexture::eColRgh].targetViewId
+				, getClearValue( DsTexture::eColRgh ) );
+			result.addOutputColourView( opaquePassResult[DsTexture::eSpcMtl].targetViewId
+				, getClearValue( DsTexture::eSpcMtl ) );
+			result.addOutputColourView( opaquePassResult[DsTexture::eEmsTrn].targetViewId
+				, getClearValue( DsTexture::eEmsTrn ) );
 		}
 
 		return result;
@@ -1311,7 +1311,7 @@ namespace castor3d
 		result.addOutputColourView( m_renderTarget.getVelocity()->targetViewId );
 #if !C3D_UseDeferredRendering
 		result.addOutputColourView( m_normal->targetViewId
-			, getClearValue( DsTexture::eData1 ) );
+			, getClearValue( DsTexture::eNmlOcc ) );
 #endif
 		return result;
 	}
@@ -1388,14 +1388,14 @@ namespace castor3d
 				renderPassDesc.safeBand( true )
 					.meshShading( true );
 #if C3D_UseDeferredRendering
-				auto data1It = std::next( framePass.images.begin(), 1u );
-				auto data2It = std::next( data1It );
-				auto data3It = std::next( data2It );
-				auto data4It = std::next( data3It );
-				renderPassDesc.implicitAction( data1It->view(), crg::RecordContext::clearAttachment( *data1It ) )
-					.implicitAction( data2It->view(), crg::RecordContext::clearAttachment( *data2It ) )
-					.implicitAction( data3It->view(), crg::RecordContext::clearAttachment( *data3It ) )
-					.implicitAction( data4It->view(), crg::RecordContext::clearAttachment( *data4It ) );
+				auto nmlOccIt = std::next( framePass.images.begin(), 1u );
+				auto colRghIt = std::next( nmlOccIt );
+				auto spcMtlIt = std::next( colRghIt );
+				auto emsTrnIt = std::next( spcMtlIt );
+				renderPassDesc.implicitAction( nmlOccIt->view(), crg::RecordContext::clearAttachment( *nmlOccIt ) )
+					.implicitAction( colRghIt->view(), crg::RecordContext::clearAttachment( *colRghIt ) )
+					.implicitAction( spcMtlIt->view(), crg::RecordContext::clearAttachment( *spcMtlIt ) )
+					.implicitAction( emsTrnIt->view(), crg::RecordContext::clearAttachment( *emsTrnIt ) );
 #else
 				techniquePassDesc.ssao( m_ssao->getResult() )
 					.lpvConfigUbo( m_lpvConfigUbo )
@@ -1426,14 +1426,14 @@ namespace castor3d
 #if C3D_UseDeferredRendering
 		auto & opaquePassResult = *m_opaquePassResult;
 		result.addInOutDepthStencilView( m_depth->targetViewId );
-		result.addOutputColourView( opaquePassResult[DsTexture::eData1].targetViewId
-			, getClearValue( DsTexture::eData1 ) );
-		result.addOutputColourView( opaquePassResult[DsTexture::eData2].targetViewId
-			, getClearValue( DsTexture::eData2 ) );
-		result.addOutputColourView( opaquePassResult[DsTexture::eData3].targetViewId
-			, getClearValue( DsTexture::eData3 ) );
-		result.addOutputColourView( opaquePassResult[DsTexture::eData4].targetViewId
-			, getClearValue( DsTexture::eData4 ) );
+		result.addOutputColourView( opaquePassResult[DsTexture::eNmlOcc].targetViewId
+			, getClearValue( DsTexture::eNmlOcc ) );
+		result.addOutputColourView( opaquePassResult[DsTexture::eColRgh].targetViewId
+			, getClearValue( DsTexture::eColRgh ) );
+		result.addOutputColourView( opaquePassResult[DsTexture::eSpcMtl].targetViewId
+			, getClearValue( DsTexture::eSpcMtl ) );
+		result.addOutputColourView( opaquePassResult[DsTexture::eEmsTrn].targetViewId
+			, getClearValue( DsTexture::eEmsTrn ) );
 #else
 		result.addDependency( m_ssao->getLastPass() );
 		result.addSampledView( m_ssao->getResult().sampledViewId, 0u );
