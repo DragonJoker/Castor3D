@@ -417,15 +417,6 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Deferred lighting Render technique pass.
-	*\~french
-	*\brief
-	*	Classe de passe de technique de rendu implémentant le Deferred lighting.
-	*/
-	class DepthPass;
-	/**
-	*\~english
-	*\brief
 	*	Implements a frustum and the checks related to frustum culling.
 	*\~french
 	*\brief

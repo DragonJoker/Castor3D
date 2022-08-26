@@ -1,4 +1,4 @@
-#include "Castor3D/Render/Visibility/VisibilityPass.hpp"
+#include "Castor3D/Render/Prepass/VisibilityPass.hpp"
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"

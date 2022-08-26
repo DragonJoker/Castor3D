@@ -1,4 +1,4 @@
-#include "Castor3D/Render/Passes/DepthPass.hpp"
+#include "Castor3D/Render/Prepass/DepthPass.hpp"
 
 #include "Castor3D/Config.hpp"
 #include "Castor3D/Engine.hpp"
