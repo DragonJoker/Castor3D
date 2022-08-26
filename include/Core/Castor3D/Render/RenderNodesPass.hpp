@@ -25,6 +25,9 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	C3D_API void countNodes( RenderNodesPass const & renderPass
+		, RenderInfo & info );
+
 	struct RenderNodesPassDesc
 	{
 	private:

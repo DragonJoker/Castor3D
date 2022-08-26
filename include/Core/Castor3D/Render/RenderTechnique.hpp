@@ -6,18 +6,21 @@ See LICENSE file in root folder
 
 #include "RenderModule.hpp"
 
-#include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumesModule.hpp"
 #include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/VoxelizeModule.hpp"
-#include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
+#include "Castor3D/Render/Opaque/OpaqueModule.hpp"
 #include "Castor3D/Render/Prepass/PrepassModule.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
-#include "Castor3D/Render/Opaque/OpaqueModule.hpp"
-#include "Castor3D/Render/Ssao/SsaoConfig.hpp"
-#include "Castor3D/Render/Ssao/SsaoPass.hpp"
+#include "Castor3D/Render/Ssao/SsaoModule.hpp"
 #include "Castor3D/Render/Transparent/TransparentModule.hpp"
 #include "Castor3D/Scene/Background/BackgroundModule.hpp"
+
+#include "Castor3D/Material/Texture/TextureUnit.hpp"
+#include "Castor3D/Render/Opaque/OpaqueRendering.hpp"
+#include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
+#include "Castor3D/Render/Prepass/PrepassRendering.hpp"
+#include "Castor3D/Render/Transparent/TransparentRendering.hpp"
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
 #include "Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp"
 #include "Castor3D/Shader/Ubos/LpvGridConfigUbo.hpp"
@@ -25,10 +28,8 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 #include "Castor3D/Shader/Ubos/VoxelizerUbo.hpp"
 
-#include <CastorUtils/Design/DelayedInitialiser.hpp>
 #include <CastorUtils/Design/Named.hpp>
 
-#include <RenderGraph/Attachment.hpp>
 #include <RenderGraph/FramePass.hpp>
 
 namespace castor3d
@@ -66,7 +67,10 @@ namespace castor3d
 			, QueueData const & queueData
 			, Parameters const & parameters
 			, SsaoConfig const & ssaoConfig
-			, ProgressBar * progress );
+			, ProgressBar * progress
+			, bool deferred
+			, bool visbuffer
+			, bool weightedBlended );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -169,101 +173,49 @@ namespace castor3d
 			return m_rawSize;
 		}
 
-		TextureLayout const & getResult()const
-		{
-			CU_Require( m_colourTexture->isTextured() );
-			return *m_colourTexture->getTexture();
-		}
-
-		Texture const & getResultTexture()const
+		Texture const & getResult()const
 		{
 			return m_colour;
 		}
 
-		crg::ImageId const & getResultImg()const
-		{
-			return m_colour.imageId;
-		}
-
-		crg::ImageViewId const & getResultImgView()const
-		{
-			return m_colour.sampledViewId;
-		}
-
-		crg::ImageViewId const & getResultTargetView()const
-		{
-			return m_colour.targetViewId;
-		}
-
-		Texture const & getNormalTexture()const
+		Texture const & getNormal()const
 		{
 			return *m_normal;
 		}
 
-		crg::ImageViewId const & getNormalImgView()const
-		{
-			return m_normal->sampledViewId;
-		}
-
-		Texture const & getDepthTexture()const
+		Texture const & getDepth()const
 		{
 			return *m_depth;
 		}
 
-		crg::ImageId const & getDepthImg()const
-		{
-			return m_depth->imageId;
-		}
-
-		crg::ImageViewId const & getDepthWholeView()const
-		{
-			return m_depth->wholeViewId;
-		}
-
-		crg::ImageViewId const & getDepthSampledView()const
-		{
-			return m_depth->sampledViewId;
-		}
-
-		crg::ImageViewId const & getDepthTargetView()const
-		{
-			return m_depth->targetViewId;
-		}
-
 		Texture const & getDepthObj()const
 		{
-			return *m_depthObj;
-		}
-
-		crg::ImageViewId const & getDepthObjImgView()const
-		{
-			return m_depthObj->sampledViewId;
-		}
-
-		TextureLayout const & getDepth()const
-		{
-			return *m_depthBuffer->getTexture();
-		}
-
-		TextureLayoutSPtr getDepthPtr()const
-		{
-			return m_depthBuffer->getTexture();
+			return m_prepass.getDepthObj();
 		}
 
 		ashes::Buffer< int32_t > const & getDepthRange()const
 		{
-			CU_Require( m_depthRange );
-			return *m_depthRange;
+			return m_prepass.getDepthRange();
 		}
 
-		bool needsDepthRange()const
+		void setNeedsDepthRange( bool v )
 		{
-			return m_needsDepthRange;
+			m_prepass.setNeedsDepthRange( v );
 		}
 
-		void setNeedsDepthRange( bool value )
+		ShadowMapResult const & getDirectionalShadowPassResult()const
 		{
-			m_needsDepthRange = value;
+			return m_directionalShadowMap->getShadowPassResult();
+		}
+
+		ShadowMapResult const & getPointShadowPassResult()const
+		{
+			return m_pointShadowMap->getShadowPassResult();
+		}
+
+		ShadowMapResult const & getSpotShadowPassResult()const
+		{
+			return m_spotShadowMap->getShadowPassResult();
 		}
 
 		LightVolumePassResult const & getLpvResult()const
@@ -295,6 +247,11 @@ namespace castor3d
 		SceneUbo & getSceneUbo()
 		{
 			return m_sceneUbo;
+		}
+
+		GpInfoUbo const & getGpInfoUbo()const
+		{
+			return m_gpInfoUbo;
 		}
 
 		LpvGridConfigUbo const & getLpvConfigUbo()const
@@ -334,32 +291,32 @@ namespace castor3d
 
 		ashes::Buffer< uint32_t > const & getMaterialsCounts()const
 		{
-			return *m_materialsCounts1;
+			return m_opaque.getMaterialsCounts();
 		}
 
 		ashes::Buffer< uint32_t > const & getMaterialsStarts()const
 		{
-			return *m_materialsStarts;
+			return m_opaque.getMaterialsStarts();
 		}
 
 		ashes::Buffer< castor::Point2ui > const & getPixelXY()const
 		{
-			return *m_pixelsXY;
+			return m_opaque.getPixelXY();
 		}
 
 		bool hasVisibility()const
 		{
-			return m_visibilityPassDesc != nullptr;
+			return m_prepass.hasVisibility();
 		}
 
 		OpaquePassResult const & getOpaqueResult()const
 		{
-			return *m_opaquePassResult;
+			return m_opaque.getOpaqueResult();
 		}
 
 		Texture const & getVisibilityResult()const
 		{
-			return *m_visibility;
+			return m_prepass.getVisibility();
 		}
 		/**@}*/
 
@@ -370,13 +327,7 @@ namespace castor3d
 		crg::FramePassArray doCreateRenderPasses( ProgressBar * progress
 			, TechniquePassEvent event
 			, crg::FramePass const * previousPass );
-		crg::FramePass & doCreateVisibilityPass( ProgressBar * progress );
-		crg::FramePass & doCreateVisibilityResolve( ProgressBar * progress );
-		crg::FramePass & doCreateDepthPass( ProgressBar * progress );
 		BackgroundRendererUPtr doCreateBackgroundPass( ProgressBar * progress );
-		crg::FramePass & doCreateOpaquePass( ProgressBar * progress );
-		crg::FramePass & doCreateComputeDepthRange( ProgressBar * progress );
-		crg::FramePass & doCreateTransparentPass( ProgressBar * progress );
 		void doInitialiseLpv();
 		void doUpdateShadowMaps( CpuUpdater & updater );
 		void doUpdateShadowMaps( GpuUpdater & updater );
@@ -398,10 +349,7 @@ namespace castor3d
 		castor::Size m_targetSize;
 		castor::Size m_rawSize;
 		Texture m_colour;
-		TextureUnitUPtr m_colourTexture;
 		TexturePtr m_depth;
-		TextureUnitUPtr m_depthBuffer;
-		TexturePtr m_depthObj;
 		TexturePtr m_normal;
 		MatrixUbo m_matrixUbo;
 		SceneUbo m_sceneUbo;
@@ -409,36 +357,17 @@ namespace castor3d
 		LpvGridConfigUbo m_lpvConfigUbo;
 		LayeredLpvGridConfigUbo m_llpvConfigUbo;
 		VoxelizerUbo m_vctConfigUbo;
-		OpaquePassResultUPtr m_opaquePassResult;
-		ashes::BufferPtr< uint32_t > m_materialsCounts1;
-		ashes::BufferPtr< uint32_t > m_materialsCounts2;
-		ashes::BufferPtr< uint32_t > m_materialsStarts;
-		ashes::BufferPtr< castor::Point2ui > m_pixelsXY;
-		ShaderBufferUPtr m_visibilityPipelinesIds;
-		TexturePtr m_visibility;
-		crg::FramePass * m_visibilityPassDesc{};
-		VisibilityPass * m_visibilityPass{};
-		VisibilityReorderPassUPtr m_visibilityReorder;
-		crg::FramePass * m_visibilityResolveDesc{};
-		crg::FramePass * m_depthPassDesc{};
-		DepthPass * m_depthPass{};
-		ashes::BufferPtr< int32_t > m_depthRange;
-		crg::FramePass * m_computeDepthRangeDesc{};
 		VoxelizerUPtr m_voxelizer;
 		LightVolumePassResultUPtr m_lpvResult;
 		LightVolumePassResultArray m_llpvResult;
-		BackgroundRendererUPtr m_backgroundRenderer{};
 		ShadowMapUPtr m_directionalShadowMap;
 		ShadowMapUPtr m_pointShadowMap;
 		ShadowMapUPtr m_spotShadowMap;
-		SsaoPassUPtr m_ssao;
-		crg::FramePass * m_opaquePassDesc{};
-		RenderTechniquePass * m_opaquePass{};
-		DeferredRenderingUPtr m_deferredRendering;
-		TransparentPassResultUPtr m_transparentPassResult;
-		crg::FramePass * m_transparentPassDesc{};
-		RenderTechniqueNodesPass * m_transparentPass{};
-		WeightedBlendRenderingUPtr m_weightedBlendRendering;
+		TechniquePasses m_renderPasses;
+		PrepassRendering m_prepass;
+		BackgroundRendererUPtr m_background{};
+		OpaqueRendering m_opaque;
+		TransparentRendering m_transparent;
 		crg::FrameGraph m_clearLpvGraph;
 		crg::RunnableGraphPtr m_clearLpvRunnable;
 		ShadowMapLightTypeArray m_allShadowMaps;
@@ -447,8 +376,6 @@ namespace castor3d
 		LayeredLightPropagationVolumesLightType m_layeredLightPropagationVolumes;
 		LightPropagationVolumesGLightType m_lightPropagationVolumesG;
 		LayeredLightPropagationVolumesGLightType m_layeredLightPropagationVolumesG;
-		TechniquePasses m_renderPasses;
-		bool m_needsDepthRange{};
 	};
 }
 

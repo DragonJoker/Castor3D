@@ -75,7 +75,7 @@ namespace castor3d
 		VkDeviceSize morphTargetsOffset{};
 	};
 
-	C3D_API bool operator==( PipelineHiHashDetails const & lhs, PipelineHashDetails const & rhs );
+	C3D_API bool operator==( PipelineHiHashDetails const & lhs, PipelineHiHashDetails const & rhs );
 	/**
 	*\~english
 	*\brief

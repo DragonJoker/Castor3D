@@ -87,6 +87,58 @@ namespace castor3d
 
 	//*********************************************************************************************
 
+	void countNodes( RenderNodesPass const & renderPass
+		, RenderInfo & info )
+	{
+		for ( auto & pipelineNodes : renderPass.getCuller().getSubmeshNodes( renderPass ) )
+		{
+			for ( auto & bufferNodes : pipelineNodes.second )
+			{
+				for ( auto & sidedNode : bufferNodes.second )
+				{
+					if ( sidedNode.first.visible )
+					{
+						++info.visibleObjectsCount;
+						info.visibleFaceCount += sidedNode.first.node->data.getFaceCount();
+						info.visibleVertexCount += sidedNode.first.node->data.getPointsCount();
+					}
+
+					++info.totalObjectsCount;
+					info.totalFaceCount += sidedNode.first.node->data.getFaceCount();
+					info.totalVertexCount += sidedNode.first.node->data.getPointsCount();
+				}
+			}
+		}
+
+		for ( auto & pipelineNodes : renderPass.getCuller().getInstancedSubmeshNodes( renderPass ) )
+		{
+			for ( auto & bufferNodes : pipelineNodes.second )
+			{
+				for ( auto & passNodes : bufferNodes.second )
+				{
+					for ( auto & dataNodes : passNodes.second )
+					{
+						for ( auto & sidedNode : dataNodes.second )
+						{
+							if ( sidedNode.first.visible )
+							{
+								++info.visibleObjectsCount;
+								info.visibleFaceCount += sidedNode.first.node->data.getFaceCount();
+								info.visibleVertexCount += sidedNode.first.node->data.getPointsCount();
+							}
+
+							++info.totalObjectsCount;
+							info.totalFaceCount += sidedNode.first.node->data.getFaceCount();
+							info.totalVertexCount += sidedNode.first.node->data.getPointsCount();
+						}
+					}
+				}
+			}
+		}
+	}
+
+	//*********************************************************************************************
+
 	RenderNodesPass::RenderNodesPass( crg::FramePass const & pass
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph

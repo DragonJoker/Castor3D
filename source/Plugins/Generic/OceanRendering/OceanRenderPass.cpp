@@ -213,7 +213,7 @@ namespace ocean
 			, graph
 			, device
 			, Type
-			, parent->getResultImg().data
+			, parent->getResult().imageId.data
 			, renderPassDesc
 			, techniquePassDesc }
 		, m_isEnabled{ std::move( isEnabled ) }
@@ -266,7 +266,7 @@ namespace ocean
 	{
 		std::string name{ Name };
 		auto isEnabled = std::make_shared< IsRenderPassEnabled >();
-		auto extent = getExtent( technique.getResultImg() );
+		auto extent = technique.getResult().getExtent();
 		auto & graph = technique.getRenderTarget().getGraph().createPassGroup( name );
 		auto colourInput = std::make_shared< castor3d::Texture >( device
 			, graph.getHandler()
@@ -275,7 +275,7 @@ namespace ocean
 			, extent
 			, 1u
 			, 1u
-			, technique.getResultImg().data->info.format
+			, technique.getResult().imageId.data->info.format
 			, ( VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT ) );
 		colourInput->create();
 		auto & blitColourPass = graph.createPass( "CopyColour"
@@ -295,7 +295,7 @@ namespace ocean
 				return result;
 			} );
 		blitColourPass.addDependencies( previousPasses );
-		blitColourPass.addTransferInputView( technique.getResultImgView() );
+		blitColourPass.addTransferInputView( technique.getResult().sampledViewId );
 		blitColourPass.addTransferOutputView( colourInput->sampledViewId );
 
 		auto depthInput = std::make_shared< castor3d::Texture >( device
@@ -305,7 +305,7 @@ namespace ocean
 			, extent
 			, 1u
 			, 1u
-			, technique.getDepthImg().data->info.format
+			, technique.getDepth().imageId.data->info.format
 			, ( VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT ) );
 		depthInput->create();
 		auto & blitDepthPass = graph.createPass( "CopyDepth"
@@ -325,7 +325,7 @@ namespace ocean
 				return result;
 			} );
 		blitDepthPass.addDependencies( previousPasses );
-		blitDepthPass.addTransferInputView( technique.getDepthSampledView() );
+		blitDepthPass.addTransferInputView( technique.getDepth().sampledViewId );
 		blitDepthPass.addTransferOutputView( depthInput->sampledViewId );
 
 		auto & result = graph.createPass( "NodesPass"
@@ -366,8 +366,8 @@ namespace ocean
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 		result.addImplicitDepthView( depthInput->sampledViewId
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-		result.addInOutDepthStencilView( technique.getDepthTargetView() );
-		result.addInOutColourView( technique.getResultTargetView() );
+		result.addInOutDepthStencilView( technique.getDepth().targetViewId );
+		result.addInOutColourView( technique.getResult().targetViewId );
 		return { &result, &blitDepthPass };
 	}
 
@@ -581,7 +581,7 @@ namespace ocean
 		bindTexture( m_normals1, *m_linearWrapSampler, descriptorWrites, index );
 		bindTexture( m_normals2, *m_linearWrapSampler, descriptorWrites, index );
 		bindTexture( m_noise, *m_linearWrapSampler, descriptorWrites, index );
-		bindTexture( m_parent->getNormalTexture().sampledView, *m_pointClampSampler, descriptorWrites, index );
+		bindTexture( m_parent->getNormal().sampledView, *m_pointClampSampler, descriptorWrites, index );
 		bindTexture( m_depthInput->sampledView, *m_pointClampSampler, descriptorWrites, index );
 		bindTexture( m_colourInput->sampledView, *m_pointClampSampler, descriptorWrites, index );
 		bindTexture( getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().sampledView

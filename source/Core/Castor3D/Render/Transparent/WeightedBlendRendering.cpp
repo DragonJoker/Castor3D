@@ -62,7 +62,7 @@ namespace castor3d
 			C3D_Scene( writer, SceneUboIndex, 0u );
 			C3D_GpInfo( writer, GpuInfoUboIndex, 0u );
 			C3D_HdrConfig( writer, HdrUboIndex, 0u );
-			auto c3d_mapDepth = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( WbTexture::eDepth ), uint32_t( DepthTexIndex ), 0u );
+			auto c3d_mapDepth = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapDepth", uint32_t( DepthTexIndex ), 0u );
 			auto c3d_mapAccumulation = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( WbTexture::eAccumulation ), uint32_t( AccumTexIndex ), 0u );
 			auto c3d_mapRevealage = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( WbTexture::eRevealage ), uint32_t( RevealTexIndex ), 0u );
 
@@ -134,6 +134,7 @@ namespace castor3d
 		, RenderDevice const & device
 		, ProgressBar * progress
 		, crg::FramePass const & transparentPassDesc
+		, Texture const & depth
 		, TransparentPassResult const & transparentPassResult
 		, crg::ImageViewId const & targetColourView
 		, castor::Size const & size
@@ -143,7 +144,7 @@ namespace castor3d
 		: m_device{ device }
 		, m_graph{ graph }
 		, m_transparentPassResult{ transparentPassResult }
-		, m_depthOnlyView{ m_transparentPassResult[WbTexture::eDepth].sampledViewId }
+		, m_depthOnlyView{ depth.sampledViewId }
 		, m_size{ size }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "TransparentCombine", wboit::getVertexProgram() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "TransparentCombine", wboit::getPixelProgram() }

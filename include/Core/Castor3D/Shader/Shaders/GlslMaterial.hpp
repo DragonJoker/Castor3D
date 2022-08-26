@@ -197,6 +197,7 @@ namespace castor3d::shader
 		sdw::Vec3 bit;
 		sdw::Vec3 tvp;
 		sdw::Vec3 tfp;
+		sdw::Float occ;
 	};
 
 	struct GeometryBlendComponents
@@ -207,7 +208,7 @@ namespace castor3d::shader
 			, BlendComponentT< sdw::Vec3 > t0, BlendComponentT< sdw::Vec3 > t1, BlendComponentT< sdw::Vec3 > t2, BlendComponentT< sdw::Vec3 > t3
 			, BlendComponentT< sdw::Float > opa
 			, BlendComponentT< sdw::Vec3 > nml, BlendComponentT< sdw::Vec3 > tan, BlendComponentT< sdw::Vec3 > bit
-			, BlendComponentT< sdw::Vec3 > tvp, BlendComponentT< sdw::Vec3 > tfp );
+			, BlendComponentT< sdw::Vec3 > tvp, BlendComponentT< sdw::Vec3 > tfp, BlendComponentT< sdw::Float > occ );
 		C3D_API GeometryBlendComponents( sdw::ShaderWriter & writer
 			, std::string const & prefix
 			, GeometryBlendComponents const & rhs );
@@ -226,6 +227,7 @@ namespace castor3d::shader
 		sdw::Vec3 & bitangent() { return m_bitangent; }
 		sdw::Vec3 & tangentSpaceViewPosition() { return m_tangentSpaceViewPosition; }
 		sdw::Vec3 & tangentSpaceFragPosition() { return m_tangentSpaceFragPosition; }
+		sdw::Float & occlusion() { return m_occlusion; }
 
 		sdw::Vec3 const & texCoord1()const { return m_texCoord1; }
 		sdw::Vec3 const & texCoord2()const { return m_texCoord2; }
@@ -235,6 +237,7 @@ namespace castor3d::shader
 		sdw::Vec3 const & bitangent()const { return m_bitangent; }
 		sdw::Vec3 const & tangentSpaceViewPosition()const { return m_tangentSpaceViewPosition; }
 		sdw::Vec3 const & tangentSpaceFragPosition()const { return m_tangentSpaceFragPosition; }
+		sdw::Float const & occlusion()const { return m_occlusion; }
 
 	private:
 		sdw::Vec3 m_texCoord1;
@@ -245,12 +248,12 @@ namespace castor3d::shader
 		sdw::Vec3 m_bitangent;
 		sdw::Vec3 m_tangentSpaceViewPosition;
 		sdw::Vec3 m_tangentSpaceFragPosition;
+		sdw::Float m_occlusion;
 	};
 
 	struct OpqResult
 	{
 		GeoResult geo;
-		sdw::Float occ;
 		sdw::Float trn;
 		sdw::Vec3 ems;
 	};
@@ -263,8 +266,8 @@ namespace castor3d::shader
 			, BlendComponentT< sdw::Vec3 > t0, BlendComponentT< sdw::Vec3 > t1, BlendComponentT< sdw::Vec3 > t2, BlendComponentT< sdw::Vec3 > t3
 			, BlendComponentT< sdw::Float > opa
 			, BlendComponentT< sdw::Vec3 > nml, BlendComponentT< sdw::Vec3 > tan, BlendComponentT< sdw::Vec3 > bit
-			, BlendComponentT< sdw::Vec3 > tvp, BlendComponentT< sdw::Vec3 > tfp
-			, BlendComponentT< sdw::Float > occ, BlendComponentT< sdw::Float > trn, BlendComponentT< sdw::Vec3 > ems );
+			, BlendComponentT< sdw::Vec3 > tvp, BlendComponentT< sdw::Vec3 > tfp, BlendComponentT< sdw::Float > occ
+			, BlendComponentT< sdw::Float > trn, BlendComponentT< sdw::Vec3 > ems );
 		C3D_API OpaqueBlendComponents( sdw::ShaderWriter & writer
 			, std::string const & prefix
 			, OpaqueBlendComponents const & rhs );
@@ -275,16 +278,13 @@ namespace castor3d::shader
 			, OpqResult & res )const;
 		C3D_API void set( OpqResult const & rhs );
 
-		sdw::Float & occlusion() { return m_occlusion; }
 		sdw::Float & transmittance() { return m_transmittance; }
 		sdw::Vec3 & emissive() { return m_emissive; }
 
-		sdw::Float const & occlusion()const { return m_occlusion; }
 		sdw::Float const & transmittance()const { return m_transmittance; }
 		sdw::Vec3 const & emissive()const { return m_emissive; }
 
 	private:
-		sdw::Float m_occlusion;
 		sdw::Float m_transmittance;
 		sdw::Vec3 m_emissive;
 	};
@@ -309,8 +309,8 @@ namespace castor3d::shader
 			, BlendComponentT< DerivTex > t0, BlendComponentT< DerivTex > t1, BlendComponentT< DerivTex > t2, BlendComponentT< DerivTex > t3
 			, BlendComponentT< sdw::Float > opa
 			, BlendComponentT< sdw::Vec3 > nml, BlendComponentT< sdw::Vec3 > tan, BlendComponentT< sdw::Vec3 > bit
-			, BlendComponentT< sdw::Vec3 > tvp, BlendComponentT< sdw::Vec3 > tfp
-			, BlendComponentT< sdw::Float > occ, BlendComponentT< sdw::Float > trn, BlendComponentT< sdw::Vec3 > ems );
+			, BlendComponentT< sdw::Vec3 > tvp, BlendComponentT< sdw::Vec3 > tfp, BlendComponentT< sdw::Float > occ
+			, BlendComponentT< sdw::Float > trn, BlendComponentT< sdw::Vec3 > ems );
 		C3D_API VisibilityBlendComponents( sdw::ShaderWriter & writer
 			, std::string const & prefix
 			, VisibilityBlendComponents const & rhs );
@@ -383,8 +383,8 @@ namespace castor3d::shader
 			, BlendComponentT< sdw::Vec3 > t0, BlendComponentT< sdw::Vec3 > t1, BlendComponentT< sdw::Vec3 > t2, BlendComponentT< sdw::Vec3 > t3
 			, BlendComponentT< sdw::Float > opa
 			, BlendComponentT< sdw::Vec3 > nml, BlendComponentT< sdw::Vec3 > tan, BlendComponentT< sdw::Vec3 > bit
-			, BlendComponentT< sdw::Vec3 > tvp, BlendComponentT< sdw::Vec3 > tfp
-			, BlendComponentT< sdw::Float > occ, BlendComponentT< sdw::Float > trn, BlendComponentT< sdw::Vec3 > ems
+			, BlendComponentT< sdw::Vec3 > tvp, BlendComponentT< sdw::Vec3 > tfp, BlendComponentT< sdw::Float > occ
+			, BlendComponentT< sdw::Float > trn, BlendComponentT< sdw::Vec3 > ems
 			, BlendComponentT< sdw::Vec3 > trs
 			, BlendComponentT< sdw::Float > rfr, BlendComponentT< sdw::UInt > hrr, BlendComponentT< sdw::UInt > hrl
 			, BlendComponentT< sdw::Float > acc );

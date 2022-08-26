@@ -28,7 +28,7 @@ namespace castor3d
 		 *\param[in]	graph			The render graph.
 		 *\param[in]	device			The GPU device.
 		 *\param[in]	progress		The progress bar.
-		 *\param[in]	previousPass	The previous frame pass.
+		 *\param[in]	previousPasses	The previous frame passes.
 		 *\param[in]	size			The render area dimensions.
 		 *\param[in]	ssaoConfig		The SSAO configuration.
 		 *\param[in]	depth			The depth buffer.
@@ -39,17 +39,17 @@ namespace castor3d
 		 *\param[in]	graph			Le render graph.
 		 *\param[in]	device			Le device GPU.
 		 *\param[in]	progress		La barre de progression
-		 *\param[in]	previousPass	La frame pass précédente.
+		 *\param[in]	previousPasses	Les frame passes précédentes.
 		 *\param[in]	size			Les dimensions de la zone de rendu.
 		 *\param[in]	ssaoConfig		La configuration du SSAO.
 		 *\param[in]	depth			Le depth buffer.
 		 *\param[in]	normal			Le buffer de normales.
 		 *\param[in]	gpInfoUbo		L'UBO de configuration du GBuffer
 		 */
-		C3D_API SsaoPass( crg::FrameGraph & graph
+		C3D_API SsaoPass( crg::FramePassGroup & graph
 			, RenderDevice const & device
 			, ProgressBar * progress
-			, crg::FramePass const & previousPass
+			, crg::FramePassArray const & previousPasses
 			, castor::Size const & size
 			, SsaoConfig & ssaoConfig
 			, Texture const & depth

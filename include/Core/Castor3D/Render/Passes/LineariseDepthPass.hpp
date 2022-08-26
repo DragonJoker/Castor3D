@@ -38,7 +38,7 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	graph			The render graph.
-		 *\param[in]	previousPass	The previous frame pass.
+		 *\param[in]	previousPasses	The previous frame passes.
 		 *\param[in]	device			The GPU device.
 		 *\param[in]	progress		The progress bar.
 		 *\param[in]	prefix			The pass name's prefix.
@@ -48,7 +48,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	graph			Le render graph.
-		 *\param[in]	previousPass	La frame pass précédente.
+		 *\param[in]	previousPasses	Les frame passes précédentes.
 		 *\param[in]	device			Le device GPU.
 		 *\param[in]	progress		La barre de progression.
 		 *\param[in]	prefix			Le préfixe du nom de la passe.
@@ -57,7 +57,7 @@ namespace castor3d
 		 *\param[in]	depthBuffer		Le tampon de profondeur non linéarisé.
 		 */
 		C3D_API LineariseDepthPass( crg::FramePassGroup & graph
-			, crg::FramePass const & previousPass
+			, crg::FramePassArray const & previousPasses
 			, RenderDevice const & device
 			, ProgressBar * progress
 			, castor::String const & prefix
@@ -105,7 +105,8 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		crg::FramePass const & doInitialiseLinearisePass( ProgressBar * progress );
+		crg::FramePass const & doInitialiseLinearisePass( ProgressBar * progress
+			, crg::FramePassArray const & previousPasses );
 		void doInitialiseMinifyPass( ProgressBar * progress );
 
 	private:

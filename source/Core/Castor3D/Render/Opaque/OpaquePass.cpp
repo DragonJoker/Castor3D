@@ -54,7 +54,7 @@ namespace castor3d
 			, graph
 			, device
 			, Type
-			, parent->getResultImg().data
+			, parent->getResult().imageId.data
 			, renderPassDesc
 			, techniquePassDesc }
 	{

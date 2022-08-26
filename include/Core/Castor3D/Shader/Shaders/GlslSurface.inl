@@ -11,21 +11,6 @@ namespace castor3d::shader
 {
 	//*****************************************************************************************
 
-	namespace surface
-	{
-		template< typename TypeT >
-		sdw::Array< TypeT > getMemberArray( sdw::StorageBuffer const & buffer
-			, std::string const & name
-			, bool enable )
-		{
-			auto result = buffer.declMemberArray< TypeT >( name, enable );
-			buffer.end();
-			return result;
-		}
-	}
-
-	//*****************************************************************************************
-
 	template< ast::var::Flag FlagT >
 	SurfaceT< FlagT >::SurfaceT( sdw::ShaderWriter & writer
 		, ast::expr::ExprPtr expr
@@ -534,39 +519,6 @@ namespace castor3d::shader
 	{
 		return ( curPosition.xy() / curPosition.z() ) - ( prvPosition.xy() / prvPosition.z() );
 	}
-
-	//*****************************************************************************************
-
-#define DefineSsbo( Name, Type, Enable )\
-		m_##Name##Buffer{ writer\
-			, #Name + std::string{ "Buffer" }\
-			, binding++\
-			, set\
-			, ast::type::MemoryLayout::eStd430\
-			, Enable }\
-		, ##Name{ getMemberArray< Type >( m_##Name##Buffer, #Name, Enable ) }
-
-	template< typename PositionT >
-	ComputeSurfaceT< PositionT >::ComputeSurfaceT( sdw::ShaderWriter & writer
-		, PipelineFlags const & flags
-		, uint32_t stride
-		, uint32_t binding
-		, uint32_t set )
-		: DefineSsbo( indices, sdw::UInt, flags.enableIndices() )
-		, DefineSsbo( positions, PositionT, flags.enablePosition() )
-		, DefineSsbo( normals, sdw::Vec4, flags.enableNormal() )
-		, DefineSsbo( tangents, sdw::Vec4, flags.enableTangentSpace() )
-		, DefineSsbo( texcoords0, sdw::Vec4, flags.enableTexcoord0() && ( stride == 0u ) )
-		, DefineSsbo( texcoords1, sdw::Vec4, flags.enableTexcoord1() )
-		, DefineSsbo( texcoords2, sdw::Vec4, flags.enableTexcoord2() )
-		, DefineSsbo( texcoords3, sdw::Vec4, flags.enableTexcoord3() )
-		, DefineSsbo( colours, sdw::Vec4, flags.enableColours() )
-		, DefineSsbo( velocities, sdw::Vec4, flags.enableVelocity() )
-		, DefineSsbo( passMasks, sdw::UVec4, flags.enablePassMasks() )
-	{
-	}
-
-#undef DefineSsbo
 
 	//*****************************************************************************************
 }

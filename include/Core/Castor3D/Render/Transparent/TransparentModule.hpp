@@ -26,10 +26,9 @@ namespace castor3d
 	enum class WbTexture
 		: uint8_t
 	{
-		eDepth,
 		eAccumulation,
 		eRevealage,
-		CU_ScopedEnumBounds( eDepth ),
+		CU_ScopedEnumBounds( eAccumulation ),
 	};
 	C3D_API castor::String getTextureName( WbTexture texture );
 	C3D_API castor::String getTexName( WbTexture texture );
@@ -73,6 +72,15 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	The render technique part dedicated to transparent nodes.
+	*\~french
+	*\brief
+	*	La partie de render technique dédiée aux noeuds transparents.
+	*/
+	class TransparentRendering;
+	/**
+	*\~english
+	*\brief
 	*	Handles the weighted blend rendering.
 	*\~french
 	*\brief
@@ -82,6 +90,7 @@ namespace castor3d
 
 	CU_DeclareCUSmartPtr( castor3d, WeightedBlendRendering, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, TransparentPassResult, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, TransparentRendering, C3D_API );
 
 	//@}
 	//@}

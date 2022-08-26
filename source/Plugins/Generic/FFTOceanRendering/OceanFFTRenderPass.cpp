@@ -237,7 +237,7 @@ namespace ocean_fft
 			, castor3d::TexturePtr depthInput
 			, std::shared_ptr< IsRenderPassEnabled > isEnabled )
 		{
-			auto extent = getExtent( technique.getResultImg() );
+			auto extent = technique.getResult().getExtent();
 			auto & result = graph.createPass( "NodesPass"
 				, [extent, colourInput, depthInput, oceanUbo, oceanFFT, isEnabled, &device, &technique, &renderPasses]( crg::FramePass const & framePass
 					, crg::GraphContext & context
@@ -282,8 +282,8 @@ namespace ocean_fft
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 			result.addImplicitDepthView( technique.getDiffuseLightingResult().sampledViewId
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-			result.addInOutDepthStencilView( technique.getDepthTargetView() );
-			result.addInOutColourView( technique.getResultTargetView() );
+			result.addInOutDepthStencilView( technique.getDepth().targetViewId );
+			result.addInOutColourView( technique.getResult().targetViewId );
 #else
 			result.addDependencies( oceanFFT->getLastPasses() );
 			result.addImplicitColourView( colourInput->sampledViewId
@@ -300,8 +300,8 @@ namespace ocean_fft
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 			result.addImplicitColourView( oceanFFT->getGradientJacobian().sampledViewId
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-			result.addInOutDepthStencilView( technique.getDepthTargetView() );
-			result.addInOutColourView( technique.getResultTargetView() );
+			result.addInOutDepthStencilView( technique.getDepth().targetViewId );
+			result.addInOutColourView( technique.getResult().targetViewId );
 #endif
 			return { &result };
 		}
@@ -332,7 +332,7 @@ namespace ocean_fft
 			, graph
 			, device
 			, Type
-			, parent->getResultImg().data
+			, parent->getResult().imageId.data
 			, renderPassDesc
 			, techniquePassDesc }
 		, m_isEnabled{ isEnabled }
@@ -380,7 +380,7 @@ namespace ocean_fft
 	{
 		auto isEnabled = std::make_shared< IsRenderPassEnabled >();
 		auto & graph = technique.getRenderTarget().getGraph().createPassGroup( OceanFFT::Name );
-		auto extent = getExtent( technique.getResultImg() );
+		auto extent = technique.getResult().getExtent();
 		auto colourInput = std::make_shared< castor3d::Texture >( device
 			, graph.getHandler()
 			, OceanFFT::Name + "/Colour"
@@ -388,7 +388,7 @@ namespace ocean_fft
 			, extent
 			, 1u
 			, 1u
-			, technique.getResultImg().data->info.format
+			, technique.getResult().imageId.data->info.format
 			, ( VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT ) );
 		colourInput->create();
 		crg::FramePassArray passes;
@@ -396,7 +396,7 @@ namespace ocean_fft
 			, device
 			, graph
 			, previousPasses
-			, technique.getResultImgView()
+			, technique.getResult().sampledViewId
 			, colourInput->sampledViewId
 			, isEnabled ) );
 
@@ -407,14 +407,14 @@ namespace ocean_fft
 			, extent
 			, 1u
 			, 1u
-			, technique.getDepthImg().data->info.format
+			, technique.getDepth().imageId.data->info.format
 			, ( VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT ) );
 		depthInput->create();
 		passes.push_back( &rdpass::createCopyPass( "Depth"
 			, device
 			, graph
 			, previousPasses
-			, technique.getDepthWholeView()
+			, technique.getDepth().wholeViewId
 			, depthInput->wholeViewId
 			, isEnabled ) );
 
@@ -622,7 +622,7 @@ namespace ocean_fft
 		rdpass::bindTexture( m_oceanFFT->getHeightDisplacement().sampledView, *m_linearWrapSampler, descriptorWrites, index );
 		rdpass::bindTexture( m_oceanFFT->getGradientJacobian().sampledView, *m_linearWrapSampler, descriptorWrites, index );
 		rdpass::bindTexture( m_oceanFFT->getNormals().sampledView, *m_linearWrapSampler, descriptorWrites, index );
-		rdpass::bindTexture( m_parent->getNormalTexture().sampledView, *m_pointClampSampler, descriptorWrites, index );
+		rdpass::bindTexture( m_parent->getNormal().sampledView, *m_pointClampSampler, descriptorWrites, index );
 		rdpass::bindTexture( m_depthInput->sampledView, *m_pointClampSampler, descriptorWrites, index );
 		rdpass::bindTexture( m_colourInput->sampledView, *m_pointClampSampler, descriptorWrites, index );
 		rdpass::bindTexture( m_parent->getBaseColourResult().sampledView, *m_pointClampSampler, descriptorWrites, index );

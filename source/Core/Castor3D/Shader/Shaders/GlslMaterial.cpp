@@ -213,7 +213,8 @@ namespace castor3d::shader
 		, BlendComponentT< sdw::Vec3 > tan
 		, BlendComponentT< sdw::Vec3 > bit
 		, BlendComponentT< sdw::Vec3 > tvp
-		, BlendComponentT< sdw::Vec3 > tfp )
+		, BlendComponentT< sdw::Vec3 > tfp
+		, BlendComponentT< sdw::Float > occ )
 		: OpacityBlendComponents{ writer, prefix
 			, std::move( t0 )
 			, std::move( opa ) }
@@ -225,6 +226,7 @@ namespace castor3d::shader
 		, m_bitangent{ writer.declLocale( prefix + "Bitangent", std::move( bit.value ), bit.enabled ) }
 		, m_tangentSpaceViewPosition{ writer.declLocale( prefix + "TangentSpaceViewPosition", std::move( tvp.value ), tvp.enabled ) }
 		, m_tangentSpaceFragPosition{ writer.declLocale( prefix + "TangentSpaceFragPosition", std::move( tfp.value ), tfp.enabled ) }
+		, m_occlusion{ writer.declLocale( prefix + "Occlusion", std::move( occ.value ), occ.enabled ) }
 	{
 	}
 
@@ -242,7 +244,8 @@ namespace castor3d::shader
 			, { rhs.tangent(), rhs.tangent().isEnabled() }
 			, { rhs.bitangent(), rhs.bitangent().isEnabled() }
 			, { rhs.tangentSpaceViewPosition(), rhs.tangentSpaceViewPosition().isEnabled() }
-			, { rhs.tangentSpaceFragPosition(), rhs.tangentSpaceFragPosition().isEnabled() } }
+			, { rhs.tangentSpaceFragPosition(), rhs.tangentSpaceFragPosition().isEnabled() }
+			, { rhs.occlusion(), rhs.occlusion().isEnabled() } }
 	{
 	}
 
@@ -254,7 +257,8 @@ namespace castor3d::shader
 			, writer.declLocale( "rTan", vec3( 0.0_f ), rhs.tangent().isEnabled() )
 			, writer.declLocale( "rBit", vec3( 0.0_f ), rhs.bitangent().isEnabled() )
 			, writer.declLocale( "rTvp", vec3( 0.0_f ), rhs.tangentSpaceViewPosition().isEnabled() )
-			, writer.declLocale( "rTfp", vec3( 0.0_f ), rhs.tangentSpaceFragPosition().isEnabled() ) };
+			, writer.declLocale( "rTfp", vec3( 0.0_f ), rhs.tangentSpaceFragPosition().isEnabled() )
+			, writer.declLocale( "rOcc", 0.0_f, rhs.occlusion().isEnabled() ) };
 	}
 
 	void GeometryBlendComponents::apply( sdw::Float const & passMultiplier
@@ -266,6 +270,7 @@ namespace castor3d::shader
 		res.bit += bitangent() * passMultiplier;
 		res.tvp += tangentSpaceViewPosition() * passMultiplier;
 		res.tfp += tangentSpaceFragPosition() * passMultiplier;
+		res.occ += occlusion() * passMultiplier;
 	}
 
 	void GeometryBlendComponents::set( GeoResult const & rhs )
@@ -276,6 +281,7 @@ namespace castor3d::shader
 		bitangent() = normalize( rhs.bit );
 		tangentSpaceViewPosition() = rhs.tvp;
 		tangentSpaceFragPosition() = rhs.tfp;
+		occlusion() = rhs.occ;
 	}
 
 	//*********************************************************************************************
@@ -299,8 +305,7 @@ namespace castor3d::shader
 			, std::move( t0 ), std::move( t1 ), std::move( t2 ), std::move( t3 )
 			, std::move( opa )
 			, std::move( nml ), std::move( tan ), std::move( bit )
-			, std::move( tvp ), std::move( tfp ) }
-		, m_occlusion{ writer.declLocale( prefix + "Occlusion", std::move( occ.value ), occ.enabled ) }
+			, std::move( tvp ), std::move( tfp ), std::move( occ ) }
 		, m_transmittance{ writer.declLocale( prefix + "Transmittance", std::move( trn.value ), trn.enabled ) }
 		, m_emissive{ writer.declLocale( prefix + "Emissive", std::move( ems.value ), ems.enabled ) }
 	{
@@ -331,7 +336,6 @@ namespace castor3d::shader
 		, OpaqueBlendComponents const & rhs )const
 	{
 		return OpqResult{ GeometryBlendComponents::createResult( writer, rhs )
-			, writer.declLocale( "rOcc", 0.0_f, rhs.occlusion().isEnabled() )
 			, writer.declLocale( "rTrn", 0.0_f, rhs.transmittance().isEnabled() )
 			, writer.declLocale( "eRms", vec3( 0.0_f ), rhs.emissive().isEnabled() ) };
 	}
@@ -340,7 +344,6 @@ namespace castor3d::shader
 		, OpqResult & res )const
 	{
 		GeometryBlendComponents::apply( passMultiplier, res.geo );
-		res.occ += occlusion() * passMultiplier;
 		res.trn += transmittance() * passMultiplier;
 		res.ems += emissive() * passMultiplier;
 	}
@@ -348,7 +351,6 @@ namespace castor3d::shader
 	void OpaqueBlendComponents::set( OpqResult const & rhs )
 	{
 		GeometryBlendComponents::set( rhs.geo );
-		occlusion() = rhs.occ;
 		transmittance() = rhs.trn;
 		emissive() = rhs.ems;
 	}
