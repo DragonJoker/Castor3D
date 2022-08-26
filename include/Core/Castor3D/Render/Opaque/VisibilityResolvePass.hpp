@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_VisibilityResolvePass_H___
 #define ___C3D_VisibilityResolvePass_H___
 
-#include "VisibilityModule.hpp"
+#include "OpaqueModule.hpp"
 
 #include "Castor3D/Render/RenderTechniquePass.hpp"
 

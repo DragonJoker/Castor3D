@@ -1,4 +1,4 @@
-#include "Castor3D/Render/Visibility/VisibilityReorderPass.hpp"
+#include "Castor3D/Render/Opaque/VisibilityReorderPass.hpp"
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"

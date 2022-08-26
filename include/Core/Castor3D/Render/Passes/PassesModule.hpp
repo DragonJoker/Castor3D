@@ -199,7 +199,6 @@ namespace castor3d
 
 	CU_DeclareCUSmartPtr( castor3d, BackgroundRenderer, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, CombinePass, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, DepthPass, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, DownscalePass, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, GaussianBlur, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, LineariseDepthPass, C3D_API );

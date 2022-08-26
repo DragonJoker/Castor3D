@@ -1,4 +1,4 @@
-#include "Castor3D/Render/Visibility/VisibilityResolvePass.hpp"
+#include "Castor3D/Render/Opaque/VisibilityResolvePass.hpp"
 
 #include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"

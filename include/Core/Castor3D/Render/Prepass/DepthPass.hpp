@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_DepthPass_H___
 #define ___C3D_DepthPass_H___
 
-#include "PassesModule.hpp"
+#include "PrepassModule.hpp"
 
 #include "Castor3D/Render/RenderTechniquePass.hpp"
 
