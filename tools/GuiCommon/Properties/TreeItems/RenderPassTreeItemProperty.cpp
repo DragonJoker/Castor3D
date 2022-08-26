@@ -5,8 +5,8 @@
 #include "GuiCommon/Shader/ShaderDialog.hpp"
 #include "GuiCommon/Properties/AdditionalProperties.hpp"
 
-#include <Castor3D/Render/Technique/RenderTechniquePass.hpp>
-#include <Castor3D/Render/Technique/RenderTechniqueVisitor.hpp>
+#include <Castor3D/Render/RenderTechniquePass.hpp>
+#include <Castor3D/Render/RenderTechniqueVisitor.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
 
 #include <ShaderAST/Shader.hpp>

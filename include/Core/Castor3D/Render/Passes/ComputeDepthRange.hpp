@@ -5,7 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_ComputeDepthRange_H___
 
 #include "PassesModule.hpp"
-#include "Castor3D/Render/Technique/TechniqueModule.hpp"
+#include "Castor3D/Render/RenderModule.hpp"
 
 #include <ashespp/Descriptor/DescriptorSet.hpp>
 #include <ashespp/Descriptor/DescriptorSetLayout.hpp>

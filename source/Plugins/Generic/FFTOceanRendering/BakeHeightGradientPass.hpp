@@ -7,7 +7,6 @@ See LICENSE file in root folder
 #include "OceanFFTRenderingPrerequisites.hpp"
 
 #include <Castor3D/Render/RenderModule.hpp>
-#include <Castor3D/Render/Technique/TechniqueModule.hpp>
 
 #include <RenderGraph/RunnablePass.hpp>
 

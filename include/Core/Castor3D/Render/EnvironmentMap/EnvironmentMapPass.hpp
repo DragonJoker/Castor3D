@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "EnvironmentMapModule.hpp"
 #include "Castor3D/Scene/Background/BackgroundModule.hpp"
-#include "Castor3D/Render/Technique/TechniqueModule.hpp"
+#include "Castor3D/Render/RenderModule.hpp"
 
 #include "Castor3D/Render/Culling/SceneCuller.hpp"
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"

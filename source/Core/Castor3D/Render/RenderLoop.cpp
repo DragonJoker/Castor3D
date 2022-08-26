@@ -17,7 +17,7 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/RenderWindow.hpp"
-#include "Castor3D/Render/Technique/RenderTechnique.hpp"
+#include "Castor3D/Render/RenderTechnique.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Shader/ShaderBuffer.hpp"
 

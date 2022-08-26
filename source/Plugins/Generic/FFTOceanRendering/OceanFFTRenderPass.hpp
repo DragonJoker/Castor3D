@@ -7,12 +7,12 @@ See LICENSE file in root folder
 #include "OceanFFTUbo.hpp"
 #include "OceanFFT.hpp"
 
-#include <Castor3D/Render/Technique/TechniqueModule.hpp>
+#include <Castor3D/Render/RenderModule.hpp>
 
+#include <Castor3D/Render/RenderTechniquePass.hpp>
 #include <Castor3D/Render/ShadowMap/ShadowMapDirectional.hpp>
 #include <Castor3D/Render/ShadowMap/ShadowMapPoint.hpp>
 #include <Castor3D/Render/ShadowMap/ShadowMapSpot.hpp>
-#include <Castor3D/Render/Technique/RenderTechniquePass.hpp>
 
 #include <CastorUtils/Miscellaneous/PreciseTimer.hpp>
 

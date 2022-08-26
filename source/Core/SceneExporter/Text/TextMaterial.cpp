@@ -3,7 +3,7 @@
 #include "TextPass.hpp"
 
 #include <Castor3D/Miscellaneous/Logger.hpp>
-#include <Castor3D/Render/Technique/TechniqueModule.hpp>
+#include <Castor3D/Render/RenderModule.hpp>
 
 namespace castor
 {

@@ -14,7 +14,7 @@
 #include "Castor3D/Render/RenderQueue.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapDirectional.hpp"
-#include "Castor3D/Render/Technique/RenderTechniquePass.hpp"
+#include "Castor3D/Render/RenderTechniquePass.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Scene/Light/DirectionalLight.hpp"

@@ -8,7 +8,7 @@
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
-#include "Castor3D/Render/Technique/RenderTechnique.hpp"
+#include "Castor3D/Render/RenderTechnique.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"

@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_VoxelizeModule_H___
 #define ___C3D_VoxelizeModule_H___
 
-#include "Castor3D/Render/Technique/TechniqueModule.hpp"
+#include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Buffer/BufferModule.hpp"
 
 namespace castor3d

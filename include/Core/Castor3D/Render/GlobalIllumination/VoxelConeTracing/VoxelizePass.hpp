@@ -5,7 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_VoxelizePass_H___
 
 #include "VoxelizeModule.hpp"
-#include "Castor3D/Render/Technique/TechniqueModule.hpp"
+#include "Castor3D/Render/RenderModule.hpp"
 
 #include "Castor3D/Render/RenderNodesPass.hpp"
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"

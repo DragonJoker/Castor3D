@@ -11,7 +11,7 @@
 #include <Castor3D/Miscellaneous/Parameter.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
-#include <Castor3D/Render/Technique/RenderTechnique.hpp>
+#include <Castor3D/Render/RenderTechnique.hpp>
 #include <Castor3D/Shader/GlslToSpv.hpp>
 #include <Castor3D/Shader/Program.hpp>
 

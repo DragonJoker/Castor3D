@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "PassesModule.hpp"
 
-#include "Castor3D/Render/Technique/RenderTechniquePass.hpp"
+#include "Castor3D/Render/RenderTechniquePass.hpp"
 
 namespace castor3d
 {
