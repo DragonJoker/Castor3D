@@ -161,7 +161,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	LineariseDepthPass::LineariseDepthPass( crg::FramePassGroup & graph
-		, crg::FramePass const & previousPass
+		, crg::FramePassArray const & previousPasses
 		, RenderDevice const & device
 		, ProgressBar * progress
 		, castor::String const & prefix
@@ -177,12 +177,12 @@ namespace castor3d
 		, m_size{ size }
 		, m_result{ passlindpth::doCreateTexture( m_device, m_graph.getHandler(), m_size, m_prefix ) }
 		, m_clipInfo{ m_device.uboPool->getBuffer< castor::Point3f >( 0u ) }
-		, m_lastPass{ &previousPass }
+		, m_lastPass{}
 		, m_lineariseVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, m_prefix + "LineariseDepth", passlindpth::getVertexProgram() }
 		, m_linearisePixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, m_prefix + "LineariseDepth", passlindpth::getLinearisePixelProgram() }
 		, m_lineariseStages{ makeShaderState( m_device, m_lineariseVertexShader )
 			, makeShaderState( m_device, m_linearisePixelShader ) }
-		, m_linearisePass{ doInitialiseLinearisePass( progress ) }
+		, m_linearisePass{ doInitialiseLinearisePass( progress, previousPasses ) }
 		, m_minifyVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, m_prefix + "MinifyDepth", passlindpth::getVertexProgram() }
 		, m_minifyPixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, m_prefix + "MinifyDepth", passlindpth::getMinifyPixelProgram() }
 		, m_minifyStages{ makeShaderState( m_device, m_minifyVertexShader )
@@ -245,7 +245,8 @@ namespace castor3d
 		visitor.visit( m_minifyPixelShader );
 	}
 
-	crg::FramePass const & LineariseDepthPass::doInitialiseLinearisePass( ProgressBar * progress )
+	crg::FramePass const & LineariseDepthPass::doInitialiseLinearisePass( ProgressBar * progress
+		, crg::FramePassArray const & previousPasses )
 	{
 		stepProgressBar( progress, "Creating depth linearise pass" );
 		auto & pass = m_graph.createPass( "LineariseDepth"
@@ -263,7 +264,7 @@ namespace castor3d
 					, result->getTimer() );
 				return result;
 			} );
-		pass.addDependency( *m_lastPass );
+		pass.addDependencies( previousPasses );
 		pass.addSampledView( m_srcDepthBuffer, passlindpth::DepthImgIdx );
 		m_clipInfo.createPassBinding( pass, "ClipInfoCfg", passlindpth::ClipInfoUboIdx );
 		pass.addOutputColourView( m_result.targetViewId );

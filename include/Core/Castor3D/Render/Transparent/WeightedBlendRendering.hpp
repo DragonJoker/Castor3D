@@ -43,6 +43,7 @@ namespace castor3d
 			, RenderDevice const & device
 			, ProgressBar * progress
 			, crg::FramePass const & transparentPassDesc
+			, Texture const & depth
 			, TransparentPassResult const & transparentPassResult
 			, crg::ImageViewId const & targetColourView
 			, castor::Size const & size

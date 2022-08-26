@@ -45,7 +45,8 @@ namespace castor3d
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
 		, SsaoConfig const & ssaoConfig
-		, RenderNodesPassDesc const & renderPassDesc )
+		, RenderNodesPassDesc const & renderPassDesc
+		, bool deferred )
 		: RenderTechniqueNodesPass{ parent
 			, pass
 			, context
@@ -55,17 +56,15 @@ namespace castor3d
 			, nullptr
 			, renderPassDesc
 			, { false, ssaoConfig } }
+		, m_deferred{ deferred }
 	{
 	}
 
 	TextureFlags DepthPass::getTexturesMask()const
 	{
-#if !C3D_UseDeferredRendering
-		return TextureFlags{ TextureFlag::eGeometry
-			| TextureFlag::eNormal };
-#else
-		return TextureFlags{ TextureFlag::eGeometry };
-#endif
+		return TextureFlag::eGeometry
+			| ( m_deferred ? TextureFlag::eNone : TextureFlag::eNormal )
+			| ( m_deferred ? TextureFlag::eNone : TextureFlag::eOcclusion );
 	}
 
 	ShaderFlags DepthPass::getShaderFlags()const
@@ -74,7 +73,8 @@ namespace castor3d
 			| ShaderFlag::eTangentSpace
 			| ShaderFlag::eVelocity
 			| ShaderFlag::eOpacity
-			| ShaderFlag::eDepth;
+			| ShaderFlag::eDepth
+			| ( m_deferred ? ShaderFlag::eNone : ShaderFlag::eNormal );
 	}
 
 	PassFlags DepthPass::doAdjustPassFlags( PassFlags flags )const
@@ -107,7 +107,7 @@ namespace castor3d
 	{
 		return RenderNodesPass::createBlendState( BlendMode::eNoBlend
 			, BlendMode::eNoBlend
-			, C3D_UseDeferredRendering ? 2u : 3u );
+			, m_deferred ? 2u : 3u );
 	}
 
 	ShaderPtr DepthPass::doGetGeometryShaderSource( PipelineFlags const & flags )const
@@ -151,9 +151,7 @@ namespace castor3d
 		// Outputs
 		auto depthObj = writer.declOutput< Vec4 >( "depthObj", 0u );
 		auto velocity = writer.declOutput< Vec2 >( "velocity", 1u );
-#if !C3D_UseDeferredRendering
-		auto nmlOcc = writer.declOutput< Vec4 >( "nmlOcc", 2u );
-#endif
+		auto nmlOcc = writer.declOutput< Vec4 >( "nmlOcc", 2u, !m_deferred );
 
 		shader::Utils utils{ writer };
 
@@ -176,7 +174,8 @@ namespace castor3d
 					, normalize( in.tangent )
 					, normalize( in.bitangent )
 					, in.tangentSpaceViewPosition
-					, in.tangentSpaceFragPosition };
+					, in.tangentSpaceFragPosition
+					, { 1.0_f, !m_deferred } };
 				materials.blendMaterials( utils
 					, flags
 					, textureConfigs
@@ -190,9 +189,7 @@ namespace castor3d
 					, writer.cast< sdw::Float >( in.nodeId )
 					, 0.0_f );
 				velocity = in.getVelocity();
-#if !C3D_UseDeferredRendering
-				nmlOcc = vec4( components.normal(), 0.0_f );
-#endif
+				nmlOcc = vec4( components.normal(), components.occlusion() );
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

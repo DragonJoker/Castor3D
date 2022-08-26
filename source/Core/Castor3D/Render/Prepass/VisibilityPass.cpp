@@ -187,7 +187,8 @@ namespace castor3d
 					, normalize( in.tangent )
 					, normalize( in.bitangent )
 					, in.tangentSpaceViewPosition
-					, in.tangentSpaceFragPosition };
+					, in.tangentSpaceFragPosition
+					, { 1.0_f, false } };
 				materials.blendMaterials( utils
 					, flags
 					, textureConfigs

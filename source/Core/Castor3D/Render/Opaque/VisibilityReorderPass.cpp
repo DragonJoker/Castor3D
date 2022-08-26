@@ -361,7 +361,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	VisibilityReorderPass::VisibilityReorderPass( crg::FramePassGroup & graph
-		, crg::FramePass const & previousPass
+		, crg::FramePassArray const & previousPasses
 		, RenderDevice const & device
 		, crg::ImageViewId const & data
 		, ShaderBuffer const & pipelinesIds
@@ -395,7 +395,7 @@ namespace castor3d
 					, result->getTimer() );
 				return result;
 			} );
-		clear.addDependency( previousPass );
+		clear.addDependencies( previousPasses );
 		clear.addOutputStorageBuffer( { counts1, "MaterialsCounts1" }
 			, 0u
 			, 0u

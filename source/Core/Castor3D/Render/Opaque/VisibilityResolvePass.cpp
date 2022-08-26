@@ -1816,7 +1816,7 @@ namespace castor3d
 					, getClearValue( DsTexture::eColRgh )
 					, getClearValue( DsTexture::eSpcMtl )
 					, getClearValue( DsTexture::eEmsTrn ) };
-				auto & extent = m_parent->getNormalTexture().getExtent();
+				auto & extent = m_parent->getNormal().getExtent();
 				VkRenderPassBeginInfo beginInfo{ VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO
 					, nullptr
 					, nullptr
@@ -1967,7 +1967,7 @@ namespace castor3d
 				? VK_SHADER_STAGE_COMPUTE_BIT
 				: VK_SHADER_STAGE_FRAGMENT_BIT;
 			auto stageFlags = VkShaderStageFlags( stageBit );
-			auto extent = m_parent->getNormalTexture().getExtent();
+			auto extent = m_parent->getNormal().getExtent();
 			auto result = std::make_unique< Pipeline >();
 			result->descriptorLayout = stride == 0u
 				? visres::createVtxDescriptorLayout( m_device, getName(), flags )

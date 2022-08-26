@@ -611,14 +611,15 @@ namespace castor3d
 
 	ViewportType RenderTarget::getViewportType()const
 	{
-		return ( getCamera() ? getCamera()->getViewportType() : ViewportType::eCount );
+		auto camera = getCamera();
+		return ( camera ? camera->getViewportType() : ViewportType::eCount );
 	}
 
 	void RenderTarget::setViewportType( ViewportType value )
 	{
-		if ( getCamera() )
+		if ( auto camera = getCamera() )
 		{
-			getCamera()->setViewportType( value );
+			camera->setViewportType( value );
 		}
 	}
 
@@ -807,7 +808,7 @@ namespace castor3d
 
 		if ( !m_hdrPostEffects.empty() )
 		{
-			auto const * sourceView = &m_renderTechnique->getResultImgView();
+			auto const * sourceView = &m_renderTechnique->getResult().sampledViewId;
 
 			for ( auto effect : m_hdrPostEffects )
 			{
@@ -827,7 +828,7 @@ namespace castor3d
 				previousPass = &doInitialiseCopyCommands( device
 					, "HDR"
 					, *sourceView
-					, m_renderTechnique->getResultImgView()
+					, m_renderTechnique->getResult().sampledViewId
 					, *previousPass
 					, progress );
 			}
@@ -841,7 +842,7 @@ namespace castor3d
 				, device
 				, m_size
 				, m_graph
-				, m_renderTechnique->getResultImgView()
+				, m_renderTechnique->getResult().sampledViewId
 				, m_objects.wholeViewId
 				, *m_hdrLastPass
 				, *m_hdrConfigUbo
@@ -957,7 +958,10 @@ namespace castor3d
 					, queueData
 					, m_techniqueParameters
 					, m_ssaoConfig
-					, progress );
+					, progress
+					, C3D_UseDeferredRendering != 0
+					, C3D_UseVisibilityBuffer != 0
+					, C3D_UseWeightedBlendedRendering != 0 );
 			}
 			catch ( castor::Exception & exc )
 			{

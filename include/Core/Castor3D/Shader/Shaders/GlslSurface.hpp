@@ -142,62 +142,6 @@ namespace castor3d::shader
 		sdw::UInt nodeId;
 		sdw::UInt vertexId;
 	};
-
-	template< typename PositionT >
-	struct ComputeSurfaceT
-	{
-	public:
-		ComputeSurfaceT( sdw::ShaderWriter & writer
-			, PipelineFlags const & flags
-			, uint32_t stride
-			, uint32_t binding
-			, uint32_t set );
-
-		// Vertex shader side
-		void computeVelocity( MatrixData const & matrixData
-			, sdw::Vec4 & curPos
-			, sdw::Vec4 & prvPos );
-		void computeTangentSpace( PipelineFlags const & flags
-			, sdw::Vec3 const & cameraPosition
-			, sdw::Vec3 const & worldPos
-			, sdw::Vec3 const & nml
-			, sdw::Vec3 const & tan );
-		void computeTangentSpace( PipelineFlags const & flags
-			, sdw::Vec3 const & cameraPosition
-			, sdw::Vec3 const & worldPos
-			, sdw::Mat3 const & mtx
-			, sdw::Vec3 const & nml
-			, sdw::Vec3 const & tan );
-		void computeTangentSpace( PipelineFlags const & flags
-			, sdw::Vec3 const & cameraPosition
-			, sdw::Vec3 const & worldPos
-			, sdw::Vec3 const & nml
-			, sdw::Vec3 const & tan
-			, sdw::Vec3 const & bin );
-
-		// Fragment shader side
-		sdw::Vec2 getVelocity()const;
-
-	public:
-#define DeclareSsbo( Name, Type )\
-		sdw::StorageBuffer m_##Name##Buffer;\
-		sdw::Array< Type > ##Name;\
-
-		DeclareSsbo( indices, sdw::UInt );
-		DeclareSsbo( positions, PositionT );
-		DeclareSsbo( normals, sdw::Vec4 );
-		DeclareSsbo( tangents, sdw::Vec4 );
-		DeclareSsbo( texcoords0, sdw::Vec4 );
-		DeclareSsbo( texcoords1, sdw::Vec4 );
-		DeclareSsbo( texcoords2, sdw::Vec4 );
-		DeclareSsbo( texcoords3, sdw::Vec4 );
-		DeclareSsbo( colours, sdw::Vec4 );
-		DeclareSsbo( velocities, sdw::Vec4 );
-		DeclareSsbo( passMasks, sdw::UVec4 );
-		DeclareSsbo( objectsIds, sdw::UVec4 );
-
-#undef DeclareSsbo
-	};
 }
 
 #include "GlslSurface.inl"

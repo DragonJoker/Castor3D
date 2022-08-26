@@ -40,7 +40,8 @@ namespace castor3d
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
 			, SsaoConfig const & ssaoConfig
-			, RenderNodesPassDesc const & renderPassDesc );
+			, RenderNodesPassDesc const & renderPassDesc
+			, bool deferred );
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::getTexturesMask
 		 */
@@ -68,6 +69,7 @@ namespace castor3d
 
 	public:
 		C3D_API static castor::String const Type;
+		bool m_deferred{ false };
 	};
 }
 

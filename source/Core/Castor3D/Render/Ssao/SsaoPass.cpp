@@ -20,10 +20,10 @@ CU_ImplementCUSmartPtr( castor3d, SsaoPass )
 
 namespace castor3d
 {
-	SsaoPass::SsaoPass( crg::FrameGraph & graph
+	SsaoPass::SsaoPass( crg::FramePassGroup & graph
 		, RenderDevice const & device
 		, ProgressBar * progress
-		, crg::FramePass const & previousPass
+		, crg::FramePassArray const & previousPasses
 		, castor::Size const & size
 		, SsaoConfig & ssaoConfig
 		, Texture const & depth
@@ -36,7 +36,7 @@ namespace castor3d
 		, m_size{ makeExtent2D( size ) }
 		, m_matrixUbo{ m_device }
 		, m_linearisePass{ castor::makeUnique< LineariseDepthPass >( m_group
-			, previousPass
+			, previousPasses
 			, m_device
 			, progress
 			, cuT( "Ssao" )

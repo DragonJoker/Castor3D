@@ -241,8 +241,8 @@ namespace draw_edges
 		auto & engine = *device.renderSystem.getEngine();
 		auto & technique = m_renderTarget.getTechnique();
 		auto & passBuffer = engine.getMaterialCache().getPassBuffer();
-		auto & depthObj = technique.getDepthObjImgView();
-		auto & nmlOcc = technique.getNormalImgView();
+		auto & depthObj = technique.getDepthObj().sampledViewId;
+		auto & nmlOcc = technique.getNormal().sampledViewId;
 		auto & depthRange = technique.getDepthRange();
 		auto previous = &previousPass;
 

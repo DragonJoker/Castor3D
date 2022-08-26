@@ -267,7 +267,7 @@ namespace smaa
 		, crg::FramePass const & previousPass )
 	{
 		m_srgbTextureView = m_target;
-		m_hdrTextureView = &m_renderTarget.getTechnique().getResultImgView();
+		m_hdrTextureView = &m_renderTarget.getTechnique().getResult().sampledViewId;
 		auto previous = &previousPass;
 		crg::ImageViewIdArray smaaResult;
 
@@ -279,7 +279,7 @@ namespace smaa
 				, m_renderTarget
 				, device
 				, m_ubo
-				, m_renderTarget.getTechnique().getDepthSampledView()
+				, m_renderTarget.getTechnique().getDepth().sampledViewId
 				, m_config
 				, &m_enabled );
 			break;
@@ -515,7 +515,7 @@ namespace smaa
 
 		if ( m_config.data.enablePredication )
 		{
-			predication = &m_renderTarget.getTechnique().getDepthSampledView();
+			predication = &m_renderTarget.getTechnique().getDepth().sampledViewId;
 		}
 
 		return predication;

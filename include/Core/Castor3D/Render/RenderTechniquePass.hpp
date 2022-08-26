@@ -228,7 +228,7 @@ namespace castor3d
 		/**
 		 *\copydoc	RenderNodesPass::getShaderFlags
 		 */
-		C3D_API virtual ShaderFlags getShaderFlags()const = 0u;
+		C3D_API virtual ShaderFlags getShaderFlags()const = 0;
 		/**
 		*\~english
 		*name
