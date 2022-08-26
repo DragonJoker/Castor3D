@@ -22,7 +22,7 @@ See LICENSE file in root folder
 #include "Castor3D/Overlay/OverlayModule.hpp"
 #include "Castor3D/Plugin/PluginModule.hpp"
 #include "Castor3D/Render/PostEffect/PostEffectModule.hpp"
-#include "Castor3D/Render/Technique/Opaque/Lighting/LightingModule.hpp"
+#include "Castor3D/Render/Opaque/Lighting/LightingModule.hpp"
 #include "Castor3D/Render/ToneMapping/ToneMappingModule.hpp"
 #include "Castor3D/Render/ToTexture/RenderToTextureModule.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleModule.hpp"

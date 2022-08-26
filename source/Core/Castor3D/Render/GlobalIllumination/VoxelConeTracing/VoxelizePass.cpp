@@ -14,7 +14,7 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Culling/SceneCuller.hpp"
 #include "Castor3D/Render/Node/QueueRenderNodes.hpp"
-#include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
+#include "Castor3D/Render/RenderTechniqueVisitor.hpp"
 #include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/VoxelSceneData.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"

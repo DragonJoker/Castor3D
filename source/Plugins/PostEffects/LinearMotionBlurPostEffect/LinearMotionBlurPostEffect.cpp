@@ -16,8 +16,8 @@
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Render/RenderWindow.hpp>
 #include <Castor3D/Render/Viewport.hpp>
-#include <Castor3D/Render/Technique/RenderTechnique.hpp>
-#include <Castor3D/Render/Technique/RenderTechniquePass.hpp>
+#include <Castor3D/Render/RenderTechnique.hpp>
+#include <Castor3D/Render/RenderTechniquePass.hpp>
 #include <Castor3D/Scene/ParticleSystem/ParticleDeclaration.hpp>
 #include <Castor3D/Scene/ParticleSystem/ParticleElementDeclaration.hpp>
 #include <Castor3D/Shader/Program.hpp>

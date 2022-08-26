@@ -417,6 +417,15 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Deferred lighting Render technique pass.
+	*\~french
+	*\brief
+	*	Classe de passe de technique de rendu implémentant le Deferred lighting.
+	*/
+	class DepthPass;
+	/**
+	*\~english
+	*\brief
 	*	Implements a frustum and the checks related to frustum culling.
 	*\~french
 	*\brief
@@ -588,6 +597,42 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Render technique class
+	*\remarks
+	*	A render technique is the description of a way to render a render target
+	*\~french
+	*\brief
+	*	Classe de technique de rendu
+	*\remarks
+	*	Une technique de rendu est la description d'une manière de rendre une cible de rendu
+	*/
+	class RenderTechnique;
+	/**
+	\~english
+	\brief		Render technique pass base class.
+	\~french
+	\brief		Classe de base d'une passe de technique de rendu.
+	*/
+	class RenderTechniquePass;
+	/**
+	\~english
+	\brief		Render technique nodes pass base class.
+	\~french
+	\brief		Classe de base d'une passe de technique de rendu de noeuds.
+	*/
+	class RenderTechniqueNodesPass;
+	/**
+	*\~english
+	*\brief
+	*	Render technique effect visitor base class.
+	*\~french
+	*\brief
+	*	Classe de base d'un visiteur de technique de rendu.
+	*/
+	class RenderTechniqueVisitor;
+	/**
+	*\~english
+	*\brief
 	*	Render window representation.
 	*\remark
 	*	Manages a window where you can render a scene.
@@ -643,6 +688,8 @@ namespace castor3d
 	CU_DeclareCUSmartPtr( castor3d, RenderQueue, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, RenderSystem, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, RenderTarget, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, RenderTechnique, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, RenderTechniquePass, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, RenderWindow, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, Viewport, C3D_API );
 
@@ -671,6 +718,31 @@ namespace castor3d
 	{
 		RenderQueueArray queues;
 		ShadowMapLightTypeArray shadowMaps;
+	};
+
+	enum class TechniquePassEvent
+	{
+		eBeforeDepth,
+		eBeforeBackground,
+		eBeforeOpaque,
+		eBeforeTransparent,
+		eBeforePostEffects,
+		CU_ScopedEnumBounds( eBeforeDepth )
+	};
+
+	using TechniquePassVector = std::vector< RenderTechniqueNodesPass * >;
+	using TechniquePasses = std::array< TechniquePassVector, size_t( TechniquePassEvent::eCount ) >;
+
+	struct RenderPassRegisterInfo
+	{
+		using Creator = std::function< crg::FramePassArray( RenderDevice const &
+			, RenderTechnique &
+			, TechniquePasses &
+			, crg::FramePassArray ) >;
+		castor::String name;
+		Creator create;
+		TechniquePassEvent event;
+		RenderPassTypeID id{};
 	};
 
 	struct CpuUpdater
@@ -808,6 +880,27 @@ namespace castor3d
 		, ashes::Image const & image
 		, Texture const & texture );
 	C3D_API void printGraph( crg::RunnableGraph const & graph );
+	/**
+	*\~english
+	*\brief
+	*	Writes the image view and sampler descriptor to the given writes.
+	*\~french
+	*\brief
+	*	Ecrit le descripteur de la vue et du sampler dans les writes donnés.
+	*/
+	C3D_API void bindTexture( VkImageView view
+		, VkSampler sampler
+		, ashes::WriteDescriptorSetArray & writes
+		, uint32_t & index );
+	C3D_API void bindTexture( ashes::ImageView const & view
+		, ashes::Sampler const & sampler
+		, ashes::WriteDescriptorSetArray & writes
+		, uint32_t & index );
+	C3D_API void bindTexture( crg::RunnableGraph & graph
+		, crg::ImageViewId const & view
+		, VkSampler const & sampler
+		, ashes::WriteDescriptorSetArray & writes
+		, uint32_t & index );
 	/**
 	*\~english
 	*\brief

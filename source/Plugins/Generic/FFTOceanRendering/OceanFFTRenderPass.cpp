@@ -13,8 +13,8 @@
 #include <Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightVolumePassResult.hpp>
 #include <Castor3D/Render/Node/BillboardRenderNode.hpp>
 #include <Castor3D/Render/Node/SubmeshRenderNode.hpp>
-#include <Castor3D/Render/Technique/RenderTechnique.hpp>
-#include <Castor3D/Render/Technique/RenderTechniqueVisitor.hpp>
+#include <Castor3D/Render/RenderTechnique.hpp>
+#include <Castor3D/Render/RenderTechniqueVisitor.hpp>
 #include <Castor3D/Scene/Camera.hpp>
 #include <Castor3D/Scene/Scene.hpp>
 #include <Castor3D/Scene/Background/Background.hpp>

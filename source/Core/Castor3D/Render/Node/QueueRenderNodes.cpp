@@ -20,7 +20,7 @@
 #include "Castor3D/Render/Node/BillboardRenderNode.hpp"
 #include "Castor3D/Render/Node/SceneRenderNodes.hpp"
 #include "Castor3D/Render/Node/SubmeshRenderNode.hpp"
-#include "Castor3D/Render/Technique/Visibility/VisibilityResolvePass.hpp"
+#include "Castor3D/Render/Visibility/VisibilityResolvePass.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
 #include "Castor3D/Scene/Scene.hpp"

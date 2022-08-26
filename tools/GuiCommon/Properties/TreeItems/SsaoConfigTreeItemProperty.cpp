@@ -5,7 +5,7 @@
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Render/Ssao/SsaoConfig.hpp>
-#include <Castor3D/Render/Technique/RenderTechnique.hpp>
+#include <Castor3D/Render/RenderTechnique.hpp>
 
 #include <wx/propgrid/advprops.h>
 

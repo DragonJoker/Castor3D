@@ -10,7 +10,7 @@
 #include "Castor3D/Render/Culling/FrustumCuller.hpp"
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
 #include "Castor3D/Render/Passes/BackgroundRenderer.hpp"
-#include "Castor3D/Render/Technique/ForwardRenderTechniquePass.hpp"
+#include "Castor3D/Render/Passes/ForwardRenderTechniquePass.hpp"
 #include "Castor3D/Render/Ssao/SsaoConfig.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"

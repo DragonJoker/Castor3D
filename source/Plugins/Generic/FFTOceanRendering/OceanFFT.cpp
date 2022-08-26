@@ -7,7 +7,7 @@
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Miscellaneous/Logger.hpp>
 #include <Castor3D/Miscellaneous/Parameter.hpp>
-#include <Castor3D/Render/Technique/RenderTechniqueVisitor.hpp>
+#include <Castor3D/Render/RenderTechniqueVisitor.hpp>
 #include <Castor3D/Shader/GlslToSpv.hpp>
 #include <Castor3D/Shader/ShaderModule.hpp>
 

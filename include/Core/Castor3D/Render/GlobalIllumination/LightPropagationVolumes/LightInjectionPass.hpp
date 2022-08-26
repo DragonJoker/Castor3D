@@ -13,7 +13,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightVolumePassResult.hpp"
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
-#include "Castor3D/Render/Technique/Opaque/OpaqueModule.hpp"
+#include "Castor3D/Render/Opaque/OpaqueModule.hpp"
 #include "Castor3D/Render/Passes/RenderQuad.hpp"
 #include "Castor3D/Scene/Light/LightModule.hpp"
 #include "Castor3D/Shader/ShaderModule.hpp"

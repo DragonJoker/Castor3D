@@ -17,7 +17,7 @@ See LICENSE file in root folder
 #include <VkFFT/vkFFT.h>
 #pragma warning( pop )
 
-#include <Castor3D/Render/Technique/TechniqueModule.hpp>
+#include <Castor3D/Render/RenderModule.hpp>
 #include <Castor3D/Render/RenderNodesPass.hpp>
 
 #include <complex>

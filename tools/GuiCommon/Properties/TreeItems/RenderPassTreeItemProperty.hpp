@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "GuiCommon/Properties/TreeItems/TreeItemProperty.hpp"
 
-#include <Castor3D/Render/Technique/TechniqueModule.hpp>
+#include <Castor3D/Render/RenderModule.hpp>
 
 namespace GuiCommon
 {

@@ -22,7 +22,7 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/Passes/RenderQuad.hpp"
-#include "Castor3D/Render/Technique/RenderTechnique.hpp"
+#include "Castor3D/Render/RenderTechnique.hpp"
 #include "Castor3D/Render/ToTexture/Texture3DTo2D.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Geometry.hpp"

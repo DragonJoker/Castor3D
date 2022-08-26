@@ -46,6 +46,15 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Screen Space Ambient Occlusion pass.
+	*\~french
+	*\brief
+	*	Passe de Occlusion Ambiante en Espace Ecran.
+	*/
+	class SsaoPass;
+	/**
+	*\~english
+	*\brief
 	*	Raw SSAO pass.
 	*\~french
 	*\brief
@@ -54,6 +63,7 @@ namespace castor3d
 	class SsaoRawAOPass;
 
 	CU_DeclareCUSmartPtr( castor3d, SsaoBlurPass, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, SsaoPass, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, SsaoRawAOPass, C3D_API );
 
 	//@}

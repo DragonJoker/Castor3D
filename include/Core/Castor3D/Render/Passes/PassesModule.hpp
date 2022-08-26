@@ -89,6 +89,15 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Forward render technique pass class.
+	*\~french
+	*\brief
+	*	Classe de passe de technique de rendu de type forward.
+	*/
+	class ForwardRenderTechniquePass;
+	/**
+	*\~english
+	*\brief
 	*	Gaussian blur pass.
 	*\~french
 	*\brief

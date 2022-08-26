@@ -9,7 +9,7 @@
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Miscellaneous/ProgressBar.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
-#include "Castor3D/Render/Technique/RenderTechniqueVisitor.hpp"
+#include "Castor3D/Render/RenderTechniqueVisitor.hpp"
 #include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/VoxelBufferToTexture.hpp"
 #include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/VoxelizePass.hpp"
 #include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/VoxelSceneData.hpp"

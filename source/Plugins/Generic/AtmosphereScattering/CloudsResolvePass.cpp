@@ -6,7 +6,7 @@
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Render/RenderDevice.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
-#include <Castor3D/Render/Technique/RenderTechniqueVisitor.hpp>
+#include <Castor3D/Render/RenderTechniqueVisitor.hpp>
 #include <Castor3D/Shader/Program.hpp>
 
 #include <RenderGraph/RunnableGraph.hpp>

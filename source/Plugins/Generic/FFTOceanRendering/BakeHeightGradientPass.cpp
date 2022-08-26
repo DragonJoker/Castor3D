@@ -9,7 +9,7 @@
 #include <Castor3D/Miscellaneous/Logger.hpp>
 #include <Castor3D/Render/RenderDevice.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
-#include <Castor3D/Render/Technique/RenderTechniqueVisitor.hpp>
+#include <Castor3D/Render/RenderTechniqueVisitor.hpp>
 #include <Castor3D/Shader/Program.hpp>
 
 #include <ashespp/Descriptor/DescriptorSet.hpp>
