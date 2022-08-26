@@ -92,7 +92,7 @@ jobs:
 
     - name: Install vcpkg packages
       shell: bash
-      run: $VCPKG_ROOT/vcpkg install spirv-cross:${{ matrix.os[1] }} freetype:${{ matrix.os[1] }} zlib:${{ matrix.os[1] }} minizip:${{ matrix.os[1] }} vkfft:${{ matrix.os[1] }} convectionkernels:${{ matrix.os[1] }} meshoptimizer:${{ matrix.os[1] }} gli:${{ matrix.os[1] }}
+      run: $VCPKG_ROOT/vcpkg install spirv-cross:${{ matrix.os[1] }} freetype:${{ matrix.os[1] }} zlib:${{ matrix.os[1] }} minizip:${{ matrix.os[1] }} vkfft:${{ matrix.os[1] }} convectionkernels:${{ matrix.os[1] }} meshoptimizer:${{ matrix.os[1] }} gli:${{ matrix.os[1] }} glslang:${{ matrix.os[1] }}
 
     - name: Install vcpkg packages (Windows)
       if: runner.os == 'Windows'
