@@ -8,19 +8,6 @@ See LICENSE file in root folder
 #include <Castor3D/Castor3DPrerequisites.hpp>
 
 #if CU_UsePCH
-#	ifdef CU_PlatformWindows
-#		if CASTOR_GTK
-#			ifdef __WXGTK__
-#				undef __WXMSW__
-#			else
-#				define __WXMSW__
-#			endif
-#		else
-#			undef __WXGTK__
-#			define __WXMSW__
-#		endif
-#	endif
-
 #	include <string>
 
 #	pragma warning( push )

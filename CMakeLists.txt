@@ -69,6 +69,8 @@ option( CASTOR_BUILGRP_RENDERER "Build Ashes renderer plugins" ON )
 
 if ( WIN32 )
 	option( CASTOR_USE_DEPS_WXWIDGETS "Use wxWidgets from dependencies submodule instead of system/vcpkg one" OFF )
+else ()
+	option( CASTOR_USE_SYSTEM_WXWIDGETS "Use wxWidgets from system submodule instead of vcpkg one" OFF )
 endif ()
 
 set( DEPENDENCIES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/${COMPILER_FOLDER}/${PROJECTS_PLATFORM} )
