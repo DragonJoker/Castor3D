@@ -43,8 +43,9 @@ namespace castor3d
 			: public OverlayVisitor
 		{
 		public:
-			explicit Preparer( OverlayRenderer & renderer
-				, RenderDevice const & device );
+			C3D_API explicit Preparer( OverlayRenderer & renderer
+				, RenderDevice const & device
+				, VkRenderPass renderPass );
 
 			void visit( PanelOverlay const & overlay )override;
 			void visit( BorderPanelOverlay const & overlay )override;
@@ -63,6 +64,7 @@ namespace castor3d
 		private:
 			OverlayRenderer & m_renderer;
 			RenderDevice const & m_device;
+			VkRenderPass m_renderPass;
 		};
 
 	public:
@@ -97,24 +99,6 @@ namespace castor3d
 		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API void update( GpuUpdater & updater );
-		/**
-		 *\~english
-		 *\brief		Begins the overlays preparation.
-		 *\param[in]	timer	The render pass timer.
-		 *\~french
-		 *\brief		Commence la préparation des incrustations.
-		 *\param[in]	timer	Le timer de la passe de rendu.
-		 */
-		C3D_API void beginPrepare( FramePassTimer const & timer );
-		/**
-		 *\~english
-		 *\brief		Ends the overlays preparation.
-		 *\param[in]	timer	The render pass timer.
-		 *\~french
-		 *\brief		Termine la préparation des incrustations.
-		 *\param[in]	timer	Le timer de la passe de rendu.
-		 */
-		C3D_API void endPrepare( FramePassTimer const & timer );
 		/**
 		 *\~english
 		 *\brief		Begins the overlays preparation.
@@ -185,9 +169,10 @@ namespace castor3d
 			return m_sizeChanged;
 		}
 
-		Preparer getPreparer( RenderDevice const & device )
+		Preparer getPreparer( RenderDevice const & device
+			, VkRenderPass renderPass )
 		{
-			return Preparer{ *this, device };
+			return Preparer{ *this, device, renderPass };
 		}
 		/**@}*/
 
@@ -275,17 +260,21 @@ namespace castor3d
 
 	private:
 		OverlayRenderNode & doGetPanelNode( RenderDevice const & device
+			, VkRenderPass renderPass
 			, Pass const & pass );
 		OverlayRenderNode & doGetTextNode( RenderDevice const & device
+			, VkRenderPass renderPass
 			, Pass const & pass
 			, TextureLayout const & texture
 			, Sampler const & sampler );
 		Pipeline doCreatePipeline( RenderDevice const & device
+			, VkRenderPass renderPass
 			, Pass const & pass
 			, ashes::PipelineShaderStageCreateInfoArray program
 			, FilteredTextureFlags const & texturesFlags
 			, bool text );
 		Pipeline & doGetPipeline( RenderDevice const & device
+			, VkRenderPass renderPass
 			, Pass const & pass
 			, std::map< uint32_t, Pipeline > & pipelines
 			, bool text );
@@ -305,7 +294,6 @@ namespace castor3d
 			, uint32_t index
 			, TextureLayout const & texture
 			, Sampler const & sampler );
-		void doCreateRenderPass( RenderDevice const & device );
 
 	private:
 		UniformBufferPool & m_uboPool;
@@ -325,8 +313,6 @@ namespace castor3d
 		castor::Size m_size;
 		std::map< Pass const *, OverlayRenderNode > m_mapPanelNodes;
 		std::map< Pass const *, OverlayRenderNode > m_mapTextNodes;
-		ashes::RenderPassPtr m_renderPass;
-		ashes::FrameBufferPtr m_frameBuffer;
 		std::map< uint32_t, Pipeline > m_panelPipelines;
 		std::map< uint32_t, Pipeline > m_textPipelines;
 		castor::String m_previousCaption;

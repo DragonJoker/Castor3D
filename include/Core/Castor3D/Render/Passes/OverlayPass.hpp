@@ -42,7 +42,8 @@ namespace castor3d
 			, RenderDevice const & device
 			, Scene const & scene
 			, VkExtent2D const & size
-			, Texture const & output );
+			, Texture const & output
+			, bool drawGlobal = false );
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, CPU wise.
@@ -82,6 +83,7 @@ namespace castor3d
 		Scene const & m_scene;
 		crg::RenderPassHolder m_renderPass;
 		OverlayRendererUPtr m_renderer;
+		bool m_drawGlobal{};
 	};
 }
 
