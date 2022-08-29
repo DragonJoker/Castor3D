@@ -358,7 +358,7 @@ namespace castor3d
 		, m_prepass{ *this
 			, m_device
 			, queueData
-			, doCreateRenderPasses( progress , TechniquePassEvent::eBeforeDepth, nullptr )
+			, doCreateRenderPasses( progress , TechniquePassEvent::eBeforeDepth, &m_renderTarget.createVertexTransformPass() )
 			, progress
 			, deferred
 			, visbuffer }
