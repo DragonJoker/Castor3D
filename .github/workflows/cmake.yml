@@ -14,10 +14,96 @@ on:
       - created
 
 jobs:
-  build:
+  build-windows:
     strategy:
       matrix:
-        os: [[ubuntu-latest,x64-linux,gcc], [ubuntu-latest,x64-linux,clang], [windows-latest,x64-windows,msvc], [macos-latest,x64-osx,clang]]
+        os: [[windows-latest,x64-windows,msvc]]
+        buildType: [Release]
+
+    runs-on: ${{ matrix.os[0] }}
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup vcpkg
+      uses: lukka/run-vcpkg@v4
+      with:
+        vcpkgGitCommitId: '${{ secrets.VCPKG_COMMIT_ID }}'
+        setupOnly: true
+
+    - name: Create Build Environment
+      run: cmake -E make_directory ${{runner.workspace}}/build-${{ matrix.buildType }}
+
+    - name: Configure Warnings as errors (OFF)
+      if: github.event_name == 'push'
+      shell: bash
+      working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
+      run: echo "PROJ_WAE=OFF" >> $GITHUB_ENV
+
+    - name: Configure Warnings as errors (ON)
+      if: github.event_name == 'pull_request'
+      shell: bash
+      working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
+      run: echo "PROJ_WAE=ON" >> $GITHUB_ENV
+
+    - name: Install vcpkg packages
+      shell: bash
+      run: $VCPKG_ROOT/vcpkg install spirv-cross:${{ matrix.os[1] }} freetype:${{ matrix.os[1] }} zlib:${{ matrix.os[1] }} minizip:${{ matrix.os[1] }} vkfft:${{ matrix.os[1] }} convectionkernels:${{ matrix.os[1] }} meshoptimizer:${{ matrix.os[1] }} gli:${{ matrix.os[1] }} glslang:${{ matrix.os[1] }} assimp:${{ matrix.os[1] }}
+
+    - name: Checkout submodules
+      run: |
+        git submodule update --init -- "CMake"
+        git submodule update --init --recursive -- "external/Ashes"
+        git submodule update --init --recursive -- "external/ShaderWriter"
+        git submodule update --init --recursive -- "external/RenderGraph"
+        git submodule update --init -- "dependencies"
+
+    - name: Unzip dependencies
+      working-directory: ${{ github.workspace }}/dependencies/vc14/x64
+      run: |
+        7z x wxWidgets-3.1.0-win32-headers.zip
+        7z x wxWidgets-3.1.0-win32-libs-debug-vc16.8.4.zip
+        7z x wxWidgets-3.1.0-win32-libs-release-vc16.8.4.zip
+
+    - name: Configure CMake
+      id: configure
+      shell: bash
+      working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
+      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{ matrix.buildType }} -DCMAKE_TOOLCHAIN_FILE=$GITHUB_WORKSPACE/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/package/Castor3D -DPROJECTS_WARNINGS_AS_ERRORS=$PROJ_WAE -DPROJECTS_UNITY_BUILD=ON -DPROJECTS_USE_PRECOMPILED_HEADERS=OFF -DSDW_GENERATE_SOURCE=OFF -DCASTOR_BUILD_PLUGINS=ON -DCASTOR_BUILDGRP_INTEROP=OFF -DCASTOR_BUILDGRP_TEST=OFF -DCASTOR_USE_GLSLANG=ON -DCASTOR_DISABLE_DELAYED_INITIALISATION=ON -DASHES_BUILD_RENDERER_OGL=OFF -DCASTOR_BUILDGRP_SAMPLE=ON -DCASTOR_BUILDGRP_TOOL=ON -DASHES_BUILD_RENDERER_D3D11=OFF -DCASTOR_USE_DEPS_WXWIDGETS=ON
+
+    - name: Build
+      if: steps.configure.conclusion == 'success'
+      id: build
+      working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
+      shell: bash
+      run: cmake --build . --parallel 2 --config ${{ matrix.buildType }}
+
+    - name: Prepare success package
+      if: (github.event_name == 'push') && (steps.build.conclusion == 'success')
+      working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
+      shell: bash
+      run: |
+        cmake --install . --config ${{ matrix.buildType }}
+        7z a $GITHUB_WORKSPACE/Castor3D-${{ matrix.os[1] }}.zip $GITHUB_WORKSPACE/package/Castor3D/
+
+    - name: Clean build folder
+      if: (steps.build.conclusion == 'success')
+      working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
+      shell: bash
+      run: cmake --build . --config ${{ matrix.buildType }} --target clean
+
+    - name: Upload success package
+      if: (github.event_name == 'push') && (steps.build.conclusion == 'success')
+      uses: actions/upload-artifact@v2
+      with:
+        name: Castor3D-${{ matrix.os[1] }}.zip
+        path: ${{ github.workspace }}/Castor3D-${{ matrix.os[1] }}.zip
+
+
+  build-mac:
+    strategy:
+      matrix:
+        os: [[macos-latest,x64-osx,clang]]
         buildType: [Release]
 
     runs-on: ${{ matrix.os[0] }}
@@ -31,73 +117,12 @@ jobs:
         vcpkgGitCommitId: '${{ secrets.VCPKG_COMMIT_ID }}'
         setupOnly: true
   
-    - name: Install necessary G++ version (Linux)
-      if: runner.os == 'Linux' && matrix.os[2] == 'gcc'
-      shell: bash
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y --no-install-recommends ccache gcc-10 g++-10
-
-    - name: Install necessary Clang++ version (Linux)
-      if: runner.os == 'Linux' && matrix.os[2] == 'clang'
-      shell: bash
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y --no-install-recommends ccache clang-12 clang++-12
-
     - name: Create Build Environment
       run: cmake -E make_directory ${{runner.workspace}}/build-${{ matrix.buildType }}
 
-    - name: Configure Warnings as errors (OFF)
-      if: github.event_name == 'push' || runner.os == 'macOS'
-      shell: bash
-      working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
-      run: echo "PROJ_WAE=OFF" >> $GITHUB_ENV
-
-    - name: Configure Warnings as errors (ON)
-      if: github.event_name == 'pull_request' && runner.os != 'macOS'
-      shell: bash
-      working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
-      run: echo "PROJ_WAE=ON" >> $GITHUB_ENV
-
-    - name: Configure GCC version (Linux)
-      if: runner.os == 'Linux' && matrix.os[2] == 'gcc'
-      shell: bash
-      working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
-      run: echo "CC=gcc-10" >> $GITHUB_ENV
-
-    - name: Configure G++ version (Linux)
-      if: runner.os == 'Linux' && matrix.os[2] == 'gcc'
-      shell: bash
-      working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
-      run: echo "CXX=g++-10" >> $GITHUB_ENV
-
-    - name: Configure Clang version (Linux)
-      if: runner.os == 'Linux' && matrix.os[2] == 'clang'
-      shell: bash
-      working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
-      run: echo "CC=clang-12" >> $GITHUB_ENV
-
-    - name: Configure Clang++ version (Linux)
-      if: runner.os == 'Linux' && matrix.os[2] == 'clang'
-      shell: bash
-      working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
-      run: echo "CXX=clang++-12" >> $GITHUB_ENV
-
-    - name: Install necessary packages (Linux)
-      if: runner.os == 'Linux'
-      shell: bash
-      run: |
-        sudo apt-get install -y --no-install-recommends libxi-dev libgl1-mesa-dev libglu1-mesa-dev mesa-common-dev libxrandr-dev libxxf86vm-dev libxaw7-dev libwayland-dev libxcb1-dev libx11-xcb-dev libassimp-dev libfreeimage-dev
-
     - name: Install vcpkg packages
       shell: bash
-      run: $VCPKG_ROOT/vcpkg install spirv-cross:${{ matrix.os[1] }} freetype:${{ matrix.os[1] }} zlib:${{ matrix.os[1] }} minizip:${{ matrix.os[1] }} vkfft:${{ matrix.os[1] }} convectionkernels:${{ matrix.os[1] }} meshoptimizer:${{ matrix.os[1] }} gli:${{ matrix.os[1] }} glslang:${{ matrix.os[1] }}
-
-    - name: Install vcpkg packages (Windows)
-      if: runner.os == 'Windows'
-      shell: bash
-      run: $VCPKG_ROOT/vcpkg install assimp:${{ matrix.os[1] }}
+      run: $VCPKG_ROOT/vcpkg install spirv-cross:${{ matrix.os[1] }} freetype:${{ matrix.os[1] }} zlib:${{ matrix.os[1] }} minizip:${{ matrix.os[1] }} vkfft:${{ matrix.os[1] }} convectionkernels:${{ matrix.os[1] }} meshoptimizer:${{ matrix.os[1] }} gli:${{ matrix.os[1] }} glslang:${{ matrix.os[1] }} assimp:${{ matrix.os[1] }}
 
     - name: Checkout submodules
       run: |
@@ -106,41 +131,198 @@ jobs:
         git submodule update --init --recursive -- "external/ShaderWriter"
         git submodule update --init --recursive -- "external/RenderGraph"
 
-    - name: Checkout dependencies submodule (Windows)
-      if: runner.os == 'Windows'
-      run: git submodule update --init -- "dependencies"
-    
-    - name: Unzip dependencies (Windows)
-      if: runner.os == 'Windows'
-      working-directory: ${{ github.workspace }}/dependencies/vc14/x64
-      run: |
-        7z x wxWidgets-3.1.0-win32-headers.zip
-        7z x wxWidgets-3.1.0-win32-libs-debug-vc16.8.4.zip
-        7z x wxWidgets-3.1.0-win32-libs-release-vc16.8.4.zip
-
-    - name: Configure CMake (Windows)
-      id: configure-windows
-      if: runner.os == 'Windows'
+    - name: Configure CMake
+      id: configure
       shell: bash
       working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
-      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{ matrix.buildType }} -DCMAKE_TOOLCHAIN_FILE=$GITHUB_WORKSPACE/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/package/Castor3D -DPROJECTS_WARNINGS_AS_ERRORS=$PROJ_WAE -DPROJECTS_UNITY_BUILD=ON -DPROJECTS_USE_PRECOMPILED_HEADERS=OFF -DSDW_GENERATE_SOURCE=OFF -DCASTOR_BUILD_PLUGINS=ON -DCASTOR_BUILDGRP_INTEROP=OFF -DCASTOR_BUILDGRP_TEST=OFF -DCASTOR_USE_GLSLANG=ON -DCASTOR_DISABLE_DELAYED_INITIALISATION=ON -DASHES_BUILD_RENDERER_OGL=OFF -DCASTOR_BUILDGRP_SAMPLE=ON -DCASTOR_BUILDGRP_TOOL=ON -DASHES_BUILD_RENDERER_D3D11=OFF -DCASTOR_USE_DEPS_WXWIDGETS=ON
-
-    - name: Configure CMake (Linux)
-      id: configure-linux
-      if: runner.os == 'Linux'
-      shell: bash
-      working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
-      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{ matrix.buildType }} -DCMAKE_TOOLCHAIN_FILE=$GITHUB_WORKSPACE/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/package/Castor3D -DPROJECTS_WARNINGS_AS_ERRORS=$PROJ_WAE -DPROJECTS_UNITY_BUILD=ON -DPROJECTS_USE_PRECOMPILED_HEADERS=OFF -DSDW_GENERATE_SOURCE=OFF -DCASTOR_BUILD_PLUGINS=ON -DCASTOR_BUILDGRP_INTEROP=OFF -DCASTOR_BUILDGRP_TEST=OFF -DCASTOR_USE_GLSLANG=ON -DCASTOR_DISABLE_DELAYED_INITIALISATION=ON -DASHES_BUILD_RENDERER_OGL=OFF -DCASTOR_BUILDGRP_SAMPLE=OFF -DCASTOR_BUILDGRP_TOOL=OFF -DCASTOR_BUILD_IMPORTER_ASSIMP=OFF
-
-    - name: Configure CMake (Mac OS)
-      id: configure-macos
-      shell: bash
-      working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
-      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{ matrix.buildType }} -DCMAKE_TOOLCHAIN_FILE=$GITHUB_WORKSPACE/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/package/Castor3D -DPROJECTS_WARNINGS_AS_ERRORS=$PROJ_WAE -DPROJECTS_UNITY_BUILD=ON -DPROJECTS_USE_PRECOMPILED_HEADERS=OFF -DSDW_GENERATE_SOURCE=OFF -DCASTOR_BUILD_PLUGINS=ON -DCASTOR_BUILDGRP_INTEROP=OFF -DCASTOR_BUILDGRP_TEST=OFF -DCASTOR_USE_GLSLANG=ON -DCASTOR_DISABLE_DELAYED_INITIALISATION=ON -DASHES_BUILD_RENDERER_OGL=OFF -DCASTOR_BUILDGRP_SAMPLE=OFF -DCASTOR_BUILDGRP_TOOL=OFF -DCASTOR_BUILD_IMPORTER_ASSIMP=OFF
-      if: runner.os == 'macOS'
+      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{ matrix.buildType }} -DCMAKE_TOOLCHAIN_FILE=$GITHUB_WORKSPACE/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/package/Castor3D -DPROJECTS_UNITY_BUILD=ON -DPROJECTS_USE_PRECOMPILED_HEADERS=OFF -DSDW_GENERATE_SOURCE=OFF -DCASTOR_BUILD_PLUGINS=ON -DCASTOR_BUILDGRP_INTEROP=OFF -DCASTOR_BUILDGRP_TEST=OFF -DCASTOR_USE_GLSLANG=ON -DCASTOR_DISABLE_DELAYED_INITIALISATION=ON -DASHES_BUILD_RENDERER_OGL=OFF -DCASTOR_BUILDGRP_SAMPLE=OFF -DCASTOR_BUILDGRP_TOOL=OFF
 
     - name: Build
-      if: (steps.configure-windows.conclusion == 'success') || (steps.configure-linux.conclusion == 'success') || (steps.configure-macos.conclusion == 'success')
+      if: steps.configure.conclusion == 'success'
+      id: build
+      working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
+      shell: bash
+      run: cmake --build . --parallel 2 --config ${{ matrix.buildType }}
+
+    - name: Prepare success package
+      if: (github.event_name == 'push') && (steps.build.conclusion == 'success')
+      working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
+      shell: bash
+      run: |
+        cmake --install . --config ${{ matrix.buildType }}
+        7z a $GITHUB_WORKSPACE/Castor3D-${{ matrix.os[1] }}.zip $GITHUB_WORKSPACE/package/Castor3D/
+
+    - name: Clean build folder
+      if: (steps.build.conclusion == 'success')
+      working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
+      shell: bash
+      run: cmake --build . --config ${{ matrix.buildType }} --target clean
+
+    - name: Upload success package
+      if: (github.event_name == 'push') && (steps.build.conclusion == 'success')
+      uses: actions/upload-artifact@v2
+      with:
+        name: Castor3D-${{ matrix.os[1] }}.zip
+        path: ${{ github.workspace }}/Castor3D-${{ matrix.os[1] }}.zip
+
+
+  build-linux-gcc:
+    strategy:
+      matrix:
+        os: [[ubuntu-latest,x64-linux,gcc]]
+        buildType: [Release]
+
+    runs-on: ${{ matrix.os[0] }}
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup vcpkg
+      uses: lukka/run-vcpkg@v4
+      with:
+        vcpkgGitCommitId: '${{ secrets.VCPKG_COMMIT_ID }}'
+        setupOnly: true
+  
+    - name: Install necessary G++ version
+      if: matrix.os[2] == 'gcc'
+      shell: bash
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y --no-install-recommends ccache gcc-10 g++-10
+        echo "CXX=g++-10" >> $GITHUB_ENV
+        echo "CC=gcc-10" >> $GITHUB_ENV
+
+    - name: Create Build Environment
+      run: cmake -E make_directory ${{runner.workspace}}/build-${{ matrix.buildType }}
+
+    - name: Configure Warnings as errors (OFF)
+      if: github.event_name == 'push'
+      shell: bash
+      working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
+      run: echo "PROJ_WAE=OFF" >> $GITHUB_ENV
+
+    - name: Configure Warnings as errors (ON)
+      if: github.event_name == 'pull_request'
+      shell: bash
+      working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
+      run: echo "PROJ_WAE=ON" >> $GITHUB_ENV
+
+    - name: Install necessary packages
+      shell: bash
+      run: |
+        sudo apt-get install -y --no-install-recommends libxi-dev libgl1-mesa-dev libglu1-mesa-dev mesa-common-dev libxrandr-dev libxxf86vm-dev libxaw7-dev libwayland-dev libxcb1-dev libx11-xcb-dev pkg-config libgtk-3-dev libsecret-1-dev libgcrypt20-dev libsystemd-dev
+
+    - name: Install vcpkg packages
+      shell: bash
+      run: $VCPKG_ROOT/vcpkg install spirv-cross:${{ matrix.os[1] }} freetype:${{ matrix.os[1] }} zlib:${{ matrix.os[1] }} minizip:${{ matrix.os[1] }} vkfft:${{ matrix.os[1] }} convectionkernels:${{ matrix.os[1] }} meshoptimizer:${{ matrix.os[1] }} gli:${{ matrix.os[1] }} glslang:${{ matrix.os[1] }} assimp:${{ matrix.os[1] }}
+
+    - name: Checkout submodules
+      run: |
+        git submodule update --init -- "CMake"
+        git submodule update --init --recursive -- "external/Ashes"
+        git submodule update --init --recursive -- "external/ShaderWriter"
+        git submodule update --init --recursive -- "external/RenderGraph"
+
+    - name: Configure CMake
+      id: configure
+      shell: bash
+      working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
+      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{ matrix.buildType }} -DCMAKE_TOOLCHAIN_FILE=$GITHUB_WORKSPACE/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/package/Castor3D -DPROJECTS_WARNINGS_AS_ERRORS=$PROJ_WAE -DPROJECTS_UNITY_BUILD=ON -DPROJECTS_USE_PRECOMPILED_HEADERS=OFF -DSDW_GENERATE_SOURCE=OFF -DCASTOR_BUILD_PLUGINS=ON -DCASTOR_BUILDGRP_INTEROP=OFF -DCASTOR_BUILDGRP_TEST=OFF -DCASTOR_USE_GLSLANG=ON -DCASTOR_DISABLE_DELAYED_INITIALISATION=ON -DASHES_BUILD_RENDERER_OGL=OFF -DCASTOR_BUILDGRP_SAMPLE=OFF -DCASTOR_BUILDGRP_TOOL=OFF
+
+    - name: Build
+      if: steps.configure.conclusion == 'success'
+      id: build
+      working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
+      shell: bash
+      run: cmake --build . --parallel 2 --config ${{ matrix.buildType }}
+
+    - name: Prepare success package
+      if: (github.event_name == 'push') && (steps.build.conclusion == 'success')
+      working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
+      shell: bash
+      run: |
+        cmake --install . --config ${{ matrix.buildType }}
+        7z a $GITHUB_WORKSPACE/Castor3D-${{ matrix.os[1] }}.zip $GITHUB_WORKSPACE/package/Castor3D/
+
+    - name: Clean build folder
+      if: (steps.build.conclusion == 'success')
+      working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
+      shell: bash
+      run: cmake --build . --config ${{ matrix.buildType }} --target clean
+
+    - name: Upload success package
+      if: (github.event_name == 'push') && (steps.build.conclusion == 'success')
+      uses: actions/upload-artifact@v2
+      with:
+        name: Castor3D-${{ matrix.os[1] }}.zip
+        path: ${{ github.workspace }}/Castor3D-${{ matrix.os[1] }}.zip
+
+
+  build-linux-clang:
+    strategy:
+      matrix:
+        os: [[ubuntu-latest,x64-linux,clang]]
+        buildType: [Release]
+
+    runs-on: ${{ matrix.os[0] }}
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup vcpkg
+      uses: lukka/run-vcpkg@v4
+      with:
+        vcpkgGitCommitId: '${{ secrets.VCPKG_COMMIT_ID }}'
+        setupOnly: true
+  
+    - name: Install necessary Clang++ version
+      if: matrix.os[2] == 'clang'
+      shell: bash
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y --no-install-recommends ccache clang-12 clang++-12
+        echo "CC=clang-12" >> $GITHUB_ENV
+        echo "CXX=clang++-12" >> $GITHUB_ENV
+
+    - name: Create Build Environment
+      run: cmake -E make_directory ${{runner.workspace}}/build-${{ matrix.buildType }}
+
+    - name: Configure Warnings as errors (OFF)
+      if: github.event_name == 'push'
+      shell: bash
+      working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
+      run: echo "PROJ_WAE=OFF" >> $GITHUB_ENV
+
+    - name: Configure Warnings as errors (ON)
+      if: github.event_name == 'pull_request'
+      shell: bash
+      working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
+      run: echo "PROJ_WAE=ON" >> $GITHUB_ENV
+
+    - name: Install necessary packages
+      shell: bash
+      run: |
+        sudo apt-get install -y --no-install-recommends libxi-dev libgl1-mesa-dev libglu1-mesa-dev mesa-common-dev libxrandr-dev libxxf86vm-dev libxaw7-dev libwayland-dev libxcb1-dev libx11-xcb-dev pkg-config libgtk-3-dev libsecret-1-dev libgcrypt20-dev libsystemd-dev
+
+    - name: Install vcpkg packages
+      shell: bash
+      run: $VCPKG_ROOT/vcpkg install spirv-cross:${{ matrix.os[1] }} freetype:${{ matrix.os[1] }} zlib:${{ matrix.os[1] }} minizip:${{ matrix.os[1] }} vkfft:${{ matrix.os[1] }} convectionkernels:${{ matrix.os[1] }} meshoptimizer:${{ matrix.os[1] }} gli:${{ matrix.os[1] }} glslang:${{ matrix.os[1] }} assimp:${{ matrix.os[1] }}
+
+    - name: Checkout submodules
+      run: |
+        git submodule update --init -- "CMake"
+        git submodule update --init --recursive -- "external/Ashes"
+        git submodule update --init --recursive -- "external/ShaderWriter"
+        git submodule update --init --recursive -- "external/RenderGraph"
+
+    - name: Configure CMake
+      id: configure
+      shell: bash
+      working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
+      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{ matrix.buildType }} -DCMAKE_TOOLCHAIN_FILE=$GITHUB_WORKSPACE/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/package/Castor3D -DPROJECTS_WARNINGS_AS_ERRORS=$PROJ_WAE -DPROJECTS_UNITY_BUILD=ON -DPROJECTS_USE_PRECOMPILED_HEADERS=OFF -DSDW_GENERATE_SOURCE=OFF -DCASTOR_BUILD_PLUGINS=ON -DCASTOR_BUILDGRP_INTEROP=OFF -DCASTOR_BUILDGRP_TEST=OFF -DCASTOR_USE_GLSLANG=ON -DCASTOR_DISABLE_DELAYED_INITIALISATION=ON -DASHES_BUILD_RENDERER_OGL=OFF -DCASTOR_BUILDGRP_SAMPLE=OFF -DCASTOR_BUILDGRP_TOOL=OFF
+
+    - name: Build
+      if: steps.configure.conclusion == 'success'
       id: build
       working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
       shell: bash
