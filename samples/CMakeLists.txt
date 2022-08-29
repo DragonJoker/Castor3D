@@ -22,37 +22,40 @@ function( SamplesBuild )
 		if( CASTOR_BUILD_SAMPLE_CASTOR_TD )
 			if( APPLE )
 				set( GTK_FOUND TRUE )
+				set( GTK2_FOUND TRUE )
 				set( GTK_LIBRARIES
 					"-framework AppKit"
 					"-framework QuartzCore"
 					"-framework Metal"
 				)
+				set( GTK2_LIBRARIES ${GTK_LIBRARIES} )
 			elseif ( WIN32 )
 				set( GTK_FOUND TRUE )
+				set( GTK2_FOUND TRUE )
 			else()
-				find_package( GTK3 )
-				find_package( X11 )
+				find_package( GTK3 QUIET )
+				find_package( X11 QUIET )
 				if ( GTK3_FOUND )
 					set( GTK_FOUND ${GTK3_FOUND} )
 					set( GTK_INCLUDE_DIRS ${GTK3_INCLUDE_DIRS} )
 					set( GTK_LIBRARIES ${GTK3_LIBRARIES} )
+					set( GTK2_FOUND ${GTK_FOUND} )
+					set( GTK2_INCLUDE_DIRS ${GTK_INCLUDE_DIRS} )
+					set( GTK2_LIBRARIES ${GTK_LIBRARIES} )
 				else ()
 					set( GTK_FOUND FALSE )
+					set( GTK2_FOUND FALSE )
 				endif ()
 			endif()
-
-			#we look for wxWidgets
-			if ( WIN32 )
-				set( wxWidgets_IGNORE_VCPKG ON )
-				find_package( wxWidgets QUIET COMPONENTS core base scintilla stc aui adv propgrid regex )
-
-				if ( CASTOR_USE_DEPS_WXWIDGETS AND NOT wxWidgets_FOUND )
-					set( wxWidgets_LIB_DIR ${DEPENDENCIES_DIR}/wxWidgets/lib CACHE PATH "wxWidgets libraries directory" )
-					find_package( wxWidgets QUIET COMPONENTS core base scintilla stc aui adv propgrid regex )
-				endif ()
+			if ( WIN32 AND CASTOR_USE_DEPS_WXWIDGETS )
+				find_package( wxWidgets COMPONENTS core base adv aui scintilla stc propgrid regex )
+			elseif ( CASTOR_USE_SYSTEM_WXWIDGETS )
+				find_package( wxWidgets REQUIRED COMPONENTS core base stc aui adv propgrid )
 			else ()
-				find_package( wxWidgets COMPONENTS core base stc aui adv propgrid )
+				find_package( wxWidgets CONFIG COMPONENTS core base stc aui adv propgrid )
 			endif ()
+
+
 			if( wxWidgets_FOUND AND GTK_FOUND )
 				set( Castor3DIncludeDirs
 					${CASTOR_BINARY_DIR}/include/Core
