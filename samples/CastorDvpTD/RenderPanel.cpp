@@ -169,9 +169,19 @@ namespace castortd
 						m_listener->postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePostRender
 							, [this, p_geometry]()
 							{
-								castor::Point3f position = p_geometry->getParent()->getPosition();
-								auto height = p_geometry->getMesh().lock()->getBoundingBox().getMax()[1] - p_geometry->getMesh().lock()->getBoundingBox().getMin()[1];
-								m_marker->setPosition( castor::Point3f{ position[0], height + 1, position[2] } );
+								if ( p_geometry && m_marker )
+								{
+									if ( auto node = p_geometry->getParent() )
+									{
+										castor::Point3f position = node->getPosition();
+
+										if ( auto mesh = p_geometry->getMesh().lock() )
+										{
+											auto height = mesh->getBoundingBox().getMax()[1] - mesh->getBoundingBox().getMin()[1];
+											m_marker->setPosition( castor::Point3f{ position[0], height + 1, position[2] } );
+										}
+									}
+								}
 							} ) );
 						m_selectedTower = nullptr;
 						break;
@@ -195,7 +205,10 @@ namespace castortd
 				, [this, freeCell]( castor3d::RenderDevice const & device
 					, castor3d::QueueData const & queueData )
 				{
-					m_marker->setVisible( freeCell );
+					if ( m_marker )
+					{
+						m_marker->setVisible( freeCell );
+					}
 				} ) );
 		}
 	}

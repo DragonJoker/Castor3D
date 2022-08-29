@@ -364,13 +364,13 @@ namespace CastorViewer
 			}
 		}
 
-		if ( geometry )
+		if ( m_selectedGeometry )
 		{
 			m_currentNode = m_selectedGeometry->getParent();
 		}
-		else
+		else if ( auto camera = m_camera.lock() )
 		{
-			m_currentNode = m_camera.lock()->getParent();
+			m_currentNode = camera->getParent();
 		}
 
 		m_currentState = &doAddNodeState( m_currentNode, false );
@@ -690,15 +690,18 @@ namespace CastorViewer
 				{
 					doUpdateSelectedGeometry( nullptr, nullptr );
 				}
-				else
+				else if ( m_parent )
 				{
 					m_parent->Close();
 				}
 				break;
 
 			case 'L':
-				m_currentNode = m_camera.lock()->getParent();
-				m_currentState = &doAddNodeState( m_currentNode, false );
+				if ( auto camera = m_camera.lock() )
+				{
+					m_currentNode = camera->getParent();
+					m_currentState = &doAddNodeState( m_currentNode, false );
+				}
 				break;
 			}
 		}
