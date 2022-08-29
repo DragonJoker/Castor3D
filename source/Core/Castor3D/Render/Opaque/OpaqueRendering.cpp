@@ -100,8 +100,8 @@ namespace castor3d
 				, *m_materialsStarts
 				, *m_pixelsXY )
 			: nullptr ) }
-		, m_visibilityResolveDesc{ ( m_visibilityReorder
-			? &doCreateVisibilityResolve( progress, previous.getVisibility(), previous.getVisibilityPass(), previousPasses )
+		, m_visibilityResolveDesc{ ( previous.hasVisibility()
+			? &doCreateVisibilityResolve( progress, previous, previousPasses )
 			: nullptr ) }
 		, m_ssao{ ( deferred
 			? ( m_visibilityResolveDesc
@@ -300,13 +300,12 @@ namespace castor3d
 	}
 
 	crg::FramePass & OpaqueRendering::doCreateVisibilityResolve( ProgressBar * progress
-		, Texture const & visibility
-		, VisibilityPass const & visibilityPass
+		, PrepassRendering const & previous
 		, crg::FramePassArray const & previousPasses )
 	{
 		stepProgressBar( progress, "Creating visibility resolve pass" );
 		auto & result = m_graph.createPass( "Visibility"
-			, [this, progress, &visibilityPass]( crg::FramePass const & framePass
+			, [this, progress, &previous]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
@@ -338,7 +337,7 @@ namespace castor3d
 					, m_device
 					, cuT( "Visibility" )
 					, cuT( "Resolve" )
-					, visibilityPass
+					, previous.getVisibilityPass()
 					, m_visibilityPipelinesIds.get()
 					, std::move( renderPassDesc )
 					, RenderTechniquePassDesc{ false, getOwner()->getSsaoConfig() } );
@@ -348,10 +347,8 @@ namespace castor3d
 				return res;
 			} );
 		result.addDependencies( previousPasses );
-		result.addDependency( m_visibilityReorder->getLastPass() );
-
 		uint32_t index = 0u;
-		result.addInputStorageView( visibility.targetViewId
+		result.addInputStorageView( previous.getVisibility().targetViewId
 			, index++ );
 
 		auto & opaquePassResult = *m_opaquePassResult;

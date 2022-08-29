@@ -163,8 +163,7 @@ namespace castor3d
 			, crg::FramePass const & lastPass
 			, crg::FramePassArray previousPasses )const;
 		crg::FramePass & doCreateVisibilityResolve( ProgressBar * progress
-			, Texture const & coin
-			, VisibilityPass const & visibilityPass
+			, PrepassRendering const & previous
 			, crg::FramePassArray const & previousPasses );
 		crg::FramePass & doCreateForwardOpaquePass( ProgressBar * progress
 			, crg::FramePass const & lastPass
