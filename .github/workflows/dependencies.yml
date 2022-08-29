@@ -42,10 +42,6 @@ jobs:
         vcpkgGitCommitId: '${{ secrets.VCPKG_COMMIT_ID }}'
         setupOnly: true
 
-    - name: Install vcpkg wxwidgets
-      shell: bash
-      run: $VCPKG_ROOT/vcpkg install wxwidgets:${{ matrix.os[1] }}
-
     - name: Install vcpkg packages
       shell: bash
       run: $VCPKG_ROOT/vcpkg install spirv-cross:${{ matrix.os[1] }} freetype:${{ matrix.os[1] }} zlib:${{ matrix.os[1] }} minizip:${{ matrix.os[1] }} vkfft:${{ matrix.os[1] }} convectionkernels:${{ matrix.os[1] }} meshoptimizer:${{ matrix.os[1] }} gli:${{ matrix.os[1] }} glslang:${{ matrix.os[1] }} assimp:${{ matrix.os[1] }}
@@ -78,11 +74,7 @@ jobs:
     - name: Install necessary packages
       shell: bash
       run: |
-        sudo apt-get install -y --no-install-recommends libxi-dev libgl1-mesa-dev libglu1-mesa-dev mesa-common-dev libxrandr-dev libxxf86vm-dev libxaw7-dev libwayland-dev libxcb1-dev libx11-xcb-dev libassimp-dev libfreeimage-dev pkg-config libgtk-3-dev libsecret-1-dev libgcrypt20-dev libsystemd-dev
-
-    - name: Install vcpkg wxwidgets
-      shell: bash
-      run: $VCPKG_ROOT/vcpkg install wxwidgets:${{ matrix.os[1] }}
+        sudo apt-get install -y --no-install-recommends linux-headers libxi-dev libgl1-mesa-dev libglu1-mesa-dev mesa-common-dev libxrandr-dev libxxf86vm-dev libxaw7-dev libwayland-dev libxcb1-dev libx11-xcb-dev libassimp-dev libfreeimage-dev pkg-config libgtk-3-dev libsecret-1-dev libgcrypt20-dev libsystemd-dev
 
     - name: Install vcpkg packages
       shell: bash
@@ -116,11 +108,7 @@ jobs:
     - name: Install necessary packages
       shell: bash
       run: |
-        sudo apt-get install -y --no-install-recommends libxi-dev libgl1-mesa-dev libglu1-mesa-dev mesa-common-dev libxrandr-dev libxxf86vm-dev libxaw7-dev libwayland-dev libxcb1-dev libx11-xcb-dev libassimp-dev libfreeimage-dev pkg-config libgtk-3-dev libsecret-1-dev libgcrypt20-dev libsystemd-dev
-
-    - name: Install vcpkg wxwidgets
-      shell: bash
-      run: $VCPKG_ROOT/vcpkg install wxwidgets:${{ matrix.os[1] }}
+        sudo apt-get install -y --no-install-recommends linux-headers libxi-dev libgl1-mesa-dev libglu1-mesa-dev mesa-common-dev libxrandr-dev libxxf86vm-dev libxaw7-dev libwayland-dev libxcb1-dev libx11-xcb-dev libassimp-dev libfreeimage-dev pkg-config libgtk-3-dev libsecret-1-dev libgcrypt20-dev libsystemd-dev
 
     - name: Install vcpkg packages
       shell: bash
