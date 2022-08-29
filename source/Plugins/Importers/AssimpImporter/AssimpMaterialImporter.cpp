@@ -20,7 +20,7 @@
 #pragma warning( disable: 4365 )
 #pragma warning( disable: 4619 )
 #include <assimp/material.h>
-#include <assimp/pbrmaterial.h>
+#include <assimp/GltfMaterial.h>
 #include <assimp/version.h>
 #pragma warning( pop )
 
@@ -320,12 +320,11 @@ namespace c3d_assimp
 			{
 				if ( name == "Roughness" )
 				{
-					if ( m_material.Get( AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_ROUGHNESS_FACTOR, value ) != aiReturn_SUCCESS )
+					if ( m_material.Get( AI_MATKEY_ROUGHNESS_FACTOR, value ) != aiReturn_SUCCESS )
 					{
 						float shininess = 0.5f;
 
-						if ( m_material.Get( AI_MATKEY_GLTF_PBRSPECULARGLOSSINESS_GLOSSINESS_FACTOR, shininess ) == aiReturn_SUCCESS
-							|| m_material.Get( AI_MATKEY_GLTF_PBRSPECULARGLOSSINESS, shininess ) == aiReturn_SUCCESS )
+						if ( m_material.Get( AI_MATKEY_GLOSSINESS_FACTOR, shininess ) == aiReturn_SUCCESS )
 						{
 							value = 1.0f - shininess;
 						}
@@ -350,12 +349,11 @@ namespace c3d_assimp
 				}
 				else if ( name == "Glossiness" )
 				{
-					if ( m_material.Get( AI_MATKEY_GLTF_PBRSPECULARGLOSSINESS_GLOSSINESS_FACTOR, value ) != aiReturn_SUCCESS
-						&& m_material.Get( AI_MATKEY_GLTF_PBRSPECULARGLOSSINESS, value ) != aiReturn_SUCCESS )
+					if ( m_material.Get( AI_MATKEY_GLOSSINESS_FACTOR, value ) != aiReturn_SUCCESS )
 					{
 						float shininess = 0.5f;
 
-						if ( m_material.Get( AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_ROUGHNESS_FACTOR, shininess ) == aiReturn_SUCCESS )
+						if ( m_material.Get( AI_MATKEY_ROUGHNESS_FACTOR, shininess ) == aiReturn_SUCCESS )
 						{
 							value = 1.0f - shininess;
 						}
@@ -381,12 +379,11 @@ namespace c3d_assimp
 				{
 					float shininess = 0.5f;
 
-					if ( m_material.Get( AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_ROUGHNESS_FACTOR, shininess ) == aiReturn_SUCCESS )
+					if ( m_material.Get( AI_MATKEY_ROUGHNESS_FACTOR, shininess ) == aiReturn_SUCCESS )
 					{
 						value = ( 1.0f - shininess ) * castor3d::MaxPhongShininess;
 					}
-					else if ( m_material.Get( AI_MATKEY_GLTF_PBRSPECULARGLOSSINESS_GLOSSINESS_FACTOR, shininess ) == aiReturn_SUCCESS
-						|| m_material.Get( AI_MATKEY_GLTF_PBRSPECULARGLOSSINESS, shininess ) == aiReturn_SUCCESS )
+					else if ( m_material.Get( AI_MATKEY_GLOSSINESS_FACTOR, shininess ) == aiReturn_SUCCESS )
 					{
 						value = shininess * castor3d::MaxPhongShininess;
 					}
@@ -407,7 +404,7 @@ namespace c3d_assimp
 				}
 				else if ( name == "Metalness" )
 				{
-					if ( m_material.Get( AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_METALLIC_FACTOR, value ) != aiReturn_SUCCESS )
+					if ( m_material.Get( AI_MATKEY_METALLIC_FACTOR, value ) != aiReturn_SUCCESS )
 					{
 						aiColor3D specular = { 1, 1, 1 };
 
@@ -521,7 +518,7 @@ namespace c3d_assimp
 				{
 					aiColor3D colour = { 1, 1, 1 };
 
-					if ( m_material.Get( AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_BASE_COLOR_FACTOR, colour ) == aiReturn_SUCCESS )
+					if ( m_material.Get( AI_MATKEY_BASE_COLOR, colour ) == aiReturn_SUCCESS )
 					{
 						value = castor::RgbColour::fromComponents( colour.r
 							, colour.g
