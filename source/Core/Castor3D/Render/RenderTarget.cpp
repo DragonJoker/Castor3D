@@ -1,5 +1,6 @@
 #include "Castor3D/Render/RenderTarget.hpp"
 
+#include "Castor3D/Config.hpp"
 #include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/GeometryCache.hpp"
@@ -17,6 +18,7 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Culling/FrustumCuller.hpp"
 #include "Castor3D/Render/Node/SceneRenderNodes.hpp"
+#include "Castor3D/Render/Passes/OverlayPass.hpp"
 #include "Castor3D/Render/PostEffect/PostEffect.hpp"
 #include "Castor3D/Render/RenderTechnique.hpp"
 #include "Castor3D/Render/RenderTechniqueVisitor.hpp"
@@ -365,6 +367,7 @@ namespace castor3d
 				| VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT )
 			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
+		, m_overlayPassDesc{ doCreateOverlayPass( nullptr, engine.getRenderSystem()->getRenderDevice() ) }
 		, m_combinePass{ doCreateCombinePass( nullptr ) }
 	{
 		auto sampler = engine.addNewSampler( RenderTarget::DefaultSamplerName + getName() + cuT( "Linear" ), engine ).lock();
@@ -467,7 +470,7 @@ namespace castor3d
 		if ( m_initialised.exchange( false ) )
 		{
 			m_signalReady.reset();
-			m_overlayRenderer.reset();
+			m_overlayPass = nullptr;
 #if C3D_DebugTimers
 			getEngine()->unregisterTimer( cuT( "AAATests" ), *m_testTimer );
 			m_testTimer.reset();
@@ -522,6 +525,7 @@ namespace castor3d
 		CU_Require( m_culler );
 		m_culler->update( updater );
 		m_renderTechnique->update( updater );
+		m_overlayPass->update( updater );
 
 		m_hdrConfigUbo->cpuUpdate( getHdrConfig() );
 
@@ -557,7 +561,7 @@ namespace castor3d
 		updater.scene->update( updater );
 
 		m_renderTechnique->update( updater );
-		m_overlayRenderer->update( updater );
+		m_overlayPass->update( updater );
 
 		for ( auto effect : m_hdrPostEffects )
 		{
@@ -574,7 +578,7 @@ namespace castor3d
 	{
 		if ( m_initialised )
 		{
-			m_overlayRenderer->upload( cb );
+			m_overlayPass->upload( cb );
 		}
 	}
 
@@ -903,9 +907,6 @@ namespace castor3d
 
 		stepProgressBar( progress, "Creating overlay renderer" );
 		m_overlaysTimer = castor::makeUnique< FramePassTimer >( device.makeContext(), getName() + cuT( "/Overlays" ) );
-		m_overlayRenderer = std::make_shared< OverlayRenderer >( device
-			, m_overlays
-			, VK_COMMAND_BUFFER_LEVEL_PRIMARY );
 		getEngine()->registerTimer( getName() + cuT( "/Overlays/Overlays" ), *m_overlaysTimer );
 #if C3D_DebugTimers
 		m_testTimer = castor::makeUnique< FramePassTimer >( device.makeContext(), cuT( "AAATests" ) );
@@ -913,6 +914,33 @@ namespace castor3d
 #endif
 		m_signalReady = device->createSemaphore( getName() + "Ready" );
 		m_initialising = false;
+	}
+
+	crg::FramePass & RenderTarget::doCreateOverlayPass( ProgressBar * progress
+		, RenderDevice const & device )
+	{
+		stepProgressBar( progress, "Creating overlays pass" );
+		auto & result = m_graph.createPassGroup( "Overlays" ).createPass( "Overlays"
+			, [this, progress, &device]( crg::FramePass const & pass
+				, crg::GraphContext & context
+				, crg::RunnableGraph & graph )
+			{
+				stepProgressBar( progress, "Initialising overlays pass" );
+				auto result = std::make_unique< OverlayPass >( pass
+					, context
+					, graph
+					, device
+					, *m_scene
+					, makeExtent2D( m_overlays.getExtent() )
+					, m_overlays
+					, true );
+				m_overlayPass = result.get();
+				getOwner()->registerTimer( pass.getFullName()
+					, result->getTimer() );
+				return result;
+			} );
+		result.addOutputColourView( m_overlays.targetViewId );
+		return result;
 	}
 
 	crg::FramePass & RenderTarget::doCreateCombinePass( ProgressBar * progress )
@@ -934,6 +962,7 @@ namespace castor3d
 					, result->getTimer() );
 				return result;
 			} );
+		result.addDependency( m_overlayPassDesc );
 		result.addSampledView( m_objects.sampledViewId
 			, rendtgt::CombineLhsIdx );
 		result.addSampledView( m_overlays.sampledViewId
@@ -1103,13 +1132,8 @@ namespace castor3d
 				, targetSemaphores.end() );
 		}
 
-		// Render overlays.
-		m_signalFinished = doRenderOverlays( device
-			, queue
-			, signalsToWait );
-
 		// Compute all that is needed for the rendering of the scene.
-		m_signalFinished = m_renderTechnique->preRender( m_signalFinished
+		m_signalFinished = m_renderTechnique->preRender( signalsToWait
 			, queue );
 
 		// Then run the graph
@@ -1117,44 +1141,5 @@ namespace castor3d
 			, queue );
 
 		return m_signalFinished;
-	}
-
-	crg::SemaphoreWaitArray RenderTarget::doRenderOverlays( RenderDevice const & device
-		, ashes::Queue const & queue
-		, crg::SemaphoreWaitArray const & toWait )
-	{
-		auto timerBlock = m_overlaysTimer->start();
-		m_overlayRenderer->beginPrepare( *m_overlaysTimer );
-		auto preparer = m_overlayRenderer->getPreparer( device );
-
-		if ( m_type == TargetType::eWindow )
-		{
-			auto lock( castor::makeUniqueLock( getEngine()->getOverlayCache() ) );
-
-			for ( auto category : getEngine()->getOverlayCache().getCategories() )
-			{
-				if ( category->getOverlay().isVisible() )
-				{
-					category->update( *m_overlayRenderer );
-					category->accept( preparer );
-				}
-			}
-		}
-
-		auto lock( castor::makeUniqueLock( getScene()->getOverlayCache() ) );
-
-		for ( auto category : getScene()->getOverlayCache().getCategories() )
-		{
-			if ( category->getOverlay().isVisible() )
-			{
-				category->update( *m_overlayRenderer );
-				category->accept( preparer );
-			}
-		}
-
-		m_overlayRenderer->endPrepare( *m_overlaysTimer );
-		return m_overlayRenderer->render( *m_overlaysTimer
-			, queue
-			, toWait );
 	}
 }

@@ -14,41 +14,19 @@ namespace castor3d
 {
 	namespace passovy
 	{
-		static void doParseOverlay( Overlay const & overlay
-			, OverlayRenderer & renderer
-			, OverlayRenderer::Preparer & preparer
-			, std::set< Overlay const * > & visited )
-		{
-			auto ires = visited.insert( &overlay );
-
-			if ( ires.second
-				&& overlay.isVisible() )
-			{
-				overlay.getCategory()->update( renderer );
-				overlay.getCategory()->accept( preparer );
-
-				for ( auto & child : overlay )
-				{
-					doParseOverlay( *child
-						, renderer
-						, preparer
-						, visited );
-				}
-			}
-		}
-
-		static void doParseOverlays( Scene const & refScene
+		static void doParseOverlays( OverlayCache const & cache
 			, OverlayRenderer & renderer
 			, OverlayRenderer::Preparer & preparer )
 		{
-			std::set< Overlay const * > visited;
+			auto lock( castor::makeUniqueLock( cache ) );
 
-			for ( auto category : refScene.getOverlayCache().getCategories() )
+			for ( auto category : cache.getCategories() )
 			{
-				doParseOverlay( category->getOverlay()
-					, renderer
-					, preparer
-					, visited );
+				if ( category->getOverlay().isVisible() )
+				{
+					category->update( renderer );
+					category->accept( preparer );
+				}
 			}
 		}
 	}
@@ -59,7 +37,8 @@ namespace castor3d
 		, RenderDevice const & device
 		, Scene const & scene
 		, VkExtent2D const & size
-		, Texture const & output )
+		, Texture const & output
+		, bool drawGlobal )
 		: crg::RunnablePass{ pass
 			, context
 			, graph
@@ -75,6 +54,7 @@ namespace castor3d
 			, 1u
 			, size }
 		, m_renderer{ castor::makeUnique< OverlayRenderer >( device, output, VK_COMMAND_BUFFER_LEVEL_SECONDARY ) }
+		, m_drawGlobal{ drawGlobal }
 	{
 	}
 
@@ -83,8 +63,18 @@ namespace castor3d
 		resetCommandBuffer();
 		m_renderer->beginPrepare( m_renderPass.getRenderPass()
 			, m_renderPass.getFramebuffer( 0u ) );
-		auto preparer = m_renderer->getPreparer( m_device );
-		passovy::doParseOverlays( m_scene, *m_renderer, preparer );
+		auto preparer = m_renderer->getPreparer( m_device, m_renderPass.getRenderPass() );
+
+		if ( m_drawGlobal )
+		{
+			passovy::doParseOverlays( m_scene.getEngine()->getOverlayCache()
+				, *m_renderer
+				, preparer );
+		}
+
+		passovy::doParseOverlays( m_scene.getOverlayCache()
+			, *m_renderer
+			, preparer );
 		m_renderer->endPrepare();
 		reRecordCurrent();
 	}

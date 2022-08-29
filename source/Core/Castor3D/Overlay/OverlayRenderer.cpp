@@ -164,9 +164,11 @@ namespace castor3d
 	//*********************************************************************************************
 
 	OverlayRenderer::Preparer::Preparer( OverlayRenderer & renderer
-		, RenderDevice const & device )
+		, RenderDevice const & device
+		, VkRenderPass renderPass )
 		: m_renderer{ renderer }
 		, m_device{ device }
+		, m_renderPass{ renderPass }
 	{
 	}
 
@@ -318,8 +320,8 @@ namespace castor3d
 				, overlay.getOverlay()
 				, pass
 				, ( fontTexture
-					? m_renderer.doGetTextNode( device, pass, *fontTexture->getTexture(), *fontTexture->getSampler().lock() )
-					: m_renderer.doGetPanelNode( device, pass ) )
+					? m_renderer.doGetTextNode( device, m_renderPass, pass, *fontTexture->getTexture(), *fontTexture->getSampler().lock() )
+					: m_renderer.doGetPanelNode( device, m_renderPass, pass ) )
 				, *pass.getOwner()->getEngine()
 				, device
 				, ( fontTexture ? m_renderer.m_noTexTextDeclaration : m_renderer.m_noTexDeclaration )
@@ -498,8 +500,6 @@ namespace castor3d
 		, m_size{ makeSize( m_target.getExtent() ) }
 		, m_matrixUbo{ device }
 	{
-		doCreateRenderPass( device );
-
 		// Create one panel overlays buffer pool
 		m_panelVertexBuffers.emplace_back( std::make_unique< PanelVertexBufferPool >( *getRenderSystem()->getEngine()
 			, "PanelOverlays"
@@ -548,8 +548,6 @@ namespace castor3d
 		m_borderVertexBuffers.clear();
 		m_textVertexBuffers.clear();
 		m_commands = {};
-		m_frameBuffer.reset();
-		m_renderPass.reset();
 	}
 
 	void OverlayRenderer::update( GpuUpdater & updater )
@@ -567,33 +565,6 @@ namespace castor3d
 				, -1.0f
 				, 1.0f ) );
 		}
-	}
-
-	void OverlayRenderer::beginPrepare( FramePassTimer const & timer )
-	{
-		m_fence->wait( ashes::MaxTimeout );
-		m_fence->reset();
-		auto & cb = m_commands.commandBuffer;
-		cb->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
-		cb->beginDebugBlock(
-			{
-				"Overlays",
-				makeFloatArray( getRenderSystem()->getEngine()->getNextRainbowColour() ),
-			} );
-		timer.beginPass( *cb );
-		cb->beginRenderPass( *m_renderPass
-			, *m_frameBuffer
-			, { transparentBlackClearColor }
-			, VK_SUBPASS_CONTENTS_INLINE );
-	}
-
-	void OverlayRenderer::endPrepare( FramePassTimer const & timer )
-	{
-		auto & cb = m_commands.commandBuffer;
-		cb->endRenderPass();
-		timer.endPass( *cb );
-		cb->endDebugBlock();
-		endPrepare();
 	}
 
 	void OverlayRenderer::beginPrepare( VkRenderPass renderPass
@@ -652,13 +623,14 @@ namespace castor3d
 	}
 
 	OverlayRenderer::OverlayRenderNode & OverlayRenderer::doGetPanelNode( RenderDevice const & device
+		, VkRenderPass renderPass
 		, Pass const & pass )
 	{
 		auto it = m_mapPanelNodes.find( &pass );
 
 		if ( it == m_mapPanelNodes.end() )
 		{
-			auto & pipeline = doGetPipeline( device, pass, m_panelPipelines, false );
+			auto & pipeline = doGetPipeline( device, renderPass, pass, m_panelPipelines, false );
 			it = m_mapPanelNodes.insert( { &pass, OverlayRenderNode{ pipeline, pass } } ).first;
 		}
 
@@ -666,6 +638,7 @@ namespace castor3d
 	}
 
 	OverlayRenderer::OverlayRenderNode & OverlayRenderer::doGetTextNode( RenderDevice const & device
+		, VkRenderPass renderPass
 		, Pass const & pass
 		, TextureLayout const & texture
 		, Sampler const & sampler )
@@ -674,7 +647,7 @@ namespace castor3d
 
 		if ( it == m_mapTextNodes.end() )
 		{
-			auto & pipeline = doGetPipeline( device, pass, m_textPipelines, true );
+			auto & pipeline = doGetPipeline( device, renderPass, pass, m_textPipelines, true );
 			it = m_mapTextNodes.insert( { &pass, OverlayRenderNode{ pipeline, pass } } ).first;
 		}
 
@@ -752,60 +725,8 @@ namespace castor3d
 		return result;
 	}
 
-	void OverlayRenderer::doCreateRenderPass( RenderDevice const & device )
-	{
-		ashes::VkAttachmentDescriptionArray attaches{ { 0u
-			, m_target.getFormat()
-			, VK_SAMPLE_COUNT_1_BIT
-			, VK_ATTACHMENT_LOAD_OP_CLEAR
-			, VK_ATTACHMENT_STORE_OP_STORE
-			, VK_ATTACHMENT_LOAD_OP_DONT_CARE
-			, VK_ATTACHMENT_STORE_OP_DONT_CARE
-			, VK_IMAGE_LAYOUT_UNDEFINED
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } };
-		ashes::SubpassDescriptionArray subpasses;
-		subpasses.emplace_back( ashes::SubpassDescription{ 0u
-			, VK_PIPELINE_BIND_POINT_GRAPHICS
-			, {}
-			, { { 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } }
-			, {}
-			, ashes::nullopt
-			, {} } );
-		ashes::VkSubpassDependencyArray dependencies{ { VK_SUBPASS_EXTERNAL
-				, 0u
-				, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-				, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
-				, VK_ACCESS_SHADER_READ_BIT
-				, VK_DEPENDENCY_BY_REGION_BIT }
-			, { 0u
-				, VK_SUBPASS_EXTERNAL
-				, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-				, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
-				, VK_ACCESS_SHADER_READ_BIT
-				, VK_DEPENDENCY_BY_REGION_BIT } };
-		ashes::RenderPassCreateInfo createInfo{ 0u
-			, std::move( attaches )
-			, std::move( subpasses )
-			, std::move( dependencies ) };
-		m_renderPass = device->createRenderPass( "OverlayRenderer"
-			, std::move( createInfo ) );
-
-		ashes::ImageViewCRefArray fbAttaches;
-		auto image = std::make_unique< ashes::Image >( *device
-			, m_target.image
-			, ashes::ImageCreateInfo{ m_target.imageId.data->info } );
-		auto view = ashes::ImageView{ ashes::ImageViewCreateInfo{ m_target.image, m_target.targetViewId.data->info }
-			, m_target.wholeView
-			, image.get() };
-		fbAttaches.emplace_back( view );
-		m_frameBuffer = m_renderPass->createFrameBuffer( "OverlayRenderer"
-			, makeExtent2D( m_target.getExtent() )
-			, std::move( fbAttaches ) );
-	}
-
 	OverlayRenderer::Pipeline OverlayRenderer::doCreatePipeline( RenderDevice const & device
+		, VkRenderPass renderPass
 		, Pass const & pass
 		, ashes::PipelineShaderStageCreateInfoArray program
 		, FilteredTextureFlags const & texturesFlags
@@ -873,7 +794,7 @@ namespace castor3d
 			, std::move( blState )
 			, ashes::PipelineDynamicStateCreateInfo{ 0u, { VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR } }
 			, *pipelineLayout
-			, *m_renderPass } );
+			, renderPass } );
 		return Pipeline{ std::move( descriptorLayout )
 			, std::move( descriptorPool )
 			, std::move( pipelineLayout )
@@ -881,6 +802,7 @@ namespace castor3d
 	}
 
 	OverlayRenderer::Pipeline & OverlayRenderer::doGetPipeline( RenderDevice const & device
+		, VkRenderPass renderPass
 		, Pass const & pass
 		, std::map< uint32_t, Pipeline > & pipelines
 		, bool text )
@@ -895,6 +817,7 @@ namespace castor3d
 			// Since it does not exist yet, create it and initialise it
 			it = pipelines.emplace( key
 				, doCreatePipeline( device
+					, renderPass
 					, pass
 					, doCreateOverlayProgram( device, textures, text )
 					, textures

@@ -399,6 +399,8 @@ namespace castor3d
 		void doInitialise( RenderDevice const & device
 			, QueueData const & queueData
 			, ProgressBar * progress = nullptr );
+		crg::FramePass & doCreateOverlayPass( ProgressBar * progress
+			, RenderDevice const & device );
 		crg::FramePass & doCreateCombinePass( ProgressBar * progress );
 		bool doInitialiseTechnique( RenderDevice const & device
 			, QueueData const & queueData
@@ -415,9 +417,6 @@ namespace castor3d
 			, ashes::Queue const & queue
 			, CameraSPtr camera
 			, crg::SemaphoreWaitArray signalsToWait );
-		crg::SemaphoreWaitArray doRenderOverlays( RenderDevice const & device
-			, ashes::Queue const & queue
-			, crg::SemaphoreWaitArray const & toWait );
 
 	public:
 		//!\~english The render target default sampler name	\~french Le nom du sampler par défaut pour la cible de rendu
@@ -449,7 +448,6 @@ namespace castor3d
 		ashes::PipelineShaderStageCreateInfoArray m_combineStages;
 		SsaoConfig m_ssaoConfig;
 		castor::Point2f m_jitter;
-		OverlayRendererSPtr m_overlayRenderer;
 		ashes::SemaphorePtr m_signalReady;
 		crg::SemaphoreWaitArray m_signalFinished;
 		SceneCullerUPtr m_culler;
@@ -458,6 +456,8 @@ namespace castor3d
 		Texture m_objects;
 		Texture m_overlays;
 		Texture m_combined;
+		crg::FramePass & m_overlayPassDesc;
+		OverlayPass * m_overlayPass{};
 		crg::FramePass & m_combinePass;
 		crg::FramePass const * m_hdrLastPass{};
 		crg::RunnableGraphPtr m_runnable;
