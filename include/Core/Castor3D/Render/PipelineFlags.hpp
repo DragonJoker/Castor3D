@@ -33,7 +33,7 @@ namespace castor3d
 
 	struct PipelineHashDetails
 	{
-		PipelineHashDetails( PassTypeID passType
+		explicit PipelineHashDetails( PassTypeID passType
 			, PassFlags passFlags = PassFlag::eNone
 			, SubmeshFlags submeshFlags = SubmeshFlag::eNone
 			, ProgramFlags programFlags = ProgramFlag::eNone
@@ -67,7 +67,7 @@ namespace castor3d
 
 	struct PipelineHiHashDetails
 	{
-		PipelineHiHashDetails( VkDeviceSize morphTargetsOffset = 0u )
+		explicit PipelineHiHashDetails( VkDeviceSize morphTargetsOffset = 0u )
 			: morphTargetsOffset{ morphTargetsOffset }
 		{
 		}
@@ -88,7 +88,7 @@ namespace castor3d
 		: PipelineHashDetails
 		, PipelineHiHashDetails
 	{
-		PipelineFlags( PassTypeID passType
+		explicit PipelineFlags( PassTypeID passType
 			, BlendMode colourBlendMode = BlendMode::eNoBlend
 			, BlendMode alphaBlendMode = BlendMode::eNoBlend
 			, PassFlags passFlags = PassFlag::eNone
@@ -149,7 +149,7 @@ namespace castor3d
 			CU_Require( passType != 0 );
 		}
 
-		PipelineFlags( PipelineHashDetails const & details )
+		explicit PipelineFlags( PipelineHashDetails const & details )
 			: PipelineHashDetails{ details }
 			, PipelineHiHashDetails{}
 			, m_sceneFlags{ SceneFlag::eNone }

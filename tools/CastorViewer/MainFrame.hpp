@@ -12,11 +12,14 @@ See LICENSE file in root folder
 #include <CastorUtils/Log/Logger.hpp>
 #include <CastorUtils/Data/Path.hpp>
 
+#pragma warning( push )
+#pragma warning( disable: 4365 )
 #include <wx/frame.h>
 #include <wx/listctrl.h>
 #include <wx/aui/framemanager.h>
 #include <wx/aui/auibook.h>
 #include <wx/aui/auibar.h>
+#pragma warning( pop )
 
 #if defined( __WXOSX_COCOA__ )
 #	define CV_MainFrameToolbar 0

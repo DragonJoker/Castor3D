@@ -2,6 +2,7 @@
 #include "ImgConverter/MainFrame.hpp"
 
 #pragma warning( push )
+#pragma warning( disable: 4251 )
 #pragma warning( disable: 4365 )
 #pragma warning( disable: 4371 )
 #include <wx/filedlg.h>
