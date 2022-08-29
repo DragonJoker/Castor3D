@@ -182,7 +182,7 @@ namespace castor3d
 			, context
 			, graph
 			, { [this]() { doInitialise(); }
-				, crg::getDefaultV< crg::RunnablePass::GetSemaphoreWaitFlagsCallback >()
+				, crg::getDefaultV< crg::RunnablePass::GetPipelineStateCallback >()
 				, [this]( crg::RecordContext & context, VkCommandBuffer cmd, uint32_t i ){ doRecordInto( context, cmd, i ); } }
 			, { 1u, true } }
 		, m_renderSize{ renderSize }

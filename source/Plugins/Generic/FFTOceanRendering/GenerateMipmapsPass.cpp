@@ -152,7 +152,7 @@ namespace ocean_fft
 			, context
 			, graph
 			, { [this](){ doInitialise(); }
-				, GetSemaphoreWaitFlagsCallback( [this](){ return doGetSemaphoreWaitFlags(); } )
+				, GetPipelineStateCallback( [](){ return crg::getPipelineState( VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT ); } )
 				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i );}
 				, passIndex
 				, isEnabled
@@ -190,8 +190,8 @@ namespace ocean_fft
 			doUpdateFinalLayout( passIndex
 				, viewId
 				, layoutState.layout
-				, layoutState.access
-				, layoutState.pipelineStage );
+				, layoutState.state.access
+				, layoutState.state.pipelineStage );
 		}
 	}
 
@@ -310,11 +310,6 @@ namespace ocean_fft
 					, shaderRead );
 			}
 		}
-	}
-
-	VkPipelineStageFlags GenerateMipmapsPass::doGetSemaphoreWaitFlags()const
-	{
-		return VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT;
 	}
 
 	bool GenerateMipmapsPass::doIsComputePass()const

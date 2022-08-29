@@ -139,7 +139,7 @@ namespace castor3d
 			, context
 			, graph
 			, { [this](){ doInitialise(); }
-				, GetSemaphoreWaitFlagsCallback( [this](){ return doGetSemaphoreWaitFlags(); } )
+				, GetPipelineStateCallback( [](){ return crg::getPipelineState( VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT ); } )
 				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i ); }
 				, GetPassIndexCallback( [this](){ return doGetPassIndex(); } )
 				, IsEnabledCallback( [&enabled](){ return enabled; } )
@@ -187,11 +187,6 @@ namespace castor3d
 			, extent.width / 32u + 1u
 			, extent.height / 32u + 1u
 			, 1u );
-	}
-
-	VkPipelineStageFlags ComputeDepthRange::doGetSemaphoreWaitFlags()const
-	{
-		return VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT;
 	}
 
 	uint32_t ComputeDepthRange::doGetPassIndex()const

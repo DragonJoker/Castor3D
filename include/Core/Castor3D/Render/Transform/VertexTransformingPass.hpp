@@ -37,7 +37,6 @@ namespace castor3d
 		void doRecordInto( crg::RecordContext & context
 			, VkCommandBuffer commandBuffer
 			, uint32_t index );
-		VkPipelineStageFlags doGetSemaphoreWaitFlags()const;
 		bool doIsComputePass()const;
 
 	private:

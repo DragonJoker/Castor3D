@@ -24,7 +24,7 @@ namespace castor3d
 			, context
 			, graph
 			, { [this](){ doInitialise(); }
-				, GetSemaphoreWaitFlagsCallback( [](){ return VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT; } )
+				, GetPipelineStateCallback( [](){ return crg::getPipelineState( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT ); } )
 				, [this]( crg::RecordContext & ctx, VkCommandBuffer cb, uint32_t i ){ doRecordInto( ctx, cb, i ); }
 				, GetPassIndexCallback( [](){ return 0u; } )
 				, IsEnabledCallback([&lightingPass](){ return lightingPass.isEnabled(); } ) }
