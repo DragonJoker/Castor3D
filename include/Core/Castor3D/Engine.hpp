@@ -709,6 +709,11 @@ namespace castor3d
 		{
 			return m_loadingScene.get();
 		}
+
+		Texture const & getPrefilteredBrdfTexture()const
+		{
+			return m_brdf;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -754,6 +759,7 @@ namespace castor3d
 		Version m_version;
 		ashes::RendererList m_rendererList;
 		RenderSystemUPtr m_renderSystem;
+		Texture m_brdf;
 		bool m_cleaned{ true };
 		bool m_threaded{ false };
 		SamplerResPtr m_defaultSampler;

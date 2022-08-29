@@ -3,7 +3,6 @@
 #include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
-#include "Castor3D/Render/PBR/BrdfPrefilter.hpp"
 #include "Castor3D/Shader/GlslToSpv.hpp"
 
 #include <CastorUtils/Data/BinaryFile.hpp>
@@ -595,77 +594,6 @@ namespace castor3d
 
 			return result;
 		}
-
-#if !C3D_GenerateBRDFIntegration
-		static void doLoadPrefilteredBrdfView( RenderDevice const & device
-			, Texture const & texture )
-		{
-			auto & engine = *device.renderSystem.getEngine();
-			auto image = std::make_unique< ashes::Image >( *device, texture.image, texture.imageId.data->info );
-			castor::PxBufferBaseSPtr buffer;
-
-			if ( engine.getImageCache().has( cuT( "BRDF" ) ) )
-			{
-				auto img = engine.getImageCache().find( cuT( "BRDF" ) );
-				buffer = img.lock()->getPixels();
-			}
-			else
-			{
-				auto imagePath = Engine::getEngineDirectory() / cuT( "Core" ) / cuT( "brdf.png" );
-				auto img = engine.getImageCache().add( cuT( "BRDF" )
-					, castor::ImageCreateParams{ imagePath, { false, false, false } } );
-				buffer = img.lock()->getPixels();
-			}
-
-			buffer = castor::PxBufferBase::create( buffer->getDimensions()
-				, castor::PixelFormat::eR8G8B8A8_UNORM
-				, buffer->getConstPtr()
-				, buffer->getFormat() );
-			auto result = image->createView( VK_IMAGE_VIEW_TYPE_2D, texture.getFormat() );
-			auto staging = device->createStagingTexture( VK_FORMAT_R8G8B8A8_UNORM
-				, makeExtent2D( buffer->getDimensions() ) );
-			auto data = device.graphicsData();;
-			staging->uploadTextureData( *data->queue
-				, *data->commandPool
-				, VK_FORMAT_R8G8B8A8_UNORM
-				, buffer->getConstPtr()
-				, result );
-		}
-#endif
-
-		static Texture doCreatePrefilteredBrdf( RenderDevice const & device
-			, crg::ResourceHandler & handler
-			, castor::Size const & size )
-		{
-			Texture result{ device
-				, handler
-				, "IblTexturesResult"
-				, 0u
-				, { size[0], size[1], 1u }
-				, 1u
-				, 1u
-#if !C3D_GenerateBRDFIntegration
-				, VK_FORMAT_R8G8B8A8_UNORM
-#else
-				, VK_FORMAT_R32G32B32A32_SFLOAT
-#endif
-				, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-#if !C3D_GenerateBRDFIntegration
-					| VK_IMAGE_USAGE_TRANSFER_DST_BIT
-#endif
-					| VK_IMAGE_USAGE_SAMPLED_BIT ) };
-			result.create();
-
-#if !C3D_GenerateBRDFIntegration
-			doLoadPrefilteredBrdfView( device, result );
-#else
-			BrdfPrefilter filter{ *scene.getEngine()
-				, { m_prefilteredBrdf->getDimensions().width, m_prefilteredBrdf->getDimensions().height }
-			, *m_prefilteredBrdfView };
-			filter.render();
-#endif
-			return result;
-		}
 	}
 
 	//*************************************************************************
@@ -786,11 +714,6 @@ namespace castor3d
 		m_gpuInformations.setValue( GpuMax::eViewportHeight, limits.maxViewportDimensions[1] );
 		m_gpuInformations.setValue( GpuMax::eViewports, limits.maxViewports );
 
-		m_brdf = rendsys::doCreatePrefilteredBrdf( *m_device
-			, getEngine()->getGraphResourceHandler()
-			, { PrefilteredBrdfMapSize, PrefilteredBrdfMapSize } );
-		m_brdf.create();
-
 		log::info << m_gpuInformations << std::endl;
 	}
 
@@ -806,7 +729,6 @@ namespace castor3d
 
 	RenderSystem::~RenderSystem()
 	{
-		m_brdf.destroy();
 	}
 
 	ashes::InstancePtr RenderSystem::createInstance( Engine & engine
@@ -1117,6 +1039,11 @@ namespace castor3d
 		, float zNear )const
 	{
 		return convert( m_renderer.instance->infinitePerspective( radiansFovY, aspect, zNear ) );
+	}
+
+	Texture const & RenderSystem::getPrefilteredBrdfTexture()const
+	{
+		return getEngine()->getPrefilteredBrdfTexture();
 	}
 
 	//*************************************************************************
