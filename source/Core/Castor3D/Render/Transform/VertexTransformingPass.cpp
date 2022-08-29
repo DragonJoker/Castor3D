@@ -36,7 +36,7 @@ namespace castor3d
 			, context
 			, graph
 			, { [this](){ doInitialise(); }
-				, GetSemaphoreWaitFlagsCallback( [this](){ return doGetSemaphoreWaitFlags(); } )
+				, GetPipelineStateCallback( [](){ return crg::getPipelineState( VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT ); } )
 				, [this]( crg::RecordContext & ctx, VkCommandBuffer cb, uint32_t i ){ doRecordInto( ctx, cb, i ); }
 				, crg::defaultV< crg::RunnablePass::GetPassIndexCallback >
 				, crg::RunnablePass::IsEnabledCallback( [this](){ return !m_passes.empty(); } )
@@ -114,11 +114,6 @@ namespace castor3d
 			, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT
 			, { VK_ACCESS_UNIFORM_READ_BIT
 				, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT } );
-	}
-
-	VkPipelineStageFlags VertexTransformingPass::doGetSemaphoreWaitFlags()const
-	{
-		return VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT;
 	}
 
 	bool VertexTransformingPass::doIsComputePass()const

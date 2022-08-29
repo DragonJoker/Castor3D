@@ -308,7 +308,7 @@ namespace ocean_fft
 			, context
 			, graph
 			, { [this](){ doInitialise(); }
-				, GetSemaphoreWaitFlagsCallback( [this](){ return doGetSemaphoreWaitFlags(); } )
+				, GetPipelineStateCallback( [](){ return crg::getPipelineState( VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT ); } )
 				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i ); }
 				, GetPassIndexCallback( [this](){ return doGetPassIndex(); } )
 				, isEnabled
@@ -353,11 +353,6 @@ namespace ocean_fft
 		launchParams.buffer = &m_vkOutput[0] ;
 		checkFFTResult( "VkFFT recording"
 			, VkFFTAppend( &m_app, -1, &launchParams ) );
-	}
-
-	VkPipelineStageFlags ProcessFFTPass::doGetSemaphoreWaitFlags()const
-	{
-		return VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT;
 	}
 
 	uint32_t ProcessFFTPass::doGetPassIndex()const

@@ -61,18 +61,13 @@ namespace ocean_fft
 					, context
 					, graph
 					, { crg::RunnablePass::InitialiseCallback( [this](){ doInitialise(); } )
-						, crg::RunnablePass::GetSemaphoreWaitFlagsCallback( [this](){ return doGetSemaphoreWaitFlags(); } ) } }
+						, crg::RunnablePass::GetPipelineStateCallback( [this](){ return crg::getPipelineState( VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT ); } ) } }
 			{
 			}
 
 		private:
 			void doInitialise()
 			{
-			}
-
-			VkPipelineStageFlags doGetSemaphoreWaitFlags()const
-			{
-				return VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT;
 			}
 		};
 

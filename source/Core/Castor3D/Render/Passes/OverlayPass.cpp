@@ -64,7 +64,7 @@ namespace castor3d
 			, context
 			, graph
 			, crg::RunnablePass::Callbacks{ [this](){ doInitialise(); }
-				, crg::defaultV< crg::RunnablePass::GetSemaphoreWaitFlagsCallback >
+				, crg::defaultV< crg::RunnablePass::GetPipelineStateCallback >
 				, [this]( crg::RecordContext & ctx, VkCommandBuffer cb, uint32_t i ){ doRecordInto( ctx, cb, i ); } }
 			, { 1u, true } }
 		, m_device{ device }
