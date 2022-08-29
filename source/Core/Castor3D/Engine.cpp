@@ -14,6 +14,7 @@
 #include "Castor3D/Overlay/DebugOverlays.hpp"
 #include "Castor3D/Overlay/Overlay.hpp"
 #include "Castor3D/Plugin/Plugin.hpp"
+#include "Castor3D/Render/PBR/BrdfPrefilter.hpp"
 #include "Castor3D/Render/RenderLoopAsync.hpp"
 #include "Castor3D/Render/RenderLoopSync.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
@@ -26,6 +27,7 @@
 #include "Castor3D/Scene/Background/Shaders/GlslIblBackground.hpp"
 #include "Castor3D/Scene/Background/Shaders/GlslImgBackground.hpp"
 #include "Castor3D/Scene/Background/Shaders/GlslNoIblBackground.hpp"
+#include "Castor3D/Shader/GlslToSpv.hpp"
 
 #include <CastorUtils/Design/ResourceCache.hpp>
 #include <CastorUtils/FileParser/FileParser.hpp>
@@ -41,7 +43,7 @@
 #include <CastorUtils/Miscellaneous/DynamicLibrary.hpp>
 #include <CastorUtils/Pool/UniqueObjectPool.hpp>
 
-#include "Castor3D/Shader/GlslToSpv.hpp"
+#include <ashespp/Image/StagingTexture.hpp>
 
 #include <string_view>
 
@@ -67,6 +69,69 @@ namespace castor3d
 			result->setFileName( filePath, castor::LogType::eInfo );
 			result->setFileName( debugFilePath, castor::LogType::eDebug );
 			result->setFileName( debugFilePath, castor::LogType::eTrace );
+			return result;
+		}
+
+#if !C3D_GenerateBRDFIntegration
+		static void doLoadPrefilteredBrdfView( RenderDevice const & device
+			, Texture const & texture )
+		{
+			auto & engine = *device.renderSystem.getEngine();
+			auto image = std::make_unique< ashes::Image >( *device, texture.image, texture.imageId.data->info );
+			auto imagePath = Engine::getEngineDirectory() / cuT( "Core" ) / cuT( "brdf.png" );
+			castor::ImageResPtr created;
+			castor::ImageResPtr img = engine.getImageCache().tryAdd( cuT( "BRDF" )
+				, true
+				, created
+				, castor::ImageCreateParams{ imagePath, { false, false, false } } );
+			auto buffer = img.lock()->getPixels();
+			buffer = castor::PxBufferBase::create( buffer->getDimensions()
+				, castor::PixelFormat::eR8G8B8A8_UNORM
+				, buffer->getConstPtr()
+				, buffer->getFormat() );
+			auto result = image->createView( VK_IMAGE_VIEW_TYPE_2D, texture.getFormat() );
+			auto staging = device->createStagingTexture( VK_FORMAT_R8G8B8A8_UNORM
+				, makeExtent2D( buffer->getDimensions() ) );
+			auto data = device.graphicsData();;
+			staging->uploadTextureData( *data->queue
+				, *data->commandPool
+				, VK_FORMAT_R8G8B8A8_UNORM
+				, buffer->getConstPtr()
+				, result );
+		}
+#endif
+
+		static Texture doCreatePrefilteredBrdf( RenderDevice const & device
+			, crg::ResourceHandler & handler
+			, castor::Size const & size )
+		{
+			Texture result{ device
+				, handler
+				, "IblTexturesResult"
+				, 0u
+				, { size[0], size[1], 1u }
+				, 1u
+				, 1u
+#if !C3D_GenerateBRDFIntegration
+				, VK_FORMAT_R8G8B8A8_UNORM
+#else
+				, VK_FORMAT_R32G32B32A32_SFLOAT
+#endif
+				, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+#if !C3D_GenerateBRDFIntegration
+					| VK_IMAGE_USAGE_TRANSFER_DST_BIT
+#endif
+					| VK_IMAGE_USAGE_SAMPLED_BIT ) };
+			result.create();
+
+#if !C3D_GenerateBRDFIntegration
+			doLoadPrefilteredBrdfView( device, result );
+#else
+			BrdfPrefilter filter{ *scene.getEngine()
+				, { m_prefilteredBrdf->getDimensions().width, m_prefilteredBrdf->getDimensions().height }
+			, *m_prefilteredBrdfView };
+			filter.render();
+#endif
 			return result;
 		}
 	}
@@ -315,6 +380,7 @@ namespace castor3d
 					m_textureCache->clear();
 				} ) );
 
+			m_brdf.destroy();
 			m_renderLoop.reset();
 
 			m_targetCache->clear();
@@ -849,5 +915,12 @@ namespace castor3d
 				log::error << cuT( "Can't read Core.zip data file" ) << std::endl;
 			}
 		}
+		
+		auto & device = m_renderSystem->getRenderDevice();
+		m_brdf = eng::doCreatePrefilteredBrdf( device
+			, getGraphResourceHandler()
+			, { PrefilteredBrdfMapSize, PrefilteredBrdfMapSize } );
+		m_brdf.create();
+
 	}
 }

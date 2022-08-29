@@ -300,6 +300,8 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
+		C3D_API Texture const & getPrefilteredBrdfTexture()const;
+
 		AshPluginDescription const & getDescription()const
 		{
 			return m_renderer.desc;
@@ -400,11 +402,6 @@ namespace castor3d
 		{
 			return m_properties.limits.maxDescriptorSetSampledImages > 16u;
 		}
-
-		Texture const & getPrefilteredBrdfTexture()const
-		{
-			return m_brdf;
-		}
 		/**@}*/
 		/**
 		*\~english
@@ -439,7 +436,6 @@ namespace castor3d
 		RenderDeviceSPtr m_device;
 		std::stack< SceneRPtr > m_stackScenes;
 		castor::Nanoseconds m_gpuTime;
-		Texture m_brdf;
 	};
 }
 
