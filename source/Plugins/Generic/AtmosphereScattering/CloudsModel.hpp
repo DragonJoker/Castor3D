@@ -48,12 +48,13 @@ namespace atmosphere_scattering
 			, Ray const & ray );
 		sdw::RetFloat getDensityHeightGradientForPoint( sdw::Float const & heightFraction
 			, sdw::Float const & cloudType );
-		sdw::RetFloat sampleLowFrequency( sdw::Vec3 const & skewedSamplePoint
-			, sdw::Vec3 const & unskewedSamplePoint
+		sdw::RetFloat sampleLowFrequency( sdw::Vec2 const & unskewedUV
+			, sdw::Vec2 const & skewedUV
 			, sdw::Float const & heightFraction
 			, sdw::Float const & lod );
 		sdw::RetFloat erodeWithHighFrequency( sdw::Float const & baseDensity
 			, sdw::Vec3 const & skewedSamplePoint
+			, sdw::Vec2 const & skewedUV
 			, sdw::Float const & heightFraction
 			, sdw::Float const & lod );
 		sdw::RetFloat sampleCloudDensity( sdw::Vec3 const & samplePoint
@@ -131,13 +132,14 @@ namespace atmosphere_scattering
 			, sdw::InVec3
 			, sdw::InFloat > m_skewSamplePointWithWind;
 		sdw::Function< sdw::Float
-			, sdw::InVec3
-			, sdw::InVec3
+			, sdw::InVec2
+			, sdw::InVec2
 			, sdw::InFloat
 			, sdw::InFloat > m_sampleLowFrequency;
 		sdw::Function< sdw::Float
 			, sdw::InFloat
 			, sdw::InVec3
+			, sdw::InVec2
 			, sdw::InFloat
 			, sdw::InFloat > m_erodeWithHighFrequency;
 		sdw::Function< sdw::Float

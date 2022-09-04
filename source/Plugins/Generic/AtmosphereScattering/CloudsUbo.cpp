@@ -32,6 +32,8 @@ namespace atmosphere_scattering
 		m_config = config;
 		auto & data = m_ubo.getData();
 		data = config;
+		data.crispiness *= 10.0f;
 		data.time = totalTime;
+		data.windDirection = castor::point::getNormalised( data.windDirection );
 	}
 }
