@@ -129,19 +129,15 @@ namespace atmosphere_scattering
 						endPos0 = interOuterN.point();
 						fogRay0 = startPos0;
 
-						IF( writer, interInnerCount >= 1_i )
+						IF( writer, interInnerCount > 1_i )
 						{
-							IF( writer, interInnerCount > 1_i )
-							{
-								// Ray intersects clouds layer a second time
-								// Hence, for precision's sake, trace a second ray.
-								startPos1 = interInnerF.point();
-								endPos1 = endPos0;
-								fogRay1 = startPos1;
-								endPos0 = interInnerN.point();
-								secondRay = 1_b;
-							}
-							FI;
+							// Ray intersects clouds layer a second time
+							// Hence, for precision's sake, trace a second ray.
+							startPos1 = interInnerF.point();
+							endPos1 = endPos0;
+							fogRay1 = startPos1;
+							endPos0 = interInnerN.point();
+							secondRay = 1_b;
 						}
 						FI;
 					}
@@ -172,9 +168,9 @@ namespace atmosphere_scattering
 					auto sunColor = writer.declLocale( "sunColor"
 						, 3.0_f * scattering.getSunRadiance( atmosphere.getSunDirection() ) );
 
-					//compute fog amount and early exit if over a certain value
+					// Compute fog amount.
 					auto fogAmount = writer.declLocale( "fogAmount"
-						, computeFogAmount( fogRay0, ray.origin, 0.01_f ) );
+						, computeFogAmount( fogRay0, ray.origin, 2.0_f ) );
 					auto earthShadow = writer.declLocale( "earthShadow"
 						, 0.0_f );
 					auto rayMarchResult = writer.declLocale( "rayMarchResult"
@@ -200,7 +196,7 @@ namespace atmosphere_scattering
 
 					IF( writer, secondRay )
 					{
-						//compute fog amount and early exit if over a certain value
+						// Compute fog amount.
 						fogAmount = computeFogAmount( fogRay1, ray.origin, 0.006_f );
 
 						IF( writer, fogAmount <= 0.965_f )
@@ -253,7 +249,7 @@ namespace atmosphere_scattering
 
 	sdw::Float CloudsModel::getHeightFraction( sdw::Vec3 const & inPos )
 	{
-		return ( length( inPos ) - cloudsInnerRadius ) / cloudsThickness;
+		return ( length( inPos.y() ) - cloudsInnerRadius ) / cloudsThickness;
 	}
 
 	sdw::RetVec3 CloudsModel::skewSamplePointWithWind( sdw::Vec3 const & ppoint
@@ -356,24 +352,22 @@ namespace atmosphere_scattering
 			, pcloudType );
 	}
 
-	sdw::RetFloat CloudsModel::sampleLowFrequency( sdw::Vec3 const & pskewedSamplePoint
-		, sdw::Vec3 const & punskewedSamplePoint
+	sdw::RetFloat CloudsModel::sampleLowFrequency( sdw::Vec2 const & punskewedUV
+		, sdw::Vec2 const & pskewedUV
 		, sdw::Float const & pheightFraction
 		, sdw::Float const & plod )
 	{
 		if ( !m_sampleLowFrequency )
 		{
 			m_sampleLowFrequency = writer.implementFunction< sdw::Float >( "clouds_sampleLowFrequency"
-				, [&]( sdw::Vec3 const & skewedSamplePoint
-					, sdw::Vec3 const & unskewedSamplePoint
+				, [&]( sdw::Vec2 const & unskewedUV
+					, sdw::Vec2 const & skewedUV
 					, sdw::Float const & heightFraction
 					, sdw::Float const & lod )
 				{
-					auto uv = writer.declLocale( "uv"
-						, getSphericalProjection( unskewedSamplePoint ) );
 					//Read in the low-frequency Perlin-Worley noises and Worley noises
 					auto lowFrequencyNoise = writer.declLocale( "lowFrequencyNoise"
-						, perlinWorleyNoiseMap.lod( vec3( uv * clouds.crispiness(), heightFraction ), lod ) );
+						, perlinWorleyNoiseMap.lod( vec3( unskewedUV * clouds.crispiness(), heightFraction ), lod ) );
 
 					//Build an FBM out of the low-frequency Worley Noises that are used to add detail to the Low-frequency Perlin Worley noise
 					auto lowFrequencyFBM = writer.declLocale( "lowFrequencyFBM"
@@ -384,9 +378,8 @@ namespace atmosphere_scattering
 						, utils.remap( lowFrequencyNoise.r(), ( lowFrequencyFBM - 1.0_f ), 1.0_f, 0.0_f, 1.0_f ) );
 
 					// Use weather map for cloud types and blend between them and their densities
-					uv = getSphericalProjection( skewedSamplePoint );
 					auto weather = writer.declLocale( "weatherData"
-						, weatherMap.lod( uv, 0.0_f ) );
+						, weatherMap.lod( skewedUV, 0.0_f ) );
 					auto densityHeightGradient = writer.declLocale( "densityHeightGradient"
 						, getDensityHeightGradientForPoint( heightFraction, weather.g() ) );
 					// Apply Height function to the base cloud shape
@@ -405,20 +398,21 @@ namespace atmosphere_scattering
 
 					writer.returnStmt( baseCloudWithCoverage );
 				}
-				, sdw::InVec3{ writer, "skewedSamplePoint" }
-				, sdw::InVec3{ writer, "unskewedSamplePoint" }
+				, sdw::InVec2{ writer, "unskewedUV" }
+				, sdw::InVec2{ writer, "skewedUV" }
 				, sdw::InFloat{ writer, "heightFraction" }
 				, sdw::InFloat{ writer, "lod" } );
 		}
 
-		return m_sampleLowFrequency( pskewedSamplePoint
-			, punskewedSamplePoint
+		return m_sampleLowFrequency( punskewedUV
+			, pskewedUV
 			, pheightFraction
 			, plod );
 	}
 
 	sdw::RetFloat CloudsModel::erodeWithHighFrequency( sdw::Float const & pbaseDensity
 		, sdw::Vec3 const & pskewedSamplePoint
+		, sdw::Vec2 const & pskewedUV
 		, sdw::Float const & pheightFraction
 		, sdw::Float const & plod )
 	{
@@ -427,20 +421,18 @@ namespace atmosphere_scattering
 			m_erodeWithHighFrequency = writer.implementFunction< sdw::Float >( "clouds_erodeWithHighFrequency"
 				, [&]( sdw::Float const & baseDensity
 					, sdw::Vec3 skewedSamplePoint
+					, sdw::Vec2 const & skewedUV
 					, sdw::Float heightFraction
 					, sdw::Float const & lod )
 				{
-					auto uv = writer.declLocale( "uv"
-						, getSphericalProjection( skewedSamplePoint ) );
-
 					// Add turbulence to the bottom of the clouds
 					auto curlNoise = writer.declLocale( "curlNoise"
-						, curlNoiseMap.sample( uv, 0.0_f ) );
+						, curlNoiseMap.sample( skewedUV, 0.0_f ) );
 					skewedSamplePoint.xy() += curlNoise * ( 1.0_f - heightFraction );
 
 					// Sample High Frequency Noises
 					auto highFrequencyNoise = writer.declLocale( "highFrequencyNoise"
-						, worleyNoiseMap.lod( vec3( uv * clouds.crispiness(), heightFraction ) * clouds.curliness(), lod ).rgb() );
+						, worleyNoiseMap.lod( vec3( skewedUV * clouds.crispiness(), heightFraction ) * clouds.curliness(), lod ).rgb() );
 
 					// Build High Frequency FBM
 					auto highFrequencyFBM = writer.declLocale( "highFrequencyFBM"
@@ -459,12 +451,14 @@ namespace atmosphere_scattering
 				}
 				, sdw::InFloat{ writer, "baseCloud" }
 				, sdw::InVec3{ writer, "skewedSamplePoint" }
+				, sdw::InVec2{ writer, "skewedUV" }
 				, sdw::InFloat{ writer, "heightFraction" }
 				, sdw::InFloat{ writer, "lod" } );
 		}
 
 		return m_erodeWithHighFrequency( pbaseDensity
 			, pskewedSamplePoint
+			, pskewedUV
 			, pheightFraction
 			, plod );
 	}
@@ -484,9 +478,13 @@ namespace atmosphere_scattering
 				{
 					auto skewedSamplePoint = writer.declLocale( "skewedSamplePoint"
 						, skewSamplePointWithWind( samplePoint, heightFraction ) );
+					auto unskewedUV = writer.declLocale( "unskewedUV"
+						, getSphericalProjection( samplePoint ) );
+					auto skewedUV = writer.declLocale( "skewedUV"
+						, getSphericalProjection( skewedSamplePoint ) );
 					auto baseDensity = writer.declLocale( "baseDensity"
-						, sampleLowFrequency( skewedSamplePoint
-							, samplePoint
+						, sampleLowFrequency( unskewedUV
+							, skewedUV
 							, heightFraction
 							, lod ) );
 
@@ -494,6 +492,7 @@ namespace atmosphere_scattering
 					{
 						baseDensity = erodeWithHighFrequency( baseDensity
 							, skewedSamplePoint
+							, skewedUV
 							, heightFraction
 							, lod );
 					}
