@@ -12,8 +12,8 @@ See LICENSE file in root folder
 
 namespace castor3d::shader
 {
-	struct ModelIndices
-		: public sdw::StructInstanceHelperT< "C3D_BufferName"
+	struct ModelData
+		: public sdw::StructInstanceHelperT< "C3D_ModelData"
 			, sdw::type::MemoryLayout::eStd140
 			, sdw::Mat4Field< "prvMtxModel" >
 			, sdw::Mat4Field< "curMtxModel" >
@@ -28,7 +28,7 @@ namespace castor3d::shader
 			, sdw::UIntField< "meshletOffset" >
 			, sdw::UVec2Field< "pad" > >
 	{
-		ModelIndices( sdw::ShaderWriter & writer
+		ModelData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
 			: StructInstanceHelperT{ writer, std::move( expr ), enabled }
@@ -94,10 +94,6 @@ namespace castor3d::shader
 			return getMember< "indexOffset" >();
 		}
 
-	public:
-		C3D_API static castor::String const BufferName;
-		C3D_API static castor::String const DataName;
-
 	private:
 		sdw::Mat4 prvMtxModel()const
 		{
@@ -112,23 +108,23 @@ namespace castor3d::shader
 }
 
 #define C3D_ModelsData( writer, binding, set )\
-	sdw::StorageBuffer modelsBufferIndices{ writer\
-		, castor3d::shader::ModelIndices::BufferName\
+	sdw::StorageBuffer c3d_modelsDataBuffer{ writer\
+		, "c3d_modelsDataBuffer"\
 		, uint32_t( binding )\
 		, uint32_t( set )\
 		, ast::type::MemoryLayout::eStd430\
 		, true };\
-	auto c3d_modelsData = modelsBufferIndices.declMemberArray< castor3d::shader::ModelIndices >( castor3d::shader::ModelIndices::DataName );\
-	modelsBufferIndices.end()
+	auto c3d_modelsData = c3d_modelsDataBuffer.declMemberArray< castor3d::shader::ModelData >( "c3d_modelsData" );\
+	c3d_modelsDataBuffer.end()
 
 #define C3D_ModelData( writer, binding, set )\
-	sdw::UniformBuffer modelBufferIndices{ writer\
-		, castor3d::shader::ModelIndices::BufferName\
+	sdw::UniformBuffer c3d_modelDataBuffer{ writer\
+		, "c3d_modelDataBuffer"\
 		, uint32_t( binding )\
 		, uint32_t( set )\
 		, ast::type::MemoryLayout::eStd140\
 		, true };\
-	auto c3d_modelData = modelBufferIndices.declMember< castor3d::shader::ModelIndices >( castor3d::shader::ModelIndices::DataName );\
-	modelBufferIndices.end()
+	auto c3d_modelData = c3d_modelDataBuffer.declMember< castor3d::shader::ModelData >( "c3d_modelData" );\
+	c3d_modelDataBuffer.end()
 
 #endif

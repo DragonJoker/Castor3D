@@ -301,6 +301,8 @@ namespace castor3d
 		C3D_API bool hasTerminateInvocation()const;
 		C3D_API bool hasDemoteToHelperInvocation()const;
 		C3D_API bool hasMeshAndTaskShaders()const;
+		C3D_API bool hasMeshShaders()const;
+		C3D_API bool hasTaskShaders()const;
 		C3D_API bool hasAtomicFloatAdd()const;
 		C3D_API bool hasBufferDeviceAddress()const;
 		C3D_API bool hasRayTracing()const;

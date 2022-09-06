@@ -45,6 +45,14 @@ namespace castor3d
 		stream << "    Geometry shaders: " << support( object.hasShaderType( VK_SHADER_STAGE_GEOMETRY_BIT ) ) << "\n";
 		stream << "    Fragment shaders: " << support( object.hasShaderType( VK_SHADER_STAGE_FRAGMENT_BIT ) ) << "\n";
 		stream << "    Compute shaders: " << support( object.hasShaderType( VK_SHADER_STAGE_COMPUTE_BIT ) ) << "\n";
+		stream << "    Mesh shaders: " << support( object.hasShaderType( VK_SHADER_STAGE_MESH_BIT_NV ) ) << "\n";
+		stream << "    Task shaders: " << support( object.hasShaderType( VK_SHADER_STAGE_TASK_BIT_NV ) ) << "\n";
+		stream << "    Ray Generation shaders: " << support( object.hasShaderType( VK_SHADER_STAGE_RAYGEN_BIT_KHR ) ) << "\n";
+		stream << "    Any Hit shaders: " << support( object.hasShaderType( VK_SHADER_STAGE_ANY_HIT_BIT_KHR ) ) << "\n";
+		stream << "    Closest Hit shaders: " << support( object.hasShaderType( VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR ) ) << "\n";
+		stream << "    Miss shaders: " << support( object.hasShaderType( VK_SHADER_STAGE_MISS_BIT_KHR ) ) << "\n";
+		stream << "    Intersection shaders: " << support( object.hasShaderType( VK_SHADER_STAGE_INTERSECTION_BIT_KHR ) ) << "\n";
+		stream << "    Callable shaders: " << support( object.hasShaderType( VK_SHADER_STAGE_CALLABLE_BIT_KHR ) ) << "\n";
 
 		for ( size_t i = 0; i < size_t( GpuMin::eCount ); ++i )
 		{

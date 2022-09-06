@@ -668,9 +668,22 @@ namespace castor3d
 
 	bool RenderDevice::hasMeshAndTaskShaders()const
 	{
+		return hasMeshShaders() && hasTaskShaders();
+	}
+
+	bool RenderDevice::hasMeshShaders()const
+	{
 #if VK_NV_mesh_shader
-		return m_meshShaderFeatures.meshShader == VK_TRUE
-			&& m_meshShaderFeatures.taskShader == VK_TRUE;
+		return m_meshShaderFeatures.meshShader == VK_TRUE;
+#else
+		return false;
+#endif
+	}
+
+	bool RenderDevice::hasTaskShaders()const
+	{
+#if VK_NV_mesh_shader
+		return m_meshShaderFeatures.taskShader == VK_TRUE;
 #else
 		return false;
 #endif
