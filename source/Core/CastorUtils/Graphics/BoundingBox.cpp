@@ -7,13 +7,14 @@ CU_ImplementCUSmartPtr( castor, BoundingBox )
 namespace castor
 {
 	BoundingBox::BoundingBox()
-		: BoundingContainer3D()
+		: BoundingContainer3D{}
+		, m_dimensions{}
 	{
 	}
 
 	BoundingBox::BoundingBox( Point3f const & min, Point3f const & max )
-		: BoundingContainer3D( min + ( max - min ) / 2.0f )
-		, m_dimensions( max - min )
+		: BoundingContainer3D{ min + ( max - min ) / 2.0f }
+		, m_dimensions{ max - min }
 	{
 	}
 

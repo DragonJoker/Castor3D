@@ -7,10 +7,7 @@
 
 namespace castor3d::shader
 {
-	castor::String const ModelIndices::BufferName = cuT( "ModelsIndices" );
-	castor::String const ModelIndices::DataName = cuT( "c3d_modelsData" );
-
-	sdw::Mat4 ModelIndices::getPrvModelMtx( PipelineFlags const & flags
+	sdw::Mat4 ModelData::getPrvModelMtx( PipelineFlags const & flags
 		, sdw::Mat4 const & curModelMatrix )const
 	{
 		if ( flags.enableInstantiation() )
@@ -21,7 +18,7 @@ namespace castor3d::shader
 		return prvMtxModel();
 	}
 
-	sdw::Mat3 ModelIndices::getNormalMtx( bool hasSkin
+	sdw::Mat3 ModelData::getNormalMtx( bool hasSkin
 		, sdw::Mat4 const & curModelMatrix )const
 	{
 		if ( hasSkin )
@@ -32,7 +29,7 @@ namespace castor3d::shader
 		return mat3( mtxNormal() );
 	}
 
-	sdw::Mat3 ModelIndices::getNormalMtx( PipelineFlags const & flags
+	sdw::Mat3 ModelData::getNormalMtx( PipelineFlags const & flags
 		, sdw::Mat4 const & curModelMatrix )const
 	{
 		if ( flags.enableInstantiation()
@@ -44,27 +41,27 @@ namespace castor3d::shader
 		return mat3( mtxNormal() );
 	}
 
-	sdw::Vec4 ModelIndices::worldToModel( sdw::Vec4 const & pos )const
+	sdw::Vec4 ModelData::worldToModel( sdw::Vec4 const & pos )const
 	{
 		return inverse( getModelMtx() ) * pos;
 	}
 
-	sdw::Vec4 ModelIndices::modelToWorld( sdw::Vec4 const & pos )const
+	sdw::Vec4 ModelData::modelToWorld( sdw::Vec4 const & pos )const
 	{
 		return getModelMtx() * pos;
 	}
 
-	sdw::Vec4 ModelIndices::modelToCurWorld( sdw::Vec4 const & pos )const
+	sdw::Vec4 ModelData::modelToCurWorld( sdw::Vec4 const & pos )const
 	{
 		return getModelMtx() * pos;
 	}
 
-	sdw::Vec4 ModelIndices::modelToPrvWorld( sdw::Vec4 const & pos )const
+	sdw::Vec4 ModelData::modelToPrvWorld( sdw::Vec4 const & pos )const
 	{
 		return prvMtxModel() * pos;
 	}
 
-	sdw::Mat4 ModelIndices::getCurModelMtx( PipelineFlags const & flags
+	sdw::Mat4 ModelData::getCurModelMtx( PipelineFlags const & flags
 		, sdw::Mat4 const & transform )const
 	{
 		if ( flags.enableInstantiation() )
@@ -75,7 +72,7 @@ namespace castor3d::shader
 		return getModelMtx();
 	}
 
-	sdw::Mat4 ModelIndices::getCurModelMtx( SkinningData const & skinning
+	sdw::Mat4 ModelData::getCurModelMtx( SkinningData const & skinning
 		, sdw::UInt const & skinningId
 		, sdw::UVec4 const & boneIds0
 		, sdw::UVec4 const & boneIds1

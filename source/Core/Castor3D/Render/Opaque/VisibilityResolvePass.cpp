@@ -471,7 +471,7 @@ namespace castor3d
 			auto loadVertices = writer.implementFunction< sdw::Void >( "loadVertices"
 				, [&]( sdw::UInt const & nodeId
 					, sdw::UInt const & primitiveId
-					, shader::ModelIndices const & modelData
+					, shader::ModelData const & modelData
 					, shader::VertexSurface v0
 					, shader::VertexSurface v1
 					, shader::VertexSurface v2 )
@@ -577,7 +577,7 @@ namespace castor3d
 				}
 				, sdw::InUInt{ writer, "nodeId" }
 				, sdw::InUInt{ writer, "primitiveId" }
-				, shader::InModelIndices{ writer, "modelData" }
+				, shader::InModelData{ writer, "modelData" }
 				, shader::OutVertexSurface{ writer, "v0" }
 				, shader::OutVertexSurface{ writer, "v1" }
 				, shader::OutVertexSurface{ writer, "v2" } );
@@ -586,7 +586,7 @@ namespace castor3d
 				, [&]( sdw::UInt const & nodeId
 					, sdw::UInt const & primitiveId
 					, sdw::Vec2 const & pixelCoord
-					, shader::ModelIndices const & modelData
+					, shader::ModelData const & modelData
 					, shader::Material const & material
 					, sdw::Float depth )
 				{
@@ -789,7 +789,7 @@ namespace castor3d
 				, sdw::InUInt{ writer, "nodeId" }
 				, sdw::InUInt{ writer, "primitiveId" }
 				, sdw::InVec2{ writer, "pixelCoord" }
-				, shader::InModelIndices{ writer, "modelData" }
+				, shader::InModelData{ writer, "modelData" }
 				, shader::InMaterial{ writer, "material" }
 				, sdw::OutFloat{ writer, "depth" } );
 

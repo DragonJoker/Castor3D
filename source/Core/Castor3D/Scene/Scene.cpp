@@ -870,12 +870,19 @@ namespace castor3d
 #if C3D_DebugTimers
 		auto block( m_timerBoundingBox->start() );
 #endif
-		constexpr float fmin = std::numeric_limits< float >::max();
-		constexpr float fmax = std::numeric_limits< float >::lowest();
-		castor::Point3f min{ fmin, fmin, fmin };
-		castor::Point3f max{ fmax, fmax, fmax };
-		m_geometryCache->forEach( [&min, &max]( Geometry const & geometry )
+		auto & cache = *m_geometryCache;
+		auto lock( castor::makeUniqueLock( cache ) );
+
+		if ( !cache.isEmptyNoLock() )
+		{
+			constexpr float fmin = std::numeric_limits< float >::max();
+			constexpr float fmax = std::numeric_limits< float >::lowest();
+			castor::Point3f min{ fmin, fmin, fmin };
+			castor::Point3f max{ fmax, fmax, fmax };
+
+			for ( auto & geomIt : cache )
 			{
+				auto & geometry = *geomIt.second;
 				auto node = geometry.getParent();
 				auto mesh = geometry.getMesh().lock();
 
@@ -889,8 +896,14 @@ namespace castor3d
 						max[i] = std::max( max[i], bbox.getMax()[i] );
 					}
 				}
-			} );
-		m_boundingBox.load( min, max );
+			}
+
+			m_boundingBox.load( min, max );
+		}
+		else
+		{
+			m_boundingBox = castor::BoundingBox{};
+		}
 	}
 
 	void Scene::doUpdateSceneNodes( CpuUpdater & updater
