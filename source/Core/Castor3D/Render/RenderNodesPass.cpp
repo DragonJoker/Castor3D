@@ -1188,12 +1188,12 @@ namespace castor3d
 			primOut.setMeshOutputCounts( vertexCount, triangleCount );
 			auto indexCount = writer.declLocale( "indexCount"
 				, triangleCount * 3u );
-			auto indexGroupCount = writer.declLocale( "indexGroupCount"
-				, ( indexCount + 3u ) / 4u );
 
-			FOR( writer, sdw::UInt, i, laneId, i < indexGroupCount, i += 32u )
+			FOR( writer, sdw::UInt, i, laneId, i < indexCount, i += 32u )
 			{
-				writePackedPrimitiveIndices4x8( i * 4u, meshlet.indices[i] );
+				primOut[i].primitiveIndex = uvec3( meshlet.indices[i * 3u + 0u]
+					, meshlet.indices[i * 3u + 1u]
+					, meshlet.indices[i * 3u + 2u] );
 			}
 			ROF;
 

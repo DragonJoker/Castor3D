@@ -11,7 +11,7 @@ namespace castor3d
 			, bool enabled )
 			: sdw::StructInstance{ writer, std::move( expr ), enabled }
 			, vertices{ getMemberArray< sdw::UInt >( "vertices" ) }
-			, indices{ getMemberArray< sdw::UInt >( "indices" ) }
+			, indices{ getMemberArray< sdw::UInt8 >( "indices" ) }
 			, m_counts{ getMember< sdw::UVec4 >( "counts" ) }
 			, vertexCount{ m_counts.x() }
 			, triangleCount{ m_counts.y() }
@@ -29,8 +29,8 @@ namespace castor3d
 					, sdw::type::Kind::eUInt
 					, 64u );
 				result->declMember( "indices"
-					, sdw::type::Kind::eUInt
-					, 128u * 3u / 4u );
+					, sdw::type::Kind::eUInt8
+					, 128u * 3u );
 				result->declMember( "counts"
 					, sdw::type::Kind::eVec4U
 					, sdw::type::NotArray );

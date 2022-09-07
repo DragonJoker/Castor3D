@@ -27,7 +27,7 @@ namespace castor3d
 			C3D_API static sdw::type::BaseStructPtr makeType( sdw::type::TypesCache & cache );
 
 			sdw::Array< sdw::UInt > vertices;
-			sdw::Array< sdw::UInt > indices;
+			sdw::Array< sdw::UInt8 > indices;
 
 		private:
 			sdw::UVec4 m_counts;
