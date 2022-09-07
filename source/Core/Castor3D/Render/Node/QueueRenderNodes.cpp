@@ -366,7 +366,7 @@ namespace castor3d
 				, 0u
 				, sizeof( MeshletDrawConstants )
 				, &constants );
-			commandBuffer.drawMeshTasksIndirect( indirectMeshCommands.getBuffer()
+			commandBuffer.drawMeshTasksIndirectNV( indirectMeshCommands.getBuffer()
 				, mshIndex * sizeof( VkDrawMeshTasksIndirectCommandNV )
 				, drawCount
 				, sizeof( VkDrawMeshTasksIndirectCommandNV ) );
