@@ -76,7 +76,11 @@ namespace castor3d
 		, m_computeDepthRangeDesc{ &doCreateComputeDepthRange( progress ) }
 	{
 		m_depthObj->create();
-		m_visibility->create();
+
+		if ( hasVisibility() )
+		{
+			m_visibility->create();
+		}
 	}
 
 	PrepassRendering::~PrepassRendering()
