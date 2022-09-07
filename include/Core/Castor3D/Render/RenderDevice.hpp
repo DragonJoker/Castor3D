@@ -391,6 +391,15 @@ namespace castor3d
 			, nullptr
 			, {} };
 #endif
+#if VK_KHR_8bit_storage
+		VkPhysicalDevice8BitStorageFeaturesKHR m_8bitFeatures{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_8BIT_STORAGE_FEATURES_KHR };
+#endif
+#if VK_KHR_16bit_storage
+		VkPhysicalDevice16BitStorageFeaturesKHR m_16bitFeatures{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_16BIT_STORAGE_FEATURES_KHR };
+#endif
+#if VK_KHR_shader_float16_int8
+		VkPhysicalDeviceShaderFloat16Int8FeaturesKHR m_f16i8bitFeatures{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_FLOAT16_INT8_FEATURES_KHR };
+#endif
 #if VK_KHR_acceleration_structure
 		VkPhysicalDeviceAccelerationStructureFeaturesKHR m_accelFeatures{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ACCELERATION_STRUCTURE_FEATURES_KHR
 			, nullptr

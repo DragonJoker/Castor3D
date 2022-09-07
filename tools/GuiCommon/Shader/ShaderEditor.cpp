@@ -82,6 +82,8 @@ namespace GuiCommon
 			{
 				result.insert( glsl::ARB_shader_stencil_export );
 				result.insert( glsl::KHR_vulkan_glsl );
+				result.insert( glsl::EXT_shader_explicit_arithmetic_types_int8 );
+				result.insert( glsl::EXT_shader_explicit_arithmetic_types_int16 );
 				result.insert( glsl::EXT_shader_explicit_arithmetic_types_int64 );
 				result.insert( glsl::EXT_multiview );
 				result.insert( glsl::ARB_explicit_attrib_location );

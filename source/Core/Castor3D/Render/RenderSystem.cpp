@@ -208,6 +208,8 @@ namespace castor3d
 			{
 				result.insert( glsl::ARB_shader_stencil_export );
 				result.insert( glsl::KHR_vulkan_glsl );
+				result.insert( glsl::EXT_shader_explicit_arithmetic_types_int8 );
+				result.insert( glsl::EXT_shader_explicit_arithmetic_types_int16 );
 				result.insert( glsl::EXT_shader_explicit_arithmetic_types_int64 );
 				result.insert( glsl::EXT_multiview );
 				result.insert( glsl::ARB_explicit_attrib_location );
@@ -538,6 +540,18 @@ namespace castor3d
 		{
 			spirv::SpirVExtensionSet result;
 
+			if ( device.hasExtension( VK_KHR_16BIT_STORAGE_EXTENSION_NAME )
+				|| device.gpu.getProperties().apiVersion >= ashes::makeVersion( 1, 1, 0 ) )
+			{
+				result.insert( spirv::KHR_16bit_storage );
+			}
+
+			if ( device.hasExtension( VK_KHR_8BIT_STORAGE_EXTENSION_NAME )
+				|| device.gpu.getProperties().apiVersion >= ashes::makeVersion( 1, 2, 0 ) )
+			{
+				result.insert( spirv::KHR_8bit_storage );
+			}
+
 			if ( device.hasExtension( VK_KHR_SHADER_DRAW_PARAMETERS_EXTENSION_NAME )
 				|| device.gpu.getProperties().apiVersion >= ashes::makeVersion( 1, 1, 0 ) )
 			{
@@ -684,8 +698,8 @@ namespace castor3d
 		m_gpuInformations.useShaderType( VK_SHADER_STAGE_GEOMETRY_BIT, features.geometryShader != 0 );
 		m_gpuInformations.useShaderType( VK_SHADER_STAGE_FRAGMENT_BIT, true );
 		m_gpuInformations.useShaderType( VK_SHADER_STAGE_VERTEX_BIT, true );
-		m_gpuInformations.useShaderType( VK_SHADER_STAGE_MESH_BIT_NV, m_device->hasMeshAndTaskShaders() );
-		m_gpuInformations.useShaderType( VK_SHADER_STAGE_TASK_BIT_NV, m_device->hasMeshAndTaskShaders() );
+		m_gpuInformations.useShaderType( VK_SHADER_STAGE_MESH_BIT_NV, m_device->hasMeshShaders() );
+		m_gpuInformations.useShaderType( VK_SHADER_STAGE_TASK_BIT_NV, m_device->hasTaskShaders() );
 		m_gpuInformations.useShaderType( VK_SHADER_STAGE_RAYGEN_BIT_KHR, m_device->hasRayTracing() );
 		m_gpuInformations.useShaderType( VK_SHADER_STAGE_ANY_HIT_BIT_KHR, m_device->hasRayTracing() );
 		m_gpuInformations.useShaderType( VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR, m_device->hasRayTracing() );

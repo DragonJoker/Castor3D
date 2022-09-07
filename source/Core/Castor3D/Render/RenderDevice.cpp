@@ -329,6 +329,7 @@ namespace castor3d
 		, m_availableExtensions{ gpu.enumerateExtensionProperties( std::string{} ) }
 	{
 		auto apiVersion = gpu.getProperties().apiVersion;
+		bool hasFeatures11 = false;
 		bool hasFeatures2 = false;
 		bool hasVulkan1_1 = false;
 		bool hasFloatControls = false;
@@ -338,6 +339,7 @@ namespace castor3d
 		if ( apiVersion >= ashes::makeVersion( 1, 2, 0 ) )
 		{
 			hasFeatures2 = true;
+			hasFeatures11 = true;
 			hasVulkan1_1 = true;
 			hasFloatControls = true;
 			hasSpirv1_4 = true;
@@ -408,6 +410,18 @@ namespace castor3d
 				}
 #	endif
 			}
+#endif
+			if ( !hasFeatures11 )
+			{
+#if VK_KHR_16bit_storage
+				doTryAddExtension( VK_KHR_16BIT_STORAGE_EXTENSION_NAME, &m_16bitFeatures );
+#endif
+			}
+#if VK_KHR_8bit_storage
+			doTryAddExtension( VK_KHR_8BIT_STORAGE_EXTENSION_NAME, &m_8bitFeatures );
+#endif
+#if VK_KHR_shader_float16_int8
+			doTryAddExtension( VK_KHR_SHADER_FLOAT16_INT8_EXTENSION_NAME, &m_f16i8bitFeatures );
 #endif
 #if VK_KHR_synchronization2
 			doTryAddExtension( VK_KHR_SYNCHRONIZATION_2_EXTENSION_NAME );
