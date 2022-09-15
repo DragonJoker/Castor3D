@@ -989,7 +989,7 @@ namespace castor3d
 					, m_ssaoConfig
 					, progress
 					, C3D_UseDeferredRendering != 0
-					, C3D_UseVisibilityBuffer != 0
+					, C3D_UseVisibilityBuffer != 0 && C3D_UseMeshShaders == 0
 					, C3D_UseWeightedBlendedRendering != 0 );
 			}
 			catch ( castor::Exception & exc )
