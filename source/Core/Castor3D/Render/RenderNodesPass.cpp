@@ -51,7 +51,11 @@
 #include <ashespp/Buffer/Buffer.hpp>
 #include <ashespp/Buffer/VertexBuffer.hpp>
 
+#define SDW_PreferredMeshShadingExtension SDW_MeshShadingNV
+
 #include <ShaderWriter/Source.hpp>
+#include <ShaderWriter/MeshWriter.hpp>
+#include <ShaderWriter/TaskWriter.hpp>
 
 #include <RenderGraph/FramePass.hpp>
 #include <RenderGraph/FramePassGroup.hpp>
@@ -905,8 +909,7 @@ namespace castor3d
 
 	ShaderPtr RenderNodesPass::doGetTaskShaderSource( PipelineFlags const & flags )const
 	{
-		using namespace sdw;
-		TaskWriter writer;
+		sdw::TaskWriter writer;
 		bool checkCones = flags.hasSubmeshData( SubmeshFlag::eNormals )
 			&& !flags.hasWorldPosInputs();
 
@@ -1030,7 +1033,7 @@ namespace castor3d
 			, sdw::InUInt{ writer, "nodeId" }
 			, sdw::InUInt{ writer, "meshletId" } );
 
-		writer.implementMainT< shader::PayloadT >( 32u
+		writer.implementMainT< shader::PayloadT >( SDW_TaskLocalSize( 32u, 1u, 1u )
 			, sdw::TaskPayloadOutT< shader::PayloadT >{ writer }
 			, [&]( sdw::TaskSubgroupIn in
 				, sdw::TaskPayloadOutT< shader::PayloadT > payload )
@@ -1076,8 +1079,7 @@ namespace castor3d
 
 	ShaderPtr RenderNodesPass::doGetMeshShaderSource( PipelineFlags const & flags )const
 	{
-		using namespace sdw;
-		MeshWriter writer;
+		sdw::MeshWriter writer;
 
 		C3D_Matrix( writer
 			, GlobalBuffersIdx::eMatrix
@@ -1166,7 +1168,7 @@ namespace castor3d
 		auto meshShader = [&]( sdw::UInt const & meshletIndex
 			, sdw::MeshSubgroupIn const & in
 			, sdw::MeshVertexListOutT< shader::FragmentSurfaceT > & vtxOut
-			, sdw::TrianglesMeshPrimitiveListOutT< VoidT > & primOut )
+			, sdw::TrianglesMeshPrimitiveListOutT< sdw::VoidT > & primOut )
 		{
 			auto laneId = writer.declLocale( "laneId"
 				, in.localInvocationID );
@@ -1214,7 +1216,7 @@ namespace castor3d
 				vtxOut[i].colour = c3d_colour[vertexIndex].xyz();
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[nodeId - 1u] );
-				vtxOut[i].nodeId = writer.cast< Int >( nodeId );
+				vtxOut[i].nodeId = writer.cast< sdw::Int >( nodeId );
 				auto material = writer.declLocale( "material"
 					, materials.getMaterial( modelData.getMaterialId() ) );
 				auto passMultipliers = writer.declLocaleArray( "passMultipliers"
@@ -1231,7 +1233,7 @@ namespace castor3d
 				vtxOut[i].passMultipliers[2] = passMultipliers[2];
 				vtxOut[i].passMultipliers[3] = passMultipliers[3];
 
-				auto curMtxModel = writer.declLocale< Mat4 >( "curMtxModel"
+				auto curMtxModel = writer.declLocale( "curMtxModel"
 					, modelData.getModelMtx() );
 				auto prvPosition = writer.declLocale( "prvPosition"
 					, curPosition );
@@ -1279,17 +1281,17 @@ namespace castor3d
 
 		if ( flags.usesTask() )
 		{
-			writer.implementMainT< shader::PayloadT, shader::FragmentSurfaceT, VoidT >( 32u
+			writer.implementMainT< shader::PayloadT, shader::FragmentSurfaceT, sdw::VoidT >( SDW_MeshLocalSize( 32u, 1u, 1u )
 				, sdw::TaskPayloadInT< shader::PayloadT >{ writer }
 				, sdw::MeshVertexListOutT< shader::FragmentSurfaceT >{ writer
 					, MaxMeshletVertexCount
 					, flags }
-				, sdw::TrianglesMeshPrimitiveListOutT< VoidT >{ writer
+				, sdw::TrianglesMeshPrimitiveListOutT< sdw::VoidT >{ writer
 					, MaxMeshletTriangleCount }
 				, [&]( sdw::MeshSubgroupIn in
 					, sdw::TaskPayloadInT< shader::PayloadT > payload
 					, sdw::MeshVertexListOutT< shader::FragmentSurfaceT > vtxOut
-					, sdw::TrianglesMeshPrimitiveListOutT< VoidT > primOut )
+					, sdw::TrianglesMeshPrimitiveListOutT< sdw::VoidT > primOut )
 				{
 					auto baseId = writer.declLocale( "baseId"
 						, in.workGroupID );
@@ -1298,17 +1300,17 @@ namespace castor3d
 		}
 		else
 		{
-			writer.implementMainT< VoidT, shader::FragmentSurfaceT, VoidT >( 32u
+			writer.implementMainT< sdw::VoidT, shader::FragmentSurfaceT, sdw::VoidT >( SDW_MeshLocalSize( 32u, 1u, 1u )
 				, sdw::TaskPayloadIn{ writer }
 				, sdw::MeshVertexListOutT< shader::FragmentSurfaceT >{ writer
 					, MaxMeshletVertexCount
 					, flags }
-				, sdw::TrianglesMeshPrimitiveListOutT< VoidT >{ writer
+				, sdw::TrianglesMeshPrimitiveListOutT< sdw::VoidT >{ writer
 					, MaxMeshletTriangleCount }
 				, [&]( sdw::MeshSubgroupIn in
 					, sdw::TaskPayloadIn payload
 					, sdw::MeshVertexListOutT< shader::FragmentSurfaceT > vtxOut
-					, sdw::TrianglesMeshPrimitiveListOutT< VoidT > primOut )
+					, sdw::TrianglesMeshPrimitiveListOutT< sdw::VoidT > primOut )
 				{
 					auto baseId = writer.declLocale( "baseId"
 						, in.workGroupID );
