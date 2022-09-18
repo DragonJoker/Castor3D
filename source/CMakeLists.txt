@@ -63,14 +63,14 @@ if ( ${CASTOR_BUILD_CASTOR3D} )
 		if ( CASTOR_USE_SYSTEM_LIBS AND NOT CASTOR_FORCE_GLSLANG_SUBMODULE )
 			if ( VCPKG_TOOLCHAIN )
 				find_package( glslang CONFIG REQUIRED glslang OGLCompiler OSDependent SPIRV SPVRemapper )
-				get_target_property( glslang_INCLUDE_DIR SPIRV INTERFACE_INCLUDE_DIRECTORIES )
+				get_target_property( glslang_INCLUDE_DIR glslang::SPIRV INTERFACE_INCLUDE_DIRECTORIES )
 				find_path( glslang_INCLUDE_DIR glslang/Public/ShaderLang.h )
 				set( glslang_LIBRARIES
-					OSDependent
-					glslang
-					OGLCompiler
-					SPIRV
-					SPVRemapper
+					glslang::OSDependent
+					glslang::glslang
+					glslang::OGLCompiler
+					glslang::SPIRV
+					glslang::SPVRemapper
 				)
 			else ()
 				find_package( glslang REQUIRED glslang OSDependent OGLCompiler SPIRV )

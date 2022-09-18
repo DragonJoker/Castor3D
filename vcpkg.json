@@ -1,0 +1,17 @@
+{
+    "name": "castor3d",
+    "version": "0.14.0",
+    "dependencies": [ "assimp",
+        "convectionkernels",
+        "freetype",
+        "freeimage",
+        "gli",
+        "glslang",
+        "meshoptimizer",
+        "minizip",
+        "spirv-cross",
+        "vkfft",
+        "zlib"
+    ],
+    "builtin-baseline": "ff4bb46b1d8d651e01b44caac8b59706b5a480aa"
+}
