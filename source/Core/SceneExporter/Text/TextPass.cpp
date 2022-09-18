@@ -96,15 +96,6 @@ namespace castor
 					&& writeOpt( file, cuT( "refraction_ratio" ), pass.getRefractionRatio(), 0.0f );
 			}
 
-			if ( result )
-			{
-				result = writeOpt( file, cuT( "edge_width" ), pass.getEdgeWidth(), 1.0f )
-					&& writeOpt( file, cuT( "edge_depth_factor" ), pass.getDepthFactor(), 1.0f )
-					&& writeOpt( file, cuT( "edge_normal_factor" ), pass.getNormalFactor(), 1.0f )
-					&& writeOpt( file, cuT( "edge_object_factor" ), pass.getObjectFactor(), 1.0f )
-					&& writeNamedSubOpt( file, cuT( "edge_colour" ), pass.getEdgeColour(), castor::RgbaColour::fromPredefined( castor::PredefinedRgbaColour::eOpaqueBlack ) );
-			}
-
 			if ( result && pass.hasSubsurfaceScattering() )
 			{
 				result = writeSub( file, pass.getSubsurfaceScattering() );

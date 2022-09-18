@@ -12,6 +12,8 @@
 #include <Castor3D/Shader/Shaders/GlslUtils.hpp>
 #include <Castor3D/Shader/Ubos/ModelDataUbo.hpp>
 
+#include <Shaders/GlslToonMaterial.hpp>
+
 #include <ShaderWriter/Source.hpp>
 
 #include <RenderGraph/RunnablePasses/RenderQuad.hpp>
@@ -31,6 +33,7 @@ namespace draw_edges
 			eEdgeDN,
 			eEdgeO,
 			eDrawEdges,
+			eSpecifics,
 		};
 
 		static std::unique_ptr< ast::Shader > getVertexProgram()
@@ -54,13 +57,15 @@ namespace draw_edges
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static std::unique_ptr< ast::Shader > getFragmentProgram( VkExtent3D const & extent )
+		static std::unique_ptr< ast::Shader > getFragmentProgram( castor3d::Engine const & engine
+			, VkExtent3D const & extent )
 		{
 			using namespace sdw;
 			FragmentWriter writer;
 
 			// Shader inputs
-			castor3d::shader::Materials materials{ writer, eMaterials, 0u };
+			auto specifics = uint32_t( eSpecifics );
+			castor3d::shader::Materials materials{ engine, writer, eMaterials, 0u, specifics };
 			C3D_ModelsData( writer, eModels, 0u );
 			auto c3d_depthObj = writer.declCombinedImg< FImg2DRgba32 >( "c3d_depthObj", eDepthObj, 0u );
 			auto c3d_source = writer.declCombinedImg< FImg2DRgba32 >( "c3d_source", eSource, 0u );
@@ -128,10 +133,11 @@ namespace draw_edges
 					{
 						auto modelData = writer.declLocale( "modelData"
 							, c3d_modelsData[writer.cast< sdw::UInt >( nodeId ) - 1u] );
-						auto material = writer.declLocale( "material"
-							, materials.getMaterial( modelData.getMaterialId() ) );
+						auto & toonProfiles = materials.getSpecificsBuffer< toon::shader::ToonProfile >();
+						auto toonProfile = writer.declLocale( "toonProfile"
+							, toonProfiles.getData( modelData.getMaterialId() - 1u ) );
 
-						IF( writer, material.edgeColour().a() != 0.0_f )
+						IF( writer, toonProfile.edgeColour().a() != 0.0_f )
 						{
 							auto edgeDN = writer.declLocale( "edgeDN"
 								, writer.ternary( c3d_drawEdgesData.normalDepthWidth > 0_i
@@ -143,11 +149,11 @@ namespace draw_edges
 									, 0.0_f ) );
 
 							auto edge = writer.declLocale( "edge"
-								, mix( colour.rgb(), material.edgeColour().rgb(), vec3( edgeDN ) ) );
+								, mix( colour.rgb(), toonProfile.edgeColour().rgb(), vec3( edgeDN ) ) );
 							// outline contour over inline
-							edge = mix( edge, material.edgeColour().rgb(), vec3( edgeO ) );
+							edge = mix( edge, toonProfile.edgeColour().rgb(), vec3( edgeO ) );
 
-							colour.rgb() = mix( colour.rgb(), edge, vec3( material.edgeColour().a() ) );
+							colour.rgb() = mix( colour.rgb(), edge, vec3( toonProfile.edgeColour().a() ) );
 						}
 						FI;
 					}
@@ -178,7 +184,8 @@ namespace draw_edges
 			, parameters
 			, 1u }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "DECombine", px::getVertexProgram() }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "DECombine", px::getFragmentProgram( castor3d::getSafeBandedExtent3D( m_renderTarget.getSize() ) ) }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "DECombine", px::getFragmentProgram( *renderTarget.getEngine()
+			, castor3d::getSafeBandedExtent3D( m_renderTarget.getSize() ) ) }
 		, m_stages{ makeShaderState( renderSystem.getRenderDevice(), m_vertexShader )
 			, makeShaderState( renderSystem.getRenderDevice(), m_pixelShader ) }
 		, m_ubo{ renderSystem.getRenderDevice() }
@@ -315,6 +322,8 @@ namespace draw_edges
 		pass.addSampledView( m_depthNormal->getResult(), px::eEdgeDN );
 		pass.addSampledView( m_objectID->getResult(), px::eEdgeO );
 		m_ubo.createPassBinding( pass, px::eDrawEdges );
+		auto index = uint32_t( px::eSpecifics );
+		device.renderSystem.getEngine()->createSpecificsBuffersPassBindings( pass, index );
 		pass.addOutputColourView( m_resultView );
 
 		m_pass = &pass;

@@ -23,6 +23,20 @@ See LICENSE file in root folder
 
 namespace toon
 {
+	static float constexpr MinMaterialEdgeWidth = 0.001f;
+	static float constexpr MaxMaterialEdgeWidth = 1000.0f;
+
+	struct ToonProfileData
+	{
+		float edgeWidth;
+		float depthFactor;
+		float normalFactor;
+		float objectFactor;
+		castor::Point4f edgeColour;
+		float smoothBand;
+		castor::Point3f pad;
+	};
+
 	template< typename TypeT >
 	class ToonPassT
 		: public TypeT
@@ -38,16 +52,67 @@ namespace toon
 			, castor::String const & remapSectionName
 			, uint32_t remapChannelSectionID );
 
-		void fillData( castor3d::PassBuffer::PassDataPtr & data )const;
+		void fillData( ToonProfileData & data )const;
+		void cloneData( ToonPassT & result )const;
 
 		void setSmoothBandWidth( float value )
 		{
-			m_smoothBandWidth = value;
+			*m_smoothBandWidth = value;
+		}
+
+		void setEdgeWidth( float value )
+		{
+			*m_edgeWidth = value;
+		}
+
+		void setDepthFactor( float value )
+		{
+			*m_depthFactor = value;
+		}
+
+		void setNormalFactor( float value )
+		{
+			*m_normalFactor = value;
+		}
+
+		void setObjectFactor( float value )
+		{
+			*m_objectFactor = value;
+		}
+
+		void setEdgeColour( castor::RgbaColour const & value )
+		{
+			m_edgeColour = value;
 		}
 
 		float getSmoothBandWidth()const
 		{
-			return m_smoothBandWidth;
+			return m_smoothBandWidth.value();
+		}
+
+		float getEdgeWidth()const
+		{
+			return m_edgeWidth->value();
+		}
+
+		float getDepthFactor()const
+		{
+			return m_depthFactor->value();
+		}
+
+		float getNormalFactor()const
+		{
+			return m_normalFactor->value();
+		}
+
+		float getObjectFactor()const
+		{
+			return m_objectFactor->value();
+		}
+
+		castor::RgbaColour getEdgeColour()const
+		{
+			return *m_edgeColour;
 		}
 
 	protected:
@@ -58,7 +123,12 @@ namespace toon
 	public:
 		static castor::String const Name;
 
-	private:
+	protected:
+		castor::GroupChangeTracked< castor::RgbaColour > m_edgeColour;
+		castor::GroupChangeTracked< castor::RangedValue< float > > m_edgeWidth;
+		castor::GroupChangeTracked< castor::RangedValue< float > > m_depthFactor;
+		castor::GroupChangeTracked< castor::RangedValue< float > > m_normalFactor;
+		castor::GroupChangeTracked< castor::RangedValue< float > > m_objectFactor;
 		castor::GroupChangeTracked< float > m_smoothBandWidth;
 	};
 
@@ -78,8 +148,6 @@ namespace toon
 		static castor::AttributeParsers createParsers();
 		static castor::StrUInt32Map createSections();
 
-		void fillBuffer( castor3d::PassBuffer & buffer
-			, uint16_t passTypeIndex )const override;
 		uint32_t getPassSectionID()const override;
 		uint32_t getTextureSectionID()const override;
 		bool writeText( castor::String const & tabs
@@ -110,8 +178,6 @@ namespace toon
 		static castor::AttributeParsers createParsers();
 		static castor::StrUInt32Map createSections();
 
-		void fillBuffer( castor3d::PassBuffer & buffer
-			, uint16_t passTypeIndex )const override;
 		uint32_t getPassSectionID()const override;
 		uint32_t getTextureSectionID()const override;
 		bool writeText( castor::String const & tabs
@@ -142,8 +208,6 @@ namespace toon
 		static castor::AttributeParsers createParsers();
 		static castor::StrUInt32Map createSections();
 
-		void fillBuffer( castor3d::PassBuffer & buffer
-			, uint16_t passTypeIndex )const override;
 		uint32_t getPassSectionID()const override;
 		uint32_t getTextureSectionID()const override;
 		bool writeText( castor::String const & tabs

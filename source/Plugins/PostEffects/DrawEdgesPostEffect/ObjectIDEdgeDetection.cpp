@@ -13,6 +13,8 @@
 
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 
+#include <Shaders/GlslToonMaterial.hpp>
+
 #include <ashespp/Buffer/UniformBuffer.hpp>
 #include <ashespp/Image/Image.hpp>
 #include <ashespp/Image/ImageView.hpp>
@@ -33,6 +35,7 @@ namespace draw_edges
 			eMaterials,
 			eModels,
 			eDepthObj,
+			eSpecifics,
 		};
 
 		static std::unique_ptr< ast::Shader > getVertexShader( VkExtent3D const & size )
@@ -56,7 +59,8 @@ namespace draw_edges
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static std::unique_ptr< ast::Shader > getPixelShader( VkExtent3D const & extent
+		static std::unique_ptr< ast::Shader > getPixelShader( castor3d::Engine const & engine
+			, VkExtent3D const & extent
 			, int contourMethod )
 		{
 			using namespace sdw;
@@ -65,7 +69,8 @@ namespace draw_edges
 			// Shader inputs
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
-			castor3d::shader::Materials materials{ writer, eMaterials, 0u };
+			auto specifics = uint32_t( eSpecifics );
+			castor3d::shader::Materials materials{ engine, writer, eMaterials, 0u, specifics };
 			C3D_ModelsData( writer, eModels, 0u );
 			auto c3d_depthObj = writer.declCombinedImg< FImg2DRgba32 >( "c3d_depthObj", eDepthObj, 0u );
 
@@ -151,18 +156,19 @@ namespace draw_edges
 
 					auto modelData = writer.declLocale( "modelData"
 						, c3d_modelsData[writer.cast< sdw::UInt >( nodeId ) - 1u] );
-					auto material = writer.declLocale( "material"
-						, materials.getMaterial( modelData.getMaterialId() ) );
+					auto & toonProfiles = materials.getSpecificsBuffer< toon::shader::ToonProfile >();
+					auto toonProfile = writer.declLocale( "toonProfile"
+						, toonProfiles.getData( modelData.getMaterialId() - 1u ) );
 
-					IF( writer, material.edgeColour().w() == 0.0_f )
+					IF( writer, toonProfile.edgeColour().w() == 0.0_f )
 					{
 						writer.demote();
 					}
 					FI;
 
-					fragColour = material.objectFactor() * computeContour( texelCoord
+					fragColour = toonProfile.objectFactor() * computeContour( texelCoord
 						, writer.cast< sdw::Int >( X.z() )
-						, material.edgeWidth() );
+						, toonProfile.edgeWidth() );
 
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -182,7 +188,9 @@ namespace draw_edges
 		, m_graph{ graph }
 		, m_extent{ castor3d::getSafeBandedExtent3D( renderTarget.getSize() ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "DEObjDetection", oied::getVertexShader( m_extent ) }
-	, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "DEObjDetection", oied::getPixelShader( m_extent, 1 ) }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "DEObjDetection", oied::getPixelShader( *renderTarget.getEngine()
+			, m_extent
+			, 1 ) }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
 		, m_result{ m_device
@@ -222,6 +230,8 @@ namespace draw_edges
 			, 0u
 			, uint32_t( modelBuffer.getSize() ) );
 		m_pass.addSampledView( depthObj, oied::eDepthObj );
+		auto index = uint32_t( oied::eSpecifics );
+		device.renderSystem.getEngine()->createSpecificsBuffersPassBindings( m_pass, index );
 		m_pass.addOutputColourView( m_result.targetViewId
 			, castor3d::transparentBlackClearColor );
 	}

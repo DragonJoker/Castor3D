@@ -19,12 +19,6 @@ namespace castor3d::shader
 			, sdw::type::MemoryLayout::eStd140
 			, sdw::Vec4Field< "colourDiv" >
 			, sdw::Vec4Field< "specDiv" >
-			, sdw::FloatField< "edgeWidth" >
-			, sdw::FloatField< "depthFactor" >
-			, sdw::FloatField< "normalFactor" >
-			, sdw::FloatField< "objectFactor" >
-			, sdw::Vec4Field< "edgeColour" >
-			, sdw::Vec4Field< "specific" >
 			, sdw::UIntField< "index" >
 			, sdw::FloatField< "emissive" >
 			, sdw::FloatField< "alphaRef" >
@@ -122,12 +116,6 @@ namespace castor3d::shader
 	public:
 		auto colourDiv()const { return getMember< "colourDiv" >(); }
 		auto specDiv()const { return getMember< "specDiv" >(); }
-		auto edgeWidth()const { return getMember< "edgeWidth" >(); }
-		auto depthFactor()const { return getMember< "depthFactor" >(); }
-		auto normalFactor()const { return getMember< "normalFactor" >(); }
-		auto objectFactor()const { return getMember< "objectFactor" >(); }
-		auto edgeColour()const { return getMember< "edgeColour" >(); }
-		auto specific()const { return getMember< "specific" >(); }
 		auto index()const { return getMember< "index" >(); }
 		auto emissive()const { return getMember< "emissive" >(); }
 		auto alphaRef()const { return getMember< "alphaRef" >(); }

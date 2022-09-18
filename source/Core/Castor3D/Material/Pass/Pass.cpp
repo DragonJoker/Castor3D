@@ -173,11 +173,6 @@ namespace castor3d
 		, m_alphaFunc{ m_dirty, VK_COMPARE_OP_ALWAYS }
 		, m_blendAlphaFunc{ m_dirty, VK_COMPARE_OP_ALWAYS }
 		, m_parallaxOcclusionMode{ m_dirty, ParallaxOcclusionMode::eNone }
-		, m_edgeColour{ m_dirty, castor::RgbaColour::fromComponents( 0.0f, 0.0f, 0.0f, 1.0f ) }
-		, m_edgeWidth{ m_dirty, { 1.0f, castor::makeRange( MinMaterialEdgeWidth, MaxMaterialEdgeWidth ) } }
-		, m_depthFactor{ m_dirty, { 1.0f, castor::makeRange( 0.0f, 1.0f ) } }
-		, m_normalFactor{ m_dirty, { 1.0f, castor::makeRange( 0.0f, 1.0f ) } }
-		, m_objectFactor{ m_dirty, { 1.0f, castor::makeRange( 0.0f, 1.0f ) } }
 		, m_renderPassInfo{ getOwner()->getRenderPassInfo() }
 	{
 	}
@@ -253,17 +248,6 @@ namespace castor3d
 			vis.visit( cuT( "Refraction ratio" )
 				, m_refractionRatio );
 		}
-
-		vis.visit( cuT( "Edge colour" )
-			, m_edgeColour );
-		vis.visit( cuT( "Edge width" )
-			, m_edgeWidth );
-		vis.visit( cuT( "Depth factor" )
-			, m_depthFactor );
-		vis.visit( cuT( "Normal factor" )
-			, m_normalFactor );
-		vis.visit( cuT( "Object factor" )
-			, m_objectFactor );
 	}
 
 	void Pass::fillSssProfileBuffer( SssProfileBuffer & buffer )const
@@ -318,11 +302,6 @@ namespace castor3d
 		result->m_alphaFunc = m_alphaFunc.value();
 		result->m_blendAlphaFunc = m_blendAlphaFunc.value();
 		result->m_parallaxOcclusionMode = m_parallaxOcclusionMode.value();
-		result->m_edgeColour = m_edgeColour.value();
-		result->m_edgeWidth = m_edgeWidth.value();
-		result->m_depthFactor = m_depthFactor.value();
-		result->m_normalFactor = m_normalFactor.value();
-		result->m_objectFactor = m_objectFactor.value();
 		result->m_renderPassInfo = m_renderPassInfo;
 
 		if ( m_subsurfaceScattering )
@@ -584,16 +563,6 @@ namespace castor3d
 	void Pass::doFillData( PassBuffer::PassDataPtr & data
 		, uint16_t passTypeIndex )const
 	{
-		*data.edgeWidth = getEdgeWidth();
-		*data.depthFactor = getDepthFactor();
-		*data.normalFactor = getNormalFactor();
-		*data.objectFactor = getObjectFactor();
-		data.edgeColour->r = powf( getEdgeColour().red(), 2.2f );
-		data.edgeColour->g = powf( getEdgeColour().green(), 2.2f );
-		data.edgeColour->b = powf( getEdgeColour().blue(), 2.2f );
-		data.edgeColour->a = ( checkFlag( m_flags, PassFlag::eDrawEdge )
-			? getEdgeColour().alpha()
-			: 0.0f );
 		*data.index = m_index;
 		*data.emissive = getEmissive();
 		*data.alphaRef = getAlphaValue();

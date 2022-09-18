@@ -195,12 +195,6 @@ namespace castor3d
 		auto & data = m_data[index];
 		result.colourDiv = &data.colourDiv;
 		result.specDiv = &data.specDiv;
-		result.edgeWidth = &data.edgeWidth;
-		result.depthFactor = &data.depthFactor;
-		result.normalFactor = &data.normalFactor;
-		result.objectFactor = &data.objectFactor;
-		result.edgeColour = &data.edgeColour;
-		result.specific = &data.specific;
 		result.index = &data.index;
 		result.emissive = &data.emissive;
 		result.alphaRef = &data.alphaRef;

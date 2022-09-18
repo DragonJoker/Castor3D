@@ -30,12 +30,6 @@ namespace castor3d::shader
 				, spcMtl
 				, colRgh
 				, material.colourDiv().a() );
-			edgeWidth = material.edgeWidth();
-			depthFactor = material.depthFactor();
-			normalFactor = material.normalFactor();
-			objectFactor = material.objectFactor();
-			edgeColour = material.edgeColour();
-			specific = material.specific();
 		}
 	}
 

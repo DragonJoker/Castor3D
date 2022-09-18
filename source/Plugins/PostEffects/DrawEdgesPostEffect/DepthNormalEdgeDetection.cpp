@@ -1,6 +1,7 @@
 #include "DrawEdgesPostEffect/DepthNormalEdgeDetection.hpp"
 
 #include <Castor3D/Engine.hpp>
+#include <Castor3D/Cache/MaterialCache.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Scene/Scene.hpp>
@@ -8,6 +9,8 @@
 #include <Castor3D/Shader/ShaderBuffers/PassBuffer.hpp>
 #include <Castor3D/Shader/Shaders/GlslMaterial.hpp>
 #include <Castor3D/Shader/Ubos/ModelDataUbo.hpp>
+
+#include <Shaders/GlslToonMaterial.hpp>
 
 #include <ashespp/Image/Image.hpp>
 #include <ashespp/Image/ImageView.hpp>
@@ -44,7 +47,8 @@ namespace draw_edges
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static std::unique_ptr< ast::Shader > getFragmentProgram( VkExtent3D const & extent )
+		static std::unique_ptr< ast::Shader > getFragmentProgram( castor3d::Engine const & engine
+			, VkExtent3D const & extent )
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -52,7 +56,8 @@ namespace draw_edges
 			// Inputs
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
-			castor3d::shader::Materials materials{ writer, DepthNormalEdgeDetection::eMaterials, 0u };
+			auto specifics = uint32_t( DepthNormalEdgeDetection::eSpecifics );
+			castor3d::shader::Materials materials{ engine, writer, DepthNormalEdgeDetection::eMaterials, 0u, specifics };
 			C3D_ModelsData( writer, DepthNormalEdgeDetection::eModels, 0u );
 			auto depthObj( writer.declCombinedImg< FImg2DRgba32 >( "depthObj", DepthNormalEdgeDetection::eDepthObj, 0u ) );
 			auto nmlOcc( writer.declCombinedImg< FImg2DRgba32 >( "nmlOcc", DepthNormalEdgeDetection::eNmlOcc, 0u ) );
@@ -161,10 +166,11 @@ namespace draw_edges
 
 					auto modelData = writer.declLocale( "modelData"
 						, c3d_modelsData[writer.cast< sdw::UInt >( nodeId ) - 1u] );
-					auto material = writer.declLocale( "material"
-						, materials.getMaterial( modelData.getMaterialId() ) );
+					auto & toonProfiles = materials.getSpecificsBuffer< toon::shader::ToonProfile >();
+					auto toonProfile = writer.declLocale( "toonProfile"
+						, toonProfiles.getData( modelData.getMaterialId() - 1u ) );
 
-					IF( writer, material.edgeColour().w() == 0.0_f )
+					IF( writer, toonProfile.edgeColour().w() == 0.0_f )
 					{
 						writer.demote();
 					}
@@ -180,9 +186,9 @@ namespace draw_edges
 						, X
 						, Xn.xyz()
 						, depthRange
-						, material.edgeWidth()
-						, material.depthFactor()
-						, material.normalFactor() );
+						, toonProfile.edgeWidth()
+						, toonProfile.depthFactor()
+						, toonProfile.normalFactor() );
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
@@ -214,7 +220,8 @@ namespace draw_edges
 				| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "DNEdgesDetection", dned::getVertexShader( m_extent ) }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "DNEdgesDetection", dned::getFragmentProgram( m_extent ) }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "DNEdgesDetection", dned::getFragmentProgram( *renderTarget.getEngine()
+			, m_extent ) }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
 		, m_pass{ m_graph.createPass( "EdgesDetection"
@@ -250,6 +257,8 @@ namespace draw_edges
 		m_pass.addSampledView( depthObj, eDepthObj );
 		m_pass.addSampledView( nmlOcc, eNmlOcc );
 		m_pass.addInputStorageBuffer( { depthRange.getBuffer(), "DepthRange" }, eDepthRange, 0u, depthRange.getBuffer().getSize() );
+		auto index = uint32_t( eSpecifics );
+		device.renderSystem.getEngine()->createSpecificsBuffersPassBindings( m_pass, index );
 		m_pass.addOutputColourView( m_result.targetViewId
 			, castor3d::transparentBlackClearColor );
 		m_result.create();

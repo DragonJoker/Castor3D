@@ -440,11 +440,6 @@ namespace castor3d
 			return m_refraction;
 		}
 
-		bool hasEdges()const
-		{
-			return checkFlag( m_flags, PassFlag::eDrawEdge );
-		}
-
 		uint32_t getHeightTextureIndex()const
 		{
 			return m_heightTextureIndex;
@@ -463,31 +458,6 @@ namespace castor3d
 		PassTypeID getTypeID()const
 		{
 			return m_typeID;
-		}
-
-		float getEdgeWidth()const
-		{
-			return m_edgeWidth->value();
-		}
-
-		float getDepthFactor()const
-		{
-			return m_depthFactor->value();
-		}
-
-		float getNormalFactor()const
-		{
-			return m_normalFactor->value();
-		}
-
-		float getObjectFactor()const
-		{
-			return m_objectFactor->value();
-		}
-
-		castor::RgbaColour getEdgeColour()const
-		{
-			return *m_edgeColour;
 		}
 
 		RenderPassRegisterInfo * getRenderPassInfo()const
@@ -644,36 +614,6 @@ namespace castor3d
 		{
 			updateFlag( PassFlag::ePickable, value );
 		}
-
-		void enableEdges( bool value )
-		{
-			updateFlag( PassFlag::eDrawEdge, value );
-		}
-
-		void setEdgeWidth( float value )
-		{
-			*m_edgeWidth = value;
-		}
-
-		void setDepthFactor( float value )
-		{
-			*m_depthFactor = value;
-		}
-
-		void setNormalFactor( float value )
-		{
-			*m_normalFactor = value;
-		}
-
-		void setObjectFactor( float value )
-		{
-			*m_objectFactor = value;
-		}
-
-		void setEdgeColour( castor::RgbaColour const & value )
-		{
-			m_edgeColour = value;
-		}
 		/**@}*/
 
 	protected:
@@ -767,11 +707,6 @@ namespace castor3d
 		castor::GroupChangeTracked< VkCompareOp > m_alphaFunc;
 		castor::GroupChangeTracked< VkCompareOp > m_blendAlphaFunc;
 		castor::GroupChangeTracked< ParallaxOcclusionMode > m_parallaxOcclusionMode;
-		castor::GroupChangeTracked< castor::RgbaColour > m_edgeColour;
-		castor::GroupChangeTracked< castor::RangedValue< float > > m_edgeWidth;
-		castor::GroupChangeTracked< castor::RangedValue< float > > m_depthFactor;
-		castor::GroupChangeTracked< castor::RangedValue< float > > m_normalFactor;
-		castor::GroupChangeTracked< castor::RangedValue< float > > m_objectFactor;
 		SubsurfaceScatteringUPtr m_subsurfaceScattering;
 		SubsurfaceScattering::OnChangedConnection m_sssConnection;
 		uint32_t m_heightTextureIndex{ InvalidIndex };

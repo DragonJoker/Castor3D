@@ -66,12 +66,6 @@ namespace castor3d::shader
 		static C3D_API sdw::Float computeGlossiness( sdw::Float const & roughness );
 		//\}
 
-		sdw::Float edgeWidth;
-		sdw::Float depthFactor;
-		sdw::Float normalFactor;
-		sdw::Float objectFactor;
-		sdw::Vec4 edgeColour;
-		sdw::Vec4 specific;
 		sdw::Vec3 albedo;
 		sdw::Vec3 specular;
 
