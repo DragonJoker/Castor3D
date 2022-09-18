@@ -14,13 +14,68 @@ namespace toon::shader
 {
 	namespace c3d = castor3d::shader;
 
+	struct ToonProfile
+		: public sdw::StructInstanceHelperT < "C3D_ToonProfile"
+			, sdw::type::MemoryLayout::eStd430
+			, sdw::FloatField< "edgeWidth" >
+			, sdw::FloatField< "depthFactor" >
+			, sdw::FloatField< "normalFactor" >
+			, sdw::FloatField< "objectFactor" >
+			, sdw::Vec4Field< "edgeColour" >
+			, sdw::FloatField< "smoothBand" >
+			, sdw::FloatField< "pad0" >
+			, sdw::FloatField< "pad1" >
+			, sdw::FloatField< "pad2" > >
+	{
+		friend class ToonProfiles;
+		ToonProfile( sdw::ShaderWriter & writer
+			, ast::expr::ExprPtr expr
+			, bool enabled )
+			: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+		{
+		}
+
+		static std::string const & getName()
+		{
+			static std::string const name{ "C3D_ToonProfile" };
+			return name;
+		}
+		
+		auto edgeWidth()const { return getMember< "edgeWidth" >(); }
+		auto depthFactor()const { return getMember< "depthFactor" >(); }
+		auto normalFactor()const { return getMember< "normalFactor" >(); }
+		auto objectFactor()const { return getMember< "objectFactor" >(); }
+		auto edgeColour()const { return getMember< "edgeColour" >(); }
+		auto smoothBand()const { return getMember< "smoothBand" >(); }
+	};
+
+	class ToonProfiles
+		: public c3d::BufferT< ToonProfile >
+	{
+	public:
+		explicit ToonProfiles( sdw::ShaderWriter & writer
+			, uint32_t binding
+			, uint32_t set
+			, bool enable = true );
+
+		static castor3d::ShaderBufferUPtr create( castor3d::RenderDevice const & device );
+		static void update( castor3d::ShaderBuffer & buffer
+			, castor3d::Pass const & pass );
+		static c3d::BufferBaseUPtr declare( sdw::ShaderWriter & writer
+			, uint32_t binding
+			, uint32_t set );
+	};
+
 	struct ToonPhongLightMaterial
 		: public c3d::LightMaterial
 	{
-		SDW_DeclStructInstance( , ToonPhongLightMaterial );
 		ToonPhongLightMaterial( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
 			, bool enabled );
+
+		SDW_DeclStructInstance( , ToonPhongLightMaterial );
+
+		static sdw::type::BaseStructPtr makeType( sdw::type::TypesCache & cache );
 
 		void create( sdw::Vec3 const & albedo
 			, sdw::Vec4 const & spcMtl
@@ -46,6 +101,11 @@ namespace toon::shader
 
 		sdw::Float & ambient;
 		sdw::Float & shininess;
+		sdw::Float edgeWidth;
+		sdw::Float depthFactor;
+		sdw::Float normalFactor;
+		sdw::Float objectFactor;
+		sdw::Vec4 edgeColour;
 		sdw::Float smoothBand;
 
 	private:
@@ -58,10 +118,13 @@ namespace toon::shader
 	struct ToonPbrLightMaterial
 		: public c3d::LightMaterial
 	{
-		SDW_DeclStructInstance( , ToonPbrLightMaterial );
 		ToonPbrLightMaterial( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
 			, bool enabled );
+
+		SDW_DeclStructInstance( , ToonPbrLightMaterial );
+
+		static sdw::type::BaseStructPtr makeType( sdw::type::TypesCache & cache );
 
 		void create( sdw::Vec3 const & albedo
 			, sdw::Vec4 const & spcMtl

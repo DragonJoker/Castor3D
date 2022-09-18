@@ -379,91 +379,6 @@ namespace castor3d
 		}
 		CU_EndAttribute()
 
-		CU_ImplementAttributeParser( parserPassEdgeColour )
-		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.pass )
-			{
-				CU_ParsingError( cuT( "No Pass initialised." ) );
-			}
-			else if ( !params.empty() )
-			{
-				castor::RgbaColour value;
-				params[0]->get( value );
-				parsingContext.pass->setEdgeColour( value );
-			}
-		}
-		CU_EndAttribute()
-
-		CU_ImplementAttributeParser( parserPassEdgeWidth )
-		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.pass )
-			{
-				CU_ParsingError( cuT( "No Pass initialised." ) );
-			}
-			else if ( !params.empty() )
-			{
-				float value;
-				params[0]->get( value );
-				parsingContext.pass->setEdgeWidth( value );
-			}
-		}
-		CU_EndAttribute()
-
-		CU_ImplementAttributeParser( parserPassDepthFactor )
-		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.pass )
-			{
-				CU_ParsingError( cuT( "No Pass initialised." ) );
-			}
-			else if ( !params.empty() )
-			{
-				float value;
-				params[0]->get( value );
-				parsingContext.pass->setDepthFactor( value );
-			}
-		}
-		CU_EndAttribute()
-
-		CU_ImplementAttributeParser( parserPassNormalFactor )
-		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.pass )
-			{
-				CU_ParsingError( cuT( "No Pass initialised." ) );
-			}
-			else if ( !params.empty() )
-			{
-				float value;
-				params[0]->get( value );
-				parsingContext.pass->setNormalFactor( value );
-			}
-		}
-		CU_EndAttribute()
-
-		CU_ImplementAttributeParser( parserPassObjectFactor )
-		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.pass )
-			{
-				CU_ParsingError( cuT( "No Pass initialised." ) );
-			}
-			else if ( !params.empty() )
-			{
-				float value;
-				params[0]->get( value );
-				parsingContext.pass->setObjectFactor( value );
-			}
-		}
-		CU_EndAttribute()
-
 		CU_ImplementAttributeParser( parserPassEnd )
 		{
 			auto & parsingContext = getParserContext( context );
@@ -1025,11 +940,6 @@ namespace castor3d
 		Pass::addParser( result, mtlSectionID, cuT( "refractions" ), parserPassRefractions, { makeParameter< ParameterType::eBool >() } );
 		Pass::addParser( result, mtlSectionID, cuT( "transmission" ), parserPassTransmission, { makeParameter< ParameterType::eRgbColour >() } );
 		Pass::addParser( result, mtlSectionID, cuT( "untile" ), parserPassUntile, { makeParameter< ParameterType::eBool >() } );
-		Pass::addParser( result, mtlSectionID, cuT( "edge_colour" ), parserPassEdgeColour, { makeParameter< ParameterType::eRgbaColour >() } );
-		Pass::addParser( result, mtlSectionID, cuT( "edge_width" ), parserPassEdgeWidth, { makeParameter< ParameterType::eFloat >( makeRange( MinMaterialEdgeWidth, MaxMaterialEdgeWidth ) ) } );
-		Pass::addParser( result, mtlSectionID, cuT( "edge_depth_factor" ), parserPassDepthFactor, { makeParameter< ParameterType::eFloat >( makeRange( 0.0f, 1.0f ) ) } );
-		Pass::addParser( result, mtlSectionID, cuT( "edge_normal_factor" ), parserPassNormalFactor, { makeParameter< ParameterType::eFloat >( makeRange( 0.0f, 1.0f ) ) } );
-		Pass::addParser( result, mtlSectionID, cuT( "edge_object_factor" ), parserPassObjectFactor, { makeParameter< ParameterType::eFloat >( makeRange( 0.0f, 1.0f ) ) } );
 		Pass::addParser( result, mtlSectionID, cuT( "}" ), parserPassEnd );
 
 		Pass::addParser( result, texSectionID, cuT( "image" ), parserUnitImage, { makeParameter< ParameterType::ePath >() } );

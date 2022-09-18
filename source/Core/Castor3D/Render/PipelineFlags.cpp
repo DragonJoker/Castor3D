@@ -98,7 +98,6 @@ namespace castor3d
 			}
 
 			remFlag( flags.m_programFlags, ProgramFlag::eAllOptional );
-			remFlag( flags.m_passFlags, PassFlag::eAllOptional );
 
 			auto offset = 0u;
 			uint64_t result{};

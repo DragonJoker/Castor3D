@@ -67,8 +67,6 @@ namespace castor3d
 			return cuT( "pickable" );
 		case PassFlag::eAlphaBlending:
 			return cuT( "alpha_blending" );
-		case PassFlag::eDrawEdge:
-			return cuT( "draw_edge" );
 		default:
 			CU_Failure( "Unsupported PassFlag" );
 			return castor::cuEmptyString;

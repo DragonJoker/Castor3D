@@ -43,14 +43,6 @@ namespace castor3d
 			Vec4 colourDiv;
 			Vec4 specDiv;
 
-			float edgeWidth;
-			float depthFactor;
-			float normalFactor;
-			float objectFactor;
-
-			Vec4 edgeColour;
-			Vec4 specific;
-
 			uint32_t index;
 			float emissive;
 			float alphaRef;
@@ -77,12 +69,6 @@ namespace castor3d
 		{
 			Vec4 * colourDiv;
 			Vec4 * specDiv;
-			float * edgeWidth;
-			float * depthFactor;
-			float * normalFactor;
-			float * objectFactor;
-			Vec4 * edgeColour;
-			Vec4 * specific;
 			uint32_t * index;
 			float * emissive;
 			float * alphaRef;

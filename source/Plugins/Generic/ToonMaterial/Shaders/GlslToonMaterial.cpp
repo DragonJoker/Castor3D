@@ -3,11 +3,101 @@
 #include "ToonMaterial/ToonPass.hpp"
 
 #include <Castor3D/Limits.hpp>
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Material/Pass/PassFactory.hpp>
+#include <Castor3D/Render/RenderDevice.hpp>
+#include <Castor3D/Render/RenderSystem.hpp>
+#include <Castor3D/Shader/ShaderBuffer.hpp>
 
 #include <ShaderWriter/Source.hpp>
 
 namespace toon::shader
 {
+	//***********************************************************************************************
+
+	namespace lighting
+	{
+		static sdw::Float interpolate( sdw::Float const & lhs
+			, sdw::Float const & rhs
+			, sdw::Float const & weight )
+		{
+			return lhs * ( 1.0_f - weight ) + rhs * weight;
+		}
+
+		static sdw::Vec3 interpolate( sdw::Vec3 const & lhs
+			, sdw::Vec3 const & rhs
+			, sdw::Float const & weight )
+		{
+			return lhs * vec3( 1.0_f - weight ) + rhs * vec3( weight );
+		}
+
+		static sdw::Vec4 interpolate( sdw::Vec4 const & lhs
+			, sdw::Vec4 const & rhs
+			, sdw::Float const & weight )
+		{
+			return lhs * vec4( 1.0_f - weight ) + rhs * vec4( weight );
+		}
+	}
+
+	//*********************************************************************************************
+
+	ToonProfiles::ToonProfiles( sdw::ShaderWriter & writer
+		, uint32_t binding
+		, uint32_t set
+		, bool enable )
+		: BufferT< ToonProfile >{ "ToonProfilesBuffer"
+			, "toonProfiles"
+			, writer
+			, binding
+			, set
+			, enable }
+	{
+	}
+
+	void ToonProfiles::update( castor3d::ShaderBuffer & buffer
+		, castor3d::Pass const & pass )
+	{
+		static auto const toonPhongID = buffer.getDevice().renderSystem.getEngine()->getPassFactory().getNameId( ToonPhongPass::Type );
+		static auto const toonBlinnPhongID = buffer.getDevice().renderSystem.getEngine()->getPassFactory().getNameId( ToonBlinnPhongPass::Type );
+		static auto const toonPbrID = buffer.getDevice().renderSystem.getEngine()->getPassFactory().getNameId( ToonPbrPass::Type );
+		auto profiles = castor::makeArrayView( reinterpret_cast< ToonProfileData * >( buffer.getPtr() ), castor3d::MaxMaterialsCount );
+		auto & data = profiles[pass.getId() - 1u];
+
+		if ( pass.getTypeID() == toonPhongID )
+		{
+			auto & toonPass = static_cast< ToonPhongPass const & >( pass );
+			toonPass.fillData( data );
+		}
+		else if ( pass.getTypeID() == toonBlinnPhongID )
+		{
+			auto & toonPass = static_cast< ToonBlinnPhongPass const & >( pass );
+			toonPass.fillData( data );
+		}
+		else if ( pass.getTypeID() == toonPbrID )
+		{
+			auto & toonPass = static_cast< ToonPbrPass const & >( pass );
+			toonPass.fillData( data );
+		}
+	}
+
+	castor3d::ShaderBufferUPtr ToonProfiles::create( castor3d::RenderDevice const & device )
+	{
+		return castor::makeUnique< castor3d::ShaderBuffer >( *device.renderSystem.getEngine()
+			, device
+			, castor3d::MaxMaterialsCount * sizeof( ToonProfileData )
+			, cuT( "ToonProfilesBuffer" ) );
+	}
+
+	c3d::BufferBaseUPtr ToonProfiles::declare( sdw::ShaderWriter & writer
+		, uint32_t binding
+		, uint32_t set )
+	{
+		return castor::makeUniqueDerived< c3d::BufferBase, ToonProfiles >( writer
+			, binding
+			, set
+			, true );
+	}
+
 	//***********************************************************************************************
 
 	ToonPhongLightMaterial::ToonPhongLightMaterial( sdw::ShaderWriter & writer
@@ -16,28 +106,57 @@ namespace toon::shader
 		: c3d::LightMaterial{ writer, std::move( expr ), enabled }
 		, ambient{ albDiv }
 		, shininess{ spcDiv }
-		, smoothBand{ specific.r() }
+		, edgeWidth{ getMember< sdw::Float >( "edgeWidth" ) }
+		, depthFactor{ getMember< sdw::Float >( "depthFactor" ) }
+		, normalFactor{ getMember< sdw::Float >( "normalFactor" ) }
+		, objectFactor{ getMember< sdw::Float >( "objectFactor" ) }
+		, edgeColour{ getMember< sdw::Vec4 >( "edgeColour" ) }
+		, smoothBand{ getMember< sdw::Float >( "smoothBand" ) }
 	{
+	}
+
+	ast::type::BaseStructPtr ToonPhongLightMaterial::makeType( ast::type::TypesCache & cache )
+	{
+		auto result = LightMaterial::makeType( cache );
+
+		if ( !result->hasMember( "edgeWidth" ) )
+		{
+			result->declMember( "edgeWidth", ast::type::Kind::eFloat );
+			result->declMember( "depthFactor", ast::type::Kind::eFloat );
+			result->declMember( "normalFactor", ast::type::Kind::eFloat );
+			result->declMember( "objectFactor", ast::type::Kind::eFloat );
+			result->declMember( "edgeColour", ast::type::Kind::eVec4F );
+			result->declMember( "smoothBand", ast::type::Kind::eFloat );
+		}
+
+		return result;
 	}
 
 	void ToonPhongLightMaterial::create( sdw::Vec3 const & palbedo
 		, sdw::Vec4 const & spcMtl
 		, sdw::Vec4 const & colRgh
+		, c3d::Materials const & materials
 		, c3d::Material const & material )
 	{
 		if ( isEnabled() )
 		{
-			create( palbedo
-				, spcMtl
-				, colRgh
-				, material.colourDiv().a() );
-			edgeWidth = material.edgeWidth();
-			depthFactor = material.depthFactor();
-			normalFactor = material.normalFactor();
-			objectFactor = material.objectFactor();
-			edgeColour = material.edgeColour();
-			specific = material.specific();
-			smoothBand = specific.r();
+			albedo = palbedo;
+			specular = spcMtl.rgb();
+			ambient = material.colourDiv().a();
+			shininess = colRgh.a();
+
+			if ( materials.hasSpecificsBuffer< ToonProfile >() )
+			{
+				auto & toonProfiles = materials.getSpecificsBuffer< ToonProfile >();
+				auto toonProfile = m_writer->declLocale( "toonProfile"
+					, toonProfiles.getData( material.passId() - 1u ) );
+				edgeWidth = toonProfile.edgeWidth();
+				depthFactor = toonProfile.depthFactor();
+				normalFactor = toonProfile.normalFactor();
+				objectFactor = toonProfile.objectFactor();
+				edgeColour = toonProfile.edgeColour();
+				smoothBand = toonProfile.smoothBand();
+			}
 		}
 	}
 
@@ -52,6 +171,13 @@ namespace toon::shader
 			specular = spcMtl.rgb();
 			ambient = pambient;
 			shininess = colRgh.a();
+
+			edgeWidth = 0.0_f;
+			depthFactor = 0.0_f;
+			normalFactor = 0.0_f;
+			objectFactor = 0.0_f;
+			edgeColour = vec4( 0.0_f );
+			smoothBand = 0.0_f;
 		}
 	}
 
@@ -138,28 +264,57 @@ namespace toon::shader
 		: LightMaterial{ writer, std::move( expr ), enabled }
 		, roughness{ albDiv }
 		, metalness{ spcDiv }
-		, smoothBand{ specific.r() }
+		, edgeWidth{ getMember< sdw::Float >( "edgeWidth" ) }
+		, depthFactor{ getMember< sdw::Float >( "depthFactor" ) }
+		, normalFactor{ getMember< sdw::Float >( "normalFactor" ) }
+		, objectFactor{ getMember< sdw::Float >( "objectFactor" ) }
+		, edgeColour{ getMember< sdw::Vec4 >( "edgeColour" ) }
+		, smoothBand{ getMember< sdw::Float >( "smoothBand" ) }
 	{
+	}
+
+	ast::type::BaseStructPtr ToonPbrLightMaterial::makeType( ast::type::TypesCache & cache )
+	{
+		auto result = LightMaterial::makeType( cache );
+
+		if ( !result->hasMember( "edgeWidth" ) )
+		{
+			result->declMember( "edgeWidth", ast::type::Kind::eFloat );
+			result->declMember( "depthFactor", ast::type::Kind::eFloat );
+			result->declMember( "normalFactor", ast::type::Kind::eFloat );
+			result->declMember( "objectFactor", ast::type::Kind::eFloat );
+			result->declMember( "edgeColour", ast::type::Kind::eVec4F );
+			result->declMember( "smoothBand", ast::type::Kind::eFloat );
+		}
+
+		return result;
 	}
 
 	void ToonPbrLightMaterial::create( sdw::Vec3 const & palbedo
 		, sdw::Vec4 const & spcMtl
 		, sdw::Vec4 const & colRgh
+		, c3d::Materials const & materials
 		, c3d::Material const & material )
 	{
 		if ( isEnabled() )
 		{
-			create( palbedo
-				, spcMtl
-				, colRgh
-				, 0.0_f );
-			edgeWidth = material.edgeWidth();
-			depthFactor = material.depthFactor();
-			normalFactor = material.normalFactor();
-			objectFactor = material.objectFactor();
-			edgeColour = material.edgeColour();
-			specific = material.specific();
-			smoothBand = specific.r();
+			albedo = palbedo;
+			specular = spcMtl.rgb();
+			metalness = spcMtl.a();
+			roughness = colRgh.a();
+
+			if ( materials.hasSpecificsBuffer< ToonProfile >() )
+			{
+				auto & toonProfiles = materials.getSpecificsBuffer< ToonProfile >();
+				auto toonProfile = m_writer->declLocale( "toonProfile"
+					, toonProfiles.getData( material.passId() - 1u ) );
+				edgeWidth = toonProfile.edgeWidth();
+				depthFactor = toonProfile.depthFactor();
+				normalFactor = toonProfile.normalFactor();
+				objectFactor = toonProfile.objectFactor();
+				edgeColour = toonProfile.edgeColour();
+				smoothBand = toonProfile.smoothBand();
+			}
 		}
 	}
 
@@ -174,6 +329,13 @@ namespace toon::shader
 			specular = spcMtl.rgb();
 			metalness = spcMtl.a();
 			roughness = colRgh.a();
+
+			edgeWidth = 0.0_f;
+			depthFactor = 0.0_f;
+			normalFactor = 0.0_f;
+			objectFactor = 0.0_f;
+			edgeColour = vec4( 0.0_f );
+			smoothBand = 0.0_f;
 		}
 	}
 

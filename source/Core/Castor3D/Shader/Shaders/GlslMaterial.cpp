@@ -642,11 +642,6 @@ namespace castor3d::shader
 				lightMat->create( vec3( 0.0_f )
 					, vec4( 0.0_f )
 					, vec4( 0.0_f ) );
-				lightMat->depthFactor = 0.0_f;
-				lightMat->normalFactor = 0.0_f;
-				lightMat->objectFactor = 0.0_f;
-				lightMat->edgeColour = vec4( 0.0_f );
-				lightMat->specific = vec4( 0.0_f );
 				ComponentT firstComponents{ writer, "first", output };
 				auto result = firstComponents.createResult( writer, output );
 				auto firstMats = materials.applyMaterial( "firstMaterial", "firstLightMat"
@@ -818,11 +813,6 @@ namespace castor3d::shader
 			lightMat->create( vec3( 0.0_f )
 				, vec4( 0.0_f )
 				, vec4( 0.0_f ) );
-			lightMat->depthFactor = 0.0_f;
-			lightMat->normalFactor = 0.0_f;
-			lightMat->objectFactor = 0.0_f;
-			lightMat->edgeColour = vec4( 0.0_f );
-			lightMat->specific = vec4( 0.0_f );
 			VisibilityBlendComponents firstComponents{ m_writer, "first", output };
 			auto result = firstComponents.createResult( m_writer, output );
 			auto firstLightMat = applyMaterial( "firstLightMat"

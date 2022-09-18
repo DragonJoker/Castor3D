@@ -148,12 +148,6 @@ namespace castor3d::shader
 		, sdw::expr::ExprPtr expr
 		, bool enabled )
 		: sdw::StructInstance{ writer, std::move( expr ), enabled }
-		, edgeWidth{ getMember< sdw::Float >( "edgeWidth" ) }
-		, depthFactor{ getMember< sdw::Float >( "depthFactor" ) }
-		, normalFactor{ getMember< sdw::Float >( "normalFactor" ) }
-		, objectFactor{ getMember< sdw::Float >( "objectFactor" ) }
-		, edgeColour{ getMember< sdw::Vec4 >( "edgeColour" ) }
-		, specific{ getMember< sdw::Vec4 >( "specific" ) }
 		, albedo{ getMember< sdw::Vec3 >( "albedo" ) }
 		, specular{ getMember< sdw::Vec3 >( "specular" ) }
 		, albDiv{ getMember< sdw::Float >( "albDiv" ) }
@@ -170,12 +164,6 @@ namespace castor3d::shader
 
 		if ( result->empty() )
 		{
-			result->declMember( "edgeWidth", ast::type::Kind::eFloat );
-			result->declMember( "depthFactor", ast::type::Kind::eFloat );
-			result->declMember( "normalFactor", ast::type::Kind::eFloat );
-			result->declMember( "objectFactor", ast::type::Kind::eFloat );
-			result->declMember( "edgeColour", ast::type::Kind::eVec4F );
-			result->declMember( "specific", ast::type::Kind::eVec4F );
 			result->declMember( "albedo", ast::type::Kind::eVec3F );
 			result->declMember( "specular", ast::type::Kind::eVec3F );
 			result->declMember( "albDiv", ast::type::Kind::eFloat );
@@ -196,12 +184,6 @@ namespace castor3d::shader
 	void LightMaterial::blendWith( LightMaterial const & material
 		, sdw::Float const & weight )
 	{
-		edgeWidth = lighting::interpolate( edgeWidth, material.edgeWidth, weight );
-		depthFactor = lighting::interpolate( depthFactor, material.depthFactor, weight );
-		normalFactor = lighting::interpolate( normalFactor, material.normalFactor, weight );
-		objectFactor = lighting::interpolate( objectFactor, material.objectFactor, weight );
-		edgeColour = lighting::interpolate( edgeColour, material.edgeColour, weight );
-		specific = lighting::interpolate( specific, material.specific, weight );
 		albedo = lighting::interpolate( albedo, material.albedo, weight );
 		specular = lighting::interpolate( specular, material.specular, weight );
 		albDiv = lighting::interpolate( albDiv, material.albDiv, weight );

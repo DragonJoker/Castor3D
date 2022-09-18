@@ -15,118 +15,41 @@
 #include <CastorUtils/Data/Text/TextRgbColour.hpp>
 #include <CastorUtils/Data/Text/TextRgbaColour.hpp>
 
-namespace castor
+namespace toon
 {
 	//*********************************************************************************************
 
-	template<>
-	class TextWriter< toon::ToonPhongPass >
-		: public TextWriterT< toon::ToonPhongPass >
+	template< typename TypeT >
+	class TextWriter
+		: public castor::TextWriterT< ToonPassT< TypeT > >
 	{
 	public:
-		TextWriter( String const & tabs
-			, Path const & folder
-			, String const & subfolder )
-			: TextWriterT< toon::ToonPhongPass >{ tabs }
+		TextWriter( castor::String const & tabs
+			, castor::Path const & folder
+			, castor::String const & subfolder )
+			: castor::TextWriterT< ToonPassT< TypeT > >{ tabs }
 			, m_folder{ folder }
 			, m_subfolder{ subfolder }
 		{
 		}
 
-		bool operator()( toon::ToonPhongPass const & pass
-			, StringStream & file )override
+		bool operator()( ToonPassT< TypeT > const & pass
+			, castor::StringStream & file )override
 		{
-			castor3d::log::info << tabs() << cuT( "Writing ToonPass " ) << std::endl;
-			return writeNamedSub( file, "diffuse", pass.getDiffuse() )
-				&& writeNamedSub( file, "specular", pass.getSpecular() )
-				&& write( file, "ambient", pass.getAmbient() )
-				&& write( file, "shininess", pass.getShininess() )
-				&& write( file, "smooth_band_width", pass.getSmoothBandWidth() )
-				&& write( file, cuT( "edge_width" ), pass.getEdgeWidth() )
-				&& write( file, cuT( "edge_depth_factor" ), pass.getDepthFactor() )
-				&& write( file, cuT( "edge_normal_factor" ), pass.getNormalFactor() )
-				&& write( file, cuT( "edge_object_factor" ), pass.getObjectFactor() )
-				&& writeNamedSub( file, cuT( "edge_colour" ), pass.getEdgeColour() );
+			castor3d::log::info << this->tabs() << cuT( "Writing Toon data " ) << std::endl;
+			return this->writeOpt( file, "smooth_band_width", pass.getSmoothBandWidth(), 1.0f )
+				&& this->writeOpt( file, cuT( "edge_width" ), pass.getEdgeWidth(), 1.0f )
+				&& this->writeOpt( file, cuT( "edge_depth_factor" ), pass.getDepthFactor(), 1.0f )
+				&& this->writeOpt( file, cuT( "edge_normal_factor" ), pass.getNormalFactor(), 1.0f )
+				&& this->writeOpt( file, cuT( "edge_object_factor" ), pass.getObjectFactor(), 1.0f )
+				&& this->writeNamedSubOpt( file, cuT( "edge_colour" ), pass.getEdgeColour(), castor::RgbaColour::fromPredefined( castor::PredefinedRgbaColour::eOpaqueBlack ) );
 		}
 
 	private:
-		Path m_folder;
-		String m_subfolder;
+		castor::Path m_folder;
+		castor::String m_subfolder;
 	};
 
-	template<>
-	class TextWriter< toon::ToonBlinnPhongPass >
-		: public TextWriterT< toon::ToonBlinnPhongPass >
-	{
-	public:
-		TextWriter( String const & tabs
-			, Path const & folder
-			, String const & subfolder )
-			: TextWriterT< toon::ToonBlinnPhongPass >{ tabs }
-			, m_folder{ folder }
-			, m_subfolder{ subfolder }
-		{
-		}
-
-		bool operator()( toon::ToonBlinnPhongPass const & pass
-			, StringStream & file )override
-		{
-			castor3d::log::info << tabs() << cuT( "Writing ToonBlinnPhongPass " ) << std::endl;
-			return writeNamedSub( file, "diffuse", pass.getDiffuse() )
-				&& writeNamedSub( file, "specular", pass.getSpecular() )
-				&& write( file, "ambient", pass.getAmbient() )
-				&& write( file, "shininess", pass.getShininess() )
-				&& write( file, "smooth_band_width", pass.getSmoothBandWidth() )
-				&& write( file, cuT( "edge_width" ), pass.getEdgeWidth() )
-				&& write( file, cuT( "edge_depth_factor" ), pass.getDepthFactor() )
-				&& write( file, cuT( "edge_normal_factor" ), pass.getNormalFactor() )
-				&& write( file, cuT( "edge_object_factor" ), pass.getObjectFactor() )
-				&& writeNamedSub( file, cuT( "edge_colour" ), pass.getEdgeColour() );
-		}
-
-	private:
-		Path m_folder;
-		String m_subfolder;
-	};
-
-	template<>
-	class TextWriter< toon::ToonPbrPass >
-		: public TextWriterT< toon::ToonPbrPass >
-	{
-	public:
-		TextWriter( String const & tabs
-			, Path const & folder
-			, String const & subfolder )
-			: TextWriterT< toon::ToonPbrPass >{ tabs }
-			, m_folder{ folder }
-			, m_subfolder{ subfolder }
-		{
-		}
-
-		bool operator()( toon::ToonPbrPass const & pass
-			, StringStream & file )override
-		{
-			castor3d::log::info << tabs() << cuT( "Writing ToonPbrPass " ) << std::endl;
-			return writeNamedSub( file, "albedo", pass.getAlbedo() )
-				&& write( file, "roughness", pass.getRoughness() )
-				&& write( file, "metalness", pass.getMetalness() )
-				&& writeNamedSub( file, "specular", pass.getSpecular() )
-				&& write( file, "smooth_band_width", pass.getSmoothBandWidth() )
-				&& write( file, cuT( "edge_width" ), pass.getEdgeWidth() )
-				&& write( file, cuT( "edge_depth_factor" ), pass.getDepthFactor() )
-				&& write( file, cuT( "edge_normal_factor" ), pass.getNormalFactor() )
-				&& write( file, cuT( "edge_object_factor" ), pass.getObjectFactor() )
-				&& writeNamedSub( file, cuT( "edge_colour" ), pass.getEdgeColour() );
-		}
-
-	private:
-		Path m_folder;
-		String m_subfolder;
-	};
-}
-
-namespace toon
-{
 	//*********************************************************************************************
 
 	namespace phong
@@ -226,24 +149,6 @@ namespace toon
 		};
 	}
 
-	void ToonPhongPass::fillBuffer( castor3d::PassBuffer & buffer
-		, uint16_t passTypeIndex )const
-	{
-		auto data = buffer.getData( getId() );
-
-		data.colourDiv->r = powf( getDiffuse().red(), 2.2f );
-		data.colourDiv->g = powf( getDiffuse().green(), 2.2f );
-		data.colourDiv->b = powf( getDiffuse().blue(), 2.2f );
-		data.colourDiv->a = getAmbient();
-		data.specDiv->r = getSpecular().red();
-		data.specDiv->g = getSpecular().green();
-		data.specDiv->b = getSpecular().blue();
-		data.specDiv->a = getShininess().value();
-
-		ToonPass::fillData( data );
-		doFillData( data, passTypeIndex );
-	}
-
 	uint32_t ToonPhongPass::getPassSectionID()const
 	{
 		return uint32_t( phong::Section::ePass );
@@ -259,7 +164,8 @@ namespace toon
 		, castor::String const & subfolder
 		, castor::StringStream & file )const
 	{
-		return castor::TextWriter< ToonPhongPass >{ tabs, folder, subfolder }( *this, file );
+		return castor3d::PhongPass::writeText( tabs, folder, subfolder, file )
+			&& TextWriter< castor3d::PhongPass >{ tabs, folder, subfolder }( *this, file );
 	}
 
 	castor3d::PassSPtr ToonPhongPass::doClone( castor3d::Material & material )const
@@ -269,7 +175,7 @@ namespace toon
 		result->setSpecular( getSpecular() );
 		result->setAmbient( getAmbient() );
 		result->setShininess( getShininess().value() );
-		result->setSmoothBandWidth( getSmoothBandWidth() );
+		cloneData( *result );
 		return result;
 	}
 
@@ -315,24 +221,6 @@ namespace toon
 		};
 	}
 
-	void ToonBlinnPhongPass::fillBuffer( castor3d::PassBuffer & buffer
-		, uint16_t passTypeIndex )const
-	{
-		auto data = buffer.getData( getId() );
-
-		data.colourDiv->r = powf( getDiffuse().red(), 2.2f );
-		data.colourDiv->g = powf( getDiffuse().green(), 2.2f );
-		data.colourDiv->b = powf( getDiffuse().blue(), 2.2f );
-		data.colourDiv->a = getAmbient();
-		data.specDiv->r = getSpecular().red();
-		data.specDiv->g = getSpecular().green();
-		data.specDiv->b = getSpecular().blue();
-		data.specDiv->a = getShininess().value();
-
-		ToonPass::fillData( data );
-		doFillData( data, passTypeIndex );
-	}
-
 	uint32_t ToonBlinnPhongPass::getPassSectionID()const
 	{
 		return uint32_t( blinn_phong::Section::ePass );
@@ -348,17 +236,18 @@ namespace toon
 		, castor::String const & subfolder
 		, castor::StringStream & file )const
 	{
-		return castor::TextWriter< ToonBlinnPhongPass >{ tabs, folder, subfolder }( *this, file );
+		return castor3d::BlinnPhongPass::writeText( tabs, folder, subfolder, file )
+			&& TextWriter< castor3d::BlinnPhongPass >{ tabs, folder, subfolder }( *this, file );
 	}
 
 	castor3d::PassSPtr ToonBlinnPhongPass::doClone( castor3d::Material & material )const
 	{
-		auto result = std::make_shared< ToonPhongPass >( material );
+		auto result = std::make_shared< ToonBlinnPhongPass >( material );
 		result->setDiffuse( getDiffuse() );
 		result->setSpecular( getSpecular() );
 		result->setAmbient( getAmbient() );
 		result->setShininess( getShininess().value() );
-		result->setSmoothBandWidth( getSmoothBandWidth() );
+		cloneData( *result );
 		return result;
 	}
 
@@ -404,24 +293,6 @@ namespace toon
 		};
 	}
 
-	void ToonPbrPass::fillBuffer( castor3d::PassBuffer & buffer
-		, uint16_t passTypeIndex )const
-	{
-		auto data = buffer.getData( getId() );
-
-		data.colourDiv->r = getAlbedo().red();
-		data.colourDiv->g = getAlbedo().green();
-		data.colourDiv->b = getAlbedo().blue();
-		data.colourDiv->a = getRoughness();
-		data.specDiv->r = getSpecular().red();
-		data.specDiv->g = getSpecular().green();
-		data.specDiv->b = getSpecular().blue();
-		data.specDiv->a = getMetalness();
-
-		ToonPass::fillData( data );
-		doFillData( data, passTypeIndex );
-	}
-
 	uint32_t ToonPbrPass::getPassSectionID()const
 	{
 		return uint32_t( pbr::Section::ePass );
@@ -437,7 +308,8 @@ namespace toon
 		, castor::String const & subfolder
 		, castor::StringStream & file )const
 	{
-		return castor::TextWriter< ToonPbrPass >{ tabs, folder, subfolder }( *this, file );
+		return castor3d::PbrPass::writeText( tabs, folder, subfolder, file )
+			&& TextWriter< castor3d::PbrPass >{ tabs, folder, subfolder }( *this, file );
 	}
 
 	castor3d::PassSPtr ToonPbrPass::doClone( castor3d::Material & material )const
@@ -445,17 +317,11 @@ namespace toon
 		auto result = std::make_shared< ToonPbrPass >( material );
 		result->setAlbedo( getAlbedo() );
 		result->setRoughness( getRoughness() );
-
-		if ( m_specularSet )
-		{
-			result->setSpecular( getSpecular() );
-		}
-
-		if ( m_metalnessSet )
-		{
-			result->setMetalness( getMetalness() );
-		}
-
+		result->setMetalness( getMetalness() );
+		result->setSpecular( getSpecular() );
+		result->m_specularSet = m_specularSet;
+		result->m_metalnessSet = m_metalnessSet;
+		cloneData( *result );
 		return result;
 	}
 

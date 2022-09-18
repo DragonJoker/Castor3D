@@ -25,6 +25,7 @@ namespace draw_edges
 			eDepthObj,
 			eNmlOcc,
 			eDepthRange,
+			eSpecifics,
 		};
 
 	public:

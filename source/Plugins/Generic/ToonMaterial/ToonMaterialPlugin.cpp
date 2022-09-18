@@ -1,8 +1,12 @@
 #include "ToonMaterial/ToonPass.hpp"
 #include "ToonMaterial/Shaders/GlslToonLighting.hpp"
+#include "ToonMaterial/Shaders/GlslToonMaterial.hpp"
 
 #include <Castor3D/Engine.hpp>
+#include <Castor3D/Cache/MaterialCache.hpp>
 #include <Castor3D/Material/Pass/PassFactory.hpp>
+#include <Castor3D/Render/RenderSystem.hpp>
+#include <Castor3D/Shader/ShaderBuffers/PassBuffer.hpp>
 
 extern "C"
 {
@@ -50,10 +54,15 @@ extern "C"
 				, toon::ToonPbrPass::createSections()
 				, &toon::shader::ToonPbrLightingModel::create
 				, true } );
+		engine->registerSpecificsBuffer( toon::shader::ToonProfile::getName()
+			, { &toon::shader::ToonProfiles::create
+				, &toon::shader::ToonProfiles::update
+				, &toon::shader::ToonProfiles::declare } );
 	}
 
 	C3D_ToonMaterial_API void OnUnload( castor3d::Engine * engine )
 	{
+		engine->unregisterSpecificsBuffer( toon::shader::ToonProfile::getName() );
 		engine->getPassFactory().unregisterType( toon::ToonPbrPass::Type );
 		engine->getPassFactory().unregisterType( toon::ToonBlinnPhongPass::Type );
 		engine->getPassFactory().unregisterType( toon::ToonPhongPass::Type );

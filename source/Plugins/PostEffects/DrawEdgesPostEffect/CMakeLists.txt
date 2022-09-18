@@ -51,10 +51,12 @@ add_library( castor::${FOLDER_NAME}
 target_include_directories( ${PROJECT_NAME}
 	PRIVATE
 		${PostEffectIncludes}
+		${Castor3D_MATERIAL_DIRS}
 )
 target_link_libraries( ${PROJECT_NAME}
 	PUBLIC
 		castor::Castor3D
+		${Castor3D_MATERIAL_DEPS}
 )
 install_target_ex( ${PROJECT_NAME}
 	Castor3D
