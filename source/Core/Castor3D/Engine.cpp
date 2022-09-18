@@ -691,6 +691,44 @@ namespace castor3d
 		m_passFactory->unregisterType( passType );
 	}
 
+	void Engine::registerSpecificsBuffer( std::string const & name
+		, SpecificsBuffer buffer )
+	{
+		m_materialCache->registerSpecificsBuffer( name, buffer );
+	}
+
+	void Engine::unregisterSpecificsBuffer( std::string const & name )
+	{
+		m_materialCache->unregisterSpecificsBuffer( name );
+	}
+
+	void Engine::addSpecificsBuffersBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+		, VkShaderStageFlags shaderStages
+		, uint32_t & index )const
+	{
+		m_materialCache->addSpecificsBuffersBindings( bindings, shaderStages, index );
+	}
+
+	void Engine::addSpecificsBuffersDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
+		, uint32_t & index )const
+	{
+		m_materialCache->addSpecificsBuffersDescriptors( descriptorWrites, index );
+	}
+
+	void Engine::createSpecificsBuffersPassBindings( crg::FramePass & pass
+		, uint32_t & index )const
+	{
+		m_materialCache->createSpecificsBuffersPassBindings( pass, index );
+	}
+
+	void Engine::declareSpecificsShaderBuffers( sdw::ShaderWriter & writer
+		, std::map< std::string, shader::BufferBaseUPtr > & buffers
+		, uint32_t & binding
+		, uint32_t set )const
+	{
+		m_materialCache->declareSpecificsShaderBuffers( writer, buffers, binding, set );
+	}
+
 	void Engine::registerRenderPassType( castor::String const & renderPassType
 		, castor::UniquePtr< RenderPassRegisterInfo > info )
 	{

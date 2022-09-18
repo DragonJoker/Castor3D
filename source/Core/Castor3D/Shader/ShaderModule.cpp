@@ -8,6 +8,8 @@
 #include <ShaderWriter/CompositeTypes/Struct.hpp>
 #include <ShaderWriter/CompositeTypes/ArrayStorageBuffer.hpp>
 
+CU_ImplementCUSmartPtr( castor3d::shader, BufferBase )
+
 namespace castor3d
 {
 	//*************************************************************************

@@ -22,12 +22,14 @@ namespace castor3d::shader
 		C3D_API void create( sdw::Vec3 const & albedo
 			, sdw::Vec4 const & spcMtl
 			, sdw::Vec4 const & colRgh
+			, Materials const & materials
 			, Material const & material )override;
 		C3D_API void create( sdw::Vec3 const & albedo
 			, sdw::Vec4 const & spcMtl
 			, sdw::Vec4 const & colRgh
 			, sdw::Float const & ambient )override;
 		C3D_API void create( sdw::Vec3 const & vtxColour
+			, Materials const & materials
 			, Material const & material )override;
 		C3D_API void output( sdw::Vec4 & outColRgh, sdw::Vec4 & outSpcMtl )const override;
 		C3D_API sdw::Vec3 getAmbient( sdw::Vec3 const & ambientLight )const override;

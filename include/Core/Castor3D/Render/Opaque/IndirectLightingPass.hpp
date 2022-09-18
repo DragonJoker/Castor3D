@@ -48,6 +48,7 @@ namespace castor3d
 			eLayeredLpv3R,
 			eLayeredLpv3G,
 			eLayeredLpv3B,
+			eCount,
 			eVctStart = eVctFirstBounce,
 			eLpvStart = eLpvR,
 			eLayeredLpvStart = eLayeredLpv1R,

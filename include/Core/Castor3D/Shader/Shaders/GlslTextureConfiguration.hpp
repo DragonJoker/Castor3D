@@ -387,7 +387,7 @@ namespace castor3d
 
 			TextureConfigData getTextureConfiguration( sdw::UInt const & index )const
 			{
-				return BufferT< TextureConfigData >::getData( index );
+				return BufferT< TextureConfigData >::getData( index - 1u );
 			}
 
 		private:

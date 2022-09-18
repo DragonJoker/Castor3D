@@ -118,9 +118,12 @@ namespace castor3d
 		auto pxl_scattering = writer.declOutput< Vec3 >( "pxl_scattering", 2 );
 
 		// Shader inputs
-		shader::Materials materials{ writer
+		auto index = uint32_t( LightPassIdx::eCount );
+		shader::Materials materials{ *scene.getEngine()
+			, writer
 			, uint32_t( LightPassIdx::eMaterials )
-			, 0u };
+			, 0u
+			, index };
 		shader::SssProfiles sssProfiles{ writer
 			, uint32_t( LightPassIdx::eSssProfiles )
 			, 0u };
@@ -139,7 +142,7 @@ namespace castor3d
 			: ShadowType::eNone;
 
 		// Utility functions
-		auto index = uint32_t( LightPassLgtIdx::eSmLinear );
+		index = uint32_t( LightPassLgtIdx::eSmLinear );
 		auto lightingModel = shader::LightingModel::createModel( *scene.getEngine() 
 			, utils
 			, scene.getLightingModel( lightType )
@@ -202,6 +205,7 @@ namespace castor3d
 					lightMat->create( albedo
 						, spcMtl
 						, colRgh
+						, materials
 						, material );
 					lightMat->sssProfileIndex = writer.cast< sdw::Float >( material.sssProfileIndex() );
 					lightMat->sssTransmittance = emsTrn.w();

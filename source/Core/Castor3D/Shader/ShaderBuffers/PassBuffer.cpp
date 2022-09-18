@@ -128,7 +128,8 @@ namespace castor3d
 		m_passID--;
 	}
 
-	void PassBuffer::update( ashes::CommandBuffer const & commandBuffer )
+	void PassBuffer::update( SpecificsBuffers const & specifics
+		, ashes::CommandBuffer const & commandBuffer )
 	{
 		auto lock( castor::makeUniqueLock( m_mutex ) );
 
@@ -140,15 +141,26 @@ namespace castor3d
 
 			std::for_each( dirty.begin()
 				, end
-				, [this]( Pass const * pass )
+				, [this, &specifics]( Pass const * pass )
 				{
 					auto it = m_passTypeIndices.emplace( passbuf::hash( *pass )
 						, uint16_t( m_passTypeIndices.size() ) ).first;
 					pass->fillBuffer( *this, it->second );
+
+					for ( auto & buffer : specifics )
+					{
+						buffer.second.first.update( *buffer.second.second, *pass );
+					}
 				} );
 			m_buffer.setCount( uint32_t( m_passes.size() ) );
 			m_buffer.setSecondaryCount( uint32_t( m_passTypeIndices.size() ) );
 			m_buffer.upload( commandBuffer );
+
+			for ( auto & buffer : specifics )
+			{
+				buffer.second.second->setCount( uint32_t( m_passes.size() ) );
+				buffer.second.second->upload( commandBuffer );
+			}
 		}
 	}
 
@@ -201,7 +213,7 @@ namespace castor3d
 		result.bwAccumulationOperator = &data.bwAccumulationOperator;
 		result.textures = &data.textures;
 		result.textureCount = &data.textureCount;
-		result.passTypeIndex = &data.passTypeIndex;
+		result.passId = &data.passId;
 		result.lighting = &data.lighting;
 		result.passCount = &data.passCount;
 

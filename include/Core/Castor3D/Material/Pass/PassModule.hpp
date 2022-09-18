@@ -5,11 +5,25 @@ See LICENSE file in root folder
 #define ___C3D_MaterialPassModule_H___
 
 #include "Castor3D/Material/MaterialModule.hpp"
+#include "Castor3D/Shader/ShaderModule.hpp"
 
 #include <CastorUtils/Design/Signal.hpp>
 
+namespace sdw
+{
+	class ShaderWriter;
+}
+
+namespace castor3d::shader
+{
+	class BufferBase;
+	CU_DeclareCUSmartPtr( castor3d::shader, BufferBase, C3D_API );
+}
+
 namespace castor3d
 {
+	struct RenderDevice;
+
 	/**@name Material */
 	//@{
 	/**@name Pass */
@@ -110,15 +124,9 @@ namespace castor3d
 		//!\~english	All flags used in base pipeline flags hashing.
 		//\~french		Tous les indicateurs utilisés dans le hash des indicateurs de pipeline.
 		eAllBase = 0x01FF,
-		//!\~english	The pass needs an edge to be drawn.
-		//!\~french		La passe demande qu'une bordure soit dessinée.
-		eDrawEdge = 0x0200,
-		//!\~english	All other flags.
-		//\~french		Tous les autres indicateurs.
-		eAllOptional = eDrawEdge,
 		//!\~english	All flags.
 		//\~french		Tous les indicateurs.
-		eAll = eAllBase | eAllOptional,
+		eAll = eAllBase,
 	};
 	CU_ImplementFlags( PassFlag )
 	C3D_API castor::String getName( PassFlag value );
@@ -176,7 +184,22 @@ namespace castor3d
 	struct RenderPassRegisterInfo;
 	struct PassRegisterInfo;
 
+	struct SpecificsBuffer
+	{
+		using ShaderBufferCreator = std::function< ShaderBufferUPtr( RenderDevice const & ) >;
+		using ShaderBufferUpdater = std::function< void( ShaderBuffer &
+			, Pass const & ) >;
+		using ShaderBufferDeclarator = std::function< shader::BufferBaseUPtr( sdw::ShaderWriter & writer
+			, uint32_t binding
+			, uint32_t set ) >;
+
+		ShaderBufferCreator create;
+		ShaderBufferUpdater update;
+		ShaderBufferDeclarator declare;
+	};
+
 	using PassFactoryBase = castor::Factory< Pass, PassTypeID, PassSPtr, std::function< PassSPtr( Material & ) > >;
+	using SpecificsBuffers = std::map< std::string, std::pair< SpecificsBuffer, ShaderBufferUPtr > >;
 
 	CU_DeclareCUSmartPtr( castor3d, RenderPassRegisterInfo, C3D_API );
 	//@}

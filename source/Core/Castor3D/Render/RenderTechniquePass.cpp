@@ -327,6 +327,14 @@ namespace castor3d
 		}
 	}
 
+	void RenderTechniqueNodesPass::doAddPassSpecificsBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+		, uint32_t & index )const
+	{
+		getEngine()->addSpecificsBuffersBindings( bindings
+			, VK_SHADER_STAGE_FRAGMENT_BIT
+			, index );
+	}
+
 	void RenderTechniqueNodesPass::doAddShadowDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
 		, ShadowMapLightTypeArray const & shadowMaps
 		, uint32_t & index )const
@@ -341,7 +349,6 @@ namespace castor3d
 
 	void RenderTechniqueNodesPass::doAddBackgroundDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
 		, crg::ImageData const & targetImage
-		, ShadowMapLightTypeArray const & shadowMaps
 		, uint32_t & index )const
 	{
 		if ( auto background = m_scene.getBackground() )
@@ -351,7 +358,6 @@ namespace castor3d
 	}
 
 	void RenderTechniqueNodesPass::doAddEnvDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
-		, ShadowMapLightTypeArray const & shadowMaps
 		, uint32_t & index )const
 	{
 		bindTexture( m_scene.getEnvironmentMap().getColourId().sampledView
@@ -361,7 +367,6 @@ namespace castor3d
 	}
 
 	void RenderTechniqueNodesPass::doAddGIDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
-		, ShadowMapLightTypeArray const & shadowMaps
 		, uint32_t & index )const
 	{
 		auto sceneFlags = doAdjustSceneFlags( m_scene.getFlags() );
@@ -437,13 +442,24 @@ namespace castor3d
 		}
 	}
 
+	void RenderTechniqueNodesPass::doAddPassSpecificsDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
+		, uint32_t & index )const
+	{
+		getEngine()->addSpecificsBuffersDescriptors( descriptorWrites, index );
+	}
+
 	void RenderTechniqueNodesPass::doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
 		auto index = uint32_t( GlobalBuffersIdx::eCount );
 		bindings.emplace_back( m_scene.getLightCache().createLayoutBinding( index++ ) );
-		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) ); // c3d_mapOcclusion
+
+		if ( m_ssao )
+		{
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) ); // c3d_mapOcclusion
+		}
+
 		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapBrdf
@@ -452,6 +468,7 @@ namespace castor3d
 		doAddEnvBindings( bindings, index );
 		doAddBackgroundBindings( bindings, index );
 		doAddGIBindings( bindings, index );
+		doAddPassSpecificsBindings( bindings, index );
 	}
 
 	void RenderTechniqueNodesPass::doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
@@ -473,9 +490,10 @@ namespace castor3d
 			, descriptorWrites
 			, index );
 		doAddShadowDescriptor( descriptorWrites, shadowMaps, index );
-		doAddEnvDescriptor( descriptorWrites, shadowMaps, index );
-		doAddBackgroundDescriptor( descriptorWrites, *m_targetImage, shadowMaps, index );
-		doAddGIDescriptor( descriptorWrites, shadowMaps, index );
+		doAddEnvDescriptor( descriptorWrites, index );
+		doAddBackgroundDescriptor( descriptorWrites, *m_targetImage, index );
+		doAddGIDescriptor( descriptorWrites, index );
+		doAddPassSpecificsDescriptor( descriptorWrites, index );
 	}
 
 	ashes::PipelineDepthStencilStateCreateInfo RenderTechniqueNodesPass::doCreateDepthStencilState( PipelineFlags const & flags )const

@@ -165,7 +165,7 @@ namespace castor3d::shader
 
 	ast::type::BaseStructPtr LightMaterial::makeType( ast::type::TypesCache & cache )
 	{
-		auto result = cache.getStruct( ast::type::MemoryLayout::eStd430
+		auto result = cache.getStruct( ast::type::MemoryLayout::eC
 			, "C3D_LightMaterial" );
 
 		if ( result->empty() )
@@ -187,9 +187,10 @@ namespace castor3d::shader
 		return result;
 	}
 
-	void LightMaterial::create( Material const & material )
+	void LightMaterial::create( Materials const & materials
+		, Material const & material )
 	{
-		create( vec3( 1.0_f ), material );
+		create( vec3( 1.0_f ), materials, material );
 	}
 
 	void LightMaterial::blendWith( LightMaterial const & material
@@ -205,6 +206,7 @@ namespace castor3d::shader
 		specular = lighting::interpolate( specular, material.specular, weight );
 		albDiv = lighting::interpolate( albDiv, material.albDiv, weight );
 		spcDiv = lighting::interpolate( spcDiv, material.spcDiv, weight );
+		doBlendWith( material, weight );
 	}
 
 	sdw::Vec3 LightMaterial::computeF0( sdw::Vec3 const & albedo

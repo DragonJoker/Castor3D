@@ -43,6 +43,7 @@ namespace castor3d
 		eColRgh,
 		eSpcMtl,
 		eEmsTrn,
+		eCount,
 	};
 	/**
 	*\~english

@@ -401,6 +401,84 @@ namespace castor3d
 		C3D_API void unregisterPassType( castor::String const & type );
 		/**
 		 *\~english
+		 *\brief			Registers a specific data shader buffer.
+		 *\param[in,out]	name	The shader buffer name.
+		 *\param[out]		buffer	The shader buffer.
+		 *\~french
+		 *\brief			Enregistre un shader buffer de données spécifiques.
+		 *\param[in,out]	name	Le nom du shader buffer.
+		 *\param[out]		buffer	Le shader buffer.
+		 */
+		C3D_API void registerSpecificsBuffer( std::string const & name
+			, castor3d::SpecificsBuffer buffer );
+		/**
+		 *\~english
+		 *\brief			Unregisters a pass' specific data buffer.
+		 *\param[in,out]	name	The shader buffer name.
+		 *\~french
+		 *\brief			Désenregistre un shader buffer de données spécifiques.
+		 *\param[in,out]	name	Le nom du shader buffer.
+		 */
+		C3D_API void unregisterSpecificsBuffer( std::string const & name );
+		/**
+		 *\~english
+		 *\brief			Addw the pass' specific data buffer into the given descriptor layout bindings array.
+		 *\param[in,out]	descriptorWrites	Receives the buffers descriptor layout bindings.
+		 *\param[in]		shaderStages		The shader stage flags.
+		 *\param[in,out]	index				The binding index.
+		 *\~french
+		 *\brief			Ecrit les shader buffers de données spécifiques dans le tableau de descriptor layout bindings donné.
+		 *\param[in,out]	descriptorWrites	Reçoit les descriptor layout bindings des buffers.
+		 *\param[in]		shaderStages		Les indicateurs de shader stage.
+		 *\param[in,out]	index				L'indice de binding.
+		 */
+		C3D_API void addSpecificsBuffersBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+			, VkShaderStageFlags shaderStages
+			, uint32_t & index )const;
+		/**
+		 *\~english
+		 *\brief			Writes the pass' specific data buffer into the given descriptor writes array.
+		 *\param[in,out]	descriptorWrites	Receives the buffers descriptor writes.
+		 *\param[in,out]	index				The binding index.
+		 *\~french
+		 *\brief			Ecrit les shader buffers de données spécifiques dans le tableau de descriptor writes donné.
+		 *\param[in,out]	descriptorWrites	Reçoit les descriptor writes des buffers.
+		 *\param[in,out]	index				L'indice de binding.
+		 */
+		C3D_API void addSpecificsBuffersDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
+			, uint32_t & index )const;
+		/**
+		 *\~english
+		 *\brief			Writes the pass' specific data buffer bindings into given frame pass.
+		 *\param[in,out]	pass	The target frame pass.
+		 *\param[in,out]	index	The binding index.
+		 *\~french
+		 *\brief			Ecrit les bindings des shader buffers de données spécifiques dans la frame pass donnée.
+		 *\param[in,out]	pass	La frame pass ciblée.
+		 *\param[in,out]	index	L'indice de binding.
+		 */
+		C3D_API void createSpecificsBuffersPassBindings( crg::FramePass & pass
+			, uint32_t & index )const;
+		/**
+		 *\~english
+		 *\brief			Declares pass' specific data shader buffers.
+		 *\param[in,out]	writer	The shader writer.
+		 *\param[out]		buffers	Receives the registered shader buffers.
+		 *\param[in,out]	binding	The descriptor binding index.
+		 *\param[in]		set		The descriptor set index.
+		 *\~french
+		 *\brief			Déclare dans les shaders les buffers spécifiques enregistrés.
+		 *\param[in,out]	writer	Le writer de shader.
+		 *\param[out]		buffers	Reçoit les shader buffers enregistrés.
+		 *\param[in,out]	binding	L'indice de descripteur.
+		 *\param[in]		set		L'indice de descriptor set.
+		 */
+		C3D_API void declareSpecificsShaderBuffers( sdw::ShaderWriter & writer
+			, std::map< std::string, castor3d::shader::BufferBaseUPtr > & buffers
+			, uint32_t & binding
+			, uint32_t set )const;
+		/**
+		 *\~english
 		 *\brief		Registers a scene render pass type, used to render given material pass type.
 		 *\param[in]	renderPassType	The pass type name.
 		 *\param[in]	info			The pass creation informations.

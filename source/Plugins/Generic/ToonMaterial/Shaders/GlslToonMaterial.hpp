@@ -25,12 +25,14 @@ namespace toon::shader
 		void create( sdw::Vec3 const & albedo
 			, sdw::Vec4 const & spcMtl
 			, sdw::Vec4 const & colRgh
+			, c3d::Materials const & materials
 			, c3d::Material const & material )override;
 		void create( sdw::Vec3 const & albedo
 			, sdw::Vec4 const & spcMtl
 			, sdw::Vec4 const & colRgh
 			, sdw::Float const & ambient )override;
 		void create( sdw::Vec3 const & vtxColour
+			, c3d::Materials const & materials
 			, c3d::Material const & material )override;
 		void output( sdw::Vec4 & outColRgh, sdw::Vec4 & outSpcMtl )const override;
 		sdw::Vec3 getAmbient( sdw::Vec3 const & ambientLight )const override;
@@ -45,6 +47,10 @@ namespace toon::shader
 		sdw::Float & ambient;
 		sdw::Float & shininess;
 		sdw::Float smoothBand;
+
+	private:
+		void doBlendWith( c3d::LightMaterial const & material
+			, sdw::Float const & weight )override;
 	};
 
 	Writer_Parameter( ToonPhongLightMaterial );
@@ -60,12 +66,14 @@ namespace toon::shader
 		void create( sdw::Vec3 const & albedo
 			, sdw::Vec4 const & spcMtl
 			, sdw::Vec4 const & colRgh
+			, c3d::Materials const & materials
 			, c3d::Material const & material )override;
 		void create( sdw::Vec3 const & albedo
 			, sdw::Vec4 const & spcMtl
 			, sdw::Vec4 const & colRgh
 			, sdw::Float const & ambient )override;
 		void create( sdw::Vec3 const & vtxColour
+			, c3d::Materials const & materials
 			, c3d::Material const & material )override;
 		void output( sdw::Vec4 & outColRgh, sdw::Vec4 & outSpcMtl )const override;
 		sdw::Vec3 getAmbient( sdw::Vec3 const & ambientLight )const override;
@@ -76,7 +84,16 @@ namespace toon::shader
 
 		sdw::Float & roughness;
 		sdw::Float & metalness;
+		sdw::Float edgeWidth;
+		sdw::Float depthFactor;
+		sdw::Float normalFactor;
+		sdw::Float objectFactor;
+		sdw::Vec4 edgeColour;
 		sdw::Float smoothBand;
+
+	private:
+		void doBlendWith( c3d::LightMaterial const & material
+			, sdw::Float const & weight )override;
 	};
 
 	Writer_Parameter( ToonPbrLightMaterial );

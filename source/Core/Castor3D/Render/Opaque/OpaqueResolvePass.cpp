@@ -240,6 +240,7 @@ namespace castor3d
 						lightMat->create( albedo
 							, spcMtl
 							, colRgh
+							, materials
 							, material );
 
 						auto ambient = writer.declLocale( "ambient"

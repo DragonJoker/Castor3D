@@ -108,6 +108,7 @@ namespace castor3d::shader
 	using DerivFragmentSurface = RasterizerSurfaceT< DerivTex, ast::var::Flag::eNone >;
 
 	class BackgroundModel;
+	class BufferBase;
 	class Fog;
 	class Materials;
 	class LightingModel;
@@ -126,6 +127,9 @@ namespace castor3d::shader
 	struct PbrLightMaterial;
 	class PbrLightingModel;
 	class PbrReflectionModel;
+
+	template< typename DataT >
+	class BufferT;
 
 	using LightingModelPtr = std::unique_ptr< LightingModel >;
 	using ReflectionModelPtr = std::unique_ptr< ReflectionModel >;
