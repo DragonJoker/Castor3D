@@ -13,11 +13,10 @@ See LICENSE file in root folder
 
 namespace castor3d::shader
 {
-	template< typename DataT >
-	class BufferT
+	class BufferBase
 	{
 	public:
-		BufferT( std::string const & bufferName
+		BufferBase( std::string const & bufferName
 			, std::string const & arrayName
 			, sdw::ShaderWriter & writer
 			, uint32_t binding
@@ -33,8 +32,6 @@ namespace castor3d::shader
 					, binding
 					, set );
 				m_ssbo->declMember< sdw::UVec4 >( "counts" );
-				m_ssbo->declMemberArray< DataT >( m_arrayName );
-				m_ssbo->end();
 			}
 		}
 
@@ -52,13 +49,6 @@ namespace castor3d::shader
 				: m_writer.declLocale( "disabled_" + m_arrayName + "_cnt", 0_u, false ) );
 		}
 
-		DataT getData( sdw::UInt const & index )const
-		{
-			return ( m_ssbo
-				? m_ssbo->getMemberArray< DataT >( m_arrayName )[index - 1_u]
-				: m_writer.declLocale< DataT >( "disabled_" + m_arrayName + "_data", false ) );
-		}
-
 		bool isEnabled()const noexcept
 		{
 			return m_ssbo != nullptr;
@@ -66,10 +56,36 @@ namespace castor3d::shader
 
 	protected:
 		sdw::ShaderWriter & m_writer;
-
-	private:
 		std::string m_arrayName;
 		std::unique_ptr< sdw::StorageBuffer > m_ssbo;
+	};
+
+	template< typename DataT >
+	class BufferT
+		: public BufferBase
+	{
+	public:
+		BufferT( std::string const & bufferName
+			, std::string const & arrayName
+			, sdw::ShaderWriter & writer
+			, uint32_t binding
+			, uint32_t set
+			, bool enable = true )
+			: BufferBase{ bufferName, arrayName, writer, binding, set, enable }
+		{
+			if ( enable )
+			{
+				m_ssbo->declMemberArray< DataT >( m_arrayName );
+				m_ssbo->end();
+			}
+		}
+
+		DataT getData( sdw::UInt const & index )const
+		{
+			return ( m_ssbo
+				? m_ssbo->getMemberArray< DataT >( m_arrayName )[index]
+				: m_writer.declLocale< DataT >( "disabled_" + m_arrayName + "_data", false ) );
+		}
 	};
 }
 

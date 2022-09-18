@@ -589,9 +589,9 @@ namespace ocean
 			, descriptorWrites
 			, index );
 		doAddShadowDescriptor( descriptorWrites, shadowMaps, index );
-		doAddEnvDescriptor( descriptorWrites, shadowMaps, index );
-		doAddBackgroundDescriptor( descriptorWrites, *m_targetImage, shadowMaps, index );
-		doAddGIDescriptor( descriptorWrites, shadowMaps, index );
+		doAddEnvDescriptor( descriptorWrites, index );
+		doAddBackgroundDescriptor( descriptorWrites, *m_targetImage, index );
+		doAddGIDescriptor( descriptorWrites, index );
 	}
 
 	castor3d::SubmeshFlags OceanRenderPass::doAdjustSubmeshFlags( castor3d::SubmeshFlags flags )const
@@ -1148,6 +1148,7 @@ namespace ocean
 					, c3d_sceneData.cameraPosition );
 				auto lightMat = lightingModel->declMaterial( "lightMat" );
 				lightMat->create( in.colour
+					, materials
 					, material );
 				displayDebugData( eMatSpecular, lightMat->specular, 1.0_f );
 

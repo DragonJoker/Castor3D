@@ -618,7 +618,7 @@ namespace castor3d
 		}
 
 		*data.textureCount = std::min( MaxPassTextures, getTextureUnitsCount() );
-		*data.passTypeIndex = passTypeIndex;
+		*data.passId = getId();
 		*data.lighting = hasLighting() ? 1u : 0u;
 		*data.passCount = getOwner()->getPassCount();
 	}

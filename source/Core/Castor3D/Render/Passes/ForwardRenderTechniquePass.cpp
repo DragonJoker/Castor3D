@@ -98,9 +98,6 @@ namespace castor3d
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::eBuffers );
-		shader::Materials materials{ writer
-			, uint32_t( GlobalBuffersIdx::eMaterials )
-			, RenderPipeline::eBuffers };
 		shader::TextureConfigurations textureConfigs{ writer
 			, uint32_t( GlobalBuffersIdx::eTexConfigs )
 			, RenderPipeline::eBuffers
@@ -140,6 +137,11 @@ namespace castor3d
 		indirect.declare( index
 			, RenderPipeline::eBuffers
 			, flags.getGlobalIlluminationFlags() );
+		shader::Materials materials{ *getEngine()
+			, writer
+			, uint32_t( GlobalBuffersIdx::eMaterials )
+			, RenderPipeline::eBuffers
+			, index };
 
 		auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
 			, 0u

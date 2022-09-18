@@ -56,6 +56,7 @@ namespace toon::shader
 	}
 
 	void ToonPhongLightMaterial::create( sdw::Vec3 const & vtxColour
+		, c3d::Materials const & materials
 		, c3d::Material const & material )
 	{
 		if ( vtxColour.isEnabled() )
@@ -63,6 +64,7 @@ namespace toon::shader
 			create( material.colour() * vtxColour
 				, material.specDiv()
 				, material.specDiv()
+				, materials
 				, material );
 		}
 		else
@@ -70,6 +72,7 @@ namespace toon::shader
 			create( material.colour()
 				, material.specDiv()
 				, material.specDiv()
+				, materials
 				, material );
 		}
 	}
@@ -113,6 +116,18 @@ namespace toon::shader
 	sdw::Float ToonPhongLightMaterial::computeShininess( sdw::Float const & glossiness )
 	{
 		return glossiness * castor3d::MaxPhongShininess;
+	}
+
+	void ToonPhongLightMaterial::doBlendWith( c3d::LightMaterial const & material
+		, sdw::Float const & weight )
+	{
+		auto & toonMaterial = static_cast< ToonPhongLightMaterial const & >( material );
+		edgeWidth = lighting::interpolate( edgeWidth, toonMaterial.edgeWidth, weight );
+		depthFactor = lighting::interpolate( depthFactor, toonMaterial.depthFactor, weight );
+		normalFactor = lighting::interpolate( normalFactor, toonMaterial.normalFactor, weight );
+		objectFactor = lighting::interpolate( objectFactor, toonMaterial.objectFactor, weight );
+		edgeColour = lighting::interpolate( edgeColour, toonMaterial.edgeColour, weight );
+		smoothBand = lighting::interpolate( smoothBand, toonMaterial.smoothBand, weight );
 	}
 
 	//*********************************************************************************************
@@ -163,6 +178,7 @@ namespace toon::shader
 	}
 
 	void ToonPbrLightMaterial::create( sdw::Vec3 const & vtxColour
+		, c3d::Materials const & materials
 		, c3d::Material const & material )
 	{
 		if ( vtxColour.isEnabled() )
@@ -170,6 +186,7 @@ namespace toon::shader
 			create( material.colour() * vtxColour
 				, material.specDiv()
 				, material.colourDiv()
+				, materials
 				, material );
 		}
 		else
@@ -177,6 +194,7 @@ namespace toon::shader
 			create( material.colour()
 				, material.specDiv()
 				, material.colourDiv()
+				, materials
 				, material );
 		}
 	}
@@ -209,6 +227,18 @@ namespace toon::shader
 	sdw::Float ToonPbrLightMaterial::getRoughness()const
 	{
 		return roughness;
+	}
+
+	void ToonPbrLightMaterial::doBlendWith( c3d::LightMaterial const & material
+		, sdw::Float const & weight )
+	{
+		auto & toonMaterial = static_cast< ToonPbrLightMaterial const & >( material );
+		edgeWidth = lighting::interpolate( edgeWidth, toonMaterial.edgeWidth, weight );
+		depthFactor = lighting::interpolate( depthFactor, toonMaterial.depthFactor, weight );
+		normalFactor = lighting::interpolate( normalFactor, toonMaterial.normalFactor, weight );
+		objectFactor = lighting::interpolate( objectFactor, toonMaterial.objectFactor, weight );
+		edgeColour = lighting::interpolate( edgeColour, toonMaterial.edgeColour, weight );
+		smoothBand = lighting::interpolate( smoothBand, toonMaterial.smoothBand, weight );
 	}
 
 	//*********************************************************************************************

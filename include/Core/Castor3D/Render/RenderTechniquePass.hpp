@@ -375,18 +375,19 @@ namespace castor3d
 			, uint32_t & index )const;
 		C3D_API void doAddGIBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
 			, uint32_t & index )const;
+		C3D_API void doAddPassSpecificsBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+			, uint32_t & index )const;
 		C3D_API void doAddShadowDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
 			, ShadowMapLightTypeArray const & shadowMaps
 			, uint32_t & index )const;
 		C3D_API void doAddBackgroundDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
 			, crg::ImageData const & targetImage
-			, ShadowMapLightTypeArray const & shadowMaps
 			, uint32_t & index )const;
 		C3D_API void doAddEnvDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
-			, ShadowMapLightTypeArray const & shadowMaps
 			, uint32_t & index )const;
 		C3D_API void doAddGIDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
-			, ShadowMapLightTypeArray const & shadowMaps
+			, uint32_t & index )const;
+		C3D_API void doAddPassSpecificsDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
 			, uint32_t & index )const;
 
 	private:

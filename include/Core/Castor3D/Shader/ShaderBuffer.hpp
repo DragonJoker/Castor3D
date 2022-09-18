@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "ShaderModule.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
+#include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
 #include <CastorUtils/Design/ArrayView.hpp>
 

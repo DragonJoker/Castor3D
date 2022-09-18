@@ -51,7 +51,7 @@ namespace castor3d
 
 			TextureAnimData getTextureAnimation( sdw::UInt const & index )const
 			{
-				return BufferT< TextureAnimData >::getData( index );
+				return BufferT< TextureAnimData >::getData( index - 1u );
 			}
 		};
 	}

@@ -213,6 +213,8 @@ namespace castor3d
 			, uint32_t( LightPassIdx::eSpcMtl ) );
 		pass.addSampledView( m_gpResult[DsTexture::eEmsTrn].sampledViewId
 			, uint32_t( LightPassIdx::eEmsTrn ) );
+		auto index = uint32_t( LightPassIdx::eCount );
+		engine.createSpecificsBuffersPassBindings( pass, index );
 
 		pass.addInOutDepthStencilView( m_lpResult[LpTexture::eDepth].targetViewId );
 		pass.addOutputColourView( m_lpResult[LpTexture::eDiffuse].targetViewId );

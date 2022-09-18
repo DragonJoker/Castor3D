@@ -21,6 +21,7 @@ namespace castor3d::shader
 	void PhongLightMaterial::create( sdw::Vec3 const & newAlbedo
 		, sdw::Vec4 const & spcMtl
 		, sdw::Vec4 const & colRgh
+		, Materials const & materials
 		, Material const & material )
 	{
 		if ( isEnabled() )
@@ -53,6 +54,7 @@ namespace castor3d::shader
 	}
 
 	void PhongLightMaterial::create( sdw::Vec3 const & vtxColour
+		, Materials const & materials
 		, Material const & material )
 	{
 		if ( vtxColour.isEnabled() )
@@ -60,6 +62,7 @@ namespace castor3d::shader
 			create( material.colour() * vtxColour
 				, material.specDiv()
 				, material.specDiv()
+				, materials
 				, material );
 		}
 		else
@@ -67,6 +70,7 @@ namespace castor3d::shader
 			create( material.colour()
 				, material.specDiv()
 				, material.specDiv()
+				, materials
 				, material );
 		}
 	}

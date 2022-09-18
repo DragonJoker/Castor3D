@@ -227,7 +227,7 @@ namespace castor3d
 						* Calculate the scale of the effect.
 						*/
 						auto scale = m_writer.declLocale( "scale"
-							, 8.25_f * translucency / sssProfile.gaussianWidth );
+							, 8.25_f * translucency / sssProfile.gaussianWidth() );
 
 						/**
 						* Now we calculate the thickness from the light point of view:
@@ -244,10 +244,10 @@ namespace castor3d
 						auto profile = m_writer.declLocale( "profile"
 							, vec3( 0.0_f ) );
 
-						FOR( m_writer, sdw::Int, i, 0, i < sssProfile.transmittanceProfileSize, ++i )
+						FOR( m_writer, sdw::Int, i, 0, i < sssProfile.transmittanceProfileSize(), ++i )
 						{
 							auto profileFactors = m_writer.declLocale( "profileFactors"
-								, sssProfile.transmittanceProfile[i] );
+								, sssProfile.transmittanceProfile()[i] );
 							profile += profileFactors.rgb() * exp( dd / profileFactors.a() );
 						}
 						ROF;

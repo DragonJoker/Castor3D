@@ -66,9 +66,12 @@ namespace castor3d
 			C3D_ModelsData( writer, IndirectLightingPass::eModels, 0u );
 			C3D_GpInfo( writer, IndirectLightingPass::eGpInfo, 0u );
 			C3D_Scene( writer, IndirectLightingPass::eScene, 0u );
-			shader::Materials materials{ writer
+			auto index = uint32_t( IndirectLightingPass::eCount );
+			shader::Materials materials{ *renderSystem.getEngine()
+				, writer
 				, IndirectLightingPass::eMaterials
-				, 0u };
+				, 0u
+				, index };
 			shader::GlobalIllumination indirect{ writer, utils, true };
 			uint32_t vctIndex = uint32_t( IndirectLightingPass::eVctStart );
 			uint32_t lpvIndex = uint32_t( IndirectLightingPass::eLpvStart );
@@ -457,6 +460,8 @@ namespace castor3d
 				, linearSampler );
 		}
 
+		auto index = uint32_t( IndirectLightingPass::eCount );
+		engine.createSpecificsBuffersPassBindings( pass, index );
 		pass.addOutputColourView( m_lpResult[LpTexture::eIndirectDiffuse].targetViewId );
 		pass.addOutputColourView( m_lpResult[LpTexture::eIndirectSpecular].targetViewId );
 

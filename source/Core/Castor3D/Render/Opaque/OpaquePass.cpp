@@ -126,9 +126,6 @@ namespace castor3d
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::eBuffers );
-		shader::Materials materials{ writer
-			, uint32_t( GlobalBuffersIdx::eMaterials )
-			, RenderPipeline::eBuffers };
 		shader::TextureConfigurations textureConfigs{ writer
 			, uint32_t( GlobalBuffersIdx::eTexConfigs )
 			, RenderPipeline::eBuffers
@@ -137,6 +134,9 @@ namespace castor3d
 			, uint32_t( GlobalBuffersIdx::eTexAnims )
 			, RenderPipeline::eBuffers
 			, enableTextures };
+		shader::Materials materials{ writer
+			, uint32_t( GlobalBuffersIdx::eMaterials )
+			, RenderPipeline::eBuffers };
 
 		auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
 			, 0u
@@ -148,7 +148,7 @@ namespace castor3d
 		pcb.end();
 
 		// Fragment Outputs
-		auto index = 0u;
+		uint32_t index = 0u;
 		auto outNmlOcc = writer.declOutput< Vec4 >( dropqpass::OutputNmlOcc, index++ );
 		auto outColRgh = writer.declOutput< Vec4 >( dropqpass::OutputColRgh, index++ );
 		auto outSpcMtl = writer.declOutput< Vec4 >( dropqpass::OutputSpcMtl, index++ );

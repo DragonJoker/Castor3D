@@ -182,7 +182,7 @@ namespace castor3d
 					auto translucency = writer.declLocale( "translucency"
 						, emsTrn.w() );
 					auto finalStep = writer.declLocale( "finalStep"
-						, translucency * step * sssProfile.subsurfaceScatteringStrength * sssProfile.gaussianWidth / depthM );
+						, translucency * step * sssProfile.subsurfaceScatteringStrength() * sssProfile.gaussianWidth() / depthM );
 
 					auto offset = writer.declLocale< Vec2 >( "offset" );
 					auto color = writer.declLocale< Vec3 >( "color" );

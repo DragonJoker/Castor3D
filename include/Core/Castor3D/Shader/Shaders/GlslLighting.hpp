@@ -27,19 +27,22 @@ namespace castor3d::shader
 			, bool enabled );
 		SDW_DeclStructInstance( C3D_API, LightMaterial );
 
-		C3D_API void create( Material const & material );
+		C3D_API void create( Materials const & materials
+			, Material const & material );
 		C3D_API void blendWith( LightMaterial const & material
 			, sdw::Float const & weight );
 
 		C3D_API virtual void create( sdw::Vec3 const & albedo
 			, sdw::Vec4 const & spcMtl
 			, sdw::Vec4 const & colRgh
+			, Materials const & materials
 			, Material const & material ) = 0;
 		C3D_API virtual void create( sdw::Vec3 const & albedo
 			, sdw::Vec4 const & spcMtl
 			, sdw::Vec4 const & colRgh
 			, sdw::Float const & ambient = 0.0_f ) = 0;
 		C3D_API virtual void create( sdw::Vec3 const & vtxColour
+			, Materials const & materials
 			, Material const & material ) = 0;
 		C3D_API virtual void output( sdw::Vec4 & outColRgh, sdw::Vec4 & outSpcMtl )const = 0;
 		C3D_API virtual sdw::Vec3 getAmbient( sdw::Vec3 const & ambientLight )const = 0;
@@ -80,9 +83,15 @@ namespace castor3d::shader
 		sdw::Float sssProfileIndex;
 		sdw::Float sssTransmittance;
 
-	private:
+	protected:
 		using sdw::StructInstance::getMember;
 		using sdw::StructInstance::getMemberArray;
+
+	private:
+		virtual void doBlendWith( LightMaterial const & material
+			, sdw::Float const & weight )
+		{
+		}
 	};
 
 	class LightingModel

@@ -28,6 +28,99 @@ namespace castor
 {
 	using namespace castor3d;
 
+	//*********************************************************************************************
+
+	void ResourceCacheT< Material, String, MaterialCacheTraits >::PassDataBuffers::initialise( RenderDevice const & device )
+	{
+		for ( auto & buffer : m_buffers )
+		{
+			buffer.second.second = buffer.second.first.create( device );
+		}
+	}
+	
+	void ResourceCacheT< Material, String, MaterialCacheTraits >::PassDataBuffers::cleanup()
+	{
+		for ( auto & buffer : m_buffers )
+		{
+			buffer.second.second.reset();
+		}
+	}
+
+	void ResourceCacheT< Material, String, MaterialCacheTraits >::PassDataBuffers::update( castor3d::PassBuffer & passBuffer
+		, ashes::CommandBuffer const & cb )const
+	{
+		passBuffer.update( m_buffers, cb );
+	}
+
+	void ResourceCacheT< Material, String, MaterialCacheTraits >::PassDataBuffers::registerBuffer( std::string const & name
+		, SpecificsBuffer buffer )
+	{
+		auto it = m_buffers.find( name );
+
+		if ( it != m_buffers.end() )
+		{
+			CU_Exception( "Buffer with given name already registered." );
+		}
+
+		m_buffers.emplace( name
+			, std::make_pair( std::move( buffer ), nullptr ) );
+	}
+
+	void ResourceCacheT< Material, String, MaterialCacheTraits >::PassDataBuffers::unregisterBuffer( std::string const & name )
+	{
+		auto it = m_buffers.find( name );
+
+		if ( it != m_buffers.end() )
+		{
+			m_buffers.erase( it );
+		}
+	}
+
+	void ResourceCacheT< Material, String, MaterialCacheTraits >::PassDataBuffers::addBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+		, VkShaderStageFlags shaderStages
+		, uint32_t & index )const
+	{
+		for ( auto & buffer : m_buffers )
+		{
+			bindings.push_back( buffer.second.second->createLayoutBinding( index, shaderStages ) );
+			++index;
+		}
+	}
+
+	void ResourceCacheT< Material, String, MaterialCacheTraits >::PassDataBuffers::addDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
+		, uint32_t & index )const
+	{
+		for ( auto & buffer : m_buffers )
+		{
+			descriptorWrites.push_back( buffer.second.second->getBinding( index ) );
+			++index;
+		}
+	}
+
+	void ResourceCacheT< Material, String, MaterialCacheTraits >::PassDataBuffers::createPassBindings( crg::FramePass & pass
+		, uint32_t & index )const
+	{
+		for ( auto & buffer : m_buffers )
+		{
+			buffer.second.second->createPassBinding( pass, buffer.first, index );
+			++index;
+		}
+	}
+
+	void ResourceCacheT< Material, String, MaterialCacheTraits >::PassDataBuffers::declareShaderBuffers( sdw::ShaderWriter & writer
+		, std::map< std::string, shader::BufferBaseUPtr > & buffers
+		, uint32_t & binding
+		, uint32_t set )const
+	{
+		for ( auto & buffer : m_buffers )
+		{
+			buffers.emplace( buffer.first
+				, buffer.second.first.declare( writer, binding, set ) );
+		}
+	}
+
+	//*********************************************************************************************
+
 	ResourceCacheT< Material, String, MaterialCacheTraits >::ResourceCacheT( Engine & engine )
 		: ElementCacheT{ engine.getLogger()
 			, [this]( ElementT & resource )
@@ -46,67 +139,6 @@ namespace castor
 	void ResourceCacheT< Material, String, MaterialCacheTraits >::initialise( RenderDevice const & device
 		, PassTypeID passType )
 	{
-		if ( !m_passBuffer )
-		{
-			auto lock( makeUniqueLock( *this ) );
-			MaterialResPtr created;
-			auto defaultMaterial = doTryAddNoLockT( Material::DefaultMaterialName
-				, false
-				, created
-				, m_engine, passType );
-			auto material = defaultMaterial.lock();
-
-			if ( created.lock() == material )
-			{
-				material->createPass();
-				material->getPass( 0 )->setTwoSided( true );
-			}
-
-			m_defaultMaterial = material.get();
-			m_passBuffer = std::make_shared< PassBuffer >( m_engine
-				, device
-				, MaxMaterialsCount );
-			m_sssProfileBuffer = std::make_shared< SssProfileBuffer >( m_engine
-				, device
-				, MaxSssProfilesCount );
-			m_texConfigBuffer = std::make_shared< TextureConfigurationBuffer >( m_engine
-				, device
-				, ( device.hasBindless()
-					? device.getMaxBindlessSampled()
-					: MaxTextureConfigurationCount ) );
-			m_texAnimBuffer = std::make_shared< TextureAnimationBuffer >( m_engine
-				, device
-				, ( device.hasBindless()
-					? device.getMaxBindlessSampled()
-					: MaxTextureAnimationCount ) );
-
-			for ( auto & it : *this )
-			{
-				if ( !it.second->isInitialised() )
-				{
-					it.second->initialise();
-				}
-			}
-
-			for ( auto pass : m_pendingPasses )
-			{
-				registerPass( *pass );
-			}
-
-			for ( auto unit : m_pendingUnits )
-			{
-				registerUnit( *unit );
-			}
-
-			for ( auto texture : m_pendingTextures )
-			{
-				registerTexture( *texture );
-			}
-
-			m_pendingPasses.clear();
-			m_pendingUnits.clear();
-			m_pendingTextures.clear();
-		}
 	}
 
 	void ResourceCacheT< Material, String, MaterialCacheTraits >::cleanup()
@@ -118,6 +150,7 @@ namespace castor
 		m_engine.postEvent( makeCpuFunctorEvent( EventType::ePostRender
 			, [this]()
 			{
+				m_specificsBuffers.cleanup();
 				m_passBuffer.reset();
 				m_sssProfileBuffer.reset();
 				m_texConfigBuffer.reset();
@@ -153,11 +186,49 @@ namespace castor
 	{
 		if ( m_passBuffer )
 		{
-			m_passBuffer->update( cb );
+			m_specificsBuffers.update( *m_passBuffer, cb );
 			m_sssProfileBuffer->update( cb );
 			m_texConfigBuffer->update( cb );
 			m_texAnimBuffer->update( cb );
 		}
+	}
+
+	void ResourceCacheT< Material, String, MaterialCacheTraits >::registerSpecificsBuffer( std::string const & name
+		, SpecificsBuffer buffer )
+	{
+		m_specificsBuffers.registerBuffer( name, buffer );
+	}
+
+	void ResourceCacheT< Material, String, MaterialCacheTraits >::unregisterSpecificsBuffer( std::string const & name )
+	{
+		m_specificsBuffers.unregisterBuffer( name );
+	}
+
+	void ResourceCacheT< Material, String, MaterialCacheTraits >::addSpecificsBuffersBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+		, VkShaderStageFlags shaderStages
+		, uint32_t & index )const
+	{
+		m_specificsBuffers.addBindings( bindings, shaderStages, index );
+	}
+
+	void ResourceCacheT< Material, String, MaterialCacheTraits >::addSpecificsBuffersDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
+		, uint32_t & index )const
+	{
+		m_specificsBuffers.addDescriptors( descriptorWrites, index );
+	}
+
+	void ResourceCacheT< Material, String, MaterialCacheTraits >::createSpecificsBuffersPassBindings( crg::FramePass & pass
+		, uint32_t & index )const
+	{
+		m_specificsBuffers.createPassBindings( pass, index );
+	}
+
+	void ResourceCacheT< Material, String, MaterialCacheTraits >::declareSpecificsShaderBuffers( sdw::ShaderWriter & writer
+		, std::map< std::string, shader::BufferBaseUPtr > & buffers
+		, uint32_t & binding
+		, uint32_t set )const
+	{
+		m_specificsBuffers.declareShaderBuffers( writer, buffers, binding, set );
 	}
 
 	void ResourceCacheT< Material, String, MaterialCacheTraits >::getNames( StringArray & names )
@@ -301,4 +372,6 @@ namespace castor
 	{
 		return m_passBuffer->getCurrentPassTypeCount();
 	}
+
+	//*********************************************************************************************
 }

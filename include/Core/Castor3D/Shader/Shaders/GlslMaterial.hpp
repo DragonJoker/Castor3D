@@ -4,7 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_GlslMaterials_H___
 #define ___C3D_GlslMaterials_H___
 
-#include "GlslBuffer.hpp"
+#include "Castor3D/Limits.hpp"
+#include "Castor3D/Shader/Shaders/GlslBuffer.hpp"
 
 #include <ShaderWriter/MatTypes/Mat4.hpp>
 #include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>
@@ -36,7 +37,7 @@ namespace castor3d::shader
 			, sdw::FloatField< "bwAccumulationOperator" >
 			, sdw::UVec4ArrayField< "textures", 2u >
 			, sdw::UIntField< "texturesCount" >
-			, sdw::UIntField< "passTypeIndex" >
+			, sdw::UIntField< "passId" >
 			, sdw::UIntField< "lighting" >
 			, sdw::UIntField< "passCount" > >
 	{
@@ -139,7 +140,7 @@ namespace castor3d::shader
 		auto bwAccumulationOperator()const { return getMember< "bwAccumulationOperator" >(); }
 		auto textures()const { return getMember< "textures" >(); }
 		auto texturesCount()const { return getMember< "texturesCount" >(); }
-		auto passTypeIndex()const { return getMember< "passTypeIndex" >(); }
+		auto passId()const { return getMember< "passId" >(); }
 		auto lighting()const { return getMember< "lighting" >(); }
 		auto passCount()const { return getMember< "passCount" >(); }
 	};
@@ -428,6 +429,31 @@ namespace castor3d::shader
 			, uint32_t binding
 			, uint32_t set
 			, bool enable = true );
+		C3D_API explicit Materials( Engine const & engine
+			, sdw::ShaderWriter & writer
+			, uint32_t binding
+			, uint32_t set
+			, uint32_t & specifics
+			, bool enable = true );
+
+		template< typename TypeT >
+		bool hasSpecificsBuffer()const
+		{
+			return m_buffers.end() != m_buffers.find( TypeT::getName() );
+		}
+
+		template< typename TypeT >
+		BufferT< TypeT > const & getSpecificsBuffer()const
+		{
+			auto it = m_buffers.find( TypeT::getName() );
+
+			if ( it == m_buffers.end() )
+			{
+				CU_Exception( "Buffer not declared." );
+			}
+
+			return static_cast< BufferT< TypeT > const & >( *it->second );
+		}
 
 		sdw::UInt getPassTypesCount()const
 		{
@@ -436,7 +462,7 @@ namespace castor3d::shader
 
 		Material getMaterial( sdw::UInt const & index )const
 		{
-			return this->getData( index );
+			return this->getData( index - 1u );
 		}
 
 		// Used by picking pass (opacity only)
@@ -562,32 +588,32 @@ namespace castor3d::shader
 			, sdw::UInt const & materialId
 			, sdw::Vec3 const & vertexColour
 			, LightingBlendComponents & output )const;
+
+	private:
+		std::map< std::string, BufferBaseUPtr > m_buffers;
 	};
 
 	struct SssProfile
-		: public sdw::StructInstance
+		: public sdw::StructInstanceHelperT< "C3D_SssProfile"
+			, sdw::type::MemoryLayout::eStd140
+			, sdw::IntField< "transmittanceProfileSize" >
+			, sdw::FloatField< "gaussianWidth" >
+			, sdw::FloatField< "subsurfaceScatteringStrength" >
+			, sdw::FloatField< "pad" >
+			, sdw::Vec4ArrayField< "transmittanceProfile", TransmittanceProfileSize > >
 	{
-		friend class SssProfiles;
 		C3D_API SssProfile( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
-			, bool enabled );
-		SDW_DeclStructInstance( C3D_API, SssProfile );
+			, bool enabled )
+			: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+		{
+		}
 
-		C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
-
-	protected:
-		using sdw::StructInstance::getMember;
-		using sdw::StructInstance::getMemberArray;
-
-	public:
-		sdw::Int transmittanceProfileSize;
-		sdw::Float gaussianWidth;
-		sdw::Float subsurfaceScatteringStrength;
-		sdw::Float pad;
-		sdw::Array< sdw::Vec4 > transmittanceProfile;
+		auto transmittanceProfileSize()const { return getMember< "transmittanceProfileSize" >(); }
+		auto gaussianWidth()const { return getMember< "gaussianWidth" >(); }
+		auto subsurfaceScatteringStrength()const { return getMember< "subsurfaceScatteringStrength" >(); }
+		auto transmittanceProfile()const { return getMember< "transmittanceProfile" >(); }
 	};
-
-	CU_DeclareSmartPtr( SssProfile );
 
 	class SssProfiles
 		: public BufferT< SssProfile >
@@ -600,7 +626,7 @@ namespace castor3d::shader
 
 		SssProfile getProfile( sdw::UInt const & index )const
 		{
-			return BufferT< SssProfile >::getData( index );
+			return BufferT< SssProfile >::getData( index - 1u );
 		}
 	};
 }

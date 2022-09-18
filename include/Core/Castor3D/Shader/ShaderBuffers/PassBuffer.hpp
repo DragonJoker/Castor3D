@@ -67,7 +67,7 @@ namespace castor3d
 			std::array< castor::Point4ui, 2u > textures;
 
 			uint32_t textureCount;
-			uint32_t passTypeIndex;
+			uint32_t passId;
 			uint32_t lighting;
 			uint32_t passCount;
 		};
@@ -95,7 +95,7 @@ namespace castor3d
 			float * bwAccumulationOperator;
 			std::array< castor::Point4ui, 2u > * textures;
 			uint32_t * textureCount;
-			uint32_t * passTypeIndex;
+			uint32_t * passId;
 			uint32_t * lighting;
 			uint32_t * passCount;
 		};
@@ -144,7 +144,8 @@ namespace castor3d
 		 *\brief		Met à jour le tampon de passes.
 		 *\param[in]	commandBuffer	Reçoit les commandes de mise à jour.
 		 */
-		C3D_API void update( ashes::CommandBuffer const & commandBuffer );
+		C3D_API void update( SpecificsBuffers const & specifics
+			, ashes::CommandBuffer const & commandBuffer );
 		/**
 		 *\~english
 		 *\brief		Creates the descriptor set layout binding.

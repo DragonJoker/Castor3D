@@ -1,6 +1,8 @@
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 
+#include "Castor3D/Engine.hpp"
 #include "Castor3D/Limits.hpp"
+#include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
@@ -731,6 +733,20 @@ namespace castor3d::shader
 	{
 	}
 
+	Materials::Materials( Engine const & engine
+		, sdw::ShaderWriter & writer
+		, uint32_t binding
+		, uint32_t set
+		, uint32_t & specifics
+		, bool enable )
+		: Materials{ writer
+			, binding
+			, set
+			, enable }
+	{
+		engine.declareSpecificsShaderBuffers( writer, m_buffers, specifics, set );
+	}
+
 	void Materials::blendMaterials( Utils & utils
 		, PipelineFlags const & flags
 		, shader::TextureConfigurations const & textureConfigs
@@ -1044,6 +1060,7 @@ namespace castor3d::shader
 		auto lightMat = lightingModel.declMaterial( lgtMatName
 			, needsRsm );
 		lightMat->create( vertexColour
+			, *this
 			, material );
 
 		if ( maps.isEnabled()
@@ -1078,6 +1095,7 @@ namespace castor3d::shader
 	{
 		auto lightMat = lightingModel.declMaterial( lgtMatName );
 		lightMat->create( vertexColour
+			, *this
 			, material );
 		output.emissive() = vec3( material.emissive() );
 		output.opacity() = material.opacity();
@@ -1123,6 +1141,7 @@ namespace castor3d::shader
 			, getMaterial( materialId ) );
 		auto lightMat = lightingModel.declMaterial( lgtMatName );
 		lightMat->create( vertexColour
+			, *this
 			, material );
 		output.emissive() = vec3( material.emissive() );
 		output.opacity() = material.opacity();
@@ -1168,6 +1187,7 @@ namespace castor3d::shader
 			, getMaterial( materialId ) );
 		auto lightMat = lightingModel.declMaterial( lgtMatName );
 		lightMat->create( vertexColour
+			, *this
 			, material );
 		output.emissive() = lightMat->albedo * material.emissive();
 		output.opacity() = material.opacity();
@@ -1201,36 +1221,6 @@ namespace castor3d::shader
 		}
 
 		return std::make_pair( material, std::move( lightMat ) );
-	}
-
-	//*****************************************************************************************
-
-	SssProfile::SssProfile( sdw::ShaderWriter & writer
-		, ast::expr::ExprPtr expr
-		, bool enabled )
-		: StructInstance{ writer, std::move( expr ), enabled }
-		, transmittanceProfileSize{ getMember< sdw::Int >( "transmittanceProfileSize" ) }
-		, gaussianWidth{ getMember< sdw::Float >( "gaussianWidth" ) }
-		, subsurfaceScatteringStrength{ getMember< sdw::Float >( "subsurfaceScatteringStrength" ) }
-		, pad{ getMember< sdw::Float >( "pad" ) }
-		, transmittanceProfile{ getMemberArray< sdw::Vec4 >( "transmittanceProfile" ) }
-	{
-	}
-
-	ast::type::BaseStructPtr SssProfile::makeType( ast::type::TypesCache & cache )
-	{
-		auto result = cache.getStruct( ast::type::MemoryLayout::eStd140, "C3D_SssProfile" );
-
-		if ( result->empty() )
-		{
-			result->declMember( "transmittanceProfileSize", ast::type::Kind::eInt );
-			result->declMember( "gaussianWidth", ast::type::Kind::eFloat );
-			result->declMember( "subsurfaceScatteringStrength", ast::type::Kind::eFloat );
-			result->declMember( "pad", ast::type::Kind::eFloat );
-			result->declMember( "transmittanceProfile", ast::type::Kind::eVec4F, TransmittanceProfileSize );
-		}
-
-		return result;
 	}
 
 	//*********************************************************************************************
