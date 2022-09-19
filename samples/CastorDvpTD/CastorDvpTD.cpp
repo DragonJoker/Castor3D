@@ -2,7 +2,10 @@
 
 #include "MainFrame.hpp"
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wold-style-cast"
 wxIMPLEMENT_APP( castortd::CastorDvpTD );
+#pragma GCC diagnostic pop
 
 namespace castortd
 {

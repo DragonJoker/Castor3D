@@ -18,33 +18,20 @@ namespace castor
 	class SquareMatrix
 		: public Matrix< T, Count, Count >
 	{
-	private:
-		typedef T __value_type;
-		typedef SquareMatrix< __value_type, Count > __square_type;
-		typedef __square_type __transpose;
-
 	public:
-		//!\~english	The data type
-		//!\~french		Le type de données
-		typedef typename Matrix< __value_type, Count, Count >::value_type value_type;
-		//!\~english	The column type
-		//!\~french		Le type de colonne
-		typedef typename Matrix< __value_type, Count, Count >::col_type col_type;
-		//!\~english	The line type
-		//!\~french		Le type de ligne
-		typedef typename Matrix< __value_type, Count, Count >::row_type row_type;
+		using /*value_type = */typename Matrix< T, Count, Count >::value_type;
+		using /*col_type = */typename Matrix< T, Count, Count >::col_type;
+		using /*row_type = */typename Matrix< T, Count, Count >::row_type;
+
+		//!\~english	This matrix type
+		//!\~french		Le type de cette matrice
+		using matrix_type = Matrix< T, Count, Count >;
+		//!\~english	This matrix type
+		//!\~french		Le type de cette matrice
+		using square_type = SquareMatrix< T, Count >;
 		//!\~english	The transposed matrix type
 		//!\~french		Le type de matrice transposée
-		typedef __transpose transpose_type;
-		//!\~english	This matrix type
-		//!\~french		Le type de cette matrice
-		typedef __square_type square_matrix_type;
-		//!\~english	This matrix type
-		//!\~french		Le type de cette matrice
-		typedef Matrix< T, Count, Count > my_matrix_type;
-		//!\~english	This matrix type
-		//!\~french		Le type de cette matrice
-		typedef __square_type my_square_type;
+		using transpose_type = square_type;
 
 	public:
 		/**
@@ -59,8 +46,8 @@ namespace castor
 		explicit SquareMatrix( T const & rhs );
 		SquareMatrix( SquareMatrix const & rhs );
 		SquareMatrix( SquareMatrix && rhs );
-		template< uint32_t _Rows >
-		explicit SquareMatrix( SquareMatrix< T, _Rows > const & rhs );
+		template< uint32_t CountU >
+		explicit SquareMatrix( SquareMatrix< T, CountU > const & rhs );
 		template< typename Type >
 		explicit SquareMatrix( SquareMatrix< Type, Count > const & rhs );
 		template< typename Type >
@@ -89,7 +76,7 @@ namespace castor
 		 *\param[in]	row, column	La ligne et la colonne
 		 *\return		Le cofacteur
 		 */
-		__value_type getCofactor( uint32_t column, uint32_t row )const;
+		value_type getCofactor( uint32_t column, uint32_t row )const;
 		/**
 		 *\~english
 		 *\brief		Computes the determinant of this matrix
@@ -98,7 +85,7 @@ namespace castor
 		 *\brief		Calcule le déterminant de cette matrice
 		 *\return		Le déterminant
 		 */
-		__value_type getDeterminant()const;
+		value_type getDeterminant()const;
 		/**
 		 *\~english
 		 *\brief		Computes and returns the transposed of this matrix
@@ -116,7 +103,7 @@ namespace castor
 		 *\brief		Transpose cette matrice.
 		 *\return		Cette matrice.
 		 */
-		my_square_type & transpose();
+		square_type & transpose();
 		/**
 		 *\~english
 		 *\brief		Tells if the matrix is orthogonal

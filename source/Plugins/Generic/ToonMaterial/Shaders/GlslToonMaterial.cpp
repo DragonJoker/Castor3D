@@ -24,13 +24,6 @@ namespace toon::shader
 			return lhs * ( 1.0_f - weight ) + rhs * weight;
 		}
 
-		static sdw::Vec3 interpolate( sdw::Vec3 const & lhs
-			, sdw::Vec3 const & rhs
-			, sdw::Float const & weight )
-		{
-			return lhs * vec3( 1.0_f - weight ) + rhs * vec3( weight );
-		}
-
 		static sdw::Vec4 interpolate( sdw::Vec4 const & lhs
 			, sdw::Vec4 const & rhs
 			, sdw::Float const & weight )

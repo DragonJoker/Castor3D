@@ -243,9 +243,9 @@ namespace castor
 	}
 
 	template< typename T, uint32_t Columns, uint32_t Rows >
-	inline T Matrix< T, Columns, Rows >::getTrace()const
+	inline typename Matrix< T, Columns, Rows >::value_type Matrix< T, Columns, Rows >::getTrace()const
 	{
-		T sum = T();
+		typename Matrix< T, Columns, Rows >::value_type sum{};
 		T * buffer = m_data.data();
 
 		for ( uint32_t i = 0; i < MinValue< Columns, Rows >::value; i++ )
@@ -478,12 +478,12 @@ namespace castor
 		return mtx;
 	}
 
-	template< typename T, uint32_t Columns, uint32_t Rows, typename U, uint32_t _Columns >
-	Matrix< T, _Columns, Rows > operator*( Matrix< T, Columns, Rows > const & lhs, Matrix< U, _Columns, Columns > const & rhs )
+	template< typename T, uint32_t Columns, uint32_t Rows, typename U, uint32_t ColumnsU >
+	Matrix< T, ColumnsU, Rows > operator*( Matrix< T, Columns, Rows > const & lhs, Matrix< U, ColumnsU, Columns > const & rhs )
 	{
-		Matrix< T, _Columns, Rows > result;
+		Matrix< T, ColumnsU, Rows > result;
 
-		for ( uint32_t i = 0; i < _Columns; i++ )
+		for ( uint32_t i = 0; i < ColumnsU; i++ )
 		{
 			for ( uint32_t j = 0; j < Columns; j++ )
 			{

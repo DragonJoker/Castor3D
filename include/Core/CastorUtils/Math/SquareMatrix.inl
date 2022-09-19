@@ -370,40 +370,40 @@ namespace castor
 
 	template< typename T, uint32_t Count >
 	inline SquareMatrix< T, Count >::SquareMatrix()
-		: my_matrix_type()
+		: matrix_type()
 	{
 	}
 
 	template< typename T, uint32_t Count >
 	inline SquareMatrix< T, Count >::SquareMatrix( NoInit const & noinit )
-		: my_matrix_type( noinit )
+		: matrix_type( noinit )
 	{
 	}
 
 	template< typename T, uint32_t Count >
 	inline SquareMatrix< T, Count >::SquareMatrix( T const & rhs )
-		: my_matrix_type( rhs )
+		: matrix_type( rhs )
 	{
 	}
 
 	template< typename T, uint32_t Count >
 	inline SquareMatrix< T, Count >::SquareMatrix( SquareMatrix< T, Count > const & rhs )
-		: my_matrix_type( rhs )
+		: matrix_type( rhs )
 	{
 	}
 
 	template< typename T, uint32_t Count >
 	inline SquareMatrix< T, Count >::SquareMatrix( SquareMatrix< T, Count > && rhs )
-		: my_matrix_type( std::move( rhs ) )
+		: matrix_type( std::move( rhs ) )
 	{
 	}
 
 	template< typename T, uint32_t Count >
-	template< uint32_t _Rows >
-	inline SquareMatrix< T, Count >::SquareMatrix( SquareMatrix< T, _Rows > const & rhs )
-		: my_matrix_type()
+	template< uint32_t CountU >
+	inline SquareMatrix< T, Count >::SquareMatrix( SquareMatrix< T, CountU > const & rhs )
+		: matrix_type()
 	{
-		static uint32_t constexpr minCount = MinValue< Count, _Rows >::value;
+		static uint32_t constexpr minCount = MinValue< Count, CountU >::value;
 
 		for ( uint32_t i = 0; i < minCount; i++ )
 		{
@@ -422,28 +422,28 @@ namespace castor
 	template< typename T, uint32_t Count >
 	template< typename Type >
 	inline SquareMatrix< T, Count >::SquareMatrix( SquareMatrix< Type, Count > const & rhs )
-		: my_matrix_type( rhs )
+		: matrix_type( rhs )
 	{
 	}
 
 	template< typename T, uint32_t Count >
 	template< typename Type >
 	inline SquareMatrix< T, Count >::SquareMatrix( Matrix< Type, Count, Count > const & rhs )
-		: my_matrix_type( rhs )
+		: matrix_type( rhs )
 	{
 	}
 
 	template< typename T, uint32_t Count >
 	template< typename Type >
 	inline SquareMatrix< T, Count >::SquareMatrix( Type const * rhs )
-		: my_matrix_type( rhs )
+		: matrix_type( rhs )
 	{
 	}
 
 	template< typename T, uint32_t Count >
-	inline T SquareMatrix< T, Count >::getDeterminant()const
+	inline typename SquareMatrix< T, Count >::value_type SquareMatrix< T, Count >::getDeterminant()const
 	{
-		T result{};
+		typename SquareMatrix< T, Count >::value_type result{};
 
 		if constexpr ( Count < 3 || Count > 4 )
 		{
@@ -464,7 +464,7 @@ namespace castor
 	template< typename T, uint32_t Count >
 	inline bool SquareMatrix< T, Count >::isOrthogonal()const
 	{
-		my_matrix_type mTmp( *this );
+		matrix_type mTmp( *this );
 		SquareMatrix< T, Count > mId1;
 		SquareMatrix< T, Count > mId2;
 		mTmp.transpose();
@@ -545,7 +545,7 @@ namespace castor
 	}
 
 	template< typename T, uint32_t Count >
-	inline T SquareMatrix< T, Count >::getCofactor( uint32_t column, uint32_t row )const
+	inline typename SquareMatrix< T, Count >::value_type SquareMatrix< T, Count >::getCofactor( uint32_t column, uint32_t row )const
 	{
 		return CoFactorComputer< T, Count >::get( *this, column, row );
 	}
@@ -582,21 +582,21 @@ namespace castor
 	template< typename Type >
 	inline SquareMatrix< T, Count > & SquareMatrix< T, Count >::operator=( Matrix< Type, Count, Count > const & rhs )
 	{
-		my_matrix_type::operator=( rhs );
+		matrix_type::operator=( rhs );
 		return * this;
 	}
 
 	template< typename T, uint32_t Count >
 	inline SquareMatrix< T, Count > & SquareMatrix< T, Count >::operator=( SquareMatrix< T, Count > const & rhs )
 	{
-		my_matrix_type::operator=( rhs );
+		matrix_type::operator=( rhs );
 		return * this;
 	}
 
 	template< typename T, uint32_t Count >
 	inline SquareMatrix< T, Count > & SquareMatrix< T, Count >::operator=( SquareMatrix< T, Count > && rhs )
 	{
-		my_matrix_type::operator=( std::move( rhs ) );
+		matrix_type::operator=( std::move( rhs ) );
 		return * this;
 	}
 
@@ -604,7 +604,7 @@ namespace castor
 	template< typename Type >
 	inline SquareMatrix< T, Count > & SquareMatrix< T, Count >::operator=( SquareMatrix< Type, Count > const & rhs )
 	{
-		my_matrix_type::operator=( rhs );
+		matrix_type::operator=( rhs );
 		return * this;
 	}
 
@@ -612,7 +612,7 @@ namespace castor
 	template< typename Type >
 	inline SquareMatrix< T, Count > & SquareMatrix< T, Count >::operator=( Type const * rhs )
 	{
-		my_matrix_type::operator=( rhs );
+		matrix_type::operator=( rhs );
 		return * this;
 	}
 
@@ -620,7 +620,7 @@ namespace castor
 	template< typename Type >
 	inline SquareMatrix< T, Count > & SquareMatrix< T, Count >::operator+=( SquareMatrix< Type, Count > const & rhs )
 	{
-		my_matrix_type::operator+=( rhs );
+		matrix_type::operator+=( rhs );
 		return * this;
 	}
 
@@ -628,7 +628,7 @@ namespace castor
 	template< typename Type >
 	inline SquareMatrix< T, Count > & SquareMatrix< T, Count >::operator-=( SquareMatrix< Type, Count > const & rhs )
 	{
-		my_matrix_type::operator-=( rhs );
+		matrix_type::operator-=( rhs );
 		return * this;
 	}
 
@@ -644,7 +644,7 @@ namespace castor
 	template< typename Type >
 	inline SquareMatrix< T, Count > & SquareMatrix< T, Count >::operator+=( Type const * rhs )
 	{
-		my_matrix_type::operator+=( rhs );
+		matrix_type::operator+=( rhs );
 		return * this;
 	}
 
@@ -652,7 +652,7 @@ namespace castor
 	template< typename Type >
 	inline SquareMatrix< T, Count > & SquareMatrix< T, Count >::operator-=( Type const * rhs )
 	{
-		my_matrix_type::operator-=( rhs );
+		matrix_type::operator-=( rhs );
 		return * this;
 	}
 
@@ -660,35 +660,35 @@ namespace castor
 	template< typename Type >
 	inline SquareMatrix< T, Count > & SquareMatrix< T, Count >::operator*=( Type const * rhs )
 	{
-		my_matrix_type::operator*=( rhs );
+		matrix_type::operator*=( rhs );
 		return * this;
 	}
 
 	template< typename T, uint32_t Count >
 	inline SquareMatrix< T, Count > & SquareMatrix< T, Count >::operator+=( T const & rhs )
 	{
-		my_matrix_type::operator+=( rhs );
+		matrix_type::operator+=( rhs );
 		return * this;
 	}
 
 	template< typename T, uint32_t Count >
 	inline SquareMatrix< T, Count > & SquareMatrix< T, Count >::operator-=( T const & rhs )
 	{
-		my_matrix_type::operator-=( rhs );
+		matrix_type::operator-=( rhs );
 		return * this;
 	}
 
 	template< typename T, uint32_t Count >
 	inline SquareMatrix< T, Count > & SquareMatrix< T, Count >::operator*=( T const & rhs )
 	{
-		my_matrix_type::operator*=( rhs );
+		matrix_type::operator*=( rhs );
 		return * this;
 	}
 
 	template< typename T, uint32_t Count >
 	inline SquareMatrix< T, Count > & SquareMatrix< T, Count >::operator/=( T const & rhs )
 	{
-		my_matrix_type::operator/=( rhs );
+		matrix_type::operator/=( rhs );
 		return * this;
 	}
 

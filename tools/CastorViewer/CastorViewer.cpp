@@ -16,7 +16,10 @@
 #include <GuiCommon/xpms/properties.xpm>
 #include <GuiCommon/xpms/scene_blanc.xpm>
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wold-style-cast"
 wxIMPLEMENT_APP( CastorViewer::CastorViewerApp );
+#pragma GCC diagnostic pop
 
 namespace CastorViewer
 {

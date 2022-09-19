@@ -8,6 +8,8 @@
 #pragma warning( push )
 #pragma warning( disable: 4242 )
 #pragma warning( disable: 4365 )
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wreserved-identifier"
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Walloc-zero"
 #pragma GCC diagnostic ignored "-Wcast-qual"
@@ -16,6 +18,7 @@
 #pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
 #include "tinyexr.h"
 #pragma GCC diagnostic pop
+#pragma clang diagnostic pop
 #pragma warning( pop )
 
 namespace castor

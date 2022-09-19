@@ -269,6 +269,8 @@ namespace castortd
 		}
 	}
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wambiguous-reversed-operator"
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
 	BEGIN_EVENT_TABLE( RenderPanel, wxPanel )
@@ -294,6 +296,7 @@ namespace castortd
 		EVT_MENU( int( panel::MenuID::eUpgradeDamage ), RenderPanel::OnUpgradeTowerDamage )
 	END_EVENT_TABLE()
 #pragma GCC diagnostic pop
+#pragma clang diagnostic pop
 
 	void RenderPanel::OnSize( wxSizeEvent & p_event )
 	{

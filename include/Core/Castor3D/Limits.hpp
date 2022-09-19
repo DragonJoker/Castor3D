@@ -30,19 +30,19 @@ namespace castor3d
 	*/
 	//@{
 	// Maximum pipelines and buffer count.
-	static VkDeviceSize constexpr MaxPipelines = 25'000ull;
+	static uint64_t constexpr MaxPipelines = 25'000ull;
 	// Maximum nodes per Pipeline Nodes buffer.
-	static VkDeviceSize constexpr MaxNodesPerPipeline = 1'000ull;
+	static uint64_t constexpr MaxNodesPerPipeline = 1'000ull;
 	// Maximum nodes per meshlet indirect commands buffer.
-	static VkDeviceSize constexpr MaxSubmeshMeshletDrawIndirectCommand = MaxPipelines;
+	static uint64_t constexpr MaxSubmeshMeshletDrawIndirectCommand = MaxPipelines;
 	// Maximum nodes per indexed indirect commands buffer.
-	static VkDeviceSize constexpr MaxSubmeshIdxDrawIndirectCommand = MaxPipelines;
+	static uint64_t constexpr MaxSubmeshIdxDrawIndirectCommand = MaxPipelines;
 	// Maximum nodes per non-indexed indirect commands buffer.
-	static VkDeviceSize constexpr MaxSubmeshNIdxDrawIndirectCommand = MaxPipelines;
+	static uint64_t constexpr MaxSubmeshNIdxDrawIndirectCommand = MaxPipelines;
 	// Maximum billboard nodes per indirect commands buffer.
-	static VkDeviceSize constexpr MaxBillboardDrawIndirectCommand = MaxPipelines;
+	static uint64_t constexpr MaxBillboardDrawIndirectCommand = MaxPipelines;
 	// Maximum objects nodes count in a scene (submesh or billboards).
-	static VkDeviceSize constexpr MaxObjectNodesCount = 250'000ull;
+	static uint64_t constexpr MaxObjectNodesCount = 250'000ull;
 	//@}
 	/**
 	*\name
@@ -112,7 +112,7 @@ namespace castor3d
 	// Pass Buffer.
 	static uint32_t constexpr MaxMaterialsCount = 2'000u;
 	static uint32_t constexpr MaxSssProfilesCount = 100u;
-	static int constexpr MaxMaterialComponentsCount = 8;
+	static int32_t constexpr MaxMaterialComponentsCount = 8;
 	// Texture Configuration Buffer.
 	static uint32_t constexpr MaxTextureConfigurationCount = 4'000u;
 	static int constexpr MaxTextureConfigurationComponentsCount = 12;

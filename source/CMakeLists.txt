@@ -57,6 +57,12 @@ else ()
 	add_subdirectory( ${ASHES_SOURCE_DIR}/source ${CMAKE_BINARY_DIR}/${ASHES_DIR} )
 endif ()
 
+find_package( Threads REQUIRED )
+
+set( PLATFORM_LIBRARIES
+	Threads::Threads
+)
+
 if ( ${CASTOR_BUILD_CASTOR3D} )
 	if ( CASTOR_USE_GLSLANG )
 		option( CASTOR_FORCE_GLSLANG_SUBMODULE "Force use of glslang submodule" OFF )
@@ -80,7 +86,6 @@ if ( ${CASTOR_BUILD_CASTOR3D} )
 					set( CASTOR_USE_GLSLANG OFF )
 				endif ()
 				set( glslang_LIBRARIES
-					glslang::OSDependent
 					glslang::glslang
 					glslang::OGLCompiler
 					glslang::SPIRV

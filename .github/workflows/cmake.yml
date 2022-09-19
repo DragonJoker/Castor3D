@@ -46,26 +46,22 @@ jobs:
       working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
       run: echo "PROJ_WAE=ON" >> $GITHUB_ENV
 
+    - name: Install vcpkg packages
+      shell: bash
+      run: $VCPKG_ROOT/vcpkg install --triplet=${{ matrix.os[1] }} --clean-buildtrees-after-build
+
     - name: Checkout submodules
       run: |
         git submodule update --init -- "CMake"
         git submodule update --init --recursive -- "external/Ashes"
         git submodule update --init --recursive -- "external/ShaderWriter"
         git submodule update --init --recursive -- "external/RenderGraph"
-        git submodule update --init -- "dependencies"
-
-    - name: Unzip dependencies
-      working-directory: ${{ github.workspace }}/dependencies/vc14/x64
-      run: |
-        7z x wxWidgets-3.1.0-win32-headers.zip
-        7z x wxWidgets-3.1.0-win32-libs-debug-vc16.8.4.zip
-        7z x wxWidgets-3.1.0-win32-libs-release-vc16.8.4.zip
 
     - name: Configure CMake
       id: configure
       shell: bash
       working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
-      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{ matrix.buildType }} -DCMAKE_TOOLCHAIN_FILE=$GITHUB_WORKSPACE/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/package/Castor3D -DPROJECTS_WARNINGS_AS_ERRORS=$PROJ_WAE -DPROJECTS_UNITY_BUILD=ON -DPROJECTS_USE_PRECOMPILED_HEADERS=OFF -DSDW_GENERATE_SOURCE=OFF -DCASTOR_BUILD_PLUGINS=ON -DCASTOR_BUILDGRP_INTEROP=OFF -DCASTOR_BUILDGRP_TEST=OFF -DCASTOR_USE_GLSLANG=ON -DCASTOR_DISABLE_DELAYED_INITIALISATION=ON -DASHES_BUILD_RENDERER_OGL=OFF -DCASTOR_BUILDGRP_SAMPLE=ON -DCASTOR_BUILDGRP_TOOL=ON -DASHES_BUILD_RENDERER_D3D11=OFF -DCASTOR_USE_DEPS_WXWIDGETS=ON
+      run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{ matrix.buildType }} -DCMAKE_TOOLCHAIN_FILE=$GITHUB_WORKSPACE/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/package/Castor3D -DPROJECTS_WARNINGS_AS_ERRORS=$PROJ_WAE -DPROJECTS_UNITY_BUILD=ON -DPROJECTS_USE_PRECOMPILED_HEADERS=OFF -DSDW_GENERATE_SOURCE=OFF -DCASTOR_BUILD_PLUGINS=ON -DCASTOR_BUILDGRP_INTEROP=OFF -DCASTOR_BUILDGRP_TEST=OFF -DCASTOR_USE_GLSLANG=ON -DCASTOR_DISABLE_DELAYED_INITIALISATION=ON -DASHES_BUILD_RENDERER_OGL=OFF -DCASTOR_BUILDGRP_SAMPLE=OFF -DCASTOR_BUILDGRP_TOOL=OFF
 
     - name: Build
       if: steps.configure.conclusion == 'success'
@@ -115,6 +111,10 @@ jobs:
   
     - name: Create Build Environment
       run: cmake -E make_directory ${{runner.workspace}}/build-${{ matrix.buildType }}
+
+    - name: Install vcpkg packages
+      shell: bash
+      run: $VCPKG_ROOT/vcpkg install --triplet=${{ matrix.os[1] }} --clean-buildtrees-after-build
 
     - name: Checkout submodules
       run: |
@@ -204,6 +204,10 @@ jobs:
       run: |
         sudo apt-get install -y --no-install-recommends libxi-dev libgl1-mesa-dev libglu1-mesa-dev mesa-common-dev libxrandr-dev libxxf86vm-dev libxaw7-dev libwayland-dev libxcb1-dev libx11-xcb-dev pkg-config libgtk-3-dev libsecret-1-dev libgcrypt20-dev libsystemd-dev
 
+    - name: Install vcpkg packages
+      shell: bash
+      run: $VCPKG_ROOT/vcpkg install --triplet=${{ matrix.os[1] }} --clean-buildtrees-after-build
+
     - name: Checkout submodules
       run: |
         git submodule update --init -- "CMake"
@@ -291,6 +295,10 @@ jobs:
       shell: bash
       run: |
         sudo apt-get install -y --no-install-recommends libxi-dev libgl1-mesa-dev libglu1-mesa-dev mesa-common-dev libxrandr-dev libxxf86vm-dev libxaw7-dev libwayland-dev libxcb1-dev libx11-xcb-dev pkg-config libgtk-3-dev libsecret-1-dev libgcrypt20-dev libsystemd-dev
+
+    - name: Install vcpkg packages
+      shell: bash
+      run: $VCPKG_ROOT/vcpkg install --triplet=${{ matrix.os[1] }} --clean-buildtrees-after-build
 
     - name: Checkout submodules
       run: |

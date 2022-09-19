@@ -30,12 +30,14 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		include_directories( ${ANDROID_NDK}/sources )
 		android_ndk_import_module_cpufeatures()
 		set( PLATFORM_LIBRARIES
+			${PLATFORM_LIBRARIES}
 			m
 			EGL
 			cpufeatures
 		)
 	elseif( APPLE )
 		set( PLATFORM_LIBRARIES
+			${PLATFORM_LIBRARIES}
 			"-framework CoreGraphics"
 		)
 		set( PROJECTS_USE_PRECOMPILED_HEADERS OFF )
@@ -47,6 +49,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		if ( EXISTS "/usr/lib/X11/extensions/Xinerama.h" )
 			set( CASTOR_HAS_XINERAMA 1 )
 			set( PLATFORM_LIBRARIES
+				${PLATFORM_LIBRARIES}
 				Xinerama
 			)
 			set( ${PROJECT_NAME}_DEFINITIONS
@@ -56,6 +59,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		elseif ( EXISTS "/usr/include/X11/extensions/Xinerama.h" )
 			set( CASTOR_HAS_XINERAMA 1 )
 			set( PLATFORM_LIBRARIES
+				${PLATFORM_LIBRARIES}
 				Xinerama
 			)
 			set( ${PROJECT_NAME}_DEFINITIONS
@@ -671,12 +675,6 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 			PUBLIC
 				Dbghelp
 		)
-	else ()
-		target_link_libraries( ${PROJECT_NAME}
-			PUBLIC
-				${CMAKE_DL_LIBRARY}
-				pthread
-		)
 	endif ()
 
 	option( CASTOR_USE_FREEIMAGE "Look for FreeImage to use it to decode images" OFF )
@@ -756,6 +754,10 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 	set( CASTOR_INSTEXP_LIST
 		${CASTOR_INSTEXP_LIST}
 		${PROJECT_NAME}
+		PARENT_SCOPE
+	)
+	set( PLATFORM_LIBRARIES
+		${PLATFORM_LIBRARIES}
 		PARENT_SCOPE
 	)
 	if ( WIN32 )
