@@ -20,6 +20,7 @@
 #pragma clang diagnostic ignored "-Wimplicit-fallthrough"
 #pragma clang diagnostic ignored "-Wdisabled-macro-expansion"
 #pragma clang diagnostic ignored "-Wold-style-cast"
+#pragma clang diagnostic ignored "-Wreserved-identifier"
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Walloc-zero"
 #pragma GCC diagnostic ignored "-Wcast-qual"

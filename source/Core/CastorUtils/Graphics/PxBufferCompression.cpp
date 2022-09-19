@@ -304,6 +304,9 @@ namespace castor
 		assert( written <= dstSize );
 	}
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-but-set-variable"
+
 	void compressBlocks( CVTTOptions  const & options
 		, std::atomic_bool const * interrupt
 		, std::vector< cvtt::PixelBlockS8 > const & blocksCont
@@ -381,6 +384,8 @@ namespace castor
 
 		assert( written <= dstSize );
 	}
+
+#pragma clang diagnostic pop
 
 #else
 

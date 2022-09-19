@@ -16,27 +16,22 @@ namespace castor
 		friend class Matrix;
 
 	protected:
-		using __value_type = T;
-		using __type = Matrix< __value_type, Columns, Rows >;
-		using __transpose = Matrix< __value_type, Rows, Columns >;
-		using __row = Point< __value_type, Columns >;
-		using __column = Point< __value_type, Rows >;
 		static const std::size_t count = Rows * Columns;
 		static const std::size_t size = sizeof( T ) * Rows * Columns;
 
 	public:
 		//!\~english	The data type.
 		//!\~french		Le type de données.
-		using value_type = __value_type;
+		using value_type = T;
 		//!\~english	The column type
 		//!\~french		Le type de colonne.
-		using col_type = __column;
+		using col_type = Point< value_type, Rows >;
 		//!\~english	The line type.
 		//!\~french		Le type de ligne.
-		using row_type = __row;
+		using row_type = Point< value_type, Columns >;
 		//!\~english	The transposed matrix type.
 		//!\~french		Le type de matrice transposée.
-		using transpose_type = __transpose;
+		using transpose_type = Matrix< value_type, Rows, Columns >;
 		//!\~english	This matrix type.
 		//!\~french		Le type de cette matrice.
 		using my_type = Matrix< value_type, Columns, Rows >;
@@ -222,8 +217,8 @@ namespace castor
 	Matrix< T, Columns, Rows > operator+( Matrix< T, Columns, Rows > const & lhs, Matrix< U, Columns, Rows > const & rhs );
 	template< typename T, uint32_t Columns, uint32_t Rows, typename U >
 	Matrix< T, Columns, Rows > operator-( Matrix< T, Columns, Rows > const & lhs, Matrix< U, Columns, Rows > const & rhs );
-	template< typename T, uint32_t Columns, uint32_t Rows, typename U, uint32_t _Columns >
-	Matrix< T, _Columns, Rows > operator*( Matrix< T, Columns, Rows > const & lhs, Matrix< U, _Columns, Columns > const & rhs );
+	template< typename T, uint32_t Columns, uint32_t Rows, typename U, uint32_t ColumnsU >
+	Matrix< T, ColumnsU, Rows > operator*( Matrix< T, Columns, Rows > const & lhs, Matrix< U, ColumnsU, Columns > const & rhs );
 
 	template< typename T, uint32_t Columns, uint32_t Rows, typename U >
 	Point< T, Rows > operator*( Matrix< T, Columns, Rows > const & lhs, Point< U, Columns > const & rhs );

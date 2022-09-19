@@ -1,4 +1,5 @@
 {
+    "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg/master/scripts/vcpkg.schema.json",
     "name": "castor3d",
     "version": "0.14.0",
     "dependencies": [ "assimp",

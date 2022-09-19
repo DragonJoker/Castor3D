@@ -19,6 +19,7 @@
 #pragma clang diagnostic ignored "-Wimplicit-fallthrough"
 #pragma clang diagnostic ignored "-Wmissing-prototypes"
 #pragma clang diagnostic ignored "-Wmissing-variable-declarations"
+#pragma clang diagnostic ignored "-Wreserved-identifier"
 #pragma clang diagnostic ignored "-Wold-style-cast"
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wcast-qual"

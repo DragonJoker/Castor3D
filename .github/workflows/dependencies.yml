@@ -23,7 +23,7 @@ jobs:
 
     - name: Install vcpkg packages
       shell: bash
-      run: $VCPKG_ROOT/vcpkg install --triplet=${{ matrix.os[1] }}
+      run: $VCPKG_ROOT/vcpkg install --triplet=${{ matrix.os[1] }} --clean-buildtrees-after-build
 
   build-macos:
     strategy:
@@ -44,7 +44,7 @@ jobs:
 
     - name: Install vcpkg packages
       shell: bash
-      run: $VCPKG_ROOT/vcpkg install --triplet=${{ matrix.os[1] }}
+      run: $VCPKG_ROOT/vcpkg install --triplet=${{ matrix.os[1] }} --clean-buildtrees-after-build
 
   build-linux-gcc:
     strategy:
@@ -78,7 +78,7 @@ jobs:
 
     - name: Install vcpkg packages
       shell: bash
-      run: $VCPKG_ROOT/vcpkg install --triplet=${{ matrix.os[1] }}
+      run: $VCPKG_ROOT/vcpkg install --triplet=${{ matrix.os[1] }} --clean-buildtrees-after-build
 
   build-linux-clang:
     strategy:
@@ -112,4 +112,4 @@ jobs:
 
     - name: Install vcpkg packages
       shell: bash
-      run: $VCPKG_ROOT/vcpkg install --triplet=${{ matrix.os[1] }}
+      run: $VCPKG_ROOT/vcpkg install --triplet=${{ matrix.os[1] }} --clean-buildtrees-after-build
