@@ -151,10 +151,6 @@ namespace castor3d
 			return m_ubo;
 		}
 
-	public:
-		C3D_API static castor::String const BufferScene;
-		C3D_API static castor::String const SceneData;
-
 	private:
 		RenderDevice const & m_device;
 		UniformBufferOffsetT< Configuration > m_ubo;
@@ -163,12 +159,13 @@ namespace castor3d
 
 #define C3D_Scene( writer, binding, set )\
 	sdw::UniformBuffer sceneBuffer{ writer\
-		, castor3d::SceneUbo::BufferScene\
+		, "C3D_Scene"\
+		, "c3d_scene"\
 		, uint32_t( binding )\
 		, uint32_t( set )\
 		, ast::type::MemoryLayout::eStd140\
 		, true };\
-	auto c3d_sceneData = sceneBuffer.declMember< castor3d::shader::SceneData >( castor3d::SceneUbo::SceneData );\
+	auto c3d_sceneData = sceneBuffer.declMember< castor3d::shader::SceneData >( "d" );\
 	sceneBuffer.end()
 
 #endif

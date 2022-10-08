@@ -126,10 +126,6 @@ namespace castor3d
 			return m_ubo.getDescriptorWrite( dstBinding, dstArrayElement );
 		}
 
-	public:
-		C3D_API static const std::string LpvGridConfig;
-		C3D_API static const std::string LpvGridData;
-
 	private:
 		RenderDevice const & m_device;
 		UniformBufferOffsetT< Configuration > m_ubo;
@@ -139,11 +135,12 @@ namespace castor3d
 
 #define C3D_LpvGridConfig( writer, binding, set, enabled )\
 	sdw::UniformBuffer lpvGridConfig{ writer\
-		, castor3d::LpvGridConfigUbo::LpvGridConfig\
+		, "C3D_LpvGridConfig"\
+		, "c3d_lpvGridConfig"\
 		, uint32_t( binding )\
 		, uint32_t( set )\
 		, ast::type::MemoryLayout::eStd140 };\
-	auto c3d_lpvGridData = lpvGridConfig.declMember< castor3d::shader::LpvGridData >( castor3d::LpvGridConfigUbo::LpvGridData, enabled );\
+	auto c3d_lpvGridData = lpvGridConfig.declMember< castor3d::shader::LpvGridData >( "c3d_lpvGridData", enabled );\
 	lpvGridConfig.end()
 
 #endif

@@ -86,10 +86,6 @@ namespace castor3d
 			return m_ubo.createSizedBinding( descriptorSet, layoutBinding );
 		}
 
-	public:
-		C3D_API static const std::string LpvLightConfig;
-		C3D_API static const std::string LpvLightData;
-
 	private:
 		RenderDevice const & m_device;
 		UniformBufferOffsetT< Configuration > m_ubo;
@@ -98,11 +94,12 @@ namespace castor3d
 
 #define C3D_LpvLightConfig( writer, binding, set )\
 	sdw::UniformBuffer lpvLightConfig{ writer\
-		, castor3d::LpvLightConfigUbo::LpvLightConfig\
+		, "C3D_LpvLightConfig"\
+		, "c3d_lpvLightConfig"\
 		, uint32_t( binding )\
 		, uint32_t( set )\
 		, ast::type::MemoryLayout::eStd140 };\
-	auto c3d_lpvLightData = lpvLightConfig.declMember< castor3d::shader::LpvLightData >( castor3d::LpvLightConfigUbo::LpvLightData );\
+	auto c3d_lpvLightData = lpvLightConfig.declMember< castor3d::shader::LpvLightData >( "d" );\
 	lpvLightConfig.end()
 
 #endif

@@ -35,31 +35,30 @@ namespace castor3d
 			auto dimensions()const { return getMember< "dimensions" >(); }
 			auto isSpherical()const { return getMember< "isSpherical" >(); }
 			auto isFixedSize()const { return getMember< "isFixedSize" >(); }
-
-			C3D_API static castor::String const BufferName;
-			C3D_API static castor::String const MemberName;
 		};
 	}
 }
 
 #define C3D_Billboard( writer, binding, set )\
 	sdw::StorageBuffer billboard{ writer\
-		, castor3d::shader::BillboardData::BufferName\
+		, "C3D_Billboard"\
+		, "c3d_billboard"\
 		, uint32_t( binding )\
 		, uint32_t( set )\
 		, ast::type::MemoryLayout::eStd430\
 		, true };\
-	auto c3d_billboardData = billboard.declMemberArray< castor3d::shader::BillboardData >( castor3d::shader::BillboardData::MemberName );\
+	auto c3d_billboardData = billboard.declMemberArray< castor3d::shader::BillboardData >( "d" );\
 	billboard.end()
 
 #define C3D_BillboardOpt( writer, binding, set, enable )\
 	sdw::StorageBuffer billboard{ writer\
-		, castor3d::shader::BillboardData::BufferName\
+		, "C3D_Billboard"\
+		, "c3d_billboard"\
 		, uint32_t( binding )\
 		, uint32_t( set )\
 		, ast::type::MemoryLayout::eStd430\
 		, enable };\
-	auto c3d_billboardData = billboard.declMemberArray< castor3d::shader::BillboardData >( castor3d::shader::BillboardData::MemberName, enable );\
+	auto c3d_billboardData = billboard.declMemberArray< castor3d::shader::BillboardData >( "d", enable );\
 	billboard.end()
 
 #endif

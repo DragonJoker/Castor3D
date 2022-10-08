@@ -29,7 +29,8 @@ namespace castor3d
 
 		ast::type::BaseStructPtr TextureAnimData::makeType( ast::type::TypesCache & cache )
 		{
-			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140, "C3D_TextureAnimData" );
+			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
+				, "C3D_TextureAnimData" );
 
 			if ( result->empty() )
 			{
@@ -48,9 +49,9 @@ namespace castor3d
 			, uint32_t binding
 			, uint32_t set
 			, bool enable )
-			: BufferT< TextureAnimData >{ TextureAnimationBufferName
-				, "texAnims"
-				, writer
+			: BufferT< TextureAnimData >{ writer
+				, "C3D_TextureAnimations"
+				, "c3d_textureAnimations"
 				, binding
 				, set
 				, enable }

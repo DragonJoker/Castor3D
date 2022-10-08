@@ -73,9 +73,6 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	std::string const LpvLightConfigUbo::LpvLightConfig = "LpvLightConfig";
-	std::string const LpvLightConfigUbo::LpvLightData = "c3d_lpvLightData";
-
 	LpvLightConfigUbo::LpvLightConfigUbo( RenderDevice const & device )
 		: m_device{ device }
 		, m_ubo{ m_device.uboPool->getBuffer< Configuration >( 0u ) }

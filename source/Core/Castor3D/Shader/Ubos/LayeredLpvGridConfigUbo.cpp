@@ -51,9 +51,6 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	std::string const LayeredLpvGridConfigUbo::LayeredLpvConfig = "LayeredLpvConfig";
-	std::string const LayeredLpvGridConfigUbo::LayeredLpvGridData = "c3d_llpvGridData";
-
 	LayeredLpvGridConfigUbo::LayeredLpvGridConfigUbo( RenderDevice const & device )
 		: m_device{ device }
 		, m_ubo{ m_device.uboPool->getBuffer< Configuration >( 0u ) }

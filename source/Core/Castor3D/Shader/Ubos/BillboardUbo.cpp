@@ -9,9 +9,6 @@ namespace castor3d
 {
 	namespace shader
 	{
-		castor::String const BillboardData::BufferName = cuT( "C3D_Billboard" );
-		castor::String const BillboardData::MemberName = cuT( "c3d_billboardData" );
-
 		sdw::Vec3 BillboardData::getCameraRight( MatrixData const & matrixData )const
 		{
 			return getWriter()->ternary( isSpherical() != 0_u

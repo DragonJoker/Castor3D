@@ -32,7 +32,11 @@ namespace castor3d
 			NodesPipelines( sdw::ShaderWriter & writer
 				, uint32_t binding
 				, uint32_t set )
-				: BufferT{ "NodesPipelines", "nodesPipelines", writer, binding, set }
+				: BufferT{ writer
+					, "C3D_NodesPipelines"
+					, "c3d_nodesPipelines"
+					, binding
+					, set }
 			{
 			}
 
@@ -64,8 +68,8 @@ namespace castor3d
 			auto constexpr maxPipelinesSize = uint32_t( castor::getBitSize( MaxPipelines ) );
 			auto constexpr maxPipelinesMask = ( 0x000000001u << maxPipelinesSize ) - 1u;
 
-			auto MaterialsCounts = writer.declStorageBuffer<>( "MaterialsCounts", Bindings::eMaterialsCounts, 0u );
-			auto materialsCounts = MaterialsCounts.declMemberArray< sdw::UInt >( "materialsCounts" );
+			auto MaterialsCounts = writer.declStorageBuffer<>( "C3D_MaterialsCounts", Bindings::eMaterialsCounts, 0u );
+			auto materialsCounts = MaterialsCounts.declMemberArray< sdw::UInt >( "counts" );
 			MaterialsCounts.end();
 
 			writer.implementMain( 16u, 16u

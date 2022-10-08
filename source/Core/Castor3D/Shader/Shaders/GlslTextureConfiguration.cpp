@@ -364,9 +364,9 @@ namespace castor3d
 			, uint32_t binding
 			, uint32_t set
 			, bool enable )
-			: BufferT< TextureConfigData >{ TextureConfigurationBufferName
-				, "texConfigs"
-				, writer
+			: BufferT< TextureConfigData >{ writer
+				, "C3D_TextureConfigurations"
+				, "c3d_textureConfigurations"
 				, binding
 				, set
 				, enable }

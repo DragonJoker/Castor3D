@@ -91,9 +91,6 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const SsaoConfigUbo::BufferSsaoConfig = cuT( "SsaoConfig" );
-	castor::String const SsaoConfigUbo::SsaoConfigData = cuT( "c3d_ssaoConfigData" );
-
 	SsaoConfigUbo::SsaoConfigUbo( RenderDevice const & device )
 		: m_device{ device }
 		, m_ubo{ m_device.uboPool->getBuffer< Configuration >( 0u ) }

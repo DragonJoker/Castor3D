@@ -26,9 +26,6 @@ namespace castor3d::shader
 		using sdw::StructInstance::getMember;
 		using sdw::StructInstance::getMemberArray;
 
-	public:
-		C3D_API static castor::String const DataName;
-
 	private:
 		sdw::UVec4 m_data;
 
@@ -57,10 +54,6 @@ namespace castor3d::shader
 		using sdw::StructInstance::getMember;
 		using sdw::StructInstance::getMemberArray;
 
-	public:
-		C3D_API static castor::String const BufferName;
-		C3D_API static castor::String const DataName;
-
 	private:
 		sdw::Array< sdw::UVec4 > m_data;
 	};
@@ -81,10 +74,6 @@ namespace castor3d::shader
 	private:
 		using sdw::StructInstance::getMember;
 		using sdw::StructInstance::getMemberArray;
-
-	public:
-		C3D_API static castor::String const BufferName;
-		C3D_API static castor::String const DataName;
 
 	private:
 		sdw::Array< sdw::UVec4 > m_data;
@@ -129,23 +118,25 @@ namespace castor3d::shader
 
 #define C3D_ObjectIdsData( writer, flags, binding, set )\
 	sdw::StorageBuffer objectIdsDataBuffer{ writer\
-		, castor3d::shader::ObjectsIds::BufferName\
+		, "C3D_ObjectsIds"\
+		, "c3d_objectsIds"\
 		, uint32_t( binding )\
 		, uint32_t( set )\
 		, ast::type::MemoryLayout::eStd430\
 		, !flags.enableInstantiation() };\
-	auto c3d_objectIdsData = objectIdsDataBuffer.declMemberArray< castor3d::shader::ObjectsIds >( castor3d::shader::ObjectsIds::DataName\
+	auto c3d_objectIdsData = objectIdsDataBuffer.declMemberArray< castor3d::shader::ObjectsIds >( "d"\
 		, !flags.enableInstantiation() );\
 	objectIdsDataBuffer.end()
 
 #define C3D_ObjectsIdsData( writer, flags, binding, set )\
 	sdw::StorageBuffer objectsIdsDataBuffer{ writer\
-		, castor3d::shader::PipelineObjectsIds::BufferName\
+		, "C3D_PipelineObjectsIds"\
+		, "c3d_pipelineObjectsIds"\
 		, uint32_t( binding )\
 		, uint32_t( set )\
 		, ast::type::MemoryLayout::eStd430\
 		, !flags.enableInstantiation() };\
-	auto c3d_objectsIdsData = objectsIdsDataBuffer.declMemberArray< castor3d::shader::PipelineObjectsIds >( castor3d::shader::PipelineObjectsIds::DataName\
+	auto c3d_objectsIdsData = objectsIdsDataBuffer.declMemberArray< castor3d::shader::PipelineObjectsIds >( "d"\
 		, !flags.enableInstantiation() );\
 	objectsIdsDataBuffer.end()
 

@@ -15,8 +15,6 @@ namespace castor3d::shader
 
 	//*********************************************************************************************
 
-	castor::String const ObjectIds::DataName = cuT( "c3d_objectIds" );
-
 	ObjectIds::ObjectIds( sdw::ShaderWriter & writer
 		, ast::expr::ExprPtr expr
 		, bool enabled )
@@ -31,7 +29,7 @@ namespace castor3d::shader
 	ast::type::BaseStructPtr ObjectIds::makeType( ast::type::TypesCache & cache )
 	{
 		auto result = cache.getStruct( ast::type::MemoryLayout::eStd430
-			, "C3D_ObjectIds" );
+			, "C3D_ObjectIdsData" );
 
 		if ( result->empty() )
 		{
@@ -45,9 +43,6 @@ namespace castor3d::shader
 
 	//*********************************************************************************************
 
-	castor::String const ObjectsIds::BufferName = cuT( "ObjectIdsBuffer" );
-	castor::String const ObjectsIds::DataName = cuT( "c3d_objectIdsData" );
-
 	ObjectsIds::ObjectsIds( sdw::ShaderWriter & writer
 		, ast::expr::ExprPtr expr
 		, bool enabled )
@@ -59,7 +54,7 @@ namespace castor3d::shader
 	ast::type::BaseStructPtr ObjectsIds::makeType( ast::type::TypesCache & cache )
 	{
 		auto result = cache.getStruct( ast::type::MemoryLayout::eStd430
-			, "C3D_" + BufferName );
+			, "C3D_ObjectsIdsData" );
 
 		if ( result->empty() )
 		{
@@ -73,9 +68,6 @@ namespace castor3d::shader
 
 	//*********************************************************************************************
 
-	castor::String const PipelineObjectsIds::BufferName = cuT( "ObjectsIdsBuffer" );
-	castor::String const PipelineObjectsIds::DataName = cuT( "c3d_objectsIdsData" );
-
 	PipelineObjectsIds::PipelineObjectsIds( sdw::ShaderWriter & writer
 		, ast::expr::ExprPtr expr
 		, bool enabled )
@@ -87,7 +79,7 @@ namespace castor3d::shader
 	ast::type::BaseStructPtr PipelineObjectsIds::makeType( ast::type::TypesCache & cache )
 	{
 		auto result = cache.getStruct( ast::type::MemoryLayout::eStd430
-			, "C3D_" + BufferName );
+			, "C3D_PipelineObjectsIdsData" );
 
 		if ( result->empty() )
 		{

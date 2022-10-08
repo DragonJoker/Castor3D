@@ -90,10 +90,6 @@ namespace castor3d
 			return m_ubo;
 		}
 
-	public:
-		C3D_API static castor::String const BufferHdrConfig;
-		C3D_API static castor::String const HdrConfigData;
-
 	private:
 		RenderDevice const & m_device;
 		UniformBufferOffsetT< HdrConfig > m_ubo;
@@ -102,12 +98,13 @@ namespace castor3d
 
 #define C3D_HdrConfig( writer, binding, set )\
 	sdw::UniformBuffer hdrConfig{ writer\
-		, castor3d::HdrConfigUbo::BufferHdrConfig\
+		, "C3D_HdrConfig"\
+		, "c3d_hdrConfig"\
 		, uint32_t( binding )\
 		, uint32_t( set )\
 		, ast::type::MemoryLayout::eStd140\
 		, true };\
-	auto c3d_hdrConfigData = hdrConfig.declMember< castor3d::shader::HdrConfigData >( castor3d::HdrConfigUbo::HdrConfigData );\
+	auto c3d_hdrConfigData = hdrConfig.declMember< castor3d::shader::HdrConfigData >( "d" );\
 	hdrConfig.end()
 
 #endif

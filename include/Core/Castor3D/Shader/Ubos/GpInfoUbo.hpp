@@ -92,10 +92,6 @@ namespace castor3d
 			return m_ubo;
 		}
 
-	public:
-		C3D_API static const castor::String BufferGPInfo;
-		C3D_API static const castor::String GPInfoData;
-
 	private:
 		RenderDevice const & m_device;
 		UniformBufferOffsetT< Configuration > m_ubo;
@@ -104,12 +100,13 @@ namespace castor3d
 
 #define C3D_GpInfo( writer, binding, set )\
 	sdw::UniformBuffer gpInfo{ writer\
-		, castor3d::GpInfoUbo::BufferGPInfo\
+		, "C3D_GpInfo"\
+		, "c3d_gpInfo"\
 		, uint32_t( binding )\
 		, uint32_t( set )\
 		, ast::type::MemoryLayout::eStd140\
 		, true };\
-	auto c3d_gpInfoData = gpInfo.declMember< shader::GpInfoData >( castor3d::GpInfoUbo::GPInfoData );\
+	auto c3d_gpInfoData = gpInfo.declMember< shader::GpInfoData >( "d" );\
 	gpInfo.end()
 
 #endif

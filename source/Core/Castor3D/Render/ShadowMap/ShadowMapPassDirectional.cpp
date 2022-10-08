@@ -145,7 +145,7 @@ namespace castor3d
 			, index++
 			, RenderPipeline::eBuffers );
 
-		sdw::PushConstantBuffer pcb{ writer, "DrawData" };
+		sdw::PushConstantBuffer pcb{ writer, "C3D_DrawData", "c3d_drawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
 		pcb.end();
 
@@ -266,7 +266,7 @@ namespace castor3d
 			, RenderPipeline::eTextures
 			, enableTextures ) );
 
-		sdw::PushConstantBuffer pcb{ writer, "DrawData" };
+		sdw::PushConstantBuffer pcb{ writer, "C3D_DrawData", "c3d_drawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
 		pcb.end();
 
