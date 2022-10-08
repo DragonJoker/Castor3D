@@ -310,6 +310,24 @@ namespace GuiCommon
 	}
 
 	template< typename T, uint32_t Count >
+	PointProperty< T, Count >::PointProperty( wxString const & label, wxString const & name, castor::HdrRgbColour const & value )
+		: wxPGProperty( label, name )
+	{
+		castor::Point< T, Count > point{ value };
+		setValueI( point );
+		PointPropertyHelper< T, Count >::addChildren( this, GC_COL_RGB, point );
+	}
+
+	template< typename T, uint32_t Count >
+	PointProperty< T, Count >::PointProperty( wxString const & label, wxString const & name, castor::HdrRgbaColour const & value )
+		: wxPGProperty( label, name )
+	{
+		castor::Point< T, Count > point{ value };
+		setValueI( point );
+		PointPropertyHelper< T, Count >::addChildren( this, GC_COL_RGBA, point );
+	}
+
+	template< typename T, uint32_t Count >
 	void PointProperty< T, Count >::RefreshChildren()
 	{
 		if ( GetChildCount() )
