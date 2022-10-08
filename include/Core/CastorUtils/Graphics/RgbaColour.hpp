@@ -49,13 +49,23 @@ namespace castor
 		using ColourComponentArrayConstRIt = typename ColourComponentArray::const_reverse_iterator;
 
 	public:
+		RgbaColourT() = default;
+		RgbaColourT( RgbaColourT const & rhs ) = default;
+		RgbaColourT & operator=( RgbaColourT const & rhs ) = default;
+		RgbaColourT( RgbaColourT && rhs ) = default;
+		RgbaColourT & operator=( RgbaColourT && rhs ) = default;
+		~RgbaColourT() = default;
 		/**
 		 *\~english
-		 *\brief		Default Constructor
+		 *\brief		Specified constructor
+		 *\param[in]	value	The component value
 		 *\~french
-		 *\brief		Constructeur par défaut
+		 *\brief		Constructeur spécifié
+		 *\param[in]	value	La valeur de la composante
 		 */
-		inline RgbaColourT();
+		template< typename ComponentU >
+		explicit RgbaColourT( RgbaColourT< ComponentU > const & rhs
+			, float gamma = 2.2f );
 		/**
 		 *\~english
 		 *\brief		Specified Constructor
@@ -63,46 +73,6 @@ namespace castor
 		 *\brief		Constructeur spécifié.
 		 */
 		inline RgbaColourT( float r, float g, float b, float a );
-		/**
-		 *\~english
-		 *\brief		Copy Constructor
-		 *\param[in]	rhs	The object to copy
-		 *\~french
-		 *\brief		Constructeur par copie
-		 *\param[in]	rhs	Couleur à copier
-		 */
-		inline RgbaColourT( RgbaColourT const & rhs );
-		/**
-		 *\~english
-		 *\brief		Move Constructor
-		 *\param[in]	rhs	The object to move
-		 *\~french
-		 *\brief		Constructeur par déplacement
-		 *\param[in]	rhs	Couleur à déplacer
-		 */
-		inline RgbaColourT( RgbaColourT && rhs );
-		/**
-		 *\~english
-		 *\brief		Copy assignment operator
-		 *\param[in]	rhs	The object to copy
-		 *\return		A reference to this object
-		 *\~french
-		 *\brief		Opérateur d'affectation par copie
-		 *\param[in]	rhs	L'objet à copier
-		 *\return		Une référence sur cet objet
-		 */
-		inline RgbaColourT & operator=( RgbaColourT const & rhs );
-		/**
-		 *\~english
-		 *\brief		Move assignment operator
-		 *\param[in]	rhs	The object to copy
-		 *\return		Reference to this colour
-		 *\~french
-		 *\brief		Opérateur d'affectation par déplacement
-		 *\param[in]	rhs	Couleur à déplacer
-		 *\return		Référence sur cette couleur
-		 */
-		inline RgbaColourT & operator=( RgbaColourT && rhs );
 		/**
 		 *\~english
 		 *\brief		Constructor from components
@@ -117,10 +87,10 @@ namespace castor
 		static RgbaColourT fromComponents( T1 const & r, T2 const & g, T3 const & b, T4 const & a )
 		{
 			RgbaColourT clrReturn;
-			clrReturn.m_arrayComponents[size_t( RgbaComponent::eRed )] = r;
-			clrReturn.m_arrayComponents[size_t( RgbaComponent::eGreen )] = g;
-			clrReturn.m_arrayComponents[size_t( RgbaComponent::eBlue )] = b;
-			clrReturn.m_arrayComponents[size_t( RgbaComponent::eAlpha )] = a;
+			clrReturn.m_components[size_t( RgbaComponent::eRed )] = r;
+			clrReturn.m_components[size_t( RgbaComponent::eGreen )] = g;
+			clrReturn.m_components[size_t( RgbaComponent::eBlue )] = b;
+			clrReturn.m_components[size_t( RgbaComponent::eAlpha )] = a;
 			return clrReturn;
 		}
 		/**
@@ -488,7 +458,7 @@ namespace castor
 		 */
 		inline ColourComponentArrayIt begin()
 		{
-			return m_arrayComponents.begin();
+			return m_components.begin();
 		}
 		/**
 		 *\~english
@@ -500,7 +470,7 @@ namespace castor
 		 */
 		inline ColourComponentArrayConstIt begin()const
 		{
-			return m_arrayComponents.begin();
+			return m_components.begin();
 		}
 		/**
 		 *\~english
@@ -512,7 +482,7 @@ namespace castor
 		 */
 		inline ColourComponentArrayIt end()
 		{
-			return m_arrayComponents.end();
+			return m_components.end();
 		}
 		/**
 		 *\~english
@@ -524,7 +494,7 @@ namespace castor
 		 */
 		inline ColourComponentArrayConstIt end()const
 		{
-			return m_arrayComponents.end();
+			return m_components.end();
 		}
 		/**
 		 *\~english
@@ -536,7 +506,7 @@ namespace castor
 		 */
 		inline float const * constPtr()const
 		{
-			return &m_arrayValues[0];
+			return &m_components[0].value();
 		}
 		/**
 		 *\~english
@@ -548,7 +518,7 @@ namespace castor
 		 */
 		inline float * ptr()
 		{
-			return &m_arrayValues[0];
+			return &m_components[0].value();
 		}
 		/**
 		 *\~english
@@ -562,7 +532,7 @@ namespace castor
 		 */
 		inline ComponentType & operator[]( RgbaComponent component )
 		{
-			return m_arrayComponents[size_t( component )];
+			return m_components[size_t( component )];
 		}
 		/**
 		 *\~english
@@ -576,7 +546,7 @@ namespace castor
 		 */
 		inline ComponentType const & operator[]( RgbaComponent component )const
 		{
-			return m_arrayComponents[size_t( component )];
+			return m_components[size_t( component )];
 		}
 		/**
 		 *\~english
@@ -590,7 +560,7 @@ namespace castor
 		 */
 		inline ComponentType & operator[]( size_t component )
 		{
-			return m_arrayComponents[component];
+			return m_components[component];
 		}
 		/**
 		 *\~english
@@ -604,7 +574,7 @@ namespace castor
 		 */
 		inline ComponentType const & operator[]( size_t component )const
 		{
-			return m_arrayComponents[component];
+			return m_components[component];
 		}
 		/**
 		 *\~english
@@ -618,7 +588,7 @@ namespace castor
 		 */
 		inline ComponentType & get( RgbaComponent component )
 		{
-			return m_arrayComponents[size_t( component )];
+			return m_components[size_t( component )];
 		}
 		/**
 		 *\~english
@@ -632,7 +602,7 @@ namespace castor
 		 */
 		inline ComponentType const & get( RgbaComponent component )const
 		{
-			return m_arrayComponents[size_t( component )];
+			return m_components[size_t( component )];
 		}
 		/**
 		 *\~english
@@ -767,7 +737,7 @@ namespace castor
 		{
 			for ( uint8_t i = 0; i < uint8_t( RgbaComponent::eCount ); i++ )
 			{
-				m_arrayComponents[i] += scalar;
+				m_components[i] += scalar;
 			}
 
 			return *this;
@@ -787,7 +757,7 @@ namespace castor
 		{
 			for ( uint8_t i = 0; i < uint8_t( RgbaComponent::eCount ); i++ )
 			{
-				m_arrayComponents[i] -= scalar;
+				m_components[i] -= scalar;
 			}
 
 			return *this;
@@ -807,7 +777,7 @@ namespace castor
 		{
 			for ( uint8_t i = 0; i < uint8_t( RgbaComponent::eCount ); i++ )
 			{
-				m_arrayComponents[i] *= scalar;
+				m_components[i] *= scalar;
 			}
 
 			return *this;
@@ -827,7 +797,7 @@ namespace castor
 		{
 			for ( uint8_t i = 0; i < uint8_t( RgbaComponent::eCount ); i++ )
 			{
-				m_arrayComponents[i] /= scalar;
+				m_components[i] /= scalar;
 			}
 
 			return *this;
@@ -878,8 +848,7 @@ namespace castor
 		inline RgbaColourT & operator/=( ComponentType const & component );
 
 	private:
-		ColourComponentArray m_arrayComponents;
-		Float4Array m_arrayValues;
+		ColourComponentArray m_components;
 	};
 	/**
 	 *\~english

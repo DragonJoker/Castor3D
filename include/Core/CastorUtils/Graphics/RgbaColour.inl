@@ -160,78 +160,20 @@ namespace castor
 	}
 
 	template< typename ComponentType >
-	RgbaColourT< ComponentType >::RgbaColourT()
-		: m_arrayComponents()
-		, m_arrayValues()
+	template< typename ComponentU >
+	RgbaColourT< ComponentType >::RgbaColourT( RgbaColourT< ComponentU > const & rhs
+		, float gamma )
+		: m_components{ ComponentType{ rhs.m_components[0u], gamma }
+			, ComponentType{ rhs.m_components[1u], gamma }
+			, ComponentType{ rhs.m_components[2u], gamma }
+			, ComponentType{ rhs.m_components[3u], gamma } }
 	{
-		for ( uint8_t i = 0; i < uint8_t( RgbaComponent::eCount ); i++ )
-		{
-			m_arrayComponents[i].link( &m_arrayValues[i] );
-		}
 	}
 
 	template< typename ComponentType >
 	RgbaColourT< ComponentType >::RgbaColourT( float r, float g, float b, float a )
-		: m_arrayComponents()
-		, m_arrayValues()
+		: m_components{ ComponentType{ r }, ComponentType{ g }, ComponentType{ b }, ComponentType{ a } }
 	{
-		for ( uint8_t i = 0; i < uint8_t( RgbaComponent::eCount ); i++ )
-		{
-			m_arrayComponents[i].link( &m_arrayValues[i] );
-		}
-
-		m_arrayComponents[size_t( RgbaComponent::eRed )] = r;
-		m_arrayComponents[size_t( RgbaComponent::eGreen )] = g;
-		m_arrayComponents[size_t( RgbaComponent::eBlue )] = b;
-		m_arrayComponents[size_t( RgbaComponent::eAlpha )] = a;
-	}
-
-	template< typename ComponentType >
-	RgbaColourT< ComponentType >::RgbaColourT( RgbaColourT< ComponentType > const & colour )
-	{
-		for ( uint8_t i = 0; i < uint8_t( RgbaComponent::eCount ); i++ )
-		{
-			m_arrayValues[i] = colour.m_arrayValues[i];
-			m_arrayComponents[i].link( &m_arrayValues[i] );
-		}
-	}
-
-	template< typename ComponentType >
-	RgbaColourT< ComponentType >::RgbaColourT( RgbaColourT< ComponentType > && colour )
-		: m_arrayComponents()
-		, m_arrayValues( std::move( colour.m_arrayValues ) )
-	{
-		for ( uint8_t i = 0; i < uint8_t( RgbaComponent::eCount ); i++ )
-		{
-			m_arrayComponents[i].link( &m_arrayValues[i] );
-		}
-	}
-
-	template< typename ComponentType >
-	RgbaColourT< ComponentType > & RgbaColourT< ComponentType >::operator=( RgbaColourT< ComponentType > const & colour )
-	{
-		for ( uint8_t i = 0; i < uint8_t( RgbaComponent::eCount ); i++ )
-		{
-			m_arrayValues[i] = colour.m_arrayValues[i];
-		}
-
-		return * this;
-	}
-
-	template< typename ComponentType >
-	RgbaColourT< ComponentType > & RgbaColourT< ComponentType >::operator=( RgbaColourT< ComponentType > && colour )
-	{
-		if ( this != &colour )
-		{
-			m_arrayValues = std::move( colour.m_arrayValues );
-
-			for ( uint8_t i = 0; i < uint8_t( RgbaComponent::eCount ); i++ )
-			{
-				m_arrayComponents[i].link( &m_arrayValues[i] );
-			}
-		}
-
-		return *this;
 	}
 
 	template< typename ComponentType >
@@ -480,7 +422,7 @@ namespace castor
 	{
 		for ( uint8_t i = 0; i < uint8_t( RgbaComponent::eCount ); i++ )
 		{
-			m_arrayComponents[i] += rhs[RgbaComponent( i )];
+			m_components[i] += rhs[RgbaComponent( i )];
 		}
 
 		return *this;
@@ -491,7 +433,7 @@ namespace castor
 	{
 		for ( uint8_t i = 0; i < uint8_t( RgbaComponent::eCount ); i++ )
 		{
-			m_arrayComponents[i] -= rhs[RgbaComponent( i )];
+			m_components[i] -= rhs[RgbaComponent( i )];
 		}
 
 		return *this;
@@ -502,7 +444,7 @@ namespace castor
 	{
 		for ( uint8_t i = 0; i < uint8_t( RgbaComponent::eCount ); i++ )
 		{
-			m_arrayComponents[i] += component;
+			m_components[i] += component;
 		}
 
 		return *this;
@@ -513,7 +455,7 @@ namespace castor
 	{
 		for ( uint8_t i = 0; i < uint8_t( RgbaComponent::eCount ); i++ )
 		{
-			m_arrayComponents[i] -= component;
+			m_components[i] -= component;
 		}
 
 		return *this;
@@ -524,7 +466,7 @@ namespace castor
 	{
 		for ( uint8_t i = 0; i < uint8_t( RgbaComponent::eCount ); i++ )
 		{
-			m_arrayComponents[i] *= component;
+			m_components[i] *= component;
 		}
 
 		return *this;
@@ -535,7 +477,7 @@ namespace castor
 	{
 		for ( uint8_t i = 0; i < uint8_t( RgbaComponent::eCount ); i++ )
 		{
-			m_arrayComponents[i] /= component;
+			m_components[i] /= component;
 		}
 
 		return *this;

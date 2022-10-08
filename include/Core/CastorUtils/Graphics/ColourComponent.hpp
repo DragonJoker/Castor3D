@@ -13,21 +13,13 @@ namespace castor
 	*/
 	class ColourComponent
 	{
-	private:
-		friend class std::array< ColourComponent, 4u >;
-		friend class std::array< ColourComponent, 3u >;
-		/**
-		 *\~english
-		 *\brief		Constructor
-		 *\~french
-		 *\brief		Constructeur
-		 */
-		ColourComponent()
-			: m_component( nullptr )
-		{
-		}
-
 	public:
+		ColourComponent() = default;
+		ColourComponent( ColourComponent const & rhs ) = default;
+		ColourComponent & operator=( ColourComponent const & rhs ) = default;
+		ColourComponent( ColourComponent && rhs ) = default;
+		ColourComponent & operator=( ColourComponent && rhs ) = default;
+		~ColourComponent() = default;
 		/**
 		 *\~english
 		 *\brief		Specified constructor
@@ -36,33 +28,19 @@ namespace castor
 		 *\brief		Constructeur spécifié
 		 *\param[in]	value	La valeur de la composante
 		 */
-		explicit ColourComponent( float * value )
-			: m_component( value )
-		{
-		}
+		CU_API explicit ColourComponent( HdrColourComponent const & rhs
+			, float gamma = 2.2f );
 		/**
 		 *\~english
-		 *\brief		Copy assignment operator.
-		 *\param[in]	rhs	The component.
+		 *\brief		Specified constructor
+		 *\param[in]	value	The component value
 		 *\~french
-		 *\brief		Opérateur d'affectation par copie.
-		 *\param[in]	rhs	La composante.
+		 *\brief		Constructeur spécifié
+		 *\param[in]	value	La valeur de la composante
 		 */
-		ColourComponent( ColourComponent const & rhs ) = default;
-		/**
-		 *\~english
-		 *\brief		Copy assignment operator.
-		 *\param[in]	rhs	The component.
-		 *\return		Reference to this object.
-		 *\~french
-		 *\brief		Opérateur d'affectation par copie.
-		 *\param[in]	rhs	La composante.
-		 *\return		Référence sur cet objet.
-		 */
-		ColourComponent & operator=( ColourComponent const & rhs )
+		explicit ColourComponent( float value )
+			: m_component{ value }
 		{
-			*m_component = *rhs.m_component;
-			return *this;
 		}
 		/**
 		 *\~english
@@ -76,7 +54,7 @@ namespace castor
 		 */
 		ColourComponent & operator=( float rhs )
 		{
-			*m_component = rhs;
+			m_component = rhs;
 			doClamp();
 			return *this;
 		}
@@ -92,7 +70,7 @@ namespace castor
 		 */
 		ColourComponent & operator=( double rhs )
 		{
-			*m_component = float( rhs );
+			m_component = float( rhs );
 			doClamp();
 			return *this;
 		}
@@ -108,7 +86,7 @@ namespace castor
 		 */
 		ColourComponent & operator=( long double rhs )
 		{
-			*m_component = float( rhs );
+			m_component = float( rhs );
 			doClamp();
 			return *this;
 		}
@@ -124,7 +102,7 @@ namespace castor
 		 */
 		ColourComponent & operator=( int8_t rhs )
 		{
-			*m_component = float( uint8_t( rhs ) ) / 255.0f;
+			m_component = float( uint8_t( rhs ) ) / 255.0f;
 			doClamp();
 			return *this;
 		}
@@ -140,7 +118,7 @@ namespace castor
 		 */
 		ColourComponent & operator=( uint8_t rhs )
 		{
-			*m_component = float( rhs ) / 255.0f;
+			m_component = float( rhs ) / 255.0f;
 			return *this;
 		}
 		/**
@@ -155,7 +133,7 @@ namespace castor
 		 */
 		ColourComponent & operator=( int16_t rhs )
 		{
-			*m_component = float( rhs ) / 255.0f;
+			m_component = float( rhs ) / 255.0f;
 			doClamp();
 			return *this;
 		}
@@ -171,7 +149,7 @@ namespace castor
 		 */
 		ColourComponent & operator=( uint16_t rhs )
 		{
-			*m_component = float( rhs ) / 255.0f;
+			m_component = float( rhs ) / 255.0f;
 			doClamp();
 			return *this;
 		}
@@ -187,7 +165,7 @@ namespace castor
 		 */
 		ColourComponent & operator=( int32_t rhs )
 		{
-			*m_component = float( rhs ) / 255.0f;
+			m_component = float( rhs ) / 255.0f;
 			doClamp();
 			return *this;
 		}
@@ -203,7 +181,7 @@ namespace castor
 		 */
 		ColourComponent & operator=( uint32_t rhs )
 		{
-			*m_component = float( rhs ) / 255.0f;
+			m_component = float( rhs ) / 255.0f;
 			doClamp();
 			return *this;
 		}
@@ -219,7 +197,7 @@ namespace castor
 		 */
 		ColourComponent & operator=( int64_t rhs )
 		{
-			*m_component = float( rhs ) / 255.0f;
+			m_component = float( rhs ) / 255.0f;
 			doClamp();
 			return *this;
 		}
@@ -235,7 +213,7 @@ namespace castor
 		 */
 		ColourComponent & operator=( uint64_t rhs )
 		{
-			*m_component = float( rhs ) / 255.0f;
+			m_component = float( rhs ) / 255.0f;
 			doClamp();
 			return *this;
 		}
@@ -351,21 +329,6 @@ namespace castor
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the component value
-		 *\remarks		Clamps the result
-		 *\param[in]	value	The value
-		 *\~french
-		 *\brief		Définit la valeur de la composante
-		 *\remarks		Clampe le résultat
-		 *\param[in]	value	La valeur
-		 */
-		void link( float * value )
-		{
-			m_component = value;
-			doClamp();
-		}
-		/**
-		 *\~english
 		 *\brief		Addition assignment operator
 		 *\remarks		Clamps the result
 		 *\param[in]	rhs	The value to add
@@ -378,7 +341,7 @@ namespace castor
 		 */
 		ColourComponent & operator+=( ColourComponent && rhs )
 		{
-			*m_component += rhs.value();
+			m_component += rhs.value();
 			doClamp();
 			return *this;
 		}
@@ -396,7 +359,7 @@ namespace castor
 		 */
 		ColourComponent & operator-=( ColourComponent && rhs )
 		{
-			*m_component -= rhs.value();
+			m_component -= rhs.value();
 			doClamp();
 			return *this;
 		}
@@ -414,7 +377,7 @@ namespace castor
 		 */
 		ColourComponent & operator*=( ColourComponent && rhs )
 		{
-			*m_component *= rhs.value();
+			m_component *= rhs.value();
 			doClamp();
 			return *this;
 		}
@@ -432,7 +395,7 @@ namespace castor
 		 */
 		ColourComponent & operator/=( ColourComponent && rhs )
 		{
-			*m_component /= rhs.value();
+			m_component /= rhs.value();
 			doClamp();
 			return *this;
 		}
@@ -450,9 +413,9 @@ namespace castor
 		ColourComponent & operator+=( T && rhs )
 		{
 			float value = 0;
-			ColourComponent component( &value );
+			ColourComponent component( value );
 			component = rhs;
-			*m_component += component.value();
+			m_component += component.value();
 			doClamp();
 			return *this;
 		}
@@ -470,9 +433,9 @@ namespace castor
 		ColourComponent & operator-=( T && rhs )
 		{
 			float value = 0;
-			ColourComponent component( &value );
+			ColourComponent component( value );
 			component = rhs;
-			*m_component -= component.value();
+			m_component -= component.value();
 			doClamp();
 			return *this;
 		}
@@ -490,9 +453,9 @@ namespace castor
 		ColourComponent & operator*=( T && rhs )
 		{
 			float value = 0;
-			ColourComponent component( &value );
+			ColourComponent component( value );
 			component = rhs;
-			*m_component *= component.value();
+			m_component *= component.value();
 			doClamp();
 			return *this;
 		}
@@ -510,9 +473,9 @@ namespace castor
 		ColourComponent & operator/=( T && rhs )
 		{
 			float value = 0;
-			ColourComponent component( &value );
+			ColourComponent component( value );
 			component = rhs;
-			*m_component /= component.value();
+			m_component /= component.value();
 			doClamp();
 			return *this;
 		}
@@ -526,7 +489,7 @@ namespace castor
 		 */
 		inline operator float()const
 		{
-			return *m_component;
+			return m_component;
 		}
 		/**
 		 *\~english
@@ -538,7 +501,7 @@ namespace castor
 		 */
 		inline float const & value()const
 		{
-			return *m_component;
+			return m_component;
 		}
 		/**
 		 *\~english
@@ -550,7 +513,7 @@ namespace castor
 		 */
 		inline float & value()
 		{
-			return *m_component;
+			return m_component;
 		}
 
 	private:
@@ -558,17 +521,18 @@ namespace castor
 		{
 			if ( value() < 0 )
 			{
-				*m_component = 0;
+				m_component = 0;
 			}
 			else if ( value() > 1 )
 			{
-				*m_component = 1;
+				m_component = 1;
 			}
 		}
 
 	private:
-		float * m_component;
+		float m_component;
 	};
+	static_assert( sizeof( ColourComponent ) == sizeof( float ) );
 	/**
 	 *\~english
 	 *\brief		Equality operator
@@ -598,11 +562,11 @@ namespace castor
 	 *\return		Resultat de lhs + rhs
 	 */
 	template< typename T >
-	float operator+( ColourComponent const & lhs, T && rhs )
+	float operator+( ColourComponent const & lhs, T const & rhs )
 	{
 		float value;
 		lhs.convertTo( value );
-		ColourComponent cpnt( &value );
+		ColourComponent cpnt{ value };
 		cpnt += rhs;
 		return value;
 	}
@@ -617,11 +581,11 @@ namespace castor
 	 *\return		Resultat de lhs - rhs
 	 */
 	template< typename T >
-	float operator-( ColourComponent const & lhs, T && rhs )
+	float operator-( ColourComponent const & lhs, T const & rhs )
 	{
 		float value;
 		lhs.convertTo( value );
-		ColourComponent cpnt( &value );
+		ColourComponent cpnt{ value };
 		cpnt -= rhs;
 		return value;
 	}
@@ -636,11 +600,11 @@ namespace castor
 	 *\return		Resultat de lhs / rhs
 	 */
 	template< typename T >
-	float operator/( ColourComponent const & lhs, T && rhs )
+	float operator/( ColourComponent const & lhs, T const & rhs )
 	{
 		float value;
 		lhs.convertTo( value );
-		ColourComponent cpnt( &value );
+		ColourComponent cpnt{ value };
 		cpnt /= rhs;
 		return value;
 	}
@@ -655,11 +619,11 @@ namespace castor
 	 *\return		Resultat de lhs * rhs
 	 */
 	template< typename T >
-	float operator*( ColourComponent const & lhs, T && rhs )
+	float operator*( ColourComponent const & lhs, T const & rhs )
 	{
 		float value;
 		lhs.convertTo( value );
-		ColourComponent cpnt( &value );
+		ColourComponent cpnt{ value };
 		cpnt *= rhs;
 		return value;
 	}

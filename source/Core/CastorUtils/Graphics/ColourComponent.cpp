@@ -1,7 +1,25 @@
 #include "CastorUtils/Graphics/ColourComponent.hpp"
 
+#include "CastorUtils/Graphics/HdrColourComponent.hpp"
+
+#include <cmath>
+
 namespace castor
 {
+	namespace srgbcol
+	{
+		static float applyGamma( float hdr, float gamma )
+		{
+			return powf( std::max( hdr, 0.0f ), 1.0f / gamma );
+		}
+	}
+
+	ColourComponent::ColourComponent( HdrColourComponent const & rhs
+		, float gamma )
+		: m_component{ srgbcol::applyGamma( rhs.value(), gamma ) }
+	{
+	}
+
 	bool operator ==( ColourComponent const & p_cpnA, ColourComponent const & p_cpnB )
 	{
 		uint8_t uiA;
@@ -20,7 +38,7 @@ namespace castor
 	{
 		float fValue;
 		p_cpnt.convertTo( fValue );
-		ColourComponent cpnt( &fValue );
+		ColourComponent cpnt( fValue );
 		cpnt -= p_scalar;
 		return fValue;
 	}
@@ -29,7 +47,7 @@ namespace castor
 	{
 		float fValue;
 		p_cpnt.convertTo( fValue );
-		ColourComponent cpnt( &fValue );
+		ColourComponent cpnt( fValue );
 		cpnt += p_scalar;
 		return fValue;
 	}
@@ -38,7 +56,7 @@ namespace castor
 	{
 		float fValue;
 		p_cpnt.convertTo( fValue );
-		ColourComponent cpnt( &fValue );
+		ColourComponent cpnt( fValue );
 		cpnt *= p_scalar;
 		return fValue;
 	}
@@ -47,7 +65,7 @@ namespace castor
 	{
 		float fValue;
 		p_cpnt.convertTo( fValue );
-		ColourComponent cpnt( &fValue );
+		ColourComponent cpnt( fValue );
 		cpnt /= p_scalar;
 		return fValue;
 	}

@@ -72,77 +72,19 @@ namespace castor
 	}
 
 	template< typename ComponentType >
-	RgbColourT< ComponentType >::RgbColourT()
-		: m_components()
-		, m_values()
+	template< typename ComponentU >
+	RgbColourT< ComponentType >::RgbColourT( RgbColourT< ComponentU > const & rhs
+		, float gamma )
+		: m_components{ ComponentType{ rhs.m_components[0u], gamma }
+			, ComponentType{ rhs.m_components[1u], gamma }
+			, ComponentType{ rhs.m_components[2u], gamma } }
 	{
-		for ( uint8_t i = 0; i < uint8_t( RgbComponent::eCount ); i++ )
-		{
-			m_components[i].link( &m_values[i] );
-		}
 	}
 
 	template< typename ComponentType >
 	RgbColourT< ComponentType >::RgbColourT( float r, float g, float b )
-		: m_components()
-		, m_values()
+		: m_components{ ComponentType{ r }, ComponentType{ g }, ComponentType{ b } }
 	{
-		for ( uint8_t i = 0; i < uint8_t( RgbComponent::eCount ); i++ )
-		{
-			m_components[i].link( &m_values[i] );
-		}
-
-		m_components[size_t( RgbComponent::eRed )] = r;
-		m_components[size_t( RgbComponent::eGreen )] = g;
-		m_components[size_t( RgbComponent::eBlue )] = b;
-	}
-
-	template< typename ComponentType >
-	RgbColourT< ComponentType >::RgbColourT( RgbColourT< ComponentType > const & colour )
-	{
-		for ( uint8_t i = 0; i < uint8_t( RgbComponent::eCount ); i++ )
-		{
-			m_values[i] = colour.m_values[i];
-			m_components[i].link( &m_values[i] );
-		}
-	}
-
-	template< typename ComponentType >
-	RgbColourT< ComponentType >::RgbColourT( RgbColourT< ComponentType > && colour )
-		: m_components()
-		, m_values( std::move( colour.m_values ) )
-	{
-		for ( uint8_t i = 0; i < uint8_t( RgbComponent::eCount ); i++ )
-		{
-			m_components[i].link( &m_values[i] );
-		}
-	}
-
-	template< typename ComponentType >
-	RgbColourT< ComponentType > & RgbColourT< ComponentType >::operator=( RgbColourT< ComponentType > const & colour )
-	{
-		for ( uint8_t i = 0; i < uint8_t( RgbComponent::eCount ); i++ )
-		{
-			m_values[i] = colour.m_values[i];
-		}
-
-		return * this;
-	}
-
-	template< typename ComponentType >
-	RgbColourT< ComponentType > & RgbColourT< ComponentType >::operator=( RgbColourT< ComponentType > && colour )
-	{
-		if ( this != &colour )
-		{
-			m_values = std::move( colour.m_values );
-
-			for ( uint8_t i = 0; i < uint8_t( RgbComponent::eCount ); i++ )
-			{
-				m_components[i].link( &m_values[i] );
-			}
-		}
-
-		return *this;
 	}
 
 	template< typename ComponentType >
