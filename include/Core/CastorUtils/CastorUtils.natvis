@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+
+  <Type Name="castor::DynamicBitsetT&lt;*&gt;">
+    <DisplayString>dynbitset {m_blocks}</DisplayString>
+    <Expand>
+      <ArrayItems>
+        <Size>_Mylast - _Myfirst</Size>
+        <ValuePointer>_Myfirst, X[100]</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+
   <Type Name="castor::Point&lt;*, 2&gt;">
     <DisplayString>{{x={m_data.coords[0]} y={m_data.coords[1]}}}</DisplayString>
     <Expand>
