@@ -10,29 +10,36 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	template< typename T >
-	class GroupChangeTracked
+	template< typename ValueT, typename ControlT >
+	class GroupChangeTrackedT
 	{
 	public:
-		using Type = T;
+		using Type = ValueT;
 
 	public:
-		explicit GroupChangeTracked( bool & dirty )noexcept
+		explicit GroupChangeTrackedT( ControlT & dirty )noexcept
 			: m_value{}
 			, m_dirty{ dirty }
 		{
 		}
 
-		GroupChangeTracked( bool & dirty, T const & rhs )noexcept
-			: m_value{ rhs }
+		GroupChangeTrackedT( ControlT & dirty, ValueT rhs )noexcept
+			: m_value{ std::move( rhs ) }
 			, m_dirty{ dirty }
 		{
 		}
 
-		GroupChangeTracked & operator=( T const & rhs )noexcept
+		GroupChangeTrackedT & operator=( ValueT const & rhs )noexcept
 		{
 			m_dirty = m_dirty || ( m_value != rhs );
 			m_value = rhs;
+			return *this;
+		}
+
+		GroupChangeTrackedT & operator=( GroupChangeTrackedT const & rhs )noexcept
+		{
+			m_dirty = m_dirty || ( m_value != rhs.m_value );
+			m_value = rhs.m_value;
 			return *this;
 		}
 
@@ -41,12 +48,17 @@ namespace castor
 			m_dirty = false;
 		}
 
-		T const & value()const noexcept
+		ValueT & naked()noexcept
 		{
 			return m_value;
 		}
 
-		bool & control()const noexcept
+		ValueT const & value()const noexcept
+		{
+			return m_value;
+		}
+
+		ControlT & control()const noexcept
 		{
 			return m_dirty;
 		}
@@ -56,93 +68,99 @@ namespace castor
 			return m_dirty;
 		}
 
-		operator T()const noexcept
+		operator ValueT const &()const noexcept
 		{
 			return m_value;
 		}
 
-		T const & operator*()const noexcept
-		{
-			return m_value;
-		}
-
-		T & operator*()noexcept
+		operator ValueT &()noexcept
 		{
 			m_dirty = true;
 			return m_value;
 		}
 
-		T const * operator->()const noexcept
+		ValueT const & operator*()const noexcept
+		{
+			return m_value;
+		}
+
+		ValueT & operator*()noexcept
+		{
+			m_dirty = true;
+			return m_value;
+		}
+
+		ValueT const * operator->()const noexcept
 		{
 			return &m_value;
 		}
 
-		T * operator->()noexcept
+		ValueT * operator->()noexcept
 		{
 			m_dirty = true;
 			return &m_value;
 		}
 
 	private:
-		T m_value;
-		bool & m_dirty;
+		ValueT m_value;
+		ControlT & m_dirty;
 	};
 
-	template< typename T >
-	bool operator==( GroupChangeTracked< T > const & lhs
-		, T const & rhs )
+	template< typename ValueT, typename ControlT >
+	bool operator==( GroupChangeTrackedT< ValueT, ControlT > const & lhs
+		, ValueT const & rhs )
 	{
 		return lhs.value() == rhs;
 	}
 
-	template< typename T >
-	bool operator==( T const & lhs
-		, GroupChangeTracked< T > const & rhs )
+	template< typename ValueT, typename ControlT >
+	bool operator==( ValueT const & lhs
+		, GroupChangeTrackedT< ValueT, ControlT > const & rhs )
 	{
 		return lhs == rhs.value();
 	}
 
-	template< typename T >
-	bool operator==( GroupChangeTracked< T > const & lhs
-		, GroupChangeTracked< T > const & rhs )
+	template< typename ValueT, typename ControlT >
+	bool operator==( GroupChangeTrackedT< ValueT, ControlT > const & lhs
+		, GroupChangeTrackedT< ValueT, ControlT > const & rhs )
 	{
 		return lhs.value() == rhs.value();
 	}
 
-	template< typename T >
-	bool operator!=( GroupChangeTracked< T > const & lhs
-		, T const & rhs )
+	template< typename ValueT, typename ControlT >
+	bool operator!=( GroupChangeTrackedT< ValueT, ControlT > const & lhs
+		, ValueT const & rhs )
 	{
 		return !operator==( lhs, rhs );
 	}
 
-	template< typename T >
-	bool operator!=( T const & lhs
-		, GroupChangeTracked< T > const & rhs )
+	template< typename ValueT, typename ControlT >
+	bool operator!=( ValueT const & lhs
+		, GroupChangeTrackedT< ValueT, ControlT > const & rhs )
 	{
 		return !operator==( lhs, rhs );
 	}
 
-	template< typename T >
-	bool operator!=( GroupChangeTracked< T > const & lhs
-		, GroupChangeTracked< T > const & rhs )
+	template< typename ValueT, typename ControlT >
+	bool operator!=( GroupChangeTrackedT< ValueT, ControlT > const & lhs
+		, GroupChangeTrackedT< ValueT, ControlT > const & rhs )
 	{
 		return !operator==( lhs, rhs );
 	}
 
-	template< typename T >
-	GroupChangeTracked< T > makeChangeTracked( bool & dirty, T const & value )
+	template< typename ValueT, typename ControlT >
+	GroupChangeTrackedT< ValueT, ControlT > makeGroupChangeTracked( ControlT & dirty, ValueT const & value )
 	{
-		return GroupChangeTracked< T >{ dirty, value };
+		return GroupChangeTrackedT< ValueT, ControlT >{ dirty, value };
 	}
 
-	template< typename T >
-	struct IsChangeTrackedT< GroupChangeTracked< T > > : std::true_type
+	template< typename ValueT, typename ControlT >
+	struct IsChangeTrackedT< GroupChangeTrackedT< ValueT, ControlT > > : std::true_type
 	{
 	};
 
-	template< typename T >
-	struct IsGroupChangeTrackedT< ChangeTracked< T > > : std::true_type
+	template< typename ValueT, typename ControlT >
+	struct IsGroupChangeTrackedT< GroupChangeTrackedT< ValueT, ControlT > > : std::true_type
 	{
 	};
 }

@@ -100,8 +100,8 @@ namespace castor
 	\~french
 	\brief		Classe template qui fournit une vue sur un tampon, à la manière d'un std::array.
 	*/
-	template< typename T >
-	class ChangeTracked;
+	template< typename ValueT, typename ControlT >
+	class ChangeTrackedT;
 	/**
 	\~english
 	\brief		Element collection class
@@ -212,8 +212,8 @@ namespace castor
 	\~french
 	\brief		Classe template qui fournit une vue sur un tampon, à la manière d'un std::array.
 	*/
-	template< typename T >
-	class GroupChangeTracked;
+	template< typename ValueT, typename ControlT >
+	class GroupChangeTrackedT;
 	/**
 	\~english
 	\brief		Used to have the minimum value of two, at compile time.
@@ -542,6 +542,16 @@ namespace castor
 
 	using Named = NamedBaseT< String >;
 	using DynamicBitset = DynamicBitsetT< uint32_t >;
+
+	template< typename ValueT >
+	using ChangeTracked = ChangeTrackedT< ValueT, bool >;
+	template< typename ValueT >
+	using AtomicChangeTracked = ChangeTrackedT< ValueT, std::atomic_bool >;
+
+	template< typename ValueT >
+	using GroupChangeTracked = GroupChangeTrackedT< ValueT, bool >;
+	template< typename ValueT >
+	using AtomicGroupChangeTracked = GroupChangeTrackedT< ValueT, std::atomic_bool >;
 
 	template< typename T >
 	struct IsChangeTrackedT : std::false_type
