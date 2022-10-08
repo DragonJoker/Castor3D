@@ -175,7 +175,7 @@ namespace GuiCommon
 				CU_Require( ov->getType() == castor3d::OverlayType::eText );
 				ov->setFont( variantCast< castor::FontSPtr >( var )->getName() );
 			} );
-		addPropertyT( grid, PROPERTY_OVERLAY_CAPTION, overlay->getCaption(), overlay.get(), &castor3d::TextOverlay::setCaption, nullptr );
+		addPropertyT( grid, PROPERTY_OVERLAY_CAPTION, overlay->getCaption(), overlay.get(), &castor3d::TextOverlay::setCaption );
 		addPropertyET( grid, PROPERTY_OVERLAY_HALIGN, haligns, overlay->getHAlign(), overlay.get(), &castor3d::TextOverlay::setHAlign );
 		addPropertyET( grid, PROPERTY_OVERLAY_VALIGN, haligns, overlay->getVAlign(), overlay.get(), &castor3d::TextOverlay::setVAlign );
 		addPropertyET( grid, PROPERTY_OVERLAY_WRAPPING, wrappings, overlay->getTextWrappingMode(), overlay.get(), &castor3d::TextOverlay::setTextWrappingMode );

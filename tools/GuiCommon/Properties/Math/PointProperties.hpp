@@ -30,6 +30,9 @@ namespace GuiCommon
 	static const wxString GC_POINT_XYZ[3] = { wxT( "X" ), wxT( "Y" ), wxT( "Z" ) };
 	static const wxString GC_POINT_XYZW[4] = { wxT( "X" ), wxT( "Y" ), wxT( "Z" ), wxT( "W" ) };
 
+	static const wxString GC_COL_RGB[3] = { wxT( "R" ), wxT( "G" ), wxT( "B" ) };
+	static const wxString GC_COL_RGBA[4] = { wxT( "R" ), wxT( "G" ), wxT( "B" ), wxT( "A" ) };
+
 	static const wxString GC_POINT_12[2] = { wxT( "1" ), wxT( "2" ) };
 	static const wxString GC_POINT_123[3] = { wxT( "1" ), wxT( "2" ), wxT( "3" ) };
 	static const wxString GC_POINT_1234[4] = { wxT( "1" ), wxT( "2" ), wxT( "3" ), wxT( "4" ) };
@@ -80,6 +83,12 @@ namespace GuiCommon
 			, wxString const & label
 			, wxString const & name
 			, castor::Coords< T, Count > const & value );
+		PointProperty( wxString const & label
+			, wxString const & name
+			, castor::HdrRgbColour const & value );
+		PointProperty( wxString const & label
+			, wxString const & name
+			, castor::HdrRgbaColour const & value );
 
 		wxVariant ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue )const override;
 		void RefreshChildren()override;
