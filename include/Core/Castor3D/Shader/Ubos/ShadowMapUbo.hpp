@@ -88,10 +88,6 @@ namespace castor3d
 			return m_ubo;
 		}
 
-	public:
-		C3D_API static castor::String const BufferShadowMap;
-		C3D_API static castor::String const ShadowMapData;
-
 	private:
 		RenderDevice const & m_device;
 		UniformBufferOffsetT< Configuration > m_ubo;
@@ -100,12 +96,13 @@ namespace castor3d
 
 #define C3D_ShadowMap( writer, binding, set )\
 	sdw::UniformBuffer shadowMapCfg{ writer\
-		, castor3d::ShadowMapUbo::BufferShadowMap\
+		, "C3D_ShadowMapConfig"\
+		, "c3d_shadowMapConfig"\
 		, uint32_t( binding )\
 		, uint32_t( set )\
 		, ast::type::MemoryLayout::eStd140\
 		, true };\
-	auto c3d_shadowMapData = shadowMapCfg.declMember< castor3d::shader::ShadowMapData >( castor3d::ShadowMapUbo::ShadowMapData );\
+	auto c3d_shadowMapData = shadowMapCfg.declMember< castor3d::shader::ShadowMapData >( "d" );\
 	shadowMapCfg.end()
 
 #endif

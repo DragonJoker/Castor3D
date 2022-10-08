@@ -128,9 +128,6 @@ namespace castor3d
 			return m_ubo;
 		}
 
-	public:
-		C3D_API static castor::String const BufferVoxelizer;
-		C3D_API static castor::String const VoxelData;
 
 	private:
 		RenderDevice const & m_device;
@@ -140,12 +137,13 @@ namespace castor3d
 
 #define C3D_Voxelizer( writer, binding, set, enable )\
 	sdw::UniformBuffer voxelizer{ writer\
-		, castor3d::VoxelizerUbo::BufferVoxelizer\
+		, "C3D_Voxelizer"\
+		, "c3d_voxelizer"\
 		, uint32_t( binding )\
 		, uint32_t( set )\
 		, ast::type::MemoryLayout::eStd140\
 		, enable };\
-	auto c3d_voxelData = voxelizer.declMember< shader::VoxelData >( castor3d::VoxelizerUbo::VoxelData );\
+	auto c3d_voxelData = voxelizer.declMember< shader::VoxelData >( "c3d_voxelData" );\
 	voxelizer.end()
 
 #endif

@@ -184,9 +184,6 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const MatrixUbo::BufferMatrix = cuT( "Matrices" );
-	castor::String const MatrixUbo::MatrixData = cuT( "c3d_matrixData" );
-
 	MatrixUbo::MatrixUbo( RenderDevice const & device )
 		: m_device{ device }
 		, m_ubo{ m_device.uboPool->getBuffer< Configuration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) }

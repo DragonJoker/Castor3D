@@ -9,9 +9,6 @@ namespace castor3d
 	{
 		//*****************************************************************************************
 
-		castor::String const MorphTargetData::BufferName = cuT( "MorphTargets" );
-		castor::String const MorphTargetData::DataName = cuT( "c3d_morphTargets" );
-
 		MorphTargetData::MorphTargetData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
@@ -162,9 +159,6 @@ namespace castor3d
 		}
 
 		//*****************************************************************************************
-
-		castor::String const MorphingWeightsData::BufferName = cuT( "MorphingWeightsIndices" );
-		castor::String const MorphingWeightsData::DataName = cuT( "c3d_morphingWeightsIndices" );
 
 		MorphingWeightsData::MorphingWeightsData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr

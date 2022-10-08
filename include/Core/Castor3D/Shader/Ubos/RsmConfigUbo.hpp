@@ -74,10 +74,6 @@ namespace castor3d
 			return m_ubo;
 		}
 
-	public:
-		C3D_API static std::string const BufferRsmConfig;
-		C3D_API static std::string const RsmConfigData;
-
 	private:
 		RenderDevice const & m_device;
 		UniformBufferOffsetT< Configuration > m_ubo;
@@ -86,12 +82,13 @@ namespace castor3d
 
 #define C3D_RsmConfig( writer, binding, set )\
 	sdw::UniformBuffer rsmConfig{ writer\
-		, castor3d::RsmConfigUbo::BufferRsmConfig\
+		, "C3D_RsmConfig"\
+		, "c3d_rsmConfig"\
 		, uint32_t( binding )\
 		, uint32_t( set )\
 		, ast::type::MemoryLayout::eStd140\
 		, true };\
-	auto c3d_rsmConfigData = rsmConfig.declMember< castor3d::shader::RsmConfigData >( castor3d::RsmConfigUbo::RsmConfigData );\
+	auto c3d_rsmConfigData = rsmConfig.declMember< castor3d::shader::RsmConfigData >( "d" );\
 	rsmConfig.end()
 
 #endif

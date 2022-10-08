@@ -60,9 +60,4 @@ namespace castor3d
 	}
 
 	//*********************************************************************************************
-
-	castor::String const OverlayUbo::BufferOverlay = cuT( "Overlay" );
-	castor::String const OverlayUbo::OverlayData = cuT( "c3d_overlayData" );
-
-	//*********************************************************************************************
 }

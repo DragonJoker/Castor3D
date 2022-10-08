@@ -166,10 +166,6 @@ namespace castor3d
 			return m_ubo;
 		}
 
-	public:
-		C3D_API static castor::String const BufferSsaoConfig;
-		C3D_API static castor::String const SsaoConfigData;
-
 	private:
 		RenderDevice const & m_device;
 		UniformBufferOffsetT< Configuration > m_ubo;
@@ -178,12 +174,13 @@ namespace castor3d
 
 #define C3D_SsaoConfig( Writer, Binding, Set )\
 	sdw::UniformBuffer ssaoConfig{ Writer\
-		, castor3d::SsaoConfigUbo::BufferSsaoConfig\
+		, "C3D_SsaoConfig"\
+		, "c3d_ssaoConfig"\
 		, uint32_t( Binding )\
 		, uint32_t( Set )\
 		, ast::type::MemoryLayout::eStd140\
 		, true };\
-	auto c3d_ssaoConfigData = ssaoConfig.declMember< castor3d::shader::SsaoConfigData >( castor3d::SsaoConfigUbo::SsaoConfigData );\
+	auto c3d_ssaoConfigData = ssaoConfig.declMember< castor3d::shader::SsaoConfigData >( "d" );\
 	ssaoConfig.end()
 
 #endif

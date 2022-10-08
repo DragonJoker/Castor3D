@@ -54,10 +54,6 @@ namespace castor3d
 				, sdw::Float const & weight )const;
 
 		public:
-			C3D_API static castor::String const BufferName;
-			C3D_API static castor::String const DataName;
-
-		public:
 			sdw::Vec4 morphPosition;
 			sdw::Vec4 morphNormal;
 			sdw::Vec4 morphTangent;
@@ -149,10 +145,6 @@ namespace castor3d
 			{
 				return m_weights[index / 4_u][index % 4_u];
 			}
-
-		public:
-			C3D_API static castor::String const BufferName;
-			C3D_API static castor::String const DataName;
 
 		private:
 			sdw::UVec4 m_limits;

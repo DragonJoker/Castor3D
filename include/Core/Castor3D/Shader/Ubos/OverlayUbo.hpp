@@ -39,26 +39,17 @@ namespace castor3d
 			sdw::IVec4 m_renderSizeIndex;
 		};
 	}
-
-	class OverlayUbo
-	{
-	private:
-		using Configuration = OverlayUboConfiguration;
-
-	public:
-		C3D_API static castor::String const BufferOverlay;
-		C3D_API static castor::String const OverlayData;
-	};
 }
 
 #define C3D_Overlay( writer, binding, set )\
 	sdw::UniformBuffer overlay{ writer\
-		, castor3d::OverlayUbo::BufferOverlay\
+		, "C3D_Overlay"\
+		, "c3d_overlay"\
 		, uint32_t( binding )\
 		, uint32_t( set )\
 		, ast::type::MemoryLayout::eStd140\
 		, true };\
-	auto c3d_overlayData = overlay.declMember< castor3d::shader::OverlayData >( castor3d::OverlayUbo::OverlayData );\
+	auto c3d_overlayData = overlay.declMember< castor3d::shader::OverlayData >( "d" );\
 	overlay.end()
 
 #endif

@@ -83,10 +83,6 @@ namespace castor3d
 			return m_ubo;
 		}
 
-	public:
-		C3D_API static const std::string LayeredLpvConfig;
-		C3D_API static const std::string LayeredLpvGridData;
-
 	private:
 		RenderDevice const & m_device;
 		UniformBufferOffsetT< Configuration > m_ubo{};
@@ -95,11 +91,12 @@ namespace castor3d
 
 #define C3D_LayeredLpvGridConfig( writer, binding, set, enabled )\
 	sdw::UniformBuffer layeredLpvConfig{ writer\
-		, castor3d::LayeredLpvGridConfigUbo::LayeredLpvConfig\
+		, "C3D_LayeredLpvConfig"\
+		, "c3d_layeredLpvConfig"\
 		, uint32_t( binding )\
 		, uint32_t( set )\
 		, ast::type::MemoryLayout::eStd140 };\
-	auto c3d_llpvGridData = layeredLpvConfig.declMember< castor3d::shader::LayeredLpvGridData >( castor3d::LayeredLpvGridConfigUbo::LayeredLpvGridData, enabled );\
+	auto c3d_llpvGridData = layeredLpvConfig.declMember< castor3d::shader::LayeredLpvGridData >( "c3d_llpvGridData", enabled );\
 	layeredLpvConfig.end()
 
 #endif

@@ -52,9 +52,6 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	std::string const RsmConfigUbo::BufferRsmConfig = "RsmConfig";
-	std::string const RsmConfigUbo::RsmConfigData = "c3d_rsmConfigData";
-
 	RsmConfigUbo::RsmConfigUbo( RenderDevice const & device )
 		: m_device{ device }
 		, m_ubo{ m_device.uboPool->getBuffer< Configuration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) }

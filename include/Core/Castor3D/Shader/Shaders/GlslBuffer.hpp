@@ -16,19 +16,20 @@ namespace castor3d::shader
 	class BufferBase
 	{
 	public:
-		BufferBase( std::string const & bufferName
-			, std::string const & arrayName
-			, sdw::ShaderWriter & writer
+		BufferBase( sdw::ShaderWriter & writer
+			, std::string blockName
+			, std::string variableName
 			, uint32_t binding
 			, uint32_t set
-			, bool enable = true )
+			, bool enabled = true )
 			: m_writer{ writer }
-			, m_arrayName{ arrayName }
+			, m_variableName{ variableName }
 		{
-			if ( enable )
+			if ( enabled )
 			{
 				m_ssbo = std::make_unique< sdw::StorageBuffer >( m_writer
-					, bufferName
+					, std::move( blockName )
+					, std::move( variableName )
 					, binding
 					, set );
 				m_ssbo->declMember< sdw::UVec4 >( "counts" );
@@ -39,14 +40,14 @@ namespace castor3d::shader
 		{
 			return ( m_ssbo
 				? m_ssbo->getMember< sdw::UVec4 >( "counts" ).x()
-				: m_writer.declLocale( "disabled_" + m_arrayName + "_cnt", 0_u, false ) );
+				: m_writer.declLocale( "disabled_" + m_variableName + "_cnt", 0_u, false ) );
 		}
 
 		sdw::UInt getSecondaryCount()const
 		{
 			return ( m_ssbo
 				? m_ssbo->getMember< sdw::UVec4 >( "counts" ).y()
-				: m_writer.declLocale( "disabled_" + m_arrayName + "_cnt", 0_u, false ) );
+				: m_writer.declLocale( "disabled_" + m_variableName + "_cnt", 0_u, false ) );
 		}
 
 		bool isEnabled()const noexcept
@@ -54,10 +55,15 @@ namespace castor3d::shader
 			return m_ssbo != nullptr;
 		}
 
+		sdw::ShaderWriter * getWriter()const noexcept
+		{
+			return &m_writer;
+		}
+
 	protected:
 		sdw::ShaderWriter & m_writer;
-		std::string m_arrayName;
 		std::unique_ptr< sdw::StorageBuffer > m_ssbo;
+		std::string m_variableName;
 	};
 
 	template< typename DataT >
@@ -65,26 +71,35 @@ namespace castor3d::shader
 		: public BufferBase
 	{
 	public:
-		BufferT( std::string const & bufferName
-			, std::string const & arrayName
-			, sdw::ShaderWriter & writer
+		template< typename ... ParamsT >
+		BufferT( sdw::ShaderWriter & writer
+			, std::string blockName
+			, std::string variableName
 			, uint32_t binding
 			, uint32_t set
-			, bool enable = true )
-			: BufferBase{ bufferName, arrayName, writer, binding, set, enable }
+			, bool enabled = true
+			, ParamsT && ... params )
+			: BufferBase{ writer
+				, std::move( blockName )
+				, std::move( variableName )
+				, binding
+				, set
+				, enabled }
 		{
-			if ( enable )
+			if ( isEnabled() )
 			{
-				m_ssbo->declMemberArray< DataT >( m_arrayName );
+				m_ssbo->declMemberArray< DataT >( "d", isEnabled(), std::forward< ParamsT >( params )... );
 				m_ssbo->end();
 			}
 		}
 
-		DataT getData( sdw::UInt const & index )const
+		template< typename ... ParamsT >
+		DataT getData( sdw::UInt const & index
+			, ParamsT && ... params )const
 		{
 			return ( m_ssbo
-				? m_ssbo->getMemberArray< DataT >( m_arrayName )[index]
-				: m_writer.declLocale< DataT >( "disabled_" + m_arrayName + "_data", false ) );
+				? m_ssbo->getMemberArray< DataT >( "d", isEnabled() )[index]
+				: m_writer.declLocale< DataT >( "disabled_" + m_variableName + "_data", false, std::forward< ParamsT >( params )... ) );
 		}
 	};
 }

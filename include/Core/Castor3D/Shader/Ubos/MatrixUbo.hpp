@@ -158,10 +158,6 @@ namespace castor3d
 			return m_ubo;
 		}
 
-	public:
-		C3D_API static castor::String const BufferMatrix;
-		C3D_API static castor::String const MatrixData;
-
 	private:
 		RenderDevice const & m_device;
 		UniformBufferOffsetT< Configuration > m_ubo;
@@ -170,12 +166,13 @@ namespace castor3d
 
 #define C3D_Matrix( writer, binding, set )\
 	sdw::UniformBuffer matrices{ writer\
-		, castor3d::MatrixUbo::BufferMatrix\
+		, "C3D_Matrices"\
+		, "c3d_matrices"\
 		, uint32_t( binding )\
 		, uint32_t( set )\
 		, sdw::type::MemoryLayout::eStd140\
 		, true };\
-	auto c3d_matrixData = matrices.declMember< castor3d::shader::MatrixData >( castor3d::MatrixUbo::MatrixData );\
+	auto c3d_matrixData = matrices.declMember< castor3d::shader::MatrixData >( "d" );\
 	matrices.end()
 
 #endif

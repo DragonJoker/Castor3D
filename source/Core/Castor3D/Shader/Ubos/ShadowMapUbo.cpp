@@ -83,9 +83,6 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const ShadowMapUbo::BufferShadowMap = cuT( "ShadowMapCfg" );
-	castor::String const ShadowMapUbo::ShadowMapData = cuT( "c3d_shadowMapData" );
-
 	ShadowMapUbo::ShadowMapUbo( RenderDevice const & device )
 		: m_device{ device }
 	{

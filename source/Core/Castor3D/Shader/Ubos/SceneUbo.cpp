@@ -112,9 +112,6 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const SceneUbo::BufferScene = cuT( "Scene" );
-	castor::String const SceneUbo::SceneData = cuT( "c3d_sceneData" );
-
 	SceneUbo::SceneUbo( RenderDevice const & device )
 		: m_device{ device }
 		, m_ubo{ m_device.uboPool->getBuffer< Configuration >( 0u ) }

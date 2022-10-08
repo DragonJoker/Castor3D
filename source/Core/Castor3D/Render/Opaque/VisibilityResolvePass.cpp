@@ -380,7 +380,7 @@ namespace castor3d
 
 			auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps", TexBindings::eTextures, Sets::eTex ) );
 
-			sdw::PushConstantBuffer pcb{ writer, "DrawData" };
+			sdw::PushConstantBuffer pcb{ writer, "C3D_DrawData", "c3d_drawData" };
 			auto pipelineId = pcb.declMember< sdw::UInt >( "pipelineId" );
 			auto billboardNodeId = pcb.declMember< sdw::UInt >( "billboardNodeId", stride != 0u );
 			pcb.end();
