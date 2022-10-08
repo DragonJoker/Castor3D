@@ -31,7 +31,10 @@ namespace GuiCommon
 		void doPopulateMenu();
 		void doCleanup();
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wmissing-override"
 		DECLARE_EVENT_TABLE()
+#pragma clang diagnostic pop
 		void onClose( wxCloseEvent & event );
 		void onMenuClose( wxCommandEvent & event );
 #if C3D_HasGLSL

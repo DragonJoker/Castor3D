@@ -33,7 +33,10 @@ namespace ImgToIco
 		MainFrame();
 
 	protected:
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wmissing-override"
 		DECLARE_EVENT_TABLE()
+#pragma clang diagnostic pop
 		void _onBrowse( wxCommandEvent & p_event );
 		void _onProcess( wxCommandEvent & p_event );
 		void _onExit( wxCommandEvent & p_event );

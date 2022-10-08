@@ -88,7 +88,10 @@ namespace CastorViewer
 			, bool camera );
 		void doUpdateMaxSpeed( float factor );
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wmissing-override"
 		DECLARE_EVENT_TABLE()
+#pragma clang diagnostic pop
 		void onTimerFwd( wxTimerEvent & event );
 		void onTimerBck( wxTimerEvent & event );
 		void onTimerLft( wxTimerEvent & event );

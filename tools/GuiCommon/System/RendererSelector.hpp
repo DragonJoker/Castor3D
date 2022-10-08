@@ -32,7 +32,10 @@ namespace GuiCommon
 		void doSelectRenderer( bool next );
 		void doSelectDevice( bool next);
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wmissing-override"
 		DECLARE_EVENT_TABLE()
+#pragma clang diagnostic pop
 		void onPaint( wxPaintEvent & event );
 		void onDevicesKeyUp( wxKeyEvent & event );
 		void onRenderersKeyUp( wxKeyEvent & event );

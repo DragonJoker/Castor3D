@@ -76,7 +76,10 @@ namespace CastorViewer
 		void doSceneLoadEnd( castor3d::RenderTargetSPtr target );
 
 	private:
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wmissing-override"
 		DECLARE_EVENT_TABLE()
+#pragma clang diagnostic pop
 		void onRenderTimer( wxTimerEvent & event );
 		void onTimer( wxTimerEvent & event );
 		void onFpsTimer( wxTimerEvent & event );
