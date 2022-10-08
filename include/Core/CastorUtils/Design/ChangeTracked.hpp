@@ -10,36 +10,36 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	template< typename T >
-	class ChangeTracked
+	template< typename ValueT, typename ControlT >
+	class ChangeTrackedT
 	{
 	public:
-		ChangeTracked()noexcept
+		ChangeTrackedT()noexcept
 			: m_value{}
 			, m_dirty{ true }
 		{
 		}
 
-		explicit ChangeTracked( T const & rhs )noexcept
+		explicit ChangeTrackedT( ValueT const & rhs )noexcept
 			: m_value{ rhs }
 			, m_dirty{ true }
 		{
 		}
 
-		ChangeTracked( ChangeTracked const & rhs )noexcept
+		ChangeTrackedT( ChangeTrackedT const & rhs )noexcept
 			: m_value{ rhs.m_value }
 			, m_dirty{ true }
 		{
 		}
 
-		ChangeTracked & operator=( T const & rhs )noexcept
+		ChangeTrackedT & operator=( ValueT const & rhs )noexcept
 		{
 			m_dirty = m_dirty || ( m_value != rhs );
 			m_value = rhs;
 			return *this;
 		}
 
-		ChangeTracked & operator=( ChangeTracked< T > const & rhs )noexcept
+		ChangeTrackedT & operator=( ChangeTrackedT const & rhs )noexcept
 		{
 			m_dirty = m_dirty || ( m_value != rhs.m_value );
 			m_value = rhs.m_value;
@@ -51,12 +51,17 @@ namespace castor
 			m_dirty = false;
 		}
 
-		T const & value()const noexcept
+		ValueT & naked()noexcept
 		{
 			return m_value;
 		}
 
-		bool & control()noexcept
+		ValueT const & value()const noexcept
+		{
+			return m_value;
+		}
+
+		ControlT & control()noexcept
 		{
 			return m_dirty;
 		}
@@ -66,82 +71,93 @@ namespace castor
 			return m_dirty;
 		}
 
-		operator T()const noexcept
+		operator ValueT const &()const noexcept
 		{
 			return m_value;
 		}
 
-		T const & operator*()const noexcept
+		operator ValueT &()noexcept
 		{
 			return m_value;
 		}
 
-		T & operator*()noexcept
+		ValueT const & operator*()const noexcept
+		{
+			return m_value;
+		}
+
+		ValueT & operator*()noexcept
 		{
 			m_dirty = true;
 			return m_value;
 		}
 
-		T const * operator->()const noexcept
+		ValueT const * operator->()const noexcept
 		{
 			return &m_value;
 		}
 
-		T * operator->()noexcept
+		ValueT * operator->()noexcept
 		{
 			m_dirty = true;
 			return &m_value;
 		}
 
 	private:
-		T m_value;
-		bool m_dirty{ true };
+		ValueT m_value;
+		ControlT m_dirty{ true };
 	};
 
-	template< typename T >
-	bool operator==( ChangeTracked< T > const & lhs, T const & rhs )
+	template< typename ValueT, typename ControlT >
+	bool operator==( ChangeTrackedT< ValueT, ControlT > const & lhs, ValueT const & rhs )
 	{
 		return lhs.value() == rhs;
 	}
 
-	template< typename T >
-	bool operator==( T const & lhs, ChangeTracked< T > const & rhs )
+	template< typename ValueT, typename ControlT >
+	bool operator==( ValueT const & lhs, ChangeTrackedT< ValueT, ControlT > const & rhs )
 	{
 		return lhs == rhs.value();
 	}
 
-	template< typename T >
-	bool operator==( ChangeTracked< T > const & lhs, ChangeTracked< T > const & rhs )
+	template< typename ValueT, typename ControlT >
+	bool operator==( ChangeTrackedT< ValueT, ControlT > const & lhs, ChangeTrackedT< ValueT, ControlT > const & rhs )
 	{
 		return lhs.value() == rhs.value();
 	}
 
-	template< typename T >
-	bool operator!=( ChangeTracked< T > const & lhs, T const & rhs )
+	template< typename ValueT, typename ControlT >
+	bool operator!=( ChangeTrackedT< ValueT, ControlT > const & lhs, ValueT const & rhs )
 	{
 		return !operator==( lhs, rhs );
 	}
 
-	template< typename T >
-	bool operator!=( T const & lhs, ChangeTracked< T > const & rhs )
+	template< typename ValueT, typename ControlT >
+	bool operator!=( ValueT const & lhs, ChangeTrackedT< ValueT, ControlT > const & rhs )
 	{
 		return !operator==( lhs, rhs );
 	}
 
-	template< typename T >
-	bool operator!=( ChangeTracked< T > const & lhs, ChangeTracked< T > const & rhs )
+	template< typename ValueT, typename ControlT >
+	bool operator!=( ChangeTrackedT< ValueT, ControlT > const & lhs, ChangeTrackedT< ValueT, ControlT > const & rhs )
 	{
 		return !operator==( lhs, rhs );
 	}
 
-	template< typename T >
-	ChangeTracked< T > makeChangeTracked( T const & value )
+	template< typename ControlT, typename ValueT >
+	ChangeTrackedT< ValueT, ControlT > makeChangeTrackedT( ValueT const & value )
 	{
-		return ChangeTracked< T >{ value };
+		return ChangeTrackedT< ValueT, ControlT >{ value };
 	}
 
-	template< typename T >
-	struct IsChangeTrackedT< ChangeTracked< T > > : std::true_type {};
+	template< typename ValueT >
+	ChangeTracked< ValueT > makeChangeTracked( ValueT const & value )
+	{
+		return makeChangeTrackedT< bool, ValueT >( value );
+	}
+
+	template< typename ValueT, typename ControlT >
+	struct IsChangeTrackedT< ChangeTrackedT< ValueT, ControlT > > : std::true_type {};
 }
 
 #endif
