@@ -122,7 +122,10 @@ namespace GuiCommon
 			, wxColour const & fgColour );
 
 	private:
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wmissing-override"
 		DECLARE_EVENT_TABLE()
+#pragma clang diagnostic pop
 		void onSize( wxSizeEvent & event );
 		void onEditRedo( wxCommandEvent & event );
 		void onEditUndo( wxCommandEvent & event );

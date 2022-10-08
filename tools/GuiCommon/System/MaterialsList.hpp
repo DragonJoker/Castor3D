@@ -46,7 +46,10 @@ namespace GuiCommon
 			, castor3d::TextureUnitSPtr texture
 			, uint32_t iconOffset );
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wmissing-override"
 		DECLARE_EVENT_TABLE()
+#pragma clang diagnostic pop
 		void onClose( wxCloseEvent & event );
 		void onSelectItem( wxTreeEvent & event );
 		void onMouseRButtonUp( wxTreeEvent & event );

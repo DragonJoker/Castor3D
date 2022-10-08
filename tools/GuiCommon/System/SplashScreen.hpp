@@ -30,7 +30,10 @@ namespace GuiCommon
 	protected:
 		void doDraw( wxDC * p_pDC );
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wmissing-override"
 		DECLARE_EVENT_TABLE()
+#pragma clang diagnostic pop
 		void OnPaint( wxPaintEvent & p_event );
 		void OnEraseBackground( wxEraseEvent & p_event );
 

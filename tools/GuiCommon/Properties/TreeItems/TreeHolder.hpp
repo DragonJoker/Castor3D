@@ -25,7 +25,10 @@ namespace GuiCommon
 		void setTree( wxTreeCtrl * tree );
 
 	protected:
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wmissing-override"
 		DECLARE_EVENT_TABLE()
+#pragma clang diagnostic pop
 		void onCollapseAll( wxCommandEvent & event );
 		void onExpandAll( wxCommandEvent & event );
 

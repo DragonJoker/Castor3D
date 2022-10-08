@@ -19,7 +19,10 @@ namespace GuiCommon
 
 	private:
 		void doInitialise();
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wmissing-override"
 		DECLARE_EVENT_TABLE()
+#pragma clang diagnostic pop
 		void OnPaint( wxPaintEvent & p_event );
 
 	private:

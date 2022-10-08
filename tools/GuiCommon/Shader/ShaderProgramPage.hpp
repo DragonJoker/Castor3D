@@ -32,7 +32,10 @@ namespace GuiCommon
 		void doLoadPages( ShaderLanguage language );
 		void doCleanup();
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wmissing-override"
 		DECLARE_EVENT_TABLE()
+#pragma clang diagnostic pop
 		void onClose( wxCloseEvent & event );
 
 	protected:

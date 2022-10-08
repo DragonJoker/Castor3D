@@ -52,7 +52,10 @@ namespace GuiCommon
 		void doAddOverlay( wxTreeItemId id
 			, castor3d::OverlayCategory & overlay );
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wmissing-override"
 		DECLARE_EVENT_TABLE()
+#pragma clang diagnostic pop
 		void onClose( wxCloseEvent & event );
 		void onSelectItem( wxTreeEvent & event );
 		void onMouseRButtonUp( wxTreeEvent & event );
