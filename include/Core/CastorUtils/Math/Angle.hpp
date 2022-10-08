@@ -12,21 +12,39 @@ namespace castor
 	class AngleT
 	{
 	public:
+		//!\~english	Turn to radian conversion constant.
+		//!\~french		Constante de conversion de tour vers radian.
+		CU_API static constexpr Type TurnToRadian{ Type( Tau< double > ) };
+		//!\~english	Turn to degree conversion constant.
+		//!\~french		Constante de conversion de tour vers degré.
+		CU_API static constexpr Type TurnToDegree{ Type( 360.0 ) };
+		//!\~english	Turn to gradient conversion constant.
+		//!\~french		Constante de conversion de tour vers gradient.
+		CU_API static constexpr Type TurnToGrad{ Type( 400.0 ) };
+		//!\~english	Radian to turn conversion constant.
+		//!\~french		Constante de conversion de radian vers tour.
+		CU_API static constexpr Type RadianToTurn{ Type( 1.0 / Tau< double > ) };
 		//!\~english	Radian to degree conversion constant.
 		//!\~french		Constante de conversion de radian vers degré.
 		CU_API static constexpr Type RadianToDegree{ Type( 57.295779513082320876798154814105 ) };
 		//!\~english	Radian to gradient conversion constant.
 		//!\~french		Constante de conversion de radian vers gradient.
 		CU_API static constexpr Type RadianToGrad{ 200 / Pi< Type > };
+		//!\~english	Degree to turn conversion constant.
+		//!\~french		Constante de conversion de degré vers tour.
+		CU_API static constexpr Type DegreeToTurn{ Type( 1.0 / 360.0 ) };
 		//!\~english	Degree to radian conversion constant.
 		//!\~french		Constante de conversion de degré vers radian.
 		CU_API static constexpr Type DegreeToRadian{ Type( 0.01745329251994329576923690768489 ) };
 		//!\~english	Degree to gradient conversion constant.
 		//!\~french		Constante de conversion de degré vers gradient.
 		CU_API static constexpr Type DegreeToGrad{ Type( 200 ) / 180 };
+		//!\~english	Gradient to turn conversion constant.
+		//!\~french		Constante de conversion de gradient vers tour.
+		CU_API static constexpr Type GradToTurn{ Type( 1 ) / 400 };
 		//!\~english	Gradient to degree conversion constant.
 		//!\~french		Constante de conversion de gradient vers degré.
-		CU_API static constexpr Type GradToDegree{ Pi< Type > / 200 };
+		CU_API static constexpr Type GradToDegree{ Type( 180 ) / 200 };
 		//!\~english	Gradient to radian conversion constant.
 		//!\~french		Constante de conversion de gradient vers radian.
 		CU_API static constexpr Type GradToRadian{ 180 / Type( 200 ) };
@@ -47,6 +65,21 @@ namespace castor
 		}
 
 	public:
+		/**
+		 *\~english
+		 *\brief		Named constructor, from a turns angle
+		 *\param[in]	degrees	The angle in turns
+		 *\return		The built angle
+		 *\~french
+		 *\brief		Constructeur nommé, à partir d'un angle en tours
+		 *\param[in]	degrees	L'angle, exprimé en tours
+		 *\return		L'angle construit
+		 */
+		template< typename T >
+		static AngleT< Type > fromTurns( T turns )noexcept
+		{
+			return AngleT< Type >( turns * TurnToRadian );
+		}
 		/**
 		 *\~english
 		 *\brief		Named constructor, from a degrees angle
@@ -101,6 +134,15 @@ namespace castor
 		inline AngleT()noexcept;
 		/**
 		 *\~english
+		 *\brief		Conversion to turns
+		 *\return		Angle value, in turns
+		 *\~french
+		 *\brief		Conversion en tours
+		 *\return		La valeur de l'angle, en tours
+		 */
+		inline Type turns()const noexcept;
+		/**
+		 *\~english
 		 *\brief		Conversion to degrees
 		 *\return		Angle value, in degrees
 		 *\~french
@@ -126,6 +168,15 @@ namespace castor
 		 *\return		La valeur de l'angle, en gradients
 		 */
 		inline Type grads()const noexcept;
+		/**
+		 *\~english
+		 *\brief		sets this angle value from turns
+		 *\param[in]	value	Angle in turns
+		 *\~french
+		 *\brief		Définit la valeur de cet angle à partir de tours
+		 *\param[in]	value	L'angle exprimé en tours
+		 */
+		inline void turns( double value )noexcept;
 		/**
 		 *\~english
 		 *\brief		sets this angle value from degrees
@@ -612,6 +663,11 @@ namespace castor
 	inline AngleT< Type > operator/( AngleT< Type > const & lhs, double rhs )noexcept;
 
 	using Angle = AngleT< float >;
+}
+
+inline castor::Angle operator "" _turns( long double value )
+{
+	return castor::Angle::fromTurns( value );
 }
 
 inline castor::Angle operator "" _degrees( long double value )

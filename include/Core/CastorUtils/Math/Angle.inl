@@ -9,6 +9,12 @@ namespace castor
 	}
 
 	template< typename Type >
+	Type AngleT< Type >::turns()const noexcept
+	{
+		return m_radians * RadianToTurn;
+	}
+	
+	template< typename Type >
 	Type AngleT< Type >::degrees()const noexcept
 	{
 		return m_radians * RadianToDegree;
@@ -27,21 +33,27 @@ namespace castor
 	}
 
 	template< typename Type >
-	void AngleT< Type >::degrees( double p_rAngle )noexcept
+	void AngleT< Type >::turns( double value )noexcept
 	{
-		m_radians = Type( p_rAngle * DegreeToRadian );
+		m_radians = Type( value * TurnToRadian );
+	}
+	
+	template< typename Type >
+	void AngleT< Type >::degrees( double value )noexcept
+	{
+		m_radians = Type( value * DegreeToRadian );
 	}
 
 	template< typename Type >
-	void AngleT< Type >::radians( double p_rAngle )noexcept
+	void AngleT< Type >::radians( double value )noexcept
 	{
-		m_radians = Type( p_rAngle );
+		m_radians = Type( value );
 	}
 
 	template< typename Type >
-	void AngleT< Type >::grads( double p_rAngle )noexcept
+	void AngleT< Type >::grads( double value )noexcept
 	{
-		m_radians = Type( p_rAngle * GradToRadian );
+		m_radians = Type( value * GradToRadian );
 	}
 
 	template< typename Type >
