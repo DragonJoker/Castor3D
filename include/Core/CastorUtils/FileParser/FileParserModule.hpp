@@ -191,6 +191,7 @@ namespace castor
 	{
 		ParserFunction function;
 		ParserParameterArray params;
+		String comment{};
 	};
 	/**
 	*\~english

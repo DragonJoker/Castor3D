@@ -798,7 +798,7 @@ namespace castor
 
 			if ( values.size() >= size_t( RgbComponent::eCount ) )
 			{
-				Point4f colour;
+				Point3f colour;
 				result = parseValues( logger, params, colour );
 
 				if ( result )

@@ -41,6 +41,9 @@ namespace castor
 	class RgbColourT
 	{
 	private:
+		template< typename ComponentU >
+		friend class RgbColourT;
+
 		CU_DeclareArray( float, RgbComponent::eCount, Float4 );
 		using ColourComponentArray = std::array< ComponentType, size_t( RgbComponent::eCount ) >;
 		using ColourComponentArrayIt = typename ColourComponentArray::iterator;
@@ -49,13 +52,23 @@ namespace castor
 		using ColourComponentArrayConstRIt = typename ColourComponentArray::const_reverse_iterator;
 
 	public:
+		RgbColourT() = default;
+		RgbColourT( RgbColourT const & rhs ) = default;
+		RgbColourT & operator=( RgbColourT const & rhs ) = default;
+		RgbColourT( RgbColourT && rhs ) = default;
+		RgbColourT & operator=( RgbColourT && rhs ) = default;
+		~RgbColourT() = default;
 		/**
 		 *\~english
-		 *\brief		Default Constructor
+		 *\brief		Specified constructor
+		 *\param[in]	value	The component value
 		 *\~french
-		 *\brief		Constructeur par défaut
+		 *\brief		Constructeur spécifié
+		 *\param[in]	value	La valeur de la composante
 		 */
-		inline RgbColourT();
+		template< typename ComponentU >
+		explicit RgbColourT( RgbColourT< ComponentU > const & rhs
+			, float gamma = 2.2f );
 		/**
 		 *\~english
 		 *\brief		Specified Constructor
@@ -63,46 +76,6 @@ namespace castor
 		 *\brief		Constructeur spécifié
 		 */
 		inline RgbColourT( float r, float g, float b );
-		/**
-		 *\~english
-		 *\brief		Copy Constructor
-		 *\param[in]	rhs	The object to copy
-		 *\~french
-		 *\brief		Constructeur par copie
-		 *\param[in]	rhs	Couleur à copier
-		 */
-		inline RgbColourT( RgbColourT const & rhs );
-		/**
-		 *\~english
-		 *\brief		Move Constructor
-		 *\param[in]	rhs	The object to move
-		 *\~french
-		 *\brief		Constructeur par déplacement
-		 *\param[in]	rhs	Couleur à déplacer
-		 */
-		inline RgbColourT( RgbColourT && rhs );
-		/**
-		 *\~english
-		 *\brief		Copy assignment operator
-		 *\param[in]	rhs	The object to copy
-		 *\return		A reference to this object
-		 *\~french
-		 *\brief		Opérateur d'affectation par copie
-		 *\param[in]	rhs	L'objet à copier
-		 *\return		Une référence sur cet objet
-		 */
-		inline RgbColourT & operator=( RgbColourT const & rhs );
-		/**
-		 *\~english
-		 *\brief		Move assignment operator
-		 *\param[in]	rhs	The object to copy
-		 *\return		Reference to this colour
-		 *\~french
-		 *\brief		Opérateur d'affectation par déplacement
-		 *\param[in]	rhs	Couleur à déplacer
-		 *\return		Référence sur cette couleur
-		 */
-		inline RgbColourT & operator=( RgbColourT && rhs );
 		/**
 		 *\~english
 		 *\brief		Constructor from components
@@ -535,7 +508,7 @@ namespace castor
 		 */
 		inline float const * constPtr()const
 		{
-			return &m_values[0];
+			return &m_components[0].value();
 		}
 		/**
 		 *\~english
@@ -547,7 +520,7 @@ namespace castor
 		 */
 		inline float * ptr()
 		{
-			return &m_values[0];
+			return &m_components[0].value();
 		}
 		/**
 		 *\~english
@@ -854,7 +827,6 @@ namespace castor
 
 	private:
 		ColourComponentArray m_components;
-		Float4Array m_values;
 	};
 	/**
 	 *\~english

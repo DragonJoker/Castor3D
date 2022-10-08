@@ -232,7 +232,7 @@ namespace castor
 		 *\~french
 		 *\brief		Convvertit en tile map (aucun effet si m_layers <= 1).
 		 */
-		CU_API void convertToTiles( uint32_t maxSize );
+		CU_API uint32_t convertToTiles( uint32_t maxSize );
 		/**
 		 *\~english
 		 *\return		A clone of this buffer.

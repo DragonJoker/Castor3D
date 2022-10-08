@@ -66,19 +66,19 @@ namespace castor
 		, X16FGetter getB
 		, X16FGetter getA );
 
-	void compressBlocks( CVTTOptions  const & options
+	uint32_t compressBlocks( CVTTOptions  const & options
 		, std::atomic_bool const * interrupt
 		, std::vector< cvtt::PixelBlockU8 > const & blocksCont
 		, PixelFormat dstFormat
 		, uint8_t * dstBuffer
 		, uint32_t dstSize );
-	void compressBlocks( CVTTOptions  const & options
+	uint32_t compressBlocks( CVTTOptions  const & options
 		, std::atomic_bool const * interrupt
 		, std::vector< cvtt::PixelBlockS8 > const & blocksCont
 		, PixelFormat dstFormat
 		, uint8_t * dstBuffer
 		, uint32_t dstSize );
-	void compressBlocks( CVTTOptions  const & options
+	uint32_t compressBlocks( CVTTOptions  const & options
 		, std::atomic_bool const * interrupt
 		, std::vector< cvtt::PixelBlockF16 > const & blocksCont
 		, PixelFormat dstFormat

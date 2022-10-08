@@ -201,7 +201,7 @@ namespace castor
 			return result;
 		}
 
-		static void copyBuffer( Size const & dimensions
+		static uint32_t copyBuffer( Size const & dimensions
 			, uint8_t const * srcBuffer
 			, PixelFormat srcFormat
 			, uint32_t srcAlign
@@ -268,9 +268,11 @@ namespace castor
 				srcLayerStart = srcLevelStart;
 				dstLayerStart = dstLevelStart;
 			}
+
+			return written;
 		}
 
-		static void compressBuffer( PxBufferConvertOptions const * options
+		static uint32_t compressBuffer( PxBufferConvertOptions const * options
 			, std::atomic_bool const * interrupt
 			, Size const & dimensions
 			, uint8_t const * srcBuffer
@@ -305,7 +307,7 @@ namespace castor
 				{
 					if ( interrupt && *interrupt )
 					{
-						return;
+						return written;
 					}
 
 					auto srcLevel = srcLevelStart;
@@ -346,6 +348,8 @@ namespace castor
 				srcLayerStart = srcLevelStart;
 				dstLayerStart = dstLevelStart;
 			}
+
+			return written;
 		}
 
 		static uint32_t getMipLevels( VkExtent3D const & extent )
@@ -625,11 +629,11 @@ namespace castor
 		m_buffer = buffer;
 	}
 
-	void PxBufferBase::convertToTiles( uint32_t maxSize )
+	uint32_t PxBufferBase::convertToTiles( uint32_t maxSize )
 	{
 		if ( m_layers <= 1u )
 		{
-			return;
+			return 0u;
 		}
 
 		VkExtent2D srcSize{ m_size.getWidth(), m_size.getHeight() };
@@ -696,6 +700,7 @@ namespace castor
 		m_size = { dstSize.width, dstSize.height };
 		m_tiles = { tilesX, tilesY, m_layers };
 		m_layers = 1u;
+		return uint32_t( written );
 	}
 
 	void PxBufferBase::update( uint32_t layers

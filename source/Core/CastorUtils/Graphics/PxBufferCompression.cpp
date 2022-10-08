@@ -235,7 +235,7 @@ namespace castor
 			, getA );
 	}
 
-	void compressBlocks( CVTTOptions  const & options
+	uint32_t compressBlocks( CVTTOptions  const & options
 		, std::atomic_bool const * interrupt
 		, std::vector< cvtt::PixelBlockU8 > const & blocksCont
 		, PixelFormat dstFormat
@@ -251,7 +251,7 @@ namespace castor
 		{
 			if ( interrupt && *interrupt )
 			{
-				return;
+				return written;
 			}
 
 			switch ( dstFormat )
@@ -302,12 +302,13 @@ namespace castor
 		}
 
 		assert( written <= dstSize );
+		return written;
 	}
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunused-but-set-variable"
 
-	void compressBlocks( CVTTOptions  const & options
+	uint32_t compressBlocks( CVTTOptions  const & options
 		, std::atomic_bool const * interrupt
 		, std::vector< cvtt::PixelBlockS8 > const & blocksCont
 		, PixelFormat dstFormat
@@ -323,7 +324,7 @@ namespace castor
 		{
 			if ( interrupt && *interrupt )
 			{
-				return;
+				return written;
 			}
 
 			switch ( dstFormat )
@@ -344,9 +345,10 @@ namespace castor
 		}
 
 		assert( written <= dstSize );
+		return written;
 	}
 
-	void compressBlocks( CVTTOptions  const & options
+	uint32_t compressBlocks( CVTTOptions  const & options
 		, std::atomic_bool const * interrupt
 		, std::vector< cvtt::PixelBlockF16 > const & blocksCont
 		, PixelFormat dstFormat
@@ -362,7 +364,7 @@ namespace castor
 		{
 			if ( interrupt && *interrupt )
 			{
-				return;
+				return written;
 			}
 
 			switch ( dstFormat )
@@ -383,6 +385,7 @@ namespace castor
 		}
 
 		assert( written <= dstSize );
+		return written;
 	}
 
 #pragma clang diagnostic pop
