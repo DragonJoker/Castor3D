@@ -88,38 +88,42 @@ namespace castor3d
 
 		for ( uint32_t index = 0u; index < 2u; ++index )
 		{
-			auto viewportState = doCreateViewportState( *m_renderPasses[index].framebuffer );
-			ashes::PipelineColorBlendStateCreateInfo colourBlend;
 			auto & program = m_holder.getProgram( index );
 			auto & pipeline = m_holder.getPipeline( index );
-			VkPipelineColorBlendStateCreateInfo const & cbState = colourBlend;
-			VkPipelineViewportStateCreateInfo const & vpState = viewportState;
-			auto createInfo = makeVkStruct< VkGraphicsPipelineCreateInfo >( 0u
-				, uint32_t( program.size() )
-				, program.data()
-				, &vsState
-				, &iaState
-				, nullptr
-				, &vpState
-				, &rsState
-				, &msState
-				, &dsState
-				, &cbState
-				, nullptr
-				, m_holder.getPipelineLayout()
-				, *m_renderPasses[index].renderPass
-				, 0u
-				, VK_NULL_HANDLE
-				, 0 );
-			auto res = m_holder.getContext().vkCreateGraphicsPipelines( m_holder.getContext().device
-				, m_holder.getContext().cache
-				, 1u
-				, &createInfo
-				, m_holder.getContext().allocator
-				, &pipeline );
-			auto name = nameBase + ( index ? std::string{ "/Blend" } : std::string{ "/First" } );
-			crg::checkVkResult( res, name + " - Pipeline creation" );
-			crgRegisterObject( m_holder.getContext(), name, pipeline );
+
+			if ( !pipeline )
+			{
+				auto viewportState = doCreateViewportState( *m_renderPasses[index].framebuffer );
+				ashes::PipelineColorBlendStateCreateInfo colourBlend;
+				VkPipelineColorBlendStateCreateInfo const & cbState = colourBlend;
+				VkPipelineViewportStateCreateInfo const & vpState = viewportState;
+				auto createInfo = makeVkStruct< VkGraphicsPipelineCreateInfo >( 0u
+					, uint32_t( program.size() )
+					, program.data()
+					, &vsState
+					, &iaState
+					, nullptr
+					, &vpState
+					, &rsState
+					, &msState
+					, &dsState
+					, &cbState
+					, nullptr
+					, m_holder.getPipelineLayout()
+					, *m_renderPasses[index].renderPass
+					, 0u
+					, VK_NULL_HANDLE
+					, 0 );
+				auto res = m_holder.getContext().vkCreateGraphicsPipelines( m_holder.getContext().device
+					, m_holder.getContext().cache
+					, 1u
+					, &createInfo
+					, m_holder.getContext().allocator
+					, &pipeline );
+				auto name = nameBase + ( index ? std::string{ "/Blend" } : std::string{ "/First" } );
+				crg::checkVkResult( res, name + " - Pipeline creation" );
+				crgRegisterObject( m_holder.getContext(), name, pipeline );
+			}
 		}
 	}
 
