@@ -31,14 +31,14 @@ namespace castor
 
 		GroupChangeTrackedT & operator=( ValueT const & rhs )noexcept
 		{
-			m_dirty = m_dirty || ( m_value != rhs );
+			this->doCopy( m_dirty, m_dirty || ( m_value != rhs ) );
 			m_value = rhs;
 			return *this;
 		}
 
 		GroupChangeTrackedT & operator=( GroupChangeTrackedT const & rhs )noexcept
 		{
-			m_dirty = m_dirty || ( m_value != rhs.m_value );
+			this->doCopy( m_dirty, m_dirty || ( m_value != rhs.m_value ) );
 			m_value = rhs.m_value;
 			return *this;
 		}
@@ -99,6 +99,19 @@ namespace castor
 		{
 			m_dirty = true;
 			return &m_value;
+		}
+
+	private:
+		void doCopy( std::atomic_bool & lhs
+			, std::atomic_bool const & rhs )
+		{
+			lhs = rhs.load();
+		}
+
+		void doCopy( bool & lhs
+			, bool const & rhs )
+		{
+			lhs = rhs;
 		}
 
 	private:
