@@ -76,7 +76,7 @@ namespace castor3d
 		eDerivTex = 0x0001u << uint16_t( ComponentMode::eDerivTex ),
 		eOcclusion = 0x0001u << uint16_t( ComponentMode::eOcclusion ),
 	};
-	CU_ImplementFlags( ComponentModeFlag );
+	CU_ImplementFlags( ComponentModeFlag )
 	/**
 	\~english
 	\brief		Pass component holding base pass data.

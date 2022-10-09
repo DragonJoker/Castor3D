@@ -229,7 +229,7 @@ namespace castor3d
 	{
 		CU_Require( passID > 0 );
 		auto index = passID - 1;
-		return castor::makeArrayView( m_data.data() + m_stride * index, m_stride );
+		return PassBuffer::PassDataPtr{ castor::makeArrayView( m_data.data() + m_stride * index, m_stride ) };
 	}
 
 	uint32_t PassBuffer::getMaxPassTypeCount()const

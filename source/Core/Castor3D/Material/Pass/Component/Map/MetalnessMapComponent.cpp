@@ -193,9 +193,7 @@ namespace castor3d
 		if ( !checkFlag( texturesFlags, TextureFlag::eMetalness )
 			&& checkFlag( texturesFlags, TextureFlag::eSpecular ) )
 		{
-			auto metalness = components.getMember< sdw::Float >( "metalness", true );
-			auto specular = components.getMember< sdw::Vec3 >( "specular", true );
-			metalness = length( specular );
+			components.getMember< sdw::Float >( "metalness", true ) = length( components.getMember< sdw::Vec3 >( "specular", true ) );
 		}
 	}
 

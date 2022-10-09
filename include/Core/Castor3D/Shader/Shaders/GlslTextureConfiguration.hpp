@@ -156,7 +156,6 @@ namespace castor3d
 					&& emsEnbl() == 0.0_f
 					&& occEnbl() == 0.0_f
 					&& rghEnbl() == 0.0_f
-					&& colEnbl() == 0.0_f
 					&& trsEnbl() == 0.0_f;
 			}
 
