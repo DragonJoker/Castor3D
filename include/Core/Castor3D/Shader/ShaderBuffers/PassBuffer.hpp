@@ -27,7 +27,7 @@ namespace castor3d
 	public:
 		struct PassDataPtr
 		{
-			C3D_API PassDataPtr( castor::ArrayView< uint8_t > data )
+			C3D_API explicit PassDataPtr( castor::ArrayView< uint8_t > data )
 				: m_data{ data }
 			{
 			}

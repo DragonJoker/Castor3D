@@ -198,10 +198,8 @@ namespace castor3d
 		if ( checkFlag( texturesFlags, TextureFlag::eMetalness )
 			&& !checkFlag( texturesFlags, TextureFlag::eSpecular ) )
 		{
-			auto specular = components.getMember< sdw::Vec3 >( "specular", true );
-			auto colour = components.getMember< sdw::Vec3 >( "colour", vec3( 0.0_f ) );
-			auto metalness = components.getMember< sdw::Float >( "metalness", 0.0_f );
-			specular = shader::BlendComponents::computeF0( colour, metalness );
+			components.getMember< sdw::Vec3 >( "specular", true ) = shader::BlendComponents::computeF0( components.getMember< sdw::Vec3 >( "colour", vec3( 0.0_f ) )
+				, components.getMember< sdw::Float >( "metalness", 0.0_f ) );
 		}
 	}
 

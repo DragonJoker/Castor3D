@@ -193,9 +193,7 @@ namespace castor3d
 	{
 		if ( !checkFlag( texturesFlags, TextureFlag::eEmissive ) )
 		{
-			auto emissive = components.getMember< sdw::Vec3 >( "emissive", true );
-			auto colour = components.getMember< sdw::Vec3 >( "colour", true );
-			emissive *= colour;
+			components.getMember< sdw::Vec3 >( "emissive", true ) *= components.getMember< sdw::Vec3 >( "colour", true );
 		}
 	}
 
