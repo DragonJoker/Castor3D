@@ -8,13 +8,13 @@ See LICENSE file in root folder
 
 #include <ShaderWriter/MatTypes/Mat4.hpp>
 #include <ShaderWriter/Intrinsics/Intrinsics.hpp>
-#include <ShaderWriter/CompositeTypes/StructInstance.hpp>
+#include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>
 
 namespace castor3d
 {
 	namespace shader
 	{
-		castor::String const TextureConfigurationBufferName = cuT( "TextureConfigurations" );
+		class PassShaders;
 
 		template< typename LhsT, typename RhsT >
 		inline LhsT translateUV( LhsT const & translate
@@ -45,7 +45,44 @@ namespace castor3d
 		}
 
 		struct TextureConfigData
-			: public sdw::StructInstance
+			: public sdw::StructInstanceHelperT< "C3D_TextureConfigData"
+				, ast::type::MemoryLayout::eStd430
+				, sdw::FloatField< "colEnbl" >
+				, sdw::FloatField< "colMask" >
+				, sdw::FloatField< "opaEnbl" >
+				, sdw::FloatField< "opaMask" >
+				, sdw::FloatField< "spcEnbl" >
+				, sdw::FloatField< "spcMask" >
+				, sdw::FloatField< "glsEnbl" >
+				, sdw::FloatField< "glsMask" >
+				, sdw::FloatField< "metEnbl" >
+				, sdw::FloatField< "metMask" >
+				, sdw::FloatField< "rghEnbl" >
+				, sdw::FloatField< "rghMask" >
+				, sdw::FloatField< "emsEnbl" >
+				, sdw::FloatField< "emsMask" >
+				, sdw::FloatField< "occEnbl" >
+				, sdw::FloatField< "occMask" >
+				, sdw::FloatField< "trsEnbl" >
+				, sdw::FloatField< "trsMask" >
+				, sdw::FloatField< "nmlEnbl" >
+				, sdw::FloatField< "nmlMask" >
+				, sdw::FloatField< "nmlFact" >
+				, sdw::FloatField< "nmlGMul" >
+				, sdw::FloatField< "hgtEnbl" >
+				, sdw::FloatField< "hgtMask" >
+				, sdw::FloatField< "hgtFact" >
+				, sdw::FloatField< "pad0" >
+				, sdw::UIntField< "needsYI" >
+				, sdw::UIntField< "isTrnfAnim" >
+				, sdw::UIntField< "isTileAnim" >
+				, sdw::UIntField< "texSet" >
+				, sdw::UIntField< "pad1" >
+				, sdw::UIntField< "pad2" >
+				, sdw::Vec4Field< "translate" >
+				, sdw::Vec4Field< "rotate" >
+				, sdw::Vec4Field< "scale" >
+				, sdw::Vec4Field< "tileSet" > >
 		{
 			friend class TextureConfigurations;
 
@@ -53,56 +90,6 @@ namespace castor3d
 			C3D_API TextureConfigData( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr
 				, bool enabled );
-			SDW_DeclStructInstance( C3D_API, TextureConfigData );
-
-			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
-			C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
-
-			template< typename TexcoordT >
-			void computeGeometryMapContribution( Utils &  utils
-				, PipelineFlags const & flags
-				, shader::TextureAnimData const & anim
-				, sdw::CombinedImage2DRgba32 const & map
-				, TexcoordT & texCoords
-				, sdw::Float & opacity
-				, sdw::Vec3 & tangentSpaceViewPosition
-				, sdw::Vec3 & tangentSpaceFragPosition );
-			template< typename TexcoordT >
-			void computeGeometryMapContribution( Utils &  utils
-				, PipelineFlags const & flags
-				, shader::TextureAnimData const & anim
-				, sdw::CombinedImage2DRgba32 const & map
-				, TexcoordT & texCoords
-				, sdw::Float & opacity
-				, sdw::Vec3 & normal
-				, sdw::Vec3 & tangent
-				, sdw::Vec3 & bitangent
-				, sdw::Vec3 & tangentSpaceViewPosition
-				, sdw::Vec3 & tangentSpaceFragPosition );
-			template< typename TexcoordT >
-			sdw::Vec4 computeCommonMapContribution( Utils & utils
-				, PipelineFlags const & flags
-				, shader::TextureAnimData const & anim
-				, sdw::CombinedImage2DRgba32 const & map
-				, TexcoordT & texCoords
-				, sdw::Vec3 & emissive
-				, sdw::Float & opacity
-				, sdw::Float & occlusion
-				, sdw::Float & transmittance
-				, sdw::Vec3 & normal
-				, sdw::Vec3 & tangent
-				, sdw::Vec3 & bitangent
-				, sdw::Vec3 & tangentSpaceViewPosition
-				, sdw::Vec3 & tangentSpaceFragPosition );
-			template< typename TexcoordT >
-			sdw::Vec4 computeCommonMapVoxelContribution( Utils & utils
-				, PipelineFlags const & flags
-				, shader::TextureAnimData const & anim
-				, sdw::CombinedImage2DRgba32 const & map
-				, TexcoordT & texCoords
-				, sdw::Vec3 & emissive
-				, sdw::Float & opacity
-				, sdw::Float & occlusion );
 
 			C3D_API void transformUV( Utils & utils
 				, TextureAnimData const & anim
@@ -114,151 +101,63 @@ namespace castor3d
 				, TextureAnimData const & anim
 				, DerivTex & uv )const;
 
-			C3D_API sdw::Float getGlossiness( sdw::Vec4 const & sampled
-				, sdw::Float const & glossiness )const;
-			C3D_API sdw::Vec3 getColour( sdw::Vec4 const & sampled
-				, sdw::Vec3 const & colour )const;
-			C3D_API sdw::Float getOpacity( sdw::Vec4 const & sampled
-				, sdw::Float const & opacity )const;
+			C3D_API sdw::Float getFloat( sdw::Vec4 const & sampled
+				, sdw::Float const & mask )const;
+			C3D_API sdw::Vec3 getVec3( sdw::Vec4 const & sampled
+				, sdw::Float const & mask )const;
 
-			template< typename TexcoordsT, typename TexcoordT >
-			void applyParallax( Utils & utils
-				, PipelineFlags const & flags
-				, sdw::CombinedImage2DRgba32 const & map
-				, TexcoordsT & texCoords
-				, TexcoordT & texCoord
-				, sdw::Vec3 & tangentSpaceViewPosition
-				, sdw::Vec3 & tangentSpaceFragPosition );
-
-			C3D_API void applyDiffuse( PipelineFlags const & flags
-				, sdw::Vec4 const & sampled
-				, sdw::Vec3 & diffuse )const;
-			C3D_API void applyAlbedo( PipelineFlags const & flags
-				, sdw::Vec4 const & sampled
-				, sdw::Vec3 & diffuse )const;
-			C3D_API void applyEmissive( PipelineFlags const & flags
-				, sdw::Vec4 const & sampled
-				, sdw::Vec3 & emissive )const;
-			C3D_API void applySpecular( PipelineFlags const & flags
-				, sdw::Vec4 const & sampled
-				, sdw::Vec3 & specular )const;
-			C3D_API void applyMetalness( PipelineFlags const & flags
-				, sdw::Vec4 const & sampled
-				, sdw::Float & metalness )const;
-			C3D_API void applyShininess( PipelineFlags const & flags
-				, sdw::Vec4 const & sampled
-				, sdw::Float & shininess )const;
-			C3D_API void applyRoughness( PipelineFlags const & flags
-				, sdw::Vec4 const & sampled
-				, sdw::Float & roughness )const;
-			C3D_API void applyGlossiness( PipelineFlags const & flags
-				, sdw::Vec4 const & sampled
-				, sdw::Float & glossiness )const;
-			C3D_API void applyOpacity( PipelineFlags const & flags
-				, sdw::Vec4 const & sampled
-				, sdw::Float & opacity )const;
-			C3D_API void applyNormal( PipelineFlags const & flags
-				, sdw::Vec4 const & sampled
-				, sdw::Mat3 const & tbn
-				, sdw::Vec3 & normal )const;
-			C3D_API void applyNormal( PipelineFlags const & flags
-				, sdw::Vec4 const & sampled
-				, sdw::Vec3 const & normal
-				, sdw::Vec3 const & tangent
-				, sdw::Vec3 const & bitangent
-				, sdw::Vec3 & result )const;
-			C3D_API void applyHeight( PipelineFlags const & flags
-				, sdw::Vec4 const & sampled
-				, sdw::Float & height )const;
-			C3D_API void applyOcclusion( PipelineFlags const & flags
-				, sdw::Vec4 const & sampled
-				, sdw::Float & occlusion )const;
-			C3D_API void applyTransmittance( PipelineFlags const & flags
-				, sdw::Vec4 const & sampled
-				, sdw::Float & transmittance )const;
-
-			sdw::Boolean isDiffuse()const
-			{
-				return colEnbl != 0.0_f;
-			}
-
-			sdw::Boolean isAlbedo()const
-			{
-				return colEnbl != 0.0_f;
-			}
-
-			sdw::Boolean isEmissive()const
-			{
-				return emsEnbl != 0.0_f;
-			}
-
-			sdw::Boolean isSpecular()const
-			{
-				return spcEnbl != 0.0_f;
-			}
-
-			sdw::Boolean isMetalness()const
-			{
-				return metEnbl != 0.0_f;
-			}
-
-			sdw::Boolean isShininess()const
-			{
-				return shnEnbl != 0.0_f;
-			}
-
-			sdw::Boolean isGlossiness()const
-			{
-				return shnEnbl != 0.0_f;
-			}
-
-			sdw::Boolean isRoughness()const
-			{
-				return rghEnbl != 0.0_f;
-			}
-
-			sdw::Boolean isOcclusion()const
-			{
-				return occEnbl != 0.0_f;
-			}
-
-			sdw::Boolean isTransmittance()const
-			{
-				return trsEnbl != 0.0_f;
-			}
-
-			sdw::Boolean isOpacity()const
-			{
-				return opaEnbl != 0.0_f;
-			}
-
-			sdw::Boolean isNormal()const
-			{
-				return nmlEnbl != 0.0_f;
-			}
-
-			sdw::Boolean isHeight()const
-			{
-				return hgtEnbl != 0.0_f;
-			}
+			auto colEnbl()const { return getMember< "colEnbl" >(); }
+			auto colMask()const { return getMember< "colMask" >(); }
+			auto opaEnbl()const { return getMember< "opaEnbl" >(); }
+			auto opaMask()const { return getMember< "opaMask" >(); }
+			auto spcEnbl()const { return getMember< "spcEnbl" >(); }
+			auto spcMask()const { return getMember< "spcMask" >(); }
+			auto glsEnbl()const { return getMember< "glsEnbl" >(); }
+			auto glsMask()const { return getMember< "glsMask" >(); }
+			auto metEnbl()const { return getMember< "metEnbl" >(); }
+			auto metMask()const { return getMember< "metMask" >(); }
+			auto rghEnbl()const { return getMember< "rghEnbl" >(); }
+			auto rghMask()const { return getMember< "rghMask" >(); }
+			auto emsEnbl()const { return getMember< "emsEnbl" >(); }
+			auto emsMask()const { return getMember< "emsMask" >(); }
+			auto occEnbl()const { return getMember< "occEnbl" >(); }
+			auto occMask()const { return getMember< "occMask" >(); }
+			auto trsEnbl()const { return getMember< "trsEnbl" >(); }
+			auto trsMask()const { return getMember< "trsMask" >(); }
+			auto nmlEnbl()const { return getMember< "nmlEnbl" >(); }
+			auto nmlMask()const { return getMember< "nmlMask" >(); }
+			auto nmlFact()const { return getMember< "nmlFact" >(); }
+			auto nmlGMul()const { return getMember< "nmlGMul" >(); }
+			auto hgtEnbl()const { return getMember< "hgtEnbl" >(); }
+			auto hgtMask()const { return getMember< "hgtMask" >(); }
+			auto hgtFact()const { return getMember< "hgtFact" >(); }
+			auto needsYI()const { return getMember< "needsYI" >(); }
+			auto isTrnfAnim()const { return getMember< "isTrnfAnim" >() != 0_u; }
+			auto isTileAnim()const { return getMember< "isTileAnim" >() != 0_u; }
+			auto texSet()const { return getMember< "texSet" >(); }
+			auto translate()const { return getMember< "translate" >(); }
+			auto rotate()const { return getMember< "rotate" >(); }
+			auto scale()const { return getMember< "scale" >(); }
+			auto tileSet()const { return getMember< "tileSet" >(); }
 
 			sdw::Boolean isGeometry()const
 			{
-				return opaEnbl != 0.0_f
-					|| nmlEnbl != 0.0_f
-					|| hgtEnbl != 0.0_f;
+				return opaEnbl() != 0.0_f
+					|| nmlEnbl() != 0.0_f
+					|| hgtEnbl() != 0.0_f;
 			}
 
 			sdw::Boolean isGeometryOnly()const
 			{
-				return colEnbl == 0.0_f
-					&& emsEnbl == 0.0_f
-					&& metEnbl == 0.0_f
-					&& occEnbl == 0.0_f
-					&& rghEnbl == 0.0_f
-					&& spcEnbl == 0.0_f
-					&& shnEnbl == 0.0_f
-					&& trsEnbl == 0.0_f;
+				return colEnbl() == 0.0_f
+					&& spcEnbl() == 0.0_f
+					&& glsEnbl() == 0.0_f
+					&& metEnbl() == 0.0_f
+					&& emsEnbl() == 0.0_f
+					&& occEnbl() == 0.0_f
+					&& rghEnbl() == 0.0_f
+					&& colEnbl() == 0.0_f
+					&& trsEnbl() == 0.0_f;
 			}
 
 			sdw::Vec2 getUv( sdw::Vec3 const & uvw )const
@@ -293,61 +192,7 @@ namespace castor3d
 				lhs.uv() = rhs.uv();
 			}
 
-		private:
-			sdw::Float getFloat( sdw::Vec4 const & sampled
-				, sdw::Float const & mask )const;
-			sdw::Vec3 getVec3( sdw::Vec4 const & sampled
-				, sdw::Float const & mask )const;
-
-		private:
-			using sdw::StructInstance::getMember;
-			using sdw::StructInstance::getMemberArray;
-
-		public:
-			sdw::Vec4 colOpa;
-			sdw::Vec4 spcShn;
-			sdw::Vec4 metRgh;
-			sdw::Vec4 emsOcc;
-			sdw::Vec4 trsDum;
-			sdw::Vec4 nmlFcr;
-			sdw::Vec4 hgtFcr;
-			sdw::Vec4 mscVls;
-			sdw::Vec4 texTrn;
-			sdw::Vec4 texRot;
-			sdw::Vec4 texScl;
-			sdw::Vec4 tleSet;
-
-		public:
-			sdw::Float colEnbl;
-			sdw::Float colMask;
-			sdw::Float opaEnbl;
-			sdw::Float opaMask;
-			sdw::Float spcEnbl;
-			sdw::Float spcMask;
-			sdw::Float shnEnbl;
-			sdw::Float shnMask;
-			sdw::Float metEnbl;
-			sdw::Float metMask;
-			sdw::Float rghEnbl;
-			sdw::Float rghMask;
-			sdw::Float emsEnbl;
-			sdw::Float emsMask;
-			sdw::Float occEnbl;
-			sdw::Float occMask;
-			sdw::Float trsEnbl;
-			sdw::Float trsMask;
-			sdw::Float nmlEnbl;
-			sdw::Float nmlMask;
-			sdw::Float nmlFact;
-			sdw::Float nmlGMul;
-			sdw::Float hgtEnbl;
-			sdw::Float hgtMask;
-			sdw::Float hgtFact;
 			sdw::Float fneedYI;
-			sdw::UInt needsYI;
-			sdw::Boolean isTrnfAnim;
-			sdw::Boolean isTileAnim;
-			sdw::UInt texSet;
 		};
 
 		class TextureConfigurations
@@ -358,32 +203,38 @@ namespace castor3d
 				, uint32_t binding
 				, uint32_t set
 				, bool enable = true );
-			template< typename TexcoordT >
-			void computeGeometryMapContributions( Utils & utils
+			C3D_API void computeMapsContributions( PassShaders const & passShaders
 				, PipelineFlags const & flags
 				, TextureAnimations const & textureAnims
 				, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-				, shader::Material const & material
-				, TexcoordT & texCoords0
-				, TexcoordT & texCoords1
-				, TexcoordT & texCoords2
-				, TexcoordT & texCoords3
-				, sdw::Float & opacity
-				, sdw::Vec3 & tangentSpaceViewPosition
-				, sdw::Vec3 & tangentSpaceFragPosition )const;
+				, Material const & material
+				, BlendComponents & components )const;
+			C3D_API void computeMapsContributions( PassShaders const & passShaders
+				, TextureFlags const & texturesFlags
+				, TextureAnimations const & textureAnims
+				, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+				, Material const & material
+				, BlendComponents & components )const;
+			template< typename TexcoordT, typename FlagsT >
+			void computeMapsContributionsT( PassShaders const & passShaders
+				, FlagsT const & flags
+				, TextureAnimations const & textureAnims
+				, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+				, Material const & material
+				, BlendComponents & components )const;
 			template< typename TexcoordT >
-			TexcoordT getTexcoord( TextureConfigData const & data
+			static TexcoordT getTexcoord( TextureConfigData const & data
 				, TexcoordT const & texCoords0
 				, TexcoordT const & texCoords1
 				, TexcoordT const & texCoords2
-				, TexcoordT const & texCoords3 )const;
+				, TexcoordT const & texCoords3 );
 			template< typename TexcoordT >
-			void setTexcoord( TextureConfigData const & data
+			static void setTexcoord( TextureConfigData const & data
 				, TexcoordT const & value
 				, TexcoordT & texCoords0
 				, TexcoordT & texCoords1
 				, TexcoordT & texCoords2
-				, TexcoordT & texCoords3 )const;
+				, TexcoordT & texCoords3 );
 
 			TextureConfigData getTextureConfiguration( sdw::UInt const & index )const
 			{

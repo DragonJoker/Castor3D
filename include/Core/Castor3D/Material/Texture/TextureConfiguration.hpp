@@ -87,7 +87,7 @@ namespace castor3d
 		TextureTransform transform;
 		castor::Point4ui tileSet;
 		uint32_t tiles{ 1u };
-		TextureSpace textureSpace{ TextureSpace::eColour };
+		TextureSpaces textureSpace{};
 		/**@}*/
 		/**
 		*\~english
@@ -115,6 +115,7 @@ namespace castor3d
 		*	Configurations de texture prédéfinies.
 		*/
 		/**@{*/
+		C3D_API static TextureConfiguration const ColourTexture;
 		C3D_API static TextureConfiguration const DiffuseTexture;
 		C3D_API static TextureConfiguration const AlbedoTexture;
 		C3D_API static TextureConfiguration const SpecularTexture;
@@ -152,6 +153,7 @@ namespace castor3d
 	{
 		ashes::ImageCreateInfo imageInfo{ {} };
 		TextureConfiguration config{};
+		uint32_t texcoordSet{};
 	};
 }
 

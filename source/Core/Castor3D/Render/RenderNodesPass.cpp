@@ -12,6 +12,8 @@
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
+#include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
+#include "Castor3D/Material/Pass/Component/PassShaders.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/MeshletComponent.hpp"
@@ -40,6 +42,7 @@
 #include "Castor3D/Shader/Shaders/GlslMeshlet.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslTaskPayload.hpp"
+#include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/BillboardUbo.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
@@ -300,7 +303,8 @@ namespace castor3d
 		return VK_COMPARE_OP_ALWAYS;
 	}
 
-	PipelineFlags RenderNodesPass::createPipelineFlags( BlendMode colourBlendMode
+	PipelineFlags RenderNodesPass::createPipelineFlags( PassComponentsBitset components
+		, BlendMode colourBlendMode
 		, BlendMode alphaBlendMode
 		, PassFlags passFlags
 		, RenderPassTypeID renderPassTypeID
@@ -316,7 +320,8 @@ namespace castor3d
 		, uint32_t passLayerIndex
 		, GpuBufferOffsetT< castor::Point4f > const & morphTargets )const
 	{
-		auto result = PipelineFlags{ passTypeID
+		auto result = PipelineFlags{ std::move( components )
+			, passTypeID
 			, colourBlendMode
 			, alphaBlendMode
 			, passFlags
@@ -356,7 +361,8 @@ namespace castor3d
 		, bool isFrontCulled
 		, GpuBufferOffsetT< castor::Point4f > const & morphTargets )const
 	{
-		return createPipelineFlags( pass.getColourBlendMode()
+		return createPipelineFlags( getEngine()->getPassComponentsRegister().getPassComponentsBitset( &pass )
+			, pass.getColourBlendMode()
 			, pass.getAlphaBlendMode()
 			, pass.getPassFlags()
 			, ( pass.getRenderPassInfo()
@@ -1081,6 +1087,12 @@ namespace castor3d
 	{
 		sdw::MeshWriter writer;
 
+		shader::Utils utils{ writer };
+		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
+			, flags
+			, ComponentModeFlag::eNone
+			, utils };
+
 		C3D_Matrix( writer
 			, GlobalBuffersIdx::eMatrix
 			, RenderPipeline::eBuffers );
@@ -1095,6 +1107,7 @@ namespace castor3d
 			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::eBuffers );
 		shader::Materials materials{ writer
+			, passShaders
 			, uint32_t( GlobalBuffersIdx::eMaterials )
 			, RenderPipeline::eBuffers };
 
@@ -1326,6 +1339,12 @@ namespace castor3d
 		using namespace sdw;
 		VertexWriter writer;
 
+		shader::Utils utils{ writer };
+		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
+			, flags
+			, ComponentModeFlag::eNone
+			, utils };
+
 		C3D_Matrix( writer
 			, GlobalBuffersIdx::eMatrix
 			, RenderPipeline::eBuffers );
@@ -1340,6 +1359,7 @@ namespace castor3d
 			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::eBuffers );
 		shader::Materials materials{ writer
+			, passShaders
 			, uint32_t( GlobalBuffersIdx::eMaterials )
 			, RenderPipeline::eBuffers };
 

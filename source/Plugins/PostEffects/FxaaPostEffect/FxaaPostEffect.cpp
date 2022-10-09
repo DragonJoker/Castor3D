@@ -121,9 +121,9 @@ namespace fxaa
 						, max( vec2( -c3d_fxaaData.spanMax, -c3d_fxaaData.spanMax )
 							, dir * rcpDirMin ) ) * c3d_fxaaData.pixelSize;
 
-					auto texcoord0 = writer.declLocale( "texcoord0"
+					auto texcoord0 = writer.declLocale( "texture0"
 						, vtx_texture + dir * ( 1.0_f / 3.0_f - 0.5_f ) );
-					auto texcoord1 = writer.declLocale( "texcoord1"
+					auto texcoord1 = writer.declLocale( "texture1"
 						, vtx_texture + dir * ( 2.0_f / 3.0_f - 0.5_f ) );
 
 					auto rgbA = writer.declLocale( "rgbA"

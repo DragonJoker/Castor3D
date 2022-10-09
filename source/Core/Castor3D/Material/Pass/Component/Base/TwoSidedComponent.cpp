@@ -1,0 +1,95 @@
+#include "Castor3D/Material/Pass/Component/Base/TwoSidedComponent.hpp"
+
+#include "Castor3D/Material/Pass/Pass.hpp"
+#include "Castor3D/Material/Pass/PassVisitor.hpp"
+#include "Castor3D/Material/Texture/TextureConfiguration.hpp"
+#include "Castor3D/Scene/SceneFileParser.hpp"
+
+#include <CastorUtils/FileParser/ParserParameter.hpp>
+
+namespace castor
+{
+	template<>
+	class TextWriter< castor3d::TwoSidedComponent >
+		: public TextWriterT< castor3d::TwoSidedComponent >
+	{
+	public:
+		explicit TextWriter( String const & tabs )
+			: TextWriterT< castor3d::TwoSidedComponent >{ tabs }
+		{
+		}
+
+		bool operator()( castor3d::TwoSidedComponent const & object
+			, StringStream & file )override
+		{
+			return writeOpt( file, cuT( "two_sided" ), object.isTwoSided(), false );
+		}
+	};
+}
+
+namespace castor3d
+{
+	//*********************************************************************************************
+
+	namespace tws
+	{
+		static CU_ImplementAttributeParser( parserPassTwoSided )
+		{
+			auto & parsingContext = getParserContext( context );
+
+			if ( !parsingContext.pass )
+			{
+				CU_ParsingError( cuT( "No Pass initialised." ) );
+			}
+			else if ( !params.empty() )
+			{
+				bool value;
+				params[0]->get( value );
+				auto & component = getPassComponent< TwoSidedComponent >( parsingContext );
+				component.setTwoSided( value );
+			}
+		}
+		CU_EndAttribute()
+	}
+
+	//*********************************************************************************************
+
+	castor::String const TwoSidedComponent::TypeName = C3D_MakePassComponentName( "two_sided" );
+
+	TwoSidedComponent::TwoSidedComponent( Pass & pass )
+		: BaseDataPassComponentT< castor::AtomicGroupChangeTracked< bool > >{ pass, TypeName }
+	{
+	}
+
+	void TwoSidedComponent::createParsers( castor::AttributeParsers & parsers
+		, ChannelFillers & channelFillers )
+	{
+		Pass::addParserT( parsers
+			, CSCNSection::ePass
+			, cuT( "two_sided" )
+			, tws::parserPassTwoSided
+			, { castor::makeParameter< castor::ParameterType::eBool >() } );
+	}
+
+	void TwoSidedComponent::accept( PassVisitorBase & vis )
+	{
+		vis.visit( cuT( "Two sided" ), m_value );
+	}
+
+	PassComponentUPtr TwoSidedComponent::doClone( Pass & pass )const
+	{
+		auto result = std::make_unique< TwoSidedComponent >( pass );
+		result->setData( getData() );
+		return result;
+	}
+
+	bool TwoSidedComponent::doWriteText( castor::String const & tabs
+		, castor::Path const & folder
+		, castor::String const & subfolder
+		, castor::StringStream & file )const
+	{
+		return castor::TextWriter< TwoSidedComponent >{ tabs }( *this, file );
+	}
+
+	//*********************************************************************************************
+}

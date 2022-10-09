@@ -82,7 +82,7 @@ namespace CastorGui
 			, float offset
 			, castor::String const & suffix )
 		{
-			castor::RgbColour colour = getMaterialColour( *material->getPass( 0u ) );
+			auto colour = getMaterialColour( *material->getPass( 0u ) );
 			colour.red() = float( colour.red() ) + offset;
 			colour.green() = float( colour.green() ) + offset;
 			colour.blue() = float( colour.blue() ) + offset;

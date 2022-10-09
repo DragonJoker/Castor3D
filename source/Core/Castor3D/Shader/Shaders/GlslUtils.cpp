@@ -37,6 +37,7 @@ namespace castor3d::shader
 	}
 
 	LightingModelPtr Utils::createLightingModel( Engine const & engine
+		, Materials const & materials
 		, castor::String const & name
 		, ShadowOptions shadowsOptions
 		, SssProfiles const * sssProfiles
@@ -44,6 +45,7 @@ namespace castor3d::shader
 	{
 		return engine.getLightingModelFactory().create( name
 			, m_writer
+			, materials
 			, *this
 			, std::move( shadowsOptions )
 			, sssProfiles
@@ -108,50 +110,6 @@ namespace castor3d::shader
 		return pow( max( srgb, vec3( 0.0_f, 0.0_f, 0.0_f ) ), vec3( gamma ) );
 	}
 
-	void Utils::compute2DMapsContributions( FilteredTextureFlags const & flags
-		, TextureConfigurations const & textureConfigs
-		, TextureAnimations const & textureAnims
-		, sdw::Array< sdw::CombinedImage2DRgba32 > const maps
-		, sdw::Vec3 const texCoords
-		, sdw::Vec3 & colour
-		, sdw::Float & opacity )
-	{
-		if ( !textureConfigs.isEnabled() )
-		{
-			return;
-		}
-
-		for ( auto & textureIt : flags )
-		{
-			if ( checkFlag( textureIt.second.flags, TextureFlag::eColour )
-				|| checkFlag( textureIt.second.flags, TextureFlag::eOpacity ) )
-			{
-				auto i = textureIt.first;
-				auto name = castor::string::stringCast< char >( castor::string::toString( i ) );
-				CU_Require( textureIt.second.id > 0u );
-				auto config = m_writer.declLocale( "c3d_config" + name
-					, textureConfigs.getTextureConfiguration( sdw::UInt( textureIt.second.id ) ) );
-				auto anim = m_writer.declLocale( "c3d_anim" + name
-					, textureAnims.getTextureAnimation( sdw::UInt( textureIt.second.id ) ) );
-				auto texCoord = m_writer.declLocale( "c3d_texCoord" + name
-					, texCoords.xy() );
-				texCoord = transformUV( config, anim, texCoord );
-				auto sampled = m_writer.declLocale< sdw::Vec4 >( "c3d_sampled" + name
-					, maps[i].sample( texCoord ) );
-
-				if ( checkFlag( textureIt.second.flags, TextureFlag::eColour ) )
-				{
-					colour = config.getColour( sampled, colour );
-				}
-
-				if ( checkFlag( textureIt.second.flags, TextureFlag::eOpacity ) )
-				{
-					opacity = config.getOpacity( sampled, opacity );
-				}
-			}
-		}
-	}
-
 	sdw::Float Utils::remap( sdw::Float const originalValue
 		, sdw::Float const originalMin
 		, sdw::Float const originalMax
@@ -185,13 +143,40 @@ namespace castor3d::shader
 			, clamp( fma( cosTheta, 0.5_f, 0.5_f ), 0.0_f, 1.0_f ) );
 	}
 
+	sdw::Vec4 Utils::sampleMap( sdw::CombinedImage2DRgba32 const map
+		, sdw::Vec2 const texCoords )
+	{
+		return map.sample( texCoords );
+	}
+
+	sdw::Vec4 Utils::sampleMap( sdw::CombinedImage2DRgba32 const map
+		, sdw::Vec3 const texCoords )
+	{
+		return map.sample( texCoords.xy() );
+	}
+
+	sdw::Vec4 Utils::sampleMap( sdw::CombinedImage2DRgba32 const map
+		, DerivTex const texCoords )
+	{
+		return map.grad( texCoords.uv(), texCoords.dPdx(), texCoords.dPdy() );
+	}
+
 	sdw::Vec4 Utils::sampleMap( PipelineFlags const & flags
 		, sdw::CombinedImage2DRgba32 const map
 		, sdw::Vec2 const texCoords )
 	{
 		return ( flags.hasUntile()
 			? sampleUntiled( map, texCoords )
-			: map.sample( texCoords ) );
+			: sampleMap( map, texCoords ) );
+	}
+
+	sdw::Vec4 Utils::sampleMap( PipelineFlags const & flags
+		, sdw::CombinedImage2DRgba32 const map
+		, sdw::Vec3 const texCoords )
+	{
+		return ( flags.hasUntile()
+			? sampleUntiled( map, texCoords.xy() )
+			: sampleMap( map, texCoords ) );
 	}
 
 	sdw::Vec4 Utils::sampleMap( PipelineFlags const & flags
@@ -200,7 +185,7 @@ namespace castor3d::shader
 	{
 		return ( flags.hasUntile()
 			? sampleUntiled( map, texCoords )
-			: map.grad( texCoords.uv(), texCoords.dPdx(), texCoords.dPdy() ) );
+			: sampleMap( map, texCoords ) );
 	}
 
 	sdw::RetVec2 Utils::transformUV( TextureConfigData const & pconfig
@@ -216,11 +201,11 @@ namespace castor3d::shader
 				{
 					uv = vec2( uv.x()
 						, mix( uv.y(), 1.0_f - uv.y(), config.fneedYI ) );
-					uv = scaleUV( config.texScl.xy(), uv );
-					uv = rotateUV( config.texRot.xy(), uv );
-					uv = translateUV( config.texTrn.xy(), uv );
+					uv = scaleUV( config.scale().xy(), uv );
+					uv = rotateUV( config.rotate().xy(), uv );
+					uv = translateUV( config.translate().xy(), uv );
 
-					IF( m_writer, config.isTrnfAnim )
+					IF( m_writer, config.isTrnfAnim() )
 					{
 						uv = vec2( uv.x()
 							, mix( uv.y(), 1.0_f - uv.y(), config.fneedYI ) );
@@ -230,10 +215,10 @@ namespace castor3d::shader
 					}
 					FI;
 
-					uv.x() = ( uv.x() + config.tleSet.x() ) / config.tleSet.z();
-					uv.y() = ( uv.y() + config.tleSet.y() ) / config.tleSet.w();
+					uv.x() = ( uv.x() + config.tileSet().x() ) / config.tileSet().z();
+					uv.y() = ( uv.y() + config.tileSet().y() ) / config.tileSet().w();
 
-					IF( m_writer, config.isTileAnim )
+					IF( m_writer, config.isTileAnim() )
 					{
 						uv.x() += anim.tleSet.x() / anim.tleSet.z();
 						uv.y() += anim.tleSet.y() / anim.tleSet.w();
@@ -264,11 +249,11 @@ namespace castor3d::shader
 					uvw = vec3( uvw.x()
 						, mix( uvw.y(), 1.0_f - uvw.y(), config.fneedYI )
 						, uvw.z() );
-					uvw = scaleUV( config.texScl.xyz(), uvw );
-					uvw = rotateUV( config.texRot.xyz(), uvw );
-					uvw = translateUV( config.texTrn.xyz(), uvw );
+					uvw = scaleUV( config.scale().xyz(), uvw );
+					uvw = rotateUV( config.rotate().xyz(), uvw );
+					uvw = translateUV( config.translate().xyz(), uvw );
 
-					IF( m_writer, config.isTrnfAnim )
+					IF( m_writer, config.isTrnfAnim() )
 					{
 						uvw = vec3( uvw.x()
 							, mix( uvw.y(), 1.0_f - uvw.y(), config.fneedYI )
@@ -473,7 +458,7 @@ namespace castor3d::shader
 		, sdw::Float const & palpha
 		, sdw::Float const & pnearPlane
 		, sdw::Float const & pfarPlane
-		, sdw::Float const & paccumulationOperator )
+		, sdw::UInt const & paccumulationOperator )
 	{
 		if ( !m_computeAccumulation )
 		{
@@ -483,14 +468,14 @@ namespace castor3d::shader
 					, sdw::Float const & alpha
 					, sdw::Float const & nearPlane
 					, sdw::Float const & farPlane
-					, sdw::Float const & accumulationOperator )
+					, sdw::UInt const & accumulationOperator )
 				{
 					auto weight = m_writer.declLocale< sdw::Float >( "weight"
 						, 1.0_f );
 
-					SWITCH( m_writer, m_writer.cast< sdw::Int >( accumulationOperator ) )
+					SWITCH( m_writer, accumulationOperator )
 					{
-						CASE( 0 )
+						CASE( 0u )
 						{
 							// Naive
 							weight = 1.0_f - rescaleDepth( depth
@@ -499,35 +484,35 @@ namespace castor3d::shader
 							m_writer.caseBreakStmt();
 						}
 						ESAC;
-						CASE( 1 )
+						CASE( 1u )
 						{
 							// (10)
 							weight = max( pow( clamp( 1.0_f - depth, 0.0_f, 1.0_f ), 3.0_f ) * 3000.0_f, 0.01_f );
 							m_writer.caseBreakStmt();
 						}
 						ESAC;
-						CASE( 2 )
+						CASE( 2u )
 						{
 							// (9)
 							weight = max( min( 0.03_f / ( pow( abs( depth ) / 200.0_f, 4.0_f ) + 0.00001_f ), 3000.0_f ), 0.01_f );
 							m_writer.caseBreakStmt();
 						}
 						ESAC;
-						CASE( 3 )
+						CASE( 3u )
 						{
 							// (8)
 							weight = max( min( 10.0_f / ( pow( abs( depth ) / 200.0_f, 6.0_f ) + pow( abs( depth ) / 10.0_f, 3.0_f ) + 0.00001_f ), 3000.0_f ), 0.01_f );
 							m_writer.caseBreakStmt();
 						}
 						ESAC;
-						CASE( 4 )
+						CASE( 4u )
 						{
 							// (7)
 							weight = max( min( 10.0_f / ( pow( abs( depth ) / 200.0_f, 6.0_f ) + pow( abs( depth ) / 5.0_f, 2.0_f ) + 0.00001_f ), 3000.0_f ), 0.01_f );
 							m_writer.caseBreakStmt();
 						}
 						ESAC;
-						CASE( 5 )
+						CASE( 5u )
 						{
 							// (other)
 							auto a = m_writer.declLocale( "a"
@@ -538,7 +523,7 @@ namespace castor3d::shader
 							m_writer.caseBreakStmt();
 						}
 						ESAC;
-						CASE( 6 )
+						CASE( 6u )
 						{
 							// (other)
 							auto a = m_writer.declLocale( "a"
@@ -552,7 +537,7 @@ namespace castor3d::shader
 							m_writer.caseBreakStmt();
 						}
 						ESAC;
-						CASE( 7 )
+						CASE( 7u )
 						{
 							// (yet another one)
 							weight = max( min( 1.0_f, max( max( colour.r(), colour.g() ), colour.b() ) * alpha ), alpha ) * clamp( 0.03_f / ( 0.00001_f + pow( depth / 200.0_f, 4.0_f ) ), 0.01_f, 3000.0_f );
@@ -569,7 +554,7 @@ namespace castor3d::shader
 				, sdw::InFloat{ m_writer, "alpha" }
 				, sdw::InFloat{ m_writer, "nearPlane" }
 				, sdw::InFloat{ m_writer, "farPlane" }
-				, sdw::InFloat{ m_writer, "accumulationOperator" } );
+				, sdw::InUInt{ m_writer, "accumulationOperator" } );
 		}
 
 		return m_computeAccumulation( pdepth
@@ -589,7 +574,7 @@ namespace castor3d::shader
 				, [&]( sdw::Float const & product
 					, sdw::Vec3 const & f0 )
 				{
-					auto f90 = clamp( dot( f0, vec3( 50.0_f * 0.33_f ) ), 0.0_f, 1.0_f );
+					sdw::Float f90 = clamp( dot( f0, vec3( 50.0_f * 0.33_f ) ), 0.0_f, 1.0_f );
 					m_writer.returnStmt( sdw::fma( max( vec3( f90 ), f0 ) - f0
 						, vec3( pow( clamp( 1.0_f - product, 0.0_f, 1.0_f ), 5.0_f ) )
 						, f0 ) );
@@ -644,7 +629,7 @@ namespace castor3d::shader
 					, sdw::CombinedImage2DRgba32 const & heightMap
 					, TextureConfigData const & textureConfig )
 				{
-					IF( m_writer, textureConfig.hgtEnbl == 0.0_f )
+					IF( m_writer, textureConfig.hgtEnbl() == 0.0_f )
 					{
 						m_writer.returnStmt( texCoords );
 					}
@@ -667,14 +652,14 @@ namespace castor3d::shader
 						, 0.0_f );
 					// the amount to shift the texture coordinates per layer (from vector P)
 					auto p = m_writer.declLocale( "p"
-						, viewDir.xy() / viewDir.z() * textureConfig.hgtFact );
+						, viewDir.xy() / viewDir.z() * textureConfig.hgtFact() );
 					auto deltaTexCoords = m_writer.declLocale( "deltaTexCoords"
 						, p / numLayers );
 
 					auto currentTexCoords = m_writer.declLocale( "currentTexCoords"
 						, texCoords );
 					auto heightIndex = m_writer.declLocale( "heightIndex"
-						, m_writer.cast< sdw::UInt >( textureConfig.hgtMask ) );
+						, m_writer.cast< sdw::UInt >( textureConfig.hgtMask() ) );
 					auto sampled = m_writer.declLocale( "sampled"
 						, heightMap.grad( currentTexCoords, dx, dy ) );
 					auto currentDepthMapValue = m_writer.declLocale( "currentDepthMapValue"
@@ -744,7 +729,7 @@ namespace castor3d::shader
 					, sdw::CombinedImage2DRgba32 const & heightMap
 					, TextureConfigData const & textureConfig )
 				{
-					IF( m_writer, textureConfig.hgtEnbl == 0.0_f )
+					IF( m_writer, textureConfig.hgtEnbl() == 0.0_f )
 					{
 						m_writer.returnStmt( 1.0_f );
 					}
@@ -771,7 +756,7 @@ namespace castor3d::shader
 						auto layerHeight = m_writer.declLocale( "layerHeight"
 							, initialHeight / numLayers );
 						auto texStep = m_writer.declLocale( "deltaTexCoords"
-							, ( lightDir.xy() * textureConfig.hgtFact ) / lightDir.z() / numLayers );
+							, ( lightDir.xy() * textureConfig.hgtFact() ) / lightDir.z() / numLayers );
 
 						// current parameters
 						auto currentLayerHeight = m_writer.declLocale( "currentLayerHeight"
@@ -779,7 +764,7 @@ namespace castor3d::shader
 						auto currentTextureCoords = m_writer.declLocale( "currentTextureCoords"
 							, initialTexCoord + texStep );
 						auto heightIndex = m_writer.declLocale( "heightIndex"
-							, m_writer.cast< sdw::UInt >( textureConfig.hgtMask ) );
+							, m_writer.cast< sdw::UInt >( textureConfig.hgtMask() ) );
 						auto sampled = m_writer.declLocale( "sampled"
 							, heightMap.sample( currentTextureCoords ) );
 						auto heightFromTexture = m_writer.declLocale( "heightFromTexture"

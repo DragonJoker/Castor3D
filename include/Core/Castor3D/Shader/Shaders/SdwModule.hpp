@@ -81,7 +81,6 @@ namespace castor3d::shader
 	struct Intersection;
 	struct Light;
 	struct LightData;
-	struct LightMaterial;
 	struct LayeredLpvGridData;
 	struct LpvGridData;
 	struct LpvLightData;
@@ -95,23 +94,37 @@ namespace castor3d::shader
 	struct TextureConfigData;
 	struct VoxelData;
 
-	template< ast::var::Flag FlagT >
-	struct SurfaceT;
+	struct BlendComponents;
+	struct SurfaceBase;
+	struct RasterizerSurfaceBase;
+
+	template< typename TexcoordT >
+	struct BlendComponentsT;
+	struct Surface;
 	template< typename TexcoordT, ast::var::Flag FlagT >
 	struct RasterizerSurfaceT;
 	template< ast::var::Flag FlagT >
 	struct VertexSurfaceT;
+	template< sdw::var::Flag FlagT >
+	struct VoxelSurfaceT;
 
-	using Surface = SurfaceT< ast::var::Flag::eNone >;
 	template< ast::var::Flag FlagT >
 	using FragmentSurfaceT = RasterizerSurfaceT< sdw::Vec3, FlagT >;
+	using RasterizerSurface = RasterizerSurfaceT< sdw::Vec3, ast::var::Flag::eNone >;
+	using Vec3BlendComponents = BlendComponentsT< sdw::Vec3 >;
 	using DerivFragmentSurface = RasterizerSurfaceT< DerivTex, ast::var::Flag::eNone >;
+	template< typename TexcoordT >
+	using RasterSurfaceT = RasterizerSurfaceT< TexcoordT, ast::var::Flag::eNone >;
+	using DerivBlendComponents = BlendComponentsT< DerivTex >;
+	using VertexSurface = VertexSurfaceT< sdw::var::Flag::eNone >;
+	using VoxelSurface = VoxelSurfaceT< sdw::var::Flag::eNone >;
 
 	class BackgroundModel;
 	class BufferBase;
 	class Fog;
 	class Materials;
 	class LightingModel;
+	class PassShaders;
 	class ReflectionModel;
 	class Shadow;
 	class SssProfiles;
@@ -120,11 +133,9 @@ namespace castor3d::shader
 	class TextureConfigurations;
 	class Utils;
 
-	struct PhongLightMaterial;
 	class PhongLightingModel;
 	class PhongReflectionModel;
 
-	struct PbrLightMaterial;
 	class PbrLightingModel;
 	class PbrReflectionModel;
 
@@ -134,6 +145,7 @@ namespace castor3d::shader
 	using LightingModelPtr = std::unique_ptr< LightingModel >;
 	using ReflectionModelPtr = std::unique_ptr< ReflectionModel >;
 	using LightingModelCreator = std::function< LightingModelPtr( sdw::ShaderWriter & writer
+		, Materials const & materials
 		, Utils & utils
 		, ShadowOptions shadowsOptions
 		, SssProfiles const * sssProfiles
@@ -154,23 +166,23 @@ namespace castor3d::shader
 		, BackgroundModelPtr
 		, BackgroundModelCreator >;
 
+	Writer_Parameter( BlendComponents );
 	Writer_Parameter( DirectionalLight );
 	Writer_Parameter( Intersection );
 	Writer_Parameter( LayeredLpvGridData );
 	Writer_Parameter( Light );
-	Writer_Parameter( LightMaterial );
 	Writer_Parameter( LpvGridData );
 	Writer_Parameter( LpvLightData );
 	Writer_Parameter( Material );
-	Writer_Parameter( PbrLightMaterial );
-	Writer_Parameter( PhongLightMaterial );
 	Writer_Parameter( PointLight );
 	Writer_Parameter( Ray );
 	Writer_Parameter( SpotLight );
 	Writer_Parameter( Surface );
 	Writer_Parameter( TextureAnimData );
 	Writer_Parameter( TextureConfigData );
+	Writer_Parameter( VertexSurface );
 	Writer_Parameter( VoxelData );
+	Writer_Parameter( VoxelSurface );
 
 	C3D_API uint32_t getSpotShadowMapCount();
 	C3D_API uint32_t getPointShadowMapCount();
@@ -193,6 +205,23 @@ namespace castor3d::shader
 		{
 		}
 
+		DerivTex( sdw::Vec2 const & puv
+			, sdw::Vec2 const & pdPdx
+			, sdw::Vec2 const & pdPdy )
+			: DerivTex{ sdw::findWriterMandat( puv, pdPdx, pdPdy )
+				, sdw::makeAggrInit( makeType( puv.getType()->getCache() )
+					, [&puv, &pdPdx, &pdPdy]()
+					{
+						sdw::expr::ExprList result;
+						result.emplace_back( makeExpr( puv ) );
+						result.emplace_back( makeExpr( pdPdx ) );
+						result.emplace_back( makeExpr( pdPdy ) );
+						return result;
+					}() )
+				, true }
+		{
+		}
+
 		C3D_API sdw::Float computeMip( sdw::Vec2 const & texSize )const;
 
 		auto uv()const { return getMember< "uv" >(); }
@@ -201,6 +230,8 @@ namespace castor3d::shader
 	};
 
 	Writer_Parameter( DerivTex );
+
+	CU_DeclareSmartPtr( Material );
 
 	//@}
 	//@}

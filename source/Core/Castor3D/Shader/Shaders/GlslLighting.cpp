@@ -4,6 +4,7 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Limits.hpp"
 #include "Castor3D/Material/Pass/PassFactory.hpp"
+#include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
@@ -23,112 +24,6 @@ namespace castor3d::shader
 {
 	//*********************************************************************************************
 
-	namespace lighting
-	{
-		static sdw::Float interpolate( sdw::Float const & lhs
-			, sdw::Float const & rhs
-			, sdw::Float const & weight )
-		{
-			return lhs * ( 1.0_f - weight ) + rhs * weight;
-		}
-
-		static sdw::Vec3 interpolate( sdw::Vec3 const & lhs
-			, sdw::Vec3 const & rhs
-			, sdw::Float const & weight )
-		{
-			return lhs * vec3( 1.0_f - weight ) + rhs * vec3( weight );
-		}
-
-		template< typename TexcoordT >
-		void computeMapContributions( LightingModel const & lightingModel
-			, sdw::ShaderWriter & writer
-			, Utils & utils
-			, PipelineFlags const & flags
-			, TextureConfigurations const & textureConfigs
-			, TextureAnimations const & textureAnims
-			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-			, shader::Material const & material
-			, TexcoordT & texCoords0
-			, TexcoordT & texCoords1
-			, TexcoordT & texCoords2
-			, TexcoordT & texCoords3
-			, sdw::Vec3 & normal
-			, sdw::Vec3 & tangent
-			, sdw::Vec3 & bitangent
-			, sdw::Vec3 & emissive
-			, sdw::Float & opacity
-			, sdw::Float & occlusion
-			, sdw::Float & transmittance
-			, LightMaterial & lightMat
-			, sdw::Vec3 & tangentSpaceViewPosition
-			, sdw::Vec3 & tangentSpaceFragPosition )
-		{
-			if ( !textureConfigs.isEnabled() )
-			{
-				lightingModel.updateMaterial( flags
-					, lightMat
-					, emissive );
-				return;
-			}
-
-			FOR( writer, sdw::UInt, index, 0u, index < material.texturesCount() && index < MaxPassTextures, ++index )
-			{
-				auto id = writer.declLocale( "c3d_id"
-					, material.getTexture( index ) );
-
-				IF( writer, id > 0_u )
-				{
-					auto config = writer.declLocale( "c3d_config"
-						, textureConfigs.getTextureConfiguration( id ) );
-					auto anim = writer.declLocale( "c3d_anim"
-						, textureAnims.getTextureAnimation( id ) );
-					auto texcoord = writer.declLocale( "c3d_tex"
-						, textureConfigs.getTexcoord( config
-							, texCoords0
-							, texCoords1
-							, texCoords2
-							, texCoords3 ) );
-					auto sampled = config.computeCommonMapContribution( utils
-						, flags
-						, anim
-						, maps[id - 1_u]
-						, texcoord
-						, emissive
-						, opacity
-						, occlusion
-						, transmittance
-						, normal
-						, tangent
-						, bitangent
-						, tangentSpaceViewPosition
-						, tangentSpaceFragPosition );
-					textureConfigs.setTexcoord( config
-						, texcoord
-						, texCoords0
-						, texCoords1
-						, texCoords2
-						, texCoords3 );
-					lightingModel.modifyMaterial( flags
-						, sampled
-						, config
-						, lightMat );
-				}
-				FI;
-			}
-			ROF;
-
-			lightingModel.updateMaterial( flags
-				, lightMat
-				, emissive );
-		}
-	}
-
-	//*********************************************************************************************
-
-	castor::String const LightBufferName = cuT( "C3D_Lights" );
-
-	//*********************************************************************************************
-
 	castor::String getLightingModelName( Engine const & engine
 		, PassTypeID passType )
 	{
@@ -137,86 +32,15 @@ namespace castor3d::shader
 
 	//*********************************************************************************************
 
-	LightMaterial::LightMaterial( sdw::ShaderWriter & writer
-		, sdw::expr::ExprPtr expr
-		, bool enabled )
-		: sdw::StructInstance{ writer, std::move( expr ), enabled }
-		, albedo{ getMember< sdw::Vec3 >( "albedo" ) }
-		, specular{ getMember< sdw::Vec3 >( "specular" ) }
-		, albDiv{ getMember< sdw::Float >( "albDiv" ) }
-		, spcDiv{ getMember< sdw::Float >( "spcDiv" ) }
-		, sssProfileIndex{ getMember< sdw::Float >( "sssProfileIndex" ) }
-		, sssTransmittance{ getMember< sdw::Float >( "sssTransmittance" ) }
-	{
-	}
-
-	ast::type::BaseStructPtr LightMaterial::makeType( ast::type::TypesCache & cache )
-	{
-		auto result = cache.getStruct( ast::type::MemoryLayout::eC
-			, "C3D_LightMaterial" );
-
-		if ( result->empty() )
-		{
-			result->declMember( "albedo", ast::type::Kind::eVec3F );
-			result->declMember( "specular", ast::type::Kind::eVec3F );
-			result->declMember( "albDiv", ast::type::Kind::eFloat );
-			result->declMember( "spcDiv", ast::type::Kind::eFloat );
-			result->declMember( "sssProfileIndex", ast::type::Kind::eFloat );
-			result->declMember( "sssTransmittance", ast::type::Kind::eFloat );
-		}
-
-		return result;
-	}
-
-	void LightMaterial::create( Materials const & materials
-		, Material const & material )
-	{
-		create( vec3( 1.0_f ), materials, material );
-	}
-
-	void LightMaterial::blendWith( LightMaterial const & material
-		, sdw::Float const & weight )
-	{
-		albedo = lighting::interpolate( albedo, material.albedo, weight );
-		specular = lighting::interpolate( specular, material.specular, weight );
-		albDiv = lighting::interpolate( albDiv, material.albDiv, weight );
-		spcDiv = lighting::interpolate( spcDiv, material.spcDiv, weight );
-		doBlendWith( material, weight );
-	}
-
-	sdw::Vec3 LightMaterial::computeF0( sdw::Vec3 const & albedo
-		, sdw::Float const & metalness )
-	{
-		return mix( vec3( 0.04_f ), albedo, vec3( metalness ) );
-	}
-
-	sdw::Float LightMaterial::computeMetalness( sdw::Vec3 const & albedo
-		, sdw::Vec3 const & f0 )
-	{
-		return length( f0 );
-		//return ( length( clamp( f0, vec3( 0.04_f ), albedo ) )
-		//		/ length( max( albedo, vec3( 0.04_f ) ) ) );
-	}
-
-	sdw::Float LightMaterial::computeRoughness( sdw::Float const & glossiness )
-	{
-		return 1.0_f - glossiness;
-	}
-
-	sdw::Float LightMaterial::computeGlossiness( sdw::Float const & roughness )
-	{
-		return 1.0_f - roughness;
-	}
-
-	//*********************************************************************************************
-
 	LightingModel::LightingModel( sdw::ShaderWriter & writer
+		, Materials const & materials
 		, Utils & utils
 		, ShadowOptions shadowOptions
 		, SssProfiles const * sssProfiles
 		, bool enableVolumetric
 		, std::string prefix )
 		: m_writer{ writer }
+		, m_materials{ materials }
 		, m_utils{ utils }
 		, m_enableVolumetric{ enableVolumetric }
 		, m_prefix{ std::move( prefix ) }
@@ -227,6 +51,31 @@ namespace castor3d::shader
 				, *sssProfiles )
 			: nullptr ) }
 	{
+	}
+
+	sdw::Vec3 LightingModel::combine( BlendComponents const & components
+		, sdw::Vec3 const & directDiffuse
+		, sdw::Vec3 const & indirectDiffuse
+		, sdw::Vec3 const & directSpecular
+		, sdw::Vec3 const & directScattering
+		, sdw::Vec3 const & indirectSpecular
+		, sdw::Vec3 const & directAmbient
+		, sdw::Vec3 const & indirectAmbient
+		, sdw::Vec3 const & reflected
+		, sdw::Vec3 const & refracted )
+	{
+		return combine( components
+			, directDiffuse
+			, indirectDiffuse
+			, directSpecular
+			, directScattering
+			, indirectSpecular
+			, directAmbient
+			, indirectAmbient
+			, components.occlusion
+			, components.emissive
+			, reflected
+			, refracted );
 	}
 
 	void LightingModel::declareModel( uint32_t lightsBufBinding
@@ -243,7 +92,7 @@ namespace castor3d::shader
 		doDeclareGetSpotLight();
 	}
 
-	void LightingModel::computeCombined( LightMaterial const & material
+	void LightingModel::computeCombined( BlendComponents const & components
 		, SceneData const & sceneData
 		, BackgroundModel & background
 		, Surface const & surface
@@ -259,7 +108,7 @@ namespace castor3d::shader
 		FOR( m_writer, sdw::UInt, dir, begin, dir < end, ++dir )
 		{
 			compute( getDirectionalLight( dir )
-				, material
+				, components
 				, surface
 				, background
 				, worldEye
@@ -274,7 +123,7 @@ namespace castor3d::shader
 		FOR( m_writer, sdw::UInt, point, begin, point < end, ++point )
 		{
 			compute( getPointLight( point )
-				, material
+				, components
 				, surface
 				, worldEye
 				, receivesShadows
@@ -288,7 +137,7 @@ namespace castor3d::shader
 		FOR( m_writer, sdw::UInt, spot, begin, spot < end, ++spot )
 		{
 			compute( getSpotLight( spot )
-				, material
+				, components
 				, surface
 				, worldEye
 				, receivesShadows
@@ -298,6 +147,7 @@ namespace castor3d::shader
 	}
 
 	LightingModelPtr LightingModel::createModel( Engine const & engine
+		, Materials const & materials
 		, Utils & utils
 		, castor::String const & name
 		, uint32_t lightsBufBinding
@@ -309,6 +159,7 @@ namespace castor3d::shader
 		, bool enableVolumetric )
 	{
 		auto result = utils.createLightingModel( engine
+			, materials
 			, name
 			, shadows
 			, sssProfiles
@@ -321,6 +172,7 @@ namespace castor3d::shader
 	}
 
 	LightingModelPtr LightingModel::createModel( Engine const & engine
+		, Materials const & materials
 		, Utils & utils
 		, castor::String const & name
 		, LightType lightType
@@ -333,6 +185,7 @@ namespace castor3d::shader
 		, uint32_t shadowMapSet )
 	{
 		auto result = utils.createLightingModel( engine
+			, materials
 			, name
 			, shadows
 			, sssProfiles
@@ -386,7 +239,7 @@ namespace castor3d::shader
 		doDeclareGetSpotLight();
 	}
 
-	sdw::Vec3 LightingModel::computeCombinedDiffuse( LightMaterial const & material
+	sdw::Vec3 LightingModel::computeCombinedDiffuse( BlendComponents const & components
 		, SceneData const & sceneData
 		, Surface const & surface
 		, sdw::Vec3 const & worldEye
@@ -402,7 +255,7 @@ namespace castor3d::shader
 		FOR( m_writer, sdw::UInt, dir, begin, dir < end, ++dir )
 		{
 			result += computeDiffuse( getDirectionalLight( dir )
-				, material
+				, components
 				, surface
 				, worldEye
 				, receivesShadows );
@@ -415,7 +268,7 @@ namespace castor3d::shader
 		FOR( m_writer, sdw::UInt, point, begin, point < end, ++point )
 		{
 			result += computeDiffuse( getPointLight( point )
-				, material
+				, components
 				, surface
 				, worldEye
 				, receivesShadows );
@@ -428,7 +281,7 @@ namespace castor3d::shader
 		FOR( m_writer, sdw::UInt, spot, begin, spot < end, ++spot )
 		{
 			result += computeDiffuse( getSpotLight( spot )
-				, material
+				, components
 				, surface
 				, worldEye
 				, receivesShadows );
@@ -439,6 +292,7 @@ namespace castor3d::shader
 	}
 
 	LightingModelPtr LightingModel::createDiffuseModel( Engine const & engine
+		, Materials const & materials
 		, Utils & utils
 		, castor::String const & name
 		, uint32_t lightsBufBinding
@@ -449,6 +303,7 @@ namespace castor3d::shader
 		, bool enableVolumetric )
 	{
 		auto result = utils.createLightingModel( engine
+			, materials
 			, name
 			, shadows
 			, nullptr
@@ -521,161 +376,6 @@ namespace castor3d::shader
 		}
 	}
 
-	void LightingModel::computeMapContributions( PipelineFlags const & flags
-		, TextureConfigurations const & textureConfigs
-		, TextureAnimations const & textureAnims
-		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-		, shader::Material const & material
-		, DerivTex & texCoords0
-		, DerivTex & texCoords1
-		, DerivTex & texCoords2
-		, DerivTex & texCoords3
-		, sdw::Vec3 & normal
-		, sdw::Vec3 & tangent
-		, sdw::Vec3 & bitangent
-		, sdw::Vec3 & emissive
-		, sdw::Float & opacity
-		, sdw::Float & occlusion
-		, sdw::Float & transmittance
-		, LightMaterial & lightMat
-		, sdw::Vec3 & tangentSpaceViewPosition
-		, sdw::Vec3 & tangentSpaceFragPosition )
-	{
-		lighting::computeMapContributions( *this
-			, m_writer
-			, m_utils
-			, flags
-			, textureConfigs
-			, textureAnims
-			, maps
-			, material
-			, texCoords0
-			, texCoords1
-			, texCoords2
-			, texCoords3
-			, normal
-			, tangent
-			, bitangent
-			, emissive
-			, opacity
-			, occlusion
-			, transmittance
-			, lightMat
-			, tangentSpaceViewPosition
-			, tangentSpaceFragPosition );
-	}
-
-	void LightingModel::computeMapContributions( PipelineFlags const & flags
-		, TextureConfigurations const & textureConfigs
-		, TextureAnimations const & textureAnims
-		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-		, shader::Material const & material
-		, sdw::Vec3 & texCoords0
-		, sdw::Vec3 & texCoords1
-		, sdw::Vec3 & texCoords2
-		, sdw::Vec3 & texCoords3
-		, sdw::Vec3 & normal
-		, sdw::Vec3 & tangent
-		, sdw::Vec3 & bitangent
-		, sdw::Vec3 & emissive
-		, sdw::Float & opacity
-		, sdw::Float & occlusion
-		, sdw::Float & transmittance
-		, LightMaterial & lightMat
-		, sdw::Vec3 & tangentSpaceViewPosition
-		, sdw::Vec3 & tangentSpaceFragPosition )
-	{
-		lighting::computeMapContributions( *this
-			, m_writer
-			, m_utils
-			, flags
-			, textureConfigs
-			, textureAnims
-			, maps
-			, material
-			, texCoords0
-			, texCoords1
-			, texCoords2
-			, texCoords3
-			, normal
-			, tangent
-			, bitangent
-			, emissive
-			, opacity
-			, occlusion
-			, transmittance
-			, lightMat
-			, tangentSpaceViewPosition
-			, tangentSpaceFragPosition );
-	}
-
-	void LightingModel::computeMapDiffuseContributions( PipelineFlags const & flags
-		, TextureConfigurations const & textureConfigs
-		, TextureAnimations const & textureAnims
-		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-		, shader::Material const & material
-		, sdw::Vec3 & texCoords0
-		, sdw::Vec3 & texCoords1
-		, sdw::Vec3 & texCoords2
-		, sdw::Vec3 & texCoords3
-		, sdw::Vec3 & emissive
-		, sdw::Float & opacity
-		, sdw::Float & occlusion
-		, LightMaterial & lightMat )
-	{
-		if ( !textureConfigs.isEnabled() )
-		{
-			updateMaterial( flags
-				, lightMat
-				, emissive );
-			return;
-		}
-
-		FOR( m_writer, sdw::UInt, index, 0u, index < material.texturesCount() && index < MaxPassTextures, ++index )
-		{
-			auto id = m_writer.declLocale( "c3d_id"
-				, material.getTexture( index ) );
-
-			IF( m_writer, id > 0_u )
-			{
-				auto config = m_writer.declLocale( "config"
-					, textureConfigs.getTextureConfiguration( id ) );
-				auto anim = m_writer.declLocale( "anim"
-					, textureAnims.getTextureAnimation( id ) );
-				auto texcoord = m_writer.declLocale( "tex"
-					, textureConfigs.getTexcoord( config
-						, texCoords0
-						, texCoords1
-						, texCoords2
-						, texCoords3 ) );
-				auto sampled = config.computeCommonMapVoxelContribution( m_utils
-					, flags
-					, anim
-					, maps[id - 1_u]
-					, texcoord
-					, emissive
-					, opacity
-					, occlusion );
-				textureConfigs.setTexcoord( config
-					, texcoord
-					, texCoords0
-					, texCoords1
-					, texCoords2
-					, texCoords3 );
-				modifyMaterial( flags
-					, sampled
-					, config
-					, lightMat );
-			}
-			FI;
-		}
-		ROF;
-
-		updateMaterial( flags
-			, lightMat
-			, emissive );
-	}
-
 	DirectionalLight LightingModel::getDirectionalLight( sdw::UInt const & index )const
 	{
 		return m_getDirectionalLight( index );
@@ -700,7 +400,8 @@ namespace castor3d::shader
 		, uint32_t set )
 	{
 		m_ssbo = std::make_unique< sdw::StorageBuffer >( m_writer
-			, LightBufferName
+			, "C3D_Lights"
+			, "c3d_lights"
 			, binding
 			, set );
 		m_ssbo->declMember< sdw::UVec4 >( "counts" );

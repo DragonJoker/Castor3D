@@ -96,6 +96,7 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserSceneImportRoll )
 	CU_DeclareAttributeParser( parserSceneImportNoOptimisations )
 	CU_DeclareAttributeParser( parserSceneImportEmissiveMult )
+	CU_DeclareAttributeParser( parserSceneImportTexRemap )
 	CU_DeclareAttributeParser( parserSceneImportEnd )
 
 	// ParticleSystem parsers
@@ -221,6 +222,25 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserMaterialPass )
 	CU_DeclareAttributeParser( parserMaterialRenderPass )
 	CU_DeclareAttributeParser( parserMaterialEnd )
+
+	// Pass Parsers
+	CU_DeclareAttributeParser( parserPassTextureUnit )
+	CU_DeclareAttributeParser( parserPassShader )
+	CU_DeclareAttributeParser( parserPassEnd )
+
+	// Texture Unit Parsers
+	CU_DeclareAttributeParser( parserUnitChannel )
+	CU_DeclareAttributeParser( parserUnitImage )
+	CU_DeclareAttributeParser( parserUnitLevelsCount )
+	CU_DeclareAttributeParser( parserUnitRenderTarget )
+	CU_DeclareAttributeParser( parserUnitSampler )
+	CU_DeclareAttributeParser( parserUnitInvertY )
+	CU_DeclareAttributeParser( parserUnitTransform )
+	CU_DeclareAttributeParser( parserUnitTileSet )
+	CU_DeclareAttributeParser( parserUnitTiles )
+	CU_DeclareAttributeParser( parserUnitAnimation )
+	CU_DeclareAttributeParser( parserUnitTexcoordSet )
+	CU_DeclareAttributeParser( parserUnitEnd )
 
 	// Texture Config Parsers
 	CU_DeclareAttributeParser( parserTexTransformRotate )
@@ -368,12 +388,6 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserSsaoBendStepCount )
 	CU_DeclareAttributeParser( parserSsaoBendStepSize )
 	CU_DeclareAttributeParser( parserSsaoEnd )
-
-	// Subsurface Scattering parsers
-	CU_DeclareAttributeParser( parserSubsurfaceScatteringStrength )
-	CU_DeclareAttributeParser( parserSubsurfaceScatteringGaussianWidth )
-	CU_DeclareAttributeParser( parserSubsurfaceScatteringTransmittanceProfile )
-	CU_DeclareAttributeParser( parserSubsurfaceScatteringEnd )
 
 	// Transmittance Profile parsers
 	CU_DeclareAttributeParser( parserTransmittanceProfileFactor )

@@ -24,6 +24,7 @@ namespace castor3d
 			SDW_DeclStructInstance( , PayloadT );
 
 			static sdw::type::IOStructPtr makeIOType( sdw::type::TypesCache & cache );
+			static sdw::type::BaseStructPtr makeType( sdw::type::TypesCache & cache );
 
 			sdw::Array< sdw::UInt > meshletIndices;
 		};

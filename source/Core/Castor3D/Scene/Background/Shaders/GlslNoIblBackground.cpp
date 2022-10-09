@@ -1,6 +1,7 @@
 #include "Castor3D/Scene/Background/Shaders/GlslNoIblBackground.hpp"
 
 #include "Castor3D/Render/RenderPipeline.hpp"
+#include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
@@ -37,7 +38,7 @@ namespace castor3d::shader
 
 	sdw::RetVec3 NoIblBackgroundModel::computeReflections( sdw::Vec3 const & pwsIncident
 		, sdw::Vec3 const & pwsNormal
-		, LightMaterial const & pmaterial
+		, BlendComponents & components
 		, sdw::CombinedImage2DRg32 const & pbrdf )
 	{
 		if ( !m_computeReflections )
@@ -64,15 +65,15 @@ namespace castor3d::shader
 		return m_computeReflections( pwsIncident
 			, pwsNormal
 			, backgroundMap
-			, pmaterial.specular
-			, pmaterial.getRoughness() );
+			, components.specular
+			, components.roughness );
 	}
 
 	sdw::RetVec3 NoIblBackgroundModel::computeRefractions( sdw::Vec3 const & pwsIncident
 		, sdw::Vec3 const & pwsNormal
 		, sdw::Float const & prefractionRatio
 		, sdw::Vec3 const & ptransmission
-		, LightMaterial const & pmaterial )
+		, BlendComponents & components )
 	{
 		auto backgroundMap = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapBackground" );
 		return doComputeRefractions( pwsIncident
@@ -80,15 +81,15 @@ namespace castor3d::shader
 			, backgroundMap
 			, prefractionRatio
 			, ptransmission
-			, pmaterial.albedo
-			, pmaterial.getRoughness() );
+			, components.colour
+			, components.roughness );
 	}
 
 	sdw::RetVoid NoIblBackgroundModel::mergeReflRefr( sdw::Vec3 const & pwsIncident
 		, sdw::Vec3 const & pwsNormal
 		, sdw::Float const & prefractionRatio
 		, sdw::Vec3 const & ptransmission
-		, LightMaterial const & pmaterial
+		, BlendComponents & components
 		, sdw::Vec3 & preflection
 		, sdw::Vec3 & prefraction )
 	{
@@ -148,8 +149,8 @@ namespace castor3d::shader
 			, backgroundMap
 			, prefractionRatio
 			, ptransmission
-			, pmaterial.albedo
-			, pmaterial.getRoughness()
+			, components.colour
+			, components.roughness
 			, preflection
 			, prefraction );
 	}
@@ -159,7 +160,7 @@ namespace castor3d::shader
 		, sdw::CombinedImageCubeRgba32 const & pbackgroundMap
 		, sdw::Float const & prefractionRatio
 		, sdw::Vec3 const & ptransmission
-		, sdw::Vec3 const & palbedo
+		, sdw::Vec3 & palbedo
 		, sdw::Float const & proughness )
 	{
 		if ( !m_computeRefractions )

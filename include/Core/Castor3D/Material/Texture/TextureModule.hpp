@@ -26,14 +26,15 @@ namespace castor3d
 	enum class TextureSpace
 		: uint16_t
 	{
-		//!\~english Modifier: Normalized value (Colour in [-1, 1] range, depth in [0, 1] range).
-		//!\~french Modificateur: Valeur normalisée (Couleur dans l'intervalle [-1, 1], profondeur dans l'intervalle [0, 1]).
+		eNone = 0x0000,
+		//!\~english Modifier: Normalized value (Colour in [0, 1] range, depth in [0, 1] range).
+		//!\~french Modificateur: Valeur normalisée (Couleur dans l'intervalle [0, 1], profondeur dans l'intervalle [0, 1]).
 		eNormalised = 0x0001 << 0,
 		//!\~english Modifier: Y inverted space.
 		//!\~french Modificateur: Espace Y inversé.
 		eYInverted = 0x0001 << 1,
-		//!\~english Colour texture in R.
-		//!\~french Texture couleur dans R.
+		//!\~english Colour texture.
+		//!\~french Texture couleur.
 		eColour = 0x0001 << 2,
 		//!\~english Depth in [near, far] range.
 		//!\~french Profondeur dans l'intervalle [near, far].
@@ -56,6 +57,9 @@ namespace castor3d
 		//!\~english Stencil data.
 		//!\~french Données de stencil.
 		eStencil = 0x0001 << 9,
+		//!\~english Allows SRGB formats.
+		//!\~french Autorise les formats SRGB.
+		eAllowSRGB = 0x0001 << 10,
 	};
 	CU_ImplementFlags( TextureSpace )
 	C3D_API castor::String getName( TextureSpace value );
@@ -149,6 +153,15 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Hashes a TextureSourceInfo.
+	*\~french
+	*\brief
+	*	Hashe une TextureSourceInfo.
+	*/
+	struct TextureSourceInfoHasher;
+	/**
+	*\~english
+	*\brief
 	*	Texture unit representation.
 	*\remarks
 	*	A texture unit is a texture with few options, like channel, blend modes, transformations...
@@ -159,6 +172,15 @@ namespace castor3d
 	*	Une unité de texture se compose d'une texture avec des options telles que son canal, modes de mélange, transformations...
 	*/
 	class TextureUnit;
+	/**
+	*\~english
+	*\brief
+	*	Data for a texture unit.
+	*\~french
+	*\brief
+	*	Données pour une unité de texture.
+	*/
+	struct TextureUnitData;
 	/**
 	*\~english
 	*\brief
@@ -187,6 +209,7 @@ namespace castor3d
 	CU_DeclareCUSmartPtr( castor3d, TextureSource, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, TextureUnit, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, TextureView, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, TextureUnitData, C3D_API );
 
 	//! TextureUnit array
 	CU_DeclareVector( TextureUnit, TextureUnit );
@@ -194,6 +217,10 @@ namespace castor3d
 	CU_DeclareVector( TextureUnitSPtr, TextureUnitPtr );
 	//! TextureUnit reference array
 	CU_DeclareVector( std::reference_wrapper< TextureUnit >, DepthMap );
+
+	using TextureUnitDatas = std::vector< TextureUnitDataUPtr >;
+	using TextureUnitDataRefs = std::vector< TextureUnitDataRPtr >;
+	using TextureUnitDataSet = std::set< TextureUnitDataRPtr >;
 
 	using OnTextureUnitChangedFunction = std::function< void( TextureUnit const & ) >;
 	using OnTextureUnitChanged = castor::SignalT< OnTextureUnitChangedFunction >;

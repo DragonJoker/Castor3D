@@ -428,6 +428,21 @@ namespace castor3d
 				return result;
 			}
 
+			static sdw::type::BaseStructPtr makeType( sdw::type::TypesCache & cache )
+			{
+				auto result = cache.getStruct( sdw::type::MemoryLayout::eStd430
+					, "C3D_T3DTo3DSurface" );
+
+				if ( result->empty() )
+				{
+					result->declMember( "voxelColour"
+						, sdw::type::Kind::eVec4F
+						, sdw::type::NotArray );
+				}
+
+				return result;
+			}
+
 			sdw::Vec4 voxelColour;
 		};
 

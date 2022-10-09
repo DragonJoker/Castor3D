@@ -270,17 +270,33 @@
 	</Type>
 
 	<Type Name="aiMaterialProperty">
-		<DisplayString Condition="mType==1">{mKey} {*(float*)mData}</DisplayString>
-		<DisplayString Condition="mType==2">{mKey} {*(double*)mData}</DisplayString>
+		<DisplayString Condition="mType==1">{mKey} {(float*)mData,hv}</DisplayString>
+		<DisplayString Condition="mType==2">{mKey} {(double*)mData,hv}</DisplayString>
 		<DisplayString Condition="mType==3">{mKey} {mData+4,s}</DisplayString>
-		<DisplayString Condition="mType==4">{mKey} {*(int*)mData}</DisplayString>
+		<DisplayString Condition="mType==4">{mKey} {(int*)mData,hv}</DisplayString>
 		<DisplayString Condition="mType>4">{mKey} {mData}</DisplayString>
 		<Expand>
 			<Item Name="[key]">mKey</Item>
-			<Item Name="[value]" Condition="mType==1">*(float*)mData</Item>
 			<Item Name="[value]" Condition="mType==2">*(double*)mData</Item>
 			<Item Name="[value]" Condition="mType==3">mData+4,s</Item>
-			<Item Name="[value]" Condition="mType==4">*(int*)mData</Item>
+			<Synthetic Name="[value]" Condition="mType==1">
+				<DisplayString>[size={mDataLength / 4}]</DisplayString>
+				<Expand>
+					<ArrayItems>
+						<Size>mDataLength / 4</Size>
+						<ValuePointer>(float*)mData</ValuePointer>
+					</ArrayItems>
+				</Expand>
+			</Synthetic>
+			<Synthetic Name="[value]" Condition="mType==4">
+				<DisplayString>[size={mDataLength / 4}]</DisplayString>
+				<Expand>
+					<ArrayItems>
+						<Size>mDataLength / 4</Size>
+						<ValuePointer>(int*)mData</ValuePointer>
+					</ArrayItems>
+				</Expand>
+			</Synthetic>
 			<Synthetic Name="[value]" Condition="mType==5">
 				<DisplayString>[size={mDataLength}]</DisplayString>
 				<Expand>

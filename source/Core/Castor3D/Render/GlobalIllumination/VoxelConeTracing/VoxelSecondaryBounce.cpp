@@ -169,8 +169,8 @@ namespace castor3d
 						// to world
 						position *= c3d_voxelData.gridToWorld;
 
-						auto surface = writer.declLocale< shader::Surface >( "surface" );
-						surface.create( position, normal );
+						auto surface = writer.declLocale( "surface"
+							, shader::Surface{ position, normal } );
 						auto radiance = writer.declLocale( "radiance"
 							, indirect.traceConeRadiance( firstBounce
 								, surface

@@ -207,10 +207,10 @@ namespace castor3d
 			, uint32_t( LightPassIdx::eDepthObj ) );
 		pass.addSampledView( m_gpResult[DsTexture::eNmlOcc].sampledViewId
 			, uint32_t( LightPassIdx::eNmlOcc ) );
-		pass.addSampledView( m_gpResult[DsTexture::eColRgh].sampledViewId
-			, uint32_t( LightPassIdx::eColRgh ) );
-		pass.addSampledView( m_gpResult[DsTexture::eSpcMtl].sampledViewId
-			, uint32_t( LightPassIdx::eSpcMtl ) );
+		pass.addSampledView( m_gpResult[DsTexture::eColMtl].sampledViewId
+			, uint32_t( LightPassIdx::eColMtl ) );
+		pass.addSampledView( m_gpResult[DsTexture::eSpcRgh].sampledViewId
+			, uint32_t( LightPassIdx::eSpcRgh ) );
 		pass.addSampledView( m_gpResult[DsTexture::eEmsTrn].sampledViewId
 			, uint32_t( LightPassIdx::eEmsTrn ) );
 		auto index = uint32_t( LightPassIdx::eCount );

@@ -34,7 +34,8 @@ namespace castor3d
 			}
 		}
 
-		static PipelineHashDetails getLoHashDetails( uint64_t hash
+		static PipelineHiHashDetails getHiHashDetails( uint64_t hiHash
+			, PassComponentsBitset components
 			, ShaderFlags shaderFlags )
 		{
 			constexpr auto maxSubmeshSize = castor::getBitSize( uint32_t( SubmeshFlag::eAllBase ) );
@@ -54,29 +55,42 @@ namespace castor3d
 			constexpr auto maxSize = maxSubmeshSize + maxProgramSize + maxPassIDSize + maxPassSize + maxTextureSize + maxCompareOpSize + maxPassLayerSize;
 			static_assert( 64 >= maxSize );
 
-			PipelineHashDetails result{ 0u };
+			PipelineHiHashDetails result{ {}, 0u };
 			result.m_shaderFlags = shaderFlags;
+			result.components = std::move( components );
 
 			auto offset = 0u;
-			result.m_submeshFlags = SubmeshFlags( ( hash >> offset ) & maxSubmeshMask );
+			result.m_submeshFlags = SubmeshFlags( ( hiHash >> offset ) & maxSubmeshMask );
 			offset += maxSubmeshSize;
-			result.m_programFlags = ProgramFlags( ( hash >> offset ) & maxProgramMask );
+			result.m_programFlags = ProgramFlags( ( hiHash >> offset ) & maxProgramMask );
 			offset += maxProgramSize;
-			result.passType = PassFlags( ( hash >> offset ) & maxPassIDMask );
+			result.passType = PassFlags( ( hiHash >> offset ) & maxPassIDMask );
 			offset += maxPassIDSize;
-			result.m_passFlags = PassFlags( ( hash >> offset ) & maxPassMask );
+			result.m_passFlags = PassFlags( ( hiHash >> offset ) & maxPassMask );
 			offset += maxPassSize;
-			result.m_texturesFlags = TextureFlags( ( hash >> offset ) & maxTextureMask );
+			result.m_texturesFlags = TextureFlags( ( hiHash >> offset ) & maxTextureMask );
 			offset += maxTextureSize;
-			result.alphaFunc = VkCompareOp( ( hash >> offset ) & maxCompareOpMask );
+			result.alphaFunc = VkCompareOp( ( hiHash >> offset ) & maxCompareOpMask );
 			offset += maxCompareOpSize;
-			result.passLayerIndex = uint32_t( ( hash >> offset ) & maxPassLayerMask );
+			result.passLayerIndex = uint32_t( ( hiHash >> offset ) & maxPassLayerMask );
 
 			CU_Require( result.passType != 0 );
 			return result;
 		}
 
-		static uint64_t getLoHash( PipelineFlags & flags )
+		static uint64_t getComponentsHash( PassComponentsBitset const & components )
+		{
+			uint64_t result{ std::hash< bool >{}( components[0] ) };
+
+			for ( uint32_t i = 1u; i < components.getSize(); ++i )
+			{
+				castor::hashCombine64( result, components[i] );
+			}
+
+			return result;
+		}
+
+		static uint64_t getHiHash( PipelineHiHashDetails & flags )
 		{
 			constexpr auto maxSubmeshSize = castor::getBitSize( uint32_t( SubmeshFlag::eAllBase ) );
 			constexpr auto maxProgramSize = castor::getBitSize( uint32_t( ProgramFlag::eAllBase ) );
@@ -90,20 +104,14 @@ namespace castor3d
 			CU_Require( flags.passType != 0 );
 			CU_Require( flags.passLayerIndex < MaxPassLayers );
 
-			if ( flags.enablePassMasks() )
-			{
-				// When pass masks component is present, only consider first pass,
-				// since blending will occur in shader.
-				flags.passLayerIndex = 0u;
-			}
-
-			remFlag( flags.m_programFlags, ProgramFlag::eAllOptional );
+			auto programFlags = flags.m_programFlags;
+			remFlag( programFlags, ProgramFlag::eAllOptional );
 
 			auto offset = 0u;
 			uint64_t result{};
 			result = uint64_t( flags.m_submeshFlags ) << offset;
 			offset += maxSubmeshSize;
-			result |= uint64_t( flags.m_programFlags ) << offset;
+			result |= uint64_t( programFlags ) << offset;
 			offset += maxProgramSize;
 			result |= uint64_t( flags.passType ) << offset;
 			offset += maxPassIDSize;
@@ -116,10 +124,10 @@ namespace castor3d
 			result |= uint64_t( flags.passLayerIndex ) << offset;
 
 #if !defined( NDEBUG )
-			auto details = getLoHashDetails( result, flags.m_shaderFlags );
+			auto details = getHiHashDetails( result, flags.components, flags.m_shaderFlags );
 			CU_Require( flags.m_shaderFlags == details.m_shaderFlags );
 			CU_Require( flags.m_submeshFlags == details.m_submeshFlags );
-			CU_Require( flags.m_programFlags == details.m_programFlags );
+			CU_Require( programFlags == details.m_programFlags );
 			CU_Require( flags.passType == details.passType );
 			CU_Require( flags.m_passFlags == details.m_passFlags );
 			CU_Require( flags.m_texturesFlags == details.m_texturesFlags );
@@ -130,7 +138,7 @@ namespace castor3d
 		}
 
 #if !defined( NDEBUG )
-		static PipelineHiHashDetails getHiHashDetails( uint64_t hash )
+		static PipelineLoHashDetails getLoHashDetails( uint64_t hash )
 		{
 			static constexpr auto maxTargetOffsetSize = 64;
 			static constexpr auto maxSize = maxTargetOffsetSize;
@@ -139,7 +147,7 @@ namespace castor3d
 				: ( 0x1ull << uint64_t( std::min( maxTargetOffsetSize, maxSize - 1 ) ) ) - 1ull;
 			static_assert( 64 >= maxSize );
 
-			PipelineHiHashDetails result{};
+			PipelineLoHashDetails result{};
 			auto offset = 0u;
 			result.morphTargetsOffset = VkDeviceSize( ( hash >> offset ) & maxMorphTargetOffsetMask );
 
@@ -147,7 +155,7 @@ namespace castor3d
 		}
 #endif
 
-		static uint64_t getHiHash( PipelineFlags & flags )
+		static uint64_t getLoHash( PipelineLoHashDetails const & flags )
 		{
 			static constexpr auto maxTargetOffsetSize = 64;
 			static constexpr auto maxSize = maxTargetOffsetSize;
@@ -160,7 +168,7 @@ namespace castor3d
 			result = uint64_t( flags.morphTargetsOffset ) << offset;
 
 #if !defined( NDEBUG )
-			auto details = getHiHashDetails( result );
+			auto details = getLoHashDetails( result );
 			CU_Require( flags.morphTargetsOffset == details.morphTargetsOffset );
 #endif
 			return result;
@@ -169,8 +177,9 @@ namespace castor3d
 		static PipelineBaseHash getPipelineBaseHash( PipelineFlags flags )
 		{
 			PipelineBaseHash result{};
-			result.lo = getLoHash( flags );
 			result.hi = getHiHash( flags );
+			result.lo = getLoHash( flags );
+			result.components = flags.components;
 			return result;
 		}
 
@@ -185,9 +194,22 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	bool operator==( PipelineHashDetails const & lhs, PipelineHashDetails const & rhs )
+	bool operator<( PipelineBaseHash const & lhs
+		, PipelineBaseHash const & rhs )
 	{
-		return lhs.passType == rhs.passType
+		return lhs.hi < rhs.hi
+			|| ( ( lhs.hi == rhs.hi )
+				&& ( ( lhs.lo < rhs.lo )
+					|| ( ( lhs.lo == rhs.lo )
+						&& ( pipflags::getComponentsHash( lhs.components ) < pipflags::getComponentsHash( rhs.components ) ) ) ) );
+	}
+
+	//*********************************************************************************************
+
+	bool operator==( PipelineHiHashDetails const & lhs, PipelineHiHashDetails const & rhs )
+	{
+		return lhs.components == rhs.components
+			&& lhs.passType == rhs.passType
 			&& lhs.alphaFunc == rhs.alphaFunc
 			&& lhs.passLayerIndex == rhs.passLayerIndex
 			&& lhs.m_passFlags == rhs.m_passFlags
@@ -199,7 +221,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	bool operator==( PipelineHiHashDetails const & lhs, PipelineHiHashDetails const & rhs )
+	bool operator==( PipelineLoHashDetails const & lhs, PipelineLoHashDetails const & rhs )
 	{
 		return lhs.morphTargetsOffset == rhs.morphTargetsOffset;
 	}
@@ -339,8 +361,8 @@ namespace castor3d
 
 	bool operator==( PipelineFlags const & lhs, PipelineFlags const & rhs )
 	{
-		return static_cast< PipelineHashDetails const & >( lhs ) == static_cast< PipelineHashDetails const & >( rhs )
-			&& static_cast< PipelineHiHashDetails const & >( lhs ) == static_cast< PipelineHiHashDetails const & >( rhs )
+		return static_cast< PipelineHiHashDetails const & >( lhs ) == static_cast< PipelineHiHashDetails const & >( rhs )
+			&& static_cast< PipelineLoHashDetails const & >( lhs ) == static_cast< PipelineLoHashDetails const & >( rhs )
 			&& lhs.m_sceneFlags == rhs.m_sceneFlags
 			&& lhs.colourBlendMode == rhs.colourBlendMode
 			&& lhs.alphaBlendMode == rhs.alphaBlendMode
@@ -381,10 +403,11 @@ namespace castor3d
 			, {} ) );
 	}
 
-	PipelineHashDetails getPipelineHashDetails( PipelineBaseHash const & hash
+	PipelineHiHashDetails getPipelineHiHashDetails( PipelineBaseHash const & hash
 		, ShaderFlags shaderFlags )
 	{
-		return pipflags::getLoHashDetails( hash.lo
+		return pipflags::getHiHashDetails( hash.hi
+			, hash.components
 			, shaderFlags );
 	}
 

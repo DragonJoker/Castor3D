@@ -1,6 +1,5 @@
 #include "Castor3D/Material/Pass/Phong/Shaders/GlslPhongReflection.hpp"
 
-#include "Castor3D/Material/Pass/Phong/Shaders/GlslPhongMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslBackground.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"

@@ -5,6 +5,8 @@
 #include "GuiCommon/Shader/ShaderDialog.hpp"
 #include "GuiCommon/Properties/AdditionalProperties.hpp"
 
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Material/Pass/Component/PassComponentRegister.hpp>
 #include <Castor3D/Render/RenderTechniquePass.hpp>
 #include <Castor3D/Render/RenderTechniqueVisitor.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
@@ -37,7 +39,8 @@ namespace GuiCommon
 				, castor3d::RenderTechniqueNodesPass & renderPass )
 			{
 				auto & engine = *renderPass.getEngine();
-				RenderPassConfigurationBuilder vis{ renderPass.createPipelineFlags( castor3d::BlendMode::eNoBlend
+				RenderPassConfigurationBuilder vis{ renderPass.createPipelineFlags( renderPass.getEngine()->getPassComponentsRegister().getPassComponentsBitset()
+						, castor3d::BlendMode::eNoBlend
 						, castor3d::BlendMode::eNoBlend
 						, castor3d::PassFlag::eNone
 						, engine.getRenderPassTypeID( renderPass.getTypeName() )

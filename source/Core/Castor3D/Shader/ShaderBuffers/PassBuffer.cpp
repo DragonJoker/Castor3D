@@ -1,5 +1,7 @@
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
 
+#include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
+
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Limits.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
@@ -13,13 +15,6 @@ namespace castor3d
 
 	namespace passbuf
 	{
-		static PassBuffer::PassesData bindData( uint8_t * buffer
-			, uint32_t count )
-		{
-			return castor::makeArrayView( reinterpret_cast< PassBuffer::PassData * >( buffer )
-				, reinterpret_cast< PassBuffer::PassData * >( buffer ) + count );
-		}
-
 		static uint32_t constexpr count()noexcept
 		{
 			constexpr auto maxPassTypeSize = castor::getBitSize( MaxPassTypes );
@@ -79,11 +74,53 @@ namespace castor3d
 
 	//*********************************************************************************************
 
+	VkDeviceSize PassBuffer::PassDataPtr::write( MemChunk const & chunk
+		, uint32_t v
+		, VkDeviceSize offset )
+	{
+		auto buffer = m_data.data();
+		CU_Require( chunk.askedSize - sizeof( uint32_t ) >= offset );
+		offset += chunk.offset;
+		CU_Require( m_data.size() - sizeof( uint32_t ) >= offset );
+		buffer += offset;
+		*reinterpret_cast< uint32_t * >( buffer ) = v;
+		return sizeof( uint32_t );
+	}
+
+	VkDeviceSize PassBuffer::PassDataPtr::write( MemChunk const & chunk
+		, int32_t v
+		, VkDeviceSize offset )
+	{
+		auto buffer = m_data.data();
+		CU_Require( chunk.askedSize - sizeof( int32_t ) >= offset );
+		offset += chunk.offset;
+		CU_Require( m_data.size() - sizeof( int32_t ) >= offset );
+		buffer += offset;
+		*reinterpret_cast< int32_t * >( buffer ) = v;
+		return sizeof( int32_t );
+	}
+
+	VkDeviceSize PassBuffer::PassDataPtr::write( MemChunk const & chunk
+		, float v
+		, VkDeviceSize offset )
+	{
+		auto buffer = m_data.data();
+		CU_Require( chunk.askedSize - sizeof( float ) >= offset );
+		offset += chunk.offset;
+		CU_Require( m_data.size() - sizeof( float ) >= offset );
+		buffer += offset;
+		*reinterpret_cast< float * >( buffer ) = v;
+		return sizeof( float );
+	}
+
+	//*********************************************************************************************
+
 	PassBuffer::PassBuffer( Engine & engine
 		, RenderDevice const & device
 		, uint32_t count )
-		: m_buffer{ engine, device, count * DataSize, cuT( "PassBuffer" ) }
-		, m_data{ passbuf::bindData( m_buffer.getPtr(), count ) }
+		: m_stride{ uint32_t( engine.getPassComponentsRegister().getPassBufferStride() ) }
+		, m_buffer{ engine, device, count * m_stride, cuT( "PassBuffer" ) }
+		, m_data{ castor::makeArrayView( m_buffer.getPtr(), count * m_stride ) }
 	{
 	}
 
@@ -151,6 +188,8 @@ namespace castor3d
 					{
 						buffer.second.first.update( *buffer.second.second, *pass );
 					}
+
+					pass->reset();
 				} );
 			m_buffer.setCount( uint32_t( m_passes.size() ) );
 			m_buffer.setSecondaryCount( uint32_t( m_passTypeIndices.size() ) );
@@ -190,28 +229,7 @@ namespace castor3d
 	{
 		CU_Require( passID > 0 );
 		auto index = passID - 1;
-		PassDataPtr result{};
-
-		auto & data = m_data[index];
-		result.colourDiv = &data.colourDiv;
-		result.specDiv = &data.specDiv;
-		result.index = &data.index;
-		result.emissive = &data.emissive;
-		result.alphaRef = &data.alphaRef;
-		result.sssProfileIndex = &data.sssProfileIndex;
-		result.transmission = &data.transmission;
-		result.opacity = &data.opacity;
-		result.refractionRatio = &data.refractionRatio;
-		result.hasRefraction = &data.hasRefraction;
-		result.hasReflection = &data.hasReflection;
-		result.bwAccumulationOperator = &data.bwAccumulationOperator;
-		result.textures = &data.textures;
-		result.textureCount = &data.textureCount;
-		result.passId = &data.passId;
-		result.lighting = &data.lighting;
-		result.passCount = &data.passCount;
-
-		return result;
+		return castor::makeArrayView( m_data.data() + m_stride * index, m_stride );
 	}
 
 	uint32_t PassBuffer::getMaxPassTypeCount()const

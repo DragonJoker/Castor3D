@@ -2,6 +2,7 @@
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Cache/MaterialCache.hpp>
+#include <Castor3D/Material/Pass/Component/PassShaders.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Render/RenderTechnique.hpp>
@@ -12,7 +13,7 @@
 #include <Castor3D/Shader/Shaders/GlslUtils.hpp>
 #include <Castor3D/Shader/Ubos/ModelDataUbo.hpp>
 
-#include <Shaders/GlslToonMaterial.hpp>
+#include <Shaders/GlslToonProfile.hpp>
 
 #include <ShaderWriter/Source.hpp>
 
@@ -62,10 +63,15 @@ namespace draw_edges
 		{
 			using namespace sdw;
 			FragmentWriter writer;
+			castor3d::shader::Utils utils{ writer };
+			castor3d::shader::PassShaders passShaders{ engine.getPassComponentsRegister()
+				, castor3d::TextureFlag::eNone
+				, castor3d::ComponentModeFlag::eNone
+				, utils };
 
 			// Shader inputs
 			auto specifics = uint32_t( eSpecifics );
-			castor3d::shader::Materials materials{ engine, writer, eMaterials, 0u, specifics };
+			castor3d::shader::Materials materials{ engine, writer, passShaders, eMaterials, 0u, specifics };
 			C3D_ModelsData( writer, eModels, 0u );
 			auto c3d_depthObj = writer.declCombinedImg< FImg2DRgba32 >( "c3d_depthObj", eDepthObj, 0u );
 			auto c3d_source = writer.declCombinedImg< FImg2DRgba32 >( "c3d_source", eSource, 0u );

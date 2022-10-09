@@ -267,11 +267,11 @@ namespace castor3d::shader
 				auto L = m_writer.declLocale( "L"
 					, normalize( direction ) );
 				auto V = m_writer.declLocale( "V"
-					, normalize( worldEye - surface.worldPosition ) );
+					, normalize( worldEye - surface.worldPosition.xyz() ) );
 				auto H = m_writer.declLocale( "H"
 					, normalize( L + V ) );
 				auto N = m_writer.declLocale( "N"
-					, normalize( surface.worldNormal ) );
+					, normalize( surface.normal ) );
 
 				auto NdotL = m_writer.declLocale( "NdotL"
 					, max( 0.0_f, dot( N, L ) ) );
@@ -348,11 +348,11 @@ namespace castor3d::shader
 				auto L = m_writer.declLocale( "L"
 					, normalize( direction ) );
 				auto V = m_writer.declLocale( "V"
-					, normalize( worldEye - surface.worldPosition ) );
+					, normalize( worldEye - surface.worldPosition.xyz() ) );
 				auto H = m_writer.declLocale( "H"
 					, normalize( L + V ) );
 				auto N = m_writer.declLocale( "N"
-					, normalize( surface.worldNormal ) );
+					, normalize( surface.normal ) );
 				auto radiance = m_writer.declLocale( "radiance"
 					, light.colour );
 
@@ -430,11 +430,11 @@ namespace castor3d::shader
 				auto L = m_writer.declLocale( "L"
 					, normalize( direction ) );
 				auto V = m_writer.declLocale( "V"
-					, normalize( worldEye - surface.worldPosition ) );
+					, normalize( worldEye - surface.worldPosition.xyz() ) );
 				auto H = m_writer.declLocale( "H"
 					, normalize( L + V ) );
 				auto N = m_writer.declLocale( "N"
-					, normalize( surface.worldNormal ) );
+					, normalize( surface.normal ) );
 				auto radiance = m_writer.declLocale( "radiance"
 					, colour );
 
@@ -484,11 +484,11 @@ namespace castor3d::shader
 				auto L = m_writer.declLocale( "L"
 					, normalize( direction ) );
 				auto V = m_writer.declLocale( "V"
-					, normalize( worldEye - surface.worldPosition ) );
+					, normalize( worldEye - surface.worldPosition.xyz() ) );
 				auto H = m_writer.declLocale( "H"
 					, normalize( L + V ) );
 				auto N = m_writer.declLocale( "N"
-					, normalize( surface.worldNormal ) );
+					, normalize( surface.normal ) );
 				auto radiance = m_writer.declLocale( "radiance"
 					, colour );
 

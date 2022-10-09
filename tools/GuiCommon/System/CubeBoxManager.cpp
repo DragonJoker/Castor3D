@@ -28,7 +28,7 @@ namespace GuiCommon
 	{
 		castor3d::MeshResPtr doCreateCubeMesh( castor::String const name
 			, castor3d::Scene & scene
-			, castor::RgbColour const & colour
+			, castor::HdrRgbColour const & colour
 			, castor::String const & colourName )
 		{
 			auto result = scene.addNewMesh( name, scene );
@@ -92,11 +92,11 @@ namespace GuiCommon
 
 	CubeBoxManager::CubeBoxManager( castor3d::Scene & scene )
 		: m_scene{ scene }
-		, m_obbMesh{ doCreateCubeMesh( cuT( "CubeBox_OBB" ), scene, castor::RgbColour::fromPredefined( castor::PredefinedRgbColour::eRed ), cuT( "Red" ) ) }
-		, m_obbSubmesh{ doCreateCubeMesh( cuT( "CubeBox_OBB_Submesh" ), scene, castor::RgbColour::fromPredefined( castor::PredefinedRgbColour::eBlue ), cuT( "Blue" ) ) }
-		, m_obbSelectedSubmesh{ doCreateCubeMesh( cuT( "CubeBox_OBB_SelectedSubmesh" ), scene, castor::RgbColour::fromComponents( 1.0f, 1.0f, 0.0f ), cuT( "Yellow" ) ) }
-		, m_obbBone{ doCreateCubeMesh( cuT( "CubeBox_OBB_Bone" ), scene, castor::RgbColour::fromPredefined( castor::PredefinedRgbColour::eDarkBlue ), cuT( "DarkBlue" ) ) }
-		, m_aabbMesh{ doCreateCubeMesh( cuT( "CubeBox_AABB" ), scene, castor::RgbColour::fromPredefined( castor::PredefinedRgbColour::eGreen ), cuT( "Green" ) ) }
+		, m_obbMesh{ doCreateCubeMesh( cuT( "CubeBox_OBB" ), scene, castor::HdrRgbColour::fromPredefined( castor::PredefinedRgbColour::eRed ), cuT( "Red" ) ) }
+		, m_obbSubmesh{ doCreateCubeMesh( cuT( "CubeBox_OBB_Submesh" ), scene, castor::HdrRgbColour::fromPredefined( castor::PredefinedRgbColour::eBlue ), cuT( "Blue" ) ) }
+		, m_obbSelectedSubmesh{ doCreateCubeMesh( cuT( "CubeBox_OBB_SelectedSubmesh" ), scene, castor::HdrRgbColour::fromComponents( 1.0f, 1.0f, 0.0f ), cuT( "Yellow" ) ) }
+		, m_obbBone{ doCreateCubeMesh( cuT( "CubeBox_OBB_Bone" ), scene, castor::HdrRgbColour::fromPredefined( castor::PredefinedRgbColour::eDarkBlue ), cuT( "DarkBlue" ) ) }
+		, m_aabbMesh{ doCreateCubeMesh( cuT( "CubeBox_AABB" ), scene, castor::HdrRgbColour::fromPredefined( castor::PredefinedRgbColour::eGreen ), cuT( "Green" ) ) }
 	{
 	}
 

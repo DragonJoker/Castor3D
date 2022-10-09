@@ -16,6 +16,19 @@ namespace castor3d
 	class PassVisitorBase
 	{
 	public:
+		template< typename ControlT >
+		using ControlsListT = std::vector< ControlT * >;
+		using ControlsList = ControlsListT< bool >;
+		using AtomicControlsList = ControlsListT< std::atomic_bool >;
+
+		template< typename ControlT >
+		static ControlsListT< ControlT > makeControlsList( ControlT * control )
+		{
+			return ( control
+				? ControlsListT< ControlT >{ control }
+				: ControlsListT< ControlT >{} );
+		}
+
 		struct Config
 		{
 			bool forceSubPassesVisit;
@@ -41,112 +54,454 @@ namespace castor3d
 		/**@{*/
 		C3D_API virtual void visit( castor::String const & name
 			, bool & value
-			, bool * control = nullptr ) = 0;
+			, ControlsList controls ) = 0;
 		C3D_API virtual void visit( castor::String const & name
 			, int16_t & value
-			, bool * control = nullptr ) = 0;
+			, ControlsList controls ) = 0;
 		C3D_API virtual void visit( castor::String const & name
 			, uint16_t & value
-			, bool * control = nullptr ) = 0;
+			, ControlsList controls ) = 0;
 		C3D_API virtual void visit( castor::String const & name
 			, int32_t & value
-			, bool * control = nullptr ) = 0;
+			, ControlsList controls ) = 0;
 		C3D_API virtual void visit( castor::String const & name
 			, uint32_t & value
-			, bool * control = nullptr ) = 0;
+			, ControlsList controls ) = 0;
 		C3D_API virtual void visit( castor::String const & name
 			, int64_t & value
-			, bool * control = nullptr ) = 0;
+			, ControlsList controls ) = 0;
 		C3D_API virtual void visit( castor::String const & name
 			, uint64_t & value
-			, bool * control = nullptr ) = 0;
+			, ControlsList controls ) = 0;
 		C3D_API virtual void visit( castor::String const & name
 			, float & value
-			, bool * control = nullptr ) = 0;
+			, ControlsList controls ) = 0;
 		C3D_API virtual void visit( castor::String const & name
 			, double & value
-			, bool * control = nullptr ) = 0;
+			, ControlsList controls ) = 0;
 		C3D_API virtual void visit( castor::String const & name
 			, BlendMode & value
-			, bool * control = nullptr ) = 0;
+			, ControlsList controls ) = 0;
 		C3D_API virtual void visit( castor::String const & name
 			, ParallaxOcclusionMode & value
-			, bool * control = nullptr ) = 0;
+			, ControlsList controls ) = 0;
 		C3D_API virtual void visit( castor::String const & name
 			, PassFlags & value
-			, bool * control = nullptr ) = 0;
+			, ControlsList controls ) = 0;
 		C3D_API virtual void visit( castor::String const & name
 			, VkCompareOp & value
-			, bool * control = nullptr ) = 0;
+			, ControlsList controls ) = 0;
 		C3D_API virtual void visit( castor::String const & name
 			, castor::RgbColour & value
-			, bool * control = nullptr ) = 0;
+			, ControlsList controls ) = 0;
 		C3D_API virtual void visit( castor::String const & name
 			, castor::RgbaColour & value
-			, bool * control = nullptr ) = 0;
+			, ControlsList controls ) = 0;
 		C3D_API virtual void visit( castor::String const & name
 			, castor::HdrRgbColour & value
-			, bool * control = nullptr ) = 0;
+			, ControlsList controls ) = 0;
 		C3D_API virtual void visit( castor::String const & name
 			, castor::HdrRgbaColour & value
-			, bool * control = nullptr ) = 0;
+			, ControlsList controls ) = 0;
 		C3D_API virtual void visit( castor::String const & name
 			, castor::Point2f & value
-			, bool * control = nullptr ) = 0;
+			, ControlsList controls ) = 0;
 		C3D_API virtual void visit( castor::String const & name
 			, castor::Point2i & value
-			, bool * control = nullptr ) = 0;
+			, ControlsList controls ) = 0;
 		C3D_API virtual void visit( castor::String const & name
 			, castor::Point2ui & value
-			, bool * control = nullptr ) = 0;
+			, ControlsList controls ) = 0;
 		C3D_API virtual void visit( castor::String const & name
 			, castor::Point3f & value
-			, bool * control = nullptr ) = 0;
+			, ControlsList controls ) = 0;
 		C3D_API virtual void visit( castor::String const & name
 			, castor::Point3i & value
-			, bool * control = nullptr ) = 0;
+			, ControlsList controls ) = 0;
 		C3D_API virtual void visit( castor::String const & name
 			, castor::Point3ui & value
-			, bool * control = nullptr ) = 0;
+			, ControlsList controls ) = 0;
 		C3D_API virtual void visit( castor::String const & name
 			, castor::Point4f & value
-			, bool * control = nullptr ) = 0;
+			, ControlsList controls ) = 0;
 		C3D_API virtual void visit( castor::String const & name
 			, castor::Point4i & value
-			, bool * control = nullptr ) = 0;
+			, ControlsList controls ) = 0;
 		C3D_API virtual void visit( castor::String const & name
 			, castor::Point4ui & value
-			, bool * control = nullptr ) = 0;
+			, ControlsList controls ) = 0;
 		C3D_API virtual void visit( castor::String const & name
 			, castor::Matrix4x4f & value
-			, bool * control = nullptr ) = 0;
+			, ControlsList controls ) = 0;
 		C3D_API virtual void visit( castor::String const & name
 			, castor::RangedValue< float > & value
-			, bool * control = nullptr ) = 0;
+			, ControlsList controls ) = 0;
 		C3D_API virtual void visit( castor::String const & name
 			, castor::RangedValue< int32_t > & value
-			, bool * control = nullptr ) = 0;
+			, ControlsList controls ) = 0;
 		C3D_API virtual void visit( castor::String const & name
 			, castor::RangedValue< uint32_t > & value
-			, bool * control = nullptr ) = 0;
+			, ControlsList controls ) = 0;
 		C3D_API virtual void visit( castor::String const & name
 			, TextureFlag textureFlag
 			, castor::Point2ui & value
 			, uint32_t componentsCount
-			, bool * control = nullptr ) = 0;
+			, ControlsList controls ) = 0;
 
-		template< typename TypeT >
+		C3D_API virtual void visit( castor::String const & name
+			, bool & value
+			, AtomicControlsList controls ) = 0;
+		C3D_API virtual void visit( castor::String const & name
+			, int16_t & value
+			, AtomicControlsList controls ) = 0;
+		C3D_API virtual void visit( castor::String const & name
+			, uint16_t & value
+			, AtomicControlsList controls ) = 0;
+		C3D_API virtual void visit( castor::String const & name
+			, int32_t & value
+			, AtomicControlsList controls ) = 0;
+		C3D_API virtual void visit( castor::String const & name
+			, uint32_t & value
+			, AtomicControlsList controls ) = 0;
+		C3D_API virtual void visit( castor::String const & name
+			, int64_t & value
+			, AtomicControlsList controls ) = 0;
+		C3D_API virtual void visit( castor::String const & name
+			, uint64_t & value
+			, AtomicControlsList controls ) = 0;
+		C3D_API virtual void visit( castor::String const & name
+			, float & value
+			, AtomicControlsList controls ) = 0;
+		C3D_API virtual void visit( castor::String const & name
+			, double & value
+			, AtomicControlsList controls ) = 0;
+		C3D_API virtual void visit( castor::String const & name
+			, BlendMode & value
+			, AtomicControlsList controls ) = 0;
+		C3D_API virtual void visit( castor::String const & name
+			, ParallaxOcclusionMode & value
+			, AtomicControlsList controls ) = 0;
+		C3D_API virtual void visit( castor::String const & name
+			, PassFlags & value
+			, AtomicControlsList controls ) = 0;
+		C3D_API virtual void visit( castor::String const & name
+			, VkCompareOp & value
+			, AtomicControlsList controls ) = 0;
+		C3D_API virtual void visit( castor::String const & name
+			, castor::RgbColour & value
+			, AtomicControlsList controls ) = 0;
+		C3D_API virtual void visit( castor::String const & name
+			, castor::RgbaColour & value
+			, AtomicControlsList controls ) = 0;
+		C3D_API virtual void visit( castor::String const & name
+			, castor::HdrRgbColour & value
+			, AtomicControlsList controls ) = 0;
+		C3D_API virtual void visit( castor::String const & name
+			, castor::HdrRgbaColour & value
+			, AtomicControlsList controls ) = 0;
+		C3D_API virtual void visit( castor::String const & name
+			, castor::Point2f & value
+			, AtomicControlsList controls ) = 0;
+		C3D_API virtual void visit( castor::String const & name
+			, castor::Point2i & value
+			, AtomicControlsList controls ) = 0;
+		C3D_API virtual void visit( castor::String const & name
+			, castor::Point2ui & value
+			, AtomicControlsList controls ) = 0;
+		C3D_API virtual void visit( castor::String const & name
+			, castor::Point3f & value
+			, AtomicControlsList controls ) = 0;
+		C3D_API virtual void visit( castor::String const & name
+			, castor::Point3i & value
+			, AtomicControlsList controls ) = 0;
+		C3D_API virtual void visit( castor::String const & name
+			, castor::Point3ui & value
+			, AtomicControlsList controls ) = 0;
+		C3D_API virtual void visit( castor::String const & name
+			, castor::Point4f & value
+			, AtomicControlsList controls ) = 0;
+		C3D_API virtual void visit( castor::String const & name
+			, castor::Point4i & value
+			, AtomicControlsList controls ) = 0;
+		C3D_API virtual void visit( castor::String const & name
+			, castor::Point4ui & value
+			, AtomicControlsList controls ) = 0;
+		C3D_API virtual void visit( castor::String const & name
+			, castor::Matrix4x4f & value
+			, AtomicControlsList controls ) = 0;
+		C3D_API virtual void visit( castor::String const & name
+			, castor::RangedValue< float > & value
+			, AtomicControlsList controls ) = 0;
+		C3D_API virtual void visit( castor::String const & name
+			, castor::RangedValue< int32_t > & value
+			, AtomicControlsList controls ) = 0;
+		C3D_API virtual void visit( castor::String const & name
+			, castor::RangedValue< uint32_t > & value
+			, AtomicControlsList controls ) = 0;
+		C3D_API virtual void visit( castor::String const & name
+			, TextureFlag textureFlag
+			, castor::Point2ui & value
+			, uint32_t componentsCount
+			, AtomicControlsList controls ) = 0;
+
+		template< typename ControlT = bool >
 		void visit( castor::String const & name
-			, castor::ChangeTracked< TypeT > & value )
+			, bool & value
+			, ControlT * control = nullptr )
 		{
-			visit( name, *value, &value.control() );
+			visit( name, value, makeControlsList( control ) );
 		}
 
-		template< typename TypeT >
+		template< typename ControlT = bool >
 		void visit( castor::String const & name
-			, castor::GroupChangeTracked< TypeT > & value )
+			, int16_t & value
+			, ControlT * control = nullptr )
 		{
-			visit( name, *value, &value.control() );
+			visit( name, value, makeControlsList( control ) );
+		}
+
+		template< typename ControlT = bool >
+		void visit( castor::String const & name
+			, uint16_t & value
+			, ControlT * control = nullptr )
+		{
+			visit( name, value, makeControlsList( control ) );
+		}
+
+		template< typename ControlT = bool >
+		void visit( castor::String const & name
+			, int32_t & value
+			, ControlT * control = nullptr )
+		{
+			visit( name, value, makeControlsList( control ) );
+		}
+
+		template< typename ControlT = bool >
+		void visit( castor::String const & name
+			, uint32_t & value
+			, ControlT * control = nullptr )
+		{
+			visit( name, value, makeControlsList( control ) );
+		}
+
+		template< typename ControlT = bool >
+		void visit( castor::String const & name
+			, int64_t & value
+			, ControlT * control = nullptr )
+		{
+			visit( name, value, makeControlsList( control ) );
+		}
+
+		template< typename ControlT = bool >
+		void visit( castor::String const & name
+			, uint64_t & value
+			, ControlT * control = nullptr )
+		{
+			visit( name, value, makeControlsList( control ) );
+		}
+
+		template< typename ControlT = bool >
+		void visit( castor::String const & name
+			, float & value
+			, ControlT * control = nullptr )
+		{
+			visit( name, value, makeControlsList( control ) );
+		}
+
+		template< typename ControlT = bool >
+		void visit( castor::String const & name
+			, double & value
+			, ControlT * control = nullptr )
+		{
+			visit( name, value, makeControlsList( control ) );
+		}
+
+		template< typename ControlT = bool >
+		void visit( castor::String const & name
+			, BlendMode & value
+			, ControlT * control = nullptr )
+		{
+			visit( name, value, makeControlsList( control ) );
+		}
+
+		template< typename ControlT = bool >
+		void visit( castor::String const & name
+			, ParallaxOcclusionMode & value
+			, ControlT * control = nullptr )
+		{
+			visit( name, value, makeControlsList( control ) );
+		}
+
+		template< typename ControlT = bool >
+		void visit( castor::String const & name
+			, PassFlags & value
+			, ControlT * control = nullptr )
+		{
+			visit( name, value, makeControlsList( control ) );
+		}
+
+		template< typename ControlT = bool >
+		void visit( castor::String const & name
+			, VkCompareOp & value
+			, ControlT * control = nullptr )
+		{
+			visit( name, value, makeControlsList( control ) );
+		}
+
+		template< typename ControlT = bool >
+		void visit( castor::String const & name
+			, castor::RgbaColour & value
+			, ControlT * control = nullptr )
+		{
+			visit( name, value, makeControlsList( control ) );
+		}
+
+		template< typename ControlT = bool >
+		void visit( castor::String const & name
+			, castor::HdrRgbColour & value
+			, ControlT * control = nullptr )
+		{
+			visit( name, value, makeControlsList( control ) );
+		}
+
+		template< typename ControlT = bool >
+		void visit( castor::String const & name
+			, castor::HdrRgbaColour & value
+			, ControlT * control = nullptr )
+		{
+			visit( name, value, makeControlsList( control ) );
+		}
+
+		template< typename ControlT = bool >
+		void visit( castor::String const & name
+			, castor::Point2f & value
+			, ControlT * control = nullptr )
+		{
+			visit( name, value, makeControlsList( control ) );
+		}
+
+		template< typename ControlT = bool >
+		void visit( castor::String const & name
+			, castor::Point2i & value
+			, ControlT * control = nullptr )
+		{
+			visit( name, value, makeControlsList( control ) );
+		}
+
+		template< typename ControlT = bool >
+		void visit( castor::String const & name
+			, castor::Point2ui & value
+			, ControlT * control = nullptr )
+		{
+			visit( name, value, makeControlsList( control ) );
+		}
+
+		template< typename ControlT = bool >
+		void visit( castor::String const & name
+			, castor::Point3f & value
+			, ControlT * control = nullptr )
+		{
+			visit( name, value, makeControlsList( control ) );
+		}
+
+		template< typename ControlT = bool >
+		void visit( castor::String const & name
+			, castor::Point3i & value
+			, ControlT * control = nullptr )
+		{
+			visit( name, value, makeControlsList( control ) );
+		}
+
+		template< typename ControlT = bool >
+		void visit( castor::String const & name
+			, castor::Point3ui & value
+			, ControlT * control = nullptr )
+		{
+			visit( name, value, makeControlsList( control ) );
+		}
+
+		template< typename ControlT = bool >
+		void visit( castor::String const & name
+			, castor::Point4f & value
+			, ControlT * control = nullptr )
+		{
+			visit( name, value, makeControlsList( control ) );
+		}
+
+		template< typename ControlT = bool >
+		void visit( castor::String const & name
+			, castor::Point4i & value
+			, ControlT * control = nullptr )
+		{
+			visit( name, value, makeControlsList( control ) );
+		}
+
+		template< typename ControlT = bool >
+		void visit( castor::String const & name
+			, castor::Point4ui & value
+			, ControlT * control = nullptr )
+		{
+			visit( name, value, makeControlsList( control ) );
+		}
+
+		template< typename ControlT = bool >
+		void visit( castor::String const & name
+			, castor::Matrix4x4f & value
+			, ControlT * control = nullptr )
+		{
+			visit( name, value, makeControlsList( control ) );
+		}
+
+		template< typename ControlT = bool >
+		void visit( castor::String const & name
+			, castor::RangedValue< float > & value
+			, ControlT * control = nullptr )
+		{
+			visit( name, value, makeControlsList( control ) );
+		}
+
+		template< typename ControlT = bool >
+		void visit( castor::String const & name
+			, castor::RangedValue< int32_t > & value
+			, ControlT * control = nullptr )
+		{
+			visit( name, value, makeControlsList( control ) );
+		}
+
+		template< typename ControlT = bool >
+		void visit( castor::String const & name
+			, castor::RangedValue< uint32_t > & value
+			, ControlT * control = nullptr )
+		{
+			visit( name, value, makeControlsList( control ) );
+		}
+
+		template< typename ControlT = bool >
+		void visit( castor::String const & name
+			, TextureFlag textureFlag
+			, castor::Point2ui & value
+			, uint32_t componentsCount
+			, ControlT * control = nullptr )
+		{
+			visit( name, textureFlag, value, componentsCount, makeControlsList( control ) );
+		}
+
+		template< typename TypeT, typename ControlT >
+		void visit( castor::String const & name
+			, castor::ChangeTrackedT< TypeT, ControlT > & value
+			, ControlsListT< ControlT > controls = ControlsListT< ControlT >{} )
+		{
+			controls.push_back( &value.control() );
+			visit( name, value.naked(), std::move( controls ) );
+		}
+
+		template< typename TypeT, typename ControlT >
+		void visit( castor::String const & name
+			, castor::GroupChangeTrackedT< TypeT, ControlT > & value
+			, ControlsListT< ControlT > controls = ControlsListT< ControlT >{} )
+		{
+			controls.push_back( &value.control() );
+			visit( name, value.naked(), std::move( controls ) );
 		}
 		/**@}*/
 
@@ -177,181 +532,181 @@ namespace castor3d
 		/**@{*/
 		void visit( castor::String const & name
 			, bool & value
-			, bool * control )override
+			, ControlsList controls )override
 		{
 		}
 
 		void visit( castor::String const & name
 			, int16_t & value
-			, bool * control )override
+			, ControlsList controls )override
 		{
 		}
 
 		void visit( castor::String const & name
 			, uint16_t & value
-			, bool * control )override
+			, ControlsList controls )override
 		{
 		}
 
 		void visit( castor::String const & name
 			, int32_t & value
-			, bool * control )override
+			, ControlsList controls )override
 		{
 		}
 
 		void visit( castor::String const & name
 			, uint32_t & value
-			, bool * control )override
+			, ControlsList controls )override
 		{
 		}
 
 		void visit( castor::String const & name
 			, int64_t & value
-			, bool * control )override
+			, ControlsList controls )override
 		{
 		}
 
 		void visit( castor::String const & name
 			, uint64_t & value
-			, bool * control )override
+			, ControlsList controls )override
 		{
 		}
 
 		void visit( castor::String const & name
 			, float & value
-			, bool * control )override
+			, ControlsList controls )override
 		{
 		}
 
 		void visit( castor::String const & name
 			, double & value
-			, bool * control )override
+			, ControlsList controls )override
 		{
 		}
 
 		void visit( castor::String const & name
 			, BlendMode & value
-			, bool * control )override
+			, ControlsList controls )override
 		{
 		}
 
 		void visit( castor::String const & name
 			, ParallaxOcclusionMode & value
-			, bool * control )override
+			, ControlsList controls )override
 		{
 		}
 
 		void visit( castor::String const & name
 			, PassFlags & value
-			, bool * control )override
+			, ControlsList controls )override
 		{
 		}
 
 		void visit( castor::String const & name
 			, VkCompareOp & value
-			, bool * control )override
+			, ControlsList controls )override
 		{
 		}
 
 		void visit( castor::String const & name
 			, castor::RgbColour & value
-			, bool * control )override
+			, ControlsList controls )override
 		{
 		}
 
 		void visit( castor::String const & name
 			, castor::RgbaColour & value
-			, bool * control )override
+			, ControlsList controls )override
 		{
 		}
 
 		void visit( castor::String const & name
 			, castor::HdrRgbColour & value
-			, bool * control )override
+			, ControlsList controls )override
 		{
 		}
 
 		void visit( castor::String const & name
 			, castor::HdrRgbaColour & value
-			, bool * control )override
+			, ControlsList controls )override
 		{
 		}
 
 		void visit( castor::String const & name
 			, castor::Point2f & value
-			, bool * control )override
+			, ControlsList controls )override
 		{
 		}
 
 		void visit( castor::String const & name
 			, castor::Point2i & value
-			, bool * control )override
+			, ControlsList controls )override
 		{
 		}
 
 		void visit( castor::String const & name
 			, castor::Point2ui & value
-			, bool * control )override
+			, ControlsList controls )override
 		{
 		}
 
 		void visit( castor::String const & name
 			, castor::Point3f & value
-			, bool * control )override
+			, ControlsList controls )override
 		{
 		}
 
 		void visit( castor::String const & name
 			, castor::Point3i & value
-			, bool * control )override
+			, ControlsList controls )override
 		{
 		}
 
 		void visit( castor::String const & name
 			, castor::Point3ui & value
-			, bool * control )override
+			, ControlsList controls )override
 		{
 		}
 
 		void visit( castor::String const & name
 			, castor::Point4f & value
-			, bool * control )override
+			, ControlsList controls )override
 		{
 		}
 
 		void visit( castor::String const & name
 			, castor::Point4i & value
-			, bool * control )override
+			, ControlsList controls )override
 		{
 		}
 
 		void visit( castor::String const & name
 			, castor::Point4ui & value
-			, bool * control )override
+			, ControlsList controls )override
 		{
 		}
 
 		void visit( castor::String const & name
 			, castor::Matrix4x4f & value
-			, bool * control )override
+			, ControlsList controls )override
 		{
 		}
 
 		void visit( castor::String const & name
 			, castor::RangedValue< float > & value
-			, bool * control )override
+			, ControlsList controls )override
 		{
 		}
 
 		void visit( castor::String const & name
 			, castor::RangedValue< int32_t > & value
-			, bool * control )override
+			, ControlsList controls )override
 		{
 		}
 
 		void visit( castor::String const & name
 			, castor::RangedValue< uint32_t > & value
-			, bool * control )override
+			, ControlsList controls )override
 		{
 		}
 
@@ -359,7 +714,195 @@ namespace castor3d
 			, TextureFlag textureFlag
 			, castor::Point2ui & value
 			, uint32_t componentsCount
-			, bool * control )override
+			, ControlsList controls )override
+		{
+		}
+
+		void visit( castor::String const & name
+			, bool & value
+			, AtomicControlsList controls )override
+		{
+		}
+
+		void visit( castor::String const & name
+			, int16_t & value
+			, AtomicControlsList controls )override
+		{
+		}
+
+		void visit( castor::String const & name
+			, uint16_t & value
+			, AtomicControlsList controls )override
+		{
+		}
+
+		void visit( castor::String const & name
+			, int32_t & value
+			, AtomicControlsList controls )override
+		{
+		}
+
+		void visit( castor::String const & name
+			, uint32_t & value
+			, AtomicControlsList controls )override
+		{
+		}
+
+		void visit( castor::String const & name
+			, int64_t & value
+			, AtomicControlsList controls )override
+		{
+		}
+
+		void visit( castor::String const & name
+			, uint64_t & value
+			, AtomicControlsList controls )override
+		{
+		}
+
+		void visit( castor::String const & name
+			, float & value
+			, AtomicControlsList controls )override
+		{
+		}
+
+		void visit( castor::String const & name
+			, double & value
+			, AtomicControlsList controls )override
+		{
+		}
+
+		void visit( castor::String const & name
+			, BlendMode & value
+			, AtomicControlsList controls )override
+		{
+		}
+
+		void visit( castor::String const & name
+			, ParallaxOcclusionMode & value
+			, AtomicControlsList controls )override
+		{
+		}
+
+		void visit( castor::String const & name
+			, PassFlags & value
+			, AtomicControlsList controls )override
+		{
+		}
+
+		void visit( castor::String const & name
+			, VkCompareOp & value
+			, AtomicControlsList controls )override
+		{
+		}
+
+		void visit( castor::String const & name
+			, castor::RgbColour & value
+			, AtomicControlsList controls )override
+		{
+		}
+
+		void visit( castor::String const & name
+			, castor::RgbaColour & value
+			, AtomicControlsList controls )override
+		{
+		}
+
+		void visit( castor::String const & name
+			, castor::HdrRgbColour & value
+			, AtomicControlsList controls )override
+		{
+		}
+
+		void visit( castor::String const & name
+			, castor::HdrRgbaColour & value
+			, AtomicControlsList controls )override
+		{
+		}
+
+		void visit( castor::String const & name
+			, castor::Point2f & value
+			, AtomicControlsList controls )override
+		{
+		}
+
+		void visit( castor::String const & name
+			, castor::Point2i & value
+			, AtomicControlsList controls )override
+		{
+		}
+
+		void visit( castor::String const & name
+			, castor::Point2ui & value
+			, AtomicControlsList controls )override
+		{
+		}
+
+		void visit( castor::String const & name
+			, castor::Point3f & value
+			, AtomicControlsList controls )override
+		{
+		}
+
+		void visit( castor::String const & name
+			, castor::Point3i & value
+			, AtomicControlsList controls )override
+		{
+		}
+
+		void visit( castor::String const & name
+			, castor::Point3ui & value
+			, AtomicControlsList controls )override
+		{
+		}
+
+		void visit( castor::String const & name
+			, castor::Point4f & value
+			, AtomicControlsList controls )override
+		{
+		}
+
+		void visit( castor::String const & name
+			, castor::Point4i & value
+			, AtomicControlsList controls )override
+		{
+		}
+
+		void visit( castor::String const & name
+			, castor::Point4ui & value
+			, AtomicControlsList controls )override
+		{
+		}
+
+		void visit( castor::String const & name
+			, castor::Matrix4x4f & value
+			, AtomicControlsList controls )override
+		{
+		}
+
+		void visit( castor::String const & name
+			, castor::RangedValue< float > & value
+			, AtomicControlsList controls )override
+		{
+		}
+
+		void visit( castor::String const & name
+			, castor::RangedValue< int32_t > & value
+			, AtomicControlsList controls )override
+		{
+		}
+
+		void visit( castor::String const & name
+			, castor::RangedValue< uint32_t > & value
+			, AtomicControlsList controls )override
+		{
+		}
+
+		void visit( castor::String const & name
+			, TextureFlag textureFlag
+			, castor::Point2ui & value
+			, uint32_t componentsCount
+			, AtomicControlsList controls )override
 		{
 		}
 		/**@}*/

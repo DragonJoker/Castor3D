@@ -7,6 +7,19 @@
 #include "Castor3D/Cache/TextureCache.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/PassVisitor.hpp"
+#include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
+#include "Castor3D/Material/Pass/Component/Base/BlendComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Base/NormalComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Base/PassHeaderComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Base/TexturesComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Base/TextureCountComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Base/TwoSidedComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Base/UntileComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Other/AlphaTestComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Other/OpacityComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Other/ReflectionComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Other/RefractionComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Lighting/SubsurfaceScatteringComponent.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
@@ -31,6 +44,22 @@ namespace castor3d
 
 	namespace matpass
 	{
+		static bool matchConfigFlags( TextureConfiguration const & config
+			, TextureFlags mask )
+		{
+			return ( checkFlag( mask, TextureFlag::eColour ) && config.colourMask[0] )
+				|| ( checkFlag( mask, TextureFlag::eSpecular ) && config.specularMask[0] )
+				|| ( checkFlag( mask, TextureFlag::eMetalness ) && config.metalnessMask[0] )
+				|| ( checkFlag( mask, TextureFlag::eGlossiness ) && config.glossinessMask[0] )
+				|| ( checkFlag( mask, TextureFlag::eRoughness ) && config.roughnessMask[0] )
+				|| ( checkFlag( mask, TextureFlag::eOpacity ) && config.opacityMask[0] )
+				|| ( checkFlag( mask, TextureFlag::eEmissive ) && config.emissiveMask[0] )
+				|| ( checkFlag( mask, TextureFlag::eNormal ) && config.normalMask[0] )
+				|| ( checkFlag( mask, TextureFlag::eHeight ) && config.heightMask[0] )
+				|| ( checkFlag( mask, TextureFlag::eOcclusion ) && config.occlusionMask[0] )
+				|| ( checkFlag( mask, TextureFlag::eTransmittance ) && config.transmittanceMask[0] );
+		}
+
 		static TextureSourceMap getSources( TextureSourceMap const & sources
 			, TextureFlags mask )
 		{
@@ -40,17 +69,7 @@ namespace castor3d
 			{
 				auto & config = source.second.config;
 
-				if ( ( checkFlag( mask, TextureFlag::eAlbedo ) && config.colourMask[0] )
-					|| ( checkFlag( mask, TextureFlag::eSpecular ) && config.specularMask[0] )
-					|| ( checkFlag( mask, TextureFlag::eMetalness ) && config.metalnessMask[0] )
-					|| ( checkFlag( mask, TextureFlag::eGlossiness ) && config.glossinessMask[0] )
-					|| ( checkFlag( mask, TextureFlag::eRoughness ) && config.roughnessMask[0] )
-					|| ( checkFlag( mask, TextureFlag::eOpacity ) && config.opacityMask[0] )
-					|| ( checkFlag( mask, TextureFlag::eEmissive ) && config.emissiveMask[0] )
-					|| ( checkFlag( mask, TextureFlag::eNormal ) && config.normalMask[0] )
-					|| ( checkFlag( mask, TextureFlag::eHeight ) && config.heightMask[0] )
-					|| ( checkFlag( mask, TextureFlag::eOcclusion ) && config.occlusionMask[0] )
-					|| ( checkFlag( mask, TextureFlag::eTransmittance ) && config.transmittanceMask[0] ) )
+				if ( matchConfigFlags( config, mask ) )
 				{
 					result.insert( source );
 				}
@@ -68,17 +87,7 @@ namespace castor3d
 			{
 				auto & config = unit->getConfiguration();
 
-				if ( ( checkFlag( mask, TextureFlag::eAlbedo ) && config.colourMask[0] )
-					|| ( checkFlag( mask, TextureFlag::eSpecular ) && config.specularMask[0] )
-					|| ( checkFlag( mask, TextureFlag::eMetalness ) && config.metalnessMask[0] )
-					|| ( checkFlag( mask, TextureFlag::eGlossiness ) && config.glossinessMask[0] )
-					|| ( checkFlag( mask, TextureFlag::eRoughness ) && config.roughnessMask[0] )
-					|| ( checkFlag( mask, TextureFlag::eOpacity ) && config.opacityMask[0] )
-					|| ( checkFlag( mask, TextureFlag::eEmissive ) && config.emissiveMask[0] )
-					|| ( checkFlag( mask, TextureFlag::eNormal ) && config.normalMask[0] )
-					|| ( checkFlag( mask, TextureFlag::eHeight ) && config.heightMask[0] )
-					|| ( checkFlag( mask, TextureFlag::eOcclusion ) && config.occlusionMask[0] )
-					|| ( checkFlag( mask, TextureFlag::eTransmittance ) && config.transmittanceMask[0] ) )
+				if ( matchConfigFlags( config, mask ) )
 				{
 					result.push_back( unit );
 				}
@@ -145,6 +154,11 @@ namespace castor3d
 				, castor::Path{ name + lhsName + rhsName }
 				, lhs.config() };
 		}
+
+		static float mix( float x, float y, float a )
+		{
+			return float( x * ( 1.0 - a ) + y * a );
+		}
 	}
 
 	//*********************************************************************************************
@@ -157,24 +171,15 @@ namespace castor3d
 		, m_index{ parent.getPassCount() }
 		, m_flags{ PassFlag::ePickable
 			| initialFlags }
-		, m_opacity{ m_dirty, 1.0f }
-		, m_bwAccumulationOperator{ m_dirty, castor::makeRangedValue( 1u, 0u, 8u ) }
-		, m_emissive{ m_dirty, 0.0f }
-		, m_refractionRatio{ m_dirty, 0.0f }
-		, m_twoSided{ m_dirty, false }
-		, m_untiling{ m_dirty, false }
-		, m_lighting{ m_dirty, true }
-		, m_reflection{ m_dirty, false }
-		, m_refraction{ m_dirty, false }
-		, m_alphaBlendMode{ m_dirty, BlendMode::eNoBlend }
-		, m_colourBlendMode{ m_dirty, BlendMode::eNoBlend }
-		, m_alphaValue{ m_dirty, 0.0f }
-		, m_transmission{ m_dirty, { 1.0f, 1.0f, 1.0f } }
-		, m_alphaFunc{ m_dirty, VK_COMPARE_OP_ALWAYS }
-		, m_blendAlphaFunc{ m_dirty, VK_COMPARE_OP_ALWAYS }
-		, m_parallaxOcclusionMode{ m_dirty, ParallaxOcclusionMode::eNone }
 		, m_renderPassInfo{ getOwner()->getRenderPassInfo() }
 	{
+		createComponent< BlendComponent >();
+		createComponent< PassHeaderComponent >();
+		createComponent< TwoSidedComponent >();
+		createComponent< TexturesComponent >();
+		createComponent< TextureCountComponent >();
+		createComponent< UntileComponent >();
+		createComponent< NormalComponent >();
 	}
 
 	Pass::~Pass()
@@ -202,121 +207,405 @@ namespace castor3d
 
 	void Pass::update()
 	{
-		if ( m_dirty )
+		if ( m_dirty.exchange( false ) )
 		{
 			onChanged( *this );
-			m_dirty = false;
 		}
 
-		if ( m_sssDirty )
+		for ( auto & component : m_components )
 		{
-			onSssProfileChanged( *this );
-			m_sssDirty = false;
+			component.second->update();
 		}
 	}
 
-	void Pass::accept( PassVisitorBase & vis )
+	void Pass::addComponent( PassComponentUPtr component )
 	{
-		doAccept( vis );
-		vis.visit( cuT( "Emissive" )
-			, m_emissive );
-		vis.visit( cuT( "Transmission" )
-			, m_transmission );
-		vis.visit( cuT( "Opacity" )
-			, m_opacity );
-		vis.visit( cuT( "Two sided" )
-			, m_twoSided );
-		vis.visit( cuT( "Colour blend mode" )
-			, m_colourBlendMode );
-		vis.visit( cuT( "Alpha blend mode" )
-			, m_alphaBlendMode );
-		vis.visit( cuT( "Pass flags" )
-			, m_flags );
-		vis.visit( cuT( "Alpha func" )
-			, m_alphaFunc );
-		vis.visit( cuT( "Blend alpha func" )
-			, m_blendAlphaFunc );
-		vis.visit( cuT( "Alpha ref. value" )
-			, m_alphaValue );
-		vis.visit( cuT( "Blended weighted accumulator" )
-			, m_bwAccumulationOperator );
-		vis.visit( cuT( "Parallax occlusion mode" )
-			, m_parallaxOcclusionMode );
-
-		if ( hasRefraction() )
-		{
-			vis.visit( cuT( "Refraction ratio" )
-				, m_refractionRatio );
-		}
+		auto id = getOwner()->getEngine()->getPassComponentsRegister().getNameId( component->getType() );
+		m_components.emplace( id, std::move( component ) );
+		m_dirty = true;
 	}
 
-	void Pass::fillSssProfileBuffer( SssProfileBuffer & buffer )const
+	bool Pass::hasComponent( castor::String const & name )const
 	{
-		auto data = buffer.getData( getSssProfileId() );
-
-		if ( hasSubsurfaceScattering() )
-		{
-			auto & subsurfaceScattering = getSubsurfaceScattering();
-			data.sssInfo->x = float( subsurfaceScattering.getProfileSize() );
-			data.sssInfo->y = subsurfaceScattering.getGaussianWidth();
-			data.sssInfo->z = subsurfaceScattering.getStrength();
-			data.sssInfo->w = 0.0f;
-
-			auto i = 0u;
-			auto & transmittanceProfile = *data.transmittanceProfile;
-
-			for ( auto & factor : subsurfaceScattering )
+		auto it = std::find_if( m_components.begin()
+			, m_components.end()
+			, [&name]( PassComponentMap::value_type const & lookup )
 			{
-				transmittanceProfile[i].x = factor[0];
-				transmittanceProfile[i].y = factor[1];
-				transmittanceProfile[i].z = factor[2];
-				transmittanceProfile[i].w = factor[3];
-				++i;
+				return lookup.second->getType() == name;
+			} );
+		return it != m_components.end();
+	}
+
+	PassComponent * Pass::getComponent( castor::String const & name )const
+	{
+		PassComponent * result{};
+		auto it = std::find_if( m_components.begin()
+			, m_components.end()
+			, [&name]( PassComponentMap::value_type const & lookup )
+			{
+				return lookup.second->getType() == name;
+			} );
+
+		if ( it != m_components.end() )
+		{
+			result = it->second.get();
+		}
+
+		return result;
+	}
+
+	void Pass::removeComponent( castor::String const & name )
+	{
+		auto it = std::find_if( m_components.begin()
+			, m_components.end()
+			, [&name]( PassComponentMap::value_type const & lookup )
+			{
+				return lookup.second->getType() == name;
+			} );
+
+		if ( it != m_components.end() )
+		{
+			m_components.erase( it );
+			m_dirty = true;
+		}
+	}
+
+	TextureUnitSPtr Pass::getTextureUnit( uint32_t index )const
+	{
+		CU_Require( index < m_textureUnits.size() );
+		return m_textureUnits[index];
+	}
+
+	void Pass::registerTexture( TextureSourceInfo sourceInfo
+		, PassTextureConfig configuration )
+	{
+		auto it = m_sources.find( sourceInfo );
+
+		if ( it != m_sources.end() )
+		{
+			mergeConfigs( std::move( configuration.config ), it->second.config );
+		}
+		else
+		{
+			m_maxTexcoordSet = std::max( m_maxTexcoordSet, configuration.texcoordSet );
+			it = m_sources.emplace( std::move( sourceInfo )
+				, std::move( configuration ) ).first;
+		}
+
+		m_textureFlags |= getFlags( it->second.config );
+		doUpdateTextureFlags();
+	}
+
+	void Pass::registerTexture( TextureSourceInfo sourceInfo
+		, PassTextureConfig configuration
+		, AnimationUPtr animation )
+	{
+		m_animations.emplace( sourceInfo
+			, std::move( animation ) );
+		registerTexture( std::move( sourceInfo )
+			, std::move( configuration ) );
+	}
+
+	void Pass::unregisterTexture( TextureSourceInfo sourceInfo )
+	{
+		auto it = m_sources.find( sourceInfo );
+
+		if ( it != m_sources.end() )
+		{
+			m_sources.erase( it );
+			m_dirty = true;
+
+			remFlag( m_textureFlags, TextureFlag( uint16_t( getFlags( it->second.config ) ) ) );
+			doUpdateTextureFlags();
+		}
+	}
+
+	void Pass::resetTexture( TextureSourceInfo const & srcSourceInfo
+		, TextureSourceInfo dstSourceInfo )
+	{
+		auto it = m_sources.find( srcSourceInfo );
+		PassTextureConfig configuration;
+
+		if ( it != m_sources.end() )
+		{
+			configuration = it->second;
+			m_sources.erase( it );
+			remFlag( m_textureFlags, TextureFlag( uint16_t( getFlags( it->second.config ) ) ) );
+
+			it = m_sources.find( dstSourceInfo );
+
+			if ( it != m_sources.end() )
+			{
+				mergeConfigs( std::move( configuration.config ), it->second.config );
+			}
+			else
+			{
+				it = m_sources.emplace( std::move( dstSourceInfo )
+					, std::move( configuration ) ).first;
+			}
+
+			m_textureFlags |= getFlags( it->second.config );
+			doUpdateTextureFlags();
+		}
+	}
+
+	void Pass::updateConfig( TextureSourceInfo const & sourceInfo
+		, TextureConfiguration configuration )
+	{
+		auto it = m_sources.find( sourceInfo );
+
+		if ( it != m_sources.end() )
+		{
+			remFlag( m_textureFlags, TextureFlag( uint16_t( getFlags( it->second.config ) ) ) );
+			it->second.config = std::move( configuration );
+			m_textureFlags |= getFlags( it->second.config );
+			doUpdateTextureFlags();
+		}
+	}
+
+	void Pass::prepareTextures()
+	{
+		if ( !m_texturesReduced.exchange( true ) )
+		{
+			TextureUnitDataSet sources;
+
+			for ( auto & component : m_components )
+			{
+				component.second->mergeImages( sources );
+			}
+
+			TextureUnitPtrArray newUnits;
+
+			for ( auto & source : sources )
+			{
+				auto & textureCache = getOwner()->getEngine()->getTextureUnitCache();
+				auto unit = textureCache.getTexture( *source );
+				doAddUnit( *source, unit, newUnits );
+			}
+
+			m_textureUnits = newUnits;
+		}
+	}
+
+	void Pass::mergeImages( TextureFlag lhsFlag
+		, uint32_t lhsMaskOffset
+		, uint32_t lhsDstMask
+		, TextureFlag rhsFlag
+		, uint32_t rhsMaskOffset
+		, uint32_t rhsDstMask
+		, castor::String const & name
+		, TextureUnitDataSet & result )
+	{
+		auto & engine = *getOwner()->getEngine();
+		auto & textureCache = engine.getTextureUnitCache();
+		auto sourcesLhs = matpass::getSources( m_sources, lhsFlag );
+		auto sourcesRhs = matpass::getSources( m_sources, rhsFlag );
+
+		if ( !sourcesLhs.empty()
+			&& !sourcesRhs.empty() )
+		{
+			auto & lhsIt = *sourcesLhs.begin();
+			auto & rhsIt = *sourcesRhs.begin();
+
+			auto lhsAnimIt = m_animations.find( lhsIt.first );
+			auto rhsAnimIt = m_animations.find( rhsIt.first );
+
+			auto lhsAnim = ( lhsAnimIt != m_animations.end()
+				? std::move( lhsAnimIt->second )
+				: nullptr );
+			auto rhsAnim = ( rhsAnimIt != m_animations.end()
+				? std::move( rhsAnimIt->second )
+				: nullptr );
+
+			if ( lhsIt.first == rhsIt.first )
+			{
+				result.emplace( &textureCache.getSourceData( lhsIt.first, lhsIt.second, std::move( lhsAnim ) ) );
+			}
+			else
+			{
+				auto & imgCache = engine.getImageCache();
+
+				if ( ( lhsIt.first.isFileImage() || lhsIt.first.isBufferImage() )
+					&& lhsIt.second.imageInfo->format == VK_FORMAT_UNDEFINED )
+				{
+					lhsIt.second.imageInfo->format = convert( imgCache.getImageFormat( lhsIt.first.name() ) );
+				}
+
+				if ( ( rhsIt.first.isFileImage() || rhsIt.first.isBufferImage() )
+					&& rhsIt.second.imageInfo->format == VK_FORMAT_UNDEFINED )
+				{
+					rhsIt.second.imageInfo->format = convert( imgCache.getImageFormat( rhsIt.first.name() ) );
+				}
+
+				auto lhsFlags = getFlags( lhsIt.second.config );
+				auto rhsFlags = getFlags( rhsIt.second.config );
+
+				if ( lhsFlags.size() == 1u
+					&& rhsFlags.size() == 1u
+					&& lhsIt.second.texcoordSet == rhsIt.second.texcoordSet
+					&& matpass::isMergeable( lhsIt.first, lhsIt.second, lhsAnim )
+					&& matpass::isMergeable( rhsIt.first, rhsIt.second, rhsAnim )
+					&& matpass::areFormatsCompatible( lhsIt.second.imageInfo->format, rhsIt.second.imageInfo->format ) )
+				{
+					log::debug << getOwner()->getName() << name << cuT( " - Merging textures." ) << std::endl;
+					auto resultSourceInfo = matpass::mergeSourceInfos( lhsIt.first, rhsIt.first );
+					PassTextureConfig resultConfig;
+					resultConfig.config.heightMask[0] = ( lhsIt.second.config.heightMask[0]
+						| rhsIt.second.config.heightMask[0] );
+					resultConfig.config.heightMask[1] = ( lhsIt.second.config.heightMask[1]
+						| rhsIt.second.config.heightMask[1] );
+					resultConfig.config.heightFactor = std::min( lhsIt.second.config.heightFactor
+						, rhsIt.second.config.heightFactor );
+					matpass::getMask( resultConfig.config, lhsMaskOffset ) = lhsDstMask;
+					matpass::getMask( resultConfig.config, rhsMaskOffset ) = rhsDstMask;
+					mergeConfigsBase( lhsIt.second.config, resultConfig.config );
+					mergeConfigsBase( rhsIt.second.config, resultConfig.config );
+					result.emplace( &textureCache.mergeSources( lhsIt.first
+						, lhsIt.second
+						, matpass::getMask( lhsIt.second.config, lhsMaskOffset )
+						, lhsDstMask
+						, rhsIt.first
+						, rhsIt.second
+						, matpass::getMask( rhsIt.second.config, rhsMaskOffset )
+						, rhsDstMask
+						, getOwner()->getName() + name
+						, resultSourceInfo
+						, resultConfig ) );
+				}
+				else
+				{
+					result.emplace( &textureCache.getSourceData( lhsIt.first, lhsIt.second, std::move( lhsAnim ) ) );
+					result.emplace( &textureCache.getSourceData( rhsIt.first, rhsIt.second, std::move( rhsAnim ) ) );
+				}
 			}
 		}
 		else
 		{
-			data.sssInfo->x = 0.0f;
-			data.sssInfo->y = 0.0f;
-			data.sssInfo->z = 0.0f;
-			data.sssInfo->w = 0.0f;
+			if ( !sourcesLhs.empty() )
+			{
+				auto & it = *sourcesLhs.begin();
+				auto animIt = m_animations.find( it.first );
+				auto anim = ( animIt != m_animations.end()
+					? std::move( animIt->second )
+					: nullptr );
+				result.emplace( &textureCache.getSourceData( it.first, it.second, std::move( anim ) ) );
+			}
+			else if ( !sourcesRhs.empty() )
+			{
+				auto & it = *sourcesRhs.begin();
+				auto animIt = m_animations.find( it.first );
+				auto anim = ( animIt != m_animations.end()
+					? std::move( animIt->second )
+					: nullptr );
+				result.emplace( &textureCache.getSourceData( it.first, it.second, std::move( anim ) ) );
+			}
 		}
+
+#if !defined( NDEBUG )
+		auto it = result.begin();
+
+		while ( it != result.end() )
+		{
+			auto nit = std::find_if( std::next( it )
+				, result.end()
+				, [it]( TextureUnitData * lookup )
+				{
+					return shallowEqual( ( *it )->passConfig.config, lookup->passConfig.config );
+				} );
+			bool ok = ( nit == result.end() );
+			CU_Ensure( ok );
+			++it;
+		}
+#endif
+	}
+
+	void Pass::prepareImage( TextureFlag flag
+		, uint32_t maskOffset
+		, uint32_t dstMask
+		, castor::String const & name
+		, TextureUnitDataSet & result )
+	{
+		auto & engine = *getOwner()->getEngine();
+		auto & textureCache = engine.getTextureUnitCache();
+		auto sources = matpass::getSources( m_sources, flag );
+
+		if ( !sources.empty() )
+		{
+			auto & it = *sources.begin();
+			auto animIt = m_animations.find( it.first );
+			auto anim = ( animIt != m_animations.end()
+				? std::move( animIt->second )
+				: nullptr );
+			result.emplace( &textureCache.getSourceData( it.first, it.second, std::move( anim ) ) );
+		}
+	}
+
+	void Pass::setColour( castor::HdrRgbColour const & value )
+	{
+		for ( auto & component : m_components )
+		{
+			if ( component.second->hasColour() )
+			{
+				component.second->setColour( value );
+			}
+		}
+	}
+
+	castor::HdrRgbColour const & Pass::getColour()const
+	{
+		auto it = std::find_if( m_components.begin()
+			, m_components.end()
+			, []( PassComponentMap::value_type const & lookup )
+			{
+				return lookup.second->hasColour();
+			} );
+		static castor::HdrRgbColour const dummy{};
+		return it == m_components.end()
+			? dummy
+			: it->second->getColour();
+	}
+
+	PassFlags Pass::getPassFlags()const
+	{
+		auto result = m_flags;
+
+		for ( auto & component : m_components )
+		{
+			result |= component.second->getPassFlags();
+		}
+
+		return result;
+	}
+
+	void Pass::accept( PassVisitorBase & vis )
+	{
+		for ( auto & component : m_components )
+		{
+			component.second->accept( vis );
+		}
+	}
+
+	void Pass::fillBuffer( PassBuffer & buffer
+		, uint16_t passTypeIndex )const
+	{
+		if ( !getId() )
+		{
+			return;
+		}
+
+		getOwner()->getEngine()->getPassComponentsRegister().fillBuffer( *this, buffer );
 	}
 
 	PassSPtr Pass::clone( Material & material )const
 	{
-		auto result = doClone( material );
-		result->m_flags = m_flags;
+		auto result = std::make_unique< Pass >( material, getTypeID(), getPassFlags() );
 		result->m_implicit = m_implicit;
 		result->m_automaticShader = m_automaticShader;
-		result->m_opacity = m_opacity.value();
-		result->m_bwAccumulationOperator = m_bwAccumulationOperator.value();
-		result->m_emissive = m_emissive.value();
-		result->m_refractionRatio = m_refractionRatio.value();
-		result->m_twoSided = m_twoSided.value();
-		result->m_untiling = m_untiling.value();
-		result->m_alphaBlendMode = m_alphaBlendMode.value();
-		result->m_colourBlendMode = m_colourBlendMode.value();
-		result->m_alphaValue = m_alphaValue.value();
-		result->m_transmission = m_transmission.value();
-		result->m_alphaFunc = m_alphaFunc.value();
-		result->m_blendAlphaFunc = m_blendAlphaFunc.value();
-		result->m_parallaxOcclusionMode = m_parallaxOcclusionMode.value();
 		result->m_renderPassInfo = m_renderPassInfo;
 
-		if ( m_subsurfaceScattering )
+		for ( auto & component : m_components )
 		{
-			auto sss = std::make_unique< SubsurfaceScattering >();
-			sss->setGaussianWidth( m_subsurfaceScattering->getGaussianWidth() );
-			sss->setStrength( m_subsurfaceScattering->getStrength() );
-			sss->setSubsurfaceRadius( m_subsurfaceScattering->getSubsurfaceRadius() );
-
-			for ( auto & factor : *m_subsurfaceScattering )
-			{
-				sss->addProfileFactor( factor );
-			}
-
-			result->setSubsurfaceScattering( std::move( sss ) );
+			result->addComponent( component.second->clone( *result ) );
 		}
 
 		for ( auto & source : m_sources )
@@ -347,116 +636,136 @@ namespace castor3d
 		return result;
 	}
 
+	bool Pass::writeText( castor::String const & tabs
+		, castor::Path const & folder
+		, castor::String const & subfolder
+		, castor::StringStream & file )const
+	{
+		bool result = true;
+
+		for ( auto & component : m_components )
+		{
+			result = result
+				&& component.second->writeText( tabs, folder, subfolder, file );
+		}
+
+		return result;
+	}
+
 	void Pass::fillConfig( TextureConfiguration & configuration
 		, PassVisitorBase & vis )
 	{
-		doAccept( configuration, vis );
-		vis.visit( cuT( "Emissive" ), TextureFlag::eEmissive, configuration.emissiveMask, 3u );
-		vis.visit( cuT( "Opacity" ), TextureFlag::eOpacity, configuration.opacityMask, 1u );
-		vis.visit( cuT( "Occlusion" ), TextureFlag::eOcclusion, configuration.occlusionMask, 1u );
-		vis.visit( cuT( "Transmittance" ), TextureFlag::eTransmittance, configuration.transmittanceMask, 1u );
-		vis.visit( cuT( "Normal" ), TextureFlag::eNormal, configuration.normalMask, 3u );
-		vis.visit( cuT( "Normal factor" ), configuration.normalFactor );
-		vis.visit( cuT( "Normal DirectX" ), configuration.normalGMultiplier );
-		vis.visit( cuT( "Height" ), TextureFlag::eHeight, configuration.heightMask, 1u );
-		vis.visit( cuT( "Height factor" ), configuration.heightFactor );
+		for ( auto & component : m_components )
+		{
+			component.second->fillConfig( configuration, vis );
+		}
 	}
 
-	void Pass::registerTexture( TextureSourceInfo sourceInfo
-		, PassTextureConfig configuration )
+	void Pass::parseError( castor::String const & error )
 	{
-		auto it = m_sources.find( sourceInfo );
+		castor::StringStream stream{ castor::makeStringStream() };
+		stream << cuT( "Error, : " ) << error;
+		castor::Logger::logError( stream.str() );
+	}
 
-		if ( it != m_sources.end() )
+	void Pass::addParser( castor::AttributeParsers & parsers
+		, uint32_t section
+		, castor::String const & name
+		, castor::ParserFunction function
+		, castor::ParserParameterArray array
+		, castor::String comment )
+	{
+		auto nameIt = parsers.find( name );
+
+		if ( nameIt != parsers.end()
+			&& nameIt->second.find( section ) != nameIt->second.end() )
 		{
-			mergeConfigs( std::move( configuration.config ), it->second.config );
+			parseError( cuT( "Parser " ) + name + cuT( " for section " ) + castor::string::toString( section ) + cuT( " already exists." ) );
 		}
 		else
 		{
-			m_maxTexcoordSet = std::max( m_maxTexcoordSet, sourceInfo.getTexcoordSet() );
-			it = m_sources.emplace( std::move( sourceInfo )
-				, std::move( configuration ) ).first;
-		}
-
-		m_textures |= getFlags( it->second.config );
-		doUpdateTextureFlags();
-	}
-
-	void Pass::registerTexture( TextureSourceInfo sourceInfo
-		, PassTextureConfig configuration
-		, AnimationUPtr animation )
-	{
-		m_animations.emplace( sourceInfo
-			, std::move( animation ) );
-		registerTexture( std::move( sourceInfo )
-			, std::move( configuration ) );
-	}
-
-	void Pass::unregisterTexture( TextureSourceInfo sourceInfo )
-	{
-		auto it = m_sources.find( sourceInfo );
-
-		if ( it != m_sources.end() )
-		{
-			m_sources.erase( it );
-			m_dirty = true;
-
-			remFlag( m_textures, TextureFlag( uint16_t( getFlags( it->second.config ) ) ) );
-			doUpdateTextureFlags();
+			parsers[name][section] = { function, std::move( array ), std::move( comment ) };
 		}
 	}
 
-	void Pass::resetTexture( TextureSourceInfo const & srcSourceInfo
-		, TextureSourceInfo dstSourceInfo )
+	castor::RgbColour Pass::computeF0( castor::HdrRgbColour const & albedo
+		, float metalness )
 	{
-		auto it = m_sources.find( srcSourceInfo );
-		PassTextureConfig configuration;
-
-		if ( it != m_sources.end() )
-		{
-			configuration = it->second;
-			m_sources.erase( it );
-			remFlag( m_textures, TextureFlag( uint16_t( getFlags( it->second.config ) ) ) );
-
-			it = m_sources.find( dstSourceInfo );
-
-			if ( it != m_sources.end() )
-			{
-				mergeConfigs( std::move( configuration.config ), it->second.config );
-			}
-			else
-			{
-				it = m_sources.emplace( std::move( dstSourceInfo )
-					, std::move( configuration ) ).first;
-			}
-
-			m_textures |= getFlags( it->second.config );
-			doUpdateTextureFlags();
-		}
+		return castor::RgbColour{ matpass::mix( 0.04f, albedo.red(), metalness )
+			, matpass::mix( 0.04f, albedo.green(), metalness )
+			, matpass::mix( 0.04f, albedo.blue(), metalness ) };
 	}
 
-	void Pass::updateConfig( TextureSourceInfo const & sourceInfo
-		, TextureConfiguration configuration )
+	float Pass::computeRoughnessFromGlossiness( float glossiness )
 	{
-		auto it = m_sources.find( sourceInfo );
-		if ( it != m_sources.end() )
-		{
-			remFlag( m_textures, TextureFlag( uint16_t( getFlags( it->second.config ) ) ) );
-			it->second.config = std::move( configuration );
-			m_textures |= getFlags( it->second.config );
-			doUpdateTextureFlags();
-		}
+		return 1.0f - glossiness;
 	}
 
-	TextureUnitSPtr Pass::getTextureUnit( uint32_t index )const
+	float Pass::computeGlossinessFromRoughness( float roughness )
 	{
-		CU_Require( index < m_textureUnits.size() );
-		return m_textureUnits[index];
+		return 1.0f - roughness;
+	}
+
+	float Pass::computeGlossinessFromShininess( float shininess )
+	{
+		return shininess / MaxPhongShininess;
+	}
+
+	float Pass::computeShininessFromGlossiness( float glossiness )
+	{
+		return glossiness * MaxPhongShininess;
 	}
 
 	bool Pass::needsAlphaProcessing()const
 	{
-		return checkFlag( m_textures, TextureFlag::eOpacity ) || m_opacity < 1.0f;
+		bool result = checkFlag( m_textureFlags, TextureFlag::eOpacity );
+
+		if ( auto comp = getComponent< OpacityComponent >() )
+		{
+			result = result && comp->needsAlphaProcessing();
+		}
+
+		return result;
+	}
+
+	BlendMode Pass::getAlphaBlendMode()const
+	{
+		if ( auto comp = getComponent< BlendComponent >() )
+		{
+			return comp->getAlphaBlendMode();
+		}
+
+		return BlendMode::eNoBlend;
+	}
+
+	BlendMode Pass::getColourBlendMode()const
+	{
+		if ( auto comp = getComponent< BlendComponent >() )
+		{
+			return comp->getColourBlendMode();
+		}
+
+		return BlendMode::eNoBlend;
+	}
+
+	VkCompareOp Pass::getAlphaFunc()const
+	{
+		if ( auto comp = getComponent< AlphaTestComponent >() )
+		{
+			return comp->getAlphaFunc();
+		}
+
+		return VK_COMPARE_OP_ALWAYS;
+	}
+
+	VkCompareOp Pass::getBlendAlphaFunc()const
+	{
+		if ( auto comp = getComponent< AlphaTestComponent >() )
+		{
+			return comp->getBlendAlphaFunc();
+		}
+
+		return VK_COMPARE_OP_ALWAYS;
 	}
 
 	bool Pass::hasAlphaBlending()const
@@ -484,57 +793,54 @@ namespace castor3d
 			&& getBlendAlphaFunc() != VK_COMPARE_OP_ALWAYS;
 	}
 
-	void Pass::prepareTextures()
+	bool Pass::hasEnvironmentMapping()const
 	{
-		if ( !m_texturesReduced.exchange( true ) )
+		auto result = false;
+
+		if ( auto comp = getComponent< ReflectionComponent >() )
 		{
-			TextureUnitPtrArray newUnits;
-			doJoinNmlHgt( newUnits );
-			doJoinEmsOcc( newUnits );
-			doPrepareTextures( newUnits );
-			m_textureUnits = newUnits;
+			result = comp->hasEnvironmentMapping();
 		}
-	}
 
-	void Pass::setOpacity( float value )
-	{
-		m_opacity = value;
-
-		if ( needsAlphaProcessing() )
+		if ( !result )
 		{
-			if ( m_alphaBlendMode == BlendMode::eNoBlend )
+			if ( auto comp = getComponent< RefractionComponent >() )
 			{
-				m_alphaBlendMode = BlendMode::eInterpolative;
+				result = comp->hasEnvironmentMapping();
 			}
 		}
-		else
+
+		return result;
+	}
+
+	bool Pass::hasSubsurfaceScattering()const
+	{
+		if ( auto comp = getComponent< SubsurfaceScatteringComponent >() )
 		{
-			m_alphaBlendMode = BlendMode::eNoBlend;
+			return comp->hasSubsurfaceScattering();
 		}
 
-		doUpdateAlphaFlags();
-		m_dirty = true;
+		return false;
 	}
 
-	PassFlags Pass::getPassFlags()const
+	bool Pass::isTwoSided()const
 	{
-		return m_flags;
-	}
+		if ( auto comp = getComponent< TwoSidedComponent >() )
+		{
+			return comp->isTwoSided();
+		}
 
-	void Pass::setSubsurfaceScattering( SubsurfaceScatteringUPtr value )
-	{
-		m_subsurfaceScattering = std::move( value );
-		updateFlag( PassFlag::eSubsurfaceScattering, m_subsurfaceScattering != nullptr );
-		m_sssConnection = m_subsurfaceScattering->onChanged.connect( [this]( SubsurfaceScattering const & sss )
-			{
-				onSssChanged( sss );
-			} );
-		m_sssDirty = true;
+		return false;
 	}
 
 	TextureUnitPtrArray Pass::getTextureUnits( TextureFlags mask )const
 	{
 		return matpass::getTextureUnits( m_textureUnits, mask );
+	}
+
+	uint32_t Pass::getTextureUnitsCount( TextureFlags mask )const
+	{
+		return uint32_t( matpass::getTextureUnits( m_textureUnits, mask ).size() );
 	}
 
 	TextureFlagsArray Pass::getTexturesMask( TextureFlags mask )const
@@ -555,307 +861,63 @@ namespace castor3d
 		return result;
 	}
 
-	uint32_t Pass::getTextureUnitsCount( TextureFlags mask )const
+	TextureFlags Pass::getTextures()const
 	{
-		return uint32_t( matpass::getTextureUnits( m_textureUnits, mask ).size() );
+		return m_textureFlags;
 	}
 
-	void Pass::doFillData( PassBuffer::PassDataPtr & data
-		, uint16_t passTypeIndex )const
+	bool Pass::hasLighting()const
 	{
-		*data.index = m_index;
-		*data.emissive = getEmissive();
-		*data.alphaRef = getAlphaValue();
-		*data.sssProfileIndex = getSssProfileId();
-		data.transmission->r = powf( getTransmission().red(), 2.2f );
-		data.transmission->g = powf( getTransmission().green(), 2.2f );
-		data.transmission->b = powf( getTransmission().blue(), 2.2f );
-		*data.opacity = getOpacity();
-		*data.refractionRatio = getRefractionRatio();
-		*data.hasRefraction = hasRefraction() ? 1u : 0u;
-		*data.hasReflection = hasReflections() ? 1u : 0u;
-		*data.bwAccumulationOperator = float( getBWAccumulationOperator() );
-
-		uint32_t index = 0u;
-		( *data.textures )[0] = {};
-		( *data.textures )[1] = {};
-
-		for ( auto & unit : *this )
+		if ( auto component = getComponent< PassHeaderComponent >() )
 		{
-			( *data.textures )[index / 4u][index % 4u] = unit->getId();
-			++index;
-		}
-
-		*data.textureCount = std::min( MaxPassTextures, getTextureUnitsCount() );
-		*data.passId = getId();
-		*data.lighting = hasLighting() ? 1u : 0u;
-		*data.passCount = getOwner()->getPassCount();
-	}
-
-	void Pass::doMergeImages( TextureFlag lhsFlag
-		, uint32_t lhsMaskOffset
-		, uint32_t lhsDstMask
-		, TextureFlag rhsFlag
-		, uint32_t rhsMaskOffset
-		, uint32_t rhsDstMask
-		, castor::String const & name
-		, TextureUnitPtrArray & result )
-	{
-		auto & textureCache = getOwner()->getEngine()->getTextureUnitCache();
-		auto sourcesLhs = matpass::getSources( m_sources, lhsFlag );
-		auto sourcesRhs = matpass::getSources( m_sources, rhsFlag );
-
-		if ( !sourcesLhs.empty()
-			&& !sourcesRhs.empty() )
-		{
-			auto & lhsIt = *sourcesLhs.begin();
-			auto & rhsIt = *sourcesRhs.begin();
-
-			auto lhsAnimIt = m_animations.find( lhsIt.first );
-			auto rhsAnimIt = m_animations.find( rhsIt.first );
-
-			auto lhsAnim = ( lhsAnimIt != m_animations.end()
-				? std::move( lhsAnimIt->second )
-				: nullptr );
-			auto rhsAnim = ( rhsAnimIt != m_animations.end()
-				? std::move( rhsAnimIt->second )
-				: nullptr );
-
-			if ( lhsIt.first == rhsIt.first )
-			{
-				auto unit = textureCache.getTexture( lhsIt.first, lhsIt.second );
-
-				if ( doAddUnit( lhsIt.second.config
-					, std::move( lhsAnim )
-					, unit
-					, result ) )
-				{
-					m_unitsSources.emplace( unit.get(), TextureSourceSet{} ).first->second.insert( lhsIt.first );
-				}
-			}
-			else
-			{
-				auto & imgCache = getOwner()->getEngine()->getImageCache();
-
-				if ( ( lhsIt.first.isFileImage() || lhsIt.first.isBufferImage() )
-					&& lhsIt.second.imageInfo->format == VK_FORMAT_UNDEFINED )
-				{
-					lhsIt.second.imageInfo->format = convert( imgCache.getImageFormat( lhsIt.first.name() ) );
-				}
-
-				if ( ( rhsIt.first.isFileImage() || rhsIt.first.isBufferImage() )
-					&& rhsIt.second.imageInfo->format == VK_FORMAT_UNDEFINED )
-				{
-					rhsIt.second.imageInfo->format = convert( imgCache.getImageFormat( rhsIt.first.name() ) );
-				}
-
-				auto lhsFlags = getFlags( lhsIt.second.config );
-				auto rhsFlags = getFlags( rhsIt.second.config );
-
-				if ( lhsFlags.size() == 1u
-					&& rhsFlags.size() == 1u
-					&& lhsIt.first.getTexcoordSet() == rhsIt.first.getTexcoordSet()
-					&& matpass::isMergeable( lhsIt.first, lhsIt.second, lhsAnim )
-					&& matpass::isMergeable( rhsIt.first, rhsIt.second, rhsAnim )
-					&& matpass::areFormatsCompatible( lhsIt.second.imageInfo->format, rhsIt.second.imageInfo->format ) )
-				{
-					log::debug << getOwner()->getName() << name << cuT( " - Merging textures." ) << std::endl;
-					auto resultSourceInfo = matpass::mergeSourceInfos( lhsIt.first, rhsIt.first );
-					TextureConfiguration resultConfig;
-					resultConfig.heightMask[0] = ( lhsIt.second.config.heightMask[0]
-						| rhsIt.second.config.heightMask[0] );
-					resultConfig.heightMask[1] = ( lhsIt.second.config.heightMask[1]
-						| rhsIt.second.config.heightMask[1] );
-					resultConfig.heightFactor = std::min( lhsIt.second.config.heightFactor
-						, rhsIt.second.config.heightFactor );
-					matpass::getMask( resultConfig, lhsMaskOffset ) = lhsDstMask;
-					matpass::getMask( resultConfig, rhsMaskOffset ) = rhsDstMask;
-					auto img = textureCache.mergeImages( lhsIt.first
-						, lhsIt.second.config
-						, matpass::getMask( lhsIt.second.config, lhsMaskOffset )
-						, lhsDstMask
-						, rhsIt.first
-						, rhsIt.second.config
-						, matpass::getMask( rhsIt.second.config, rhsMaskOffset )
-						, rhsDstMask
-						, getOwner()->getName() + name
-						, resultSourceInfo
-						, resultConfig );
-
-					if ( doAddUnit( resultConfig
-						, nullptr
-						, img
-						, result ) )
-					{
-						m_unitsSources.emplace( img.get(), TextureSourceSet{} ).first->second.insert( lhsIt.first );
-						m_unitsSources.emplace( img.get(), TextureSourceSet{} ).first->second.insert( rhsIt.first );
-					}
-				}
-				else
-				{
-					auto unit = textureCache.getTexture( lhsIt.first, lhsIt.second );
-
-					if ( doAddUnit( lhsIt.second.config
-						, std::move( lhsAnim )
-						, unit
-						, result ) )
-					{
-						m_unitsSources.emplace( unit.get(), TextureSourceSet{} ).first->second.insert( lhsIt.first );
-					}
-
-					unit = textureCache.getTexture( rhsIt.first, rhsIt.second );
-
-					if ( doAddUnit( rhsIt.second.config
-						, std::move( rhsAnim )
-						, unit
-						, result ) )
-					{
-						m_unitsSources.emplace( unit.get(), TextureSourceSet{} ).first->second.insert( rhsIt.first );
-					}
-				}
-			}
-		}
-		else
-		{
-			if ( !sourcesLhs.empty() )
-			{
-				auto & it = *sourcesLhs.begin();
-				auto animIt = m_animations.find( it.first );
-				auto anim = ( animIt != m_animations.end()
-					? std::move( animIt->second )
-					: nullptr );
-				auto unit = textureCache.getTexture( it.first, it.second );
-
-				if ( doAddUnit( it.second.config
-					, std::move( anim )
-					, unit
-					, result ) )
-				{
-					m_unitsSources.emplace( unit.get(), TextureSourceSet{} ).first->second.insert( it.first );
-				}
-			}
-			else if ( !sourcesRhs.empty() )
-			{
-				auto & it = *sourcesRhs.begin();
-				auto animIt = m_animations.find( it.first );
-				auto anim = ( animIt != m_animations.end()
-					? std::move( animIt->second )
-					: nullptr );
-				auto unit = textureCache.getTexture( it.first, it.second );
-
-				if ( doAddUnit( it.second.config
-					, std::move( anim )
-					, unit
-					, result ) )
-				{
-					m_unitsSources.emplace( unit.get(), TextureSourceSet{} ).first->second.insert( it.first );
-				}
-			}
-		}
-
-#ifndef NDEBUG
-		auto it = result.begin();
-
-		while ( it != result.end() )
-		{
-			auto nit = std::find_if( std::next( it )
-				, result.end()
-				, [it]( TextureUnitSPtr lookup )
-				{
-					return shallowEqual( ( *it )->getConfiguration(), lookup->getConfiguration() );
-				} );
-			bool ok = ( nit == result.end() );
-			CU_Ensure( ok );
-			++it;
-		}
-#endif
-	}
-
-	void Pass::doJoinDifOpa( TextureUnitPtrArray & result
-		, castor::String const & name )
-	{
-		doMergeImages( TextureFlag::eDiffuse
-			, offsetof( TextureConfiguration, colourMask )
-			, 0x00FFFFFF
-			, TextureFlag::eOpacity
-			, offsetof( TextureConfiguration, opacityMask )
-			, 0xFF000000
-			, name
-			, result );
-	}
-
-	void Pass::onSssChanged( SubsurfaceScattering const & sss )
-	{
-		m_sssDirty = true;
-	}
-
-	void Pass::doJoinNmlHgt( TextureUnitPtrArray & result )
-	{
-		doMergeImages( TextureFlag::eNormal
-			, offsetof( TextureConfiguration, normalMask )
-			, 0x00FFFFFF
-			, TextureFlag::eHeight
-			, offsetof( TextureConfiguration, heightMask )
-			, 0xFF000000
-			, cuT( "NmlHgt" )
-			, result );
-	}
-
-	void Pass::doJoinEmsOcc( TextureUnitPtrArray & result )
-	{
-		doMergeImages( TextureFlag::eEmissive
-			, offsetof( TextureConfiguration, emissiveMask )
-			, 0x00FFFFFF
-			, TextureFlag::eOcclusion
-			, offsetof( TextureConfiguration, occlusionMask )
-			, 0xFF000000
-			, cuT( "EmsOcc" )
-			, result );
-	}
-
-	bool Pass::doAddUnit( TextureConfiguration const & config
-		, AnimationUPtr animation
-		, TextureUnitSPtr unit
-		, TextureUnitPtrArray & result )
-	{
-		if ( config.heightMask[0] )
-		{
-			m_heightTextureIndex = uint32_t( result.size() );
-		}
-
-		if ( animation && !unit->hasAnimation() )
-		{
-			auto anim = animation.get();
-			
-			unit->addAnimation( std::move( animation ) );
-			static_cast< TextureAnimation & >( *anim ).setAnimable( *unit );
-		}
-
-		auto it = std::find_if( result.begin()
-			, result.end()
-			, [&config]( TextureUnitSPtr lookup )
-			{
-				return shallowEqual( config, lookup->getConfiguration() );
-			} );
-
-		if ( it == result.end() )
-		{
-			result.push_back( unit );
-			return true;
+			return component->isLightingEnabled();
 		}
 
 		return false;
 	}
 
-	void Pass::doUpdateAlphaFlags()
+	void Pass::enableLighting( bool value )
 	{
-		updateFlag( PassFlag::eAlphaBlending, hasAlphaBlending() );
-		updateFlag( PassFlag::eAlphaTest, hasAlphaTest() || hasBlendAlphaTest() );
+		if ( auto component = getComponent< PassHeaderComponent >() )
+		{
+			component->enableLighting( value );
+		}
+	}
+
+	void Pass::doAddUnit( TextureUnitData & unitData
+		, TextureUnitSPtr unit
+		, TextureUnitPtrArray & result )
+	{
+		if ( unitData.passConfig.config.heightMask[0] )
+		{
+			m_heightTextureIndex = uint32_t( result.size() );
+		}
+
+		if ( unitData.animation && !unit->hasAnimation() )
+		{
+			auto anim = unitData.animation.get();
+			
+			unit->addAnimation( std::move( unitData.animation ) );
+			static_cast< TextureAnimation & >( *anim ).setAnimable( *unit );
+		}
+
+		auto it = std::find_if( result.begin()
+			, result.end()
+			, [&unitData]( TextureUnitSPtr lookup )
+			{
+				return shallowEqual( unitData.passConfig.config, lookup->getConfiguration() );
+			} );
+
+		if ( it == result.end() )
+		{
+			result.push_back( unit );
+		}
 	}
 
 	void Pass::doUpdateTextureFlags()
 	{
-		doUpdateAlphaFlags();
+		updateFlag( PassFlag::eAlphaBlending, hasAlphaBlending() );
+		updateFlag( PassFlag::eAlphaTest, hasAlphaTest() || hasBlendAlphaTest() );
 
 		if ( m_texturesReduced.exchange( false ) )
 		{
@@ -863,6 +925,14 @@ namespace castor3d
 			onChanged( *this );
 		}
 
+		m_textureConfigs = TextureConfiguration{};
+
+		for ( auto & source : m_sources )
+		{
+			mergeConfigs( source.second.config, m_textureConfigs );
+		}
+
+		getOwner()->getEngine()->getPassComponentsRegister().updateMapComponents( m_textureConfigs, *this );
 		m_dirty = true;
 	}
 }

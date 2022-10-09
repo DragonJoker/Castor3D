@@ -8,6 +8,7 @@
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Pass/PassFactory.hpp"
+#include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/MeshFactory.hpp"
@@ -158,6 +159,7 @@ namespace castor3d
 		, m_cpuJobs{ std::max( 8u, std::min( 4u, castor::CpuInformations{}.getCoreCount() / 2u ) ) }
 	{
 		m_passFactory = castor::makeUnique< PassFactory >( *this );
+		m_passComponents = castor::makeUnique< PassComponentRegister >( *this );
 		m_passesType = m_passFactory->listRegisteredTypes().begin()->second;
 
 		auto listenerClean = []( auto & element )
@@ -267,6 +269,9 @@ namespace castor3d
 		castor::GliImageWriter::unregisterWriter( m_imageWriter );
 		cleanupGlslang();
 
+		m_passComponents.reset();
+		m_passFactory.reset();
+
 		m_logger = nullptr;
 		log::cleanup();
 	}
@@ -276,39 +281,34 @@ namespace castor3d
 		castor::Debug::initialise();
 		m_threaded = threaded;
 
-		if ( m_renderSystem )
-		{
-			if ( auto created = m_samplerCache->create( cuT( "Default" ), *this ) )
-			{
-				created->setMinFilter( VK_FILTER_LINEAR );
-				created->setMagFilter( VK_FILTER_LINEAR );
-				created->setWrapS( VK_SAMPLER_ADDRESS_MODE_REPEAT );
-				created->setWrapT( VK_SAMPLER_ADDRESS_MODE_REPEAT );
-				created->setWrapR( VK_SAMPLER_ADDRESS_MODE_REPEAT );
-				m_defaultSampler = m_samplerCache->add( created->getName(), created, true );
-			}
-
-			if ( auto created = m_samplerCache->create( eng::samplerName, *this ) )
-			{
-				created->setMinFilter( VK_FILTER_NEAREST );
-				created->setMagFilter( VK_FILTER_NEAREST );
-				created->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-				created->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-				created->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-				m_lightsSampler = m_samplerCache->add( created->getName(), created, true );
-			}
-
-			doLoadCoreData();
-
-			if ( m_maxImageSize == 0xFFFFFFFF )
-			{
-				m_maxImageSize = m_renderSystem->getGpuInformations().getValue( GpuMax::eTexture2DSize );
-			}
-		}
-
 		if ( !m_renderSystem )
 		{
 			CU_Exception( eng::C3D_NO_RENDERSYSTEM );
+		}
+
+		if ( auto created = m_samplerCache->create( cuT( "Default" ), *this ) )
+		{
+			created->setMinFilter( VK_FILTER_LINEAR );
+			created->setMagFilter( VK_FILTER_LINEAR );
+			created->setWrapS( VK_SAMPLER_ADDRESS_MODE_REPEAT );
+			created->setWrapT( VK_SAMPLER_ADDRESS_MODE_REPEAT );
+			created->setWrapR( VK_SAMPLER_ADDRESS_MODE_REPEAT );
+			m_defaultSampler = m_samplerCache->add( created->getName(), created, true );
+		}
+
+		if ( auto created = m_samplerCache->create( eng::samplerName, *this ) )
+		{
+			created->setMinFilter( VK_FILTER_NEAREST );
+			created->setMagFilter( VK_FILTER_NEAREST );
+			created->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+			created->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+			created->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
+			m_lightsSampler = m_samplerCache->add( created->getName(), created, true );
+		}
+
+		if ( m_maxImageSize == 0xFFFFFFFF )
+		{
+			m_maxImageSize = m_renderSystem->getGpuInformations().getValue( GpuMax::eTexture2DSize );
 		}
 
 		m_textureCache->initialise( m_renderSystem->getRenderDevice() );
@@ -322,6 +322,8 @@ namespace castor3d
 		{
 			postEvent( makeGpuInitialiseEvent( **m_defaultSampler.lock() ) );
 		}
+
+		doLoadCoreData();
 
 		if ( threaded )
 		{
@@ -609,6 +611,13 @@ namespace castor3d
 		return m_materialCache->getMaxPassTypeCount();
 	}
 
+	RenderDevice * Engine::getRenderDevice()const
+	{
+		return m_renderSystem
+			? &m_renderSystem->getRenderDevice()
+			: nullptr;
+	}
+
 	castor::RgbaColour Engine::getNextRainbowColour()const
 	{
 		static float currentColourHue{ 0.0f };
@@ -727,6 +736,24 @@ namespace castor3d
 		, uint32_t set )const
 	{
 		m_materialCache->declareSpecificsShaderBuffers( writer, buffers, binding, set );
+	}
+
+	uint32_t Engine::registerPassComponent( castor::String const & type
+		, ParsersFiller createParsers
+		, SectionsFiller createSections
+		, CreateMaterialShader createMaterialShader
+		, ComponentData data )
+	{
+		return m_passComponents->registerComponent( type
+			, createParsers
+			, createSections
+			, createMaterialShader
+			, std::move( data ) );
+	}
+
+	void Engine::unregisterPassComponent( castor::String const & type )
+	{
+		m_passComponents->unregisterComponent( type );
 	}
 
 	void Engine::registerRenderPassType( castor::String const & renderPassType

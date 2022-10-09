@@ -15,19 +15,19 @@
 
 namespace CastorGui
 {
-	void setMaterialColour( castor3d::Pass & pass, castor::RgbColour const & colour )
+	void setMaterialColour( castor3d::Pass & pass, castor::HdrRgbColour const & colour )
 	{
 		pass.setColour( colour );
 	}
 
-	castor::RgbColour const & getMaterialColour( castor3d::Pass const & pass )
+	castor::HdrRgbColour const & getMaterialColour( castor3d::Pass const & pass )
 	{
 		return pass.getColour();
 	}
 
 	castor3d::MaterialRPtr createMaterial( castor3d::Engine & engine
 		, castor::String const & name
-		, castor::RgbColour const & colour )
+		, castor::HdrRgbColour const & colour )
 	{
 		auto & cache = engine.getMaterialCache();
 		castor3d::MaterialResPtr created;
@@ -67,8 +67,11 @@ namespace CastorGui
 
 		if ( pass->getTextureUnitsCount() == 0 )
 		{
+			auto & texCache = engine.getTextureUnitCache();
 			auto unit = std::make_shared< castor3d::TextureUnit >( engine
-				, castor3d::TextureSourceInfo{ nullptr, texture->getCreateInfo() } );
+				, texCache.getSourceData( castor3d::TextureSourceInfo{ nullptr, texture->getCreateInfo() }
+					, castor3d::PassTextureConfig{ { {} }, castor3d::TextureConfiguration::DiffuseTexture }
+					, nullptr ) );
 			unit->setConfiguration( castor3d::TextureConfiguration::DiffuseTexture );
 			//pass->addTextureUnit( unit );
 		}

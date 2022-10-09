@@ -20,8 +20,6 @@ namespace castor3d
 	{
 		castor::String lightingModel;
 		PassFactoryBase::Creator passCreator;
-		castor::AttributeParsers parsers;
-		castor::StrUInt32Map sections;
 		shader::LightingModelCreator lightingModelCreator;
 		bool isIBLNeeded;
 	};

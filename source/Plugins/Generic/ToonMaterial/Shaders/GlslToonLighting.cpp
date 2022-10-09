@@ -1,7 +1,5 @@
 #include "ToonMaterial/Shaders/GlslToonLighting.hpp"
 
-#include "ToonMaterial/Shaders/GlslToonMaterial.hpp"
-
 #include <Castor3D/Material/Pass/Phong/Shaders/GlslPhongReflection.hpp>
 #include <Castor3D/Material/Pass/PBR/Shaders/GlslPbrReflection.hpp>
 #include <Castor3D/Shader/Shaders/GlslLight.hpp>
@@ -27,12 +25,14 @@ namespace toon::shader
 	}
 
 	ToonPhongLightingModel::ToonPhongLightingModel( sdw::ShaderWriter & m_writer
+		, c3d::Materials const & materials
 		, c3d::Utils & utils
 		, c3d::ShadowOptions shadowOptions
 		, c3d::SssProfiles const * sssProfiles
 		, bool enableVolumetric
 		, bool isBlinnPhong )
 		: c3d::PhongLightingModel{ m_writer
+			, materials
 			, utils
 			, std::move( shadowOptions )
 			, sssProfiles
@@ -43,23 +43,19 @@ namespace toon::shader
 	}
 
 	c3d::LightingModelPtr ToonPhongLightingModel::create( sdw::ShaderWriter & writer
+		, c3d::Materials const & materials
 		, c3d::Utils & utils
 		, c3d::ShadowOptions shadowOptions
 		, c3d::SssProfiles const * sssProfiles
 		, bool enableVolumetric )
 	{
 		return std::make_unique< ToonPhongLightingModel >( writer
+			, materials
 			, utils
 			, std::move( shadowOptions )
 			, sssProfiles
 			, enableVolumetric
 			, false );
-	}
-
-	std::unique_ptr< c3d::LightMaterial > ToonPhongLightingModel::declMaterial( std::string const & name
-		, bool enabled )
-	{
-		return m_writer.declDerivedLocale< c3d::LightMaterial, ToonPhongLightMaterial >( name, enabled );
 	}
 
 	c3d::ReflectionModelPtr ToonPhongLightingModel::getReflectionModel( uint32_t & envMapBinding
@@ -72,7 +68,7 @@ namespace toon::shader
 	}
 
 	void ToonPhongLightingModel::compute( c3d::DirectionalLight const & plight
-		, c3d::LightMaterial const & pmaterial
+		, c3d::BlendComponents const & pcomponents
 		, c3d::Surface const & psurface
 		, c3d::BackgroundModel & pbackground
 		, sdw::Vec3 const & pworldEye
@@ -84,7 +80,7 @@ namespace toon::shader
 			c3d::OutputComponents outputs{ m_writer };
 			m_computeDirectional = m_writer.implementFunction< sdw::Void >( m_prefix + "computeDirectionalLight"
 				, [this]( c3d::DirectionalLight const & light
-					, ToonPhongLightMaterial const & material
+					, c3d::BlendComponents const & components
 					, c3d::Surface const & surface
 					, sdw::Vec3 const & worldEye
 					, sdw::UInt const & receivesShadows
@@ -96,7 +92,7 @@ namespace toon::shader
 					auto lightDirection = m_writer.declLocale( "lightDirection"
 						, normalize( light.direction ) );
 					doComputeLight( light.base
-						, material
+						, components
 						, surface
 						, worldEye
 						, lightDirection
@@ -119,7 +115,7 @@ namespace toon::shader
 							FOR( m_writer, sdw::UInt, i, 0u, i < maxCount, ++i )
 							{
 								auto factors = m_writer.declLocale( "factors"
-									, m_getCascadeFactors( sdw::Vec3{ surface.viewPosition }
+									, m_getCascadeFactors( surface.viewPosition.xyz()
 										, light.splitDepths
 										, i ) );
 
@@ -187,7 +183,7 @@ namespace toon::shader
 					parentOutput.m_scattering += max( vec3( 0.0_f ), output.m_scattering );
 				}
 				, c3d::InDirectionalLight( m_writer, "light" )
-				, InToonPhongLightMaterial{ m_writer, "material" }
+				, c3d::InBlendComponents{ m_writer, "component", m_materials }
 				, c3d::InSurface{ m_writer, "surface" }
 				, sdw::InVec3( m_writer, "worldEye" )
 				, sdw::InUInt( m_writer, "receivesShadows" )
@@ -195,7 +191,7 @@ namespace toon::shader
 		}
 
 		m_computeDirectional( plight
-			, static_cast< ToonPhongLightMaterial const & >( pmaterial )
+			, pcomponents
 			, psurface
 			, pworldEye
 			, preceivesShadows
@@ -203,7 +199,7 @@ namespace toon::shader
 	}
 
 	void ToonPhongLightingModel::compute( c3d::PointLight const & plight
-		, c3d::LightMaterial const & pmaterial
+		, c3d::BlendComponents const & pcomponents
 		, c3d::Surface const & psurface
 		, sdw::Vec3 const & pworldEye
 		, sdw::UInt const & preceivesShadows
@@ -214,7 +210,7 @@ namespace toon::shader
 			c3d::OutputComponents outputs{ m_writer };
 			m_computePoint = m_writer.implementFunction< sdw::Void >( m_prefix + "computePointLight"
 				, [this]( c3d::PointLight const & light
-					, ToonPhongLightMaterial const & material
+					, c3d::BlendComponents const & components
 					, c3d::Surface const & surface
 					, sdw::Vec3 const & worldEye
 					, sdw::UInt const & receivesShadows
@@ -224,13 +220,13 @@ namespace toon::shader
 						, m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) )
 						, m_writer.declLocale( "lightScattering", vec3( 0.0_f ) ) };
 					auto lightToVertex = m_writer.declLocale( "lightToVertex"
-						, surface.worldPosition - light.position );
+						, surface.worldPosition.xyz() - light.position );
 					auto distance = m_writer.declLocale( "distance"
 						, length( lightToVertex ) );
 					auto lightDirection = m_writer.declLocale( "lightDirection"
 						, normalize( lightToVertex ) );
 					doComputeLight( light.base
-						, material
+						, components
 						, surface
 						, worldEye
 						, lightDirection
@@ -263,7 +259,7 @@ namespace toon::shader
 					parentOutput.m_scattering += max( vec3( 0.0_f ), output.m_scattering );
 				}
 				, c3d::InPointLight( m_writer, "light" )
-				, InToonPhongLightMaterial{ m_writer, "material" }
+				, c3d::InBlendComponents{ m_writer, "component", m_materials }
 				, c3d::InSurface{ m_writer, "surface" }
 				, sdw::InVec3( m_writer, "worldEye" )
 				, sdw::InUInt( m_writer, "receivesShadows" )
@@ -271,7 +267,7 @@ namespace toon::shader
 		}
 
 		m_computePoint( plight
-			, static_cast< ToonPhongLightMaterial const & >( pmaterial )
+			, pcomponents
 			, psurface
 			, pworldEye
 			, preceivesShadows
@@ -279,7 +275,7 @@ namespace toon::shader
 	}
 
 	void ToonPhongLightingModel::compute( c3d::SpotLight const & plight
-		, c3d::LightMaterial const & pmaterial
+		, c3d::BlendComponents const & pcomponents
 		, c3d::Surface const & psurface
 		, sdw::Vec3 const & pworldEye
 		, sdw::UInt const & preceivesShadows
@@ -290,14 +286,14 @@ namespace toon::shader
 			c3d::OutputComponents outputs{ m_writer };
 			m_computeSpot = m_writer.implementFunction< sdw::Void >( m_prefix + "computeSpotLight"
 				, [this]( c3d::SpotLight const & light
-					, ToonPhongLightMaterial const & material
+					, c3d::BlendComponents const & components
 					, c3d::Surface const & surface
 					, sdw::Vec3 const & worldEye
 					, sdw::UInt const & receivesShadows
 					, c3d::OutputComponents & parentOutput )
 				{
 					auto lightToVertex = m_writer.declLocale( "lightToVertex"
-						, surface.worldPosition - light.position );
+						, surface.worldPosition.xyz() - light.position );
 					auto lightDirection = m_writer.declLocale( "lightDirection"
 						, normalize( lightToVertex ) );
 					auto spotFactor = m_writer.declLocale( "spotFactor"
@@ -311,7 +307,7 @@ namespace toon::shader
 							, m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) )
 							, m_writer.declLocale( "lightScattering", vec3( 0.0_f ) ) };
 						doComputeLight( light.base
-							, material
+							, components
 							, surface
 							, worldEye
 							, lightDirection
@@ -348,7 +344,7 @@ namespace toon::shader
 					FI;
 				}
 				, c3d::InSpotLight( m_writer, "light" )
-				, InToonPhongLightMaterial{ m_writer, "material" }
+				, c3d::InBlendComponents{ m_writer, "component", m_materials }
 				, c3d::InSurface{ m_writer, "surface" }
 				, sdw::InVec3( m_writer, "worldEye" )
 				, sdw::InUInt( m_writer, "receivesShadows" )
@@ -356,7 +352,7 @@ namespace toon::shader
 		}
 
 		m_computeSpot( plight
-			, static_cast< ToonPhongLightMaterial const & >( pmaterial )
+			, pcomponents
 			, psurface
 			, pworldEye
 			, preceivesShadows
@@ -364,7 +360,7 @@ namespace toon::shader
 	}
 
 	sdw::Vec3 ToonPhongLightingModel::computeDiffuse( c3d::DirectionalLight const & plight
-		, c3d::LightMaterial const & pmaterial
+		, c3d::BlendComponents const & pcomponents
 		, c3d::Surface const & psurface
 		, sdw::Vec3 const & pworldEye
 		, sdw::UInt const & preceivesShadows )
@@ -373,7 +369,7 @@ namespace toon::shader
 		{
 			m_computeDirectionalDiffuse = m_writer.implementFunction< sdw::Vec3 >( m_prefix + "computeDirectionalLight"
 				, [this]( c3d::DirectionalLight light
-					, ToonPhongLightMaterial const & material
+					, c3d::BlendComponents const & components
 					, c3d::Surface const & surface
 					, sdw::Vec3 const & worldEye
 					, sdw::UInt const & receivesShadows )
@@ -382,7 +378,7 @@ namespace toon::shader
 						, normalize( light.direction ) );
 					auto diffuse = m_writer.declLocale( "diffuse"
 						, doComputeLightDiffuse( light.base
-							, material
+							, components
 							, surface
 							, worldEye
 							, lightDirection ) );
@@ -411,21 +407,21 @@ namespace toon::shader
 					m_writer.returnStmt( max( vec3( 0.0_f ), diffuse ) );
 				}
 				, c3d::InOutDirectionalLight( m_writer, "light" )
-				, InToonPhongLightMaterial{ m_writer, "material" }
+				, c3d::InBlendComponents{ m_writer, "component", m_materials }
 				, c3d::InSurface{ m_writer, "surface" }
 				, sdw::InVec3( m_writer, "worldEye" )
 				, sdw::InUInt( m_writer, "receivesShadows" ) );
 		}
 
 		return m_computeDirectionalDiffuse( plight
-			, static_cast< ToonPhongLightMaterial const & >( pmaterial )
+			, pcomponents
 			, psurface
 			, pworldEye
 			, preceivesShadows );
 	}
 
 	sdw::Vec3 ToonPhongLightingModel::computeDiffuse( c3d::PointLight const & plight
-		, c3d::LightMaterial const & pmaterial
+		, c3d::BlendComponents const & pcomponents
 		, c3d::Surface const & psurface
 		, sdw::Vec3 const & pworldEye
 		, sdw::UInt const & preceivesShadows )
@@ -434,20 +430,20 @@ namespace toon::shader
 		{
 			m_computePointDiffuse = m_writer.implementFunction< sdw::Vec3 >( m_prefix + "computePointLight"
 				, [this]( c3d::PointLight light
-					, ToonPhongLightMaterial const & material
+					, c3d::BlendComponents const & components
 					, c3d::Surface const & surface
 					, sdw::Vec3 const & worldEye
 					, sdw::UInt const & receivesShadows )
 				{
 					auto lightToVertex = m_writer.declLocale( "lightToVertex"
-						, surface.worldPosition - light.position );
+						, surface.worldPosition.xyz() - light.position );
 					auto distance = m_writer.declLocale( "distance"
 						, length( lightToVertex ) );
 					auto lightDirection = m_writer.declLocale( "lightDirection"
 						, normalize( lightToVertex ) );
 					auto diffuse = m_writer.declLocale( "diffuse"
 						, doComputeLightDiffuse( light.base
-							, material
+							, components
 							, surface
 							, worldEye
 							, lightDirection ) );
@@ -474,21 +470,21 @@ namespace toon::shader
 					m_writer.returnStmt( max( vec3( 0.0_f ), diffuse / attenuation ) );
 				}
 				, c3d::InOutPointLight( m_writer, "light" )
-				, InToonPhongLightMaterial{ m_writer, "material" }
+				, c3d::InBlendComponents{ m_writer, "component", m_materials }
 				, c3d::InSurface{ m_writer, "surface" }
 				, sdw::InVec3( m_writer, "worldEye" )
 				, sdw::InUInt( m_writer, "receivesShadows" ) );
 		}
 
 		return m_computePointDiffuse( plight
-			, static_cast< ToonPhongLightMaterial const & >( pmaterial )
+			, pcomponents
 			, psurface
 			, pworldEye
 			, preceivesShadows );
 	}
 
 	sdw::Vec3 ToonPhongLightingModel::computeDiffuse( c3d::SpotLight const & plight
-		, c3d::LightMaterial const & pmaterial
+		, c3d::BlendComponents const & pcomponents
 		, c3d::Surface const & psurface
 		, sdw::Vec3 const & pworldEye
 		, sdw::UInt const & preceivesShadows )
@@ -497,13 +493,13 @@ namespace toon::shader
 		{
 			m_computeSpotDiffuse = m_writer.implementFunction< sdw::Vec3 >( m_prefix + "computeSpotLight"
 				, [this]( c3d::SpotLight light
-					, ToonPhongLightMaterial const & material
+					, c3d::BlendComponents const & components
 					, c3d::Surface const & surface
 					, sdw::Vec3 const & worldEye
 					, sdw::UInt const & receivesShadows )
 				{
 					auto lightToVertex = m_writer.declLocale( "lightToVertex"
-						, surface.worldPosition - light.position );
+						, surface.worldPosition.xyz() - light.position );
 					auto lightDirection = m_writer.declLocale( "lightDirection"
 						, normalize( lightToVertex ) );
 					auto spotFactor = m_writer.declLocale( "spotFactor"
@@ -516,7 +512,7 @@ namespace toon::shader
 						auto distance = m_writer.declLocale( "distance"
 							, length( lightToVertex ) );
 						diffuse = doComputeLightDiffuse( light.base
-							, material
+							, components
 							, surface
 							, worldEye
 							, lightDirection );
@@ -549,21 +545,21 @@ namespace toon::shader
 					m_writer.returnStmt( diffuse );
 				}
 				, c3d::InOutSpotLight( m_writer, "light" )
-				, InToonPhongLightMaterial{ m_writer, "material" }
+				, c3d::InBlendComponents{ m_writer, "component", m_materials }
 				, c3d::InSurface{ m_writer, "surface" }
 				, sdw::InVec3( m_writer, "worldEye" )
 				, sdw::InUInt( m_writer, "receivesShadows" ) );
 		}
 
 		return m_computeSpotDiffuse( plight
-			, static_cast< ToonPhongLightMaterial const & >( pmaterial )
+			, pcomponents
 			, psurface
 			, pworldEye
 			, preceivesShadows );
 	}
 
 	void ToonPhongLightingModel::doComputeLight( c3d::Light const & plight
-		, ToonPhongLightMaterial const & pmaterial
+		, c3d::BlendComponents const & pcomponents
 		, c3d::Surface const & psurface
 		, sdw::Vec3 const & pworldEye
 		, sdw::Vec3 const & plightDirection
@@ -574,7 +570,7 @@ namespace toon::shader
 			c3d::OutputComponents outputs{ m_writer };
 			m_computeLight = m_writer.implementFunction< sdw::Void >( m_prefix + "doComputeLight"
 				, [this]( c3d::Light const & light
-					, ToonPhongLightMaterial const & material
+					, c3d::BlendComponents const & components
 					, c3d::Surface const & surface
 					, sdw::Vec3 const & worldEye
 					, sdw::Vec3 const & lightDirection
@@ -582,9 +578,9 @@ namespace toon::shader
 				{
 					// Diffuse term.
 					auto diffuseFactor = m_writer.declLocale( "diffuseFactor"
-						, dot( surface.worldNormal, -lightDirection ) );
+						, dot( surface.normal, -lightDirection ) );
 					auto delta = m_writer.declLocale( "delta"
-						, fwidth( diffuseFactor ) * material.smoothBand );
+						, fwidth( diffuseFactor ) * components.getMember< sdw::Float >( "smoothBand", true ) );
 					diffuseFactor = smoothStep( 0.0_f, delta, diffuseFactor );
 					output.m_diffuse = light.colour
 						* light.intensity.x()
@@ -592,32 +588,32 @@ namespace toon::shader
 
 					// Specular term.
 					auto vertexToEye = m_writer.declLocale( "vertexToEye"
-						, normalize( worldEye - surface.worldPosition ) );
+						, normalize( worldEye - surface.worldPosition.xyz() ) );
 
 					if ( m_isBlinnPhong )
 					{
 						auto halfwayDir = m_writer.declLocale( "halfwayDir"
 							, normalize( vertexToEye - lightDirection ) );
 						m_writer.declLocale( "specularFactor"
-							, max( dot( surface.worldNormal, halfwayDir ), 0.0_f ) );
+							, max( dot( surface.normal, halfwayDir ), 0.0_f ) );
 					}
 					else
 					{
 						auto lightReflect = m_writer.declLocale( "lightReflect"
-							, normalize( reflect( lightDirection, surface.worldNormal ) ) );
+							, normalize( reflect( lightDirection, surface.normal ) ) );
 						m_writer.declLocale( "specularFactor"
 							, max( dot( vertexToEye, lightReflect ), 0.0_f ) );
 					}
 
 					auto specularFactor = m_writer.getVariable< sdw::Float >( "specularFactor" );
-					specularFactor = pow( specularFactor * diffuseFactor, clamp( material.shininess, 1.0_f, 256.0_f ) );
-					specularFactor = smoothStep( 0.0_f, 0.01_f * material.smoothBand, specularFactor );
+					specularFactor = pow( specularFactor * diffuseFactor, clamp( components.shininess, 1.0_f, 256.0_f ) );
+					specularFactor = smoothStep( 0.0_f, 0.01_f * components.getMember< sdw::Float >( "smoothBand", true ), specularFactor );
 					output.m_specular = specularFactor
 						* light.colour
 						* light.intensity.y();
 				}
 				, c3d::InLight( m_writer, "light" )
-				, InToonPhongLightMaterial{ m_writer, "material" }
+				, c3d::InBlendComponents{ m_writer, "component", m_materials }
 				, c3d::InSurface{ m_writer, "surface" }
 				, sdw::InVec3( m_writer, "worldEye" )
 				, sdw::InVec3( m_writer, "lightDirection" )
@@ -625,7 +621,7 @@ namespace toon::shader
 		}
 
 		m_computeLight( plight
-			, pmaterial
+			, pcomponents
 			, psurface
 			, pworldEye
 			, plightDirection
@@ -633,7 +629,7 @@ namespace toon::shader
 	}
 
 	sdw::Vec3 ToonPhongLightingModel::doComputeLightDiffuse( c3d::Light const & plight
-		, ToonPhongLightMaterial const & pmaterial
+		, c3d::BlendComponents const & pcomponents
 		, c3d::Surface const & psurface
 		, sdw::Vec3 const & pworldEye
 		, sdw::Vec3 const & plightDirection )
@@ -642,30 +638,30 @@ namespace toon::shader
 		{
 			m_computeLightDiffuse = m_writer.implementFunction< sdw::Vec3 >( m_prefix + "doComputeLight"
 				, [this]( c3d::Light const & light
-					, ToonPhongLightMaterial const & material
+					, c3d::BlendComponents const & components
 					, c3d::Surface const & surface
 					, sdw::Vec3 const & worldEye
 					, sdw::Vec3 const & lightDirection )
 				{
 					// Diffuse term.
 					auto diffuseFactor = m_writer.declLocale( "diffuseFactor"
-						, dot( surface.worldNormal, -lightDirection ) );
+						, dot( surface.normal, -lightDirection ) );
 					auto delta = m_writer.declLocale( "delta"
-						, fwidth( diffuseFactor ) * material.smoothBand );
+						, fwidth( diffuseFactor ) * components.getMember< sdw::Float >( "smoothBand", true ) );
 					diffuseFactor = smoothStep( 0.0_f, delta, diffuseFactor );
 					m_writer.returnStmt( diffuseFactor
 						* light.colour
 						* light.intensity.x() );
 				}
 				, c3d::InLight( m_writer, "light" )
-				, InToonPhongLightMaterial{ m_writer, "material" }
+				, c3d::InBlendComponents{ m_writer, "component", m_materials }
 				, c3d::InSurface{ m_writer, "surface" }
 				, sdw::InVec3( m_writer, "worldEye" )
 				, sdw::InVec3( m_writer, "lightDirection" ) );
 		}
 
 		return m_computeLightDiffuse( plight
-			, pmaterial
+			, pcomponents
 			, psurface
 			, pworldEye
 			, plightDirection );
@@ -674,11 +670,13 @@ namespace toon::shader
 	//*********************************************************************************************
 
 	ToonBlinnPhongLightingModel::ToonBlinnPhongLightingModel( sdw::ShaderWriter & writer
+		, c3d::Materials const & materials
 		, c3d::Utils & utils
 		, c3d::ShadowOptions shadowOptions
 		, c3d::SssProfiles const * sssProfiles
 		, bool enableVolumetric )
 		: ToonPhongLightingModel{ writer
+			, materials
 			, utils
 			, std::move( shadowOptions )
 			, sssProfiles
@@ -688,12 +686,14 @@ namespace toon::shader
 	}
 
 	c3d::LightingModelPtr ToonBlinnPhongLightingModel::create( sdw::ShaderWriter & writer
+		, c3d::Materials const & materials
 		, c3d::Utils & utils
 		, c3d::ShadowOptions shadowOptions
 		, c3d::SssProfiles const * sssProfiles
 		, bool enableVolumetric )
 	{
 		return std::make_unique< ToonBlinnPhongLightingModel >( writer
+			, materials
 			, utils
 			, std::move( shadowOptions )
 			, sssProfiles
@@ -708,11 +708,13 @@ namespace toon::shader
 	//*********************************************************************************************
 
 	ToonPbrLightingModel::ToonPbrLightingModel( sdw::ShaderWriter & writer
+		, c3d::Materials const & materials
 		, c3d::Utils & utils
 		, c3d::ShadowOptions shadowOptions
 		, c3d::SssProfiles const * sssProfiles
 		, bool enableVolumetric )
 		: c3d::PbrLightingModel{ writer
+			, materials
 			, utils
 			, std::move( shadowOptions )
 			, sssProfiles
@@ -727,22 +729,18 @@ namespace toon::shader
 	}
 
 	c3d::LightingModelPtr ToonPbrLightingModel::create( sdw::ShaderWriter & writer
+		, c3d::Materials const & materials
 		, c3d::Utils & utils
 		, c3d::ShadowOptions shadowOptions
 		, c3d::SssProfiles const * sssProfiles
 		, bool enableVolumetric )
 	{
 		return std::make_unique< ToonPbrLightingModel >( writer
+			, materials
 			, utils
 			, std::move( shadowOptions )
 			, sssProfiles
 			, enableVolumetric );
-	}
-
-	std::unique_ptr< c3d::LightMaterial > ToonPbrLightingModel::declMaterial( std::string const & name
-		, bool enabled )
-	{
-		return m_writer.declDerivedLocale< c3d::LightMaterial, ToonPbrLightMaterial >( name, enabled );
 	}
 
 	c3d::ReflectionModelPtr ToonPbrLightingModel::getReflectionModel( uint32_t & envMapBinding
@@ -755,7 +753,7 @@ namespace toon::shader
 	}
 
 	void ToonPbrLightingModel::compute( c3d::DirectionalLight const & plight
-		, c3d::LightMaterial const & pmaterial
+		, c3d::BlendComponents const & pcomponents
 		, c3d::Surface const & psurface
 		, c3d::BackgroundModel & pbackground
 		, sdw::Vec3 const & pworldEye
@@ -767,7 +765,7 @@ namespace toon::shader
 			c3d::OutputComponents outputs{ m_writer };
 			m_computeDirectional = m_writer.implementFunction< sdw::Void >( m_prefix + "computeDirectionalLight"
 				, [this]( c3d::DirectionalLight const & light
-					, ToonPbrLightMaterial const & material
+					, c3d::BlendComponents const & components
 					, c3d::Surface const & surface
 					, sdw::Vec3 const & worldEye
 					, sdw::UInt const & receivesShadows
@@ -781,10 +779,10 @@ namespace toon::shader
 					m_cookTorrance.computeAON( light.base
 						, worldEye
 						, lightDirection
-						, material.specular
-						, material.getMetalness()
-						, material.getRoughness()
-						, material.smoothBand
+						, components.specular
+						, components.metalness
+						, components.roughness
+						, components.getMember< sdw::Float >( "smoothBand", true )
 						, surface
 						, output );
 
@@ -805,7 +803,7 @@ namespace toon::shader
 							FOR( m_writer, sdw::UInt, i, 0u, i < maxCount, ++i )
 							{
 								auto factors = m_writer.declLocale( "factors"
-									, m_getCascadeFactors( sdw::Vec3{ surface.viewPosition }
+									, m_getCascadeFactors( sdw::Vec3{ surface.viewPosition.xyz() }
 										, light.splitDepths
 										, i ) );
 
@@ -897,7 +895,7 @@ namespace toon::shader
 					parentOutput.m_scattering += max( vec3( 0.0_f ), output.m_scattering );
 				}
 				, c3d::InDirectionalLight( m_writer, "light" )
-				, InToonPbrLightMaterial{ m_writer, "material" }
+				, c3d::InBlendComponents{ m_writer, "component", m_materials }
 				, c3d::InSurface{ m_writer, "surface" }
 				, sdw::InVec3( m_writer, "worldEye" )
 				, sdw::InUInt( m_writer, "receivesShadows" )
@@ -905,7 +903,7 @@ namespace toon::shader
 		}
 
 		m_computeDirectional( plight
-			, static_cast< ToonPbrLightMaterial const & >( pmaterial )
+			, pcomponents
 			, psurface
 			, pworldEye
 			, preceivesShadows
@@ -913,7 +911,7 @@ namespace toon::shader
 	}
 
 	void ToonPbrLightingModel::compute( c3d::PointLight const & plight
-		, c3d::LightMaterial const & pmaterial
+		, c3d::BlendComponents const & pcomponents
 		, c3d::Surface const & psurface
 		, sdw::Vec3 const & pworldEye
 		, sdw::UInt const & preceivesShadows
@@ -924,7 +922,7 @@ namespace toon::shader
 			c3d::OutputComponents outputs{ m_writer };
 			m_computePoint = m_writer.implementFunction< sdw::Void >( m_prefix + "computePointLight"
 				, [this]( c3d::PointLight const & light
-					, ToonPbrLightMaterial const & material
+					, c3d::BlendComponents const & components
 					, c3d::Surface const & surface
 					, sdw::Vec3 const & worldEye
 					, sdw::UInt const & receivesShadows
@@ -934,7 +932,7 @@ namespace toon::shader
 						, m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) )
 						, m_writer.declLocale( "lightScattering", vec3( 0.0_f ) ) };
 					auto lightToVertex = m_writer.declLocale( "lightToVertex"
-						, light.position - surface.worldPosition );
+						, light.position - surface.worldPosition.xyz() );
 					auto distance = m_writer.declLocale( "distance"
 						, length( lightToVertex ) );
 					auto lightDirection = m_writer.declLocale( "lightDirection"
@@ -942,10 +940,10 @@ namespace toon::shader
 					m_cookTorrance.computeAON( light.base
 						, worldEye
 						, lightDirection
-						, material.specular
-						, material.getMetalness()
-						, material.getRoughness()
-						, material.smoothBand
+						, components.specular
+						, components.metalness
+						, components.roughness
+						, components.getMember< sdw::Float >( "smoothBand", true )
 						, surface
 						, output );
 
@@ -976,7 +974,7 @@ namespace toon::shader
 					parentOutput.m_scattering += max( vec3( 0.0_f ), output.m_scattering );
 				}
 				, c3d::InPointLight( m_writer, "light" )
-				, InToonPbrLightMaterial{ m_writer, "material" }
+				, c3d::InBlendComponents{ m_writer, "component", m_materials }
 				, c3d::InSurface{ m_writer, "surface" }
 				, sdw::InVec3( m_writer, "worldEye" )
 				, sdw::InUInt( m_writer, "receivesShadows" )
@@ -984,7 +982,7 @@ namespace toon::shader
 		}
 
 		m_computePoint( plight
-			, static_cast< ToonPbrLightMaterial const & >( pmaterial )
+			, pcomponents
 			, psurface
 			, pworldEye
 			, preceivesShadows
@@ -992,7 +990,7 @@ namespace toon::shader
 	}
 
 	void ToonPbrLightingModel::compute( c3d::SpotLight const & plight
-		, c3d::LightMaterial const & pmaterial
+		, c3d::BlendComponents const & pcomponents
 		, c3d::Surface const & psurface
 		, sdw::Vec3 const & pworldEye
 		, sdw::UInt const & preceivesShadows
@@ -1003,14 +1001,14 @@ namespace toon::shader
 			c3d::OutputComponents outputs{ m_writer };
 			m_computeSpot = m_writer.implementFunction< sdw::Void >( m_prefix + "computeSpotLight"
 				, [this]( c3d::SpotLight const & light
-					, ToonPbrLightMaterial const & material
+					, c3d::BlendComponents const & components
 					, c3d::Surface const & surface
 					, sdw::Vec3 const & worldEye
 					, sdw::UInt const & receivesShadows
 					, c3d::OutputComponents & parentOutput )
 				{
 					auto lightToVertex = m_writer.declLocale( "lightToVertex"
-						, light.position - surface.worldPosition );
+						, light.position - surface.worldPosition.xyz() );
 					auto lightDirection = m_writer.declLocale( "lightDirection"
 						, normalize( lightToVertex ) );
 					auto spotFactor = m_writer.declLocale( "spotFactor"
@@ -1026,10 +1024,10 @@ namespace toon::shader
 						m_cookTorrance.computeAON( light.base
 							, worldEye
 							, lightDirection
-							, material.specular
-							, material.getMetalness()
-							, material.getRoughness()
-							, material.smoothBand
+							, components.specular
+							, components.metalness
+							, components.roughness
+							, components.getMember< sdw::Float >( "smoothBand", true )
 							, surface
 							, output );
 
@@ -1064,7 +1062,7 @@ namespace toon::shader
 					FI;
 				}
 				, c3d::InSpotLight( m_writer, "light" )
-				, InToonPbrLightMaterial{ m_writer, "material" }
+				, c3d::InBlendComponents{ m_writer, "component", m_materials }
 				, c3d::InSurface{ m_writer, "surface" }
 				, sdw::InVec3( m_writer, "worldEye" )
 				, sdw::InUInt( m_writer, "receivesShadows" )
@@ -1072,7 +1070,7 @@ namespace toon::shader
 		}
 
 		m_computeSpot( plight
-			, static_cast< ToonPbrLightMaterial const & >( pmaterial )
+			, pcomponents
 			, psurface
 			, pworldEye
 			, preceivesShadows
@@ -1080,7 +1078,7 @@ namespace toon::shader
 	}
 
 	sdw::Vec3 ToonPbrLightingModel::computeDiffuse( c3d::DirectionalLight const & plight
-		, c3d::LightMaterial const & pmaterial
+		, c3d::BlendComponents const & pcomponents
 		, c3d::Surface const & psurface
 		, sdw::Vec3 const & pworldEye
 		, sdw::UInt const & preceivesShadows )
@@ -1089,7 +1087,7 @@ namespace toon::shader
 		{
 			m_computeDirectionalDiffuse = m_writer.implementFunction< sdw::Vec3 >( m_prefix + "computeDirectionalLight"
 				, [this]( c3d::DirectionalLight light
-					, ToonPbrLightMaterial const & material
+					, c3d::BlendComponents const & components
 					, c3d::Surface const & surface
 					, sdw::Vec3 const & worldEye
 					, sdw::UInt const & receivesShadows )
@@ -1100,9 +1098,9 @@ namespace toon::shader
 						, m_cookTorrance.computeDiffuseAON( light.base
 							, worldEye
 							, lightDirection
-							, material.specular
-							, material.getMetalness()
-							, material.smoothBand
+							, components.specular
+							, components.metalness
+							, components.getMember< sdw::Float >( "smoothBand", true )
 							, surface ) );
 
 					if ( m_shadowModel->isEnabled() )
@@ -1131,21 +1129,21 @@ namespace toon::shader
 					m_writer.returnStmt( max( vec3( 0.0_f ), diffuse ) );
 				}
 				, c3d::InOutDirectionalLight( m_writer, "light" )
-				, InToonPbrLightMaterial{ m_writer, "material" }
+				, c3d::InBlendComponents{ m_writer, "component", m_materials }
 				, c3d::InSurface{ m_writer, "surface" }
 				, sdw::InVec3( m_writer, "worldEye" )
 				, sdw::InUInt( m_writer, "receivesShadows" ) );
 		}
 
 		return m_computeDirectionalDiffuse( plight
-			, static_cast< ToonPbrLightMaterial const & >( pmaterial )
+			, pcomponents
 			, psurface
 			, pworldEye
 			, preceivesShadows );
 	}
 
 	sdw::Vec3 ToonPbrLightingModel::computeDiffuse( c3d::PointLight const & plight
-		, c3d::LightMaterial const & pmaterial
+		, c3d::BlendComponents const & pcomponents
 		, c3d::Surface const & psurface
 		, sdw::Vec3 const & pworldEye
 		, sdw::UInt const & preceivesShadows )
@@ -1154,13 +1152,13 @@ namespace toon::shader
 		{
 			m_computePointDiffuse = m_writer.implementFunction< sdw::Vec3 >( m_prefix + "computePointLight"
 				, [this]( c3d::PointLight light
-					, ToonPbrLightMaterial const & material
+					, c3d::BlendComponents const & components
 					, c3d::Surface const & surface
 					, sdw::Vec3 const & worldEye
 					, sdw::UInt const & receivesShadows )
 				{
 					auto lightToVertex = m_writer.declLocale( "lightToVertex"
-						, light.position - surface.worldPosition );
+						, light.position - surface.worldPosition.xyz() );
 					auto distance = m_writer.declLocale( "distance"
 						, length( lightToVertex ) );
 					auto lightDirection = m_writer.declLocale( "lightDirection"
@@ -1169,9 +1167,9 @@ namespace toon::shader
 						, m_cookTorrance.computeDiffuseAON( light.base
 							, worldEye
 							, lightDirection
-							, material.specular
-							, material.getMetalness()
-							, material.smoothBand
+							, components.specular
+							, components.metalness
+							, components.getMember< sdw::Float >( "smoothBand", true )
 							, surface ) );
 
 					if ( m_shadowModel->isEnabled() )
@@ -1196,21 +1194,21 @@ namespace toon::shader
 					m_writer.returnStmt( max( vec3( 0.0_f ), diffuse / attenuation ) );
 				}
 				, c3d::InOutPointLight( m_writer, "light" )
-				, InToonPbrLightMaterial{ m_writer, "material" }
+				, c3d::InBlendComponents{ m_writer, "component", m_materials }
 				, c3d::InSurface{ m_writer, "surface" }
 				, sdw::InVec3( m_writer, "worldEye" )
 				, sdw::InUInt( m_writer, "receivesShadows" ) );
 		}
 
 		return m_computePointDiffuse( plight
-			, static_cast< ToonPbrLightMaterial const & >( pmaterial )
+			, pcomponents
 			, psurface
 			, pworldEye
 			, preceivesShadows );
 	}
 
 	sdw::Vec3 ToonPbrLightingModel::computeDiffuse( c3d::SpotLight const & plight
-		, c3d::LightMaterial const & pmaterial
+		, c3d::BlendComponents const & pcomponents
 		, c3d::Surface const & psurface
 		, sdw::Vec3 const & pworldEye
 		, sdw::UInt const & preceivesShadows )
@@ -1219,13 +1217,13 @@ namespace toon::shader
 		{
 			m_computeSpotDiffuse = m_writer.implementFunction< sdw::Vec3 >( m_prefix + "computeSpotLight"
 				, [this]( c3d::SpotLight light
-					, ToonPbrLightMaterial const & material
+					, c3d::BlendComponents const & components
 					, c3d::Surface const & surface
 					, sdw::Vec3 const & worldEye
 					, sdw::UInt const & receivesShadows )
 				{
 					auto lightToVertex = m_writer.declLocale( "lightToVertex"
-						, light.position - surface.worldPosition );
+						, light.position - surface.worldPosition.xyz() );
 					auto lightDirection = m_writer.declLocale( "lightDirection"
 						, normalize( lightToVertex ) );
 					auto spotFactor = m_writer.declLocale( "spotFactor"
@@ -1240,9 +1238,9 @@ namespace toon::shader
 						diffuse = m_cookTorrance.computeDiffuseAON( light.base
 							, worldEye
 							, lightDirection
-							, material.specular
-							, material.getMetalness()
-							, material.smoothBand
+							, components.specular
+							, components.metalness
+							, components.getMember< sdw::Float >( "smoothBand", true )
 							, surface );
 
 						if ( m_shadowModel->isEnabled() )
@@ -1273,14 +1271,14 @@ namespace toon::shader
 					m_writer.returnStmt( diffuse );
 				}
 				, c3d::InOutSpotLight( m_writer, "light" )
-				, InToonPbrLightMaterial{ m_writer, "material" }
+				, c3d::InBlendComponents{ m_writer, "component", m_materials }
 				, c3d::InSurface{ m_writer, "surface" }
 				, sdw::InVec3( m_writer, "worldEye" )
 				, sdw::InUInt( m_writer, "receivesShadows" ) );
 		}
 
 		return m_computeSpotDiffuse( plight
-			, static_cast< ToonPbrLightMaterial const & >( pmaterial )
+			, pcomponents
 			, psurface
 			, pworldEye
 			, preceivesShadows );

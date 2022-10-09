@@ -145,7 +145,7 @@ namespace GuiCommon
 	{
 		auto prop = grid->Append( new wxStringProperty{ _( "View shaders..." ), wxPG_LABEL, name } );
 		prop->SetEditor( editor );
-		prop->SetClientObject( new ButtonData{ doGetHandler( handler, control ) } );
+		prop->SetClientObject( new ButtonData{ doGetHandler( handler, castor3d::PassVisitorBase::makeControlsList( control ) ) } );
 		return prop;
 	}
 
@@ -157,21 +157,92 @@ namespace GuiCommon
 	{
 		auto prop = grid->AppendChild( new wxStringProperty{ _( "View shaders..." ), wxPG_LABEL, name } );
 		prop->SetEditor( editor );
-		prop->SetClientObject( new ButtonData{ doGetHandler( handler, control ) } );
+		prop->SetClientObject( new ButtonData{ doGetHandler( handler, castor3d::PassVisitorBase::makeControlsList( control ) ) } );
+		return prop;
+	}
+
+	wxPGProperty * TreeItemProperty::addProperty( wxPropertyGrid * grid
+		, wxString const & name
+		, wxArrayString const & choices
+		, wxString const & selected
+		, PropertyChangeHandler handler
+		, std::atomic_bool * control )
+	{
+		wxPGProperty * prop = createProperty( grid, name, choices, handler, control );
+		prop->SetValue( selected );
+		return prop;
+	}
+
+	wxPGProperty * TreeItemProperty::addProperty( wxPGProperty * grid
+		, wxString const & name
+		, wxArrayString const & choices
+		, wxString const & selected
+		, PropertyChangeHandler handler
+		, std::atomic_bool * control )
+	{
+		wxPGProperty * prop = createProperty( grid, name, choices, handler, control );
+		prop->SetValue( selected );
+		return prop;
+	}
+
+	wxPGProperty * TreeItemProperty::addProperty( wxPropertyGrid * grid
+		, wxString const & name
+		, wxPGEditor * editor
+		, PropertyChangeHandler handler
+		, std::atomic_bool * control )
+	{
+		auto prop = grid->Append( new wxStringProperty{ _( "View shaders..." ), wxPG_LABEL, name } );
+		prop->SetEditor( editor );
+		prop->SetClientObject( new ButtonData{ doGetHandler( handler, castor3d::PassVisitorBase::makeControlsList( control ) ) } );
+		return prop;
+	}
+
+	wxPGProperty * TreeItemProperty::addProperty( wxPGProperty * grid
+		, wxString const & name
+		, wxPGEditor * editor
+		, PropertyChangeHandler handler
+		, std::atomic_bool * control )
+	{
+		auto prop = grid->AppendChild( new wxStringProperty{ _( "View shaders..." ), wxPG_LABEL, name } );
+		prop->SetEditor( editor );
+		prop->SetClientObject( new ButtonData{ doGetHandler( handler, castor3d::PassVisitorBase::makeControlsList( control ) ) } );
 		return prop;
 	}
 
 	TreeItemProperty::PropertyChangeHandler TreeItemProperty::doGetHandler( TreeItemProperty::PropertyChangeHandler handler
-		, bool * control )
+		, castor3d::PassVisitorBase::ControlsList controls )
 	{
-		if ( !control )
+		if ( controls.empty() )
 		{
 			return handler;
 		}
 
-		return [control, handler]( wxVariant const & var )
+		return [controls = std::move( controls ), handler]( wxVariant const & var )
 		{
-			*control = true;
+			for ( auto control : controls )
+			{
+				*control = true;
+			}
+
+			handler( var );
+		};
+	}
+
+	TreeItemProperty::PropertyChangeHandler TreeItemProperty::doGetHandler( TreeItemProperty::PropertyChangeHandler handler
+		, castor3d::PassVisitorBase::AtomicControlsList controls )
+	{
+		if ( controls.empty() )
+		{
+			return handler;
+		}
+
+		return [controls=std::move( controls ), handler]( wxVariant const & var )
+		{
+			for ( auto control : controls )
+			{
+				*control = true;
+			}
+
 			handler( var );
 		};
 	}

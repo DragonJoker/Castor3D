@@ -18,7 +18,7 @@ namespace castor3d
 		sdw::type::IOStructPtr PayloadT< FlagT >::makeIOType( sdw::type::TypesCache & cache )
 		{
 			auto result = cache.getIOStruct( sdw::type::MemoryLayout::eStd430
-				, ( FlagT == sdw::var::Flag::eShaderOutput
+				, "C3D_" + ( FlagT == sdw::var::Flag::eShaderOutput
 					? std::string{ "Output" }
 					: std::string{ "Input" } ) + "Payload"
 				, ast::var::Flag( FlagT | ast::var::Flag::ePerTask ) );
@@ -29,6 +29,22 @@ namespace castor3d
 					, sdw::type::Kind::eUInt
 					, 32u
 					, ast::type::Struct::InvalidLocation );
+			}
+
+			return result;
+		}
+
+		template< sdw::var::Flag FlagT >
+		sdw::type::BaseStructPtr PayloadT< FlagT >::makeType( sdw::type::TypesCache & cache )
+		{
+			auto result = cache.getStruct( sdw::type::MemoryLayout::eStd430
+				, "C3D_Payload" );
+
+			if ( result->empty() )
+			{
+				result->declMember( "meshletIndices"
+					, sdw::type::Kind::eUInt
+					, 32u );
 			}
 
 			return result;

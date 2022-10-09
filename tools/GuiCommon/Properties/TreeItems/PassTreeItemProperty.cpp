@@ -10,6 +10,7 @@
 #include <Castor3D/Cache/TargetCache.hpp>
 #include <Castor3D/Material/Material.hpp>
 #include <Castor3D/Material/Pass/PassVisitor.hpp>
+#include <Castor3D/Material/Pass/Component/PassComponentRegister.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Render/RenderWindow.hpp>
 #include <Castor3D/Render/RenderTechnique.hpp>
@@ -45,93 +46,93 @@ namespace GuiCommon
 
 			void visit( castor::String const & name
 				, bool & value
-				, bool * control )override
+				, castor3d::PassVisitor::ControlsList controls )override
 			{
-				m_properties->addPropertyT( m_grid, name, &value, control );
+				m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, int16_t & value
-				, bool * control )override
+				, castor3d::PassVisitor::ControlsList controls )override
 			{
-				m_properties->addPropertyT( m_grid, name, &value, control );
+				m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, uint16_t & value
-				, bool * control )override
+				, castor3d::PassVisitor::ControlsList controls )override
 			{
-				m_properties->addPropertyT( m_grid, name, &value, control );
+				m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, int32_t & value
-				, bool * control )override
+				, castor3d::PassVisitor::ControlsList controls )override
 			{
-				m_properties->addPropertyT( m_grid, name, &value, control );
+				m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, uint32_t & value
-				, bool * control )override
+				, castor3d::PassVisitor::ControlsList controls )override
 			{
-				m_properties->addPropertyT( m_grid, name, &value, control );
+				m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, int64_t & value
-				, bool * control )override
+				, castor3d::PassVisitor::ControlsList controls )override
 			{
-				m_properties->addPropertyT( m_grid, name, &value, control );
+				m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, uint64_t & value
-				, bool * control )override
+				, castor3d::PassVisitor::ControlsList controls )override
 			{
-				m_properties->addPropertyT( m_grid, name, &value, control );
+				m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, float & value
-				, bool * control )override
+				, castor3d::PassVisitor::ControlsList controls )override
 			{
-				m_properties->addPropertyT( m_grid, name, &value, control );
+				m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, double & value
-				, bool * control )override
+				, castor3d::PassVisitor::ControlsList controls )override
 			{
-				m_properties->addPropertyT( m_grid, name, &value, control );
+				m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, castor3d::BlendMode & value
-				, bool * control )override
+				, castor3d::PassVisitor::ControlsList controls )override
 			{
 				wxArrayString choices;
 				choices.push_back( _( "No Blend" ) );
 				choices.push_back( _( "Additive" ) );
 				choices.push_back( _( "Multiplicative" ) );
 				choices.push_back( _( "Interpolative" ) );
-				m_properties->addPropertyET( m_grid, name, choices, &value, control );
+				m_properties->addPropertyET( m_grid, name, choices, &value, std::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, castor3d::ParallaxOcclusionMode & value
-				, bool * control )override
+				, castor3d::PassVisitor::ControlsList controls )override
 			{
 				wxArrayString choices;
 				choices.push_back( _( "None" ) );
 				choices.push_back( _( "One" ) );
 				choices.push_back( _( "Repeat" ) );
-				m_properties->addPropertyET( m_grid, name, choices, &value, control );
+				m_properties->addPropertyET( m_grid, name, choices, &value, std::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, VkCompareOp & value
-				, bool * control )override
+				, castor3d::PassVisitor::ControlsList controls )override
 			{
 				wxArrayString choices;
 				choices.push_back( _( "Never" ) );
@@ -142,42 +143,207 @@ namespace GuiCommon
 				choices.push_back( _( "Not Equal" ) );
 				choices.push_back( _( "Greater Equal" ) );
 				choices.push_back( _( "Always" ) );
-				m_properties->addPropertyET( m_grid, name, choices, &value, control );
+				m_properties->addPropertyET( m_grid, name, choices, &value, std::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::RgbColour & value
-				, bool * control )override
+				, castor3d::PassVisitor::ControlsList controls )override
 			{
-				m_properties->addPropertyT( m_grid, name, &value, control );
+				m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::RgbaColour & value
-				, bool * control )override
+				, castor3d::PassVisitor::ControlsList controls )override
 			{
-				m_properties->addPropertyT( m_grid, name, &value, control );
+				m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) );
+			}
+
+			void visit( castor::String const & name
+				, castor::HdrRgbColour & value
+				, castor3d::PassVisitor::ControlsList controls )override
+			{
+				m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) );
+			}
+
+			void visit( castor::String const & name
+				, castor::HdrRgbaColour & value
+				, castor3d::PassVisitor::ControlsList controls )override
+			{
+				m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::RangedValue< float > & value
-				, bool * control )override
+				, castor3d::PassVisitor::ControlsList controls )override
 			{
-				m_properties->addPropertyT( m_grid, name, &value, control );
+				m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::RangedValue< int32_t > & value
-				, bool * control )override
+				, castor3d::PassVisitor::ControlsList controls )override
 			{
-				m_properties->addPropertyT( m_grid, name, &value, control );
+				m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::RangedValue< uint32_t > & value
-				, bool * control )override
+				, castor3d::PassVisitor::ControlsList controls )override
 			{
-				m_properties->addPropertyT( m_grid, name, &value, control );
+				m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) );
+			}
+
+			void visit( castor::String const & name
+				, bool & value
+				, castor3d::PassVisitor::AtomicControlsList controls )override
+			{
+				m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) );
+			}
+
+			void visit( castor::String const & name
+				, int16_t & value
+				, castor3d::PassVisitor::AtomicControlsList controls )override
+			{
+				m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) );
+			}
+
+			void visit( castor::String const & name
+				, uint16_t & value
+				, castor3d::PassVisitor::AtomicControlsList controls )override
+			{
+				m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) );
+			}
+
+			void visit( castor::String const & name
+				, int32_t & value
+				, castor3d::PassVisitor::AtomicControlsList controls )override
+			{
+				m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) );
+			}
+
+			void visit( castor::String const & name
+				, uint32_t & value
+				, castor3d::PassVisitor::AtomicControlsList controls )override
+			{
+				m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) );
+			}
+
+			void visit( castor::String const & name
+				, int64_t & value
+				, castor3d::PassVisitor::AtomicControlsList controls )override
+			{
+				m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) );
+			}
+
+			void visit( castor::String const & name
+				, uint64_t & value
+				, castor3d::PassVisitor::AtomicControlsList controls )override
+			{
+				m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) );
+			}
+
+			void visit( castor::String const & name
+				, float & value
+				, castor3d::PassVisitor::AtomicControlsList controls )override
+			{
+				m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) );
+			}
+
+			void visit( castor::String const & name
+				, double & value
+				, castor3d::PassVisitor::AtomicControlsList controls )override
+			{
+				m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) );
+			}
+
+			void visit( castor::String const & name
+				, castor3d::BlendMode & value
+				, castor3d::PassVisitor::AtomicControlsList controls )override
+			{
+				wxArrayString choices;
+				choices.push_back( _( "No Blend" ) );
+				choices.push_back( _( "Additive" ) );
+				choices.push_back( _( "Multiplicative" ) );
+				choices.push_back( _( "Interpolative" ) );
+				m_properties->addPropertyET( m_grid, name, choices, &value, std::move( controls ) );
+			}
+
+			void visit( castor::String const & name
+				, castor3d::ParallaxOcclusionMode & value
+				, castor3d::PassVisitor::AtomicControlsList controls )override
+			{
+				wxArrayString choices;
+				choices.push_back( _( "None" ) );
+				choices.push_back( _( "One" ) );
+				choices.push_back( _( "Repeat" ) );
+				m_properties->addPropertyET( m_grid, name, choices, &value, std::move( controls ) );
+			}
+
+			void visit( castor::String const & name
+				, VkCompareOp & value
+				, castor3d::PassVisitor::AtomicControlsList controls )override
+			{
+				wxArrayString choices;
+				choices.push_back( _( "Never" ) );
+				choices.push_back( _( "Less" ) );
+				choices.push_back( _( "Equal" ) );
+				choices.push_back( _( "Less Equal" ) );
+				choices.push_back( _( "Greater" ) );
+				choices.push_back( _( "Not Equal" ) );
+				choices.push_back( _( "Greater Equal" ) );
+				choices.push_back( _( "Always" ) );
+				m_properties->addPropertyET( m_grid, name, choices, &value, std::move( controls ) );
+			}
+
+			void visit( castor::String const & name
+				, castor::RgbColour & value
+				, castor3d::PassVisitor::AtomicControlsList controls )override
+			{
+				m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) );
+			}
+
+			void visit( castor::String const & name
+				, castor::RgbaColour & value
+				, castor3d::PassVisitor::AtomicControlsList controls )override
+			{
+				m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) );
+			}
+
+			void visit( castor::String const & name
+				, castor::HdrRgbColour & value
+				, castor3d::PassVisitor::AtomicControlsList controls )override
+			{
+				m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) );
+			}
+
+			void visit( castor::String const & name
+				, castor::HdrRgbaColour & value
+				, castor3d::PassVisitor::AtomicControlsList controls )override
+			{
+				m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) );
+			}
+
+			void visit( castor::String const & name
+				, castor::RangedValue< float > & value
+				, castor3d::PassVisitor::AtomicControlsList controls )override
+			{
+				m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) );
+			}
+
+			void visit( castor::String const & name
+				, castor::RangedValue< int32_t > & value
+				, castor3d::PassVisitor::AtomicControlsList controls )override
+			{
+				m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) );
+			}
+
+			void visit( castor::String const & name
+				, castor::RangedValue< uint32_t > & value
+				, castor3d::PassVisitor::AtomicControlsList controls )override
+			{
+				m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) );
 			}
 
 		private:
@@ -202,7 +368,8 @@ namespace GuiCommon
 				, castor3d::Scene const & scene )
 			{
 				ShaderSources result;
-				PassShaderGatherer vis{ castor3d::PipelineFlags{ pass.getTypeID()
+				PassShaderGatherer vis{ castor3d::PipelineFlags{ scene.getEngine()->getPassComponentsRegister().getPassComponentsBitset( &pass )
+						, pass.getTypeID()
 						, pass.getColourBlendMode()
 						, pass.getAlphaBlendMode()
 						, pass.getPassFlags()

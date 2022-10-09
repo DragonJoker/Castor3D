@@ -39,7 +39,7 @@ namespace castor3d::shader
 
 	sdw::RetVec3 ImgBackgroundModel::computeReflections( sdw::Vec3 const & pwsIncident
 		, sdw::Vec3 const & pwsNormal
-		, LightMaterial const & pmaterial
+		, BlendComponents & components
 		, sdw::CombinedImage2DRg32 const & pbrdf )
 	{
 		if ( !m_computeReflections )
@@ -58,7 +58,7 @@ namespace castor3d::shader
 		, sdw::Vec3 const & pwsNormal
 		, sdw::Float const & prefractionRatio
 		, sdw::Vec3 const & ptransmission
-		, LightMaterial const & pmaterial )
+		, BlendComponents & components )
 	{
 		if ( !m_computeRefractions )
 		{
@@ -76,7 +76,7 @@ namespace castor3d::shader
 		, sdw::Vec3 const & pwsNormal
 		, sdw::Float const & prefractionRatio
 		, sdw::Vec3 const & ptransmission
-		, LightMaterial const & pmaterial
+		, BlendComponents & components
 		, sdw::Vec3 & preflection
 		, sdw::Vec3 & prefraction )
 	{

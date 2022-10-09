@@ -1,7 +1,6 @@
 #include "Castor3D/Material/Pass/PBR/Shaders/GlslPbrReflection.hpp"
 
 #include "Castor3D/Limits.hpp"
-#include "Castor3D/Material/Pass/PBR/Shaders/GlslPbrMaterial.hpp"
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
 #include "Castor3D/Render/PBR/EnvironmentPrefilter.hpp"
 #include "Castor3D/Shader/Shaders/GlslBackground.hpp"

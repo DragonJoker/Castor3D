@@ -65,6 +65,21 @@ namespace atmosphere_scattering
 				return result;
 			}
 
+			static sdw::type::BaseStructPtr makeType( sdw::type::TypesCache & cache )
+			{
+				auto result = cache.getStruct( sdw::type::MemoryLayout::eStd430
+					, "AtmosphereSurface" );
+
+				if ( result->empty() )
+				{
+					result->declMember( "sliceId"
+						, sdw::type::Kind::eInt
+						, sdw::type::NotArray );
+				}
+
+				return result;
+			}
+
 			sdw::Int sliceId;
 		};
 

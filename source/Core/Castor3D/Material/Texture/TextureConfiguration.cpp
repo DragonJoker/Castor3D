@@ -58,9 +58,20 @@ namespace castor3d
 
 	//*********************************************************************************************
 
+	TextureConfiguration const TextureConfiguration::ColourTexture = []()
+	{
+		TextureConfiguration result;
+		result.textureSpace |= TextureSpace::eColour;
+		result.textureSpace |= TextureSpace::eAllowSRGB;
+		result.colourMask[0] = 0x00FFFFFF;
+		return result;
+	}();
+
 	TextureConfiguration const TextureConfiguration::DiffuseTexture = []()
 	{
 		TextureConfiguration result;
+		result.textureSpace |= TextureSpace::eColour;
+		result.textureSpace |= TextureSpace::eAllowSRGB;
 		result.colourMask[0] = 0x00FFFFFF;
 		return result;
 	}();
@@ -68,6 +79,8 @@ namespace castor3d
 	TextureConfiguration const TextureConfiguration::AlbedoTexture = []()
 	{
 		TextureConfiguration result;
+		result.textureSpace |= TextureSpace::eColour;
+		result.textureSpace |= TextureSpace::eAllowSRGB;
 		result.colourMask[0] = 0x00FFFFFF;
 		return result;
 	}();
@@ -75,6 +88,8 @@ namespace castor3d
 	TextureConfiguration const TextureConfiguration::SpecularTexture = []()
 	{
 		TextureConfiguration result;
+		result.textureSpace |= TextureSpace::eColour;
+		result.textureSpace |= TextureSpace::eNormalised;
 		result.specularMask[0] = 0x00FFFFFF;
 		return result;
 	}();
@@ -82,6 +97,7 @@ namespace castor3d
 	TextureConfiguration const TextureConfiguration::MetalnessTexture = []()
 	{
 		TextureConfiguration result;
+		result.textureSpace |= TextureSpace::eNormalised;
 		result.metalnessMask[0] = 0x00FF0000;
 		return result;
 	}();
@@ -89,6 +105,7 @@ namespace castor3d
 	TextureConfiguration const TextureConfiguration::ShininessTexture = []()
 	{
 		TextureConfiguration result;
+		result.textureSpace |= TextureSpace::eNormalised;
 		result.glossinessMask[0] = 0x00FF0000;
 		return result;
 	}();
@@ -96,6 +113,7 @@ namespace castor3d
 	TextureConfiguration const TextureConfiguration::GlossinessTexture = []()
 	{
 		TextureConfiguration result;
+		result.textureSpace |= TextureSpace::eNormalised;
 		result.glossinessMask[0] = 0x00FF0000;
 		return result;
 	}();
@@ -103,6 +121,7 @@ namespace castor3d
 	TextureConfiguration const TextureConfiguration::RoughnessTexture = []()
 	{
 		TextureConfiguration result;
+		result.textureSpace |= TextureSpace::eNormalised;
 		result.roughnessMask[0] = 0x00FF0000;
 		return result;
 	}();
@@ -110,6 +129,7 @@ namespace castor3d
 	TextureConfiguration const TextureConfiguration::OpacityTexture = []()
 	{
 		TextureConfiguration result;
+		result.textureSpace |= TextureSpace::eNormalised;
 		result.opacityMask[0] = 0xFF000000;
 		return result;
 	}();
@@ -117,6 +137,8 @@ namespace castor3d
 	TextureConfiguration const TextureConfiguration::EmissiveTexture = []()
 	{
 		TextureConfiguration result;
+		result.textureSpace |= TextureSpace::eColour;
+		result.textureSpace |= TextureSpace::eAllowSRGB;
 		result.emissiveMask[0] = 0x00FFFFFF;
 		return result;
 	}();
@@ -124,6 +146,8 @@ namespace castor3d
 	TextureConfiguration const TextureConfiguration::NormalTexture = []()
 	{
 		TextureConfiguration result;
+		result.textureSpace |= TextureSpace::eNormalised;
+		result.textureSpace |= TextureSpace::eTangentSpace;
 		result.normalMask[0] = 0x00FFFFFF;
 		return result;
 	}();
@@ -131,6 +155,7 @@ namespace castor3d
 	TextureConfiguration const TextureConfiguration::HeightTexture = []()
 	{
 		TextureConfiguration result;
+		result.textureSpace |= TextureSpace::eNormalised;
 		result.heightMask[0] = 0x00FF0000;
 		return result;
 	}();
@@ -138,6 +163,7 @@ namespace castor3d
 	TextureConfiguration const TextureConfiguration::OcclusionTexture = []()
 	{
 		TextureConfiguration result;
+		result.textureSpace |= TextureSpace::eNormalised;
 		result.occlusionMask[0] = 0x00FF0000;
 		return result;
 	}();
@@ -145,6 +171,7 @@ namespace castor3d
 	TextureConfiguration const TextureConfiguration::TransmittanceTexture = []()
 	{
 		TextureConfiguration result;
+		result.textureSpace |= TextureSpace::eNormalised;
 		result.transmittanceMask[0] = 0xFF000000;
 		return result;
 	}();
@@ -194,7 +221,7 @@ namespace castor3d
 	TextureFlags getFlags( TextureConfiguration const & config )
 	{
 		TextureFlags result = TextureFlag::eNone;
-		texconf::mergeMasks( config.colourMask[0], TextureFlag::eDiffuse, result );
+		texconf::mergeMasks( config.colourMask[0], TextureFlag::eColour, result );
 		texconf::mergeMasks( config.specularMask[0], TextureFlag::eSpecular, result );
 		texconf::mergeMasks( config.metalnessMask[0], TextureFlag::eMetalness, result );
 		texconf::mergeMasks( config.glossinessMask[0], TextureFlag::eGlossiness, result );

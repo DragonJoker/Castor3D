@@ -24,14 +24,9 @@ namespace castor
 
 		if ( configuration.colourMask[0] )
 		{
-			if ( m_isPbr )
-			{
-				result = writeMask( file, cuT( "albedo_mask" ), configuration.colourMask[0] );
-			}
-			else
-			{
-				result = writeMask( file, cuT( "diffuse_mask" ), configuration.colourMask[0] );
-			}
+			result = m_isPbr
+				? writeMask( file, cuT( "albedo_mask" ), configuration.colourMask[0] )
+				: writeMask( file, cuT( "diffuse_mask" ), configuration.colourMask[0] );
 		}
 
 		if ( result && configuration.specularMask[0] )
@@ -46,16 +41,9 @@ namespace castor
 
 		if ( result && configuration.glossinessMask[0] )
 		{
-			if ( m_isPbr )
-			{
-				result = writeMask( file, cuT( "glossiness_mask" ), configuration.glossinessMask[0] );
-			}
-			else
-			{
-				result = writeMask( file, cuT( "shininess_mask" ), configuration.glossinessMask[0] );
-			}
-
-			checkError( result, "gloss mask" );
+			result = m_isPbr
+				? writeMask( file, cuT( "glossiness_mask" ), configuration.glossinessMask[0] )
+				: writeMask( file, cuT( "shininess_mask" ), configuration.glossinessMask[0] );
 		}
 
 		if ( result && configuration.roughnessMask[0] )

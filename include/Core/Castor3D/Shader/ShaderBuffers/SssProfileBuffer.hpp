@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "ShaderBuffersModule.hpp"
 #include "Castor3D/Material/Pass/PassModule.hpp"
+#include "Castor3D/Material/Pass/Component/ComponentModule.hpp"
 
 #include "Castor3D/Limits.hpp"
 #include "Castor3D/Shader/ShaderBuffer.hpp"
@@ -66,21 +67,21 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Adds a pass to the buffer.
-		 *\param[in]	pass	The pass.
+		 *\param[in]	component	The subsurface scattering component.
 		 *\~french
 		 *\brief		Ajoute une passe au tampon.
-		 *\param[in]	pass	La passe.
+		 *\param[in]	component	Le composant de subsurface scattering.
 		 */
-		C3D_API uint32_t addPass( Pass & pass );
+		C3D_API uint32_t addPass( SubsurfaceScatteringComponent & component );
 		/**
 		 *\~english
 		 *\brief		Removes a pass from the buffer.
-		 *\param[in]	pass	The pass.
+		 *\param[in]	component	The subsurface scattering component.
 		 *\~french
 		 *\brief		Supprime une pass du tampon.
-		 *\param[in]	pass	La passe.
+		 *\param[in]	component	Le composant de subsurface scattering.
 		 */
-		C3D_API void removePass( Pass & pass );
+		C3D_API void removePass( SubsurfaceScatteringComponent & component );
 		/**
 		 *\~english
 		 *\brief		Updates the passes buffer.
@@ -146,9 +147,9 @@ namespace castor3d
 
 	private:
 		ShaderBuffer m_buffer;
-		std::vector< Pass * > m_passes;
-		std::vector< Pass const * > m_dirty;
-		std::vector< OnPassChangedConnection > m_connections;
+		std::vector< SubsurfaceScatteringComponent * > m_components;
+		std::vector< SubsurfaceScatteringComponent const * > m_dirty;
+		std::vector< OnSssProfileChangedConnection > m_connections;
 		uint32_t m_profileID{ 1u };
 		SssProfilesData m_data;
 		std::mutex m_mutex;

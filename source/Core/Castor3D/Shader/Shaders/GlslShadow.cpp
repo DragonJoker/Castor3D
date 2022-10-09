@@ -169,8 +169,8 @@ namespace castor3d
 			, sdw::UInt const & maxCascade )
 		{
 			return computeDirectional( light
-				, surface.worldPosition
-				, surface.worldNormal
+				, surface.worldPosition.xyz()
+				, surface.normal
 				, lightMatrix
 				, lightDirection
 				, cascadeIndex
@@ -341,7 +341,7 @@ namespace castor3d
 							auto c3d_mapNormalDepthSpot = m_writer.getVariable< sdw::CombinedImage2DArrayR32 >( Shadow::MapDepthSpot );
 							auto c3d_mapVarianceSpot = m_writer.getVariable< sdw::CombinedImage2DArrayRg32 >( Shadow::MapVarianceSpot );
 							auto lightSpacePosition = m_writer.declLocale( "lightSpacePosition"
-								, getLightSpacePosition( lightMatrix, surface.worldPosition ) );
+								, getLightSpacePosition( lightMatrix, surface.worldPosition.xyz() ) );
 							auto result = m_writer.declLocale( "result"
 								, 0.0_f );
 							auto depth = m_writer.declLocale( "depth"
@@ -364,7 +364,7 @@ namespace castor3d
 								IF( m_writer, light.shadowType == sdw::Int( int( ShadowType::ePCF ) ) )
 								{
 									auto bias = m_writer.declLocale( "bias"
-										, getShadowOffset( surface.worldNormal
+										, getShadowOffset( surface.normal
 											, normalize( lightToVertex )
 											, light.pcfShadowOffsets.x()
 											, light.pcfShadowOffsets.y() ) );
@@ -378,7 +378,7 @@ namespace castor3d
 								ELSE
 								{
 									auto bias = m_writer.declLocale( "bias"
-										, getShadowOffset( surface.worldNormal
+										, getShadowOffset( surface.normal
 											, normalize( lightToVertex )
 											, light.rawShadowOffsets.x()
 											, light.rawShadowOffsets.y() ) );
@@ -426,7 +426,7 @@ namespace castor3d
 							auto c3d_mapNormalDepthPoint = m_writer.getVariable< sdw::CombinedImageCubeArrayR32 >( Shadow::MapDepthPoint );
 							auto c3d_mapVariancePoint = m_writer.getVariable< sdw::CombinedImageCubeArrayRg32 >( Shadow::MapVariancePoint );
 							auto lightToVertex = m_writer.declLocale( "lightToVertex"
-								, surface.worldPosition - lightPosition );
+								, surface.worldPosition.xyz() - lightPosition );
 							auto depth = m_writer.declLocale( "depth"
 								, length( lightToVertex ) / light.farPlane );
 							auto result = m_writer.declLocale( "result"
@@ -446,7 +446,7 @@ namespace castor3d
 								IF( m_writer, light.shadowType == sdw::Int( int( ShadowType::ePCF ) ) )
 								{
 									auto bias = m_writer.declLocale( "bias"
-										, getShadowOffset( surface.worldNormal
+										, getShadowOffset( surface.normal
 											, normalize( lightToVertex )
 											, light.pcfShadowOffsets.x()
 											, light.pcfShadowOffsets.y() ) );
@@ -460,7 +460,7 @@ namespace castor3d
 								ELSE
 								{
 									auto bias = m_writer.declLocale( "bias"
-										, getShadowOffset( surface.worldNormal
+										, getShadowOffset( surface.normal
 											, normalize( lightToVertex )
 											, light.rawShadowOffsets.x()
 											, light.rawShadowOffsets.y() ) );
@@ -502,7 +502,7 @@ namespace castor3d
 
 			// Prepare ray
 			auto rayVector = m_writer.declLocale( "rayVector"
-				, surface.worldPosition - eyePosition );
+				, surface.worldPosition.xyz() - eyePosition );
 			auto rayLength = m_writer.declLocale( "rayLength"
 				, length( rayVector ) );
 			auto rayDirection = m_writer.declLocale( "rayDirection"
@@ -555,7 +555,7 @@ namespace castor3d
 
 			// Prepare ray
 			auto rayVector = m_writer.declLocale( "rayVector"
-				, surface.worldPosition - eyePosition );
+				, surface.worldPosition.xyz() - eyePosition );
 			auto rayLength = m_writer.declLocale( "rayLength"
 				, length( rayVector ) );
 			auto rayDirection = m_writer.declLocale( "rayDirection"
@@ -619,7 +619,7 @@ namespace castor3d
 								IF( m_writer
 									, computeDirectional( light
 										, ray.step( t )
-										, surface.worldNormal
+										, surface.normal
 										, lightMatrix
 										, lightDirection
 										, cascadeIndex

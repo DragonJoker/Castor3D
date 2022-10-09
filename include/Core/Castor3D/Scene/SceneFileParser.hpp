@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_SceneFileParser_H___
 
 #include "Castor3D/Material/Pass/PassModule.hpp"
+#include "Castor3D/Material/Pass/Component/ComponentModule.hpp"
 #include "Castor3D/Material/Texture/Animation/TextureAnimationModule.hpp"
 #include "Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp"
 #include "Castor3D/Model/Skeleton/SkeletonModule.hpp"
@@ -18,6 +19,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
+#include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Pass/SubsurfaceScattering.hpp"
 #include "Castor3D/Model/Mesh/MeshImporter.hpp"
 #include "Castor3D/Model/Mesh/Animation/MeshAnimation.hpp"
@@ -88,6 +90,8 @@ namespace castor3d
 		eSceneImport = CU_MakeSectionName( 'I', 'M', 'P', 'T' ),
 		eSkeleton = CU_MakeSectionName( 'S', 'K', 'E', 'L' ),
 		eMorphAnimation = CU_MakeSectionName( 'M', 'T', 'A', 'N' ),
+		eTextureRemapChannel = CU_MakeSectionName( 'T', 'X', 'R', 'C' ),
+		eTextureRemap = CU_MakeSectionName( 'T', 'X', 'R', 'P' ),
 	};
 
 	class SceneFileContext
@@ -155,6 +159,7 @@ namespace castor3d
 		RenderTargetSPtr renderTarget{};
 		RenderTargetSPtr textureRenderTarget{};
 		PassSPtr pass{};
+		PassComponent * passComponent{};
 		bool createPass{ true };
 		uint32_t unitIndex{};
 		ashes::ImageCreateInfo imageInfo{ 0u
@@ -299,6 +304,25 @@ namespace castor3d
 	};
 
 	C3D_API SceneFileContext & getParserContext( castor::FileParserContext & context );
+
+	template< typename ComponentT >
+	ComponentT & getPassComponent( SceneFileContext & parsingContext )
+	{
+		if ( !parsingContext.passComponent
+			|| getPassComponentType( *parsingContext.passComponent ) != ComponentT::TypeName )
+		{
+			if ( parsingContext.pass->template hasComponent< ComponentT >() )
+			{
+				parsingContext.passComponent = parsingContext.pass->template getComponent< ComponentT >();
+			}
+			else
+			{
+				parsingContext.passComponent = parsingContext.pass->template createComponent< ComponentT >();
+			}
+		}
+
+		return static_cast< ComponentT & >( *parsingContext.passComponent );
+	}
 }
 
 #endif

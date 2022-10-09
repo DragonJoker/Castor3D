@@ -436,7 +436,8 @@ namespace castor3d
 		 *\param[in]	isFrontCulled		\p true pour front face culling, \p false pour back face culling.
 		 *\param[in]	morphTargets		Le buffer de morph targets.
 		 */
-		C3D_API PipelineFlags createPipelineFlags( BlendMode colourBlendMode
+		C3D_API PipelineFlags createPipelineFlags( PassComponentsBitset components
+			, BlendMode colourBlendMode
 			, BlendMode alphaBlendMode
 			, PassFlags passFlags
 			, RenderPassTypeID renderPassTypeID

@@ -7,6 +7,7 @@
 #include "Castor3D/Buffer/PoolUniformBuffer.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Material/Pass/PassFactory.hpp"
+#include "Castor3D/Material/Pass/Component/PassShaders.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
@@ -22,6 +23,7 @@
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
+#include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
@@ -98,6 +100,32 @@ namespace castor3d
 				return result;
 			}
 
+			static sdw::type::BaseStructPtr makeType( sdw::type::TypesCache & cache
+				, bool isFragment = false )
+			{
+				auto result = cache.getStruct( sdw::type::MemoryLayout::eStd430
+					, "C3D_LgtInjSurface" );
+
+				if ( result->empty() )
+				{
+					if ( !isFragment )
+					{
+						result->declMember( "layer"
+							, sdw::type::Kind::eInt
+							, sdw::type::NotArray );
+					}
+
+					result->declMember( "rsmNormal"
+						, sdw::type::Kind::eVec3F
+						, sdw::type::NotArray );
+					result->declMember( "rsmFlux"
+						, sdw::type::Kind::eVec3F
+						, sdw::type::NotArray );
+				}
+
+				return result;
+			}
+
 			sdw::Int layer;
 			sdw::Vec3 rsmNormal;
 			sdw::Vec3 rsmFlux;
@@ -125,8 +153,14 @@ namespace castor3d
 
 				// Utility functions
 				shader::Utils utils{ writer };
-				uint32_t index = 0u;
+				shader::PassShaders passShaders{ renderSystem.getEngine()->getPassComponentsRegister()
+					, TextureFlag::eNone
+					, ComponentModeFlag::eDiffuseLighting
+					, utils };
+				shader::Materials materials{ writer, passShaders };
+				uint32_t index = 0;
 				auto lightingModel = shader::LightingModel::createModel( *renderSystem.getEngine()
+					, materials
 					, utils
 					, renderSystem.getEngine()->getPassFactory().getLightingModelName( 1u )
 					, LightType::eDirectional
@@ -181,8 +215,14 @@ namespace castor3d
 
 				// Utility functions
 				shader::Utils utils{ writer };
-				uint32_t index = 0u;
+				shader::PassShaders passShaders{ renderSystem.getEngine()->getPassComponentsRegister()
+					, TextureFlag::eNone
+					, ComponentModeFlag::eDiffuseLighting
+					, utils };
+				shader::Materials materials{ writer, passShaders };
+				uint32_t index = 0;
 				auto lightingModel = shader::LightingModel::createModel( *renderSystem.getEngine()
+					, materials
 					, utils
 					, renderSystem.getEngine()->getPassFactory().getLightingModelName( 1u )
 					, LightType::eDirectional
@@ -241,8 +281,14 @@ namespace castor3d
 
 			// Utility functions
 			shader::Utils utils{ writer };
-			uint32_t index = 0u;
+			shader::PassShaders passShaders{ renderSystem.getEngine()->getPassComponentsRegister()
+				, TextureFlag::eNone
+				, ComponentModeFlag::eDiffuseLighting
+				, utils };
+			shader::Materials materials{ writer, passShaders };
+			uint32_t index = 0;
 			auto lightingModel = shader::LightingModel::createModel( *renderSystem.getEngine()
+				, materials
 				, utils
 				, renderSystem.getEngine()->getPassFactory().getLightingModelName( 1u )
 				, LightType::ePoint
@@ -300,8 +346,14 @@ namespace castor3d
 
 			// Utility functions
 			shader::Utils utils{ writer };
-			uint32_t index = 0u;
+			shader::PassShaders passShaders{ renderSystem.getEngine()->getPassComponentsRegister()
+				, TextureFlag::eNone
+				, ComponentModeFlag::eDiffuseLighting
+				, utils };
+			shader::Materials materials{ writer, passShaders };
+			uint32_t index = 0;
 			auto lightingModel = shader::LightingModel::createModel( *renderSystem.getEngine()
+				, materials
 				, utils
 				, renderSystem.getEngine()->getPassFactory().getLightingModelName( 1u )
 				, LightType::eSpot
