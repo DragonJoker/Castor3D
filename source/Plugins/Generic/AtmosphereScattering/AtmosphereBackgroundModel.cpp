@@ -61,7 +61,7 @@ namespace atmosphere_scattering
 
 	sdw::RetVec3 AtmosphereBackgroundModel::computeReflections( sdw::Vec3 const & wsIncident
 		, sdw::Vec3 const & wsNormal
-		, castor3d::shader::LightMaterial const & material
+		, castor3d::shader::BlendComponents & components
 		, sdw::CombinedImage2DRg32 const & brdf )
 	{
 		if ( !m_computeReflections )
@@ -80,7 +80,7 @@ namespace atmosphere_scattering
 		, sdw::Vec3 const & wsNormal
 		, sdw::Float const & refractionRatio
 		, sdw::Vec3 const & transmission
-		, castor3d::shader::LightMaterial const & material )
+		, castor3d::shader::BlendComponents & components )
 	{
 		if ( !m_computeRefractions )
 		{
@@ -98,7 +98,7 @@ namespace atmosphere_scattering
 		, sdw::Vec3 const & wsNormal
 		, sdw::Float const & refractionRatio
 		, sdw::Vec3 const & transmission
-		, castor3d::shader::LightMaterial const & material
+		, castor3d::shader::BlendComponents & components
 		, sdw::Vec3 & reflection
 		, sdw::Vec3 & refraction )
 	{

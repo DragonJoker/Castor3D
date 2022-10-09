@@ -17,6 +17,7 @@
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/MaterialImporter.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
+#include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/Animation/TextureAnimation.hpp"
 #include "Castor3D/Miscellaneous/LoadingScreen.hpp"
@@ -1527,6 +1528,14 @@ namespace castor3d
 		params[0]->get( parsingContext.sceneImportConfig.emissiveMult );
 	}
 	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserSceneImportTexRemap )
+	{
+		auto & parsingContext = getParserContext( context );
+		parsingContext.sceneImportConfig.textureRemaps.clear();
+		parsingContext.sceneImportConfig.textureRemapIt = parsingContext.sceneImportConfig.textureRemaps.end();
+	}
+	CU_EndAttributePush( CSCNSection::eTextureRemap )
 
 	CU_ImplementAttributeParser( parserSceneImportEnd )
 	{
@@ -3908,7 +3917,7 @@ namespace castor3d
 	}
 	CU_EndAttributePop()
 
-	CU_ImplementAttributeParserBlock( parserMaterialPass, CSCNSection::ePass )
+	CU_ImplementAttributeParser( parserMaterialPass )
 	{
 		auto & parsingContext = getParserContext( context );
 		parsingContext.strName.clear();
@@ -3930,14 +3939,13 @@ namespace castor3d
 
 			++parsingContext.passIndex;
 			parsingContext.unitIndex = 0u;
-			sectionName = parsingContext.pass->getPassSectionID();
 		}
 		else
 		{
 			CU_ParsingError( cuT( "Material not initialised" ) );
 		}
 	}
-	CU_EndAttributeBlock()
+	CU_EndAttributePush( CSCNSection::ePass )
 
 	CU_ImplementAttributeParser( parserMaterialRenderPass )
 	{
@@ -3989,6 +3997,324 @@ namespace castor3d
 		parsingContext.material = {};
 		parsingContext.createMaterial = false;
 		parsingContext.passIndex = 0u;
+	}
+	CU_EndAttributePop()
+
+	CU_ImplementAttributeParser( parserPassTextureUnit )
+	{
+		auto & parsingContext = getParserContext( context );
+
+		if ( parsingContext.pass )
+		{
+			parsingContext.textureTransform = TextureTransform{};
+
+			if ( parsingContext.createPass
+				|| parsingContext.pass->getTextureUnitsCount() <= parsingContext.unitIndex )
+			{
+				parsingContext.imageInfo->mipLevels = ashes::RemainingArrayLayers;
+			}
+			else
+			{
+				parsingContext.textureConfiguration = parsingContext.pass->getTextureUnit( parsingContext.unitIndex )->getConfiguration();
+			}
+
+			++parsingContext.unitIndex;
+		}
+		else
+		{
+			CU_ParsingError( cuT( "Pass not initialised" ) );
+		}
+	}
+	CU_EndAttributePush( CSCNSection::eTextureUnit )
+
+	CU_ImplementAttributeParser( parserPassShader )
+	{
+		auto & parsingContext = getParserContext( context );
+		parsingContext.shaderProgram.reset();
+		parsingContext.shaderStage = VkShaderStageFlagBits( 0u );
+
+		if ( parsingContext.pass )
+		{
+			auto & cache = parsingContext.parser->getEngine()->getShaderProgramCache();
+			parsingContext.shaderProgram = cache.getNewProgram( parsingContext.material->getName() + castor::string::toString( parsingContext.pass->getId() )
+				, true );
+		}
+		else
+		{
+			CU_ParsingError( cuT( "Pass not initialised" ) );
+		}
+	}
+	CU_EndAttributePush( CSCNSection::eShaderProgram )
+
+	CU_ImplementAttributeParser( parserPassEnd )
+	{
+		auto & parsingContext = getParserContext( context );
+
+		if ( !parsingContext.pass )
+		{
+			CU_ParsingError( cuT( "No Pass initialised." ) );
+		}
+		else
+		{
+			parsingContext.pass->prepareTextures();
+			parsingContext.pass.reset();
+		}
+	}
+	CU_EndAttributePop()
+
+	CU_ImplementAttributeParser( parserUnitChannel )
+	{
+		auto & parsingContext = getParserContext( context );
+
+		if ( !params.empty() )
+		{
+			uint32_t flags;
+			params[0]->get( flags );
+			auto textures = TextureFlags( uint16_t( flags ) );
+			auto & engine = *parsingContext.parser->getEngine();
+			engine.getPassComponentsRegister().fillChannels( textures, parsingContext );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserUnitImage )
+	{
+		auto & parsingContext = getParserContext( context );
+
+		if ( params.empty() )
+		{
+			CU_ParsingError( cuT( "Missing parameter." ) );
+		}
+		else
+		{
+			castor::Path folder;
+			castor::Path relative;
+			params[0]->get( relative );
+
+			if ( castor::File::fileExists( context.file.getPath() / relative ) )
+			{
+				folder = context.file.getPath();
+				auto & cache = parsingContext.parser->getEngine()->getImageCache();
+				auto image = cache.tryFind( relative.getFileName() );
+
+				if ( !image.lock() )
+				{
+					image = cache.add( relative.getFileName()
+						, castor::ImageCreateParams{ folder / relative
+							, { false, false, false } } );
+				}
+			}
+			else if ( !castor::File::fileExists( relative ) )
+			{
+				CU_ParsingError( cuT( "File [" ) + relative + cuT( "] not found, check the relativeness of the path" ) );
+				relative.clear();
+			}
+
+			if ( !relative.empty() )
+			{
+				parsingContext.folder = folder;
+				parsingContext.relative = relative;
+				parsingContext.strName.clear();
+			}
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserUnitLevelsCount )
+	{
+		auto & parsingContext = getParserContext( context );
+
+		if ( params.empty() )
+		{
+			CU_ParsingError( cuT( "Missing parameter." ) );
+		}
+		else
+		{
+			params[0]->get( parsingContext.imageInfo->mipLevels );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserUnitRenderTarget )
+	{
+		auto & parsingContext = getParserContext( context );
+		parsingContext.targetType = TargetType::eTexture;
+		parsingContext.size = { 1u, 1u };
+		parsingContext.pixelFormat = castor::PixelFormat::eUNDEFINED;
+	}
+	CU_EndAttributePush( CSCNSection::eRenderTarget )
+
+	CU_ImplementAttributeParser( parserUnitSampler )
+	{
+		auto & parsingContext = getParserContext( context );
+
+		if ( !params.empty() )
+		{
+			castor::String name;
+			auto sampler = parsingContext.parser->getEngine()->findSampler( params[0]->get( name ) );
+
+			if ( sampler.lock() )
+			{
+				parsingContext.sampler = sampler;
+			}
+			else
+			{
+				CU_ParsingError( cuT( "Unknown sampler : [" ) + name + cuT( "]" ) );
+			}
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserUnitInvertY )
+	{
+		auto & parsingContext = getParserContext( context );
+
+		if ( params.empty() )
+		{
+			CU_ParsingError( cuT( "Missing parameter." ) );
+		}
+		else
+		{
+			bool value;
+			params[0]->get( value );
+			parsingContext.textureConfiguration.needsYInversion = value
+				? 1u
+				: 0u;
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserUnitTransform )
+	{
+		auto & parsingContext = getParserContext( context );
+
+		if ( parsingContext.pass )
+		{
+		}
+	}
+	CU_EndAttributePush( CSCNSection::eTextureTransform )
+
+	CU_ImplementAttributeParser( parserUnitTileSet )
+	{
+		auto & parsingContext = getParserContext( context );
+
+		if ( parsingContext.pass )
+		{
+			castor::Point2i value;
+			params[0]->get( value );
+			parsingContext.textureConfiguration.tileSet->z = uint32_t( value->x );
+			parsingContext.textureConfiguration.tileSet->w = uint32_t( value->y );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserUnitTiles )
+	{
+		auto & parsingContext = getParserContext( context );
+
+		if ( parsingContext.pass )
+		{
+			params[0]->get( parsingContext.textureConfiguration.tiles );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserUnitAnimation )
+	{
+		auto & parsingContext = getParserContext( context );
+
+		if ( parsingContext.pass )
+		{
+			parsingContext.textureAnimation = std::make_unique< TextureAnimation >( *parsingContext.parser->getEngine()
+				, "Default" );
+		}
+	}
+	CU_EndAttributePush( CSCNSection::eTextureAnimation )
+
+	CU_ImplementAttributeParser( parserUnitTexcoordSet )
+	{
+		auto & parsingContext = getParserContext( context );
+
+		if ( parsingContext.pass )
+		{
+			params[0]->get( parsingContext.texcoordSet );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserUnitEnd )
+	{
+		auto & parsingContext = getParserContext( context );
+
+		if ( parsingContext.pass
+			&& parsingContext.passComponent )
+		{
+			if ( !parsingContext.sampler.lock() )
+			{
+				parsingContext.sampler = parsingContext.parser->getEngine()->getDefaultSampler();
+			}
+
+			TextureSourceInfo sourceInfo = ( parsingContext.textureRenderTarget
+				? TextureSourceInfo{ parsingContext.sampler.lock()
+					, parsingContext.textureRenderTarget }
+				: TextureSourceInfo{ parsingContext.sampler.lock()
+					, parsingContext.folder
+					, parsingContext.relative } );
+
+			if ( parsingContext.textureAnimation && parsingContext.scene )
+			{
+				auto animated = parsingContext.scene->addAnimatedTexture( sourceInfo
+					, parsingContext.textureConfiguration
+					, *parsingContext.pass );
+				parsingContext.textureAnimation->addPendingAnimated( *animated );
+			}
+
+			if ( parsingContext.textureRenderTarget )
+			{
+				parsingContext.pass->registerTexture( std::move( sourceInfo )
+					, { { {} }
+						, std::move( parsingContext.textureConfiguration )
+						, parsingContext.texcoordSet }
+					, std::move( parsingContext.textureAnimation ) );
+				parsingContext.textureRenderTarget.reset();
+			}
+			else if ( parsingContext.folder.empty() && parsingContext.relative.empty() )
+			{
+				CU_ParsingError( cuT( "Texture unit's image not initialised" ) );
+			}
+			else
+			{
+				if ( parsingContext.imageInfo->mipLevels == ashes::RemainingArrayLayers )
+				{
+					parsingContext.imageInfo->mipLevels = 20;
+				}
+
+				parsingContext.pass->registerTexture( std::move( sourceInfo )
+					, { std::move( parsingContext.imageInfo )
+						, std::move( parsingContext.textureConfiguration )
+						, parsingContext.texcoordSet }
+					, std::move( parsingContext.textureAnimation ) );
+			}
+
+			parsingContext.imageInfo =
+			{
+				0u,
+				VK_IMAGE_TYPE_2D,
+				VK_FORMAT_UNDEFINED,
+				{ 1u, 1u, 1u },
+				1u,
+				1u,
+				VK_SAMPLE_COUNT_1_BIT,
+				VK_IMAGE_TILING_OPTIMAL,
+				VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT
+			};
+			parsingContext.textureConfiguration = TextureConfiguration{};
+			parsingContext.texcoordSet = 0u;
+		}
+		else
+		{
+			CU_ParsingError( cuT( "Pass not initialised" ) );
+		}
 	}
 	CU_EndAttributePop()
 
@@ -6054,95 +6380,6 @@ namespace castor3d
 		}
 	}
 	CU_EndAttributePop()
-
-	CU_ImplementAttributeParser( parserSubsurfaceScatteringStrength )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.subsurfaceScattering )
-		{
-			CU_ParsingError( cuT( "No SubsurfaceScattering initialised." ) );
-		}
-		else if ( params.empty() )
-		{
-			CU_ParsingError( cuT( "Missing parameter." ) );
-		}
-		else
-		{
-			float value;
-			params[0]->get( value );
-			parsingContext.subsurfaceScattering->setStrength( value );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserSubsurfaceScatteringGaussianWidth )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.subsurfaceScattering )
-		{
-			CU_ParsingError( cuT( "No SubsurfaceScattering initialised." ) );
-		}
-		else if ( params.empty() )
-		{
-			CU_ParsingError( cuT( "Missing parameter." ) );
-		}
-		else
-		{
-			float value;
-			params[0]->get( value );
-			parsingContext.subsurfaceScattering->setGaussianWidth( value );
-		}
-	}
-	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserSubsurfaceScatteringTransmittanceProfile )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.subsurfaceScattering )
-		{
-			CU_ParsingError( cuT( "No SubsurfaceScattering initialised." ) );
-		}
-	}
-	CU_EndAttributePush( CSCNSection::eTransmittanceProfile )
-
-	CU_ImplementAttributeParser( parserSubsurfaceScatteringEnd )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.subsurfaceScattering )
-		{
-			CU_ParsingError( cuT( "No SubsurfaceScattering initialised." ) );
-		}
-		else
-		{
-			parsingContext.pass->setSubsurfaceScattering( std::move( parsingContext.subsurfaceScattering ) );
-		}
-	}
-	CU_EndAttributePop()
-
-	CU_ImplementAttributeParser( parserTransmittanceProfileFactor )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( !parsingContext.subsurfaceScattering )
-		{
-			CU_ParsingError( cuT( "No SubsurfaceScattering initialised." ) );
-		}
-		else if ( params.empty() )
-		{
-			CU_ParsingError( cuT( "Missing parameter." ) );
-		}
-		else
-		{
-			castor::Point4f value;
-			params[0]->get( value );
-			parsingContext.subsurfaceScattering->addProfileFactor( value );
-		}
-	}
-	CU_EndAttribute()
 
 	CU_ImplementAttributeParser( parserHdrExponent )
 	{

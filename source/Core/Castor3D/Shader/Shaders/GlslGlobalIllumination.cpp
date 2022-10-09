@@ -131,9 +131,9 @@ namespace castor3d
 					auto c3d_lpvAccumulatorB = m_writer.getVariable< sdw::CombinedImage3DRgba16 >( getTextureName( LpvTexture::eB, "Accumulator" ) );
 
 					auto SHintensity = m_writer.declLocale( "SHintensity"
-						, m_evalSH( -surface.worldNormal ) );
+						, m_evalSH( -surface.normal ) );
 					auto lpvCellCoords = m_writer.declLocale( "lpvCellCoords"
-						, lpvGridData.worldToTex( surface.worldPosition ) );
+						, lpvGridData.worldToTex( surface.worldPosition.xyz() ) );
 					auto lpvIntensity = m_writer.declLocale( "lpvIntensity"
 						, vec3( dot( SHintensity, c3d_lpvAccumulatorR.sample( lpvCellCoords ) )
 							, dot( SHintensity, c3d_lpvAccumulatorG.sample( lpvCellCoords ) )
@@ -205,13 +205,13 @@ namespace castor3d
 					auto c3d_lpvAccumulator3B = m_writer.getVariable< CombinedImage3DRgba16 >( getTextureName( LpvTexture::eB, "Accumulator3" ) );
 
 					auto SHintensity = m_writer.declLocale( "SHintensity"
-						, m_evalSH( -surface.worldNormal ) );
+						, m_evalSH( -surface.normal ) );
 					auto lpvCellCoords1 = m_writer.declLocale( "lpvCellCoords1"
-						, ( surface.worldPosition - llpvGridData.allMinVolumeCorners[0].xyz() ) / llpvGridData.allCellSizes.x() / llpvGridData.gridSizes );
+						, ( surface.worldPosition.xyz() - llpvGridData.allMinVolumeCorners[0].xyz() ) / llpvGridData.allCellSizes.x() / llpvGridData.gridSizes );
 					auto lpvCellCoords2 = m_writer.declLocale( "lpvCellCoords2"
-						, ( surface.worldPosition - llpvGridData.allMinVolumeCorners[1].xyz() ) / llpvGridData.allCellSizes.y() / llpvGridData.gridSizes );
+						, ( surface.worldPosition.xyz() - llpvGridData.allMinVolumeCorners[1].xyz() ) / llpvGridData.allCellSizes.y() / llpvGridData.gridSizes );
 					auto lpvCellCoords3 = m_writer.declLocale( "lpvCellCoords3"
-						, ( surface.worldPosition - llpvGridData.allMinVolumeCorners[2].xyz() ) / llpvGridData.allCellSizes.z() / llpvGridData.gridSizes );
+						, ( surface.worldPosition.xyz() - llpvGridData.allMinVolumeCorners[2].xyz() ) / llpvGridData.allCellSizes.z() / llpvGridData.gridSizes );
 
 					auto lpvIntensity1 = m_writer.declLocale( "lpvIntensity1"
 						, vec3( dot( SHintensity, c3d_lpvAccumulator1R.sample( lpvCellCoords1 ) )
@@ -281,7 +281,7 @@ namespace castor3d
 								auto c3d_light = m_writer.getVariable< shader::PointLight >( "c3d_light" );
 								vxlOcclusion = traceConeOcclusion( mapVoxelsSecondaryBounce
 									, surface
-									, c3d_light.position - surface.worldPosition
+									, c3d_light.position - surface.worldPosition.xyz()
 									, voxelData );
 							}
 							break;
@@ -290,7 +290,7 @@ namespace castor3d
 								auto c3d_light = m_writer.getVariable< shader::SpotLight >( "c3d_light" );
 								vxlOcclusion = traceConeOcclusion( mapVoxelsSecondaryBounce
 									, surface
-									, c3d_light.position - surface.worldPosition
+									, c3d_light.position - surface.worldPosition.xyz()
 									, voxelData );
 							}
 							break;
@@ -317,7 +317,7 @@ namespace castor3d
 								auto c3d_light = m_writer.getVariable< shader::PointLight >( "c3d_light" );
 								vxlOcclusion = traceConeOcclusion( mapVoxelsFirstBounce
 									, surface
-									, c3d_light.position - surface.worldPosition
+									, c3d_light.position - surface.worldPosition.xyz()
 									, voxelData );
 							}
 							break;
@@ -326,7 +326,7 @@ namespace castor3d
 								auto c3d_light = m_writer.getVariable< shader::SpotLight >( "c3d_light" );
 								vxlOcclusion = traceConeOcclusion( mapVoxelsFirstBounce
 									, surface
-									, c3d_light.position - surface.worldPosition
+									, c3d_light.position - surface.worldPosition.xyz()
 									, voxelData );
 							}
 							break;
@@ -367,7 +367,7 @@ namespace castor3d
 			FI;
 
 			auto vxlPosition = m_writer.declLocale( "vxlPosition"
-				, clamp( abs( voxelData.worldToClip( surface.worldPosition ) ), vec3( -1.0_f ), vec3( 1.0_f ) ) );
+				, clamp( abs( voxelData.worldToClip( surface.worldPosition.xyz() ) ), vec3( -1.0_f ), vec3( 1.0_f ) ) );
 			auto vxlBlend = m_writer.declLocale( "vxlBlend"
 				, 1.0_f - pow( max( vxlPosition.x(), max( vxlPosition.y(), vxlPosition.z() ) ), 4.0_f ) );
 			return vec4( mix( vec3( 0.0_f )
@@ -392,7 +392,7 @@ namespace castor3d
 			{
 				vxlReflection = traceConeReflection( mapVoxelsSecondaryBounce
 					, surface
-					, wsCamera - surface.worldPosition
+					, wsCamera - surface.worldPosition.xyz()
 					, roughness
 					, voxelData );
 			}
@@ -400,7 +400,7 @@ namespace castor3d
 			{
 				vxlReflection = traceConeReflection( mapVoxelsFirstBounce
 					, surface
-					, wsCamera - surface.worldPosition
+					, wsCamera - surface.worldPosition.xyz()
 					, roughness
 					, voxelData );
 			}
@@ -487,7 +487,7 @@ namespace castor3d
 					, indirectBlend
 					, voxelData );
 				auto NdotV = m_writer.declLocale( "NdotV"
-					, max( 0.0_f, dot( surface.worldNormal, normalize( vsPosition ) ) ) );
+					, max( 0.0_f, dot( surface.normal, normalize( vsPosition ) ) ) );
 				auto envBRDF = m_writer.declLocale( "envBRDF"
 					, brdfMap.sample( vec2( NdotV, roughness ) ) );
 				indirectSpecular *= sdw::fma( m_utils.fresnelSchlick( NdotV, indirectSpecular.xyz() )
@@ -535,9 +535,9 @@ namespace castor3d
 							// approximate a hemisphere from random points inside a sphere:
 							//  (and modulate cone with surface normal, no banding this way)
 							auto wsConeDirection = m_writer.declLocale( "wsConeDirection"
-								, normalize( cones[cone] + surface.worldNormal ) );
+								, normalize( cones[cone] + surface.normal ) );
 							// if point on sphere is facing below normal (so it's located on bottom hemisphere), put it on the opposite hemisphere instead:
-							wsConeDirection *= m_writer.ternary( dot( wsConeDirection, surface.worldNormal ) < 0.0_f, -1.0_f, 1.0_f );
+							wsConeDirection *= m_writer.ternary( dot( wsConeDirection, surface.normal ) < 0.0_f, -1.0_f, 1.0_f );
 
 							radiance += traceCone( voxels
 								, surface
@@ -588,7 +588,7 @@ namespace castor3d
 						auto wsDist = m_writer.declLocale( "wsDist"
 							, voxelData.gridToWorld ); // offset by cone dir so that first sample of all cones are not the same
 						auto wsStartPos = m_writer.declLocale( "wsStartPos"
-							, surface.worldPosition + surface.worldNormal * vec3( voxelData.gridToWorld * 2.0f * float( sqrt( 2.0f ) ) ) ); // sqrt2 is diagonal voxel half-extent
+							, surface.worldPosition.xyz() + surface.normal * vec3( voxelData.gridToWorld * 2.0f * float( sqrt( 2.0f ) ) ) ); // sqrt2 is diagonal voxel half-extent
 
 						// We will break off the loop if the sampling distance is too far for performance reasons:
 						WHILE( m_writer, wsDist < voxelData.radianceMaxDistance && occlusion < 1.0_f )
@@ -656,7 +656,7 @@ namespace castor3d
 						auto aperture = m_writer.declLocale( "aperture"
 							, tan( roughness * sdw::Float{ castor::PiDiv2< float > / 10 } ) );
 						auto wsConeDirection = m_writer.declLocale( "wsConeDirection"
-							, reflect( -wsViewVector, surface.worldNormal ) );
+							, reflect( -wsViewVector, surface.normal ) );
 
 						auto reflection = m_writer.declLocale( "reflection"
 							, traceCone( voxels
@@ -703,7 +703,7 @@ namespace castor3d
 						auto wsDist = m_writer.declLocale( "wsDist"
 							, voxelData.gridToWorld ); // offset by cone dir so that first sample of all cones are not the same
 						auto wsStartPos = m_writer.declLocale( "wsStartPos"
-							, surface.worldPosition + surface.worldNormal * vec3( voxelData.gridToWorld * 2.0f * float( sqrt( 2.0f ) ) ) ); // sqrt2 is diagonal voxel half-extent
+							, surface.worldPosition.xyz() + surface.normal * vec3( voxelData.gridToWorld * 2.0f * float( sqrt( 2.0f ) ) ) ); // sqrt2 is diagonal voxel half-extent
 
 						// We will break off the loop if the sampling distance is too far for performance reasons:
 						WHILE( m_writer, wsDist < voxelData.radianceMaxDistance && occlusion < 1.0_f )

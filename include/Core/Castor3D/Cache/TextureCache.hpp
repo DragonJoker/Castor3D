@@ -8,6 +8,7 @@ See LICENSE file in root folder
 #include "Castor3D/Material/Pass/PassModule.hpp"
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
 #include "Castor3D/Material/Texture/TextureSourceInfo.hpp"
+#include "Castor3D/Material/Texture/TextureUnit.hpp"
 
 #pragma warning( push )
 #pragma warning( disable:4365 )
@@ -20,6 +21,8 @@ namespace castor3d
 {
 	C3D_API void mergeConfigs( TextureConfiguration const & lhs
 		, TextureConfiguration & rhs );
+	C3D_API void mergeConfigsBase( TextureConfiguration const & lhs
+		, TextureConfiguration & rhs );
 	C3D_API castor::PixelFormat getSRGBFormat( castor::PixelFormat pformat );
 	C3D_API castor::PixelFormat getNonSRGBFormat( castor::PixelFormat pformat );
 
@@ -29,18 +32,14 @@ namespace castor3d
 	public:
 		struct ThreadData
 		{
-			ThreadData( TextureSourceInfo psourceInfo
-				, PassTextureConfig pconfig
+			ThreadData( TextureUnitData & pdata
 				, TextureUnit & punit )
-				: sourceInfo{ psourceInfo }
-				, config{ pconfig }
+				: data{ &pdata }
 				, unit{ &punit }
 			{
 			}
 
-			TextureSourceInfo sourceInfo;
-			PassTextureConfig config;
-			castor::PxBufferBaseUPtr buffer{};
+			TextureUnitData * data;
 			TextureLayoutSPtr layout{};
 			TextureUnit * unit{};
 			uint32_t tiles{ 1u };
@@ -62,24 +61,21 @@ namespace castor3d
 
 		C3D_API void clear();
 
-		C3D_API TextureUnitSPtr getTexture( TextureSourceInfo const & sourceInfo
-			, PassTextureConfig const & config );
-		C3D_API TextureUnitSPtr mergeImages( TextureSourceInfo const & lhsSourceInfo
-			, TextureConfiguration const & lhsConfig
+		C3D_API TextureUnitSPtr getTexture( TextureUnitData & unitData );
+		C3D_API TextureUnitData & getSourceData( TextureSourceInfo const & sourceInfo
+			, PassTextureConfig const & config
+			, AnimationUPtr animation );
+		C3D_API TextureUnitData & mergeSources( TextureSourceInfo const & lhsSourceInfo
+			, PassTextureConfig const & lhsPassConfig
 			, uint32_t lhsSrcMask
 			, uint32_t lhsDstMask
 			, TextureSourceInfo const & rhsSourceInfo
-			, TextureConfiguration const & rhsConfig
+			, PassTextureConfig const & rhsPassConfig
 			, uint32_t rhsSrcMask
 			, uint32_t rhsDstMask
 			, castor::String const & name
-			, TextureSourceInfo resultSourceInfo
-			, TextureConfiguration resultConfig );
-
-		bool hasBindless()const
-		{
-			return m_bindlessTexLayout && m_bindlessTexSet;
-		}
+			, TextureSourceInfo const & resultSourceInfo
+			, PassTextureConfig const & resultPassConfig );
 
 		ashes::DescriptorSetLayout * getDescriptorLayout()const
 		{
@@ -99,28 +95,17 @@ namespace castor3d
 	private:
 		void doCreateLayout( ThreadData & data
 			, castor::String const & name );
-		void doLoadSource( TextureSourceInfo const & sourceInfo
-			, PassTextureConfig const & config
-			, TextureUnit & unit );
-		void doMergeSources( TextureSourceInfo const & lhsSourceInfo
-			, TextureConfiguration const & lhsConfig
-			, uint32_t lhsSrcMask
-			, uint32_t lhsDstMask
-			, TextureSourceInfo const & rhsSourceInfo
-			, TextureConfiguration const & rhsConfig
-			, uint32_t rhsSrcMask
-			, uint32_t rhsDstMask
-			, TextureSourceInfo const & resultSourceInfo
-			, PassTextureConfig const & resultConfig
-			, castor::String const & name
-			, TextureUnit & unit );
 		void doUpload( ThreadData & data );
 		void doAddWrite( TextureUnit & unit );
 		void doUpdateWrite( TextureUnit const & unit );
-		ThreadData & doCreateThreadData( TextureSourceInfo const & sourceInfo
-			, PassTextureConfig const & config
+		ThreadData & doCreateThreadData( TextureUnitData & data
 			, TextureUnit & unit );
 		void doDestroyThreadData( ThreadData & data );
+
+		bool hasBindless()const
+		{
+			return m_bindlessTexLayout && m_bindlessTexSet;
+		}
 
 	private:
 		castor::CheckedMutex m_dirtyMtx;
@@ -134,6 +119,9 @@ namespace castor3d
 		std::mutex m_dirtyWritesMtx;
 		std::vector< ashes::WriteDescriptorSet > m_dirtyWrites;
 		std::map< TextureUnit const *, OnTextureUnitChangedConnection > m_units;
+		std::map< size_t, TextureUnitDataUPtr > m_datas;
+		std::atomic_bool m_initialised{};
+		std::vector< TextureUnit * > m_pendingUnits;
 	};
 }
 

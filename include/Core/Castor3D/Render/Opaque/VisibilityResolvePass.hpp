@@ -58,7 +58,8 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::createPipelineFlags
 		 */
-		C3D_API PipelineFlags createPipelineFlags( BlendMode colourBlendMode
+		C3D_API PipelineFlags createPipelineFlags( PassComponentsBitset components
+			, BlendMode colourBlendMode
 			, BlendMode alphaBlendMode
 			, PassFlags passFlags
 			, RenderPassTypeID renderPassTypeID

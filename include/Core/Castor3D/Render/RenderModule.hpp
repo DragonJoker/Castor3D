@@ -852,6 +852,7 @@ namespace castor3d
 	 */
 	C3D_API FilteredTextureFlags filterTexturesFlags( TextureFlagsArray const & textures
 		, TextureFlags mask );
+	C3D_API TextureFlags getTextureFlags( FilteredTextureFlags const & textures );
 	C3D_API ashes::Image makeImage( ashes::Device const & device
 		, VkImage image
 		, crg::ImageId data );

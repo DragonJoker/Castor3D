@@ -1,7 +1,6 @@
 #include "Castor3D/Material/Pass/PBR/Shaders/GlslPbrLighting.hpp"
 
 #include "Castor3D/DebugDefines.hpp"
-#include "Castor3D/Material/Pass/PBR/Shaders/GlslPbrMaterial.hpp"
 #include "Castor3D/Material/Pass/PBR/Shaders/GlslPbrReflection.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
@@ -19,11 +18,13 @@
 namespace castor3d::shader
 {
 	PbrLightingModel::PbrLightingModel( sdw::ShaderWriter & writer
+		, Materials const & materials
 		, Utils & utils
 		, ShadowOptions shadowOptions
 		, SssProfiles const * sssProfiles
 		, bool enableVolumetric )
 		: LightingModel{ writer
+			, materials
 			, utils
 			, std::move( shadowOptions )
 			, sssProfiles
@@ -39,80 +40,51 @@ namespace castor3d::shader
 	}
 
 	LightingModelPtr PbrLightingModel::create( sdw::ShaderWriter & writer
+		, Materials const & materials
 		, Utils & utils
 		, ShadowOptions shadowOptions
 		, SssProfiles const * sssProfiles
 		, bool enableVolumetric )
 	{
 		return std::make_unique< PbrLightingModel >( writer
+			, materials
 			, utils
 			, std::move( shadowOptions )
 			, sssProfiles
 			, enableVolumetric );
 	}
 
-	std::unique_ptr< LightMaterial > PbrLightingModel::declMaterial( std::string const & name
-		, bool enabled )
-	{
-		return m_writer.declDerivedLocale< LightMaterial, PbrLightMaterial >( name, enabled );
-	}
-
-	void PbrLightingModel::modifyMaterial( PipelineFlags const & flags
-		, sdw::Vec4 const & sampled
-		, TextureConfigData const & config
-		, LightMaterial & lightMat )const
-	{
-		auto & pbrLightMat = static_cast< PbrLightMaterial & >( lightMat );
-		config.applyAlbedo( flags, sampled, pbrLightMat.albedo );
-		config.applySpecular( flags, sampled, pbrLightMat.specular );
-		config.applyGlossiness( flags, sampled, pbrLightMat.roughness );
-		config.applyMetalness( flags, sampled, pbrLightMat.metalness );
-		config.applyRoughness( flags, sampled, pbrLightMat.roughness );
-	}
-
-	void PbrLightingModel::updateMaterial( PipelineFlags const & flags
-		, LightMaterial & lightMat
-		, sdw::Vec3 & emissive )const
-	{
-		auto & pbrLightMat = static_cast< PbrLightMaterial & >( lightMat );
-
-		if ( !flags.hasSpecularMap()
-			&& ( flags.hasMetalnessMap() || flags.hasAlbedoMap() ) )
-		{
-			pbrLightMat.specular = LightMaterial::computeF0( pbrLightMat.albedo, pbrLightMat.metalness );
-		}
-
-		if ( !flags.hasMetalnessMap()
-			&& ( flags.hasSpecularMap() || flags.hasAlbedoMap() ) )
-		{
-			pbrLightMat.metalness = LightMaterial::computeMetalness( pbrLightMat.albedo, pbrLightMat.specular );
-		}
-
-		if ( !flags.hasEmissiveMap() )
-		{
-			emissive *= pbrLightMat.albedo;
-		}
-	}
-
-	sdw::Vec3 PbrLightingModel::combine( sdw::Vec3 const & directDiffuse
+	sdw::Vec3 PbrLightingModel::combine( BlendComponents const & components
+		, sdw::Vec3 const & directDiffuse
 		, sdw::Vec3 const & indirectDiffuse
 		, sdw::Vec3 const & directSpecular
 		, sdw::Vec3 const & directScattering
 		, sdw::Vec3 const & indirectSpecular
-		, sdw::Vec3 const & ambient
+		, sdw::Vec3 const & directAmbient
 		, sdw::Vec3 const & indirectAmbient
 		, sdw::Float const & ambientOcclusion
 		, sdw::Vec3 const & emissive
 		, sdw::Vec3 const & reflected
-		, sdw::Vec3 const & refracted
-		, sdw::Vec3 const & materialAlbedo )
+		, sdw::Vec3 const & refracted )
 	{
-		return materialAlbedo * ( directDiffuse + ( indirectDiffuse * ambientOcclusion ) )
-			+ directSpecular + ( indirectSpecular * ambientOcclusion )
+		return components.colour * components.transmission * ( directDiffuse + ( indirectDiffuse * ambientOcclusion ) )
+			+ adjustDirectSpecular( components, directSpecular ) + ( indirectSpecular * ambientOcclusion )
 			+ emissive
 			+ refracted
-			+ ( reflected * ambient * indirectAmbient * ambientOcclusion )
+			+ ( reflected * adjustDirectAmbient( components, directAmbient ) * indirectAmbient * ambientOcclusion )
 			+ directScattering;
+	}
+
+	sdw::Vec3 PbrLightingModel::adjustDirectAmbient( BlendComponents const & components
+		, sdw::Vec3 const & directAmbient )const
+	{
+		return directAmbient;
+	}
+
+	sdw::Vec3 PbrLightingModel::adjustDirectSpecular( BlendComponents const & components
+		, sdw::Vec3 const & directSpecular )const
+	{
+		return directSpecular;
 	}
 
 	ReflectionModelPtr PbrLightingModel::getReflectionModel( uint32_t & envMapBinding
@@ -125,7 +97,7 @@ namespace castor3d::shader
 	}
 
 	void PbrLightingModel::compute( DirectionalLight const & plight
-		, LightMaterial const & pmaterial
+		, BlendComponents const & pcomponents
 		, Surface const & psurface
 		, BackgroundModel & pbackground
 		, sdw::Vec3 const & pworldEye
@@ -137,7 +109,7 @@ namespace castor3d::shader
 			OutputComponents outputs{ m_writer };
 			m_computeDirectional = m_writer.implementFunction< sdw::Void >( m_prefix + "computeDirectionalLight"
 				, [this]( DirectionalLight const & light
-					, PbrLightMaterial const & material
+					, BlendComponents const & components
 					, Surface const & surface
 					, sdw::Vec3 const & worldEye
 					, sdw::UInt const & receivesShadows
@@ -151,9 +123,9 @@ namespace castor3d::shader
 					m_cookTorrance.compute( light.base
 						, worldEye
 						, lightDirection
-						, material.specular
-						, material.getMetalness()
-						, material.getRoughness()
+						, components.specular
+						, components.metalness
+						, components.roughness
 						, surface
 						, output );
 
@@ -174,7 +146,7 @@ namespace castor3d::shader
 							FOR( m_writer, sdw::UInt, i, 0u, i < maxCount, ++i )
 							{
 								auto factors = m_writer.declLocale( "factors"
-									, m_getCascadeFactors( sdw::Vec3{ surface.viewPosition }
+									, m_getCascadeFactors( surface.viewPosition.xyz()
 										, light.splitDepths
 										, i ) );
 
@@ -266,7 +238,7 @@ namespace castor3d::shader
 					parentOutput.m_scattering += max( vec3( 0.0_f ), output.m_scattering );
 				}
 				, InDirectionalLight( m_writer, "light" )
-				, InPbrLightMaterial{ m_writer, "material" }
+				, InBlendComponents{ m_writer, "components", m_materials }
 				, InSurface{ m_writer, "surface" }
 				, sdw::InVec3( m_writer, "worldEye" )
 				, sdw::InUInt( m_writer, "receivesShadows" )
@@ -274,7 +246,7 @@ namespace castor3d::shader
 		}
 
 		m_computeDirectional( plight
-			, static_cast< PbrLightMaterial const & >( pmaterial )
+			, pcomponents
 			, psurface
 			, pworldEye
 			, preceivesShadows
@@ -282,7 +254,7 @@ namespace castor3d::shader
 	}
 
 	void PbrLightingModel::compute( PointLight const & plight
-		, LightMaterial const & pmaterial
+		, BlendComponents const & pcomponents
 		, Surface const & psurface
 		, sdw::Vec3 const & pworldEye
 		, sdw::UInt const & preceivesShadows
@@ -293,7 +265,7 @@ namespace castor3d::shader
 			OutputComponents outputs{ m_writer };
 			m_computePoint = m_writer.implementFunction< sdw::Void >( m_prefix + "computePointLight"
 				, [this]( PointLight const & light
-					, PbrLightMaterial const & material
+					, BlendComponents const & components
 					, Surface const & surface
 					, sdw::Vec3 const & worldEye
 					, sdw::UInt const & receivesShadows
@@ -303,7 +275,7 @@ namespace castor3d::shader
 						, m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) )
 						, m_writer.declLocale( "lightScattering", vec3( 0.0_f ) ) };
 					auto vertexToLight = m_writer.declLocale( "vertexToLight"
-						, light.position - surface.worldPosition );
+						, light.position - surface.worldPosition.xyz() );
 					auto distance = m_writer.declLocale( "distance"
 						, length( vertexToLight ) );
 					auto lightDirection = m_writer.declLocale( "lightDirection"
@@ -311,9 +283,9 @@ namespace castor3d::shader
 					m_cookTorrance.compute( light.base
 						, worldEye
 						, lightDirection
-						, material.specular
-						, material.getMetalness()
-						, material.getRoughness()
+						, components.specular
+						, components.metalness
+						, components.roughness
 						, surface
 						, output );
 
@@ -344,7 +316,7 @@ namespace castor3d::shader
 					parentOutput.m_scattering += max( vec3( 0.0_f ), output.m_scattering );
 				}
 				, InPointLight( m_writer, "light" )
-				, InPbrLightMaterial{ m_writer, "material" }
+				, InBlendComponents{ m_writer, "components", m_materials }
 				, InSurface{ m_writer, "surface" }
 				, sdw::InVec3( m_writer, "worldEye" )
 				, sdw::InUInt( m_writer, "receivesShadows" )
@@ -352,7 +324,7 @@ namespace castor3d::shader
 		}
 
 		m_computePoint( plight
-			, static_cast< PbrLightMaterial const & >( pmaterial )
+			, pcomponents
 			, psurface
 			, pworldEye
 			, preceivesShadows
@@ -360,7 +332,7 @@ namespace castor3d::shader
 	}
 
 	void PbrLightingModel::compute( SpotLight const & plight
-		, LightMaterial const & pmaterial
+		, BlendComponents const & pcomponents
 		, Surface const & psurface
 		, sdw::Vec3 const & pworldEye
 		, sdw::UInt const & preceivesShadows
@@ -371,14 +343,14 @@ namespace castor3d::shader
 			OutputComponents outputs{ m_writer };
 			m_computeSpot = m_writer.implementFunction< sdw::Void >( m_prefix + "computeSpotLight"
 				, [this]( SpotLight const & light
-					, PbrLightMaterial const & material
+					, BlendComponents const & components
 					, Surface const & surface
 					, sdw::Vec3 const & worldEye
 					, sdw::UInt const & receivesShadows
 					, OutputComponents & parentOutput )
 				{
 					auto vertexToLight = m_writer.declLocale( "vertexToLight"
-						, light.position - surface.worldPosition );
+						, light.position - surface.worldPosition.xyz() );
 					auto lightDirection = m_writer.declLocale( "lightDirection"
 						, normalize( vertexToLight ) );
 					auto spotFactor = m_writer.declLocale( "spotFactor"
@@ -395,9 +367,9 @@ namespace castor3d::shader
 							, m_cookTorrance.compute( light.base
 								, worldEye
 								, lightDirection
-								, material.specular
-								, material.getMetalness()
-								, material.getRoughness()
+								, components.specular
+								, components.metalness
+								, components.roughness
 								, surface
 								, output ) );
 
@@ -451,7 +423,7 @@ namespace castor3d::shader
 					FI;
 				}
 				, InSpotLight( m_writer, "light" )
-				, InPbrLightMaterial{ m_writer, "material" }
+				, InBlendComponents{ m_writer, "components", m_materials }
 				, InSurface{ m_writer, "surface" }
 				, sdw::InVec3( m_writer, "worldEye" )
 				, sdw::InUInt( m_writer, "receivesShadows" )
@@ -459,7 +431,7 @@ namespace castor3d::shader
 		}
 
 		m_computeSpot( plight
-			, static_cast< PbrLightMaterial const & >( pmaterial )
+			, pcomponents
 			, psurface
 			, pworldEye
 			, preceivesShadows
@@ -467,7 +439,7 @@ namespace castor3d::shader
 	}
 
 	sdw::Vec3 PbrLightingModel::computeDiffuse( DirectionalLight const & plight
-		, LightMaterial const & pmaterial
+		, BlendComponents const & pcomponents
 		, Surface const & psurface
 		, sdw::Vec3 const & pworldEye
 		, sdw::UInt const & preceivesShadows )
@@ -476,7 +448,7 @@ namespace castor3d::shader
 		{
 			m_computeDirectionalDiffuse = m_writer.implementFunction< sdw::Vec3 >( m_prefix + "computeDirectionalLight"
 				, [this]( DirectionalLight light
-					, PbrLightMaterial const & material
+					, BlendComponents const & components
 					, Surface const & surface
 					, sdw::Vec3 const & worldEye
 					, sdw::UInt const & receivesShadows )
@@ -488,8 +460,8 @@ namespace castor3d::shader
 					diffuse = m_cookTorrance.computeDiffuse( light.base
 						, worldEye
 						, lightDirection
-						, material.specular
-						, material.getMetalness()
+						, components.specular
+						, components.metalness
 						, surface );
 
 					if ( m_shadowModel->isEnabled() )
@@ -518,21 +490,21 @@ namespace castor3d::shader
 					m_writer.returnStmt( max( vec3( 0.0_f ), diffuse ) );
 				}
 				, InOutDirectionalLight( m_writer, "light" )
-				, InPbrLightMaterial{ m_writer, "material" }
+				, InBlendComponents{ m_writer, "components", m_materials }
 				, InSurface{ m_writer, "surface" }
 				, sdw::InVec3( m_writer, "worldEye" )
 				, sdw::InUInt( m_writer, "receivesShadows" ) );
 		}
 
 		return m_computeDirectionalDiffuse( plight
-			, static_cast< PbrLightMaterial const & >( pmaterial )
+			, pcomponents
 			, psurface
 			, pworldEye
 			, preceivesShadows );
 	}
 
 	sdw::Vec3 PbrLightingModel::computeDiffuse( PointLight const & plight
-		, LightMaterial const & pmaterial
+		, BlendComponents const & pcomponents
 		, Surface const & psurface
 		, sdw::Vec3 const & pworldEye
 		, sdw::UInt const & preceivesShadows )
@@ -541,7 +513,7 @@ namespace castor3d::shader
 		{
 			m_computePointDiffuse = m_writer.implementFunction< sdw::Vec3 >( m_prefix + "computePointLight"
 				, [this]( PointLight light
-					, PbrLightMaterial const & material
+					, BlendComponents const & components
 					, Surface const & surface
 					, sdw::Vec3 const & worldEye
 					, sdw::UInt const & receivesShadows )
@@ -549,7 +521,7 @@ namespace castor3d::shader
 					auto diffuse = m_writer.declLocale( "diffuse"
 						, vec3( 0.0_f ) );
 					auto lightToVertex = m_writer.declLocale( "lightToVertex"
-						, light.position - surface.worldPosition );
+						, light.position - surface.worldPosition.xyz() );
 					auto distance = m_writer.declLocale( "distance"
 						, length( lightToVertex ) );
 					auto lightDirection = m_writer.declLocale( "lightDirection"
@@ -557,8 +529,8 @@ namespace castor3d::shader
 					diffuse = m_cookTorrance.computeDiffuse( light.base
 						, worldEye
 						, lightDirection
-						, material.specular
-						, material.getMetalness()
+						, components.specular
+						, components.metalness
 						, surface );
 
 					if ( m_shadowModel->isEnabled() )
@@ -583,21 +555,21 @@ namespace castor3d::shader
 					m_writer.returnStmt( max( vec3( 0.0_f ), diffuse / attenuation ) );
 				}
 				, InOutPointLight( m_writer, "light" )
-				, InPbrLightMaterial{ m_writer, "material" }
+				, InBlendComponents{ m_writer, "components", m_materials }
 				, InSurface{ m_writer, "surface" }
 				, sdw::InVec3( m_writer, "worldEye" )
 				, sdw::InUInt( m_writer, "receivesShadows" ) );
 		}
 
 		return m_computePointDiffuse( plight
-			, static_cast< PbrLightMaterial const & >( pmaterial )
+			, pcomponents
 			, psurface
 			, pworldEye
 			, preceivesShadows );
 	}
 
 	sdw::Vec3 PbrLightingModel::computeDiffuse( SpotLight const & plight
-		, LightMaterial const & pmaterial
+		, BlendComponents const & pcomponents
 		, Surface const & psurface
 		, sdw::Vec3 const & pworldEye
 		, sdw::UInt const & preceivesShadows )
@@ -606,13 +578,13 @@ namespace castor3d::shader
 		{
 			m_computeSpotDiffuse = m_writer.implementFunction< sdw::Vec3 >( m_prefix + "computeSpotLight"
 				, [this]( SpotLight light
-					, PbrLightMaterial const & material
+					, BlendComponents const & components
 					, Surface const & surface
 					, sdw::Vec3 const & worldEye
 					, sdw::UInt const & receivesShadows )
 				{
 					auto lightToVertex = m_writer.declLocale( "lightToVertex"
-						, light.position - surface.worldPosition );
+						, light.position - surface.worldPosition.xyz() );
 					auto lightDirection = m_writer.declLocale( "lightDirection"
 						, normalize( lightToVertex ) );
 					auto spotFactor = m_writer.declLocale( "spotFactor"
@@ -627,8 +599,8 @@ namespace castor3d::shader
 						diffuse = m_cookTorrance.computeDiffuse( light.base
 							, worldEye
 							, lightDirection
-							, material.specular
-							, material.getMetalness()
+							, components.specular
+							, components.metalness
 							, surface );
 
 						if ( m_shadowModel->isEnabled() )
@@ -659,14 +631,14 @@ namespace castor3d::shader
 					m_writer.returnStmt( diffuse );
 				}
 				, InOutSpotLight( m_writer, "light" )
-				, InPbrLightMaterial{ m_writer, "material" }
+				, InBlendComponents{ m_writer, "components", m_materials }
 				, InSurface{ m_writer, "surface" }
 				, sdw::InVec3( m_writer, "worldEye" )
 				, sdw::InUInt( m_writer, "receivesShadows" ) );
 		}
 
 		return m_computeSpotDiffuse( plight
-			, static_cast< PbrLightMaterial const & >( pmaterial )
+			, pcomponents
 			, psurface
 			, pworldEye
 			, preceivesShadows );

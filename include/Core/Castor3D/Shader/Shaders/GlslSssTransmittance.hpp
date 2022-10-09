@@ -4,10 +4,11 @@ See LICENSE file in root folder
 #ifndef ___C3D_GlslSssTransmittance_H___
 #define ___C3D_GlslSssTransmittance_H___
 
-#include "Castor3D/Shader/Shaders/GlslLighting.hpp"
-#include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
+#include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
-#include <ShaderWriter/Intrinsics/Intrinsics.hpp>
+#include <ShaderWriter/BaseTypes/Float.hpp>
+#include <ShaderWriter/BaseTypes/UInt.hpp>
+#include <ShaderWriter/VecTypes/Vec3.hpp>
 
 namespace castor3d
 {
@@ -20,13 +21,13 @@ namespace castor3d
 				, ShadowOptions shadowOptions
 				, SssProfiles const & sssProfiles );
 
-			C3D_API sdw::Vec3 compute( shader::LightMaterial const & material
+			C3D_API sdw::Vec3 compute( BlendComponents const & components
 				, shader::DirectionalLight const & light
 				, Surface const & surface );
-			C3D_API sdw::Vec3 compute( shader::LightMaterial const & material
+			C3D_API sdw::Vec3 compute( BlendComponents const & components
 				, shader::PointLight const & light
 				, Surface const & surface );
-			C3D_API sdw::Vec3 compute( shader::LightMaterial const & material
+			C3D_API sdw::Vec3 compute( BlendComponents const & components
 				, shader::SpotLight const & light
 				, Surface const & surface );
 

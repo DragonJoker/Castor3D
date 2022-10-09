@@ -1,7 +1,6 @@
 #include "Castor3D/Material/Pass/Phong/Shaders/GlslPhongLighting.hpp"
 
 #include "Castor3D/DebugDefines.hpp"
-#include "Castor3D/Material/Pass/Phong/Shaders/GlslPhongMaterial.hpp"
 #include "Castor3D/Material/Pass/Phong/Shaders/GlslPhongReflection.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
@@ -26,12 +25,14 @@ namespace castor3d::shader
 	}
 
 	PhongLightingModel::PhongLightingModel( sdw::ShaderWriter & m_writer
+		, Materials const & materials
 		, Utils & utils
 		, ShadowOptions shadowOptions
 		, SssProfiles const * sssProfiles
 		, bool enableVolumetric
 		, bool isBlinnPhong )
 		: LightingModel{ m_writer
+			, materials
 			, utils
 			, std::move( shadowOptions )
 			, sssProfiles
@@ -42,12 +43,14 @@ namespace castor3d::shader
 	}
 
 	LightingModelPtr PhongLightingModel::create( sdw::ShaderWriter & writer
+		, Materials const & materials
 		, Utils & utils
 		, ShadowOptions shadowOptions
 		, SssProfiles const * sssProfiles
 		, bool enableVolumetric )
 	{
 		return std::make_unique< PhongLightingModel >( writer
+			, materials
 			, utils
 			, std::move( shadowOptions )
 			, sssProfiles
@@ -55,54 +58,39 @@ namespace castor3d::shader
 			, false );
 	}
 
-	std::unique_ptr< LightMaterial > PhongLightingModel::declMaterial( std::string const & name
-		, bool enabled )
-	{
-		return m_writer.declDerivedLocale< LightMaterial, PhongLightMaterial >( name, enabled );
-	}
-
-	void PhongLightingModel::modifyMaterial( PipelineFlags const & flags
-		, sdw::Vec4 const & sampled
-		, TextureConfigData const & config
-		, LightMaterial & lightMat )const
-	{
-		auto & phongLightMat = static_cast< PhongLightMaterial & >( lightMat );
-		config.applyAlbedo( flags, sampled, phongLightMat.albedo );
-		config.applySpecular( flags, sampled, phongLightMat.specular );
-		config.applyShininess( flags, sampled, phongLightMat.shininess );
-	}
-
-	void PhongLightingModel::updateMaterial( PipelineFlags const & flags
-		, LightMaterial & lightMat
-		, sdw::Vec3 & emissive )const
-	{
-		if ( !flags.hasEmissiveMap() )
-		{
-			auto & phongLightMat = static_cast< PhongLightMaterial & >( lightMat );
-			emissive *= phongLightMat.albedo;
-		}
-	}
-
-	sdw::Vec3 PhongLightingModel::combine( sdw::Vec3 const & directDiffuse
+	sdw::Vec3 PhongLightingModel::combine( BlendComponents const & components
+		, sdw::Vec3 const & directDiffuse
 		, sdw::Vec3 const & indirectDiffuse
 		, sdw::Vec3 const & directSpecular
 		, sdw::Vec3 const & directScattering
 		, sdw::Vec3 const & indirectSpecular
-		, sdw::Vec3 const & ambient
+		, sdw::Vec3 const & directAmbient
 		, sdw::Vec3 const & indirectAmbient
 		, sdw::Float const & ambientOcclusion
 		, sdw::Vec3 const & emissive
 		, sdw::Vec3 const & reflected
-		, sdw::Vec3 const & refracted
-		, sdw::Vec3 const & materialAlbedo )
+		, sdw::Vec3 const & refracted )
 	{
-		return materialAlbedo * ( directDiffuse + ( indirectDiffuse * ambientOcclusion ) )
-			+ ( directSpecular + ( indirectSpecular * ambientOcclusion ) )
-			+ ( ambient * indirectAmbient * ambientOcclusion )
+		return components.colour * components.transmission * ( directDiffuse + ( indirectDiffuse * ambientOcclusion ) )
+			+ ( adjustDirectSpecular( components, directSpecular ) + ( indirectSpecular * ambientOcclusion ) )
+			+ ( adjustDirectAmbient( components, directAmbient ) * indirectAmbient * ambientOcclusion )
 			+ emissive
 			+ refracted
 			+ reflected * ambientOcclusion
 			+ directScattering;
+	}
+
+	sdw::Vec3 PhongLightingModel::adjustDirectAmbient( BlendComponents const & components
+		, sdw::Vec3 const & directAmbient )const
+	{
+		return  directAmbient * components.colour;
+	}
+
+	sdw::Vec3 PhongLightingModel::adjustDirectSpecular( BlendComponents const & components
+		, sdw::Vec3 const & directSpecular )const
+	{
+		auto specular = components.getMember( "specular", vec3( 1.0_f ) );
+		return directSpecular * specular;
 	}
 
 	ReflectionModelPtr PhongLightingModel::getReflectionModel( uint32_t & envMapBinding
@@ -115,7 +103,7 @@ namespace castor3d::shader
 	}
 
 	void PhongLightingModel::compute( DirectionalLight const & plight
-		, LightMaterial const & pmaterial
+		, BlendComponents const & pcomponents
 		, Surface const & psurface
 		, BackgroundModel & pbackground
 		, sdw::Vec3 const & pworldEye
@@ -127,7 +115,7 @@ namespace castor3d::shader
 			OutputComponents outputs{ m_writer };
 			m_computeDirectional = m_writer.implementFunction< sdw::Void >( m_prefix + "computeDirectionalLight"
 				, [this]( DirectionalLight const & light
-					, PhongLightMaterial const & material
+					, BlendComponents const & components
 					, Surface const & surface
 					, sdw::Vec3 const & worldEye
 					, sdw::UInt const & receivesShadows
@@ -139,7 +127,7 @@ namespace castor3d::shader
 					auto lightDirection = m_writer.declLocale( "lightDirection"
 						, normalize( light.direction ) );
 					doComputeLight( light.base
-						, material
+						, components
 						, surface
 						, worldEye
 						, lightDirection
@@ -162,7 +150,7 @@ namespace castor3d::shader
 							FOR( m_writer, sdw::UInt, i, 0u, i < maxCount, ++i )
 							{
 								auto factors = m_writer.declLocale( "factors"
-									, m_getCascadeFactors( sdw::Vec3{ surface.viewPosition }
+									, m_getCascadeFactors( surface.viewPosition.xyz()
 										, light.splitDepths
 										, i ) );
 
@@ -254,7 +242,7 @@ namespace castor3d::shader
 					parentOutput.m_scattering += max( vec3( 0.0_f ), output.m_scattering );
 				}
 				, InDirectionalLight( m_writer, "light" )
-				, InPhongLightMaterial{ m_writer, "material" }
+				, InBlendComponents{ m_writer, "components", m_materials }
 				, InSurface{ m_writer, "surface" }
 				, sdw::InVec3( m_writer, "worldEye" )
 				, sdw::InUInt( m_writer, "receivesShadows" )
@@ -262,7 +250,7 @@ namespace castor3d::shader
 		}
 
 		m_computeDirectional( plight
-			, static_cast< PhongLightMaterial const & >( pmaterial )
+			, pcomponents
 			, psurface
 			, pworldEye
 			, preceivesShadows
@@ -270,7 +258,7 @@ namespace castor3d::shader
 	}
 
 	void PhongLightingModel::compute( PointLight const & plight
-		, LightMaterial const & pmaterial
+		, BlendComponents const & pcomponents
 		, Surface const & psurface
 		, sdw::Vec3 const & pworldEye
 		, sdw::UInt const & preceivesShadows
@@ -281,7 +269,7 @@ namespace castor3d::shader
 			OutputComponents outputs{ m_writer };
 			m_computePoint = m_writer.implementFunction< sdw::Void >( m_prefix + "computePointLight"
 				, [this]( PointLight const & light
-					, PhongLightMaterial const & material
+					, BlendComponents const & components
 					, Surface const & surface
 					, sdw::Vec3 const & worldEye
 					, sdw::UInt const & receivesShadows
@@ -291,13 +279,13 @@ namespace castor3d::shader
 						, m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) )
 						, m_writer.declLocale( "lightScattering", vec3( 0.0_f ) ) };
 					auto lightToVertex = m_writer.declLocale( "lightToVertex"
-						, surface.worldPosition - light.position );
+						, surface.worldPosition.xyz() - light.position );
 					auto distance = m_writer.declLocale( "distance"
 						, length( lightToVertex ) );
 					auto lightDirection = m_writer.declLocale( "lightDirection"
 						, normalize( lightToVertex ) );
 					doComputeLight( light.base
-						, material
+						, components
 						, surface
 						, worldEye
 						, lightDirection
@@ -330,7 +318,7 @@ namespace castor3d::shader
 					parentOutput.m_scattering += max( vec3( 0.0_f ), output.m_scattering );
 				}
 				, InPointLight( m_writer, "light" )
-				, InPhongLightMaterial{ m_writer, "material" }
+				, InBlendComponents{ m_writer, "components", m_materials }
 				, InSurface{ m_writer, "surface" }
 				, sdw::InVec3( m_writer, "worldEye" )
 				, sdw::InUInt( m_writer, "receivesShadows" )
@@ -338,7 +326,7 @@ namespace castor3d::shader
 		}
 
 		m_computePoint( plight
-			, static_cast< PhongLightMaterial const & >( pmaterial )
+			, pcomponents
 			, psurface
 			, pworldEye
 			, preceivesShadows
@@ -346,7 +334,7 @@ namespace castor3d::shader
 	}
 
 	void PhongLightingModel::compute( SpotLight const & plight
-		, LightMaterial const & pmaterial
+		, BlendComponents const & pcomponents
 		, Surface const & psurface
 		, sdw::Vec3 const & pworldEye
 		, sdw::UInt const & preceivesShadows
@@ -357,14 +345,14 @@ namespace castor3d::shader
 			OutputComponents outputs{ m_writer };
 			m_computeSpot = m_writer.implementFunction< sdw::Void >( m_prefix + "computeSpotLight"
 				, [this]( SpotLight const & light
-					, PhongLightMaterial const & material
+					, BlendComponents const & components
 					, Surface const & surface
 					, sdw::Vec3 const & worldEye
 					, sdw::UInt const & receivesShadows
 					, OutputComponents & parentOutput )
 				{
 					auto lightToVertex = m_writer.declLocale( "lightToVertex"
-						, surface.worldPosition - light.position );
+						, surface.worldPosition.xyz() - light.position );
 					auto lightDirection = m_writer.declLocale( "lightDirection"
 						, normalize( lightToVertex ) );
 					auto spotFactor = m_writer.declLocale( "spotFactor"
@@ -379,7 +367,7 @@ namespace castor3d::shader
 							, m_writer.declLocale( "lightScattering", vec3( 0.0_f ) ) };
 						auto rawDiffuse = m_writer.declLocale( "rawDiffuse"
 							, doComputeLight( light.base
-								, material
+								, components
 								, surface
 								, worldEye
 								, lightDirection
@@ -435,7 +423,7 @@ namespace castor3d::shader
 					FI;
 				}
 				, InSpotLight( m_writer, "light" )
-				, InPhongLightMaterial{ m_writer, "material" }
+				, InBlendComponents{ m_writer, "components", m_materials }
 				, InSurface{ m_writer, "surface" }
 				, sdw::InVec3( m_writer, "worldEye" )
 				, sdw::InUInt( m_writer, "receivesShadows" )
@@ -443,7 +431,7 @@ namespace castor3d::shader
 		}
 
 		m_computeSpot( plight
-			, static_cast< PhongLightMaterial const & >( pmaterial )
+			, pcomponents
 			, psurface
 			, pworldEye
 			, preceivesShadows
@@ -451,7 +439,7 @@ namespace castor3d::shader
 	}
 
 	sdw::Vec3 PhongLightingModel::computeDiffuse( DirectionalLight const & plight
-		, LightMaterial const & pmaterial
+		, BlendComponents const & pcomponents
 		, Surface const & psurface
 		, sdw::Vec3 const & pworldEye
 		, sdw::UInt const & preceivesShadows )
@@ -460,7 +448,7 @@ namespace castor3d::shader
 		{
 			m_computeDirectionalDiffuse = m_writer.implementFunction< sdw::Vec3 >( m_prefix + "computeDirectionalLight"
 				, [this]( DirectionalLight light
-					, PhongLightMaterial const & material
+					, BlendComponents const & components
 					, Surface const & surface
 					, sdw::Vec3 const & worldEye
 					, sdw::UInt const & receivesShadows )
@@ -469,7 +457,7 @@ namespace castor3d::shader
 						, normalize( light.direction ) );
 					auto diffuse = m_writer.declLocale( "diffuse"
 						, doComputeLightDiffuse( light.base
-							, material
+							, components
 							, surface
 							, worldEye
 							, lightDirection ) );
@@ -498,21 +486,21 @@ namespace castor3d::shader
 					m_writer.returnStmt( max( vec3( 0.0_f ), diffuse ) );
 				}
 				, InOutDirectionalLight( m_writer, "light" )
-				, InPhongLightMaterial{ m_writer, "material" }
+				, InBlendComponents{ m_writer, "components", m_materials }
 				, InSurface{ m_writer, "surface" }
 				, sdw::InVec3( m_writer, "worldEye" )
 				, sdw::InUInt( m_writer, "receivesShadows" ) );
 		}
 
 		return m_computeDirectionalDiffuse( plight
-			, static_cast< PhongLightMaterial const & >( pmaterial )
+			, pcomponents
 			, psurface
 			, pworldEye
 			, preceivesShadows );
 	}
 
 	sdw::Vec3 PhongLightingModel::computeDiffuse( PointLight const & plight
-		, LightMaterial const & pmaterial
+		, BlendComponents const & pcomponents
 		, Surface const & psurface
 		, sdw::Vec3 const & pworldEye
 		, sdw::UInt const & preceivesShadows )
@@ -521,20 +509,20 @@ namespace castor3d::shader
 		{
 			m_computePointDiffuse = m_writer.implementFunction< sdw::Vec3 >( m_prefix + "computePointLight"
 				, [this]( PointLight light
-					, PhongLightMaterial const & material
+					, BlendComponents const & components
 					, Surface const & surface
 					, sdw::Vec3 const & worldEye
 					, sdw::UInt const & receivesShadows )
 				{
 					auto lightToVertex = m_writer.declLocale( "lightToVertex"
-						, surface.worldPosition - light.position );
+						, surface.worldPosition.xyz() - light.position );
 					auto distance = m_writer.declLocale( "distance"
 						, length( lightToVertex ) );
 					auto lightDirection = m_writer.declLocale( "lightDirection"
 						, normalize( lightToVertex ) );
 					auto diffuse = m_writer.declLocale( "diffuse"
 						, doComputeLightDiffuse( light.base
-							, material
+							, components
 							, surface
 							, worldEye
 							, lightDirection ) );
@@ -561,21 +549,21 @@ namespace castor3d::shader
 					m_writer.returnStmt( max( vec3( 0.0_f ), diffuse / attenuation ) );
 				}
 				, InOutPointLight( m_writer, "light" )
-				, InPhongLightMaterial{ m_writer, "material" }
+				, InBlendComponents{ m_writer, "components", m_materials }
 				, InSurface{ m_writer, "surface" }
 				, sdw::InVec3( m_writer, "worldEye" )
 				, sdw::InUInt( m_writer, "receivesShadows" ) );
 		}
 
 		return m_computePointDiffuse( plight
-			, static_cast< PhongLightMaterial const & >( pmaterial )
+			, pcomponents
 			, psurface
 			, pworldEye
 			, preceivesShadows );
 	}
 
 	sdw::Vec3 PhongLightingModel::computeDiffuse( SpotLight const & plight
-		, LightMaterial const & pmaterial
+		, BlendComponents const & pcomponents
 		, Surface const & psurface
 		, sdw::Vec3 const & pworldEye
 		, sdw::UInt const & preceivesShadows )
@@ -584,13 +572,13 @@ namespace castor3d::shader
 		{
 			m_computeSpotDiffuse = m_writer.implementFunction< sdw::Vec3 >( m_prefix + "computeSpotLight"
 				, [this]( SpotLight light
-					, PhongLightMaterial const & material
+					, BlendComponents const & components
 					, Surface const & surface
 					, sdw::Vec3 const & worldEye
 					, sdw::UInt const & receivesShadows )
 				{
 					auto lightToVertex = m_writer.declLocale( "lightToVertex"
-						, surface.worldPosition - light.position );
+						, surface.worldPosition.xyz() - light.position );
 					auto lightDirection = m_writer.declLocale( "lightDirection"
 						, normalize( lightToVertex ) );
 					auto spotFactor = m_writer.declLocale( "spotFactor"
@@ -603,7 +591,7 @@ namespace castor3d::shader
 						auto distance = m_writer.declLocale( "distance"
 							, length( lightToVertex ) );
 						diffuse = doComputeLightDiffuse( light.base
-							, material
+							, components
 							, surface
 							, worldEye
 							, lightDirection );
@@ -636,21 +624,21 @@ namespace castor3d::shader
 					m_writer.returnStmt( diffuse );
 				}
 				, InOutSpotLight( m_writer, "light" )
-				, InPhongLightMaterial{ m_writer, "material" }
+				, InBlendComponents{ m_writer, "components", m_materials }
 				, InSurface{ m_writer, "surface" }
 				, sdw::InVec3( m_writer, "worldEye" )
 				, sdw::InUInt( m_writer, "receivesShadows" ) );
 		}
 
 		return m_computeSpotDiffuse( plight
-			, static_cast< PhongLightMaterial const & >( pmaterial )
+			, pcomponents
 			, psurface
 			, pworldEye
 			, preceivesShadows );
 	}
 
 	sdw::RetVec3 PhongLightingModel::doComputeLight( Light const & plight
-		, PhongLightMaterial const & pmaterial
+		, BlendComponents const & pcomponents
 		, Surface const & psurface
 		, sdw::Vec3 const & pworldEye
 		, sdw::Vec3 const & plightDirection
@@ -661,7 +649,7 @@ namespace castor3d::shader
 			OutputComponents outputs{ m_writer };
 			m_computeLight = m_writer.implementFunction< sdw::Vec3 >( m_prefix + "doComputeLight"
 				, [this]( Light const & light
-					, PhongLightMaterial const & material
+					, BlendComponents const & components
 					, Surface const & surface
 					, sdw::Vec3 const & worldEye
 					, sdw::Vec3 const & lightDirection
@@ -669,7 +657,7 @@ namespace castor3d::shader
 				{
 					// Diffuse term.
 					auto diffuseFactor = m_writer.declLocale( "diffuseFactor"
-						, dot( surface.worldNormal, -lightDirection ) );
+						, dot( surface.normal, -lightDirection ) );
 					auto isLit = m_writer.declLocale( "isLit"
 						, 1.0_f - step( diffuseFactor, 0.0_f ) );
 					auto result = m_writer.declLocale( "result"
@@ -681,19 +669,19 @@ namespace castor3d::shader
 
 					// Specular term.
 					auto vertexToEye = m_writer.declLocale( "vertexToEye"
-						, normalize( worldEye - surface.worldPosition ) );
+						, normalize( worldEye - surface.worldPosition.xyz() ) );
 
 					if ( m_isBlinnPhong )
 					{
 						auto halfwayDir = m_writer.declLocale( "halfwayDir"
 							, normalize( vertexToEye - lightDirection ) );
 						m_writer.declLocale( "specularFactor"
-							, max( dot( surface.worldNormal, halfwayDir ), 0.0_f ) );
+							, max( dot( surface.normal, halfwayDir ), 0.0_f ) );
 					}
 					else
 					{
 						auto lightReflect = m_writer.declLocale( "lightReflect"
-							, normalize( reflect( lightDirection, surface.worldNormal ) ) );
+							, normalize( reflect( lightDirection, surface.normal ) ) );
 						m_writer.declLocale( "specularFactor"
 							, max( dot( vertexToEye, lightReflect ), 0.0_f ) );
 					}
@@ -702,12 +690,12 @@ namespace castor3d::shader
 					output.m_specular = isLit
 						* light.colour
 						* light.intensity.y()
-						* pow( specularFactor, clamp( material.shininess, 1.0_f, 256.0_f ) );
+						* pow( specularFactor, clamp( components.shininess, 1.0_f, 256.0_f ) );
 
 					m_writer.returnStmt( result );
 				}
 				, InLight( m_writer, "light" )
-				, InPhongLightMaterial{ m_writer, "material" }
+				, InBlendComponents{ m_writer, "components", m_materials }
 				, InSurface{ m_writer, "surface" }
 				, sdw::InVec3( m_writer, "worldEye" )
 				, sdw::InVec3( m_writer, "lightDirection" )
@@ -715,7 +703,7 @@ namespace castor3d::shader
 		}
 
 		return m_computeLight( plight
-			, pmaterial
+			, pcomponents
 			, psurface
 			, pworldEye
 			, plightDirection
@@ -723,7 +711,7 @@ namespace castor3d::shader
 	}
 
 	sdw::Vec3 PhongLightingModel::doComputeLightDiffuse( Light const & plight
-		, PhongLightMaterial const & pmaterial
+		, BlendComponents const & pcomponents
 		, Surface const & psurface
 		, sdw::Vec3 const & pworldEye
 		, sdw::Vec3 const & plightDirection )
@@ -732,14 +720,14 @@ namespace castor3d::shader
 		{
 			m_computeLightDiffuse = m_writer.implementFunction< sdw::Vec3 >( m_prefix + "doComputeLight"
 				, [this]( Light const & light
-					, PhongLightMaterial const & material
+					, BlendComponents const & components
 					, Surface const & surface
 					, sdw::Vec3 const & worldEye
 					, sdw::Vec3 const & lightDirection )
 				{
 					// Diffuse term.
 					auto diffuseFactor = m_writer.declLocale( "diffuseFactor"
-						, dot( surface.worldNormal, -lightDirection ) );
+						, dot( surface.normal, -lightDirection ) );
 					auto isLit = m_writer.declLocale( "isLit"
 						, 1.0_f - step( diffuseFactor, 0.0_f ) );
 					m_writer.returnStmt( isLit
@@ -748,14 +736,14 @@ namespace castor3d::shader
 						* diffuseFactor );
 				}
 				, InLight( m_writer, "light" )
-				, InPhongLightMaterial{ m_writer, "material" }
+				, InBlendComponents{ m_writer, "components", m_materials }
 				, InSurface{ m_writer, "surface" }
 				, sdw::InVec3( m_writer, "worldEye" )
 				, sdw::InVec3( m_writer, "lightDirection" ) );
 		}
 
 		return m_computeLightDiffuse( plight
-			, pmaterial
+			, pcomponents
 			, psurface
 			, pworldEye
 			, plightDirection );
@@ -764,11 +752,13 @@ namespace castor3d::shader
 	//*********************************************************************************************
 
 	BlinnPhongLightingModel::BlinnPhongLightingModel( sdw::ShaderWriter & writer
+		, Materials const & materials
 		, Utils & utils
 		, ShadowOptions shadowOptions
 		, SssProfiles const * sssProfiles
 		, bool enableVolumetric )
 		: PhongLightingModel{ writer
+			, materials
 			, utils
 			, std::move( shadowOptions )
 			, sssProfiles
@@ -778,12 +768,14 @@ namespace castor3d::shader
 	}
 
 	LightingModelPtr BlinnPhongLightingModel::create( sdw::ShaderWriter & writer
+		, Materials const & materials
 		, Utils & utils
 		, ShadowOptions shadowOptions
 		, SssProfiles const * sssProfiles
 		, bool enableVolumetric )
 	{
 		return std::make_unique< BlinnPhongLightingModel >( writer
+			, materials
 			, utils
 			, std::move( shadowOptions )
 			, sssProfiles

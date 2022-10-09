@@ -6,6 +6,8 @@
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
+#include "Castor3D/Material/Pass/Component/Base/TwoSidedComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Lighting/SubsurfaceScatteringComponent.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
@@ -116,6 +118,7 @@ namespace castor
 		{
 			buffers.emplace( buffer.first
 				, buffer.second.first.declare( writer, binding, set ) );
+			++binding;
 		}
 	}
 
@@ -139,6 +142,68 @@ namespace castor
 	void ResourceCacheT< Material, String, MaterialCacheTraits >::initialise( RenderDevice const & device
 		, PassTypeID passType )
 	{
+		if ( !m_passBuffer )
+		{
+			auto lock( makeUniqueLock( *this ) );
+			MaterialResPtr created;
+			auto defaultMaterial = doTryAddNoLockT( Material::DefaultMaterialName
+				, false
+				, created
+				, m_engine, passType );
+			auto material = defaultMaterial.lock();
+
+			if ( created.lock() == material )
+			{
+				material->createPass();
+				material->getPass( 0 )->createComponent< castor3d::TwoSidedComponent >()->setTwoSided( true );
+			}
+
+			m_defaultMaterial = material.get();
+			m_passBuffer = std::make_shared< PassBuffer >( m_engine
+				, device
+				, MaxMaterialsCount );
+			m_sssProfileBuffer = std::make_shared< SssProfileBuffer >( m_engine
+				, device
+				, MaxSssProfilesCount );
+			m_texConfigBuffer = std::make_shared< TextureConfigurationBuffer >( m_engine
+				, device
+				, ( device.hasBindless()
+					? device.getMaxBindlessSampled()
+					: MaxTextureConfigurationCount ) );
+			m_texAnimBuffer = std::make_shared< TextureAnimationBuffer >( m_engine
+				, device
+				, ( device.hasBindless()
+					? device.getMaxBindlessSampled()
+					: MaxTextureAnimationCount ) );
+
+			for ( auto & it : *this )
+			{
+				if ( !it.second->isInitialised() )
+				{
+					it.second->initialise();
+				}
+			}
+
+			for ( auto pass : m_pendingPasses )
+			{
+				registerPass( *pass );
+			}
+
+			for ( auto unit : m_pendingUnits )
+			{
+				registerUnit( *unit );
+			}
+
+			for ( auto texture : m_pendingTextures )
+			{
+				registerTexture( *texture );
+			}
+
+			m_pendingPasses.clear();
+			m_pendingUnits.clear();
+			m_pendingTextures.clear();
+			m_specificsBuffers.initialise( device );
+		}
 	}
 
 	void ResourceCacheT< Material, String, MaterialCacheTraits >::cleanup()
@@ -267,9 +332,9 @@ namespace castor
 		{
 			m_passBuffer->addPass( pass );
 
-			if ( pass.hasSubsurfaceScattering() )
+			if ( auto sss = pass.getComponent< SubsurfaceScatteringComponent >() )
 			{
-				m_sssProfileBuffer->addPass( pass );
+				m_sssProfileBuffer->addPass( *sss );
 			}
 
 			return true;
@@ -284,9 +349,9 @@ namespace castor
 		if ( m_passBuffer
 			&& pass.getId() )
 		{
-			if ( pass.hasSubsurfaceScattering() )
+			if ( auto sss = pass.getComponent< SubsurfaceScatteringComponent >() )
 			{
-				m_sssProfileBuffer->removePass( pass );
+				m_sssProfileBuffer->removePass( *sss );
 			}
 
 			m_passBuffer->removePass( pass );

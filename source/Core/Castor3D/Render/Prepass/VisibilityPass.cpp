@@ -133,6 +133,11 @@ namespace castor3d
 		FragmentWriter writer;
 		bool enableTextures = flags.enableTextures();
 
+		shader::Utils utils{ writer };
+		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
+			, flags
+			, ComponentModeFlag::eOpacity | ComponentModeFlag::eGeometry
+			, utils };
 		C3D_Scene( writer
 			, GlobalBuffersIdx::eScene
 			, RenderPipeline::eBuffers );
@@ -140,6 +145,7 @@ namespace castor3d
 			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::eBuffers );
 		shader::Materials materials{ writer
+			, passShaders
 			, uint32_t( GlobalBuffersIdx::eMaterials )
 			, RenderPipeline::eBuffers };
 		shader::TextureConfigurations textureConfigs{ writer
@@ -166,8 +172,6 @@ namespace castor3d
 		auto data = writer.declOutput< UVec2 >( "data", 1u );
 		auto velocity = writer.declOutput< Vec2 >( "velocity", 2u, flags.writeVelocity() );
 
-		shader::Utils utils{ writer };
-
 		writer.implementMainT< shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer
 				, flags }
 			, FragmentOut{ writer }
@@ -176,24 +180,17 @@ namespace castor3d
 			{
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[in.nodeId - 1u] );
-				shader::GeometryBlendComponents components{ writer
-					, "out"
-					, in.texture0
-					, in.texture1
-					, in.texture2
-					, in.texture3
-					, 1.0_f
-					, normalize( in.normal )
-					, normalize( in.tangent )
-					, normalize( in.bitangent )
-					, in.tangentSpaceViewPosition
-					, in.tangentSpaceFragPosition
-					, { 1.0_f, false } };
-				materials.blendMaterials( utils
-					, flags
+				auto material = writer.declLocale( "material"
+					, materials.getMaterial( modelData.getMaterialId() ) );
+				auto components = writer.declLocale( "components"
+					, shader::BlendComponents{ materials
+						, material
+						, in } );
+				materials.blendMaterials( flags
 					, textureConfigs
 					, textureAnims
 					, c3d_maps
+					, material
 					, modelData.getMaterialId()
 					, in.passMultipliers
 					, components );

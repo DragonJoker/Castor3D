@@ -12,71 +12,13 @@
 #include <CastorUtils/Design/ResourceCache.hpp>
 
 CU_ImplementCUSmartPtr( castor3d, TextureUnit )
+CU_ImplementCUSmartPtr( castor3d, TextureUnitData )
 
 namespace castor3d
 {
-	namespace texunit
-	{
-		static TextureUnit createTextureUnit( Engine & engine
-			, RenderDevice const & device
-			, castor::String const & name
-			, VkFormat format
-			, VkExtent3D size
-			, uint32_t arrayLayers
-			, VkImageType imageType
-			, VkImageCreateFlags createFlags
-			, VkImageUsageFlags usageFlags )
-		{
-			SamplerResPtr sampler;
-
-			if ( engine.hasSampler( name ) )
-			{
-				sampler = engine.findSampler( name );
-			}
-			else
-			{
-				sampler = engine.addNewSampler( name, engine );
-
-				if ( auto obj = sampler.lock() )
-				{
-					obj->setMinFilter( VK_FILTER_LINEAR );
-					obj->setMagFilter( VK_FILTER_LINEAR );
-					obj->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-					obj->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-					obj->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
-					obj->setBorderColour( VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK );
-				}
-			}
-
-			ashes::ImageCreateInfo image
-			{
-				createFlags,
-				imageType,
-				format,
-				size,
-				1u,
-				arrayLayers,
-				VK_SAMPLE_COUNT_1_BIT,
-				VK_IMAGE_TILING_OPTIMAL,
-				usageFlags,
-			};
-			auto layout = std::make_shared< TextureLayout >( *engine.getRenderSystem()
-				, image
-				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-				, name );
-			TextureUnit unit{ engine, TextureSourceInfo{ sampler.lock(), layout->getCreateInfo() } };
-			unit.setTexture( layout );
-			unit.setSampler( sampler );
-			unit.initialise( device, *device.graphicsData() );
-			return unit;
-		}
-	}
-
-	//*********************************************************************************************
-
 	TextureUnit::TextureUnit( TextureUnit && rhs )
 		: AnimableT< Engine >{ std::move( rhs ) }
-		, m_sourceInfo{ std::move( rhs.m_sourceInfo ) }
+		, m_data{ rhs.m_data }
 		, m_device{ std::move( rhs.m_device ) }
 		, m_configuration{ std::move( rhs.m_configuration ) }
 		, m_transform{ std::move( rhs.m_transform ) }
@@ -107,9 +49,9 @@ namespace castor3d
 	}
 
 	TextureUnit::TextureUnit( Engine & engine
-		, TextureSourceInfo const & sourceInfo )
+		, TextureUnitData & data )
 		: AnimableT< Engine >{ engine }
-		, m_sourceInfo{ sourceInfo }
+		, m_data{ data }
 		, m_sampler{ engine.getDefaultSampler() }
 		, m_descriptor
 		{
@@ -119,7 +61,6 @@ namespace castor3d
 			VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 		}
 		, m_changed{ false }
-		, m_setIndex{ m_sourceInfo.getTexcoordSet() }
 	{
 		m_transformations.setIdentity();
 	}
@@ -137,103 +78,6 @@ namespace castor3d
 		{
 			getEngine()->getRenderTargetCache().remove( std::move( renderTarget ) );
 		}
-	}
-
-	TextureUnit TextureUnit::create( Engine & engine
-		, RenderDevice const & device
-		, castor::String const & name
-		, VkFormat format
-		, uint32_t size
-		, VkImageCreateFlags createFlags
-		, VkImageUsageFlags usageFlags )
-	{
-		return texunit::createTextureUnit( engine
-			, device
-			, name
-			, format
-			, { size, 1u, 1u }
-			, 1u
-			, VK_IMAGE_TYPE_1D
-			, createFlags
-			, usageFlags );
-	}
-
-	TextureUnit TextureUnit::create( Engine & engine
-		, RenderDevice const & device
-		, castor::String const & name
-		, VkFormat format
-		, uint32_t size
-		, uint32_t arrayLayers
-		, VkImageCreateFlags createFlags
-		, VkImageUsageFlags usageFlags )
-	{
-		return texunit::createTextureUnit( engine
-			, device
-			, name
-			, format
-			, { size, 1u, 1u }
-			, arrayLayers
-			, VK_IMAGE_TYPE_1D
-			, createFlags
-			, usageFlags );
-	}
-
-	TextureUnit TextureUnit::create( Engine & engine
-		, RenderDevice const & device
-		, castor::String const & name
-		, VkFormat format
-		, VkExtent2D const & size
-		, VkImageCreateFlags createFlags
-		, VkImageUsageFlags usageFlags )
-	{
-		return texunit::createTextureUnit( engine
-			, device
-			, name
-			, format
-			, { size.width, size.height, 1u }
-			, 1u
-			, VK_IMAGE_TYPE_2D
-			, createFlags
-			, usageFlags );
-	}
-
-	TextureUnit TextureUnit::create( Engine & engine
-		, RenderDevice const & device
-		, castor::String const & name
-		, VkFormat format
-		, VkExtent2D const & size
-		, uint32_t arrayLayers
-		, VkImageCreateFlags createFlags
-		, VkImageUsageFlags usageFlags )
-	{
-		return texunit::createTextureUnit( engine
-			, device
-			, name
-			, format
-			, { size.width, size.height, 1u }
-			, arrayLayers
-			, VK_IMAGE_TYPE_2D
-			, createFlags
-			, usageFlags );
-	}
-
-	TextureUnit TextureUnit::create( Engine & engine
-		, RenderDevice const & device
-		, castor::String const & name
-		, VkFormat format
-		, VkExtent3D const & size
-		, VkImageCreateFlags createFlags
-		, VkImageUsageFlags usageFlags )
-	{
-		return texunit::createTextureUnit( engine
-			, device
-			, name
-			, format
-			, size
-			, 1u
-			, VK_IMAGE_TYPE_3D
-			, createFlags
-			, usageFlags );
 	}
 
 	void TextureUnit::setTexture( TextureLayoutSPtr texture )

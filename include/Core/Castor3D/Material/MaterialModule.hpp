@@ -28,12 +28,15 @@ namespace castor3d
 		//!\~english	Height map.
 		//!\~french		Map de hauteur.
 		eHeight,
-		//!\~english	Opacity map.
-		//!\~french		Map d'opacité.
-		eOpacity,
 		//!\~english	Normal map.
 		//!\~french		Map de normales.
 		eNormal,
+		//!\~english	Colour (raw, base, or diffuse) map.
+		//!\~french		Map de couleur (brute, base ou diffuse).
+		eColour,
+		//!\~english	Opacity map.
+		//!\~french		Map d'opacité.
+		eOpacity,
 		//!\~english	Emissive map.
 		//!\~french		Map d'émissive.
 		eEmissive,
@@ -43,27 +46,15 @@ namespace castor3d
 		//!\~english	Light transmittance map.
 		//!\~french		Map de transmission de lumière.
 		eTransmittance,
-		//!\~english	Basic colour map.
-		//!\~french		Map de couleur basique.
-		eColour,
-		//!\~english	Diffuse map.
-		//!\~french		Map de diffuse.
-		eDiffuse = eColour,
-		//!\~english	Albedo map.
-		//!\~french		Map d'albedo.
-		eAlbedo = eColour,
 		//!\~english	Specular map.
 		//!\~french		Map de spéculaire.
 		eSpecular,
 		//!\~english	Metalness map.
 		//!\~french		Map de metalness.
 		eMetalness,
-		//!\~english	Glossiness map.
-		//!\~french		Map de glossiness.
+		//!\~english	Glossiness/Shininess map.
+		//!\~french		Map de glossiness/shininess.
 		eGlossiness,
-		//!\~english	Shininess map.
-		//!\~french		Map de shininess.
-		eShininess = eGlossiness,
 		//!\~english	Roughness map.
 		//!\~french		Map de roughness.
 		eRoughness,
@@ -88,12 +79,15 @@ namespace castor3d
 		//!\~english	Height map.
 		//!\~french		Map de hauteur.
 		eHeight = 0x0001 << uint16_t( TextureChannel::eHeight ),
-		//!\~english	Opacity map.
-		//!\~french		Map d'opacité.
-		eOpacity = 0x0001 << uint16_t( TextureChannel::eOpacity ),
 		//!\~english	Normal map.
 		//!\~french		Map de normales.
 		eNormal = 0x0001 << uint16_t( TextureChannel::eNormal ),
+		//!\~english	Opacity map.
+		//!\~french		Map d'opacité.
+		eOpacity = 0x0001 << uint16_t( TextureChannel::eOpacity ),
+		//!\~english	Colour (raw, base, or diffuse) map.
+		//!\~french		Map de couleur (brute, base ou diffuse).
+		eColour = 0x0001 << uint16_t( TextureChannel::eColour ),
 		//!\~english	Emissive map.
 		//!\~french		Map d'émissive.
 		eEmissive = 0x0001 << uint16_t( TextureChannel::eEmissive ),
@@ -103,15 +97,6 @@ namespace castor3d
 		//!\~english	Light transmittance map.
 		//!\~french		Map de transmission de lumière.
 		eTransmittance = 0x0001 << uint16_t( TextureChannel::eTransmittance ),
-		//!\~english	Basic colour map.
-		//!\~french		Map de couleur basique.
-		eColour = 0x0001 << uint16_t( TextureChannel::eColour ),
-		//!\~english	Diffuse map.
-		//!\~french		Map de diffuse.
-		eDiffuse = 0x0001 << uint16_t( TextureChannel::eDiffuse ),
-		//!\~english	Albedo map.
-		//!\~french		Map d'albedo.
-		eAlbedo = 0x0001 << uint16_t( TextureChannel::eAlbedo ),
 		//!\~english	Specular map.
 		//!\~french		Map de spéculaire.
 		eSpecular = 0x0001 << uint16_t( TextureChannel::eSpecular ),
@@ -121,9 +106,6 @@ namespace castor3d
 		//!\~english	Glossiness map.
 		//!\~french		Map de glossiness.
 		eGlossiness = 0x0001 << uint16_t( TextureChannel::eGlossiness ),
-		//!\~english	Shininess map.
-		//!\~french		Map de shininess.
-		eShininess = 0x0001 << uint16_t( TextureChannel::eShininess ),
 		//!\~english	Roughness map.
 		//!\~french		Map de roughness.
 		eRoughness = 0x0001 << uint16_t( TextureChannel::eRoughness ),
@@ -138,7 +120,7 @@ namespace castor3d
 		eAllButOpacity = eAll & ~( eOpacity ),
 		//!\~english	Mask for all the texture channels except for opacity and colour.
 		//!\~french		Masque pour les canaux de texture sauf l'opacité et la couleur.
-		eAllButColourAndOpacity = eAllButOpacity & ~( eDiffuse ),
+		eAllButColourAndOpacity = eAllButOpacity & ~( eColour ),
 		//!\~english	Mask for all the texture channels except for opacity and normal.
 		//!\~french		Masque pour les canaux de texture sauf l'opacité et la normale.
 		eAllButNormalAndOpacity = eAllButOpacity & ~( eNormal ),

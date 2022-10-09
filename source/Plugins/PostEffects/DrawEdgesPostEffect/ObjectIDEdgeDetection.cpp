@@ -1,6 +1,7 @@
 #include "DrawEdgesPostEffect/ObjectIDEdgeDetection.hpp"
 
 #include <Castor3D/Engine.hpp>
+#include <Castor3D/Material/Pass/Component/PassShaders.hpp>
 #include <Castor3D/Material/Texture/Sampler.hpp>
 #include <Castor3D/Material/Texture/TextureLayout.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
@@ -9,11 +10,12 @@
 #include <Castor3D/Shader/Program.hpp>
 #include <Castor3D/Shader/ShaderBuffers/PassBuffer.hpp>
 #include <Castor3D/Shader/Shaders/GlslMaterial.hpp>
+#include <Castor3D/Shader/Shaders/GlslUtils.hpp>
 #include <Castor3D/Shader/Ubos/ModelDataUbo.hpp>
 
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 
-#include <Shaders/GlslToonMaterial.hpp>
+#include <Shaders/GlslToonProfile.hpp>
 
 #include <ashespp/Buffer/UniformBuffer.hpp>
 #include <ashespp/Image/Image.hpp>
@@ -65,12 +67,17 @@ namespace draw_edges
 		{
 			using namespace sdw;
 			FragmentWriter writer;
+			castor3d::shader::Utils utils{ writer };
+			castor3d::shader::PassShaders passShaders{ engine.getPassComponentsRegister()
+				, castor3d::TextureFlag::eNone
+				, castor3d::ComponentModeFlag::eNone
+				, utils };
 
 			// Shader inputs
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			auto specifics = uint32_t( eSpecifics );
-			castor3d::shader::Materials materials{ engine, writer, eMaterials, 0u, specifics };
+			castor3d::shader::Materials materials{ engine, writer, passShaders, eMaterials, 0u, specifics };
 			C3D_ModelsData( writer, eModels, 0u );
 			auto c3d_depthObj = writer.declCombinedImg< FImg2DRgba32 >( "c3d_depthObj", eDepthObj, 0u );
 

@@ -16,11 +16,10 @@ set( PROJECT_VERSION "${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION
 set( PROJECT_SOVERSION "${${PROJECT_NAME}_VERSION_BUILD}" )
 
 set( ${PROJECT_NAME}_HDR_FILES
-	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/ToonPass.hpp
-	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/ToonPass.inl
+	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/EdgesComponent.hpp
 )
 set( ${PROJECT_NAME}_SRC_FILES
-	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/ToonPass.cpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/EdgesComponent.cpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/ToonMaterialPlugin.cpp
 )
 source_group( "Header Files" FILES ${${PROJECT_NAME}_HDR_FILES} )
@@ -28,11 +27,11 @@ source_group( "Source Files" FILES ${${PROJECT_NAME}_SRC_FILES} )
 
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${PROJECT_NAME}/Shaders/GlslToonLighting.cpp
-	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${PROJECT_NAME}/Shaders/GlslToonMaterial.cpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${PROJECT_NAME}/Shaders/GlslToonProfile.cpp
 )
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${PROJECT_NAME}/Shaders/GlslToonLighting.hpp
-	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${PROJECT_NAME}/Shaders/GlslToonMaterial.hpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${PROJECT_NAME}/Shaders/GlslToonProfile.hpp
 )
 set( ${PROJECT_NAME}_SRC_FILES
 	${${PROJECT_NAME}_SRC_FILES}

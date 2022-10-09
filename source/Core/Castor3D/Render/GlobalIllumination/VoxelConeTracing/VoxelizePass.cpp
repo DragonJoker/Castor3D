@@ -46,102 +46,6 @@ namespace castor3d
 {
 	//*********************************************************************************************
 
-	namespace vxlpass
-	{
-		template< sdw::var::Flag FlagT >
-		struct SurfaceT
-			: sdw::StructInstance
-		{
-			SurfaceT( sdw::ShaderWriter & writer
-				, sdw::expr::ExprPtr expr
-				, bool enabled = true )
-				: sdw::StructInstance{ writer, std::move( expr ), enabled }
-				, worldPosition{ getMember< sdw::Vec3 >( "worldPosition" ) }
-				, viewPosition{ getMember< sdw::Vec3 >( "viewPosition" ) }
-				, normal{ getMember< sdw::Vec3 >( "normal" ) }
-				, texture0{ getMember< sdw::Vec3 >( "texcoord0", true ) }
-				, texture1{ getMember< sdw::Vec3 >( "texcoord1", true ) }
-				, texture2{ getMember< sdw::Vec3 >( "texcoord2", true ) }
-				, texture3{ getMember< sdw::Vec3 >( "texcoord3", true ) }
-				, colour{ getMember< sdw::Vec3 >( "colour", true ) }
-				, nodeId{ getMember< sdw::UInt >( "nodeId" ) }
-			{
-			}
-
-			SDW_DeclStructInstance( , SurfaceT );
-
-			static sdw::type::IOStructPtr makeIOType( sdw::type::TypesCache & cache
-				, PipelineFlags const & flags )
-			{
-				auto result = cache.getIOStruct( sdw::type::MemoryLayout::eStd430
-					, ( FlagT == sdw::var::Flag::eShaderOutput
-						? std::string{ "Output" }
-						: std::string{ "Input" } ) + "VoxelSurface"
-					, FlagT );
-
-				if ( result->empty() )
-				{
-					uint32_t index = 0u;
-					result->declMember( "worldPosition"
-						, sdw::type::Kind::eVec3F
-						, sdw::type::NotArray
-						, index++ );
-					result->declMember( "viewPosition"
-						, sdw::type::Kind::eVec3F
-						, sdw::type::NotArray
-						, index++ );
-					result->declMember( "normal"
-						, sdw::type::Kind::eVec3F
-						, sdw::type::NotArray
-						, index++ );
-					result->declMember( "texcoord0"
-						, sdw::type::Kind::eVec3F
-						, sdw::type::NotArray
-						, ( flags.enableTexcoord0() ? index++ : 0 )
-						, flags.enableTexcoord0() );
-					result->declMember( "texcoord1"
-						, sdw::type::Kind::eVec3F
-						, sdw::type::NotArray
-						, ( flags.enableTexcoord1() ? index++ : 0 )
-						, flags.enableTexcoord1() );
-					result->declMember( "texcoord2"
-						, sdw::type::Kind::eVec3F
-						, sdw::type::NotArray
-						, ( flags.enableTexcoord2() ? index++ : 0 )
-						, flags.enableTexcoord2() );
-					result->declMember( "texcoord3"
-						, sdw::type::Kind::eVec3F
-						, sdw::type::NotArray
-						, ( flags.enableTexcoord3() ? index++ : 0 )
-						, flags.enableTexcoord3() );
-					result->declMember( "colour"
-						, sdw::type::Kind::eVec3F
-						, sdw::type::NotArray
-						, ( flags.enableColours() ? index++ : 0 )
-						, flags.enableColours() );
-					result->declMember( "nodeId"
-						, sdw::type::Kind::eUInt
-						, sdw::type::NotArray
-						, index++ );
-				}
-
-				return result;
-			}
-
-			sdw::Vec3 worldPosition;
-			sdw::Vec3 viewPosition;
-			sdw::Vec3 normal;
-			sdw::Vec3 texture0;
-			sdw::Vec3 texture1;
-			sdw::Vec3 texture2;
-			sdw::Vec3 texture3;
-			sdw::Vec3 colour;
-			sdw::UInt nodeId;
-		};
-	}
-
-	//*********************************************************************************************
-
 	castor::String const VoxelizePass::Type = "c3d.voxelize";
 
 	VoxelizePass::VoxelizePass( crg::FramePass const & pass
@@ -251,9 +155,6 @@ namespace castor3d
 			}
 		}
 
-		getEngine()->addSpecificsBuffersBindings( bindings
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, index );
 	}
 
 	ashes::PipelineDepthStencilStateCreateInfo VoxelizePass::doCreateDepthStencilState( PipelineFlags const & flags )const
@@ -301,13 +202,17 @@ namespace castor3d
 			, shadowMaps
 			, descriptorWrites
 			, index );
-		getEngine()->addSpecificsBuffersDescriptors( descriptorWrites, index );
 	}
 
 	ShaderPtr VoxelizePass::doGetVertexShaderSource( PipelineFlags const & flags )const
 	{
 		using namespace sdw;
 		VertexWriter writer;
+		shader::Utils utils{ writer };
+		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
+			, flags
+			, ComponentModeFlag::eNone
+			, utils };
 
 		C3D_Matrix( writer
 			, GlobalBuffersIdx::eMatrix
@@ -319,17 +224,21 @@ namespace castor3d
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::eBuffers );
+		shader::Materials materials{ writer
+			, passShaders
+			, uint32_t( GlobalBuffersIdx::eMaterials )
+			, RenderPipeline::eBuffers };
 
 		sdw::PushConstantBuffer pcb{ writer, "C3D_DrawData", "c3d_drawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
 		pcb.end();
 
-		writer.implementMainT< shader::VertexSurfaceT, vxlpass::SurfaceT >( sdw::VertexInT< shader::VertexSurfaceT >{ writer
+		writer.implementMainT< shader::VertexSurfaceT, shader::VoxelSurfaceT >( sdw::VertexInT< shader::VertexSurfaceT >{ writer
 				, flags }
-			, sdw::VertexOutT< vxlpass::SurfaceT >{ writer
+			, sdw::VertexOutT< shader::VoxelSurfaceT >{ writer
 				, flags }
 			, [&]( VertexInT< shader::VertexSurfaceT > in
-				, VertexOutT< vxlpass::SurfaceT > out )
+				, VertexOutT< shader::VoxelSurfaceT > out )
 			{
 				auto nodeId = writer.declLocale( "nodeId"
 					, shader::getNodeId( c3d_objectIdsData
@@ -343,11 +252,16 @@ namespace castor3d
 					, in.normal );
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[nodeId - 1u] );
-				out.nodeId = writer.cast< sdw::Int >( nodeId );
+				auto material = writer.declLocale( "material"
+					, materials.getMaterial( modelData.getMaterialId() ) );
+				out.nodeId = nodeId;
 				out.texture0 = in.texture0;
 				out.texture1 = in.texture1;
 				out.texture2 = in.texture2;
 				out.texture3 = in.texture3;
+				material.getPassMultipliers( flags
+					, in.passMasks
+					, out.passMultipliers );
 				auto modelMtx = writer.declLocale< Mat4 >( "modelMtx"
 					, modelData.getModelMtx() );
 
@@ -362,8 +276,8 @@ namespace castor3d
 					out.normal = normalize( mat3( transpose( inverse( modelMtx ) ) ) * curNormal );
 				}
 
-				out.worldPosition = out.vtx.position.xyz();
-				out.viewPosition = c3d_matrixData.worldToCurView( out.vtx.position ).xyz();
+				out.worldPosition = out.vtx.position;
+				out.viewPosition = c3d_matrixData.worldToCurView( out.vtx.position );
 			} );
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
@@ -399,11 +313,11 @@ namespace castor3d
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
 		pcb.end();
 
-		writer.implementMainT< VoidT, vxlpass::SurfaceT >( sdw::VertexInT< VoidT >{ writer }
-			, sdw::VertexOutT< vxlpass::SurfaceT >{ writer
+		writer.implementMainT< VoidT, shader::VoxelSurfaceT >( sdw::VertexInT< VoidT >{ writer }
+			, sdw::VertexOutT< shader::VoxelSurfaceT >{ writer
 				, flags }
 			,[&]( VertexIn in
-			, VertexOutT< vxlpass::SurfaceT > out )
+			, VertexOutT< shader::VoxelSurfaceT > out )
 			{
 				auto nodeId = writer.declLocale( "nodeId"
 					, shader::getNodeId( c3d_objectIdsData
@@ -436,11 +350,19 @@ namespace castor3d
 					+ right * inPosition.x() * width
 					+ up * inPosition.y() * height
 					, 1.0_f );
-				out.worldPosition = out.vtx.position.xyz();
+				out.worldPosition = out.vtx.position;
 				auto viewPosition = writer.declLocale( "viewPosition"
 					, c3d_matrixData.worldToCurView( out.vtx.position ) );
-				out.viewPosition = viewPosition.xyz();
+				out.viewPosition = viewPosition;
 				out.normal = normalize( c3d_sceneData.getPosToCamera( curBbcenter ) );
+				auto passMultipliers = std::vector< sdw::Vec4 >{ vec4( 1.0_f, 0.0_f, 0.0_f, 0.0_f )
+					, vec4( 0.0_f )
+					, vec4( 0.0_f )
+					, vec4( 0.0_f ) };
+				out.passMultipliers[0] = passMultipliers[0];
+				out.passMultipliers[1] = passMultipliers[1];
+				out.passMultipliers[2] = passMultipliers[2];
+				out.passMultipliers[3] = passMultipliers[3];
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -456,14 +378,14 @@ namespace castor3d
 			, RenderPipeline::eBuffers
 			, true );
 
-		writer.implementMainT< TriangleListT< vxlpass::SurfaceT >, TriangleStreamT< vxlpass::SurfaceT > >( TriangleListT< vxlpass::SurfaceT >{ writer
+		writer.implementMainT< TriangleListT< shader::VoxelSurfaceT >, TriangleStreamT< shader::VoxelSurfaceT > >( TriangleListT< shader::VoxelSurfaceT >{ writer
 				, flags }
-			, TriangleStreamT< vxlpass::SurfaceT >{ writer
+			, TriangleStreamT< shader::VoxelSurfaceT >{ writer
 				, 3u
 				, flags }
 			, [&]( GeometryIn in
-				, TriangleListT< vxlpass::SurfaceT > list
-				, TriangleStreamT< vxlpass::SurfaceT > out )
+				, TriangleListT< shader::VoxelSurfaceT > list
+				, TriangleStreamT< shader::VoxelSurfaceT > out )
 			{
 				auto facenormal = writer.declLocale( "facenormal"
 					, abs( list[0].normal + list[1].normal + list[2].normal ) );
@@ -474,7 +396,7 @@ namespace castor3d
 
 				FOR( writer, UInt, i, 0_u, i < 3_u, ++i )
 				{
-					positions[i] = list[i].worldPosition * c3d_voxelData.worldToGrid;
+					positions[i] = list[i].worldPosition.xyz() * c3d_voxelData.worldToGrid;
 
 					// Project onto dominant axis:
 					IF( writer, maxi == 0_u )
@@ -509,7 +431,7 @@ namespace castor3d
 				// Output
 				FOR( writer, UInt, i, 0_u, i < 3_u, ++i )
 				{
-					out.worldPosition = list[i].vtx.position.xyz();
+					out.worldPosition = list[i].vtx.position;
 					out.viewPosition = list[i].viewPosition;
 					out.normal = list[i].normal;
 					out.nodeId = list[i].nodeId;
@@ -518,6 +440,7 @@ namespace castor3d
 					out.texture1 = list[i].texture1;
 					out.texture2 = list[i].texture2;
 					out.texture3 = list[i].texture3;
+					out.passMultipliers = list[i].passMultipliers;
 
 					out.append();
 				}
@@ -535,6 +458,15 @@ namespace castor3d
 		FragmentWriter writer;
 		bool enableTextures = flags.enableTextures();
 		shader::Utils utils{ writer };
+		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
+			, flags
+			, ( ComponentModeFlag::eOpacity
+				| ComponentModeFlag::eOcclusion
+				| ComponentModeFlag::eGeometry
+				| ComponentModeFlag::eColour
+				| ComponentModeFlag::eDiffuseLighting )
+			, utils };
+		auto addIndex = uint32_t( GlobalBuffersIdx::eCount );
 
 		C3D_Scene( writer
 			, GlobalBuffersIdx::eScene
@@ -542,6 +474,10 @@ namespace castor3d
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::eBuffers );
+		shader::Materials materials{ writer
+			, passShaders
+			, uint32_t( GlobalBuffersIdx::eMaterials )
+			, RenderPipeline::eBuffers };
 		shader::TextureConfigurations textureConfigs{ writer
 			, uint32_t( GlobalBuffersIdx::eTexConfigs )
 			, RenderPipeline::eBuffers
@@ -550,7 +486,6 @@ namespace castor3d
 			, uint32_t( GlobalBuffersIdx::eTexAnims )
 			, RenderPipeline::eBuffers
 			, enableTextures };
-		auto addIndex = uint32_t( GlobalBuffersIdx::eCount );
 		auto lightsIndex = addIndex++;
 		C3D_Voxelizer( writer
 			, addIndex++
@@ -560,6 +495,7 @@ namespace castor3d
 			, addIndex++
 			, RenderPipeline::eBuffers ) );
 		auto lightingModel = shader::LightingModel::createDiffuseModel( *getEngine()
+			, materials
 			, utils
 			, shader::getLightingModelName( *getEngine(), flags.passType )
 			, lightsIndex
@@ -568,27 +504,22 @@ namespace castor3d
 			, addIndex
 			, RenderPipeline::eBuffers
 			, false );
-		shader::Materials materials{ *getEngine()
-			, writer
-			, uint32_t( GlobalBuffersIdx::eMaterials )
-			, RenderPipeline::eBuffers
-			, addIndex };
 
 		auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
 			, 0u
 			, RenderPipeline::eTextures
 			, enableTextures ) );
 
-		writer.implementMainT< vxlpass::SurfaceT, VoidT >( FragmentInT< vxlpass::SurfaceT >{ writer
+		writer.implementMainT< shader::VoxelSurfaceT, VoidT >( FragmentInT< shader::VoxelSurfaceT >{ writer
 				, FragmentOrigin::eUpperLeft
 				, FragmentCenter::eHalfPixel
 				, flags }
 			, FragmentOutT< VoidT >{ writer }
-			, [&]( FragmentInT< vxlpass::SurfaceT > in
+			, [&]( FragmentInT< shader::VoxelSurfaceT > in
 				, FragmentOut out )
 			{
 				auto diff = writer.declLocale( "diff"
-					, c3d_voxelData.worldToClip( in.worldPosition ) );
+					, c3d_voxelData.worldToClip( in.worldPosition.xyz() ) );
 				auto uvw = writer.declLocale( "uvw"
 					, diff * vec3( 0.5_f, -0.5f, 0.5f ) + 0.5f );
 
@@ -598,59 +529,36 @@ namespace castor3d
 						, c3d_modelsData[in.nodeId - 1u] );
 					auto material = writer.declLocale( "material"
 						, materials.getMaterial( modelData.getMaterialId() ) );
-					auto normal = writer.declLocale( "normal"
-						, normalize( in.normal ) );
-					auto lightMat = lightingModel->declMaterial( "lightMat" );
-					lightMat->create( in.colour
-						, materials
-						, material );
-					auto emissive = writer.declLocale( "emissive"
-						, vec3( material.emissive() ) );
-					auto alpha = writer.declLocale( "alpha"
-						, material.opacity() );
-					auto occlusion = writer.declLocale( "occlusion"
-						, 1.0_f );
-
-					if ( c3d_maps.isEnabled() )
-					{
-						auto texCoord0 = writer.declLocale( "texCoord0"
-							, in.texture0 );
-						auto texCoord1 = writer.declLocale( "texCoord1"
-							, in.texture1 );
-						auto texCoord2 = writer.declLocale( "texCoord2"
-							, in.texture2 );
-						auto texCoord3 = writer.declLocale( "texCoord3"
-							, in.texture3 );
-						lightingModel->computeMapDiffuseContributions( flags
-							, textureConfigs
-							, textureAnims
-							, c3d_maps
+					auto surface = writer.declLocale( "surface"
+						, shader::Surface{ in } );
+					surface.clipPosition = in.fragCoord.xyz();
+					auto components = writer.declLocale( "components"
+						, shader::BlendComponents{ materials
 							, material
-							, texCoord0
-							, texCoord1
-							, texCoord2
-							, texCoord3
-							, emissive
-							, alpha
-							, occlusion
-							, *lightMat );
-					}
-
+							, surface } );
+					materials.blendMaterials( flags
+						, textureConfigs
+						, textureAnims
+						, c3d_maps
+						, material
+						, modelData.getMaterialId()
+						, in.passMultipliers
+						, components );
 					auto color = writer.declLocale( "color"
-						, emissive );
+						, components.emissive );
 
-					IF( writer, material.lighting() != 0_u )
+					IF( writer, material.lighting != 0_u )
 					{
 						auto worldEye = writer.declLocale( "worldEye"
 							, c3d_sceneData.cameraPosition );
-						auto surface = writer.declLocale< shader::Surface >( "surface" );
-						surface.create( in.fragCoord.xyz()
-							, in.viewPosition
-							, in.worldPosition
-							, normal );
-						color += occlusion
-							* lightMat->albedo
-							* lightingModel->computeCombinedDiffuse( *lightMat
+						auto surface = writer.declLocale( "surface"
+							, shader::Surface{ in.fragCoord.xyz()
+								, in.viewPosition
+								, in.worldPosition
+								, components.normal } );
+						color += vec3( components.occlusion )
+							* components.colour
+							* lightingModel->computeCombinedDiffuse( components
 								, c3d_sceneData
 								, surface
 								, worldEye
@@ -659,9 +567,9 @@ namespace castor3d
 					FI;
 
 					auto encodedColor = writer.declLocale( "encodedColor"
-						, utils.encodeColor( vec4( color, alpha ) ) );
+						, utils.encodeColor( vec4( color, components.opacity ) ) );
 					auto encodedNormal = writer.declLocale( "encodedNormal"
-						, utils.encodeNormal( normal ) );
+						, utils.encodeNormal( components.normal ) );
 					auto writecoord = writer.declLocale( "writecoord"
 						, uvec3( floor( uvw * c3d_voxelData.clipToGrid ) ) );
 					auto id = writer.declLocale( "id"

@@ -29,12 +29,13 @@ namespace castor3d
 		: uint8_t
 	{
 		eNmlOcc, // RGB => Normal, A => Occlusion
-		eColRgh, // RGB => Diffuse/Albedo - Phong: A => Shininess - PBR: A => Roughness
-		eSpcMtl, // RGB => Specular - PBR: A => Metalness - Phong: A => Unused
+		eColMtl, // RGB => Diffuse/Albedo - PBR: A => Metalness - Phong: A => Ambient
+		eSpcRgh, // RGB => Specular - Phong: A => Shininess - PBR: A => Roughness
 		eEmsTrn, // RGB => Emissive, A => Transmittance
 		CU_ScopedEnumBounds( eNmlOcc ),
 	};
 	C3D_API castor::String getTextureName( DsTexture texture );
+	C3D_API castor::String getImageName( DsTexture texture );
 	C3D_API castor::String getTexName( DsTexture texture );
 	C3D_API VkFormat getFormat( RenderDevice const & device, DsTexture texture );
 	C3D_API VkClearValue getClearValue( DsTexture texture );

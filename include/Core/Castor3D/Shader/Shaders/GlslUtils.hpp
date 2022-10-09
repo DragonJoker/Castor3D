@@ -18,6 +18,7 @@ namespace castor3d::shader
 		C3D_API explicit Utils( sdw::ShaderWriter & writer );
 
 		C3D_API LightingModelPtr createLightingModel( Engine const & engine
+			, Materials const & materials
 			, castor::String const & name
 			, ShadowOptions shadowsOptions
 			, SssProfiles const * sssProfiles
@@ -37,13 +38,6 @@ namespace castor3d::shader
 			, sdw::Vec3 const HDR );
 		C3D_API sdw::Vec3 removeGamma( sdw::Float const gamma
 			, sdw::Vec3 const sRGB );
-		C3D_API void compute2DMapsContributions( FilteredTextureFlags const & flags
-			, TextureConfigurations const & textureConfigs
-			, TextureAnimations const & textureAnims
-			, sdw::Array< sdw::CombinedImage2DRgba32 > const maps
-			, sdw::Vec3 const texCoords
-			, sdw::Vec3 & colour
-			, sdw::Float & opacity );
 		C3D_API sdw::Float remap( sdw::Float const originalValue
 			, sdw::Float const originalMin
 			, sdw::Float const originalMax
@@ -55,9 +49,18 @@ namespace castor3d::shader
 		C3D_API sdw::Float powder( sdw::Float const d );
 		C3D_API sdw::Float powder( sdw::Float const d
 			, sdw::Float const cosTheta );
+		C3D_API sdw::Vec4 sampleMap( sdw::CombinedImage2DRgba32 const map
+			, sdw::Vec2 const texCoords );
+		C3D_API sdw::Vec4 sampleMap( sdw::CombinedImage2DRgba32 const map
+			, sdw::Vec3 const texCoords );
+		C3D_API sdw::Vec4 sampleMap( sdw::CombinedImage2DRgba32 const map
+			, DerivTex const texCoords );
 		C3D_API sdw::Vec4 sampleMap( PipelineFlags const & flags
 			, sdw::CombinedImage2DRgba32 const map
 			, sdw::Vec2 const texCoords );
+		C3D_API sdw::Vec4 sampleMap( PipelineFlags const & flags
+			, sdw::CombinedImage2DRgba32 const map
+			, sdw::Vec3 const texCoords );
 		C3D_API sdw::Vec4 sampleMap( PipelineFlags const & flags
 			, sdw::CombinedImage2DRgba32 const map
 			, DerivTex const texCoords );
@@ -88,7 +91,7 @@ namespace castor3d::shader
 			, sdw::Float const & alpha
 			, sdw::Float const & nearPlane
 			, sdw::Float const & farPlane
-			, sdw::Float const & accumulationOperator );
+			, sdw::UInt const & accumulationOperator );
 		C3D_API sdw::RetVec3 fresnelSchlick( sdw::Float const & product
 			, sdw::Vec3 const & f0 );
 		C3D_API void parallaxMapping( sdw::Vec2 & texCoords
@@ -203,7 +206,7 @@ namespace castor3d::shader
 			, sdw::InFloat
 			, sdw::InFloat
 			, sdw::InFloat
-			, sdw::InFloat > m_computeAccumulation;
+			, sdw::InUInt > m_computeAccumulation;
 		sdw::Function< sdw::Vec3
 			, sdw::InFloat
 			, sdw::InVec3 > m_fresnelSchlick;

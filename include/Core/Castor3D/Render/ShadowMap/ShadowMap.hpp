@@ -181,11 +181,10 @@ namespace castor3d
 	public:
 		static constexpr TextureFlags textureFlags{ TextureFlag::eOpacity
 			| TextureFlag::eNormal
-			| TextureFlag::eAlbedo
+			| TextureFlag::eColour
 			| TextureFlag::eSpecular
 			| TextureFlag::eMetalness
 			| TextureFlag::eGlossiness
-			| TextureFlag::eShininess
 			| TextureFlag::eRoughness
 			| TextureFlag::eEmissive
 			| TextureFlag::eTransmittance };

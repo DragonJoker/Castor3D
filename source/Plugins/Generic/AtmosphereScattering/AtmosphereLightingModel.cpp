@@ -3,9 +3,7 @@
 #include "AtmosphereScattering/AtmosphereBackground.hpp"
 #include "AtmosphereScattering/AtmosphereBackgroundModel.hpp"
 
-#include <Castor3D/Material/Pass/Phong/Shaders/GlslPhongMaterial.hpp>
 #include <Castor3D/Material/Pass/Phong/Shaders/GlslPhongReflection.hpp>
-#include <Castor3D/Material/Pass/PBR/Shaders/GlslPbrMaterial.hpp>
 #include <Castor3D/Material/Pass/PBR/Shaders/GlslPbrReflection.hpp>
 #include <Castor3D/Shader/Shaders/GlslLight.hpp>
 #include <Castor3D/Shader/Shaders/GlslMaterial.hpp>
@@ -25,12 +23,14 @@ namespace atmosphere_scattering
 	//*********************************************************************************************
 
 	AtmospherePhongLightingModel::AtmospherePhongLightingModel( sdw::ShaderWriter & m_writer
+		, c3d::Materials const & materials
 		, c3d::Utils & utils
 		, c3d::ShadowOptions shadowOptions
 		, c3d::SssProfiles const * sssProfiles
 		, bool enableVolumetric
 		, bool isBlinnPhong )
 		: c3d::PhongLightingModel{ m_writer
+			, materials
 			, utils
 			, std::move( shadowOptions )
 			, sssProfiles
@@ -46,12 +46,14 @@ namespace atmosphere_scattering
 	}
 
 	c3d::LightingModelPtr AtmospherePhongLightingModel::create( sdw::ShaderWriter & writer
+		, c3d::Materials const & materials
 		, c3d::Utils & utils
 		, c3d::ShadowOptions shadowOptions
 		, c3d::SssProfiles const * sssProfiles
 		, bool enableVolumetric )
 	{
 		return std::make_unique< AtmospherePhongLightingModel >( writer
+			, materials
 			, utils
 			, std::move( shadowOptions )
 			, sssProfiles
@@ -60,7 +62,7 @@ namespace atmosphere_scattering
 	}
 
 	void AtmospherePhongLightingModel::compute( c3d::DirectionalLight const & plight
-		, c3d::LightMaterial const & pmaterial
+		, c3d::BlendComponents const & pcomponents
 		, c3d::Surface const & psurface
 		, c3d::BackgroundModel & pbackground
 		, sdw::Vec3 const & pworldEye
@@ -79,7 +81,7 @@ namespace atmosphere_scattering
 			c3d::OutputComponents outputs{ m_writer };
 			m_computeDirectional = m_writer.implementFunction< sdw::Void >( m_prefix + "computeDirectionalLight"
 				, [this]( c3d::DirectionalLight const & light
-					, c3d::PhongLightMaterial const & material
+					, c3d::BlendComponents const & components
 					, c3d::Surface const & surface
 					, sdw::Vec3 const & worldEye
 					, sdw::UInt const & receivesShadows
@@ -94,7 +96,7 @@ namespace atmosphere_scattering
 						, m_atmosphereBackground->getSunRadiance( light.direction ) );
 					// Diffuse term.
 					auto diffuseFactor = m_writer.declLocale( "diffuseFactor"
-						, dot( surface.worldNormal, -lightDirection ) );
+						, dot( surface.normal, -lightDirection ) );
 					auto isLit = m_writer.declLocale( "isLit"
 						, 1.0_f - step( diffuseFactor, 0.0_f ) );
 					auto result = m_writer.declLocale( "result"
@@ -105,19 +107,19 @@ namespace atmosphere_scattering
 
 					// Specular term.
 					auto vertexToEye = m_writer.declLocale( "vertexToEye"
-						, normalize( worldEye - surface.worldPosition ) );
+						, normalize( worldEye - surface.worldPosition.xyz() ) );
 
 					if ( m_isBlinnPhong )
 					{
 						auto halfwayDir = m_writer.declLocale( "halfwayDir"
 							, normalize( vertexToEye - lightDirection ) );
 						m_writer.declLocale( "specularFactor"
-							, max( dot( surface.worldNormal, halfwayDir ), 0.0_f ) );
+							, max( dot( surface.normal, halfwayDir ), 0.0_f ) );
 					}
 					else
 					{
 						auto lightReflect = m_writer.declLocale( "lightReflect"
-							, normalize( reflect( lightDirection, surface.worldNormal ) ) );
+							, normalize( reflect( lightDirection, surface.normal ) ) );
 						m_writer.declLocale( "specularFactor"
 							, max( dot( vertexToEye, lightReflect ), 0.0_f ) );
 					}
@@ -126,7 +128,7 @@ namespace atmosphere_scattering
 					output.m_specular = isLit
 						* radiance
 						* light.base.intensity.y()
-						* pow( specularFactor, clamp( material.shininess, 1.0_f, 256.0_f ) );
+						* pow( specularFactor, clamp( components.shininess, 1.0_f, 256.0_f ) );
 					auto cascadeIndex = m_writer.declLocale( "cascadeIndex"
 						, 0_u );
 					auto maxCount = m_writer.declLocale( "maxCount"
@@ -157,7 +159,7 @@ namespace atmosphere_scattering
 							FOR( m_writer, sdw::UInt, i, 0u, i < maxCount, ++i )
 							{
 								auto factors = m_writer.declLocale( "factors"
-									, m_getCascadeFactors( sdw::Vec3{ surface.viewPosition }
+									, m_getCascadeFactors( sdw::Vec3{ surface.viewPosition.xyz() }
 										, light.splitDepths
 										, i ) );
 
@@ -225,7 +227,7 @@ namespace atmosphere_scattering
 					parentOutput.m_scattering += max( vec3( 0.0_f ), output.m_scattering );
 				}
 				, c3d::InDirectionalLight( m_writer, "light" )
-				, c3d::InPhongLightMaterial{ m_writer, "material" }
+				, c3d::InBlendComponents{ m_writer, "components", m_materials }
 				, c3d::InSurface{ m_writer, "surface" }
 				, sdw::InVec3( m_writer, "worldEye" )
 				, sdw::InUInt( m_writer, "receivesShadows" )
@@ -233,7 +235,7 @@ namespace atmosphere_scattering
 		}
 
 		m_computeDirectional( plight
-			, static_cast< c3d::PhongLightMaterial const & >( pmaterial )
+			, pcomponents
 			, psurface
 			, pworldEye
 			, preceivesShadows
@@ -243,11 +245,13 @@ namespace atmosphere_scattering
 	//*********************************************************************************************
 
 	AtmosphereBlinnPhongLightingModel::AtmosphereBlinnPhongLightingModel( sdw::ShaderWriter & writer
+		, c3d::Materials const & materials
 		, c3d::Utils & utils
 		, c3d::ShadowOptions shadowOptions
 		, c3d::SssProfiles const * sssProfiles
 		, bool enableVolumetric )
 		: AtmospherePhongLightingModel{ writer
+			, materials
 			, utils
 			, std::move( shadowOptions )
 			, sssProfiles
@@ -257,12 +261,14 @@ namespace atmosphere_scattering
 	}
 
 	c3d::LightingModelPtr AtmosphereBlinnPhongLightingModel::create( sdw::ShaderWriter & writer
+		, c3d::Materials const & materials
 		, c3d::Utils & utils
 		, c3d::ShadowOptions shadowOptions
 		, c3d::SssProfiles const * sssProfiles
 		, bool enableVolumetric )
 	{
 		return std::make_unique< AtmosphereBlinnPhongLightingModel >( writer
+			, materials
 			, utils
 			, std::move( shadowOptions )
 			, sssProfiles
@@ -277,11 +283,13 @@ namespace atmosphere_scattering
 	//*********************************************************************************************
 
 	AtmospherePbrLightingModel::AtmospherePbrLightingModel( sdw::ShaderWriter & writer
+		, c3d::Materials const & materials
 		, c3d::Utils & utils
 		, c3d::ShadowOptions shadowOptions
 		, c3d::SssProfiles const * sssProfiles
 		, bool enableVolumetric )
 		: c3d::PbrLightingModel{ writer
+			, materials
 			, utils
 			, std::move( shadowOptions )
 			, sssProfiles
@@ -296,12 +304,14 @@ namespace atmosphere_scattering
 	}
 
 	c3d::LightingModelPtr AtmospherePbrLightingModel::create( sdw::ShaderWriter & writer
+		, c3d::Materials const & materials
 		, c3d::Utils & utils
 		, c3d::ShadowOptions shadowOptions
 		, c3d::SssProfiles const * sssProfiles
 		, bool enableVolumetric )
 	{
 		return std::make_unique< AtmospherePbrLightingModel >( writer
+			, materials
 			, utils
 			, std::move( shadowOptions )
 			, sssProfiles
@@ -309,7 +319,7 @@ namespace atmosphere_scattering
 	}
 
 	void AtmospherePbrLightingModel::compute( c3d::DirectionalLight const & plight
-		, c3d::LightMaterial const & pmaterial
+		, c3d::BlendComponents const & pcomponents
 		, c3d::Surface const & psurface
 		, c3d::BackgroundModel & pbackground
 		, sdw::Vec3 const & pworldEye
@@ -328,7 +338,7 @@ namespace atmosphere_scattering
 			c3d::OutputComponents outputs{ m_writer };
 			m_computeDirectional = m_writer.implementFunction< sdw::Void >( m_prefix + "computeDirectionalLight"
 				, [this]( c3d::DirectionalLight const & light
-					, c3d::PbrLightMaterial const & material
+					, c3d::BlendComponents const & components
 					, c3d::Surface const & surface
 					, sdw::Vec3 const & worldEye
 					, sdw::UInt const & receivesShadows
@@ -347,9 +357,9 @@ namespace atmosphere_scattering
 						, light.base.intensity
 						, worldEye
 						, lightDirection
-						, material.specular
-						, material.getMetalness()
-						, material.getRoughness()
+						, components.specular
+						, components.metalness
+						, components.roughness
 						, surface
 						, output );
 					auto cascadeIndex = m_writer.declLocale( "cascadeIndex"
@@ -382,7 +392,7 @@ namespace atmosphere_scattering
 							FOR( m_writer, sdw::UInt, i, 0u, i < maxCount, ++i )
 							{
 								auto factors = m_writer.declLocale( "factors"
-									, m_getCascadeFactors( sdw::Vec3{ surface.viewPosition }
+									, m_getCascadeFactors( sdw::Vec3{ surface.viewPosition.xyz() }
 										, light.splitDepths
 										, i ) );
 
@@ -450,7 +460,7 @@ namespace atmosphere_scattering
 					parentOutput.m_scattering += max( vec3( 0.0_f ), output.m_scattering );
 				}
 				, c3d::InDirectionalLight( m_writer, "light" )
-				, c3d::InPbrLightMaterial{ m_writer, "material" }
+				, c3d::InBlendComponents{ m_writer, "components", m_materials }
 				, c3d::InSurface{ m_writer, "surface" }
 				, sdw::InVec3( m_writer, "worldEye" )
 				, sdw::InUInt( m_writer, "receivesShadows" )
@@ -458,7 +468,7 @@ namespace atmosphere_scattering
 		}
 
 		m_computeDirectional( plight
-			, static_cast< c3d::PbrLightMaterial const & >( pmaterial )
+			, pcomponents
 			, psurface
 			, pworldEye
 			, preceivesShadows

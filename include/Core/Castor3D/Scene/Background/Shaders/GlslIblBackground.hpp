@@ -26,18 +26,18 @@ namespace castor3d::shader
 
 		C3D_API sdw::RetVec3 computeReflections( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
-			, LightMaterial const & material
+			, BlendComponents & components
 			, sdw::CombinedImage2DRg32 const & brdf )override;
 		C3D_API sdw::RetVec3 computeRefractions( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::Float const & refractionRatio
 			, sdw::Vec3 const & transmission
-			, LightMaterial const & material )override;
+			, BlendComponents & components )override;
 		C3D_API sdw::RetVoid mergeReflRefr( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::Float const & refractionRatio
 			, sdw::Vec3 const & transmission
-			, LightMaterial const & material
+			, BlendComponents & components
 			, sdw::Vec3 & reflection
 			, sdw::Vec3 & refraction )override;
 
@@ -47,7 +47,8 @@ namespace castor3d::shader
 			, sdw::CombinedImageCubeRgba32 const & prefiltered
 			, sdw::Float const & refractionRatio
 			, sdw::Vec3 const & transmission
-			, sdw::Vec3 const & albedo );
+			, sdw::Vec3 const & albedo
+			, sdw::Float const & roughness );
 
 	public:
 		static castor::String const Name;
@@ -69,7 +70,8 @@ namespace castor3d::shader
 			, sdw::InCombinedImageCubeRgba32
 			, sdw::InFloat
 			, sdw::InVec3
-			, sdw::InVec3 > m_computeRefractions;
+			, sdw::InVec3
+			, sdw::InFloat > m_computeRefractions;
 		sdw::Function< sdw::Void
 			, sdw::InVec3
 			, sdw::InVec3

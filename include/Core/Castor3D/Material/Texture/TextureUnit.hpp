@@ -5,12 +5,12 @@ See LICENSE file in root folder
 #define ___C3D_TextureUnit_H___
 #pragma once
 
+#include "Castor3D/Animation/Animable.hpp"
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
 #include "Castor3D/Material/Texture/TextureSourceInfo.hpp"
 #include "Castor3D/Material/Texture/Animation/TextureAnimationModule.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
-
-#include "Castor3D/Animation/Animable.hpp"
+#include "Castor3D/Scene/Animation/AnimationModule.hpp"
 
 #include <CastorUtils/Data/TextWriter.hpp>
 #include <CastorUtils/Math/SquareMatrix.hpp>
@@ -19,6 +19,14 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	struct TextureUnitData
+	{
+		TextureSourceInfo sourceInfo;
+		PassTextureConfig passConfig{};
+		AnimationUPtr animation{};
+		castor::PxBufferBaseUPtr buffer{};
+	};
+
 	class TextureUnit
 		: public AnimableT< Engine >
 	{
@@ -27,53 +35,6 @@ namespace castor3d
 		TextureUnit & operator=( TextureUnit const & ) = delete;
 		C3D_API TextureUnit( TextureUnit && rhs );
 		C3D_API TextureUnit & operator=( TextureUnit && rhs ) = delete;
-		/**
-		*\~english
-		*name
-		*	Creators.
-		*\~french
-		*name
-		*	Créateurs.
-		*/
-		/**@{*/
-		C3D_API static TextureUnit create( Engine & engine
-			, RenderDevice const & device
-			, castor::String const & name
-			, VkFormat format
-			, uint32_t size
-			, VkImageCreateFlags createFlags
-			, VkImageUsageFlags usageFlags );
-		C3D_API static TextureUnit create( Engine & engine
-			, RenderDevice const & device
-			, castor::String const & name
-			, VkFormat format
-			, uint32_t size
-			, uint32_t arrayLayers
-			, VkImageCreateFlags createFlags
-			, VkImageUsageFlags usageFlags );
-		C3D_API static TextureUnit create( Engine & engine
-			, RenderDevice const & device
-			, castor::String const & name
-			, VkFormat format
-			, VkExtent2D const & size
-			, VkImageCreateFlags createFlags
-			, VkImageUsageFlags usageFlags );
-		C3D_API static TextureUnit create( Engine & engine
-			, RenderDevice const & device
-			, castor::String const & name
-			, VkFormat format
-			, VkExtent2D const & size
-			, uint32_t arrayLayers
-			, VkImageCreateFlags createFlags
-			, VkImageUsageFlags usageFlags );
-		C3D_API static TextureUnit create( Engine & engine
-			, RenderDevice const & device
-			, castor::String const & name
-			, VkFormat format
-			, VkExtent3D const & size
-			, VkImageCreateFlags createFlags
-			, VkImageUsageFlags usageFlags );
-		/**@}*/
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -85,7 +46,7 @@ namespace castor3d
 		 *\param		sourceInfo	Les informations de la source.
 		 */
 		C3D_API explicit TextureUnit( Engine & engine
-			, TextureSourceInfo const & sourceInfo );
+			, TextureUnitData & data );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -235,12 +196,17 @@ namespace castor3d
 
 		TextureSourceInfo const & getSourceInfo()const
 		{
-			return m_sourceInfo;
+			return m_data.sourceInfo;
 		}
 
 		uint32_t getTexcoordSet()const
 		{
-			return m_setIndex;
+			return m_data.passConfig.texcoordSet;
+		}
+
+		TextureUnitData & getData()const
+		{
+			return m_data;
 		}
 		/**@}*/
 		/**
@@ -299,7 +265,7 @@ namespace castor3d
 
 	private:
 		friend class TextureRenderer;
-		TextureSourceInfo m_sourceInfo;
+		TextureUnitData & m_data;
 		RenderDevice const * m_device{ nullptr };
 		TextureConfiguration m_configuration;
 		TextureTransform m_transform;

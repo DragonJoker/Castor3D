@@ -24,8 +24,8 @@ namespace castor3d
 			return cuT( "tangent" );
 		case ElementUsage::eBitangent:
 			return cuT( "bitangent" );
-		case ElementUsage::eDiffuse:
-			return cuT( "diffuse" );
+		case ElementUsage::eColour:
+			return cuT( "colour" );
 		case ElementUsage::eTexCoords:
 			return cuT( "texcoords" );
 		case ElementUsage::eBoneIds0:

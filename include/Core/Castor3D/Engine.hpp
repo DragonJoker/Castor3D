@@ -17,6 +17,7 @@ See LICENSE file in root folder
 #include "Castor3D/Event/UserInput/UserInputEventModule.hpp"
 #include "Castor3D/Material/MaterialModule.hpp"
 #include "Castor3D/Material/Pass/PassModule.hpp"
+#include "Castor3D/Material/Pass/Component/ComponentModule.hpp"
 #include "Castor3D/Model/Mesh/MeshModule.hpp"
 #include "Castor3D/Model/Skeleton/SkeletonModule.hpp"
 #include "Castor3D/Overlay/OverlayModule.hpp"
@@ -479,6 +480,30 @@ namespace castor3d
 			, uint32_t set )const;
 		/**
 		 *\~english
+		 *\brief		Registers a pass component.
+		 *\param[in]	type	The component type name.
+		 *\param[in]	data	The component's specific functions.
+		 *\~french
+		 *\brief		Enregistre un composant de passe.
+		 *\param[in]	type	Le nom du type de composant.
+		 *\param[in]	data	Les fonctions spécifiques du composant.
+		 */
+		C3D_API uint32_t registerPassComponent( castor::String const & type
+			, ParsersFiller createParsers
+			, SectionsFiller createSections
+			, CreateMaterialShader createMaterialShader
+			, ComponentData data );
+		/**
+		 *\~english
+		 *\brief		Unregisters a pass component.
+		 *\param[in]	type	The component type name.
+		 *\~french
+		 *\brief		Désenregistre un composant de passe.
+		 *\param[in]	type	Le nom du type de composant.
+		 */
+		C3D_API void unregisterPassComponent( castor::String const & type );
+		/**
+		 *\~english
 		 *\brief		Registers a scene render pass type, used to render given material pass type.
 		 *\param[in]	renderPassType	The pass type name.
 		 *\param[in]	info			The pass creation informations.
@@ -602,6 +627,7 @@ namespace castor3d
 		C3D_API castor3d::MaterialRPtr getDefaultMaterial()const;
 		C3D_API bool hasMeshShaders()const;
 		C3D_API uint32_t getMaxPassTypeCount()const;
+		C3D_API RenderDevice * getRenderDevice()const;
 
 		castor::String const & getAppName()const
 		{
@@ -706,6 +732,11 @@ namespace castor3d
 		PassFactory & getPassFactory()const
 		{
 			return *m_passFactory;
+		}
+
+		PassComponentRegister & getPassComponentsRegister()const
+		{
+			return *m_passComponents;
 		}
 
 		ImporterFileFactory & getImporterFileFactory()const
@@ -823,6 +854,33 @@ namespace castor3d
 		{
 			m_lpvGridSize = size;
 		}
+
+		template< typename ComponentT >
+		uint32_t registerPassComponent( ParsersFiller pcreateParsers = &ComponentT::createParsers
+			, SectionsFiller pcreateSections = &ComponentT::createSections
+			, CreateMaterialShader pcreateMaterialShader = &ComponentT::createMaterialShader
+			, ZeroBuffer pzeroBuffer = &ComponentT::zeroBuffer
+			, FillRemapMask pfillRemapMask = &ComponentT::fillRemapMask
+			, WriteTextureConfig pwriteTextureConfig = &ComponentT::writeTextureConfig
+			, NeedsMapComponent pneedsMapComponent = &ComponentT::needsMapComponent
+			, CreateMapComponent pcreateMapComponent = &ComponentT::createMapComponent
+			, IsComponentNeeded pisComponentNeeded = &ComponentT::isComponentNeeded
+			, CreateComponentsShader pcreateComponentsShader = &ComponentT::createComponentsShader
+			, std::function< UpdateComponent() > getUpdateComponent = &ComponentT::getUpdateComponent )
+		{
+			return registerPassComponent( ComponentT::TypeName
+				, pcreateParsers
+				, pcreateSections
+				, pcreateMaterialShader
+				, ComponentData{ pzeroBuffer
+					, pfillRemapMask
+					, pwriteTextureConfig
+					, pneedsMapComponent
+					, pcreateMapComponent
+					, pisComponentNeeded
+					, pcreateComponentsShader
+					, getUpdateComponent() } );
+		}
 		/**@}*/
 
 	private:
@@ -864,6 +922,7 @@ namespace castor3d
 		ImporterFileFactoryUPtr m_importerFileFactory;
 		ParticleFactoryUPtr m_particleFactory;
 		PassFactoryUPtr m_passFactory;
+		PassComponentRegisterUPtr m_passComponents;
 		castor::CpuInformations m_cpuInformations;
 		PassTypeID m_passesType{ 0u };
 		bool m_enableValidation{ false };

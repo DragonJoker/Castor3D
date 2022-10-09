@@ -2,6 +2,7 @@
 
 #include "Castor3D/Config.hpp"
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Material/Pass/Component/PassShaders.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureView.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
@@ -10,7 +11,7 @@
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/RenderTechnique.hpp"
 #include "Castor3D/Shader/Program.hpp"
-#include "Castor3D/Shader/Shaders/GlslUtils.hpp"
+#include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
@@ -121,6 +122,12 @@ namespace castor3d
 		FragmentWriter writer;
 		bool enableTextures = flags.enableTextures();
 
+		shader::Utils utils{ writer };
+		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
+			, flags
+			, ComponentModeFlag::eOpacity | ComponentModeFlag::eGeometry | ComponentModeFlag::eOcclusion
+			, utils };
+
 		C3D_Scene( writer
 			, GlobalBuffersIdx::eScene
 			, RenderPipeline::eBuffers );
@@ -128,6 +135,7 @@ namespace castor3d
 			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::eBuffers );
 		shader::Materials materials{ writer
+			, passShaders
 			, uint32_t( GlobalBuffersIdx::eMaterials )
 			, RenderPipeline::eBuffers };
 		shader::TextureConfigurations textureConfigs{ writer
@@ -153,8 +161,6 @@ namespace castor3d
 		auto velocity = writer.declOutput< Vec2 >( "velocity", 1u );
 		auto nmlOcc = writer.declOutput< Vec4 >( "nmlOcc", 2u, !m_deferred );
 
-		shader::Utils utils{ writer };
-
 		writer.implementMainT< shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer
 				, flags }
 			, FragmentOut{ writer }
@@ -163,24 +169,17 @@ namespace castor3d
 			{
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[in.nodeId - 1u] );
-				shader::GeometryBlendComponents components{ writer
-					, "out"
-					, in.texture0
-					, in.texture1
-					, in.texture2
-					, in.texture3
-					, 1.0_f
-					, normalize( in.normal )
-					, normalize( in.tangent )
-					, normalize( in.bitangent )
-					, in.tangentSpaceViewPosition
-					, in.tangentSpaceFragPosition
-					, { 1.0_f, !m_deferred } };
-				materials.blendMaterials( utils
-					, flags
+				auto material = writer.declLocale( "material"
+					, materials.getMaterial( modelData.getMaterialId() ) );
+				auto components = writer.declLocale( "components"
+					, shader::BlendComponents{ materials
+						, material
+						, in } );
+				materials.blendMaterials( flags
 					, textureConfigs
 					, textureAnims
 					, c3d_maps
+					, material
 					, modelData.getMaterialId()
 					, in.passMultipliers
 					, components );
@@ -189,7 +188,7 @@ namespace castor3d
 					, writer.cast< sdw::Float >( in.nodeId )
 					, 0.0_f );
 				velocity = in.getVelocity();
-				nmlOcc = vec4( components.normal(), components.occlusion() );
+				nmlOcc = vec4( components.normal, components.occlusion );
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

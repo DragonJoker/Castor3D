@@ -35,8 +35,8 @@ namespace castor3d
 		eTangent = 0x004,
 		//! Bitangent coords
 		eBitangent = 0x008,
-		//! Diffuse colour
-		eDiffuse = 0x010,
+		//! Colour
+		eColour = 0x010,
 		//! Texture coordinates
 		eTexCoords = 0x020,
 		//! Bone IDs 0

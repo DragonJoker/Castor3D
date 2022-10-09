@@ -150,6 +150,32 @@ namespace ocean_fft
 				return result;
 			}
 
+			static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache
+				, castor3d::PipelineFlags flags )
+			{
+				auto result = cache.getStruct( ast::type::MemoryLayout::eC
+					, "C3DORFFT_Patch" );
+
+				if ( result->empty() )
+				{
+					result->declMember( "patchWorldPosition"
+						, ast::type::Kind::eVec3F
+						, ast::type::NotArray );
+					result->declMember( "patchLodsGradNormTex"
+						, ast::type::Kind::eVec4F
+						, ast::type::NotArray );
+					result->declMember( "colour"
+						, ast::type::Kind::eVec3F
+						, ast::type::NotArray
+						, flags.enableColours() );
+					result->declMember( "nodeId"
+						, ast::type::Kind::eInt
+						, ast::type::NotArray );
+				}
+
+				return result;
+			}
+
 			sdw::Vec3 patchWorldPosition;
 			sdw::Vec4 patchLods;
 			sdw::Vec3 colour;
@@ -686,7 +712,7 @@ namespace ocean_fft
 			, rdpass::OceanFFTIdx::eOceanUbo
 			, RenderPipeline::eBuffers );
 
-		sdw::PushConstantBuffer pcb{ writer, "DrawData" };
+		sdw::PushConstantBuffer pcb{ writer, "C3D_DrawData", "c3d_drawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
 		pcb.end();
 
@@ -746,7 +772,7 @@ namespace ocean_fft
 			, rdpass::OceanFFTIdx::eOceanUbo
 			, RenderPipeline::eBuffers );
 
-		sdw::PushConstantBuffer pcb{ writer, "DrawData" };
+		sdw::PushConstantBuffer pcb{ writer, "C3D_DrawData", "c3d_drawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
 		pcb.end();
 
@@ -1073,6 +1099,16 @@ namespace ocean_fft
 		shader::Utils utils{ writer };
 		shader::CookTorranceBRDF cookTorrance{ writer, utils };
 		shader::Fog fog{ writer };
+		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
+			, flags
+			, ( ComponentModeFlag::eOpacity
+				| ComponentModeFlag::eColour
+				| ComponentModeFlag::eGeometry
+				| ComponentModeFlag::eOcclusion
+				| ComponentModeFlag::eDiffuseLighting
+				| ComponentModeFlag::eSpecularLighting
+				| ComponentModeFlag::eSpecifics )
+			, utils };
 
 		C3D_Matrix( writer
 			, GlobalBuffersIdx::eMatrix
@@ -1084,6 +1120,7 @@ namespace ocean_fft
 			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::eBuffers );
 		shader::Materials materials{ writer
+			, passShaders
 			, uint32_t( GlobalBuffersIdx::eMaterials )
 			, RenderPipeline::eBuffers };
 		auto index = uint32_t( GlobalBuffersIdx::eCount );
@@ -1119,6 +1156,7 @@ namespace ocean_fft
 			, index++
 			, RenderPipeline::eBuffers );
 		auto lightingModel = shader::LightingModel::createModel( *getEngine()
+			, materials
 			, utils
 			, getScene().getLightingModel()
 			, lightsIndex
@@ -1209,16 +1247,21 @@ namespace ocean_fft
 				auto material = writer.declLocale( "material"
 					, materials.getMaterial( modelData.getMaterialId() ) );
 				auto emissive = writer.declLocale( "emissive"
-					, vec3( material.emissive() ) );
+					, vec3( material.emissive ) );
 				auto worldEye = writer.declLocale( "worldEye"
 					, c3d_sceneData.cameraPosition );
-				auto lightMat = lightingModel->declMaterial( "lightMat" );
-				lightMat->create( in.colour
-					, materials
-					, material );
-				displayDebugData( eMatSpecular, lightMat->specular, 1.0_f );
+				auto surface = writer.declLocale( "surface"
+					, shader::Surface{ in.fragCoord.xyz()
+						, in.viewPosition.xyz()
+						, in.worldPosition.xyz()
+						, finalNormal } );
+				auto components = writer.declLocale( "components"
+					, shader::BlendComponents{ materials
+						, material
+						, surface } );
+				displayDebugData( eMatSpecular, components.specular, 1.0_f );
 
-				IF( writer, material.lighting() != 0_u )
+				IF( writer, material.lighting != 0_u )
 				{
 					// Direct Lighting
 					auto lightDiffuse = writer.declLocale( "lightDiffuse"
@@ -1228,19 +1271,15 @@ namespace ocean_fft
 					auto lightScattering = writer.declLocale( "lightScattering"
 						, vec3( 0.0_f ) );
 					shader::OutputComponents output{ lightDiffuse, lightSpecular, lightScattering };
-					auto surface = writer.declLocale< shader::Surface >( "surface" );
-					surface.create( in.fragCoord.xyz()
-						, in.viewPosition.xyz()
-						, in.worldPosition.xyz()
-						, finalNormal );
-					lightingModel->computeCombined( *lightMat
+					lightingModel->computeCombined( components
 						, c3d_sceneData
 						, *backgroundModel
 						, surface
 						, worldEye
 						, modelData.isShadowReceiver()
 						, output );
-					lightMat->adjustDirectSpecular( lightSpecular );
+					lightingModel->adjustDirectSpecular( components
+						, lightSpecular );
 					displayDebugData( eLightDiffuse, lightDiffuse, 1.0_f );
 					displayDebugData( eLightSpecular, lightSpecular, 1.0_f );
 					displayDebugData( eLightScattering, lightScattering, 1.0_f );
@@ -1258,21 +1297,21 @@ namespace ocean_fft
 						, worldEye
 						, worldToCam
 						, surface
-						, lightMat->getRoughness()
+						, components.roughness
 						, indirectOcclusion
 						, lightIndirectDiffuse.w()
 						, c3d_mapBrdf );
 					displayDebugData( eLightIndirectSpecular, lightIndirectSpecular, 1.0_f );
 					auto indirectAmbient = writer.declLocale( "indirectAmbient"
-						, lightMat->getIndirectAmbient( indirect.computeAmbient( flags.getGlobalIlluminationFlags(), lightIndirectDiffuse.xyz() ) ) );
+						, indirect.computeAmbient( flags.getGlobalIlluminationFlags(), lightIndirectDiffuse.xyz() ) );
 					displayDebugData( eIndirectAmbient, indirectAmbient, 1.0_f );
 					auto indirectDiffuse = writer.declLocale( "indirectDiffuse"
 						, ( hasDiffuseGI
 							? cookTorrance.computeDiffuse( lightIndirectDiffuse.xyz()
 								, c3d_sceneData.cameraPosition
 								, finalNormal
-								, lightMat->specular
-								, lightMat->getMetalness()
+								, components.specular
+								, components.metalness
 								, surface )
 							: vec3( 0.0_f ) ) );
 					displayDebugData( eIndirectDiffuse, indirectDiffuse, 1.0_f );
@@ -1286,18 +1325,18 @@ namespace ocean_fft
 
 
 					// Reflection
-					auto reflected = reflections->computeReflections( *lightMat
+					auto reflected = reflections->computeReflections( components
 						, surface
 						, c3d_sceneData
 						, *backgroundModel
 						, modelData.getEnvMapIndex()
-						, material.hasReflection() );
+						, components.hasReflection );
 					displayDebugData( eRawBackgroundReflection, reflected, 1.0_f );
-					reflected = utils.fresnelSchlick( NdotV, lightMat->specular ) * reflected;
+					reflected = utils.fresnelSchlick( NdotV, components.specular ) * reflected;
 					displayDebugData( eFresnelBackgroundReflection, reflected, 1.0_f );
 					auto ssrResult = writer.declLocale( "ssrResult"
 						, reflections->computeScreenSpace( c3d_matrixData
-							, surface.viewPosition
+							, surface.viewPosition.xyz()
 							, finalNormal
 							, hdrCoords
 							, c3d_oceanData.ssrSettings
@@ -1320,7 +1359,7 @@ namespace ocean_fft
 					auto distortedTexCoord = writer.declLocale( "distortedTexCoord"
 						, fma( vec2( ( finalNormal.xz() + finalNormal.xy() ) * 0.5_f )
 							, vec2( c3d_oceanData.refractionDistortionFactor
-								* utils.saturate( length( scenePosition - surface.worldPosition ) * 0.5_f ) )
+								* utils.saturate( length( scenePosition - surface.worldPosition.xyz() ) * 0.5_f ) )
 							, hdrCoords ) );
 					auto distortedDepth = writer.declLocale( "distortedDepth"
 						, c3d_sceneDepth.sample( distortedTexCoord ) );
@@ -1338,7 +1377,7 @@ namespace ocean_fft
 							, refractionResult ) );
 					displayDebugData( eLightAbsorbtion, lightAbsorbtion, 1.0_f );
 					auto waterTransmission = writer.declLocale( "waterTransmission"
-						, material.transmission() * lightAbsorbtion * ( indirectAmbient + indirectDiffuse ) );
+						, components.transmission * lightAbsorbtion * ( indirectAmbient + indirectDiffuse ) );
 					displayDebugData( eWaterTransmission, waterTransmission, 1.0_f );
 					refractionResult *= waterTransmission;
 					displayDebugData( eRefractionResult, refractionResult, 1.0_f );
@@ -1360,7 +1399,7 @@ namespace ocean_fft
 
 					//Combine all that
 					auto fresnelFactor = writer.declLocale( "fresnelFactor"
-						, vec3( reflections->computeFresnel( *lightMat
+						, vec3( reflections->computeFresnel( components
 							, surface
 							, c3d_sceneData
 							, c3d_oceanData.refractionRatio ) ) );
@@ -1378,7 +1417,7 @@ namespace ocean_fft
 				}
 				ELSE
 				{
-					pxl_colour = vec4( lightMat->albedo, 1.0_f );
+					pxl_colour = vec4( components.colour, 1.0_f );
 				}
 				FI;
 

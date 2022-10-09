@@ -13,8 +13,6 @@ namespace castor3d
 {
 	namespace shader
 	{
-		castor::String const TextureAnimationBufferName = cuT( "C3D_TextureAnimations" );
-
 		struct TextureAnimData
 			: public sdw::StructInstance
 		{

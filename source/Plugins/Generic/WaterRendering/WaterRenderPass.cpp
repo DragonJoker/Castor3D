@@ -551,6 +551,16 @@ namespace water
 		shader::Utils utils{ writer };
 		shader::CookTorranceBRDF cookTorrance{ writer, utils };
 		shader::Fog fog{ writer };
+		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
+			, flags
+			, ( ComponentModeFlag::eOpacity
+				| ComponentModeFlag::eColour
+				| ComponentModeFlag::eGeometry
+				| ComponentModeFlag::eOcclusion
+				| ComponentModeFlag::eDiffuseLighting
+				| ComponentModeFlag::eSpecularLighting
+				| ComponentModeFlag::eSpecifics )
+			, utils };
 
 		C3D_Matrix( writer
 			, GlobalBuffersIdx::eMatrix
@@ -562,6 +572,7 @@ namespace water
 			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::eBuffers );
 		shader::Materials materials{ writer
+			, passShaders
 			, uint32_t( GlobalBuffersIdx::eMaterials )
 			, RenderPipeline::eBuffers };
 		shader::TextureConfigurations textureConfigs{ writer
@@ -599,6 +610,7 @@ namespace water
 			, index++
 			, RenderPipeline::eBuffers );
 		auto lightingModel = shader::LightingModel::createModel( *getEngine()
+			, materials
 			, utils
 			, getScene().getLightingModel()
 			, lightsIndex
@@ -671,16 +683,21 @@ namespace water
 				auto material = writer.declLocale( "material"
 					, materials.getMaterial( modelData.getMaterialId() ) );
 				auto emissive = writer.declLocale( "emissive"
-					, vec3( material.emissive() ) );
+					, vec3( material.emissive ) );
 				auto worldEye = writer.declLocale( "worldEye"
 					, c3d_sceneData.cameraPosition );
-				auto lightMat = lightingModel->declMaterial( "lightMat" );
-				lightMat->create( in.colour
-					, materials
-					, material );
-				displayDebugData( eMatSpecular, lightMat->specular, 1.0_f );
+				auto surface = writer.declLocale( "surface"
+					, shader::Surface{ in.fragCoord.xyz()
+						, in.viewPosition.xyz()
+						, in.worldPosition.xyz()
+						, finalNormal } );
+				auto components = writer.declLocale( "components"
+					, shader::BlendComponents{ materials
+						, material
+						, surface } );
+				displayDebugData( eMatSpecular, components.specular, 1.0_f );
 
-				IF( writer, material.lighting() != 0_u )
+				IF( writer, material.lighting != 0_u )
 				{
 					// Direct Lighting
 					auto lightDiffuse = writer.declLocale( "lightDiffuse"
@@ -690,19 +707,15 @@ namespace water
 					auto lightScattering = writer.declLocale( "lightScattering"
 						, vec3( 0.0_f ) );
 					shader::OutputComponents output{ lightDiffuse, lightSpecular, lightScattering };
-					auto surface = writer.declLocale< shader::Surface >( "surface" );
-					surface.create( in.fragCoord.xyz()
-						, in.viewPosition.xyz()
-						, in.worldPosition.xyz()
-						, finalNormal );
-					lightingModel->computeCombined( *lightMat
+					lightingModel->computeCombined( components
 						, c3d_sceneData
 						, *backgroundModel
 						, surface
 						, worldEye
 						, modelData.isShadowReceiver()
 						, output );
-					lightMat->adjustDirectSpecular( lightSpecular );
+					lightingModel->adjustDirectSpecular( components
+						, lightSpecular );
 					displayDebugData( eLightDiffuse, lightDiffuse, 1.0_f );
 					displayDebugData( eLightSpecular, lightSpecular, 1.0_f );
 					displayDebugData( eLightScattering, lightScattering, 1.0_f );
@@ -729,38 +742,38 @@ namespace water
 					displayDebugData( eLightIndirectDiffuse, lightIndirectDiffuse.xyz(), 1.0_f );
 					auto lightIndirectSpecular = indirect.computeSpecular( flags.getGlobalIlluminationFlags()
 						, worldEye
-						, c3d_sceneData.getPosToCamera( surface.worldPosition )
+						, c3d_sceneData.getPosToCamera( surface.worldPosition.xyz() )
 						, surface
-						, lightMat->getRoughness()
+						, components.roughness
 						, indirectOcclusion
 						, lightIndirectDiffuse.w()
 						, c3d_mapBrdf );
 					displayDebugData( eLightIndirectSpecular, lightIndirectSpecular, 1.0_f );
 					auto indirectAmbient = writer.declLocale( "indirectAmbient"
-						, lightMat->getIndirectAmbient( indirect.computeAmbient( flags.getGlobalIlluminationFlags(), lightIndirectDiffuse.xyz() ) ) );
+						, indirect.computeAmbient( flags.getGlobalIlluminationFlags(), lightIndirectDiffuse.xyz() ) );
 					displayDebugData( eIndirectAmbient, indirectAmbient, 1.0_f );
 					auto indirectDiffuse = writer.declLocale( "indirectDiffuse"
 						, ( hasDiffuseGI
 							? cookTorrance.computeDiffuse( lightIndirectDiffuse.xyz()
 								, c3d_sceneData.cameraPosition
-								, surface.worldNormal
-								, lightMat->specular
-								, lightMat->getMetalness()
+								, surface.normal
+								, components.specular
+								, components.metalness
 								, surface )
 							: vec3( 0.0_f ) ) );
 					displayDebugData( eIndirectDiffuse, indirectDiffuse, 1.0_f );
 
 					// Reflection
-					auto backgroundReflection = reflections->computeReflections( *lightMat
+					auto backgroundReflection = reflections->computeReflections( components
 						, surface
 						, c3d_sceneData
 						, *backgroundModel
 						, modelData.getEnvMapIndex()
-						, material.hasReflection() );
+						, components.hasReflection );
 					displayDebugData( eBackgroundReflection, backgroundReflection, 1.0_f );
 					auto ssrResult = writer.declLocale( "ssrResult"
 						, reflections->computeScreenSpace( c3d_matrixData
-							, surface.viewPosition
+							, surface.viewPosition.xyz()
 							, finalNormal
 							, hdrCoords
 							, c3d_waterData.ssrSettings
@@ -786,7 +799,7 @@ namespace water
 					auto refractionTexCoord = writer.declLocale( "refractionTexCoord"
 						, writer.ternary( distortedPosition.y() < in.worldPosition.y(), distortedTexCoord, hdrCoords ) );
 					auto refractionResult = writer.declLocale( "refractionResult"
-						, c3d_colour.sample( refractionTexCoord ).rgb() * material.transmission() );
+						, c3d_colour.sample( refractionTexCoord ).rgb() * components.transmission );
 					displayDebugData( eRefraction, refractionResult, 1.0_f );
 					//  Retrieve non distorted scene colour.
 					auto sceneDepth = writer.declLocale( "sceneDepth"
@@ -800,7 +813,7 @@ namespace water
 					auto waterSurfacePosition = writer.declLocale( "waterSurfacePosition"
 						, writer.ternary( distortedPosition.y() < in.worldPosition.y(), distortedPosition, scenePosition ) );
 					auto waterTransmission = writer.declLocale( "waterTransmission"
-						, material.transmission().rgb() * ( indirectAmbient + indirectDiffuse ) * lightDiffuse );
+						, components.transmission * ( indirectAmbient + indirectDiffuse ) * lightDiffuse );
 					auto heightFactor = writer.declLocale( "heightFactor"
 						, c3d_waterData.refractionHeightFactor * ( c3d_sceneData.farPlane - c3d_sceneData.nearPlane ) );
 					refractionResult = mix( refractionResult
@@ -817,7 +830,7 @@ namespace water
 
 					//Combine all that
 					auto fresnelFactor = writer.declLocale( "fresnelFactor"
-						, vec3( reflections->computeFresnel( *lightMat
+						, vec3( reflections->computeFresnel( components
 							, surface
 							, c3d_sceneData
 							, c3d_waterData.refractionRatio ) ) );
@@ -837,7 +850,7 @@ namespace water
 				}
 				ELSE
 				{
-					pxl_colour = vec4( lightMat->albedo, 1.0_f );
+					pxl_colour = vec4( components.colour, 1.0_f );
 				}
 				FI;
 

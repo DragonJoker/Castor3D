@@ -1,12 +1,56 @@
-#include "ToonMaterial/ToonPass.hpp"
+#include "ToonMaterial/EdgesComponent.hpp"
 #include "ToonMaterial/Shaders/GlslToonLighting.hpp"
-#include "ToonMaterial/Shaders/GlslToonMaterial.hpp"
+#include "ToonMaterial/Shaders/GlslToonProfile.hpp"
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Cache/MaterialCache.hpp>
 #include <Castor3D/Material/Pass/PassFactory.hpp>
+#include <Castor3D/Material/Pass/PBR/PbrPass.hpp>
+#include <Castor3D/Material/Pass/Phong/BlinnPhongPass.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Shader/ShaderBuffers/PassBuffer.hpp>
+
+namespace toon
+{
+	struct ToonPbrPass
+	{
+		static castor::String const Type;
+
+		static castor3d::PassSPtr create( castor3d::Material & parent )
+		{
+			auto result = castor3d::PbrPass::create( parent );
+			result->createComponent< EdgesComponent >();
+			return result;
+		}
+	};
+	castor::String const ToonPbrPass::Type = cuT( "toon_pbr" );
+
+	struct ToonPhongPass
+	{
+		static castor::String const Type;
+
+		static castor3d::PassSPtr create( castor3d::Material & parent )
+		{
+			auto result = castor3d::PhongPass::create( parent );
+			result->createComponent< EdgesComponent >();
+			return result;
+		}
+	};
+	castor::String const ToonPhongPass::Type = cuT( "toon_phong" );
+
+	struct ToonBlinnPhongPass
+	{
+		static castor::String const Type;
+
+		static castor3d::PassSPtr create( castor3d::Material & parent )
+		{
+			auto result = castor3d::BlinnPhongPass::create( parent );
+			result->createComponent< EdgesComponent >();
+			return result;
+		}
+	};
+	castor::String const ToonBlinnPhongPass::Type = cuT( "toon_blinn_phong" );
+}
 
 extern "C"
 {
@@ -28,30 +72,25 @@ extern "C"
 
 	C3D_ToonMaterial_API void getName( char const ** p_name )
 	{
-		*p_name = toon::ToonPassT< toon::ToonPhongPass >::Name.c_str();
+		*p_name = "toon";
 	}
 
 	C3D_ToonMaterial_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * p_plugin )
 	{
+		engine->registerPassComponent< toon::EdgesComponent >();
 		engine->getPassFactory().registerType( toon::ToonPhongPass::Type
 			, { toon::shader::ToonPhongLightingModel::getName()
 				, toon::ToonPhongPass::create
-				, toon::ToonPhongPass::createParsers()
-				, toon::ToonPhongPass::createSections()
 				, &toon::shader::ToonPhongLightingModel::create
 				, false } );
 		engine->getPassFactory().registerType( toon::ToonBlinnPhongPass::Type
 			, { toon::shader::ToonBlinnPhongLightingModel::getName()
 				, toon::ToonBlinnPhongPass::create
-				, toon::ToonBlinnPhongPass::createParsers()
-				, toon::ToonBlinnPhongPass::createSections()
 				, &toon::shader::ToonBlinnPhongLightingModel::create
 				, false } );
 		engine->getPassFactory().registerType( toon::ToonPbrPass::Type
 			, { toon::shader::ToonPbrLightingModel::getName()
 				, toon::ToonPbrPass::create
-				, toon::ToonPbrPass::createParsers()
-				, toon::ToonPbrPass::createSections()
 				, &toon::shader::ToonPbrLightingModel::create
 				, true } );
 		engine->registerSpecificsBuffer( toon::shader::ToonProfile::getName()
@@ -66,5 +105,6 @@ extern "C"
 		engine->getPassFactory().unregisterType( toon::ToonPbrPass::Type );
 		engine->getPassFactory().unregisterType( toon::ToonBlinnPhongPass::Type );
 		engine->getPassFactory().unregisterType( toon::ToonPhongPass::Type );
+		engine->unregisterPassComponent( toon::EdgesComponent::TypeName );
 	}
 }

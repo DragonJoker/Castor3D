@@ -1,6 +1,7 @@
 #include "Castor3D/Scene/Background/Shaders/GlslIblBackground.hpp"
 
 #include "Castor3D/Render/RenderPipeline.hpp"
+#include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
@@ -43,7 +44,7 @@ namespace castor3d::shader
 
 	sdw::RetVec3 IblBackgroundModel::computeReflections( sdw::Vec3 const & pwsIncident
 		, sdw::Vec3 const & pwsNormal
-		, LightMaterial const & pmaterial
+		, BlendComponents & components
 		, sdw::CombinedImage2DRg32 const & pbrdfMap )
 	{
 		if ( !m_computeReflections )
@@ -108,10 +109,10 @@ namespace castor3d::shader
 		auto prefilteredEnvMap = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapPrefiltered" );
 		return m_computeReflections( pwsIncident
 			, pwsNormal
-			, pmaterial.albedo
-			, pmaterial.specular
-			, pmaterial.getMetalness()
-			, pmaterial.getRoughness()
+			, components.colour
+			, components.specular
+			, components.metalness
+			, components.roughness
 			, irradianceMap
 			, prefilteredEnvMap
 			, pbrdfMap );
@@ -121,7 +122,7 @@ namespace castor3d::shader
 		, sdw::Vec3 const & wsNormal
 		, sdw::Float const & refractionRatio
 		, sdw::Vec3 const & transmission
-		, LightMaterial const & material )
+		, BlendComponents & components )
 	{
 		auto prefiltered = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapPrefiltered" );
 		return doComputeRefractions( wsIncident
@@ -129,14 +130,15 @@ namespace castor3d::shader
 			, prefiltered
 			, refractionRatio
 			, transmission
-			, material.albedo );
+			, components.colour
+			, components.roughness );
 	}
 
 	sdw::RetVoid IblBackgroundModel::mergeReflRefr( sdw::Vec3 const & pwsIncident
 		, sdw::Vec3 const & pwsNormal
 		, sdw::Float const & prefractionRatio
 		, sdw::Vec3 const & ptransmission
-		, LightMaterial const & pmaterial
+		, BlendComponents & components
 		, sdw::Vec3 & preflection
 		, sdw::Vec3 & prefraction )
 	{
@@ -170,7 +172,8 @@ namespace castor3d::shader
 						, prefiltered
 						, refractionRatio
 						, transmission
-						, albedo );
+						, albedo
+						, roughness );
 					reflection = mix( vec3( 0.0_f )
 						, reflection
 						, vec3( fresnel ) );
@@ -195,8 +198,8 @@ namespace castor3d::shader
 			, prefiltered
 			, prefractionRatio
 			, ptransmission
-			, pmaterial.albedo
-			, pmaterial.getRoughness()
+			, components.colour
+			, components.roughness
 			, preflection
 			, prefraction );
 	}
@@ -206,7 +209,8 @@ namespace castor3d::shader
 		, sdw::CombinedImageCubeRgba32 const & pprefiltered
 		, sdw::Float const & prefractionRatio
 		, sdw::Vec3 const & ptransmission
-		, sdw::Vec3 const & palbedo )
+		, sdw::Vec3 const & palbedo
+		, sdw::Float const & proughness )
 	{
 		if ( !m_computeRefractions )
 		{
@@ -216,11 +220,13 @@ namespace castor3d::shader
 					, sdw::CombinedImageCubeRgba32 const & prefiltered
 					, sdw::Float const & refractionRatio
 					, sdw::Vec3 const & transmission
-					, sdw::Vec3 const & albedo )
+					, sdw::Vec3 const & albedo
+					, sdw::Float const & roughness )
 				{
 					auto refracted = m_writer.declLocale( "refracted"
-						, m_utils.negateTopDownToBottomUp( refract( wsIncident, wsNormal, refractionRatio ) ) );
-					m_writer.returnStmt( prefiltered.sample( refracted ).xyz()
+						, refract( wsIncident, wsNormal, refractionRatio ) );
+					refracted.y() = -refracted.y();
+					m_writer.returnStmt( prefiltered.lod( refracted, roughness * sdw::Float( float( MaxIblReflectionLod ) ) ).rgb()
 						* transmission
 						* albedo );
 				}
@@ -229,7 +235,8 @@ namespace castor3d::shader
 				, sdw::InCombinedImageCubeRgba32{ m_writer, "prefiltered" }
 				, sdw::InFloat{ m_writer, "refractionRatio" }
 				, sdw::InVec3{ m_writer, "transmission" }
-				, sdw::InVec3{ m_writer, "albedo" } );
+				, sdw::InVec3{ m_writer, "albedo" }
+				, sdw::InFloat{ m_writer, "roughness" } );
 		}
 
 		return m_computeRefractions( pwsIncident
@@ -237,6 +244,7 @@ namespace castor3d::shader
 			, pprefiltered
 			, prefractionRatio
 			, ptransmission
-			, palbedo );
+			, palbedo
+			, proughness );
 	}
 }

@@ -4,6 +4,7 @@
 #include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Buffer/UniformBuffer.hpp"
+#include "Castor3D/Material/Pass/Component/PassShaders.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
@@ -20,6 +21,7 @@
 #include "Castor3D/Shader/ShaderBuffers/SssProfileBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
+#include "Castor3D/Shader/Shaders/GlslSssProfile.hpp"
 #include "Castor3D/Shader/Shaders/GlslSssTransmittance.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
@@ -94,13 +96,19 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static ShaderPtr getBlurProgram( bool isVertic )
+		static ShaderPtr getBlurProgram( Engine const & engine
+			, bool isVertic )
 		{
 			using namespace sdw;
 			FragmentWriter writer;
 
 			// Shader inputs
-			shader::Materials materials{ writer, BlurMaterialsUboId, 0u };
+			shader::Utils utils{ writer };
+			shader::PassShaders passShaders{ engine.getPassComponentsRegister()
+				, TextureFlag::eNone
+				, ComponentModeFlag::eDiffuseLighting
+				, utils };
+			shader::Materials materials{ writer, passShaders, BlurMaterialsUboId, 0u };
 			shader::SssProfiles sssProfiles{ writer, BlurSssProfilesUboId, 0u };
 			C3D_ModelsData( writer, BlurModelsUboId, 0u );
 			C3D_GpInfo( writer, BlurGpInfoUboId, 0u );
@@ -113,8 +121,6 @@ namespace castor3d
 			auto c3d_mapLightDiffuse = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapLightDiffuse", BlurLgtDiffImgId, 0u );
 
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
-
-			shader::Utils utils{ writer };
 
 			// Shader outputs
 			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0 );
@@ -138,15 +144,16 @@ namespace castor3d
 					auto materialId = writer.declLocale( "materialId"
 						, modelData.getMaterialId() );
 					auto material = materials.getMaterial( materialId );
+					auto sssProfileIndex = material.getMember< sdw::UInt >( "sssProfileIndex", true );
 
-					IF( writer, material.sssProfileIndex() == 0_u )
+					IF( writer, sssProfileIndex == 0_u )
 					{
 						writer.demote();
 					}
 					FI;
 
 					auto sssProfile = writer.declLocale( "sssProfile"
-						, sssProfiles.getProfile( material.sssProfileIndex() ) );
+						, sssProfiles.getProfile( sssProfileIndex ) );
 
 					// Fetch color and linear depth for current pixel:
 					auto colorM = writer.declLocale( "colorM"
@@ -220,13 +227,18 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static ShaderPtr getCombineProgram()
+		static ShaderPtr getCombineProgram( Engine const & engine )
 		{
 			using namespace sdw;
 			FragmentWriter writer;
 
 			// Shader inputs
-			shader::Materials materials{ writer, CombMaterialsUboId, 0u };
+			shader::Utils utils{ writer };
+			shader::PassShaders passShaders{ engine.getPassComponentsRegister()
+				, TextureFlag::eNone
+				, ComponentModeFlag::eDiffuseLighting
+				, utils };
+			shader::Materials materials{ writer, passShaders, CombMaterialsUboId, 0u };
 			C3D_ModelsData( writer, CombModelsUboId, 0u );
 
 			auto c3d_mapDepthObj = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapDepthObj", CombDepthObjImgId, 0u );
@@ -240,8 +252,6 @@ namespace castor3d
 
 			// Shader outputs
 			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0 );
-
-			shader::Utils utils{ writer };
 
 			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
 				, FragmentOut out )
@@ -264,8 +274,9 @@ namespace castor3d
 					auto materialId = writer.declLocale( "materialId"
 						, modelData.getMaterialId() );
 					auto material = materials.getMaterial( materialId );
+					auto sssProfileIndex = material.getMember< sdw::UInt >( "sssProfileIndex", true );
 
-					IF( writer, material.sssProfileIndex() == 0_u )
+					IF( writer, sssProfileIndex == 0_u )
 					{
 						pxl_fragColor = original;
 					}
@@ -378,15 +389,15 @@ namespace castor3d
 		, m_blurCfgUbo{ m_device.uboPool->getBuffer< BlurConfiguration >( 0u ) }
 		, m_blurWgtUbo{ m_device.uboPool->getBuffer< BlurWeights >( 0u ) }
 		, m_blurHorizVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SSSBlurX", sssss::getVertexProgram() }
-		, m_blurHorizPixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SSSBlurX", sssss::getBlurProgram( false ) }
+		, m_blurHorizPixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SSSBlurX", sssss::getBlurProgram( *device.renderSystem.getEngine(), false ) }
 		, m_blurXShader{ makeShaderState( m_device, m_blurHorizVertexShader )
 			, makeShaderState( m_device, m_blurHorizPixelShader ) }
 		, m_blurVerticVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SSSBlurY", sssss::getVertexProgram() }
-		, m_blurVerticPixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SSSBlurY", sssss::getBlurProgram( true ) }
+		, m_blurVerticPixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SSSBlurY", sssss::getBlurProgram( *device.renderSystem.getEngine(), true ) }
 		, m_blurYShader{ makeShaderState( m_device, m_blurVerticVertexShader )
 			, makeShaderState( m_device, m_blurVerticPixelShader ) }
 		, m_combineVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SSSCombine", sssss::getVertexProgram() }
-		, m_combinePixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SSSCombine", sssss::getCombineProgram() }
+		, m_combinePixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SSSCombine", sssss::getCombineProgram( *device.renderSystem.getEngine() ) }
 		, m_combineShader{ makeShaderState( m_device, m_combineVertexShader )
 			, makeShaderState( m_device, m_combinePixelShader ) }
 		, m_lastPass{ &previousPass }

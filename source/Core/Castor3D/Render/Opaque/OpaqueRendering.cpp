@@ -293,7 +293,7 @@ namespace castor3d
 		if ( m_opaquePassResult )
 		{
 			m_opaquePassResult->create();
-			return ( *m_opaquePassResult )[DsTexture::eColRgh];
+			return ( *m_opaquePassResult )[DsTexture::eColMtl];
 		}
 
 		return getOwner()->getResult();
@@ -371,9 +371,9 @@ namespace castor3d
 				, uint32_t( m_pixelsXY->getBuffer().getSize() ) );
 			result.addOutputStorageView( opaquePassResult[DsTexture::eNmlOcc].targetViewId
 				, index++ );
-			result.addOutputStorageView( opaquePassResult[DsTexture::eColRgh].targetViewId
+			result.addOutputStorageView( opaquePassResult[DsTexture::eColMtl].targetViewId
 				, index++ );
-			result.addOutputStorageView( opaquePassResult[DsTexture::eSpcMtl].targetViewId
+			result.addOutputStorageView( opaquePassResult[DsTexture::eSpcRgh].targetViewId
 				, index++ );
 			result.addOutputStorageView( opaquePassResult[DsTexture::eEmsTrn].targetViewId
 				, index++ );
@@ -382,10 +382,10 @@ namespace castor3d
 		{
 			result.addOutputColourView( opaquePassResult[DsTexture::eNmlOcc].targetViewId
 				, getClearValue( DsTexture::eNmlOcc ) );
-			result.addOutputColourView( opaquePassResult[DsTexture::eColRgh].targetViewId
-				, getClearValue( DsTexture::eColRgh ) );
-			result.addOutputColourView( opaquePassResult[DsTexture::eSpcMtl].targetViewId
-				, getClearValue( DsTexture::eSpcMtl ) );
+			result.addOutputColourView( opaquePassResult[DsTexture::eColMtl].targetViewId
+				, getClearValue( DsTexture::eColMtl ) );
+			result.addOutputColourView( opaquePassResult[DsTexture::eSpcRgh].targetViewId
+				, getClearValue( DsTexture::eSpcRgh ) );
 			result.addOutputColourView( opaquePassResult[DsTexture::eEmsTrn].targetViewId
 				, getClearValue( DsTexture::eEmsTrn ) );
 		}
@@ -486,10 +486,10 @@ namespace castor3d
 		result.addInOutDepthStencilView( getOwner()->getDepth().targetViewId );
 		result.addOutputColourView( opaquePassResult[DsTexture::eNmlOcc].targetViewId
 			, getClearValue( DsTexture::eNmlOcc ) );
-		result.addOutputColourView( opaquePassResult[DsTexture::eColRgh].targetViewId
-			, getClearValue( DsTexture::eColRgh ) );
-		result.addOutputColourView( opaquePassResult[DsTexture::eSpcMtl].targetViewId
-			, getClearValue( DsTexture::eSpcMtl ) );
+		result.addOutputColourView( opaquePassResult[DsTexture::eColMtl].targetViewId
+			, getClearValue( DsTexture::eColMtl ) );
+		result.addOutputColourView( opaquePassResult[DsTexture::eSpcRgh].targetViewId
+			, getClearValue( DsTexture::eSpcRgh ) );
 		result.addOutputColourView( opaquePassResult[DsTexture::eEmsTrn].targetViewId
 			, getClearValue( DsTexture::eEmsTrn ) );
 

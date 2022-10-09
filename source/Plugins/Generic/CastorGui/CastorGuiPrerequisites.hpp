@@ -254,20 +254,20 @@ namespace CastorGui
 	 *\param[in]	pass	The pass.
 	 *\param[in]	colour	The material colour.
 	 */
-	void setMaterialColour( castor3d::Pass & pass, castor::RgbColour const & colour );
+	void setMaterialColour( castor3d::Pass & pass, castor::HdrRgbColour const & colour );
 
 	/** Retrieves the pass colour.
 	 *\param[in]	pass	The pass.
 	 *\return		The material colour.
 	 */
-	castor::RgbColour const & getMaterialColour( castor3d::Pass const & pass );
+	castor::HdrRgbColour const & getMaterialColour( castor3d::Pass const & pass );
 	/** Creates a colour material.
 	 *\param[in]	engine	The engine.
 	 *\param[in]	p_name		The material name.
 	 *\param[in]	p_colour	The material colour.
 	 *\return		The created material.
 	*/
-	castor3d::MaterialRPtr createMaterial( castor3d::Engine & engine, castor::String const & p_name, castor::RgbColour const & p_colour );
+	castor3d::MaterialRPtr createMaterial( castor3d::Engine & engine, castor::String const & p_name, castor::HdrRgbColour const & p_colour );
 
 	/** Creates a texture material.
 	 *\param[in]	engine	The engine.

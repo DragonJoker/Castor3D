@@ -9,6 +9,7 @@
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
+#include "Castor3D/Material/Pass/Component/PassShaders.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Render/Picking.hpp"
@@ -140,12 +141,17 @@ namespace castor3d
 		bool enableTextures = flags.enableTextures();
 
 		shader::Utils utils{ writer };
+		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
+			, TextureFlag::eNone
+			, ComponentModeFlag::eOpacity
+			, utils };
 
 		// UBOs
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::eBuffers );
 		shader::Materials materials{ writer
+			, passShaders
 			, uint32_t( GlobalBuffersIdx::eMaterials )
 			, RenderPipeline::eBuffers };
 		shader::TextureConfigurations textureConfigs{ writer
@@ -177,15 +183,17 @@ namespace castor3d
 			{
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[in.nodeId - 1u] );
-				shader::OpacityBlendComponents components{ writer
-					, "out"
-					, in.texture0
-					, 1.0_f };
-				materials.blendMaterials( utils
-					, flags
+				auto material = writer.declLocale( "material"
+					, materials.getMaterial( modelData.getMaterialId() ) );
+				auto components = writer.declLocale( "components"
+					, shader::BlendComponents{ materials
+						, material
+						, in } );
+				materials.blendMaterials( flags
 					, textureConfigs
 					, textureAnims
 					, c3d_maps
+					, material
 					, modelData.getMaterialId()
 					, in.passMultipliers
 					, components );

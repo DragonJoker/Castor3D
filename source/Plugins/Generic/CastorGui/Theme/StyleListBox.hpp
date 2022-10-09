@@ -58,7 +58,7 @@ namespace CastorGui
 		}
 
 	private:
-		castor::RgbColour doGetHighlightedColour( castor::RgbColour colour )
+		castor::HdrRgbColour doGetHighlightedColour( castor::HdrRgbColour colour )
 		{
 			colour.red() = std::min( 1.0f, colour.red() / 2.0f );
 			colour.green() = std::min( 1.0f, colour.green() / 2.0f );

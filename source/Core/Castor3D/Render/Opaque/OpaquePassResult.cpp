@@ -15,14 +15,19 @@ namespace castor3d
 		return cuT( "c3d_map" ) + getTexName( texture );
 	}
 
+	castor::String getImageName( DsTexture texture )
+	{
+		return cuT( "c3d_img" ) + getTexName( texture );
+	}
+
 	castor::String getTexName( DsTexture texture )
 	{
 		static std::array< castor::String, size_t( DsTexture::eCount ) > Values
 		{
 			{
 				cuT( "NmlOcc" ),
-				cuT( "ColRgh" ),
-				cuT( "SpcMtl" ),
+				cuT( "ColMtl" ),
+				cuT( "SpcRgh" ),
 				cuT( "EmsTrn" ),
 			}
 		};

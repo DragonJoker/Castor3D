@@ -5,6 +5,7 @@
 #include "Castor3D/Buffer/PoolUniformBuffer.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Material/Pass/PassFactory.hpp"
+#include "Castor3D/Material/Pass/Component/PassShaders.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureView.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
@@ -19,6 +20,7 @@
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslBackground.hpp"
+#include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslCookTorranceBRDF.hpp"
 #include "Castor3D/Shader/Shaders/GlslFog.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
@@ -118,8 +120,8 @@ namespace castor3d
 			eHdrConfig,
 			eDepthObj,
 			eNmlOcc,
-			eColRgh,
-			eSpcMtl,
+			eColMtl,
+			eSpcRgh,
 			eEmsTrn,
 			eSsao,
 			eBrdf,
@@ -142,8 +144,20 @@ namespace castor3d
 			using namespace sdw;
 			FragmentWriter writer;
 
+			shader::Utils utils{ writer };
+			shader::PassShaders passShaders{ renderSystem.getEngine()->getPassComponentsRegister()
+				, TextureFlag::eNone
+				, ( ComponentModeFlag::eColour
+					| ComponentModeFlag::eGeometry
+					| ComponentModeFlag::eDiffuseLighting
+					| ComponentModeFlag::eSpecularLighting
+					| ComponentModeFlag::eOcclusion
+					| ComponentModeFlag::eSpecifics )
+				, utils };
+
 			// Shader inputs
 			shader::Materials materials{ writer
+				, passShaders
 				, uint32_t( ResolveBind::eMaterials )
 				, 0u };
 			C3D_ModelsData( writer, ResolveBind::eModels, 0u );
@@ -153,8 +167,8 @@ namespace castor3d
 
 			auto c3d_mapDepthObj = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapDepthObj", uint32_t( ResolveBind::eDepthObj ), 0u );
 			auto c3d_mapNmlOcc = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eNmlOcc ), uint32_t( ResolveBind::eNmlOcc ), 0u );
-			auto c3d_mapColRgh = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eColRgh ), uint32_t( ResolveBind::eColRgh ), 0u );
-			auto c3d_mapSpcMtl = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eSpcMtl ), uint32_t( ResolveBind::eSpcMtl ), 0u );
+			auto c3d_mapColMtl = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eColMtl ), uint32_t( ResolveBind::eColMtl ), 0u );
+			auto c3d_mapSpcRgh = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eSpcRgh ), uint32_t( ResolveBind::eSpcRgh ), 0u );
 			auto c3d_mapEmsTrn = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eEmsTrn ), uint32_t( ResolveBind::eEmsTrn ), 0u );
 			auto c3d_mapSsao = writer.declCombinedImg< FImg2DRg32 >( "c3d_mapSsao", uint32_t( ResolveBind::eSsao ), 0u, config.hasSsao );
 			auto c3d_mapBrdf = writer.declCombinedImg< FImg2DRg32 >( "c3d_mapBrdf", uint32_t( ResolveBind::eBrdf ), 0u );
@@ -166,10 +180,10 @@ namespace castor3d
 
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
-			shader::Utils utils{ writer };
 			shader::CookTorranceBRDF cookTorrance{ writer, utils };
 
 			auto lightingModel = utils.createLightingModel( *renderSystem.getEngine()
+				, materials
 				, shader::getLightingModelName( *renderSystem.getEngine(), passType )
 				, {}
 				, nullptr
@@ -210,41 +224,42 @@ namespace castor3d
 						, materials.getMaterial( materialId ) );
 					auto nmlOcc = writer.declLocale( "nmlOcc"
 						, c3d_mapNmlOcc.lod( vtx_texture, 0.0_f ) );
-					auto colRgh = writer.declLocale( "colRgh"
-						, c3d_mapColRgh.lod( vtx_texture, 0.0_f ) );
+					auto colMtl = writer.declLocale( "colMtl"
+						, c3d_mapColMtl.lod( vtx_texture, 0.0_f ) );
 					auto envMapIndex = writer.declLocale( "envMapIndex"
 						, modelData.getEnvMapIndex() );
 					auto depth = writer.declLocale( "depth"
 						, depthObj.x() );
 					auto albedo = writer.declLocale( "albedo"
-						, colRgh.rgb() );
-					auto surface = writer.declLocale< shader::Surface >( "surface" );
-					surface.create( vec3( in.fragCoord.xy(), depth )
-						, vec3( 0.0_f )
-						, c3d_gpInfoData.projToWorld( utils, vtx_texture, depth )
-						, nmlOcc.rgb()
-						, vec3( vtx_texture, 0.0_f ) );
+						, colMtl.rgb() );
+					auto surface = writer.declLocale( "surface"
+						, shader::Surface{ vec3( in.fragCoord.xy(), depth )
+							, vec3( 0.0_f )
+							, c3d_gpInfoData.projToWorld( utils, vtx_texture, depth )
+							, nmlOcc.rgb()
+							, vec3( vtx_texture, 0.0_f ) } );
 
-					IF( writer, material.lighting() != 0_u )
+					IF( writer, material.lighting != 0_u )
 					{
-						auto spcMtl = writer.declLocale( "spcMtl"
-							, c3d_mapSpcMtl.lod( vtx_texture, 0.0_f ) );
+						auto spcRgh = writer.declLocale( "spcRgh"
+							, c3d_mapSpcRgh.lod( vtx_texture, 0.0_f ) );
 						auto emsTrn = writer.declLocale( "emsTrn"
 							, c3d_mapEmsTrn.lod( vtx_texture, 0.0_f ) );
 
 						auto occlusion = writer.declLocale( "occlusion"
-							, nmlOcc.w() );
+							, ( config.hasSsao
+								? nmlOcc.w() * c3d_mapSsao.lod( vtx_texture, 0.0_f ).r()
+								: nmlOcc.w() ) );
 						auto emissive = writer.declLocale( "emissive"
 							, emsTrn.xyz() );
-						auto lightMat = lightingModel->declMaterial( "lightMat" );
-						lightMat->create( albedo
-							, spcMtl
-							, colRgh
-							, materials
-							, material );
+						materials.fill( albedo, spcRgh, colMtl, material );
+						auto components = writer.declLocale( "components"
+							, shader::BlendComponents{ materials
+								, material
+								, surface } );
 
-						auto ambient = writer.declLocale( "ambient"
-							, lightMat->getAmbient( c3d_sceneData.ambientLight ) );
+						auto directAmbient = writer.declLocale( "directAmbient"
+							, c3d_sceneData.ambientLight );
 						auto lightDiffuse = writer.declLocale( "lightDiffuse"
 							, c3d_mapLightDiffuse.lod( vtx_texture, 0.0_f ).xyz() );
 						auto lightSpecular = writer.declLocale( "lightSpecular"
@@ -257,52 +272,46 @@ namespace castor3d
 						auto lightIndirectSpecular = writer.declLocale( "lightIndirectSpecular"
 							, c3d_mapLightIndirectSpecular.lod( vtx_texture, 0.0_f ).rgb()
 							, config.hasSpecularGi );
-						lightMat->adjustDirectSpecular( lightSpecular );
-
-						if ( config.hasSsao )
-						{
-							occlusion *= c3d_mapSsao.lod( vtx_texture, 0.0_f ).r();
-						}
 
 						auto reflected = writer.declLocale( "reflected"
 							, vec3( 0.0_f ) );
 						auto refracted = writer.declLocale( "refracted"
 							, vec3( 0.0_f ) );
-						reflections->computeCombined( *lightMat
+						reflections->computeCombined( components
 							, surface
 							, c3d_sceneData
 							, *backgroundModel
 							, envMapIndex
-							, material.hasReflection()
-							, material.hasRefraction()
-							, material.refractionRatio()
-							, material.transmission()
-							, ambient
+							, components.hasReflection
+							, components.hasRefraction
+							, components.refractionRatio
+							, components.transmission
+							, directAmbient
 							, reflected
 							, refracted );
 						auto indirectAmbient = writer.declLocale( "indirectAmbient"
-							, lightMat->getIndirectAmbient( config.hasDiffuseGi ? lightIndirectDiffuse : vec3( 1.0_f ) ) );
+							, config.hasDiffuseGi ? lightIndirectDiffuse : vec3( 1.0_f ) );
 						auto indirectDiffuse = writer.declLocale( "indirectDiffuse"
 							, ( config.hasDiffuseGi
 								? cookTorrance.computeDiffuse( lightIndirectDiffuse
 									, c3d_sceneData.cameraPosition
-									, surface.worldNormal
-									, lightMat->specular
-									, lightMat->getMetalness()
+									, components.normal
+									, components.specular
+									, components.metalness
 									, surface )
 								: vec3( 0.0_f ) ) );
-						pxl_fragColor = vec4( lightingModel->combine( lightDiffuse
+						pxl_fragColor = vec4( lightingModel->combine( components
+								, lightDiffuse
 								, indirectDiffuse
 								, lightSpecular
 								, lightScattering
 								, config.hasSpecularGi ? lightIndirectSpecular : vec3( 0.0_f )
-								, ambient
+								, directAmbient
 								, indirectAmbient
 								, occlusion
 								, emissive
 								, reflected
-								, refracted
-								, lightMat->albedo )
+								, refracted )
 							, 1.0_f );
 					}
 					ELSE
@@ -313,12 +322,13 @@ namespace castor3d
 
 					IF( writer, c3d_sceneData.fogType != UInt( uint32_t( FogType::eDisabled ) ) )
 					{
-						surface.viewPosition = c3d_gpInfoData.projToView( utils
-							, vtx_texture
-							, depth );
+						surface.viewPosition = vec4( c3d_gpInfoData.projToView( utils
+								, vtx_texture
+								, depth )
+							, 1.0_f );
 						pxl_fragColor = fog.apply( c3d_sceneData.getBackgroundColour( c3d_hdrConfigData )
 							, pxl_fragColor
-							, surface.worldPosition
+							, surface.worldPosition.xyz()
 							, c3d_sceneData );
 					}
 					FI;
@@ -437,10 +447,10 @@ namespace castor3d
 			, uint32_t( dropqrslv::ResolveBind::eDepthObj ) );
 		pass.addSampledView( m_opaquePassResult[DsTexture::eNmlOcc].sampledViewId
 			, uint32_t( dropqrslv::ResolveBind::eNmlOcc ) );
-		pass.addSampledView( m_opaquePassResult[DsTexture::eColRgh].sampledViewId
-			, uint32_t( dropqrslv::ResolveBind::eColRgh ) );
-		pass.addSampledView( m_opaquePassResult[DsTexture::eSpcMtl].sampledViewId
-			, uint32_t( dropqrslv::ResolveBind::eSpcMtl ) );
+		pass.addSampledView( m_opaquePassResult[DsTexture::eColMtl].sampledViewId
+			, uint32_t( dropqrslv::ResolveBind::eColMtl ) );
+		pass.addSampledView( m_opaquePassResult[DsTexture::eSpcRgh].sampledViewId
+			, uint32_t( dropqrslv::ResolveBind::eSpcRgh ) );
 		pass.addSampledView( m_opaquePassResult[DsTexture::eEmsTrn].sampledViewId
 			, uint32_t( dropqrslv::ResolveBind::eEmsTrn ) );
 		pass.addSampledView( m_ssaoResult.sampledViewId

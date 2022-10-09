@@ -412,13 +412,13 @@ namespace castor3d
 					, c3d_inNormal[index] );
 				auto tangent = writer.declLocale( "tangent"
 					, c3d_inTangent[index] );
-				auto texcoord0 = writer.declLocale( "texcoord0"
+				auto texcoord0 = writer.declLocale( "texture0"
 					, c3d_inTexcoord0[index].xyz() );
-				auto texcoord1 = writer.declLocale( "texcoord1"
+				auto texcoord1 = writer.declLocale( "texture1"
 					, c3d_inTexcoord1[index].xyz() );
-				auto texcoord2 = writer.declLocale( "texcoord2"
+				auto texcoord2 = writer.declLocale( "texture2"
 					, c3d_inTexcoord2[index].xyz() );
-				auto texcoord3 = writer.declLocale( "texcoord3"
+				auto texcoord3 = writer.declLocale( "texture3"
 					, c3d_inTexcoord3[index].xyz() );
 				auto colour = writer.declLocale( "colour"
 					, c3d_inColour[index].xyz() );

@@ -15,42 +15,144 @@ See LICENSE file in root folder
 
 namespace castor3d::shader
 {
-	template< ast::var::Flag FlagT >
-	struct SurfaceT
+	struct SurfaceBase
 		: public sdw::StructInstance
 	{
-		SurfaceT( sdw::ShaderWriter & writer
-			, ast::expr::ExprPtr expr
+		C3D_API SurfaceBase( sdw::ShaderWriter & writer
+			, sdw::expr::ExprPtr expr
 			, bool enabled );
-		SDW_DeclStructInstance( , SurfaceT );
 
-		void create( sdw::Vec3 clip
-			, sdw::Vec3 view
-			, sdw::Vec3 world
+		sdw::Vec3 clipPosition;
+		sdw::Vec4 viewPosition;
+		sdw::Vec4 worldPosition;
+		sdw::Vec3 normal;
+
+	protected:
+		C3D_API static void fillType( sdw::type::BaseStruct & type );
+		C3D_API static void fillIOType( sdw::type::IOStruct & type
+			, PipelineFlags const & flags
+			, uint32_t & index );
+		C3D_API static void fillType( sdw::type::BaseStruct & type
+			, PipelineFlags const & flags );
+		C3D_API static void fillInit( sdw::expr::ExprList & init
+			, sdw::Vec3 clip
+			, sdw::Vec4 view
+			, sdw::Vec4 world
 			, sdw::Vec3 normal );
-		void create( sdw::Vec3 clip
+		C3D_API static void fillInit( sdw::expr::ExprList & init
+			, PipelineFlags const & flags
+			, sdw::Vec3 clip
+			, sdw::Vec4 view
+			, sdw::Vec4 world
+			, sdw::Vec3 normal );
+	};
+
+	struct Surface
+		: public SurfaceBase
+	{
+		C3D_API Surface( sdw::ShaderWriter & writer
+			, sdw::expr::ExprPtr expr
+			, bool enabled );
+		C3D_API Surface( sdw::Vec3 clip
+			, sdw::Vec4 view
+			, sdw::Vec4 world
+			, sdw::Vec3 normal
+			, sdw::Vec3 texCoord );
+		C3D_API Surface( sdw::Vec3 clip
 			, sdw::Vec3 view
 			, sdw::Vec3 world
 			, sdw::Vec3 normal
 			, sdw::Vec3 texCoord );
-		void create( sdw::Vec3 world
+		C3D_API Surface( sdw::Vec3 clip
+			, sdw::Vec4 view
+			, sdw::Vec4 world
 			, sdw::Vec3 normal );
+		C3D_API Surface( sdw::Vec3 clip
+			, sdw::Vec3 view
+			, sdw::Vec3 world
+			, sdw::Vec3 normal );
+		C3D_API Surface( sdw::Vec3 world
+			, sdw::Vec3 normal );
+		SDW_DeclStructInstance( C3D_API, Surface );
 
-		static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
-		static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
+		C3D_API static sdw::type::BaseStructPtr makeType( sdw::type::TypesCache & cache );
+		C3D_API static sdw::type::BaseStructPtr makeType( sdw::type::TypesCache & cache
+			, PipelineFlags const & flags );
 
-		sdw::Vec3 clipPosition;
-		sdw::Vec3 viewPosition;
-		sdw::Vec3 worldPosition;
-		sdw::Vec3 worldNormal;
 		sdw::Vec3 texCoord;
 
-	private:
-		using sdw::StructInstance::getMember;
-		using sdw::StructInstance::getMemberArray;
+	protected:
+		C3D_API static void fillType( sdw::type::BaseStruct & type );
+		C3D_API static void fillType( sdw::type::BaseStruct & type
+			, PipelineFlags const & flags );
+		C3D_API static void fillInit( sdw::expr::ExprList & init
+			, sdw::Vec3 clip
+			, sdw::Vec4 view
+			, sdw::Vec4 world
+			, sdw::Vec3 normal
+			, sdw::Vec3 texCoord );
+		C3D_API static void fillInit( sdw::expr::ExprList & init
+			, PipelineFlags const & flags
+			, sdw::Vec3 clip
+			, sdw::Vec4 view
+			, sdw::Vec4 world
+			, sdw::Vec3 normal
+			, sdw::Vec3 texCoord );
 	};
 
-	template< ast::var::Flag FlagT >
+	struct RasterizerSurfaceBase
+		: public SurfaceBase
+	{
+		C3D_API RasterizerSurfaceBase( sdw::ShaderWriter & writer
+			, sdw::expr::ExprPtr expr
+			, bool enabled );
+
+		// Vertex shader side
+		C3D_API void computeVelocity( MatrixData const & matrixData
+			, sdw::Vec4 & curPos
+			, sdw::Vec4 & prvPos );
+		C3D_API void computeTangentSpace( PipelineFlags const & flags
+			, sdw::Vec3 const & cameraPosition
+			, sdw::Vec3 const & worldPos
+			, sdw::Vec3 const & nml
+			, sdw::Vec3 const & tan );
+		C3D_API void computeTangentSpace( PipelineFlags const & flags
+			, sdw::Vec3 const & cameraPosition
+			, sdw::Vec3 const & worldPos
+			, sdw::Mat3 const & mtx
+			, sdw::Vec3 const & nml
+			, sdw::Vec3 const & tan );
+		C3D_API void computeTangentSpace( PipelineFlags const & flags
+			, sdw::Vec3 const & cameraPosition
+			, sdw::Vec3 const & worldPos
+			, sdw::Vec3 const & nml
+			, sdw::Vec3 const & tan
+			, sdw::Vec3 const & bin );
+
+		// Fragment shader side
+		C3D_API sdw::Vec2 getVelocity()const;
+
+		sdw::Vec4 curPosition;
+		sdw::Vec4 prvPosition;
+		sdw::Vec3 tangentSpaceFragPosition;
+		sdw::Vec3 tangentSpaceViewPosition;
+		sdw::Vec3 tangent;
+		sdw::Vec3 bitangent;
+		sdw::Vec3 colour;
+		sdw::Array< sdw::Vec4 > passMultipliers;
+		sdw::UInt nodeId;
+		sdw::UInt vertexId;
+
+	protected:
+		C3D_API static void fillIOType( sdw::type::IOStruct & type
+			, PipelineFlags const & flags
+			, uint32_t & index );
+		C3D_API static void fillType( sdw::type::BaseStruct & type
+			, PipelineFlags const & flags );
+		C3D_API static void fillType( sdw::type::BaseStruct & type );
+	};
+
+	template< sdw::var::Flag FlagT >
 	struct VertexSurfaceT
 		: public sdw::StructInstance
 	{
@@ -60,9 +162,9 @@ namespace castor3d::shader
 
 		SDW_DeclStructInstance( , VertexSurfaceT );
 
-		static ast::type::IOStructPtr makeIOType( ast::type::TypesCache & cache
+		static sdw::type::IOStructPtr makeIOType( sdw::type::TypesCache & cache
 			, PipelineFlags const & flags );
-		static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
+		static sdw::type::BaseStructPtr makeType( sdw::type::TypesCache & cache );
 
 		// Base
 		sdw::Vec4 position;
@@ -80,67 +182,60 @@ namespace castor3d::shader
 		sdw::UVec4 objectIds;
 	};
 
-	using VertexSurface = VertexSurfaceT< ast::var::Flag::eNone >;
-	Writer_Parameter( VertexSurface );
-
-	template< typename TexcoordT, ast::var::Flag FlagT >
+	template< typename TexcoordT, sdw::var::Flag FlagT >
 	struct RasterizerSurfaceT
-		: public sdw::StructInstance
+		: public RasterizerSurfaceBase
 	{
 	public:
 		RasterizerSurfaceT( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
 			, bool enabled );
+		RasterizerSurfaceT( sdw::Vec3 clip
+			, sdw::Vec3 view
+			, sdw::Vec3 world
+			, sdw::Vec3 normal
+			, TexcoordT texCoord );
+		template< sdw::var::Flag FlagU >
+		RasterizerSurfaceT( RasterizerSurfaceT< TexcoordT, FlagU > const & rhs );
 
 		SDW_DeclStructInstance( , RasterizerSurfaceT );
 
-		static ast::type::IOStructPtr makeIOType( ast::type::TypesCache & cache
+		static sdw::type::IOStructPtr makeIOType( sdw::type::TypesCache & cache
 			, PipelineFlags const & flags );
-		static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
-
-		// Vertex shader side
-		void computeVelocity( MatrixData const & matrixData
-			, sdw::Vec4 & curPos
-			, sdw::Vec4 & prvPos );
-		void computeTangentSpace( PipelineFlags const & flags
-			, sdw::Vec3 const & cameraPosition
-			, sdw::Vec3 const & worldPos
-			, sdw::Vec3 const & nml
-			, sdw::Vec3 const & tan );
-		void computeTangentSpace( PipelineFlags const & flags
-			, sdw::Vec3 const & cameraPosition
-			, sdw::Vec3 const & worldPos
-			, sdw::Mat3 const & mtx
-			, sdw::Vec3 const & nml
-			, sdw::Vec3 const & tan );
-		void computeTangentSpace( PipelineFlags const & flags
-			, sdw::Vec3 const & cameraPosition
-			, sdw::Vec3 const & worldPos
-			, sdw::Vec3 const & nml
-			, sdw::Vec3 const & tan
-			, sdw::Vec3 const & bin );
-
-		// Fragment shader side
-		sdw::Vec2 getVelocity()const;
+		static sdw::type::BaseStructPtr makeType( sdw::type::TypesCache & cache
+			, PipelineFlags const & flags );
+		static sdw::type::BaseStructPtr makeType( sdw::type::TypesCache & cache );
 
 	public:
-		sdw::Vec4 worldPosition;
-		sdw::Vec4 viewPosition;
-		sdw::Vec4 curPosition;
-		sdw::Vec4 prvPosition;
-		sdw::Vec3 tangentSpaceFragPosition;
-		sdw::Vec3 tangentSpaceViewPosition;
-		sdw::Vec3 normal;
-		sdw::Vec3 tangent;
-		sdw::Vec3 bitangent;
 		TexcoordT texture0;
 		TexcoordT texture1;
 		TexcoordT texture2;
 		TexcoordT texture3;
+	};
+
+	template< sdw::var::Flag FlagT >
+	struct VoxelSurfaceT
+		: shader::SurfaceBase
+	{
+		VoxelSurfaceT( sdw::ShaderWriter & writer
+			, sdw::expr::ExprPtr expr
+			, bool enabled = true );
+
+		SDW_DeclStructInstance( , VoxelSurfaceT );
+
+		static sdw::type::IOStructPtr makeIOType( sdw::type::TypesCache & cache
+			, PipelineFlags const & flags );
+		static sdw::type::BaseStructPtr makeType( sdw::type::TypesCache & cache
+			, PipelineFlags const & flags );
+		static sdw::type::BaseStructPtr makeType( sdw::type::TypesCache & cache );
+
+		sdw::Vec3 texture0;
+		sdw::Vec3 texture1;
+		sdw::Vec3 texture2;
+		sdw::Vec3 texture3;
 		sdw::Vec3 colour;
-		sdw::Array< sdw::Vec4 > passMultipliers;
 		sdw::UInt nodeId;
-		sdw::UInt vertexId;
+		sdw::Array< sdw::Vec4 > passMultipliers;
 	};
 }
 

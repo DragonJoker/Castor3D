@@ -40,8 +40,8 @@ namespace castor3d
 		eScene,
 		eDepthObj,
 		eNmlOcc,
-		eColRgh,
-		eSpcMtl,
+		eColMtl,
+		eSpcRgh,
 		eEmsTrn,
 		eCount,
 	};

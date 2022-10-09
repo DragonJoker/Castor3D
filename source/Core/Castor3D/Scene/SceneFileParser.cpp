@@ -3,6 +3,7 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Limits.hpp"
 #include "Castor3D/Material/Pass/PassFactory.hpp"
+#include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
 #include "Castor3D/Render/GlobalIllumination/GlobalIlluminationModule.hpp"
 #include "Castor3D/Scene/SceneFileParser_Parsers.hpp"
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
@@ -40,10 +41,11 @@ namespace castor3d
 			}
 		}
 
-		static castor::AttributeParsers registerParsers()
+		static castor::AttributeParsers registerParsers( Engine & engine )
 		{
 			using namespace castor;
 			AttributeParsers result;
+			auto & textureChannels = engine.getPassComponentsRegister().getTextureChannels();
 
 			addParser( result, uint32_t( CSCNSection::eRoot ), cuT( "scene" ), parserRootScene, { makeParameter< ParameterType::eName >() } );
 			addParser( result, uint32_t( CSCNSection::eRoot ), cuT( "loading_screen" ), parserRootLoadingScreen, {} );
@@ -126,6 +128,7 @@ namespace castor3d
 			addParser( result, uint32_t( CSCNSection::eSceneImport ), cuT( "roll" ), parserSceneImportRoll, { makeParameter< ParameterType::eFloat >() } );
 			addParser( result, uint32_t( CSCNSection::eSceneImport ), cuT( "no_optimisations" ), parserSceneImportNoOptimisations, { makeParameter< ParameterType::eBool >() } );
 			addParser( result, uint32_t( CSCNSection::eSceneImport ), cuT( "emissive_mult" ), parserSceneImportEmissiveMult, { makeParameter< ParameterType::eFloat >() } );
+			addParser( result, uint32_t( CSCNSection::eSceneImport ), cuT( "texture_remap_config" ), parserSceneImportTexRemap );
 			addParser( result, uint32_t( CSCNSection::eSceneImport ), cuT( "}" ), parserSceneImportEnd );
 
 			addParser( result, uint32_t( CSCNSection::eParticleSystem ), cuT( "parent" ), parserParticleSystemParent, { makeParameter< ParameterType::eName >() } );
@@ -233,6 +236,23 @@ namespace castor3d
 			addParser( result, uint32_t( CSCNSection::eMaterial ), cuT( "pass" ), parserMaterialPass );
 			addParser( result, uint32_t( CSCNSection::eMaterial ), cuT( "render_pass" ), parserMaterialRenderPass, { makeParameter< ParameterType::eText >() } );
 			addParser( result, uint32_t( CSCNSection::eMaterial ), cuT( "}" ), parserMaterialEnd );
+
+			addParser( result, uint32_t( CSCNSection::ePass ), cuT( "texture_unit" ), parserPassTextureUnit );
+			addParser( result, uint32_t( CSCNSection::ePass ), cuT( "shader_program" ), parserPassShader );
+			addParser( result, uint32_t( CSCNSection::ePass ), cuT( "}" ), parserPassEnd );
+
+			addParser( result, uint32_t( CSCNSection::eTextureUnit ), cuT( "channel" ), parserUnitChannel, { makeParameter< ParameterType::eBitwiseOred32BitsCheckedText >( textureChannels ) } );
+			addParser( result, uint32_t( CSCNSection::eTextureUnit ), cuT( "image" ), parserUnitImage, { makeParameter< ParameterType::ePath >() } );
+			addParser( result, uint32_t( CSCNSection::eTextureUnit ), cuT( "levels_count" ), parserUnitLevelsCount, { makeParameter< ParameterType::eUInt32 >() } );
+			addParser( result, uint32_t( CSCNSection::eTextureUnit ), cuT( "render_target" ), parserUnitRenderTarget );
+			addParser( result, uint32_t( CSCNSection::eTextureUnit ), cuT( "sampler" ), parserUnitSampler, { makeParameter< ParameterType::eName >() } );
+			addParser( result, uint32_t( CSCNSection::eTextureUnit ), cuT( "invert_y" ), parserUnitInvertY, { makeParameter< ParameterType::eBool >() } );
+			addParser( result, uint32_t( CSCNSection::eTextureUnit ), cuT( "transform" ), parserUnitTransform );
+			addParser( result, uint32_t( CSCNSection::eTextureUnit ), cuT( "tileset" ), parserUnitTileSet, { makeParameter< ParameterType::ePoint2I >() } );
+			addParser( result, uint32_t( CSCNSection::eTextureUnit ), cuT( "tiles" ), parserUnitTiles, { makeParameter< ParameterType::eUInt32 >() } );
+			addParser( result, uint32_t( CSCNSection::eTextureUnit ), cuT( "animation" ), parserUnitAnimation );
+			addParser( result, uint32_t( CSCNSection::eTextureUnit ), cuT( "texcoord_set" ), parserUnitTexcoordSet, { makeParameter< ParameterType::eUInt32 >() } );
+			addParser( result, uint32_t( CSCNSection::eTextureUnit ), cuT( "}" ), parserUnitEnd );
 
 			addParser( result, uint32_t( CSCNSection::eTextureTransform ), cuT( "rotate" ), parserTexTransformRotate, { makeParameter< ParameterType::eFloat >() } );
 			addParser( result, uint32_t( CSCNSection::eTextureTransform ), cuT( "translate" ), parserTexTransformTranslate, { makeParameter< ParameterType::ePoint2F >() } );
@@ -380,13 +400,6 @@ namespace castor3d
 			addParser( result, uint32_t( CSCNSection::eSsao ), cuT( "bend_step_size" ), parserSsaoBendStepSize, { makeParameter< ParameterType::eFloat >() } );
 			addParser( result, uint32_t( CSCNSection::eSsao ), cuT( "}" ), parserSsaoEnd );
 
-			addParser( result, uint32_t( CSCNSection::eSubsurfaceScattering ), cuT( "strength" ), parserSubsurfaceScatteringStrength, { makeParameter< ParameterType::eFloat >() } );
-			addParser( result, uint32_t( CSCNSection::eSubsurfaceScattering ), cuT( "gaussian_width" ), parserSubsurfaceScatteringGaussianWidth, { makeParameter< ParameterType::eFloat >() } );
-			addParser( result, uint32_t( CSCNSection::eSubsurfaceScattering ), cuT( "transmittance_profile" ), parserSubsurfaceScatteringTransmittanceProfile );
-			addParser( result, uint32_t( CSCNSection::eSubsurfaceScattering ), cuT( "}" ), parserSubsurfaceScatteringEnd );
-
-			addParser( result, uint32_t( CSCNSection::eTransmittanceProfile ), cuT( "factor" ), parserTransmittanceProfileFactor, { makeParameter< ParameterType::ePoint4F >() } );
-
 			addParser( result, uint32_t( CSCNSection::eHdrConfig ), cuT( "exposure" ), parserHdrExponent, { makeParameter< ParameterType::eFloat >() } );
 			addParser( result, uint32_t( CSCNSection::eHdrConfig ), cuT( "gamma" ), parserHdrGamma, { makeParameter< ParameterType::eFloat >() } );
 
@@ -453,7 +466,9 @@ namespace castor3d
 				, { uint32_t( CSCNSection::eTextureTransform ), cuT( "texture_transform" ) }
 				, { uint32_t( CSCNSection::eSceneImport ), cuT( "import" ) }
 				, { uint32_t( CSCNSection::eSkeleton ), cuT( "skeleton" ) }
-				, { uint32_t( CSCNSection::eMorphAnimation ), cuT( "morph_animation" ) } };
+				, { uint32_t( CSCNSection::eMorphAnimation ), cuT( "morph_animation" ) }
+				, { uint32_t( CSCNSection::eTextureRemapChannel ), cuT( "texture_remap_channel" ) }
+				, { uint32_t( CSCNSection::eTextureRemap ), cuT( "texture_remap" ) } };
 		}
 
 		static void * createContext( castor::FileParserContext & context )
@@ -473,9 +488,9 @@ namespace castor3d
 			return userContext;
 		}
 
-		static castor::AdditionalParsers createParsers()
+		static castor::AdditionalParsers createParsers( Engine & engine )
 		{
-			return { registerParsers()
+			return { registerParsers( engine )
 				, registerSections() 
 				, &createContext };
 		}
@@ -537,8 +552,6 @@ namespace castor3d
 	UInt32StrMap SceneFileParser::shadowFilters;
 	UInt32StrMap SceneFileParser::globalIlluminations;
 
-	//****************************************************************************************************
-
 	SceneFileParser::SceneFileParser( Engine & engine )
 		: OwnedBy< Engine >( engine )
 		, FileParser{ engine.getLogger(), uint32_t( CSCNSection::eRoot ) }
@@ -598,7 +611,7 @@ namespace castor3d
 			registerParsers( it.first, it.second );
 		}
 
-		registerParsers( "c3d.scene", scnps::createParsers() );
+		registerParsers( "c3d.scene", scnps::createParsers( engine ) );
 	}
 
 	RenderWindowDesc SceneFileParser::getRenderWindow()

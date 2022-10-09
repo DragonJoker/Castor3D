@@ -18,24 +18,18 @@ namespace castor3d
 		registerType( PhongPass::Type
 			, { PhongPass::LightingModel
 				, PhongPass::create
-				, PhongPass::createParsers()
-				, PhongPass::createSections()
 				, &shader::PhongLightingModel::create
 				, false } );
 		
 		registerType( BlinnPhongPass::Type
 			, { BlinnPhongPass::LightingModel
 				, BlinnPhongPass::create
-				, BlinnPhongPass::createParsers()
-				, BlinnPhongPass::createSections()
 				, &shader::BlinnPhongLightingModel::create
 				, false } );
 
 		registerType( PbrPass::Type
 			, { PbrPass::LightingModel
 				, PbrPass::create
-				, PbrPass::createParsers()
-				, PbrPass::createSections()
 				, &shader::PbrLightingModel::create
 				, true } );
 	}
@@ -52,10 +46,6 @@ namespace castor3d
 		m_passTypeNames.emplace_back( passType, id );
 		m_lightingModels.emplace( id, info.lightingModel );
 		m_ibls.emplace( id, info.isIBLNeeded );
-		getEngine()->registerParsers( passType
-			, info.parsers
-			, info.sections
-			, nullptr );
 		getEngine()->registerLightingModel( info.lightingModel, info.lightingModelCreator );
 	}
 

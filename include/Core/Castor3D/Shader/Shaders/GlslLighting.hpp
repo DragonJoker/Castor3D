@@ -19,106 +19,43 @@ namespace castor3d::shader
 	C3D_API castor::String getLightingModelName( Engine const & engine
 		, PassTypeID passType );
 
-	struct LightMaterial
-		: public sdw::StructInstance
-	{
-		C3D_API LightMaterial( sdw::ShaderWriter & writer
-			, sdw::expr::ExprPtr expr
-			, bool enabled );
-		SDW_DeclStructInstance( C3D_API, LightMaterial );
-
-		C3D_API void create( Materials const & materials
-			, Material const & material );
-		C3D_API void blendWith( LightMaterial const & material
-			, sdw::Float const & weight );
-
-		C3D_API virtual void create( sdw::Vec3 const & albedo
-			, sdw::Vec4 const & spcMtl
-			, sdw::Vec4 const & colRgh
-			, Materials const & materials
-			, Material const & material ) = 0;
-		C3D_API virtual void create( sdw::Vec3 const & albedo
-			, sdw::Vec4 const & spcMtl
-			, sdw::Vec4 const & colRgh
-			, sdw::Float const & ambient = 0.0_f ) = 0;
-		C3D_API virtual void create( sdw::Vec3 const & vtxColour
-			, Materials const & materials
-			, Material const & material ) = 0;
-		C3D_API virtual void output( sdw::Vec4 & outColRgh, sdw::Vec4 & outSpcMtl )const = 0;
-		C3D_API virtual sdw::Vec3 getAmbient( sdw::Vec3 const & ambientLight )const = 0;
-		C3D_API virtual void adjustDirectSpecular( sdw::Vec3 & directSpecular )const = 0;
-		C3D_API virtual sdw::Vec3 getIndirectAmbient( sdw::Vec3 const & indirectAmbient )const = 0;
-		C3D_API virtual sdw::Float getMetalness()const = 0;
-		C3D_API virtual sdw::Float getRoughness()const = 0;
-
-		C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
-
-		/**
-		*\name
-		*	Convertors
-		*/
-		//\{
-		static C3D_API sdw::Vec3 computeF0( sdw::Vec3 const & albedo
-			, sdw::Float const & metalness );
-		static C3D_API sdw::Float computeMetalness( sdw::Vec3 const & albedo
-			, sdw::Vec3 const & specular );
-		static C3D_API sdw::Float computeRoughness( sdw::Float const & glossiness );
-		static C3D_API sdw::Float computeGlossiness( sdw::Float const & roughness );
-		//\}
-
-		sdw::Vec3 albedo;
-		sdw::Vec3 specular;
-
-	protected:
-		sdw::Float albDiv;
-		sdw::Float spcDiv;
-
-	public:
-		sdw::Float sssProfileIndex;
-		sdw::Float sssTransmittance;
-
-	protected:
-		using sdw::StructInstance::getMember;
-		using sdw::StructInstance::getMemberArray;
-
-	private:
-		virtual void doBlendWith( LightMaterial const & material
-			, sdw::Float const & weight )
-		{
-		}
-	};
-
 	class LightingModel
 	{
 	public:
 		C3D_API LightingModel( sdw::ShaderWriter & writer
+			, Materials const & materials
 			, Utils & utils
 			, ShadowOptions shadowOptions
 			, SssProfiles const * sssProfiles
 			, bool enableVolumetric
 			, std::string prefix );
 		C3D_API virtual ~LightingModel() = default;
-		C3D_API virtual sdw::Vec3 combine( sdw::Vec3 const & directDiffuse
+		C3D_API virtual sdw::Vec3 combine( BlendComponents const & components
+			, sdw::Vec3 const & directDiffuse
 			, sdw::Vec3 const & indirectDiffuse
 			, sdw::Vec3 const & directSpecular
 			, sdw::Vec3 const & directScattering
 			, sdw::Vec3 const & indirectSpecular
-			, sdw::Vec3 const & ambient
+			, sdw::Vec3 const & directAmbient
 			, sdw::Vec3 const & indirectAmbient
 			, sdw::Float const & ambientOcclusion
 			, sdw::Vec3 const & emissive
 			, sdw::Vec3 const & reflected
-			, sdw::Vec3 const & refracted
-			, sdw::Vec3 const & materialAlbedo ) = 0;
-		C3D_API virtual std::unique_ptr< LightMaterial > declMaterial( std::string const & name
-			, bool enabled = true ) = 0;
-		C3D_API virtual void modifyMaterial( PipelineFlags const & flags
-			, sdw::Vec4 const & sampled
-			, TextureConfigData const & config
-			, LightMaterial & lightMat )const = 0;
-		C3D_API virtual void updateMaterial( PipelineFlags const & flags
-			, LightMaterial & lightMat
-			, sdw::Vec3 & emissive )const = 0;
+			, sdw::Vec3 const & refracted ) = 0;
+		C3D_API virtual sdw::Vec3 adjustDirectAmbient( BlendComponents const & components
+			, sdw::Vec3 const & directAmbient )const = 0;
+		C3D_API virtual sdw::Vec3 adjustDirectSpecular( BlendComponents const & components
+			, sdw::Vec3 const & directSpecular )const = 0;
+		C3D_API sdw::Vec3 combine( BlendComponents const & components
+			, sdw::Vec3 const & directDiffuse
+			, sdw::Vec3 const & indirectDiffuse
+			, sdw::Vec3 const & directSpecular
+			, sdw::Vec3 const & directScattering
+			, sdw::Vec3 const & indirectSpecular
+			, sdw::Vec3 const & directAmbient
+			, sdw::Vec3 const & indirectAmbient
+			, sdw::Vec3 const & reflected
+			, sdw::Vec3 const & refracted );
 		C3D_API virtual ReflectionModelPtr getReflectionModel( uint32_t & envMapBinding
 			, uint32_t envMapSet )const = 0;
 		/**
@@ -135,7 +72,7 @@ namespace castor3d::shader
 			, uint32_t lightsBufSet
 			, uint32_t & shadowMapBinding
 			, uint32_t shadowMapSet );
-		C3D_API void computeCombined( LightMaterial const & material
+		C3D_API void computeCombined( BlendComponents const & components
 			, SceneData const & sceneData
 			, BackgroundModel & background
 			, Surface const & surface
@@ -143,6 +80,7 @@ namespace castor3d::shader
 			, sdw::UInt const & receivesShadows
 			, OutputComponents & output );
 		C3D_API static LightingModelPtr createModel( Engine const & engine
+			, Materials const & materials
 			, Utils & utils
 			, castor::String const & name
 			, uint32_t lightsBufBinding
@@ -154,6 +92,7 @@ namespace castor3d::shader
 			, bool enableVolumetric );
 		template< typename LightsBufBindingT >
 		static LightingModelPtr createModelT( Engine const & engine
+			, Materials const & materials
 			, Utils & utils
 			, castor::String const & name
 			, LightsBufBindingT lightsBufBinding
@@ -165,6 +104,7 @@ namespace castor3d::shader
 			, bool enableVolumetric )
 		{
 			return createModel( engine
+				, materials
 				, utils
 				, name
 				, uint32_t( lightsBufBinding )
@@ -177,6 +117,7 @@ namespace castor3d::shader
 		}
 		template< typename LightBindingT >
 		static LightingModelPtr createModel( Engine const & engine
+			, Materials const & materials
 			, Utils & utils
 			, castor::String const & name
 			, LightType light
@@ -189,6 +130,7 @@ namespace castor3d::shader
 			, uint32_t shadowMapSet )
 		{
 			return createModel( engine
+				, materials
 				, utils
 				, name
 				, light
@@ -210,12 +152,13 @@ namespace castor3d::shader
 			, uint32_t lightsBufSet
 			, uint32_t & shadowMapBinding
 			, uint32_t shadowMapSet );
-		C3D_API sdw::Vec3 computeCombinedDiffuse( LightMaterial const & material
+		C3D_API sdw::Vec3 computeCombinedDiffuse( BlendComponents const & components
 			, SceneData const & sceneData
 			, Surface const & surface
 			, sdw::Vec3 const & worldEye
 			, sdw::UInt const & receivesShadows );
 		C3D_API static LightingModelPtr createDiffuseModel( Engine const & engine
+			, Materials const & materials
 			, Utils & utils
 			, castor::String const & name
 			, uint32_t lightsBufBinding
@@ -226,6 +169,7 @@ namespace castor3d::shader
 			, bool enableVolumetric );
 		template< typename LightsBufBindingT >
 		static LightingModelPtr createDiffuseModelT( Engine const & engine
+			, Materials const & materials
 			, Utils & utils
 			, castor::String const & name
 			, LightsBufBindingT lightsBufBinding
@@ -236,6 +180,7 @@ namespace castor3d::shader
 			, bool enableVolumetric )
 		{
 			return createDiffuseModel( engine
+				, materials
 				, utils
 				, name
 				, uint32_t( lightsBufBinding )
@@ -273,62 +218,24 @@ namespace castor3d::shader
 		*/
 		//\{
 		C3D_API virtual void compute( DirectionalLight const & light
-			, LightMaterial const & material
+			, BlendComponents const & components
 			, Surface const & surface
 			, BackgroundModel & background
 			, sdw::Vec3 const & worldEye
 			, sdw::UInt const & receivesShadows
 			, OutputComponents & output ) = 0;
 		C3D_API virtual void compute( PointLight const & light
-			, LightMaterial const & material
+			, BlendComponents const & components
 			, Surface const & surface
 			, sdw::Vec3 const & worldEye
 			, sdw::UInt const & receivesShadows
 			, OutputComponents & output ) = 0;
 		C3D_API virtual void compute( SpotLight const & light
-			, LightMaterial const & material
+			, BlendComponents const & components
 			, Surface const & surface
 			, sdw::Vec3 const & worldEye
 			, sdw::UInt const & receivesShadows
 			, OutputComponents & output ) = 0;
-		C3D_API void computeMapContributions( PipelineFlags const & flags
-			, TextureConfigurations const & textureConfigs
-			, TextureAnimations const & textureAnims
-			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-			, shader::Material const & material
-			, DerivTex & texCoords0
-			, DerivTex & texCoords1
-			, DerivTex & texCoords2
-			, DerivTex & texCoords3
-			, sdw::Vec3 & normal
-			, sdw::Vec3 & tangent
-			, sdw::Vec3 & bitangent
-			, sdw::Vec3 & emissive
-			, sdw::Float & opacity
-			, sdw::Float & occlusion
-			, sdw::Float & transmittance
-			, LightMaterial & lightMat
-			, sdw::Vec3 & tangentSpaceViewPosition
-			, sdw::Vec3 & tangentSpaceFragPosition );
-		C3D_API void computeMapContributions( PipelineFlags const & flags
-			, TextureConfigurations const & textureConfigs
-			, TextureAnimations const & textureAnims
-			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-			, shader::Material const & material
-			, sdw::Vec3 & texCoords0
-			, sdw::Vec3 & texCoords1
-			, sdw::Vec3 & texCoords2
-			, sdw::Vec3 & texCoords3
-			, sdw::Vec3 & normal
-			, sdw::Vec3 & tangent
-			, sdw::Vec3 & bitangent
-			, sdw::Vec3 & emissive
-			, sdw::Float & opacity
-			, sdw::Float & occlusion
-			, sdw::Float & transmittance
-			, LightMaterial & lightMat
-			, sdw::Vec3 & tangentSpaceViewPosition
-			, sdw::Vec3 & tangentSpaceFragPosition );
 		//\}
 		/**
 		*\name
@@ -336,33 +243,20 @@ namespace castor3d::shader
 		*/
 		//\{
 		C3D_API virtual sdw::Vec3 computeDiffuse( DirectionalLight const & light
-			, LightMaterial const & material
+			, BlendComponents const & components
 			, Surface const & surface
 			, sdw::Vec3 const & worldEye
 			, sdw::UInt const & receivesShadows ) = 0;
 		C3D_API virtual sdw::Vec3 computeDiffuse( PointLight const & light
-			, LightMaterial const & material
+			, BlendComponents const & components
 			, Surface const & surface
 			, sdw::Vec3 const & worldEye
 			, sdw::UInt const & receivesShadows ) = 0;
 		C3D_API virtual sdw::Vec3 computeDiffuse( SpotLight const & light
-			, LightMaterial const & material
+			, BlendComponents const & components
 			, Surface const & surface
 			, sdw::Vec3 const & worldEye
 			, sdw::UInt const & receivesShadows ) = 0;
-		C3D_API void computeMapDiffuseContributions( PipelineFlags const & flags
-			, TextureConfigurations const & textureConfigs
-			, TextureAnimations const & textureAnims
-			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-			, shader::Material const & material
-			, sdw::Vec3 & texCoords0
-			, sdw::Vec3 & texCoords1
-			, sdw::Vec3 & texCoords2
-			, sdw::Vec3 & texCoords3
-			, sdw::Vec3 & emissive
-			, sdw::Float & opacity
-			, sdw::Float & occlusion
-			, LightMaterial & lightMat );
 		//\}
 		//\}
 		/**
@@ -398,6 +292,7 @@ namespace castor3d::shader
 
 	private:
 		C3D_API static LightingModelPtr createModel( Engine const & engine
+			, Materials const & materials
 			, Utils & utils
 			, castor::String const & name
 			, LightType light
@@ -411,6 +306,7 @@ namespace castor3d::shader
 
 	protected:
 		sdw::ShaderWriter & m_writer;
+		Materials const & m_materials;
 		Utils & m_utils;
 		std::unique_ptr< sdw::Struct > m_type;
 		std::unique_ptr< sdw::StorageBuffer > m_ssbo;

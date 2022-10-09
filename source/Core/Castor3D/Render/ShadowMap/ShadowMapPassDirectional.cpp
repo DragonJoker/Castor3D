@@ -129,6 +129,11 @@ namespace castor3d
 	{
 		using namespace sdw;
 		VertexWriter writer;
+		shader::Utils utils{ writer };
+		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
+			, flags
+			, ComponentModeFlag::eNone
+			, utils };
 
 		C3D_ObjectIdsData( writer
 			, flags
@@ -138,6 +143,7 @@ namespace castor3d
 			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::eBuffers );
 		shader::Materials materials{ writer
+			, passShaders
 			, uint32_t( GlobalBuffersIdx::eMaterials )
 			, RenderPipeline::eBuffers };
 		auto index = uint32_t( GlobalBuffersIdx::eCount ) + 1u;
@@ -224,15 +230,22 @@ namespace castor3d
 		using namespace sdw;
 		FragmentWriter writer;
 		auto enableTextures = flags.enableTextures();
-
-		shader::Utils utils{ writer };
 		auto needsVsm = flags.writeShadowVSM();
 		auto needsRsm = flags.writeShadowRSM();
+
+		shader::Utils utils{ writer };
+		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
+			, flags
+			, ( ComponentModeFlag::eOpacity
+				| ComponentModeFlag::eGeometry
+				| ( needsRsm ? ComponentModeFlag::eColour : ComponentModeFlag::eNone ) )
+			, utils };
 
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::eBuffers );
 		shader::Materials materials{ writer
+			, passShaders
 			, uint32_t( GlobalBuffersIdx::eMaterials )
 			, RenderPipeline::eBuffers
 			, needsRsm || flags.enableOpacity() };
@@ -250,6 +263,7 @@ namespace castor3d
 			, index++
 			, RenderPipeline::eBuffers );
 		auto lightingModel = shader::LightingModel::createModel( *renderSystem.getEngine()
+			, materials
 			, utils
 			, shader::getLightingModelName( *getEngine(), flags.passType )
 			, LightType::eDirectional
@@ -292,31 +306,19 @@ namespace castor3d
 
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[in.nodeId - 1u] );
-				shader::OpaqueBlendComponents components{ writer
-					, "out"
-					, in.texture0
-					, in.texture1
-					, in.texture2
-					, in.texture3
-					, { 1.0_f, flags.enableOpacity() }
-					, normalize( in.normal )
-					, normalize( in.tangent )
-					, normalize( in.bitangent )
-					, in.tangentSpaceViewPosition
-					, in.tangentSpaceFragPosition
-					, { 1.0_f, false }
-					, { 1.0_f, false }
-					, { vec3( 0.0_f ), needsRsm } };
-				auto lightMat = materials.blendMaterials( utils
-					, needsRsm
-					, flags
+				auto material = writer.declLocale( "material"
+					, materials.getMaterial( modelData.getMaterialId() ) );
+				auto components = writer.declLocale( "components"
+					, shader::BlendComponents{ materials
+						, material
+						, in } );
+				materials.blendMaterials( flags
 					, textureConfigs
 					, textureAnims
-					, *lightingModel
 					, c3d_maps
+					, material
 					, modelData.getMaterialId()
 					, in.passMultipliers
-					, in.colour
 					, components );
 				auto depth = writer.declLocale( "depth"
 					, in.fragCoord.z() );
@@ -338,10 +340,11 @@ namespace castor3d
 				{
 					auto light = writer.declLocale( "light"
 						, c3d_shadowMapData.getDirectionalLight( *lightingModel ) );
-					pxl_flux.rgb() = lightMat->albedo
+					components.colour *= in.colour;
+					pxl_flux.rgb() = components.colour
 						* light.base.colour
 						* light.base.intensity.x();
-					pxl_normal.xyz() = components.normal();
+					pxl_normal.xyz() = components.normal;
 					pxl_position.xyz() = in.worldPosition.xyz();
 				}
 			} );

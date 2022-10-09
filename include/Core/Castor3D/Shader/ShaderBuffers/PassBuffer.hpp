@@ -4,11 +4,13 @@ See LICENSE file in root folder
 #ifndef ___C3D_PassBuffer_H___
 #define ___C3D_PassBuffer_H___
 
+#include "Castor3D/Buffer/BufferModule.hpp"
 #include "Castor3D/Material/Pass/PassModule.hpp"
 
 #include "Castor3D/Shader/ShaderBuffer.hpp"
 
 #include <CastorUtils/Design/ArrayView.hpp>
+#include <CastorUtils/Graphics/RgbColour.hpp>
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 
 #include <ashespp/Descriptor/DescriptorSet.hpp>
@@ -23,72 +25,154 @@ namespace castor3d
 	class PassBuffer
 	{
 	public:
-		struct Vec3
-		{
-			float r;
-			float g;
-			float b;
-		};
-
-		struct Vec4
-		{
-			float r;
-			float g;
-			float b;
-			float a;
-		};
-
-		struct PassData
-		{
-			Vec4 colourDiv;
-			Vec4 specDiv;
-
-			uint32_t index;
-			float emissive;
-			float alphaRef;
-			uint32_t sssProfileIndex;
-
-			Vec3 transmission;
-			float opacity;
-
-			float refractionRatio;
-			uint32_t hasRefraction;
-			uint32_t hasReflection;
-			float bwAccumulationOperator;
-
-			std::array< castor::Point4ui, 2u > textures;
-
-			uint32_t textureCount;
-			uint32_t passId;
-			uint32_t lighting;
-			uint32_t passCount;
-		};
-		using PassesData = castor::ArrayView< PassData >;
-
 		struct PassDataPtr
 		{
-			Vec4 * colourDiv;
-			Vec4 * specDiv;
-			uint32_t * index;
-			float * emissive;
-			float * alphaRef;
-			uint32_t * sssProfileIndex;
-			Vec3 * transmission;
-			float * opacity;
-			float * refractionRatio;
-			uint32_t * hasRefraction;
-			uint32_t * hasReflection;
-			float * bwAccumulationOperator;
-			std::array< castor::Point4ui, 2u > * textures;
-			uint32_t * textureCount;
-			uint32_t * passId;
-			uint32_t * lighting;
-			uint32_t * passCount;
+			C3D_API PassDataPtr( castor::ArrayView< uint8_t > data )
+				: m_data{ data }
+			{
+			}
+
+			C3D_API VkDeviceSize write( MemChunk const & chunk
+				, uint32_t v
+				, VkDeviceSize offset );
+			C3D_API VkDeviceSize write( MemChunk const & chunk
+				, int32_t v
+				, VkDeviceSize offset );
+			C3D_API VkDeviceSize write( MemChunk const & chunk
+				, float v
+				, VkDeviceSize offset );
+
+			template< typename DataA, typename DataB >
+			VkDeviceSize write( MemChunk const & chunk
+				, DataA a
+				, DataB b
+				, VkDeviceSize offset )
+			{
+				auto base = offset;
+				offset += write( chunk, a, offset );
+				offset += write( chunk, b, offset );
+				return offset - base;
+			}
+
+			template< typename DataA, typename DataB, typename DataC >
+			VkDeviceSize write( MemChunk const & chunk
+				, DataA a
+				, DataB b
+				, DataC c
+				, VkDeviceSize offset )
+			{
+				auto base = offset;
+				offset += write( chunk, a, offset );
+				offset += write( chunk, b, offset );
+				offset += write( chunk, c, offset );
+				return offset - base;
+			}
+
+			template< typename DataA, typename DataB, typename DataC, typename DataD >
+			VkDeviceSize write( MemChunk const & chunk
+				, DataA a
+				, DataB b
+				, DataC c
+				, DataD d
+				, VkDeviceSize offset )
+			{
+				auto base = offset;
+				offset += write( chunk, a, offset );
+				offset += write( chunk, b, offset );
+				offset += write( chunk, c, offset );
+				offset += write( chunk, d, offset );
+				return offset - base;
+			}
+
+			template< typename DataT, size_t SizeT >
+			VkDeviceSize write( MemChunk const & chunk
+				, std::array< DataT, SizeT > const & v
+				, VkDeviceSize offset )
+			{
+				auto base = offset;
+
+				for ( size_t i = 0u; i < SizeT; ++i )
+				{
+					offset += write( chunk, v[i], offset );
+				}
+
+				return offset - base;
+			}
+
+			template< typename DataT, uint32_t CountT >
+			VkDeviceSize write( MemChunk const & chunk
+				, castor::Point< DataT, CountT > const & v
+				, VkDeviceSize offset )
+			{
+				auto base = offset;
+
+				for ( uint32_t i = 0u; i < CountT; ++i )
+				{
+					offset += write( chunk, v[i], offset );
+				}
+
+				return offset - base;
+			}
+
+			VkDeviceSize write( MemChunk const & chunk
+				, castor::RgbColour const & v
+				, VkDeviceSize offset )
+			{
+				auto base = offset;
+
+				for ( size_t i = 0u; i < 3u; ++i )
+				{
+					offset += write( chunk, v[i], offset );
+				}
+
+				return offset - base;
+			}
+
+			VkDeviceSize write( MemChunk const & chunk
+				, castor::HdrRgbColour const & v
+				, VkDeviceSize offset )
+			{
+				auto base = offset;
+
+				for ( size_t i = 0u; i < 3u; ++i )
+				{
+					offset += write( chunk, v[i], offset );
+				}
+
+				return offset - base;
+			}
+
+			VkDeviceSize write( MemChunk const & chunk
+				, castor::RgbaColour const & v
+				, VkDeviceSize offset )
+			{
+				auto base = offset;
+
+				for ( size_t i = 0u; i < 4u; ++i )
+				{
+					offset += write( chunk, v[i], offset );
+				}
+
+				return offset - base;
+			}
+
+			VkDeviceSize write( MemChunk const & chunk
+				, castor::HdrRgbaColour const & v
+				, VkDeviceSize offset )
+			{
+				auto base = offset;
+
+				for ( size_t i = 0u; i < 4u; ++i )
+				{
+					offset += write( chunk, v[i], offset );
+				}
+
+				return offset - base;
+			}
+
+		private:
+			castor::ArrayView< uint8_t > m_data;
 		};
-
-		static constexpr uint32_t DataSize = sizeof( PassData );
-
-	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -217,13 +301,14 @@ namespace castor3d
 		}
 
 	private:
+		uint32_t m_stride;
 		ShaderBuffer m_buffer;
 		std::vector< Pass * > m_passes;
 		std::vector< Pass const * > m_dirty;
 		std::vector< OnPassChangedConnection > m_connections;
 		uint32_t m_passID{ 1u };
 		std::unordered_map< uint32_t, uint16_t > m_passTypeIndices;
-		PassesData m_data;
+		castor::ArrayView< uint8_t > m_data;
 		std::mutex m_mutex;
 	};
 }

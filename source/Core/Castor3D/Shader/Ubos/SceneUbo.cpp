@@ -99,7 +99,7 @@ namespace castor3d
 			, sdw::Float const & depth
 			, sdw::Vec3 const & colour
 			, sdw::Float const & alpha
-			, sdw::Float const & accumulationOperator )const
+			, sdw::UInt const & accumulationOperator )const
 		{
 			return utils.computeAccumulation( depth
 				, colour

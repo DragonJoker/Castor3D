@@ -135,6 +135,12 @@ namespace castor3d
 		using namespace sdw;
 		VertexWriter writer;
 
+		shader::Utils utils{ writer };
+		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
+			, flags
+			, ComponentModeFlag::eNone
+			, utils };
+
 		C3D_Matrix( writer
 			, GlobalBuffersIdx::eMatrix
 			, RenderPipeline::eBuffers );
@@ -146,6 +152,7 @@ namespace castor3d
 			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::eBuffers );
 		shader::Materials materials{ writer
+			, passShaders
 			, uint32_t( GlobalBuffersIdx::eMaterials )
 			, RenderPipeline::eBuffers };
 
@@ -231,11 +238,18 @@ namespace castor3d
 		auto needsRsm = flags.writeShadowRSM();
 
 		shader::Utils utils{ writer };
+		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
+			, flags
+			, ( ComponentModeFlag::eOpacity
+				| ComponentModeFlag::eGeometry
+				| ( needsRsm ? ComponentModeFlag::eColour : ComponentModeFlag::eNone ) )
+			, utils };
 
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::eBuffers );
 		shader::Materials materials{ writer
+			, passShaders
 			, uint32_t( GlobalBuffersIdx::eMaterials )
 			, RenderPipeline::eBuffers
 			, needsRsm || flags.enableOpacity() };
@@ -253,6 +267,7 @@ namespace castor3d
 			, index++
 			, RenderPipeline::eBuffers );
 		auto lightingModel = shader::LightingModel::createModel( *renderSystem.getEngine()
+			, materials
 			, utils
 			, shader::getLightingModelName( *getEngine(), flags.passType )
 			, LightType::eSpot
@@ -295,31 +310,19 @@ namespace castor3d
 
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[in.nodeId - 1u] );
-				shader::OpaqueBlendComponents components{ writer
-					, "out"
-					, in.texture0
-					, in.texture1
-					, in.texture2
-					, in.texture3
-					, { 1.0_f, flags.enableOpacity() }
-					, normalize( in.normal )
-					, normalize( in.tangent )
-					, normalize( in.bitangent )
-					, in.tangentSpaceViewPosition
-					, in.tangentSpaceFragPosition
-					, { 1.0_f, false }
-					, { 1.0_f, false }
-					, { vec3( 0.0_f ), needsRsm } };
-				auto lightMat = materials.blendMaterials( utils
-					, needsRsm
-					, flags
+				auto material = writer.declLocale( "material"
+					, materials.getMaterial( modelData.getMaterialId() ) );
+				auto components = writer.declLocale( "components"
+					, shader::BlendComponents{ materials
+						, material
+						, in } );
+				materials.blendMaterials( flags
 					, textureConfigs
 					, textureAnims
-					, *lightingModel
 					, c3d_maps
+					, material
 					, modelData.getMaterialId()
 					, in.passMultipliers
-					, in.colour
 					, components );
 
 				auto depth = writer.declLocale( "depth"
@@ -357,12 +360,13 @@ namespace castor3d
 							, 1.0_f / ( 1.0_f - light.outerCutOff )
 							, 1.0_f ) );
 					spotFactor = 1.0_f - step( spotFactor, 0.0_f );
-					pxl_flux.rgb() = ( lightMat->albedo
+					components.colour *= in.colour;
+					pxl_flux.rgb() = ( components.colour
 							* light.base.colour
 							* light.base.intensity.x()
-							* clamp( dot( lightDirection, components.normal() ), 0.0_f, 1.0_f ) )
+							* clamp( dot( lightDirection, components.normal ), 0.0_f, 1.0_f ) )
 						/ attenuation;
-					pxl_normal.xyz() = components.normal();
+					pxl_normal.xyz() = components.normal;
 					pxl_position.xyz() = in.worldPosition.xyz();
 				}
 			} );

@@ -31,14 +31,6 @@
 
 namespace castor3d
 {
-	namespace dropqpass
-	{
-		static castor::String const OutputNmlOcc = "outNmlOcc";
-		static castor::String const OutputColRgh = "outColRgh";
-		static castor::String const OutputSpcMtl = "outSpcMtl";
-		static castor::String const OutputEmsTrn = "outEmsTrn";
-	}
-
 	castor::String const OpaquePass::Type = "c3d.deferred.geometry";
 
 	OpaquePass::OpaquePass( RenderTechnique * parent
@@ -120,6 +112,18 @@ namespace castor3d
 		FragmentWriter writer;
 		bool enableTextures = flags.enableTextures();
 
+		shader::Utils utils{ writer };
+		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
+			, flags
+			, ( ComponentModeFlag::eOpacity
+				| ComponentModeFlag::eColour
+				| ComponentModeFlag::eGeometry
+				| ComponentModeFlag::eOcclusion
+				| ComponentModeFlag::eDiffuseLighting
+				| ComponentModeFlag::eSpecularLighting
+				| ComponentModeFlag::eSpecifics )
+			, utils };
+
 		C3D_Scene( writer
 			, GlobalBuffersIdx::eScene
 			, RenderPipeline::eBuffers );
@@ -135,6 +139,7 @@ namespace castor3d
 			, RenderPipeline::eBuffers
 			, enableTextures };
 		shader::Materials materials{ writer
+			, passShaders
 			, uint32_t( GlobalBuffersIdx::eMaterials )
 			, RenderPipeline::eBuffers };
 
@@ -148,14 +153,14 @@ namespace castor3d
 		pcb.end();
 
 		// Fragment Outputs
-		uint32_t index = 0u;
-		auto outNmlOcc = writer.declOutput< Vec4 >( dropqpass::OutputNmlOcc, index++ );
-		auto outColRgh = writer.declOutput< Vec4 >( dropqpass::OutputColRgh, index++ );
-		auto outSpcMtl = writer.declOutput< Vec4 >( dropqpass::OutputSpcMtl, index++ );
-		auto outEmsTrn = writer.declOutput< Vec4 >( dropqpass::OutputEmsTrn, index++ );
+		uint32_t idx = 0u;
+		auto c3d_imgNmlOcc = writer.declOutput< sdw::Vec4 >( getImageName( DsTexture::eNmlOcc ), idx++ );
+		auto c3d_imgColMtl = writer.declOutput< sdw::Vec4 >( getImageName( DsTexture::eColMtl ), idx++ );
+		auto c3d_imgSpcRgh = writer.declOutput< sdw::Vec4 >( getImageName( DsTexture::eSpcRgh ), idx++ );
+		auto c3d_imgEmsTrn = writer.declOutput< sdw::Vec4 >( getImageName( DsTexture::eEmsTrn ), idx++ );
 
-		shader::Utils utils{ writer };
 		auto lightingModel = utils.createLightingModel( *renderSystem.getEngine()
+			, materials
 			, shader::getLightingModelName( *getEngine(), flags.passType )
 			, {}
 			, nullptr
@@ -169,34 +174,24 @@ namespace castor3d
 			{
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[in.nodeId - 1u] );
-				shader::OpaqueBlendComponents components{ writer
-					, "out"
-					, in.texture0
-					, in.texture1
-					, in.texture2
-					, in.texture3
-					, 1.0_f
-					, normalize( in.normal )
-					, normalize( in.tangent )
-					, normalize( in.bitangent )
-					, in.tangentSpaceViewPosition
-					, in.tangentSpaceFragPosition
-					, 1.0_f
-					, 1.0_f
-					, vec3( 0.0_f ) };
-				auto lightMat = materials.blendMaterials( utils
+				auto material = writer.declLocale( "material"
+					, materials.getMaterial( modelData.getMaterialId() ) );
+				auto components = writer.declLocale( "components"
+					, shader::BlendComponents{ materials
+						, material
+						, in } );
+				materials.blendMaterials( flags.alphaFunc
 					, flags
 					, textureConfigs
 					, textureAnims
-					, *lightingModel
 					, c3d_maps
+					, material
 					, modelData.getMaterialId()
 					, in.passMultipliers
-					, in.colour
 					, components );
-				outNmlOcc = vec4( components.normal(), components.occlusion() );
-				lightMat->output( outColRgh, outSpcMtl );
-				outEmsTrn = vec4( components.emissive(), components.transmittance() );
+				c3d_imgNmlOcc = vec4( components.normal, components.occlusion );
+				passShaders.updateOutputs( components, in, c3d_imgSpcRgh, c3d_imgColMtl );
+				c3d_imgEmsTrn = vec4( components.emissive, components.transmittance );
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

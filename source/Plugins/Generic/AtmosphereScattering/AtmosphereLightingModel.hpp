@@ -22,6 +22,7 @@ namespace atmosphere_scattering
 	{
 	public:
 		AtmospherePhongLightingModel( sdw::ShaderWriter & writer
+			, c3d::Materials const & materials
 			, c3d::Utils & utils
 			, c3d::ShadowOptions shadowOptions
 			, c3d::SssProfiles const * sssProfiles
@@ -30,6 +31,7 @@ namespace atmosphere_scattering
 
 		static const castor::String getName();
 		static c3d::LightingModelPtr create( sdw::ShaderWriter & writer
+			, c3d::Materials const & materials
 			, c3d::Utils & utils
 			, c3d::ShadowOptions shadowOptions
 			, c3d::SssProfiles const * sssProfiles
@@ -40,7 +42,7 @@ namespace atmosphere_scattering
 		*/
 		//\{
 		void compute( c3d::DirectionalLight const & light
-			, c3d::LightMaterial const & material
+			, c3d::BlendComponents const & components
 			, c3d::Surface const & surface
 			, c3d::BackgroundModel & background
 			, sdw::Vec3 const & worldEye
@@ -53,7 +55,7 @@ namespace atmosphere_scattering
 		AtmosphereBackgroundModel * m_atmosphereBackground{};
 		sdw::Function< sdw::Void
 			, c3d::InDirectionalLight
-			, c3d::InPhongLightMaterial
+			, c3d::InBlendComponents
 			, c3d::InSurface
 			, sdw::InVec3
 			, sdw::InUInt
@@ -65,6 +67,7 @@ namespace atmosphere_scattering
 	{
 	public:
 		AtmosphereBlinnPhongLightingModel( sdw::ShaderWriter & writer
+			, c3d::Materials const & materials
 			, c3d::Utils & utils
 			, c3d::ShadowOptions shadowOptions
 			, c3d::SssProfiles const * sssProfiles
@@ -72,6 +75,7 @@ namespace atmosphere_scattering
 
 		static castor::String getName();
 		static c3d::LightingModelPtr create( sdw::ShaderWriter & writer
+			, c3d::Materials const & materials
 			, c3d::Utils & utils
 			, c3d::ShadowOptions shadowOptions
 			, c3d::SssProfiles const * sssProfiles
@@ -83,6 +87,7 @@ namespace atmosphere_scattering
 	{
 	public:
 		explicit AtmospherePbrLightingModel( sdw::ShaderWriter & writer
+			, c3d::Materials const & materials
 			, c3d::Utils & utils
 			, c3d::ShadowOptions shadowOptions
 			, c3d::SssProfiles const * sssProfiles
@@ -90,6 +95,7 @@ namespace atmosphere_scattering
 
 		static const castor::String getName();
 		static c3d::LightingModelPtr create( sdw::ShaderWriter & writer
+			, c3d::Materials const & materials
 			, c3d::Utils & utils
 			, c3d::ShadowOptions shadowOptions
 			, c3d::SssProfiles const * sssProfiles
@@ -100,7 +106,7 @@ namespace atmosphere_scattering
 		*/
 		//\{
 		void compute( c3d::DirectionalLight const & light
-			, c3d::LightMaterial const & material
+			, c3d::BlendComponents const & components
 			, c3d::Surface const & surface
 			, c3d::BackgroundModel & background
 			, sdw::Vec3 const & worldEye
@@ -113,7 +119,7 @@ namespace atmosphere_scattering
 		AtmosphereBackgroundModel * m_atmosphereBackground{};
 		sdw::Function< sdw::Void
 			, c3d::InDirectionalLight
-			, c3d::InPbrLightMaterial
+			, c3d::InBlendComponents
 			, c3d::InSurface
 			, sdw::InVec3
 			, sdw::InUInt

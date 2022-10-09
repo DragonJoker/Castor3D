@@ -74,6 +74,21 @@ namespace castor3d
 				return result;
 			}
 
+			static sdw::type::BaseStructPtr makeType( sdw::type::TypesCache & cache )
+			{
+				auto result = cache.getStruct( sdw::type::MemoryLayout::eStd430
+					, "C3D_LgtPropSurface" );
+
+				if ( result->empty() )
+				{
+					result->declMember( "cellIndex"
+						, sdw::type::Kind::eVec3I
+						, sdw::type::NotArray );
+				}
+
+				return result;
+			}
+
 			sdw::IVec3 cellIndex;
 		};
 

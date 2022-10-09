@@ -188,6 +188,18 @@ namespace castor3d
 		return result;
 	}
 
+	TextureFlags getTextureFlags( FilteredTextureFlags const & textures )
+	{
+		TextureFlags result{ TextureFlag::eNone };
+
+		for ( auto & flagId : textures )
+		{
+			result |= flagId.second.flags;
+		}
+
+		return result;
+	}
+
 	ashes::Image makeImage( ashes::Device const & device
 		, VkImage image
 		, crg::ImageId data )

@@ -9,10 +9,12 @@ namespace castor3d
 		{
 		case TextureFlag::eNone:
 			return cuT( "none" );
-		case TextureFlag::eDiffuse:
-			return ( isPbr
-				? castor::String{ cuT( "albedo" ) }
-				: castor::String{ cuT( "diffuse" ) } );
+		case TextureFlag::eColour:
+			if ( isPbr )
+			{
+				return cuT( "albedo" );
+			}
+			return cuT( "diffuse" );
 		case TextureFlag::eNormal:
 			return cuT( "normal" );
 		case TextureFlag::eOpacity:
@@ -24,9 +26,11 @@ namespace castor3d
 		case TextureFlag::eHeight:
 			return cuT( "height" );
 		case TextureFlag::eGlossiness:
-			return ( isPbr
-				? castor::String{ cuT( "glossiness" ) }
-				: castor::String{ cuT( "shininess" ) } );
+			if ( isPbr )
+			{
+				return cuT( "glossiness" );
+			}
+			return cuT( "shininess" );
 		case TextureFlag::eRoughness:
 			return cuT( "roughness" );
 		case TextureFlag::eEmissive:

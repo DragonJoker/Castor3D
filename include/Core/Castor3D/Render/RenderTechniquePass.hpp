@@ -206,7 +206,8 @@ namespace castor3d
 		/**
 		 *\copydoc	RenderNodesPass::createPipelineFlags
 		 */
-		C3D_API virtual PipelineFlags createPipelineFlags( BlendMode colourBlendMode
+		C3D_API virtual PipelineFlags createPipelineFlags( PassComponentsBitset components
+			, BlendMode colourBlendMode
 			, BlendMode alphaBlendMode
 			, PassFlags passFlags
 			, RenderPassTypeID renderPassTypeID
@@ -310,7 +311,8 @@ namespace castor3d
 		/**
 		 *\copydoc	RenderNodesPass::createPipelineFlags
 		 */
-		C3D_API PipelineFlags createPipelineFlags( BlendMode colourBlendMode
+		C3D_API PipelineFlags createPipelineFlags( PassComponentsBitset components
+			, BlendMode colourBlendMode
 			, BlendMode alphaBlendMode
 			, PassFlags passFlags
 			, RenderPassTypeID renderPassTypeID

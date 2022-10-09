@@ -165,7 +165,8 @@ namespace castor3d
 		RenderNodesPass::update( updater );
 	}
 
-	PipelineFlags RenderTechniqueNodesPass::createPipelineFlags( BlendMode colourBlendMode
+	PipelineFlags RenderTechniqueNodesPass::createPipelineFlags( PassComponentsBitset components
+		, BlendMode colourBlendMode
 		, BlendMode alphaBlendMode
 		, PassFlags passFlags
 		, RenderPassTypeID renderPassTypeID
@@ -181,7 +182,8 @@ namespace castor3d
 		, uint32_t passLayerIndex
 		, GpuBufferOffsetT< castor::Point4f > const & morphTargets )const
 	{
-		return RenderNodesPass::createPipelineFlags( colourBlendMode
+		return RenderNodesPass::createPipelineFlags( std::move( components )
+			, colourBlendMode
 			, alphaBlendMode
 			, passFlags
 			, renderPassTypeID
@@ -451,6 +453,7 @@ namespace castor3d
 	void RenderTechniqueNodesPass::doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
 		auto index = uint32_t( GlobalBuffersIdx::eCount );
+		doAddPassSpecificsBindings( bindings, index );
 		bindings.emplace_back( m_scene.getLightCache().createLayoutBinding( index++ ) );
 
 		if ( m_ssao )
@@ -468,13 +471,13 @@ namespace castor3d
 		doAddEnvBindings( bindings, index );
 		doAddBackgroundBindings( bindings, index );
 		doAddGIBindings( bindings, index );
-		doAddPassSpecificsBindings( bindings, index );
 	}
 
 	void RenderTechniqueNodesPass::doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
 		auto index = uint32_t( GlobalBuffersIdx::eCount );
+		doAddPassSpecificsDescriptor( descriptorWrites, index );
 		descriptorWrites.push_back( m_scene.getLightCache().getBinding( index++ ) );
 
 		if ( m_ssao )
@@ -493,7 +496,6 @@ namespace castor3d
 		doAddEnvDescriptor( descriptorWrites, index );
 		doAddBackgroundDescriptor( descriptorWrites, *m_targetImage, index );
 		doAddGIDescriptor( descriptorWrites, index );
-		doAddPassSpecificsDescriptor( descriptorWrites, index );
 	}
 
 	ashes::PipelineDepthStencilStateCreateInfo RenderTechniqueNodesPass::doCreateDepthStencilState( PipelineFlags const & flags )const

@@ -87,7 +87,18 @@ namespace castor3d
 		bool hasDiffuseGI = flags.hasDiffuseGI();
 
 		shader::Utils utils{ writer };
+		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
+			, flags
+			, ( ComponentModeFlag::eOpacity
+				| ComponentModeFlag::eColour
+				| ComponentModeFlag::eDiffuseLighting
+				| ComponentModeFlag::eSpecularLighting
+				| ComponentModeFlag::eGeometry
+				| ComponentModeFlag::eOcclusion
+				| ComponentModeFlag::eSpecifics )
+			, utils };
 		shader::CookTorranceBRDF cookTorrance{ writer, utils };
+		auto index = uint32_t( GlobalBuffersIdx::eCount );
 
 		C3D_Matrix( writer
 			, GlobalBuffersIdx::eMatrix
@@ -98,6 +109,12 @@ namespace castor3d
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::eBuffers );
+		shader::Materials materials{ *getEngine()
+			, writer
+			, passShaders
+			, uint32_t( GlobalBuffersIdx::eMaterials )
+			, RenderPipeline::eBuffers
+			, index };
 		shader::TextureConfigurations textureConfigs{ writer
 			, uint32_t( GlobalBuffersIdx::eTexConfigs )
 			, RenderPipeline::eBuffers
@@ -106,7 +123,6 @@ namespace castor3d
 			, uint32_t( GlobalBuffersIdx::eTexAnims )
 			, RenderPipeline::eBuffers
 			, enableTextures };
-		auto index = uint32_t( GlobalBuffersIdx::eCount );
 		auto lightsIndex = index++;
 		auto c3d_mapOcclusion = writer.declCombinedImg< FImg2DR32 >( "c3d_mapOcclusion"
 			, ( m_ssao ? index++ : 0u )
@@ -116,6 +132,7 @@ namespace castor3d
 			, index++
 			, RenderPipeline::eBuffers );
 		auto lightingModel = shader::LightingModel::createModel( *getEngine()
+			, materials
 			, utils
 			, getScene().getLightingModel()
 			, lightsIndex
@@ -137,11 +154,6 @@ namespace castor3d
 		indirect.declare( index
 			, RenderPipeline::eBuffers
 			, flags.getGlobalIlluminationFlags() );
-		shader::Materials materials{ *getEngine()
-			, writer
-			, uint32_t( GlobalBuffersIdx::eMaterials )
-			, RenderPipeline::eBuffers
-			, index };
 
 		auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
 			, 0u
@@ -166,43 +178,26 @@ namespace castor3d
 			{
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[in.nodeId - 1u] );
-				shader::LightingBlendComponents components{ writer
-					, "out"
-					, in.texture0
-					, in.texture1
-					, in.texture2
-					, in.texture3
-					, 1.0_f // opa
-					, normalize( in.normal )
-					, normalize( in.tangent )
-					, normalize( in.bitangent )
-					, in.tangentSpaceViewPosition
-					, in.tangentSpaceFragPosition
-					, ( m_ssao
-						? c3d_mapOcclusion.fetch( ivec2( in.fragCoord.xy() ), 0_i )
-						: 1.0_f )
-					, 1.0_f // trn
-					, vec3( 1.0_f ) // ems
-					, vec3( 1.0_f ) // trs
-					, 1.0_f // rfr
-					, 0_u // hrr 
-					, 0_u // hrl
-					, 1.0_f }; // acc
-				auto mats = materials.blendMaterials( utils
-					, !checkFlag( m_filters, RenderFilter::eAlphaBlend )
+				auto material = writer.declLocale( "material"
+					, materials.getMaterial( modelData.getMaterialId() ) );
+				auto components = writer.declLocale( "components"
+					, shader::BlendComponents{ materials
+						, material
+						, in } );
+				components.occlusion = ( m_ssao
+					? c3d_mapOcclusion.fetch( ivec2( in.fragCoord.xy() ), 0_i )
+					: 1.0_f );
+				materials.blendMaterials( !checkFlag( m_filters, RenderFilter::eAlphaBlend )
 					, flags
 					, textureConfigs
 					, textureAnims
-					, *lightingModel
 					, c3d_maps
+					, material
 					, modelData.getMaterialId()
 					, in.passMultipliers
-					, in.colour
 					, components );
-				auto material = std::move( mats.first );
-				auto lightMat = std::move( mats.second );
 
-				IF( writer, material.lighting() != 0_u )
+				IF( writer, material.lighting != 0_u )
 				{
 					auto worldEye = writer.declLocale( "worldEye"
 						, c3d_sceneData.cameraPosition );
@@ -213,12 +208,12 @@ namespace castor3d
 					auto lightScattering = writer.declLocale( "lightScattering"
 						, vec3( 0.0_f ) );
 					shader::OutputComponents output{ lightDiffuse, lightSpecular, lightScattering };
-					auto surface = writer.declLocale< shader::Surface >( "surface" );
-					surface.create( in.fragCoord.xyz()
-						, in.viewPosition.xyz()
-						, in.worldPosition.xyz()
-						, components.normal() );
-					lightingModel->computeCombined( *lightMat
+					auto surface = writer.declLocale( "surface"
+						, shader::Surface{ in.fragCoord.xyz()
+							, in.viewPosition.xyz()
+							, in.worldPosition.xyz()
+							, components.normal } );
+					lightingModel->computeCombined( components
 						, c3d_sceneData
 						, *backgroundModel
 						, surface
@@ -226,25 +221,24 @@ namespace castor3d
 						, modelData.isShadowReceiver()
 						, output );
 
-					auto ambient = writer.declLocale( "ambient"
-						, lightMat->getAmbient( c3d_sceneData.ambientLight ) );
+					auto directAmbient = writer.declLocale( "directAmbient"
+						, c3d_sceneData.ambientLight );
 					auto reflected = writer.declLocale( "reflected"
 						, vec3( 0.0_f ) );
 					auto refracted = writer.declLocale( "refracted"
 						, vec3( 0.0_f ) );
-					reflections->computeCombined( *lightMat
+					reflections->computeCombined( components
 						, surface
 						, c3d_sceneData
 						, *backgroundModel
 						, modelData.getEnvMapIndex()
-						, components.hasReflection()
-						, components.hasRefraction()
-						, components.refractionRatio()
-						, components.transmission()
-						, ambient
+						, material.hasReflection
+						, material.hasRefraction
+						, material.refractionRatio
+						, material.transmission
+						, directAmbient
 						, reflected
 						, refracted );
-					lightMat->adjustDirectSpecular( lightSpecular );
 
 					auto indirectOcclusion = writer.declLocale( "indirectOcclusion"
 						, 1.0_f );
@@ -253,42 +247,40 @@ namespace castor3d
 						, indirectOcclusion );
 					auto lightIndirectSpecular = indirect.computeSpecular( flags.getGlobalIlluminationFlags()
 						, worldEye
-						, c3d_sceneData.getPosToCamera( surface.worldPosition )
+						, c3d_sceneData.getPosToCamera( surface.worldPosition.xyz() )
 						, surface
-						, lightMat->getRoughness()
+						, components.roughness
 						, indirectOcclusion
 						, lightIndirectDiffuse.w()
 						, c3d_mapBrdf );
 					auto indirectAmbient = writer.declLocale( "indirectAmbient"
-						, lightMat->getIndirectAmbient( indirect.computeAmbient( flags.getGlobalIlluminationFlags()
-							, lightIndirectDiffuse.xyz() ) ) );
+						, indirect.computeAmbient( flags.getGlobalIlluminationFlags()
+							, lightIndirectDiffuse.xyz() ) );
 					auto indirectDiffuse = writer.declLocale( "indirectDiffuse"
 						, ( hasDiffuseGI
 							? cookTorrance.computeDiffuse( lightIndirectDiffuse.xyz()
 								, c3d_sceneData.cameraPosition
-								, surface.worldNormal
-								, lightMat->specular
-								, lightMat->getMetalness()
+								, components.normal
+								, components.specular
+								, components.metalness
 								, surface )
 							: vec3( 0.0_f ) ) );
 
-					pxl_fragColor = vec4( lightingModel->combine( lightDiffuse
+					pxl_fragColor = vec4( lightingModel->combine( components
+							, lightDiffuse
 							, indirectDiffuse
 							, lightSpecular
 							, lightScattering
 							, lightIndirectSpecular
-							, ambient
+							, directAmbient
 							, indirectAmbient
-							, components.occlusion()
-							, components.emissive()
 							, reflected
-							, refracted
-							, lightMat->albedo )
-						, components.opacity() );
+							, refracted )
+						, components.opacity );
 				}
 				ELSE
 				{
-					pxl_fragColor = vec4( lightMat->albedo, components.opacity() );
+					pxl_fragColor = vec4( components.colour, components.opacity );
 				}
 				FI;
 

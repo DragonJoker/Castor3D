@@ -2,7 +2,7 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Limits.hpp"
-#include "Castor3D/Material/Pass/Pass.hpp"
+#include "Castor3D/Material/Pass/Component/Lighting/SubsurfaceScatteringComponent.hpp"
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
 CU_ImplementCUSmartPtr( castor3d, SssProfileBuffer )
@@ -31,44 +31,44 @@ namespace castor3d
 	{
 	}
 
-	uint32_t SssProfileBuffer::addPass( Pass & pass )
+	uint32_t SssProfileBuffer::addPass( SubsurfaceScatteringComponent & component )
 	{
-		if ( pass.getSssProfileId() == 0u )
+		if ( component.getSssProfileId() == 0u )
 		{
 			auto lock( castor::makeUniqueLock( m_mutex ) );
 
-			CU_Require( m_passes.size() < MaxMaterialsCount );
-			m_passes.emplace_back( &pass );
-			pass.setSssProfileId( m_profileID++ );
-			m_connections.emplace_back( pass.onSssProfileChanged.connect( [this]( Pass const & ppass )
+			CU_Require( m_components.size() < MaxMaterialsCount );
+			m_components.emplace_back( &component );
+			component.setSssProfileId( m_profileID++ );
+			m_connections.emplace_back( component.onProfileChanged.connect( [this]( SubsurfaceScatteringComponent const & comp )
 				{
-					m_dirty.emplace_back( &ppass );
+					m_dirty.emplace_back( &comp );
 				} ) );
-			m_dirty.emplace_back( &pass );
+			m_dirty.emplace_back( &component );
 		}
 
-		return pass.getSssProfileId();
+		return component.getSssProfileId();
 	}
 
-	void SssProfileBuffer::removePass( Pass & pass )
+	void SssProfileBuffer::removePass( SubsurfaceScatteringComponent & component )
 	{
 		auto lock( castor::makeUniqueLock( m_mutex ) );
 
-		auto id = pass.getSssProfileId() - 1u;
-		CU_Require( id < m_passes.size() );
-		CU_Require( &pass == m_passes[id] );
-		auto it = m_passes.erase( m_passes.begin() + id );
+		auto id = component.getSssProfileId() - 1u;
+		CU_Require( id < m_components.size() );
+		CU_Require( &component == m_components[id] );
+		auto it = m_components.erase( m_components.begin() + id );
 		m_connections.erase( m_connections.begin() + id );
 		++id;
 
-		while ( it != m_passes.end() )
+		while ( it != m_components.end() )
 		{
 			( *it )->setSssProfileId( id );
 			++it;
 			++id;
 		}
 
-		pass.setSssProfileId( 0u );
+		component.setSssProfileId( 0u );
 		m_profileID--;
 	}
 
@@ -78,16 +78,16 @@ namespace castor3d
 
 		if ( !m_dirty.empty() )
 		{
-			std::vector< Pass const * > dirty;
+			std::vector< SubsurfaceScatteringComponent const * > dirty;
 			std::swap( m_dirty, dirty );
 			auto end = std::unique( dirty.begin(), dirty.end() );
 
-			std::for_each( dirty.begin(), end, [this]( Pass const * p_pass )
+			std::for_each( dirty.begin(), end, [this]( SubsurfaceScatteringComponent const * component )
 			{
-				p_pass->fillSssProfileBuffer( *this );
+					component->fillProfileBuffer( *this );
 			} );
 
-			m_buffer.setCount( uint32_t( m_passes.size() ) );
+			m_buffer.setCount( uint32_t( m_components.size() ) );
 			m_buffer.upload( commandBuffer );
 		}
 	}

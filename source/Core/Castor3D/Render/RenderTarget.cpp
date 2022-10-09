@@ -8,6 +8,7 @@
 #include "Castor3D/Cache/OverlayCache.hpp"
 #include "Castor3D/Cache/TargetCache.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
+#include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Miscellaneous/ProgressBar.hpp"
@@ -94,7 +95,8 @@ namespace castor3d
 			{
 				ImageViewCache cache;
 
-				PipelineFlags flags{ scene.getPassesType()
+				PipelineFlags flags{ scene.getEngine()->getPassComponentsRegister().getPassComponentsBitset()
+					, scene.getPassesType()
 					, castor3d::PassFlag::eNone
 					, castor3d::SubmeshFlag::ePosNmlTanTex
 					, castor3d::ProgramFlag::eNone
@@ -118,7 +120,8 @@ namespace castor3d
 			{
 				ImageViewCache cache;
 
-				PipelineFlags flags{ scene.getPassesType()
+				PipelineFlags flags{ scene.getEngine()->getPassComponentsRegister().getPassComponentsBitset()
+					, scene.getPassesType()
 					, castor3d::PassFlag::eNone
 					, castor3d::SubmeshFlag::ePosNmlTanTex
 					, castor3d::ProgramFlag::eNone

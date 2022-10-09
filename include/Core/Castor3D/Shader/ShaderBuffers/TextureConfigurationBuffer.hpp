@@ -106,14 +106,30 @@ namespace castor3d
 	public:
 		struct Data
 		{
-			castor::Point4f colOpa;
-			castor::Point4f spcShn;
-			castor::Point4f metRgh;
-			castor::Point4f emsOcc;
-			castor::Point4f trsDum;
-			castor::Point4f nmlFcr;
-			castor::Point4f hgtFcr;
-			castor::Point4f mscVls;
+			castor::Point2f colour;
+			castor::Point2f opacity;
+
+			castor::Point2f specular;
+			castor::Point2f glossiness;
+
+			castor::Point2f metalness;
+			castor::Point2f roughness;
+
+			castor::Point2f emissive;
+			castor::Point2f occlusion;
+
+			castor::Point2f transmittance;
+			castor::Point2f normal;
+
+			castor::Point2f normalFactors;
+			castor::Point2f height;
+
+			castor::Point2f heightFactors;
+			castor::Point2ui invAnim;
+
+			castor::Point2ui tileAnimSet;
+			castor::Point2ui pad;
+
 			castor::Point4f translate;
 			castor::Point4f rotate;
 			castor::Point4f scale;
