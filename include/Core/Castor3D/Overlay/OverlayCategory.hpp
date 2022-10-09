@@ -518,7 +518,7 @@ namespace castor3d
 		bool m_visible{ true };
 		//!\~english	The material used by the overlay.
 		//!\~french		Le matériau utilisé par l'incrustation.
-		MaterialRPtr m_pMaterial;
+		MaterialRPtr m_pMaterial{};
 		//!\~english	The overlay index.
 		//!\~french		L'index de l'overlay.
 		int m_index{ 0 };
