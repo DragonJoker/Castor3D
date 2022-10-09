@@ -43,9 +43,15 @@ namespace castor3d
 			: public OverlayVisitor
 		{
 		public:
+			C3D_API Preparer( Preparer const & ) = delete;
+			C3D_API Preparer & operator=( Preparer const & ) = delete;
 			C3D_API explicit Preparer( OverlayRenderer & renderer
 				, RenderDevice const & device
-				, VkRenderPass renderPass );
+				, VkRenderPass renderPass
+				, VkFramebuffer framebuffer );
+			C3D_API Preparer( Preparer && rhs );
+			C3D_API Preparer & operator=( Preparer && rhs );
+			C3D_API ~Preparer()override;
 
 			void visit( PanelOverlay const & overlay )override;
 			void visit( BorderPanelOverlay const & overlay )override;
@@ -66,6 +72,8 @@ namespace castor3d
 			RenderDevice const & m_device;
 			VkRenderPass m_renderPass;
 		};
+
+		friend class Preparer;
 
 	public:
 		/**
@@ -109,15 +117,9 @@ namespace castor3d
 		 *\param[in]	renderPass	La passe de rendu.
 		 *\param[in]	framebuffer	Le framebuffer recevant le résultat.
 		 */
-		C3D_API void beginPrepare( VkRenderPass renderPass
+		C3D_API Preparer beginPrepare( RenderDevice const & device
+			, VkRenderPass renderPass
 			, VkFramebuffer framebuffer );
-		/**
-		 *\~english
-		 *\brief		Ends the overlays preparation.
-		 *\~french
-		 *\brief		Termine la préparation des incrustations.
-		 */
-		C3D_API void endPrepare();
 		/**
 		 *\~english
 		 *\brief		Uploads all GPU buffers to VRAM.
@@ -127,23 +129,6 @@ namespace castor3d
 		 *\param[in]	cb	Le command buffer sur lequel les commandes de transfert sont enregistrées.
 		 */
 		C3D_API void upload( ashes::CommandBuffer const & cb );
-		/**
-		 *\~english
-		 *\brief		Ends the overlays preparation.
-		 *\param[in]	timer	The render pass timer.
-		 *\param[in]	queue	The queue receiving the render commands.
-		 *\param[in]	toWait	The semaphore from the previous render pass.
-		 *\return		The semaphores signaled by this render.
-		 *\~french
-		 *\brief		Termine la préparation des incrustations.
-		 *\param[in]	timer	Le timer de la passe de rendu.
-		 *\param[in]	queue	La queue recevant les commandes d'initialisation.
-		 *\param[in]	toWait	Le sémaphore de la passe de rendu précédente.
-		 *\return		Les sémaphores signalés par ce dessin.
-		 */
-		C3D_API crg::SemaphoreWaitArray render( FramePassTimer & timer
-			, ashes::Queue const & queue
-			, crg::SemaphoreWaitArray const & toWait );
 		/**
 		*\~english
 		*name
@@ -167,12 +152,6 @@ namespace castor3d
 		bool isSizeChanged()const
 		{
 			return m_sizeChanged;
-		}
-
-		Preparer getPreparer( RenderDevice const & device
-			, VkRenderPass renderPass )
-		{
-			return Preparer{ *this, device, renderPass };
 		}
 		/**@}*/
 
@@ -264,6 +243,9 @@ namespace castor3d
 		using TextVertexBufferIndex = TextVertexBufferPool::MyBufferIndex;
 
 	private:
+		void doBeginPrepare( VkRenderPass renderPass
+			, VkFramebuffer framebuffer );
+		void doEndPrepare();
 		OverlayRenderNode & doGetPanelNode( RenderDevice const & device
 			, VkRenderPass renderPass
 			, Pass const & pass );
@@ -302,7 +284,6 @@ namespace castor3d
 		UniformBufferPool & m_uboPool;
 		Texture const & m_target;
 		CommandsSemaphore m_commands;
-		ashes::FencePtr m_fence;
 		std::vector< std::unique_ptr< PanelVertexBufferPool > > m_panelVertexBuffers;
 		std::vector< std::unique_ptr< BorderPanelVertexBufferPool > > m_borderVertexBuffers;
 		std::vector< std::unique_ptr< TextVertexBufferPool > > m_textVertexBuffers;

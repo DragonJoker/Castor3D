@@ -22,7 +22,8 @@ namespace castor3d
 
 			for ( auto category : cache.getCategories() )
 			{
-				if ( category->getOverlay().isVisible() )
+				if ( category->getOverlay().isVisible()
+					&& category->getMaterial() )
 				{
 					category->update( renderer );
 					category->accept( preparer );
@@ -61,21 +62,22 @@ namespace castor3d
 	void OverlayPass::update( CpuUpdater & updater )
 	{
 		resetCommandBuffer();
-		m_renderer->beginPrepare( m_renderPass.getRenderPass()
-			, m_renderPass.getFramebuffer( 0u ) );
-		auto preparer = m_renderer->getPreparer( m_device, m_renderPass.getRenderPass() );
-
-		if ( m_drawGlobal )
 		{
-			passovy::doParseOverlays( m_scene.getEngine()->getOverlayCache()
+			auto preparer = m_renderer->beginPrepare( m_device
+				, m_renderPass.getRenderPass()
+				, m_renderPass.getFramebuffer( 0u ) );
+
+			if ( m_drawGlobal )
+			{
+				passovy::doParseOverlays( m_scene.getEngine()->getOverlayCache()
+					, *m_renderer
+					, preparer );
+			}
+
+			passovy::doParseOverlays( m_scene.getOverlayCache()
 				, *m_renderer
 				, preparer );
 		}
-
-		passovy::doParseOverlays( m_scene.getOverlayCache()
-			, *m_renderer
-			, preparer );
-		m_renderer->endPrepare();
 		reRecordCurrent();
 	}
 
@@ -99,9 +101,9 @@ namespace castor3d
 	{
 		if ( m_renderPass.initialise( context, *this ) )
 		{
-			m_renderer->beginPrepare( m_renderPass.getRenderPass()
+			m_renderer->beginPrepare( m_device
+				, m_renderPass.getRenderPass()
 				, m_renderPass.getFramebuffer( 0u ) );
-			m_renderer->endPrepare();
 		}
 
 		VkCommandBuffer secondary = m_renderer->getCommands();

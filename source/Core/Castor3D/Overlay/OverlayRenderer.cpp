@@ -317,11 +317,38 @@ namespace castor3d
 
 	OverlayRenderer::Preparer::Preparer( OverlayRenderer & renderer
 		, RenderDevice const & device
-		, VkRenderPass renderPass )
+		, VkRenderPass renderPass
+		, VkFramebuffer framebuffer )
 		: m_renderer{ renderer }
 		, m_device{ device }
 		, m_renderPass{ renderPass }
 	{
+		m_renderer.doBeginPrepare( m_renderPass, framebuffer );
+	}
+
+	OverlayRenderer::Preparer::Preparer( Preparer && rhs )
+		: m_renderer{ rhs.m_renderer }
+		, m_device{ rhs.m_device }
+		, m_renderPass{ rhs.m_renderPass }
+	{
+		rhs.m_renderPass = nullptr;
+	}
+
+	OverlayRenderer::Preparer & OverlayRenderer::Preparer::operator=( Preparer && rhs )
+	{
+		m_renderPass = rhs.m_renderPass;
+
+		rhs.m_renderPass = nullptr;
+
+		return *this;
+	}
+
+	OverlayRenderer::Preparer::~Preparer()
+	{
+		if ( m_renderPass )
+		{
+			m_renderer.doEndPrepare();
+		}
 	}
 
 	void OverlayRenderer::Preparer::visit( PanelOverlay const & overlay )
@@ -626,7 +653,6 @@ namespace castor3d
 		, m_uboPool{ *device.uboPool }
 		, m_target{ target }
 		, m_commands{ device, *device.graphicsData(), "OverlayRenderer", level }
-		, m_fence{ device->createFence( "OverlayRenderer", VK_FENCE_CREATE_SIGNALED_BIT ) }
 		, m_noTexDeclaration{ 0u
 			, ashes::VkVertexInputBindingDescriptionArray{ { 0u
 				, sizeof( OverlayCategory::Vertex )
@@ -721,22 +747,11 @@ namespace castor3d
 		}
 	}
 
-	void OverlayRenderer::beginPrepare( VkRenderPass renderPass
+	OverlayRenderer::Preparer OverlayRenderer::beginPrepare( RenderDevice const & device
+		, VkRenderPass renderPass
 		, VkFramebuffer framebuffer )
 	{
-		m_commands.commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT | VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT
-			, makeVkStruct< VkCommandBufferInheritanceInfo >( renderPass
-				, 0u
-				, framebuffer
-				, VK_FALSE
-				, 0u
-				, 0u ) );
-	}
-
-	void OverlayRenderer::endPrepare()
-	{
-		m_commands.commandBuffer->end();
-		m_sizeChanged = false;
+		return Preparer{ *this, device, renderPass, framebuffer };
 	}
 
 	void OverlayRenderer::upload( ashes::CommandBuffer const & cb )
@@ -757,23 +772,23 @@ namespace castor3d
 		}
 	}
 
-	crg::SemaphoreWaitArray OverlayRenderer::render( FramePassTimer & timer
-		, ashes::Queue const & queue
-		, crg::SemaphoreWaitArray const & toWait )
+	void OverlayRenderer::doBeginPrepare( VkRenderPass renderPass
+		, VkFramebuffer framebuffer )
 	{
-		auto timerBlock( timer.start() );
-		timerBlock->notifyPassRender();
-		std::vector< VkSemaphore > semaphores;
-		std::vector< VkPipelineStageFlags > dstStageMasks;
-		crg::convert( toWait, semaphores, dstStageMasks );
-		queue.submit( *m_commands.commandBuffer
-			, semaphores
-			, dstStageMasks
-			, *m_commands.semaphore
-			, *m_fence );
-		return { 1u
-			, { *m_commands.semaphore
-				, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT } };
+		m_retired.clear();
+		m_commands.commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT | VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT
+			, makeVkStruct< VkCommandBufferInheritanceInfo >( renderPass
+				, 0u
+				, framebuffer
+				, VK_FALSE
+				, 0u
+				, 0u ) );
+	}
+
+	void OverlayRenderer::doEndPrepare()
+	{
+		m_commands.commandBuffer->end();
+		m_sizeChanged = false;
 	}
 
 	OverlayRenderer::OverlayRenderNode & OverlayRenderer::doGetPanelNode( RenderDevice const & device
