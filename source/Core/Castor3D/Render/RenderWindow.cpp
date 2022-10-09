@@ -1415,7 +1415,7 @@ namespace castor3d
 #if !C3D_DebugPicking && !C3D_DebugBackgroundPicking
 		auto target = m_renderTarget.lock();
 
-		if ( !target )
+		if ( !target || !target->hasTechnique() )
 		{
 			return;
 		}

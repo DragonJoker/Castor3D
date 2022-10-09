@@ -6,6 +6,7 @@
 
 #include <Castor3D/Engine.hpp>
 
+#include <wx/defs.h>
 #include <wx/panel.h>
 #include <wx/timer.h>
 
@@ -48,7 +49,11 @@ namespace castortd
 		void doStartTimer( TimerID id );
 		void doStopTimer( TimerID id );
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wmissing-override"
+#pragma clang diagnostic ignored "-Wsuggest-override"
 		DECLARE_EVENT_TABLE()
+#pragma clang diagnostic pop
 		void OnSize( wxSizeEvent & event );
 		void OnMove( wxMoveEvent & event );
 		void OnPaint( wxPaintEvent & event );

@@ -2,6 +2,7 @@
 
 #include "CastorDvpTDPrerequisites.hpp"
 
+#include <wx/defs.h>
 #include <wx/frame.h>
 #include <wx/windowptr.h>
 
@@ -16,7 +17,11 @@ namespace castortd
 	private:
 		void doLoadScene();
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wmissing-override"
+#pragma clang diagnostic ignored "-Wsuggest-override"
 		DECLARE_EVENT_TABLE()
+#pragma clang diagnostic pop
 		void OnPaint( wxPaintEvent  & event );
 		void OnClose( wxCloseEvent  & event );
 		void OnEraseBackground( wxEraseEvent & event );
