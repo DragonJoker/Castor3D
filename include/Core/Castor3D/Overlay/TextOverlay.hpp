@@ -97,16 +97,6 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\return		\p true if this overlay's font has changed.
-		 *\~french
-		 *\return		\p true si la police de cette incrustation a changé.
-		 */
-		inline bool isFontChanged()const
-		{
-			return m_fontChanged;
-		}
-		/**
-		 *\~english
 		 *\brief		Retrieves the panel vertex buffer
 		 *\return		The buffer
 		 *\~french
@@ -466,7 +456,6 @@ namespace castor3d
 		castor::String m_currentCaption;
 		castor::String m_previousCaption;
 		FontTextureWPtr m_fontTexture;
-		bool m_fontChanged{ true };
 		TextWrappingMode m_wrappingMode{ TextWrappingMode::eNone };
 		TextLineSpacingMode m_lineSpacingMode{ TextLineSpacingMode::eOwnHeight };
 		HAlign m_hAlign{ HAlign::eLeft };

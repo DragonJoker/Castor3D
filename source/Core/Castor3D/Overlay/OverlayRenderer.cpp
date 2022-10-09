@@ -58,7 +58,6 @@ namespace castor3d
 			eMatrix,
 			eOverlay,
 			eTextMap,
-			eMaps,
 		};
 
 		template< typename VertexT, uint32_t CountT >
@@ -525,11 +524,11 @@ namespace castor3d
 			auto size = overlay.getAbsoluteSize( m_renderer.m_size ) + borderExtent;
 			size->x = std::max( 1u, size->x );
 			size->y = std::max( 1u, size->y );
-			auto & commandBuffer = *m_renderer.m_commands.commandBuffer;
+			ashes::CommandBuffer & commandBuffer = *m_renderer.m_commands.commandBuffer;
 			commandBuffer.bindPipeline( *bufferIndex.node.pipeline.pipeline );
 			commandBuffer.setViewport( makeViewport( m_renderer.m_size ) );
 			commandBuffer.setScissor( makeScissor( position, size ) );
-			commandBuffer.bindDescriptorSet( *bufferIndex.descriptorSet
+			commandBuffer.bindDescriptorSets( { *descriptorConnection.descriptorSet, *device.renderSystem.getEngine()->getTextureUnitCache().getDescriptorSet() }
 				, *bufferIndex.node.pipeline.pipelineLayout );
 			commandBuffer.bindVertexBuffer( 0u
 				, bufferIndex.geometryBuffers.noTexture.bufferOffset.getBuffer( SubmeshFlag::ePositions )
@@ -810,13 +809,11 @@ namespace castor3d
 	}
 
 	ashes::DescriptorSetPtr OverlayRenderer::doCreateDescriptorSet( OverlayRenderer::Pipeline & pipeline
-		, TextureFlags textures
 		, Pass const & pass
 		, UniformBufferOffsetT< Configuration > const & overlayUbo
 		, uint32_t index
 		, bool update )
 	{
-		remFlag( textures, TextureFlag::eAllButColourAndOpacity );
 		auto result = pipeline.descriptorPool->createDescriptorSet( "OverlayRenderer" + castor::string::toString( index ) );
 
 		// Pass buffer
@@ -833,23 +830,6 @@ namespace castor3d
 		// Overlay UBO
 		overlayUbo.createSizedBinding( *result
 			, pipeline.descriptorLayout->getBinding( uint32_t( ovrlrend::OverlayBindingId::eOverlay ) ) );
-		uint32_t texIndex = 0u;
-
-		for ( auto & unit : pass.getTextureUnits( textures ) )
-		{
-			auto config = unit->getConfiguration();
-
-			if ( unit->isInitialised()
-				&& ( config.colourMask[0]
-				|| config.opacityMask[0] ) )
-			{
-				result->createBinding( pipeline.descriptorLayout->getBinding( uint32_t( ovrlrend::OverlayBindingId::eMaps ) )
-					, unit->getTexture()->getDefaultView().getSampledView()
-					, unit->getSampler().lock()->getSampler()
-					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-					, texIndex++ );
-			}
-		}
 
 		if ( update )
 		{
@@ -860,7 +840,6 @@ namespace castor3d
 	}
 
 	ashes::DescriptorSetPtr OverlayRenderer::doCreateDescriptorSet( OverlayRenderer::Pipeline & pipeline
-		, TextureFlags textures
 		, Pass const & pass
 		, UniformBufferOffsetT< Configuration > const & overlayUbo
 		, uint32_t index
@@ -868,7 +847,6 @@ namespace castor3d
 		, Sampler const & sampler )
 	{
 		auto result = doCreateDescriptorSet( pipeline
-			, std::move( textures )
 			, pass
 			, overlayUbo
 			, index
@@ -926,17 +904,10 @@ namespace castor3d
 				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 		}
 
-		if ( !texturesFlags.empty() )
-		{
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( ovrlrend::OverlayBindingId::eMaps )
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT
-				, uint32_t( texturesFlags.size() ) ) );
-		}
-
+		auto texLayout = getOwner()->getEngine()->getTextureUnitCache().getDescriptorLayout();
 		auto descriptorLayout = device->createDescriptorSetLayout( std::move( bindings ) );
 		auto descriptorPool = descriptorLayout->createPool( 1000u );
-		auto pipelineLayout = device->createPipelineLayout( *descriptorLayout );
+		auto pipelineLayout = device->createPipelineLayout( { *descriptorLayout, *texLayout } );
 		auto pipeline = device->createPipeline( { 0u
 			, std::move( program )
 			, *vertexLayout

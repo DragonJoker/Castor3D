@@ -328,11 +328,6 @@ namespace castor3d
 			return *m_device;
 		}
 
-		OverlayRendererSPtr getOverlayRenderer()const
-		{
-			return m_overlayRenderer;
-		}
-
 		castor::Nanoseconds const & getGpuTime()const
 		{
 			return m_gpuTime;
@@ -428,7 +423,6 @@ namespace castor3d
 		std::recursive_mutex m_mutex;
 		Renderer m_renderer;
 		GpuInformations m_gpuInformations;
-		OverlayRendererSPtr m_overlayRenderer;
 		DebugCallbacksPtr m_debug;
 		VkPhysicalDeviceMemoryProperties m_memoryProperties;
 		VkPhysicalDeviceProperties m_properties;

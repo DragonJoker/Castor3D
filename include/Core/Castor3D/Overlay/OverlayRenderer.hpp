@@ -287,13 +287,11 @@ namespace castor3d
 			, FilteredTextureFlags const & textures
 			, bool text );
 		ashes::DescriptorSetPtr doCreateDescriptorSet( OverlayRenderer::Pipeline & pipeline
-			, TextureFlags textures
 			, Pass const & pass
 			, UniformBufferOffsetT< Configuration > const & overlayUbo
 			, uint32_t index
 			, bool update = true );
 		ashes::DescriptorSetPtr doCreateDescriptorSet( OverlayRenderer::Pipeline & pipeline
-			, TextureFlags textures
 			, Pass const & pass
 			, UniformBufferOffsetT< Configuration > const & overlayUbo
 			, uint32_t index
