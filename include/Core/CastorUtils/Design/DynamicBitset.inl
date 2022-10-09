@@ -126,7 +126,7 @@ namespace castor
 
 		if ( size > m_bitCount && remainingBits > 0u && value )
 		{
-			m_blocks[lastBlockIndex] |= fullBitMask << remainingBits;
+			m_blocks[lastBlockIndex] |= BlockTypeT( fullBitMask << remainingBits );
 		}
 
 		m_bitCount = size;
