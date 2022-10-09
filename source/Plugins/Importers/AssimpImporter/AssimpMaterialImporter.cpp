@@ -199,9 +199,12 @@ namespace c3d_assimp
 					hasOpa = parseComponentInvOpaDataT< castor3d::OpacityComponent >( AI_MATKEY_TRANSPARENCYFACTOR, 1.0f );
 				}
 
-				if ( hasOpa && m_result.getComponent< castor3d::OpacityComponent >()->getOpacity() < 1.0f )
+				if ( auto opaComp = m_result.getComponent< castor3d::OpacityComponent >() )
 				{
-					parseComponentRgbData< castor3d::TransmissionComponent >( AI_MATKEY_COLOR_TRANSPARENT );
+					if ( hasOpa && opaComp->getOpacity() < 1.0f )
+					{
+						parseComponentRgbData< castor3d::TransmissionComponent >( AI_MATKEY_COLOR_TRANSPARENT );
+					}
 				}
 
 				parseAlphaRefValue();
