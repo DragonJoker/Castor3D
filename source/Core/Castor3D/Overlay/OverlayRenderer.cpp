@@ -487,27 +487,29 @@ namespace castor3d
 			ovrlrend::doFillBuffers( vertices.begin()
 				, uint32_t( vertices.size() )
 				, bufferIndex );
+			auto ptr = fontTexture ? fontTexture->getTexture().get() : nullptr;
+			auto ires = bufferIndex.descriptorSets.emplace( ptr, OverlayDescriptorConnection{} );
+			auto & descriptorConnection = ires.first->second;
 
-			if ( !bufferIndex.descriptorSet )
+			if ( ires.second || !descriptorConnection.descriptorSet )
 			{
 				if ( fontTexture )
 				{
-					bufferIndex.descriptorSet = m_renderer.doCreateDescriptorSet( bufferIndex.node.pipeline
-						, pass.getTextures()
+					descriptorConnection.descriptorSet = m_renderer.doCreateDescriptorSet( bufferIndex.node.pipeline
 						, pass
 						, bufferIndex.overlayUbo
 						, bufferIndex.index
 						, *fontTexture->getTexture()
 						, *fontTexture->getSampler().lock() );
-					bufferIndex.connection = fontTexture->onChanged.connect( [&bufferIndex]( FontTexture const & )
+					OverlayRenderer & renderer = m_renderer;
+					descriptorConnection.connection = fontTexture->onChanged.connect( [&renderer, &descriptorConnection]( DoubleBufferedTextureLayout const & )
 						{
-							bufferIndex.descriptorSet.reset();
+							renderer.m_retired.emplace_back( std::move( descriptorConnection.descriptorSet ) );
 						} );
 				}
 				else
 				{
-					bufferIndex.descriptorSet = m_renderer.doCreateDescriptorSet( bufferIndex.node.pipeline
-						, pass.getTextures()
+					descriptorConnection.descriptorSet = m_renderer.doCreateDescriptorSet( bufferIndex.node.pipeline
 						, pass
 						, bufferIndex.overlayUbo
 						, bufferIndex.index );

@@ -205,6 +205,12 @@ namespace castor3d
 			GeometryBuffers textured;
 		};
 
+		struct OverlayDescriptorConnection
+		{
+			ashes::DescriptorSetPtr descriptorSet;
+			FontTexture::OnChanged::connection connection{};
+		};
+
 		template< typename VertexT, uint32_t CountT >
 		struct VertexBufferIndexT;
 
@@ -247,8 +253,7 @@ namespace castor3d
 			uint32_t index;
 			UniformBufferOffsetT< Configuration > overlayUbo{};
 			OverlayGeometryBuffers geometryBuffers{};
-			ashes::DescriptorSetPtr descriptorSet{};
-			FontTexture::OnChanged::connection connection{};
+			std::map< void *, OverlayDescriptorConnection > descriptorSets{};
 		};
 
 		using PanelVertexBufferPool = VertexBufferPoolT< OverlayCategory::Vertex, 6u >;
@@ -318,6 +323,7 @@ namespace castor3d
 		castor::String m_previousCaption;
 		bool m_sizeChanged{ true };
 		MatrixUbo m_matrixUbo;
+		std::vector< ashes::DescriptorSetPtr > m_retired;
 	};
 }
 
