@@ -26,11 +26,19 @@ namespace castor
 		{
 		}
 
+		ChangeTrackedT( ChangeTrackedT && rhs )noexcept
+			: m_value{ std::move( rhs.m_value ) }
+		{
+			this->doCopy( m_dirty, rhs.m_dirty );
+		}
+
 		ChangeTrackedT( ChangeTrackedT const & rhs )noexcept
 			: m_value{ rhs.m_value }
 			, m_dirty{ true }
 		{
 		}
+
+		~ChangeTrackedT() = default;
 
 		ChangeTrackedT & operator=( ValueT const & rhs )noexcept
 		{
@@ -43,6 +51,13 @@ namespace castor
 		{
 			this->doCopy( m_dirty, m_dirty || ( m_value != rhs.m_value ) );
 			m_value = rhs.m_value;
+			return *this;
+		}
+
+		ChangeTrackedT & operator=( ChangeTrackedT && rhs )noexcept
+		{
+			this->doCopy( m_dirty, rhs.m_dirty );
+			m_value = std::move( rhs.m_value );
 			return *this;
 		}
 

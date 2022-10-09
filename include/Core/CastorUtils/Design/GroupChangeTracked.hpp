@@ -23,11 +23,25 @@ namespace castor
 		{
 		}
 
+		GroupChangeTrackedT( GroupChangeTrackedT && rhs )noexcept
+			: m_value{ std::move( rhs.m_value ) }
+			, m_dirty{ rhs.m_dirty }
+		{
+		}
+
+		GroupChangeTrackedT( GroupChangeTrackedT const & rhs )noexcept
+			: m_value{ rhs.m_value }
+			, m_dirty{ rhs.m_dirty }
+		{
+		}
+
 		GroupChangeTrackedT( ControlT & dirty, ValueT rhs )noexcept
 			: m_value{ std::move( rhs ) }
 			, m_dirty{ dirty }
 		{
 		}
+
+		~GroupChangeTrackedT() = default;
 
 		GroupChangeTrackedT & operator=( ValueT const & rhs )noexcept
 		{
@@ -40,6 +54,13 @@ namespace castor
 		{
 			this->doCopy( m_dirty, m_dirty || ( m_value != rhs.m_value ) );
 			m_value = rhs.m_value;
+			return *this;
+		}
+
+		GroupChangeTrackedT & operator=( GroupChangeTrackedT && rhs )noexcept
+		{
+			this->doCopy( m_dirty, rhs.m_dirty );
+			m_value = std::move( rhs.m_value );
 			return *this;
 		}
 
