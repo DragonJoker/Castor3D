@@ -16,13 +16,137 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	class FontTexture
+	C3D_API void postPreRenderGpuEvent( Engine & engine
+		, std::function< void( RenderDevice const &, QueueData const & ) > event );
+	C3D_API void postQueueRenderCpuEvent( Engine & engine
+		, std::function< void() > event );
+
+	template< typename ResourceT, template< typename ResT > typename PointerT >
+	class DoubleBufferedResourceT
 		: public castor::OwnedBy< Engine >
 	{
 	public:
-		CU_DeclareMap( char32_t, castor::Position, GlyphPosition );
-		using OnChangedFunction = std::function< void( FontTexture const & ) >;
+		using ResourcePtrT = PointerT< ResourceT >;
+		using OnChangedFunction = std::function< void( DoubleBufferedResourceT const & ) >;
 		using OnChanged = castor::SignalT< OnChangedFunction >;
+
+	protected:
+		DoubleBufferedResourceT( Engine & parent
+			, ResourcePtrT back
+			, ResourcePtrT front )
+			: OwnedBy{ parent }
+			, m_back{ std::move( back ) }
+			, m_front{ std::move( front ) }
+		{
+		}
+
+		C3D_API virtual ~DoubleBufferedResourceT() = default;
+
+	public:
+		//!\~english	The signal used to notify clients that this resource has changed.
+		//!\~french		Signal utilisé pour notifier les clients que cette ressource a changé.
+		OnChanged onChanged;
+		/**
+		 *\~english
+		 *\brief		Updates the resource.
+		 *\~french
+		 *\brief		Met à jour la ressource.
+		 */
+		void update( bool clean )
+		{
+			doRefresh( clean, m_first.exchange( false ) );
+		}
+
+		inline ResourcePtrT const & getResource()const
+		{
+			return m_front;
+		}
+
+	protected:
+		ResourcePtrT m_back;
+		ResourcePtrT m_front;
+		/**
+		 *\~english
+		 *\brief		Initialises the texture.
+		 *\param[in]	device		The GPU device.
+		 *\param[in]	queueData	The queue receiving the GPU commands.
+		 *\~french
+		 *\brief		Initialise la texture.
+		 *\param[in]	device		Le device GPU.
+		 *\param[in]	queueData	La queue recevant les commandes GPU.
+		 */
+		void doInitialise( RenderDevice const & device
+			, QueueData const & queueData )
+		{
+			initialiseResource( *m_back, device, queueData );
+			initialiseResource( *m_front, device, queueData );
+		}
+		/**
+		 *\~english
+		 *\brief		Flushes the teture.
+		 *\~french
+		 *\brief		Nettoie la texture.
+		 */
+		void doCleanup()
+		{
+			cleanupResource( *m_front );
+			cleanupResource( *m_back );
+		}
+		/**
+		 *\~english
+		 *\brief		Orders events to refresh the resource.
+		 *\~french
+		 *\brief		Ordonne les évènements pour rafraîchir la ressource.
+		 */
+		void doRefresh( bool clean
+			, bool front )
+		{
+			auto & resource = front ? *m_front : *m_back;
+			updateResource( resource, front );
+			postPreRenderGpuEvent( *getEngine()
+				, [this, clean, front, &resource]( RenderDevice const & device
+					, QueueData const & queueData )
+				{
+					if ( clean )
+					{
+						cleanupResource( resource );
+					}
+
+					initialiseResource( resource
+						, device
+						, queueData );
+
+					if ( !front )
+					{
+						postQueueRenderCpuEvent( *getEngine()
+							, [this]()
+							{
+								std::swap( m_front, m_back );
+								swapResources();
+								onChanged( *this );
+							} );
+					}
+				} );
+		}
+
+	private:
+		std::atomic_bool m_first{ true };
+
+		C3D_API virtual void initialiseResource( ResourceT & resource
+			, RenderDevice const & device
+			, QueueData const & queueData ) = 0;
+		C3D_API virtual void cleanupResource( ResourceT & resource ) = 0;
+		C3D_API virtual void updateResource( ResourceT & resource
+			, bool front ) = 0;
+		C3D_API virtual void swapResources() = 0;
+	};
+	using DoubleBufferedTextureLayout = DoubleBufferedResourceT< TextureLayout, std::shared_ptr >;
+
+	class FontTexture
+		: public DoubleBufferedTextureLayout
+	{
+	public:
+		CU_DeclareMap( char32_t, castor::Position, GlyphPosition );
 
 	public:
 		/**
@@ -43,7 +167,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API ~FontTexture();
+		C3D_API ~FontTexture()override;
 		/**
 		 *\~english
 		 *\brief		Initialises the texture.
@@ -63,13 +187,6 @@ namespace castor3d
 		 *\brief		Nettoie la texture.
 		 */
 		C3D_API void cleanup( RenderDevice const & device );
-		/**
-		 *\~english
-		 *\brief		Updates the glyphs.
-		 *\~french
-		 *\brief		Met à jour les glyphes.
-		 */
-		C3D_API void update();
 		/**
 		 *\~english
 		 *\brief		Retrieves the font name.
@@ -112,7 +229,7 @@ namespace castor3d
 		 */
 		inline TextureLayoutSPtr getTexture()const
 		{
-			return m_texture;
+			return getResource();
 		}
 		/**
 		 *\~english
@@ -127,16 +244,21 @@ namespace castor3d
 			return m_sampler;
 		}
 
-	public:
-		//!\~english	The signal used to notify clients that this texture has changed.
-		//!\~french		Signal utilisé pour notifier les clients que cette texture a changé.
-		OnChanged onChanged;
+	private:
+		void initialiseResource( TextureLayout & resource
+			, RenderDevice const & device
+			, QueueData const & queueData )override;
+		void cleanupResource( TextureLayout & resource )override;
+		void updateResource( TextureLayout & resource
+			, bool front )override;
+		void swapResources()override;
 
 	private:
 		castor::FontResPtr m_font;
 		SamplerResPtr m_sampler;
-		TextureLayoutSPtr m_texture;
-		GlyphPositionMap m_glyphsPositions;
+		GlyphPositionMap m_frontGlyphsPositions;
+		GlyphPositionMap m_backGlyphsPositions;
+
 	};
 }
 

@@ -28,6 +28,7 @@ namespace castor3d
 
 			if ( !fontTexture )
 			{
+				CU_Failure( cuT( "The TextOverlay has no FontTexture. Did you set its font?" ) );
 				CU_Exception( cuT( "The TextOverlay [" ) + overlay.getOverlayName() + cuT( "] has no FontTexture. Did you set its font?" ) );
 			}
 
@@ -35,6 +36,7 @@ namespace castor3d
 
 			if ( !pfont )
 			{
+				CU_Failure( cuT( "The TextOverlay has no Font. Did you set its font?" ) );
 				CU_Exception( cuT( "The TextOverlay [" ) + overlay.getOverlayName() + cuT( "] has no Font. Did you set its font?" ) );
 			}
 
@@ -70,18 +72,19 @@ namespace castor3d
 			if ( !fontTexture )
 			{
 				fontTexture = engine->getOverlayCache().createFontTexture( font );
-				fontTexture->update();
+				fontTexture->update( false );
 			}
 
 			m_connection.disconnect();
 			m_fontTexture = fontTexture;
-			m_connection = fontTexture->onChanged.connect( [this]( FontTexture const & p_texture )
+			m_connection = fontTexture->onChanged.connect( [this]( DoubleBufferedTextureLayout const & )
 			{
 				m_textChanged = true;
 			} );
 		}
 		else
 		{
+			CU_Failure( cuT( "Font not found" ) );
 			CU_Exception( "Font " + castor::string::stringCast< char >( name ) + "not found" );
 		}
 
@@ -90,11 +93,11 @@ namespace castor3d
 
 	void TextOverlay::doUpdate( OverlayRenderer const & renderer )
 	{
-		m_fontChanged = false;
 		FontTextureSPtr fontTexture = getFontTexture();
 
 		if ( !fontTexture )
 		{
+			CU_Failure( cuT( "The TextOverlay has no FontTexture. Did you set its font?" ) );
 			CU_Exception( cuT( "The TextOverlay [" ) + getOverlayName() + cuT( "] has no FontTexture. Did you set its font?" ) );
 		}
 
@@ -103,6 +106,7 @@ namespace castor3d
 		if ( !font )
 		{
 			setVisible( false );
+			CU_Failure( cuT( "The TextOverlay has no Font. Did you set its font?" ) );
 			CU_Exception( cuT( "The TextOverlay [" ) + getOverlayName() + cuT( "] has no Font. Did you set its font?" ) );
 		}
 
@@ -123,16 +127,7 @@ namespace castor3d
 				font->loadGlyph( c );
 			}
 
-			fontTexture->update();
-
-			getOverlay().getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
-				, [this, fontTexture]( RenderDevice const & device
-					, QueueData const & queueData )
-				{
-					m_fontChanged = true;
-					fontTexture->cleanup( device );
-					fontTexture->initialise( device, queueData );
-				} ) );
+			fontTexture->update( true );
 		}
 	}
 
