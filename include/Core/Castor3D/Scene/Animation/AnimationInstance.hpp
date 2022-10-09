@@ -14,15 +14,31 @@ namespace castor3d
 	public:
 		/**
 		 *\~english
+		 *name Copy / Move.
+		 *\~french
+		 *name Copie / Déplacement.
+		 **/
+		/**@{*/
+		C3D_API AnimationInstance & operator=( AnimationInstance && rhs ) = delete;
+		C3D_API AnimationInstance( AnimationInstance const & rhs ) = delete;
+		C3D_API AnimationInstance & operator=( AnimationInstance const & rhs ) = delete;
+		C3D_API AnimationInstance( AnimationInstance && rhs );
+		/**@}*/
+		/**
+		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	object		The parent AnimatedObject.
 		 *\param[in]	animation	The animation.
+		 *\param[in]	looped		Is the animation looped or not.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	object		L'AnimatedObject parent.
 		 *\param[in]	animation	L'animation.
+		 *\param[in]	looped		L'animation tourne-t-elle en boucle ou pas.
 		 */
-		C3D_API AnimationInstance( AnimatedObject & object, Animation & animation );
+		C3D_API AnimationInstance( AnimatedObject & object
+			, Animation & animation
+			, bool looped = false );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -197,7 +213,7 @@ namespace castor3d
 		float m_scale{ 1.0f };
 		//!\~english	Tells whether or not the animation is looped.
 		//!\~french		Dit si oui ou non l'animation est bouclée.
-		bool m_looped{ false };
+		std::atomic_bool m_looped;
 		//!\~english	The starting point.
 		//!\~french		Le point de départ.
 		castor::Milliseconds m_startingPoint{ 0 };

@@ -11,7 +11,7 @@ namespace castor3d
 	//*************************************************************************************************
 
 	TextureAnimationInstance::TextureAnimationInstance( AnimatedTexture & object, TextureAnimation & animation )
-		: AnimationInstance{ object, animation }
+		: AnimationInstance{ object, animation, true }
 		, m_animatedTexture{ object }
 		, m_textureAnimation{ animation }
 	{

@@ -4,9 +4,19 @@
 
 namespace castor3d
 {
-	AnimationInstance::AnimationInstance( AnimatedObject & object, Animation & animation )
+	AnimationInstance::AnimationInstance( AnimationInstance && rhs )
+		: castor::OwnedBy< AnimatedObject >{ *rhs.getOwner() }
+		, m_animation{ std::move( rhs.m_animation ) }
+		, m_looped{ rhs.m_looped.load() }
+	{
+	}
+
+	AnimationInstance::AnimationInstance( AnimatedObject & object
+		, Animation & animation
+		, bool looped )
 		: castor::OwnedBy< AnimatedObject >{ object }
 		, m_animation{ animation }
+		, m_looped{ looped }
 	{
 	}
 
@@ -16,7 +26,6 @@ namespace castor3d
 			? m_animation.getLength()
 			: std::min( m_stoppingPoint, m_animation.getLength() );
 		double scale = m_scale;
-		auto looped = m_looped;
 
 		if ( m_state != AnimationState::eStopped && length > 0_ms )
 		{
@@ -26,7 +35,7 @@ namespace castor3d
 
 				if ( m_currentTime >= length )
 				{
-					if ( !looped )
+					if ( !m_looped )
 					{
 						m_state = AnimationState::ePaused;
 						m_currentTime = length;
@@ -44,7 +53,7 @@ namespace castor3d
 				}
 				else if ( m_currentTime < m_startingPoint )
 				{
-					if ( !looped )
+					if ( !m_looped )
 					{
 						m_state = AnimationState::ePaused;
 						m_currentTime = m_startingPoint;
