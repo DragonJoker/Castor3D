@@ -351,6 +351,7 @@ namespace castor3d
 #else
 		static const uint32_t FRAME_SAMPLES_COUNT = 20;
 #endif
+		std::mutex m_mutex;
 		castor::PreciseTimer m_taskTimer{};
 		castor::PreciseTimer m_frameTimer{};
 		castor::PreciseTimer m_debugTimer{};
