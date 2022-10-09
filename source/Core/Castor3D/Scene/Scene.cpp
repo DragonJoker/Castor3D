@@ -775,7 +775,9 @@ namespace castor3d
 
 	bool Scene::hasBindless()const
 	{
-		return getEngine()->getTextureUnitCache().hasBindless();
+		auto device = getEngine()->getRenderDevice();
+		CU_Require( getEngine()->getRenderDevice() );
+		return device->hasBindless();
 	}
 
 	ashes::DescriptorSetLayout * Scene::getBindlessTexDescriptorLayout()const
@@ -936,27 +938,28 @@ namespace castor3d
 			bool dirty = false;
 			auto & geometry = *object;
 
-			for ( auto & passIt : object->getIds() )
+			for ( auto & passIt : geometry.getIds() )
 			{
 				for ( auto & submeshIt : passIt.second )
 				{
 					auto & submesh = submeshIt.second.second->data;
-					object->fillEntry( submeshIt.second.first
+					geometry.fillEntry( submeshIt.second.first
 						, *passIt.first
-						, *object->getParent()
+						, *geometry.getParent()
 						, submesh.getMeshletsCount()
 						, submeshIt.second.second->modelData );
-					object->fillEntryOffsets( submeshIt.second.first
+					geometry.fillEntryOffsets( submeshIt.second.first
 						, submesh.getVertexOffset( geometry )
 						, submesh.getIndexOffset()
 						, submesh.getMeshletOffset() );
-					dirty = dirty || passIt.first->getId() == 0;
 				}
+
+				dirty = dirty || passIt.first->getId() == 0;
 			}
 
 			if ( dirty )
 			{
-				markDirty( *object );
+				markDirty( geometry );
 			}
 		}
 
