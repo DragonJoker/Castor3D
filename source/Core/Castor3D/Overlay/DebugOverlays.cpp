@@ -528,6 +528,7 @@ namespace castor3d
 		if ( m_dirty )
 		{
 			uint32_t offset = 0u;
+			auto lock( castor::makeUniqueLock( m_mutex ) );
 
 			for ( auto & renderPass : m_renderPasses )
 			{
@@ -545,6 +546,7 @@ namespace castor3d
 	uint32_t DebugOverlays::registerTimer( castor::String const & category
 		, FramePassTimer & timer )
 	{
+		auto lock( castor::makeUniqueLock( m_mutex ) );
 		auto realCategory = category.substr( 0u, category.find_last_of( cuT( '/' ) ) );
 		auto & cache = getEngine()->getOverlayCache();
 		auto ires = m_renderPasses.emplace( realCategory, CategoryOverlays{} );
@@ -564,6 +566,7 @@ namespace castor3d
 	void DebugOverlays::unregisterTimer( castor::String const & category
 		, FramePassTimer & timer )
 	{
+		auto lock( castor::makeUniqueLock( m_mutex ) );
 		m_dirty = true;
 		auto it = m_renderPasses.find( category );
 
@@ -578,6 +581,7 @@ namespace castor3d
 
 	void DebugOverlays::dumpFrameTimes( Parameters & params )
 	{
+		auto lock( castor::makeUniqueLock( m_mutex ) );
 		params.add( "Average", m_averageTime );
 
 		for ( auto & pass : m_renderPasses )
@@ -611,6 +615,8 @@ namespace castor3d
 
 		if ( m_visible )
 		{
+			auto lock( castor::makeUniqueLock( m_mutex ) );
+
 			for ( auto & pass : m_renderPasses )
 			{
 				pass.second.update();
@@ -631,11 +637,14 @@ namespace castor3d
 
 	void DebugOverlays::endGpuTask()
 	{
-		for ( auto & renderPass : m_renderPasses )
 		{
-			renderPass.second.retrieveGpuTime();
-		}
+			auto lock( castor::makeUniqueLock( m_mutex ) );
 
+			for ( auto & renderPass : m_renderPasses )
+			{
+				renderPass.second.retrieveGpuTime();
+			}
+		}
 		m_gpuTime += m_taskTimer.getElapsed();
 	}
 
@@ -648,10 +657,13 @@ namespace castor3d
 	{
 		m_visible = show;
 		m_debugPanel->setVisible( m_visible );
-
-		for ( auto & pass : m_renderPasses )
 		{
-			pass.second.setVisible( m_visible );
+			auto lock( castor::makeUniqueLock( m_mutex ) );
+
+			for ( auto & pass : m_renderPasses )
+			{
+				pass.second.setVisible( m_visible );
+			}
 		}
 	}
 
@@ -720,12 +732,15 @@ namespace castor3d
 	{
 		m_gpuTotalTime = 0_ns;
 		m_gpuClientTime = 0_ns;
-
-		for ( auto & pass : m_renderPasses )
 		{
-			pass.second.compute();
-			m_gpuTotalTime += pass.second.getGpuTime();
-			m_gpuClientTime += pass.second.getCpuTime();
+			auto lock( castor::makeUniqueLock( m_mutex ) );
+
+			for ( auto & pass : m_renderPasses )
+			{
+				pass.second.compute();
+				m_gpuTotalTime += pass.second.getGpuTime();
+				m_gpuClientTime += pass.second.getCpuTime();
+			}
 		}
 	}
 
