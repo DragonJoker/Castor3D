@@ -30,8 +30,8 @@ namespace castor3d
 			} ) )
 		, m_ignoredNode{ ignored }
 		, m_renderNodes{ castor::makeUnique< QueueRenderNodes >( *this ) }
-		, m_viewport{ castor::makeChangeTracked< ashes::Optional< VkViewport > >( m_culledChanged, ashes::nullopt ) }
-		, m_scissor{ castor::makeChangeTracked< ashes::Optional< VkRect2D > >( m_culledChanged, ashes::nullopt ) }
+		, m_viewport{ castor::makeGroupChangeTracked< ashes::Optional< VkViewport > >( m_culledChanged, ashes::nullopt ) }
+		, m_scissor{ castor::makeGroupChangeTracked< ashes::Optional< VkRect2D > >( m_culledChanged, ashes::nullopt ) }
 	{
 	}
 

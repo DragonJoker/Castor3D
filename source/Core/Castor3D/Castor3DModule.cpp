@@ -27,14 +27,20 @@ namespace castor3d
 	VkClearColorValue convert( castor::RgbaColour const & value )
 	{
 		VkClearColorValue result;
-		std::memcpy( result.float32, value.constPtr(), 4 * sizeof( float ) );
+		result.float32[0] = value.red();
+		result.float32[1] = value.green();
+		result.float32[2] = value.blue();
+		result.float32[3] = value.alpha();
 		return result;
 	}
 
 	castor::RgbaColour convert( VkClearColorValue const & value )
 	{
 		castor::RgbaColour result;
-		std::memcpy( result.ptr(), value.float32, 4 * sizeof( float ) );
+		result.red() = value.float32[0];
+		result.green() = value.float32[1];
+		result.blue() = value.float32[2];
+		result.alpha() = value.float32[3];
 		return result;
 	}
 

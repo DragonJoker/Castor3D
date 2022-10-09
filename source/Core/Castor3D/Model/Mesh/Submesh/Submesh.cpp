@@ -298,7 +298,6 @@ namespace castor3d
 
 	VkDeviceSize Submesh::getVertexOffset( Geometry const & geometry )const
 	{
-		CU_Require( m_sourceBufferOffset );
 		return m_sourceBufferOffset
 			? getFinalBufferOffsets( geometry ).getFirstVertex< castor::Point4f >()
 			: 0u;
@@ -306,7 +305,6 @@ namespace castor3d
 
 	VkDeviceSize Submesh::getIndexOffset()const
 	{
-		CU_Require( m_sourceBufferOffset );
 		return m_sourceBufferOffset
 			? m_sourceBufferOffset.getFirstIndex< uint32_t >()
 			: 0u;
