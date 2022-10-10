@@ -109,7 +109,6 @@ namespace castor3d
 
 	void AlphaTestComponent::ComponentsShader::fillComponents( sdw::type::BaseStruct & components
 		, shader::Materials const & materials
-		, shader::Material const * material
 		, sdw::StructInstance const * surface )const
 	{
 		if ( !checkFlag( materials.getFilter(), ComponentModeFlag::eOpacity ) )
@@ -123,7 +122,7 @@ namespace castor3d
 		}
 	}
 
-	void AlphaTestComponent::ComponentsShader::fillComponentsInits( sdw::type::BaseStruct & components
+	void AlphaTestComponent::ComponentsShader::fillComponentsInits( sdw::type::BaseStruct const & components
 		, shader::Materials const & materials
 		, shader::Material const * material
 		, sdw::StructInstance const * surface
@@ -158,7 +157,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	AlphaTestComponent::MaterialShader::MaterialShader()
-		: shader::PassMaterialShader{ MemChunk{ 0u, 4u, 4u } }
+		: shader::PassMaterialShader{ 4u }
 	{
 	}
 
@@ -174,15 +173,8 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const AlphaTestComponent::TypeName = C3D_MakePassComponentName( "alpha_test" );
-
-	AlphaTestComponent::AlphaTestComponent( Pass & pass )
-		: BaseDataPassComponentT< AlphaTestData >{ pass, TypeName }
-	{
-	}
-
-	void AlphaTestComponent::createParsers( castor::AttributeParsers & parsers
-		, ChannelFillers & channelFillers )
+	void AlphaTestComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+		, ChannelFillers & channelFillers )const
 	{
 		static UInt32StrMap const comparisonFuncs = getEnumMapT( VK_COMPARE_OP_NEVER, VK_COMPARE_OP_ALWAYS );
 		Pass::addParserT( parsers
@@ -197,18 +189,27 @@ namespace castor3d
 			, { castor::makeParameter< castor::ParameterType::eCheckedText >( comparisonFuncs ), castor::makeParameter< castor::ParameterType::eFloat >() } );
 	}
 
-	void AlphaTestComponent::zeroBuffer( Pass const & pass
+	void AlphaTestComponent::Plugin::zeroBuffer( Pass const & pass
 		, shader::PassMaterialShader const & materialShader
-		, PassBuffer & buffer )
+		, PassBuffer & buffer )const
 	{
 		auto data = buffer.getData( pass.getId() );
 		data.write( materialShader.getMaterialChunk(), 0.95f, 0u );
 	}
 
-	bool AlphaTestComponent::isComponentNeeded( TextureFlags const & textures
-		, ComponentModeFlags const & filter )
+	bool AlphaTestComponent::Plugin::isComponentNeeded( TextureFlags const & textures
+		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eOpacity );
+	}
+
+	//*********************************************************************************************
+
+	castor::String const AlphaTestComponent::TypeName = C3D_MakePassComponentName( "alpha_test" );
+
+	AlphaTestComponent::AlphaTestComponent( Pass & pass )
+		: BaseDataPassComponentT< AlphaTestData >{ pass, TypeName }
+	{
 	}
 
 	void AlphaTestComponent::accept( PassVisitorBase & vis )

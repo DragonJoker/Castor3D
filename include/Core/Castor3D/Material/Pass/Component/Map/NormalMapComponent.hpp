@@ -24,25 +24,38 @@ namespace castor3d
 				, shader::BlendComponents const & components )const override;
 		};
 
-		C3D_API explicit NormalMapComponent( Pass & pass );
-
-		C3D_API static void createParsers( castor::AttributeParsers & parsers
-			, ChannelFillers & channelFillers );
-		C3D_API static void fillRemapMask( uint32_t maskValue
-			, TextureConfiguration & configuration );
-		C3D_API static bool writeTextureConfig( TextureConfiguration const & configuration
-			, castor::String const & tabs
-			, castor::StringStream & file );
-		C3D_API static bool isComponentNeeded( TextureFlags const & textures
-			, ComponentModeFlags const & filter );
-		C3D_API static bool needsMapComponent( TextureConfiguration const & configuration );
-		C3D_API static void createMapComponent( Pass & pass
-			, std::vector< PassComponentUPtr > & result );
-
-		C3D_API static shader::PassComponentsShaderPtr createComponentsShader()
+		class Plugin
+			: public PassComponentPlugin
 		{
-			return std::make_unique< ComponentsShader >();
+		public:
+			void createParsers( castor::AttributeParsers & parsers
+				, ChannelFillers & channelFillers )const override;
+			bool writeTextureConfig( TextureConfiguration const & configuration
+				, castor::String const & tabs
+				, castor::StringStream & file )const override;
+			bool isComponentNeeded( TextureFlags const & textures
+				, ComponentModeFlags const & filter )const override;
+			bool needsMapComponent( TextureConfiguration const & configuration )const override;
+			void createMapComponent( Pass & pass
+				, std::vector< PassComponentUPtr > & result )const override;
+
+			bool isMapComponent()const override
+			{
+				return true;
+			}
+
+			shader::PassComponentsShaderPtr createComponentsShader()const override
+			{
+				return std::make_unique< ComponentsShader >();
+			}
+		};
+
+		static PassComponentPluginUPtr createPlugin()
+		{
+			return castor::makeUniqueDerived< PassComponentPlugin, Plugin >();
 		}
+
+		C3D_API explicit NormalMapComponent( Pass & pass );
 
 		C3D_API void mergeImages( TextureUnitDataSet & result )override;
 		C3D_API void fillChannel( TextureConfiguration & configuration

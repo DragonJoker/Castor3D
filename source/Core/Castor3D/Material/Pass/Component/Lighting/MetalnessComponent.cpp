@@ -63,7 +63,6 @@ namespace castor3d
 
 	void MetalnessComponent::ComponentsShader::fillComponents( sdw::type::BaseStruct & components
 		, shader::Materials const & materials
-		, shader::Material const * material
 		, sdw::StructInstance const * surface )const
 	{
 		if ( !checkFlag( materials.getFilter(), ComponentModeFlag::eSpecularLighting ) )
@@ -77,7 +76,7 @@ namespace castor3d
 		}
 	}
 
-	void MetalnessComponent::ComponentsShader::fillComponentsInits( sdw::type::BaseStruct & components
+	void MetalnessComponent::ComponentsShader::fillComponentsInits( sdw::type::BaseStruct const & components
 		, shader::Materials const & materials
 		, shader::Material const * material
 		, sdw::StructInstance const * surface
@@ -130,7 +129,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	MetalnessComponent::MaterialShader::MaterialShader()
-		: shader::PassMaterialShader{ MemChunk{ 0u, 4u, 4u } }
+		: shader::PassMaterialShader{ 4u }
 	{
 	}
 
@@ -154,6 +153,32 @@ namespace castor3d
 
 	//*********************************************************************************************
 
+	void MetalnessComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+		, ChannelFillers & channelFillers )const
+	{
+		Pass::addParserT( parsers
+			, CSCNSection::ePass
+			, cuT( "metalness" )
+			, mtlcmp::parserPassMetalness
+			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+	}
+
+	void MetalnessComponent::Plugin::zeroBuffer( Pass const & pass
+		, shader::PassMaterialShader const & materialShader
+		, PassBuffer & buffer )const
+	{
+		auto data = buffer.getData( pass.getId() );
+		data.write( materialShader.getMaterialChunk(), MetalnessComponent::Default, 0u );
+	}
+
+	bool MetalnessComponent::Plugin::isComponentNeeded( TextureFlags const & textures
+		, ComponentModeFlags const & filter )const
+	{
+		return checkFlag( filter, ComponentModeFlag::eSpecularLighting );
+	}
+
+	//*********************************************************************************************
+
 	castor::String const MetalnessComponent::TypeName = C3D_MakePassComponentName( "metalness" );
 
 	MetalnessComponent::MetalnessComponent( Pass & pass
@@ -169,30 +194,6 @@ namespace castor3d
 		{
 			pass.createComponent< SpecularComponent >();
 		}
-	}
-
-	void MetalnessComponent::createParsers( castor::AttributeParsers & parsers
-		, ChannelFillers & channelFillers )
-	{
-		Pass::addParserT( parsers
-			, CSCNSection::ePass
-			, cuT( "metalness" )
-			, mtlcmp::parserPassMetalness
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-	}
-
-	void MetalnessComponent::zeroBuffer( Pass const & pass
-		, shader::PassMaterialShader const & materialShader
-		, PassBuffer & buffer )
-	{
-		auto data = buffer.getData( pass.getId() );
-		data.write( materialShader.getMaterialChunk(), MetalnessComponent::Default, 0u );
-	}
-
-	bool MetalnessComponent::isComponentNeeded( TextureFlags const & textures
-		, ComponentModeFlags const & filter )
-	{
-		return checkFlag( filter, ComponentModeFlag::eSpecularLighting );
 	}
 
 	void MetalnessComponent::accept( PassVisitorBase & vis )

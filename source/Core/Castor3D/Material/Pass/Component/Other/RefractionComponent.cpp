@@ -81,7 +81,6 @@ namespace castor3d
 
 	void RefractionComponent::ComponentsShader::fillComponents( sdw::type::BaseStruct & components
 		, shader::Materials const & materials
-		, shader::Material const * material
 		, sdw::StructInstance const * surface )const
 	{
 		if ( !checkFlag( materials.getFilter(), ComponentModeFlag::eDiffuseLighting )
@@ -97,7 +96,7 @@ namespace castor3d
 		}
 	}
 
-	void RefractionComponent::ComponentsShader::fillComponentsInits( sdw::type::BaseStruct & components
+	void RefractionComponent::ComponentsShader::fillComponentsInits( sdw::type::BaseStruct const & components
 		, shader::Materials const & materials
 		, shader::Material const * material
 		, sdw::StructInstance const * surface
@@ -135,7 +134,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	RefractionComponent::MaterialShader::MaterialShader()
-		: shader::PassMaterialShader{ MemChunk{ 0u, 8u, 8u } }
+		: shader::PassMaterialShader{ 8u }
 	{
 	}
 
@@ -153,15 +152,8 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const RefractionComponent::TypeName = C3D_MakePassComponentName( "refraction" );
-
-	RefractionComponent::RefractionComponent( Pass & pass )
-		: BaseDataPassComponentT< RefractionData >{ pass, TypeName }
-	{
-	}
-
-	void RefractionComponent::createParsers( castor::AttributeParsers & parsers
-		, ChannelFillers & channelFillers )
+	void RefractionComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+		, ChannelFillers & channelFillers )const
 	{
 		Pass::addParserT( parsers
 			, CSCNSection::ePass
@@ -175,9 +167,9 @@ namespace castor3d
 			, { castor::makeParameter< castor::ParameterType::eBool >() } );
 	}
 
-	void RefractionComponent::zeroBuffer( Pass const & pass
+	void RefractionComponent::Plugin::zeroBuffer( Pass const & pass
 		, shader::PassMaterialShader const & materialShader
-		, PassBuffer & buffer )
+		, PassBuffer & buffer )const
 	{
 		auto data = buffer.getData( pass.getId() );
 		VkDeviceSize offset{};
@@ -185,11 +177,20 @@ namespace castor3d
 		data.write( materialShader.getMaterialChunk(), 0.0f, offset );
 	}
 
-	bool RefractionComponent::isComponentNeeded( TextureFlags const & textures
-		, ComponentModeFlags const & filter )
+	bool RefractionComponent::Plugin::isComponentNeeded( TextureFlags const & textures
+		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eDiffuseLighting )
 			|| checkFlag( filter, ComponentModeFlag::eSpecularLighting );
+	}
+
+	//*********************************************************************************************
+
+	castor::String const RefractionComponent::TypeName = C3D_MakePassComponentName( "refraction" );
+
+	RefractionComponent::RefractionComponent( Pass & pass )
+		: BaseDataPassComponentT< RefractionData >{ pass, TypeName }
+	{
 	}
 
 	void RefractionComponent::accept( PassVisitorBase & vis )

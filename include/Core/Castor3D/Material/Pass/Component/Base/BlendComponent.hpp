@@ -26,17 +26,27 @@ namespace castor3d
 	struct BlendComponent
 		: public BaseDataPassComponentT< BlendData >
 	{
-		C3D_API explicit BlendComponent( Pass & pass );
-
-		C3D_API static void createParsers( castor::AttributeParsers & parsers
-			, ChannelFillers & channelFillers );
-
-		C3D_API static bool isComponentNeeded( TextureFlags const & textures
-			, ComponentModeFlags const & filter )
+		class Plugin
+			: public PassComponentPlugin
 		{
-			// Component is never need in shader.
-			return false;
+		public:
+			void createParsers( castor::AttributeParsers & parsers
+				, ChannelFillers & channelFillers )const override;
+
+			bool isComponentNeeded( TextureFlags const & textures
+				, ComponentModeFlags const & filter )const override
+			{
+				// Component is never need in shader.
+				return false;
+			}
+		};
+
+		static PassComponentPluginUPtr createPlugin()
+		{
+			return castor::makeUniqueDerived< PassComponentPlugin, Plugin >();
 		}
+
+		C3D_API explicit BlendComponent( Pass & pass );
 
 		C3D_API void accept( PassVisitorBase & vis )override;
 

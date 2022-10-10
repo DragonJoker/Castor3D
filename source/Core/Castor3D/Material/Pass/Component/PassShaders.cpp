@@ -48,7 +48,7 @@ namespace castor3d::shader
 	{
 		for ( auto & shader : m_shaders )
 		{
-			shader->fillComponents( components, materials, nullptr, nullptr );
+			shader->fillComponents( components, materials, nullptr );
 			shader->fillComponentsInits( components, materials, nullptr, nullptr, inits );
 		}
 	}
@@ -61,12 +61,12 @@ namespace castor3d::shader
 	{
 		for ( auto & shader : m_shaders )
 		{
-			shader->fillComponents( components, materials, &material, &surface );
+			shader->fillComponents( components, materials, &surface );
 			shader->fillComponentsInits( components, materials, &material, &surface, inits );
 		}
 	}
 
-	void PassShaders::fillComponentsInits( sdw::type::BaseStruct & components
+	void PassShaders::fillComponentsInits( sdw::type::BaseStruct const & components
 		, Materials const & materials
 		, sdw::expr::ExprList & inits )const
 	{
@@ -76,7 +76,7 @@ namespace castor3d::shader
 		}
 	}
 
-	void PassShaders::fillComponentsInits( sdw::type::BaseStruct & components
+	void PassShaders::fillComponentsInits( sdw::type::BaseStruct const & components
 		, Materials const & materials
 		, Material const & material
 		, sdw::StructInstance const & surface

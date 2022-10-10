@@ -92,8 +92,7 @@ namespace castor3d
 			}
 			else
 			{
-				GlossinessMapComponent::fillRemapMask( params[0]->get< uint32_t >()
-					, parsingContext.sceneImportConfig.textureRemapIt->second );
+				parsingContext.sceneImportConfig.textureRemapIt->second.glossinessMask[0] = params[0]->get< uint32_t >();
 			}
 		}
 		CU_EndAttribute()
@@ -128,24 +127,8 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const GlossinessMapComponent::TypeName = C3D_MakePassMapComponentName( "glossiness" );
-
-	GlossinessMapComponent::GlossinessMapComponent( Pass & pass )
-		: PassMapComponent{ pass, TypeName }
-	{
-		if ( !pass.hasComponent< SpecularComponent >() )
-		{
-			pass.createComponent< SpecularComponent >();
-		}
-
-		if ( !pass.hasComponent< RoughnessComponent >() )
-		{
-			pass.createComponent< RoughnessComponent >();
-		}
-	}
-
-	void GlossinessMapComponent::createParsers( castor::AttributeParsers & parsers
-		, ChannelFillers & channelFillers )
+	void GlossinessMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+		, ChannelFillers & channelFillers )const
 	{
 		channelFillers.emplace( "glossiness", ChannelFiller{ uint32_t( TextureFlag::eEmissive )
 			, []( SceneFileContext & parsingContext )
@@ -167,13 +150,13 @@ namespace castor3d
 			, cuT( "glossiness_mask" )
 			, glscmp::parserUnitGlossinessMask
 			, { castor::makeParameter< castor::ParameterType::eUInt32 >() }
-			, "The specular glossiness (or shininess exponent) channels mask for the texture" );
+		, "The specular glossiness (or shininess exponent) channels mask for the texture" );
 		Pass::addParserT( parsers
 			, CSCNSection::eTextureUnit
 			, cuT( "shininess_mask" )
 			, glscmp::parserUnitGlossinessMask
 			, { castor::makeParameter< castor::ParameterType::eUInt32 >() }
-			, "The specular shininess exponent (or glossiness) channels mask for the texture" );
+		, "The specular shininess exponent (or glossiness) channels mask for the texture" );
 
 		Pass::addParserT( parsers
 			, CSCNSection::eTextureRemap
@@ -185,45 +168,57 @@ namespace castor3d
 			, cuT( "glossiness_mask" )
 			, glscmp::parserTexRemapGlossinessMask
 			, { castor::makeParameter< castor::ParameterType::eUInt32 >() }
-			, "The specular glossiness (or shininess exponent) remapping channels mask for the texture" );
+		, "The specular glossiness (or shininess exponent) remapping channels mask for the texture" );
 		Pass::addParserT( parsers
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "shininess_mask" )
 			, glscmp::parserUnitGlossinessMask
 			, { castor::makeParameter< castor::ParameterType::eUInt32 >() }
-			, "The specular shininess exponent (or glossiness) remapping channels mask for the texture" );
+		, "The specular shininess exponent (or glossiness) remapping channels mask for the texture" );
 	}
 
-	void GlossinessMapComponent::fillRemapMask( uint32_t maskValue
-		, TextureConfiguration & configuration )
-	{
-		configuration.glossinessMask[0] = maskValue;
-	}
-
-	bool GlossinessMapComponent::writeTextureConfig( TextureConfiguration const & configuration
+	bool GlossinessMapComponent::Plugin::writeTextureConfig( TextureConfiguration const & configuration
 		, castor::String const & tabs
-		, castor::StringStream & file )
+		, castor::StringStream & file )const
 	{
 		return castor::TextWriter< GlossinessMapComponent >{ tabs, configuration.glossinessMask[0] }( file );
 	}
 
-	bool GlossinessMapComponent::isComponentNeeded( TextureFlags const & textures
-		, ComponentModeFlags const & filter )
+	bool GlossinessMapComponent::Plugin::isComponentNeeded( TextureFlags const & textures
+		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eDiffuseLighting )
 			|| checkFlag( filter, ComponentModeFlag::eSpecularLighting )
 			|| checkFlag( textures, TextureFlag::eGlossiness );
 	}
 
-	bool GlossinessMapComponent::needsMapComponent( TextureConfiguration const & configuration )
+	bool GlossinessMapComponent::Plugin::needsMapComponent( TextureConfiguration const & configuration )const
 	{
 		return configuration.glossinessMask[0] != 0u;
 	}
 
-	void GlossinessMapComponent::createMapComponent( Pass & pass
-		, std::vector< PassComponentUPtr > & result )
+	void GlossinessMapComponent::Plugin::createMapComponent( Pass & pass
+		, std::vector< PassComponentUPtr > & result )const
 	{
 		result.push_back( std::make_unique< GlossinessMapComponent >( pass ) );
+	}
+
+	//*********************************************************************************************
+
+	castor::String const GlossinessMapComponent::TypeName = C3D_MakePassMapComponentName( "glossiness" );
+
+	GlossinessMapComponent::GlossinessMapComponent( Pass & pass )
+		: PassMapComponent{ pass, TypeName }
+	{
+		if ( !pass.hasComponent< SpecularComponent >() )
+		{
+			pass.createComponent< SpecularComponent >();
+		}
+
+		if ( !pass.hasComponent< RoughnessComponent >() )
+		{
+			pass.createComponent< RoughnessComponent >();
+		}
 	}
 
 	void GlossinessMapComponent::mergeImages( TextureUnitDataSet & result )

@@ -74,8 +74,6 @@ namespace castor3d
 		eParticleSystem = CU_MakeSectionName( 'P', 'L', 'S', 'M' ),
 		eParticle = CU_MakeSectionName( 'P', 'T', 'C', 'L' ),
 		eSsao = CU_MakeSectionName( 'S', 'S', 'A', 'O' ),
-		eSubsurfaceScattering = CU_MakeSectionName( 'S', 'S', 'S', 'G' ),
-		eTransmittanceProfile = CU_MakeSectionName( 'T', 'R', 'P', 'R' ),
 		eHdrConfig = CU_MakeSectionName( 'H', 'D', 'R', 'C' ),
 		eShadows = CU_MakeSectionName( 'S', 'H', 'D', 'W' ),
 		eMeshDefaultMaterials = CU_MakeSectionName( 'M', 'M', 'T', 'L' ),

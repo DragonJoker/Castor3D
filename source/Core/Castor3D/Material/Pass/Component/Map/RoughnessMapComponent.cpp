@@ -85,8 +85,7 @@ namespace castor3d
 			}
 			else
 			{
-				RoughnessMapComponent::fillRemapMask( params[0]->get< uint32_t >()
-					, parsingContext.sceneImportConfig.textureRemapIt->second );
+				parsingContext.sceneImportConfig.textureRemapIt->second.roughnessMask[0] = params[0]->get< uint32_t >();
 			}
 		}
 		CU_EndAttribute()
@@ -117,19 +116,8 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const RoughnessMapComponent::TypeName = C3D_MakePassMapComponentName( "roughness" );
-
-	RoughnessMapComponent::RoughnessMapComponent( Pass & pass )
-		: PassMapComponent{ pass, TypeName }
-	{
-		if ( !pass.hasComponent< RoughnessComponent >() )
-		{
-			pass.createComponent< RoughnessComponent >();
-		}
-	}
-
-	void RoughnessMapComponent::createParsers( castor::AttributeParsers & parsers
-		, ChannelFillers & channelFillers )
+	void RoughnessMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+		, ChannelFillers & channelFillers )const
 	{
 		channelFillers.emplace( "roughness", ChannelFiller{ uint32_t( TextureFlag::eRoughness )
 			, []( SceneFileContext & parsingContext )
@@ -157,36 +145,43 @@ namespace castor3d
 			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
 	}
 
-	void RoughnessMapComponent::fillRemapMask( uint32_t maskValue
-		, TextureConfiguration & configuration )
-	{
-		configuration.roughnessMask[0] = maskValue;
-	}
-
-	bool RoughnessMapComponent::writeTextureConfig( TextureConfiguration const & configuration
+	bool RoughnessMapComponent::Plugin::writeTextureConfig( TextureConfiguration const & configuration
 		, castor::String const & tabs
-		, castor::StringStream & file )
+		, castor::StringStream & file )const
 	{
 		return castor::TextWriter< RoughnessMapComponent >{ tabs, configuration.roughnessMask[0] }( file );
 	}
 
-	bool RoughnessMapComponent::isComponentNeeded( TextureFlags const & textures
-		, ComponentModeFlags const & filter )
+	bool RoughnessMapComponent::Plugin::isComponentNeeded( TextureFlags const & textures
+		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eDiffuseLighting )
 			|| checkFlag( filter, ComponentModeFlag::eSpecularLighting )
 			|| checkFlag( textures, TextureFlag::eRoughness );
 	}
 
-	bool RoughnessMapComponent::needsMapComponent( TextureConfiguration const & configuration )
+	bool RoughnessMapComponent::Plugin::needsMapComponent( TextureConfiguration const & configuration )const
 	{
 		return configuration.roughnessMask[0] != 0u;
 	}
 
-	void RoughnessMapComponent::createMapComponent( Pass & pass
-		, std::vector< PassComponentUPtr > & result )
+	void RoughnessMapComponent::Plugin::createMapComponent( Pass & pass
+		, std::vector< PassComponentUPtr > & result )const
 	{
 		result.push_back( std::make_unique< RoughnessMapComponent >( pass ) );
+	}
+
+	//*********************************************************************************************
+
+	castor::String const RoughnessMapComponent::TypeName = C3D_MakePassMapComponentName( "roughness" );
+
+	RoughnessMapComponent::RoughnessMapComponent( Pass & pass )
+		: PassMapComponent{ pass, TypeName }
+	{
+		if ( !pass.hasComponent< RoughnessComponent >() )
+		{
+			pass.createComponent< RoughnessComponent >();
+		}
 	}
 
 	void RoughnessMapComponent::mergeImages( TextureUnitDataSet & result )

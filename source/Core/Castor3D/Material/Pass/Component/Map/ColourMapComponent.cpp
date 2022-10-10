@@ -86,8 +86,7 @@ namespace castor3d
 			}
 			else
 			{
-				ColourMapComponent::fillRemapMask( params[0]->get< uint32_t >()
-					, parsingContext.sceneImportConfig.textureRemapIt->second );
+				parsingContext.sceneImportConfig.textureRemapIt->second.colourMask[0] = params[0]->get< uint32_t >();
 			}
 		}
 		CU_EndAttribute()
@@ -118,19 +117,8 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const ColourMapComponent::TypeName = C3D_MakePassMapComponentName( "colour" );
-
-	ColourMapComponent::ColourMapComponent( Pass & pass )
-		: PassMapComponent{ pass, TypeName }
-	{
-		if ( !pass.hasComponent< ColourComponent >() )
-		{
-			pass.createComponent< ColourComponent >();
-		}
-	}
-
-	void ColourMapComponent::createParsers( castor::AttributeParsers & parsers
-		, ChannelFillers & channelFillers )
+	void ColourMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+		, ChannelFillers & channelFillers )const
 	{
 		channelFillers.emplace( "diffuse", ChannelFiller{ uint32_t( TextureFlag::eColour )
 			, []( SceneFileContext & parsingContext )
@@ -200,35 +188,42 @@ namespace castor3d
 			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
 	}
 
-	void ColourMapComponent::fillRemapMask( uint32_t maskValue
-		, TextureConfiguration & configuration )
-	{
-		configuration.colourMask[0] = maskValue;
-	}
-
-	bool ColourMapComponent::writeTextureConfig( TextureConfiguration const & configuration
+	bool ColourMapComponent::Plugin::writeTextureConfig( TextureConfiguration const & configuration
 		, castor::String const & tabs
-		, castor::StringStream & file )
+		, castor::StringStream & file )const
 	{
 		return castor::TextWriter< ColourMapComponent >{ tabs, configuration.colourMask[0] }( file );
 	}
 
-	bool ColourMapComponent::isComponentNeeded( TextureFlags const & textures
-		, ComponentModeFlags const & filter )
+	bool ColourMapComponent::Plugin::isComponentNeeded( TextureFlags const & textures
+		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eColour )
 			|| checkFlag( textures, TextureFlag::eColour );
 	}
 
-	bool ColourMapComponent::needsMapComponent( TextureConfiguration const & configuration )
+	bool ColourMapComponent::Plugin::needsMapComponent( TextureConfiguration const & configuration )const
 	{
 		return configuration.colourMask[0] != 0u;
 	}
 
-	void ColourMapComponent::createMapComponent( Pass & pass
-		, std::vector< PassComponentUPtr > & result )
+	void ColourMapComponent::Plugin::createMapComponent( Pass & pass
+		, std::vector< PassComponentUPtr > & result )const
 	{
 		result.push_back( std::make_unique< ColourMapComponent >( pass ) );
+	}
+
+	//*********************************************************************************************
+
+	castor::String const ColourMapComponent::TypeName = C3D_MakePassMapComponentName( "colour" );
+
+	ColourMapComponent::ColourMapComponent( Pass & pass )
+		: PassMapComponent{ pass, TypeName }
+	{
+		if ( !pass.hasComponent< ColourComponent >() )
+		{
+			pass.createComponent< ColourComponent >();
+		}
 	}
 
 	void ColourMapComponent::mergeImages( TextureUnitDataSet & result )

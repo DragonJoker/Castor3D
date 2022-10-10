@@ -84,8 +84,7 @@ namespace castor3d
 			}
 			else
 			{
-				MetalnessMapComponent::fillRemapMask( params[0]->get< uint32_t >()
-					, parsingContext.sceneImportConfig.textureRemapIt->second );
+				parsingContext.sceneImportConfig.textureRemapIt->second.metalnessMask[0] = params[0]->get< uint32_t >();
 			}
 		}
 		CU_EndAttribute()
@@ -116,19 +115,8 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const MetalnessMapComponent::TypeName = C3D_MakePassMapComponentName( "metalness" );
-
-	MetalnessMapComponent::MetalnessMapComponent( Pass & pass )
-		: PassMapComponent{ pass, TypeName }
-	{
-		if ( !pass.hasComponent< MetalnessComponent >() )
-		{
-			pass.createComponent< MetalnessComponent >();
-		}
-	}
-
-	void MetalnessMapComponent::createParsers( castor::AttributeParsers & parsers
-		, ChannelFillers & channelFillers )
+	void MetalnessMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+		, ChannelFillers & channelFillers )const
 	{
 		channelFillers.emplace( "metalness", ChannelFiller{ uint32_t( TextureFlag::eMetalness )
 			, []( SceneFileContext & parsingContext )
@@ -156,44 +144,51 @@ namespace castor3d
 			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
 	}
 
-	void MetalnessMapComponent::fillRemapMask( uint32_t maskValue
-		, TextureConfiguration & configuration )
-	{
-		configuration.metalnessMask[0] = maskValue;
-	}
-
-	bool MetalnessMapComponent::writeTextureConfig( TextureConfiguration const & configuration
+	bool MetalnessMapComponent::Plugin::writeTextureConfig( TextureConfiguration const & configuration
 		, castor::String const & tabs
-		, castor::StringStream & file )
+		, castor::StringStream & file )const
 	{
 		return castor::TextWriter< MetalnessMapComponent >{ tabs, configuration.metalnessMask[0] }( file );
 	}
 
-	bool MetalnessMapComponent::isComponentNeeded( TextureFlags const & textures
-		, ComponentModeFlags const & filter )
+	bool MetalnessMapComponent::Plugin::isComponentNeeded( TextureFlags const & textures
+		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eSpecularLighting )
 			|| checkFlag( textures, TextureFlag::eMetalness );
 	}
 
-	bool MetalnessMapComponent::needsMapComponent( TextureConfiguration const & configuration )
+	bool MetalnessMapComponent::Plugin::needsMapComponent( TextureConfiguration const & configuration )const
 	{
 		return configuration.metalnessMask[0] != 0u;
 	}
 
-	void MetalnessMapComponent::createMapComponent( Pass & pass
-		, std::vector< PassComponentUPtr > & result )
+	void MetalnessMapComponent::Plugin::createMapComponent( Pass & pass
+		, std::vector< PassComponentUPtr > & result )const
 	{
 		result.push_back( std::make_unique< MetalnessMapComponent >( pass ) );
 	}
 
-	void MetalnessMapComponent::updateComponent( TextureFlags const & texturesFlags
+	void MetalnessMapComponent::Plugin::doUpdateComponent( TextureFlags const & texturesFlags
 		, shader::BlendComponents const & components )
 	{
 		if ( !checkFlag( texturesFlags, TextureFlag::eMetalness )
 			&& checkFlag( texturesFlags, TextureFlag::eSpecular ) )
 		{
 			components.getMember< sdw::Float >( "metalness", true ) = length( components.getMember< sdw::Vec3 >( "specular", true ) );
+		}
+	}
+
+	//*********************************************************************************************
+
+	castor::String const MetalnessMapComponent::TypeName = C3D_MakePassMapComponentName( "metalness" );
+
+	MetalnessMapComponent::MetalnessMapComponent( Pass & pass )
+		: PassMapComponent{ pass, TypeName }
+	{
+		if ( !pass.hasComponent< MetalnessComponent >() )
+		{
+			pass.createComponent< MetalnessComponent >();
 		}
 	}
 

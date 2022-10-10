@@ -18,7 +18,6 @@ namespace castor3d
 
 	void NormalComponent::ComponentsShader::fillComponents( sdw::type::BaseStruct & components
 		, shader::Materials const & materials
-		, shader::Material const * material
 		, sdw::StructInstance const * surface )const
 	{
 		if ( !checkFlag( materials.getFilter(), ComponentModeFlag::eGeometry ) )
@@ -34,7 +33,7 @@ namespace castor3d
 		}
 	}
 
-	void NormalComponent::ComponentsShader::fillComponentsInits( sdw::type::BaseStruct & components
+	void NormalComponent::ComponentsShader::fillComponentsInits( sdw::type::BaseStruct const & components
 		, shader::Materials const & materials
 		, shader::Material const * material
 		, sdw::StructInstance const * surface
@@ -79,15 +78,6 @@ namespace castor3d
 	NormalComponent::NormalComponent( Pass & pass )
 		: PassComponent{ pass, TypeName }
 	{
-	}
-
-	bool NormalComponent::isComponentNeeded( TextureFlags const & textures
-		, ComponentModeFlags const & filter )
-	{
-		return checkFlag( filter, ComponentModeFlag::eGeometry )
-			|| checkFlag( filter, ComponentModeFlag::eDiffuseLighting )
-			|| checkFlag( filter, ComponentModeFlag::eSpecularLighting )
-			|| checkFlag( filter, ComponentModeFlag::eOcclusion );
 	}
 
 	PassComponentUPtr NormalComponent::doClone( Pass & pass )const

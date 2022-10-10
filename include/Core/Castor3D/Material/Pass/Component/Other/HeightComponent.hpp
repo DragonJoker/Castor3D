@@ -19,9 +19,8 @@ namespace castor3d
 		{
 			C3D_API void fillComponents( sdw::type::BaseStruct & components
 				, shader::Materials const & materials
-				, shader::Material const * material
 				, sdw::StructInstance const * surface )const override;
-			C3D_API void fillComponentsInits( sdw::type::BaseStruct & components
+			C3D_API void fillComponentsInits( sdw::type::BaseStruct const & components
 				, shader::Materials const & materials
 				, shader::Material const * material
 				, sdw::StructInstance const * surface
@@ -32,17 +31,27 @@ namespace castor3d
 				, shader::BlendComponents const & src )const override;
 		};
 
-		C3D_API explicit HeightComponent( Pass & pass );
-
-		C3D_API static void createParsers( castor::AttributeParsers & parsers
-			, ChannelFillers & channelFillers );
-		C3D_API static bool isComponentNeeded( TextureFlags const & textures
-			, ComponentModeFlags const & filter );
-
-		C3D_API static shader::PassComponentsShaderPtr createComponentsShader()
+		class Plugin
+			: public PassComponentPlugin
 		{
-			return std::make_unique< ComponentsShader >();
+		public:
+			void createParsers( castor::AttributeParsers & parsers
+				, ChannelFillers & channelFillers )const override;
+			bool isComponentNeeded( TextureFlags const & textures
+				, ComponentModeFlags const & filter )const override;
+
+			shader::PassComponentsShaderPtr createComponentsShader()const override
+			{
+				return std::make_unique< ComponentsShader >();
+			}
+		};
+
+		static PassComponentPluginUPtr createPlugin()
+		{
+			return castor::makeUniqueDerived< PassComponentPlugin, Plugin >();
 		}
+
+		C3D_API explicit HeightComponent( Pass & pass );
 
 		C3D_API void accept( PassVisitorBase & vis )override;
 

@@ -104,8 +104,7 @@ namespace castor3d
 			}
 			else
 			{
-				HeightMapComponent::fillRemapMask( params[0]->get< uint32_t >()
-					, parsingContext.sceneImportConfig.textureRemapIt->second );
+				parsingContext.sceneImportConfig.textureRemapIt->second.heightMask[0] = params[0]->get< uint32_t >();
 			}
 		}
 		CU_EndAttribute()
@@ -123,19 +122,8 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const HeightMapComponent::TypeName = C3D_MakePassMapComponentName( "height" );
-
-	HeightMapComponent::HeightMapComponent( Pass & pass )
-		: PassMapComponent{ pass, TypeName }
-	{
-		if ( !pass.hasComponent< HeightComponent >() )
-		{
-			pass.createComponent< HeightComponent >();
-		}
-	}
-
-	void HeightMapComponent::createParsers( castor::AttributeParsers & parsers
-		, ChannelFillers & channelFillers )
+	void HeightMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+		, ChannelFillers & channelFillers )const
 	{
 		static UInt32StrMap const parallaxOcclusionModes{ getEnumMapT< ParallaxOcclusionMode >() };
 
@@ -170,35 +158,42 @@ namespace castor3d
 			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
 	}
 
-	void HeightMapComponent::fillRemapMask( uint32_t maskValue
-		, TextureConfiguration & configuration )
-	{
-		configuration.heightMask[0] = maskValue;
-	}
-
-	bool HeightMapComponent::writeTextureConfig( TextureConfiguration const & configuration
+	bool HeightMapComponent::Plugin::writeTextureConfig( TextureConfiguration const & configuration
 		, castor::String const & tabs
-		, castor::StringStream & file )
+		, castor::StringStream & file )const
 	{
 		return castor::TextWriter< HeightMapComponent >{ tabs, configuration }( file );
 	}
 
-	bool HeightMapComponent::isComponentNeeded( TextureFlags const & textures
-		, ComponentModeFlags const & filter )
+	bool HeightMapComponent::Plugin::isComponentNeeded( TextureFlags const & textures
+		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eGeometry )
 			|| checkFlag( textures, TextureFlag::eHeight );
 	}
 
-	bool HeightMapComponent::needsMapComponent( TextureConfiguration const & configuration )
+	bool HeightMapComponent::Plugin::needsMapComponent( TextureConfiguration const & configuration )const
 	{
 		return configuration.heightMask[0] != 0u;
 	}
 
-	void HeightMapComponent::createMapComponent( Pass & pass
-		, std::vector< PassComponentUPtr > & result )
+	void HeightMapComponent::Plugin::createMapComponent( Pass & pass
+		, std::vector< PassComponentUPtr > & result )const
 	{
 		result.push_back( std::make_unique< HeightMapComponent >( pass ) );
+	}
+
+	//*********************************************************************************************
+
+	castor::String const HeightMapComponent::TypeName = C3D_MakePassMapComponentName( "height" );
+
+	HeightMapComponent::HeightMapComponent( Pass & pass )
+		: PassMapComponent{ pass, TypeName }
+	{
+		if ( !pass.hasComponent< HeightComponent >() )
+		{
+			pass.createComponent< HeightComponent >();
+		}
 	}
 
 	void HeightMapComponent::mergeImages( TextureUnitDataSet & result )

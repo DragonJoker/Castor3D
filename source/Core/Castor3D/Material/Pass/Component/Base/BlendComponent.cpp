@@ -85,15 +85,8 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const BlendComponent::TypeName = C3D_MakePassComponentName( "blend" );
-
-	BlendComponent::BlendComponent( Pass & pass )
-		: BaseDataPassComponentT< BlendData >{ pass, TypeName }
-	{
-	}
-
-	void BlendComponent::createParsers( castor::AttributeParsers & parsers
-		, ChannelFillers & channelFillers )
+	void BlendComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+		, ChannelFillers & channelFillers )const
 	{
 		static UInt32StrMap const blendModes{ getEnumMapT< BlendMode >() };
 
@@ -107,6 +100,15 @@ namespace castor3d
 			, cuT( "colour_blend_mode" )
 			, bldcmp::parserPassColourBlendMode
 			, { castor::makeParameter< castor::ParameterType::eCheckedText >( blendModes ) } );
+	}
+
+	//*********************************************************************************************
+
+	castor::String const BlendComponent::TypeName = C3D_MakePassComponentName( "blend" );
+
+	BlendComponent::BlendComponent( Pass & pass )
+		: BaseDataPassComponentT< BlendData >{ pass, TypeName }
+	{
 	}
 
 	void BlendComponent::accept( PassVisitorBase & vis )

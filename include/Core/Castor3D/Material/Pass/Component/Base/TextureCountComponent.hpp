@@ -22,23 +22,32 @@ namespace castor3d
 				, sdw::expr::ExprList & inits )const override;
 		};
 
+		class Plugin
+			: public PassComponentPlugin
+		{
+		public:
+			void zeroBuffer( Pass const & pass
+				, shader::PassMaterialShader const & materialShader
+				, PassBuffer & buffer )const override;
+			bool isComponentNeeded( TextureFlags const & textures
+				, ComponentModeFlags const & filter )const override
+			{
+				// Component is always needed in lighting shaders.
+				return false;
+			}
+
+			shader::PassMaterialShaderPtr createMaterialShader()const override
+			{
+				return std::make_unique< MaterialShader >();
+			}
+		};
+
+		static PassComponentPluginUPtr createPlugin()
+		{
+			return castor::makeUniqueDerived< PassComponentPlugin, Plugin >();
+		}
+
 		C3D_API explicit TextureCountComponent( Pass & pass );
-
-		C3D_API static void zeroBuffer( Pass const & pass
-			, shader::PassMaterialShader const & materialShader
-			, PassBuffer & buffer );
-
-		C3D_API static bool isComponentNeeded( TextureFlags const & textures
-			, ComponentModeFlags const & filter )
-		{
-			// Component is always needed in shader.
-			return false;
-		}
-
-		C3D_API static shader::PassMaterialShaderPtr createMaterialShader()
-		{
-			return std::make_unique< MaterialShader >();
-		}
 
 		C3D_API void accept( PassVisitorBase & vis )override;
 

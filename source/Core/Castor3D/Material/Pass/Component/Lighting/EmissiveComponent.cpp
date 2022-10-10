@@ -59,7 +59,6 @@ namespace castor3d
 
 	void EmissiveComponent::ComponentsShader::fillComponents( sdw::type::BaseStruct & components
 		, shader::Materials const & materials
-		, shader::Material const * material
 		, sdw::StructInstance const * surface )const
 	{
 		if ( !checkFlag( materials.getFilter(), ComponentModeFlag::eDiffuseLighting ) )
@@ -73,7 +72,7 @@ namespace castor3d
 		}
 	}
 
-	void EmissiveComponent::ComponentsShader::fillComponentsInits( sdw::type::BaseStruct & components
+	void EmissiveComponent::ComponentsShader::fillComponentsInits( sdw::type::BaseStruct const & components
 		, shader::Materials const & materials
 		, shader::Material const * material
 		, sdw::StructInstance const * surface
@@ -105,7 +104,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	EmissiveComponent::MaterialShader::MaterialShader()
-		: shader::PassMaterialShader{ MemChunk{ 0u, 4u, 4u } }
+		: shader::PassMaterialShader{ 4u }
 	{
 	}
 
@@ -121,16 +120,8 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const EmissiveComponent::TypeName = C3D_MakePassComponentName( "emissive" );
-
-	EmissiveComponent::EmissiveComponent( Pass & pass
-		, float defaultValue )
-		: BaseDataPassComponentT{ pass, TypeName, defaultValue }
-	{
-	}
-
-	void EmissiveComponent::createParsers( castor::AttributeParsers & parsers
-		, ChannelFillers & channelFillers )
+	void EmissiveComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+		, ChannelFillers & channelFillers )const
 	{
 		Pass::addParserT( parsers
 			, CSCNSection::ePass
@@ -139,18 +130,28 @@ namespace castor3d
 			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
 	}
 
-	void EmissiveComponent::zeroBuffer( Pass const & pass
+	void EmissiveComponent::Plugin::zeroBuffer( Pass const & pass
 		, shader::PassMaterialShader const & materialShader
-		, PassBuffer & buffer )
+		, PassBuffer & buffer )const
 	{
 		auto data = buffer.getData( pass.getId() );
 		data.write( materialShader.getMaterialChunk(), 0.0f, 0u );
 	}
 
-	bool EmissiveComponent::isComponentNeeded( TextureFlags const & textures
-		, ComponentModeFlags const & filter )
+	bool EmissiveComponent::Plugin::isComponentNeeded( TextureFlags const & textures
+		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eDiffuseLighting );
+	}
+
+	//*********************************************************************************************
+
+	castor::String const EmissiveComponent::TypeName = C3D_MakePassComponentName( "emissive" );
+
+	EmissiveComponent::EmissiveComponent( Pass & pass
+		, float defaultValue )
+		: BaseDataPassComponentT{ pass, TypeName, defaultValue }
+	{
 	}
 
 	void EmissiveComponent::accept( PassVisitorBase & vis )

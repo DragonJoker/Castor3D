@@ -118,39 +118,16 @@ namespace castor3d
 		 */
 		/**@{*/
 		C3D_API uint32_t registerComponent( castor::String const & componentType
-			, ParsersFiller createParsers
-			, SectionsFiller createSections
-			, CreateMaterialShader createMaterialShader
-			, ComponentData data );
+			, PassComponentPluginUPtr componentPlugin );
 		C3D_API void unregisterComponent( castor::String const & componentType );
 		C3D_API uint32_t getNameId( castor::String const & componentType )const;
 		C3D_API PassComponentsBitset getPassComponentsBitset( Pass const * pass = nullptr )const;
 
 		template< typename ComponentT >
-		uint32_t registerComponent( ParsersFiller pcreateParsers = &ComponentT::createParsers
-			, SectionsFiller pcreateSections = &ComponentT::createSections
-			, CreateMaterialShader pcreateMaterialShader = &ComponentT::createMaterialShader
-			, ZeroBuffer pzeroBuffer = &ComponentT::zeroBuffer
-			, FillRemapMask pfillRemapMask = &ComponentT::fillRemapMask
-			, WriteTextureConfig pwriteTextureConfig = &ComponentT::writeTextureConfig
-			, NeedsMapComponent pneedsMapComponent = &ComponentT::needsMapComponent
-			, CreateMapComponent pcreateMapComponent = &ComponentT::createMapComponent
-			, IsComponentNeeded pisComponentNeeded = &ComponentT::isComponentNeeded
-			, CreateComponentsShader pcreateComponentsShader = &ComponentT::createComponentsShader
-			, std::function< UpdateComponent() > getUpdateComponent = &ComponentT::getUpdateComponent )
+		uint32_t registerComponent( CreatePassComponentPlugin createPlugin = &ComponentT::createPlugin )
 		{
 			return registerComponent( ComponentT::TypeName
-				, pcreateParsers
-				, pcreateSections
-				, pcreateMaterialShader
-				, ComponentData{ pzeroBuffer
-					, pfillRemapMask
-					, pwriteTextureConfig
-					, pneedsMapComponent
-					, pcreateMapComponent
-					, pisComponentNeeded
-					, pcreateComponentsShader
-					, getUpdateComponent() } );
+				, createPlugin() );
 		}
 		/**@}*/
 
@@ -158,7 +135,7 @@ namespace castor3d
 		struct Component
 		{
 			std::string name;
-			ComponentData data{};
+			PassComponentPluginUPtr plugin{};
 		};
 		using ComponentIds = std::map< uint32_t, Component >;
 
@@ -166,10 +143,7 @@ namespace castor3d
 		uint32_t getNextId();
 		void registerComponent( uint32_t id
 			, castor::String const & componentType
-			, ParsersFiller createParsers
-			, SectionsFiller createSections
-			, CreateMaterialShader createMaterialShader
-			, ComponentData data );
+			, PassComponentPluginUPtr componentPlugin );
 		void unregisterComponent( uint32_t id );
 		void reorderBuffer();
 

@@ -83,8 +83,7 @@ namespace castor3d
 			}
 			else
 			{
-				TransmittanceMapComponent::fillRemapMask( params[0]->get< uint32_t >()
-					, parsingContext.sceneImportConfig.textureRemapIt->second );
+				parsingContext.sceneImportConfig.textureRemapIt->second.transmittanceMask[0] = params[0]->get< uint32_t >();
 			}
 		}
 		CU_EndAttribute()
@@ -94,7 +93,6 @@ namespace castor3d
 
 	void TransmittanceMapComponent::ComponentsShader::fillComponents( sdw::type::BaseStruct & components
 		, shader::Materials const & materials
-		, shader::Material const * material
 		, sdw::StructInstance const * surface )const
 	{
 		if ( !checkFlag( materials.getFilter(), ComponentModeFlag::eDiffuseLighting )
@@ -109,7 +107,7 @@ namespace castor3d
 		}
 	}
 
-	void TransmittanceMapComponent::ComponentsShader::fillComponentsInits( sdw::type::BaseStruct & components
+	void TransmittanceMapComponent::ComponentsShader::fillComponentsInits( sdw::type::BaseStruct const & components
 		, shader::Materials const & materials
 		, shader::Material const * material
 		, sdw::StructInstance const * surface
@@ -165,7 +163,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	TransmittanceMapComponent::MaterialShader::MaterialShader()
-		: shader::PassMaterialShader{ MemChunk{ 0u, 4u, 4u } }
+		: shader::PassMaterialShader{ 4u }
 	{
 	}
 
@@ -181,16 +179,8 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const TransmittanceMapComponent::TypeName = C3D_MakePassMapComponentName( "transmittance" );
-
-	TransmittanceMapComponent::TransmittanceMapComponent( Pass & pass )
-		: PassMapComponent{ pass, TypeName }
-		, m_transmittance{ m_dirty, 1.0f }
-	{
-	}
-
-	void TransmittanceMapComponent::createParsers( castor::AttributeParsers & parsers
-		, ChannelFillers & channelFillers )
+	void TransmittanceMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+		, ChannelFillers & channelFillers )const
 	{
 		channelFillers.emplace( "transmittance", ChannelFiller{ uint32_t( TextureFlag::eTransmittance )
 			, []( SceneFileContext & parsingContext )
@@ -218,44 +208,48 @@ namespace castor3d
 			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
 	}
 
-	bool TransmittanceMapComponent::isComponentNeeded( TextureFlags const & textures
-		, ComponentModeFlags const & filter )
+	bool TransmittanceMapComponent::Plugin::isComponentNeeded( TextureFlags const & textures
+		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eDiffuseLighting )
 			|| checkFlag( filter, ComponentModeFlag::eSpecularLighting )
 			|| checkFlag( textures, TextureFlag::eTransmittance );
 	}
 
-	void TransmittanceMapComponent::fillRemapMask( uint32_t maskValue
-		, TextureConfiguration & configuration )
-	{
-		configuration.transmittanceMask[0] = maskValue;
-	}
-
-	bool TransmittanceMapComponent::writeTextureConfig( TextureConfiguration const & configuration
+	bool TransmittanceMapComponent::Plugin::writeTextureConfig( TextureConfiguration const & configuration
 		, castor::String const & tabs
-		, castor::StringStream & file )
+		, castor::StringStream & file )const
 	{
 		return castor::TextWriter< TransmittanceMapComponent >{ tabs, configuration.transmittanceMask[0] }( file );
 	}
 
-	bool TransmittanceMapComponent::needsMapComponent( TextureConfiguration const & configuration )
+	bool TransmittanceMapComponent::Plugin::needsMapComponent( TextureConfiguration const & configuration )const
 	{
 		return configuration.transmittanceMask[0] != 0;
 	}
 
-	void TransmittanceMapComponent::createMapComponent( Pass & pass
-		, std::vector< PassComponentUPtr > & result )
+	void TransmittanceMapComponent::Plugin::createMapComponent( Pass & pass
+		, std::vector< PassComponentUPtr > & result )const
 	{
 		result.push_back( std::make_unique< TransmittanceMapComponent >( pass ) );
 	}
 
-	void TransmittanceMapComponent::zeroBuffer( Pass const & pass
+	void TransmittanceMapComponent::Plugin::zeroBuffer( Pass const & pass
 		, shader::PassMaterialShader const & materialShader
-		, PassBuffer & buffer )
+		, PassBuffer & buffer )const
 	{
 		auto data = buffer.getData( pass.getId() );
 		data.write( materialShader.getMaterialChunk(), 1.0f, 0u );
+	}
+
+	//*********************************************************************************************
+
+	castor::String const TransmittanceMapComponent::TypeName = C3D_MakePassMapComponentName( "transmittance" );
+
+	TransmittanceMapComponent::TransmittanceMapComponent( Pass & pass )
+		: PassMapComponent{ pass, TypeName }
+		, m_transmittance{ m_dirty, 1.0f }
+	{
 	}
 
 	void TransmittanceMapComponent::mergeImages( TextureUnitDataSet & result )
