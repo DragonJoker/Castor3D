@@ -2,17 +2,46 @@
     "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg/master/scripts/vcpkg.schema.json",
     "name": "castor3d",
     "version": "0.14.0",
-    "dependencies": [ "assimp",
-        "convectionkernels",
-        "freetype",
-        "freeimage",
+    "builtin-baseline": "083f103cfb6ff4a05d6c49b6a2231965e08b6e2b",
+    "dependencies": [ "freetype",
         "gli",
-        "glslang",
+        "vkfft",
         "meshoptimizer",
         "minizip",
         "spirv-cross",
-        "vkfft",
         "zlib"
     ],
-    "builtin-baseline": "ff4bb46b1d8d651e01b44caac8b59706b5a480aa"
+    "default-features": [ "cvtt", "assimp", "freeimage", "glsl", "vkfft" ],
+    "features": {
+        "cvtt": {
+            "description": "Use ConvectionKernels library to block compress textures.",
+            "dependencies": [
+                "convectionkernels"
+            ]
+        },
+        "assimp": {
+            "description": "Use Assimp library to import external scenes.",
+            "dependencies": [
+                "assimp"
+            ]
+        },
+        "freeimage": {
+            "description": "Use FreeImage library over stb_image to import TIF, PNG or RAW images.",
+            "dependencies": [
+                "freeimage"
+            ]
+        },
+        "glsl": {
+            "description": "Enable GLSL shaders import support.",
+            "dependencies": [
+                "glslang"
+            ]
+        },
+        "vkfft": {
+            "description": "Use VkFFT to compute Fast Fourier Transforms.",
+            "dependencies": [
+                "vkfft"
+            ]
+        }
+    }
 }
