@@ -58,7 +58,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	PassHeaderComponent::MaterialShader::MaterialShader()
-		: shader::PassMaterialShader{ MemChunk{ 0u, 16u, 16u } }
+		: shader::PassMaterialShader{ 16u }
 	{
 	}
 
@@ -80,16 +80,8 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const PassHeaderComponent::TypeName = C3D_MakePassComponentName( "header" );
-
-	PassHeaderComponent::PassHeaderComponent( Pass & pass )
-		: BaseDataPassComponentT< castor::AtomicGroupChangeTracked< uint32_t > >{ pass, TypeName }
-	{
-		m_value = 1u;
-	}
-
-	void PassHeaderComponent::createParsers( castor::AttributeParsers & parsers
-		, ChannelFillers & channelFillers )
+	void PassHeaderComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+		, ChannelFillers & channelFillers )const
 	{
 		Pass::addParserT( parsers
 			, CSCNSection::ePass
@@ -98,14 +90,24 @@ namespace castor3d
 			, { castor::makeParameter< castor::ParameterType::eBool >() } );
 	}
 
-	void PassHeaderComponent::zeroBuffer( Pass const & pass
+	void PassHeaderComponent::Plugin::zeroBuffer( Pass const & pass
 		, shader::PassMaterialShader const & materialShader
-		, PassBuffer & buffer )
+		, PassBuffer & buffer )const
 	{
 		auto data = buffer.getData( pass.getId() );
 		data.write( materialShader.getMaterialChunk()
 			, 0u, 0u, 0u, 0u
 			, 0u );
+	}
+
+	//*********************************************************************************************
+
+	castor::String const PassHeaderComponent::TypeName = C3D_MakePassComponentName( "header" );
+
+	PassHeaderComponent::PassHeaderComponent( Pass & pass )
+		: BaseDataPassComponentT< castor::AtomicGroupChangeTracked< uint32_t > >{ pass, TypeName }
+	{
+		m_value = 1u;
 	}
 
 	void PassHeaderComponent::accept( PassVisitorBase & vis )

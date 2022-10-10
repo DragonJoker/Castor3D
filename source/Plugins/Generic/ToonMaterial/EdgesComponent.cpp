@@ -166,7 +166,6 @@ namespace toon
 
 	void EdgesComponent::ComponentsShader::fillComponents( sdw::type::BaseStruct & components
 		, castor3d::shader::Materials const & materials
-		, castor3d::shader::Material const * material
 		, sdw::StructInstance const * surface )const
 	{
 		if ( ( !checkFlag( materials.getFilter(), castor3d::ComponentModeFlag::eSpecifics )
@@ -188,7 +187,7 @@ namespace toon
 		}
 	}
 
-	void EdgesComponent::ComponentsShader::fillComponentsInits( sdw::type::BaseStruct & components
+	void EdgesComponent::ComponentsShader::fillComponentsInits( sdw::type::BaseStruct const & components
 		, castor3d::shader::Materials const & materials
 		, castor3d::shader::Material const * material
 		, sdw::StructInstance const * surface
@@ -241,15 +240,8 @@ namespace toon
 
 	//*********************************************************************************************
 
-	castor::String const EdgesComponent::TypeName = C3D_PluginMakePassComponentName( "toon", "edges" );
-
-	EdgesComponent::EdgesComponent( castor3d::Pass & pass )
-		: BaseDataPassComponentT< EdgesData >{ pass, TypeName }
-	{
-	}
-
-	void EdgesComponent::createParsers( castor::AttributeParsers & parsers
-		, castor3d::ChannelFillers & channelFillers )
+	void EdgesComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+		, castor3d::ChannelFillers & channelFillers )const
 	{
 		castor3d::Pass::addParserT( parsers
 			, castor3d::CSCNSection::ePass
@@ -283,10 +275,19 @@ namespace toon
 			, { castor::makeParameter< castor::ParameterType::eHdrRgbaColour >() } );
 	}
 
-	bool EdgesComponent::isComponentNeeded( castor3d::TextureFlags const & textures
-		, castor3d::ComponentModeFlags const & filter )
+	bool EdgesComponent::Plugin::isComponentNeeded( castor3d::TextureFlags const & textures
+		, castor3d::ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, castor3d::ComponentModeFlag::eColour );
+	}
+
+	//*********************************************************************************************
+
+	castor::String const EdgesComponent::TypeName = C3D_PluginMakePassComponentName( "toon", "edges" );
+
+	EdgesComponent::EdgesComponent( castor3d::Pass & pass )
+		: BaseDataPassComponentT< EdgesData >{ pass, TypeName }
+	{
 	}
 
 	void EdgesComponent::accept( castor3d::PassVisitorBase & vis )

@@ -123,14 +123,14 @@ namespace castor3d::shader
 		materials.getPassShaders().fillComponents( type, materials, material, surface, inits );
 	}
 
-	void BlendComponents::fillInit( sdw::type::BaseStruct & components
+	void BlendComponents::fillInit( sdw::type::BaseStruct const & components
 		, Materials const & materials
 		, sdw::expr::ExprList & inits )
 	{
 		materials.getPassShaders().fillComponentsInits( components, materials, inits );
 	}
 
-	void BlendComponents::fillInit( sdw::type::BaseStruct & components
+	void BlendComponents::fillInit( sdw::type::BaseStruct const & components
 		, Materials const & materials
 		, Material const & material
 		, sdw::StructInstance const & surface

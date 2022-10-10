@@ -101,7 +101,6 @@ namespace castor3d
 
 	void RoughnessComponent::ComponentsShader::fillComponents( sdw::type::BaseStruct & components
 		, shader::Materials const & materials
-		, shader::Material const * material
 		, sdw::StructInstance const * surface )const
 	{
 		if ( !checkFlag( materials.getFilter(), ComponentModeFlag::eDiffuseLighting )
@@ -116,7 +115,7 @@ namespace castor3d
 		}
 	}
 
-	void RoughnessComponent::ComponentsShader::fillComponentsInits( sdw::type::BaseStruct & components
+	void RoughnessComponent::ComponentsShader::fillComponentsInits( sdw::type::BaseStruct const & components
 		, shader::Materials const & materials
 		, shader::Material const * material
 		, sdw::StructInstance const * surface
@@ -159,7 +158,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	RoughnessComponent::MaterialShader::MaterialShader()
-		: shader::PassMaterialShader{ MemChunk{ 0u, 4u, 4u } }
+		: shader::PassMaterialShader{ 4u }
 	{
 	}
 
@@ -179,6 +178,46 @@ namespace castor3d
 		, shader::Material & material )const
 	{
 		material.getMember< sdw::Float >( "roughness", true ) = spcRgh.a();
+	}
+
+	//*********************************************************************************************
+
+	void RoughnessComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+		, ChannelFillers & channelFillers )const
+	{
+		Pass::addParserT( parsers
+			, CSCNSection::ePass
+			, cuT( "roughness" )
+			, rghcmp::parserPassRoughness
+			, { castor::makeParameter< castor::ParameterType::eFloat >() }
+		, "The microfacet roughness factor for the pass" );
+		Pass::addParserT( parsers
+			, CSCNSection::ePass
+			, cuT( "glossiness" )
+			, rghcmp::parserPassGlossiness
+			, { castor::makeParameter< castor::ParameterType::eFloat >() }
+		, "The specular glossiness (or shininess exponent) for the pass" );
+		Pass::addParserT( parsers
+			, CSCNSection::ePass
+			, cuT( "shininess" )
+			, rghcmp::parserPassShininess
+			, { castor::makeParameter< castor::ParameterType::eFloat >() }
+		, "The specular shininess exponent (or glossiness) for the pass" );
+	}
+
+	void RoughnessComponent::Plugin::zeroBuffer( Pass const & pass
+		, shader::PassMaterialShader const & materialShader
+		, PassBuffer & buffer )const
+	{
+		auto data = buffer.getData( pass.getId() );
+		data.write( materialShader.getMaterialChunk(), 1.0f, 0u );
+	}
+
+	bool RoughnessComponent::Plugin::isComponentNeeded( TextureFlags const & textures
+		, ComponentModeFlags const & filter )const
+	{
+		return checkFlag( filter, ComponentModeFlag::eDiffuseLighting )
+			|| checkFlag( filter, ComponentModeFlag::eSpecularLighting );
 	}
 
 	//*********************************************************************************************
@@ -209,44 +248,6 @@ namespace castor3d
 	void RoughnessComponent::setShininess( float v )
 	{
 		setGlossiness( v / MaxPhongShininess );
-	}
-
-	void RoughnessComponent::createParsers( castor::AttributeParsers & parsers
-		, ChannelFillers & channelFillers )
-	{
-		Pass::addParserT( parsers
-			, CSCNSection::ePass
-			, cuT( "roughness" )
-			, rghcmp::parserPassRoughness
-			, { castor::makeParameter< castor::ParameterType::eFloat >() }
-			, "The microfacet roughness factor for the pass" );
-		Pass::addParserT( parsers
-			, CSCNSection::ePass
-			, cuT( "glossiness" )
-			, rghcmp::parserPassGlossiness
-			, { castor::makeParameter< castor::ParameterType::eFloat >() }
-			, "The specular glossiness (or shininess exponent) for the pass" );
-		Pass::addParserT( parsers
-			, CSCNSection::ePass
-			, cuT( "shininess" )
-			, rghcmp::parserPassShininess
-			, { castor::makeParameter< castor::ParameterType::eFloat >() }
-			, "The specular shininess exponent (or glossiness) for the pass" );
-	}
-
-	void RoughnessComponent::zeroBuffer( Pass const & pass
-		, shader::PassMaterialShader const & materialShader
-		, PassBuffer & buffer )
-	{
-		auto data = buffer.getData( pass.getId() );
-		data.write( materialShader.getMaterialChunk(), 1.0f, 0u );
-	}
-
-	bool RoughnessComponent::isComponentNeeded( TextureFlags const & textures
-		, ComponentModeFlags const & filter )
-	{
-		return checkFlag( filter, ComponentModeFlag::eDiffuseLighting )
-			|| checkFlag( filter, ComponentModeFlag::eSpecularLighting );
 	}
 
 	void RoughnessComponent::accept( PassVisitorBase & vis )

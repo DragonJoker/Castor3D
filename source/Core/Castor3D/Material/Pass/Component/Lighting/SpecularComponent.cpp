@@ -68,7 +68,6 @@ namespace castor3d
 
 	void SpecularComponent::ComponentsShader::fillComponents( sdw::type::BaseStruct & components
 		, shader::Materials const & materials
-		, shader::Material const * material
 		, sdw::StructInstance const * surface )const
 	{
 		if ( !checkFlag( materials.getFilter(), ComponentModeFlag::eSpecularLighting ) )
@@ -82,7 +81,7 @@ namespace castor3d
 		}
 	}
 
-	void SpecularComponent::ComponentsShader::fillComponentsInits( sdw::type::BaseStruct & components
+	void SpecularComponent::ComponentsShader::fillComponentsInits( sdw::type::BaseStruct const & components
 		, shader::Materials const & materials
 		, shader::Material const * material
 		, sdw::StructInstance const * surface
@@ -124,7 +123,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	SpecularComponent::MaterialShader::MaterialShader()
-		: shader::PassMaterialShader{ MemChunk{ 0u, 12u, 12u } }
+		: shader::PassMaterialShader{ 12u }
 	{
 	}
 
@@ -148,6 +147,32 @@ namespace castor3d
 
 	//*********************************************************************************************
 
+	void SpecularComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+		, ChannelFillers & channelFillers )const
+	{
+		Pass::addParserT( parsers
+			, CSCNSection::ePass
+			, cuT( "specular" )
+			, spccmp::parserPassSpecular
+			, { castor::makeParameter< castor::ParameterType::eRgbColour >() } );
+	}
+
+	void SpecularComponent::Plugin::zeroBuffer( Pass const & pass
+		, shader::PassMaterialShader const & materialShader
+		, PassBuffer & buffer )const
+	{
+		auto data = buffer.getData( pass.getId() );
+		data.write( materialShader.getMaterialChunk(), SpecularComponent::Default, 0u );
+	}
+
+	bool SpecularComponent::Plugin::isComponentNeeded( TextureFlags const & textures
+		, ComponentModeFlags const & filter )const
+	{
+		return checkFlag( filter, ComponentModeFlag::eSpecularLighting );
+	}
+
+	//*********************************************************************************************
+
 	castor::String const SpecularComponent::TypeName = C3D_MakePassComponentName( "specular" );
 	castor::RgbColour const SpecularComponent::Default = { DefaultComponent, DefaultComponent, DefaultComponent };
 	castor::RgbColour const SpecularComponent::DefaultPhong = { DefaultPhongComponent, DefaultPhongComponent, DefaultPhongComponent };
@@ -161,30 +186,6 @@ namespace castor3d
 		{
 			m_value->reset();
 		}
-	}
-
-	void SpecularComponent::createParsers( castor::AttributeParsers & parsers
-		, ChannelFillers & channelFillers )
-	{
-		Pass::addParserT( parsers
-			, CSCNSection::ePass
-			, cuT( "specular" )
-			, spccmp::parserPassSpecular
-			, { castor::makeParameter< castor::ParameterType::eRgbColour >() } );
-	}
-
-	void SpecularComponent::zeroBuffer( Pass const & pass
-		, shader::PassMaterialShader const & materialShader
-		, PassBuffer & buffer )
-	{
-		auto data = buffer.getData( pass.getId() );
-		data.write( materialShader.getMaterialChunk(), SpecularComponent::Default, 0u );
-	}
-
-	bool SpecularComponent::isComponentNeeded( TextureFlags const & textures
-		, ComponentModeFlags const & filter )
-	{
-		return checkFlag( filter, ComponentModeFlag::eSpecularLighting );
 	}
 
 	void SpecularComponent::accept( PassVisitorBase & vis )

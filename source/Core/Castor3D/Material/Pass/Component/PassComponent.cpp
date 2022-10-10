@@ -7,6 +7,8 @@
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
 #include "Castor3D/Material/Texture/Animation/TextureAnimation.hpp"
 
+CU_ImplementCUSmartPtr( castor3d, PassComponentPlugin )
+
 namespace castor3d
 {
 	//************************************************************************************************

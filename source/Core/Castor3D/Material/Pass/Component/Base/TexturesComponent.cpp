@@ -17,7 +17,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	TexturesComponent::MaterialShader::MaterialShader()
-		: shader::PassMaterialShader{ MemChunk{ 0u, MaxPassTextures * sizeof( uint32_t ), MaxPassTextures * sizeof( uint32_t ) } }
+		: shader::PassMaterialShader{ MaxPassTextures * sizeof( uint32_t ) }
 	{
 
 	}
@@ -47,7 +47,6 @@ namespace castor3d
 
 	void TexturesComponent::ComponentsShader::fillComponents( sdw::type::BaseStruct & components
 		, shader::Materials const & materials
-		, shader::Material const * material
 		, sdw::StructInstance const * surface )const
 	{
 		if ( !surface )
@@ -104,7 +103,7 @@ namespace castor3d
 		}
 	}
 
-	void TexturesComponent::ComponentsShader::fillComponentsInits( sdw::type::BaseStruct & components
+	void TexturesComponent::ComponentsShader::fillComponentsInits( sdw::type::BaseStruct const & components
 		, shader::Materials const & materials
 		, shader::Material const * material
 		, sdw::StructInstance const * surface
@@ -260,22 +259,30 @@ namespace castor3d
 
 	//*********************************************************************************************
 
+	void TexturesComponent::Plugin::zeroBuffer( Pass const & pass
+		, shader::PassMaterialShader const & materialShader
+		, PassBuffer & buffer )const
+	{
+		auto data = buffer.getData( pass.getId() );
+		data.write( materialShader.getMaterialChunk()
+			, TexturesData{}
+			, 0u );
+	}
+
+	bool TexturesComponent::Plugin::isComponentNeeded( TextureFlags const & textures
+		, ComponentModeFlags const & filter )const
+	{
+		return !textures.empty();
+	}
+
+	//*********************************************************************************************
+
 	castor::String const TexturesComponent::TypeName = C3D_MakePassComponentName( "textures" );
 
 	TexturesComponent::TexturesComponent( Pass & pass )
 		: PassComponent{ pass, TypeName }
 		, m_textures{}
 	{
-	}
-
-	void TexturesComponent::zeroBuffer( Pass const & pass
-		, shader::PassMaterialShader const & materialShader
-		, PassBuffer & buffer )
-	{
-		auto data = buffer.getData( pass.getId() );
-		data.write( materialShader.getMaterialChunk()
-			, TexturesData{}
-			, 0u );
 	}
 
 	void TexturesComponent::accept( PassVisitorBase & vis )
@@ -322,12 +329,6 @@ namespace castor3d
 		data.write( m_materialShader->getMaterialChunk()
 			, m_textures
 			, 0u );
-	}
-
-	bool TexturesComponent::isComponentNeeded( TextureFlags const & textures
-		, ComponentModeFlags const & filter )
-	{
-		return !textures.empty();
 	}
 
 	//*********************************************************************************************

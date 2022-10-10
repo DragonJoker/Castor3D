@@ -80,7 +80,6 @@ namespace castor3d
 
 	void ColourComponent::ComponentsShader::fillComponents( sdw::type::BaseStruct & components
 		, shader::Materials const & materials
-		, shader::Material const * material
 		, sdw::StructInstance const * surface )const
 	{
 		if ( !checkFlag( materials.getFilter(), ComponentModeFlag::eColour ) )
@@ -94,7 +93,7 @@ namespace castor3d
 		}
 	}
 
-	void ColourComponent::ComponentsShader::fillComponentsInits( sdw::type::BaseStruct & components
+	void ColourComponent::ComponentsShader::fillComponentsInits( sdw::type::BaseStruct const & components
 		, shader::Materials const & materials
 		, shader::Material const * material
 		, sdw::StructInstance const * surface
@@ -135,7 +134,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	ColourComponent::MaterialShader::MaterialShader()
-		: shader::PassMaterialShader{ MemChunk{ 0u, 12u, 12u } }
+		: shader::PassMaterialShader{ 12u }
 	{
 
 	}
@@ -160,46 +159,38 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const ColourComponent::TypeName = C3D_MakePassComponentName( "colour" );
-
-	ColourComponent::ColourComponent( Pass & pass
-		, castor::HdrRgbColour defaultValue )
-		: BaseDataPassComponentT{ pass, TypeName, std::move( defaultValue ) }
-	{
-	}
-
-	void ColourComponent::createParsers( castor::AttributeParsers & parsers
-		, ChannelFillers & channelFillers )
+	void ColourComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+		, ChannelFillers & channelFillers )const
 	{
 		Pass::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "colour_hdr" )
 			, albcmp::parserPassHdrColour
 			, { castor::makeParameter< castor::ParameterType::eHdrRgbColour >() }
-			, "The pass colour" );
+		, "The pass colour" );
 		Pass::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "colour_srgb" )
 			, albcmp::parserPassSrgbColour
 			, { castor::makeParameter< castor::ParameterType::eRgbColour >() }
-			, "The pass colour" );
+		, "The pass colour" );
 		Pass::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "albedo" )
 			, albcmp::parserPassHdrColour
 			, { castor::makeParameter< castor::ParameterType::eHdrRgbColour >() }
-			, "The pass base colour" );
+		, "The pass base colour" );
 		Pass::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "diffuse" )
 			, albcmp::parserPassSrgbColour
 			, { castor::makeParameter< castor::ParameterType::eRgbColour >() }
-			, "The pass diffuse colour" );
+		, "The pass diffuse colour" );
 	}
 
-	void ColourComponent::zeroBuffer( Pass const & pass
+	void ColourComponent::Plugin::zeroBuffer( Pass const & pass
 		, shader::PassMaterialShader const & materialShader
-		, PassBuffer & buffer )
+		, PassBuffer & buffer )const
 	{
 		static castor::HdrRgbColour const dummy{ castor::RgbColour{ 1.0f, 1.0f, 1.0f }, 2.2f };
 		auto data = buffer.getData( pass.getId() );
@@ -210,10 +201,20 @@ namespace castor3d
 			, 0u );
 	}
 
-	bool ColourComponent::isComponentNeeded( TextureFlags const & textures
-		, ComponentModeFlags const & filter )
+	bool ColourComponent::Plugin::isComponentNeeded( TextureFlags const & textures
+		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eColour );
+	}
+
+	//*********************************************************************************************
+
+	castor::String const ColourComponent::TypeName = C3D_MakePassComponentName( "colour" );
+
+	ColourComponent::ColourComponent( Pass & pass
+		, castor::HdrRgbColour defaultValue )
+		: BaseDataPassComponentT{ pass, TypeName, std::move( defaultValue ) }
+	{
 	}
 
 	void ColourComponent::accept( PassVisitorBase & vis )

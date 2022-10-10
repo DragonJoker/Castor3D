@@ -58,21 +58,23 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const UntileComponent::TypeName = C3D_MakePassComponentName( "untile" );
-
-	UntileComponent::UntileComponent( Pass & pass )
-		: BaseDataPassComponentT< castor::AtomicGroupChangeTracked< bool > >{ pass, TypeName }
-	{
-	}
-
-	void UntileComponent::createParsers( castor::AttributeParsers & parsers
-		, ChannelFillers & channelFillers )
+	void UntileComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+		, ChannelFillers & channelFillers )const
 	{
 		Pass::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "untile" )
 			, unt::parserPassUntile
 			, { castor::makeParameter< castor::ParameterType::eBool >() } );
+	}
+
+	//*********************************************************************************************
+
+	castor::String const UntileComponent::TypeName = C3D_MakePassComponentName( "untile" );
+
+	UntileComponent::UntileComponent( Pass & pass )
+		: BaseDataPassComponentT< castor::AtomicGroupChangeTracked< bool > >{ pass, TypeName }
+	{
 	}
 
 	void UntileComponent::accept( PassVisitorBase & vis )

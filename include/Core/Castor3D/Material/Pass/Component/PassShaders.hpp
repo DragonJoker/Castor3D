@@ -38,10 +38,10 @@ namespace castor3d::shader
 			, Material const & material
 			, sdw::StructInstance const & surface
 			, sdw::expr::ExprList & inits )const;
-		C3D_API void fillComponentsInits( sdw::type::BaseStruct & components
+		C3D_API void fillComponentsInits( sdw::type::BaseStruct const & components
 			, Materials const & materials
 			, sdw::expr::ExprList & inits )const;
-		C3D_API void fillComponentsInits( sdw::type::BaseStruct & components
+		C3D_API void fillComponentsInits( sdw::type::BaseStruct const & components
 			, Materials const & materials
 			, Material const & material
 			, sdw::StructInstance const & surface

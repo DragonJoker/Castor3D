@@ -84,8 +84,7 @@ namespace castor3d
 			}
 			else
 			{
-				EmissiveMapComponent::fillRemapMask( params[0]->get< uint32_t >()
-					, parsingContext.sceneImportConfig.textureRemapIt->second );
+				parsingContext.sceneImportConfig.textureRemapIt->second.emissiveMask[0] = params[0]->get< uint32_t >();
 			}
 		}
 		CU_EndAttribute()
@@ -116,19 +115,8 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const EmissiveMapComponent::TypeName = C3D_MakePassMapComponentName( "emissive" );
-
-	EmissiveMapComponent::EmissiveMapComponent( Pass & pass )
-		: PassMapComponent{ pass, TypeName }
-	{
-		if ( !pass.hasComponent< EmissiveComponent >() )
-		{
-			pass.createComponent< EmissiveComponent >();
-		}
-	}
-
-	void EmissiveMapComponent::createParsers( castor::AttributeParsers & parsers
-		, ChannelFillers & channelFillers )
+	void EmissiveMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+		, ChannelFillers & channelFillers )const
 	{
 		channelFillers.emplace( "emissive", ChannelFiller{ uint32_t( TextureFlag::eEmissive )
 			, []( SceneFileContext & parsingContext )
@@ -156,44 +144,51 @@ namespace castor3d
 			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
 	}
 
-	void EmissiveMapComponent::fillRemapMask( uint32_t maskValue
-		, TextureConfiguration & configuration )
-	{
-		configuration.emissiveMask[0] = maskValue;
-	}
-
-	bool EmissiveMapComponent::writeTextureConfig( TextureConfiguration const & configuration
+	bool EmissiveMapComponent::Plugin::writeTextureConfig( TextureConfiguration const & configuration
 		, castor::String const & tabs
-		, castor::StringStream & file )
+		, castor::StringStream & file )const
 	{
 		return castor::TextWriter< EmissiveMapComponent >{ tabs, configuration.emissiveMask[0] }( file );
 	}
 
-	bool EmissiveMapComponent::isComponentNeeded( TextureFlags const & textures
-		, ComponentModeFlags const & filter )
+	bool EmissiveMapComponent::Plugin::isComponentNeeded( TextureFlags const & textures
+		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eDiffuseLighting )
 			|| checkFlag( filter, ComponentModeFlag::eSpecularLighting )
 			|| checkFlag( textures, TextureFlag::eEmissive );
 	}
 
-	bool EmissiveMapComponent::needsMapComponent( TextureConfiguration const & configuration )
+	bool EmissiveMapComponent::Plugin::needsMapComponent( TextureConfiguration const & configuration )const
 	{
 		return configuration.emissiveMask[0] != 0u;
 	}
 
-	void EmissiveMapComponent::createMapComponent( Pass & pass
-		, std::vector< PassComponentUPtr > & result )
+	void EmissiveMapComponent::Plugin::createMapComponent( Pass & pass
+		, std::vector< PassComponentUPtr > & result )const
 	{
 		result.push_back( std::make_unique< EmissiveMapComponent >( pass ) );
 	}
 
-	void EmissiveMapComponent::updateComponent( TextureFlags const & texturesFlags
+	void EmissiveMapComponent::Plugin::doUpdateComponent( TextureFlags const & texturesFlags
 		, shader::BlendComponents const & components )
 	{
 		if ( !checkFlag( texturesFlags, TextureFlag::eEmissive ) )
 		{
 			components.getMember< sdw::Vec3 >( "emissive", true ) *= components.getMember< sdw::Vec3 >( "colour", true );
+		}
+	}
+
+	//*********************************************************************************************
+
+	castor::String const EmissiveMapComponent::TypeName = C3D_MakePassMapComponentName( "emissive" );
+
+	EmissiveMapComponent::EmissiveMapComponent( Pass & pass )
+		: PassMapComponent{ pass, TypeName }
+	{
+		if ( !pass.hasComponent< EmissiveComponent >() )
+		{
+			pass.createComponent< EmissiveComponent >();
 		}
 	}
 

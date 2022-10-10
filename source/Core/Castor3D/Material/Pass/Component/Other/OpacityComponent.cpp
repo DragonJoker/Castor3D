@@ -119,7 +119,6 @@ namespace castor3d
 
 	void OpacityComponent::ComponentsShader::fillComponents( sdw::type::BaseStruct & components
 		, shader::Materials const & materials
-		, shader::Material const * material
 		, sdw::StructInstance const * surface )const
 	{
 		if ( !checkFlag( materials.getFilter(), ComponentModeFlag::eOpacity ) )
@@ -134,7 +133,7 @@ namespace castor3d
 		}
 	}
 
-	void OpacityComponent::ComponentsShader::fillComponentsInits( sdw::type::BaseStruct & components
+	void OpacityComponent::ComponentsShader::fillComponentsInits( sdw::type::BaseStruct const & components
 		, shader::Materials const & materials
 		, shader::Material const * material
 		, sdw::StructInstance const * surface
@@ -173,7 +172,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	OpacityComponent::MaterialShader::MaterialShader()
-		: shader::PassMaterialShader{ MemChunk{ 0u, 8u, 8u } }
+		: shader::PassMaterialShader{ 8u }
 	{
 	}
 
@@ -191,15 +190,8 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const OpacityComponent::TypeName = C3D_MakePassComponentName( "opacity" );
-
-	OpacityComponent::OpacityComponent( Pass & pass )
-		: BaseDataPassComponentT< OpacityData >{ pass, TypeName }
-	{
-	}
-
-	void OpacityComponent::createParsers( castor::AttributeParsers & parsers
-		, ChannelFillers & channelFillers )
+	void OpacityComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+		, ChannelFillers & channelFillers )const
 	{
 		Pass::addParserT( parsers
 			, CSCNSection::ePass
@@ -218,9 +210,9 @@ namespace castor3d
 			, { castor::makeParameter< castor::ParameterType::eUInt32 >( castor::makeRange( 0u, 8u ) ) } );
 	}
 
-	void OpacityComponent::zeroBuffer( Pass const & pass
+	void OpacityComponent::Plugin::zeroBuffer( Pass const & pass
 		, shader::PassMaterialShader const & materialShader
-		, PassBuffer & buffer )
+		, PassBuffer & buffer )const
 	{
 		auto data = buffer.getData( pass.getId() );
 		VkDeviceSize offset{};
@@ -228,10 +220,19 @@ namespace castor3d
 		data.write( materialShader.getMaterialChunk(), 0u, offset );
 	}
 
-	bool OpacityComponent::isComponentNeeded( TextureFlags const & textures
-		, ComponentModeFlags const & filter )
+	bool OpacityComponent::Plugin::isComponentNeeded( TextureFlags const & textures
+		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eOpacity );
+	}
+
+	//*********************************************************************************************
+
+	castor::String const OpacityComponent::TypeName = C3D_MakePassComponentName( "opacity" );
+
+	OpacityComponent::OpacityComponent( Pass & pass )
+		: BaseDataPassComponentT< OpacityData >{ pass, TypeName }
+	{
 	}
 
 	void OpacityComponent::accept( PassVisitorBase & vis )

@@ -68,7 +68,7 @@ namespace castor3d
 		void getComponentShadersT( FlagsT const & flags
 			, ComponentModeFlags filter
 			, uint32_t componentId
-			, ComponentData const & component
+			, PassComponentPlugin const & component
 			, std::vector< shader::PassComponentsShaderPtr > & shaders
 			, std::vector< UpdateComponent > & updateComponents )
 		{
@@ -161,9 +161,9 @@ namespace castor3d
 			{
 				component->fillBuffer( buffer );
 			}
-			else if ( componentDesc.data.zeroBuffer )
+			else
 			{
-				componentDesc.data.zeroBuffer( pass
+				componentDesc.plugin->zeroBuffer( pass
 					, *m_materialShaders.find( id )->second
 					, buffer );
 			}
@@ -199,7 +199,7 @@ namespace castor3d
 			passcompreg::getComponentShadersT( texturesFlags
 				, filter
 				, id.first
-				, id.second.data
+				, *id.second.plugin
 				, result
 				, updateComponents );
 		}
@@ -218,7 +218,7 @@ namespace castor3d
 			passcompreg::getComponentShadersT( flags
 				, filter
 				, id.first
-				, id.second.data
+				, *id.second.plugin
 				, result
 				, updateComponents );
 		}
@@ -227,10 +227,7 @@ namespace castor3d
 	}
 
 	uint32_t PassComponentRegister::registerComponent( castor::String const & componentType
-		, ParsersFiller createParsers
-		, SectionsFiller createSections
-		, CreateMaterialShader createMaterialShader
-		, ComponentData data )
+		, PassComponentPluginUPtr componentPlugin )
 	{
 		auto id = getNameId( componentType );
 
@@ -244,10 +241,7 @@ namespace castor3d
 		id = getNextId();
 		registerComponent( id
 			, componentType
-			, createParsers
-			, createSections
-			, createMaterialShader
-			, std::move( data ) );
+			, std::move( componentPlugin ) );
 		return id;
 	}
 
@@ -275,15 +269,13 @@ namespace castor3d
 			auto & component = idit.second;
 			bool hasComponent = result.hasComponent( component.name );
 
-			if ( component.data.needsMapComponent
-				&& component.data.createMapComponent
-				&& component.data.createMapComponent != &PassComponent::createMapComponent )
+			if ( component.plugin->isMapComponent() )
 			{
-				if ( component.data.needsMapComponent( texConfig ) )
+				if ( component.plugin->needsMapComponent( texConfig ) )
 				{
 					if ( !hasComponent )
 					{
-						component.data.createMapComponent( result, components );
+						component.plugin->createMapComponent( result, components );
 					}
 				}
 				else if ( hasComponent )
@@ -347,48 +339,32 @@ namespace castor3d
 
 	void PassComponentRegister::registerComponent( uint32_t id
 		, castor::String const & componentType
-		, ParsersFiller createParsers
-		, SectionsFiller createSections
-		, CreateMaterialShader createMaterialShader
-		, ComponentData data )
+		, PassComponentPluginUPtr componentPlugin )
 	{
-		auto & component = m_ids.emplace( id, Component{ componentType, std::move( data ) } ).first->second;
-		CU_Require( ( !component.data.zeroBuffer && !createMaterialShader )
-			|| ( component.data.zeroBuffer && createMaterialShader ) );
+		auto & component = m_ids.emplace( id, Component{ componentType, std::move( componentPlugin ) } ).first->second;
 
-		if ( component.data.zeroBuffer && createMaterialShader )
+		if ( auto shader = component.plugin->createMaterialShader() )
 		{
-			if ( auto shader = createMaterialShader() )
-			{
-				m_materialShaders.emplace( id, std::move( shader ) );
+			m_materialShaders.emplace( id, std::move( shader ) );
 
-				if ( !m_pauseOrder )
-				{
-					reorderBuffer();
-				}
+			if ( !m_pauseOrder )
+			{
+				reorderBuffer();
 			}
 		}
 
 		castor::AttributeParsers parsers;
+		ChannelFillers fillers;
+		component.plugin->createParsers( parsers, fillers );
 
-		if ( createParsers )
+		for ( auto & channelFiller : fillers )
 		{
-			ChannelFillers fillers;
-			createParsers( parsers, fillers );
-
-			for ( auto & channelFiller : fillers )
-			{
-				auto it = m_channelsFillers.emplace( channelFiller ).first;
-				m_channels.emplace( it->first, it->second.first );
-			}
+			auto it = m_channelsFillers.emplace( channelFiller ).first;
+			m_channels.emplace( it->first, it->second.first );
 		}
 
 		castor::StrUInt32Map sections;
-
-		if ( createSections )
-		{
-			createSections( sections );
-		}
+		component.plugin->createSections( sections );
 
 		getEngine()->registerParsers( componentType
 			, parsers

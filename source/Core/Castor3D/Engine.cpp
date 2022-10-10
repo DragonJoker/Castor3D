@@ -739,16 +739,10 @@ namespace castor3d
 	}
 
 	uint32_t Engine::registerPassComponent( castor::String const & type
-		, ParsersFiller createParsers
-		, SectionsFiller createSections
-		, CreateMaterialShader createMaterialShader
-		, ComponentData data )
+		, PassComponentPluginUPtr componentPlugin )
 	{
 		return m_passComponents->registerComponent( type
-			, createParsers
-			, createSections
-			, createMaterialShader
-			, std::move( data ) );
+			, std::move( componentPlugin ) );
 	}
 
 	void Engine::unregisterPassComponent( castor::String const & type )

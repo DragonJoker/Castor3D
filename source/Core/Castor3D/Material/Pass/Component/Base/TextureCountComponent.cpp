@@ -15,7 +15,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	TextureCountComponent::MaterialShader::MaterialShader()
-		: shader::PassMaterialShader{ MemChunk{ 0u, 4u, 4u } }
+		: shader::PassMaterialShader{ 4u }
 	{
 
 	}
@@ -32,21 +32,23 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const TextureCountComponent::TypeName = C3D_MakePassComponentName( "texcount" );
-
-	TextureCountComponent::TextureCountComponent( Pass & pass )
-		: PassComponent{ pass, TypeName }
-	{
-	}
-
-	void TextureCountComponent::zeroBuffer( Pass const & pass
+	void TextureCountComponent::Plugin::zeroBuffer( Pass const & pass
 		, shader::PassMaterialShader const & materialShader
-		, PassBuffer & buffer )
+		, PassBuffer & buffer )const
 	{
 		auto data = buffer.getData( pass.getId() );
 		data.write( materialShader.getMaterialChunk()
 			, 0u
 			, 0u );
+	}
+
+	//*********************************************************************************************
+
+	castor::String const TextureCountComponent::TypeName = C3D_MakePassComponentName( "texcount" );
+
+	TextureCountComponent::TextureCountComponent( Pass & pass )
+		: PassComponent{ pass, TypeName }
+	{
 	}
 
 	void TextureCountComponent::accept( PassVisitorBase & vis )

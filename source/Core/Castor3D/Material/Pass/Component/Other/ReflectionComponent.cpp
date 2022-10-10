@@ -60,7 +60,6 @@ namespace castor3d
 
 	void ReflectionComponent::ComponentsShader::fillComponents( sdw::type::BaseStruct & components
 		, shader::Materials const & materials
-		, shader::Material const * material
 		, sdw::StructInstance const * surface )const
 	{
 		if ( !checkFlag( materials.getFilter(), ComponentModeFlag::eSpecularLighting ) )
@@ -74,7 +73,7 @@ namespace castor3d
 		}
 	}
 
-	void ReflectionComponent::ComponentsShader::fillComponentsInits( sdw::type::BaseStruct & components
+	void ReflectionComponent::ComponentsShader::fillComponentsInits( sdw::type::BaseStruct const & components
 		, shader::Materials const & materials
 		, shader::Material const * material
 		, sdw::StructInstance const * surface
@@ -109,7 +108,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	ReflectionComponent::MaterialShader::MaterialShader()
-		: shader::PassMaterialShader{ MemChunk{ 0u, 4u, 4u } }
+		: shader::PassMaterialShader{ 4u }
 	{
 	}
 
@@ -125,15 +124,8 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const ReflectionComponent::TypeName = C3D_MakePassComponentName( "reflection" );
-
-	ReflectionComponent::ReflectionComponent( Pass & pass )
-		: BaseDataPassComponentT< castor::AtomicGroupChangeTracked< bool > >{ pass, TypeName }
-	{
-	}
-
-	void ReflectionComponent::createParsers( castor::AttributeParsers & parsers
-		, ChannelFillers & channelFillers )
+	void ReflectionComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+		, ChannelFillers & channelFillers )const
 	{
 		Pass::addParserT( parsers
 			, CSCNSection::ePass
@@ -142,18 +134,27 @@ namespace castor3d
 			, { castor::makeParameter< castor::ParameterType::eBool >() } );
 	}
 
-	void ReflectionComponent::zeroBuffer( Pass const & pass
+	void ReflectionComponent::Plugin::zeroBuffer( Pass const & pass
 		, shader::PassMaterialShader const & materialShader
-		, PassBuffer & buffer )
+		, PassBuffer & buffer )const
 	{
 		auto data = buffer.getData( pass.getId() );
 		data.write( materialShader.getMaterialChunk(), 0u, 0u );
 	}
 
-	bool ReflectionComponent::isComponentNeeded( TextureFlags const & textures
-		, ComponentModeFlags const & filter )
+	bool ReflectionComponent::Plugin::isComponentNeeded( TextureFlags const & textures
+		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eSpecularLighting );
+	}
+
+	//*********************************************************************************************
+
+	castor::String const ReflectionComponent::TypeName = C3D_MakePassComponentName( "reflection" );
+
+	ReflectionComponent::ReflectionComponent( Pass & pass )
+		: BaseDataPassComponentT< castor::AtomicGroupChangeTracked< bool > >{ pass, TypeName }
+	{
 	}
 
 	void ReflectionComponent::accept( PassVisitorBase & vis )

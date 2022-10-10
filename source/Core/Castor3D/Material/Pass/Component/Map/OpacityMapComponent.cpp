@@ -87,8 +87,7 @@ namespace castor3d
 			}
 			else
 			{
-				OpacityMapComponent::fillRemapMask( params[0]->get< uint32_t >()
-					, parsingContext.sceneImportConfig.textureRemapIt->second );
+				parsingContext.sceneImportConfig.textureRemapIt->second.opacityMask[0] = params[0]->get< uint32_t >();
 			}
 		}
 		CU_EndAttribute()
@@ -119,19 +118,8 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const OpacityMapComponent::TypeName = C3D_MakePassMapComponentName( "opacity" );
-
-	OpacityMapComponent::OpacityMapComponent( Pass & pass )
-		: PassMapComponent{ pass, TypeName }
-	{
-		if ( !pass.hasComponent< OpacityComponent >() )
-		{
-			pass.createComponent< OpacityComponent >();
-		}
-	}
-
-	void OpacityMapComponent::createParsers( castor::AttributeParsers & parsers
-		, ChannelFillers & channelFillers )
+	void OpacityMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+		, ChannelFillers & channelFillers )const
 	{
 		channelFillers.emplace( "opacity", ChannelFiller{ uint32_t( TextureFlag::eOpacity )
 			, []( SceneFileContext & parsingContext )
@@ -159,35 +147,42 @@ namespace castor3d
 			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
 	}
 
-	void OpacityMapComponent::fillRemapMask( uint32_t maskValue
-		, TextureConfiguration & configuration )
-	{
-		configuration.opacityMask[0] = maskValue;
-	}
-
-	bool OpacityMapComponent::writeTextureConfig( TextureConfiguration const & configuration
+	bool OpacityMapComponent::Plugin::writeTextureConfig( TextureConfiguration const & configuration
 		, castor::String const & tabs
-		, castor::StringStream & file )
+		, castor::StringStream & file )const
 	{
 		return castor::TextWriter< OpacityMapComponent >{ tabs, configuration.opacityMask[0] }( file );
 	}
 
-	bool OpacityMapComponent::isComponentNeeded( TextureFlags const & textures
-		, ComponentModeFlags const & filter )
+	bool OpacityMapComponent::Plugin::isComponentNeeded( TextureFlags const & textures
+		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eOpacity )
 			|| checkFlag( textures, TextureFlag::eOpacity );
 	}
 
-	bool OpacityMapComponent::needsMapComponent( TextureConfiguration const & configuration )
+	bool OpacityMapComponent::Plugin::needsMapComponent( TextureConfiguration const & configuration )const
 	{
 		return configuration.opacityMask[0] != 0u;
 	}
 
-	void OpacityMapComponent::createMapComponent( Pass & pass
-		, std::vector< PassComponentUPtr > & result )
+	void OpacityMapComponent::Plugin::createMapComponent( Pass & pass
+		, std::vector< PassComponentUPtr > & result )const
 	{
 		result.push_back( std::make_unique< OpacityMapComponent >( pass ) );
+	}
+
+	//*********************************************************************************************
+
+	castor::String const OpacityMapComponent::TypeName = C3D_MakePassMapComponentName( "opacity" );
+
+	OpacityMapComponent::OpacityMapComponent( Pass & pass )
+		: PassMapComponent{ pass, TypeName }
+	{
+		if ( !pass.hasComponent< OpacityComponent >() )
+		{
+			pass.createComponent< OpacityComponent >();
+		}
 	}
 
 	void OpacityMapComponent::mergeImages( TextureUnitDataSet & result )

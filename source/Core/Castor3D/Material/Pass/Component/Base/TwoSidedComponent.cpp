@@ -54,21 +54,23 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const TwoSidedComponent::TypeName = C3D_MakePassComponentName( "two_sided" );
-
-	TwoSidedComponent::TwoSidedComponent( Pass & pass )
-		: BaseDataPassComponentT< castor::AtomicGroupChangeTracked< bool > >{ pass, TypeName }
-	{
-	}
-
-	void TwoSidedComponent::createParsers( castor::AttributeParsers & parsers
-		, ChannelFillers & channelFillers )
+	void TwoSidedComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+		, ChannelFillers & channelFillers )const
 	{
 		Pass::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "two_sided" )
 			, tws::parserPassTwoSided
 			, { castor::makeParameter< castor::ParameterType::eBool >() } );
+	}
+
+	//*********************************************************************************************
+
+	castor::String const TwoSidedComponent::TypeName = C3D_MakePassComponentName( "two_sided" );
+
+	TwoSidedComponent::TwoSidedComponent( Pass & pass )
+		: BaseDataPassComponentT< castor::AtomicGroupChangeTracked< bool > >{ pass, TypeName }
+	{
 	}
 
 	void TwoSidedComponent::accept( PassVisitorBase & vis )

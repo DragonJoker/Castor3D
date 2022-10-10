@@ -20,9 +20,8 @@ namespace castor3d
 		{
 			C3D_API void fillComponents( sdw::type::BaseStruct & components
 				, shader::Materials const & materials
-				, shader::Material const * material
 				, sdw::StructInstance const * surface )const override;
-			C3D_API void fillComponentsInits( sdw::type::BaseStruct & components
+			C3D_API void fillComponentsInits( sdw::type::BaseStruct const & components
 				, shader::Materials const & materials
 				, shader::Material const * material
 				, sdw::StructInstance const * surface
@@ -46,33 +45,46 @@ namespace castor3d
 				, sdw::expr::ExprList & inits )const override;
 		};
 
+		class Plugin
+			: public PassComponentPlugin
+		{
+		public:
+			void createParsers( castor::AttributeParsers & parsers
+				, ChannelFillers & channelFillers )const override;
+			bool writeTextureConfig( TextureConfiguration const & configuration
+				, castor::String const & tabs
+				, castor::StringStream & file )const override;
+			bool isComponentNeeded( TextureFlags const & textures
+				, ComponentModeFlags const & filter )const override;
+			bool needsMapComponent( TextureConfiguration const & configuration )const override;
+			void createMapComponent( Pass & pass
+				, std::vector< PassComponentUPtr > & result )const override;
+			void zeroBuffer( Pass const & pass
+				, shader::PassMaterialShader const & materialShader
+				, PassBuffer & buffer )const override;
+
+			bool isMapComponent()const override
+			{
+				return true;
+			}
+
+			shader::PassComponentsShaderPtr createComponentsShader()const override
+			{
+				return std::make_unique< ComponentsShader >();
+			}
+
+			shader::PassMaterialShaderPtr createMaterialShader()const override
+			{
+				return std::make_unique< MaterialShader >();
+			}
+		};
+
+		static PassComponentPluginUPtr createPlugin()
+		{
+			return castor::makeUniqueDerived< PassComponentPlugin, Plugin >();
+		}
+
 		C3D_API explicit TransmittanceMapComponent( Pass & pass );
-
-		C3D_API static void createParsers( castor::AttributeParsers & parsers
-			, ChannelFillers & channelFillers );
-		C3D_API static void fillRemapMask( uint32_t maskValue
-			, TextureConfiguration & configuration );
-		C3D_API static bool writeTextureConfig( TextureConfiguration const & configuration
-			, castor::String const & tabs
-			, castor::StringStream & file );
-		C3D_API static bool isComponentNeeded( TextureFlags const & textures
-			, ComponentModeFlags const & filter );
-		C3D_API static bool needsMapComponent( TextureConfiguration const & configuration );
-		C3D_API static void createMapComponent( Pass & pass
-			, std::vector< PassComponentUPtr > & result );
-		C3D_API static void zeroBuffer( Pass const & pass
-			, shader::PassMaterialShader const & materialShader
-			, PassBuffer & buffer );
-
-		C3D_API static shader::PassComponentsShaderPtr createComponentsShader()
-		{
-			return std::make_unique< ComponentsShader >();
-		}
-
-		C3D_API static shader::PassMaterialShaderPtr createMaterialShader()
-		{
-			return std::make_unique< MaterialShader >();
-		}
 
 		C3D_API void mergeImages( TextureUnitDataSet & result )override;
 		C3D_API void fillChannel( TextureConfiguration & configuration

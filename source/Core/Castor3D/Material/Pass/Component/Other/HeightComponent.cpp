@@ -65,7 +65,6 @@ namespace castor3d
 
 	void HeightComponent::ComponentsShader::fillComponents( sdw::type::BaseStruct & components
 		, shader::Materials const & materials
-		, shader::Material const * material
 		, sdw::StructInstance const * surface )const
 	{
 		if ( !checkFlag( materials.getFilter(), ComponentModeFlag::eGeometry ) )
@@ -80,7 +79,7 @@ namespace castor3d
 		}
 	}
 
-	void HeightComponent::ComponentsShader::fillComponentsInits( sdw::type::BaseStruct & components
+	void HeightComponent::ComponentsShader::fillComponentsInits( sdw::type::BaseStruct const & components
 		, shader::Materials const & materials
 		, shader::Material const * material
 		, sdw::StructInstance const * surface
@@ -117,15 +116,8 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const HeightComponent::TypeName = C3D_MakePassComponentName( "height" );
-
-	HeightComponent::HeightComponent( Pass & pass )
-		: BaseDataPassComponentT< castor::AtomicGroupChangeTracked< ParallaxOcclusionMode > >{ pass, TypeName }
-	{
-	}
-
-	void HeightComponent::createParsers( castor::AttributeParsers & parsers
-		, ChannelFillers & channelFillers )
+	void HeightComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+		, ChannelFillers & channelFillers )const
 	{
 		static UInt32StrMap const parallaxOcclusionModes{ getEnumMapT< ParallaxOcclusionMode >() };
 
@@ -136,10 +128,19 @@ namespace castor3d
 			, { castor::makeParameter< castor::ParameterType::eCheckedText >( parallaxOcclusionModes ) } );
 	}
 
-	bool HeightComponent::isComponentNeeded( TextureFlags const & textures
-		, ComponentModeFlags const & filter )
+	bool HeightComponent::Plugin::isComponentNeeded( TextureFlags const & textures
+		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eGeometry );
+	}
+
+	//*********************************************************************************************
+
+	castor::String const HeightComponent::TypeName = C3D_MakePassComponentName( "height" );
+
+	HeightComponent::HeightComponent( Pass & pass )
+		: BaseDataPassComponentT< castor::AtomicGroupChangeTracked< ParallaxOcclusionMode > >{ pass, TypeName }
+	{
 	}
 
 	void HeightComponent::accept( PassVisitorBase & vis )

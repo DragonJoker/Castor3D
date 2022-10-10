@@ -451,8 +451,6 @@ namespace castor3d
 				, { uint32_t( CSCNSection::eParticleSystem ), cuT( "particle_system" ) }
 				, { uint32_t( CSCNSection::eParticle ), cuT( "particle" ) }
 				, { uint32_t( CSCNSection::eSsao ), cuT( "ssao" ) }
-				, { uint32_t( CSCNSection::eSubsurfaceScattering ), cuT( "subsurface_scattering" ) }
-				, { uint32_t( CSCNSection::eTransmittanceProfile ), cuT( "transmittance_profile" ) }
 				, { uint32_t( CSCNSection::eHdrConfig ), cuT( "hdr_config" ) }
 				, { uint32_t( CSCNSection::eShadows ), cuT( "shadows" ) }
 				, { uint32_t( CSCNSection::eMeshDefaultMaterials ), cuT( "default_materials" ) }

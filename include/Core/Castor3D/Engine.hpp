@@ -489,10 +489,7 @@ namespace castor3d
 		 *\param[in]	data	Les fonctions spécifiques du composant.
 		 */
 		C3D_API uint32_t registerPassComponent( castor::String const & type
-			, ParsersFiller createParsers
-			, SectionsFiller createSections
-			, CreateMaterialShader createMaterialShader
-			, ComponentData data );
+			, PassComponentPluginUPtr componentPlugin );
 		/**
 		 *\~english
 		 *\brief		Unregisters a pass component.
@@ -856,30 +853,10 @@ namespace castor3d
 		}
 
 		template< typename ComponentT >
-		uint32_t registerPassComponent( ParsersFiller pcreateParsers = &ComponentT::createParsers
-			, SectionsFiller pcreateSections = &ComponentT::createSections
-			, CreateMaterialShader pcreateMaterialShader = &ComponentT::createMaterialShader
-			, ZeroBuffer pzeroBuffer = &ComponentT::zeroBuffer
-			, FillRemapMask pfillRemapMask = &ComponentT::fillRemapMask
-			, WriteTextureConfig pwriteTextureConfig = &ComponentT::writeTextureConfig
-			, NeedsMapComponent pneedsMapComponent = &ComponentT::needsMapComponent
-			, CreateMapComponent pcreateMapComponent = &ComponentT::createMapComponent
-			, IsComponentNeeded pisComponentNeeded = &ComponentT::isComponentNeeded
-			, CreateComponentsShader pcreateComponentsShader = &ComponentT::createComponentsShader
-			, std::function< UpdateComponent() > getUpdateComponent = &ComponentT::getUpdateComponent )
+		uint32_t registerPassComponent( CreatePassComponentPlugin createPlugin = &ComponentT::createPlugin )
 		{
 			return registerPassComponent( ComponentT::TypeName
-				, pcreateParsers
-				, pcreateSections
-				, pcreateMaterialShader
-				, ComponentData{ pzeroBuffer
-					, pfillRemapMask
-					, pwriteTextureConfig
-					, pneedsMapComponent
-					, pcreateMapComponent
-					, pisComponentNeeded
-					, pcreateComponentsShader
-					, getUpdateComponent() } );
+				, createPlugin() );
 		}
 		/**@}*/
 

@@ -66,9 +66,8 @@ namespace toon
 		{
 			C3D_ToonMaterial_API void fillComponents( sdw::type::BaseStruct & components
 				, castor3d::shader::Materials const & materials
-				, castor3d::shader::Material const * material
 				, sdw::StructInstance const * surface )const override;
-			C3D_ToonMaterial_API void fillComponentsInits( sdw::type::BaseStruct & components
+			C3D_ToonMaterial_API void fillComponentsInits( sdw::type::BaseStruct const & components
 				, castor3d::shader::Materials const & materials
 				, castor3d::shader::Material const * material
 				, sdw::StructInstance const * surface
@@ -81,14 +80,24 @@ namespace toon
 
 		C3D_ToonMaterial_API explicit EdgesComponent( castor3d::Pass & pass );
 
-		C3D_ToonMaterial_API static void createParsers( castor::AttributeParsers & parsers
-			, castor3d::ChannelFillers & channelFillers );
-		C3D_ToonMaterial_API static bool isComponentNeeded( castor3d::TextureFlags const & textures
-			, castor3d::ComponentModeFlags const & filter );
-
-		C3D_ToonMaterial_API static castor3d::shader::PassComponentsShaderPtr createComponentsShader()
+		class Plugin
+			: public castor3d::PassComponentPlugin
 		{
-			return std::make_unique< ComponentsShader >();
+		public:
+			void createParsers( castor::AttributeParsers & parsers
+				, castor3d::ChannelFillers & channelFillers )const override;
+			bool isComponentNeeded( castor3d::TextureFlags const & textures
+				, castor3d::ComponentModeFlags const & filter )const override;
+
+			castor3d::shader::PassComponentsShaderPtr createComponentsShader()const override
+			{
+				return std::make_unique< ComponentsShader >();
+			}
+		};
+
+		static castor3d::PassComponentPluginUPtr createPlugin()
+		{
+			return castor::makeUniqueDerived< castor3d::PassComponentPlugin, Plugin >();
 		}
 
 		C3D_ToonMaterial_API void accept( castor3d::PassVisitorBase & vis )override;

@@ -94,6 +94,13 @@ namespace castor3d
 	struct PassComponent;
 	/**
 	\~english
+	\brief		Used to create a component type's shaders and data.
+	\~french
+	\brief		Utilisé pour créer les shaders et données d'un type de composant.
+	*/
+	class PassComponentPlugin;
+	/**
+	\~english
 	\brief		Pass texture component base class.
 	\~french
 	\brief		Classe de base d'un composant de texture de passe.
@@ -110,8 +117,30 @@ namespace castor3d
 	//@{
 	namespace shader
 	{
+		/**
+		\~english
+		\brief		Base class for all component shaders.
+		\~french
+		\brief		Classe de base des shaders de composant.
+		*/
 		struct PassShader;
+		/**
+		\~english
+		\brief		Shaders for components that go through lighting (\see shader::BlendComponents).
+		\remarks	Those shaders are enabled if the component is enabled.
+		\~french
+		\brief		Shaders pour les composants allant jusqu'à l'éclairage (\see shader::BlendComponents).
+		\remarks	Ces shaders sont actifs si le composant est actif.
+		*/
 		struct PassComponentsShader;
+		/**
+		\~english
+		\brief		Shaders for components that need registration to castor3d::PassBuffer.
+		\remarks	Those shaders are enabled whether the component is enabled or not (for consistency with the PassBuffer).
+		\~french
+		\brief		Shaders pour les composants ayant un enregistrement dans castor3d::PassBuffer.
+		\remarks	Ces shaders sont actifs que le composant soit actif ou pas (par soucis de cohérence avec le PassBuffer).
+		*/
 		struct PassMaterialShader;
 		/**
 		\~english
@@ -130,6 +159,7 @@ namespace castor3d
 
 	CU_DeclareSmartPtr( PassComponent );
 	CU_DeclareCUSmartPtr( castor3d, PassComponentRegister, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, PassComponentPlugin, C3D_API );
 
 	CU_DeclareMap( uint32_t, PassComponentUPtr, PassComponent );
 
@@ -145,37 +175,10 @@ namespace castor3d
 	using ChannelFiller = std::pair< uint32_t, ComponentConfigFiller >;
 	using ChannelFillers = std::map< castor::String, ChannelFiller >;
 
-	using ParsersFiller = std::function< void( castor::AttributeParsers & parsers
-		, ChannelFillers & channelFillers ) >;
-	using SectionsFiller = std::function< void( castor::StrUInt32Map & sections ) >;
-	using ZeroBuffer = std::function< void( Pass const &
-		, shader::PassMaterialShader const &
-		, PassBuffer & ) >;
-	using FillRemapMask = std::function< void( uint32_t maskValue
-		, TextureConfiguration & configuration ) >;
-	using WriteTextureConfig = std::function< bool( TextureConfiguration const & configuration
-		, castor::String const & tabs
-		, castor::StringStream & file ) >;
-	using NeedsMapComponent = std::function< bool( TextureConfiguration const & configuration ) >;
-	using IsComponentNeeded = std::function< bool( TextureFlags const &, ComponentModeFlags const & ) >;
-	using CreateMapComponent = void( * )( Pass & pass
-		, std::vector< PassComponentUPtr > & result );
-	using CreateComponentsShader = std::function< shader::PassComponentsShaderPtr() >;
-	using CreateMaterialShader = std::function< shader::PassMaterialShaderPtr() >;
 	using UpdateComponent = std::function< void( TextureFlags const & texturesFlags
 		, shader::BlendComponents const & components ) >;
 
-	struct ComponentData
-	{
-		ZeroBuffer zeroBuffer{};
-		FillRemapMask fillRemapMask{};
-		WriteTextureConfig writeTextureConfig{};
-		NeedsMapComponent needsMapComponent{};
-		CreateMapComponent createMapComponent{};
-		IsComponentNeeded isComponentNeeded{};
-		CreateComponentsShader createComponentsShader{};
-		UpdateComponent updateComponent{};
-	};
+	using CreatePassComponentPlugin = std::function< PassComponentPluginUPtr() >;
 	//@}
 	//@}
 	//@}

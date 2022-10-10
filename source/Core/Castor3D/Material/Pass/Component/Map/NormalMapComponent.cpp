@@ -125,8 +125,7 @@ namespace castor3d
 			}
 			else
 			{
-				NormalMapComponent::fillRemapMask( params[0]->get< uint32_t >()
-					, parsingContext.sceneImportConfig.textureRemapIt->second );
+				parsingContext.sceneImportConfig.textureRemapIt->second.normalMask[0] = params[0]->get< uint32_t >();
 			}
 		}
 		CU_EndAttribute()
@@ -184,19 +183,8 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const NormalMapComponent::TypeName = C3D_MakePassMapComponentName( "normal" );
-
-	NormalMapComponent::NormalMapComponent( Pass & pass )
-		: PassMapComponent{ pass, TypeName }
-	{
-			if ( !pass.hasComponent< NormalComponent >() )
-			{
-				pass.createComponent< NormalComponent >();
-			}
-	}
-
-	void NormalMapComponent::createParsers( castor::AttributeParsers & parsers
-		, ChannelFillers & channelFillers )
+	void NormalMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+		, ChannelFillers & channelFillers )const
 	{
 		channelFillers.emplace( "normal", ChannelFiller{ uint32_t( TextureFlag::eNormal )
 			, []( SceneFileContext & parsingContext )
@@ -239,21 +227,15 @@ namespace castor3d
 			, { castor::makeParameter< castor::ParameterType::eBool >() } );
 	}
 
-	void NormalMapComponent::fillRemapMask( uint32_t maskValue
-		, TextureConfiguration & configuration )
-	{
-		configuration.normalMask[0] = maskValue;
-	}
-
-	bool NormalMapComponent::writeTextureConfig( TextureConfiguration const & configuration
+	bool NormalMapComponent::Plugin::writeTextureConfig( TextureConfiguration const & configuration
 		, castor::String const & tabs
-		, castor::StringStream & file )
+		, castor::StringStream & file )const
 	{
 		return castor::TextWriter< NormalMapComponent >{ tabs, configuration }( file );
 	}
 
-	bool NormalMapComponent::isComponentNeeded( TextureFlags const & textures
-		, ComponentModeFlags const & filter )
+	bool NormalMapComponent::Plugin::isComponentNeeded( TextureFlags const & textures
+		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eGeometry )
 			|| checkFlag( filter, ComponentModeFlag::eDiffuseLighting )
@@ -262,15 +244,28 @@ namespace castor3d
 			|| checkFlag( textures, TextureFlag::eNormal );
 	}
 
-	bool NormalMapComponent::needsMapComponent( TextureConfiguration const & configuration )
+	bool NormalMapComponent::Plugin::needsMapComponent( TextureConfiguration const & configuration )const
 	{
 		return configuration.normalMask[0] != 0u;
 	}
 
-	void NormalMapComponent::createMapComponent( Pass & pass
-		, std::vector< PassComponentUPtr > & result )
+	void NormalMapComponent::Plugin::createMapComponent( Pass & pass
+		, std::vector< PassComponentUPtr > & result )const
 	{
 		result.push_back( std::make_unique< NormalMapComponent >( pass ) );
+	}
+
+	//*********************************************************************************************
+
+	castor::String const NormalMapComponent::TypeName = C3D_MakePassMapComponentName( "normal" );
+
+	NormalMapComponent::NormalMapComponent( Pass & pass )
+		: PassMapComponent{ pass, TypeName }
+	{
+			if ( !pass.hasComponent< NormalComponent >() )
+			{
+				pass.createComponent< NormalComponent >();
+			}
 	}
 
 	void NormalMapComponent::mergeImages( TextureUnitDataSet & result )
