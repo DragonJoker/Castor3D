@@ -1,4 +1,4 @@
-#include "Castor3D/Material/Pass/Component/PassShaders.hpp"
+#include "Castor3D/Shader/Shaders/GlslPassShaders.hpp"
 
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"

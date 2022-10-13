@@ -2,7 +2,6 @@
 
 #include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Material/Pass/Component/PassShaders.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Opaque/Lighting/DirectionalLightPass.hpp"
@@ -18,6 +17,7 @@
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
+#include "Castor3D/Shader/Shaders/GlslPassShaders.hpp"
 #include "Castor3D/Shader/Shaders/GlslSssProfile.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"

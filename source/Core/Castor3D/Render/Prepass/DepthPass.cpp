@@ -2,7 +2,6 @@
 
 #include "Castor3D/Config.hpp"
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Material/Pass/Component/PassShaders.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureView.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
@@ -18,6 +17,7 @@
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
+#include "Castor3D/Shader/Shaders/GlslPassShaders.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Ubos/BillboardUbo.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
