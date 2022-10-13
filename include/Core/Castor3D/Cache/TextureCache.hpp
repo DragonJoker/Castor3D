@@ -19,9 +19,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	C3D_API castor::PixelFormat getSRGBFormat( castor::PixelFormat pformat );
-	C3D_API castor::PixelFormat getNonSRGBFormat( castor::PixelFormat pformat );
-
 	class TextureUnitCache
 		: public castor::OwnedBy< Engine >
 	{
