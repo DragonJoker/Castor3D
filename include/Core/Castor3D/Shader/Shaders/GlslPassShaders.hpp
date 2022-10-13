@@ -1,8 +1,10 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_PassShaders_H___
-#define ___C3D_PassShaders_H___
+#ifndef ___C3D_GlslPassShaders_H___
+#define ___C3D_GlslPassShaders_H___
+
+#include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
 #include "Castor3D/Material/MaterialModule.hpp"
 #include "Castor3D/Material/Pass/PassModule.hpp"
@@ -10,7 +12,6 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/Animation/AnimationModule.hpp"
 #include "Castor3D/Shader/ShaderModule.hpp"
 #include "Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp"
-#include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
 #include "Castor3D/Material/Pass/Component/PassComponent.hpp"
 
@@ -151,6 +152,6 @@ namespace castor3d::shader
 	};
 }
 
-#include "PassShaders.inl"
+#include "GlslPassShaders.inl"
 
 #endif

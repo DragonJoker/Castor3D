@@ -1,4 +1,4 @@
-#include "PassShaders.hpp"
+#include "Castor3D/Shader/Shaders/GlslPassShaders.hpp"
 
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"

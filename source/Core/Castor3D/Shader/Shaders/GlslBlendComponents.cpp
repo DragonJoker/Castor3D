@@ -1,7 +1,7 @@
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
 
-#include "Castor3D/Material/Pass/Component/PassShaders.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
+#include "Castor3D/Shader/Shaders/GlslPassShaders.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 
 #include <ShaderWriter/Source.hpp>

@@ -2,13 +2,13 @@
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Cache/MaterialCache.hpp>
-#include <Castor3D/Material/Pass/Component/PassShaders.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Scene/Scene.hpp>
 #include <Castor3D/Shader/Program.hpp>
 #include <Castor3D/Shader/ShaderBuffers/PassBuffer.hpp>
 #include <Castor3D/Shader/Shaders/GlslMaterial.hpp>
+#include "Castor3D/Shader/Shaders/GlslPassShaders.hpp"
 #include <Castor3D/Shader/Shaders/GlslUtils.hpp>
 #include <Castor3D/Shader/Ubos/ModelDataUbo.hpp>
 
