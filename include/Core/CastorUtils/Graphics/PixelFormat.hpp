@@ -126,6 +126,20 @@ namespace castor
 	inline constexpr bool isABGRFormat( PixelFormat format );
 	/**
 	 *\~english
+	 *\return		The SRGB format matching \p format, \p format if not found.
+	 *\~french
+	 *\return		Le format SRGB correspondant à \p format, \p format si non trouvé.
+	 */
+	inline constexpr PixelFormat getSRGBFormat( PixelFormat format );
+	/**
+	 *\~english
+	 *\return		The non SRGB format matching \p format, \p format if not found.
+	 *\~french
+	 *\return		Le format non SRGB correspondant à \p format, \p format si non trouvé.
+	 */
+	inline constexpr PixelFormat getNonSRGBFormat( PixelFormat format );
+	/**
+	 *\~english
 	 *\return		\p true if format is a depth and/or stencil format.
 	 *\~french
 	 *\return		\p false si le format est un format depth et/ou stencil.
