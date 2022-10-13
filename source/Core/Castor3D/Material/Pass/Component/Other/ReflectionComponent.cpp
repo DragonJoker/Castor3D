@@ -96,7 +96,7 @@ namespace castor3d
 
 	void ReflectionComponent::ComponentsShader::blendComponents( shader::Materials const & materials
 		, sdw::Float const & passMultiplier
-		, shader::BlendComponents const & res
+		, shader::BlendComponents & res
 		, shader::BlendComponents const & src )const
 	{
 		if ( src.hasMember( "hasReflection" ) )
@@ -142,7 +142,7 @@ namespace castor3d
 		data.write( materialShader.getMaterialChunk(), 0u, 0u );
 	}
 
-	bool ReflectionComponent::Plugin::isComponentNeeded( TextureFlags const & textures
+	bool ReflectionComponent::Plugin::isComponentNeeded( TextureFlagsArray const & textures
 		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eSpecularLighting );
@@ -150,7 +150,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const ReflectionComponent::TypeName = C3D_MakePassComponentName( "reflection" );
+	castor::String const ReflectionComponent::TypeName = C3D_MakePassOtherComponentName( "reflection" );
 
 	ReflectionComponent::ReflectionComponent( Pass & pass )
 		: BaseDataPassComponentT< castor::AtomicGroupChangeTracked< bool > >{ pass, TypeName }

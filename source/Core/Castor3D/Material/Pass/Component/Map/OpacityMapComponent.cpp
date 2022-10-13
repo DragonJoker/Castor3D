@@ -3,6 +3,7 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Pass/PassVisitor.hpp"
+#include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
 #include "Castor3D/Material/Pass/Component/Map/ColourMapComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Other/OpacityComponent.hpp"
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
@@ -33,12 +34,12 @@ namespace castor
 		bool operator()( castor3d::OpacityMapComponent const & object
 			, StringStream & file )override
 		{
-			return writeNamedSub( file, cuT( "opacity_mask" ), m_mask );
+			return writeMask( file, cuT( "opacity_mask" ), m_mask );
 		}
 
 		bool operator()( StringStream & file )
 		{
-			return writeNamedSub( file, cuT( "opacity_mask" ), m_mask );
+			return writeMask( file, cuT( "opacity_mask" ), m_mask );
 		}
 
 	private:
@@ -62,8 +63,8 @@ namespace castor3d
 			}
 			else
 			{
-				auto & component = getPassComponent< OpacityMapComponent >( parsingContext );
-				component.fillChannel( parsingContext.textureConfiguration
+				auto & plugin = parsingContext.pass->getComponentPlugin( OpacityMapComponent::TypeName );
+				plugin.fillTextureConfiguration( parsingContext.textureConfiguration
 					, params[0]->get< uint32_t >() );
 			}
 		}
@@ -72,7 +73,8 @@ namespace castor3d
 		static CU_ImplementAttributeParser( parserTexRemapOpacity )
 		{
 			auto & parsingContext = getParserContext( context );
-			parsingContext.sceneImportConfig.textureRemapIt = parsingContext.sceneImportConfig.textureRemaps.emplace( TextureFlag::eOpacity, TextureConfiguration{} ).first;
+			auto & plugin = parsingContext.parser->getEngine()->getPassComponentsRegister().getPlugin( OpacityMapComponent::TypeName );
+			parsingContext.sceneImportConfig.textureRemapIt = parsingContext.sceneImportConfig.textureRemaps.emplace( plugin.getTextureFlags(), TextureConfiguration{} ).first;
 			parsingContext.sceneImportConfig.textureRemapIt->second = TextureConfiguration{};
 		}
 		CU_EndAttributePush( CSCNSection::eTextureRemapChannel )
@@ -87,7 +89,9 @@ namespace castor3d
 			}
 			else
 			{
-				parsingContext.sceneImportConfig.textureRemapIt->second.opacityMask[0] = params[0]->get< uint32_t >();
+				auto & plugin = parsingContext.parser->getEngine()->getPassComponentsRegister().getPlugin( OpacityMapComponent::TypeName );
+				plugin.fillTextureConfiguration( parsingContext.sceneImportConfig.textureRemapIt->second
+					, params[0]->get< uint32_t >() );
 			}
 		}
 		CU_EndAttribute()
@@ -95,23 +99,24 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void OpacityMapComponent::ComponentsShader::applyComponents( TextureFlags const & texturesFlags
+	void OpacityMapComponent::ComponentsShader::applyComponents( TextureFlagsArray const & texturesFlags
 		, PipelineFlags const * flags
 		, shader::TextureConfigData const & config
+		, sdw::U32Vec3 const & imgCompConfig
 		, sdw::Vec4 const & sampled
-		, shader::BlendComponents const & components )const
+		, shader::BlendComponents & components )const
 	{
 		if ( !components.hasMember( "opacity" )
-			|| !checkFlag( texturesFlags, TextureFlag::eOpacity ) )
+			|| texturesFlags.end() == checkFlags( texturesFlags, getTextureFlags() ) )
 		{
 			return;
 		}
 
 		auto & writer{ *sampled.getWriter() };
 
-		IF( writer, config.opaEnbl() != 0.0_f )
+		IF( writer, imgCompConfig.y() != 0_u )
 		{
-			components.getMember< sdw::Float >( "opacity" ) *= config.getFloat( sampled, config.opaMask() );
+			components.getMember< sdw::Float >( "opacity" ) *= config.getFloat( sampled, imgCompConfig.z() );
 		}
 		FI;
 	}
@@ -121,7 +126,7 @@ namespace castor3d
 	void OpacityMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		channelFillers.emplace( "opacity", ChannelFiller{ uint32_t( TextureFlag::eOpacity )
+		channelFillers.emplace( "opacity", ChannelFiller{ getTextureFlags()
 			, []( SceneFileContext & parsingContext )
 			{
 				auto & component = getPassComponent< OpacityMapComponent >( parsingContext );
@@ -151,19 +156,21 @@ namespace castor3d
 		, castor::String const & tabs
 		, castor::StringStream & file )const
 	{
-		return castor::TextWriter< OpacityMapComponent >{ tabs, configuration.opacityMask[0] }( file );
+		auto it = checkFlags( configuration.components, getTextureFlags() );
+
+		if ( it == configuration.components.end() )
+		{
+			return true;
+		}
+
+		return castor::TextWriter< OpacityMapComponent >{ tabs, it->componentsMask }( file );
 	}
 
-	bool OpacityMapComponent::Plugin::isComponentNeeded( TextureFlags const & textures
+	bool OpacityMapComponent::Plugin::isComponentNeeded( TextureFlagsArray const & textures
 		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eOpacity )
-			|| checkFlag( textures, TextureFlag::eOpacity );
-	}
-
-	bool OpacityMapComponent::Plugin::needsMapComponent( TextureConfiguration const & configuration )const
-	{
-		return configuration.opacityMask[0] != 0u;
+			|| textures.end() != checkFlags( textures, getTextureFlags() );
 	}
 
 	void OpacityMapComponent::Plugin::createMapComponent( Pass & pass
@@ -185,32 +192,10 @@ namespace castor3d
 		}
 	}
 
-	void OpacityMapComponent::mergeImages( TextureUnitDataSet & result )
-	{
-		if ( !getOwner()->hasComponent< ColourMapComponent >() )
-		{
-			getOwner()->mergeImages( TextureFlag::eColour
-				, offsetof( TextureConfiguration, colourMask )
-				, 0x00FFFFFF
-				, TextureFlag::eOpacity
-				, offsetof( TextureConfiguration, opacityMask )
-				, 0xFF000000
-				, "ColOpa"
-				, result );
-		}
-	}
-
-	void OpacityMapComponent::fillChannel( TextureConfiguration & configuration
-		, uint32_t mask )
-	{
-		configuration.textureSpace |= TextureSpace::eNormalised;
-		configuration.opacityMask[0] = mask;
-	}
-
 	void OpacityMapComponent::fillConfig( TextureConfiguration & configuration
-		, PassVisitorBase & vis )
+		, PassVisitorBase & vis )const
 	{
-		vis.visit( cuT( "Opacity" ), TextureFlag::eOpacity, configuration.opacityMask, 1u );
+		vis.visit( cuT( "Opacity" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 1u );
 	}
 
 	PassComponentUPtr OpacityMapComponent::doClone( Pass & pass )const

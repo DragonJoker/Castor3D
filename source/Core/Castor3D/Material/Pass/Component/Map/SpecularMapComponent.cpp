@@ -4,7 +4,9 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Pass/PassFactory.hpp"
+#include "Castor3D/Material/Pass/Component/Map/MetalnessMapComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/SpecularComponent.hpp"
+#include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
 #include "Castor3D/Material/Pass/PBR/PbrPass.hpp"
 #include "Castor3D/Material/Pass/PassVisitor.hpp"
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
@@ -34,13 +36,13 @@ namespace castor
 
 		bool operator()( StringStream & file )
 		{
-			return writeNamedSub( file, cuT( "specular_mask" ), m_mask );
+			return writeMask( file, cuT( "specular_mask" ), m_mask );
 		}
 
 		bool operator()( castor3d::SpecularMapComponent const & object
 			, StringStream & file )override
 		{
-			return writeNamedSub( file, cuT( "specular_mask" ), m_mask );
+			return writeMask( file, cuT( "specular_mask" ), m_mask );
 		}
 
 	private:
@@ -64,8 +66,8 @@ namespace castor3d
 			}
 			else
 			{
-				auto & component = getPassComponent< SpecularMapComponent >( parsingContext );
-				component.fillChannel( parsingContext.textureConfiguration
+				auto & plugin = parsingContext.pass->getComponentPlugin( SpecularMapComponent::TypeName );
+				plugin.fillTextureConfiguration( parsingContext.textureConfiguration
 					, params[0]->get< uint32_t >() );
 			}
 		}
@@ -74,7 +76,8 @@ namespace castor3d
 		static CU_ImplementAttributeParser( parserTexRemapSpecular )
 		{
 			auto & parsingContext = getParserContext( context );
-			parsingContext.sceneImportConfig.textureRemapIt = parsingContext.sceneImportConfig.textureRemaps.emplace( TextureFlag::eSpecular, TextureConfiguration{} ).first;
+			auto & plugin = parsingContext.parser->getEngine()->getPassComponentsRegister().getPlugin( SpecularMapComponent::TypeName );
+			parsingContext.sceneImportConfig.textureRemapIt = parsingContext.sceneImportConfig.textureRemaps.emplace( plugin.getTextureFlags(), TextureConfiguration{} ).first;
 			parsingContext.sceneImportConfig.textureRemapIt->second = TextureConfiguration{};
 		}
 		CU_EndAttributePush( CSCNSection::eTextureRemapChannel )
@@ -89,7 +92,9 @@ namespace castor3d
 			}
 			else
 			{
-				parsingContext.sceneImportConfig.textureRemapIt->second.specularMask[0] = params[0]->get< uint32_t >();
+				auto & plugin = parsingContext.parser->getEngine()->getPassComponentsRegister().getPlugin( SpecularMapComponent::TypeName );
+				plugin.fillTextureConfiguration( parsingContext.sceneImportConfig.textureRemapIt->second
+					, params[0]->get< uint32_t >() );
 			}
 		}
 		CU_EndAttribute()
@@ -97,23 +102,24 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void SpecularMapComponent::ComponentsShader::applyComponents( TextureFlags const & texturesFlags
+	void SpecularMapComponent::ComponentsShader::applyComponents( TextureFlagsArray const & texturesFlags
 		, PipelineFlags const * flags
 		, shader::TextureConfigData const & config
+		, sdw::U32Vec3 const & imgCompConfig
 		, sdw::Vec4 const & sampled
-		, shader::BlendComponents const & components )const
+		, shader::BlendComponents & components )const
 	{
 		if ( !components.hasMember( "specular" )
-			|| !checkFlag( texturesFlags, TextureFlag::eSpecular ) )
+			|| texturesFlags.end() == checkFlags( texturesFlags, getTextureFlags() ) )
 		{
 			return;
 		}
 
 		auto & writer{ *sampled.getWriter() };
 
-		IF( writer, config.spcEnbl() != 0.0_f )
+		IF( writer, imgCompConfig.y() != 0_u )
 		{
-			components.getMember< sdw::Vec3 >( "specular" ) *= config.getVec3( sampled, config.spcMask() );
+			components.getMember< sdw::Vec3 >( "specular" ) *= config.getVec3( sampled, imgCompConfig.z() );
 		}
 		FI;
 	}
@@ -123,7 +129,7 @@ namespace castor3d
 	void SpecularMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		channelFillers.emplace( "specular", ChannelFiller{ uint32_t( TextureFlag::eSpecular )
+		channelFillers.emplace( "specular", ChannelFiller{ getTextureFlags()
 			, []( SceneFileContext & parsingContext )
 			{
 				auto & component = getPassComponent< SpecularMapComponent >( parsingContext );
@@ -153,19 +159,21 @@ namespace castor3d
 		, castor::String const & tabs
 		, castor::StringStream & file )const
 	{
-		return castor::TextWriter< SpecularMapComponent >{ tabs, configuration.specularMask[0] }( file );
+		auto it = checkFlags( configuration.components, getTextureFlags() );
+
+		if ( it == configuration.components.end() )
+		{
+			return true;
+		}
+
+		return castor::TextWriter< SpecularMapComponent >{ tabs, it->componentsMask }( file );
 	}
 
-	bool SpecularMapComponent::Plugin::isComponentNeeded( TextureFlags const & textures
+	bool SpecularMapComponent::Plugin::isComponentNeeded( TextureFlagsArray const & textures
 		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eSpecularLighting )
-			|| checkFlag( textures, TextureFlag::eSpecular );
-	}
-
-	bool SpecularMapComponent::Plugin::needsMapComponent( TextureConfiguration const & configuration )const
-	{
-		return configuration.specularMask[0] != 0u;
+			|| textures.end() != checkFlags( textures, getTextureFlags() );
 	}
 
 	void SpecularMapComponent::Plugin::createMapComponent( Pass & pass
@@ -174,11 +182,15 @@ namespace castor3d
 		result.push_back( std::make_unique< SpecularMapComponent >( pass ) );
 	}
 
-	void SpecularMapComponent::Plugin::doUpdateComponent( TextureFlags const & texturesFlags
-		, shader::BlendComponents const & components )
+	void SpecularMapComponent::Plugin::doUpdateComponent( PassComponentRegister const & passComponents
+		, TextureFlagsArray const & texturesFlags
+		, shader::BlendComponents & components )
 	{
-		if ( checkFlag( texturesFlags, TextureFlag::eMetalness )
-			&& !checkFlag( texturesFlags, TextureFlag::eSpecular ) )
+		auto & plugin = passComponents.getPlugin< SpecularMapComponent >();
+		auto & mtlPlugin = passComponents.getPlugin< MetalnessMapComponent >();
+
+		if ( texturesFlags.end() != checkFlags( texturesFlags, mtlPlugin.getTextureFlags() )
+			&& texturesFlags.end() == checkFlags( texturesFlags, plugin.getTextureFlags() ) )
 		{
 			components.getMember< sdw::Vec3 >( "specular", true ) = shader::BlendComponents::computeF0( components.getMember< sdw::Vec3 >( "colour", vec3( 0.0_f ) )
 				, components.getMember< sdw::Float >( "metalness", 0.0_f ) );
@@ -198,30 +210,10 @@ namespace castor3d
 		}
 	}
 
-	void SpecularMapComponent::mergeImages( TextureUnitDataSet & result )
-	{
-		getOwner()->mergeImages( TextureFlag::eSpecular
-			, offsetof( TextureConfiguration, specularMask )
-			, 0x00FFFFFF
-			, TextureFlag::eGlossiness
-			, offsetof( TextureConfiguration, glossinessMask )
-			, 0xFF000000
-			, "SpcGls"
-			, result );
-	}
-
-	void SpecularMapComponent::fillChannel( TextureConfiguration & configuration
-		, uint32_t mask )
-	{
-		configuration.textureSpace |= TextureSpace::eNormalised;
-		configuration.textureSpace |= TextureSpace::eColour;
-		configuration.specularMask[0] = mask;
-	}
-
 	void SpecularMapComponent::fillConfig( TextureConfiguration & configuration
-		, PassVisitorBase & vis )
+		, PassVisitorBase & vis )const
 	{
-		vis.visit( cuT( "Specular" ), castor3d::TextureFlag::eSpecular, configuration.specularMask, 3u );
+		vis.visit( cuT( "Specular" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 3u );
 	}
 
 	PassComponentUPtr SpecularMapComponent::doClone( Pass & pass )const

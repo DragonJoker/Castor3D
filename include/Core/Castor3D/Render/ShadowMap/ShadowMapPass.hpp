@@ -71,10 +71,27 @@ namespace castor3d
 		{
 			return !m_outOfDate;
 		}
-
-		TextureFlags getTexturesMask()const override
+		/**
+		 *\copydoc		castor3d::RenderTechniquePass::getComponentsMask
+		 */
+		ComponentModeFlags getComponentsMask()const override
 		{
-			return ShadowMap::textureFlags;
+			return ComponentModeFlag::eOpacity
+				| ComponentModeFlag::eGeometry
+				| ( m_needsRsm ? ComponentModeFlag::eColour : ComponentModeFlag::eNone );
+		}
+		/**
+		 *\copydoc		castor3d::RenderTechniquePass::getShaderFlags
+		 */
+		ShaderFlags getShaderFlags()const override
+		{
+			return ShaderFlag::eLighting
+				| ShaderFlag::eTangentSpace
+				| ShaderFlag::eOpacity
+				| ( m_needsVsm ? ShaderFlag::eVsmShadowMap : ShaderFlag::eNone )
+				| ( m_needsRsm ? ShaderFlag::eRsmShadowMap : ShaderFlag::eNone )
+				| ( m_needsRsm ? ShaderFlag::eColour : ShaderFlag::eNone )
+				| doGetShaderFlags();
 		}
 		/**@}*/
 		/**
@@ -89,17 +106,6 @@ namespace castor3d
 		void setUpToDate()
 		{
 			m_outOfDate = false;
-		}
-
-		ShaderFlags getShaderFlags()const override
-		{
-			return ShaderFlag::eLighting
-				| ShaderFlag::eTangentSpace
-				| ShaderFlag::eOpacity
-				| ( m_needsVsm ? ShaderFlag::eVsmShadowMap : ShaderFlag::eNone )
-				| ( m_needsRsm ? ShaderFlag::eRsmShadowMap : ShaderFlag::eNone )
-				| ( m_needsRsm ? ShaderFlag::eColour : ShaderFlag::eNone )
-				| doGetShaderFlags();
 		}
 		/**@}*/
 

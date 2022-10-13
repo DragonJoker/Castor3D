@@ -276,14 +276,14 @@ namespace castor3d
 		 */
 		C3D_API uint32_t getPassTypeIndex( PassTypeID passType
 			, PassFlags passFlags
-			, TextureFlags textureFlags )const;
+			, TextureFlagsArray textureFlags )const;
 		/**
 		 *\~english
 		 *\return		The pass type details for given pass type index (for visibility buffer use).
 		 *\~french
 		 *\brief		Les détails du type de passe pour l'index donné (pour l'utilisation de vibility buffer).
 		 */
-		C3D_API std::tuple< PassTypeID, PassFlags, TextureFlags > getPassTypeDetails( uint32_t passTypeIndex )const;
+		C3D_API std::tuple< PassTypeID, PassFlags, TextureFlagsArray > getPassTypeDetails( uint32_t passTypeIndex )const;
 		/**
 		 *\~english
 		 *\return		The pointer to the buffer.
@@ -300,6 +300,15 @@ namespace castor3d
 			return uint32_t( m_passTypeIndices.size() );
 		}
 
+	public:
+		struct PassTypeData
+		{
+			uint16_t index;
+			PassTypeID passType;
+			PassFlags passFlags;
+			TextureFlagsArray textureFlags;
+		};
+
 	private:
 		uint32_t m_stride;
 		ShaderBuffer m_buffer;
@@ -307,7 +316,7 @@ namespace castor3d
 		std::vector< Pass const * > m_dirty;
 		std::vector< OnPassChangedConnection > m_connections;
 		uint32_t m_passID{ 1u };
-		std::unordered_map< uint32_t, uint16_t > m_passTypeIndices;
+		std::unordered_map< uint32_t, PassTypeData > m_passTypeIndices;
 		castor::ArrayView< uint8_t > m_data;
 		std::mutex m_mutex;
 	};

@@ -61,11 +61,11 @@ namespace castor3d
 	{
 	}
 
-	TextureFlags DepthPass::getTexturesMask()const
+	ComponentModeFlags DepthPass::getComponentsMask()const
 	{
-		return TextureFlag::eGeometry
-			| ( m_deferred ? TextureFlag::eNone : TextureFlag::eNormal )
-			| ( m_deferred ? TextureFlag::eNone : TextureFlag::eOcclusion );
+		return ComponentModeFlag::eOpacity
+			| ComponentModeFlag::eGeometry
+			| ComponentModeFlag::eOcclusion;
 	}
 
 	ShaderFlags DepthPass::getShaderFlags()const
@@ -125,7 +125,7 @@ namespace castor3d
 		shader::Utils utils{ writer };
 		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
 			, flags
-			, ComponentModeFlag::eOpacity | ComponentModeFlag::eGeometry | ComponentModeFlag::eOcclusion
+			, getComponentsMask()
 			, utils };
 
 		C3D_Scene( writer
@@ -162,6 +162,7 @@ namespace castor3d
 		auto nmlOcc = writer.declOutput< Vec4 >( "nmlOcc", 2u, !m_deferred );
 
 		writer.implementMainT< shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer
+				, passShaders
 				, flags }
 			, FragmentOut{ writer }
 			, [&]( FragmentInT< shader::FragmentSurfaceT > in

@@ -158,7 +158,7 @@ namespace castor3d
 
 	void OpacityComponent::ComponentsShader::blendComponents( shader::Materials const & materials
 		, sdw::Float const & passMultiplier
-		, shader::BlendComponents const & res
+		, shader::BlendComponents & res
 		, shader::BlendComponents const & src )const
 	{
 		if ( src.hasMember( "opacity" ) )
@@ -220,7 +220,7 @@ namespace castor3d
 		data.write( materialShader.getMaterialChunk(), 0u, offset );
 	}
 
-	bool OpacityComponent::Plugin::isComponentNeeded( TextureFlags const & textures
+	bool OpacityComponent::Plugin::isComponentNeeded( TextureFlagsArray const & textures
 		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eOpacity );
@@ -228,7 +228,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const OpacityComponent::TypeName = C3D_MakePassComponentName( "opacity" );
+	castor::String const OpacityComponent::TypeName = C3D_MakePassOtherComponentName( "opacity" );
 
 	OpacityComponent::OpacityComponent( Pass & pass )
 		: BaseDataPassComponentT< OpacityData >{ pass, TypeName }

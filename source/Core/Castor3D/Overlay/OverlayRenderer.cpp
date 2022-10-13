@@ -9,6 +9,7 @@
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
+#include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
 #include "Castor3D/Material/Pass/Component/PassShaders.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
@@ -141,17 +142,18 @@ namespace castor3d
 			eOpacity = 0x04,
 		};
 
-		static uint32_t makeKey( FilteredTextureFlags const & textures
+		static uint32_t makeKey( PassComponentRegister const & passComponents
+			, TextureFlagsArray const & textures
 			, bool text )
 		{
 			auto tex{ uint32_t( text ? OverlayTexture::eText : OverlayTexture::eNone ) };
 
-			if ( checkFlags( textures, TextureFlag::eColour ) != textures.end() )
+			if ( checkFlags( textures, passComponents.getColourFlags() ) != textures.end() )
 			{
 				tex |= uint32_t( OverlayTexture::eColour );
 			}
 
-			if ( checkFlags( textures, TextureFlag::eOpacity ) != textures.end() )
+			if ( checkFlags( textures, passComponents.getOpacityFlags() ) != textures.end() )
 			{
 				tex |= uint32_t( OverlayTexture::eOpacity );
 			}
@@ -877,7 +879,7 @@ namespace castor3d
 		, VkRenderPass renderPass
 		, Pass const & pass
 		, ashes::PipelineShaderStageCreateInfoArray program
-		, FilteredTextureFlags const & texturesFlags
+		, TextureFlagsArray const & texturesFlags
 		, bool text )
 	{
 		ashes::VkPipelineColorBlendAttachmentStateArray attachments{ { VK_TRUE
@@ -949,8 +951,10 @@ namespace castor3d
 		, bool text )
 	{
 		// Remove unwanted flags
-		auto textures = filterTexturesFlags( pass.getTexturesMask(), TextureFlag::eColour | TextureFlag::eOpacity );
-		auto key = ovrlrend::makeKey( textures, text );
+		auto & passComponents = device.renderSystem.getEngine()->getPassComponentsRegister();
+		auto textures = passComponents.filterTextureFlags( ComponentModeFlag::eColour | ComponentModeFlag::eOpacity
+			, pass.getTexturesMask() );
+		auto key = ovrlrend::makeKey( passComponents, textures, text );
 		auto it = pipelines.find( key );
 
 		if ( it == pipelines.end() )
@@ -969,7 +973,7 @@ namespace castor3d
 	}
 
 	ashes::PipelineShaderStageCreateInfoArray OverlayRenderer::doCreateOverlayProgram( RenderDevice const & device
-		, FilteredTextureFlags const & texturesFlags
+		, TextureFlagsArray const & texturesFlags
 		, bool textOverlay )
 	{
 		using namespace sdw;
@@ -1013,7 +1017,7 @@ namespace castor3d
 
 			shader::Utils utils{ writer };
 			shader::PassShaders passShaders{ getOwner()->getEngine()->getPassComponentsRegister()
-				, getTextureFlags( texturesFlags )
+				, texturesFlags
 				, ( ComponentModeFlag::eOpacity
 					| ComponentModeFlag::eColour )
 				, utils };
@@ -1068,7 +1072,7 @@ namespace castor3d
 					if ( hasTexture )
 					{
 						textureConfigs.computeMapsContributions( passShaders
-							, getTextureFlags( texturesFlags )
+							, texturesFlags
 							, textureAnims
 							, c3d_maps
 							, material

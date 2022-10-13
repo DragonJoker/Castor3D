@@ -97,11 +97,11 @@ namespace castor3d
 
 				PipelineFlags flags{ scene.getEngine()->getPassComponentsRegister().getPassComponentsBitset()
 					, scene.getPassesType()
-					, castor3d::PassFlag::eNone
-					, castor3d::SubmeshFlag::ePosNmlTanTex
-					, castor3d::ProgramFlag::eNone
-					, castor3d::TextureFlag::eNone
-					, castor3d::ShaderFlag::eNone
+					, PassFlag::eNone
+					, SubmeshFlag::ePosNmlTanTex
+					, ProgramFlag::eNone
+					, TextureFlagsArray{}
+					, ShaderFlag::eNone
 					, VK_COMPARE_OP_ALWAYS };
 				IntermediatesLister visOpaque{ flags, scene, cache, intermediates };
 				technique.accept( visOpaque );
@@ -122,11 +122,11 @@ namespace castor3d
 
 				PipelineFlags flags{ scene.getEngine()->getPassComponentsRegister().getPassComponentsBitset()
 					, scene.getPassesType()
-					, castor3d::PassFlag::eNone
-					, castor3d::SubmeshFlag::ePosNmlTanTex
-					, castor3d::ProgramFlag::eNone
-					, castor3d::TextureFlag::eNone
-					, castor3d::ShaderFlag::eNone
+					, PassFlag::eNone
+					, SubmeshFlag::ePosNmlTanTex
+					, ProgramFlag::eNone
+					, TextureFlagsArray{}
+					, ShaderFlag::eNone
 					, VK_COMPARE_OP_ALWAYS };
 				IntermediatesLister vis{ flags, scene, cache, intermediates };
 				value.accept( vis );

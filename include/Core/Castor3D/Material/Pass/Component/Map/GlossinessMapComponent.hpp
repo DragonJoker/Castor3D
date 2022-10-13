@@ -14,14 +14,27 @@ namespace castor3d
 	struct GlossinessMapComponent
 		: public PassMapComponent
 	{
+		static constexpr TextureFlag Glossiness = TextureFlag( 0x01u );
+
 		struct ComponentsShader
 			: shader::PassComponentsShader
 		{
-			C3D_API void applyComponents( TextureFlags const & texturesFlags
+			ComponentsShader( PassComponentPlugin const & plugin )
+				: shader::PassComponentsShader{ plugin }
+			{
+			}
+
+			C3D_API void applyComponents( TextureFlagsArray const & texturesFlags
 				, PipelineFlags const * flags
 				, shader::TextureConfigData const & config
+				, sdw::U32Vec3 const & imgCompConfig
 				, sdw::Vec4 const & sampled
-				, shader::BlendComponents const & components )const override;
+				, shader::BlendComponents & components )const override;
+
+			PassComponentTextureFlag getTextureFlags()const
+			{
+				return makeTextureFlag( getId(), Glossiness );
+			}
 		};
 
 		class Plugin
@@ -33,9 +46,8 @@ namespace castor3d
 			bool writeTextureConfig( TextureConfiguration const & configuration
 				, castor::String const & tabs
 				, castor::StringStream & file )const override;
-			bool isComponentNeeded( TextureFlags const & textures
+			bool isComponentNeeded( TextureFlagsArray const & textures
 				, ComponentModeFlags const & filter )const override;
-			bool needsMapComponent( TextureConfiguration const & configuration )const override;
 			void createMapComponent( Pass & pass
 				, std::vector< PassComponentUPtr > & result )const override;
 
@@ -46,7 +58,37 @@ namespace castor3d
 
 			shader::PassComponentsShaderPtr createComponentsShader()const override
 			{
-				return std::make_unique< ComponentsShader >();
+				return std::make_unique< ComponentsShader >( *this );
+			}
+
+			void filterTextureFlags( ComponentModeFlags filter
+				, TextureFlagsArray & texturesFlags )const override
+			{
+				if ( !checkFlag( filter, ComponentModeFlag::eDiffuseLighting )
+					&& !checkFlag( filter, ComponentModeFlag::eSpecularLighting ) )
+				{
+					remFlags( texturesFlags, getTextureFlags() );
+				}
+			}
+
+			PassComponentTextureFlag getTextureFlags()const override
+			{
+				return makeTextureFlag( getId(), Glossiness );
+			}
+
+			void fillTextureConfiguration( TextureConfiguration & result
+				, uint32_t mask )const override
+			{
+				result.textureSpace |= TextureSpace::eNormalised;
+				addFlagConfiguration( result, { getTextureFlags(), ( mask == 0 ? 0x00FF0000u : mask ) } );
+			}
+
+			castor::String getMapFlagsName( PassComponentTextureFlag const & flags )const
+			{
+				auto [passIndex, textureFlags] = splitTextureFlag( flags );
+				return ( passIndex == getId() && checkFlag( textureFlags, Glossiness ) )
+					? castor::String{ "Glossiness" }
+					: castor::String{};
 			}
 		};
 
@@ -57,15 +99,12 @@ namespace castor3d
 
 		C3D_API explicit GlossinessMapComponent( Pass & pass );
 
-		C3D_API void mergeImages( TextureUnitDataSet & result )override;
-		C3D_API void fillChannel( TextureConfiguration & configuration
-			, uint32_t mask )override;
 		C3D_API void fillConfig( TextureConfiguration & configuration
-			, PassVisitorBase & vis )override;
+			, PassVisitorBase & vis )const override;
 
-		TextureFlags getTextureFlags()const override
+		PassComponentTextureFlag getTextureFlags()const override
 		{
-			return TextureFlag::eGlossiness;
+			return makeTextureFlag( getId(), Glossiness );
 		}
 
 		C3D_API static castor::String const TypeName;

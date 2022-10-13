@@ -29,7 +29,7 @@ namespace castor3d
 			void zeroBuffer( Pass const & pass
 				, shader::PassMaterialShader const & materialShader
 				, PassBuffer & buffer )const override;
-			bool isComponentNeeded( TextureFlags const & textures
+			bool isComponentNeeded( TextureFlagsArray const & textures
 				, ComponentModeFlags const & filter )const override
 			{
 				// Component is always needed in lighting shaders.

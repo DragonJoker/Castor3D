@@ -214,7 +214,7 @@ namespace castor3d
 
 	void SubsurfaceScatteringComponent::ComponentsShader::blendComponents( shader::Materials const & materials
 		, sdw::Float const & passMultiplier
-		, shader::BlendComponents const & res
+		, shader::BlendComponents & res
 		, shader::BlendComponents const & src )const
 	{
 		if ( src.hasMember( "sssProfileIndex" ) )
@@ -292,7 +292,7 @@ namespace castor3d
 		data.write( materialShader.getMaterialChunk(), 0u, 0u );
 	}
 
-	bool SubsurfaceScatteringComponent::Plugin::isComponentNeeded( TextureFlags const & textures
+	bool SubsurfaceScatteringComponent::Plugin::isComponentNeeded( TextureFlagsArray const & textures
 		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eDiffuseLighting );
@@ -300,7 +300,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const SubsurfaceScatteringComponent::TypeName = C3D_MakePassComponentName( "subsurf_scatter" );
+	castor::String const SubsurfaceScatteringComponent::TypeName = C3D_MakePassLightingComponentName( "subsurf_scatter" );
 
 	SubsurfaceScatteringComponent::SubsurfaceScatteringComponent( Pass & pass )
 		: BaseDataPassComponentT< castor::AtomicGroupChangeTracked< SubsurfaceScatteringUPtr > >{ pass, TypeName }

@@ -14,10 +14,13 @@ namespace castor3d
 {
 	namespace anmtex
 	{
-		static castor::String writeMask( castor::String const & name, uint32_t mask )
+		static castor::String writeMask( castor::String const & name
+			, TextureFlagConfiguration const & config )
 		{
 			auto stream = castor::makeStringStream();
-			stream << name << cuT( "0x" ) << std::hex << std::setw( 8u ) << std::setfill( cuT( '0' ) ) << mask;
+			stream << name
+				<< cuT( "_" ) << config.flag
+				<< cuT( "0x" ) << std::hex << std::setw( 8u ) << std::setfill( cuT( '0' ) ) << config.componentsMask;
 			return stream.str();
 		}
 
@@ -28,25 +31,25 @@ namespace castor3d
 			return stream.str();
 		}
 
+		static castor::String write( castor::String const & name, uint32_t v )
+		{
+			auto stream = castor::makeStringStream();
+			stream << name << v;
+			return stream.str();
+		}
+
 		static castor::String getTexName( TextureSourceInfo const & sourceInfo
 			, TextureConfiguration const & configuration )
 		{
 			castor::String result{ sourceInfo.relative() };
-			result += writeMask( cuT( "_c" ), configuration.colourMask[0] );
-			result += writeMask( cuT( "_s" ), configuration.specularMask[0] );
-			result += writeMask( cuT( "_m" ), configuration.metalnessMask[0] );
-			result += writeMask( cuT( "_g" ), configuration.glossinessMask[0] );
-			result += writeMask( cuT( "_r" ), configuration.roughnessMask[0] );
-			result += writeMask( cuT( "_a" ), configuration.opacityMask[0] );
-			result += writeMask( cuT( "_e" ), configuration.emissiveMask[0] );
-			result += writeMask( cuT( "_o" ), configuration.occlusionMask[0] );
-			result += writeMask( cuT( "_t" ), configuration.transmittanceMask[0] );
-			result += writeMask( cuT( "_n" ), configuration.normalMask[0] );
+			result += writeMask( cuT( "_c0" ), configuration.components[0] );
+			result += writeMask( cuT( "_c1" ), configuration.components[1] );
+			result += writeMask( cuT( "_c2" ), configuration.components[2] );
+			result += writeMask( cuT( "_c3" ), configuration.components[3] );
 			result += write( cuT( "_nf" ), configuration.normalFactor );
 			result += write( cuT( "_ng" ), configuration.normalGMultiplier );
-			result += writeMask( cuT( "_h" ), configuration.heightMask[0] );
 			result += write( cuT( "_hf" ), configuration.heightFactor );
-			result += writeMask( cuT( "_yv" ), configuration.needsYInversion );
+			result += write( cuT( "_yv" ), configuration.needsYInversion );
 			return result;
 		}
 	}

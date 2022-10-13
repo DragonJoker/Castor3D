@@ -44,7 +44,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const TextureCountComponent::TypeName = C3D_MakePassComponentName( "texcount" );
+	castor::String const TextureCountComponent::TypeName = C3D_MakePassBaseComponentName( "texcount" );
 
 	TextureCountComponent::TextureCountComponent( Pass & pass )
 		: PassComponent{ pass, TypeName }

@@ -6,6 +6,8 @@
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Pass/PassFactory.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/MetalnessComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Map/SpecularMapComponent.hpp"
+#include "Castor3D/Material/Pass/Component/PassComponent.hpp"
 #include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
 #include "Castor3D/Material/Pass/PBR/PbrPass.hpp"
 #include "Castor3D/Material/Pass/PassVisitor.hpp"
@@ -104,7 +106,7 @@ namespace castor3d
 
 	void SpecularComponent::ComponentsShader::blendComponents( shader::Materials const & materials
 		, sdw::Float const & passMultiplier
-		, shader::BlendComponents const & res
+		, shader::BlendComponents & res
 		, shader::BlendComponents const & src )const
 	{
 		res.getMember< sdw::Vec3 >( "specular", true ) += src.getMember< sdw::Vec3 >( "specular", true ) * passMultiplier;
@@ -165,7 +167,7 @@ namespace castor3d
 		data.write( materialShader.getMaterialChunk(), SpecularComponent::Default, 0u );
 	}
 
-	bool SpecularComponent::Plugin::isComponentNeeded( TextureFlags const & textures
+	bool SpecularComponent::Plugin::isComponentNeeded( TextureFlagsArray const & textures
 		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eSpecularLighting );
@@ -173,7 +175,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const SpecularComponent::TypeName = C3D_MakePassComponentName( "specular" );
+	castor::String const SpecularComponent::TypeName = C3D_MakePassLightingComponentName( "specular" );
 	castor::RgbColour const SpecularComponent::Default = { DefaultComponent, DefaultComponent, DefaultComponent };
 	castor::RgbColour const SpecularComponent::DefaultPhong = { DefaultPhongComponent, DefaultPhongComponent, DefaultPhongComponent };
 	castor::RgbColour const SpecularComponent::DefaultPbr = { DefaultPbrComponent, DefaultPbrComponent, DefaultPbrComponent };
@@ -211,7 +213,9 @@ namespace castor3d
 	void SpecularComponent::doFillBuffer( PassBuffer & buffer )const
 	{
 		auto mtl = getOwner()->getComponent< MetalnessComponent >();
-		auto specular = ( isValueSet() || checkFlag( getOwner()->getTextures(), TextureFlag::eSpecular ) )
+		auto & spcPlugin = getOwner()->getComponentPlugin( SpecularMapComponent::TypeName );
+		auto textures = getOwner()->getTextures();
+		auto specular = ( isValueSet() || textures.end() != checkFlags( textures, spcPlugin.getTextureFlags() ) )
 			? getSpecular()
 			: Pass::computeF0( getOwner()->getColour()
 				, ( ( mtl && mtl->isValueSet() )

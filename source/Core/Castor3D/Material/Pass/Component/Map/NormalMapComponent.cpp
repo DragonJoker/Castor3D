@@ -1,5 +1,6 @@
 #include "Castor3D/Material/Pass/Component/Map/NormalMapComponent.hpp"
 
+#include "Castor3D/Engine.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Pass/PassVisitor.hpp"
 #include "Castor3D/Material/Pass/Component/Base/NormalComponent.hpp"
@@ -31,16 +32,17 @@ namespace castor
 		bool operator()( castor3d::NormalMapComponent const & object
 			, StringStream & file )override
 		{
-			return write( file, cuT( "normal_mask" ), m_configuration.normalMask[0] )
-				&& write( file, cuT( "normal_factor" ), m_configuration.normalFactor )
-				&& write( file, cuT( "normal_directx" ), m_configuration.normalGMultiplier == -1.0f );
+			return writeMask( file, cuT( "normal_mask" ), getComponentsMask( m_configuration, object.getTextureFlags() ) )
+				&& writeOpt( file, cuT( "normal_factor" ), m_configuration.normalFactor, 1.0f )
+				&& writeOpt( file, cuT( "normal_directx" ), m_configuration.normalGMultiplier != 1.0f );
 		}
 
-		bool operator()( StringStream & file )
+		bool operator()( StringStream & file
+			, uint32_t mask )
 		{
-			return write( file, cuT( "normal_mask" ), m_configuration.normalMask[0] )
-				&& write( file, cuT( "normal_factor" ), m_configuration.normalFactor )
-				&& write( file, cuT( "normal_directx" ), m_configuration.normalGMultiplier == -1.0f );
+			return writeMask( file, cuT( "normal_mask" ), mask )
+				&& writeOpt( file, cuT( "normal_factor" ), m_configuration.normalFactor, 1.0f )
+				&& writeOpt( file, cuT( "normal_directx" ), m_configuration.normalGMultiplier != 1.0f );
 		}
 
 	private:
@@ -110,7 +112,8 @@ namespace castor3d
 		static CU_ImplementAttributeParser( parserTexRemapNormal )
 		{
 			auto & parsingContext = getParserContext( context );
-			parsingContext.sceneImportConfig.textureRemapIt = parsingContext.sceneImportConfig.textureRemaps.emplace( TextureFlag::eNormal, TextureConfiguration{} ).first;
+			auto & plugin = parsingContext.parser->getEngine()->getPassComponentsRegister().getPlugin( NormalMapComponent::TypeName );
+			parsingContext.sceneImportConfig.textureRemapIt = parsingContext.sceneImportConfig.textureRemaps.emplace( plugin.getTextureFlags(), TextureConfiguration{} ).first;
 			parsingContext.sceneImportConfig.textureRemapIt->second = TextureConfiguration{};
 		}
 		CU_EndAttributePush( CSCNSection::eTextureRemapChannel )
@@ -125,7 +128,9 @@ namespace castor3d
 			}
 			else
 			{
-				parsingContext.sceneImportConfig.textureRemapIt->second.normalMask[0] = params[0]->get< uint32_t >();
+				auto & plugin = parsingContext.parser->getEngine()->getPassComponentsRegister().getPlugin( NormalMapComponent::TypeName );
+				plugin.fillTextureConfiguration( parsingContext.sceneImportConfig.textureRemapIt->second
+					, params[0]->get< uint32_t >() );
 			}
 		}
 		CU_EndAttribute()
@@ -152,14 +157,15 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void NormalMapComponent::ComponentsShader::applyComponents( TextureFlags const & texturesFlags
+	void NormalMapComponent::ComponentsShader::applyComponents( TextureFlagsArray const & texturesFlags
 		, PipelineFlags const * flags
 		, shader::TextureConfigData const & config
+		, sdw::U32Vec3 const & imgCompConfig
 		, sdw::Vec4 const & sampled
-		, shader::BlendComponents const & components )const
+		, shader::BlendComponents & components )const
 	{
 		if ( !components.hasMember( "normal" )
-			|| !checkFlag( texturesFlags, TextureFlag::eNormal )
+			|| texturesFlags.end() == checkFlags( texturesFlags, getTextureFlags() )
 			|| !flags
 			|| !flags->enableTangentSpace() )
 		{
@@ -168,13 +174,13 @@ namespace castor3d
 
 		auto & writer{ *sampled.getWriter() };
 
-		IF( writer, config.nmlEnbl() != 0.0_f )
+		IF( writer, imgCompConfig.y() != 0_u )
 		{
 			auto tbn = shader::Utils::getTBN( components.getMember< sdw::Vec3 >( "normal" )
 				, components.getMember< sdw::Vec3 >( "tangent" )
 				, components.getMember< sdw::Vec3 >( "bitangent" ) );
 			components.getMember< sdw::Vec3 >( "normal" ) = normalize( tbn
-				* fma( config.getVec3( sampled, config.nmlMask() )
+				* fma( config.getVec3( sampled, imgCompConfig.z() )
 					, vec3( 2.0_f )
 					, -vec3( 1.0_f ) ) );
 		}
@@ -186,7 +192,7 @@ namespace castor3d
 	void NormalMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		channelFillers.emplace( "normal", ChannelFiller{ uint32_t( TextureFlag::eNormal )
+		channelFillers.emplace( "normal", ChannelFiller{ getTextureFlags()
 			, []( SceneFileContext & parsingContext )
 			{
 				auto & component = getPassComponent< NormalMapComponent >( parsingContext );
@@ -231,22 +237,24 @@ namespace castor3d
 		, castor::String const & tabs
 		, castor::StringStream & file )const
 	{
-		return castor::TextWriter< NormalMapComponent >{ tabs, configuration }( file );
+		auto it = checkFlags( configuration.components, getTextureFlags() );
+
+		if ( it == configuration.components.end() )
+		{
+			return true;
+		}
+
+		return castor::TextWriter< NormalMapComponent >{ tabs, configuration }( file, it->componentsMask );
 	}
 
-	bool NormalMapComponent::Plugin::isComponentNeeded( TextureFlags const & textures
+	bool NormalMapComponent::Plugin::isComponentNeeded( TextureFlagsArray const & textures
 		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eGeometry )
 			|| checkFlag( filter, ComponentModeFlag::eDiffuseLighting )
 			|| checkFlag( filter, ComponentModeFlag::eSpecularLighting )
 			|| checkFlag( filter, ComponentModeFlag::eOcclusion )
-			|| checkFlag( textures, TextureFlag::eNormal );
-	}
-
-	bool NormalMapComponent::Plugin::needsMapComponent( TextureConfiguration const & configuration )const
-	{
-		return configuration.normalMask[0] != 0u;
+			|| textures.end() != checkFlags( textures, getTextureFlags() );
 	}
 
 	void NormalMapComponent::Plugin::createMapComponent( Pass & pass
@@ -268,30 +276,10 @@ namespace castor3d
 			}
 	}
 
-	void NormalMapComponent::mergeImages( TextureUnitDataSet & result )
-	{
-		getOwner()->mergeImages( TextureFlag::eNormal
-			, offsetof( TextureConfiguration, normalMask )
-			, 0x00FFFFFF
-			, TextureFlag::eHeight
-			, offsetof( TextureConfiguration, heightMask )
-			, 0xFF000000
-			, "NmlHgt"
-			, result );
-	}
-
-	void NormalMapComponent::fillChannel( TextureConfiguration & configuration
-		, uint32_t mask )
-	{
-		configuration.textureSpace |= TextureSpace::eNormalised;
-		configuration.textureSpace |= TextureSpace::eTangentSpace;
-		configuration.normalMask[0] = mask;
-	}
-
 	void NormalMapComponent::fillConfig( TextureConfiguration & configuration
-		, PassVisitorBase & vis )
+		, PassVisitorBase & vis )const
 	{
-		vis.visit( cuT( "Normal" ), TextureFlag::eNormal, configuration.normalMask, 3u );
+		vis.visit( cuT( "Normal" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 3u );
 		vis.visit( cuT( "Normal factor" ), configuration.normalFactor );
 		vis.visit( cuT( "Normal DirectX" ), configuration.normalGMultiplier );
 	}

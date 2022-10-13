@@ -65,9 +65,15 @@ namespace castor3d
 		}
 	}
 
-	TextureFlags OpaquePass::getTexturesMask()const
+	ComponentModeFlags OpaquePass::getComponentsMask()const
 	{
-		return TextureFlags{ TextureFlag::eAll };
+		return ComponentModeFlag::eOpacity
+			| ComponentModeFlag::eGeometry
+			| ComponentModeFlag::eColour
+			| ComponentModeFlag::eDiffuseLighting
+			| ComponentModeFlag::eSpecularLighting
+			| ComponentModeFlag::eSpecifics
+			| ComponentModeFlag::eOcclusion;
 	}
 
 	ShaderFlags OpaquePass::getShaderFlags()const
@@ -115,13 +121,7 @@ namespace castor3d
 		shader::Utils utils{ writer };
 		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
 			, flags
-			, ( ComponentModeFlag::eOpacity
-				| ComponentModeFlag::eColour
-				| ComponentModeFlag::eGeometry
-				| ComponentModeFlag::eOcclusion
-				| ComponentModeFlag::eDiffuseLighting
-				| ComponentModeFlag::eSpecularLighting
-				| ComponentModeFlag::eSpecifics )
+			, getComponentsMask()
 			, utils };
 
 		C3D_Scene( writer
@@ -167,6 +167,7 @@ namespace castor3d
 			, true );
 
 		writer.implementMainT< shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer
+				, passShaders
 				, flags }
 				, FragmentOut{ writer }
 			, [&]( FragmentInT< shader::FragmentSurfaceT > in

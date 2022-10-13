@@ -12,13 +12,14 @@ namespace castor3d::shader
 	//************************************************************************************************
 
 	PassShaders::PassShaders( PassComponentRegister const & compRegister
-		, TextureFlags const & texturesFlags
+		, TextureFlagsArray const & texturesFlags
 		, ComponentModeFlags filter
 		, Utils & utils )
 		: m_utils{ utils }
 		, m_compRegister{ compRegister }
 		, m_shaders{ m_compRegister.getComponentsShaders( texturesFlags, filter, m_updateComponents ) }
 		, m_filter{ filter }
+		, m_opacity{ checkFlags( texturesFlags, m_compRegister.getOpacityFlags() ) != texturesFlags.end() }
 	{
 	}
 
@@ -30,6 +31,9 @@ namespace castor3d::shader
 		, m_compRegister{ compRegister }
 		, m_shaders{ m_compRegister.getComponentsShaders( flags, filter, m_updateComponents ) }
 		, m_filter{ filter }
+		, m_opacity{ ( flags.usesOpacity()
+			&& flags.hasMap( m_compRegister.getOpacityFlags() )
+			&& flags.hasOpacity() ) }
 	{
 	}
 
@@ -88,31 +92,56 @@ namespace castor3d::shader
 		}
 	}
 
-	void PassShaders::applyComponents( TextureFlags const & texturesFlags
+	void PassShaders::applyComponents( TextureFlagsArray const & texturesFlags
 		, TextureConfigData const & config
+		, sdw::U32Vec3 const & imgCompConfig
 		, sdw::Vec4 const & sampled
-		, BlendComponents const & components )const
+		, BlendComponents & components )const
 	{
+		auto & writer = findWriterMandat( config, imgCompConfig, sampled, components );
+
 		for ( auto & shader : m_shaders )
 		{
-			shader->applyComponents( texturesFlags, nullptr, config, sampled, components );
+			auto & plugin = m_compRegister.getPlugin( shader->getId() );
+
+			if ( checkFlags( texturesFlags, plugin.getTextureFlags() ) != texturesFlags.end() )
+			{
+				IF( writer, imgCompConfig.x() == sdw::UInt{ plugin.getTextureFlags() } )
+				{
+					shader->applyComponents( texturesFlags, nullptr, config, imgCompConfig, sampled, components );
+				}
+				FI;
+			}
 		}
 	}
 
 	void PassShaders::applyComponents( PipelineFlags const & flags
 		, TextureConfigData const & config
+		, sdw::U32Vec3 const & imgCompConfig
 		, sdw::Vec4 const & sampled
-		, BlendComponents const & components )const
+		, BlendComponents & components )const
 	{
+		auto & writer = findWriterMandat( config, imgCompConfig, sampled, components );
+		auto texturesFlags = flags.makeTexturesFlags();
+
 		for ( auto & shader : m_shaders )
 		{
-			shader->applyComponents( flags.m_texturesFlags, &flags, config, sampled, components );
+			auto & plugin = m_compRegister.getPlugin( shader->getId() );
+
+			if ( checkFlags( texturesFlags, plugin.getTextureFlags() ) != texturesFlags.end() )
+			{
+				IF( writer, imgCompConfig.x() == sdw::UInt{ plugin.getTextureFlags() } )
+				{
+					shader->applyComponents( flags.makeTexturesFlags(), &flags, config, imgCompConfig, sampled, components );
+				}
+				FI;
+			}
 		}
 	}
 
 	void PassShaders::blendComponents( shader::Materials const & materials
 		, sdw::Float const & passMultiplier
-		, BlendComponents const & res
+		, BlendComponents & res
 		, BlendComponents const & src )const
 	{
 		for ( auto & shader : m_shaders )
@@ -163,21 +192,122 @@ namespace castor3d::shader
 		}
 	}
 
-	void PassShaders::updateComponents( TextureFlags const & texturesFlags
-		, BlendComponents const & components )const
+	void PassShaders::updateComponents( TextureFlagsArray const & texturesFlags
+		, BlendComponents & components )const
 	{
-		for ( auto & updateComponents : m_updateComponents )
+		for ( auto & update : m_updateComponents )
 		{
-			updateComponents( texturesFlags, components );
+			update( m_compRegister, texturesFlags, components );
 		}
 	}
 
 	void PassShaders::updateComponents( PipelineFlags const & flags
-		, BlendComponents const & components )const
+		, BlendComponents & components )const
 	{
-		for ( auto & updateComponents : m_updateComponents )
+		updateComponents( flags.makeTexturesFlags(), components );
+	}
+
+	bool PassShaders::hasTexcoordModif( PipelineFlags const & flags )const
+	{
+		return m_compRegister.hasTexcoordModif( flags );
+	}
+
+	bool PassShaders::hasTexcoordModif( TextureFlagsArray const & flags )const
+	{
+		return m_compRegister.hasTexcoordModif( flags );
+	}
+
+	void PassShaders::computeTexcoord( PipelineFlags const & flags
+		, TextureConfigData const & config
+		, sdw::U32Vec3 const & imgCompConfig
+		, sdw::CombinedImage2DRgba32 const & map
+		, sdw::Vec3 & texCoords
+		, sdw::Vec2 & texCoord
+		, BlendComponents & components )const
+	{
+		auto & writer = findWriterMandat( config, map, texCoords, texCoord, components );
+		auto textures = flags.makeTexturesFlags();
+
+		for ( auto & shader : m_shaders )
 		{
-			updateComponents( flags.m_texturesFlags, components );
+			auto & plugin = m_compRegister.getPlugin( shader->getId() );
+
+			if ( checkFlags( textures, plugin.getTextureFlags() ) != textures.end() )
+			{
+				IF( writer, imgCompConfig.x() == sdw::UInt{ plugin.getTextureFlags() } )
+				{
+					shader->computeTexcoord( flags
+						, config
+						, imgCompConfig
+						, map
+						, texCoords
+						, texCoord
+						, components );
+				}
+				FI;
+			}
 		}
+	}
+
+	void PassShaders::computeTexcoord( PipelineFlags const & flags
+		, TextureConfigData const & config
+		, sdw::U32Vec3 const & imgCompConfig
+		, sdw::CombinedImage2DRgba32 const & map
+		, DerivTex & texCoords
+		, DerivTex & texCoord
+		, BlendComponents & components )const
+	{
+		auto & writer = findWriterMandat( config, map, texCoords, texCoord, components );
+		auto textures = flags.makeTexturesFlags();
+
+		for ( auto & shader : m_shaders )
+		{
+			auto & plugin = m_compRegister.getPlugin( shader->getId() );
+
+			if ( checkFlags( textures, plugin.getTextureFlags() ) != textures.end() )
+			{
+				IF( writer, imgCompConfig.x() == sdw::UInt{ plugin.getTextureFlags() } )
+				{
+					shader->computeTexcoord( flags
+						, config
+						, imgCompConfig
+						, map
+						, texCoords
+						, texCoord
+						, components );
+				}
+				FI;
+			}
+		}
+	}
+
+	void PassShaders::computeTexcoord( TextureFlagsArray const & flags
+		, TextureConfigData const & config
+		, sdw::U32Vec3 const & imgCompConfig
+		, sdw::CombinedImage2DRgba32 const & map
+		, sdw::Vec3 & texCoords
+		, sdw::Vec2 & texCoord
+		, BlendComponents & components )const
+	{
+	}
+
+	void PassShaders::computeTexcoord( TextureFlagsArray const & flags
+		, TextureConfigData const & config
+		, sdw::U32Vec3 const & imgCompConfig
+		, sdw::CombinedImage2DRgba32 const & map
+		, DerivTex & texCoords
+		, DerivTex & texCoord
+		, BlendComponents & components )const
+	{
+	}
+
+	bool PassShaders::enableParallaxOcclusionMapping( PipelineFlags const & flags )const
+	{
+		return flags.enableParallaxOcclusionMapping( m_compRegister);
+	}
+
+	bool PassShaders::enableParallaxOcclusionMappingOne( PipelineFlags const & flags )const
+	{
+		return flags.enableParallaxOcclusionMappingOne( m_compRegister );
 	}
 }

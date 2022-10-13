@@ -371,9 +371,15 @@ namespace ocean
 		return { &result, &blitDepthPass };
 	}
 
-	castor3d::TextureFlags OceanRenderPass::getTexturesMask()const
+	castor3d::ComponentModeFlags OceanRenderPass::getComponentsMask()const
 	{
-		return castor3d::TextureFlags{ castor3d::TextureFlag::eAll };
+		return castor3d::ComponentModeFlag::eOpacity
+			| castor3d::ComponentModeFlag::eColour
+			| castor3d::ComponentModeFlag::eGeometry
+			| castor3d::ComponentModeFlag::eOcclusion
+			| castor3d::ComponentModeFlag::eDiffuseLighting
+			| castor3d::ComponentModeFlag::eSpecularLighting
+			| castor3d::ComponentModeFlag::eSpecifics;
 	}
 
 	castor3d::ShaderFlags OceanRenderPass::getShaderFlags()const
@@ -632,6 +638,12 @@ namespace ocean
 		using namespace castor3d;
 		VertexWriter writer;
 
+		castor3d::shader::Utils utils{ writer };
+		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
+			, flags
+			, getComponentsMask()
+			, utils };
+
 		C3D_Matrix( writer
 			, GlobalBuffersIdx::eMatrix
 			, RenderPipeline::eBuffers );
@@ -653,6 +665,7 @@ namespace ocean
 		writer.implementMainT< castor3d::shader::VertexSurfaceT, castor3d::shader::FragmentSurfaceT >( sdw::VertexInT< castor3d::shader::VertexSurfaceT >{ writer
 				, flags }
 			, sdw::VertexOutT< castor3d::shader::FragmentSurfaceT >{ writer
+				, passShaders
 				, flags }
 			, [&]( VertexInT< castor3d::shader::VertexSurfaceT > in
 				, VertexOutT< castor3d::shader::FragmentSurfaceT > out )
@@ -703,6 +716,12 @@ namespace ocean
 		using namespace castor3d;
 		VertexWriter writer;
 
+		castor3d::shader::Utils utils{ writer };
+		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
+			, flags
+			, getComponentsMask()
+			, utils };
+
 		// Shader inputs
 		auto position = writer.declInput< Vec4 >( "position", 0u );
 		auto uv = writer.declInput< Vec2 >( "uv", 1u );
@@ -731,6 +750,7 @@ namespace ocean
 
 		writer.implementMainT< VoidT, castor3d::shader::FragmentSurfaceT >( sdw::VertexInT< sdw::VoidT >{ writer }
 			, sdw::VertexOutT< castor3d::shader::FragmentSurfaceT >{ writer
+				, passShaders
 				, flags }
 			, [&]( VertexInT< VoidT > in
 				, VertexOutT< castor3d::shader::FragmentSurfaceT > out )
@@ -786,6 +806,12 @@ namespace ocean
 		using namespace castor3d;
 		TessellationControlWriter writer;
 
+		castor3d::shader::Utils utils{ writer };
+		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
+			, flags
+			, getComponentsMask()
+			, utils };
+
 		auto index = uint32_t( GlobalBuffersIdx::eCount );
 		index++; // lights buffer
 		C3D_Ocean( writer
@@ -794,6 +820,7 @@ namespace ocean
 
 		writer.implementPatchRoutineT< castor3d::shader::FragmentSurfaceT, 3u, VoidT >( TessControlListInT< castor3d::shader::FragmentSurfaceT, 3u >{ writer
 				, false
+				, passShaders
 				, flags }
 			, TrianglesTessPatchOutT< VoidT >{ writer, 9u }
 			, [&]( sdw::TessControlPatchRoutineIn in
@@ -809,12 +836,14 @@ namespace ocean
 
 		writer.implementMainT< castor3d::shader::FragmentSurfaceT, 3u, castor3d::shader::FragmentSurfaceT >( TessControlListInT< castor3d::shader::FragmentSurfaceT, 3u >{ writer
 				, true
+				, passShaders
 				, flags }
 			, TrianglesTessControlListOutT< castor3d::shader::FragmentSurfaceT >{ writer
 				, ast::type::Partitioning::eFractionalOdd
 				, ast::type::OutputTopology::eTriangle
 				, ast::type::PrimitiveOrdering::eCCW
 				, 3u
+				, passShaders
 				, flags }
 			, [&]( TessControlMainIn in
 				, TessControlListInT< castor3d::shader::FragmentSurfaceT, 3u > listIn
@@ -841,6 +870,10 @@ namespace ocean
 		TessellationEvaluationWriter writer;
 
 		castor3d::shader::Utils utils{ writer };
+		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
+			, flags
+			, getComponentsMask()
+			, utils };
 
 		C3D_Matrix( writer
 			, GlobalBuffersIdx::eMatrix
@@ -920,9 +953,11 @@ namespace ocean
 				, ast::type::PatchDomain::eTriangles
 				, type::Partitioning::eFractionalOdd
 				, type::PrimitiveOrdering::eCCW
+				, passShaders
 				, flags }
 			, TrianglesTessPatchInT< VoidT >{ writer, 9u }
 			, TessEvalDataOutT< castor3d::shader::FragmentSurfaceT >{ writer
+				, passShaders
 				, flags }
 			, [&]( TessEvalMainIn mainIn
 				, TessEvalListInT< castor3d::shader::FragmentSurfaceT, 3u > listIn
@@ -1035,13 +1070,7 @@ namespace ocean
 		shader::Fog fog{ writer };
 		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
 			, flags
-			, ( ComponentModeFlag::eOpacity
-				| ComponentModeFlag::eColour
-				| ComponentModeFlag::eGeometry
-				| ComponentModeFlag::eOcclusion
-				| ComponentModeFlag::eDiffuseLighting
-				| ComponentModeFlag::eSpecularLighting
-				| ComponentModeFlag::eSpecifics )
+			, getComponentsMask()
 			, utils };
 
 		C3D_Matrix( writer
@@ -1114,6 +1143,7 @@ namespace ocean
 		auto pxl_colour( writer.declOutput< Vec4 >( "pxl_colour", 0 ) );
 
 		writer.implementMainT< castor3d::shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< castor3d::shader::FragmentSurfaceT >{ writer
+				, passShaders
 				, flags }
 			, FragmentOut{ writer }
 			, [&]( FragmentInT< castor3d::shader::FragmentSurfaceT > in

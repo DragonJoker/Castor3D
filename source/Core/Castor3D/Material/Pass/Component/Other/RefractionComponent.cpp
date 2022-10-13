@@ -121,7 +121,7 @@ namespace castor3d
 
 	void RefractionComponent::ComponentsShader::blendComponents( shader::Materials const & materials
 		, sdw::Float const & passMultiplier
-		, shader::BlendComponents const & res
+		, shader::BlendComponents & res
 		, shader::BlendComponents const & src )const
 	{
 		if ( src.hasMember( "hasRefraction" ) )
@@ -177,7 +177,7 @@ namespace castor3d
 		data.write( materialShader.getMaterialChunk(), 0.0f, offset );
 	}
 
-	bool RefractionComponent::Plugin::isComponentNeeded( TextureFlags const & textures
+	bool RefractionComponent::Plugin::isComponentNeeded( TextureFlagsArray const & textures
 		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eDiffuseLighting )
@@ -186,7 +186,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const RefractionComponent::TypeName = C3D_MakePassComponentName( "refraction" );
+	castor::String const RefractionComponent::TypeName = C3D_MakePassOtherComponentName( "refraction" );
 
 	RefractionComponent::RefractionComponent( Pass & pass )
 		: BaseDataPassComponentT< RefractionData >{ pass, TypeName }

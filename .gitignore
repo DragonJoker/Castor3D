@@ -13,6 +13,7 @@
 /source/Samples/CastorViewerSharp/Src/obj
 /CMake
 /out
+/vcpkg_installed
 /.gitattributes
 /package
 *.csproj

@@ -43,9 +43,9 @@ namespace castor3d
 			, RenderNodesPassDesc const & renderPassDesc
 			, bool deferred );
 		/**
-		 *\copydoc		castor3d::RenderTechniquePass::getTexturesMask
+		 *\copydoc		castor3d::RenderTechniquePass::getComponentsMask
 		 */
-		C3D_API TextureFlags getTexturesMask()const override;
+		C3D_API ComponentModeFlags getComponentsMask()const override;
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::getShaderFlags
 		 */

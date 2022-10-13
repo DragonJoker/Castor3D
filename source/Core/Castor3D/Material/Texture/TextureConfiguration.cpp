@@ -1,47 +1,60 @@
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
 
+#include "Castor3D/Render/RenderModule.hpp"
+
 #include <CastorUtils/Graphics/PixelFormat.hpp>
 
 namespace castor3d
 {
+	//*********************************************************************************************
+
 	namespace texconf
 	{
-		static void mergeMasks( uint32_t toMerge
-			, TextureFlag flag
-			, TextureFlags & result )
-		{
-			result |= toMerge
-				? flag
-				: TextureFlag::eNone;
-		}
-
 		static void updateStartIndex( castor::PixelFormat format
-			, castor::Point2ui & mask )
+			, TextureFlagConfiguration & config )
 		{
-			if ( mask[0] )
+			if ( config.componentsMask )
 			{
-				auto components = getPixelComponents( mask[0] );
+				auto components = getPixelComponents( config.componentsMask );
 
 				switch ( components.size() )
 				{
 				case 1:
-					mask[1] = castor::getComponentIndex( *components.begin(), format );
+					config.startIndex = castor::getComponentIndex( *components.begin(), format );
 					break;
 				case 3:
-					if ( mask[0] & 0xFF000000 )
+					if ( config.componentsMask & 0xFF000000 )
 					{
-						mask[1] = 1;
+						config.startIndex = 1;
 					}
 					else
 					{
-						mask[1] = 0;
+						config.startIndex = 0;
 					}
 					break;
 				default:
 					CU_Failure( "Invalid component count for a texture component flag" );
-					mask[1] = 0;
+					config.startIndex = 0;
 					break;
 				}
+			}
+		}
+
+		static void mergeMasks( uint32_t lhs
+			, uint32_t & rhs )
+		{
+			rhs |= lhs;
+		}
+
+		static void mergeFactors( float lhs
+			, float & rhs
+			, float ref )
+		{
+			if ( lhs != rhs )
+			{
+				rhs = ( lhs == ref
+					? rhs
+					: lhs );
 			}
 		}
 	}
@@ -58,152 +71,39 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	TextureConfiguration const TextureConfiguration::ColourTexture = []()
+	bool shallowEqual( TextureFlagConfiguration const & lhs
+		, TextureFlagConfiguration const & rhs )
 	{
-		TextureConfiguration result;
-		result.textureSpace |= TextureSpace::eColour;
-		result.textureSpace |= TextureSpace::eAllowSRGB;
-		result.colourMask[0] = 0x00FFFFFF;
-		return result;
-	}();
-
-	TextureConfiguration const TextureConfiguration::DiffuseTexture = []()
-	{
-		TextureConfiguration result;
-		result.textureSpace |= TextureSpace::eColour;
-		result.textureSpace |= TextureSpace::eAllowSRGB;
-		result.colourMask[0] = 0x00FFFFFF;
-		return result;
-	}();
-
-	TextureConfiguration const TextureConfiguration::AlbedoTexture = []()
-	{
-		TextureConfiguration result;
-		result.textureSpace |= TextureSpace::eColour;
-		result.textureSpace |= TextureSpace::eAllowSRGB;
-		result.colourMask[0] = 0x00FFFFFF;
-		return result;
-	}();
-
-	TextureConfiguration const TextureConfiguration::SpecularTexture = []()
-	{
-		TextureConfiguration result;
-		result.textureSpace |= TextureSpace::eColour;
-		result.textureSpace |= TextureSpace::eNormalised;
-		result.specularMask[0] = 0x00FFFFFF;
-		return result;
-	}();
-
-	TextureConfiguration const TextureConfiguration::MetalnessTexture = []()
-	{
-		TextureConfiguration result;
-		result.textureSpace |= TextureSpace::eNormalised;
-		result.metalnessMask[0] = 0x00FF0000;
-		return result;
-	}();
-
-	TextureConfiguration const TextureConfiguration::ShininessTexture = []()
-	{
-		TextureConfiguration result;
-		result.textureSpace |= TextureSpace::eNormalised;
-		result.glossinessMask[0] = 0x00FF0000;
-		return result;
-	}();
-
-	TextureConfiguration const TextureConfiguration::GlossinessTexture = []()
-	{
-		TextureConfiguration result;
-		result.textureSpace |= TextureSpace::eNormalised;
-		result.glossinessMask[0] = 0x00FF0000;
-		return result;
-	}();
-
-	TextureConfiguration const TextureConfiguration::RoughnessTexture = []()
-	{
-		TextureConfiguration result;
-		result.textureSpace |= TextureSpace::eNormalised;
-		result.roughnessMask[0] = 0x00FF0000;
-		return result;
-	}();
-
-	TextureConfiguration const TextureConfiguration::OpacityTexture = []()
-	{
-		TextureConfiguration result;
-		result.textureSpace |= TextureSpace::eNormalised;
-		result.opacityMask[0] = 0xFF000000;
-		return result;
-	}();
-
-	TextureConfiguration const TextureConfiguration::EmissiveTexture = []()
-	{
-		TextureConfiguration result;
-		result.textureSpace |= TextureSpace::eColour;
-		result.textureSpace |= TextureSpace::eAllowSRGB;
-		result.emissiveMask[0] = 0x00FFFFFF;
-		return result;
-	}();
-
-	TextureConfiguration const TextureConfiguration::NormalTexture = []()
-	{
-		TextureConfiguration result;
-		result.textureSpace |= TextureSpace::eNormalised;
-		result.textureSpace |= TextureSpace::eTangentSpace;
-		result.normalMask[0] = 0x00FFFFFF;
-		return result;
-	}();
-
-	TextureConfiguration const TextureConfiguration::HeightTexture = []()
-	{
-		TextureConfiguration result;
-		result.textureSpace |= TextureSpace::eNormalised;
-		result.heightMask[0] = 0x00FF0000;
-		return result;
-	}();
-
-	TextureConfiguration const TextureConfiguration::OcclusionTexture = []()
-	{
-		TextureConfiguration result;
-		result.textureSpace |= TextureSpace::eNormalised;
-		result.occlusionMask[0] = 0x00FF0000;
-		return result;
-	}();
-
-	TextureConfiguration const TextureConfiguration::TransmittanceTexture = []()
-	{
-		TextureConfiguration result;
-		result.textureSpace |= TextureSpace::eNormalised;
-		result.transmittanceMask[0] = 0xFF000000;
-		return result;
-	}();
-
-	bool shallowEqual( TextureConfiguration const & lhs, TextureConfiguration const & rhs )
-	{
-		return lhs.colourMask[0] == rhs.colourMask[0]
-			&& lhs.specularMask[0] == rhs.specularMask[0]
-			&& lhs.metalnessMask[0] == rhs.metalnessMask[0]
-			&& lhs.glossinessMask[0] == rhs.glossinessMask[0]
-			&& lhs.roughnessMask[0] == rhs.roughnessMask[0]
-			&& lhs.opacityMask[0] == rhs.opacityMask[0]
-			&& lhs.emissiveMask[0] == rhs.emissiveMask[0]
-			&& lhs.normalMask[0] == rhs.normalMask[0]
-			&& lhs.heightMask[0] == rhs.heightMask[0]
-			&& lhs.occlusionMask[0] == rhs.occlusionMask[0]
-			&& lhs.transmittanceMask[0] == rhs.transmittanceMask[0];
+		return lhs.flag == rhs.flag
+			&& lhs.componentsMask == rhs.componentsMask;
 	}
 
-	bool operator==( TextureConfiguration const & lhs, TextureConfiguration const & rhs )
+	bool operator==( TextureFlagConfiguration const & lhs
+		, TextureFlagConfiguration const & rhs )noexcept
 	{
-		return lhs.colourMask == rhs.colourMask
-			&& lhs.specularMask == rhs.specularMask
-			&& lhs.metalnessMask == rhs.metalnessMask
-			&& lhs.glossinessMask == rhs.glossinessMask
-			&& lhs.roughnessMask == rhs.roughnessMask
-			&& lhs.opacityMask == rhs.opacityMask
-			&& lhs.emissiveMask == rhs.emissiveMask
-			&& lhs.normalMask == rhs.normalMask
-			&& lhs.heightMask == rhs.heightMask
-			&& lhs.occlusionMask == rhs.occlusionMask
-			&& lhs.transmittanceMask == rhs.transmittanceMask
+		return lhs.flag == rhs.flag
+			&& lhs.componentsMask == rhs.componentsMask
+			&& lhs.startIndex == rhs.startIndex;
+	}
+
+	//*********************************************************************************************
+
+	bool shallowEqual( TextureConfiguration const & lhs
+		, TextureConfiguration const & rhs )
+	{
+		return shallowEqual( lhs.components[0], rhs.components[0] )
+			&& shallowEqual( lhs.components[1], rhs.components[1] )
+			&& shallowEqual( lhs.components[2], rhs.components[2] )
+			&& shallowEqual( lhs.components[3], rhs.components[3] );
+	}
+
+	bool operator==( TextureConfiguration const & lhs
+		, TextureConfiguration const & rhs )
+	{
+		return lhs.components[0] == rhs.components[0]
+			&& lhs.components[1] == rhs.components[1]
+			&& lhs.components[2] == rhs.components[2]
+			&& lhs.components[3] == rhs.components[3]
 			&& lhs.normalFactor == rhs.normalFactor
 			&& lhs.heightFactor == rhs.heightFactor
 			&& lhs.normalGMultiplier == rhs.normalGMultiplier
@@ -213,25 +113,43 @@ namespace castor3d
 			&& lhs.transform.scale == rhs.transform.scale;
 	}
 
-	bool operator!=( TextureConfiguration const & lhs, TextureConfiguration const & rhs )
+	//*********************************************************************************************
+
+	bool matchConfigFlags( TextureConfiguration const & config
+		, PassComponentTextureFlag const & mask )
 	{
-		return !( lhs == rhs );
+		return castor::checkFlag( config.components[0].flag, mask )
+			|| castor::checkFlag( config.components[1].flag, mask )
+			|| castor::checkFlag( config.components[2].flag, mask )
+			|| castor::checkFlag( config.components[3].flag, mask );
 	}
 
-	TextureFlags getFlags( TextureConfiguration const & config )
+	bool matchConfigFlags( TextureConfiguration const & config
+		, TextureFlagsArray const & mask )
 	{
-		TextureFlags result = TextureFlag::eNone;
-		texconf::mergeMasks( config.colourMask[0], TextureFlag::eColour, result );
-		texconf::mergeMasks( config.specularMask[0], TextureFlag::eSpecular, result );
-		texconf::mergeMasks( config.metalnessMask[0], TextureFlag::eMetalness, result );
-		texconf::mergeMasks( config.glossinessMask[0], TextureFlag::eGlossiness, result );
-		texconf::mergeMasks( config.roughnessMask[0], TextureFlag::eRoughness, result );
-		texconf::mergeMasks( config.opacityMask[0], TextureFlag::eOpacity, result );
-		texconf::mergeMasks( config.emissiveMask[0], TextureFlag::eEmissive, result );
-		texconf::mergeMasks( config.normalMask[0], TextureFlag::eNormal, result );
-		texconf::mergeMasks( config.heightMask[0], TextureFlag::eHeight, result );
-		texconf::mergeMasks( config.occlusionMask[0], TextureFlag::eOcclusion, result );
-		texconf::mergeMasks( config.transmittanceMask[0], TextureFlag::eTransmittance, result );
+		for ( auto flag : mask )
+		{
+			if ( matchConfigFlags( config, flag ) )
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	TextureFlagsArray getFlags( TextureConfiguration const & config )
+	{
+		TextureFlagsArray result;
+
+		for ( auto & conf : config.components )
+		{
+			if ( conf.componentsMask )
+			{
+				addFlags( result, conf.flag );
+			}
+		}
+
 		return result;
 	}
 
@@ -262,19 +180,193 @@ namespace castor3d
 		return result;
 	}
 
+	castor::PixelComponents getPixelComponents( TextureConfiguration const & config )
+	{
+		castor::PixelComponents result;
+		result |= getPixelComponents( config.components[0].componentsMask );
+		result |= getPixelComponents( config.components[1].componentsMask );
+		result |= getPixelComponents( config.components[2].componentsMask );
+		result |= getPixelComponents( config.components[3].componentsMask );
+		return result;
+	}
+
 	void updateIndices( castor::PixelFormat format
 		, TextureConfiguration & config )
 	{
-		texconf::updateStartIndex( format, config.colourMask );
-		texconf::updateStartIndex( format, config.specularMask );
-		texconf::updateStartIndex( format, config.metalnessMask );
-		texconf::updateStartIndex( format, config.glossinessMask );
-		texconf::updateStartIndex( format, config.roughnessMask );
-		texconf::updateStartIndex( format, config.opacityMask );
-		texconf::updateStartIndex( format, config.emissiveMask );
-		texconf::updateStartIndex( format, config.normalMask );
-		texconf::updateStartIndex( format, config.heightMask );
-		texconf::updateStartIndex( format, config.occlusionMask );
-		texconf::updateStartIndex( format, config.transmittanceMask );
+		texconf::updateStartIndex( format, config.components[0] );
+		texconf::updateStartIndex( format, config.components[1] );
+		texconf::updateStartIndex( format, config.components[2] );
+		texconf::updateStartIndex( format, config.components[3] );
 	}
+
+	TextureFlagConfigurations::const_iterator checkFlags( TextureFlagConfigurations const & lhs
+		, PassComponentTextureFlag rhs )
+	{
+		auto [rhsPassIndex, rhsTextureFlag] = splitTextureFlag( rhs );
+		auto it = std::find_if( lhs.begin()
+			, lhs.end()
+			, [rhsPassIndex, rhsTextureFlag]( TextureFlagConfiguration const & lookup )
+			{
+				auto [lhsPassIndex, lhsTextureFlag] = splitTextureFlag( lookup.flag );
+				return lhsPassIndex == rhsPassIndex
+					&& castor::hasAny( lhsTextureFlag, rhsTextureFlag );
+			} );
+		return it;
+	}
+
+	TextureFlagConfigurations::iterator checkFlags( TextureFlagConfigurations & lhs
+		, PassComponentTextureFlag rhs )
+	{
+		auto [rhsPassIndex, rhsTextureFlag] = splitTextureFlag( rhs );
+		auto it = std::find_if( lhs.begin()
+			, lhs.end()
+			, [rhsPassIndex, rhsTextureFlag]( TextureFlagConfiguration const & lookup )
+			{
+				auto [lhsPassIndex, lhsTextureFlag] = splitTextureFlag( lookup.flag );
+				return lhsPassIndex == rhsPassIndex
+					&& castor::hasAny( lhsTextureFlag, rhsTextureFlag );
+			} );
+		return it;
+	}
+
+	void addFlagConfiguration( TextureConfiguration & config
+		, TextureFlagConfiguration flagConfiguration )
+	{
+		auto it = checkFlags( config.components, flagConfiguration.flag );
+
+		if ( it == config.components.end() )
+		{
+			it = findFirstEmpty( config );
+
+			if ( it == config.components.end() )
+			{
+				CU_Exception( "Can't add component to this texture configuration" );
+			}
+		}
+
+		*it = std::move( flagConfiguration );
+	}
+
+	TextureFlagConfiguration & getFlagConfiguration( TextureConfiguration & configuration
+		, PassComponentTextureFlag textureFlag )
+	{
+		auto it = checkFlags( configuration.components, textureFlag );
+
+		if ( it != configuration.components.end() )
+		{
+			CU_Exception( "Component texture flag was not found in the texture configuration" );
+		}
+
+		return *it;
+	}
+
+	uint32_t getComponentsMask( TextureConfiguration const & configuration
+		, PassComponentTextureFlag textureFlag )
+	{
+		auto it = checkFlags( configuration.components, textureFlag );
+		return it != configuration.components.end()
+			? it->componentsMask
+			: 0u;
+	}
+
+	PassComponentTextureFlag getEnabledFlag( TextureConfiguration const & configuration )
+	{
+		auto it = std::find_if( configuration.components.begin()
+			, configuration.components.end()
+			, []( TextureFlagConfiguration const & lookup )
+			{
+				return lookup.componentsMask != 0u;
+			} );
+		CU_Require( it != configuration.components.end() );
+		return it->flag;
+	}
+
+	void mergeConfigs( TextureConfiguration const & lhs
+		, TextureConfiguration & rhs )
+	{
+		mergeConfigsBase( lhs, rhs );
+		auto rhsit = findFirstEmpty( rhs );
+
+		if ( rhsit == rhs.components.end() )
+		{
+			// Can't add any configuration.
+			CU_Require( rhsit == rhs.components.begin() );
+			return;
+		}
+
+		auto lhsit = findFirstNonEmpty( lhs );
+
+		if ( lhsit == lhs.components.end() )
+		{
+			// No configuration to add.
+			return;
+		}
+
+		while ( lhsit != lhs.components.end()
+			&& rhsit != rhs.components.end() )
+		{
+			*rhsit = *lhsit;
+			++lhsit;
+			++rhsit;
+		}
+
+		// We should have been able to merge all configuration components
+		CU_Require( lhsit == lhs.components.end() );
+	}
+
+	void mergeConfigsBase( TextureConfiguration const & lhs
+		, TextureConfiguration & rhs )
+	{
+		texconf::mergeMasks( lhs.needsYInversion, rhs.needsYInversion );
+		texconf::mergeFactors( lhs.heightFactor, rhs.heightFactor, 0.1f );
+		texconf::mergeFactors( lhs.normalFactor, rhs.normalFactor, 1.0f );
+		texconf::mergeFactors( lhs.normalGMultiplier, rhs.normalGMultiplier, 1.0f );
+		rhs.textureSpace |= lhs.textureSpace;
+	}
+
+	TextureFlagConfigurations::const_iterator findFirstEmpty( TextureConfiguration const & config )
+	{
+		return std::find_if( config.components.begin()
+			, config.components.end()
+			, []( TextureFlagConfiguration const & lookup )
+			{
+				return lookup.flag == 0
+					|| lookup.componentsMask == 0;
+			} );
+	}
+
+	TextureFlagConfigurations::iterator findFirstEmpty( TextureConfiguration & config )
+	{
+		return std::find_if( config.components.begin()
+			, config.components.end()
+			, []( TextureFlagConfiguration const & lookup )
+			{
+				return lookup.flag == 0
+					|| lookup.componentsMask == 0;
+			} );
+	}
+
+	TextureFlagConfigurations::const_iterator findFirstNonEmpty( TextureConfiguration const & config )
+	{
+		return std::find_if( config.components.begin()
+			, config.components.end()
+			, []( TextureFlagConfiguration const & lookup )
+			{
+				return lookup.flag != 0
+					&& lookup.componentsMask != 0;
+			} );
+	}
+
+	TextureFlagConfigurations::iterator findFirstNonEmpty( TextureConfiguration & config )
+	{
+		return std::find_if( config.components.begin()
+			, config.components.end()
+			, []( TextureFlagConfiguration const & lookup )
+			{
+				return lookup.flag != 0
+					&& lookup.componentsMask != 0;
+			} );
+	}
+
+	//*********************************************************************************************
 }

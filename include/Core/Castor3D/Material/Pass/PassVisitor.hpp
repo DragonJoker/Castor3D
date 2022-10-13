@@ -4,7 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_PassVisitor_HPP___
 #define ___C3D_PassVisitor_HPP___
 
-#include "PassModule.hpp"
+#include "Castor3D/Material/Pass/PassModule.hpp"
+#include "Castor3D/Material/Texture/TextureModule.hpp"
 
 #include <CastorUtils/Design/ChangeTracked.hpp>
 #include <CastorUtils/Design/GroupChangeTracked.hpp>
@@ -143,8 +144,8 @@ namespace castor3d
 			, castor::RangedValue< uint32_t > & value
 			, ControlsList controls ) = 0;
 		C3D_API virtual void visit( castor::String const & name
-			, TextureFlag textureFlag
-			, castor::Point2ui & value
+			, PassComponentTextureFlag textureFlag
+			, TextureFlagConfiguration & value
 			, uint32_t componentsCount
 			, ControlsList controls ) = 0;
 
@@ -239,8 +240,8 @@ namespace castor3d
 			, castor::RangedValue< uint32_t > & value
 			, AtomicControlsList controls ) = 0;
 		C3D_API virtual void visit( castor::String const & name
-			, TextureFlag textureFlag
-			, castor::Point2ui & value
+			, PassComponentTextureFlag textureFlag
+			, TextureFlagConfiguration & value
 			, uint32_t componentsCount
 			, AtomicControlsList controls ) = 0;
 
@@ -478,8 +479,8 @@ namespace castor3d
 
 		template< typename ControlT = bool >
 		void visit( castor::String const & name
-			, TextureFlag textureFlag
-			, castor::Point2ui & value
+			, PassComponentTextureFlag textureFlag
+			, TextureFlagConfiguration & value
 			, uint32_t componentsCount
 			, ControlT * control = nullptr )
 		{
@@ -711,8 +712,8 @@ namespace castor3d
 		}
 
 		void visit( castor::String const & name
-			, TextureFlag textureFlag
-			, castor::Point2ui & value
+			, PassComponentTextureFlag textureFlag
+			, TextureFlagConfiguration & value
 			, uint32_t componentsCount
 			, ControlsList controls )override
 		{
@@ -899,8 +900,8 @@ namespace castor3d
 		}
 
 		void visit( castor::String const & name
-			, TextureFlag textureFlag
-			, castor::Point2ui & value
+			, PassComponentTextureFlag textureFlag
+			, TextureFlagConfiguration & value
 			, uint32_t componentsCount
 			, AtomicControlsList controls )override
 		{

@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___CU_Exception_H___
 #define ___CU_Exception_H___
 
-#include "CastorUtils/Exception/ExceptionModule.hpp"
+#include "CastorUtils/Exception/Assertion.hpp"
 
 #include <string>
 #include <sstream>
@@ -188,6 +188,8 @@ namespace castor
 *\~french
 *\brief		Macro définie pour faciliter l'utilisation de castor::Exception
 */
-#define CU_Exception( text ) throw castor::Exception{ text, __FILE__, __FUNCTION__, uint32_t( __LINE__ ) }
+#define CU_Exception( text )\
+	CU_Failure( text );\
+	throw castor::Exception{ text, __FILE__, __FUNCTION__, uint32_t( __LINE__ ) }
 
 #endif

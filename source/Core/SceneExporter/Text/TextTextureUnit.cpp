@@ -138,7 +138,7 @@ namespace castor
 
 					if ( result )
 					{
-						result = writeSub( file, config, m_type, m_isPbr );
+						result = writeSub( file, config, unit, m_isPbr );
 						checkError( result, "configuration" );
 					}
 

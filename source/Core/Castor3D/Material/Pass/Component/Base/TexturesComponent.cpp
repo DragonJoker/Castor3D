@@ -215,7 +215,7 @@ namespace castor3d
 
 	void TexturesComponent::ComponentsShader::blendComponents( shader::Materials const & materials
 		, sdw::Float const & passMultiplier
-		, shader::BlendComponents const & res
+		, shader::BlendComponents & res
 		, shader::BlendComponents const & src )const
 	{
 		if ( checkFlag( materials.getFilter(), ComponentModeFlag::eDerivTex ) )
@@ -269,7 +269,7 @@ namespace castor3d
 			, 0u );
 	}
 
-	bool TexturesComponent::Plugin::isComponentNeeded( TextureFlags const & textures
+	bool TexturesComponent::Plugin::isComponentNeeded( TextureFlagsArray const & textures
 		, ComponentModeFlags const & filter )const
 	{
 		return !textures.empty();
@@ -277,7 +277,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const TexturesComponent::TypeName = C3D_MakePassComponentName( "textures" );
+	castor::String const TexturesComponent::TypeName = C3D_MakePassBaseComponentName( "textures" );
 
 	TexturesComponent::TexturesComponent( Pass & pass )
 		: PassComponent{ pass, TypeName }
@@ -302,9 +302,10 @@ namespace castor3d
 		for ( auto & unit : *getOwner() )
 		{
 			m_textures[index % MaxPassTextures] = unit->getId();
+			auto flags = unit->getFlags();
 
-			if ( checkFlag( unit->getFlags(), TextureFlag::eNormal )
-				|| checkFlag( unit->getFlags(), TextureFlag::eHeight ) )
+			if ( flags.end() != checkFlags( flags, getOwner()->getNormalMapFlags() )
+				|| flags.end() != checkFlags( flags, getOwner()->getHeightMapFlags() ) )
 			{
 				nmlHgtIndex = index;
 			}

@@ -139,7 +139,7 @@ namespace castor3d
 			} );
 	}
 
-	bool Material::isTextured( TextureFlags mask )const
+	bool Material::isTextured( TextureFlagsArray mask )const
 	{
 		return m_passes.end() != std::find_if( m_passes.begin()
 			, m_passes.end()

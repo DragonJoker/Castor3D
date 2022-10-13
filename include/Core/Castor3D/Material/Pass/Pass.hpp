@@ -95,6 +95,20 @@ namespace castor3d
 		C3D_API bool hasComponent( castor::String const & name )const;
 		C3D_API PassComponent * getComponent( castor::String const & name )const;
 		C3D_API void removeComponent( castor::String const & name );
+		C3D_API shader::PassMaterialShader * getMaterialShader( castor::String const & componentType )const;
+		C3D_API PassComponentID getComponentId( castor::String const & componentType )const;
+		C3D_API PassComponentPlugin const & getComponentPlugin( PassComponentID componentId )const;
+
+		PassComponentPlugin const & getComponentPlugin( castor::String const & componentType )const
+		{
+			return getComponentPlugin( getComponentId( componentType ) );
+		}
+
+		template< typename ComponentT >
+		PassComponentPlugin const & getComponentPlugin()const
+		{
+			return getComponentPlugin( getComponentId( ComponentT::TypeName ) );
+		}
 
 		template< typename ComponentT >
 		void removeComponent()
@@ -215,18 +229,13 @@ namespace castor3d
 		 *\brief		Réduit les textures.
 		 */
 		C3D_API void prepareTextures();
-		C3D_API void mergeImages( TextureFlag lhsFlag
-			, uint32_t lhsMaskOffset
+		using PassTextureSource = std::pair< TextureSourceInfo, PassTextureConfig >;
+		C3D_API void mergeImages( PassTextureSource lhs
 			, uint32_t lhsDstMask
-			, TextureFlag rhsFlag
-			, uint32_t rhsMaskOffset
+			, PassTextureSource rhs
 			, uint32_t rhsDstMask
-			, castor::String const & name
 			, TextureUnitDataSet & result );
-		C3D_API void prepareImage( TextureFlag flag
-			, uint32_t maskOffset
-			, uint32_t dstMask
-			, castor::String const & name
+		C3D_API void prepareImage( PassTextureSource cfg
 			, TextureUnitDataSet & result );
 		/**
 		 *\~english
@@ -385,11 +394,20 @@ namespace castor3d
 		C3D_API bool hasEnvironmentMapping()const;
 		C3D_API bool hasSubsurfaceScattering()const;
 		C3D_API bool isTwoSided()const;
-		C3D_API TextureUnitPtrArray getTextureUnits( TextureFlags mask = TextureFlag::eAll )const;
-		C3D_API uint32_t getTextureUnitsCount( TextureFlags mask = TextureFlag::eAll )const;
-		C3D_API TextureFlagsArray getTexturesMask( TextureFlags mask = TextureFlag::eAll )const;
-		C3D_API TextureFlags getTextures()const;
+		C3D_API TextureUnitPtrArray getTextureUnits()const;
+		C3D_API TextureUnitPtrArray getTextureUnits( TextureFlagsArray mask )const;
+		C3D_API uint32_t getTextureUnitsCount()const;
+		C3D_API uint32_t getTextureUnitsCount( TextureFlagsArray mask )const;
+		C3D_API TextureFlagsArray getTexturesMask()const;
+		C3D_API TextureFlagsArray getTexturesMask( TextureFlagsArray mask )const;
+		C3D_API TextureFlagsArray getTextures()const;
 		C3D_API bool hasLighting()const;
+		C3D_API PassComponentTextureFlag getColourMapFlags()const;
+		C3D_API PassComponentTextureFlag getOpacityMapFlags()const;
+		C3D_API PassComponentTextureFlag getNormalMapFlags()const;
+		C3D_API PassComponentTextureFlag getHeightMapFlags()const;
+		C3D_API PassComponentTextureFlag getOcclusionMapFlags()const;
+		C3D_API castor::String getMapFlagsName( PassComponentTextureFlag flags )const;
 
 		bool hasAutomaticShader()const
 		{
@@ -404,11 +422,6 @@ namespace castor3d
 		bool isImplicit()const
 		{
 			return m_implicit;
-		}
-
-		uint32_t getHeightTextureIndex()const
-		{
-			return m_heightTextureIndex;
 		}
 
 		bool hasIBL()const
@@ -551,17 +564,15 @@ namespace castor3d
 		uint32_t m_index;
 		PassFlags m_flags;
 		PassComponentMap m_components;
-		TextureFlags m_textureFlags;
+		TextureFlagsArray m_textureFlags;
 		TextureSourceMap m_sources;
 		std::unordered_map< TextureSourceInfo, AnimationUPtr, TextureSourceInfoHasher > m_animations;
 		uint32_t m_maxTexcoordSet{};
 		std::atomic_bool m_texturesReduced{ false };
-		TextureConfiguration m_textureConfigs;
 		TextureUnitPtrArray m_textureUnits;
 		uint32_t m_id{ 0u };
 		bool m_implicit{ false };
 		bool m_automaticShader{ true };
-		uint32_t m_heightTextureIndex{ InvalidIndex };
 		std::map< TextureUnit const *, OnTextureUnitChangedConnection > m_unitsConnections;
 		RenderPassRegisterInfo * m_renderPassInfo{};
 	};

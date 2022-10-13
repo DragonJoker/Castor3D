@@ -1,5 +1,6 @@
 #include "Castor3D/Material/Pass/Component/Map/RoughnessMapComponent.hpp"
 
+#include "Castor3D/Engine.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Pass/PassVisitor.hpp"
 #include "Castor3D/Material/Pass/Component/Map/MetalnessMapComponent.hpp"
@@ -30,13 +31,13 @@ namespace castor
 
 		bool operator()( StringStream & file )
 		{
-			return writeNamedSub( file, cuT( "roughness_mask" ), m_mask );
+			return writeMask( file, cuT( "roughness_mask" ), m_mask );
 		}
 
 		bool operator()( castor3d::RoughnessMapComponent const & object
 			, StringStream & file )override
 		{
-			return writeNamedSub( file, cuT( "roughness_mask" ), m_mask );
+			return writeMask( file, cuT( "roughness_mask" ), m_mask );
 		}
 
 	private:
@@ -60,8 +61,8 @@ namespace castor3d
 			}
 			else
 			{
-				auto & component = getPassComponent< RoughnessMapComponent >( parsingContext );
-				component.fillChannel( parsingContext.textureConfiguration
+				auto & plugin = parsingContext.pass->getComponentPlugin( RoughnessMapComponent::TypeName );
+				plugin.fillTextureConfiguration( parsingContext.textureConfiguration
 					, params[0]->get< uint32_t >() );
 			}
 		}
@@ -70,7 +71,8 @@ namespace castor3d
 		static CU_ImplementAttributeParser( parserTexRemapRoughness )
 		{
 			auto & parsingContext = getParserContext( context );
-			parsingContext.sceneImportConfig.textureRemapIt = parsingContext.sceneImportConfig.textureRemaps.emplace( TextureFlag::eRoughness, TextureConfiguration{} ).first;
+			auto & plugin = parsingContext.parser->getEngine()->getPassComponentsRegister().getPlugin( RoughnessMapComponent::TypeName );
+			parsingContext.sceneImportConfig.textureRemapIt = parsingContext.sceneImportConfig.textureRemaps.emplace( plugin.getTextureFlags(), TextureConfiguration{} ).first;
 			parsingContext.sceneImportConfig.textureRemapIt->second = TextureConfiguration{};
 		}
 		CU_EndAttributePush( CSCNSection::eTextureRemapChannel )
@@ -85,7 +87,9 @@ namespace castor3d
 			}
 			else
 			{
-				parsingContext.sceneImportConfig.textureRemapIt->second.roughnessMask[0] = params[0]->get< uint32_t >();
+				auto & plugin = parsingContext.parser->getEngine()->getPassComponentsRegister().getPlugin( RoughnessMapComponent::TypeName );
+				plugin.fillTextureConfiguration( parsingContext.sceneImportConfig.textureRemapIt->second
+					, params[0]->get< uint32_t >() );
 			}
 		}
 		CU_EndAttribute()
@@ -93,23 +97,24 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void RoughnessMapComponent::ComponentsShader::applyComponents( TextureFlags const & texturesFlags
+	void RoughnessMapComponent::ComponentsShader::applyComponents( TextureFlagsArray const & texturesFlags
 		, PipelineFlags const * flags
 		, shader::TextureConfigData const & config
+		, sdw::U32Vec3 const & imgCompConfig
 		, sdw::Vec4 const & sampled
-		, shader::BlendComponents const & components )const
+		, shader::BlendComponents & components )const
 	{
 		if ( !components.hasMember( "roughness" )
-			|| !checkFlag( texturesFlags, TextureFlag::eRoughness ) )
+			|| texturesFlags.end() == checkFlags( texturesFlags, getTextureFlags() ) )
 		{
 			return;
 		}
 
 		auto & writer{ *sampled.getWriter() };
 
-		IF( writer, config.rghEnbl() != 0.0_f )
+		IF( writer, imgCompConfig.y() != 0_u )
 		{
-			components.getMember< sdw::Float >( "roughness" ) *= config.getFloat( sampled, config.rghMask() );
+			components.getMember< sdw::Float >( "roughness" ) *= config.getFloat( sampled, imgCompConfig.z() );
 		}
 		FI;
 	}
@@ -119,7 +124,7 @@ namespace castor3d
 	void RoughnessMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		channelFillers.emplace( "roughness", ChannelFiller{ uint32_t( TextureFlag::eRoughness )
+		channelFillers.emplace( "roughness", ChannelFiller{ getTextureFlags()
 			, []( SceneFileContext & parsingContext )
 			{
 				auto & component = getPassComponent< RoughnessMapComponent >( parsingContext );
@@ -149,20 +154,22 @@ namespace castor3d
 		, castor::String const & tabs
 		, castor::StringStream & file )const
 	{
-		return castor::TextWriter< RoughnessMapComponent >{ tabs, configuration.roughnessMask[0] }( file );
+		auto it = checkFlags( configuration.components, getTextureFlags() );
+
+		if ( it == configuration.components.end() )
+		{
+			return true;
+		}
+
+		return castor::TextWriter< RoughnessMapComponent >{ tabs, it->componentsMask }( file );
 	}
 
-	bool RoughnessMapComponent::Plugin::isComponentNeeded( TextureFlags const & textures
+	bool RoughnessMapComponent::Plugin::isComponentNeeded( TextureFlagsArray const & textures
 		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eDiffuseLighting )
 			|| checkFlag( filter, ComponentModeFlag::eSpecularLighting )
-			|| checkFlag( textures, TextureFlag::eRoughness );
-	}
-
-	bool RoughnessMapComponent::Plugin::needsMapComponent( TextureConfiguration const & configuration )const
-	{
-		return configuration.roughnessMask[0] != 0u;
+			|| textures.end() != checkFlags( textures, getTextureFlags() );
 	}
 
 	void RoughnessMapComponent::Plugin::createMapComponent( Pass & pass
@@ -184,32 +191,10 @@ namespace castor3d
 		}
 	}
 
-	void RoughnessMapComponent::mergeImages( TextureUnitDataSet & result )
-	{
-		if ( !getOwner()->hasComponent< MetalnessMapComponent >() )
-		{
-			getOwner()->mergeImages( TextureFlag::eMetalness
-				, offsetof( TextureConfiguration, metalnessMask )
-				, 0x00FF0000
-				, TextureFlag::eRoughness
-				, offsetof( TextureConfiguration, roughnessMask )
-				, 0x0000FF00
-				, "MtlRgh"
-				, result );
-		}
-	}
-
-	void RoughnessMapComponent::fillChannel( TextureConfiguration & configuration
-		, uint32_t mask )
-	{
-		configuration.textureSpace |= TextureSpace::eNormalised;
-		configuration.roughnessMask[0] = mask;
-	}
-
 	void RoughnessMapComponent::fillConfig( TextureConfiguration & configuration
-		, PassVisitorBase & vis )
+		, PassVisitorBase & vis )const
 	{
-		vis.visit( cuT( "Roughness" ), castor3d::TextureFlag::eRoughness, configuration.roughnessMask, 1u );
+		vis.visit( cuT( "Roughness" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 1u );
 	}
 
 	PassComponentUPtr RoughnessMapComponent::doClone( Pass & pass )const

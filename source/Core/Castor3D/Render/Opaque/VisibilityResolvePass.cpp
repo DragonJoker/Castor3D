@@ -306,6 +306,7 @@ namespace castor3d
 				, flags
 				, ( ComponentModeFlag::eDerivTex
 					| ComponentModeFlag::eColour
+					| ComponentModeFlag::eOpacity
 					| ComponentModeFlag::eDiffuseLighting
 					| ComponentModeFlag::eSpecularLighting
 					| ComponentModeFlag::eGeometry

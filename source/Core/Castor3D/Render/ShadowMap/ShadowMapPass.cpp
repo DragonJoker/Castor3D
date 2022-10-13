@@ -1,5 +1,6 @@
 #include "Castor3D/Render/ShadowMap/ShadowMapPass.hpp"
 
+#include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"

@@ -104,7 +104,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const BlendComponent::TypeName = C3D_MakePassComponentName( "blend" );
+	castor::String const BlendComponent::TypeName = C3D_MakePassBaseComponentName( "blend" );
 
 	BlendComponent::BlendComponent( Pass & pass )
 		: BaseDataPassComponentT< BlendData >{ pass, TypeName }

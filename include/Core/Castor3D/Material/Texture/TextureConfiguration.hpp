@@ -22,6 +22,15 @@ namespace castor3d
 		castor::Angle rotate;
 		castor::Point4f scale{ 1, 1, 1, 0 };
 	};
+	/**
+	*\~english
+	*name
+	*	Comparison operators.
+	*\~french
+	*name
+	*	Opérateurs de comparaison.
+	*/
+	/**@{*/
 	C3D_API bool operator==( TextureTransform const & lhs
 		, TextureTransform const & rhs )noexcept;
 	inline bool operator!=( TextureTransform const & lhs
@@ -29,38 +38,67 @@ namespace castor3d
 	{
 		return !( lhs == rhs );
 	}
+	/**@}*/
+	struct TextureFlagConfiguration
+	{
+		/**
+		*\~english
+		*\brief
+		*	To know what this configuration relates to.
+		*\~french
+		*\brief
+		*	Pour savoir à quoi cette configuration est liée.
+		*/
+		PassComponentTextureFlag flag{};
+		/**
+		*\~english
+		*\brief
+		*	Mask, used with start index to filter image components (AARRGGBB).
+		*\~french
+		*\brief
+		*	Masque, utilisés avec l'indice de début pour filtrer les composantes d'une image (AARRGGBB).
+		*/
+		uint32_t componentsMask{};
+		/**
+		*\~english
+		*\brief
+		*	Start index, used with the mask to filter image components (AARRGGBB).
+		*\~french
+		*\brief
+		*	Indice de début, utilisé avec le masque pour filtrer les composantes d'une image (AARRGGBB).
+		*/
+		uint32_t startIndex{};
+	};
 	/**
 	*\~english
-	*\brief
-	*	Specifies the usages of a texture, per image component.
+	*name
+	*	Comparison operators.
 	*\~french
-	*\brief
-	*	Définit les utilisations d'une texture, par composante d'image.
+	*name
+	*	Opérateurs de comparaison.
 	*/
+	/**@{*/
+	C3D_API bool shallowEqual( TextureFlagConfiguration const & lhs
+		, TextureFlagConfiguration const & rhs );
+	C3D_API bool operator==( TextureFlagConfiguration const & lhs
+		, TextureFlagConfiguration const & rhs )noexcept;
+	inline bool operator!=( TextureFlagConfiguration const & lhs
+		, TextureFlagConfiguration const & rhs )noexcept
+	{
+		return !( lhs == rhs );
+	}
+	/**@}*/
 	struct TextureConfiguration
 	{
 		/**
 		*\~english
 		*\brief
-		*	Masks and start indices, used to filter image components (AARRGGBB).
-		*\remarks
+		*	The configuration per RGBA component.
 		*\~french
 		*\brief
-		*	Masques et indices de début, utilisés pour filtrer les composantes d'une image (AARRGGBB).
+		*	Les configurations par composante RGBA.
 		*/
-		/**@{*/
-		castor::Point2ui colourMask{ 0u, 0u };
-		castor::Point2ui specularMask{ 0u, 0u };
-		castor::Point2ui metalnessMask{ 0u, 0u };
-		castor::Point2ui glossinessMask{ 0u, 0u };
-		castor::Point2ui roughnessMask{ 0u, 0u };
-		castor::Point2ui opacityMask{ 0u, 0u };
-		castor::Point2ui emissiveMask{ 0u, 0u };
-		castor::Point2ui normalMask{ 0u, 0u };
-		castor::Point2ui heightMask{ 0u, 0u };
-		castor::Point2ui occlusionMask{ 0u, 0u };
-		castor::Point2ui transmittanceMask{ 0u, 0u };
-		/**@}*/
+		TextureFlagConfigurations components;
 		/**
 		*\~english
 		*name
@@ -106,30 +144,6 @@ namespace castor3d
 		static uint32_t constexpr RgbMask = RgMask | BlueMask;
 		static uint32_t constexpr RgbaMask = RgbMask | AlphaMask;
 		/**@}*/
-		/**
-		*\~english
-		*name
-		*	Predefined texture configurations.
-		*\~french
-		*name
-		*	Configurations de texture prédéfinies.
-		*/
-		/**@{*/
-		C3D_API static TextureConfiguration const ColourTexture;
-		C3D_API static TextureConfiguration const DiffuseTexture;
-		C3D_API static TextureConfiguration const AlbedoTexture;
-		C3D_API static TextureConfiguration const SpecularTexture;
-		C3D_API static TextureConfiguration const MetalnessTexture;
-		C3D_API static TextureConfiguration const GlossinessTexture;
-		C3D_API static TextureConfiguration const ShininessTexture;
-		C3D_API static TextureConfiguration const RoughnessTexture;
-		C3D_API static TextureConfiguration const OpacityTexture;
-		C3D_API static TextureConfiguration const EmissiveTexture;
-		C3D_API static TextureConfiguration const NormalTexture;
-		C3D_API static TextureConfiguration const HeightTexture;
-		C3D_API static TextureConfiguration const OcclusionTexture;
-		C3D_API static TextureConfiguration const TransmittanceTexture;
-		/**@}*/
 	};
 	/**
 	*\~english
@@ -140,14 +154,54 @@ namespace castor3d
 	*	Opérateurs de comparaison.
 	*/
 	/**@{*/
-	C3D_API bool shallowEqual( TextureConfiguration const & lhs, TextureConfiguration const & rhs );
-	C3D_API bool operator==( TextureConfiguration const & lhs, TextureConfiguration const & rhs );
-	C3D_API bool operator!=( TextureConfiguration const & lhs, TextureConfiguration const & rhs );
+	C3D_API bool shallowEqual( TextureConfiguration const & lhs
+		, TextureConfiguration const & rhs );
+	C3D_API bool operator==( TextureConfiguration const & lhs
+		, TextureConfiguration const & rhs );
+	inline bool operator!=( TextureConfiguration const & lhs
+		, TextureConfiguration const & rhs )noexcept
+	{
+		return !( lhs == rhs );
+	}
 	/**@}*/
-	C3D_API TextureFlags getFlags( TextureConfiguration const & config );
+	/**
+	*\~english
+	*name
+	*	Other functions.
+	*\~french
+	*name
+	*	Autres fonctions.
+	*/
+	/**@{*/
+	C3D_API bool matchConfigFlags( TextureConfiguration const & config
+		, PassComponentTextureFlag const & mask );
+	C3D_API bool matchConfigFlags( TextureConfiguration const & config
+		, TextureFlagsArray const & mask );
+	C3D_API TextureFlagsArray getFlags( TextureConfiguration const & config );
 	C3D_API castor::PixelComponents getPixelComponents( uint32_t mask );
+	C3D_API castor::PixelComponents getPixelComponents( TextureConfiguration const & config );
 	C3D_API void updateIndices( castor::PixelFormat format
 		, TextureConfiguration & config );
+	C3D_API TextureFlagConfigurations::const_iterator checkFlags( TextureFlagConfigurations const & lhs
+		, PassComponentTextureFlag rhs );
+	C3D_API TextureFlagConfigurations::iterator checkFlags( TextureFlagConfigurations & lhs
+		, PassComponentTextureFlag rhs );
+	C3D_API void addFlagConfiguration( TextureConfiguration & config
+		, TextureFlagConfiguration flagConfiguration );
+	C3D_API TextureFlagConfiguration & getFlagConfiguration( TextureConfiguration & config
+		, PassComponentTextureFlag textureFlag );
+	C3D_API uint32_t getComponentsMask( TextureConfiguration const & config
+		, PassComponentTextureFlag textureFlag );
+	C3D_API PassComponentTextureFlag getEnabledFlag( TextureConfiguration const & config );
+	C3D_API void mergeConfigs( TextureConfiguration const & lhs
+		, TextureConfiguration & rhs );
+	C3D_API void mergeConfigsBase( TextureConfiguration const & lhs
+		, TextureConfiguration & rhs );
+	C3D_API TextureFlagConfigurations::const_iterator findFirstEmpty( TextureConfiguration const & config );
+	C3D_API TextureFlagConfigurations::iterator findFirstEmpty( TextureConfiguration & config );
+	C3D_API TextureFlagConfigurations::const_iterator findFirstNonEmpty( TextureConfiguration const & config );
+	C3D_API TextureFlagConfigurations::iterator findFirstNonEmpty( TextureConfiguration & config );
+	/**@}*/
 
 	struct PassTextureConfig
 	{

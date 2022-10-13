@@ -81,9 +81,9 @@ namespace castor3d
 		m_renderQueue->update( shadowMaps, scissor );
 	}
 
-	TextureFlags PickingPass::getTexturesMask()const
+	ComponentModeFlags PickingPass::getComponentsMask()const
 	{
-		return TextureFlags{ TextureFlag::eOpacity };
+		return ComponentModeFlag::eOpacity;
 	}
 
 	bool PickingPass::doIsValidPass( Pass const & pass )const
@@ -142,8 +142,8 @@ namespace castor3d
 
 		shader::Utils utils{ writer };
 		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
-			, TextureFlag::eNone
-			, ComponentModeFlag::eOpacity
+			, TextureFlagsArray{}
+			, getComponentsMask()
 			, utils };
 
 		// UBOs
@@ -176,6 +176,7 @@ namespace castor3d
 		auto pxl_fragColor( writer.declOutput< UVec4 >( "pxl_fragColor", 0 ) );
 
 		writer.implementMainT< shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer
+				, passShaders
 				, flags }
 			, FragmentOut{ writer }
 			, [&]( FragmentInT< shader::FragmentSurfaceT > in

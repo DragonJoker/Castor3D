@@ -412,8 +412,6 @@ namespace castor3d
 	CU_ImplementFlags( RenderFilter )
 
 	C3D_API castor::String getName( RenderFilter value );
-
-	C3D_API TextureFlags merge( TextureFlagsArray const & flags );
 	/**
 	*\~english
 	*\brief
@@ -815,8 +813,16 @@ namespace castor3d
 		, castor::Size const & size );
 	C3D_API float getSafeBandedAspect( float aspect
 		, castor::Size const & size );
-	C3D_API FilteredTextureFlags::const_iterator checkFlags( FilteredTextureFlags const & flags, TextureFlag flag );
-	C3D_API TextureFlagsArray::const_iterator checkFlags( TextureFlagsArray const & flags, TextureFlag flag );
+	C3D_API TextureFlagsArray::const_iterator checkFlags( TextureFlagsArray const & lhs
+		, PassComponentTextureFlag rhs );
+	C3D_API void remFlags( TextureFlagsArray & lhs
+		, PassComponentTextureFlag rhs );
+	C3D_API void remFlags( TextureFlagsArray & lhs
+		, TextureFlagsArray const & rhs );
+	C3D_API void addFlags( TextureFlagsArray & lhs
+		, PassComponentTextureFlag rhs );
+	C3D_API void addFlags( TextureFlagsArray & lhs
+		, TextureFlagsArray const & rhs );
 	C3D_API VkImageMemoryBarrier makeLayoutTransition( VkImage image
 		, VkImageSubresourceRange const & range
 		, VkImageLayout sourceLayout
@@ -838,21 +844,6 @@ namespace castor3d
 		, VkAccessFlags dstAccessMask
 		, uint32_t srcQueueFamily
 		, uint32_t dstQueueFamily );
-	/**
-	 *\~english
-	 *\brief		Filters the given textures flags using the given mask.
-	 *\param[in]	textures	The textures flags.
-	 *\param[in]	mask		The mask used to filter out textures.
-	 *\return		The filtered flags.
-	 *\~french
-	 *\brief		Filtre les indicateurs de textures donnés en utilisant le masque donné.
-	 *\param[in]	textures	Les indicateurs de textures.
-	 *\param[in]	mask		Le masque utilisé pour le filtre.
-	 *\return		Les indicateurs filtrés.
-	 */
-	C3D_API FilteredTextureFlags filterTexturesFlags( TextureFlagsArray const & textures
-		, TextureFlags mask );
-	C3D_API TextureFlags getTextureFlags( FilteredTextureFlags const & textures );
 	C3D_API ashes::Image makeImage( ashes::Device const & device
 		, VkImage image
 		, crg::ImageId data );

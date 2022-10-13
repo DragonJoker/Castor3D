@@ -102,7 +102,7 @@ namespace castor3d
 
 	void TransmissionComponent::ComponentsShader::blendComponents( shader::Materials const & materials
 		, sdw::Float const & passMultiplier
-		, shader::BlendComponents const & res
+		, shader::BlendComponents & res
 		, shader::BlendComponents const & src )const
 	{
 		res.getMember< sdw::Vec3 >( "transmission", true ) = src.getMember< sdw::Vec3 >( "transmission", true ) * passMultiplier;
@@ -145,7 +145,7 @@ namespace castor3d
 		data.write( materialShader.getMaterialChunk(), 1.0f, 1.0f, 1.0f, 0u );
 	}
 
-	bool TransmissionComponent::Plugin::isComponentNeeded( TextureFlags const & textures
+	bool TransmissionComponent::Plugin::isComponentNeeded( TextureFlagsArray const & textures
 		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eDiffuseLighting )
@@ -154,7 +154,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const TransmissionComponent::TypeName = C3D_MakePassComponentName( "transmission" );
+	castor::String const TransmissionComponent::TypeName = C3D_MakePassLightingComponentName( "transmission" );
 
 	TransmissionComponent::TransmissionComponent( Pass & pass
 		, castor::RgbColour defaultValue )

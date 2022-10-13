@@ -145,9 +145,11 @@ namespace castor3d::shader
 
 	protected:
 		C3D_API static void fillIOType( sdw::type::IOStruct & type
+			, PassShaders const & shaders
 			, PipelineFlags const & flags
 			, uint32_t & index );
 		C3D_API static void fillType( sdw::type::BaseStruct & type
+			, PassShaders const & shaders
 			, PipelineFlags const & flags );
 		C3D_API static void fillType( sdw::type::BaseStruct & type );
 	};
@@ -201,8 +203,10 @@ namespace castor3d::shader
 		SDW_DeclStructInstance( , RasterizerSurfaceT );
 
 		static sdw::type::IOStructPtr makeIOType( sdw::type::TypesCache & cache
+			, PassShaders const & shaders
 			, PipelineFlags const & flags );
 		static sdw::type::BaseStructPtr makeType( sdw::type::TypesCache & cache
+			, PassShaders const & shaders
 			, PipelineFlags const & flags );
 		static sdw::type::BaseStructPtr makeType( sdw::type::TypesCache & cache );
 

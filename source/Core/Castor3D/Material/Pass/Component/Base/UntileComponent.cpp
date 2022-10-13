@@ -70,7 +70,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const UntileComponent::TypeName = C3D_MakePassComponentName( "untile" );
+	castor::String const UntileComponent::TypeName = C3D_MakePassBaseComponentName( "untile" );
 
 	UntileComponent::UntileComponent( Pass & pass )
 		: BaseDataPassComponentT< castor::AtomicGroupChangeTracked< bool > >{ pass, TypeName }

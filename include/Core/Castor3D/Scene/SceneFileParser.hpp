@@ -121,14 +121,14 @@ namespace castor3d
 			castor::PathArray files;
 			castor::PathArray animFiles;
 			castor::String prefix;
-			std::map< TextureFlag, TextureConfiguration > textureRemaps;
+			std::map< PassComponentTextureFlag, TextureConfiguration > textureRemaps;
 			float rescale{ 1.0f };
 			float pitch{ 0.0f };
 			float yaw{ 0.0f };
 			float roll{ 0.0f };
 			bool noOptimisations{ false };
 			float emissiveMult{ 1.0f };
-			std::map< TextureFlag, TextureConfiguration >::iterator textureRemapIt;
+			std::map< PassComponentTextureFlag, TextureConfiguration >::iterator textureRemapIt;
 		};
 
 		castor::LoggerInstance * logger{};

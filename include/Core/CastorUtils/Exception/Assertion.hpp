@@ -10,86 +10,11 @@ See LICENSE file in root folder
 
 #if CU_UseAssert
 
-#include "CastorUtils/Exception/Exception.hpp"
 #include "CastorUtils/Log/Logger.hpp"
 
 #	if defined( CU_Assert )
 #		undef CU_Assert
 #	endif
-
-#	if CU_ExceptAssert
-
-namespace castor
-{
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.8.0
-	\date		16/10/2015
-	\~english
-	\brief		Exception class thrown on Debug builds, when an assertion fails.
-	\~french
-	\brief		Classe d'exception levée en Debug, lorsqu'une assertion échoue.
-	*/
-	class AssertException
-		: public Debug::Backtraced
-		, public Exception
-	{
-	public:
-		/**
-		 *\~english
-		 *\brief		Specified constructor
-		 *\param[in]	description	The exception description
-		 *\param[in]	file		The file name
-		 *\param[in]	function	The function name
-		 *\param[in]	line		The line number
-		 *\~french
-		 *\brief		Constructeur spécifié
-		 *\param[in]	description	La description de l'exception
-		 *\param[in]	file		Le nom du fichier
-		 *\param[in]	function	Le nom de la fonction
-		 *\param[in]	line		Le numéro de ligne
-		 */
-		AssertException( std::string const & description
-			, char const * file
-			, char const * function
-			, uint32_t line )
-			: Debug::Backtraced{}
-			, Exception{ "Assertion failed: " + description + "\n" + m_callStack, file, function, line }
-		{
-		}
-	};
-	/**
-	 *\~english
-	 *\brief		Specified constructor
-	 *\param[in]	description	The exception description
-	 *\param[in]	file		The file name
-	 *\param[in]	function	The function name
-	 *\param[in]	line		The line number
-	 *\~french
-	 *\brief		Constructeur spécifié
-	 *\param[in]	description	La description de l'exception
-	 *\param[in]	file		Le nom du fichier
-	 *\param[in]	function	Le nom de la fonction
-	 *\param[in]	line		Le numéro de ligne
-	 */
-	inline void cuAssert( bool expr, char const * const description )
-	{
-		if ( !expr )
-		{
-			Logger::logError( std::stringstream() << "Assertion failed: " << description );
-			Logger::logError( std::stringstream() << Debug::Backtrace{} );
-			assert( false );
-		}
-	}
-}
-
-#		define CU_Assert( pred, text )
-	if ( !( pred ) )\
-	{\
-		throw castor::AssertException( ( text ), __FILE__, __FUNCTION__, uint32_t( __LINE__ ) );\
-	}
-
-#	else
 
 namespace castor
 {
@@ -116,9 +41,7 @@ namespace castor
 	}
 }
 
-#		define CU_Assert( pred, text ) castor::cuAssert( pred, text )
-
-#	endif
+#	define CU_Assert( pred, text ) castor::cuAssert( pred, text )
 
 //!\~english	Calls invariant checking function.
 //!\~french		Appelle la fonction de vérification des invariants de classe.

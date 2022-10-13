@@ -117,6 +117,15 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	The configuration for one texture flag.
+	*\~french
+	*\brief
+	*	La configuration pour un indicateur de texture.
+	*/
+	struct TextureFlagConfiguration;
+	/**
+	*\~english
+	*\brief
 	*	Specifies the transformations for a texture.
 	*\~french
 	*\brief
@@ -217,6 +226,8 @@ namespace castor3d
 	CU_DeclareVector( TextureUnitSPtr, TextureUnitPtr );
 	//! TextureUnit reference array
 	CU_DeclareVector( std::reference_wrapper< TextureUnit >, DepthMap );
+	// ARGB => 4 components => 4 channels per configuration.
+	using TextureFlagConfigurations = std::array< TextureFlagConfiguration, 4u >;
 
 	using TextureUnitDatas = std::vector< TextureUnitDataUPtr >;
 	using TextureUnitDataRefs = std::vector< TextureUnitDataRPtr >;

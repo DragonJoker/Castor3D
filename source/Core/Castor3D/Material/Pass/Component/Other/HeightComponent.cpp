@@ -104,7 +104,7 @@ namespace castor3d
 
 	void HeightComponent::ComponentsShader::blendComponents( shader::Materials const & materials
 		, sdw::Float const & passMultiplier
-		, shader::BlendComponents const & res
+		, shader::BlendComponents & res
 		, shader::BlendComponents const & src )const
 	{
 		if ( src.hasMember( "tangentSpaceViewPosition" ) )
@@ -128,7 +128,7 @@ namespace castor3d
 			, { castor::makeParameter< castor::ParameterType::eCheckedText >( parallaxOcclusionModes ) } );
 	}
 
-	bool HeightComponent::Plugin::isComponentNeeded( TextureFlags const & textures
+	bool HeightComponent::Plugin::isComponentNeeded( TextureFlagsArray const & textures
 		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eGeometry );
@@ -136,7 +136,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const HeightComponent::TypeName = C3D_MakePassComponentName( "height" );
+	castor::String const HeightComponent::TypeName = C3D_MakePassOtherComponentName( "height" );
 
 	HeightComponent::HeightComponent( Pass & pass )
 		: BaseDataPassComponentT< castor::AtomicGroupChangeTracked< ParallaxOcclusionMode > >{ pass, TypeName }

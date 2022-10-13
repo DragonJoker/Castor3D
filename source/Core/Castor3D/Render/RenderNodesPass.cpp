@@ -281,9 +281,10 @@ namespace castor3d
 		return doAdjustSceneFlags( flags );
 	}
 
-	TextureFlags RenderNodesPass::adjustFlags( TextureFlags texturesFlags )const
+	TextureFlagsArray RenderNodesPass::adjustFlags( TextureFlagsArray texturesFlags )const
 	{
-		return texturesFlags & getTexturesMask();
+		return getEngine()->getPassComponentsRegister().filterTextureFlags( getComponentsMask()
+			, texturesFlags );
 	}
 
 	VkCompareOp RenderNodesPass::adjustAlphaFunc( PassFlags passFlags
@@ -333,7 +334,7 @@ namespace castor3d
 			, topology
 			, 3u
 			, alphaFunc
-			, textures
+			, adjustFlags( textures )
 			, checkFlag( submeshFlags, SubmeshFlag::ePassMasks ) ? 0u : passLayerIndex
 			, morphTargets.getOffset() };
 
@@ -399,11 +400,6 @@ namespace castor3d
 			, meshletDescriptorLayout
 			, std::move( pipelineFlags )
 			, VK_CULL_MODE_FRONT_BIT );
-	}
-
-	TextureFlags RenderNodesPass::filterTexturesFlags( TextureFlagsArray const & textures )const
-	{
-		return adjustFlags( merge( textures ) );
 	}
 
 	ashes::PipelineColorBlendStateCreateInfo RenderNodesPass::createBlendState( BlendMode colourBlendMode
@@ -514,9 +510,9 @@ namespace castor3d
 		};
 	}
 
-	TextureFlags RenderNodesPass::getTexturesMask()const
+	ComponentModeFlags RenderNodesPass::getComponentsMask()const
 	{
-		return TextureFlags{ TextureFlag::eAll };
+		return ComponentModeFlags{ ComponentModeFlag::eAll };
 	}
 
 	bool RenderNodesPass::areValidPassFlags( PassFlags const & passFlags )const
@@ -725,9 +721,8 @@ namespace castor3d
 		flags.m_programFlags = adjustFlags( flags.m_programFlags );
 		flags.m_passFlags = adjustFlags( flags.m_passFlags );
 		flags.m_sceneFlags = adjustFlags( flags.m_sceneFlags );
-		flags.m_texturesFlags = adjustFlags( flags.m_texturesFlags );
 
-		if ( flags.m_texturesFlags.empty()
+		if ( areFlagsEmpty( flags.textures )
 			&& !flags.forceTexCoords() )
 		{
 			remFlag( flags.m_submeshFlags, SubmeshFlag::eTexcoords );
@@ -1090,7 +1085,7 @@ namespace castor3d
 		shader::Utils utils{ writer };
 		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
 			, flags
-			, ComponentModeFlag::eNone
+			, getComponentsMask()
 			, utils };
 
 		C3D_Matrix( writer
@@ -1298,6 +1293,7 @@ namespace castor3d
 				, sdw::TaskPayloadInT< shader::PayloadT >{ writer }
 				, sdw::MeshVertexListOutT< shader::FragmentSurfaceT >{ writer
 					, MaxMeshletVertexCount
+					, passShaders
 					, flags }
 				, sdw::TrianglesMeshPrimitiveListOutT< sdw::VoidT >{ writer
 					, MaxMeshletTriangleCount }
@@ -1317,6 +1313,7 @@ namespace castor3d
 				, sdw::TaskPayloadIn{ writer }
 				, sdw::MeshVertexListOutT< shader::FragmentSurfaceT >{ writer
 					, MaxMeshletVertexCount
+					, passShaders
 					, flags }
 				, sdw::TrianglesMeshPrimitiveListOutT< sdw::VoidT >{ writer
 					, MaxMeshletTriangleCount }
@@ -1342,7 +1339,7 @@ namespace castor3d
 		shader::Utils utils{ writer };
 		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
 			, flags
-			, ComponentModeFlag::eNone
+			, getComponentsMask()
 			, utils };
 
 		C3D_Matrix( writer
@@ -1370,6 +1367,7 @@ namespace castor3d
 		writer.implementMainT< shader::VertexSurfaceT, shader::FragmentSurfaceT >( sdw::VertexInT< shader::VertexSurfaceT >{ writer
 				, flags }
 			, sdw::VertexOutT< shader::FragmentSurfaceT >{ writer
+				, passShaders
 				, flags }
 			, [&]( VertexInT< shader::VertexSurfaceT > in
 				, VertexOutT< shader::FragmentSurfaceT > out )
@@ -1468,6 +1466,12 @@ namespace castor3d
 		VertexWriter writer;
 		bool enableTexcoords = flags.enableTexcoords();
 
+		shader::Utils utils{ writer };
+		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
+			, flags
+			, getComponentsMask()
+			, utils };
+
 		// Shader inputs
 		auto position = writer.declInput< Vec4 >( "position", 0u );
 		auto uv = writer.declInput< Vec2 >( "uv", 1u, enableTexcoords );
@@ -1496,6 +1500,7 @@ namespace castor3d
 
 		writer.implementMainT< VoidT, shader::FragmentSurfaceT >( sdw::VertexInT< sdw::VoidT >{ writer }
 			, sdw::VertexOutT< shader::FragmentSurfaceT >{ writer
+				, passShaders
 				, flags }
 			, [&]( VertexInT< VoidT > in
 				, VertexOutT< shader::FragmentSurfaceT > out )

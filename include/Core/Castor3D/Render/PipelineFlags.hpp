@@ -19,6 +19,7 @@ namespace castor3d
 		uint64_t hi;
 		uint64_t lo;
 		PassComponentsBitset components;
+		ComponentsTextures textures;
 	};
 
 	C3D_API bool operator<( PipelineBaseHash const & lhs
@@ -39,23 +40,24 @@ namespace castor3d
 			, PassFlags passFlags = PassFlag::eNone
 			, SubmeshFlags submeshFlags = SubmeshFlag::eNone
 			, ProgramFlags programFlags = ProgramFlag::eNone
-			, TextureFlags texturesFlags = TextureFlag::eNone
+			, TextureFlagsArray ptextures = TextureFlagsArray{}
 			, ShaderFlags shaderFlags = ShaderFlag::eNone
 			, VkCompareOp alphaFunc = VkCompareOp::VK_COMPARE_OP_ALWAYS
 			, uint32_t passLayerIndex = 0u )
 			: components{ std::move( pcomponents ) }
+			, textures{ makeComponentsTextures( ptextures ) }
 			, passType{ passType }
 			, alphaFunc{ alphaFunc }
 			, passLayerIndex{ passLayerIndex }
 			, m_passFlags{ passFlags }
 			, m_submeshFlags{ submeshFlags }
 			, m_programFlags{ programFlags }
-			, m_texturesFlags{ texturesFlags }
 			, m_shaderFlags{ shaderFlags }
 		{
 		}
 
 		PassComponentsBitset components;
+		ComponentsTextures textures;
 		PassTypeID passType;
 		VkCompareOp alphaFunc;
 		uint32_t passLayerIndex;
@@ -63,7 +65,6 @@ namespace castor3d
 		PassFlags m_passFlags;
 		SubmeshFlags m_submeshFlags;
 		ProgramFlags m_programFlags;
-		TextureFlags m_texturesFlags;
 		ShaderFlags m_shaderFlags;
 	};
 
@@ -125,7 +126,7 @@ namespace castor3d
 			, VkPrimitiveTopology ptopology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST
 			, uint32_t ppatchVertices = 3u
 			, VkCompareOp palphaFunc = VK_COMPARE_OP_ALWAYS
-			, TextureFlagsArray ptextures = {}
+			, TextureFlagsArray textures = {}
 			, uint32_t ppassLayerIndex = {}
 			, VkDeviceSize pmorphTargetsOffset = {} )
 			: PipelineFlags{ PipelineHiHashDetails{ std::move( pcomponents )
@@ -133,7 +134,7 @@ namespace castor3d
 					, ppassFlags
 					, psubmeshFlags
 					, pprogramFlags
-					, merge( ptextures )
+					, std::move( textures )
 					, pshaderFlags
 					, palphaFunc
 					, ppassLayerIndex }
@@ -153,7 +154,7 @@ namespace castor3d
 			, PassFlags passFlags
 			, SubmeshFlags submeshFlags
 			, ProgramFlags programFlags
-			, TextureFlags texturesFlags
+			, TextureFlagsArray textures
 			, ShaderFlags shaderFlags
 			, VkCompareOp alphaFunc
 			, uint32_t passLayerIndex = 0u )
@@ -162,7 +163,7 @@ namespace castor3d
 					, passFlags
 					, submeshFlags
 					, programFlags
-					, texturesFlags
+					, std::move( textures )
 					, shaderFlags
 					, alphaFunc
 					, passLayerIndex }
@@ -193,10 +194,9 @@ namespace castor3d
 		/**/
 		C3D_API bool enableTextures()const;
 		C3D_API bool enableVertexID()const;
-		C3D_API bool enableOpacity()const;
 		C3D_API bool enableInstantiation()const;
-		C3D_API bool enableParallaxOcclusionMapping()const;
-		C3D_API bool enableParallaxOcclusionMappingOne()const;
+		C3D_API bool enableParallaxOcclusionMapping( PassComponentRegister const & passComponents )const;
+		C3D_API bool enableParallaxOcclusionMappingOne( PassComponentRegister const & passComponents )const;
 		C3D_API bool enableVelocity()const;
 
 		C3D_API bool hasFog()const;
@@ -226,6 +226,11 @@ namespace castor3d
 		bool usesColour()const
 		{
 			return checkFlag( m_shaderFlags, ShaderFlag::eColour );
+		}
+
+		bool usesOpacity()const
+		{
+			return checkFlag( m_shaderFlags, ShaderFlag::eOpacity );
 		}
 
 		bool forceTexCoords()const
@@ -337,73 +342,17 @@ namespace castor3d
 		{
 			return checkFlag( m_passFlags, PassFlag::eUntile );
 		}
+
+		bool hasOpacity()const
+		{
+			return ( checkFlag( m_passFlags, PassFlag::eAlphaBlending )
+				|| ( checkFlag( m_passFlags, PassFlag::eAlphaTest ) && ( alphaFunc != VK_COMPARE_OP_ALWAYS ) ) );
+		}
 		//@}
-		/**@name TextureFlags */
+		/**@name Textures */
 		//@{
-		bool hasMap( TextureFlag flag )const
-		{
-			return checkFlag( m_texturesFlags, flag );
-		}
-
-		bool hasColourMap()const
-		{
-			return hasMap( TextureFlag::eColour );
-		}
-
-		bool hasOpacityMap()const
-		{
-			return hasMap( TextureFlag::eOpacity );
-		}
-
-		bool hasEmissiveMap()const
-		{
-			return hasMap( TextureFlag::eEmissive );
-		}
-
-		bool hasSpecularMap()const
-		{
-			return hasMap( TextureFlag::eSpecular );
-		}
-
-		bool hasMetalnessMap()const
-		{
-			return hasMap( TextureFlag::eMetalness );
-		}
-
-		bool hasRoughnessMap()const
-		{
-			return hasMap( TextureFlag::eRoughness );
-		}
-
-		bool hasGlossinessMap()const
-		{
-			return hasMap( TextureFlag::eGlossiness );
-		}
-
-		bool hasNormalMap()const
-		{
-			return hasMap( TextureFlag::eNormal );
-		}
-
-		bool hasHeightMap()const
-		{
-			return hasMap( TextureFlag::eHeight );
-		}
-
-		bool hasOcclusionMap()const
-		{
-			return hasMap( TextureFlag::eOcclusion );
-		}
-
-		bool hasTransmittanceMap()const
-		{
-			return hasMap( TextureFlag::eTransmittance );
-		}
-
-		bool hasGeometryMaps()const
-		{
-			return hasAny( m_texturesFlags, TextureFlag::eGeometry );
-		}
+		C3D_API bool hasMap( PassComponentTextureFlag flag )const;
+		C3D_API TextureFlagsArray makeTexturesFlags()const;
 		//@}
 
 	public:

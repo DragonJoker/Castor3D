@@ -326,9 +326,15 @@ namespace water
 		return { &result, &blitDepthPass };
 	}
 
-	castor3d::TextureFlags WaterRenderPass::getTexturesMask()const
+	castor3d::ComponentModeFlags WaterRenderPass::getComponentsMask()const
 	{
-		return castor3d::TextureFlags{ castor3d::TextureFlag::eAll };
+		return castor3d::ComponentModeFlag::eOpacity
+			| castor3d::ComponentModeFlag::eColour
+			| castor3d::ComponentModeFlag::eGeometry
+			| castor3d::ComponentModeFlag::eOcclusion
+			| castor3d::ComponentModeFlag::eDiffuseLighting
+			| castor3d::ComponentModeFlag::eSpecularLighting
+			| castor3d::ComponentModeFlag::eSpecifics;
 	}
 
 	castor3d::ShaderFlags WaterRenderPass::getShaderFlags()const
@@ -553,13 +559,7 @@ namespace water
 		shader::Fog fog{ writer };
 		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
 			, flags
-			, ( ComponentModeFlag::eOpacity
-				| ComponentModeFlag::eColour
-				| ComponentModeFlag::eGeometry
-				| ComponentModeFlag::eOcclusion
-				| ComponentModeFlag::eDiffuseLighting
-				| ComponentModeFlag::eSpecularLighting
-				| ComponentModeFlag::eSpecifics )
+			, getComponentsMask()
 			, utils };
 
 		C3D_Matrix( writer
@@ -642,6 +642,7 @@ namespace water
 		auto pxl_colour( writer.declOutput< Vec4 >( "pxl_colour", 0 ) );
 
 		writer.implementMainT< castor3d::shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< castor3d::shader::FragmentSurfaceT >{ writer
+				, passShaders
 				, flags }
 			, FragmentOut{ writer }
 			, [&]( FragmentInT< castor3d::shader::FragmentSurfaceT > in

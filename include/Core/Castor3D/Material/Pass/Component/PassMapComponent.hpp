@@ -49,9 +49,15 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		C3D_API virtual TextureFlags getTextureFlags()const
+		C3D_API virtual PassComponentTextureFlag getTextureFlags()const
 		{
-			return TextureFlag::eNone;
+			return 0u;
+		}
+
+		void fillChannel( TextureConfiguration & configuration
+			, uint32_t mask )const
+		{
+			getPlugin().fillTextureConfiguration( configuration, mask );
 		}
 		/**@}*/
 	};

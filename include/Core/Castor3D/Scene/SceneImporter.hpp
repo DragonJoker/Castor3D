@@ -46,7 +46,7 @@ namespace castor3d
 		C3D_API bool import( Scene & scene
 			, ImporterFile * file
 			, Parameters const & parameters
-			, std::map< TextureFlag, TextureConfiguration > const & textureRemaps );
+			, std::map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps );
 		/**
 		 *\~english
 		 *\brief		Scene import Function.
@@ -66,7 +66,7 @@ namespace castor3d
 		C3D_API bool import( Scene & scene
 			, castor::Path const & pathFile
 			, Parameters const & parameters
-			, std::map< TextureFlag, TextureConfiguration > const & textureRemaps );
+			, std::map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps );
 		/**
 		 *\~english
 		 *\brief		Scene animations import Function.
@@ -105,7 +105,7 @@ namespace castor3d
 	private:
 		void doImportMaterials( Scene & scene
 			, Parameters const & parameters
-			, std::map< TextureFlag, TextureConfiguration > const & textureRemaps );
+			, std::map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps );
 		std::map< castor::String, SkeletonRPtr > doImportSkeletons( Scene & scene );
 		std::map< castor::String, MeshResPtr > doImportMeshes( Scene & scene
 			, std::map< castor::String, SkeletonRPtr > const & skeletons );

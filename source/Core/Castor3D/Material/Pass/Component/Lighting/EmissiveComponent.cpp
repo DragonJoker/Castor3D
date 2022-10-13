@@ -95,7 +95,7 @@ namespace castor3d
 
 	void EmissiveComponent::ComponentsShader::blendComponents( shader::Materials const & materials
 		, sdw::Float const & passMultiplier
-		, shader::BlendComponents const & res
+		, shader::BlendComponents & res
 		, shader::BlendComponents const & src )const
 	{
 		res.getMember< sdw::Vec3 >( "emissive", true ) += src.getMember< sdw::Vec3 >( "emissive", true ) * passMultiplier;
@@ -138,7 +138,7 @@ namespace castor3d
 		data.write( materialShader.getMaterialChunk(), 0.0f, 0u );
 	}
 
-	bool EmissiveComponent::Plugin::isComponentNeeded( TextureFlags const & textures
+	bool EmissiveComponent::Plugin::isComponentNeeded( TextureFlagsArray const & textures
 		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eDiffuseLighting );
@@ -146,7 +146,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const EmissiveComponent::TypeName = C3D_MakePassComponentName( "emissive" );
+	castor::String const EmissiveComponent::TypeName = C3D_MakePassLightingComponentName( "emissive" );
 
 	EmissiveComponent::EmissiveComponent( Pass & pass
 		, float defaultValue )

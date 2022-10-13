@@ -45,15 +45,15 @@ namespace castor3d
 		}
 
 		sdw::Float TextureConfigData::getFloat( sdw::Vec4 const & sampled
-			, sdw::Float const & mask )const
+			, sdw::UInt const & mask )const
 		{
-			return sampled[m_writer->cast< sdw::UInt >( mask )];
+			return sampled[mask];
 		}
 
 		sdw::Vec3 TextureConfigData::getVec3( sdw::Vec4 const & sampled
-			, sdw::Float const & mask )const
+			, sdw::UInt const & mask )const
 		{
-			return m_writer->ternary( mask == 0.0_f
+			return m_writer->ternary( mask == 0_u
 				, sampled.rgb()
 				, sampled.gba() );
 		}
@@ -101,7 +101,7 @@ namespace castor3d
 		}
 
 		void TextureConfigurations::computeMapsContributions( PassShaders const & passShaders
-			, TextureFlags const & texturesFlags
+			, TextureFlagsArray const & texturesFlags
 			, TextureAnimations const & textureAnims
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 			, Material const & material

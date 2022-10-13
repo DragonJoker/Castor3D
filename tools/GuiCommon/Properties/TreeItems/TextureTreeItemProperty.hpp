@@ -27,7 +27,7 @@ namespace GuiCommon
 		{
 			wxPGProperty * isMap;
 			wxPGProperty * components;
-			castor::Point2ui & mask;
+			castor3d::TextureFlagConfiguration & configuration;
 		};
 
 	public:
@@ -65,7 +65,7 @@ namespace GuiCommon
 
 	private:
 		void onChange( wxVariant const & var
-			, castor3d::TextureFlag flag
+			, castor3d::PassComponentTextureFlag flag
 			, uint32_t componentsCount );
 		void onImageChange( wxVariant const & var );
 
@@ -73,7 +73,7 @@ namespace GuiCommon
 		castor3d::Pass & m_pass;
 		castor3d::TextureUnitWPtr m_texture;
 		castor3d::TextureConfiguration m_configuration;
-		std::map< castor3d::TextureFlag, PropertyPair > m_properties;
+		std::map< castor3d::PassComponentTextureFlag, PropertyPair > m_properties;
 		castor::Path m_path;
 	};
 }

@@ -138,7 +138,7 @@ namespace castor3d
 
 	void RoughnessComponent::ComponentsShader::blendComponents( shader::Materials const & materials
 		, sdw::Float const & passMultiplier
-		, shader::BlendComponents const & res
+		, shader::BlendComponents & res
 		, shader::BlendComponents const & src )const
 	{
 		if ( src.hasMember( "roughness" ) )
@@ -213,7 +213,7 @@ namespace castor3d
 		data.write( materialShader.getMaterialChunk(), 1.0f, 0u );
 	}
 
-	bool RoughnessComponent::Plugin::isComponentNeeded( TextureFlags const & textures
+	bool RoughnessComponent::Plugin::isComponentNeeded( TextureFlagsArray const & textures
 		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eDiffuseLighting )
@@ -222,7 +222,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const RoughnessComponent::TypeName = C3D_MakePassComponentName( "roughness" );
+	castor::String const RoughnessComponent::TypeName = C3D_MakePassLightingComponentName( "roughness" );
 
 	RoughnessComponent::RoughnessComponent( Pass & pass
 		, float defaultValue )

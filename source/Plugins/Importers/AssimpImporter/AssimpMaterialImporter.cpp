@@ -68,6 +68,18 @@ namespace c3d_assimp
 {
 	//*********************************************************************************************
 
+	static auto constexpr TextureType_BASE_COLOR = aiTextureType( 12 );
+	static auto constexpr TextureType_NORMAL_CAMERA = aiTextureType( 13 );
+	static auto constexpr TextureType_EMISSION_COLOR = aiTextureType( 14 );
+	static auto constexpr TextureType_METALNESS = aiTextureType( 15 );
+	static auto constexpr TextureType_DIFFUSE_ROUGHNESS = aiTextureType( 16 );
+	static auto constexpr TextureType_AMBIENT_OCCLUSION = aiTextureType( 17 );
+	static auto constexpr TextureType_SHEEN = aiTextureType( 19 );
+	static auto constexpr TextureType_CLEARCOAT = aiTextureType( 20 );
+	static auto constexpr TextureType_TRANSMISSION = aiTextureType( 21 );
+
+	//*********************************************************************************************
+
 	namespace materials
 	{
 		static constexpr aiShadingMode ShadingMode_PBR_BRDF = aiShadingMode( 0xb );
@@ -78,8 +90,7 @@ namespace c3d_assimp
 				, castor::PixelComponent::eAlpha );
 			auto data = alphaChannel->getConstPtr();
 			auto end = data + alphaChannel->getSize();
-			return !std::all_of( data, end, []( uint8_t byte ){ return byte == 0x00; } )
-				&& !std::all_of( data, end, []( uint8_t byte ) { return byte == 0xFF; } );
+			return std::any_of( data, end, []( uint8_t byte ){ return byte != 0x00 && byte != 0xFF; } );
 		}
 
 		static castor::String decodeUri( castor::String uri )
@@ -126,7 +137,7 @@ namespace c3d_assimp
 				, castor3d::SamplerRes sampler
 				, AssimpMaterialImporter const & importer
 				, float emissiveMult
-				, std::map< castor3d::TextureFlag, castor3d::TextureConfiguration > const & textureRemaps
+				, std::map< castor3d::PassComponentTextureFlag, castor3d::TextureConfiguration > const & textureRemaps
 				, castor3d::Pass & result )
 				: m_material{ material }
 				, m_scene{ scene }
@@ -136,6 +147,39 @@ namespace c3d_assimp
 				, m_textureRemaps{ textureRemaps }
 				, m_isPbr{ detectPbr() }
 				, m_result{ result }
+				, m_colourMapPlugin{ m_result.getComponentPlugin< castor3d::ColourMapComponent >() }
+				, m_emissiveMapPlugin{ m_result.getComponentPlugin< castor3d::EmissiveMapComponent >() }
+				, m_glossinessMapPlugin{ m_result.getComponentPlugin< castor3d::GlossinessMapComponent >() }
+				, m_heightMapPlugin{ m_result.getComponentPlugin< castor3d::HeightMapComponent >() }
+				, m_metalnessMapPlugin{ m_result.getComponentPlugin< castor3d::MetalnessMapComponent >() }
+				, m_normalMapPlugin{ m_result.getComponentPlugin< castor3d::NormalMapComponent >() }
+				, m_occlusionMapPlugin{ m_result.getComponentPlugin< castor3d::OcclusionMapComponent >() }
+				, m_opacityMapPlugin{ m_result.getComponentPlugin< castor3d::OpacityMapComponent >() }
+				, m_roughnessMapPlugin{ m_result.getComponentPlugin< castor3d::RoughnessMapComponent >() }
+				, m_specularMapPlugin{ m_result.getComponentPlugin< castor3d::SpecularMapComponent >() }
+				, m_transmittanceMapPlugin{ m_result.getComponentPlugin< castor3d::TransmittanceMapComponent >() }
+				, m_colourMapFlags{ m_colourMapPlugin.getTextureFlags() }
+				, m_emissiveMapFlags{ m_emissiveMapPlugin.getTextureFlags() }
+				, m_glossinessMapFlags{ m_glossinessMapPlugin.getTextureFlags() }
+				, m_heightMapFlags{ m_heightMapPlugin.getTextureFlags() }
+				, m_metalnessMapFlags{ m_metalnessMapPlugin.getTextureFlags() }
+				, m_normalMapFlags{ m_normalMapPlugin.getTextureFlags() }
+				, m_occlusionMapFlags{ m_occlusionMapPlugin.getTextureFlags() }
+				, m_opacityMapFlags{ m_opacityMapPlugin.getTextureFlags() }
+				, m_roughnessMapFlags{ m_roughnessMapPlugin.getTextureFlags() }
+				, m_specularMapFlags{ m_specularMapPlugin.getTextureFlags() }
+				, m_transmittanceMapFlags{ m_transmittanceMapPlugin.getTextureFlags() }
+				, m_colourBaseConfiguration{ m_colourMapPlugin.getBaseTextureConfiguration() }
+				, m_emissiveBaseConfiguration{ m_emissiveMapPlugin.getBaseTextureConfiguration() }
+				, m_glossinessBaseConfiguration{ m_glossinessMapPlugin.getBaseTextureConfiguration() }
+				, m_heightBaseConfiguration{ m_heightMapPlugin.getBaseTextureConfiguration() }
+				, m_metalnessBaseConfiguration{ m_metalnessMapPlugin.getBaseTextureConfiguration() }
+				, m_normalBaseConfiguration{ m_normalMapPlugin.getBaseTextureConfiguration() }
+				, m_occlusionBaseConfiguration{ m_occlusionMapPlugin.getBaseTextureConfiguration() }
+				, m_opacityBaseConfiguration{ m_opacityMapPlugin.getBaseTextureConfiguration() }
+				, m_roughnessBaseConfiguration{ m_roughnessMapPlugin.getBaseTextureConfiguration() }
+				, m_specularBaseConfiguration{ m_specularMapPlugin.getBaseTextureConfiguration() }
+				, m_transmittanceBaseConfiguration{ m_transmittanceMapPlugin.getBaseTextureConfiguration() }
 			{
 				if ( m_shadingModel == aiShadingMode_Toon )
 				{
@@ -153,7 +197,7 @@ namespace c3d_assimp
 				, castor3d::SamplerRes sampler
 				, AssimpMaterialImporter const & importer
 				, float emissiveMult
-				, std::map< castor3d::TextureFlag, castor3d::TextureConfiguration > const & textureRemaps
+				, std::map< castor3d::PassComponentTextureFlag, castor3d::TextureConfiguration > const & textureRemaps
 				, castor3d::Pass & pass )
 			{
 				MaterialParser parser{ material, scene, sampler, importer, emissiveMult, textureRemaps, pass };
@@ -232,43 +276,35 @@ namespace c3d_assimp
 				finishSpecular( spcInfo, occInfo, mtlInfo, glsInfo, rghInfo );
 				auto hasOpacityTex = finishOpacity( opaInfo );
 
-				loadTexture( colInfo, getRemap( castor3d::TextureFlag::eColour
-					, castor3d::TextureConfiguration::AlbedoTexture )
+				loadTexture( colInfo, getRemap( m_colourMapFlags, m_colourBaseConfiguration )
 					, hasOpacityTex );
-				loadTexture( emiInfo, getRemap( castor3d::TextureFlag::eEmissive
-					, castor3d::TextureConfiguration::EmissiveTexture )
+				loadTexture( emiInfo, getRemap( m_emissiveMapFlags, m_emissiveBaseConfiguration )
 					, hasOpacityTex );
-				loadTexture( spcInfo, getRemap( castor3d::TextureFlag::eSpecular
-					, castor3d::TextureConfiguration::SpecularTexture )
+				loadTexture( spcInfo, getRemap( m_specularMapFlags, m_specularBaseConfiguration )
 					, hasOpacityTex );
-				loadTexture( mtlInfo, getRemap( castor3d::TextureFlag::eMetalness
-					, castor3d::TextureConfiguration::MetalnessTexture )
+				loadTexture( mtlInfo, getRemap( m_metalnessMapFlags, m_metalnessBaseConfiguration )
 					, hasOpacityTex );
-				loadTexture( rghInfo, getRemap( castor3d::TextureFlag::eRoughness
-					, castor3d::TextureConfiguration::RoughnessTexture )
+				loadTexture( rghInfo, getRemap( m_roughnessMapFlags, m_roughnessBaseConfiguration )
 					, hasOpacityTex );
-				loadTexture( glsInfo, getRemap( castor3d::TextureFlag::eGlossiness
-					, castor3d::TextureConfiguration::ShininessTexture )
+				loadTexture( glsInfo, getRemap( m_glossinessMapFlags, m_glossinessBaseConfiguration )
 					, hasOpacityTex );
-				loadTexture( occInfo, getRemap( castor3d::TextureFlag::eOcclusion
-					, castor3d::TextureConfiguration::OcclusionTexture )
+				loadTexture( occInfo, getRemap( m_occlusionMapFlags, m_occlusionBaseConfiguration )
 					, hasOpacityTex );
 
 				if ( !nmlInfo.name.empty() )
 				{
-					loadTexture( nmlInfo, getRemap( castor3d::TextureFlag::eNormal
-						, castor3d::TextureConfiguration::NormalTexture )
+					loadTexture( nmlInfo, getRemap( m_normalMapFlags, m_normalBaseConfiguration )
 						, hasOpacityTex );
-					loadTexture( hgtInfo, getRemap( castor3d::TextureFlag::eHeight
-						, castor3d::TextureConfiguration::HeightTexture )
+					loadTexture( hgtInfo, getRemap( m_heightMapFlags, m_heightBaseConfiguration )
 						, hasOpacityTex );
 				}
 				else
 				{
-					auto texConfig = castor3d::TextureConfiguration::NormalTexture;
+					auto texConfig = m_normalBaseConfiguration;
 					convertToNormalMap( hgtInfo, texConfig );
 					loadTexture( hgtInfo
-						, getRemap( castor3d::TextureFlag::eNormal, texConfig )
+						, getRemap( m_normalMapFlags
+							, texConfig )
 						, hasOpacityTex );
 				}
 			}
@@ -502,7 +538,7 @@ namespace c3d_assimp
 				}
 			}
 
-			castor3d::TextureConfiguration getRemap( castor3d::TextureFlag flag
+			castor3d::TextureConfiguration getRemap( castor3d::PassComponentTextureFlag flag
 				, castor3d::TextureConfiguration texConfig )
 			{
 				auto it = m_textureRemaps.find( flag );
@@ -603,23 +639,24 @@ namespace c3d_assimp
 								, VK_SAMPLE_COUNT_1_BIT
 								, VK_IMAGE_TILING_OPTIMAL
 								, VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT };
+							auto texFlags = getFlags( texConfig );
 
-							if ( texConfig.opacityMask[0] && getFlags( texConfig ) == castor3d::TextureFlag::eOpacity )
+							if ( getComponentsMask( texConfig, m_opacityMapFlags )
+								&& castor3d::checkFlags( texFlags, m_opacityMapFlags ) != texFlags.end() )
 							{
 								mixedInterpolative( true );
 
 								if ( !hasAlphaChannel( image ) )
 								{
-									texConfig.opacityMask[0] = 0x00FF0000;
+									addFlagConfiguration( texConfig, { m_opacityMapFlags, 0x00FF0000 } );
 								}
 							}
 							else if ( !hasOpacity
-								&& ( texConfig == castor3d::TextureConfiguration::AlbedoTexture
-									|| texConfig == castor3d::TextureConfiguration::DiffuseTexture )
+								&& texConfig == m_colourBaseConfiguration
 								&& hasAlphaChannel( image ) )
 							{
 								mixedInterpolative( true );
-								texConfig.opacityMask[0] = 0xFF000000;
+								addFlagConfiguration( texConfig, { m_opacityMapFlags, 0xFF000000 } );
 							}
 
 							m_result.registerTexture( std::move( *sourceInfo )
@@ -635,16 +672,6 @@ namespace c3d_assimp
 					}
 				}
 			}
-
-			static auto constexpr TextureType_BASE_COLOR = aiTextureType( 12 );
-			static auto constexpr TextureType_NORMAL_CAMERA = aiTextureType( 13 );
-			static auto constexpr TextureType_EMISSION_COLOR = aiTextureType( 14 );
-			static auto constexpr TextureType_METALNESS = aiTextureType( 15 );
-			static auto constexpr TextureType_DIFFUSE_ROUGHNESS = aiTextureType( 16 );
-			static auto constexpr TextureType_AMBIENT_OCCLUSION = aiTextureType( 17 );
-			static auto constexpr TextureType_SHEEN = aiTextureType( 19 );
-			static auto constexpr TextureType_CLEARCOAT = aiTextureType( 20 );
-			static auto constexpr TextureType_TRANSMISSION = aiTextureType( 21 );
 
 			TextureInfo getTextureInfo( aiTextureType type )
 			{
@@ -826,24 +853,23 @@ namespace c3d_assimp
 
 					if ( !spcInfo.name.empty() )
 					{
-						auto spcConfig{ getRemap( castor3d::TextureFlag::eSpecular
-							, castor3d::TextureConfiguration{} ) };
+						auto spcConfig{ getRemap( m_specularMapFlags, castor3d::TextureConfiguration{} ) };
 
-						if ( !spcConfig.metalnessMask[0] )
+						if ( !getComponentsMask( spcConfig, m_metalnessMapFlags ) )
 						{
-							spcConfig.metalnessMask[0] = 0x000000FF;
+							addFlagConfiguration( spcConfig, { m_metalnessMapFlags, 0x000000FF } );
 						}
 
-						if ( !spcConfig.roughnessMask[0] )
+						if ( !getComponentsMask( spcConfig, m_roughnessMapFlags ) )
 						{
-							spcConfig.roughnessMask[0] = 0x0000FF00;
+							addFlagConfiguration( spcConfig, { m_roughnessMapFlags, 0x0000FF00 } );
 						}
 
 						if ( spcInfo.name == occInfo.name )
 						{
-							if ( !spcConfig.occlusionMask[0] )
+							if ( !getComponentsMask( spcConfig, m_occlusionMapFlags ) )
 							{
-								spcConfig.occlusionMask[0] = 0x00FF0000;
+								addFlagConfiguration( spcConfig, { m_occlusionMapFlags, 0x00FF0000 } );
 							}
 
 							occInfo.name.clear();
@@ -864,7 +890,7 @@ namespace c3d_assimp
 							rghInfo.name.clear();
 						}
 
-						m_textureRemaps.emplace( castor3d::TextureFlag::eSpecular, spcConfig );
+						m_textureRemaps.emplace( m_specularMapFlags, spcConfig );
 					}
 				}
 			}
@@ -876,8 +902,7 @@ namespace c3d_assimp
 
 				if ( hasOpacityTex )
 				{
-					loadTexture( opaInfo, getRemap( castor3d::TextureFlag::eOpacity
-						, castor3d::TextureConfiguration::OpacityTexture )
+					loadTexture( opaInfo, getRemap( m_opacityMapFlags, m_opacityBaseConfiguration )
 						, hasOpacityTex );
 				}
 				else
@@ -890,10 +915,9 @@ namespace c3d_assimp
 
 						if ( mode != "OPAQUE" )
 						{
-							auto config = getRemap( castor3d::TextureFlag::eColour
-								, castor3d::TextureConfiguration::ColourTexture );
-							config.opacityMask[0] = 0xFF000000;
-							m_textureRemaps.emplace( castor3d::TextureFlag::eColour, config );
+							auto config = getRemap( m_colourMapFlags, m_colourBaseConfiguration );
+							addFlagConfiguration( config, { m_opacityMapFlags, 0xFF000000 } );
+							m_textureRemaps.emplace( m_colourMapFlags, config );
 							hasOpacityTex = true;
 							mixedInterpolative( mode == "BLEND" );
 						}
@@ -965,10 +989,43 @@ namespace c3d_assimp
 			castor3d::SamplerRes m_sampler;
 			AssimpMaterialImporter const & m_importer;
 			float m_emissiveMult;
-			std::map< castor3d::TextureFlag, castor3d::TextureConfiguration > m_textureRemaps;
+			std::map< castor3d::PassComponentTextureFlag, castor3d::TextureConfiguration > m_textureRemaps;
 			aiShadingMode m_shadingModel{};
 			bool m_isPbr;
 			castor3d::Pass & m_result;
+			castor3d::PassComponentPlugin const & m_colourMapPlugin;
+			castor3d::PassComponentPlugin const & m_emissiveMapPlugin;
+			castor3d::PassComponentPlugin const & m_glossinessMapPlugin;
+			castor3d::PassComponentPlugin const & m_heightMapPlugin;
+			castor3d::PassComponentPlugin const & m_metalnessMapPlugin;
+			castor3d::PassComponentPlugin const & m_normalMapPlugin;
+			castor3d::PassComponentPlugin const & m_occlusionMapPlugin;
+			castor3d::PassComponentPlugin const & m_opacityMapPlugin;
+			castor3d::PassComponentPlugin const & m_roughnessMapPlugin;
+			castor3d::PassComponentPlugin const & m_specularMapPlugin;
+			castor3d::PassComponentPlugin const & m_transmittanceMapPlugin;
+			castor3d::PassComponentTextureFlag m_colourMapFlags;
+			castor3d::PassComponentTextureFlag m_emissiveMapFlags;
+			castor3d::PassComponentTextureFlag m_glossinessMapFlags;
+			castor3d::PassComponentTextureFlag m_heightMapFlags;
+			castor3d::PassComponentTextureFlag m_metalnessMapFlags;
+			castor3d::PassComponentTextureFlag m_normalMapFlags;
+			castor3d::PassComponentTextureFlag m_occlusionMapFlags;
+			castor3d::PassComponentTextureFlag m_opacityMapFlags;
+			castor3d::PassComponentTextureFlag m_roughnessMapFlags;
+			castor3d::PassComponentTextureFlag m_specularMapFlags;
+			castor3d::PassComponentTextureFlag m_transmittanceMapFlags;
+			castor3d::TextureConfiguration m_colourBaseConfiguration;
+			castor3d::TextureConfiguration m_emissiveBaseConfiguration;
+			castor3d::TextureConfiguration m_glossinessBaseConfiguration;
+			castor3d::TextureConfiguration m_heightBaseConfiguration;
+			castor3d::TextureConfiguration m_metalnessBaseConfiguration;
+			castor3d::TextureConfiguration m_normalBaseConfiguration;
+			castor3d::TextureConfiguration m_occlusionBaseConfiguration;
+			castor3d::TextureConfiguration m_opacityBaseConfiguration;
+			castor3d::TextureConfiguration m_roughnessBaseConfiguration;
+			castor3d::TextureConfiguration m_specularBaseConfiguration;
+			castor3d::TextureConfiguration m_transmittanceBaseConfiguration;
 		};
 	}
 

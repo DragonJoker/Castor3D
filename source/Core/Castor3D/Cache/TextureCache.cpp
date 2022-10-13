@@ -21,24 +21,6 @@ namespace castor3d
 
 	namespace cachetex
 	{
-		static void mergeMasks( uint32_t lhs
-			, uint32_t & rhs )
-		{
-			rhs |= lhs;
-		}
-
-		static void mergeFactors( float lhs
-			, float & rhs
-			, float ref )
-		{
-			if ( lhs != rhs )
-			{
-				rhs = ( lhs == ref
-					? rhs
-					: lhs );
-			}
-		}
-
 		static castor::PxBufferBaseUPtr mergeBuffers( castor::PxBufferBaseUPtr lhsBuffer
 			, uint32_t const & lhsSrcMask
 			, uint32_t const & lhsDstMask
@@ -308,7 +290,12 @@ namespace castor3d
 		{
 			auto result = TextureSourceInfoHasher{}( sourceInfo );
 			auto flags = getFlags( config.config );
-			castor::hashCombine( result, uint16_t( flags ) );
+
+			for ( auto flag : flags )
+			{
+				castor::hashCombine( result, flag );
+			}
+
 			return result;
 		}
 
@@ -380,32 +367,6 @@ namespace castor3d
 	}
 
 	//*********************************************************************************************
-
-	void mergeConfigs( TextureConfiguration const & lhs
-		, TextureConfiguration & rhs )
-	{
-		cachetex::mergeMasks( lhs.colourMask[0], rhs.colourMask[0] );
-		cachetex::mergeMasks( lhs.specularMask[0], rhs.specularMask[0] );
-		cachetex::mergeMasks( lhs.metalnessMask[0], rhs.metalnessMask[0] );
-		cachetex::mergeMasks( lhs.glossinessMask[0], rhs.glossinessMask[0] );
-		cachetex::mergeMasks( lhs.roughnessMask[0], rhs.roughnessMask[0] );
-		cachetex::mergeMasks( lhs.opacityMask[0], rhs.opacityMask[0] );
-		cachetex::mergeMasks( lhs.emissiveMask[0], rhs.emissiveMask[0] );
-		cachetex::mergeMasks( lhs.normalMask[0], rhs.normalMask[0] );
-		cachetex::mergeMasks( lhs.heightMask[0], rhs.heightMask[0] );
-		cachetex::mergeMasks( lhs.occlusionMask[0], rhs.occlusionMask[0] );
-		cachetex::mergeMasks( lhs.transmittanceMask[0], rhs.transmittanceMask[0] );
-		mergeConfigsBase( lhs, rhs );
-	}
-
-	void mergeConfigsBase( TextureConfiguration const & lhs
-		, TextureConfiguration & rhs )
-	{
-		cachetex::mergeMasks( lhs.needsYInversion, rhs.needsYInversion );
-		cachetex::mergeFactors( lhs.heightFactor, rhs.heightFactor, 0.1f );
-		cachetex::mergeFactors( lhs.normalFactor, rhs.normalFactor, 1.0f );
-		cachetex::mergeFactors( lhs.normalGMultiplier, rhs.normalGMultiplier, 1.0f );
-	}
 
 	castor::PixelFormat getSRGBFormat( castor::PixelFormat format )
 	{
@@ -814,7 +775,7 @@ namespace castor3d
 		data.layout = cachetex::getTextureLayout( *getEngine()
 			, std::move( data.data->buffer )
 			, name
-			, data.data->sourceInfo.allowCompression() && ( data.data->passConfig.config.normalMask[0] == 0 )
+			, data.data->sourceInfo.allowCompression() && !checkFlag( data.data->passConfig.config.textureSpace, TextureSpace::eTangentSpace )
 			, data.data->sourceInfo.layersToTiles()
 			, data.tiles
 			, data.interrupted );

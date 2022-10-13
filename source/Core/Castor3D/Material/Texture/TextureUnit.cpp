@@ -251,7 +251,7 @@ namespace castor3d
 		return m_name;
 	}
 
-	TextureFlags TextureUnit::getFlags()const
+	TextureFlagsArray TextureUnit::getFlags()const
 	{
 		return castor3d::getFlags( m_configuration );
 	}

@@ -116,7 +116,7 @@ namespace castor3d
 
 	void ColourComponent::ComponentsShader::blendComponents( shader::Materials const & materials
 		, sdw::Float const & passMultiplier
-		, shader::BlendComponents const & res
+		, shader::BlendComponents & res
 		, shader::BlendComponents const & src )const
 	{
 		res.getMember< sdw::Vec3 >( "colour", true ) += src.getMember< sdw::Vec3 >( "colour", true ) * passMultiplier;
@@ -201,7 +201,7 @@ namespace castor3d
 			, 0u );
 	}
 
-	bool ColourComponent::Plugin::isComponentNeeded( TextureFlags const & textures
+	bool ColourComponent::Plugin::isComponentNeeded( TextureFlagsArray const & textures
 		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eColour );
@@ -209,7 +209,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const ColourComponent::TypeName = C3D_MakePassComponentName( "colour" );
+	castor::String const ColourComponent::TypeName = C3D_MakePassOtherComponentName( "colour" );
 
 	ColourComponent::ColourComponent( Pass & pass
 		, castor::HdrRgbColour defaultValue )
