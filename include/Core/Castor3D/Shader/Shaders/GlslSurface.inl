@@ -201,6 +201,7 @@ namespace castor3d::shader
 
 	template< typename TexcoordT, ast::var::Flag FlagT >
 	ast::type::IOStructPtr RasterizerSurfaceT< TexcoordT, FlagT >::makeIOType( ast::type::TypesCache & cache
+		, PassShaders const & shaders
 		, PipelineFlags const & flags )
 	{
 		auto result = cache.getIOStruct( ast::type::MemoryLayout::eC
@@ -213,7 +214,7 @@ namespace castor3d::shader
 		{
 			auto texType = TexcoordT::makeType( cache );
 			uint32_t index = 0u;
-			RasterizerSurfaceBase::fillIOType( *result, flags, index );
+			RasterizerSurfaceBase::fillIOType( *result, shaders, flags, index );
 			result->declMember( "texture0", texType
 				, ast::type::NotArray
 				, ( flags.enableTexcoord0() ? index++ : 0 )
@@ -237,6 +238,7 @@ namespace castor3d::shader
 
 	template< typename TexcoordT, ast::var::Flag FlagT >
 	ast::type::BaseStructPtr RasterizerSurfaceT< TexcoordT, FlagT >::makeType( ast::type::TypesCache & cache
+		, PassShaders const & shaders
 		, PipelineFlags const & flags )
 	{
 		auto result = cache.getStruct( ast::type::MemoryLayout::eC
@@ -245,7 +247,7 @@ namespace castor3d::shader
 		if ( result->empty() )
 		{
 			auto texType = TexcoordT::makeType( cache );
-			RasterizerSurfaceBase::fillType( *result, flags );
+			RasterizerSurfaceBase::fillType( *result, shaders, flags );
 			result->declMember( "texture0", texType
 				, ast::type::NotArray
 				, flags.enableTexcoord0() );

@@ -60,7 +60,7 @@ namespace castor3d
 
 	void NormalComponent::ComponentsShader::blendComponents( shader::Materials const & materials
 		, sdw::Float const & passMultiplier
-		, shader::BlendComponents const & res
+		, shader::BlendComponents & res
 		, shader::BlendComponents const & src )const
 	{
 		if ( src.hasMember( "normal" ) )
@@ -73,7 +73,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const NormalComponent::TypeName = C3D_MakePassComponentName( "normal" );
+	castor::String const NormalComponent::TypeName = C3D_MakePassBaseComponentName( "normal" );
 
 	NormalComponent::NormalComponent( Pass & pass )
 		: PassComponent{ pass, TypeName }

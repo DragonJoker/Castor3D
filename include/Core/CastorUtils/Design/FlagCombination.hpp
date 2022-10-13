@@ -532,6 +532,27 @@ namespace castor
 	}
 	/**
 	 *\~english
+	 *\brief			Removes a flag combination from the given value.
+	 *\param[in,out]	value	The value.
+	 *\param[in]		flag	The flag to remove.
+	 *\return			The value.
+	 *\~french
+	 *\brief			Enlève une combinaison d'indicateurs de la valeur donnée.
+	 *\param[in,out]	value	La valeur.
+	 *\param[in]		flag	L'indicateur à enlever.
+	 *\return			La valeur.
+	 */
+	template< typename FlagType >
+	inline FlagCombination< FlagType > & remFlags
+	( FlagCombination< FlagType > & value
+		, FlagCombination< FlagType > const & flags )noexcept
+	{
+		using Type = typename FlagCombination< FlagType >::BaseType;
+		value &= Type( ~Type( flags ) );
+		return value;
+	}
+	/**
+	 *\~english
 	 *\brief			Removes a flag from the given value.
 	 *\param[in,out]	value	The value.
 	 *\param[in]		flag	The flag to remove.

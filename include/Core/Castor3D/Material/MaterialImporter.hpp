@@ -51,7 +51,7 @@ namespace castor3d
 		C3D_API bool import( Material & material
 			, ImporterFile * file
 			, Parameters const & parameters
-			, std::map< TextureFlag, TextureConfiguration > const & textureRemaps );
+			, std::map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps );
 		/**
 		 *\~english
 		 *\brief		Scene import Function.
@@ -71,7 +71,7 @@ namespace castor3d
 		C3D_API static bool import( Material & material
 			, castor::Path const & pathFile
 			, Parameters const & parameters
-			, std::map< TextureFlag, TextureConfiguration > const & textureRemaps );
+			, std::map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps );
 		/**
 		 *\~english
 		 *\brief		Loads an image.
@@ -217,7 +217,7 @@ namespace castor3d
 	protected:
 		ImporterFile * m_file{};
 		Parameters m_parameters;
-		std::map< TextureFlag, TextureConfiguration > m_textureRemaps;
+		std::map< PassComponentTextureFlag, TextureConfiguration > m_textureRemaps;
 	};
 }
 

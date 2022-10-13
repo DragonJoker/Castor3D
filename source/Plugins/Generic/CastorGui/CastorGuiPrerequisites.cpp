@@ -4,6 +4,7 @@
 #include <Castor3D/Cache/MaterialCache.hpp>
 #include <Castor3D/Material/Material.hpp>
 #include <Castor3D/Material/Pass/Pass.hpp>
+#include <Castor3D/Material/Pass/Component/PassComponentRegister.hpp>
 #include <Castor3D/Material/Texture/TextureLayout.hpp>
 #include <Castor3D/Material/Texture/TextureUnit.hpp>
 #include <Castor3D/Overlay/BorderPanelOverlay.hpp>
@@ -68,11 +69,14 @@ namespace CastorGui
 		if ( pass->getTextureUnitsCount() == 0 )
 		{
 			auto & texCache = engine.getTextureUnitCache();
+			auto & compRegister = engine.getPassComponentsRegister();
+			castor3d::TextureConfiguration baseConfig{};
+			compRegister.fillTextureConfiguration( compRegister.getColourFlags(), baseConfig );
 			auto unit = std::make_shared< castor3d::TextureUnit >( engine
 				, texCache.getSourceData( castor3d::TextureSourceInfo{ nullptr, texture->getCreateInfo() }
-					, castor3d::PassTextureConfig{ { {} }, castor3d::TextureConfiguration::DiffuseTexture }
+					, castor3d::PassTextureConfig{ { {} }, baseConfig }
 					, nullptr ) );
-			unit->setConfiguration( castor3d::TextureConfiguration::DiffuseTexture );
+			unit->setConfiguration( baseConfig );
 			//pass->addTextureUnit( unit );
 		}
 

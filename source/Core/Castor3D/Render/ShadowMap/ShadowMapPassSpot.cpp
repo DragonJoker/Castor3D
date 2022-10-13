@@ -163,6 +163,7 @@ namespace castor3d
 		writer.implementMainT< shader::VertexSurfaceT, shader::FragmentSurfaceT >( sdw::VertexInT< shader::VertexSurfaceT >{ writer
 				, flags }
 			, sdw::VertexOutT< shader::FragmentSurfaceT >{ writer
+				, passShaders
 				, flags }
 			, [&]( VertexInT< shader::VertexSurfaceT > in
 			, VertexOutT< shader::FragmentSurfaceT > out )
@@ -240,9 +241,7 @@ namespace castor3d
 		shader::Utils utils{ writer };
 		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
 			, flags
-			, ( ComponentModeFlag::eOpacity
-				| ComponentModeFlag::eGeometry
-				| ( needsRsm ? ComponentModeFlag::eColour : ComponentModeFlag::eNone ) )
+			, getComponentsMask()
 			, utils };
 
 		C3D_ModelsData( writer
@@ -252,7 +251,7 @@ namespace castor3d
 			, passShaders
 			, uint32_t( GlobalBuffersIdx::eMaterials )
 			, RenderPipeline::eBuffers
-			, needsRsm || flags.enableOpacity() };
+			, needsRsm || passShaders.enableOpacity() };
 		shader::TextureConfigurations textureConfigs{ writer
 			, uint32_t( GlobalBuffersIdx::eTexConfigs )
 			, RenderPipeline::eBuffers
@@ -297,6 +296,7 @@ namespace castor3d
 		auto pxl_flux( writer.declOutput< Vec4 >( "pxl_flux", needsRsm ? outIndex++ : 0u, needsRsm ) );
 
 		writer.implementMainT< shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer
+				, passShaders
 				, flags }
 			, FragmentOut{ writer }
 			, [&]( FragmentInT< shader::FragmentSurfaceT > in

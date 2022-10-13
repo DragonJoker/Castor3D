@@ -72,7 +72,7 @@ namespace castor3d
 		 *	Gestion des composants de sortie des shaders.
 		 */
 		/**@{*/
-		C3D_API std::vector< shader::PassComponentsShaderPtr > getComponentsShaders( TextureFlags const & texturesFlags
+		C3D_API std::vector< shader::PassComponentsShaderPtr > getComponentsShaders( TextureFlagsArray const & texturesFlags
 			, ComponentModeFlags filter
 			, std::vector< UpdateComponent > & updateComponents )const;
 		C3D_API std::vector< shader::PassComponentsShaderPtr > getComponentsShaders( PipelineFlags const & flags
@@ -91,17 +91,45 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief			Adds or removes texture components, whether they are needed or not, from given pass.
-		 *\param[in,out]	texConfig	Used to determine if a map component is needed.
+		 *\param[in,out]	texConfigs	Used to determine if a map component is needed.
 		 *\param[in]		pass		The pass.
 		 *\~french
 		 *\brief			Ajoute ou supprime les composants de texture de la passe, selon s'ils sont nécessaires ou pas.
-		 *\param[in,out]	texConfig	Utilisé pour déterminer si un composant de texture est nécessaire.
+		 *\param[in,out]	texConfigs	Utilisé pour déterminer si un composant de texture est nécessaire.
 		 *\param[in]		pass		La passe.
 		 */
-		C3D_API void updateMapComponents( TextureConfiguration const & texConfig
+		C3D_API void updateMapComponents( std::vector< TextureFlagConfiguration > const & texConfigs
 			, Pass & result );
-		C3D_API void fillChannels( TextureFlags const & flags
+		/**
+		 *\~english
+		 *\brief		Writes the texture configuration for this component in a scene file.
+		 *\param[in]	configuration	Holds the texture configuration data for this component.
+		 *\param[in]	tabs			The current indentation in the output file.
+		 *\param[in]	file			The output file.
+		 *\~french
+		 *\brief		Ecrit la configuration de texture pour ce composant dans un fichier de scène.
+		 *\param[in]	configuration	Contient les données de configuration de texture de ce composant.
+		 *\param[in]	tabs			Le niveau d'indentation dans le fichier de sortie.
+		 *\param[in]	file			Le fichier de sortie.
+		 */
+		C3D_API bool writeTextureConfig( TextureConfiguration const & configuration
+			, castor::String const & tabs
+			, castor::StringStream & file )const;
+		C3D_API void fillChannels( PassComponentTextureFlag const & flags
 			, SceneFileContext & parsingContext );
+		C3D_API TextureFlagsArray filterTextureFlags( ComponentModeFlags filter
+			, TextureFlagsArray const & texturesFlags )const;
+		C3D_API PassComponentTextureFlag getColourFlags()const;
+		C3D_API PassComponentTextureFlag getOpacityFlags()const;
+		C3D_API PassComponentTextureFlag getNormalFlags()const;
+		C3D_API PassComponentTextureFlag getHeightFlags()const;
+		C3D_API PassComponentTextureFlag getOcclusionFlags()const;
+		C3D_API void fillTextureConfiguration( PassComponentTextureFlag const & flags
+			, TextureConfiguration & result )const;
+		C3D_API bool hasTexcoordModif( PassComponentTextureFlag const & flag
+			, PipelineFlags const * flags )const;
+		C3D_API bool hasTexcoordModif( PipelineFlags const & flags )const;
+		C3D_API bool hasTexcoordModif( TextureFlagsArray const & flags )const;
 
 		castor::UInt32StrMap const & getTextureChannels()const
 		{
@@ -117,14 +145,26 @@ namespace castor3d
 		 *	Enregistrement des composants.
 		 */
 		/**@{*/
-		C3D_API uint32_t registerComponent( castor::String const & componentType
+		C3D_API PassComponentID registerComponent( castor::String const & componentType
 			, PassComponentPluginUPtr componentPlugin );
 		C3D_API void unregisterComponent( castor::String const & componentType );
-		C3D_API uint32_t getNameId( castor::String const & componentType )const;
+		C3D_API PassComponentID getNameId( castor::String const & componentType )const;
 		C3D_API PassComponentsBitset getPassComponentsBitset( Pass const * pass = nullptr )const;
+		C3D_API PassComponentPlugin const & getPlugin( PassComponentID componentId )const;
+
+		PassComponentPlugin const & getPlugin( castor::String const & componentType )const
+		{
+			return getPlugin( getNameId( componentType ) );
+		}
 
 		template< typename ComponentT >
-		uint32_t registerComponent( CreatePassComponentPlugin createPlugin = &ComponentT::createPlugin )
+		PassComponentPlugin const & getPlugin()const
+		{
+			return getPlugin( getNameId( ComponentT::TypeName ) );
+		}
+
+		template< typename ComponentT >
+		PassComponentID registerComponent( CreatePassComponentPlugin createPlugin = &ComponentT::createPlugin )
 		{
 			return registerComponent( ComponentT::TypeName
 				, createPlugin() );
@@ -137,14 +177,14 @@ namespace castor3d
 			std::string name;
 			PassComponentPluginUPtr plugin{};
 		};
-		using ComponentIds = std::map< uint32_t, Component >;
+		using ComponentIds = std::map< PassComponentID, Component >;
 
 	private:
-		uint32_t getNextId();
-		void registerComponent( uint32_t id
+		PassComponentID getNextId();
+		void registerComponent( PassComponentID id
 			, castor::String const & componentType
 			, PassComponentPluginUPtr componentPlugin );
-		void unregisterComponent( uint32_t id );
+		void unregisterComponent( PassComponentID id );
 		void reorderBuffer();
 
 		using FillMaterialType = std::function< void ( sdw::type::BaseStruct & type
@@ -153,11 +193,11 @@ namespace castor3d
 
 	private:
 		ComponentIds m_ids;
-		std::map< uint32_t, shader::PassMaterialShaderPtr > m_materialShaders;
+		std::map< PassComponentID, shader::PassMaterialShaderPtr > m_materialShaders;
 		castor::UInt32StrMap m_channels;
 		ChannelFillers m_channelsFillers;
 		bool m_pauseOrder{ true };
-		std::vector< uint32_t > m_bufferOrder;
+		std::vector< PassComponentID > m_bufferOrder;
 		std::vector< shader::PassMaterialShader * > m_bufferShaders;
 		std::vector< FillMaterialType > m_fillMaterial;
 		VkDeviceSize m_bufferStride{};

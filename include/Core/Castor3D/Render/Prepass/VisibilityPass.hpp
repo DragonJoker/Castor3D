@@ -48,7 +48,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::getTexturesMask
 		 */
-		C3D_API TextureFlags getTexturesMask()const override;
+		C3D_API ComponentModeFlags getComponentsMask()const override;
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::getShaderFlags
 		 */

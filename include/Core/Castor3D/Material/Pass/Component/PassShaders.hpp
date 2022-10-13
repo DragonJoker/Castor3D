@@ -20,7 +20,7 @@ namespace castor3d::shader
 	{
 	public:
 		C3D_API PassShaders( PassComponentRegister const & compRegister
-			, TextureFlags const & texturesFlags
+			, TextureFlagsArray const & texturesFlags
 			, ComponentModeFlags filter
 			, Utils & utils );
 		C3D_API PassShaders( PassComponentRegister const & compRegister
@@ -46,17 +46,19 @@ namespace castor3d::shader
 			, Material const & material
 			, sdw::StructInstance const & surface
 			, sdw::expr::ExprList & inits )const;
-		C3D_API void applyComponents( TextureFlags const & texturesFlags
+		C3D_API void applyComponents( TextureFlagsArray const & texturesFlags
 			, TextureConfigData const & config
+			, sdw::U32Vec3 const & imgCompConfig
 			, sdw::Vec4 const & sampled
-			, BlendComponents const & components )const;
+			, BlendComponents & components )const;
 		C3D_API void applyComponents( PipelineFlags const & flags
 			, TextureConfigData const & config
+			, sdw::U32Vec3 const & imgCompConfig
 			, sdw::Vec4 const & sampled
-			, BlendComponents const & components )const;
+			, BlendComponents & components )const;
 		C3D_API void blendComponents( Materials const & materials
 			, sdw::Float const & passMultiplier
-			, BlendComponents const & res
+			, BlendComponents & res
 			, BlendComponents const & src )const;
 		C3D_API void updateMaterial( sdw::Vec3 const & albedo
 			, sdw::Vec4 const & spcRgh
@@ -71,27 +73,46 @@ namespace castor3d::shader
 			, sdw::Vec4 & spcRgh
 			, sdw::Vec4 & colMtl )const;
 		C3D_API void updateComponents( PipelineFlags const & flags
-			, BlendComponents const & components )const;
-		C3D_API void updateComponents( TextureFlags const & texturesFlags
-			, BlendComponents const & components )const;
+			, BlendComponents & components )const;
+		C3D_API void updateComponents( TextureFlagsArray const & texturesFlags
+			, BlendComponents & components )const;
+		C3D_API bool hasTexcoordModif( PipelineFlags const & flags )const;
+		C3D_API bool hasTexcoordModif( TextureFlagsArray const & flags )const;
+		C3D_API void computeTexcoord( TextureFlagsArray const & flags
+			, TextureConfigData const & config
+			, sdw::U32Vec3 const & imgCompConfig
+			, sdw::CombinedImage2DRgba32 const & map
+			, sdw::Vec3 & texCoords
+			, sdw::Vec2 & texCoord
+			, BlendComponents & components )const;
+		C3D_API void computeTexcoord( TextureFlagsArray const & flags
+			, TextureConfigData const & config
+			, sdw::U32Vec3 const & imgCompConfig
+			, sdw::CombinedImage2DRgba32 const & map
+			, DerivTex & texCoords
+			, DerivTex & texCoord
+			, BlendComponents & components )const;
+		C3D_API void computeTexcoord( PipelineFlags const & flags
+			, TextureConfigData const & config
+			, sdw::U32Vec3 const & imgCompConfig
+			, sdw::CombinedImage2DRgba32 const & map
+			, sdw::Vec3 & texCoords
+			, sdw::Vec2 & texCoord
+			, BlendComponents & components )const;
+		C3D_API void computeTexcoord( PipelineFlags const & flags
+			, TextureConfigData const & config
+			, sdw::U32Vec3 const & imgCompConfig
+			, sdw::CombinedImage2DRgba32 const & map
+			, DerivTex & texCoords
+			, DerivTex & texCoord
+			, BlendComponents & components )const;
+		C3D_API bool enableParallaxOcclusionMapping( PipelineFlags const & flags )const;
+		C3D_API bool enableParallaxOcclusionMappingOne( PipelineFlags const & flags )const;
 
 		template< typename TexcoordT >
-		void computeTexcoord( TextureFlags const & texturesFlags
+		void computeMapContribution( TextureFlagsArray const & texturesFlags
 			, TextureConfigData const & config
-			, TextureAnimData const & anim
-			, sdw::CombinedImage2DRgba32 const & map
-			, TexcoordT & texCoords
-			, BlendComponents & components )const;
-		template< typename TexcoordT >
-		void computeTexcoord( PipelineFlags const & flags
-			, TextureConfigData const & config
-			, TextureAnimData const & anim
-			, sdw::CombinedImage2DRgba32 const & map
-			, TexcoordT & texCoords
-			, BlendComponents & components )const;
-		template< typename TexcoordT >
-		void computeMapContribution( TextureFlags const & texturesFlags
-			, TextureConfigData const & config
+			, sdw::U32Vec3 const & imgCompConfig
 			, TextureAnimData const & anim
 			, sdw::CombinedImage2DRgba32 const & map
 			, TexcoordT & texCoords
@@ -99,21 +120,25 @@ namespace castor3d::shader
 		template< typename TexcoordT >
 		void computeMapContribution( PipelineFlags const & flags
 			, TextureConfigData const & config
+			, sdw::U32Vec3 const & imgCompConfig
 			, TextureAnimData const & anim
 			, sdw::CombinedImage2DRgba32 const & map
 			, TexcoordT & texCoords
-			, BlendComponents & components )const;
-		template< typename TexcoordsT, typename TexcoordT >
-		void applyParallax( PipelineFlags const & flags
-			, TextureConfigData const & config
-			, sdw::CombinedImage2DRgba32 const & map
-			, TexcoordsT & texCoords
-			, TexcoordT & texCoord
 			, BlendComponents & components )const;
 
 		auto getFilter()const
 		{
 			return m_filter;
+		}
+
+		bool enableOpacity()const
+		{
+			return m_opacity;
+		}
+
+		Utils & getUtils()const
+		{
+			return m_utils;
 		}
 
 	private:
@@ -122,6 +147,7 @@ namespace castor3d::shader
 		std::vector< UpdateComponent > m_updateComponents;
 		std::vector< PassComponentsShaderPtr > m_shaders;
 		ComponentModeFlags m_filter;
+		bool m_opacity{};
 	};
 }
 

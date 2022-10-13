@@ -14,14 +14,76 @@ namespace castor3d
 	struct HeightMapComponent
 		: public PassMapComponent
 	{
+		static constexpr TextureFlag Height = TextureFlag( 0x01u );
+
 		struct ComponentsShader
 			: shader::PassComponentsShader
 		{
-			C3D_API void applyComponents( TextureFlags const & texturesFlags
-				, PipelineFlags const * flags
+			ComponentsShader( PassComponentPlugin const & plugin )
+				: shader::PassComponentsShader{ plugin }
+			{
+			}
+
+			C3D_API void computeTexcoord( PipelineFlags const & flags
 				, shader::TextureConfigData const & config
-				, sdw::Vec4 const & sampled
-				, shader::BlendComponents const & components )const override;
+				, sdw::U32Vec3 const & imgCompConfig
+				, sdw::CombinedImage2DRgba32 const & map
+				, sdw::Vec3 & texCoords
+				, sdw::Vec2 & texCoord
+				, shader::BlendComponents & components )const override;
+			C3D_API void computeTexcoord( PipelineFlags const & flags
+				, shader::TextureConfigData const & config
+				, sdw::U32Vec3 const & imgCompConfig
+				, sdw::CombinedImage2DRgba32 const & map
+				, shader::DerivTex & texCoords
+				, shader::DerivTex & texCoord
+				, shader::BlendComponents & components )const override;
+
+			C3D_API void parallaxMapping( sdw::Vec2 & texCoords
+				, sdw::Vec3 const & viewDir
+				, sdw::CombinedImage2DRgba32 const & heightMap
+				, shader::TextureConfigData const & textureConfig
+				, sdw::U32Vec3 const & imgCompConfig )const;
+			C3D_API void parallaxMapping( shader::DerivTex & texCoords
+				, sdw::Vec3 const & viewDir
+				, sdw::CombinedImage2DRgba32 const & heightMap
+				, shader::TextureConfigData const & textureConfig
+				, sdw::U32Vec3 const & imgCompConfig )const;
+			C3D_API void parallaxMapping( sdw::Vec2 texCoords
+				, sdw::Vec2 const & dx
+				, sdw::Vec2 const & dy
+				, sdw::Vec3 const & viewDir
+				, sdw::CombinedImage2DRgba32 const & heightMap
+				, shader::TextureConfigData const & textureConfig
+				, sdw::U32Vec3 const & imgCompConfig )const;
+			C3D_API sdw::RetFloat parallaxShadow( sdw::Vec3 const & lightDir
+				, sdw::Vec2 const & initialTexCoord
+				, sdw::Float const & initialHeight
+				, sdw::CombinedImage2DRgba32 const & heightMap
+				, shader::TextureConfigData const & textureConfig
+				, sdw::U32Vec3 const & imgCompConfig );
+
+			PassComponentTextureFlag getTextureFlags()const
+			{
+				return makeTextureFlag( getId(), Height );
+			}
+
+		private:
+			mutable sdw::Function< sdw::Vec2
+				, sdw::InVec2
+				, sdw::InVec2
+				, sdw::InVec2
+				, sdw::InVec3
+				, sdw::InCombinedImage2DRgba32
+				, shader::InTextureConfigData
+				, sdw::InU32Vec3 > m_parallaxMapping;
+			mutable sdw::Function< sdw::Float
+				, sdw::InVec3
+				, sdw::InVec2
+				, sdw::InFloat
+				, sdw::InCombinedImage2DRgba32
+				, shader::InTextureConfigData
+				, sdw::InU32Vec3 > m_parallaxShadow;
 		};
 
 		class Plugin
@@ -33,11 +95,11 @@ namespace castor3d
 			bool writeTextureConfig( TextureConfiguration const & configuration
 				, castor::String const & tabs
 				, castor::StringStream & file )const override;
-			bool isComponentNeeded( TextureFlags const & textures
+			bool isComponentNeeded( TextureFlagsArray const & textures
 				, ComponentModeFlags const & filter )const override;
-			bool needsMapComponent( TextureConfiguration const & configuration )const override;
 			void createMapComponent( Pass & pass
 				, std::vector< PassComponentUPtr > & result )const override;
+			bool hasTexcoordModif( PipelineFlags const * flags )const override;
 
 			bool isMapComponent()const override
 			{
@@ -46,7 +108,41 @@ namespace castor3d
 
 			shader::PassComponentsShaderPtr createComponentsShader()const override
 			{
-				return std::make_unique< ComponentsShader >();
+				return std::make_unique< ComponentsShader >( *this );
+			}
+
+			PassComponentTextureFlag getHeightFlags()const override
+			{
+				return getTextureFlags();
+			}
+
+			void filterTextureFlags( ComponentModeFlags filter
+				, TextureFlagsArray & texturesFlags )const override
+			{
+				if ( !checkFlag( filter, ComponentModeFlag::eGeometry ) )
+				{
+					remFlags( texturesFlags, getTextureFlags() );
+				}
+			}
+
+			PassComponentTextureFlag getTextureFlags()const override
+			{
+				return makeTextureFlag( getId(), Height );
+			}
+
+			void fillTextureConfiguration( TextureConfiguration & result
+				, uint32_t mask )const override
+			{
+				result.textureSpace |= TextureSpace::eNormalised;
+				addFlagConfiguration( result, { getTextureFlags(), ( mask == 0 ? 0x00FF0000u : mask ) } );
+			}
+
+			castor::String getMapFlagsName( PassComponentTextureFlag const & flags )const
+			{
+				auto [passIndex, textureFlags] = splitTextureFlag( flags );
+				return ( passIndex == getId() && checkFlag( textureFlags, Height ) )
+					? castor::String{ "Height" }
+					: castor::String{};
 			}
 		};
 
@@ -57,15 +153,12 @@ namespace castor3d
 
 		C3D_API explicit HeightMapComponent( Pass & pass );
 
-		C3D_API void mergeImages( TextureUnitDataSet & result )override;
-		C3D_API void fillChannel( TextureConfiguration & configuration
-			, uint32_t mask )override;
-		C3D_API void fillConfig( TextureConfiguration & config
-			, PassVisitorBase & vis )override;
+		C3D_API void fillConfig( TextureConfiguration & configuration
+			, PassVisitorBase & vis )const override;
 
-		TextureFlags getTextureFlags()const override
+		PassComponentTextureFlag getTextureFlags()const override
 		{
-			return TextureFlag::eHeight;
+			return makeTextureFlag( getId(), Height );
 		}
 
 		C3D_API static castor::String const TypeName;

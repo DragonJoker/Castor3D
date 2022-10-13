@@ -69,12 +69,18 @@ namespace castor3d
 		}
 	}
 
-	TextureFlags VisibilityPass::getTexturesMask()const
+	ComponentModeFlags VisibilityPass::getComponentsMask()const
 	{
-		// Normally, ( TextureFlag::eOpacity | TextureFlag::eHeight ) would be enough,
+		// Normally, ( ComponentModeFlag::eOpacity | ComponentModeFlag::eHeight ) would be enough,
 		// but to have the pipeline ID order synchronization with visibility resolve,
-		// allow all.
-		return TextureFlags{ TextureFlag::eAll };
+		// allow the same flags.
+		return ComponentModeFlag::eColour
+			| ComponentModeFlag::eOpacity
+			| ComponentModeFlag::eDiffuseLighting
+			| ComponentModeFlag::eSpecularLighting
+			| ComponentModeFlag::eGeometry
+			| ComponentModeFlag::eOcclusion
+			| ComponentModeFlag::eSpecifics;
 	}
 
 	ShaderFlags VisibilityPass::getShaderFlags()const
@@ -173,6 +179,7 @@ namespace castor3d
 		auto velocity = writer.declOutput< Vec2 >( "velocity", 2u, flags.writeVelocity() );
 
 		writer.implementMainT< shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer
+				, passShaders
 				, flags }
 			, FragmentOut{ writer }
 			, [&]( FragmentInT< shader::FragmentSurfaceT > in

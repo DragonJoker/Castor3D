@@ -4068,9 +4068,8 @@ namespace castor3d
 
 		if ( !params.empty() )
 		{
-			uint32_t flags;
-			params[0]->get( flags );
-			auto textures = TextureFlags( uint16_t( flags ) );
+			PassComponentTextureFlag textures;
+			params[0]->get( textures );
 			auto & engine = *parsingContext.parser->getEngine();
 			engine.getPassComponentsRegister().fillChannels( textures, parsingContext );
 		}

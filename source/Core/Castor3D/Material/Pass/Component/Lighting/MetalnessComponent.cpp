@@ -99,7 +99,7 @@ namespace castor3d
 
 	void MetalnessComponent::ComponentsShader::blendComponents( shader::Materials const & materials
 		, sdw::Float const & passMultiplier
-		, shader::BlendComponents const & res
+		, shader::BlendComponents & res
 		, shader::BlendComponents const & src )const
 	{
 		res.getMember< sdw::Float >( "metalness", true ) += src.getMember< sdw::Float >( "metalness", true ) * passMultiplier;
@@ -171,7 +171,7 @@ namespace castor3d
 		data.write( materialShader.getMaterialChunk(), MetalnessComponent::Default, 0u );
 	}
 
-	bool MetalnessComponent::Plugin::isComponentNeeded( TextureFlags const & textures
+	bool MetalnessComponent::Plugin::isComponentNeeded( TextureFlagsArray const & textures
 		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eSpecularLighting );
@@ -179,7 +179,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const MetalnessComponent::TypeName = C3D_MakePassComponentName( "metalness" );
+	castor::String const MetalnessComponent::TypeName = C3D_MakePassLightingComponentName( "metalness" );
 
 	MetalnessComponent::MetalnessComponent( Pass & pass
 		, float defaultValue )

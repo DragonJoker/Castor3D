@@ -44,24 +44,8 @@ namespace castor3d
 
 	namespace matpass
 	{
-		static bool matchConfigFlags( TextureConfiguration const & config
-			, TextureFlags mask )
-		{
-			return ( checkFlag( mask, TextureFlag::eColour ) && config.colourMask[0] )
-				|| ( checkFlag( mask, TextureFlag::eSpecular ) && config.specularMask[0] )
-				|| ( checkFlag( mask, TextureFlag::eMetalness ) && config.metalnessMask[0] )
-				|| ( checkFlag( mask, TextureFlag::eGlossiness ) && config.glossinessMask[0] )
-				|| ( checkFlag( mask, TextureFlag::eRoughness ) && config.roughnessMask[0] )
-				|| ( checkFlag( mask, TextureFlag::eOpacity ) && config.opacityMask[0] )
-				|| ( checkFlag( mask, TextureFlag::eEmissive ) && config.emissiveMask[0] )
-				|| ( checkFlag( mask, TextureFlag::eNormal ) && config.normalMask[0] )
-				|| ( checkFlag( mask, TextureFlag::eHeight ) && config.heightMask[0] )
-				|| ( checkFlag( mask, TextureFlag::eOcclusion ) && config.occlusionMask[0] )
-				|| ( checkFlag( mask, TextureFlag::eTransmittance ) && config.transmittanceMask[0] );
-		}
-
 		static TextureSourceMap getSources( TextureSourceMap const & sources
-			, TextureFlags mask )
+			, PassComponentTextureFlag mask )
 		{
 			TextureSourceMap result;
 
@@ -79,7 +63,7 @@ namespace castor3d
 		}
 
 		static TextureUnitPtrArray getTextureUnits( TextureUnitPtrArray const & units
-			, TextureFlags mask )
+			, TextureFlagsArray const & mask )
 		{
 			TextureUnitPtrArray result;
 
@@ -105,7 +89,7 @@ namespace castor3d
 
 		static bool isMergeable( TextureSourceInfo const & source
 			, PassTextureConfig const & config
-			, AnimationUPtr const & animation )
+			, Animation const * animation )
 		{
 			return isPreparable( source, config )
 				&& !animation;
@@ -126,6 +110,35 @@ namespace castor3d
 				&& !ashes::isCompressedFormat( rhs );
 		}
 
+		static bool areSpacesCompatible( TextureSpaces lhs, TextureSpaces rhs )
+		{
+			return checkFlag( lhs, TextureSpace::eAllowSRGB ) == checkFlag( rhs, TextureSpace::eAllowSRGB )
+				&& checkFlag( lhs, TextureSpace::eNormalised ) == checkFlag( rhs, TextureSpace::eNormalised );
+		}
+
+		bool areMergeable( std::unordered_map< TextureSourceInfo, AnimationUPtr, TextureSourceInfoHasher > const & animations
+			, Pass::PassTextureSource const & lhs
+			, Pass::PassTextureSource const & rhs )
+		{
+			auto lhsFlags = getFlags( lhs.second.config );
+			auto rhsFlags = getFlags( rhs.second.config );
+			auto lhsAnimIt = animations.find( lhs.first );
+			auto rhsAnimIt = animations.find( rhs.first );
+			auto lhsAnim = ( lhsAnimIt != animations.end()
+				? lhsAnimIt->second.get()
+				: nullptr );
+			auto rhsAnim = ( rhsAnimIt != animations.end()
+				? rhsAnimIt->second.get()
+				: nullptr );
+			return lhsFlags.size() == 1u
+				&& rhsFlags.size() == 1u
+				&& lhs.second.texcoordSet == rhs.second.texcoordSet
+				&& isMergeable( lhs.first, rhs.second, lhsAnim )
+				&& isMergeable( lhs.first, rhs.second, rhsAnim )
+				&& areFormatsCompatible( lhs.second.imageInfo->format, rhs.second.imageInfo->format )
+				&& areSpacesCompatible( lhs.second.config.textureSpace, rhs.second.config.textureSpace );
+		}
+
 		static uint32_t & getMask( TextureConfiguration & config
 			, uint32_t offset )
 		{
@@ -141,14 +154,23 @@ namespace castor3d
 					? rhs.folder()
 					: castor::Path{} );
 			auto lhsName = lhs.isFileImage()
-				? lhs.relative()
+				? castor::Path{ lhs.relative() }.getFileName()
 				: castor::Path{ lhs.name() }.getFileName();
 			auto rhsName = rhs.isFileImage()
-				? rhs.relative()
+				? castor::Path{ rhs.relative() }.getFileName()
 				: castor::Path{ rhs.name() }.getFileName();
 			auto name = castor::string::getLongestCommonSubstring( lhsName, rhsName );
-			castor::string::replace( lhsName, name, castor::String{} );
-			castor::string::replace( rhsName, name, castor::String{} );
+
+			if ( name.size() > 2 )
+			{
+				castor::string::replace( lhsName, name, castor::String{} );
+				castor::string::replace( rhsName, name, castor::String{} );
+			}
+			else
+			{
+				name.clear();
+			}
+
 			return TextureSourceInfo{ lhs.sampler()
 				, folder
 				, castor::Path{ name + lhsName + rhsName }
@@ -270,6 +292,21 @@ namespace castor3d
 		}
 	}
 
+	shader::PassMaterialShader * Pass::getMaterialShader( castor::String const & componentType )const
+	{
+		return getOwner()->getEngine()->getPassComponentsRegister().getMaterialShader( componentType );
+	}
+
+	PassComponentID Pass::getComponentId( castor::String const & componentType )const
+	{
+		return getOwner()->getEngine()->getPassComponentsRegister().getNameId( componentType );
+	}
+
+	PassComponentPlugin const & Pass::getComponentPlugin( PassComponentID componentId )const
+	{
+		return getOwner()->getEngine()->getPassComponentsRegister().getPlugin( componentId );
+	}
+
 	TextureUnitSPtr Pass::getTextureUnit( uint32_t index )const
 	{
 		CU_Require( index < m_textureUnits.size() );
@@ -292,7 +329,7 @@ namespace castor3d
 				, std::move( configuration ) ).first;
 		}
 
-		m_textureFlags |= getFlags( it->second.config );
+		addFlags( m_textureFlags, getFlags( it->second.config ) );
 		doUpdateTextureFlags();
 	}
 
@@ -315,7 +352,7 @@ namespace castor3d
 			m_sources.erase( it );
 			m_dirty = true;
 
-			remFlag( m_textureFlags, TextureFlag( uint16_t( getFlags( it->second.config ) ) ) );
+			remFlags( m_textureFlags, getFlags( it->second.config ) );
 			doUpdateTextureFlags();
 		}
 	}
@@ -330,7 +367,7 @@ namespace castor3d
 		{
 			configuration = it->second;
 			m_sources.erase( it );
-			remFlag( m_textureFlags, TextureFlag( uint16_t( getFlags( it->second.config ) ) ) );
+			remFlags( m_textureFlags, getFlags( it->second.config ) );
 
 			it = m_sources.find( dstSourceInfo );
 
@@ -343,8 +380,8 @@ namespace castor3d
 				it = m_sources.emplace( std::move( dstSourceInfo )
 					, std::move( configuration ) ).first;
 			}
-
-			m_textureFlags |= getFlags( it->second.config );
+			
+			addFlags( m_textureFlags, getFlags( it->second.config ) );
 			doUpdateTextureFlags();
 		}
 	}
@@ -356,9 +393,9 @@ namespace castor3d
 
 		if ( it != m_sources.end() )
 		{
-			remFlag( m_textureFlags, TextureFlag( uint16_t( getFlags( it->second.config ) ) ) );
+			remFlags( m_textureFlags, getFlags( it->second.config ) );
 			it->second.config = std::move( configuration );
-			m_textureFlags |= getFlags( it->second.config );
+			addFlags( m_textureFlags, getFlags( it->second.config ) );
 			doUpdateTextureFlags();
 		}
 	}
@@ -368,10 +405,123 @@ namespace castor3d
 		if ( !m_texturesReduced.exchange( true ) )
 		{
 			TextureUnitDataSet sources;
-
-			for ( auto & component : m_components )
+			//
+			//	Sort per used components, decrementally
+			//
+			auto remaining = m_sources;
+			//
+			//		Starting at four components
+			//
+			auto it = remaining.begin();
+			while ( it != remaining.end() )
 			{
-				component.second->mergeImages( sources );
+				if ( getPixelComponents( it->second.config ).size() == 4u )
+				{
+					prepareImage( *it, sources );
+					it = remaining.erase( it );
+				}
+				else
+				{
+					++it;
+				}
+			}
+			//
+			//		Then three components
+			//
+			it = remaining.begin();
+			while ( it != remaining.end() )
+			{
+				if ( getPixelComponents( it->second.config ).size() == 3u )
+				{
+					PassTextureSource lhs = *it;
+					remaining.erase( it );
+
+					if ( getFlags( lhs.second.config ).size() == 1u )
+					{
+						//
+						//	Fill with a one component texture
+						//
+						it = std::find_if( remaining.begin()
+							, remaining.end()
+							, [this, &lhs]( TextureSourceMap::value_type const & lookup )
+							{
+								return getPixelComponents( lookup.second.config ).size() == 1u
+									&& matpass::areMergeable( m_animations, lhs, lookup );
+							} );
+
+						if ( it == remaining.end() )
+						{
+							prepareImage( lhs, sources );
+						}
+						else
+						{
+							mergeImages( lhs, 0x00FFFFFFu
+								, *it, 0xFF000000u
+								, sources );
+							remaining.erase( it );
+						}
+					}
+					else
+					{
+						prepareImage( lhs, sources );
+					}
+
+					it = remaining.begin();
+				}
+				else
+				{
+					++it;
+				}
+			}
+			//
+			//		Then two components
+			//
+			it = remaining.begin();
+			while ( it != remaining.end() )
+			{
+				if ( getPixelComponents( it->second.config ).size() == 2u )
+				{
+					prepareImage( *it, sources );
+					it = remaining.erase( it );
+				}
+				else
+				{
+					++it;
+				}
+			}
+			//
+			//		Then one component
+			//
+			it = remaining.begin();
+			while ( it != remaining.end() )
+			{
+				CU_Require( getPixelComponents( it->second.config ).size() == 1u );
+				PassTextureSource lhs = *it;
+				remaining.erase( it );
+				//
+				//	Group them by two.
+				//
+				it = std::find_if( remaining.begin()
+					, remaining.end()
+					, [this, &lhs]( TextureSourceMap::value_type const & lookup )
+					{
+						CU_Require( getPixelComponents( lookup.second.config ).size() == 1u );
+						return matpass::areMergeable( m_animations, lhs, lookup );
+					} );
+
+				if ( it == remaining.end() )
+				{
+					prepareImage( lhs, sources );
+				}
+				else
+				{
+					mergeImages( lhs, 0x00FF0000u
+						, *it, 0x0000FF00u
+						, sources );
+					remaining.erase( it );
+				}
+
+				it = remaining.begin();
 			}
 
 			TextureUnitPtrArray newUnits;
@@ -387,119 +537,61 @@ namespace castor3d
 		}
 	}
 
-	void Pass::mergeImages( TextureFlag lhsFlag
-		, uint32_t lhsMaskOffset
+	void Pass::mergeImages( PassTextureSource lhsIt
 		, uint32_t lhsDstMask
-		, TextureFlag rhsFlag
-		, uint32_t rhsMaskOffset
+		, PassTextureSource rhsIt
 		, uint32_t rhsDstMask
-		, castor::String const & name
 		, TextureUnitDataSet & result )
 	{
 		auto & engine = *getOwner()->getEngine();
 		auto & textureCache = engine.getTextureUnitCache();
-		auto sourcesLhs = matpass::getSources( m_sources, lhsFlag );
-		auto sourcesRhs = matpass::getSources( m_sources, rhsFlag );
 
-		if ( !sourcesLhs.empty()
-			&& !sourcesRhs.empty() )
+		auto lhsAnimIt = m_animations.find( lhsIt.first );
+		auto rhsAnimIt = m_animations.find( rhsIt.first );
+		auto lhsAnim = ( lhsAnimIt != m_animations.end()
+			? std::move( lhsAnimIt->second )
+			: nullptr );
+		auto rhsAnim = ( rhsAnimIt != m_animations.end()
+			? std::move( rhsAnimIt->second )
+			: nullptr );
+		auto & imgCache = engine.getImageCache();
+
+		if ( ( lhsIt.first.isFileImage() || lhsIt.first.isBufferImage() )
+			&& lhsIt.second.imageInfo->format == VK_FORMAT_UNDEFINED )
 		{
-			auto & lhsIt = *sourcesLhs.begin();
-			auto & rhsIt = *sourcesRhs.begin();
-
-			auto lhsAnimIt = m_animations.find( lhsIt.first );
-			auto rhsAnimIt = m_animations.find( rhsIt.first );
-
-			auto lhsAnim = ( lhsAnimIt != m_animations.end()
-				? std::move( lhsAnimIt->second )
-				: nullptr );
-			auto rhsAnim = ( rhsAnimIt != m_animations.end()
-				? std::move( rhsAnimIt->second )
-				: nullptr );
-
-			if ( lhsIt.first == rhsIt.first )
-			{
-				result.emplace( &textureCache.getSourceData( lhsIt.first, lhsIt.second, std::move( lhsAnim ) ) );
-			}
-			else
-			{
-				auto & imgCache = engine.getImageCache();
-
-				if ( ( lhsIt.first.isFileImage() || lhsIt.first.isBufferImage() )
-					&& lhsIt.second.imageInfo->format == VK_FORMAT_UNDEFINED )
-				{
-					lhsIt.second.imageInfo->format = convert( imgCache.getImageFormat( lhsIt.first.name() ) );
-				}
-
-				if ( ( rhsIt.first.isFileImage() || rhsIt.first.isBufferImage() )
-					&& rhsIt.second.imageInfo->format == VK_FORMAT_UNDEFINED )
-				{
-					rhsIt.second.imageInfo->format = convert( imgCache.getImageFormat( rhsIt.first.name() ) );
-				}
-
-				auto lhsFlags = getFlags( lhsIt.second.config );
-				auto rhsFlags = getFlags( rhsIt.second.config );
-
-				if ( lhsFlags.size() == 1u
-					&& rhsFlags.size() == 1u
-					&& lhsIt.second.texcoordSet == rhsIt.second.texcoordSet
-					&& matpass::isMergeable( lhsIt.first, lhsIt.second, lhsAnim )
-					&& matpass::isMergeable( rhsIt.first, rhsIt.second, rhsAnim )
-					&& matpass::areFormatsCompatible( lhsIt.second.imageInfo->format, rhsIt.second.imageInfo->format ) )
-				{
-					log::debug << getOwner()->getName() << name << cuT( " - Merging textures." ) << std::endl;
-					auto resultSourceInfo = matpass::mergeSourceInfos( lhsIt.first, rhsIt.first );
-					PassTextureConfig resultConfig;
-					resultConfig.config.heightMask[0] = ( lhsIt.second.config.heightMask[0]
-						| rhsIt.second.config.heightMask[0] );
-					resultConfig.config.heightMask[1] = ( lhsIt.second.config.heightMask[1]
-						| rhsIt.second.config.heightMask[1] );
-					resultConfig.config.heightFactor = std::min( lhsIt.second.config.heightFactor
-						, rhsIt.second.config.heightFactor );
-					matpass::getMask( resultConfig.config, lhsMaskOffset ) = lhsDstMask;
-					matpass::getMask( resultConfig.config, rhsMaskOffset ) = rhsDstMask;
-					mergeConfigsBase( lhsIt.second.config, resultConfig.config );
-					mergeConfigsBase( rhsIt.second.config, resultConfig.config );
-					result.emplace( &textureCache.mergeSources( lhsIt.first
-						, lhsIt.second
-						, matpass::getMask( lhsIt.second.config, lhsMaskOffset )
-						, lhsDstMask
-						, rhsIt.first
-						, rhsIt.second
-						, matpass::getMask( rhsIt.second.config, rhsMaskOffset )
-						, rhsDstMask
-						, getOwner()->getName() + name
-						, resultSourceInfo
-						, resultConfig ) );
-				}
-				else
-				{
-					result.emplace( &textureCache.getSourceData( lhsIt.first, lhsIt.second, std::move( lhsAnim ) ) );
-					result.emplace( &textureCache.getSourceData( rhsIt.first, rhsIt.second, std::move( rhsAnim ) ) );
-				}
-			}
+			lhsIt.second.imageInfo->format = convert( imgCache.getImageFormat( lhsIt.first.name() ) );
 		}
-		else
+
+		if ( ( rhsIt.first.isFileImage() || rhsIt.first.isBufferImage() )
+			&& rhsIt.second.imageInfo->format == VK_FORMAT_UNDEFINED )
 		{
-			if ( !sourcesLhs.empty() )
-			{
-				auto & it = *sourcesLhs.begin();
-				auto animIt = m_animations.find( it.first );
-				auto anim = ( animIt != m_animations.end()
-					? std::move( animIt->second )
-					: nullptr );
-				result.emplace( &textureCache.getSourceData( it.first, it.second, std::move( anim ) ) );
-			}
-			else if ( !sourcesRhs.empty() )
-			{
-				auto & it = *sourcesRhs.begin();
-				auto animIt = m_animations.find( it.first );
-				auto anim = ( animIt != m_animations.end()
-					? std::move( animIt->second )
-					: nullptr );
-				result.emplace( &textureCache.getSourceData( it.first, it.second, std::move( anim ) ) );
-			}
+			rhsIt.second.imageInfo->format = convert( imgCache.getImageFormat( rhsIt.first.name() ) );
 		}
+
+		auto lhsFlags = getEnabledFlag( lhsIt.second.config );
+		auto rhsFlags = getEnabledFlag( rhsIt.second.config );
+		auto name = getMapFlagsName( lhsFlags ) + getMapFlagsName( rhsFlags );
+
+		log::debug << getOwner()->getName() << name << cuT( " - Merging textures." ) << std::endl;
+		auto resultSourceInfo = matpass::mergeSourceInfos( lhsIt.first, rhsIt.first );
+		PassTextureConfig resultConfig;
+		resultConfig.config.heightFactor = std::min( lhsIt.second.config.heightFactor
+			, rhsIt.second.config.heightFactor );
+		addFlagConfiguration( resultConfig.config, { lhsFlags, lhsDstMask } );
+		addFlagConfiguration( resultConfig.config, { rhsFlags, rhsDstMask } );
+		mergeConfigsBase( lhsIt.second.config, resultConfig.config );
+		mergeConfigsBase( rhsIt.second.config, resultConfig.config );
+		result.emplace( &textureCache.mergeSources( lhsIt.first
+			, lhsIt.second
+			, getComponentsMask( lhsIt.second.config, lhsFlags )
+			, lhsDstMask
+			, rhsIt.first
+			, rhsIt.second
+			, getComponentsMask( rhsIt.second.config, rhsFlags )
+			, rhsDstMask
+			, getOwner()->getName() + name
+			, resultSourceInfo
+			, resultConfig ) );
 
 #if !defined( NDEBUG )
 		auto it = result.begin();
@@ -519,25 +611,16 @@ namespace castor3d
 #endif
 	}
 
-	void Pass::prepareImage( TextureFlag flag
-		, uint32_t maskOffset
-		, uint32_t dstMask
-		, castor::String const & name
+	void Pass::prepareImage( PassTextureSource cfg
 		, TextureUnitDataSet & result )
 	{
 		auto & engine = *getOwner()->getEngine();
 		auto & textureCache = engine.getTextureUnitCache();
-		auto sources = matpass::getSources( m_sources, flag );
-
-		if ( !sources.empty() )
-		{
-			auto & it = *sources.begin();
-			auto animIt = m_animations.find( it.first );
-			auto anim = ( animIt != m_animations.end()
-				? std::move( animIt->second )
-				: nullptr );
-			result.emplace( &textureCache.getSourceData( it.first, it.second, std::move( anim ) ) );
-		}
+		auto animIt = m_animations.find( cfg.first );
+		auto anim = ( animIt != m_animations.end()
+			? std::move( animIt->second )
+			: nullptr );
+		result.emplace( &textureCache.getSourceData( cfg.first, cfg.second, std::move( anim ) ) );
 	}
 
 	void Pass::setColour( castor::HdrRgbColour const & value )
@@ -718,7 +801,7 @@ namespace castor3d
 
 	bool Pass::needsAlphaProcessing()const
 	{
-		bool result = checkFlag( m_textureFlags, TextureFlag::eOpacity );
+		bool result = checkFlags( m_textureFlags, getOpacityMapFlags() ) != m_textureFlags.end();
 
 		if ( auto comp = getComponent< OpacityComponent >() )
 		{
@@ -833,17 +916,46 @@ namespace castor3d
 		return false;
 	}
 
-	TextureUnitPtrArray Pass::getTextureUnits( TextureFlags mask )const
+	TextureUnitPtrArray Pass::getTextureUnits()const
+	{
+		return m_textureUnits;
+	}
+
+	TextureUnitPtrArray Pass::getTextureUnits( TextureFlagsArray mask )const
 	{
 		return matpass::getTextureUnits( m_textureUnits, mask );
 	}
 
-	uint32_t Pass::getTextureUnitsCount( TextureFlags mask )const
+	uint32_t Pass::getTextureUnitsCount()const
+	{
+		return uint32_t( m_textureUnits.size() );
+	}
+
+	uint32_t Pass::getTextureUnitsCount( TextureFlagsArray mask )const
 	{
 		return uint32_t( matpass::getTextureUnits( m_textureUnits, mask ).size() );
 	}
 
-	TextureFlagsArray Pass::getTexturesMask( TextureFlags mask )const
+	TextureFlagsArray Pass::getTexturesMask()const
+	{
+		if ( !m_texturesReduced )
+		{
+			return {};
+		}
+
+		TextureUnitPtrArray units{ getTextureUnits() };
+		TextureFlagsArray result;
+
+		for ( auto & unit : units )
+		{
+			auto unitFlags = unit->getFlags();
+			result.insert( result.end(), unitFlags.begin(), unitFlags.end() );
+		}
+
+		return result;
+	}
+
+	TextureFlagsArray Pass::getTexturesMask( TextureFlagsArray mask )const
 	{
 		if ( !m_texturesReduced )
 		{
@@ -855,13 +967,14 @@ namespace castor3d
 
 		for ( auto & unit : units )
 		{
-			result.push_back( { unit->getFlags(), unit->getId() } );
+			auto unitFlags = unit->getFlags();
+			result.insert( result.end(), unitFlags.begin(), unitFlags.end() );
 		}
 
 		return result;
 	}
 
-	TextureFlags Pass::getTextures()const
+	TextureFlagsArray Pass::getTextures()const
 	{
 		return m_textureFlags;
 	}
@@ -876,6 +989,90 @@ namespace castor3d
 		return false;
 	}
 
+	PassComponentTextureFlag Pass::getColourMapFlags()const
+	{
+		auto it = std::find_if( m_components.begin()
+			, m_components.end()
+			, []( PassComponentMap::value_type const & lookup )
+			{
+				return lookup.second->getPlugin().isMapComponent()
+					&& lookup.second->getPlugin().getColourFlags() != 0u;
+			} );
+		return it == m_components.end()
+			? 0u
+			: it->second->getPlugin().getColourFlags();
+	}
+
+	PassComponentTextureFlag Pass::getOpacityMapFlags()const
+	{
+		auto it = std::find_if( m_components.begin()
+			, m_components.end()
+			, []( PassComponentMap::value_type const & lookup )
+			{
+				return lookup.second->getPlugin().isMapComponent()
+					&& lookup.second->getPlugin().getOpacityFlags() != 0u;
+			} );
+		return it == m_components.end()
+			? 0u
+			: it->second->getPlugin().getOpacityFlags();
+	}
+
+	PassComponentTextureFlag Pass::getNormalMapFlags()const
+	{
+		auto it = std::find_if( m_components.begin()
+			, m_components.end()
+			, []( PassComponentMap::value_type const & lookup )
+			{
+				return lookup.second->getPlugin().isMapComponent()
+					&& lookup.second->getPlugin().getNormalFlags() != 0u;
+			} );
+		return it == m_components.end()
+			? 0u
+			: it->second->getPlugin().getNormalFlags();
+	}
+
+	PassComponentTextureFlag Pass::getHeightMapFlags()const
+	{
+		auto it = std::find_if( m_components.begin()
+			, m_components.end()
+			, []( PassComponentMap::value_type const & lookup )
+			{
+				return lookup.second->getPlugin().isMapComponent()
+					&& lookup.second->getPlugin().getHeightFlags() != 0u;
+			} );
+		return it == m_components.end()
+			? 0u
+			: it->second->getPlugin().getHeightFlags();
+	}
+
+	PassComponentTextureFlag Pass::getOcclusionMapFlags()const
+	{
+		auto it = std::find_if( m_components.begin()
+			, m_components.end()
+			, []( PassComponentMap::value_type const & lookup )
+			{
+				return lookup.second->getPlugin().isMapComponent()
+					&& lookup.second->getPlugin().getOcclusionFlags() != 0u;
+			} );
+		return it == m_components.end()
+			? 0u
+			: it->second->getPlugin().getOcclusionFlags();
+	}
+
+	castor::String Pass::getMapFlagsName( PassComponentTextureFlag flags )const
+	{
+		auto it = std::find_if( m_components.begin()
+			, m_components.end()
+			, [&flags]( PassComponentMap::value_type const & lookup )
+			{
+				return lookup.second->getPlugin().isMapComponent()
+					&& !lookup.second->getPlugin().getMapFlagsName( flags ).empty();
+			} );
+		return it == m_components.end()
+			? castor::String{}
+			: it->second->getPlugin().getMapFlagsName( flags );
+	}
+
 	void Pass::enableLighting( bool value )
 	{
 		if ( auto component = getComponent< PassHeaderComponent >() )
@@ -888,11 +1085,6 @@ namespace castor3d
 		, TextureUnitSPtr unit
 		, TextureUnitPtrArray & result )
 	{
-		if ( unitData.passConfig.config.heightMask[0] )
-		{
-			m_heightTextureIndex = uint32_t( result.size() );
-		}
-
 		if ( unitData.animation && !unit->hasAnimation() )
 		{
 			auto anim = unitData.animation.get();
@@ -925,14 +1117,20 @@ namespace castor3d
 			onChanged( *this );
 		}
 
-		m_textureConfigs = TextureConfiguration{};
+		std::vector< TextureFlagConfiguration > textureConfigs;
 
 		for ( auto & source : m_sources )
 		{
-			mergeConfigs( source.second.config, m_textureConfigs );
+			for ( auto & component : source.second.config.components )
+			{
+				if ( component.componentsMask )
+				{
+					textureConfigs.push_back( component );
+				}
+			}
 		}
 
-		getOwner()->getEngine()->getPassComponentsRegister().updateMapComponents( m_textureConfigs, *this );
+		getOwner()->getEngine()->getPassComponentsRegister().updateMapComponents( textureConfigs, *this );
 		m_dirty = true;
 	}
 }

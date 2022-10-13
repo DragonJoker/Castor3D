@@ -18,11 +18,11 @@ namespace GuiCommon
 
 	namespace
 	{
-		uint32_t getComponent( castor::Point2ui const & flag )
+		uint32_t getComponent( castor3d::TextureFlagConfiguration & configuration )
 		{
 			for ( uint32_t i = 0u; i < 4u; ++i )
 			{
-				if ( ( flag[0] >> ( i * 8u ) ) & 0x01 )
+				if ( ( configuration.componentsMask >> ( i * 8u ) ) & 0x01 )
 				{
 					return i;
 				}
@@ -75,20 +75,20 @@ namespace GuiCommon
 		}
 
 		using onMaskChange = std::function< void ( wxVariant const & var
-				, castor3d::TextureFlag flag
+				, castor3d::PassComponentTextureFlag flag
 				, uint32_t componentsCount ) >;
 
 		class UnitTreeGatherer
 			: public castor3d::PassVisitor
 		{
 		public:
-			static std::map< castor3d::TextureFlag, TextureTreeItemProperty::PropertyPair > submit( castor3d::Pass & pass
+			static std::map< castor3d::PassComponentTextureFlag, TextureTreeItemProperty::PropertyPair > submit( castor3d::Pass & pass
 				, castor3d::TextureConfiguration & config
 				, TextureTreeItemProperty * properties
 				, wxPropertyGrid * grid
 				, onMaskChange onChange )
 			{
-				std::map< castor3d::TextureFlag, TextureTreeItemProperty::PropertyPair > result;
+				std::map< castor3d::PassComponentTextureFlag, TextureTreeItemProperty::PropertyPair > result;
 				UnitTreeGatherer vis{ properties, grid, onChange, result };
 				pass.fillConfig( config, vis );
 				return result;
@@ -98,7 +98,7 @@ namespace GuiCommon
 			UnitTreeGatherer( TextureTreeItemProperty * properties
 				, wxPropertyGrid * grid
 				, onMaskChange onChange
-				, std::map< castor3d::TextureFlag, TextureTreeItemProperty::PropertyPair > & result )
+				, std::map< castor3d::PassComponentTextureFlag, TextureTreeItemProperty::PropertyPair > & result )
 				: castor3d::PassVisitor{ {} }
 				, m_properties{ properties }
 				, m_grid{ grid }
@@ -245,8 +245,8 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, castor3d::TextureFlag textureFlag
-				, castor::Point2ui & mask
+				, castor3d::PassComponentTextureFlag textureFlag
+				, castor3d::TextureFlagConfiguration & configuration
 				, uint32_t componentsCount
 				, PassVisitor::ControlsList controls )override
 			{
@@ -254,7 +254,7 @@ namespace GuiCommon
 					, name + _( " Map" )
 					, name + _( " Component" )
 					, textureFlag
-					, mask
+					, configuration
 					, componentsCount );
 			}
 
@@ -262,8 +262,8 @@ namespace GuiCommon
 			void doAddProperty( wxString const & flagName
 				, wxString const & isName
 				, wxString const & compName
-				, castor3d::TextureFlag flag
-				, castor::Point2ui & mask
+				, castor3d::PassComponentTextureFlag flag
+				, castor3d::TextureFlagConfiguration & configuration
 				, uint32_t componentsCount )
 			{
 				auto onChange = m_onChange;
@@ -278,7 +278,7 @@ namespace GuiCommon
 				m_properties->addProperty( m_grid, flagName );
 				auto isProp = m_properties->addProperty( m_grid
 					, isName
-					, mask[0] != 0
+					, configuration.componentsMask != 0
 					, [onChange, flag, componentsCount]( wxVariant const & var )
 					{
 						onChange( var, flag, componentsCount );
@@ -293,13 +293,13 @@ namespace GuiCommon
 					choices.Add( PROPERTY_COMPONENT_G );
 					choices.Add( PROPERTY_COMPONENT_B );
 					choices.Add( PROPERTY_COMPONENT_A );
-					selected = choices[getComponent( mask )];
+					selected = choices[getComponent( configuration )];
 				}
 				else
 				{
 					choices.Add( PROPERTY_COMPONENT_RGB );
 					choices.Add( PROPERTY_COMPONENT_GBA );
-					selected = choices[getComponent( mask )];
+					selected = choices[getComponent( configuration )];
 				}
 
 				auto compProp = m_properties->addProperty( m_grid
@@ -310,15 +310,15 @@ namespace GuiCommon
 					{
 						onChange( var, flag, componentsCount );
 					} );
-				compProp->Enable( mask[0] != 0 );
-				m_result.emplace( flag, TextureTreeItemProperty::PropertyPair{ isProp, compProp, mask } );
+				compProp->Enable( configuration.componentsMask != 0 );
+				m_result.emplace( flag, TextureTreeItemProperty::PropertyPair{ isProp, compProp, configuration } );
 			}
 
 		private:
 			TextureTreeItemProperty * m_properties;
 			wxPropertyGrid * m_grid;
 			onMaskChange m_onChange;
-			std::map< castor3d::TextureFlag, TextureTreeItemProperty::PropertyPair > & m_result;
+			std::map< castor3d::PassComponentTextureFlag, TextureTreeItemProperty::PropertyPair > & m_result;
 		};
 	}
 
@@ -363,7 +363,7 @@ namespace GuiCommon
 				, this
 				, grid
 				, [this]( wxVariant const & var
-					, castor3d::TextureFlag flag
+					, castor3d::PassComponentTextureFlag flag
 					, uint32_t componentsCount )
 				{
 					onChange( var, flag, componentsCount );
@@ -386,7 +386,7 @@ namespace GuiCommon
 	}
 
 	void TextureTreeItemProperty::onChange( wxVariant const & var
-		, castor3d::TextureFlag flag
+		, castor3d::PassComponentTextureFlag flag
 		, uint32_t componentsCount )
 	{
 		auto unit = getTexture();
@@ -395,7 +395,7 @@ namespace GuiCommon
 		bool isMap = it->second.isMap->GetValue();
 		long components = it->second.components->GetValue();
 		it->second.components->Enable( isMap );
-		it->second.mask[0] = getMask( isMap, components, componentsCount );
+		it->second.configuration.componentsMask = getMask( isMap, components, componentsCount );
 		m_pass.updateConfig( unit->getSourceInfo(), m_configuration );
 	}
 

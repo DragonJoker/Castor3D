@@ -388,6 +388,18 @@ namespace castor
 
 		switch ( format )
 		{
+		case PixelFormat::eR8G8_UNORM:
+			if ( support.supportBC5 )
+			{
+				result = PixelFormat::eBC5_UNORM_BLOCK;
+			}
+			break;
+		case PixelFormat::eR8G8_SNORM:
+			if ( support.supportBC5 )
+			{
+				result = PixelFormat::eBC5_SNORM_BLOCK;
+			}
+			break;
 		case PixelFormat::eR8G8B8_UNORM:
 		case PixelFormat::eB8G8R8_UNORM:
 		case PixelFormat::eB8G8R8A8_UNORM:

@@ -17,128 +17,40 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Texture channels.
-	*\~french
-	*\brief
-	*	Les canaux de texture.
-	*/
-	enum class TextureChannel
-		: uint16_t
-	{
-		//!\~english	Height map.
-		//!\~french		Map de hauteur.
-		eHeight,
-		//!\~english	Normal map.
-		//!\~french		Map de normales.
-		eNormal,
-		//!\~english	Colour (raw, base, or diffuse) map.
-		//!\~french		Map de couleur (brute, base ou diffuse).
-		eColour,
-		//!\~english	Opacity map.
-		//!\~french		Map d'opacité.
-		eOpacity,
-		//!\~english	Emissive map.
-		//!\~french		Map d'émissive.
-		eEmissive,
-		//!\~english	Occlusion map.
-		//!\~french		Map d'occlusion.
-		eOcclusion,
-		//!\~english	Light transmittance map.
-		//!\~french		Map de transmission de lumière.
-		eTransmittance,
-		//!\~english	Specular map.
-		//!\~french		Map de spéculaire.
-		eSpecular,
-		//!\~english	Metalness map.
-		//!\~french		Map de metalness.
-		eMetalness,
-		//!\~english	Glossiness/Shininess map.
-		//!\~french		Map de glossiness/shininess.
-		eGlossiness,
-		//!\~english	Roughness map.
-		//!\~french		Map de roughness.
-		eRoughness,
-		//!\~english	Count.
-		//!\~french		Compte.
-		eCount,
-	};
-	/**
-	*\~english
-	*\brief
 	*	Texture channels flags.
 	*\~french
 	*\brief
 	*	Indicateurs des canaux de texture.
 	*/
 	enum class TextureFlag
-		: uint16_t
+		: uint8_t
 	{
 		//!\~english	No texture.
 		//!\~french		Pas de texture.
-		eNone = 0x0000,
-		//!\~english	Height map.
-		//!\~french		Map de hauteur.
-		eHeight = 0x0001 << uint16_t( TextureChannel::eHeight ),
-		//!\~english	Normal map.
-		//!\~french		Map de normales.
-		eNormal = 0x0001 << uint16_t( TextureChannel::eNormal ),
-		//!\~english	Opacity map.
-		//!\~french		Map d'opacité.
-		eOpacity = 0x0001 << uint16_t( TextureChannel::eOpacity ),
-		//!\~english	Colour (raw, base, or diffuse) map.
-		//!\~french		Map de couleur (brute, base ou diffuse).
-		eColour = 0x0001 << uint16_t( TextureChannel::eColour ),
-		//!\~english	Emissive map.
-		//!\~french		Map d'émissive.
-		eEmissive = 0x0001 << uint16_t( TextureChannel::eEmissive ),
-		//!\~english	Occlusion map.
-		//!\~french		Map d'occlusion.
-		eOcclusion = 0x0001 << uint16_t( TextureChannel::eOcclusion ),
-		//!\~english	Light transmittance map.
-		//!\~french		Map de transmission de lumière.
-		eTransmittance = 0x0001 << uint16_t( TextureChannel::eTransmittance ),
-		//!\~english	Specular map.
-		//!\~french		Map de spéculaire.
-		eSpecular = 0x0001 << uint16_t( TextureChannel::eSpecular ),
-		//!\~english	Metalness map.
-		//!\~french		Map de metalness.
-		eMetalness = 0x0001 << uint16_t( TextureChannel::eMetalness ),
-		//!\~english	Glossiness map.
-		//!\~french		Map de glossiness.
-		eGlossiness = 0x0001 << uint16_t( TextureChannel::eGlossiness ),
-		//!\~english	Roughness map.
-		//!\~french		Map de roughness.
-		eRoughness = 0x0001 << uint16_t( TextureChannel::eRoughness ),
-		//!\~english	Mask for all the texture channels affecting geometry.
-		//!\~french		Masque pour les canaux de texture affectant la géométrie.
-		eGeometry = eOpacity | eHeight,
+		eNone = 0x00u,
 		//!\~english	Mask for all the texture channels.
 		//!\~french		Masque pour les canaux de texture.
-		eAll = ( 0x0001 << uint16_t( TextureChannel::eCount ) ) - 1u,
-		//!\~english	Mask for all the texture channels except for opacity.
-		//!\~french		Masque pour les canaux de texture sauf l'opacité.
-		eAllButOpacity = eAll & ~( eOpacity ),
-		//!\~english	Mask for all the texture channels except for opacity and colour.
-		//!\~french		Masque pour les canaux de texture sauf l'opacité et la couleur.
-		eAllButColourAndOpacity = eAllButOpacity & ~( eColour ),
-		//!\~english	Mask for all the texture channels except for opacity and normal.
-		//!\~french		Masque pour les canaux de texture sauf l'opacité et la normale.
-		eAllButNormalAndOpacity = eAllButOpacity & ~( eNormal ),
-		//!\~english	Mask for all the texture channels except for geometry related ones.
-		//!\~french		Masque pour les canaux de texture sauf ceux liés à la géométrie.
-		eAllButGeometry = eAll & ~( eGeometry ),
+		eAll = 0xFFu,
 	};
 	CU_ImplementFlags( TextureFlag )
-	C3D_API castor::String getName( TextureFlag value
-		, bool isPbr );
-	struct TextureFlagsId
+
+	using PassComponentID = uint16_t;
+	using PassComponentTextureFlag = uint32_t;
+
+	inline PassComponentTextureFlag makeTextureFlag( PassComponentID componentId
+		, TextureFlags componentTextureFlag )
 	{
-		TextureFlags flags;
-		uint32_t id;
-	};
-	C3D_API bool operator==( TextureFlagsId const & lhs, TextureFlagsId const & rhs );
-	using TextureFlagsArray = std::vector< TextureFlagsId >;
-	using FilteredTextureFlags = std::map< uint32_t, TextureFlagsId >;
+		return PassComponentTextureFlag{ uint32_t( uint32_t( componentId ) << 8u )
+			| uint32_t( componentTextureFlag ) };
+	}
+
+	inline std::pair< PassComponentID, TextureFlags > splitTextureFlag( PassComponentTextureFlag flag )
+	{
+		return { PassComponentID( uint32_t( flag ) >> 8u )
+			, TextureFlags( uint32_t( flag ) & 0x000000FFu ) };
+	}
+
+	using TextureFlagsArray = std::vector< PassComponentTextureFlag >;
 	/**
 	*\~english
 	*\brief

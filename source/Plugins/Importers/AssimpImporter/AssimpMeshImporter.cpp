@@ -167,7 +167,7 @@ namespace c3d_assimp
 					if ( importer.import( *mat
 						, &file
 						, castor3d::Parameters{}
-						, std::map< castor3d::TextureFlag, castor3d::TextureConfiguration >{} ) )
+						, std::map< castor3d::PassComponentTextureFlag, castor3d::TextureConfiguration >{} ) )
 					{
 						scene.getMaterialView().add( matName, mat, true );
 					}

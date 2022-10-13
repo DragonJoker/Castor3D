@@ -258,7 +258,7 @@ namespace castor3d
 			, VkRenderPass renderPass
 			, Pass const & pass
 			, ashes::PipelineShaderStageCreateInfoArray program
-			, FilteredTextureFlags const & texturesFlags
+			, TextureFlagsArray const & texturesFlags
 			, bool text );
 		Pipeline & doGetPipeline( RenderDevice const & device
 			, VkRenderPass renderPass
@@ -266,7 +266,7 @@ namespace castor3d
 			, std::map< uint32_t, Pipeline > & pipelines
 			, bool text );
 		ashes::PipelineShaderStageCreateInfoArray doCreateOverlayProgram( RenderDevice const & device
-			, FilteredTextureFlags const & textures
+			, TextureFlagsArray const & texturesFlags
 			, bool text );
 		ashes::DescriptorSetPtr doCreateDescriptorSet( OverlayRenderer::Pipeline & pipeline
 			, Pass const & pass

@@ -106,39 +106,25 @@ namespace castor3d
 	public:
 		struct Data
 		{
-			castor::Point2f colour;
-			castor::Point2f opacity;
-
-			castor::Point2f specular;
-			castor::Point2f glossiness;
-
-			castor::Point2f metalness;
-			castor::Point2f roughness;
-
-			castor::Point2f emissive;
-			castor::Point2f occlusion;
-
-			castor::Point2f transmittance;
-			castor::Point2f normal;
-
-			castor::Point2f normalFactors;
-			castor::Point2f height;
-
-			castor::Point2f heightFactors;
-			castor::Point2ui invAnim;
-
-			castor::Point2ui tileAnimSet;
-			castor::Point2ui pad;
-
 			castor::Point4f translate;
 			castor::Point4f rotate;
 			castor::Point4f scale;
 			castor::Point4f tileSet;
+			float normalFactor;
+			float normalGMult;
+			float heightFactor;
+			uint32_t needsYInv;
+			uint32_t isTransformAnim;
+			uint32_t isTileAnim;
+			uint32_t texcoordSet;
+			uint32_t componentsCount;
+			std::array< castor::Point4ui, 4u > components;
 		};
 
 		using TextureConfigurationsData = castor::ArrayView< Data >;
 
 		static uint32_t constexpr DataSize = uint32_t( sizeof( Data ) );
+		static_assert( DataSize == 160u );
 
 	private:
 		ShaderBuffer m_buffer;

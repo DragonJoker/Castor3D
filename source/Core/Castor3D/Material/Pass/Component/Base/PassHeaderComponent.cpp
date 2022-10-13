@@ -102,7 +102,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const PassHeaderComponent::TypeName = C3D_MakePassComponentName( "header" );
+	castor::String const PassHeaderComponent::TypeName = C3D_MakePassBaseComponentName( "header" );
 
 	PassHeaderComponent::PassHeaderComponent( Pass & pass )
 		: BaseDataPassComponentT< castor::AtomicGroupChangeTracked< uint32_t > >{ pass, TypeName }

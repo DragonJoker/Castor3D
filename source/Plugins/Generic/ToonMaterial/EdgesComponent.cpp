@@ -224,7 +224,7 @@ namespace toon
 
 	void EdgesComponent::ComponentsShader::blendComponents( castor3d::shader::Materials const & materials
 		, sdw::Float const & passMultiplier
-		, castor3d::shader::BlendComponents const & res
+		, castor3d::shader::BlendComponents & res
 		, castor3d::shader::BlendComponents const & src )const
 	{
 		if ( src.hasMember( "edgeColour" ) )
@@ -275,7 +275,7 @@ namespace toon
 			, { castor::makeParameter< castor::ParameterType::eHdrRgbaColour >() } );
 	}
 
-	bool EdgesComponent::Plugin::isComponentNeeded( castor3d::TextureFlags const & textures
+	bool EdgesComponent::Plugin::isComponentNeeded( castor3d::TextureFlagsArray const & textures
 		, castor3d::ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, castor3d::ComponentModeFlag::eColour );
@@ -283,7 +283,7 @@ namespace toon
 
 	//*********************************************************************************************
 
-	castor::String const EdgesComponent::TypeName = C3D_PluginMakePassComponentName( "toon", "edges" );
+	castor::String const EdgesComponent::TypeName = C3D_PluginMakePassOtherComponentName( "toon", "edges" );
 
 	EdgesComponent::EdgesComponent( castor3d::Pass & pass )
 		: BaseDataPassComponentT< EdgesData >{ pass, TypeName }

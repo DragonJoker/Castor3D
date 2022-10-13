@@ -79,7 +79,10 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		C3D_API TextureFlags getTexturesMask()const override;
+		/**
+		 *\copydoc		castor3d::RenderTechniquePass::getComponentsMask
+		 */
+		C3D_API ComponentModeFlags getComponentsMask()const override;
 
 		C3D_API ShaderFlags getShaderFlags()const override
 		{

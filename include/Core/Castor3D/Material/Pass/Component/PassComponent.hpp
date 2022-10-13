@@ -13,6 +13,8 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp"
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
+#include "Castor3D/Material/Texture/TextureConfiguration.hpp"
+
 #include <CastorUtils/Graphics/RgbColour.hpp>
 
 #pragma warning( push )
@@ -66,6 +68,10 @@ namespace castor3d
 		struct PassComponentsShader
 			: public PassShader
 		{
+			PassComponentsShader( PassComponentPlugin const & plugin )
+				: m_plugin{ plugin }
+			{
+			}
 			/**
 			*\~english
 			*\brief
@@ -133,6 +139,96 @@ namespace castor3d
 			/**
 			*\~english
 			*\brief
+			*	Use this component ta alter texture coordinates.
+			*\param[in] flags
+			*	Used to check if the render pass is configured so the component is usable.
+			*\param[in] config
+			*	Used to say if the texture has the needed configuration for this component.
+			*\param[in] imgCompConfig
+			*	The current image component(s) to use.
+			*\param[in] map
+			*	The texture to use.
+			*\param[in] texCoords
+			*	The 3D texture coordinates.
+			*\param[in] texCoord
+			*	The 2D texture coordinates.
+			*\param[in] components
+			*	Contains the component members.
+			*\~french
+			*\brief
+			*	Utilise ce composant pour altérer les coordonnées de texture.
+			*\param[in] flags
+			*	Utilisé pour vérifier si la passe de rendu est configurée pour que le composant soit utilisable.
+			*\param[in] config
+			*	Utilisé pour dire si la texture a la configuration pour ce composant.
+			*\param[in] imgCompConfig
+			*	Les composantes de l'image à utiliser.
+			*\param[in] map
+			*	La texture à utiliser.
+			*\param[in] texCoords
+			*	Les coordonnées de texture 3D.
+			*\param[in] texCoord
+			*	Les coordonnées de texture 2D.
+			*\param[in] components
+			*	Contient les membres du composant.
+			*/
+			C3D_API virtual void computeTexcoord( PipelineFlags const & flags
+				, TextureConfigData const & config
+				, sdw::U32Vec3 const & imgCompConfig
+				, sdw::CombinedImage2DRgba32 const & map
+				, sdw::Vec3 & texCoords
+				, sdw::Vec2 & texCoord
+				, BlendComponents & components )const
+			{
+			}
+			/**
+			*\~english
+			*\brief
+			*	Use this component ta alter texture coordinates.
+			*\param[in] flags
+			*	Used to check if the render pass is configured so the component is usable.
+			*\param[in] config
+			*	Used to say if the texture has the needed configuration for this component.
+			*\param[in] imgCompConfig
+			*	The current image component(s) to use.
+			*\param[in] map
+			*	The texture to use.
+			*\param[in] texCoords
+			*	The 3D texture coordinates.
+			*\param[in] texCoord
+			*	The 2D texture coordinates.
+			*\param[in] components
+			*	Contains the component members.
+			*\~french
+			*\brief
+			*	Utilise ce composant pour altérer les coordonnées de texture.
+			*\param[in] flags
+			*	Utilisé pour vérifier si la passe de rendu est configurée pour que le composant soit utilisable.
+			*\param[in] config
+			*	Utilisé pour dire si la texture a la configuration pour ce composant.
+			*\param[in] imgCompConfig
+			*	Les composantes de l'image à utiliser.
+			*\param[in] map
+			*	La texture à utiliser.
+			*\param[in] texCoords
+			*	Les coordonnées de texture 3D.
+			*\param[in] texCoord
+			*	Les coordonnées de texture 2D.
+			*\param[in] components
+			*	Contient les membres du composant.
+			*/
+			C3D_API virtual void computeTexcoord( PipelineFlags const & flags
+				, TextureConfigData const & config
+				, sdw::U32Vec3 const & imgCompConfig
+				, sdw::CombinedImage2DRgba32 const & map
+				, DerivTex & texCoords
+				, DerivTex & texCoord
+				, BlendComponents & components )const
+			{
+			}
+			/**
+			*\~english
+			*\brief
 			*	Fills this component's values with the data retrieved from a texture.
 			*\param[in] texturesFlags
 			*	Used to check if the component's textures are enabled.
@@ -158,11 +254,12 @@ namespace castor3d
 			*\param[in] components
 			*	Contient les membres du composant.
 			*/
-			C3D_API virtual void applyComponents( TextureFlags const & texturesFlags
+			C3D_API virtual void applyComponents( TextureFlagsArray const & texturesFlags
 				, PipelineFlags const * flags
 				, shader::TextureConfigData const & config
+				, sdw::U32Vec3 const & imgCompConfig
 				, sdw::Vec4 const & sampled
-				, BlendComponents const & components )const
+				, BlendComponents & components )const
 			{
 			}
 			/**
@@ -191,10 +288,38 @@ namespace castor3d
 			*/
 			C3D_API virtual void blendComponents( shader::Materials const & materials
 				, sdw::Float const & passMultiplier
-				, BlendComponents const & res
+				, BlendComponents & res
 				, BlendComponents const & src )const
 			{
 			}
+			/**
+			*\~english
+			*	Adjusts the component data after textures have been parsed.
+			*\param[in] texturesFlags
+			*	Used to check if the component's textures are enabled.
+			*\param[in,out] components
+			*	Contains the component members.
+			*\~french
+			*	Ajuste les données du composant après que les textures ont été traitées.
+			*\param[in] texturesFlags
+			*	Utilisé pour vérifier si les textures du composant sont activées.
+			*\param[in,out] components
+			*	Contient les membres du composant.
+			*/
+			C3D_API virtual void updateComponent( TextureFlagsArray const & texturesFlags
+				, shader::BlendComponents & components )const
+			{
+			}
+			/**
+			*\name
+			*	Getters.
+			*/
+			/**@{*/
+			C3D_API PassComponentID getId()const;
+			/**@}*/
+
+		private:
+			PassComponentPlugin const & m_plugin;
 		};
 
 		struct PassMaterialShader
@@ -417,22 +542,6 @@ namespace castor3d
 		/**
 		*\~english
 		*\brief
-		*	Tells if the map component is needed in shader.
-		*\param[in] configuration
-		*	To check if the configuration for the component is there.
-		*\~french
-		*\brief
-		*	Dit si le composant de texture est nécessaire dans le shader.
-		*\param[in] configuration
-		*	Pour vérifier si la configuration nécessaire au composant est présente.
-		*/
-		C3D_API virtual bool needsMapComponent( TextureConfiguration const & configuration )const
-		{
-			return false;
-		}
-		/**
-		*\~english
-		*\brief
 		*	Creates the map component.
 		*\param[in] pass
 		*	To check if the configuration for the component is there.
@@ -464,11 +573,153 @@ namespace castor3d
 		}
 		/**
 		*\~english
-		*	The function to adjust the component data after textures have been parsed.
+		*\return
+		*	\p true if this component modifies texture coordinates.
 		*\~french
-		*	La fonction pour ajuster les données du composant après que les textures ont été traitées.
+		*\return
+		*	\p true si le composant modifie les coordonnées de texture.
+		*/
+		C3D_API virtual bool hasTexcoordModif( PipelineFlags const * flags )const
+		{
+			return false;
+		}
+		/**
+		*\~english
+		*\brief
+		*	Removes from given texture flags the ones that are useless given the provided filter.
+		*\~french
+		*\brief
+		*	Enlève des indicateurs de textures donnés ceux qui sont inutiles, par rapport au filtre donné.
+		*/
+		C3D_API virtual void filterTextureFlags( ComponentModeFlags filter
+			, TextureFlagsArray & texturesFlags )const
+		{
+		}
+		/**
+		*\~english
+		*\brief
+		*	Fills the texture configuration for use with this component.
+		*\param configuration
+		*	The texture configuration.
+		*\param mask
+		*	The mask value.
+		*\~french
+		*\brief
+		*	Remplit une configuration de texture, pour utilisation par ce composant.
+		*\param configuration
+		*	La configuration de texture.
+		*\param mask
+		*	La valeur du masque.
+		*/
+		C3D_API virtual void fillTextureConfiguration( TextureConfiguration & configuration
+			, uint32_t mask = 0 )const
+		{
+		}
+		/**
+		*\~english
+		*\return
+		*	The texture configuration with default configuration for this component.
+		*\~french
+		*\return
+		*	La configuration de texture avec la configuration par défaut pour ce composant.
+		*/
+		TextureConfiguration getBaseTextureConfiguration()const
+		{
+			TextureConfiguration result{};
+			fillTextureConfiguration( result );
+			return result;
+		}
+		/**
+		*\~english
+		*	Adjust the component data after textures have been parsed.
+		*\~french
+		*	Ajuste les données du composant après que les textures ont été traitées.
 		*/
 		UpdateComponent updateComponent;
+		/**
+		*\~english
+		*\return
+		*	The texture flags for this component.
+		*\~french
+		*\return
+		*	Les indicateurs de textures pour ce composant.
+		*/
+		C3D_API virtual PassComponentTextureFlag getTextureFlags()const
+		{
+			return 0u;
+		}
+		/**
+		*\~english
+		*\return
+		*	The texture flags concatenated names.
+		*\~french
+		*\return
+		*	Les noms concaténés des indicateurs de textures.
+		*/
+		C3D_API virtual castor::String getMapFlagsName( PassComponentTextureFlag const & flags )const
+		{
+			return castor::String{};
+		}
+		/**
+		*\~english
+		*\return
+		*	The flags for the colour map.
+		*\~french
+		*\return
+		*	Les indicateurs pour la texture de couleur.
+		*/
+		C3D_API virtual PassComponentTextureFlag getColourFlags()const
+		{
+			return 0u;
+		}
+		/**
+		*\~english
+		*\return
+		*	The flags for the opacity map.
+		*\~french
+		*\return
+		*	Les indicateurs pour la texture d'opacité.
+		*/
+		C3D_API virtual PassComponentTextureFlag getOpacityFlags()const
+		{
+			return 0u;
+		}
+		/**
+		*\~english
+		*\return
+		*	The flags for the normal map.
+		*\~french
+		*\return
+		*	Les indicateurs pour la texture de normales.
+		*/
+		C3D_API virtual PassComponentTextureFlag getNormalFlags()const
+		{
+			return 0u;
+		}
+		/**
+		*\~english
+		*\return
+		*	The flags for the height map.
+		*\~french
+		*\return
+		*	Les indicateurs pour la texture de hauteur.
+		*/
+		C3D_API virtual PassComponentTextureFlag getHeightFlags()const
+		{
+			return 0u;
+		}
+		/**
+		*\~english
+		*\return
+		*	The flags for the occlusion map.
+		*\~french
+		*\return
+		*	Les indicateurs pour la texture d'occlusion.
+		*/
+		C3D_API virtual PassComponentTextureFlag getOcclusionFlags()const
+		{
+			return 0u;
+		}
 		/**@}*/
 		/**
 		*\name
@@ -491,7 +742,7 @@ namespace castor3d
 		*\param[in,out] filter
 		*	Pour vérifier du point de vue de la passe de rendu.
 		*/
-		C3D_API virtual bool isComponentNeeded( TextureFlags const & textures
+		C3D_API virtual bool isComponentNeeded( TextureFlagsArray const & textures
 			, ComponentModeFlags const & filter )const
 		{
 			return false;
@@ -521,6 +772,26 @@ namespace castor3d
 			return nullptr;
 		}
 		/**@}*/
+		/**
+		*\name
+		*	Getters.
+		*/
+		/**@{*/
+		PassComponentID getId()const
+		{
+			return m_id;
+		}
+		/**@}*/
+
+	private:
+		friend class PassComponentRegister;
+
+		void setId( PassComponentID id )
+		{
+			m_id = id;
+		}
+
+		PassComponentID m_id{};
 	};
 
 	struct PassComponent
@@ -613,17 +884,6 @@ namespace castor3d
 		*/
 		/**@{*/
 		/**
-		 *\~english
-		 *\brief			Merges composant images, and creates the related texture data.
-		 *\param[in,out]	result	Receives the merged textures data.
-		 *\~french
-		 *\brief			Fusionne les images du composant, et crée les données de textures correspondantes.
-		 *\param[in,out]	result		Reçoit les données des textures.
-		 */
-		C3D_API virtual void mergeImages( TextureUnitDataSet & result )
-		{
-		}
-		/**
 		*\~english
 		*\brief
 		*	Fills the texture configuration for use with this component.
@@ -639,10 +899,8 @@ namespace castor3d
 		*\param mask
 		*	La valeur du masque.
 		*/
-		C3D_API virtual void fillChannel( TextureConfiguration & configuration
-			, uint32_t mask )
-		{
-		}
+		C3D_API void fillChannel( TextureConfiguration & configuration
+			, uint32_t mask );
 		/**
 		*\~english
 		*\brief
@@ -660,7 +918,7 @@ namespace castor3d
 		*	Le ... visiteur.
 		*/
 		C3D_API virtual void fillConfig( TextureConfiguration & config
-			, PassVisitorBase & vis )
+			, PassVisitorBase & vis )const
 		{
 		}
 		/**@}*/
@@ -702,6 +960,16 @@ namespace castor3d
 		castor::String const & getType()const
 		{
 			return m_type;
+		}
+
+		PassComponentPlugin const & getPlugin()const
+		{
+			return m_plugin;
+		}
+
+		PassComponentID getId()const
+		{
+			return m_id;
 		}
 
 		void setColour( castor::RgbColour const & v
@@ -762,6 +1030,8 @@ namespace castor3d
 
 	protected:
 		castor::String m_type;
+		PassComponentID m_id;
+		PassComponentPlugin const & m_plugin;
 		std::atomic_bool & m_dirty;
 		shader::PassMaterialShader * m_materialShader{};
 	};

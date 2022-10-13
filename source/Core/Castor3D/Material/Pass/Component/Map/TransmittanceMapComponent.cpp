@@ -1,5 +1,6 @@
 #include "Castor3D/Material/Pass/Component/Map/TransmittanceMapComponent.hpp"
 
+#include "Castor3D/Engine.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Pass/PassVisitor.hpp"
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
@@ -28,13 +29,13 @@ namespace castor
 
 		bool operator()( StringStream & file )
 		{
-			return writeNamedSub( file, cuT( "transmittance_mask" ), m_mask );
+			return writeMask( file, cuT( "transmittance_mask" ), m_mask );
 		}
 
 		bool operator()( castor3d::TransmittanceMapComponent const & object
 			, StringStream & file )override
 		{
-			return writeNamedSub( file, cuT( "transmittance" ), object.getTransmittance() );
+			return writeOpt( file, cuT( "transmittance" ), object.getTransmittance(), 1.0f );
 		}
 
 	private:
@@ -58,8 +59,8 @@ namespace castor3d
 			}
 			else
 			{
-				auto & component = getPassComponent< TransmittanceMapComponent >( parsingContext );
-				component.fillChannel( parsingContext.textureConfiguration
+				auto & plugin = parsingContext.pass->getComponentPlugin( TransmittanceMapComponent::TypeName );
+				plugin.fillTextureConfiguration( parsingContext.textureConfiguration
 					, params[0]->get< uint32_t >() );
 			}
 		}
@@ -68,7 +69,8 @@ namespace castor3d
 		static CU_ImplementAttributeParser( parserTexRemapTransmittance )
 		{
 			auto & parsingContext = getParserContext( context );
-			parsingContext.sceneImportConfig.textureRemapIt = parsingContext.sceneImportConfig.textureRemaps.emplace( TextureFlag::eTransmittance, TextureConfiguration{} ).first;
+			auto & plugin = parsingContext.parser->getEngine()->getPassComponentsRegister().getPlugin( TransmittanceMapComponent::TypeName );
+			parsingContext.sceneImportConfig.textureRemapIt = parsingContext.sceneImportConfig.textureRemaps.emplace( plugin.getTextureFlags(), TextureConfiguration{} ).first;
 			parsingContext.sceneImportConfig.textureRemapIt->second = TextureConfiguration{};
 		}
 		CU_EndAttributePush( CSCNSection::eTextureRemapChannel )
@@ -83,7 +85,9 @@ namespace castor3d
 			}
 			else
 			{
-				parsingContext.sceneImportConfig.textureRemapIt->second.transmittanceMask[0] = params[0]->get< uint32_t >();
+				auto & plugin = parsingContext.parser->getEngine()->getPassComponentsRegister().getPlugin( TransmittanceMapComponent::TypeName );
+				plugin.fillTextureConfiguration( parsingContext.sceneImportConfig.textureRemapIt->second
+					, params[0]->get< uint32_t >() );
 			}
 		}
 		CU_EndAttribute()
@@ -130,7 +134,7 @@ namespace castor3d
 
 	void TransmittanceMapComponent::ComponentsShader::blendComponents( shader::Materials const & materials
 		, sdw::Float const & passMultiplier
-		, shader::BlendComponents const & res
+		, shader::BlendComponents & res
 		, shader::BlendComponents const & src )const
 	{
 		if ( src.hasMember( "transmittance" ) )
@@ -139,23 +143,24 @@ namespace castor3d
 		}
 	}
 
-	void TransmittanceMapComponent::ComponentsShader::applyComponents( TextureFlags const & texturesFlags
+	void TransmittanceMapComponent::ComponentsShader::applyComponents( TextureFlagsArray const & texturesFlags
 		, PipelineFlags const * flags
 		, shader::TextureConfigData const & config
+		, sdw::U32Vec3 const & imgCompConfig
 		, sdw::Vec4 const & sampled
-		, shader::BlendComponents const & components )const
+		, shader::BlendComponents & components )const
 	{
 		if ( !components.hasMember( "transmittance" )
-			|| !checkFlag( texturesFlags, TextureFlag::eTransmittance ) )
+			|| texturesFlags.end() == checkFlags( texturesFlags, getTextureFlags() ) )
 		{
 			return;
 		}
 
 		auto & writer{ *sampled.getWriter() };
 
-		IF( writer, config.trsEnbl() != 0.0_f )
+		IF( writer, imgCompConfig.y() != 0_u )
 		{
-			components.getMember< sdw::Float >( "transmittance" ) *= config.getFloat( sampled, config.trsMask() );
+			components.getMember< sdw::Float >( "transmittance" ) *= config.getFloat( sampled, imgCompConfig.z() );
 		}
 		FI;
 	}
@@ -182,7 +187,7 @@ namespace castor3d
 	void TransmittanceMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		channelFillers.emplace( "transmittance", ChannelFiller{ uint32_t( TextureFlag::eTransmittance )
+		channelFillers.emplace( "transmittance", ChannelFiller{ getTextureFlags()
 			, []( SceneFileContext & parsingContext )
 			{
 				auto & component = getPassComponent< TransmittanceMapComponent >( parsingContext );
@@ -208,24 +213,26 @@ namespace castor3d
 			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
 	}
 
-	bool TransmittanceMapComponent::Plugin::isComponentNeeded( TextureFlags const & textures
+	bool TransmittanceMapComponent::Plugin::isComponentNeeded( TextureFlagsArray const & textures
 		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eDiffuseLighting )
 			|| checkFlag( filter, ComponentModeFlag::eSpecularLighting )
-			|| checkFlag( textures, TextureFlag::eTransmittance );
+			|| textures.end( ) != checkFlags( textures, getTextureFlags() );
 	}
 
 	bool TransmittanceMapComponent::Plugin::writeTextureConfig( TextureConfiguration const & configuration
 		, castor::String const & tabs
 		, castor::StringStream & file )const
 	{
-		return castor::TextWriter< TransmittanceMapComponent >{ tabs, configuration.transmittanceMask[0] }( file );
-	}
+		auto it = checkFlags( configuration.components, getTextureFlags() );
 
-	bool TransmittanceMapComponent::Plugin::needsMapComponent( TextureConfiguration const & configuration )const
-	{
-		return configuration.transmittanceMask[0] != 0;
+		if ( it == configuration.components.end() )
+		{
+			return true;
+		}
+
+		return castor::TextWriter< TransmittanceMapComponent >{ tabs, it->componentsMask }( file );
 	}
 
 	void TransmittanceMapComponent::Plugin::createMapComponent( Pass & pass
@@ -252,26 +259,10 @@ namespace castor3d
 	{
 	}
 
-	void TransmittanceMapComponent::mergeImages( TextureUnitDataSet & result )
-	{
-		getOwner()->prepareImage( TextureFlag::eTransmittance
-			, offsetof( TextureConfiguration, transmittanceMask )
-			, 0x00FFFFFF
-			, "Trs"
-			, result );
-	}
-
-	void TransmittanceMapComponent::fillChannel( TextureConfiguration & configuration
-		, uint32_t mask )
-	{
-		configuration.textureSpace |= TextureSpace::eNormalised;
-		configuration.transmittanceMask[0] = mask;
-	}
-
 	void TransmittanceMapComponent::fillConfig( TextureConfiguration & configuration
-		, PassVisitorBase & vis )
+		, PassVisitorBase & vis )const
 	{
-		vis.visit( cuT( "Transmittance" ), TextureFlag::eTransmittance, configuration.transmittanceMask, 1u );
+		vis.visit( cuT( "Transmittance" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 1u );
 	}
 
 	PassComponentUPtr TransmittanceMapComponent::doClone( Pass & pass )const

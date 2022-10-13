@@ -4,6 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_MaterialPassComponentModule_H___
 #define ___C3D_MaterialPassComponentModule_H___
 
+#include "Castor3D/Limits.hpp"
 #include "Castor3D/Castor3DModule.hpp"
 #include "Castor3D/Material/MaterialModule.hpp"
 
@@ -18,11 +19,20 @@ See LICENSE file in root folder
 #define C3D_Join3Strings( l, m, r ) C3D_Join2Strings(l, C3D_Join2Strings(m, r))
 #define C3D_Join4Strings( l, ml, mr, r ) C3D_Join3Strings(l, ml, C3D_Join2Strings(mr, r))
 
-#define C3D_PluginMakePassComponentName( p, x ) C3D_Join3Strings(p, "pass", x)
+#define C3D_PluginMakePassComponentName( p, x ) C3D_Join3Strings( p, "pass", x )
 #define C3D_MakePassComponentName( x ) C3D_PluginMakePassComponentName( "c3d", x )
 
-#define C3D_PluginMakePassMapComponentName( p, x ) C3D_Join4Strings(p, "map", "pass", x)
+#define C3D_PluginMakePassBaseComponentName( p, x ) C3D_Join4Strings( p, "pass", "base", x )
+#define C3D_MakePassBaseComponentName( x ) C3D_PluginMakePassBaseComponentName( "c3d", x )
+
+#define C3D_PluginMakePassLightingComponentName( p, x ) C3D_Join4Strings( p, "pass", "lighting", x )
+#define C3D_MakePassLightingComponentName( x ) C3D_PluginMakePassLightingComponentName( "c3d", x )
+
+#define C3D_PluginMakePassMapComponentName( p, x ) C3D_Join4Strings( p, "pass", "map", x )
 #define C3D_MakePassMapComponentName( x ) C3D_PluginMakePassMapComponentName( "c3d", x )
+
+#define C3D_PluginMakePassOtherComponentName( p, x ) C3D_Join4Strings( p, "pass", "other", x )
+#define C3D_MakePassOtherComponentName( x ) C3D_PluginMakePassOtherComponentName( "c3d", x )
 
 namespace castor3d
 {
@@ -63,6 +73,7 @@ namespace castor3d
 		eSpecifics,
 		eDerivTex,
 		eOcclusion,
+		CU_ScopedEnumBounds( eNone ),
 	};
 	enum class ComponentModeFlag : uint16_t
 	{
@@ -75,6 +86,7 @@ namespace castor3d
 		eSpecifics = 0x0001u << uint16_t( ComponentMode::eSpecifics ),
 		eDerivTex = 0x0001u << uint16_t( ComponentMode::eDerivTex ),
 		eOcclusion = 0x0001u << uint16_t( ComponentMode::eOcclusion ),
+		eAll = ( ( 0x0001u << uint16_t( ComponentMode::eCount ) ) - 1u ),
 	};
 	CU_ImplementFlags( ComponentModeFlag )
 	/**
@@ -170,13 +182,20 @@ namespace castor3d
 	using OnSssProfileChangedConnection = castor::ConnectionT< OnSssProfileChanged >;
 
 	using PassComponentsBitset = castor::DynamicBitsetT< uint16_t >;
+	using ComponentsTextures = std::array< PassComponentTextureFlag, MaxPassTextures >;
+
+	C3D_API bool areFlagsEmpty( ComponentsTextures const & textures );
+	C3D_API ComponentsTextures makeComponentsTextures( TextureFlagsArray const & textures );
+	C3D_API ComponentsTextures::const_iterator checkFlags( ComponentsTextures const & flags
+		, PassComponentTextureFlag flag );
 
 	using ComponentConfigFiller = std::function< void( SceneFileContext & parsingContext ) >;
-	using ChannelFiller = std::pair< uint32_t, ComponentConfigFiller >;
+	using ChannelFiller = std::pair< PassComponentTextureFlag, ComponentConfigFiller >;
 	using ChannelFillers = std::map< castor::String, ChannelFiller >;
 
-	using UpdateComponent = std::function< void( TextureFlags const & texturesFlags
-		, shader::BlendComponents const & components ) >;
+	using UpdateComponent = std::function< void( PassComponentRegister const & passComponents
+		, TextureFlagsArray const & texturesFlags
+		, shader::BlendComponents & components ) >;
 
 	using CreatePassComponentPlugin = std::function< PassComponentPluginUPtr() >;
 	//@}

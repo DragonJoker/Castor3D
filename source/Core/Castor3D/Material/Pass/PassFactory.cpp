@@ -62,7 +62,6 @@ namespace castor3d
 		auto lightingIt = m_lightingModels.find( id );
 		CU_Require( lightingIt != m_lightingModels.end() );
 		getEngine()->unregisterLightingModel( lightingIt->second );
-		getEngine()->unregisterParsers( passType );
 		auto iblIt = m_ibls.find( id );
 		CU_Require( iblIt != m_ibls.end() );
 		m_ibls.erase( iblIt );

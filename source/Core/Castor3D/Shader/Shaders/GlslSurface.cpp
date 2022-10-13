@@ -1,5 +1,6 @@
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 
+#include "Castor3D/Material/Pass/Component/PassShaders.hpp"
 #include "Castor3D/Render/RenderNodesPass.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/MorphingUbo.hpp"
@@ -368,6 +369,7 @@ namespace castor3d::shader
 	}
 
 	void RasterizerSurfaceBase::fillIOType( sdw::type::IOStruct & type
+		, PassShaders const & shaders
 		, PipelineFlags const & flags
 		, uint32_t & index )
 	{
@@ -390,13 +392,13 @@ namespace castor3d::shader
 		type.declMember( "tangentSpaceFragPosition"
 			, ast::type::Kind::eVec3F
 			, ast::type::NotArray
-			, ( flags.enableParallaxOcclusionMapping() ? index++ : 0 )
-			, flags.enableParallaxOcclusionMapping() );
+			, ( shaders.enableParallaxOcclusionMapping( flags ) ? index++ : 0 )
+			, shaders.enableParallaxOcclusionMapping( flags ) );
 		type.declMember( "tangentSpaceViewPosition"
 			, ast::type::Kind::eVec3F
 			, ast::type::NotArray
-			, ( flags.enableParallaxOcclusionMapping() ? index++ : 0 )
-			, flags.enableParallaxOcclusionMapping() );
+			, ( shaders.enableParallaxOcclusionMapping( flags) ? index++ : 0 )
+			, shaders.enableParallaxOcclusionMapping( flags ) );
 		type.declMember( "tangent", ast::type::Kind::eVec3F
 			, ast::type::NotArray
 			, ( flags.enableTangentSpace() ? index++ : 0 )
@@ -421,6 +423,7 @@ namespace castor3d::shader
 	}
 
 	void RasterizerSurfaceBase::fillType( sdw::type::BaseStruct & type
+		, PassShaders const & shaders
 		, PipelineFlags const & flags )
 	{
 		SurfaceBase::fillType( type, flags );
@@ -438,11 +441,11 @@ namespace castor3d::shader
 		type.declMember( "tangentSpaceFragPosition"
 			, ast::type::Kind::eVec3F
 			, ast::type::NotArray
-			, flags.enableParallaxOcclusionMapping() );
+			, shaders.enableParallaxOcclusionMapping( flags ) );
 		type.declMember( "tangentSpaceViewPosition"
 			, ast::type::Kind::eVec3F
 			, ast::type::NotArray
-			, flags.enableParallaxOcclusionMapping() );
+			, shaders.enableParallaxOcclusionMapping( flags ) );
 		type.declMember( "tangent", ast::type::Kind::eVec3F
 			, ast::type::NotArray
 			, flags.enableTangentSpace() );

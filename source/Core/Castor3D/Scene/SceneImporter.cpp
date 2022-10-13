@@ -31,7 +31,7 @@ namespace castor3d
 	bool SceneImporter::import( Scene & scene
 		, ImporterFile * file
 		, Parameters const & parameters
-		, std::map< TextureFlag, TextureConfiguration > const & textureRemaps )
+		, std::map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps )
 	{
 		m_file = file;
 		doImportMaterials( scene, parameters, textureRemaps );
@@ -48,7 +48,7 @@ namespace castor3d
 	bool SceneImporter::import( Scene & scene
 		, castor::Path const & path
 		, Parameters const & parameters
-		, std::map< TextureFlag, TextureConfiguration > const & textureRemaps )
+		, std::map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps )
 	{
 		auto & engine = *scene.getEngine();
 		auto extension = castor::string::lowerCase( path.getExtension() );
@@ -107,7 +107,7 @@ namespace castor3d
 
 	void SceneImporter::doImportMaterials( Scene & scene
 		, Parameters const & parameters
-		, std::map< TextureFlag, TextureConfiguration > const & textureRemaps )
+		, std::map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps )
 	{
 		if ( auto materialImporter = m_file->createMaterialImporter() )
 		{

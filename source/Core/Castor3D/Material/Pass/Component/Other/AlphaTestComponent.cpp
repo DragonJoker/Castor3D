@@ -145,7 +145,7 @@ namespace castor3d
 
 	void AlphaTestComponent::ComponentsShader::blendComponents( shader::Materials const & materials
 		, sdw::Float const & passMultiplier
-		, shader::BlendComponents const & res
+		, shader::BlendComponents & res
 		, shader::BlendComponents const & src )const
 	{
 		if ( src.hasMember( "alphaRef" ) )
@@ -197,7 +197,7 @@ namespace castor3d
 		data.write( materialShader.getMaterialChunk(), 0.95f, 0u );
 	}
 
-	bool AlphaTestComponent::Plugin::isComponentNeeded( TextureFlags const & textures
+	bool AlphaTestComponent::Plugin::isComponentNeeded( TextureFlagsArray const & textures
 		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eOpacity );
@@ -205,7 +205,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const AlphaTestComponent::TypeName = C3D_MakePassComponentName( "alpha_test" );
+	castor::String const AlphaTestComponent::TypeName = C3D_MakePassOtherComponentName( "alpha_test" );
 
 	AlphaTestComponent::AlphaTestComponent( Pass & pass )
 		: BaseDataPassComponentT< AlphaTestData >{ pass, TypeName }

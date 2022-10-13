@@ -64,9 +64,15 @@ namespace castor3d
 	{
 	}
 
-	TextureFlags TransparentPass::getTexturesMask()const
+	ComponentModeFlags TransparentPass::getComponentsMask()const
 	{
-		return TextureFlags{ TextureFlag::eAll };
+		return ComponentModeFlag::eOpacity
+			| ComponentModeFlag::eColour
+			| ComponentModeFlag::eDiffuseLighting
+			| ComponentModeFlag::eSpecularLighting
+			| ComponentModeFlag::eGeometry
+			| ComponentModeFlag::eOcclusion
+			| ComponentModeFlag::eSpecifics;
 	}
 
 	void TransparentPass::accept( RenderTechniqueVisitor & visitor )
@@ -144,13 +150,7 @@ namespace castor3d
 		shader::Utils utils{ writer };
 		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
 			, flags
-			, ( ComponentModeFlag::eOpacity
-				| ComponentModeFlag::eColour
-				| ComponentModeFlag::eDiffuseLighting
-				| ComponentModeFlag::eSpecularLighting
-				| ComponentModeFlag::eGeometry
-				| ComponentModeFlag::eOcclusion
-				| ComponentModeFlag::eSpecifics )
+			, getComponentsMask()
 			, utils };
 		shader::CookTorranceBRDF cookTorrance{ writer, utils };
 		auto index = uint32_t( GlobalBuffersIdx::eCount );
@@ -225,6 +225,7 @@ namespace castor3d
 		auto pxl_velocity( writer.declOutput< Vec2 >( "pxl_velocity", 2 ) );
 
 		writer.implementMainT< shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer
+				, passShaders
 				, flags }
 			, FragmentOut{ writer }
 			, [&]( FragmentInT< shader::FragmentSurfaceT > in

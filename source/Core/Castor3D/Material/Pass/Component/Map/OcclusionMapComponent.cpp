@@ -1,7 +1,9 @@
 #include "Castor3D/Material/Pass/Component/Map/OcclusionMapComponent.hpp"
 
+#include "Castor3D/Engine.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Pass/PassVisitor.hpp"
+#include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
 #include "Castor3D/Material/Pass/Component/Map/EmissiveMapComponent.hpp"
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
 #include "Castor3D/Scene/SceneFileParser.hpp"
@@ -28,13 +30,13 @@ namespace castor
 
 		bool operator()( StringStream & file )
 		{
-			return writeNamedSub( file, cuT( "occlusion_mask" ), m_mask );
+			return writeMask( file, cuT( "occlusion_mask" ), m_mask );
 		}
 
 		bool operator()( castor3d::OcclusionMapComponent const & object
 			, StringStream & file )override
 		{
-			return writeNamedSub( file, cuT( "occlusion_mask" ), m_mask );
+			return writeMask( file, cuT( "occlusion_mask" ), m_mask );
 		}
 
 	private:
@@ -58,8 +60,8 @@ namespace castor3d
 			}
 			else
 			{
-				auto & component = getPassComponent< OcclusionMapComponent >( parsingContext );
-				component.fillChannel( parsingContext.textureConfiguration
+				auto & plugin = parsingContext.pass->getComponentPlugin( OcclusionMapComponent::TypeName );
+				plugin.fillTextureConfiguration( parsingContext.textureConfiguration
 					, params[0]->get< uint32_t >() );
 			}
 		}
@@ -68,7 +70,8 @@ namespace castor3d
 		static CU_ImplementAttributeParser( parserTexRemapOcclusion )
 		{
 			auto & parsingContext = getParserContext( context );
-			parsingContext.sceneImportConfig.textureRemapIt = parsingContext.sceneImportConfig.textureRemaps.emplace( TextureFlag::eOcclusion, TextureConfiguration{} ).first;
+			auto & plugin = parsingContext.parser->getEngine()->getPassComponentsRegister().getPlugin( OcclusionMapComponent::TypeName );
+			parsingContext.sceneImportConfig.textureRemapIt = parsingContext.sceneImportConfig.textureRemaps.emplace( plugin.getTextureFlags(), TextureConfiguration{} ).first;
 			parsingContext.sceneImportConfig.textureRemapIt->second = TextureConfiguration{};
 		}
 		CU_EndAttributePush( CSCNSection::eTextureRemapChannel )
@@ -83,7 +86,9 @@ namespace castor3d
 			}
 			else
 			{
-				parsingContext.sceneImportConfig.textureRemapIt->second.occlusionMask[0] = params[0]->get< uint32_t >();
+				auto & plugin = parsingContext.parser->getEngine()->getPassComponentsRegister().getPlugin( OcclusionMapComponent::TypeName );
+				plugin.fillTextureConfiguration( parsingContext.sceneImportConfig.textureRemapIt->second
+					, params[0]->get< uint32_t >() );
 			}
 		}
 		CU_EndAttribute()
@@ -122,7 +127,7 @@ namespace castor3d
 
 	void OcclusionMapComponent::ComponentsShader::blendComponents( shader::Materials const & materials
 		, sdw::Float const & passMultiplier
-		, shader::BlendComponents const & res
+		, shader::BlendComponents & res
 		, shader::BlendComponents const & src )const
 	{
 		if ( src.hasMember( "occlusion" ) )
@@ -131,23 +136,24 @@ namespace castor3d
 		}
 	}
 
-	void OcclusionMapComponent::ComponentsShader::applyComponents( TextureFlags const & texturesFlags
+	void OcclusionMapComponent::ComponentsShader::applyComponents( TextureFlagsArray const & texturesFlags
 		, PipelineFlags const * flags
 		, shader::TextureConfigData const & config
+		, sdw::U32Vec3 const & imgCompConfig
 		, sdw::Vec4 const & sampled
-		, shader::BlendComponents const & components )const
+		, shader::BlendComponents & components )const
 	{
 		if ( !components.hasMember( "occlusion" )
-			|| !checkFlag( texturesFlags, TextureFlag::eOcclusion ) )
+			|| texturesFlags.end() == checkFlags( texturesFlags, getTextureFlags() ) )
 		{
 			return;
 		}
 
 		auto & writer{ *sampled.getWriter() };
 
-		IF( writer, config.occEnbl() != 0.0_f )
+		IF( writer, imgCompConfig.y() != 0_u )
 		{
-			components.getMember< sdw::Float >( "occlusion" ) *= config.getFloat( sampled, config.occMask() );
+			components.getMember< sdw::Float >( "occlusion" ) *= config.getFloat( sampled, imgCompConfig.z() );
 		}
 		FI;
 	}
@@ -157,7 +163,7 @@ namespace castor3d
 	void OcclusionMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		channelFillers.emplace( "occlusion", ChannelFiller{ uint32_t( TextureFlag::eOcclusion )
+		channelFillers.emplace( "occlusion", ChannelFiller{ getTextureFlags()
 			, []( SceneFileContext & parsingContext )
 			{
 				auto & component = getPassComponent< OcclusionMapComponent >( parsingContext );
@@ -187,19 +193,21 @@ namespace castor3d
 		, castor::String const & tabs
 		, castor::StringStream & file )const
 	{
-		return castor::TextWriter< OcclusionMapComponent >{ tabs, configuration.occlusionMask[0] }( file );
+		auto it = checkFlags( configuration.components, getTextureFlags() );
+
+		if ( it == configuration.components.end() )
+		{
+			return true;
+		}
+
+		return castor::TextWriter< OcclusionMapComponent >{ tabs, it->componentsMask }( file );
 	}
 
-	bool OcclusionMapComponent::Plugin::isComponentNeeded( TextureFlags const & textures
+	bool OcclusionMapComponent::Plugin::isComponentNeeded( TextureFlagsArray const & textures
 		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eOcclusion )
-			|| checkFlag( textures, TextureFlag::eOcclusion );
-	}
-
-	bool OcclusionMapComponent::Plugin::needsMapComponent( TextureConfiguration const & configuration )const
-	{
-		return configuration.occlusionMask[0] != 0u;
+			|| textures.end() != checkFlags( textures, getTextureFlags() );
 	}
 
 	void OcclusionMapComponent::Plugin::createMapComponent( Pass & pass
@@ -217,32 +225,10 @@ namespace castor3d
 	{
 	}
 
-	void OcclusionMapComponent::mergeImages( TextureUnitDataSet & result )
-	{
-		if ( !getOwner()->hasComponent< EmissiveMapComponent >() )
-		{
-			getOwner()->mergeImages( TextureFlag::eEmissive
-				, offsetof( TextureConfiguration, emissiveMask )
-				, 0x00FFFFFF
-				, TextureFlag::eOcclusion
-				, offsetof( TextureConfiguration, occlusionMask )
-				, 0xFF000000
-				, "EmsOcc"
-				, result );
-		}
-	}
-
-	void OcclusionMapComponent::fillChannel( TextureConfiguration & configuration
-		, uint32_t mask )
-	{
-		configuration.textureSpace |= TextureSpace::eNormalised;
-		configuration.occlusionMask[0] = mask;
-	}
-
 	void OcclusionMapComponent::fillConfig( TextureConfiguration & configuration
-		, PassVisitorBase & vis )
+		, PassVisitorBase & vis )const
 	{
-		vis.visit( cuT( "Occlusion" ), TextureFlag::eOcclusion, configuration.occlusionMask, 1u );
+		vis.visit( cuT( "Occlusion" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 1u );
 	}
 
 	PassComponentUPtr OcclusionMapComponent::doClone( Pass & pass )const

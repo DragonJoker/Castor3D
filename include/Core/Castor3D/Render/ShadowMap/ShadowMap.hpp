@@ -178,17 +178,6 @@ namespace castor3d
 		}
 		/**@}*/
 
-	public:
-		static constexpr TextureFlags textureFlags{ TextureFlag::eOpacity
-			| TextureFlag::eNormal
-			| TextureFlag::eColour
-			| TextureFlag::eSpecular
-			| TextureFlag::eMetalness
-			| TextureFlag::eGlossiness
-			| TextureFlag::eRoughness
-			| TextureFlag::eEmissive
-			| TextureFlag::eTransmittance };
-
 	private:
 		C3D_API virtual std::vector< ShadowMap::PassDataPtr > doCreatePass( uint32_t index
 			, bool vsm

@@ -135,69 +135,80 @@ namespace castor3d
 		}
 	}
 
-	FilteredTextureFlags::const_iterator checkFlags( FilteredTextureFlags const & flags, TextureFlag flag )
+	TextureFlagsArray::const_iterator checkFlags( TextureFlagsArray const & lhs
+		, PassComponentTextureFlag rhs )
 	{
-		auto it = std::find_if( flags.begin()
-			, flags.end()
-			, [flag]( FilteredTextureFlags::value_type const & lookup )
+		auto [rhsPassIndex, rhsTextureFlag] = splitTextureFlag( rhs );
+		auto it = std::find_if( lhs.begin()
+			, lhs.end()
+			, [rhsPassIndex, rhsTextureFlag]( PassComponentTextureFlag const & lookup )
 			{
-				return checkFlag( lookup.second.flags, flag );
+				auto [lhsPassIndex, lhsTextureFlag] = splitTextureFlag( lookup );
+				return lhsPassIndex == rhsPassIndex
+					&& castor::hasAny( lhsTextureFlag, rhsTextureFlag );
 			} );
 		return it;
 	}
 
-	TextureFlagsArray::const_iterator checkFlags( TextureFlagsArray const & flags, TextureFlag flag )
+	void remFlags( TextureFlagsArray & lhs
+		, PassComponentTextureFlag rhs )
 	{
-		auto it = std::find_if( flags.begin()
-			, flags.end()
-			, [flag]( TextureFlagsId const & lookup )
-			{
-				return checkFlag( lookup.flags, flag );
-			} );
-		return it;
-	}
+		auto [rhsPassIndex, rhsTextureFlag] = splitTextureFlag( rhs );
+		auto it = lhs.begin();
 
-	TextureFlags merge( TextureFlagsArray const & flags )
-	{
-		TextureFlags result = TextureFlag::eNone;
-
-		for ( auto flag : flags )
+		while ( it != lhs.end() )
 		{
-			result |= flag.flags;
-		}
+			auto & lookup = *it;
+			auto [lhsPassIndex, lhsTextureFlag] = splitTextureFlag( lookup );
 
-		return result;
-	}
-
-	FilteredTextureFlags filterTexturesFlags( TextureFlagsArray const & textures
-		, TextureFlags mask )
-	{
-		FilteredTextureFlags result;
-		uint32_t index = 0u;
-
-		for ( auto & flagId : textures )
-		{
-			if ( ( flagId.flags & mask ) != 0 )
+			if ( lhsPassIndex == rhsPassIndex )
 			{
-				result.emplace( index, flagId );
+				remFlags( lhsTextureFlag, rhsTextureFlag );
+
+				if ( lhsTextureFlag == TextureFlag{} )
+				{
+					it = lhs.erase( it );
+				}
+				else
+				{
+					lookup = makeTextureFlag( lhsPassIndex, lhsTextureFlag );
+					++it;
+				}
 			}
-
-			++index;
+			else
+			{
+				++it;
+			}
 		}
-
-		return result;
 	}
 
-	TextureFlags getTextureFlags( FilteredTextureFlags const & textures )
+	void remFlags( TextureFlagsArray & lhs
+		, TextureFlagsArray const & rhs )
 	{
-		TextureFlags result{ TextureFlag::eNone };
-
-		for ( auto & flagId : textures )
+		for ( auto flag : rhs )
 		{
-			result |= flagId.second.flags;
+			remFlags( lhs, flag );
 		}
+	}
 
-		return result;
+	void addFlags( TextureFlagsArray & lhs
+		, PassComponentTextureFlag rhs )
+	{
+		auto it = checkFlags( lhs, rhs );
+
+		if ( it == lhs.end() )
+		{
+			lhs.push_back( rhs );
+		}
+	}
+
+	void addFlags( TextureFlagsArray & lhs
+		, TextureFlagsArray const & rhs )
+	{
+		for ( auto flag : rhs )
+		{
+			addFlags( lhs, flag );
+		}
 	}
 
 	ashes::Image makeImage( ashes::Device const & device

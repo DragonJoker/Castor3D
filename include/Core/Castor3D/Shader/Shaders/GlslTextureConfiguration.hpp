@@ -47,42 +47,19 @@ namespace castor3d
 		struct TextureConfigData
 			: public sdw::StructInstanceHelperT< "C3D_TextureConfigData"
 				, ast::type::MemoryLayout::eStd430
-				, sdw::FloatField< "colEnbl" >
-				, sdw::FloatField< "colMask" >
-				, sdw::FloatField< "opaEnbl" >
-				, sdw::FloatField< "opaMask" >
-				, sdw::FloatField< "spcEnbl" >
-				, sdw::FloatField< "spcMask" >
-				, sdw::FloatField< "glsEnbl" >
-				, sdw::FloatField< "glsMask" >
-				, sdw::FloatField< "metEnbl" >
-				, sdw::FloatField< "metMask" >
-				, sdw::FloatField< "rghEnbl" >
-				, sdw::FloatField< "rghMask" >
-				, sdw::FloatField< "emsEnbl" >
-				, sdw::FloatField< "emsMask" >
-				, sdw::FloatField< "occEnbl" >
-				, sdw::FloatField< "occMask" >
-				, sdw::FloatField< "trsEnbl" >
-				, sdw::FloatField< "trsMask" >
-				, sdw::FloatField< "nmlEnbl" >
-				, sdw::FloatField< "nmlMask" >
+				, sdw::Vec4Field< "translate" >
+				, sdw::Vec4Field< "rotate" >
+				, sdw::Vec4Field< "scale" >
+				, sdw::Vec4Field< "tileSet" >
 				, sdw::FloatField< "nmlFact" >
 				, sdw::FloatField< "nmlGMul" >
-				, sdw::FloatField< "hgtEnbl" >
-				, sdw::FloatField< "hgtMask" >
 				, sdw::FloatField< "hgtFact" >
-				, sdw::FloatField< "pad0" >
 				, sdw::UIntField< "needsYI" >
 				, sdw::UIntField< "isTrnfAnim" >
 				, sdw::UIntField< "isTileAnim" >
 				, sdw::UIntField< "texSet" >
-				, sdw::UIntField< "pad1" >
-				, sdw::UIntField< "pad2" >
-				, sdw::Vec4Field< "translate" >
-				, sdw::Vec4Field< "rotate" >
-				, sdw::Vec4Field< "scale" >
-				, sdw::Vec4Field< "tileSet" > >
+				, sdw::UIntField< "componentCount" >
+				, sdw::U32Vec4ArrayField< "components", 4u > >
 		{
 			friend class TextureConfigurations;
 
@@ -102,62 +79,24 @@ namespace castor3d
 				, DerivTex & uv )const;
 
 			C3D_API sdw::Float getFloat( sdw::Vec4 const & sampled
-				, sdw::Float const & mask )const;
+				, sdw::UInt const & mask )const;
 			C3D_API sdw::Vec3 getVec3( sdw::Vec4 const & sampled
-				, sdw::Float const & mask )const;
+				, sdw::UInt const & mask )const;
 
-			auto colEnbl()const { return getMember< "colEnbl" >(); }
-			auto colMask()const { return getMember< "colMask" >(); }
-			auto opaEnbl()const { return getMember< "opaEnbl" >(); }
-			auto opaMask()const { return getMember< "opaMask" >(); }
-			auto spcEnbl()const { return getMember< "spcEnbl" >(); }
-			auto spcMask()const { return getMember< "spcMask" >(); }
-			auto glsEnbl()const { return getMember< "glsEnbl" >(); }
-			auto glsMask()const { return getMember< "glsMask" >(); }
-			auto metEnbl()const { return getMember< "metEnbl" >(); }
-			auto metMask()const { return getMember< "metMask" >(); }
-			auto rghEnbl()const { return getMember< "rghEnbl" >(); }
-			auto rghMask()const { return getMember< "rghMask" >(); }
-			auto emsEnbl()const { return getMember< "emsEnbl" >(); }
-			auto emsMask()const { return getMember< "emsMask" >(); }
-			auto occEnbl()const { return getMember< "occEnbl" >(); }
-			auto occMask()const { return getMember< "occMask" >(); }
-			auto trsEnbl()const { return getMember< "trsEnbl" >(); }
-			auto trsMask()const { return getMember< "trsMask" >(); }
-			auto nmlEnbl()const { return getMember< "nmlEnbl" >(); }
-			auto nmlMask()const { return getMember< "nmlMask" >(); }
+			auto translate()const { return getMember< "translate" >(); }
+			auto rotate()const { return getMember< "rotate" >(); }
+			auto scale()const { return getMember< "scale" >(); }
+			auto tileSet()const { return getMember< "tileSet" >(); }
+			auto component( sdw::UInt const & index )const { return getMember< "components" >()[index].xyz(); }
+			auto component( uint32_t index )const { return getMember< "components" >()[index].xyz(); }
 			auto nmlFact()const { return getMember< "nmlFact" >(); }
 			auto nmlGMul()const { return getMember< "nmlGMul" >(); }
-			auto hgtEnbl()const { return getMember< "hgtEnbl" >(); }
-			auto hgtMask()const { return getMember< "hgtMask" >(); }
 			auto hgtFact()const { return getMember< "hgtFact" >(); }
 			auto needsYI()const { return getMember< "needsYI" >(); }
 			auto isTrnfAnim()const { return getMember< "isTrnfAnim" >() != 0_u; }
 			auto isTileAnim()const { return getMember< "isTileAnim" >() != 0_u; }
 			auto texSet()const { return getMember< "texSet" >(); }
-			auto translate()const { return getMember< "translate" >(); }
-			auto rotate()const { return getMember< "rotate" >(); }
-			auto scale()const { return getMember< "scale" >(); }
-			auto tileSet()const { return getMember< "tileSet" >(); }
-
-			sdw::Boolean isGeometry()const
-			{
-				return opaEnbl() != 0.0_f
-					|| nmlEnbl() != 0.0_f
-					|| hgtEnbl() != 0.0_f;
-			}
-
-			sdw::Boolean isGeometryOnly()const
-			{
-				return colEnbl() == 0.0_f
-					&& spcEnbl() == 0.0_f
-					&& glsEnbl() == 0.0_f
-					&& metEnbl() == 0.0_f
-					&& emsEnbl() == 0.0_f
-					&& occEnbl() == 0.0_f
-					&& rghEnbl() == 0.0_f
-					&& trsEnbl() == 0.0_f;
-			}
+			auto componentCount()const { return getMember< "componentCount" >(); }
 
 			sdw::Vec2 getUv( sdw::Vec3 const & uvw )const
 			{
@@ -209,7 +148,7 @@ namespace castor3d
 				, Material const & material
 				, BlendComponents & components )const;
 			C3D_API void computeMapsContributions( PassShaders const & passShaders
-				, TextureFlags const & texturesFlags
+				, TextureFlagsArray const & texturesFlags
 				, TextureAnimations const & textureAnims
 				, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 				, Material const & material

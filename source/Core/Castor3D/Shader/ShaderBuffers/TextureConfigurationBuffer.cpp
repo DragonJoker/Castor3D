@@ -25,38 +25,12 @@ namespace castor3d
 				, reinterpret_cast< TextureConfigurationBuffer::Data * >( buffer ) + count );
 		}
 
-		static castor::Point2f writeFlags( castor::Point2ui const & a )
+		static castor::Point4ui writeFlags( TextureFlagConfiguration const & a )
 		{
-			return castor::Point2f
-			{
-				a[0] ? 1.0f : 0.0f,
-				float( a[1] ),
-			};
-		}
-
-		static castor::Point2f writeFlags( float a
-			, float b = 0.0f )
-		{
-			return castor::Point2f
-			{
-				a,
-				b,
-			};
-		}
-
-		static castor::Point2ui writeFlags( uint32_t a
-			, uint32_t b = 0u )
-		{
-			return castor::Point2ui
-			{
-				a,
-				b,
-			};
-		}
-
-		static uint32_t writeBool( bool v )
-		{
-			return v ? 1u : 0u;
+			return castor::Point4ui{ a.flag
+				, a.componentsMask ? 1u : 0u
+				, float( a.startIndex )
+				, 0u };
 		}
 	}
 
@@ -142,26 +116,25 @@ namespace castor3d
 					auto index = unit->getId() - 1u;
 
 					auto & data = m_data[index];
-					data.colour = texcfgbuf::writeFlags( config.colourMask );
-					data.opacity = texcfgbuf::writeFlags( config.opacityMask );
-					data.specular = texcfgbuf::writeFlags( config.specularMask );
-					data.glossiness = texcfgbuf::writeFlags( config.glossinessMask );
-					data.metalness = texcfgbuf::writeFlags( config.metalnessMask );
-					data.roughness = texcfgbuf::writeFlags( config.roughnessMask );
-					data.emissive = texcfgbuf::writeFlags( config.emissiveMask );
-					data.occlusion = texcfgbuf::writeFlags( config.occlusionMask );
-					data.transmittance = texcfgbuf::writeFlags( config.transmittanceMask );
-					data.normal = texcfgbuf::writeFlags( config.normalMask );
-					data.normalFactors = texcfgbuf::writeFlags( config.normalFactor, config.normalGMultiplier );
-					data.height = texcfgbuf::writeFlags( config.heightMask );
-					data.heightFactors = texcfgbuf::writeFlags( config.heightFactor );
-
-					data.invAnim = texcfgbuf::writeFlags( config.needsYInversion, texcfgbuf::writeBool( unit->isTransformAnimated() ) );
-					data.tileAnimSet = texcfgbuf::writeFlags( texcfgbuf::writeBool( unit->isTileAnimated() ), unit->getTexcoordSet() );
 					data.translate = config.transform.translate;
 					data.rotate = { config.transform.rotate.cos(), config.transform.rotate.sin(), 0.0f, 0.0f };
 					data.scale = config.transform.scale;
 					data.tileSet = castor::Point4f{ config.tileSet };
+					data.normalFactor = config.normalFactor;
+					data.normalGMult = config.normalGMultiplier;
+					data.heightFactor = config.heightFactor;
+					data.needsYInv = config.needsYInversion;
+					data.isTransformAnim = unit->isTransformAnimated() ? 1u : 0u;
+					data.isTileAnim = unit->isTileAnimated() ? 1u : 0u;
+					data.texcoordSet = unit->getTexcoordSet() ? 1u : 0u;
+
+					auto it = findFirstEmpty( config );
+					data.componentsCount = uint32_t( std::distance( config.components.begin(), it ) );
+
+					for ( uint32_t i = 0u; i < data.componentsCount; ++i )
+					{
+						data.components[i] = texcfgbuf::writeFlags( config.components[i] );
+					}
 				} );
 
 			m_buffer.setCount( uint32_t( m_configurations.size() ) );

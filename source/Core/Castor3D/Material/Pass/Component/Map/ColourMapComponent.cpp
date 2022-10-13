@@ -3,6 +3,7 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Pass/PassVisitor.hpp"
+#include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
 #include "Castor3D/Material/Pass/Component/Other/ColourComponent.hpp"
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
 #include "Castor3D/Scene/SceneFileParser.hpp"
@@ -32,12 +33,12 @@ namespace castor
 		bool operator()( castor3d::ColourMapComponent const & object
 			, StringStream & file )override
 		{
-			return writeNamedSub( file, cuT( "colour_mask" ), m_mask );
+			return writeMask( file, cuT( "colour_mask" ), m_mask );
 		}
 
 		bool operator()( StringStream & file )
 		{
-			return writeNamedSub( file, cuT( "colour_mask" ), m_mask );
+			return writeMask( file, cuT( "colour_mask" ), m_mask );
 		}
 
 	private:
@@ -61,8 +62,8 @@ namespace castor3d
 			}
 			else
 			{
-				auto & component = getPassComponent< ColourMapComponent >( parsingContext );
-				component.fillChannel( parsingContext.textureConfiguration
+				auto & plugin = parsingContext.pass->getComponentPlugin( ColourMapComponent::TypeName );
+				plugin.fillTextureConfiguration( parsingContext.textureConfiguration
 					, params[0]->get< uint32_t >() );
 			}
 		}
@@ -71,7 +72,8 @@ namespace castor3d
 		static CU_ImplementAttributeParser( parserTexRemapColour )
 		{
 			auto & parsingContext = getParserContext( context );
-			parsingContext.sceneImportConfig.textureRemapIt = parsingContext.sceneImportConfig.textureRemaps.emplace( TextureFlag::eColour, TextureConfiguration{} ).first;
+			auto & plugin = parsingContext.parser->getEngine()->getPassComponentsRegister().getPlugin( ColourMapComponent::TypeName );
+			parsingContext.sceneImportConfig.textureRemapIt = parsingContext.sceneImportConfig.textureRemaps.emplace( plugin.getTextureFlags(), TextureConfiguration{} ).first;
 			parsingContext.sceneImportConfig.textureRemapIt->second = TextureConfiguration{};
 		}
 		CU_EndAttributePush( CSCNSection::eTextureRemapChannel )
@@ -86,7 +88,9 @@ namespace castor3d
 			}
 			else
 			{
-				parsingContext.sceneImportConfig.textureRemapIt->second.colourMask[0] = params[0]->get< uint32_t >();
+				auto & plugin = parsingContext.parser->getEngine()->getPassComponentsRegister().getPlugin( ColourMapComponent::TypeName );
+				plugin.fillTextureConfiguration( parsingContext.sceneImportConfig.textureRemapIt->second
+					, params[0]->get< uint32_t >() );
 			}
 		}
 		CU_EndAttribute()
@@ -94,23 +98,24 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void ColourMapComponent::ComponentsShader::applyComponents( TextureFlags const & texturesFlags
+	void ColourMapComponent::ComponentsShader::applyComponents( TextureFlagsArray const & texturesFlags
 		, PipelineFlags const * flags
 		, shader::TextureConfigData const & config
+		, sdw::U32Vec3 const & imgCompConfig
 		, sdw::Vec4 const & sampled
-		, shader::BlendComponents const & components )const
+		, shader::BlendComponents & components )const
 	{
 		if ( !components.hasMember( "colour" )
-			|| !checkFlag( texturesFlags, TextureFlag::eColour ) )
+			|| texturesFlags.end() == checkFlags( texturesFlags, getTextureFlags() ) )
 		{
 			return;
 		}
 
 		auto & writer{ *sampled.getWriter() };
 
-		IF( writer, config.colEnbl() != 0.0_f )
+		IF( writer, imgCompConfig.y() != 0_u )
 		{
-			components.getMember< sdw::Vec3 >( "colour" ) *= config.getVec3( sampled, config.colMask() );
+			components.getMember< sdw::Vec3 >( "colour" ) *= config.getVec3( sampled, imgCompConfig.z() );
 		}
 		FI;
 	}
@@ -120,21 +125,21 @@ namespace castor3d
 	void ColourMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		channelFillers.emplace( "diffuse", ChannelFiller{ uint32_t( TextureFlag::eColour )
+		channelFillers.emplace( "diffuse", ChannelFiller{ getTextureFlags()
 			, []( SceneFileContext & parsingContext )
 			{
 				auto & component = getPassComponent< ColourMapComponent >( parsingContext );
 				component.fillChannel( parsingContext.textureConfiguration
 					, 0x00FFFFFF );
 			} } );
-		channelFillers.emplace( "albedo", ChannelFiller{ uint32_t( TextureFlag::eColour )
+		channelFillers.emplace( "albedo", ChannelFiller{ getTextureFlags()
 			, []( SceneFileContext & parsingContext )
 			{
 				auto & component = getPassComponent< ColourMapComponent >( parsingContext );
 				component.fillChannel( parsingContext.textureConfiguration
 					, 0x00FFFFFF );
 			} } );
-		channelFillers.emplace( "colour", ChannelFiller{ uint32_t( TextureFlag::eColour )
+		channelFillers.emplace( "colour", ChannelFiller{ getTextureFlags()
 			, []( SceneFileContext & parsingContext )
 			{
 				auto & component = getPassComponent< ColourMapComponent >( parsingContext );
@@ -192,19 +197,21 @@ namespace castor3d
 		, castor::String const & tabs
 		, castor::StringStream & file )const
 	{
-		return castor::TextWriter< ColourMapComponent >{ tabs, configuration.colourMask[0] }( file );
+		auto it = checkFlags( configuration.components, getTextureFlags() );
+
+		if ( it == configuration.components.end() )
+		{
+			return true;
+		}
+
+		return castor::TextWriter< ColourMapComponent >{ tabs, it->componentsMask }( file );
 	}
 
-	bool ColourMapComponent::Plugin::isComponentNeeded( TextureFlags const & textures
+	bool ColourMapComponent::Plugin::isComponentNeeded( TextureFlagsArray const & textures
 		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eColour )
-			|| checkFlag( textures, TextureFlag::eColour );
-	}
-
-	bool ColourMapComponent::Plugin::needsMapComponent( TextureConfiguration const & configuration )const
-	{
-		return configuration.colourMask[0] != 0u;
+			|| checkFlags( textures, getTextureFlags() ) != textures.end();
 	}
 
 	void ColourMapComponent::Plugin::createMapComponent( Pass & pass
@@ -226,30 +233,10 @@ namespace castor3d
 		}
 	}
 
-	void ColourMapComponent::mergeImages( TextureUnitDataSet & result )
-	{
-		getOwner()->mergeImages( TextureFlag::eColour
-			, offsetof( TextureConfiguration, colourMask )
-			, 0x00FFFFFF
-			, TextureFlag::eOpacity
-			, offsetof( TextureConfiguration, opacityMask )
-			, 0xFF000000
-			, "ColOpa"
-			, result );
-	}
-
-	void ColourMapComponent::fillChannel( TextureConfiguration & configuration
-		, uint32_t mask )
-	{
-		configuration.textureSpace |= TextureSpace::eColour;
-		configuration.textureSpace |= TextureSpace::eAllowSRGB;
-		configuration.colourMask[0] = mask;
-	}
-
 	void ColourMapComponent::fillConfig( TextureConfiguration & configuration
-		, PassVisitorBase & vis )
+		, PassVisitorBase & vis )const
 	{
-		vis.visit( cuT( "Colour" ), TextureFlag::eColour, configuration.colourMask, 3u );
+		vis.visit( cuT( "Colour" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 3u );
 	}
 
 	PassComponentUPtr ColourMapComponent::doClone( Pass & pass )const

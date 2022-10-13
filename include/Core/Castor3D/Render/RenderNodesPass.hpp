@@ -388,7 +388,7 @@ namespace castor3d
 		 *\param[in]	texturesFlags	Les indicateurs de textures.
 		 *\return		Les indicateurs filtrés.
 		 */
-		C3D_API TextureFlags adjustFlags( TextureFlags texturesFlags )const;
+		C3D_API TextureFlagsArray adjustFlags( TextureFlagsArray texturesFlags )const;
 		/**
 		 *\~english
 		 *\brief		Filters the given textures flags using this pass needed textures.
@@ -529,17 +529,6 @@ namespace castor3d
 			, GpuBufferOffsetT< castor::Point4f > const & morphTargets );
 		/**
 		 *\~english
-		 *\brief		Filters the given textures flags using this pass needed textures.
-		 *\param[in]	textures	The textures flags.
-		 *\return		The filtered flags.
-		 *\~french
-		 *\brief		Filtre les indicateurs de textures donnés en utilisant ceux voulus par cette passe.
-		 *\param[in]	textures	Les indicateurs de textures.
-		 *\return		Les indicateurs filtrés.
-		 */
-		C3D_API TextureFlags filterTexturesFlags( TextureFlagsArray const & textures )const;
-		/**
-		 *\~english
 		 *\brief		Sets the node ignored node.
 		 *\remarks		All objects attached to this node will be ignored during rendering.
 		 *\param[in]	node	The node.
@@ -575,7 +564,7 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		C3D_API virtual TextureFlags getTexturesMask()const;
+		C3D_API virtual ComponentModeFlags getComponentsMask()const;
 		C3D_API virtual bool areValidPassFlags( PassFlags const & passFlags )const;
 		C3D_API bool isValidPass( Pass const & pass )const;
 		C3D_API bool isValidRenderable( RenderedObject const & object )const;

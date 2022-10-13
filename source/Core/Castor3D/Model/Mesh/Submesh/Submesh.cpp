@@ -33,13 +33,6 @@ namespace castor3d
 			size_t result = node.data.isDynamic()
 				? std::hash< Geometry const * >{}( &node.instance )
 				: std::hash< MaterialRPtr >{}( node.pass->getOwner() );
-
-			//for ( auto const & flagId : flags.m_texturesFlags )
-			//{
-			//	result = castor::hashCombine( result, flagId.id );
-			//	result = castor::hashCombine( result, flagId.flags.value() );
-			//}
-
 			result = castor::hashCombine( result, flags.m_shaderFlags.value() );
 			result = castor::hashCombine( result, flags.m_programFlags.value() );
 			result = castor::hashCombine( result, flags.m_submeshFlags.value() );

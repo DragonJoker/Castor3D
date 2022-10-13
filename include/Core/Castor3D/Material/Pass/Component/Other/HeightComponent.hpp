@@ -17,6 +17,11 @@ namespace castor3d
 		struct ComponentsShader
 			: shader::PassComponentsShader
 		{
+			ComponentsShader( PassComponentPlugin const & plugin )
+				: shader::PassComponentsShader{ plugin }
+			{
+			}
+
 			C3D_API void fillComponents( sdw::type::BaseStruct & components
 				, shader::Materials const & materials
 				, sdw::StructInstance const * surface )const override;
@@ -27,7 +32,7 @@ namespace castor3d
 				, sdw::expr::ExprList & inits )const override;
 			C3D_API void blendComponents( shader::Materials const & materials
 				, sdw::Float const & passMultiplier
-				, shader::BlendComponents const & res
+				, shader::BlendComponents & res
 				, shader::BlendComponents const & src )const override;
 		};
 
@@ -37,12 +42,12 @@ namespace castor3d
 		public:
 			void createParsers( castor::AttributeParsers & parsers
 				, ChannelFillers & channelFillers )const override;
-			bool isComponentNeeded( TextureFlags const & textures
+			bool isComponentNeeded( TextureFlagsArray const & textures
 				, ComponentModeFlags const & filter )const override;
 
 			shader::PassComponentsShaderPtr createComponentsShader()const override
 			{
-				return std::make_unique< ComponentsShader >();
+				return std::make_unique< ComponentsShader >( *this );
 			}
 		};
 

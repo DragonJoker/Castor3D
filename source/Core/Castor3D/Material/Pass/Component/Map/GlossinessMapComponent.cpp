@@ -38,12 +38,12 @@ namespace castor
 		bool operator()( castor3d::GlossinessMapComponent const & object
 			, StringStream & file )override
 		{
-			return writeNamedSub( file, cuT( "glossiness_mask" ), m_mask );
+			return writeMask( file, cuT( "glossiness_mask" ), m_mask );
 		}
 
 		bool operator()( StringStream & file )
 		{
-			return writeNamedSub( file, cuT( "glossiness_mask" ), m_mask );
+			return writeMask( file, cuT( "glossiness_mask" ), m_mask );
 		}
 
 	private:
@@ -67,8 +67,8 @@ namespace castor3d
 			}
 			else
 			{
-				auto & component = getPassComponent< GlossinessMapComponent >( parsingContext );
-				component.fillChannel( parsingContext.textureConfiguration
+				auto & plugin = parsingContext.pass->getComponentPlugin( GlossinessMapComponent::TypeName );
+				plugin.fillTextureConfiguration( parsingContext.textureConfiguration
 					, params[0]->get< uint32_t >() );
 			}
 		}
@@ -77,7 +77,8 @@ namespace castor3d
 		static CU_ImplementAttributeParser( parserTexRemapGlossiness )
 		{
 			auto & parsingContext = getParserContext( context );
-			parsingContext.sceneImportConfig.textureRemapIt = parsingContext.sceneImportConfig.textureRemaps.emplace( TextureFlag::eGlossiness, TextureConfiguration{} ).first;
+			auto & plugin = parsingContext.parser->getEngine()->getPassComponentsRegister().getPlugin( GlossinessMapComponent::TypeName );
+			parsingContext.sceneImportConfig.textureRemapIt = parsingContext.sceneImportConfig.textureRemaps.emplace( plugin.getTextureFlags(), TextureConfiguration{} ).first;
 			parsingContext.sceneImportConfig.textureRemapIt->second = TextureConfiguration{};
 		}
 		CU_EndAttributePush( CSCNSection::eTextureRemapChannel )
@@ -92,7 +93,9 @@ namespace castor3d
 			}
 			else
 			{
-				parsingContext.sceneImportConfig.textureRemapIt->second.glossinessMask[0] = params[0]->get< uint32_t >();
+				auto & plugin = parsingContext.parser->getEngine()->getPassComponentsRegister().getPlugin( GlossinessMapComponent::TypeName );
+				plugin.fillTextureConfiguration( parsingContext.sceneImportConfig.textureRemapIt->second
+					, params[0]->get< uint32_t >() );
 			}
 		}
 		CU_EndAttribute()
@@ -100,26 +103,27 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void GlossinessMapComponent::ComponentsShader::applyComponents( TextureFlags const & texturesFlags
+	void GlossinessMapComponent::ComponentsShader::applyComponents( TextureFlagsArray const & texturesFlags
 		, PipelineFlags const * flags
 		, shader::TextureConfigData const & config
+		, sdw::U32Vec3 const & imgCompConfig
 		, sdw::Vec4 const & sampled
-		, shader::BlendComponents const & components )const
+		, shader::BlendComponents & components )const
 	{
 		if ( !components.hasMember( "roughness" )
-			|| !checkFlag( texturesFlags, TextureFlag::eGlossiness ) )
+			|| checkFlags( texturesFlags, getTextureFlags() ) == texturesFlags.end() )
 		{
 			return;
 		}
 
 		auto & writer{ *sampled.getWriter() };
 
-		IF( writer, config.glsEnbl() != 0.0_f )
+		IF( writer, imgCompConfig.y() != 0_u )
 		{
 			auto roughness = components.getMember< sdw::Float >( "roughness" );
 			auto gloss = writer.declLocale( "gloss"
 				, ( 1.0_f - roughness ) );
-			gloss *= config.getFloat( sampled, config.glsMask() );
+			gloss *= config.getFloat( sampled, imgCompConfig.z() );
 			components.getMember< sdw::Float >( "roughness" ) = ( 1.0_f - gloss );
 		}
 		FI;
@@ -130,14 +134,14 @@ namespace castor3d
 	void GlossinessMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		channelFillers.emplace( "glossiness", ChannelFiller{ uint32_t( TextureFlag::eEmissive )
+		channelFillers.emplace( "glossiness", ChannelFiller{ getTextureFlags()
 			, []( SceneFileContext & parsingContext )
 			{
 				auto & component = getPassComponent< GlossinessMapComponent >( parsingContext );
 				component.fillChannel( parsingContext.textureConfiguration
 					, 0x00FF0000 );
 			} } );
-		channelFillers.emplace( "shininess", ChannelFiller{ uint32_t( TextureFlag::eEmissive )
+		channelFillers.emplace( "shininess", ChannelFiller{ getTextureFlags()
 			, []( SceneFileContext & parsingContext )
 			{
 				auto & component = getPassComponent< GlossinessMapComponent >( parsingContext );
@@ -150,13 +154,13 @@ namespace castor3d
 			, cuT( "glossiness_mask" )
 			, glscmp::parserUnitGlossinessMask
 			, { castor::makeParameter< castor::ParameterType::eUInt32 >() }
-		, "The specular glossiness (or shininess exponent) channels mask for the texture" );
+			, "The specular glossiness (or shininess exponent) channels mask for the texture" );
 		Pass::addParserT( parsers
 			, CSCNSection::eTextureUnit
 			, cuT( "shininess_mask" )
 			, glscmp::parserUnitGlossinessMask
 			, { castor::makeParameter< castor::ParameterType::eUInt32 >() }
-		, "The specular shininess exponent (or glossiness) channels mask for the texture" );
+			, "The specular shininess exponent (or glossiness) channels mask for the texture" );
 
 		Pass::addParserT( parsers
 			, CSCNSection::eTextureRemap
@@ -168,33 +172,35 @@ namespace castor3d
 			, cuT( "glossiness_mask" )
 			, glscmp::parserTexRemapGlossinessMask
 			, { castor::makeParameter< castor::ParameterType::eUInt32 >() }
-		, "The specular glossiness (or shininess exponent) remapping channels mask for the texture" );
+			, "The specular glossiness (or shininess exponent) remapping channels mask for the texture" );
 		Pass::addParserT( parsers
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "shininess_mask" )
 			, glscmp::parserUnitGlossinessMask
 			, { castor::makeParameter< castor::ParameterType::eUInt32 >() }
-		, "The specular shininess exponent (or glossiness) remapping channels mask for the texture" );
+			, "The specular shininess exponent (or glossiness) remapping channels mask for the texture" );
 	}
 
 	bool GlossinessMapComponent::Plugin::writeTextureConfig( TextureConfiguration const & configuration
 		, castor::String const & tabs
 		, castor::StringStream & file )const
 	{
-		return castor::TextWriter< GlossinessMapComponent >{ tabs, configuration.glossinessMask[0] }( file );
+		auto it = checkFlags( configuration.components, getTextureFlags() );
+
+		if ( it == configuration.components.end() )
+		{
+			return true;
+		}
+
+		return castor::TextWriter< GlossinessMapComponent >{ tabs, it->componentsMask }( file );
 	}
 
-	bool GlossinessMapComponent::Plugin::isComponentNeeded( TextureFlags const & textures
+	bool GlossinessMapComponent::Plugin::isComponentNeeded( TextureFlagsArray const & textures
 		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eDiffuseLighting )
 			|| checkFlag( filter, ComponentModeFlag::eSpecularLighting )
-			|| checkFlag( textures, TextureFlag::eGlossiness );
-	}
-
-	bool GlossinessMapComponent::Plugin::needsMapComponent( TextureConfiguration const & configuration )const
-	{
-		return configuration.glossinessMask[0] != 0u;
+			|| checkFlags( textures, getTextureFlags() ) != textures.end();
 	}
 
 	void GlossinessMapComponent::Plugin::createMapComponent( Pass & pass
@@ -221,32 +227,10 @@ namespace castor3d
 		}
 	}
 
-	void GlossinessMapComponent::mergeImages( TextureUnitDataSet & result )
-	{
-		if ( !getOwner()->hasComponent< SpecularMapComponent >() )
-		{
-			getOwner()->mergeImages( TextureFlag::eSpecular
-				, offsetof( TextureConfiguration, specularMask )
-				, 0x00FFFFFF
-				, TextureFlag::eGlossiness
-				, offsetof( TextureConfiguration, glossinessMask )
-				, 0xFF000000
-				, "SpcGls"
-				, result );
-		}
-	}
-
-	void GlossinessMapComponent::fillChannel( TextureConfiguration & configuration
-		, uint32_t mask )
-	{
-		configuration.textureSpace |= TextureSpace::eNormalised;
-		configuration.glossinessMask[0] = mask;
-	}
-
 	void GlossinessMapComponent::fillConfig( TextureConfiguration & configuration
-		, PassVisitorBase & vis )
+		, PassVisitorBase & vis )const
 	{
-		vis.visit( cuT( "Glossiness" ), castor3d::TextureFlag::eGlossiness, configuration.glossinessMask, 1u );
+		vis.visit( cuT( "Glossiness" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 1u );
 	}
 
 	PassComponentUPtr GlossinessMapComponent::doClone( Pass & pass )const

@@ -94,25 +94,6 @@ namespace castor3d::shader
 			, sdw::UInt const & accumulationOperator );
 		C3D_API sdw::RetVec3 fresnelSchlick( sdw::Float const & product
 			, sdw::Vec3 const & f0 );
-		C3D_API void parallaxMapping( sdw::Vec2 & texCoords
-			, sdw::Vec3 const & viewDir
-			, sdw::CombinedImage2DRgba32 const & heightMap
-			, TextureConfigData const & textureConfig );
-		C3D_API void parallaxMapping( DerivTex & texCoords
-			, sdw::Vec3 const & viewDir
-			, sdw::CombinedImage2DRgba32 const & heightMap
-			, TextureConfigData const & textureConfig );
-		C3D_API void parallaxMapping( sdw::Vec2 texCoords
-			, sdw::Vec2 const & dx
-			, sdw::Vec2 const & dy
-			, sdw::Vec3 const & viewDir
-			, sdw::CombinedImage2DRgba32 const & heightMap
-			, TextureConfigData const & textureConfig );
-		C3D_API sdw::RetFloat parallaxShadow( sdw::Vec3 const & lightDir
-			, sdw::Vec2 const & initialTexCoord
-			, sdw::Float const & initialHeight
-			, sdw::CombinedImage2DRgba32 const & heightMap
-			, TextureConfigData const & textureConfig );
 		C3D_API sdw::RetVec4 clipToScreen( sdw::Vec4 const & in );
 
 		C3D_API sdw::RetBoolean isSaturated( sdw::Vec3 const & p );
@@ -158,10 +139,6 @@ namespace castor3d::shader
 		C3D_API static sdw::Mat3 getTBN( sdw::Vec3 const & normal
 			, sdw::Vec3 const & tangent
 			, sdw::Vec3 const & bitangent );
-		C3D_API static bool isGeometryMap( TextureFlags const & flags
-			, PassFlags const & passFlags );
-		C3D_API static bool isGeometryOnlyMap( TextureFlags const & flags
-			, PassFlags const & passFlags );
 
 	private:
 		sdw::RetVec4 sampleUntiled( sdw::CombinedImage2DRgba32 const & map
@@ -212,19 +189,6 @@ namespace castor3d::shader
 			, sdw::InVec3 > m_fresnelSchlick;
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3 > m_invertNormal;
-		sdw::Function< sdw::Vec2
-			, sdw::InVec2
-			, sdw::InVec2
-			, sdw::InVec2
-			, sdw::InVec3
-			, sdw::InCombinedImage2DRgba32
-			, InTextureConfigData > m_parallaxMapping;
-		sdw::Function< sdw::Float
-			, sdw::InVec3
-			, sdw::InVec2
-			, sdw::InFloat
-			, sdw::InCombinedImage2DRgba32
-			, InTextureConfigData > m_parallaxShadow;
 		sdw::Function< sdw::Boolean
 			, sdw::InVec3 > m_isSaturated3D;
 		sdw::Function< sdw::Boolean

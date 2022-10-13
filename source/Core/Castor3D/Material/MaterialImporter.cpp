@@ -4,6 +4,7 @@
 #include "Castor3D/ImporterFile.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
+#include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
 #include "Castor3D/Material/Texture/TextureSourceInfo.hpp"
 
@@ -72,7 +73,7 @@ namespace castor3d
 	bool MaterialImporter::import( Material & material
 		, ImporterFile * file
 		, Parameters const & parameters
-		, std::map< TextureFlag, TextureConfiguration > const & textureRemaps )
+		, std::map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps )
 	{
 		m_file = file;
 		m_textureRemaps = textureRemaps;
@@ -83,7 +84,7 @@ namespace castor3d
 	bool MaterialImporter::import( Material & material
 		, castor::Path const & path
 		, Parameters const & parameters
-		, std::map< TextureFlag, TextureConfiguration > const & textureRemaps )
+		, std::map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps )
 	{
 		auto & engine = *material.getEngine();
 		auto extension = castor::string::lowerCase( path.getExtension() );
@@ -180,7 +181,7 @@ namespace castor3d
 			CU_Exception( "Couldn't find image at path [" + path + "]" );
 		}
 
-		bool allowCompression = config.normalMask[0] == 0;
+		bool allowCompression = !checkFlag( config.textureSpace, TextureSpace::eTangentSpace );
 		return TextureSourceInfo{ sampler
 			, image->getPath().getPath()
 			, image->getPath().getFileName( true )
@@ -200,7 +201,7 @@ namespace castor3d
 			CU_Exception( "Couldn't load image [" + name + "]" );
 		}
 
-		bool allowCompression = config.normalMask[0] == 0;
+		bool allowCompression = !checkFlag( config.textureSpace, TextureSpace::eTangentSpace );
 		return TextureSourceInfo{ sampler
 			, std::move( name )
 			, std::move( type )
@@ -259,8 +260,12 @@ namespace castor3d
 
 				if ( castor::convertToNormalMap( 3.0f, *image ) )
 				{
-					config.normalMask[0] = 0x00FFFFFF;
-					config.heightMask[0] = 0xFF000000;
+					castor3d::addFlagConfiguration( config
+						, { getEngine()->getPassComponentsRegister().getNormalFlags()
+							, 0x00FFFFFF } );
+					castor3d::addFlagConfiguration( config
+						, { getEngine()->getPassComponentsRegister().getHeightFlags()
+							, 0xFF000000 } );
 					path = image->getPath();
 					path = path.getPath() / ( "N_" + path.getFileName() + ".png" );
 					getEngine()->getImageWriter().write( path, image->getPxBuffer() );

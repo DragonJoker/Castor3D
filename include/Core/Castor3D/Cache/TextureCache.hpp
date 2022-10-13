@@ -19,10 +19,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	C3D_API void mergeConfigs( TextureConfiguration const & lhs
-		, TextureConfiguration & rhs );
-	C3D_API void mergeConfigsBase( TextureConfiguration const & lhs
-		, TextureConfiguration & rhs );
 	C3D_API castor::PixelFormat getSRGBFormat( castor::PixelFormat pformat );
 	C3D_API castor::PixelFormat getNonSRGBFormat( castor::PixelFormat pformat );
 
