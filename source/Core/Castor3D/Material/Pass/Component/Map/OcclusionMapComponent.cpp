@@ -143,18 +143,12 @@ namespace castor3d
 		, sdw::Vec4 const & sampled
 		, shader::BlendComponents & components )const
 	{
-		if ( !components.hasMember( "occlusion" ) )
-		{
-			return;
-		}
-
-		auto & writer{ *sampled.getWriter() };
-
-		IF( writer, imgCompConfig.x() == sdw::UInt{ getTextureFlags() } )
-		{
-			components.getMember< sdw::Float >( "occlusion" ) *= config.getFloat( sampled, imgCompConfig.z() );
-		}
-		FI;
+		applyFloatComponent( "occlusion"
+			, getTextureFlags()
+			, config
+			, imgCompConfig
+			, sampled
+			, components );
 	}
 
 	//*********************************************************************************************
@@ -188,31 +182,25 @@ namespace castor3d
 			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
 	}
 
-	bool OcclusionMapComponent::Plugin::writeTextureConfig( TextureConfiguration const & configuration
-		, castor::String const & tabs
-		, castor::StringStream & file )const
-	{
-		auto it = checkFlags( configuration.components, getTextureFlags() );
-
-		if ( it == configuration.components.end() )
-		{
-			return true;
-		}
-
-		return castor::TextWriter< OcclusionMapComponent >{ tabs, it->componentsMask }( file );
-	}
-
 	bool OcclusionMapComponent::Plugin::isComponentNeeded( TextureCombine const & textures
 		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eOcclusion )
-			|| textures.flags.end() != checkFlags( textures, getTextureFlags() );
+			|| hasAny( textures, getTextureFlags() );
 	}
 
 	void OcclusionMapComponent::Plugin::createMapComponent( Pass & pass
 		, std::vector< PassComponentUPtr > & result )const
 	{
 		result.push_back( std::make_unique< OcclusionMapComponent >( pass ) );
+	}
+
+	bool OcclusionMapComponent::Plugin::doWriteTextureConfig( TextureConfiguration const & configuration
+		, uint32_t mask
+		, castor::String const & tabs
+		, castor::StringStream & file )const
+	{
+		return castor::TextWriter< OcclusionMapComponent >{ tabs, mask }( file );
 	}
 
 	//*********************************************************************************************
@@ -224,15 +212,15 @@ namespace castor3d
 	{
 	}
 
-	void OcclusionMapComponent::fillConfig( TextureConfiguration & configuration
-		, PassVisitorBase & vis )const
-	{
-		vis.visit( cuT( "Occlusion" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 1u );
-	}
-
 	PassComponentUPtr OcclusionMapComponent::doClone( Pass & pass )const
 	{
 		return std::make_unique< OcclusionMapComponent >( pass );
+	}
+
+	void OcclusionMapComponent::doFillConfig( TextureConfiguration & configuration
+		, PassVisitorBase & vis )const
+	{
+		vis.visit( cuT( "Occlusion" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 1u );
 	}
 
 	//*********************************************************************************************

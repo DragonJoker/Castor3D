@@ -215,7 +215,7 @@ namespace castor3d
 		auto mtl = getOwner()->getComponent< MetalnessComponent >();
 		auto & spcPlugin = getOwner()->getComponentPlugin( SpecularMapComponent::TypeName );
 		auto textures = getOwner()->getTexturesMask();
-		auto specular = ( isValueSet() || textures.flags.end() != checkFlags( textures, spcPlugin.getTextureFlags() ) )
+		auto specular = ( isValueSet() || hasAny( textures, spcPlugin.getTextureFlags() ) )
 			? getSpecular()
 			: Pass::computeF0( getOwner()->getColour()
 				, ( ( mtl && mtl->isValueSet() )

@@ -642,7 +642,7 @@ namespace c3d_assimp
 							auto texFlags = getFlags( texConfig );
 
 							if ( getComponentsMask( texConfig, m_opacityMapFlags )
-								&& castor3d::checkFlags( texFlags, m_opacityMapFlags ) != texFlags.end() )
+								&& castor3d::hasAny( texFlags, m_opacityMapFlags ) )
 							{
 								mixedInterpolative( true );
 

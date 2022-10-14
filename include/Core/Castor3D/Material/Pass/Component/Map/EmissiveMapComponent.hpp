@@ -39,19 +39,16 @@ namespace castor3d
 		};
 
 		class Plugin
-			: public PassComponentPlugin
+			: public PassMapComponentPlugin
 		{
 		public:
 			Plugin()
-				: PassComponentPlugin{ &Plugin::doUpdateComponent }
+				: PassMapComponentPlugin{ &Plugin::doUpdateComponent }
 			{
 			}
 
 			void createParsers( castor::AttributeParsers & parsers
 				, ChannelFillers & channelFillers )const override;
-			bool writeTextureConfig( TextureConfiguration const & configuration
-				, castor::String const & tabs
-				, castor::StringStream & file )const override;
 			bool isComponentNeeded( TextureCombine const & textures
 				, ComponentModeFlags const & filter )const override;
 			void createMapComponent( Pass & pass
@@ -90,7 +87,7 @@ namespace castor3d
 				addFlagConfiguration( result, { getTextureFlags(), ( mask == 0 ? 0x00FFFFFFu : mask ) } );
 			}
 
-			castor::String getMapFlagsName( PassComponentTextureFlag const & flags )const
+			castor::String getMapFlagsName( PassComponentTextureFlag const & flags )const override
 			{
 				auto [passIndex, textureFlags] = splitTextureFlag( flags );
 				return ( passIndex == getId() && checkFlag( textureFlags, Emissive ) )
@@ -99,6 +96,10 @@ namespace castor3d
 			}
 
 		private:
+			bool doWriteTextureConfig( TextureConfiguration const & configuration
+				, uint32_t mask
+				, castor::String const & tabs
+				, castor::StringStream & file )const override;
 			static void doUpdateComponent( PassComponentRegister const & passComponents
 				, TextureCombine const & combine
 				, shader::BlendComponents & components );
@@ -111,9 +112,6 @@ namespace castor3d
 
 		C3D_API explicit EmissiveMapComponent( Pass & pass );
 
-		C3D_API void fillConfig( TextureConfiguration & config
-			, PassVisitorBase & vis )const override;
-
 		PassComponentTextureFlag getTextureFlags()const override
 		{
 			return makeTextureFlag( getId(), Emissive );
@@ -123,6 +121,8 @@ namespace castor3d
 
 	private:
 		PassComponentUPtr doClone( Pass & pass )const override;
+		void doFillConfig( TextureConfiguration & configuration
+			, PassVisitorBase & vis )const override;
 	};
 }
 

@@ -19,7 +19,7 @@ namespace castor3d::shader
 		, m_compRegister{ compRegister }
 		, m_shaders{ m_compRegister.getComponentsShaders( combine, filter, m_updateComponents ) }
 		, m_filter{ filter }
-		, m_opacity{ checkFlags( combine, m_compRegister.getOpacityFlags() ) != combine.flags.end() }
+		, m_opacity{ hasAny( combine, m_compRegister.getOpacityFlags() ) }
 	{
 	}
 
@@ -102,7 +102,7 @@ namespace castor3d::shader
 		{
 			auto & plugin = m_compRegister.getPlugin( shader->getId() );
 
-			if ( checkFlags( combine, plugin.getTextureFlags() ) != combine.flags.end() )
+			if ( hasAny( combine, plugin.getTextureFlags() ) )
 			{
 				shader->applyComponents( combine, nullptr, config, imgCompConfig, sampled, components );
 			}
@@ -121,7 +121,7 @@ namespace castor3d::shader
 		{
 			auto & plugin = m_compRegister.getPlugin( shader->getId() );
 
-			if ( checkFlags( combine, plugin.getTextureFlags() ) != combine.flags.end() )
+			if ( hasAny( combine, plugin.getTextureFlags() ) )
 			{
 				shader->applyComponents( combine, &flags, config, imgCompConfig, sampled, components );
 			}
@@ -221,7 +221,7 @@ namespace castor3d::shader
 		{
 			auto & plugin = m_compRegister.getPlugin( shader->getId() );
 
-			if ( checkFlags( combine, plugin.getTextureFlags() ) != combine.flags.end() )
+			if ( hasAny( combine, plugin.getTextureFlags() ) )
 			{
 				IF( writer, imgCompConfig.x() == sdw::UInt{ plugin.getTextureFlags() } )
 				{
@@ -253,7 +253,7 @@ namespace castor3d::shader
 		{
 			auto & plugin = m_compRegister.getPlugin( shader->getId() );
 
-			if ( checkFlags( combine, plugin.getTextureFlags() ) != combine.flags.end() )
+			if ( hasAny( combine, plugin.getTextureFlags() ) )
 			{
 				IF( writer, imgCompConfig.x() == sdw::UInt{ plugin.getTextureFlags() } )
 				{

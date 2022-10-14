@@ -19,6 +19,29 @@ namespace castor3d
 	using TextureSourceMapVT = TextureSourceMap::value_type;
 	using TextureSourceSet = std::unordered_set< TextureSourceInfo, TextureSourceInfoHasher >;
 
+	class PassMapComponentPlugin
+		: public PassComponentPlugin
+	{
+	public:
+		C3D_API explicit PassMapComponentPlugin( UpdateComponent pupdateComponent = nullptr )
+			: PassComponentPlugin{ pupdateComponent }
+		{
+		}
+
+		C3D_API bool writeTextureConfig( TextureConfiguration const & configuration
+			, castor::String const & tabs
+			, castor::StringStream & file )const override;
+
+	private:
+		virtual bool doWriteTextureConfig( TextureConfiguration const & configuration
+			, uint32_t mask
+			, castor::String const & tabs
+			, castor::StringStream & file )const
+		{
+			return true;
+		}
+	};
+
 	struct PassMapComponent
 		: public PassComponent
 	{
@@ -54,12 +77,21 @@ namespace castor3d
 			return 0u;
 		}
 
+		C3D_API void fillConfig( TextureConfiguration & config
+			, PassVisitorBase & vis )const override;
+
 		void fillChannel( TextureConfiguration & configuration
 			, uint32_t mask )const
 		{
 			getPlugin().fillTextureConfiguration( configuration, mask );
 		}
 		/**@}*/
+
+	private:
+		virtual void doFillConfig( TextureConfiguration & configuration
+			, PassVisitorBase & vis )const
+		{
+		}
 	};
 }
 

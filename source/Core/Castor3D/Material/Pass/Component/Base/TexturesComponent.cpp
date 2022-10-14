@@ -304,8 +304,8 @@ namespace castor3d
 			m_textures[index % MaxPassTextures] = unit->getId();
 			auto flags = unit->getFlags();
 
-			if ( flags.end() != checkFlags( flags, getOwner()->getNormalMapFlags() )
-				|| flags.end() != checkFlags( flags, getOwner()->getHeightMapFlags() ) )
+			if ( hasAny( flags, getOwner()->getNormalMapFlags() )
+				|| hasAny( flags, getOwner()->getHeightMapFlags() ) )
 			{
 				nmlHgtIndex = index;
 			}

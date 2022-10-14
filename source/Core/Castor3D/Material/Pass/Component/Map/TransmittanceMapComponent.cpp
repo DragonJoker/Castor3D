@@ -151,18 +151,12 @@ namespace castor3d
 		, sdw::Vec4 const & sampled
 		, shader::BlendComponents & components )const
 	{
-		if ( !components.hasMember( "transmittance" ) )
-		{
-			return;
-		}
-
-		auto & writer{ *sampled.getWriter() };
-
-		IF( writer, imgCompConfig.x() == sdw::UInt{ getTextureFlags() } )
-		{
-			components.getMember< sdw::Float >( "transmittance" ) *= config.getFloat( sampled, imgCompConfig.z() );
-		}
-		FI;
+		applyFloatComponent( "transmittance"
+			, getTextureFlags()
+			, config
+			, imgCompConfig
+			, sampled
+			, components );
 	}
 
 	//*********************************************************************************************
@@ -218,21 +212,7 @@ namespace castor3d
 	{
 		return checkFlag( filter, ComponentModeFlag::eDiffuseLighting )
 			|| checkFlag( filter, ComponentModeFlag::eSpecularLighting )
-			|| textures.flags.end( ) != checkFlags( textures, getTextureFlags() );
-	}
-
-	bool TransmittanceMapComponent::Plugin::writeTextureConfig( TextureConfiguration const & configuration
-		, castor::String const & tabs
-		, castor::StringStream & file )const
-	{
-		auto it = checkFlags( configuration.components, getTextureFlags() );
-
-		if ( it == configuration.components.end() )
-		{
-			return true;
-		}
-
-		return castor::TextWriter< TransmittanceMapComponent >{ tabs, it->componentsMask }( file );
+			|| hasAny( textures, getTextureFlags() );
 	}
 
 	void TransmittanceMapComponent::Plugin::createMapComponent( Pass & pass
@@ -249,6 +229,14 @@ namespace castor3d
 		data.write( materialShader.getMaterialChunk(), 1.0f, 0u );
 	}
 
+	bool TransmittanceMapComponent::Plugin::doWriteTextureConfig( TextureConfiguration const & configuration
+		, uint32_t mask
+		, castor::String const & tabs
+		, castor::StringStream & file )const
+	{
+		return castor::TextWriter< TransmittanceMapComponent >{ tabs, mask }( file );
+	}
+
 	//*********************************************************************************************
 
 	castor::String const TransmittanceMapComponent::TypeName = C3D_MakePassMapComponentName( "transmittance" );
@@ -257,12 +245,6 @@ namespace castor3d
 		: PassMapComponent{ pass, TypeName }
 		, m_transmittance{ m_dirty, 1.0f }
 	{
-	}
-
-	void TransmittanceMapComponent::fillConfig( TextureConfiguration & configuration
-		, PassVisitorBase & vis )const
-	{
-		vis.visit( cuT( "Transmittance" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 1u );
 	}
 
 	PassComponentUPtr TransmittanceMapComponent::doClone( Pass & pass )const
@@ -282,6 +264,12 @@ namespace castor3d
 	{
 		auto data = buffer.getData( getOwner()->getId() );
 		data.write( m_materialShader->getMaterialChunk(), getTransmittance(), 0u );
+	}
+
+	void TransmittanceMapComponent::doFillConfig( TextureConfiguration & configuration
+		, PassVisitorBase & vis )const
+	{
+		vis.visit( cuT( "Transmittance" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 1u );
 	}
 
 	//*********************************************************************************************

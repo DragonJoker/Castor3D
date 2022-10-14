@@ -118,7 +118,7 @@ namespace castor3d
 			, PassComponentTextureFlag const & flag )
 		{
 			return flags.enableTangentSpace()
-				&& checkFlags( flags.textures, flag ) != flags.textures.flags.end()
+				&& hasAny( flags.textures, flag )
 				&& ( checkFlag( flags.m_passFlags, PassFlag::eParallaxOcclusionMappingOne )
 					|| checkFlag( flags.m_passFlags, PassFlag::eParallaxOcclusionMappingRepeat ) );
 		}
@@ -127,7 +127,7 @@ namespace castor3d
 			, PassComponentTextureFlag const & flag )
 		{
 			return flags.enableTangentSpace()
-				&& checkFlags( flags.textures, flag ) != flags.textures.flags.end()
+				&& hasAny( flags.textures, flag )
 				&& checkFlag( flags.m_passFlags, PassFlag::eParallaxOcclusionMappingOne );
 		}
 	}
@@ -528,25 +528,11 @@ namespace castor3d
 			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
 	}
 
-	bool HeightMapComponent::Plugin::writeTextureConfig( TextureConfiguration const & configuration
-		, castor::String const & tabs
-		, castor::StringStream & file )const
-	{
-		auto it = checkFlags( configuration.components, getTextureFlags() );
-
-		if ( it == configuration.components.end() )
-		{
-			return true;
-		}
-
-		return castor::TextWriter< HeightMapComponent >{ tabs, configuration }( file, it->componentsMask );
-	}
-
 	bool HeightMapComponent::Plugin::isComponentNeeded( TextureCombine const & textures
 		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eGeometry )
-			|| textures.flags.end() != checkFlags( textures, getTextureFlags() );
+			|| hasAny( textures, getTextureFlags() );
 	}
 
 	void HeightMapComponent::Plugin::createMapComponent( Pass & pass
@@ -562,6 +548,14 @@ namespace castor3d
 			: false;
 	}
 
+	bool HeightMapComponent::Plugin::doWriteTextureConfig( TextureConfiguration const & configuration
+		, uint32_t mask
+		, castor::String const & tabs
+		, castor::StringStream & file )const
+	{
+		return castor::TextWriter< HeightMapComponent >{ tabs, configuration }( file, mask );
+	}
+
 	//*********************************************************************************************
 
 	castor::String const HeightMapComponent::TypeName = C3D_MakePassMapComponentName( "height" );
@@ -575,16 +569,16 @@ namespace castor3d
 		}
 	}
 
-	void HeightMapComponent::fillConfig( TextureConfiguration & configuration
+	PassComponentUPtr HeightMapComponent::doClone( Pass & pass )const
+	{
+		return std::make_unique< HeightMapComponent >( pass );
+	}
+
+	void HeightMapComponent::doFillConfig( TextureConfiguration & configuration
 		, PassVisitorBase & vis )const
 	{
 		vis.visit( cuT( "Height" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 1u );
 		vis.visit( cuT( "Height factor" ), configuration.heightFactor );
-	}
-
-	PassComponentUPtr HeightMapComponent::doClone( Pass & pass )const
-	{
-		return std::make_unique< HeightMapComponent >( pass );
 	}
 
 	//*********************************************************************************************

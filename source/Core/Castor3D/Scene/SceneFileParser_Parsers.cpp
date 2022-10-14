@@ -4245,8 +4245,7 @@ namespace castor3d
 	{
 		auto & parsingContext = getParserContext( context );
 
-		if ( parsingContext.pass
-			&& parsingContext.passComponent )
+		if ( parsingContext.pass )
 		{
 			if ( !parsingContext.sampler.lock() )
 			{

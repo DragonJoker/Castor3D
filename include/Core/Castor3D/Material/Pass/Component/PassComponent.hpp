@@ -318,6 +318,20 @@ namespace castor3d
 			C3D_API PassComponentID getId()const;
 			/**@}*/
 
+		protected:
+			C3D_API void applyFloatComponent( std::string const & name
+				, PassComponentTextureFlag flag
+				, shader::TextureConfigData const & config
+				, sdw::U32Vec3 const & imgCompConfig
+				, sdw::Vec4 const & sampled
+				, shader::BlendComponents & components )const;
+			C3D_API void applyVec3Component( std::string const & name
+				, PassComponentTextureFlag flag
+				, shader::TextureConfigData const & config
+				, sdw::U32Vec3 const & imgCompConfig
+				, sdw::Vec4 const & sampled
+				, shader::BlendComponents & components )const;
+
 		private:
 			PassComponentPlugin const & m_plugin;
 		};

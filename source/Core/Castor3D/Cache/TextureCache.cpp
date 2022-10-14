@@ -365,7 +365,7 @@ namespace castor3d
 					, allowSRGB );
 		}
 
-		TextureCombine getCombine( Pass const & pass )
+		static TextureCombine getCombine( Pass const & pass )
 		{
 			TextureCombine combine;
 			combine.configCount = pass.getTextureUnitsCount();
