@@ -18,44 +18,6 @@ namespace castor3d
 		return component.getType();
 	}
 
-	bool areFlagsEmpty( ComponentsTextures const & textures )
-	{
-		return textures.end() == std::find_if( textures.begin()
-			, textures.end()
-			, []( PassComponentTextureFlag const & lookup ) -> bool
-			{
-				return ( lookup != 0u );
-			} );
-	}
-
-	ComponentsTextures makeComponentsTextures( TextureFlagsArray const & textures )
-	{
-		ComponentsTextures result{};
-		uint32_t index{};
-
-		for ( auto flag : castor::makeArrayView( textures.data(), std::min( textures.size(), result.size() ) ) )
-		{
-			result[index++] = flag;
-		}
-
-		return result;
-	}
-
-	ComponentsTextures::const_iterator checkFlags( ComponentsTextures const & flags
-		, PassComponentTextureFlag flag )
-	{
-		auto [passIndex, textureFlag] = splitTextureFlag( flag );
-		auto it = std::find_if( flags.begin()
-			, flags.end()
-			, [passIndex, textureFlag]( PassComponentTextureFlag const & lookup )
-			{
-				auto [lookupPassIndex, lookuptextureFlag] = splitTextureFlag( lookup );
-				return lookupPassIndex == passIndex
-					&& castor::checkFlag( lookuptextureFlag, textureFlag );
-			} );
-		return it;
-	}
-
 	//************************************************************************************************
 
 	namespace shader

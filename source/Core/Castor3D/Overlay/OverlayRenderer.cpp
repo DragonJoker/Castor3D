@@ -143,23 +143,23 @@ namespace castor3d
 		};
 
 		static uint32_t makeKey( PassComponentRegister const & passComponents
-			, TextureFlagsArray const & textures
+			, TextureCombine const & textures
 			, bool text )
 		{
 			auto tex{ uint32_t( text ? OverlayTexture::eText : OverlayTexture::eNone ) };
 
-			if ( checkFlags( textures, passComponents.getColourFlags() ) != textures.end() )
+			if ( checkFlags( textures, passComponents.getColourFlags() ) != textures.flags.end() )
 			{
 				tex |= uint32_t( OverlayTexture::eColour );
 			}
 
-			if ( checkFlags( textures, passComponents.getOpacityFlags() ) != textures.end() )
+			if ( checkFlags( textures, passComponents.getOpacityFlags() ) != textures.flags.end() )
 			{
 				tex |= uint32_t( OverlayTexture::eOpacity );
 			}
 
 			uint32_t result{ tex << 8 };
-			result |= uint32_t( textures.size() );
+			result |= uint32_t( textures.configCount );
 			return result;
 		}
 
@@ -879,7 +879,7 @@ namespace castor3d
 		, VkRenderPass renderPass
 		, Pass const & pass
 		, ashes::PipelineShaderStageCreateInfoArray program
-		, TextureFlagsArray const & texturesFlags
+		, TextureCombine const & texturesFlags
 		, bool text )
 	{
 		ashes::VkPipelineColorBlendAttachmentStateArray attachments{ { VK_TRUE
@@ -907,13 +907,13 @@ namespace castor3d
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT ) );
 
-		auto vertexLayout = ( texturesFlags.empty()
+		auto vertexLayout = ( texturesFlags.configCount == 0u
 			? &m_noTexDeclaration
 			: &m_texDeclaration );
 
 		if ( text )
 		{
-			vertexLayout = ( texturesFlags.empty()
+			vertexLayout = ( texturesFlags.configCount == 0u
 				? &m_noTexTextDeclaration
 				: &m_texTextDeclaration );
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( ovrlrend::OverlayBindingId::eTextMap )
@@ -973,12 +973,12 @@ namespace castor3d
 	}
 
 	ashes::PipelineShaderStageCreateInfoArray OverlayRenderer::doCreateOverlayProgram( RenderDevice const & device
-		, TextureFlagsArray const & texturesFlags
+		, TextureCombine const & texturesFlags
 		, bool textOverlay )
 	{
 		using namespace sdw;
 		using namespace shader;
-		bool hasTexture = !texturesFlags.empty();
+		bool hasTexture = texturesFlags.configCount != 0u;
 
 		// Vertex shader
 		ShaderModule vtx{ VK_SHADER_STAGE_VERTEX_BIT, "Overlay" };

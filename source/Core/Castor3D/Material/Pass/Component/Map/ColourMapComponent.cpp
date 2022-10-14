@@ -98,22 +98,21 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void ColourMapComponent::ComponentsShader::applyComponents( TextureFlagsArray const & texturesFlags
+	void ColourMapComponent::ComponentsShader::applyComponents( TextureCombine const & combine
 		, PipelineFlags const * flags
 		, shader::TextureConfigData const & config
 		, sdw::U32Vec3 const & imgCompConfig
 		, sdw::Vec4 const & sampled
 		, shader::BlendComponents & components )const
 	{
-		if ( !components.hasMember( "colour" )
-			|| texturesFlags.end() == checkFlags( texturesFlags, getTextureFlags() ) )
+		if ( !components.hasMember( "colour" ) )
 		{
 			return;
 		}
 
 		auto & writer{ *sampled.getWriter() };
 
-		IF( writer, imgCompConfig.y() != 0_u )
+		IF( writer, imgCompConfig.x() == sdw::UInt{ getTextureFlags() } )
 		{
 			components.getMember< sdw::Vec3 >( "colour" ) *= config.getVec3( sampled, imgCompConfig.z() );
 		}
@@ -207,11 +206,11 @@ namespace castor3d
 		return castor::TextWriter< ColourMapComponent >{ tabs, it->componentsMask }( file );
 	}
 
-	bool ColourMapComponent::Plugin::isComponentNeeded( TextureFlagsArray const & textures
+	bool ColourMapComponent::Plugin::isComponentNeeded( TextureCombine const & textures
 		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eColour )
-			|| checkFlags( textures, getTextureFlags() ) != textures.end();
+			|| checkFlags( textures, getTextureFlags() ) != textures.flags.end();
 	}
 
 	void ColourMapComponent::Plugin::createMapComponent( Pass & pass

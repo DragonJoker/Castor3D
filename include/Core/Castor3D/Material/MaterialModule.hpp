@@ -35,6 +35,8 @@ namespace castor3d
 	CU_ImplementFlags( TextureFlag )
 
 	using PassComponentID = uint16_t;
+	using TextureCombineID = uint16_t;
+	using PassComponentsTypeID = uint16_t;
 	using PassComponentTextureFlag = uint32_t;
 
 	inline PassComponentTextureFlag makeTextureFlag( PassComponentID componentId
@@ -136,6 +138,14 @@ namespace castor3d
 	CU_DeclareMap( castor::String, MaterialRPtr, MaterialPtrStr );
 	//! Material pointer map
 	CU_DeclareMap( uint32_t, MaterialRPtr, MaterialPtrUInt );
+
+	struct TextureCombine
+	{
+		uint32_t configCount{};
+		std::set< PassComponentTextureFlag > flags{};
+	};
+
+	C3D_API bool operator==( TextureCombine const & lhs, TextureCombine const & rhs );
 
 	//@}
 }

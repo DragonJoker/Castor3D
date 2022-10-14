@@ -97,22 +97,21 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void EmissiveMapComponent::ComponentsShader::applyComponents( TextureFlagsArray const & texturesFlags
+	void EmissiveMapComponent::ComponentsShader::applyComponents( TextureCombine const & combine
 		, PipelineFlags const * flags
 		, shader::TextureConfigData const & config
 		, sdw::U32Vec3 const & imgCompConfig
 		, sdw::Vec4 const & sampled
 		, shader::BlendComponents & components )const
 	{
-		if ( !components.hasMember( "emissive" )
-			|| texturesFlags.end() == checkFlags( texturesFlags, getTextureFlags() ) )
+		if ( !components.hasMember( "emissive" ) )
 		{
 			return;
 		}
 
 		auto & writer{ *sampled.getWriter() };
 
-		IF( writer, imgCompConfig.y() != 0_u )
+		IF( writer, imgCompConfig.x() == sdw::UInt{ getTextureFlags() } )
 		{
 			components.getMember< sdw::Vec3 >( "emissive" ) *= config.getVec3( sampled, imgCompConfig.z() );
 		}
@@ -164,12 +163,12 @@ namespace castor3d
 		return castor::TextWriter< EmissiveMapComponent >{ tabs, it->componentsMask }( file );
 	}
 
-	bool EmissiveMapComponent::Plugin::isComponentNeeded( TextureFlagsArray const & textures
+	bool EmissiveMapComponent::Plugin::isComponentNeeded( TextureCombine const & textures
 		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eDiffuseLighting )
 			|| checkFlag( filter, ComponentModeFlag::eSpecularLighting )
-			|| checkFlags( textures, getTextureFlags() ) != textures.end();
+			|| checkFlags( textures, getTextureFlags() ) != textures.flags.end();
 	}
 
 	void EmissiveMapComponent::Plugin::createMapComponent( Pass & pass
@@ -179,12 +178,12 @@ namespace castor3d
 	}
 
 	void EmissiveMapComponent::Plugin::doUpdateComponent( PassComponentRegister const & passComponents
-		, TextureFlagsArray const & texturesFlags
+		, TextureCombine const & combine
 		, shader::BlendComponents & components )
 	{
 		auto & plugin = passComponents.getPlugin< EmissiveMapComponent >();
 
-		if ( checkFlags( texturesFlags, plugin.getTextureFlags() ) == texturesFlags.end() )
+		if ( checkFlags( combine, plugin.getTextureFlags() ) == combine.flags.end() )
 		{
 			components.getMember< sdw::Vec3 >( "emissive", true ) *= components.getMember< sdw::Vec3 >( "colour", true );
 		}

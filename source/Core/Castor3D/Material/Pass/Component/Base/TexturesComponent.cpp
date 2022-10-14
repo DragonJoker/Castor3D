@@ -269,10 +269,10 @@ namespace castor3d
 			, 0u );
 	}
 
-	bool TexturesComponent::Plugin::isComponentNeeded( TextureFlagsArray const & textures
+	bool TexturesComponent::Plugin::isComponentNeeded( TextureCombine const & textures
 		, ComponentModeFlags const & filter )const
 	{
-		return !textures.empty();
+		return textures.configCount != 0;
 	}
 
 	//*********************************************************************************************

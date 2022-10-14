@@ -138,7 +138,7 @@ namespace castor3d
 		data.write( materialShader.getMaterialChunk(), 0.0f, 0u );
 	}
 
-	bool EmissiveComponent::Plugin::isComponentNeeded( TextureFlagsArray const & textures
+	bool EmissiveComponent::Plugin::isComponentNeeded( TextureCombine const & textures
 		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eDiffuseLighting );

@@ -171,7 +171,7 @@ namespace castor3d
 		data.write( materialShader.getMaterialChunk(), MetalnessComponent::Default, 0u );
 	}
 
-	bool MetalnessComponent::Plugin::isComponentNeeded( TextureFlagsArray const & textures
+	bool MetalnessComponent::Plugin::isComponentNeeded( TextureCombine const & textures
 		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eSpecularLighting );

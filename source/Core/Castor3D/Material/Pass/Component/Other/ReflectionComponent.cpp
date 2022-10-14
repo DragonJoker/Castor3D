@@ -142,7 +142,7 @@ namespace castor3d
 		data.write( materialShader.getMaterialChunk(), 0u, 0u );
 	}
 
-	bool ReflectionComponent::Plugin::isComponentNeeded( TextureFlagsArray const & textures
+	bool ReflectionComponent::Plugin::isComponentNeeded( TextureCombine const & textures
 		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eSpecularLighting );

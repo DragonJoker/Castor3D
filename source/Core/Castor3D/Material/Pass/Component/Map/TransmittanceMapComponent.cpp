@@ -3,6 +3,7 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Pass/PassVisitor.hpp"
+#include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
 #include "Castor3D/Scene/SceneFileParser.hpp"
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
@@ -143,22 +144,21 @@ namespace castor3d
 		}
 	}
 
-	void TransmittanceMapComponent::ComponentsShader::applyComponents( TextureFlagsArray const & texturesFlags
+	void TransmittanceMapComponent::ComponentsShader::applyComponents( TextureCombine const & combine
 		, PipelineFlags const * flags
 		, shader::TextureConfigData const & config
 		, sdw::U32Vec3 const & imgCompConfig
 		, sdw::Vec4 const & sampled
 		, shader::BlendComponents & components )const
 	{
-		if ( !components.hasMember( "transmittance" )
-			|| texturesFlags.end() == checkFlags( texturesFlags, getTextureFlags() ) )
+		if ( !components.hasMember( "transmittance" ) )
 		{
 			return;
 		}
 
 		auto & writer{ *sampled.getWriter() };
 
-		IF( writer, imgCompConfig.y() != 0_u )
+		IF( writer, imgCompConfig.x() == sdw::UInt{ getTextureFlags() } )
 		{
 			components.getMember< sdw::Float >( "transmittance" ) *= config.getFloat( sampled, imgCompConfig.z() );
 		}
@@ -213,12 +213,12 @@ namespace castor3d
 			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
 	}
 
-	bool TransmittanceMapComponent::Plugin::isComponentNeeded( TextureFlagsArray const & textures
+	bool TransmittanceMapComponent::Plugin::isComponentNeeded( TextureCombine const & textures
 		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eDiffuseLighting )
 			|| checkFlag( filter, ComponentModeFlag::eSpecularLighting )
-			|| textures.end( ) != checkFlags( textures, getTextureFlags() );
+			|| textures.flags.end( ) != checkFlags( textures, getTextureFlags() );
 	}
 
 	bool TransmittanceMapComponent::Plugin::writeTextureConfig( TextureConfiguration const & configuration

@@ -368,7 +368,7 @@ namespace GuiCommon
 				, castor3d::Scene const & scene )
 			{
 				ShaderSources result;
-				PassShaderGatherer vis{ castor3d::PipelineFlags{ scene.getEngine()->getPassComponentsRegister().getPassComponentsBitset( &pass )
+				PassShaderGatherer vis{ castor3d::PipelineFlags{ scene.getEngine()->getPassComponentsRegister().getPassComponents( pass )
 						, pass.getTypeID()
 						, pass.getColourBlendMode()
 						, pass.getAlphaBlendMode()

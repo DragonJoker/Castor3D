@@ -12,14 +12,14 @@ namespace castor3d::shader
 	//************************************************************************************************
 
 	PassShaders::PassShaders( PassComponentRegister const & compRegister
-		, TextureFlagsArray const & texturesFlags
+		, TextureCombine const & combine
 		, ComponentModeFlags filter
 		, Utils & utils )
 		: m_utils{ utils }
 		, m_compRegister{ compRegister }
-		, m_shaders{ m_compRegister.getComponentsShaders( texturesFlags, filter, m_updateComponents ) }
+		, m_shaders{ m_compRegister.getComponentsShaders( combine, filter, m_updateComponents ) }
 		, m_filter{ filter }
-		, m_opacity{ checkFlags( texturesFlags, m_compRegister.getOpacityFlags() ) != texturesFlags.end() }
+		, m_opacity{ checkFlags( combine, m_compRegister.getOpacityFlags() ) != combine.flags.end() }
 	{
 	}
 
@@ -92,25 +92,19 @@ namespace castor3d::shader
 		}
 	}
 
-	void PassShaders::applyComponents( TextureFlagsArray const & texturesFlags
+	void PassShaders::applyComponents( TextureCombine const & combine
 		, TextureConfigData const & config
 		, sdw::U32Vec3 const & imgCompConfig
 		, sdw::Vec4 const & sampled
 		, BlendComponents & components )const
 	{
-		auto & writer = findWriterMandat( config, imgCompConfig, sampled, components );
-
 		for ( auto & shader : m_shaders )
 		{
 			auto & plugin = m_compRegister.getPlugin( shader->getId() );
 
-			if ( checkFlags( texturesFlags, plugin.getTextureFlags() ) != texturesFlags.end() )
+			if ( checkFlags( combine, plugin.getTextureFlags() ) != combine.flags.end() )
 			{
-				IF( writer, imgCompConfig.x() == sdw::UInt{ plugin.getTextureFlags() } )
-				{
-					shader->applyComponents( texturesFlags, nullptr, config, imgCompConfig, sampled, components );
-				}
-				FI;
+				shader->applyComponents( combine, nullptr, config, imgCompConfig, sampled, components );
 			}
 		}
 	}
@@ -121,20 +115,15 @@ namespace castor3d::shader
 		, sdw::Vec4 const & sampled
 		, BlendComponents & components )const
 	{
-		auto & writer = findWriterMandat( config, imgCompConfig, sampled, components );
-		auto texturesFlags = flags.makeTexturesFlags();
+		auto & combine = flags.textures;
 
 		for ( auto & shader : m_shaders )
 		{
 			auto & plugin = m_compRegister.getPlugin( shader->getId() );
 
-			if ( checkFlags( texturesFlags, plugin.getTextureFlags() ) != texturesFlags.end() )
+			if ( checkFlags( combine, plugin.getTextureFlags() ) != combine.flags.end() )
 			{
-				IF( writer, imgCompConfig.x() == sdw::UInt{ plugin.getTextureFlags() } )
-				{
-					shader->applyComponents( flags.makeTexturesFlags(), &flags, config, imgCompConfig, sampled, components );
-				}
-				FI;
+				shader->applyComponents( combine, &flags, config, imgCompConfig, sampled, components );
 			}
 		}
 	}
@@ -192,29 +181,29 @@ namespace castor3d::shader
 		}
 	}
 
-	void PassShaders::updateComponents( TextureFlagsArray const & texturesFlags
+	void PassShaders::updateComponents( TextureCombine const & combine
 		, BlendComponents & components )const
 	{
 		for ( auto & update : m_updateComponents )
 		{
-			update( m_compRegister, texturesFlags, components );
+			update( m_compRegister, combine, components );
 		}
 	}
 
 	void PassShaders::updateComponents( PipelineFlags const & flags
 		, BlendComponents & components )const
 	{
-		updateComponents( flags.makeTexturesFlags(), components );
+		updateComponents( flags.textures, components );
 	}
 
-	bool PassShaders::hasTexcoordModif( PipelineFlags const & flags )const
+	std::map< uint32_t, PassComponentTextureFlag > PassShaders::getTexcoordModifs( PipelineFlags const & flags )const
 	{
-		return m_compRegister.hasTexcoordModif( flags );
+		return m_compRegister.getTexcoordModifs( flags );
 	}
 
-	bool PassShaders::hasTexcoordModif( TextureFlagsArray const & flags )const
+	std::map< uint32_t, PassComponentTextureFlag > PassShaders::getTexcoordModifs( TextureCombine const & combine )const
 	{
-		return m_compRegister.hasTexcoordModif( flags );
+		return m_compRegister.getTexcoordModifs( combine );
 	}
 
 	void PassShaders::computeTexcoord( PipelineFlags const & flags
@@ -226,13 +215,13 @@ namespace castor3d::shader
 		, BlendComponents & components )const
 	{
 		auto & writer = findWriterMandat( config, map, texCoords, texCoord, components );
-		auto textures = flags.makeTexturesFlags();
+		auto & combine = flags.textures;
 
 		for ( auto & shader : m_shaders )
 		{
 			auto & plugin = m_compRegister.getPlugin( shader->getId() );
 
-			if ( checkFlags( textures, plugin.getTextureFlags() ) != textures.end() )
+			if ( checkFlags( combine, plugin.getTextureFlags() ) != combine.flags.end() )
 			{
 				IF( writer, imgCompConfig.x() == sdw::UInt{ plugin.getTextureFlags() } )
 				{
@@ -258,13 +247,13 @@ namespace castor3d::shader
 		, BlendComponents & components )const
 	{
 		auto & writer = findWriterMandat( config, map, texCoords, texCoord, components );
-		auto textures = flags.makeTexturesFlags();
+		auto & combine = flags.textures;
 
 		for ( auto & shader : m_shaders )
 		{
 			auto & plugin = m_compRegister.getPlugin( shader->getId() );
 
-			if ( checkFlags( textures, plugin.getTextureFlags() ) != textures.end() )
+			if ( checkFlags( combine, plugin.getTextureFlags() ) != combine.flags.end() )
 			{
 				IF( writer, imgCompConfig.x() == sdw::UInt{ plugin.getTextureFlags() } )
 				{
@@ -281,7 +270,7 @@ namespace castor3d::shader
 		}
 	}
 
-	void PassShaders::computeTexcoord( TextureFlagsArray const & flags
+	void PassShaders::computeTexcoord( TextureCombine const & combine
 		, TextureConfigData const & config
 		, sdw::U32Vec3 const & imgCompConfig
 		, sdw::CombinedImage2DRgba32 const & map
@@ -291,7 +280,7 @@ namespace castor3d::shader
 	{
 	}
 
-	void PassShaders::computeTexcoord( TextureFlagsArray const & flags
+	void PassShaders::computeTexcoord( TextureCombine const & combine
 		, TextureConfigData const & config
 		, sdw::U32Vec3 const & imgCompConfig
 		, sdw::CombinedImage2DRgba32 const & map

@@ -57,6 +57,26 @@ namespace castor3d
 					: lhs );
 			}
 		}
+
+		void addFlags( TextureFlagsArray & lhs
+			, PassComponentTextureFlag rhs )
+		{
+			auto it = checkFlags( lhs, rhs );
+
+			if ( it == lhs.end() )
+			{
+				lhs.push_back( rhs );
+			}
+		}
+
+		void addFlags( TextureFlagsArray & lhs
+			, TextureFlagsArray const & rhs )
+		{
+			for ( auto flag : rhs )
+			{
+				addFlags( lhs, flag );
+			}
+		}
 	}
 
 	//*********************************************************************************************
@@ -115,29 +135,6 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	bool matchConfigFlags( TextureConfiguration const & config
-		, PassComponentTextureFlag const & mask )
-	{
-		return castor::checkFlag( config.components[0].flag, mask )
-			|| castor::checkFlag( config.components[1].flag, mask )
-			|| castor::checkFlag( config.components[2].flag, mask )
-			|| castor::checkFlag( config.components[3].flag, mask );
-	}
-
-	bool matchConfigFlags( TextureConfiguration const & config
-		, TextureFlagsArray const & mask )
-	{
-		for ( auto flag : mask )
-		{
-			if ( matchConfigFlags( config, flag ) )
-			{
-				return true;
-			}
-		}
-
-		return false;
-	}
-
 	TextureFlagsArray getFlags( TextureConfiguration const & config )
 	{
 		TextureFlagsArray result;
@@ -146,7 +143,7 @@ namespace castor3d
 		{
 			if ( conf.componentsMask )
 			{
-				addFlags( result, conf.flag );
+				texconf::addFlags( result, conf.flag );
 			}
 		}
 

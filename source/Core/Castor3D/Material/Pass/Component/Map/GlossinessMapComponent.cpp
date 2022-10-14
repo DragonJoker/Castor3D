@@ -4,6 +4,7 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Pass/PassFactory.hpp"
+#include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
 #include "Castor3D/Material/Pass/Component/Map/SpecularMapComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/MetalnessComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/RoughnessComponent.hpp"
@@ -103,22 +104,21 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void GlossinessMapComponent::ComponentsShader::applyComponents( TextureFlagsArray const & texturesFlags
+	void GlossinessMapComponent::ComponentsShader::applyComponents( TextureCombine const & combine
 		, PipelineFlags const * flags
 		, shader::TextureConfigData const & config
 		, sdw::U32Vec3 const & imgCompConfig
 		, sdw::Vec4 const & sampled
 		, shader::BlendComponents & components )const
 	{
-		if ( !components.hasMember( "roughness" )
-			|| checkFlags( texturesFlags, getTextureFlags() ) == texturesFlags.end() )
+		if ( !components.hasMember( "roughness" ) )
 		{
 			return;
 		}
 
 		auto & writer{ *sampled.getWriter() };
 
-		IF( writer, imgCompConfig.y() != 0_u )
+		IF( writer, imgCompConfig.x() == sdw::UInt{ getTextureFlags() } )
 		{
 			auto roughness = components.getMember< sdw::Float >( "roughness" );
 			auto gloss = writer.declLocale( "gloss"
@@ -195,12 +195,12 @@ namespace castor3d
 		return castor::TextWriter< GlossinessMapComponent >{ tabs, it->componentsMask }( file );
 	}
 
-	bool GlossinessMapComponent::Plugin::isComponentNeeded( TextureFlagsArray const & textures
+	bool GlossinessMapComponent::Plugin::isComponentNeeded( TextureCombine const & textures
 		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eDiffuseLighting )
 			|| checkFlag( filter, ComponentModeFlag::eSpecularLighting )
-			|| checkFlags( textures, getTextureFlags() ) != textures.end();
+			|| checkFlags( textures, getTextureFlags() ) != textures.flags.end();
 	}
 
 	void GlossinessMapComponent::Plugin::createMapComponent( Pass & pass

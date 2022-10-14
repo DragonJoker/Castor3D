@@ -81,6 +81,12 @@ namespace castor3d::shader
 		return result;
 	}
 
+	ast::type::BaseStructPtr BlendComponents::makeType( ast::type::TypesCache & cache
+		, BlendComponents const & rhs )
+	{
+		return std::static_pointer_cast< ast::type::BaseStruct >( rhs.getType() );
+	}
+
 	sdw::Vec3 BlendComponents::computeF0( sdw::Vec3 const & albedo
 		, sdw::Float const & metalness )
 	{

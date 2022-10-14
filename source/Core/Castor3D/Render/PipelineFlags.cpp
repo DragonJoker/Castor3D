@@ -1,10 +1,12 @@
 #include "Castor3D/Render/PipelineFlags.hpp"
 
+#include "Castor3D/Engine.hpp"
 #include "Castor3D/Limits.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Render/RenderNodesPass.hpp"
+#include "Castor3D/Render/RenderTechniquePass.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
@@ -35,9 +37,10 @@ namespace castor3d
 			}
 		}
 
-		static PipelineHiHashDetails getHiHashDetails( uint64_t hiHash
-			, PassComponentsBitset components
-			, ComponentsTextures textures
+		static PipelineHiHashDetails getHiHashDetails( PassComponentRegister const & passComponents
+			, uint64_t hiHash
+			, PassComponentsTypeID components
+			, TextureCombineID textures
 			, ShaderFlags shaderFlags )
 		{
 			constexpr auto maxSubmeshSize = castor::getBitSize( uint32_t( SubmeshFlag::eAllBase ) );
@@ -57,8 +60,8 @@ namespace castor3d
 
 			PipelineHiHashDetails result{ {}, 0u };
 			result.m_shaderFlags = shaderFlags;
-			result.components = std::move( components );
-			result.textures = std::move( textures );
+			result.components = passComponents.getPassComponents( components );
+			result.textures = passComponents.getTextureCombine( textures );
 
 			auto offset = 0u;
 			result.m_submeshFlags = SubmeshFlags( ( hiHash >> offset ) & maxSubmeshMask );
@@ -77,31 +80,8 @@ namespace castor3d
 			return result;
 		}
 
-		static uint64_t getComponentsHash( PassComponentsBitset const & components )
-		{
-			uint64_t result{ std::hash< bool >{}( components[0] ) };
-
-			for ( uint32_t i = 1u; i < components.getSize(); ++i )
-			{
-				castor::hashCombine64( result, components[i] );
-			}
-
-			return result;
-		}
-
-		static uint64_t getComponentsTexturesHash( ComponentsTextures const & textures )
-		{
-			uint64_t result{ std::hash< uint8_t >{}( uint8_t( textures[0] ) ) };
-
-			for ( uint32_t i = 1u; i < textures.size(); ++i )
-			{
-				castor::hashCombine64( result, textures[i] );
-			}
-
-			return result;
-		}
-
-		static uint64_t getHiHash( PipelineHiHashDetails & flags )
+		static uint64_t getHiHash( PassComponentRegister const & passComponents
+			, PipelineHiHashDetails & flags )
 		{
 			constexpr auto maxSubmeshSize = castor::getBitSize( uint32_t( SubmeshFlag::eAllBase ) );
 			constexpr auto maxProgramSize = castor::getBitSize( uint32_t( ProgramFlag::eAllBase ) );
@@ -132,9 +112,10 @@ namespace castor3d
 			result |= uint64_t( flags.passLayerIndex ) << offset;
 
 #if !defined( NDEBUG )
-			auto details = getHiHashDetails( result
-				, flags.components
-				, flags.textures
+			auto details = getHiHashDetails( passComponents
+				, result
+				, passComponents.getPassComponentsType( flags.components )
+				, passComponents.getTextureCombineType( flags.textures )
 				, flags.m_shaderFlags );
 			CU_Require( flags.m_shaderFlags == details.m_shaderFlags );
 			CU_Require( flags.m_submeshFlags == details.m_submeshFlags );
@@ -143,6 +124,8 @@ namespace castor3d
 			CU_Require( flags.m_passFlags == details.m_passFlags );
 			CU_Require( flags.alphaFunc == details.alphaFunc );
 			CU_Require( flags.passLayerIndex == details.passLayerIndex );
+			CU_Require( flags.components == details.components );
+			CU_Require( flags.textures == details.textures );
 #endif
 			return result;
 		}
@@ -184,13 +167,14 @@ namespace castor3d
 			return result;
 		}
 
-		static PipelineBaseHash getPipelineBaseHash( PipelineFlags flags )
+		static PipelineBaseHash getPipelineBaseHash( PassComponentRegister const & passComponents
+			, PipelineFlags flags )
 		{
 			PipelineBaseHash result{};
-			result.hi = getHiHash( flags );
+			result.hi = getHiHash( passComponents, flags );
 			result.lo = getLoHash( flags );
-			result.components = flags.components;
-			result.textures = flags.textures;
+			result.components = passComponents.getPassComponentsType( flags.components );
+			result.textures = passComponents.getTextureCombineType( flags.textures );
 			return result;
 		}
 
@@ -212,9 +196,9 @@ namespace castor3d
 			|| ( ( lhs.hi == rhs.hi )
 				&& ( ( lhs.lo < rhs.lo )
 					|| ( ( lhs.lo == rhs.lo )
-						&& ( ( pipflags::getComponentsHash( lhs.components ) < pipflags::getComponentsHash( rhs.components ) )
-							|| ( ( pipflags::getComponentsHash( lhs.components ) == pipflags::getComponentsHash( rhs.components ) )
-								&& ( pipflags::getComponentsTexturesHash( lhs.textures ) < pipflags::getComponentsTexturesHash( lhs.textures ) ) ) ) ) ) );
+						&& ( ( lhs.components < rhs.components )
+							|| ( ( lhs.components == rhs.components )
+								&& ( lhs.textures < lhs.textures ) ) ) ) ) );
 	}
 
 	//*********************************************************************************************
@@ -244,7 +228,7 @@ namespace castor3d
 	bool PipelineFlags::enableTexcoords()const
 	{
 		return forceTexCoords()
-			|| ( !areFlagsEmpty( textures ) && ( hasAny( m_submeshFlags, SubmeshFlag::eTexcoords ) ) );
+			|| ( textures.configCount != 0u && ( hasAny( m_submeshFlags, SubmeshFlag::eTexcoords ) ) );
 	}
 
 	bool PipelineFlags::enableVertexInput( SubmeshFlag data )const
@@ -306,7 +290,7 @@ namespace castor3d
 
 	bool PipelineFlags::enableTextures()const
 	{
-		return enableTexcoords() && !areFlagsEmpty( textures );
+		return enableTexcoords() && textures.configCount != 0u;
 	}
 
 	bool PipelineFlags::enableVertexID()const
@@ -322,7 +306,7 @@ namespace castor3d
 	bool PipelineFlags::enableParallaxOcclusionMapping( PassComponentRegister const & passComponents )const
 	{
 		return enableTangentSpace()
-			&& checkFlags( textures, passComponents.getHeightFlags() ) != textures.end()
+			&& hasMap( passComponents.getHeightFlags() )
 			&& ( checkFlag( m_passFlags, PassFlag::eParallaxOcclusionMappingOne )
 				|| checkFlag( m_passFlags, PassFlag::eParallaxOcclusionMappingRepeat ) );
 	}
@@ -330,7 +314,7 @@ namespace castor3d
 	bool PipelineFlags::enableParallaxOcclusionMappingOne( PassComponentRegister const & passComponents )const
 	{
 		return enableTangentSpace()
-			&& checkFlags( textures, passComponents.getHeightFlags() ) != textures.end()
+			&& hasMap( passComponents.getHeightFlags() )
 			&& checkFlag( m_passFlags, PassFlag::eParallaxOcclusionMappingOne );
 	}
 
@@ -351,7 +335,7 @@ namespace castor3d
 			&& uint32_t( data ) <= uint32_t( SubmeshFlag::eTexcoords3 ) );
 		return hasSubmeshData( data )
 			&& ( forceTexCoords()
-				|| ( !areFlagsEmpty( textures ) && hasSubmeshData( data ) ) );
+				|| ( textures.configCount != 0u && hasSubmeshData( data ) ) );
 	}
 
 	bool PipelineFlags::enableNonTexcoord( SubmeshFlag data )const
@@ -367,29 +351,14 @@ namespace castor3d
 		auto ires = splitTextureFlag( flag );
 		auto passIndex = ires.first;
 		auto textureFlag = ires.second;
-		return textures.end() != std::find_if( textures.begin()
-			, textures.end()
+		return textures.flags.end() != std::find_if( textures.flags.begin()
+			, textures.flags.end()
 			, [passIndex, textureFlag]( PassComponentTextureFlag lookup )
 			{
 				auto [lookupPassIndex, lookupTextureFlag] = splitTextureFlag( lookup );
 				return lookupPassIndex == passIndex
 					&& castor::hasAny( lookupTextureFlag, textureFlag );
 			} );
-	}
-
-	TextureFlagsArray PipelineFlags::makeTexturesFlags()const
-	{
-		TextureFlagsArray result;
-
-		for ( auto & textureFlag : textures )
-		{
-			if ( textureFlag != 0u )
-			{
-				result.push_back( textureFlag );
-			}
-		}
-
-		return result;
 	}
 
 	//*********************************************************************************************
@@ -413,14 +382,15 @@ namespace castor3d
 		, Pass const & pass
 		, bool isFrontCulled )
 	{
-		return pipflags::getPipelineBaseHash( renderPass.createPipelineFlags( pass
-			, pass.getTexturesMask()
-			, data.getSubmeshFlags( &pass )
-			, data.getProgramFlags( *pass.getOwner() )
-			, SceneFlag::eNone
-			, data.getTopology()
-			, isFrontCulled
-			, {} ) );
+		return pipflags::getPipelineBaseHash( renderPass.getEngine()->getPassComponentsRegister()
+			, renderPass.createPipelineFlags( pass
+				, pass.getTexturesMask()
+				, data.getSubmeshFlags( &pass )
+				, data.getProgramFlags( *pass.getOwner() )
+				, SceneFlag::eNone
+				, data.getTopology()
+				, isFrontCulled
+				, {} ) );
 	}
 
 	PipelineBaseHash getPipelineBaseHash( RenderNodesPass const & renderPass
@@ -428,20 +398,34 @@ namespace castor3d
 		, Pass const & pass
 		, bool isFrontCulled )
 	{
-		return pipflags::getPipelineBaseHash( renderPass.createPipelineFlags( pass
-			, pass.getTexturesMask()
-			, data.getSubmeshFlags()
-			, data.getProgramFlags()
-			, SceneFlag::eNone
-			, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP
-			, isFrontCulled
-			, {} ) );
+		return pipflags::getPipelineBaseHash( renderPass.getEngine()->getPassComponentsRegister()
+			, renderPass.createPipelineFlags( pass
+				, pass.getTexturesMask()
+				, data.getSubmeshFlags()
+				, data.getProgramFlags()
+				, SceneFlag::eNone
+				, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP
+				, isFrontCulled
+				, {} ) );
 	}
 
-	PipelineHiHashDetails getPipelineHiHashDetails( PipelineBaseHash const & hash
+	PipelineHiHashDetails getPipelineHiHashDetails( RenderNodesPass const & renderPass
+		, PipelineBaseHash const & hash
 		, ShaderFlags shaderFlags )
 	{
-		return pipflags::getHiHashDetails( hash.hi
+		return pipflags::getHiHashDetails( renderPass.getEngine()->getPassComponentsRegister()
+			, hash.hi
+			, hash.components
+			, hash.textures
+			, shaderFlags );
+	}
+
+	PipelineHiHashDetails getPipelineHiHashDetails( RenderTechniquePass const & renderPass
+		, PipelineBaseHash const & hash
+		, ShaderFlags shaderFlags )
+	{
+		return pipflags::getHiHashDetails( renderPass.getEngine()->getPassComponentsRegister()
+			, hash.hi
 			, hash.components
 			, hash.textures
 			, shaderFlags );

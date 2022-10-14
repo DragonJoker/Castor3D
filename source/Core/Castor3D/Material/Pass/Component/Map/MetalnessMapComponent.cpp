@@ -3,6 +3,7 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Pass/PassVisitor.hpp"
+#include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
 #include "Castor3D/Material/Pass/Component/Map/SpecularMapComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/MetalnessComponent.hpp"
 #include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
@@ -98,22 +99,21 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void MetalnessMapComponent::ComponentsShader::applyComponents( TextureFlagsArray const & texturesFlags
+	void MetalnessMapComponent::ComponentsShader::applyComponents( TextureCombine const & combine
 		, PipelineFlags const * flags
 		, shader::TextureConfigData const & config
 		, sdw::U32Vec3 const & imgCompConfig
 		, sdw::Vec4 const & sampled
 		, shader::BlendComponents & components )const
 	{
-		if ( !components.hasMember( "metalness" )
-			|| texturesFlags.end() == checkFlags( texturesFlags, getTextureFlags() ) )
+		if ( !components.hasMember( "metalness" ) )
 		{
 			return;
 		}
 
 		auto & writer{ *sampled.getWriter() };
 
-		IF( writer, imgCompConfig.y() != 0_u )
+		IF( writer, imgCompConfig.x() == sdw::UInt{ getTextureFlags() } )
 		{
 			components.getMember< sdw::Float >( "metalness" ) *= config.getFloat( sampled, imgCompConfig.z() );
 		}
@@ -165,11 +165,11 @@ namespace castor3d
 		return castor::TextWriter< MetalnessMapComponent >{ tabs, it->componentsMask }( file );
 	}
 
-	bool MetalnessMapComponent::Plugin::isComponentNeeded( TextureFlagsArray const & textures
+	bool MetalnessMapComponent::Plugin::isComponentNeeded( TextureCombine const & textures
 		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eSpecularLighting )
-			|| textures.end() != checkFlags( textures, getTextureFlags() );
+			|| textures.flags.end() != checkFlags( textures, getTextureFlags() );
 	}
 
 	void MetalnessMapComponent::Plugin::createMapComponent( Pass & pass
@@ -179,14 +179,14 @@ namespace castor3d
 	}
 
 	void MetalnessMapComponent::Plugin::doUpdateComponent( PassComponentRegister const & passComponents
-		, TextureFlagsArray const & texturesFlags
+		, TextureCombine const & combine
 		, shader::BlendComponents & components )
 	{
 		auto & plugin = passComponents.getPlugin< MetalnessMapComponent >();
 		auto & spcPlugin = passComponents.getPlugin< SpecularMapComponent >();
 
-		if ( texturesFlags.end() == checkFlags( texturesFlags, plugin.getTextureFlags() )
-			&& texturesFlags.end() != checkFlags( texturesFlags, spcPlugin.getTextureFlags() ) )
+		if ( combine.flags.end() == checkFlags( combine, plugin.getTextureFlags() )
+			&& combine.flags.end() != checkFlags( combine, spcPlugin.getTextureFlags() ) )
 		{
 			components.getMember< sdw::Float >( "metalness", true ) = length( components.getMember< sdw::Vec3 >( "specular", true ) );
 		}

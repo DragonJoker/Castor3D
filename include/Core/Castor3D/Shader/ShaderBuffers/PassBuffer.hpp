@@ -274,16 +274,16 @@ namespace castor3d
 		 *\~french
 		 *\brief		L'indice de type de passe (pour l'utilisation de vibility buffer).
 		 */
-		C3D_API uint32_t getPassTypeIndex( PassTypeID passType
-			, PassFlags passFlags
-			, TextureFlagsArray textureFlags )const;
+		C3D_API uint32_t getPassTypeIndex( PassComponentsTypeID passType
+			, TextureCombineID textureCombine
+			, PassFlags passFlags )const;
 		/**
 		 *\~english
 		 *\return		The pass type details for given pass type index (for visibility buffer use).
 		 *\~french
 		 *\brief		Les détails du type de passe pour l'index donné (pour l'utilisation de vibility buffer).
 		 */
-		C3D_API std::tuple< PassTypeID, PassFlags, TextureFlagsArray > getPassTypeDetails( uint32_t passTypeIndex )const;
+		C3D_API std::tuple< PassComponentsTypeID, TextureCombineID, PassFlags > getPassTypeDetails( uint32_t passTypeIndex )const;
 		/**
 		 *\~english
 		 *\return		The pointer to the buffer.
@@ -304,9 +304,9 @@ namespace castor3d
 		struct PassTypeData
 		{
 			uint16_t index;
-			PassTypeID passType;
+			PassComponentsTypeID passType;
+			TextureCombineID textureCombine;
 			PassFlags passFlags;
-			TextureFlagsArray textureFlags;
 		};
 
 	private:

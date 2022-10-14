@@ -3,6 +3,7 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Pass/PassVisitor.hpp"
+#include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
 #include "Castor3D/Material/Pass/Component/Base/NormalComponent.hpp"
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
 #include "Castor3D/Scene/SceneFileParser.hpp"
@@ -157,7 +158,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void NormalMapComponent::ComponentsShader::applyComponents( TextureFlagsArray const & texturesFlags
+	void NormalMapComponent::ComponentsShader::applyComponents( TextureCombine const & combine
 		, PipelineFlags const * flags
 		, shader::TextureConfigData const & config
 		, sdw::U32Vec3 const & imgCompConfig
@@ -165,7 +166,6 @@ namespace castor3d
 		, shader::BlendComponents & components )const
 	{
 		if ( !components.hasMember( "normal" )
-			|| texturesFlags.end() == checkFlags( texturesFlags, getTextureFlags() )
 			|| !flags
 			|| !flags->enableTangentSpace() )
 		{
@@ -174,7 +174,7 @@ namespace castor3d
 
 		auto & writer{ *sampled.getWriter() };
 
-		IF( writer, imgCompConfig.y() != 0_u )
+		IF( writer, imgCompConfig.x() == sdw::UInt{ getTextureFlags() } )
 		{
 			auto tbn = shader::Utils::getTBN( components.getMember< sdw::Vec3 >( "normal" )
 				, components.getMember< sdw::Vec3 >( "tangent" )
@@ -247,14 +247,14 @@ namespace castor3d
 		return castor::TextWriter< NormalMapComponent >{ tabs, configuration }( file, it->componentsMask );
 	}
 
-	bool NormalMapComponent::Plugin::isComponentNeeded( TextureFlagsArray const & textures
+	bool NormalMapComponent::Plugin::isComponentNeeded( TextureCombine const & textures
 		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eGeometry )
 			|| checkFlag( filter, ComponentModeFlag::eDiffuseLighting )
 			|| checkFlag( filter, ComponentModeFlag::eSpecularLighting )
 			|| checkFlag( filter, ComponentModeFlag::eOcclusion )
-			|| textures.end() != checkFlags( textures, getTextureFlags() );
+			|| textures.flags.end() != checkFlags( textures, getTextureFlags() );
 	}
 
 	void NormalMapComponent::Plugin::createMapComponent( Pass & pass

@@ -388,7 +388,7 @@ namespace castor3d
 		 *\param[in]	texturesFlags	Les indicateurs de textures.
 		 *\return		Les indicateurs filtrés.
 		 */
-		C3D_API TextureFlagsArray adjustFlags( TextureFlagsArray texturesFlags )const;
+		C3D_API TextureCombine adjustFlags( TextureCombine texturesFlags )const;
 		/**
 		 *\~english
 		 *\brief		Filters the given textures flags using this pass needed textures.
@@ -436,7 +436,7 @@ namespace castor3d
 		 *\param[in]	isFrontCulled		\p true pour front face culling, \p false pour back face culling.
 		 *\param[in]	morphTargets		Le buffer de morph targets.
 		 */
-		C3D_API PipelineFlags createPipelineFlags( PassComponentsBitset components
+		C3D_API PipelineFlags createPipelineFlags( PassComponentIDSet components
 			, BlendMode colourBlendMode
 			, BlendMode alphaBlendMode
 			, PassFlags passFlags
@@ -444,7 +444,7 @@ namespace castor3d
 			, PassTypeID passTypeID
 			, VkCompareOp alphaFunc
 			, VkCompareOp blendAlphaFunc
-			, TextureFlagsArray const & textures
+			, TextureCombine const & textures
 			, SubmeshFlags const & submeshFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
@@ -475,7 +475,7 @@ namespace castor3d
 		 *\param[in]	morphTargets	Le buffer de morph targets.
 		 */
 		C3D_API PipelineFlags createPipelineFlags( Pass const & pass
-			, TextureFlagsArray const & textures
+			, TextureCombine const & textures
 			, SubmeshFlags const & submeshFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags

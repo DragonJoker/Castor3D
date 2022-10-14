@@ -364,6 +364,22 @@ namespace castor3d
 					, sourceInfo.relative()
 					, allowSRGB );
 		}
+
+		TextureCombine getCombine( Pass const & pass )
+		{
+			TextureCombine combine;
+			combine.configCount = pass.getTextureUnitsCount();
+
+			for ( auto & unit : pass.getTextureUnits() )
+			{
+				for ( auto flag : getFlags( unit->getConfiguration() ) )
+				{
+					combine.flags.emplace( flag );
+				}
+			}
+
+			return combine;
+		}
 	}
 
 	//*********************************************************************************************
@@ -375,6 +391,51 @@ namespace castor3d
 
 	TextureUnitCache::~TextureUnitCache()
 	{
+	}
+
+	TextureCombineID TextureUnitCache::registerTextureCombineType( Pass const & pass )
+	{
+		TextureCombine combine = cachetex::getCombine( pass );
+		auto it = std::find( m_texturesCombineTypes.begin()
+			, m_texturesCombineTypes.end()
+			, combine );
+
+		if ( it == m_texturesCombineTypes.end() )
+		{
+			m_texturesCombineTypes.push_back( std::move( combine ) );
+			it = std::next( m_texturesCombineTypes.begin(), ptrdiff_t( m_texturesCombineTypes.size() - 1u ) );
+		}
+
+		return TextureCombineID( std::distance( m_texturesCombineTypes.begin(), it ) + 1 );
+	}
+
+	TextureCombineID TextureUnitCache::getTextureCombineType( Pass const & pass )const
+	{
+		return getTextureCombineType( cachetex::getCombine( pass ) );
+	}
+
+	TextureCombineID TextureUnitCache::getTextureCombineType( TextureCombine const & combine )const
+	{
+		auto it = std::find( m_texturesCombineTypes.begin()
+			, m_texturesCombineTypes.end()
+			, combine );
+		CU_Require( it != m_texturesCombineTypes.end() );
+		return it == m_texturesCombineTypes.end()
+			? 0u
+			: TextureCombineID( std::distance( m_texturesCombineTypes.begin(), it ) + 1 );
+	}
+
+	TextureCombine TextureUnitCache::getTextureCombine( TextureCombineID combineType )const
+	{
+		CU_Require( combineType <= m_texturesCombineTypes.size() );
+
+		if ( combineType == 0 )
+		{
+			CU_Failure( "Unexpected invalid texture combine type." );
+			return TextureCombine{};
+		}
+
+		return m_texturesCombineTypes[combineType - 1u];
 	}
 
 	void TextureUnitCache::initialise( RenderDevice const & device )

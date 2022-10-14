@@ -99,22 +99,21 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void OpacityMapComponent::ComponentsShader::applyComponents( TextureFlagsArray const & texturesFlags
+	void OpacityMapComponent::ComponentsShader::applyComponents( TextureCombine const & combine
 		, PipelineFlags const * flags
 		, shader::TextureConfigData const & config
 		, sdw::U32Vec3 const & imgCompConfig
 		, sdw::Vec4 const & sampled
 		, shader::BlendComponents & components )const
 	{
-		if ( !components.hasMember( "opacity" )
-			|| texturesFlags.end() == checkFlags( texturesFlags, getTextureFlags() ) )
+		if ( !components.hasMember( "opacity" ) )
 		{
 			return;
 		}
 
 		auto & writer{ *sampled.getWriter() };
 
-		IF( writer, imgCompConfig.y() != 0_u )
+		IF( writer, imgCompConfig.x() == sdw::UInt{ getTextureFlags() } )
 		{
 			components.getMember< sdw::Float >( "opacity" ) *= config.getFloat( sampled, imgCompConfig.z() );
 		}
@@ -166,11 +165,11 @@ namespace castor3d
 		return castor::TextWriter< OpacityMapComponent >{ tabs, it->componentsMask }( file );
 	}
 
-	bool OpacityMapComponent::Plugin::isComponentNeeded( TextureFlagsArray const & textures
+	bool OpacityMapComponent::Plugin::isComponentNeeded( TextureCombine const & textures
 		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eOpacity )
-			|| textures.end() != checkFlags( textures, getTextureFlags() );
+			|| textures.flags.end() != checkFlags( textures, getTextureFlags() );
 	}
 
 	void OpacityMapComponent::Plugin::createMapComponent( Pass & pass

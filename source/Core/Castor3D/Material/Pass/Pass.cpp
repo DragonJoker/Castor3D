@@ -44,42 +44,6 @@ namespace castor3d
 
 	namespace matpass
 	{
-		static TextureSourceMap getSources( TextureSourceMap const & sources
-			, PassComponentTextureFlag mask )
-		{
-			TextureSourceMap result;
-
-			for ( auto & source : sources )
-			{
-				auto & config = source.second.config;
-
-				if ( matchConfigFlags( config, mask ) )
-				{
-					result.insert( source );
-				}
-			}
-
-			return result;
-		}
-
-		static TextureUnitPtrArray getTextureUnits( TextureUnitPtrArray const & units
-			, TextureFlagsArray const & mask )
-		{
-			TextureUnitPtrArray result;
-
-			for ( auto & unit : units )
-			{
-				auto & config = unit->getConfiguration();
-
-				if ( matchConfigFlags( config, mask ) )
-				{
-					result.push_back( unit );
-				}
-			}
-
-			return result;
-		}
-
 		static bool isPreparable( TextureSourceInfo const & source
 			, PassTextureConfig const & config )
 		{
@@ -219,6 +183,8 @@ namespace castor3d
 			}
 		}
 
+		m_componentsID = getOwner()->getOwner()->getPassComponentsRegister().registerPassType( *this );
+		m_texturesID = getOwner()->getOwner()->getTextureUnitCache().registerTextureCombineType( *this );
 		getOwner()->getOwner()->getMaterialCache().registerPass( *this );
 	}
 
@@ -307,6 +273,16 @@ namespace castor3d
 		return getOwner()->getEngine()->getPassComponentsRegister().getPlugin( componentId );
 	}
 
+	PassComponentsTypeID Pass::getPassComponentsType()const
+	{
+		return getOwner()->getEngine()->getPassComponentsRegister().getPassComponentsType( *this );
+	}
+
+	TextureCombineID Pass::getTextureCombineType()const
+	{
+		return getOwner()->getEngine()->getPassComponentsRegister().getTextureCombineType( *this );
+	}
+
 	TextureUnitSPtr Pass::getTextureUnit( uint32_t index )const
 	{
 		CU_Require( index < m_textureUnits.size() );
@@ -329,7 +305,7 @@ namespace castor3d
 				, std::move( configuration ) ).first;
 		}
 
-		addFlags( m_textureFlags, getFlags( it->second.config ) );
+		addFlags( m_textureCombine, getFlags( it->second.config ) );
 		doUpdateTextureFlags();
 	}
 
@@ -352,7 +328,7 @@ namespace castor3d
 			m_sources.erase( it );
 			m_dirty = true;
 
-			remFlags( m_textureFlags, getFlags( it->second.config ) );
+			remFlags( m_textureCombine, getFlags( it->second.config ) );
 			doUpdateTextureFlags();
 		}
 	}
@@ -367,7 +343,7 @@ namespace castor3d
 		{
 			configuration = it->second;
 			m_sources.erase( it );
-			remFlags( m_textureFlags, getFlags( it->second.config ) );
+			remFlags( m_textureCombine, getFlags( it->second.config ) );
 
 			it = m_sources.find( dstSourceInfo );
 
@@ -381,7 +357,7 @@ namespace castor3d
 					, std::move( configuration ) ).first;
 			}
 			
-			addFlags( m_textureFlags, getFlags( it->second.config ) );
+			addFlags( m_textureCombine, getFlags( it->second.config ) );
 			doUpdateTextureFlags();
 		}
 	}
@@ -393,9 +369,9 @@ namespace castor3d
 
 		if ( it != m_sources.end() )
 		{
-			remFlags( m_textureFlags, getFlags( it->second.config ) );
+			remFlags( m_textureCombine, getFlags( it->second.config ) );
 			it->second.config = std::move( configuration );
-			addFlags( m_textureFlags, getFlags( it->second.config ) );
+			addFlags( m_textureCombine, getFlags( it->second.config ) );
 			doUpdateTextureFlags();
 		}
 	}
@@ -525,15 +501,37 @@ namespace castor3d
 			}
 
 			TextureUnitPtrArray newUnits;
+			auto sit = sources.begin();
+			auto & passComponents = getOwner()->getEngine()->getPassComponentsRegister();
+			auto & textureCache = getOwner()->getEngine()->getTextureUnitCache();
 
+			// Make sure height map is within the first textures.
+			while ( sit != sources.end() )
+			{
+				auto & source = *sit;
+
+				if ( source->passConfig.config.components.end() != checkFlags( source->passConfig.config.components
+					, passComponents.getHeightFlags() ) )
+				{
+					auto unit = textureCache.getTexture( *source );
+					doAddUnit( *source, unit, newUnits );
+					sit = sources.erase( sit );
+				}
+				else
+				{
+					++sit;
+				}
+			}
+
+			// Then add the other ones.
 			for ( auto & source : sources )
 			{
-				auto & textureCache = getOwner()->getEngine()->getTextureUnitCache();
 				auto unit = textureCache.getTexture( *source );
 				doAddUnit( *source, unit, newUnits );
 			}
 
 			m_textureUnits = newUnits;
+			m_textureCombine.configCount = uint32_t( m_textureUnits.size() );
 		}
 	}
 
@@ -801,7 +799,7 @@ namespace castor3d
 
 	bool Pass::needsAlphaProcessing()const
 	{
-		bool result = checkFlags( m_textureFlags, getOpacityMapFlags() ) != m_textureFlags.end();
+		bool result = checkFlags( m_textureCombine, getOpacityMapFlags() ) != m_textureCombine.flags.end();
 
 		if ( auto comp = getComponent< OpacityComponent >() )
 		{
@@ -921,62 +919,14 @@ namespace castor3d
 		return m_textureUnits;
 	}
 
-	TextureUnitPtrArray Pass::getTextureUnits( TextureFlagsArray mask )const
-	{
-		return matpass::getTextureUnits( m_textureUnits, mask );
-	}
-
 	uint32_t Pass::getTextureUnitsCount()const
 	{
 		return uint32_t( m_textureUnits.size() );
 	}
 
-	uint32_t Pass::getTextureUnitsCount( TextureFlagsArray mask )const
+	TextureCombine Pass::getTexturesMask()const
 	{
-		return uint32_t( matpass::getTextureUnits( m_textureUnits, mask ).size() );
-	}
-
-	TextureFlagsArray Pass::getTexturesMask()const
-	{
-		if ( !m_texturesReduced )
-		{
-			return {};
-		}
-
-		TextureUnitPtrArray units{ getTextureUnits() };
-		TextureFlagsArray result;
-
-		for ( auto & unit : units )
-		{
-			auto unitFlags = unit->getFlags();
-			result.insert( result.end(), unitFlags.begin(), unitFlags.end() );
-		}
-
-		return result;
-	}
-
-	TextureFlagsArray Pass::getTexturesMask( TextureFlagsArray mask )const
-	{
-		if ( !m_texturesReduced )
-		{
-			return {};
-		}
-
-		TextureUnitPtrArray units{ getTextureUnits( mask ) };
-		TextureFlagsArray result;
-
-		for ( auto & unit : units )
-		{
-			auto unitFlags = unit->getFlags();
-			result.insert( result.end(), unitFlags.begin(), unitFlags.end() );
-		}
-
-		return result;
-	}
-
-	TextureFlagsArray Pass::getTextures()const
-	{
-		return m_textureFlags;
+		return m_textureCombine;
 	}
 
 	bool Pass::hasLighting()const

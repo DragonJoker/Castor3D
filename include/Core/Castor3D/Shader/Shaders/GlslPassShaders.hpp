@@ -21,7 +21,7 @@ namespace castor3d::shader
 	{
 	public:
 		C3D_API PassShaders( PassComponentRegister const & compRegister
-			, TextureFlagsArray const & texturesFlags
+			, TextureCombine const & combine
 			, ComponentModeFlags filter
 			, Utils & utils );
 		C3D_API PassShaders( PassComponentRegister const & compRegister
@@ -47,7 +47,7 @@ namespace castor3d::shader
 			, Material const & material
 			, sdw::StructInstance const & surface
 			, sdw::expr::ExprList & inits )const;
-		C3D_API void applyComponents( TextureFlagsArray const & texturesFlags
+		C3D_API void applyComponents( TextureCombine const & combine
 			, TextureConfigData const & config
 			, sdw::U32Vec3 const & imgCompConfig
 			, sdw::Vec4 const & sampled
@@ -75,18 +75,18 @@ namespace castor3d::shader
 			, sdw::Vec4 & colMtl )const;
 		C3D_API void updateComponents( PipelineFlags const & flags
 			, BlendComponents & components )const;
-		C3D_API void updateComponents( TextureFlagsArray const & texturesFlags
+		C3D_API void updateComponents( TextureCombine const & combine
 			, BlendComponents & components )const;
-		C3D_API bool hasTexcoordModif( PipelineFlags const & flags )const;
-		C3D_API bool hasTexcoordModif( TextureFlagsArray const & flags )const;
-		C3D_API void computeTexcoord( TextureFlagsArray const & flags
+		C3D_API std::map< uint32_t, PassComponentTextureFlag > getTexcoordModifs( PipelineFlags const & flags )const;
+		C3D_API std::map< uint32_t, PassComponentTextureFlag > getTexcoordModifs( TextureCombine const & combine )const;
+		C3D_API void computeTexcoord( TextureCombine const & combine
 			, TextureConfigData const & config
 			, sdw::U32Vec3 const & imgCompConfig
 			, sdw::CombinedImage2DRgba32 const & map
 			, sdw::Vec3 & texCoords
 			, sdw::Vec2 & texCoord
 			, BlendComponents & components )const;
-		C3D_API void computeTexcoord( TextureFlagsArray const & flags
+		C3D_API void computeTexcoord( TextureCombine const & combine
 			, TextureConfigData const & config
 			, sdw::U32Vec3 const & imgCompConfig
 			, sdw::CombinedImage2DRgba32 const & map
@@ -111,7 +111,7 @@ namespace castor3d::shader
 		C3D_API bool enableParallaxOcclusionMappingOne( PipelineFlags const & flags )const;
 
 		template< typename TexcoordT >
-		void computeMapContribution( TextureFlagsArray const & texturesFlags
+		void computeMapContribution( TextureCombine const & combine
 			, TextureConfigData const & config
 			, sdw::U32Vec3 const & imgCompConfig
 			, TextureAnimData const & anim

@@ -660,26 +660,20 @@ namespace castor3d
 		m_culledChanged = true;
 		auto & submeshNodes = getScene().getRenderNodes().getSubmeshNodes();
 
-		for ( auto & texturesIt : submeshNodes )
+		for ( auto & programIt : submeshNodes )
 		{
-			for ( auto & programIt : texturesIt.second )
-			{
-				m_culledSubmeshes.push_back( { programIt.second.get()
-					, isSubmeshVisible( *programIt.second )
-					, 0u } );
-			}
+			m_culledSubmeshes.push_back( { programIt.second.get()
+				, isSubmeshVisible( *programIt.second )
+				, 0u } );
 		}
 
 		auto & billboardNodes = getScene().getRenderNodes().getBillboardNodes();
 
-		for ( auto & texturesIt : billboardNodes )
+		for ( auto & programIt : billboardNodes )
 		{
-			for ( auto & programIt : texturesIt.second )
-			{
-				m_culledBillboards.push_back( { programIt.second.get()
-					, isBillboardVisible( *programIt.second )
-					, 0u } );
-			}
+			m_culledBillboards.push_back( { programIt.second.get()
+				, isBillboardVisible( *programIt.second )
+				, 0u } );
 		}
 	}
 

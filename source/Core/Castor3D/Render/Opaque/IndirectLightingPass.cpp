@@ -70,7 +70,7 @@ namespace castor3d
 			C3D_Scene( writer, IndirectLightingPass::eScene, 0u );
 			auto index = uint32_t( IndirectLightingPass::eCount );
 			shader::PassShaders passShaders{ renderSystem.getEngine()->getPassComponentsRegister()
-				, TextureFlagsArray{}
+				, TextureCombine{}
 				, ComponentModeFlag::eDiffuseLighting | ComponentModeFlag::eSpecularLighting
 				, utils };
 			shader::Materials materials{ *renderSystem.getEngine()

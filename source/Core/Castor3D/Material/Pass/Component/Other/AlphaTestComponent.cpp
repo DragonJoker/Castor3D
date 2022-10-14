@@ -197,7 +197,7 @@ namespace castor3d
 		data.write( materialShader.getMaterialChunk(), 0.95f, 0u );
 	}
 
-	bool AlphaTestComponent::Plugin::isComponentNeeded( TextureFlagsArray const & textures
+	bool AlphaTestComponent::Plugin::isComponentNeeded( TextureCombine const & textures
 		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eOpacity );

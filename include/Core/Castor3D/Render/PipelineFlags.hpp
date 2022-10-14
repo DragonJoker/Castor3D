@@ -18,8 +18,8 @@ namespace castor3d
 	{
 		uint64_t hi;
 		uint64_t lo;
-		PassComponentsBitset components;
-		ComponentsTextures textures;
+		PassComponentsTypeID components;
+		TextureCombineID textures;
 	};
 
 	C3D_API bool operator<( PipelineBaseHash const & lhs
@@ -30,22 +30,23 @@ namespace castor3d
 	{
 		return lhs.hi == rhs.hi
 			&& lhs.lo == rhs.lo
-			&& lhs.components == rhs.components;
+			&& lhs.components == rhs.components
+			&& lhs.textures == rhs.textures;
 	}
 
 	struct PipelineHiHashDetails
 	{
-		explicit PipelineHiHashDetails( PassComponentsBitset pcomponents
+		explicit PipelineHiHashDetails( PassComponentIDSet pcomponents
 			, PassTypeID passType
 			, PassFlags passFlags = PassFlag::eNone
 			, SubmeshFlags submeshFlags = SubmeshFlag::eNone
 			, ProgramFlags programFlags = ProgramFlag::eNone
-			, TextureFlagsArray ptextures = TextureFlagsArray{}
+			, TextureCombine ptextures = TextureCombine{}
 			, ShaderFlags shaderFlags = ShaderFlag::eNone
 			, VkCompareOp alphaFunc = VkCompareOp::VK_COMPARE_OP_ALWAYS
 			, uint32_t passLayerIndex = 0u )
 			: components{ std::move( pcomponents ) }
-			, textures{ makeComponentsTextures( ptextures ) }
+			, textures{ std::move( ptextures ) }
 			, passType{ passType }
 			, alphaFunc{ alphaFunc }
 			, passLayerIndex{ passLayerIndex }
@@ -56,8 +57,8 @@ namespace castor3d
 		{
 		}
 
-		PassComponentsBitset components;
-		ComponentsTextures textures;
+		PassComponentIDSet components;
+		TextureCombine textures;
 		PassTypeID passType;
 		VkCompareOp alphaFunc;
 		uint32_t passLayerIndex;
@@ -113,7 +114,7 @@ namespace castor3d
 			CU_Require( passType != 0 );
 		}
 
-		explicit PipelineFlags( PassComponentsBitset pcomponents
+		explicit PipelineFlags( PassComponentIDSet pcomponents
 			, PassTypeID ppassType
 			, BlendMode pcolourBlendMode = BlendMode::eNoBlend
 			, BlendMode palphaBlendMode = BlendMode::eNoBlend
@@ -126,7 +127,7 @@ namespace castor3d
 			, VkPrimitiveTopology ptopology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST
 			, uint32_t ppatchVertices = 3u
 			, VkCompareOp palphaFunc = VK_COMPARE_OP_ALWAYS
-			, TextureFlagsArray textures = {}
+			, TextureCombine textures = {}
 			, uint32_t ppassLayerIndex = {}
 			, VkDeviceSize pmorphTargetsOffset = {} )
 			: PipelineFlags{ PipelineHiHashDetails{ std::move( pcomponents )
@@ -149,12 +150,12 @@ namespace castor3d
 			CU_Require( passType != 0 );
 		}
 
-		PipelineFlags( PassComponentsBitset pcomponents
+		PipelineFlags( PassComponentIDSet pcomponents
 			, PassTypeID passType
 			, PassFlags passFlags
 			, SubmeshFlags submeshFlags
 			, ProgramFlags programFlags
-			, TextureFlagsArray textures
+			, TextureCombine textures
 			, ShaderFlags shaderFlags
 			, VkCompareOp alphaFunc
 			, uint32_t passLayerIndex = 0u )
@@ -352,7 +353,6 @@ namespace castor3d
 		/**@name Textures */
 		//@{
 		C3D_API bool hasMap( PassComponentTextureFlag flag )const;
-		C3D_API TextureFlagsArray makeTexturesFlags()const;
 		//@}
 
 	public:
@@ -377,7 +377,11 @@ namespace castor3d
 		, BillboardBase const & data
 		, Pass const & pass
 		, bool isFrontCulled );
-	C3D_API PipelineHiHashDetails getPipelineHiHashDetails( PipelineBaseHash const & hash
+	C3D_API PipelineHiHashDetails getPipelineHiHashDetails( RenderNodesPass const & renderPass
+		, PipelineBaseHash const & hash
+		, ShaderFlags shaderFlags );
+	C3D_API PipelineHiHashDetails getPipelineHiHashDetails( RenderTechniquePass const & renderPass
+		, PipelineBaseHash const & hash
 		, ShaderFlags shaderFlags );
 }
 

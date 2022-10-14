@@ -21,7 +21,7 @@ namespace castor3d
 			void createParsers( castor::AttributeParsers & parsers
 				, ChannelFillers & channelFillers )const override;
 
-			bool isComponentNeeded( TextureFlagsArray const & textures
+			bool isComponentNeeded( TextureCombine const & textures
 				, ComponentModeFlags const & filter )const override
 			{
 				// Component is never need in shader.

@@ -292,7 +292,7 @@ namespace castor3d
 		data.write( materialShader.getMaterialChunk(), 0u, 0u );
 	}
 
-	bool SubsurfaceScatteringComponent::Plugin::isComponentNeeded( TextureFlagsArray const & textures
+	bool SubsurfaceScatteringComponent::Plugin::isComponentNeeded( TextureCombine const & textures
 		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eDiffuseLighting );

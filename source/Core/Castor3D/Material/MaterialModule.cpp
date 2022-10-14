@@ -11,4 +11,10 @@ namespace castor3d
 	{
 		return castor::PixelFormat( format );
 	}
+
+	bool operator==( TextureCombine const & lhs, TextureCombine const & rhs )
+	{
+		return lhs.configCount == rhs.configCount
+			&& lhs.flags == rhs.flags;
+	}
 }
