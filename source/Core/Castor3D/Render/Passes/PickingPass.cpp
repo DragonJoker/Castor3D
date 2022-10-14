@@ -142,7 +142,7 @@ namespace castor3d
 
 		shader::Utils utils{ writer };
 		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
-			, TextureFlagsArray{}
+			, TextureCombine{}
 			, getComponentsMask()
 			, utils };
 

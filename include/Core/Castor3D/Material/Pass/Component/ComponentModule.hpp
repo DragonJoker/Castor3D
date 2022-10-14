@@ -169,11 +169,13 @@ namespace castor3d
 
 	struct SubsurfaceScatteringComponent;
 
+	using PassComponentIDSet = std::set< PassComponentID >;
+
 	CU_DeclareSmartPtr( PassComponent );
 	CU_DeclareCUSmartPtr( castor3d, PassComponentRegister, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, PassComponentPlugin, C3D_API );
 
-	CU_DeclareMap( uint32_t, PassComponentUPtr, PassComponent );
+	CU_DeclareMap( PassComponentID, PassComponentUPtr, PassComponent );
 
 	C3D_API castor::String const & getPassComponentType( PassComponent const & component );
 
@@ -182,19 +184,13 @@ namespace castor3d
 	using OnSssProfileChangedConnection = castor::ConnectionT< OnSssProfileChanged >;
 
 	using PassComponentsBitset = castor::DynamicBitsetT< uint16_t >;
-	using ComponentsTextures = std::array< PassComponentTextureFlag, MaxPassTextures >;
-
-	C3D_API bool areFlagsEmpty( ComponentsTextures const & textures );
-	C3D_API ComponentsTextures makeComponentsTextures( TextureFlagsArray const & textures );
-	C3D_API ComponentsTextures::const_iterator checkFlags( ComponentsTextures const & flags
-		, PassComponentTextureFlag flag );
 
 	using ComponentConfigFiller = std::function< void( SceneFileContext & parsingContext ) >;
 	using ChannelFiller = std::pair< PassComponentTextureFlag, ComponentConfigFiller >;
 	using ChannelFillers = std::map< castor::String, ChannelFiller >;
 
 	using UpdateComponent = std::function< void( PassComponentRegister const & passComponents
-		, TextureFlagsArray const & texturesFlags
+		, TextureCombine const & combine
 		, shader::BlendComponents & components ) >;
 
 	using CreatePassComponentPlugin = std::function< PassComponentPluginUPtr() >;

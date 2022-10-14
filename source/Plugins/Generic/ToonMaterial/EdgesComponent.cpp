@@ -275,7 +275,7 @@ namespace toon
 			, { castor::makeParameter< castor::ParameterType::eHdrRgbaColour >() } );
 	}
 
-	bool EdgesComponent::Plugin::isComponentNeeded( castor3d::TextureFlagsArray const & textures
+	bool EdgesComponent::Plugin::isComponentNeeded( castor3d::TextureCombine const & textures
 		, castor3d::ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, castor3d::ComponentModeFlag::eColour );

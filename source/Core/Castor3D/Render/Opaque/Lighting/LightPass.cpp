@@ -115,7 +115,7 @@ namespace castor3d
 		FragmentWriter writer;
 		shader::Utils utils{ writer };
 		shader::PassShaders passShaders{ scene.getEngine()->getPassComponentsRegister()
-			, TextureFlagsArray{}
+			, TextureCombine{}
 			, ( ComponentModeFlag::eColour
 				| ComponentModeFlag::eDiffuseLighting
 				| ComponentModeFlag::eSpecularLighting

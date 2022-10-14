@@ -128,7 +128,7 @@ namespace castor3d
 			, { castor::makeParameter< castor::ParameterType::eCheckedText >( parallaxOcclusionModes ) } );
 	}
 
-	bool HeightComponent::Plugin::isComponentNeeded( TextureFlagsArray const & textures
+	bool HeightComponent::Plugin::isComponentNeeded( TextureCombine const & textures
 		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eGeometry );

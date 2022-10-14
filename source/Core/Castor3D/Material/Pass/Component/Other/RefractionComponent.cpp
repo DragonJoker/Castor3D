@@ -177,7 +177,7 @@ namespace castor3d
 		data.write( materialShader.getMaterialChunk(), 0.0f, offset );
 	}
 
-	bool RefractionComponent::Plugin::isComponentNeeded( TextureFlagsArray const & textures
+	bool RefractionComponent::Plugin::isComponentNeeded( TextureCombine const & textures
 		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eDiffuseLighting )

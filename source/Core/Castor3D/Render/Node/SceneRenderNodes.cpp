@@ -143,25 +143,19 @@ namespace castor3d
 	{
 		auto lock( castor::makeUniqueLock( m_nodesMutex ) );
 
-		for ( auto & nodes : m_submeshNodes )
+		for ( auto & node : m_submeshNodes )
 		{
-			for ( auto & node : nodes.second )
-			{
-				node.second->instance.setId( *node.second->pass
-					, node.second->data
-					, nullptr
-					, 0u );
-			}
+			node.second->instance.setId( *node.second->pass
+				, node.second->data
+				, nullptr
+				, 0u );
 		}
 
-		for ( auto & nodes : m_billboardNodes )
+		for ( auto & node : m_billboardNodes )
 		{
-			for ( auto & node : nodes.second )
-			{
-				node.second->instance.setId( *node.second->pass
-					, nullptr
-					, 0u );
-			}
+			node.second->instance.setId( *node.second->pass
+				, nullptr
+				, 0u );
 		}
 
 		m_nodesData.clear();
@@ -176,8 +170,7 @@ namespace castor3d
 		, AnimatedSkeleton * skeleton )
 	{
 		auto lock( castor::makeUniqueLock( m_nodesMutex ) );
-		auto & pool = m_submeshNodes.emplace( pass.getTexturesMask().size(), NodesPtrMapT< SubmeshRenderNode >{} ).first->second;
-		auto it = pool.emplace( scnrendnd::makeNodeHash( pass, data, instance ), nullptr );
+		auto it = m_submeshNodes.emplace( scnrendnd::makeNodeHash( pass, data, instance ), nullptr );
 
 		if ( it.second )
 		{
@@ -239,8 +232,7 @@ namespace castor3d
 		, BillboardBase & instance )
 	{
 		auto lock( castor::makeUniqueLock( m_nodesMutex ) );
-		auto & pool = m_billboardNodes.emplace( pass.getTexturesMask().size(), NodesPtrMapT< BillboardRenderNode >{} ).first->second;
-		auto it = pool.emplace( scnrendnd::makeNodeHash( pass, instance ), nullptr );
+		auto it = m_billboardNodes.emplace( scnrendnd::makeNodeHash( pass, instance ), nullptr );
 
 		if ( it.second )
 		{
@@ -265,14 +257,11 @@ namespace castor3d
 
 	SubmeshRenderNode const * SceneRenderNodes::getSubmeshNode( uint32_t nodeId )
 	{
-		for ( auto & poolsIt : m_submeshNodes )
+		for ( auto & nodeIt : m_submeshNodes )
 		{
-			for ( auto & nodeIt : poolsIt.second )
+			if ( nodeIt.second->getId() == nodeId )
 			{
-				if ( nodeIt.second->getId() == nodeId )
-				{
-					return nodeIt.second.get();
-				}
+				return nodeIt.second.get();
 			}
 		}
 
@@ -281,14 +270,11 @@ namespace castor3d
 
 	BillboardRenderNode const * SceneRenderNodes::getBillboardNode( uint32_t nodeId )
 	{
-		for ( auto & poolsIt : m_billboardNodes )
+		for ( auto & nodeIt : m_billboardNodes )
 		{
-			for ( auto & nodeIt : poolsIt.second )
+			if ( nodeIt.second->getId() == nodeId )
 			{
-				if ( nodeIt.second->getId() == nodeId )
-				{
-					return nodeIt.second.get();
-				}
+				return nodeIt.second.get();
 			}
 		}
 
@@ -304,29 +290,19 @@ namespace castor3d
 
 		for ( auto pass : oldMaterial )
 		{
-			auto poolIt = m_submeshNodes.find( pass->getTexturesMask().size() );
+			auto submeshIt = m_submeshNodes.find( scnrendnd::makeNodeHash( *pass, data, instance ) );
 
-			if ( poolIt != m_submeshNodes.end() )
+			if ( submeshIt != m_submeshNodes.end() )
 			{
-				auto submeshIt = poolIt->second.find( scnrendnd::makeNodeHash( *pass, data, instance ) );
+				auto node = std::move( submeshIt->second );
+				m_submeshNodes.erase( submeshIt );
 
-				if ( submeshIt != poolIt->second.end() )
+				for ( auto & culler : m_cullers )
 				{
-					auto node = std::move( submeshIt->second );
-					poolIt->second.erase( submeshIt );
-
-					if ( poolIt->second.empty() )
-					{
-						m_submeshNodes.erase( poolIt );
-					}
-
-					for ( auto & culler : m_cullers )
-					{
-						culler->removeCulled( *node );
-					}
-
-					nodes.emplace_back( instance.getId( *pass, data ), std::move( node ) );
+					culler->removeCulled( *node );
 				}
+
+				nodes.emplace_back( instance.getId( *pass, data ), std::move( node ) );
 			}
 		}
 
@@ -339,8 +315,7 @@ namespace castor3d
 				&& passIt != newMaterial.end() )
 			{
 				auto pass = passIt->get();
-				auto poolIt = m_submeshNodes.emplace( pass->getTexturesMask().size(), NodesPtrMapT< SubmeshRenderNode >{} ).first;
-				auto submeshIt = poolIt->second.emplace( scnrendnd::makeNodeHash( *pass, data, instance ), nullptr ).first;
+				auto submeshIt = m_submeshNodes.emplace( scnrendnd::makeNodeHash( *pass, data, instance ), nullptr ).first;
 				submeshIt->second = std::move( nodeIt->second );
 
 				auto it = std::find_if( m_nodesData.begin()
@@ -393,29 +368,19 @@ namespace castor3d
 
 		for ( auto pass : oldMaterial )
 		{
-			auto poolIt = m_billboardNodes.find( pass->getTexturesMask().size() );
+			auto billboardIt = m_billboardNodes.find( scnrendnd::makeNodeHash( *pass, billboard ) );
 
-			if ( poolIt != m_billboardNodes.end() )
+			if ( billboardIt != m_billboardNodes.end() )
 			{
-				auto billboardIt = poolIt->second.find( scnrendnd::makeNodeHash( *pass, billboard ) );
+				auto node = std::move( billboardIt->second );
+				m_billboardNodes.erase( billboardIt );
 
-				if ( billboardIt != poolIt->second.end() )
+				for ( auto & culler : m_cullers )
 				{
-					auto node = std::move( billboardIt->second );
-					poolIt->second.erase( billboardIt );
-
-					if ( poolIt->second.empty() )
-					{
-						m_billboardNodes.erase( poolIt );
-					}
-
-					for ( auto & culler : m_cullers )
-					{
-						culler->removeCulled( *node );
-					}
-
-					nodes.emplace_back( billboard.getId( *pass ), std::move( node ) );
+					culler->removeCulled( *node );
 				}
+
+				nodes.emplace_back( billboard.getId( *pass ), std::move( node ) );
 			}
 		}
 
@@ -428,8 +393,7 @@ namespace castor3d
 				&& passIt != newMaterial.end() )
 			{
 				auto pass = passIt->get();
-				auto poolIt = m_billboardNodes.emplace( pass->getTexturesMask().size(), NodesPtrMapT< BillboardRenderNode >{} ).first;
-				auto billboardIt = poolIt->second.emplace( scnrendnd::makeNodeHash( *pass, billboard ), nullptr ).first;
+				auto billboardIt = m_billboardNodes.emplace( scnrendnd::makeNodeHash( *pass, billboard ), nullptr ).first;
 				billboardIt->second = std::move( nodeIt->second );
 
 				auto it = std::find_if( m_nodesData.begin()
@@ -471,45 +435,42 @@ namespace castor3d
 		auto block( m_timerRenderNodes->start() );
 #endif
 		std::map< Submesh const *, std::map< Pass const *, uint32_t > > indices;
-
-		for ( auto & nodes : m_submeshNodes )
+		
+		for ( auto & nodeIt : m_submeshNodes )
 		{
-			for ( auto & nodeIt : nodes.second )
+			auto & node = nodeIt.second;
+			auto & instantiation = node->data.getInstantiation();
+			node->mesh = node->data.hasMorphComponent()
+				? std::static_pointer_cast< AnimatedMesh >( findAnimatedObject( *getOwner(), node->instance.getName() + cuT( "_Mesh" ) ) ).get()
+				: nullptr;
+			node->skeleton = node->data.hasSkinComponent()
+				? std::static_pointer_cast< AnimatedSkeleton >( findAnimatedObject( *getOwner(), node->instance.getName() + cuT( "_Skeleton" ) ) ).get()
+				: nullptr;
+
+			if ( instantiation.isInstanced()
+				&& node->instance.getParent()->isVisible() )
 			{
-				auto & node = nodeIt.second;
-				auto & instantiation = node->data.getInstantiation();
-				node->mesh = node->data.hasMorphComponent()
-					? std::static_pointer_cast< AnimatedMesh >( findAnimatedObject( *getOwner(), node->instance.getName() + cuT( "_Mesh" ) ) ).get()
-					: nullptr;
-				node->skeleton = node->data.hasSkinComponent()
-					? std::static_pointer_cast< AnimatedSkeleton >( findAnimatedObject( *getOwner(), node->instance.getName() + cuT( "_Skeleton" ) ) ).get()
-					: nullptr;
+				auto & passes = indices.emplace( &node->data, std::map< Pass const *, uint32_t >{} ).first->second;
+				auto & index = passes.emplace( node->pass, 0u ).first->second;
+				auto it = instantiation.find( *node->pass->getOwner() );
+				CU_Require( it != instantiation.end() );
+				CU_Require( node->getId() > 0u );
 
-				if ( instantiation.isInstanced()
-					&& node->instance.getParent()->isVisible() )
+				if ( it->second.data.size() > index )
 				{
-					auto & passes = indices.emplace( &node->data, std::map< Pass const *, uint32_t >{} ).first->second;
-					auto & index = passes.emplace( node->pass, 0u ).first->second;
-					auto it = instantiation.find( *node->pass->getOwner() );
-					CU_Require( it != instantiation.end() );
-					CU_Require( node->getId() > 0u );
+					auto & buffer = it->second.data[index++];
+					buffer.objectIDs.nodeId = node->getId();
 
-					if ( it->second.data.size() > index )
+					if ( node->mesh )
 					{
-						auto & buffer = it->second.data[index++];
-						buffer.objectIDs.nodeId = node->getId();
+						CU_Require( node->mesh->getId( node->data ) > 0u );
+						buffer.objectIDs.morphingId = node->mesh->getId( node->data ) - 1u;
+					}
 
-						if ( node->mesh )
-						{
-							CU_Require( node->mesh->getId( node->data ) > 0u );
-							buffer.objectIDs.morphingId = node->mesh->getId( node->data ) - 1u;
-						}
-
-						if ( node->skeleton )
-						{
-							CU_Require( node->skeleton->getId() > 0u );
-							buffer.objectIDs.skinningId = node->skeleton->getId() - 1u;
-						}
+					if ( node->skeleton )
+					{
+						CU_Require( node->skeleton->getId() > 0u );
+						buffer.objectIDs.skinningId = node->skeleton->getId() - 1u;
 					}
 				}
 			}

@@ -69,7 +69,7 @@ namespace draw_edges
 			FragmentWriter writer;
 			castor3d::shader::Utils utils{ writer };
 			castor3d::shader::PassShaders passShaders{ engine.getPassComponentsRegister()
-				, castor3d::TextureFlagsArray{}
+				, castor3d::TextureCombine{}
 				, castor3d::ComponentModeFlag::eNone
 				, utils };
 

@@ -32,7 +32,7 @@ namespace castor3d
 				, shader::PassMaterialShader const & materialShader
 				, PassBuffer & buffer )const override;
 
-			bool isComponentNeeded( TextureFlagsArray const & textures
+			bool isComponentNeeded( TextureCombine const & textures
 				, ComponentModeFlags const & filter )const override
 			{
 				// Component is never needed in lighting shader.

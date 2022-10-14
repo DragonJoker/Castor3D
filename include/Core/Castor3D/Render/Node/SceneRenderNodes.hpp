@@ -30,8 +30,6 @@ namespace castor3d
 	public:
 		template< typename NodeT >
 		using NodesPtrMapT = std::unordered_map< size_t, castor::UniquePtr< NodeT > >;
-		template< typename NodeT >
-		using NodesPtrFlagsMapT = std::unordered_map< size_t, NodesPtrMapT< NodeT > >;
 		struct NodeData
 		{
 			Pass const * pass;
@@ -84,12 +82,12 @@ namespace castor3d
 			return *m_billboardsData;
 		}
 
-		NodesPtrFlagsMapT< SubmeshRenderNode > const & getSubmeshNodes()const
+		NodesPtrMapT< SubmeshRenderNode > const & getSubmeshNodes()const
 		{
 			return m_submeshNodes;
 		}
 
-		NodesPtrFlagsMapT< BillboardRenderNode > const & getBillboardNodes()const
+		NodesPtrMapT< BillboardRenderNode > const & getBillboardNodes()const
 		{
 			return m_billboardNodes;
 		}
@@ -97,8 +95,8 @@ namespace castor3d
 	private:
 		RenderDevice const & m_device;
 		std::mutex m_nodesMutex;
-		NodesPtrFlagsMapT< SubmeshRenderNode > m_submeshNodes;
-		NodesPtrFlagsMapT< BillboardRenderNode > m_billboardNodes;
+		NodesPtrMapT< SubmeshRenderNode > m_submeshNodes;
+		NodesPtrMapT< BillboardRenderNode > m_billboardNodes;
 		ashes::BufferPtr< ModelBufferConfiguration > m_modelsData;
 		ashes::BufferPtr< BillboardUboConfiguration > m_billboardsData;
 		ModelBufferConfiguration * m_modelsBuffer{};

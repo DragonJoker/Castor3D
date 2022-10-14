@@ -17,34 +17,32 @@ namespace castor3d
 
 	namespace passbuf
 	{
-		static uint32_t hash( PassTypeID passType
-			, PassFlags passFlags
-			, TextureFlagsArray textureFlags )noexcept
+		static uint32_t hash( PassComponentsTypeID passType
+			, TextureCombineID textureFlags
+			, PassFlags passFlags )noexcept
 		{
-			constexpr auto maxPassTypeSize = castor::getBitSize( MaxPassTypes );
+			constexpr auto maxPassTypeSize = int( sizeof( PassComponentsTypeID ) * 8 - 2 );
+			constexpr auto maxTexturesSize = int( sizeof( TextureCombineID ) * 8 - 2 );
 			constexpr auto maxPassFlagsSize = castor::getBitSize( uint32_t( PassFlag::eAllVisibility ) );
-			constexpr auto size = maxPassTypeSize + maxPassFlagsSize;
-			static_assert( size < 31u );
+			constexpr auto size = maxPassTypeSize + maxTexturesSize + maxPassFlagsSize;
+			static_assert( size <= 32u );
 
 			auto offset = 0u;
 			auto result = uint32_t{};
-			result |= uint32_t( passFlags & PassFlag::eAllVisibility ) << offset;
-			offset += maxPassFlagsSize;
 			result |= uint32_t( passType ) << offset;
-
-			for ( auto flag : textureFlags )
-			{
-				castor::hashCombine32( result, flag );
-			}
+			offset += maxPassTypeSize;
+			result |= uint32_t( textureFlags ) << offset;
+			offset += maxTexturesSize;
+			result |= uint32_t( passFlags & PassFlag::eAllVisibility ) << offset;
 
 			return result;
 		}
 
 		static uint32_t hash( Pass const & pass )noexcept
 		{
-			return hash( pass.getTypeID()
-				, pass.getPassFlags()
-				, pass.getTextures() );
+			return hash( pass.getPassComponentsType()
+				, pass.getTextureCombineType()
+				, pass.getPassFlags() );
 		}
 	}
 
@@ -158,9 +156,9 @@ namespace castor3d
 				{
 					auto it = m_passTypeIndices.emplace( passbuf::hash( *pass )
 						, PassTypeData{ uint16_t( m_passTypeIndices.size() )
-							, pass->getTypeID()
-							, pass->getPassFlags()
-							, pass->getTextures() } ).first;
+							, pass->getPassComponentsType()
+							, pass->getTextureCombineType()
+							, pass->getPassFlags() } ).first;
 					
 					pass->fillBuffer( *this, it->second.index );
 
@@ -214,14 +212,14 @@ namespace castor3d
 
 	uint32_t PassBuffer::getMaxPassTypeCount()const
 	{
-		return std::numeric_limits< PassTypeID >::max();
+		return std::numeric_limits< PassComponentsTypeID >::max();
 	}
 
-	uint32_t PassBuffer::getPassTypeIndex( PassTypeID passType
-		, PassFlags passFlags
-		, TextureFlagsArray textureFlags )const
+	uint32_t PassBuffer::getPassTypeIndex( PassComponentsTypeID passType
+		, TextureCombineID textureCombine
+		, PassFlags passFlags )const
 	{
-		auto hash = passbuf::hash( passType, passFlags, textureFlags );
+		auto hash = passbuf::hash( passType, textureCombine, passFlags );
 		auto it = m_passTypeIndices.find( hash );
 
 		if ( it == m_passTypeIndices.end() )
@@ -232,7 +230,7 @@ namespace castor3d
 		return it->second.index;
 	}
 
-	std::tuple< PassTypeID, PassFlags, TextureFlagsArray > PassBuffer::getPassTypeDetails( uint32_t passTypeIndex )const
+	std::tuple< PassComponentsTypeID, TextureCombineID, PassFlags > PassBuffer::getPassTypeDetails( uint32_t passTypeIndex )const
 	{
 		auto it = std::find_if( m_passTypeIndices.begin()
 			, m_passTypeIndices.end()
@@ -246,6 +244,6 @@ namespace castor3d
 			CU_Exception( "Pass type index not found in registered ones." );
 		}
 
-		return { it->second.passType, it->second.passFlags, it->second.textureFlags };
+		return { it->second.passType, it->second.textureCombine, it->second.passFlags };
 	}
 }

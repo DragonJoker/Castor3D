@@ -148,7 +148,7 @@ namespace castor3d
 				, Material const & material
 				, BlendComponents & components )const;
 			C3D_API void computeMapsContributions( PassShaders const & passShaders
-				, TextureFlagsArray const & texturesFlags
+				, TextureCombine const & texturesFlags
 				, TextureAnimations const & textureAnims
 				, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 				, Material const & material
@@ -198,6 +198,9 @@ namespace castor3d
 				, sdw::InVec3
 				, sdw::InOutVec3
 				, sdw::InOutVec3 > m_setTexcoord2;
+			mutable sdw::Function< sdw::Void
+				, sdw::InUInt
+				, InOutBlendComponents > m_applyTexture;
 		};
 	}
 }

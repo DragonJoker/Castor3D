@@ -55,6 +55,8 @@ namespace castor3d::shader
 			, Material const & material
 			, sdw::StructInstance const & surface
 			, sdw::expr::ExprList & inits );
+		static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache
+			, BlendComponents const & rhs );
 
 		static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache
 			, Materials const & materials

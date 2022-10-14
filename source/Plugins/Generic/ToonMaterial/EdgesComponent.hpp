@@ -91,7 +91,7 @@ namespace toon
 		public:
 			void createParsers( castor::AttributeParsers & parsers
 				, castor3d::ChannelFillers & channelFillers )const override;
-			bool isComponentNeeded( castor3d::TextureFlagsArray const & textures
+			bool isComponentNeeded( castor3d::TextureCombine const & textures
 				, castor3d::ComponentModeFlags const & filter )const override;
 
 			castor3d::shader::PassComponentsShaderPtr createComponentsShader()const override

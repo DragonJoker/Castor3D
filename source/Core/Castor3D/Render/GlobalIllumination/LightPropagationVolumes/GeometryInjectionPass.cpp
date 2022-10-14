@@ -157,7 +157,7 @@ namespace castor3d
 				// Utility functions
 				shader::Utils utils{ writer };
 				shader::PassShaders passShaders{ renderSystem.getEngine()->getPassComponentsRegister()
-					, TextureFlagsArray{}
+					, TextureCombine{}
 					, ComponentModeFlag::eDiffuseLighting
 					, utils };
 				shader::Materials materials{ writer, passShaders };
@@ -226,7 +226,7 @@ namespace castor3d
 				// Utility functions
 				shader::Utils utils{ writer };
 				shader::PassShaders passShaders{ renderSystem.getEngine()->getPassComponentsRegister()
-					, TextureFlagsArray{}
+					, TextureCombine{}
 					, ComponentModeFlag::eDiffuseLighting
 					, utils };
 				shader::Materials materials{ writer, passShaders };
@@ -300,7 +300,7 @@ namespace castor3d
 			// Utility functions
 			shader::Utils utils{ writer };
 			shader::PassShaders passShaders{ renderSystem.getEngine()->getPassComponentsRegister()
-				, TextureFlagsArray{}
+				, TextureCombine{}
 				, ComponentModeFlag::eDiffuseLighting
 				, utils };
 			shader::Materials materials{ writer, passShaders };
@@ -374,7 +374,7 @@ namespace castor3d
 			// Utility functions
 			shader::Utils utils{ writer };
 			shader::PassShaders passShaders{ renderSystem.getEngine()->getPassComponentsRegister()
-				, TextureFlagsArray{}
+				, TextureCombine{}
 				, ComponentModeFlag::eDiffuseLighting
 				, utils };
 			shader::Materials materials{ writer, passShaders };

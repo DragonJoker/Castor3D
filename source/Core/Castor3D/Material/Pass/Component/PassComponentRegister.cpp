@@ -46,21 +46,21 @@ namespace castor3d
 		static bool isValidComponent( PipelineFlags const & flags
 			, PassComponentID componentId )
 		{
-			return flags.components[componentId];
+			return flags.components.end() != flags.components.find( componentId );
 		}
 
-		static bool isValidComponent( TextureFlagsArray  const & flags
+		static bool isValidComponent( TextureCombine const & flags
 			, PassComponentID componentId )
 		{
 			return true;
 		}
 
-		static TextureFlagsArray getTextureFlags( PipelineFlags const & flags )
+		static TextureCombine getTextureFlags( PipelineFlags const & flags )
 		{
-			return flags.makeTexturesFlags();
+			return flags.textures;
 		}
 
-		static TextureFlagsArray getTextureFlags( TextureFlagsArray const & flags )
+		static TextureCombine getTextureFlags( TextureCombine const & flags )
 		{
 			return flags;
 		}
@@ -92,6 +92,18 @@ namespace castor3d
 			{
 				updateComponents.push_back( component.updateComponent );
 			}
+		}
+
+		PassComponentIDSet getComponents( Pass const & pass )
+		{
+			PassComponentIDSet components;
+
+			for ( auto & component : pass.getComponents() )
+			{
+				components.emplace( component.first );
+			}
+
+			return components;
 		}
 	}
 
@@ -151,6 +163,76 @@ namespace castor3d
 		}
 	}
 
+	PassComponentsTypeID PassComponentRegister::registerPassType( Pass const & pass )
+	{
+		auto components = passcompreg::getComponents( pass );
+		auto it = std::find( m_passTypes.begin()
+			, m_passTypes.end()
+			, components );
+
+		if ( it == m_passTypes.end() )
+		{
+			m_passTypes.push_back( std::move( components ) );
+			it = std::next( m_passTypes.begin(), ptrdiff_t( m_passTypes.size() - 1u ) );
+		}
+
+		return PassComponentsTypeID( std::distance( m_passTypes.begin(), it ) + 1 );
+	}
+
+	PassComponentsTypeID PassComponentRegister::getPassComponentsType( Pass const & pass )const
+	{
+		return getPassComponentsType( passcompreg::getComponents( pass ) );
+	}
+
+	PassComponentsTypeID PassComponentRegister::getPassComponentsType( PassComponentIDSet const & components )const
+	{
+		auto it = std::find( m_passTypes.begin()
+			, m_passTypes.end()
+			, components );
+		CU_Require( it != m_passTypes.end() );
+		return it == m_passTypes.end()
+			? 0u
+			: PassComponentsTypeID( std::distance( m_passTypes.begin(), it ) + 1 );
+	}
+
+	TextureCombineID PassComponentRegister::getTextureCombineType( Pass const & pass )const
+	{
+		return getOwner()->getTextureUnitCache().getTextureCombineType( pass );
+	}
+
+	TextureCombineID PassComponentRegister::getTextureCombineType( TextureCombine const & combine )const
+	{
+		return getOwner()->getTextureUnitCache().getTextureCombineType( combine );
+	}
+
+	PassComponentIDSet PassComponentRegister::getPassComponents( Pass const & pass )const
+	{
+		return getPassComponents( pass.getComponentsTypeID() );
+	}
+
+	PassComponentIDSet PassComponentRegister::getPassComponents( PassComponentsTypeID passType )const
+	{
+		CU_Require( passType <= m_passTypes.size() );
+
+		if ( passType == 0 )
+		{
+			CU_Failure( "Unexpected invalid pass type." );
+			return PassComponentIDSet{};
+		}
+
+		return m_passTypes[passType - 1u];
+	}
+
+	TextureCombine PassComponentRegister::getTextureCombine( Pass const & pass )const
+	{
+		return getTextureCombine( pass.getTextureCombineType() );
+	}
+
+	TextureCombine PassComponentRegister::getTextureCombine( TextureCombineID combineType )const
+	{
+		return getOwner()->getTextureUnitCache().getTextureCombine( combineType );
+	}
+
 	void PassComponentRegister::fillBuffer( Pass const & pass
 		, PassBuffer & buffer )const
 	{
@@ -189,7 +271,7 @@ namespace castor3d
 		}
 	}
 
-	std::vector< shader::PassComponentsShaderPtr > PassComponentRegister::getComponentsShaders( TextureFlagsArray  const & texturesFlags
+	std::vector< shader::PassComponentsShaderPtr > PassComponentRegister::getComponentsShaders( TextureCombine const & combine
 		, ComponentModeFlags filter
 		, std::vector< UpdateComponent > & updateComponents )const
 	{
@@ -197,7 +279,7 @@ namespace castor3d
 
 		for ( auto & id : m_ids )
 		{
-			passcompreg::getComponentShadersT( texturesFlags
+			passcompreg::getComponentShadersT( combine
 				, filter
 				, id.first
 				, *id.second.plugin
@@ -307,16 +389,19 @@ namespace castor3d
 		}
 	}
 
-	TextureFlagsArray PassComponentRegister::filterTextureFlags( ComponentModeFlags filter
-		, TextureFlagsArray const & texturesFlags )const
+	TextureCombine PassComponentRegister::filterTextureFlags( ComponentModeFlags filter
+		, TextureCombine const & combine )const
 	{
-		TextureFlagsArray result{ texturesFlags };
+		TextureCombine result{ combine };
 
 		for ( auto & id : m_ids )
 		{
 			id.second.plugin->filterTextureFlags( filter, result );
 		}
 
+		result.configCount = result.flags.empty()
+			? 0u
+			: result.configCount;
 		return result;
 	}
 
@@ -420,25 +505,37 @@ namespace castor3d
 			} );
 	}
 
-	bool PassComponentRegister::hasTexcoordModif( PipelineFlags const & flags )const
+	std::map< uint32_t, PassComponentTextureFlag > PassComponentRegister::getTexcoordModifs( PipelineFlags const & flags )const
 	{
-		auto textures = flags.makeTexturesFlags();
-		return textures.end() != std::find_if( textures.begin()
-			, textures.end()
-			, [this, &flags]( PassComponentTextureFlag const & flag )
+		auto & textures = flags.textures;
+		std::map< uint32_t, PassComponentTextureFlag > result;
+		uint32_t index = 0u;
+
+		for ( auto flag : textures.flags )
+		{
+			if ( hasTexcoordModif( flag, &flags ) )
 			{
-				return hasTexcoordModif( flag, &flags );
-			} );
+				result.emplace( index, flag );
+			}
+		}
+
+		return result;
 	}
 
-	bool PassComponentRegister::hasTexcoordModif( TextureFlagsArray const & flags )const
+	std::map< uint32_t, PassComponentTextureFlag > PassComponentRegister::getTexcoordModifs( TextureCombine const & combine )const
 	{
-		return flags.end() != std::find_if( flags.begin()
-			, flags.end()
-			, [this]( PassComponentTextureFlag const & flag )
+		std::map< uint32_t, PassComponentTextureFlag > result;
+		uint32_t index = 0u;
+
+		for ( auto flag : combine.flags )
+		{
+			if ( hasTexcoordModif( flag, nullptr ) )
 			{
-				return hasTexcoordModif( flag, nullptr );
-			} );
+				result.emplace( index, flag );
+			}
+		}
+
+		return result;
 	}
 
 	PassComponentID PassComponentRegister::registerComponent( castor::String const & componentType

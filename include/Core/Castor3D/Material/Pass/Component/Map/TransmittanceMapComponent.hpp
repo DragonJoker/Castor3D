@@ -37,7 +37,7 @@ namespace castor3d
 				, sdw::Float const & passMultiplier
 				, shader::BlendComponents & res
 				, shader::BlendComponents const & src )const override;
-			C3D_API void applyComponents( TextureFlagsArray const & texturesFlags
+			C3D_API void applyComponents( TextureCombine const & combine
 				, PipelineFlags const * flags
 				, shader::TextureConfigData const & config
 				, sdw::U32Vec3 const & imgCompConfig
@@ -67,7 +67,7 @@ namespace castor3d
 			bool writeTextureConfig( TextureConfiguration const & configuration
 				, castor::String const & tabs
 				, castor::StringStream & file )const override;
-			bool isComponentNeeded( TextureFlagsArray const & textures
+			bool isComponentNeeded( TextureCombine const & textures
 				, ComponentModeFlags const & filter )const override;
 			void createMapComponent( Pass & pass
 				, std::vector< PassComponentUPtr > & result )const override;
@@ -91,7 +91,7 @@ namespace castor3d
 			}
 
 			void filterTextureFlags( ComponentModeFlags filter
-				, TextureFlagsArray & texturesFlags )const override
+				, TextureCombine & texturesFlags )const override
 			{
 				if ( !checkFlag( filter, ComponentModeFlag::eDiffuseLighting )
 					&& !checkFlag( filter, ComponentModeFlag::eSpecularLighting ) )

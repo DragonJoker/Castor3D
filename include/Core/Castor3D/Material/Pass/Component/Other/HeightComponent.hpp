@@ -42,7 +42,7 @@ namespace castor3d
 		public:
 			void createParsers( castor::AttributeParsers & parsers
 				, ChannelFillers & channelFillers )const override;
-			bool isComponentNeeded( TextureFlagsArray const & textures
+			bool isComponentNeeded( TextureCombine const & textures
 				, ComponentModeFlags const & filter )const override;
 
 			shader::PassComponentsShaderPtr createComponentsShader()const override

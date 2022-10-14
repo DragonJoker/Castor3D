@@ -230,7 +230,7 @@ namespace castor3d
 			*\~english
 			*\brief
 			*	Fills this component's values with the data retrieved from a texture.
-			*\param[in] texturesFlags
+			*\param[in] combine
 			*	Used to check if the component's textures are enabled.
 			*\param[in] flags
 			*	Used to check if the render pass is configured so the component is usable.
@@ -243,7 +243,7 @@ namespace castor3d
 			*\~french
 			*\brief
 			*	Remplit les valeurs de ce composant avec des données récupérées depuis une texture.
-			*\param[in] texturesFlags
+			*\param[in] combine
 			*	Utilisé pour vérifier si les textures du composant sont activées.
 			*\param[in] flags
 			*	Utilisé pour vérifier si la passe de rendu est configurée pour que le composant soit utilisable.
@@ -254,7 +254,7 @@ namespace castor3d
 			*\param[in] components
 			*	Contient les membres du composant.
 			*/
-			C3D_API virtual void applyComponents( TextureFlagsArray const & texturesFlags
+			C3D_API virtual void applyComponents( TextureCombine const & combine
 				, PipelineFlags const * flags
 				, shader::TextureConfigData const & config
 				, sdw::U32Vec3 const & imgCompConfig
@@ -295,18 +295,18 @@ namespace castor3d
 			/**
 			*\~english
 			*	Adjusts the component data after textures have been parsed.
-			*\param[in] texturesFlags
+			*\param[in] combine
 			*	Used to check if the component's textures are enabled.
 			*\param[in,out] components
 			*	Contains the component members.
 			*\~french
 			*	Ajuste les données du composant après que les textures ont été traitées.
-			*\param[in] texturesFlags
+			*\param[in] combine
 			*	Utilisé pour vérifier si les textures du composant sont activées.
 			*\param[in,out] components
 			*	Contient les membres du composant.
 			*/
-			C3D_API virtual void updateComponent( TextureFlagsArray const & texturesFlags
+			C3D_API virtual void updateComponent( TextureCombine const & combine
 				, shader::BlendComponents & components )const
 			{
 			}
@@ -592,7 +592,7 @@ namespace castor3d
 		*	Enlève des indicateurs de textures donnés ceux qui sont inutiles, par rapport au filtre donné.
 		*/
 		C3D_API virtual void filterTextureFlags( ComponentModeFlags filter
-			, TextureFlagsArray & texturesFlags )const
+			, TextureCombine & texturesFlags )const
 		{
 		}
 		/**
@@ -742,7 +742,7 @@ namespace castor3d
 		*\param[in,out] filter
 		*	Pour vérifier du point de vue de la passe de rendu.
 		*/
-		C3D_API virtual bool isComponentNeeded( TextureFlagsArray const & textures
+		C3D_API virtual bool isComponentNeeded( TextureCombine const & textures
 			, ComponentModeFlags const & filter )const
 		{
 			return false;

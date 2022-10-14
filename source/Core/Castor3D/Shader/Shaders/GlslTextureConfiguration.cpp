@@ -101,7 +101,7 @@ namespace castor3d
 		}
 
 		void TextureConfigurations::computeMapsContributions( PassShaders const & passShaders
-			, TextureFlagsArray const & texturesFlags
+			, TextureCombine const & combine
 			, TextureAnimations const & textureAnims
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 			, Material const & material
@@ -110,7 +110,7 @@ namespace castor3d
 			if ( checkFlag( passShaders.getFilter(), ComponentModeFlag::eDerivTex ) )
 			{
 				computeMapsContributionsT< DerivTex >( passShaders
-					, texturesFlags
+					, combine
 					, textureAnims
 					, maps
 					, material
@@ -119,7 +119,7 @@ namespace castor3d
 			else
 			{
 				computeMapsContributionsT< sdw::Vec3 >( passShaders
-					, texturesFlags
+					, combine
 					, textureAnims
 					, maps
 					, material

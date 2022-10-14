@@ -39,7 +39,7 @@ namespace castor3d
 			: public PassComponentPlugin
 		{
 		public:
-			bool isComponentNeeded( TextureFlagsArray const & textures
+			bool isComponentNeeded( TextureCombine const & textures
 				, ComponentModeFlags const & filter )const override
 			{
 				return checkFlag( filter, ComponentModeFlag::eGeometry )

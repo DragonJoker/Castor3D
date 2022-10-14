@@ -815,13 +815,15 @@ namespace castor3d
 		, castor::Size const & size );
 	C3D_API TextureFlagsArray::const_iterator checkFlags( TextureFlagsArray const & lhs
 		, PassComponentTextureFlag rhs );
-	C3D_API void remFlags( TextureFlagsArray & lhs
+	C3D_API std::set< PassComponentTextureFlag >::const_iterator checkFlags( TextureCombine const & lhs
 		, PassComponentTextureFlag rhs );
-	C3D_API void remFlags( TextureFlagsArray & lhs
+	C3D_API void remFlags( TextureCombine & lhs
+		, PassComponentTextureFlag rhs );
+	C3D_API void remFlags( TextureCombine & lhs
 		, TextureFlagsArray const & rhs );
-	C3D_API void addFlags( TextureFlagsArray & lhs
+	C3D_API void addFlags( TextureCombine & lhs
 		, PassComponentTextureFlag rhs );
-	C3D_API void addFlags( TextureFlagsArray & lhs
+	C3D_API void addFlags( TextureCombine & lhs
 		, TextureFlagsArray const & rhs );
 	C3D_API VkImageMemoryBarrier makeLayoutTransition( VkImage image
 		, VkImageSubresourceRange const & range

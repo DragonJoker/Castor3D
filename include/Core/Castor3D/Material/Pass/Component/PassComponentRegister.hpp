@@ -20,13 +20,32 @@ namespace castor3d
 	{
 	public:
 		/**
-		 *\~english
-		 *\brief		Constructor
-		 *\~french
-		 *\brief		Constructeur
+		 *\name
+		 *	Construction / Destruction.
 		 */
+		/**@{*/
 		C3D_API explicit PassComponentRegister( Engine & engine );
 		C3D_API ~PassComponentRegister();
+		/**@}*/
+		/**
+		 *\~english
+		 *\name
+		 *	Pass type registration.
+		 *\~french
+		 *\name
+		 *	Enregistrement de type de passe.
+		 */
+		/**@{*/
+		C3D_API PassComponentsTypeID registerPassType( Pass const & pass );
+		C3D_API PassComponentsTypeID getPassComponentsType( Pass const & pass )const;
+		C3D_API PassComponentsTypeID getPassComponentsType( PassComponentIDSet const & components )const;
+		C3D_API TextureCombineID getTextureCombineType( Pass const & pass )const;
+		C3D_API TextureCombineID getTextureCombineType( TextureCombine const & combine )const;
+		C3D_API PassComponentIDSet getPassComponents( Pass const & pass )const;
+		C3D_API PassComponentIDSet getPassComponents( PassComponentsTypeID passType )const;
+		C3D_API TextureCombine getTextureCombine( Pass const & pass )const;
+		C3D_API TextureCombine getTextureCombine( TextureCombineID combineType )const;
+		/**@}*/
 		/**
 		 *\~english
 		 *\name
@@ -72,7 +91,7 @@ namespace castor3d
 		 *	Gestion des composants de sortie des shaders.
 		 */
 		/**@{*/
-		C3D_API std::vector< shader::PassComponentsShaderPtr > getComponentsShaders( TextureFlagsArray const & texturesFlags
+		C3D_API std::vector< shader::PassComponentsShaderPtr > getComponentsShaders( TextureCombine const & texturesFlags
 			, ComponentModeFlags filter
 			, std::vector< UpdateComponent > & updateComponents )const;
 		C3D_API std::vector< shader::PassComponentsShaderPtr > getComponentsShaders( PipelineFlags const & flags
@@ -117,8 +136,8 @@ namespace castor3d
 			, castor::StringStream & file )const;
 		C3D_API void fillChannels( PassComponentTextureFlag const & flags
 			, SceneFileContext & parsingContext );
-		C3D_API TextureFlagsArray filterTextureFlags( ComponentModeFlags filter
-			, TextureFlagsArray const & texturesFlags )const;
+		C3D_API TextureCombine filterTextureFlags( ComponentModeFlags filter
+			, TextureCombine const & combine )const;
 		C3D_API PassComponentTextureFlag getColourFlags()const;
 		C3D_API PassComponentTextureFlag getOpacityFlags()const;
 		C3D_API PassComponentTextureFlag getNormalFlags()const;
@@ -128,8 +147,8 @@ namespace castor3d
 			, TextureConfiguration & result )const;
 		C3D_API bool hasTexcoordModif( PassComponentTextureFlag const & flag
 			, PipelineFlags const * flags )const;
-		C3D_API bool hasTexcoordModif( PipelineFlags const & flags )const;
-		C3D_API bool hasTexcoordModif( TextureFlagsArray const & flags )const;
+		C3D_API std::map< uint32_t, PassComponentTextureFlag > getTexcoordModifs( PipelineFlags const & flags )const;
+		C3D_API std::map< uint32_t, PassComponentTextureFlag > getTexcoordModifs( TextureCombine const & combine )const;
 
 		castor::UInt32StrMap const & getTextureChannels()const
 		{
@@ -201,6 +220,7 @@ namespace castor3d
 		std::vector< shader::PassMaterialShader * > m_bufferShaders;
 		std::vector< FillMaterialType > m_fillMaterial;
 		VkDeviceSize m_bufferStride{};
+		std::vector< PassComponentIDSet > m_passTypes{};
 	};
 }
 

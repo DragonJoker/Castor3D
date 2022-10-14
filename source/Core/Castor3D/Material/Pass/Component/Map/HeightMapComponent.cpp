@@ -118,7 +118,7 @@ namespace castor3d
 			, PassComponentTextureFlag const & flag )
 		{
 			return flags.enableTangentSpace()
-				&& checkFlags( flags.textures, flag ) != flags.textures.end()
+				&& checkFlags( flags.textures, flag ) != flags.textures.flags.end()
 				&& ( checkFlag( flags.m_passFlags, PassFlag::eParallaxOcclusionMappingOne )
 					|| checkFlag( flags.m_passFlags, PassFlag::eParallaxOcclusionMappingRepeat ) );
 		}
@@ -127,7 +127,7 @@ namespace castor3d
 			, PassComponentTextureFlag const & flag )
 		{
 			return flags.enableTangentSpace()
-				&& checkFlags( flags.textures, flag ) != flags.textures.end()
+				&& checkFlags( flags.textures, flag ) != flags.textures.flags.end()
 				&& checkFlag( flags.m_passFlags, PassFlag::eParallaxOcclusionMappingOne );
 		}
 	}
@@ -542,11 +542,11 @@ namespace castor3d
 		return castor::TextWriter< HeightMapComponent >{ tabs, configuration }( file, it->componentsMask );
 	}
 
-	bool HeightMapComponent::Plugin::isComponentNeeded( TextureFlagsArray const & textures
+	bool HeightMapComponent::Plugin::isComponentNeeded( TextureCombine const & textures
 		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eGeometry )
-			|| textures.end() != checkFlags( textures, getTextureFlags() );
+			|| textures.flags.end() != checkFlags( textures, getTextureFlags() );
 	}
 
 	void HeightMapComponent::Plugin::createMapComponent( Pass & pass

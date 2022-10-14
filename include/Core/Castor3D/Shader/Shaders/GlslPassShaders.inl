@@ -7,7 +7,7 @@
 namespace castor3d::shader
 {
 	template< typename TexcoordT >
-	void PassShaders::computeMapContribution( TextureFlagsArray const & texturesFlags
+	void PassShaders::computeMapContribution( TextureCombine const & combine
 		, TextureConfigData const & config
 		, sdw::U32Vec3 const & imgCompConfig
 		, TextureAnimData const & anim
@@ -16,10 +16,10 @@ namespace castor3d::shader
 		, BlendComponents & components )const
 	{
 		auto & writer = findWriterMandat( config, anim, map );
-		this->computeTexcoord( texturesFlags, config, imgCompConfig, anim, map, texCoords, components );
+		this->computeTexcoord( combine, config, imgCompConfig, anim, map, texCoords, components );
 		auto sampled = writer.declLocale( "c3d_sampled"
 			, m_utils.sampleMap( map, texCoords ) );
-		applyComponents( texturesFlags, config, imgCompConfig, sampled, components );
+		applyComponents( combine, config, imgCompConfig, sampled, components );
 	}
 
 	template< typename TexcoordT >

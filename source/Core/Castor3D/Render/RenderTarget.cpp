@@ -95,12 +95,12 @@ namespace castor3d
 			{
 				ImageViewCache cache;
 
-				PipelineFlags flags{ scene.getEngine()->getPassComponentsRegister().getPassComponentsBitset()
+				PipelineFlags flags{ PassComponentIDSet{}
 					, scene.getPassesType()
 					, PassFlag::eNone
 					, SubmeshFlag::ePosNmlTanTex
 					, ProgramFlag::eNone
-					, TextureFlagsArray{}
+					, TextureCombine{}
 					, ShaderFlag::eNone
 					, VK_COMPARE_OP_ALWAYS };
 				IntermediatesLister visOpaque{ flags, scene, cache, intermediates };
@@ -120,12 +120,12 @@ namespace castor3d
 			{
 				ImageViewCache cache;
 
-				PipelineFlags flags{ scene.getEngine()->getPassComponentsRegister().getPassComponentsBitset()
+				PipelineFlags flags{ PassComponentIDSet{}
 					, scene.getPassesType()
 					, PassFlag::eNone
 					, SubmeshFlag::ePosNmlTanTex
 					, ProgramFlag::eNone
-					, TextureFlagsArray{}
+					, TextureCombine{}
 					, ShaderFlag::eNone
 					, VK_COMPARE_OP_ALWAYS };
 				IntermediatesLister vis{ flags, scene, cache, intermediates };

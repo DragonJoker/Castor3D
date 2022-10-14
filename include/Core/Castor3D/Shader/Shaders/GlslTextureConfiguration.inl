@@ -10,6 +10,19 @@ namespace castor3d
 {
 	namespace shader
 	{
+		namespace texconf
+		{
+			static TextureCombine getTextureCombine( PipelineFlags const & flags )
+			{
+				return flags.textures;
+			}
+
+			static TextureCombine getTextureCombine( TextureCombine const & flags )
+			{
+				return flags;
+			}
+		}
+
 		//*********************************************************************************************
 
 		template< typename TexcoordT, typename FlagsT >
@@ -17,75 +30,98 @@ namespace castor3d
 			, FlagsT const & flags
 			, TextureAnimations const & textureAnims
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-			, Material const & material
-			, BlendComponents & components )const
+			, Material const & pmaterial
+			, BlendComponents & pcomponents )const
 		{
 			if ( isEnabled()
-				&& components.hasMember( "texture0" ) )
+				&& pcomponents.hasMember( "texture0" ) )
 			{
-				auto texCoords0 = components.getMember< TexcoordT >( "texture0" );
-				auto texCoords1 = components.getMember< TexcoordT >( "texture1", true );
-				auto texCoords2 = components.getMember< TexcoordT >( "texture2", true );
-				auto texCoords3 = components.getMember< TexcoordT >( "texture3", true );
-
-				FOR( m_writer, sdw::UInt, index, 0u, index < material.texturesCount && index < MaxPassTextures, ++index )
+				if ( !this->m_applyTexture )
 				{
-					auto id = m_writer.declLocale( "c3d_id"
-						, material.getTexture( index ) );
-
-					IF( m_writer, id > 0_u )
-					{
-						auto config = m_writer.declLocale( "c3d_config"
-							, getTextureConfiguration( id ) );
-						auto anim = m_writer.declLocale( "c3d_anim"
-							, textureAnims.getTextureAnimation( id ) );
-						auto texCoords = m_writer.declLocale( "c3d_tex"
-							, TextureConfigurations::getTexcoord( config
-								, texCoords0
-								, texCoords1
-								, texCoords2
-								, texCoords3 ) );
-						auto & writer = findWriterMandat( config, anim, maps[id - 1_u] );
-						auto texCoord = writer.declLocale( "c3d_texCoord"
-							, config.toUv( texCoords ) );
-						config.transformUV( passShaders.getUtils(), anim, texCoord );
-						config.setUv( texCoords, texCoord );
-
-						if ( passShaders.hasTexcoordModif( flags ) )
+					this->m_applyTexture = m_writer.implementFunction< sdw::Void >( "c3d_applyTexture"
+						, [&]( sdw::UInt const & id
+							, BlendComponents components )
 						{
-							FOR( m_writer, sdw::UInt, comp, 0u, comp < config.componentCount(), ++comp )
+							auto texCoords0 = components.getMember< TexcoordT >( "texture0" );
+							auto texCoords1 = components.getMember< TexcoordT >( "texture1", true );
+							auto texCoords2 = components.getMember< TexcoordT >( "texture2", true );
+							auto texCoords3 = components.getMember< TexcoordT >( "texture3", true );
+
+							IF( m_writer, id > 0_u )
 							{
-								passShaders.computeTexcoord( flags
-									, config
-									, config.component( comp )
-									, maps[id - 1_u]
-									, texCoords
-									, texCoord
-									, components );
+								auto config = m_writer.declLocale( "c3d_config"
+									, getTextureConfiguration( id ) );
+								auto anim = m_writer.declLocale( "c3d_anim"
+									, textureAnims.getTextureAnimation( id ) );
+								auto texCoords = m_writer.declLocale( "c3d_tex"
+									, TextureConfigurations::getTexcoord( config
+										, texCoords0
+										, texCoords1
+										, texCoords2
+										, texCoords3 ) );
+								auto & writer = findWriterMandat( config, anim, maps[id - 1_u] );
+								auto texCoord = writer.declLocale( "c3d_texCoord"
+									, config.toUv( texCoords ) );
+								config.transformUV( passShaders.getUtils(), anim, texCoord );
+								config.setUv( texCoords, texCoord );
+								std::map< uint32_t, PassComponentTextureFlag > texcoordModifs = passShaders.getTexcoordModifs( flags );
+
+								if ( !texcoordModifs.empty() )
+								{
+									FOR( m_writer, sdw::UInt, comp, 0u, comp < config.componentCount(), ++comp )
+									{
+										auto component = writer.declLocale( "c3d_component"
+											, config.component( comp ) );
+
+										IF( writer, component.y() != 0_u )
+										{
+											passShaders.computeTexcoord( flags
+												, config
+												, config.component( comp )
+												, maps[id - 1_u]
+												, texCoords
+												, texCoord
+												, components );
+										}
+										FI;
+									}
+									ROF;
+								}
+
+								auto sampled = writer.declLocale( "c3d_sampled"
+									, passShaders.getUtils().sampleMap( maps[id - 1_u], texCoords ) );
+
+								FOR( m_writer, sdw::UInt, comp, 0u, comp < config.componentCount(), ++comp )
+								{
+									auto component = writer.declLocale( "c3d_component"
+										, config.component( comp ) );
+
+									IF( writer, component.y() != 0_u )
+									{
+										passShaders.applyComponents( flags
+											, config
+											, component
+											, sampled
+											, components );
+									}
+									FI;
+								}
+								ROF;
 							}
-							ROF;
+							FI;
 						}
-
-						auto sampled = writer.declLocale( "c3d_sampled"
-							, passShaders.getUtils().sampleMap( maps[id - 1_u], texCoords ) );
-
-						FOR( m_writer, sdw::UInt, comp, 0u, comp < config.componentCount(), ++comp )
-						{
-							passShaders.applyComponents( flags
-								, config
-								, config.component( comp )
-								, sampled
-								, components );
-						}
-						ROF;
-					}
-					FI;
+						, sdw::InUInt{ m_writer, "id" }
+						, InOutBlendComponents{ m_writer, "components", pcomponents } );
 				}
-				ROF;
+
+				for ( uint32_t index = 0u; index < texconf::getTextureCombine( flags ).configCount; ++index )
+				{
+					this->m_applyTexture( pmaterial.getTexture( index ), pcomponents );
+				}
 			}
 
 			passShaders.updateComponents( flags
-				, components );
+				, pcomponents );
 		}
 
 		template< typename TexcoordT >

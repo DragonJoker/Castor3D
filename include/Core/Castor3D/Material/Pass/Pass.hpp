@@ -98,6 +98,8 @@ namespace castor3d
 		C3D_API shader::PassMaterialShader * getMaterialShader( castor::String const & componentType )const;
 		C3D_API PassComponentID getComponentId( castor::String const & componentType )const;
 		C3D_API PassComponentPlugin const & getComponentPlugin( PassComponentID componentId )const;
+		C3D_API PassComponentsTypeID getPassComponentsType()const;
+		C3D_API TextureCombineID getTextureCombineType()const;
 
 		PassComponentPlugin const & getComponentPlugin( castor::String const & componentType )const
 		{
@@ -395,12 +397,8 @@ namespace castor3d
 		C3D_API bool hasSubsurfaceScattering()const;
 		C3D_API bool isTwoSided()const;
 		C3D_API TextureUnitPtrArray getTextureUnits()const;
-		C3D_API TextureUnitPtrArray getTextureUnits( TextureFlagsArray mask )const;
 		C3D_API uint32_t getTextureUnitsCount()const;
-		C3D_API uint32_t getTextureUnitsCount( TextureFlagsArray mask )const;
-		C3D_API TextureFlagsArray getTexturesMask()const;
-		C3D_API TextureFlagsArray getTexturesMask( TextureFlagsArray mask )const;
-		C3D_API TextureFlagsArray getTextures()const;
+		C3D_API TextureCombine getTexturesMask()const;
 		C3D_API bool hasLighting()const;
 		C3D_API PassComponentTextureFlag getColourMapFlags()const;
 		C3D_API PassComponentTextureFlag getOpacityMapFlags()const;
@@ -432,6 +430,16 @@ namespace castor3d
 		PassTypeID getTypeID()const
 		{
 			return m_typeID;
+		}
+
+		PassComponentsTypeID getComponentsTypeID()const
+		{
+			return m_componentsID;
+		}
+
+		TextureCombineID getTexturesID()const
+		{
+			return m_texturesID;
 		}
 
 		RenderPassRegisterInfo * getRenderPassInfo()const
@@ -561,10 +569,12 @@ namespace castor3d
 
 	private:
 		PassTypeID m_typeID;
+		PassComponentsTypeID m_componentsID;
+		TextureCombineID m_texturesID;
 		uint32_t m_index;
 		PassFlags m_flags;
 		PassComponentMap m_components;
-		TextureFlagsArray m_textureFlags;
+		TextureCombine m_textureCombine;
 		TextureSourceMap m_sources;
 		std::unordered_map< TextureSourceInfo, AnimationUPtr, TextureSourceInfoHasher > m_animations;
 		uint32_t m_maxTexcoordSet{};

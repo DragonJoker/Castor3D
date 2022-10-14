@@ -165,7 +165,7 @@ namespace castor3d
 		RenderNodesPass::update( updater );
 	}
 
-	PipelineFlags RenderTechniqueNodesPass::createPipelineFlags( PassComponentsBitset components
+	PipelineFlags RenderTechniqueNodesPass::createPipelineFlags( PassComponentIDSet components
 		, BlendMode colourBlendMode
 		, BlendMode alphaBlendMode
 		, PassFlags passFlags
@@ -173,7 +173,7 @@ namespace castor3d
 		, PassTypeID passTypeID
 		, VkCompareOp alphaFunc
 		, VkCompareOp blendAlphaFunc
-		, TextureFlagsArray const & textures
+		, TextureCombine const & textures
 		, SubmeshFlags const & submeshFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags

@@ -98,8 +98,6 @@ namespace castor3d
 		C3D_API bool hasAlphaBlending()const;
 		C3D_API bool hasEnvironmentMapping()const;
 		C3D_API bool hasSubsurfaceScattering()const;
-		C3D_API bool isTextured()const;
-		C3D_API bool isTextured( TextureFlagsArray mask )const;
 
 		PassTypeID getType()const
 		{

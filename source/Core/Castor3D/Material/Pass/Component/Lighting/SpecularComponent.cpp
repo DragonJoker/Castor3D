@@ -167,7 +167,7 @@ namespace castor3d
 		data.write( materialShader.getMaterialChunk(), SpecularComponent::Default, 0u );
 	}
 
-	bool SpecularComponent::Plugin::isComponentNeeded( TextureFlagsArray const & textures
+	bool SpecularComponent::Plugin::isComponentNeeded( TextureCombine const & textures
 		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eSpecularLighting );
@@ -214,8 +214,8 @@ namespace castor3d
 	{
 		auto mtl = getOwner()->getComponent< MetalnessComponent >();
 		auto & spcPlugin = getOwner()->getComponentPlugin( SpecularMapComponent::TypeName );
-		auto textures = getOwner()->getTextures();
-		auto specular = ( isValueSet() || textures.end() != checkFlags( textures, spcPlugin.getTextureFlags() ) )
+		auto textures = getOwner()->getTexturesMask();
+		auto specular = ( isValueSet() || textures.flags.end() != checkFlags( textures, spcPlugin.getTextureFlags() ) )
 			? getSpecular()
 			: Pass::computeF0( getOwner()->getColour()
 				, ( ( mtl && mtl->isValueSet() )

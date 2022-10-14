@@ -213,7 +213,7 @@ namespace castor3d
 		data.write( materialShader.getMaterialChunk(), 1.0f, 0u );
 	}
 
-	bool RoughnessComponent::Plugin::isComponentNeeded( TextureFlagsArray const & textures
+	bool RoughnessComponent::Plugin::isComponentNeeded( TextureCombine const & textures
 		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eDiffuseLighting )

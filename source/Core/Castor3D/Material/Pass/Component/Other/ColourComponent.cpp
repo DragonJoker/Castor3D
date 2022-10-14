@@ -201,7 +201,7 @@ namespace castor3d
 			, 0u );
 	}
 
-	bool ColourComponent::Plugin::isComponentNeeded( TextureFlagsArray const & textures
+	bool ColourComponent::Plugin::isComponentNeeded( TextureCombine const & textures
 		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eColour );

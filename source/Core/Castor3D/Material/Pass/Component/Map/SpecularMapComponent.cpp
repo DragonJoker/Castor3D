@@ -102,22 +102,21 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void SpecularMapComponent::ComponentsShader::applyComponents( TextureFlagsArray const & texturesFlags
+	void SpecularMapComponent::ComponentsShader::applyComponents( TextureCombine const & combine
 		, PipelineFlags const * flags
 		, shader::TextureConfigData const & config
 		, sdw::U32Vec3 const & imgCompConfig
 		, sdw::Vec4 const & sampled
 		, shader::BlendComponents & components )const
 	{
-		if ( !components.hasMember( "specular" )
-			|| texturesFlags.end() == checkFlags( texturesFlags, getTextureFlags() ) )
+		if ( !components.hasMember( "specular" ) )
 		{
 			return;
 		}
 
 		auto & writer{ *sampled.getWriter() };
 
-		IF( writer, imgCompConfig.y() != 0_u )
+		IF( writer, imgCompConfig.x() == sdw::UInt{ getTextureFlags() } )
 		{
 			components.getMember< sdw::Vec3 >( "specular" ) *= config.getVec3( sampled, imgCompConfig.z() );
 		}
@@ -169,11 +168,11 @@ namespace castor3d
 		return castor::TextWriter< SpecularMapComponent >{ tabs, it->componentsMask }( file );
 	}
 
-	bool SpecularMapComponent::Plugin::isComponentNeeded( TextureFlagsArray const & textures
+	bool SpecularMapComponent::Plugin::isComponentNeeded( TextureCombine const & textures
 		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eSpecularLighting )
-			|| textures.end() != checkFlags( textures, getTextureFlags() );
+			|| textures.flags.end() != checkFlags( textures, getTextureFlags() );
 	}
 
 	void SpecularMapComponent::Plugin::createMapComponent( Pass & pass
@@ -183,14 +182,14 @@ namespace castor3d
 	}
 
 	void SpecularMapComponent::Plugin::doUpdateComponent( PassComponentRegister const & passComponents
-		, TextureFlagsArray const & texturesFlags
+		, TextureCombine const & combine
 		, shader::BlendComponents & components )
 	{
 		auto & plugin = passComponents.getPlugin< SpecularMapComponent >();
 		auto & mtlPlugin = passComponents.getPlugin< MetalnessMapComponent >();
 
-		if ( texturesFlags.end() != checkFlags( texturesFlags, mtlPlugin.getTextureFlags() )
-			&& texturesFlags.end() == checkFlags( texturesFlags, plugin.getTextureFlags() ) )
+		if ( combine.flags.end() != checkFlags( combine, mtlPlugin.getTextureFlags() )
+			&& combine.flags.end() == checkFlags( combine, plugin.getTextureFlags() ) )
 		{
 			components.getMember< sdw::Vec3 >( "specular", true ) = shader::BlendComponents::computeF0( components.getMember< sdw::Vec3 >( "colour", vec3( 0.0_f ) )
 				, components.getMember< sdw::Float >( "metalness", 0.0_f ) );

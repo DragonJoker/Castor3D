@@ -281,10 +281,10 @@ namespace castor3d
 		return doAdjustSceneFlags( flags );
 	}
 
-	TextureFlagsArray RenderNodesPass::adjustFlags( TextureFlagsArray texturesFlags )const
+	TextureCombine RenderNodesPass::adjustFlags( TextureCombine combine )const
 	{
 		return getEngine()->getPassComponentsRegister().filterTextureFlags( getComponentsMask()
-			, texturesFlags );
+			, combine );
 	}
 
 	VkCompareOp RenderNodesPass::adjustAlphaFunc( PassFlags passFlags
@@ -304,7 +304,7 @@ namespace castor3d
 		return VK_COMPARE_OP_ALWAYS;
 	}
 
-	PipelineFlags RenderNodesPass::createPipelineFlags( PassComponentsBitset components
+	PipelineFlags RenderNodesPass::createPipelineFlags( PassComponentIDSet components
 		, BlendMode colourBlendMode
 		, BlendMode alphaBlendMode
 		, PassFlags passFlags
@@ -312,7 +312,7 @@ namespace castor3d
 		, PassTypeID passTypeID
 		, VkCompareOp alphaFunc
 		, VkCompareOp blendAlphaFunc
-		, TextureFlagsArray const & textures
+		, TextureCombine const & textures
 		, SubmeshFlags const & submeshFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
@@ -354,7 +354,7 @@ namespace castor3d
 	}
 
 	PipelineFlags RenderNodesPass::createPipelineFlags( Pass const & pass
-		, TextureFlagsArray const & textures
+		, TextureCombine const & textures
 		, SubmeshFlags const & submeshFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
@@ -362,7 +362,8 @@ namespace castor3d
 		, bool isFrontCulled
 		, GpuBufferOffsetT< castor::Point4f > const & morphTargets )const
 	{
-		return createPipelineFlags( getEngine()->getPassComponentsRegister().getPassComponentsBitset( &pass )
+		auto & passComponents = getEngine()->getPassComponentsRegister();
+		return createPipelineFlags( passComponents.getPassComponents( pass )
 			, pass.getColourBlendMode()
 			, pass.getAlphaBlendMode()
 			, pass.getPassFlags()
@@ -722,7 +723,7 @@ namespace castor3d
 		flags.m_passFlags = adjustFlags( flags.m_passFlags );
 		flags.m_sceneFlags = adjustFlags( flags.m_sceneFlags );
 
-		if ( areFlagsEmpty( flags.textures )
+		if ( flags.textures.configCount == 0
 			&& !flags.forceTexCoords() )
 		{
 			remFlag( flags.m_submeshFlags, SubmeshFlag::eTexcoords );

@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_TextureCache_H___
@@ -40,9 +40,37 @@ namespace castor3d
 		};
 
 	public:
+		/**
+		 *\name
+		 *	Construction / Destruction.
+		 */
+		/**@{*/
 		C3D_API explicit TextureUnitCache( Engine & engine );
 		C3D_API ~TextureUnitCache();
-
+		/**@}*/
+		/**
+		 *\~english
+		 *\name
+		 *	Texture combinations registration.
+		 *\~french
+		 *\name
+		 *	Enregistrement de combinaisons de textures.
+		 */
+		/**@{*/
+		C3D_API TextureCombineID registerTextureCombineType( Pass const & pass );
+		C3D_API TextureCombineID getTextureCombineType( Pass const & pass )const;
+		C3D_API TextureCombineID getTextureCombineType( TextureCombine const & combine )const;
+		C3D_API TextureCombine getTextureCombine( TextureCombineID combineType )const;
+		/**@}*/
+		/**
+		 *\~english
+		 *\name
+		 *	General functions.
+		 *\~french
+		 *\name
+		 *	Fonctions générales.
+		 */
+		/**@{*/
 		C3D_API void initialise( RenderDevice const & device );
 		C3D_API void cleanup();
 		C3D_API void stopLoad();
@@ -53,7 +81,16 @@ namespace castor3d
 		C3D_API void preparePass( Pass & pass );
 
 		C3D_API void clear();
-
+		/**@}*/
+		/**
+		 *\~english
+		 *\name
+		 *	Texture handling functions.
+		 *\~french
+		 *\name
+		 *	Fonctions de gestion de textures.
+		 */
+		/**@{*/
 		C3D_API TextureUnitSPtr getTexture( TextureUnitData & unitData );
 		C3D_API TextureUnitData & getSourceData( TextureSourceInfo const & sourceInfo
 			, PassTextureConfig const & config
@@ -69,7 +106,12 @@ namespace castor3d
 			, castor::String const & name
 			, TextureSourceInfo const & resultSourceInfo
 			, PassTextureConfig const & resultPassConfig );
-
+		/**@}*/
+		/**
+		 *\name
+		 *	Getters.
+		 */
+		/**@{*/
 		ashes::DescriptorSetLayout * getDescriptorLayout()const
 		{
 			return m_bindlessTexLayout.get();
@@ -84,6 +126,7 @@ namespace castor3d
 		{
 			return m_bindlessTexSet.get();
 		}
+		/**@}*/
 
 	private:
 		void doCreateLayout( ThreadData & data
@@ -115,6 +158,7 @@ namespace castor3d
 		std::map< size_t, TextureUnitDataUPtr > m_datas;
 		std::atomic_bool m_initialised{};
 		std::vector< TextureUnit * > m_pendingUnits;
+		std::vector< TextureCombine > m_texturesCombineTypes;
 	};
 }
 

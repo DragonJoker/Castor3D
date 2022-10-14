@@ -220,7 +220,7 @@ namespace castor3d
 		data.write( materialShader.getMaterialChunk(), 0u, offset );
 	}
 
-	bool OpacityComponent::Plugin::isComponentNeeded( TextureFlagsArray const & textures
+	bool OpacityComponent::Plugin::isComponentNeeded( TextureCombine const & textures
 		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eOpacity );

@@ -1531,7 +1531,9 @@ namespace castor3d
 				auto buffer = bufferIt.second;
 				auto pipelineHash = bufferIt.first;
 				auto pipelineId = index++;
-				PipelineFlags pipelineFlags{ getPipelineHiHashDetails( pipelineHash, getShaderFlags() ) };
+				PipelineFlags pipelineFlags{ getPipelineHiHashDetails( *this
+					, pipelineHash
+					, getShaderFlags() ) };
 
 				if ( !pipelineFlags.isBillboard() )
 				{
@@ -1574,7 +1576,9 @@ namespace castor3d
 					{
 						auto & culled = sidedCulled.first;
 						auto & positionsBuffer = culled.node->data.getVertexBuffer();
-						PipelineFlags pipelineFlags{ getPipelineHiHashDetails( pipelineHash, getShaderFlags() ) };
+						PipelineFlags pipelineFlags{ getPipelineHiHashDetails( *this
+							, pipelineHash
+							, getShaderFlags() ) };
 						auto & pipeline = doCreatePipeline( pipelineHash
 							, pipelineFlags
 							, culled.node->data.getVertexStride() );
@@ -1606,7 +1610,7 @@ namespace castor3d
 		}
 	}
 
-	PipelineFlags VisibilityResolvePass::createPipelineFlags( PassComponentsBitset components
+	PipelineFlags VisibilityResolvePass::createPipelineFlags( PassComponentIDSet components
 		, BlendMode colourBlendMode
 		, BlendMode alphaBlendMode
 		, PassFlags passFlags
@@ -1614,7 +1618,7 @@ namespace castor3d
 		, PassTypeID passTypeID
 		, VkCompareOp alphaFunc
 		, VkCompareOp blendAlphaFunc
-		, TextureFlagsArray const & textures
+		, TextureCombine const & textures
 		, SubmeshFlags const & submeshFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
