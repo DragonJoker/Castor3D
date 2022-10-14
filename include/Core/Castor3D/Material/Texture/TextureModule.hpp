@@ -231,7 +231,7 @@ namespace castor3d
 
 	using TextureUnitDatas = std::vector< TextureUnitDataUPtr >;
 	using TextureUnitDataRefs = std::vector< TextureUnitDataRPtr >;
-	using TextureUnitDataSet = std::set< TextureUnitDataRPtr >;
+	using TextureUnitDataSet = std::map< PassComponentTextureFlag, TextureUnitDataRPtr >;
 
 	using OnTextureUnitChangedFunction = std::function< void( TextureUnit const & ) >;
 	using OnTextureUnitChanged = castor::SignalT< OnTextureUnitChangedFunction >;

@@ -6,6 +6,8 @@
 #include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
 #include "Castor3D/Material/Texture/Animation/TextureAnimation.hpp"
+#include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
+#include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 
 CU_ImplementCUSmartPtr( castor3d, PassComponentPlugin )
 
@@ -25,6 +27,48 @@ namespace castor3d
 		PassComponentID PassComponentsShader::getId()const
 		{
 			return m_plugin.getId();
+		}
+
+		void PassComponentsShader::applyFloatComponent( std::string const & name
+			, PassComponentTextureFlag flag
+			, shader::TextureConfigData const & config
+			, sdw::U32Vec3 const & imgCompConfig
+			, sdw::Vec4 const & sampled
+			, shader::BlendComponents & components )const
+		{
+			if ( !components.hasMember( name ) )
+			{
+				return;
+			}
+
+			auto & writer{ *sampled.getWriter() };
+
+			IF( writer, imgCompConfig.x() == sdw::UInt{ flag } )
+			{
+				components.getMember< sdw::Float >( name ) *= config.getFloat( sampled, imgCompConfig.z() );
+			}
+			FI;
+		}
+
+		void PassComponentsShader::applyVec3Component( std::string const & name
+			, PassComponentTextureFlag flag
+			, shader::TextureConfigData const & config
+			, sdw::U32Vec3 const & imgCompConfig
+			, sdw::Vec4 const & sampled
+			, shader::BlendComponents & components )const
+		{
+			if ( !components.hasMember( name ) )
+			{
+				return;
+			}
+
+			auto & writer{ *sampled.getWriter() };
+
+			IF( writer, imgCompConfig.x() == sdw::UInt{ flag } )
+			{
+				components.getMember< sdw::Vec3 >( name ) *= config.getVec3( sampled, imgCompConfig.z() );
+			}
+			FI;
 		}
 	}
 

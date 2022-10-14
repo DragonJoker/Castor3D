@@ -348,17 +348,7 @@ namespace castor3d
 
 	bool PipelineFlags::hasMap( PassComponentTextureFlag flag )const
 	{
-		auto ires = splitTextureFlag( flag );
-		auto passIndex = ires.first;
-		auto textureFlag = ires.second;
-		return textures.flags.end() != std::find_if( textures.flags.begin()
-			, textures.flags.end()
-			, [passIndex, textureFlag]( PassComponentTextureFlag lookup )
-			{
-				auto [lookupPassIndex, lookupTextureFlag] = splitTextureFlag( lookup );
-				return lookupPassIndex == passIndex
-					&& castor::hasAny( lookupTextureFlag, textureFlag );
-			} );
+		return hasAny( textures, flag );
 	}
 
 	//*********************************************************************************************

@@ -173,14 +173,16 @@ namespace castor3d
 	*	Autres fonctions.
 	*/
 	/**@{*/
-	C3D_API TextureFlagsArray getFlags( TextureConfiguration const & config );
+	C3D_API TextureFlagsSet getFlags( TextureConfiguration const & config );
 	C3D_API castor::PixelComponents getPixelComponents( uint32_t mask );
 	C3D_API castor::PixelComponents getPixelComponents( TextureConfiguration const & config );
 	C3D_API void updateIndices( castor::PixelFormat format
 		, TextureConfiguration & config );
-	C3D_API TextureFlagConfigurations::const_iterator checkFlags( TextureFlagConfigurations const & lhs
+	C3D_API TextureFlagConfigurations::const_iterator checkFlag( TextureFlagConfigurations const & lhs
 		, PassComponentTextureFlag rhs );
-	C3D_API TextureFlagConfigurations::iterator checkFlags( TextureFlagConfigurations & lhs
+	C3D_API TextureFlagConfigurations::iterator checkFlag( TextureFlagConfigurations & lhs
+		, PassComponentTextureFlag rhs );
+	C3D_API bool hasAny( TextureFlagConfigurations const & lhs
 		, PassComponentTextureFlag rhs );
 	C3D_API void addFlagConfiguration( TextureConfiguration & config
 		, TextureFlagConfiguration flagConfiguration );

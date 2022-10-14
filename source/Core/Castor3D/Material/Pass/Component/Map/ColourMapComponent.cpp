@@ -105,18 +105,12 @@ namespace castor3d
 		, sdw::Vec4 const & sampled
 		, shader::BlendComponents & components )const
 	{
-		if ( !components.hasMember( "colour" ) )
-		{
-			return;
-		}
-
-		auto & writer{ *sampled.getWriter() };
-
-		IF( writer, imgCompConfig.x() == sdw::UInt{ getTextureFlags() } )
-		{
-			components.getMember< sdw::Vec3 >( "colour" ) *= config.getVec3( sampled, imgCompConfig.z() );
-		}
-		FI;
+		applyVec3Component( "colour"
+			, getTextureFlags()
+			, config
+			, imgCompConfig
+			, sampled
+			, components );
 	}
 
 	//*********************************************************************************************
@@ -192,25 +186,19 @@ namespace castor3d
 			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
 	}
 
-	bool ColourMapComponent::Plugin::writeTextureConfig( TextureConfiguration const & configuration
+	bool ColourMapComponent::Plugin::doWriteTextureConfig( TextureConfiguration const & configuration
+		, uint32_t mask
 		, castor::String const & tabs
 		, castor::StringStream & file )const
 	{
-		auto it = checkFlags( configuration.components, getTextureFlags() );
-
-		if ( it == configuration.components.end() )
-		{
-			return true;
-		}
-
-		return castor::TextWriter< ColourMapComponent >{ tabs, it->componentsMask }( file );
+		return castor::TextWriter< ColourMapComponent >{ tabs, mask }( file );
 	}
 
 	bool ColourMapComponent::Plugin::isComponentNeeded( TextureCombine const & textures
 		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eColour )
-			|| checkFlags( textures, getTextureFlags() ) != textures.flags.end();
+			|| hasAny( textures, getTextureFlags() );
 	}
 
 	void ColourMapComponent::Plugin::createMapComponent( Pass & pass
@@ -232,15 +220,15 @@ namespace castor3d
 		}
 	}
 
-	void ColourMapComponent::fillConfig( TextureConfiguration & configuration
-		, PassVisitorBase & vis )const
-	{
-		vis.visit( cuT( "Colour" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 3u );
-	}
-
 	PassComponentUPtr ColourMapComponent::doClone( Pass & pass )const
 	{
 		return std::make_unique< ColourMapComponent >( pass );
+	}
+
+	void ColourMapComponent::doFillConfig( TextureConfiguration & configuration
+		, PassVisitorBase & vis )const
+	{
+		vis.visit( cuT( "Colour" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 3u );
 	}
 
 	//*********************************************************************************************

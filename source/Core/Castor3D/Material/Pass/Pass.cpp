@@ -80,7 +80,7 @@ namespace castor3d
 				&& checkFlag( lhs, TextureSpace::eNormalised ) == checkFlag( rhs, TextureSpace::eNormalised );
 		}
 
-		bool areMergeable( std::unordered_map< TextureSourceInfo, AnimationUPtr, TextureSourceInfoHasher > const & animations
+		static bool areMergeable( std::unordered_map< TextureSourceInfo, AnimationUPtr, TextureSourceInfoHasher > const & animations
 			, Pass::PassTextureSource const & lhs
 			, Pass::PassTextureSource const & rhs )
 		{
@@ -144,6 +144,22 @@ namespace castor3d
 		static float mix( float x, float y, float a )
 		{
 			return float( x * ( 1.0 - a ) + y * a );
+		}
+
+		using SortedTextureSources = std::map< PassComponentTextureFlag
+			, Pass::PassTextureSource >;
+
+		static SortedTextureSources sortSources( TextureSourceMap const & sources )
+		{
+			SortedTextureSources result;
+
+			for ( auto & source : sources )
+			{
+ 				result.emplace( *getFlags( source.second.config ).begin()
+					, source );
+			}
+
+			return result;
 		}
 	}
 
@@ -384,16 +400,18 @@ namespace castor3d
 			//
 			//	Sort per used components, decrementally
 			//
-			auto remaining = m_sources;
+			auto remaining = matpass::sortSources( m_sources );
 			//
-			//		Starting at four components
+			//		Four and two component images are not merged with others,
+			//		hence get rid of them first
 			//
 			auto it = remaining.begin();
 			while ( it != remaining.end() )
 			{
-				if ( getPixelComponents( it->second.config ).size() == 4u )
+				if ( getPixelComponents( it->second.second.config ).size() == 4u
+					|| getPixelComponents( it->second.second.config ).size() == 2u )
 				{
-					prepareImage( *it, sources );
+					prepareImage( std::move( it->second ), sources );
 					it = remaining.erase( it );
 				}
 				else
@@ -407,9 +425,9 @@ namespace castor3d
 			it = remaining.begin();
 			while ( it != remaining.end() )
 			{
-				if ( getPixelComponents( it->second.config ).size() == 3u )
+				if ( getPixelComponents( it->second.second.config ).size() == 3u )
 				{
-					PassTextureSource lhs = *it;
+					PassTextureSource lhs = std::move( it->second );
 					remaining.erase( it );
 
 					if ( getFlags( lhs.second.config ).size() == 1u )
@@ -419,20 +437,20 @@ namespace castor3d
 						//
 						it = std::find_if( remaining.begin()
 							, remaining.end()
-							, [this, &lhs]( TextureSourceMap::value_type const & lookup )
+							, [this, &lhs]( matpass::SortedTextureSources::value_type const & lookup )
 							{
-								return getPixelComponents( lookup.second.config ).size() == 1u
-									&& matpass::areMergeable( m_animations, lhs, lookup );
+								return getPixelComponents( lookup.second.second.config ).size() == 1u
+									&& matpass::areMergeable( m_animations, lhs, lookup.second );
 							} );
 
 						if ( it == remaining.end() )
 						{
-							prepareImage( lhs, sources );
+							prepareImage( std::move( lhs ), sources );
 						}
 						else
 						{
-							mergeImages( lhs, 0x00FFFFFFu
-								, *it, 0xFF000000u
+							mergeImages( std::move( lhs ), 0x00FFFFFFu
+								, std::move( it->second ), 0xFF000000u
 								, sources );
 							remaining.erase( it );
 						}
@@ -450,49 +468,33 @@ namespace castor3d
 				}
 			}
 			//
-			//		Then two components
-			//
-			it = remaining.begin();
-			while ( it != remaining.end() )
-			{
-				if ( getPixelComponents( it->second.config ).size() == 2u )
-				{
-					prepareImage( *it, sources );
-					it = remaining.erase( it );
-				}
-				else
-				{
-					++it;
-				}
-			}
-			//
 			//		Then one component
 			//
 			it = remaining.begin();
 			while ( it != remaining.end() )
 			{
-				CU_Require( getPixelComponents( it->second.config ).size() == 1u );
-				PassTextureSource lhs = *it;
+				CU_Require( getPixelComponents( it->second.second.config ).size() == 1u );
+				PassTextureSource lhs = std::move( it->second );
 				remaining.erase( it );
 				//
 				//	Group them by two.
 				//
 				it = std::find_if( remaining.begin()
 					, remaining.end()
-					, [this, &lhs]( TextureSourceMap::value_type const & lookup )
+					, [this, &lhs]( matpass::SortedTextureSources::value_type const & lookup )
 					{
-						CU_Require( getPixelComponents( lookup.second.config ).size() == 1u );
-						return matpass::areMergeable( m_animations, lhs, lookup );
+						CU_Require( getPixelComponents( lookup.second.second.config ).size() == 1u );
+						return matpass::areMergeable( m_animations, lhs, lookup.second );
 					} );
 
 				if ( it == remaining.end() )
 				{
-					prepareImage( lhs, sources );
+					prepareImage( std::move( lhs ), sources );
 				}
 				else
 				{
-					mergeImages( lhs, 0x00FF0000u
-						, *it, 0x0000FF00u
+					mergeImages( std::move( lhs ), 0x00FF0000u
+						, std::move( it->second ), 0x0000FF00u
 						, sources );
 					remaining.erase( it );
 				}
@@ -501,33 +503,13 @@ namespace castor3d
 			}
 
 			TextureUnitPtrArray newUnits;
-			auto sit = sources.begin();
-			auto & passComponents = getOwner()->getEngine()->getPassComponentsRegister();
-			auto & textureCache = getOwner()->getEngine()->getTextureUnitCache();
-
-			// Make sure height map is within the first textures.
-			while ( sit != sources.end() )
-			{
-				auto & source = *sit;
-
-				if ( source->passConfig.config.components.end() != checkFlags( source->passConfig.config.components
-					, passComponents.getHeightFlags() ) )
-				{
-					auto unit = textureCache.getTexture( *source );
-					doAddUnit( *source, unit, newUnits );
-					sit = sources.erase( sit );
-				}
-				else
-				{
-					++sit;
-				}
-			}
 
 			// Then add the other ones.
 			for ( auto & source : sources )
 			{
-				auto unit = textureCache.getTexture( *source );
-				doAddUnit( *source, unit, newUnits );
+				auto & textureCache = getOwner()->getEngine()->getTextureUnitCache();
+				auto unit = textureCache.getTexture( *source.second );
+				doAddUnit( *source.second, unit, newUnits );
 			}
 
 			m_textureUnits = newUnits;
@@ -579,17 +561,19 @@ namespace castor3d
 		addFlagConfiguration( resultConfig.config, { rhsFlags, rhsDstMask } );
 		mergeConfigsBase( lhsIt.second.config, resultConfig.config );
 		mergeConfigsBase( rhsIt.second.config, resultConfig.config );
-		result.emplace( &textureCache.mergeSources( lhsIt.first
-			, lhsIt.second
-			, getComponentsMask( lhsIt.second.config, lhsFlags )
-			, lhsDstMask
-			, rhsIt.first
-			, rhsIt.second
-			, getComponentsMask( rhsIt.second.config, rhsFlags )
-			, rhsDstMask
-			, getOwner()->getName() + name
-			, resultSourceInfo
-			, resultConfig ) );
+		auto flags = getFlags( resultConfig.config );
+		result.emplace( *flags.begin()
+			, &textureCache.mergeSources( lhsIt.first
+				, lhsIt.second
+				, getComponentsMask( lhsIt.second.config, lhsFlags )
+				, lhsDstMask
+				, rhsIt.first
+				, rhsIt.second
+				, getComponentsMask( rhsIt.second.config, rhsFlags )
+				, rhsDstMask
+				, getOwner()->getName() + name
+				, resultSourceInfo
+				, resultConfig ) );
 
 #if !defined( NDEBUG )
 		auto it = result.begin();
@@ -598,9 +582,9 @@ namespace castor3d
 		{
 			auto nit = std::find_if( std::next( it )
 				, result.end()
-				, [it]( TextureUnitData * lookup )
+				, [it]( TextureUnitDataSet::value_type const & lookup )
 				{
-					return shallowEqual( ( *it )->passConfig.config, lookup->passConfig.config );
+					return shallowEqual( it->second->passConfig.config, lookup.second->passConfig.config );
 				} );
 			bool ok = ( nit == result.end() );
 			CU_Ensure( ok );
@@ -618,7 +602,8 @@ namespace castor3d
 		auto anim = ( animIt != m_animations.end()
 			? std::move( animIt->second )
 			: nullptr );
-		result.emplace( &textureCache.getSourceData( cfg.first, cfg.second, std::move( anim ) ) );
+		auto flags = getFlags( cfg.second.config );
+		result.emplace( *flags.begin(), &textureCache.getSourceData( cfg.first, cfg.second, std::move( anim ) ) );
 	}
 
 	void Pass::setColour( castor::HdrRgbColour const & value )
@@ -799,7 +784,7 @@ namespace castor3d
 
 	bool Pass::needsAlphaProcessing()const
 	{
-		bool result = checkFlags( m_textureCombine, getOpacityMapFlags() ) != m_textureCombine.flags.end();
+		bool result = hasAny( m_textureCombine, getOpacityMapFlags() );
 
 		if ( auto comp = getComponent< OpacityComponent >() )
 		{

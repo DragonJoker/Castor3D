@@ -233,20 +233,6 @@ namespace castor3d
 			, { castor::makeParameter< castor::ParameterType::eBool >() } );
 	}
 
-	bool NormalMapComponent::Plugin::writeTextureConfig( TextureConfiguration const & configuration
-		, castor::String const & tabs
-		, castor::StringStream & file )const
-	{
-		auto it = checkFlags( configuration.components, getTextureFlags() );
-
-		if ( it == configuration.components.end() )
-		{
-			return true;
-		}
-
-		return castor::TextWriter< NormalMapComponent >{ tabs, configuration }( file, it->componentsMask );
-	}
-
 	bool NormalMapComponent::Plugin::isComponentNeeded( TextureCombine const & textures
 		, ComponentModeFlags const & filter )const
 	{
@@ -254,13 +240,21 @@ namespace castor3d
 			|| checkFlag( filter, ComponentModeFlag::eDiffuseLighting )
 			|| checkFlag( filter, ComponentModeFlag::eSpecularLighting )
 			|| checkFlag( filter, ComponentModeFlag::eOcclusion )
-			|| textures.flags.end() != checkFlags( textures, getTextureFlags() );
+			|| hasAny( textures, getTextureFlags() );
 	}
 
 	void NormalMapComponent::Plugin::createMapComponent( Pass & pass
 		, std::vector< PassComponentUPtr > & result )const
 	{
 		result.push_back( std::make_unique< NormalMapComponent >( pass ) );
+	}
+
+	bool NormalMapComponent::Plugin::doWriteTextureConfig( TextureConfiguration const & configuration
+		, uint32_t mask
+		, castor::String const & tabs
+		, castor::StringStream & file )const
+	{
+		return castor::TextWriter< NormalMapComponent >{ tabs, configuration }( file, mask );
 	}
 
 	//*********************************************************************************************
@@ -270,23 +264,23 @@ namespace castor3d
 	NormalMapComponent::NormalMapComponent( Pass & pass )
 		: PassMapComponent{ pass, TypeName }
 	{
-			if ( !pass.hasComponent< NormalComponent >() )
-			{
-				pass.createComponent< NormalComponent >();
-			}
-	}
-
-	void NormalMapComponent::fillConfig( TextureConfiguration & configuration
-		, PassVisitorBase & vis )const
-	{
-		vis.visit( cuT( "Normal" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 3u );
-		vis.visit( cuT( "Normal factor" ), configuration.normalFactor );
-		vis.visit( cuT( "Normal DirectX" ), configuration.normalGMultiplier );
+		if ( !pass.hasComponent< NormalComponent >() )
+		{
+			pass.createComponent< NormalComponent >();
+		}
 	}
 
 	PassComponentUPtr NormalMapComponent::doClone( Pass & pass )const
 	{
 		return std::make_unique< NormalMapComponent >( pass );
+	}
+
+	void NormalMapComponent::doFillConfig( TextureConfiguration & configuration
+		, PassVisitorBase & vis )const
+	{
+		vis.visit( cuT( "Normal" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 3u );
+		vis.visit( cuT( "Normal factor" ), configuration.normalFactor );
+		vis.visit( cuT( "Normal DirectX" ), configuration.normalGMultiplier );
 	}
 
 	//*********************************************************************************************

@@ -106,18 +106,12 @@ namespace castor3d
 		, sdw::Vec4 const & sampled
 		, shader::BlendComponents & components )const
 	{
-		if ( !components.hasMember( "opacity" ) )
-		{
-			return;
-		}
-
-		auto & writer{ *sampled.getWriter() };
-
-		IF( writer, imgCompConfig.x() == sdw::UInt{ getTextureFlags() } )
-		{
-			components.getMember< sdw::Float >( "opacity" ) *= config.getFloat( sampled, imgCompConfig.z() );
-		}
-		FI;
+		applyFloatComponent( "opacity"
+			, getTextureFlags()
+			, config
+			, imgCompConfig
+			, sampled
+			, components );
 	}
 
 	//*********************************************************************************************
@@ -151,31 +145,25 @@ namespace castor3d
 			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
 	}
 
-	bool OpacityMapComponent::Plugin::writeTextureConfig( TextureConfiguration const & configuration
-		, castor::String const & tabs
-		, castor::StringStream & file )const
-	{
-		auto it = checkFlags( configuration.components, getTextureFlags() );
-
-		if ( it == configuration.components.end() )
-		{
-			return true;
-		}
-
-		return castor::TextWriter< OpacityMapComponent >{ tabs, it->componentsMask }( file );
-	}
-
 	bool OpacityMapComponent::Plugin::isComponentNeeded( TextureCombine const & textures
 		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eOpacity )
-			|| textures.flags.end() != checkFlags( textures, getTextureFlags() );
+			|| hasAny( textures, getTextureFlags() );
 	}
 
 	void OpacityMapComponent::Plugin::createMapComponent( Pass & pass
 		, std::vector< PassComponentUPtr > & result )const
 	{
 		result.push_back( std::make_unique< OpacityMapComponent >( pass ) );
+	}
+
+	bool OpacityMapComponent::Plugin::doWriteTextureConfig( TextureConfiguration const & configuration
+		, uint32_t mask
+		, castor::String const & tabs
+		, castor::StringStream & file )const
+	{
+		return castor::TextWriter< OpacityMapComponent >{ tabs, mask }( file );
 	}
 
 	//*********************************************************************************************
@@ -191,15 +179,15 @@ namespace castor3d
 		}
 	}
 
-	void OpacityMapComponent::fillConfig( TextureConfiguration & configuration
-		, PassVisitorBase & vis )const
-	{
-		vis.visit( cuT( "Opacity" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 1u );
-	}
-
 	PassComponentUPtr OpacityMapComponent::doClone( Pass & pass )const
 	{
 		return std::make_unique< OpacityMapComponent >( pass );
+	}
+
+	void OpacityMapComponent::doFillConfig( TextureConfiguration & configuration
+		, PassVisitorBase & vis )const
+	{
+		vis.visit( cuT( "Opacity" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 1u );
 	}
 
 	//*********************************************************************************************

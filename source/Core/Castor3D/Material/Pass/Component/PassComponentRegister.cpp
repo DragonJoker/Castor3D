@@ -127,9 +127,9 @@ namespace castor3d
 		// Pass shader buffer components
 		registerComponent< HeightComponent >();
 		registerComponent< OpacityComponent >();
+		registerComponent< ColourComponent >();
 		registerComponent< EmissiveComponent >();
 		registerComponent< TransmissionComponent >();
-		registerComponent< ColourComponent >();
 		registerComponent< SpecularComponent >();
 		registerComponent< MetalnessComponent >();
 		registerComponent< RoughnessComponent >();
@@ -139,16 +139,16 @@ namespace castor3d
 		registerComponent< SubsurfaceScatteringComponent >();
 		// Pass shader image components
 		registerComponent< HeightMapComponent >();
-		registerComponent< OpacityMapComponent >();
 		registerComponent< NormalMapComponent >();
+		registerComponent< OpacityMapComponent >();
+		registerComponent< ColourMapComponent >();
 		registerComponent< EmissiveMapComponent >();
 		registerComponent< OcclusionMapComponent >();
-		registerComponent< TransmittanceMapComponent >();
-		registerComponent< ColourMapComponent >();
 		registerComponent< SpecularMapComponent >();
 		registerComponent< MetalnessMapComponent >();
 		registerComponent< GlossinessMapComponent >();
 		registerComponent< RoughnessMapComponent >();
+		registerComponent< TransmittanceMapComponent >();
 
 		m_pauseOrder = false;
 		reorderBuffer();
@@ -324,7 +324,7 @@ namespace castor3d
 
 				if ( component.plugin->isMapComponent() )
 				{
-					if ( texConfig.flag == component.plugin->getTextureFlags() )
+					if ( hasIntersect( texConfig.flag, component.plugin->getTextureFlags() ) )
 					{
 						needed.emplace( idit.first, &idit.second );
 					}
@@ -483,7 +483,7 @@ namespace castor3d
 			, [&flags]( ComponentIds::value_type const & lookup )
 			{
 				return lookup.second.plugin->isMapComponent()
-					&& lookup.second.plugin->getTextureFlags() == flags;
+					&& hasIntersect( flags, lookup.second.plugin->getTextureFlags() );
 			} );
 
 		if ( it != m_ids.end() )
@@ -500,7 +500,7 @@ namespace castor3d
 			, [&flag, flags]( ComponentIds::value_type const & lookup )
 			{
 				return lookup.second.plugin->isMapComponent()
-					&& lookup.second.plugin->getTextureFlags() == flag
+					&& hasIntersect( flag, lookup.second.plugin->getTextureFlags() )
 					&& lookup.second.plugin->hasTexcoordModif( flags );
 			} );
 	}

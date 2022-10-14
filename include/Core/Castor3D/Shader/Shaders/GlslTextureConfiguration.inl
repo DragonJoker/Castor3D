@@ -10,7 +10,7 @@ namespace castor3d
 {
 	namespace shader
 	{
-		namespace texconf
+		namespace shdtex
 		{
 			static TextureCombine getTextureCombine( PipelineFlags const & flags )
 			{
@@ -114,7 +114,7 @@ namespace castor3d
 						, InOutBlendComponents{ m_writer, "components", pcomponents } );
 				}
 
-				for ( uint32_t index = 0u; index < texconf::getTextureCombine( flags ).configCount; ++index )
+				for ( uint32_t index = 0u; index < shdtex::getTextureCombine( flags ).configCount; ++index )
 				{
 					this->m_applyTexture( pmaterial.getTexture( index ), pcomponents );
 				}

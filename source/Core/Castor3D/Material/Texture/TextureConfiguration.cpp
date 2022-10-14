@@ -57,26 +57,6 @@ namespace castor3d
 					: lhs );
 			}
 		}
-
-		void addFlags( TextureFlagsArray & lhs
-			, PassComponentTextureFlag rhs )
-		{
-			auto it = checkFlags( lhs, rhs );
-
-			if ( it == lhs.end() )
-			{
-				lhs.push_back( rhs );
-			}
-		}
-
-		void addFlags( TextureFlagsArray & lhs
-			, TextureFlagsArray const & rhs )
-		{
-			for ( auto flag : rhs )
-			{
-				addFlags( lhs, flag );
-			}
-		}
 	}
 
 	//*********************************************************************************************
@@ -135,15 +115,15 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	TextureFlagsArray getFlags( TextureConfiguration const & config )
+	TextureFlagsSet getFlags( TextureConfiguration const & config )
 	{
-		TextureFlagsArray result;
+		TextureFlagsSet result;
 
 		for ( auto & conf : config.components )
 		{
 			if ( conf.componentsMask )
 			{
-				texconf::addFlags( result, conf.flag );
+				result.insert( conf.flag );
 			}
 		}
 
@@ -196,22 +176,33 @@ namespace castor3d
 		texconf::updateStartIndex( format, config.components[3] );
 	}
 
-	TextureFlagConfigurations::const_iterator checkFlags( TextureFlagConfigurations const & lhs
+	TextureFlagConfigurations::const_iterator checkFlag( TextureFlagConfigurations const & lhs
 		, PassComponentTextureFlag rhs )
 	{
-		auto [rhsPassIndex, rhsTextureFlag] = splitTextureFlag( rhs );
+		CU_Require( splitTextureFlag( rhs ).second.size() == 1u );
 		auto it = std::find_if( lhs.begin()
 			, lhs.end()
-			, [rhsPassIndex, rhsTextureFlag]( TextureFlagConfiguration const & lookup )
+			, [rhs]( TextureFlagConfiguration const & lookup )
 			{
-				auto [lhsPassIndex, lhsTextureFlag] = splitTextureFlag( lookup.flag );
-				return lhsPassIndex == rhsPassIndex
-					&& castor::hasAny( lhsTextureFlag, rhsTextureFlag );
+				return lookup.flag == rhs;
 			} );
 		return it;
 	}
 
-	TextureFlagConfigurations::iterator checkFlags( TextureFlagConfigurations & lhs
+	TextureFlagConfigurations::iterator checkFlag( TextureFlagConfigurations & lhs
+		, PassComponentTextureFlag rhs )
+	{
+		CU_Require( splitTextureFlag( rhs ).second.size() == 1u );
+		auto it = std::find_if( lhs.begin()
+			, lhs.end()
+			, [rhs]( TextureFlagConfiguration const & lookup )
+			{
+				return lookup.flag == rhs;
+			} );
+		return it;
+	}
+
+	bool hasAny( TextureFlagConfigurations const & lhs
 		, PassComponentTextureFlag rhs )
 	{
 		auto [rhsPassIndex, rhsTextureFlag] = splitTextureFlag( rhs );
@@ -223,13 +214,13 @@ namespace castor3d
 				return lhsPassIndex == rhsPassIndex
 					&& castor::hasAny( lhsTextureFlag, rhsTextureFlag );
 			} );
-		return it;
+		return it != lhs.end();
 	}
 
 	void addFlagConfiguration( TextureConfiguration & config
 		, TextureFlagConfiguration flagConfiguration )
 	{
-		auto it = checkFlags( config.components, flagConfiguration.flag );
+		auto it = checkFlag( config.components, flagConfiguration.flag );
 
 		if ( it == config.components.end() )
 		{
@@ -247,9 +238,9 @@ namespace castor3d
 	TextureFlagConfiguration & getFlagConfiguration( TextureConfiguration & configuration
 		, PassComponentTextureFlag textureFlag )
 	{
-		auto it = checkFlags( configuration.components, textureFlag );
+		auto it = checkFlag( configuration.components, textureFlag );
 
-		if ( it != configuration.components.end() )
+		if ( it == configuration.components.end() )
 		{
 			CU_Exception( "Component texture flag was not found in the texture configuration" );
 		}
@@ -260,7 +251,7 @@ namespace castor3d
 	uint32_t getComponentsMask( TextureConfiguration const & configuration
 		, PassComponentTextureFlag textureFlag )
 	{
-		auto it = checkFlags( configuration.components, textureFlag );
+		auto it = checkFlag( configuration.components, textureFlag );
 		return it != configuration.components.end()
 			? it->componentsMask
 			: 0u;

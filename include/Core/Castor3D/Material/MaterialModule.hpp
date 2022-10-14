@@ -52,7 +52,7 @@ namespace castor3d
 			, TextureFlags( uint32_t( flag ) & 0x000000FFu ) };
 	}
 
-	using TextureFlagsArray = std::vector< PassComponentTextureFlag >;
+	using TextureFlagsSet = std::set< PassComponentTextureFlag >;
 	/**
 	*\~english
 	*\brief
@@ -142,7 +142,7 @@ namespace castor3d
 	struct TextureCombine
 	{
 		uint32_t configCount{};
-		std::set< PassComponentTextureFlag > flags{};
+		TextureFlagsSet flags{};
 	};
 
 	C3D_API bool operator==( TextureCombine const & lhs, TextureCombine const & rhs );

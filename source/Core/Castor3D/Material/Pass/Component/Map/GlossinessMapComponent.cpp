@@ -181,32 +181,26 @@ namespace castor3d
 			, "The specular shininess exponent (or glossiness) remapping channels mask for the texture" );
 	}
 
-	bool GlossinessMapComponent::Plugin::writeTextureConfig( TextureConfiguration const & configuration
-		, castor::String const & tabs
-		, castor::StringStream & file )const
-	{
-		auto it = checkFlags( configuration.components, getTextureFlags() );
-
-		if ( it == configuration.components.end() )
-		{
-			return true;
-		}
-
-		return castor::TextWriter< GlossinessMapComponent >{ tabs, it->componentsMask }( file );
-	}
-
 	bool GlossinessMapComponent::Plugin::isComponentNeeded( TextureCombine const & textures
 		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eDiffuseLighting )
 			|| checkFlag( filter, ComponentModeFlag::eSpecularLighting )
-			|| checkFlags( textures, getTextureFlags() ) != textures.flags.end();
+			|| hasAny( textures, getTextureFlags() );
 	}
 
 	void GlossinessMapComponent::Plugin::createMapComponent( Pass & pass
 		, std::vector< PassComponentUPtr > & result )const
 	{
 		result.push_back( std::make_unique< GlossinessMapComponent >( pass ) );
+	}
+
+	bool GlossinessMapComponent::Plugin::doWriteTextureConfig( TextureConfiguration const & configuration
+		, uint32_t mask
+		, castor::String const & tabs
+		, castor::StringStream & file )const
+	{
+		return castor::TextWriter< GlossinessMapComponent >{ tabs, mask }( file );
 	}
 
 	//*********************************************************************************************
@@ -227,15 +221,15 @@ namespace castor3d
 		}
 	}
 
-	void GlossinessMapComponent::fillConfig( TextureConfiguration & configuration
-		, PassVisitorBase & vis )const
-	{
-		vis.visit( cuT( "Glossiness" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 1u );
-	}
-
 	PassComponentUPtr GlossinessMapComponent::doClone( Pass & pass )const
 	{
 		return std::make_unique< GlossinessMapComponent >( pass );
+	}
+
+	void GlossinessMapComponent::doFillConfig( TextureConfiguration & configuration
+		, PassVisitorBase & vis )const
+	{
+		vis.visit( cuT( "Glossiness" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 1u );
 	}
 
 	//*********************************************************************************************
