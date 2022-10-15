@@ -64,7 +64,7 @@ namespace toon
 		struct ComponentsShader
 			: castor3d::shader::PassComponentsShader
 		{
-			ComponentsShader( castor3d::PassComponentPlugin const & plugin )
+			explicit ComponentsShader( castor3d::PassComponentPlugin const & plugin )
 				: PassComponentsShader{ plugin }
 			{
 			}

@@ -519,15 +519,6 @@ namespace castor3d
 	{
 		auto & engine = *getOwner()->getEngine();
 		auto & textureCache = engine.getTextureUnitCache();
-
-		auto lhsAnimIt = m_animations.find( lhsIt.first );
-		auto rhsAnimIt = m_animations.find( rhsIt.first );
-		auto lhsAnim = ( lhsAnimIt != m_animations.end()
-			? std::move( lhsAnimIt->second )
-			: nullptr );
-		auto rhsAnim = ( rhsAnimIt != m_animations.end()
-			? std::move( rhsAnimIt->second )
-			: nullptr );
 		auto & imgCache = engine.getImageCache();
 
 		if ( ( lhsIt.first.isFileImage() || lhsIt.first.isBufferImage() )

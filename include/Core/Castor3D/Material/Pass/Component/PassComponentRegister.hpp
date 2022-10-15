@@ -188,6 +188,16 @@ namespace castor3d
 			return registerComponent( ComponentT::TypeName
 				, createPlugin() );
 		}
+
+		auto begin()const
+		{
+			return m_ids.begin();
+		}
+
+		auto end()const
+		{
+			return m_ids.end();
+		}
 		/**@}*/
 
 	private:
