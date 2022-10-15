@@ -3,6 +3,7 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Pass/PassVisitor.hpp"
+#include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
 #include "Castor3D/Material/Pass/Component/Map/NormalMapComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Other/HeightComponent.hpp"
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"

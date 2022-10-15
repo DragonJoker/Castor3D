@@ -12,12 +12,12 @@ namespace castor3d
 	{
 		namespace shdtex
 		{
-			static TextureCombine getTextureCombine( PipelineFlags const & flags )
+			inline TextureCombine getTextureFlags( PipelineFlags const & flags )
 			{
 				return flags.textures;
 			}
 
-			static TextureCombine getTextureCombine( TextureCombine const & flags )
+			inline TextureCombine getTextureFlags( TextureCombine const & flags )
 			{
 				return flags;
 			}
@@ -114,7 +114,9 @@ namespace castor3d
 						, InOutBlendComponents{ m_writer, "components", pcomponents } );
 				}
 
-				for ( uint32_t index = 0u; index < shdtex::getTextureCombine( flags ).configCount; ++index )
+				auto count = shdtex::getTextureFlags( flags ).configCount;
+
+				for ( uint32_t index = 0u; index < count; ++index )
 				{
 					this->m_applyTexture( pmaterial.getTexture( index ), pcomponents );
 				}

@@ -103,12 +103,6 @@ namespace castor3d
 				&& areSpacesCompatible( lhs.second.config.textureSpace, rhs.second.config.textureSpace );
 		}
 
-		static uint32_t & getMask( TextureConfiguration & config
-			, uint32_t offset )
-		{
-			return ( *reinterpret_cast< castor::Point2ui * >( reinterpret_cast< uint8_t * >( &config ) + offset ) )[0];
-		}
-
 		static TextureSourceInfo mergeSourceInfos( TextureSourceInfo const & lhs
 			, TextureSourceInfo const & rhs )
 		{
@@ -1049,6 +1043,7 @@ namespace castor3d
 		if ( m_texturesReduced.exchange( false ) )
 		{
 			prepareTextures();
+			m_texturesID = getOwner()->getOwner()->getTextureUnitCache().registerTextureCombineType( *this );
 			onChanged( *this );
 		}
 
