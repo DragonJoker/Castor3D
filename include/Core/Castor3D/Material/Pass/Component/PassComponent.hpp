@@ -68,7 +68,7 @@ namespace castor3d
 		struct PassComponentsShader
 			: public PassShader
 		{
-			PassComponentsShader( PassComponentPlugin const & plugin )
+			explicit PassComponentsShader( PassComponentPlugin const & plugin )
 				: m_plugin{ plugin }
 			{
 			}

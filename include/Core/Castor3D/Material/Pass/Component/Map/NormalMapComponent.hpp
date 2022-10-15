@@ -19,7 +19,7 @@ namespace castor3d
 		struct ComponentsShader
 			: shader::PassComponentsShader
 		{
-			ComponentsShader( PassComponentPlugin const & plugin )
+			explicit ComponentsShader( PassComponentPlugin const & plugin )
 				: shader::PassComponentsShader{ plugin }
 			{
 			}
