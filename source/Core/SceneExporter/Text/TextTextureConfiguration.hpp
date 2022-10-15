@@ -17,14 +17,12 @@ namespace castor
 	{
 	public:
 		explicit TextWriter( String const & tabs
-			, castor3d::TextureUnit const & parent
-			, bool isPbr );
+			, castor3d::TextureUnit const & parent );
 		bool operator()( castor3d::TextureConfiguration const & object
 			, StringStream & file )override;
 
 	private:
 		castor3d::TextureUnit const & m_parent;
-		bool m_isPbr;
 	};
 }
 

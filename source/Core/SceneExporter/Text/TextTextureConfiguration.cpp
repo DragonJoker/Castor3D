@@ -12,11 +12,9 @@ namespace castor
 	using namespace castor3d;
 
 	TextWriter< TextureConfiguration >::TextWriter( String const & tabs
-		, castor3d::TextureUnit const & parent
-		, bool isPbr )
+		, castor3d::TextureUnit const & parent )
 		: TextWriterT< TextureConfiguration >{ tabs, cuT( "TextureConfiguration" ) }
 		, m_parent{ parent }
-		, m_isPbr{ isPbr }
 	{
 	}
 

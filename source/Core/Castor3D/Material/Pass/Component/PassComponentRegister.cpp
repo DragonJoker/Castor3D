@@ -94,7 +94,7 @@ namespace castor3d
 			}
 		}
 
-		PassComponentIDSet getComponents( Pass const & pass )
+		static PassComponentIDSet getComponents( Pass const & pass )
 		{
 			PassComponentIDSet components;
 

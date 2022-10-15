@@ -17,13 +17,9 @@ namespace castor
 	using namespace castor3d;
 
 	TextWriter< TextureUnit >::TextWriter( String const & tabs
-		, PassTypeID type
-		, bool isPbr
 		, Path const & folder
 		, String subFolder )
 		: TextWriterT< TextureUnit >{ tabs, "TextureUnit" }
-		, m_type{ type }
-		, m_isPbr{ isPbr }
 		, m_folder{ folder }
 		, m_subFolder{ subFolder }
 	{
@@ -138,7 +134,7 @@ namespace castor
 
 					if ( result )
 					{
-						result = writeSub( file, config, unit, m_isPbr );
+						result = writeSub( file, config, unit );
 						checkError( result, "configuration" );
 					}
 

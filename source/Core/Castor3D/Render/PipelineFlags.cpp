@@ -198,7 +198,7 @@ namespace castor3d
 					|| ( ( lhs.lo == rhs.lo )
 						&& ( ( lhs.components < rhs.components )
 							|| ( ( lhs.components == rhs.components )
-								&& ( lhs.textures < lhs.textures ) ) ) ) ) );
+								&& ( lhs.textures < rhs.textures ) ) ) ) ) );
 	}
 
 	//*********************************************************************************************

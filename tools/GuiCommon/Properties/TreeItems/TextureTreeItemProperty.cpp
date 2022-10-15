@@ -18,19 +18,6 @@ namespace GuiCommon
 
 	namespace
 	{
-		uint32_t getComponent( castor3d::TextureFlagConfiguration & configuration )
-		{
-			for ( uint32_t i = 0u; i < 4u; ++i )
-			{
-				if ( ( configuration.componentsMask >> ( i * 8u ) ) & 0x01 )
-				{
-					return i;
-				}
-			}
-
-			return 0u;
-		}
-
 		uint32_t getMask( bool enabled
 			, long component
 			, uint32_t componentsCount )
@@ -84,22 +71,25 @@ namespace GuiCommon
 		public:
 			static std::map< castor3d::PassComponentTextureFlag, TextureTreeItemProperty::PropertyPair > submit( castor3d::Pass & pass
 				, castor3d::TextureConfiguration & config
+				, castor::PixelFormat format
 				, TextureTreeItemProperty * properties
 				, wxPropertyGrid * grid
 				, onMaskChange onChange )
 			{
 				std::map< castor3d::PassComponentTextureFlag, TextureTreeItemProperty::PropertyPair > result;
-				UnitTreeGatherer vis{ properties, grid, onChange, result };
+				UnitTreeGatherer vis{ format, properties, grid, onChange, result };
 				pass.fillConfig( config, vis );
 				return result;
 			}
 
 		private:
-			UnitTreeGatherer( TextureTreeItemProperty * properties
+			UnitTreeGatherer( castor::PixelFormat format
+				, TextureTreeItemProperty * properties
 				, wxPropertyGrid * grid
 				, onMaskChange onChange
 				, std::map< castor3d::PassComponentTextureFlag, TextureTreeItemProperty::PropertyPair > & result )
 				: castor3d::PassVisitor{ {} }
+				, m_format{ format }
 				, m_properties{ properties }
 				, m_grid{ grid }
 				, m_onChange{ onChange }
@@ -267,10 +257,10 @@ namespace GuiCommon
 				, uint32_t componentsCount )
 			{
 				auto onChange = m_onChange;
+				static wxString PROPERTY_COMPONENT_A = wxT( "A" );
 				static wxString PROPERTY_COMPONENT_R = wxT( "R" );
 				static wxString PROPERTY_COMPONENT_G = wxT( "G" );
 				static wxString PROPERTY_COMPONENT_B = wxT( "B" );
-				static wxString PROPERTY_COMPONENT_A = wxT( "A" );
 				static wxString PROPERTY_COMPONENT_RGB = wxT( "RGB" );
 				static wxString PROPERTY_COMPONENT_GBA = wxT( "GBA" );
 
@@ -289,17 +279,64 @@ namespace GuiCommon
 
 				if ( componentsCount == 1u )
 				{
-					choices.Add( PROPERTY_COMPONENT_R );
-					choices.Add( PROPERTY_COMPONENT_G );
-					choices.Add( PROPERTY_COMPONENT_B );
-					choices.Add( PROPERTY_COMPONENT_A );
-					selected = choices[getComponent( configuration )];
+					if ( isABGRFormat( m_format ) )
+					{
+						choices.Add( PROPERTY_COMPONENT_A );
+						choices.Add( PROPERTY_COMPONENT_B );
+						choices.Add( PROPERTY_COMPONENT_G );
+						choices.Add( PROPERTY_COMPONENT_R );
+					}
+					else if ( isBGRAFormat( m_format ) )
+					{
+						choices.Add( PROPERTY_COMPONENT_B );
+						choices.Add( PROPERTY_COMPONENT_G );
+						choices.Add( PROPERTY_COMPONENT_R );
+						choices.Add( PROPERTY_COMPONENT_A );
+					}
+					else if ( isRGBAFormat( m_format ) )
+					{
+						choices.Add( PROPERTY_COMPONENT_R );
+						choices.Add( PROPERTY_COMPONENT_G );
+						choices.Add( PROPERTY_COMPONENT_B );
+						choices.Add( PROPERTY_COMPONENT_A );
+					}
+					else if ( isARGBFormat( m_format ) )
+					{
+						choices.Add( PROPERTY_COMPONENT_A );
+						choices.Add( PROPERTY_COMPONENT_R );
+						choices.Add( PROPERTY_COMPONENT_G );
+						choices.Add( PROPERTY_COMPONENT_B );
+					}
+					else if ( isBGRFormat( m_format ) )
+					{
+						choices.Add( PROPERTY_COMPONENT_B );
+						choices.Add( PROPERTY_COMPONENT_G );
+						choices.Add( PROPERTY_COMPONENT_R );
+					}
+					else
+					{
+						choices.Add( PROPERTY_COMPONENT_R );
+						choices.Add( PROPERTY_COMPONENT_G );
+						choices.Add( PROPERTY_COMPONENT_B );
+					}
+
+					selected = choices[configuration.startIndex];
 				}
 				else
 				{
-					choices.Add( PROPERTY_COMPONENT_RGB );
-					choices.Add( PROPERTY_COMPONENT_GBA );
-					selected = choices[getComponent( configuration )];
+					if ( isABGRFormat( m_format )
+						|| isBGRAFormat( m_format )
+						|| isARGBFormat( m_format )
+						|| isRGBAFormat( m_format ) )
+					{
+						choices.Add( PROPERTY_COMPONENT_RGB );
+						choices.Add( PROPERTY_COMPONENT_GBA );
+					}
+					else
+					{
+						choices.Add( PROPERTY_COMPONENT_RGB );
+					}
+					selected = choices[configuration.startIndex];
 				}
 
 				auto compProp = m_properties->addProperty( m_grid
@@ -315,6 +352,7 @@ namespace GuiCommon
 			}
 
 		private:
+			castor::PixelFormat m_format;
 			TextureTreeItemProperty * m_properties;
 			wxPropertyGrid * m_grid;
 			onMaskChange m_onChange;
@@ -360,6 +398,7 @@ namespace GuiCommon
 			addPropertyT( grid, PROPERTY_TEXTURE_TEXCOORDSET, unit->getTexcoordSet(), unit.get(), &castor3d::TextureUnit::setTexcoordSet );
 			m_properties = UnitTreeGatherer::submit( m_pass
 				, m_configuration
+				, castor::PixelFormat( unit->getSourceInfo().createInfo()->format )
 				, this
 				, grid
 				, [this]( wxVariant const & var

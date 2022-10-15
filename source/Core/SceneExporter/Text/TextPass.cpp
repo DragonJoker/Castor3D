@@ -36,8 +36,6 @@ namespace castor
 					result = result
 						&& writeSub( file
 							, *unit
-							, pass.getTypeID()
-							, pass.hasIBL()
 							, m_folder
 							, m_subfolder );
 				}
