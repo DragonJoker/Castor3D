@@ -77,7 +77,7 @@ namespace castor3d
 										{
 											passShaders.computeTexcoord( flags
 												, config
-												, config.component( comp )
+												, component
 												, maps[id - 1_u]
 												, texCoords
 												, texCoord
@@ -89,7 +89,7 @@ namespace castor3d
 								}
 
 								auto sampled = writer.declLocale( "c3d_sampled"
-									, passShaders.getUtils().sampleMap( maps[id - 1_u], texCoords ) );
+									, passShaders.sampleMap( flags, maps[id - 1_u], texCoords ) );
 
 								FOR( m_writer, sdw::UInt, comp, 0u, comp < config.componentCount(), ++comp )
 								{

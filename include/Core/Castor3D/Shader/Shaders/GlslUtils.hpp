@@ -55,15 +55,6 @@ namespace castor3d::shader
 			, sdw::Vec3 const texCoords );
 		C3D_API sdw::Vec4 sampleMap( sdw::CombinedImage2DRgba32 const map
 			, DerivTex const texCoords );
-		C3D_API sdw::Vec4 sampleMap( PipelineFlags const & flags
-			, sdw::CombinedImage2DRgba32 const map
-			, sdw::Vec2 const texCoords );
-		C3D_API sdw::Vec4 sampleMap( PipelineFlags const & flags
-			, sdw::CombinedImage2DRgba32 const map
-			, sdw::Vec3 const texCoords );
-		C3D_API sdw::Vec4 sampleMap( PipelineFlags const & flags
-			, sdw::CombinedImage2DRgba32 const map
-			, DerivTex const texCoords );
 		C3D_API sdw::RetVec2 transformUV( TextureConfigData const & config
 			, TextureAnimData const & anim
 			, sdw::Vec2 const uv );
@@ -141,16 +132,6 @@ namespace castor3d::shader
 			, sdw::Vec3 const & bitangent );
 
 	private:
-		sdw::RetVec4 sampleUntiled( sdw::CombinedImage2DRgba32 const & map
-			, sdw::Vec2 const & texCoords
-			, sdw::Vec2 const & ddx
-			, sdw::Vec2 const & ddy );
-		sdw::RetVec4 sampleUntiled( sdw::CombinedImage2DRgba32 const & map
-			, sdw::Vec2 const & texCoords );
-		sdw::RetVec4 sampleUntiled( sdw::CombinedImage2DRgba32 const & map
-			, DerivTex const & texCoords );
-
-	private:
 		sdw::ShaderWriter & m_writer;
 		sdw::Function< sdw::Void
 			, sdw::InOutFloat
@@ -212,13 +193,6 @@ namespace castor3d::shader
 			, sdw::InUVec3 > m_unflatten3D;
 		sdw::Function< sdw::Vec4
 			, sdw::InVec4 > m_clipToScreen;
-		sdw::Function< sdw::Vec4
-			, sdw::InVec2 > m_hash4;
-		sdw::Function< sdw::Vec4
-			, sdw::InCombinedImage2DRgba32
-			, sdw::InVec2
-			, sdw::InVec2
-			, sdw::InVec2 > m_sampleUntiled;
 		sdw::Function< sdw::Vec2
 			, InTextureConfigData
 			, InTextureAnimData

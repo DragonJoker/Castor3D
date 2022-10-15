@@ -206,6 +206,52 @@ namespace castor3d::shader
 		return m_compRegister.getTexcoordModifs( combine );
 	}
 
+	sdw::Vec4 PassShaders::sampleMap( PipelineFlags const & flags
+		, sdw::CombinedImage2DRgba32 const map
+		, sdw::Vec3 const texCoords )const
+	{
+		auto it = std::find_if( m_shaders.begin()
+			, m_shaders.end()
+			, [&flags]( PassComponentsShaderPtr const & shader )
+			{
+				return shader->isMapSampling( flags );
+			} );
+
+		return it != m_shaders.end()
+			? ( *it )->sampleMap( map, texCoords )
+			: m_utils.sampleMap( map, texCoords );
+	}
+
+	sdw::Vec4 PassShaders::sampleMap( PipelineFlags const & flags
+		, sdw::CombinedImage2DRgba32 const map
+		, DerivTex const texCoords )const
+	{
+		auto it = std::find_if( m_shaders.begin()
+			, m_shaders.end()
+			, [&flags]( PassComponentsShaderPtr const & shader )
+			{
+				return shader->isMapSampling( flags );
+			} );
+
+		return it != m_shaders.end()
+			? ( *it )->sampleMap( map, texCoords )
+			: m_utils.sampleMap( map, texCoords );
+	}
+
+	sdw::Vec4 PassShaders::sampleMap( TextureCombine const & flags
+		, sdw::CombinedImage2DRgba32 const map
+		, sdw::Vec3 const texCoords )const
+	{
+		return m_utils.sampleMap( map, texCoords );
+	}
+
+	sdw::Vec4 PassShaders::sampleMap( TextureCombine const & flags
+		, sdw::CombinedImage2DRgba32 const map
+		, DerivTex const texCoords )const
+	{
+		return m_utils.sampleMap( map, texCoords );
+	}
+
 	void PassShaders::computeTexcoord( PipelineFlags const & flags
 		, TextureConfigData const & config
 		, sdw::U32Vec3 const & imgCompConfig

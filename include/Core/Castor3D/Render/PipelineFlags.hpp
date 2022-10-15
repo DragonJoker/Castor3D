@@ -339,11 +339,6 @@ namespace castor3d
 		//@}
 		/**@name PassFlags */
 		//@{
-		bool hasUntile()const
-		{
-			return checkFlag( m_passFlags, PassFlag::eUntile );
-		}
-
 		bool hasOpacity()const
 		{
 			return ( checkFlag( m_passFlags, PassFlag::eAlphaBlending )

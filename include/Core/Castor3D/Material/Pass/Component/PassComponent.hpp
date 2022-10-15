@@ -311,6 +311,56 @@ namespace castor3d
 			{
 			}
 			/**
+			*\~english
+			*	Lets the component sample the map.
+			*\param[in] map
+			*	The texture.
+			*\param[in] texCoords
+			*	The texture coordinates.
+			*\~french
+			*	Laisse le composant échantillonner la texture.
+			*\param[in] map
+			*	La texture.
+			*\param[in] texCoords
+			*	Les coordonnées de texture.
+			*/
+			C3D_API virtual sdw::Vec4 sampleMap( sdw::CombinedImage2DRgba32 const & map
+				, sdw::Vec3 const & texCoords )const
+			{
+				return map.sample( texCoords.xy() );
+			}
+			/**
+			*\~english
+			*	Lets the component sample the map.
+			*\param[in] map
+			*	The texture.
+			*\param[in] texCoords
+			*	The texture coordinates.
+			*\~french
+			*	Laisse le composant échantillonner la texture.
+			*\param[in] map
+			*	La texture.
+			*\param[in] texCoords
+			*	Les coordonnées de texture.
+			*/
+			C3D_API virtual sdw::Vec4 sampleMap( sdw::CombinedImage2DRgba32 const & map
+				, shader::DerivTex const & texCoords )const
+			{
+				return map.grad( texCoords.uv(), texCoords.dPdx(), texCoords.dPdy() );
+			}
+			/**
+			*\~english
+			*\return
+			*	\p true if the component map sampling is usable with given  \p flags.
+			*\~french
+			*\return
+			*	\p true si l'échantillonnage de texture du composant est utilisable par rapport à \p flags.
+			*/
+			C3D_API virtual bool isMapSampling( PipelineFlags const & flags )const
+			{
+				return false;
+			}
+			/**
 			*\name
 			*	Getters.
 			*/
@@ -582,6 +632,18 @@ namespace castor3d
 		*	\p true si le composant traite des données de texture.
 		*/
 		C3D_API virtual bool isMapComponent()const
+		{
+			return false;
+		}
+		/**
+		*\~english
+		*\return
+		*	\p true if the component replaces regular map sampling.
+		*\~french
+		*\return
+		*	\p true si le composant remplace l'échantillonnage de texture traditionnel.
+		*/
+		C3D_API virtual bool replacesMapSampling()const
 		{
 			return false;
 		}
