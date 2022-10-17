@@ -261,10 +261,10 @@ namespace castor3d
 				if ( castor::convertToNormalMap( 3.0f, *image ) )
 				{
 					castor3d::addFlagConfiguration( config
-						, { getEngine()->getPassComponentsRegister().getNormalFlags()
+						, { getEngine()->getPassComponentsRegister().getNormalMapFlags()
 							, 0x00FFFFFF } );
 					castor3d::addFlagConfiguration( config
-						, { getEngine()->getPassComponentsRegister().getHeightFlags()
+						, { getEngine()->getPassComponentsRegister().getHeightMapFlags()
 							, 0xFF000000 } );
 					path = image->getPath();
 					path = path.getPath() / ( "N_" + path.getFileName() + ".png" );

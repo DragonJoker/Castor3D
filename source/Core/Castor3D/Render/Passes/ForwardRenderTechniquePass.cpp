@@ -79,6 +79,30 @@ namespace castor3d
 		}
 	}
 
+	ComponentModeFlags ForwardRenderTechniquePass::getComponentsMask()const
+	{
+		ComponentModeFlags result{ ( ComponentModeFlag::eColour
+			| ComponentModeFlag::eDiffuseLighting
+			| ComponentModeFlag::eSpecularLighting
+			| ComponentModeFlag::eNormals
+			| ComponentModeFlag::eGeometry
+			| ComponentModeFlag::eOcclusion
+			| ComponentModeFlag::eSpecifics ) };
+
+		if ( !checkFlag( m_filters, RenderFilter::eAlphaTest )
+			|| !checkFlag( m_filters, RenderFilter::eAlphaBlend ) )
+		{
+			result |= ComponentModeFlag::eOpacity;
+
+			if ( !checkFlag( m_filters, RenderFilter::eAlphaBlend ) )
+			{
+				result |= ComponentModeFlag::eAlphaBlending;
+			}
+		}
+
+		return result;
+	}
+
 	ShaderPtr ForwardRenderTechniquePass::doGetPixelShaderSource( PipelineFlags const & flags )const
 	{
 		using namespace sdw;
@@ -89,13 +113,7 @@ namespace castor3d
 		shader::Utils utils{ writer };
 		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
 			, flags
-			, ( ComponentModeFlag::eOpacity
-				| ComponentModeFlag::eColour
-				| ComponentModeFlag::eDiffuseLighting
-				| ComponentModeFlag::eSpecularLighting
-				| ComponentModeFlag::eGeometry
-				| ComponentModeFlag::eOcclusion
-				| ComponentModeFlag::eSpecifics )
+			, getComponentsMask()
 			, utils };
 		shader::CookTorranceBRDF cookTorrance{ writer, utils };
 		auto index = uint32_t( GlobalBuffersIdx::eCount );

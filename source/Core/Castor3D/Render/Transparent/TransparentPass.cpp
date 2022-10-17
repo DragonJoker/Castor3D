@@ -67,9 +67,11 @@ namespace castor3d
 	ComponentModeFlags TransparentPass::getComponentsMask()const
 	{
 		return ComponentModeFlag::eOpacity
+			| ComponentModeFlag::eAlphaBlending
 			| ComponentModeFlag::eColour
 			| ComponentModeFlag::eDiffuseLighting
 			| ComponentModeFlag::eSpecularLighting
+			| ComponentModeFlag::eNormals
 			| ComponentModeFlag::eGeometry
 			| ComponentModeFlag::eOcclusion
 			| ComponentModeFlag::eSpecifics;

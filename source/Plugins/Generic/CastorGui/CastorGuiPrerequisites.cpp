@@ -71,7 +71,7 @@ namespace CastorGui
 			auto & texCache = engine.getTextureUnitCache();
 			auto & compRegister = engine.getPassComponentsRegister();
 			castor3d::TextureConfiguration baseConfig{};
-			compRegister.fillTextureConfiguration( compRegister.getColourFlags(), baseConfig );
+			compRegister.fillTextureConfiguration( compRegister.getColourMapFlags(), baseConfig );
 			auto unit = std::make_shared< castor3d::TextureUnit >( engine
 				, texCache.getSourceData( castor3d::TextureSourceInfo{ nullptr, texture->getCreateInfo() }
 					, castor3d::PassTextureConfig{ { {} }, baseConfig }

@@ -165,10 +165,9 @@ namespace castor3d
 		RenderNodesPass::update( updater );
 	}
 
-	PipelineFlags RenderTechniqueNodesPass::createPipelineFlags( PassComponentIDSet components
+	PipelineFlags RenderTechniqueNodesPass::createPipelineFlags( PassComponentCombine components
 		, BlendMode colourBlendMode
 		, BlendMode alphaBlendMode
-		, PassFlags passFlags
 		, RenderPassTypeID renderPassTypeID
 		, PassTypeID passTypeID
 		, VkCompareOp alphaFunc
@@ -185,7 +184,6 @@ namespace castor3d
 		return RenderNodesPass::createPipelineFlags( std::move( components )
 			, colourBlendMode
 			, alphaBlendMode
-			, passFlags
 			, renderPassTypeID
 			, passTypeID
 			, alphaFunc

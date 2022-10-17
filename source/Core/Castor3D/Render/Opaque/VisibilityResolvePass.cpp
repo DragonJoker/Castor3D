@@ -305,13 +305,7 @@ namespace castor3d
 			shader::PassShaders passShaders{ engine.getPassComponentsRegister()
 				, flags
 				, ( ComponentModeFlag::eDerivTex
-					| ComponentModeFlag::eColour
-					| ComponentModeFlag::eOpacity
-					| ComponentModeFlag::eDiffuseLighting
-					| ComponentModeFlag::eSpecularLighting
-					| ComponentModeFlag::eGeometry
-					| ComponentModeFlag::eOcclusion
-					| ComponentModeFlag::eSpecifics )
+					| VisibilityResolvePass::getComponentsMask() )
 				, utils };
 
 			DeclareSsbo( c3d_inIndices
@@ -1610,10 +1604,9 @@ namespace castor3d
 		}
 	}
 
-	PipelineFlags VisibilityResolvePass::createPipelineFlags( PassComponentIDSet components
+	PipelineFlags VisibilityResolvePass::createPipelineFlags( PassComponentCombine components
 		, BlendMode colourBlendMode
 		, BlendMode alphaBlendMode
-		, PassFlags passFlags
 		, RenderPassTypeID renderPassTypeID
 		, PassTypeID passTypeID
 		, VkCompareOp alphaFunc
@@ -1630,7 +1623,6 @@ namespace castor3d
 		auto result = m_nodesPass.createPipelineFlags( std::move( components )
 			, colourBlendMode
 			, alphaBlendMode
-			, passFlags
 			, renderPassTypeID
 			, passTypeID
 			, alphaFunc
@@ -1647,12 +1639,12 @@ namespace castor3d
 		return result;
 	}
 
-	bool VisibilityResolvePass::areValidPassFlags( PassFlags const & passFlags )const
+	bool VisibilityResolvePass::areValidPassFlags( PassComponentCombine const & passFlags )const
 	{
 		return m_nodesPass.areValidPassFlags( passFlags );
 	}
 
-	C3D_API ShaderFlags VisibilityResolvePass::getShaderFlags()const
+	ShaderFlags VisibilityResolvePass::getShaderFlags()const
 	{
 		return ShaderFlag::eNormal
 			| ShaderFlag::eTangentSpace
@@ -1661,6 +1653,17 @@ namespace castor3d
 			| ShaderFlag::eVelocity
 			| ShaderFlag::eOpacity
 			| ShaderFlag::eColour;
+	}
+
+	ComponentModeFlags VisibilityResolvePass::getComponentsMask()
+	{
+		return ( ComponentModeFlag::eColour
+			| ComponentModeFlag::eOpacity
+			| ComponentModeFlag::eDiffuseLighting
+			| ComponentModeFlag::eSpecularLighting
+			| ComponentModeFlag::eNormals
+			| ComponentModeFlag::eGeometry
+			| ComponentModeFlag::eOcclusion );
 	}
 
 	void VisibilityResolvePass::doInitialise()

@@ -7,6 +7,7 @@
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
+#include "Castor3D/Render/Opaque/VisibilityResolvePass.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
@@ -71,16 +72,10 @@ namespace castor3d
 
 	ComponentModeFlags VisibilityPass::getComponentsMask()const
 	{
-		// Normally, ( ComponentModeFlag::eOpacity | ComponentModeFlag::eHeight ) would be enough,
+		// Normally, ( ComponentModeFlag::eOpacity | ComponentModeFlag::eHeight | ComponentModeFlag::eNormals ) would be enough,
 		// but to have the pipeline ID order synchronization with visibility resolve,
 		// allow the same flags.
-		return ComponentModeFlag::eColour
-			| ComponentModeFlag::eOpacity
-			| ComponentModeFlag::eDiffuseLighting
-			| ComponentModeFlag::eSpecularLighting
-			| ComponentModeFlag::eGeometry
-			| ComponentModeFlag::eOcclusion
-			| ComponentModeFlag::eSpecifics;
+		return VisibilityResolvePass::getComponentsMask();
 	}
 
 	ShaderFlags VisibilityPass::getShaderFlags()const
@@ -90,11 +85,6 @@ namespace castor3d
 			| ShaderFlag::eOpacity
 			| ShaderFlag::eVelocity
 			| ShaderFlag::eVisibility;
-	}
-
-	PassFlags VisibilityPass::doAdjustPassFlags( PassFlags flags )const
-	{
-		return flags & PassFlag::eAllVisibility;
 	}
 
 	ProgramFlags VisibilityPass::doAdjustProgramFlags( ProgramFlags flags )const
@@ -142,7 +132,9 @@ namespace castor3d
 		shader::Utils utils{ writer };
 		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
 			, flags
-			, ComponentModeFlag::eOpacity | ComponentModeFlag::eGeometry
+			, ( ComponentModeFlag::eOpacity
+				| ComponentModeFlag::eNormals
+				| ComponentModeFlag::eGeometry )
 			, utils };
 		C3D_Scene( writer
 			, GlobalBuffersIdx::eScene

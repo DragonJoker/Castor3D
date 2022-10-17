@@ -366,6 +366,11 @@ namespace castor3d
 			*/
 			/**@{*/
 			C3D_API PassComponentID getId()const;
+
+			PassComponentPlugin const & getPlugin()const
+			{
+				return m_plugin;
+			}
 			/**@}*/
 
 		protected:
@@ -484,9 +489,9 @@ namespace castor3d
 		/**@{*/
 		PassComponentPlugin( PassComponentPlugin const & ) = delete;
 		PassComponentPlugin & operator=( PassComponentPlugin const & ) = delete;
-		C3D_API PassComponentPlugin( PassComponentPlugin && ) = default;
-		C3D_API PassComponentPlugin & operator=( PassComponentPlugin && ) = default;
+		PassComponentPlugin & operator=( PassComponentPlugin && rhs ) = delete;
 		C3D_API virtual ~PassComponentPlugin() = default;
+		C3D_API PassComponentPlugin( PassComponentPlugin && rhs ) = default;
 		/**
 		*\~english
 		*\param[in] pupdateComponent
@@ -495,8 +500,10 @@ namespace castor3d
 		*\param[in] pupdateComponent
 		*	Fonction pour ajuster les données du composant après que les textures ont été traitées.
 		*/
-		C3D_API explicit PassComponentPlugin( UpdateComponent pupdateComponent = nullptr )
+		C3D_API explicit PassComponentPlugin( PassComponentRegister const & passComponents
+			, UpdateComponent pupdateComponent = nullptr )
 			: updateComponent{ pupdateComponent }
+			, m_passComponents{ passComponents }
 		{
 		}
 		/**@}*/
@@ -600,6 +607,84 @@ namespace castor3d
 		/**@}*/
 		/**
 		*\name
+		*	Pass flags handling.
+		*/
+		/**@{*/
+		/**
+		*\~english
+		*\brief
+		*	Removes from given component flags the ones that are useless given the provided filter.
+		*\~french
+		*\brief
+		*	Enlève des indicateurs de composants donnés ceux qui sont inutiles, par rapport au filtre donné.
+		*/
+		C3D_API virtual void filterComponentFlags( ComponentModeFlags filter
+			, PassComponentCombine & componentsFlags )const
+		{
+		}
+		/**
+		*\~english
+		*\return
+		*	The pass flags for this component.
+		*\~french
+		*\return
+		*	Les indicateurs de passe pour ce composant.
+		*/
+		C3D_API virtual PassComponentFlag getComponentFlags()const
+		{
+			return makePassComponentFlag( getId(), PassFlag::eNone );
+		}
+		/**
+		*\~english
+		*\return
+		*	The flags for alpha blending.
+		*\~french
+		*\return
+		*	Les indicateurs pour l'a texture de couleur'alphablending.
+		*/
+		C3D_API virtual PassComponentFlag getAlphaBlendingFlag()const
+		{
+			return 0u;
+		}
+		/**
+		*\~english
+		*\return
+		*	The flags for alpha test.
+		*\~french
+		*\return
+		*	Les indicateurs pour l'alpha test.
+		*/
+		C3D_API virtual PassComponentFlag getAlphaTestFlag()const
+		{
+			return 0u;
+		}
+		/**
+		*\~english
+		*\return
+		*	The flags for non repeated parallax occlusion mapping.
+		*\~french
+		*\return
+		*	Les indicateurs pour le parallax occlusion mapping non répété.
+		*/
+		C3D_API virtual PassComponentFlag getParallaxOcclusionMappingOneFlag()const
+		{
+			return 0u;
+		}
+		/**
+		*\~english
+		*\return
+		*	The flags for repeated parallax occlusion mapping.
+		*\~french
+		*\return
+		*	Les indicateurs pour le parallax occlusion mapping répété.
+		*/
+		C3D_API virtual PassComponentFlag getParallaxOcclusionMappingRepeatFlag()const
+		{
+			return 0u;
+		}
+		/**@}*/
+		/**
+		*\name
 		*	Textures handling.
 		*/
 		/**@{*/
@@ -655,7 +740,8 @@ namespace castor3d
 		*\return
 		*	\p true si le composant modifie les coordonnées de texture.
 		*/
-		C3D_API virtual bool hasTexcoordModif( PipelineFlags const * flags )const
+		C3D_API virtual bool hasTexcoordModif( PassComponentRegister const & passComponents
+			, PipelineFlags const * flags )const
 		{
 			return false;
 		}
@@ -732,7 +818,7 @@ namespace castor3d
 		*\return
 		*	Les noms concaténés des indicateurs de textures.
 		*/
-		C3D_API virtual castor::String getMapFlagsName( PassComponentTextureFlag const & flags )const
+		C3D_API virtual castor::String getTextureFlagsName( PassComponentTextureFlag const & flags )const
 		{
 			return castor::String{};
 		}
@@ -744,7 +830,7 @@ namespace castor3d
 		*\return
 		*	Les indicateurs pour la texture de couleur.
 		*/
-		C3D_API virtual PassComponentTextureFlag getColourFlags()const
+		C3D_API virtual PassComponentTextureFlag getColourMapFlags()const
 		{
 			return 0u;
 		}
@@ -756,7 +842,7 @@ namespace castor3d
 		*\return
 		*	Les indicateurs pour la texture d'opacité.
 		*/
-		C3D_API virtual PassComponentTextureFlag getOpacityFlags()const
+		C3D_API virtual PassComponentTextureFlag getOpacityMapFlags()const
 		{
 			return 0u;
 		}
@@ -768,7 +854,7 @@ namespace castor3d
 		*\return
 		*	Les indicateurs pour la texture de normales.
 		*/
-		C3D_API virtual PassComponentTextureFlag getNormalFlags()const
+		C3D_API virtual PassComponentTextureFlag getNormalMapFlags()const
 		{
 			return 0u;
 		}
@@ -780,7 +866,7 @@ namespace castor3d
 		*\return
 		*	Les indicateurs pour la texture de hauteur.
 		*/
-		C3D_API virtual PassComponentTextureFlag getHeightFlags()const
+		C3D_API virtual PassComponentTextureFlag getHeightMapFlags()const
 		{
 			return 0u;
 		}
@@ -792,7 +878,7 @@ namespace castor3d
 		*\return
 		*	Les indicateurs pour la texture d'occlusion.
 		*/
-		C3D_API virtual PassComponentTextureFlag getOcclusionFlags()const
+		C3D_API virtual PassComponentTextureFlag getOcclusionMapFlags()const
 		{
 			return 0u;
 		}
@@ -857,6 +943,11 @@ namespace castor3d
 		{
 			return m_id;
 		}
+
+		PassComponentRegister const & getRegister()const
+		{
+			return m_passComponents;
+		}
 		/**@}*/
 
 	private:
@@ -868,6 +959,7 @@ namespace castor3d
 		}
 
 		PassComponentID m_id{};
+		PassComponentRegister const & m_passComponents;
 	};
 
 	struct PassComponent
@@ -1028,9 +1120,9 @@ namespace castor3d
 			dummy = std::move( v );
 		}
 
-		C3D_API virtual PassFlags getPassFlags()const
+		C3D_API virtual PassComponentFlag getPassFlags()const
 		{
-			return PassFlag::eNone;
+			return makePassComponentFlag( getId(), PassFlag::eNone );
 		}
 
 		castor::String const & getType()const

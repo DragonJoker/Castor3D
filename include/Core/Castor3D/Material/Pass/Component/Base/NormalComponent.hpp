@@ -39,10 +39,15 @@ namespace castor3d
 			: public PassComponentPlugin
 		{
 		public:
+			explicit Plugin( PassComponentRegister const & passComponent )
+				: PassComponentPlugin{ passComponent }
+			{
+			}
+
 			bool isComponentNeeded( TextureCombine const & textures
 				, ComponentModeFlags const & filter )const override
 			{
-				return checkFlag( filter, ComponentModeFlag::eGeometry )
+				return checkFlag( filter, ComponentModeFlag::eNormals )
 					|| checkFlag( filter, ComponentModeFlag::eDiffuseLighting )
 					|| checkFlag( filter, ComponentModeFlag::eSpecularLighting )
 					|| checkFlag( filter, ComponentModeFlag::eOcclusion );
@@ -54,9 +59,9 @@ namespace castor3d
 			}
 		};
 
-		C3D_API static PassComponentPluginUPtr createPlugin()
+		static PassComponentPluginUPtr createPlugin( PassComponentRegister const & passComponent )
 		{
-			return castor::makeUniqueDerived< PassComponentPlugin, Plugin >();
+			return castor::makeUniqueDerived< PassComponentPlugin, Plugin >( passComponent );
 		}
 
 		C3D_API explicit NormalComponent( Pass & pass );

@@ -66,6 +66,8 @@ namespace castor3d
 	{
 		eNone,
 		eOpacity,
+		eAlphaBlending,
+		eNormals,
 		eGeometry,
 		eColour,
 		eDiffuseLighting,
@@ -79,6 +81,8 @@ namespace castor3d
 	{
 		eNone = 0x0000u,
 		eOpacity = 0x0001u << uint16_t( ComponentMode::eOpacity ),
+		eAlphaBlending = 0x0001u << uint16_t( ComponentMode::eAlphaBlending ),
+		eNormals = 0x0001u << uint16_t( ComponentMode::eNormals ),
 		eGeometry = 0x0001u << uint16_t( ComponentMode::eGeometry ),
 		eColour = 0x0001u << uint16_t( ComponentMode::eColour ),
 		eDiffuseLighting = 0x0001u << uint16_t( ComponentMode::eDiffuseLighting ),
@@ -169,7 +173,28 @@ namespace castor3d
 
 	struct SubsurfaceScatteringComponent;
 
-	using PassComponentIDSet = std::set< PassComponentID >;
+	struct PassComponentCombine
+	{
+		PassComponentCombineID baseId{};
+		PassComponentFlagsSet flags{};
+	};
+
+	C3D_API bool operator==( PassComponentCombine const & lhs, PassComponentCombine const & rhs );
+
+	C3D_API bool hasAny( PassComponentCombine const & lhs
+		, PassComponentFlag rhs );
+	C3D_API void remFlags( PassComponentCombine & lhs
+		, PassComponentFlag rhs );
+	C3D_API void remFlags( PassComponentCombine & lhs
+		, PassComponentFlagsSet const & rhs );
+	C3D_API void addFlags( PassComponentCombine & lhs
+		, PassComponentFlag rhs );
+	C3D_API void addFlags( PassComponentCombine & lhs
+		, PassComponentFlagsSet const & rhs );
+	C3D_API bool contains( PassComponentCombine const & cont
+		, PassComponentFlag test );
+	C3D_API bool contains( PassComponentCombine const & cont
+		, PassComponentCombine const & test );
 
 	CU_DeclareSmartPtr( PassComponent );
 	CU_DeclareCUSmartPtr( castor3d, PassComponentRegister, C3D_API );
@@ -193,7 +218,7 @@ namespace castor3d
 		, TextureCombine const & combine
 		, shader::BlendComponents & components ) >;
 
-	using CreatePassComponentPlugin = std::function< PassComponentPluginUPtr() >;
+	using CreatePassComponentPlugin = std::function< PassComponentPluginUPtr( PassComponentRegister const & ) >;
 	//@}
 	//@}
 	//@}

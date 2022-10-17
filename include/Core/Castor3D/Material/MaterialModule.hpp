@@ -17,26 +17,25 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Texture channels flags.
+	*	Texture flags.
 	*\~french
 	*\brief
-	*	Indicateurs des canaux de texture.
+	*	Indicateurs de texture.
 	*/
 	enum class TextureFlag
 		: uint8_t
 	{
-		//!\~english	No texture.
-		//!\~french		Pas de texture.
+		//!\~english	No flag.
+		//\~french		Aucun indicateur.
 		eNone = 0x00u,
-		//!\~english	Mask for all the texture channels.
-		//!\~french		Masque pour les canaux de texture.
+		//!\~english	Mask for all the flags.
+		//!\~french		Masque pour les indcateurs.
 		eAll = 0xFFu,
 	};
 	CU_ImplementFlags( TextureFlag )
 
 	using PassComponentID = uint16_t;
 	using TextureCombineID = uint16_t;
-	using PassComponentsTypeID = uint16_t;
 	using PassComponentTextureFlag = uint32_t;
 
 	inline PassComponentTextureFlag makeTextureFlag( PassComponentID componentId
@@ -53,6 +52,43 @@ namespace castor3d
 	}
 
 	using TextureFlagsSet = std::set< PassComponentTextureFlag >;
+	/**
+	*\~english
+	*\brief
+	*	Pass specific flags.
+	*\~french
+	*\brief
+	*	Indicateurs spécifiques à la passe.
+	*/
+	enum class PassFlag
+		: uint16_t
+	{
+		//!\~english	No flag.
+		//\~french		Aucun indicateur.
+		eNone = 0x0000,
+		//!\~english	Mask for all the flags.
+		//!\~french		Masque pour les indicateurs.
+		eAll = 0xFFu,
+	};
+	CU_ImplementFlags( PassFlag )
+
+	using PassComponentCombineID = uint16_t;
+	using PassComponentFlag = uint32_t;
+
+	inline PassComponentFlag makePassComponentFlag( PassComponentID componentId
+		, PassFlags componentTextureFlag )
+	{
+		return PassComponentFlag{ uint32_t( uint32_t( componentId ) << 8u )
+			| uint32_t( componentTextureFlag ) };
+	}
+
+	inline std::pair< PassComponentID, PassFlags > splitPassComponentFlag( PassComponentFlag flag )
+	{
+		return { PassComponentID( uint32_t( flag ) >> 8u )
+			, PassFlags( uint32_t( flag ) & 0x000000FFu ) };
+	}
+
+	using PassComponentFlagsSet = std::set< PassComponentFlag >;
 	/**
 	*\~english
 	*\brief
@@ -146,6 +182,25 @@ namespace castor3d
 	};
 
 	C3D_API bool operator==( TextureCombine const & lhs, TextureCombine const & rhs );
+
+	C3D_API TextureFlagsSet::const_iterator checkFlag( TextureCombine const & lhs
+		, PassComponentTextureFlag rhs );
+	C3D_API bool hasAny( TextureFlagsSet const & lhs
+		, PassComponentTextureFlag rhs );
+	C3D_API bool hasAny( TextureCombine const & lhs
+		, PassComponentTextureFlag rhs );
+	C3D_API bool hasIntersect( PassComponentTextureFlag lhs
+		, PassComponentTextureFlag rhs );
+	C3D_API void remFlags( TextureCombine & lhs
+		, PassComponentTextureFlag rhs );
+	C3D_API void remFlags( TextureCombine & lhs
+		, TextureFlagsSet const & rhs );
+	C3D_API void addFlags( TextureCombine & lhs
+		, PassComponentTextureFlag rhs );
+	C3D_API void addFlags( TextureCombine & lhs
+		, TextureFlagsSet const & rhs );
+	C3D_API bool contains( TextureCombine const & cont
+		, TextureCombine const & test );
 
 	//@}
 }

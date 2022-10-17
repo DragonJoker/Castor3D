@@ -58,10 +58,9 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::createPipelineFlags
 		 */
-		C3D_API PipelineFlags createPipelineFlags( PassComponentIDSet components
+		C3D_API PipelineFlags createPipelineFlags( PassComponentCombine components
 			, BlendMode colourBlendMode
 			, BlendMode alphaBlendMode
-			, PassFlags passFlags
 			, RenderPassTypeID renderPassTypeID
 			, PassTypeID passTypeID
 			, VkCompareOp alphaFunc
@@ -77,11 +76,15 @@ namespace castor3d
 		/**
 		 *\copydoc	RenderNodesPass::areValidPassFlags
 		 */
-		C3D_API bool areValidPassFlags( PassFlags const & passFlags )const override;
+		C3D_API bool areValidPassFlags( PassComponentCombine const & passFlags )const override;
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::getShaderFlags
 		 */
 		C3D_API ShaderFlags getShaderFlags()const override;
+		/**
+		 *\copydoc		castor3d::RenderTechniquePass::getComponentsMask
+		 */
+		C3D_API static ComponentModeFlags getComponentsMask();
 
 		static constexpr bool useCompute{ false };
 

@@ -365,20 +365,11 @@ namespace castor3d
 					, allowSRGB );
 		}
 
-		static TextureCombine getCombine( Pass const & pass )
+		static TextureCombineID addCombine( TextureCombine combine
+			, std::vector< TextureCombine > & result )
 		{
-			TextureCombine combine;
-			combine.configCount = pass.getTextureUnitsCount();
-
-			for ( auto & unit : pass.getTextureUnits() )
-			{
-				for ( auto flag : getFlags( unit->getConfiguration() ) )
-				{
-					combine.flags.emplace( flag );
-				}
-			}
-
-			return combine;
+			result.push_back( std::move( combine ) );
+			return TextureCombineID( result.size() );
 		}
 	}
 
@@ -393,49 +384,59 @@ namespace castor3d
 	{
 	}
 
-	TextureCombineID TextureUnitCache::registerTextureCombineType( Pass const & pass )
+	TextureCombine TextureUnitCache::registerTextureCombine( Pass const & pass )
 	{
-		TextureCombine combine = cachetex::getCombine( pass );
-		auto it = std::find( m_texturesCombineTypes.begin()
-			, m_texturesCombineTypes.end()
-			, combine );
+		TextureCombine result;
+		result.configCount = pass.getTextureUnitsCount();
 
-		if ( it == m_texturesCombineTypes.end() )
+		for ( auto & unit : pass.getTextureUnits() )
 		{
-			m_texturesCombineTypes.push_back( std::move( combine ) );
-			it = std::next( m_texturesCombineTypes.begin(), ptrdiff_t( m_texturesCombineTypes.size() - 1u ) );
+			for ( auto flag : getFlags( unit->getConfiguration() ) )
+			{
+				result.flags.emplace( flag );
+			}
 		}
 
-		return TextureCombineID( std::distance( m_texturesCombineTypes.begin(), it ) + 1 );
+		registerTextureCombine( result );
+		return result;
 	}
 
-	TextureCombineID TextureUnitCache::getTextureCombineType( Pass const & pass )const
+	TextureCombineID TextureUnitCache::registerTextureCombine( TextureCombine combine )
 	{
-		return getTextureCombineType( cachetex::getCombine( pass ) );
-	}
-
-	TextureCombineID TextureUnitCache::getTextureCombineType( TextureCombine const & combine )const
-	{
-		auto it = std::find( m_texturesCombineTypes.begin()
-			, m_texturesCombineTypes.end()
+		auto it = std::find( m_texturesCombines.begin()
+			, m_texturesCombines.end()
 			, combine );
-		CU_Require( it != m_texturesCombineTypes.end() );
-		return it == m_texturesCombineTypes.end()
-			? 0u
-			: TextureCombineID( std::distance( m_texturesCombineTypes.begin(), it ) + 1 );
+
+		if ( it == m_texturesCombines.end() )
+		{
+			auto idx = cachetex::addCombine( std::move( combine ), m_texturesCombines );
+			it = std::next( m_texturesCombines.begin(), idx );
+		}
+
+		return TextureCombineID( std::distance( m_texturesCombines.begin(), it ) + 1 );
 	}
 
-	TextureCombine TextureUnitCache::getTextureCombine( TextureCombineID combineType )const
+	TextureCombineID TextureUnitCache::getTextureCombineID( TextureCombine const & combine )const
 	{
-		CU_Require( combineType <= m_texturesCombineTypes.size() );
+		auto it = std::find( m_texturesCombines.begin()
+			, m_texturesCombines.end()
+			, combine );
+		return it == m_texturesCombines.end()
+			? cachetex::addCombine( combine, m_texturesCombines )
+			: TextureCombineID( std::distance( m_texturesCombines.begin(), it ) + 1 );
+	}
 
-		if ( combineType == 0 )
+	TextureCombine TextureUnitCache::getTextureCombine( TextureCombineID id )const
+	{
+		CU_Require( id <= m_texturesCombines.size() );
+
+		if ( id == 0 )
 		{
 			CU_Failure( "Unexpected invalid texture combine type." );
 			return TextureCombine{};
 		}
 
-		return m_texturesCombineTypes[combineType - 1u];
+		return m_texturesCombines[id - 1u];
 	}
 
 	void TextureUnitCache::initialise( RenderDevice const & device )

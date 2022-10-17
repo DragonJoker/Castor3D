@@ -102,17 +102,6 @@ namespace castor3d
 		return flags;
 	}
 
-	PassFlags VoxelizePass::doAdjustPassFlags( PassFlags flags )const
-	{
-		remFlag( flags, PassFlag::eParallaxOcclusionMappingOne );
-		remFlag( flags, PassFlag::eParallaxOcclusionMappingRepeat );
-		remFlag( flags, PassFlag::eDistanceBasedTransmittance );
-		remFlag( flags, PassFlag::eSubsurfaceScattering );
-		remFlag( flags, PassFlag::eAlphaBlending );
-		remFlag( flags, PassFlag::eAlphaTest );
-		return flags;
-	}
-
 	ProgramFlags VoxelizePass::doAdjustProgramFlags( ProgramFlags flags )const
 	{
 		return flags;
@@ -460,11 +449,7 @@ namespace castor3d
 		shader::Utils utils{ writer };
 		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
 			, flags
-			, ( ComponentModeFlag::eOpacity
-				| ComponentModeFlag::eOcclusion
-				| ComponentModeFlag::eGeometry
-				| ComponentModeFlag::eColour
-				| ComponentModeFlag::eDiffuseLighting )
+			, getComponentsMask()
 			, utils };
 		auto addIndex = uint32_t( GlobalBuffersIdx::eCount );
 

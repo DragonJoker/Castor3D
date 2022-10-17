@@ -1,6 +1,7 @@
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 
 #include "Castor3D/Limits.hpp"
+#include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslPassShaders.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"

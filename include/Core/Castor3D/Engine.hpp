@@ -488,7 +488,7 @@ namespace castor3d
 		 *\param[in]	type	Le nom du type de composant.
 		 *\param[in]	data	Les fonctions spécifiques du composant.
 		 */
-		C3D_API uint32_t registerPassComponent( castor::String const & type
+		C3D_API PassComponentID registerPassComponent( castor::String const & type
 			, PassComponentPluginUPtr componentPlugin );
 		/**
 		 *\~english
@@ -853,10 +853,10 @@ namespace castor3d
 		}
 
 		template< typename ComponentT >
-		uint32_t registerPassComponent( CreatePassComponentPlugin createPlugin = &ComponentT::createPlugin )
+		PassComponentID registerPassComponent( CreatePassComponentPlugin createPlugin = &ComponentT::createPlugin )
 		{
 			return registerPassComponent( ComponentT::TypeName
-				, createPlugin() );
+				, createPlugin( *m_passComponents ) );
 		}
 		/**@}*/
 

@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_PassHeaderComponent_H___
-#define ___C3D_PassHeaderComponent_H___
+#ifndef ___C3D_PickableComponent_H___
+#define ___C3D_PickableComponent_H___
 
 #include "Castor3D/Material/Pass/Component/BaseDataPassComponent.hpp"
 
@@ -11,16 +11,10 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	struct PassHeaderComponent
-		: public BaseDataPassComponentT< castor::AtomicGroupChangeTracked< uint32_t > >
+	struct PickableComponent
+		: public BaseDataPassComponentT< castor::AtomicGroupChangeTracked< bool > >
 	{
-		struct MaterialShader
-			: shader::PassMaterialShader
-		{
-			C3D_API MaterialShader();
-			C3D_API void fillMaterialType( sdw::type::BaseStruct & type
-				, sdw::expr::ExprList & inits )const override;
-		};
+		static constexpr PassFlag ePickable = PassFlag( 0x01u );
 
 		class Plugin
 			: public PassComponentPlugin
@@ -33,20 +27,17 @@ namespace castor3d
 
 			void createParsers( castor::AttributeParsers & parsers
 				, ChannelFillers & channelFillers )const override;
-			void zeroBuffer( Pass const & pass
-				, shader::PassMaterialShader const & materialShader
-				, PassBuffer & buffer )const override;
 
 			bool isComponentNeeded( TextureCombine const & textures
 				, ComponentModeFlags const & filter )const override
 			{
-				// Component is never needed in lighting shader.
+				// Component is never need in shader.
 				return false;
 			}
 
-			shader::PassMaterialShaderPtr createMaterialShader()const override
+			PassComponentFlag getComponentFlags()const override
 			{
-				return std::make_unique< MaterialShader >();
+				return makePassComponentFlag( getId(), ePickable );
 			}
 		};
 
@@ -55,23 +46,26 @@ namespace castor3d
 			return castor::makeUniqueDerived< PassComponentPlugin, Plugin >( passComponent );
 		}
 
-		C3D_API explicit PassHeaderComponent( Pass & pass );
+		C3D_API explicit PickableComponent( Pass & pass, bool pickable = true );
 
 		C3D_API void accept( PassVisitorBase & vis )override;
 
-		bool isLightingEnabled()const
+		C3D_API PassComponentFlag getPassFlags()const override
 		{
-			return getData() != 0u;
+			return makePassComponentFlag( getId()
+				, ( isPickable()
+					? ePickable
+					: PassFlag::eNone ) );
 		}
 
-		uint32_t getLighting()const
+		bool isPickable()const
 		{
 			return getData();
 		}
 
-		void enableLighting( bool value )
+		void setPickable( bool v )
 		{
-			setData( value ? 1u : 0u );
+			setData( v );
 		}
 
 		C3D_API static castor::String const TypeName;
@@ -82,7 +76,6 @@ namespace castor3d
 			, castor::Path const & folder
 			, castor::String const & subfolder
 			, castor::StringStream & file )const override;
-		void doFillBuffer( PassBuffer & buffer )const override;
 	};
 }
 

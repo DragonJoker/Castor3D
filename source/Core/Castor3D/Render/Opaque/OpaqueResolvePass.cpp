@@ -148,6 +148,7 @@ namespace castor3d
 			shader::PassShaders passShaders{ renderSystem.getEngine()->getPassComponentsRegister()
 				, TextureCombine{}
 				, ( ComponentModeFlag::eColour
+					| ComponentModeFlag::eNormals
 					| ComponentModeFlag::eGeometry
 					| ComponentModeFlag::eDiffuseLighting
 					| ComponentModeFlag::eSpecularLighting

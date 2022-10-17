@@ -39,10 +39,9 @@ namespace GuiCommon
 				, castor3d::RenderTechniqueNodesPass & renderPass )
 			{
 				auto & engine = *renderPass.getEngine();
-				RenderPassConfigurationBuilder vis{ renderPass.createPipelineFlags( castor3d::PassComponentIDSet{}
+				RenderPassConfigurationBuilder vis{ renderPass.createPipelineFlags( castor3d::PassComponentCombine{}
 						, castor3d::BlendMode::eNoBlend
 						, castor3d::BlendMode::eNoBlend
-						, castor3d::PassFlag::eNone
 						, engine.getRenderPassTypeID( renderPass.getTypeName() )
 						, 0u
 						, VK_COMPARE_OP_ALWAYS

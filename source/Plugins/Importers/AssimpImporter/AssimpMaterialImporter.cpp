@@ -11,7 +11,6 @@
 #include <Castor3D/Material/Pass/Component/Base/TextureCountComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Base/TexturesComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Base/TwoSidedComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Base/UntileComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/EmissiveComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/MetalnessComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/RoughnessComponent.hpp>

@@ -261,9 +261,10 @@ namespace castor3d
 		return doAdjustSubmeshFlags( flags );
 	}
 
-	PassFlags RenderNodesPass::adjustFlags( PassFlags flags )const
+	PassComponentCombine RenderNodesPass::adjustFlags( PassComponentCombine combine )const
 	{
-		return doAdjustPassFlags( flags );
+		return getEngine()->getPassComponentsRegister().filterComponentFlags( getComponentsMask()
+			, combine );
 	}
 
 	ProgramFlags RenderNodesPass::adjustFlags( ProgramFlags flags )const
@@ -287,27 +288,9 @@ namespace castor3d
 			, combine );
 	}
 
-	VkCompareOp RenderNodesPass::adjustAlphaFunc( PassFlags passFlags
-		, VkCompareOp alphaFunc
-		, VkCompareOp blendAlphaFunc )const
-	{
-		if ( checkFlag( passFlags, PassFlag::eAlphaTest ) )
-		{
-			if ( !checkFlag( m_filters, RenderFilter::eAlphaBlend ) )
-			{
-				return blendAlphaFunc;
-			}
-			
-			return alphaFunc;
-		}
-
-		return VK_COMPARE_OP_ALWAYS;
-	}
-
-	PipelineFlags RenderNodesPass::createPipelineFlags( PassComponentIDSet components
+	PipelineFlags RenderNodesPass::createPipelineFlags( PassComponentCombine components
 		, BlendMode colourBlendMode
 		, BlendMode alphaBlendMode
-		, PassFlags passFlags
 		, RenderPassTypeID renderPassTypeID
 		, PassTypeID passTypeID
 		, VkCompareOp alphaFunc
@@ -321,11 +304,10 @@ namespace castor3d
 		, uint32_t passLayerIndex
 		, GpuBufferOffsetT< castor::Point4f > const & morphTargets )const
 	{
-		auto result = PipelineFlags{ std::move( components )
+		auto result = PipelineFlags{ adjustFlags( components )
 			, passTypeID
 			, colourBlendMode
 			, alphaBlendMode
-			, passFlags
 			, renderPassTypeID
 			, submeshFlags
 			, programFlags
@@ -345,7 +327,7 @@ namespace castor3d
 
 		doUpdateFlags( result );
 
-		if ( checkFlag( result.m_passFlags, PassFlag::eAlphaBlending ) )
+		if ( hasAny( result.components, getEngine()->getPassComponentsRegister().getAlphaBlendingFlag() ) )
 		{
 			result.alphaFunc = blendAlphaFunc;
 		}
@@ -362,11 +344,9 @@ namespace castor3d
 		, bool isFrontCulled
 		, GpuBufferOffsetT< castor::Point4f > const & morphTargets )const
 	{
-		auto & passComponents = getEngine()->getPassComponentsRegister();
-		return createPipelineFlags( passComponents.getPassComponents( pass )
+		return createPipelineFlags( pass.getPassFlags()
 			, pass.getColourBlendMode()
 			, pass.getAlphaBlendMode()
-			, pass.getPassFlags()
 			, ( pass.getRenderPassInfo()
 				? pass.getRenderPassInfo()->id
 				: RenderPassTypeID{} )
@@ -516,16 +496,16 @@ namespace castor3d
 		return ComponentModeFlags{ ComponentModeFlag::eAll };
 	}
 
-	bool RenderNodesPass::areValidPassFlags( PassFlags const & passFlags )const
+	bool RenderNodesPass::areValidPassFlags( PassComponentCombine const & passFlags )const
 	{
-		if ( checkFlag( passFlags, PassFlag::eAlphaTest ) )
+		if ( hasAny( passFlags, getEngine()->getPassComponentsRegister().getAlphaTestFlag() ) )
 		{
 			// Blend alpha test with alpha blending,
 			// alpha test without.
 			return !checkFlag( m_filters, RenderFilter::eAlphaTest );
 		}
 
-		if ( checkFlag( passFlags, PassFlag::eAlphaBlending ) )
+		if ( hasAny( passFlags, getEngine()->getPassComponentsRegister().getAlphaBlendingFlag() ) )
 		{
 			return !checkFlag( m_filters, RenderFilter::eAlphaBlend );
 		}
@@ -675,11 +655,6 @@ namespace castor3d
 		return flags;
 	}
 
-	PassFlags RenderNodesPass::doAdjustPassFlags( PassFlags flags )const
-	{
-		return flags;
-	}
-
 	ProgramFlags RenderNodesPass::doAdjustProgramFlags( ProgramFlags flags )const
 	{
 		return flags;
@@ -720,7 +695,6 @@ namespace castor3d
 
 		flags.m_submeshFlags = adjustFlags( flags.m_submeshFlags );
 		flags.m_programFlags = adjustFlags( flags.m_programFlags );
-		flags.m_passFlags = adjustFlags( flags.m_passFlags );
 		flags.m_sceneFlags = adjustFlags( flags.m_sceneFlags );
 
 		if ( flags.textures.configCount == 0
@@ -835,7 +809,7 @@ namespace castor3d
 		auto & device = renderSystem.getRenderDevice();
 		RenderPipeline * result{};
 		auto program = doGetProgram( flags, cullMode );
-		CU_Require( areValidPassFlags( flags.m_passFlags ) );
+		CU_Require( areValidPassFlags( flags.components ) );
 
 		if ( !flags.isBillboard()
 			|| !flags.writeShadowMap() )

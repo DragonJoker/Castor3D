@@ -11,17 +11,6 @@ namespace castor3d::shader
 {
 	ReflectionModel::ReflectionModel( sdw::ShaderWriter & writer
 		, Utils & utils
-		, PassFlags const & passFlags
-		, bool hasIblSupport )
-		: m_writer{ writer }
-		, m_utils{ utils }
-		, m_passFlags{ passFlags }
-		, m_hasIblSupport{ hasIblSupport }
-	{
-	}
-
-	ReflectionModel::ReflectionModel( sdw::ShaderWriter & writer
-		, Utils & utils
 		, bool hasIblSupport )
 		: m_writer{ writer }
 		, m_utils{ utils }

@@ -506,11 +506,7 @@ namespace castor3d
 				, device
 				, *m_texture };
 			equiToCube.render( queueData );
-
-			if ( m_scene.getEngine()->getPassFactory().hasIBL( m_scene.getPassesType() ) )
-			{
-				m_texture->generateMipmaps( queueData );
-			}
+			m_texture->generateMipmaps( queueData );
 		}
 
 		m_equiTexture->cleanup();

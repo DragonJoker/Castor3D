@@ -18,8 +18,6 @@ namespace castor3d
 	{
 		uint64_t hi;
 		uint64_t lo;
-		PassComponentsTypeID components;
-		TextureCombineID textures;
 	};
 
 	C3D_API bool operator<( PipelineBaseHash const & lhs
@@ -29,16 +27,13 @@ namespace castor3d
 		, PipelineBaseHash const & rhs )
 	{
 		return lhs.hi == rhs.hi
-			&& lhs.lo == rhs.lo
-			&& lhs.components == rhs.components
-			&& lhs.textures == rhs.textures;
+			&& lhs.lo == rhs.lo;
 	}
 
 	struct PipelineHiHashDetails
 	{
-		explicit PipelineHiHashDetails( PassComponentIDSet pcomponents
+		explicit PipelineHiHashDetails( PassComponentCombine pcomponents
 			, PassTypeID passType
-			, PassFlags passFlags = PassFlag::eNone
 			, SubmeshFlags submeshFlags = SubmeshFlag::eNone
 			, ProgramFlags programFlags = ProgramFlag::eNone
 			, TextureCombine ptextures = TextureCombine{}
@@ -50,20 +45,18 @@ namespace castor3d
 			, passType{ passType }
 			, alphaFunc{ alphaFunc }
 			, passLayerIndex{ passLayerIndex }
-			, m_passFlags{ passFlags }
 			, m_submeshFlags{ submeshFlags }
 			, m_programFlags{ programFlags }
 			, m_shaderFlags{ shaderFlags }
 		{
 		}
 
-		PassComponentIDSet components;
+		PassComponentCombine components;
 		TextureCombine textures;
 		PassTypeID passType;
 		VkCompareOp alphaFunc;
 		uint32_t passLayerIndex;
 		//uint32_t maxTexcoordSet;
-		PassFlags m_passFlags;
 		SubmeshFlags m_submeshFlags;
 		ProgramFlags m_programFlags;
 		ShaderFlags m_shaderFlags;
@@ -114,11 +107,10 @@ namespace castor3d
 			CU_Require( passType != 0 );
 		}
 
-		explicit PipelineFlags( PassComponentIDSet pcomponents
+		explicit PipelineFlags( PassComponentCombine pcomponents
 			, PassTypeID ppassType
 			, BlendMode pcolourBlendMode = BlendMode::eNoBlend
 			, BlendMode palphaBlendMode = BlendMode::eNoBlend
-			, PassFlags ppassFlags = PassFlag::eNone
 			, RenderPassTypeID prenderPassType = 0u
 			, SubmeshFlags psubmeshFlags = SubmeshFlag::eIndex
 			, ProgramFlags pprogramFlags = ProgramFlag::eNone
@@ -132,7 +124,6 @@ namespace castor3d
 			, VkDeviceSize pmorphTargetsOffset = {} )
 			: PipelineFlags{ PipelineHiHashDetails{ std::move( pcomponents )
 					, ppassType
-					, ppassFlags
 					, psubmeshFlags
 					, pprogramFlags
 					, std::move( textures )
@@ -150,9 +141,8 @@ namespace castor3d
 			CU_Require( passType != 0 );
 		}
 
-		PipelineFlags( PassComponentIDSet pcomponents
+		PipelineFlags( PassComponentCombine pcomponents
 			, PassTypeID passType
-			, PassFlags passFlags
 			, SubmeshFlags submeshFlags
 			, ProgramFlags programFlags
 			, TextureCombine textures
@@ -161,7 +151,6 @@ namespace castor3d
 			, uint32_t passLayerIndex = 0u )
 			: PipelineFlags{ PipelineHiHashDetails{ std::move( pcomponents )
 					, passType
-					, passFlags
 					, submeshFlags
 					, programFlags
 					, std::move( textures )
@@ -337,13 +326,9 @@ namespace castor3d
 			return checkFlag( m_programFlags, ProgramFlag::eHasTask );
 		}
 		//@}
-		/**@name PassFlags */
+		/**@name Components */
 		//@{
-		bool hasOpacity()const
-		{
-			return ( checkFlag( m_passFlags, PassFlag::eAlphaBlending )
-				|| ( checkFlag( m_passFlags, PassFlag::eAlphaTest ) && ( alphaFunc != VK_COMPARE_OP_ALWAYS ) ) );
-		}
+		C3D_API bool hasFlag( PassComponentFlag flag )const;
 		//@}
 		/**@name Textures */
 		//@{

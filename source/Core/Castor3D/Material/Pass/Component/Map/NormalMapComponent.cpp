@@ -236,7 +236,7 @@ namespace castor3d
 	bool NormalMapComponent::Plugin::isComponentNeeded( TextureCombine const & textures
 		, ComponentModeFlags const & filter )const
 	{
-		return checkFlag( filter, ComponentModeFlag::eGeometry )
+		return checkFlag( filter, ComponentModeFlag::eNormals )
 			|| checkFlag( filter, ComponentModeFlag::eDiffuseLighting )
 			|| checkFlag( filter, ComponentModeFlag::eSpecularLighting )
 			|| checkFlag( filter, ComponentModeFlag::eOcclusion )

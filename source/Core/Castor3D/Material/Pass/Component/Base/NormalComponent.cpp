@@ -20,7 +20,7 @@ namespace castor3d
 		, shader::Materials const & materials
 		, sdw::StructInstance const * surface )const
 	{
-		if ( !checkFlag( materials.getFilter(), ComponentModeFlag::eGeometry ) )
+		if ( !checkFlag( materials.getFilter(), ComponentModeFlag::eNormals ) )
 		{
 			return;
 		}
@@ -39,7 +39,7 @@ namespace castor3d
 		, sdw::StructInstance const * surface
 		, sdw::expr::ExprList & inits )const
 	{
-		if ( !checkFlag( materials.getFilter(), ComponentModeFlag::eGeometry ) )
+		if ( !checkFlag( materials.getFilter(), ComponentModeFlag::eNormals ) )
 		{
 			return;
 		}

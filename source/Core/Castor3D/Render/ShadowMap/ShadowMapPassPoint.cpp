@@ -133,12 +133,6 @@ namespace castor3d
 			, result );
 	}
 
-	PassFlags ShadowMapPassPoint::doAdjustPassFlags( PassFlags flags )const
-	{
-		remFlag( flags, PassFlag::eAlphaBlending );
-		return flags;
-	}
-
 	ProgramFlags ShadowMapPassPoint::doAdjustProgramFlags( ProgramFlags flags )const
 	{
 		return flags;

@@ -15,8 +15,7 @@ namespace castor3d
 	PassSPtr BlinnPhongPass::create( Material & parent )
 	{
 		auto result = std::make_shared< Pass >( parent
-			, parent.getEngine()->getPassFactory().getNameId( Type )
-			, PassFlag::eNone );
+			, parent.getEngine()->getPassFactory().getNameId( Type ) );
 		result->createComponent< ColourComponent >();
 		result->createComponent< RoughnessComponent >( Pass::computeRoughnessFromShininess( 50.0f ) );
 		result->createComponent< SpecularComponent >( SpecularComponent::DefaultPhong );

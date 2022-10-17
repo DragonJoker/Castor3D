@@ -87,9 +87,6 @@ namespace castor3d
 			, ParallaxOcclusionMode & value
 			, ControlsList controls ) = 0;
 		C3D_API virtual void visit( castor::String const & name
-			, PassFlags & value
-			, ControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
 			, VkCompareOp & value
 			, ControlsList controls ) = 0;
 		C3D_API virtual void visit( castor::String const & name
@@ -181,9 +178,6 @@ namespace castor3d
 			, AtomicControlsList controls ) = 0;
 		C3D_API virtual void visit( castor::String const & name
 			, ParallaxOcclusionMode & value
-			, AtomicControlsList controls ) = 0;
-		C3D_API virtual void visit( castor::String const & name
-			, PassFlags & value
 			, AtomicControlsList controls ) = 0;
 		C3D_API virtual void visit( castor::String const & name
 			, VkCompareOp & value
@@ -328,14 +322,6 @@ namespace castor3d
 		template< typename ControlT = bool >
 		void visit( castor::String const & name
 			, ParallaxOcclusionMode & value
-			, ControlT * control = nullptr )
-		{
-			visit( name, value, makeControlsList( control ) );
-		}
-
-		template< typename ControlT = bool >
-		void visit( castor::String const & name
-			, PassFlags & value
 			, ControlT * control = nullptr )
 		{
 			visit( name, value, makeControlsList( control ) );
@@ -598,12 +584,6 @@ namespace castor3d
 		}
 
 		void visit( castor::String const & name
-			, PassFlags & value
-			, ControlsList controls )override
-		{
-		}
-
-		void visit( castor::String const & name
 			, VkCompareOp & value
 			, ControlsList controls )override
 		{
@@ -781,12 +761,6 @@ namespace castor3d
 
 		void visit( castor::String const & name
 			, ParallaxOcclusionMode & value
-			, AtomicControlsList controls )override
-		{
-		}
-
-		void visit( castor::String const & name
-			, PassFlags & value
 			, AtomicControlsList controls )override
 		{
 		}

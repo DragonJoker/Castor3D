@@ -477,9 +477,8 @@ namespace ocean_fft
 
 	castor3d::ComponentModeFlags OceanRenderPass::getComponentsMask()const
 	{
-		return castor3d::ComponentModeFlag::eOpacity
-			| castor3d::ComponentModeFlag::eColour
-			| castor3d::ComponentModeFlag::eGeometry
+		return castor3d::ComponentModeFlag::eColour
+			| castor3d::ComponentModeFlag::eNormals
 			| castor3d::ComponentModeFlag::eOcclusion
 			| castor3d::ComponentModeFlag::eDiffuseLighting
 			| castor3d::ComponentModeFlag::eSpecularLighting
@@ -669,17 +668,6 @@ namespace ocean_fft
 		remFlag( flags, castor3d::SubmeshFlag::eNormals );
 		remFlag( flags, castor3d::SubmeshFlag::eTangents );
 		remFlag( flags, castor3d::SubmeshFlag::eTexcoords );
-		return flags;
-	}
-
-	castor3d::PassFlags OceanRenderPass::doAdjustPassFlags( castor3d::PassFlags flags )const
-	{
-		remFlag( flags, castor3d::PassFlag::eParallaxOcclusionMappingOne );
-		remFlag( flags, castor3d::PassFlag::eParallaxOcclusionMappingRepeat );
-		remFlag( flags, castor3d::PassFlag::eDistanceBasedTransmittance );
-		remFlag( flags, castor3d::PassFlag::eSubsurfaceScattering );
-		remFlag( flags, castor3d::PassFlag::eAlphaBlending );
-		remFlag( flags, castor3d::PassFlag::eAlphaTest );
 		return flags;
 	}
 

@@ -314,16 +314,15 @@ namespace castor
 		return m_passBuffer->getMaxPassTypeCount();
 	}
 
-	std::tuple< PassComponentsTypeID, TextureCombineID, PassFlags > ResourceCacheT< Material, String, MaterialCacheTraits >::getPassTypeDetails( uint32_t passTypeIndex )const
+	std::tuple< PassComponentCombineID, TextureCombineID > ResourceCacheT< Material, String, MaterialCacheTraits >::getPassTypeDetails( uint32_t passTypeIndex )const
 	{
 		return m_passBuffer->getPassTypeDetails( passTypeIndex );
 	}
 
-	uint32_t ResourceCacheT< Material, String, MaterialCacheTraits >::getPassTypeIndex( castor3d::PassComponentsTypeID passType
-		, castor3d::TextureCombineID textureFlags
-		, castor3d::PassFlags passFlags )const
+	uint32_t ResourceCacheT< Material, String, MaterialCacheTraits >::getPassTypeIndex( castor3d::PassComponentCombineID passType
+		, castor3d::TextureCombineID textureFlags )const
 	{
-		return m_passBuffer->getPassTypeIndex( passType, textureFlags, passFlags );
+		return m_passBuffer->getPassTypeIndex( passType, textureFlags );
 	}
 
 	bool ResourceCacheT< Material, String, MaterialCacheTraits >::registerPass( Pass & pass )

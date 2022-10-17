@@ -81,6 +81,14 @@ namespace castor3d
 				| ShaderFlag::eGeometry
 				| ShaderFlag::eColour;
 		}
+
+		C3D_API ComponentModeFlags getComponentsMask()const override
+		{
+			return ( ComponentModeFlag::eOcclusion
+				| ComponentModeFlag::eColour
+				| ComponentModeFlag::eDiffuseLighting
+				| ComponentModeFlag::eNormals );
+		}
 		/**@}*/
 
 	private:
@@ -92,7 +100,6 @@ namespace castor3d
 		void doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
 			, ShadowMapLightTypeArray const & shadowMaps )override;
 		SubmeshFlags doAdjustSubmeshFlags( SubmeshFlags flags )const override;
-		PassFlags doAdjustPassFlags( PassFlags flags )const override;
 		ProgramFlags doAdjustProgramFlags( ProgramFlags flags )const override;
 		SceneFlags doAdjustSceneFlags( SceneFlags flags )const override;
 		ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const override;

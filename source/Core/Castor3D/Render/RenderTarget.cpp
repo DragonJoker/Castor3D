@@ -95,9 +95,8 @@ namespace castor3d
 			{
 				ImageViewCache cache;
 
-				PipelineFlags flags{ PassComponentIDSet{}
+				PipelineFlags flags{ PassComponentCombine{}
 					, scene.getPassesType()
-					, PassFlag::eNone
 					, SubmeshFlag::ePosNmlTanTex
 					, ProgramFlag::eNone
 					, TextureCombine{}
@@ -107,7 +106,7 @@ namespace castor3d
 				technique.accept( visOpaque );
 
 				flags.m_shaderFlags |= ShaderFlag::eOpacity;
-				flags.m_passFlags |= PassFlag::eAlphaBlending;
+				addFlags( flags.components, scene.getEngine()->getPassComponentsRegister().getAlphaBlendingFlag() );
 				flags.alphaFunc = VK_COMPARE_OP_LESS;
 				IntermediatesLister visTransparent{ flags, scene, cache, intermediates };
 				technique.accept( visTransparent );
@@ -120,9 +119,8 @@ namespace castor3d
 			{
 				ImageViewCache cache;
 
-				PipelineFlags flags{ PassComponentIDSet{}
+				PipelineFlags flags{ PassComponentCombine{}
 					, scene.getPassesType()
-					, PassFlag::eNone
 					, SubmeshFlag::ePosNmlTanTex
 					, ProgramFlag::eNone
 					, TextureCombine{}

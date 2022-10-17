@@ -398,6 +398,103 @@ namespace castor
 	 *\return		\p true si flags contient n'importe lequel de rhs.
 	 */
 	template< typename T, typename U >
+	inline constexpr bool hasAll( T const & value, U const & rhs )noexcept
+	{
+		static_assert( sizeof( T ) == sizeof( U )
+			, "Can't check flags for different size parameters" );
+		return T( value & T( rhs ) ) == T( rhs );
+	}
+	/**
+	 *\~english
+	 *\param[in]	value	The value.
+	 *\param[in]	rhs		The flags looked for.
+	 *\return		\p true if flags contain any of rhs.
+	 *\~french
+	 *\param[in]	value	La valeur.
+	 *\param[in]	rhs		Les indicateurs recherchés.
+	 *\return		\p true si flags contient n'importe lequel de rhs.
+	 */
+	template< typename FlagType >
+	inline constexpr bool hasAll( FlagCombination< FlagType > const & value
+		, FlagType const & rhs )noexcept
+	{
+		return ( value & rhs ) == rhs;
+	}
+	/**
+	 *\~english
+	 *\param[in]	value	The value.
+	 *\param[in]	rhs		The flags looked for.
+	 *\return		\p true if flags contain any of rhs.
+	 *\~french
+	 *\param[in]	value	La valeur.
+	 *\param[in]	rhs		Les indicateurs recherchés.
+	 *\return		\p true si flags contient n'importe lequel de rhs.
+	 */
+	template< typename FlagType >
+	inline constexpr bool hasAll( FlagType const & value
+		, FlagCombination< FlagType > const & rhs )noexcept
+	{
+		return ( rhs & value ) == rhs;
+	}
+	/**
+	 *\~english
+	 *\param[in]	value	The value.
+	 *\param[in]	rhs		The flags looked for.
+	 *\return		\p true if flags contain any of rhs.
+	 *\~french
+	 *\param[in]	value	La valeur.
+	 *\param[in]	rhs		Les indicateurs recherchés.
+	 *\return		\p true si flags contient n'importe lequel de rhs.
+	 */
+	template< typename FlagType >
+	inline constexpr bool hasAll( typename FlagCombination< FlagType >::BaseType const & value
+		, FlagCombination< FlagType > const & rhs )noexcept
+	{
+		return hasAll( FlagType{ value }, rhs );
+	}
+	/**
+	 *\~english
+	 *\param[in]	value	The value.
+	 *\param[in]	rhs		The flags looked for.
+	 *\return		\p true if flags contain any of rhs.
+	 *\~french
+	 *\param[in]	value	La valeur.
+	 *\param[in]	rhs		Les indicateurs recherchés.
+	 *\return		\p true si flags contient n'importe lequel de rhs.
+	 */
+	template< typename FlagType >
+	inline constexpr bool hasAll( FlagCombination< FlagType > const & value
+		, typename FlagCombination< FlagType >::BaseType const & rhs )noexcept
+	{
+		return hasAll( value, FlagType{ rhs } );
+	}
+	/**
+	 *\~english
+	 *\param[in]	value	The value.
+	 *\param[in]	rhs		The flags looked for.
+	 *\return		\p true if flags contain any of rhs.
+	 *\~french
+	 *\param[in]	value	La valeur.
+	 *\param[in]	rhs		Les indicateurs recherchés.
+	 *\return		\p true si flags contient n'importe lequel de rhs.
+	 */
+	template< typename FlagType >
+	inline constexpr bool hasAll( FlagCombination< FlagType > const & value
+		, FlagCombination< FlagType > const & rhs )noexcept
+	{
+		return ( value & rhs ) == rhs;
+	}
+	/**
+	 *\~english
+	 *\param[in]	value	The value.
+	 *\param[in]	rhs		The flags looked for.
+	 *\return		\p true if flags contain any of rhs.
+	 *\~french
+	 *\param[in]	value	La valeur.
+	 *\param[in]	rhs		Les indicateurs recherchés.
+	 *\return		\p true si flags contient n'importe lequel de rhs.
+	 */
+	template< typename T, typename U >
 	inline constexpr bool hasAny( T const & value, U const & rhs )noexcept
 	{
 		static_assert( sizeof( T ) == sizeof( U )

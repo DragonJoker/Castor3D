@@ -5,10 +5,11 @@
 #include "Castor3D/Material/Pass/Component/Base/BlendComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Base/NormalComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Base/PassHeaderComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Base/PickableComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Base/TextureCountComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Base/TexturesComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Base/TwoSidedComponent.hpp"
-#include "Castor3D/Material/Pass/Component/Base/UntileComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Base/UntileMappingComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/EmissiveComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/MetalnessComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/RoughnessComponent.hpp"
@@ -46,7 +47,13 @@ namespace castor3d
 		static bool isValidComponent( PipelineFlags const & flags
 			, PassComponentID componentId )
 		{
-			return flags.components.end() != flags.components.find( componentId );
+			return flags.components.flags.end() != std::find_if( flags.components.flags.begin()
+				, flags.components.flags.end()
+				, [&componentId]( PassComponentFlag const & lookup )
+				{
+					auto lookupComponentId = splitPassComponentFlag( lookup ).first;
+					return lookupComponentId == componentId;
+				} );
 		}
 
 		static bool isValidComponent( TextureCombine const & flags
@@ -94,16 +101,11 @@ namespace castor3d
 			}
 		}
 
-		static PassComponentIDSet getComponents( Pass const & pass )
+		static PassComponentID addCombine( PassComponentCombine combine
+			, std::vector< PassComponentCombine > & result )
 		{
-			PassComponentIDSet components;
-
-			for ( auto & component : pass.getComponents() )
-			{
-				components.emplace( component.first );
-			}
-
-			return components;
+			result.push_back( std::move( combine ) );
+			return PassComponentID( result.size() - 1u );
 		}
 	}
 
@@ -122,7 +124,8 @@ namespace castor3d
 		registerComponent< TextureCountComponent >();
 		registerComponent< BlendComponent >();
 		registerComponent< TwoSidedComponent >();
-		registerComponent< UntileComponent >();
+		registerComponent< PickableComponent >();
+		registerComponent< UntileMappingComponent >();
 		registerComponent< NormalComponent >();
 		// Pass shader buffer components
 		registerComponent< HeightComponent >();
@@ -156,81 +159,103 @@ namespace castor3d
 
 	PassComponentRegister::~PassComponentRegister()
 	{
-		while ( !m_ids.empty() )
+		while ( !m_registered.empty() )
 		{
-			auto it = m_ids.begin();
-			unregisterComponent( it->second.name );
+			auto & componentDesc = m_registered.back();
+
+			if ( componentDesc.plugin )
+			{
+				unregisterComponent( componentDesc.name );
+			}
+
+			m_registered.pop_back();
 		}
 	}
 
-	PassComponentsTypeID PassComponentRegister::registerPassType( Pass const & pass )
+	PassComponentCombine PassComponentRegister::registerPassComponentCombine( Pass const & pass )
 	{
-		auto components = passcompreg::getComponents( pass );
-		auto it = std::find( m_passTypes.begin()
-			, m_passTypes.end()
-			, components );
+		PassComponentCombine result{};
 
-		if ( it == m_passTypes.end() )
+		for ( auto & component : pass.getComponents() )
 		{
-			m_passTypes.push_back( std::move( components ) );
-			it = std::next( m_passTypes.begin(), ptrdiff_t( m_passTypes.size() - 1u ) );
+			addFlags( result, component.second->getPassFlags() );
 		}
 
-		return PassComponentsTypeID( std::distance( m_passTypes.begin(), it ) + 1 );
+		result.baseId = registerPassComponentCombine( result );
+		return result;
 	}
 
-	PassComponentsTypeID PassComponentRegister::getPassComponentsType( Pass const & pass )const
+	PassComponentCombineID PassComponentRegister::registerPassComponentCombine( PassComponentCombine combine )
 	{
-		return getPassComponentsType( passcompreg::getComponents( pass ) );
+		auto it = std::find_if( m_componentCombines.begin()
+			, m_componentCombines.end()
+			, [&combine]( PassComponentCombine const & lookup )
+			{
+				return lookup.baseId == 0
+					&& lookup.flags == combine.flags;
+			} );
+
+		if ( it == m_componentCombines.end() )
+		{
+			auto idx = passcompreg::addCombine( std::move( combine ), m_componentCombines );
+			it = std::next( m_componentCombines.begin(), idx );
+		}
+
+		return PassComponentCombineID( std::distance( m_componentCombines.begin(), it ) + 1 );
 	}
 
-	PassComponentsTypeID PassComponentRegister::getPassComponentsType( PassComponentIDSet const & components )const
+	PassComponentCombineID PassComponentRegister::getPassComponentCombineID( PassComponentCombine const & combine )const
 	{
-		auto it = std::find( m_passTypes.begin()
-			, m_passTypes.end()
-			, components );
-		CU_Require( it != m_passTypes.end() );
-		return it == m_passTypes.end()
-			? 0u
-			: PassComponentsTypeID( std::distance( m_passTypes.begin(), it ) + 1 );
+		if ( combine.baseId == 0u )
+		{
+			auto it = std::find( m_componentCombines.begin()
+				, m_componentCombines.end()
+				, combine );
+
+			if ( it == m_componentCombines.end() )
+			{
+				CU_Failure( "Pass components combination was not registered." );
+				CU_Exception( "Pass components combination was not registered." );
+			}
+
+			return PassComponentCombineID( std::distance( m_componentCombines.begin(), it ) + 1 );
+		}
+
+		CU_Require( combine.baseId <= m_componentCombines.size() );
+		return combine.baseId;
 	}
 
-	TextureCombineID PassComponentRegister::getTextureCombineType( Pass const & pass )const
+	TextureCombineID PassComponentRegister::getTextureCombineID( TextureCombine const & combine )const
 	{
-		return getOwner()->getTextureUnitCache().getTextureCombineType( pass );
+		return getOwner()->getTextureUnitCache().getTextureCombineID( combine );
 	}
 
-	TextureCombineID PassComponentRegister::getTextureCombineType( TextureCombine const & combine )const
+	PassComponentCombine PassComponentRegister::getPassComponentCombine( Pass const & pass )const
 	{
-		return getOwner()->getTextureUnitCache().getTextureCombineType( combine );
+		return getPassComponentCombine( pass.getComponentCombineID() );
 	}
 
-	PassComponentIDSet PassComponentRegister::getPassComponents( Pass const & pass )const
+	PassComponentCombine PassComponentRegister::getPassComponentCombine( PassComponentCombineID id )const
 	{
-		return getPassComponents( pass.getComponentsTypeID() );
-	}
+		CU_Require( id <= m_componentCombines.size() );
 
-	PassComponentIDSet PassComponentRegister::getPassComponents( PassComponentsTypeID passType )const
-	{
-		CU_Require( passType <= m_passTypes.size() );
-
-		if ( passType == 0 )
+		if ( id == 0 )
 		{
 			CU_Failure( "Unexpected invalid pass type." );
-			return PassComponentIDSet{};
+			return PassComponentCombine{};
 		}
 
-		return m_passTypes[passType - 1u];
+		return m_componentCombines[id - 1u];
 	}
 
 	TextureCombine PassComponentRegister::getTextureCombine( Pass const & pass )const
 	{
-		return getTextureCombine( pass.getTextureCombineType() );
+		return getTextureCombine( pass.getTextureCombineID() );
 	}
 
-	TextureCombine PassComponentRegister::getTextureCombine( TextureCombineID combineType )const
+	TextureCombine PassComponentRegister::getTextureCombine( TextureCombineID id )const
 	{
-		return getOwner()->getTextureUnitCache().getTextureCombine( combineType );
+		return getOwner()->getTextureUnitCache().getTextureCombine( id );
 	}
 
 	void PassComponentRegister::fillBuffer( Pass const & pass
@@ -238,7 +263,8 @@ namespace castor3d
 	{
 		for ( auto & id : m_bufferOrder )
 		{
-			auto & componentDesc = m_ids.find( id )->second;
+			auto & componentDesc = m_registered[id - 1u];
+			CU_Require( id == componentDesc.id );
 
 			if ( auto component = pass.getComponent( componentDesc.name ) )
 			{
@@ -277,12 +303,12 @@ namespace castor3d
 	{
 		std::vector< shader::PassComponentsShaderPtr > result;
 
-		for ( auto & id : m_ids )
+		for ( auto & componentDesc : m_registered )
 		{
 			passcompreg::getComponentShadersT( combine
 				, filter
-				, id.first
-				, *id.second.plugin
+				, componentDesc.id
+				, *componentDesc.plugin
 				, result
 				, updateComponents );
 		}
@@ -296,17 +322,88 @@ namespace castor3d
 	{
 		std::vector< shader::PassComponentsShaderPtr > result;
 
-		for ( auto & id : m_ids )
+		for ( auto & componentDesc : m_registered )
 		{
 			passcompreg::getComponentShadersT( flags
 				, filter
-				, id.first
-				, *id.second.plugin
+				, componentDesc.id
+				, *componentDesc.plugin
 				, result
 				, updateComponents );
 		}
 
 		return result;
+	}
+
+	PassComponentCombine PassComponentRegister::filterComponentFlags( ComponentModeFlags filter
+		, PassComponentCombine const & combine )const
+	{
+		PassComponentCombine result{ combine };
+
+		for ( auto & componentDesc : m_registered )
+		{
+			componentDesc.plugin->filterComponentFlags( filter, result );
+		}
+
+		return result;
+	}
+
+	bool PassComponentRegister::hasOpacity( PipelineFlags const & flags )const
+	{
+		return ( hasAny( flags.components, getAlphaBlendingFlag() )
+			|| ( hasAny( flags.components, getAlphaTestFlag() ) && ( flags.alphaFunc != VK_COMPARE_OP_ALWAYS ) ) );
+	}
+
+	PassComponentFlag PassComponentRegister::getAlphaBlendingFlag()const
+	{
+		auto it = std::find_if( m_registered.begin()
+			, m_registered.end()
+			, []( Components::value_type const & lookup )
+			{
+				return lookup.plugin->getAlphaBlendingFlag() != 0u;
+			} );
+		return it == m_registered.end()
+			? 0u
+			: it->plugin->getAlphaBlendingFlag();
+	}
+
+	PassComponentFlag PassComponentRegister::getAlphaTestFlag()const
+	{
+		auto it = std::find_if( m_registered.begin()
+			, m_registered.end()
+			, []( Components::value_type const & lookup )
+			{
+				return lookup.plugin->getAlphaTestFlag() != 0u;
+			} );
+		return it == m_registered.end()
+			? 0u
+			: it->plugin->getAlphaTestFlag();
+	}
+
+	PassComponentFlag PassComponentRegister::getParallaxOcclusionMappingOneFlag()const
+	{
+		auto it = std::find_if( m_registered.begin()
+			, m_registered.end()
+			, []( Components::value_type const & lookup )
+			{
+				return lookup.plugin->getParallaxOcclusionMappingOneFlag() != 0u;
+			} );
+		return it == m_registered.end()
+			? 0u
+			: it->plugin->getParallaxOcclusionMappingOneFlag();
+	}
+
+	PassComponentFlag PassComponentRegister::getParallaxOcclusionMappingRepeatFlag()const
+	{
+		auto it = std::find_if( m_registered.begin()
+			, m_registered.end()
+			, []( Components::value_type const & lookup )
+			{
+				return lookup.plugin->getParallaxOcclusionMappingRepeatFlag() != 0u;
+			} );
+		return it == m_registered.end()
+			? 0u
+			: it->plugin->getParallaxOcclusionMappingRepeatFlag();
 	}
 
 	void PassComponentRegister::updateMapComponents( std::vector< TextureFlagConfiguration > const & texConfigs
@@ -318,40 +415,36 @@ namespace castor3d
 		// First gather the needed map components.
 		for ( auto & texConfig : texConfigs )
 		{
-			for ( auto & idit : m_ids )
+			for ( auto & componentDesc : m_registered )
 			{
-				auto & component = idit.second;
-
-				if ( component.plugin->isMapComponent() )
+				if ( componentDesc.plugin->isMapComponent() )
 				{
-					if ( hasIntersect( texConfig.flag, component.plugin->getTextureFlags() ) )
+					if ( hasIntersect( texConfig.flag, componentDesc.plugin->getTextureFlags() ) )
 					{
-						needed.emplace( idit.first, &idit.second );
+						needed.emplace( componentDesc.id, &componentDesc );
 					}
 				}
 			}
 		}
 
 		// Then update the pass map components givent the needed ones list.
-		for ( auto & idit : m_ids )
+		for ( auto & componentDesc : m_registered )
 		{
-			auto & component = idit.second;
-
-			if ( component.plugin->isMapComponent() )
+			if ( componentDesc.plugin->isMapComponent() )
 			{
-				auto needit = needed.find( idit.first );
-				bool hasComponent = result.hasComponent( component.name );
+				auto needit = needed.find( componentDesc.id );
+				bool hasComponent = result.hasComponent( componentDesc.name );
 
 				if ( needit != needed.end() )
 				{
 					if ( !hasComponent )
 					{
-						component.plugin->createMapComponent( result, components );
+						componentDesc.plugin->createMapComponent( result, components );
 					}
 				}
 				else if ( hasComponent )
 				{
-					result.removeComponent( component.name );
+					result.removeComponent( componentDesc.name );
 				}
 			}
 		}
@@ -368,10 +461,10 @@ namespace castor3d
 	{
 		bool result = true;
 
-		for ( auto & idit : m_ids )
+		for ( auto & componentDesc : m_registered )
 		{
 			result = result
-				&& idit.second.plugin->writeTextureConfig( configuration, tabs, file );
+				&& componentDesc.plugin->writeTextureConfig( configuration, tabs, file );
 		}
 
 		return result;
@@ -394,9 +487,9 @@ namespace castor3d
 	{
 		TextureCombine result{ combine };
 
-		for ( auto & id : m_ids )
+		for ( auto & componentDesc : m_registered )
 		{
-			id.second.plugin->filterTextureFlags( filter, result );
+			componentDesc.plugin->filterTextureFlags( filter, result );
 		}
 
 		result.configCount = result.flags.empty()
@@ -405,103 +498,103 @@ namespace castor3d
 		return result;
 	}
 
-	PassComponentTextureFlag PassComponentRegister::getColourFlags()const
+	PassComponentTextureFlag PassComponentRegister::getColourMapFlags()const
 	{
-		auto it = std::find_if( m_ids.begin()
-			, m_ids.end()
-			, []( ComponentIds::value_type const & lookup )
+		auto it = std::find_if( m_registered.begin()
+			, m_registered.end()
+			, []( Components::value_type const & lookup )
 			{
-				return lookup.second.plugin->isMapComponent()
-					&& lookup.second.plugin->getColourFlags() != 0u;
+				return lookup.plugin->isMapComponent()
+					&& lookup.plugin->getColourMapFlags() != 0u;
 			} );
-		return it == m_ids.end()
+		return it == m_registered.end()
 			? 0u
-			: it->second.plugin->getColourFlags();
+			: it->plugin->getColourMapFlags();
 	}
 
-	PassComponentTextureFlag PassComponentRegister::getOpacityFlags()const
+	PassComponentTextureFlag PassComponentRegister::getOpacityMapFlags()const
 	{
-		auto it = std::find_if( m_ids.begin()
-			, m_ids.end()
-			, []( ComponentIds::value_type const & lookup )
+		auto it = std::find_if( m_registered.begin()
+			, m_registered.end()
+			, []( Components::value_type const & lookup )
 			{
-				return lookup.second.plugin->isMapComponent()
-					&& lookup.second.plugin->getOpacityFlags() != 0u;
+				return lookup.plugin->isMapComponent()
+					&& lookup.plugin->getOpacityMapFlags() != 0u;
 			} );
-		return it == m_ids.end()
+		return it == m_registered.end()
 			? 0u
-			: it->second.plugin->getOpacityFlags();
+			: it->plugin->getOpacityMapFlags();
 	}
 
-	PassComponentTextureFlag PassComponentRegister::getNormalFlags()const
+	PassComponentTextureFlag PassComponentRegister::getNormalMapFlags()const
 	{
-		auto it = std::find_if( m_ids.begin()
-			, m_ids.end()
-			, []( ComponentIds::value_type const & lookup )
+		auto it = std::find_if( m_registered.begin()
+			, m_registered.end()
+			, []( Components::value_type const & lookup )
 			{
-				return lookup.second.plugin->isMapComponent()
-					&& lookup.second.plugin->getNormalFlags() != 0u;
+				return lookup.plugin->isMapComponent()
+					&& lookup.plugin->getNormalMapFlags() != 0u;
 			} );
-		return it == m_ids.end()
+		return it == m_registered.end()
 			? 0u
-			: it->second.plugin->getNormalFlags();
+			: it->plugin->getNormalMapFlags();
 	}
 
-	PassComponentTextureFlag PassComponentRegister::getHeightFlags()const
+	PassComponentTextureFlag PassComponentRegister::getHeightMapFlags()const
 	{
-		auto it = std::find_if( m_ids.begin()
-			, m_ids.end()
-			, []( ComponentIds::value_type const & lookup )
+		auto it = std::find_if( m_registered.begin()
+			, m_registered.end()
+			, []( Components::value_type const & lookup )
 			{
-				return lookup.second.plugin->isMapComponent()
-					&& lookup.second.plugin->getHeightFlags() != 0u;
+				return lookup.plugin->isMapComponent()
+					&& lookup.plugin->getHeightMapFlags() != 0u;
 			} );
-		return it == m_ids.end()
+		return it == m_registered.end()
 			? 0u
-			: it->second.plugin->getHeightFlags();
+			: it->plugin->getHeightMapFlags();
 	}
 
-	PassComponentTextureFlag PassComponentRegister::getOcclusionFlags()const
+	PassComponentTextureFlag PassComponentRegister::getOcclusionMapFlags()const
 	{
-		auto it = std::find_if( m_ids.begin()
-			, m_ids.end()
-			, []( ComponentIds::value_type const & lookup )
+		auto it = std::find_if( m_registered.begin()
+			, m_registered.end()
+			, []( Components::value_type const & lookup )
 			{
-				return lookup.second.plugin->isMapComponent()
-					&& lookup.second.plugin->getOcclusionFlags() != 0u;
+				return lookup.plugin->isMapComponent()
+					&& lookup.plugin->getOcclusionMapFlags() != 0u;
 			} );
-		return it == m_ids.end()
+		return it == m_registered.end()
 			? 0u
-			: it->second.plugin->getOcclusionFlags();
+			: it->plugin->getOcclusionMapFlags();
 	}
 
 	void PassComponentRegister::fillTextureConfiguration( PassComponentTextureFlag const & flags
 		, TextureConfiguration & result )const
 	{
-		auto it = std::find_if( m_ids.begin()
-			, m_ids.end()
-			, [&flags]( ComponentIds::value_type const & lookup )
+		auto it = std::find_if( m_registered.begin()
+			, m_registered.end()
+			, [&flags]( Components::value_type const & lookup )
 			{
-				return lookup.second.plugin->isMapComponent()
-					&& hasIntersect( flags, lookup.second.plugin->getTextureFlags() );
+				return lookup.plugin->isMapComponent()
+					&& hasIntersect( flags, lookup.plugin->getTextureFlags() );
 			} );
 
-		if ( it != m_ids.end() )
+		if ( it != m_registered.end() )
 		{
-			it->second.plugin->fillTextureConfiguration( result );
+			it->plugin->fillTextureConfiguration( result );
 		}
 	}
 
 	bool PassComponentRegister::hasTexcoordModif( PassComponentTextureFlag const & flag
 		, PipelineFlags const * flags )const
 	{
-		return m_ids.end() != std::find_if( m_ids.begin()
-			, m_ids.end()
-			, [&flag, flags]( ComponentIds::value_type const & lookup )
+		return m_registered.end() != std::find_if( m_registered.begin()
+			, m_registered.end()
+			, [this, &flag, flags]( Components::value_type const & lookup )
 			{
-				return lookup.second.plugin->isMapComponent()
-					&& hasIntersect( flag, lookup.second.plugin->getTextureFlags() )
-					&& lookup.second.plugin->hasTexcoordModif( flags );
+				return lookup.plugin->isMapComponent()
+					&& hasIntersect( flag, lookup.plugin->getTextureFlags() )
+					&& lookup.plugin->hasTexcoordModif( *this, flags );
 			} );
 	}
 
@@ -550,11 +643,11 @@ namespace castor3d
 			return id;
 		}
 
-		id = getNextId();
-		registerComponent( id
+		auto & componentDesc = getNextId();
+		registerComponent( componentDesc
 			, componentType
 			, std::move( componentPlugin ) );
-		return id;
+		return componentDesc.id;
 	}
 
 	void PassComponentRegister::unregisterComponent( castor::String const & componentType )
@@ -573,61 +666,61 @@ namespace castor3d
 
 	PassComponentID PassComponentRegister::getNameId( castor::String const & componentType )const
 	{
-		auto it = std::find_if( m_ids.begin()
-			, m_ids.end()
-			, [&componentType]( ComponentIds::value_type const & lookup )
+		auto it = std::find_if( m_registered.begin()
+			, m_registered.end()
+			, [&componentType]( Components::value_type const & lookup )
 			{
-				return lookup.second.name == componentType;
+				return lookup.name == componentType;
 			} );
-		return ( it == m_ids.end() )
+		return ( it == m_registered.end() )
 			? passcompreg::InvalidId
-			: it->first;
-	}
-	
-	PassComponentsBitset PassComponentRegister::getPassComponentsBitset( Pass const * pass )const
-	{
-		PassComponentsBitset result{ m_ids.size() };
-
-		if ( pass )
-		{
-			for ( auto & id : m_ids )
-			{
-				result[id.first] = pass->hasComponent( id.second.name );
-			}
-		}
-
-		return result;
+			: it->id;
 	}
 
 	PassComponentPlugin const & PassComponentRegister::getPlugin( PassComponentID componentId )const
 	{
-		auto it = m_ids.find( componentId );
-
-		if ( it == m_ids.end() )
+		if ( componentId > m_registered.size()
+			|| componentId == 0u
+			|| !m_registered[componentId - 1u].plugin )
 		{
 			CU_Failure( "Component ID was not found." );
 			CU_Exception( "Component ID was not found." );
 		}
 
-		return *it->second.plugin;
+		return *m_registered[componentId - 1u].plugin;
 	}
 
-	PassComponentID PassComponentRegister::getNextId()
+	PassComponentRegister::Component & PassComponentRegister::getNextId()
 	{
-		static PassComponentID result{};
-		return result++;
+		auto it = std::find_if( m_registered.begin()
+			, m_registered.end()
+			, []( Components::value_type const & lookup )
+			{
+				return lookup.plugin == nullptr;
+			} );
+
+		if ( it == m_registered.end() )
+		{
+			auto id = PassComponentID( m_registered.size() + 1u );
+			m_registered.push_back( { id } );
+			it = std::next( m_registered.begin()
+				, ptrdiff_t( id - 1u ) );
+		}
+
+		return *it;
 	}
 
-	void PassComponentRegister::registerComponent( PassComponentID id
+	void PassComponentRegister::registerComponent( Component & componentDesc
 		, castor::String const & componentType
 		, PassComponentPluginUPtr componentPlugin )
 	{
-		componentPlugin->setId( id );
-		auto & component = m_ids.emplace( id, Component{ componentType, std::move( componentPlugin ) } ).first->second;
+		componentPlugin->setId( componentDesc.id );
+		componentDesc.name = componentType;
+		componentDesc.plugin = std::move( componentPlugin );
 
-		if ( auto shader = component.plugin->createMaterialShader() )
+		if ( auto shader = componentDesc.plugin->createMaterialShader() )
 		{
-			m_materialShaders.emplace( id, std::move( shader ) );
+			m_materialShaders.emplace( componentDesc.id, std::move( shader ) );
 
 			if ( !m_pauseOrder )
 			{
@@ -637,7 +730,7 @@ namespace castor3d
 
 		castor::AttributeParsers parsers;
 		ChannelFillers fillers;
-		component.plugin->createParsers( parsers, fillers );
+		componentDesc.plugin->createParsers( parsers, fillers );
 
 		for ( auto & channelFiller : fillers )
 		{
@@ -646,25 +739,21 @@ namespace castor3d
 		}
 
 		castor::StrUInt32Map sections;
-		component.plugin->createSections( sections );
+		componentDesc.plugin->createSections( sections );
 
 		getEngine()->registerParsers( componentType
 			, parsers
 			, sections
 			, nullptr );
-
-		log::debug << "Registered component ID " << id << " for [" << componentType << "]" << std::endl;
+		log::debug << "Registered component ID " << componentDesc.id << " for [" << componentType << "]" << std::endl;
 	}
 
 	void PassComponentRegister::unregisterComponent( PassComponentID id )
 	{
-		auto idit = m_ids.find( id );
-
-		if ( idit != m_ids.end() )
+		if ( id > 0 && id <= m_registered.size() )
 		{
-			log::debug << "Unregistered component " << id << " (" << idit->second.name << ")" << std::endl;
-			getEngine()->unregisterParsers( idit->second.name );
-			m_ids.erase( idit );
+			auto & componentDesc = m_registered[id - 1u];
+			getEngine()->unregisterParsers( componentDesc.name );
 
 			auto ordIt = std::find( m_bufferOrder.begin(), m_bufferOrder.end(), id );
 
@@ -684,6 +773,10 @@ namespace castor3d
 					reorderBuffer();
 				}
 			}
+
+			log::debug << "Unregistered component " << id << " (" << componentDesc.name << ")" << std::endl;
+			componentDesc.name.clear();
+			componentDesc.plugin.reset();
 		}
 	}
 
@@ -698,7 +791,7 @@ namespace castor3d
 		for ( auto & shader : m_materialShaders )
 		{
 			auto chunk = shader.second->getMaterialChunk();
-			chunks.emplace( shader.first, std::make_pair( m_ids[shader.first].name, chunk ) );
+			chunks.emplace( shader.first, std::make_pair( m_registered[shader.first - 1u].name, chunk ) );
 		}
 
 		// float is base unit size.

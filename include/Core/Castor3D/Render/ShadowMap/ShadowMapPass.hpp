@@ -77,6 +77,7 @@ namespace castor3d
 		ComponentModeFlags getComponentsMask()const override
 		{
 			return ComponentModeFlag::eOpacity
+				| ComponentModeFlag::eNormals
 				| ComponentModeFlag::eGeometry
 				| ( m_needsRsm ? ComponentModeFlag::eColour : ComponentModeFlag::eNone );
 		}

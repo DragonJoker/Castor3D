@@ -38,13 +38,36 @@
     </Expand>
   </Type>
 
-  <Type Name="castor::ColourT&lt;*&gt;">
-    <DisplayString>{{r={m_arrayValues[0]} g={m_arrayValues[1]} b={m_arrayValues[2]} a={m_arrayValues[3]}}}</DisplayString>
+  <Type Name="castor::ColourComponent">
+    <DisplayString>{m_component}</DisplayString>
     <Expand>
-      <Item Name="r">m_arrayValues[0]</Item>
-      <Item Name="g">m_arrayValues[1]</Item>
-      <Item Name="b">m_arrayValues[2]</Item>
-      <Item Name="a">m_arrayValues[3]</Item>
+      <Item Name="component">m_component</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="castor::HdrColourComponent">
+    <DisplayString>{m_component}</DisplayString>
+    <Expand>
+      <Item Name="component">m_component</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="castor::RgbaColourT&lt;*&gt;">
+    <DisplayString>{{r={m_components[0]} g={m_components[1]} b={m_components[2]} a={m_components[3]}}}</DisplayString>
+    <Expand>
+      <Item Name="r">m_components[0]</Item>
+      <Item Name="g">m_components[1]</Item>
+      <Item Name="b">m_components[2]</Item>
+      <Item Name="a">m_components[3]</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="castor::RgbColourT&lt;*&gt;">
+    <DisplayString>{{r={m_components[0]} g={m_components[1]} b={m_components[2]}}}</DisplayString>
+    <Expand>
+      <Item Name="r">m_components[0]</Item>
+      <Item Name="g">m_components[1]</Item>
+      <Item Name="b">m_components[2]</Item>
     </Expand>
   </Type>
 

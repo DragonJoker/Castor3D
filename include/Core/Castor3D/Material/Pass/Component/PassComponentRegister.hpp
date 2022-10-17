@@ -36,15 +36,14 @@ namespace castor3d
 		 *	Enregistrement de type de passe.
 		 */
 		/**@{*/
-		C3D_API PassComponentsTypeID registerPassType( Pass const & pass );
-		C3D_API PassComponentsTypeID getPassComponentsType( Pass const & pass )const;
-		C3D_API PassComponentsTypeID getPassComponentsType( PassComponentIDSet const & components )const;
-		C3D_API TextureCombineID getTextureCombineType( Pass const & pass )const;
-		C3D_API TextureCombineID getTextureCombineType( TextureCombine const & combine )const;
-		C3D_API PassComponentIDSet getPassComponents( Pass const & pass )const;
-		C3D_API PassComponentIDSet getPassComponents( PassComponentsTypeID passType )const;
+		C3D_API PassComponentCombine registerPassComponentCombine( Pass const & pass );
+		C3D_API PassComponentCombineID registerPassComponentCombine( PassComponentCombine combine );
+		C3D_API PassComponentCombineID getPassComponentCombineID( PassComponentCombine const & combine )const;
+		C3D_API TextureCombineID getTextureCombineID( TextureCombine const & combine )const;
+		C3D_API PassComponentCombine getPassComponentCombine( Pass const & pass )const;
+		C3D_API PassComponentCombine getPassComponentCombine( PassComponentCombineID id )const;
 		C3D_API TextureCombine getTextureCombine( Pass const & pass )const;
-		C3D_API TextureCombine getTextureCombine( TextureCombineID combineType )const;
+		C3D_API TextureCombine getTextureCombine( TextureCombineID id )const;
 		/**@}*/
 		/**
 		 *\~english
@@ -101,6 +100,23 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\name
+		 *	Base components handling.
+		 *\~french
+		 *\name
+		 *	Gestion des composants de base.
+		 */
+		/**@{*/
+		C3D_API PassComponentCombine filterComponentFlags( ComponentModeFlags filter
+			, PassComponentCombine const & combine )const;
+		C3D_API bool hasOpacity( PipelineFlags const & flags )const;
+		C3D_API PassComponentFlag getAlphaBlendingFlag()const;
+		C3D_API PassComponentFlag getAlphaTestFlag()const;
+		C3D_API PassComponentFlag getParallaxOcclusionMappingOneFlag()const;
+		C3D_API PassComponentFlag getParallaxOcclusionMappingRepeatFlag()const;
+		/**@}*/
+		/**
+		 *\~english
+		 *\name
 		 *	Texture components handling.
 		 *\~french
 		 *\name
@@ -138,11 +154,11 @@ namespace castor3d
 			, SceneFileContext & parsingContext );
 		C3D_API TextureCombine filterTextureFlags( ComponentModeFlags filter
 			, TextureCombine const & combine )const;
-		C3D_API PassComponentTextureFlag getColourFlags()const;
-		C3D_API PassComponentTextureFlag getOpacityFlags()const;
-		C3D_API PassComponentTextureFlag getNormalFlags()const;
-		C3D_API PassComponentTextureFlag getHeightFlags()const;
-		C3D_API PassComponentTextureFlag getOcclusionFlags()const;
+		C3D_API PassComponentTextureFlag getColourMapFlags()const;
+		C3D_API PassComponentTextureFlag getOpacityMapFlags()const;
+		C3D_API PassComponentTextureFlag getNormalMapFlags()const;
+		C3D_API PassComponentTextureFlag getHeightMapFlags()const;
+		C3D_API PassComponentTextureFlag getOcclusionMapFlags()const;
 		C3D_API void fillTextureConfiguration( PassComponentTextureFlag const & flags
 			, TextureConfiguration & result )const;
 		C3D_API bool hasTexcoordModif( PassComponentTextureFlag const & flag
@@ -168,7 +184,6 @@ namespace castor3d
 			, PassComponentPluginUPtr componentPlugin );
 		C3D_API void unregisterComponent( castor::String const & componentType );
 		C3D_API PassComponentID getNameId( castor::String const & componentType )const;
-		C3D_API PassComponentsBitset getPassComponentsBitset( Pass const * pass = nullptr )const;
 		C3D_API PassComponentPlugin const & getPlugin( PassComponentID componentId )const;
 
 		PassComponentPlugin const & getPlugin( castor::String const & componentType )const
@@ -186,31 +201,22 @@ namespace castor3d
 		PassComponentID registerComponent( CreatePassComponentPlugin createPlugin = &ComponentT::createPlugin )
 		{
 			return registerComponent( ComponentT::TypeName
-				, createPlugin() );
-		}
-
-		auto begin()const
-		{
-			return m_ids.begin();
-		}
-
-		auto end()const
-		{
-			return m_ids.end();
+				, createPlugin( *this ) );
 		}
 		/**@}*/
 
 	private:
 		struct Component
 		{
-			std::string name;
+			PassComponentID id{};
+			std::string name{};
 			PassComponentPluginUPtr plugin{};
 		};
-		using ComponentIds = std::map< PassComponentID, Component >;
+		using Components = std::vector< Component >;
 
 	private:
-		PassComponentID getNextId();
-		void registerComponent( PassComponentID id
+		Component & getNextId();
+		void registerComponent( Component & componentDesc
 			, castor::String const & componentType
 			, PassComponentPluginUPtr componentPlugin );
 		void unregisterComponent( PassComponentID id );
@@ -221,7 +227,7 @@ namespace castor3d
 			, uint32_t & padIndex ) >;
 
 	private:
-		ComponentIds m_ids;
+		Components m_registered;
 		std::map< PassComponentID, shader::PassMaterialShaderPtr > m_materialShaders;
 		castor::UInt32StrMap m_channels;
 		ChannelFillers m_channelsFillers;
@@ -230,7 +236,7 @@ namespace castor3d
 		std::vector< shader::PassMaterialShader * > m_bufferShaders;
 		std::vector< FillMaterialType > m_fillMaterial;
 		VkDeviceSize m_bufferStride{};
-		std::vector< PassComponentIDSet > m_passTypes{};
+		mutable std::vector< PassComponentCombine > m_componentCombines{};
 	};
 }
 

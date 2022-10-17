@@ -42,8 +42,8 @@ namespace castor3d
 			: public PassMapComponentPlugin
 		{
 		public:
-			Plugin()
-				: PassMapComponentPlugin{ &Plugin::doUpdateComponent }
+			explicit Plugin( PassComponentRegister const & passComponent )
+				: PassMapComponentPlugin{ passComponent, &Plugin::doUpdateComponent }
 			{
 			}
 
@@ -86,7 +86,7 @@ namespace castor3d
 				addFlagConfiguration( result, { getTextureFlags(), ( mask == 0 ? 0x00FFFFFFu : mask ) } );
 			}
 
-			castor::String getMapFlagsName( PassComponentTextureFlag const & flags )const override
+			castor::String getTextureFlagsName( PassComponentTextureFlag const & flags )const override
 			{
 				auto [passIndex, textureFlags] = splitTextureFlag( flags );
 				return ( passIndex == getId() && checkFlag( textureFlags, Specular ) )
@@ -104,9 +104,9 @@ namespace castor3d
 				, shader::BlendComponents & components );
 		};
 
-		static PassComponentPluginUPtr createPlugin()
+		static PassComponentPluginUPtr createPlugin( PassComponentRegister const & passComponent )
 		{
-			return castor::makeUniqueDerived< PassComponentPlugin, Plugin >();
+			return castor::makeUniqueDerived< PassComponentPlugin, Plugin >( passComponent );
 		}
 
 		C3D_API explicit SpecularMapComponent( Pass & pass );

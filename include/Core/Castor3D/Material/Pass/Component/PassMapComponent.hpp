@@ -23,8 +23,9 @@ namespace castor3d
 		: public PassComponentPlugin
 	{
 	public:
-		C3D_API explicit PassMapComponentPlugin( UpdateComponent pupdateComponent = nullptr )
-			: PassComponentPlugin{ pupdateComponent }
+		C3D_API explicit PassMapComponentPlugin( PassComponentRegister const & passComponent
+			, UpdateComponent pupdateComponent = nullptr )
+			: PassComponentPlugin{ passComponent, pupdateComponent }
 		{
 		}
 

@@ -17,6 +17,10 @@ namespace castor3d
 	struct SubsurfaceScatteringComponent
 		: public BaseDataPassComponentT< castor::AtomicGroupChangeTracked< SubsurfaceScatteringUPtr > >
 	{
+		static constexpr PassFlag eSubsurfaceScattering = PassFlag( 0x01u );
+		static constexpr PassFlag eDistanceBasedTransmittance = PassFlag( 0x02u );
+		static constexpr PassFlag eAll = PassFlag( 0x03u );
+
 		struct ComponentsShader
 			: shader::PassComponentsShader
 		{
@@ -51,6 +55,11 @@ namespace castor3d
 			: public PassComponentPlugin
 		{
 		public:
+			explicit Plugin( PassComponentRegister const & passComponent )
+				: PassComponentPlugin{ passComponent }
+			{
+			}
+
 			void createParsers( castor::AttributeParsers & parsers
 				, ChannelFillers & channelFillers )const override;
 			void createSections( castor::StrUInt32Map & sections )const override;
@@ -69,11 +78,25 @@ namespace castor3d
 			{
 				return std::make_unique< MaterialShader >();
 			}
+
+			PassComponentFlag getComponentFlags()const override
+			{
+				return makePassComponentFlag( getId(), eAll );
+			}
+
+			void filterComponentFlags( ComponentModeFlags filter
+				, PassComponentCombine & componentsFlags )const override
+			{
+				if ( !checkFlag( filter, ComponentModeFlag::eDiffuseLighting ) )
+				{
+					remFlags( componentsFlags, getComponentFlags() );
+				}
+			}
 		};
 
-		static PassComponentPluginUPtr createPlugin()
+		static PassComponentPluginUPtr createPlugin( PassComponentRegister const & passComponent )
 		{
-			return castor::makeUniqueDerived< PassComponentPlugin, Plugin >();
+			return castor::makeUniqueDerived< PassComponentPlugin, Plugin >( passComponent );
 		}
 
 		C3D_API explicit SubsurfaceScatteringComponent( Pass & pass );
@@ -81,11 +104,12 @@ namespace castor3d
 		C3D_API void accept( PassVisitorBase & vis )override;
 		C3D_API void update()override;
 
-		C3D_API PassFlags getPassFlags()const override
+		C3D_API PassComponentFlag getPassFlags()const override
 		{
-			return hasSubsurfaceScattering()
-				? PassFlag::eSubsurfaceScattering
-				: PassFlag::eNone;
+			return makePassComponentFlag( getId()
+				, ( hasSubsurfaceScattering()
+					? eSubsurfaceScattering
+					: PassFlag::eNone ) );
 		}
 
 		C3D_API void setSubsurfaceScattering( SubsurfaceScatteringUPtr value );

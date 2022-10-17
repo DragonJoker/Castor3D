@@ -1,4 +1,4 @@
-#include "Castor3D/Material/Pass/Component/Base/UntileComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Base/UntileMappingComponent.hpp"
 
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Pass/PassVisitor.hpp"
@@ -7,19 +7,21 @@
 
 #include <CastorUtils/FileParser/ParserParameter.hpp>
 
+#include <ShaderWriter/Source.hpp>
+
 namespace castor
 {
 	template<>
-	class TextWriter< castor3d::UntileComponent >
-		: public TextWriterT< castor3d::UntileComponent >
+	class TextWriter< castor3d::UntileMappingComponent >
+		: public TextWriterT< castor3d::UntileMappingComponent >
 	{
 	public:
 		explicit TextWriter( String const & tabs )
-			: TextWriterT< castor3d::UntileComponent >{ tabs }
+			: TextWriterT< castor3d::UntileMappingComponent >{ tabs }
 		{
 		}
 
-		bool operator()( castor3d::UntileComponent const & object
+		bool operator()( castor3d::UntileMappingComponent const & object
 			, StringStream & file )override
 		{
 			return writeOpt( file, cuT( "untile" ), object.isUntiling(), false );
@@ -49,7 +51,7 @@ namespace castor3d
 			{
 				bool value{ false };
 				params[0]->get( value );
-				auto & component = getPassComponent< UntileComponent >( parsingContext );
+				auto & component = getPassComponent< UntileMappingComponent >( parsingContext );
 				component.setUntiling( value );
 			}
 		}
@@ -58,7 +60,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	sdw::Vec4 UntileComponent::ComponentsShader::sampleMap( sdw::CombinedImage2DRgba32 const & map
+	sdw::Vec4 UntileMappingComponent::ComponentsShader::sampleMap( sdw::CombinedImage2DRgba32 const & map
 		, sdw::Vec3 const & texCoords )const
 	{
 		return sampleUntiled( map
@@ -67,7 +69,7 @@ namespace castor3d
 			, dFdy( texCoords.xy() ) );
 	}
 
-	sdw::Vec4 UntileComponent::ComponentsShader::sampleMap( sdw::CombinedImage2DRgba32 const & map
+	sdw::Vec4 UntileMappingComponent::ComponentsShader::sampleMap( sdw::CombinedImage2DRgba32 const & map
 		, shader::DerivTex const & texCoords )const
 	{
 		return sampleUntiled( map
@@ -76,7 +78,7 @@ namespace castor3d
 			, texCoords.dPdy() );
 	}
 
-	sdw::RetVec4 UntileComponent::ComponentsShader::sampleUntiled( sdw::CombinedImage2DRgba32 const & pmap
+	sdw::RetVec4 UntileMappingComponent::ComponentsShader::sampleUntiled( sdw::CombinedImage2DRgba32 const & pmap
 		, sdw::Vec2 const & ptexCoords
 		, sdw::Vec2 const & pddx
 		, sdw::Vec2 const & pddy )const
@@ -151,7 +153,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void UntileComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+	void UntileMappingComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
 		Pass::addParserT( parsers
@@ -163,31 +165,31 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const UntileComponent::TypeName = C3D_MakePassBaseComponentName( "untile" );
+	castor::String const UntileMappingComponent::TypeName = C3D_MakePassBaseComponentName( "untile" );
 
-	UntileComponent::UntileComponent( Pass & pass )
+	UntileMappingComponent::UntileMappingComponent( Pass & pass )
 		: BaseDataPassComponentT< castor::AtomicGroupChangeTracked< bool > >{ pass, TypeName }
 	{
 	}
 
-	void UntileComponent::accept( PassVisitorBase & vis )
+	void UntileMappingComponent::accept( PassVisitorBase & vis )
 	{
 		vis.visit( cuT( "Untile" ), m_value );
 	}
 
-	PassComponentUPtr UntileComponent::doClone( Pass & pass )const
+	PassComponentUPtr UntileMappingComponent::doClone( Pass & pass )const
 	{
-		auto result = std::make_unique< UntileComponent >( pass );
+		auto result = std::make_unique< UntileMappingComponent >( pass );
 		result->setData( getData() );
 		return result;
 	}
 
-	bool UntileComponent::doWriteText( castor::String const & tabs
+	bool UntileMappingComponent::doWriteText( castor::String const & tabs
 		, castor::Path const & folder
 		, castor::String const & subfolder
 		, castor::StringStream & file )const
 	{
-		return castor::TextWriter< UntileComponent >{ tabs }( *this, file );
+		return castor::TextWriter< UntileMappingComponent >{ tabs }( *this, file );
 	}
 
 	//*********************************************************************************************

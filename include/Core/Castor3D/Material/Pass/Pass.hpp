@@ -44,16 +44,13 @@ namespace castor3d
 		 *\brief		Constructor.
 		 *\param[in]	parent			The parent material.
 		 *\param[in]	typeID			The pass type ID.
-		 *\param[in]	initialFlags	The flags inherited from pass type.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	parent			Le matériau parent.
 		 *\param[in]	typeID			L'ID du type de la passe.
-		 *\param[in]	initialFlags	Les flags hérités du type de passe.
 		 */
 		C3D_API explicit Pass( Material & parent
-			, PassTypeID typeID
-			, PassFlags initialFlags );
+			, PassTypeID typeID );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -98,8 +95,8 @@ namespace castor3d
 		C3D_API shader::PassMaterialShader * getMaterialShader( castor::String const & componentType )const;
 		C3D_API PassComponentID getComponentId( castor::String const & componentType )const;
 		C3D_API PassComponentPlugin const & getComponentPlugin( PassComponentID componentId )const;
-		C3D_API PassComponentsTypeID getPassComponentsType()const;
-		C3D_API TextureCombineID getTextureCombineType()const;
+		C3D_API PassComponentCombineID getComponentCombineID()const;
+		C3D_API TextureCombineID getTextureCombineID()const;
 
 		PassComponentPlugin const & getComponentPlugin( castor::String const & componentType )const
 		{
@@ -261,7 +258,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La combinaison d'indicateurs de passe.
 		 */
-		C3D_API PassFlags getPassFlags()const;
+		C3D_API PassComponentCombine getPassFlags()const;
 		/**
 		*\~english
 		*\brief
@@ -400,12 +397,13 @@ namespace castor3d
 		C3D_API uint32_t getTextureUnitsCount()const;
 		C3D_API TextureCombine getTexturesMask()const;
 		C3D_API bool hasLighting()const;
+		C3D_API PassComponentRegister & getPassComponentsRegister()const;
 		C3D_API PassComponentTextureFlag getColourMapFlags()const;
 		C3D_API PassComponentTextureFlag getOpacityMapFlags()const;
 		C3D_API PassComponentTextureFlag getNormalMapFlags()const;
 		C3D_API PassComponentTextureFlag getHeightMapFlags()const;
 		C3D_API PassComponentTextureFlag getOcclusionMapFlags()const;
-		C3D_API castor::String getMapFlagsName( PassComponentTextureFlag flags )const;
+		C3D_API castor::String getTextureFlagsName( PassComponentTextureFlag flags )const;
 
 		bool hasAutomaticShader()const
 		{
@@ -422,24 +420,9 @@ namespace castor3d
 			return m_implicit;
 		}
 
-		bool hasIBL()const
-		{
-			return checkFlag( m_flags, PassFlag::eImageBasedLighting );
-		}
-
 		PassTypeID getTypeID()const
 		{
 			return m_typeID;
-		}
-
-		PassComponentsTypeID getComponentsTypeID()const
-		{
-			return m_componentsID;
-		}
-
-		TextureCombineID getTexturesID()const
-		{
-			return m_texturesID;
 		}
 
 		RenderPassRegisterInfo * getRenderPassInfo()const
@@ -496,6 +479,7 @@ namespace castor3d
 		*/
 		/**@{*/
 		C3D_API void enableLighting( bool value );
+		C3D_API void enablePicking( bool value );
 
 		void setId( uint32_t value )
 		{
@@ -505,11 +489,6 @@ namespace castor3d
 		void setImplicit( bool value = true )
 		{
 			m_implicit = value;
-		}
-
-		void enablePicking( bool value )
-		{
-			updateFlag( PassFlag::ePickable, value );
 		}
 
 		void setColour( castor::RgbColour const & v
@@ -544,23 +523,6 @@ namespace castor3d
 			, TextureUnitPtrArray & result );
 		void doUpdateTextureFlags();
 
-		void updateFlag( PassFlag flag
-			, bool value )
-		{
-			auto save = m_flags;
-
-			if ( value )
-			{
-				addFlag( m_flags, flag );
-			}
-			else
-			{
-				remFlag( m_flags, flag );
-			}
-
-			m_dirty = m_dirty || ( save != m_flags );
-		}
-
 	public:
 		OnPassChanged onChanged;
 
@@ -569,12 +531,10 @@ namespace castor3d
 
 	private:
 		PassTypeID m_typeID;
-		PassComponentsTypeID m_componentsID;
-		TextureCombineID m_texturesID;
-		uint32_t m_index;
-		PassFlags m_flags;
-		PassComponentMap m_components;
+		PassComponentCombine m_componentCombine;
 		TextureCombine m_textureCombine;
+		uint32_t m_index;
+		PassComponentMap m_components;
 		TextureSourceMap m_sources;
 		std::unordered_map< TextureSourceInfo, AnimationUPtr, TextureSourceInfoHasher > m_animations;
 		uint32_t m_maxTexcoordSet{};
