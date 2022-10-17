@@ -49,6 +49,10 @@ namespace castor3d
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
 		C3D_API void accept( RenderTechniqueVisitor & visitor )override;
+		/**
+		 *\copydoc		castor3d::RenderTechniquePass::getComponentsMask
+		 */
+		C3D_API ComponentModeFlags getComponentsMask()const override;
 
 	public:
 		C3D_API static castor::String const Type;

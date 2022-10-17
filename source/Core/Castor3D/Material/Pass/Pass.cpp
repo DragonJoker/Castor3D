@@ -11,10 +11,11 @@
 #include "Castor3D/Material/Pass/Component/Base/BlendComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Base/NormalComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Base/PassHeaderComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Base/PickableComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Base/TexturesComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Base/TextureCountComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Base/TwoSidedComponent.hpp"
-#include "Castor3D/Material/Pass/Component/Base/UntileComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Base/UntileMappingComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Other/AlphaTestComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Other/OpacityComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Other/ReflectionComponent.hpp"
@@ -160,13 +161,10 @@ namespace castor3d
 	//*********************************************************************************************
 
 	Pass::Pass( Material & parent
-		, PassTypeID typeID
-		, PassFlags initialFlags )
+		, PassTypeID typeID )
 		: OwnedBy< Material >{ parent }
 		, m_typeID{ typeID }
 		, m_index{ parent.getPassCount() }
-		, m_flags{ PassFlag::ePickable
-			| initialFlags }
 		, m_renderPassInfo{ getOwner()->getRenderPassInfo() }
 	{
 		createComponent< BlendComponent >();
@@ -174,8 +172,8 @@ namespace castor3d
 		createComponent< TwoSidedComponent >();
 		createComponent< TexturesComponent >();
 		createComponent< TextureCountComponent >();
-		createComponent< UntileComponent >();
 		createComponent< NormalComponent >();
+		createComponent< PickableComponent >();
 	}
 
 	Pass::~Pass()
@@ -193,8 +191,7 @@ namespace castor3d
 			}
 		}
 
-		m_componentsID = getOwner()->getOwner()->getPassComponentsRegister().registerPassType( *this );
-		m_texturesID = getOwner()->getOwner()->getTextureUnitCache().registerTextureCombineType( *this );
+		m_componentCombine = getOwner()->getOwner()->getPassComponentsRegister().registerPassComponentCombine( *this );
 		getOwner()->getOwner()->getMaterialCache().registerPass( *this );
 	}
 
@@ -205,20 +202,21 @@ namespace castor3d
 
 	void Pass::update()
 	{
-		if ( m_dirty.exchange( false ) )
-		{
-			onChanged( *this );
-		}
-
 		for ( auto & component : m_components )
 		{
 			component.second->update();
+		}
+
+		if ( m_dirty.exchange( false ) )
+		{
+			m_componentCombine = getOwner()->getOwner()->getPassComponentsRegister().registerPassComponentCombine( *this );
+			onChanged( *this );
 		}
 	}
 
 	void Pass::addComponent( PassComponentUPtr component )
 	{
-		auto id = getOwner()->getEngine()->getPassComponentsRegister().getNameId( component->getType() );
+		auto id = getPassComponentsRegister().getNameId( component->getType() );
 		m_components.emplace( id, std::move( component ) );
 		m_dirty = true;
 	}
@@ -270,27 +268,28 @@ namespace castor3d
 
 	shader::PassMaterialShader * Pass::getMaterialShader( castor::String const & componentType )const
 	{
-		return getOwner()->getEngine()->getPassComponentsRegister().getMaterialShader( componentType );
+		return getPassComponentsRegister().getMaterialShader( componentType );
 	}
 
 	PassComponentID Pass::getComponentId( castor::String const & componentType )const
 	{
-		return getOwner()->getEngine()->getPassComponentsRegister().getNameId( componentType );
+		return getPassComponentsRegister().getNameId( componentType );
 	}
 
 	PassComponentPlugin const & Pass::getComponentPlugin( PassComponentID componentId )const
 	{
-		return getOwner()->getEngine()->getPassComponentsRegister().getPlugin( componentId );
+		return getPassComponentsRegister().getPlugin( componentId );
 	}
 
-	PassComponentsTypeID Pass::getPassComponentsType()const
+	PassComponentCombineID Pass::getComponentCombineID()const
 	{
-		return getOwner()->getEngine()->getPassComponentsRegister().getPassComponentsType( *this );
+		CU_Require( m_componentCombine.baseId != 0u );
+		return m_componentCombine.baseId;
 	}
 
-	TextureCombineID Pass::getTextureCombineType()const
+	TextureCombineID Pass::getTextureCombineID()const
 	{
-		return getOwner()->getEngine()->getPassComponentsRegister().getTextureCombineType( *this );
+		return getPassComponentsRegister().getTextureCombineID( m_textureCombine );
 	}
 
 	TextureUnitSPtr Pass::getTextureUnit( uint32_t index )const
@@ -315,7 +314,6 @@ namespace castor3d
 				, std::move( configuration ) ).first;
 		}
 
-		addFlags( m_textureCombine, getFlags( it->second.config ) );
 		doUpdateTextureFlags();
 	}
 
@@ -338,7 +336,6 @@ namespace castor3d
 			m_sources.erase( it );
 			m_dirty = true;
 
-			remFlags( m_textureCombine, getFlags( it->second.config ) );
 			doUpdateTextureFlags();
 		}
 	}
@@ -353,7 +350,6 @@ namespace castor3d
 		{
 			configuration = it->second;
 			m_sources.erase( it );
-			remFlags( m_textureCombine, getFlags( it->second.config ) );
 
 			it = m_sources.find( dstSourceInfo );
 
@@ -367,7 +363,6 @@ namespace castor3d
 					, std::move( configuration ) ).first;
 			}
 			
-			addFlags( m_textureCombine, getFlags( it->second.config ) );
 			doUpdateTextureFlags();
 		}
 	}
@@ -379,9 +374,7 @@ namespace castor3d
 
 		if ( it != m_sources.end() )
 		{
-			remFlags( m_textureCombine, getFlags( it->second.config ) );
 			it->second.config = std::move( configuration );
-			addFlags( m_textureCombine, getFlags( it->second.config ) );
 			doUpdateTextureFlags();
 		}
 	}
@@ -507,7 +500,7 @@ namespace castor3d
 			}
 
 			m_textureUnits = newUnits;
-			m_textureCombine.configCount = uint32_t( m_textureUnits.size() );
+			m_textureCombine = getOwner()->getOwner()->getTextureUnitCache().registerTextureCombine( *this );
 		}
 	}
 
@@ -535,7 +528,7 @@ namespace castor3d
 
 		auto lhsFlags = getEnabledFlag( lhsIt.second.config );
 		auto rhsFlags = getEnabledFlag( rhsIt.second.config );
-		auto name = getMapFlagsName( lhsFlags ) + getMapFlagsName( rhsFlags );
+		auto name = getTextureFlagsName( lhsFlags ) + getTextureFlagsName( rhsFlags );
 
 		log::debug << getOwner()->getName() << name << cuT( " - Merging textures." ) << std::endl;
 		auto resultSourceInfo = matpass::mergeSourceInfos( lhsIt.first, rhsIt.first );
@@ -616,16 +609,9 @@ namespace castor3d
 			: it->second->getColour();
 	}
 
-	PassFlags Pass::getPassFlags()const
+	PassComponentCombine Pass::getPassFlags()const
 	{
-		auto result = m_flags;
-
-		for ( auto & component : m_components )
-		{
-			result |= component.second->getPassFlags();
-		}
-
-		return result;
+		return m_componentCombine;
 	}
 
 	void Pass::accept( PassVisitorBase & vis )
@@ -644,12 +630,12 @@ namespace castor3d
 			return;
 		}
 
-		getOwner()->getEngine()->getPassComponentsRegister().fillBuffer( *this, buffer );
+		getPassComponentsRegister().fillBuffer( *this, buffer );
 	}
 
 	PassSPtr Pass::clone( Material & material )const
 	{
-		auto result = std::make_unique< Pass >( material, getTypeID(), getPassFlags() );
+		auto result = std::make_unique< Pass >( material, getTypeID() );
 		result->m_implicit = m_implicit;
 		result->m_automaticShader = m_automaticShader;
 		result->m_renderPassInfo = m_renderPassInfo;
@@ -769,7 +755,7 @@ namespace castor3d
 
 	bool Pass::needsAlphaProcessing()const
 	{
-		bool result = hasAny( m_textureCombine, getOpacityMapFlags() );
+		bool result = hasAny( getTexturesMask(), getOpacityMapFlags() );
 
 		if ( auto comp = getComponent< OpacityComponent >() )
 		{
@@ -909,6 +895,11 @@ namespace castor3d
 		return false;
 	}
 
+	PassComponentRegister & Pass::getPassComponentsRegister()const
+	{
+		return getOwner()->getEngine()->getPassComponentsRegister();
+	}
+
 	PassComponentTextureFlag Pass::getColourMapFlags()const
 	{
 		auto it = std::find_if( m_components.begin()
@@ -916,11 +907,11 @@ namespace castor3d
 			, []( PassComponentMap::value_type const & lookup )
 			{
 				return lookup.second->getPlugin().isMapComponent()
-					&& lookup.second->getPlugin().getColourFlags() != 0u;
+					&& lookup.second->getPlugin().getColourMapFlags() != 0u;
 			} );
 		return it == m_components.end()
-			? 0u
-			: it->second->getPlugin().getColourFlags();
+			? getPassComponentsRegister().getColourMapFlags()
+			: it->second->getPlugin().getColourMapFlags();
 	}
 
 	PassComponentTextureFlag Pass::getOpacityMapFlags()const
@@ -930,11 +921,11 @@ namespace castor3d
 			, []( PassComponentMap::value_type const & lookup )
 			{
 				return lookup.second->getPlugin().isMapComponent()
-					&& lookup.second->getPlugin().getOpacityFlags() != 0u;
+					&& lookup.second->getPlugin().getOpacityMapFlags() != 0u;
 			} );
 		return it == m_components.end()
-			? 0u
-			: it->second->getPlugin().getOpacityFlags();
+			? getPassComponentsRegister().getOpacityMapFlags()
+			: it->second->getPlugin().getOpacityMapFlags();
 	}
 
 	PassComponentTextureFlag Pass::getNormalMapFlags()const
@@ -944,11 +935,11 @@ namespace castor3d
 			, []( PassComponentMap::value_type const & lookup )
 			{
 				return lookup.second->getPlugin().isMapComponent()
-					&& lookup.second->getPlugin().getNormalFlags() != 0u;
+					&& lookup.second->getPlugin().getNormalMapFlags() != 0u;
 			} );
 		return it == m_components.end()
-			? 0u
-			: it->second->getPlugin().getNormalFlags();
+			? getPassComponentsRegister().getNormalMapFlags()
+			: it->second->getPlugin().getNormalMapFlags();
 	}
 
 	PassComponentTextureFlag Pass::getHeightMapFlags()const
@@ -958,11 +949,11 @@ namespace castor3d
 			, []( PassComponentMap::value_type const & lookup )
 			{
 				return lookup.second->getPlugin().isMapComponent()
-					&& lookup.second->getPlugin().getHeightFlags() != 0u;
+					&& lookup.second->getPlugin().getHeightMapFlags() != 0u;
 			} );
 		return it == m_components.end()
-			? 0u
-			: it->second->getPlugin().getHeightFlags();
+			? getPassComponentsRegister().getHeightMapFlags()
+			: it->second->getPlugin().getHeightMapFlags();
 	}
 
 	PassComponentTextureFlag Pass::getOcclusionMapFlags()const
@@ -972,25 +963,25 @@ namespace castor3d
 			, []( PassComponentMap::value_type const & lookup )
 			{
 				return lookup.second->getPlugin().isMapComponent()
-					&& lookup.second->getPlugin().getOcclusionFlags() != 0u;
+					&& lookup.second->getPlugin().getOcclusionMapFlags() != 0u;
 			} );
 		return it == m_components.end()
-			? 0u
-			: it->second->getPlugin().getOcclusionFlags();
+			? getPassComponentsRegister().getOcclusionMapFlags()
+			: it->second->getPlugin().getOcclusionMapFlags();
 	}
 
-	castor::String Pass::getMapFlagsName( PassComponentTextureFlag flags )const
+	castor::String Pass::getTextureFlagsName( PassComponentTextureFlag flags )const
 	{
 		auto it = std::find_if( m_components.begin()
 			, m_components.end()
 			, [&flags]( PassComponentMap::value_type const & lookup )
 			{
 				return lookup.second->getPlugin().isMapComponent()
-					&& !lookup.second->getPlugin().getMapFlagsName( flags ).empty();
+					&& !lookup.second->getPlugin().getTextureFlagsName( flags ).empty();
 			} );
 		return it == m_components.end()
 			? castor::String{}
-			: it->second->getPlugin().getMapFlagsName( flags );
+			: it->second->getPlugin().getTextureFlagsName( flags );
 	}
 
 	void Pass::enableLighting( bool value )
@@ -998,6 +989,14 @@ namespace castor3d
 		if ( auto component = getComponent< PassHeaderComponent >() )
 		{
 			component->enableLighting( value );
+		}
+	}
+
+	void Pass::enablePicking( bool value )
+	{
+		if ( auto component = getComponent< PickableComponent >() )
+		{
+			component->setPickable( value );
 		}
 	}
 
@@ -1028,13 +1027,10 @@ namespace castor3d
 
 	void Pass::doUpdateTextureFlags()
 	{
-		updateFlag( PassFlag::eAlphaBlending, hasAlphaBlending() );
-		updateFlag( PassFlag::eAlphaTest, hasAlphaTest() || hasBlendAlphaTest() );
-
 		if ( m_texturesReduced.exchange( false ) )
 		{
 			prepareTextures();
-			m_texturesID = getOwner()->getOwner()->getTextureUnitCache().registerTextureCombineType( *this );
+			m_textureCombine = getOwner()->getOwner()->getTextureUnitCache().registerTextureCombine( *this );
 			onChanged( *this );
 		}
 
@@ -1051,7 +1047,7 @@ namespace castor3d
 			}
 		}
 
-		getOwner()->getEngine()->getPassComponentsRegister().updateMapComponents( textureConfigs, *this );
+		getPassComponentsRegister().updateMapComponents( textureConfigs, *this );
 		m_dirty = true;
 	}
 }

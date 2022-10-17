@@ -148,12 +148,12 @@ namespace castor3d
 		{
 			auto tex{ uint32_t( text ? OverlayTexture::eText : OverlayTexture::eNone ) };
 
-			if ( hasAny( textures, passComponents.getColourFlags() ) )
+			if ( hasAny( textures, passComponents.getColourMapFlags() ) )
 			{
 				tex |= uint32_t( OverlayTexture::eColour );
 			}
 
-			if ( hasAny( textures, passComponents.getOpacityFlags() ) )
+			if ( hasAny( textures, passComponents.getOpacityMapFlags() ) )
 			{
 				tex |= uint32_t( OverlayTexture::eOpacity );
 			}

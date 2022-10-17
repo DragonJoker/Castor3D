@@ -89,6 +89,11 @@ namespace toon
 			: public castor3d::PassComponentPlugin
 		{
 		public:
+			Plugin( castor3d::PassComponentRegister const & passComponents )
+				: PassComponentPlugin{ passComponents }
+			{
+			}
+
 			void createParsers( castor::AttributeParsers & parsers
 				, castor3d::ChannelFillers & channelFillers )const override;
 			bool isComponentNeeded( castor3d::TextureCombine const & textures
@@ -100,9 +105,9 @@ namespace toon
 			}
 		};
 
-		static castor3d::PassComponentPluginUPtr createPlugin()
+		static castor3d::PassComponentPluginUPtr createPlugin( castor3d::PassComponentRegister const & passComponents )
 		{
-			return castor::makeUniqueDerived< castor3d::PassComponentPlugin, Plugin >();
+			return castor::makeUniqueDerived< castor3d::PassComponentPlugin, Plugin >( passComponents );
 		}
 
 		C3D_ToonMaterial_API void accept( castor3d::PassVisitorBase & vis )override;

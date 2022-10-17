@@ -28,6 +28,8 @@ namespace castor3d
 	struct AlphaTestComponent
 		: public BaseDataPassComponentT< AlphaTestData >
 	{
+		static constexpr PassFlag eAlphaTest = PassFlag( 0x01u );
+
 		struct ComponentsShader
 			: shader::PassComponentsShader
 		{
@@ -62,6 +64,11 @@ namespace castor3d
 			: public PassComponentPlugin
 		{
 		public:
+			explicit Plugin( PassComponentRegister const & passComponent )
+				: PassComponentPlugin{ passComponent }
+			{
+			}
+
 			void createParsers( castor::AttributeParsers & parsers
 				, ChannelFillers & channelFillers )const override;
 			void zeroBuffer( Pass const & pass
@@ -79,22 +86,42 @@ namespace castor3d
 			{
 				return std::make_unique< MaterialShader >();
 			}
+
+			PassComponentFlag getAlphaTestFlag()const override
+			{
+				return getComponentFlags();
+			}
+
+			PassComponentFlag getComponentFlags()const override
+			{
+				return makePassComponentFlag( getId(), eAlphaTest );
+			}
+
+			void filterComponentFlags( ComponentModeFlags filter
+				, PassComponentCombine & componentsFlags )const override
+			{
+				if ( !checkFlag( filter, ComponentModeFlag::eOpacity ) )
+				{
+					remFlags( componentsFlags, getComponentFlags() );
+				}
+			}
 		};
 
-		static PassComponentPluginUPtr createPlugin()
+		static PassComponentPluginUPtr createPlugin( PassComponentRegister const & passComponent )
 		{
-			return castor::makeUniqueDerived< PassComponentPlugin, Plugin >();
+			return castor::makeUniqueDerived< PassComponentPlugin, Plugin >( passComponent );
 		}
 
 		C3D_API explicit AlphaTestComponent( Pass & pass );
 
 		C3D_API void accept( PassVisitorBase & vis )override;
 
-		C3D_API PassFlags getPassFlags()const override
+		C3D_API PassComponentFlag getPassFlags()const override
 		{
-			return ( hasAlphaTest() || hasBlendAlphaTest() )
-				? PassFlag::eAlphaTest
-				: PassFlag::eNone;
+			return makePassComponentFlag( getId()
+				, ( ( hasAlphaTest() || hasBlendAlphaTest() )
+					? eAlphaTest
+					: PassFlag::eNone ) );
 		}
 
 		bool hasAlphaTest()const

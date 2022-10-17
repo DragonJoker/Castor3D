@@ -147,9 +147,6 @@ namespace castor3d
 			, ParallaxOcclusionMode & value
 			, bool * control = nullptr ) = 0;
 		C3D_API virtual void visit( castor::String const & name
-			, PassFlags & value
-			, bool * control = nullptr ) = 0;
-		C3D_API virtual void visit( castor::String const & name
 			, VkCompareOp & value
 			, bool * control = nullptr ) = 0;
 		C3D_API virtual void visit( castor::String const & name
@@ -488,12 +485,6 @@ namespace castor3d
 
 		void visit( castor::String const & name
 			, ParallaxOcclusionMode & value
-			, bool * control )override
-		{
-		}
-
-		void visit( castor::String const & name
-			, PassFlags & value
 			, bool * control )override
 		{
 		}

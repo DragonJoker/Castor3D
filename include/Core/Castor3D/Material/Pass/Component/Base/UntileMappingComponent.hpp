@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_UntileComponent_H___
-#define ___C3D_UntileComponent_H___
+#ifndef ___C3D_UntileMappingComponent_H___
+#define ___C3D_UntileMappingComponent_H___
 
 #include "Castor3D/Material/Pass/Component/BaseDataPassComponent.hpp"
 
@@ -11,9 +11,11 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	struct UntileComponent
+	struct UntileMappingComponent
 		: public BaseDataPassComponentT< castor::AtomicGroupChangeTracked< bool > >
 	{
+		static constexpr PassFlag eUntile = PassFlag( 0x01u );
+
 		struct ComponentsShader
 			: shader::PassComponentsShader
 		{
@@ -29,8 +31,8 @@ namespace castor3d
 
 			bool isMapSampling( PipelineFlags const & flags )const override
 			{
-				return checkFlag( flags.m_passFlags
-					, PassFlag::eUntile );
+				return hasAny( flags.components
+					, makePassComponentFlag( getId(), eUntile ) );
 			}
 
 		private:
@@ -53,6 +55,11 @@ namespace castor3d
 			: public PassComponentPlugin
 		{
 		public:
+			explicit Plugin( PassComponentRegister const & passComponent )
+				: PassComponentPlugin{ passComponent }
+			{
+			}
+
 			void createParsers( castor::AttributeParsers & parsers
 				, ChannelFillers & channelFillers )const override;
 
@@ -72,22 +79,28 @@ namespace castor3d
 			{
 				return std::make_unique< ComponentsShader >( *this );
 			}
+
+			PassComponentFlag getComponentFlags()const override
+			{
+				return makePassComponentFlag( getId(), eUntile );
+			}
 		};
 
-		static PassComponentPluginUPtr createPlugin()
+		static PassComponentPluginUPtr createPlugin( PassComponentRegister const & passComponent )
 		{
-			return castor::makeUniqueDerived< PassComponentPlugin, Plugin >();
+			return castor::makeUniqueDerived< PassComponentPlugin, Plugin >( passComponent );
 		}
 
-		C3D_API explicit UntileComponent( Pass & pass );
+		C3D_API explicit UntileMappingComponent( Pass & pass );
 
 		C3D_API void accept( PassVisitorBase & vis )override;
 
-		C3D_API PassFlags getPassFlags()const override
+		C3D_API PassComponentFlag getPassFlags()const override
 		{
-			return m_value.value()
-				? PassFlag::eUntile
-				: PassFlag::eNone;
+			return makePassComponentFlag( getId()
+				, ( isUntiling()
+					? eUntile
+					: PassFlag::eNone ) );
 		}
 
 		bool isUntiling()const

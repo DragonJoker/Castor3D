@@ -16,8 +16,7 @@ namespace castor3d
 	PassSPtr PbrPass::create( Material & parent )
 	{
 		auto result = std::make_shared< Pass >( parent
-			, parent.getEngine()->getPassFactory().getNameId( Type )
-			, PassFlag::eImageBasedLighting );
+			, parent.getEngine()->getPassFactory().getNameId( Type ) );
 		result->createComponent< ColourComponent >();
 		result->createComponent< MetalnessComponent >();
 		result->createComponent< RoughnessComponent >();

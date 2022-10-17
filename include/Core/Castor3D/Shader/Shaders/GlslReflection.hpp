@@ -14,10 +14,6 @@ namespace castor3d::shader
 	public:
 		C3D_API ReflectionModel( sdw::ShaderWriter & writer
 			, Utils & utils
-			, PassFlags const & passFlags
-			, bool hasIblSupport );
-		C3D_API ReflectionModel( sdw::ShaderWriter & writer
-			, Utils & utils
 			, bool hasIblSupport );
 		C3D_API virtual ~ReflectionModel() = default;
 
@@ -159,7 +155,6 @@ namespace castor3d::shader
 	protected:
 		sdw::ShaderWriter & m_writer;
 		Utils & m_utils;
-		PassFlags m_passFlags;
 		bool m_hasIblSupport;
 
 		sdw::Function< sdw::Boolean

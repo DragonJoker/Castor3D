@@ -1,0 +1,119 @@
+#include "Castor3D/Material/Pass/Component/ComponentModule.hpp"
+
+#include "Castor3D/Material/Pass/Component/PassComponent.hpp"
+#include "Castor3D/Render/RenderModule.hpp"
+
+namespace castor3d
+{
+	bool operator==( PassComponentCombine const & lhs, PassComponentCombine const & rhs )
+	{
+		return lhs.baseId == rhs.baseId
+			&& lhs.flags == rhs.flags;
+	}
+
+	bool hasAny( PassComponentCombine const & lhs
+		, PassComponentFlag rhs )
+	{
+		return hasAny( lhs.flags, rhs );
+	}
+
+	void remFlags( PassComponentCombine & lhs
+		, PassComponentFlag rhs )
+	{
+		auto it = lhs.flags.find( rhs );
+
+		if ( it != lhs.flags.end() )
+		{
+			auto componentId = splitPassComponentFlag( *it ).first;
+			lhs.flags.erase( it );
+			lhs.flags.emplace( makePassComponentFlag( componentId, PassFlag::eNone ) );
+		}
+	}
+
+	void remFlags( PassComponentCombine & lhs
+		, PassComponentFlagsSet const & rhs )
+	{
+		for ( auto flag : rhs )
+		{
+			remFlags( lhs, flag );
+		}
+	}
+
+	void addFlags( PassComponentCombine & lhs
+		, PassComponentFlag rhs )
+	{
+		auto split = splitPassComponentFlag( rhs );
+		auto componentId = split.first;
+		auto rhsComponentFlag = split.second;
+		auto it = std::find_if( lhs.flags.begin()
+			, lhs.flags.end()
+			, [componentId]( PassComponentFlag lookup )
+			{
+				return componentId == splitPassComponentFlag( lookup ).first;
+			} );
+
+		if ( it != lhs.flags.end() )
+		{
+			auto lhsComponentFlag = splitPassComponentFlag( *it ).second;
+			lhs.flags.erase( it );
+			lhs.flags.emplace( makePassComponentFlag( componentId
+				, lhsComponentFlag | rhsComponentFlag ) );
+		}
+		else
+		{
+			lhs.flags.emplace( rhs );
+		}
+	}
+
+	void addFlags( PassComponentCombine & lhs
+		, PassComponentFlagsSet const & rhs )
+	{
+		for ( auto flag : rhs )
+		{
+			addFlags( lhs, flag );
+		}
+	}
+
+	bool contains( PassComponentCombine const & cont
+		, PassComponentFlag test )
+	{
+		auto split = splitPassComponentFlag( test );
+		auto testComponentId = split.first;
+		auto testComponentFlag = split.second;
+		return cont.flags.end() != std::find_if( cont.flags.begin()
+			, cont.flags.end()
+			, [testComponentId, testComponentFlag]( PassComponentFlag const & lookup )
+			{
+				auto [lookupComponentId, lookupComponentFlag] = splitPassComponentFlag( lookup );
+				return lookupComponentId == testComponentId
+					&& ( testComponentFlag == 0u
+						|| castor::hasAll( lookupComponentFlag, testComponentFlag ) );
+			} );
+	}
+
+	bool contains( PassComponentCombine const & cont
+		, PassComponentCombine const & test )
+	{
+		if ( cont.baseId == test.baseId )
+		{
+			return true;
+		}
+
+		auto result = true;
+
+		for ( auto flag : test.flags )
+		{
+			if ( result )
+			{
+				result = contains( cont, flag );
+			}
+		}
+
+		return result;
+	}
+
+	castor::String const & getPassComponentType( PassComponent const & component )
+	{
+		return component.getType();
+	}
+}

@@ -368,11 +368,10 @@ namespace GuiCommon
 				, castor3d::Scene const & scene )
 			{
 				ShaderSources result;
-				PassShaderGatherer vis{ castor3d::PipelineFlags{ scene.getEngine()->getPassComponentsRegister().getPassComponents( pass )
+				PassShaderGatherer vis{ castor3d::PipelineFlags{ scene.getEngine()->getPassComponentsRegister().getPassComponentCombine( pass )
 						, pass.getTypeID()
 						, pass.getColourBlendMode()
 						, pass.getAlphaBlendMode()
-						, pass.getPassFlags()
 						, ( pass.getRenderPassInfo()? pass.getRenderPassInfo()->id: castor3d::RenderPassTypeID{} )
 						, castor3d::SubmeshFlag::ePosNmlTanTex
 						, castor3d::ProgramFlags{}

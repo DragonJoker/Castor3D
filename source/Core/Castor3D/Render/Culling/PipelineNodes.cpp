@@ -32,7 +32,9 @@ namespace castor3d
 					&& lookup.second == &buffer;
 			} );
 		CU_Require( it != cont.end() );
-		return uint32_t( std::distance( cont.begin(), it ) );
+		return it != cont.end()
+			? uint32_t( std::distance( cont.begin(), it ) )
+			: InvalidPipelineIndex;
 	}
 
 	PipelineNodes & getPipelineNodes( PipelineBaseHash hash

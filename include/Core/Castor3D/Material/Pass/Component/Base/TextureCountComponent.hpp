@@ -26,6 +26,11 @@ namespace castor3d
 			: public PassComponentPlugin
 		{
 		public:
+			explicit Plugin( PassComponentRegister const & passComponent )
+				: PassComponentPlugin{ passComponent }
+			{
+			}
+
 			void zeroBuffer( Pass const & pass
 				, shader::PassMaterialShader const & materialShader
 				, PassBuffer & buffer )const override;
@@ -42,19 +47,14 @@ namespace castor3d
 			}
 		};
 
-		static PassComponentPluginUPtr createPlugin()
+		static PassComponentPluginUPtr createPlugin( PassComponentRegister const & passComponent )
 		{
-			return castor::makeUniqueDerived< PassComponentPlugin, Plugin >();
+			return castor::makeUniqueDerived< PassComponentPlugin, Plugin >( passComponent );
 		}
 
 		C3D_API explicit TextureCountComponent( Pass & pass );
 
 		C3D_API void accept( PassVisitorBase & vis )override;
-
-		C3D_API PassFlags getPassFlags()const override
-		{
-			return PassFlag::eNone;
-		}
 
 		C3D_API static castor::String const TypeName;
 

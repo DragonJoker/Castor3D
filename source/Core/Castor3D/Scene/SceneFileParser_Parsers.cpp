@@ -4058,6 +4058,7 @@ namespace castor3d
 		{
 			parsingContext.pass->prepareTextures();
 			parsingContext.pass.reset();
+			parsingContext.passComponent = nullptr;
 		}
 	}
 	CU_EndAttributePop()
@@ -4308,6 +4309,7 @@ namespace castor3d
 			};
 			parsingContext.textureConfiguration = TextureConfiguration{};
 			parsingContext.texcoordSet = 0u;
+			parsingContext.passComponent = nullptr;
 		}
 		else
 		{

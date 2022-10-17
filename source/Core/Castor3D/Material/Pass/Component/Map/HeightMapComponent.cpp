@@ -115,21 +115,25 @@ namespace castor3d
 		}
 		CU_EndAttribute()
 
-		static bool enableParallaxOcclusionMapping( PipelineFlags const & flags
+		static bool enableParallaxOcclusionMapping( PassComponentRegister const & passComponents
+			, PipelineFlags const & flags
 			, PassComponentTextureFlag const & flag )
 		{
+			auto & plugin = passComponents.getPlugin< HeightComponent >();
 			return flags.enableTangentSpace()
 				&& hasAny( flags.textures, flag )
-				&& ( checkFlag( flags.m_passFlags, PassFlag::eParallaxOcclusionMappingOne )
-					|| checkFlag( flags.m_passFlags, PassFlag::eParallaxOcclusionMappingRepeat ) );
+				&& ( hasAny( flags.components, makePassComponentFlag( plugin.getId(), HeightComponent::eParallaxOcclusionMappingRepeat ) )
+					|| hasAny( flags.components, makePassComponentFlag( plugin.getId(), HeightComponent::eParallaxOcclusionMappingOne ) ) );
 		}
 
-		static bool enableParallaxOcclusionMappingOne( PipelineFlags const & flags
+		static bool enableParallaxOcclusionMappingOne( PassComponentRegister const & passComponents
+			, PipelineFlags const & flags
 			, PassComponentTextureFlag const & flag )
 		{
+			auto & plugin = passComponents.getPlugin< HeightComponent >();
 			return flags.enableTangentSpace()
 				&& hasAny( flags.textures, flag )
-				&& checkFlag( flags.m_passFlags, PassFlag::eParallaxOcclusionMappingOne );
+				&& hasAny( flags.components, makePassComponentFlag( plugin.getId(), HeightComponent::eParallaxOcclusionMappingOne ) );
 		}
 	}
 
@@ -143,7 +147,7 @@ namespace castor3d
 		, sdw::Vec2 & texCoord
 		, shader::BlendComponents & components )const
 	{
-		if ( hgtcmp::enableParallaxOcclusionMapping( flags, getTextureFlags() )
+		if ( hgtcmp::enableParallaxOcclusionMapping( getPlugin().getRegister(), flags, getTextureFlags() )
 			&& components.hasMember( "tangentSpaceViewPosition" )
 			&& components.hasMember( "tangentSpaceFragPosition" ) )
 		{
@@ -160,7 +164,7 @@ namespace castor3d
 					, imgCompConfig );
 				config.setUv( texCoords, texCoord );
 
-				if ( hgtcmp::enableParallaxOcclusionMappingOne( flags, getTextureFlags() ) )
+				if ( hgtcmp::enableParallaxOcclusionMappingOne( getPlugin().getRegister(), flags, getTextureFlags() ) )
 				{
 					IF( writer, config.getUv( texCoords ).x() > 1.0_f
 						|| config.getUv( texCoords ).y() > 1.0_f
@@ -195,7 +199,7 @@ namespace castor3d
 		, shader::DerivTex & texCoord
 		, shader::BlendComponents & components )const
 	{
-		if ( hgtcmp::enableParallaxOcclusionMapping( flags, getTextureFlags() )
+		if ( hgtcmp::enableParallaxOcclusionMapping( getPlugin().getRegister(), flags, getTextureFlags() )
 			&& components.hasMember( "tangentSpaceViewPosition" )
 			&& components.hasMember( "tangentSpaceFragPosition" ) )
 		{
@@ -212,7 +216,7 @@ namespace castor3d
 					, imgCompConfig );
 				config.setUv( texCoords, texCoord );
 
-				if ( hgtcmp::enableParallaxOcclusionMappingOne( flags, getTextureFlags() ) )
+				if ( hgtcmp::enableParallaxOcclusionMappingOne( getPlugin().getRegister(), flags, getTextureFlags() ) )
 				{
 					IF( writer, config.getUv( texCoords ).x() > 1.0_f
 						|| config.getUv( texCoords ).y() > 1.0_f
@@ -542,10 +546,11 @@ namespace castor3d
 		result.push_back( std::make_unique< HeightMapComponent >( pass ) );
 	}
 
-	bool HeightMapComponent::Plugin::hasTexcoordModif( PipelineFlags const * flags )const
+	bool HeightMapComponent::Plugin::hasTexcoordModif( PassComponentRegister const & passComponents
+		, PipelineFlags const * flags )const
 	{
 		return flags
-			? hgtcmp::enableParallaxOcclusionMapping( *flags, getTextureFlags() )
+			? hgtcmp::enableParallaxOcclusionMapping( passComponents, *flags, getTextureFlags() )
 			: false;
 	}
 

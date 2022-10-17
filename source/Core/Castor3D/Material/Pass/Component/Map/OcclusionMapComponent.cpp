@@ -205,7 +205,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const OcclusionMapComponent::TypeName = C3D_MakePassMapComponentName( "occ" );
+	castor::String const OcclusionMapComponent::TypeName = C3D_MakePassMapComponentName( "occlusion" );
 
 	OcclusionMapComponent::OcclusionMapComponent( Pass & pass )
 		: PassMapComponent{ pass, TypeName }

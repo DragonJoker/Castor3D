@@ -65,7 +65,8 @@ namespace castor3d
 	{
 		return ComponentModeFlag::eOpacity
 			| ComponentModeFlag::eGeometry
-			| ComponentModeFlag::eOcclusion;
+			| ( m_deferred ? ComponentModeFlag::eNone : ComponentModeFlag::eNormals )
+			| ( m_deferred ? ComponentModeFlag::eNone : ComponentModeFlag::eOcclusion );
 	}
 
 	ShaderFlags DepthPass::getShaderFlags()const
@@ -76,12 +77,6 @@ namespace castor3d
 			| ShaderFlag::eOpacity
 			| ShaderFlag::eDepth
 			| ( m_deferred ? ShaderFlag::eNone : ShaderFlag::eNormal );
-	}
-
-	PassFlags DepthPass::doAdjustPassFlags( PassFlags flags )const
-	{
-		remFlag( flags, PassFlag::eAlphaBlending );
-		return flags;
 	}
 
 	ProgramFlags DepthPass::doAdjustProgramFlags( ProgramFlags flags )const

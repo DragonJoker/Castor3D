@@ -39,8 +39,6 @@ namespace castor3d
 
 		static PipelineHiHashDetails getHiHashDetails( PassComponentRegister const & passComponents
 			, uint64_t hiHash
-			, PassComponentsTypeID components
-			, TextureCombineID textures
 			, ShaderFlags shaderFlags )
 		{
 			constexpr auto maxSubmeshSize = castor::getBitSize( uint32_t( SubmeshFlag::eAllBase ) );
@@ -49,29 +47,31 @@ namespace castor3d
 			constexpr auto maxProgramMask = ( 0x1u << uint64_t( maxProgramSize ) ) - 1u;
 			constexpr auto maxPassIDSize = castor::getBitSize( MaxPassTypes );
 			constexpr auto maxPassIDMask = ( 0x1u << uint64_t( maxPassIDSize ) ) - 1u;
-			constexpr auto maxPassSize = castor::getBitSize( uint32_t( PassFlag::eAllBase ) );
+			constexpr auto maxPassSize = sizeof( PassComponentCombineID ) * 8u;
 			constexpr auto maxPassMask = ( 0x1u << uint64_t( maxPassSize ) ) - 1u;
+			constexpr auto maxTexturesSize = sizeof( TextureCombineID ) * 8u;
+			constexpr auto maxTexturesMask = ( 0x1u << uint64_t( maxTexturesSize ) ) - 1u;
 			constexpr auto maxCompareOpSize = castor::getBitSize( uint32_t( VK_COMPARE_OP_ALWAYS + 1 ) );
 			constexpr auto maxCompareOpMask = ( 0x1u << uint64_t( maxCompareOpSize ) ) - 1u;
 			constexpr auto maxPassLayerSize = castor::getBitSize( MaxPassLayers );
 			constexpr auto maxPassLayerMask = ( 0x1u << uint64_t( maxPassLayerSize ) ) - 1u;
-			constexpr auto maxSize = maxSubmeshSize + maxProgramSize + maxPassIDSize + maxPassSize + maxCompareOpSize + maxPassLayerSize;
+			constexpr auto maxSize = maxSubmeshSize + maxProgramSize + maxPassIDSize + maxPassSize + maxTexturesSize + maxCompareOpSize + maxPassLayerSize;
 			static_assert( 64 >= maxSize );
 
 			PipelineHiHashDetails result{ {}, 0u };
 			result.m_shaderFlags = shaderFlags;
-			result.components = passComponents.getPassComponents( components );
-			result.textures = passComponents.getTextureCombine( textures );
 
 			auto offset = 0u;
+			result.components = passComponents.getPassComponentCombine( PassComponentCombineID( ( hiHash >> offset ) & maxPassMask ) );
+			offset += maxPassSize;
+			result.textures = passComponents.getTextureCombine( TextureCombineID( ( hiHash >> offset ) & maxTexturesMask ) );
+			offset += maxTexturesSize;
 			result.m_submeshFlags = SubmeshFlags( ( hiHash >> offset ) & maxSubmeshMask );
 			offset += maxSubmeshSize;
 			result.m_programFlags = ProgramFlags( ( hiHash >> offset ) & maxProgramMask );
 			offset += maxProgramSize;
-			result.passType = PassFlags( ( hiHash >> offset ) & maxPassIDMask );
+			result.passType = PassTypeID( ( hiHash >> offset ) & maxPassIDMask );
 			offset += maxPassIDSize;
-			result.m_passFlags = PassFlags( ( hiHash >> offset ) & maxPassMask );
-			offset += maxPassSize;
 			result.alphaFunc = VkCompareOp( ( hiHash >> offset ) & maxCompareOpMask );
 			offset += maxCompareOpSize;
 			result.passLayerIndex = uint32_t( ( hiHash >> offset ) & maxPassLayerMask );
@@ -86,10 +86,11 @@ namespace castor3d
 			constexpr auto maxSubmeshSize = castor::getBitSize( uint32_t( SubmeshFlag::eAllBase ) );
 			constexpr auto maxProgramSize = castor::getBitSize( uint32_t( ProgramFlag::eAllBase ) );
 			constexpr auto maxPassIDSize = castor::getBitSize( MaxPassTypes );
-			constexpr auto maxPassSize = castor::getBitSize( uint32_t( PassFlag::eAllBase ) );
+			constexpr auto maxPassSize = sizeof( PassComponentCombineID ) * 8u;
+			constexpr auto maxTexturesSize = sizeof( TextureCombineID ) * 8u;
 			constexpr auto maxCompareOpSize = castor::getBitSize( uint32_t( VK_COMPARE_OP_ALWAYS + 1 ) );
 			constexpr auto maxPassLayerSize = castor::getBitSize( MaxPassLayers );
-			constexpr auto maxSize = maxSubmeshSize + maxProgramSize + maxPassIDSize + maxPassSize + maxCompareOpSize + maxPassLayerSize;
+			constexpr auto maxSize = maxSubmeshSize + maxProgramSize + maxPassIDSize + maxPassSize + maxTexturesSize + maxCompareOpSize + maxPassLayerSize;
 			static_assert( 64 >= maxSize );
 			CU_Require( flags.passType != 0 );
 			CU_Require( flags.passLayerIndex < MaxPassLayers );
@@ -99,33 +100,38 @@ namespace castor3d
 
 			auto offset = 0u;
 			uint64_t result{};
-			result = uint64_t( flags.m_submeshFlags ) << offset;
+			auto componentsId = flags.components.baseId
+				? flags.components.baseId
+				: passComponents.getPassComponentCombineID( flags.components );
+			result |= uint64_t( componentsId ) << offset;
+			offset += maxPassSize;
+			result |= uint64_t( passComponents.getTextureCombineID( flags.textures ) ) << offset;
+			offset += maxTexturesSize;
+			result |= uint64_t( flags.m_submeshFlags ) << offset;
 			offset += maxSubmeshSize;
 			result |= uint64_t( programFlags ) << offset;
 			offset += maxProgramSize;
 			result |= uint64_t( flags.passType ) << offset;
 			offset += maxPassIDSize;
-			result |= uint64_t( flags.m_passFlags ) << offset;
-			offset += maxPassSize;
 			result |= uint64_t( flags.alphaFunc ) << offset;
 			offset += maxCompareOpSize;
 			result |= uint64_t( flags.passLayerIndex ) << offset;
 
 #if !defined( NDEBUG )
+			auto components = flags.components.baseId
+				? passComponents.getPassComponentCombine( flags.components.baseId )
+				: flags.components;
 			auto details = getHiHashDetails( passComponents
 				, result
-				, passComponents.getPassComponentsType( flags.components )
-				, passComponents.getTextureCombineType( flags.textures )
 				, flags.m_shaderFlags );
 			CU_Require( flags.m_shaderFlags == details.m_shaderFlags );
 			CU_Require( flags.m_submeshFlags == details.m_submeshFlags );
 			CU_Require( programFlags == details.m_programFlags );
 			CU_Require( flags.passType == details.passType );
-			CU_Require( flags.m_passFlags == details.m_passFlags );
 			CU_Require( flags.alphaFunc == details.alphaFunc );
 			CU_Require( flags.passLayerIndex == details.passLayerIndex );
-			CU_Require( flags.components == details.components );
-			CU_Require( flags.textures == details.textures );
+			CU_Require( contains( components, details.components ) );
+			CU_Require( contains( flags.textures, details.textures ) );
 #endif
 			return result;
 		}
@@ -173,8 +179,6 @@ namespace castor3d
 			PipelineBaseHash result{};
 			result.hi = getHiHash( passComponents, flags );
 			result.lo = getLoHash( flags );
-			result.components = passComponents.getPassComponentsType( flags.components );
-			result.textures = passComponents.getTextureCombineType( flags.textures );
 			return result;
 		}
 
@@ -194,11 +198,7 @@ namespace castor3d
 	{
 		return lhs.hi < rhs.hi
 			|| ( ( lhs.hi == rhs.hi )
-				&& ( ( lhs.lo < rhs.lo )
-					|| ( ( lhs.lo == rhs.lo )
-						&& ( ( lhs.components < rhs.components )
-							|| ( ( lhs.components == rhs.components )
-								&& ( lhs.textures < rhs.textures ) ) ) ) ) );
+				&& ( lhs.lo < rhs.lo ) );
 	}
 
 	//*********************************************************************************************
@@ -210,7 +210,6 @@ namespace castor3d
 			&& lhs.passType == rhs.passType
 			&& lhs.alphaFunc == rhs.alphaFunc
 			&& lhs.passLayerIndex == rhs.passLayerIndex
-			&& lhs.m_passFlags == rhs.m_passFlags
 			&& lhs.m_submeshFlags == rhs.m_submeshFlags
 			&& lhs.m_programFlags == rhs.m_programFlags
 			&& lhs.m_shaderFlags == rhs.m_shaderFlags;
@@ -306,16 +305,16 @@ namespace castor3d
 	bool PipelineFlags::enableParallaxOcclusionMapping( PassComponentRegister const & passComponents )const
 	{
 		return enableTangentSpace()
-			&& hasMap( passComponents.getHeightFlags() )
-			&& ( checkFlag( m_passFlags, PassFlag::eParallaxOcclusionMappingOne )
-				|| checkFlag( m_passFlags, PassFlag::eParallaxOcclusionMappingRepeat ) );
+			&& hasMap( passComponents.getHeightMapFlags() )
+			&& ( hasAny( components, passComponents.getParallaxOcclusionMappingOneFlag() )
+				|| hasAny( components, passComponents.getParallaxOcclusionMappingRepeatFlag() ) );
 	}
 
 	bool PipelineFlags::enableParallaxOcclusionMappingOne( PassComponentRegister const & passComponents )const
 	{
 		return enableTangentSpace()
-			&& hasMap( passComponents.getHeightFlags() )
-			&& checkFlag( m_passFlags, PassFlag::eParallaxOcclusionMappingOne );
+			&& hasMap( passComponents.getHeightMapFlags() )
+			&& hasAny( components, passComponents.getParallaxOcclusionMappingOneFlag() );
 	}
 
 	bool PipelineFlags::enableVelocity()const
@@ -344,6 +343,11 @@ namespace castor3d
 			|| uint32_t( data ) > uint32_t( SubmeshFlag::eTexcoords3 ) );
 		return hasSubmeshData( data )
 			&& pipflags::hasMatchingFlag( data, m_shaderFlags );
+	}
+
+	bool PipelineFlags::hasFlag( PassComponentFlag flag )const
+	{
+		return hasAny( components, flag );
 	}
 
 	bool PipelineFlags::hasMap( PassComponentTextureFlag flag )const
@@ -405,8 +409,6 @@ namespace castor3d
 	{
 		return pipflags::getHiHashDetails( renderPass.getEngine()->getPassComponentsRegister()
 			, hash.hi
-			, hash.components
-			, hash.textures
 			, shaderFlags );
 	}
 
@@ -416,8 +418,6 @@ namespace castor3d
 	{
 		return pipflags::getHiHashDetails( renderPass.getEngine()->getPassComponentsRegister()
 			, hash.hi
-			, hash.components
-			, hash.textures
 			, shaderFlags );
 	}
 

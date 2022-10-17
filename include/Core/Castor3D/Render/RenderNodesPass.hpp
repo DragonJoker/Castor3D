@@ -359,7 +359,7 @@ namespace castor3d
 		 *\brief		Ajuste les flags donnés pour qu'ils correspondent aux pré-requis de la passe.
 		 *\param[in]	flags	Les flags.
 		 */
-		C3D_API PassFlags adjustFlags( PassFlags flags )const;
+		C3D_API PassComponentCombine adjustFlags( PassComponentCombine flags )const;
 		/**
 		 *\~english
 		 *\brief		Adjusts given flags to match the render pass requirements.
@@ -391,23 +391,10 @@ namespace castor3d
 		C3D_API TextureCombine adjustFlags( TextureCombine texturesFlags )const;
 		/**
 		 *\~english
-		 *\brief		Filters the given textures flags using this pass needed textures.
-		 *\param[in]	texturesFlags	The textures flags.
-		 *\return		The filtered flags.
-		 *\~french
-		 *\brief		Filtre les indicateurs de textures donnés en utilisant ceux voulus par cette passe.
-		 *\param[in]	texturesFlags	Les indicateurs de textures.
-		 *\return		Les indicateurs filtrés.
-		 */
-		C3D_API VkCompareOp adjustAlphaFunc( PassFlags passFlags
-			, VkCompareOp alphaFunc
-			, VkCompareOp blendAlphaFunc )const;
-		/**
-		 *\~english
 		 *\brief		Creates the pipeline flags for given configuration.
+		 *\param[in]	components			The components combination.
 		 *\param[in]	colourBlendMode		The colour blending mode.
 		 *\param[in]	alphaBlendMode		The alpha blending mode.
-		 *\param[in]	passFlags			The pass flags.
 		 *\param[in]	renderPassTypeID	The render pass type ID.
 		 *\param[in]	passTypeID			The material pass type ID.
 		 *\param[in]	alphaFunc			The alpha comparison function (for opaque nodes).
@@ -421,9 +408,9 @@ namespace castor3d
 		 *\param[in]	morphTargets		The morph targets buffer.
 		 *\~french
 		 *\brief		Crée les indicateurs de pipeline pour la configuration donnée.
+		 *\param[in]	components			La combinaison de composants.
 		 *\param[in]	colourBlendMode		Le mode de mélange de couleurs.
 		 *\param[in]	alphaBlendMode		Le mode de mélange de l'alpha
-		 *\param[in]	passFlags			Les pass flags
 		 *\param[in]	renderPassTypeID	L'ID du type de render pass.
 		 *\param[in]	passTypeID			L'ID du type de passe de matériau.
 		 *\param[in]	alphaFunc			La fonction de comparaison de l'alpha (pour les noeuds opaques).
@@ -436,10 +423,9 @@ namespace castor3d
 		 *\param[in]	isFrontCulled		\p true pour front face culling, \p false pour back face culling.
 		 *\param[in]	morphTargets		Le buffer de morph targets.
 		 */
-		C3D_API PipelineFlags createPipelineFlags( PassComponentIDSet components
+		C3D_API PipelineFlags createPipelineFlags( PassComponentCombine components
 			, BlendMode colourBlendMode
 			, BlendMode alphaBlendMode
-			, PassFlags passFlags
 			, RenderPassTypeID renderPassTypeID
 			, PassTypeID passTypeID
 			, VkCompareOp alphaFunc
@@ -455,7 +441,7 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Creates the pipeline flags for given configuration.
-		 *\param[in]	pass			The pass for whic the pipeline is created.
+		 *\param[in]	pass			The pass for which the pipeline is created.
 		 *\param[in]	textures		The textures configuration.
 		 *\param[in]	submeshFlags	A combination of SubmeshFlag.
 		 *\param[in]	programFlags	A combination of ProgramFlag.
@@ -565,7 +551,7 @@ namespace castor3d
 		*/
 		/**@{*/
 		C3D_API virtual ComponentModeFlags getComponentsMask()const;
-		C3D_API virtual bool areValidPassFlags( PassFlags const & passFlags )const;
+		C3D_API virtual bool areValidPassFlags( PassComponentCombine const & passFlags )const;
 		C3D_API bool isValidPass( Pass const & pass )const;
 		C3D_API bool isValidRenderable( RenderedObject const & object )const;
 		C3D_API bool hasNodes()const;
@@ -656,7 +642,6 @@ namespace castor3d
 		C3D_API virtual bool doIsValidPass( Pass const & pass )const;
 		C3D_API virtual bool doIsValidRenderable( RenderedObject const & object )const;
 		C3D_API virtual SubmeshFlags doAdjustSubmeshFlags( SubmeshFlags flags )const;
-		C3D_API virtual PassFlags doAdjustPassFlags( PassFlags flags )const;
 		C3D_API virtual ProgramFlags doAdjustProgramFlags( ProgramFlags flags )const;
 		C3D_API virtual SceneFlags doAdjustSceneFlags( SceneFlags flags )const;
 		C3D_API ShaderProgramSPtr doGetProgram( PipelineFlags const & flags

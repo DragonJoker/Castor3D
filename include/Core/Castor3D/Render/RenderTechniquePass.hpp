@@ -206,10 +206,9 @@ namespace castor3d
 		/**
 		 *\copydoc	RenderNodesPass::createPipelineFlags
 		 */
-		C3D_API virtual PipelineFlags createPipelineFlags( PassComponentIDSet components
+		C3D_API virtual PipelineFlags createPipelineFlags( PassComponentCombine components
 			, BlendMode colourBlendMode
 			, BlendMode alphaBlendMode
-			, PassFlags passFlags
 			, RenderPassTypeID renderPassTypeID
 			, PassTypeID passTypeID
 			, VkCompareOp alphaFunc
@@ -225,7 +224,7 @@ namespace castor3d
 		/**
 		 *\copydoc	RenderNodesPass::areValidPassFlags
 		 */
-		C3D_API virtual bool areValidPassFlags( PassFlags const & passFlags )const = 0;
+		C3D_API virtual bool areValidPassFlags( PassComponentCombine const & passFlags )const = 0;
 		/**
 		 *\copydoc	RenderNodesPass::getShaderFlags
 		 */
@@ -311,10 +310,9 @@ namespace castor3d
 		/**
 		 *\copydoc	RenderNodesPass::createPipelineFlags
 		 */
-		C3D_API PipelineFlags createPipelineFlags( PassComponentIDSet components
+		C3D_API PipelineFlags createPipelineFlags( PassComponentCombine components
 			, BlendMode colourBlendMode
 			, BlendMode alphaBlendMode
-			, PassFlags passFlags
 			, RenderPassTypeID renderPassTypeID
 			, PassTypeID passTypeID
 			, VkCompareOp alphaFunc
@@ -337,7 +335,7 @@ namespace castor3d
 		/**
 		 *\copydoc	RenderNodesPass::areValidPassFlags
 		 */
-		C3D_API bool areValidPassFlags( PassFlags const & passFlags )const override
+		C3D_API bool areValidPassFlags( PassComponentCombine const & passFlags )const override
 		{
 			return RenderNodesPass::areValidPassFlags( passFlags );
 		}

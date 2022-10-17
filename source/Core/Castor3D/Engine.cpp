@@ -738,7 +738,7 @@ namespace castor3d
 		m_materialCache->declareSpecificsShaderBuffers( writer, buffers, binding, set );
 	}
 
-	uint32_t Engine::registerPassComponent( castor::String const & type
+	PassComponentID Engine::registerPassComponent( castor::String const & type
 		, PassComponentPluginUPtr componentPlugin )
 	{
 		return m_passComponents->registerComponent( type

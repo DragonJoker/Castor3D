@@ -237,7 +237,7 @@ namespace castor3d
 		m_ssao->accept( visitor );
 
 		if ( m_opaquePass
-			&& m_opaquePass->areValidPassFlags( visitor.getFlags().m_passFlags ) )
+			&& m_opaquePass->areValidPassFlags( visitor.getFlags().components ) )
 		{
 			m_opaquePass->accept( visitor );
 

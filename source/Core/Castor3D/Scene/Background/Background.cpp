@@ -307,7 +307,6 @@ namespace castor3d
 			m_sampler = sampler;
 
 			if ( m_initialised
-				&& m_scene.getEngine()->getPassFactory().hasIBL( m_scene.getPassesType() )
 				&& m_texture->getLayersCount() == 6u )
 			{
 				m_ibl = std::make_unique< IblTextures >( m_scene

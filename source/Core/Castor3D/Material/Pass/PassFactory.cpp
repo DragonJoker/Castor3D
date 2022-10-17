@@ -45,7 +45,6 @@ namespace castor3d
 		PassFactoryBase::registerType( id, info.passCreator );
 		m_passTypeNames.emplace_back( passType, id );
 		m_lightingModels.emplace( id, info.lightingModel );
-		m_ibls.emplace( id, info.isIBLNeeded );
 		getEngine()->registerLightingModel( info.lightingModel, info.lightingModelCreator );
 	}
 
@@ -62,9 +61,6 @@ namespace castor3d
 		auto lightingIt = m_lightingModels.find( id );
 		CU_Require( lightingIt != m_lightingModels.end() );
 		getEngine()->unregisterLightingModel( lightingIt->second );
-		auto iblIt = m_ibls.find( id );
-		CU_Require( iblIt != m_ibls.end() );
-		m_ibls.erase( iblIt );
 		m_lightingModels.erase( lightingIt );
 		m_passTypeNames.erase( it );
 		PassFactoryBase::unregisterType( id );
@@ -115,18 +111,6 @@ namespace castor3d
 		auto it = m_lightingModels.find( passTypeId );
 
 		if ( it == m_lightingModels.end() )
-		{
-			CU_Exception( "Unknown pass type ID." );
-		}
-
-		return it->second;
-	}
-
-	bool PassFactory::hasIBL( PassTypeID passTypeId )const
-	{
-		auto it = m_ibls.find( passTypeId );
-
-		if ( it == m_ibls.end() )
 		{
 			CU_Exception( "Unknown pass type ID." );
 		}

@@ -122,23 +122,6 @@ namespace castor3d::shader
 			, sdw::CombinedImage2DRgba32 const map
 			, DerivTex const texCoords )const;
 
-		template< typename TexcoordT >
-		void computeMapContribution( TextureCombine const & combine
-			, TextureConfigData const & config
-			, sdw::U32Vec3 const & imgCompConfig
-			, TextureAnimData const & anim
-			, sdw::CombinedImage2DRgba32 const & map
-			, TexcoordT & texCoords
-			, BlendComponents & components )const;
-		template< typename TexcoordT >
-		void computeMapContribution( PipelineFlags const & flags
-			, TextureConfigData const & config
-			, sdw::U32Vec3 const & imgCompConfig
-			, TextureAnimData const & anim
-			, sdw::CombinedImage2DRgba32 const & map
-			, TexcoordT & texCoords
-			, BlendComponents & components )const;
-
 		auto getFilter()const
 		{
 			return m_filter;
@@ -163,7 +146,5 @@ namespace castor3d::shader
 		bool m_opacity{};
 	};
 }
-
-#include "GlslPassShaders.inl"
 
 #endif

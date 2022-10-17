@@ -15,13 +15,6 @@ namespace castor3d
 {
 	//************************************************************************************************
 
-	castor::String const & getPassComponentType( PassComponent const & component )
-	{
-		return component.getType();
-	}
-
-	//************************************************************************************************
-
 	namespace shader
 	{
 		PassComponentID PassComponentsShader::getId()const

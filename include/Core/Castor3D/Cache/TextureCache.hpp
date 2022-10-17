@@ -57,10 +57,10 @@ namespace castor3d
 		 *	Enregistrement de combinaisons de textures.
 		 */
 		/**@{*/
-		C3D_API TextureCombineID registerTextureCombineType( Pass const & pass );
-		C3D_API TextureCombineID getTextureCombineType( Pass const & pass )const;
-		C3D_API TextureCombineID getTextureCombineType( TextureCombine const & combine )const;
-		C3D_API TextureCombine getTextureCombine( TextureCombineID combineType )const;
+		C3D_API TextureCombine registerTextureCombine( Pass const & pass );
+		C3D_API TextureCombineID registerTextureCombine( TextureCombine combine );
+		C3D_API TextureCombineID getTextureCombineID( TextureCombine const & combine )const;
+		C3D_API TextureCombine getTextureCombine( TextureCombineID id )const;
 		/**@}*/
 		/**
 		 *\~english
@@ -158,7 +158,7 @@ namespace castor3d
 		std::map< size_t, TextureUnitDataUPtr > m_datas;
 		std::atomic_bool m_initialised{};
 		std::vector< TextureUnit * > m_pendingUnits;
-		std::vector< TextureCombine > m_texturesCombineTypes;
+		mutable std::vector< TextureCombine > m_texturesCombines;
 	};
 }
 

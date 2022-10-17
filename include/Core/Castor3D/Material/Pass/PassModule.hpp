@@ -80,59 +80,6 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Pass specific flags.
-	*\~french
-	*\brief
-	*	Indicateurs spécifiques à la passe.
-	*/
-	enum class PassFlag
-		: uint16_t
-	{
-		//!\~english	No flag.
-		//\~french		Aucun indicateur.
-		eNone = 0x0000,
-		//!\~english	Shader using parallax occlusion mapping.
-		//\~french		Shader utilisant le parallax occlusion mapping.
-		eParallaxOcclusionMappingOne = 0x0001,
-		//!\~english	Shader using parallax occlusion mapping.
-		//\~french		Shader utilisant le parallax occlusion mapping.
-		eParallaxOcclusionMappingRepeat = 0x0002,
-		//!\~english	Shader untiles the textures.
-		//\~french		Shader untile les textures.
-		eUntile = 0x0004,
-		//!\~english	Shader using alpha test.
-		//\~french		Shader utilisant un test alpha.
-		eAlphaTest = 0x0008,
-		//!\~english	All flags used in visibility pipelines.
-		//\~french		Tous les indicateurs utilisés dans les pipelines de visibilité.
-		eAllVisibility = 0x000F,
-		//!\~english	Shader with Image Based Lighting support.
-		//\~french		Shader supportant l'Image Based Lighting.
-		eImageBasedLighting = 0x0010,
-		//!\~english	Shader for Subsurface Scattering.
-		//\~french		Shader pour le subsurface scattering.
-		eSubsurfaceScattering = 0x0020,
-		//!\~english	Shader using distance based transmittance when computing Subsurface Scattering.
-		//\~french		Shader utilisant la transmission basée sur la distance, lors du calcul du Subsurface Scattering.
-		eDistanceBasedTransmittance = 0x0040,
-		//!\~english	The pass sets an object as pickable.
-		//!\~french		La passe rend l'objet sélectionnable.
-		ePickable = 0x0080,
-		//!\~english	Shader using alpha blending.
-		//\~french		Shader utilisant le mélange alpha.
-		eAlphaBlending = 0x0100,
-		//!\~english	All flags used in base pipeline flags hashing.
-		//\~french		Tous les indicateurs utilisés dans le hash des indicateurs de pipeline.
-		eAllBase = 0x01FF,
-		//!\~english	All flags.
-		//\~french		Tous les indicateurs.
-		eAll = eAllBase,
-	};
-	CU_ImplementFlags( PassFlag )
-	C3D_API castor::String getName( PassFlag value );
-	/**
-	*\~english
-	*\brief
 	*	Base class of a material pass.
 	*\~french
 	*\brief

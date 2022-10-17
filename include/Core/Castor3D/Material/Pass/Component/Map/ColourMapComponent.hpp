@@ -42,6 +42,11 @@ namespace castor3d
 			: public PassMapComponentPlugin
 		{
 		public:
+			explicit Plugin( PassComponentRegister const & passComponent )
+				: PassMapComponentPlugin{ passComponent }
+			{
+			}
+
 			void createParsers( castor::AttributeParsers & parsers
 				, ChannelFillers & channelFillers )const override;
 			bool isComponentNeeded( TextureCombine const & textures
@@ -68,7 +73,7 @@ namespace castor3d
 				}
 			}
 
-			PassComponentTextureFlag getColourFlags()const override
+			PassComponentTextureFlag getColourMapFlags()const override
 			{
 				return getTextureFlags();
 			}
@@ -86,7 +91,7 @@ namespace castor3d
 				addFlagConfiguration( result, { getTextureFlags(), ( mask == 0 ? 0x00FFFFFFu : mask ) } );
 			}
 
-			castor::String getMapFlagsName( PassComponentTextureFlag const & flags )const override
+			castor::String getTextureFlagsName( PassComponentTextureFlag const & flags )const override
 			{
 				auto [passIndex, textureFlags] = splitTextureFlag( flags );
 				return ( passIndex == getId() && checkFlag( textureFlags, Colour ) )
@@ -101,9 +106,9 @@ namespace castor3d
 				, castor::StringStream & file )const override;
 		};
 
-		static PassComponentPluginUPtr createPlugin()
+		static PassComponentPluginUPtr createPlugin( PassComponentRegister const & passComponent )
 		{
-			return castor::makeUniqueDerived< PassComponentPlugin, Plugin >();
+			return castor::makeUniqueDerived< PassComponentPlugin, Plugin >( passComponent );
 		}
 
 		C3D_API explicit ColourMapComponent( Pass & pass );

@@ -90,13 +90,19 @@ namespace castor3d
 			: public PassMapComponentPlugin
 		{
 		public:
+			explicit Plugin( PassComponentRegister const & passComponent )
+				: PassMapComponentPlugin{ passComponent }
+			{
+			}
+
 			void createParsers( castor::AttributeParsers & parsers
 				, ChannelFillers & channelFillers )const override;
 			bool isComponentNeeded( TextureCombine const & textures
 				, ComponentModeFlags const & filter )const override;
 			void createMapComponent( Pass & pass
 				, std::vector< PassComponentUPtr > & result )const override;
-			bool hasTexcoordModif( PipelineFlags const * flags )const override;
+			bool hasTexcoordModif( PassComponentRegister const & passComponents
+				, PipelineFlags const * flags )const override;
 
 			bool isMapComponent()const override
 			{
@@ -108,7 +114,7 @@ namespace castor3d
 				return std::make_unique< ComponentsShader >( *this );
 			}
 
-			PassComponentTextureFlag getHeightFlags()const override
+			PassComponentTextureFlag getHeightMapFlags()const override
 			{
 				return getTextureFlags();
 			}
@@ -134,7 +140,7 @@ namespace castor3d
 				addFlagConfiguration( result, { getTextureFlags(), ( mask == 0 ? 0x00FF0000u : mask ) } );
 			}
 
-			castor::String getMapFlagsName( PassComponentTextureFlag const & flags )const override
+			castor::String getTextureFlagsName( PassComponentTextureFlag const & flags )const override
 			{
 				auto [passIndex, textureFlags] = splitTextureFlag( flags );
 				return ( passIndex == getId() && checkFlag( textureFlags, Height ) )
@@ -149,9 +155,9 @@ namespace castor3d
 				, castor::StringStream & file )const override;
 		};
 
-		static PassComponentPluginUPtr createPlugin()
+		static PassComponentPluginUPtr createPlugin( PassComponentRegister const & passComponent )
 		{
-			return castor::makeUniqueDerived< PassComponentPlugin, Plugin >();
+			return castor::makeUniqueDerived< PassComponentPlugin, Plugin >( passComponent );
 		}
 
 		C3D_API explicit HeightMapComponent( Pass & pass );

@@ -3,7 +3,10 @@
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
+#include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
+#include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
+#include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
 #include <ShaderWriter/Writer.hpp>
 
@@ -19,7 +22,7 @@ namespace castor3d::shader
 		, m_compRegister{ compRegister }
 		, m_shaders{ m_compRegister.getComponentsShaders( combine, filter, m_updateComponents ) }
 		, m_filter{ filter }
-		, m_opacity{ hasAny( combine, m_compRegister.getOpacityFlags() ) }
+		, m_opacity{ hasAny( combine, m_compRegister.getOpacityMapFlags() ) }
 	{
 	}
 
@@ -32,8 +35,8 @@ namespace castor3d::shader
 		, m_shaders{ m_compRegister.getComponentsShaders( flags, filter, m_updateComponents ) }
 		, m_filter{ filter }
 		, m_opacity{ ( flags.usesOpacity()
-			&& flags.hasMap( m_compRegister.getOpacityFlags() )
-			&& flags.hasOpacity() ) }
+			&& flags.hasMap( m_compRegister.getOpacityMapFlags() )
+			&& m_compRegister.hasOpacity( flags ) ) }
 	{
 	}
 

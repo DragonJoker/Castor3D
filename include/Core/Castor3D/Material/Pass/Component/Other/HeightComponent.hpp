@@ -14,6 +14,10 @@ namespace castor3d
 	struct HeightComponent
 		: public BaseDataPassComponentT< castor::AtomicGroupChangeTracked< ParallaxOcclusionMode > >
 	{
+		static constexpr PassFlag eParallaxOcclusionMappingOne = PassFlag( 0x01u );
+		static constexpr PassFlag eParallaxOcclusionMappingRepeat = PassFlag( 0x02u );
+		static constexpr PassFlag eAll = PassFlag( 0x03u );
+
 		struct ComponentsShader
 			: shader::PassComponentsShader
 		{
@@ -40,6 +44,11 @@ namespace castor3d
 			: public PassComponentPlugin
 		{
 		public:
+			explicit Plugin( PassComponentRegister const & passComponent )
+				: PassComponentPlugin{ passComponent }
+			{
+			}
+
 			void createParsers( castor::AttributeParsers & parsers
 				, ChannelFillers & channelFillers )const override;
 			bool isComponentNeeded( TextureCombine const & textures
@@ -49,24 +58,49 @@ namespace castor3d
 			{
 				return std::make_unique< ComponentsShader >( *this );
 			}
+
+			PassComponentFlag getParallaxOcclusionMappingOneFlag()const override
+			{
+				return makePassComponentFlag( getId(), eParallaxOcclusionMappingOne );
+			}
+
+			PassComponentFlag getParallaxOcclusionMappingRepeatFlag()const override
+			{
+				return makePassComponentFlag( getId(), eParallaxOcclusionMappingRepeat );
+			}
+
+			PassComponentFlag getComponentFlags()const override
+			{
+				return makePassComponentFlag( getId(), eAll );
+			}
+
+			void filterComponentFlags( ComponentModeFlags filter
+				, PassComponentCombine & componentsFlags )const override
+			{
+				if ( !checkFlag( filter, ComponentModeFlag::eGeometry ) )
+				{
+					remFlags( componentsFlags, getComponentFlags() );
+				}
+			}
 		};
 
-		static PassComponentPluginUPtr createPlugin()
+		static PassComponentPluginUPtr createPlugin( PassComponentRegister const & passComponent )
 		{
-			return castor::makeUniqueDerived< PassComponentPlugin, Plugin >();
+			return castor::makeUniqueDerived< PassComponentPlugin, Plugin >( passComponent );
 		}
 
 		C3D_API explicit HeightComponent( Pass & pass );
 
 		C3D_API void accept( PassVisitorBase & vis )override;
 
-		C3D_API PassFlags getPassFlags()const override
+		C3D_API PassComponentFlag getPassFlags()const override
 		{
-			return ( ( getParallaxOcclusion() == ParallaxOcclusionMode::eOne )
-				? PassFlag::eParallaxOcclusionMappingOne
-				: ( ( getParallaxOcclusion() == ParallaxOcclusionMode::eRepeat )
-					? PassFlag::eParallaxOcclusionMappingRepeat
-					: PassFlag::eNone ) );
+			return makePassComponentFlag( getId()
+				, ( ( getParallaxOcclusion() == ParallaxOcclusionMode::eOne )
+					? eParallaxOcclusionMappingOne
+					: ( ( getParallaxOcclusion() == ParallaxOcclusionMode::eRepeat )
+						? eParallaxOcclusionMappingRepeat
+						: PassFlag::eNone ) ) );
 		}
 
 		void setParallaxOcclusion( ParallaxOcclusionMode v )

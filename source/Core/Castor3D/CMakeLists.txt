@@ -364,6 +364,7 @@ source_group( "Header Files\\Material\\Pass" FILES ${${PROJECT_NAME}_FOLDER_HDR_
 source_group( "Source Files\\Material\\Pass" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
 
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Pass/Component/ComponentModule.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Pass/Component/PassComponent.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Pass/Component/PassComponentRegister.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Pass/Component/PassMapComponent.cpp
@@ -388,21 +389,23 @@ source_group( "Source Files\\Material\\Pass\\Component" FILES ${${PROJECT_NAME}_
 
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Pass/Component/Base/BlendComponent.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Pass/Component/Base/PassHeaderComponent.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Pass/Component/Base/NormalComponent.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Pass/Component/Base/PassHeaderComponent.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Pass/Component/Base/PickableComponent.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Pass/Component/Base/TextureCountComponent.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Pass/Component/Base/TexturesComponent.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Pass/Component/Base/TwoSidedComponent.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Pass/Component/Base/UntileComponent.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Pass/Component/Base/UntileMappingComponent.cpp
 )
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/Pass/Component/Base/BlendComponent.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/Pass/Component/Base/PassHeaderComponent.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/Pass/Component/Base/NormalComponent.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/Pass/Component/Base/PassHeaderComponent.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/Pass/Component/Base/PickableComponent.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/Pass/Component/Base/TextureCountComponent.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/Pass/Component/Base/TexturesComponent.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/Pass/Component/Base/TwoSidedComponent.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/Pass/Component/Base/UntileComponent.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/Pass/Component/Base/UntileMappingComponent.hpp
 )
 set( ${PROJECT_NAME}_SRC_FILES
 	${${PROJECT_NAME}_SRC_FILES}
@@ -1858,7 +1861,6 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Shaders/GlslMeshlet.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Shaders/GlslOutputComponents.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Shaders/GlslPassShaders.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Shaders/GlslPassShaders.inl
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Shaders/GlslRay.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Shaders/GlslReflection.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Shaders/GlslShadow.hpp

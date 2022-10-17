@@ -307,6 +307,7 @@ namespace castor3d
 	ComponentT & getPassComponent( SceneFileContext & parsingContext )
 	{
 		if ( !parsingContext.passComponent
+			|| parsingContext.passComponent->getOwner() != parsingContext.pass.get()
 			|| getPassComponentType( *parsingContext.passComponent ) != ComponentT::TypeName )
 		{
 			if ( parsingContext.pass->template hasComponent< ComponentT >() )

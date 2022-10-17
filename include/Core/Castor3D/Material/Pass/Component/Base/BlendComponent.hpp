@@ -26,10 +26,17 @@ namespace castor3d
 	struct BlendComponent
 		: public BaseDataPassComponentT< BlendData >
 	{
+		static constexpr PassFlag eAlphaBlending = PassFlag( 0x01u );
+
 		class Plugin
 			: public PassComponentPlugin
 		{
 		public:
+			explicit Plugin( PassComponentRegister const & passComponent )
+				: PassComponentPlugin{ passComponent }
+			{
+			}
+
 			void createParsers( castor::AttributeParsers & parsers
 				, ChannelFillers & channelFillers )const override;
 
@@ -39,22 +46,43 @@ namespace castor3d
 				// Component is never need in shader.
 				return false;
 			}
+
+			PassComponentFlag getAlphaBlendingFlag()const override
+			{
+				return getComponentFlags();
+			}
+
+			PassComponentFlag getComponentFlags()const override
+			{
+				return makePassComponentFlag( getId(), eAlphaBlending );
+			}
+
+			void filterComponentFlags( ComponentModeFlags filter
+				, PassComponentCombine & componentsFlags )const override
+			{
+				if ( !checkFlag( filter, ComponentModeFlag::eOpacity )
+					|| !checkFlag( filter, ComponentModeFlag::eAlphaBlending ) )
+				{
+					remFlags( componentsFlags, getComponentFlags() );
+				}
+			}
 		};
 
-		static PassComponentPluginUPtr createPlugin()
+		static PassComponentPluginUPtr createPlugin( PassComponentRegister const & passComponent )
 		{
-			return castor::makeUniqueDerived< PassComponentPlugin, Plugin >();
+			return castor::makeUniqueDerived< PassComponentPlugin, Plugin >( passComponent );
 		}
 
 		C3D_API explicit BlendComponent( Pass & pass );
 
 		C3D_API void accept( PassVisitorBase & vis )override;
 
-		C3D_API PassFlags getPassFlags()const override
+		C3D_API PassComponentFlag getPassFlags()const override
 		{
-			return ( hasAlphaBlending() )
-				? PassFlag::eAlphaBlending
-				: PassFlag::eNone;
+			return makePassComponentFlag( getId()
+				, ( hasAlphaBlending()
+					? eAlphaBlending
+					: PassFlag::eNone ) );
 		}
 
 		bool hasAlphaBlending()const

@@ -56,7 +56,6 @@ namespace castor3d
 		C3D_API PassTypeID getNameId( castor::String const & passType )const;
 		C3D_API castor::String getIdName( PassTypeID passTypeId )const;
 		C3D_API castor::String getLightingModelName( PassTypeID  passTypeId )const;
-		C3D_API bool hasIBL( PassTypeID  passTypeId )const;
 
 		std::vector< StringIdPair > const & listRegisteredTypes()const
 		{
@@ -68,7 +67,6 @@ namespace castor3d
 	private:
 		std::vector< StringIdPair > m_passTypeNames;
 		std::unordered_map< PassTypeID, castor::String > m_lightingModels;
-		std::unordered_map< PassTypeID, bool > m_ibls;
 	};
 }
 
