@@ -89,7 +89,7 @@ namespace toon
 			: public castor3d::PassComponentPlugin
 		{
 		public:
-			Plugin( castor3d::PassComponentRegister const & passComponents )
+			explicit Plugin( castor3d::PassComponentRegister const & passComponents )
 				: PassComponentPlugin{ passComponents }
 			{
 			}
