@@ -61,7 +61,8 @@ namespace castor3d
 	//*********************************************************************************************
 
 	sdw::Vec4 UntileMappingComponent::ComponentsShader::sampleMap( sdw::CombinedImage2DRgba32 const & map
-		, sdw::Vec3 const & texCoords )const
+		, sdw::Vec3 const & texCoords
+		, shader::BlendComponents const & components )const
 	{
 		return sampleUntiled( map
 			, texCoords.xy()
@@ -70,7 +71,8 @@ namespace castor3d
 	}
 
 	sdw::Vec4 UntileMappingComponent::ComponentsShader::sampleMap( sdw::CombinedImage2DRgba32 const & map
-		, shader::DerivTex const & texCoords )const
+		, shader::DerivTex const & texCoords
+		, shader::BlendComponents const & components )const
 	{
 		return sampleUntiled( map
 			, texCoords.uv()
@@ -86,7 +88,7 @@ namespace castor3d
 		if ( !m_hash4 )
 		{
 			auto & writer = findWriterMandat( pmap, ptexCoords, pddx, pddy );
-			m_hash4 = writer.implementFunction< sdw::Vec4 >( "hash4"
+			m_hash4 = writer.implementFunction< sdw::Vec4 >( "c3d_hash4"
 				, [&]( sdw::Vec2 const & p )
 				{
 					writer.returnStmt( fract( sin( vec4( 1.0_f + dot( p, vec2( 37.0_f, 17.0_f ) )
@@ -100,7 +102,7 @@ namespace castor3d
 		if ( !m_sampleUntiled )
 		{
 			auto & writer = findWriterMandat( pmap, ptexCoords, pddx, pddy );
-			m_sampleUntiled = writer.implementFunction< sdw::Vec4 >( "sampleUntiled"
+			m_sampleUntiled = writer.implementFunction< sdw::Vec4 >( "c3d_sampleUntiled"
 				, [&]( sdw::CombinedImage2DRgba32 const & map
 					, sdw::Vec2 const & texCoords
 					, sdw::Vec2 const & ddx

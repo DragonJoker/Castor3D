@@ -90,7 +90,7 @@ namespace castor3d
 								}
 
 								auto sampled = writer.declLocale( "c3d_sampled"
-									, passShaders.sampleMap( flags, maps[id - 1_u], texCoords ) );
+									, passShaders.sampleMap( flags, maps[id - 1_u], texCoords, components ) );
 
 								FOR( m_writer, sdw::UInt, comp, 0u, comp < config.componentCount(), ++comp )
 								{

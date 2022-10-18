@@ -9,6 +9,9 @@
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 
+#include <ShaderWriter/BaseTypes/CombinedImage.hpp>
+#include <ShaderWriter/Intrinsics/Intrinsics.hpp>
+
 CU_ImplementCUSmartPtr( castor3d, PassComponentPlugin )
 
 namespace castor3d
@@ -20,6 +23,22 @@ namespace castor3d
 		PassComponentID PassComponentsShader::getId()const
 		{
 			return m_plugin.getId();
+		}
+
+		sdw::Vec4 PassComponentsShader::sampleMap( sdw::CombinedImage2DRgba32 const & map
+			, sdw::Vec3 const & texCoords
+			, shader::BlendComponents const & components )const
+		{
+			return map.sample( texCoords.xy() );
+		}
+
+		sdw::Vec4 PassComponentsShader::sampleMap( sdw::CombinedImage2DRgba32 const & map
+			, shader::DerivTex const & texCoords
+			, shader::BlendComponents const & components )const
+		{
+			return map.grad( texCoords.uv()
+				, texCoords.dPdx()
+				, texCoords.dPdy() );
 		}
 
 		void PassComponentsShader::applyFloatComponent( std::string const & name

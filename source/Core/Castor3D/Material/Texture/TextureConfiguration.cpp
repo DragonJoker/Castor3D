@@ -301,7 +301,8 @@ namespace castor3d
 		}
 
 		// We should have been able to merge all configuration components
-		CU_Require( lhsit == lhs.components.end() );
+		CU_Require( lhsit == lhs.components.end()
+			|| lhsit->flag == 0 );
 	}
 
 	void mergeConfigsBase( TextureConfiguration const & lhs

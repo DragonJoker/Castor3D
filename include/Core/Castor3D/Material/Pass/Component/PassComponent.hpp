@@ -325,7 +325,8 @@ namespace castor3d
 			*	Les coordonnées de texture.
 			*/
 			C3D_API virtual sdw::Vec4 sampleMap( sdw::CombinedImage2DRgba32 const & map
-				, sdw::Vec3 const & texCoords )const
+				, sdw::Vec3 const & texCoords
+				, shader::BlendComponents const & components )const
 			{
 				return map.sample( texCoords.xy() );
 			}
@@ -344,7 +345,8 @@ namespace castor3d
 			*	Les coordonnées de texture.
 			*/
 			C3D_API virtual sdw::Vec4 sampleMap( sdw::CombinedImage2DRgba32 const & map
-				, shader::DerivTex const & texCoords )const
+				, shader::DerivTex const & texCoords
+				, shader::BlendComponents const & components )const
 			{
 				return map.grad( texCoords.uv(), texCoords.dPdx(), texCoords.dPdy() );
 			}
