@@ -3,6 +3,7 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Pass/Component/Base/BlendComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Base/FractalMappingComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Base/NormalComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Base/PassHeaderComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Base/PickableComponent.hpp"
@@ -126,6 +127,7 @@ namespace castor3d
 		registerComponent< TwoSidedComponent >();
 		registerComponent< PickableComponent >();
 		registerComponent< UntileMappingComponent >();
+		registerComponent< FractalMappingComponent >();
 		registerComponent< NormalComponent >();
 		// Pass shader buffer components
 		registerComponent< HeightComponent >();

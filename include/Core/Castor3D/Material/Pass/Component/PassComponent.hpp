@@ -326,10 +326,7 @@ namespace castor3d
 			*/
 			C3D_API virtual sdw::Vec4 sampleMap( sdw::CombinedImage2DRgba32 const & map
 				, sdw::Vec3 const & texCoords
-				, shader::BlendComponents const & components )const
-			{
-				return map.sample( texCoords.xy() );
-			}
+				, shader::BlendComponents const & components )const;
 			/**
 			*\~english
 			*	Lets the component sample the map.
@@ -346,10 +343,7 @@ namespace castor3d
 			*/
 			C3D_API virtual sdw::Vec4 sampleMap( sdw::CombinedImage2DRgba32 const & map
 				, shader::DerivTex const & texCoords
-				, shader::BlendComponents const & components )const
-			{
-				return map.grad( texCoords.uv(), texCoords.dPdx(), texCoords.dPdy() );
-			}
+				, shader::BlendComponents const & components )const;
 			/**
 			*\~english
 			*\return
