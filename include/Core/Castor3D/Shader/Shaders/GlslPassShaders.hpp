@@ -111,16 +111,20 @@ namespace castor3d::shader
 		C3D_API bool enableParallaxOcclusionMappingOne( PipelineFlags const & flags )const;
 		C3D_API sdw::Vec4 sampleMap( PipelineFlags const & flags
 			, sdw::CombinedImage2DRgba32 const map
-			, sdw::Vec3 const texCoords )const;
+			, sdw::Vec3 const texCoords
+			, shader::BlendComponents const & components )const;
 		C3D_API sdw::Vec4 sampleMap( PipelineFlags const & flags
 			, sdw::CombinedImage2DRgba32 const map
-			, DerivTex const texCoords )const;
+			, DerivTex const texCoords
+			, shader::BlendComponents const & components )const;
 		C3D_API sdw::Vec4 sampleMap( TextureCombine const & flags
 			, sdw::CombinedImage2DRgba32 const map
-			, sdw::Vec3 const texCoords )const;
+			, sdw::Vec3 const texCoords
+			, shader::BlendComponents const & components )const;
 		C3D_API sdw::Vec4 sampleMap( TextureCombine const & flags
 			, sdw::CombinedImage2DRgba32 const map
-			, DerivTex const texCoords )const;
+			, DerivTex const texCoords
+			, shader::BlendComponents const & components )const;
 
 		auto getFilter()const
 		{

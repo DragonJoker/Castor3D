@@ -379,7 +379,7 @@ namespace castor3d::shader
 			, index++ );
 		type.declMember( "vertexId", ast::type::Kind::eUInt
 			, ast::type::NotArray
-			, ( flags.enableVertexID() ? index : 0 )
+			, ( flags.enableVertexID() ? index++ : 0 )
 			, flags.enableVertexID() );
 		type.declMember( "curPosition", ast::type::Kind::eVec4F
 			, ast::type::NotArray

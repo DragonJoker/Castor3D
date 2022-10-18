@@ -19,8 +19,7 @@ namespace castor3d::shader
 
 	namespace mtl
 	{
-		template< typename ... ParamsT >
-		void blendMaterialsT( Materials const & materials
+		static void blendMaterials( Materials const & materials
 			, bool opaque
 			, VkCompareOp alphaFunc
 			, PipelineFlags const & flags
@@ -30,8 +29,7 @@ namespace castor3d::shader
 			, Material & material
 			, sdw::UInt const & materialId
 			, sdw::Array< sdw::Vec4 > const & passMultipliers
-			, BlendComponents & output
-			, ParamsT && ... params )
+			, BlendComponents & output )
 		{
 			auto & writer = findWriterMandat( textureConfigs, textureAnims, maps, material, output );
 			auto & passShaders = materials.getPassShaders();
@@ -46,8 +44,7 @@ namespace castor3d::shader
 				materials.applyMaterial( flags
 					, textureConfigs, textureAnims, maps
 					, material
-					, firstComponents
-					, std::forward< ParamsT >( params )... );
+					, firstComponents );
 				auto passMultiplier = writer.declLocale( "passMultiplier"
 					, passMultipliers[0_u][0_u] );
 
@@ -70,8 +67,7 @@ namespace castor3d::shader
 						materials.applyMaterial( flags
 							, textureConfigs, textureAnims, maps
 							, curMaterial
-							, passComponents
-							, std::forward< ParamsT >( params )... );
+							, passComponents );
 						material.lighting += curMaterial.lighting;
 						passShaders.blendComponents( materials, passMultiplier, result, passComponents );
 					}
@@ -92,8 +88,7 @@ namespace castor3d::shader
 				materials.applyMaterial( flags
 					, textureConfigs, textureAnims, maps
 					, material
-					, output
-					, std::forward< ParamsT >( params )... );
+					, output );
 				material.applyAlphaFunc( alphaFunc
 					, opacity
 					, 1.0_f
@@ -389,7 +384,7 @@ namespace castor3d::shader
 		, sdw::Array< sdw::Vec4 > const & passMultipliers
 		, BlendComponents & output )const
 	{
-		mtl::blendMaterialsT( *this, true, flags.alphaFunc, flags
+		mtl::blendMaterials( *this, true, flags.alphaFunc, flags
 			, textureConfigs, textureAnims, maps
 			, material, materialId, passMultipliers
 			, output );
@@ -405,7 +400,7 @@ namespace castor3d::shader
 		, sdw::Array< sdw::Vec4 > const & passMultipliers
 		, BlendComponents & output )const
 	{
-		mtl::blendMaterialsT( *this, true, alphaFunc, flags
+		mtl::blendMaterials( *this, true, alphaFunc, flags
 			, textureConfigs, textureAnims, maps
 			, material, materialId, passMultipliers
 			, output );
@@ -421,7 +416,7 @@ namespace castor3d::shader
 		, sdw::Array< sdw::Vec4 > const & passMultipliers
 		, BlendComponents & output )const
 	{
-		mtl::blendMaterialsT( *this, opaque, flags.alphaFunc, flags
+		mtl::blendMaterials( *this, opaque, flags.alphaFunc, flags
 			, textureConfigs, textureAnims, maps
 			, material, materialId, passMultipliers
 			, output );
