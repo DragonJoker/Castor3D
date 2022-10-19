@@ -339,15 +339,7 @@ namespace castor3d
 
 	void Submesh::update()
 	{
-		if ( m_dirty && m_sourceBufferOffset )
-		{
-			for ( auto & component : m_components )
-			{
-				component.second->upload();
-			}
-
-			m_dirty = false;
-		}
+		m_dirty = false;
 
 		for ( auto & component : m_components )
 		{
