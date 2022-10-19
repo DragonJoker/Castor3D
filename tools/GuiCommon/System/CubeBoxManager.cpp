@@ -9,6 +9,7 @@
 #include <Castor3D/Event/Frame/GpuFunctorEvent.hpp>
 #include <Castor3D/Material/Material.hpp>
 #include <Castor3D/Material/Pass/Pass.hpp>
+#include <Castor3D/Material/Pass/Component/Other/ColourComponent.hpp>
 #include <Castor3D/Model/Mesh/Mesh.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/LinesMapping.hpp>
@@ -76,7 +77,7 @@ namespace GuiCommon
 				auto pass = material.lock()->createPass();
 				pass->enableLighting( false );
 				pass->enablePicking( false );
-				pass->setColour( colour );
+				pass->createComponent< castor3d::ColourComponent >()->setColour( colour );
 			}
 			else
 			{
@@ -294,15 +295,21 @@ namespace GuiCommon
 			auto aabbMin = aabb.getMin();
 			auto aabbMax = aabb.getMax();
 			auto aabbSubmesh = m_aabbMesh.lock()->getSubmesh( 0u );
-			aabbSubmesh->getPositions()[0u] = castor::Point3f( aabbMin->x, aabbMin->y, aabbMin->z );
-			aabbSubmesh->getPositions()[1u] = castor::Point3f( aabbMin->x, aabbMax->y, aabbMin->z );
-			aabbSubmesh->getPositions()[2u] = castor::Point3f( aabbMax->x, aabbMax->y, aabbMin->z );
-			aabbSubmesh->getPositions()[3u] = castor::Point3f( aabbMax->x, aabbMin->y, aabbMin->z );
-			aabbSubmesh->getPositions()[4u] = castor::Point3f( aabbMin->x, aabbMin->y, aabbMax->z );
-			aabbSubmesh->getPositions()[5u] = castor::Point3f( aabbMin->x, aabbMax->y, aabbMax->z );
-			aabbSubmesh->getPositions()[6u] = castor::Point3f( aabbMax->x, aabbMax->y, aabbMax->z );
-			aabbSubmesh->getPositions()[7u] = castor::Point3f( aabbMax->x, aabbMin->y, aabbMax->z );
-			aabbSubmesh->needsUpdate();
+
+			if ( auto positions = aabbSubmesh->getComponent< castor3d::PositionsComponent >() )
+			{
+				auto & data = positions->getData();
+				data[0u] = castor::Point3f( aabbMin->x, aabbMin->y, aabbMin->z );
+				data[1u] = castor::Point3f( aabbMin->x, aabbMax->y, aabbMin->z );
+				data[2u] = castor::Point3f( aabbMax->x, aabbMax->y, aabbMin->z );
+				data[3u] = castor::Point3f( aabbMax->x, aabbMin->y, aabbMin->z );
+				data[4u] = castor::Point3f( aabbMin->x, aabbMin->y, aabbMax->z );
+				data[5u] = castor::Point3f( aabbMin->x, aabbMax->y, aabbMax->z );
+				data[6u] = castor::Point3f( aabbMax->x, aabbMax->y, aabbMax->z );
+				data[7u] = castor::Point3f( aabbMax->x, aabbMin->y, aabbMax->z );
+				positions->needsUpdate();
+				aabbSubmesh->needsUpdate();
+			}
 
 			castor3d::Engine * engine = m_scene.getEngine();
 			engine->postEvent( castor3d::makeGpuFunctorEvent( castor3d::EventType::ePreRender
