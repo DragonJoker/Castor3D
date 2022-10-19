@@ -1,6 +1,7 @@
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/SkinComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/InstantiationComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/LinesMapping.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/TriFaceMapping.hpp"
 
 namespace castor3d
@@ -11,49 +12,23 @@ namespace castor3d
 	inline void SubmeshComponentAdder< T >::add( std::shared_ptr< T > component
 		, Submesh & submesh )
 	{
-		submesh.m_components.emplace( component->getID(), component );
-	}
-
-	//*********************************************************************************************
-
-	template<>
-	struct SubmeshComponentAdder< InstantiationComponent >
-	{
-		static inline void add( std::shared_ptr< InstantiationComponent > component
-			, Submesh & submesh )
+		if constexpr ( std::is_base_of_v< IndexMapping, T > )
+		{
+			submesh.setIndexMapping( component );
+		}
+		else
 		{
 			submesh.m_components.emplace( component->getID(), component );
 
-			if ( submesh.m_instantiation != component )
+			if constexpr ( std::is_same_v< InstantiationComponent, T > )
 			{
-				submesh.m_instantiation = component;
+				if ( submesh.m_instantiation != component )
+				{
+					submesh.m_instantiation = component;
+				}
 			}
 		}
-	};
-
-	//*********************************************************************************************
-
-	template<>
-	struct SubmeshComponentAdder< IndexMapping >
-	{
-		static inline void add( std::shared_ptr< IndexMapping > component
-			, Submesh & submesh )
-		{
-			submesh.setIndexMapping( component );
-		}
-	};
-
-	//*********************************************************************************************
-
-	template<>
-	struct SubmeshComponentAdder< TriFaceMapping >
-	{
-		static inline void add( std::shared_ptr< TriFaceMapping > component
-			, Submesh & submesh )
-		{
-			submesh.setIndexMapping( component );
-		}
-	};
+	}
 
 	//*********************************************************************************************
 
