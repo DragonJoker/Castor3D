@@ -1600,6 +1600,7 @@ namespace castor3d
 				}
 			}
 
+			reRecordCurrent();
 			m_commandsChanged = false;
 		}
 	}
