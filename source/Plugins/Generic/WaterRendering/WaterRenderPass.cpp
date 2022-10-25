@@ -788,7 +788,7 @@ namespace water
 					auto refractionTexCoord = writer.declLocale( "refractionTexCoord"
 						, writer.ternary( distortedPosition.y() < in.worldPosition.y(), distortedTexCoord, hdrCoords ) );
 					auto refractionResult = writer.declLocale( "refractionResult"
-						, c3d_colour.sample( refractionTexCoord ).rgb() * components.transmission );
+						, c3d_colour.sample( refractionTexCoord ).rgb() * components.colour );
 					displayDebugData( eRefraction, refractionResult, 1.0_f );
 					//  Retrieve non distorted scene colour.
 					auto sceneDepth = writer.declLocale( "sceneDepth"
@@ -802,7 +802,7 @@ namespace water
 					auto waterSurfacePosition = writer.declLocale( "waterSurfacePosition"
 						, writer.ternary( distortedPosition.y() < in.worldPosition.y(), distortedPosition, scenePosition ) );
 					auto waterTransmission = writer.declLocale( "waterTransmission"
-						, components.transmission * ( indirectAmbient + indirectDiffuse ) * lightDiffuse );
+						, components.colour * ( indirectAmbient + indirectDiffuse ) * lightDiffuse );
 					auto heightFactor = writer.declLocale( "heightFactor"
 						, c3d_waterData.refractionHeightFactor * ( c3d_sceneData.farPlane - c3d_sceneData.nearPlane ) );
 					refractionResult = mix( refractionResult
@@ -819,9 +819,9 @@ namespace water
 
 					//Combine all that
 					auto fresnelFactor = writer.declLocale( "fresnelFactor"
-						, vec3( reflections->computeFresnel( components
-							, surface
-							, c3d_sceneData
+						, vec3( utils.fresnelMix( reflections->computeIncident( surface.worldPosition.xyz(), c3d_sceneData.cameraPosition )
+							, components.normal
+							, components.roughness
 							, c3d_waterData.refractionRatio ) ) );
 					displayDebugData( eFresnelFactor, vec3( fresnelFactor ), 1.0_f );
 					reflectionResult *= fresnelFactor;

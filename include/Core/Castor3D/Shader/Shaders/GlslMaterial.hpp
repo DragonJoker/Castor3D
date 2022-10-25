@@ -111,12 +111,12 @@ namespace castor3d::shader
 		sdw::UInt texturesCount;
 		sdw::Vec3 colour;
 		sdw::Vec3 specular;
-		sdw::Vec3 transmission;
+		sdw::Float transmission;
+		sdw::UInt hasTransmission;
 		sdw::Float opacity;
 		sdw::Float alphaRef;
 		sdw::Float emissive;
 		sdw::UInt hasReflection;
-		sdw::UInt hasRefraction;
 		sdw::Float refractionRatio;
 
 	private:

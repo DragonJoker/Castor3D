@@ -31,15 +31,7 @@ namespace castor3d::shader
 		C3D_API sdw::RetVec3 computeRefractions( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::Float const & refractionRatio
-			, sdw::Vec3 const & transmission
 			, BlendComponents & components )override;
-		C3D_API sdw::RetVoid mergeReflRefr( sdw::Vec3 const & wsIncident
-			, sdw::Vec3 const & wsNormal
-			, sdw::Float const & refractionRatio
-			, sdw::Vec3 const & transmission
-			, BlendComponents & components
-			, sdw::Vec3 & reflection
-			, sdw::Vec3 & refraction )override;
 
 	public:
 		static castor::String const Name;

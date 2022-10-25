@@ -42,6 +42,7 @@ namespace castor3d
 		WeightedBlendRendering( crg::FramePassGroup & graph
 			, RenderDevice const & device
 			, ProgressBar * progress
+			, bool & enabled
 			, crg::FramePass const & transparentPassDesc
 			, Texture const & depth
 			, TransparentPassResult const & transparentPassResult
@@ -75,20 +76,6 @@ namespace castor3d
 			return result;
 		}
 		/**@}*/
-		/**
-		*\~english
-		*name
-		*	Mutators.
-		*\~french
-		*name
-		*	Mutateurs.
-		*/
-		/**@{*/
-		void enable( bool value )
-		{
-			m_enabled = value;
-		}
-		/**@}*/
 
 	private:
 		crg::FramePass & doCreateFinalCombine( crg::FramePassGroup & graph
@@ -102,6 +89,7 @@ namespace castor3d
 	private:
 		RenderDevice const & m_device;
 		crg::FramePassGroup & m_graph;
+		bool & m_enabled;
 		TransparentPassResult const & m_transparentPassResult;
 		crg::ImageViewId m_depthOnlyView;
 		castor::Size m_size;
@@ -109,7 +97,6 @@ namespace castor3d
 		ShaderModule m_pixelShader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
 		crg::FramePass & m_finalCombinePassDesc;
-		bool m_enabled{};
 	};
 }
 

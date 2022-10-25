@@ -30,15 +30,7 @@ namespace castor3d::shader
 		C3D_API virtual sdw::RetVec3 computeRefractions( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::Float const & refractionRatio
-			, sdw::Vec3 const & transmission
 			, BlendComponents & components ) = 0;
-		C3D_API virtual sdw::RetVoid mergeReflRefr( sdw::Vec3 const & wsIncident
-			, sdw::Vec3 const & wsNormal
-			, sdw::Float const & refractionRatio
-			, sdw::Vec3 const & transmission
-			, BlendComponents & components
-			, sdw::Vec3 & reflection
-			, sdw::Vec3 & refraction ) = 0;
 
 		VkExtent2D const & getTargetSize()const
 		{

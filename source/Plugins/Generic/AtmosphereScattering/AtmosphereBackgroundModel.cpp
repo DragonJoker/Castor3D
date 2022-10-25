@@ -79,7 +79,6 @@ namespace atmosphere_scattering
 	sdw::RetVec3 AtmosphereBackgroundModel::computeRefractions( sdw::Vec3 const & wsIncident
 		, sdw::Vec3 const & wsNormal
 		, sdw::Float const & refractionRatio
-		, sdw::Vec3 const & transmission
 		, castor3d::shader::BlendComponents & components )
 	{
 		if ( !m_computeRefractions )
@@ -92,25 +91,6 @@ namespace atmosphere_scattering
 		}
 
 		return m_computeRefractions();
-	}
-
-	sdw::RetVoid AtmosphereBackgroundModel::mergeReflRefr( sdw::Vec3 const & wsIncident
-		, sdw::Vec3 const & wsNormal
-		, sdw::Float const & refractionRatio
-		, sdw::Vec3 const & transmission
-		, castor3d::shader::BlendComponents & components
-		, sdw::Vec3 & reflection
-		, sdw::Vec3 & refraction )
-	{
-		if ( !m_mergeReflRefr )
-		{
-			m_mergeReflRefr = m_writer.implementFunction< sdw::Void >( "c3d_atmbg_mergeReflRefr"
-				, [&]()
-				{
-				} );
-		}
-
-		return m_mergeReflRefr();
 	}
 
 	sdw::Vec3 AtmosphereBackgroundModel::getSunRadiance( sdw::Vec3 const & psunDir )

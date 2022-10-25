@@ -8,6 +8,7 @@
 #include "Castor3D/Cache/ObjectCache.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
+#include "Castor3D/Material/Pass/Component/Lighting/TransmissionComponent.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Render/RenderNodesPass.hpp"
@@ -1098,6 +1099,8 @@ namespace castor3d
 			&& node.instance.getParent() != renderPass.getIgnoredNode() )
 		{
 			bool needsFront = ( !checkFlag( renderPass.getRenderFilters(), RenderFilter::eAlphaBlend ) )
+				|| ( node.pass->hasComponent< TransmissionComponent >()
+					&& ( !checkFlag( renderPass.getRenderFilters(), RenderFilter::eTransmission ) ) )
 				|| renderPass.forceTwoSided()
 				|| node.pass->isTwoSided()
 				|| node.pass->hasAlphaBlending();

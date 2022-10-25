@@ -113,8 +113,6 @@ namespace castor3d
 
 	ShaderPtr OpaquePass::doGetPixelShaderSource( PipelineFlags const & flags )const
 	{
-		auto & renderSystem = *getEngine()->getRenderSystem();
-
 		using namespace sdw;
 		FragmentWriter writer;
 		bool enableTextures = flags.enableTextures();
@@ -159,8 +157,9 @@ namespace castor3d
 		auto c3d_imgColMtl = writer.declOutput< sdw::Vec4 >( getImageName( DsTexture::eColMtl ), idx++ );
 		auto c3d_imgSpcRgh = writer.declOutput< sdw::Vec4 >( getImageName( DsTexture::eSpcRgh ), idx++ );
 		auto c3d_imgEmsTrn = writer.declOutput< sdw::Vec4 >( getImageName( DsTexture::eEmsTrn ), idx++ );
+		auto c3d_imgData = writer.declOutput< sdw::Vec4 >( getImageName( DsTexture::eData ), idx++ );
 
-		auto lightingModel = utils.createLightingModel( *renderSystem.getEngine()
+		auto lightingModel = utils.createLightingModel( *getEngine()
 			, materials
 			, shader::getLightingModelName( *getEngine(), flags.passType )
 			, {}
@@ -191,9 +190,23 @@ namespace castor3d
 					, modelData.getMaterialId()
 					, in.passMultipliers
 					, components );
+
+				if ( components.hasTransmission.isEnabled() )
+				{
+					auto incident = writer.declLocale( "incident"
+						, normalize( in.worldPosition.xyz() - c3d_sceneData.cameraPosition ) );
+
+					IF( writer, lightingModel->getFinalTransmission( components, incident ) >= 0.1_f )
+					{
+						writer.demote();
+					}
+					FI;
+				}
+
 				c3d_imgNmlOcc = vec4( components.normal, components.occlusion );
 				passShaders.updateOutputs( components, in, c3d_imgSpcRgh, c3d_imgColMtl );
 				c3d_imgEmsTrn = vec4( components.emissive, components.transmittance );
+				c3d_imgData = vec4( components.transmission, 0.0_f, 0.0_f, 0.0_f );
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

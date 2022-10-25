@@ -11,20 +11,8 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	struct RefractionData
-	{
-		explicit RefractionData( std::atomic_bool & dirty )
-			: refractionRatio{ dirty, 0.0f }
-			, refraction{ dirty, false }
-		{
-		}
-
-		castor::AtomicGroupChangeTracked< float > refractionRatio;
-		castor::AtomicGroupChangeTracked< bool > refraction;
-	};
-
 	struct RefractionComponent
-		: public BaseDataPassComponentT< RefractionData >
+		: public BaseDataPassComponentT< castor::AtomicGroupChangeTracked< float > >
 	{
 		struct ComponentsShader
 			: shader::PassComponentsShader
@@ -89,33 +77,19 @@ namespace castor3d
 			return castor::makeUniqueDerived< PassComponentPlugin, Plugin >( passComponent );
 		}
 
-		C3D_API explicit RefractionComponent( Pass & pass );
+		C3D_API explicit RefractionComponent( Pass & pass
+			, float defaultValue = 1.0f );
 
 		C3D_API void accept( PassVisitorBase & vis )override;
 
 		void setRefractionRatio( float value )
 		{
-			m_value.refractionRatio = value;
-		}
-
-		void enableRefractions( bool value = true )
-		{
-			m_value.refraction = value;
-		}
-
-		bool hasRefraction()const
-		{
-			return m_value.refraction;
+			setData( value );
 		}
 
 		float getRefractionRatio()const
 		{
-			return m_value.refractionRatio;
-		}
-
-		bool hasEnvironmentMapping()const
-		{
-			return hasRefraction();
+			return getData();
 		}
 
 		C3D_API static castor::String const TypeName;

@@ -148,7 +148,8 @@ namespace castor3d
 	bool MetalnessMapComponent::Plugin::isComponentNeeded( TextureCombine const & textures
 		, ComponentModeFlags const & filter )const
 	{
-		return checkFlag( filter, ComponentModeFlag::eSpecularLighting )
+		return checkFlag( filter, ComponentModeFlag::eOpacity )
+			|| checkFlag( filter, ComponentModeFlag::eSpecularLighting )
 			|| hasAny( textures, getTextureFlags() );
 	}
 

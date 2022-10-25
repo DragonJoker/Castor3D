@@ -117,17 +117,21 @@ namespace castor3d
 		/**@}*/
 
 	private:
+		crg::FramePass & doCreateMipGenPass( ProgressBar * progress
+			, crg::FramePass const & lastPass
+			, crg::FramePassArray const & previousPasses );
 		crg::FramePass & doCreateForwardTransparentPass( ProgressBar * progress
-			, crg::FramePass const & lastPass
-			, crg::FramePassArray const & previousPasses );
+			, crg::FramePass const & lastPass );
 		crg::FramePass & doCreateWBTransparentPass( ProgressBar * progress
-			, crg::FramePass const & lastPass
-			, crg::FramePassArray const & previousPasses );
+			, crg::FramePass const & lastPass );
 
 	private:
 		RenderDevice const & m_device;
 		crg::FramePassGroup & m_graph;
+		Texture m_mippedColour;
 		TransparentPassResultUPtr m_transparentPassResult;
+		bool m_enabled{};
+		crg::FramePass * m_mipgenPassDesc{};
 		crg::FramePass * m_transparentPassDesc{};
 		RenderTechniqueNodesPass * m_transparentPass{};
 		WeightedBlendRenderingUPtr m_weightedBlendRendering;

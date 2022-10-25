@@ -127,6 +127,8 @@ namespace castor3d
 			return cuT( "alpha_blend" );
 		case RenderFilter::eAlphaTest:
 			return cuT( "alpha_test" );
+		case RenderFilter::eTransmission:
+			return cuT( "transmission" );
 		case RenderFilter::eOpaque:
 			return cuT( "opaque" );
 		default:

@@ -29,18 +29,8 @@ namespace castor3d::shader
 			, SssProfiles const * sssProfiles
 			, bool enableVolumetric );
 
-		C3D_API sdw::Vec3 combine( BlendComponents const & components
-			, sdw::Vec3 const & directDiffuse
-			, sdw::Vec3 const & indirectDiffuse
-			, sdw::Vec3 const & directSpecular
-			, sdw::Vec3 const & directScattering
-			, sdw::Vec3 const & indirectSpecular
-			, sdw::Vec3 const & directAmbient
-			, sdw::Vec3 const & indirectAmbient
-			, sdw::Float const & ambientOcclusion
-			, sdw::Vec3 const & emissive
-			, sdw::Vec3 const & reflected
-			, sdw::Vec3 const & refracted )override;
+		C3D_API sdw::Float getFinalTransmission( BlendComponents const & components
+			, sdw::Vec3 const & incident )override;
 		C3D_API sdw::Vec3 adjustDirectAmbient( BlendComponents const & components
 			, sdw::Vec3 const & directAmbient )const override;
 		C3D_API sdw::Vec3 adjustDirectSpecular( BlendComponents const & components
@@ -111,6 +101,21 @@ namespace castor3d::shader
 			, Surface const & surface
 			, sdw::Vec3 const & worldEye
 			, sdw::Vec3 const & lightDirection );
+
+	private:
+		C3D_API sdw::Vec3 doCombine( BlendComponents const & components
+			, sdw::Vec3 const & incident
+			, sdw::Vec3 const & directDiffuse
+			, sdw::Vec3 const & indirectDiffuse
+			, sdw::Vec3 const & directSpecular
+			, sdw::Vec3 const & directScattering
+			, sdw::Vec3 const & indirectSpecular
+			, sdw::Vec3 const & directAmbient
+			, sdw::Vec3 const & indirectAmbient
+			, sdw::Float const & ambientOcclusion
+			, sdw::Vec3 const & emissive
+			, sdw::Vec3 const & reflected
+			, sdw::Vec3 const & refracted )override;
 
 	public:
 		C3D_API static castor::String getName();

@@ -65,7 +65,7 @@ namespace castor3d::shader
 					auto NdotV = m_writer.declLocale( "NdotV"
 						, max( dot( wsNormal, V ), 0.0_f ) );
 					auto F = m_writer.declLocale( "F"
-						, m_utils.fresnelSchlick( NdotV, specular ) );
+						, m_utils.conductorFresnel( NdotV, specular ) );
 					auto kS = m_writer.declLocale( "kS"
 						, F );
 					auto kD = m_writer.declLocale( "kD"
@@ -121,7 +121,6 @@ namespace castor3d::shader
 	sdw::RetVec3 IblBackgroundModel::computeRefractions( sdw::Vec3 const & wsIncident
 		, sdw::Vec3 const & wsNormal
 		, sdw::Float const & refractionRatio
-		, sdw::Vec3 const & transmission
 		, BlendComponents & components )
 	{
 		auto prefiltered = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapPrefiltered" );
@@ -129,86 +128,14 @@ namespace castor3d::shader
 			, wsNormal
 			, prefiltered
 			, refractionRatio
-			, transmission
 			, components.colour
 			, components.roughness );
-	}
-
-	sdw::RetVoid IblBackgroundModel::mergeReflRefr( sdw::Vec3 const & pwsIncident
-		, sdw::Vec3 const & pwsNormal
-		, sdw::Float const & prefractionRatio
-		, sdw::Vec3 const & ptransmission
-		, BlendComponents & components
-		, sdw::Vec3 & preflection
-		, sdw::Vec3 & prefraction )
-	{
-		if ( !m_mergeReflRefr )
-		{
-			m_mergeReflRefr = m_writer.implementFunction< sdw::Void >( "c3d_iblbg_mergeReflRefr"
-				, [&]( sdw::Vec3 const & wsIncident
-					, sdw::Vec3 const & wsNormal
-					, sdw::CombinedImageCubeRgba32 const & prefiltered
-					, sdw::Float const & refractionRatio
-					, sdw::Vec3 const & transmission
-					, sdw::Vec3 const & albedo
-					, sdw::Float const & roughness
-					, sdw::Vec3 reflection
-					, sdw::Vec3 refraction )
-				{
-					auto subRatio = m_writer.declLocale( "subRatio"
-						, 1.0_f - refractionRatio );
-					auto addRatio = m_writer.declLocale( "addRatio"
-						, 1.0_f + refractionRatio );
-					auto reflectance = m_writer.declLocale( "reflectance"
-						, ( subRatio * subRatio ) / ( addRatio * addRatio ) );
-					auto product = m_writer.declLocale( "product"
-						, max( 0.0_f, dot( -wsIncident, wsNormal ) ) );
-					auto fresnel = m_writer.declLocale( "fresnel"
-						, sdw::fma( max( 1.0_f - roughness, reflectance ) - reflectance
-							, pow( 1.0_f - product, 5.0_f )
-							, reflectance ) );
-					refraction = doComputeRefractions( wsIncident
-						, wsNormal
-						, prefiltered
-						, refractionRatio
-						, transmission
-						, albedo
-						, roughness );
-					reflection = mix( vec3( 0.0_f )
-						, reflection
-						, vec3( fresnel ) );
-					refraction = mix( refraction
-						, vec3( 0.0_f )
-						, vec3( fresnel ) );
-				}
-				, sdw::InVec3{ m_writer, "wsIncident" }
-				, sdw::InVec3{ m_writer, "wsNormal" }
-				, sdw::InCombinedImageCubeRgba32{ m_writer, "prefiltered" }
-				, sdw::InFloat{ m_writer, "refractionRatio" }
-				, sdw::InVec3{ m_writer, "transmission" }
-				, sdw::InVec3{ m_writer, "albedo" }
-				, sdw::InFloat{ m_writer, "roughness" }
-				, sdw::InOutVec3{ m_writer, "reflection" }
-				, sdw::OutVec3{ m_writer, "refraction" } );
-		}
-
-		auto prefiltered = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapPrefiltered" );
-		return m_mergeReflRefr( pwsIncident
-			, pwsNormal
-			, prefiltered
-			, prefractionRatio
-			, ptransmission
-			, components.colour
-			, components.roughness
-			, preflection
-			, prefraction );
 	}
 
 	sdw::RetVec3 IblBackgroundModel::doComputeRefractions( sdw::Vec3 const & pwsIncident
 		, sdw::Vec3 const & pwsNormal
 		, sdw::CombinedImageCubeRgba32 const & pprefiltered
 		, sdw::Float const & prefractionRatio
-		, sdw::Vec3 const & ptransmission
 		, sdw::Vec3 const & palbedo
 		, sdw::Float const & proughness )
 	{
@@ -219,7 +146,6 @@ namespace castor3d::shader
 					, sdw::Vec3 const & wsNormal
 					, sdw::CombinedImageCubeRgba32 const & prefiltered
 					, sdw::Float const & refractionRatio
-					, sdw::Vec3 const & transmission
 					, sdw::Vec3 const & albedo
 					, sdw::Float const & roughness )
 				{
@@ -227,14 +153,12 @@ namespace castor3d::shader
 						, refract( wsIncident, wsNormal, refractionRatio ) );
 					refracted.y() = -refracted.y();
 					m_writer.returnStmt( prefiltered.lod( refracted, roughness * sdw::Float( float( MaxIblReflectionLod ) ) ).rgb()
-						* transmission
 						* albedo );
 				}
 				, sdw::InVec3{ m_writer, "wsIncident" }
 				, sdw::InVec3{ m_writer, "wsNormal" }
 				, sdw::InCombinedImageCubeRgba32{ m_writer, "prefiltered" }
 				, sdw::InFloat{ m_writer, "refractionRatio" }
-				, sdw::InVec3{ m_writer, "transmission" }
 				, sdw::InVec3{ m_writer, "albedo" }
 				, sdw::InFloat{ m_writer, "roughness" } );
 		}
@@ -243,7 +167,6 @@ namespace castor3d::shader
 			, pwsNormal
 			, pprefiltered
 			, prefractionRatio
-			, ptransmission
 			, palbedo
 			, proughness );
 	}

@@ -2,6 +2,7 @@
 
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Pass/PassVisitor.hpp"
+#include "Castor3D/Material/Pass/Component/Other/RefractionComponent.hpp"
 #include "Castor3D/Scene/SceneFileParser.hpp"
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
@@ -27,7 +28,7 @@ namespace castor
 		bool operator()( castor3d::TransmissionComponent const & object
 			, StringStream & file )override
 		{
-			return writeNamedSubOpt( file, cuT( "transmission" ), object.getTransmission(), castor::RgbColour{ 1.0f, 1.0f, 1.0f } );
+			return writeNamedSubOpt( file, cuT( "transmission" ), object.getTransmission(), 0.0f );
 		}
 	};
 }
@@ -52,10 +53,8 @@ namespace castor3d
 			}
 			else
 			{
-				castor::RgbColour value{ 1.0f, 1.0f, 1.0f };
-				params[0]->get( value );
 				auto & component = getPassComponent< TransmissionComponent >( parsingContext );
-				component.setTransmission( value );
+				component.setTransmission( params[0]->get< float >() );
 			}
 		}
 		CU_EndAttribute()
@@ -67,15 +66,15 @@ namespace castor3d
 		, shader::Materials const & materials
 		, sdw::StructInstance const * surface )const
 	{
-		if ( !checkFlag( materials.getFilter(), ComponentModeFlag::eDiffuseLighting )
-			&& !checkFlag( materials.getFilter(), ComponentModeFlag::eSpecularLighting ) )
+		if ( !checkFlag( materials.getFilter(), ComponentModeFlag::eOpacity ) )
 		{
 			return;
 		}
 
 		if ( !components.hasMember( "transmission" ) )
 		{
-			components.declMember( "transmission", sdw::type::Kind::eVec3F );
+			components.declMember( "transmission", sdw::type::Kind::eFloat );
+			components.declMember( "hasTransmission", sdw::type::Kind::eUInt );
 		}
 	}
 
@@ -92,11 +91,13 @@ namespace castor3d
 
 		if ( material )
 		{
-			inits.emplace_back( sdw::makeExpr( material->getMember< sdw::Vec3 >( "transmission" ) ) );
+			inits.emplace_back( sdw::makeExpr( material->getMember< sdw::Float >( "transmission" ) ) );
+			inits.emplace_back( sdw::makeExpr( material->getMember< sdw::UInt >( "hasTransmission" ) ) );
 		}
 		else
 		{
-			inits.emplace_back( sdw::makeExpr( vec3( 1.0_f ) ) );
+			inits.emplace_back( sdw::makeExpr( 1.0_f ) );
+			inits.emplace_back( sdw::makeExpr( 0_u ) );
 		}
 	}
 
@@ -105,13 +106,15 @@ namespace castor3d
 		, shader::BlendComponents & res
 		, shader::BlendComponents const & src )const
 	{
-		res.getMember< sdw::Vec3 >( "transmission", true ) = src.getMember< sdw::Vec3 >( "transmission", true ) * passMultiplier;
+		res.getMember< sdw::Float >( "transmission", true ) = src.getMember< sdw::Float >( "transmission", true ) * passMultiplier;
+		res.getMember< sdw::Float >( "hasTransmission", true ) = max( res.getMember< sdw::Float >( "hasTransmission", true )
+			, src.getMember< sdw::Float >( "hasTransmission", true ) );
 	}
 
 	//*********************************************************************************************
 
 	TransmissionComponent::MaterialShader::MaterialShader()
-		: shader::PassMaterialShader{ 12u }
+		: shader::PassMaterialShader{ 8u }
 	{
 	}
 
@@ -120,8 +123,10 @@ namespace castor3d
 	{
 		if ( !type.hasMember( "transmission" ) )
 		{
-			type.declMember( "transmission", ast::type::Kind::eVec3F );
-			inits.emplace_back( sdw::makeExpr( vec3( 1.0_f ) ) );
+			type.declMember( "transmission", ast::type::Kind::eFloat );
+			type.declMember( "hasTransmission", ast::type::Kind::eUInt );
+			inits.emplace_back( sdw::makeExpr( 0.0_f ) );
+			inits.emplace_back( sdw::makeExpr( 0_u ) );
 		}
 	}
 
@@ -134,7 +139,7 @@ namespace castor3d
 			, CSCNSection::ePass
 			, cuT( "transmission" )
 			, trs::parserPassTransmission
-			, { castor::makeParameter< castor::ParameterType::eRgbColour >() } );
+			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
 	}
 
 	void TransmissionComponent::Plugin::zeroBuffer( Pass const & pass
@@ -142,14 +147,15 @@ namespace castor3d
 		, PassBuffer & buffer )const
 	{
 		auto data = buffer.getData( pass.getId() );
-		data.write( materialShader.getMaterialChunk(), 1.0f, 1.0f, 1.0f, 0u );
+		VkDeviceSize offset{};
+		offset += data.write( materialShader.getMaterialChunk(), 0.0f, offset );
+		data.write( materialShader.getMaterialChunk(), 0u, offset );
 	}
 
 	bool TransmissionComponent::Plugin::isComponentNeeded( TextureCombine const & textures
 		, ComponentModeFlags const & filter )const
 	{
-		return checkFlag( filter, ComponentModeFlag::eDiffuseLighting )
-			|| checkFlag( filter, ComponentModeFlag::eSpecularLighting );
+		return checkFlag( filter, ComponentModeFlag::eOpacity );
 	}
 
 	//*********************************************************************************************
@@ -157,9 +163,13 @@ namespace castor3d
 	castor::String const TransmissionComponent::TypeName = C3D_MakePassLightingComponentName( "transmission" );
 
 	TransmissionComponent::TransmissionComponent( Pass & pass
-		, castor::RgbColour defaultValue )
-		: BaseDataPassComponentT{ pass, TypeName, std::move( defaultValue ) }
+		, float defaultValue )
+		: BaseDataPassComponentT{ pass, TypeName, defaultValue }
 	{
+		if ( !pass.hasComponent< RefractionComponent >() )
+		{
+			pass.createComponent< RefractionComponent >( 1.0f );
+		}
 	}
 
 	void TransmissionComponent::accept( PassVisitorBase & vis )
@@ -185,11 +195,13 @@ namespace castor3d
 	void TransmissionComponent::doFillBuffer( PassBuffer & buffer )const
 	{
 		auto data = buffer.getData( getOwner()->getId() );
+		VkDeviceSize offset{};
+		offset += data.write( m_materialShader->getMaterialChunk()
+			, getTransmission()
+			, offset );
 		data.write( m_materialShader->getMaterialChunk()
-			, powf( getTransmission().red(), 2.2f )
-			, powf( getTransmission().green(), 2.2f )
-			, powf( getTransmission().blue(), 2.2f )
-			, 0u );
+			, 1u
+			, offset );
 	}
 
 	//*********************************************************************************************

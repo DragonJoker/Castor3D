@@ -42,6 +42,7 @@ namespace castor3d
 			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
+			, Texture const & sceneImage
 			, crg::ImageData const * targetImage
 			, RenderNodesPassDesc const & renderPassDesc
 			, RenderTechniquePassDesc const & techniquePassDesc );
@@ -71,6 +72,9 @@ namespace castor3d
 	private:
 		ashes::PipelineDepthStencilStateCreateInfo doCreateDepthStencilState( PipelineFlags const & flags )const override;
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
+		void doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const override;
+		void doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
+			, castor3d::ShadowMapLightTypeArray const & shadowMaps )override;
 		ShaderPtr doGetPixelShaderSource( PipelineFlags const & flags )const override;
 
 	public:
@@ -78,6 +82,7 @@ namespace castor3d
 
 	private:
 		VkFormat m_depthFormat{};
+		Texture const & m_sceneImage;
 		ashes::CommandBufferPtr m_nodesCommands;
 		ashes::FrameBufferPtr m_frameBuffer;
 	};

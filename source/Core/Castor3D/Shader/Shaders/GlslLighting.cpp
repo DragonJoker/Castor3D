@@ -54,6 +54,7 @@ namespace castor3d::shader
 	}
 
 	sdw::Vec3 LightingModel::combine( BlendComponents const & components
+		, sdw::Vec3 const & incident
 		, sdw::Vec3 const & directDiffuse
 		, sdw::Vec3 const & indirectDiffuse
 		, sdw::Vec3 const & directSpecular
@@ -61,10 +62,57 @@ namespace castor3d::shader
 		, sdw::Vec3 const & indirectSpecular
 		, sdw::Vec3 const & directAmbient
 		, sdw::Vec3 const & indirectAmbient
-		, sdw::Vec3 const & reflected
-		, sdw::Vec3 const & refracted )
+		, sdw::Float const & ambientOcclusion
+		, sdw::Vec3 const & emissive
+		, sdw::Vec3 reflected
+		, sdw::Vec3 refracted )
+	{
+		IF( m_writer, components.refractionRatio != 0.0_f
+			&& components.hasTransmission == 0_u )
+		{
+			auto fresnelFactor = m_writer.declLocale( "fresnelFactor"
+				, m_utils.fresnelMix( incident
+					, components.normal
+					, components.roughness
+					, components.refractionRatio ) );
+			reflected = mix( vec3( 0.0_f )
+				, reflected
+				, vec3( fresnelFactor ) );
+			refracted = mix( refracted
+				, vec3( 0.0_f )
+				, vec3( fresnelFactor ) );
+		}
+		FI;
+
+		return doCombine( components
+			, incident
+			, directDiffuse
+			, indirectDiffuse
+			, directSpecular
+			, directScattering
+			, indirectSpecular
+			, directAmbient
+			, indirectAmbient
+			, ambientOcclusion
+			, emissive
+			, reflected
+			, refracted );
+	}
+
+	sdw::Vec3 LightingModel::combine( BlendComponents const & components
+		, sdw::Vec3 const & incident
+		, sdw::Vec3 const & directDiffuse
+		, sdw::Vec3 const & indirectDiffuse
+		, sdw::Vec3 const & directSpecular
+		, sdw::Vec3 const & directScattering
+		, sdw::Vec3 const & indirectSpecular
+		, sdw::Vec3 const & directAmbient
+		, sdw::Vec3 const & indirectAmbient
+		, sdw::Vec3 reflected
+		, sdw::Vec3 refracted )
 	{
 		return combine( components
+			, incident
 			, directDiffuse
 			, indirectDiffuse
 			, directSpecular
@@ -74,8 +122,8 @@ namespace castor3d::shader
 			, indirectAmbient
 			, components.occlusion
 			, components.emissive
-			, reflected
-			, refracted );
+			, std::move( reflected )
+			, std::move( refracted ) );
 	}
 
 	void LightingModel::declareModel( uint32_t lightsBufBinding

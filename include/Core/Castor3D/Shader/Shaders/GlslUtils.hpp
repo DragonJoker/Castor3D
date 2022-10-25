@@ -83,8 +83,12 @@ namespace castor3d::shader
 			, sdw::Float const & nearPlane
 			, sdw::Float const & farPlane
 			, sdw::UInt const & accumulationOperator );
-		C3D_API sdw::RetVec3 fresnelSchlick( sdw::Float const & product
+		C3D_API sdw::RetVec3 conductorFresnel( sdw::Float const & product
 			, sdw::Vec3 const & f0 );
+		C3D_API sdw::RetFloat fresnelMix( sdw::Vec3 const & incident
+			, sdw::Vec3 const & normal
+			, sdw::Float const & roughness
+			, sdw::Float const & refractionRatio );
 		C3D_API sdw::RetVec4 clipToScreen( sdw::Vec4 const & in );
 
 		C3D_API sdw::RetBoolean isSaturated( sdw::Vec3 const & p );
@@ -167,7 +171,12 @@ namespace castor3d::shader
 			, sdw::InUInt > m_computeAccumulation;
 		sdw::Function< sdw::Vec3
 			, sdw::InFloat
-			, sdw::InVec3 > m_fresnelSchlick;
+			, sdw::InVec3 > m_conductorFresnel;
+		sdw::Function< sdw::Float
+			, sdw::InVec3
+			, sdw::InVec3
+			, sdw::InFloat
+			, sdw::InFloat > m_fresnelMix;
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3 > m_invertNormal;
 		sdw::Function< sdw::Boolean

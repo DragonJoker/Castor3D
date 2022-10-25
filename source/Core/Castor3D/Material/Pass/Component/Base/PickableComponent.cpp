@@ -22,7 +22,7 @@ namespace castor
 		bool operator()( castor3d::PickableComponent const & object
 			, StringStream & file )override
 		{
-			return writeOpt( file, cuT( "two_sided" ), object.isPickable(), false );
+			return writeOpt( file, cuT( "pickable" ), object.isPickable(), true );
 		}
 	};
 }

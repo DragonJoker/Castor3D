@@ -37,7 +37,8 @@ namespace castor3d
 			{
 				auto [lhsComponentId, lhsTextureFlag] = splitTextureFlag( lookup );
 				return lhsComponentId == rhsComponentId
-					&& castor::hasAny( lhsTextureFlag, rhsTextureFlag );
+					&& ( rhsTextureFlag == 0
+						|| castor::hasAny( lhsTextureFlag, rhsTextureFlag ) );
 			} );
 		return it != lhs.end();
 	}

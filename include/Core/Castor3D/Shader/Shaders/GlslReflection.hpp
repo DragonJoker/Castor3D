@@ -17,15 +17,25 @@ namespace castor3d::shader
 			, bool hasIblSupport );
 		C3D_API virtual ~ReflectionModel() = default;
 
+		C3D_API sdw::RetVec3 computeIncident( sdw::Vec3 const & wsPosition
+			, sdw::Vec3 const & wsCamera )const;
 		C3D_API void computeCombined( BlendComponents & components
-			, Surface const & surface
-			, SceneData const & sceneData
+			, sdw::Vec3 const & incident
+			, BackgroundModel & background
+			, sdw::CombinedImage2DRgba32 const & mippedScene
+			, sdw::Vec2 const & sceneUv
+			, sdw::UInt envMapIndex
+			, sdw::UInt const & hasReflection
+			, sdw::Float const & refractionRatio
+			, sdw::Vec3 & ambient
+			, sdw::Vec3 & reflected
+			, sdw::Vec3 & refracted );
+		C3D_API void computeCombined( BlendComponents & components
+			, sdw::Vec3 const & incident
 			, BackgroundModel & background
 			, sdw::UInt envMapIndex
-			, sdw::UInt const & reflection
-			, sdw::UInt const & refraction
+			, sdw::UInt const & hasReflection
 			, sdw::Float const & refractionRatio
-			, sdw::Vec3 const & transmission
 			, sdw::Vec3 & ambient
 			, sdw::Vec3 & reflected
 			, sdw::Vec3 & refracted );
@@ -42,11 +52,7 @@ namespace castor3d::shader
 			, sdw::UInt envMapIndex
 			, sdw::UInt const & refraction
 			, sdw::Float const & refractionRatio
-			, sdw::Vec3 const & transmission );
-		C3D_API sdw::RetFloat computeFresnel( BlendComponents & components
-			, Surface const & surface
-			, SceneData const & sceneData
-			, sdw::Float const & refractionRatio );
+			, sdw::Float const & transmission );
 		C3D_API sdw::RetVec4 computeScreenSpace( MatrixData const & matrixData
 			, sdw::Vec3 const & viewPosition
 			, sdw::Vec3 const & worldNormal
@@ -107,8 +113,6 @@ namespace castor3d::shader
 			, sdw::Vec3 & csHitPoint );
 
 	private:
-		sdw::RetVec3 computeIncident( sdw::Vec3 const & wsPosition
-			, sdw::Vec3 const & wsCamera )const;
 		sdw::RetVec3 computeReflEnvMaps( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::CombinedImageCubeArrayRgba32 const & envMap
@@ -119,17 +123,13 @@ namespace castor3d::shader
 			, sdw::CombinedImageCubeArrayRgba32 const & envMap
 			, sdw::UInt const & envMapIndex
 			, sdw::Float const & refractionRatio
-			, sdw::Vec3 const & transmission
 			, BlendComponents & components );
-		sdw::RetVec3 mergeReflRefrEnvMaps( sdw::Vec3 const & wsIncident
+		sdw::RetVec3 computeRefrSceneMap( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
-			, sdw::CombinedImageCubeArrayRgba32 const & envMap
-			, sdw::UInt const & envMapIndex
+			, sdw::CombinedImage2DRgba32 const & sceneMap
+			, sdw::Vec2 const & sceneUv
 			, sdw::Float const & refractionRatio
-			, sdw::Vec3 const & transmission
-			, BlendComponents & components
-			, sdw::Vec3 & reflection
-			, sdw::Vec3 & refraction );
+			, BlendComponents & components );
 
 		virtual void doAdjustAmbient( sdw::Vec3 & ambient )const
 		{
@@ -148,7 +148,6 @@ namespace castor3d::shader
 			, sdw::CombinedImageCubeArrayRgba32 const & envMap
 			, sdw::UInt const & envMapIndex
 			, sdw::Float const & refractionRatio
-			, sdw::Vec3 const & transmission
 			, sdw::Vec3 & albedo
 			, sdw::Float const & roughness );
 
@@ -181,12 +180,6 @@ namespace castor3d::shader
 			, sdw::InCombinedImage2DR32
 			, sdw::InCombinedImage2DRgba32
 			, sdw::InCombinedImage2DRgba32 > m_computeScreenSpace;
-		sdw::Function< sdw::Float
-			, sdw::InVec3
-			, sdw::InVec3
-			, sdw::InFloat
-			, sdw::InVec3
-			, sdw::InFloat > m_computeFresnel;
 
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3
@@ -202,19 +195,15 @@ namespace castor3d::shader
 			, sdw::InUInt
 			, sdw::InFloat
 			, sdw::InVec3
-			, sdw::InOutVec3
 			, sdw::InFloat > m_computeRefrEnvMaps;
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3
 			, sdw::InVec3
-			, sdw::InCombinedImageCubeArrayRgba32
-			, sdw::InUInt
+			, sdw::InCombinedImage2DRgba32
+			, sdw::InVec2
 			, sdw::InFloat
 			, sdw::InVec3
-			, sdw::InVec3
-			, sdw::InFloat
-			, sdw::InOutVec3
-			, sdw::OutVec3 > m_mergeReflRefrEnvMaps;
+			, sdw::InFloat > m_computeRefrSceneMap;
 	};
 }
 

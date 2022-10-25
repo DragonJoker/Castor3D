@@ -57,7 +57,6 @@ namespace castor3d::shader
 	sdw::RetVec3 ImgBackgroundModel::computeRefractions( sdw::Vec3 const & pwsIncident
 		, sdw::Vec3 const & pwsNormal
 		, sdw::Float const & prefractionRatio
-		, sdw::Vec3 const & ptransmission
 		, BlendComponents & components )
 	{
 		if ( !m_computeRefractions )
@@ -70,24 +69,5 @@ namespace castor3d::shader
 		}
 
 		return m_computeRefractions();
-	}
-
-	sdw::RetVoid ImgBackgroundModel::mergeReflRefr( sdw::Vec3 const & pwsIncident
-		, sdw::Vec3 const & pwsNormal
-		, sdw::Float const & prefractionRatio
-		, sdw::Vec3 const & ptransmission
-		, BlendComponents & components
-		, sdw::Vec3 & preflection
-		, sdw::Vec3 & prefraction )
-	{
-		if ( !m_mergeReflRefr )
-		{
-			m_mergeReflRefr = m_writer.implementFunction< sdw::Void >( "c3d_imgbg_mergeReflRefr"
-				, [&]()
-				{
-				} );
-		}
-
-		return m_mergeReflRefr();
 	}
 }

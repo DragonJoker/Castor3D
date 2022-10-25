@@ -657,6 +657,18 @@ namespace castor3d
 		/**
 		*\~english
 		*\return
+		*	The flags for transmission.
+		*\~french
+		*\return
+		*	Les indicateurs pour la transmission.
+		*/
+		C3D_API virtual PassComponentFlag getTransmissionFlag()const
+		{
+			return 0u;
+		}
+		/**
+		*\~english
+		*\return
 		*	The flags for non repeated parallax occlusion mapping.
 		*\~french
 		*\return

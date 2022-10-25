@@ -48,7 +48,7 @@ namespace castor3d::shader
 				auto reflected = m_writer.declLocale( "reflected"
 					, reflect( wsIncident, wsNormal ) );
 				m_writer.returnStmt( envMap.lod( vec4( reflected, m_writer.cast< sdw::Float >( envMapIndex ) )
-						, roughness * sdw::Float( float( castor::getBitSize( EnvironmentMapSize ) ) ) ).xyz()
+						, roughness * sdw::Float( float( EnvironmentMipLevels ) ) ).xyz()
 					* specular );
 			}
 			, sdw::InVec3{ m_writer, "wsIncident" }
@@ -72,18 +72,15 @@ namespace castor3d::shader
 				, sdw::CombinedImageCubeArrayRgba32 const & envMap
 				, sdw::UInt const & envMapIndex
 				, sdw::Float const & refractionRatio
-				, sdw::Vec3 const & transmission
-				, sdw::Vec3 albedo
+				, sdw::Vec3 const & albedo
 				, sdw::Float const & roughness )
 			{
 				auto alb = m_writer.declLocale( "alb"
 					, albedo );
 				auto refracted = m_writer.declLocale( "refracted"
 					, refract( wsIncident, wsNormal, refractionRatio ) );
-				albedo = vec3( 0.0_f );
 				m_writer.returnStmt( envMap.lod( vec4( refracted, m_writer.cast< sdw::Float >( envMapIndex ) )
-						, roughness * sdw::Float( float( castor::getBitSize( EnvironmentMapSize ) ) ) ).xyz()
-					* transmission
+						, roughness * sdw::Float( float( EnvironmentMipLevels ) ) ).xyz()
 					* alb );
 			}
 			, sdw::InVec3{ m_writer, "wsIncident" }
@@ -91,8 +88,7 @@ namespace castor3d::shader
 			, sdw::InCombinedImageCubeArrayRgba32{ m_writer, "envMap" }
 			, sdw::InUInt{ m_writer, "envMapIndex" }
 			, sdw::InFloat{ m_writer, "refractionRatio" }
-			, sdw::InVec3{ m_writer, "transmission" }
-			, sdw::InOutVec3{ m_writer, "albedo" }
+			, sdw::InVec3{ m_writer, "albedo" }
 			, sdw::InFloat{ m_writer, "roughness" } );
 	}
 }

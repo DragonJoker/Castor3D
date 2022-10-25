@@ -13,7 +13,7 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	struct TransmissionComponent
-		: public BaseDataPassComponentT< castor::AtomicGroupChangeTracked< castor::RgbColour > >
+		: public BaseDataPassComponentT< castor::AtomicGroupChangeTracked< float > >
 	{
 		struct ComponentsShader
 			: shader::PassComponentsShader
@@ -71,6 +71,11 @@ namespace castor3d
 			{
 				return std::make_unique< MaterialShader >();
 			}
+
+			PassComponentFlag getTransmissionFlag()const override
+			{
+				return getComponentFlags();
+			}
 		};
 
 		static PassComponentPluginUPtr createPlugin( PassComponentRegister const & passComponent )
@@ -79,34 +84,18 @@ namespace castor3d
 		}
 
 		C3D_API explicit TransmissionComponent( Pass & pass
-			, castor::RgbColour defaultValue = { 1.0f, 1.0f, 1.0f } );
+			, float defaultValue = 0.0f );
 
 		C3D_API void accept( PassVisitorBase & vis )override;
 
-		castor::RgbColour const & getTransmission()const
+		float const & getTransmission()const
 		{
 			return getData();
 		}
 
-		void setTransmission( castor::RgbColour const & v )
+		void setTransmission( float v )
 		{
 			setData( v );
-		}
-
-		void setTransmission( castor::HdrRgbColour const & v
-			, float gamma )
-		{
-			setTransmission( castor::RgbColour{ v, gamma } );
-		}
-
-		void setTransmission( castor::Coords3f const & v )
-		{
-			setTransmission( castor::RgbColour{ v[0u], v[1u], v[2u] } );
-		}
-
-		void setTransmission( castor::Point3f const & v )
-		{
-			setTransmission( castor::RgbColour{ v[0u], v[1u], v[2u] } );
 		}
 
 		C3D_API static castor::String const TypeName;

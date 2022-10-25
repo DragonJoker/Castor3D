@@ -60,7 +60,8 @@ namespace castor3d
 	*/
 	//@{
 	static uint32_t constexpr MaxEnvironmentMapCount = 10u;
-	static uint32_t constexpr EnvironmentMapSize = 128u;
+	static uint32_t constexpr EnvironmentMipLevels = 8u;
+	static uint32_t constexpr EnvironmentMapSize = 0x0001u << ( EnvironmentMipLevels - 1u );
 	//@}
 	/**
 	*\name
