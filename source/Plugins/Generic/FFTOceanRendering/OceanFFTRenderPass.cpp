@@ -1326,7 +1326,7 @@ namespace ocean_fft
 						, modelData.getEnvMapIndex()
 						, components.hasReflection );
 					displayDebugData( eRawBackgroundReflection, reflected, 1.0_f );
-					reflected = utils.fresnelSchlick( NdotV, components.specular ) * reflected;
+					reflected = utils.conductorFresnel( NdotV, components.specular ) * reflected;
 					displayDebugData( eFresnelBackgroundReflection, reflected, 1.0_f );
 					auto ssrResult = writer.declLocale( "ssrResult"
 						, reflections->computeScreenSpace( c3d_matrixData
@@ -1371,7 +1371,7 @@ namespace ocean_fft
 							, refractionResult ) );
 					displayDebugData( eLightAbsorbtion, lightAbsorbtion, 1.0_f );
 					auto waterTransmission = writer.declLocale( "waterTransmission"
-						, components.transmission * lightAbsorbtion * ( indirectAmbient + indirectDiffuse ) );
+						, components.colour * lightAbsorbtion * ( indirectAmbient + indirectDiffuse ) );
 					displayDebugData( eWaterTransmission, waterTransmission, 1.0_f );
 					refractionResult *= waterTransmission;
 					displayDebugData( eRefractionResult, refractionResult, 1.0_f );
@@ -1393,9 +1393,9 @@ namespace ocean_fft
 
 					//Combine all that
 					auto fresnelFactor = writer.declLocale( "fresnelFactor"
-						, vec3( reflections->computeFresnel( components
-							, surface
-							, c3d_sceneData
+						, vec3( utils.fresnelMix( reflections->computeIncident( surface.worldPosition.xyz(), c3d_sceneData.cameraPosition )
+							, components.normal
+							, components.roughness
 							, c3d_oceanData.refractionRatio ) ) );
 					displayDebugData( eFresnelFactor, vec3( fresnelFactor ), 1.0_f );
 					reflectionResult *= fresnelFactor;

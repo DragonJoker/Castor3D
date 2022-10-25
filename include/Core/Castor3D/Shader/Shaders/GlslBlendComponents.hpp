@@ -97,7 +97,8 @@ namespace castor3d::shader
 		sdw::DefaultedT< sdw::Vec3 > colour;
 		sdw::DefaultedT< sdw::Vec3 > emissive;
 		sdw::DefaultedT< sdw::Vec3 > specular;
-		sdw::DefaultedT< sdw::Vec3 > transmission;
+		sdw::DefaultedT< sdw::Float > transmission;
+		sdw::DefaultedT< sdw::UInt > hasTransmission;
 		sdw::DefaultedT< sdw::Float > opacity;
 		sdw::DefaultedT< sdw::UInt > bwAccumulationOperator;
 		sdw::DefaultedT< sdw::Float > alphaRef;
@@ -105,7 +106,6 @@ namespace castor3d::shader
 		sdw::DefaultedT< sdw::Float > transmittance;
 		sdw::DefaultedT< sdw::Float > refractionRatio;
 		sdw::DefaultedT< sdw::UInt > hasReflection;
-		sdw::DefaultedT< sdw::UInt > hasRefraction;
 		sdw::DefaultedT< sdw::Float > metalness;
 		sdw::DefaultedT< sdw::Float > roughness;
 		sdw::Float const shininess;

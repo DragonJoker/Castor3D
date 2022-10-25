@@ -330,7 +330,7 @@ namespace castor3d
 						, merged );
 				}
 
-				if ( merged != it->second->getConfiguration() )
+				if ( !shallowEqual( merged, it->second->getConfiguration() ) )
 				{
 					mergeConfigs( it->second->getConfiguration(), merged );
 					it->second->setConfiguration( merged );

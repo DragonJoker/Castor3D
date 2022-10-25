@@ -288,14 +288,15 @@ namespace castor3d
 			format = m_texture->getImage().getPixelFormat();
 		}
 
+		auto needsYInversion = value.needsYInversion;
 		m_configuration = std::move( value );
 		m_configuration.needsYInversion = m_texture
-			? ( ( m_texture->needsYInversion() && value.needsYInversion )
+			? ( ( m_texture->needsYInversion() && needsYInversion )
 				? 0u
-				: ( ( m_texture->needsYInversion() || value.needsYInversion )
+				: ( ( m_texture->needsYInversion() || needsYInversion )
 					? 1u
 					: 0u ) )
-			: 0u;
+			: needsYInversion;
 		updateIndices( format, m_configuration );
 		onChanged( *this );
 	}

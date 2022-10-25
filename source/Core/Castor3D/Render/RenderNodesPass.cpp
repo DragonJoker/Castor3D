@@ -498,6 +498,11 @@ namespace castor3d
 
 	bool RenderNodesPass::areValidPassFlags( PassComponentCombine const & passFlags )const
 	{
+		if ( hasAny( passFlags, getEngine()->getPassComponentsRegister().getTransmissionFlag() ) )
+		{
+			return !checkFlag( m_filters, RenderFilter::eTransmission );
+		}
+
 		if ( hasAny( passFlags, getEngine()->getPassComponentsRegister().getAlphaTestFlag() ) )
 		{
 			// Blend alpha test with alpha blending,

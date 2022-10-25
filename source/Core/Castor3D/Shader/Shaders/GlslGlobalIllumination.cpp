@@ -490,7 +490,7 @@ namespace castor3d
 					, max( 0.0_f, dot( surface.normal, normalize( vsPosition ) ) ) );
 				auto envBRDF = m_writer.declLocale( "envBRDF"
 					, brdfMap.sample( vec2( NdotV, roughness ) ) );
-				indirectSpecular *= sdw::fma( m_utils.fresnelSchlick( NdotV, indirectSpecular.xyz() )
+				indirectSpecular *= sdw::fma( m_utils.conductorFresnel( NdotV, indirectSpecular.xyz() )
 					, vec3( envBRDF.x() )
 					, vec3( envBRDF.y() ) );
 			}

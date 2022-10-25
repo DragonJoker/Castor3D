@@ -54,25 +54,10 @@ namespace castor3d::shader
 			, enableVolumetric );
 	}
 
-	sdw::Vec3 PbrLightingModel::combine( BlendComponents const & components
-		, sdw::Vec3 const & directDiffuse
-		, sdw::Vec3 const & indirectDiffuse
-		, sdw::Vec3 const & directSpecular
-		, sdw::Vec3 const & directScattering
-		, sdw::Vec3 const & indirectSpecular
-		, sdw::Vec3 const & directAmbient
-		, sdw::Vec3 const & indirectAmbient
-		, sdw::Float const & ambientOcclusion
-		, sdw::Vec3 const & emissive
-		, sdw::Vec3 const & reflected
-		, sdw::Vec3 const & refracted )
+	sdw::Float PbrLightingModel::getFinalTransmission( BlendComponents const & components
+		, sdw::Vec3 const & incident )
 	{
-		return components.colour * components.transmission * ( directDiffuse + ( indirectDiffuse * ambientOcclusion ) )
-			+ adjustDirectSpecular( components, directSpecular ) + ( indirectSpecular * ambientOcclusion )
-			+ emissive
-			+ refracted
-			+ ( reflected * adjustDirectAmbient( components, directAmbient ) * indirectAmbient * ambientOcclusion )
-			+ directScattering;
+		return mix( components.transmission, 0.0_f, components.metalness );
 	}
 
 	sdw::Vec3 PbrLightingModel::adjustDirectAmbient( BlendComponents const & components
@@ -85,6 +70,17 @@ namespace castor3d::shader
 		, sdw::Vec3 const & directSpecular )const
 	{
 		return directSpecular;
+	}
+
+	sdw::Vec3 PbrLightingModel::adjustRefraction( BlendComponents const & components
+		, sdw::Vec3 const & refraction )const
+	{
+		if ( components.hasMember( "metalness" ) )
+		{
+			return refraction * ( 1.0_f - components.getMember< sdw::Float >( "metalness" ) );
+		}
+
+		return refraction;
 	}
 
 	ReflectionModelPtr PbrLightingModel::getReflectionModel( uint32_t & envMapBinding
@@ -642,6 +638,46 @@ namespace castor3d::shader
 			, psurface
 			, pworldEye
 			, preceivesShadows );
+	}
+
+	sdw::Vec3 PbrLightingModel::doCombine( BlendComponents const & components
+		, sdw::Vec3 const & incident
+		, sdw::Vec3 const & directDiffuse
+		, sdw::Vec3 const & indirectDiffuse
+		, sdw::Vec3 const & directSpecular
+		, sdw::Vec3 const & directScattering
+		, sdw::Vec3 const & indirectSpecular
+		, sdw::Vec3 const & directAmbient
+		, sdw::Vec3 const & indirectAmbient
+		, sdw::Float const & ambientOcclusion
+		, sdw::Vec3 const & emissive
+		, sdw::Vec3 const & reflected
+		, sdw::Vec3 const & refracted )
+	{
+		auto diffuseBrdf = m_writer.declLocale( "diffuseBrdf"
+			, components.colour * ( directDiffuse + ( indirectDiffuse * ambientOcclusion ) ) );
+		auto specularBrdf = m_writer.declLocale( "specularBrdf"
+			, ( reflected * adjustDirectAmbient( components, directAmbient ) * indirectAmbient * ambientOcclusion )
+			+ adjustDirectSpecular( components, directSpecular ) + ( indirectSpecular * ambientOcclusion ) );
+
+		IF( m_writer, components.hasTransmission )
+		{
+			auto specularBtdf = m_writer.declLocale( "specularBtdf"
+				, adjustRefraction( components, refracted ) );
+			diffuseBrdf = mix( diffuseBrdf, specularBtdf, vec3( components.transmission ) );
+		}
+		ELSE
+		{
+			diffuseBrdf += refracted;
+		}
+		FI;
+
+		auto metal = specularBrdf; // Conductor Fresnel already included there.
+		auto dielectric = m_writer.declLocale( "dielectric"
+			, specularBrdf + diffuseBrdf );
+		return mix( dielectric, metal, vec3( components.metalness ) )
+			+ emissive
+			+ directScattering;
 	}
 
 	//***********************************************************************************************

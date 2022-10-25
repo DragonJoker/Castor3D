@@ -123,6 +123,7 @@ namespace castor3d
 			eColMtl,
 			eSpcRgh,
 			eEmsTrn,
+			eData,
 			eSsao,
 			eBrdf,
 			eDirectDiffuse,
@@ -152,6 +153,7 @@ namespace castor3d
 					| ComponentModeFlag::eGeometry
 					| ComponentModeFlag::eDiffuseLighting
 					| ComponentModeFlag::eSpecularLighting
+					| ComponentModeFlag::eOpacity
 					| ComponentModeFlag::eOcclusion
 					| ComponentModeFlag::eSpecifics )
 				, utils };
@@ -171,6 +173,7 @@ namespace castor3d
 			auto c3d_mapColMtl = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eColMtl ), uint32_t( ResolveBind::eColMtl ), 0u );
 			auto c3d_mapSpcRgh = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eSpcRgh ), uint32_t( ResolveBind::eSpcRgh ), 0u );
 			auto c3d_mapEmsTrn = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eEmsTrn ), uint32_t( ResolveBind::eEmsTrn ), 0u );
+			auto c3d_mapData = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eData ), uint32_t( ResolveBind::eData ), 0u );
 			auto c3d_mapSsao = writer.declCombinedImg< FImg2DRg32 >( "c3d_mapSsao", uint32_t( ResolveBind::eSsao ), 0u, config.hasSsao );
 			auto c3d_mapBrdf = writer.declCombinedImg< FImg2DRg32 >( "c3d_mapBrdf", uint32_t( ResolveBind::eBrdf ), 0u );
 			auto c3d_mapLightDiffuse = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapLightDiffuse", uint32_t( ResolveBind::eDirectDiffuse ), 0u );
@@ -274,19 +277,18 @@ namespace castor3d
 							, c3d_mapLightIndirectSpecular.lod( vtx_texture, 0.0_f ).rgb()
 							, config.hasSpecularGi );
 
+						auto incident = writer.declLocale( "incident"
+							, reflections->computeIncident( surface.worldPosition.xyz(), c3d_sceneData.cameraPosition ) );
 						auto reflected = writer.declLocale( "reflected"
 							, vec3( 0.0_f ) );
 						auto refracted = writer.declLocale( "refracted"
 							, vec3( 0.0_f ) );
 						reflections->computeCombined( components
-							, surface
-							, c3d_sceneData
+							, incident
 							, *backgroundModel
 							, envMapIndex
 							, components.hasReflection
-							, components.hasRefraction
 							, components.refractionRatio
-							, components.transmission
 							, directAmbient
 							, reflected
 							, refracted );
@@ -301,7 +303,15 @@ namespace castor3d
 									, components.metalness
 									, surface )
 								: vec3( 0.0_f ) ) );
+
+						IF( writer, material.hasTransmission != 0_u )
+						{
+							refracted = vec3( 0.0_f );
+						}
+						FI;
+
 						pxl_fragColor = vec4( lightingModel->combine( components
+								, incident
 								, lightDiffuse
 								, indirectDiffuse
 								, lightSpecular
@@ -454,6 +464,8 @@ namespace castor3d
 			, uint32_t( dropqrslv::ResolveBind::eSpcRgh ) );
 		pass.addSampledView( m_opaquePassResult[DsTexture::eEmsTrn].sampledViewId
 			, uint32_t( dropqrslv::ResolveBind::eEmsTrn ) );
+		pass.addSampledView( m_opaquePassResult[DsTexture::eData].sampledViewId
+			, uint32_t( dropqrslv::ResolveBind::eData ) );
 		pass.addSampledView( m_ssaoResult.sampledViewId
 			, uint32_t( dropqrslv::ResolveBind::eSsao ) );
 		pass.addSampledView( m_device.renderSystem.getPrefilteredBrdfTexture().sampledViewId

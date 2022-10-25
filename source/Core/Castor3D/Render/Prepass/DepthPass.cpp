@@ -156,6 +156,13 @@ namespace castor3d
 		auto velocity = writer.declOutput< Vec2 >( "velocity", 1u );
 		auto nmlOcc = writer.declOutput< Vec4 >( "nmlOcc", 2u, !m_deferred );
 
+		auto lightingModel = utils.createLightingModel( *getEngine()
+			, materials
+			, shader::getLightingModelName( *getEngine(), flags.passType )
+			, {}
+			, nullptr
+			, true );
+
 		writer.implementMainT< shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer
 				, passShaders
 				, flags }
@@ -179,6 +186,19 @@ namespace castor3d
 					, modelData.getMaterialId()
 					, in.passMultipliers
 					, components );
+
+				if ( components.transmission.isEnabled() )
+				{
+					auto incident = writer.declLocale( "incident"
+						, normalize( in.worldPosition.xyz() - c3d_sceneData.cameraPosition ) );
+
+					IF( writer, lightingModel->getFinalTransmission( components, incident ) >= 0.1_f )
+					{
+						writer.demote();
+					}
+					FI;
+				}
+
 				depthObj = vec4( in.fragCoord.z()
 					, length( in.worldPosition.xyz() - c3d_sceneData.cameraPosition )
 					, writer.cast< sdw::Float >( in.nodeId )

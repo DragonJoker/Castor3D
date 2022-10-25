@@ -32,6 +32,7 @@ namespace castor3d
 		eColMtl, // RGB => Diffuse/Albedo - PBR: A => Metalness - Phong: A => Ambient
 		eSpcRgh, // RGB => Specular - Phong: A => Shininess - PBR: A => Roughness
 		eEmsTrn, // RGB => Emissive, A => Transmittance
+		eData,   // Pass additional data.
 		CU_ScopedEnumBounds( eNmlOcc ),
 	};
 	C3D_API castor::String getTextureName( DsTexture texture );

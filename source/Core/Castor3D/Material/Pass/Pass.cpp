@@ -16,6 +16,7 @@
 #include "Castor3D/Material/Pass/Component/Base/TextureCountComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Base/TwoSidedComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Base/UntileMappingComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Lighting/TransmissionComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Other/AlphaTestComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Other/OpacityComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Other/ReflectionComponent.hpp"
@@ -841,10 +842,8 @@ namespace castor3d
 
 		if ( !result )
 		{
-			if ( auto comp = getComponent< RefractionComponent >() )
-			{
-				result = comp->hasEnvironmentMapping();
-			}
+			result = hasComponent< RefractionComponent >()
+				&& !hasComponent< TransmissionComponent >();
 		}
 
 		return result;

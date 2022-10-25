@@ -111,6 +111,7 @@ namespace castor3d
 		C3D_API bool hasOpacity( PipelineFlags const & flags )const;
 		C3D_API PassComponentFlag getAlphaBlendingFlag()const;
 		C3D_API PassComponentFlag getAlphaTestFlag()const;
+		C3D_API PassComponentFlag getTransmissionFlag()const;
 		C3D_API PassComponentFlag getParallaxOcclusionMappingOneFlag()const;
 		C3D_API PassComponentFlag getParallaxOcclusionMappingRepeatFlag()const;
 		/**@}*/

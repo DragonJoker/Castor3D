@@ -65,7 +65,8 @@ namespace castor3d
 		, shader::Materials const & materials
 		, sdw::StructInstance const * surface )const
 	{
-		if ( !checkFlag( materials.getFilter(), ComponentModeFlag::eSpecularLighting ) )
+		if ( !checkFlag( materials.getFilter(), ComponentModeFlag::eOpacity )
+			&& !checkFlag( materials.getFilter(), ComponentModeFlag::eSpecularLighting ) )
 		{
 			return;
 		}
@@ -174,7 +175,8 @@ namespace castor3d
 	bool MetalnessComponent::Plugin::isComponentNeeded( TextureCombine const & textures
 		, ComponentModeFlags const & filter )const
 	{
-		return checkFlag( filter, ComponentModeFlag::eSpecularLighting );
+		return checkFlag( filter, ComponentModeFlag::eOpacity )
+			|| checkFlag( filter, ComponentModeFlag::eSpecularLighting );
 	}
 
 	//*********************************************************************************************

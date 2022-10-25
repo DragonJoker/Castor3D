@@ -18,7 +18,8 @@ namespace castor3d::shader
 		, colour{ getMember( "colour", vec3( 0.0_f ) ) }
 		, emissive{ getMember( "emissive", vec3( 0.0_f ) ) }
 		, specular{ getMember( "specular", vec3( 0.0_f ) ) }
-		, transmission{ getMember( "transmission", vec3( 1.0_f ) ) }
+		, transmission{ getMember( "transmission", 0.0_f ) }
+		, hasTransmission{ getMember( "hasTransmission", 0_u ) }
 		, opacity{ getMember( "opacity", 1.0_f ) }
 		, bwAccumulationOperator{ getMember( "bwAccumulationOperator", 0_u ) }
 		, alphaRef{ getMember( "alphaRef", 0.95_f ) }
@@ -26,7 +27,6 @@ namespace castor3d::shader
 		, transmittance{ getMember( "transmittance", 1.0_f ) }
 		, refractionRatio{ getMember( "refractionRatio", 0.0_f ) }
 		, hasReflection{ getMember( "hasReflection", 0_u ) }
-		, hasRefraction{ getMember( "hasRefraction", 0_u ) }
 		, metalness{ getMember( "metalness", 0.0_f ) }
 		, roughness{ getMember( "roughness", 1.0_f ) }
 		, shininess{ computeShininessFromRoughness( roughness ) }

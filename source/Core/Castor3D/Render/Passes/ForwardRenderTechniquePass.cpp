@@ -216,6 +216,21 @@ namespace castor3d
 					, in.passMultipliers
 					, components );
 
+				if ( !checkFlag( m_filters, RenderFilter::eOpaque ) )
+				{
+					if ( components.transmission.isEnabled() )
+					{
+						auto incident = writer.declLocale( "incident"
+							, normalize( in.worldPosition.xyz() - c3d_sceneData.cameraPosition ) );
+
+						IF( writer, lightingModel->getFinalTransmission( components, incident ) >= 0.1_f )
+						{
+							writer.demote();
+						}
+						FI;
+					}
+				}
+
 				IF( writer, material.lighting != 0_u )
 				{
 					auto worldEye = writer.declLocale( "worldEye"
@@ -242,19 +257,18 @@ namespace castor3d
 
 					auto directAmbient = writer.declLocale( "directAmbient"
 						, c3d_sceneData.ambientLight );
+					auto incident = writer.declLocale( "incident"
+						, reflections->computeIncident( surface.worldPosition.xyz(), c3d_sceneData.cameraPosition ) );
 					auto reflected = writer.declLocale( "reflected"
 						, vec3( 0.0_f ) );
 					auto refracted = writer.declLocale( "refracted"
 						, vec3( 0.0_f ) );
 					reflections->computeCombined( components
-						, surface
-						, c3d_sceneData
+						, incident
 						, *backgroundModel
 						, modelData.getEnvMapIndex()
 						, material.hasReflection
-						, material.hasRefraction
 						, material.refractionRatio
-						, material.transmission
 						, directAmbient
 						, reflected
 						, refracted );
@@ -286,6 +300,7 @@ namespace castor3d
 							: vec3( 0.0_f ) ) );
 
 					pxl_fragColor = vec4( lightingModel->combine( components
+							, incident
 							, lightDiffuse
 							, indirectDiffuse
 							, lightSpecular

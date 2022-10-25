@@ -39,15 +39,7 @@ namespace atmosphere_scattering
 		sdw::RetVec3 computeRefractions( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::Float const & refractionRatio
-			, sdw::Vec3 const & transmission
 			, castor3d::shader::BlendComponents & components )override;
-		sdw::RetVoid mergeReflRefr( sdw::Vec3 const & wsIncident
-			, sdw::Vec3 const & wsNormal
-			, sdw::Float const & refractionRatio
-			, sdw::Vec3 const & transmission
-			, castor3d::shader::BlendComponents & components
-			, sdw::Vec3 & reflection
-			, sdw::Vec3 & refraction )override;
 		sdw::Vec3 getSunRadiance( sdw::Vec3 const & sunDir );
 
 		sdw::Void getPixelTransLum( sdw::Vec2 const & fragPos

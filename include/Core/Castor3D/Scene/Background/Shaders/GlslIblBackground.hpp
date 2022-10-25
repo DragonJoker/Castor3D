@@ -31,22 +31,13 @@ namespace castor3d::shader
 		C3D_API sdw::RetVec3 computeRefractions( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::Float const & refractionRatio
-			, sdw::Vec3 const & transmission
 			, BlendComponents & components )override;
-		C3D_API sdw::RetVoid mergeReflRefr( sdw::Vec3 const & wsIncident
-			, sdw::Vec3 const & wsNormal
-			, sdw::Float const & refractionRatio
-			, sdw::Vec3 const & transmission
-			, BlendComponents & components
-			, sdw::Vec3 & reflection
-			, sdw::Vec3 & refraction )override;
 
 	private:
 		sdw::RetVec3 doComputeRefractions( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::CombinedImageCubeRgba32 const & prefiltered
 			, sdw::Float const & refractionRatio
-			, sdw::Vec3 const & transmission
 			, sdw::Vec3 const & albedo
 			, sdw::Float const & roughness );
 
@@ -70,18 +61,7 @@ namespace castor3d::shader
 			, sdw::InCombinedImageCubeRgba32
 			, sdw::InFloat
 			, sdw::InVec3
-			, sdw::InVec3
 			, sdw::InFloat > m_computeRefractions;
-		sdw::Function< sdw::Void
-			, sdw::InVec3
-			, sdw::InVec3
-			, sdw::InCombinedImageCubeRgba32
-			, sdw::InFloat
-			, sdw::InVec3
-			, sdw::InVec3
-			, sdw::InFloat
-			, sdw::InOutVec3
-			, sdw::OutVec3 > m_mergeReflRefr;
 	};
 }
 

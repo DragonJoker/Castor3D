@@ -285,7 +285,7 @@ namespace castor3d::shader
 					, max( 0.0_f, dot( L, V ) ) );
 
 				auto F = m_writer.declLocale( "F"
-					, m_utils.fresnelSchlick( HdotV, specular ) );
+					, m_utils.conductorFresnel( HdotV, specular ) );
 				auto D = m_writer.declLocale( "D"
 					, m_distributionGGX( NdotH, roughness ) );
 				auto G = m_writer.declLocale( "G"
@@ -368,7 +368,7 @@ namespace castor3d::shader
 					, max( 0.0_f, dot( L, V ) ) );
 
 				auto F = m_writer.declLocale( "F"
-					, m_utils.fresnelSchlick( HdotV, specular ) );
+					, m_utils.conductorFresnel( HdotV, specular ) );
 				auto D = m_writer.declLocale( "D"
 					, m_distributionGGX( NdotH, roughness ) );
 				auto G = m_writer.declLocale( "G"
@@ -444,7 +444,7 @@ namespace castor3d::shader
 					, max( dot( H, V ), 0.0_f ) );
 
 				auto F = m_writer.declLocale( "F"
-					, m_utils.fresnelSchlick( HdotV, specular ) );
+					, m_utils.conductorFresnel( HdotV, specular ) );
 				auto kS = m_writer.declLocale( "kS"
 					, F );
 				auto kD = m_writer.declLocale( "kD"
@@ -498,7 +498,7 @@ namespace castor3d::shader
 					, max( dot( H, V ), 0.0_f ) );
 
 				auto F = m_writer.declLocale( "F"
-					, m_utils.fresnelSchlick( HdotV, specular ) );
+					, m_utils.conductorFresnel( HdotV, specular ) );
 				auto kS = m_writer.declLocale( "kS"
 					, F );
 				auto kD = m_writer.declLocale( "kD"

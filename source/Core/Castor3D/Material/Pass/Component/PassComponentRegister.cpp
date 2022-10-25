@@ -27,6 +27,7 @@
 #include "Castor3D/Material/Pass/Component/Map/OpacityMapComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Map/RoughnessMapComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Map/SpecularMapComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Map/TransmissionMapComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Map/TransmittanceMapComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Other/AlphaTestComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Other/ColourComponent.hpp"
@@ -154,6 +155,7 @@ namespace castor3d
 		registerComponent< GlossinessMapComponent >();
 		registerComponent< RoughnessMapComponent >();
 		registerComponent< TransmittanceMapComponent >();
+		registerComponent< TransmissionMapComponent >();
 
 		m_pauseOrder = false;
 		reorderBuffer();
@@ -380,6 +382,19 @@ namespace castor3d
 		return it == m_registered.end()
 			? 0u
 			: it->plugin->getAlphaTestFlag();
+	}
+
+	PassComponentFlag PassComponentRegister::getTransmissionFlag()const
+	{
+		auto it = std::find_if( m_registered.begin()
+			, m_registered.end()
+			, []( Components::value_type const & lookup )
+			{
+				return lookup.plugin->getTransmissionFlag() != 0u;
+			} );
+		return it == m_registered.end()
+			? 0u
+			: it->plugin->getTransmissionFlag();
 	}
 
 	PassComponentFlag PassComponentRegister::getParallaxOcclusionMappingOneFlag()const

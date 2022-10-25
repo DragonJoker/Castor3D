@@ -49,6 +49,7 @@ namespace castor3d
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
+		, Texture const & sceneImage
 		, crg::ImageData const * targetImage
 		, RenderNodesPassDesc const & renderPassDesc
 		, RenderTechniquePassDesc const & techniquePassDesc )
@@ -61,6 +62,7 @@ namespace castor3d
 			, targetImage
 			, renderPassDesc
 			, techniquePassDesc }
+		, m_sceneImage{ sceneImage }
 	{
 	}
 
@@ -142,6 +144,63 @@ namespace castor3d
 		};
 	}
 
+	void TransparentPass::doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const
+	{
+		auto index = uint32_t( GlobalBuffersIdx::eCount );
+		doAddPassSpecificsBindings( bindings, index );
+		bindings.emplace_back( m_scene.getLightCache().createLayoutBinding( index++ ) );
+
+		if ( m_ssao )
+		{
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) ); // c3d_mapOcclusion
+		}
+
+		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapBrdf
+
+		doAddShadowBindings( bindings, index );
+		doAddEnvBindings( bindings, index );
+		doAddBackgroundBindings( bindings, index );
+		doAddGIBindings( bindings, index );
+
+		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapScene
+	}
+
+	void TransparentPass::doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
+		, castor3d::ShadowMapLightTypeArray const & shadowMaps )
+	{
+		auto index = uint32_t( GlobalBuffersIdx::eCount );
+		doAddPassSpecificsDescriptor( descriptorWrites, index );
+		descriptorWrites.push_back( m_scene.getLightCache().getBinding( index++ ) );
+
+		if ( m_ssao )
+		{
+			bindTexture( m_ssao->wholeView
+				, *m_ssao->sampler
+				, descriptorWrites
+				, index );
+		}
+
+		bindTexture( getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().wholeView
+			, *getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().sampler
+			, descriptorWrites
+			, index );
+		doAddShadowDescriptor( descriptorWrites, shadowMaps, index );
+		doAddEnvDescriptor( descriptorWrites, index );
+		doAddBackgroundDescriptor( descriptorWrites, *m_targetImage, index );
+		doAddGIDescriptor( descriptorWrites, index );
+
+		bindTexture( m_sceneImage.wholeView
+			, *m_sceneImage.sampler
+			, descriptorWrites
+			, index );
+	}
+
 	ShaderPtr TransparentPass::doGetPixelShaderSource( PipelineFlags const & flags )const
 	{
 		using namespace sdw;
@@ -211,6 +270,9 @@ namespace castor3d
 		indirect.declare( index
 			, RenderPipeline::eBuffers
 			, flags.getGlobalIlluminationFlags() );
+		auto c3d_mapScene = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapScene"
+			, index++
+			, RenderPipeline::eBuffers );
 
 		auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
 			, 0u
@@ -283,19 +345,20 @@ namespace castor3d
 
 					auto directAmbient = writer.declLocale( "directAmbient"
 						, c3d_sceneData.ambientLight );
+					auto incident = writer.declLocale( "incident"
+						, reflections->computeIncident( surface.worldPosition.xyz(), c3d_sceneData.cameraPosition ) );
 					auto reflected = writer.declLocale( "reflected"
 						, vec3( 0.0_f ) );
 					auto refracted = writer.declLocale( "refracted"
 						, vec3( 0.0_f ) );
 					reflections->computeCombined( components
-						, surface
-						, c3d_sceneData
+						, incident
 						, *backgroundModel
+						, c3d_mapScene
+						, in.fragCoord.xy() / c3d_sceneData.renderSize
 						, modelData.getEnvMapIndex()
 						, components.hasReflection
-						, components.hasRefraction
 						, components.refractionRatio
-						, components.transmission
 						, directAmbient
 						, reflected
 						, refracted );
@@ -326,6 +389,7 @@ namespace castor3d
 							: vec3( 0.0_f ) ) );
 
 					colour = lightingModel->combine( components
+						, incident
 						, lightDiffuse
 						, indirectDiffuse
 						, lightSpecular
@@ -338,7 +402,7 @@ namespace castor3d
 				}
 				ELSE
 				{
-					colour = components.colour * components.transmission;
+					colour = components.colour;
 				}
 				FI;
 

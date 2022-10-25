@@ -538,12 +538,12 @@ namespace castor3d::shader
 			, paccumulationOperator );
 	}
 
-	sdw::RetVec3 Utils::fresnelSchlick( sdw::Float const & pproduct
+	sdw::RetVec3 Utils::conductorFresnel( sdw::Float const & pproduct
 		, sdw::Vec3 const & pf0 )
 	{
-		if ( !m_fresnelSchlick )
+		if ( !m_conductorFresnel )
 		{
-			m_fresnelSchlick = m_writer.implementFunction< sdw::Vec3 >( "c3d_fresnelSchlick"
+			m_conductorFresnel = m_writer.implementFunction< sdw::Vec3 >( "c3d_conductorFresnel"
 				, [&]( sdw::Float const & product
 					, sdw::Vec3 const & f0 )
 				{
@@ -556,7 +556,44 @@ namespace castor3d::shader
 				, sdw::InVec3{ m_writer, "f0" } );
 		}
 
-		return m_fresnelSchlick( pproduct, pf0 );
+		return m_conductorFresnel( pproduct, pf0 );
+	}
+
+	sdw::RetFloat Utils::fresnelMix( sdw::Vec3 const & pincident
+		, sdw::Vec3 const & pnormal
+		, sdw::Float const & proughness
+		, sdw::Float const & prefractionRatio )
+	{
+		if ( !m_fresnelMix )
+		{
+			m_fresnelMix = m_writer.implementFunction< sdw::Float >( "c3d_fresnelMix"
+				, [&]( sdw::Vec3 const & incident
+					, sdw::Vec3 const & normal
+					, sdw::Float const & roughness
+					, sdw::Float const & refractionRatio )
+				{
+					auto subRatio = m_writer.declLocale( "subRatio"
+						, 1.0_f - refractionRatio );
+					auto addRatio = m_writer.declLocale( "addRatio"
+						, 1.0_f + refractionRatio );
+					auto reflectance = m_writer.declLocale( "reflectance"
+						, ( subRatio * subRatio ) / ( addRatio * addRatio ) );
+					auto product = m_writer.declLocale( "product"
+						, max( 0.0_f, dot( -incident, normal ) ) );
+					m_writer.returnStmt( sdw::fma( max( 1.0_f - roughness, reflectance ) - reflectance
+						, pow( 1.0_f - product, 5.0_f )
+						, reflectance ) );
+				}
+				, sdw::InVec3{ m_writer, "incident" }
+				, sdw::InVec3{ m_writer, "normal" }
+				, sdw::InFloat{ m_writer, "roughness" }
+				, sdw::InFloat{ m_writer, "refractionRatio" } );
+		}
+
+		return m_fresnelMix( pincident
+			, pnormal
+			, proughness
+			, prefractionRatio );
 	}
 
 	sdw::RetVec4 Utils::clipToScreen( sdw::Vec4 const & pin )

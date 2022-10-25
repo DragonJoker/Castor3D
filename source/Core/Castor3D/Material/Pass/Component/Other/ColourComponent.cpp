@@ -28,7 +28,7 @@ namespace castor
 		bool operator()( castor3d::ColourComponent const & object
 			, StringStream & file )override
 		{
-			return writeNamedSub( file, cuT( "colour" ), object.getColour() );
+			return writeNamedSub( file, cuT( "colour_hdr" ), object.getColour() );
 		}
 	};
 }

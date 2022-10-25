@@ -76,12 +76,17 @@ namespace castor3d::shader
 				ROF;
 
 				output = result;
-				Material::applyAlphaFunc( writer
-					, alphaFunc
-					, opacity
-					, 0.0_f
-					, 1.0_f
-					, opaque );
+
+				if ( opaque
+					|| !output.hasMember( "transmission" ) )
+				{
+					Material::applyAlphaFunc( writer
+						, alphaFunc
+						, opacity
+						, 0.0_f
+						, 1.0_f
+						, opaque );
+				}
 			}
 			else
 			{
@@ -89,10 +94,16 @@ namespace castor3d::shader
 					, textureConfigs, textureAnims, maps
 					, material
 					, output );
-				material.applyAlphaFunc( alphaFunc
-					, opacity
-					, 1.0_f
-					, opaque );
+
+				if ( opaque
+					|| !output.hasMember( "transmission" ) )
+				{
+					material.applyAlphaFunc( alphaFunc
+						, opacity
+						, 1.0_f
+						, opaque );
+				}
+
 			}
 		}
 	}
@@ -111,12 +122,12 @@ namespace castor3d::shader
 		, texturesCount{ getMember < sdw::UInt >( "textureCount" ) }
 		, colour{ getMember< sdw::Vec3 >( "colour" ) }
 		, specular{ getMember< sdw::Vec3 >( "specular" ) }
-		, transmission{ getMember< sdw::Vec3 >( "transmission" ) }
+		, transmission{ getMember< sdw::Float >( "transmission" ) }
+		, hasTransmission{ getMember< sdw::UInt >( "hasTransmission" ) }
 		, opacity{ getMember< sdw::Float >( "opacity" ) }
 		, alphaRef{ getMember< sdw::Float >( "alphaRef" ) }
 		, emissive{ getMember< sdw::Float >( "emissive" ) }
 		, hasReflection{ getMember< sdw::UInt >( "hasReflection" ) }
-		, hasRefraction{ getMember< sdw::UInt >( "hasRefraction" ) }
 		, refractionRatio{ getMember< sdw::Float >( "refractionRatio" ) }
 	{
 	}

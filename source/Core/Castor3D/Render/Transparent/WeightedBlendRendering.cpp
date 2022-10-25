@@ -133,6 +133,7 @@ namespace castor3d
 	WeightedBlendRendering::WeightedBlendRendering( crg::FramePassGroup & graph
 		, RenderDevice const & device
 		, ProgressBar * progress
+		, bool & enabled
 		, crg::FramePass const & transparentPassDesc
 		, Texture const & depth
 		, TransparentPassResult const & transparentPassResult
@@ -143,6 +144,7 @@ namespace castor3d
 		, GpInfoUbo const & gpInfoUbo )
 		: m_device{ device }
 		, m_graph{ graph }
+		, m_enabled{ enabled }
 		, m_transparentPassResult{ transparentPassResult }
 		, m_depthOnlyView{ depth.sampledViewId }
 		, m_size{ size }

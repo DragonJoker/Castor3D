@@ -58,26 +58,10 @@ namespace castor3d::shader
 			, false );
 	}
 
-	sdw::Vec3 PhongLightingModel::combine( BlendComponents const & components
-		, sdw::Vec3 const & directDiffuse
-		, sdw::Vec3 const & indirectDiffuse
-		, sdw::Vec3 const & directSpecular
-		, sdw::Vec3 const & directScattering
-		, sdw::Vec3 const & indirectSpecular
-		, sdw::Vec3 const & directAmbient
-		, sdw::Vec3 const & indirectAmbient
-		, sdw::Float const & ambientOcclusion
-		, sdw::Vec3 const & emissive
-		, sdw::Vec3 const & reflected
-		, sdw::Vec3 const & refracted )
+	sdw::Float PhongLightingModel::getFinalTransmission( BlendComponents const & components
+		, sdw::Vec3 const & incident )
 	{
-		return components.colour * components.transmission * ( directDiffuse + ( indirectDiffuse * ambientOcclusion ) )
-			+ ( adjustDirectSpecular( components, directSpecular ) + ( indirectSpecular * ambientOcclusion ) )
-			+ ( adjustDirectAmbient( components, directAmbient ) * indirectAmbient * ambientOcclusion )
-			+ emissive
-			+ refracted
-			+ reflected * ambientOcclusion
-			+ directScattering;
+		return components.transmission;
 	}
 
 	sdw::Vec3 PhongLightingModel::adjustDirectAmbient( BlendComponents const & components
@@ -747,6 +731,37 @@ namespace castor3d::shader
 			, psurface
 			, pworldEye
 			, plightDirection );
+	}
+
+	sdw::Vec3 PhongLightingModel::doCombine( BlendComponents const & components
+		, sdw::Vec3 const & incident
+		, sdw::Vec3 const & directDiffuse
+		, sdw::Vec3 const & indirectDiffuse
+		, sdw::Vec3 const & directSpecular
+		, sdw::Vec3 const & directScattering
+		, sdw::Vec3 const & indirectSpecular
+		, sdw::Vec3 const & directAmbient
+		, sdw::Vec3 const & indirectAmbient
+		, sdw::Float const & ambientOcclusion
+		, sdw::Vec3 const & emissive
+		, sdw::Vec3 const & reflected
+		, sdw::Vec3 const & refracted )
+	{
+		return m_writer.ternary( components.hasTransmission != 0_u
+			, components.colour * components.transmission * ( directDiffuse + ( indirectDiffuse * ambientOcclusion ) )
+				+ ( adjustDirectSpecular( components, directSpecular ) + ( indirectSpecular * ambientOcclusion ) )
+				+ ( adjustDirectAmbient( components, directAmbient ) * indirectAmbient * ambientOcclusion )
+				+ emissive
+				+ refracted
+				+ reflected * ambientOcclusion
+				+ directScattering
+			, components.colour * ( directDiffuse + ( indirectDiffuse * ambientOcclusion ) )
+				+ ( adjustDirectSpecular( components, directSpecular ) + ( indirectSpecular * ambientOcclusion ) )
+				+ ( adjustDirectAmbient( components, directAmbient ) * indirectAmbient * ambientOcclusion )
+				+ emissive
+				+ refracted
+				+ reflected * ambientOcclusion
+				+ directScattering );
 	}
 
 	//*********************************************************************************************

@@ -72,96 +72,7 @@ namespace castor3d::shader
 	sdw::RetVec3 NoIblBackgroundModel::computeRefractions( sdw::Vec3 const & pwsIncident
 		, sdw::Vec3 const & pwsNormal
 		, sdw::Float const & prefractionRatio
-		, sdw::Vec3 const & ptransmission
 		, BlendComponents & components )
-	{
-		auto backgroundMap = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapBackground" );
-		return doComputeRefractions( pwsIncident
-			, pwsNormal
-			, backgroundMap
-			, prefractionRatio
-			, ptransmission
-			, components.colour
-			, components.roughness );
-	}
-
-	sdw::RetVoid NoIblBackgroundModel::mergeReflRefr( sdw::Vec3 const & pwsIncident
-		, sdw::Vec3 const & pwsNormal
-		, sdw::Float const & prefractionRatio
-		, sdw::Vec3 const & ptransmission
-		, BlendComponents & components
-		, sdw::Vec3 & preflection
-		, sdw::Vec3 & prefraction )
-	{
-		if ( !m_mergeReflRefr )
-		{
-			m_mergeReflRefr = m_writer.implementFunction< sdw::Void >( "c3d_noiblbg_mergeReflRefr"
-				, [&]( sdw::Vec3 const & wsIncident
-					, sdw::Vec3 const & wsNormal
-					, sdw::CombinedImageCubeRgba32 const & envMap
-					, sdw::Float const & refractionRatio
-					, sdw::Vec3 const & transmission
-					, sdw::Vec3 albedo
-					, sdw::Float const & roughness
-					, sdw::Vec3 reflection
-					, sdw::Vec3 refraction )
-				{
-					auto subRatio = m_writer.declLocale( "subRatio"
-						, 1.0_f - refractionRatio );
-					auto addRatio = m_writer.declLocale( "addRatio"
-						, 1.0_f + refractionRatio );
-					auto reflectance = m_writer.declLocale( "reflectance"
-						, ( subRatio * subRatio ) / ( addRatio * addRatio ) );
-					auto product = m_writer.declLocale( "product"
-						, max( 0.0_f, dot( -wsIncident, wsNormal ) ) );
-					auto fresnel = m_writer.declLocale( "fresnel"
-						, sdw::fma( pow( 1.0_f - product, 5.0_f )
-							, 1.0_f - reflectance
-							, reflectance ) );
-					refraction = doComputeRefractions( wsIncident
-						, wsNormal
-						, envMap
-						, refractionRatio
-						, transmission
-						, albedo
-						, roughness );
-					reflection = mix( vec3( 0.0_f )
-						, reflection
-						, vec3( fresnel ) );
-					refraction = mix( refraction
-						, vec3( 0.0_f )
-						, vec3( fresnel ) );
-				}
-				, sdw::InVec3{ m_writer, "wsIncident" }
-				, sdw::InVec3{ m_writer, "wsNormal" }
-				, sdw::InCombinedImageCubeRgba32{ m_writer, "envMap" }
-				, sdw::InFloat{ m_writer, "refractionRatio" }
-				, sdw::InVec3{ m_writer, "transmission" }
-				, sdw::InOutVec3{ m_writer, "albedo" }
-				, sdw::InFloat{ m_writer, "roughness" }
-				, sdw::InOutVec3{ m_writer, "reflection" }
-				, sdw::OutVec3{ m_writer, "refraction" } );
-		}
-
-		auto backgroundMap = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapBackground" );
-		return m_mergeReflRefr( pwsIncident
-			, pwsNormal
-			, backgroundMap
-			, prefractionRatio
-			, ptransmission
-			, components.colour
-			, components.roughness
-			, preflection
-			, prefraction );
-	}
-
-	sdw::RetVec3 NoIblBackgroundModel::doComputeRefractions( sdw::Vec3 const & pwsIncident
-		, sdw::Vec3 const & pwsNormal
-		, sdw::CombinedImageCubeRgba32 const & pbackgroundMap
-		, sdw::Float const & prefractionRatio
-		, sdw::Vec3 const & ptransmission
-		, sdw::Vec3 & palbedo
-		, sdw::Float const & proughness )
 	{
 		if ( !m_computeRefractions )
 		{
@@ -170,7 +81,6 @@ namespace castor3d::shader
 					, sdw::Vec3 const & wsNormal
 					, sdw::CombinedImageCubeRgba32 const & backgroundMap
 					, sdw::Float const & refractionRatio
-					, sdw::Vec3 const & transmission
 					, sdw::Vec3 albedo
 					, sdw::Float const & roughness )
 				{
@@ -180,24 +90,22 @@ namespace castor3d::shader
 						, refract( wsIncident, wsNormal, refractionRatio ) );
 					albedo = vec3( 0.0_f );
 					m_writer.returnStmt( backgroundMap.lod( refracted, roughness * 8.0_f ).xyz()
-						* transmission
 						* alb );
 				}
 				, sdw::InVec3{ m_writer, "wsIncident" }
 				, sdw::InVec3{ m_writer, "wsNormal" }
 				, sdw::InCombinedImageCubeRgba32{ m_writer, "backgroundMap" }
 				, sdw::InFloat{ m_writer, "refractionRatio" }
-				, sdw::InVec3{ m_writer, "transmission" }
 				, sdw::InOutVec3{ m_writer, "albedo" }
 				, sdw::InFloat{ m_writer, "roughness" } );
 		}
 
+		auto backgroundMap = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapBackground" );
 		return m_computeRefractions( pwsIncident
 			, pwsNormal
-			, pbackgroundMap
+			, backgroundMap
 			, prefractionRatio
-			, ptransmission
-			, palbedo
-			, proughness );
+			, components.colour
+			, components.roughness );
 	}
 }

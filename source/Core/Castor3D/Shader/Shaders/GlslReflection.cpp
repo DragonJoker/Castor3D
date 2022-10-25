@@ -19,29 +19,26 @@ namespace castor3d::shader
 	}
 
 	void ReflectionModel::computeCombined( BlendComponents & components
-		, Surface const & surface
-		, SceneData const & sceneData
+		, sdw::Vec3 const & incident
 		, BackgroundModel & background
+		, sdw::CombinedImage2DRgba32 const & mippedScene
+		, sdw::Vec2 const & sceneUv
 		, sdw::UInt envMapIndex
-		, sdw::UInt const & reflection
-		, sdw::UInt const & refraction
+		, sdw::UInt const & hasReflection
 		, sdw::Float const & refractionRatio
-		, sdw::Vec3 const & transmission
 		, sdw::Vec3 & ambient
 		, sdw::Vec3 & reflected
 		, sdw::Vec3 & refracted )
 	{
 		auto brdf = m_writer.getVariable< sdw::CombinedImage2DRg32 >( "c3d_mapBrdf" );
 		auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
-		auto incident = m_writer.declLocale( "incident"
-			, computeIncident( surface.worldPosition.xyz(), sceneData.cameraPosition ) );
 
 		IF( m_writer, envMapIndex > 0_u )
 		{
 			envMapIndex = envMapIndex - 1_u;
 			doAdjustAmbient( ambient );
 
-			IF( m_writer, reflection != 0_u )
+			IF( m_writer, hasReflection != 0_u )
 			{
 				// Reflection from environment map.
 				reflected = computeReflEnvMaps( incident
@@ -49,36 +46,6 @@ namespace castor3d::shader
 					, envMap
 					, envMapIndex
 					, components );
-
-				IF( m_writer, refraction != 0_u )
-				{
-					// Refraction from environment map.
-					components.colour = mergeReflRefrEnvMaps( incident
-						, components.normal
-						, envMap
-						, envMapIndex
-						, refractionRatio
-						, transmission
-						, components
-						, reflected
-						, refracted );
-				}
-				ELSEIF( refractionRatio != 0.0_f )
-				{
-					// Refraction from background skybox.
-					background.mergeReflRefr( incident
-						, components.normal
-						, refractionRatio
-						, transmission
-						, components
-						, reflected
-						, refracted );
-				}
-				ELSE
-				{
-					doAdjustAlbedo( components.colour );
-				}
-				FI;
 			}
 			ELSE
 			{
@@ -90,36 +57,111 @@ namespace castor3d::shader
 						, components
 						, brdf );
 				}
+			}
+			FI;
+		}
+		ELSE
+		{
+			// Reflection from background skybox.
+			if ( m_hasIblSupport )
+			{
+				reflected = background.computeReflections( incident
+					, components.normal
+					, components
+					, brdf );
+			}
+		}
+		FI;
 
-				IF( m_writer, refraction != 0_u )
+		IF( m_writer, components.hasTransmission )
+		{
+			refracted = computeRefrSceneMap( incident
+				, components.normal
+				, mippedScene
+				, sceneUv
+				, refractionRatio
+				, components );
+		}
+		ELSE
+		{
+			IF( m_writer, refractionRatio != 0.0_f )
+			{
+				IF( m_writer, envMapIndex > 0_u )
 				{
-					// Refraction from environment map.
-					components.colour = mergeReflRefrEnvMaps( incident
+					refracted = computeRefrEnvMaps( incident
 						, components.normal
 						, envMap
 						, envMapIndex
 						, refractionRatio
-						, transmission
-						, components
-						, reflected
-						, refracted );
-				}
-				ELSEIF( refractionRatio != 0.0_f )
-				{
-					// Refraction from background skybox.
-					background.mergeReflRefr( incident
-						, components.normal
-						, refractionRatio
-						, transmission
-						, components
-						, reflected
-						, refracted );
+						, components );
 				}
 				ELSE
 				{
-					doAdjustAlbedo( components.colour );
+					refracted = background.computeRefractions( incident
+						, components.normal
+						, refractionRatio
+						, components );
 				}
 				FI;
+			}
+			FI;
+		}
+		FI;
+	}
+
+	void ReflectionModel::computeCombined( BlendComponents & components
+		, sdw::Vec3 const & incident
+		, BackgroundModel & background
+		, sdw::UInt envMapIndex
+		, sdw::UInt const & hasReflection
+		, sdw::Float const & refractionRatio
+		, sdw::Vec3 & ambient
+		, sdw::Vec3 & reflected
+		, sdw::Vec3 & refracted )
+	{
+		auto brdf = m_writer.getVariable< sdw::CombinedImage2DRg32 >( "c3d_mapBrdf" );
+		auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
+
+		IF( m_writer, envMapIndex > 0_u )
+		{
+			envMapIndex = envMapIndex - 1_u;
+			doAdjustAmbient( ambient );
+
+			IF( m_writer, hasReflection != 0_u )
+			{
+				// Reflection from environment map.
+				reflected = computeReflEnvMaps( incident
+					, components.normal
+					, envMap
+					, envMapIndex
+					, components );
+			}
+			ELSE
+			{
+				// Reflection from background skybox.
+				if ( m_hasIblSupport )
+				{
+					reflected = background.computeReflections( incident
+						, components.normal
+						, components
+						, brdf );
+				}
+			}
+			FI;
+
+			IF( m_writer, refractionRatio != 0.0_f )
+			{
+				// Refraction from environment map.
+				refracted = computeRefrEnvMaps( incident
+					, components.normal
+					, envMap
+					, envMapIndex
+					, refractionRatio
+					, components );
+			}
+			ELSE
+			{
+				doAdjustAlbedo( components.colour );
 			}
 			FI;
 		}
@@ -137,13 +179,10 @@ namespace castor3d::shader
 			IF( m_writer, refractionRatio != 0.0_f )
 			{
 				// Refraction from background skybox.
-				background.mergeReflRefr( incident
+				refracted = background.computeRefractions( incident
 					, components.normal
 					, refractionRatio
-					, transmission
-					, components
-					, reflected
-					, refracted );
+					, components );
 			}
 			FI;
 		}
@@ -197,7 +236,7 @@ namespace castor3d::shader
 		, sdw::UInt envMapIndex
 		, sdw::UInt const & refraction
 		, sdw::Float const & refractionRatio
-		, sdw::Vec3 const & transmission )
+		, sdw::Float const & transmission )
 	{
 		auto refracted = m_writer.declLocale( "refracted"
 			, vec3( 0.0_f ) );
@@ -213,7 +252,6 @@ namespace castor3d::shader
 				, envMap
 				, envMapIndex
 				, refractionRatio
-				, transmission
 				, components );
 		}
 		ELSE
@@ -225,7 +263,6 @@ namespace castor3d::shader
 				refracted = background.computeRefractions( incident
 					, components.normal
 					, refractionRatio
-					, transmission
 					, components );
 			}
 		}
@@ -238,48 +275,6 @@ namespace castor3d::shader
 		, sdw::Vec3 const & wsCamera )const
 	{
 		return normalize( wsPosition - wsCamera );
-	}
-
-	sdw::RetFloat ReflectionModel::computeFresnel( BlendComponents & pcomponents
-		, Surface const & psurface
-		, SceneData const & psceneData
-		, sdw::Float const & prefractionRatio )
-	{
-		if ( !m_computeFresnel )
-		{
-			m_computeFresnel = m_writer.implementFunction< sdw::Float >( "c3d_computeFresnel"
-				, [&]( sdw::Vec3 const & worldPosition
-					, sdw::Vec3 const & normal
-					, sdw::Float const & roughness
-					, sdw::Vec3 const & worldEye
-					, sdw::Float const & refractionRatio )
-				{
-					auto incident = m_writer.declLocale( "incident"
-						, normalize( worldPosition - worldEye ) );
-					auto subRatio = m_writer.declLocale( "subRatio"
-						, 1.0_f - refractionRatio );
-					auto addRatio = m_writer.declLocale( "addRatio"
-						, 1.0_f + refractionRatio );
-					auto reflectance = m_writer.declLocale( "reflectance"
-						, ( subRatio * subRatio ) / ( addRatio * addRatio ) );
-					auto product = m_writer.declLocale( "product"
-						, max( 0.0_f, dot( -incident, normal ) ) );
-					m_writer.returnStmt( sdw::fma( max( 1.0_f - roughness, reflectance ) - reflectance
-						, pow( 1.0_f - product, 5.0_f )
-						, reflectance ) );
-				}
-				, sdw::InVec3{ m_writer, "worldPosition" }
-				, sdw::InVec3{ m_writer, "normal" }
-				, sdw::InFloat{ m_writer, "roughness" }
-				, sdw::InVec3{ m_writer, "worldEye" }
-				, sdw::InFloat{ m_writer, "refractionRatio" } );
-		}
-
-		return m_computeFresnel( psurface.worldPosition.xyz()
-			, pcomponents.normal
-			, pcomponents.roughness
-			, psceneData.cameraPosition
-			, prefractionRatio );
 	}
 
 	sdw::RetVec4 ReflectionModel::computeScreenSpace( MatrixData const & matrixData
@@ -668,7 +663,6 @@ namespace castor3d::shader
 		, sdw::CombinedImageCubeArrayRgba32 const & envMap
 		, sdw::UInt const & envMapIndex
 		, sdw::Float const & refractionRatio
-		, sdw::Vec3 const & transmission
 		, BlendComponents & components )
 	{
 		return doComputeRefrEnvMaps( wsIncident
@@ -676,86 +670,50 @@ namespace castor3d::shader
 			, envMap
 			, envMapIndex
 			, refractionRatio
-			, transmission
 			, components.colour
 			, components.roughness );
 	}
 
-	sdw::RetVec3 ReflectionModel::mergeReflRefrEnvMaps( sdw::Vec3 const & pwsIncident
+	sdw::RetVec3 ReflectionModel::computeRefrSceneMap( sdw::Vec3 const & pwsIncident
 		, sdw::Vec3 const & pwsNormal
-		, sdw::CombinedImageCubeArrayRgba32 const & penvMap
-		, sdw::UInt const & penvMapIndex
+		, sdw::CombinedImage2DRgba32 const & psceneMap
+		, sdw::Vec2 const & psceneUv
 		, sdw::Float const & prefractionRatio
-		, sdw::Vec3 const & ptransmission
-		, BlendComponents & pcomponents
-		, sdw::Vec3 & preflection
-		, sdw::Vec3 & prefraction )
+		, BlendComponents & pcomponents )
 	{
-		if ( !m_mergeReflRefrEnvMaps )
+		if ( !m_computeRefrSceneMap )
 		{
-			m_mergeReflRefrEnvMaps = m_writer.implementFunction< sdw::Vec3 >( "c3d_mergeReflRefrEnvMap"
+			m_computeRefrSceneMap = m_writer.implementFunction< sdw::Vec3 >( "c3d_computeRefrSceneMap"
 				, [&]( sdw::Vec3 const & wsIncident
 					, sdw::Vec3 const & wsNormal
-					, sdw::CombinedImageCubeArrayRgba32 const & envMap
-					, sdw::UInt const & envMapIndex
+					, sdw::CombinedImage2DRgba32 const & sceneMap
+					, sdw::Vec2 const & sceneUv
 					, sdw::Float const & refractionRatio
-					, sdw::Vec3 const & transmission
 					, sdw::Vec3 const & albedo
-					, sdw::Float const & roughness
-					, sdw::Vec3 reflection
-					, sdw::Vec3 refraction )
+					, sdw::Float roughness )
 				{
-					auto subRatio = m_writer.declLocale( "subRatio"
-						, 1.0_f - refractionRatio );
-					auto addRatio = m_writer.declLocale( "addRatio"
-						, 1.0_f + refractionRatio );
-					auto reflectance = m_writer.declLocale( "reflectance"
-						, ( subRatio * subRatio ) / ( addRatio * addRatio ) );
-					auto product = m_writer.declLocale( "product"
-						, max( 0.0_f, dot( -wsIncident, wsNormal ) ) );
-					auto fresnel = m_writer.declLocale( "fresnel"
-						, sdw::fma( max( 1.0_f - roughness, reflectance ) - reflectance
-							, pow( 1.0_f - product, 5.0_f )
-							, reflectance ) );
 					auto alb = m_writer.declLocale( "alb"
 						, albedo );
-					refraction = doComputeRefrEnvMaps( wsIncident
-						, wsNormal
-						, envMap
-						, envMapIndex
-						, refractionRatio
-						, transmission
-						, alb
-						, roughness );
-					reflection = mix( vec3( 0.0_f )
-						, reflection
-						, vec3( fresnel ) );
-					refraction = mix( refraction
-						, vec3( 0.0_f )
-						, vec3( fresnel ) );
-					m_writer.returnStmt( alb );
+					roughness = roughness * clamp( refractionRatio * 2.0_f, 0.0_f, 2.0_f );
+					m_writer.returnStmt( sceneMap.lod( sceneUv, roughness * sdw::Float( float( EnvironmentMipLevels ) ) ).rgb()
+						* alb );
 				}
 				, sdw::InVec3{ m_writer, "wsIncident" }
 				, sdw::InVec3{ m_writer, "wsNormal" }
-				, sdw::InCombinedImageCubeArrayRgba32{ m_writer, "envMap" }
-				, sdw::InUInt{ m_writer, "envMapIndex" }
+				, sdw::InCombinedImage2DRgba32{ m_writer, "sceneMap" }
+				, sdw::InVec2{ m_writer, "sceneUv" }
 				, sdw::InFloat{ m_writer, "refractionRatio" }
-				, sdw::InVec3{ m_writer, "transmission" }
 				, sdw::InVec3{ m_writer, "albedo" }
-				, sdw::InFloat{ m_writer, "roughness" }
-				, sdw::InOutVec3{ m_writer, "reflection" }
-				, sdw::OutVec3{ m_writer, "refraction" } );
+				, sdw::InFloat{ m_writer, "roughness" } );
 		}
-		return m_mergeReflRefrEnvMaps( pwsIncident
+
+		return m_computeRefrSceneMap( pwsIncident
 			, pwsNormal
-			, penvMap
-			, penvMapIndex
+			, psceneMap
+			, psceneUv
 			, prefractionRatio
-			, ptransmission
 			, pcomponents.colour
-			, pcomponents.roughness
-			, preflection
-			, prefraction );
+			, pcomponents.roughness );
 	}
 
 	sdw::RetVec3 ReflectionModel::doComputeRefrEnvMaps( sdw::Vec3 const & wsIncident
@@ -763,7 +721,6 @@ namespace castor3d::shader
 		, sdw::CombinedImageCubeArrayRgba32 const & envMap
 		, sdw::UInt const & envMapIndex
 		, sdw::Float const & refractionRatio
-		, sdw::Vec3 const & transmission
 		, sdw::Vec3 & albedo
 		, sdw::Float const & roughness )
 	{
@@ -773,7 +730,6 @@ namespace castor3d::shader
 			, envMap
 			, envMapIndex
 			, refractionRatio
-			, transmission
 			, albedo
 			, roughness );
 	}

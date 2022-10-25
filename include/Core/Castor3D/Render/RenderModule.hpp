@@ -405,9 +405,12 @@ namespace castor3d
 		//!\~english	Alpha test opacity.
 		//\~french		Opacité de test d'alpha.
 		eAlphaTest = 0x01 << 1u,
+		//!\~english	Materials with refraction.
+		//\~french		Matériaux avec refraction.
+		eTransmission = 0x01 << 2u,
 		//!\~english	Fully opaque (no opacity at all).
 		//\~french		Complètement opaque (pas d'opacité du tout).
-		eOpaque = 0x01 << 2u,
+		eOpaque = 0x01 << 3u,
 	};
 	CU_ImplementFlags( RenderFilter )
 
