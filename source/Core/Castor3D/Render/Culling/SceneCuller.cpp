@@ -8,6 +8,7 @@
 #include "Castor3D/Cache/ObjectCache.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
+#include "Castor3D/Material/Pass/Component/Lighting/AttenuationComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/TransmissionComponent.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
@@ -1098,12 +1099,13 @@ namespace castor3d
 			&& renderPass.isValidRenderable( node.instance )
 			&& node.instance.getParent() != renderPass.getIgnoredNode() )
 		{
-			bool needsFront = ( !checkFlag( renderPass.getRenderFilters(), RenderFilter::eAlphaBlend ) )
-				|| ( node.pass->hasComponent< TransmissionComponent >()
-					&& ( !checkFlag( renderPass.getRenderFilters(), RenderFilter::eTransmission ) ) )
-				|| renderPass.forceTwoSided()
-				|| node.pass->isTwoSided()
-				|| node.pass->hasAlphaBlending();
+			bool needsFront = !node.pass->hasComponent< AttenuationComponent >()
+				&& ( ( !checkFlag( renderPass.getRenderFilters(), RenderFilter::eAlphaBlend ) )
+					|| ( node.pass->hasComponent< TransmissionComponent >()
+						&& !checkFlag( renderPass.getRenderFilters(), RenderFilter::eTransmission ) )
+					|| renderPass.forceTwoSided()
+					|| node.pass->isTwoSided()
+					|| node.pass->hasAlphaBlending() );
 			auto & instantiation = node.data.getInstantiation();
 
 			if ( instantiation.isInstanced( node.instance.getMaterial( node.data ) ) )

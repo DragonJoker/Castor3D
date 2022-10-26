@@ -659,6 +659,8 @@ namespace castor3d::shader
 		auto specularBrdf = m_writer.declLocale( "specularBrdf"
 			, ( reflected * adjustDirectAmbient( components, directAmbient ) * indirectAmbient * ambientOcclusion )
 			+ adjustDirectSpecular( components, directSpecular ) + ( indirectSpecular * ambientOcclusion ) );
+		auto metal = m_writer.declLocale( "metal"
+			, specularBrdf ); // Conductor Fresnel already included there.
 
 		IF( m_writer, components.hasTransmission )
 		{
@@ -672,7 +674,6 @@ namespace castor3d::shader
 		}
 		FI;
 
-		auto metal = specularBrdf; // Conductor Fresnel already included there.
 		auto dielectric = m_writer.declLocale( "dielectric"
 			, specularBrdf + diffuseBrdf );
 		return mix( dielectric, metal, vec3( components.metalness ) )

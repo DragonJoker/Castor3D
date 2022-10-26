@@ -11,12 +11,14 @@
 #include <Castor3D/Material/Pass/Component/Base/TextureCountComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Base/TexturesComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Base/TwoSidedComponent.hpp>
+#include <Castor3D/Material/Pass/Component/Lighting/AttenuationComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/EmissiveComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/MetalnessComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/RoughnessComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/SpecularComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/SubsurfaceScatteringComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/TransmissionComponent.hpp>
+#include <Castor3D/Material/Pass/Component/Map/AttenuationMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/ColourMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/EmissiveMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/GlossinessMapComponent.hpp>
@@ -160,6 +162,7 @@ namespace c3d_assimp
 				, m_specularMapPlugin{ m_result.getComponentPlugin< castor3d::SpecularMapComponent >() }
 				, m_transmissionMapPlugin{ m_result.getComponentPlugin< castor3d::TransmissionMapComponent >() }
 				, m_transmittanceMapPlugin{ m_result.getComponentPlugin< castor3d::TransmittanceMapComponent >() }
+				, m_attenuationMapPlugin{ m_result.getComponentPlugin< castor3d::AttenuationMapComponent >() }
 				, m_colourMapFlags{ m_colourMapPlugin.getTextureFlags() }
 				, m_emissiveMapFlags{ m_emissiveMapPlugin.getTextureFlags() }
 				, m_glossinessMapFlags{ m_glossinessMapPlugin.getTextureFlags() }
@@ -172,6 +175,7 @@ namespace c3d_assimp
 				, m_specularMapFlags{ m_specularMapPlugin.getTextureFlags() }
 				, m_transmissionMapFlags{ m_transmissionMapPlugin.getTextureFlags() }
 				, m_transmittanceMapFlags{ m_transmittanceMapPlugin.getTextureFlags() }
+				, m_attenuationMapFlags{ m_attenuationMapPlugin.getTextureFlags() }
 				, m_colourBaseConfiguration{ m_colourMapPlugin.getBaseTextureConfiguration() }
 				, m_emissiveBaseConfiguration{ m_emissiveMapPlugin.getBaseTextureConfiguration() }
 				, m_glossinessBaseConfiguration{ m_glossinessMapPlugin.getBaseTextureConfiguration() }
@@ -184,6 +188,7 @@ namespace c3d_assimp
 				, m_specularBaseConfiguration{ m_specularMapPlugin.getBaseTextureConfiguration() }
 				, m_transmissionBaseConfiguration{ m_transmissionMapPlugin.getBaseTextureConfiguration() }
 				, m_transmittanceBaseConfiguration{ m_transmittanceMapPlugin.getBaseTextureConfiguration() }
+				, m_attenuationBaseConfiguration{ m_attenuationMapPlugin.getBaseTextureConfiguration() }
 			{
 				if ( m_shadingModel == aiShadingMode_Toon )
 				{
@@ -238,6 +243,7 @@ namespace c3d_assimp
 				}
 
 				parseEmissive();
+				parseAttenuation();
 				parseComponentDataT< castor3d::TransmissionComponent, float >( AI_MATKEY_TRANSMISSION_FACTOR );
 				m_hasRefr = parseRefractionRatio();
 
@@ -258,7 +264,8 @@ namespace c3d_assimp
 				TextureInfo mtlInfo{};
 				TextureInfo glsInfo{};
 				TextureInfo rghInfo{};
-				auto trsInfo = getTextureInfo( TextureType_TRANSMISSION );
+				auto trsInfo = getTextureInfo( TextureType_TRANSMISSION, 0u );
+				auto thkInfo = getTextureInfo( TextureType_TRANSMISSION, 1u );
 				auto occInfo = getTextureInfo( TextureType_AMBIENT_OCCLUSION );
 
 				if ( occInfo.name.empty() )
@@ -287,6 +294,8 @@ namespace c3d_assimp
 				loadTexture( occInfo, getRemap( m_occlusionMapFlags, m_occlusionBaseConfiguration )
 					, hasOpacityTex );
 				loadTexture( trsInfo, getRemap( m_transmissionMapFlags, m_transmissionBaseConfiguration )
+					, hasOpacityTex );
+				loadTexture( thkInfo, getRemap( m_attenuationMapFlags, m_attenuationBaseConfiguration )
 					, hasOpacityTex );
 
 				if ( !nmlInfo.name.empty() )
@@ -515,6 +524,26 @@ namespace c3d_assimp
 				}
 			}
 
+			void parseAttenuation()
+			{
+				aiColor3D colour = { 1, 1, 1 };
+				float distance{};
+				float factor{};
+				bool hasColour = m_material.Get( AI_MATKEY_VOLUME_ATTENUATION_COLOR, colour ) == aiReturn_SUCCESS;
+				bool hasDistance = m_material.Get( AI_MATKEY_VOLUME_ATTENUATION_DISTANCE, distance ) == aiReturn_SUCCESS;
+				bool hasFactor = m_material.Get( AI_MATKEY_VOLUME_THICKNESS_FACTOR, factor ) == aiReturn_SUCCESS;
+
+				if ( hasColour || hasDistance || hasFactor )
+				{
+					auto component = m_result.createComponent< castor3d::AttenuationComponent >();
+					component->setAttenuationColour( castor::RgbColour{ colour.r
+						, colour.g
+						, colour.b } );
+					component->setAttenuationDistance( distance );
+					component->setThicknessFactor( factor );
+				}
+			}
+
 			void parseAlphaRefValue()
 			{
 				float ref{ 1.0f };
@@ -675,30 +704,24 @@ namespace c3d_assimp
 				}
 			}
 
-			TextureInfo getTextureInfo( aiTextureType type )
+			TextureInfo getTextureInfo( aiTextureType type
+				, uint32_t index )
 			{
-				TextureInfo result;
+				TextureInfo result{};
 				aiString name;
-				uint32_t index{};
+				m_material.Get( AI_MATKEY_TEXTURE( type, index ), name );
 
-				while ( name.length == 0 && index < castor3d::MaxTextureCoordinatesSets )
+				if ( name.length > 0 )
 				{
-					m_material.Get( AI_MATKEY_TEXTURE( type, index ), name );
+					result.name = makeString( name );
+					int texcoordSet{};
 
-					if ( name.length > 0 )
+					if ( m_material.Get( AI_MATKEY_UVWSRC( type, index ), texcoordSet ) == AI_SUCCESS )
 					{
-						result.name = makeString( name );
-						int texcoordSet{};
-
-						if ( m_material.Get( AI_MATKEY_UVWSRC( type, index ), texcoordSet ) == AI_SUCCESS )
-						{
-							result.texcoordSet = uint32_t( texcoordSet );
-						}
-
-						m_material.Get( AI_MATKEY_UVTRANSFORM( type, index ), result.transform );
+						result.texcoordSet = uint32_t( texcoordSet );
 					}
 
-					++index;
+					m_material.Get( AI_MATKEY_UVTRANSFORM( type, index ), result.transform );
 				}
 
 				if ( !result.name.empty() )
@@ -711,6 +734,26 @@ namespace c3d_assimp
 					default:
 						break;
 					}
+				}
+
+				return result;
+			}
+
+			TextureInfo getTextureInfo( aiTextureType type )
+			{
+				TextureInfo result;
+				uint32_t index{};
+
+				while ( result.name.empty() && index < castor3d::MaxTextureCoordinatesSets )
+				{
+					auto tmp = getTextureInfo( type, index );
+
+					if ( !tmp.name.empty() )
+					{
+						result = tmp;
+					}
+
+					++index;
 				}
 
 				return result;
@@ -993,6 +1036,7 @@ namespace c3d_assimp
 			castor3d::PassComponentPlugin const & m_specularMapPlugin;
 			castor3d::PassComponentPlugin const & m_transmissionMapPlugin;
 			castor3d::PassComponentPlugin const & m_transmittanceMapPlugin;
+			castor3d::PassComponentPlugin const & m_attenuationMapPlugin;
 			castor3d::PassComponentTextureFlag m_colourMapFlags;
 			castor3d::PassComponentTextureFlag m_emissiveMapFlags;
 			castor3d::PassComponentTextureFlag m_glossinessMapFlags;
@@ -1005,6 +1049,7 @@ namespace c3d_assimp
 			castor3d::PassComponentTextureFlag m_specularMapFlags;
 			castor3d::PassComponentTextureFlag m_transmissionMapFlags;
 			castor3d::PassComponentTextureFlag m_transmittanceMapFlags;
+			castor3d::PassComponentTextureFlag m_attenuationMapFlags;
 			castor3d::TextureConfiguration m_colourBaseConfiguration;
 			castor3d::TextureConfiguration m_emissiveBaseConfiguration;
 			castor3d::TextureConfiguration m_glossinessBaseConfiguration;
@@ -1017,6 +1062,7 @@ namespace c3d_assimp
 			castor3d::TextureConfiguration m_specularBaseConfiguration;
 			castor3d::TextureConfiguration m_transmissionBaseConfiguration;
 			castor3d::TextureConfiguration m_transmittanceBaseConfiguration;
+			castor3d::TextureConfiguration m_attenuationBaseConfiguration;
 		};
 	}
 

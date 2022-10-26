@@ -82,6 +82,17 @@ namespace castor3d::shader
 				, vec3( 0.0_f )
 				, vec3( fresnelFactor ) );
 		}
+		ELSEIF( components.thicknessFactor != 0.0_f )
+		{
+			auto fresnelFactor = m_writer.declLocale( "fresnelFactor"
+				, m_utils.fresnelMix( incident
+					, components.normal
+					, components.roughness
+					, components.refractionRatio ) );
+			reflected = mix( vec3( 0.0_f )
+				, reflected
+				, vec3( fresnelFactor ) );
+		}
 		FI;
 
 		return doCombine( components

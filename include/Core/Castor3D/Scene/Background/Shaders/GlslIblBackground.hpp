@@ -33,14 +33,6 @@ namespace castor3d::shader
 			, sdw::Float const & refractionRatio
 			, BlendComponents & components )override;
 
-	private:
-		sdw::RetVec3 doComputeRefractions( sdw::Vec3 const & wsIncident
-			, sdw::Vec3 const & wsNormal
-			, sdw::CombinedImageCubeRgba32 const & prefiltered
-			, sdw::Float const & refractionRatio
-			, sdw::Vec3 const & albedo
-			, sdw::Float const & roughness );
-
 	public:
 		static castor::String const Name;
 

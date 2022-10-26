@@ -11,12 +11,14 @@
 #include "Castor3D/Material/Pass/Component/Base/TexturesComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Base/TwoSidedComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Base/UntileMappingComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Lighting/AttenuationComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/EmissiveComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/MetalnessComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/RoughnessComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/SpecularComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/SubsurfaceScatteringComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/TransmissionComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Map/AttenuationMapComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Map/ColourMapComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Map/EmissiveMapComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Map/GlossinessMapComponent.hpp"
@@ -136,6 +138,7 @@ namespace castor3d
 		registerComponent< ColourComponent >();
 		registerComponent< EmissiveComponent >();
 		registerComponent< TransmissionComponent >();
+		registerComponent< AttenuationComponent >();
 		registerComponent< SpecularComponent >();
 		registerComponent< MetalnessComponent >();
 		registerComponent< RoughnessComponent >();
@@ -156,6 +159,7 @@ namespace castor3d
 		registerComponent< RoughnessMapComponent >();
 		registerComponent< TransmittanceMapComponent >();
 		registerComponent< TransmissionMapComponent >();
+		registerComponent< AttenuationMapComponent >();
 
 		m_pauseOrder = false;
 		reorderBuffer();

@@ -129,6 +129,9 @@ namespace castor3d::shader
 		, emissive{ getMember< sdw::Float >( "emissive" ) }
 		, hasReflection{ getMember< sdw::UInt >( "hasReflection" ) }
 		, refractionRatio{ getMember< sdw::Float >( "refractionRatio" ) }
+		, attenuationColour{ getMember< sdw::Vec3 >( "attenuationColour" ) }
+		, attenuationDistance{ getMember< sdw::Float >( "attenuationDistance" ) }
+		, thicknessFactor{ getMember< sdw::Float >( "thicknessFactor" ) }
 	{
 	}
 
