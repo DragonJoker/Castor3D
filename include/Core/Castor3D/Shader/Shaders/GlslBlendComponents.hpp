@@ -108,6 +108,9 @@ namespace castor3d::shader
 		sdw::DefaultedT< sdw::UInt > hasReflection;
 		sdw::DefaultedT< sdw::Float > metalness;
 		sdw::DefaultedT< sdw::Float > roughness;
+		sdw::DefaultedT< sdw::Float > thicknessFactor;
+		sdw::DefaultedT< sdw::Float > attenuationDistance;
+		sdw::DefaultedT< sdw::Vec3 > attenuationColour;
 		sdw::Float const shininess;
 
 	protected:

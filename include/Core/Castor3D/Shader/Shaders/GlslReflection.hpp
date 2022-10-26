@@ -21,8 +21,10 @@ namespace castor3d::shader
 			, sdw::Vec3 const & wsCamera )const;
 		C3D_API void computeCombined( BlendComponents & components
 			, sdw::Vec3 const & incident
+			, sdw::Vec3 const & position
 			, BackgroundModel & background
 			, sdw::CombinedImage2DRgba32 const & mippedScene
+			, MatrixData const & matrices
 			, sdw::Vec2 const & sceneUv
 			, sdw::UInt envMapIndex
 			, sdw::UInt const & hasReflection
@@ -126,8 +128,10 @@ namespace castor3d::shader
 			, BlendComponents & components );
 		sdw::RetVec3 computeRefrSceneMap( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
+			, sdw::Vec3 const & wsPosition
 			, sdw::CombinedImage2DRgba32 const & sceneMap
-			, sdw::Vec2 const & sceneUv
+			, MatrixData const & matrices
+			, sdw::Vec2 sceneUv
 			, sdw::Float const & refractionRatio
 			, BlendComponents & components );
 
@@ -199,8 +203,12 @@ namespace castor3d::shader
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3
 			, sdw::InVec3
+			, sdw::InVec3
 			, sdw::InCombinedImage2DRgba32
 			, sdw::InVec2
+			, sdw::InFloat
+			, sdw::InVec3
+			, sdw::InFloat
 			, sdw::InFloat
 			, sdw::InVec3
 			, sdw::InFloat > m_computeRefrSceneMap;

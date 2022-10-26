@@ -118,6 +118,9 @@ namespace castor3d::shader
 		sdw::Float emissive;
 		sdw::UInt hasReflection;
 		sdw::Float refractionRatio;
+		sdw::Vec3 attenuationColour;
+		sdw::Float attenuationDistance;
+		sdw::Float thicknessFactor;
 
 	private:
 		static sdw::expr::ExprPtr makeInit( sdw::ShaderWriter & writer

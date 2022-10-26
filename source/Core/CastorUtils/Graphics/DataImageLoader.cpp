@@ -40,7 +40,7 @@ namespace castor
 	{
 		auto format = getFormatByName( imageFormat );
 		auto bitsize = getBytesPerPixel( format );
-		auto dim = uint32_t( sqrt( size / bitsize ) );
+		auto dim = uint32_t( sqrt( double( size / bitsize ) ) );
 		outbuffer = PxBufferBase::create( castor::Size{ dim, dim }
 			, format
 			, input

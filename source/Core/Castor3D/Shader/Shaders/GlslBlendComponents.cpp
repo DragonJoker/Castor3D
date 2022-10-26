@@ -29,6 +29,9 @@ namespace castor3d::shader
 		, hasReflection{ getMember( "hasReflection", 0_u ) }
 		, metalness{ getMember( "metalness", 0.0_f ) }
 		, roughness{ getMember( "roughness", 1.0_f ) }
+		, thicknessFactor{ getMember( "thicknessFactor", 0.0_f ) }
+		, attenuationDistance{ getMember( "attenuationDistance", 0.0_f ) }
+		, attenuationColour{ getMember( "attenuationColour", vec3( 0.0_f ) ) }
 		, shininess{ computeShininessFromRoughness( roughness ) }
 	{
 	}

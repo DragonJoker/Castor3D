@@ -118,26 +118,10 @@ namespace castor3d::shader
 			, pbrdfMap );
 	}
 
-	sdw::RetVec3 IblBackgroundModel::computeRefractions( sdw::Vec3 const & wsIncident
-		, sdw::Vec3 const & wsNormal
-		, sdw::Float const & refractionRatio
-		, BlendComponents & components )
-	{
-		auto prefiltered = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapPrefiltered" );
-		return doComputeRefractions( wsIncident
-			, wsNormal
-			, prefiltered
-			, refractionRatio
-			, components.colour
-			, components.roughness );
-	}
-
-	sdw::RetVec3 IblBackgroundModel::doComputeRefractions( sdw::Vec3 const & pwsIncident
+	sdw::RetVec3 IblBackgroundModel::computeRefractions( sdw::Vec3 const & pwsIncident
 		, sdw::Vec3 const & pwsNormal
-		, sdw::CombinedImageCubeRgba32 const & pprefiltered
 		, sdw::Float const & prefractionRatio
-		, sdw::Vec3 const & palbedo
-		, sdw::Float const & proughness )
+		, BlendComponents & components )
 	{
 		if ( !m_computeRefractions )
 		{
@@ -163,11 +147,12 @@ namespace castor3d::shader
 				, sdw::InFloat{ m_writer, "roughness" } );
 		}
 
+		auto prefiltered = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapPrefiltered" );
 		return m_computeRefractions( pwsIncident
 			, pwsNormal
-			, pprefiltered
+			, prefiltered
 			, prefractionRatio
-			, palbedo
-			, proughness );
+			, components.colour
+			, components.roughness );
 	}
 }

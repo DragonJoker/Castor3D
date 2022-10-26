@@ -351,11 +351,21 @@ namespace castor3d
 						, vec3( 0.0_f ) );
 					auto refracted = writer.declLocale( "refracted"
 						, vec3( 0.0_f ) );
+					auto sceneUv = writer.declLocale( "sceneUv"
+						, in.fragCoord.xy() / c3d_sceneData.renderSize );
+
+					if ( components.hasMember( "thicknessFactor" ) )
+					{
+						components.thicknessFactor *= length( modelData.getScale() );
+					}
+
 					reflections->computeCombined( components
 						, incident
+						, surface.worldPosition.xyz()
 						, *backgroundModel
 						, c3d_mapScene
-						, in.fragCoord.xy() / c3d_sceneData.renderSize
+						, c3d_matrixData
+						, sceneUv
 						, modelData.getEnvMapIndex()
 						, components.hasReflection
 						, components.refractionRatio

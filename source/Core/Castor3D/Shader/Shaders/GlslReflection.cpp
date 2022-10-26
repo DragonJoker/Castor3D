@@ -4,6 +4,7 @@
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
+#include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 
 #include <ShaderWriter/Writer.hpp>
 
@@ -20,8 +21,10 @@ namespace castor3d::shader
 
 	void ReflectionModel::computeCombined( BlendComponents & components
 		, sdw::Vec3 const & incident
+		, sdw::Vec3 const & position
 		, BackgroundModel & background
 		, sdw::CombinedImage2DRgba32 const & mippedScene
+		, MatrixData const & matrices
 		, sdw::Vec2 const & sceneUv
 		, sdw::UInt envMapIndex
 		, sdw::UInt const & hasReflection
@@ -77,7 +80,9 @@ namespace castor3d::shader
 		{
 			refracted = computeRefrSceneMap( incident
 				, components.normal
+				, position
 				, mippedScene
+				, matrices
 				, sceneUv
 				, refractionRatio
 				, components );
@@ -676,44 +681,80 @@ namespace castor3d::shader
 
 	sdw::RetVec3 ReflectionModel::computeRefrSceneMap( sdw::Vec3 const & pwsIncident
 		, sdw::Vec3 const & pwsNormal
+		, sdw::Vec3 const & pwsPosition
 		, sdw::CombinedImage2DRgba32 const & psceneMap
-		, sdw::Vec2 const & psceneUv
+		, MatrixData const & pmatrices
+		, sdw::Vec2 psceneUv
 		, sdw::Float const & prefractionRatio
 		, BlendComponents & pcomponents )
 	{
 		if ( !m_computeRefrSceneMap )
 		{
 			m_computeRefrSceneMap = m_writer.implementFunction< sdw::Vec3 >( "c3d_computeRefrSceneMap"
-				, [&]( sdw::Vec3 const & wsIncident
+				, [this, &pmatrices]( sdw::Vec3 const & wsIncident
+					, sdw::Vec3 const & wsPosition
 					, sdw::Vec3 const & wsNormal
 					, sdw::CombinedImage2DRgba32 const & sceneMap
-					, sdw::Vec2 const & sceneUv
+					, sdw::Vec2 sceneUv
 					, sdw::Float const & refractionRatio
 					, sdw::Vec3 const & albedo
-					, sdw::Float roughness )
+					, sdw::Float roughness
+					, sdw::Float thicknessFactor
+					, sdw::Vec3 attenuationColour
+					, sdw::Float attenuationDistance )
 				{
 					auto alb = m_writer.declLocale( "alb"
 						, albedo );
-					roughness = roughness * clamp( refractionRatio * 2.0_f, 0.0_f, 2.0_f );
-					m_writer.returnStmt( sceneMap.lod( sceneUv, roughness * sdw::Float( float( EnvironmentMipLevels ) ) ).rgb()
-						* alb );
+					roughness *= clamp( refractionRatio * 2.0_f, 0.0_f, 2.0_f );
+
+					IF( m_writer, thicknessFactor != 0.0_f
+						&& refractionRatio != 0.0_f )
+					{
+						auto refractionVector = m_writer.declLocale( "refractionVector"
+							, refract( wsIncident, normalize( wsNormal ), 1.0_f / refractionRatio ) );
+						auto worldExit = m_writer.declLocale( "worldExit"
+							, wsPosition + normalize( refractionVector ) * thicknessFactor );
+						auto ndc = m_writer.declLocale( "ndc"
+							, pmatrices.worldToCurProj( vec4( worldExit, 1.0_f ) ) );
+						sceneUv = ( ndc.xy() / ndc.w() + vec2( 1.0_f ) ) * 0.5_f;
+
+						auto transmitted = m_writer.declLocale( "transmitted"
+							, sceneMap.lod( sceneUv, roughness * sdw::Float( float( EnvironmentMipLevels ) ) ).rgb() );
+
+						auto attnCoefficient = m_writer.declLocale( "attnCoefficient"
+							, -sdw::log( attenuationColour ) / attenuationDistance );
+						auto transmittance = m_writer.declLocale( "transmittance"
+							, exp( -attnCoefficient * thicknessFactor ) );
+						m_writer.returnStmt( transmitted * transmittance * alb );
+					}
+					FI;
+
+					m_writer.returnStmt( sceneMap.lod( sceneUv, roughness * sdw::Float( float( EnvironmentMipLevels ) ) ).rgb() * alb );
 				}
 				, sdw::InVec3{ m_writer, "wsIncident" }
+				, sdw::InVec3{ m_writer, "wsPosition" }
 				, sdw::InVec3{ m_writer, "wsNormal" }
 				, sdw::InCombinedImage2DRgba32{ m_writer, "sceneMap" }
 				, sdw::InVec2{ m_writer, "sceneUv" }
 				, sdw::InFloat{ m_writer, "refractionRatio" }
 				, sdw::InVec3{ m_writer, "albedo" }
-				, sdw::InFloat{ m_writer, "roughness" } );
+				, sdw::InFloat{ m_writer, "roughness" }
+				, sdw::InFloat{ m_writer, "thicknessFactor" }
+				, sdw::InVec3{ m_writer, "attenuationColour" }
+				, sdw::InFloat{ m_writer, "attenuationDistance" } );
 		}
 
 		return m_computeRefrSceneMap( pwsIncident
+			, pwsPosition
 			, pwsNormal
 			, psceneMap
 			, psceneUv
 			, prefractionRatio
 			, pcomponents.colour
-			, pcomponents.roughness );
+			, pcomponents.roughness
+			, pcomponents.thicknessFactor
+			, pcomponents.attenuationColour
+			, pcomponents.attenuationDistance );
 	}
 
 	sdw::RetVec3 ReflectionModel::doComputeRefrEnvMaps( sdw::Vec3 const & wsIncident
