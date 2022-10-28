@@ -158,8 +158,7 @@ namespace castor3d
 	bool ClearcoatNormalMapComponent::Plugin::isComponentNeeded( TextureCombine const & textures
 		, ComponentModeFlags const & filter )const
 	{
-		return checkFlag( filter, ComponentModeFlag::eDiffuseLighting )
-			|| checkFlag( filter, ComponentModeFlag::eSpecularLighting )
+		return checkFlag( filter, ComponentModeFlag::eSpecularLighting )
 			|| hasAny( textures, getTextureFlags() );
 	}
 
@@ -198,7 +197,7 @@ namespace castor3d
 	void ClearcoatNormalMapComponent::doFillConfig( TextureConfiguration & configuration
 		, PassVisitorBase & vis )const
 	{
-		vis.visit( cuT( "ClearcoatNormal" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 1u );
+		vis.visit( cuT( "Clearcoat Normal" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 1u );
 	}
 
 	//*********************************************************************************************

@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_AttenuationComponent_H___
-#define ___C3D_AttenuationComponent_H___
+#ifndef ___C3D_ThicknessComponent_H___
+#define ___C3D_ThicknessComponent_H___
 
 #include "Castor3D/Material/Pass/Component/BaseDataPassComponent.hpp"
 
@@ -12,20 +12,8 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	struct AttenuationData
-	{
-		explicit AttenuationData( std::atomic_bool & dirty )
-			: colour{ dirty, castor::RgbColour{ 1.0f, 1.0f, 1.0f } }
-			, distance{ dirty, std::numeric_limits< float >::infinity() }
-		{
-		}
-
-		castor::AtomicGroupChangeTracked< castor::RgbColour > colour;
-		castor::AtomicGroupChangeTracked< float > distance;
-	};
-
-	struct AttenuationComponent
-		: public BaseDataPassComponentT< AttenuationData >
+	struct ThicknessComponent
+		: public BaseDataPassComponentT< castor::AtomicGroupChangeTracked< float > >
 	{
 		struct ComponentsShader
 			: shader::PassComponentsShader
@@ -91,28 +79,18 @@ namespace castor3d
 			return castor::makeUniqueDerived< PassComponentPlugin, Plugin >( passComponent );
 		}
 
-		C3D_API explicit AttenuationComponent( Pass & pass );
+		C3D_API explicit ThicknessComponent( Pass & pass );
 
 		C3D_API void accept( PassVisitorBase & vis )override;
 
-		castor::RgbColour const & getAttenuationColour()const
+		float const & getThicknessFactor()const
 		{
-			return m_value.colour;
+			return getData();
 		}
 
-		void setAttenuationColour( castor::RgbColour const & v )
+		void setThicknessFactor( float v )
 		{
-			m_value.colour = v;
-		}
-
-		float const & getAttenuationDistance()const
-		{
-			return m_value.distance;
-		}
-
-		void setAttenuationDistance( float v )
-		{
-			m_value.distance = v;
+			setData( v );
 		}
 
 		C3D_API static castor::String const TypeName;

@@ -18,6 +18,7 @@
 #include "Castor3D/Material/Pass/Component/Lighting/RoughnessComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/SpecularComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/SubsurfaceScatteringComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Lighting/ThicknessComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/TransmissionComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Map/AttenuationMapComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Map/ClearcoatMapComponent.hpp"
@@ -143,6 +144,7 @@ namespace castor3d
 		registerComponent< EmissiveComponent >();
 		registerComponent< TransmissionComponent >();
 		registerComponent< AttenuationComponent >();
+		registerComponent< ThicknessComponent >();
 		registerComponent< SpecularComponent >();
 		registerComponent< MetalnessComponent >();
 		registerComponent< RoughnessComponent >();
@@ -841,7 +843,7 @@ namespace castor3d
 				&& ( ( chunk.second.second.askedSize % 16u ) == 0u ) )
 			{
 				chunk.second.second.offset = offset;
-				offset += alignment;
+				offset += chunk.second.second.askedSize;
 				ordered.push_back( std::move( chunk ) );
 				it = chunks.erase( it );
 			}

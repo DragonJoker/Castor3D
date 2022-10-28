@@ -18,6 +18,7 @@
 #include <Castor3D/Material/Pass/Component/Lighting/RoughnessComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/SpecularComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/SubsurfaceScatteringComponent.hpp>
+#include <Castor3D/Material/Pass/Component/Lighting/ThicknessComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/TransmissionComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/AttenuationMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/ClearcoatMapComponent.hpp>
@@ -260,6 +261,7 @@ namespace c3d_assimp
 				parseEmissive();
 				parseAttenuation();
 				parseClearcoat();
+				parseComponentDataT< castor3d::ThicknessComponent, float >( AI_MATKEY_VOLUME_THICKNESS_FACTOR );
 				parseComponentDataT< castor3d::TransmissionComponent, float >( AI_MATKEY_TRANSMISSION_FACTOR );
 				m_hasRefr = parseRefractionRatio();
 
@@ -553,19 +555,16 @@ namespace c3d_assimp
 			{
 				aiColor3D colour = { 1, 1, 1 };
 				float distance{};
-				float factor{};
 				bool hasColour = m_material.Get( AI_MATKEY_VOLUME_ATTENUATION_COLOR, colour ) == aiReturn_SUCCESS;
 				bool hasDistance = m_material.Get( AI_MATKEY_VOLUME_ATTENUATION_DISTANCE, distance ) == aiReturn_SUCCESS;
-				bool hasFactor = m_material.Get( AI_MATKEY_VOLUME_THICKNESS_FACTOR, factor ) == aiReturn_SUCCESS;
 
-				if ( hasColour || hasDistance || hasFactor )
+				if ( hasColour || hasDistance )
 				{
 					auto component = m_result.createComponent< castor3d::AttenuationComponent >();
 					component->setAttenuationColour( castor::RgbColour{ colour.r
 						, colour.g
 						, colour.b } );
 					component->setAttenuationDistance( distance );
-					component->setThicknessFactor( factor );
 				}
 			}
 
