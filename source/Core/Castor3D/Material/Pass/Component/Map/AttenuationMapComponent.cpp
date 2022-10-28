@@ -4,7 +4,7 @@
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Pass/PassVisitor.hpp"
 #include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
-#include "Castor3D/Material/Pass/Component/Lighting/AttenuationComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Lighting/ThicknessComponent.hpp"
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
 #include "Castor3D/Scene/SceneFileParser.hpp"
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
@@ -179,9 +179,9 @@ namespace castor3d
 	AttenuationMapComponent::AttenuationMapComponent( Pass & pass )
 		: PassMapComponent{ pass, TypeName }
 	{
-		if ( !pass.hasComponent< AttenuationComponent >() )
+		if ( !pass.hasComponent< ThicknessComponent >() )
 		{
-			pass.createComponent< AttenuationComponent >();
+			pass.createComponent< ThicknessComponent >();
 		}
 	}
 

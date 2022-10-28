@@ -67,8 +67,7 @@ namespace castor3d
 			void filterTextureFlags( ComponentModeFlags filter
 				, TextureCombine & texturesFlags )const override
 			{
-				if ( !checkFlag( filter, ComponentModeFlag::eDiffuseLighting )
-					&& !checkFlag( filter, ComponentModeFlag::eSpecularLighting ) )
+				if ( !checkFlag( filter, ComponentModeFlag::eSpecularLighting ) )
 				{
 					remFlags( texturesFlags, getTextureFlags() );
 				}

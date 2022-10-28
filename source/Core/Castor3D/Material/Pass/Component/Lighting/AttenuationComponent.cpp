@@ -29,8 +29,7 @@ namespace castor
 			, StringStream & file )override
 		{
 			return writeNamedSubOpt( file, cuT( "attenuation_colour" ), object.getAttenuationColour(), castor::RgbColour{} )
-				&& writeOpt( file, cuT( "attenuation_distance" ), object.getAttenuationDistance(), std::numeric_limits< float >::infinity() )
-				&& writeOpt( file, cuT( "thickness_factor" ), object.getThicknessFactor(), 0.0f );
+				&& writeOpt( file, cuT( "attenuation_distance" ), object.getAttenuationDistance(), std::numeric_limits< float >::infinity() );
 		}
 	};
 }
@@ -80,26 +79,6 @@ namespace castor3d
 			}
 		}
 		CU_EndAttribute()
-
-		static CU_ImplementAttributeParser( parserPassThicknessFactor )
-		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.pass )
-			{
-				CU_ParsingError( cuT( "No Pass initialised." ) );
-			}
-			else if ( params.empty() )
-			{
-				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
-			else
-			{
-				auto & component = getPassComponent< AttenuationComponent >( parsingContext );
-				component.setThicknessFactor( params[0]->get< float >() );
-			}
-		}
-		CU_EndAttribute()
 	}
 
 	//*********************************************************************************************
@@ -118,7 +97,6 @@ namespace castor3d
 		{
 			components.declMember( "attenuationColour", sdw::type::Kind::eVec3F );
 			components.declMember( "attenuationDistance", sdw::type::Kind::eFloat );
-			components.declMember( "thicknessFactor", sdw::type::Kind::eFloat );
 		}
 	}
 
@@ -138,12 +116,10 @@ namespace castor3d
 		{
 			inits.emplace_back( sdw::makeExpr( material->getMember< sdw::Vec3 >( "attenuationColour" ) ) );
 			inits.emplace_back( sdw::makeExpr( material->getMember< sdw::Float >( "attenuationDistance" ) ) );
-			inits.emplace_back( sdw::makeExpr( material->getMember< sdw::Float >( "thicknessFactor" ) ) );
 		}
 		else
 		{
 			inits.emplace_back( sdw::makeExpr( vec3( 0.0_f ) ) );
-			inits.emplace_back( sdw::makeExpr( 0.0_f ) );
 			inits.emplace_back( sdw::makeExpr( 0.0_f ) );
 		}
 	}
@@ -155,13 +131,12 @@ namespace castor3d
 	{
 		res.getMember< sdw::Vec3 >( "attenuationColour", true ) = src.getMember< sdw::Vec3 >( "attenuationColour", true ) * passMultiplier;
 		res.getMember< sdw::Float >( "attenuationDistance", true ) = src.getMember< sdw::Float >( "attenuationDistance", true ) * passMultiplier;
-		res.getMember< sdw::Float >( "thicknessFactor", true ) = src.getMember< sdw::Float >( "thicknessFactor", true ) * passMultiplier;
 	}
 
 	//*********************************************************************************************
 
 	AttenuationComponent::MaterialShader::MaterialShader()
-		: shader::PassMaterialShader{ 20u }
+		: shader::PassMaterialShader{ 16u }
 	{
 	}
 
@@ -172,9 +147,7 @@ namespace castor3d
 		{
 			type.declMember( "attenuationColour", ast::type::Kind::eVec3F );
 			type.declMember( "attenuationDistance", ast::type::Kind::eFloat );
-			type.declMember( "thicknessFactor", ast::type::Kind::eFloat );
 			inits.emplace_back( sdw::makeExpr( vec3( 0.0_f ) ) );
-			inits.emplace_back( sdw::makeExpr( 0.0_f ) );
 			inits.emplace_back( sdw::makeExpr( 0.0_f ) );
 		}
 	}
@@ -194,11 +167,6 @@ namespace castor3d
 			, cuT( "attenuation_distance" )
 			, trsatt::parserPassAttenuationDistance
 			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		Pass::addParserT( parsers
-			, CSCNSection::ePass
-			, cuT( "thickness_factor" )
-			, trsatt::parserPassThicknessFactor
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
 	}
 
 	void AttenuationComponent::Plugin::zeroBuffer( Pass const & pass
@@ -207,7 +175,6 @@ namespace castor3d
 	{
 		auto data = buffer.getData( pass.getId() );
 		VkDeviceSize offset{};
-		offset += data.write( materialShader.getMaterialChunk(), 0.0f, offset );
 		offset += data.write( materialShader.getMaterialChunk(), 0.0f, offset );
 		offset += data.write( materialShader.getMaterialChunk(), 0.0f, offset );
 		offset += data.write( materialShader.getMaterialChunk(), 0.0f, offset );
@@ -238,7 +205,6 @@ namespace castor3d
 	{
 		vis.visit( cuT( "Attenuation Colour" ), m_value.colour );
 		vis.visit( cuT( "Attenuation Distance" ), m_value.distance );
-		vis.visit( cuT( "Thickness Factor" ), m_value.thicknessFactor );
 	}
 
 	PassComponentUPtr AttenuationComponent::doClone( Pass & pass )const
@@ -265,9 +231,6 @@ namespace castor3d
 			, offset );
 		offset += data.write( m_materialShader->getMaterialChunk()
 			, getAttenuationDistance()
-			, offset );
-		data.write( m_materialShader->getMaterialChunk()
-			, getThicknessFactor()
 			, offset );
 	}
 

@@ -153,8 +153,7 @@ namespace castor3d
 	bool ClearcoatMapComponent::Plugin::isComponentNeeded( TextureCombine const & textures
 		, ComponentModeFlags const & filter )const
 	{
-		return checkFlag( filter, ComponentModeFlag::eDiffuseLighting )
-			|| checkFlag( filter, ComponentModeFlag::eSpecularLighting )
+		return checkFlag( filter, ComponentModeFlag::eSpecularLighting )
 			|| hasAny( textures, getTextureFlags() );
 	}
 
