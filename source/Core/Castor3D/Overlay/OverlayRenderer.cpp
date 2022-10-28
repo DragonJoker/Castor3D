@@ -279,7 +279,7 @@ namespace castor3d
 				, sdw::expr::ExprList & inits )
 			{
 				auto result = cache.getStruct( ast::type::MemoryLayout::eC, "C3D_OverlayBlendComponents" );
-				shader::BlendComponents::fillType( *result, materials, material, surface, inits );
+				shader::BlendComponents::fillType( *result, materials, material, surface, nullptr, inits );
 				return result;
 			}
 

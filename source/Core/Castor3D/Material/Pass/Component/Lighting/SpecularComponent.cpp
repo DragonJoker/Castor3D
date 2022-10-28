@@ -87,6 +87,7 @@ namespace castor3d
 		, shader::Materials const & materials
 		, shader::Material const * material
 		, sdw::StructInstance const * surface
+		, sdw::Vec4 const * clrCot
 		, sdw::expr::ExprList & inits )const
 	{
 		if ( !components.hasMember( "specular" ) )
@@ -118,8 +119,6 @@ namespace castor3d
 		, sdw::Vec4 & colMtl )const
 	{
 		spcRgh.rgb() = components.getMember< sdw::Vec3 >( "specular", true );
-		//spcRgh.rgb() *= shader::BlendComponents::computeF0( surface.getMember< sdw::Vec3 >( "colour", true )
-		//	, components.getMember< sdw::Vec3 >( "metalness", 0.0_f ) );
 	}
 
 	//*********************************************************************************************
@@ -142,6 +141,7 @@ namespace castor3d
 	void SpecularComponent::MaterialShader::updateMaterial( sdw::Vec3 const & albedo
 		, sdw::Vec4 const & spcRgh
 		, sdw::Vec4 const & colMtl
+		, sdw::Float const & transm
 		, shader::Material & material )const
 	{
 		material.getMember< sdw::Vec3 >( "specular", true ) = spcRgh.rgb();

@@ -135,6 +135,10 @@ namespace castor3d
 							, c3d_mapColMtl.lod( texCoord, 0.0_f ) );
 						auto spcRgh = writer.declLocale( "spcRgh"
 							, c3d_mapSpcRgh.lod( texCoord, 0.0_f ) );
+						auto clrCot = writer.declLocale( "clrCot"
+							, vec4( 0.0_f ) );
+						auto ccrTrs = writer.declLocale( "ccrTrs"
+							, vec2( 0.0_f ) );
 						auto eye = writer.declLocale( "eye"
 							, c3d_sceneData.cameraPosition );
 						auto depth = writer.declLocale( "depth"
@@ -150,11 +154,13 @@ namespace castor3d
 								, vsPosition
 								, wsPosition
 								, wsNormal } );
-						materials.fill( colMtl.rgb(), spcRgh, colMtl, material );
+						materials.fill( colMtl.rgb(), spcRgh, colMtl, ccrTrs.y(), material );
 						auto components = writer.declLocale( "components"
 							, shader::BlendComponents{ materials
 								, material
-								, surface } );
+								, surface
+								, clrCot } );
+						components.clearcoatRoughness = ccrTrs.x();
 
 						//auto occlusion = indirect.computeOcclusion( sceneFlags
 						//	, lightType

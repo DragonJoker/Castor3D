@@ -32,6 +32,19 @@ namespace castor3d::shader
 			, sdw::Vec3 const & wsNormal
 			, sdw::Float const & refractionRatio
 			, BlendComponents & components )override;
+		C3D_API sdw::RetVec3 computeSpecularReflections( sdw::Vec3 const & wsIncident
+			, sdw::Vec3 const & wsNormal
+			, sdw::Vec3 const & specular
+			, sdw::Float const & roughness
+			, BlendComponents & components
+			, sdw::CombinedImage2DRg32 const & brdf )override;
+		C3D_API sdw::RetVec3 computeSpecularRefractions( sdw::Vec3 const & wsIncident
+			, sdw::Vec3 const & wsNormal
+			, sdw::Vec3 const & specular
+			, sdw::Float const & roughness
+			, sdw::Float const & refractionRatio
+			, BlendComponents & components
+			, sdw::CombinedImage2DRg32 const & brdfMap )override;
 
 	public:
 		static castor::String const Name;
@@ -54,6 +67,25 @@ namespace castor3d::shader
 			, sdw::InFloat
 			, sdw::InVec3
 			, sdw::InFloat > m_computeRefractions;
+		sdw::Function< sdw::Vec3
+			, sdw::InVec3
+			, sdw::InVec3
+			, sdw::InVec3
+			, sdw::InVec3
+			, sdw::InFloat
+			, sdw::InFloat
+			, sdw::InCombinedImageCubeRgba32
+			, sdw::InCombinedImageCubeRgba32
+			, sdw::InCombinedImage2DRg32 > m_computeSpecularReflections;
+		sdw::Function< sdw::Vec3
+			, sdw::InVec3
+			, sdw::InVec3
+			, sdw::InCombinedImageCubeRgba32
+			, sdw::InCombinedImage2DRg32
+			, sdw::InFloat
+			, sdw::InVec3
+			, sdw::InVec3
+			, sdw::InFloat > m_computeSpecularRefractions;
 	};
 }
 

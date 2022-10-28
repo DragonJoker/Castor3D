@@ -25,6 +25,7 @@ namespace castor3d
 				cuT( "Diffuse" ),
 				cuT( "Specular" ),
 				cuT( "Scattering" ),
+				cuT( "CoatingSpecular" ),
 				cuT( "IndirectDiffuse" ),
 				cuT( "IndirectSpecular" ),
 			}
@@ -38,6 +39,8 @@ namespace castor3d
 		{
 			{
 				VK_FORMAT_D32_SFLOAT_S8_UINT,
+				device.selectSmallestFormatRGBUFloatFormat( VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
+					| VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT ),
 				device.selectSmallestFormatRGBUFloatFormat( VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
 					| VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT ),
 				device.selectSmallestFormatRGBUFloatFormat( VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
@@ -64,6 +67,7 @@ namespace castor3d
 				opaqueBlackClearColor,
 				opaqueBlackClearColor,
 				opaqueBlackClearColor,
+				opaqueBlackClearColor,
 			}
 		};
 		return Values[size_t( texture )];
@@ -71,10 +75,11 @@ namespace castor3d
 
 	VkImageUsageFlags getUsageFlags( LpTexture texture )
 	{
-		static std::array< VkImageUsageFlags, size_t( SmTexture::eCount ) > Values
+		static std::array< VkImageUsageFlags, size_t( LpTexture::eCount ) > Values
 		{
 			{
 				VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
+				VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
 				VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
 				VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
 				VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
@@ -94,6 +99,7 @@ namespace castor3d
 				VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK,
 				VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK,
 				VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK,
+				VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK,
 				VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE,
 				VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE,
 			}
@@ -109,7 +115,7 @@ namespace castor3d
 		: GBufferT< LpTexture >{ handler
 			, device
 			, cuT( "LPResult" )
-			, { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr }
+			, { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr }
 			, 0u
 			, size }
 	{

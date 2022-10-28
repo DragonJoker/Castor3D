@@ -102,6 +102,10 @@ namespace castor3d
 			, m_lpResult[LpTexture::eScattering]
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) );
+		visitor.visit( "Light Clearcoat"
+			, m_lpResult[LpTexture::eCoatingSpecular]
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, TextureFactors{}.invert( true ) );
 	}
 
 	void LightingPass::doUpdateLightPasses( CpuUpdater & updater
@@ -213,6 +217,10 @@ namespace castor3d
 			, uint32_t( LightPassIdx::eSpcRgh ) );
 		pass.addSampledView( m_gpResult[DsTexture::eEmsTrn].sampledViewId
 			, uint32_t( LightPassIdx::eEmsTrn ) );
+		pass.addSampledView( m_gpResult[DsTexture::eClrCot].sampledViewId
+			, uint32_t( LightPassIdx::eClrCot ) );
+		pass.addSampledView( m_gpResult[DsTexture::eCcrTrs].sampledViewId
+			, uint32_t( LightPassIdx::eCcrTrs ) );
 		auto index = uint32_t( LightPassIdx::eCount );
 		engine.createSpecificsBuffersPassBindings( pass, index );
 
@@ -220,6 +228,7 @@ namespace castor3d
 		pass.addOutputColourView( m_lpResult[LpTexture::eDiffuse].targetViewId );
 		pass.addOutputColourView( m_lpResult[LpTexture::eSpecular].targetViewId );
 		pass.addOutputColourView( m_lpResult[LpTexture::eScattering].targetViewId );
+		pass.addOutputColourView( m_lpResult[LpTexture::eCoatingSpecular].targetViewId );
 		return pass;
 	}
 }

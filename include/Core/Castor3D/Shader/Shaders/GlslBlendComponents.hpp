@@ -42,6 +42,10 @@ namespace castor3d::shader
 			, Material const & material
 			, SurfaceBase const & surface );
 		BlendComponents( Materials const & materials
+			, Material const & material
+			, SurfaceBase const & surface
+			, sdw::Vec4 const & clrCot );
+		BlendComponents( Materials const & materials
 			, bool zeroInit = false );
 
 		SDW_DeclStructInstance( , BlendComponents );
@@ -54,6 +58,7 @@ namespace castor3d::shader
 			, Materials const & materials
 			, Material const & material
 			, sdw::StructInstance const & surface
+			, sdw::Vec4 const * clrCot
 			, sdw::expr::ExprList & inits );
 		static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache
 			, BlendComponents const & rhs );
@@ -69,10 +74,11 @@ namespace castor3d::shader
 		static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache
 			, Materials const & materials
 			, Material const & material
-			, sdw::StructInstance const & surface )
+			, sdw::StructInstance const & surface
+			, sdw::Vec4 const * clrCot )
 		{
 			sdw::expr::ExprList inits;
-			return makeType( cache, materials, material, surface, inits );
+			return makeType( cache, materials, material, surface, clrCot, inits );
 		}
 
 		static sdw::Vec3 computeF0( sdw::Vec3 const & albedo
@@ -111,6 +117,9 @@ namespace castor3d::shader
 		sdw::DefaultedT< sdw::Float > thicknessFactor;
 		sdw::DefaultedT< sdw::Float > attenuationDistance;
 		sdw::DefaultedT< sdw::Vec3 > attenuationColour;
+		sdw::DefaultedT< sdw::Float > clearcoatFactor;
+		sdw::DefaultedT< sdw::Vec3 > clearcoatNormal;
+		sdw::DefaultedT< sdw::Float > clearcoatRoughness;
 		sdw::Float const shininess;
 
 	protected:
@@ -121,6 +130,7 @@ namespace castor3d::shader
 			, Materials const & materials
 			, Material const & material
 			, sdw::StructInstance const & surface
+			, sdw::Vec4 const * clrCot
 			, sdw::expr::ExprList & inits );
 		static void fillInit( sdw::type::BaseStruct const & components
 			, Materials const & materials
@@ -129,12 +139,14 @@ namespace castor3d::shader
 			, Materials const & materials
 			, Material const & material
 			, sdw::StructInstance const & surface
+			, sdw::Vec4 const * clrCot
 			, sdw::expr::ExprList & inits );
 		static sdw::expr::ExprPtr makeInit( Materials const & materials
 			, bool zeroInit );
 		static sdw::expr::ExprPtr makeInit( Materials const & materials
 			, Material const & material
-			, sdw::StructInstance const & surface );
+			, sdw::StructInstance const & surface
+			, sdw::Vec4 const * clrCot );
 	};
 }
 

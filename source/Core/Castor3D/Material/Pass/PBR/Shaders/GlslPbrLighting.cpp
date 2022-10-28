@@ -113,7 +113,8 @@ namespace castor3d::shader
 				{
 					OutputComponents output{ m_writer.declLocale( "lightDiffuse", vec3( 0.0_f ) )
 						, m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) )
-						, m_writer.declLocale( "lightScattering", vec3( 0.0_f ) ) };
+						, m_writer.declLocale( "lightScattering", vec3( 0.0_f ) )
+						, m_writer.declLocale( "lightCoatingSpecular", vec3( 0.0_f ) ) };
 					auto lightDirection = m_writer.declLocale( "lightDirection"
 						, normalize( -light.direction ) );
 					m_cookTorrance.compute( light.base
@@ -124,6 +125,19 @@ namespace castor3d::shader
 						, components.roughness
 						, surface
 						, output );
+
+					IF( m_writer, components.clearcoatFactor != 0.0_f )
+					{
+						output.m_coatingSpecular = m_cookTorrance.computeSpecular( light.base
+							, worldEye
+							, lightDirection
+							, components.specular
+							, components.metalness
+							, components.clearcoatRoughness
+							, surface.worldPosition.xyz()
+							, components.clearcoatNormal );
+					}
+					FI;
 
 					if ( m_shadowModel->isEnabled() )
 					{
@@ -181,6 +195,7 @@ namespace castor3d::shader
 
 								output.m_diffuse *= shadowFactor;
 								output.m_specular *= shadowFactor;
+								output.m_coatingSpecular *= shadowFactor;
 							}
 							FI;
 
@@ -198,6 +213,7 @@ namespace castor3d::shader
 											, light.cascadeCount ) );
 									output.m_diffuse += volumetric * light.base.intensity.x() * light.base.colour;
 									output.m_specular += volumetric * light.base.intensity.y() * light.base.colour;
+									output.m_coatingSpecular += volumetric * light.base.intensity.y() * light.base.colour;
 								}
 								FI;
 							}
@@ -207,21 +223,25 @@ namespace castor3d::shader
 							{
 								output.m_diffuse.rgb() *= vec3( 1.0_f, 0.25f, 0.25f );
 								output.m_specular.rgb() *= vec3( 1.0_f, 0.25f, 0.25f );
+								output.m_coatingSpecular.rgb() *= vec3( 1.0_f, 0.25f, 0.25f );
 							}
 							ELSEIF( cascadeIndex == 1_u )
 							{
 								output.m_diffuse.rgb() *= vec3( 0.25_f, 1.0f, 0.25f );
 								output.m_specular.rgb() *= vec3( 0.25_f, 1.0f, 0.25f );
+								output.m_coatingSpecular.rgb() *= vec3( 0.25_f, 1.0f, 0.25f );
 							}
 							ELSEIF( cascadeIndex == 2_u )
 							{
 								output.m_diffuse.rgb() *= vec3( 0.25_f, 0.25f, 1.0f );
 								output.m_specular.rgb() *= vec3( 0.25_f, 0.25f, 1.0f );
+								output.m_coatingSpecular.rgb() *= vec3( 0.25_f, 0.25f, 1.0f );
 							}
 							ELSE
 							{
 								output.m_diffuse.rgb() *= vec3( 1.0_f, 1.0f, 0.25f );
 								output.m_specular.rgb() *= vec3( 1.0_f, 1.0f, 0.25f );
+								output.m_coatingSpecular.rgb() *= vec3( 1.0_f, 1.0f, 0.25f );
 							}
 							FI;
 #endif
@@ -232,6 +252,7 @@ namespace castor3d::shader
 					parentOutput.m_diffuse += max( vec3( 0.0_f ), output.m_diffuse );
 					parentOutput.m_specular += max( vec3( 0.0_f ), output.m_specular );
 					parentOutput.m_scattering += max( vec3( 0.0_f ), output.m_scattering );
+					parentOutput.m_coatingSpecular += max( vec3( 0.0_f ), output.m_coatingSpecular );
 				}
 				, InDirectionalLight( m_writer, "light" )
 				, InBlendComponents{ m_writer, "components", m_materials }
@@ -269,7 +290,8 @@ namespace castor3d::shader
 				{
 					OutputComponents output{ m_writer.declLocale( "lightDiffuse", vec3( 0.0_f ) )
 						, m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) )
-						, m_writer.declLocale( "lightScattering", vec3( 0.0_f ) ) };
+						, m_writer.declLocale( "lightScattering", vec3( 0.0_f ) )
+						, m_writer.declLocale( "lightCoatingSpecular", vec3( 0.0_f ) ) };
 					auto vertexToLight = m_writer.declLocale( "vertexToLight"
 						, light.position - surface.worldPosition.xyz() );
 					auto distance = m_writer.declLocale( "distance"
@@ -285,6 +307,19 @@ namespace castor3d::shader
 						, surface
 						, output );
 
+					IF( m_writer, components.clearcoatFactor != 0.0_f )
+					{
+						output.m_coatingSpecular = m_cookTorrance.computeSpecular( light.base
+							, worldEye
+							, lightDirection
+							, components.specular
+							, components.metalness
+							, components.clearcoatRoughness
+							, surface.worldPosition.xyz()
+							, components.clearcoatNormal );
+					}
+					FI;
+
 					if ( m_shadowModel->isEnabled() )
 					{
 						IF( m_writer
@@ -298,6 +333,7 @@ namespace castor3d::shader
 									, light.position ) );
 							output.m_diffuse *= shadowFactor;
 							output.m_specular *= shadowFactor;
+							output.m_coatingSpecular *= shadowFactor;
 						}
 						FI;
 					}
@@ -307,9 +343,11 @@ namespace castor3d::shader
 					output.m_diffuse = output.m_diffuse / attenuation;
 					output.m_specular = output.m_specular / attenuation;
 					output.m_scattering = output.m_scattering / attenuation;
+					output.m_coatingSpecular = output.m_coatingSpecular / attenuation;
 					parentOutput.m_diffuse += max( vec3( 0.0_f ), output.m_diffuse );
 					parentOutput.m_specular += max( vec3( 0.0_f ), output.m_specular );
 					parentOutput.m_scattering += max( vec3( 0.0_f ), output.m_scattering );
+					parentOutput.m_coatingSpecular += max( vec3( 0.0_f ), output.m_coatingSpecular );
 				}
 				, InPointLight( m_writer, "light" )
 				, InBlendComponents{ m_writer, "components", m_materials }
@@ -358,7 +396,8 @@ namespace castor3d::shader
 							, length( vertexToLight ) );
 						OutputComponents output{ m_writer.declLocale( "lightDiffuse", vec3( 0.0_f ) )
 							, m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) )
-							, m_writer.declLocale( "lightScattering", vec3( 0.0_f ) ) };
+							, m_writer.declLocale( "lightScattering", vec3( 0.0_f ) )
+							, m_writer.declLocale( "lightCoatingSpecular", vec3( 0.0_f ) ) };
 						auto rawDiffuse = m_writer.declLocale( "rawDiffuse"
 							, m_cookTorrance.compute( light.base
 								, worldEye
@@ -368,6 +407,19 @@ namespace castor3d::shader
 								, components.roughness
 								, surface
 								, output ) );
+
+						IF( m_writer, components.clearcoatFactor != 0.0_f )
+						{
+							output.m_coatingSpecular = m_cookTorrance.computeSpecular( light.base
+								, worldEye
+								, lightDirection
+								, components.specular
+								, components.metalness
+								, components.clearcoatRoughness
+								, surface.worldPosition.xyz()
+								, components.clearcoatNormal );
+						}
+						FI;
 
 						if ( m_shadowModel->isEnabled() )
 						{
@@ -383,6 +435,7 @@ namespace castor3d::shader
 									, -vertexToLight ) );
 								output.m_diffuse *= shadowFactor;
 								output.m_specular *= shadowFactor;
+								output.m_coatingSpecular *= shadowFactor;
 							}
 							FI;
 						}
@@ -412,9 +465,11 @@ namespace castor3d::shader
 
 						output.m_specular = spotFactor * output.m_specular / attenuation;
 						output.m_scattering = spotFactor * output.m_scattering / attenuation;
+						output.m_coatingSpecular = spotFactor * output.m_coatingSpecular / attenuation;
 						parentOutput.m_diffuse += max( vec3( 0.0_f ), output.m_diffuse );
 						parentOutput.m_specular += max( vec3( 0.0_f ), output.m_specular );
 						parentOutput.m_scattering += max( vec3( 0.0_f ), output.m_scattering );
+						parentOutput.m_coatingSpecular += max( vec3( 0.0_f ), output.m_coatingSpecular );
 					}
 					FI;
 				}
@@ -646,13 +701,15 @@ namespace castor3d::shader
 		, sdw::Vec3 const & indirectDiffuse
 		, sdw::Vec3 const & directSpecular
 		, sdw::Vec3 const & directScattering
+		, sdw::Vec3 const & directCoatingSpecular
 		, sdw::Vec3 const & indirectSpecular
 		, sdw::Vec3 const & directAmbient
 		, sdw::Vec3 const & indirectAmbient
 		, sdw::Float const & ambientOcclusion
 		, sdw::Vec3 const & emissive
 		, sdw::Vec3 const & reflected
-		, sdw::Vec3 const & refracted )
+		, sdw::Vec3 const & refracted
+		, sdw::Vec3 const & coatReflected )
 	{
 		auto diffuseBrdf = m_writer.declLocale( "diffuseBrdf"
 			, components.colour * ( directDiffuse + ( indirectDiffuse * ambientOcclusion ) ) );
@@ -676,7 +733,22 @@ namespace castor3d::shader
 
 		auto dielectric = m_writer.declLocale( "dielectric"
 			, specularBrdf + diffuseBrdf );
-		return mix( dielectric, metal, vec3( components.metalness ) )
+		auto combineResult = m_writer.declLocale( "combineResult"
+			, mix( dielectric, metal, vec3( components.metalness ) ) );
+
+		IF( m_writer, components.clearcoatFactor != 0.0_f )
+		{
+			auto clearcoatNdotV = m_writer.declLocale( "clearcoatNdotV"
+				, max( dot( components.clearcoatNormal, -incident ), 0.0_f ) );
+			auto clearcoatFresnel = m_writer.declLocale( "clearcoatFresnel"
+				, pow( 0.04_f + ( 1.0_f - 0.04_f ) * ( 1.0_f - clearcoatNdotV ), 5.0_f ) );
+			combineResult = mix( combineResult
+				, coatReflected + directCoatingSpecular
+				, vec3( components.clearcoatFactor * clearcoatFresnel ) );
+		}
+		FI;
+
+		return combineResult
 			+ emissive
 			+ directScattering;
 	}

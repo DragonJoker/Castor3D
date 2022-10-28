@@ -76,6 +76,7 @@ namespace toon
 				, castor3d::shader::Materials const & materials
 				, castor3d::shader::Material const * material
 				, sdw::StructInstance const * surface
+				, sdw::Vec4 const * clrCot
 				, sdw::expr::ExprList & inits )const override;
 			C3D_ToonMaterial_API void blendComponents( castor3d::shader::Materials const & materials
 				, sdw::Float const & passMultiplier

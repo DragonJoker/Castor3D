@@ -43,6 +43,8 @@ namespace castor3d
 		eColMtl,
 		eSpcRgh,
 		eEmsTrn,
+		eClrCot,
+		eCcrTrs,
 		eCount,
 	};
 	/**
@@ -78,6 +80,7 @@ namespace castor3d
 		eDiffuse,
 		eSpecular,
 		eScattering,
+		eCoatingSpecular,
 		eIndirectDiffuse,
 		eIndirectSpecular,
 		CU_ScopedEnumBounds( eDepth ),

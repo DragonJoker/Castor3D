@@ -39,6 +39,14 @@ namespace castor3d::shader
 			, sdw::Float const & smoothBand
 			, Surface surface
 			, OutputComponents & output );
+		C3D_API sdw::RetVec3 computeSpecular( Light const & light
+			, sdw::Vec3 const & worldEye
+			, sdw::Vec3 const & direction
+			, sdw::Vec3 const & specular
+			, sdw::Float const & metalness
+			, sdw::Float const & roughness
+			, sdw::Vec3 const & position
+			, sdw::Vec3 const & normal );
 		C3D_API sdw::Vec3 computeDiffuse( sdw::Vec3 const & colour
 			, sdw::Vec3 const & worldEye
 			, sdw::Vec3 const & direction
@@ -71,6 +79,7 @@ namespace castor3d::shader
 		void declareGeometry();
 		void declareComputeCookTorrance();
 		void declareComputeCookTorranceAON();
+		void declareComputeCookTorranceSpecular();
 		void declareComputeCookTorranceDiffuse();
 		void declareComputeCookTorranceDiffuseAON();
 
@@ -112,6 +121,16 @@ namespace castor3d::shader
 			, sdw::InFloat
 			, InSurface
 			, OutputComponents & > m_computeCookTorranceAON;
+		sdw::Function< sdw::Vec3
+			, sdw::InVec3
+			, sdw::InVec2
+			, sdw::InVec3
+			, sdw::InVec3
+			, sdw::InVec3
+			, sdw::InFloat
+			, sdw::InFloat
+			, sdw::InVec3
+			, sdw::InVec3 > m_computeCookTorranceSpecular;
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3
 			, sdw::InFloat

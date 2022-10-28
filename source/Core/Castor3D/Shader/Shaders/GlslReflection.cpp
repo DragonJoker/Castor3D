@@ -31,7 +31,8 @@ namespace castor3d::shader
 		, sdw::Float const & refractionRatio
 		, sdw::Vec3 & ambient
 		, sdw::Vec3 & reflected
-		, sdw::Vec3 & refracted )
+		, sdw::Vec3 & refracted
+		, sdw::Vec3 & coatReflected )
 	{
 		auto brdf = m_writer.getVariable< sdw::CombinedImage2DRg32 >( "c3d_mapBrdf" );
 		auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
@@ -46,6 +47,7 @@ namespace castor3d::shader
 				// Reflection from environment map.
 				reflected = computeReflEnvMaps( incident
 					, components.normal
+					, components.roughness
 					, envMap
 					, envMapIndex
 					, components );
@@ -112,6 +114,36 @@ namespace castor3d::shader
 			FI;
 		}
 		FI;
+
+		IF( m_writer, components.clearcoatFactor != 0.0_f )
+		{
+			IF( m_writer, envMapIndex > 0_u && hasReflection != 0_u )
+			{
+				envMapIndex = envMapIndex - 1_u;
+				auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
+				coatReflected = computeReflEnvMaps( incident
+					, components.clearcoatNormal
+					, components.clearcoatRoughness
+					, envMap
+					, envMapIndex
+					, components );
+			}
+			ELSE
+			{
+				if ( m_hasIblSupport )
+				{
+					auto brdf = m_writer.getVariable< sdw::CombinedImage2DRg32 >( "c3d_mapBrdf" );
+					coatReflected = background.computeSpecularReflections( incident
+						, components.clearcoatNormal
+						, components.specular
+						, components.clearcoatRoughness
+						, components
+						, brdf );
+				}
+			}
+			FI;
+		}
+		FI;
 	}
 
 	void ReflectionModel::computeCombined( BlendComponents & components
@@ -122,7 +154,8 @@ namespace castor3d::shader
 		, sdw::Float const & refractionRatio
 		, sdw::Vec3 & ambient
 		, sdw::Vec3 & reflected
-		, sdw::Vec3 & refracted )
+		, sdw::Vec3 & refracted
+		, sdw::Vec3 & coatReflected )
 	{
 		auto brdf = m_writer.getVariable< sdw::CombinedImage2DRg32 >( "c3d_mapBrdf" );
 		auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
@@ -137,6 +170,7 @@ namespace castor3d::shader
 				// Reflection from environment map.
 				reflected = computeReflEnvMaps( incident
 					, components.normal
+					, components.roughness
 					, envMap
 					, envMapIndex
 					, components );
@@ -192,6 +226,36 @@ namespace castor3d::shader
 			FI;
 		}
 		FI;
+
+		IF( m_writer, components.clearcoatFactor != 0.0_f )
+		{
+			IF( m_writer, envMapIndex > 0_u && hasReflection != 0_u )
+			{
+				envMapIndex = envMapIndex - 1_u;
+				auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
+				coatReflected = computeReflEnvMaps( incident
+					, components.clearcoatNormal
+					, components.clearcoatRoughness
+					, envMap
+					, envMapIndex
+					, components );
+			}
+			ELSE
+			{
+				if ( m_hasIblSupport )
+				{
+					auto brdf = m_writer.getVariable< sdw::CombinedImage2DRg32 >( "c3d_mapBrdf" );
+					coatReflected = background.computeSpecularReflections( incident
+						, components.clearcoatNormal
+						, components.specular
+						, components.clearcoatRoughness
+						, components
+						, brdf );
+				}
+			}
+			FI;
+		}
+		FI;
 	}
 
 	sdw::Vec3 ReflectionModel::computeReflections( BlendComponents & components
@@ -212,6 +276,7 @@ namespace castor3d::shader
 				, computeIncident( surface.worldPosition.xyz(), sceneData.cameraPosition ) );
 			reflected = computeReflEnvMaps( incident
 				, components.normal
+				, components.roughness
 				, envMap
 				, envMapIndex
 				, components );
@@ -650,6 +715,7 @@ namespace castor3d::shader
 
 	sdw::RetVec3 ReflectionModel::computeReflEnvMaps( sdw::Vec3 const & wsIncident
 		, sdw::Vec3 const & wsNormal
+		, sdw::Float const & roughness
 		, sdw::CombinedImageCubeArrayRgba32 const & envMap
 		, sdw::UInt const & envMapIndex
 		, BlendComponents & components )
@@ -660,7 +726,7 @@ namespace castor3d::shader
 			, envMap
 			, envMapIndex
 			, components.specular
-			, components.roughness );
+			, roughness );
 	}
 
 	sdw::RetVec3 ReflectionModel::computeRefrEnvMaps( sdw::Vec3 const & wsIncident

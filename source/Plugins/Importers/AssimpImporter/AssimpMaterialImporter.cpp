@@ -12,6 +12,7 @@
 #include <Castor3D/Material/Pass/Component/Base/TexturesComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Base/TwoSidedComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/AttenuationComponent.hpp>
+#include <Castor3D/Material/Pass/Component/Lighting/ClearcoatComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/EmissiveComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/MetalnessComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/RoughnessComponent.hpp>
@@ -19,6 +20,9 @@
 #include <Castor3D/Material/Pass/Component/Lighting/SubsurfaceScatteringComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/TransmissionComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/AttenuationMapComponent.hpp>
+#include <Castor3D/Material/Pass/Component/Map/ClearcoatMapComponent.hpp>
+#include <Castor3D/Material/Pass/Component/Map/ClearcoatNormalMapComponent.hpp>
+#include <Castor3D/Material/Pass/Component/Map/ClearcoatRoughnessMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/ColourMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/EmissiveMapComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Map/GlossinessMapComponent.hpp>
@@ -63,6 +67,8 @@
 #	define AI_MATKEY_METALLIC_FACTOR AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_METALLIC_FACTOR
 #	define AI_MATKEY_BASE_COLOR AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_BASE_COLOR_FACTOR
 #	define AI_MATKEY_TRANSMISSION_FACTOR AI_MATKEY_GLTF_MATERIAL_TRANSMISSION_FACTOR
+#	define AI_MATKEY_CLEARCOAT_FACTOR AI_MATKEY_GLTF_MATERIAL_CLEARCOAT_FACTOR
+#	define AI_MATKEY_CLEARCOAT_ROUGHNESS_FACTOR AI_MATKEY_GLTF_MATERIAL_CLEARCOAT_ROUGHNESS_FACTOR
 #else
 #	include <assimp/GltfMaterial.h>
 #endif
@@ -163,6 +169,9 @@ namespace c3d_assimp
 				, m_transmissionMapPlugin{ m_result.getComponentPlugin< castor3d::TransmissionMapComponent >() }
 				, m_transmittanceMapPlugin{ m_result.getComponentPlugin< castor3d::TransmittanceMapComponent >() }
 				, m_attenuationMapPlugin{ m_result.getComponentPlugin< castor3d::AttenuationMapComponent >() }
+				, m_clearcoatMapPlugin{ m_result.getComponentPlugin< castor3d::ClearcoatMapComponent >() }
+				, m_clearcoatNormalMapPlugin{ m_result.getComponentPlugin< castor3d::ClearcoatNormalMapComponent >() }
+				, m_clearcoatRoughnessMapPlugin{ m_result.getComponentPlugin< castor3d::ClearcoatRoughnessMapComponent >() }
 				, m_colourMapFlags{ m_colourMapPlugin.getTextureFlags() }
 				, m_emissiveMapFlags{ m_emissiveMapPlugin.getTextureFlags() }
 				, m_glossinessMapFlags{ m_glossinessMapPlugin.getTextureFlags() }
@@ -176,6 +185,9 @@ namespace c3d_assimp
 				, m_transmissionMapFlags{ m_transmissionMapPlugin.getTextureFlags() }
 				, m_transmittanceMapFlags{ m_transmittanceMapPlugin.getTextureFlags() }
 				, m_attenuationMapFlags{ m_attenuationMapPlugin.getTextureFlags() }
+				, m_clearcoatMapFlags{ m_clearcoatMapPlugin.getTextureFlags() }
+				, m_clearcoatNormalMapFlags{ m_clearcoatNormalMapPlugin.getTextureFlags() }
+				, m_clearcoatRoughnessMapFlags{ m_clearcoatRoughnessMapPlugin.getTextureFlags() }
 				, m_colourBaseConfiguration{ m_colourMapPlugin.getBaseTextureConfiguration() }
 				, m_emissiveBaseConfiguration{ m_emissiveMapPlugin.getBaseTextureConfiguration() }
 				, m_glossinessBaseConfiguration{ m_glossinessMapPlugin.getBaseTextureConfiguration() }
@@ -189,6 +201,9 @@ namespace c3d_assimp
 				, m_transmissionBaseConfiguration{ m_transmissionMapPlugin.getBaseTextureConfiguration() }
 				, m_transmittanceBaseConfiguration{ m_transmittanceMapPlugin.getBaseTextureConfiguration() }
 				, m_attenuationBaseConfiguration{ m_attenuationMapPlugin.getBaseTextureConfiguration() }
+				, m_clearcoatBaseConfiguration{ m_clearcoatMapPlugin.getBaseTextureConfiguration() }
+				, m_clearcoatNormalBaseConfiguration{ m_clearcoatNormalMapPlugin.getBaseTextureConfiguration() }
+				, m_clearcoatRoughnessBaseConfiguration{ m_clearcoatRoughnessMapPlugin.getBaseTextureConfiguration() }
 			{
 				if ( m_shadingModel == aiShadingMode_Toon )
 				{
@@ -244,6 +259,7 @@ namespace c3d_assimp
 
 				parseEmissive();
 				parseAttenuation();
+				parseClearcoat();
 				parseComponentDataT< castor3d::TransmissionComponent, float >( AI_MATKEY_TRANSMISSION_FACTOR );
 				m_hasRefr = parseRefractionRatio();
 
@@ -266,6 +282,9 @@ namespace c3d_assimp
 				TextureInfo rghInfo{};
 				auto trsInfo = getTextureInfo( TextureType_TRANSMISSION, 0u );
 				auto thkInfo = getTextureInfo( TextureType_TRANSMISSION, 1u );
+				auto cctInfo = getTextureInfo( TextureType_CLEARCOAT, 0u );
+				auto ccrInfo = getTextureInfo( TextureType_CLEARCOAT, 1u );
+				auto ccnInfo = getTextureInfo( TextureType_CLEARCOAT, 2u );
 				auto occInfo = getTextureInfo( TextureType_AMBIENT_OCCLUSION );
 
 				if ( occInfo.name.empty() )
@@ -296,6 +315,12 @@ namespace c3d_assimp
 				loadTexture( trsInfo, getRemap( m_transmissionMapFlags, m_transmissionBaseConfiguration )
 					, hasOpacityTex );
 				loadTexture( thkInfo, getRemap( m_attenuationMapFlags, m_attenuationBaseConfiguration )
+					, hasOpacityTex );
+				loadTexture( cctInfo, getRemap( m_clearcoatMapFlags, m_clearcoatBaseConfiguration )
+					, hasOpacityTex );
+				loadTexture( ccrInfo, getRemap( m_clearcoatRoughnessMapFlags, m_clearcoatRoughnessBaseConfiguration )
+					, hasOpacityTex );
+				loadTexture( ccnInfo, getRemap( m_clearcoatNormalMapFlags, m_clearcoatNormalBaseConfiguration )
 					, hasOpacityTex );
 
 				if ( !nmlInfo.name.empty() )
@@ -541,6 +566,21 @@ namespace c3d_assimp
 						, colour.b } );
 					component->setAttenuationDistance( distance );
 					component->setThicknessFactor( factor );
+				}
+			}
+
+			void parseClearcoat()
+			{
+				float clearcoat{};
+				float roughness{};
+				bool hasClearcoat = m_material.Get( AI_MATKEY_CLEARCOAT_FACTOR, clearcoat ) == aiReturn_SUCCESS;
+				bool hasRoughness = m_material.Get( AI_MATKEY_CLEARCOAT_ROUGHNESS_FACTOR, roughness ) == aiReturn_SUCCESS;
+
+				if ( hasClearcoat || hasRoughness )
+				{
+					auto component = m_result.createComponent< castor3d::ClearcoatComponent >();
+					component->setClearcoatFactor( clearcoat );
+					component->setRoughnessFactor( roughness );
 				}
 			}
 
@@ -1037,6 +1077,9 @@ namespace c3d_assimp
 			castor3d::PassComponentPlugin const & m_transmissionMapPlugin;
 			castor3d::PassComponentPlugin const & m_transmittanceMapPlugin;
 			castor3d::PassComponentPlugin const & m_attenuationMapPlugin;
+			castor3d::PassComponentPlugin const & m_clearcoatMapPlugin;
+			castor3d::PassComponentPlugin const & m_clearcoatNormalMapPlugin;
+			castor3d::PassComponentPlugin const & m_clearcoatRoughnessMapPlugin;
 			castor3d::PassComponentTextureFlag m_colourMapFlags;
 			castor3d::PassComponentTextureFlag m_emissiveMapFlags;
 			castor3d::PassComponentTextureFlag m_glossinessMapFlags;
@@ -1050,6 +1093,9 @@ namespace c3d_assimp
 			castor3d::PassComponentTextureFlag m_transmissionMapFlags;
 			castor3d::PassComponentTextureFlag m_transmittanceMapFlags;
 			castor3d::PassComponentTextureFlag m_attenuationMapFlags;
+			castor3d::PassComponentTextureFlag m_clearcoatMapFlags;
+			castor3d::PassComponentTextureFlag m_clearcoatNormalMapFlags;
+			castor3d::PassComponentTextureFlag m_clearcoatRoughnessMapFlags;
 			castor3d::TextureConfiguration m_colourBaseConfiguration;
 			castor3d::TextureConfiguration m_emissiveBaseConfiguration;
 			castor3d::TextureConfiguration m_glossinessBaseConfiguration;
@@ -1063,6 +1109,9 @@ namespace c3d_assimp
 			castor3d::TextureConfiguration m_transmissionBaseConfiguration;
 			castor3d::TextureConfiguration m_transmittanceBaseConfiguration;
 			castor3d::TextureConfiguration m_attenuationBaseConfiguration;
+			castor3d::TextureConfiguration m_clearcoatBaseConfiguration;
+			castor3d::TextureConfiguration m_clearcoatNormalBaseConfiguration;
+			castor3d::TextureConfiguration m_clearcoatRoughnessBaseConfiguration;
 		};
 	}
 

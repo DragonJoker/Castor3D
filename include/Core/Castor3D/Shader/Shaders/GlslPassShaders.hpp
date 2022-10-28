@@ -38,6 +38,7 @@ namespace castor3d::shader
 			, Materials const & materials
 			, Material const & material
 			, sdw::StructInstance const & surface
+			, sdw::Vec4 const * clrCot
 			, sdw::expr::ExprList & inits )const;
 		C3D_API void fillComponentsInits( sdw::type::BaseStruct const & components
 			, Materials const & materials
@@ -46,6 +47,7 @@ namespace castor3d::shader
 			, Materials const & materials
 			, Material const & material
 			, sdw::StructInstance const & surface
+			, sdw::Vec4 const * clrCot
 			, sdw::expr::ExprList & inits )const;
 		C3D_API void applyComponents( TextureCombine const & combine
 			, TextureConfigData const & config
@@ -64,6 +66,7 @@ namespace castor3d::shader
 		C3D_API void updateMaterial( sdw::Vec3 const & albedo
 			, sdw::Vec4 const & spcRgh
 			, sdw::Vec4 const & colMtl
+			, sdw::Float const & transm
 			, Material & material )const;
 		C3D_API void updateOutputs( Material const & material
 			, SurfaceBase const & surface

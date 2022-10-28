@@ -94,6 +94,7 @@ namespace castor3d
 			, Texture const & lightDiffuse
 			, Texture const & lightSpecular
 			, Texture const & lightScattering
+			, Texture const & lightCoatingSpecular
 			, Texture const & lightIndirectDiffuse
 			, Texture const & lightIndirectSpecular
 			, Texture const & result
@@ -139,6 +140,7 @@ namespace castor3d
 		Texture const & m_subsurfaceScattering;
 		Texture const & m_lightSpecular;
 		Texture const & m_lightScattering;
+		Texture const & m_lightCoatingSpecular;
 		Texture const & m_lightIndirectDiffuse;
 		Texture const & m_lightIndirectSpecular;
 		std::vector< ProgramPtr > m_programs;

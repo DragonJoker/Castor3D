@@ -56,7 +56,7 @@ namespace castor3d::shader
 		for ( auto & shader : m_shaders )
 		{
 			shader->fillComponents( components, materials, nullptr );
-			shader->fillComponentsInits( components, materials, nullptr, nullptr, inits );
+			shader->fillComponentsInits( components, materials, nullptr, nullptr, nullptr, inits );
 		}
 	}
 
@@ -64,12 +64,13 @@ namespace castor3d::shader
 		, Materials const & materials
 		, Material const & material
 		, sdw::StructInstance const & surface
+		, sdw::Vec4 const * clrCot
 		, sdw::expr::ExprList & inits )const
 	{
 		for ( auto & shader : m_shaders )
 		{
 			shader->fillComponents( components, materials, &surface );
-			shader->fillComponentsInits( components, materials, &material, &surface, inits );
+			shader->fillComponentsInits( components, materials, &material, &surface, clrCot, inits );
 		}
 	}
 
@@ -79,7 +80,7 @@ namespace castor3d::shader
 	{
 		for ( auto & shader : m_shaders )
 		{
-			shader->fillComponentsInits( components, materials, nullptr, nullptr, inits );
+			shader->fillComponentsInits( components, materials, nullptr, nullptr, nullptr, inits );
 		}
 	}
 
@@ -87,11 +88,12 @@ namespace castor3d::shader
 		, Materials const & materials
 		, Material const & material
 		, sdw::StructInstance const & surface
+		, sdw::Vec4 const * clrCot
 		, sdw::expr::ExprList & inits )const
 	{
 		for ( auto & shader : m_shaders )
 		{
-			shader->fillComponentsInits( components, materials, &material, &surface, inits );
+			shader->fillComponentsInits( components, materials, &material, &surface, clrCot, inits );
 		}
 	}
 
@@ -145,6 +147,7 @@ namespace castor3d::shader
 	void PassShaders::updateMaterial( sdw::Vec3 const & albedo
 		, sdw::Vec4 const & spcRgh
 		, sdw::Vec4 const & colMtl
+		, sdw::Float const & transm
 		, Material & material )const
 	{
 		for ( auto & shader : m_compRegister.getMaterialShaders() )
@@ -152,6 +155,7 @@ namespace castor3d::shader
 			shader->updateMaterial( albedo
 				, spcRgh
 				, colMtl
+				, transm
 				, material );
 		}
 	}

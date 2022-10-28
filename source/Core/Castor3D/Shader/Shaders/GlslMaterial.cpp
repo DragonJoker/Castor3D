@@ -359,6 +359,7 @@ namespace castor3d::shader
 	void Materials::fill( sdw::Vec3 const & newAlbedo
 		, sdw::Vec4 const & spcRgh
 		, sdw::Vec4 const & colMtl
+		, sdw::Float const & transm
 		, Material & material )
 	{
 		if ( isEnabled() )
@@ -366,6 +367,7 @@ namespace castor3d::shader
 			m_passShaders.updateMaterial( newAlbedo
 				, spcRgh
 				, colMtl
+				, transm
 				, material );
 		}
 	}

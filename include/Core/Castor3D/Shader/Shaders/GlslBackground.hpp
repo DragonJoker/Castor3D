@@ -32,6 +32,27 @@ namespace castor3d::shader
 			, sdw::Float const & refractionRatio
 			, BlendComponents & components ) = 0;
 
+		C3D_API sdw::RetVec3 virtual computeSpecularReflections( sdw::Vec3 const & wsIncident
+			, sdw::Vec3 const & wsNormal
+			, sdw::Vec3 const & specular
+			, sdw::Float const & roughness
+			, BlendComponents & components
+			, sdw::CombinedImage2DRg32 const & brdf )
+		{
+			return computeReflections( wsIncident, wsNormal, components, brdf );
+		}
+
+		C3D_API sdw::RetVec3 virtual computeSpecularRefractions( sdw::Vec3 const & wsIncident
+			, sdw::Vec3 const & wsNormal
+			, sdw::Vec3 const & specular
+			, sdw::Float const & roughness
+			, sdw::Float const & refractionRatio
+			, BlendComponents & components
+			, sdw::CombinedImage2DRg32 const & brdfMap )
+		{
+			return computeRefractions( wsIncident, wsNormal, refractionRatio, components );
+		}
+
 		VkExtent2D const & getTargetSize()const
 		{
 			return m_targetSize;

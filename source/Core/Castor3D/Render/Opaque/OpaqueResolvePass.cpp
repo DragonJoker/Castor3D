@@ -123,12 +123,14 @@ namespace castor3d
 			eColMtl,
 			eSpcRgh,
 			eEmsTrn,
-			eData,
+			eClrCot,
+			eCcrTrs,
 			eSsao,
 			eBrdf,
 			eDirectDiffuse,
 			eDirectSpecular,
 			eDirectScattering,
+			eDirectCoatingSpecular,
 			eIndirectDiffuse,
 			eIndirectSpecular,
 			eEnvironment,
@@ -173,12 +175,14 @@ namespace castor3d
 			auto c3d_mapColMtl = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eColMtl ), uint32_t( ResolveBind::eColMtl ), 0u );
 			auto c3d_mapSpcRgh = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eSpcRgh ), uint32_t( ResolveBind::eSpcRgh ), 0u );
 			auto c3d_mapEmsTrn = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eEmsTrn ), uint32_t( ResolveBind::eEmsTrn ), 0u );
-			auto c3d_mapData = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eData ), uint32_t( ResolveBind::eData ), 0u );
+			auto c3d_mapClrCot = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eClrCot ), uint32_t( ResolveBind::eClrCot ), 0u );
+			auto c3d_mapCcrTrs = writer.declCombinedImg< FImg2DRg32 >( getTextureName( DsTexture::eCcrTrs ), uint32_t( ResolveBind::eCcrTrs ), 0u );
 			auto c3d_mapSsao = writer.declCombinedImg< FImg2DRg32 >( "c3d_mapSsao", uint32_t( ResolveBind::eSsao ), 0u, config.hasSsao );
 			auto c3d_mapBrdf = writer.declCombinedImg< FImg2DRg32 >( "c3d_mapBrdf", uint32_t( ResolveBind::eBrdf ), 0u );
 			auto c3d_mapLightDiffuse = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapLightDiffuse", uint32_t( ResolveBind::eDirectDiffuse ), 0u );
 			auto c3d_mapLightSpecular = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapLightSpecular", uint32_t( ResolveBind::eDirectSpecular ), 0u );
 			auto c3d_mapLightScattering = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapLightScattering", uint32_t( ResolveBind::eDirectScattering ), 0u );
+			auto c3d_mapLightCoatingSpecular = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapLightCoatingSpecular", uint32_t( ResolveBind::eDirectCoatingSpecular ), 0u );
 			auto c3d_mapLightIndirectDiffuse = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapLightIndirectDiffuse", uint32_t( ResolveBind::eIndirectDiffuse ), 0u, config.hasDiffuseGi );
 			auto c3d_mapLightIndirectSpecular = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapLightIndirectSpecular", uint32_t( ResolveBind::eIndirectSpecular ), 0u, config.hasSpecularGi );
 
@@ -230,6 +234,10 @@ namespace castor3d
 						, c3d_mapNmlOcc.lod( vtx_texture, 0.0_f ) );
 					auto colMtl = writer.declLocale( "colMtl"
 						, c3d_mapColMtl.lod( vtx_texture, 0.0_f ) );
+					auto clrCot = writer.declLocale( "clrCot"
+						, c3d_mapClrCot.lod( vtx_texture, 0.0_f ) );
+					auto ccrTrs = writer.declLocale( "ccrTrs"
+						, c3d_mapCcrTrs.lod( vtx_texture, 0.0_f ) );
 					auto envMapIndex = writer.declLocale( "envMapIndex"
 						, modelData.getEnvMapIndex() );
 					auto depth = writer.declLocale( "depth"
@@ -256,11 +264,13 @@ namespace castor3d
 								: nmlOcc.w() ) );
 						auto emissive = writer.declLocale( "emissive"
 							, emsTrn.xyz() );
-						materials.fill( albedo, spcRgh, colMtl, material );
+						materials.fill( albedo, spcRgh, colMtl, ccrTrs.y(), material );
 						auto components = writer.declLocale( "components"
 							, shader::BlendComponents{ materials
 								, material
-								, surface } );
+								, surface
+								, clrCot } );
+						components.clearcoatRoughness = ccrTrs.x();
 
 						auto directAmbient = writer.declLocale( "directAmbient"
 							, c3d_sceneData.ambientLight );
@@ -270,6 +280,8 @@ namespace castor3d
 							, c3d_mapLightSpecular.lod( vtx_texture, 0.0_f ).xyz() );
 						auto lightScattering = writer.declLocale( "lightScattering"
 							, c3d_mapLightScattering.lod( vtx_texture, 0.0_f ).xyz() );
+						auto lightCoatingSpecular = writer.declLocale( "lightCoatingSpecular"
+							, c3d_mapLightCoatingSpecular.lod( vtx_texture, 0.0_f ).xyz() );
 						auto lightIndirectDiffuse = writer.declLocale( "lightIndirectDiffuse"
 							, c3d_mapLightIndirectDiffuse.lod( vtx_texture, 0.0_f ).rgb()
 							, config.hasDiffuseGi );
@@ -283,6 +295,8 @@ namespace castor3d
 							, vec3( 0.0_f ) );
 						auto refracted = writer.declLocale( "refracted"
 							, vec3( 0.0_f ) );
+						auto coatReflected = writer.declLocale( "coatReflected"
+							, vec3( 0.0_f ) );
 						reflections->computeCombined( components
 							, incident
 							, *backgroundModel
@@ -291,7 +305,8 @@ namespace castor3d
 							, components.refractionRatio
 							, directAmbient
 							, reflected
-							, refracted );
+							, refracted
+							, coatReflected );
 						auto indirectAmbient = writer.declLocale( "indirectAmbient"
 							, config.hasDiffuseGi ? lightIndirectDiffuse : vec3( 1.0_f ) );
 						auto indirectDiffuse = writer.declLocale( "indirectDiffuse"
@@ -316,13 +331,15 @@ namespace castor3d
 								, indirectDiffuse
 								, lightSpecular
 								, lightScattering
+								, lightCoatingSpecular
 								, config.hasSpecularGi ? lightIndirectSpecular : vec3( 0.0_f )
 								, directAmbient
 								, indirectAmbient
 								, occlusion
 								, emissive
 								, reflected
-								, refracted )
+								, refracted
+								, coatReflected )
 							, 1.0_f );
 					}
 					ELSE
@@ -363,6 +380,7 @@ namespace castor3d
 		, Texture const & lightDiffuse
 		, Texture const & lightSpecular
 		, Texture const & lightScattering
+		, Texture const & lightCoatingSpecular
 		, Texture const & lightIndirectDiffuse
 		, Texture const & lightIndirectSpecular
 		, Texture const & result
@@ -383,6 +401,7 @@ namespace castor3d
 		, m_subsurfaceScattering{ subsurfaceScattering }
 		, m_lightSpecular{ lightSpecular }
 		, m_lightScattering{ lightScattering }
+		, m_lightCoatingSpecular{ lightCoatingSpecular }
 		, m_lightIndirectDiffuse{ lightIndirectDiffuse }
 		, m_lightIndirectSpecular{ lightIndirectSpecular }
 	{
@@ -464,8 +483,10 @@ namespace castor3d
 			, uint32_t( dropqrslv::ResolveBind::eSpcRgh ) );
 		pass.addSampledView( m_opaquePassResult[DsTexture::eEmsTrn].sampledViewId
 			, uint32_t( dropqrslv::ResolveBind::eEmsTrn ) );
-		pass.addSampledView( m_opaquePassResult[DsTexture::eData].sampledViewId
-			, uint32_t( dropqrslv::ResolveBind::eData ) );
+		pass.addSampledView( m_opaquePassResult[DsTexture::eClrCot].sampledViewId
+			, uint32_t( dropqrslv::ResolveBind::eClrCot ) );
+		pass.addSampledView( m_opaquePassResult[DsTexture::eCcrTrs].sampledViewId
+			, uint32_t( dropqrslv::ResolveBind::eCcrTrs ) );
 		pass.addSampledView( m_ssaoResult.sampledViewId
 			, uint32_t( dropqrslv::ResolveBind::eSsao ) );
 		pass.addSampledView( m_device.renderSystem.getPrefilteredBrdfTexture().sampledViewId
@@ -480,6 +501,8 @@ namespace castor3d
 			, uint32_t( dropqrslv::ResolveBind::eDirectSpecular ) );
 		pass.addSampledView( m_lightScattering.sampledViewId
 			, uint32_t( dropqrslv::ResolveBind::eDirectScattering ) );
+		pass.addSampledView( m_lightCoatingSpecular.sampledViewId
+			, uint32_t( dropqrslv::ResolveBind::eDirectCoatingSpecular ) );
 		pass.addSampledView( m_lightIndirectDiffuse.sampledViewId
 			, uint32_t( dropqrslv::ResolveBind::eIndirectDiffuse ) );
 		pass.addSampledView( m_lightIndirectSpecular.sampledViewId
