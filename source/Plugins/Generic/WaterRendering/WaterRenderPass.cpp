@@ -695,7 +695,9 @@ namespace water
 						, vec3( 0.0_f ) );
 					auto lightScattering = writer.declLocale( "lightScattering"
 						, vec3( 0.0_f ) );
-					shader::OutputComponents output{ lightDiffuse, lightSpecular, lightScattering };
+					auto lightCoatingSpecular = writer.declLocale( "lightCoatingSpecular"
+						, vec3( 0.0_f ) );
+					shader::OutputComponents output{ lightDiffuse, lightSpecular, lightScattering, lightCoatingSpecular };
 					lightingModel->computeCombined( components
 						, c3d_sceneData
 						, *backgroundModel

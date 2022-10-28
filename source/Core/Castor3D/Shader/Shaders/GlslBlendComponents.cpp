@@ -32,15 +32,28 @@ namespace castor3d::shader
 		, thicknessFactor{ getMember( "thicknessFactor", 0.0_f ) }
 		, attenuationDistance{ getMember( "attenuationDistance", 0.0_f ) }
 		, attenuationColour{ getMember( "attenuationColour", vec3( 0.0_f ) ) }
+		, clearcoatFactor{ getMember( "clearcoatFactor", 0.0_f ) }
+		, clearcoatNormal{ getMember( "clearcoatNormal", vec3( 0.0_f ) ) }
+		, clearcoatRoughness{ getMember( "clearcoatRoughness", 0.0_f ) }
 		, shininess{ computeShininessFromRoughness( roughness ) }
 	{
 	}
-	
+
 	BlendComponents::BlendComponents( Materials const & materials
 		, Material const & material
 		, SurfaceBase const & surface )
 		: BlendComponents{ *materials.getWriter()
-			, makeInit( materials, material, surface )
+			, makeInit( materials, material, surface, nullptr )
+			, true }
+	{
+	}
+
+	BlendComponents::BlendComponents( Materials const & materials
+		, Material const & material
+		, SurfaceBase const & surface
+		, sdw::Vec4 const & clrCot )
+		: BlendComponents{ *materials.getWriter()
+			, makeInit( materials, material, surface, &clrCot )
 			, true }
 	{
 	}
@@ -72,13 +85,14 @@ namespace castor3d::shader
 		, Materials const & materials
 		, Material const & material
 		, sdw::StructInstance const & surface
+		, sdw::Vec4 const * clrCot
 		, sdw::expr::ExprList & inits )
 	{
 		auto result = cache.getStruct( ast::type::MemoryLayout::eC, "C3D_BlendComponents" );
 
 		if ( result->empty() )
 		{
-			BlendComponents::fillType( *result, materials, material, surface, inits );
+			BlendComponents::fillType( *result, materials, material, surface, clrCot, inits );
 		}
 
 		return result;
@@ -127,9 +141,10 @@ namespace castor3d::shader
 		, Materials const & materials
 		, Material const & material
 		, sdw::StructInstance const & surface
+		, sdw::Vec4 const * clrCot
 		, sdw::expr::ExprList & inits )
 	{
-		materials.getPassShaders().fillComponents( type, materials, material, surface, inits );
+		materials.getPassShaders().fillComponents( type, materials, material, surface, clrCot, inits );
 	}
 
 	void BlendComponents::fillInit( sdw::type::BaseStruct const & components
@@ -143,9 +158,10 @@ namespace castor3d::shader
 		, Materials const & materials
 		, Material const & material
 		, sdw::StructInstance const & surface
+		, sdw::Vec4 const * clrCot
 		, sdw::expr::ExprList & inits )
 	{
-		materials.getPassShaders().fillComponentsInits( components, materials, material, surface, inits );
+		materials.getPassShaders().fillComponentsInits( components, materials, material, surface, clrCot, inits );
 	}
 
 	sdw::expr::ExprPtr BlendComponents::makeInit( Materials const & materials
@@ -170,15 +186,16 @@ namespace castor3d::shader
 
 	sdw::expr::ExprPtr BlendComponents::makeInit( Materials const & materials
 		, Material const & material
-		, sdw::StructInstance const & surface )
+		, sdw::StructInstance const & surface
+		, sdw::Vec4 const * clrCot )
 	{
 		auto & writer = *materials.getWriter();
 		sdw::expr::ExprList initializers;
-		auto type = BlendComponents::makeType( writer.getTypesCache(), materials, material, surface, initializers );
+		auto type = BlendComponents::makeType( writer.getTypesCache(), materials, material, surface, clrCot, initializers );
 
 		if ( initializers.empty() )
 		{
-			BlendComponents::fillInit( *type, materials, material, surface, initializers );
+			BlendComponents::fillInit( *type, materials, material, surface, clrCot, initializers );
 		}
 
 		return sdw::makeAggrInit( type, std::move( initializers ) );

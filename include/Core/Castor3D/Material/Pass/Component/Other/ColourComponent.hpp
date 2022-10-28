@@ -30,6 +30,7 @@ namespace castor3d
 				, shader::Materials const & materials
 				, shader::Material const * material
 				, sdw::StructInstance const * surface
+				, sdw::Vec4 const * clrCot
 				, sdw::expr::ExprList & inits )const override;
 			C3D_API void blendComponents( shader::Materials const & materials
 				, sdw::Float const & passMultiplier
@@ -50,6 +51,7 @@ namespace castor3d
 			C3D_API void updateMaterial( sdw::Vec3 const & albedo
 				, sdw::Vec4 const & spcRgh
 				, sdw::Vec4 const & colMtl
+				, sdw::Float const & transm
 				, shader::Material & material )const override;
 		};
 

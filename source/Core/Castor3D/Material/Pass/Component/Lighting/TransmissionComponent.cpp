@@ -82,6 +82,7 @@ namespace castor3d
 		, shader::Materials const & materials
 		, shader::Material const * material
 		, sdw::StructInstance const * surface
+		, sdw::Vec4 const * clrCot
 		, sdw::expr::ExprList & inits )const
 	{
 		if ( !components.hasMember( "transmission" ) )
@@ -128,6 +129,15 @@ namespace castor3d
 			inits.emplace_back( sdw::makeExpr( 0.0_f ) );
 			inits.emplace_back( sdw::makeExpr( 0_u ) );
 		}
+	}
+
+	void TransmissionComponent::MaterialShader::updateMaterial( sdw::Vec3 const & albedo
+		, sdw::Vec4 const & spcRgh
+		, sdw::Vec4 const & colMtl
+		, sdw::Float const & transm
+		, shader::Material & material )const
+	{
+		material.getMember< sdw::Float >( "transmission", true ) = transm;
 	}
 
 	//*********************************************************************************************

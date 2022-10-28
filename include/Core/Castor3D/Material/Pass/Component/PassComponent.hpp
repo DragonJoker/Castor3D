@@ -133,6 +133,7 @@ namespace castor3d
 				, Materials const & materials
 				, Material const * material
 				, sdw::StructInstance const * surface
+				, sdw::Vec4 const * clrCot
 				, sdw::expr::ExprList & inits )const
 			{
 			}
@@ -448,6 +449,7 @@ namespace castor3d
 			C3D_API virtual void updateMaterial( sdw::Vec3 const & colour
 				, sdw::Vec4 const & spcRgh
 				, sdw::Vec4 const & colMtl
+				, sdw::Float const & transm
 				, Material & material )const
 			{
 			}

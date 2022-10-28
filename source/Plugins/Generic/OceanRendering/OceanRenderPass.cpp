@@ -1196,7 +1196,9 @@ namespace ocean
 						, vec3( 0.0_f ) );
 					auto lightScattering = writer.declLocale( "lightScattering"
 						, vec3( 0.0_f ) );
-					shader::OutputComponents output{ lightDiffuse, lightSpecular, lightScattering };
+					auto lightCoatingSpecular = writer.declLocale( "lightCoatingSpecular"
+						, vec3( 0.0_f ) );
+					shader::OutputComponents output{ lightDiffuse, lightSpecular, lightScattering, lightCoatingSpecular };
 					auto rastComponents = writer.declLocale( "rastComponents"
 						, shader::BlendComponents{ components, materials } );
 					lightingModel->computeCombined( rastComponents

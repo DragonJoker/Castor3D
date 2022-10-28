@@ -195,6 +195,7 @@ namespace castor3d
 		, shader::Materials const & materials
 		, shader::Material const * material
 		, sdw::StructInstance const * surface
+		, sdw::Vec4 const * clrCot
 		, sdw::expr::ExprList & inits )const
 	{
 		if ( !components.hasMember( "sssProfileIndex" ) )

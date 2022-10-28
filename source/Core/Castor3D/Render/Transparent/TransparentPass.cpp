@@ -329,7 +329,9 @@ namespace castor3d
 						, vec3( 0.0_f ) );
 					auto lightScattering = writer.declLocale( "lightScattering"
 						, vec3( 0.0_f ) );
-					shader::OutputComponents output{ lightDiffuse, lightSpecular, lightScattering };
+					auto lightCoatingSpecular = writer.declLocale( "lightCoatingSpecular"
+						, vec3( 0.0_f ) );
+					shader::OutputComponents output{ lightDiffuse, lightSpecular, lightScattering, lightCoatingSpecular };
 					auto surface = writer.declLocale( "surface"
 						, shader::Surface{ in.fragCoord.xyz()
 							, in.viewPosition.xyz()
@@ -351,6 +353,8 @@ namespace castor3d
 						, vec3( 0.0_f ) );
 					auto refracted = writer.declLocale( "refracted"
 						, vec3( 0.0_f ) );
+					auto coatReflected = writer.declLocale( "coatReflected"
+						, vec3( 0.0_f ) );
 					auto sceneUv = writer.declLocale( "sceneUv"
 						, in.fragCoord.xy() / c3d_sceneData.renderSize );
 
@@ -371,7 +375,8 @@ namespace castor3d
 						, components.refractionRatio
 						, directAmbient
 						, reflected
-						, refracted );
+						, refracted
+						, coatReflected );
 
 					auto indirectOcclusion = writer.declLocale( "indirectOcclusion"
 						, 1.0_f );
@@ -404,11 +409,13 @@ namespace castor3d
 						, indirectDiffuse
 						, lightSpecular
 						, lightScattering
+						, lightCoatingSpecular
 						, lightIndirectSpecular
 						, directAmbient
 						, indirectAmbient
 						, reflected
-						, refracted );
+						, refracted
+						, coatReflected );
 				}
 				ELSE
 				{

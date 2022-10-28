@@ -59,13 +59,15 @@ namespace castor3d::shader
 		, sdw::Vec3 const & indirectDiffuse
 		, sdw::Vec3 const & directSpecular
 		, sdw::Vec3 const & directScattering
+		, sdw::Vec3 const & directCoatingSpecular
 		, sdw::Vec3 const & indirectSpecular
 		, sdw::Vec3 const & directAmbient
 		, sdw::Vec3 const & indirectAmbient
 		, sdw::Float const & ambientOcclusion
 		, sdw::Vec3 const & emissive
 		, sdw::Vec3 reflected
-		, sdw::Vec3 refracted )
+		, sdw::Vec3 refracted
+		, sdw::Vec3 coatReflected )
 	{
 		IF( m_writer, components.refractionRatio != 0.0_f
 			&& components.hasTransmission == 0_u )
@@ -101,13 +103,15 @@ namespace castor3d::shader
 			, indirectDiffuse
 			, directSpecular
 			, directScattering
+			, directCoatingSpecular
 			, indirectSpecular
 			, directAmbient
 			, indirectAmbient
 			, ambientOcclusion
 			, emissive
-			, reflected
-			, refracted );
+			, std::move( reflected )
+			, std::move( refracted )
+			, std::move( coatReflected ) );
 	}
 
 	sdw::Vec3 LightingModel::combine( BlendComponents const & components
@@ -116,11 +120,13 @@ namespace castor3d::shader
 		, sdw::Vec3 const & indirectDiffuse
 		, sdw::Vec3 const & directSpecular
 		, sdw::Vec3 const & directScattering
+		, sdw::Vec3 const & directCoatingSpecular
 		, sdw::Vec3 const & indirectSpecular
 		, sdw::Vec3 const & directAmbient
 		, sdw::Vec3 const & indirectAmbient
 		, sdw::Vec3 reflected
-		, sdw::Vec3 refracted )
+		, sdw::Vec3 refracted
+		, sdw::Vec3 coatReflected )
 	{
 		return combine( components
 			, incident
@@ -128,13 +134,15 @@ namespace castor3d::shader
 			, indirectDiffuse
 			, directSpecular
 			, directScattering
+			, directCoatingSpecular
 			, indirectSpecular
 			, directAmbient
 			, indirectAmbient
 			, components.occlusion
 			, components.emissive
 			, std::move( reflected )
-			, std::move( refracted ) );
+			, std::move( refracted )
+			, std::move( coatReflected ) );
 	}
 
 	void LightingModel::declareModel( uint32_t lightsBufBinding

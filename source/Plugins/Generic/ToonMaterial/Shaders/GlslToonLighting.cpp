@@ -88,7 +88,8 @@ namespace toon::shader
 				{
 					c3d::OutputComponents output{ m_writer.declLocale( "lightDiffuse", vec3( 0.0_f ) )
 						, m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) )
-						, m_writer.declLocale( "lightScattering", vec3( 0.0_f ) ) };
+						, m_writer.declLocale( "lightScattering", vec3( 0.0_f ) )
+						, m_writer.declLocale( "lightCoatingSpecular", vec3( 0.0_f ) ) };
 					auto lightDirection = m_writer.declLocale( "lightDirection"
 						, normalize( light.direction ) );
 					doComputeLight( light.base
@@ -154,6 +155,7 @@ namespace toon::shader
 
 								output.m_diffuse *= shadowFactor;
 								output.m_specular *= shadowFactor;
+								output.m_coatingSpecular *= shadowFactor;
 							}
 							FI;
 
@@ -171,6 +173,7 @@ namespace toon::shader
 											, light.cascadeCount ) );
 									output.m_diffuse += volumetric * light.base.intensity.x() * light.base.colour;
 									output.m_specular += volumetric * light.base.intensity.y() * light.base.colour;
+									output.m_coatingSpecular += volumetric * light.base.intensity.y() * light.base.colour;
 								}
 								FI;
 							}
@@ -181,6 +184,7 @@ namespace toon::shader
 					parentOutput.m_diffuse += max( vec3( 0.0_f ), output.m_diffuse );
 					parentOutput.m_specular += max( vec3( 0.0_f ), output.m_specular );
 					parentOutput.m_scattering += max( vec3( 0.0_f ), output.m_scattering );
+					parentOutput.m_coatingSpecular += max( vec3( 0.0_f ), output.m_coatingSpecular );
 				}
 				, c3d::InDirectionalLight( m_writer, "light" )
 				, c3d::InBlendComponents{ m_writer, "component", m_materials }
@@ -218,7 +222,8 @@ namespace toon::shader
 				{
 					c3d::OutputComponents output{ m_writer.declLocale( "lightDiffuse", vec3( 0.0_f ) )
 						, m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) )
-						, m_writer.declLocale( "lightScattering", vec3( 0.0_f ) ) };
+						, m_writer.declLocale( "lightScattering", vec3( 0.0_f ) )
+						, m_writer.declLocale( "lightCoatingSpecular", vec3( 0.0_f ) ) };
 					auto lightToVertex = m_writer.declLocale( "lightToVertex"
 						, surface.worldPosition.xyz() - light.position );
 					auto distance = m_writer.declLocale( "distance"
@@ -245,6 +250,7 @@ namespace toon::shader
 									, light.position ) );
 							output.m_diffuse *= shadowFactor;
 							output.m_specular *= shadowFactor;
+							output.m_coatingSpecular *= shadowFactor;
 						}
 						FI;
 					}
@@ -254,9 +260,11 @@ namespace toon::shader
 					output.m_diffuse = output.m_diffuse / attenuation;
 					output.m_specular = output.m_specular / attenuation;
 					output.m_scattering = output.m_scattering / attenuation;
+					output.m_coatingSpecular = output.m_coatingSpecular / attenuation;
 					parentOutput.m_diffuse += max( vec3( 0.0_f ), output.m_diffuse );
 					parentOutput.m_specular += max( vec3( 0.0_f ), output.m_specular );
 					parentOutput.m_scattering += max( vec3( 0.0_f ), output.m_scattering );
+					parentOutput.m_coatingSpecular += max( vec3( 0.0_f ), output.m_coatingSpecular );
 				}
 				, c3d::InPointLight( m_writer, "light" )
 				, c3d::InBlendComponents{ m_writer, "component", m_materials }
@@ -305,7 +313,8 @@ namespace toon::shader
 							, length( lightToVertex ) );
 						c3d::OutputComponents output{ m_writer.declLocale( "lightDiffuse", vec3( 0.0_f ) )
 							, m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) )
-							, m_writer.declLocale( "lightScattering", vec3( 0.0_f ) ) };
+							, m_writer.declLocale( "lightScattering", vec3( 0.0_f ) )
+							, m_writer.declLocale( "lightCoatingSpecular", vec3( 0.0_f ) ) };
 						doComputeLight( light.base
 							, components
 							, surface
@@ -327,6 +336,7 @@ namespace toon::shader
 										, lightToVertex ) );
 								output.m_diffuse *= shadowFactor;
 								output.m_specular *= shadowFactor;
+								output.m_coatingSpecular *= shadowFactor;
 							}
 							FI;
 						}
@@ -337,9 +347,11 @@ namespace toon::shader
 						output.m_diffuse = spotFactor * output.m_diffuse / attenuation;
 						output.m_specular = spotFactor * output.m_specular / attenuation;
 						output.m_scattering = spotFactor * output.m_scattering / attenuation;
+						output.m_coatingSpecular = spotFactor * output.m_coatingSpecular / attenuation;
 						parentOutput.m_diffuse += max( vec3( 0.0_f ), output.m_diffuse );
 						parentOutput.m_specular += max( vec3( 0.0_f ), output.m_specular );
 						parentOutput.m_scattering += max( vec3( 0.0_f ), output.m_scattering );
+						parentOutput.m_coatingSpecular += max( vec3( 0.0_f ), output.m_coatingSpecular );
 					}
 					FI;
 				}
@@ -773,7 +785,8 @@ namespace toon::shader
 				{
 					c3d::OutputComponents output{ m_writer.declLocale( "lightDiffuse", vec3( 0.0_f ) )
 						, m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) )
-						, m_writer.declLocale( "lightScattering", vec3( 0.0_f ) ) };
+						, m_writer.declLocale( "lightScattering", vec3( 0.0_f ) )
+						, m_writer.declLocale( "lightCoatingSpecular", vec3( 0.0_f ) ) };
 					auto lightDirection = m_writer.declLocale( "lightDirection"
 						, normalize( -light.direction ) );
 					m_cookTorrance.computeAON( light.base
@@ -842,6 +855,7 @@ namespace toon::shader
 
 								output.m_diffuse *= shadowFactor;
 								output.m_specular *= shadowFactor;
+								output.m_coatingSpecular *= shadowFactor;
 							}
 							FI;
 
@@ -859,6 +873,7 @@ namespace toon::shader
 											, light.cascadeCount ) );
 									output.m_diffuse += volumetric * light.base.intensity.x() * light.base.colour;
 									output.m_specular += volumetric * light.base.intensity.y() * light.base.colour;
+									output.m_coatingSpecular += volumetric * light.base.intensity.y() * light.base.colour;
 								}
 								FI;
 							}
@@ -868,21 +883,25 @@ namespace toon::shader
 							{
 								output.m_diffuse.rgb() *= vec3( 1.0_f, 0.25f, 0.25f );
 								output.m_specular.rgb() *= vec3( 1.0_f, 0.25f, 0.25f );
+								output.m_coatingSpecular.rgb() *= vec3( 1.0_f, 0.25f, 0.25f );
 							}
 							ELSEIF( cascadeIndex == 1_u )
 							{
 								output.m_diffuse.rgb() *= vec3( 0.25_f, 1.0f, 0.25f );
 								output.m_specular.rgb() *= vec3( 0.25_f, 1.0f, 0.25f );
+								output.m_coatingSpecular.rgb() *= vec3( 0.25_f, 1.0f, 0.25f );
 							}
 							ELSEIF( cascadeIndex == 2_u )
 							{
 								output.m_diffuse.rgb() *= vec3( 0.25_f, 0.25f, 1.0f );
 								output.m_specular.rgb() *= vec3( 0.25_f, 0.25f, 1.0f );
+								output.m_coatingSpecular.rgb() *= vec3( 0.25_f, 0.25f, 1.0f );
 							}
 							ELSE
 							{
 								output.m_diffuse.rgb() *= vec3( 1.0_f, 1.0f, 0.25f );
 								output.m_specular.rgb() *= vec3( 1.0_f, 1.0f, 0.25f );
+								output.m_coatingSpecular.rgb() *= vec3( 1.0_f, 1.0f, 0.25f );
 							}
 							FI;
 #endif
@@ -893,6 +912,7 @@ namespace toon::shader
 					parentOutput.m_diffuse += max( vec3( 0.0_f ), output.m_diffuse );
 					parentOutput.m_specular += max( vec3( 0.0_f ), output.m_specular );
 					parentOutput.m_scattering += max( vec3( 0.0_f ), output.m_scattering );
+					parentOutput.m_coatingSpecular += max( vec3( 0.0_f ), output.m_coatingSpecular );
 				}
 				, c3d::InDirectionalLight( m_writer, "light" )
 				, c3d::InBlendComponents{ m_writer, "component", m_materials }
@@ -930,7 +950,8 @@ namespace toon::shader
 				{
 					c3d::OutputComponents output{ m_writer.declLocale( "lightDiffuse", vec3( 0.0_f ) )
 						, m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) )
-						, m_writer.declLocale( "lightScattering", vec3( 0.0_f ) ) };
+						, m_writer.declLocale( "lightScattering", vec3( 0.0_f ) )
+						, m_writer.declLocale( "lightCoatingSpecular", vec3( 0.0_f ) ) };
 					auto lightToVertex = m_writer.declLocale( "lightToVertex"
 						, light.position - surface.worldPosition.xyz() );
 					auto distance = m_writer.declLocale( "distance"
@@ -960,6 +981,7 @@ namespace toon::shader
 									, light.position ) );
 							output.m_diffuse *= shadowFactor;
 							output.m_specular *= shadowFactor;
+							output.m_coatingSpecular *= shadowFactor;
 						}
 						FI;
 					}
@@ -969,9 +991,11 @@ namespace toon::shader
 					output.m_diffuse = output.m_diffuse / attenuation;
 					output.m_specular = output.m_specular / attenuation;
 					output.m_scattering = output.m_scattering / attenuation;
+					output.m_coatingSpecular = output.m_coatingSpecular / attenuation;
 					parentOutput.m_diffuse += max( vec3( 0.0_f ), output.m_diffuse );
 					parentOutput.m_specular += max( vec3( 0.0_f ), output.m_specular );
 					parentOutput.m_scattering += max( vec3( 0.0_f ), output.m_scattering );
+					parentOutput.m_coatingSpecular += max( vec3( 0.0_f ), output.m_coatingSpecular );
 				}
 				, c3d::InPointLight( m_writer, "light" )
 				, c3d::InBlendComponents{ m_writer, "component", m_materials }
@@ -1020,7 +1044,8 @@ namespace toon::shader
 							, length( lightToVertex ) );
 						c3d::OutputComponents output{ m_writer.declLocale( "lightDiffuse", vec3( 0.0_f ) )
 							, m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) )
-							, m_writer.declLocale( "lightScattering", vec3( 0.0_f ) ) };
+							, m_writer.declLocale( "lightScattering", vec3( 0.0_f ) )
+							, m_writer.declLocale( "lightCoatingSpecular", vec3( 0.0_f ) ) };
 						m_cookTorrance.computeAON( light.base
 							, worldEye
 							, lightDirection
@@ -1045,6 +1070,7 @@ namespace toon::shader
 										, -lightToVertex ) );
 								output.m_diffuse *= shadowFactor;
 								output.m_specular *= shadowFactor;
+								output.m_coatingSpecular *= shadowFactor;
 							}
 							FI;
 						}
@@ -1055,9 +1081,11 @@ namespace toon::shader
 						output.m_diffuse = spotFactor * output.m_diffuse / attenuation;
 						output.m_specular = spotFactor * output.m_specular / attenuation;
 						output.m_scattering = spotFactor * output.m_scattering / attenuation;
+						output.m_coatingSpecular = spotFactor * output.m_coatingSpecular / attenuation;
 						parentOutput.m_diffuse += max( vec3( 0.0_f ), output.m_diffuse );
 						parentOutput.m_specular += max( vec3( 0.0_f ), output.m_specular );
 						parentOutput.m_scattering += max( vec3( 0.0_f ), output.m_scattering );
+						parentOutput.m_coatingSpecular += max( vec3( 0.0_f ), output.m_coatingSpecular );
 					}
 					FI;
 				}

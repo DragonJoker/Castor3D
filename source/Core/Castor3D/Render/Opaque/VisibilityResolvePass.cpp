@@ -83,7 +83,8 @@ namespace castor3d
 			eOutColMtl,
 			eOutSpcRgh,
 			eOutEmsTrn,
-			eOutData,
+			eOutClrCot,
+			eOutCcrTrs,
 		};
 
 		enum VtxBindings : uint32_t
@@ -812,7 +813,8 @@ namespace castor3d
 					, sdw::Vec4 outColMtl
 					, sdw::Vec4 outSpcRgh
 					, sdw::Vec4 outEmsTrn
-					, sdw::Vec4 outData )
+					, sdw::Vec4 outClrCot
+					, sdw::Vec2 outCcrTrs )
 				{
 					IF( writer, pipelineId != pipeline )
 					{
@@ -849,7 +851,8 @@ namespace castor3d
 					outNmlOcc = vec4( components.normal, components.occlusion );
 					passShaders.updateOutputs( components, surface, outSpcRgh, outColMtl );
 					outEmsTrn = vec4( components.emissive, components.transmittance );
-					outData = vec4( components.transmission, 0.0_f, 0.0_f, 0.0_f );
+					outClrCot = vec4( components.clearcoatNormal, components.clearcoatFactor );
+					outCcrTrs = vec2( components.clearcoatRoughness, components.transmittance );
 					writer.returnStmt( 1_b );
 				}
 				, sdw::InIVec2{ writer, "ipixel" }
@@ -860,7 +863,8 @@ namespace castor3d
 				, sdw::OutVec4{ writer, "outColMtl" }
 				, sdw::OutVec4{ writer, "outSpcRgh" }
 				, sdw::OutVec4{ writer, "outEmsTrn" }
-				, sdw::OutVec4{ writer, "outData" } );
+				, sdw::OutVec4{ writer, "outClrCot" }
+				, sdw::OutVec2{ writer, "outCcrTrs" } );
 
 			if constexpr ( VisibilityResolvePass::useCompute )
 			{
@@ -880,7 +884,8 @@ namespace castor3d
 				auto c3d_imgOutColMtl = writer.declStorageImg< sdw::WImage2DRgba32 >( getImageName( DsTexture::eColMtl ), uint32_t( InOutBindings::eOutColMtl ), Sets::eInOuts );
 				auto c3d_imgOutSpcRgh = writer.declStorageImg< sdw::WImage2DRgba32 >( getImageName( DsTexture::eSpcRgh ), uint32_t( InOutBindings::eOutSpcRgh ), Sets::eInOuts );
 				auto c3d_imgOutEmsTrn = writer.declStorageImg< sdw::WImage2DRgba32 >( getImageName( DsTexture::eEmsTrn ), uint32_t( InOutBindings::eOutEmsTrn ), Sets::eInOuts );
-				auto c3d_imgOutData = writer.declStorageImg< sdw::WImage2DRgba32 >( "c3d_imgOutData", uint32_t( InOutBindings::eOutData ), Sets::eInOuts );
+				auto c3d_imgOutClrCot = writer.declStorageImg< sdw::WImage2DRgba32 >( getImageName( DsTexture::eClrCot ), uint32_t( InOutBindings::eOutClrCot ), Sets::eInOuts );
+				auto c3d_imgOutCcrTrs = writer.declStorageImg< sdw::WImage2DRg32 >( getImageName( DsTexture::eCcrTrs ), uint32_t( InOutBindings::eOutCcrTrs ), Sets::eInOuts );
 
 				ShaderWriter< VisibilityResolvePass::useCompute >::implementMain( writer
 					, [&]( sdw::UVec2 const & pos )
@@ -905,16 +910,18 @@ namespace castor3d
 						auto colMtl = writer.declLocale( "colMtl", vec4( 0.0_f ) );
 						auto spcRgh = writer.declLocale( "spcRgh", vec4( 0.0_f ) );
 						auto emsTrn = writer.declLocale( "emsTrn", vec4( 0.0_f ) );
-						auto data = writer.declLocale( "data", vec4( 0.0_f ) );
+						auto clrCot = writer.declLocale( "clrCot", vec4( 0.0_f ) );
+						auto ccrTrs = writer.declLocale( "ccrTrs", vec2( 0.0_f ) );
 
 						IF( writer, ( stride != 0u ? ( nodeId == billboardNodeId ) : nodeId != 0_u )
-							&& shade( ipixel, nodeId, pipeline, primitiveId, nmlOcc, colMtl, spcRgh, emsTrn, data ) )
+							&& shade( ipixel, nodeId, pipeline, primitiveId, nmlOcc, colMtl, spcRgh, emsTrn, clrCot, ccrTrs ) )
 						{
 							c3d_imgOutNmlOcc.store( ipixel, nmlOcc );
 							c3d_imgOutColMtl.store( ipixel, colMtl );
 							c3d_imgOutSpcRgh.store( ipixel, spcRgh );
 							c3d_imgOutEmsTrn.store( ipixel, emsTrn );
-							c3d_imgOutData.store( ipixel, data );
+							c3d_imgOutClrCot.store( ipixel, clrCot );
+							c3d_imgOutCcrTrs.store( ipixel, ccrTrs );
 						}
 						FI;
 					} );
@@ -926,7 +933,8 @@ namespace castor3d
 				auto c3d_imgOutColMtl = writer.declOutput< sdw::Vec4 >( getImageName( DsTexture::eColMtl ), idx++ );
 				auto c3d_imgOutSpcRgh = writer.declOutput< sdw::Vec4 >( getImageName( DsTexture::eSpcRgh ), idx++ );
 				auto c3d_imgOutEmsTrn = writer.declOutput< sdw::Vec4 >( getImageName( DsTexture::eEmsTrn ), idx++ );
-				auto c3d_imgOutData = writer.declOutput< sdw::Vec4 >( "c3d_imgOutData", idx++ );
+				auto c3d_imgOutClrCot = writer.declOutput< sdw::Vec4 >( getImageName( DsTexture::eClrCot ), idx++ );
+				auto c3d_imgOutCcrTrs = writer.declOutput< sdw::Vec2 >( getImageName( DsTexture::eCcrTrs ), idx++ );
 
 				ShaderWriter< VisibilityResolvePass::useCompute >::implementMain( writer
 					, [&]( sdw::IVec2 const & pos )
@@ -935,7 +943,8 @@ namespace castor3d
 						auto colMtl = writer.declLocale( "colMtl", vec4( 0.0_f ) );
 						auto spcRgh = writer.declLocale( "spcRgh", vec4( 0.0_f ) );
 						auto emsTrn = writer.declLocale( "emsTrn", vec4( 0.0_f ) );
-						auto data = writer.declLocale( "data", vec4( 0.0_f ) );
+						auto clrCot = writer.declLocale( "clrCot", vec4( 0.0_f ) );
+						auto ccrTrs = writer.declLocale( "ccrTrs", vec2( 0.0_f ) );
 						auto indata = writer.declLocale( "indata"
 							, c3d_imgData.load( pos ) );
 						auto nodePipelineId = writer.declLocale( "nodePipelineId"
@@ -950,7 +959,7 @@ namespace castor3d
 						if ( blend )
 						{
 							IF( writer, ( stride != 0u ? ( nodeId != billboardNodeId ) : nodeId == 0_u )
-								|| !shade( pos, nodeId, pipeline, primitiveId, nmlOcc, colMtl, spcRgh, emsTrn, data ) )
+								|| !shade( pos, nodeId, pipeline, primitiveId, nmlOcc, colMtl, spcRgh, emsTrn, clrCot, ccrTrs ) )
 							{
 								writer.demote();
 							}
@@ -960,7 +969,8 @@ namespace castor3d
 							c3d_imgOutColMtl = colMtl;
 							c3d_imgOutSpcRgh = spcRgh;
 							c3d_imgOutEmsTrn = emsTrn;
-							c3d_imgOutData = data;
+							c3d_imgOutClrCot = clrCot;
+							c3d_imgOutCcrTrs = ccrTrs;
 						}
 						else
 						{
@@ -970,9 +980,10 @@ namespace castor3d
 								c3d_imgOutColMtl = vec4( 0.0_f );
 								c3d_imgOutSpcRgh = vec4( 0.0_f );
 								c3d_imgOutEmsTrn = vec4( 0.0_f );
-								c3d_imgOutData = vec4( 0.0_f );
+								c3d_imgOutClrCot = vec4( 0.0_f );
+								c3d_imgOutCcrTrs = vec2( 0.0_f );
 							}
-							ELSEIF( !shade( pos, nodeId, pipeline, primitiveId, nmlOcc, colMtl, spcRgh, emsTrn, data ) )
+							ELSEIF( !shade( pos, nodeId, pipeline, primitiveId, nmlOcc, colMtl, spcRgh, emsTrn, clrCot, ccrTrs ) )
 							{
 								writer.demote();
 							}
@@ -982,7 +993,8 @@ namespace castor3d
 								c3d_imgOutColMtl = colMtl;
 								c3d_imgOutSpcRgh = spcRgh;
 								c3d_imgOutEmsTrn = emsTrn;
-								c3d_imgOutData = data;
+								c3d_imgOutClrCot = clrCot;
+								c3d_imgOutCcrTrs = ccrTrs;
 							}
 							FI;
 						}
@@ -1045,6 +1057,12 @@ namespace castor3d
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eOutEmsTrn
 					, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
 					, stages ) );
+				bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eOutClrCot
+					, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
+					, stages ) );
+				bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eOutCcrTrs
+					, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
+					, stages ) );
 			}
 
 			return device->createDescriptorSetLayout( name + "InOut"
@@ -1101,8 +1119,10 @@ namespace castor3d
 					, InOutBindings::eOutSpcRgh ) );
 				writes.push_back( makeDescriptorWrite( opaquePassResult[DsTexture::eEmsTrn].targetView
 					, InOutBindings::eOutEmsTrn ) );
-				writes.push_back( makeDescriptorWrite( opaquePassResult[DsTexture::eData].targetView
-					, InOutBindings::eOutData ) );
+				writes.push_back( makeDescriptorWrite( opaquePassResult[DsTexture::eClrCot].targetView
+					, InOutBindings::eOutClrCot ) );
+				writes.push_back( makeDescriptorWrite( opaquePassResult[DsTexture::eCcrTrs].targetView
+					, InOutBindings::eOutCcrTrs ) );
 			}
 
 			auto result = pool.createDescriptorSet( name + "InOut"
@@ -1359,7 +1379,16 @@ namespace castor3d
 					, srcLayout
 					, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL }
 				, { 0u
-					, getFormat( device, DsTexture::eData )
+					, getFormat( device, DsTexture::eClrCot )
+					, VK_SAMPLE_COUNT_1_BIT
+					, loadOp
+					, VK_ATTACHMENT_STORE_OP_STORE
+					, VK_ATTACHMENT_LOAD_OP_DONT_CARE
+					, VK_ATTACHMENT_STORE_OP_DONT_CARE
+					, srcLayout
+					, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL }
+				, { 0u
+					, getFormat( device, DsTexture::eCcrTrs )
 					, VK_SAMPLE_COUNT_1_BIT
 					, loadOp
 					, VK_ATTACHMENT_STORE_OP_STORE
@@ -1375,7 +1404,8 @@ namespace castor3d
 					, { 1u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL }
 					, { 2u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL }
 					, { 3u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL }
-					, { 4u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } }
+					, { 4u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL }
+					, { 5u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } }
 				, {}
 				, ashes::nullopt
 				, {} } );
@@ -1411,7 +1441,8 @@ namespace castor3d
 			fbAttaches.emplace_back( textures[DsTexture::eColMtl].targetView );
 			fbAttaches.emplace_back( textures[DsTexture::eSpcRgh].targetView );
 			fbAttaches.emplace_back( textures[DsTexture::eEmsTrn].targetView );
-			fbAttaches.emplace_back( textures[DsTexture::eData].targetView );
+			fbAttaches.emplace_back( textures[DsTexture::eClrCot].targetView );
+			fbAttaches.emplace_back( textures[DsTexture::eCcrTrs].targetView );
 			return renderPass.createFrameBuffer( name
 				, makeVkStruct< VkFramebufferCreateInfo >( 0u
 					, renderPass
@@ -1442,6 +1473,7 @@ namespace castor3d
 						, VK_BLEND_OP_ADD
 						, VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT } }}
 				: ashes::PipelineColorBlendStateCreateInfo{};
+			blendState.attachments.push_back( blendState.attachments.front() );
 			blendState.attachments.push_back( blendState.attachments.front() );
 			blendState.attachments.push_back( blendState.attachments.front() );
 			blendState.attachments.push_back( blendState.attachments.front() );
@@ -1730,38 +1762,45 @@ namespace castor3d
 			, getClearValue( DsTexture::eColMtl )
 			, getClearValue( DsTexture::eSpcRgh )
 			, getClearValue( DsTexture::eEmsTrn )
-			, getClearValue( DsTexture::eData ) };
+			, getClearValue( DsTexture::eClrCot )
+			, getClearValue( DsTexture::eCcrTrs ) };
 
 		context.getContext().vkCmdClearColorImage( commandBuffer
 			, opaqueResult[DsTexture::eNmlOcc].image
 			, VK_IMAGE_LAYOUT_GENERAL
-			, &clearValues[1u].color
+			, &clearValues[0u].color
 			, 1u
 			, &opaqueResult[DsTexture::eNmlOcc].targetViewId.data->info.subresourceRange );
 		context.getContext().vkCmdClearColorImage( commandBuffer
 			, opaqueResult[DsTexture::eColMtl].image
 			, VK_IMAGE_LAYOUT_GENERAL
-			, &clearValues[2u].color
+			, &clearValues[1u].color
 			, 1u
 			, &opaqueResult[DsTexture::eColMtl].targetViewId.data->info.subresourceRange );
 		context.getContext().vkCmdClearColorImage( commandBuffer
 			, opaqueResult[DsTexture::eSpcRgh].image
 			, VK_IMAGE_LAYOUT_GENERAL
-			, &clearValues[3u].color
+			, &clearValues[2u].color
 			, 1u
 			, &opaqueResult[DsTexture::eSpcRgh].targetViewId.data->info.subresourceRange );
 		context.getContext().vkCmdClearColorImage( commandBuffer
 			, opaqueResult[DsTexture::eEmsTrn].image
 			, VK_IMAGE_LAYOUT_GENERAL
-			, &clearValues[4u].color
+			, &clearValues[3u].color
 			, 1u
 			, &opaqueResult[DsTexture::eEmsTrn].targetViewId.data->info.subresourceRange );
 		context.getContext().vkCmdClearColorImage( commandBuffer
-			, opaqueResult[DsTexture::eData].image
+			, opaqueResult[DsTexture::eClrCot].image
+			, VK_IMAGE_LAYOUT_GENERAL
+			, &clearValues[4u].color
+			, 1u
+			, &opaqueResult[DsTexture::eClrCot].targetViewId.data->info.subresourceRange );
+		context.getContext().vkCmdClearColorImage( commandBuffer
+			, opaqueResult[DsTexture::eCcrTrs].image
 			, VK_IMAGE_LAYOUT_GENERAL
 			, &clearValues[5u].color
 			, 1u
-			, &opaqueResult[DsTexture::eData].targetViewId.data->info.subresourceRange );
+			, &opaqueResult[DsTexture::eCcrTrs].targetViewId.data->info.subresourceRange );
 		bool first = true;
 
 		for ( auto & pipelineIt : m_activePipelines )
@@ -1835,7 +1874,9 @@ namespace castor3d
 			, crg::makeLayoutState( VK_IMAGE_LAYOUT_GENERAL ) );
 		context.setLayoutState( opaqueResult[DsTexture::eEmsTrn].targetViewId
 			, crg::makeLayoutState( VK_IMAGE_LAYOUT_GENERAL ) );
-		context.setLayoutState( opaqueResult[DsTexture::eData].targetViewId
+		context.setLayoutState( opaqueResult[DsTexture::eClrCot].targetViewId
+			, crg::makeLayoutState( VK_IMAGE_LAYOUT_GENERAL ) );
+		context.setLayoutState( opaqueResult[DsTexture::eCcrTrs].targetViewId
 			, crg::makeLayoutState( VK_IMAGE_LAYOUT_GENERAL ) );
 	}
 
@@ -1859,7 +1900,8 @@ namespace castor3d
 					, getClearValue( DsTexture::eColMtl )
 					, getClearValue( DsTexture::eSpcRgh )
 					, getClearValue( DsTexture::eEmsTrn )
-					, getClearValue( DsTexture::eData ) };
+					, getClearValue( DsTexture::eClrCot )
+					, getClearValue( DsTexture::eCcrTrs ) };
 				auto & extent = m_parent->getNormal().getExtent();
 				VkRenderPassBeginInfo beginInfo{ VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO
 					, nullptr
@@ -1977,7 +2019,9 @@ namespace castor3d
 			, crg::makeLayoutState( VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL ) );
 		context.setLayoutState( opaqueResult[DsTexture::eEmsTrn].targetViewId
 			, crg::makeLayoutState( VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL ) );
-		context.setLayoutState( opaqueResult[DsTexture::eData].targetViewId
+		context.setLayoutState( opaqueResult[DsTexture::eClrCot].targetViewId
+			, crg::makeLayoutState( VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL ) );
+		context.setLayoutState( opaqueResult[DsTexture::eCcrTrs].targetViewId
 			, crg::makeLayoutState( VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL ) );
 	}
 

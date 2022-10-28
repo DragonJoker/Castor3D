@@ -88,6 +88,27 @@ namespace castor3d::shader
 			, output );
 	}
 
+	sdw::RetVec3 CookTorranceBRDF::computeSpecular( Light const & light
+		, sdw::Vec3 const & worldEye
+		, sdw::Vec3 const & direction
+		, sdw::Vec3 const & specular
+		, sdw::Float const & metalness
+		, sdw::Float const & roughness
+		, sdw::Vec3 const & position
+		, sdw::Vec3 const & normal )
+	{
+		declareComputeCookTorranceSpecular();
+		return m_computeCookTorranceSpecular( light.colour
+			, light.intensity
+			, worldEye
+			, direction
+			, specular
+			, metalness
+			, roughness
+			, position
+			, normal );
+	}
+
 	sdw::Vec3 CookTorranceBRDF::computeDiffuse( sdw::Vec3 const & colour
 		, sdw::Vec3 const & worldEye
 		, sdw::Vec3 const & direction
@@ -408,6 +429,75 @@ namespace castor3d::shader
 			, sdw::InFloat{ m_writer, "smoothBand" }
 			, InSurface{ m_writer, "surface" }
 			, outputs );
+	}
+
+	void CookTorranceBRDF::declareComputeCookTorranceSpecular()
+	{
+		if ( m_computeCookTorranceSpecular )
+		{
+			return;
+		}
+
+		declareDistribution();
+		declareGeometry();
+		OutputComponents outputs{ m_writer };
+		m_computeCookTorranceSpecular = m_writer.implementFunction< sdw::Vec3 >( "c3d_computeCookTorranceSpecular"
+			, [this]( sdw::Vec3 const & radiance
+				, sdw::Vec2 const & intensity
+				, sdw::Vec3 const & worldEye
+				, sdw::Vec3 const & direction
+				, sdw::Vec3 const & specular
+				, sdw::Float const & metalness
+				, sdw::Float const & roughness
+				, sdw::Vec3 const & position
+				, sdw::Vec3 const & normal )
+			{
+				// From https://learnopengl.com/#!PBR/Lighting
+				auto L = m_writer.declLocale( "L"
+					, normalize( direction ) );
+				auto V = m_writer.declLocale( "V"
+					, normalize( worldEye - position ) );
+				auto H = m_writer.declLocale( "H"
+					, normalize( L + V ) );
+				auto N = m_writer.declLocale( "N"
+					, normalize( normal ) );
+
+				auto NdotL = m_writer.declLocale( "NdotL"
+					, max( 0.0_f, dot( N, L ) ) );
+				auto NdotV = m_writer.declLocale( "NdotV"
+					, max( 0.0_f, dot( N, V ) ) );
+				auto NdotH = m_writer.declLocale( "NdotH"
+					, max( 0.0_f, dot( N, H ) ) );
+				auto HdotV = m_writer.declLocale( "HdotV"
+					, max( 0.0_f, dot( H, V ) ) );
+
+				auto F = m_writer.declLocale( "F"
+					, m_utils.conductorFresnel( HdotV, specular ) );
+				auto D = m_writer.declLocale( "D"
+					, m_distributionGGX( NdotH, roughness ) );
+				auto G = m_writer.declLocale( "G"
+					, m_geometrySmith( NdotV, NdotL, roughness ) );
+
+				auto numerator = m_writer.declLocale( "numerator"
+					, F * D * G );
+				auto denominator = m_writer.declLocale( "denominator"
+					, sdw::fma( 4.0_f
+						, NdotV * NdotL
+						, 0.001_f ) );
+				auto specReflectance = m_writer.declLocale( "specReflectance"
+					, numerator / denominator );
+
+				m_writer.returnStmt( max( specReflectance * radiance * intensity.g() * NdotL, vec3( 0.0_f ) ) );
+			}
+			, sdw::InVec3( m_writer, "radiance" )
+			, sdw::InVec2( m_writer, "intensity" )
+			, sdw::InVec3( m_writer, "worldEye" )
+			, sdw::InVec3( m_writer, "direction" )
+			, sdw::InVec3{ m_writer, "specular" }
+			, sdw::InFloat{ m_writer, "metalness" }
+			, sdw::InFloat{ m_writer, "roughness" }
+			, sdw::InVec3{ m_writer, "position" }
+			, sdw::InVec3{ m_writer, "normal" } );
 	}
 
 	void CookTorranceBRDF::declareComputeCookTorranceDiffuse()

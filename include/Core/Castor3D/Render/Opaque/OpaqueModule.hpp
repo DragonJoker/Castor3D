@@ -29,10 +29,11 @@ namespace castor3d
 		: uint8_t
 	{
 		eNmlOcc, // RGB => Normal, A => Occlusion
-		eColMtl, // RGB => Diffuse/Albedo - PBR: A => Metalness - Phong: A => Ambient
+		eColMtl, // RGB => Diffuse/Albedo - PBR: A => Metalness - Phong: A => Unused
 		eSpcRgh, // RGB => Specular - Phong: A => Shininess - PBR: A => Roughness
 		eEmsTrn, // RGB => Emissive, A => Transmittance
-		eData,   // Pass additional data.
+		eClrCot, // RGB => Coating normal, A => Coating factor.
+		eCcrTrs, // R => Coating roughness, G => Transmission.
 		CU_ScopedEnumBounds( eNmlOcc ),
 	};
 	C3D_API castor::String getTextureName( DsTexture texture );

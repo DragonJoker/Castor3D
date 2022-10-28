@@ -89,7 +89,8 @@ namespace atmosphere_scattering
 				{
 					c3d::OutputComponents output{ m_writer.declLocale( "lightDiffuse", vec3( 0.0_f ) )
 						, m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) )
-						, m_writer.declLocale( "lightScattering", vec3( 0.0_f ) ) };
+						, m_writer.declLocale( "lightScattering", vec3( 0.0_f ) )
+						, m_writer.declLocale( "lightCoatingSpecular", vec3( 0.0_f ) ) };
 					auto lightDirection = m_writer.declLocale( "lightDirection"
 						, normalize( light.direction ) );
 					auto radiance = m_writer.declLocale( "lightSpecular"
@@ -198,6 +199,7 @@ namespace atmosphere_scattering
 
 								output.m_diffuse *= shadowFactor;
 								output.m_specular *= shadowFactor;
+								output.m_coatingSpecular *= shadowFactor;
 							}
 							FI;
 						}
@@ -225,6 +227,7 @@ namespace atmosphere_scattering
 					parentOutput.m_diffuse += max( vec3( 0.0_f ), output.m_diffuse );
 					parentOutput.m_specular += max( vec3( 0.0_f ), output.m_specular );
 					parentOutput.m_scattering += max( vec3( 0.0_f ), output.m_scattering );
+					parentOutput.m_coatingSpecular += max( vec3( 0.0_f ), output.m_coatingSpecular );
 				}
 				, c3d::InDirectionalLight( m_writer, "light" )
 				, c3d::InBlendComponents{ m_writer, "components", m_materials }
@@ -346,7 +349,8 @@ namespace atmosphere_scattering
 				{
 					c3d::OutputComponents output{ m_writer.declLocale( "lightDiffuse", vec3( 0.0_f ) )
 						, m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) )
-						, m_writer.declLocale( "lightScattering", vec3( 0.0_f ) ) };
+						, m_writer.declLocale( "lightScattering", vec3( 0.0_f ) )
+						, m_writer.declLocale( "lightCoatingSpecular", vec3( 0.0_f ) ) };
 					auto lightDirection = m_writer.declLocale( "lightDirection"
 						, normalize( -light.direction ) );
 					auto radiance = m_writer.declLocale( "lightSpecular"
@@ -431,6 +435,7 @@ namespace atmosphere_scattering
 
 								output.m_diffuse *= shadowFactor;
 								output.m_specular *= shadowFactor;
+								output.m_coatingSpecular *= shadowFactor;
 							}
 							FI;
 						}
@@ -458,6 +463,7 @@ namespace atmosphere_scattering
 					parentOutput.m_diffuse += max( vec3( 0.0_f ), output.m_diffuse );
 					parentOutput.m_specular += max( vec3( 0.0_f ), output.m_specular );
 					parentOutput.m_scattering += max( vec3( 0.0_f ), output.m_scattering );
+					parentOutput.m_coatingSpecular += max( vec3( 0.0_f ), output.m_coatingSpecular );
 				}
 				, c3d::InDirectionalLight( m_writer, "light" )
 				, c3d::InBlendComponents{ m_writer, "components", m_materials }

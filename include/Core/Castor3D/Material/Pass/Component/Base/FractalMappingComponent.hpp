@@ -31,6 +31,7 @@ namespace castor3d
 				, shader::Materials const & materials
 				, shader::Material const * material
 				, sdw::StructInstance const * surface
+				, sdw::Vec4 const * clrCot
 				, sdw::expr::ExprList & inits )const override;
 			C3D_API sdw::Vec4 sampleMap( sdw::CombinedImage2DRgba32 const & map
 				, sdw::Vec3 const & texCoords

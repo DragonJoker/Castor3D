@@ -81,6 +81,7 @@ namespace castor3d
 		, shader::Materials const & materials
 		, shader::Material const * material
 		, sdw::StructInstance const * surface
+		, sdw::Vec4 const * clrCot
 		, sdw::expr::ExprList & inits )const
 	{
 		if ( !components.hasMember( "metalness" ) )
@@ -147,6 +148,7 @@ namespace castor3d
 	void MetalnessComponent::MaterialShader::updateMaterial( sdw::Vec3 const & albedo
 		, sdw::Vec4 const & spcRgh
 		, sdw::Vec4 const & colMtl
+		, sdw::Float const & transm
 		, shader::Material & material )const
 	{
 		material.getMember< sdw::Float >( "metalness", true ) = colMtl.a();
