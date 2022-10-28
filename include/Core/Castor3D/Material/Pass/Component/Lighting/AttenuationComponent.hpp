@@ -16,7 +16,7 @@ namespace castor3d
 	{
 		explicit AttenuationData( std::atomic_bool & dirty )
 			: colour{ dirty, castor::RgbColour{ 1.0f, 1.0f, 1.0f } }
-			, distance{ dirty, 0.0f }
+			, distance{ dirty, std::numeric_limits< float >::infinity() }
 			, thicknessFactor{ dirty, 0.0f }
 		{
 		}
