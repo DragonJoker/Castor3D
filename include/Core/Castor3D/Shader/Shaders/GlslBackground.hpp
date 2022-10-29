@@ -26,7 +26,7 @@ namespace castor3d::shader
 		C3D_API virtual sdw::RetVec3 computeReflections( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, BlendComponents & components
-			, sdw::CombinedImage2DRg32 const & brdf ) = 0;
+			, sdw::CombinedImage2DRgba32 const & brdf ) = 0;
 		C3D_API virtual sdw::RetVec3 computeRefractions( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::Float const & refractionRatio
@@ -37,7 +37,7 @@ namespace castor3d::shader
 			, sdw::Vec3 const & specular
 			, sdw::Float const & roughness
 			, BlendComponents & components
-			, sdw::CombinedImage2DRg32 const & brdf )
+			, sdw::CombinedImage2DRgba32 const & brdf )
 		{
 			return computeReflections( wsIncident, wsNormal, components, brdf );
 		}
@@ -48,9 +48,17 @@ namespace castor3d::shader
 			, sdw::Float const & roughness
 			, sdw::Float const & refractionRatio
 			, BlendComponents & components
-			, sdw::CombinedImage2DRg32 const & brdfMap )
+			, sdw::CombinedImage2DRgba32 const & brdf )
 		{
 			return computeRefractions( wsIncident, wsNormal, refractionRatio, components );
+		}
+
+		C3D_API virtual sdw::RetVec3 computeSheenReflections( sdw::Vec3 const & wsIncident
+			, sdw::Vec3 const & wsNormal
+			, BlendComponents & components
+			, sdw::CombinedImage2DRgba32 const & brdf )
+		{
+			return computeReflections( wsIncident, wsNormal, components, brdf );
 		}
 
 		VkExtent2D const & getTargetSize()const

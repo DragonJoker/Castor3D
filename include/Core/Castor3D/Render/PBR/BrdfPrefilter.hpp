@@ -34,7 +34,7 @@ namespace castor3d
 		C3D_API explicit BrdfPrefilter( Engine & engine
 			, RenderDevice const & device
 			, castor::Size const & size
-			, ashes::ImageView const & dstTexture );
+			, Texture const & dstTexture );
 		/**
 		 *\~english
 		 *\brief		Computes the convoluted BRDF.
@@ -51,6 +51,8 @@ namespace castor3d
 	private:
 		RenderSystem & m_renderSystem;
 		RenderDevice const & m_device;
+		ashes::ImagePtr m_image;
+		ashes::ImageView m_view;
 		ObjectBufferOffset m_vertexBuffer;
 		ashes::PipelineVertexInputStateCreateInfoPtr m_vertexLayout;
 		ashes::RenderPassPtr m_renderPass;

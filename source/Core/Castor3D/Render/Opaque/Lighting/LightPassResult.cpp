@@ -26,6 +26,7 @@ namespace castor3d
 				cuT( "Specular" ),
 				cuT( "Scattering" ),
 				cuT( "CoatingSpecular" ),
+				cuT( "Sheen" ),
 				cuT( "IndirectDiffuse" ),
 				cuT( "IndirectSpecular" ),
 			}
@@ -47,6 +48,8 @@ namespace castor3d
 					| VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT ),
 				device.selectSmallestFormatRGBUFloatFormat( VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
 					| VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT ),
+				device.selectSmallestFormatRGSFloatFormat( VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
+					| VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT ),
 				device.selectSmallestFormatRGBUFloatFormat( VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
 					| VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT ),
 				device.selectSmallestFormatRGBUFloatFormat( VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
@@ -66,6 +69,7 @@ namespace castor3d
 				opaqueBlackClearColor,
 				opaqueBlackClearColor,
 				opaqueBlackClearColor,
+				makeClearValue( 0.0f, 1.0f, 0.0f, 1.0f ),
 				opaqueBlackClearColor,
 				opaqueBlackClearColor,
 			}
@@ -85,6 +89,7 @@ namespace castor3d
 				VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
 				VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
 				VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
+				VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
 			}
 		};
 		return Values[size_t( texture )];
@@ -96,6 +101,7 @@ namespace castor3d
 		{
 			{
 				VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE,
+				VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK,
 				VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK,
 				VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK,
 				VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK,

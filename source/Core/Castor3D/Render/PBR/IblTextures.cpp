@@ -65,8 +65,22 @@ namespace castor3d
 		: OwnedBy< Scene >{ scene }
 		, m_brdf{ brdf }
 		, m_sampler{ ibltex::doCreateSampler( *scene.getEngine(), device ) }
-		, m_radianceComputer{ *scene.getEngine(), device, castor::Size{ RadianceMapSize, RadianceMapSize }, source }
-		, m_environmentPrefilter{ *scene.getEngine(), device, castor::Size{ PrefilteredEnvironmentMapSize, PrefilteredEnvironmentMapSize }, source, std::move( sampler ) }
+		, m_radianceComputer{ *scene.getEngine()
+			, device
+			, castor::Size{ RadianceMapSize, RadianceMapSize }
+			, source }
+		, m_environmentPrefilter{ *scene.getEngine()
+			, device
+			, castor::Size{ PrefilteredEnvironmentMapSize, PrefilteredEnvironmentMapSize }
+			, source
+			, sampler
+			, false }
+		, m_environmentSheenPrefilter{ *scene.getEngine()
+			, device
+			, castor::Size{ PrefilteredEnvironmentMapSize, PrefilteredEnvironmentMapSize }
+			, source
+			, sampler
+			, true }
 	{
 	}
 
@@ -78,14 +92,15 @@ namespace castor3d
 	{
 		m_radianceComputer.render( queueData );
 		m_environmentPrefilter.render( queueData );
+		m_environmentSheenPrefilter.render( queueData );
 	}
 
-	ashes::Semaphore const & IblTextures::update( QueueData const & queueData
-		, ashes::Semaphore const & toWait )
+	crg::SemaphoreWaitArray IblTextures::update( crg::SemaphoreWaitArray signalsToWait
+		, ashes::Queue const & queue )const
 	{
-		auto result = &toWait;
-		result = &m_radianceComputer.render( queueData, *result );
-		result = &m_environmentPrefilter.render( queueData, *result );
-		return *result;
+		signalsToWait = m_radianceComputer.render( signalsToWait, queue );
+		signalsToWait = m_environmentPrefilter.render( signalsToWait, queue );
+		signalsToWait = m_environmentSheenPrefilter.render( signalsToWait, queue );
+		return signalsToWait;
 	}
 }

@@ -32,9 +32,10 @@ namespace castor3d::shader
 		, sdw::Vec3 & ambient
 		, sdw::Vec3 & reflected
 		, sdw::Vec3 & refracted
-		, sdw::Vec3 & coatReflected )
+		, sdw::Vec3 & coatReflected
+		, sdw::Vec3 & sheenReflected )
 	{
-		auto brdf = m_writer.getVariable< sdw::CombinedImage2DRg32 >( "c3d_mapBrdf" );
+		auto brdf = m_writer.getVariable< sdw::CombinedImage2DRgba32 >( "c3d_mapBrdf" );
 		auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
 
 		IF( m_writer, envMapIndex > 0_u )
@@ -132,11 +133,36 @@ namespace castor3d::shader
 			{
 				if ( m_hasIblSupport )
 				{
-					auto brdf = m_writer.getVariable< sdw::CombinedImage2DRg32 >( "c3d_mapBrdf" );
 					coatReflected = background.computeSpecularReflections( incident
 						, components.clearcoatNormal
 						, components.specular
 						, components.clearcoatRoughness
+						, components
+						, brdf );
+				}
+			}
+			FI;
+		}
+		FI;
+
+		IF( m_writer, !all( components.sheenFactor == vec3( 0.0_f ) ) )
+		{
+			IF( m_writer, envMapIndex > 0_u && hasReflection != 0_u )
+			{
+				envMapIndex = envMapIndex - 1_u;
+				auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
+				sheenReflected = computeSheenReflEnvMaps( incident
+					, components.normal
+					, envMap
+					, envMapIndex
+					, components );
+			}
+			ELSE
+			{
+				if ( m_hasIblSupport )
+				{
+					sheenReflected = background.computeSheenReflections( incident
+						, components.normal
 						, components
 						, brdf );
 				}
@@ -155,9 +181,10 @@ namespace castor3d::shader
 		, sdw::Vec3 & ambient
 		, sdw::Vec3 & reflected
 		, sdw::Vec3 & refracted
-		, sdw::Vec3 & coatReflected )
+		, sdw::Vec3 & coatReflected
+		, sdw::Vec3 & sheenReflected )
 	{
-		auto brdf = m_writer.getVariable< sdw::CombinedImage2DRg32 >( "c3d_mapBrdf" );
+		auto brdf = m_writer.getVariable< sdw::CombinedImage2DRgba32 >( "c3d_mapBrdf" );
 		auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
 
 		IF( m_writer, envMapIndex > 0_u )
@@ -244,11 +271,36 @@ namespace castor3d::shader
 			{
 				if ( m_hasIblSupport )
 				{
-					auto brdf = m_writer.getVariable< sdw::CombinedImage2DRg32 >( "c3d_mapBrdf" );
 					coatReflected = background.computeSpecularReflections( incident
 						, components.clearcoatNormal
 						, components.specular
 						, components.clearcoatRoughness
+						, components
+						, brdf );
+				}
+			}
+			FI;
+		}
+		FI;
+
+		IF( m_writer, !all( components.sheenFactor == vec3( 0.0_f ) ) )
+		{
+			IF( m_writer, envMapIndex > 0_u && hasReflection != 0_u )
+			{
+				envMapIndex = envMapIndex - 1_u;
+				auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
+				sheenReflected = computeSheenReflEnvMaps( incident
+					, components.normal
+					, envMap
+					, envMapIndex
+					, components );
+			}
+			ELSE
+			{
+				if ( m_hasIblSupport )
+				{
+					sheenReflected = background.computeSheenReflections( incident
+						, components.normal
 						, components
 						, brdf );
 				}
@@ -287,7 +339,7 @@ namespace castor3d::shader
 			{
 				auto incident = m_writer.declLocale( "incident"
 					, computeIncident( surface.worldPosition.xyz(), sceneData.cameraPosition ) );
-				auto brdf = m_writer.getVariable< sdw::CombinedImage2DRg32 >( "c3d_mapBrdf" );
+				auto brdf = m_writer.getVariable< sdw::CombinedImage2DRgba32 >( "c3d_mapBrdf" );
 				reflected = background.computeReflections( incident
 					, components.normal
 					, components
@@ -727,6 +779,42 @@ namespace castor3d::shader
 			, envMapIndex
 			, components.specular
 			, roughness );
+	}
+
+	sdw::RetVec3 ReflectionModel::computeSheenReflEnvMaps( sdw::Vec3 const & incident
+		, sdw::Vec3 const & normal
+		, sdw::CombinedImageCubeArrayRgba32 const & env
+		, sdw::UInt const & envIndex
+		, BlendComponents & components )
+	{
+		if ( !m_computeSheenReflEnvMaps )
+		{
+			m_computeSheenReflEnvMaps = m_writer.implementFunction< sdw::Vec3 >( "c3d_computeSheenReflEnvMap"
+				, [&]( sdw::Vec3 const & wsIncident
+					, sdw::Vec3 const & wsNormal
+					, sdw::CombinedImageCubeArrayRgba32 const & envMap
+					, sdw::UInt const & envMapIndex
+					, sdw::Float const & roughness )
+				{
+					auto reflected = m_writer.declLocale( "reflected"
+						, reflect( wsIncident, wsNormal ) );
+					auto radiance = m_writer.declLocale( "radiance"
+						, envMap.lod( vec4( reflected, m_writer.cast< sdw::Float >( envMapIndex ) )
+							, roughness * sdw::Float( float( EnvironmentMipLevels ) ) ).xyz() );
+					m_writer.returnStmt( radiance );
+				}
+				, sdw::InVec3{ m_writer, "wsIncident" }
+				, sdw::InVec3{ m_writer, "wsNormal" }
+				, sdw::InCombinedImageCubeArrayRgba32{ m_writer, "envMap" }
+				, sdw::InUInt{ m_writer, "envMapIndex" }
+				, sdw::InFloat{ m_writer, "roughness" } );
+		}
+
+		return m_computeSheenReflEnvMaps( incident
+			, normal
+			, env
+			, envIndex
+			, components.sheenRoughness );
 	}
 
 	sdw::RetVec3 ReflectionModel::computeRefrEnvMaps( sdw::Vec3 const & wsIncident

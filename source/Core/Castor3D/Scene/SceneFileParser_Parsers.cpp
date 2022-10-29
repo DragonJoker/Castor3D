@@ -4259,6 +4259,7 @@ namespace castor3d
 				: TextureSourceInfo{ parsingContext.sampler.lock()
 					, parsingContext.folder
 					, parsingContext.relative } );
+			parsingContext.textureConfiguration.transform = parsingContext.textureTransform;
 
 			if ( parsingContext.textureAnimation && parsingContext.scene )
 			{

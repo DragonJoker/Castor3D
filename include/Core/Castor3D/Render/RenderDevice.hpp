@@ -288,6 +288,7 @@ namespace castor3d
 		C3D_API VkFormat selectSuitableStencilFormat( VkFormatFeatureFlags requiredFeatures )const;
 		C3D_API VkFormat selectSuitableDepthStencilFormat( VkFormatFeatureFlags requiredFeatures )const;
 		C3D_API VkFormat selectSmallestFormatRSFloatFormat( VkFormatFeatureFlags requiredFeatures )const;
+		C3D_API VkFormat selectSmallestFormatRGSFloatFormat( VkFormatFeatureFlags requiredFeatures )const;
 		C3D_API VkFormat selectSmallestFormatRGBUFloatFormat( VkFormatFeatureFlags requiredFeatures )const;
 		C3D_API VkFormat selectSmallestFormatRGBSFloatFormat( VkFormatFeatureFlags requiredFeatures )const;
 		C3D_API VkFormat selectSuitableFormat( std::vector< VkFormat > const & formats

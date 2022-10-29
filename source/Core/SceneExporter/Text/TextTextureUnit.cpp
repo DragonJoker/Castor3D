@@ -140,7 +140,7 @@ namespace castor
 
 					if ( result )
 					{
-						auto & transform = unit.getTransform();
+						auto & transform = config.transform;
 						auto rotate = transform.rotate.degrees();
 						auto translate = castor::Point3f{ transform.translate };
 						auto scale = castor::Point3f{ transform.scale };

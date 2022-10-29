@@ -39,7 +39,7 @@ namespace castor3d::shader
 	sdw::RetVec3 NoIblBackgroundModel::computeReflections( sdw::Vec3 const & pwsIncident
 		, sdw::Vec3 const & pwsNormal
 		, BlendComponents & components
-		, sdw::CombinedImage2DRg32 const & pbrdf )
+		, sdw::CombinedImage2DRgba32 const & pbrdf )
 	{
 		if ( !m_computeReflections )
 		{

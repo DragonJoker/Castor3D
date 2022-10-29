@@ -150,11 +150,13 @@ namespace castor3d::shader
 			, sdw::Vec4 const & spcRgh
 			, sdw::Vec4 const & colMtl
 			, sdw::Float const & transm
+			, sdw::Vec4 const & sheen
 			, Material & material );
 		C3D_API void apply( Material const & material
 			, SurfaceBase const & surface
 			, sdw::Vec4 & spcRgh
-			, sdw::Vec4 & colMtl );
+			, sdw::Vec4 & colMtl
+			, sdw::Vec4 & sheen );
 		C3D_API ComponentModeFlags getFilter()const;
 
 		template< typename TypeT >

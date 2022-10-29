@@ -139,6 +139,8 @@ namespace castor3d
 							, vec4( 0.0_f ) );
 						auto ccrTrs = writer.declLocale( "ccrTrs"
 							, vec2( 0.0_f ) );
+						auto sheen = writer.declLocale( "sheen"
+							, vec4( 0.0_f ) );
 						auto eye = writer.declLocale( "eye"
 							, c3d_sceneData.cameraPosition );
 						auto depth = writer.declLocale( "depth"
@@ -154,7 +156,7 @@ namespace castor3d
 								, vsPosition
 								, wsPosition
 								, wsNormal } );
-						materials.fill( colMtl.rgb(), spcRgh, colMtl, ccrTrs.y(), material );
+						materials.fill( colMtl.rgb(), spcRgh, colMtl, ccrTrs.y(), sheen, material );
 						auto components = writer.declLocale( "components"
 							, shader::BlendComponents{ materials
 								, material

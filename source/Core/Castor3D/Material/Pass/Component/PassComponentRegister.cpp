@@ -16,6 +16,7 @@
 #include "Castor3D/Material/Pass/Component/Lighting/EmissiveComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/MetalnessComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/RoughnessComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Lighting/SheenComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/SpecularComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/SubsurfaceScatteringComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/ThicknessComponent.hpp"
@@ -33,6 +34,8 @@
 #include "Castor3D/Material/Pass/Component/Map/OcclusionMapComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Map/OpacityMapComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Map/RoughnessMapComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Map/SheenMapComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Map/SheenRoughnessMapComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Map/SpecularMapComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Map/TransmissionMapComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Map/TransmittanceMapComponent.hpp"
@@ -152,6 +155,7 @@ namespace castor3d
 		registerComponent< ReflectionComponent >();
 		registerComponent< RefractionComponent >();
 		registerComponent< ClearcoatComponent >();
+		registerComponent< SheenComponent >();
 		registerComponent< SubsurfaceScatteringComponent >();
 		// Pass shader image components
 		registerComponent< HeightMapComponent >();
@@ -170,6 +174,8 @@ namespace castor3d
 		registerComponent< ClearcoatMapComponent >();
 		registerComponent< ClearcoatNormalMapComponent >();
 		registerComponent< ClearcoatRoughnessMapComponent >();
+		registerComponent< SheenMapComponent >();
+		registerComponent< SheenRoughnessMapComponent >();
 
 		m_pauseOrder = false;
 		reorderBuffer();
@@ -830,7 +836,7 @@ namespace castor3d
 		static uint32_t constexpr alignment = 16u;
 		auto constexpr baseOffset = 0u;
 
-		// First put vec4s
+		// First put vec4s and 16 bit aligned structs
 		std::vector< std::pair< PassComponentID, std::pair< std::string, MemChunk > > > ordered;
 		auto it = chunks.begin();
 		VkDeviceSize offset = baseOffset;

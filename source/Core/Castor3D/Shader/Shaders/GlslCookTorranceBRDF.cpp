@@ -23,31 +23,12 @@ namespace castor3d::shader
 	{
 	}
 
-	sdw::RetVec3 CookTorranceBRDF::compute( Light const & light
-		, sdw::Vec3 const & worldEye
-		, sdw::Vec3 const & direction
-		, sdw::Vec3 const & specular
-		, sdw::Float const & metalness
-		, sdw::Float const & roughness
-		, Surface surface
-		, OutputComponents & output )
-	{
-		declareComputeCookTorrance();
-		return m_computeCookTorrance( light.colour
-			, light.intensity
-			, worldEye
-			, direction
-			, specular
-			, metalness
-			, roughness
-			, surface
-			, output );
-	}
-
 	sdw::RetVec3 CookTorranceBRDF::compute( sdw::Vec3 const & radiance
 		, sdw::Vec2 const & intensity
-		, sdw::Vec3 const & worldEye
-		, sdw::Vec3 const & direction
+		, sdw::Float const & HdotV
+		, sdw::Float const & NdotH
+		, sdw::Float const & NdotV
+		, sdw::Float const & NdotL
 		, sdw::Vec3 const & specular
 		, sdw::Float const & metalness
 		, sdw::Float const & roughness
@@ -57,8 +38,34 @@ namespace castor3d::shader
 		declareComputeCookTorrance();
 		return m_computeCookTorrance( radiance
 			, intensity
-			, worldEye
-			, direction
+			, HdotV
+			, NdotH
+			, NdotV
+			, NdotL
+			, specular
+			, metalness
+			, roughness
+			, surface
+			, output );
+	}
+
+	sdw::RetVec3 CookTorranceBRDF::compute( Light const & light
+		, sdw::Float const & HdotV
+		, sdw::Float const & NdotH
+		, sdw::Float const & NdotV
+		, sdw::Float const & NdotL
+		, sdw::Vec3 const & specular
+		, sdw::Float const & metalness
+		, sdw::Float const & roughness
+		, Surface surface
+		, OutputComponents & output )
+	{
+		return compute( light.colour
+			, light.intensity
+			, HdotV
+			, NdotH
+			, NdotV
+			, NdotL
 			, specular
 			, metalness
 			, roughness
@@ -67,8 +74,10 @@ namespace castor3d::shader
 	}
 
 	void CookTorranceBRDF::computeAON( Light const & light
-		, sdw::Vec3 const & worldEye
-		, sdw::Vec3 const & direction
+		, sdw::Float const & HdotV
+		, sdw::Float const & NdotH
+		, sdw::Float const & NdotV
+		, sdw::Float const & NdotL
 		, sdw::Vec3 const & specular
 		, sdw::Float const & metalness
 		, sdw::Float const & roughness
@@ -77,9 +86,12 @@ namespace castor3d::shader
 		, OutputComponents & output )
 	{
 		declareComputeCookTorranceAON();
-		m_computeCookTorranceAON( light
-			, worldEye
-			, direction
+		m_computeCookTorranceAON( light.colour
+			, light.intensity
+			, HdotV
+			, NdotH
+			, NdotV
+			, NdotL
 			, specular
 			, metalness
 			, roughness
@@ -89,8 +101,10 @@ namespace castor3d::shader
 	}
 
 	sdw::RetVec3 CookTorranceBRDF::computeSpecular( Light const & light
-		, sdw::Vec3 const & worldEye
-		, sdw::Vec3 const & direction
+		, sdw::Float const & HdotV
+		, sdw::Float const & NdotH
+		, sdw::Float const & NdotV
+		, sdw::Float const & NdotL
 		, sdw::Vec3 const & specular
 		, sdw::Float const & metalness
 		, sdw::Float const & roughness
@@ -100,8 +114,10 @@ namespace castor3d::shader
 		declareComputeCookTorranceSpecular();
 		return m_computeCookTorranceSpecular( light.colour
 			, light.intensity
-			, worldEye
-			, direction
+			, HdotV
+			, NdotH
+			, NdotV
+			, NdotL
 			, specular
 			, metalness
 			, roughness
@@ -276,8 +292,10 @@ namespace castor3d::shader
 		m_computeCookTorrance = m_writer.implementFunction< sdw::Vec3 >( "c3d_computeCookTorrance"
 			, [this]( sdw::Vec3 const & radiance
 				, sdw::Vec2 const & intensity
-				, sdw::Vec3 const & worldEye
-				, sdw::Vec3 const & direction
+				, sdw::Float const & HdotV
+				, sdw::Float const & NdotH
+				, sdw::Float const & NdotV
+				, sdw::Float const & NdotL
 				, sdw::Vec3 const & specular
 				, sdw::Float const & metalness
 				, sdw::Float const & roughness
@@ -285,26 +303,6 @@ namespace castor3d::shader
 				, OutputComponents & output )
 			{
 				// From https://learnopengl.com/#!PBR/Lighting
-				auto L = m_writer.declLocale( "L"
-					, normalize( direction ) );
-				auto V = m_writer.declLocale( "V"
-					, normalize( worldEye - surface.worldPosition.xyz() ) );
-				auto H = m_writer.declLocale( "H"
-					, normalize( L + V ) );
-				auto N = m_writer.declLocale( "N"
-					, normalize( surface.normal ) );
-
-				auto NdotL = m_writer.declLocale( "NdotL"
-					, max( 0.0_f, dot( N, L ) ) );
-				auto NdotV = m_writer.declLocale( "NdotV"
-					, max( 0.0_f, dot( N, V ) ) );
-				auto NdotH = m_writer.declLocale( "NdotH"
-					, max( 0.0_f, dot( N, H ) ) );
-				auto HdotV = m_writer.declLocale( "HdotV"
-					, max( 0.0_f, dot( H, V ) ) );
-				auto LdotV = m_writer.declLocale( "LdotV"
-					, max( 0.0_f, dot( L, V ) ) );
-
 				auto F = m_writer.declLocale( "F"
 					, m_utils.conductorFresnel( HdotV, specular ) );
 				auto D = m_writer.declLocale( "D"
@@ -335,8 +333,10 @@ namespace castor3d::shader
 			}
 			, sdw::InVec3( m_writer, "radiance" )
 			, sdw::InVec2( m_writer, "intensity" )
-			, sdw::InVec3( m_writer, "worldEye" )
-			, sdw::InVec3( m_writer, "direction" )
+			, sdw::InFloat( m_writer, "HdotV" )
+			, sdw::InFloat( m_writer, "NdotH" )
+			, sdw::InFloat( m_writer, "NdotV" )
+			, sdw::InFloat( m_writer, "NdotL" )
 			, sdw::InVec3{ m_writer, "specular" }
 			, sdw::InFloat{ m_writer, "metalness" }
 			, sdw::InFloat{ m_writer, "roughness" }
@@ -355,9 +355,12 @@ namespace castor3d::shader
 		declareGeometry();
 		OutputComponents outputs{ m_writer };
 		m_computeCookTorranceAON = m_writer.implementFunction< sdw::Void >( "c3d_computeCookTorranceAON"
-			, [this]( Light const & light
-				, sdw::Vec3 const & worldEye
-				, sdw::Vec3 const & direction
+			, [this]( sdw::Vec3 const & radiance
+				, sdw::Vec2 const & intensity
+				, sdw::Float const & HdotV
+				, sdw::Float const & NdotH
+				, sdw::Float const & NdotV
+				, sdw::Float const & NdotL
 				, sdw::Vec3 const & specular
 				, sdw::Float const & metalness
 				, sdw::Float const & roughness
@@ -366,28 +369,6 @@ namespace castor3d::shader
 				, OutputComponents & output )
 			{
 				// From https://learnopengl.com/#!PBR/Lighting
-				auto L = m_writer.declLocale( "L"
-					, normalize( direction ) );
-				auto V = m_writer.declLocale( "V"
-					, normalize( worldEye - surface.worldPosition.xyz() ) );
-				auto H = m_writer.declLocale( "H"
-					, normalize( L + V ) );
-				auto N = m_writer.declLocale( "N"
-					, normalize( surface.normal ) );
-				auto radiance = m_writer.declLocale( "radiance"
-					, light.colour );
-
-				auto NdotL = m_writer.declLocale( "NdotL"
-					, max( 0.0_f, dot( N, L ) ) );
-				auto NdotV = m_writer.declLocale( "NdotV"
-					, max( 0.0_f, dot( N, V ) ) );
-				auto NdotH = m_writer.declLocale( "NdotH"
-					, max( 0.0_f, dot( N, H ) ) );
-				auto HdotV = m_writer.declLocale( "HdotV"
-					, max( 0.0_f, dot( H, V ) ) );
-				auto LdotV = m_writer.declLocale( "LdotV"
-					, max( 0.0_f, dot( L, V ) ) );
-
 				auto F = m_writer.declLocale( "F"
 					, m_utils.conductorFresnel( HdotV, specular ) );
 				auto D = m_writer.declLocale( "D"
@@ -415,14 +396,17 @@ namespace castor3d::shader
 
 				kD *= 1.0_f - metalness;
 
-				output.m_diffuse = max( radiance * light.intensity.r() * diffuseFactor * kD, vec3( 0.0_f ) ) / sdw::Float{ castor::Pi< float > };
+				output.m_diffuse = max( radiance * intensity.r() * diffuseFactor * kD, vec3( 0.0_f ) ) / sdw::Float{ castor::Pi< float > };
 
 				specReflectance = smoothStep( vec3( 0.0_f ), vec3( 0.01_f * smoothBand ), specReflectance );
-				output.m_specular = max( specReflectance * radiance * light.intensity.g() * NdotL, vec3( 0.0_f ) );
+				output.m_specular = max( specReflectance * radiance * intensity.g() * NdotL, vec3( 0.0_f ) );
 			}
-			, InLight( m_writer, "light" )
-			, sdw::InVec3( m_writer, "worldEye" )
-			, sdw::InVec3( m_writer, "direction" )
+			, sdw::InVec3( m_writer, "radiance" )
+			, sdw::InVec2( m_writer, "intensity" )
+			, sdw::InFloat( m_writer, "HdotV" )
+			, sdw::InFloat( m_writer, "NdotH" )
+			, sdw::InFloat( m_writer, "NdotV" )
+			, sdw::InFloat( m_writer, "NdotL" )
 			, sdw::InVec3{ m_writer, "specular" }
 			, sdw::InFloat{ m_writer, "metalness" }
 			, sdw::InFloat{ m_writer, "roughness" }
@@ -444,8 +428,10 @@ namespace castor3d::shader
 		m_computeCookTorranceSpecular = m_writer.implementFunction< sdw::Vec3 >( "c3d_computeCookTorranceSpecular"
 			, [this]( sdw::Vec3 const & radiance
 				, sdw::Vec2 const & intensity
-				, sdw::Vec3 const & worldEye
-				, sdw::Vec3 const & direction
+				, sdw::Float const & HdotV
+				, sdw::Float const & NdotH
+				, sdw::Float const & NdotV
+				, sdw::Float const & NdotL
 				, sdw::Vec3 const & specular
 				, sdw::Float const & metalness
 				, sdw::Float const & roughness
@@ -453,24 +439,6 @@ namespace castor3d::shader
 				, sdw::Vec3 const & normal )
 			{
 				// From https://learnopengl.com/#!PBR/Lighting
-				auto L = m_writer.declLocale( "L"
-					, normalize( direction ) );
-				auto V = m_writer.declLocale( "V"
-					, normalize( worldEye - position ) );
-				auto H = m_writer.declLocale( "H"
-					, normalize( L + V ) );
-				auto N = m_writer.declLocale( "N"
-					, normalize( normal ) );
-
-				auto NdotL = m_writer.declLocale( "NdotL"
-					, max( 0.0_f, dot( N, L ) ) );
-				auto NdotV = m_writer.declLocale( "NdotV"
-					, max( 0.0_f, dot( N, V ) ) );
-				auto NdotH = m_writer.declLocale( "NdotH"
-					, max( 0.0_f, dot( N, H ) ) );
-				auto HdotV = m_writer.declLocale( "HdotV"
-					, max( 0.0_f, dot( H, V ) ) );
-
 				auto F = m_writer.declLocale( "F"
 					, m_utils.conductorFresnel( HdotV, specular ) );
 				auto D = m_writer.declLocale( "D"
@@ -491,8 +459,10 @@ namespace castor3d::shader
 			}
 			, sdw::InVec3( m_writer, "radiance" )
 			, sdw::InVec2( m_writer, "intensity" )
-			, sdw::InVec3( m_writer, "worldEye" )
-			, sdw::InVec3( m_writer, "direction" )
+			, sdw::InFloat( m_writer, "HdotV" )
+			, sdw::InFloat( m_writer, "NdotH" )
+			, sdw::InFloat( m_writer, "NdotV" )
+			, sdw::InFloat( m_writer, "NdotL" )
 			, sdw::InVec3{ m_writer, "specular" }
 			, sdw::InFloat{ m_writer, "metalness" }
 			, sdw::InFloat{ m_writer, "roughness" }

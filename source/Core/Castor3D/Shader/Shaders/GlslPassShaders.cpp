@@ -148,6 +148,7 @@ namespace castor3d::shader
 		, sdw::Vec4 const & spcRgh
 		, sdw::Vec4 const & colMtl
 		, sdw::Float const & transm
+		, sdw::Vec4 const & sheen
 		, Material & material )const
 	{
 		for ( auto & shader : m_compRegister.getMaterialShaders() )
@@ -156,6 +157,7 @@ namespace castor3d::shader
 				, spcRgh
 				, colMtl
 				, transm
+				, sheen
 				, material );
 		}
 	}
@@ -163,28 +165,32 @@ namespace castor3d::shader
 	void PassShaders::updateOutputs( Material const & material
 		, SurfaceBase const & surface
 		, sdw::Vec4 & spcRgh
-		, sdw::Vec4 & colMtl )const
+		, sdw::Vec4 & colMtl
+		, sdw::Vec4 & sheen )const
 	{
 		for ( auto & shader : m_compRegister.getMaterialShaders() )
 		{
 			shader->updateOutputs( material
 				, surface
 				, spcRgh
-				, colMtl );
+				, colMtl
+				, sheen );
 		}
 	}
 
 	void PassShaders::updateOutputs( BlendComponents const & components
 		, SurfaceBase const & surface
 		, sdw::Vec4 & spcRgh
-		, sdw::Vec4 & colMtl )const
+		, sdw::Vec4 & colMtl
+		, sdw::Vec4 & sheen )const
 	{
 		for ( auto & shader : m_shaders )
 		{
 			shader->updateOutputs( components
 				, surface
 				, spcRgh
-				, colMtl );
+				, colMtl
+				, sheen );
 		}
 	}
 

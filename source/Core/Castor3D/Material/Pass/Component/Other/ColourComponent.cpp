@@ -126,7 +126,8 @@ namespace castor3d
 	void ColourComponent::ComponentsShader::updateOutputs( sdw::StructInstance const & components
 		, sdw::StructInstance const & surface
 		, sdw::Vec4 & spcRgh
-		, sdw::Vec4 & colMtl )const
+		, sdw::Vec4 & colMtl
+		, sdw::Vec4 & sheen )const
 	{
 		colMtl.rgb() = components.getMember< sdw::Vec3 >( "colour", true );
 		colMtl.rgb() *= surface.getMember< sdw::Vec3 >( "colour", true );
@@ -154,6 +155,7 @@ namespace castor3d
 		, sdw::Vec4 const & spcRgh
 		, sdw::Vec4 const & colMtl
 		, sdw::Float const & transm
+		, sdw::Vec4 const & sheen
 		, shader::Material & material )const
 	{
 		material.getMember< sdw::Vec3 >( "colour", true ) = colMtl.rgb();

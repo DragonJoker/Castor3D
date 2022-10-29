@@ -454,6 +454,12 @@ namespace castor3d
 				, crg::SamplerDesc{ VK_FILTER_LINEAR
 					, VK_FILTER_LINEAR
 					, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
+			pass.addSampledView( ibl.getPrefilteredEnvironmentSheenTexture().sampledViewId
+				, index++
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, crg::SamplerDesc{ VK_FILTER_LINEAR
+					, VK_FILTER_LINEAR
+					, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
 		}
 	}
 
@@ -470,6 +476,9 @@ namespace castor3d
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapPrefiltered
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapPrefilteredSheen
 		}
 	}
 
@@ -488,6 +497,10 @@ namespace castor3d
 				, index );
 			bindTexture( ibl.getPrefilteredEnvironmentTexture().wholeView
 				, ibl.getPrefilteredEnvironmentSampler()
+				, descriptorWrites
+				, index );
+			bindTexture( ibl.getPrefilteredEnvironmentSheenTexture().wholeView
+				, ibl.getPrefilteredEnvironmentSheenSampler()
 				, descriptorWrites
 				, index );
 		}

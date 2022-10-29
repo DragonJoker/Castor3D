@@ -120,6 +120,8 @@ namespace castor3d::shader
 		sdw::DefaultedT< sdw::Float > clearcoatFactor;
 		sdw::DefaultedT< sdw::Vec3 > clearcoatNormal;
 		sdw::DefaultedT< sdw::Float > clearcoatRoughness;
+		sdw::DefaultedT< sdw::Vec3 > sheenFactor;
+		sdw::DefaultedT< sdw::Float > sheenRoughness;
 		sdw::Float const shininess;
 
 	protected:

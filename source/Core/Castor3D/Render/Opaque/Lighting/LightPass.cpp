@@ -128,6 +128,7 @@ namespace castor3d
 		auto pxl_specular = writer.declOutput< Vec3 >( "pxl_specular", 1 );
 		auto pxl_scattering = writer.declOutput< Vec3 >( "pxl_scattering", 2 );
 		auto pxl_coatingSpecular = writer.declOutput< Vec3 >( "pxl_coatingSpecular", 3 );
+		auto pxl_sheen = writer.declOutput< Vec2 >( "pxl_sheen", 4 );
 
 		// Shader inputs
 		auto index = uint32_t( LightPassIdx::eCount );
@@ -151,6 +152,7 @@ namespace castor3d
 		auto c3d_mapEmsTrn = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eEmsTrn ), uint32_t( LightPassIdx::eEmsTrn ), 0u );
 		auto c3d_mapClrCot = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eClrCot ), uint32_t( LightPassIdx::eClrCot ), 0u );
 		auto c3d_mapCcrTrs = writer.declCombinedImg< FImg2DRg32 >( getTextureName( DsTexture::eCcrTrs ), uint32_t( LightPassIdx::eCcrTrs ), 0u );
+		auto c3d_mapSheen = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eSheen ), uint32_t( LightPassIdx::eSheen ), 0u );
 
 		shadowType = shadows
 			? shadowType
@@ -220,6 +222,8 @@ namespace castor3d
 						, c3d_mapClrCot.lod( texCoord, 0.0_f ) );
 					auto ccrTrs = writer.declLocale( "ccrTrs"
 						, c3d_mapCcrTrs.lod( texCoord, 0.0_f ) );
+					auto sheen = writer.declLocale( "sheen"
+						, c3d_mapSheen.lod( texCoord, 0.0_f ) );
 
 					auto eye = writer.declLocale( "eye"
 						, c3d_sceneData.cameraPosition );
@@ -240,7 +244,9 @@ namespace castor3d
 						, vec3( 0.0_f ) );
 					auto lightCoatingSpecular = writer.declLocale( "lightCoatingSpecular"
 						, vec3( 0.0_f ) );
-					shader::OutputComponents output{ lightDiffuse, lightSpecular, lightScattering, lightCoatingSpecular };
+					auto lightSheen = writer.declLocale( "lightSheen"
+						, vec2( 0.0_f ) );
+					shader::OutputComponents output{ lightDiffuse, lightSpecular, lightScattering, lightCoatingSpecular, lightSheen };
 					auto surface = writer.declLocale( "surface"
 						, shader::Surface{ vec3( in.fragCoord.xy(), depth )
 							, vsPosition
@@ -248,7 +254,7 @@ namespace castor3d
 							, wsNormal
 							, vec3( texCoord, 0.0_f ) } );
 
-					materials.fill( colMtl.rgb(), spcRgh, colMtl, ccrTrs.y(), material );
+					materials.fill( colMtl.rgb(), spcRgh, colMtl, ccrTrs.y(), sheen, material );
 					auto components = writer.declLocale( "components"
 						, shader::BlendComponents{ materials
 							, material
@@ -306,6 +312,7 @@ namespace castor3d
 					pxl_specular = lightSpecular;
 					pxl_scattering = lightScattering;
 					pxl_coatingSpecular = lightCoatingSpecular;
+					pxl_sheen = lightSheen;
 				}
 				ELSE
 				{
@@ -313,6 +320,7 @@ namespace castor3d
 					pxl_specular = vec3( 0.0_f, 0.0_f, 0.0_f );
 					pxl_scattering = vec3( 0.0_f, 0.0_f, 0.0_f );
 					pxl_coatingSpecular = vec3( 0.0_f, 0.0_f, 0.0_f );
+					pxl_sheen = vec2( 0.0_f, 1.0_f );
 				}
 				FI;
 			} );

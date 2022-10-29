@@ -91,12 +91,7 @@ namespace castor3d
 			, SsaoConfig const & ssao
 			, Texture const & ssaoResult
 			, Texture const & subsurfaceScattering
-			, Texture const & lightDiffuse
-			, Texture const & lightSpecular
-			, Texture const & lightScattering
-			, Texture const & lightCoatingSpecular
-			, Texture const & lightIndirectDiffuse
-			, Texture const & lightIndirectSpecular
+			, LightPassResult const & lighting
 			, Texture const & result
 			, SceneUbo const & sceneUbo
 			, GpInfoUbo const & gpInfoUbo
@@ -138,11 +133,7 @@ namespace castor3d
 		OpaquePassResult const & m_opaquePassResult;
 		Texture const & m_ssaoResult;
 		Texture const & m_subsurfaceScattering;
-		Texture const & m_lightSpecular;
-		Texture const & m_lightScattering;
-		Texture const & m_lightCoatingSpecular;
-		Texture const & m_lightIndirectDiffuse;
-		Texture const & m_lightIndirectSpecular;
+		LightPassResult const & m_lighting;
 		std::vector< ProgramPtr > m_programs;
 		uint32_t m_programIndex{};
 		crg::FramePass const * m_lastPass{};

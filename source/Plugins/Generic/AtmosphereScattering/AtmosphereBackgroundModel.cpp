@@ -62,7 +62,7 @@ namespace atmosphere_scattering
 	sdw::RetVec3 AtmosphereBackgroundModel::computeReflections( sdw::Vec3 const & wsIncident
 		, sdw::Vec3 const & wsNormal
 		, castor3d::shader::BlendComponents & components
-		, sdw::CombinedImage2DRg32 const & brdf )
+		, sdw::CombinedImage2DRgba32 const & brdf )
 	{
 		if ( !m_computeReflections )
 		{

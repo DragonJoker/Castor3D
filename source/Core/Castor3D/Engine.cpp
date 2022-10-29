@@ -1,5 +1,6 @@
 #include "Castor3D/Engine.hpp"
 
+#include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/ImporterFile.hpp"
 #include "Castor3D/Cache/ObjectCache.hpp"
 #include "Castor3D/Event/Frame/FrameListener.hpp"
@@ -102,13 +103,14 @@ namespace castor3d
 		}
 #endif
 
-		static Texture doCreatePrefilteredBrdf( RenderDevice const & device
+		static Texture doCreatePrefilteredBrdf( Engine & engine
+			, RenderDevice const & device
 			, crg::ResourceHandler & handler
 			, castor::Size const & size )
 		{
 			Texture result{ device
 				, handler
-				, "IblTexturesResult"
+				, "BrdfLUT"
 				, 0u
 				, { size[0], size[1], 1u }
 				, 1u
@@ -116,7 +118,7 @@ namespace castor3d
 #if !C3D_GenerateBRDFIntegration
 				, VK_FORMAT_R8G8B8A8_UNORM
 #else
-				, VK_FORMAT_R32G32B32A32_SFLOAT
+				, VK_FORMAT_R16G16B16A16_SFLOAT
 #endif
 				, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 #if !C3D_GenerateBRDFIntegration
@@ -128,10 +130,12 @@ namespace castor3d
 #if !C3D_GenerateBRDFIntegration
 			doLoadPrefilteredBrdfView( device, result );
 #else
-			BrdfPrefilter filter{ *scene.getEngine()
-				, { m_prefilteredBrdf->getDimensions().width, m_prefilteredBrdf->getDimensions().height }
-			, *m_prefilteredBrdfView };
-			filter.render();
+			BrdfPrefilter filter{ engine
+				, device
+				, size
+				, result };
+			auto queueData = device.graphicsData();
+			filter.render( *queueData );
 #endif
 			return result;
 		}
@@ -976,7 +980,8 @@ namespace castor3d
 		}
 		
 		auto & device = m_renderSystem->getRenderDevice();
-		m_brdf = eng::doCreatePrefilteredBrdf( device
+		m_brdf = eng::doCreatePrefilteredBrdf( *this
+			, device
 			, getGraphResourceHandler()
 			, { PrefilteredBrdfMapSize, PrefilteredBrdfMapSize } );
 		m_brdf.create();

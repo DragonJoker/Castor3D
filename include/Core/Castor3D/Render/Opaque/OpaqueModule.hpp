@@ -34,6 +34,7 @@ namespace castor3d
 		eEmsTrn, // RGB => Emissive, A => Transmittance
 		eClrCot, // RGB => Coating normal, A => Coating factor.
 		eCcrTrs, // R => Coating roughness, G => Transmission.
+		eSheen, // RGB => Sheen color factor, A => Sheen roughness.
 		CU_ScopedEnumBounds( eNmlOcc ),
 	};
 	C3D_API castor::String getTextureName( DsTexture texture );
