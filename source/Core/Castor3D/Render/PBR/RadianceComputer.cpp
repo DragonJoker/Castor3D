@@ -295,10 +295,11 @@ namespace castor3d
 		m_commands.submit( *queueData.queue );
 	}
 
-	ashes::Semaphore const & RadianceComputer::render( QueueData const & queueData
-		, ashes::Semaphore const & toWait )
+	crg::SemaphoreWaitArray RadianceComputer::render( crg::SemaphoreWaitArray signalsToWait
+		, ashes::Queue const & queue )const
 	{
-		return m_commands.submit( *queueData.queue, toWait );
+		return { 1u, { m_commands.submit( queue, signalsToWait )
+			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT } };
 	}
 
 	ashes::Sampler const & RadianceComputer::getSampler()const

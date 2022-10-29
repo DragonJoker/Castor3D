@@ -27,7 +27,7 @@ namespace castor3d::shader
 		C3D_API sdw::RetVec3 computeReflections( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, BlendComponents & components
-			, sdw::CombinedImage2DRg32 const & brdf )override;
+			, sdw::CombinedImage2DRgba32 const & brdf )override;
 		C3D_API sdw::RetVec3 computeRefractions( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::Float const & refractionRatio

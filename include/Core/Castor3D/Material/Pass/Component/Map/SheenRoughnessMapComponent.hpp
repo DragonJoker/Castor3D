@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_ClearcoatNormalMapComponent_H___
-#define ___C3D_ClearcoatNormalMapComponent_H___
+#ifndef ___C3D_SheenRoughnessMapComponent_H___
+#define ___C3D_SheenRoughnessMapComponent_H___
 
 #include "Castor3D/Material/Pass/Component/PassMapComponent.hpp"
 
@@ -12,10 +12,10 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	struct ClearcoatNormalMapComponent
+	struct SheenRoughnessMapComponent
 		: public PassMapComponent
 	{
-		static const TextureFlag ClearcoatNormal = TextureFlag( 0x01u );
+		static const TextureFlag SheenRoughness = TextureFlag( 0x01u );
 
 		struct ComponentsShader
 			: shader::PassComponentsShader
@@ -34,7 +34,7 @@ namespace castor3d
 
 			PassComponentTextureFlag getTextureFlags()const
 			{
-				return makeTextureFlag( getId(), ClearcoatNormal );
+				return makeTextureFlag( getId(), SheenRoughness );
 			}
 		};
 
@@ -75,22 +75,21 @@ namespace castor3d
 
 			PassComponentTextureFlag getTextureFlags()const override
 			{
-				return makeTextureFlag( getId(), ClearcoatNormal );
+				return makeTextureFlag( getId(), SheenRoughness );
 			}
 
 			void fillTextureConfiguration( TextureConfiguration & result
 				, uint32_t mask )const override
 			{
 				result.textureSpace |= TextureSpace::eNormalised;
-				result.textureSpace |= TextureSpace::eTangentSpace;
-				addFlagConfiguration( result, { getTextureFlags(), ( mask == 0 ? 0x00FFFFFFu : mask ) } );
+				addFlagConfiguration( result, { getTextureFlags(), ( mask == 0 ? 0xFF000000u : mask ) } );
 			}
 
 			castor::String getTextureFlagsName( PassComponentTextureFlag const & flags )const override
 			{
 				auto [passIndex, textureFlags] = splitTextureFlag( flags );
-				return ( passIndex == getId() && checkFlag( textureFlags, ClearcoatNormal ) )
-					? castor::String{ "ClearcoatNormal" }
+				return ( passIndex == getId() && checkFlag( textureFlags, SheenRoughness ) )
+					? castor::String{ "SheenRoughness" }
 					: castor::String{};
 			}
 
@@ -106,11 +105,11 @@ namespace castor3d
 			return castor::makeUniqueDerived< PassComponentPlugin, Plugin >( passComponent );
 		}
 
-		C3D_API explicit ClearcoatNormalMapComponent( Pass & pass );
+		C3D_API explicit SheenRoughnessMapComponent( Pass & pass );
 
 		PassComponentTextureFlag getTextureFlags()const override
 		{
-			return makeTextureFlag( getId(), ClearcoatNormal );
+			return makeTextureFlag( getId(), SheenRoughness );
 		}
 
 		C3D_API static castor::String const TypeName;

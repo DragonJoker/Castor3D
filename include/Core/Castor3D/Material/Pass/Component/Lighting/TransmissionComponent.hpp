@@ -48,6 +48,7 @@ namespace castor3d
 				, sdw::Vec4 const & spcRgh
 				, sdw::Vec4 const & colMtl
 				, sdw::Float const & transm
+				, sdw::Vec4 const & sheen
 				, shader::Material & material )const override;
 		};
 

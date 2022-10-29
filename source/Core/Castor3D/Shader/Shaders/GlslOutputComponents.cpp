@@ -41,6 +41,13 @@ namespace castor3d
 				result.emplace_back( std::move( expr ) );
 			}
 
+			args = sdw::makeFnArg( writer, value.m_sheen );
+
+			for ( auto & expr : args )
+			{
+				result.emplace_back( std::move( expr ) );
+			}
+
 			return result;
 		}
 
@@ -50,22 +57,26 @@ namespace castor3d
 			: OutputComponents{ { writer, "outDiffuse" }
 				, { writer, "outSpecular" }
 				, { writer, "outScattering" }
-				, { writer, "coatingSpecular" } }
+				, { writer, "coatingSpecular" }
+				, { writer, "sheen" } }
 		{
 		}
 
 		OutputComponents::OutputComponents( sdw::InOutVec3 const & diffuse
 			, sdw::InOutVec3 const & specular
 			, sdw::InOutVec3 const & scattering
-			, sdw::InOutVec3 const & coatingSpecular )
+			, sdw::InOutVec3 const & coatingSpecular
+			, sdw::InOutVec2 const & sheen )
 			: m_diffuse{ diffuse }
 			, m_specular{ specular }
 			, m_scattering{ scattering }
 			, m_coatingSpecular{ coatingSpecular }
+			, m_sheen{ sheen }
 			, m_expr{ sdw::expr::makeComma( makeExpr( m_diffuse )
 				, sdw::expr::makeComma( makeExpr( m_specular )
 					, sdw::expr::makeComma( makeExpr( m_scattering )
-						, makeExpr( m_coatingSpecular ) ) ) ) }
+						, sdw::expr::makeComma( makeExpr( m_coatingSpecular )
+							, makeExpr( m_sheen ) ) ) ) ) }
 		{
 		}
 
@@ -85,6 +96,7 @@ namespace castor3d
 			m_specular.setVar( var );
 			m_scattering.setVar( var );
 			m_coatingSpecular.setVar( var );
+			m_sheen.setVar( var );
 		}
 	}
 }

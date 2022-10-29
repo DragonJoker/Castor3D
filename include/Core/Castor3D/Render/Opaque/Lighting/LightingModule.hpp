@@ -45,6 +45,7 @@ namespace castor3d
 		eEmsTrn,
 		eClrCot,
 		eCcrTrs,
+		eSheen,
 		eCount,
 	};
 	/**
@@ -81,6 +82,7 @@ namespace castor3d
 		eSpecular,
 		eScattering,
 		eCoatingSpecular,
+		eSheen,
 		eIndirectDiffuse,
 		eIndirectSpecular,
 		CU_ScopedEnumBounds( eDepth ),

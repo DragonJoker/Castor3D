@@ -24,12 +24,56 @@
 
 namespace castor3d
 {
+	namespace brdf
+	{
+		struct MicrofacetDistributionSample
+			: public sdw::StructInstanceHelperT< "MicrofacetDistributionSample"
+			, sdw::type::MemoryLayout::eC
+			, sdw::FloatField< "pdf" >
+			, sdw::FloatField< "cosTheta" >
+			, sdw::FloatField< "sinTheta" >
+			, sdw::FloatField< "phi" > >
+		{
+			MicrofacetDistributionSample( sdw::ShaderWriter & writer
+				, sdw::expr::ExprPtr expr
+				, bool enabled = true )
+				: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+			{
+			}
+
+			auto pdf()const
+			{
+				return getMember< "pdf" >();
+			}
+			auto cosTheta()const
+			{
+				return getMember< "cosTheta" >();
+			}
+			auto sinTheta()const
+			{
+				return getMember< "sinTheta" >();
+			}
+			auto phi()const
+			{
+				return getMember< "phi" >();
+			}
+		};
+
+		Writer_Parameter( MicrofacetDistributionSample );
+	}
+
 	BrdfPrefilter::BrdfPrefilter( Engine & engine
 		, RenderDevice const & device
 		, castor::Size const & size
-		, ashes::ImageView const & dstTexture )
+		, Texture const & dstTexture )
 		: m_renderSystem{ *engine.getRenderSystem() }
 		, m_device{ device }
+		, m_image{ std::make_unique< ashes::Image >( *m_device
+			, dstTexture.image
+			, dstTexture.imageId.data->info ) }
+		, m_view{ dstTexture.targetViewId.data->info
+			, dstTexture.targetView
+			, m_image.get() }
 		, m_commands{ m_device, *m_device.graphicsData(), "BrdfPrefilter" }
 	{
 		// Initialise the vertex buffer.
@@ -71,7 +115,7 @@ namespace castor3d
 				VK_ATTACHMENT_LOAD_OP_DONT_CARE,
 				VK_ATTACHMENT_STORE_OP_DONT_CARE,
 				VK_IMAGE_LAYOUT_UNDEFINED,
-				VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+				VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
 			}
 		};
 		ashes::SubpassDescriptionArray subpasses;
@@ -118,7 +162,7 @@ namespace castor3d
 
 		// Initialise the frame buffer.
 		ashes::ImageViewCRefArray views;
-		views.emplace_back( dstTexture );
+		views.emplace_back( m_view );
 		m_frameBuffer = m_renderPass->createFrameBuffer( "BrdfPrefilter"
 			, VkExtent2D{ size.getWidth(), size.getHeight() }
 			, std::move( views ) );
@@ -138,7 +182,7 @@ namespace castor3d
 				ashes::PipelineMultisampleStateCreateInfo{},
 				ashes::PipelineDepthStencilStateCreateInfo{ 0u, false, false },
 				ashes::PipelineColorBlendStateCreateInfo{},
-				ashes::PipelineDynamicStateCreateInfo{ 0u, { VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR } },
+				ashes::nullopt,
 				*m_pipelineLayout,
 				*m_renderPass
 			} );
@@ -198,9 +242,9 @@ namespace castor3d
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			// Outputs
-			auto pxl_fragColor = writer.declOutput< Vec2 >( "pxl_FragColor", 0u );
+			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_FragColor", 0u );
 
-			auto radicalInverse = writer.implementFunction< Float >( "RadicalInverse_VdC"
+			auto radicalInverse = writer.implementFunction< Float >( "c3d_radicalInverse_VdC"
 				, [&]( UInt const & inBits )
 				{
 					auto bits = writer.declLocale( "bits"
@@ -214,7 +258,7 @@ namespace castor3d
 				}
 				, InUInt{ writer, "inBits" } );
 
-			auto hammersley = writer.implementFunction< Vec2 >( "Hammersley"
+			auto hammersley = writer.implementFunction< Vec2 >( "c3d_hammersley"
 				, [&]( UInt const & i
 					, UInt const & n )
 				{
@@ -223,47 +267,7 @@ namespace castor3d
 				, InUInt{ writer, "i" }
 				, InUInt{ writer, "n" } );
 
-			auto importanceSample = writer.implementFunction< Vec3 >( "ImportanceSampleGGX"
-				, [&]( Vec2 const & xi
-					, Vec3 const & n
-					, Float const & roughness )
-				{
-					// From https://learnopengl.com/#!PBR/Lighting
-					auto a = writer.declLocale( "a"
-						, roughness * roughness );
-
-					auto phi = writer.declLocale( "phi"
-						, castor::PiMult2< float > * xi.x() );
-					auto cosTheta = writer.declLocale( "cosTheta"
-						, sqrt( ( 1.0_f - xi.y() ) / ( 1.0_f + ( a * a - 1.0_f ) * xi.y() ) ) );
-					auto sinTheta = writer.declLocale( "sinTheta"
-						, sqrt( 1.0_f - cosTheta * cosTheta ) );
-
-					// from spherical coordinates to cartesian coordinates
-					auto H = writer.declLocale< Vec3 >( "H" );
-					H.x() = cos( phi ) * sinTheta;
-					H.y() = sin( phi ) * sinTheta;
-					H.z() = cosTheta;
-
-					// from tangent-space vector to world-space sample vector
-					auto up = writer.declLocale( "up"
-						, writer.ternary( sdw::abs( n.z() ) < 0.999_f
-							, vec3( 0.0_f, 0.0_f, 1.0_f )
-							, vec3( 1.0_f, 0.0_f, 0.0_f ) ) );
-					auto tangent = writer.declLocale( "tangent"
-						, normalize( cross( up, n ) ) );
-					auto bitangent = writer.declLocale( "bitangent"
-						, cross( n, tangent ) );
-
-					auto sampleVec = writer.declLocale( "sampleVec"
-						, tangent * H.x() + bitangent * H.y() + n * H.z() );
-					writer.returnStmt( normalize( sampleVec ) );
-				}
-				, InVec2{ writer, "xi" }
-				, InVec3{ writer, "n" }
-				, InFloat{ writer, "roughness" } );
-
-			auto geometrySchlickGGX = writer.implementFunction< Float >( "GeometrySchlickGGX"
+			auto geometrySchlickGGX = writer.implementFunction< Float >( "c3d_geometrySchlickGGX"
 				, [&]( Float const & product
 					, Float const & roughness )
 				{
@@ -283,7 +287,7 @@ namespace castor3d
 				, InFloat( writer, "product" )
 				, InFloat( writer, "roughness" ) );
 
-			auto geometrySmith = writer.implementFunction< Float >( "GeometrySmith"
+			auto geometrySmith = writer.implementFunction< Float >( "c3d_geometrySmith"
 				, [&]( Float const & NdotV
 					, Float const & NdotL
 					, Float const & roughness )
@@ -300,21 +304,155 @@ namespace castor3d
 				, InFloat( writer, "NdotL" )
 				, InFloat( writer, "roughness" ) );
 
-			auto integrateBRDF = writer.implementFunction< Vec2 >( "IntegrateBRDF"
+			auto distributionGGX = writer.implementFunction< Float >( "c3d_distributionGGX"
+				, [&]( Float const & NdotH
+					, Float alpha )
+				{
+					auto a = writer.declLocale( "a"
+						, NdotH * alpha );
+					auto k = writer.declLocale( "k"
+						, alpha / ( 1.0_f - NdotH * NdotH + a * a ) );
+					writer.returnStmt( k * k * 1.0_f / castor::Pi< float > );
+				}
+				, InFloat{ writer, "NdotH" }
+				, InFloat{ writer, "alpha" } );
+
+			auto distributionCharlie = writer.implementFunction< Float >( "c3d_distributionCharlie"
+				, [&]( Float const & NdotH
+					, Float alpha )
+				{
+					alpha = max( alpha, 0.000001_f );
+					auto invR = writer.declLocale( "invR"
+						, 1.0_f / alpha );
+					auto cos2h = writer.declLocale( "cos2h"
+						, NdotH * NdotH );
+					auto sin2h = writer.declLocale( "sin2h"
+						, 1.0_f - cos2h );
+					writer.returnStmt( ( 2.0_f * invR ) * pow( sin2h, invR * 0.5_f ) / castor::Tau< float > );
+				}
+				, InFloat{ writer, "NdotH" }
+				, InFloat{ writer, "alpha" } );
+
+			auto visibilityAshikhmin = writer.implementFunction< Float >( "c3d_visibilityAshikhmin"
+				, [&]( Float const & NdotL
+					, Float NdotV )
+				{
+					writer.returnStmt( clamp( 1.0_f / ( 4.0_f * ( NdotL + NdotV - NdotL * NdotV ) )
+						, 0.0_f
+						, 1.0_f ) );
+				}
+				, InFloat{ writer, "NdotL" }
+				, InFloat{ writer, "NdotV" } );
+
+			auto importanceSampleGGX = writer.implementFunction< brdf::MicrofacetDistributionSample >( "c3d_importanceSampleGGX"
+				, [&]( Vec2 const & xi
+					, Float const & roughness )
+				{
+					auto result = writer.declLocale< brdf::MicrofacetDistributionSample >( "result" );
+
+					// Evaluate sampling equations
+					auto alpha = writer.declLocale( "alpha"
+						, roughness * roughness );
+					auto a2 = writer.declLocale( "a2"
+						, alpha * alpha );
+
+					result.phi() = castor::Tau< float > *xi.x();
+					result.cosTheta() = sqrt( ( 1.0_f - xi.y() ) / ( 1.0_f + ( a2 - 1.0_f ) * xi.y() ) );
+					result.sinTheta() = sqrt( 1.0_f - result.cosTheta() * result.cosTheta() );
+
+					// Evaluate GGX pdf (for half vector)
+					result.pdf() = distributionGGX( result.cosTheta(), alpha );
+
+					// Apply the Jacobian to obtain a pdf that is parameterized by l
+					// see https://bruop.github.io/ibl/
+					// Typically you'd have the following:
+					// float pdf = D_GGX(NoH, roughness) * NoH / (4.0 * VoH);
+					// but since V = N => VoH == NoH
+					result.pdf() /= 4.0_f;
+
+					writer.returnStmt( result );
+				}
+				, InVec2{ writer, "xi" }
+				, InFloat{ writer, "roughness" } );
+
+			auto importanceSampleCharlie = writer.implementFunction< brdf::MicrofacetDistributionSample >( "c3d_importanceSampleCharlie"
+				, [&]( Vec2 const & xi
+					, Float const & roughness )
+				{
+					auto result = writer.declLocale< brdf::MicrofacetDistributionSample >( "result" );
+
+					// Evaluate sampling equations
+					auto alpha = writer.declLocale( "alpha"
+						, roughness * roughness );
+
+					result.phi() = castor::Tau< float > * xi.x();
+					result.sinTheta() = writer.ternary( alpha == 0.0_f
+						, 0.0_f
+						, pow( xi.y(), alpha / ( 2.0f * alpha + 1.0_f ) ) );
+					result.cosTheta() = sqrt( 1.0_f - result.sinTheta() * result.sinTheta() );
+
+					// Evaluate GGX pdf (for half vector)
+					result.pdf() = distributionCharlie( result.cosTheta(), alpha );
+
+					// Apply the Jacobian to obtain a pdf that is parameterized by l
+					// see https://bruop.github.io/ibl/
+					// Typically you'd have the following:
+					// float pdf = D_GGX(NoH, roughness) * NoH / (4.0 * VoH);
+					// but since V = N => VoH == NoH
+					result.pdf() /= 4.0_f;
+
+					writer.returnStmt( result );
+				}
+				, InVec2{ writer, "xi" }
+				, InFloat{ writer, "roughness" } );
+
+			auto getImportanceSample = writer.implementFunction< sdw::Vec4 >( "c3d_getImportanceSample"
+				, [&]( brdf::MicrofacetDistributionSample const & is
+					, sdw::Vec3 const & n )
+				{
+					// from spherical coordinates to cartesian coordinates
+					auto localSpaceDirection = writer.declLocale( "localSpaceDirection"
+						, normalize( vec3( cos( is.phi() ) * is.sinTheta()
+							, sin( is.phi() ) * is.sinTheta()
+							, is.cosTheta() ) ) );
+
+					// from tangent-space vector to world-space sample vector
+					auto up = writer.declLocale( "up"
+						, writer.ternary( sdw::abs( n.z() ) < 0.999_f
+							, vec3( 0.0_f, 0.0_f, 1.0_f )
+							, vec3( 1.0_f, 0.0_f, 0.0_f ) ) );
+					auto tangent = writer.declLocale( "tangent"
+						, normalize( cross( up, n ) ) );
+					auto bitangent = writer.declLocale( "bitangent"
+						, cross( n, tangent ) );
+
+					auto sampleVec = writer.declLocale( "sampleVec"
+						, ( tangent * localSpaceDirection.x()
+							+ bitangent * localSpaceDirection.y()
+							+ n * localSpaceDirection.z() ) );
+
+					writer.returnStmt( vec4( sampleVec, is.pdf() ) );
+				}
+				, brdf::InMicrofacetDistributionSample{ writer, "is" }
+				, InVec3{ writer, "n" } );
+
+			auto integrateBRDF = writer.implementFunction< Vec3 >( "c3d_integrateBRDF"
 				, [&]( Float const & NdotV
 					, Float const & roughness )
 				{
-					// From https://learnopengl.com/#!PBR/Lighting
-					auto V = writer.declLocale< Vec3 >( "V" );
-					V.x() = sqrt( 1.0_f - NdotV * NdotV );
-					V.y() = 0.0_f;
-					V.z() = NdotV;
+					// Compute spherical view vector: (sin(phi), 0, cos(phi))
+					auto V = writer.declLocale( "V"
+						, vec3( sqrt( 1.0_f - NdotV * NdotV ), 0.0_f, NdotV ) );
+
+					// The macro surface normal just points up.
 					auto N = writer.declLocale( "N"
 						, vec3( 0.0_f, 0.0_f, 1.0_f ) );
 
 					auto A = writer.declLocale( "A"
 						, 0.0_f );
 					auto B = writer.declLocale( "B"
+						, 0.0_f );
+					auto C = writer.declLocale( "C"
 						, 0.0_f );
 
 					auto sampleCount = writer.declLocale( "sampleCount"
@@ -324,8 +462,43 @@ namespace castor3d
 					{
 						auto xi = writer.declLocale( "xi"
 							, hammersley( i, sampleCount ) );
+
+						// GGX
+						{
+							auto importanceSample = writer.declLocale( "importanceSample"
+								, getImportanceSample( importanceSampleGGX( xi, roughness ), N ) );
+							auto H = writer.declLocale( "H"
+								,importanceSample.xyz() );
+							auto L = writer.declLocale( "L"
+								, normalize( vec3( 2.0_f ) * dot( V, H ) * H - V ) );
+
+							auto NdotL = writer.declLocale( "NdotL"
+								, max( L.z(), 0.0_f ) );
+							auto NdotH = writer.declLocale( "NdotH"
+								, max( H.z(), 0.0_f ) );
+							auto VdotH = writer.declLocale( "VdotH"
+								, max( dot( V, H ), 0.0_f ) );
+
+							IF( writer, NdotL > 0.0_f )
+							{
+								auto G = writer.declLocale( "G"
+									, geometrySmith( NdotV, max( dot( N, L ), 0.0_f ), roughness ) );
+								auto vis = writer.declLocale( "G_Vis"
+									, ( G * VdotH ) / ( NdotH * NdotV ) );
+								auto Fc = writer.declLocale( "Fc"
+									, pow( 1.0_f - VdotH, 5.0_f ) );
+
+								A += ( 1.0_f - Fc ) * vis;
+								B += Fc * vis;
+							}
+							FI;
+						}
+
+						// Charlie
+						auto importanceSample = writer.declLocale( "importanceSample"
+							, getImportanceSample( importanceSampleCharlie( xi, roughness ), N ) );
 						auto H = writer.declLocale( "H"
-							, importanceSample( xi, N, roughness ) );
+							, importanceSample.xyz() );
 						auto L = writer.declLocale( "L"
 							, normalize( vec3( 2.0_f ) * dot( V, H ) * H - V ) );
 
@@ -338,15 +511,11 @@ namespace castor3d
 
 						IF( writer, NdotL > 0.0_f )
 						{
-							auto G = writer.declLocale( "G"
-								, geometrySmith( NdotV, max( dot( N, L ), 0.0_f ), roughness ) );
-							auto G_Vis = writer.declLocale( "G_Vis"
-								, ( G * VdotH ) / ( NdotH * NdotV ) );
-							auto Fc = writer.declLocale( "Fc"
-								, pow( 1.0_f - VdotH, 5.0_f ) );
-
-							A += ( 1.0_f - Fc ) * G_Vis;
-							B += Fc * G_Vis;
+							auto sheenDistribution = writer.declLocale( "G"
+								, distributionCharlie( roughness, NdotH ) );
+							auto sheenVisibility = writer.declLocale( "G"
+								, visibilityAshikhmin( NdotL, NdotV ) );
+							C += sheenVisibility * sheenDistribution * NdotL * VdotH;
 						}
 						FI;
 					}
@@ -354,7 +523,8 @@ namespace castor3d
 
 					A /= writer.cast< Float >( sampleCount );
 					B /= writer.cast< Float >( sampleCount );
-					writer.returnStmt( vec2( A, B ) );
+					C /= writer.cast< Float >( sampleCount );
+					writer.returnStmt( vec3( A, B, C ) );
 				}
 				, InFloat( writer, "NdotV" )
 				, InFloat( writer, "roughness" ) );
@@ -362,7 +532,7 @@ namespace castor3d
 			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
 				, FragmentOut out )
 				{
-					pxl_fragColor.xy() = integrateBRDF( vtx_texture.x(), 1.0_f - vtx_texture.y() );
+					pxl_fragColor = vec4( integrateBRDF( vtx_texture.x(), vtx_texture.y() ), 1.0_f );
 				} );
 
 			pxl.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

@@ -46,6 +46,19 @@ namespace castor3d
 		return *semaphore;
 	}
 
+	ashes::Semaphore const & CommandsSemaphore::submit( ashes::Queue const & queue
+		, crg::SemaphoreWaitArray const & toWait )const
+	{
+		ashes::VkSemaphoreArray semaphores;
+		ashes::VkPipelineStageFlagsArray stages;
+		crg::convert( toWait, semaphores, stages );
+		queue.submit( *commandBuffer
+			, semaphores
+			, stages
+			, *semaphore );
+		return *semaphore;
+	}
+
 	void CommandsSemaphore::submit( ashes::Queue const & queue
 		, ashes::VkSemaphoreArray & semaphores
 		, ashes::VkPipelineStageFlagsArray & stages )

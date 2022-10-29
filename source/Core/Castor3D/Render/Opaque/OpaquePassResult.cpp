@@ -31,6 +31,7 @@ namespace castor3d
 				cuT( "EmsTrn" ),
 				cuT( "ClrCot" ),
 				cuT( "CcrTrs" ),
+				cuT( "Sheen" ),
 			}
 		};
 
@@ -48,6 +49,7 @@ namespace castor3d
 				VK_FORMAT_R16G16B16A16_SFLOAT,
 				VK_FORMAT_R16G16B16A16_SFLOAT,
 				VK_FORMAT_R16G16_SFLOAT,
+				VK_FORMAT_R16G16B16A16_SFLOAT,
 			}
 		};
 		return Values[size_t( texture )];
@@ -58,6 +60,7 @@ namespace castor3d
 		static std::array< VkClearValue, size_t( DsTexture::eCount ) > Values
 		{
 			{
+				transparentBlackClearColor,
 				transparentBlackClearColor,
 				transparentBlackClearColor,
 				transparentBlackClearColor,
@@ -80,6 +83,7 @@ namespace castor3d
 				VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_STORAGE_BIT,
 				VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_STORAGE_BIT,
 				VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_STORAGE_BIT,
+				VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_STORAGE_BIT,
 			}
 		};
 		return Values[size_t( texture )];
@@ -90,6 +94,7 @@ namespace castor3d
 		static std::array< VkBorderColor, size_t( DsTexture::eCount ) > Values
 		{
 			{
+				VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK,
 				VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK,
 				VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK,
 				VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK,

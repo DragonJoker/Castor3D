@@ -561,6 +561,18 @@ namespace castor3d
 		return selectSuitableFormat( formats, requiredFeatures );
 	}
 
+	VkFormat RenderDevice::selectSmallestFormatRGSFloatFormat( VkFormatFeatureFlags requiredFeatures )const
+	{
+		std::vector< VkFormat > formats
+		{
+			VK_FORMAT_R16G16_SFLOAT,
+			VK_FORMAT_R32G32_SFLOAT,
+			VK_FORMAT_R16G16B16A16_SFLOAT,
+			VK_FORMAT_R32G32B32A32_SFLOAT,
+		};
+		return selectSuitableFormat( formats, requiredFeatures );
+	}
+
 	VkFormat RenderDevice::selectSmallestFormatRGBUFloatFormat( VkFormatFeatureFlags requiredFeatures )const
 	{
 		std::vector< VkFormat > formats

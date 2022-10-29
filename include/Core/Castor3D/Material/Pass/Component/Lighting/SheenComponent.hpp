@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_SpecularComponent_H___
-#define ___C3D_SpecularComponent_H___
+#ifndef ___C3D_SheenComponent_H___
+#define ___C3D_SheenComponent_H___
 
 #include "Castor3D/Material/Pass/Component/BaseDataPassComponent.hpp"
 
@@ -12,8 +12,20 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	struct SpecularComponent
-		: public BaseDataPassComponentT< castor::AtomicGroupChangeTracked< castor::AtomicChangeTracked< castor::RgbColour > > >
+	struct SheenData
+	{
+		explicit SheenData( std::atomic_bool & dirty )
+			: factor{ dirty, castor::HdrRgbColour{ 0.0f, 0.0f, 0.0f } }
+			, roughness{ dirty, 0.0f }
+		{
+		}
+
+		castor::AtomicGroupChangeTracked< castor::HdrRgbColour > factor;
+		castor::AtomicGroupChangeTracked< float > roughness;
+	};
+
+	struct SheenComponent
+		: public BaseDataPassComponentT< SheenData >
 	{
 		struct ComponentsShader
 			: shader::PassComponentsShader
@@ -36,11 +48,6 @@ namespace castor3d
 				, sdw::Float const & passMultiplier
 				, shader::BlendComponents & res
 				, shader::BlendComponents const & src )const override;
-			C3D_API void updateOutputs( sdw::StructInstance const & components
-				, sdw::StructInstance const & surface
-				, sdw::Vec4 & spcRgh
-				, sdw::Vec4 & colMtl
-				, sdw::Vec4 & sheen )const override;
 		};
 
 		struct MaterialShader
@@ -49,12 +56,6 @@ namespace castor3d
 			C3D_API MaterialShader();
 			C3D_API void fillMaterialType( sdw::type::BaseStruct & type
 				, sdw::expr::ExprList & inits )const override;
-			C3D_API void updateMaterial( sdw::Vec3 const & albedo
-				, sdw::Vec4 const & spcRgh
-				, sdw::Vec4 const & colMtl
-				, sdw::Float const & transm
-				, sdw::Vec4 const & sheen
-				, shader::Material & material )const override;
 		};
 
 		class Plugin
@@ -90,49 +91,31 @@ namespace castor3d
 			return castor::makeUniqueDerived< PassComponentPlugin, Plugin >( passComponent );
 		}
 
-		C3D_API explicit SpecularComponent( Pass & pass
-			, castor::RgbColour defaultValue = Default );
+		C3D_API explicit SheenComponent( Pass & pass );
 
 		C3D_API void accept( PassVisitorBase & vis )override;
 
-		bool isValueSet()const
+		castor::HdrRgbColour const & getSheenFactor()const
 		{
-			return m_value.value().isDirty();
+			return m_value.factor;
 		}
 
-		castor::RgbColour const & getSpecular()const
+		float const & getRoughnessFactor()const
 		{
-			return *getData();
+			return m_value.roughness;
 		}
 
-		void setSpecular( castor::RgbColour const & v )
+		void setSheenFactor( castor::HdrRgbColour const & v )
 		{
-			setData( castor::makeChangeTrackedT< std::atomic_bool >( v ) );
+			m_value.factor = v;
 		}
 
-		void setSpecular( castor::HdrRgbColour const & v
-			, float gamma )
+		void setRoughnessFactor( float v )
 		{
-			setSpecular( castor::RgbColour{ v, gamma } );
-		}
-
-		void setSpecular( castor::Coords3f const & v )
-		{
-			setSpecular( castor::RgbColour{ v[0u], v[1u], v[2u] } );
-		}
-
-		void setSpecular( castor::Point3f const & v )
-		{
-			setSpecular( castor::RgbColour{ v[0u], v[1u], v[2u] } );
+			m_value.roughness = v;
 		}
 
 		C3D_API static castor::String const TypeName;
-		static float constexpr DefaultComponent = 0.0f;
-		static float constexpr DefaultPhongComponent = 1.0f;
-		static float constexpr DefaultPbrComponent = 0.04f;
-		C3D_API static castor::RgbColour const Default;
-		C3D_API static castor::RgbColour const DefaultPhong;
-		C3D_API static castor::RgbColour const DefaultPbr;
 
 	private:
 		PassComponentUPtr doClone( Pass & pass )const override;

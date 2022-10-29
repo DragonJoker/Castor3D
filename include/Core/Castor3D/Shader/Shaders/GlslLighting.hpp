@@ -39,6 +39,7 @@ namespace castor3d::shader
 			, sdw::Vec3 const & directSpecular
 			, sdw::Vec3 const & directScattering
 			, sdw::Vec3 const & directCoatingSpecular
+			, sdw::Vec2 const & directSheen
 			, sdw::Vec3 const & indirectSpecular
 			, sdw::Vec3 const & directAmbient
 			, sdw::Vec3 const & indirectAmbient
@@ -46,7 +47,8 @@ namespace castor3d::shader
 			, sdw::Vec3 const & emissive
 			, sdw::Vec3 reflected
 			, sdw::Vec3 refracted
-			, sdw::Vec3 coatReflected );
+			, sdw::Vec3 coatReflected
+			, sdw::Vec3 sheenReflected );
 		C3D_API virtual sdw::Vec3 adjustDirectAmbient( BlendComponents const & components
 			, sdw::Vec3 const & directAmbient )const = 0;
 		C3D_API virtual sdw::Vec3 adjustDirectSpecular( BlendComponents const & components
@@ -58,12 +60,14 @@ namespace castor3d::shader
 			, sdw::Vec3 const & directSpecular
 			, sdw::Vec3 const & directScattering
 			, sdw::Vec3 const & directCoatingSpecular
+			, sdw::Vec2 const & directSheen
 			, sdw::Vec3 const & indirectSpecular
 			, sdw::Vec3 const & directAmbient
 			, sdw::Vec3 const & indirectAmbient
 			, sdw::Vec3 reflected
 			, sdw::Vec3 refracted
-			, sdw::Vec3 coatReflected );
+			, sdw::Vec3 coatReflected
+			, sdw::Vec3 sheenReflected );
 		C3D_API virtual ReflectionModelPtr getReflectionModel( uint32_t & envMapBinding
 			, uint32_t envMapSet )const = 0;
 		/**
@@ -306,6 +310,7 @@ namespace castor3d::shader
 			, sdw::Vec3 const & directSpecular
 			, sdw::Vec3 const & directScattering
 			, sdw::Vec3 const & directCoatingSpecular
+			, sdw::Vec2 const & directSheen
 			, sdw::Vec3 const & indirectSpecular
 			, sdw::Vec3 const & directAmbient
 			, sdw::Vec3 const & indirectAmbient
@@ -313,7 +318,8 @@ namespace castor3d::shader
 			, sdw::Vec3 const & emissive
 			, sdw::Vec3 const & reflected
 			, sdw::Vec3 const & refracted
-			, sdw::Vec3 const & coatReflected ) = 0;
+			, sdw::Vec3 const & coatReflected
+			, sdw::Vec3 const & sheenReflected ) = 0;
 		C3D_API static LightingModelPtr createModel( Engine const & engine
 			, Materials const & materials
 			, Utils & utils

@@ -35,11 +35,12 @@ namespace castor3d
 				, VkExtent2D const & size
 				, ashes::ImageView const & srcView
 				, Texture const & dstTexture
-				, SamplerResPtr sampler );
+				, SamplerResPtr sampler
+				, bool isCharlie );
 			void registerFrames();
 			void render( QueueData const & queueData );
-			ashes::Semaphore const & render( QueueData const & queueData
-				, ashes::Semaphore const & toWait );
+			crg::SemaphoreWaitArray render( crg::SemaphoreWaitArray signalsToWait
+				, ashes::Queue const & queue )const;
 
 		private:
 			struct FrameBuffer
@@ -48,6 +49,7 @@ namespace castor3d
 				ashes::FrameBufferPtr frameBuffer;
 			};
 			ashes::RenderPass const & m_renderPass;
+			std::string m_prefix;
 			SamplerResPtr m_sampler;
 			std::array< FrameBuffer, 6u > m_frameBuffers;
 			CommandsSemaphore m_commands;
@@ -62,6 +64,7 @@ namespace castor3d
 		 *\param[in]	size		The render size.
 		 *\param[in]	srcTexture	The cube texture source.
 		 *\param[in]	sampler		The sampler used for the source texture.
+		 *\param[in]	isCharlie	\p true for Charlie distribution (for sheen), \p false for GGX.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine		Le moteur.
@@ -69,12 +72,14 @@ namespace castor3d
 		 *\param[in]	size		La taille du rendu.
 		 *\param[in]	srcTexture	La texture cube source.
 		 *\param[in]	sampler		Le sampler utilisé pour la texture source.
+		 *\param[in]	isCharlie	\p true pour la distribution Charlie (pour le sheen), \p false pour la distribution GGX.
 		 */
 		C3D_API explicit EnvironmentPrefilter( Engine & engine
 			, RenderDevice const & device
 			, castor::Size const & size
 			, Texture const & srcTexture
-			, SamplerResPtr sampler );
+			, SamplerResPtr sampler
+			, bool isCharlie );
 		C3D_API ~EnvironmentPrefilter();
 		/**
 		 *\~english
@@ -97,8 +102,8 @@ namespace castor3d
 		 *\param[in]	toWait		Le sémaphore de la passe de rendu précédente.
 		 *\return		Les sémaphores signalés par ce dessin.
 		 */
-		C3D_API ashes::Semaphore const & render( QueueData const & queueData
-			, ashes::Semaphore const & toWait );
+		C3D_API crg::SemaphoreWaitArray render( crg::SemaphoreWaitArray signalsToWait
+			, ashes::Queue const & queue )const;
 		/**
 		*\~english
 		*name
@@ -122,6 +127,7 @@ namespace castor3d
 	private:
 		RenderDevice const & m_device;
 		Texture const & m_srcView;
+		std::string m_prefix;
 		ashes::ImagePtr m_srcImage;
 		ashes::ImageView m_srcImageView;
 		Texture m_result;

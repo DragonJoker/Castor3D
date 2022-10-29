@@ -61,8 +61,8 @@ namespace castor3d
 		 *\param[in]	toWait		Le sémaphore de la passe de rendu précédente.
 		 *\return		Les sémaphores signalés par ce dessin.
 		 */
-		C3D_API ashes::Semaphore const & render( QueueData const & queueData
-			, ashes::Semaphore const & toWait );
+		C3D_API crg::SemaphoreWaitArray render( crg::SemaphoreWaitArray signalsToWait
+			, ashes::Queue const & queue )const;
 		/**
 		*\~english
 		*name

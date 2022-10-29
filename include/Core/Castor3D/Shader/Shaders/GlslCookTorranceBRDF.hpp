@@ -13,26 +13,32 @@ namespace castor3d::shader
 	public:
 		C3D_API explicit CookTorranceBRDF( sdw::ShaderWriter & writer
 			, Utils & utils );
-		C3D_API sdw::RetVec3 compute( Light const & light
-			, sdw::Vec3 const & worldEye
-			, sdw::Vec3 const & direction
+		C3D_API sdw::RetVec3 compute( sdw::Vec3 const & radiance
+			, sdw::Vec2 const & intensity
+			, sdw::Float const & HdotV
+			, sdw::Float const & NdotH
+			, sdw::Float const & NdotV
+			, sdw::Float const & NdotL
 			, sdw::Vec3 const & specular
 			, sdw::Float const & metalness
 			, sdw::Float const & roughness
 			, Surface surface
 			, OutputComponents & output );
-		C3D_API sdw::RetVec3 compute( sdw::Vec3 const & radiance
-			, sdw::Vec2 const & intensity
-			, sdw::Vec3 const & worldEye
-			, sdw::Vec3 const & direction
+		C3D_API sdw::RetVec3 compute( Light const & light
+			, sdw::Float const & HdotV
+			, sdw::Float const & NdotH
+			, sdw::Float const & NdotV
+			, sdw::Float const & NdotL
 			, sdw::Vec3 const & specular
 			, sdw::Float const & metalness
 			, sdw::Float const & roughness
 			, Surface surface
 			, OutputComponents & output );
 		C3D_API void computeAON( Light const & light
-			, sdw::Vec3 const & worldEye
-			, sdw::Vec3 const & direction
+			, sdw::Float const & HdotV
+			, sdw::Float const & NdotH
+			, sdw::Float const & NdotV
+			, sdw::Float const & NdotL
 			, sdw::Vec3 const & specular
 			, sdw::Float const & metalness
 			, sdw::Float const & roughness
@@ -40,8 +46,10 @@ namespace castor3d::shader
 			, Surface surface
 			, OutputComponents & output );
 		C3D_API sdw::RetVec3 computeSpecular( Light const & light
-			, sdw::Vec3 const & worldEye
-			, sdw::Vec3 const & direction
+			, sdw::Float const & HdotV
+			, sdw::Float const & NdotH
+			, sdw::Float const & NdotV
+			, sdw::Float const & NdotL
 			, sdw::Vec3 const & specular
 			, sdw::Float const & metalness
 			, sdw::Float const & roughness
@@ -104,17 +112,22 @@ namespace castor3d::shader
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3
 			, sdw::InVec2
-			, sdw::InVec3
-			, sdw::InVec3
+			, sdw::InFloat
+			, sdw::InFloat
+			, sdw::InFloat
+			, sdw::InFloat
 			, sdw::InVec3
 			, sdw::InFloat
 			, sdw::InFloat
 			, InSurface
 			, OutputComponents & > m_computeCookTorrance;
 		sdw::Function< sdw::Void
-			, InLight
 			, sdw::InVec3
-			, sdw::InVec3
+			, sdw::InVec2
+			, sdw::InFloat
+			, sdw::InFloat
+			, sdw::InFloat
+			, sdw::InFloat
 			, sdw::InVec3
 			, sdw::InFloat
 			, sdw::InFloat
@@ -124,8 +137,10 @@ namespace castor3d::shader
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3
 			, sdw::InVec2
-			, sdw::InVec3
-			, sdw::InVec3
+			, sdw::InFloat
+			, sdw::InFloat
+			, sdw::InFloat
+			, sdw::InFloat
 			, sdw::InVec3
 			, sdw::InFloat
 			, sdw::InFloat

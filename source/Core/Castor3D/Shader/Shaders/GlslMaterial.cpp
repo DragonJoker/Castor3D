@@ -360,6 +360,7 @@ namespace castor3d::shader
 		, sdw::Vec4 const & spcRgh
 		, sdw::Vec4 const & colMtl
 		, sdw::Float const & transm
+		, sdw::Vec4 const & sheen
 		, Material & material )
 	{
 		if ( isEnabled() )
@@ -368,6 +369,7 @@ namespace castor3d::shader
 				, spcRgh
 				, colMtl
 				, transm
+				, sheen
 				, material );
 		}
 	}
@@ -375,14 +377,16 @@ namespace castor3d::shader
 	void Materials::apply( Material const & material
 		, SurfaceBase const & surface
 		, sdw::Vec4 & spcRgh
-		, sdw::Vec4 & colMtl )
+		, sdw::Vec4 & colMtl
+		, sdw::Vec4 & sheen )
 	{
 		if ( isEnabled() )
 		{
 			m_passShaders.updateOutputs( material
 				, surface
 				, spcRgh
-				, colMtl );
+				, colMtl
+				, sheen );
 		}
 	}
 

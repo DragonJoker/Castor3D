@@ -151,7 +151,8 @@ namespace castor3d
 	void RoughnessComponent::ComponentsShader::updateOutputs( sdw::StructInstance const & components
 		, sdw::StructInstance const & surface
 		, sdw::Vec4 & spcRgh
-		, sdw::Vec4 & colMtl )const
+		, sdw::Vec4 & colMtl
+		, sdw::Vec4 & sheen )const
 	{
 		spcRgh.a() = components.getMember< sdw::Float >( "roughness", true );
 	}
@@ -177,6 +178,7 @@ namespace castor3d
 		, sdw::Vec4 const & spcRgh
 		, sdw::Vec4 const & colMtl
 		, sdw::Float const & transm
+		, sdw::Vec4 const & sheen
 		, shader::Material & material )const
 	{
 		material.getMember< sdw::Float >( "roughness", true ) = spcRgh.a();

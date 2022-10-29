@@ -60,6 +60,7 @@ namespace castor3d::shader
 		, sdw::Vec3 const & directSpecular
 		, sdw::Vec3 const & directScattering
 		, sdw::Vec3 const & directCoatingSpecular
+		, sdw::Vec2 const & directSheen
 		, sdw::Vec3 const & indirectSpecular
 		, sdw::Vec3 const & directAmbient
 		, sdw::Vec3 const & indirectAmbient
@@ -67,7 +68,8 @@ namespace castor3d::shader
 		, sdw::Vec3 const & emissive
 		, sdw::Vec3 reflected
 		, sdw::Vec3 refracted
-		, sdw::Vec3 coatReflected )
+		, sdw::Vec3 coatReflected
+		, sdw::Vec3 sheenReflected )
 	{
 		IF( m_writer, components.refractionRatio != 0.0_f
 			&& components.hasTransmission == 0_u )
@@ -104,6 +106,7 @@ namespace castor3d::shader
 			, directSpecular
 			, directScattering
 			, directCoatingSpecular
+			, directSheen
 			, indirectSpecular
 			, directAmbient
 			, indirectAmbient
@@ -111,7 +114,8 @@ namespace castor3d::shader
 			, emissive
 			, std::move( reflected )
 			, std::move( refracted )
-			, std::move( coatReflected ) );
+			, std::move( coatReflected )
+			, std::move( sheenReflected ) );
 	}
 
 	sdw::Vec3 LightingModel::combine( BlendComponents const & components
@@ -121,12 +125,14 @@ namespace castor3d::shader
 		, sdw::Vec3 const & directSpecular
 		, sdw::Vec3 const & directScattering
 		, sdw::Vec3 const & directCoatingSpecular
+		, sdw::Vec2 const & directSheen
 		, sdw::Vec3 const & indirectSpecular
 		, sdw::Vec3 const & directAmbient
 		, sdw::Vec3 const & indirectAmbient
 		, sdw::Vec3 reflected
 		, sdw::Vec3 refracted
-		, sdw::Vec3 coatReflected )
+		, sdw::Vec3 coatReflected
+		, sdw::Vec3 sheenReflected )
 	{
 		return combine( components
 			, incident
@@ -135,6 +141,7 @@ namespace castor3d::shader
 			, directSpecular
 			, directScattering
 			, directCoatingSpecular
+			, directSheen
 			, indirectSpecular
 			, directAmbient
 			, indirectAmbient
@@ -142,7 +149,8 @@ namespace castor3d::shader
 			, components.emissive
 			, std::move( reflected )
 			, std::move( refracted )
-			, std::move( coatReflected ) );
+			, std::move( coatReflected )
+			, std::move( sheenReflected ) );
 	}
 
 	void LightingModel::declareModel( uint32_t lightsBufBinding

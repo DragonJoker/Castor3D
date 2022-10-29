@@ -106,6 +106,10 @@ namespace castor3d
 			, m_lpResult[LpTexture::eCoatingSpecular]
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) );
+		visitor.visit( "Light Sheen"
+			, m_lpResult[LpTexture::eSheen]
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, TextureFactors{}.invert( true ) );
 	}
 
 	void LightingPass::doUpdateLightPasses( CpuUpdater & updater
@@ -221,6 +225,8 @@ namespace castor3d
 			, uint32_t( LightPassIdx::eClrCot ) );
 		pass.addSampledView( m_gpResult[DsTexture::eCcrTrs].sampledViewId
 			, uint32_t( LightPassIdx::eCcrTrs ) );
+		pass.addSampledView( m_gpResult[DsTexture::eSheen].sampledViewId
+			, uint32_t( LightPassIdx::eSheen ) );
 		auto index = uint32_t( LightPassIdx::eCount );
 		engine.createSpecificsBuffersPassBindings( pass, index );
 
@@ -229,6 +235,7 @@ namespace castor3d
 		pass.addOutputColourView( m_lpResult[LpTexture::eSpecular].targetViewId );
 		pass.addOutputColourView( m_lpResult[LpTexture::eScattering].targetViewId );
 		pass.addOutputColourView( m_lpResult[LpTexture::eCoatingSpecular].targetViewId );
+		pass.addOutputColourView( m_lpResult[LpTexture::eSheen].targetViewId );
 		return pass;
 	}
 }

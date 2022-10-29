@@ -27,6 +27,9 @@ namespace castor3d::shader
 		m_writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapPrefiltered"
 			, binding++
 			, set );
+		m_writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapPrefilteredSheen"
+			, binding++
+			, set );
 	}
 
 	BackgroundModelPtr IblBackgroundModel::create( sdw::ShaderWriter & writer
@@ -45,7 +48,7 @@ namespace castor3d::shader
 	sdw::RetVec3 IblBackgroundModel::computeReflections( sdw::Vec3 const & pwsIncident
 		, sdw::Vec3 const & pwsNormal
 		, BlendComponents & components
-		, sdw::CombinedImage2DRg32 const & pbrdfMap )
+		, sdw::CombinedImage2DRgba32 const & pbrdfMap )
 	{
 		if ( !m_computeReflections )
 		{
@@ -58,7 +61,7 @@ namespace castor3d::shader
 					, sdw::Float const & roughness
 					, sdw::CombinedImageCubeRgba32 const & irradianceMap
 					, sdw::CombinedImageCubeRgba32 const & prefilteredEnvMap
-					, sdw::CombinedImage2DRg32 const & brdfMap )
+					, sdw::CombinedImage2DRgba32 const & brdfMap )
 				{
 					auto V = m_writer.declLocale( "V"
 						, -wsIncident );
@@ -103,7 +106,7 @@ namespace castor3d::shader
 				, sdw::InFloat{ m_writer, "roughness" }
 				, sdw::InCombinedImageCubeRgba32{ m_writer, "irradianceMap" }
 				, sdw::InCombinedImageCubeRgba32{ m_writer, "prefilteredEnvMap" }
-				, sdw::InCombinedImage2DRg32{ m_writer, "brdfMap" } );
+				, sdw::InCombinedImage2DRgba32{ m_writer, "brdfMap" } );
 		}
 		auto irradianceMap = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapIrradiance" );
 		auto prefilteredEnvMap = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapPrefiltered" );
@@ -161,7 +164,7 @@ namespace castor3d::shader
 		, sdw::Vec3 const & pspecular
 		, sdw::Float const & proughness
 		, BlendComponents & components
-		, sdw::CombinedImage2DRg32 const & pbrdfMap )
+		, sdw::CombinedImage2DRgba32 const & pbrdfMap )
 	{
 		if ( !m_computeSpecularReflections )
 		{
@@ -174,7 +177,7 @@ namespace castor3d::shader
 					, sdw::Float const & roughness
 					, sdw::CombinedImageCubeRgba32 const & irradianceMap
 					, sdw::CombinedImageCubeRgba32 const & prefilteredEnvMap
-					, sdw::CombinedImage2DRg32 const & brdfMap )
+					, sdw::CombinedImage2DRgba32 const & brdfMap )
 				{
 					auto V = m_writer.declLocale( "V"
 						, -wsIncident );
@@ -208,7 +211,7 @@ namespace castor3d::shader
 				, sdw::InFloat{ m_writer, "roughness" }
 				, sdw::InCombinedImageCubeRgba32{ m_writer, "irradianceMap" }
 				, sdw::InCombinedImageCubeRgba32{ m_writer, "prefilteredEnvMap" }
-				, sdw::InCombinedImage2DRg32{ m_writer, "brdfMap" } );
+				, sdw::InCombinedImage2DRgba32{ m_writer, "brdfMap" } );
 		}
 		auto irradianceMap = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapIrradiance" );
 		auto prefilteredEnvMap = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapPrefiltered" );
@@ -229,7 +232,7 @@ namespace castor3d::shader
 		, sdw::Float const & proughness
 		, sdw::Float const & prefractionRatio
 		, BlendComponents & components
-		, sdw::CombinedImage2DRg32 const & pbrdfMap )
+		, sdw::CombinedImage2DRgba32 const & pbrdfMap )
 	{
 		if ( !m_computeSpecularRefractions )
 		{
@@ -237,7 +240,7 @@ namespace castor3d::shader
 				, [&]( sdw::Vec3 const & wsIncident
 					, sdw::Vec3 const & wsNormal
 					, sdw::CombinedImageCubeRgba32 const & prefiltered
-					, sdw::CombinedImage2DRg32 const & brdfMap
+					, sdw::CombinedImage2DRgba32 const & brdfMap
 					, sdw::Float const & refractionRatio
 					, sdw::Vec3 const & albedo
 					, sdw::Vec3 const & specular
@@ -269,7 +272,7 @@ namespace castor3d::shader
 				, sdw::InVec3{ m_writer, "wsIncident" }
 				, sdw::InVec3{ m_writer, "wsNormal" }
 				, sdw::InCombinedImageCubeRgba32{ m_writer, "prefiltered" }
-				, sdw::InCombinedImage2DRg32{ m_writer, "brdfMap" }
+				, sdw::InCombinedImage2DRgba32{ m_writer, "brdfMap" }
 				, sdw::InFloat{ m_writer, "refractionRatio" }
 				, sdw::InVec3{ m_writer, "albedo" }
 				, sdw::InVec3{ m_writer, "specular" }
@@ -285,5 +288,54 @@ namespace castor3d::shader
 			, components.colour
 			, pspecular
 			, proughness );
+	}
+
+	sdw::RetVec3 IblBackgroundModel::computeSheenReflections( sdw::Vec3 const & pwsIncident
+		, sdw::Vec3 const & pwsNormal
+		, BlendComponents & components
+		, sdw::CombinedImage2DRgba32 const & pbrdfMap )
+	{
+		if ( !m_computeSheenReflections )
+		{
+			m_computeSheenReflections = m_writer.implementFunction< sdw::Vec3 >( "c3d_iblbg_computeSheenReflections"
+				, [&]( sdw::Vec3 const & wsIncident
+					, sdw::Vec3 const & wsNormal
+					, sdw::Vec3 const & sheenColour
+					, sdw::Float const & sheenRoughness
+					, sdw::CombinedImageCubeRgba32 const & prefilteredEnvMap
+					, sdw::CombinedImage2DRgba32 const & brdfMap )
+				{
+					auto V = m_writer.declLocale( "V"
+						, -wsIncident );
+					auto NdotV = m_writer.declLocale( "NdotV"
+						, max( dot( wsNormal, V ), 0.0_f ) );
+					auto lod = m_writer.declLocale( "lod"
+						, sheenRoughness * float( MaxIblReflectionLod ) );
+					auto reflection = m_writer.declLocale( "reflection"
+						, normalize( reflect( -V, wsNormal ) ) );
+
+					auto brdfSamplePoint = m_writer.declLocale( "brdfSamplePoint"
+						, clamp( vec2( NdotV, sheenRoughness ), vec2( 0.0_f, 0.0_f ), vec2( 1.0_f, 1.0_f ) ) );
+					auto brdf = m_writer.declLocale( "brdf"
+						, brdfMap.sample( brdfSamplePoint ).z() );
+					auto sheenSample = m_writer.declLocale( "sheenSample"
+						, prefilteredEnvMap.lod( reflection, lod ) );
+
+					m_writer.returnStmt( sheenSample.rgb() * sheenColour * brdf );
+				}
+				, sdw::InVec3{ m_writer, "wsIncident" }
+				, sdw::InVec3{ m_writer, "wsNormal" }
+				, sdw::InVec3{ m_writer, "sheenColour" }
+				, sdw::InFloat{ m_writer, "sheenRoughness" }
+				, sdw::InCombinedImageCubeRgba32{ m_writer, "prefilteredEnvMap" }
+				, sdw::InCombinedImage2DRgba32{ m_writer, "brdfMap" } );
+		}
+		auto prefilteredEnvMap = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapPrefilteredSheen" );
+		return m_computeSheenReflections( pwsIncident
+			, pwsNormal
+			, components.sheenFactor
+			, components.sheenRoughness
+			, prefilteredEnvMap
+			, pbrdfMap );
 	}
 }

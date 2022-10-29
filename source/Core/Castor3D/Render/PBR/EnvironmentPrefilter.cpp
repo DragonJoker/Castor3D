@@ -29,11 +29,12 @@ namespace castor3d
 	{
 		static Texture doCreatePrefilteredTexture( RenderDevice const & device
 			, crg::ResourceHandler & handler
-			, castor::Size const & size )
+			, castor::Size const & size
+			, std::string const & prefix )
 		{
 			Texture result{ device
 				, handler
-				, "EnvironmentPrefilterResult"
+				, prefix + "EnvironmentPrefilterResult"
 				, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT
 				, { size[0], size[1], 1u }
 				, 6u
@@ -46,11 +47,12 @@ namespace castor3d
 
 		static SamplerResPtr doCreateSampler( Engine & engine
 			, RenderDevice const & device
+			, std::string const & prefix
 			, uint32_t maxLod )
 		{
 			SamplerResPtr result;
 			auto stream = castor::makeStringStream();
-			stream << cuT( "IblTexturesPrefiltered_" ) << maxLod;
+			stream << prefix << cuT( "IblTexturesPrefiltered_" ) << maxLod;
 			auto name = stream.str();
 
 			if ( engine.hasSampler( name ) )
@@ -75,9 +77,33 @@ namespace castor3d
 			return result;
 		}
 
+		struct MicrofacetDistributionSample
+			: public sdw::StructInstanceHelperT< "MicrofacetDistributionSample"
+				, sdw::type::MemoryLayout::eC
+				, sdw::FloatField< "pdf" >
+				, sdw::FloatField< "cosTheta" >
+				, sdw::FloatField< "sinTheta" >
+				, sdw::FloatField< "phi" > >
+		{
+			MicrofacetDistributionSample( sdw::ShaderWriter & writer
+				, sdw::expr::ExprPtr expr
+				, bool enabled = true )
+				: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+			{
+			}
+
+			auto pdf()const { return getMember< "pdf" >(); }
+			auto cosTheta()const { return getMember< "cosTheta" >(); }
+			auto sinTheta()const { return getMember< "sinTheta" >(); }
+			auto phi()const { return getMember< "phi" >(); }
+		};
+
+		Writer_Parameter( MicrofacetDistributionSample );
+
 		static ashes::PipelineShaderStageCreateInfoArray doCreateProgram( RenderDevice const & device
 			, VkExtent2D const & size
-			, uint32_t mipLevel )
+			, uint32_t mipLevel
+			, bool isCharlie )
 		{
 			ShaderModule vtx{ VK_SHADER_STAGE_VERTEX_BIT, "EnvironmentPrefilter" };
 			{
@@ -116,30 +142,108 @@ namespace castor3d
 				// Outputs
 				auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_FragColor", 0u );
 
-				auto distributionGGX = writer.implementFunction< Float >( "DistributionGGX"
-					, [&]( Vec3 const & N
-						, Vec3 const & H
+				auto getDistributionPDF = writer.implementFunction< Float >( "c3d_getDistributionPDF"
+					, [&]( Float const & NdotH
+						, Float alpha )
+					{
+						if ( isCharlie )
+						{
+							alpha = max( alpha, 0.000001_f );
+							auto invR = writer.declLocale( "invR"
+								, 1.0_f / alpha );
+							auto cos2h = writer.declLocale( "cos2h"
+								, NdotH * NdotH );
+							auto sin2h = writer.declLocale( "sin2h"
+								, 1.0_f - cos2h );
+							writer.returnStmt( ( 2.0_f * invR ) * pow( sin2h, invR * 0.5_f ) / castor::Tau< float > );
+						}
+						else
+						{
+							auto a = writer.declLocale( "a"
+								, NdotH * alpha );
+							auto k = writer.declLocale( "k"
+								, alpha / ( 1.0_f - NdotH * NdotH + a * a ) );
+							writer.returnStmt( k * k * 1.0_f / castor::Pi< float > );
+						}
+					}
+					, InFloat{ writer, "NdotH" }
+					, InFloat{ writer, "alpha" } );
+
+				auto importanceSample = writer.implementFunction< MicrofacetDistributionSample >( "c3d_importanceSample"
+					, [&]( Vec2 const & xi
 						, Float const & roughness )
 					{
-						auto a = writer.declLocale( "a"
+						auto result = writer.declLocale< MicrofacetDistributionSample >( "result" );
+
+						// Evaluate sampling equations
+						auto alpha = writer.declLocale( "alpha"
 							, roughness * roughness );
-						auto a2 = writer.declLocale( "a2"
-							, a * a );
-						auto NdotH = writer.declLocale( "NdotH"
-							, max( dot( N, H ), 0.0_f ) );
-						auto NdotH2 = writer.declLocale( "NdotH2"
-							, NdotH * NdotH );
 
-						auto nom = writer.declLocale( "nom"
-							, a2 );
-						auto denom = writer.declLocale( "denom"
-							, fma( NdotH2, a2 - 1.0_f, 1.0_f ) );
-						denom = denom * denom * Float{ castor::Pi< float > };
+						result.phi() = castor::Tau< float > * xi.x();
 
-						writer.returnStmt( nom / denom );
+						if ( isCharlie )
+						{
+							result.sinTheta() = writer.ternary( alpha == 0.0_f
+								, 0.0_f
+								, pow( xi.y(), alpha / ( 2.0f * alpha + 1.0_f ) ) );
+							result.cosTheta() = sqrt( 1.0_f - result.sinTheta() * result.sinTheta() );
+						}
+						else
+						{
+							auto a2 = writer.declLocale( "a2"
+								, alpha * alpha );
+							result.cosTheta() = sqrt( ( 1.0_f - xi.y() ) / ( 1.0_f + ( a2 - 1.0_f ) * xi.y() ) );
+							result.sinTheta() = sqrt( 1.0_f - result.cosTheta() * result.cosTheta() );
+						}
+
+						// Evaluate GGX pdf (for half vector)
+						result.pdf() = getDistributionPDF( result.cosTheta(), alpha );
+
+						// Apply the Jacobian to obtain a pdf that is parameterized by l
+						// see https://bruop.github.io/ibl/
+						// Typically you'd have the following:
+						// float pdf = D_GGX(NoH, roughness) * NoH / (4.0 * VoH);
+						// but since V = N => VoH == NoH
+						result.pdf() /= 4.0_f;
+
+						writer.returnStmt( result );
 					}
-					, InVec3{ writer, "N" }
-					, InVec3{ writer, "H" }
+					, InVec2{ writer, "xi" }
+					, InFloat{ writer, "roughness" } );
+
+				auto getImportanceSample = writer.implementFunction< sdw::Vec4 >( "c3d_getImportanceSample"
+					, [&]( Vec2 const & xi
+						, Vec3 const & n
+						, Float const & roughness )
+					{
+						auto is = writer.declLocale( "is"
+							, importanceSample( xi, roughness ) );
+
+						// from spherical coordinates to cartesian coordinates
+						auto localSpaceDirection = writer.declLocale( "localSpaceDirection"
+							, normalize( vec3( cos( is.phi() ) * is.sinTheta()
+								, sin( is.phi() ) * is.sinTheta()
+								, is.cosTheta() ) ) );
+
+						// from tangent-space vector to world-space sample vector
+						auto up = writer.declLocale( "up"
+							, writer.ternary( sdw::abs( n.z() ) < 0.999_f
+								, vec3( 0.0_f, 0.0_f, 1.0_f )
+								, vec3( 1.0_f, 0.0_f, 0.0_f ) ) );
+						auto tangent = writer.declLocale( "tangent"
+							, normalize( cross( up, n ) ) );
+						auto bitangent = writer.declLocale( "bitangent"
+							, cross( n, tangent ) );
+
+						auto sampleVec = writer.declLocale( "sampleVec"
+							, ( tangent * localSpaceDirection.x()
+								+ bitangent * localSpaceDirection.y()
+								+ n * localSpaceDirection.z() ) );
+
+						writer.returnStmt( vec4( sampleVec, is.pdf() ) );
+					}
+					, InVec2{ writer, "xi" }
+					, InVec3{ writer, "n" }
 					, InFloat{ writer, "roughness" } );
 
 				auto radicalInverse = writer.implementFunction< Float >( "RadicalInverse_VdC"
@@ -167,48 +271,6 @@ namespace castor3d
 					, InUInt{ writer, "i" }
 					, InUInt{ writer, "n" } );
 
-				auto importanceSample = writer.implementFunction< Vec3 >( "ImportanceSampleGGX"
-					, [&]( Vec2 const & xi
-						, Vec3 const & n
-						, Float const & roughness )
-					{
-						// From https://learnopengl.com/#!PBR/Lighting
-						auto a = writer.declLocale( "a"
-							, roughness * roughness );
-						auto a2 = writer.declLocale( "a2"
-							, a * a );
-
-						auto phi = writer.declLocale( "phi"
-							, Float{ castor::PiMult2< float > } * xi.x() );
-						auto cosTheta = writer.declLocale( "cosTheta"
-							, sqrt( ( 1.0_f - xi.y() ) / ( 1.0_f + ( a2 - 1.0_f ) * xi.y() ) ) );
-						auto sinTheta = writer.declLocale( "sinTheta"
-							, sqrt( 1.0_f - cosTheta * cosTheta ) );
-
-						// from spherical coordinates to cartesian coordinates
-						auto H = writer.declLocale< Vec3 >( "H" );
-						H.x() = cos( phi ) * sinTheta;
-						H.y() = sin( phi ) * sinTheta;
-						H.z() = cosTheta;
-
-						// from tangent-space vector to world-space sample vector
-						auto up = writer.declLocale( "up"
-							, writer.ternary( sdw::abs( n.z() ) < 0.999_f
-								, vec3( 0.0_f, 0.0_f, 1.0_f )
-								, vec3( 1.0_f, 0.0_f, 0.0_f ) ) );
-						auto tangent = writer.declLocale( "tangent"
-							, normalize( cross( up, n ) ) );
-						auto bitangent = writer.declLocale( "bitangent"
-							, cross( n, tangent ) );
-
-						auto sampleVec = writer.declLocale( "sampleVec"
-							, tangent * H.x() + bitangent * H.y() + n * H.z() );
-						writer.returnStmt( normalize( sampleVec ) );
-					}
-					, InVec2{ writer, "xi" }
-					, InVec3{ writer, "n" }
-					, InFloat{ writer, "roughness" } );
-
 				writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
 					, FragmentOut out )
 					{
@@ -231,44 +293,47 @@ namespace castor3d
 						{
 							auto xi = writer.declLocale( "xi"
 								, hammersley( i, sampleCount ) );
+							auto importanceSample = writer.declLocale( "importanceSample"
+								, getImportanceSample( xi, N, c3d_roughness ) );
 							auto H = writer.declLocale( "H"
-								, importanceSample( xi, N, c3d_roughness ) );
+								, importanceSample.xyz() );
+							auto pdf = writer.declLocale( "pdf"
+								, importanceSample.w() );
+
 							auto L = writer.declLocale( "L"
 								, normalize( vec3( 2.0_f ) * dot( V, H ) * H - V ) );
-
 							auto NdotL = writer.declLocale( "NdotL"
-								, max( dot( N, L ), 0.0_f ) );
+								, dot( N, L ) );
 
 							IF( writer, NdotL > 0.0_f )
 							{
-								auto D = writer.declLocale( "D"
-									, distributionGGX( N, H, c3d_roughness ) );
-								auto NdotH = writer.declLocale( "NdotH"
-									, max( dot( N, H ), 0.0_f ) );
-								auto HdotV = writer.declLocale( "HdotV"
-									, max( dot( H, V ), 0.0_f ) );
-								auto pdf = writer.declLocale( "pdf"
-									, ( D * NdotH ) / ( 4.0_f * HdotV ) + 0.0001_f );
-
-								auto resolution = writer.declLocale( "resolution"
-									, Float( float( size.width ) ) ); // resolution of source cubemap (per face)
-								auto saTexel = writer.declLocale( "saTexel"
-									, Float{ 4.0f * castor::Pi< float > } / ( 6.0_f * resolution * resolution ) );
-								auto saSample = writer.declLocale( "saSample"
+								auto resolution = Float{ float( size.width ) }; // resolution of source cubemap (per face)
+								auto omegaP = writer.declLocale( "omegaP"
+									, ( 4.0f * castor::Pi< float > ) / ( 6.0_f * resolution * resolution ) );
+								auto omegaS = writer.declLocale( "omegaS"
 									, 1.0_f / ( writer.cast< Float >( sampleCount ) * pdf + 0.0001_f ) );
-								auto mipLevel = writer.declLocale( "mipLevel"
+								auto lod = writer.declLocale( "lod"
 									, writer.ternary( c3d_roughness == 0.0_f
 										, 0.0_f
-										, 0.5_f * log2( saSample / saTexel ) ) );
+										, 0.5_f * log2( omegaS / omegaP ) ) );
 
-								prefilteredColor += c3d_mapEnvironment.sample( L, mipLevel ).rgb() * NdotL;
+								prefilteredColor += c3d_mapEnvironment.sample( L, lod ).rgb() * NdotL;
 								totalWeight += NdotL;
 							}
 							FI;
 						}
 						ROF;
 
-						prefilteredColor = prefilteredColor / totalWeight;
+						IF( writer, totalWeight != 0.0f )
+						{
+							prefilteredColor /= totalWeight;
+						}
+						ELSE
+						{
+							prefilteredColor /= writer.cast< sdw::Float >( sampleCount );
+						}
+						FI;
+
 						pxl_fragColor = vec4( prefilteredColor, 1.0_f );
 					} );
 
@@ -283,6 +348,7 @@ namespace castor3d
 		}
 
 		static ashes::RenderPassPtr doCreateRenderPass( RenderDevice const & device
+			, std::string const & prefix
 			, VkFormat format )
 		{
 			ashes::VkAttachmentDescriptionArray attaches
@@ -329,7 +395,7 @@ namespace castor3d
 				std::move( subpasses ),
 				std::move( dependencies ),
 			};
-			auto result = device->createRenderPass( "EnvironmentPrefilter"
+			auto result = device->createRenderPass( prefix + "EnvironmentPrefilter"
 				, std::move( createInfo ) );
 			return result;
 		}
@@ -346,14 +412,16 @@ namespace castor3d
 		, VkExtent2D const & size
 		, ashes::ImageView const & srcView
 		, Texture const & dstTexture
-		, SamplerResPtr sampler )
+		, SamplerResPtr sampler
+		, bool isCharlie )
 		: RenderCube{ device, false, std::move( sampler ) }
 		, m_renderPass{ renderPass }
+		, m_prefix{ isCharlie ? std::string{ "Sheen" } : std::string{} }
 		, m_commands{ m_device, queueData, "EnvironmentPrefilter" }
 	{
 		for ( auto face = 0u; face < 6u; ++face )
 		{
-			auto name = "EnvironmentPrefilterL" + castor::string::toString( face ) + "M" + castor::string::toString( mipLevel );
+			auto name = m_prefix + "EnvironmentPrefilterL" + castor::string::toString( face ) + "M" + castor::string::toString( mipLevel );
 			auto & facePass = m_frameBuffers[face];
 			// Create the views.
 			auto data = *dstTexture.wholeViewId.data;
@@ -379,7 +447,7 @@ namespace castor3d
 
 		createPipelines( size
 			, castor::Position{}
-			, envpref::doCreateProgram( m_device, originalSize, mipLevel )
+			, envpref::doCreateProgram( m_device, originalSize, mipLevel, isCharlie )
 			, srcView
 			, renderPass
 			, {} );
@@ -389,7 +457,7 @@ namespace castor3d
 	{
 		auto & cmd = *m_commands.commandBuffer;
 		cmd.begin();
-		cmd.beginDebugBlock( { "Prefiltering Environment map"
+		cmd.beginDebugBlock( { "Prefiltering " + m_prefix + " Environment map"
 			, makeFloatArray( m_device.renderSystem.getEngine()->getNextRainbowColour() ) } );
 
 		for ( uint32_t face = 0u; face < 6u; ++face )
@@ -412,10 +480,12 @@ namespace castor3d
 		m_commands.submit( *queueData.queue );
 	}
 
-	ashes::Semaphore const & EnvironmentPrefilter::MipRenderCube::render( QueueData const & queueData
-		, ashes::Semaphore const & toWait )
+	crg::SemaphoreWaitArray EnvironmentPrefilter::MipRenderCube::render( crg::SemaphoreWaitArray signalsToWait
+		, ashes::Queue const & queue )const
 	{
-		return m_commands.submit( *queueData.queue, toWait );
+		return { 1u
+			, { m_commands.submit( queue, signalsToWait )
+				, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT } };
 	}
 
 	//*********************************************************************************************
@@ -424,14 +494,16 @@ namespace castor3d
 		, RenderDevice const & device
 		, castor::Size const & size
 		, Texture const & srcTexture
-		, SamplerResPtr sampler )
+		, SamplerResPtr sampler
+		, bool isCharlie )
 		: m_device{ device }
 		, m_srcView{ srcTexture }
+		, m_prefix{ isCharlie ? std::string{ "Sheen" } : std::string{} }
 		, m_srcImage{ std::make_unique< ashes::Image >( *device, m_srcView.image, m_srcView.imageId.data->info ) }
 		, m_srcImageView{ m_srcImage->createView( "EnvironmentPrefilterSrc", VK_IMAGE_VIEW_TYPE_CUBE, srcTexture.getFormat(), 0u, m_srcView.getMipLevels(), 0u, 6u ) }
-		, m_result{ envpref::doCreatePrefilteredTexture( m_device, engine.getGraphResourceHandler(), size ) }
-		, m_sampler{ envpref::doCreateSampler( engine, m_device, m_result.getMipLevels() - 1u ) }
-		, m_renderPass{ envpref::doCreateRenderPass( m_device, m_result.getFormat() ) }
+		, m_result{ envpref::doCreatePrefilteredTexture( m_device, engine.getGraphResourceHandler(), size, m_prefix ) }
+		, m_sampler{ envpref::doCreateSampler( engine, m_device, m_prefix, m_result.getMipLevels() - 1u ) }
+		, m_renderPass{ envpref::doCreateRenderPass( m_device, m_prefix, m_result.getFormat() ) }
 	{
 		VkExtent2D originalSize{ size.getWidth(), size.getHeight() };
 		auto data = m_device.graphicsData();
@@ -449,7 +521,8 @@ namespace castor3d
 				, mipSize
 				, m_srcImageView
 				, m_result
-				, sampler ) );
+				, sampler
+				, isCharlie ) );
 		}
 
 		for ( auto & cubePass : m_renderPasses )
@@ -471,17 +544,15 @@ namespace castor3d
 		}
 	}
 
-	ashes::Semaphore const & EnvironmentPrefilter::render( QueueData const & queueData
-		, ashes::Semaphore const & toWait )
+	crg::SemaphoreWaitArray EnvironmentPrefilter::render( crg::SemaphoreWaitArray signalsToWait
+		, ashes::Queue const & queue )const
 	{
-		ashes::Semaphore const * result = &toWait;
-
 		for ( auto & cubePass : m_renderPasses )
 		{
-			result = &cubePass->render( queueData, *result );
+			signalsToWait = cubePass->render( signalsToWait, queue );
 		}
 
-		return *result;
+		return signalsToWait;
 	}
 
 	//*********************************************************************************************

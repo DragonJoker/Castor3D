@@ -52,17 +52,17 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Updates the environment maps.
-		 *\param[in]	queueData	The queue receiving the GPU commands.
-		 *\param[in]	toWait		The semaphore from the previous render pass.
+		 *\param[in]	signalsToWait	The semaphore from the previous render pass.
+		 *\param[in]	queue			The queue receiving the GPU commands.
 		 *\return		The semaphores signaled by this pass.
 		 *\~french
 		 *\brief		Met à jour les textures d'environnement.
-		 *\param[in]	queueData	La queue recevant les commandes GPU.
-		 *\param[in]	toWait		Le sémaphore de la passe de rendu précédente.
+		 *\param[in]	signalsToWait	Le sémaphore de la passe de rendu précédente.
+		 *\param[in]	queue			La queue recevant les commandes GPU.
 		 *\return		Les sémaphores signalés par cette passe.
 		 */
-		C3D_API ashes::Semaphore const & update( QueueData const & queueData
-			, ashes::Semaphore const & toWait );
+		C3D_API crg::SemaphoreWaitArray update( crg::SemaphoreWaitArray signalsToWait
+			, ashes::Queue const & queue )const;
 		/**
 		*\~english
 		*name
@@ -82,6 +82,11 @@ namespace castor3d
 			return m_environmentPrefilter.getResult();
 		}
 
+		Texture const & getPrefilteredEnvironmentSheenTexture()const
+		{
+			return m_environmentSheenPrefilter.getResult();
+		}
+
 		Texture const & getPrefilteredBrdfTexture()const
 		{
 			return m_brdf;
@@ -97,6 +102,11 @@ namespace castor3d
 			return m_environmentPrefilter.getSampler();
 		}
 
+		ashes::Sampler const & getPrefilteredEnvironmentSheenSampler()const
+		{
+			return m_environmentSheenPrefilter.getSampler();
+		}
+
 		ashes::Sampler const & getPrefilteredBrdfSampler()const
 		{
 			return m_sampler.lock()->getSampler();
@@ -108,6 +118,7 @@ namespace castor3d
 		SamplerResPtr m_sampler;
 		RadianceComputer m_radianceComputer;
 		EnvironmentPrefilter m_environmentPrefilter;
+		EnvironmentPrefilter m_environmentSheenPrefilter;
 	};
 }
 

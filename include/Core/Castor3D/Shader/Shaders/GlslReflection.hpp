@@ -32,7 +32,8 @@ namespace castor3d::shader
 			, sdw::Vec3 & ambient
 			, sdw::Vec3 & reflected
 			, sdw::Vec3 & refracted
-			, sdw::Vec3 & coatReflected );
+			, sdw::Vec3 & coatReflected
+			, sdw::Vec3 & sheenReflected );
 		C3D_API void computeCombined( BlendComponents & components
 			, sdw::Vec3 const & incident
 			, BackgroundModel & background
@@ -42,7 +43,8 @@ namespace castor3d::shader
 			, sdw::Vec3 & ambient
 			, sdw::Vec3 & reflected
 			, sdw::Vec3 & refracted
-			, sdw::Vec3 & coatReflected );
+			, sdw::Vec3 & coatReflected
+			, sdw::Vec3 & sheenReflected );
 		C3D_API sdw::Vec3 computeReflections( BlendComponents & components
 			, Surface const & surface
 			, SceneData const & sceneData
@@ -123,6 +125,11 @@ namespace castor3d::shader
 			, sdw::CombinedImageCubeArrayRgba32 const & envMap
 			, sdw::UInt const & envMapIndex
 			, BlendComponents & components );
+		sdw::RetVec3 computeSheenReflEnvMaps( sdw::Vec3 const & wsIncident
+			, sdw::Vec3 const & wsNormal
+			, sdw::CombinedImageCubeArrayRgba32 const & envMap
+			, sdw::UInt const & envMapIndex
+			, BlendComponents & components );
 		sdw::RetVec3 computeRefrEnvMaps( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::CombinedImageCubeArrayRgba32 const & envMap
@@ -195,6 +202,12 @@ namespace castor3d::shader
 			, sdw::InUInt
 			, sdw::InVec3
 			, sdw::InFloat > m_computeReflEnvMaps;
+		sdw::Function< sdw::Vec3
+			, sdw::InVec3
+			, sdw::InVec3
+			, sdw::InCombinedImageCubeArrayRgba32
+			, sdw::InUInt
+			, sdw::InFloat > m_computeSheenReflEnvMaps;
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3
 			, sdw::InVec3

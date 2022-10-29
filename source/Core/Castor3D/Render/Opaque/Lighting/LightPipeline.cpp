@@ -253,6 +253,8 @@ namespace castor3d
 
 		attachs.push_back( attachs.back() );
 		attachs.push_back( attachs.back() );
+		attachs.push_back( attachs.back() );
+		attachs.push_back( attachs.back() );
 
 		return { 0u
 			, VK_FALSE
