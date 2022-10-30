@@ -74,12 +74,25 @@ namespace castor3d
 			return result;
 		}
 
-#if !C3D_GenerateBRDFIntegration
-		static void doLoadPrefilteredBrdfView( RenderDevice const & device
-			, Texture const & texture )
+		static Texture doCreatePrefilteredBrdf( Engine & engine
+			, RenderDevice const & device
+			, crg::ResourceHandler & handler
+			, castor::Size const & size )
 		{
-			auto & engine = *device.renderSystem.getEngine();
-			auto image = std::make_unique< ashes::Image >( *device, texture.image, texture.imageId.data->info );
+#if !C3D_GenerateBRDFIntegration
+			Texture result{ device
+				, handler
+				, "BrdfLUT"
+				, 0u
+				, { size[0], size[1], 1u }
+				, 1u
+				, 1u
+				, VK_FORMAT_R8G8B8A8_UNORM
+				, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+					| VK_IMAGE_USAGE_TRANSFER_DST_BIT
+					| VK_IMAGE_USAGE_SAMPLED_BIT ) };
+			result.create();
+			auto image = std::make_unique< ashes::Image >( *device, result.image, result.imageId.data->info );
 			auto imagePath = Engine::getEngineDirectory() / cuT( "Core" ) / cuT( "brdf.png" );
 			castor::ImageResPtr created;
 			castor::ImageResPtr img = engine.getImageCache().tryAdd( cuT( "BRDF" )
@@ -91,7 +104,7 @@ namespace castor3d
 				, castor::PixelFormat::eR8G8B8A8_UNORM
 				, buffer->getConstPtr()
 				, buffer->getFormat() );
-			auto result = image->createView( VK_IMAGE_VIEW_TYPE_2D, texture.getFormat() );
+			auto view = image->createView( VK_IMAGE_VIEW_TYPE_2D, result.getFormat() );
 			auto staging = device->createStagingTexture( VK_FORMAT_R8G8B8A8_UNORM
 				, makeExtent2D( buffer->getDimensions() ) );
 			auto data = device.graphicsData();;
@@ -99,15 +112,8 @@ namespace castor3d
 				, *data->commandPool
 				, VK_FORMAT_R8G8B8A8_UNORM
 				, buffer->getConstPtr()
-				, result );
-		}
-#endif
-
-		static Texture doCreatePrefilteredBrdf( Engine & engine
-			, RenderDevice const & device
-			, crg::ResourceHandler & handler
-			, castor::Size const & size )
-		{
+				, view );
+#else
 			Texture result{ device
 				, handler
 				, "BrdfLUT"
@@ -115,27 +121,17 @@ namespace castor3d
 				, { size[0], size[1], 1u }
 				, 1u
 				, 1u
-#if !C3D_GenerateBRDFIntegration
-				, VK_FORMAT_R8G8B8A8_UNORM
-#else
 				, VK_FORMAT_R16G16B16A16_SFLOAT
-#endif
 				, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-#if !C3D_GenerateBRDFIntegration
-					| VK_IMAGE_USAGE_TRANSFER_DST_BIT
-#endif
 					| VK_IMAGE_USAGE_SAMPLED_BIT ) };
 			result.create();
-
-#if !C3D_GenerateBRDFIntegration
-			doLoadPrefilteredBrdfView( device, result );
-#else
 			BrdfPrefilter filter{ engine
 				, device
 				, size
 				, result };
 			auto queueData = device.graphicsData();
 			filter.render( *queueData );
+			device->waitIdle();
 #endif
 			return result;
 		}

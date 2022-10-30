@@ -118,8 +118,8 @@ namespace castor3d::shader
 					, roughness * roughness );
 				1_u;
 
-				return clamp( 1.0_f / ( ( 1.0_f + m_lambdaSheen( NdotV, alphaG ) + m_lambdaSheen( NdotL, alphaG ) )
-					* ( 4.0_f * NdotV * NdotL ) ), 0.0_f, 1.0_f );
+				m_writer.returnStmt( clamp( 1.0_f / ( ( 1.0_f + m_lambdaSheen( NdotV, alphaG ) + m_lambdaSheen( NdotL, alphaG ) )
+					* ( 4.0_f * NdotV * NdotL ) ), 0.0_f, 1.0_f ) );
 			}
 			, sdw::InFloat{ m_writer, "NdotL" }
 			, sdw::InFloat{ m_writer, "NdotV" }

@@ -79,7 +79,7 @@ namespace castor3d
 				, sdw::Float roughness
 				, sdw::Float indirectOcclusion
 				, sdw::Float indirectBlend
-				, sdw::CombinedImage2DRg32 brdfMap );
+				, sdw::CombinedImage2DRgba32 brdfMap );
 			sdw::Vec4 traceConeRadiance( sdw::CombinedImage3DRgba32 const & voxels
 				, Surface surface
 				, VoxelData const & voxelData );

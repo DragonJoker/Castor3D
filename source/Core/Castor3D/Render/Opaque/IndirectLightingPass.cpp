@@ -101,7 +101,7 @@ namespace castor3d
 			auto c3d_mapNmlOcc = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eNmlOcc ), uint32_t( IndirectLightingPass::eNmlOcc ), 0u );
 			auto c3d_mapColMtl = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eColMtl ), uint32_t( IndirectLightingPass::eColMtl ), 0u );
 			auto c3d_mapSpcRgh = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eSpcRgh ), uint32_t( IndirectLightingPass::eSpcRgh ), 0u );
-			auto c3d_brdfMap = writer.declCombinedImg< FImg2DRg32 >( "c3d_brdfMap", uint32_t( IndirectLightingPass::eBrdf ), 0u );
+			auto c3d_brdfMap = writer.declCombinedImg< FImg2DRgba32 >( "c3d_brdfMap", uint32_t( IndirectLightingPass::eBrdf ), 0u );
 
 			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
 				, FragmentOut out )

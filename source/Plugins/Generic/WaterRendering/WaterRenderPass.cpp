@@ -594,7 +594,7 @@ namespace water
 		auto c3d_colour = writer.declCombinedImg< FImg2DRgba32 >( "c3d_colour"
 			, index++
 			, RenderPipeline::eBuffers );
-		auto c3d_mapBrdf = writer.declCombinedImg< FImg2DRg32 >( "c3d_mapBrdf"
+		auto c3d_mapBrdf = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapBrdf"
 			, index++
 			, RenderPipeline::eBuffers );
 		auto lightingModel = shader::LightingModel::createModel( *getEngine()

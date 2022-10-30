@@ -471,7 +471,7 @@ namespace castor3d
 			, sdw::Float roughness
 			, sdw::Float indirectOcclusion
 			, sdw::Float indirectBlend
-			, sdw::CombinedImage2DRg32 brdfMap )
+			, sdw::CombinedImage2DRgba32 brdfMap )
 		{
 			auto indirectSpecular = m_writer.declLocale( "lightIndirectSpecular"
 				, vec3( 0.0_f ) );
