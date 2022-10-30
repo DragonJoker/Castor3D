@@ -10,6 +10,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 #include "Castor3D/Render/Passes/RenderQuad.hpp"
 
+#include <ashespp/Image/Image.hpp>
 #include <ashespp/RenderPass/FrameBuffer.hpp>
 
 namespace castor3d

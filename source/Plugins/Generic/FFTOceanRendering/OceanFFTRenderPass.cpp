@@ -1145,7 +1145,7 @@ namespace ocean_fft
 		auto c3d_sceneDiffuseLighting = writer.declCombinedImg< FImg2DRgba32 >( "c3d_sceneDiffuseLighting"
 			, index++
 			, RenderPipeline::eBuffers );
-		auto c3d_mapBrdf = writer.declCombinedImg< FImg2DRg32 >( "c3d_mapBrdf"
+		auto c3d_mapBrdf = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapBrdf"
 			, index++
 			, RenderPipeline::eBuffers );
 		auto lightingModel = shader::LightingModel::createModel( *getEngine()
