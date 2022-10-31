@@ -2,13 +2,13 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Limits.hpp"
+#include "Castor3D/Material/Texture/Sampler.hpp"
+#include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Shader/Program.hpp"
-#include "Castor3D/Shader/Shaders/GlslUtils.hpp"
+#include "Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp"
 #include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
-#include "Castor3D/Material/Texture/Sampler.hpp"
-#include "Castor3D/Material/Texture/TextureLayout.hpp"
 
 #include <CastorUtils/Design/ResourceCache.hpp>
 #include <CastorUtils/Graphics/Size.hpp>
@@ -77,29 +77,6 @@ namespace castor3d
 			return result;
 		}
 
-		struct MicrofacetDistributionSample
-			: public sdw::StructInstanceHelperT< "MicrofacetDistributionSample"
-				, sdw::type::MemoryLayout::eC
-				, sdw::FloatField< "pdf" >
-				, sdw::FloatField< "cosTheta" >
-				, sdw::FloatField< "sinTheta" >
-				, sdw::FloatField< "phi" > >
-		{
-			MicrofacetDistributionSample( sdw::ShaderWriter & writer
-				, sdw::expr::ExprPtr expr
-				, bool enabled = true )
-				: StructInstanceHelperT{ writer, std::move( expr ), enabled }
-			{
-			}
-
-			auto pdf()const { return getMember< "pdf" >(); }
-			auto cosTheta()const { return getMember< "cosTheta" >(); }
-			auto sinTheta()const { return getMember< "sinTheta" >(); }
-			auto phi()const { return getMember< "phi" >(); }
-		};
-
-		Writer_Parameter( MicrofacetDistributionSample );
-
 		static ashes::PipelineShaderStageCreateInfoArray doCreateProgram( RenderDevice const & device
 			, VkExtent2D const & size
 			, uint32_t mipLevel
@@ -132,6 +109,7 @@ namespace castor3d
 			{
 				using namespace sdw;
 				FragmentWriter writer;
+				shader::BRDFHelpers brdf{ writer };
 
 				// Inputs
 				auto vtx_worldPosition = writer.declInput< Vec3 >( "vtx_worldPosition", 0u );
@@ -141,135 +119,6 @@ namespace castor3d
 
 				// Outputs
 				auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_FragColor", 0u );
-
-				auto getDistributionPDF = writer.implementFunction< Float >( "c3d_getDistributionPDF"
-					, [&]( Float const & NdotH
-						, Float alpha )
-					{
-						if ( isCharlie )
-						{
-							alpha = max( alpha, 0.000001_f );
-							auto invR = writer.declLocale( "invR"
-								, 1.0_f / alpha );
-							auto cos2h = writer.declLocale( "cos2h"
-								, NdotH * NdotH );
-							auto sin2h = writer.declLocale( "sin2h"
-								, 1.0_f - cos2h );
-							writer.returnStmt( ( 2.0_f * invR ) * pow( sin2h, invR * 0.5_f ) / castor::Tau< float > );
-						}
-						else
-						{
-							auto a = writer.declLocale( "a"
-								, NdotH * alpha );
-							auto k = writer.declLocale( "k"
-								, alpha / ( 1.0_f - NdotH * NdotH + a * a ) );
-							writer.returnStmt( k * k * 1.0_f / castor::Pi< float > );
-						}
-					}
-					, InFloat{ writer, "NdotH" }
-					, InFloat{ writer, "alpha" } );
-
-				auto importanceSample = writer.implementFunction< MicrofacetDistributionSample >( "c3d_importanceSample"
-					, [&]( Vec2 const & xi
-						, Float const & roughness )
-					{
-						auto result = writer.declLocale< MicrofacetDistributionSample >( "result" );
-
-						// Evaluate sampling equations
-						auto alpha = writer.declLocale( "alpha"
-							, roughness * roughness );
-
-						result.phi() = castor::Tau< float > * xi.x();
-
-						if ( isCharlie )
-						{
-							result.sinTheta() = writer.ternary( alpha == 0.0_f
-								, 0.0_f
-								, pow( xi.y(), alpha / ( 2.0f * alpha + 1.0_f ) ) );
-							result.cosTheta() = sqrt( 1.0_f - result.sinTheta() * result.sinTheta() );
-						}
-						else
-						{
-							auto a2 = writer.declLocale( "a2"
-								, alpha * alpha );
-							result.cosTheta() = sqrt( ( 1.0_f - xi.y() ) / ( 1.0_f + ( a2 - 1.0_f ) * xi.y() ) );
-							result.sinTheta() = sqrt( 1.0_f - result.cosTheta() * result.cosTheta() );
-						}
-
-						// Evaluate GGX pdf (for half vector)
-						result.pdf() = getDistributionPDF( result.cosTheta(), alpha );
-
-						// Apply the Jacobian to obtain a pdf that is parameterized by l
-						// see https://bruop.github.io/ibl/
-						// Typically you'd have the following:
-						// float pdf = D_GGX(NoH, roughness) * NoH / (4.0 * VoH);
-						// but since V = N => VoH == NoH
-						result.pdf() /= 4.0_f;
-
-						writer.returnStmt( result );
-					}
-					, InVec2{ writer, "xi" }
-					, InFloat{ writer, "roughness" } );
-
-				auto getImportanceSample = writer.implementFunction< sdw::Vec4 >( "c3d_getImportanceSample"
-					, [&]( Vec2 const & xi
-						, Vec3 const & n
-						, Float const & roughness )
-					{
-						auto is = writer.declLocale( "is"
-							, importanceSample( xi, roughness ) );
-
-						// from spherical coordinates to cartesian coordinates
-						auto localSpaceDirection = writer.declLocale( "localSpaceDirection"
-							, normalize( vec3( cos( is.phi() ) * is.sinTheta()
-								, sin( is.phi() ) * is.sinTheta()
-								, is.cosTheta() ) ) );
-
-						// from tangent-space vector to world-space sample vector
-						auto up = writer.declLocale( "up"
-							, writer.ternary( sdw::abs( n.z() ) < 0.999_f
-								, vec3( 0.0_f, 0.0_f, 1.0_f )
-								, vec3( 1.0_f, 0.0_f, 0.0_f ) ) );
-						auto tangent = writer.declLocale( "tangent"
-							, normalize( cross( up, n ) ) );
-						auto bitangent = writer.declLocale( "bitangent"
-							, cross( n, tangent ) );
-
-						auto sampleVec = writer.declLocale( "sampleVec"
-							, ( tangent * localSpaceDirection.x()
-								+ bitangent * localSpaceDirection.y()
-								+ n * localSpaceDirection.z() ) );
-
-						writer.returnStmt( vec4( sampleVec, is.pdf() ) );
-					}
-					, InVec2{ writer, "xi" }
-					, InVec3{ writer, "n" }
-					, InFloat{ writer, "roughness" } );
-
-				auto radicalInverse = writer.implementFunction< Float >( "RadicalInverse_VdC"
-					, [&]( UInt const & inBits )
-				{
-					// From https://learnopengl.com/#!PBR/Lighting
-					auto bits = writer.declLocale( "bits"
-						, inBits );
-					bits = ( bits << 16_u ) | ( bits >> 16_u );
-					bits = ( ( bits & 0x55555555_u ) << 1_u ) | ( ( bits & 0xAAAAAAAA_u ) >> 1_u );
-					bits = ( ( bits & 0x33333333_u ) << 2_u ) | ( ( bits & 0xCCCCCCCC_u ) >> 2_u );
-					bits = ( ( bits & 0x0F0F0F0F_u ) << 4_u ) | ( ( bits & 0xF0F0F0F0_u ) >> 4_u );
-					bits = ( ( bits & 0x00FF00FF_u ) << 8_u ) | ( ( bits & 0xFF00FF00_u ) >> 8_u );
-					writer.returnStmt( writer.cast< Float >( bits ) * 2.3283064365386963e-10_f ); // / 0x100000000
-				}
-				, InUInt{ writer, "inBits" } );
-
-				auto hammersley = writer.implementFunction< Vec2 >( "Hammersley"
-					, [&]( UInt const & i
-						, UInt const & n )
-					{
-						// From https://learnopengl.com/#!PBR/Lighting
-						writer.returnStmt( vec2( writer.cast< Float >( i ) / writer.cast< Float >( n ), radicalInverse( i ) ) );
-					}
-					, InUInt{ writer, "i" }
-					, InUInt{ writer, "n" } );
 
 				writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
 					, FragmentOut out )
@@ -292,9 +141,11 @@ namespace castor3d
 						FOR( writer, UInt, i, 0_u, i < sampleCount, ++i )
 						{
 							auto xi = writer.declLocale( "xi"
-								, hammersley( i, sampleCount ) );
+								, brdf.hammersley( i, sampleCount ) );
 							auto importanceSample = writer.declLocale( "importanceSample"
-								, getImportanceSample( xi, N, c3d_roughness ) );
+								, ( isCharlie
+									? brdf.getImportanceSample( brdf.importanceSampleCharlie( xi, c3d_roughness ), N )
+									: brdf.getImportanceSample( brdf.importanceSampleGGX( xi, c3d_roughness ), N ) ) );
 							auto H = writer.declLocale( "H"
 								, importanceSample.xyz() );
 							auto pdf = writer.declLocale( "pdf"

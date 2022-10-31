@@ -20,18 +20,20 @@ namespace castor3d::shader
 	PbrLightingModel::PbrLightingModel( sdw::ShaderWriter & writer
 		, Materials const & materials
 		, Utils & utils
+		, BRDFHelpers & brdf
 		, ShadowOptions shadowOptions
 		, SssProfiles const * sssProfiles
 		, bool enableVolumetric )
 		: LightingModel{ writer
 			, materials
 			, utils
+			, brdf
 			, std::move( shadowOptions )
 			, sssProfiles
 			, enableVolumetric
 			, "c3d_pbr_" }
-		, m_cookTorrance{ writer, utils }
-		, m_sheen{ writer, utils }
+		, m_cookTorrance{ writer, utils, brdf }
+		, m_sheen{ writer, brdf }
 	{
 	}
 
@@ -43,6 +45,7 @@ namespace castor3d::shader
 	LightingModelPtr PbrLightingModel::create( sdw::ShaderWriter & writer
 		, Materials const & materials
 		, Utils & utils
+		, BRDFHelpers & brdf
 		, ShadowOptions shadowOptions
 		, SssProfiles const * sssProfiles
 		, bool enableVolumetric )
@@ -50,6 +53,7 @@ namespace castor3d::shader
 		return std::make_unique< PbrLightingModel >( writer
 			, materials
 			, utils
+			, brdf
 			, std::move( shadowOptions )
 			, sssProfiles
 			, enableVolumetric );

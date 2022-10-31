@@ -19,6 +19,7 @@ namespace castor3d::shader
 
 		C3D_API LightingModelPtr createLightingModel( Engine const & engine
 			, Materials const & materials
+			, BRDFHelpers & brdf
 			, castor::String const & name
 			, ShadowOptions shadowsOptions
 			, SssProfiles const * sssProfiles

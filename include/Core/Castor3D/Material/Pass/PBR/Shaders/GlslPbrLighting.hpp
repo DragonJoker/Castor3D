@@ -20,6 +20,7 @@ namespace castor3d::shader
 		C3D_API explicit PbrLightingModel( sdw::ShaderWriter & writer
 			, Materials const & materials
 			, Utils & utils
+			, BRDFHelpers & brdf
 			, ShadowOptions shadowOptions
 			, SssProfiles const * sssProfiles
 			, bool enableVolumetric );
@@ -28,6 +29,7 @@ namespace castor3d::shader
 		C3D_API static LightingModelPtr create( sdw::ShaderWriter & writer
 			, Materials const & materials
 			, Utils & utils
+			, BRDFHelpers & brdf
 			, ShadowOptions shadowOptions
 			, SssProfiles const * sssProfiles
 			, bool enableVolumetric );

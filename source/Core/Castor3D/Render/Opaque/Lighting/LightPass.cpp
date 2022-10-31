@@ -12,6 +12,7 @@
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslBackground.hpp"
+#include "Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp"
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslFog.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
@@ -115,6 +116,7 @@ namespace castor3d
 		using namespace sdw;
 		FragmentWriter writer;
 		shader::Utils utils{ writer };
+		shader::BRDFHelpers brdf{ writer };
 		shader::PassShaders passShaders{ scene.getEngine()->getPassComponentsRegister()
 			, TextureCombine{}
 			, ( ComponentModeFlag::eColour
@@ -163,6 +165,7 @@ namespace castor3d
 		auto lightingModel = shader::LightingModel::createModel( *scene.getEngine() 
 			, materials
 			, utils
+			, brdf
 			, scene.getLightingModel( lightType )
 			, lightType
 			, uint32_t( LightPassLgtIdx::eLight )

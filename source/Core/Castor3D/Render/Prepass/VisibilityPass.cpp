@@ -9,6 +9,7 @@
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/Opaque/VisibilityResolvePass.hpp"
 #include "Castor3D/Shader/Program.hpp"
+#include "Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
@@ -130,6 +131,7 @@ namespace castor3d
 		bool enableTextures = flags.enableTextures();
 
 		shader::Utils utils{ writer };
+		shader::BRDFHelpers brdf{ writer };
 		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
 			, flags
 			, ( ComponentModeFlag::eOpacity
@@ -172,6 +174,7 @@ namespace castor3d
 
 		auto lightingModel = utils.createLightingModel( *getEngine()
 			, materials
+			, brdf
 			, shader::getLightingModelName( *getEngine(), flags.passType )
 			, {}
 			, nullptr

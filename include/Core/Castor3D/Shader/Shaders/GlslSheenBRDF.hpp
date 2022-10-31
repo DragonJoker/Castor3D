@@ -12,33 +12,15 @@ namespace castor3d::shader
 	{
 	public:
 		C3D_API explicit SheenBRDF( sdw::ShaderWriter & writer
-			, Utils & utils );
+			, BRDFHelpers & brdf );
 		C3D_API sdw::RetVec2 compute( sdw::Float const & NdotH
 			, sdw::Float const & NdotV
 			, sdw::Float const & NdotL
 			, sdw::Float const & roughness );
 
 	private:
-		void declareDistribution();
-		void declareVisibility();
-		void declareComputeSheen();
-
-	private:
 		sdw::ShaderWriter & m_writer;
-		Utils & m_utils;
-		sdw::Function< sdw::Float
-			, sdw::InFloat
-			, sdw::InFloat > m_distributionCharlie;
-		sdw::Function< sdw::Float
-			, sdw::InFloat
-			, sdw::InFloat > m_lambdaSheenNumericHelper;
-		sdw::Function< sdw::Float
-			, sdw::InFloat
-			, sdw::InFloat > m_lambdaSheen;
-		sdw::Function< sdw::Float
-			, sdw::InFloat
-			, sdw::InFloat
-			, sdw::InFloat > m_visibility;
+		BRDFHelpers & m_brdf;
 		sdw::Function< sdw::Vec2
 			, sdw::InFloat
 			, sdw::InFloat

@@ -20,6 +20,7 @@
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslBackground.hpp"
+#include "Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp"
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslCookTorranceBRDF.hpp"
 #include "Castor3D/Shader/Shaders/GlslFog.hpp"
@@ -151,6 +152,7 @@ namespace castor3d
 			FragmentWriter writer;
 
 			shader::Utils utils{ writer };
+			shader::BRDFHelpers brdf{ writer };
 			shader::PassShaders passShaders{ renderSystem.getEngine()->getPassComponentsRegister()
 				, TextureCombine{}
 				, ( ComponentModeFlag::eColour
@@ -193,10 +195,11 @@ namespace castor3d
 
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
-			shader::CookTorranceBRDF cookTorrance{ writer, utils };
+			shader::CookTorranceBRDF cookTorrance{ writer, utils, brdf };
 
 			auto lightingModel = utils.createLightingModel( *renderSystem.getEngine()
 				, materials
+				, brdf
 				, shader::getLightingModelName( *renderSystem.getEngine(), passType )
 				, {}
 				, nullptr

@@ -15,6 +15,7 @@
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
+#include "Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp"
 #include "Castor3D/Shader/Shaders/GlslGlobalIllumination.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
@@ -59,6 +60,7 @@ namespace castor3d
 			using namespace sdw;
 			FragmentWriter writer;
 			shader::Utils utils{ writer };
+			shader::BRDFHelpers brdf{ writer };
 
 			// Shader outputs
 			auto pxl_indirectDiffuse = writer.declOutput< Vec3 >( "pxl_indirectDiffuse", 0 );
@@ -93,6 +95,7 @@ namespace castor3d
 				, config.sceneFlags );
 			auto lightingModel = utils.createLightingModel( *renderSystem.getEngine()
 				, materials
+				, brdf
 				, shader::getLightingModelName( *renderSystem.getEngine(), passType )
 				, {}
 				, nullptr

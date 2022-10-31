@@ -27,6 +27,7 @@ namespace castor3d::shader
 	PhongLightingModel::PhongLightingModel( sdw::ShaderWriter & m_writer
 		, Materials const & materials
 		, Utils & utils
+		, BRDFHelpers & brdf
 		, ShadowOptions shadowOptions
 		, SssProfiles const * sssProfiles
 		, bool enableVolumetric
@@ -34,6 +35,7 @@ namespace castor3d::shader
 		: LightingModel{ m_writer
 			, materials
 			, utils
+			, brdf
 			, std::move( shadowOptions )
 			, sssProfiles
 			, enableVolumetric
@@ -45,6 +47,7 @@ namespace castor3d::shader
 	LightingModelPtr PhongLightingModel::create( sdw::ShaderWriter & writer
 		, Materials const & materials
 		, Utils & utils
+		, BRDFHelpers & brdf
 		, ShadowOptions shadowOptions
 		, SssProfiles const * sssProfiles
 		, bool enableVolumetric )
@@ -52,6 +55,7 @@ namespace castor3d::shader
 		return std::make_unique< PhongLightingModel >( writer
 			, materials
 			, utils
+			, brdf
 			, std::move( shadowOptions )
 			, sssProfiles
 			, enableVolumetric
@@ -825,12 +829,14 @@ namespace castor3d::shader
 	BlinnPhongLightingModel::BlinnPhongLightingModel( sdw::ShaderWriter & writer
 		, Materials const & materials
 		, Utils & utils
+		, BRDFHelpers & brdf
 		, ShadowOptions shadowOptions
 		, SssProfiles const * sssProfiles
 		, bool enableVolumetric )
 		: PhongLightingModel{ writer
 			, materials
 			, utils
+			, brdf
 			, std::move( shadowOptions )
 			, sssProfiles
 			, enableVolumetric
@@ -841,6 +847,7 @@ namespace castor3d::shader
 	LightingModelPtr BlinnPhongLightingModel::create( sdw::ShaderWriter & writer
 		, Materials const & materials
 		, Utils & utils
+		, BRDFHelpers & brdf
 		, ShadowOptions shadowOptions
 		, SssProfiles const * sssProfiles
 		, bool enableVolumetric )
@@ -848,6 +855,7 @@ namespace castor3d::shader
 		return std::make_unique< BlinnPhongLightingModel >( writer
 			, materials
 			, utils
+			, brdf
 			, std::move( shadowOptions )
 			, sssProfiles
 			, enableVolumetric );

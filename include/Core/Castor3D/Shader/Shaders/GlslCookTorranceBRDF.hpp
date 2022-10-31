@@ -12,7 +12,8 @@ namespace castor3d::shader
 	{
 	public:
 		C3D_API explicit CookTorranceBRDF( sdw::ShaderWriter & writer
-			, Utils & utils );
+			, Utils & utils
+			, BRDFHelpers & brdf );
 		C3D_API sdw::RetVec3 compute( sdw::Vec3 const & radiance
 			, sdw::Vec2 const & intensity
 			, sdw::Float const & HdotV
@@ -83,8 +84,6 @@ namespace castor3d::shader
 			, Surface surface );
 
 	private:
-		void declareDistribution();
-		void declareGeometry();
 		void declareComputeCookTorrance();
 		void declareComputeCookTorranceAON();
 		void declareComputeCookTorranceSpecular();
@@ -94,21 +93,7 @@ namespace castor3d::shader
 	private:
 		sdw::ShaderWriter & m_writer;
 		Utils & m_utils;
-		sdw::Function< sdw::Float
-			, sdw::InFloat
-			, sdw::InFloat > m_distributionGGX;
-		sdw::Function< sdw::Float
-			, sdw::InFloat
-			, sdw::InFloat > m_geometrySchlickGGX;
-		sdw::Function< sdw::Float
-			, sdw::InFloat
-			, sdw::InFloat
-			, sdw::InFloat > m_geometrySmith;
-		sdw::Function< sdw::Float
-			, sdw::InVec3
-			, sdw::InVec3
-			, sdw::InVec3
-			, sdw::InFloat > m_smith;
+		BRDFHelpers & m_brdf;
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3
 			, sdw::InVec2

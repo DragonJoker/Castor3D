@@ -1,5 +1,6 @@
 #include "Castor3D/Shader/Shaders/GlslCookTorranceBRDF.hpp"
 
+#include "Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
@@ -17,9 +18,11 @@ namespace castor3d::shader
 	//*********************************************************************************************
 
 	CookTorranceBRDF::CookTorranceBRDF( sdw::ShaderWriter & writer
-		, Utils & utils )
+		, Utils & utils
+		, BRDFHelpers & brdf )
 		: m_writer{ writer }
 		, m_utils{ utils }
+		, m_brdf{ brdf }
 	{
 	}
 
@@ -197,88 +200,6 @@ namespace castor3d::shader
 			, surface );
 	}
 
-	void CookTorranceBRDF::declareDistribution()
-	{
-		if ( m_distributionGGX )
-		{
-			return;
-		}
-
-		// Distribution Function
-		m_distributionGGX = m_writer.implementFunction< sdw::Float >( "c3d_distribution"
-			, [this]( sdw::Float const & product
-				, sdw::Float const & roughness )
-			{
-				// From https://learnopengl.com/#!PBR/Lighting
-				auto a = m_writer.declLocale( "a"
-					, roughness * roughness );
-				auto a2 = m_writer.declLocale( "a2"
-					, a * a );
-				auto NdotH2 = m_writer.declLocale( "NdotH2"
-					, product * product );
-
-				auto numerator = m_writer.declLocale( "num"
-					, a2 );
-				auto denominator = m_writer.declLocale( "denom"
-					, sdw::fma( NdotH2
-						, a2 - 1.0_f
-						, 1.0_f ) );
-				denominator = sdw::Float{ castor::Pi< float > } * denominator * denominator;
-
-				m_writer.returnStmt( numerator / denominator );
-			}
-			, sdw::InFloat( m_writer, "product" )
-			, sdw::InFloat( m_writer, "roughness" ) );
-	}
-	
-	void CookTorranceBRDF::declareGeometry()
-	{
-		if ( m_geometrySchlickGGX )
-		{
-			return;
-		}
-
-		// Geometry Functions
-		m_geometrySchlickGGX = m_writer.implementFunction< sdw::Float >( "c3d_geometrySchlickGGX"
-			, [this]( sdw::Float const & product
-				, sdw::Float const & roughness )
-			{
-				// From https://learnopengl.com/#!PBR/Lighting
-				auto r = m_writer.declLocale( "r"
-					, roughness + 1.0_f );
-				auto k = m_writer.declLocale( "k"
-					, ( r * r ) / 8.0_f );
-
-				auto numerator = m_writer.declLocale( "num"
-					, product );
-				auto denominator = m_writer.declLocale( "denom"
-					, sdw::fma( product
-						, 1.0_f - k
-						, k ) );
-
-				m_writer.returnStmt( numerator / denominator );
-			}
-			, sdw::InFloat( m_writer, "product" )
-			, sdw::InFloat( m_writer, "roughness" ) );
-
-		m_geometrySmith = m_writer.implementFunction< sdw::Float >( "c3d_geometrySmith"
-			, [this]( sdw::Float const & NdotV
-				, sdw::Float const & NdotL
-				, sdw::Float const & roughness )
-			{
-				// From https://learnopengl.com/#!PBR/Lighting
-				auto ggx2 = m_writer.declLocale( "ggx2"
-					, m_geometrySchlickGGX( NdotV, roughness ) );
-				auto ggx1 = m_writer.declLocale( "ggx1"
-					, m_geometrySchlickGGX( NdotL, roughness ) );
-
-				m_writer.returnStmt( ggx1 * ggx2 );
-			}
-			, sdw::InFloat( m_writer, "NdotV" )
-			, sdw::InFloat( m_writer, "NdotL" )
-			, sdw::InFloat( m_writer, "roughness" ) );
-	}
-
 	void CookTorranceBRDF::declareComputeCookTorrance()
 	{
 		if ( m_computeCookTorrance )
@@ -286,8 +207,6 @@ namespace castor3d::shader
 			return;
 		}
 
-		declareDistribution();
-		declareGeometry();
 		OutputComponents outputs{ m_writer };
 		m_computeCookTorrance = m_writer.implementFunction< sdw::Vec3 >( "c3d_computeCookTorrance"
 			, [this]( sdw::Vec3 const & radiance
@@ -306,9 +225,9 @@ namespace castor3d::shader
 				auto F = m_writer.declLocale( "F"
 					, m_utils.conductorFresnel( HdotV, specular ) );
 				auto D = m_writer.declLocale( "D"
-					, m_distributionGGX( NdotH, roughness ) );
+					, m_brdf.distributionGGX( NdotH, roughness * roughness ) );
 				auto G = m_writer.declLocale( "G"
-					, m_geometrySmith( NdotV, NdotL, roughness ) );
+					, m_brdf.visibilitySmithGGXCorrelated( NdotV, NdotL, roughness ) );
 
 				auto numerator = m_writer.declLocale( "numerator"
 					, F * D * G );
@@ -351,8 +270,6 @@ namespace castor3d::shader
 			return;
 		}
 
-		declareDistribution();
-		declareGeometry();
 		OutputComponents outputs{ m_writer };
 		m_computeCookTorranceAON = m_writer.implementFunction< sdw::Void >( "c3d_computeCookTorranceAON"
 			, [this]( sdw::Vec3 const & radiance
@@ -372,9 +289,9 @@ namespace castor3d::shader
 				auto F = m_writer.declLocale( "F"
 					, m_utils.conductorFresnel( HdotV, specular ) );
 				auto D = m_writer.declLocale( "D"
-					, m_distributionGGX( NdotH, roughness ) );
+					, m_brdf.distributionGGX( NdotH, roughness * roughness ) );
 				auto G = m_writer.declLocale( "G"
-					, m_geometrySmith( NdotV, NdotL, roughness ) );
+					, m_brdf.visibilitySmithGGXCorrelated( NdotV, NdotL, roughness ) );
 
 				auto delta = m_writer.declLocale( "delta"
 					, fwidth( NdotL ) * smoothBand );
@@ -422,8 +339,6 @@ namespace castor3d::shader
 			return;
 		}
 
-		declareDistribution();
-		declareGeometry();
 		OutputComponents outputs{ m_writer };
 		m_computeCookTorranceSpecular = m_writer.implementFunction< sdw::Vec3 >( "c3d_computeCookTorranceSpecular"
 			, [this]( sdw::Vec3 const & radiance
@@ -442,9 +357,9 @@ namespace castor3d::shader
 				auto F = m_writer.declLocale( "F"
 					, m_utils.conductorFresnel( HdotV, specular ) );
 				auto D = m_writer.declLocale( "D"
-					, m_distributionGGX( NdotH, roughness ) );
+					, m_brdf.distributionGGX( NdotH, roughness * roughness ) );
 				auto G = m_writer.declLocale( "G"
-					, m_geometrySmith( NdotV, NdotL, roughness ) );
+					, m_brdf.visibilitySmithGGXCorrelated( NdotV, NdotL, roughness ) );
 
 				auto numerator = m_writer.declLocale( "numerator"
 					, F * D * G );

@@ -16,6 +16,7 @@
 #include "Castor3D/Scene/Light/SpotLight.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
+#include "Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
@@ -233,6 +234,7 @@ namespace castor3d
 		auto needsRsm = flags.writeShadowRSM();
 
 		shader::Utils utils{ writer };
+		shader::BRDFHelpers brdf{ writer };
 		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
 			, flags
 			, getComponentsMask()
@@ -262,6 +264,7 @@ namespace castor3d
 		auto lightingModel = shader::LightingModel::createModel( *renderSystem.getEngine()
 			, materials
 			, utils
+			, brdf
 			, shader::getLightingModelName( *getEngine(), flags.passType )
 			, LightType::eSpot
 			, lightsIndex

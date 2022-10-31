@@ -21,6 +21,7 @@
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp"
+#include "Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
@@ -447,6 +448,7 @@ namespace castor3d
 		FragmentWriter writer;
 		bool enableTextures = flags.enableTextures();
 		shader::Utils utils{ writer };
+		shader::BRDFHelpers brdf{ writer };
 		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
 			, flags
 			, getComponentsMask()
@@ -482,6 +484,7 @@ namespace castor3d
 		auto lightingModel = shader::LightingModel::createDiffuseModel( *getEngine()
 			, materials
 			, utils
+			, brdf
 			, shader::getLightingModelName( *getEngine(), flags.passType )
 			, lightsIndex
 			, RenderPipeline::eBuffers
