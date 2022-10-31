@@ -38,6 +38,7 @@ namespace castor3d::shader
 
 	LightingModelPtr Utils::createLightingModel( Engine const & engine
 		, Materials const & materials
+		, BRDFHelpers & brdf
 		, castor::String const & name
 		, ShadowOptions shadowsOptions
 		, SssProfiles const * sssProfiles
@@ -47,6 +48,7 @@ namespace castor3d::shader
 			, m_writer
 			, materials
 			, *this
+			, brdf
 			, std::move( shadowsOptions )
 			, sssProfiles
 			, enableVolumetric );

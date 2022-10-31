@@ -25,6 +25,7 @@ namespace castor3d::shader
 		C3D_API LightingModel( sdw::ShaderWriter & writer
 			, Materials const & materials
 			, Utils & utils
+			, BRDFHelpers & brdf
 			, ShadowOptions shadowOptions
 			, SssProfiles const * sssProfiles
 			, bool enableVolumetric
@@ -94,6 +95,7 @@ namespace castor3d::shader
 		C3D_API static LightingModelPtr createModel( Engine const & engine
 			, Materials const & materials
 			, Utils & utils
+			, BRDFHelpers & brdf
 			, castor::String const & name
 			, uint32_t lightsBufBinding
 			, uint32_t lightsBufSet
@@ -106,6 +108,7 @@ namespace castor3d::shader
 		static LightingModelPtr createModelT( Engine const & engine
 			, Materials const & materials
 			, Utils & utils
+			, BRDFHelpers & brdf
 			, castor::String const & name
 			, LightsBufBindingT lightsBufBinding
 			, uint32_t lightsBufSet
@@ -118,6 +121,7 @@ namespace castor3d::shader
 			return createModel( engine
 				, materials
 				, utils
+				, brdf
 				, name
 				, uint32_t( lightsBufBinding )
 				, lightsBufSet
@@ -131,6 +135,7 @@ namespace castor3d::shader
 		static LightingModelPtr createModel( Engine const & engine
 			, Materials const & materials
 			, Utils & utils
+			, BRDFHelpers & brdf
 			, castor::String const & name
 			, LightType light
 			, LightBindingT lightBinding
@@ -144,6 +149,7 @@ namespace castor3d::shader
 			return createModel( engine
 				, materials
 				, utils
+				, brdf
 				, name
 				, light
 				, lightUbo
@@ -172,6 +178,7 @@ namespace castor3d::shader
 		C3D_API static LightingModelPtr createDiffuseModel( Engine const & engine
 			, Materials const & materials
 			, Utils & utils
+			, BRDFHelpers & brdf
 			, castor::String const & name
 			, uint32_t lightsBufBinding
 			, uint32_t lightsBufSet
@@ -183,6 +190,7 @@ namespace castor3d::shader
 		static LightingModelPtr createDiffuseModelT( Engine const & engine
 			, Materials const & materials
 			, Utils & utils
+			, BRDFHelpers & brdf
 			, castor::String const & name
 			, LightsBufBindingT lightsBufBinding
 			, uint32_t lightsBufSet
@@ -194,6 +202,7 @@ namespace castor3d::shader
 			return createDiffuseModel( engine
 				, materials
 				, utils
+				, brdf
 				, name
 				, uint32_t( lightsBufBinding )
 				, lightsBufSet
@@ -323,6 +332,7 @@ namespace castor3d::shader
 		C3D_API static LightingModelPtr createModel( Engine const & engine
 			, Materials const & materials
 			, Utils & utils
+			, BRDFHelpers & brdf
 			, castor::String const & name
 			, LightType light
 			, bool lightUbo

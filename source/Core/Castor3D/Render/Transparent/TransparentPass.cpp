@@ -17,6 +17,7 @@
 #include "Castor3D/Scene/Background/Background.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslBackground.hpp"
+#include "Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp"
 #include "Castor3D/Shader/Shaders/GlslCookTorranceBRDF.hpp"
 #include "Castor3D/Shader/Shaders/GlslFog.hpp"
 #include "Castor3D/Shader/Shaders/GlslGlobalIllumination.hpp"
@@ -209,11 +210,12 @@ namespace castor3d
 		bool hasDiffuseGI = flags.hasDiffuseGI();
 
 		shader::Utils utils{ writer };
+		shader::BRDFHelpers brdf{ writer };
 		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
 			, flags
 			, getComponentsMask()
 			, utils };
-		shader::CookTorranceBRDF cookTorrance{ writer, utils };
+		shader::CookTorranceBRDF cookTorrance{ writer, utils, brdf };
 		auto index = uint32_t( GlobalBuffersIdx::eCount );
 
 		C3D_Matrix( writer
@@ -250,6 +252,7 @@ namespace castor3d
 		auto lightingModel = shader::LightingModel::createModel( *getEngine()
 			, materials
 			, utils
+			, brdf
 			, getScene().getLightingModel()
 			, lightsIndex
 			, RenderPipeline::eBuffers

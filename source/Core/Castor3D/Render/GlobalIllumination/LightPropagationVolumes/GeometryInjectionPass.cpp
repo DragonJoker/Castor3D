@@ -20,6 +20,7 @@
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Shader/Program.hpp"
+#include "Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
@@ -156,6 +157,7 @@ namespace castor3d
 
 				// Utility functions
 				shader::Utils utils{ writer };
+				shader::BRDFHelpers brdf{ writer };
 				shader::PassShaders passShaders{ renderSystem.getEngine()->getPassComponentsRegister()
 					, TextureCombine{}
 					, ComponentModeFlag::eDiffuseLighting
@@ -165,6 +167,7 @@ namespace castor3d
 				auto lightingModel = shader::LightingModel::createModel( *renderSystem.getEngine()
 					, materials
 					, utils
+					, brdf
 					, renderSystem.getEngine()->getPassFactory().getLightingModelName( 1u )
 					, LightType::eDirectional
 					, GeometryInjectionPass::LightsIdx
@@ -225,6 +228,7 @@ namespace castor3d
 
 				// Utility functions
 				shader::Utils utils{ writer };
+				shader::BRDFHelpers brdf{ writer };
 				shader::PassShaders passShaders{ renderSystem.getEngine()->getPassComponentsRegister()
 					, TextureCombine{}
 					, ComponentModeFlag::eDiffuseLighting
@@ -234,6 +238,7 @@ namespace castor3d
 				auto lightingModel = shader::LightingModel::createModel( *renderSystem.getEngine()
 					, materials
 					, utils
+					, brdf
 					, renderSystem.getEngine()->getPassFactory().getLightingModelName( 1u )
 					, LightType::eDirectional
 					, GeometryInjectionPass::LightsIdx
@@ -299,6 +304,7 @@ namespace castor3d
 
 			// Utility functions
 			shader::Utils utils{ writer };
+			shader::BRDFHelpers brdf{ writer };
 			shader::PassShaders passShaders{ renderSystem.getEngine()->getPassComponentsRegister()
 				, TextureCombine{}
 				, ComponentModeFlag::eDiffuseLighting
@@ -308,6 +314,7 @@ namespace castor3d
 			auto lightingModel = shader::LightingModel::createModel( *renderSystem.getEngine()
 				, materials
 				, utils
+				, brdf
 				, renderSystem.getEngine()->getPassFactory().getLightingModelName( 1u )
 				, LightType::eSpot
 				, GeometryInjectionPass::LightsIdx
@@ -373,6 +380,7 @@ namespace castor3d
 
 			// Utility functions
 			shader::Utils utils{ writer };
+			shader::BRDFHelpers brdf{ writer };
 			shader::PassShaders passShaders{ renderSystem.getEngine()->getPassComponentsRegister()
 				, TextureCombine{}
 				, ComponentModeFlag::eDiffuseLighting
@@ -382,6 +390,7 @@ namespace castor3d
 			auto lightingModel = shader::LightingModel::createModel( *renderSystem.getEngine()
 				, materials
 				, utils
+				, brdf
 				, renderSystem.getEngine()->getPassFactory().getLightingModelName( 1u )
 				, LightType::ePoint
 				, GeometryInjectionPass::LightsIdx

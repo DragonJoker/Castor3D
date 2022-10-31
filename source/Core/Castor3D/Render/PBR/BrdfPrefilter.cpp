@@ -6,6 +6,7 @@
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Shader/Program.hpp"
+#include "Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp"
 
 #include <CastorUtils/Math/Angle.hpp>
 #include <CastorUtils/Graphics/Size.hpp>
@@ -24,44 +25,6 @@
 
 namespace castor3d
 {
-	namespace brdf
-	{
-		struct MicrofacetDistributionSample
-			: public sdw::StructInstanceHelperT< "MicrofacetDistributionSample"
-			, sdw::type::MemoryLayout::eC
-			, sdw::FloatField< "pdf" >
-			, sdw::FloatField< "cosTheta" >
-			, sdw::FloatField< "sinTheta" >
-			, sdw::FloatField< "phi" > >
-		{
-			MicrofacetDistributionSample( sdw::ShaderWriter & writer
-				, sdw::expr::ExprPtr expr
-				, bool enabled = true )
-				: StructInstanceHelperT{ writer, std::move( expr ), enabled }
-			{
-			}
-
-			auto pdf()const
-			{
-				return getMember< "pdf" >();
-			}
-			auto cosTheta()const
-			{
-				return getMember< "cosTheta" >();
-			}
-			auto sinTheta()const
-			{
-				return getMember< "sinTheta" >();
-			}
-			auto phi()const
-			{
-				return getMember< "phi" >();
-			}
-		};
-
-		Writer_Parameter( MicrofacetDistributionSample );
-	}
-
 	BrdfPrefilter::BrdfPrefilter( Engine & engine
 		, RenderDevice const & device
 		, castor::Size const & size
@@ -237,204 +200,13 @@ namespace castor3d
 		{
 			using namespace sdw;
 			FragmentWriter writer;
+			shader::BRDFHelpers brdf{ writer };
 
 			// Inputs
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			// Outputs
 			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_FragColor", 0u );
-
-			auto radicalInverse = writer.implementFunction< Float >( "c3d_radicalInverse_VdC"
-				, [&]( UInt const & inBits )
-				{
-					auto bits = writer.declLocale( "bits"
-						, inBits );
-					bits = ( bits << 16u ) | ( bits >> 16u );
-					bits = ( ( bits & 0x55555555_u ) << 1u ) | ( ( bits & 0xAAAAAAAA_u ) >> 1u );
-					bits = ( ( bits & 0x33333333_u ) << 2u ) | ( ( bits & 0xCCCCCCCC_u ) >> 2u );
-					bits = ( ( bits & 0x0F0F0F0F_u ) << 4u ) | ( ( bits & 0xF0F0F0F0_u ) >> 4u );
-					bits = ( ( bits & 0x00FF00FF_u ) << 8u ) | ( ( bits & 0xFF00FF00_u ) >> 8u );
-					writer.returnStmt( writer.cast< Float >( bits ) * 2.3283064365386963e-10_f ); // / 0x100000000
-				}
-				, InUInt{ writer, "inBits" } );
-
-			auto hammersley = writer.implementFunction< Vec2 >( "c3d_hammersley"
-				, [&]( UInt const & i
-					, UInt const & n )
-				{
-					writer.returnStmt( vec2( writer.cast< Float >( i ) / writer.cast< Float >( n ), radicalInverse( i ) ) );
-				}
-				, InUInt{ writer, "i" }
-				, InUInt{ writer, "n" } );
-
-			auto geometrySchlickGGX = writer.implementFunction< Float >( "c3d_geometrySchlickGGX"
-				, [&]( Float const & product
-					, Float const & roughness )
-				{
-					// From https://learnopengl.com/#!PBR/Lighting
-					auto r = writer.declLocale( "r"
-						, roughness );
-					auto k = writer.declLocale( "k"
-						, ( r * r ) / 2.0_f );
-
-					auto numerator = writer.declLocale( "num"
-						, product );
-					auto denominator = writer.declLocale( "denom"
-						, product * ( 1.0_f - k ) + k );
-
-					writer.returnStmt( numerator / denominator );
-				}
-				, InFloat( writer, "product" )
-				, InFloat( writer, "roughness" ) );
-
-			auto geometrySmith = writer.implementFunction< Float >( "c3d_geometrySmith"
-				, [&]( Float const & NdotV
-					, Float const & NdotL
-					, Float const & roughness )
-				{
-					// From https://learnopengl.com/#!PBR/Lighting
-					auto ggx2 = writer.declLocale( "ggx2"
-						, geometrySchlickGGX( NdotV, roughness ) );
-					auto ggx1 = writer.declLocale( "ggx1"
-						, geometrySchlickGGX( NdotL, roughness ) );
-
-					writer.returnStmt( ggx1 * ggx2 );
-				}
-				, InFloat( writer, "NdotV" )
-				, InFloat( writer, "NdotL" )
-				, InFloat( writer, "roughness" ) );
-
-			auto distributionGGX = writer.implementFunction< Float >( "c3d_distributionGGX"
-				, [&]( Float const & NdotH
-					, Float alpha )
-				{
-					auto a = writer.declLocale( "a"
-						, NdotH * alpha );
-					auto k = writer.declLocale( "k"
-						, alpha / ( 1.0_f - NdotH * NdotH + a * a ) );
-					writer.returnStmt( k * k * 1.0_f / castor::Pi< float > );
-				}
-				, InFloat{ writer, "NdotH" }
-				, InFloat{ writer, "alpha" } );
-
-			auto distributionCharlie = writer.implementFunction< Float >( "c3d_distributionCharlie"
-				, [&]( Float const & NdotH
-					, Float alpha )
-				{
-					alpha = max( alpha, 0.000001_f );
-					auto invR = writer.declLocale( "invR"
-						, 1.0_f / alpha );
-					auto cos2h = writer.declLocale( "cos2h"
-						, NdotH * NdotH );
-					auto sin2h = writer.declLocale( "sin2h"
-						, 1.0_f - cos2h );
-					writer.returnStmt( ( 2.0_f * invR ) * pow( sin2h, invR * 0.5_f ) / castor::Tau< float > );
-				}
-				, InFloat{ writer, "NdotH" }
-				, InFloat{ writer, "alpha" } );
-
-			auto visibilityAshikhmin = writer.implementFunction< Float >( "c3d_visibilityAshikhmin"
-				, [&]( Float const & NdotL
-					, Float NdotV )
-				{
-					writer.returnStmt( clamp( 1.0_f / ( 4.0_f * ( NdotL + NdotV - NdotL * NdotV ) )
-						, 0.0_f
-						, 1.0_f ) );
-				}
-				, InFloat{ writer, "NdotL" }
-				, InFloat{ writer, "NdotV" } );
-
-			auto importanceSampleGGX = writer.implementFunction< brdf::MicrofacetDistributionSample >( "c3d_importanceSampleGGX"
-				, [&]( Vec2 const & xi
-					, Float const & roughness )
-				{
-					auto result = writer.declLocale< brdf::MicrofacetDistributionSample >( "result" );
-
-					// Evaluate sampling equations
-					auto alpha = writer.declLocale( "alpha"
-						, roughness * roughness );
-					auto a2 = writer.declLocale( "a2"
-						, alpha * alpha );
-
-					result.phi() = castor::Tau< float > *xi.x();
-					result.cosTheta() = sqrt( ( 1.0_f - xi.y() ) / ( 1.0_f + ( a2 - 1.0_f ) * xi.y() ) );
-					result.sinTheta() = sqrt( 1.0_f - result.cosTheta() * result.cosTheta() );
-
-					// Evaluate GGX pdf (for half vector)
-					result.pdf() = distributionGGX( result.cosTheta(), alpha );
-
-					// Apply the Jacobian to obtain a pdf that is parameterized by l
-					// see https://bruop.github.io/ibl/
-					// Typically you'd have the following:
-					// float pdf = D_GGX(NoH, roughness) * NoH / (4.0 * VoH);
-					// but since V = N => VoH == NoH
-					result.pdf() /= 4.0_f;
-
-					writer.returnStmt( result );
-				}
-				, InVec2{ writer, "xi" }
-				, InFloat{ writer, "roughness" } );
-
-			auto importanceSampleCharlie = writer.implementFunction< brdf::MicrofacetDistributionSample >( "c3d_importanceSampleCharlie"
-				, [&]( Vec2 const & xi
-					, Float const & roughness )
-				{
-					auto result = writer.declLocale< brdf::MicrofacetDistributionSample >( "result" );
-
-					// Evaluate sampling equations
-					auto alpha = writer.declLocale( "alpha"
-						, roughness * roughness );
-
-					result.phi() = castor::Tau< float > * xi.x();
-					result.sinTheta() = writer.ternary( alpha == 0.0_f
-						, 0.0_f
-						, pow( xi.y(), alpha / ( 2.0f * alpha + 1.0_f ) ) );
-					result.cosTheta() = sqrt( 1.0_f - result.sinTheta() * result.sinTheta() );
-
-					// Evaluate GGX pdf (for half vector)
-					result.pdf() = distributionCharlie( result.cosTheta(), alpha );
-
-					// Apply the Jacobian to obtain a pdf that is parameterized by l
-					// see https://bruop.github.io/ibl/
-					// Typically you'd have the following:
-					// float pdf = D_GGX(NoH, roughness) * NoH / (4.0 * VoH);
-					// but since V = N => VoH == NoH
-					result.pdf() /= 4.0_f;
-
-					writer.returnStmt( result );
-				}
-				, InVec2{ writer, "xi" }
-				, InFloat{ writer, "roughness" } );
-
-			auto getImportanceSample = writer.implementFunction< sdw::Vec4 >( "c3d_getImportanceSample"
-				, [&]( brdf::MicrofacetDistributionSample const & is
-					, sdw::Vec3 const & n )
-				{
-					// from spherical coordinates to cartesian coordinates
-					auto localSpaceDirection = writer.declLocale( "localSpaceDirection"
-						, normalize( vec3( cos( is.phi() ) * is.sinTheta()
-							, sin( is.phi() ) * is.sinTheta()
-							, is.cosTheta() ) ) );
-
-					// from tangent-space vector to world-space sample vector
-					auto up = writer.declLocale( "up"
-						, writer.ternary( sdw::abs( n.z() ) < 0.999_f
-							, vec3( 0.0_f, 0.0_f, 1.0_f )
-							, vec3( 1.0_f, 0.0_f, 0.0_f ) ) );
-					auto tangent = writer.declLocale( "tangent"
-						, normalize( cross( up, n ) ) );
-					auto bitangent = writer.declLocale( "bitangent"
-						, cross( n, tangent ) );
-
-					auto sampleVec = writer.declLocale( "sampleVec"
-						, ( tangent * localSpaceDirection.x()
-							+ bitangent * localSpaceDirection.y()
-							+ n * localSpaceDirection.z() ) );
-
-					writer.returnStmt( vec4( sampleVec, is.pdf() ) );
-				}
-				, brdf::InMicrofacetDistributionSample{ writer, "is" }
-				, InVec3{ writer, "n" } );
 
 			auto integrateBRDF = writer.implementFunction< Vec3 >( "c3d_integrateBRDF"
 				, [&]( Float const & NdotV
@@ -461,12 +233,12 @@ namespace castor3d
 					FOR( writer, UInt, i, 0_u, i < sampleCount, ++i )
 					{
 						auto xi = writer.declLocale( "xi"
-							, hammersley( i, sampleCount ) );
+							, brdf.hammersley( i, sampleCount ) );
 
 						// GGX
 						{
 							auto importanceSample = writer.declLocale( "importanceSample"
-								, getImportanceSample( importanceSampleGGX( xi, roughness ), N ) );
+								, brdf.getImportanceSample( brdf.importanceSampleGGX( xi, roughness ), N ) );
 							auto H = writer.declLocale( "H"
 								,importanceSample.xyz() );
 							auto L = writer.declLocale( "L"
@@ -482,7 +254,7 @@ namespace castor3d
 							IF( writer, NdotL > 0.0_f )
 							{
 								auto G = writer.declLocale( "G"
-									, geometrySmith( NdotV, max( dot( N, L ), 0.0_f ), roughness ) );
+									, brdf.visibilitySmithGGXCorrelated( NdotV, max( dot( N, L ), 0.0_f ), roughness ) );
 								auto vis = writer.declLocale( "G_Vis"
 									, ( G * VdotH ) / ( NdotH * NdotV ) );
 								auto Fc = writer.declLocale( "Fc"
@@ -496,7 +268,7 @@ namespace castor3d
 
 						// Charlie
 						auto importanceSample = writer.declLocale( "importanceSample"
-							, getImportanceSample( importanceSampleCharlie( xi, roughness ), N ) );
+							, brdf.getImportanceSample( brdf.importanceSampleCharlie( xi, roughness ), N ) );
 						auto H = writer.declLocale( "H"
 							, importanceSample.xyz() );
 						auto L = writer.declLocale( "L"
@@ -512,9 +284,9 @@ namespace castor3d
 						IF( writer, NdotL > 0.0_f )
 						{
 							auto sheenDistribution = writer.declLocale( "G"
-								, distributionCharlie( roughness, NdotH ) );
+								, brdf.distributionCharlie( roughness, NdotH ) );
 							auto sheenVisibility = writer.declLocale( "G"
-								, visibilityAshikhmin( NdotL, NdotV ) );
+								, brdf.visibilityAshikhmin( NdotL, NdotV ) );
 							C += sheenVisibility * sheenDistribution * NdotL * VdotH;
 						}
 						FI;

@@ -24,6 +24,7 @@ namespace atmosphere_scattering
 		AtmospherePhongLightingModel( sdw::ShaderWriter & writer
 			, c3d::Materials const & materials
 			, c3d::Utils & utils
+			, c3d::BRDFHelpers & brdf
 			, c3d::ShadowOptions shadowOptions
 			, c3d::SssProfiles const * sssProfiles
 			, bool enableVolumetric
@@ -33,6 +34,7 @@ namespace atmosphere_scattering
 		static c3d::LightingModelPtr create( sdw::ShaderWriter & writer
 			, c3d::Materials const & materials
 			, c3d::Utils & utils
+			, c3d::BRDFHelpers & brdf
 			, c3d::ShadowOptions shadowOptions
 			, c3d::SssProfiles const * sssProfiles
 			, bool enableVolumetric );
@@ -69,6 +71,7 @@ namespace atmosphere_scattering
 		AtmosphereBlinnPhongLightingModel( sdw::ShaderWriter & writer
 			, c3d::Materials const & materials
 			, c3d::Utils & utils
+			, c3d::BRDFHelpers & brdf
 			, c3d::ShadowOptions shadowOptions
 			, c3d::SssProfiles const * sssProfiles
 			, bool enableVolumetric );
@@ -77,6 +80,7 @@ namespace atmosphere_scattering
 		static c3d::LightingModelPtr create( sdw::ShaderWriter & writer
 			, c3d::Materials const & materials
 			, c3d::Utils & utils
+			, c3d::BRDFHelpers & brdf
 			, c3d::ShadowOptions shadowOptions
 			, c3d::SssProfiles const * sssProfiles
 			, bool enableVolumetric );
@@ -89,6 +93,7 @@ namespace atmosphere_scattering
 		explicit AtmospherePbrLightingModel( sdw::ShaderWriter & writer
 			, c3d::Materials const & materials
 			, c3d::Utils & utils
+			, c3d::BRDFHelpers & brdf
 			, c3d::ShadowOptions shadowOptions
 			, c3d::SssProfiles const * sssProfiles
 			, bool enableVolumetric );
@@ -97,6 +102,7 @@ namespace atmosphere_scattering
 		static c3d::LightingModelPtr create( sdw::ShaderWriter & writer
 			, c3d::Materials const & materials
 			, c3d::Utils & utils
+			, c3d::BRDFHelpers & brdf
 			, c3d::ShadowOptions shadowOptions
 			, c3d::SssProfiles const * sssProfiles
 			, bool enableVolumetric );

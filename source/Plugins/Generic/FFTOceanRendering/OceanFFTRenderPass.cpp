@@ -20,6 +20,7 @@
 #include <Castor3D/Scene/Background/Background.hpp>
 #include <Castor3D/Shader/Program.hpp>
 #include "Castor3D/Shader/Shaders/GlslBackground.hpp"
+#include "Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp"
 #include <Castor3D/Shader/Shaders/GlslCookTorranceBRDF.hpp>
 #include <Castor3D/Shader/Shaders/GlslFog.hpp>
 #include <Castor3D/Shader/Shaders/GlslGlobalIllumination.hpp>
@@ -1096,7 +1097,8 @@ namespace ocean_fft
 		bool hasDiffuseGI = flags.hasDiffuseGI();
 
 		shader::Utils utils{ writer };
-		shader::CookTorranceBRDF cookTorrance{ writer, utils };
+		shader::BRDFHelpers brdf{ writer };
+		shader::CookTorranceBRDF cookTorrance{ writer, utils, brdf };
 		shader::Fog fog{ writer };
 		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
 			, flags
@@ -1151,6 +1153,7 @@ namespace ocean_fft
 		auto lightingModel = shader::LightingModel::createModel( *getEngine()
 			, materials
 			, utils
+			, brdf
 			, getScene().getLightingModel()
 			, lightsIndex
 			, RenderPipeline::eBuffers

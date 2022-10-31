@@ -27,6 +27,7 @@ namespace toon::shader
 	ToonPhongLightingModel::ToonPhongLightingModel( sdw::ShaderWriter & m_writer
 		, c3d::Materials const & materials
 		, c3d::Utils & utils
+		, c3d::BRDFHelpers & brdf
 		, c3d::ShadowOptions shadowOptions
 		, c3d::SssProfiles const * sssProfiles
 		, bool enableVolumetric
@@ -34,6 +35,7 @@ namespace toon::shader
 		: c3d::PhongLightingModel{ m_writer
 			, materials
 			, utils
+			, brdf
 			, std::move( shadowOptions )
 			, sssProfiles
 			, enableVolumetric
@@ -45,6 +47,7 @@ namespace toon::shader
 	c3d::LightingModelPtr ToonPhongLightingModel::create( sdw::ShaderWriter & writer
 		, c3d::Materials const & materials
 		, c3d::Utils & utils
+		, c3d::BRDFHelpers & brdf
 		, c3d::ShadowOptions shadowOptions
 		, c3d::SssProfiles const * sssProfiles
 		, bool enableVolumetric )
@@ -52,6 +55,7 @@ namespace toon::shader
 		return std::make_unique< ToonPhongLightingModel >( writer
 			, materials
 			, utils
+			, brdf
 			, std::move( shadowOptions )
 			, sssProfiles
 			, enableVolumetric
@@ -695,12 +699,14 @@ namespace toon::shader
 	ToonBlinnPhongLightingModel::ToonBlinnPhongLightingModel( sdw::ShaderWriter & writer
 		, c3d::Materials const & materials
 		, c3d::Utils & utils
+		, c3d::BRDFHelpers & brdf
 		, c3d::ShadowOptions shadowOptions
 		, c3d::SssProfiles const * sssProfiles
 		, bool enableVolumetric )
 		: ToonPhongLightingModel{ writer
 			, materials
 			, utils
+			, brdf
 			, std::move( shadowOptions )
 			, sssProfiles
 			, enableVolumetric
@@ -711,6 +717,7 @@ namespace toon::shader
 	c3d::LightingModelPtr ToonBlinnPhongLightingModel::create( sdw::ShaderWriter & writer
 		, c3d::Materials const & materials
 		, c3d::Utils & utils
+		, c3d::BRDFHelpers & brdf
 		, c3d::ShadowOptions shadowOptions
 		, c3d::SssProfiles const * sssProfiles
 		, bool enableVolumetric )
@@ -718,6 +725,7 @@ namespace toon::shader
 		return std::make_unique< ToonBlinnPhongLightingModel >( writer
 			, materials
 			, utils
+			, brdf
 			, std::move( shadowOptions )
 			, sssProfiles
 			, enableVolumetric );
@@ -733,12 +741,14 @@ namespace toon::shader
 	ToonPbrLightingModel::ToonPbrLightingModel( sdw::ShaderWriter & writer
 		, c3d::Materials const & materials
 		, c3d::Utils & utils
+		, c3d::BRDFHelpers & brdf
 		, c3d::ShadowOptions shadowOptions
 		, c3d::SssProfiles const * sssProfiles
 		, bool enableVolumetric )
 		: c3d::PbrLightingModel{ writer
 			, materials
 			, utils
+			, brdf
 			, std::move( shadowOptions )
 			, sssProfiles
 			, enableVolumetric }
@@ -754,6 +764,7 @@ namespace toon::shader
 	c3d::LightingModelPtr ToonPbrLightingModel::create( sdw::ShaderWriter & writer
 		, c3d::Materials const & materials
 		, c3d::Utils & utils
+		, c3d::BRDFHelpers & brdf
 		, c3d::ShadowOptions shadowOptions
 		, c3d::SssProfiles const * sssProfiles
 		, bool enableVolumetric )
@@ -761,6 +772,7 @@ namespace toon::shader
 		return std::make_unique< ToonPbrLightingModel >( writer
 			, materials
 			, utils
+			, brdf
 			, std::move( shadowOptions )
 			, sssProfiles
 			, enableVolumetric );

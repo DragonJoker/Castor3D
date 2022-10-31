@@ -35,6 +35,7 @@ namespace castor3d::shader
 	LightingModel::LightingModel( sdw::ShaderWriter & writer
 		, Materials const & materials
 		, Utils & utils
+		, BRDFHelpers & brdf
 		, ShadowOptions shadowOptions
 		, SssProfiles const * sssProfiles
 		, bool enableVolumetric
@@ -224,6 +225,7 @@ namespace castor3d::shader
 	LightingModelPtr LightingModel::createModel( Engine const & engine
 		, Materials const & materials
 		, Utils & utils
+		, BRDFHelpers & brdf
 		, castor::String const & name
 		, uint32_t lightsBufBinding
 		, uint32_t lightsBufSet
@@ -235,6 +237,7 @@ namespace castor3d::shader
 	{
 		auto result = utils.createLightingModel( engine
 			, materials
+			, brdf
 			, name
 			, shadows
 			, sssProfiles
@@ -249,6 +252,7 @@ namespace castor3d::shader
 	LightingModelPtr LightingModel::createModel( Engine const & engine
 		, Materials const & materials
 		, Utils & utils
+		, BRDFHelpers & brdf
 		, castor::String const & name
 		, LightType lightType
 		, bool lightUbo
@@ -261,6 +265,7 @@ namespace castor3d::shader
 	{
 		auto result = utils.createLightingModel( engine
 			, materials
+			, brdf
 			, name
 			, shadows
 			, sssProfiles
@@ -369,6 +374,7 @@ namespace castor3d::shader
 	LightingModelPtr LightingModel::createDiffuseModel( Engine const & engine
 		, Materials const & materials
 		, Utils & utils
+		, BRDFHelpers & brdf
 		, castor::String const & name
 		, uint32_t lightsBufBinding
 		, uint32_t lightsBufSet
@@ -379,6 +385,7 @@ namespace castor3d::shader
 	{
 		auto result = utils.createLightingModel( engine
 			, materials
+			, brdf
 			, name
 			, shadows
 			, nullptr

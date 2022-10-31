@@ -25,6 +25,7 @@ namespace atmosphere_scattering
 	AtmospherePhongLightingModel::AtmospherePhongLightingModel( sdw::ShaderWriter & m_writer
 		, c3d::Materials const & materials
 		, c3d::Utils & utils
+		, c3d::BRDFHelpers & brdf
 		, c3d::ShadowOptions shadowOptions
 		, c3d::SssProfiles const * sssProfiles
 		, bool enableVolumetric
@@ -32,6 +33,7 @@ namespace atmosphere_scattering
 		: c3d::PhongLightingModel{ m_writer
 			, materials
 			, utils
+			, brdf
 			, std::move( shadowOptions )
 			, sssProfiles
 			, enableVolumetric
@@ -48,6 +50,7 @@ namespace atmosphere_scattering
 	c3d::LightingModelPtr AtmospherePhongLightingModel::create( sdw::ShaderWriter & writer
 		, c3d::Materials const & materials
 		, c3d::Utils & utils
+		, c3d::BRDFHelpers & brdf
 		, c3d::ShadowOptions shadowOptions
 		, c3d::SssProfiles const * sssProfiles
 		, bool enableVolumetric )
@@ -55,6 +58,7 @@ namespace atmosphere_scattering
 		return std::make_unique< AtmospherePhongLightingModel >( writer
 			, materials
 			, utils
+			, brdf
 			, std::move( shadowOptions )
 			, sssProfiles
 			, enableVolumetric
@@ -253,12 +257,14 @@ namespace atmosphere_scattering
 	AtmosphereBlinnPhongLightingModel::AtmosphereBlinnPhongLightingModel( sdw::ShaderWriter & writer
 		, c3d::Materials const & materials
 		, c3d::Utils & utils
+		, c3d::BRDFHelpers & brdf
 		, c3d::ShadowOptions shadowOptions
 		, c3d::SssProfiles const * sssProfiles
 		, bool enableVolumetric )
 		: AtmospherePhongLightingModel{ writer
 			, materials
 			, utils
+			, brdf
 			, std::move( shadowOptions )
 			, sssProfiles
 			, enableVolumetric
@@ -269,6 +275,7 @@ namespace atmosphere_scattering
 	c3d::LightingModelPtr AtmosphereBlinnPhongLightingModel::create( sdw::ShaderWriter & writer
 		, c3d::Materials const & materials
 		, c3d::Utils & utils
+		, c3d::BRDFHelpers & brdf
 		, c3d::ShadowOptions shadowOptions
 		, c3d::SssProfiles const * sssProfiles
 		, bool enableVolumetric )
@@ -276,6 +283,7 @@ namespace atmosphere_scattering
 		return std::make_unique< AtmosphereBlinnPhongLightingModel >( writer
 			, materials
 			, utils
+			, brdf
 			, std::move( shadowOptions )
 			, sssProfiles
 			, enableVolumetric );
@@ -291,12 +299,14 @@ namespace atmosphere_scattering
 	AtmospherePbrLightingModel::AtmospherePbrLightingModel( sdw::ShaderWriter & writer
 		, c3d::Materials const & materials
 		, c3d::Utils & utils
+		, c3d::BRDFHelpers & brdf
 		, c3d::ShadowOptions shadowOptions
 		, c3d::SssProfiles const * sssProfiles
 		, bool enableVolumetric )
 		: c3d::PbrLightingModel{ writer
 			, materials
 			, utils
+			, brdf
 			, std::move( shadowOptions )
 			, sssProfiles
 			, enableVolumetric }
@@ -312,6 +322,7 @@ namespace atmosphere_scattering
 	c3d::LightingModelPtr AtmospherePbrLightingModel::create( sdw::ShaderWriter & writer
 		, c3d::Materials const & materials
 		, c3d::Utils & utils
+		, c3d::BRDFHelpers & brdf
 		, c3d::ShadowOptions shadowOptions
 		, c3d::SssProfiles const * sssProfiles
 		, bool enableVolumetric )
@@ -319,6 +330,7 @@ namespace atmosphere_scattering
 		return std::make_unique< AtmospherePbrLightingModel >( writer
 			, materials
 			, utils
+			, brdf
 			, std::move( shadowOptions )
 			, sssProfiles
 			, enableVolumetric );

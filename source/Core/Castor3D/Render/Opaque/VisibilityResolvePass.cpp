@@ -24,6 +24,7 @@
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
 #include "Castor3D/Shader/ShaderBuffers/TextureAnimationBuffer.hpp"
 #include "Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp"
+#include "Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslPassShaders.hpp"
@@ -305,6 +306,7 @@ namespace castor3d
 			ShaderWriter< VisibilityResolvePass::useCompute >::Type writer;
 
 			shader::Utils utils{ writer };
+			shader::BRDFHelpers brdf{ writer };
 			shader::PassShaders passShaders{ engine.getPassComponentsRegister()
 				, flags
 				, ( ComponentModeFlag::eDerivTex
@@ -399,6 +401,7 @@ namespace castor3d
 
 			auto lightingModel = utils.createLightingModel( engine
 				, materials
+				, brdf
 				, shader::getLightingModelName( engine, flags.passType )
 				, {}
 				, nullptr

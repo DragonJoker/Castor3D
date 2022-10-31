@@ -121,6 +121,7 @@ namespace castor3d::shader
 
 	class BackgroundModel;
 	class BufferBase;
+	class BRDFHelpers;
 	class Fog;
 	class Materials;
 	class LightingModel;
@@ -147,6 +148,7 @@ namespace castor3d::shader
 	using LightingModelCreator = std::function< LightingModelPtr( sdw::ShaderWriter & writer
 		, Materials const & materials
 		, Utils & utils
+		, BRDFHelpers & brdf
 		, ShadowOptions shadowsOptions
 		, SssProfiles const * sssProfiles
 		, bool enableVolumetric ) >;
