@@ -126,7 +126,7 @@ namespace castor3d
 			eSpcRgh,
 			eEmsTrn,
 			eClrCot,
-			eCcrTrs,
+			eCrTsIr,
 			eSheen,
 			eSsao,
 			eBrdf,
@@ -181,7 +181,7 @@ namespace castor3d
 			auto c3d_mapSpcRgh = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eSpcRgh ), uint32_t( ResolveBind::eSpcRgh ), 0u );
 			auto c3d_mapEmsTrn = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eEmsTrn ), uint32_t( ResolveBind::eEmsTrn ), 0u );
 			auto c3d_mapClrCot = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eClrCot ), uint32_t( ResolveBind::eClrCot ), 0u );
-			auto c3d_mapCcrTrs = writer.declCombinedImg< FImg2DRg32 >( getTextureName( DsTexture::eCcrTrs ), uint32_t( ResolveBind::eCcrTrs ), 0u );
+			auto c3d_mapCrTsIr = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eCrTsIr ), uint32_t( ResolveBind::eCrTsIr ), 0u );
 			auto c3d_mapSheen = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eSheen ), uint32_t( ResolveBind::eSheen ), 0u );
 			auto c3d_mapSsao = writer.declCombinedImg< FImg2DRg32 >( "c3d_mapSsao", uint32_t( ResolveBind::eSsao ), 0u, config.hasSsao );
 			auto c3d_mapBrdf = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapBrdf", uint32_t( ResolveBind::eBrdf ), 0u );
@@ -244,8 +244,8 @@ namespace castor3d
 						, c3d_mapColMtl.lod( vtx_texture, 0.0_f ) );
 					auto clrCot = writer.declLocale( "clrCot"
 						, c3d_mapClrCot.lod( vtx_texture, 0.0_f ) );
-					auto ccrTrs = writer.declLocale( "ccrTrs"
-						, c3d_mapCcrTrs.lod( vtx_texture, 0.0_f ) );
+					auto crTsIr = writer.declLocale( "crTsIr"
+						, c3d_mapCrTsIr.lod( vtx_texture, 0.0_f ) );
 					auto sheen = writer.declLocale( "sheen"
 						, c3d_mapSheen.lod( vtx_texture, 0.0_f ) );
 					auto envMapIndex = writer.declLocale( "envMapIndex"
@@ -274,13 +274,12 @@ namespace castor3d
 								: nmlOcc.w() ) );
 						auto emissive = writer.declLocale( "emissive"
 							, emsTrn.xyz() );
-						materials.fill( albedo, spcRgh, colMtl, ccrTrs.y(), sheen, material );
+						materials.fill( albedo, spcRgh, colMtl, crTsIr, sheen, material );
 						auto components = writer.declLocale( "components"
 							, shader::BlendComponents{ materials
 								, material
 								, surface
 								, clrCot } );
-						components.clearcoatRoughness = ccrTrs.x();
 
 						auto directAmbient = writer.declLocale( "directAmbient"
 							, c3d_sceneData.ambientLight );
@@ -303,6 +302,21 @@ namespace castor3d
 
 						auto incident = writer.declLocale( "incident"
 							, reflections->computeIncident( surface.worldPosition.xyz(), c3d_sceneData.cameraPosition ) );
+
+						IF( writer, components.iridescenceFactor != 0.0_f )
+						{
+							auto NdotV = writer.declLocale( "NdotV"
+								, dot( components.normal, -incident ) );
+							components.iridescenceFresnel = utils.evalIridescence( utils
+								, 1.0_f
+								, components.iridescenceIor
+								, NdotV
+								, components.iridescenceThickness
+								, components.specular );
+							components.iridescenceF0 = utils.fresnelToF0( components.iridescenceFresnel, NdotV );
+						}
+						FI;
+
 						auto reflected = writer.declLocale( "reflected"
 							, vec3( 0.0_f ) );
 						auto refracted = writer.declLocale( "refracted"
@@ -493,8 +507,8 @@ namespace castor3d
 			, uint32_t( dropqrslv::ResolveBind::eEmsTrn ) );
 		pass.addSampledView( m_opaquePassResult[DsTexture::eClrCot].sampledViewId
 			, uint32_t( dropqrslv::ResolveBind::eClrCot ) );
-		pass.addSampledView( m_opaquePassResult[DsTexture::eCcrTrs].sampledViewId
-			, uint32_t( dropqrslv::ResolveBind::eCcrTrs ) );
+		pass.addSampledView( m_opaquePassResult[DsTexture::eCrTsIr].sampledViewId
+			, uint32_t( dropqrslv::ResolveBind::eCrTsIr ) );
 		pass.addSampledView( m_opaquePassResult[DsTexture::eSheen].sampledViewId
 			, uint32_t( dropqrslv::ResolveBind::eSheen ) );
 		pass.addSampledView( m_ssaoResult.sampledViewId

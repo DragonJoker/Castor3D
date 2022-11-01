@@ -342,6 +342,23 @@ namespace castor3d
 							, in.viewPosition.xyz()
 							, in.worldPosition.xyz()
 							, components.normal } );
+					auto incident = writer.declLocale( "incident"
+						, reflections->computeIncident( surface.worldPosition.xyz(), c3d_sceneData.cameraPosition ) );
+
+					IF( writer, components.iridescenceFactor != 0.0_f )
+					{
+						auto NdotV = writer.declLocale( "NdotV"
+							, dot( components.normal, -incident ) );
+						components.iridescenceFresnel = utils.evalIridescence( utils
+							, 1.0_f
+							, components.iridescenceIor
+							, NdotV
+							, components.iridescenceThickness
+							, components.specular );
+						components.iridescenceF0 = utils.fresnelToF0( components.iridescenceFresnel, NdotV );
+					}
+					FI;
+
 					lightingModel->computeCombined( components
 						, c3d_sceneData
 						, *backgroundModel
@@ -352,8 +369,6 @@ namespace castor3d
 
 					auto directAmbient = writer.declLocale( "directAmbient"
 						, c3d_sceneData.ambientLight );
-					auto incident = writer.declLocale( "incident"
-						, reflections->computeIncident( surface.worldPosition.xyz(), c3d_sceneData.cameraPosition ) );
 					auto reflected = writer.declLocale( "reflected"
 						, vec3( 0.0_f ) );
 					auto refracted = writer.declLocale( "refracted"

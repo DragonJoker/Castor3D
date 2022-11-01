@@ -61,6 +61,17 @@ namespace castor3d::shader
 			return computeReflections( wsIncident, wsNormal, components, brdf );
 		}
 
+		C3D_API sdw::RetVec3 virtual computeReflections( sdw::Vec3 const & wsIncident
+			, sdw::Vec3 const & wsNormal
+			, BlendComponents & components
+			, sdw::CombinedImage2DRgba32 const & brdf
+			, sdw::Vec3 const & iridescenceFresnel
+			, sdw::Vec3 const & iridescenceF0
+			, sdw::Float const & iridescenceFactor )
+		{
+			return computeReflections( wsIncident, wsNormal, components, brdf );
+		}
+
 		VkExtent2D const & getTargetSize()const
 		{
 			return m_targetSize;

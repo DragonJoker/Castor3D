@@ -33,7 +33,7 @@ namespace castor3d
 		eSpcRgh, // RGB => Specular - Phong: A => Shininess - PBR: A => Roughness
 		eEmsTrn, // RGB => Emissive, A => Transmittance
 		eClrCot, // RGB => Coating normal, A => Coating factor.
-		eCcrTrs, // R => Coating roughness, G => Transmission.
+		eCrTsIr, // R => Coating roughness, G => Transmission, B => Iridescence factor, A => Iridescence thickness.
 		eSheen, // RGB => Sheen color factor, A => Sheen roughness.
 		CU_ScopedEnumBounds( eNmlOcc ),
 	};

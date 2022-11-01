@@ -53,6 +53,19 @@ namespace castor3d::shader
 					, envMapIndex
 					, components );
 			}
+			ELSEIF( components.iridescenceFactor != 0.0_f )
+			{
+				if ( m_hasIblSupport )
+				{
+					reflected = background.computeReflections( incident
+						, components.normal
+						, components
+						, brdf
+						, components.iridescenceFresnel
+						, components.iridescenceF0
+						, components.iridescenceFactor );
+				}
+			}
 			ELSE
 			{
 				// Reflection from background skybox.
@@ -65,6 +78,19 @@ namespace castor3d::shader
 				}
 			}
 			FI;
+		}
+		ELSEIF( components.iridescenceFactor != 0.0_f )
+		{
+			if ( m_hasIblSupport )
+			{
+				reflected = background.computeReflections( incident
+					, components.normal
+					, components
+					, brdf
+					, components.iridescenceFresnel
+					, components.iridescenceF0
+					, components.iridescenceFactor );
+			}
 		}
 		ELSE
 		{
@@ -202,6 +228,19 @@ namespace castor3d::shader
 					, envMapIndex
 					, components );
 			}
+			ELSEIF( components.iridescenceFactor != 0.0_f )
+			{
+				if ( m_hasIblSupport )
+				{
+					reflected = background.computeReflections( incident
+						, components.normal
+						, components
+						, brdf
+						, components.iridescenceFresnel
+						, components.iridescenceF0
+						, components.iridescenceFactor );
+				}
+			}
 			ELSE
 			{
 				// Reflection from background skybox.
@@ -230,6 +269,19 @@ namespace castor3d::shader
 				doAdjustAlbedo( components.colour );
 			}
 			FI;
+		}
+		ELSEIF( components.iridescenceFactor != 0.0_f )
+		{
+			if ( m_hasIblSupport )
+			{
+				reflected = background.computeReflections( incident
+					, components.normal
+					, components
+					, brdf
+					, components.iridescenceFresnel
+					, components.iridescenceF0
+					, components.iridescenceFactor );
+			}
 		}
 		ELSE
 		{

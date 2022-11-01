@@ -223,8 +223,8 @@ namespace castor3d
 			, uint32_t( LightPassIdx::eEmsTrn ) );
 		pass.addSampledView( m_gpResult[DsTexture::eClrCot].sampledViewId
 			, uint32_t( LightPassIdx::eClrCot ) );
-		pass.addSampledView( m_gpResult[DsTexture::eCcrTrs].sampledViewId
-			, uint32_t( LightPassIdx::eCcrTrs ) );
+		pass.addSampledView( m_gpResult[DsTexture::eCrTsIr].sampledViewId
+			, uint32_t( LightPassIdx::eCrTsIr ) );
 		pass.addSampledView( m_gpResult[DsTexture::eSheen].sampledViewId
 			, uint32_t( LightPassIdx::eSheen ) );
 		auto index = uint32_t( LightPassIdx::eCount );

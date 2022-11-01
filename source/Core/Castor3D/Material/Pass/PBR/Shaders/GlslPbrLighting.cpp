@@ -140,16 +140,35 @@ namespace castor3d::shader
 					auto HdotV = m_writer.declLocale( "HdotV"
 						, max( 0.0_f, dot( H, V ) ) );
 
-					m_cookTorrance.compute( light.base
-						, HdotV
-						, NdotH
-						, NdotV
-						, NdotL
-						, components.specular
-						, components.metalness
-						, components.roughness
-						, surface
-						, output );
+					IF( m_writer, components.iridescenceFactor != 0.0_f )
+					{
+						m_cookTorrance.compute( light.base
+							, HdotV
+							, NdotH
+							, NdotV
+							, NdotL
+							, components.specular
+							, components.metalness
+							, components.roughness
+							, components.iridescenceFresnel
+							, components.iridescenceFactor
+							, surface
+							, output );
+					}
+					ELSE
+					{
+						m_cookTorrance.compute( light.base
+							, HdotV
+							, NdotH
+							, NdotV
+							, NdotL
+							, components.specular
+							, components.metalness
+							, components.roughness
+							, surface
+							, output );
+					}
+					FI;
 
 					IF( m_writer, components.clearcoatFactor != 0.0_f )
 					{
@@ -354,16 +373,35 @@ namespace castor3d::shader
 					auto HdotV = m_writer.declLocale( "HdotV"
 						, max( 0.0_f, dot( H, V ) ) );
 
-					m_cookTorrance.compute( light.base
+					IF( m_writer, components.iridescenceFactor != 0.0_f )
+					{
+						m_cookTorrance.compute( light.base
+							, HdotV
+							, NdotH
+							, NdotV
+							, NdotL
+							, components.specular
+							, components.metalness
+							, components.roughness
+							, components.iridescenceFresnel
+							, components.iridescenceFactor
+							, surface
+							, output );
+					}
+					ELSE
+					{
+						m_cookTorrance.compute( light.base
 						, HdotV
-						, NdotH
-						, NdotV
-						, NdotL
-						, components.specular
-						, components.metalness
-						, components.roughness
-						, surface
-						, output );
+							, NdotH
+							, NdotV
+							, NdotL
+							, components.specular
+							, components.metalness
+							, components.roughness
+							, surface
+							, output );
+					}
+					FI;
 
 					IF( m_writer, components.clearcoatFactor != 0.0_f )
 					{
@@ -488,9 +526,27 @@ namespace castor3d::shader
 							, max( 0.0_f, dot( N, H ) ) );
 						auto HdotV = m_writer.declLocale( "HdotV"
 							, max( 0.0_f, dot( H, V ) ) );
-
 						auto rawDiffuse = m_writer.declLocale( "rawDiffuse"
-							, m_cookTorrance.compute( light.base
+							, vec3( 0.0_f ) );
+
+						IF( m_writer, components.iridescenceFactor != 0.0_f )
+						{
+							rawDiffuse = m_cookTorrance.compute( light.base
+								, HdotV
+								, NdotH
+								, NdotV
+								, NdotL
+								, components.specular
+								, components.metalness
+								, components.roughness
+								, components.iridescenceFresnel
+								, components.iridescenceFactor
+								, surface
+								, output );
+						}
+						ELSE
+						{
+							rawDiffuse = m_cookTorrance.compute( light.base
 								, HdotV
 								, NdotH
 								, NdotV
@@ -499,7 +555,9 @@ namespace castor3d::shader
 								, components.metalness
 								, components.roughness
 								, surface
-								, output ) );
+								, output );
+						}
+						FI;
 
 						IF( m_writer, components.clearcoatFactor != 0.0_f )
 						{

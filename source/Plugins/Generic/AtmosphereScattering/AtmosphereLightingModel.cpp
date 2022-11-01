@@ -391,17 +391,38 @@ namespace atmosphere_scattering
 						, max( 0.0_f, dot( H, V ) ) );
 
 					//Direct lighting
-					m_cookTorrance.compute( radiance
-						, light.base.intensity
-						, HdotV
-						, NdotH
-						, NdotV
-						, NdotL
-						, components.specular
-						, components.metalness
-						, components.roughness
-						, surface
-						, output );
+					IF( m_writer, components.iridescenceFactor != 0.0_f )
+					{
+						m_cookTorrance.compute( radiance
+							, light.base.intensity
+							, HdotV
+							, NdotH
+							, NdotV
+							, NdotL
+							, components.specular
+							, components.metalness
+							, components.roughness
+							, components.iridescenceFresnel
+							, components.iridescenceFactor
+							, surface
+							, output );
+					}
+					ELSE
+					{
+						m_cookTorrance.compute( radiance
+							, light.base.intensity
+							, HdotV
+							, NdotH
+							, NdotV
+							, NdotL
+							, components.specular
+							, components.metalness
+							, components.roughness
+							, surface
+							, output );
+					}
+					FI;
+
 					auto cascadeIndex = m_writer.declLocale( "cascadeIndex"
 						, 0_u );
 					auto maxCount = m_writer.declLocale( "maxCount"

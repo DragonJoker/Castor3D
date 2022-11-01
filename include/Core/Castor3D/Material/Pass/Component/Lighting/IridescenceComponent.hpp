@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_SpecularComponent_H___
-#define ___C3D_SpecularComponent_H___
+#ifndef ___C3D_IridescenceComponent_H___
+#define ___C3D_IridescenceComponent_H___
 
 #include "Castor3D/Material/Pass/Component/BaseDataPassComponent.hpp"
 
@@ -12,8 +12,24 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	struct SpecularComponent
-		: public BaseDataPassComponentT< castor::AtomicGroupChangeTracked< castor::AtomicChangeTracked< castor::RgbColour > > >
+	struct IridescenceData
+	{
+		explicit IridescenceData( std::atomic_bool & dirty )
+			: factor{ dirty, 0.0f }
+			, ior{ dirty, 1.3f }
+			, minThickness{ dirty, 100.0f }
+			, maxThickness{ dirty, 400.0f }
+		{
+		}
+
+		castor::AtomicGroupChangeTracked< float > factor;
+		castor::AtomicGroupChangeTracked< float > ior;
+		castor::AtomicGroupChangeTracked< float > minThickness;
+		castor::AtomicGroupChangeTracked< float > maxThickness;
+	};
+
+	struct IridescenceComponent
+		: public BaseDataPassComponentT< IridescenceData >
 	{
 		struct ComponentsShader
 			: shader::PassComponentsShader
@@ -36,11 +52,6 @@ namespace castor3d
 				, sdw::Float const & passMultiplier
 				, shader::BlendComponents & res
 				, shader::BlendComponents const & src )const override;
-			C3D_API void updateOutputs( sdw::StructInstance const & components
-				, sdw::StructInstance const & surface
-				, sdw::Vec4 & spcRgh
-				, sdw::Vec4 & colMtl
-				, sdw::Vec4 & sheen )const override;
 		};
 
 		struct MaterialShader
@@ -90,49 +101,51 @@ namespace castor3d
 			return castor::makeUniqueDerived< PassComponentPlugin, Plugin >( passComponent );
 		}
 
-		C3D_API explicit SpecularComponent( Pass & pass
-			, castor::RgbColour defaultValue = Default );
+		C3D_API explicit IridescenceComponent( Pass & pass );
 
 		C3D_API void accept( PassVisitorBase & vis )override;
 
-		bool isValueSet()const
+		float const & getFactor()const
 		{
-			return m_value.value().isDirty();
+			return m_value.factor;
 		}
 
-		castor::RgbColour const & getSpecular()const
+		void setFactor( float v )
 		{
-			return *getData();
+			m_value.factor = v;
 		}
 
-		void setSpecular( castor::RgbColour const & v )
+		float const & getIor()const
 		{
-			setData( castor::makeChangeTrackedT< std::atomic_bool >( v ) );
+			return m_value.ior;
 		}
 
-		void setSpecular( castor::HdrRgbColour const & v
-			, float gamma )
+		void setIor( float v )
 		{
-			setSpecular( castor::RgbColour{ v, gamma } );
+			m_value.ior = v;
 		}
 
-		void setSpecular( castor::Coords3f const & v )
+		float const & getMinThickness()const
 		{
-			setSpecular( castor::RgbColour{ v[0u], v[1u], v[2u] } );
+			return m_value.minThickness;
 		}
 
-		void setSpecular( castor::Point3f const & v )
+		void setMinThickness( float v )
 		{
-			setSpecular( castor::RgbColour{ v[0u], v[1u], v[2u] } );
+			m_value.minThickness = v;
+		}
+
+		float const & getMaxThickness()const
+		{
+			return m_value.maxThickness;
+		}
+
+		void setMaxThickness( float v )
+		{
+			m_value.maxThickness = v;
 		}
 
 		C3D_API static castor::String const TypeName;
-		static float constexpr DefaultComponent = 0.0f;
-		static float constexpr DefaultPhongComponent = 1.0f;
-		static float constexpr DefaultPbrComponent = 0.04f;
-		C3D_API static castor::RgbColour const Default;
-		C3D_API static castor::RgbColour const DefaultPhong;
-		C3D_API static castor::RgbColour const DefaultPbr;
 
 	private:
 		PassComponentUPtr doClone( Pass & pass )const override;

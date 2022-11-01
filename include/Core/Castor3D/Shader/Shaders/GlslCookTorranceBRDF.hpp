@@ -20,7 +20,7 @@ namespace castor3d::shader
 			, sdw::Float const & NdotH
 			, sdw::Float const & NdotV
 			, sdw::Float const & NdotL
-			, sdw::Vec3 const & specular
+			, sdw::Vec3 const & f0
 			, sdw::Float const & metalness
 			, sdw::Float const & roughness
 			, Surface surface
@@ -30,9 +30,34 @@ namespace castor3d::shader
 			, sdw::Float const & NdotH
 			, sdw::Float const & NdotV
 			, sdw::Float const & NdotL
-			, sdw::Vec3 const & specular
+			, sdw::Vec3 const & f0
 			, sdw::Float const & metalness
 			, sdw::Float const & roughness
+			, Surface surface
+			, OutputComponents & output );
+		C3D_API sdw::RetVec3 compute( sdw::Vec3 const & radiance
+			, sdw::Vec2 const & intensity
+			, sdw::Float const & HdotV
+			, sdw::Float const & NdotH
+			, sdw::Float const & NdotV
+			, sdw::Float const & NdotL
+			, sdw::Vec3 const & f0
+			, sdw::Float const & metalness
+			, sdw::Float const & roughness
+			, sdw::Vec3 const & iridescenceFresnel
+			, sdw::Float const & iridescenceFactor
+			, Surface surface
+			, OutputComponents & output );
+		C3D_API sdw::RetVec3 compute( Light const & light
+			, sdw::Float const & HdotV
+			, sdw::Float const & NdotH
+			, sdw::Float const & NdotV
+			, sdw::Float const & NdotL
+			, sdw::Vec3 const & f0
+			, sdw::Float const & metalness
+			, sdw::Float const & roughness
+			, sdw::Vec3 const & iridescenceFresnel
+			, sdw::Float const & iridescenceFactor
 			, Surface surface
 			, OutputComponents & output );
 		C3D_API void computeAON( Light const & light
@@ -44,6 +69,19 @@ namespace castor3d::shader
 			, sdw::Float const & metalness
 			, sdw::Float const & roughness
 			, sdw::Float const & smoothBand
+			, Surface surface
+			, OutputComponents & output );
+		C3D_API void computeAON( Light const & light
+			, sdw::Float const & HdotV
+			, sdw::Float const & NdotH
+			, sdw::Float const & NdotV
+			, sdw::Float const & NdotL
+			, sdw::Vec3 const & specular
+			, sdw::Float const & metalness
+			, sdw::Float const & roughness
+			, sdw::Float const & smoothBand
+			, sdw::Vec3 const & iridescenceFresnel
+			, sdw::Float const & iridescenceFactor
 			, Surface surface
 			, OutputComponents & output );
 		C3D_API sdw::RetVec3 computeSpecular( Light const & light
@@ -106,6 +144,20 @@ namespace castor3d::shader
 			, sdw::InFloat
 			, InSurface
 			, OutputComponents & > m_computeCookTorrance;
+		sdw::Function< sdw::Vec3
+			, sdw::InVec3
+			, sdw::InVec2
+			, sdw::InFloat
+			, sdw::InFloat
+			, sdw::InFloat
+			, sdw::InFloat
+			, sdw::InVec3
+			, sdw::InFloat
+			, sdw::InFloat
+			, sdw::InVec3
+			, sdw::InFloat
+			, InSurface
+			, OutputComponents & > m_computeCookTorranceIridescence;
 		sdw::Function< sdw::Void
 			, sdw::InVec3
 			, sdw::InVec2
@@ -119,6 +171,21 @@ namespace castor3d::shader
 			, sdw::InFloat
 			, InSurface
 			, OutputComponents & > m_computeCookTorranceAON;
+		sdw::Function< sdw::Void
+			, sdw::InVec3
+			, sdw::InVec2
+			, sdw::InFloat
+			, sdw::InFloat
+			, sdw::InFloat
+			, sdw::InFloat
+			, sdw::InVec3
+			, sdw::InFloat
+			, sdw::InFloat
+			, sdw::InFloat
+			, sdw::InVec3
+			, sdw::InFloat
+			, InSurface
+			, OutputComponents & > m_computeCookTorranceIridescenceAON;
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3
 			, sdw::InVec2

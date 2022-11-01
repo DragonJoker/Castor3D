@@ -147,7 +147,7 @@ namespace castor3d::shader
 	void PassShaders::updateMaterial( sdw::Vec3 const & albedo
 		, sdw::Vec4 const & spcRgh
 		, sdw::Vec4 const & colMtl
-		, sdw::Float const & transm
+		, sdw::Vec4 const & crTsIr
 		, sdw::Vec4 const & sheen
 		, Material & material )const
 	{
@@ -156,7 +156,7 @@ namespace castor3d::shader
 			shader->updateMaterial( albedo
 				, spcRgh
 				, colMtl
-				, transm
+				, crTsIr
 				, sheen
 				, material );
 		}

@@ -56,6 +56,12 @@ namespace castor3d
 			C3D_API MaterialShader();
 			C3D_API void fillMaterialType( sdw::type::BaseStruct & type
 				, sdw::expr::ExprList & inits )const override;
+			C3D_API void updateMaterial( sdw::Vec3 const & albedo
+				, sdw::Vec4 const & spcRgh
+				, sdw::Vec4 const & colMtl
+				, sdw::Vec4 const & crTsIr
+				, sdw::Vec4 const & sheen
+				, shader::Material & material )const override;
 		};
 
 		class Plugin

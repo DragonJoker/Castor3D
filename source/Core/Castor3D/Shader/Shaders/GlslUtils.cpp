@@ -540,12 +540,33 @@ namespace castor3d::shader
 			, paccumulationOperator );
 	}
 
+	sdw::RetFloat Utils::conductorFresnel( sdw::Float const & pproduct
+		, sdw::Float const & pf0 )
+	{
+		if ( !m_conductorFresnel1 )
+		{
+			m_conductorFresnel1 = m_writer.implementFunction< sdw::Float >( "c3d_conductorFresnel1"
+				, [&]( sdw::Float const & product
+					, sdw::Float const & f0 )
+				{
+					sdw::Float f90 = clamp( 50.0_f * f0, 0.0_f, 1.0_f );
+					m_writer.returnStmt( sdw::fma( max( f90, f0 ) - f0
+						, pow( clamp( 1.0_f - product, 0.0_f, 1.0_f ), 5.0_f )
+						, f0 ) );
+				}
+				, sdw::InFloat{ m_writer, "product" }
+				, sdw::InFloat{ m_writer, "f0" } );
+		}
+
+		return m_conductorFresnel1( pproduct, pf0 );
+	}
+
 	sdw::RetVec3 Utils::conductorFresnel( sdw::Float const & pproduct
 		, sdw::Vec3 const & pf0 )
 	{
-		if ( !m_conductorFresnel )
+		if ( !m_conductorFresnel3 )
 		{
-			m_conductorFresnel = m_writer.implementFunction< sdw::Vec3 >( "c3d_conductorFresnel"
+			m_conductorFresnel3 = m_writer.implementFunction< sdw::Vec3 >( "c3d_conductorFresnel3"
 				, [&]( sdw::Float const & product
 					, sdw::Vec3 const & f0 )
 				{
@@ -558,7 +579,7 @@ namespace castor3d::shader
 				, sdw::InVec3{ m_writer, "f0" } );
 		}
 
-		return m_conductorFresnel( pproduct, pf0 );
+		return m_conductorFresnel3( pproduct, pf0 );
 	}
 
 	sdw::RetFloat Utils::fresnelMix( sdw::Vec3 const & pincident
@@ -842,6 +863,262 @@ namespace castor3d::shader
 		}
 
 		return m_unflatten3D( pp, pdim );
+	}
+
+	sdw::RetFloat Utils::iorToFresnel0( sdw::Float const & ptransmittedIor
+		, sdw::Float const & pincidentIor )
+	{
+		if ( !m_ior1ToFresnel0 )
+		{
+			m_ior1ToFresnel0 = m_writer.implementFunction< sdw::Float >( "c3d_ior1ToFresnel0"
+				, [&]( sdw::Float const & transmittedIor
+					, sdw::Float const & incidentIor )
+				{
+					auto v = m_writer.declLocale( "v"
+						, ( transmittedIor - incidentIor ) / ( transmittedIor + incidentIor ) );
+					m_writer.returnStmt( v * v );
+				}
+				, sdw::InFloat{ m_writer, "transmittedsIor" }
+				, sdw::InFloat{ m_writer, "incidentIor" } );
+		}
+
+		return m_ior1ToFresnel0( ptransmittedIor
+			, pincidentIor );
+	}
+
+	sdw::RetVec3 Utils::iorToFresnel0( sdw::Vec3 const & ptransmittedIor
+		, sdw::Float const & pincidentIor )
+	{
+		if ( !m_ior3ToFresnel0 )
+		{
+			m_ior3ToFresnel0 = m_writer.implementFunction< sdw::Vec3 >( "c3d_ior3ToFresnel0"
+				, [&]( sdw::Vec3 const & transmittedIor
+					, sdw::Float const & incidentIor )
+				{
+					auto v = m_writer.declLocale( "v"
+						, ( transmittedIor - vec3( incidentIor ) ) / ( transmittedIor + vec3( incidentIor ) ) );
+					m_writer.returnStmt( v * v );
+				}
+				, sdw::InVec3{ m_writer, "transmittedsIor" }
+				, sdw::InFloat{ m_writer, "incidentIor" } );
+		}
+
+		return m_ior3ToFresnel0( ptransmittedIor
+			, pincidentIor );
+	}
+
+	sdw::RetVec3 Utils::fresnel0ToIor( sdw::Vec3 const & pfresnel0 )
+	{
+		if ( !m_fresnel0ToIor )
+		{
+			m_fresnel0ToIor = m_writer.implementFunction< sdw::Vec3 >( "c3d_fresnel0ToIor"
+				, [&]( sdw::Vec3 const & fresnel0 )
+				{
+					auto sqrtF0 = m_writer.declLocale( "sqrtF0"
+						, sqrt( fresnel0 ) );
+					m_writer.returnStmt( ( vec3( 1.0_f ) + sqrtF0 ) / ( vec3( 1.0_f ) - sqrtF0 ) );
+				}
+				, sdw::InVec3{ m_writer, "fresnel0" } );
+		}
+
+		return m_fresnel0ToIor( pfresnel0 );
+	}
+
+	sdw::RetVec3 Utils::fresnelToF0( sdw::Vec3 const & pfresnel
+		, sdw::Float const & pVdotH )
+	{
+		if ( !m_fresnelToF0 )
+		{
+			m_fresnelToF0 = m_writer.implementFunction< sdw::Vec3 >( "c3d_fresnelToF0"
+				, [&]( sdw::Vec3 const & f
+					, sdw::Float const & VdotH )
+				{
+					auto x = m_writer.declLocale( "x"
+						, clamp( 1.0_f - VdotH, 0.0_f, 1.0_f ) );
+					auto x2 = m_writer.declLocale( "x2"
+						, x * x );
+					auto x5 = m_writer.declLocale( "x5"
+						, clamp( x * x2 * x2, 0.0_f, 0.9999_f ) );
+					m_writer.returnStmt( ( f - vec3( 1.0_f ) * x5 ) / ( 1.0_f - x5 ) );
+				}
+				, sdw::InVec3{ m_writer, "f" }
+				, sdw::InFloat{ m_writer, "VdotH" } );
+		}
+
+		return m_fresnelToF0( pfresnel
+			, pVdotH );
+	}
+
+	sdw::RetVec3 Utils::evalIridescence( Utils & utils
+		, sdw::Float const & poutsideIOR
+		, sdw::Float const & peta2
+		, sdw::Float const & pcosTheta1
+		, sdw::Float const & pthinFilmThickness
+		, sdw::Vec3 const & pbaseF0 )
+	{
+		if ( !m_evalIridescence )
+		{
+			m_evalIridescence = m_writer.implementFunction< sdw::Vec3 >( "c3d_iblbg_evalIridescence"
+				, [&]( sdw::Float const & outsideIOR
+					, sdw::Float const & eta2
+					, sdw::Float const & cosTheta1
+					, sdw::Float const & thinFilmThickness
+					, sdw::Vec3 const & baseF0 )
+				{
+					auto I = m_writer.declLocale< sdw::Vec3 >( "I" );
+
+					// Force iridescenceIor -> outsideIOR when thinFilmThickness -> 0.0
+					auto iridescenceIor = m_writer.declLocale( "iridescenceIor"
+						, mix( outsideIOR, eta2, smoothStep( 0.0_f, 0.03_f, thinFilmThickness ) ) );
+					auto iorRatio = m_writer.declLocale( "iorRatio"
+						, outsideIOR / iridescenceIor );
+					// Evaluate the cosTheta on the base layer (Snell law)
+					auto sinTheta2Sq = m_writer.declLocale( "sinTheta2"
+						, iorRatio * iorRatio * ( 1.0_f - ( cosTheta1 * cosTheta1 ) ) );
+
+					// Handle TIR:
+					auto cosTheta2Sq = m_writer.declLocale( "sinTheta2Sq"
+						, 1.0_f - sinTheta2Sq );
+
+					IF( m_writer, cosTheta2Sq < 0.0_f )
+					{
+						m_writer.returnStmt( vec3( 1.0_f ) );
+					}
+					FI;
+
+					auto cosTheta2 = m_writer.declLocale( "cosTheta2"
+						, sqrt( cosTheta2Sq ) );
+
+					// First interface
+					auto R0 = m_writer.declLocale( "R0"
+						, iorToFresnel0( iridescenceIor, outsideIOR ) );
+					auto R12 = m_writer.declLocale( "R12"
+						, utils.conductorFresnel( cosTheta1, R0 ) );
+					auto R21 = m_writer.declLocale( "R21"
+						, R12 );
+					auto T121 = m_writer.declLocale( "T121"
+						, 1.0_f - R12 );
+					auto phi12 = m_writer.declLocale( "phi12"
+						, 0.0_f );
+
+					IF( m_writer, iridescenceIor < outsideIOR )
+					{
+						phi12 = castor::Pi< float >;
+					}
+					FI;
+
+					auto phi21 = m_writer.declLocale( "phi21"
+						, castor::Pi< float > - phi12 );
+
+					// Second interface
+					auto baseIOR = m_writer.declLocale( "baseIOR"
+						, fresnel0ToIor( clamp( baseF0, vec3( 0.0_f ), vec3( 0.9999_f ) ) ) ); // guard against 1.0
+					auto R1 = m_writer.declLocale( "R1"
+						, iorToFresnel0( baseIOR, iridescenceIor ) );
+					auto R23 = m_writer.declLocale( "R23"
+						, utils.conductorFresnel( cosTheta2, R1 ) );
+					auto phi23 = m_writer.declLocale( "phi23"
+						, vec3( 0.0_f ) );
+
+					IF( m_writer, baseIOR[0] < iridescenceIor )
+					{
+						phi23[0] = castor::Pi< float >;
+					}
+					FI;
+					IF( m_writer, baseIOR[1] < iridescenceIor )
+					{
+						phi23[1] = castor::Pi< float >;
+					}
+					FI;
+					IF( m_writer, baseIOR[2] < iridescenceIor )
+					{
+						phi23[2] = castor::Pi< float >;
+					}
+					FI;
+
+					// Phase shift
+					auto OPD = m_writer.declLocale( "OPD"
+						, 2.0_f * iridescenceIor * thinFilmThickness * cosTheta2 );
+					auto phi = m_writer.declLocale( "phi"
+						, vec3( phi21 ) + phi23 );
+
+					// Compound terms
+					auto R123 = m_writer.declLocale( "R123"
+						, clamp( R12 * R23, vec3( 1e-5_f ), vec3( 0.9999_f ) ) );
+					auto r123 = m_writer.declLocale( "r123"
+						, sqrt( R123 ) );
+					auto Rs = m_writer.declLocale( "Rs"
+						, ( T121 * T121 ) * R23 / ( vec3( 1.0_f ) - R123 ) );
+
+					// Reflectance term for m = 0 (DC term amplitude)
+					auto C0 = R12 + Rs;
+					I = C0;
+
+					// Reflectance term for m > 0 (pairs of diracs)
+					auto Cm = m_writer.declLocale( "Cm"
+						, Rs - T121 );
+
+					for ( int m = 1; m <= 2; ++m )
+					{
+						Cm *= r123;
+						I += Cm * 2.0_f * evalSensitivity( float( m ) * OPD, float( m ) * phi );
+					}
+
+					// Since out of gamut colors might be produced, negative color values are clamped to 0.
+					m_writer.returnStmt( max( I, vec3( 0.0_f ) ) );
+				}
+				, sdw::InFloat{ m_writer, "outsideIOR" }
+				, sdw::InFloat{ m_writer, "eta2" }
+				, sdw::InFloat{ m_writer, "cosTheta1" }
+				, sdw::InFloat{ m_writer, "thinFilmThickness" }
+				, sdw::InVec3{ m_writer, "baseF0" } );
+		}
+
+		return m_evalIridescence( poutsideIOR
+			, peta2
+			, pcosTheta1
+			, pthinFilmThickness
+			, pbaseF0 );
+	}
+
+	sdw::RetVec3 Utils::evalSensitivity( sdw::Float const & pOPD
+		, sdw::Vec3 const & pshift )
+	{
+		if ( !m_evalSensitivity )
+		{
+			m_evalSensitivity = m_writer.implementFunction< sdw::Vec3 >( "c3d_evalSensitivity"
+				, [&]( sdw::Float const & OPD
+					, sdw::Vec3 const & shift )
+				{
+					auto XYZ_TO_REC709 = m_writer.declConstant( "XYZ_TO_REC709"
+						, mat3( vec3( 3.2404542_f, -0.9692660_f, 0.0556434_f )
+							, vec3( -1.5371385_f, 1.8760108_f, -0.2040259_f )
+							, vec3( -0.4985314_f, 0.0415560_f, 1.0572252_f ) ) );
+
+					auto phase = m_writer.declLocale( "phase"
+						, 2.0_f * castor::Pi< float > *OPD * 1.0e-9_f );
+					auto val = m_writer.declLocale( "val"
+						, vec3( 5.4856e-13_f, 4.4201e-13_f, 5.2481e-13_f ) );
+					auto pos = m_writer.declLocale( "pos"
+						, vec3( 1.6810e+06_f, 1.7953e+06_f, 2.2084e+06_f ) );
+					auto var = m_writer.declLocale( "var"
+						, vec3( 4.3278e+09_f, 9.3046e+09_f, 6.6121e+09_f ) );
+
+					auto xyz = m_writer.declLocale( "xyz"
+						, val * sqrt( 2.0_f * castor::Pi< float > *var ) * cos( pos * phase + shift ) * exp( -( phase * phase ) * var ) );
+					xyz.x() += 9.7470e-14_f * sqrt( 2.0_f * castor::Pi< float > *4.5282e+09_f ) * cos( 2.2399e+06_f * phase + shift[0] ) * exp( -4.5282e+09_f * ( phase * phase ) );
+					xyz /= 1.0685e-7_f;
+
+					auto srgb = m_writer.declLocale( "srgb"
+						, XYZ_TO_REC709 * xyz );
+					m_writer.returnStmt( srgb );
+				}
+				, sdw::InFloat{ m_writer, "OPD" }
+				, sdw::InVec3{ m_writer, "shift" } );
+		}
+
+		return m_evalSensitivity( pOPD
+			, pshift );
 	}
 
 	sdw::Mat3 Utils::getTBN( sdw::Vec3 const & normal

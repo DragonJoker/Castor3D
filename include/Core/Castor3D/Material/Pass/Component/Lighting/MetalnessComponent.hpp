@@ -51,7 +51,7 @@ namespace castor3d
 			C3D_API void updateMaterial( sdw::Vec3 const & albedo
 				, sdw::Vec4 const & spcRgh
 				, sdw::Vec4 const & colMtl
-				, sdw::Float const & transm
+				, sdw::Vec4 const & crTsIr
 				, sdw::Vec4 const & sheen
 				, shader::Material & material )const override;
 		};
