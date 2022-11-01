@@ -67,7 +67,8 @@ namespace castor3d::shader
 		, sdw::Vec3 const & indirectAmbient
 		, sdw::Float const & ambientOcclusion
 		, sdw::Vec3 const & emissive
-		, sdw::Vec3 reflected
+		, sdw::Vec3 reflectedDiffuse
+		, sdw::Vec3 reflectedSpecular
 		, sdw::Vec3 refracted
 		, sdw::Vec3 coatReflected
 		, sdw::Vec3 sheenReflected )
@@ -80,22 +81,14 @@ namespace castor3d::shader
 					, components.normal
 					, components.roughness
 					, components.refractionRatio ) );
-			reflected = mix( vec3( 0.0_f )
-				, reflected
+			reflectedDiffuse = mix( vec3( 0.0_f )
+				, reflectedDiffuse
+				, vec3( fresnelFactor ) );
+			reflectedSpecular = mix( vec3( 0.0_f )
+				, reflectedSpecular
 				, vec3( fresnelFactor ) );
 			refracted = mix( refracted
 				, vec3( 0.0_f )
-				, vec3( fresnelFactor ) );
-		}
-		ELSEIF( components.thicknessFactor != 0.0_f )
-		{
-			auto fresnelFactor = m_writer.declLocale( "fresnelFactor"
-				, m_utils.fresnelMix( incident
-					, components.normal
-					, components.roughness
-					, components.refractionRatio ) );
-			reflected = mix( vec3( 0.0_f )
-				, reflected
 				, vec3( fresnelFactor ) );
 		}
 		FI;
@@ -113,7 +106,8 @@ namespace castor3d::shader
 			, indirectAmbient
 			, ambientOcclusion
 			, emissive
-			, std::move( reflected )
+			, std::move( reflectedDiffuse )
+			, std::move( reflectedSpecular )
 			, std::move( refracted )
 			, std::move( coatReflected )
 			, std::move( sheenReflected ) );
@@ -130,7 +124,8 @@ namespace castor3d::shader
 		, sdw::Vec3 const & indirectSpecular
 		, sdw::Vec3 const & directAmbient
 		, sdw::Vec3 const & indirectAmbient
-		, sdw::Vec3 reflected
+		, sdw::Vec3 reflectedDiffuse
+		, sdw::Vec3 reflectedSpecular
 		, sdw::Vec3 refracted
 		, sdw::Vec3 coatReflected
 		, sdw::Vec3 sheenReflected )
@@ -148,7 +143,8 @@ namespace castor3d::shader
 			, indirectAmbient
 			, components.occlusion
 			, components.emissive
-			, std::move( reflected )
+			, std::move( reflectedDiffuse )
+			, std::move( reflectedSpecular )
 			, std::move( refracted )
 			, std::move( coatReflected )
 			, std::move( sheenReflected ) );

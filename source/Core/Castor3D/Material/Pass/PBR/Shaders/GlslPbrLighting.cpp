@@ -873,15 +873,17 @@ namespace castor3d::shader
 		, sdw::Vec3 const & indirectAmbient
 		, sdw::Float const & ambientOcclusion
 		, sdw::Vec3 const & emissive
-		, sdw::Vec3 const & reflected
+		, sdw::Vec3 const & reflectedDiffuse
+		, sdw::Vec3 const & reflectedSpecular
 		, sdw::Vec3 const & refracted
 		, sdw::Vec3 const & coatReflected
 		, sdw::Vec3 const & sheenReflected )
 	{
 		auto diffuseBrdf = m_writer.declLocale( "diffuseBrdf"
-			, components.colour * ( directDiffuse + ( indirectDiffuse * ambientOcclusion ) ) );
+			, components.colour * ( directDiffuse + ( indirectDiffuse * ambientOcclusion ) )
+				+ ( reflectedDiffuse * ambientOcclusion ) );
 		auto specularBrdf = m_writer.declLocale( "specularBrdf"
-			, ( reflected * adjustDirectAmbient( components, directAmbient ) * indirectAmbient * ambientOcclusion )
+			, ( reflectedSpecular * adjustDirectAmbient( components, directAmbient ) * indirectAmbient * ambientOcclusion )
 			+ adjustDirectSpecular( components, directSpecular ) + ( indirectSpecular * ambientOcclusion ) );
 		auto metal = m_writer.declLocale( "metal"
 			, specularBrdf ); // Conductor Fresnel already included there.

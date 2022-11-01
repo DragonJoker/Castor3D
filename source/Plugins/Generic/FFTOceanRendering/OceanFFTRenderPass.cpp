@@ -1326,12 +1326,20 @@ namespace ocean_fft
 
 
 					// Reflection
-					auto reflected = reflections->computeReflections( components
+					auto bgDiffuseReflection = writer.declLocale( "bgDiffuseReflection"
+						, vec3( 0.0_f ) );
+					auto bgSpecularReflection = writer.declLocale( "bgSpecularReflection"
+						, vec3( 0.0_f ) );
+					reflections->computeReflections( components
 						, surface
 						, c3d_sceneData
 						, *backgroundModel
 						, modelData.getEnvMapIndex()
-						, components.hasReflection );
+						, components.hasReflection
+						, bgDiffuseReflection
+						, bgSpecularReflection );
+					auto reflected = writer.declLocale( "reflected"
+						, bgDiffuseReflection + bgSpecularReflection );
 					displayDebugData( eRawBackgroundReflection, reflected, 1.0_f );
 					reflected = utils.conductorFresnel( NdotV, components.specular ) * reflected;
 					displayDebugData( eFresnelBackgroundReflection, reflected, 1.0_f );

@@ -23,6 +23,7 @@ namespace castor3d::shader
 		void doAdjustAmbient( sdw::Vec3 & ambient )const override;
 		void doAdjustAlbedo( sdw::Vec3 & albedo )const override;
 		void doDeclareComputeReflEnvMaps()override;
+		void doDeclareComputeSpecularReflEnvMaps()override;
 		void doDeclareComputeRefrEnvMaps()override;
 	};
 }

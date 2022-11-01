@@ -19,371 +19,479 @@ namespace castor3d::shader
 	{
 	}
 
-	void ReflectionModel::computeCombined( BlendComponents & components
-		, sdw::Vec3 const & incident
-		, sdw::Vec3 const & position
+	void ReflectionModel::computeCombined( BlendComponents & pcomponents
+		, sdw::Vec3 const & pincident
+		, sdw::Vec3 const & pposition
 		, BackgroundModel & background
-		, sdw::CombinedImage2DRgba32 const & mippedScene
+		, sdw::CombinedImage2DRgba32 const & pmippedScene
 		, MatrixData const & matrices
-		, sdw::Vec2 const & sceneUv
-		, sdw::UInt envMapIndex
-		, sdw::UInt const & hasReflection
-		, sdw::Float const & refractionRatio
-		, sdw::Vec3 & ambient
-		, sdw::Vec3 & reflected
-		, sdw::Vec3 & refracted
-		, sdw::Vec3 & coatReflected
-		, sdw::Vec3 & sheenReflected )
+		, sdw::Vec2 const & psceneUv
+		, sdw::UInt const & penvMapIndex
+		, sdw::UInt const & phasReflection
+		, sdw::Float const & prefractionRatio
+		, sdw::Vec3 & pambient
+		, sdw::Vec3 & preflectedDiffuse
+		, sdw::Vec3 & preflectedSpecular
+		, sdw::Vec3 & prefracted
+		, sdw::Vec3 & pcoatReflected
+		, sdw::Vec3 & psheenReflected )
 	{
-		auto brdf = m_writer.getVariable< sdw::CombinedImage2DRgba32 >( "c3d_mapBrdf" );
-		auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
+		if ( !m_computeDeferred )
+		{
+			m_computeDeferred = m_writer.implementFunction< sdw::Void >( "c3d_computeReflRefr"
+				, [&]( BlendComponents components
+					, sdw::Vec3 const & incident
+					, sdw::Vec3 const & position
+					, sdw::CombinedImage2DRgba32 const & mippedScene
+					, sdw::Vec2 const & sceneUv
+					, sdw::UInt envMapIndex
+					, sdw::UInt const & hasReflection
+					, sdw::Float const & refractionRatio
+					, sdw::Vec3 ambient
+					, sdw::Vec3 reflectedDiffuse
+					, sdw::Vec3 reflectedSpecular
+					, sdw::Vec3 refracted
+					, sdw::Vec3 coatReflected
+					, sdw::Vec3 sheenReflected )
+				{
+					auto brdf = m_writer.getVariable< sdw::CombinedImage2DRgba32 >( "c3d_mapBrdf" );
+					auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
 
-		IF( m_writer, envMapIndex > 0_u )
-		{
-			envMapIndex = envMapIndex - 1_u;
-			doAdjustAmbient( ambient );
+					IF( m_writer, envMapIndex > 0_u )
+					{
+						envMapIndex = envMapIndex - 1_u;
+						doAdjustAmbient( ambient );
 
-			IF( m_writer, hasReflection != 0_u )
-			{
-				// Reflection from environment map.
-				reflected = computeReflEnvMaps( incident
-					, components.normal
-					, components.roughness
-					, envMap
-					, envMapIndex
-					, components );
-			}
-			ELSEIF( components.iridescenceFactor != 0.0_f )
-			{
-				if ( m_hasIblSupport )
-				{
-					reflected = background.computeReflections( incident
-						, components.normal
-						, components
-						, brdf
-						, components.iridescenceFresnel
-						, components.iridescenceF0
-						, components.iridescenceFactor );
-				}
-			}
-			ELSE
-			{
-				// Reflection from background skybox.
-				if ( m_hasIblSupport )
-				{
-					reflected = background.computeReflections( incident
-						, components.normal
-						, components
-						, brdf );
-				}
-			}
-			FI;
-		}
-		ELSEIF( components.iridescenceFactor != 0.0_f )
-		{
-			if ( m_hasIblSupport )
-			{
-				reflected = background.computeReflections( incident
-					, components.normal
-					, components
-					, brdf
-					, components.iridescenceFresnel
-					, components.iridescenceF0
-					, components.iridescenceFactor );
-			}
-		}
-		ELSE
-		{
-			// Reflection from background skybox.
-			if ( m_hasIblSupport )
-			{
-				reflected = background.computeReflections( incident
-					, components.normal
-					, components
-					, brdf );
-			}
-		}
-		FI;
+						IF( m_writer, hasReflection != 0_u )
+						{
+							// Reflection from environment map.
+							computeReflEnvMaps( incident
+								, components.normal
+								, components.roughness
+								, envMap
+								, envMapIndex
+								, components
+								, reflectedDiffuse
+								, reflectedSpecular );
+						}
+						ELSEIF( components.iridescenceFactor != 0.0_f )
+						{
+							if ( m_hasIblSupport )
+							{
+								background.computeIridescenceReflections( incident
+									, components.normal
+									, components
+									, brdf
+									, components.iridescenceFresnel
+									, components.iridescenceF0
+									, components.iridescenceFactor
+									, reflectedDiffuse
+									, reflectedSpecular );
+							}
+						}
+						ELSE
+						{
+							// Reflection from background skybox.
+							if ( m_hasIblSupport )
+							{
+								background.computeReflections( incident
+									, components.normal
+									, components
+									, brdf
+									, reflectedDiffuse
+									, reflectedSpecular );
+							}
+						}
+						FI;
+					}
+					ELSEIF( components.iridescenceFactor != 0.0_f )
+					{
+						if ( m_hasIblSupport )
+						{
+							background.computeIridescenceReflections( incident
+								, components.normal
+								, components
+								, brdf
+								, components.iridescenceFresnel
+								, components.iridescenceF0
+								, components.iridescenceFactor
+								, reflectedDiffuse
+								, reflectedSpecular );
+						}
+					}
+					ELSE
+					{
+						// Reflection from background skybox.
+						if ( m_hasIblSupport )
+						{
+							background.computeReflections( incident
+								, components.normal
+								, components
+								, brdf
+								, reflectedDiffuse
+								, reflectedSpecular );
+						}
+					}
+					FI;
 
-		IF( m_writer, components.hasTransmission )
-		{
-			refracted = computeRefrSceneMap( incident
-				, components.normal
-				, position
-				, mippedScene
-				, matrices
-				, sceneUv
-				, refractionRatio
-				, components );
-		}
-		ELSE
-		{
-			IF( m_writer, refractionRatio != 0.0_f )
-			{
-				IF( m_writer, envMapIndex > 0_u )
-				{
-					refracted = computeRefrEnvMaps( incident
-						, components.normal
-						, envMap
-						, envMapIndex
-						, refractionRatio
-						, components );
-				}
-				ELSE
-				{
-					refracted = background.computeRefractions( incident
-						, components.normal
-						, refractionRatio
-						, components );
-				}
-				FI;
-			}
-			FI;
-		}
-		FI;
+					IF( m_writer, components.hasTransmission )
+					{
+						refracted = computeRefrSceneMap( incident
+							, components.normal
+							, position
+							, mippedScene
+							, matrices
+							, sceneUv
+							, refractionRatio
+							, components );
+					}
+					ELSE
+					{
+						IF( m_writer, refractionRatio != 0.0_f )
+						{
+							IF( m_writer, envMapIndex > 0_u )
+							{
+								refracted = computeRefrEnvMaps( incident
+									, components.normal
+									, envMap
+									, envMapIndex
+									, refractionRatio
+									, components );
+							}
+							ELSE
+							{
+								refracted = background.computeRefractions( incident
+									, components.normal
+									, refractionRatio
+									, components );
+							}
+							FI;
+						}
+						FI;
+					}
+					FI;
 
-		IF( m_writer, components.clearcoatFactor != 0.0_f )
-		{
-			IF( m_writer, envMapIndex > 0_u && hasReflection != 0_u )
-			{
-				envMapIndex = envMapIndex - 1_u;
-				auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
-				coatReflected = computeReflEnvMaps( incident
-					, components.clearcoatNormal
-					, components.clearcoatRoughness
-					, envMap
-					, envMapIndex
-					, components );
-			}
-			ELSE
-			{
-				if ( m_hasIblSupport )
-				{
-					coatReflected = background.computeSpecularReflections( incident
-						, components.clearcoatNormal
-						, components.specular
-						, components.clearcoatRoughness
-						, components
-						, brdf );
-				}
-			}
-			FI;
-		}
-		FI;
+					IF( m_writer, components.clearcoatFactor != 0.0_f )
+					{
+						IF( m_writer, envMapIndex > 0_u && hasReflection != 0_u )
+						{
+							envMapIndex = envMapIndex - 1_u;
+							auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
+							coatReflected = computeSpecularReflEnvMaps( incident
+								, components.clearcoatNormal
+								, components.clearcoatRoughness
+								, envMap
+								, envMapIndex
+								, components );
+						}
+						ELSE
+						{
+							if ( m_hasIblSupport )
+							{
+								coatReflected = background.computeSpecularReflections( incident
+									, components.clearcoatNormal
+									, components.specular
+									, components.clearcoatRoughness
+									, components
+									, brdf );
+							}
+						}
+						FI;
+					}
+					FI;
 
-		IF( m_writer, !all( components.sheenFactor == vec3( 0.0_f ) ) )
-		{
-			IF( m_writer, envMapIndex > 0_u && hasReflection != 0_u )
-			{
-				envMapIndex = envMapIndex - 1_u;
-				auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
-				sheenReflected = computeSheenReflEnvMaps( incident
-					, components.normal
-					, envMap
-					, envMapIndex
-					, components );
-			}
-			ELSE
-			{
-				if ( m_hasIblSupport )
-				{
-					sheenReflected = background.computeSheenReflections( incident
-						, components.normal
-						, components
-						, brdf );
+					IF( m_writer, !all( components.sheenFactor == vec3( 0.0_f ) ) )
+					{
+						IF( m_writer, envMapIndex > 0_u && hasReflection != 0_u )
+						{
+							envMapIndex = envMapIndex - 1_u;
+							auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
+							sheenReflected = computeSheenReflEnvMaps( incident
+								, components.normal
+								, envMap
+								, envMapIndex
+								, components );
+						}
+						ELSE
+						{
+							if ( m_hasIblSupport )
+							{
+								sheenReflected = background.computeSheenReflections( incident
+									, components.normal
+									, components
+									, brdf );
+							}
+						}
+						FI;
+					}
+					FI;
 				}
-			}
-			FI;
+				, InOutBlendComponents{ m_writer, "components", pcomponents }
+				, sdw::InVec3{ m_writer, "incident" }
+				, sdw::InVec3{ m_writer, "position" }
+				, sdw::InCombinedImage2DRgba32{ m_writer, "mippedScene" }
+				, sdw::InVec2{ m_writer, "sceneUv" }
+				, sdw::InUInt{ m_writer, "envMapIndex" }
+				, sdw::InUInt{ m_writer, "hasReflection" }
+				, sdw::InFloat{ m_writer, "refractionRatio" }
+				, sdw::OutVec3{ m_writer, "ambient" }
+				, sdw::OutVec3{ m_writer, "reflectedDiffuse" }
+				, sdw::OutVec3{ m_writer, "reflectedSpecular" }
+				, sdw::OutVec3{ m_writer, "refracted" }
+				, sdw::OutVec3{ m_writer, "coatReflected" }
+				, sdw::OutVec3{ m_writer, "sheenReflected" } );
 		}
-		FI;
+
+		m_computeDeferred( pcomponents
+			, pincident
+			, pposition
+			, pmippedScene
+			, psceneUv
+			, penvMapIndex
+			, phasReflection
+			, prefractionRatio
+			, pambient
+			, preflectedDiffuse
+			, preflectedSpecular
+			, prefracted
+			, pcoatReflected
+			, psheenReflected );
 	}
 
-	void ReflectionModel::computeCombined( BlendComponents & components
-		, sdw::Vec3 const & incident
+	void ReflectionModel::computeCombined( BlendComponents & pcomponents
+		, sdw::Vec3 const & pincident
 		, BackgroundModel & background
-		, sdw::UInt envMapIndex
-		, sdw::UInt const & hasReflection
-		, sdw::Float const & refractionRatio
-		, sdw::Vec3 & ambient
-		, sdw::Vec3 & reflected
-		, sdw::Vec3 & refracted
-		, sdw::Vec3 & coatReflected
-		, sdw::Vec3 & sheenReflected )
+		, sdw::UInt const & penvMapIndex
+		, sdw::UInt const & phasReflection
+		, sdw::Float const & prefractionRatio
+		, sdw::Vec3 & pambient
+		, sdw::Vec3 & preflectedDiffuse
+		, sdw::Vec3 & preflectedSpecular
+		, sdw::Vec3 & prefracted
+		, sdw::Vec3 & pcoatReflected
+		, sdw::Vec3 & psheenReflected )
 	{
-		auto brdf = m_writer.getVariable< sdw::CombinedImage2DRgba32 >( "c3d_mapBrdf" );
-		auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
-
-		IF( m_writer, envMapIndex > 0_u )
+		if ( !m_computeForward )
 		{
-			envMapIndex = envMapIndex - 1_u;
-			doAdjustAmbient( ambient );
-
-			IF( m_writer, hasReflection != 0_u )
-			{
-				// Reflection from environment map.
-				reflected = computeReflEnvMaps( incident
-					, components.normal
-					, components.roughness
-					, envMap
-					, envMapIndex
-					, components );
-			}
-			ELSEIF( components.iridescenceFactor != 0.0_f )
-			{
-				if ( m_hasIblSupport )
+			m_computeForward = m_writer.implementFunction< sdw::Void >( "c3d_computeReflRefr"
+				, [&]( BlendComponents components
+					, sdw::Vec3 const & incident
+					, sdw::UInt envMapIndex
+					, sdw::UInt const & hasReflection
+					, sdw::Float const & refractionRatio
+					, sdw::Vec3 ambient
+					, sdw::Vec3 reflectedDiffuse
+					, sdw::Vec3 reflectedSpecular
+					, sdw::Vec3 refracted
+					, sdw::Vec3 coatReflected
+					, sdw::Vec3 sheenReflected )
 				{
-					reflected = background.computeReflections( incident
-						, components.normal
-						, components
-						, brdf
-						, components.iridescenceFresnel
-						, components.iridescenceF0
-						, components.iridescenceFactor );
-				}
-			}
-			ELSE
-			{
-				// Reflection from background skybox.
-				if ( m_hasIblSupport )
-				{
-					reflected = background.computeReflections( incident
-						, components.normal
-						, components
-						, brdf );
-				}
-			}
-			FI;
+					auto brdf = m_writer.getVariable< sdw::CombinedImage2DRgba32 >( "c3d_mapBrdf" );
+					auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
 
-			IF( m_writer, refractionRatio != 0.0_f )
-			{
-				// Refraction from environment map.
-				refracted = computeRefrEnvMaps( incident
-					, components.normal
-					, envMap
-					, envMapIndex
-					, refractionRatio
-					, components );
-			}
-			ELSE
-			{
-				doAdjustAlbedo( components.colour );
-			}
-			FI;
-		}
-		ELSEIF( components.iridescenceFactor != 0.0_f )
-		{
-			if ( m_hasIblSupport )
-			{
-				reflected = background.computeReflections( incident
-					, components.normal
-					, components
-					, brdf
-					, components.iridescenceFresnel
-					, components.iridescenceF0
-					, components.iridescenceFactor );
-			}
-		}
-		ELSE
-		{
-			// Reflection from background skybox.
-			if ( m_hasIblSupport )
-			{
-				reflected = background.computeReflections( incident
-					, components.normal
-					, components
-					, brdf );
-			}
+					IF( m_writer, envMapIndex > 0_u )
+					{
+						envMapIndex = envMapIndex - 1_u;
+						doAdjustAmbient( ambient );
 
-			IF( m_writer, refractionRatio != 0.0_f )
-			{
-				// Refraction from background skybox.
-				refracted = background.computeRefractions( incident
-					, components.normal
-					, refractionRatio
-					, components );
-			}
-			FI;
-		}
-		FI;
+						IF( m_writer, hasReflection != 0_u )
+						{
+							// Reflection from environment map.
+							computeReflEnvMaps( incident
+								, components.normal
+								, components.roughness
+								, envMap
+								, envMapIndex
+								, components
+								, reflectedDiffuse
+								, reflectedSpecular );
+						}
+						ELSEIF( components.iridescenceFactor != 0.0_f )
+						{
+							if ( m_hasIblSupport )
+							{
+								background.computeIridescenceReflections( incident
+									, components.normal
+									, components
+									, brdf
+									, components.iridescenceFresnel
+									, components.iridescenceF0
+									, components.iridescenceFactor
+									, reflectedDiffuse
+									, reflectedSpecular );
+							}
+						}
+						ELSE
+						{
+							// Reflection from background skybox.
+							if ( m_hasIblSupport )
+							{
+								background.computeReflections( incident
+									, components.normal
+									, components
+									, brdf
+									, reflectedDiffuse
+									, reflectedSpecular );
+							}
+						}
+						FI;
+					}
+					ELSEIF( components.iridescenceFactor != 0.0_f )
+					{
+						if ( m_hasIblSupport )
+						{
+							background.computeIridescenceReflections( incident
+								, components.normal
+								, components
+								, brdf
+								, components.iridescenceFresnel
+								, components.iridescenceF0
+								, components.iridescenceFactor
+								, reflectedDiffuse
+								, reflectedSpecular );
+						}
+					}
+					ELSE
+					{
+						// Reflection from background skybox.
+						if ( m_hasIblSupport )
+						{
+							background.computeReflections( incident
+								, components.normal
+								, components
+								, brdf
+								, reflectedDiffuse
+								, reflectedSpecular );
+						}
+					}
+					FI;
 
-		IF( m_writer, components.clearcoatFactor != 0.0_f )
-		{
-			IF( m_writer, envMapIndex > 0_u && hasReflection != 0_u )
-			{
-				envMapIndex = envMapIndex - 1_u;
-				auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
-				coatReflected = computeReflEnvMaps( incident
-					, components.clearcoatNormal
-					, components.clearcoatRoughness
-					, envMap
-					, envMapIndex
-					, components );
-			}
-			ELSE
-			{
-				if ( m_hasIblSupport )
-				{
-					coatReflected = background.computeSpecularReflections( incident
-						, components.clearcoatNormal
-						, components.specular
-						, components.clearcoatRoughness
-						, components
-						, brdf );
+					IF( m_writer, refractionRatio != 0.0_f )
+					{
+						IF( m_writer, envMapIndex > 0_u )
+						{
+							refracted = computeRefrEnvMaps( incident
+								, components.normal
+								, envMap
+								, envMapIndex
+								, refractionRatio
+								, components );
+						}
+						ELSE
+						{
+							refracted = background.computeRefractions( incident
+							, components.normal
+								, refractionRatio
+								, components );
+						}
+						FI;
+					}
+					FI;
+
+					IF( m_writer, components.clearcoatFactor != 0.0_f )
+					{
+						IF( m_writer, envMapIndex > 0_u && hasReflection != 0_u )
+						{
+							envMapIndex = envMapIndex - 1_u;
+							auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
+							coatReflected = computeSpecularReflEnvMaps( incident
+								, components.clearcoatNormal
+								, components.clearcoatRoughness
+								, envMap
+								, envMapIndex
+								, components );
+						}
+						ELSE
+						{
+							if ( m_hasIblSupport )
+							{
+								coatReflected = background.computeSpecularReflections( incident
+									, components.clearcoatNormal
+									, components.specular
+									, components.clearcoatRoughness
+									, components
+									, brdf );
+							}
+						}
+						FI;
+					}
+					FI;
+
+					IF( m_writer, !all( components.sheenFactor == vec3( 0.0_f ) ) )
+					{
+						IF( m_writer, envMapIndex > 0_u && hasReflection != 0_u )
+						{
+							envMapIndex = envMapIndex - 1_u;
+							auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
+							sheenReflected = computeSheenReflEnvMaps( incident
+								, components.normal
+								, envMap
+								, envMapIndex
+								, components );
+						}
+						ELSE
+						{
+							if ( m_hasIblSupport )
+							{
+								sheenReflected = background.computeSheenReflections( incident
+									, components.normal
+									, components
+									, brdf );
+							}
+						}
+						FI;
+					}
+					FI;
 				}
-			}
-			FI;
+				, InOutBlendComponents{ m_writer, "components", pcomponents }
+				, sdw::InVec3{ m_writer, "incident" }
+				, sdw::InUInt{ m_writer, "envMapIndex" }
+				, sdw::InUInt{ m_writer, "hasReflection" }
+				, sdw::InFloat{ m_writer, "refractionRatio" }
+				, sdw::OutVec3{ m_writer, "ambient" }
+				, sdw::OutVec3{ m_writer, "reflectedDiffuse" }
+				, sdw::OutVec3{ m_writer, "reflectedSpecular" }
+				, sdw::OutVec3{ m_writer, "refracted" }
+				, sdw::OutVec3{ m_writer, "coatReflected" }
+				, sdw::OutVec3{ m_writer, "sheenReflected" } );
 		}
-		FI;
 
-		IF( m_writer, !all( components.sheenFactor == vec3( 0.0_f ) ) )
-		{
-			IF( m_writer, envMapIndex > 0_u && hasReflection != 0_u )
-			{
-				envMapIndex = envMapIndex - 1_u;
-				auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
-				sheenReflected = computeSheenReflEnvMaps( incident
-					, components.normal
-					, envMap
-					, envMapIndex
-					, components );
-			}
-			ELSE
-			{
-				if ( m_hasIblSupport )
-				{
-					sheenReflected = background.computeSheenReflections( incident
-						, components.normal
-						, components
-						, brdf );
-				}
-			}
-			FI;
-		}
-		FI;
+		m_computeForward( pcomponents
+			, pincident
+			, penvMapIndex
+			, phasReflection
+			, prefractionRatio
+			, pambient
+			, preflectedDiffuse
+			, preflectedSpecular
+			, prefracted
+			, pcoatReflected
+			, psheenReflected );
 	}
 
-	sdw::Vec3 ReflectionModel::computeReflections( BlendComponents & components
+	void ReflectionModel::computeReflections( BlendComponents & components
 		, Surface const & surface
 		, SceneData const & sceneData
 		, BackgroundModel & background
 		, sdw::UInt envMapIndex
-		, sdw::UInt const & reflection )
+		, sdw::UInt const & reflection
+		, sdw::Vec3 & reflectedDiffuse
+		, sdw::Vec3 & reflectedSpecular )
 	{
-		auto reflected = m_writer.declLocale( "reflected"
-			, vec3( 0.0_f ) );
-
 		IF( m_writer, envMapIndex > 0_u && reflection != 0_u )
 		{
 			envMapIndex = envMapIndex - 1_u;
 			auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
 			auto incident = m_writer.declLocale( "incident"
 				, computeIncident( surface.worldPosition.xyz(), sceneData.cameraPosition ) );
-			reflected = computeReflEnvMaps( incident
+			computeReflEnvMaps( incident
 				, components.normal
 				, components.roughness
 				, envMap
 				, envMapIndex
-				, components );
+				, components
+				, reflectedDiffuse
+				, reflectedSpecular );
 		}
 		ELSE
 		{
@@ -392,15 +500,15 @@ namespace castor3d::shader
 				auto incident = m_writer.declLocale( "incident"
 					, computeIncident( surface.worldPosition.xyz(), sceneData.cameraPosition ) );
 				auto brdf = m_writer.getVariable< sdw::CombinedImage2DRgba32 >( "c3d_mapBrdf" );
-				reflected = background.computeReflections( incident
+				background.computeReflections( incident
 					, components.normal
 					, components
-					, brdf );
+					, brdf
+					, reflectedDiffuse
+					, reflectedSpecular );
 			}
 		}
 		FI;
-
-		return reflected;
 	}
 
 	sdw::Vec3 ReflectionModel::computeRefractions( BlendComponents & components
@@ -817,15 +925,35 @@ namespace castor3d::shader
 			, pcsHitPoint );
 	}
 
-	sdw::RetVec3 ReflectionModel::computeReflEnvMaps( sdw::Vec3 const & wsIncident
+	void ReflectionModel::computeReflEnvMaps( sdw::Vec3 const & wsIncident
+		, sdw::Vec3 const & wsNormal
+		, sdw::Float const & roughness
+		, sdw::CombinedImageCubeArrayRgba32 const & envMap
+		, sdw::UInt const & envMapIndex
+		, BlendComponents & components
+		, sdw::Vec3 & reflectedDiffuse
+		, sdw::Vec3 & reflectedSpecular )
+	{
+		doDeclareComputeReflEnvMaps();
+		m_computeReflEnvMaps( wsIncident
+			, wsNormal
+			, envMap
+			, envMapIndex
+			, components.specular
+			, roughness
+			, reflectedDiffuse
+			, reflectedSpecular );
+	}
+
+	sdw::RetVec3 ReflectionModel::computeSpecularReflEnvMaps( sdw::Vec3 const & wsIncident
 		, sdw::Vec3 const & wsNormal
 		, sdw::Float const & roughness
 		, sdw::CombinedImageCubeArrayRgba32 const & envMap
 		, sdw::UInt const & envMapIndex
 		, BlendComponents & components )
 	{
-		doDeclareComputeReflEnvMaps();
-		return m_computeReflEnvMaps( wsIncident
+		doDeclareComputeSpecularReflEnvMaps();
+		return m_computeSpecularReflEnvMaps( wsIncident
 			, wsNormal
 			, envMap
 			, envMapIndex
@@ -904,6 +1032,7 @@ namespace castor3d::shader
 					, sdw::Vec2 sceneUv
 					, sdw::Float const & refractionRatio
 					, sdw::Vec3 const & albedo
+					, sdw::Vec3 const & f0
 					, sdw::Float roughness
 					, sdw::Float thicknessFactor
 					, sdw::Vec3 attenuationColour
@@ -929,9 +1058,31 @@ namespace castor3d::shader
 
 						auto attnCoefficient = m_writer.declLocale( "attnCoefficient"
 							, -sdw::log( attenuationColour ) / attenuationDistance );
-						auto transmittance = m_writer.declLocale( "transmittance"
+						auto attenuatedColor = m_writer.declLocale( "attenuatedColor"
 							, exp( -attnCoefficient * thicknessFactor ) );
-						m_writer.returnStmt( transmitted * transmittance * alb );
+
+						if ( m_writer.hasVariable( "c3d_mapBrdf" ) )
+						{
+							auto brdfMap = m_writer.getVariable< sdw::CombinedImage2DRgba32 >( "c3d_mapBrdf" );
+
+							// Sample GGX LUT to get the specular component.
+							auto NdotV = m_writer.declLocale( "NdotV"
+								, clamp( dot( wsNormal, -wsIncident ), 0.0_f, 1.0_f ) );
+							auto brdfSamplePoint = m_writer.declLocale( "brdfSamplePoint"
+								, vec2( NdotV, roughness ) );
+							auto brdf = m_writer.declLocale( "brdf"
+								, brdfMap.sample( brdfSamplePoint ) );
+							auto F = m_writer.declLocale( "F"
+								, m_utils.conductorFresnel( NdotV, f0 ) );
+							auto specularColor = m_writer.declLocale( "specularColor"
+								, sdw::fma( F, vec3( brdf.x() ), vec3( brdf.y() ) ) );
+
+							m_writer.returnStmt( ( 1.0_f - specularColor ) * transmitted * attenuatedColor * alb );
+						}
+						else
+						{
+							m_writer.returnStmt( transmitted * attenuatedColor * alb );
+						}
 					}
 					FI;
 
@@ -944,6 +1095,7 @@ namespace castor3d::shader
 				, sdw::InVec2{ m_writer, "sceneUv" }
 				, sdw::InFloat{ m_writer, "refractionRatio" }
 				, sdw::InVec3{ m_writer, "albedo" }
+				, sdw::InVec3{ m_writer, "f0" }
 				, sdw::InFloat{ m_writer, "roughness" }
 				, sdw::InFloat{ m_writer, "thicknessFactor" }
 				, sdw::InVec3{ m_writer, "attenuationColour" }
@@ -957,6 +1109,7 @@ namespace castor3d::shader
 			, psceneUv
 			, prefractionRatio
 			, pcomponents.colour
+			, pcomponents.specular
 			, pcomponents.roughness
 			, pcomponents.thicknessFactor
 			, pcomponents.attenuationColour

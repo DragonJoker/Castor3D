@@ -36,37 +36,45 @@ namespace castor3d::shader
 			, set );
 	}
 
-	sdw::RetVec3 NoIblBackgroundModel::computeReflections( sdw::Vec3 const & pwsIncident
+	void NoIblBackgroundModel::computeReflections( sdw::Vec3 const & pwsIncident
 		, sdw::Vec3 const & pwsNormal
 		, BlendComponents & components
-		, sdw::CombinedImage2DRgba32 const & pbrdf )
+		, sdw::CombinedImage2DRgba32 const & pbrdf
+		, sdw::Vec3 & preflectedDiffuse
+		, sdw::Vec3 & preflectedSpecular )
 	{
 		if ( !m_computeReflections )
 		{
-			m_computeReflections = m_writer.implementFunction< sdw::Vec3 >( "c3d_noiblbg_computeReflections"
+			m_computeReflections = m_writer.implementFunction< sdw::Void >( "c3d_noiblbg_computeReflections"
 				, [&]( sdw::Vec3 const & wsIncident
 					, sdw::Vec3 const & wsNormal
 					, sdw::CombinedImageCubeRgba32 const & backgroundMap
 					, sdw::Vec3 const & specular
-					, sdw::Float const & roughness )
+					, sdw::Float const & roughness
+					, sdw::Vec3 reflectedDiffuse
+					, sdw::Vec3 reflectedSpecular )
 				{
 					auto reflected = m_writer.declLocale( "reflected"
 						, reflect( wsIncident, wsNormal ) );
-					m_writer.returnStmt( backgroundMap.lod( reflected, roughness * 8.0_f ).xyz() * specular );
+					reflectedSpecular = backgroundMap.lod( reflected, roughness * 8.0_f ).xyz() * specular;
 				}
 				, sdw::InVec3{ m_writer, "wsIncident" }
 				, sdw::InVec3{ m_writer, "wsNormal" }
 				, sdw::InCombinedImageCubeRgba32{ m_writer, "backgroundMap" }
 				, sdw::InVec3{ m_writer, "specular" }
-				, sdw::InFloat{ m_writer, "roughness" } );
+				, sdw::InFloat{ m_writer, "roughness" }
+				, sdw::OutVec3{ m_writer, "reflectedDiffuse" }
+				, sdw::OutVec3{ m_writer, "reflectedSpecular" } );
 		}
 
 		auto backgroundMap = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapBackground" );
-		return m_computeReflections( pwsIncident
+		m_computeReflections( pwsIncident
 			, pwsNormal
 			, backgroundMap
 			, components.specular
-			, components.roughness );
+			, components.roughness
+			, preflectedDiffuse
+			, preflectedSpecular );
 	}
 
 	sdw::RetVec3 NoIblBackgroundModel::computeRefractions( sdw::Vec3 const & pwsIncident

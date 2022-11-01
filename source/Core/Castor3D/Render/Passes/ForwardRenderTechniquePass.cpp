@@ -281,7 +281,9 @@ namespace castor3d
 
 					auto directAmbient = writer.declLocale( "directAmbient"
 						, c3d_sceneData.ambientLight );
-					auto reflected = writer.declLocale( "reflected"
+					auto reflectedDiffuse = writer.declLocale( "reflectedDiffuse"
+						, vec3( 0.0_f ) );
+					auto reflectedSpecular = writer.declLocale( "reflectedSpecular"
 						, vec3( 0.0_f ) );
 					auto refracted = writer.declLocale( "refracted"
 						, vec3( 0.0_f ) );
@@ -296,7 +298,8 @@ namespace castor3d
 						, material.hasReflection
 						, material.refractionRatio
 						, directAmbient
-						, reflected
+						, reflectedDiffuse
+						, reflectedSpecular
 						, refracted
 						, coatReflected
 						, sheenReflected );
@@ -338,7 +341,8 @@ namespace castor3d
 							, lightIndirectSpecular
 							, directAmbient
 							, indirectAmbient
-							, reflected
+							, reflectedDiffuse
+							, reflectedSpecular
 							, refracted
 							, coatReflected
 							, sheenReflected )

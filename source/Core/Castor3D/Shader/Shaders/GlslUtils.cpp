@@ -958,7 +958,7 @@ namespace castor3d::shader
 	{
 		if ( !m_evalIridescence )
 		{
-			m_evalIridescence = m_writer.implementFunction< sdw::Vec3 >( "c3d_iblbg_evalIridescence"
+			m_evalIridescence = m_writer.implementFunction< sdw::Vec3 >( "c3d_evalIridescence"
 				, [&]( sdw::Float const & outsideIOR
 					, sdw::Float const & eta2
 					, sdw::Float const & cosTheta1
@@ -1096,7 +1096,7 @@ namespace castor3d::shader
 							, vec3( -0.4985314_f, 0.0415560_f, 1.0572252_f ) ) );
 
 					auto phase = m_writer.declLocale( "phase"
-						, 2.0_f * castor::Pi< float > *OPD * 1.0e-9_f );
+						, castor::Tau< float > * OPD * 1.0e-9_f );
 					auto val = m_writer.declLocale( "val"
 						, vec3( 5.4856e-13_f, 4.4201e-13_f, 5.2481e-13_f ) );
 					auto pos = m_writer.declLocale( "pos"
@@ -1105,8 +1105,8 @@ namespace castor3d::shader
 						, vec3( 4.3278e+09_f, 9.3046e+09_f, 6.6121e+09_f ) );
 
 					auto xyz = m_writer.declLocale( "xyz"
-						, val * sqrt( 2.0_f * castor::Pi< float > *var ) * cos( pos * phase + shift ) * exp( -( phase * phase ) * var ) );
-					xyz.x() += 9.7470e-14_f * sqrt( 2.0_f * castor::Pi< float > *4.5282e+09_f ) * cos( 2.2399e+06_f * phase + shift[0] ) * exp( -4.5282e+09_f * ( phase * phase ) );
+						, val * sqrt( castor::Tau< float > *var ) * cos( pos * phase + shift ) * exp( -( phase * phase ) * var ) );
+					xyz.x() += 9.7470e-14_f * sqrt( castor::Tau< float > * 4.5282e+09_f ) * cos( 2.2399e+06_f * phase + shift[0] ) * exp( -4.5282e+09_f * ( phase * phase ) );
 					xyz /= 1.0685e-7_f;
 
 					auto srgb = m_writer.declLocale( "srgb"
