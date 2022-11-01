@@ -153,7 +153,7 @@ namespace castor3d
 		auto c3d_mapSpcRgh = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eSpcRgh ), uint32_t( LightPassIdx::eSpcRgh ), 0u );
 		auto c3d_mapEmsTrn = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eEmsTrn ), uint32_t( LightPassIdx::eEmsTrn ), 0u );
 		auto c3d_mapClrCot = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eClrCot ), uint32_t( LightPassIdx::eClrCot ), 0u );
-		auto c3d_mapCcrTrs = writer.declCombinedImg< FImg2DRg32 >( getTextureName( DsTexture::eCcrTrs ), uint32_t( LightPassIdx::eCcrTrs ), 0u );
+		auto c3d_mapCrTsIr = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eCrTsIr ), uint32_t( LightPassIdx::eCrTsIr ), 0u );
 		auto c3d_mapSheen = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eSheen ), uint32_t( LightPassIdx::eSheen ), 0u );
 
 		shadowType = shadows
@@ -223,8 +223,8 @@ namespace castor3d
 						, c3d_mapEmsTrn.lod( texCoord, 0.0_f ) );
 					auto clrCot = writer.declLocale( "clrCot"
 						, c3d_mapClrCot.lod( texCoord, 0.0_f ) );
-					auto ccrTrs = writer.declLocale( "ccrTrs"
-						, c3d_mapCcrTrs.lod( texCoord, 0.0_f ) );
+					auto crTsIr = writer.declLocale( "crTsIr"
+						, c3d_mapCrTsIr.lod( texCoord, 0.0_f ) );
 					auto sheen = writer.declLocale( "sheen"
 						, c3d_mapSheen.lod( texCoord, 0.0_f ) );
 
@@ -256,14 +256,28 @@ namespace castor3d
 							, wsPosition
 							, wsNormal
 							, vec3( texCoord, 0.0_f ) } );
-
-					materials.fill( colMtl.rgb(), spcRgh, colMtl, ccrTrs.y(), sheen, material );
+					materials.fill( colMtl.rgb(), spcRgh, colMtl, crTsIr, sheen, material );
 					auto components = writer.declLocale( "components"
 						, shader::BlendComponents{ materials
 							, material
 							, surface
 							, clrCot } );
-					components.clearcoatRoughness = ccrTrs.x();
+
+					IF( writer, components.iridescenceFactor != 0.0_f )
+					{
+						auto incident = writer.declLocale( "incident"
+							, normalize( surface.worldPosition.xyz() - c3d_sceneData.cameraPosition ) );
+						auto NdotV = writer.declLocale( "NdotV"
+							, dot( wsNormal, -incident ) );
+						components.iridescenceFresnel = utils.evalIridescence( utils
+							, 1.0_f
+							, components.iridescenceIor
+							, NdotV
+							, components.iridescenceThickness
+							, components.specular );
+						components.iridescenceF0 = utils.fresnelToF0( components.iridescenceFresnel, NdotV );
+					}
+					FI;
 
 					switch ( lightType )
 					{

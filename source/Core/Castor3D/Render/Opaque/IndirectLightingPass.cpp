@@ -140,8 +140,8 @@ namespace castor3d
 							, c3d_mapSpcRgh.lod( texCoord, 0.0_f ) );
 						auto clrCot = writer.declLocale( "clrCot"
 							, vec4( 0.0_f ) );
-						auto ccrTrs = writer.declLocale( "ccrTrs"
-							, vec2( 0.0_f ) );
+						auto crTsIr = writer.declLocale( "crTsIr"
+							, vec4( 0.0_f ) );
 						auto sheen = writer.declLocale( "sheen"
 							, vec4( 0.0_f ) );
 						auto eye = writer.declLocale( "eye"
@@ -159,13 +159,12 @@ namespace castor3d
 								, vsPosition
 								, wsPosition
 								, wsNormal } );
-						materials.fill( colMtl.rgb(), spcRgh, colMtl, ccrTrs.y(), sheen, material );
+						materials.fill( colMtl.rgb(), spcRgh, colMtl, crTsIr, sheen, material );
 						auto components = writer.declLocale( "components"
 							, shader::BlendComponents{ materials
 								, material
 								, surface
 								, clrCot } );
-						components.clearcoatRoughness = ccrTrs.x();
 
 						//auto occlusion = indirect.computeOcclusion( sceneFlags
 						//	, lightType

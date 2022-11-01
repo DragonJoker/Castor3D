@@ -450,7 +450,7 @@ namespace castor3d
 			C3D_API virtual void updateMaterial( sdw::Vec3 const & colour
 				, sdw::Vec4 const & spcRgh
 				, sdw::Vec4 const & colMtl
-				, sdw::Float const & transm
+				, sdw::Vec4 const & crTsIr
 				, sdw::Vec4 const & sheen
 				, Material & material )const
 			{

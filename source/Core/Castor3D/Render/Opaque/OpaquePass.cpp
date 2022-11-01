@@ -160,7 +160,7 @@ namespace castor3d
 		auto c3d_imgSpcRgh = writer.declOutput< sdw::Vec4 >( getImageName( DsTexture::eSpcRgh ), idx++ );
 		auto c3d_imgEmsTrn = writer.declOutput< sdw::Vec4 >( getImageName( DsTexture::eEmsTrn ), idx++ );
 		auto c3d_imgClrCot = writer.declOutput< sdw::Vec4 >( getImageName( DsTexture::eClrCot ), idx++ );
-		auto c3d_imgCcrTrs = writer.declOutput< sdw::Vec2 >( getImageName( DsTexture::eCcrTrs ), idx++ );
+		auto c3d_imgCrTsIr = writer.declOutput< sdw::Vec4 >( getImageName( DsTexture::eCrTsIr ), idx++ );
 		auto c3d_imgSheen = writer.declOutput< sdw::Vec4 >( getImageName( DsTexture::eSheen ), idx++ );
 
 		auto lightingModel = utils.createLightingModel( *getEngine()
@@ -212,7 +212,7 @@ namespace castor3d
 				passShaders.updateOutputs( components, in, c3d_imgSpcRgh, c3d_imgColMtl, c3d_imgSheen );
 				c3d_imgEmsTrn = vec4( components.emissive, components.transmittance );
 				c3d_imgClrCot = vec4( components.clearcoatNormal, components.clearcoatFactor );
-				c3d_imgCcrTrs = vec2( components.clearcoatRoughness, components.transmission );
+				c3d_imgCrTsIr = vec4( components.clearcoatRoughness, components.transmission, components.iridescenceFactor, components.iridescenceThickness );
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

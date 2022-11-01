@@ -44,7 +44,7 @@ namespace castor3d
 		eSpcRgh,
 		eEmsTrn,
 		eClrCot,
-		eCcrTrs,
+		eCrTsIr,
 		eSheen,
 		eCount,
 	};

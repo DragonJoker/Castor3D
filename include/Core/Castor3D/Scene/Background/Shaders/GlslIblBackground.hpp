@@ -49,6 +49,13 @@ namespace castor3d::shader
 			, sdw::Vec3 const & wsNormal
 			, BlendComponents & components
 			, sdw::CombinedImage2DRgba32 const & brdf )override;
+		C3D_API sdw::RetVec3 computeReflections( sdw::Vec3 const & wsIncident
+			, sdw::Vec3 const & wsNormal
+			, BlendComponents & components
+			, sdw::CombinedImage2DRgba32 const & brdf
+			, sdw::Vec3 const & iridescenceFresnel
+			, sdw::Vec3 const & iridescenceF0
+			, sdw::Float const & iridescenceFactor )override;
 
 	public:
 		static castor::String const Name;
@@ -97,6 +104,19 @@ namespace castor3d::shader
 			, sdw::InFloat
 			, sdw::InCombinedImageCubeRgba32
 			, sdw::InCombinedImage2DRgba32 > m_computeSheenReflections;
+		sdw::Function< sdw::Vec3
+			, sdw::InVec3
+			, sdw::InVec3
+			, sdw::InVec3
+			, sdw::InVec3
+			, sdw::InFloat
+			, sdw::InFloat
+			, sdw::InCombinedImageCubeRgba32
+			, sdw::InCombinedImageCubeRgba32
+			, sdw::InCombinedImage2DRgba32
+			, sdw::InVec3
+			, sdw::InVec3
+			, sdw::InFloat > m_computeIridescenceReflections;
 	};
 }
 

@@ -149,7 +149,7 @@ namespace castor3d::shader
 		C3D_API void fill( sdw::Vec3 const & albedo
 			, sdw::Vec4 const & spcRgh
 			, sdw::Vec4 const & colMtl
-			, sdw::Float const & transm
+			, sdw::Vec4 const & crTsIr
 			, sdw::Vec4 const & sheen
 			, Material & material );
 		C3D_API void apply( Material const & material

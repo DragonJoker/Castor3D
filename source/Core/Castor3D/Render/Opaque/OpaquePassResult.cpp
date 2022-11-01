@@ -30,7 +30,7 @@ namespace castor3d
 				cuT( "SpcRgh" ),
 				cuT( "EmsTrn" ),
 				cuT( "ClrCot" ),
-				cuT( "CcrTrs" ),
+				cuT( "CrTsIr" ),
 				cuT( "Sheen" ),
 			}
 		};
@@ -48,7 +48,7 @@ namespace castor3d
 				VK_FORMAT_R8G8B8A8_UNORM,
 				VK_FORMAT_R16G16B16A16_SFLOAT,
 				VK_FORMAT_R16G16B16A16_SFLOAT,
-				VK_FORMAT_R16G16_SFLOAT,
+				VK_FORMAT_R16G16B16A16_SFLOAT,
 				VK_FORMAT_R16G16B16A16_SFLOAT,
 			}
 		};

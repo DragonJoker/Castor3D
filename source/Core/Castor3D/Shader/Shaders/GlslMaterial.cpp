@@ -359,7 +359,7 @@ namespace castor3d::shader
 	void Materials::fill( sdw::Vec3 const & newAlbedo
 		, sdw::Vec4 const & spcRgh
 		, sdw::Vec4 const & colMtl
-		, sdw::Float const & transm
+		, sdw::Vec4 const & crTsIr
 		, sdw::Vec4 const & sheen
 		, Material & material )
 	{
@@ -368,7 +368,7 @@ namespace castor3d::shader
 			m_passShaders.updateMaterial( newAlbedo
 				, spcRgh
 				, colMtl
-				, transm
+				, crTsIr
 				, sheen
 				, material );
 		}

@@ -830,17 +830,37 @@ namespace toon::shader
 					auto HdotV = m_writer.declLocale( "HdotV"
 						, max( 0.0_f, dot( H, V ) ) );
 
-					m_cookTorrance.computeAON( light.base
-						, HdotV
-						, NdotH
-						, NdotV
-						, NdotL
-						, components.specular
-						, components.metalness
-						, components.roughness
-						, components.getMember< sdw::Float >( "smoothBand", true )
-						, surface
-						, output );
+					IF( m_writer, components.iridescenceFactor != 0.0_f )
+					{
+						m_cookTorrance.computeAON( light.base
+							, HdotV
+							, NdotH
+							, NdotV
+							, NdotL
+							, components.specular
+							, components.metalness
+							, components.roughness
+							, components.getMember< sdw::Float >( "smoothBand", true )
+							, components.iridescenceFresnel
+							, components.iridescenceFactor
+							, surface
+							, output );
+					}
+					ELSE
+					{
+						m_cookTorrance.computeAON( light.base
+							, HdotV
+							, NdotH
+							, NdotV
+							, NdotL
+							, components.specular
+							, components.metalness
+							, components.roughness
+							, components.getMember< sdw::Float >( "smoothBand", true )
+							, surface
+							, output );
+					}
+					FI;
 
 					IF( m_writer, components.clearcoatFactor != 0.0_f )
 					{
@@ -1045,17 +1065,37 @@ namespace toon::shader
 					auto HdotV = m_writer.declLocale( "HdotV"
 						, max( 0.0_f, dot( H, V ) ) );
 
-					m_cookTorrance.computeAON( light.base
-						, HdotV
-						, NdotH
-						, NdotV
-						, NdotL
-						, components.specular
-						, components.metalness
-						, components.roughness
-						, components.getMember< sdw::Float >( "smoothBand", true )
-						, surface
-						, output );
+					IF( m_writer, components.iridescenceFactor != 0.0_f )
+					{
+						m_cookTorrance.computeAON( light.base
+							, HdotV
+							, NdotH
+							, NdotV
+							, NdotL
+							, components.specular
+							, components.metalness
+							, components.roughness
+							, components.getMember< sdw::Float >( "smoothBand", true )
+							, components.iridescenceFresnel
+							, components.iridescenceFactor
+							, surface
+							, output );
+					}
+					ELSE
+					{
+						m_cookTorrance.computeAON( light.base
+							, HdotV
+							, NdotH
+							, NdotV
+							, NdotL
+							, components.specular
+							, components.metalness
+							, components.roughness
+							, components.getMember< sdw::Float >( "smoothBand", true )
+							, surface
+							, output );
+					}
+					FI;
 
 					IF( m_writer, components.clearcoatFactor != 0.0_f )
 					{
@@ -1180,17 +1220,37 @@ namespace toon::shader
 						auto HdotV = m_writer.declLocale( "HdotV"
 							, max( 0.0_f, dot( H, V ) ) );
 
-						m_cookTorrance.computeAON( light.base
-							, HdotV
-							, NdotH
-							, NdotV
-							, NdotL
-							, components.specular
-							, components.metalness
-							, components.roughness
-							, components.getMember< sdw::Float >( "smoothBand", true )
-							, surface
-							, output );
+						IF( m_writer, components.iridescenceFactor != 0.0_f )
+						{
+							m_cookTorrance.computeAON( light.base
+								, HdotV
+								, NdotH
+								, NdotV
+								, NdotL
+								, components.specular
+								, components.metalness
+								, components.roughness
+								, components.getMember< sdw::Float >( "smoothBand", true )
+								, components.iridescenceFresnel
+								, components.iridescenceFactor
+								, surface
+								, output );
+						}
+						ELSE
+						{
+							m_cookTorrance.computeAON( light.base
+								, HdotV
+								, NdotH
+								, NdotV
+								, NdotL
+								, components.specular
+								, components.metalness
+								, components.roughness
+								, components.getMember< sdw::Float >( "smoothBand", true )
+								, surface
+								, output );
+						}
+						FI;
 
 						IF( m_writer, components.clearcoatFactor != 0.0_f )
 						{

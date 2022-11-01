@@ -84,12 +84,15 @@ namespace castor3d::shader
 			, sdw::Float const & nearPlane
 			, sdw::Float const & farPlane
 			, sdw::UInt const & accumulationOperator );
+		C3D_API sdw::RetFloat conductorFresnel( sdw::Float const & product
+			, sdw::Float const & f0 );
 		C3D_API sdw::RetVec3 conductorFresnel( sdw::Float const & product
 			, sdw::Vec3 const & f0 );
 		C3D_API sdw::RetFloat fresnelMix( sdw::Vec3 const & incident
 			, sdw::Vec3 const & normal
 			, sdw::Float const & roughness
 			, sdw::Float const & refractionRatio );
+
 		C3D_API sdw::RetVec4 clipToScreen( sdw::Vec4 const & in );
 
 		C3D_API sdw::RetBoolean isSaturated( sdw::Vec3 const & p );
@@ -132,6 +135,22 @@ namespace castor3d::shader
 		C3D_API sdw::RetUVec3 unflatten( sdw::UInt const & p
 			, sdw::UVec3 const & dim );
 
+		sdw::RetFloat iorToFresnel0( sdw::Float const & transmittedIor
+			, sdw::Float const & incidentIor );
+		sdw::RetVec3 iorToFresnel0( sdw::Vec3 const & transmittedIor
+			, sdw::Float const & incidentIor );
+		sdw::RetVec3 fresnel0ToIor( sdw::Vec3 const & fresnel0 );
+		C3D_API sdw::RetVec3 fresnelToF0( sdw::Vec3 const & fresnel
+			, sdw::Float const & VdotH );
+		C3D_API sdw::RetVec3 evalIridescence( Utils & utils
+			, sdw::Float const & outsideIOR
+			, sdw::Float const & eta2
+			, sdw::Float const & cosTheta1
+			, sdw::Float const & thinFilmThickness
+			, sdw::Vec3 const & baseF0 );
+		C3D_API sdw::RetVec3 evalSensitivity( sdw::Float const & OPD
+			, sdw::Vec3 const & shift );
+
 		C3D_API static sdw::Mat3 getTBN( sdw::Vec3 const & normal
 			, sdw::Vec3 const & tangent
 			, sdw::Vec3 const & bitangent );
@@ -170,14 +189,20 @@ namespace castor3d::shader
 			, sdw::InFloat
 			, sdw::InFloat
 			, sdw::InUInt > m_computeAccumulation;
+		sdw::Function< sdw::Float
+			, sdw::InFloat
+			, sdw::InFloat > m_conductorFresnel1;
 		sdw::Function< sdw::Vec3
 			, sdw::InFloat
-			, sdw::InVec3 > m_conductorFresnel;
+			, sdw::InVec3 > m_conductorFresnel3;
 		sdw::Function< sdw::Float
 			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InFloat
 			, sdw::InFloat > m_fresnelMix;
+		sdw::Function< sdw::Vec3
+			, sdw::InVec3
+			, sdw::InFloat > m_fresnelToF0;
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3 > m_invertNormal;
 		sdw::Function< sdw::Boolean
@@ -211,6 +236,23 @@ namespace castor3d::shader
 			, InTextureConfigData
 			, InTextureAnimData
 			, sdw::InVec3 > m_transformUVW;
+		sdw::Function< sdw::Vec3
+			, sdw::InFloat
+			, sdw::InFloat
+			, sdw::InFloat
+			, sdw::InFloat
+			, sdw::InVec3 > m_evalIridescence;
+		sdw::Function< sdw::Vec3
+			, sdw::InFloat
+			, sdw::InVec3 > m_evalSensitivity;
+		sdw::Function< sdw::Float
+			, sdw::InFloat
+			, sdw::InFloat > m_ior1ToFresnel0;
+		sdw::Function< sdw::Vec3
+			, sdw::InVec3
+			, sdw::InFloat > m_ior3ToFresnel0;
+		sdw::Function< sdw::Vec3
+			, sdw::InVec3 > m_fresnel0ToIor;
 	};
 }
 

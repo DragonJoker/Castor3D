@@ -379,7 +379,7 @@ namespace castor3d
 				, index++ );
 			result.addOutputStorageView( opaquePassResult[DsTexture::eClrCot].targetViewId
 				, index++ );
-			result.addOutputStorageView( opaquePassResult[DsTexture::eCcrTrs].targetViewId
+			result.addOutputStorageView( opaquePassResult[DsTexture::eCrTsIr].targetViewId
 				, index++ );
 		}
 		else
@@ -394,8 +394,8 @@ namespace castor3d
 				, getClearValue( DsTexture::eEmsTrn ) );
 			result.addOutputColourView( opaquePassResult[DsTexture::eClrCot].targetViewId
 				, getClearValue( DsTexture::eClrCot ) );
-			result.addOutputColourView( opaquePassResult[DsTexture::eCcrTrs].targetViewId
-				, getClearValue( DsTexture::eCcrTrs ) );
+			result.addOutputColourView( opaquePassResult[DsTexture::eCrTsIr].targetViewId
+				, getClearValue( DsTexture::eCrTsIr ) );
 		}
 
 		return result;
@@ -502,8 +502,8 @@ namespace castor3d
 			, getClearValue( DsTexture::eEmsTrn ) );
 		result.addOutputColourView( opaquePassResult[DsTexture::eClrCot].targetViewId
 			, getClearValue( DsTexture::eClrCot ) );
-		result.addOutputColourView( opaquePassResult[DsTexture::eCcrTrs].targetViewId
-			, getClearValue( DsTexture::eCcrTrs ) );
+		result.addOutputColourView( opaquePassResult[DsTexture::eCrTsIr].targetViewId
+			, getClearValue( DsTexture::eCrTsIr ) );
 
 		CU_Require( !m_ssao );
 		m_ssao = doCreateSsaoPass( progress, result, {} );

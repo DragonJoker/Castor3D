@@ -14,6 +14,7 @@
 #include "Castor3D/Material/Pass/Component/Lighting/AttenuationComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/ClearcoatComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/EmissiveComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Lighting/IridescenceComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/MetalnessComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/RoughnessComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/SheenComponent.hpp"
@@ -29,6 +30,8 @@
 #include "Castor3D/Material/Pass/Component/Map/EmissiveMapComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Map/GlossinessMapComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Map/HeightMapComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Map/IridescenceMapComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Map/IridescenceThicknessMapComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Map/MetalnessMapComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Map/NormalMapComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Map/OcclusionMapComponent.hpp"
@@ -156,6 +159,7 @@ namespace castor3d
 		registerComponent< RefractionComponent >();
 		registerComponent< ClearcoatComponent >();
 		registerComponent< SheenComponent >();
+		registerComponent< IridescenceComponent >();
 		registerComponent< SubsurfaceScatteringComponent >();
 		// Pass shader image components
 		registerComponent< HeightMapComponent >();
@@ -176,6 +180,8 @@ namespace castor3d
 		registerComponent< ClearcoatRoughnessMapComponent >();
 		registerComponent< SheenMapComponent >();
 		registerComponent< SheenRoughnessMapComponent >();
+		registerComponent< IridescenceMapComponent >();
+		registerComponent< IridescenceThicknessMapComponent >();
 
 		m_pauseOrder = false;
 		reorderBuffer();
