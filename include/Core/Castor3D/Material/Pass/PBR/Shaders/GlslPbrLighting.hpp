@@ -105,7 +105,8 @@ namespace castor3d::shader
 			, sdw::Vec3 const & indirectAmbient
 			, sdw::Float const & ambientOcclusion
 			, sdw::Vec3 const & emissive
-			, sdw::Vec3 const & reflected
+			, sdw::Vec3 const & reflectedDiffuse
+			, sdw::Vec3 const & reflectedSpecular
 			, sdw::Vec3 const & refracted
 			, sdw::Vec3 const & coatReflected
 			, sdw::Vec3 const & sheenReflected )override;

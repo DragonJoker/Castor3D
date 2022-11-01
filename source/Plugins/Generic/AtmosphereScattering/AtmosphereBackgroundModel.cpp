@@ -59,23 +59,6 @@ namespace atmosphere_scattering
 			, set );
 	}
 
-	sdw::RetVec3 AtmosphereBackgroundModel::computeReflections( sdw::Vec3 const & wsIncident
-		, sdw::Vec3 const & wsNormal
-		, castor3d::shader::BlendComponents & components
-		, sdw::CombinedImage2DRgba32 const & brdf )
-	{
-		if ( !m_computeReflections )
-		{
-			m_computeReflections = m_writer.implementFunction< sdw::Vec3 >( "c3d_atmbg_computeReflections"
-				, [&]()
-				{
-					m_writer.returnStmt( vec3( 0.0_f ) );
-				} );
-		}
-
-		return m_computeReflections();
-	}
-
 	sdw::RetVec3 AtmosphereBackgroundModel::computeRefractions( sdw::Vec3 const & wsIncident
 		, sdw::Vec3 const & wsNormal
 		, sdw::Float const & refractionRatio

@@ -33,7 +33,41 @@ namespace castor3d::shader
 			return;
 		}
 
-		m_computeReflEnvMaps = m_writer.implementFunction< sdw::Vec3 >( "c3d_pbr_computeReflEnvMap"
+		m_computeReflEnvMaps = m_writer.implementFunction< sdw::Void >( "c3d_pbr_computeReflEnvMap"
+			, [&]( sdw::Vec3 const & wsIncident
+				, sdw::Vec3 const & wsNormal
+				, sdw::CombinedImageCubeArrayRgba32 const & envMap
+				, sdw::UInt const & envMapIndex
+				, sdw::Vec3 const & specular
+				, sdw::Float const & roughness
+				, sdw::Vec3 reflectedDiffuse
+				, sdw::Vec3 reflectedSpecular )
+			{
+				auto reflected = m_writer.declLocale( "reflected"
+					, reflect( wsIncident, wsNormal ) );
+				auto radiance = m_writer.declLocale( "radiance"
+					, envMap.lod( vec4( reflected, m_writer.cast< sdw::Float >( envMapIndex ) )
+						, roughness * sdw::Float( float( EnvironmentMipLevels ) ) ).xyz() );
+				reflectedSpecular = radiance * specular;
+			}
+			, sdw::InVec3{ m_writer, "wsIncident" }
+			, sdw::InVec3{ m_writer, "wsNormal" }
+			, sdw::InCombinedImageCubeArrayRgba32{ m_writer, "envMap" }
+			, sdw::InUInt{ m_writer, "envMapIndex" }
+			, sdw::InVec3{ m_writer, "specular" }
+			, sdw::InFloat{ m_writer, "roughness" }
+			, sdw::OutVec3{ m_writer, "reflectedDiffuse" }
+			, sdw::OutVec3{ m_writer, "reflectedSpecular" } );
+	}
+
+	void PbrReflectionModel::doDeclareComputeSpecularReflEnvMaps()
+	{
+		if ( m_computeSpecularReflEnvMaps )
+		{
+			return;
+		}
+
+		m_computeSpecularReflEnvMaps = m_writer.implementFunction< sdw::Vec3 >( "c3d_pbr_computeSpecularReflEnvMap"
 			, [&]( sdw::Vec3 const & wsIncident
 				, sdw::Vec3 const & wsNormal
 				, sdw::CombinedImageCubeArrayRgba32 const & envMap

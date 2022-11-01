@@ -22,6 +22,7 @@ namespace castor3d::shader
 
 	private:
 		void doDeclareComputeReflEnvMaps()override;
+		void doDeclareComputeSpecularReflEnvMaps()override;
 		void doDeclareComputeRefrEnvMaps()override;
 	};
 }

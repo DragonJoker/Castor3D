@@ -45,14 +45,16 @@ namespace castor3d::shader
 			, set );
 	}
 
-	sdw::RetVec3 IblBackgroundModel::computeReflections( sdw::Vec3 const & pwsIncident
+	void IblBackgroundModel::computeReflections( sdw::Vec3 const & pwsIncident
 		, sdw::Vec3 const & pwsNormal
 		, BlendComponents & components
-		, sdw::CombinedImage2DRgba32 const & pbrdfMap )
+		, sdw::CombinedImage2DRgba32 const & pbrdfMap
+		, sdw::Vec3 & preflectedDiffuse
+		, sdw::Vec3 & preflectedSpecular )
 	{
 		if ( !m_computeReflections )
 		{
-			m_computeReflections = m_writer.implementFunction< sdw::Vec3 >( "c3d_iblbg_computeReflections"
+			m_computeReflections = m_writer.implementFunction< sdw::Void >( "c3d_iblbg_computeReflections"
 				, [&]( sdw::Vec3 const & wsIncident
 					, sdw::Vec3 const & wsNormal
 					, sdw::Vec3 const & albedo
@@ -61,7 +63,9 @@ namespace castor3d::shader
 					, sdw::Float const & roughness
 					, sdw::CombinedImageCubeRgba32 const & irradianceMap
 					, sdw::CombinedImageCubeRgba32 const & prefilteredEnvMap
-					, sdw::CombinedImage2DRgba32 const & brdfMap )
+					, sdw::CombinedImage2DRgba32 const & brdfMap
+					, sdw::Vec3 reflectedDiffuse
+					, sdw::Vec3 reflectedSpecular )
 				{
 					auto V = m_writer.declLocale( "V"
 						, -wsIncident );
@@ -71,32 +75,26 @@ namespace castor3d::shader
 						, m_utils.conductorFresnel( NdotV, specular ) );
 					auto kS = m_writer.declLocale( "kS"
 						, F );
+
 					auto kD = m_writer.declLocale( "kD"
 						, vec3( 1.0_f ) - kS );
 					kD *= 1.0_f - metalness;
-
 					auto irradiance = m_writer.declLocale( "irradiance"
 						, irradianceMap.sample( vec3( wsNormal.x(), -wsNormal.y(), wsNormal.z() ) ).rgb() );
-					auto diffuseReflection = m_writer.declLocale( "diffuseReflection"
-						, irradiance * albedo );
+					reflectedDiffuse = kD * irradiance * albedo;
+
 					auto R = m_writer.declLocale( "R"
 						, reflect( -V, wsNormal ) );
 					R.y() = -R.y();
-
 					auto prefilteredColor = m_writer.declLocale( "prefilteredColor"
 						, prefilteredEnvMap.lod( R, roughness * sdw::Float( float( MaxIblReflectionLod ) ) ).rgb() );
 					auto envBRDFCoord = m_writer.declLocale( "envBRDFCoord"
 						, vec2( NdotV, roughness ) );
 					auto envBRDF = m_writer.declLocale( "envBRDF"
 						, brdfMap.sample( envBRDFCoord ) );
-					auto specularReflection = m_writer.declLocale( "specularReflection"
-						, prefilteredColor * sdw::fma( kS
+					reflectedSpecular = prefilteredColor * sdw::fma( kS
 							, vec3( envBRDF.x() )
-							, vec3( envBRDF.y() ) ) );
-
-					m_writer.returnStmt( sdw::fma( kD
-						, diffuseReflection
-						, specularReflection ) );
+							, vec3( envBRDF.y() ) );
 				}
 				, sdw::InVec3{ m_writer, "wsIncident" }
 				, sdw::InVec3{ m_writer, "wsNormal" }
@@ -106,12 +104,14 @@ namespace castor3d::shader
 				, sdw::InFloat{ m_writer, "roughness" }
 				, sdw::InCombinedImageCubeRgba32{ m_writer, "irradianceMap" }
 				, sdw::InCombinedImageCubeRgba32{ m_writer, "prefilteredEnvMap" }
-				, sdw::InCombinedImage2DRgba32{ m_writer, "brdfMap" } );
+				, sdw::InCombinedImage2DRgba32{ m_writer, "brdfMap" }
+				, sdw::OutVec3{ m_writer, "reflectedDiffuse" }
+				, sdw::OutVec3{ m_writer, "reflectedSpecular" } );
 		}
 
 		auto irradianceMap = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapIrradiance" );
 		auto prefilteredEnvMap = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapPrefiltered" );
-		return m_computeReflections( pwsIncident
+		m_computeReflections( pwsIncident
 			, pwsNormal
 			, components.colour
 			, components.specular
@@ -119,7 +119,9 @@ namespace castor3d::shader
 			, components.roughness
 			, irradianceMap
 			, prefilteredEnvMap
-			, pbrdfMap );
+			, pbrdfMap
+			, preflectedDiffuse
+			, preflectedSpecular );
 	}
 
 	sdw::RetVec3 IblBackgroundModel::computeRefractions( sdw::Vec3 const & pwsIncident
@@ -217,7 +219,7 @@ namespace castor3d::shader
 
 		auto irradianceMap = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapIrradiance" );
 		auto prefilteredEnvMap = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapPrefiltered" );
-		return m_computeReflections( pwsIncident
+		return m_computeSpecularReflections( pwsIncident
 			, pwsNormal
 			, components.colour
 			, pspecular
@@ -342,17 +344,19 @@ namespace castor3d::shader
 			, pbrdfMap );
 	}
 
-	sdw::RetVec3 IblBackgroundModel::computeReflections( sdw::Vec3 const & pwsIncident
+	void IblBackgroundModel::computeIridescenceReflections( sdw::Vec3 const & pwsIncident
 		, sdw::Vec3 const & pwsNormal
 		, BlendComponents & components
 		, sdw::CombinedImage2DRgba32 const & pbrdfMap
 		, sdw::Vec3 const & piridescenceFresnel
 		, sdw::Vec3 const & piridescenceF0
-		, sdw::Float const & piridescenceFactor )
+		, sdw::Float const & piridescenceFactor
+		, sdw::Vec3 & preflectedDiffuse
+		, sdw::Vec3 & preflectedSpecular )
 	{
 		if ( !m_computeIridescenceReflections )
 		{
-			m_computeIridescenceReflections = m_writer.implementFunction< sdw::Vec3 >( "c3d_iblbg_computeIridescenceReflections"
+			m_computeIridescenceReflections = m_writer.implementFunction< sdw::Void >( "c3d_iblbg_computeIridescenceReflections"
 				, [&]( sdw::Vec3 const & wsIncident
 					, sdw::Vec3 const & wsNormal
 					, sdw::Vec3 const & albedo
@@ -364,7 +368,9 @@ namespace castor3d::shader
 					, sdw::CombinedImage2DRgba32 const & brdfMap
 					, sdw::Vec3 const & iridescenceFresnel
 					, sdw::Vec3 const & iridescenceF0
-					, sdw::Float const & iridescenceFactor )
+					, sdw::Float const & iridescenceFactor
+					, sdw::Vec3 reflectedDiffuse
+					, sdw::Vec3 reflectedSpecular )
 				{
 					auto V = m_writer.declLocale( "V"
 						, -wsIncident );
@@ -394,8 +400,7 @@ namespace castor3d::shader
 
 					auto irradiance = m_writer.declLocale( "irradiance"
 						, irradianceMap.sample( vec3( wsNormal.x(), -wsNormal.y(), wsNormal.z() ) ).rgb() );
-					auto diffuseReflection = m_writer.declLocale( "diffuseReflection"
-						, irradiance * albedo );
+					reflectedDiffuse = kD * irradiance * albedo;
 
 					auto R = m_writer.declLocale( "R"
 						, reflect( -V, wsNormal ) );
@@ -407,14 +412,9 @@ namespace castor3d::shader
 						, vec2( NdotV, roughness ) );
 					auto envBRDF = m_writer.declLocale( "envBRDF"
 						, brdfMap.sample( envBRDFCoord ) );
-					auto specularReflection = m_writer.declLocale( "specularReflection"
-						, prefilteredColor * sdw::fma( speckS
-							, vec3( envBRDF.x() )
-							, vec3( envBRDF.y() ) ) );
-
-					m_writer.returnStmt( sdw::fma( kD
-						, diffuseReflection
-						, specularReflection ) );
+					reflectedSpecular = prefilteredColor * sdw::fma( speckS
+						, vec3( envBRDF.x() )
+						, vec3( envBRDF.y() ) );
 				}
 				, sdw::InVec3{ m_writer, "wsIncident" }
 				, sdw::InVec3{ m_writer, "wsNormal" }
@@ -427,12 +427,14 @@ namespace castor3d::shader
 				, sdw::InCombinedImage2DRgba32{ m_writer, "brdfMap" }
 				, sdw::InVec3{ m_writer, "iridescenceFresnel" }
 				, sdw::InVec3{ m_writer, "iridescenceF0" }
-				, sdw::InFloat{ m_writer, "iridescenceFactor" } );
+				, sdw::InFloat{ m_writer, "iridescenceFactor" }
+				, sdw::OutVec3{ m_writer, "reflectedDiffuse" }
+				, sdw::OutVec3{ m_writer, "reflectedSpecular" } );
 		}
 
 		auto irradianceMap = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapIrradiance" );
 		auto prefilteredEnvMap = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapPrefiltered" );
-		return m_computeIridescenceReflections( pwsIncident
+		m_computeIridescenceReflections( pwsIncident
 			, pwsNormal
 			, components.colour
 			, components.specular
@@ -443,6 +445,8 @@ namespace castor3d::shader
 			, pbrdfMap
 			, piridescenceFresnel
 			, piridescenceF0
-			, piridescenceFactor );
+			, piridescenceFactor
+			, preflectedDiffuse
+			, preflectedSpecular );
 	}
 }

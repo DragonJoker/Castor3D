@@ -26,31 +26,35 @@ namespace castor3d::shader
 			, sdw::CombinedImage2DRgba32 const & mippedScene
 			, MatrixData const & matrices
 			, sdw::Vec2 const & sceneUv
-			, sdw::UInt envMapIndex
+			, sdw::UInt const & envMapIndex
 			, sdw::UInt const & hasReflection
 			, sdw::Float const & refractionRatio
 			, sdw::Vec3 & ambient
-			, sdw::Vec3 & reflected
+			, sdw::Vec3 & reflectedDiffuse
+			, sdw::Vec3 & reflectedSpecular
 			, sdw::Vec3 & refracted
 			, sdw::Vec3 & coatReflected
 			, sdw::Vec3 & sheenReflected );
 		C3D_API void computeCombined( BlendComponents & components
 			, sdw::Vec3 const & incident
 			, BackgroundModel & background
-			, sdw::UInt envMapIndex
+			, sdw::UInt const & envMapIndex
 			, sdw::UInt const & hasReflection
 			, sdw::Float const & refractionRatio
 			, sdw::Vec3 & ambient
-			, sdw::Vec3 & reflected
+			, sdw::Vec3 & reflectedDiffuse
+			, sdw::Vec3 & reflectedSpecular
 			, sdw::Vec3 & refracted
 			, sdw::Vec3 & coatReflected
 			, sdw::Vec3 & sheenReflected );
-		C3D_API sdw::Vec3 computeReflections( BlendComponents & components
+		C3D_API void computeReflections( BlendComponents & components
 			, Surface const & surface
 			, SceneData const & sceneData
 			, BackgroundModel & background
 			, sdw::UInt envMapIndex
-			, sdw::UInt const & reflection );
+			, sdw::UInt const & reflection
+			, sdw::Vec3 & reflectedDiffuse
+			, sdw::Vec3 & reflectedSpecular );
 		C3D_API sdw::Vec3 computeRefractions( BlendComponents & components
 			, Surface const & surface
 			, SceneData const & sceneData
@@ -119,7 +123,15 @@ namespace castor3d::shader
 			, sdw::Vec3 & csHitPoint );
 
 	private:
-		sdw::RetVec3 computeReflEnvMaps( sdw::Vec3 const & wsIncident
+		void computeReflEnvMaps( sdw::Vec3 const & wsIncident
+			, sdw::Vec3 const & wsNormal
+			, sdw::Float const & roughness
+			, sdw::CombinedImageCubeArrayRgba32 const & envMap
+			, sdw::UInt const & envMapIndex
+			, BlendComponents & components
+			, sdw::Vec3 & reflectedDiffuse
+			, sdw::Vec3 & reflectedSpecular );
+		sdw::RetVec3 computeSpecularReflEnvMaps( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::Float const & roughness
 			, sdw::CombinedImageCubeArrayRgba32 const & envMap
@@ -155,6 +167,7 @@ namespace castor3d::shader
 
 		virtual void doDeclareComputeReflEnvMaps() = 0;
 		virtual void doDeclareComputeRefrEnvMaps() = 0;
+		virtual void doDeclareComputeSpecularReflEnvMaps() = 0;
 
 	protected:
 		C3D_API sdw::RetVec3 doComputeRefrEnvMaps( sdw::Vec3 const & wsIncident
@@ -169,6 +182,33 @@ namespace castor3d::shader
 		sdw::ShaderWriter & m_writer;
 		Utils & m_utils;
 		bool m_hasIblSupport;
+		sdw::Function< sdw::Void
+			, InOutBlendComponents
+			, sdw::InVec3
+			, sdw::InVec3
+			, sdw::InCombinedImage2DRgba32
+			, sdw::InVec2
+			, sdw::InUInt
+			, sdw::InUInt
+			, sdw::InFloat
+			, sdw::OutVec3
+			, sdw::OutVec3
+			, sdw::OutVec3
+			, sdw::OutVec3
+			, sdw::OutVec3
+			, sdw::OutVec3 > m_computeDeferred;
+		sdw::Function< sdw::Void
+			, InOutBlendComponents
+			, sdw::InVec3
+			, sdw::InUInt
+			, sdw::InUInt
+			, sdw::InFloat
+			, sdw::OutVec3
+			, sdw::OutVec3
+			, sdw::OutVec3
+			, sdw::OutVec3
+			, sdw::OutVec3
+			, sdw::OutVec3 > m_computeForward;
 
 		sdw::Function< sdw::Boolean
 			, sdw::InVec3
@@ -195,13 +235,22 @@ namespace castor3d::shader
 			, sdw::InCombinedImage2DRgba32
 			, sdw::InCombinedImage2DRgba32 > m_computeScreenSpace;
 
+		sdw::Function< sdw::Void
+			, sdw::InVec3
+			, sdw::InVec3
+			, sdw::InCombinedImageCubeArrayRgba32
+			, sdw::InUInt
+			, sdw::InVec3
+			, sdw::InFloat
+			, sdw::OutVec3
+			, sdw::OutVec3 > m_computeReflEnvMaps;
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InCombinedImageCubeArrayRgba32
 			, sdw::InUInt
 			, sdw::InVec3
-			, sdw::InFloat > m_computeReflEnvMaps;
+			, sdw::InFloat > m_computeSpecularReflEnvMaps;
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3
 			, sdw::InVec3
@@ -223,6 +272,7 @@ namespace castor3d::shader
 			, sdw::InCombinedImage2DRgba32
 			, sdw::InVec2
 			, sdw::InFloat
+			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InFloat
 			, sdw::InFloat

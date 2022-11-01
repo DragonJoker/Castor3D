@@ -24,10 +24,12 @@ namespace castor3d::shader
 			, uint32_t & binding
 			, uint32_t set );
 
-		C3D_API sdw::RetVec3 computeReflections( sdw::Vec3 const & wsIncident
+		C3D_API void computeReflections( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, BlendComponents & components
-			, sdw::CombinedImage2DRgba32 const & brdf )override;
+			, sdw::CombinedImage2DRgba32 const & brdf
+			, sdw::Vec3 & reflectedDiffuse
+			, sdw::Vec3 & reflectedSpecular )override;
 		C3D_API sdw::RetVec3 computeRefractions( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::Float const & refractionRatio
@@ -49,19 +51,21 @@ namespace castor3d::shader
 			, sdw::Vec3 const & wsNormal
 			, BlendComponents & components
 			, sdw::CombinedImage2DRgba32 const & brdf )override;
-		C3D_API sdw::RetVec3 computeReflections( sdw::Vec3 const & wsIncident
+		C3D_API void computeIridescenceReflections( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, BlendComponents & components
 			, sdw::CombinedImage2DRgba32 const & brdf
 			, sdw::Vec3 const & iridescenceFresnel
 			, sdw::Vec3 const & iridescenceF0
-			, sdw::Float const & iridescenceFactor )override;
+			, sdw::Float const & iridescenceFactor
+			, sdw::Vec3 & reflectedDiffuse
+			, sdw::Vec3 & reflectedSpecular )override;
 
 	public:
 		static castor::String const Name;
 
 	private:
-		sdw::Function< sdw::Vec3
+		sdw::Function< sdw::Void
 			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InVec3
@@ -70,7 +74,9 @@ namespace castor3d::shader
 			, sdw::InFloat
 			, sdw::InCombinedImageCubeRgba32
 			, sdw::InCombinedImageCubeRgba32
-			, sdw::InCombinedImage2DRgba32 > m_computeReflections;
+			, sdw::InCombinedImage2DRgba32
+			, sdw::OutVec3
+			, sdw::OutVec3 > m_computeReflections;
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3
 			, sdw::InVec3
@@ -104,7 +110,7 @@ namespace castor3d::shader
 			, sdw::InFloat
 			, sdw::InCombinedImageCubeRgba32
 			, sdw::InCombinedImage2DRgba32 > m_computeSheenReflections;
-		sdw::Function< sdw::Vec3
+		sdw::Function< sdw::Void
 			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InVec3
@@ -116,7 +122,9 @@ namespace castor3d::shader
 			, sdw::InCombinedImage2DRgba32
 			, sdw::InVec3
 			, sdw::InVec3
-			, sdw::InFloat > m_computeIridescenceReflections;
+			, sdw::InFloat
+			, sdw::OutVec3
+			, sdw::OutVec3 > m_computeIridescenceReflections;
 	};
 }
 
