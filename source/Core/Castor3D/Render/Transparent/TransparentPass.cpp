@@ -319,13 +319,13 @@ namespace castor3d
 					, in.passMultipliers
 					, components );
 
-				auto worldEye = writer.declLocale( "worldEye"
-					, c3d_sceneData.cameraPosition );
 				auto colour = writer.declLocale( "colour"
 					, vec3( 0.0_f ) );
 
 				IF( writer, material.lighting != 0_u )
 				{
+					auto worldEye = writer.declLocale( "worldEye"
+						, c3d_sceneData.cameraPosition );
 					auto lightDiffuse = writer.declLocale( "lightDiffuse"
 						, vec3( 0.0_f ) );
 					auto lightSpecular = writer.declLocale( "lightSpecular"
@@ -423,12 +423,13 @@ namespace castor3d
 						, lightIndirectDiffuse.w()
 						, c3d_mapBrdf );
 					auto indirectAmbient = writer.declLocale( "indirectAmbient"
-						, indirect.computeAmbient( flags.getGlobalIlluminationFlags(), lightIndirectDiffuse.xyz() ) );
+						, indirect.computeAmbient( flags.getGlobalIlluminationFlags()
+							, lightIndirectDiffuse.xyz() ) );
 					auto indirectDiffuse = writer.declLocale( "indirectDiffuse"
 						, ( hasDiffuseGI
 							? cookTorrance.computeDiffuse( lightIndirectDiffuse.xyz()
 								, c3d_sceneData.cameraPosition
-								, surface.normal
+								, components.normal
 								, components.specular
 								, components.metalness
 								, surface )
