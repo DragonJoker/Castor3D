@@ -263,6 +263,11 @@ namespace castor3d
 							, surface
 							, clrCot } );
 
+					IF( writer, components.iridescenceThickness == 0.0_f )
+					{
+						components.iridescenceFactor = 0.0_f;
+					}
+					FI;
 					IF( writer, components.iridescenceFactor != 0.0_f )
 					{
 						auto incident = writer.declLocale( "incident"
