@@ -115,7 +115,8 @@ namespace castor3d
 		{
 			auto iridescenceMinThickness = components.getMember< sdw::Float >( "iridescenceMinThickness" );
 			auto iridescenceMaxThickness = components.getMember< sdw::Float >( "iridescenceMaxThickness" );
-			iridescenceMaxThickness = mix( iridescenceMinThickness
+			auto iridescenceThickness = components.getMember< sdw::Float >( "iridescenceThickness" );
+			iridescenceThickness = mix( iridescenceMinThickness
 				, iridescenceMaxThickness
 				, config.getFloat( sampled, imgCompConfig.z() ) );
 		}
