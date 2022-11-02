@@ -56,6 +56,7 @@ namespace castor3d::shader
 				{
 					auto reflected = m_writer.declLocale( "reflected"
 						, reflect( wsIncident, wsNormal ) );
+					reflectedDiffuse = vec3( 0.0_f );
 					reflectedSpecular = backgroundMap.lod( reflected, roughness * 8.0_f ).xyz() * specular;
 				}
 				, sdw::InVec3{ m_writer, "wsIncident" }

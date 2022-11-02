@@ -38,6 +38,8 @@ namespace castor3d::shader
 		, sdw::Vec3 & reflectedDiffuse
 		, sdw::Vec3 & reflectedSpecular )
 	{
+		reflectedDiffuse = vec3( 0.0_f );
+		reflectedSpecular = vec3( 0.0_f );
 	}
 
 	sdw::RetVec3 BackgroundModel::computeSpecularReflections( sdw::Vec3 const & wsIncident
@@ -79,5 +81,7 @@ namespace castor3d::shader
 		, sdw::Vec3 & reflectedDiffuse
 		, sdw::Vec3 & reflectedSpecular )
 	{
+		reflectedDiffuse = vec3( 0.0_f );
+		reflectedSpecular = vec3( 0.0_f );
 	}
 }

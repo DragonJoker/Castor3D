@@ -49,6 +49,7 @@ namespace castor3d::shader
 			{
 				auto reflected = m_writer.declLocale( "reflected"
 					, reflect( wsIncident, wsNormal ) );
+				reflectedDiffuse = vec3( 0.0_f );
 				reflectedSpecular = specular
 					* envMap.lod( vec4( reflected, m_writer.cast< sdw::Float >( envMapIndex ) )
 						, roughness * sdw::Float( float( EnvironmentMipLevels ) ) ).xyz();
