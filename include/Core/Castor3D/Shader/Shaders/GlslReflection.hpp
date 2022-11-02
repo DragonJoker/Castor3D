@@ -196,7 +196,7 @@ namespace castor3d::shader
 			, sdw::OutVec3
 			, sdw::OutVec3
 			, sdw::OutVec3
-			, sdw::OutVec3 > m_computeDeferred;
+			, sdw::OutVec3 > m_computeForward;
 		sdw::Function< sdw::Void
 			, InOutBlendComponents
 			, sdw::InVec3
@@ -208,7 +208,7 @@ namespace castor3d::shader
 			, sdw::OutVec3
 			, sdw::OutVec3
 			, sdw::OutVec3
-			, sdw::OutVec3 > m_computeForward;
+			, sdw::OutVec3 > m_computeDeferred;
 
 		sdw::Function< sdw::Boolean
 			, sdw::InVec3

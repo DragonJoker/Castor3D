@@ -218,14 +218,13 @@ namespace castor3d
 					, modelData.getMaterialId()
 					, in.passMultipliers
 					, components );
+				auto incident = writer.declLocale( "incident"
+					, reflections->computeIncident( in.worldPosition.xyz(), c3d_sceneData.cameraPosition ) );
 
 				if ( !checkFlag( m_filters, RenderFilter::eOpaque ) )
 				{
 					if ( components.transmission.isEnabled() )
 					{
-						auto incident = writer.declLocale( "incident"
-							, normalize( in.worldPosition.xyz() - c3d_sceneData.cameraPosition ) );
-
 						IF( writer, lightingModel->getFinalTransmission( components, incident ) >= 0.1_f )
 						{
 							writer.demote();
@@ -254,8 +253,6 @@ namespace castor3d
 							, in.viewPosition.xyz()
 							, in.worldPosition.xyz()
 							, components.normal } );
-					auto incident = writer.declLocale( "incident"
-						, reflections->computeIncident( surface.worldPosition.xyz(), c3d_sceneData.cameraPosition ) );
 
 					IF( writer, components.iridescenceThickness == 0.0_f )
 					{
@@ -296,12 +293,18 @@ namespace castor3d
 						, vec3( 0.0_f ) );
 					auto sheenReflected = writer.declLocale( "sheenReflected"
 						, vec3( 0.0_f ) );
+
+					if ( components.hasMember( "thicknessFactor" ) )
+					{
+						components.thicknessFactor *= length( modelData.getScale() );
+					}
+
 					reflections->computeCombined( components
 						, incident
 						, *backgroundModel
 						, modelData.getEnvMapIndex()
-						, material.hasReflection
-						, material.refractionRatio
+						, components.hasReflection
+						, components.refractionRatio
 						, directAmbient
 						, reflectedDiffuse
 						, reflectedSpecular

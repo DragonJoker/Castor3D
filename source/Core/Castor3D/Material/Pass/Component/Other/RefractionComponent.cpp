@@ -3,7 +3,6 @@
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Pass/PassVisitor.hpp"
 #include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
-#include "Castor3D/Material/Pass/Component/Map/MetalnessMapComponent.hpp"
 #include "Castor3D/Scene/SceneFileParser.hpp"
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"

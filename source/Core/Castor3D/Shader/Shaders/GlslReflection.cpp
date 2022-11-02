@@ -36,9 +36,9 @@ namespace castor3d::shader
 		, sdw::Vec3 & pcoatReflected
 		, sdw::Vec3 & psheenReflected )
 	{
-		if ( !m_computeDeferred )
+		if ( !m_computeForward )
 		{
-			m_computeDeferred = m_writer.implementFunction< sdw::Void >( "c3d_computeReflRefr"
+			m_computeForward = m_writer.implementFunction< sdw::Void >( "c3d_computeReflRefrForward"
 				, [&]( BlendComponents components
 					, sdw::Vec3 const & incident
 					, sdw::Vec3 const & position
@@ -242,7 +242,7 @@ namespace castor3d::shader
 				, sdw::OutVec3{ m_writer, "sheenReflected" } );
 		}
 
-		m_computeDeferred( pcomponents
+		m_computeForward( pcomponents
 			, pincident
 			, pposition
 			, pmippedScene
@@ -271,9 +271,9 @@ namespace castor3d::shader
 		, sdw::Vec3 & pcoatReflected
 		, sdw::Vec3 & psheenReflected )
 	{
-		if ( !m_computeForward )
+		if ( !m_computeDeferred )
 		{
-			m_computeForward = m_writer.implementFunction< sdw::Void >( "c3d_computeReflRefr"
+			m_computeDeferred = m_writer.implementFunction< sdw::Void >( "c3d_computeReflRefrDeferred"
 				, [&]( BlendComponents components
 					, sdw::Vec3 const & incident
 					, sdw::UInt envMapIndex
@@ -456,7 +456,7 @@ namespace castor3d::shader
 				, sdw::OutVec3{ m_writer, "sheenReflected" } );
 		}
 
-		m_computeForward( pcomponents
+		m_computeDeferred( pcomponents
 			, pincident
 			, penvMapIndex
 			, phasReflection

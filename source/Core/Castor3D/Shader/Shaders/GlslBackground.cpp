@@ -3,7 +3,7 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
-#include <ShaderWriter/Intrinsics/IntrinsicFunctions.hpp>
+#include <ShaderWriter/Intrinsics/Intrinsics.hpp>
 
 namespace castor3d::shader
 {
