@@ -857,7 +857,7 @@ namespace castor3d
 					passShaders.updateOutputs( components, surface, outSpcRgh, outColMtl, outSheen );
 					outEmsTrn = vec4( components.emissive, components.transmittance );
 					outClrCot = vec4( components.clearcoatNormal, components.clearcoatFactor );
-					outCrTsIr = vec4( components.clearcoatRoughness, components.transmittance, components.iridescenceFactor, components.iridescenceThickness );
+					outCrTsIr = vec4( components.clearcoatRoughness, components.transmission, components.iridescenceFactor, components.iridescenceThickness );
 					writer.returnStmt( 1_b );
 				}
 				, sdw::InIVec2{ writer, "ipixel" }

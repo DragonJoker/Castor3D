@@ -48,6 +48,7 @@ namespace castor3d::shader
 				auto radiance = m_writer.declLocale( "radiance"
 					, envMap.lod( vec4( reflected, m_writer.cast< sdw::Float >( envMapIndex ) )
 						, roughness * sdw::Float( float( EnvironmentMipLevels ) ) ).xyz() );
+				reflectedDiffuse = vec3( 0.0_f );
 				reflectedSpecular = radiance * specular;
 			}
 			, sdw::InVec3{ m_writer, "wsIncident" }

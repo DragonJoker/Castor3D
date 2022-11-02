@@ -881,7 +881,7 @@ namespace castor3d::shader
 	{
 		auto diffuseBrdf = m_writer.declLocale( "diffuseBrdf"
 			, components.colour * ( directDiffuse + ( indirectDiffuse * ambientOcclusion ) )
-				+ ( reflectedDiffuse * ambientOcclusion ) );
+				+ ( reflectedDiffuse * adjustDirectAmbient( components, directAmbient ) * indirectAmbient * ambientOcclusion ) );
 		auto specularBrdf = m_writer.declLocale( "specularBrdf"
 			, ( reflectedSpecular * adjustDirectAmbient( components, directAmbient ) * indirectAmbient * ambientOcclusion )
 			+ adjustDirectSpecular( components, directSpecular ) + ( indirectSpecular * ambientOcclusion ) );
