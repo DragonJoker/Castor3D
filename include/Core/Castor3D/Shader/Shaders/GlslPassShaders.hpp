@@ -83,6 +83,10 @@ namespace castor3d::shader
 			, BlendComponents & components )const;
 		C3D_API void updateComponents( TextureCombine const & combine
 			, BlendComponents & components )const;
+		C3D_API void finishComponents( SurfaceBase const & surface
+			, sdw::Vec3 const worldEye
+			, Utils & utils
+			, BlendComponents & components )const;
 		C3D_API std::map< uint32_t, PassComponentTextureFlag > getTexcoordModifs( PipelineFlags const & flags )const;
 		C3D_API std::map< uint32_t, PassComponentTextureFlag > getTexcoordModifs( TextureCombine const & combine )const;
 		C3D_API void computeTexcoord( TextureCombine const & combine
@@ -151,6 +155,7 @@ namespace castor3d::shader
 		Utils & m_utils;
 		PassComponentRegister const & m_compRegister;
 		std::vector< UpdateComponent > m_updateComponents;
+		std::vector< FinishComponent > m_finishComponents;
 		std::vector< PassComponentsShaderPtr > m_shaders;
 		ComponentModeFlags m_filter;
 		bool m_opacity{};

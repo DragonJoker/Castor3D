@@ -56,8 +56,10 @@ namespace castor3d::shader
 				{
 					auto brdf = m_writer.getVariable< sdw::CombinedImage2DRgba32 >( "c3d_mapBrdf" );
 					auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
+					auto hasEnvmap = m_writer.declLocale( "hasEnvmap"
+						, envMapIndex > 0_u );
 
-					IF( m_writer, envMapIndex > 0_u )
+					IF( m_writer, hasEnvmap )
 					{
 						envMapIndex = envMapIndex - 1_u;
 						doAdjustAmbient( ambient );
@@ -149,7 +151,7 @@ namespace castor3d::shader
 					{
 						IF( m_writer, refractionRatio != 0.0_f )
 						{
-							IF( m_writer, envMapIndex > 0_u )
+							IF( m_writer, hasEnvmap )
 							{
 								refracted = computeRefrEnvMaps( incident
 									, components.normal
@@ -173,9 +175,8 @@ namespace castor3d::shader
 
 					IF( m_writer, components.clearcoatFactor != 0.0_f )
 					{
-						IF( m_writer, envMapIndex > 0_u && hasReflection != 0_u )
+						IF( m_writer, hasEnvmap && hasReflection != 0_u )
 						{
-							envMapIndex = envMapIndex - 1_u;
 							auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
 							coatReflected = computeSpecularReflEnvMaps( incident
 								, components.clearcoatNormal
@@ -202,9 +203,8 @@ namespace castor3d::shader
 
 					IF( m_writer, !all( components.sheenFactor == vec3( 0.0_f ) ) )
 					{
-						IF( m_writer, envMapIndex > 0_u && hasReflection != 0_u )
+						IF( m_writer, hasEnvmap && hasReflection != 0_u )
 						{
-							envMapIndex = envMapIndex - 1_u;
 							auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
 							sheenReflected = computeSheenReflEnvMaps( incident
 								, components.normal
@@ -288,8 +288,10 @@ namespace castor3d::shader
 				{
 					auto brdf = m_writer.getVariable< sdw::CombinedImage2DRgba32 >( "c3d_mapBrdf" );
 					auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
+					auto hasEnvmap = m_writer.declLocale( "hasEnvmap"
+						, envMapIndex > 0_u );
 
-					IF( m_writer, envMapIndex > 0_u )
+					IF( m_writer, hasEnvmap )
 					{
 						envMapIndex = envMapIndex - 1_u;
 						doAdjustAmbient( ambient );
@@ -368,7 +370,7 @@ namespace castor3d::shader
 
 					IF( m_writer, refractionRatio != 0.0_f )
 					{
-						IF( m_writer, envMapIndex > 0_u )
+						IF( m_writer, hasEnvmap )
 						{
 							refracted = computeRefrEnvMaps( incident
 								, components.normal
@@ -390,9 +392,8 @@ namespace castor3d::shader
 
 					IF( m_writer, components.clearcoatFactor != 0.0_f )
 					{
-						IF( m_writer, envMapIndex > 0_u && hasReflection != 0_u )
+						IF( m_writer, hasEnvmap && hasReflection != 0_u )
 						{
-							envMapIndex = envMapIndex - 1_u;
 							auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
 							coatReflected = computeSpecularReflEnvMaps( incident
 								, components.clearcoatNormal
@@ -419,9 +420,8 @@ namespace castor3d::shader
 
 					IF( m_writer, !all( components.sheenFactor == vec3( 0.0_f ) ) )
 					{
-						IF( m_writer, envMapIndex > 0_u && hasReflection != 0_u )
+						IF( m_writer, hasEnvmap && hasReflection != 0_u )
 						{
-							envMapIndex = envMapIndex - 1_u;
 							auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
 							sheenReflected = computeSheenReflEnvMaps( incident
 								, components.normal

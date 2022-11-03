@@ -949,8 +949,7 @@ namespace castor3d::shader
 			, pVdotH );
 	}
 
-	sdw::RetVec3 Utils::evalIridescence( Utils & utils
-		, sdw::Float const & poutsideIOR
+	sdw::RetVec3 Utils::evalIridescence( sdw::Float const & poutsideIOR
 		, sdw::Float const & peta2
 		, sdw::Float const & pcosTheta1
 		, sdw::Float const & pthinFilmThickness
@@ -993,7 +992,7 @@ namespace castor3d::shader
 					auto R0 = m_writer.declLocale( "R0"
 						, iorToFresnel0( iridescenceIor, outsideIOR ) );
 					auto R12 = m_writer.declLocale( "R12"
-						, utils.conductorFresnel( cosTheta1, R0 ) );
+						, conductorFresnel( cosTheta1, R0 ) );
 					auto R21 = m_writer.declLocale( "R21"
 						, R12 );
 					auto T121 = m_writer.declLocale( "T121"
@@ -1016,7 +1015,7 @@ namespace castor3d::shader
 					auto R1 = m_writer.declLocale( "R1"
 						, iorToFresnel0( baseIOR, iridescenceIor ) );
 					auto R23 = m_writer.declLocale( "R23"
-						, utils.conductorFresnel( cosTheta2, R1 ) );
+						, conductorFresnel( cosTheta2, R1 ) );
 					auto phi23 = m_writer.declLocale( "phi23"
 						, vec3( 0.0_f ) );
 

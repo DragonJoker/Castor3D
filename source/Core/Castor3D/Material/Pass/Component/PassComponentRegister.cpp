@@ -93,7 +93,8 @@ namespace castor3d
 			, PassComponentID componentId
 			, PassComponentPlugin const & component
 			, std::vector< shader::PassComponentsShaderPtr > & shaders
-			, std::vector< UpdateComponent > & updateComponents )
+			, std::vector< UpdateComponent > & updateComponents
+			, std::vector< FinishComponent > & finishComponents )
 		{
 			if ( isValidComponent( flags, componentId ) )
 			{
@@ -108,11 +109,24 @@ namespace castor3d
 					{
 						updateComponents.push_back( component.updateComponent );
 					}
+
+					if ( component.finishComponent != nullptr )
+					{
+						finishComponents.push_back( component.finishComponent );
+					}
 				}
 			}
-			else if ( component.updateComponent != nullptr )
+			else
 			{
-				updateComponents.push_back( component.updateComponent );
+				if ( component.updateComponent != nullptr )
+				{
+					updateComponents.push_back( component.updateComponent );
+				}
+
+				if ( component.finishComponent != nullptr )
+				{
+					finishComponents.push_back( component.finishComponent );
+				}
 			}
 		}
 
@@ -329,7 +343,8 @@ namespace castor3d
 
 	std::vector< shader::PassComponentsShaderPtr > PassComponentRegister::getComponentsShaders( TextureCombine const & combine
 		, ComponentModeFlags filter
-		, std::vector< UpdateComponent > & updateComponents )const
+		, std::vector< UpdateComponent > & updateComponents
+		, std::vector< FinishComponent > & finishComponents )const
 	{
 		std::vector< shader::PassComponentsShaderPtr > result;
 
@@ -340,7 +355,8 @@ namespace castor3d
 				, componentDesc.id
 				, *componentDesc.plugin
 				, result
-				, updateComponents );
+				, updateComponents
+				, finishComponents );
 		}
 
 		return result;
@@ -348,7 +364,8 @@ namespace castor3d
 
 	std::vector< shader::PassComponentsShaderPtr > PassComponentRegister::getComponentsShaders( PipelineFlags const & flags
 		, ComponentModeFlags filter
-		, std::vector< UpdateComponent > & updateComponents )const
+		, std::vector< UpdateComponent > & updateComponents
+		, std::vector< FinishComponent > & finishComponents )const
 	{
 		std::vector< shader::PassComponentsShaderPtr > result;
 
@@ -359,7 +376,8 @@ namespace castor3d
 				, componentDesc.id
 				, *componentDesc.plugin
 				, result
-				, updateComponents );
+				, updateComponents
+				, finishComponents );
 		}
 
 		return result;
