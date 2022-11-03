@@ -501,8 +501,10 @@ namespace castor3d
 		*	Fonction pour ajuster les données du composant après que les textures ont été traitées.
 		*/
 		C3D_API explicit PassComponentPlugin( PassComponentRegister const & passComponents
-			, UpdateComponent pupdateComponent = nullptr )
-			: updateComponent{ pupdateComponent }
+			, UpdateComponent pupdateComponent = nullptr
+			, FinishComponent pfinishComponent = nullptr )
+			: finishComponent{ pfinishComponent }
+			, updateComponent{ pupdateComponent }
 			, m_passComponents{ passComponents }
 		{
 		}
@@ -605,6 +607,15 @@ namespace castor3d
 		{
 		}
 		/**@}*/
+		/**
+		*\~english
+		*\brief
+		*	Applies component's transformations before lighting happens.
+		*\~french
+		*\brief
+		*	Applique les transformations du composant, avant l'éclairage.
+		*/
+		FinishComponent finishComponent;
 		/**
 		*\name
 		*	Pass flags handling.

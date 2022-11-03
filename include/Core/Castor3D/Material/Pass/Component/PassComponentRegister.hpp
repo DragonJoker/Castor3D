@@ -92,10 +92,12 @@ namespace castor3d
 		/**@{*/
 		C3D_API std::vector< shader::PassComponentsShaderPtr > getComponentsShaders( TextureCombine const & texturesFlags
 			, ComponentModeFlags filter
-			, std::vector< UpdateComponent > & updateComponents )const;
+			, std::vector< UpdateComponent > & updateComponents
+			, std::vector< FinishComponent > & finishComponents )const;
 		C3D_API std::vector< shader::PassComponentsShaderPtr > getComponentsShaders( PipelineFlags const & flags
 			, ComponentModeFlags filter
-			, std::vector< UpdateComponent > & updateComponents )const;
+			, std::vector< UpdateComponent > & updateComponents
+			, std::vector< FinishComponent > & finishComponents )const;
 		/**@}*/
 		/**
 		 *\~english

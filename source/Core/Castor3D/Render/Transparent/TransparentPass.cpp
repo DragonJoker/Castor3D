@@ -342,28 +342,10 @@ namespace castor3d
 							, in.viewPosition.xyz()
 							, in.worldPosition.xyz()
 							, components.normal } );
-					auto incident = writer.declLocale( "incident"
-						, reflections->computeIncident( surface.worldPosition.xyz(), c3d_sceneData.cameraPosition ) );
-
-					IF( writer, components.iridescenceThickness == 0.0_f )
-					{
-						components.iridescenceFactor = 0.0_f;
-					}
-					FI;
-					IF( writer, components.iridescenceFactor != 0.0_f )
-					{
-						auto NdotV = writer.declLocale( "NdotV"
-							, dot( components.normal, -incident ) );
-						components.iridescenceFresnel = utils.evalIridescence( utils
-							, 1.0_f
-							, components.iridescenceIor
-							, NdotV
-							, components.iridescenceThickness
-							, components.specular );
-						components.iridescenceF0 = utils.fresnelToF0( components.iridescenceFresnel, NdotV );
-					}
-					FI;
-
+					components.finish( passShaders
+						, surface
+						, utils
+						, c3d_sceneData.cameraPosition );
 					lightingModel->computeCombined( components
 						, c3d_sceneData
 						, *backgroundModel
@@ -392,6 +374,8 @@ namespace castor3d
 						components.thicknessFactor *= length( modelData.getScale() );
 					}
 
+					auto incident = writer.declLocale( "incident"
+						, reflections->computeIncident( surface.worldPosition.xyz(), c3d_sceneData.cameraPosition ) );
 					reflections->computeCombined( components
 						, incident
 						, surface.worldPosition.xyz()

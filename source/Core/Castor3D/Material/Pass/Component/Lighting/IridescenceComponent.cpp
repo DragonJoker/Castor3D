@@ -8,6 +8,7 @@
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
+#include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
 #include <CastorUtils/FileParser/ParserParameter.hpp>
 #include <CastorUtils/Data/Text/TextRgbColour.hpp>
@@ -273,6 +274,43 @@ namespace castor3d
 	{
 		return checkFlag( filter, ComponentModeFlag::eDiffuseLighting )
 			|| checkFlag( filter, ComponentModeFlag::eSpecularLighting );
+	}
+
+	void IridescenceComponent::Plugin::finishComponent( shader::SurfaceBase const & surface
+		, sdw::Vec3 const worldEye
+		, shader::Utils & utils
+		, shader::BlendComponents & components )
+	{
+		if ( !components.hasMember( "iridescenceFactor" ) )
+		{
+			return;
+		}
+
+		auto & writer = findWriterMandat( surface, worldEye, components );
+
+		IF( writer, components.iridescenceThickness == 0.0_f )
+		{
+			components.iridescenceFactor = 0.0_f;
+		}
+		FI;
+
+		IF( writer, components.iridescenceFactor != 0.0_f )
+		{
+			auto incident = writer.declLocale( "incident"
+				, normalize( surface.worldPosition.xyz() - worldEye ) );
+			auto normal = components.hasMember( "normal" )
+				? components.normal
+				: surface.normal;
+			auto NdotV = writer.declLocale( "NdotV"
+				, dot( normal, -incident ) );
+			components.iridescenceFresnel = utils.evalIridescence( 1.0_f
+				, components.iridescenceIor
+				, NdotV
+				, components.iridescenceThickness
+				, components.specular );
+			components.iridescenceF0 = utils.fresnelToF0( components.iridescenceFresnel, NdotV );
+		}
+		FI;
 	}
 
 	//*********************************************************************************************

@@ -50,6 +50,11 @@ namespace castor3d::shader
 
 		SDW_DeclStructInstance( , BlendComponents );
 
+		void finish( PassShaders const & passShaders
+			, SurfaceBase const & surface
+			, Utils & utils
+			, sdw::Vec3 const worldEye );
+
 		static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache
 			, Materials const & materials
 			, bool zeroInit

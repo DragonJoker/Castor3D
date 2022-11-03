@@ -73,7 +73,7 @@ namespace castor3d
 		{
 		public:
 			explicit Plugin( PassComponentRegister const & passComponent )
-				: PassComponentPlugin{ passComponent }
+				: PassComponentPlugin{ passComponent, nullptr, finishComponent }
 			{
 			}
 
@@ -94,6 +94,12 @@ namespace castor3d
 			{
 				return std::make_unique< MaterialShader >();
 			}
+
+		private:
+			static void finishComponent( shader::SurfaceBase const & surface
+				, sdw::Vec3 const worldEye
+				, shader::Utils & utils
+				, shader::BlendComponents & components );
 		};
 
 		static PassComponentPluginUPtr createPlugin( PassComponentRegister const & passComponent )

@@ -262,27 +262,10 @@ namespace castor3d
 							, material
 							, surface
 							, clrCot } );
-
-					IF( writer, components.iridescenceThickness == 0.0_f )
-					{
-						components.iridescenceFactor = 0.0_f;
-					}
-					FI;
-					IF( writer, components.iridescenceFactor != 0.0_f )
-					{
-						auto incident = writer.declLocale( "incident"
-							, normalize( surface.worldPosition.xyz() - c3d_sceneData.cameraPosition ) );
-						auto NdotV = writer.declLocale( "NdotV"
-							, dot( wsNormal, -incident ) );
-						components.iridescenceFresnel = utils.evalIridescence( utils
-							, 1.0_f
-							, components.iridescenceIor
-							, NdotV
-							, components.iridescenceThickness
-							, components.specular );
-						components.iridescenceF0 = utils.fresnelToF0( components.iridescenceFresnel, NdotV );
-					}
-					FI;
+					components.finish( passShaders
+						, surface
+						, utils
+						, c3d_sceneData.cameraPosition );
 
 					switch ( lightType )
 					{

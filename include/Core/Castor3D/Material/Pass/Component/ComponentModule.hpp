@@ -44,6 +44,8 @@ namespace castor3d
 	namespace shader
 	{
 		struct BlendComponents;
+		struct SurfaceBase;
+		class Utils;
 	}
 	//@}
 	/**@name Buffers */
@@ -216,6 +218,10 @@ namespace castor3d
 
 	using UpdateComponent = std::function< void( PassComponentRegister const & passComponents
 		, TextureCombine const & combine
+		, shader::BlendComponents & components ) >;
+	using FinishComponent = std::function< void( shader::SurfaceBase const & surface
+		, sdw::Vec3 const worldEye
+		, shader::Utils & utils
 		, shader::BlendComponents & components ) >;
 
 	using CreatePassComponentPlugin = std::function< PassComponentPluginUPtr( PassComponentRegister const & ) >;

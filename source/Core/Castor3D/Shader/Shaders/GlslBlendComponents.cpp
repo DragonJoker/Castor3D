@@ -73,6 +73,14 @@ namespace castor3d::shader
 	{
 	}
 
+	void BlendComponents::finish( PassShaders const & passShaders
+		, SurfaceBase const & surface
+		, Utils & utils
+		, sdw::Vec3 const worldEye )
+	{
+		passShaders.finishComponents( surface, worldEye, utils, *this );
+	}
+
 	sdw::type::BaseStructPtr BlendComponents::makeType( ast::type::TypesCache & cache
 		, Materials const & materials
 		, bool zeroInit

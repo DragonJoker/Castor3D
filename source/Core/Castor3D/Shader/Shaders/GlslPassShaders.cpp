@@ -20,7 +20,7 @@ namespace castor3d::shader
 		, Utils & utils )
 		: m_utils{ utils }
 		, m_compRegister{ compRegister }
-		, m_shaders{ m_compRegister.getComponentsShaders( combine, filter, m_updateComponents ) }
+		, m_shaders{ m_compRegister.getComponentsShaders( combine, filter, m_updateComponents, m_finishComponents ) }
 		, m_filter{ filter }
 		, m_opacity{ hasAny( combine, m_compRegister.getOpacityMapFlags() ) }
 	{
@@ -32,7 +32,7 @@ namespace castor3d::shader
 		, Utils & utils )
 		: m_utils{ utils }
 		, m_compRegister{ compRegister }
-		, m_shaders{ m_compRegister.getComponentsShaders( flags, filter, m_updateComponents ) }
+		, m_shaders{ m_compRegister.getComponentsShaders( flags, filter, m_updateComponents, m_finishComponents ) }
 		, m_filter{ filter }
 		, m_opacity{ ( flags.usesOpacity()
 			&& flags.hasMap( m_compRegister.getOpacityMapFlags() )
@@ -207,6 +207,17 @@ namespace castor3d::shader
 		, BlendComponents & components )const
 	{
 		updateComponents( flags.textures, components );
+	}
+
+	void PassShaders::finishComponents( SurfaceBase const & surface
+		, sdw::Vec3 const worldEye
+		, Utils & utils
+		, BlendComponents & components )const
+	{
+		for ( auto & finish : m_finishComponents )
+		{
+			finish( surface, worldEye, utils, components );
+		}
 	}
 
 	std::map< uint32_t, PassComponentTextureFlag > PassShaders::getTexcoordModifs( PipelineFlags const & flags )const

@@ -142,8 +142,7 @@ namespace castor3d::shader
 		sdw::RetVec3 fresnel0ToIor( sdw::Vec3 const & fresnel0 );
 		C3D_API sdw::RetVec3 fresnelToF0( sdw::Vec3 const & fresnel
 			, sdw::Float const & VdotH );
-		C3D_API sdw::RetVec3 evalIridescence( Utils & utils
-			, sdw::Float const & outsideIOR
+		C3D_API sdw::RetVec3 evalIridescence( sdw::Float const & outsideIOR
 			, sdw::Float const & eta2
 			, sdw::Float const & cosTheta1
 			, sdw::Float const & thinFilmThickness
