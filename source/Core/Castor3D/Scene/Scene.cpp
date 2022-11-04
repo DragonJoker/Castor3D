@@ -310,9 +310,50 @@ namespace castor3d
 		m_lightCache->initialise( device );
 		m_background->initialise( device );
 		doUpdateLightsDependent();
-		doUpdateBoundingBox();
+		updateBoundingBox();
 		log::info << "Initialised scene [" << getName() << "], AABB: " << print( m_boundingBox ) << std::endl;
 		m_initialised = true;
+	}
+
+	void Scene::updateBoundingBox()
+	{
+#if C3D_DebugTimers
+		auto block( m_timerBoundingBox->start() );
+#endif
+		auto & cache = *m_geometryCache;
+		auto lock( castor::makeUniqueLock( cache ) );
+
+		if ( !cache.isEmptyNoLock() )
+		{
+			constexpr float fmin = std::numeric_limits< float >::max();
+			constexpr float fmax = std::numeric_limits< float >::lowest();
+			castor::Point3f min{ fmin, fmin, fmin };
+			castor::Point3f max{ fmax, fmax, fmax };
+
+			for ( auto & geomIt : cache )
+			{
+				auto & geometry = *geomIt.second;
+				auto node = geometry.getParent();
+				auto mesh = geometry.getMesh().lock();
+
+				if ( node && mesh )
+				{
+					auto bbox = mesh->getBoundingBox().getAxisAligned( node->getDerivedTransformationMatrix() );
+
+					for ( auto i = 0u; i < 3u; ++i )
+					{
+						min[i] = std::min( min[i], bbox.getMin()[i] );
+						max[i] = std::max( max[i], bbox.getMax()[i] );
+					}
+				}
+			}
+
+			m_boundingBox.load( min, max );
+		}
+		else
+		{
+			m_boundingBox = castor::BoundingBox{};
+		}
 	}
 
 	void Scene::cleanup()
@@ -382,7 +423,7 @@ namespace castor3d
 			doUpdateSceneNodes( updater, sceneObjs );
 			m_animatedObjectGroupCache->update( updater );
 			doUpdateMovables( updater, sceneObjs );
-			doUpdateBoundingBox();
+			updateBoundingBox();
 			doUpdateMaterials();
 			doUpdateLights( updater, sceneObjs );
 			m_renderNodes->update( updater );
@@ -865,47 +906,6 @@ namespace castor3d
 		m_dirtyBillboards.clear();
 		m_dirtyObjects.clear();
 		m_dirtyNodes.clear();
-	}
-
-	void Scene::doUpdateBoundingBox()
-	{
-#if C3D_DebugTimers
-		auto block( m_timerBoundingBox->start() );
-#endif
-		auto & cache = *m_geometryCache;
-		auto lock( castor::makeUniqueLock( cache ) );
-
-		if ( !cache.isEmptyNoLock() )
-		{
-			constexpr float fmin = std::numeric_limits< float >::max();
-			constexpr float fmax = std::numeric_limits< float >::lowest();
-			castor::Point3f min{ fmin, fmin, fmin };
-			castor::Point3f max{ fmax, fmax, fmax };
-
-			for ( auto & geomIt : cache )
-			{
-				auto & geometry = *geomIt.second;
-				auto node = geometry.getParent();
-				auto mesh = geometry.getMesh().lock();
-
-				if ( node && mesh )
-				{
-					auto bbox = mesh->getBoundingBox().getAxisAligned( node->getDerivedTransformationMatrix() );
-
-					for ( auto i = 0u; i < 3u; ++i )
-					{
-						min[i] = std::min( min[i], bbox.getMin()[i] );
-						max[i] = std::max( max[i], bbox.getMax()[i] );
-					}
-				}
-			}
-
-			m_boundingBox.load( min, max );
-		}
-		else
-		{
-			m_boundingBox = castor::BoundingBox{};
-		}
 	}
 
 	void Scene::doUpdateSceneNodes( CpuUpdater & updater

@@ -50,7 +50,7 @@ namespace convert
 		std::cout << "              NAME can omit the extension." << std::endl << std::endl;
 		std::cout << "  -s          Splits the mesh per material." << std::endl;
 		std::cout << "  -c          Recenters the submesh in its bounding box." << std::endl;
-		std::cout << "              Only useful whe -s is specified" << std::endl;
+		std::cout << "              Only useful when -s is specified" << std::endl;
 		std::cout << "  -p DEGREES  Pitch model by given angle in floating point degrees" << std::endl;
 		std::cout << "  -y DEGREES  Yaw model by given angle in floating point degrees" << std::endl;
 		std::cout << "  -r DEGREES  Roll model by given angle in floating point degrees" << std::endl;

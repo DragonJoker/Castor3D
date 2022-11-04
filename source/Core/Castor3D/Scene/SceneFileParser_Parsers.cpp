@@ -1537,6 +1537,20 @@ namespace castor3d
 	}
 	CU_EndAttributePush( CSCNSection::eTextureRemap )
 
+	CU_ImplementAttributeParser( parserSceneImportCenterCamera )
+	{
+		auto & parsingContext = getParserContext( context );
+		if ( params.empty() )
+		{
+			CU_ParsingError( cuT( "Missing name parameter" ) );
+		}
+		else
+		{
+			parsingContext.sceneImportConfig.centerCamera = params[0]->get< castor::String >();
+		}
+	}
+	CU_EndAttributePush( CSCNSection::eTextureRemap )
+
 	CU_ImplementAttributeParser( parserSceneImportEnd )
 	{
 		auto & parsingContext = getParserContext( context );
@@ -1583,6 +1597,11 @@ namespace castor3d
 			if ( parsingContext.sceneImportConfig.emissiveMult != 1.0f )
 			{
 				parameters.add( cuT( "emissive_mult" ), parsingContext.sceneImportConfig.emissiveMult );
+			}
+
+			if ( !parsingContext.sceneImportConfig.centerCamera.empty() )
+			{
+				parameters.add( cuT( "center_camera" ), parsingContext.sceneImportConfig.centerCamera );
 			}
 
 			SceneImporter importer{ *engine };

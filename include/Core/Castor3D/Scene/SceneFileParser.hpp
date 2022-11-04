@@ -129,6 +129,7 @@ namespace castor3d
 			bool noOptimisations{ false };
 			float emissiveMult{ 1.0f };
 			std::map< PassComponentTextureFlag, TextureConfiguration >::iterator textureRemapIt;
+			castor::String centerCamera;
 		};
 
 		castor::LoggerInstance * logger{};

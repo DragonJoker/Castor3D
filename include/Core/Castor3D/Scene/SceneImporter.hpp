@@ -139,6 +139,9 @@ namespace castor3d
 			, std::map< castor::String, SceneNodeSPtr > const & nodes );
 		void doAddAnimationGroup( Geometry & geometry );
 
+		void doCenterCamera( Scene & scene
+			, Parameters const & parameters );
+
 	private:
 		ImporterFile * m_file;
 		SceneNodePtrArray m_nodes;
