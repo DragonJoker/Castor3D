@@ -129,6 +129,7 @@ namespace castor3d
 			addParser( result, uint32_t( CSCNSection::eSceneImport ), cuT( "no_optimisations" ), parserSceneImportNoOptimisations, { makeParameter< ParameterType::eBool >() } );
 			addParser( result, uint32_t( CSCNSection::eSceneImport ), cuT( "emissive_mult" ), parserSceneImportEmissiveMult, { makeParameter< ParameterType::eFloat >() } );
 			addParser( result, uint32_t( CSCNSection::eSceneImport ), cuT( "texture_remap_config" ), parserSceneImportTexRemap );
+			addParser( result, uint32_t( CSCNSection::eSceneImport ), cuT( "recenter_camera" ), parserSceneImportCenterCamera, {makeParameter< ParameterType::eName >() } );
 			addParser( result, uint32_t( CSCNSection::eSceneImport ), cuT( "}" ), parserSceneImportEnd );
 
 			addParser( result, uint32_t( CSCNSection::eParticleSystem ), cuT( "parent" ), parserParticleSystemParent, { makeParameter< ParameterType::eName >() } );

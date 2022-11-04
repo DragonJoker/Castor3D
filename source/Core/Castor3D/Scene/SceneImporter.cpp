@@ -11,6 +11,7 @@
 #include "Castor3D/Model/Skeleton/Skeleton.hpp"
 #include "Castor3D/Model/Skeleton/SkeletonImporter.hpp"
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp"
+#include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
@@ -21,6 +22,22 @@
 
 namespace castor3d
 {
+	//*********************************************************************************************
+
+	namespace scnimp
+	{
+		static castor::Point3f getCameraPosition( castor::BoundingBox const & aabb
+			, float & farPlane )
+		{
+			auto maxComp = std::max( { aabb.getMax()->z, aabb.getMax()->x, aabb.getMax()->y } );
+			auto z = ( maxComp * 3.0f );
+			farPlane = std::abs( z );
+			return { aabb.getCenter()->x
+				, aabb.getCenter()->y
+				, z };
+		}
+	}
+
 	//*********************************************************************************************
 
 	SceneImporter::SceneImporter( Engine & engine )
@@ -42,6 +59,7 @@ namespace castor3d
 		doCreateGeometries( scene, meshes, nodes );
 		importAnimations( scene, file, parameters );
 		doTransformScene( scene, parameters, nodes );
+		doCenterCamera( scene, parameters );
 		return true;
 	}
 
@@ -401,6 +419,36 @@ namespace castor3d
 				{
 					nodeIt.second->attachTo( *transformNode );
 				}
+			}
+		}
+	}
+
+	void SceneImporter::doCenterCamera( Scene & scene
+		, Parameters const & parameters )
+	{
+		castor::String centerCamera;
+
+		if ( parameters.get( cuT( "center_camera" ), centerCamera )
+			&& !centerCamera.empty() )
+		{
+			auto cam = scene.getCameraCache().tryFind( centerCamera );
+
+			if ( auto camera = cam.lock() )
+			{
+				scene.getSceneNodeCache().forEach( []( SceneNode & node )
+					{
+						node.update();
+					} );
+				scene.updateBoundingBox();
+				auto cameraNode = camera->getParent();
+				float farPlane = 0.0f;
+				cameraNode->setPosition( scnimp::getCameraPosition( scene.getBoundingBox(), farPlane ) );
+				cameraNode->setOrientation( castor::Quaternion::fromAxisAngle( castor::Point3f{ 0.0f, 1.0f, 0.0f }, 180.0_degrees ) );
+				auto & vp = camera->getViewport();
+				camera->getViewport().setPerspective( vp.getFovY()
+					, vp.getRatio()
+					, std::max( 0.01f, farPlane / 1000.0f )
+					, std::max( farPlane, 1000.0f ) );
 			}
 		}
 	}

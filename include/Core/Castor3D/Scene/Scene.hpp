@@ -88,6 +88,13 @@ namespace castor3d
 		C3D_API void initialise();
 		/**
 		 *\~english
+		 *\brief		Computes the scene AABB.
+		 *\~french
+		 *\brief		Calcule l'AABB de la scène.
+		 */
+		C3D_API void updateBoundingBox();
+		/**
+		 *\~english
 		 *\brief		Clears the maps, leaves the root nodes
 		 *\~french
 		 *\brief		Vide les maps, laisse les noeuds pères
@@ -439,7 +446,6 @@ namespace castor3d
 
 	private:
 		void doGatherDirty( CpuUpdater::DirtyObjects & sceneObjs );
-		void doUpdateBoundingBox();
 		void doUpdateSceneNodes( CpuUpdater & updater
 			, CpuUpdater::DirtyObjects & sceneObjs );
 		void doUpdateMovables( CpuUpdater & updater

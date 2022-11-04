@@ -13,6 +13,8 @@ See LICENSE file in root folder
 #include <CastorUtils/Design/DesignModule.hpp>
 #include <CastorUtils/FileParser/FileParserModule.hpp>
 
+#include <ShaderWriter/ShaderWriterPrerequisites.hpp>
+
 #define C3D_Stringify( x ) C3DX_Stringify(x)
 #define C3DX_Stringify( x ) #x
 #define C3D_Join2Strings( l, r ) l "." r
