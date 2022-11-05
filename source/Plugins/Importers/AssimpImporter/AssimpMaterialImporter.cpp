@@ -621,11 +621,22 @@ namespace c3d_assimp
 			void parseAlphaRefValue()
 			{
 				float ref{ 1.0f };
+				aiString value;
 
 				if ( m_material.Get( AI_MATKEY_GLTF_ALPHACUTOFF, ref ) == aiReturn_SUCCESS )
 				{
-					auto component = m_result.createComponent< castor3d::AlphaTestComponent >();
-					component->setAlphaRefValue( ref );
+					if ( m_material.Get( AI_MATKEY_GLTF_ALPHAMODE, value ) == aiReturn_SUCCESS )
+					{
+						auto mode = makeString( value );
+
+						if ( mode == "MASK" )
+						{
+							auto alphaTest = m_result.createComponent< castor3d::AlphaTestComponent >();
+							alphaTest->setAlphaRefValue( ref );
+							alphaTest->setAlphaFunc( VK_COMPARE_OP_GREATER );
+							alphaTest->setBlendAlphaFunc( VK_COMPARE_OP_LESS_OR_EQUAL );
+						}
+					}
 				}
 			}
 
@@ -749,7 +760,12 @@ namespace c3d_assimp
 							if ( getComponentsMask( texConfig, m_opacityMapFlags )
 								&& castor3d::hasAny( texFlags, m_opacityMapFlags ) )
 							{
-								mixedInterpolative( true );
+								aiString alphaMode;
+
+								if ( !m_material.Get( AI_MATKEY_GLTF_ALPHAMODE, alphaMode ) == aiReturn_SUCCESS )
+								{
+									mixedInterpolative( true );
+								}
 
 								if ( !hasAlphaChannel( image ) )
 								{
@@ -760,7 +776,13 @@ namespace c3d_assimp
 								&& texConfig == m_colourBaseConfiguration
 								&& hasAlphaChannel( image ) )
 							{
-								mixedInterpolative( true );
+								aiString alphaMode;
+
+								if ( !m_material.Get( AI_MATKEY_GLTF_ALPHAMODE, alphaMode ) == aiReturn_SUCCESS )
+								{
+									mixedInterpolative( true );
+								}
+
 								addFlagConfiguration( texConfig, { m_opacityMapFlags, 0xFF000000 } );
 							}
 
@@ -852,10 +874,13 @@ namespace c3d_assimp
 				auto twoSided = m_result.createComponent< castor3d::TwoSidedComponent >();
 				twoSided->setTwoSided( true );
 
-				auto alphaTest = m_result.createComponent< castor3d::AlphaTestComponent >();
-				alphaTest->setAlphaRefValue( 0.95f );
-				alphaTest->setAlphaFunc( VK_COMPARE_OP_GREATER );
-				alphaTest->setBlendAlphaFunc( VK_COMPARE_OP_LESS_OR_EQUAL );
+				if ( !m_result.hasComponent< castor3d::AlphaTestComponent >() )
+				{
+					auto alphaTest = m_result.createComponent< castor3d::AlphaTestComponent >();
+					alphaTest->setAlphaRefValue( 0.95f );
+					alphaTest->setAlphaFunc( VK_COMPARE_OP_GREATER );
+					alphaTest->setBlendAlphaFunc( VK_COMPARE_OP_LESS_OR_EQUAL );
+				}
 
 				if ( blending )
 				{
