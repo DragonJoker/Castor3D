@@ -377,7 +377,7 @@ namespace ocean
 	CU_ImplementAttributeParser( parserWaveRenderingEnd )
 	{
 		auto & waveContext = getParserContext( context );
-		waveContext.config.numWaves = float( waveContext.wave );
+		waveContext.config.numWaves = waveContext.wave;
 		waveContext.parameters.add( OceanRenderPass::Param, waveContext.config );
 		waveContext.engine->setRenderPassTypeConfiguration( OceanRenderPass::Type
 			, std::move( waveContext.parameters ) );
