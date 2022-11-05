@@ -376,6 +376,7 @@ namespace ocean
 	{
 		return castor3d::ComponentModeFlag::eColour
 			| castor3d::ComponentModeFlag::eNormals
+			| castor3d::ComponentModeFlag::eGeometry
 			| castor3d::ComponentModeFlag::eOcclusion
 			| castor3d::ComponentModeFlag::eDiffuseLighting
 			| castor3d::ComponentModeFlag::eSpecularLighting
@@ -669,11 +670,11 @@ namespace ocean
 					, pipelineID
 					, writer.cast< sdw::UInt >( in.drawID )
 					, flags ) );
-			auto modelData = writer.declLocale( "modelData"
-				, c3d_modelsData[nodeId - 1u] );
 			out.nodeId = writer.cast< sdw::Int >( nodeId );
 
 #if Ocean_DebugPixelShader
+			auto modelData = writer.declLocale( "modelData"
+				, c3d_modelsData[nodeId - 1u] );
 			auto curMtxModel = writer.declLocale< Mat4 >( "curMtxModel"
 				, c3d_modelData.getCurModelMtx( flags.programFlags
 					, skinningData
@@ -816,11 +817,11 @@ namespace ocean
 				, sdw::TessControlListInT< castor3d::shader::FragmentSurfaceT, 3u > listIn
 				, sdw::TrianglesTessPatchOut patchOut )
 			{
-				patchOut.tessLevelOuter[0] = c3d_oceanData.tessellationFactor;
-				patchOut.tessLevelOuter[1] = c3d_oceanData.tessellationFactor;
-				patchOut.tessLevelOuter[2] = c3d_oceanData.tessellationFactor;
+				patchOut.tessLevelOuter[0] = c3d_oceanData.tessellationFactor();
+				patchOut.tessLevelOuter[1] = c3d_oceanData.tessellationFactor();
+				patchOut.tessLevelOuter[2] = c3d_oceanData.tessellationFactor();
 
-				patchOut.tessLevelInner[0] = c3d_oceanData.tessellationFactor;
+				patchOut.tessLevelInner[0] = c3d_oceanData.tessellationFactor();
 			} );
 
 		writer.implementMainT< castor3d::shader::FragmentSurfaceT, 3u, castor3d::shader::FragmentSurfaceT >( TessControlListInT< castor3d::shader::FragmentSurfaceT, 3u >{ writer
@@ -883,47 +884,47 @@ namespace ocean
 			, [&]( Wave wave
 				, Vec3 wavePosition
 				, Float edgeDampen
-				, Float numWaves
+				, UInt numWaves
 				, Float timeIndex )
 			{
 				auto result = writer.declLocale< WaveResult >( "result" );
 
 				auto frequency = writer.declLocale( "frequency"
-					, 2.0_f / wave.length );
+					, 2.0_f / wave.length() );
 				auto phaseConstant = writer.declLocale( "phaseConstant"
-					, wave.speed * frequency );
+					, wave.speed() * frequency );
 				auto qi = writer.declLocale( "qi"
-					, wave.steepness / ( wave.amplitude * frequency * numWaves ) );
+					, wave.steepness() / ( wave.amplitude() * frequency * writer.cast< sdw::Float >( numWaves ) ) );
 				auto rad = writer.declLocale( "rad"
-					, frequency * dot( wave.direction.xz(), wavePosition.xz() ) + timeIndex * phaseConstant );
+					, frequency * dot( wave.direction().xz(), wavePosition.xz() ) + timeIndex * phaseConstant );
 				auto sinR = writer.declLocale( "sinR"
 					, sin( rad ) );
 				auto cosR = writer.declLocale( "cosR"
 					, cos( rad ) );
 
-				result.position.x() = wavePosition.x() + qi * wave.amplitude * wave.direction.x() * cosR * edgeDampen;
-				result.position.z() = wavePosition.z() + qi * wave.amplitude * wave.direction.z() * cosR * edgeDampen;
-				result.position.y() = wave.amplitude * sinR * edgeDampen;
+				result.position.x() = wavePosition.x() + qi * wave.amplitude() * wave.direction().x() * cosR * edgeDampen;
+				result.position.z() = wavePosition.z() + qi * wave.amplitude() * wave.direction().z() * cosR * edgeDampen;
+				result.position.y() = wave.amplitude() * sinR * edgeDampen;
 
 				auto waFactor = writer.declLocale( "waFactor"
-					, frequency * wave.amplitude );
+					, frequency * wave.amplitude() );
 				auto radN = writer.declLocale( "radN"
-					, frequency * dot( wave.direction, result.position ) + timeIndex * phaseConstant );
+					, frequency * dot( wave.direction(), result.position ) + timeIndex * phaseConstant );
 				auto sinN = writer.declLocale( "sinN"
 					, sin( radN ) );
 				auto cosN = writer.declLocale( "cosN"
 					, cos( radN ) );
 
-				result.bitangent.x() = 1.0_f - ( qi * wave.direction.x() * wave.direction.x() * waFactor * sinN );
-				result.bitangent.z() = -1.0_f * ( qi * wave.direction.x() * wave.direction.z() * waFactor * sinN );
-				result.bitangent.y() = wave.direction.x() * waFactor * cosN;
+				result.bitangent.x() = 1.0_f - ( qi * wave.direction().x() * wave.direction().x() * waFactor * sinN );
+				result.bitangent.z() = -1.0_f * ( qi * wave.direction().x() * wave.direction().z() * waFactor * sinN );
+				result.bitangent.y() = wave.direction().x() * waFactor * cosN;
 
-				result.tangent.x() = -1.0_f * ( qi * wave.direction.x() * wave.direction.z() * waFactor * sinN );
-				result.tangent.z() = 1.0_f - ( qi * wave.direction.z() * wave.direction.z() * waFactor * sinN );
-				result.tangent.y() = wave.direction.z() * waFactor * cosN;
+				result.tangent.x() = -1.0_f * ( qi * wave.direction().x() * wave.direction().z() * waFactor * sinN );
+				result.tangent.z() = 1.0_f - ( qi * wave.direction().z() * wave.direction().z() * waFactor * sinN );
+				result.tangent.y() = wave.direction().z() * waFactor * cosN;
 
-				result.normal.x() = -1.0_f * ( wave.direction.x() * waFactor * cosN );
-				result.normal.z() = -1.0_f * ( wave.direction.z() * waFactor * cosN );
+				result.normal.x() = -1.0_f * ( wave.direction().x() * waFactor * cosN );
+				result.normal.z() = -1.0_f * ( wave.direction().z() * waFactor * cosN );
 				result.normal.y() = 1.0_f - ( qi * waFactor * sinN );
 
 				result.bitangent = normalize( result.bitangent );
@@ -935,7 +936,7 @@ namespace ocean
 			, InWave{ writer, "wave" }
 			, sdw::InVec3{ writer, "wavePosition" }
 			, sdw::InFloat{ writer, "edgeDampen" }
-			, sdw::InFloat{ writer, "numWaves" }
+			, sdw::InUInt{ writer, "numWaves" }
 			, sdw::InFloat{ writer, "timeIndex" } );
 
 		writer.implementMainT< castor3d::shader::FragmentSurfaceT, 3u, VoidT, castor3d::shader::FragmentSurfaceT >( TessEvalListInT< castor3d::shader::FragmentSurfaceT, 3u >{ writer
@@ -969,8 +970,8 @@ namespace ocean
 					+ patchIn.tessCoord.z() * listIn[2].texture0 );
 
 				auto dampening = writer.declLocale( "dampening"
-					, 1.0_f - pow( utils.saturate( abs( texcoord.x() - 0.5_f ) / 0.5_f ), c3d_oceanData.dampeningFactor ) );
-				dampening *= 1.0_f - pow( utils.saturate( abs( texcoord.y() - 0.5_f ) / 0.5_f ), c3d_oceanData.dampeningFactor );
+					, 1.0_f - pow( utils.saturate( abs( texcoord.x() - 0.5_f ) / 0.5_f ), c3d_oceanData.dampeningFactor() ) );
+				dampening *= 1.0_f - pow( utils.saturate( abs( texcoord.y() - 0.5_f ) / 0.5_f ), c3d_oceanData.dampeningFactor() );
 
 				auto finalWaveResult = writer.declLocale< WaveResult >( "finalWaveResult" );
 				finalWaveResult.position = vec3( 0.0_f );
@@ -979,18 +980,18 @@ namespace ocean
 				finalWaveResult.bitangent = vec3( 0.0_f );
 
 				auto numWaves = writer.declLocale( "numWaves"
-					, writer.cast< UInt >( c3d_oceanData.numWaves ) );
+					, c3d_oceanData.numWaves() );
 
 				IF( writer, numWaves > 0_u )
 				{
 					FOR( writer, UInt, waveId, 0_u, waveId < numWaves, waveId++ )
 					{
 						auto waveResult = writer.declLocale( "waveResult"
-							, calculateWave( c3d_oceanData.waves[waveId]
+							, calculateWave( c3d_oceanData.waves()[waveId]
 								, out.vtx.position.xyz()
 								, dampening
-								, c3d_oceanData.numWaves
-								, c3d_oceanData.time ) );
+								, c3d_oceanData.numWaves()
+								, c3d_oceanData.time() ) );
 						finalWaveResult.position += waveResult.position;
 						finalWaveResult.normal += waveResult.normal;
 						finalWaveResult.tangent += waveResult.tangent;
@@ -998,7 +999,7 @@ namespace ocean
 					}
 					ROF;
 
-					finalWaveResult.position -= out.vtx.position.xyz() * ( c3d_oceanData.numWaves - 1.0_f );
+					finalWaveResult.position -= out.vtx.position.xyz() * ( writer.cast< sdw::Float >( c3d_oceanData.numWaves() - 1_u ) );
 					finalWaveResult.normal = normalize( finalWaveResult.normal );
 					finalWaveResult.tangent = normalize( finalWaveResult.tangent );
 					finalWaveResult.bitangent = normalize( finalWaveResult.bitangent );
@@ -1038,7 +1039,7 @@ namespace ocean
 	{
 #if Ocean_Debug
 #	define displayDebugData( OceanDataType, RGB, A )\
-	IF( writer, c3d_oceanData.debug.x() == sdw::UInt( OceanDataType ) )\
+	IF( writer, c3d_oceanData.debug().x() == sdw::UInt( OceanDataType ) )\
 	{\
 		pxl_colour = vec4( RGB, A );\
 		writer.returnStmt();\
@@ -1150,9 +1151,9 @@ namespace ocean
 					, normalize( in.bitangent ) );
 
 				auto normalMapCoords1 = writer.declLocale( "normalMapCoords1"
-					, in.texture1.xy() + c3d_oceanData.time * c3d_oceanData.normalMapScroll.xy() * c3d_oceanData.normalMapScrollSpeed.x() );
+					, in.texture1.xy() + c3d_oceanData.time() * c3d_oceanData.normalMapScroll().xy() * c3d_oceanData.normalMapScrollSpeed().x() );
 				auto normalMapCoords2 = writer.declLocale( "normalMapCoords2"
-					, in.texture1.xy() + c3d_oceanData.time * c3d_oceanData.normalMapScroll.zw() * c3d_oceanData.normalMapScrollSpeed.y() );
+					, in.texture1.xy() + c3d_oceanData.time() * c3d_oceanData.normalMapScroll().zw() * c3d_oceanData.normalMapScrollSpeed().y() );
 				auto hdrCoords = writer.declLocale( "hdrCoords"
 					, in.fragCoord.xy() / vec2( c3d_colour.getSize( 0_i ) ) );
 
@@ -1283,7 +1284,10 @@ namespace ocean
 							, surface.viewPosition.xyz()
 							, finalNormal
 							, hdrCoords
-							, c3d_oceanData.ssrSettings
+							, vec4( c3d_oceanData.ssrStepSize()
+								, c3d_oceanData.ssrForwardStepsCount()
+								, c3d_oceanData.ssrBackwardStepsCount()
+								, c3d_oceanData.ssrDepthMult() )
 							, c3d_depth
 							, c3d_normals
 							, c3d_colour ) );
@@ -1297,7 +1301,7 @@ namespace ocean
 
 					// Wobbly refractions
 					auto distortedTexCoord = writer.declLocale( "distortedTexCoord"
-						, ( hdrCoords + ( ( finalNormal.xz() + finalNormal.xy() ) * 0.5_f ) * c3d_oceanData.refractionDistortionFactor ) );
+						, ( hdrCoords + ( ( finalNormal.xz() + finalNormal.xy() ) * 0.5_f ) * c3d_oceanData.refractionDistortionFactor() ) );
 					auto distortedDepth = writer.declLocale( "distortedDepth"
 						, c3d_depth.sample( distortedTexCoord ) );
 					auto distortedPosition = writer.declLocale( "distortedPosition"
@@ -1314,20 +1318,20 @@ namespace ocean
 						, c3d_matrixData.curProjToWorld( utils, hdrCoords, sceneDepth ) );
 					// Depth softening, to fade the alpha of the water where it meets the scene geometry by some predetermined distance. 
 					auto depthSoftenedAlpha = writer.declLocale( "depthSoftenedAlpha"
-						, clamp( distance( scenePosition, in.worldPosition.xyz() ) / c3d_oceanData.depthSofteningDistance, 0.0_f, 1.0_f ) );
+						, clamp( distance( scenePosition, in.worldPosition.xyz() ) / c3d_oceanData.depthSofteningDistance(), 0.0_f, 1.0_f ) );
 					displayDebugData( eDepthSoftenedAlpha, vec3( depthSoftenedAlpha ), 1.0_f );
 					auto waterSurfacePosition = writer.declLocale( "waterSurfacePosition"
 						, writer.ternary( distortedPosition.y() < in.worldPosition.y(), distortedPosition, scenePosition ) );
 					auto waterTransmission = writer.declLocale( "waterTransmission"
 						, components.colour * ( indirectAmbient + indirectDiffuse ) * lightDiffuse );
 					auto heightFactor = writer.declLocale( "heightFactor"
-						, c3d_oceanData.refractionHeightFactor * ( c3d_sceneData.farPlane - c3d_sceneData.nearPlane ) );
+						, c3d_oceanData.refractionHeightFactor() * ( c3d_sceneData.farPlane - c3d_sceneData.nearPlane ) );
 					refractionResult = mix( refractionResult
 						, waterTransmission
 						, vec3( clamp( ( in.worldPosition.y() - waterSurfacePosition.y() ) / heightFactor, 0.0_f, 1.0_f ) ) );
 					displayDebugData( eHeightMixedRefraction, refractionResult, 1.0_f );
 					auto distanceFactor = writer.declLocale( "distanceFactor"
-						, c3d_oceanData.refractionDistanceFactor * ( c3d_sceneData.farPlane - c3d_sceneData.nearPlane ) );
+						, c3d_oceanData.refractionDistanceFactor() * ( c3d_sceneData.farPlane - c3d_sceneData.nearPlane ) );
 					refractionResult = mix( refractionResult
 						, waterTransmission
 						, utils.saturate( vec3( utils.saturate( length( in.viewPosition ) / distanceFactor ) ) ) );
@@ -1335,15 +1339,15 @@ namespace ocean
 
 					// Now apply some foam on top of waves
 					auto foamColor = writer.declLocale( "foamColor"
-						, c3d_waveFoam.sample( ( normalMapCoords1 + normalMapCoords2 ) * c3d_oceanData.foamTiling ).rgb() );
+						, c3d_waveFoam.sample( ( normalMapCoords1 + normalMapCoords2 ) * c3d_oceanData.foamTiling() ).rgb() );
 					auto foamNoise = writer.declLocale( "foamNoise"
-						, c3d_waveNoise.sample( in.texture1.xy() * c3d_oceanData.foamTiling ) );
+						, c3d_waveNoise.sample( in.texture1.xy() * c3d_oceanData.foamTiling() ) );
 					auto foamAmount = writer.declLocale( "foamAmount"
-						, utils.saturate( ( in.worldPosition.w() - c3d_oceanData.foamHeightStart ) / c3d_oceanData.foamFadeDistance ) * pow( utils.saturate( dot( in.normal.xyz(), vec3( 0.0_f, 1.0_f, 0.0_f ) ) ), c3d_oceanData.foamAngleExponent ) * foamNoise );
+						, utils.saturate( ( in.worldPosition.w() - c3d_oceanData.foamHeightStart() ) / c3d_oceanData.foamFadeDistance() ) * pow( utils.saturate( dot( in.normal.xyz(), vec3( 0.0_f, 1.0_f, 0.0_f ) ) ), c3d_oceanData.foamAngleExponent() ) * foamNoise );
 					foamAmount += pow( ( 1.0_f - depthSoftenedAlpha ), 3.0_f );
 					auto foamResult = writer.declLocale( "foamResult"
 						, lightDiffuse * mix( vec3( 0.0_f )
-							, foamColor * c3d_oceanData.foamBrightness
+							, foamColor * c3d_oceanData.foamBrightness()
 							, vec3( utils.saturate( foamAmount ) * depthSoftenedAlpha ) ) );
 
 
@@ -1352,7 +1356,7 @@ namespace ocean
 						, vec3( utils.fresnelMix( reflections->computeIncident( surface.worldPosition.xyz(), c3d_sceneData.cameraPosition )
 							, components.normal
 							, components.roughness
-							, c3d_oceanData.refractionRatio ) ) );
+							, c3d_oceanData.refractionRatio() ) ) );
 					displayDebugData( eFresnelFactor, vec3( fresnelFactor ), 1.0_f );
 					reflectionResult *= fresnelFactor;
 					displayDebugData( eFinalReflection, reflectionResult, 1.0_f );

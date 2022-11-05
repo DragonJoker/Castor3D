@@ -68,20 +68,24 @@ namespace ocean
 	struct OceanUboConfiguration
 	{
 		float tessellationFactor{ 7.0f };
-		float numWaves{ 2.0f };
+		uint32_t numWaves{ 2u };
 		float time{ 0.0f };
 		float dampeningFactor{ 5.0f };
+
 		float refractionRatio{ 1.2f };
 		float refractionDistortionFactor{ 0.04f };
 		float refractionHeightFactor{ 2.5f };
 		float refractionDistanceFactor{ 15.0f };
+
 		float foamHeightStart{ 0.8f };
 		float foamFadeDistance{ 0.4f };
 		float foamTiling{ 2.0f };
 		float foamAngleExponent{ 80.0f };
+
+		castor::Point2f normalMapScrollSpeed{ 0.01f, 0.01f };
 		float foamBrightness{ 4.0f };
 		float depthSofteningDistance{ 0.5f };
-		castor::Point2f normalMapScrollSpeed{ 0.01f, 0.01f };
+
 		castor::Point4f normalMapScroll{ 1.0f, 0.0f, 0.0f, 1.0f };
 		float ssrStepSize{ 0.5f };
 		float ssrForwardStepsCount{ 20.0f };
@@ -102,73 +106,85 @@ namespace ocean
 	};
 
 	struct Wave
-		: sdw::StructInstance
+		: sdw::StructInstanceHelperT< "Wave"
+			, sdw::type::MemoryLayout::eStd140
+			, sdw::Vec4Field< "direction" >
+			, sdw::FloatField< "steepness" >
+			, sdw::FloatField< "length" >
+			, sdw::FloatField< "amplitude" >
+			, sdw::FloatField< "speed" > >
 	{
 		Wave( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
-			, bool enabled = true );
+			, bool enabled = true )
+			: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+		{
+		}
 
-		SDW_DeclStructInstance( , Wave );
-
-		static sdw::type::BaseStructPtr makeType( sdw::type::TypesCache & cache );
-
-	private:
-		sdw::Vec4 m_direction;
-		sdw::Vec4 m_other;
-
-	public:
-		sdw::Vec3 direction;
-		sdw::Float steepness;
-		sdw::Float length;
-		sdw::Float amplitude;
-		sdw::Float speed;
+		auto direction()const { return getMember< "direction" >().xyz(); }
+		auto steepness()const { return getMember< "steepness" >(); }
+		auto length()const { return getMember< "length" >(); }
+		auto amplitude()const { return getMember< "amplitude" >(); }
+		auto speed()const { return getMember< "speed" >(); }
 	};
 
 	Writer_Parameter( Wave );
 
 	struct OceanData
-		: public sdw::StructInstance
+		: public sdw::StructInstanceHelperT< "WavesUbo"
+			, sdw::type::MemoryLayout::eStd140
+			, sdw::FloatField< "tessellationFactor" >
+			, sdw::UIntField< "numWaves" >
+			, sdw::FloatField< "time" >
+			, sdw::FloatField< "dampeningFactor" >
+			, sdw::FloatField< "refractionRatio" >
+			, sdw::FloatField< "refractionDistortionFactor" >
+			, sdw::FloatField< "refractionHeightFactor" >
+			, sdw::FloatField< "refractionDistanceFactor" >
+			, sdw::FloatField< "foamHeightStart" >
+			, sdw::FloatField< "foamFadeDistance" >
+			, sdw::FloatField< "foamTiling" >
+			, sdw::FloatField< "foamAngleExponent" >
+			, sdw::Vec2Field< "normalMapScrollSpeed" >
+			, sdw::FloatField< "foamBrightness" >
+			, sdw::FloatField< "depthSofteningDistance" >
+			, sdw::Vec4Field< "normalMapScroll" >
+			, sdw::FloatField< "ssrStepSize" >
+			, sdw::FloatField< "ssrForwardStepsCount" >
+			, sdw::FloatField< "ssrBackwardStepsCount" >
+			, sdw::FloatField< "ssrDepthMult" >
+			, sdw::UVec4Field< "debug" >
+			, sdw::StructFieldArrayT< Wave, "waves", MaxWaves > >
 	{
 		OceanData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
-			, bool enabled );
+			, bool enabled )
+			: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+		{
+		}
 
-		SDW_DeclStructInstance( , OceanData );
-
-		static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
-
-	private:
-		using sdw::StructInstance::getMember;
-		using sdw::StructInstance::getMemberArray;
-
-	private:
-		sdw::Vec4 m_base;
-		sdw::Vec4 m_refraction;
-		sdw::Vec4 m_foam;
-		sdw::Vec4 m_other;
-
-	public:
-		sdw::Vec4 normalMapScroll;
-		sdw::Vec4 ssrSettings;
-#if Ocean_Debug
-		sdw::UVec4 debug;
-#endif
-		sdw::Array< Wave > waves;
-		sdw::Float tessellationFactor;
-		sdw::Float numWaves;
-		sdw::Float time;
-		sdw::Float dampeningFactor;
-		sdw::Float refractionRatio;
-		sdw::Float refractionDistortionFactor;
-		sdw::Float refractionHeightFactor;
-		sdw::Float refractionDistanceFactor;
-		sdw::Float foamHeightStart;
-		sdw::Float foamFadeDistance;
-		sdw::Float foamTiling;
-		sdw::Float foamAngleExponent;
-		sdw::Float foamBrightness;
-		sdw::Float depthSofteningDistance;
-		sdw::Vec2 normalMapScrollSpeed;
+		auto normalMapScroll()const { return getMember< "normalMapScroll" >(); }
+		auto ssrStepSize()const { return getMember< "ssrStepSize" >(); }
+		auto ssrForwardStepsCount()const { return getMember< "ssrForwardStepsCount" >(); }
+		auto ssrBackwardStepsCount()const { return getMember< "ssrBackwardStepsCount" >(); }
+		auto ssrDepthMult()const { return getMember< "ssrDepthMult" >(); }
+		auto debug()const { return getMember< "debug" >(); }
+		auto waves()const { return getMember< "waves" >(); }
+		auto tessellationFactor()const { return getMember< "tessellationFactor" >(); }
+		auto numWaves()const { return getMember< "numWaves" >(); }
+		auto time()const { return getMember< "time" >(); }
+		auto dampeningFactor()const { return getMember< "dampeningFactor" >(); }
+		auto refractionRatio()const { return getMember< "refractionRatio" >(); }
+		auto refractionDistortionFactor()const { return getMember< "refractionDistortionFactor" >(); }
+		auto refractionHeightFactor()const { return getMember< "refractionHeightFactor" >(); }
+		auto refractionDistanceFactor()const { return getMember< "refractionDistanceFactor" >(); }
+		auto foamHeightStart()const { return getMember< "foamHeightStart" >(); }
+		auto foamFadeDistance()const { return getMember< "foamFadeDistance" >(); }
+		auto foamTiling()const { return getMember< "foamTiling" >(); }
+		auto foamAngleExponent()const { return getMember< "foamAngleExponent" >(); }
+		auto foamBrightness()const { return getMember< "foamBrightness" >(); }
+		auto depthSofteningDistance()const { return getMember< "depthSofteningDistance" >(); }
+		auto normalMapScrollSpeed()const { return getMember< "normalMapScrollSpeed" >(); }
 	};
 
 	class OceanUbo
