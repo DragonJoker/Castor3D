@@ -174,19 +174,21 @@ namespace castor3d::shader
 					, TextureAnimData const & anim
 					, sdw::Vec2 uv )
 				{
-					uv = vec2( uv.x()
-						, mix( uv.y(), 1.0_f - uv.y(), config.fneedYI ) );
-					uv = scaleUV( config.scale().xy(), uv );
-					uv = rotateUV( config.rotate().xy(), uv );
+					uv = scaleUV( config.scale().xy()
+						, m_writer.ternary( config.needsYI() == 0_u
+							, uv
+							, vec2( uv.x(), 1.0_f - uv.y() ) ) );
+					uv = rotateUV( config.rotateU(), config.rotateV(), uv );
 					uv = translateUV( config.translate().xy(), uv );
 
 					IF( m_writer, config.isTrnfAnim() )
 					{
-						uv = vec2( uv.x()
-							, mix( uv.y(), 1.0_f - uv.y(), config.fneedYI ) );
-						uv = scaleUV( anim.texScl.xy(), uv );
-						uv = rotateUV( anim.texRot.xy(), uv );
-						uv = translateUV( anim.texTrn.xy(), uv );
+						uv = scaleUV( anim.scale().xy()
+							, m_writer.ternary( config.needsYI() == 0_u
+								, uv
+								, vec2( uv.x(), 1.0_f - uv.y() ) ) );
+						uv = rotateUV( anim.rotateU(), anim.rotateV(), uv );
+						uv = translateUV( anim.translate().xy(), uv );
 					}
 					FI;
 
@@ -195,8 +197,8 @@ namespace castor3d::shader
 
 					IF( m_writer, config.isTileAnim() )
 					{
-						uv.x() += anim.tleSet.x() / anim.tleSet.z();
-						uv.y() += anim.tleSet.y() / anim.tleSet.w();
+						uv.x() += anim.tileSet().x() / anim.tileSet().z();
+						uv.y() += anim.tileSet().y() / anim.tileSet().w();
 					}
 					FI;
 
@@ -221,21 +223,19 @@ namespace castor3d::shader
 					, TextureAnimData const & anim
 					, sdw::Vec3 uvw )
 				{
-					uvw = vec3( uvw.x()
-						, mix( uvw.y(), 1.0_f - uvw.y(), config.fneedYI )
-						, uvw.z() );
-					uvw = scaleUV( config.scale().xyz(), uvw );
-					uvw = rotateUV( config.rotate().xyz(), uvw );
-					uvw = translateUV( config.translate().xyz(), uvw );
+					uvw = scaleUV( config.scale()
+						, m_writer.ternary( config.needsYI() == 0_u
+							, uvw
+							, vec3( uvw.x(), 1.0_f - uvw.y(), uvw.z() ) ) );
+					uvw = translateUV( config.translate(), uvw );
 
 					IF( m_writer, config.isTrnfAnim() )
 					{
-						uvw = vec3( uvw.x()
-							, mix( uvw.y(), 1.0_f - uvw.y(), config.fneedYI )
-							, uvw.z() );
-						uvw = scaleUV( anim.texScl.xyz(), uvw );
-						uvw = rotateUV( anim.texRot.xyz(), uvw );
-						uvw = translateUV( anim.texTrn.xyz(), uvw );
+						uvw = scaleUV( anim.scale()
+							, m_writer.ternary( config.needsYI() == 0_u
+								, uvw
+								, vec3( uvw.x(), 1.0_f - uvw.y(), uvw.z() ) ) );
+						uvw = translateUV( anim.translate(), uvw );
 					}
 					FI;
 

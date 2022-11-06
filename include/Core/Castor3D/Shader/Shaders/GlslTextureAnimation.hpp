@@ -7,35 +7,36 @@ See LICENSE file in root folder
 #include "GlslBuffer.hpp"
 
 #include <ShaderWriter/MatTypes/Mat4.hpp>
-#include <ShaderWriter/CompositeTypes/StructInstance.hpp>
+#include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>
 
 namespace castor3d
 {
 	namespace shader
 	{
 		struct TextureAnimData
-			: public sdw::StructInstance
+			: public sdw::StructInstanceHelperT< "C3D_TextureAnimData"
+				, ast::type::MemoryLayout::eStd430
+				, sdw::Vec3Field< "translate" >
+				, sdw::FloatField< "rotateU" >
+				, sdw::Vec3Field< "scale" >
+				, sdw::FloatField< "rotateV" >
+				, sdw::Vec4Field< "tileSet" > >
 		{
 			friend class TextureAnimations;
 
 		public:
-			C3D_API TextureAnimData( sdw::ShaderWriter & writer
+			TextureAnimData( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr
-				, bool enabled );
-			SDW_DeclStructInstance( C3D_API, TextureAnimData );
+				, bool enabled )
+				: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+			{
+			}
 
-			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
-			C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
-
-		private:
-			using sdw::StructInstance::getMember;
-			using sdw::StructInstance::getMemberArray;
-
-		public:
-			sdw::Vec4 texTrn;
-			sdw::Vec4 texRot;
-			sdw::Vec4 texScl;
-			sdw::Vec4 tleSet;
+			auto translate()const { return getMember< "translate" >(); }
+			auto rotateU()const { return getMember< "rotateU" >(); }
+			auto rotateV()const { return getMember< "rotateV" >(); }
+			auto scale()const { return getMember< "scale" >(); }
+			auto tileSet()const { return getMember< "tileSet" >(); }
 		};
 
 		class TextureAnimations

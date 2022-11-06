@@ -18,9 +18,9 @@ namespace castor3d
 {
 	struct TextureTransform
 	{
-		castor::Point4f translate{ 0, 0, 0, 0 };
+		castor::Point3f translate{ 0, 0, 0 };
 		castor::Angle rotate;
-		castor::Point4f scale{ 1, 1, 1, 0 };
+		castor::Point3f scale{ 1, 1, 1 };
 	};
 	/**
 	*\~english

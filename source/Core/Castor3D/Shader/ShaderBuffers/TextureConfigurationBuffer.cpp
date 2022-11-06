@@ -29,7 +29,7 @@ namespace castor3d
 		{
 			return castor::Point4ui{ a.flag
 				, a.componentsMask ? 1u : 0u
-				, float( a.startIndex )
+				, a.startIndex
 				, 0u };
 		}
 	}
@@ -117,7 +117,8 @@ namespace castor3d
 
 					auto & data = m_data[index];
 					data.translate = config.transform.translate;
-					data.rotate = { config.transform.rotate.cos(), config.transform.rotate.sin(), 0.0f, 0.0f };
+					data.rotateU = config.transform.rotate.cos();
+					data.rotateV = config.transform.rotate.sin();
 					data.scale = config.transform.scale;
 					data.tileSet = castor::Point4f{ config.tileSet };
 					data.normalFactor = config.normalFactor;
