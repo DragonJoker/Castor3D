@@ -313,7 +313,7 @@ namespace castor3d
 				, pipeline.morphFlags );
 			auto c3d_morphingWeights = writer.declArrayStorageBuffer< shader::MorphingWeightsData >( "c3d_morphingWeights"
 				, { uint32_t( VertexTransformPass::eMorphingWeights ), 0u }
-				, pipeline.morphFlags != MorphFlag::eNone );
+				, pipeline.morphFlags != MorphFlag::eNone && pipeline.hasMorphingWeights );
 
 			// Skinning
 			auto skinningData = SkinningUbo::declare( writer
@@ -423,18 +423,35 @@ namespace castor3d
 				auto colour = writer.declLocale( "colour"
 					, c3d_inColour[index].xyz() );
 
-				auto morphingWeights = writer.declLocale( "morphingWeights"
-					, c3d_morphingWeights[c3d_objectIDs.morphingId] );
-				morphingWeights.morph( c3d_morphTargets
-					, index
-					, position
-					, normal
-					, tangent
-					, texcoord0
-					, texcoord1
-					, texcoord2
-					, texcoord3
-					, colour );
+				if ( pipeline.hasMorphingWeights )
+				{
+					auto morphingWeights = writer.declLocale( "morphingWeights"
+						, c3d_morphingWeights[c3d_objectIDs.morphingId] );
+					morphingWeights.morph( c3d_morphTargets
+						, index
+						, position
+						, normal
+						, tangent
+						, texcoord0
+						, texcoord1
+						, texcoord2
+						, texcoord3
+						, colour );
+				}
+				else if ( pipeline.morphFlags != MorphFlag::eNone )
+				{
+					shader::MorphingWeightsData::morphNoAnim( c3d_morphTargets
+						, index
+						, position
+						, normal
+						, tangent
+						, texcoord0
+						, texcoord1
+						, texcoord2
+						, texcoord3
+						, colour );
+				}
+
 				c3d_outTexcoord0[index].xyz() = texcoord0;
 				c3d_outTexcoord1[index].xyz() = texcoord1;
 				c3d_outTexcoord2[index].xyz() = texcoord2;
@@ -648,23 +665,6 @@ namespace castor3d
 
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
-
-		static uint32_t getIndex( SubmeshFlags const & submeshFlags
-			, MorphFlags const & morphFlags
-			, ProgramFlags const & programFlags )
-		{
-			constexpr auto maxSubmeshSize = castor::getBitSize( uint32_t( SubmeshFlag::eAllBase ) );
-			constexpr auto maxMorphSize = castor::getBitSize( uint32_t( MorphFlag::eAllBase ) );
-			static_assert( maxSubmeshSize + maxMorphSize + 1u <= 32 );
-			auto offset = 0u;
-			uint32_t result{};
-			result = uint32_t( submeshFlags ) << offset;
-			offset += maxSubmeshSize;
-			result |= uint32_t( morphFlags ) << offset;
-			offset += maxMorphSize;
-			result |= uint32_t( checkFlag( programFlags, ProgramFlag::eHasTask ) ? 1u : 0u ) << offset;
-			return result;
-		}
 	}
 
 	//*********************************************************************************************
@@ -741,13 +741,17 @@ namespace castor3d
 		}
 		else
 		{
-			auto & pipeline = doGetPipeline( vtxtrsg::getIndex( node.getSubmeshFlags()
+			static GpuBufferOffsetT< castor3d::MorphingWeightsConfiguration > const dummy{};
+			auto & pipeline = doGetPipeline( TransformPipeline::getIndex( node.getSubmeshFlags()
 				, node.getMorphFlags()
-				, node.getProgramFlags() ) );
+				, node.getProgramFlags()
+				, bool( morphingWeights ) && node.data.isAnimated() ) );
 			m_pass->registerNode( node
 				, pipeline
 				, morphTargets
-				, morphingWeights
+				, *( node.data.isAnimated()
+					? &morphingWeights
+					: &dummy )
 				, skinTransforms );
 
 			if ( pipeline.meshletsBounds )

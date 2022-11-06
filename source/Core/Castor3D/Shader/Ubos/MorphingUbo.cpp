@@ -358,6 +358,44 @@ namespace castor3d
 			ROF;
 		}
 
+		void MorphingWeightsData::morphNoAnim( sdw::ArrayStorageBufferT< shader::MorphTargetsData > const & targets
+			, sdw::UInt vertexId
+			, sdw::Vec4 & pos
+			, sdw::Vec4 & nml
+			, sdw::Vec4 & tan
+			, sdw::Vec3 & uvw0
+			, sdw::Vec3 & uvw1
+			, sdw::Vec3 & uvw2
+			, sdw::Vec3 & uvw3
+			, sdw::Vec3 & col )
+		{
+			if ( !targets.isEnabled() )
+			{
+				return;
+			}
+
+			auto & writer = findWriterMandat( vertexId, pos, nml, tan, uvw0, uvw1, uvw2, col );
+			auto morphTargets = writer.declLocale( "morphTargets"
+				, targets[vertexId] );
+			auto morphWeight = writer.declLocale( "morphWeight"
+				, 0.0_f );
+			auto morphIndex = writer.declLocale( "morphIndex"
+				, 0_u );
+			morphWeight = 1.0_f;
+			morphIndex = 0_u;
+			auto target = writer.declLocale( "morphTarget"
+				, morphTargets[morphIndex] );
+			target.morph( pos
+				, nml
+				, tan
+				, uvw0
+				, uvw1
+				, uvw2
+				, uvw3
+				, col
+				, morphWeight );
+		}
+
 		//*****************************************************************************************
 	}
 }

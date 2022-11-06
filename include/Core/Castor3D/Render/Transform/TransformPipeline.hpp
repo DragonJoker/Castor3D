@@ -22,11 +22,17 @@ namespace castor3d
 		C3D_API std::string getName()const;
 		C3D_API static std::string getName( SubmeshFlags const & submeshFlags
 			, MorphFlags const & morphFlags
-			, bool meshletsBounds );
+			, bool meshletsBounds
+			, bool hasMorphingWeights );
+		C3D_API static uint32_t getIndex( SubmeshFlags const & submeshFlags
+			, MorphFlags const & morphFlags
+			, ProgramFlags const & programFlags
+			, bool morphingWeights );
 
 		SubmeshFlags submeshFlags;
 		MorphFlags morphFlags;
 		bool meshletsBounds;
+		bool hasMorphingWeights;
 		uint32_t index;
 
 		ShaderModule shader;
