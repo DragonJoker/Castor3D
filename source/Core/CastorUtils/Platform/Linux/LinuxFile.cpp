@@ -112,15 +112,15 @@ namespace castor
 		return result;
 	}
 
-	bool fileOpen( FILE *& p_file, char const * p_path, char const * p_mode )
+	bool fileOpen( FILE *& p_file, std::filesystem::path const & p_path, char const * p_mode )
 	{
-		p_file = fopen( p_path, p_mode );
+		p_file = fopen( p_path.c_str(), p_mode );
 		return p_file != nullptr;
 	}
 
-	bool fileOpen64( FILE *& p_file, char const * p_path, char const * p_mode )
+	bool fileOpen64( FILE *& p_file, std::filesystem::path const & p_path, char const * p_mode )
 	{
-		p_file = fopen64( p_path, p_mode );
+		p_file = fopen64( p_path.c_str(), p_mode );
 		return p_file != nullptr;
 	}
 

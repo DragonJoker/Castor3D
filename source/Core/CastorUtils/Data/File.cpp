@@ -78,7 +78,9 @@ namespace castor
 			}
 		}
 
-		fileOpen( m_file, string::stringCast< char >( m_fileFullPath ).c_str(), string::stringCast< char >( mode ).c_str() );
+		fileOpen( m_file
+			, makePath( m_fileFullPath )
+			, string::stringCast< char >( mode ).c_str() );
 
 		if ( m_file )
 		{
@@ -252,7 +254,7 @@ namespace castor
 
 	bool File::fileExists( Path const & fileName )
 	{
-		return std::filesystem::exists( string::stringCast< wchar_t >( fileName ) );
+		return std::filesystem::exists( makePath( fileName ) );
 	}
 
 	bool File::deleteFile( Path const & fileName )
@@ -261,7 +263,7 @@ namespace castor
 
 		if ( fileExists( fileName ) )
 		{
-			result = std::filesystem::remove( string::stringCast< wchar_t >( fileName ).c_str() ) == 0;
+			result = std::filesystem::remove( makePath( fileName ) ) == 0;
 		}
 		else
 		{
@@ -292,8 +294,8 @@ namespace castor
 				? std::filesystem::copy_options::update_existing
 				: std::filesystem::copy_options::skip_existing ) };
 			std::error_code error{};
-			result = std::filesystem::copy_file( string::stringCast< wchar_t >( srcFileName )
-				, string::stringCast< wchar_t >( dstFileName )
+			result = std::filesystem::copy_file( makePath( srcFileName )
+				, makePath( dstFileName )
 				, options
 				, error );
 			
