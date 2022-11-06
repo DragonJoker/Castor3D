@@ -69,7 +69,7 @@ namespace castor
 		}
 
 		FILE * file;
-		castor::fileOpen( file, string::stringCast< char >( logFilePath ).c_str(), "w" );
+		castor::fileOpen( file, makePath( logFilePath ), "w" );
 
 		if ( file )
 		{

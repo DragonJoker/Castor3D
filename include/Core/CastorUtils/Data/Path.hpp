@@ -8,6 +8,8 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Miscellaneous/StringUtils.hpp"
 
+#include <filesystem>
+
 namespace castor
 {
 	class Path
@@ -288,6 +290,8 @@ namespace castor
 	 *\param[in]	rhs	The first path to add
 	 */
 	CU_API Path operator/( wchar_t const * lhs, Path const & rhs );
+
+	CU_API std::filesystem::path makePath( castor::String const & str );
 }
 
 #endif

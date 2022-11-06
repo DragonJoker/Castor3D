@@ -9,6 +9,7 @@
 
 #include <cstdio>
 #include <cstring>
+#include <filesystem>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <iostream>
@@ -76,9 +77,10 @@ namespace castor
 
 #if defined( CU_CompilerMSVC )
 
-	bool fileOpen( FILE *& p_file, char const * p_path, char const * p_mode )
+	bool fileOpen( FILE *& p_file, std::filesystem::path const & p_path, char const * p_mode )
 	{
-		errno_t err = fopen_s( &p_file, p_path, p_mode );
+		auto mode = string::stringCast< wchar_t >( std::string{ p_mode } );
+		errno_t err = _wfopen_s( &p_file, p_path.c_str(), mode.c_str() );
 
 		if ( err && !p_file )
 		{
@@ -88,9 +90,10 @@ namespace castor
 		return err == 0;
 	}
 
-	bool fileOpen64( FILE *& p_file, char const * p_path, char const * p_mode )
+	bool fileOpen64( FILE *& p_file, std::filesystem::path const & p_path, char const * p_mode )
 	{
-		errno_t err = fopen_s( &p_file, p_path, p_mode );
+		auto mode = string::stringCast< wchar_t >( std::string{ p_mode } );
+		errno_t err = _wfopen_s( &p_file, p_path.c_str(), mode.c_str() );
 
 		if ( err && !p_file )
 		{
@@ -112,13 +115,13 @@ namespace castor
 
 #else
 
-	bool fileOpen( FILE *& p_file, char const * p_path, char const * p_mode )
+	bool fileOpen( FILE *& p_file, std::filesystem::path const & p_path, char const * p_mode )
 	{
 		p_file = fopen( p_path, p_mode );
 		return p_file != nullptr;
 	}
 
-	bool fileOpen64( FILE *& p_file, char const * p_path, char const * p_mode )
+	bool fileOpen64( FILE *& p_file, std::filesystem::path const & p_path, char const * p_mode )
 	{
 		p_file = fopen( p_path, p_mode );
 		return p_file != nullptr;

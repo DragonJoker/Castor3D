@@ -2,6 +2,8 @@
 
 #include <algorithm>
 
+#pragma warning( disable: 4996 )
+
 namespace castor
 {
 	const xchar Path::GenericSeparator = cuT( '/' );
@@ -316,5 +318,10 @@ namespace castor
 		Path path{ p_lhs };
 		path /= p_rhs;
 		return path;
+	}
+
+	std::filesystem::path makePath( castor::String const & str )
+	{
+		return std::filesystem::u8path( str.begin(), str.end() );
 	}
 }

@@ -28,7 +28,7 @@ namespace castor
 	 *\param[in]	mode	Le mode d'ouverture
 	 *\return		\p true en cas de réussite
 	 */
-	CU_API bool fileOpen( FILE *& file, char const * path, char const * mode );
+	CU_API bool fileOpen( FILE *& file, std::filesystem::path const & path, char const * mode );
 	/**
 	 *\~english
 	 *\brief		Opens a file
@@ -43,7 +43,7 @@ namespace castor
 	 *\param[in]	mode	Le mode d'ouverture
 	 *\return		\p true en cas de réussite
 	 */
-	CU_API bool fileOpen64( FILE *& file, char const * path, char const * mode );
+	CU_API bool fileOpen64( FILE *& file, std::filesystem::path const & path, char const * mode );
 	/**
 	 *\~english
 	 *\brief		Seeks into a file
