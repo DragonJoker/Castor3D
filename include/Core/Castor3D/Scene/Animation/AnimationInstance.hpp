@@ -186,6 +186,28 @@ namespace castor3d
 		}
 		/**
 		 *\~english
+		 *\return		The animation interpolation mode.
+		 *\~french
+		 *\return		Le mode d'interpolation de l'animation.
+		 */
+		InterpolatorType getInterpolation()const
+		{
+			return m_interpolation;
+		}
+		/**
+		 *\~english
+		 *\brief		Sets the animation interpolation mode.
+		 *\param[in]	value	The new value.
+		 *\~french
+		 *\brief		Définit le mode d'interpolation de l'animation.
+		 *\param[in]	value	La nouvelle valeur.
+		 */
+		void setInterpolation( InterpolatorType value )
+		{
+			m_interpolation = value;
+		}
+		/**
+		 *\~english
 		 *\return		The animation.
 		 *\~french
 		 *\return		L'animation.
@@ -226,6 +248,9 @@ namespace castor3d
 		//!\~english	The current state of the animation.
 		//!\~french		L'état actuel de l'animation.
 		AnimationState m_state{ AnimationState::eStopped };
+		//!\~english	The interpolation for the animation.
+		//!\~french		L'interplation de l'animation.
+		InterpolatorType m_interpolation{ InterpolatorType::eLinear };
 	};
 }
 

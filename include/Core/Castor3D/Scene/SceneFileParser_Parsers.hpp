@@ -360,6 +360,7 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserAnimationScale )
 	CU_DeclareAttributeParser( parserAnimationStartAt )
 	CU_DeclareAttributeParser( parserAnimationStopAt )
+	CU_DeclareAttributeParser( parserAnimationInterpolation )
 	CU_DeclareAttributeParser( parserAnimationEnd )
 
 	// Skybox parsers

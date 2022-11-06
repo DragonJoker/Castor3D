@@ -181,6 +181,18 @@ namespace castor3d
 			, castor::Milliseconds value );
 		/**
 		 *\~english
+		 *\brief		Sets the interpolation mode of wanted animation.
+		 *\param[in]	name	The name of the animation.
+		 *\param[in]	mode	The interpolation mode.
+		 *\~french
+		 *\brief		Définit le mode d'interpolation de l'animation voulue.
+		 *\param[in]	name	Le nom de l'animation.
+		 *\param[in]	mode	Le mode d'interpolation.
+		 */
+		C3D_API void setAnimationInterpolation( castor::String const & name
+			, InterpolatorType mode );
+		/**
+		 *\~english
 		 *\brief			CPU Update.
 		 *\param[in, out]	updater	The update data.
 		 *\~french

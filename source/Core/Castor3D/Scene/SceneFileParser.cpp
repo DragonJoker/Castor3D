@@ -373,6 +373,7 @@ namespace castor3d
 			addParser( result, uint32_t( CSCNSection::eAnimation ), cuT( "scale" ), parserAnimationScale, { makeParameter< ParameterType::eFloat >() } );
 			addParser( result, uint32_t( CSCNSection::eAnimation ), cuT( "start_at" ), parserAnimationStartAt, { makeParameter< ParameterType::eFloat >() } );
 			addParser( result, uint32_t( CSCNSection::eAnimation ), cuT( "stop_at" ), parserAnimationStopAt, { makeParameter< ParameterType::eFloat >() } );
+			addParser( result, uint32_t( CSCNSection::eAnimation ), cuT( "interpolation" ), parserAnimationInterpolation, { makeParameter< ParameterType::eCheckedText >( SceneFileParser::interpolatorTypes ) } );
 			addParser( result, uint32_t( CSCNSection::eAnimation ), cuT( "}" ), parserAnimationEnd );
 
 			addParser( result, uint32_t( CSCNSection::eSkybox ), cuT( "equirectangular" ), parserSkyboxEqui, { makeParameter< ParameterType::ePath >(), makeParameter< ParameterType::eUInt32 >() } );
@@ -550,6 +551,7 @@ namespace castor3d
 	UInt32StrMap SceneFileParser::materialTypes;
 	UInt32StrMap SceneFileParser::shadowFilters;
 	UInt32StrMap SceneFileParser::globalIlluminations;
+	UInt32StrMap SceneFileParser::interpolatorTypes;
 
 	SceneFileParser::SceneFileParser( Engine & engine )
 		: OwnedBy< Engine >( engine )
@@ -598,6 +600,7 @@ namespace castor3d
 			lineSpacingModes = getEnumMapT< TextLineSpacingMode >();
 			shadowFilters = getEnumMapT< ShadowType >();
 			globalIlluminations = getEnumMapT< GlobalIlluminationType >();
+			interpolatorTypes = getEnumMapT< InterpolatorType >();
 
 			for ( auto & it : engine.getPassFactory().listRegisteredTypes() )
 			{

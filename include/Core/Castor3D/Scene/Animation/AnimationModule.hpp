@@ -104,6 +104,7 @@ namespace castor3d
 		float scale{};
 		castor::Milliseconds startingPoint{};
 		castor::Milliseconds stoppingPoint{};
+		InterpolatorType interpolation{ InterpolatorType::eLinear };
 	};
 	using GroupAnimationMap = std::map< castor::String, GroupAnimation >;
 

@@ -23,12 +23,13 @@ namespace castor3d
 	{
 		static castor::BoundingBox doInterpolateBB( castor::BoundingBox const & prv
 			, castor::BoundingBox const & cur
+			, Interpolator< castor::Point3f > const & interpolator
 			, float const factor )
 		{
 			return castor::BoundingBox
 			{
-				castor::Point3f{ prv.getMin() * float( 1.0 - factor ) + cur.getMin() * factor },
-				castor::Point3f{ prv.getMax() * float( 1.0 - factor ) + cur.getMax() * factor }
+				interpolator.interpolate( prv.getMin(), prv.getMin(), factor ),
+				interpolator.interpolate( prv.getMax(), prv.getMax(), factor ),
 			};
 		}
 	}
@@ -60,7 +61,7 @@ namespace castor3d
 		}
 		else
 		{
-			castor3d::InterpolatorT< float, castor3d::InterpolatorType::eLinear > interpolator;
+			auto interpolator = makeInterpolator< float >( getOwner()->getInterpolation() );
 			auto prvIt = prv.begin();
 			auto curIt = cur.begin();
 			m_cur.resize( cur.size() );
@@ -68,15 +69,19 @@ namespace castor3d
 
 			for ( size_t i = 0u; i < m_cur.size(); ++i )
 			{
-				*resIt = interpolator.interpolate( *prvIt, *curIt, factor );
+				*resIt = interpolator->interpolate( *prvIt, *curIt, factor );
 				++curIt;
 				++prvIt;
 				++resIt;
 			}
 		}
 
+		auto interpolator = makeInterpolator< castor::Point3f >( getOwner()->getInterpolation() );
 		getOwner()->getAnimatedMesh().getGeometry().setBoundingBox( m_animationObject.getSubmesh()
-			, mshanminstsm::doInterpolateBB( prvbb, curbb, factor ) );
+			, mshanminstsm::doInterpolateBB( prvbb
+				, curbb
+				, *interpolator
+				, factor ) );
 	}
 
 	void MeshAnimationInstanceSubmesh::clear()
