@@ -160,14 +160,6 @@ namespace castor3d::shader
 				}
 				ROF;
 			}
-			//else
-			//{
-			//	FOR( *m_writer, sdw::UInt, passIdx, 0_u, passIdx < passCount && passIdx < MaxPassLayers, ++passIdx )
-			//	{
-			//		passMultipliers[passIdx / 4_u][passIdx % 4_u] = 0.0_f;
-			//	}
-			//	ROF;
-			//}
 		}
 	}
 

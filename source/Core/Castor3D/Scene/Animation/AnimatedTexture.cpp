@@ -80,7 +80,8 @@ namespace castor3d
 			auto & transform = m_playingAnimation->getTransform();
 			auto & data = *buffer;
 			data.translate = transform.translate;
-			data.rotate = { transform.rotate.cos(), transform.rotate.sin(), 0.0f, 0.0f };
+			data.rotateU = transform.rotate.cos();
+			data.rotateV = transform.rotate.sin();
 			data.scale = transform.scale;
 
 			if ( !m_playingAnimation->getTextureAnimation().isEmpty() )

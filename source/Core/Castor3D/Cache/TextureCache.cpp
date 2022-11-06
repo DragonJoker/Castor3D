@@ -296,6 +296,11 @@ namespace castor3d
 				castor::hashCombine( result, flag );
 			}
 
+			castor::hashCombine( result, config.config.transform.translate->x );
+			castor::hashCombine( result, config.config.transform.translate->y );
+			castor::hashCombine( result, config.config.transform.rotate.radians() );
+			castor::hashCombine( result, config.config.transform.scale->x );
+			castor::hashCombine( result, config.config.transform.scale->y );
 			return result;
 		}
 

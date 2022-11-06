@@ -4367,7 +4367,7 @@ namespace castor3d
 		{
 			castor::Point2f value;
 			params[0]->get( value );
-			parsingContext.textureTransform.translate = castor::Point4f{ value->x, value->y, 0.0f, 0.0f };
+			parsingContext.textureTransform.translate = castor::Point3f{ value->x, value->y, 0.0f };
 		}
 	}
 	CU_EndAttribute()
@@ -4384,7 +4384,7 @@ namespace castor3d
 		{
 			castor::Point2f value;
 			params[0]->get( value );
-			parsingContext.textureTransform.scale = castor::Point4f{ value->x, value->y, 1.0f, 0.0f };
+			parsingContext.textureTransform.scale = castor::Point3f{ value->x, value->y, 1.0f };
 		}
 	}
 	CU_EndAttribute()

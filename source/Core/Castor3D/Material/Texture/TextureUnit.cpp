@@ -298,6 +298,7 @@ namespace castor3d
 					: 0u ) )
 			: needsYInversion;
 		updateIndices( format, m_configuration );
+		setTransform( m_configuration.transform );
 		onChanged( *this );
 	}
 

@@ -23,18 +23,13 @@ namespace castor3d
 			return translate + uv;
 		}
 
-		inline sdw::Vec2 rotateUV( sdw::Vec2 const & rotate
+		inline sdw::Vec2 rotateUV( sdw::Float const & rotateU
+			, sdw::Float const & rotateV
 			, sdw::Vec2 const & uv )
 		{
 			auto mid = 0.5_f;
-			return vec2( rotate.x() * ( uv.x() - mid ) + rotate.y() * ( uv.y() - mid ) + mid
-				, rotate.x() * ( uv.y() - mid ) - rotate.y() * ( uv.x() - mid ) + mid );
-		}
-
-		inline sdw::Vec3 rotateUV( sdw::Vec3 const & rotate
-			, sdw::Vec3 const & uv )
-		{
-			return ( ( uv - vec3( 0.5_f, 0.5f, 0.5f ) ) * rotate ) + vec3( 0.5_f, 0.5f, 0.5f );
+			return vec2( rotateU * ( uv.x() - mid ) + rotateV * ( uv.y() - mid ) + mid
+				, rotateU * ( uv.y() - mid ) - rotateV * ( uv.x() - mid ) + mid );
 		}
 
 		template< typename LhsT, typename RhsT >
@@ -47,19 +42,20 @@ namespace castor3d
 		struct TextureConfigData
 			: public sdw::StructInstanceHelperT< "C3D_TextureConfigData"
 				, ast::type::MemoryLayout::eStd430
-				, sdw::Vec4Field< "translate" >
-				, sdw::Vec4Field< "rotate" >
-				, sdw::Vec4Field< "scale" >
+				, sdw::U32Vec4ArrayField< "components", 4u >
+				, sdw::Vec3Field< "translate" >
+				, sdw::FloatField< "rotateU" >
+				, sdw::Vec3Field< "scale" >
+				, sdw::FloatField< "rotateV" >
 				, sdw::Vec4Field< "tileSet" >
-				, sdw::FloatField< "nmlFact" >
 				, sdw::FloatField< "nmlGMul" >
+				, sdw::FloatField< "nmlFact" >
 				, sdw::FloatField< "hgtFact" >
-				, sdw::UIntField< "needsYI" >
 				, sdw::UIntField< "isTrnfAnim" >
 				, sdw::UIntField< "isTileAnim" >
+				, sdw::UIntField< "needsYI" >
 				, sdw::UIntField< "texSet" >
-				, sdw::UIntField< "componentCount" >
-				, sdw::U32Vec4ArrayField< "components", 4u > >
+				, sdw::UIntField< "componentCount" > >
 		{
 			friend class TextureConfigurations;
 
@@ -84,7 +80,8 @@ namespace castor3d
 				, sdw::UInt const & mask )const;
 
 			auto translate()const { return getMember< "translate" >(); }
-			auto rotate()const { return getMember< "rotate" >(); }
+			auto rotateU()const { return getMember< "rotateU" >(); }
+			auto rotateV()const { return getMember< "rotateV" >(); }
 			auto scale()const { return getMember< "scale" >(); }
 			auto tileSet()const { return getMember< "tileSet" >(); }
 			auto component( sdw::UInt const & index )const { return getMember< "components" >()[index].xyz(); }
