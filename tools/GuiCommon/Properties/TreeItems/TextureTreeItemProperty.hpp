@@ -44,18 +44,6 @@ namespace GuiCommon
 		TextureTreeItemProperty( bool editable
 			, castor3d::Pass & pass
 			, castor3d::TextureUnitSPtr texture );
-		/**
-		 *\~english
-		 *\brief		Retrieves the texture
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère la texture
-		 *\return		La valeur
-		 */
-		inline castor3d::TextureUnitSPtr getTexture()const
-		{
-			return m_texture.lock();
-		}
 
 	private:
 		/**
@@ -71,8 +59,11 @@ namespace GuiCommon
 
 	private:
 		castor3d::Pass & m_pass;
-		castor3d::TextureUnitWPtr m_texture;
+		castor3d::TextureUnit & m_texture;
 		castor3d::TextureConfiguration m_configuration;
+		castor::Point2f m_translate;
+		castor::Angle m_rotate;
+		castor::Point2f m_scale;
 		std::map< castor3d::PassComponentTextureFlag, PropertyPair > m_properties;
 		castor::Path m_path;
 	};

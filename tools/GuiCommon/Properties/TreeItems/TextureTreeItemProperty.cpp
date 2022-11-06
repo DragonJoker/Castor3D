@@ -1,5 +1,6 @@
 #include "GuiCommon/Properties/TreeItems/TextureTreeItemProperty.hpp"
 
+#include "GuiCommon/Properties/Math/PointProperties.hpp"
 #include "GuiCommon/Properties/AdditionalProperties.hpp"
 
 #include <Castor3D/Engine.hpp>
@@ -367,7 +368,7 @@ namespace GuiCommon
 		, castor3d::TextureUnitSPtr texture )
 		: TreeItemProperty( texture->getEngine(), editable )
 		, m_pass{ pass }
-		, m_texture{ texture }
+		, m_texture{ *texture }
 		, m_configuration{ texture->getConfiguration() }
 	{
 		CreateTreeItemMenu();
@@ -375,15 +376,15 @@ namespace GuiCommon
 
 	void TextureTreeItemProperty::doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )
 	{
-		auto unit = getTexture();
+		auto unit = &m_texture;
 
 		if ( unit )
 		{
-			static wxString CATEGORY_TEXTURE = _( "Texture" );
-			static wxString PROPERTY_TEXTURE_IMAGE = _( "Image" );
-			static wxString PROPERTY_TEXTURE_TEXCOORDSET = _( "Texcoord Set" );
+			static wxString const CATEGORY_TEXTURE = _( "Texture " );
+			static wxString const PROPERTY_TEXTURE_IMAGE = _( "Image" );
+			static wxString const PROPERTY_TEXTURE_TEXCOORDSET = _( "Texcoord Set" );
 
-			grid->Append( new wxPropertyCategory( CATEGORY_TEXTURE ) );
+			grid->Append( new wxPropertyCategory( wxString{ CATEGORY_TEXTURE } << unit->getId() ) );
 
 			if ( unit->getTexture()->isStatic() )
 			{
@@ -395,10 +396,10 @@ namespace GuiCommon
 					} );
 			}
 
-			addPropertyT( grid, PROPERTY_TEXTURE_TEXCOORDSET, unit->getTexcoordSet(), unit.get(), &castor3d::TextureUnit::setTexcoordSet );
+			addPropertyT( grid, PROPERTY_TEXTURE_TEXCOORDSET, unit->getTexcoordSet(), unit, &castor3d::TextureUnit::setTexcoordSet );
 			m_properties = UnitTreeGatherer::submit( m_pass
 				, m_configuration
-				, castor::PixelFormat( unit->getSourceInfo().createInfo()->format )
+				, castor::PixelFormat( unit->getTexture()->getPixelFormat() )
 				, this
 				, grid
 				, [this]( wxVariant const & var
@@ -408,12 +409,53 @@ namespace GuiCommon
 					onChange( var, flag, componentsCount );
 				} );
 
+			auto & transform = unit->getTransform();
+			m_translate->x = transform.translate->x;
+			m_translate->y = transform.translate->y;
+			m_scale->x = transform.scale->x;
+			m_scale->y = transform.scale->y;
+			m_rotate = transform.rotate;
+			static wxString const CATEGORY_TRANSFORM = _( "Transform" );
+			static wxString const PROPERTY_TRANSFORM_UV_TRANSLATE = _( "UV Translate" );
+			static wxString const PROPERTY_TRANSFORM_UV_ROTATE = _( "UV Rotate" );
+			static wxString const PROPERTY_TRANSFORM_UV_SCALE = _( "UV Scale" );
+			grid->Append( new wxPropertyCategory( CATEGORY_TRANSFORM ) );
+			addProperty( grid, PROPERTY_TRANSFORM_UV_TRANSLATE
+				, m_translate
+				, [this]( wxVariant const & value )
+				{
+					m_translate = variantCast< castor::Point2f >( value );
+					auto transform = m_texture.getTransform();
+					transform.translate->x = m_translate->x;
+					transform.translate->y = m_translate->y;
+					m_texture.setTransform( transform );
+				} );
+			addProperty( grid, PROPERTY_TRANSFORM_UV_ROTATE
+				, m_rotate
+				, [this]( wxVariant const & value )
+				{
+					m_rotate = variantCast< castor::Angle >( value );
+					auto transform = m_texture.getTransform();
+					transform.rotate = m_rotate;
+					m_texture.setTransform( transform );
+				} );
+			addProperty( grid, PROPERTY_TRANSFORM_UV_SCALE
+				, m_scale
+				, [this]( wxVariant const & value )
+				{
+					m_scale = variantCast< castor::Point2f >( value );
+					auto transform = m_texture.getTransform();
+					transform.scale->x = m_scale->x;
+					transform.scale->y = m_scale->y;
+					m_texture.setTransform( transform );
+				} );
+
 			if ( unit->hasAnimation() )
 			{
-				static wxString CATEGORY_ANIMATION = _( "Animation" );
-				static wxString PROPERTY_ANIMATION_TRANSLATE = _( "Translate" );
-				static wxString PROPERTY_ANIMATION_ROTATE = _( "Rotate" );
-				static wxString PROPERTY_ANIMATION_SCALE = _( "Scale" );
+				static wxString const CATEGORY_ANIMATION = _( "Animation" );
+				static wxString const PROPERTY_ANIMATION_TRANSLATE = _( "Translate" );
+				static wxString const PROPERTY_ANIMATION_ROTATE = _( "Rotate" );
+				static wxString const PROPERTY_ANIMATION_SCALE = _( "Scale" );
 
 				auto & anim = unit->getAnimation();
 				grid->Append( new wxPropertyCategory( CATEGORY_ANIMATION ) );
@@ -428,7 +470,7 @@ namespace GuiCommon
 		, castor3d::PassComponentTextureFlag flag
 		, uint32_t componentsCount )
 	{
-		auto unit = getTexture();
+		auto unit = &m_texture;
 		auto it = m_properties.find( flag );
 		CU_Require( it != m_properties.end() );
 		bool isMap = it->second.isMap->GetValue();
@@ -440,7 +482,7 @@ namespace GuiCommon
 
 	void TextureTreeItemProperty::onImageChange( wxVariant const & var )
 	{
-		auto unit = getTexture();
+		auto unit = &m_texture;
 		castor::Path path{ make_String( var.GetString() ) };
 
 		// Absolute path
