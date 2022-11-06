@@ -167,6 +167,9 @@ namespace castor3d
 	using Point3rInterpolator = Interpolator< castor::Point3f >;
 	using QuaternionInterpolator = Interpolator< castor::Quaternion >;
 
+	template< typename DataT >
+	using InterpolatorPtr = std::unique_ptr< Interpolator< DataT > >;
+
 	CU_DeclareSmartPtr( AnimationKeyFrame );
 	CU_DeclareSmartPtr( AnimationImporter );
 

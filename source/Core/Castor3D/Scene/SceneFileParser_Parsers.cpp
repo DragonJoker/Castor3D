@@ -5863,6 +5863,24 @@ namespace castor3d
 	}
 	CU_EndAttribute()
 
+	CU_ImplementAttributeParser( parserAnimationInterpolation )
+	{
+		auto & parsingContext = getParserContext( context );
+		uint32_t value;
+		params[0]->get( value );
+
+		if ( parsingContext.animGroup )
+		{
+			parsingContext.animGroup->setAnimationInterpolation( parsingContext.strName2
+				, InterpolatorType( value ) );
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No animated object group initialised" ) );
+		}
+	}
+	CU_EndAttribute()
+
 	CU_ImplementAttributeParser( parserAnimationEnd )
 	{
 	}

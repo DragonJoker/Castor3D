@@ -233,6 +233,17 @@ namespace castor3d
 			, offsetof( GroupAnimation, stoppingPoint ) );
 	}
 
+	void AnimatedObjectGroup::setAnimationInterpolation( castor::String const & name
+		, InterpolatorType mode )
+	{
+		anmobjgrp::applyAnimationFunc( m_animations
+			, m_objects
+			, name
+			, &AnimationInstance::setInterpolation
+			, mode
+			, offsetof( GroupAnimation, interpolation ) );
+	}
+
 	void AnimatedObjectGroup::update( CpuUpdater & updater )
 	{
 #if defined( NDEBUG )

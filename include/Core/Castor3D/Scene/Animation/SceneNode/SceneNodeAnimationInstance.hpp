@@ -79,8 +79,8 @@ namespace castor3d
 		SceneNodeAnimation & m_sceneNodeAnimation;
 		AnimationKeyFrameArray::iterator m_prev;
 		AnimationKeyFrameArray::iterator m_curr;
-		InterpolatorT< castor::Point3f, InterpolatorType::eLinear > m_vecInterpolator;
-		InterpolatorT< castor::Quaternion, InterpolatorType::eLinear > m_quatInterpolator;
+		InterpolatorPtr< castor::Point3f > m_vecInterpolator;
+		InterpolatorPtr< castor::Quaternion > m_quatInterpolator;
 		castor::Point3f m_initialTranslate;
 		castor::Quaternion m_initialRotate;
 		castor::Point3f m_initialScale;

@@ -12,9 +12,13 @@ namespace castor3d
 	class Interpolator
 	{
 	protected:
-		virtual ~Interpolator() = default;
+		Interpolator( InterpolatorType type )
+			: m_type{ type }
+		{
+		}
 
 	public:
+		C3D_API virtual ~Interpolator() = default;
 		/**
 		 *\~english
 		 *\brief		Interpolation function.
@@ -30,11 +34,16 @@ namespace castor3d
 		C3D_API virtual DataT interpolate( DataT const & src
 			, DataT const & dst
 			, float percent )const = 0;
+
+		InterpolatorType getType()const
+		{
+			return m_type;
+		}
+
+	private:
+		InterpolatorType m_type;
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\version	0.8.0
-	\date		24/01/2016
 	\~english
 	\brief		Partial specialisation of InterpolatorT, for InterpolatorType::eNearest.
 	\~french
@@ -45,6 +54,10 @@ namespace castor3d
 		: public Interpolator< DataT >
 	{
 	public:
+		InterpolatorT()
+			: Interpolator< DataT >{ InterpolatorType::eNearest }
+		{
+		}
 		/**
 		 *\~english
 		 *\brief		Interpolation function.
@@ -61,9 +74,6 @@ namespace castor3d
 		}
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\version	0.8.0
-	\date		24/01/2016
 	\~english
 	\brief		Partial specialisation of InterpolatorT, for InterpolatorType::eLinear.
 	\~french
@@ -74,6 +84,10 @@ namespace castor3d
 		: public Interpolator< DataT >
 	{
 	public:
+		InterpolatorT()
+			: Interpolator< DataT >{ InterpolatorType::eLinear }
+		{
+		}
 		/**
 		 *\~english
 		 *\brief		Interpolation function.
@@ -109,9 +123,6 @@ namespace castor3d
 		}
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\version	0.1
-	\date		09/02/2010
 	\~english
 	\brief		Handles the Quaternion linear interpolations.
 	\~french
@@ -122,6 +133,10 @@ namespace castor3d
 		: public Interpolator< castor::Quaternion >
 	{
 	public:
+		InterpolatorT()
+			: Interpolator< castor::Quaternion >{ InterpolatorType::eLinear }
+		{
+		}
 		/**
 		 *\~english
 		 *\brief		Interpolation function.
@@ -156,6 +171,18 @@ namespace castor3d
 			return result;
 		}
 	};
+
+	template< typename DataT >
+	InterpolatorPtr< DataT > makeInterpolator( InterpolatorType type )
+	{
+		switch ( type )
+		{
+		case InterpolatorType::eNearest:
+			return std::make_unique < InterpolatorT< DataT, InterpolatorType::eNearest > >();
+		default:
+			return std::make_unique< InterpolatorT< DataT, InterpolatorType::eLinear > >();
+		}
+	}
 }
 
 #endif

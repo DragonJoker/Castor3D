@@ -25,6 +25,13 @@ namespace castor3d
 	{
 		if ( !m_sceneNodeAnimation.isEmpty() )
 		{
+			if ( !m_vecInterpolator
+				|| m_vecInterpolator->getType() != getInterpolation() )
+			{
+				m_vecInterpolator = makeInterpolator< castor::Point3f >( getInterpolation() );
+				m_quatInterpolator = makeInterpolator< castor::Quaternion >( getInterpolation() );
+			}
+
 			m_sceneNodeAnimation.findKeyFrame( m_currentTime
 				, m_prev
 				, m_curr );
@@ -32,9 +39,9 @@ namespace castor3d
 			auto & curr = static_cast< SceneNodeAnimationKeyFrame const & >( **m_curr );
 			auto ratio = float( ( m_currentTime - ( *m_prev )->getTimeIndex() ).count() ) / float( ( ( *m_curr )->getTimeIndex() - ( *m_prev )->getTimeIndex() ).count() );
 
-			auto translate = m_vecInterpolator.interpolate( prev.getPosition(), curr.getPosition(), ratio );
-			auto rotate = m_quatInterpolator.interpolate( prev.getRotation(), curr.getRotation(), ratio );
-			auto scale = m_vecInterpolator.interpolate( prev.getScale(), curr.getScale(), ratio );
+			auto translate = m_vecInterpolator->interpolate( prev.getPosition(), curr.getPosition(), ratio );
+			auto rotate = m_quatInterpolator->interpolate( prev.getRotation(), curr.getRotation(), ratio );
+			auto scale = m_vecInterpolator->interpolate( prev.getScale(), curr.getScale(), ratio );
 
 			m_animatedSceneNode.getSceneNode().setPosition( translate );
 			m_animatedSceneNode.getSceneNode().setOrientation( rotate );
