@@ -142,6 +142,7 @@ namespace c3d_assimp
 			castor::String name;
 			uint32_t texcoordSet{};
 			aiUVTransform transform{};
+			castor3d::SamplerRes sampler;
 		};
 
 		class MaterialParser
@@ -713,7 +714,7 @@ namespace c3d_assimp
 								castor::ByteArray data;
 								data.resize( texture->mWidth );
 								std::memcpy( data.data(), texture->pcData, data.size() );
-								sourceInfo = std::make_unique< castor3d::TextureSourceInfo >( m_importer.loadTexture( m_sampler
+								sourceInfo = std::make_unique< castor3d::TextureSourceInfo >( m_importer.loadTexture( info.sampler
 									, "Image" + castor::string::toString( id )
 									, texture->achFormatHint
 									, std::move( data )
@@ -725,7 +726,7 @@ namespace c3d_assimp
 							castor::ByteArray data;
 							data.resize( texture->mWidth );
 							std::memcpy( data.data(), texture->pcData, data.size() );
-							sourceInfo = std::make_unique< castor3d::TextureSourceInfo >( m_importer.loadTexture( m_sampler
+							sourceInfo = std::make_unique< castor3d::TextureSourceInfo >( m_importer.loadTexture( info.sampler
 								, info.name
 								, texture->achFormatHint
 								, std::move( data )
@@ -734,7 +735,7 @@ namespace c3d_assimp
 						else
 						{
 							auto name = decodeUri( info.name );
-							sourceInfo = std::make_unique< castor3d::TextureSourceInfo >( m_importer.loadTexture( m_sampler
+							sourceInfo = std::make_unique< castor3d::TextureSourceInfo >( m_importer.loadTexture( info.sampler
 								, castor::Path{ name }
 								, texConfig ) );
 						}
@@ -792,7 +793,7 @@ namespace c3d_assimp
 					}
 					catch ( std::exception & )
 					{
-						m_importer.loadTexture( m_sampler
+						m_importer.loadTexture( info.sampler
 							, castor::Path{ info.name }
 							, { { {} }, texConfig }
 						, m_result );
@@ -829,6 +830,54 @@ namespace c3d_assimp
 						break;
 					default:
 						break;
+					}
+
+					auto samplerName = m_sampler->getName();
+					auto & engine = *m_result.getOwner()->getEngine();
+					auto & cache = engine.getSamplerCache();
+
+					GlFilter minFilter;
+					GlFilter magFilter;
+					aiTextureMapMode addressModeU;
+					aiTextureMapMode addressModeV;
+					auto hasMinFilter = m_material.Get( AI_MATKEY_GLTF_MAPPINGFILTER_MIN( type, index ), minFilter ) == aiReturn_SUCCESS;
+					auto hasMagFilter = m_material.Get( AI_MATKEY_GLTF_MAPPINGFILTER_MAG( type, index ), magFilter ) == aiReturn_SUCCESS;
+					auto hasAddressModeU = m_material.Get( AI_MATKEY_MAPPINGMODE_U( type, index ), addressModeU ) == aiReturn_SUCCESS;
+					auto hasAddressModeV = m_material.Get( AI_MATKEY_MAPPINGMODE_V( type, index ), addressModeV ) == aiReturn_SUCCESS;
+
+					if ( hasMinFilter || hasMagFilter || hasAddressModeU || hasAddressModeV )
+					{
+						aiString mappingName;
+						m_material.Get( AI_MATKEY_GLTF_MAPPINGNAME( type, index ), mappingName );
+
+						if ( mappingName.length > 0 )
+						{
+							samplerName = makeString( mappingName );
+						}
+						else
+						{
+							samplerName = m_result.getOwner()->getName()
+								+ "_" + castor::string::toString( m_result.getIndex() )
+								+ "_" + result.name;
+						}
+
+						if ( !cache.has( samplerName ) )
+						{
+							auto sampler = engine.createSampler( samplerName, engine );
+							sampler->setMinFilter( hasMinFilter ? fromAssimp( minFilter ) : m_sampler->getMinFilter() );
+							sampler->setMagFilter( hasMagFilter ? fromAssimp( magFilter ) : m_sampler->getMagFilter() );
+							sampler->setMipFilter( hasMinFilter ? getMipFilter( minFilter ) : m_sampler->getMipFilter() );
+							sampler->setWrapS( hasAddressModeU ? fromAssimp( addressModeU ) : m_sampler->getWrapS() );
+							sampler->setWrapT( hasAddressModeV ? fromAssimp( addressModeV ) : m_sampler->getWrapT() );
+							sampler->setWrapR( m_sampler->getWrapR() );
+							engine.addSampler( samplerName, sampler, false );
+						}
+
+						result.sampler = cache.find( samplerName ).lock();
+					}
+					else
+					{
+						result.sampler = m_sampler;
 					}
 				}
 
