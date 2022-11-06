@@ -533,7 +533,7 @@ namespace castor3d
 						, in.passMultipliers
 						, components );
 					auto color = writer.declLocale( "color"
-						, components.emissive );
+						, components.emissiveColour * components.emissiveFactor );
 
 					IF( writer, material.lighting != 0_u )
 					{

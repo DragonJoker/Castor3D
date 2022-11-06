@@ -16,7 +16,8 @@ namespace castor3d::shader
 		: sdw::StructInstance{ writer, std::move( expr ), enabled }
 		, normal{ getMember( "normal", vec3( 0.0_f ) ) }
 		, colour{ getMember( "colour", vec3( 0.0_f ) ) }
-		, emissive{ getMember( "emissive", vec3( 0.0_f ) ) }
+		, emissiveColour{ getMember( "emissiveColour", vec3( 0.0_f ) ) }
+		, emissiveFactor{ getMember( "emissiveFactor", 0.0_f ) }
 		, specular{ getMember( "specular", vec3( 0.0_f ) ) }
 		, transmission{ getMember( "transmission", 0.0_f ) }
 		, hasTransmission{ getMember( "hasTransmission", 0_u ) }

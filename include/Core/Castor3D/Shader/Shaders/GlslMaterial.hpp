@@ -115,7 +115,6 @@ namespace castor3d::shader
 		sdw::UInt hasTransmission;
 		sdw::Float opacity;
 		sdw::Float alphaRef;
-		sdw::Float emissive;
 		sdw::UInt hasReflection;
 		sdw::Float refractionRatio;
 		sdw::Vec3 attenuationColour;

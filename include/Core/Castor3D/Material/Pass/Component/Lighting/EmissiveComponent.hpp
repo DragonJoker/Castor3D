@@ -12,8 +12,20 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	struct EmissiveData
+	{
+		explicit EmissiveData( std::atomic_bool & dirty )
+			: colour{ dirty, castor::RgbColour{ 1.0f, 1.0f, 1.0f } }
+			, factor{ dirty, 1.0f }
+		{
+		}
+
+		castor::AtomicGroupChangeTracked< castor::RgbColour > colour;
+		castor::AtomicGroupChangeTracked< float > factor;
+	};
+
 	struct EmissiveComponent
-		: public BaseDataPassComponentT< castor::AtomicGroupChangeTracked< float > >
+		: public BaseDataPassComponentT< EmissiveData >
 	{
 		struct ComponentsShader
 			: shader::PassComponentsShader
@@ -79,18 +91,28 @@ namespace castor3d
 			return castor::makeUniqueDerived< PassComponentPlugin, Plugin >( passComponent );
 		}
 
-		C3D_API explicit EmissiveComponent( Pass & pass, float defaultValue = 0.0f );
+		C3D_API explicit EmissiveComponent( Pass & pass );
 
 		C3D_API void accept( PassVisitorBase & vis )override;
 
+		castor::RgbColour const & getEmissiveColour()const
+		{
+			return m_value.colour;
+		}
+
 		float getEmissiveFactor()const
 		{
-			return getData();
+			return m_value.factor;
+		}
+
+		void setEmissive( castor::RgbColour const & v )
+		{
+			m_value.colour = v;
 		}
 
 		void setEmissiveFactor( float v )
 		{
-			setData( v );
+			m_value.factor = v;
 		}
 
 		C3D_API static castor::String const TypeName;

@@ -104,7 +104,7 @@ namespace castor3d
 		, sdw::Vec4 const & sampled
 		, shader::BlendComponents & components )const
 	{
-		applyVec3Component( "emissive"
+		applyVec3Component( "emissiveColour"
 			, getTextureFlags()
 			, config
 			, imgCompConfig
@@ -163,18 +163,6 @@ namespace castor3d
 		, castor::StringStream & file )const
 	{
 		return castor::TextWriter< EmissiveMapComponent >{ tabs, mask }( file );
-	}
-
-	void EmissiveMapComponent::Plugin::doUpdateComponent( PassComponentRegister const & passComponents
-		, TextureCombine const & combine
-		, shader::BlendComponents & components )
-	{
-		auto & plugin = passComponents.getPlugin< EmissiveMapComponent >();
-
-		if ( !hasAny( combine, plugin.getTextureFlags() ) )
-		{
-			components.getMember< sdw::Vec3 >( "emissive", true ) *= components.getMember< sdw::Vec3 >( "colour", true );
-		}
 	}
 
 	//*********************************************************************************************

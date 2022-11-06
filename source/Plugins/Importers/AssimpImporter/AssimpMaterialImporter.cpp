@@ -563,9 +563,9 @@ namespace c3d_assimp
 				if ( m_material.Get( AI_MATKEY_COLOR_EMISSIVE, emissive ) == aiReturn_SUCCESS )
 				{
 					auto component = m_result.createComponent< castor3d::EmissiveComponent >();
-					component->setEmissiveFactor( m_emissiveMult * float( castor::point::length( castor::Point3f{ emissive.r
-						, emissive.g
-						, emissive.b } ) ) );
+					component->setEmissive( castor::RgbColour{ m_emissiveMult * emissive.r
+						, m_emissiveMult * emissive.g
+						, m_emissiveMult * emissive.b } );
 				}
 			}
 

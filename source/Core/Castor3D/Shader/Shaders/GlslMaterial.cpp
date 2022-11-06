@@ -126,7 +126,6 @@ namespace castor3d::shader
 		, hasTransmission{ getMember< sdw::UInt >( "hasTransmission" ) }
 		, opacity{ getMember< sdw::Float >( "opacity" ) }
 		, alphaRef{ getMember< sdw::Float >( "alphaRef" ) }
-		, emissive{ getMember< sdw::Float >( "emissive" ) }
 		, hasReflection{ getMember< sdw::UInt >( "hasReflection" ) }
 		, refractionRatio{ getMember< sdw::Float >( "refractionRatio" ) }
 		, attenuationColour{ getMember< sdw::Vec3 >( "attenuationColour" ) }
