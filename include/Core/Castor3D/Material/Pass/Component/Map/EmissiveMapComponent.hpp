@@ -43,7 +43,7 @@ namespace castor3d
 		{
 		public:
 			explicit Plugin( PassComponentRegister const & passComponent )
-				: PassMapComponentPlugin{ passComponent, &Plugin::doUpdateComponent }
+				: PassMapComponentPlugin{ passComponent }
 			{
 			}
 
@@ -100,9 +100,6 @@ namespace castor3d
 				, uint32_t mask
 				, castor::String const & tabs
 				, castor::StringStream & file )const override;
-			static void doUpdateComponent( PassComponentRegister const & passComponents
-				, TextureCombine const & combine
-				, shader::BlendComponents & components );
 		};
 
 		static PassComponentPluginUPtr createPlugin( PassComponentRegister const & passComponent )

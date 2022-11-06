@@ -210,7 +210,7 @@ namespace castor3d
 
 				c3d_imgNmlOcc = vec4( components.normal, components.occlusion );
 				passShaders.updateOutputs( components, in, c3d_imgSpcRgh, c3d_imgColMtl, c3d_imgSheen );
-				c3d_imgEmsTrn = vec4( components.emissive, components.transmittance );
+				c3d_imgEmsTrn = vec4( components.emissiveColour * components.emissiveFactor, components.transmittance );
 				c3d_imgClrCot = vec4( components.clearcoatNormal, components.clearcoatFactor );
 				c3d_imgCrTsIr = vec4( components.clearcoatRoughness, components.transmission, components.iridescenceFactor, components.iridescenceThickness );
 			} );

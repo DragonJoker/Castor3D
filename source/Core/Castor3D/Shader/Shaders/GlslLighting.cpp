@@ -142,7 +142,7 @@ namespace castor3d::shader
 			, directAmbient
 			, indirectAmbient
 			, components.occlusion
-			, components.emissive
+			, components.emissiveColour * components.emissiveFactor
 			, std::move( reflectedDiffuse )
 			, std::move( reflectedSpecular )
 			, std::move( refracted )

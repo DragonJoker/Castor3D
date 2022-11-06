@@ -106,7 +106,8 @@ namespace castor3d::shader
 	public:
 		sdw::DefaultedT< sdw::Vec3 > normal;
 		sdw::DefaultedT< sdw::Vec3 > colour;
-		sdw::DefaultedT< sdw::Vec3 > emissive;
+		sdw::DefaultedT< sdw::Vec3 > emissiveColour;
+		sdw::DefaultedT< sdw::Float > emissiveFactor;
 		sdw::DefaultedT< sdw::Vec3 > specular;
 		sdw::DefaultedT< sdw::Float > transmission;
 		sdw::DefaultedT< sdw::UInt > hasTransmission;

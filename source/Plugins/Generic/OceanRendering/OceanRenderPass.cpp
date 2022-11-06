@@ -1176,8 +1176,6 @@ namespace ocean
 
 				auto material = writer.declLocale( "material"
 					, materials.getMaterial( modelData.getMaterialId() ) );
-				auto emissive = writer.declLocale( "emissive"
-					, vec3( material.emissive ) );
 				auto worldEye = writer.declLocale( "worldEye"
 					, c3d_sceneData.cameraPosition );
 				auto surface = writer.declLocale( "surface"
@@ -1364,7 +1362,7 @@ namespace ocean
 					displayDebugData( eFinalRefraction, refractionResult, 1.0_f );
 
 					pxl_colour = vec4( lightSpecular + lightIndirectSpecular
-							+ emissive
+							+ components.emissiveColour * components.emissiveFactor
 							+ refractionResult
 							+ ( reflectionResult * indirectAmbient )
 							+ foamResult

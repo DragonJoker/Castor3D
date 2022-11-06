@@ -855,7 +855,7 @@ namespace castor3d
 						, components );
 					outNmlOcc = vec4( components.normal, components.occlusion );
 					passShaders.updateOutputs( components, surface, outSpcRgh, outColMtl, outSheen );
-					outEmsTrn = vec4( components.emissive, components.transmittance );
+					outEmsTrn = vec4( components.emissiveColour * components.emissiveFactor, components.transmittance );
 					outClrCot = vec4( components.clearcoatNormal, components.clearcoatFactor );
 					outCrTsIr = vec4( components.clearcoatRoughness, components.transmission, components.iridescenceFactor, components.iridescenceThickness );
 					writer.returnStmt( 1_b );
