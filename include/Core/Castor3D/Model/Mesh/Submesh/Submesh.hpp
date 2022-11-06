@@ -321,6 +321,7 @@ namespace castor3d
 		C3D_API std::vector< Meshlet > & getMeshlets();
 		C3D_API uint32_t getMeshletsCount()const;
 		C3D_API bool isDynamic()const;
+		C3D_API bool isAnimated()const;
 		C3D_API ObjectBufferOffset const & getFinalBufferOffsets( Geometry const & instance )const;
 		C3D_API ObjectBufferOffset const & getSourceBufferOffsets()const;
 		C3D_API GpuBufferOffsetT< Meshlet > const & getMeshletsBuffer()const;

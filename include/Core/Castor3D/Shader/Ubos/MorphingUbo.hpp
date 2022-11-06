@@ -135,6 +135,16 @@ namespace castor3d
 				, sdw::Vec3 & uvw2
 				, sdw::Vec3 & uvw3
 				, sdw::Vec3 & col )const;
+			C3D_API static void morphNoAnim( sdw::ArrayStorageBufferT< shader::MorphTargetsData > const & targets
+				, sdw::UInt vertexId
+				, sdw::Vec4 & pos
+				, sdw::Vec4 & nml
+				, sdw::Vec4 & tan
+				, sdw::Vec3 & uvw0
+				, sdw::Vec3 & uvw1
+				, sdw::Vec3 & uvw2
+				, sdw::Vec3 & uvw3
+				, sdw::Vec3 & col );
 
 			sdw::UInt index( sdw::UInt const & index )const
 			{

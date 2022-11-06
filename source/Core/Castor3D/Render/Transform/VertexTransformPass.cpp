@@ -33,15 +33,19 @@ namespace castor3d
 			, GpuBufferOffsetT< SkinningTransformsConfiguration > const & skinTransforms )
 		{
 			ashes::WriteDescriptorSetArray writes;
-			CU_Require( ( morphTargets && morphingWeights ) || skinTransforms );
+			CU_Require( morphTargets || skinTransforms );
 			writes.push_back( ashes::WriteDescriptorSet{ VertexTransformPass::eModelsData
 				, 0u
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 				, { VkDescriptorBufferInfo{ modelsBuffer.getBuffer(), 0u, ashes::WholeSize } } } );
 
-			if ( morphTargets && morphingWeights )
+			if ( morphTargets )
 			{
 				writes.push_back( morphTargets.getStorageBinding( VertexTransformPass::eMorphTargets ) );
+			}
+
+			if ( morphingWeights )
+			{
 				writes.push_back( morphingWeights.getStorageBinding( VertexTransformPass::eMorphingWeights ) );
 			}
 
@@ -165,7 +169,7 @@ namespace castor3d
 		, VkCommandBuffer commandBuffer
 		, uint32_t index )
 	{
-		if ( m_morphTargets && m_morphingWeights )
+		if ( m_morphTargets )
 		{
 			context.memoryBarrier( commandBuffer
 				, m_morphTargets.buffer->getBuffer()
@@ -174,6 +178,10 @@ namespace castor3d
 				, VK_PIPELINE_STAGE_HOST_BIT
 				, { VK_ACCESS_SHADER_READ_BIT
 					, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT } );
+		}
+
+		if ( m_morphingWeights )
+		{
 			context.memoryBarrier( commandBuffer
 				, m_morphingWeights.buffer->getBuffer()
 				, { m_morphingWeights.chunk.offset, m_morphingWeights.chunk.size }
@@ -299,7 +307,7 @@ namespace castor3d
 						, VK_PIPELINE_STAGE_HOST_BIT } );
 			}
 
-			if ( m_morphTargets && m_morphingWeights )
+			if ( m_morphTargets )
 			{
 				context.memoryBarrier( commandBuffer
 					, m_morphTargets.buffer->getBuffer()
@@ -308,6 +316,10 @@ namespace castor3d
 					, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT
 					, { VK_ACCESS_HOST_WRITE_BIT
 						, VK_PIPELINE_STAGE_HOST_BIT } );
+			}
+
+			if ( m_morphingWeights )
+			{
 				context.memoryBarrier( commandBuffer
 					, m_morphingWeights.buffer->getBuffer()
 					, { m_morphingWeights.chunk.offset, m_morphingWeights.chunk.size }

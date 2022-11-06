@@ -1015,6 +1015,12 @@ namespace castor3d
 			|| hasComponent( MorphComponent::Name );
 	}
 
+	bool Submesh::isAnimated()const
+	{
+		return isDynamic()
+			&& getOwner()->hasAnimation();
+	}
+
 	ObjectBufferOffset const & Submesh::getFinalBufferOffsets( Geometry const & instance )const
 	{
 		if ( !isDynamic() )
