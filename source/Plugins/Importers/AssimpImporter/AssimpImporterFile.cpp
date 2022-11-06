@@ -39,8 +39,7 @@ namespace c3d_assimp
 				| aiProcess_FindInvalidData
 				| aiProcess_Triangulate
 				| aiProcess_FixInfacingNormals
-				| aiProcess_LimitBoneWeights
-				| aiProcess_RemoveRedundantMaterials };
+				| aiProcess_LimitBoneWeights };
 			importer.SetPropertyInteger( AI_CONFIG_PP_LBW_MAX_WEIGHTS, 8 );
 			importer.SetPropertyBool( AI_CONFIG_IMPORT_NO_SKELETON_MESHES, true );
 			importer.SetPropertyInteger( AI_CONFIG_IMPORT_FBX_PRESERVE_PIVOTS, 0 ); //< Get rid of $AssimpFbx$_PreRotation nodes

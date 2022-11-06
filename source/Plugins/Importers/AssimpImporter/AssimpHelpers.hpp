@@ -79,6 +79,60 @@ namespace c3d_assimp
 		return castor::Point3f{ v.x, v.y, v.z };
 	}
 
+	inline VkSamplerAddressMode fromAssimp( aiTextureMapMode v )
+	{
+		switch ( v )
+		{
+		case aiTextureMapMode_Wrap:
+			return VK_SAMPLER_ADDRESS_MODE_REPEAT;
+		case aiTextureMapMode_Clamp:
+			return VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+		case aiTextureMapMode_Decal:
+			return VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER;
+		case aiTextureMapMode_Mirror:
+			return VK_SAMPLER_ADDRESS_MODE_MIRRORED_REPEAT;
+		default:
+			return VK_SAMPLER_ADDRESS_MODE_REPEAT;
+		}
+	}
+
+	enum GlFilter
+		: uint32_t
+	{
+		GL_FILTER_NEAREST = 0x2600,
+		GL_FILTER_LINEAR = 0x2601,
+		GL_FILTER_NEAREST_MIPMAP_NEAREST = 0x2700,
+		GL_FILTER_LINEAR_MIPMAP_NEAREST = 0x2701,
+		GL_FILTER_NEAREST_MIPMAP_LINEAR = 0x2702,
+		GL_FILTER_LINEAR_MIPMAP_LINEAR = 0x2703,
+	};
+
+	inline VkFilter fromAssimp( GlFilter const & v )
+	{
+		switch ( v )
+		{
+		case GL_FILTER_NEAREST:
+		case GL_FILTER_NEAREST_MIPMAP_NEAREST:
+		case GL_FILTER_NEAREST_MIPMAP_LINEAR:
+			return VK_FILTER_NEAREST;
+		default:
+			return VK_FILTER_LINEAR;
+		}
+	}
+
+	inline VkSamplerMipmapMode getMipFilter( GlFilter const & v )
+	{
+		switch ( v )
+		{
+		case GL_FILTER_NEAREST:
+		case GL_FILTER_NEAREST_MIPMAP_NEAREST:
+		case GL_FILTER_LINEAR_MIPMAP_NEAREST:
+			return VK_SAMPLER_MIPMAP_MODE_NEAREST;
+		default:
+			return VK_SAMPLER_MIPMAP_MODE_LINEAR;
+		}
+	}
+
 	inline castor::Quaternion fromAssimp( aiQuaternion const & v )
 	{
 		castor::Quaternion result;
