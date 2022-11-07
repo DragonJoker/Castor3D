@@ -836,10 +836,10 @@ namespace c3d_assimp
 					auto & engine = *m_result.getOwner()->getEngine();
 					auto & cache = engine.getSamplerCache();
 
-					GlFilter minFilter;
-					GlFilter magFilter;
-					aiTextureMapMode addressModeU;
-					aiTextureMapMode addressModeV;
+					GlFilter minFilter{ GL_FILTER_LINEAR };
+					GlFilter magFilter{ GL_FILTER_LINEAR };
+					aiTextureMapMode addressModeU{ aiTextureMapMode_Wrap };
+					aiTextureMapMode addressModeV{ aiTextureMapMode_Wrap };
 					auto hasMinFilter = m_material.Get( AI_MATKEY_GLTF_MAPPINGFILTER_MIN( type, index ), minFilter ) == aiReturn_SUCCESS;
 					auto hasMagFilter = m_material.Get( AI_MATKEY_GLTF_MAPPINGFILTER_MAG( type, index ), magFilter ) == aiReturn_SUCCESS;
 					auto hasAddressModeU = m_material.Get( AI_MATKEY_MAPPINGMODE_U( type, index ), addressModeU ) == aiReturn_SUCCESS;
