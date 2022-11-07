@@ -248,7 +248,6 @@ namespace castor3d
 			, castor::String const & name
 			, bool allowCompression
 			, bool layersToTiles
-			, uint32_t & layers
 			, std::atomic_bool & interrupted )
 		{
 			// Finish buffer initialisation.
@@ -274,7 +273,6 @@ namespace castor3d
 
 			if ( layersToTiles )
 			{
-				layers = buffer->getLayers();
 				buffer->convertToTiles( engine.getRenderSystem()->getProperties().limits.maxImageDimension2D );
 			}
 
@@ -588,7 +586,7 @@ namespace castor3d
 								data.unit->setSampler( data.data->sourceInfo.sampler() );
 								data.unit->setRenderTarget( data.data->sourceInfo.renderTarget() );
 								auto config = data.data->passConfig.config;
-								config.tileSet->z = data.tiles;
+								config.tileSet->z = 1u;
 								config.tileSet->w = 1u;
 								data.unit->setConfiguration( std::move( config ) );
 								data.unit->initialise( device, queueData );
@@ -708,7 +706,6 @@ namespace castor3d
 			, name
 			, data.data->sourceInfo.allowCompression() && !checkFlag( data.data->passConfig.config.textureSpace, TextureSpace::eTangentSpace )
 			, data.data->sourceInfo.layersToTiles()
-			, data.tiles
 			, data.interrupted );
 	}
 

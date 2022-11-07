@@ -35,7 +35,6 @@ namespace castor3d
 			TextureUnitData * data;
 			TextureLayoutSPtr layout{};
 			TextureUnit * unit{};
-			uint32_t tiles{ 1u };
 			std::atomic_bool interrupted{ false };
 		};
 
