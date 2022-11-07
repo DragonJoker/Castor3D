@@ -763,7 +763,7 @@ namespace c3d_assimp
 							{
 								aiString alphaMode;
 
-								if ( !m_material.Get( AI_MATKEY_GLTF_ALPHAMODE, alphaMode ) == aiReturn_SUCCESS )
+								if ( m_material.Get( AI_MATKEY_GLTF_ALPHAMODE, alphaMode ) != aiReturn_SUCCESS )
 								{
 									mixedInterpolative( true );
 								}
@@ -779,7 +779,7 @@ namespace c3d_assimp
 							{
 								aiString alphaMode;
 
-								if ( !m_material.Get( AI_MATKEY_GLTF_ALPHAMODE, alphaMode ) == aiReturn_SUCCESS )
+								if ( m_material.Get( AI_MATKEY_GLTF_ALPHAMODE, alphaMode ) != aiReturn_SUCCESS )
 								{
 									mixedInterpolative( true );
 								}
