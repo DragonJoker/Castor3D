@@ -832,7 +832,6 @@ namespace c3d_assimp
 						break;
 					}
 
-					auto samplerName = m_sampler->getName();
 					auto & engine = *m_result.getOwner()->getEngine();
 					auto & cache = engine.getSamplerCache();
 
@@ -847,6 +846,7 @@ namespace c3d_assimp
 
 					if ( hasMinFilter || hasMagFilter || hasAddressModeU || hasAddressModeV )
 					{
+						castor::String samplerName;
 						aiString mappingName;
 						m_material.Get( AI_MATKEY_GLTF_MAPPINGNAME( type, index ), mappingName );
 
