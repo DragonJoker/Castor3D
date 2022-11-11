@@ -222,12 +222,11 @@ namespace atmosphere_scattering
 						}
 						FI;
 
-						auto sampleCountIni = 0.0_f;
 						auto ss = m_writer.declLocale( "ss"
 							, m_atmosphere.integrateScatteredLuminance( fragPos
 								, ray
 								, m_atmosphere.getSunDirection()
-								, sampleCountIni
+								, 0.0_f /*sampleCountIni*/
 								, fragDepth ) );
 						doRegisterOutputs( ss, L, luminance, transmittance );
 					}
@@ -377,9 +376,9 @@ namespace atmosphere_scattering
 		}
 		else
 		{
-			auto t = m_writer.declLocale( "t"
-				, dot( throughput, vec3( 1.0_f / 3.0_f ) ) );
-			luminance = vec4( L, 1.0_f - t );
+			auto trs = m_writer.declLocale( "trs"
+				, dot( throughput, sdw::vec3( 1.0 / 3.0 ) ) );
+			luminance = vec4( L, 1.0_f - trs );
 		}
 	}
 

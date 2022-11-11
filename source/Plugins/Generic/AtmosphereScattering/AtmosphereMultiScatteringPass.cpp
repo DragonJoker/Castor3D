@@ -65,7 +65,9 @@ namespace atmosphere_scattering
 
 			AtmosphereModel atmosphere{ writer
 				, c3d_atmosphereData
-				, { nullptr, true, false, false, false }
+				, LuminanceSettings{}
+					.setUseGround( true )
+					.setIlluminanceIsOne( true )
 				, { transmittanceExtent.width, transmittanceExtent.height } };
 			atmosphere.setTransmittanceMap( transmittanceMap );
 
@@ -129,7 +131,7 @@ namespace atmosphere_scattering
 							, 2.0_f * PI * randA );
 						auto phi = writer.declLocale( "phi"
 							, PI * randB );
-						ray.origin = getSphericalDir( theta, phi );
+						ray.direction = getSphericalDir( theta, phi );
 						auto result = writer.declLocale( "result"
 							, atmosphere.integrateScatteredLuminance( pixPos
 								, ray

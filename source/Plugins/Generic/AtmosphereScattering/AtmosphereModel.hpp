@@ -104,16 +104,66 @@ namespace atmosphere_scattering
 
 	struct LuminanceSettings
 	{
+		LuminanceSettings()
+		{
+		}
+
+		LuminanceSettings & setCameraData( CameraData const * v )
+		{
+			cameraData = v;
+			return *this;
+		}
+
+		LuminanceSettings & setUseGround( bool v )
+		{
+			useGround = v;
+			return *this;
+		}
+
+		LuminanceSettings & setVariableSampleCount( bool v )
+		{
+			variableSampleCount = v;
+			return *this;
+		}
+
+		LuminanceSettings & setMieRayPhase( bool v )
+		{
+			mieRayPhase = v;
+			return *this;
+		}
+
+		LuminanceSettings & setIlluminanceIsOne( bool v )
+		{
+			illuminanceIsOne = v;
+			return *this;
+		}
+
+		LuminanceSettings & setMultiScatApprox( bool v )
+		{
+			multiScatApproxEnabled = v;
+			return *this;
+		}
+
+		LuminanceSettings & setShadowMap( bool v )
+		{
+			shadowMapEnabled = v;
+			return *this;
+		}
+
+		LuminanceSettings & setMultiScatteringPowerSerie( bool v )
+		{
+			multiScatteringPowerSerie = v;
+			return *this;
+		}
+
 		CameraData const * cameraData{};
 		bool useGround{};
-		bool useDepthBuffer{};
 		bool variableSampleCount{};
 		bool mieRayPhase{};
-
 		bool illuminanceIsOne{};
 		bool multiScatApproxEnabled{};
 		bool shadowMapEnabled{};
-		uint32_t multiScatteringPowerSerie{ 1u };
+		bool multiScatteringPowerSerie{ true };
 	};
 
 	struct AtmosphereModel
@@ -258,15 +308,10 @@ namespace atmosphere_scattering
 			, Ray const & ray
 			, sdw::Float const & tMaxMax
 			, sdw::Vec3 const & earthO
+			, Intersection const & tTop
 			, Intersection const & tBottom
 			, SingleScatteringResult const & result
 			, sdw::Float & tMax );
-		sdw::Float doInitSampleCount( sdw::Float const & tMax
-			, sdw::Float & sampleCount
-			, sdw::Float & sampleCountFloor
-			, sdw::Float & tMaxFloor );
-		std::pair< sdw::Float, sdw::Float > doInitPhaseFunctions( sdw::Vec3 const & sunDir
-			, sdw::Vec3 const & worldDir );
 		void doStepRay( sdw::Float const & s
 			, sdw::Float const & sampleCount
 			, sdw::Float const & sampleCountFloor
@@ -279,11 +324,6 @@ namespace atmosphere_scattering
 			, MediumSampleRGB const & medium
 			, sdw::Float const & dt
 			, sdw::Vec3 & opticalDepth );
-		std::tuple< sdw::Vec3, sdw::Vec3 > doGetScatteredLuminance( Ray const & rayToSun
-			, MediumSampleRGB const & medium
-			, sdw::Float const & sunZenithCosAngle
-			, sdw::Float const & miePhaseValue
-			, sdw::Float const & rayleighPhaseValue );
 		void doComputeStep( MediumSampleRGB const & medium
 			, sdw::Float const & dt
 			, sdw::Vec3 const & sampleTransmittance
