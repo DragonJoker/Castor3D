@@ -35,14 +35,21 @@ namespace atmosphere_scattering
 		, atmosphereData{ model::getData< AtmosphereData >( atmosphereBuffer, AtmosphereScatteringUbo::Data ) }
 		, atmosphere{ m_writer
 			, atmosphereData
-			, { &cameraData, false, true, true, true }
+			, LuminanceSettings{}
+				.setCameraData( &cameraData )
+				.setVariableSampleCount( true )
+				.setMieRayPhase( true )
 			, { 256u, 64u } }
 		, scattering{ m_writer
 			, atmosphere
-			, false, true, true, true, false
+			, false /*colorTransmittance*/
+			, true /*fastSky*/
+			, true /*fastAerialPerspective*/
+			, true /*renderSunDisk*/
+			, false /*bloomSunDisk*/
 			, binding
 			, set
-			, false }
+			, false /*needsMultiscatter*/ }
 	{
 	}
 

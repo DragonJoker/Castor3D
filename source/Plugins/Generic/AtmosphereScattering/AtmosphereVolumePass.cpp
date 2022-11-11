@@ -150,7 +150,9 @@ namespace atmosphere_scattering
 
 			AtmosphereModel atmosphere{ writer
 				, c3d_atmosphereData
-				, { &c3d_cameraData, false, false, false, true }
+				, LuminanceSettings{}
+					.setCameraData( &c3d_cameraData )
+					.setMieRayPhase( true )
 				, { transmittanceExtent.width, transmittanceExtent.height } };
 			atmosphere.setTransmittanceMap( transmittanceMap );
 
@@ -272,7 +274,7 @@ namespace atmosphere_scattering
 		, crg::ImageViewId const & resultView
 		, uint32_t index
 		, bool const & enabled )
-		: castor::Named{ "VolumePass" + castor::string::toString( index ) }
+		: castor::Named{ "CameraVolumePass" + castor::string::toString( index ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), volume::getVertexProgram() }
 		, m_geometryShader{ VK_SHADER_STAGE_GEOMETRY_BIT, getName(), volume::getGeometryProgram() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), volume::getPixelProgram( getExtent( resultView ), getExtent( transmittanceView ) ) }

@@ -38,12 +38,7 @@ namespace atmosphere_scattering
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static castor3d::ShaderPtr getPixelProgram( VkExtent2D const & renderSize
-			, VkExtent3D const & transmittanceExtent
-			, bool colorTransmittance = false
-			, bool fastSky = true
-			, bool fastAerialPerspective = true
-			, bool renderSunDisk = true )
+		static castor3d::ShaderPtr getPixelProgram( VkExtent2D const & renderSize )
 		{
 			sdw::FragmentWriter writer;
 
@@ -110,7 +105,7 @@ namespace atmosphere_scattering
 			, atmos::getVertexProgram() };
 		castor::DataHolderT< Shaders >::getData().pixelShader = { VK_SHADER_STAGE_FRAGMENT_BIT
 			, atmos::Name
-			, atmos::getPixelProgram( size, background.getTransmittance().getExtent() ) };
+			, atmos::getPixelProgram( size ) };
 		castor::DataHolderT< Shaders >::getData().stages =
 		{
 			makeShaderState( device, castor::DataHolderT< Shaders >::getData().vertexShader ),

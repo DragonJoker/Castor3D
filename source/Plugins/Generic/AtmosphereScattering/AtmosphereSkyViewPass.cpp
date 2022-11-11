@@ -73,7 +73,10 @@ namespace atmosphere_scattering
 
 			AtmosphereModel atmosphere{ writer
 				, c3d_atmosphereData
-				, { &c3d_cameraData, false, false, true, true }
+				, LuminanceSettings{}
+					.setCameraData( &c3d_cameraData )
+					.setVariableSampleCount( true )
+					.setMieRayPhase( true )
 				, { transmittanceExtent.width, transmittanceExtent.height } };
 			atmosphere.setTransmittanceMap( transmittanceMap );
 
@@ -97,8 +100,6 @@ namespace atmosphere_scattering
 					auto viewZenithCosAngle = writer.declLocale< sdw::Float >( "viewZenithCosAngle" );
 					auto lightViewCosAngle = writer.declLocale< sdw::Float >( "lightViewCosAngle" );
 					atmosphere.uvToSkyViewLutParams( viewZenithCosAngle, lightViewCosAngle, viewHeight, uv, targetSize );
-					auto lightViewSinAngle = writer.declLocale( "lightViewSinAngle"
-						, sqrt( 1.0_f - lightViewCosAngle * lightViewCosAngle ) );
 
 					auto sunDir = writer.declLocale< sdw::Vec3 >( "sunDir" );
 					{
@@ -113,6 +114,8 @@ namespace atmosphere_scattering
 
 					ray.origin = vec3( 0.0_f, viewHeight, 0.0_f );
 
+					auto lightViewSinAngle = writer.declLocale( "lightViewSinAngle"
+						, sqrt( 1.0_f - lightViewCosAngle * lightViewCosAngle ) );
 					auto viewZenithSinAngle = writer.declLocale( "viewZenithSinAngle"
 						, sqrt( 1.0_f - viewZenithCosAngle * viewZenithCosAngle ) );
 					ray.direction = vec3( viewZenithSinAngle * lightViewCosAngle

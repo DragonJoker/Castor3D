@@ -123,18 +123,22 @@ namespace atmosphere_scattering
 			castor3d::shader::Utils utils{ writer };
 			AtmosphereModel atmosphere{ writer
 				, c3d_atmosphereData
-				, { &c3d_cameraData, false, true, true, true }
+				, LuminanceSettings{}
+					.setCameraData( &c3d_cameraData )
+					.setVariableSampleCount( true )
+					.setMieRayPhase( true )
 				, { transmittanceExtent.width, transmittanceExtent.height } };
 			auto binding = uint32_t( Bindings::eTransmittance );
 			ScatteringModel scattering{ writer
 				, atmosphere
 				, false /*colorTransmittance*/
 				, true /*fastSky*/
-				, true /*fastAerialPerspective*/
+				, false /*fastAerialPerspective*/
 				, false /*renderSunDisk*/
 				, true /*bloomSunDisk*/
 				, binding
-				, 0u };
+				, 0u
+				, true /*needsMultiscatter*/ };
 			binding = uint32_t( Bindings::ePerlinWorley );
 			CloudsModel clouds{ writer
 				, utils
@@ -156,8 +160,10 @@ namespace atmosphere_scattering
 				ShaderWriter< useCompute >::implementMain( writer
 					, [&]( sdw::IVec2 const & fragCoord )
 					{
-						auto luminance = writer.declLocale< sdw::Vec4 >( "luminance" );
-						auto transmittance = writer.declLocale< sdw::Vec4 >( "transmittance" );
+						auto luminance = writer.declLocale< sdw::Vec4 >( "luminance"
+							, vec4( 0.0_f ) );
+						auto transmittance = writer.declLocale< sdw::Vec4 >( "transmittance"
+							, vec4( 0.0_f ) );
 						scattering.getPixelTransLum( vec2( fragCoord.xy() )
 							, targetSize
 							, depthBufferValue
@@ -181,8 +187,10 @@ namespace atmosphere_scattering
 				ShaderWriter< useCompute >::implementMain( writer
 					, [&]( sdw::IVec2 const & fragCoord )
 					{
-						auto luminance = writer.declLocale< sdw::Vec4 >( "luminance" );
-						auto transmittance = writer.declLocale< sdw::Vec4 >( "transmittance" );
+						auto luminance = writer.declLocale< sdw::Vec4 >( "luminance"
+							, vec4( 0.0_f ) );
+						auto transmittance = writer.declLocale< sdw::Vec4 >( "transmittance"
+							, vec4( 0.0_f ) );
 						scattering.getPixelTransLum( vec2( fragCoord.xy() )
 							, targetSize
 							, depthBufferValue
