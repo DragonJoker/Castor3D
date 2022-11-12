@@ -132,14 +132,11 @@ namespace atmosphere_scattering
 			auto binding = uint32_t( Bindings::eTransmittance );
 			ScatteringModel scattering{ writer
 				, atmosphere
-				, false /*colorTransmittance*/
-				, true /*fastSky*/
-				, false /*fastAerialPerspective*/
-				, false /*renderSunDisk*/
-				, true /*bloomSunDisk*/
+				, ScatteringModel::Settings{}
+					.setNeedsMultiscatter( true )
+					.setBloomSunDisk( true )
 				, binding
-				, 0u
-				, true /*needsMultiscatter*/ };
+				, 0u };
 			binding = uint32_t( Bindings::ePerlinWorley );
 			CloudsModel clouds{ writer
 				, utils

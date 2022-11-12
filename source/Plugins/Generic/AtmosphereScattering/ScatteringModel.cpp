@@ -9,28 +9,19 @@ namespace atmosphere_scattering
 {
 	ScatteringModel::ScatteringModel( sdw::ShaderWriter & writer
 		, AtmosphereModel & atmosphere
-		, bool colorTransmittance
-		, bool fastSky
-		, bool fastAerialPerspective
-		, bool renderSunDisk
-		, bool bloomSunDisk
+		, Settings settings
 		, uint32_t & binding
-		, uint32_t set
-		, bool needsMultiscatter )
+		, uint32_t set )
 		: m_writer{ writer }
 		, m_atmosphere{ atmosphere }
-		, m_colorTransmittance{ colorTransmittance }
-		, m_fastSky{ fastSky }
-		, m_fastAerialPerspective{ fastAerialPerspective }
-		, m_renderSunDisk{ renderSunDisk }
-		, m_bloomSunDisk{ bloomSunDisk }
+		, m_settings{ std::move( settings ) }
 		, transmittanceMap{ writer.declCombinedImg< sdw::CombinedImage2DRgba32 >( "transmittanceMap"
 			, binding++
 			, set ) }
 		, multiScatterMap{ writer.declCombinedImg< sdw::CombinedImage2DRgba32 >( "multiScatterMap"
-			, ( needsMultiscatter ? binding++ : 0u )
+			, ( settings.needsMultiscatter ? binding++ : 0u )
 			, set
-			, needsMultiscatter ) }
+			, settings.needsMultiscatter ) }
 		, skyViewMap{ writer.declCombinedImg< sdw::CombinedImage2DRgba32 >( "skyViewMap"
 			, binding++
 			, set ) }
@@ -54,7 +45,7 @@ namespace atmosphere_scattering
 					auto sunLuminance = m_writer.declLocale( "sunLuminance"
 						, vec3( 0.0_f ) );
 
-					if ( m_bloomSunDisk )
+					if ( m_settings.bloomSunDisk )
 					{
 						auto sunMinAngularDiameter = m_writer.declLocale( "sunMinAngularDiameter"
 							, sdw::Float{ ( 0.053_degrees ).radians() } );
@@ -191,29 +182,29 @@ namespace atmosphere_scattering
 						, m_atmosphere.castRay( fragPos, fragSize ) );
 					auto L = m_writer.declLocale( "L"
 						, vec3( 0.0_f ) );
+					auto viewHeight = m_writer.declLocale( "viewHeight"
+						, length( ray.origin ) );
 					doRenderSky( fragSize
 						, fragDepth
 						, ray
+						, viewHeight
 						, L
 						, luminance );
 
-					if ( m_fastAerialPerspective )
-					{
-						doRenderFastAerial( fragPos
-							, fragSize
-							, fragDepth
-							, ray.origin
-							, L
-							, luminance );
-					}
-					else
+					IF( m_writer, !doRenderFastAerial( fragPos
+						, fragSize
+						, fragDepth
+						, ray.origin
+						, viewHeight
+						, L
+						, luminance ) )
 					{
 						// Move to top atmosphere as the starting point for ray marching.
 						// This is critical to be after the above to not disrupt above atmosphere tests and voxel selection.
 						IF( m_writer, !m_atmosphere.moveToTopAtmosphere( ray ) )
 						{
 							// Ray is not intersecting the atmosphere
-							if ( m_renderSunDisk )
+							if ( m_settings.renderSunDisk )
 							{
 								luminance = vec4( getSunLuminance( ray ), 1.0_f );
 							}
@@ -230,6 +221,7 @@ namespace atmosphere_scattering
 								, fragDepth ) );
 						doRegisterOutputs( ss, L, luminance, transmittance );
 					}
+					FI;
 				}
 				, sdw::InVec2{ m_writer, "fragPos" }
 				, sdw::InVec2{ m_writer, "fragSize" }
@@ -259,14 +251,12 @@ namespace atmosphere_scattering
 	void ScatteringModel::doRenderSky( sdw::Vec2 const & fragSize
 		, sdw::Float const & fragDepth
 		, Ray const & ray
+		, sdw::Float const & viewHeight
 		, sdw::Vec3 & L
 		, sdw::Vec4 & luminance )
 	{
-		if ( m_fastSky )
+		if ( m_settings.fastSky )
 		{
-			auto viewHeight = m_writer.declLocale( "viewHeight"
-				, length( ray.origin ) );
-
 			IF( m_writer, viewHeight < m_atmosphere.getAtmosphereRadius() && fragDepth >= 1.0_f )
 			{
 				auto uv = m_writer.declLocale< sdw::Vec2 >( "uv" );
@@ -295,7 +285,7 @@ namespace atmosphere_scattering
 
 				luminance = vec4( skyViewMap.lod( uv, 0.0_f ).rgb(), 1.0_f );
 
-				if ( m_renderSunDisk )
+				if ( m_settings.renderSunDisk )
 				{
 					luminance.xyz() += getSunLuminance( ray );
 				}
@@ -304,7 +294,7 @@ namespace atmosphere_scattering
 			}
 			FI;
 		}
-		else if ( m_renderSunDisk )
+		else if ( m_settings.renderSunDisk )
 		{
 			IF( m_writer, fragDepth >= 1.0_f )
 			{
@@ -314,18 +304,29 @@ namespace atmosphere_scattering
 		}
 	}
 
-	void ScatteringModel::doRenderFastAerial( sdw::Vec2 const & fragPos
+	sdw::Boolean ScatteringModel::doRenderFastAerial( sdw::Vec2 const & fragPos
 		, sdw::Vec2 const & fragSize
 		, sdw::Float const & fragDepth
 		, sdw::Vec3 const & worldPos
+		, sdw::Float const & viewHeight
 		, sdw::Vec3 & L
 		, sdw::Vec4 & luminance )
 	{
-		if ( m_colorTransmittance )
+		if ( !m_settings.fastAerialPerspective )
+		{
+			return 0_b;
+		}
+
+		if ( m_settings.colorTransmittance )
 		{
 			castor3d::log::error << "The fastAerialPerspective path does not support colorTransmittance." << std::endl;
+			return 0_b;
 		}
-		else
+
+		auto isAerial = m_writer.declLocale( "isAerial"
+			, viewHeight < m_atmosphere.getAtmosphereRadius() );
+
+		IF( m_writer, isAerial )
 		{
 			auto apSliceCount = 32.0_f;
 			auto depthBufferWorldPos = m_writer.declLocale( "depthBufferWorldPos"
@@ -358,6 +359,9 @@ namespace atmosphere_scattering
 
 			luminance = vec4( L, opacity );
 		}
+		FI;
+
+		return isAerial;
 	}
 
 	void ScatteringModel::doRegisterOutputs( SingleScatteringResult const & ss
@@ -369,7 +373,7 @@ namespace atmosphere_scattering
 		auto throughput = m_writer.declLocale( "throughput"
 			, ss.transmittance() );
 
-		if ( m_colorTransmittance )
+		if ( m_settings.colorTransmittance )
 		{
 			luminance = vec4( L, 1.0_f );
 			transmittance = vec4( throughput, 1.0_f );
