@@ -87,4 +87,17 @@ namespace castor3d
 				, sceneNode.getDerivedTransformationMatrix() );
 		return result;
 	}
+
+	castor::Matrix4x4f Camera::getRescaledProjection( float scale
+		, bool safeBanded )const
+	{
+		if ( m_ownProjection )
+		{
+			return m_projection;
+		}
+
+		return safeBanded
+			? m_viewport.getRescaledSafeBandedProjection( scale )
+			: m_viewport.getRescaledProjection( scale );
+	}
 }

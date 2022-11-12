@@ -164,59 +164,8 @@ namespace castor3d
 
 		if ( isModified() )
 		{
-			switch ( m_type )
-			{
-			case castor3d::ViewportType::eOrtho:
-				m_projection = m_engine.getRenderSystem()->getOrtho( m_left
-					, m_right
-					, m_bottom
-					, m_top
-					, m_near
-					, m_far );
-				m_safeBandedProjection = viewport::getSafeBandedOrtho( *m_engine.getRenderSystem()
-					, m_size
-					, m_left
-					, m_right
-					, m_bottom
-					, m_top
-					, m_near
-					, m_far );
-				break;
-
-			case castor3d::ViewportType::ePerspective:
-				m_projection = m_engine.getRenderSystem()->getPerspective( m_fovY
-					, m_ratio
-					, m_near
-					, m_far );
-				m_safeBandedProjection = viewport::getSafeBandedPerspective( *m_engine.getRenderSystem()
-					, m_size
-					, m_fovY
-					, m_ratio
-					, m_near
-					, m_far );
-				break;
-
-			case castor3d::ViewportType::eFrustum:
-				m_projection = m_engine.getRenderSystem()->getFrustum( m_left
-					, m_right
-					, m_bottom
-					, m_top
-					, m_near
-					, m_far );
-				m_safeBandedProjection = viewport::getSafeBandedFrustum( *m_engine.getRenderSystem()
-					, m_size
-					, m_left
-					, m_right
-					, m_bottom
-					, m_top
-					, m_near
-					, m_far );
-				break;
-
-			default:
-				break;
-			}
-
+			m_projection = getRescaledProjection( 1.0f );
+			m_safeBandedProjection = getRescaledSafeBandedProjection( 1.0f );
 			m_modified = false;
 			result = true;
 		}
@@ -290,5 +239,65 @@ namespace castor3d
 	{
 		float const scale = std::abs( 2.0f * ( getFovY() * 0.5f ).tan() );
 		return std::abs( float( getHeight() ) / scale );
+	}
+
+	castor::Matrix4x4f Viewport::getRescaledProjection( float scale )const
+	{
+		switch ( m_type )
+		{
+		case castor3d::ViewportType::eOrtho:
+			return m_engine.getRenderSystem()->getOrtho( m_left
+				, m_right
+				, m_bottom * scale
+				, m_top * scale
+				, m_near * scale
+				, m_far * scale );
+		case castor3d::ViewportType::ePerspective:
+			return m_engine.getRenderSystem()->getPerspective( m_fovY
+				, m_ratio
+				, m_near * scale
+				, m_far * scale );
+		case castor3d::ViewportType::eFrustum:
+		default:
+			return m_engine.getRenderSystem()->getFrustum( m_left
+				, m_right
+				, m_bottom * scale
+				, m_top * scale
+				, m_near * scale
+				, m_far * scale );
+		}
+	}
+
+	castor::Matrix4x4f Viewport::getRescaledSafeBandedProjection( float scale )const
+	{
+		switch ( m_type )
+		{
+		case castor3d::ViewportType::eOrtho:
+			return viewport::getSafeBandedOrtho( *m_engine.getRenderSystem()
+				, m_size
+				, m_left * scale
+				, m_right * scale
+				, m_bottom * scale
+				, m_top * scale
+				, m_near * scale
+				, m_far * scale );
+		case castor3d::ViewportType::ePerspective:
+			return viewport::getSafeBandedPerspective( *m_engine.getRenderSystem()
+				, m_size
+				, m_fovY
+				, m_ratio
+				, m_near * scale
+				, m_far * scale );
+		case castor3d::ViewportType::eFrustum:
+		default:
+			return viewport::getSafeBandedFrustum( *m_engine.getRenderSystem()
+				, m_size
+				, m_left * scale
+				, m_right * scale
+				, m_bottom * scale
+				, m_top * scale
+				, m_near * scale
+				, m_far * scale );
+		}
 	}
 }
