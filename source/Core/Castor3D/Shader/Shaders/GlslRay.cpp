@@ -1,6 +1,7 @@
 #include "Castor3D/Shader/Shaders/GlslRay.hpp"
 
 #include <ShaderWriter/Writer.hpp>
+#include <ShaderWriter/Intrinsics/IntrinsicFunctions.hpp>
 
 namespace castor3d::shader
 {
@@ -26,6 +27,11 @@ namespace castor3d::shader
 		result.origin = o;
 		result.direction = d;
 		return result;
+	}
+
+	sdw::Vec3 Ray::step( sdw::Float const & t )const
+	{
+		return sdw::fma( direction, vec3( t ), origin );
 	}
 
 	//************************************************************************************************

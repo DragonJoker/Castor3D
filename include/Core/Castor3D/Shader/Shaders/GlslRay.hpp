@@ -68,10 +68,7 @@ namespace castor3d
 				, sdw::Vec3 const & o = vec3( 0.0_f )
 				, sdw::Vec3 const & d = vec3( 0.0_f ) );
 
-			sdw::Vec3 step( sdw::Float const & t )const
-			{
-				return origin + t * direction;
-			}
+			C3D_API sdw::Vec3 step( sdw::Float const & t )const;
 
 			sdw::Vec3 origin;
 			sdw::Vec3 direction;
