@@ -76,7 +76,8 @@ namespace atmosphere_scattering
 		castor::Matrix4x4f view;
 		castor::matrix::lookAt( view, position, position + front, up );
 
-		auto viewProj = camera.getProjection( isSafeBanded ) * view;
+		auto proj = camera.getRescaledProjection( 1.0f / 1000.0f, isSafeBanded );
+		auto viewProj = proj * view;
 		auto & data = m_ubo.getData();
 		data.camViewProj = viewProj;
 		data.camInvViewProj = viewProj.getInverse();

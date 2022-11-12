@@ -154,6 +154,9 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
+		C3D_API castor::Matrix4x4f getRescaledProjection( float scale )const;
+		C3D_API castor::Matrix4x4f getRescaledSafeBandedProjection( float scale )const;
+
 		castor::Size const & getSize()const
 		{
 			return m_size.value();
