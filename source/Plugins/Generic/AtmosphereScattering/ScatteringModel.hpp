@@ -10,16 +10,61 @@ namespace atmosphere_scattering
 {
 	struct ScatteringModel
 	{
+		struct Settings
+		{
+			Settings()
+			{
+			}
+
+			Settings & setColorTransmittance( bool v )
+			{
+				colorTransmittance = v;
+				return *this;
+			}
+
+			Settings & setFastSky( bool v )
+			{
+				fastSky = v;
+				return *this;
+			}
+
+			Settings & setFastAerialPerspective( bool v )
+			{
+				fastAerialPerspective = v;
+				return *this;
+			}
+
+			Settings & setRenderSunDisk( bool v )
+			{
+				renderSunDisk = v;
+				return *this;
+			}
+
+			Settings & setBloomSunDisk( bool v )
+			{
+				bloomSunDisk = v;
+				return *this;
+			}
+
+			Settings & setNeedsMultiscatter( bool v )
+			{
+				needsMultiscatter = v;
+				return *this;
+			}
+
+			bool colorTransmittance{};
+			bool fastSky{};
+			bool fastAerialPerspective{};
+			bool renderSunDisk{};
+			bool bloomSunDisk{};
+			bool needsMultiscatter{};
+		};
+
 		ScatteringModel( sdw::ShaderWriter & writer
 			, AtmosphereModel & atmosphere
-			, bool colorTransmittance
-			, bool fastSky
-			, bool fastAerialPerspective
-			, bool renderSunDisk
-			, bool bloomSunDisk
+			, Settings settings
 			, uint32_t & binding
-			, uint32_t set
-			, bool needsMultiscatter = true );
+			, uint32_t set );
 		sdw::RetVec3 getSunLuminance( Ray const & ray );
 		sdw::RetVec3 getSunRadiance( sdw::Vec3 const & sunDir );
 		sdw::Float aerialPerspectiveDepthToSlice( sdw::Float const & depth );
@@ -34,12 +79,14 @@ namespace atmosphere_scattering
 		void doRenderSky( sdw::Vec2 const & fragSize
 			, sdw::Float const & fragDepth
 			, Ray const & ray
+			, sdw::Float const & viewHeight
 			, sdw::Vec3 & L
 			, sdw::Vec4 & luminance );
-		void doRenderFastAerial( sdw::Vec2 const & fragPos
+		sdw::Boolean doRenderFastAerial( sdw::Vec2 const & fragPos
 			, sdw::Vec2 const & fragSize
 			, sdw::Float const & fragDepth
 			, sdw::Vec3 const & worldPos
+			, sdw::Float const & viewHeight
 			, sdw::Vec3 & L
 			, sdw::Vec4 & luminance );
 		void doRegisterOutputs( SingleScatteringResult const & ss
@@ -53,11 +100,7 @@ namespace atmosphere_scattering
 	private:
 		sdw::ShaderWriter & m_writer;
 		AtmosphereModel & m_atmosphere;
-		bool m_colorTransmittance;
-		bool m_fastSky;
-		bool m_fastAerialPerspective;
-		bool m_renderSunDisk;
-		bool m_bloomSunDisk;
+		Settings m_settings;
 		sdw::CombinedImage2DRgba32 transmittanceMap;
 		sdw::CombinedImage2DRgba32 multiScatterMap;
 		sdw::CombinedImage2DRgba32 skyViewMap;

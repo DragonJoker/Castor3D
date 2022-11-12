@@ -43,14 +43,11 @@ namespace atmosphere_scattering
 			, { 256u, 64u } }
 		, scattering{ m_writer
 			, atmosphere
-			, false /*colorTransmittance*/
-			, true /*fastSky*/
-			, true /*fastAerialPerspective*/
-			, true /*renderSunDisk*/
-			, false /*bloomSunDisk*/
+			, ScatteringModel::Settings{}
+				.setNeedsMultiscatter( true )
+				.setFastAerialPerspective( true )
 			, binding
-			, set
-			, false /*needsMultiscatter*/ }
+			, set }
 	{
 	}
 
