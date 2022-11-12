@@ -65,7 +65,7 @@ namespace atmosphere_scattering
 
 			AtmosphereModel atmosphere{ writer
 				, c3d_atmosphereData
-				, LuminanceSettings{}
+				, AtmosphereModel::Settings{}
 					.setUseGround( true )
 					.setIlluminanceIsOne( true )
 				, { transmittanceExtent.width, transmittanceExtent.height } };

@@ -50,6 +50,8 @@ namespace atmosphere_scattering
 		{
 		}
 
+		SingleScatteringResult( sdw::ShaderWriter & writer );
+
 		// Scattered light (luminance)
 		auto luminance()const { return getMember< "luminance" >(); }
 		// Optical depth (1/m)
@@ -102,78 +104,78 @@ namespace atmosphere_scattering
 	};
 	Writer_Parameter( MediumSampleRGB );
 
-	struct LuminanceSettings
-	{
-		LuminanceSettings()
-		{
-		}
-
-		LuminanceSettings & setCameraData( CameraData const * v )
-		{
-			cameraData = v;
-			return *this;
-		}
-
-		LuminanceSettings & setUseGround( bool v )
-		{
-			useGround = v;
-			return *this;
-		}
-
-		LuminanceSettings & setVariableSampleCount( bool v )
-		{
-			variableSampleCount = v;
-			return *this;
-		}
-
-		LuminanceSettings & setMieRayPhase( bool v )
-		{
-			mieRayPhase = v;
-			return *this;
-		}
-
-		LuminanceSettings & setIlluminanceIsOne( bool v )
-		{
-			illuminanceIsOne = v;
-			return *this;
-		}
-
-		LuminanceSettings & setMultiScatApprox( bool v )
-		{
-			multiScatApproxEnabled = v;
-			return *this;
-		}
-
-		LuminanceSettings & setShadowMap( bool v )
-		{
-			shadowMapEnabled = v;
-			return *this;
-		}
-
-		LuminanceSettings & setMultiScatteringPowerSerie( bool v )
-		{
-			multiScatteringPowerSerie = v;
-			return *this;
-		}
-
-		CameraData const * cameraData{};
-		bool useGround{};
-		bool variableSampleCount{};
-		bool mieRayPhase{};
-		bool illuminanceIsOne{};
-		bool multiScatApproxEnabled{};
-		bool shadowMapEnabled{};
-		bool multiScatteringPowerSerie{ true };
-	};
-
 	struct AtmosphereModel
 	{
+		struct Settings
+		{
+			Settings()
+			{
+			}
+
+			Settings & setCameraData( CameraData const * v )
+			{
+				cameraData = v;
+				return *this;
+			}
+
+			Settings & setUseGround( bool v )
+			{
+				useGround = v;
+				return *this;
+			}
+
+			Settings & setVariableSampleCount( bool v )
+			{
+				variableSampleCount = v;
+				return *this;
+			}
+
+			Settings & setMieRayPhase( bool v )
+			{
+				mieRayPhase = v;
+				return *this;
+			}
+
+			Settings & setIlluminanceIsOne( bool v )
+			{
+				illuminanceIsOne = v;
+				return *this;
+			}
+
+			Settings & setMultiScatApprox( bool v )
+			{
+				multiScatApproxEnabled = v;
+				return *this;
+			}
+
+			Settings & setShadowMap( bool v )
+			{
+				shadowMapEnabled = v;
+				return *this;
+			}
+
+			Settings & setMultiScatteringPowerSerie( bool v )
+			{
+				multiScatteringPowerSerie = v;
+				return *this;
+			}
+
+			CameraData const * cameraData{};
+			bool useGround{};
+			bool variableSampleCount{};
+			bool mieRayPhase{};
+			bool illuminanceIsOne{};
+			bool multiScatApproxEnabled{};
+			bool shadowMapEnabled{};
+			bool multiScatteringPowerSerie{ true };
+		};
+
 		AtmosphereModel( sdw::ShaderWriter & writer
 			, AtmosphereData const & atmosphereData
-			, LuminanceSettings luminanceSettings );
+			, Settings settings );
 		AtmosphereModel( sdw::ShaderWriter & writer
 			, AtmosphereData const & atmosphereData
-			, LuminanceSettings luminanceSettings
+			, Settings settings
 			, VkExtent2D transmittanceExtent );
 
 		auto getSunDirection()const
@@ -203,22 +205,22 @@ namespace atmosphere_scattering
 
 		auto getCameraPosition()const
 		{
-			return luminanceSettings.cameraData->position();
+			return settings.cameraData->position();
 		}
 
 		auto camProjToWorld( sdw::Vec4 const & clipSpace )const
 		{
-			return luminanceSettings.cameraData->camProjToWorld( clipSpace );
+			return settings.cameraData->camProjToWorld( clipSpace );
 		}
 
 		auto camProjToView( sdw::Vec4 const & clipSpace )const
 		{
-			return luminanceSettings.cameraData->camInvProj() * clipSpace;
+			return settings.cameraData->camInvProj() * clipSpace;
 		}
 
 		auto camViewToWorld( sdw::Vec4 const & viewSpace )const
 		{
-			return luminanceSettings.cameraData->camInvView()  * viewSpace;
+			return settings.cameraData->camInvView()  * viewSpace;
 		}
 
 		void setTransmittanceMap( sdw::CombinedImage2DRgba32 const & value )
@@ -236,10 +238,6 @@ namespace atmosphere_scattering
 		RetRay castRay( sdw::Vec2 const & uv );
 		RetRay castRay( sdw::Vec2 const & screenPoint
 			, sdw::Vec2 const & screenSize );
-		sdw::RetVec3 getMultipleScattering( sdw::Vec3 const & scattering
-			, sdw::Vec3 const & extinction
-			, sdw::Vec3 const & worldPos
-			, sdw::Float const & viewZenithCosAngle );
 		RetSingleScatteringResult integrateScatteredLuminance( sdw::Vec2 const & pixPos
 			, Ray const & ray
 			, sdw::Vec3 const & sunDir
@@ -303,45 +301,6 @@ namespace atmosphere_scattering
 			, sdw::Vec2 const & size );
 
 	private:
-		void doInitRay( sdw::Float const & depthBufferValue
-			, sdw::Vec2 const & pixPos
-			, Ray const & ray
-			, sdw::Float const & tMaxMax
-			, sdw::Vec3 const & earthO
-			, Intersection const & tTop
-			, Intersection const & tBottom
-			, SingleScatteringResult const & result
-			, sdw::Float & tMax );
-		void doStepRay( sdw::Float const & s
-			, sdw::Float const & sampleCount
-			, sdw::Float const & sampleCountFloor
-			, sdw::Float const & tMaxFloor
-			, sdw::Float const & tMax
-			, sdw::Float const & sampleSegmentT
-			, sdw::Float & t
-			, sdw::Float & dt );
-		std::tuple< sdw::Vec3, sdw::Float, sdw::Vec2, sdw::Vec3, sdw::Vec3 > doGetSunTransmittance( Ray const & rayToSun
-			, MediumSampleRGB const & medium
-			, sdw::Float const & dt
-			, sdw::Vec3 & opticalDepth );
-		void doComputeStep( MediumSampleRGB const & medium
-			, sdw::Float const & dt
-			, sdw::Vec3 const & sampleTransmittance
-			, sdw::Float const & earthShadow
-			, sdw::Vec3 const & transmittanceToSun
-			, sdw::Vec3 const & multiScatteredLuminance
-			, sdw::Vec3 const & S
-			, sdw::Float const & t
-			, sdw::Float & tPrev
-			, sdw::Vec3 & throughput
-			, sdw::Vec3 & L
-			, SingleScatteringResult & result );
-		void doProcessGround( sdw::Vec3 const & sunDir
-			, sdw::Float const & tMax
-			, Intersection const & tBottom
-			, sdw::Vec3 const & globalL
-			, sdw::Vec3 const & throughput
-			, sdw::Vec3 & L );
 		sdw::Float doGetEarthShadow( Ray const & rayToSun
 			, sdw::Vec3 const & earthO
 			, sdw::Vec3 const & upVector );
@@ -351,7 +310,7 @@ namespace atmosphere_scattering
 
 	public:
 		AtmosphereData const & atmosphereData;
-		LuminanceSettings luminanceSettings{};
+		Settings settings{};
 		VkExtent2D transmittanceExtent{};
 		sdw::Float planetRadiusOffset;
 		sdw::CombinedImage2DRgba32 const * transmittanceTexture{};
@@ -400,11 +359,6 @@ namespace atmosphere_scattering
 			, sdw::InFloat
 			, sdw::OutVec2
 			, sdw::InVec2 > m_skyViewLutParamsToUv;
-		sdw::Function< sdw::Vec3
-			, sdw::InVec3
-			, sdw::InVec3
-			, sdw::InVec3
-			, sdw::InFloat > m_getMultipleScattering;
 		sdw::Function< sdw::Vec3
 			, sdw::InFloat
 			, sdw::InVec2

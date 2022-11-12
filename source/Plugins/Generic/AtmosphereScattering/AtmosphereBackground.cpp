@@ -824,24 +824,24 @@ namespace atmosphere_scattering
 				, index++ );
 			m_atmosphereUbo->createPassBinding( pass
 				, index++ );
+			crg::SamplerDesc linearClampSampler{ VK_FILTER_LINEAR
+				, VK_FILTER_LINEAR };
 			pass.addSampledView( m_transmittance.wholeViewId
 				, index++
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-				, crg::SamplerDesc{ VK_FILTER_LINEAR
-					, VK_FILTER_LINEAR
-					, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
+				, linearClampSampler );
+			pass.addSampledView( m_multiScatter.wholeViewId
+				, index++
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, linearClampSampler );
 			pass.addSampledView( it->second->skyView.wholeViewId
 				, index++
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-				, crg::SamplerDesc{ VK_FILTER_LINEAR
-					, VK_FILTER_LINEAR
-					, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
+				, linearClampSampler );
 			pass.addSampledView( it->second->volume.wholeViewId
 				, index++
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-				, crg::SamplerDesc{ VK_FILTER_LINEAR
-					, VK_FILTER_LINEAR
-					, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
+				, linearClampSampler );
 		}
 	}
 
@@ -857,6 +857,9 @@ namespace atmosphere_scattering
 		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( index++
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapTransmittance
+		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( index++
+			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapMultiScatter
 		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( index++
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapSkyView
@@ -877,6 +880,10 @@ namespace atmosphere_scattering
 			descriptorWrites.push_back( m_atmosphereUbo->getDescriptorWrite( index++ ) );
 			castor3d::bindTexture( m_transmittance.sampledView
 				, *m_transmittance.sampler
+				, descriptorWrites
+				, index );
+			castor3d::bindTexture( m_multiScatter.sampledView
+				, *m_multiScatter.sampler
 				, descriptorWrites
 				, index );
 			castor3d::bindTexture( it->second->skyView.sampledView
