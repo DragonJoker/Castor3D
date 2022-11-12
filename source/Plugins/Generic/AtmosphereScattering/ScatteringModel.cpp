@@ -163,7 +163,7 @@ namespace atmosphere_scattering
 		return depth * ( 1.0_f / apKmPerSlice );
 	}
 
-	sdw::Void ScatteringModel::getPixelTransLum( sdw::Vec2 const & pfragPos
+	castor3d::shader::RetRay ScatteringModel::getPixelTransLum( sdw::Vec2 const & pfragPos
 		, sdw::Vec2 const & pfragSize
 		, sdw::Float const & pfragDepth
 		, sdw::Vec4 & ptransmittance
@@ -171,7 +171,7 @@ namespace atmosphere_scattering
 	{
 		if ( !m_getPixelTransLum )
 		{
-			m_getPixelTransLum = m_writer.implementFunction< sdw::Void >( "scatter_getPixelTransLum"
+			m_getPixelTransLum = m_writer.implementFunction< castor3d::shader::Ray >( "scatter_getPixelTransLum"
 				, [&]( sdw::Vec2 const & fragPos
 					, sdw::Vec2 const & fragSize
 					, sdw::Float const & fragDepth
@@ -209,7 +209,7 @@ namespace atmosphere_scattering
 								luminance = vec4( getSunLuminance( ray ), 1.0_f );
 							}
 
-							m_writer.returnStmt();
+							m_writer.returnStmt( ray );
 						}
 						FI;
 
@@ -222,6 +222,8 @@ namespace atmosphere_scattering
 						doRegisterOutputs( ss, L, luminance, transmittance );
 					}
 					FI;
+
+					m_writer.returnStmt( ray );
 				}
 				, sdw::InVec2{ m_writer, "fragPos" }
 				, sdw::InVec2{ m_writer, "fragSize" }
@@ -290,7 +292,7 @@ namespace atmosphere_scattering
 					luminance.xyz() += getSunLuminance( ray );
 				}
 
-				m_writer.returnStmt();
+				m_writer.returnStmt( ray );
 			}
 			FI;
 		}

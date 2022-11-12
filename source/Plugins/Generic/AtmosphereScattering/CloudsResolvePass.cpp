@@ -122,6 +122,7 @@ namespace atmosphere_scattering
 						, vec2( in.fragCoord.xy() ) / targetSize );
 					texCoords.y() = 1.0_f - texCoords.y();
 					fragColour = gaussianBlur( cloudsMap, texCoords );
+					fragColour += emissionsMap.sample( texCoords );
 /*
 					// RADIAL BLUR - CREPUSCOLAR RAYS
 					IF( writer, c3d_cameraData.lightDotCameraFront() > 0.0_f )

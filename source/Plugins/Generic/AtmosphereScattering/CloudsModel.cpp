@@ -46,31 +46,19 @@ namespace atmosphere_scattering
 	{
 	}
 
-	sdw::Void CloudsModel::applyClouds( sdw::IVec2 const & pfragCoord
-		, sdw::Vec2 const & ptargetSize
+	sdw::Void CloudsModel::applyClouds( castor3d::shader::Ray const & pray
+		, sdw::IVec2 const & pfragCoord
 		, sdw::Vec4 & pskyColor
 		, sdw::Vec4 & pemission )
 	{
 		if ( !m_applyClouds )
 		{
 			m_applyClouds = writer.implementFunction< sdw::Void >( "clouds_apply"
-				, [&]( sdw::IVec2 const & fragCoord
-					, sdw::Vec2 const & targetSize
+				, [&]( castor3d::shader::Ray const & ray
+					, sdw::IVec2 const & fragCoord
 					, sdw::Vec4 skyColor
 					, sdw::Vec4 emission )
 				{
-					auto ray = writer.declLocale( "ray"
-						, atmosphere.castRay( vec2( fragCoord ), targetSize ) );
-
-					IF( writer, clouds.coverage() == 0.0_f )
-					{
-						auto sunDisk = writer.declLocale( "sunDisk"
-							, scattering.getSunLuminance( ray ) );
-						skyColor.rgb() += sunDisk;
-						writer.returnStmt();
-					}
-					FI;
-
 					auto startPos0 = writer.declLocale( "startPos0"
 						, vec3( 0.0_f ) );
 					auto endPos0 = writer.declLocale( "endPos0"
@@ -112,7 +100,7 @@ namespace atmosphere_scattering
 						// Ray below clouds boundaries.
 						IF( writer, interGround.valid() )
 						{
-							emission = skyColor;
+							//emission = skyColor;
 							writer.returnStmt();
 						}
 						FI;
@@ -187,12 +175,12 @@ namespace atmosphere_scattering
 						, fogAmount
 						, earthShadow
 						, rayMarchResult );
-					emission = computeEmission( ray
-						, startPos0
-						, sunColor
-						, earthShadow
-						, rayMarchResult );
-					emission.rgb() *= skyColor.a();
+					//emission = computeEmission( ray
+					//	, startPos0
+					//	, sunColor
+					//	, earthShadow
+					//	, rayMarchResult );
+					//emission.rgb() *= skyColor.a();
 
 					IF( writer, secondRay )
 					{
@@ -216,28 +204,28 @@ namespace atmosphere_scattering
 									, fogAmount
 									, earthShadow
 									, rayMarchResult ) );
-							auto emissionResult = writer.declLocale( "emissionResult"
-								, computeEmission( ray
-									, startPos1
-									, sunColor
-									, earthShadow
-									, rayMarchResult ) );
-							emissionResult.rgb() *= lightingResult.a();
+							//auto emissionResult = writer.declLocale( "emissionResult"
+							//	, computeEmission( ray
+							//		, startPos1
+							//		, sunColor
+							//		, earthShadow
+							//		, rayMarchResult ) );
+							//emissionResult.rgb() *= lightingResult.a();
 							skyColor = max( skyColor, lightingResult );
-							emission = max( emission, emissionResult );
+							//emission = max( emission, emissionResult );
 						}
 						FI;
 					}
 					FI;
 				}
+				, castor3d::shader::InRay{ writer, "ray" }
 				, sdw::InIVec2{ writer, "fragCoord" }
-				, sdw::InVec2{ writer, "targetSize" }
 				, sdw::InOutVec4{ writer, "skyColor" }
 				, sdw::OutVec4{ writer, "emission" } );
 		}
 
-		return m_applyClouds( pfragCoord
-			, ptargetSize
+		return m_applyClouds( pray
+			, pfragCoord
 			, pskyColor
 			, pemission );
 	}
