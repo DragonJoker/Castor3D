@@ -127,6 +127,7 @@ namespace atmosphere_scattering
 					.setCameraData( &c3d_cameraData )
 					.setVariableSampleCount( true )
 					.setMieRayPhase( true )
+					.setMultiScatApprox( true )
 				, { transmittanceExtent.width, transmittanceExtent.height } };
 			auto binding = uint32_t( Bindings::eTransmittance );
 			ScatteringModel scattering{ writer
