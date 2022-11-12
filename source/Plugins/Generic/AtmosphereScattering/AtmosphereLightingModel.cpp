@@ -98,7 +98,7 @@ namespace atmosphere_scattering
 						, m_writer.declLocale( "lightSheen", vec2( 0.0_f ) ) };
 					auto lightDirection = m_writer.declLocale( "lightDirection"
 						, normalize( light.direction ) );
-					auto radiance = m_writer.declLocale( "lightSpecular"
+					auto radiance = m_writer.declLocale( "radiance"
 						, m_atmosphereBackground->getSunRadiance( light.direction ) );
 					// Diffuse term.
 					auto diffuseFactor = m_writer.declLocale( "diffuseFactor"
@@ -144,7 +144,7 @@ namespace atmosphere_scattering
 					, float( m_atmosphereBackground->getTargetSize().height ) );
 					auto luminance = m_writer.declLocale< sdw::Vec4 >( "luminance" );
 					auto transmittance = m_writer.declLocale< sdw::Vec4 >( "transmittance" );
-					m_atmosphereBackground->getPixelTransLum( vec2( surface.clipPosition.x(), 1.0_f - surface.clipPosition.y() )
+					m_atmosphereBackground->getPixelTransLum( surface.clipPosition.xy()
 						, targetSize
 						, surface.clipPosition.z()
 						, transmittance
@@ -367,13 +367,11 @@ namespace atmosphere_scattering
 						, m_writer.declLocale( "lightScattering", vec3( 0.0_f ) )
 						, m_writer.declLocale( "lightCoatingSpecular", vec3( 0.0_f ) )
 						, m_writer.declLocale( "lightSheen", vec2( 0.0_f ) ) };
-					auto lightDirection = m_writer.declLocale( "lightDirection"
-						, normalize( -light.direction ) );
-					auto radiance = m_writer.declLocale( "lightSpecular"
-						, m_atmosphereBackground->getSunRadiance( lightDirection ) );
-
 					auto L = m_writer.declLocale( "L"
 						, normalize( -light.direction ) );
+					auto radiance = m_writer.declLocale( "radiance"
+						, m_atmosphereBackground->getSunRadiance( L ) );
+
 					auto V = m_writer.declLocale( "V"
 						, normalize( worldEye - surface.worldPosition.xyz() ) );
 					auto H = m_writer.declLocale( "H"
@@ -432,7 +430,7 @@ namespace atmosphere_scattering
 					, float( m_atmosphereBackground->getTargetSize().height ) );
 					auto luminance = m_writer.declLocale< sdw::Vec4 >( "luminance" );
 					auto transmittance = m_writer.declLocale< sdw::Vec4 >( "transmittance" );
-					m_atmosphereBackground->getPixelTransLum( vec2( surface.clipPosition.x(), 1.0_f - surface.clipPosition.y() )
+					m_atmosphereBackground->getPixelTransLum( surface.clipPosition.xy()
 						, targetSize
 						, surface.clipPosition.z()
 						, transmittance
@@ -474,7 +472,7 @@ namespace atmosphere_scattering
 									* m_shadowModel->computeDirectional( light.base
 										, surface
 										, light.transforms[cascadeIndex]
-										, -lightDirection
+										, -L
 										, cascadeIndex
 										, light.cascadeCount ) );
 
@@ -484,7 +482,7 @@ namespace atmosphere_scattering
 										* m_shadowModel->computeDirectional( light.base
 											, surface
 											, light.transforms[cascadeIndex - 1u]
-											, -lightDirection
+											, -L
 											, cascadeIndex - 1u
 											, light.cascadeCount );
 								}
