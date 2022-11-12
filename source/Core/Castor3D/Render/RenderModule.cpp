@@ -1,5 +1,6 @@
 #include "Castor3D/Render/RenderModule.hpp"
 
+#include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
@@ -250,8 +251,12 @@ namespace castor3d
 
 	uint32_t getSafeBandsSize( castor::Size const & size )
 	{
+#if C3D_DebugDisableSafeBands
+		return 0u;
+#else
 		return castor::getNextPowerOfTwo( std::min( size.getWidth()
 			, size.getHeight() ) / 10u );
+#endif
 	}
 	
 	uint32_t getSafeBandSize( castor::Size const & size )
