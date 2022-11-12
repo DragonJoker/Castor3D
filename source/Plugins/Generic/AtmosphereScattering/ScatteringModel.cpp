@@ -241,13 +241,14 @@ namespace atmosphere_scattering
 
 	sdw::Vec4 ScatteringModel::rescaleLuminance( sdw::Vec4 const & luminance )
 	{
-		luminance.xyz() /= luminance.a();	// Normalise according to sample count when path tracing
+		auto hdr = m_writer.declLocale( "hdr"
+			, luminance.xyz() / luminance.a() );	// Normalise according to sample count when path tracing
 
 		// Similar setup to the Bruneton demo
 		auto whitePoint = vec3( 1.08241_f, 0.96756_f, 0.95003_f );
 		auto exposure = 10.0_f;
-		auto hdr = vec3( 1.0_f ) - exp( -luminance.rgb() / whitePoint * exposure );
-		return vec4( hdr, luminance.a() );
+		hdr = vec3( 1.0_f ) - exp( -hdr / whitePoint * exposure );
+		return vec4( m_writer.ternary( luminance.a() == 0.0_f, luminance.xyz(), hdr * luminance.a() ), 1.0_f );
 	}
 
 	void ScatteringModel::doRenderSky( sdw::Vec2 const & fragSize
