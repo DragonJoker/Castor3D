@@ -146,6 +146,40 @@ namespace atmosphere_scattering
 				, binding
 				, 0u };
 
+			auto process = [&]( sdw::Vec2 const & fragCoord
+				, sdw::Vec4 & luminance
+				, sdw::Vec4 & emission )
+			{
+				auto ifragCoord = writer.declLocale( "ifragCoord"
+					, ivec2( fragCoord ) );
+				auto transmittance = writer.declLocale( "transmittance"
+					, vec4( 0.0_f ) );
+				auto ray = writer.declLocale( "ray"
+					, scattering.getPixelTransLum( fragCoord
+						, targetSize
+						, depthBufferValue
+						, transmittance
+						, luminance ) );
+				luminance = scattering.rescaleLuminance( luminance );
+
+				IF( writer, c3d_cloudsData.coverage() == 0.0_f )
+				{
+					auto sunDisk = writer.declLocale( "sunDisk"
+						, scattering.getSunLuminance( ray ) );
+					emission.rgb() = sunDisk;
+				}
+				ELSE
+				{
+					clouds.applyClouds( ray
+						, ifragCoord
+						, luminance
+						, emission );
+				}
+				FI;
+
+				return ifragCoord;
+			};
+
 			if constexpr ( useCompute )
 			{
 				auto outColour = writer.declStorageImg< sdw::WImage2DRgba32 >( "outColour"
@@ -158,22 +192,12 @@ namespace atmosphere_scattering
 				ShaderWriter< useCompute >::implementMain( writer
 					, [&]( sdw::Vec2 const & fragCoord )
 					{
-						auto luminance = writer.declLocale< sdw::Vec4 >( "luminance"
+						auto luminance = writer.declLocale( "luminance"
 							, vec4( 0.0_f ) );
-						auto transmittance = writer.declLocale< sdw::Vec4 >( "transmittance"
+						auto emission = writer.declLocale( "emission"
 							, vec4( 0.0_f ) );
-						scattering.getPixelTransLum( fragCoord
-							, targetSize
-							, depthBufferValue
-							, transmittance
-							, luminance );
-						luminance = scattering.rescaleLuminance( luminance );
-						auto ifragCoord = writer.declLocale( "ifragCoord", ivec2( fragCoord ) );
-						auto emission = writer.declLocale( "emission", vec4( 0.0_f ) );
-						clouds.applyClouds( ifragCoord
-							, targetSize
-							, luminance
-							, emission );
+						auto ifragCoord = process( fragCoord, luminance, emission );
+
 						outColour.store( ifragCoord, luminance );
 						outEmission.store( ifragCoord, emission );
 					} );
@@ -186,23 +210,12 @@ namespace atmosphere_scattering
 				ShaderWriter< useCompute >::implementMain( writer
 					, [&]( sdw::Vec2 const & fragCoord )
 					{
-						auto luminance = writer.declLocale< sdw::Vec4 >( "luminance"
+						auto luminance = writer.declLocale( "luminance"
 							, vec4( 0.0_f ) );
-						auto transmittance = writer.declLocale< sdw::Vec4 >( "transmittance"
+						auto emission = writer.declLocale( "emission"
 							, vec4( 0.0_f ) );
-						scattering.getPixelTransLum( fragCoord
-							, targetSize
-							, depthBufferValue
-							, transmittance
-							, luminance );
-						luminance = scattering.rescaleLuminance( luminance );
-						auto ifragCoord = writer.declLocale( "ifragCoord", ivec2( fragCoord ) );
-						auto distance = writer.declLocale( "distance", vec4( 0.0_f ) );
-						auto emission = writer.declLocale( "emission", vec4( 0.0_f ) );
-						clouds.applyClouds( ifragCoord
-							, targetSize
-							, luminance
-							, emission );
+						process( fragCoord, luminance, emission );
+
 						outColour = luminance;
 						outEmission = emission;
 					} );

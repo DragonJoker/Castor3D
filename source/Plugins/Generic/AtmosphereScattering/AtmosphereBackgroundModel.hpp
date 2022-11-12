@@ -38,7 +38,7 @@ namespace atmosphere_scattering
 			, castor3d::shader::BlendComponents & components )override;
 		sdw::Vec3 getSunRadiance( sdw::Vec3 const & sunDir );
 
-		sdw::Void getPixelTransLum( sdw::Vec2 const & fragPos
+		castor3d::shader::RetRay getPixelTransLum( sdw::Vec2 const & fragPos
 			, sdw::Vec2 const & fragSize
 			, sdw::Float const & fragDepth
 			, sdw::Vec4 & transmittance

@@ -33,8 +33,8 @@ namespace atmosphere_scattering
 			, CloudsData const & clouds
 			, uint32_t & binding
 			, uint32_t set );
-		sdw::Void applyClouds( sdw::IVec2 const & fragCoord
-			, sdw::Vec2 const & targetSize
+		sdw::Void applyClouds( castor3d::shader::Ray const & ray
+			, sdw::IVec2 const & fragCoord
 			, sdw::Vec4 & skyColor
 			, sdw::Vec4 & emission );
 
@@ -187,8 +187,8 @@ namespace atmosphere_scattering
 			, sdw::InFloat
 			, sdw::InVec4 > m_computeEmission;
 		sdw::Function< sdw::Void
+			, castor3d::shader::InRay
 			, sdw::InIVec2
-			, sdw::InVec2
 			, sdw::InOutVec4
 			, sdw::OutVec4 > m_applyClouds;
 		sdw::Function< sdw::Int

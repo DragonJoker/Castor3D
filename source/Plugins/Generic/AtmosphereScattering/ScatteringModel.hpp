@@ -68,7 +68,7 @@ namespace atmosphere_scattering
 		sdw::RetVec3 getSunLuminance( Ray const & ray );
 		sdw::RetVec3 getSunRadiance( sdw::Vec3 const & sunDir );
 		sdw::Float aerialPerspectiveDepthToSlice( sdw::Float const & depth );
-		sdw::Void getPixelTransLum( sdw::Vec2 const & fragPos
+		castor3d::shader::RetRay getPixelTransLum( sdw::Vec2 const & fragPos
 			, sdw::Vec2 const & fragSize
 			, sdw::Float const & fragDepth
 			, sdw::Vec4 & transmittance
@@ -108,7 +108,7 @@ namespace atmosphere_scattering
 
 		sdw::Function< sdw::Vec3
 			, InRay > m_getSunLuminance;
-		sdw::Function< sdw::Void
+		sdw::Function< castor3d::shader::Ray
 			, sdw::InVec2
 			, sdw::InVec2
 			, sdw::InFloat
