@@ -76,7 +76,7 @@ namespace atmosphere_scattering
 		if ( !m_atmosphereBackground )
 		{
 			m_atmosphereBackground = &static_cast< AtmosphereBackgroundModel & >( pbackground );
-			m_atmosphereBackground->atmosphere.luminanceSettings.shadowMapEnabled = true;
+			m_atmosphereBackground->atmosphere.settings.shadowMapEnabled = true;
 			m_atmosphereBackground->atmosphere.shadows = m_shadowModel;
 		}
 
@@ -347,7 +347,7 @@ namespace atmosphere_scattering
 		if ( !m_atmosphereBackground )
 		{
 			m_atmosphereBackground = &static_cast< AtmosphereBackgroundModel & >( pbackground );
-			m_atmosphereBackground->atmosphere.luminanceSettings.shadowMapEnabled = true;
+			m_atmosphereBackground->atmosphere.settings.shadowMapEnabled = true;
 			m_atmosphereBackground->atmosphere.shadows = m_shadowModel;
 		}
 

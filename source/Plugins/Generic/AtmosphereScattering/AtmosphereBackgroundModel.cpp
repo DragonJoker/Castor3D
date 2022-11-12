@@ -35,10 +35,11 @@ namespace atmosphere_scattering
 		, atmosphereData{ model::getData< AtmosphereData >( atmosphereBuffer, AtmosphereScatteringUbo::Data ) }
 		, atmosphere{ m_writer
 			, atmosphereData
-			, LuminanceSettings{}
+			, AtmosphereModel::Settings{}
 				.setCameraData( &cameraData )
 				.setVariableSampleCount( true )
 				.setMieRayPhase( true )
+				.setMultiScatApprox( true )
 			, { 256u, 64u } }
 		, scattering{ m_writer
 			, atmosphere

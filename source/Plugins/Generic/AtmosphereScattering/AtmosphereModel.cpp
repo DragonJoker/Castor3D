@@ -17,24 +17,45 @@ namespace atmosphere_scattering
 		{
 			return vec3( sdw::fma( uv, vec2( 2.0_f, -2.0_f ), vec2( -1.0_f, 1.0_f ) ), fragDepth );
 		}
+
+		static sdw::expr::ExprList getZeroInit()
+		{
+			sdw::expr::ExprList result;
+			result.emplace_back( makeExpr( vec3( 0.0_f ) ) );
+			result.emplace_back( makeExpr( vec3( 0.0_f ) ) );
+			result.emplace_back( makeExpr( vec3( 0.0_f ) ) );
+			result.emplace_back( makeExpr( vec3( 0.0_f ) ) );
+			result.emplace_back( makeExpr( vec3( 0.0_f ) ) );
+			result.emplace_back( makeExpr( vec3( 0.0_f ) ) );
+			return result;
+		}
+	}
+
+	//************************************************************************************************
+
+	SingleScatteringResult::SingleScatteringResult( sdw::ShaderWriter & writer )
+		: SingleScatteringResult{ writer
+			, sdw::makeAggrInit( makeType( writer.getTypesCache() ), atmodel::getZeroInit() )
+			, true }
+	{
 	}
 
 	//************************************************************************************************
 
 	AtmosphereModel::AtmosphereModel( sdw::ShaderWriter & pwriter
 		, AtmosphereData const & patmosphereData
-		, LuminanceSettings pluminanceSettings )
+		, Settings pluminanceSettings )
 		: AtmosphereModel{ pwriter, patmosphereData, pluminanceSettings, {} }
 	{
 	}
 
 	AtmosphereModel::AtmosphereModel( sdw::ShaderWriter & pwriter
 		, AtmosphereData const & patmosphereData
-		, LuminanceSettings pluminanceSettings
+		, Settings psettings
 		, VkExtent2D ptransmittanceExtent )
 		: writer{ pwriter }
 		, atmosphereData{ patmosphereData }
-		, luminanceSettings{ pluminanceSettings }
+		, settings{ psettings }
 		, transmittanceExtent{ std::move( ptransmittanceExtent ) }
 		, planetRadiusOffset{ 0.01_f }
 	{
@@ -54,7 +75,7 @@ namespace atmosphere_scattering
 					auto clipSpace = writer.declLocale( "clipSpace"
 						, atmodel::getClipSpace( pixPos / texSize, depth ) );
 					auto depthBufferWorldPos = writer.declLocale( "depthBufferWorldPos"
-						, luminanceSettings.cameraData->objProjToWorld( vec4( clipSpace, 1.0f ) ) );
+						, settings.cameraData->objProjToWorld( vec4( clipSpace, 1.0f ) ) );
 					depthBufferWorldPos /= depthBufferWorldPos.w();
 					writer.returnStmt( depthBufferWorldPos.xyz() / 1000.0_f );
 				}
@@ -106,41 +127,6 @@ namespace atmosphere_scattering
 		return castRay( pscreenPoint / pscreenSize );
 	}
 
-	sdw::RetVec3 AtmosphereModel::getMultipleScattering( sdw::Vec3 const & pscattering
-		, sdw::Vec3 const & pextinction
-		, sdw::Vec3 const & pworldPos
-		, sdw::Float const & pviewZenithCosAngle )
-	{
-		if ( !m_getMultipleScattering )
-		{
-			m_getMultipleScattering = writer.implementFunction< sdw::Vec3 >( "atm_getMultipleScattering"
-				, [&]( sdw::Vec3 const & scattering
-					, sdw::Vec3 const & extinction
-					, sdw::Vec3 const & worldPos
-					, sdw::Float const & viewZenithCosAngle )
-				{
-					auto uv = writer.declLocale( "uv"
-						, clamp( vec2( viewZenithCosAngle * 0.5_f + 0.5_f
-								, ( length( worldPos ) - getEarthRadius() ) / ( getAtmosphereThickness() ) )
-							, vec2( 0.0_f )
-							, vec2( 1.0_f ) ) );
-					uv = vec2( fromUnitToSubUvs( uv.x(), atmosphereData.multiScatteringLUTRes )
-						, fromUnitToSubUvs( uv.y(), atmosphereData.multiScatteringLUTRes ) );
-
-					writer.returnStmt( multiScatTexture->lod( uv, 0.0_f ).rgb() );
-				}
-				, sdw::InVec3{ writer, "scattering" }
-				, sdw::InVec3{ writer, "extinction" }
-				, sdw::InVec3{ writer, "worldPos" }
-				, sdw::InFloat{ writer, "viewZenithCosAngle" } );
-		}
-
-		return m_getMultipleScattering( pscattering
-			, pextinction
-			, pworldPos
-			, pviewZenithCosAngle );
-	}
-
 	RetSingleScatteringResult AtmosphereModel::integrateScatteredLuminance( sdw::Vec2 const & ppixPos
 		, Ray const & pray
 		, sdw::Vec3 const & psunDir
@@ -158,116 +144,239 @@ namespace atmosphere_scattering
 					, sdw::Float const & depthBufferValue
 					, sdw::Float const & tMaxMax )
 				{
-					auto result = writer.declLocale< SingleScatteringResult >( "result" );
-					result.luminance() = vec3( 0.0_f );
-					result.opticalDepth() = vec3( 0.0_f );
-					result.transmittance() = vec3( 0.0_f );
-					result.multiScatAs1() = vec3( 0.0_f );
-					result.newMultiScatStep0Out() = vec3( 0.0_f );
-					result.newMultiScatStep1Out() = vec3( 0.0_f );
+					auto result = writer.declLocale( "result"
+						, SingleScatteringResult{ writer } );
 
 					// Compute next intersection with atmosphere or ground 
-					auto earthO = writer.declLocale( "earthO"
-						, vec3( 0.0_f, 0.0f, 0.0f ) );
-					auto tBottom = writer.declLocale( "tBottom"
-						, raySphereIntersectNearest( ray, earthO, getEarthRadius() ) );
-					auto tTop = writer.declLocale( "tTop"
-						, raySphereIntersectNearest( ray, earthO, getAtmosphereRadius() ) );
-					auto tMax = writer.declLocale( "tMax"
-						, 0.0_f );
-					doInitRay( depthBufferValue, pixPos, ray, tMaxMax, earthO, tTop, tBottom, result, tMax );
+					auto earthO = writer.declLocale( "earthO", vec3( 0.0_f, 0.0f, 0.0f ) );
+					auto tBottom = writer.declLocale( "tBottom", raySphereIntersectNearest( ray, earthO, getEarthRadius() ) );
+					auto tTop = writer.declLocale( "tTop", raySphereIntersectNearest( ray, earthO, getAtmosphereRadius() ) );
+					auto tMax = writer.declLocale( "tMax", 0.0_f );
+
+					IF( writer, !tBottom.valid() )
+					{
+						IF( writer, !tTop.valid() )
+						{
+							tMax = 0.0f; // No intersection with earth nor atmosphere: stop right away  
+							writer.returnStmt( result );
+						}
+						ELSE
+						{
+							tMax = tTop.t();
+						}
+						FI;
+					}
+					ELSE
+					{
+						IF( writer, tTop.t() > 0.0_f )
+						{
+							tMax = min( tTop.t(), tBottom.t() );
+						}
+						FI;
+					}
+					FI;
+
+					if ( settings.cameraData )
+					{
+						IF( writer, depthBufferValue >= 0.0_f
+							&& depthBufferValue < 1.0f )
+						{
+							auto transmittanceLutExtent = sdw::vec2( float( transmittanceExtent.width ), float( transmittanceExtent.height ) );
+							auto depthBufferWorldPos = writer.declLocale( "depthBufferWorldPos"
+								, getWorldPos( depthBufferValue
+									, pixPos
+									, transmittanceLutExtent ) );
+							auto tDepth = writer.declLocale( "tDepth"
+								, length( depthBufferWorldPos - ( ray.origin + vec3( 0.0_f, -getEarthRadius(), 0.0_f ) ) ) ); // apply earth offset to go back to origin as top of earth mode. 
+
+							IF( writer, tDepth < tMax )
+							{
+								tMax = tDepth;
+							}
+							FI;
+						}
+						FI;
+					}
+
+					tMax = min( tMax, tMaxMax );
 
 					// Sample count 
 					auto sampleCount = writer.declLocale( "sampleCount"
-						, ( luminanceSettings.variableSampleCount
+						, ( settings.variableSampleCount
 							? mix( atmosphereData.rayMarchMinMaxSPP.x()
 								, atmosphereData.rayMarchMinMaxSPP.y()
 								, clamp( tMax * 0.01_f, 0.0_f, 1.0_f ) )
 							: sampleCountIni ) );
 					auto sampleCountFloor = writer.declLocale( "sampleCountFloor"
-						, ( luminanceSettings.variableSampleCount
+						, ( settings.variableSampleCount
 							? floor( sampleCount )
 							: sampleCountIni ) );
 					auto tMaxFloor = writer.declLocale( "tMaxFloor"
-						, ( luminanceSettings.variableSampleCount
+						, ( settings.variableSampleCount
 							? tMax * sampleCountFloor / sampleCount		// rescale tMax to map to the last entire step segment.
 							: tMax ) );
-					auto dt = writer.declLocale( "dt"
-						, tMax / sampleCount );
+					auto dt = writer.declLocale( "dt", tMax / sampleCount );
 
 					// Phase functions
-					auto wi = writer.declLocale( "wi"
-						, sunDir );
-					auto wo = writer.declLocale( "wo"
-						, ray.direction );
-					auto cosTheta = writer.declLocale( "cosTheta"
-						, dot( wi, wo ) );
-					auto miePhaseValue = writer.declLocale( "miePhaseValue"
-						, hgPhase( atmosphereData.miePhaseFunctionG, -cosTheta ) ); 	// negate cosTheta because due to worldDir being a "in" direction. 
-					auto rayleighPhaseValue = writer.declLocale( "rayleighPhaseValue"
-						, rayleighPhase( cosTheta ) );
+					auto wi = writer.declLocale( "wi", sunDir );
+					auto wo = writer.declLocale( "wo", ray.direction );
+					auto cosTheta = writer.declLocale( "cosTheta", dot( wi, wo ) );
+					auto miePhaseValue = writer.declLocale( "miePhaseValue", hgPhase( atmosphereData.miePhaseFunctionG, -cosTheta ) ); 	// negate cosTheta because due to worldDir being a "in" direction. 
+					auto rayleighPhaseValue = writer.declLocale( "rayleighPhaseValue", rayleighPhase( cosTheta ) );
 
 					auto globalL = writer.declLocale( "globalL"
-						, ( luminanceSettings.illuminanceIsOne
+						, ( settings.illuminanceIsOne
 							// When building the scattering factor, we assume light illuminance is 1 to compute a transfert function relative to identity illuminance of 1.
 							// This make the scattering factor independent of the light. It is now only linked to the atmosphere properties.
 							? vec3( 1.0_f )
 							: atmosphereData.sunIlluminance ) );
 
 					// Ray march the atmosphere to integrate optical depth
-					auto L = writer.declLocale( "L"
-						, vec3( 0.0_f ) );
-					auto throughput = writer.declLocale( "throughput"
-						, vec3( 1.0_f ) );
-					auto opticalDepth = writer.declLocale( "opticalDepth"
-						, vec3( 0.0_f ) );
-					auto t = writer.declLocale( "t"
-						, 0.0_f );
-					auto tPrev = writer.declLocale( "tPrev"
-						, 0.0_f );
+					auto L = writer.declLocale( "L", vec3( 0.0_f ) );
+					auto throughput = writer.declLocale( "throughput", vec3( 1.0_f ) );
+					auto opticalDepth = writer.declLocale( "opticalDepth", vec3( 0.0_f ) );
+					auto t = writer.declLocale( "t", 0.0_f );
+					auto tPrev = writer.declLocale( "tPrev", 0.0_f );
+
 					auto sampleSegmentT = 0.3_f;
 					auto uniformPhase = 1.0_f / ( 4.0_f * sdw::Float{ castor::Pi< float > } );
 
 					FOR( writer, sdw::Float, s, 0.0_f, s < sampleCount, s += 1.0_f )
 					{
-						doStepRay( s, sampleCount, sampleCountFloor, tMaxFloor, tMax, sampleSegmentT, t, dt );
+						if ( settings.variableSampleCount )
+						{
+							// More expensive but artifact free
+							auto t0 = writer.declLocale( "t0", ( s ) / sampleCountFloor );
+							auto t1 = writer.declLocale( "t1", ( s + 1.0_f ) / sampleCountFloor );
+							// Non linear distribution of sample within the range.
+							t0 = t0 * t0;
+							t1 = t1 * t1;
+							// Make t0 and t1 world space distances.
+							t0 = tMaxFloor * t0;
+
+							IF( writer, t1 > 1.0_f )
+							{
+								dt = tMax - t0;
+								//	t1 = tMaxFloor;	// this reveal depth slices
+							}
+							ELSE
+							{
+								dt = sdw::fma( tMaxFloor, t1, -t0 );
+							}
+							FI;
+
+							//t = t0 + (t1 - t0) * (whangHashNoise(pixPos.x, pixPos.y, gFrameId * 1920 * 1080)); // With dithering required to hide some sampling artefact relying on TAA later? This may even allow volumetric shadow?
+							t = sdw::fma( dt, sampleSegmentT, t0 );
+						}
+						else
+						{
+							//t = tMax * (s + sampleSegmentT) / sampleCount;
+							// Exact difference, important for accuracy of multiple scattering
+							auto newT = writer.declLocale( "newT", tMax * ( s + sampleSegmentT ) / sampleCount );
+							dt = newT - t;
+							t = newT;
+						}
+
 						auto rayToSun = writer.declLocale< Ray >( "rayToSun" );
 						rayToSun.direction = sunDir;
 						rayToSun.origin = ray.step( t );
 						auto medium = writer.declLocale( "medium", sampleMediumRGB( rayToSun.origin ) );
-						auto [upVector, sunZenithCosAngle, uv, sampleTransmittance, transmittanceToSun] = doGetSunTransmittance( rayToSun
-							, medium
-							, dt
-							, opticalDepth );
-						auto earthShadow = writer.declLocale( "earthShadow"
-							, doGetEarthShadow( rayToSun, earthO, upVector ) );
-						auto phaseTimesScattering = writer.declLocale< sdw::Vec3 >( "phaseTimesScattering"
-							, ( luminanceSettings.mieRayPhase
+						auto sampleOpticalDepth = writer.declLocale( "sampleOpticalDepth", medium.extinction() * dt );
+						auto sampleTransmittance = writer.declLocale( "sampleTransmittance", exp( -sampleOpticalDepth ) );
+						opticalDepth += sampleOpticalDepth;
+
+						auto pHeight = writer.declLocale( "pHeight", length( rayToSun.origin ) );
+						auto upVector = writer.declLocale( "upVector", rayToSun.origin / pHeight );
+						auto sunZenithCosAngle = writer.declLocale( "sunZenithCosAngle", dot( rayToSun.direction, upVector ) );
+						auto trUv = writer.declLocale< sdw::Vec2 >( "trUv" );
+						lutTransmittanceParamsToUv( pHeight, sunZenithCosAngle, trUv );
+						auto transmittanceToSun = writer.declLocale( "transmittanceToSun"
+							, ( transmittanceTexture
+								? transmittanceTexture->lod( trUv, 0.0_f ).rgb()
+								: vec3( 0.0_f ) ) );
+
+						auto earthShadow = writer.declLocale( "earthShadow", doGetEarthShadow( rayToSun, earthO, upVector ) );
+						auto phaseTimesScattering = writer.declLocale( "phaseTimesScattering"
+							, ( settings.mieRayPhase
 								? medium.scatteringMie() * miePhaseValue + medium.scatteringRay() * rayleighPhaseValue
 								: medium.scattering() * uniformPhase ) );
 						// Dual scattering for multi scattering
 						auto multiScatteredLuminance = writer.declLocale( "multiScatteredLuminance"
-							, ( ( luminanceSettings.multiScatApproxEnabled && multiScatTexture )
-								? getMultipleScattering( medium.scattering(), medium.extinction(), rayToSun.origin, sunZenithCosAngle )
-								: vec3( 0.0_f ) ) );
-						auto S = writer.declLocale( "S"
-							, globalL * ( earthShadow * transmittanceToSun * phaseTimesScattering + multiScatteredLuminance * medium.scattering() ) );
-						doComputeStep( medium
-							, dt
-							, sampleTransmittance
-							, earthShadow
-							, transmittanceToSun
-							, multiScatteredLuminance
-							, S
-							, t
-							, tPrev
-							, throughput
-							, L
-							, result );
+							, vec3( 0.0_f ) );
+
+						if ( settings.multiScatApproxEnabled && multiScatTexture )
+						{
+							auto msUv = writer.declLocale( "msUv"
+								, clamp( vec2( sdw::fma( sunZenithCosAngle, 0.5_f, 0.5_f ), ( pHeight - getEarthRadius() ) / ( getAtmosphereThickness() ) )
+									, vec2( 0.0_f )
+									, vec2( 1.0_f ) ) );
+							msUv = vec2( fromUnitToSubUvs( msUv.x(), atmosphereData.multiScatteringLUTRes )
+								, fromUnitToSubUvs( msUv.y(), atmosphereData.multiScatteringLUTRes ) );
+
+							multiScatteredLuminance = multiScatTexture->lod( msUv, 0.0_f ).rgb();
+						}
+
+						auto S = writer.declLocale( "S", globalL * ( earthShadow * transmittanceToSun * phaseTimesScattering + multiScatteredLuminance * medium.scattering() ) );
+
+						// When using the power serie to accumulate all scattering order, serie r must be <1 for a serie to converge.
+						// Under extreme coefficient, MultiScatAs1 can grow larger and thus result in broken visuals.
+						// The way to fix that is to use a proper analytical integration as proposed in slide 28 of http://www.frostbite.com/2015/08/physically-based-unified-volumetric-rendering-in-frostbite/
+						// However, it is possible to disable as it can also work using simple power serie sum unroll up to 5th order. The rest of the orders has a really low contribution.
+						if ( !settings.multiScatteringPowerSerie )
+						{
+							// 1 is the integration of luminance over the 4pi of a sphere, and assuming an isotropic phase function of 1.0/(4*PI)
+							result.multiScatAs1() += throughput * medium.scattering() /** 1 */ * dt;
+						}
+						else
+						{
+							auto MS = writer.declLocale( "MS", medium.scattering() );
+							auto MSint = writer.declLocale( "MSint", ( MS - MS * sampleTransmittance ) / medium.extinction() );
+							result.multiScatAs1() += throughput * MSint;
+						}
+
+						// Evaluate input to multi scattering 
+						{
+							auto newMS = writer.declLocale( "newMS", earthShadow * transmittanceToSun * medium.scattering() * uniformPhase );
+							result.newMultiScatStep0Out() += throughput * ( newMS - newMS * sampleTransmittance ) / medium.extinction();
+							//result.newMultiScatStep0Out += sampleTransmittance * throughput * newMS * dt;
+
+							newMS = medium.scattering() * uniformPhase * multiScatteredLuminance;
+							result.newMultiScatStep1Out() += throughput * ( newMS - newMS * sampleTransmittance ) / medium.extinction();
+							//result.newMultiScatStep1Out += sampleTransmittance * throughput * newMS * dt;
+						}
+
+						// See slide 28 at http://www.frostbite.com/2015/08/physically-based-unified-volumetric-rendering-in-frostbite/ 
+						auto Sint = writer.declLocale( "Sint", ( S - S * sampleTransmittance ) / medium.extinction() );	// integrate along the current step segment 
+						L += throughput * Sint;											// accumulate and also take into account the transmittance from previous steps
+						throughput *= sampleTransmittance;
+
+						tPrev = t;
 					}
 					ROF;
 
-					//doProcessGround( sunDir, tMax , tBottom, globalL, throughput, L );
+					if ( settings.useGround )
+					{
+						IF( writer, tMax == tBottom.t() && tBottom.t() > 0.0_f )
+						{
+							// Account for bounced light off the earth
+							auto P = writer.declLocale( "P", tBottom.point() );
+							auto pHeight = writer.declLocale( "pHeight", length( P ) );
+
+							auto upVector = writer.declLocale( "upVector", P / pHeight );
+							auto sunZenithCosAngle = writer.declLocale( "sunZenithCosAngle", dot( sunDir, upVector ) );
+							auto uv = writer.declLocale< sdw::Vec2 >( "uv" );
+							lutTransmittanceParamsToUv( pHeight, sunZenithCosAngle, uv );
+							auto transmittanceToSun = writer.declLocale( "transmittanceToSun"
+								, ( transmittanceTexture
+									? transmittanceTexture->lod( uv, 0.0_f ).rgb()
+									: vec3( 0.0_f ) ) );
+
+							auto NdotL = writer.declLocale( "NdotL", clamp( dot( normalize( upVector ), normalize( sunDir ) ), 0.0_f, 1.0_f ) );
+							L += globalL * transmittanceToSun * throughput * NdotL * atmosphereData.groundAlbedo / castor::Pi< float >;
+						}
+						FI;
+					}
+
 					result.luminance() = L;
 					result.opticalDepth() = opticalDepth;
 					result.transmittance() = throughput;
@@ -317,13 +426,13 @@ namespace atmosphere_scattering
 						ELSE
 						{
 							// Ray is not intersecting the atmosphere
-							writer.returnStmt( sdw::Boolean{ false } );
+							writer.returnStmt( 0_b );
 						}
 						FI;
 					}
 					FI;
 
-					writer.returnStmt( sdw::Boolean{ true } ); // ok to start tracing
+					writer.returnStmt( 1_b ); // ok to start tracing
 				}
 				, InOutRay{ writer, "ray" } );
 		}
@@ -394,6 +503,7 @@ namespace atmosphere_scattering
 					, sdw::Float const & sphereRadius )
 				{
 					auto result = writer.declLocale< Intersection >( "result" );
+					result.t() = -1.0_f;
 					result.valid() = 0_b;
 					result.point() = vec3( 0.0_f );
 					auto s0_r0 = writer.declLocale( "s0_r0"
@@ -414,23 +524,33 @@ namespace atmosphere_scattering
 					}
 					FI;
 
-					auto t = writer.declLocale( "t"
+					auto t0 = writer.declLocale( "t0"
 						, ( -b - sqrt( delta ) ) / ( 2.0_f * a ) );
+					auto t1 = writer.declLocale( "t1"
+						, ( -b + sqrt( delta ) ) / ( 2.0_f * a ) );
 
-					IF( writer, t < 0.0_f )
+					IF( writer, t0 < 0.0_f && t1 < 0.0_f )
 					{
-						t = ( -b + sqrt( delta ) ) / ( 2.0_f * a );
+						writer.returnStmt( result );
 					}
 					FI;
 
-					IF( writer, t >= 0.0_f )
+					IF( writer, t0 < 0.0_f )
 					{
-						result.t() = t;
-						result.point() = ray.step( t );
-						result.valid() = 1_b;
+						result.t() = max( 0.0_f, t1 );
+					}
+					ELSEIF( t1 < 0.0_f )
+					{
+						result.t() = max( 0.0_f, t0 );
+					}
+					ELSE
+					{
+						result.t() = max( 0.0_f, min( t0, t1 ) );
 					}
 					FI;
 
+					result.valid() = 1_b;
+					result.point() = ray.step( result.t() );
 					writer.returnStmt( result );
 				}
 				, InRay{ writer, "ray" }
@@ -487,8 +607,8 @@ namespace atmosphere_scattering
 						, exp( atmosphereData.rayleighDensity1ExpScale * viewHeight ) );
 					auto densityOzo = writer.declLocale( "densityOzo"
 						, clamp( writer.ternary( viewHeight < atmosphereData.absorptionDensity0LayerWidth
-								, atmosphereData.absorptionDensity0LinearTerm * viewHeight + atmosphereData.absorptionDensity0ConstantTerm
-								, atmosphereData.absorptionDensity1LinearTerm * viewHeight + atmosphereData.absorptionDensity1ConstantTerm )
+								, sdw::fma( atmosphereData.absorptionDensity0LinearTerm, viewHeight, atmosphereData.absorptionDensity0ConstantTerm )
+								, sdw::fma( atmosphereData.absorptionDensity1LinearTerm, viewHeight, atmosphereData.absorptionDensity1ConstantTerm ) )
 							, 0.0_f
 							, 1.0_f ) );
 
@@ -745,234 +865,14 @@ namespace atmosphere_scattering
 			, psize );
 	}
 
-	void AtmosphereModel::doInitRay( sdw::Float const & depthBufferValue
-		, sdw::Vec2 const & pixPos
-		, Ray const & ray
-		, sdw::Float const & tMaxMax
-		, sdw::Vec3 const & earthO
-		, Intersection const & tTop
-		, Intersection const & tBottom
-		, SingleScatteringResult const & result
-		, sdw::Float & tMax )
-	{
-		IF( writer, !tBottom.valid() )
-		{
-			IF( writer, !tTop.valid() )
-			{
-				tMax = 0.0f; // No intersection with earth nor atmosphere: stop right away  
-				writer.returnStmt( result );
-			}
-			ELSE
-			{
-				tMax = tTop.t();
-			}
-			FI;
-		}
-		ELSE
-		{
-			IF( writer, tTop.t() > 0.0_f )
-			{
-				tMax = min( tTop.t(), tBottom.t() );
-			}
-			FI;
-		}
-		FI;
-
-		if ( luminanceSettings.cameraData )
-		{
-			IF( writer, depthBufferValue >= 0.0_f
-				&& depthBufferValue < 1.0f )
-			{
-				auto transmittanceLutExtent = vec2( sdw::Float{ float( transmittanceExtent.width ) }
-				, float( transmittanceExtent.height ) );
-				auto depthBufferWorldPos = writer.declLocale( "depthBufferWorldPos"
-					, getWorldPos( depthBufferValue
-						, pixPos
-						, transmittanceLutExtent ) );
-				auto tDepth = writer.declLocale( "tDepth"
-					, length( depthBufferWorldPos - ( ray.origin + vec3( 0.0_f, -getEarthRadius(), 0.0_f ) ) ) ); // apply earth offset to go back to origin as top of earth mode. 
-
-				IF( writer, tDepth < tMax )
-				{
-					tMax = tDepth;
-				}
-				FI;
-			}
-			FI;
-		}
-
-		tMax = min( tMax, tMaxMax );
-	}
-
-	void AtmosphereModel::doStepRay( sdw::Float const & s
-		, sdw::Float const & sampleCount
-		, sdw::Float const & sampleCountFloor
-		, sdw::Float const & tMaxFloor
-		, sdw::Float const & tMax
-		, sdw::Float const & sampleSegmentT
-		, sdw::Float & t
-		, sdw::Float & dt )
-	{
-		if ( luminanceSettings.variableSampleCount )
-		{
-			// More expensive but artifact free
-			auto t0 = writer.declLocale( "t0"
-				, ( s ) / sampleCountFloor );
-			auto t1 = writer.declLocale( "t1"
-				, ( s + 1.0_f ) / sampleCountFloor );
-			// Non linear distribution of sample within the range.
-			t0 = t0 * t0;
-			t1 = t1 * t1;
-			// Make t0 and t1 world space distances.
-			t0 = tMaxFloor * t0;
-
-			IF( writer, t1 > 1.0_f )
-			{
-				t1 = tMax;
-				//	t1 = tMaxFloor;	// this reveal depth slices
-			}
-			ELSE
-			{
-				t1 = tMaxFloor * t1;
-			}
-			FI;
-
-			//t = t0 + (t1 - t0) * (whangHashNoise(pixPos.x, pixPos.y, gFrameId * 1920 * 1080)); // With dithering required to hide some sampling artefact relying on TAA later? This may even allow volumetric shadow?
-			t = t0 + ( t1 - t0 ) * sampleSegmentT;
-			dt = t1 - t0;
-		}
-		else
-		{
-			//t = tMax * (s + sampleSegmentT) / sampleCount;
-			// Exact difference, important for accuracy of multiple scattering
-			auto newT = writer.declLocale( "newT"
-				, tMax * ( s + sampleSegmentT ) / sampleCount );
-			dt = newT - t;
-			t = newT;
-		}
-	}
-
-	std::tuple< sdw::Vec3, sdw::Float, sdw::Vec2, sdw::Vec3, sdw::Vec3 > AtmosphereModel::doGetSunTransmittance( Ray const & rayToSun
-		, MediumSampleRGB const & medium
-		, sdw::Float const & dt
-		, sdw::Vec3 & opticalDepth )
-	{
-		auto sampleOpticalDepth = writer.declLocale( "sampleOpticalDepth"
-			, medium.extinction() * dt );
-		auto sampleTransmittance = writer.declLocale( "sampleTransmittance"
-			, exp( -sampleOpticalDepth ) );
-		opticalDepth += sampleOpticalDepth;
-
-		auto pHeight = writer.declLocale( "pHeight"
-			, length( rayToSun.origin ) );
-		auto upVector = writer.declLocale( "upVector"
-			, rayToSun.origin / pHeight );
-		auto sunZenithCosAngle = writer.declLocale( "sunZenithCosAngle"
-			, dot( rayToSun.direction, upVector ) );
-		auto uv = writer.declLocale< sdw::Vec2 >( "uv" );
-		lutTransmittanceParamsToUv( pHeight, sunZenithCosAngle, uv );
-		auto transmittanceToSun = writer.declLocale( "transmittanceToSun"
-			, ( transmittanceTexture
-				? transmittanceTexture->lod( uv, 0.0_f ).rgb()
-				: vec3( 0.0_f ) ) );
-		return { upVector, sunZenithCosAngle, uv, sampleTransmittance, transmittanceToSun };
-	}
-
-	void AtmosphereModel::doComputeStep( MediumSampleRGB const & medium
-		, sdw::Float const & dt
-		, sdw::Vec3 const & sampleTransmittance
-		, sdw::Float const & earthShadow
-		, sdw::Vec3 const & transmittanceToSun
-		, sdw::Vec3 const & multiScatteredLuminance
-		, sdw::Vec3 const & S
-		, sdw::Float const & t
-		, sdw::Float & tPrev
-		, sdw::Vec3 & throughput
-		, sdw::Vec3 & L
-		, SingleScatteringResult & result )
-	{
-		auto uniformPhase = 1.0_f / ( 4.0_f * sdw::Float{ castor::Pi< float > } );
-		// When using the power serie to accumulate all scattering order, serie r must be <1 for a serie to converge.
-		// Under extreme coefficient, MultiScatAs1 can grow larger and thus result in broken visuals.
-		// The way to fix that is to use a proper analytical integration as proposed in slide 28 of http://www.frostbite.com/2015/08/physically-based-unified-volumetric-rendering-in-frostbite/
-		// However, it is possible to disable as it can also work using simple power serie sum unroll up to 5th order. The rest of the orders has a really low contribution.
-		if ( !luminanceSettings.multiScatteringPowerSerie )
-		{
-			// 1 is the integration of luminance over the 4pi of a sphere, and assuming an isotropic phase function of 1.0/(4*PI)
-			result.multiScatAs1() += throughput * medium.scattering() /** 1 */ * dt;
-		}
-		else
-		{
-			auto MS = writer.declLocale( "MS"
-				, medium.scattering() );
-			auto MSint = writer.declLocale( "MSint"
-				, ( MS - MS * sampleTransmittance ) / medium.extinction() );
-			result.multiScatAs1() += throughput * MSint;
-		}
-
-		// Evaluate input to multi scattering 
-		{
-			auto newMS = writer.declLocale( "newMS"
-				, earthShadow * transmittanceToSun * medium.scattering() * uniformPhase );
-			result.newMultiScatStep0Out() += throughput * ( newMS - newMS * sampleTransmittance ) / medium.extinction();
-			//result.newMultiScatStep0Out += sampleTransmittance * throughput * newMS * dt;
-
-			newMS = medium.scattering() * uniformPhase * multiScatteredLuminance;
-			result.newMultiScatStep1Out() += throughput * ( newMS - newMS * sampleTransmittance ) / medium.extinction();
-			//result.newMultiScatStep1Out += sampleTransmittance * throughput * newMS * dt;
-		}
-
-		// See slide 28 at http://www.frostbite.com/2015/08/physically-based-unified-volumetric-rendering-in-frostbite/ 
-		auto Sint = writer.declLocale( "Sint"
-			, ( S - S * sampleTransmittance ) / medium.extinction() );	// integrate along the current step segment 
-		L += throughput * Sint;											// accumulate and also take into account the transmittance from previous steps
-		throughput *= sampleTransmittance;
-
-		tPrev = t;
-	}
-
-	void AtmosphereModel::doProcessGround( sdw::Vec3 const & sunDir
-		, sdw::Float const & tMax
-		, Intersection const & tBottom
-		, sdw::Vec3 const & globalL
-		, sdw::Vec3 const & throughput
-		, sdw::Vec3 & L )
-	{
-		if ( luminanceSettings.useGround )
-		{
-			IF( writer, tMax == tBottom.t() && tBottom.t() > 0.0_f )
-			{
-				// Account for bounced light off the earth
-				auto P = writer.declLocale( "P"
-					, tBottom.point() );
-				auto pHeight = writer.declLocale( "pHeight"
-					, length( P ) );
-
-				auto upVector = writer.declLocale( "upVector"
-					, P / pHeight );
-				auto sunZenithCosAngle = writer.declLocale( "sunZenithCosAngle"
-					, dot( sunDir, upVector ) );
-				auto uv = writer.declLocale< sdw::Vec2 >( "uv" );
-				lutTransmittanceParamsToUv( pHeight, sunZenithCosAngle, uv );
-				auto transmittanceToSun = writer.declLocale( "transmittanceToSun"
-					, ( transmittanceTexture
-						? transmittanceTexture->lod( uv, 0.0_f ).rgb()
-						: vec3( 0.0_f ) ) );
-
-				auto NdotL = writer.declLocale( "NdotL"
-					, clamp( dot( normalize( upVector ), normalize( sunDir ) ), 0.0_f, 1.0_f ) );
-				L += globalL * transmittanceToSun * throughput * NdotL * atmosphereData.groundAlbedo / castor::Pi< float >;
-			}
-			FI;
-		}
-	}
-
 	sdw::Float AtmosphereModel::doGetEarthShadow( Ray const & rayToSun
 		, sdw::Vec3 const & earthO
 		, sdw::Vec3 const & upVector )
 	{
 		auto tEarth = writer.declLocale( "tEarth"
-			, raySphereIntersectNearest( rayToSun, earthO + planetRadiusOffset * upVector, getEarthRadius() ) );
+			, raySphereIntersectNearest( rayToSun
+				, sdw::fma( upVector, vec3( planetRadiusOffset ), earthO )
+				, getEarthRadius() ) );
 		return writer.ternary( tEarth.valid(), 0.0_f, 1.0_f );
 	}
 
