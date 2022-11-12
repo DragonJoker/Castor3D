@@ -15,7 +15,7 @@ namespace atmosphere_scattering
 		static sdw::Vec3 getClipSpace( sdw::Vec2 const & uv
 			, sdw::Float const & fragDepth )
 		{
-			return vec3( uv * vec2( 2.0_f ) - vec2( 1.0_f ), fragDepth );
+			return vec3( sdw::fma( uv, vec2( 2.0_f, -2.0_f ), vec2( -1.0_f, 1.0_f ) ), fragDepth );
 		}
 	}
 

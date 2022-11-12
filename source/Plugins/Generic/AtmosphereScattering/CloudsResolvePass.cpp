@@ -120,6 +120,7 @@ namespace atmosphere_scattering
 				{
 					auto texCoords = writer.declLocale( "texCoords"
 						, vec2( in.fragCoord.xy() ) / targetSize );
+					texCoords.y() = 1.0_f - texCoords.y();
 					fragColour = gaussianBlur( cloudsMap, texCoords );
 /*
 					// RADIAL BLUR - CREPUSCOLAR RAYS
