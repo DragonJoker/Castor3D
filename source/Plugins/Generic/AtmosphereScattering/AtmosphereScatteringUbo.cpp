@@ -72,7 +72,7 @@ namespace atmosphere_scattering
 	ast::type::BaseStructPtr AtmosphereData::makeType( ast::type::TypesCache & cache )
 	{
 		auto result = cache.getStruct( sdw::type::MemoryLayout::eStd430
-			, "AtmosphereData" );
+			, "C3D_ATM_AtmosphereData" );
 
 		if ( result->empty() )
 		{
@@ -134,8 +134,8 @@ namespace atmosphere_scattering
 
 	//************************************************************************************************
 
-	castor::String const AtmosphereScatteringUbo::Buffer = cuT( "Atmosphere" );
-	castor::String const AtmosphereScatteringUbo::Data = cuT( "c3d_atmosphereData" );
+	castor::String const AtmosphereScatteringUbo::Buffer = cuT( "C3D_ATM_Atmosphere" );
+	castor::String const AtmosphereScatteringUbo::Data = cuT( "d" );
 
 	AtmosphereScatteringUbo::AtmosphereScatteringUbo( castor3d::RenderDevice const & device
 		, bool & dirty )

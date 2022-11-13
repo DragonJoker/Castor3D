@@ -37,8 +37,8 @@ namespace atmosphere_scattering
 
 	//************************************************************************************************
 
-	castor::String const CameraUbo::Buffer = cuT( "Camera" );
-	castor::String const CameraUbo::Data = cuT( "c3d_cameraData" );
+	castor::String const CameraUbo::Buffer = cuT( "C3D_ATM_Camera" );
+	castor::String const CameraUbo::Data = cuT( "d" );
 
 	CameraUbo::CameraUbo( castor3d::RenderDevice const & device
 		, bool & dirty )

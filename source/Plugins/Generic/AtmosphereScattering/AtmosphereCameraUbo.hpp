@@ -34,7 +34,7 @@ namespace atmosphere_scattering
 	};
 
 	struct CameraData
-		: public sdw::StructInstanceHelperT< "CameraData"
+		: public sdw::StructInstanceHelperT< "C3D_ATM_CameraData"
 			, sdw::type::MemoryLayout::eStd140
 			, sdw::StructFieldT< sdw::Mat4, "camViewProj" >
 			, sdw::StructFieldT< sdw::Mat4, "camInvViewProj" >
