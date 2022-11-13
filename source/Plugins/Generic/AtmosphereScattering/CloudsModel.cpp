@@ -76,21 +76,13 @@ namespace atmosphere_scattering
 					auto interGround = writer.declLocale( "interGround"
 						, atmosphere.raySphereIntersectNearest( ray, atmosphere.getEarthRadius() ) );
 
-					auto interInnerN = writer.declLocale< Intersection >( "interInnerN" );
-					interInnerN.valid() = 0_b;
-					interInnerN.point() = vec3( 0.0_f );
-					auto interInnerF = writer.declLocale< Intersection >( "interInnerF" );
-					interInnerF.valid() = 0_b;
-					interInnerF.point() = vec3( 0.0_f );
+					auto interInnerN = writer.declLocale( "interInnerN", Intersection{ writer } );
+					auto interInnerF = writer.declLocale( "interInnerF", Intersection{ writer } );
 					auto interInnerCount = writer.declLocale( "interInnerCount"
 						, raySphereIntersect( ray, cloudsInnerRadius, interGround, interInnerN, interInnerF ) );
 
-					auto interOuterN = writer.declLocale< Intersection >( "interOuterN" );
-					interOuterN.valid() = 0_b;
-					interOuterN.point() = vec3( 0.0_f );
-					auto interOuterF = writer.declLocale< Intersection >( "interOuterF" );
-					interOuterF.valid() = 0_b;
-					interOuterF.point() = vec3( 0.0_f );
+					auto interOuterN = writer.declLocale( "interOuterN", Intersection{ writer } );
+					auto interOuterF = writer.declLocale( "interOuterF", Intersection{ writer } );
 					auto interOuterCount = writer.declLocale( "interOuterCount"
 						, raySphereIntersect( ray, cloudsOuterRadius, interGround, interOuterN, interOuterF ) );
 
