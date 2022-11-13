@@ -432,6 +432,8 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/Angle.inl
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/Coords.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/Coords.inl
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/Length.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/Length.inl
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/Line2D.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/Line3D.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Math/Math.hpp

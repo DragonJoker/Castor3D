@@ -60,6 +60,7 @@ namespace castor3d
 			addParser( result, uint32_t( CSCNSection::eRoot ), cuT( "materials" ), parserRootMaterials, { makeParameter< ParameterType::eCheckedText >( SceneFileParser::materialTypes ) } );
 			addParser( result, uint32_t( CSCNSection::eRoot ), cuT( "max_image_size" ), parserRootMaxImageSize, { makeParameter< ParameterType::eUInt32 >() } );
 			addParser( result, uint32_t( CSCNSection::eRoot ), cuT( "lpv_grid_size" ), parserRootLpvGridSize, { makeParameter< ParameterType::eUInt32 >() } );
+			addParser( result, uint32_t( CSCNSection::eRoot ), cuT( "default_unit" ), parserRootDefaultUnit, { makeParameter< ParameterType::eCheckedText >( SceneFileParser::lengthUnits ) } );
 
 			addParser( result, uint32_t( CSCNSection::eWindow ), cuT( "render_target" ), parserWindowRenderTarget );
 			addParser( result, uint32_t( CSCNSection::eWindow ), cuT( "vsync" ), parserWindowVSync, { makeParameter< ParameterType::eBool >() } );
@@ -552,6 +553,7 @@ namespace castor3d
 	UInt32StrMap SceneFileParser::shadowFilters;
 	UInt32StrMap SceneFileParser::globalIlluminations;
 	UInt32StrMap SceneFileParser::interpolatorTypes;
+	UInt32StrMap SceneFileParser::lengthUnits;
 
 	SceneFileParser::SceneFileParser( Engine & engine )
 		: OwnedBy< Engine >( engine )
@@ -601,6 +603,7 @@ namespace castor3d
 			shadowFilters = getEnumMapT< ShadowType >();
 			globalIlluminations = getEnumMapT< GlobalIlluminationType >();
 			interpolatorTypes = getEnumMapT< InterpolatorType >();
+			lengthUnits = getEnumMapT< castor::LengthUnit >();
 
 			for ( auto & it : engine.getPassFactory().listRegisteredTypes() )
 			{

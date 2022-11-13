@@ -44,6 +44,7 @@ See LICENSE file in root folder
 #include <CastorUtils/Graphics/ImageWriter.hpp>
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 #include <CastorUtils/Log/LoggerInstance.hpp>
+#include <CastorUtils/Math/Length.hpp>
 #include <CastorUtils/Miscellaneous/CpuInformations.hpp>
 #include <CastorUtils/Multithreading/AsyncJobQueue.hpp>
 
@@ -626,87 +627,87 @@ namespace castor3d
 		C3D_API uint32_t getMaxPassTypeCount()const;
 		C3D_API RenderDevice * getRenderDevice()const;
 
-		castor::String const & getAppName()const
+		castor::String const & getAppName()const noexcept
 		{
 			return m_appName;
 		}
 		
-		Version const & getAppVersion()const
+		Version const & getAppVersion()const noexcept
 		{
 			return m_appVersion;
 		}
 		
-		castor::ImageCache const & getImageCache()const
+		castor::ImageCache const & getImageCache()const noexcept
 		{
 			return m_imageCache;
 		}
 
-		castor::ImageCache & getImageCache()
+		castor::ImageCache & getImageCache()noexcept
 		{
 			return m_imageCache;
 		}
 
-		castor::FontCache const & getFontCache()const
+		castor::FontCache const & getFontCache()const noexcept
 		{
 			return m_fontCache;
 		}
 
-		castor::FontCache & getFontCache()
+		castor::FontCache & getFontCache()noexcept
 		{
 			return m_fontCache;
 		}
 
-		UserInputListenerSPtr getUserInputListener()
+		UserInputListenerSPtr getUserInputListener()noexcept
 		{
 			return m_userInputListener;
 		}
 
-		RenderSystem * getRenderSystem()const
+		RenderSystem * getRenderSystem()const noexcept
 		{
 			return m_renderSystem.get();
 		}
 
-		auto getDefaultSampler()const
+		auto getDefaultSampler()const noexcept
 		{
 			return m_defaultSampler;
 		}
 
-		auto getLightsSampler()const
+		auto getLightsSampler()const noexcept
 		{
 			return m_lightsSampler;
 		}
 
-		std::map< castor::String, castor::AdditionalParsers > const & getAdditionalParsers()const
+		std::map< castor::String, castor::AdditionalParsers > const & getAdditionalParsers()const noexcept
 		{
 			return m_additionalParsers;
 		}
 
-		Version const & getVersion()const
+		Version const & getVersion()const noexcept
 		{
 			return m_version;
 		}
 
-		bool isValidationEnabled()const
+		bool isValidationEnabled()const noexcept
 		{
 			return m_enableValidation;
 		}
 
-		void enableUpdateOptimisations( bool value )
+		void enableUpdateOptimisations( bool value )noexcept
 		{
 			m_enableUpdateOptimisations = value;
 		}
 
-		bool areUpdateOptimisationsEnabled()const
+		bool areUpdateOptimisationsEnabled()const noexcept
 		{
 			return m_enableUpdateOptimisations;
 		}
 
-		bool isApiTraceEnabled()const
+		bool isApiTraceEnabled()const noexcept
 		{
 			return m_enableApiTrace;
 		}
 
-		bool hasRenderLoop()const
+		bool hasRenderLoop()const noexcept
 		{
 			return m_renderLoop != nullptr;
 		}
@@ -721,104 +722,109 @@ namespace castor3d
 			return m_threaded;
 		}
 
-		MeshFactory & getMeshFactory()const
+		MeshFactory & getMeshFactory()const noexcept
 		{
 			return *m_meshFactory;
 		}
 
-		PassFactory & getPassFactory()const
+		PassFactory & getPassFactory()const noexcept
 		{
 			return *m_passFactory;
 		}
 
-		PassComponentRegister & getPassComponentsRegister()const
+		PassComponentRegister & getPassComponentsRegister()const noexcept
 		{
 			return *m_passComponents;
 		}
 
-		ImporterFileFactory & getImporterFileFactory()const
+		ImporterFileFactory & getImporterFileFactory()const noexcept
 		{
 			return *m_importerFileFactory;
 		}
 
-		ParticleFactory & getParticleFactory()const
+		ParticleFactory & getParticleFactory()const noexcept
 		{
 			return *m_particleFactory;
 		}
 
-		castor::CpuInformations const & getCpuInformations()const
+		castor::CpuInformations const & getCpuInformations()const noexcept
 		{
 			return m_cpuInformations;
 		}
 
-		PassTypeID getPassesType()const
+		PassTypeID getPassesType()const noexcept
 		{
 			return m_passesType;
 		}
 
-		castor::ImageLoader const & getImageLoader()const
+		castor::ImageLoader const & getImageLoader()const noexcept
 		{
 			return m_imageLoader;
 		}
 
-		castor::ImageLoader & getImageLoader()
+		castor::ImageLoader & getImageLoader()noexcept
 		{
 			return m_imageLoader;
 		}
 
-		castor::ImageWriter const & getImageWriter()const
+		castor::ImageWriter const & getImageWriter()const noexcept
 		{
 			return m_imageWriter;
 		}
 
-		ashes::RendererList const & getRenderersList()const
+		ashes::RendererList const & getRenderersList()const noexcept
 		{
 			return m_rendererList;
 		}
 
-		castor::LoggerInstance & getLogger()const
+		castor::LoggerInstance & getLogger()const noexcept
 		{
 			return *m_logger;
 		}
 
-		uint32_t getLpvGridSize()const
+		uint32_t getLpvGridSize()const noexcept
 		{
 			return m_lpvGridSize;
 		}
 
-		uint32_t getMaxImageSize()const
+		uint32_t getMaxImageSize()const noexcept
 		{
 			return m_maxImageSize;
 		}
 
-		std::map< castor::String, RenderWindow * > const & getRenderWindows()const
+		std::map< castor::String, RenderWindow * > const & getRenderWindows()const noexcept
 		{
 			return m_renderWindows;
 		}
 
-		crg::ResourceHandler & getGraphResourceHandler()
+		crg::ResourceHandler & getGraphResourceHandler()noexcept
 		{
 			return m_resourceHandler;
 		}
 
-		shader::LightingModelFactory const & getLightingModelFactory()const
+		shader::LightingModelFactory const & getLightingModelFactory()const noexcept
 		{
 			return m_lightingModelFactory;
 		}
 
-		shader::BackgroundModelFactory const & getBackgroundModelFactory()const
+		shader::BackgroundModelFactory const & getBackgroundModelFactory()const noexcept
 		{
 			return m_backgroundModelFactory;
 		}
 
-		SceneRPtr getLoadingScene()const
+		SceneRPtr getLoadingScene()const noexcept
 		{
 			return m_loadingScene.get();
 		}
 
-		Texture const & getPrefilteredBrdfTexture()const
+		Texture const & getPrefilteredBrdfTexture()const noexcept
 		{
 			return m_brdf;
+		}
+
+		castor::LengthUnit getLengthUnit()const noexcept
+		{
+			return m_unit;
 		}
 		/**@}*/
 		/**
@@ -832,22 +838,22 @@ namespace castor3d
 		/**@{*/
 		C3D_API void setLoadingScene( SceneUPtr scene );
 
-		void setUserInputListener( UserInputListenerSPtr listener )
+		void setUserInputListener( UserInputListenerSPtr listener )noexcept
 		{
 			m_userInputListener = listener;
 		}
 
-		void setPassesType( PassTypeID type )
+		void setPassesType( PassTypeID type )noexcept
 		{
 			m_passesType = type;
 		}
 
-		void setMaxImageSize( uint32_t size )
+		void setMaxImageSize( uint32_t size )noexcept
 		{
 			m_maxImageSize = size;
 		}
 
-		void setLpvGridSize( uint32_t size )
+		void setLpvGridSize( uint32_t size )noexcept
 		{
 			m_lpvGridSize = size;
 		}
@@ -857,6 +863,11 @@ namespace castor3d
 		{
 			return registerPassComponent( ComponentT::TypeName
 				, createPlugin( *m_passComponents ) );
+		}
+
+		void setLengthUnit( castor::LengthUnit value )noexcept
+		{
+			m_unit = value;
 		}
 		/**@}*/
 
@@ -914,6 +925,7 @@ namespace castor3d
 		SceneUPtr m_loadingScene;
 		std::unordered_map< castor::String, castor::UniquePtr< RenderPassRegisterInfo > > m_passRenderPassTypes;
 		std::unordered_map< castor::String, std::pair< RenderPassTypeID, Parameters > > m_renderPassTypes;
+		castor::LengthUnit m_unit{ castor::LengthUnit::eMetre };
 	};
 }
 

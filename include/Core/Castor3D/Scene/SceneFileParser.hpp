@@ -301,6 +301,7 @@ namespace castor3d
 		C3D_API static UInt32StrMap shadowFilters;
 		C3D_API static UInt32StrMap globalIlluminations;
 		C3D_API static UInt32StrMap interpolatorTypes;
+		C3D_API static UInt32StrMap lengthUnits;
 	};
 
 	C3D_API SceneFileContext & getParserContext( castor::FileParserContext & context );
