@@ -20,13 +20,16 @@ namespace castor3d::shader
 		, sdw::ShaderWriter & writer
 		, Utils & utils
 		, VkExtent2D targetSize
+		, bool needsForeground
 		, uint32_t & binding
 		, uint32_t set )
 	{
 		return scene.getEngine()->getBackgroundModelFactory().create( scene.getBackgroundModel()
+			, *scene.getEngine()
 			, writer
 			, utils
 			, std::move( targetSize )
+			, needsForeground
 			, binding
 			, set );
 	}
@@ -83,5 +86,13 @@ namespace castor3d::shader
 	{
 		reflectedDiffuse = vec3( 0.0_f );
 		reflectedSpecular = vec3( 0.0_f );
+	}
+
+	void BackgroundModel::applyForeground( sdw::Vec2 const fragCoord
+		, sdw::Float const linearDepth
+		, sdw::Vec2 const targetSize
+		, sdw::Vec2 const cameraPlanes
+		, sdw::Vec4 & output )
+	{
 	}
 }

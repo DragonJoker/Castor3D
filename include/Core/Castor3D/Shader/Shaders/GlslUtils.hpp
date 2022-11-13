@@ -78,6 +78,9 @@ namespace castor3d::shader
 		C3D_API sdw::RetFloat rescaleDepth( sdw::Float const & depth
 			, sdw::Float const & nearPlane
 			, sdw::Float const & farPlane );
+		C3D_API sdw::Float lineariseDepth( sdw::Float const & depth
+			, sdw::Float const & nearPlane
+			, sdw::Float const & farPlane )const;
 		C3D_API sdw::RetVec4 computeAccumulation( sdw::Float const & depth
 			, sdw::Vec3 const & colour
 			, sdw::Float const & alpha

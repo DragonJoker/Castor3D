@@ -39,6 +39,7 @@ namespace castor3d
 			, renderSize{ m_clipInfo.xy() }
 			, nearPlane{ m_clipInfo.z() }
 			, farPlane{ m_clipInfo.w() }
+			, cameraPlanes{ m_clipInfo.zw() }
 			, directionalLightCount{ writer.cast< sdw::Int >( m_lightsCount.x() ) }
 			, pointLightCount{ writer.cast< sdw::Int >( m_lightsCount.y() ) }
 			, spotLightCount{ writer.cast< sdw::Int >( m_lightsCount.z() ) }

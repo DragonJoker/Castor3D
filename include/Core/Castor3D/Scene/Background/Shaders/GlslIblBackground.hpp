@@ -18,9 +18,11 @@ namespace castor3d::shader
 			, uint32_t & binding
 			, uint32_t set );
 
-		C3D_API static BackgroundModelPtr create( sdw::ShaderWriter & writer
+		C3D_API static BackgroundModelPtr create( Engine const & engine
+			, sdw::ShaderWriter & writer
 			, Utils & utils
 			, VkExtent2D targetSize
+			, bool needsForeground
 			, uint32_t & binding
 			, uint32_t set );
 

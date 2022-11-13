@@ -39,11 +39,11 @@ namespace castor3d
 			C3D_API sdw::Vec4 prvViewToWorld( sdw::Vec4 const & vsPosition )const;
 			C3D_API sdw::Vec4 worldToCurProj( sdw::Vec4 const & wsPosition )const;
 			C3D_API sdw::Vec4 worldToPrvProj( sdw::Vec4 const & wsPosition )const;
-			C3D_API sdw::Vec4 viewToScreenUV( Utils & utils
+			C3D_API sdw::Vec2 viewToScreenUV( Utils & utils
 				, sdw::Vec4 vsPosition )const;
-			C3D_API sdw::Vec4 worldToCurScreenUV( Utils & utils
+			C3D_API sdw::Vec2 worldToCurScreenUV( Utils & utils
 				, sdw::Vec4 wsPosition )const;
-			C3D_API sdw::Vec4 worldToPrvScreenUV( Utils & utils
+			C3D_API sdw::Vec2 worldToPrvScreenUV( Utils & utils
 				, sdw::Vec4 wsPosition )const;
 			C3D_API sdw::Vec3 projToView( Utils & utils
 				, sdw::Vec2 const & texCoord

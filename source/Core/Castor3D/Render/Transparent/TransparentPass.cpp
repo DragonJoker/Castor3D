@@ -267,6 +267,7 @@ namespace castor3d
 			, writer
 			, utils
 			, makeExtent2D( m_size )
+			, false
 			, index
 			, RenderPipeline::eBuffers );
 		shader::GlobalIllumination indirect{ writer, utils };

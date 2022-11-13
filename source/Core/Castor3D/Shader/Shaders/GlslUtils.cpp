@@ -416,7 +416,7 @@ namespace castor3d::shader
 					, sdw::Float const & nearPlane
 					, sdw::Float const & farPlane )
 				{
-					m_writer.returnStmt( 2.0_f * nearPlane / ( farPlane + nearPlane - depth * ( farPlane - nearPlane ) ) );
+					m_writer.returnStmt( 2.0_f * nearPlane / sdw::fma( -depth, farPlane - nearPlane, farPlane + nearPlane ) );
 				}
 				, sdw::InFloat{ m_writer, "depth" }
 				, sdw::InFloat{ m_writer, "nearPlane" }
@@ -426,6 +426,13 @@ namespace castor3d::shader
 		return m_rescaleDepth( pdepth
 			, pnearPlane
 			, pfarPlane );
+	}
+
+	sdw::Float Utils::lineariseDepth( sdw::Float const & depth
+		, sdw::Float const & nearPlane
+		, sdw::Float const & farPlane )const
+	{
+		return ( nearPlane * farPlane ) / sdw::fma( depth, nearPlane - farPlane, farPlane );
 	}
 
 	sdw::RetVec4 Utils::computeAccumulation( sdw::Float const & pdepth
@@ -636,7 +643,7 @@ namespace castor3d::shader
 					FI;
 
 					result.xyz() /= result.w();
-					result.xyz() = fma( result.xyz(), vec3( 0.5_f ), vec3( 0.5_f ) );
+					result.xy() = fma( result.xy(), vec2( 0.5_f ), vec2( 0.5_f ) );
 					m_writer.returnStmt( result );
 				}
 				, sdw::InVec4{ m_writer, "in" } );

@@ -97,22 +97,22 @@ namespace castor3d
 			return m_prvViewProj * wsPosition;
 		}
 
-		sdw::Vec4 MatrixData::viewToScreenUV( Utils & utils
+		sdw::Vec2 MatrixData::viewToScreenUV( Utils & utils
 			, sdw::Vec4 vsPosition )const
 		{
-			return utils.clipToScreen( viewToProj( vsPosition ) );
+			return utils.clipToScreen( viewToProj( vsPosition ) ).xy();
 		}
 
-		sdw::Vec4 MatrixData::worldToCurScreenUV( Utils & utils
+		sdw::Vec2 MatrixData::worldToCurScreenUV( Utils & utils
 			, sdw::Vec4 wsPosition )const
 		{
-			return utils.clipToScreen( worldToCurProj( wsPosition ) );
+			return utils.clipToScreen( worldToCurProj( wsPosition ) ).xy();
 		}
 
-		sdw::Vec4 MatrixData::worldToPrvScreenUV( Utils & utils
+		sdw::Vec2 MatrixData::worldToPrvScreenUV( Utils & utils
 			, sdw::Vec4 wsPosition )const
 		{
-			return utils.clipToScreen( worldToPrvProj( wsPosition ) );
+			return utils.clipToScreen( worldToPrvProj( wsPosition ) ).xy();
 		}
 
 		sdw::Vec3 MatrixData::projToView( Utils & utils

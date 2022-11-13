@@ -211,6 +211,7 @@ namespace castor3d
 				, writer
 				, utils
 				, makeExtent2D( size )
+				, true
 				, index
 				, 0u );
 			shader::Fog fog{ writer };
@@ -384,6 +385,14 @@ namespace castor3d
 							, c3d_sceneData );
 					}
 					FI;
+
+					auto linearDepth = writer.declLocale( "linearDepth"
+						, min( depthObj.y(), c3d_sceneData.farPlane ) );
+					backgroundModel->applyForeground( in.fragCoord.xy()
+						, linearDepth
+						, c3d_sceneData.renderSize
+						, c3d_sceneData.cameraPlanes
+						, pxl_fragColor );
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
