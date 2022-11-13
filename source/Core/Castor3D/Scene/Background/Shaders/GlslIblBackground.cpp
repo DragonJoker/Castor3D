@@ -32,9 +32,11 @@ namespace castor3d::shader
 			, set );
 	}
 
-	BackgroundModelPtr IblBackgroundModel::create( sdw::ShaderWriter & writer
+	BackgroundModelPtr IblBackgroundModel::create( Engine const & engine
+		, sdw::ShaderWriter & writer
 		, Utils & utils
 		, VkExtent2D targetSize
+		, bool needsForeground
 		, uint32_t & binding
 		, uint32_t set )
 	{

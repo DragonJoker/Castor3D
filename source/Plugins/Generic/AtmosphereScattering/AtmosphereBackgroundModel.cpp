@@ -1,5 +1,7 @@
 #include "AtmosphereScattering/AtmosphereBackgroundModel.hpp"
 
+#include <Castor3D/Engine.hpp>
+
 #include <ShaderWriter/Writer.hpp>
 #include <ShaderWriter/BaseTypes/Float.hpp>
 #include <ShaderWriter/Intrinsics/Intrinsics.hpp>
@@ -22,6 +24,7 @@ namespace atmosphere_scattering
 	AtmosphereBackgroundModel::AtmosphereBackgroundModel( sdw::ShaderWriter & writer
 		, castor3d::shader::Utils & utils
 		, VkExtent2D targetSize
+		, bool needsForeground
 		, uint32_t & binding
 		, uint32_t set )
 		: castor3d::shader::BackgroundModel{ writer, utils, std::move( targetSize ) }
@@ -51,15 +54,18 @@ namespace atmosphere_scattering
 	{
 	}
 
-	castor3d::shader::BackgroundModelPtr AtmosphereBackgroundModel::create( sdw::ShaderWriter & writer
+	castor3d::shader::BackgroundModelPtr AtmosphereBackgroundModel::create( castor3d::Engine const & engine
+		, sdw::ShaderWriter & writer
 		, castor3d::shader::Utils & utils
 		, VkExtent2D targetSize
+		, bool needsForeground
 		, uint32_t & binding
 		, uint32_t set )
 	{
 		return std::make_unique< AtmosphereBackgroundModel >( writer
 			, utils
 			, std::move( targetSize )
+			, needsForeground
 			, binding
 			, set );
 	}
@@ -79,6 +85,14 @@ namespace atmosphere_scattering
 		}
 
 		return m_computeRefractions();
+	}
+
+	void AtmosphereBackgroundModel::applyForeground( sdw::Vec2 const pfragCoord
+		, sdw::Float const plinearDepth
+		, sdw::Vec2 const ptargetSize
+		, sdw::Vec2 const pcameraPlanes
+		, sdw::Vec4 & poutput )
+	{
 	}
 
 	sdw::Vec3 AtmosphereBackgroundModel::getSunRadiance( sdw::Vec3 const & psunDir )

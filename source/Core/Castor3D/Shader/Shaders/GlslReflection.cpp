@@ -598,15 +598,15 @@ namespace castor3d::shader
 					auto rayMarchPosition = m_writer.declLocale( "rayMarchPosition"
 						, viewPosition );
 					auto rayMarchTexPosition = m_writer.declLocale( "rayMarchTexPosition"
-						, vec4( 0.0_f ) );
+						, vec2( 0.0_f ) );
 
 					WHILE( m_writer, stepCount < ssrForwardMaxStepCount )
 					{
 						rayMarchPosition += reflectionVector.xyz() * ssrStepSize;
 						rayMarchTexPosition = matrixData.viewToScreenUV( m_utils, vec4( -rayMarchPosition, 1.0_f ) );
 
-						sceneZ = depthMap.lod( rayMarchTexPosition.xy(), 0.0_f );
-						sceneZ = matrixData.projToView( m_utils, rayMarchTexPosition.xy(), sceneZ ).z();
+						sceneZ = depthMap.lod( rayMarchTexPosition, 0.0_f );
+						sceneZ = matrixData.projToView( m_utils, rayMarchTexPosition, sceneZ ).z();
 
 						IF( m_writer, -sceneZ <= -rayMarchPosition.z() )
 						{
@@ -630,8 +630,8 @@ namespace castor3d::shader
 							rayMarchPosition -= reflectionVector.xyz() * ssrStepSize / ssrBackwardMaxStepCount;
 							rayMarchTexPosition = matrixData.viewToScreenUV( m_utils, vec4( -rayMarchPosition, 1.0_f ) );
 
-							sceneZ = depthMap.lod( rayMarchTexPosition.xy(), 0.0_f );
-							sceneZ = matrixData.projToView( m_utils, rayMarchTexPosition.xy(), sceneZ ).z();
+							sceneZ = depthMap.lod( rayMarchTexPosition, 0.0_f );
+							sceneZ = matrixData.projToView( m_utils, rayMarchTexPosition, sceneZ ).z();
 
 							IF( m_writer, -sceneZ > -rayMarchPosition.z() )
 							{
@@ -650,7 +650,7 @@ namespace castor3d::shader
 					auto nDotV = m_writer.declLocale( "nDotV"
 						, abs( dot( worldNormal, viewDir ) ) + epsilon );
 					auto ssrReflectionNormal = m_writer.declLocale( "ssrReflectionNormal"
-						, normalMap.sample( rayMarchTexPosition.xy() ).xyz() );
+						, normalMap.sample( rayMarchTexPosition ).xyz() );
 					auto ssrDistanceFactor = m_writer.declLocale( "ssrDistanceFactor"
 						, vec2( distance( 0.5_f, texcoord.x() ), distance( 0.5_f, texcoord.y() ) ) * 2.0f );
 					auto ssrFactor = m_writer.declLocale( "ssrFactor"
@@ -661,7 +661,7 @@ namespace castor3d::shader
 							* ( 1.0f - clamp( dot( ssrReflectionNormal, worldNormal ), 0.0_f, 1.0_f ) ) );
 
 					auto reflectionColor = m_writer.declLocale( "reflectionColor"
-						, colourMap.sample( rayMarchTexPosition.xy() ).rgb() );
+						, colourMap.sample( rayMarchTexPosition ).rgb() );
 
 					m_writer.returnStmt( vec4( reflectionColor, ssrFactor ) );
 				}

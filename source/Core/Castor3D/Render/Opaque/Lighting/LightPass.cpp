@@ -180,6 +180,7 @@ namespace castor3d
 			, writer
 			, utils
 			, targetSize
+			, false
 			, index
 			, 1u );
 

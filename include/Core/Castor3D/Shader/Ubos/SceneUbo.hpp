@@ -63,6 +63,7 @@ namespace castor3d
 			sdw::Vec2 renderSize;
 			sdw::Float nearPlane;
 			sdw::Float farPlane;
+			sdw::Vec2 cameraPlanes;
 			sdw::Int directionalLightCount;
 			sdw::Int pointLightCount;
 			sdw::Int spotLightCount;

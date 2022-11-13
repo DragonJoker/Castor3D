@@ -23,12 +23,15 @@ namespace atmosphere_scattering
 		AtmosphereBackgroundModel( sdw::ShaderWriter & writer
 			, castor3d::shader::Utils & utils
 			, VkExtent2D targetSize
+			, bool needsForeground
 			, uint32_t & binding
 			, uint32_t set );
 
-		static castor3d::shader::BackgroundModelPtr create( sdw::ShaderWriter & writer
+		static castor3d::shader::BackgroundModelPtr create( castor3d::Engine const & engine
+			, sdw::ShaderWriter & writer
 			, castor3d::shader::Utils & utils
 			, VkExtent2D targetSize
+			, bool needsForeground
 			, uint32_t & binding
 			, uint32_t set );
 
@@ -36,6 +39,11 @@ namespace atmosphere_scattering
 			, sdw::Vec3 const & wsNormal
 			, sdw::Float const & refractionRatio
 			, castor3d::shader::BlendComponents & components )override;
+		void applyForeground( sdw::Vec2 const fragCoord
+			, sdw::Float const linearDepth
+			, sdw::Vec2 const targetSize
+			, sdw::Vec2 const cameraPlanes
+			, sdw::Vec4 & output )override;
 		sdw::Vec3 getSunRadiance( sdw::Vec3 const & sunDir );
 
 		castor3d::shader::RetRay getPixelTransLum( sdw::Vec2 const & fragPos
