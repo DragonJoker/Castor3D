@@ -22,7 +22,7 @@ See LICENSE file in root folder
 namespace atmosphere_scattering
 {
 	struct CloudsData
-		: public sdw::StructInstanceHelperT< "CloudsData"
+		: public sdw::StructInstanceHelperT< "C3D_ATM_CloudsData"
 			, sdw::type::MemoryLayout::eStd140
 			, sdw::FloatField< "speed" >
 			, sdw::FloatField< "coverage" >
