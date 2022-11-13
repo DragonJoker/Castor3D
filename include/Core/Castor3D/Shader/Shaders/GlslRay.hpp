@@ -27,8 +27,16 @@ namespace castor3d
 			{
 			}
 
-			C3D_API static Intersection create( std::string const & name
-				, sdw::ShaderWriter & writer );
+			C3D_API explicit Intersection( sdw::ShaderWriter & writer );
+			C3D_API Intersection( sdw::ShaderWriter & writer
+				, sdw::Vec3 const & p );
+			C3D_API Intersection( sdw::ShaderWriter & writer
+				, sdw::Vec3 const & p
+				, sdw::Boolean const & v );
+			C3D_API Intersection( sdw::ShaderWriter & writer
+				, sdw::Vec3 const & p
+				, sdw::Boolean const & v
+				, sdw::Float const & t );
 
 			auto point()const
 			{
@@ -63,10 +71,12 @@ namespace castor3d
 			{
 			}
 
-			C3D_API static Ray create( std::string const & name
-				, sdw::ShaderWriter & writer
-				, sdw::Vec3 const & o = vec3( 0.0_f )
-				, sdw::Vec3 const & d = vec3( 0.0_f ) );
+			C3D_API explicit Ray( sdw::ShaderWriter & writer );
+			C3D_API Ray( sdw::ShaderWriter & writer
+				, sdw::Vec3 const & o );
+			C3D_API Ray( sdw::ShaderWriter & writer
+				, sdw::Vec3 const & o
+				, sdw::Vec3 const & d );
 
 			C3D_API sdw::Vec3 step( sdw::Float const & t )const;
 

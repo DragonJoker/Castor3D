@@ -514,10 +514,10 @@ namespace castor3d
 					, m_writer.cast< sdw::UInt >( surface.clipPosition.y() ) ) );
 			auto ditherValue = m_writer.declLocale( "ditherValue"
 				, c3d_volumetricDither[screenUV.x() % 4_u][screenUV.y() % 4_u] );
-			auto ray = Ray::create( "ray"
-				, m_writer
-				, eyePosition + rayDirection * stepLength * ditherValue
-				, rayDirection );
+			auto ray = m_writer.declLocale( "ray"
+				, Ray{ m_writer
+					, sdw::fma( rayDirection, vec3( stepLength * ditherValue ), eyePosition )
+					, rayDirection } );
 
 			// Compute scattering value
 			auto RdotL = m_writer.declLocale( "RdotL"
@@ -567,10 +567,10 @@ namespace castor3d
 					, m_writer.cast< sdw::UInt >( surface.clipPosition.y() ) ) );
 			auto ditherValue = m_writer.declLocale( "ditherValue"
 				, c3d_volumetricDither[screenUV.x() % 4_u][screenUV.y() % 4_u] );
-			auto ray = Ray::create( "ray"
-				, m_writer
-				, eyePosition + rayDirection * stepLength * ditherValue
-				, rayDirection );
+			auto ray = m_writer.declLocale( "ray"
+				, Ray{ m_writer
+					, sdw::fma( rayDirection, vec3( stepLength * ditherValue ), eyePosition )
+					, rayDirection } );
 
 			return computeVolumetric( light
 				, surface
