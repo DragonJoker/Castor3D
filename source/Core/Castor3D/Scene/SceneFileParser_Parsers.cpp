@@ -526,6 +526,21 @@ namespace castor3d
 	}
 	CU_EndAttribute()
 
+	CU_ImplementAttributeParser( parserRootDefaultUnit )
+	{
+		auto & parsingContext = getParserContext( context );
+
+		if ( params.empty() )
+		{
+			CU_ParsingError( cuT( "Missing [unit] parameter." ) );
+		}
+		else
+		{
+			parsingContext.parser->getEngine()->setLengthUnit( castor::LengthUnit( params[0]->get< uint32_t >() ) );
+		}
+	}
+	CU_EndAttribute()
+
 	CU_ImplementAttributeParser( parserWindowRenderTarget )
 	{
 		auto & parsingContext = getParserContext( context );

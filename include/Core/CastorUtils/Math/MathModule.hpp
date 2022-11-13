@@ -23,11 +23,11 @@ namespace castor
 	static constexpr Type PiDiv2{ Type( 3.1415926535897932384626433832795028841968 / 2.0 ) };
 	/**
 	\~english
-	\brief		Angle helper class
-	\remark		Used to manage angles without taking care of degrees or radians
+	\brief		Angle helper class.
+	\remark		Handles angle units conversions.
 	\~french
-	\brief		Classe d'angle
-	\remark		Utilisée pour gérer les angles sans avoir à se préoccuper des convertions degré / radian / gradient
+	\brief		Classe d'angle.
+	\remark		Gère les conversions d'unités d'angles.
 	*/
 	template< typename TypeT >
 	class AngleT;
@@ -41,6 +41,16 @@ namespace castor
 	*/
 	template< typename T, uint32_t Count >
 	class Coords;
+	/**
+	\~english
+	\brief		Length helper class.
+	\remark		Handles length units conversions.
+	\~french
+	\brief		Classe de longueur.
+	\remark		Gère les conversions d'unités de longueurs.
+	*/
+	template< typename TypeT >
+	class LengthT;
 	/**
 	\~english
 	\brief		2D line equation
@@ -207,6 +217,7 @@ namespace castor
 	template< typename T > using Matrix4x4 = SquareMatrix< T, 4 >;
 
 	using Angle = AngleT< float >;
+	using Length = LengthT< float >;
 	using Quaternion = QuaternionT< float >;
 
 	CU_DeclarePoint( bool, 4, b );
