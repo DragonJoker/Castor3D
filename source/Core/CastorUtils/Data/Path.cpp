@@ -2,7 +2,9 @@
 
 #include <algorithm>
 
+// Both for std::u8path
 #pragma warning( disable: 4996 )
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 
 namespace castor
 {
