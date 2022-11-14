@@ -123,7 +123,8 @@ namespace atmosphere_scattering
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static castor3d::ShaderPtr getPixelProgram( VkExtent3D const & renderSize
+		static castor3d::ShaderPtr getPixelProgram( castor3d::Engine const & engine
+			, VkExtent3D const & renderSize
 			, VkExtent3D const & transmittanceExtent )
 		{
 			sdw::FragmentWriter writer;
@@ -150,7 +151,7 @@ namespace atmosphere_scattering
 
 			AtmosphereModel atmosphere{ writer
 				, c3d_atmosphereData
-				, AtmosphereModel::Settings{}
+				, AtmosphereModel::Settings{ castor::Length::fromUnit( 1.0f, engine.getLengthUnit() ) }
 					.setCameraData( &c3d_cameraData )
 					.setMieRayPhase( true )
 				, { transmittanceExtent.width, transmittanceExtent.height } };
@@ -277,7 +278,7 @@ namespace atmosphere_scattering
 		: castor::Named{ "CameraVolumePass" + castor::string::toString( index ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), volume::getVertexProgram() }
 		, m_geometryShader{ VK_SHADER_STAGE_GEOMETRY_BIT, getName(), volume::getGeometryProgram() }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), volume::getPixelProgram( getExtent( resultView ), getExtent( transmittanceView ) ) }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), volume::getPixelProgram( *device.renderSystem.getEngine(), getExtent( resultView ), getExtent( transmittanceView ) ) }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_geometryShader )
 			, makeShaderState( device, m_pixelShader ) }

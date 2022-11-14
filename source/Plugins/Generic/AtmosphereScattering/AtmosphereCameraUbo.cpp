@@ -4,6 +4,7 @@
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/Viewport.hpp>
 #include <Castor3D/Scene/Camera.hpp>
+#include <Castor3D/Scene/Scene.hpp>
 #include <Castor3D/Scene/SceneNode.hpp>
 #include <Castor3D/Buffer/UniformBufferPool.hpp>
 
@@ -61,11 +62,13 @@ namespace atmosphere_scattering
 		auto node = camera.getParent();
 		auto position = node->getDerivedPosition();
 		auto orientation = node->getDerivedOrientation();
+		auto & engine = *node->getScene()->getEngine();
+		auto length = castor::Length::fromUnit( 1.0f, engine.getLengthUnit() );
 		m_position = position;
 		m_orientation = orientation;
 
 		// Convert from meters to kilometers
-		position = position / 1000.0f;
+		position = position * length.kilometres();
 
 		castor::Point3f right{ 1.0, 0.0, 0.0 };
 		castor::Point3f up{ 0.0, 1.0, 0.0 };
@@ -76,7 +79,7 @@ namespace atmosphere_scattering
 		castor::Matrix4x4f view;
 		castor::matrix::lookAt( view, position, position + front, up );
 
-		auto proj = camera.getRescaledProjection( 1.0f / 1000.0f, isSafeBanded );
+		auto proj = camera.getRescaledProjection( length.kilometres(), isSafeBanded );
 		auto viewProj = proj * view;
 		auto & data = m_ubo.getData();
 		data.camViewProj = viewProj;

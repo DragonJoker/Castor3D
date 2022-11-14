@@ -100,7 +100,8 @@ namespace atmosphere_scattering
 			eCount,
 		};
 
-		static castor3d::ShaderPtr getProgram( VkExtent3D renderSize
+		static castor3d::ShaderPtr getProgram( castor3d::Engine const & engine
+			, VkExtent3D renderSize
 			, VkExtent3D const & transmittanceExtent )
 		{
 			ShaderWriter< useCompute >::Type writer;
@@ -123,7 +124,7 @@ namespace atmosphere_scattering
 			castor3d::shader::Utils utils{ writer };
 			AtmosphereModel atmosphere{ writer
 				, c3d_atmosphereData
-				, AtmosphereModel::Settings{}
+				, AtmosphereModel::Settings{ castor::Length::fromUnit( 1.0f, engine.getLengthUnit() ) }
 					.setCameraData( &c3d_cameraData )
 					.setVariableSampleCount( true )
 					.setMieRayPhase( true )
@@ -248,7 +249,7 @@ namespace atmosphere_scattering
 		, m_computeShader{ VK_SHADER_STAGE_COMPUTE_BIT
 			, getName()
 			, ( volclouds::useCompute
-				? volclouds::getProgram( getExtent( colourResult ), getExtent( transmittance ) )
+				? volclouds::getProgram( *device.renderSystem.getEngine(), getExtent( colourResult ), getExtent( transmittance ) )
 				: nullptr) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT
 			, getName()
@@ -259,7 +260,7 @@ namespace atmosphere_scattering
 			, getName()
 			, ( volclouds::useCompute
 				? nullptr
-				: volclouds::getProgram( getExtent( colourResult ), getExtent( transmittance ) ) ) }
+				: volclouds::getProgram( *device.renderSystem.getEngine(), getExtent( colourResult ), getExtent( transmittance ) ) ) }
 		, m_stages{ ( volclouds::useCompute
 			? ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, m_computeShader ) }
 			: ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, m_vertexShader )
