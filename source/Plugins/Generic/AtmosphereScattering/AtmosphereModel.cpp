@@ -44,8 +44,8 @@ namespace atmosphere_scattering
 
 	AtmosphereModel::AtmosphereModel( sdw::ShaderWriter & pwriter
 		, AtmosphereData const & patmosphereData
-		, Settings pluminanceSettings )
-		: AtmosphereModel{ pwriter, patmosphereData, pluminanceSettings, {} }
+		, Settings psettings )
+		: AtmosphereModel{ pwriter, patmosphereData, psettings, {} }
 	{
 	}
 
@@ -77,7 +77,7 @@ namespace atmosphere_scattering
 					auto depthBufferWorldPos = writer.declLocale( "depthBufferWorldPos"
 						, settings.cameraData->objProjToWorld( vec4( clipSpace, 1.0f ) ) );
 					depthBufferWorldPos /= depthBufferWorldPos.w();
-					writer.returnStmt( depthBufferWorldPos.xyz() / 1000.0_f );
+					writer.returnStmt( depthBufferWorldPos.xyz() * settings.length.kilometres() );
 				}
 				, sdw::InFloat{ writer, "depth" }
 				, sdw::InVec2{ writer, "pixPos" }

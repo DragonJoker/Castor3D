@@ -10,6 +10,8 @@ See LICENSE file in root folder
 #include <Castor3D/Shader/Shaders/GlslRay.hpp>
 #include <Castor3D/Shader/Ubos/MatrixUbo.hpp>
 
+#include <CastorUtils/Math/Length.hpp>
+
 #include <ShaderWriter/BaseTypes/Array.hpp>
 #include <ShaderWriter/BaseTypes/Int.hpp>
 #include <ShaderWriter/BaseTypes/CombinedImage.hpp>
@@ -108,7 +110,8 @@ namespace atmosphere_scattering
 	{
 		struct Settings
 		{
-			Settings()
+			Settings( castor::Length l )
+				: length{ std::move( l ) }
 			{
 			}
 
@@ -160,6 +163,7 @@ namespace atmosphere_scattering
 				return *this;
 			}
 
+			castor::Length length;
 			CameraData const * cameraData{};
 			bool useGround{};
 			bool variableSampleCount{};
@@ -310,7 +314,7 @@ namespace atmosphere_scattering
 
 	public:
 		AtmosphereData const & atmosphereData;
-		Settings settings{};
+		Settings settings;
 		VkExtent2D transmittanceExtent{};
 		sdw::Float planetRadiusOffset;
 		sdw::CombinedImage2DRgba32 const * transmittanceTexture{};

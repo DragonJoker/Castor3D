@@ -20,7 +20,8 @@ namespace atmosphere_scattering
 		: public castor3d::shader::BackgroundModel
 	{
 	public:
-		AtmosphereBackgroundModel( sdw::ShaderWriter & writer
+		AtmosphereBackgroundModel( castor3d::Engine const & engine
+			, sdw::ShaderWriter & writer
 			, castor3d::shader::Utils & utils
 			, VkExtent2D targetSize
 			, bool needsForeground

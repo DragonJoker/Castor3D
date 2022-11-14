@@ -21,7 +21,8 @@ namespace atmosphere_scattering
 
 	castor::String const AtmosphereBackgroundModel::Name = cuT( "c3d.atmosphere" );
 
-	AtmosphereBackgroundModel::AtmosphereBackgroundModel( sdw::ShaderWriter & writer
+	AtmosphereBackgroundModel::AtmosphereBackgroundModel( castor3d::Engine const & engine
+		, sdw::ShaderWriter & writer
 		, castor3d::shader::Utils & utils
 		, VkExtent2D targetSize
 		, bool needsForeground
@@ -38,7 +39,7 @@ namespace atmosphere_scattering
 		, atmosphereData{ model::getData< AtmosphereData >( atmosphereBuffer, AtmosphereScatteringUbo::Data ) }
 		, atmosphere{ m_writer
 			, atmosphereData
-			, AtmosphereModel::Settings{}
+			, AtmosphereModel::Settings{ castor::Length::fromUnit( 1.0f, engine.getLengthUnit() ) }
 				.setCameraData( &cameraData )
 				.setVariableSampleCount( true )
 				.setMieRayPhase( true )
@@ -62,7 +63,8 @@ namespace atmosphere_scattering
 		, uint32_t & binding
 		, uint32_t set )
 	{
-		return std::make_unique< AtmosphereBackgroundModel >( writer
+		return std::make_unique< AtmosphereBackgroundModel >( engine
+			, writer
 			, utils
 			, std::move( targetSize )
 			, needsForeground

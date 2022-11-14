@@ -31,7 +31,8 @@ namespace atmosphere_scattering
 			eCount,
 		};
 
-		static castor3d::ShaderPtr getProgram( uint32_t renderSize
+		static castor3d::ShaderPtr getProgram( castor3d::Engine const & engine
+			, uint32_t renderSize
 			, VkExtent3D const & transmittanceExtent )
 		{
 			sdw::ComputeWriter writer;
@@ -65,7 +66,7 @@ namespace atmosphere_scattering
 
 			AtmosphereModel atmosphere{ writer
 				, c3d_atmosphereData
-				, AtmosphereModel::Settings{}
+				, AtmosphereModel::Settings{ castor::Length::fromUnit( 1.0f, engine.getLengthUnit() ) }
 					.setUseGround( true )
 					.setIlluminanceIsOne( true )
 				, { transmittanceExtent.width, transmittanceExtent.height } };
@@ -250,7 +251,7 @@ namespace atmosphere_scattering
 		, crg::ImageViewId const & transmittanceLut
 		, crg::ImageViewId const & resultView
 		, bool const & enabled )
-		: m_computeShader{ VK_SHADER_STAGE_COMPUTE_BIT, "MultiScatteringPass", multiscatter::getProgram( getExtent( resultView ).width, getExtent( transmittanceLut ) ) }
+		: m_computeShader{ VK_SHADER_STAGE_COMPUTE_BIT, "MultiScatteringPass", multiscatter::getProgram( *device.renderSystem.getEngine(), getExtent( resultView ).width, getExtent( transmittanceLut ) ) }
 		, m_stages{ makeShaderState( device, m_computeShader ) }
 	{
 		auto renderSize = getExtent( resultView );
