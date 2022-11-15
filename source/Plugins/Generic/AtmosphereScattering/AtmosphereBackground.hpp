@@ -104,14 +104,24 @@ namespace atmosphere_scattering
 			return true;
 		}
 
-		void setNode( castor3d::SceneNode const & node )
+		void setSunNode( castor3d::SceneNode const & node )
 		{
-			m_node = &node;
+			m_sunNode = &node;
 		}
 
-		auto getNode()const
+		void setPlanetNode( castor3d::SceneNode const & node )
 		{
-			return m_node;
+			m_planetNode = &node;
+		}
+
+		auto getSunNode()const
+		{
+			return m_sunNode;
+		}
+
+		auto getPlanetNode()const
+		{
+			return m_planetNode;
 		}
 
 		void setAtmosphereCfg( AtmosphereScatteringConfig config )
@@ -234,7 +244,12 @@ namespace atmosphere_scattering
 			void accept( castor3d::PipelineVisitor & visitor );
 
 			void update( castor3d::CpuUpdater & updater
-				, castor::Point3f const & sunDirection )const;
+				, castor::Point3f const & sunDirection
+				, castor::Vector3f const & planetPosition )const;
+			void update( castor3d::Camera const & camera
+				, bool safeBanded
+				, castor::Point3f const & sunDirection
+				, castor::Vector3f const & planetPosition )const;
 
 			castor3d::Texture skyView;
 			castor3d::Texture volume;
@@ -252,7 +267,8 @@ namespace atmosphere_scattering
 		};
 
 	private:
-		castor3d::SceneNode const * m_node{};
+		castor3d::SceneNode const * m_sunNode{};
+		castor3d::SceneNode const * m_planetNode{};
 		// Clouds
 		WeatherConfig m_weatherCfg;
 		CloudsConfig m_cloudsCfg;

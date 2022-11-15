@@ -53,7 +53,13 @@ namespace castor
 				auto transmittance = background.getTransmittance().getExtent();
 				auto multiScatter = background.getMultiScatter().getExtent().width;
 				auto atmosphereVolume = background.getVolumeResolution();
-				result = write( file, "transmittanceResolution", transmittance.width, transmittance.height );
+				result = ( background.getSunNode()
+					? writeName( file, "sunNode", background.getSunNode()->getName() )
+					: true );
+				result = result && ( background.getPlanetNode()
+					? write( file, "planetNode", background.getPlanetNode()->getName() )
+					: true );
+				result = result && write( file, "transmittanceResolution", transmittance.width, transmittance.height );
 				result = result && write( file, "multiScatterResolution", multiScatter );
 				result = result && write( file, "atmosphereVolumeResolution", atmosphereVolume );
 
@@ -356,9 +362,24 @@ namespace atmosphere_scattering
 	}
 
 	void AtmosphereBackground::CameraPasses::update( castor3d::CpuUpdater & updater
-		, castor::Point3f const & sunDirection )const
+		, castor::Point3f const & sunDirection
+		, castor::Vector3f const & planetPosition )const
 	{
-		cameraUbo.cpuUpdate( *updater.camera, sunDirection, updater.isSafeBanded );
+		update( *updater.camera
+			, updater.isSafeBanded
+			, sunDirection
+			, planetPosition );
+	}
+
+	void AtmosphereBackground::CameraPasses::update( castor3d::Camera const & camera
+		, bool safeBanded
+		, castor::Point3f const & sunDirection
+		, castor::Vector3f const & planetPosition )const
+	{
+		cameraUbo.cpuUpdate( camera
+			, safeBanded
+			, sunDirection
+			, planetPosition );
 	}
 
 	//*********************************************************************************************
@@ -794,7 +815,17 @@ namespace atmosphere_scattering
 		m_hdr = true;
 		m_srgb = false;
 		m_timer.getElapsed();
-		return m_texture->initialise( device, *data );
+		auto result = m_texture->initialise( device, *data );
+
+		if ( result )
+		{
+			m_time = 0.0f;
+			m_atmosphereUbo->cpuUpdate( m_atmosphereCfg, *m_sunNode, *m_planetNode );
+			m_weatherUbo->cpuUpdate( m_weatherCfg );
+			m_cloudsUbo->cpuUpdate( m_cloudsCfg, m_time );
+		}
+
+		return result;
 	}
 
 	void AtmosphereBackground::doCleanup()
@@ -811,8 +842,9 @@ namespace atmosphere_scattering
 		m_cloudsChanged = m_first;
 		m_first = false;
 
-		CU_Require( m_node );
-		auto sunDirection = m_atmosphereUbo->cpuUpdate( m_atmosphereCfg, *m_node );
+		CU_Require( m_sunNode );
+		CU_Require( m_planetNode );
+		auto [sunDirection, planetPosition] = m_atmosphereUbo->cpuUpdate( m_atmosphereCfg, *m_sunNode, *m_planetNode );
 		auto time = updater.tslf > 0_ms
 			? updater.tslf
 			: std::chrono::duration_cast< castor::Milliseconds >( m_timer.getElapsed() );
@@ -824,7 +856,7 @@ namespace atmosphere_scattering
 		if ( it != m_cameraPasses.end() )
 		{
 			it->second->camAtmoChanged = m_atmosphereChanged;
-			it->second->update( updater, sunDirection );
+			it->second->update( updater, sunDirection, planetPosition );
 		}
 	}
 

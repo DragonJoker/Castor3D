@@ -337,7 +337,7 @@ namespace atmosphere_scattering
 					, fragPos
 					, fragSize ) );
 			auto tDepth = m_writer.declLocale( "tDepth"
-				, length( depthBufferWorldPos - ( worldPos + vec3( 0.0_f, -m_atmosphere.getEarthRadius(), 0.0_f ) ) ) );
+				, length( depthBufferWorldPos - worldPos ) );
 			auto slice = m_writer.declLocale( "slice"
 				, aerialPerspectiveDepthToSlice( tDepth ) );
 			auto weight = m_writer.declLocale( "weight"
@@ -394,7 +394,7 @@ namespace atmosphere_scattering
 		, sdw::Float const & maxAngle )const
 	{
 		auto sunZenithCosAngle = m_writer.declLocale( "sunZenithCosAngle"
-			, dot( sunDir, normalize( m_atmosphere.getCameraPositionFromEarth() ) ) );
+			, dot( sunDir, normalize( m_atmosphere.getCameraPosition() ) ) );
 		return minAngle * sunZenithCosAngle
 			+ maxAngle * ( 1.0_f - sunZenithCosAngle );
 	}

@@ -197,7 +197,7 @@ namespace atmosphere_scattering
 
 					IF( writer, viewHeight <= ( atmosphere.getEarthRadius() + planetRadiusOffset ) )
 					{
-						// Apply a position offset to make sure no artefact are visible close to the earth boundaries for large voxel.
+						// Apply a position offset to make sure no artifacts are visible close to the earth boundaries for large voxel.
 						newWorldPos = normalize( newWorldPos ) * ( atmosphere.getEarthRadius() + planetRadiusOffset + 0.001_f );
 						ray.direction = normalize( newWorldPos - ray.origin );
 						tMax = length( newWorldPos - ray.origin );
@@ -227,7 +227,7 @@ namespace atmosphere_scattering
 
 						IF( writer, tMaxMax < lengthToAtmosphere )
 						{
-							// tMaxMax for this voxel is not within earth atmosphere
+							// tMaxMax for this voxel is not within planet atmosphere
 							writer.returnStmt( vec4( 0.0_f, 0.0_f, 0.0_f, 1.0_f ) );
 						}
 						FI;

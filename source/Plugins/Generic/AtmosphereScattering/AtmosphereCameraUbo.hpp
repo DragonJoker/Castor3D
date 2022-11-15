@@ -22,10 +22,7 @@ namespace atmosphere_scattering
 {
 	struct CameraConfig
 	{
-		castor::Matrix4x4f camViewProj;
 		castor::Matrix4x4f camInvViewProj;
-		castor::Matrix4x4f camInvProj;
-		castor::Matrix4x4f camInvView;
 		castor::Matrix4x4f objInvViewProj;
 		castor::Point3f position;
 		float lightDotCameraFront;
@@ -36,10 +33,7 @@ namespace atmosphere_scattering
 	struct CameraData
 		: public sdw::StructInstanceHelperT< "C3D_ATM_CameraData"
 			, sdw::type::MemoryLayout::eStd140
-			, sdw::StructFieldT< sdw::Mat4, "camViewProj" >
 			, sdw::StructFieldT< sdw::Mat4, "camInvViewProj" >
-			, sdw::StructFieldT< sdw::Mat4, "camInvProj" >
-			, sdw::StructFieldT< sdw::Mat4, "camInvView" >
 			, sdw::StructFieldT< sdw::Mat4, "objInvViewProj" >
 			, sdw::StructFieldT< sdw::Vec3, "position" >
 			, sdw::StructFieldT< sdw::Float, "lightDotCameraFront" >
@@ -53,17 +47,13 @@ namespace atmosphere_scattering
 			, bool enabled );
 
 		sdw::Vec4 camProjToWorld( sdw::Vec4 const & pos )const;
-		sdw::Vec4 camWorldToProj( sdw::Vec4 const & pos )const;
 		sdw::Vec4 objProjToWorld( sdw::Vec4 const & pos )const;
 
 		auto position()const { return getMember< "position" >(); }
 		auto isLightInFront()const { return getMember< "isLightInFront" >(); }
 		auto lightDotCameraFront()const { return getMember< "lightDotCameraFront" >(); }
-		auto camInvProj()const { return getMember< "camInvProj" >(); }
-		auto camInvView()const { return getMember< "camInvView" >(); }
 
 	private:
-		auto camViewProj()const { return getMember< "camViewProj" >(); }
 		auto camInvViewProj()const { return getMember< "camInvViewProj" >(); }
 		auto objInvViewProj()const { return getMember< "objInvViewProj" >(); }
 	};
@@ -78,8 +68,9 @@ namespace atmosphere_scattering
 			, bool & dirty );
 		~CameraUbo();
 		void cpuUpdate( castor3d::Camera const & camera
+			, bool isSafeBanded
 			, castor::Point3f const & sunDirection
-			, bool isSafeBanded );
+			, castor::Vector3f const & planetPosition );
 
 		void createPassBinding( crg::FramePass & pass
 			, uint32_t binding )const

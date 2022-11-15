@@ -23,6 +23,8 @@ namespace atmosphere_scattering
 			, sdw::type::MemoryLayout::eStd430
 			, sdw::Vec3Field< "sunDirection" >
 			, sdw::FloatField< "pad0" >
+			, sdw::Vec3Field< "planetPosition" >
+			, sdw::FloatField< "pad1" >
 			, sdw::Vec3Field< "solarIrradiance" >
 			, sdw::FloatField< "sunAngularRadius" >
 			, sdw::Vec3Field< "sunIlluminance" >
@@ -81,6 +83,7 @@ namespace atmosphere_scattering
 
 	public:
 		auto sunDirection()const { return getMember< "sunDirection" >(); }
+		auto planetPosition()const { return getMember< "planetPosition" >(); }
 		auto solarIrradiance()const { return getMember< "solarIrradiance" >(); }
 		auto sunAngularRadius()const { return getMember< "sunAngularRadius" >(); }
 		auto sunIlluminance()const { return getMember< "sunIlluminance" >(); }
@@ -139,8 +142,9 @@ namespace atmosphere_scattering
 		AtmosphereScatteringUbo( castor3d::RenderDevice const & device
 			, bool & dirty );
 		~AtmosphereScatteringUbo();
-		castor::Point3f cpuUpdate( Configuration const & config
-			, castor3d::SceneNode const & node );
+		std::pair< castor::Point3f, castor::Vector3f > cpuUpdate( Configuration const & config
+			, castor3d::SceneNode const & sunNode
+			, castor3d::SceneNode const & planetNode );
 
 		void createPassBinding( crg::FramePass & pass
 			, uint32_t binding )const
@@ -170,6 +174,16 @@ namespace atmosphere_scattering
 			return m_ubo;
 		}
 
+		castor::Point3f const & getSunDirection()const
+		{
+			return m_sunDirection;
+		}
+
+		castor::Point3f const & getPlanetPosition()const
+		{
+			return m_planetPosition;
+		}
+
 	public:
 		static const castor::String Buffer;
 		static const castor::String Data;
@@ -180,6 +194,7 @@ namespace atmosphere_scattering
 		bool & m_dirty;
 		CheckedAtmosphereScatteringConfig m_config;
 		castor::GroupChangeTracked< castor::Point3f > m_sunDirection;
+		castor::GroupChangeTracked< castor::Point3f > m_planetPosition;
 		castor::GroupChangeTracked< castor::Point3f > m_mieAbsorption;
 	};
 }

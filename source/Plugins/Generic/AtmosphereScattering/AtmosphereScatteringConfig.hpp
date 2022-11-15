@@ -48,6 +48,7 @@ namespace atmosphere_scattering
 		template< typename ... ParamsT >
 		explicit AtmosphereScatteringConfigT( ParamsT & ... params )
 			: sunDirection{ 1.0f, 0.0f, 0.0f, -20.0_degrees }
+			, planetPosition{ 0.0f, 0.0f, 0.0f }
 			, solarIrradiance{ params..., castor::Point3f{ 1.0f, 1.0f, 1.0f } }
 			, sunAngularRadius{ params..., 0.004675f }
 			, sunIlluminance{ params..., castor::Point3f{ 1.0f, 1.0f, 1.0f } }
@@ -78,6 +79,7 @@ namespace atmosphere_scattering
 		AtmosphereScatteringConfigT & operator=( AtmosphereScatteringConfigT< WrapperU > const & rhs )
 		{
 			sunDirection = rhs.sunDirection;
+			planetPosition = rhs.planetPosition;
 			solarIrradiance = rhs.solarIrradiance;
 			sunAngularRadius = rhs.sunAngularRadius;
 			sunIlluminance = rhs.sunIlluminance;
@@ -103,6 +105,7 @@ namespace atmosphere_scattering
 		}
 
 		castor::Point4f sunDirection;
+		castor::Point4f planetPosition;
 
 		// The solar irradiance at the top of the atmosphere.
 		WrapperT< castor::Point3f > solarIrradiance;
