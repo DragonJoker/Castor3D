@@ -88,7 +88,7 @@ namespace castor3d::shader
 		reflectedSpecular = vec3( 0.0_f );
 	}
 
-	void BackgroundModel::applyForeground( sdw::Vec2 const fragCoord
+	void BackgroundModel::applyVolume( sdw::Vec2 const fragCoord
 		, sdw::Float const linearDepth
 		, sdw::Vec2 const targetSize
 		, sdw::Vec2 const cameraPlanes
