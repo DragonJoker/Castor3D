@@ -46,18 +46,20 @@ namespace atmosphere_scattering
 	{
 	}
 
-	sdw::Void CloudsModel::applyClouds( castor3d::shader::Ray const & pray
+	sdw::RetVec4 CloudsModel::applyClouds( castor3d::shader::Ray const & pray
 		, sdw::IVec2 const & pfragCoord
-		, sdw::Vec4 & pskyColor
-		, sdw::Vec4 & pemission )
+		, sdw::Vec3 const & psunLuminance
+		, sdw::Vec3 & pskyLuminance
+		, sdw::Float & pskyBlendFactor )
 	{
 		if ( !m_applyClouds )
 		{
-			m_applyClouds = writer.implementFunction< sdw::Void >( "clouds_apply"
+			m_applyClouds = writer.implementFunction< sdw::Vec4 >( "clouds_apply"
 				, [&]( castor3d::shader::Ray const & ray
 					, sdw::IVec2 const & fragCoord
-					, sdw::Vec4 skyColor
-					, sdw::Vec4 emission )
+					, sdw::Vec3 const & sunLuminance
+					, sdw::Vec3 skyLuminance
+					, sdw::Float skyBlendFactor )
 				{
 					auto startPos0 = writer.declLocale( "startPos0"
 						, vec3( 0.0_f ) );
@@ -92,8 +94,7 @@ namespace atmosphere_scattering
 						// Ray below clouds boundaries.
 						IF( writer, interGround.valid() )
 						{
-							//emission = skyColor;
-							writer.returnStmt();
+							writer.returnStmt( vec4( 0.0_f ) );
 						}
 						FI;
 
@@ -101,7 +102,7 @@ namespace atmosphere_scattering
 						endPos0 = interOuterN.point();
 						fogRay0 = startPos0;
 					}
-					ELSEIF( ray.origin.y() > cloudsInnerRadius
+					ELSEIF( ray.origin.y() >= cloudsInnerRadius
 						&& ray.origin.y() < cloudsOuterRadius )
 					{
 						// Ray inside clouds boundaries.
@@ -145,81 +146,83 @@ namespace atmosphere_scattering
 					}
 					FI;
 
-					auto sunColor = writer.declLocale( "sunColor"
+					auto sunRadiance = writer.declLocale( "sunRadiance"
 						, 3.0_f * scattering.getSunRadiance( atmosphere.getSunDirection() ) );
 
 					// Compute fog amount.
-					auto fogAmount = writer.declLocale( "fogAmount"
+					auto fogAmount0 = writer.declLocale( "fogAmount0"
 						, computeFogAmount( fogRay0, ray.origin, 2.0_f ) );
-					auto earthShadow = writer.declLocale( "earthShadow"
+					auto earthShadow0 = writer.declLocale( "earthShadow"
 						, 0.0_f );
 					auto rayMarchResult = writer.declLocale( "rayMarchResult"
 						, raymarchToCloud( ray
 							, startPos0
 							, endPos0
-							, skyColor.rgb()
 							, fragCoord
-							, sunColor
-							, earthShadow ) );
-					skyColor = computeLighting( ray
-						, skyColor.rgb()
-						, sunColor
-						, fogAmount
-						, earthShadow
-						, rayMarchResult );
-					//emission = computeEmission( ray
-					//	, startPos0
-					//	, sunColor
-					//	, earthShadow
-					//	, rayMarchResult );
-					//emission.rgb() *= skyColor.a();
+							, sunRadiance
+							, earthShadow0 ) );
+					auto skyLuminance0 = writer.declLocale( "skyLuminance0"
+						, skyLuminance );
+					auto result = writer.declLocale( "result"
+						, computeLighting( ray
+							, sunRadiance
+							, sunLuminance
+							, skyLuminance0
+							, 1.0_f - fogAmount0
+							, earthShadow0
+							, rayMarchResult ) );
 
 					IF( writer, secondRay )
 					{
 						// Compute fog amount.
-						fogAmount = computeFogAmount( fogRay1, ray.origin, 0.006_f );
+						auto fogAmount1 = writer.declLocale( "fogAmount1"
+							, computeFogAmount( fogRay1, ray.origin, 0.006_f ) );
 
-						IF( writer, fogAmount <= 0.965_f )
+						IF( writer, fogAmount1 <= 0.965_f )
 						{
-							earthShadow = 0.0_f;
+							auto earthShadow1 = writer.declLocale( "earthShadow1"
+								, 0.0_f );
 							rayMarchResult = raymarchToCloud( ray
 								, startPos1
 								, endPos1
-								, skyColor.rgb()
 								, fragCoord
-								, sunColor
-								, earthShadow );
+								, sunRadiance
+								, earthShadow1 );
+							auto skyLuminance1 = writer.declLocale( "skyLuminance1"
+								, skyLuminance );
 							auto lightingResult = writer.declLocale( "lightingResult"
 								, computeLighting( ray
-									, skyColor.rgb()
-									, sunColor
-									, fogAmount
-									, earthShadow
+									, sunRadiance
+									, sunLuminance
+									, skyLuminance1
+									, 1.0_f - fogAmount1
+									, earthShadow1
 									, rayMarchResult ) );
-							//auto emissionResult = writer.declLocale( "emissionResult"
-							//	, computeEmission( ray
-							//		, startPos1
-							//		, sunColor
-							//		, earthShadow
-							//		, rayMarchResult ) );
-							//emissionResult.rgb() *= lightingResult.a();
-							skyColor = max( skyColor, lightingResult );
-							//emission = max( emission, emissionResult );
+							result = max( result, lightingResult );
+							earthShadow0 = max( earthShadow0, earthShadow1 );
+							fogAmount0 = max( fogAmount0, fogAmount1 );
+							skyLuminance0 = max( skyLuminance0, skyLuminance1 );
 						}
 						FI;
 					}
 					FI;
+
+					skyLuminance = skyLuminance0;
+					skyBlendFactor = earthShadow0 * fogAmount0;
+					writer.returnStmt( result );
 				}
 				, castor3d::shader::InRay{ writer, "ray" }
 				, sdw::InIVec2{ writer, "fragCoord" }
-				, sdw::InOutVec4{ writer, "skyColor" }
-				, sdw::OutVec4{ writer, "emission" } );
+				, sdw::InVec3{ writer, "sunLuminance" }
+				, sdw::InOutVec3{ writer, "skyLuminance" }
+				, sdw::OutFloat{ writer, "skyBlendFactor" } );
 		}
 
 		return m_applyClouds( pray
 			, pfragCoord
-			, pskyColor
-			, pemission );
+			, psunLuminance
+			, pskyLuminance
+			, pskyBlendFactor );
 	}
 
 	sdw::Vec2 CloudsModel::getSphericalProjection( sdw::Vec3 const & p )
@@ -595,7 +598,6 @@ namespace atmosphere_scattering
 	sdw::RetVec4 CloudsModel::raymarchToCloud( Ray const & pray
 		, sdw::Vec3 const & pstartPos
 		, sdw::Vec3 const & pendPos
-		, sdw::Vec3 const & pbg
 		, sdw::IVec2 const & pfragCoord
 		, sdw::Vec3 const & psunColor
 		, sdw::Float & pearthShadow )
@@ -606,7 +608,6 @@ namespace atmosphere_scattering
 				, [&]( Ray const & ray
 					, sdw::Vec3 startPos
 					, sdw::Vec3 const & endPos
-					, sdw::Vec3 const & bg
 					, sdw::IVec2 const & fragCoord
 					, sdw::Vec3 const & sunColor
 					, sdw::Float earthShadow )
@@ -701,13 +702,13 @@ namespace atmosphere_scattering
 					ELIHW;
 
 					earthShadow /= writer.cast< sdw::Float >( max( 1_i, i ) );
+					earthShadow = min( 1.0_f, earthShadow );
 					result.a() = accumDensity;
 					writer.returnStmt( result );
 				}
 				, InRay{ writer, "ray" }
 				, sdw::InVec3{ writer, "startPos" }
 				, sdw::InVec3{ writer, "endPos" }
-				, sdw::InVec3{ writer, "bg" }
 				, sdw::InIVec2{ writer, "fragCoord" }
 				, sdw::InVec3{ writer, "sunColor" }
 				, sdw::OutFloat{ writer, "earthShadow" } );
@@ -716,7 +717,6 @@ namespace atmosphere_scattering
 		return m_raymarchToCloud( pray
 			, pstartPos
 			, pendPos
-			, pbg
 			, pfragCoord
 			, psunColor
 			, pearthShadow );
@@ -810,9 +810,10 @@ namespace atmosphere_scattering
 	}
 
 	sdw::RetVec4 CloudsModel::computeLighting( Ray const & pray
-		, sdw::Vec3 const & pskyColor
-		, sdw::Vec3 const & psunColor
-		, sdw::Float const & pfogAmount
+		, sdw::Vec3 const & psunRadiance
+		, sdw::Vec3 const & psunLuminance
+		, sdw::Vec3 & pskyLuminance
+		, sdw::Float const & pfadeOut
 		, sdw::Float const & pearthShadow
 		, sdw::Vec4 const & prayMarchResult )
 	{
@@ -820,15 +821,16 @@ namespace atmosphere_scattering
 		{
 			m_computeLighting = writer.implementFunction< sdw::Vec4 >( "clouds_computeLighting"
 				, [&]( Ray const & ray
-					, sdw::Vec3 const & skyColor
-					, sdw::Vec3 const & sunColor
-					, sdw::Float const & fogAmount
+					, sdw::Vec3 const & sunRadiance
+					, sdw::Vec3 const & sunLuminance
+					, sdw::Vec3 skyLuminance
+					, sdw::Float const & fadeOut
 					, sdw::Float const & earthShadow
 					, sdw::Vec4 const & rayMarchResult )
 				{
-					auto density = writer.declLocale( "density"
+					auto cloudsDensity = writer.declLocale( "cloudsDensity"
 						, clamp( rayMarchResult.a(), 0.0_f, 1.0_f ) );
-					auto cloudColor = writer.declLocale( "cloudColor"
+					auto cloudsColour = writer.declLocale( "cloudsColour"
 						, rayMarchResult.rgb() );
 
 					// add sun glare to clouds
@@ -837,101 +839,41 @@ namespace atmosphere_scattering
 							, 0.0_f
 							, 1.0_f ) );
 					auto sunGlare = writer.declLocale( "sunGlare"
-						, sunColor * pow( sunIntensity, 256.0_f ) );
+						, sunRadiance * pow( sunIntensity, 256.0_f ) );
 					auto sunGlareIntensity = writer.declLocale( "sunGlareIntensity"
-						, ( 1.0_f - density ) );
+						, ( 1.0_f - cloudsDensity ) );
 					auto minGlare = 0.5_f;
 					sunGlareIntensity = utils.remap( sunGlareIntensity, 0.0_f, 1.0_f, minGlare, 1.0_f );
-					cloudColor += sunGlare * ( sunGlareIntensity - minGlare );
+					cloudsColour += sunGlare * ( sunGlareIntensity - minGlare );
 
 					// Fade out clouds into the horizon.
 					auto cubeMapEndPos = writer.declLocale( "cubeMapEndPos"
 						, raySphereintersectSkyMap( ray.direction, 0.5_f ).point() );
-					cloudColor = mix( vec3( 1.0_f )
-						, cloudColor
+					cloudsColour = mix( vec3( 1.0_f )
+						, cloudsColour
 						, vec3( pow( max( cubeMapEndPos.y() + 0.1_f, 0.0_f ), 0.2_f ) ) );
 
-					// Display sun disk
-					auto sunDisk = writer.declLocale( "sunDisk"
-						, scattering.getSunLuminance( ray ) );
-					auto finalSkyColor = writer.declLocale( "finalSkyColor"
-						, skyColor + sunDisk * ( sunGlareIntensity - minGlare ) );
-					auto lightFactor = writer.declLocale( "lightFactor"
-						, min( 1.0_f, earthShadow ) );
-					auto fadeOut = writer.declLocale( "fadeOut"
-						, 1.0_f - fogAmount );
-
-#if !Debug_CloudsRadius
-					// Blend background and clouds.
-					cloudColor = mix( mix( finalSkyColor, clouds.bottomColor(), vec3( clouds.coverage() ) )
-						, cloudColor
+					skyLuminance += sunLuminance * ( sunGlareIntensity - minGlare );
+					cloudsColour = mix( vec3( 0.0_f )
+						, cloudsColour
 						, vec3( fadeOut ) );
-					density = max( density, ( 1.0_f - fadeOut ) );
-#endif
-
-					writer.returnStmt( vec4( mix( finalSkyColor
-							, lightFactor * cloudColor
-							, vec3( density ) )
-						, fadeOut ) );
+					cloudsDensity = max( cloudsDensity, ( 1.0_f - fadeOut ) );
+					writer.returnStmt( vec4( earthShadow * cloudsColour, cloudsDensity ) );
 				}
 				, InRay{ writer, "ray" }
-				, sdw::InVec3{ writer, "skyColor" }
-				, sdw::InVec3{ writer, "sunColor" }
-				, sdw::InFloat{ writer, "fogAmount" }
+				, sdw::InVec3{ writer, "sunRadiance" }
+				, sdw::InVec3{ writer, "sunLuminance" }
+				, sdw::InOutVec3{ writer, "skyLuminance" }
+				, sdw::InFloat{ writer, "fadeOut" }
 				, sdw::InFloat{ writer, "earthShadow" }
 				, sdw::InVec4{ writer, "rayMarchResult" } );
 		}
 
 		return m_computeLighting( pray
-			, pskyColor
-			, psunColor
-			, pfogAmount
-			, pearthShadow
-			, prayMarchResult );
-	}
-
-	sdw::RetVec4 CloudsModel::computeEmission( Ray const & pray
-		, sdw::Vec3 const & pstartPos
-		, sdw::Vec3 const & psunColor
-		, sdw::Float const & pearthShadow
-		, sdw::Vec4 const & prayMarchResult )
-	{
-		if ( !m_computeEmission )
-		{
-			m_computeEmission = writer.implementFunction< sdw::Vec4 >( "clouds_computeEmission"
-				, [&]( Ray const & ray
-					, sdw::Vec3 const & startPos
-					, sdw::Vec3 const & sunColor
-					, sdw::Float const & earthShadow
-					, sdw::Vec4 const & rayMarchResult )
-				{
-					auto bloom = writer.declLocale( "bloom"
-						, vec3( sunColor ) );
-
-					IF( writer, rayMarchResult.a() > 0.1_f )
-					{
-						//apply fog to bloom buffer
-						auto fogAmount = writer.declLocale( "fogAmount"
-							, computeFogAmount( startPos, ray.origin, 0.01_f ) );
-						auto cloud = writer.declLocale( "cloud"
-							, mix( vec3( 0.0_f ), bloom, vec3( clamp( fogAmount, 0.0_f, 1.0_f ) ) ) );
-						bloom = bloom * ( 1.0_f - rayMarchResult.a() ) + cloud;
-						bloom *= earthShadow;
-					}
-					FI;
-
-					writer.returnStmt( vec4( bloom, clouds.coverage() ) );
-				}
-				, InRay{ writer, "ray" }
-				, sdw::InVec3{ writer, "startPos" }
-				, sdw::InVec3{ writer, "sunColor" }
-				, sdw::InFloat{ writer, "earthShadow" }
-				, sdw::InVec4{ writer, "rayMarchResult" } );
-		}
-
-		return m_computeEmission( pray
-			, pstartPos
-			, psunColor
+			, psunRadiance
+			, psunLuminance
+			, pskyLuminance
+			, pfadeOut
 			, pearthShadow
 			, prayMarchResult );
 	}

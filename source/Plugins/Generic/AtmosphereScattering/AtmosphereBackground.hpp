@@ -238,8 +238,9 @@ namespace atmosphere_scattering
 
 			castor3d::Texture skyView;
 			castor3d::Texture volume;
+			castor3d::Texture skyColour;
+			castor3d::Texture sunColour;
 			castor3d::Texture cloudsColour;
-			castor3d::Texture cloudsEmission;
 			castor3d::Texture cloudsResult;
 			mutable bool camAtmoChanged{ true };
 			mutable CameraUbo cameraUbo;

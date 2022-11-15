@@ -23,8 +23,10 @@ namespace atmosphere_scattering
 			, castor3d::RenderDevice const & device
 			, CameraUbo const & cameraUbo
 			, AtmosphereScatteringUbo const & atmosphereUbo
+			, CloudsUbo const & cloudsUbo
+			, crg::ImageViewId const & sky
+			, crg::ImageViewId const & sun
 			, crg::ImageViewId const & clouds
-			, crg::ImageViewId const & emission
 			, crg::ImageViewId const & resultView
 			, uint32_t index );
 		void accept( castor3d::PipelineVisitor & visitor );

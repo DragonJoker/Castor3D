@@ -209,21 +209,25 @@ namespace atmosphere_scattering
 
 		auto getCameraPosition()const
 		{
+			CU_Require( settings.cameraData );
 			return settings.cameraData->position();
 		}
 
 		auto camProjToWorld( sdw::Vec4 const & clipSpace )const
 		{
+			CU_Require( settings.cameraData );
 			return settings.cameraData->camProjToWorld( clipSpace );
 		}
 
 		auto camProjToView( sdw::Vec4 const & clipSpace )const
 		{
+			CU_Require( settings.cameraData );
 			return settings.cameraData->camInvProj() * clipSpace;
 		}
 
 		auto camViewToWorld( sdw::Vec4 const & viewSpace )const
 		{
+			CU_Require( settings.cameraData );
 			return settings.cameraData->camInvView()  * viewSpace;
 		}
 

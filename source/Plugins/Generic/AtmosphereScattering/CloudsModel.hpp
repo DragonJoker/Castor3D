@@ -33,10 +33,11 @@ namespace atmosphere_scattering
 			, CloudsData const & clouds
 			, uint32_t & binding
 			, uint32_t set );
-		sdw::Void applyClouds( castor3d::shader::Ray const & ray
+		sdw::RetVec4 applyClouds( castor3d::shader::Ray const & ray
 			, sdw::IVec2 const & fragCoord
-			, sdw::Vec4 & skyColor
-			, sdw::Vec4 & emission );
+			, sdw::Vec3 const & sunLuminance
+			, sdw::Vec3 & skyLuminance
+			, sdw::Float & skyBlendFactor );
 
 	private:
 		sdw::Vec2 getSphericalProjection( sdw::Vec3 const & p );
@@ -68,7 +69,6 @@ namespace atmosphere_scattering
 		sdw::RetVec4 raymarchToCloud( Ray const & ray
 			, sdw::Vec3 const & startPos
 			, sdw::Vec3 const & endPos
-			, sdw::Vec3 const & skyColor
 			, sdw::IVec2 const & fragCoord
 			, sdw::Vec3 const & sunColor
 			, sdw::Float & earthShadow );
@@ -86,14 +86,10 @@ namespace atmosphere_scattering
 		sdw::RetFloat henyeyGreensteinPhase( sdw::Float const & g
 			, sdw::Float const & cosTheta );
 		sdw::RetVec4 computeLighting( Ray const & ray
-			, sdw::Vec3 const & skyColor
-			, sdw::Vec3 const & sunColor
-			, sdw::Float const & fogAmount
-			, sdw::Float const & earthShadow
-			, sdw::Vec4 const & rayMarchResult );
-		sdw::RetVec4 computeEmission( Ray const & ray
-			, sdw::Vec3 const & startPos
-			, sdw::Vec3 const & sunColor
+			, sdw::Vec3 const & sunRadiance
+			, sdw::Vec3 const & sunLuminance
+			, sdw::Vec3 & skyLuminance
+			, sdw::Float const & fadeOut
 			, sdw::Float const & earthShadow
 			, sdw::Vec4 const & rayMarchResult );
 		sdw::Float getLightEnergy( sdw::Float cosTheta
@@ -156,7 +152,6 @@ namespace atmosphere_scattering
 			, InRay
 			, sdw::InVec3
 			, sdw::InVec3
-			, sdw::InVec3
 			, sdw::InIVec2
 			, sdw::InVec3
 			, sdw::OutFloat > m_raymarchToCloud;
@@ -177,20 +172,16 @@ namespace atmosphere_scattering
 			, InRay
 			, sdw::InVec3
 			, sdw::InVec3
+			, sdw::InOutVec3
 			, sdw::InFloat
 			, sdw::InFloat
 			, sdw::InVec4 > m_computeLighting;
 		sdw::Function< sdw::Vec4
-			, InRay
-			, sdw::InVec3
-			, sdw::InVec3
-			, sdw::InFloat
-			, sdw::InVec4 > m_computeEmission;
-		sdw::Function< sdw::Void
 			, castor3d::shader::InRay
 			, sdw::InIVec2
-			, sdw::InOutVec4
-			, sdw::OutVec4 > m_applyClouds;
+			, sdw::InVec3
+			, sdw::InOutVec3
+			, sdw::OutFloat > m_applyClouds;
 		sdw::Function< sdw::Int
 			, InRay
 			, sdw::InFloat

@@ -189,9 +189,9 @@ namespace atmosphere_scattering
 			, VK_FILTER_LINEAR
 			, VK_FILTER_LINEAR
 			, VK_SAMPLER_MIPMAP_MODE_NEAREST }
-		, cloudsColour{ device
+		, skyColour{ device
 			, graph.getHandler()
-			, "CloudsColour" + std::to_string( index )
+			, "SkyColour" + std::to_string( index )
 			, 0u
 			, { size.width, size.height, 1u }
 			, 1u
@@ -202,9 +202,22 @@ namespace atmosphere_scattering
 			, VK_FILTER_LINEAR
 			, VK_SAMPLER_MIPMAP_MODE_NEAREST
 			, VK_SAMPLER_ADDRESS_MODE_REPEAT }
-		, cloudsEmission{ device
+		, sunColour{ device
 			, graph.getHandler()
-			, "CloudsEmission" + std::to_string( index )
+			, "SunColour" + std::to_string( index )
+			, 0u
+			, { size.width, size.height, 1u }
+			, 1u
+			, 1u
+			, VK_FORMAT_R16G16B16A16_SFLOAT
+			, VK_IMAGE_USAGE_STORAGE_BIT | VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+			, VK_FILTER_LINEAR
+			, VK_FILTER_LINEAR
+			, VK_SAMPLER_MIPMAP_MODE_NEAREST
+			, VK_SAMPLER_ADDRESS_MODE_REPEAT }
+		, cloudsColour{ device
+			, graph.getHandler()
+			, "CloudsColour" + std::to_string( index )
 			, 0u
 			, { size.width, size.height, 1u }
 			, 1u
@@ -261,23 +274,27 @@ namespace atmosphere_scattering
 			, worley
 			, curl
 			, weather
+			, skyColour.targetViewId
+			, sunColour.targetViewId
 			, cloudsColour.targetViewId
-			, cloudsEmission.targetViewId
 			, index ) }
 		, cloudsResolvePass{ std::make_unique< CloudsResolvePass >( graph
 			, crg::FramePassArray{ &volumetricCloudsPass->getLastPass() }
 			, device
 			, cameraUbo
 			, atmosphereUbo
+			, cloudsUbo
+			, skyColour.sampledViewId
+			, sunColour.sampledViewId
 			, cloudsColour.sampledViewId
-			, cloudsEmission.sampledViewId
 			, cloudsResult.targetViewId
 			, index ) }
 	{
 		skyView.create();
 		volume.create();
+		skyColour.create();
+		sunColour.create();
 		cloudsColour.create();
-		cloudsEmission.create();
 		cloudsResult.create();
 		auto & pass = graph.createPass( "Background"
 			, [&background, &backgroundPass, &device, size]( crg::FramePass const & framePass
@@ -311,7 +328,8 @@ namespace atmosphere_scattering
 		skyView.destroy();
 		volume.destroy();
 		cloudsColour.destroy();
-		cloudsEmission.destroy();
+		sunColour.destroy();
+		skyColour.destroy();
 		cloudsResult.destroy();
 	}
 
@@ -321,12 +339,16 @@ namespace atmosphere_scattering
 			, skyView.sampledViewId
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, castor3d::TextureFactors{}.invert( true ) );
-		visitor.visit( "Clouds Colour"
-			, cloudsColour
+		visitor.visit( "Sky Colour"
+			, skyColour
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, castor3d::TextureFactors{}.invert( true ) );
-		visitor.visit( "Clouds Emission"
-			, cloudsEmission
+		visitor.visit( "Sun Colour"
+			, sunColour
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, castor3d::TextureFactors{}.invert( true ) );
+		visitor.visit( "Clouds Colour"
+			, cloudsColour
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, castor3d::TextureFactors{}.invert( true ) );
 		visitor.visit( "Clouds Result"

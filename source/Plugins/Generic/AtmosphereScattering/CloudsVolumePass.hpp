@@ -32,8 +32,9 @@ namespace atmosphere_scattering
 			, crg::ImageViewId const & worley
 			, crg::ImageViewId const & curl
 			, crg::ImageViewId const & weather
-			, crg::ImageViewId const & colourResult
-			, crg::ImageViewId const & emissionResult
+			, crg::ImageViewId const & skyResult
+			, crg::ImageViewId const & sunResult
+			, crg::ImageViewId const & cloudsResult
 			, uint32_t index );
 		void accept( castor3d::PipelineVisitor & visitor );
 

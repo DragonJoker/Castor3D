@@ -1,6 +1,7 @@
 #include "AtmosphereScattering/CloudsResolvePass.hpp"
 
 #include "AtmosphereScattering/AtmosphereCameraUbo.hpp"
+#include "AtmosphereScattering/AtmosphereModel.hpp"
 #include "AtmosphereScattering/AtmosphereScatteringUbo.hpp"
 
 #include <Castor3D/Engine.hpp>
@@ -8,6 +9,8 @@
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/RenderTechniqueVisitor.hpp>
 #include <Castor3D/Shader/Program.hpp>
+#include <Castor3D/Shader/Shaders/GlslRay.hpp>
+#include <Castor3D/Shader/Shaders/GlslUtils.hpp>
 
 #include <RenderGraph/RunnableGraph.hpp>
 #include <RenderGraph/RunnablePasses/RenderQuad.hpp>
@@ -29,7 +32,9 @@ namespace atmosphere_scattering
 			eCamera,
 			eAtmosphere,
 			eClouds,
-			eEmissions,
+			eMapSky,
+			eMapSun,
+			eMapClouds,
 			eCount,
 		};
 
@@ -49,9 +54,11 @@ namespace atmosphere_scattering
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static castor3d::ShaderPtr getPixelProgram( VkExtent3D renderSize )
+		static castor3d::ShaderPtr getPixelProgram( castor3d::Engine const & engine
+			, VkExtent3D renderSize )
 		{
 			sdw::FragmentWriter writer;
+			castor3d::shader::Utils utils{ writer };
 
 			C3D_Camera( writer
 				, uint32_t( Bindings::eCamera )
@@ -59,12 +66,23 @@ namespace atmosphere_scattering
 			C3D_AtmosphereScattering( writer
 				, uint32_t( Bindings::eAtmosphere )
 				, 0u );
-			auto cloudsMap = writer.declCombinedImg< sdw::CombinedImage2DRgba32 >("cloudsMap"
+			C3D_Clouds( writer
 				, uint32_t( Bindings::eClouds )
 				, 0u );
-			auto emissionsMap = writer.declCombinedImg< sdw::CombinedImage2DRgba32 >("emissionsMap"
-				, uint32_t( Bindings::eEmissions )
+			auto skyMap = writer.declCombinedImg< sdw::CombinedImage2DRgba32 >("skyMap"
+				, uint32_t( Bindings::eMapSky )
 				, 0u );
+			auto sunMap = writer.declCombinedImg< sdw::CombinedImage2DRgba32 >("sunMap"
+				, uint32_t( Bindings::eMapSun )
+				, 0u );
+			auto cloudsMap = writer.declCombinedImg< sdw::CombinedImage2DRgba32 >( "cloudsMap"
+				, uint32_t( Bindings::eMapClouds )
+				, 0u );
+
+			AtmosphereModel atmosphere{ writer
+				, c3d_atmosphereData
+				, AtmosphereModel::Settings{ castor::Length::fromUnit( 1.0f, engine.getLengthUnit() ) }
+					.setCameraData( &c3d_cameraData ) };
 
 			auto fragColour = writer.declOutput< sdw::Vec4 >( "fragColour", 0u );
 
@@ -113,6 +131,28 @@ namespace atmosphere_scattering
 					writer.returnStmt( fma( ndcPos.xy(), vec2( 0.5_f ), vec2( 0.5_f ) ) );
 				} );
 
+			auto computeLighting = writer.implementFunction< sdw::Vec4 >( "computeLighting"
+				, [&]( sdw::Vec4 skyColor
+					, sdw::Vec3 cloudsColor
+					, sdw::Float const & skyBlendFactor
+					, sdw::Float const & cloudsDensity )
+				{
+					// Blend background and clouds.
+					auto blendSkyColor = writer.declLocale( "blendSkyColor"
+						, mix( skyColor.rgb()
+							, c3d_cloudsData.bottomColor()
+							, vec3( c3d_cloudsData.coverage() ) ) );
+
+					writer.returnStmt( vec4( mix( skyColor.rgb()
+							, cloudsColor + ( skyBlendFactor * blendSkyColor )
+							, vec3( cloudsDensity ) )
+						, skyColor.a() ) );
+				}
+				, sdw::InVec4{ writer, "skyColor" }
+				, sdw::InVec3{ writer, "cloudsColor" }
+				, sdw::InFloat{ writer, "skyBlendFactor" }
+				, sdw::InFloat{ writer, "cloudsDensity" } );
+
 			writer.implementMainT< sdw::VoidT, sdw::VoidT >( sdw::FragmentIn{ writer }
 				, sdw::FragmentOut{ writer }
 				, [&]( sdw::FragmentIn in
@@ -121,64 +161,26 @@ namespace atmosphere_scattering
 					auto texCoords = writer.declLocale( "texCoords"
 						, vec2( in.fragCoord.xy() ) / targetSize );
 					texCoords.y() = 1.0_f - texCoords.y();
-					fragColour = gaussianBlur( cloudsMap, texCoords );
-					fragColour += emissionsMap.sample( texCoords );
-/*
-					// RADIAL BLUR - CREPUSCOLAR RAYS
-					IF( writer, c3d_cameraData.lightDotCameraFront() > 0.0_f )
+
+					auto sky = writer.declLocale( "sky"
+						, skyMap.sample( texCoords ) );
+					auto sun = writer.declLocale( "sun"
+						, sunMap.sample( texCoords ) );
+
+					IF( writer, c3d_cloudsData.coverage() > 0.0_f )
 					{
-						auto lightUV = writer.declLocale( "lightPos"
-							, getSunUVPos() );
-
-						// Screen coordinates.
-						auto uv = writer.declLocale( "uv"
-							, vec2( in.fragCoord.xy() ) / targetSize );
-
-						auto colResult = writer.declLocale( "colResult"
-							, emissionsMap.sample( uv ) );
-
-						IF( writer, colResult.a() > 0.0_f )
-						{
-							// Radial blur factors.
-							//
-							auto decay = 0.98_f;
-							auto density = 0.9_f;
-							auto weight = 0.07_f;
-							auto exposure = 0.15_f;
-							const int SAMPLES = 64;
-
-							// Light offset. 
-							auto l = writer.declLocale( "l"
-								, vec3( lightUV, 0.5_f ) );
-
-							auto illuminationDecay = writer.declLocale( "illuminationDecay"
-								, 1.0_f );
-
-							auto dTuv = writer.declLocale( "dTuv"
-								, uv - lightUV );
-							dTuv *= density / float( SAMPLES );
-
-							auto colRays = writer.declLocale( "colRays"
-								, colResult.rgb() * 0.4_f );
-
-							FOR( writer, sdw::Int, i, 0, i < SAMPLES, i++ )
-							{
-								uv -= dTuv;
-								colRays += emissionsMap.sample( uv ).rgb() * illuminationDecay * weight;
-								illuminationDecay *= decay;
-							}
-							ROF;
-
-							auto colorWithRays = writer.declLocale( "colorWithRays"
-								, fragColour.rgb() + ( smoothStep( vec3( 0.0_f ), vec3( 1.0_f ), colRays ) * exposure ) );
-							fragColour.rgb() = mix( fragColour.rgb()
-								, colorWithRays * 0.9_f
-								, vec3( c3d_cameraData.lightDotCameraFront() * c3d_cameraData.lightDotCameraFront() ) );
-						}
-						FI;
+						auto clouds = writer.declLocale( "clouds"
+							, gaussianBlur( cloudsMap, texCoords ) );
+						fragColour = computeLighting( sky
+							, clouds.rgb()
+							, sky.a()
+							, clouds.a() );
+					}
+					ELSE
+					{
+						fragColour = sky + sun;
 					}
 					FI;
-*/
 				} );
 
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -192,13 +194,15 @@ namespace atmosphere_scattering
 		, castor3d::RenderDevice const & device
 		, CameraUbo const & cameraUbo
 		, AtmosphereScatteringUbo const & atmosphereUbo
+		, CloudsUbo const & cloudsUbo
+		, crg::ImageViewId const & sky
+		, crg::ImageViewId const & sun
 		, crg::ImageViewId const & clouds
-		, crg::ImageViewId const & emission
 		, crg::ImageViewId const & resultView
 		, uint32_t index )
 		: castor::Named{ "Clouds/ResolvePass" + castor::string::toString( index ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), cloudsres::getVertexProgram() }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), cloudsres::getPixelProgram( getExtent( resultView ) ) }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), cloudsres::getPixelProgram( *device.renderSystem.getEngine(), getExtent( resultView ) ) }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
 	{
@@ -221,10 +225,14 @@ namespace atmosphere_scattering
 			, cloudsres::eCamera );
 		atmosphereUbo.createPassBinding( pass
 			, cloudsres::eAtmosphere );
-		pass.addSampledView( clouds
+		cloudsUbo.createPassBinding( pass
 			, cloudsres::eClouds );
-		pass.addSampledView( emission
-			, cloudsres::eEmissions );
+		pass.addSampledView( sky
+			, cloudsres::eMapSky );
+		pass.addSampledView( sun
+			, cloudsres::eMapSun );
+		pass.addSampledView( clouds
+			, cloudsres::eMapClouds );
 		pass.addOutputColourView( resultView );
 		m_lastPass = &pass;
 	}
