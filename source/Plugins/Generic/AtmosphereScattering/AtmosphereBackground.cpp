@@ -144,8 +144,6 @@ namespace castor
 
 namespace atmosphere_scattering
 {
-	//*********************************************************************************************
-
 	AtmosphereBackground::CameraPasses::CameraPasses( crg::FramePassGroup & graph
 		, castor3d::RenderDevice const & device
 		, AtmosphereBackground & background
@@ -846,6 +844,8 @@ namespace atmosphere_scattering
 				, index++ );
 			m_atmosphereUbo->createPassBinding( pass
 				, index++ );
+			m_cloudsUbo->createPassBinding( pass
+				, index++ );
 			crg::SamplerDesc linearClampSampler{ VK_FILTER_LINEAR
 				, VK_FILTER_LINEAR };
 			pass.addSampledView( m_transmittance.wholeViewId
@@ -864,6 +864,10 @@ namespace atmosphere_scattering
 				, index++
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 				, linearClampSampler );
+			pass.addSampledView( it->second->cloudsResult.wholeViewId
+				, index++
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, linearClampSampler );
 		}
 	}
 
@@ -877,6 +881,9 @@ namespace atmosphere_scattering
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// AtmosphereBuffer
 		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( index++
+			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// CloudsBuffer
+		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( index++
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapTransmittance
 		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( index++
@@ -888,6 +895,9 @@ namespace atmosphere_scattering
 		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( index++
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapVolume
+		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( index++
+			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapClouds
 	}
 
 	void AtmosphereBackground::doAddDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
@@ -900,6 +910,7 @@ namespace atmosphere_scattering
 		{
 			descriptorWrites.push_back( it->second->cameraUbo.getDescriptorWrite( index++ ) );
 			descriptorWrites.push_back( m_atmosphereUbo->getDescriptorWrite( index++ ) );
+			descriptorWrites.push_back( m_cloudsUbo->getDescriptorWrite( index++ ) );
 			castor3d::bindTexture( m_transmittance.sampledView
 				, *m_transmittance.sampler
 				, descriptorWrites
@@ -913,6 +924,10 @@ namespace atmosphere_scattering
 				, descriptorWrites
 				, index );
 			castor3d::bindTexture( it->second->volume.sampledView
+				, *it->second->volume.sampler
+				, descriptorWrites
+				, index );
+			castor3d::bindTexture( it->second->cloudsResult.sampledView
 				, *it->second->volume.sampler
 				, descriptorWrites
 				, index );

@@ -92,6 +92,11 @@ namespace atmosphere_scattering
 		return position + vec3( 0.0_f, getEarthRadius(), 0.0_f );
 	}
 
+	sdw::Vec3 AtmosphereModel::getPositionToEarth( sdw::Vec3 const & position )const
+	{
+		return position - vec3( 0.0_f, getEarthRadius(), 0.0_f );
+	}
+
 	sdw::Vec3 AtmosphereModel::getCameraPositionFromEarth()const
 	{
 		return getPositionFromEarth( getCameraPosition() );
@@ -567,6 +572,95 @@ namespace atmosphere_scattering
 		, sdw::Float const & sphereRadius )
 	{
 		return raySphereIntersectNearest( ray, vec3( 0.0_f ), sphereRadius );
+	}
+
+	sdw::RetInt AtmosphereModel::raySphereIntersect( Ray const & pray
+		, sdw::Float const & psphereRadius
+		, Intersection const & pground
+		, Intersection & pnearest
+		, Intersection & pfarthest )
+	{
+		if ( !m_raySphereIntersect )
+		{
+			m_raySphereIntersect = writer.implementFunction< sdw::Int >( "raySphereIntersect"
+				, [&]( Ray const & ray
+					, sdw::Float const & sphereRadius
+					, Intersection const & ground
+					, Intersection nearest
+					, Intersection farthest )
+				{
+					auto s0_r0 = writer.declLocale( "s0_r0"
+						, ray.origin );
+
+					auto a = writer.declLocale( "a"
+						, dot( ray.direction, ray.direction ) );
+					auto b = writer.declLocale( "b"
+						, 2.0_f * dot( ray.direction, s0_r0 ) );
+					auto c = writer.declLocale( "c"
+						, dot( s0_r0, s0_r0 ) - ( sphereRadius * sphereRadius ) );
+					auto delta = writer.declLocale( "delta"
+						, b * b - 4.0_f * a * c );
+
+					IF( writer, delta < 0.0_f || a == 0.0_f )
+					{
+						writer.returnStmt( 0_i );
+					}
+					FI;
+
+					auto solA = writer.declLocale( "solA"
+						, ( -b - sqrt( delta ) ) / ( 2.0_f * a ) );
+					auto solB = writer.declLocale( "solB"
+						, ( -b + sqrt( delta ) ) / ( 2.0_f * a ) );
+
+					IF( writer, solA < 0.0_f && solB < 0.0_f )
+					{
+						writer.returnStmt( 0_i );
+					}
+					FI;
+
+					auto minSol = writer.declLocale( "minSol"
+						, min( solA, solB ) );
+					auto maxSol = writer.declLocale( "maxSol"
+						, max( solA, solB ) );
+
+					IF( writer, ground.valid() )
+					{
+						minSol = min( minSol, ground.t() );
+						maxSol = min( maxSol, ground.t() );
+					}
+					FI;
+
+					IF( writer, minSol < 0.0_f || minSol == maxSol )
+					{
+						nearest.t() = maxSol;
+						nearest.point() = ray.step( maxSol );
+						nearest.valid() = 1_b;
+						writer.returnStmt( 1_i );
+					}
+					FI;
+
+					nearest.t() = minSol;
+					nearest.point() = ray.step( minSol );
+					nearest.valid() = 1_b;
+
+					farthest.t() = maxSol;
+					farthest.point() = ray.step( maxSol );
+					farthest.valid() = 1_b;
+
+					writer.returnStmt( 2_i );
+				}
+				, InRay{ writer, "ray" }
+				, sdw::InFloat{ writer, "sphereRadius" }
+				, InIntersection{ writer, "ground" }
+				, OutIntersection{ writer, "nearest" }
+				, OutIntersection{ writer, "farthest" } );
+		}
+
+		return m_raySphereIntersect( pray
+			, psphereRadius
+			, pground
+			, pnearest
+			, pfarthest );
 	}
 
 	sdw::RetFloat AtmosphereModel::hgPhase( sdw::Float const & pg

@@ -84,7 +84,7 @@ namespace atmosphere_scattering
 		{
 			c3d::OutputComponents outputs{ m_writer };
 			m_computeDirectional = m_writer.implementFunction< sdw::Void >( m_prefix + "computeDirectionalLight"
-				, [this]( c3d::DirectionalLight const & light
+				, [this]( c3d::DirectionalLight light
 					, c3d::BlendComponents const & components
 					, c3d::Surface const & surface
 					, sdw::Vec3 const & worldEye
@@ -100,6 +100,7 @@ namespace atmosphere_scattering
 						, normalize( light.direction ) );
 					auto radiance = m_writer.declLocale( "radiance"
 						, m_atmosphereBackground->getSunRadiance( light.direction ) );
+					light.base.colour = radiance;
 					// Diffuse term.
 					auto diffuseFactor = m_writer.declLocale( "diffuseFactor"
 						, dot( surface.normal, -lightDirection ) );
