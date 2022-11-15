@@ -101,7 +101,7 @@ namespace atmosphere_scattering
 		return m_computeRefractions();
 	}
 
-	void AtmosphereBackgroundModel::applyForeground( sdw::Vec2 const pfragCoord
+	void AtmosphereBackgroundModel::applyVolume( sdw::Vec2 const pfragCoord
 		, sdw::Float const plinearDepth
 		, sdw::Vec2 const ptargetSize
 		, sdw::Vec2 const pcameraPlanes

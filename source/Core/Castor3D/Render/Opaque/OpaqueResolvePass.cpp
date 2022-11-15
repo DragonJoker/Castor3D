@@ -388,7 +388,7 @@ namespace castor3d
 
 					auto linearDepth = writer.declLocale( "linearDepth"
 						, min( depthObj.y(), c3d_sceneData.farPlane ) );
-					backgroundModel->applyForeground( in.fragCoord.xy()
+					backgroundModel->applyVolume( in.fragCoord.xy()
 						, linearDepth
 						, c3d_sceneData.renderSize
 						, c3d_sceneData.cameraPlanes

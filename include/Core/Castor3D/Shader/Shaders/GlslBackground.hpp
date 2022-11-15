@@ -60,7 +60,7 @@ namespace castor3d::shader
 			, sdw::Float const & iridescenceFactor
 			, sdw::Vec3 & reflectedDiffuse
 			, sdw::Vec3 & reflectedSpecular );
-		C3D_API virtual void applyForeground( sdw::Vec2 const fragCoord
+		C3D_API virtual void applyVolume( sdw::Vec2 const fragCoord
 			, sdw::Float const linearDepth
 			, sdw::Vec2 const targetSize
 			, sdw::Vec2 const cameraPlanes

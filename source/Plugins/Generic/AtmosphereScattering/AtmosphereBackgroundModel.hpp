@@ -42,7 +42,7 @@ namespace atmosphere_scattering
 			, sdw::Vec3 const & wsNormal
 			, sdw::Float const & refractionRatio
 			, castor3d::shader::BlendComponents & components )override;
-		void applyForeground( sdw::Vec2 const fragCoord
+		void applyVolume( sdw::Vec2 const fragCoord
 			, sdw::Float const linearDepth
 			, sdw::Vec2 const targetSize
 			, sdw::Vec2 const cameraPlanes

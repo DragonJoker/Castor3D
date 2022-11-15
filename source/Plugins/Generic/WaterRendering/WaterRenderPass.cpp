@@ -865,7 +865,7 @@ namespace water
 						, c3d_sceneData );
 				}
 
-				backgroundModel->applyForeground( in.fragCoord.xy()
+				backgroundModel->applyVolume( in.fragCoord.xy()
 					, utils.lineariseDepth( in.fragCoord.z(), c3d_sceneData.nearPlane, c3d_sceneData.farPlane )
 					, c3d_sceneData.renderSize
 					, c3d_sceneData.cameraPlanes
