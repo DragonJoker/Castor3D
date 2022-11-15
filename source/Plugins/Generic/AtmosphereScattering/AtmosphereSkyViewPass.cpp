@@ -107,7 +107,7 @@ namespace atmosphere_scattering
 						auto upVector = writer.declLocale( "upVector"
 							, ray.origin / viewHeight );
 						auto sunZenithCosAngle = writer.declLocale( "sunZenithCosAngle"
-							, dot( upVector, c3d_atmosphereData.sunDirection ) );
+							, dot( upVector, c3d_atmosphereData.sunDirection() ) );
 						auto sunZenithSinAngle = writer.declLocale( "sunZenithSinAngle"
 							, sqrt( 1.0_f - sunZenithCosAngle * sunZenithCosAngle ) );
 						sunDir = normalize( vec3( sunZenithSinAngle, sunZenithCosAngle, 0.0_f ) );

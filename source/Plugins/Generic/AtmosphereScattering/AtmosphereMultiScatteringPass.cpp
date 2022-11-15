@@ -235,7 +235,7 @@ namespace atmosphere_scattering
 #endif
 
 					outputTexture.store( ivec2( in.globalInvocationID.xy() )
-						, vec4( c3d_atmosphereData.multipleScatteringFactor * L, 1.0_f ) );
+						, vec4( c3d_atmosphereData.multipleScatteringFactor() * L, 1.0_f ) );
 				} );
 
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
