@@ -89,7 +89,7 @@ namespace atmosphere_scattering
 					auto transmittance = writer.declLocale( "transmittance"
 						, exp( -atmosphere.integrateScatteredLuminance( pixPos
 							, ray
-							, c3d_atmosphereData.sunDirection
+							, c3d_atmosphereData.sunDirection()
 							, sampleCountIni
 							, depthBufferValue ).opticalDepth() ) );
 

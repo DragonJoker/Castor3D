@@ -240,7 +240,7 @@ namespace atmosphere_scattering
 					SingleScatteringResult ss = writer.declLocale( "ss"
 						, atmosphere.integrateScatteredLuminance( pixPos
 							, ray
-							, c3d_atmosphereData.sunDirection
+							, c3d_atmosphereData.sunDirection()
 							, sampleCountIni
 							, depthBufferValue
 							, tMaxMax ) );

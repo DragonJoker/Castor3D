@@ -124,7 +124,7 @@ namespace atmosphere_scattering
 				, [&]()
 				{
 					auto worldPos = writer.declLocale( "worldPos"
-						, vec4( c3d_cameraData.position() + vec3( 0.0_f, c3d_atmosphereData.bottomRadius, 0.0_f ) + c3d_atmosphereData.sunDirection * 1e6_f, 1.0_f ) );
+						, vec4( c3d_cameraData.position() + vec3( 0.0_f, c3d_atmosphereData.bottomRadius(), 0.0_f ) + c3d_atmosphereData.sunDirection() * 1e6_f, 1.0_f ) );
 					auto ndcPos = writer.declLocale( "ndcPos"
 						, c3d_cameraData.camWorldToProj( worldPos ) );
 					ndcPos /= ndcPos.w();

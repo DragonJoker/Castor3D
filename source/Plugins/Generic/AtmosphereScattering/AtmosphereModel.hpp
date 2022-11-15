@@ -189,22 +189,22 @@ namespace atmosphere_scattering
 
 		auto getSunDirection()const noexcept
 		{
-			return atmosphereData.sunDirection;
+			return atmosphereData.sunDirection();
 		}
 
 		auto getEarthRadius()const noexcept
 		{
-			return atmosphereData.bottomRadius;
+			return atmosphereData.bottomRadius();
 		}
 
 		auto getAtmosphereRadius()const noexcept
 		{
-			return atmosphereData.topRadius;
+			return atmosphereData.topRadius();
 		}
 
 		auto getSunIlluminance()const noexcept
 		{
-			return atmosphereData.sunIlluminance;
+			return atmosphereData.sunIlluminance();
 		}
 
 		auto getAtmosphereThickness()const noexcept

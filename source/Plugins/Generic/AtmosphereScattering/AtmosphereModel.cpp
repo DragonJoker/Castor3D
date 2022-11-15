@@ -208,8 +208,8 @@ namespace atmosphere_scattering
 					// Sample count 
 					auto sampleCount = writer.declLocale( "sampleCount"
 						, ( settings.variableSampleCount
-							? mix( atmosphereData.rayMarchMinMaxSPP.x()
-								, atmosphereData.rayMarchMinMaxSPP.y()
+							? mix( atmosphereData.rayMarchMinMaxSPP().x()
+								, atmosphereData.rayMarchMinMaxSPP().y()
 								, clamp( tMax * 0.01_f, 0.0_f, 1.0_f ) )
 							: sampleCountIni ) );
 					auto sampleCountFloor = writer.declLocale( "sampleCountFloor"
@@ -226,7 +226,7 @@ namespace atmosphere_scattering
 					auto wi = writer.declLocale( "wi", sunDir );
 					auto wo = writer.declLocale( "wo", ray.direction );
 					auto cosTheta = writer.declLocale( "cosTheta", dot( wi, wo ) );
-					auto miePhaseValue = writer.declLocale( "miePhaseValue", hgPhase( atmosphereData.miePhaseFunctionG, -cosTheta ) ); 	// negate cosTheta because due to worldDir being a "in" direction. 
+					auto miePhaseValue = writer.declLocale( "miePhaseValue", hgPhase( atmosphereData.miePhaseFunctionG(), -cosTheta ) ); 	// negate cosTheta because due to worldDir being a "in" direction. 
 					auto rayleighPhaseValue = writer.declLocale( "rayleighPhaseValue", rayleighPhase( cosTheta ) );
 
 					auto globalL = writer.declLocale( "globalL"
@@ -234,7 +234,7 @@ namespace atmosphere_scattering
 							// When building the scattering factor, we assume light illuminance is 1 to compute a transfert function relative to identity illuminance of 1.
 							// This make the scattering factor independent of the light. It is now only linked to the atmosphere properties.
 							? vec3( 1.0_f )
-							: atmosphereData.sunIlluminance ) );
+							: atmosphereData.sunIlluminance() ) );
 
 					// Ray march the atmosphere to integrate optical depth
 					auto L = writer.declLocale( "L", vec3( 0.0_f ) );
@@ -315,8 +315,8 @@ namespace atmosphere_scattering
 								, clamp( vec2( sdw::fma( sunZenithCosAngle, 0.5_f, 0.5_f ), ( pHeight - getEarthRadius() ) / ( getAtmosphereThickness() ) )
 									, vec2( 0.0_f )
 									, vec2( 1.0_f ) ) );
-							msUv = vec2( fromUnitToSubUvs( msUv.x(), atmosphereData.multiScatteringLUTRes )
-								, fromUnitToSubUvs( msUv.y(), atmosphereData.multiScatteringLUTRes ) );
+							msUv = vec2( fromUnitToSubUvs( msUv.x(), atmosphereData.multiScatteringLUTRes() )
+								, fromUnitToSubUvs( msUv.y(), atmosphereData.multiScatteringLUTRes() ) );
 
 							multiScatteredLuminance = multiScatTexture->lod( msUv, 0.0_f ).rgb();
 						}
@@ -377,7 +377,7 @@ namespace atmosphere_scattering
 									: vec3( 0.0_f ) ) );
 
 							auto NdotL = writer.declLocale( "NdotL", clamp( dot( normalize( upVector ), normalize( sunDir ) ), 0.0_f, 1.0_f ) );
-							L += globalL * transmittanceToSun * throughput * NdotL * atmosphereData.groundAlbedo / castor::Pi< float >;
+							L += globalL * transmittanceToSun * throughput * NdotL * atmosphereData.groundAlbedo() / castor::Pi< float >;
 						}
 						FI;
 					}
@@ -696,28 +696,28 @@ namespace atmosphere_scattering
 						, length( worldPos ) - getEarthRadius() );
 
 					auto densityMie = writer.declLocale( "densityMie"
-						, exp( atmosphereData.mieDensity1ExpScale * viewHeight ) );
+						, exp( atmosphereData.mieDensity1ExpScale() * viewHeight ) );
 					auto densityRay = writer.declLocale( "densityRay"
-						, exp( atmosphereData.rayleighDensity1ExpScale * viewHeight ) );
+						, exp( atmosphereData.rayleighDensity1ExpScale() * viewHeight ) );
 					auto densityOzo = writer.declLocale( "densityOzo"
-						, clamp( writer.ternary( viewHeight < atmosphereData.absorptionDensity0LayerWidth
-								, sdw::fma( atmosphereData.absorptionDensity0LinearTerm, viewHeight, atmosphereData.absorptionDensity0ConstantTerm )
-								, sdw::fma( atmosphereData.absorptionDensity1LinearTerm, viewHeight, atmosphereData.absorptionDensity1ConstantTerm ) )
+						, clamp( writer.ternary( viewHeight < atmosphereData.absorptionDensity0LayerWidth()
+								, sdw::fma( atmosphereData.absorptionDensity0LinearTerm(), viewHeight, atmosphereData.absorptionDensity0ConstantTerm() )
+								, sdw::fma( atmosphereData.absorptionDensity1LinearTerm(), viewHeight, atmosphereData.absorptionDensity1ConstantTerm() ) )
 							, 0.0_f
 							, 1.0_f ) );
 
 					auto s = writer.declLocale< MediumSampleRGB >( "s" );
 
-					s.scatteringMie() = densityMie * atmosphereData.mieScattering;
-					s.absorptionMie() = densityMie * atmosphereData.mieAbsorption;
-					s.extinctionMie() = densityMie * atmosphereData.mieExtinction;
+					s.scatteringMie() = densityMie * atmosphereData.mieScattering();
+					s.absorptionMie() = densityMie * atmosphereData.mieAbsorption();
+					s.extinctionMie() = densityMie * atmosphereData.mieExtinction();
 
-					s.scatteringRay() = densityRay * atmosphereData.rayleighScattering;
+					s.scatteringRay() = densityRay * atmosphereData.rayleighScattering();
 					s.absorptionRay() = vec3( 0.0_f );
 					s.extinctionRay() = s.scatteringRay() + s.absorptionRay();
 
 					s.scatteringOzo() = vec3( 0.0_f );
-					s.absorptionOzo() = densityOzo * atmosphereData.absorptionExtinction;
+					s.absorptionOzo() = densityOzo * atmosphereData.absorptionExtinction();
 					s.extinctionOzo() = s.scatteringOzo() + s.absorptionOzo();
 
 					s.scattering() = s.scatteringMie() + s.scatteringRay() + s.scatteringOzo();

@@ -19,86 +19,115 @@ See LICENSE file in root folder
 namespace atmosphere_scattering
 {
 	struct AtmosphereData
-		: public sdw::StructInstance
+		: public sdw::StructInstanceHelperT< "C3D_ATM_AtmosphereData"
+			, sdw::type::MemoryLayout::eStd430
+			, sdw::Vec3Field< "sunDirection" >
+			, sdw::FloatField< "pad0" >
+			, sdw::Vec3Field< "solarIrradiance" >
+			, sdw::FloatField< "sunAngularRadius" >
+			, sdw::Vec3Field< "sunIlluminance" >
+			, sdw::FloatField< "sunIlluminanceScale" >
+			, sdw::Vec2Field< "rayMarchMinMaxSPP" >
+			, sdw::Vec2Field< "pad2" >
+			, sdw::Vec3Field< "absorptionExtinction" >
+			, sdw::FloatField< "muSMin" >
+			, sdw::Vec3Field< "rayleighScattering" >
+			, sdw::FloatField< "miePhaseFunctionG" >
+			, sdw::Vec3Field< "mieScattering" >
+			, sdw::FloatField< "bottomRadius" >
+			, sdw::Vec3Field< "mieExtinction" >
+			, sdw::FloatField< "topRadius" >
+			, sdw::Vec3Field< "mieAbsorption" >
+			, sdw::FloatField< "multipleScatteringFactor" >
+			, sdw::Vec3Field< "groundAlbedo" >
+			, sdw::FloatField< "multiScatteringLUTRes" >
+			, sdw::FloatField< "rayleighDensity0LayerWidth" >
+			, sdw::FloatField< "rayleighDensity0ExpTerm" >
+			, sdw::FloatField< "rayleighDensity0ExpScale" >
+			, sdw::FloatField< "rayleighDensity0LinearTerm" >
+			, sdw::FloatField< "rayleighDensity0ConstantTerm" >
+			, sdw::FloatField< "rayleighDensity1LayerWidth" >
+			, sdw::FloatField< "rayleighDensity1ExpTerm" >
+			, sdw::FloatField< "rayleighDensity1ExpScale" >
+			, sdw::FloatField< "rayleighDensity1LinearTerm" >
+			, sdw::FloatField< "rayleighDensity1ConstantTerm" >
+			, sdw::FloatField< "mieDensity0LayerWidth" >
+			, sdw::FloatField< "mieDensity0ExpTerm" >
+			, sdw::FloatField< "mieDensity0ExpScale" >
+			, sdw::FloatField< "mieDensity0LinearTerm" >
+			, sdw::FloatField< "mieDensity0ConstantTerm" >
+			, sdw::FloatField< "mieDensity1LayerWidth" >
+			, sdw::FloatField< "mieDensity1ExpTerm" >
+			, sdw::FloatField< "mieDensity1ExpScale" >
+			, sdw::FloatField< "mieDensity1LinearTerm" >
+			, sdw::FloatField< "mieDensity1ConstantTerm" >
+			, sdw::FloatField< "absorptionDensity0LayerWidth" >
+			, sdw::FloatField< "absorptionDensity0ExpTerm" >
+			, sdw::FloatField< "absorptionDensity0ExpScale" >
+			, sdw::FloatField< "absorptionDensity0LinearTerm" >
+			, sdw::FloatField< "absorptionDensity0ConstantTerm" >
+			, sdw::FloatField< "absorptionDensity1LayerWidth" >
+			, sdw::FloatField< "absorptionDensity1ExpTerm" >
+			, sdw::FloatField< "absorptionDensity1ExpScale" >
+			, sdw::FloatField< "absorptionDensity1LinearTerm" >
+			, sdw::FloatField< "absorptionDensity1ConstantTerm" > >
 	{
 		AtmosphereData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
-			, bool enabled );
-
-		SDW_DeclStructInstance( , AtmosphereData );
-
-		static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
-
-	private:
-		using sdw::StructInstance::getMember;
-		using sdw::StructInstance::getMemberArray;
+			, bool enabled )
+			: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+		{
+		}
 
 	public:
-		sdw::Vec3 sunDirection;
-		sdw::Float pad0;
-
-		sdw::Vec3 solarIrradiance;
-		sdw::Float sunAngularRadius;
-
-		sdw::Vec3 sunIlluminance;
-		sdw::Float sunIlluminanceScale;
-
-		sdw::Vec2 rayMarchMinMaxSPP;
-		sdw::Vec2 pad1;
-
-		sdw::Vec3 absorptionExtinction;
-		sdw::Float muSMin;
-
-		sdw::Vec3 rayleighScattering;
-		sdw::Float miePhaseFunctionG;
-
-		sdw::Vec3 mieScattering;
-		sdw::Float bottomRadius;
-
-		sdw::Vec3 mieExtinction;
-		sdw::Float topRadius;
-
-		sdw::Vec3 mieAbsorption;
-		sdw::Float multipleScatteringFactor;
-
-		sdw::Vec3 groundAlbedo;
-		sdw::Float multiScatteringLUTRes;
-
-		sdw::Float rayleighDensity0LayerWidth;
-		sdw::Float rayleighDensity0ExpTerm;
-		sdw::Float rayleighDensity0ExpScale;
-		sdw::Float rayleighDensity0LinearTerm;
-		sdw::Float rayleighDensity0ConstantTerm;
-
-		sdw::Float rayleighDensity1LayerWidth;
-		sdw::Float rayleighDensity1ExpTerm;
-		sdw::Float rayleighDensity1ExpScale;
-		sdw::Float rayleighDensity1LinearTerm;
-		sdw::Float rayleighDensity1ConstantTerm;
-
-		sdw::Float mieDensity0LayerWidth;
-		sdw::Float mieDensity0ExpTerm;
-		sdw::Float mieDensity0ExpScale;
-		sdw::Float mieDensity0LinearTerm;
-		sdw::Float mieDensity0ConstantTerm;
-
-		sdw::Float mieDensity1LayerWidth;
-		sdw::Float mieDensity1ExpTerm;
-		sdw::Float mieDensity1ExpScale;
-		sdw::Float mieDensity1LinearTerm;
-		sdw::Float mieDensity1ConstantTerm;
-
-		sdw::Float absorptionDensity0LayerWidth;
-		sdw::Float absorptionDensity0ExpTerm;
-		sdw::Float absorptionDensity0ExpScale;
-		sdw::Float absorptionDensity0LinearTerm;
-		sdw::Float absorptionDensity0ConstantTerm;
-
-		sdw::Float absorptionDensity1LayerWidth;
-		sdw::Float absorptionDensity1ExpTerm;
-		sdw::Float absorptionDensity1ExpScale;
-		sdw::Float absorptionDensity1LinearTerm;
-		sdw::Float absorptionDensity1ConstantTerm;
+		auto sunDirection()const { return getMember< "sunDirection" >(); }
+		auto solarIrradiance()const { return getMember< "solarIrradiance" >(); }
+		auto sunAngularRadius()const { return getMember< "sunAngularRadius" >(); }
+		auto sunIlluminance()const { return getMember< "sunIlluminance" >(); }
+		auto sunIlluminanceScale()const { return getMember< "sunIlluminanceScale" >(); }
+		auto rayMarchMinMaxSPP()const { return getMember< "rayMarchMinMaxSPP" >(); }
+		auto absorptionExtinction()const { return getMember< "absorptionExtinction" >(); }
+		auto muSMin()const { return getMember< "muSMin" >(); }
+		auto rayleighScattering()const { return getMember< "rayleighScattering" >(); }
+		auto miePhaseFunctionG()const { return getMember< "miePhaseFunctionG" >(); }
+		auto mieScattering()const { return getMember< "mieScattering" >(); }
+		auto bottomRadius()const { return getMember< "bottomRadius" >(); }
+		auto mieExtinction()const { return getMember< "mieExtinction" >(); }
+		auto topRadius()const { return getMember< "topRadius" >(); }
+		auto mieAbsorption()const { return getMember< "mieAbsorption" >(); }
+		auto multipleScatteringFactor()const { return getMember< "multipleScatteringFactor" >(); }
+		auto groundAlbedo()const { return getMember< "groundAlbedo" >(); }
+		auto multiScatteringLUTRes()const { return getMember< "multiScatteringLUTRes" >(); }
+		auto rayleighDensity0LayerWidth()const { return getMember< "rayleighDensity0LayerWidth" >(); }
+		auto rayleighDensity0ExpTerm()const { return getMember< "rayleighDensity0ExpTerm" >(); }
+		auto rayleighDensity0ExpScale()const { return getMember< "rayleighDensity0ExpScale" >(); }
+		auto rayleighDensity0LinearTerm()const { return getMember< "rayleighDensity0LinearTerm" >(); }
+		auto rayleighDensity0ConstantTerm()const { return getMember< "rayleighDensity0ConstantTerm" >(); }
+		auto rayleighDensity1LayerWidth()const { return getMember< "rayleighDensity1LayerWidth" >(); }
+		auto rayleighDensity1ExpTerm()const { return getMember< "rayleighDensity1ExpTerm" >(); }
+		auto rayleighDensity1ExpScale()const { return getMember< "rayleighDensity1ExpScale" >(); }
+		auto rayleighDensity1LinearTerm()const { return getMember< "rayleighDensity1LinearTerm" >(); }
+		auto rayleighDensity1ConstantTerm()const { return getMember< "rayleighDensity1ConstantTerm" >(); }
+		auto mieDensity0LayerWidth()const { return getMember< "mieDensity0LayerWidth" >(); }
+		auto mieDensity0ExpTerm()const { return getMember< "mieDensity0ExpTerm" >(); }
+		auto mieDensity0ExpScale()const { return getMember< "mieDensity0ExpScale" >(); }
+		auto mieDensity0LinearTerm()const { return getMember< "mieDensity0LinearTerm" >(); }
+		auto mieDensity0ConstantTerm()const { return getMember< "mieDensity0ConstantTerm" >(); }
+		auto mieDensity1LayerWidth()const { return getMember< "mieDensity1LayerWidth" >(); }
+		auto mieDensity1ExpTerm()const { return getMember< "mieDensity1ExpTerm" >(); }
+		auto mieDensity1ExpScale()const { return getMember< "mieDensity1ExpScale" >(); }
+		auto mieDensity1LinearTerm()const { return getMember< "mieDensity1LinearTerm" >(); }
+		auto mieDensity1ConstantTerm()const { return getMember< "mieDensity1ConstantTerm" >(); }
+		auto absorptionDensity0LayerWidth()const { return getMember< "absorptionDensity0LayerWidth" >(); }
+		auto absorptionDensity0ExpTerm()const { return getMember< "absorptionDensity0ExpTerm" >(); }
+		auto absorptionDensity0ExpScale()const { return getMember< "absorptionDensity0ExpScale" >(); }
+		auto absorptionDensity0LinearTerm()const { return getMember< "absorptionDensity0LinearTerm" >(); }
+		auto absorptionDensity0ConstantTerm()const { return getMember< "absorptionDensity0ConstantTerm" >(); }
+		auto absorptionDensity1LayerWidth()const { return getMember< "absorptionDensity1LayerWidth" >(); }
+		auto absorptionDensity1ExpTerm()const { return getMember< "absorptionDensity1ExpTerm" >(); }
+		auto absorptionDensity1ExpScale()const { return getMember< "absorptionDensity1ExpScale" >(); }
+		auto absorptionDensity1LinearTerm()const { return getMember< "absorptionDensity1LinearTerm" >(); }
+		auto absorptionDensity1ConstantTerm()const { return getMember< "absorptionDensity1ConstantTerm" >(); }
 	};
 
 	class AtmosphereScatteringUbo
