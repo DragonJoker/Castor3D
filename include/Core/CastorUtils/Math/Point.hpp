@@ -336,6 +336,9 @@ namespace castor
 	Point< typename std::remove_cv< T >::type, TCount > operator*( Point< T, TCount > const & lhs, T const & rhs );
 	template< typename T, uint32_t TCount >
 	Point< typename std::remove_cv< T >::type, TCount > operator/( Point< T, TCount > const & lhs, T const & rhs );
+
+	template< typename DstCompT, typename SrcT >
+	PointTypeT< SrcT, DstCompT > pointCast( SrcT const & src );
 	/**@}*/
 	/**
 	\~english
@@ -345,6 +348,37 @@ namespace castor
 	*/
 	namespace point
 	{
+		template< typename CoordT, uint32_t CountT >
+		Point< CoordT, CountT > const & getPoint( Point< CoordT, CountT > const & lhs );
+		template< typename CoordT, uint32_t CountT >
+		Point< CoordT, CountT > const & getPoint( LengthT< Point< CoordT, CountT > > const & lhs );
+		template< typename CoordT, typename CoordU, uint32_t CountT >
+		void setPoint( Point< CoordT, CountT > & lhs
+			, Point< CoordU, CountT > const & rhs );
+		template< typename CoordT, typename CoordU, uint32_t CountT >
+		void setPoint( LengthT< Point< CoordT, CountT > > & lhs
+			, Point< CoordU, CountT > const & rhs );
+		template< typename CoordT, uint32_t CountT >
+		void setCoord( Point< CoordT, CountT > & pt
+			, uint32_t i
+			, CoordT const & c );
+		template< typename CoordT, uint32_t CountT >
+		void setCoord( Coords< CoordT, CountT > & pt
+			, uint32_t i
+			, CoordT const & c );
+		template< typename CoordT, uint32_t CountT >
+		void setCoord( LengthT< Point< CoordT, CountT > > & pt
+			, uint32_t i
+			, CoordT const & c );
+		template< typename CoordT, uint32_t CountT >
+		CoordT const & getCoord( Point< CoordT, CountT > const & pt
+			, uint32_t i );
+		template< typename CoordT, uint32_t CountT >
+		CoordT const & getCoord( Coords< CoordT, CountT > const & pt
+			, uint32_t i );
+		template< typename CoordT, uint32_t CountT >
+		CoordT const & getCoord( LengthT< Point< CoordT, CountT > > const & pt
+			, uint32_t i );
 		/**
 		 *\~english
 		 *\brief		Floors every value of a point's data.
@@ -467,8 +501,8 @@ namespace castor
 		 *\param[in]	lhs, rhs	Les points.
 		 *\return		Le vecteur résultant.
 		 */
-		template< typename T, typename U >
-		static Point3< T > cross( Point3< T > const & lhs, Point3< T > const & rhs );
+		template< Vector3T LhsT, Vector3T RhsT >
+		LhsT cross( LhsT const & lhs, RhsT const & rhs );
 		/**
 		 *\~english
 		 *\brief		Computes the trigonometric cosine of the angle between 2 points

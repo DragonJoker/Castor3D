@@ -246,26 +246,28 @@ namespace castor
 	}
 
 	template< typename T >
-	Point3f & QuaternionT< T >::transform( Point3f const & p_vector, Point3f & p_result )const
+	template< Vector3fT PtT >
+	PtT & QuaternionT< T >::transform( PtT const & p_vector, PtT & p_result )const
 	{
 		Point3d u( quat.x, quat.y, quat.z );
-		Point3d uv( castor::point::cross( u, p_vector ) );
-		Point3d uuv( castor::point::cross( u, uv ) );
+		Point3d uv( point::cross( u, p_vector ) );
+		Point3d uuv( point::cross( u, uv ) );
 		uv *= 2.0 * quat.w;
 		uuv *= 2;
-		p_result = p_vector + uv + uuv;
+		point::setPoint( p_result, point::getPoint( p_vector ) + uv + uuv );
 		return p_result;
 	}
 
 	template< typename T >
-	Point3d & QuaternionT< T >::transform( Point3d const & p_vector, Point3d & p_result )const
+	template< Vector3dT PtT >
+	PtT & QuaternionT< T >::transform( PtT const & p_vector, PtT & p_result )const
 	{
 		Point3d u( quat.x, quat.y, quat.z );
-		Point3d uv( castor::point::cross( u, p_vector ) );
-		Point3d uuv( castor::point::cross( u, uv ) );
+		Point3d uv( point::cross( u, p_vector ) );
+		Point3d uuv( point::cross( u, uv ) );
 		uv *= 2 * quat.w;
 		uuv *= 2;
-		p_result = p_vector + uv + uuv;
+		point::setPoint( p_result, point::getPoint( p_vector ) + uv + uuv );
 		return p_result;
 	}
 

@@ -490,8 +490,87 @@ namespace castor
 
 	//*************************************************************************************************
 
+	template< typename DstCompT, typename SrcT >
+	PointTypeT< SrcT, DstCompT > pointCast( SrcT const & src )
+	{
+		return PointTypeT< SrcT, DstCompT >{ src };
+	}
+
+	//*************************************************************************************************
+
 	namespace point
 	{
+		template< typename CoordT, uint32_t CountT >
+		Point< CoordT, CountT > const & getPoint( Point< CoordT, CountT > const & lhs )
+		{
+			return lhs;
+		}
+
+		template< typename CoordT, uint32_t CountT >
+		Point< CoordT, CountT > const & getPoint( LengthT< Point< CoordT, CountT > > const & lhs )
+		{
+			return lhs.value();
+		}
+
+		template< typename CoordT, typename CoordU, uint32_t CountT >
+		void setPoint( Point< CoordT, CountT > & lhs
+			, Point< CoordU, CountT > const & rhs )
+		{
+			lhs = Point< CoordT, CountT >{ rhs };
+		}
+
+		template< typename CoordT, typename CoordU, uint32_t CountT >
+		void setPoint( LengthT< Point< CoordT, CountT > > & lhs
+			, Point< CoordU, CountT > const & rhs )
+		{
+			lhs = Point< CoordT, CountT >{ rhs };
+		}
+
+		template< typename CoordT, uint32_t CountT >
+		void setCoord( Point< CoordT, CountT > & pt
+			, uint32_t i
+			, CoordT const & c )
+		{
+			pt[i] = c;
+		}
+
+		template< typename CoordT, uint32_t CountT >
+		void setCoord( Coords< CoordT, CountT > & pt
+			, uint32_t i
+			, CoordT const & c )
+		{
+			pt[i] = c;
+		}
+
+		template< typename CoordT, uint32_t CountT >
+		void setCoord( LengthT< Point< CoordT, CountT > > & pt
+			, uint32_t i
+			, CoordT const & c )
+		{
+			( *pt )[i] = c;
+		}
+
+		template< typename CoordT, uint32_t CountT >
+		CoordT const & getCoord( Point< CoordT, CountT > const & pt
+			, uint32_t i )
+		{
+			return pt[i];
+		}
+
+		template< typename CoordT, uint32_t CountT >
+		CoordT const & getCoord( Coords< CoordT, CountT > const & pt
+			, uint32_t i )
+		{
+			return pt[i];
+		}
+
+		template< typename CoordT, uint32_t CountT >
+		CoordT const & getCoord( LengthT< Point< CoordT, CountT > > const & pt
+			, uint32_t i )
+		{
+			return pt.value()[i];
+		}
+
 		template< typename T, uint32_t TCount >
 		static void floor( Point< T, TCount > & point )
 		{
@@ -584,14 +663,14 @@ namespace castor
 			return result;
 		}
 
-		template< typename T, typename U >
-		Point< T, 3 > cross( Point< T, 3 > const & lhs, Point< U, 3 > const & rhs )
+		template< Vector3T LhsT, Vector3T RhsT >
+		LhsT cross( LhsT const & lhs, RhsT const & rhs )
 		{
-			return Point< T, 3 >(
-				( lhs[1] * rhs[2] ) - ( lhs[2] * rhs[1] ),
-				( lhs[2] * rhs[0] ) - ( lhs[0] * rhs[2] ),
-				( lhs[0] * rhs[1] ) - ( lhs[1] * rhs[0] )
-				);
+			LhsT result{ lhs };
+			setCoord( result, 0, ( getCoord( lhs, 1 ) * getCoord( rhs, 2 ) ) - ( getCoord( lhs, 2 ) * getCoord( rhs, 1 ) ) );
+			setCoord( result, 1, ( getCoord( lhs, 2 ) * getCoord( rhs, 0 ) ) - ( getCoord( lhs, 0 ) * getCoord( rhs, 2 ) ) );
+			setCoord( result, 2, ( getCoord( lhs, 0 ) * getCoord( rhs, 1 ) ) - ( getCoord( lhs, 1 ) * getCoord( rhs, 0 ) ) );
+			return result;
 		}
 
 		template< typename T, uint32_t TCount >
@@ -713,14 +792,14 @@ namespace castor
 			return result;
 		}
 
-		template< typename T, typename U >
-		Point< T, 3 > cross( Point< T, 3 > const & lhs, Coords< U, 3 > const & rhs )
+		template< Vector3T LhsT, typename U >
+		LhsT cross( LhsT const & lhs, Coords< U, 3 > const & rhs )
 		{
-			return Point< T, 3 >(
-				( lhs[1] * rhs[2] ) - ( lhs[2] * rhs[1] ),
-				( lhs[2] * rhs[0] ) - ( lhs[0] * rhs[2] ),
-				( lhs[0] * rhs[1] ) - ( lhs[1] * rhs[0] )
-				);
+			LhsT result{ lhs };
+			setCoord( result, 0, ( getCoord( lhs, 1 ) * getCoord( rhs, 2 ) ) - ( getCoord( lhs, 2 ) * getCoord( rhs, 1 ) ) );
+			setCoord( result, 1, ( getCoord( lhs, 2 ) * getCoord( rhs, 0 ) ) - ( getCoord( lhs, 0 ) * getCoord( rhs, 2 ) ) );
+			setCoord( result, 2, ( getCoord( lhs, 0 ) * getCoord( rhs, 1 ) ) - ( getCoord( lhs, 1 ) * getCoord( rhs, 0 ) ) );
+			return result;
 		}
 
 		template< typename T, uint32_t TCount >
@@ -753,14 +832,14 @@ namespace castor
 			return result;
 		}
 
-		template< typename T, typename U >
-		Point< T, 3 > cross( Coords< T, 3 > const & lhs, Point< U, 3 > const & rhs )
+		template< typename T, Vector3T RhsT >
+		RhsT cross( Coords< T, 3 > const & lhs, RhsT const & rhs )
 		{
-			return Point< T, 3 >(
-				( lhs[1] * rhs[2] ) - ( lhs[2] * rhs[1] ),
-				( lhs[2] * rhs[0] ) - ( lhs[0] * rhs[2] ),
-				( lhs[0] * rhs[1] ) - ( lhs[1] * rhs[0] )
-				);
+			RhsT result{ lhs };
+			setCoord( result, 0, ( getCoord( lhs, 1 ) * getCoord( rhs, 2 ) ) - ( getCoord( lhs, 2 ) * getCoord( rhs, 1 ) ) );
+			setCoord( result, 1, ( getCoord( lhs, 2 ) * getCoord( rhs, 0 ) ) - ( getCoord( lhs, 0 ) * getCoord( rhs, 2 ) ) );
+			setCoord( result, 2, ( getCoord( lhs, 0 ) * getCoord( rhs, 1 ) ) - ( getCoord( lhs, 1 ) * getCoord( rhs, 0 ) ) );
+			return result;
 		}
 
 		template< typename T, uint32_t TCount >

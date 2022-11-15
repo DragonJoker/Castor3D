@@ -248,6 +248,13 @@ namespace castor
 	CU_DeclarePoint( double, 3, d );
 	CU_DeclarePoint( double, 2, d );
 
+	using Vector2f = LengthT< Point2f >;
+	using Vector3f = LengthT< Point3f >;
+	using Vector4f = LengthT< Point4f >;
+	using Vector2d = LengthT< Point2d >;
+	using Vector3d = LengthT< Point3d >;
+	using Vector4d = LengthT< Point4d >;
+
 	CU_DeclareCoord( bool, 4, b );
 	CU_DeclareCoord( bool, 3, b );
 	CU_DeclareCoord( bool, 2, b );
@@ -373,6 +380,125 @@ namespace castor
 	CU_API Point4f operator*( Matrix4x4f const & lhs, Point4f const & rhs );
 	CU_API Point4f operator*( Point4f const & lhs, Matrix4x4f const & rhs );
 	//@}
+
+	template< typename SrcT, typename DstCompT >
+	struct PointTyperT
+	{
+		using Type = DstCompT;
+	};
+
+	template< typename SrcCompT, uint32_t CountT, typename DstCompT >
+	struct PointTyperT< Point< SrcCompT, CountT >, DstCompT >
+	{
+		using Type = Point< DstCompT, CountT >;
+	};
+
+	template< typename SrcT, typename DstCompT >
+	struct PointTyperT< LengthT< SrcT >, DstCompT >
+	{
+		using Type = LengthT< typename PointTyperT< SrcT, DstCompT >::Type >;
+	};
+
+	template< typename SrcT, typename DstCompT >
+	using PointTypeT = typename PointTyperT< SrcT, DstCompT >::Type;
+
+	template< typename TypeT >
+	struct PointComponentGetT
+	{
+		using Type = TypeT;
+	};
+
+	template< typename TypeT >
+	struct PointComponentGetT< Point< TypeT, 2u > >
+	{
+		using Type = TypeT;
+	};
+
+	template< typename TypeT >
+	struct PointComponentGetT< Point< TypeT, 3u > >
+	{
+		using Type = TypeT;
+	};
+
+	template< typename TypeT >
+	struct PointComponentGetT< Point< TypeT, 4u > >
+	{
+		using Type = TypeT;
+	};
+
+	template< typename TypeT >
+	struct PointComponentGetT< LengthT< TypeT > >
+	{
+		using Type = typename PointComponentGetT< TypeT >::Type;
+	};
+
+	template< typename TypeT >
+	using PointComponentT = typename PointComponentGetT< TypeT >::Type;
+
+	template< typename TypeT >
+	struct IsLengthT : std::false_type
+	{
+	};
+
+	template< typename TypeT >
+	struct IsLengthT< LengthT< TypeT > > : std::true_type
+	{
+	};
+
+	template< typename TypeT >
+	static constexpr bool isLengthV = IsLengthT< TypeT >::value;
+
+	template< typename TypeT >
+	static constexpr bool isFloatingV = std::is_same_v< float, TypeT >
+		|| std::is_same_v< double, TypeT >;
+	template< typename TypeT >
+	concept FloatingT = ( isFloatingV< TypeT > );
+
+	template< typename TypeT, typename CoordT, uint32_t CountT >
+	static constexpr bool isPointV = std::is_same_v< Point< CoordT, CountT >, TypeT >
+		|| std::is_same_v< LengthT< Point< CoordT, CountT > >, TypeT >;
+
+	template< typename TypeT, typename CoordT >
+	static constexpr bool isPoint2V = isPointV< TypeT, CoordT, 2u >;
+	template< typename TypeT, typename CoordT >
+	static constexpr bool isPoint3V = isPointV< TypeT, CoordT, 3u >;
+	template< typename TypeT, typename CoordT >
+	static constexpr bool isPoint4V = isPointV< TypeT, CoordT, 4u >;
+
+	template< typename TypeT >
+	static constexpr bool isPoint2f = isPoint2V< TypeT, float >;
+	template< typename TypeT >
+	static constexpr bool isPoint3f = isPoint3V< TypeT, float >;
+	template< typename TypeT >
+	static constexpr bool isPoint4f = isPoint4V< TypeT, float >;
+
+	template< typename TypeT >
+	static constexpr bool isPoint2d = isPoint2V< TypeT, double >;
+	template< typename TypeT >
+	static constexpr bool isPoint3d = isPoint3V< TypeT, double >;
+	template< typename TypeT >
+	static constexpr bool isPoint4d = isPoint4V< TypeT, double >;
+
+	template< typename TypeT >
+	concept Vector2T = ( isPoint2f< TypeT > || isPoint2d< TypeT > );
+	template< typename TypeT >
+	concept Vector3T = ( isPoint3f< TypeT > || isPoint3d< TypeT > );
+	template< typename TypeT >
+	concept Vector4T = ( isPoint4f< TypeT > || isPoint4d< TypeT > );
+
+	template< typename TypeT >
+	concept Vector2fT = ( isPoint2f< TypeT > );
+	template< typename TypeT >
+	concept Vector3fT = ( isPoint3f< TypeT > );
+	template< typename TypeT >
+	concept Vector4fT = ( isPoint4f< TypeT > );
+
+	template< typename TypeT >
+	concept Vector2dT = ( isPoint2d< TypeT > );
+	template< typename TypeT >
+	concept Vector3dT = ( isPoint3d< TypeT > );
+	template< typename TypeT >
+	concept Vector4dT = ( isPoint4d< TypeT > );
 }
 
 #endif

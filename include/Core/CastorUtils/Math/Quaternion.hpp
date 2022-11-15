@@ -266,7 +266,8 @@ namespace castor
 		 *\param[out]	result	Reçoit le résultat
 		 *\return		Une référence sur result
 		 */
-		inline Point3f & transform( Point3f const & vector, Point3f & result )const;
+		template< Vector3fT PtT >
+		inline PtT & transform( PtT const & vector, PtT & result )const;
 		/**
 		 *\~english
 		 *\brief		Transforms a vector and gives the result
@@ -279,7 +280,8 @@ namespace castor
 		 *\param[out]	result	Reçoit le résultat
 		 *\return		Une référence sur result
 		 */
-		inline Point3d & transform( Point3d const & vector, Point3d & result )const;
+		template< Vector3dT PtT >
+		inline PtT & transform( PtT const & vector, PtT & result )const;
 		/**
 		 *\~english
 		 *\brief		Fills a rotation matrix from this Quaternion
