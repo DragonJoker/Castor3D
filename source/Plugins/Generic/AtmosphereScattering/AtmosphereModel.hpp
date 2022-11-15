@@ -182,50 +182,55 @@ namespace atmosphere_scattering
 			, Settings settings
 			, VkExtent2D transmittanceExtent );
 
-		auto getSunDirection()const
+		castor::Length getLengthUnit()const noexcept
+		{
+			return settings.length;
+		}
+
+		auto getSunDirection()const noexcept
 		{
 			return atmosphereData.sunDirection;
 		}
 
-		auto getEarthRadius()const
+		auto getEarthRadius()const noexcept
 		{
 			return atmosphereData.bottomRadius;
 		}
 
-		auto getAtmosphereRadius()const
+		auto getAtmosphereRadius()const noexcept
 		{
 			return atmosphereData.topRadius;
 		}
 
-		auto getSunIlluminance()const
+		auto getSunIlluminance()const noexcept
 		{
 			return atmosphereData.sunIlluminance;
 		}
 
-		auto getAtmosphereThickness()const
+		auto getAtmosphereThickness()const noexcept
 		{
 			return getAtmosphereRadius() - getEarthRadius();
 		}
 
-		auto getCameraPosition()const
+		auto getCameraPosition()const noexcept
 		{
 			CU_Require( settings.cameraData );
 			return settings.cameraData->position();
 		}
 
-		auto camProjToWorld( sdw::Vec4 const & clipSpace )const
+		auto camProjToWorld( sdw::Vec4 const & clipSpace )const noexcept
 		{
 			CU_Require( settings.cameraData );
 			return settings.cameraData->camProjToWorld( clipSpace );
 		}
 
-		auto camProjToView( sdw::Vec4 const & clipSpace )const
+		auto camProjToView( sdw::Vec4 const & clipSpace )const noexcept
 		{
 			CU_Require( settings.cameraData );
 			return settings.cameraData->camInvProj() * clipSpace;
 		}
 
-		auto camViewToWorld( sdw::Vec4 const & viewSpace )const
+		auto camViewToWorld( sdw::Vec4 const & viewSpace )const noexcept
 		{
 			CU_Require( settings.cameraData );
 			return settings.cameraData->camInvView()  * viewSpace;
@@ -242,6 +247,7 @@ namespace atmosphere_scattering
 		}
 
 		sdw::Vec3 getPositionFromEarth( sdw::Vec3 const & position )const;
+		sdw::Vec3 getPositionToEarth( sdw::Vec3 const & position )const;
 		sdw::Vec3 getCameraPositionFromEarth()const;
 		RetRay castRay( sdw::Vec2 const & uv );
 		RetRay castRay( sdw::Vec2 const & screenPoint
@@ -266,6 +272,11 @@ namespace atmosphere_scattering
 			, sdw::Float const & sphereRadius );
 		RetIntersection raySphereIntersectNearest( Ray const & ray
 			, sdw::Float const & sphereRadius );
+		sdw::RetInt raySphereIntersect( Ray const & ray
+			, sdw::Float const & sphereRadius
+			, Intersection const & ground
+			, Intersection & nearest
+			, Intersection & farthest );
 
 		// Reference implementation (i.e. not schlick approximation). 
 		// See http://www.pbr-book.org/3ed-2018/Volume_Scattering/Phase_Functions.html
@@ -341,6 +352,12 @@ namespace atmosphere_scattering
 			, InRay
 			, sdw::InVec3
 			, sdw::InFloat > m_raySphereIntersectNearest;
+		sdw::Function< sdw::Int
+			, InRay
+			, sdw::InFloat
+			, InIntersection
+			, OutIntersection
+			, OutIntersection > m_raySphereIntersect;
 		sdw::Function< sdw::Float
 			, sdw::InFloat
 			, sdw::InFloat > m_hgPhase;

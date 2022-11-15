@@ -8,6 +8,8 @@ See LICENSE file in root folder
 #include "AtmosphereScattering/AtmosphereCameraUbo.hpp"
 #include "AtmosphereScattering/AtmosphereScatteringUbo.hpp"
 #include "AtmosphereScattering/ScatteringModel.hpp"
+#include "AtmosphereScattering/CloudsModel.hpp"
+#include "AtmosphereScattering/CloudsUbo.hpp"
 
 #include <Castor3D/Shader/Shaders/GlslBackground.hpp>
 #include <Castor3D/Shader/Shaders/GlslUtils.hpp>
@@ -66,13 +68,21 @@ namespace atmosphere_scattering
 		CameraData cameraData;
 		sdw::UniformBuffer atmosphereBuffer;
 		AtmosphereData atmosphereData;
+		sdw::UniformBuffer cloudsBuffer;
+		CloudsData cloudsData;
 		AtmosphereModel atmosphere;
 		ScatteringModel scattering;
+		sdw::CombinedImage2DRgba32 cloudsResult;
 
 	private:
 		sdw::Function< sdw::Vec3 > m_computeReflections;
 		sdw::Function< sdw::Vec3 > m_computeRefractions;
 		sdw::Function< sdw::Void > m_mergeReflRefr;
+		sdw::Function < sdw::Void
+			, sdw::InVec2
+			, sdw::InFloat
+			, sdw::InVec2
+			, sdw::InOutVec4 > m_computeForeground;
 	};
 }
 

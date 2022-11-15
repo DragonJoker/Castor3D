@@ -11,9 +11,11 @@ namespace atmosphere_scattering
 	namespace model
 	{
 		template< typename DataT >
-		DataT getData( sdw::UniformBuffer & ubo, std::string const & name )
+		DataT getData( sdw::UniformBuffer & ubo
+			, std::string const & name
+			, bool enabled = true )
 		{
-			auto result = ubo.declMember< DataT >( name );
+			auto result = ubo.declMember< DataT >( name, enabled );
 			ubo.end();
 			return result;
 		}
@@ -37,6 +39,12 @@ namespace atmosphere_scattering
 			, binding++
 			, set ) }
 		, atmosphereData{ model::getData< AtmosphereData >( atmosphereBuffer, AtmosphereScatteringUbo::Data ) }
+		, cloudsBuffer{ writer.declUniformBuffer<>( CloudsUbo::Buffer
+			, binding++
+			, set
+			, sdw::type::MemoryLayout::eStd140
+			, needsForeground ) }
+		, cloudsData{ model::getData< CloudsData >( cloudsBuffer, CloudsUbo::Data, needsForeground ) }
 		, atmosphere{ m_writer
 			, atmosphereData
 			, AtmosphereModel::Settings{ castor::Length::fromUnit( 1.0f, engine.getLengthUnit() ) }
@@ -52,6 +60,10 @@ namespace atmosphere_scattering
 				.setFastAerialPerspective( true )
 			, binding
 			, set }
+		, cloudsResult{ writer.declCombinedImg< sdw::CombinedImage2DRgba32 >( "cloudsMap"
+			, binding++
+			, set
+			, needsForeground ) }
 	{
 	}
 
@@ -95,6 +107,60 @@ namespace atmosphere_scattering
 		, sdw::Vec2 const pcameraPlanes
 		, sdw::Vec4 & poutput )
 	{
+		if ( !cloudsBuffer.isEnabled() )
+		{
+			return;
+		}
+
+		if ( !m_computeForeground )
+		{
+			m_computeForeground = m_writer.implementFunction< sdw::Void >( "c3d_atmbg_computeForeground"
+				, [&]( sdw::Vec2 const & fragCoord
+					, sdw::Float const & linearDepth
+					, sdw::Vec2 const & targetSize
+					, sdw::Vec4 output )
+				{
+					auto uv = m_writer.declLocale( "uv"
+						, fragCoord / targetSize );
+					auto ray = m_writer.declLocale( "ray"
+						, atmosphere.castRay( uv ) );
+					auto interGround = m_writer.declLocale( "interGround", Intersection{ m_writer } );
+					auto interOuterNear = m_writer.declLocale( "interOuterNear", Intersection{ m_writer } );
+					auto interOuterFar = m_writer.declLocale( "interOuterFar", Intersection{ m_writer } );
+					auto interOuterCount = m_writer.declLocale( "interOuterCount"
+						, atmosphere.raySphereIntersect( ray
+							, cloudsData.outerRadius() + atmosphere.getEarthRadius()
+							, interGround
+							, interOuterNear
+							, interOuterFar ) );
+
+					IF( m_writer, interOuterNear.valid() )
+					{
+						auto interDepth = m_writer.declLocale( "interDepth"
+							, interOuterNear.t() - atmosphere.getEarthRadius() );
+
+						IF( m_writer, linearDepth * atmosphere.getLengthUnit().kilometres() > interDepth )
+						{
+							output = cloudsResult.lod( uv, 0.0_f );
+						}
+						FI;
+					}
+					FI;
+				}
+				, sdw::InVec2{ m_writer, "fragCoord" }
+				, sdw::InFloat{ m_writer, "linearDepth" }
+				, sdw::InVec2{ m_writer, "targetSize" }
+				, sdw::InOutVec4{ m_writer, "output" } );
+		}
+
+		IF( m_writer, plinearDepth < pcameraPlanes.y() )
+		{
+			m_computeForeground( pfragCoord
+				, plinearDepth
+				, ptargetSize
+				, poutput );
+		}
+		FI;
 	}
 
 	sdw::Vec3 AtmosphereBackgroundModel::getSunRadiance( sdw::Vec3 const & psunDir )
