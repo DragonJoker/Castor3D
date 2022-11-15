@@ -306,9 +306,12 @@ namespace castor
 		 *\name Opérateurs arithmétiques.
 		**/
 		/**@{*/
+		inline LengthT< TypeT > & operator=( TypeT const & rhs )noexcept;
 		inline LengthT< TypeT > & operator-()noexcept;
 		inline LengthT< TypeT > & operator+=( LengthT< TypeT > const & rhs )noexcept;
 		inline LengthT< TypeT > & operator-=( LengthT< TypeT > const & rhs )noexcept;
+		inline LengthT< TypeT > & operator+=( TypeT const & rhs )noexcept;
+		inline LengthT< TypeT > & operator-=( TypeT const & rhs )noexcept;
 		inline LengthT< TypeT > & operator*=( double rhs )noexcept;
 		inline LengthT< TypeT > & operator/=( double rhs )noexcept;
 		/**@}*/
@@ -318,9 +321,24 @@ namespace castor
 		 *\~french
 		*\return		La valeur de la longueur, dans son unité.
 		*/
-		explicit inline operator TypeT()const noexcept
+		explicit inline operator TypeT const &()const noexcept
 		{
 			return m_value;
+		}
+
+		inline TypeT const & value()const noexcept
+		{
+			return m_value;
+		}
+
+		inline TypeT & operator*()noexcept
+		{
+			return m_value;
+		}
+
+		inline LengthUnit lengthUnit()const noexcept
+		{
+			return m_unit;
 		}
 
 	private:
@@ -336,7 +354,7 @@ namespace castor
 	};
 
 	template< typename TypeT >
-	static inline TypeT convert( TypeT value
+	static inline TypeT convert( TypeT const & value
 		, LengthUnit from
 		, LengthUnit to );
 	/**
@@ -370,6 +388,14 @@ namespace castor
 	inline LengthT< TypeT > operator+( LengthT< TypeT > const & lhs, LengthT< TypeT > const & rhs )noexcept;
 	template< typename TypeT >
 	inline LengthT< TypeT > operator-( LengthT< TypeT > const & lhs, LengthT< TypeT > const & rhs )noexcept;
+	template< typename TypeT >
+	inline LengthT< TypeT > operator+( TypeT const & lhs, LengthT< TypeT > const & rhs )noexcept;
+	template< typename TypeT >
+	inline LengthT< TypeT > operator-( TypeT const & lhs, LengthT< TypeT > const & rhs )noexcept;
+	template< typename TypeT >
+	inline LengthT< TypeT > operator+( LengthT< TypeT > const & lhs, TypeT const & rhs )noexcept;
+	template< typename TypeT >
+	inline LengthT< TypeT > operator-( LengthT< TypeT > const & lhs, TypeT const & rhs )noexcept;
 	template< typename TypeT >
 	inline LengthT< TypeT > operator*( LengthT< TypeT > const & lhs, double rhs )noexcept;
 	template< typename TypeT >

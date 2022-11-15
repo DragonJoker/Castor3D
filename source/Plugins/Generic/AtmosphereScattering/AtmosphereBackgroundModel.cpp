@@ -152,7 +152,7 @@ namespace atmosphere_scattering
 				, sdw::InVec2{ m_writer, "targetSize" }
 				, sdw::InOutVec4{ m_writer, "output" } );
 		}
-
+/*
 		IF( m_writer, plinearDepth < pcameraPlanes.y() )
 		{
 			m_computeForeground( pfragCoord
@@ -161,6 +161,7 @@ namespace atmosphere_scattering
 				, poutput );
 		}
 		FI;
+*/
 	}
 
 	sdw::Vec3 AtmosphereBackgroundModel::getSunRadiance( sdw::Vec3 const & psunDir )

@@ -6,98 +6,98 @@ namespace castor
 
 	namespace details
 	{
-		template< typename TypeT, LengthUnit FromT >
+		template< LengthUnit FromT >
 		struct LengthUnitConvertFactors;
 
-		template< typename TypeT >
-		struct LengthUnitConvertFactors< TypeT, LengthUnit::eKilometre >
+		template<>
+		struct LengthUnitConvertFactors< LengthUnit::eKilometre >
 		{
-			static constexpr std::array< TypeT, size_t( LengthUnit::eCount ) > factors{ TypeT( 1.0 )
-				, TypeT( 1000.0 )
-				, TypeT( 100000.0 )
-				, TypeT( 1000000.0 )
-				, TypeT( 1.0 / 0.0009144 )
-				, TypeT( 1.0 / 0.0003048 )
-				, TypeT( 1.0 / 0.0000254 ) };
+			static constexpr std::array< double, size_t( LengthUnit::eCount ) > factors{ double( 1.0 )
+				, double( 1000.0 )
+				, double( 100000.0 )
+				, double( 1000000.0 )
+				, double( 1.0 / 0.0009144 )
+				, double( 1.0 / 0.0003048 )
+				, double( 1.0 / 0.0000254 ) };
 		};
 
-		template< typename TypeT >
-		struct LengthUnitConvertFactors< TypeT, LengthUnit::eMetre >
+		template<>
+		struct LengthUnitConvertFactors< LengthUnit::eMetre >
 		{
-			static constexpr std::array< TypeT, size_t( LengthUnit::eCount ) > factors{ TypeT( 1.0 / 1000.0 )
-				, TypeT( 1.0 )
-				, TypeT( 100.0 )
-				, TypeT( 1000.0 )
-				, TypeT( 1.0 / 0.9144 )
-				, TypeT( 1.0 / 0.3048 )
-				, TypeT( 1.0 / 0.0254 ) };
+			static constexpr std::array< double, size_t( LengthUnit::eCount ) > factors{ double( 1.0 / 1000.0 )
+				, double( 1.0 )
+				, double( 100.0 )
+				, double( 1000.0 )
+				, double( 1.0 / 0.9144 )
+				, double( 1.0 / 0.3048 )
+				, double( 1.0 / 0.0254 ) };
 		};
 
-		template< typename TypeT >
-		struct LengthUnitConvertFactors< TypeT, LengthUnit::eCentimetre >
+		template<>
+		struct LengthUnitConvertFactors< LengthUnit::eCentimetre >
 		{
-			static constexpr std::array< TypeT, size_t( LengthUnit::eCount ) > factors{ TypeT( 1.0 / 100000.0 )
-				, TypeT( 1.0 / 100.0 )
-				, TypeT( 1.0 )
-				, TypeT( 10.0 )
-				, TypeT( 1.0 / 91.44 )
-				, TypeT( 1.0 / 30.48 )
-				, TypeT( 1.0 / 2.54 ) };
+			static constexpr std::array< double, size_t( LengthUnit::eCount ) > factors{ double( 1.0 / 100000.0 )
+				, double( 1.0 / 100.0 )
+				, double( 1.0 )
+				, double( 10.0 )
+				, double( 1.0 / 91.44 )
+				, double( 1.0 / 30.48 )
+				, double( 1.0 / 2.54 ) };
 		};
 
-		template< typename TypeT >
-		struct LengthUnitConvertFactors< TypeT, LengthUnit::eMillimetre >
+		template<>
+		struct LengthUnitConvertFactors< LengthUnit::eMillimetre >
 		{
-			static constexpr std::array< TypeT, size_t( LengthUnit::eCount ) > factors{ TypeT( 1.0 / 1000000.0 )
-				, TypeT( 1.0 / 1000.0 )
-				, TypeT( 1.0 / 10.0 )
-				, TypeT( 1.0 )
-				, TypeT( 1.0 / 914.4 )
-				, TypeT( 1.0 / 304.8 )
-				, TypeT( 1.0 / 25.4 ) };
+			static constexpr std::array< double, size_t( LengthUnit::eCount ) > factors{ double( 1.0 / 1000000.0 )
+				, double( 1.0 / 1000.0 )
+				, double( 1.0 / 10.0 )
+				, double( 1.0 )
+				, double( 1.0 / 914.4 )
+				, double( 1.0 / 304.8 )
+				, double( 1.0 / 25.4 ) };
 		};
 
-		template< typename TypeT >
-		struct LengthUnitConvertFactors< TypeT, LengthUnit::eYard >
+		template<>
+		struct LengthUnitConvertFactors< LengthUnit::eYard >
 		{
-			static constexpr std::array< TypeT, size_t( LengthUnit::eCount ) > factors{ TypeT( 0.0009144 )
-				, TypeT( 0.9144 )
-				, TypeT( 91.44 )
-				, TypeT( 914.4 )
-				, TypeT( 1.0 )
-				, TypeT( 3.0 )
-				, TypeT( 36.0 ) };
+			static constexpr std::array< double, size_t( LengthUnit::eCount ) > factors{ double( 0.0009144 )
+				, double( 0.9144 )
+				, double( 91.44 )
+				, double( 914.4 )
+				, double( 1.0 )
+				, double( 3.0 )
+				, double( 36.0 ) };
 		};
 
-		template< typename TypeT >
-		struct LengthUnitConvertFactors< TypeT, LengthUnit::eFoot >
+		template<>
+		struct LengthUnitConvertFactors< LengthUnit::eFoot >
 		{
-			static constexpr std::array< TypeT, size_t( LengthUnit::eCount ) > factors{ TypeT( 0.0003048 )
-				, TypeT( 0.3048 )
-				, TypeT( 30.48 )
-				, TypeT( 304.8 )
-				, TypeT( 1.0 / 3.0 )
-				, TypeT( 1.0 )
-				, TypeT( 12.0 ) };
+			static constexpr std::array< double, size_t( LengthUnit::eCount ) > factors{ double( 0.0003048 )
+				, double( 0.3048 )
+				, double( 30.48 )
+				, double( 304.8 )
+				, double( 1.0 / 3.0 )
+				, double( 1.0 )
+				, double( 12.0 ) };
 		};
 
-		template< typename TypeT >
-		struct LengthUnitConvertFactors< TypeT, LengthUnit::eInch >
+		template<>
+		struct LengthUnitConvertFactors< LengthUnit::eInch >
 		{
-			static constexpr std::array< TypeT, size_t( LengthUnit::eCount ) > factors{ TypeT( 0.0000254 )
-				, TypeT( 0.0254 )
-				, TypeT( 2.54 )
-				, TypeT( 25.4 )
-				, TypeT( 1.0 / 36.0 )
-				, TypeT( 1.0 / 12.0 )
-				, TypeT( 1.0 ) };
+			static constexpr std::array< double, size_t( LengthUnit::eCount ) > factors{ double( 0.0000254 )
+				, double( 0.0254 )
+				, double( 2.54 )
+				, double( 25.4 )
+				, double( 1.0 / 36.0 )
+				, double( 1.0 / 12.0 )
+				, double( 1.0 ) };
 		};
 
 		template< LengthUnit FromT, typename TypeT >
-		static inline TypeT convertTo( TypeT value
+		static inline TypeT convertTo( TypeT const & value
 			, LengthUnit to )
 		{
-			using ConvertFactors = LengthUnitConvertFactors< TypeT, FromT >;
+			using ConvertFactors = LengthUnitConvertFactors< FromT >;
 
 			switch ( to )
 			{
@@ -108,7 +108,7 @@ namespace castor
 			case LengthUnit::eYard:
 			case LengthUnit::eFoot:
 			case LengthUnit::eInch:
-				return value * ConvertFactors::factors[size_t( to )];
+				return TypeT( pointCast< double >( value ) * ConvertFactors::factors[size_t( to )] );
 			default:
 				CU_Failure( "Unsupported length unit for conversion" );
 				return value;
@@ -215,6 +215,13 @@ namespace castor
 	}
 
 	template< typename TypeT >
+	LengthT< TypeT > & LengthT< TypeT >::operator=( TypeT const & rhs )noexcept
+	{
+		m_value = rhs;
+		return *this;
+	}
+
+	template< typename TypeT >
 	LengthT< TypeT > & LengthT< TypeT >::operator-()noexcept
 	{
 		m_value = -m_value;
@@ -236,6 +243,20 @@ namespace castor
 	}
 
 	template< typename TypeT >
+	LengthT< TypeT > & LengthT< TypeT >::operator+=( TypeT const & rhs )noexcept
+	{
+		m_value += rhs;
+		return *this;
+	}
+
+	template< typename TypeT >
+	LengthT< TypeT > & LengthT< TypeT >::operator-=( TypeT const & rhs )noexcept
+	{
+		m_value -= rhs;
+		return *this;
+	}
+
+	template< typename TypeT >
 	LengthT< TypeT > & LengthT< TypeT >::operator*=( double rhs )noexcept
 	{
 		m_value *= TypeT( rhs );
@@ -252,7 +273,7 @@ namespace castor
 	//*********************************************************************************************
 
 	template< typename TypeT >
-	static inline TypeT convert( TypeT value
+	static inline TypeT convert( TypeT const & value
 		, LengthUnit from
 		, LengthUnit to )
 	{
@@ -335,18 +356,30 @@ namespace castor
 	}
 
 	template< typename TypeT >
-	LengthT< TypeT > operator*( LengthT< TypeT > const & lhs, LengthT< TypeT > const & rhs )noexcept
+	LengthT< TypeT > operator+( TypeT const & lhs, LengthT< TypeT > const & rhs )noexcept
+	{
+		return LengthT< TypeT >::fromUnit( lhs, rhs.lengthUnit() ) + rhs;
+	}
+
+	template< typename TypeT >
+	LengthT< TypeT > operator-( TypeT const & lhs, LengthT< TypeT > const & rhs )noexcept
+	{
+		return LengthT< TypeT >::fromUnit( lhs, rhs.lengthUnit() ) - rhs;
+	}
+
+	template< typename TypeT >
+	LengthT< TypeT > operator+( LengthT< TypeT > const & lhs, TypeT const & rhs )noexcept
 	{
 		LengthT< TypeT > result{ lhs };
-		result *= rhs;
+		result += rhs;
 		return result;
 	}
 
 	template< typename TypeT >
-	LengthT< TypeT > operator/( LengthT< TypeT > const & lhs, LengthT< TypeT > const & rhs )noexcept
+	LengthT< TypeT > operator-( LengthT< TypeT > const & lhs, TypeT const & rhs )noexcept
 	{
 		LengthT< TypeT > result{ lhs };
-		result /= rhs;
+		result -= rhs;
 		return result;
 	}
 

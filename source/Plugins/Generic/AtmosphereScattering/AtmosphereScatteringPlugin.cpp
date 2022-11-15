@@ -54,13 +54,8 @@ namespace atmosphere_scattering
 				, &parserAtmosphereScatteringEnd );
 			addParser( result
 				, uint32_t( AtmosphereSection::eRoot )
-				, cuT( "sunNode" )
-				, &parserSunNode
-				, { castor::makeParameter< castor::ParameterType::eName >() } );
-			addParser( result
-				, uint32_t( AtmosphereSection::eRoot )
-				, cuT( "planetNode" )
-				, &parserPlanetNode
+				, cuT( "node" )
+				, &parserNode
 				, { castor::makeParameter< castor::ParameterType::eName >() } );
 			addParser( result
 				, uint32_t( AtmosphereSection::eRoot )
