@@ -120,17 +120,6 @@ namespace atmosphere_scattering
 				, sdw::InCombinedImage2DRgba32{ writer, "tex" }
 				, sdw::InVec2{ writer, "uv" } );
 
-			auto getSunUVPos = writer.implementFunction< sdw::Vec2 >( "getSunUVPos"
-				, [&]()
-				{
-					auto worldPos = writer.declLocale( "worldPos"
-						, vec4( c3d_cameraData.position() + vec3( 0.0_f, c3d_atmosphereData.bottomRadius(), 0.0_f ) + c3d_atmosphereData.sunDirection() * 1e6_f, 1.0_f ) );
-					auto ndcPos = writer.declLocale( "ndcPos"
-						, c3d_cameraData.camWorldToProj( worldPos ) );
-					ndcPos /= ndcPos.w();
-					writer.returnStmt( fma( ndcPos.xy(), vec2( 0.5_f ), vec2( 0.5_f ) ) );
-				} );
-
 			auto computeLighting = writer.implementFunction< sdw::Vec4 >( "computeLighting"
 				, [&]( sdw::Vec4 skyColor
 					, sdw::Vec3 cloudsColor

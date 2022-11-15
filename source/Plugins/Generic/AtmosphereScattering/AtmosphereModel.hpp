@@ -182,9 +182,14 @@ namespace atmosphere_scattering
 			, Settings settings
 			, VkExtent2D transmittanceExtent );
 
-		castor::Length getLengthUnit()const noexcept
+		auto const & getLengthUnit()const noexcept
 		{
 			return settings.length;
+		}
+
+		auto getPlanetPosition()const noexcept
+		{
+			return atmosphereData.planetPosition();
 		}
 
 		auto getSunDirection()const noexcept
@@ -224,18 +229,6 @@ namespace atmosphere_scattering
 			return settings.cameraData->camProjToWorld( clipSpace );
 		}
 
-		auto camProjToView( sdw::Vec4 const & clipSpace )const noexcept
-		{
-			CU_Require( settings.cameraData );
-			return settings.cameraData->camInvProj() * clipSpace;
-		}
-
-		auto camViewToWorld( sdw::Vec4 const & viewSpace )const noexcept
-		{
-			CU_Require( settings.cameraData );
-			return settings.cameraData->camInvView()  * viewSpace;
-		}
-
 		void setTransmittanceMap( sdw::CombinedImage2DRgba32 const & value )
 		{
 			transmittanceTexture = &value;
@@ -246,9 +239,7 @@ namespace atmosphere_scattering
 			multiScatTexture = &value;
 		}
 
-		sdw::Vec3 getPositionFromEarth( sdw::Vec3 const & position )const;
-		sdw::Vec3 getPositionToEarth( sdw::Vec3 const & position )const;
-		sdw::Vec3 getCameraPositionFromEarth()const;
+		sdw::Vec3 getPositionToPlanet( sdw::Vec3 const & position )const;
 		RetRay castRay( sdw::Vec2 const & uv );
 		RetRay castRay( sdw::Vec2 const & screenPoint
 			, sdw::Vec2 const & screenSize );

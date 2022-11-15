@@ -77,7 +77,7 @@ namespace atmosphere_scattering
 					auto depthBufferWorldPos = writer.declLocale( "depthBufferWorldPos"
 						, settings.cameraData->objProjToWorld( vec4( clipSpace, 1.0f ) ) );
 					depthBufferWorldPos /= depthBufferWorldPos.w();
-					writer.returnStmt( depthBufferWorldPos.xyz() * settings.length.kilometres() );
+					writer.returnStmt( getPositionToPlanet( depthBufferWorldPos.xyz() * settings.length.kilometres() ) );
 				}
 				, sdw::InFloat{ writer, "depth" }
 				, sdw::InVec2{ writer, "pixPos" }
@@ -87,19 +87,9 @@ namespace atmosphere_scattering
 		return m_getWorldPos( pdepth, ppixPos, ptexSize );
 	}
 
-	sdw::Vec3 AtmosphereModel::getPositionFromEarth( sdw::Vec3 const & position )const
+	sdw::Vec3 AtmosphereModel::getPositionToPlanet( sdw::Vec3 const & position )const
 	{
-		return position + vec3( 0.0_f, getEarthRadius(), 0.0_f );
-	}
-
-	sdw::Vec3 AtmosphereModel::getPositionToEarth( sdw::Vec3 const & position )const
-	{
-		return position - vec3( 0.0_f, getEarthRadius(), 0.0_f );
-	}
-
-	sdw::Vec3 AtmosphereModel::getCameraPositionFromEarth()const
-	{
-		return getPositionFromEarth( getCameraPosition() );
+		return position - getPlanetPosition();
 	}
 
 	RetRay AtmosphereModel::castRay( sdw::Vec2 const & puv )
@@ -115,8 +105,8 @@ namespace atmosphere_scattering
 						, camProjToWorld( vec4( clipSpace, 1.0_f ) ) );
 
 					auto result = writer.declLocale< Ray >( "result" );
-					result.origin = getCameraPositionFromEarth();
-					result.direction = normalize( hPos.xyz() / hPos.w() - getCameraPosition() );
+					result.origin = getCameraPosition();
+					result.direction = normalize( hPos.xyz() / hPos.w() - ( getPlanetPosition() + result.origin ) );
 
 					writer.returnStmt( result );
 				}
@@ -192,7 +182,7 @@ namespace atmosphere_scattering
 									, pixPos
 									, transmittanceLutExtent ) );
 							auto tDepth = writer.declLocale( "tDepth"
-								, length( depthBufferWorldPos - ( ray.origin + vec3( 0.0_f, -getEarthRadius(), 0.0_f ) ) ) ); // apply earth offset to go back to origin as top of earth mode. 
+								, length( depthBufferWorldPos - ray.origin ) ); // apply earth offset to go back to origin as top of planet mode. 
 
 							IF( writer, tDepth < tMax )
 							{
@@ -457,7 +447,7 @@ namespace atmosphere_scattering
 					, sdw::CombinedImage2DRgba32 const & transmittanceMap )
 				{
 					auto sunZenithCosAngle = writer.declLocale( "sunZenithCosAngle"
-						, dot( sunDir, normalize( getCameraPositionFromEarth() ) ) );
+						, dot( sunDir, normalize( getCameraPosition() ) ) );
 
 					auto uv = writer.declLocale< sdw::Vec2 >( "uv" );
 					lutTransmittanceParamsToUv( getEarthRadius(), sunZenithCosAngle, uv );

@@ -26,11 +26,6 @@ namespace atmosphere_scattering
 		return camInvViewProj() * pos;
 	}
 
-	sdw::Vec4 CameraData::camWorldToProj( sdw::Vec4 const & pos )const
-	{
-		return camViewProj() * pos;
-	}
-
 	sdw::Vec4 CameraData::objProjToWorld( sdw::Vec4 const & pos )const
 	{
 		return objInvViewProj() * pos;
@@ -56,43 +51,45 @@ namespace atmosphere_scattering
 	}
 
 	void CameraUbo::cpuUpdate( castor3d::Camera const & camera
+		, bool isSafeBanded
 		, castor::Point3f const & sunDirection
-		, bool isSafeBanded )
+		, castor::Vector3f const & planetPosition )
 	{
 		auto node = camera.getParent();
-		auto position = node->getDerivedPosition();
-		auto orientation = node->getDerivedOrientation();
 		auto & engine = *node->getScene()->getEngine();
+		auto position = node->getDerivedPosition() - planetPosition;
+		auto orientation = node->getDerivedOrientation();
 		auto length = castor::Length::fromUnit( 1.0f, engine.getLengthUnit() );
-		m_position = position;
+
+		auto kmPosition = position.kilometres();
+		m_position = kmPosition;
 		m_orientation = orientation;
 
-		// Convert from meters to kilometers
-		position = position * length.kilometres();
-
-		castor::Point3f right{ 1.0, 0.0, 0.0 };
-		castor::Point3f up{ 0.0, 1.0, 0.0 };
+		auto right{ castor::Vector3f::fromKilometres( castor::Point3f{ 1.0, 0.0, 0.0 } ) };
+		auto up{ castor::Vector3f::fromKilometres( castor::Point3f{ 0.0, 1.0, 0.0 } ) };
 		orientation.transform( right, right );
 		orientation.transform( up, up );
-		castor::Point3f front{ castor::point::cross( right, up ) };
+		auto front{ castor::point::cross( right, up ) };
 		up = castor::point::cross( front, right );
-		castor::Matrix4x4f view;
-		castor::matrix::lookAt( view, position, position + front, up );
 
+		position += planetPosition;
 		auto proj = camera.getRescaledProjection( length.kilometres(), isSafeBanded );
+		castor::Matrix4x4f view;
+		castor::matrix::lookAt( view
+			, position.kilometres()
+			, ( position + front ).kilometres()
+			, up.kilometres() );
 		auto viewProj = proj * view;
+
 		auto & data = m_ubo.getData();
-		data.camViewProj = viewProj;
+		data.position = m_position;
 		data.camInvViewProj = viewProj.getInverse();
-		data.camInvProj = camera.getProjection( isSafeBanded ).getInverse();
-		data.camInvView = view.getInverse();
 
 		viewProj = camera.getProjection( isSafeBanded ) * camera.getView();
 		data.objInvViewProj = viewProj.getInverse();
-		data.position = position;
 
 		data.lightDotCameraFront = castor::point::dot( sunDirection
-			, castor::point::getNormalised( front ) );
+			, castor::point::getNormalised( front.kilometres() ) );
 		data.isLightInFront = data.lightDotCameraFront > 0.2f ? 1 : 0;
 	}
 

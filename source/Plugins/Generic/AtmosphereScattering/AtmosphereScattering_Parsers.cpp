@@ -39,9 +39,13 @@ namespace atmosphere_scattering
 		auto & parsingContext = castor3d::getSceneParserContext( context );
 		auto & atmosphereContext = parser::getParserContext( context );
 
-		if ( !atmosphereContext.background->getNode() )
+		if ( !atmosphereContext.background->getSunNode() )
 		{
 			CU_ParsingError( cuT( "No node to attach the sun to..." ) );
+		}
+		else if ( !atmosphereContext.background->getPlanetNode() )
+		{
+			CU_ParsingError( cuT( "No node to attach the planet to..." ) );
 		}
 		else
 		{
@@ -62,7 +66,7 @@ namespace atmosphere_scattering
 	}
 	CU_EndAttributePop()
 
-	CU_ImplementAttributeParser( parserNode )
+	CU_ImplementAttributeParser( parserSunNode )
 	{
 		if ( params.empty() )
 		{
@@ -76,7 +80,31 @@ namespace atmosphere_scattering
 
 			if ( auto node = parsingContext.scene->findSceneNode( params[0]->get( name ) ).lock() )
 			{
-				atmosphereContext.background->setNode( *node );
+				atmosphereContext.background->setSunNode( *node );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "Node [" ) + name + cuT( "] does not exist" ) );
+			}
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserPlanetNode )
+	{
+		if ( params.empty() )
+		{
+			CU_ParsingError( "Missing parameter" );
+		}
+		else
+		{
+			auto & parsingContext = castor3d::getSceneParserContext( context );
+			auto & atmosphereContext = parser::getParserContext( context );
+			castor::String name;
+
+			if ( auto node = parsingContext.scene->findSceneNode( params[0]->get( name ) ).lock() )
+			{
+				atmosphereContext.background->setPlanetNode( *node );
 			}
 			else
 			{
