@@ -95,8 +95,9 @@ namespace atmosphere_scattering
 			eWorley,
 			eCurl,
 			eWeatherMap,
-			eOutColour,
-			eOutEmission,
+			eOutSky,
+			eOutSun,
+			eOutClouds,
 			eCount,
 		};
 
@@ -148,8 +149,9 @@ namespace atmosphere_scattering
 				, 0u };
 
 			auto process = [&]( sdw::Vec2 const & fragCoord
-				, sdw::Vec4 & luminance
-				, sdw::Vec4 & emission )
+				, sdw::Vec4 & skyColor
+				, sdw::Vec4 & sunColor
+				, sdw::Vec4 & cloudsColor )
 			{
 				auto ifragCoord = writer.declLocale( "ifragCoord"
 					, ivec2( fragCoord ) );
@@ -160,65 +162,78 @@ namespace atmosphere_scattering
 						, targetSize
 						, depthBufferValue
 						, transmittance
-						, luminance ) );
-				luminance = scattering.rescaleLuminance( luminance );
+						, skyColor ) );
 
-				IF( writer, c3d_cloudsData.coverage() == 0.0_f )
+				auto skyLuminance = writer.declLocale( "skyLuminance"
+					, scattering.rescaleLuminance( skyColor ).rgb() );
+				auto sunLuminance = writer.declLocale( "sunLuminance"
+					, scattering.getSunLuminance( ray ) );
+				auto skyBlendFactor = writer.declLocale( "skyBlendFactor"
+					, 0.0_f );
+
+				IF( writer, c3d_cloudsData.coverage() > 0.0_f )
 				{
-					auto sunDisk = writer.declLocale( "sunDisk"
-						, scattering.getSunLuminance( ray ) );
-					emission.rgb() = sunDisk;
-				}
-				ELSE
-				{
-					clouds.applyClouds( ray
+					cloudsColor = clouds.applyClouds( ray
 						, ifragCoord
-						, luminance
-						, emission );
+						, sunLuminance
+						, skyLuminance
+						, skyBlendFactor );
 				}
 				FI;
 
+				skyColor = vec4( skyLuminance, skyBlendFactor );
+				sunColor = vec4( sunLuminance, 1.0_f );
 				return ifragCoord;
 			};
 
 			if constexpr ( useCompute )
 			{
-				auto outColour = writer.declStorageImg< sdw::WImage2DRgba32 >( "outColour"
-					, uint32_t( Bindings::eOutColour )
+				auto outSky = writer.declStorageImg< sdw::WImage2DRgba32 >( "outSky"
+					, uint32_t( Bindings::eOutSky )
 					, 0u );
-				auto outEmission = writer.declStorageImg< sdw::WImage2DRgba32 >("outEmission"
-					, uint32_t( Bindings::eOutEmission )
+				auto outSun = writer.declStorageImg< sdw::WImage2DRgba32 >( "outSun"
+					, uint32_t( Bindings::eOutSun )
+					, 0u );
+				auto outClouds = writer.declStorageImg< sdw::WImage2DRgba32 >("outClouds"
+					, uint32_t( Bindings::eOutClouds )
 					, 0u );
 
 				ShaderWriter< useCompute >::implementMain( writer
 					, [&]( sdw::Vec2 const & fragCoord )
 					{
-						auto luminance = writer.declLocale( "luminance"
+						auto sky = writer.declLocale( "sky"
 							, vec4( 0.0_f ) );
-						auto emission = writer.declLocale( "emission"
+						auto sun = writer.declLocale( "sun"
 							, vec4( 0.0_f ) );
-						auto ifragCoord = process( fragCoord, luminance, emission );
+						auto clouds = writer.declLocale( "clouds"
+							, vec4( 0.0_f ) );
+						auto ifragCoord = process( fragCoord, sky, sun, clouds );
 
-						outColour.store( ifragCoord, luminance );
-						outEmission.store( ifragCoord, emission );
+						outSky.store( ifragCoord, sky );
+						outSun.store( ifragCoord, sun );
+						outClouds.store( ifragCoord, clouds );
 					} );
 			}
 			else
 			{
-				auto outColour = writer.declOutput< sdw::Vec4 >( "outColour", 0u );
-				auto outEmission = writer.declOutput< sdw::Vec4 >( "outEmission", 1u );
+				auto outSky = writer.declOutput< sdw::Vec4 >( "outSky", 0u );
+				auto outSun = writer.declOutput< sdw::Vec4 >( "outSun", 1u );
+				auto outClouds = writer.declOutput< sdw::Vec4 >( "outClouds", 2u );
 
 				ShaderWriter< useCompute >::implementMain( writer
 					, [&]( sdw::Vec2 const & fragCoord )
 					{
-						auto luminance = writer.declLocale( "luminance"
+						auto sky = writer.declLocale( "sky"
 							, vec4( 0.0_f ) );
-						auto emission = writer.declLocale( "emission"
+						auto sun = writer.declLocale( "sun"
 							, vec4( 0.0_f ) );
-						process( fragCoord, luminance, emission );
+						auto clouds = writer.declLocale( "clouds"
+							, vec4( 0.0_f ) );
+						process( fragCoord, sky, sun, clouds );
 
-						outColour = luminance;
-						outEmission = emission;
+						outSky = sky;
+						outSun = sun;
+						outClouds = clouds;
 					} );
 			}
 
@@ -242,14 +257,15 @@ namespace atmosphere_scattering
 		, crg::ImageViewId const & worley
 		, crg::ImageViewId const & curl
 		, crg::ImageViewId const & weather
-		, crg::ImageViewId const & colourResult
-		, crg::ImageViewId const & emissionResult
+		, crg::ImageViewId const & skyResult
+		, crg::ImageViewId const & sunResult
+		, crg::ImageViewId const & cloudsResult
 		, uint32_t index )
 		: castor::Named{ "Clouds/VolumePass" + castor::string::toString( index ) }
 		, m_computeShader{ VK_SHADER_STAGE_COMPUTE_BIT
 			, getName()
 			, ( volclouds::useCompute
-				? volclouds::getProgram( *device.renderSystem.getEngine(), getExtent( colourResult ), getExtent( transmittance ) )
+				? volclouds::getProgram( *device.renderSystem.getEngine(), getExtent( skyResult ), getExtent( transmittance ) )
 				: nullptr) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT
 			, getName()
@@ -260,13 +276,13 @@ namespace atmosphere_scattering
 			, getName()
 			, ( volclouds::useCompute
 				? nullptr
-				: volclouds::getProgram( *device.renderSystem.getEngine(), getExtent( colourResult ), getExtent( transmittance ) ) ) }
+				: volclouds::getProgram( *device.renderSystem.getEngine(), getExtent( skyResult ), getExtent( transmittance ) ) ) }
 		, m_stages{ ( volclouds::useCompute
 			? ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, m_computeShader ) }
 			: ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, m_vertexShader )
 				, makeShaderState( device, m_fragmentShader ) } ) }
 	{
-		auto renderSize = getExtent( colourResult );
+		auto renderSize = getExtent( skyResult );
 		auto & pass = graph.createPass( getName()
 			, [this, &device, renderSize]( crg::FramePass const & framePass
 				, crg::GraphContext & context
@@ -353,15 +369,18 @@ namespace atmosphere_scattering
 
 		if constexpr ( volclouds::useCompute )
 		{
-			pass.addOutputStorageView( colourResult
-				, volclouds::eOutColour );
-			pass.addOutputStorageView( emissionResult
-				, volclouds::eOutEmission );
+			pass.addOutputStorageView( skyResult
+				, volclouds::eOutSky );
+			pass.addOutputStorageView( sunResult
+				, volclouds::eOutSun );
+			pass.addOutputStorageView( cloudsResult
+				, volclouds::eOutClouds );
 		}
 		else
 		{
-			pass.addOutputColourView( colourResult );
-			pass.addOutputColourView( emissionResult );
+			pass.addOutputColourView( skyResult );
+			pass.addOutputColourView( sunResult );
+			pass.addOutputColourView( cloudsResult );
 		}
 
 		m_lastPass = &pass;
