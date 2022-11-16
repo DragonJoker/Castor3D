@@ -197,7 +197,7 @@ namespace atmosphere_scattering
 			return atmosphereData.sunDirection();
 		}
 
-		auto getEarthRadius()const noexcept
+		auto getPlanetRadius()const noexcept
 		{
 			return atmosphereData.bottomRadius();
 		}
@@ -207,6 +207,16 @@ namespace atmosphere_scattering
 			return atmosphereData.topRadius();
 		}
 
+		auto getAtmosphereH( sdw::Float const d )const noexcept
+		{
+			return sqrt( max( 0.0_f, d * d - getPlanetRadius() * getPlanetRadius() ) );
+		}
+
+		auto getAtmosphereH()const noexcept
+		{
+			return getAtmosphereH( getAtmosphereRadius()  );
+		}
+
 		auto getSunIlluminance()const noexcept
 		{
 			return atmosphereData.sunIlluminance();
@@ -214,7 +224,7 @@ namespace atmosphere_scattering
 
 		auto getAtmosphereThickness()const noexcept
 		{
-			return getAtmosphereRadius() - getEarthRadius();
+			return getAtmosphereRadius() - getPlanetRadius();
 		}
 
 		auto getCameraPosition()const noexcept
@@ -253,7 +263,7 @@ namespace atmosphere_scattering
 		sdw::RetVec3 getSunRadiance( sdw::Vec3 const & cameraPosition
 			, sdw::Vec3 const & sunDir
 			, sdw::CombinedImage2DRgba32 const & transmittanceMap );
-		sdw::RetFloat getEarthShadow( sdw::Vec3 const & earthO
+		sdw::RetFloat getPlanetShadow( sdw::Vec3 const & planetO
 			, sdw::Vec3 const & position );
 
 		// - Returns distance from rayOrigin to first intersecion with sphere,
@@ -311,8 +321,8 @@ namespace atmosphere_scattering
 			, sdw::Vec2 const & size );
 
 	private:
-		sdw::Float doGetEarthShadow( Ray const & rayToSun
-			, sdw::Vec3 const & earthO
+		sdw::Float doGetPlanetShadow( Ray const & rayToSun
+			, sdw::Vec3 const & planetO
 			, sdw::Vec3 const & upVector );
 
 	private:
@@ -385,7 +395,7 @@ namespace atmosphere_scattering
 			, sdw::InCombinedImage2DRgba32 > m_getSunRadiance;
 		sdw::Function< sdw::Float
 			, sdw::InVec3
-			, sdw::InVec3 > m_getEarthShadow;
+			, sdw::InVec3 > m_getPlanetShadow;
 	};
 }
 

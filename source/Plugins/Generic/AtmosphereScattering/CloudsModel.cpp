@@ -40,8 +40,8 @@ namespace atmosphere_scattering
 		, weatherMap{ writer.declCombinedImg< sdw::CombinedImage2DRg32 >( "weatherMap"
 			, binding++
 			, set ) }
-		, cloudsInnerRadius{ clouds.innerRadius() + atmosphere.getEarthRadius() }
-		, cloudsOuterRadius{ clouds.outerRadius() + atmosphere.getEarthRadius() }
+		, cloudsInnerRadius{ clouds.innerRadius() + atmosphere.getPlanetRadius() }
+		, cloudsOuterRadius{ clouds.outerRadius() + atmosphere.getPlanetRadius() }
 		, cloudsThickness{ clouds.outerRadius() - clouds.innerRadius() }
 	{
 	}
@@ -76,7 +76,7 @@ namespace atmosphere_scattering
 					auto secondRay = writer.declLocale( "secondRay"
 						, 0_b );
 					auto interGround = writer.declLocale( "interGround"
-						, atmosphere.raySphereIntersectNearest( ray, atmosphere.getEarthRadius() ) );
+						, atmosphere.raySphereIntersectNearest( ray, atmosphere.getPlanetRadius() ) );
 
 					auto interInnerN = writer.declLocale( "interInnerN", Intersection{ writer } );
 					auto interInnerF = writer.declLocale( "interInnerF", Intersection{ writer } );
@@ -152,7 +152,7 @@ namespace atmosphere_scattering
 					// Compute fog amount.
 					auto fogAmount0 = writer.declLocale( "fogAmount0"
 						, computeFogAmount( fogRay0, ray.origin, 2.0_f ) );
-					auto earthShadow0 = writer.declLocale( "earthShadow"
+					auto planetShadow0 = writer.declLocale( "planetShadow00"
 						, 0.0_f );
 					auto rayMarchResult = writer.declLocale( "rayMarchResult"
 						, raymarchToCloud( ray
@@ -160,7 +160,7 @@ namespace atmosphere_scattering
 							, endPos0
 							, fragCoord
 							, sunRadiance
-							, earthShadow0 ) );
+							, planetShadow0 ) );
 					auto skyLuminance0 = writer.declLocale( "skyLuminance0"
 						, skyLuminance );
 					auto result = writer.declLocale( "result"
@@ -169,7 +169,7 @@ namespace atmosphere_scattering
 							, sunLuminance
 							, skyLuminance0
 							, 1.0_f - fogAmount0
-							, earthShadow0
+							, planetShadow0
 							, rayMarchResult ) );
 
 					IF( writer, secondRay )
@@ -180,14 +180,14 @@ namespace atmosphere_scattering
 
 						IF( writer, fogAmount1 <= 0.965_f )
 						{
-							auto earthShadow1 = writer.declLocale( "earthShadow1"
+							auto planetShadow1 = writer.declLocale( "planetShadow1"
 								, 0.0_f );
 							rayMarchResult = raymarchToCloud( ray
 								, startPos1
 								, endPos1
 								, fragCoord
 								, sunRadiance
-								, earthShadow1 );
+								, planetShadow1 );
 							auto skyLuminance1 = writer.declLocale( "skyLuminance1"
 								, skyLuminance );
 							auto lightingResult = writer.declLocale( "lightingResult"
@@ -196,10 +196,10 @@ namespace atmosphere_scattering
 									, sunLuminance
 									, skyLuminance1
 									, 1.0_f - fogAmount1
-									, earthShadow1
+									, planetShadow1
 									, rayMarchResult ) );
 							result = max( result, lightingResult );
-							earthShadow0 = max( earthShadow0, earthShadow1 );
+							planetShadow0 = max( planetShadow0, planetShadow1 );
 							fogAmount0 = max( fogAmount0, fogAmount1 );
 							skyLuminance0 = max( skyLuminance0, skyLuminance1 );
 						}
@@ -208,7 +208,7 @@ namespace atmosphere_scattering
 					FI;
 
 					skyLuminance = skyLuminance0;
-					skyBlendFactor = earthShadow0 * fogAmount0;
+					skyBlendFactor = planetShadow0 * fogAmount0;
 					writer.returnStmt( result );
 				}
 				, castor3d::shader::InRay{ writer, "ray" }
@@ -274,11 +274,11 @@ namespace atmosphere_scattering
 						, length( point - ray.origin ) );
 					auto lengthOfRayToInnerShell = writer.declLocale( "lengthOfRayToInnerShell"
 						, length( startPosOnInnerShell - ray.origin ) );
-					auto pointToEarthDir = writer.declLocale( "pointToEarthDir"
+					auto pointToPlanetDir = writer.declLocale( "pointToPlanetDir"
 						, normalize( point ) );
 					// assuming RayDir is normalised
 					auto cosTheta = writer.declLocale( "cosTheta"
-						, dot( ray.direction, pointToEarthDir ) );
+						, dot( ray.direction, pointToPlanetDir ) );
 
 					// CosTheta is an approximation whose error gets relatively big near the horizon and could lead to problems.
 					// However, the actual calculationis involve a lot of trig and thats expensive;
@@ -600,7 +600,7 @@ namespace atmosphere_scattering
 		, sdw::Vec3 const & pendPos
 		, sdw::IVec2 const & pfragCoord
 		, sdw::Vec3 const & psunColor
-		, sdw::Float & pearthShadow )
+		, sdw::Float & pplanetShadow )
 	{
 		if ( !m_raymarchToCloud )
 		{
@@ -610,7 +610,7 @@ namespace atmosphere_scattering
 					, sdw::Vec3 const & endPos
 					, sdw::IVec2 const & fragCoord
 					, sdw::Vec3 const & sunColor
-					, sdw::Float earthShadow )
+					, sdw::Float planetShadow )
 				{
 					auto lightFactor = 1.0_f;
 					auto eccentricity = 0.6_f;
@@ -660,13 +660,13 @@ namespace atmosphere_scattering
 					auto i = writer.declLocale( "i"
 						, 0_i );
 
-					earthShadow = 0.0_f;
+					planetShadow = 0.0_f;
 
 					WHILE( writer, i < sampleCount )
 					{
 						auto relativeHeight = writer.declLocale( "relativeHeight"
 							, getHeightFraction( pos ) );
-						earthShadow += atmosphere.getEarthShadow( vec3( 0.0_f ), pos );
+						planetShadow += atmosphere.getPlanetShadow( vec3( 0.0_f ), pos );
 
 						IF( writer, relativeHeight >= 0.0_f
 							&& relativeHeight <= 1.0_f
@@ -701,8 +701,8 @@ namespace atmosphere_scattering
 					}
 					ELIHW;
 
-					earthShadow /= writer.cast< sdw::Float >( max( 1_i, i ) );
-					earthShadow = min( 1.0_f, earthShadow );
+					planetShadow /= writer.cast< sdw::Float >( max( 1_i, i ) );
+					planetShadow = min( 1.0_f, planetShadow );
 					result.a() = accumDensity;
 					writer.returnStmt( result );
 				}
@@ -711,7 +711,7 @@ namespace atmosphere_scattering
 				, sdw::InVec3{ writer, "endPos" }
 				, sdw::InIVec2{ writer, "fragCoord" }
 				, sdw::InVec3{ writer, "sunColor" }
-				, sdw::OutFloat{ writer, "earthShadow" } );
+				, sdw::OutFloat{ writer, "planetShadow" } );
 		}
 
 		return m_raymarchToCloud( pray
@@ -719,7 +719,7 @@ namespace atmosphere_scattering
 			, pendPos
 			, pfragCoord
 			, psunColor
-			, pearthShadow );
+			, pplanetShadow );
 	}
 
 	sdw::RetFloat CloudsModel::computeFogAmount( sdw::Vec3 const & pstartPos
@@ -814,7 +814,7 @@ namespace atmosphere_scattering
 		, sdw::Vec3 const & psunLuminance
 		, sdw::Vec3 & pskyLuminance
 		, sdw::Float const & pfadeOut
-		, sdw::Float const & pearthShadow
+		, sdw::Float const & pplanetShadow
 		, sdw::Vec4 const & prayMarchResult )
 	{
 		if ( !m_computeLighting )
@@ -825,7 +825,7 @@ namespace atmosphere_scattering
 					, sdw::Vec3 const & sunLuminance
 					, sdw::Vec3 skyLuminance
 					, sdw::Float const & fadeOut
-					, sdw::Float const & earthShadow
+					, sdw::Float const & planetShadow
 					, sdw::Vec4 const & rayMarchResult )
 				{
 					auto cloudsDensity = writer.declLocale( "cloudsDensity"
@@ -858,14 +858,14 @@ namespace atmosphere_scattering
 						, cloudsColour
 						, vec3( fadeOut ) );
 					cloudsDensity = max( cloudsDensity, ( 1.0_f - fadeOut ) );
-					writer.returnStmt( vec4( earthShadow * cloudsColour, cloudsDensity ) );
+					writer.returnStmt( vec4( planetShadow * cloudsColour, cloudsDensity ) );
 				}
 				, InRay{ writer, "ray" }
 				, sdw::InVec3{ writer, "sunRadiance" }
 				, sdw::InVec3{ writer, "sunLuminance" }
 				, sdw::InOutVec3{ writer, "skyLuminance" }
 				, sdw::InFloat{ writer, "fadeOut" }
-				, sdw::InFloat{ writer, "earthShadow" }
+				, sdw::InFloat{ writer, "planetShadow" }
 				, sdw::InVec4{ writer, "rayMarchResult" } );
 		}
 
@@ -874,7 +874,7 @@ namespace atmosphere_scattering
 			, psunLuminance
 			, pskyLuminance
 			, pfadeOut
-			, pearthShadow
+			, pplanetShadow
 			, prayMarchResult );
 	}
 
