@@ -195,10 +195,10 @@ namespace atmosphere_scattering
 					// If the voxel is under the ground, make sure to offset it out on the ground.
 					viewHeight = length( newWorldPos );
 
-					IF( writer, viewHeight <= ( atmosphere.getEarthRadius() + planetRadiusOffset ) )
+					IF( writer, viewHeight <= ( atmosphere.getPlanetRadius() + planetRadiusOffset ) )
 					{
-						// Apply a position offset to make sure no artifacts are visible close to the earth boundaries for large voxel.
-						newWorldPos = normalize( newWorldPos ) * ( atmosphere.getEarthRadius() + planetRadiusOffset + 0.001_f );
+						// Apply a position offset to make sure no artifacts are visible close to the planet boundaries for large voxel.
+						newWorldPos = normalize( newWorldPos ) * ( atmosphere.getPlanetRadius() + planetRadiusOffset + 0.001_f );
 						ray.direction = normalize( newWorldPos - ray.origin );
 						tMax = length( newWorldPos - ray.origin );
 					}

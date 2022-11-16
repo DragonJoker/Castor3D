@@ -71,7 +71,7 @@ namespace atmosphere_scattering
 			, sdw::Vec3 const & endPos
 			, sdw::IVec2 const & fragCoord
 			, sdw::Vec3 const & sunColor
-			, sdw::Float & earthShadow );
+			, sdw::Float & planetShadow );
 		sdw::RetFloat computeFogAmount( sdw::Vec3 const & startPos
 			, sdw::Vec3 const & wolrdPos
 			, sdw::Float const & factor );
@@ -90,7 +90,7 @@ namespace atmosphere_scattering
 			, sdw::Vec3 const & sunLuminance
 			, sdw::Vec3 & skyLuminance
 			, sdw::Float const & fadeOut
-			, sdw::Float const & earthShadow
+			, sdw::Float const & planetShadow
 			, sdw::Vec4 const & rayMarchResult );
 		sdw::Float getLightEnergy( sdw::Float cosTheta
 			, sdw::Float const & coneDensity );

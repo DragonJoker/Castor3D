@@ -109,7 +109,7 @@ namespace atmosphere_scattering
 						, vec3( 0.0_f, cosSunZenithAngle, -sinSunZenithAngle ) );
 					// We adjust again viewHeight according to PLANET_RADIUS_OFFSET to be in a valid range.
 					auto viewHeight = writer.declLocale( "viewHeight"
-						, atmosphere.getEarthRadius() + clamp( uv.y() + planetRadiusOffset, 0.0_f, 1.0_f ) * ( atmosphere.getAtmosphereThickness() - planetRadiusOffset ) );
+						, atmosphere.getPlanetRadius() + clamp( uv.y() + planetRadiusOffset, 0.0_f, 1.0_f ) * ( atmosphere.getAtmosphereThickness() - planetRadiusOffset ) );
 
 					auto ray = writer.declLocale< Ray >( "ray" );
 					ray.origin = vec3( 0.0_f, viewHeight, 0.0_f );

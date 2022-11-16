@@ -79,7 +79,7 @@ namespace atmosphere_scattering
 						{
 							IF( m_writer, !m_atmosphere.raySphereIntersectNearest( ray
 								, vec3( 0.0_f )
-								, m_atmosphere.getEarthRadius() ).valid() )
+								, m_atmosphere.getPlanetRadius() ).valid() )
 							{
 								sunLuminance = 2.0_f * getSunRadiance( ray.direction );
 
@@ -114,7 +114,7 @@ namespace atmosphere_scattering
 						{
 							IF( m_writer, !m_atmosphere.raySphereIntersectNearest( ray
 								, vec3( 0.0_f )
-								, m_atmosphere.getEarthRadius() ).valid() ) // no intersection
+								, m_atmosphere.getPlanetRadius() ).valid() ) // no intersection
 							{
 								auto sunSolidAngle = m_writer.declLocale( "sunSolidAngle"
 									, castor::PiMult2< float > * ( 1.0_f - cos( sunAngularDiameter * 0.5_f ) ) );
@@ -282,7 +282,7 @@ namespace atmosphere_scattering
 				auto intersectGround = m_writer.declLocale( "intersectGround"
 					, m_atmosphere.raySphereIntersectNearest( ray
 						, vec3( 0.0_f )
-						, m_atmosphere.getEarthRadius() ).valid() );
+						, m_atmosphere.getPlanetRadius() ).valid() );
 
 				m_atmosphere.skyViewLutParamsToUv( intersectGround, viewZenithCosAngle, lightViewCosAngle, viewHeight, uv, fragSize );
 
