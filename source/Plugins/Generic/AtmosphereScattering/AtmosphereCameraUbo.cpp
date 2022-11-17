@@ -57,7 +57,7 @@ namespace atmosphere_scattering
 	{
 		auto node = camera.getParent();
 		auto & engine = *node->getScene()->getEngine();
-		auto position = node->getDerivedPosition() - planetPosition;
+		auto position = castor::Vector3f::fromUnit( node->getDerivedPosition(), engine.getLengthUnit() ) - planetPosition;
 		auto orientation = node->getDerivedOrientation();
 		auto length = castor::Length::fromUnit( 1.0f, engine.getLengthUnit() );
 
@@ -72,17 +72,18 @@ namespace atmosphere_scattering
 		auto front{ castor::point::cross( right, up ) };
 		up = castor::point::cross( front, right );
 
-		position += planetPosition;
 		auto proj = camera.getRescaledProjection( length.kilometres(), isSafeBanded );
+
+		auto & data = m_ubo.getData();
+		data.position = m_position;
+
+		position += planetPosition;
 		castor::Matrix4x4f view;
 		castor::matrix::lookAt( view
 			, position.kilometres()
 			, ( position + front ).kilometres()
 			, up.kilometres() );
 		auto viewProj = proj * view;
-
-		auto & data = m_ubo.getData();
-		data.position = m_position;
 		data.camInvViewProj = viewProj.getInverse();
 
 		viewProj = camera.getProjection( isSafeBanded ) * camera.getView();

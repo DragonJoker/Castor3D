@@ -174,11 +174,10 @@ namespace CastorViewer
 				}	
 				else
 				{
-					auto target = GuiCommon::loadScene( *engine
+					doSceneLoadEnd( GuiCommon::loadScene( *engine
 						, "Castor3D"
 						, m_filePath
-						, nullptr );
-					doSceneLoadEnd( target );
+						, nullptr ) );
 				}
 			}
 			else
@@ -683,18 +682,13 @@ namespace CastorViewer
 	{
 		auto size = GuiCommon::make_wxSize( target->getSize() );
 
-		if ( !IsMaximized() )
-		{
-			SetClientSize( size );
-			SetPosition( wxPoint{} );
-		}
-		else
+		if ( IsMaximized() )
 		{
 			Maximize( false );
-			SetPosition( wxPoint{} );
-			SetClientSize( size );
 		}
 
+		SetPosition( wxPoint{} );
+		SetClientSize( size );
 #if wxCHECK_VERSION( 2, 9, 0 )
 		SetMinClientSize( size );
 #endif

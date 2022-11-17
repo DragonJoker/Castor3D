@@ -497,10 +497,8 @@ namespace atmosphere_scattering
 					, sdw::Vec3 const & sphereCenter
 					, sdw::Float const & sphereRadius )
 				{
-					auto result = writer.declLocale< Intersection >( "result" );
-					result.t() = -1.0_f;
-					result.valid() = 0_b;
-					result.point() = vec3( 0.0_f );
+					auto result = writer.declLocale( "result"
+						, Intersection{ writer } );
 					auto s0_r0 = writer.declLocale( "s0_r0"
 						, ray.origin - sphereCenter );
 
@@ -572,7 +570,7 @@ namespace atmosphere_scattering
 	{
 		if ( !m_raySphereIntersect )
 		{
-			m_raySphereIntersect = writer.implementFunction< sdw::Int >( "raySphereIntersect"
+			m_raySphereIntersect = writer.implementFunction< sdw::Int >( "atm_raySphereIntersect"
 				, [&]( Ray const & ray
 					, sdw::Float const & sphereRadius
 					, Intersection const & ground
@@ -597,35 +595,32 @@ namespace atmosphere_scattering
 					}
 					FI;
 
-					auto solA = writer.declLocale( "solA"
+					auto t0 = writer.declLocale( "t0"
 						, ( -b - sqrt( delta ) ) / ( 2.0_f * a ) );
-					auto solB = writer.declLocale( "solB"
+					auto t1 = writer.declLocale( "t1"
 						, ( -b + sqrt( delta ) ) / ( 2.0_f * a ) );
 
-					IF( writer, solA < 0.0_f && solB < 0.0_f )
+					IF( writer, t0 < 0.0_f && t1 < 0.0_f )
 					{
 						writer.returnStmt( 0_i );
 					}
 					FI;
 
 					auto minSol = writer.declLocale( "minSol"
-						, min( solA, solB ) );
+						, writer.ternary( ground.valid() 
+							, min( min( t0, t1 ), ground.t() )
+							, min( t0, t1 ) ) );
 					auto maxSol = writer.declLocale( "maxSol"
-						, max( solA, solB ) );
-
-					IF( writer, ground.valid() )
-					{
-						minSol = min( minSol, ground.t() );
-						maxSol = min( maxSol, ground.t() );
-					}
-					FI;
+						, writer.ternary( ground.valid() 
+							, min( max( t0, t1 ), ground.t() )
+							, max( t0, t1 ) ) );
 
 					IF( writer, minSol < 0.0_f || minSol == maxSol )
 					{
 						nearest.t() = maxSol;
 						nearest.point() = ray.step( maxSol );
-						nearest.valid() = 1_b;
-						writer.returnStmt( 1_i );
+						nearest.valid() = maxSol != ground.t();
+						writer.returnStmt( writer.ternary( nearest.valid(), 1_i, 0_i ) );
 					}
 					FI;
 
@@ -635,9 +630,9 @@ namespace atmosphere_scattering
 
 					farthest.t() = maxSol;
 					farthest.point() = ray.step( maxSol );
-					farthest.valid() = 1_b;
+					farthest.valid() = maxSol != ground.t();
 
-					writer.returnStmt( 2_i );
+					writer.returnStmt( writer.ternary( farthest.valid(), 2_i, 1_i ) );
 				}
 				, InRay{ writer, "ray" }
 				, sdw::InFloat{ writer, "sphereRadius" }

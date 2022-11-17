@@ -82,7 +82,7 @@ namespace atmosphere_scattering
 			, sdw::InVec2
 			, sdw::InFloat
 			, sdw::InVec2
-			, sdw::InOutVec4 > m_computeForeground;
+			, sdw::InOutVec4 > m_computeVolume;
 	};
 }
 

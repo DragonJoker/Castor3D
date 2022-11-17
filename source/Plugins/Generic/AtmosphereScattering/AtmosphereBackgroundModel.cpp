@@ -112,9 +112,9 @@ namespace atmosphere_scattering
 			return;
 		}
 
-		if ( !m_computeForeground )
+		if ( !m_computeVolume )
 		{
-			m_computeForeground = m_writer.implementFunction< sdw::Void >( "c3d_atmbg_computeForeground"
+			m_computeVolume = m_writer.implementFunction< sdw::Void >( "c3d_atmbg_computeVolume"
 				, [&]( sdw::Vec2 const & fragCoord
 					, sdw::Float const & linearDepth
 					, sdw::Vec2 const & targetSize
@@ -155,7 +155,7 @@ namespace atmosphere_scattering
 /*
 		IF( m_writer, plinearDepth < pcameraPlanes.y() )
 		{
-			m_computeForeground( pfragCoord
+			m_computeVolume( pfragCoord
 				, plinearDepth
 				, ptargetSize
 				, poutput );

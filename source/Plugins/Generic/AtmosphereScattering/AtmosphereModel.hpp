@@ -239,6 +239,12 @@ namespace atmosphere_scattering
 			return settings.cameraData->camProjToWorld( clipSpace );
 		}
 
+		auto objProjToWorld( sdw::Vec4 const & clipSpace )const noexcept
+		{
+			CU_Require( settings.cameraData );
+			return settings.cameraData->objProjToWorld( clipSpace );
+		}
+
 		void setTransmittanceMap( sdw::CombinedImage2DRgba32 const & value )
 		{
 			transmittanceTexture = &value;
@@ -340,6 +346,8 @@ namespace atmosphere_scattering
 	private:
 		sdw::Function< Ray
 			, sdw::InVec2 > m_castRay;
+		sdw::Function< Ray
+			, sdw::InVec2 > m_castRayM;
 		sdw::Function< SingleScatteringResult
 			, sdw::InVec2
 			, InRay
