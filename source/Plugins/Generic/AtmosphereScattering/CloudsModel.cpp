@@ -48,7 +48,7 @@ namespace atmosphere_scattering
 
 	sdw::RetVec4 CloudsModel::applyClouds( castor3d::shader::Ray const & pray
 		, sdw::IVec2 const & pfragCoord
-		, sdw::Vec3 const & psunLuminance
+		, sdw::Vec3 & psunLuminance
 		, sdw::Vec3 & pskyLuminance
 		, sdw::Float & pskyBlendFactor )
 	{
@@ -57,7 +57,7 @@ namespace atmosphere_scattering
 			m_applyClouds = writer.implementFunction< sdw::Vec4 >( "clouds_apply"
 				, [&]( castor3d::shader::Ray const & ray
 					, sdw::IVec2 const & fragCoord
-					, sdw::Vec3 const & sunLuminance
+					, sdw::Vec3 sunLuminance
 					, sdw::Vec3 skyLuminance
 					, sdw::Float skyBlendFactor )
 				{
@@ -88,61 +88,106 @@ namespace atmosphere_scattering
 					auto interOuterCount = writer.declLocale( "interOuterCount"
 						, atmosphere.raySphereIntersect( ray, cloudsOuterRadius, interGround, interOuterN, interOuterF ) );
 
-					//compute raymarching starting and ending point
-					IF( writer, ray.origin.y() < cloudsInnerRadius )
+					auto viewHeight = writer.declLocale( "viewHeight"
+						, length( ray.origin ) );
+
+					IF( writer, interInnerCount == 0_i && interOuterCount == 0_i )
 					{
-						// Ray below clouds boundaries.
+						// Ray doesn't intersect clouds layer.
+						writer.returnStmt( vec4( 0.0_f ) );
+					}
+					FI;
+
+					// Compute raymarching starting and ending point
+					IF( writer, viewHeight <= cloudsInnerRadius )
+					{
+						// Ray starts below clouds layer, two possibilities:
+						// - Ray hits ground
+						//   0 intersection.
 						IF( writer, interGround.valid() )
 						{
+							// Just to be safe, since it should be handled with prior check for counts.
 							writer.returnStmt( vec4( 0.0_f ) );
 						}
 						FI;
 
+						// - Ray goes through atmosphere, hence crosses clouds layer
+						//   2 intersections: near inner, near outer.
 						startPos0 = interInnerN.point();
 						endPos0 = interOuterN.point();
 						fogRay0 = startPos0;
 					}
-					ELSEIF( ray.origin.y() >= cloudsInnerRadius
-						&& ray.origin.y() < cloudsOuterRadius )
+					ELSEIF( viewHeight > cloudsInnerRadius
+						&& viewHeight < cloudsOuterRadius )
 					{
-						// Ray inside clouds boundaries.
-						startPos0 = ray.origin;
-						endPos0 = interOuterN.point();
-						fogRay0 = startPos0;
-
-						IF( writer, interInnerCount > 1_i )
+						// Ray starts inside clouds layer, three possibilities:
+						IF( writer, interGround.valid() )
 						{
-							// Ray intersects clouds layer a second time
-							// Hence, for precision's sake, trace a second ray.
-							startPos1 = interInnerF.point();
-							endPos1 = endPos0;
-							fogRay1 = startPos1;
+							// - Ray hits the ground, hence only crosses inner bound.
+							//   1 intersection: near inner.
+							startPos0 = ray.origin;
 							endPos0 = interInnerN.point();
+							fogRay0 = startPos0;
+						}
+						ELSEIF( interInnerCount > 1_i )
+						{
+							// - Ray goes through atmosphere, crossing inner bound twice.
+							//   3 intersections: near inner, far inner, near outer.
+							//   For precision's sake, trace a second ray.
+							startPos0 = ray.origin;
+							endPos0 = interInnerN.point();
+							fogRay0 = startPos0;
+
+							startPos1 = interInnerF.point();
+							endPos1 = interOuterN.point();
+							fogRay1 = startPos1;
+
 							secondRay = 1_b;
+						}
+						ELSE
+						{
+							// - Ray goes through atmosphere, remaining inside clouds layer.
+							//   1 intersection: near outer.
+							startPos0 = ray.origin;
+							endPos0 = interOuterN.point();
+							fogRay0 = startPos0;
 						}
 						FI;
 					}
 					ELSE
 					{
-						// Ray over clouds.
-						startPos0 = interOuterN.point();
-						endPos0 = interInnerN.point();
-						fogRay0 = startPos0;
-
-						IF( writer, interInnerCount > 1_i && interOuterCount > 1_i )
+						// Ray starts over clouds layer, three possibilities:
+						IF( writer, interGround.valid() )
 						{
-							// Ray intersects clouds layer a second time
-							// Hence, for precision's sake, trace a second ray.
+							// - Ray hits the ground, hence crosses clouds layer.
+							//   2 intersections: near outer, near inner.
+							startPos0 = interOuterN.point();
+							endPos0 = interInnerN.point();
+						}
+						ELSEIF( interInnerCount > 1_i && interOuterCount > 1_i )
+						{
+							// - Ray goes through atmosphere, crossing inner bound twice.
+							//   4 intersections: near outer, near inner, far inner, far outer.
+							//   For precision's sake, trace a second ray.
+							startPos0 = interOuterN.point();
+							endPos0 = interInnerN.point();
+
 							startPos1 = interInnerF.point();
 							endPos1 = interOuterF.point();
+							fogRay1 = startPos1;
+
 							secondRay = 1_b;
 						}
-						ELSEIF( interOuterCount > 1_i )
+						ELSE
 						{
-							// Ray remains between clouds layer bounds before getting out.
+							// - Ray goes through clouds layer, remaining inside clouds layer.
+							//   2 intersection: near outer, far outer.
+							startPos0 = interOuterN.point();
 							endPos0 = interOuterF.point();
 						}
 						FI;
+
+						fogRay0 = ray.origin; // disable fog for ray.
 					}
 					FI;
 
@@ -151,7 +196,7 @@ namespace atmosphere_scattering
 
 					// Compute fog amount.
 					auto fogAmount0 = writer.declLocale( "fogAmount0"
-						, computeFogAmount( fogRay0, ray.origin, 2.0_f ) );
+						, computeFogAmount( fogRay0, ray.origin, 2.0_f, viewHeight ) );
 					auto planetShadow0 = writer.declLocale( "planetShadow00"
 						, 0.0_f );
 					auto rayMarchResult = writer.declLocale( "rayMarchResult"
@@ -163,20 +208,23 @@ namespace atmosphere_scattering
 							, planetShadow0 ) );
 					auto skyLuminance0 = writer.declLocale( "skyLuminance0"
 						, skyLuminance );
+					auto sunLuminance0 = writer.declLocale( "sunLuminance0"
+						, sunLuminance );
 					auto result = writer.declLocale( "result"
 						, computeLighting( ray
 							, sunRadiance
-							, sunLuminance
+							, sunLuminance0
 							, skyLuminance0
 							, 1.0_f - fogAmount0
 							, planetShadow0
 							, rayMarchResult ) );
 
-					IF( writer, secondRay )
+					IF( writer, secondRay
+						&& result.a() < 1.0f )
 					{
 						// Compute fog amount.
 						auto fogAmount1 = writer.declLocale( "fogAmount1"
-							, computeFogAmount( fogRay1, ray.origin, 0.006_f ) );
+							, computeFogAmount( fogRay1, ray.origin, 0.006_f, viewHeight ) );
 
 						IF( writer, fogAmount1 <= 0.965_f )
 						{
@@ -188,20 +236,20 @@ namespace atmosphere_scattering
 								, fragCoord
 								, sunRadiance
 								, planetShadow1 );
+							auto sunLuminance1 = writer.declLocale( "sunLuminance1"
+								, sunLuminance );
 							auto skyLuminance1 = writer.declLocale( "skyLuminance1"
 								, skyLuminance );
 							auto lightingResult = writer.declLocale( "lightingResult"
 								, computeLighting( ray
 									, sunRadiance
-									, sunLuminance
+									, sunLuminance1
 									, skyLuminance1
 									, 1.0_f - fogAmount1
 									, planetShadow1
 									, rayMarchResult ) );
-							result = max( result, lightingResult );
-							planetShadow0 = max( planetShadow0, planetShadow1 );
-							fogAmount0 = max( fogAmount0, fogAmount1 );
-							skyLuminance0 = max( skyLuminance0, skyLuminance1 );
+							result = vec4( mix( lightingResult.rgb(), result.rgb(), vec3( result.a() ) )
+								, result.a() + lightingResult.a() );
 						}
 						FI;
 					}
@@ -213,7 +261,7 @@ namespace atmosphere_scattering
 				}
 				, castor3d::shader::InRay{ writer, "ray" }
 				, sdw::InIVec2{ writer, "fragCoord" }
-				, sdw::InVec3{ writer, "sunLuminance" }
+				, sdw::InOutVec3{ writer, "sunLuminance" }
 				, sdw::InOutVec3{ writer, "skyLuminance" }
 				, sdw::OutFloat{ writer, "skyBlendFactor" } );
 		}
@@ -230,9 +278,19 @@ namespace atmosphere_scattering
 		return normalize( p ).xz() * vec2( 0.5_f );
 	}
 
-	sdw::Float CloudsModel::getHeightFraction( sdw::Vec3 const & inPos )
+	sdw::RetFloat CloudsModel::getHeightFraction( sdw::Vec3 const & pinPos )
 	{
-		return ( length( inPos.y() ) - cloudsInnerRadius ) / cloudsThickness;
+		if ( !m_getHeightFraction )
+		{
+			m_getHeightFraction = writer.implementFunction< sdw::Float >( "clouds_getHeightFraction"
+				, [&]( sdw::Vec3 const & inPos )
+				{
+					writer.returnStmt( ( length( inPos ) - cloudsInnerRadius ) / cloudsThickness );
+				}
+				, sdw::InVec3{ writer, "inPos" } );
+		}
+
+		return m_getHeightFraction( pinPos );
 	}
 
 	sdw::RetVec3 CloudsModel::skewSamplePointWithWind( sdw::Vec3 const & ppoint
@@ -410,7 +468,7 @@ namespace atmosphere_scattering
 				{
 					// Add turbulence to the bottom of the clouds
 					auto curlNoise = writer.declLocale( "curlNoise"
-						, curlNoiseMap.sample( skewedUV, 0.0_f ) );
+						, curlNoiseMap.lod( skewedUV, 0.0_f ) );
 					skewedSamplePoint.xy() += curlNoise * ( 1.0_f - heightFraction );
 
 					// Sample High Frequency Noises
@@ -526,7 +584,7 @@ namespace atmosphere_scattering
 					auto coneDensity = writer.declLocale( "coneDensity"
 						, 0.0_f );
 					auto invDepth = writer.declLocale( "invDepth"
-						, 1.0_f / ( stepSize * 6.0_f ) );
+						, min( 1.0_f, 1.0_f / ( stepSize * 6.0_f ) ) );
 					auto density = writer.declLocale( "density"
 						, 0.0_f );
 
@@ -724,19 +782,21 @@ namespace atmosphere_scattering
 
 	sdw::RetFloat CloudsModel::computeFogAmount( sdw::Vec3 const & pstartPos
 		, sdw::Vec3 const & pworldPos
-		, sdw::Float const & pfactor )
+		, sdw::Float const & pfactor
+		, sdw::Float const & pviewHeight )
 	{
 		if ( !m_computeFogAmount )
 		{
 			m_computeFogAmount = writer.implementFunction< sdw::Float >( "clouds_computeFogAmount"
 				, [&]( sdw::Vec3 const & startPos
 					, sdw::Vec3 const & worldPos
-					, sdw::Float const & factor )
+					, sdw::Float const & factor
+					, sdw::Float const & viewHeight )
 				{
 					auto dist = writer.declLocale( "dist"
 						, length( startPos - worldPos ) );
 					auto radius = writer.declLocale( "radius"
-						, worldPos.y() * 0.3_f );
+						, viewHeight * 0.3_f );
 					auto alpha = writer.declLocale( "alpha"
 						, ( dist / radius ) );
 
@@ -744,10 +804,11 @@ namespace atmosphere_scattering
 				}
 				, sdw::InVec3{ writer, "startPos" }
 				, sdw::InVec3{ writer, "worldPos" }
-				, sdw::InFloat{ writer, "factor" } );
+				, sdw::InFloat{ writer, "factor" }
+				, sdw::InFloat{ writer, "viewHeight" } );
 		}
 
-		return m_computeFogAmount( pstartPos, pworldPos, pfactor );
+		return m_computeFogAmount( pstartPos, pworldPos, pfactor, pviewHeight );
 	}
 
 	RetIntersection CloudsModel::raySphereintersectSkyMap( sdw::Vec3 const & prd
@@ -765,10 +826,7 @@ namespace atmosphere_scattering
 					auto c = writer.declLocale( "c", dot( L, L ) - ( radius * radius ) );
 					auto delta = writer.declLocale( "delta", b * b - 4.0_f * a * c );
 					auto t = writer.declLocale( "t", max( 0.0_f, ( -b + sqrt( delta ) ) / 2.0_f ) );
-					auto result = writer.declLocale< Intersection >( "result" );
-					result.point() = rd * t;
-					result.valid() = 1_b;
-					writer.returnStmt( result );
+					writer.returnStmt( Intersection{ writer, rd * t, 1_b, t } );
 				}
 				, sdw::InVec3{ writer, "rd" }
 				, sdw::InFloat{ writer, "radius" } );
@@ -822,7 +880,7 @@ namespace atmosphere_scattering
 			m_computeLighting = writer.implementFunction< sdw::Vec4 >( "clouds_computeLighting"
 				, [&]( Ray const & ray
 					, sdw::Vec3 const & sunRadiance
-					, sdw::Vec3 const & sunLuminance
+					, sdw::Vec3  sunLuminance
 					, sdw::Vec3 skyLuminance
 					, sdw::Float const & fadeOut
 					, sdw::Float const & planetShadow

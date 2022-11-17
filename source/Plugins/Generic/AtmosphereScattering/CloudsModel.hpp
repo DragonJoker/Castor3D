@@ -35,13 +35,13 @@ namespace atmosphere_scattering
 			, uint32_t set );
 		sdw::RetVec4 applyClouds( castor3d::shader::Ray const & ray
 			, sdw::IVec2 const & fragCoord
-			, sdw::Vec3 const & sunLuminance
+			, sdw::Vec3 & sunLuminance
 			, sdw::Vec3 & skyLuminance
 			, sdw::Float & skyBlendFactor );
 
 	private:
 		sdw::Vec2 getSphericalProjection( sdw::Vec3 const & p );
-		sdw::Float getHeightFraction( sdw::Vec3 const & inPos );
+		sdw::RetFloat getHeightFraction( sdw::Vec3 const & inPos );
 		sdw::RetVec3 skewSamplePointWithWind( sdw::Vec3 const & point
 			, sdw::Float const & heightFraction );
 		sdw::RetFloat getRelativeHeightInAtmosphere( sdw::Vec3 const & pos
@@ -74,7 +74,8 @@ namespace atmosphere_scattering
 			, sdw::Float & planetShadow );
 		sdw::RetFloat computeFogAmount( sdw::Vec3 const & startPos
 			, sdw::Vec3 const & wolrdPos
-			, sdw::Float const & factor );
+			, sdw::Float const & factor
+			, sdw::Float const & viewHeight );
 		RetIntersection raySphereintersectSkyMap( sdw::Vec3 const & rd
 			, sdw::Float const & radius );
 		sdw::RetFloat henyeyGreenstein( sdw::Float const & g
@@ -112,6 +113,8 @@ namespace atmosphere_scattering
 		sdw::Float cloudsThickness;
 
 	private:
+		sdw::Function< sdw::Float
+			, sdw::InVec3 > m_getHeightFraction;
 		sdw::Function< sdw::Float
 			, sdw::InVec3
 			, sdw::InVec3
@@ -153,6 +156,7 @@ namespace atmosphere_scattering
 		sdw::Function< sdw::Float
 			, sdw::InVec3
 			, sdw::InVec3
+			, sdw::InFloat
 			, sdw::InFloat > m_computeFogAmount;
 		sdw::Function< Intersection
 			, sdw::InVec3
@@ -174,7 +178,7 @@ namespace atmosphere_scattering
 		sdw::Function< sdw::Vec4
 			, castor3d::shader::InRay
 			, sdw::InIVec2
-			, sdw::InVec3
+			, sdw::InOutVec3
 			, sdw::InOutVec3
 			, sdw::OutFloat > m_applyClouds;
 	};

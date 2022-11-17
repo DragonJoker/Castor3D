@@ -120,24 +120,25 @@ namespace atmosphere_scattering
 				, sdw::InCombinedImage2DRgba32{ writer, "tex" }
 				, sdw::InVec2{ writer, "uv" } );
 
-			auto computeLighting = writer.implementFunction< sdw::Vec4 >( "computeLighting"
-				, [&]( sdw::Vec4 skyColor
+			auto computeLighting = writer.implementFunction< sdw::Vec3 >( "computeLighting"
+				, [&]( sdw::Vec3 skyColor
+					, sdw::Vec3 sunColour
 					, sdw::Vec3 cloudsColor
 					, sdw::Float const & skyBlendFactor
 					, sdw::Float const & cloudsDensity )
 				{
 					// Blend background and clouds.
 					auto blendSkyColor = writer.declLocale( "blendSkyColor"
-						, mix( skyColor.rgb()
+						, mix( skyColor
 							, c3d_cloudsData.bottomColor()
 							, vec3( c3d_cloudsData.coverage() ) ) );
 
-					writer.returnStmt( vec4( mix( skyColor.rgb()
+					writer.returnStmt( mix( skyColor
 							, cloudsColor + ( skyBlendFactor * blendSkyColor )
-							, vec3( cloudsDensity ) )
-						, skyColor.a() ) );
+							, vec3( cloudsDensity ) ) );
 				}
-				, sdw::InVec4{ writer, "skyColor" }
+				, sdw::InVec3{ writer, "skyColor" }
+				, sdw::InVec3{ writer, "sunColour" }
 				, sdw::InVec3{ writer, "cloudsColor" }
 				, sdw::InFloat{ writer, "skyBlendFactor" }
 				, sdw::InFloat{ writer, "cloudsDensity" } );
@@ -160,10 +161,12 @@ namespace atmosphere_scattering
 					{
 						auto clouds = writer.declLocale( "clouds"
 							, gaussianBlur( cloudsMap, texCoords ) );
-						fragColour = computeLighting( sky
-							, clouds.rgb()
-							, sky.a()
-							, clouds.a() );
+						fragColour = vec4( computeLighting( sky.rgb()
+								, sun.rgb()
+								, clouds.rgb()
+								, sky.a()
+								, clouds.a() )
+							, 1.0_f );
 					}
 					ELSE
 					{
