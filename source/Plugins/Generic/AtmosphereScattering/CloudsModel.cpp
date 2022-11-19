@@ -10,8 +10,6 @@
 
 #include <ShaderWriter/Source.hpp>
 
-#define Debug_CloudsRadius 0
-
 namespace atmosphere_scattering
 {
 	//************************************************************************************************
@@ -47,6 +45,8 @@ namespace atmosphere_scattering
 	}
 
 	sdw::RetVec4 CloudsModel::applyClouds( castor3d::shader::Ray const & pray
+		, sdw::Float const & pobjectId
+		, sdw::Float const & plinearDepth
 		, sdw::IVec2 const & pfragCoord
 		, sdw::Vec3 & psunLuminance
 		, sdw::Vec3 & pskyLuminance
@@ -56,6 +56,8 @@ namespace atmosphere_scattering
 		{
 			m_applyClouds = writer.implementFunction< sdw::Vec4 >( "clouds_apply"
 				, [&]( castor3d::shader::Ray const & ray
+					, sdw::Float const & objectId
+					, sdw::Float const & linearDepth
 					, sdw::IVec2 const & fragCoord
 					, sdw::Vec3 sunLuminance
 					, sdw::Vec3 skyLuminance
@@ -75,18 +77,33 @@ namespace atmosphere_scattering
 						, vec3( 0.0_f ) );
 					auto secondRay = writer.declLocale( "secondRay"
 						, 0_b );
+					auto clampOuter = writer.declLocale( "clampOuter"
+						, 0_b );
 					auto interGround = writer.declLocale( "interGround"
 						, atmosphere.raySphereIntersectNearest( ray, atmosphere.getPlanetRadius() ) );
+					auto wasHittingGround = writer.declLocale( "wasHittingGround"
+						, interGround.valid() );
+
+					IF( writer, objectId != 0.0_f
+						&& linearDepth != -1.0_f
+						&& ( ( !interGround.valid() ) || linearDepth < interGround.t() ) )
+					{
+						interGround.t() = linearDepth;
+						interGround.point() = ray.step( linearDepth );
+						interGround.valid() = 1_u;
+						clampOuter = 1_b;
+					}
+					FI;
 
 					auto interInnerN = writer.declLocale( "interInnerN", Intersection{ writer } );
 					auto interInnerF = writer.declLocale( "interInnerF", Intersection{ writer } );
 					auto interInnerCount = writer.declLocale( "interInnerCount"
-						, atmosphere.raySphereIntersect( ray, cloudsInnerRadius, interGround, interInnerN, interInnerF ) );
+						, atmosphere.raySphereIntersect( ray, cloudsInnerRadius, interGround, 0_b, interInnerN, interInnerF ) );
 
 					auto interOuterN = writer.declLocale( "interOuterN", Intersection{ writer } );
 					auto interOuterF = writer.declLocale( "interOuterF", Intersection{ writer } );
 					auto interOuterCount = writer.declLocale( "interOuterCount"
-						, atmosphere.raySphereIntersect( ray, cloudsOuterRadius, interGround, interOuterN, interOuterF ) );
+						, atmosphere.raySphereIntersect( ray, cloudsOuterRadius, interGround, clampOuter, interOuterN, interOuterF ) );
 
 					auto viewHeight = writer.declLocale( "viewHeight"
 						, length( ray.origin ) );
@@ -104,7 +121,7 @@ namespace atmosphere_scattering
 						// Ray starts below clouds layer, two possibilities:
 						// - Ray hits ground
 						//   0 intersection.
-						IF( writer, interGround.valid() )
+						IF( writer, wasHittingGround )
 						{
 							// Just to be safe, since it should be handled with prior check for counts.
 							writer.returnStmt( vec4( 0.0_f ) );
@@ -124,9 +141,11 @@ namespace atmosphere_scattering
 						IF( writer, interGround.valid() )
 						{
 							// - Ray hits the ground, hence only crosses inner bound.
-							//   1 intersection: near inner.
+							//   1 intersection: near inner or near outer.
 							startPos0 = ray.origin;
-							endPos0 = interInnerN.point();
+							endPos0 = writer.ternary( interInnerN.valid()
+								, interInnerN.point()
+								, interOuterN.point() );
 							fogRay0 = startPos0;
 						}
 						ELSEIF( interInnerCount > 1_i )
@@ -188,6 +207,12 @@ namespace atmosphere_scattering
 						FI;
 
 						fogRay0 = ray.origin; // disable fog for ray.
+					}
+					FI;
+
+					IF( writer, clampOuter )
+					{
+						fogRay0 = ray.origin; // disable fog when hitting objects.
 					}
 					FI;
 
@@ -260,6 +285,8 @@ namespace atmosphere_scattering
 					writer.returnStmt( result );
 				}
 				, castor3d::shader::InRay{ writer, "ray" }
+				, sdw::InFloat{ writer, "objectId" }
+				, sdw::InFloat{ writer, "linearDepth" }
 				, sdw::InIVec2{ writer, "fragCoord" }
 				, sdw::InOutVec3{ writer, "sunLuminance" }
 				, sdw::InOutVec3{ writer, "skyLuminance" }
@@ -267,6 +294,8 @@ namespace atmosphere_scattering
 		}
 
 		return m_applyClouds( pray
+			, pobjectId
+			, plinearDepth
 			, pfragCoord
 			, psunLuminance
 			, pskyLuminance
@@ -707,12 +736,6 @@ namespace atmosphere_scattering
 					auto b = fragCoord.y() % 4_i;
 					pos += stepVector * bayerFilter[a * 4 + b];
 
-					auto lightColor = writer.declLocale( "lightColor"
-						, sunColor * lightFactor * clouds.bottomColor() );
-					auto ambientLight = writer.declLocale( "ambientLight"
-						, lightFactor * 0.65_f * mix( sunColor
-							, mix( clouds.topColor(), clouds.bottomColor(), vec3( 0.15_f ) )
-							, vec3( 0.65_f ) ) );
 					auto accumDensity = writer.declLocale( "accumDensity"
 						, 0.0_f );
 					auto i = writer.declLocale( "i"
@@ -811,31 +834,6 @@ namespace atmosphere_scattering
 		return m_computeFogAmount( pstartPos, pworldPos, pfactor, pviewHeight );
 	}
 
-	RetIntersection CloudsModel::raySphereintersectSkyMap( sdw::Vec3 const & prd
-		, sdw::Float const & pradius )
-	{
-		if ( !m_raySphereintersectSkyMap )
-		{
-			m_raySphereintersectSkyMap = writer.implementFunction< Intersection >( "clouds_raySphereintersectSkyMap"
-				, [&]( sdw::Vec3 const & rd
-					, sdw::Float const & radius )
-				{
-					auto L = writer.declLocale( "L", -vec3( 0.0_f ) );
-					auto a = writer.declLocale( "a", dot( rd, rd ) );
-					auto b = writer.declLocale( "b", 2.0_f * dot( rd, L ) );
-					auto c = writer.declLocale( "c", dot( L, L ) - ( radius * radius ) );
-					auto delta = writer.declLocale( "delta", b * b - 4.0_f * a * c );
-					auto t = writer.declLocale( "t", max( 0.0_f, ( -b + sqrt( delta ) ) / 2.0_f ) );
-					writer.returnStmt( Intersection{ writer, rd * t, 1_b, t } );
-				}
-				, sdw::InVec3{ writer, "rd" }
-				, sdw::InFloat{ writer, "radius" } );
-		}
-
-		return m_raySphereintersectSkyMap( prd
-			, pradius );
-	}
-
 	sdw::RetFloat CloudsModel::henyeyGreenstein( sdw::Float const & pg
 		, sdw::Float const & pcosTheta )
 	{
@@ -906,10 +904,10 @@ namespace atmosphere_scattering
 
 					// Fade out clouds into the horizon.
 					auto cubeMapEndPos = writer.declLocale( "cubeMapEndPos"
-						, raySphereintersectSkyMap( ray.direction, 0.5_f ).point() );
+						, atmosphere.raySphereintersectSkyMap( ray.direction, 0.5_f ).point() );
 					cloudsColour = mix( vec3( 1.0_f )
 						, cloudsColour
-						, vec3( pow( max( cubeMapEndPos.y() + 0.1_f, 0.0_f ), 0.2_f ) ) );
+						, vec3( pow( max( length( cubeMapEndPos ) + 0.1_f, 0.0_f ), 0.2_f ) ) );
 
 					skyLuminance += sunLuminance * ( sunGlareIntensity - minGlare );
 					cloudsColour = mix( vec3( 0.0_f )

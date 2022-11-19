@@ -565,6 +565,7 @@ namespace atmosphere_scattering
 	sdw::RetInt AtmosphereModel::raySphereIntersect( Ray const & pray
 		, sdw::Float const & psphereRadius
 		, Intersection const & pground
+		, sdw::Boolean const & pclampToGround
 		, Intersection & pnearest
 		, Intersection & pfarthest )
 	{
@@ -574,6 +575,7 @@ namespace atmosphere_scattering
 				, [&]( Ray const & ray
 					, sdw::Float const & sphereRadius
 					, Intersection const & ground
+					, sdw::Boolean const & clampToGround
 					, Intersection nearest
 					, Intersection farthest )
 				{
@@ -619,7 +621,7 @@ namespace atmosphere_scattering
 					{
 						nearest.t() = maxSol;
 						nearest.point() = ray.step( maxSol );
-						nearest.valid() = maxSol != ground.t();
+						nearest.valid() = clampToGround || maxSol != ground.t();
 						writer.returnStmt( writer.ternary( nearest.valid(), 1_i, 0_i ) );
 					}
 					FI;
@@ -630,13 +632,14 @@ namespace atmosphere_scattering
 
 					farthest.t() = maxSol;
 					farthest.point() = ray.step( maxSol );
-					farthest.valid() = maxSol != ground.t();
+					farthest.valid() = clampToGround || maxSol != ground.t();
 
 					writer.returnStmt( writer.ternary( farthest.valid(), 2_i, 1_i ) );
 				}
 				, InRay{ writer, "ray" }
 				, sdw::InFloat{ writer, "sphereRadius" }
 				, InIntersection{ writer, "ground" }
+				, sdw::InBoolean{ writer, "clampToGround" }
 				, OutIntersection{ writer, "nearest" }
 				, OutIntersection{ writer, "farthest" } );
 		}
@@ -644,8 +647,34 @@ namespace atmosphere_scattering
 		return m_raySphereIntersect( pray
 			, psphereRadius
 			, pground
+			, pclampToGround
 			, pnearest
 			, pfarthest );
+	}
+
+	RetIntersection AtmosphereModel::raySphereintersectSkyMap( sdw::Vec3 const & prd
+		, sdw::Float const & pradius )
+	{
+		if ( !m_raySphereintersectSkyMap )
+		{
+			m_raySphereintersectSkyMap = writer.implementFunction< Intersection >( "atm_raySphereintersectSkyMap"
+				, [&]( sdw::Vec3 const & rd
+					, sdw::Float const & radius )
+				{
+					auto L = writer.declLocale( "L", -vec3( 0.0_f ) );
+					auto a = writer.declLocale( "a", dot( rd, rd ) );
+					auto b = writer.declLocale( "b", 2.0_f * dot( rd, L ) );
+					auto c = writer.declLocale( "c", dot( L, L ) - ( radius * radius ) );
+					auto delta = writer.declLocale( "delta", b * b - 4.0_f * a * c );
+					auto t = writer.declLocale( "t", max( 0.0_f, ( -b + sqrt( delta ) ) / 2.0_f ) );
+					writer.returnStmt( Intersection{ writer, rd * t, 1_b, t } );
+				}
+				, sdw::InVec3{ writer, "rd" }
+				, sdw::InFloat{ writer, "radius" } );
+		}
+
+		return m_raySphereintersectSkyMap( prd
+			, pradius );
 	}
 
 	sdw::RetFloat AtmosphereModel::hgPhase( sdw::Float const & pg

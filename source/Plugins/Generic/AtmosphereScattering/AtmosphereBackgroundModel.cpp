@@ -60,7 +60,7 @@ namespace atmosphere_scattering
 				.setFastAerialPerspective( true )
 			, binding
 			, set }
-		, cloudsResult{ writer.declCombinedImg< sdw::CombinedImage2DRgba32 >( "cloudsMap"
+		, cloudsResult{ writer.declCombinedImg< sdw::CombinedImage2DRgba32 >( "c3d_atmbg_cloudsResult"
 			, binding++
 			, set
 			, needsForeground ) }
@@ -116,34 +116,61 @@ namespace atmosphere_scattering
 		{
 			m_computeVolume = m_writer.implementFunction< sdw::Void >( "c3d_atmbg_computeVolume"
 				, [&]( sdw::Vec2 const & fragCoord
-					, sdw::Float const & linearDepth
+					, sdw::Float linearDepth
 					, sdw::Vec2 const & targetSize
 					, sdw::Vec4 output )
 				{
 					auto uv = m_writer.declLocale( "uv"
 						, fragCoord / targetSize );
 					auto ray = m_writer.declLocale( "ray"
-						, atmosphere.castRay( uv ) );
-					auto interGround = m_writer.declLocale( "interGround", Intersection{ m_writer } );
-					auto interOuterNear = m_writer.declLocale( "interOuterNear", Intersection{ m_writer } );
-					auto interOuterFar = m_writer.declLocale( "interOuterFar", Intersection{ m_writer } );
+						, atmosphere.castRay( vec2( uv.x(), 1.0_f - uv.y() ) ) );
+					linearDepth = linearDepth * atmosphere.settings.length.kilometres();
+
+					auto clampOuter = m_writer.declLocale( "clampOuter"
+						, 0_b );
+					auto interGround = m_writer.declLocale( "interGround"
+						, atmosphere.raySphereIntersectNearest( ray
+							, atmosphere.getPlanetRadius() ) );
+					auto wasHittingGround = m_writer.declLocale( "wasHittingGround"
+						, interGround.valid() );
+
+					IF( m_writer, ( ( !interGround.valid() ) || linearDepth < interGround.t() ) )
+					{
+						interGround.t() = linearDepth;
+						interGround.point() = ray.step( linearDepth );
+						interGround.valid() = 1_u;
+						clampOuter = 1_b;
+					}
+					FI;
+
+					auto interInnerN = m_writer.declLocale( "interInnerN", Intersection{ m_writer } );
+					auto interInnerF = m_writer.declLocale( "interInnerF", Intersection{ m_writer } );
+					auto interInnerCount = m_writer.declLocale( "interInnerCount"
+						, atmosphere.raySphereIntersect( ray
+							, cloudsData.innerRadius() + atmosphere.getPlanetRadius()
+							, interGround
+							, 0_b
+							, interInnerN
+							, interInnerF ) );
+					auto interOuterN = m_writer.declLocale( "interOuterN", Intersection{ m_writer } );
+					auto interOuterF = m_writer.declLocale( "interOuterF", Intersection{ m_writer } );
 					auto interOuterCount = m_writer.declLocale( "interOuterCount"
 						, atmosphere.raySphereIntersect( ray
-							, cloudsData.outerRadius() + atmosphere.getEarthRadius()
+							, cloudsData.outerRadius() + atmosphere.getPlanetRadius()
 							, interGround
-							, interOuterNear
-							, interOuterFar ) );
+							, clampOuter
+							, interOuterN
+							, interOuterF ) );
+					auto crossesInner = m_writer.declLocale( "crossesInner"
+						, interInnerN.valid() && linearDepth > interInnerN.t() );
+					auto crossesOuter = m_writer.declLocale( "crossesOuter"
+						, interOuterN.valid() && linearDepth >= interOuterN.t() );
 
-					IF( m_writer, interOuterNear.valid() )
+					IF( m_writer, crossesInner || crossesOuter )
 					{
-						auto interDepth = m_writer.declLocale( "interDepth"
-							, interOuterNear.t() - atmosphere.getEarthRadius() );
-
-						IF( m_writer, linearDepth * atmosphere.getLengthUnit().kilometres() > interDepth )
-						{
-							output = cloudsResult.lod( uv, 0.0_f );
-						}
-						FI;
+						auto clouds = m_writer.declLocale( "clouds"
+							, cloudsResult.lod( uv, 0.0_f ) );
+						output = mix( output, clouds, vec4( clouds.a() ) );
 					}
 					FI;
 				}
@@ -152,8 +179,9 @@ namespace atmosphere_scattering
 				, sdw::InVec2{ m_writer, "targetSize" }
 				, sdw::InOutVec4{ m_writer, "output" } );
 		}
-/*
-		IF( m_writer, plinearDepth < pcameraPlanes.y() )
+
+		IF( m_writer, cloudsData.coverage() > 0.0_f
+			&& plinearDepth < pcameraPlanes.y() )
 		{
 			m_computeVolume( pfragCoord
 				, plinearDepth
@@ -161,7 +189,6 @@ namespace atmosphere_scattering
 				, poutput );
 		}
 		FI;
-*/
 	}
 
 	sdw::Vec3 AtmosphereBackgroundModel::getSunRadiance( sdw::Vec3 const & psunDir )

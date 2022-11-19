@@ -95,6 +95,7 @@ namespace atmosphere_scattering
 			eWorley,
 			eCurl,
 			eWeatherMap,
+			eDepthMap,
 			eOutSky,
 			eOutSun,
 			eOutClouds,
@@ -103,7 +104,8 @@ namespace atmosphere_scattering
 
 		static castor3d::ShaderPtr getProgram( castor3d::Engine const & engine
 			, VkExtent3D renderSize
-			, VkExtent3D const & transmittanceExtent )
+			, VkExtent3D const & transmittanceExtent
+			, bool hasDepth )
 		{
 			ShaderWriter< useCompute >::Type writer;
 
@@ -147,6 +149,10 @@ namespace atmosphere_scattering
 				, c3d_cloudsData
 				, binding
 				, 0u };
+			auto depthMap{ writer.declCombinedImg< sdw::CombinedImage2DRgba32 >( "depthMap"
+				, Bindings::eDepthMap
+				, 0u
+				, hasDepth ) };
 
 			auto process = [&]( sdw::Vec2 const & fragCoord
 				, sdw::Vec4 & skyColor
@@ -173,7 +179,15 @@ namespace atmosphere_scattering
 
 				IF( writer, c3d_cloudsData.coverage() > 0.0_f )
 				{
+					auto sceneUv = writer.declLocale( "sceneUv"
+						, fragCoord / targetSize );
+					auto depthObj = writer.declLocale( "depthObj"
+						, hasDepth ? depthMap.lod( vec2( sceneUv.x(), 1.0_f - sceneUv.y() ), 0.0_f ) : vec4( -1.0_f ) );
+					depthObj = depthObj * atmosphere.settings.length.kilometres();
+
 					cloudsColor = clouds.applyClouds( ray
+						, depthObj.b()
+						, depthObj.g()
 						, ifragCoord
 						, sunLuminance
 						, skyLuminance
@@ -257,6 +271,7 @@ namespace atmosphere_scattering
 		, crg::ImageViewId const & worley
 		, crg::ImageViewId const & curl
 		, crg::ImageViewId const & weather
+		, crg::ImageViewId const * depthObj
 		, crg::ImageViewId const & skyResult
 		, crg::ImageViewId const & sunResult
 		, crg::ImageViewId const & cloudsResult
@@ -265,7 +280,7 @@ namespace atmosphere_scattering
 		, m_computeShader{ VK_SHADER_STAGE_COMPUTE_BIT
 			, getName()
 			, ( volclouds::useCompute
-				? volclouds::getProgram( *device.renderSystem.getEngine(), getExtent( skyResult ), getExtent( transmittance ) )
+				? volclouds::getProgram( *device.renderSystem.getEngine(), getExtent( skyResult ), getExtent( transmittance ), depthObj != nullptr )
 				: nullptr) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT
 			, getName()
@@ -276,7 +291,7 @@ namespace atmosphere_scattering
 			, getName()
 			, ( volclouds::useCompute
 				? nullptr
-				: volclouds::getProgram( *device.renderSystem.getEngine(), getExtent( skyResult ), getExtent( transmittance ) ) ) }
+				: volclouds::getProgram( *device.renderSystem.getEngine(), getExtent( skyResult ), getExtent( transmittance ), depthObj != nullptr ) ) }
 		, m_stages{ ( volclouds::useCompute
 			? ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, m_computeShader ) }
 			: ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, m_vertexShader )
@@ -366,6 +381,14 @@ namespace atmosphere_scattering
 			, volclouds::eWeatherMap
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, linearRepeatSampler );
+
+		if ( depthObj )
+		{
+			pass.addSampledView( *depthObj
+				, volclouds::eDepthMap
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, linearClampSampler );
+		}
 
 		if constexpr ( volclouds::useCompute )
 		{

@@ -162,6 +162,7 @@ namespace atmosphere_scattering
 		, crg::ImageViewId const & perlinWorley
 		, crg::ImageViewId const & curl
 		, crg::ImageViewId const & weather
+		, crg::ImageViewId const * depthObj
 		, AtmosphereScatteringUbo const & atmosphereUbo
 		, CloudsUbo const & cloudsUbo
 		, VkExtent2D const & size
@@ -278,6 +279,7 @@ namespace atmosphere_scattering
 			, worley
 			, curl
 			, weather
+			, depthObj
 			, skyColour.targetViewId
 			, sunColour.targetViewId
 			, cloudsColour.targetViewId
@@ -310,8 +312,7 @@ namespace atmosphere_scattering
 					, runnableGraph
 					, device
 					, background
-					, size
-					, nullptr );
+					, size );
 				backgroundPass = res.get();
 				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, res->getTimer() );
@@ -560,6 +561,7 @@ namespace atmosphere_scattering
 		, VkExtent2D const & size
 		, crg::ImageViewId const & colour
 		, crg::ImageViewId const * depth
+		, crg::ImageViewId const * depthObj
 		, castor3d::UniformBufferOffsetT< castor3d::ModelBufferConfiguration > const & modelUbo
 		, castor3d::MatrixUbo const & matrixUbo
 		, castor3d::HdrConfigUbo const & hdrConfigUbo
@@ -624,6 +626,7 @@ namespace atmosphere_scattering
 					, m_perlinWorley.sampledViewId
 					, m_curl.sampledViewId
 					, m_weather.sampledViewId
+					, depthObj
 					, *m_atmosphereUbo
 					, *m_cloudsUbo
 					, size

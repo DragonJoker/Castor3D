@@ -32,7 +32,8 @@ namespace castor3d
 		, SceneUbo const & sceneUbo
 		, crg::ImageViewId const & colour
 		, bool clearColour
-		, crg::ImageViewId const * depth )
+		, crg::ImageViewId const * depth
+		, crg::ImageViewId const * depthObj )
 		: m_device{ device }
 		, m_colour{ colour.data->image.data }
 		, m_matrixUbo{ m_device }
@@ -46,6 +47,7 @@ namespace castor3d
 			, colour
 			, clearColour
 			, depth
+			, depthObj
 			, progress ) }
 	{
 	}
@@ -89,6 +91,7 @@ namespace castor3d
 		, crg::ImageViewId const & colour
 		, bool clearColour
 		, crg::ImageViewId const * depth
+		, crg::ImageViewId const * depthObj
 		, ProgressBar * progress )
 	{
 		stepProgressBar( progress, "Creating background pass" );
@@ -99,6 +102,7 @@ namespace castor3d
 			, size
 			, colour
 			, depth
+			, depthObj
 			, m_modelUbo
 			, m_matrixUbo
 			, hdrConfigUbo
