@@ -27,6 +27,8 @@ namespace atmosphere_scattering
 		castor::Point3f position;
 		float lightDotCameraFront;
 		int32_t isLightInFront;
+		float nearPlane;
+		float farPlane;
 		castor::Point3i pad;
 	};
 
@@ -38,8 +40,8 @@ namespace atmosphere_scattering
 			, sdw::StructFieldT< sdw::Vec3, "position" >
 			, sdw::StructFieldT< sdw::Float, "lightDotCameraFront" >
 			, sdw::StructFieldT< sdw::Int, "isLightInFront" >
-			, sdw::StructFieldT< sdw::Int, "pad0" >
-			, sdw::StructFieldT< sdw::Int, "pad1" >
+			, sdw::StructFieldT< sdw::Float, "nearPlane" >
+			, sdw::StructFieldT< sdw::Float, "farPlane" >
 			, sdw::StructFieldT< sdw::Int, "pad2" > >
 	{
 		CameraData( sdw::ShaderWriter & writer
@@ -52,8 +54,8 @@ namespace atmosphere_scattering
 		auto position()const { return getMember< "position" >(); }
 		auto isLightInFront()const { return getMember< "isLightInFront" >(); }
 		auto lightDotCameraFront()const { return getMember< "lightDotCameraFront" >(); }
-
-	private:
+		auto nearPlane()const { return getMember< "nearPlane" >(); }
+		auto farPlane()const { return getMember< "farPlane" >(); }
 		auto camInvViewProj()const { return getMember< "camInvViewProj" >(); }
 		auto objInvViewProj()const { return getMember< "objInvViewProj" >(); }
 	};

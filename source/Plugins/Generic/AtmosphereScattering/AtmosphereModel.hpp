@@ -282,8 +282,11 @@ namespace atmosphere_scattering
 		sdw::RetInt raySphereIntersect( Ray const & ray
 			, sdw::Float const & sphereRadius
 			, Intersection const & ground
+			, sdw::Boolean const & clampToGround
 			, Intersection & nearest
 			, Intersection & farthest );
+		RetIntersection raySphereintersectSkyMap( sdw::Vec3 const & rd
+			, sdw::Float const & radius );
 
 		// Reference implementation (i.e. not schlick approximation). 
 		// See http://www.pbr-book.org/3ed-2018/Volume_Scattering/Phase_Functions.html
@@ -365,8 +368,12 @@ namespace atmosphere_scattering
 			, InRay
 			, sdw::InFloat
 			, InIntersection
+			, sdw::InBoolean
 			, OutIntersection
 			, OutIntersection > m_raySphereIntersect;
+		sdw::Function< Intersection
+			, sdw::InVec3
+			, sdw::InFloat > m_raySphereintersectSkyMap;
 		sdw::Function< sdw::Float
 			, sdw::InFloat
 			, sdw::InFloat > m_hgPhase;

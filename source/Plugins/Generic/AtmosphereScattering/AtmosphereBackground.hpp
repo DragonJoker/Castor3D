@@ -68,6 +68,7 @@ namespace atmosphere_scattering
 			, VkExtent2D const & size
 			, crg::ImageViewId const & colour
 			, crg::ImageViewId const * depth
+			, crg::ImageViewId const * depthObj
 			, castor3d::UniformBufferOffsetT< castor3d::ModelBufferConfiguration > const & modelUbo
 			, castor3d::MatrixUbo const & matrixUbo
 			, castor3d::HdrConfigUbo const & hdrConfigUbo
@@ -200,18 +201,18 @@ namespace atmosphere_scattering
 		void doCpuUpdate( castor3d::CpuUpdater & updater )const override;
 		void doGpuUpdate( castor3d::GpuUpdater & updater )const override;
 		/**
-		*\copydoc	castor3d::SceneBackground::write
+		*\copydoc	castor3d::SceneBackground::doAddPassBindings
 		*/
 		void doAddPassBindings( crg::FramePass & pass
 			, crg::ImageData const & targetImage
 			, uint32_t & index )const override;
 		/**
-		*\copydoc	castor3d::SceneBackground::write
+		*\copydoc	castor3d::SceneBackground::doAddBindings
 		*/
 		void doAddBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
 			, uint32_t & index )const override;
 		/**
-		*\copydoc	castor3d::SceneBackground::write
+		*\copydoc	castor3d::SceneBackground::doAddDescriptors
 		*/
 		void doAddDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
 			, crg::ImageData const & targetImage
@@ -232,6 +233,7 @@ namespace atmosphere_scattering
 				, crg::ImageViewId const & perlinWorley
 				, crg::ImageViewId const & curl
 				, crg::ImageViewId const & weather
+				, crg::ImageViewId const * depthObj
 				, AtmosphereScatteringUbo const & atmosphereUbo
 				, CloudsUbo const & cloudsUbo
 				, VkExtent2D const & size

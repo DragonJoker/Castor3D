@@ -22,7 +22,8 @@ namespace castor3d
 			, SceneUbo const & sceneUbo
 			, crg::ImageViewId const & colour
 			, bool clearColour
-			, crg::ImageViewId const * depth );
+			, crg::ImageViewId const * depth
+			, crg::ImageViewId const * depthObj );
 
 	public:
 		BackgroundRenderer( crg::FramePassGroup & graph
@@ -47,6 +48,7 @@ namespace castor3d
 				, sceneUbo
 				, colour
 				, clearColour
+				, nullptr
 				, nullptr }
 		{
 		}
@@ -61,7 +63,8 @@ namespace castor3d
 			, SceneUbo const & sceneUbo
 			, crg::ImageViewId const & colour
 			, bool clearColour
-			, crg::ImageViewId const & depth )
+			, crg::ImageViewId const & depth
+			, crg::ImageViewId const * depthObj )
 			: BackgroundRenderer{ graph
 				, ( previousPass
 					? crg::FramePassArray{ previousPass }
@@ -74,7 +77,8 @@ namespace castor3d
 				, sceneUbo
 				, colour
 				, clearColour
-				, &depth }
+				, &depth
+				, depthObj }
 		{
 		}
 
@@ -99,6 +103,7 @@ namespace castor3d
 				, sceneUbo
 				, colour
 				, clearColour
+				, nullptr
 				, nullptr }
 		{
 		}
@@ -112,7 +117,8 @@ namespace castor3d
 			, SceneUbo const & sceneUbo
 			, crg::ImageViewId const & colour
 			, bool clearColour
-			, crg::ImageViewId const & depth )
+			, crg::ImageViewId const & depth
+			, crg::ImageViewId const * depthObj )
 			: BackgroundRenderer{ graph
 				, ( previousPass
 					? crg::FramePassArray{ previousPass }
@@ -125,7 +131,8 @@ namespace castor3d
 				, sceneUbo
 				, colour
 				, clearColour
-				, &depth }
+				, &depth
+				, depthObj }
 		{
 		}
 
@@ -149,6 +156,7 @@ namespace castor3d
 				, sceneUbo
 				, colour
 				, clearColour
+				, nullptr
 				, nullptr }
 		{
 		}
@@ -163,7 +171,8 @@ namespace castor3d
 			, SceneUbo const & sceneUbo
 			, crg::ImageViewId const & colour
 			, bool clearColour
-			, crg::ImageViewId const & depth )
+			, crg::ImageViewId const & depth
+			, crg::ImageViewId const * depthObj )
 			: BackgroundRenderer{ graph
 				, std::move( previousPasses )
 				, device
@@ -174,7 +183,8 @@ namespace castor3d
 				, sceneUbo
 				, colour
 				, clearColour
-				, &depth }
+				, &depth
+				, depthObj }
 		{
 		}
 
@@ -197,6 +207,7 @@ namespace castor3d
 				, sceneUbo
 				, colour
 				, clearColour
+				, nullptr
 				, nullptr }
 		{
 		}
@@ -210,7 +221,8 @@ namespace castor3d
 			, SceneUbo const & sceneUbo
 			, crg::ImageViewId const & colour
 			, bool clearColour
-			, crg::ImageViewId const & depth )
+			, crg::ImageViewId const & depth
+			, crg::ImageViewId const * depthObj )
 			: BackgroundRenderer{ graph
 				, std::move( previousPasses )
 				, device
@@ -221,7 +233,8 @@ namespace castor3d
 				, sceneUbo
 				, colour
 				, clearColour
-				, &depth }
+				, &depth
+				, depthObj }
 		{
 		}
 
@@ -260,6 +273,7 @@ namespace castor3d
 			, crg::ImageViewId const & colour
 			, bool clearColour
 			, crg::ImageViewId const * depth
+			, crg::ImageViewId const * depthObj
 			, ProgressBar * progress );
 
 	private:

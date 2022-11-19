@@ -78,7 +78,7 @@ namespace atmosphere_scattering
 		sdw::Function< sdw::Vec3 > m_computeReflections;
 		sdw::Function< sdw::Vec3 > m_computeRefractions;
 		sdw::Function< sdw::Void > m_mergeReflRefr;
-		sdw::Function < sdw::Void
+		sdw::Function< sdw::Void
 			, sdw::InVec2
 			, sdw::InFloat
 			, sdw::InVec2

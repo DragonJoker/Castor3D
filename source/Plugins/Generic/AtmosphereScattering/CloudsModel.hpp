@@ -34,6 +34,8 @@ namespace atmosphere_scattering
 			, uint32_t & binding
 			, uint32_t set );
 		sdw::RetVec4 applyClouds( castor3d::shader::Ray const & ray
+			, sdw::Float const & objectId
+			, sdw::Float const & linearDepth
 			, sdw::IVec2 const & fragCoord
 			, sdw::Vec3 & sunLuminance
 			, sdw::Vec3 & skyLuminance
@@ -76,8 +78,6 @@ namespace atmosphere_scattering
 			, sdw::Vec3 const & wolrdPos
 			, sdw::Float const & factor
 			, sdw::Float const & viewHeight );
-		RetIntersection raySphereintersectSkyMap( sdw::Vec3 const & rd
-			, sdw::Float const & radius );
 		sdw::RetFloat henyeyGreenstein( sdw::Float const & g
 			, sdw::Float const & cosTheta );
 		sdw::Float henyeyGreenstein( sdw::Float const & g
@@ -158,9 +158,6 @@ namespace atmosphere_scattering
 			, sdw::InVec3
 			, sdw::InFloat
 			, sdw::InFloat > m_computeFogAmount;
-		sdw::Function< Intersection
-			, sdw::InVec3
-			, sdw::InFloat > m_raySphereintersectSkyMap;
 		sdw::Function< sdw::Float
 			, sdw::InFloat
 			, sdw::InFloat > m_henyeyGreenstein;
@@ -177,6 +174,8 @@ namespace atmosphere_scattering
 			, sdw::InVec4 > m_computeLighting;
 		sdw::Function< sdw::Vec4
 			, castor3d::shader::InRay
+			, sdw::InFloat
+			, sdw::InFloat
 			, sdw::InIVec2
 			, sdw::InOutVec3
 			, sdw::InOutVec3

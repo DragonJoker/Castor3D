@@ -189,6 +189,7 @@ namespace castor3d
 			, VkExtent2D const & size
 			, crg::ImageViewId const & colour
 			, crg::ImageViewId const * depth
+			, crg::ImageViewId const * depthObj
 			, UniformBufferOffsetT< ModelBufferConfiguration > const & modelUbo
 			, MatrixUbo const & matrixUbo
 			, HdrConfigUbo const & hdrConfigUbo

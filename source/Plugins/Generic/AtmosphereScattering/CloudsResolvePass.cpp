@@ -121,7 +121,8 @@ namespace atmosphere_scattering
 				, sdw::InVec2{ writer, "uv" } );
 
 			auto computeLighting = writer.implementFunction< sdw::Vec3 >( "computeLighting"
-				, [&]( sdw::Vec3 skyColor
+				, [&]( castor3d::shader::Ray const & ray
+					, sdw::Vec3 skyColor
 					, sdw::Vec3 sunColour
 					, sdw::Vec3 cloudsColor
 					, sdw::Float const & skyBlendFactor
@@ -132,11 +133,11 @@ namespace atmosphere_scattering
 						, mix( skyColor
 							, c3d_cloudsData.bottomColor()
 							, vec3( c3d_cloudsData.coverage() ) ) );
-
 					writer.returnStmt( mix( skyColor
-							, cloudsColor + ( skyBlendFactor * blendSkyColor )
-							, vec3( cloudsDensity ) ) );
+						, cloudsColor + ( skyBlendFactor * ( blendSkyColor ) )
+						, vec3( cloudsDensity ) ) );
 				}
+				, castor3d::shader::InRay{ writer, "ray" }
 				, sdw::InVec3{ writer, "skyColor" }
 				, sdw::InVec3{ writer, "sunColour" }
 				, sdw::InVec3{ writer, "cloudsColor" }
@@ -159,14 +160,17 @@ namespace atmosphere_scattering
 
 					IF( writer, c3d_cloudsData.coverage() > 0.0_f )
 					{
+						auto ray = writer.declLocale( "ray"
+							, atmosphere.castRay( texCoords ) );
 						auto clouds = writer.declLocale( "clouds"
 							, gaussianBlur( cloudsMap, texCoords ) );
-						fragColour = vec4( computeLighting( sky.rgb()
+						fragColour = vec4( computeLighting( ray
+								, sky.rgb()
 								, sun.rgb()
 								, clouds.rgb()
 								, sky.a()
 								, clouds.a() )
-							, 1.0_f );
+							, clouds.a() );
 					}
 					ELSE
 					{

@@ -79,7 +79,8 @@ namespace castor3d
 			, m_sceneUbo
 			, m_colourView
 			, false
-			, getOwner()->getDepthViewId( m_index, m_face ) ) }
+			, getOwner()->getDepthViewId( m_index, m_face )
+			, nullptr ) }
 		, m_transparentPassDesc{ &doCreateTransparentPass( &m_backgroundRenderer->getPass() ) }
 	{
 		doCreateGenMipmapsPass( m_transparentPassDesc );

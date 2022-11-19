@@ -32,6 +32,7 @@ namespace atmosphere_scattering
 			, crg::ImageViewId const & worley
 			, crg::ImageViewId const & curl
 			, crg::ImageViewId const & weather
+			, crg::ImageViewId const * depthObj
 			, crg::ImageViewId const & skyResult
 			, crg::ImageViewId const & sunResult
 			, crg::ImageViewId const & cloudsResult
