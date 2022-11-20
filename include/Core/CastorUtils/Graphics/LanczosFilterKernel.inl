@@ -135,14 +135,14 @@ namespace castor
 		auto pixelSize = getBytesPerPixel( PFT );
 		auto dstLineSize = pixelSize * dstLevelExtent.width;
 
-		for ( int32_t y = 0; y < srcLevelExtent.width; y += 2 )
+		for ( uint32_t y = 0; y < srcLevelExtent.width; y += 2 )
 		{
 			auto dstLine = dstBuffer;
 
-			for ( int32_t x = 0; x < srcLevelExtent.height; x += 2 )
+			for ( uint32_t x = 0; x < srcLevelExtent.height; x += 2 )
 			{
-				lanczos::compute< PFT >( x
-					, y
+				lanczos::compute< PFT >( int32_t( x )
+					, int32_t( y )
 					, srcLevelExtent.width
 					, srcLevelExtent.height
 					, srcBuffer

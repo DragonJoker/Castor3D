@@ -217,7 +217,7 @@ namespace castor
 		 */
 		inline component_ref operator[]( uint8_t index )
 		{
-			return m_components.get()[index];
+			return m_components[index];
 		}
 		/**
 		 *\~english
@@ -231,7 +231,7 @@ namespace castor
 		 */
 		inline component_const_ref operator[]( uint8_t index )const
 		{
-			return m_components.get()[index];
+			return m_components[index];
 		}
 		/**
 		 *\~english
@@ -243,7 +243,7 @@ namespace castor
 		 */
 		inline component_const_ptr constPtr()const
 		{
-			return ( m_components ? & m_components.get()[0] : nullptr );
+			return ( m_components ? & m_components[0] : nullptr );
 		}
 		/**
 		 *\~english
@@ -255,7 +255,7 @@ namespace castor
 		 */
 		inline component_ptr ptr()
 		{
-			return ( m_components ? & m_components.get()[0] : nullptr );
+			return ( m_components ? & m_components[0] : nullptr );
 		}
 		/**
 		 *\~english
@@ -267,7 +267,7 @@ namespace castor
 		 */
 		inline iterator begin()
 		{
-			return ( m_components ? & m_components.get()[0] : nullptr );
+			return ( m_components ? & m_components[0] : nullptr );
 		}
 		/**
 		 *\~english
@@ -279,7 +279,7 @@ namespace castor
 		 */
 		inline const_iterator begin()const
 		{
-			return ( m_components ? & m_components.get()[0] : nullptr );
+			return ( m_components ? & m_components[0] : nullptr );
 		}
 		/**
 		 *\~english
@@ -291,7 +291,7 @@ namespace castor
 		 */
 		inline iterator end()
 		{
-			return ( m_components ? m_components.get() + PixelDefinitionsT< FT >::Size : nullptr );
+			return ( m_components ? m_components + PixelDefinitionsT< FT >::Size : nullptr );
 		}
 		/**
 		 *\~english
@@ -303,7 +303,7 @@ namespace castor
 		 */
 		inline const_iterator end()const
 		{
-			return ( m_components ? m_components.get() + PixelDefinitionsT< FT >::Size : nullptr );
+			return ( m_components ? m_components + PixelDefinitionsT< FT >::Size : nullptr );
 		}
 		/**
 		 *\~english
@@ -347,7 +347,8 @@ namespace castor
 		/**@}*/
 
 	private:
-		std::shared_ptr< uint8_t > m_components;
+		uint8_t * m_components{};
+		bool m_delete{};
 	};
 	/**
 	 *\~english
