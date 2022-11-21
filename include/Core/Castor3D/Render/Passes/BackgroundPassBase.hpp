@@ -27,8 +27,6 @@ namespace castor3d
 		 *\param[in]	graph		The runnable graph.
 		 *\param[in]	device		The GPU device.
 		 *\param[in]	background	The scene background.
-		 *\param[in]	size		The render area dimensions.
-		 *\param[in]	depth		Optional depth buffer.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	pass		La frame pass parente.
@@ -36,8 +34,6 @@ namespace castor3d
 		 *\param[in]	graph		Le runnable graph.
 		 *\param[in]	device		Le device GPU.
 		 *\param[in]	background	Le fond de la scène.
-		 *\param[in]	size		Les dimensions de la zone de rendu.
-		 *\param[in]	depth		Depth buffer optionnel.
 		 */
 		C3D_API BackgroundPassBase( crg::FramePass const & pass
 			, crg::GraphContext & context

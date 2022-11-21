@@ -136,14 +136,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialisation function.
-		 *\param[in]	device		The GPU device.
-		 *\param[in]	queueData	The queue receiving the GPU commands.
-		 *\param[in]	progress	The optional progress bar.
+		 *\param[in]	onInitialised	The callback called when initialisation ends.
+		 *\param[in]	progress		The optional progress bar.
 		 *\~french
 		 *\brief		Fonction d'initialisation.
-		 *\param[in]	device		Le device GPU.
-		 *\param[in]	queueData	La queue recevant les commandes GPU.
-		 *\param[in]	progress	La barre de progression optionnelle.
+		 *\param[in]	onInitialised	Le callback appelé lorsque l'initialisation est terminée.
+		 *\param[in]	progress		La barre de progression optionnelle.
 		 */
 		C3D_API void initialise( OnInitialisedFunc onInitialised
 			, ProgressBar * progress = nullptr );

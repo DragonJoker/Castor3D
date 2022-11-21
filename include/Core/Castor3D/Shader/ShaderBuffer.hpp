@@ -63,9 +63,11 @@ namespace castor3d
 		 *\~english
 		 *\brief		Creates the descriptor set layout binding at given point.
 		 *\param[in]	index	The binding point index.
+		 *\param[in]	stages	The shader stages.
 		 *\~french
 		 *\brief		Crée une attache de layout de set de descripteurs au point donné.
 		 *\param[in]	index	L'indice du point d'attache.
+		 *\param[in]	stages	Les shader stages.
 		 */
 		C3D_API VkDescriptorSetLayoutBinding createLayoutBinding( uint32_t index = 0u
 			, VkShaderStageFlags stages = ( VK_SHADER_STAGE_FRAGMENT_BIT

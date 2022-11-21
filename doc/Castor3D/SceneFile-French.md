@@ -62,9 +62,17 @@ Certaines sections peuvent avoir des sous-sections :
 - **materials** : *value*  
   Permet de définir le type des matériaux utilisés dans le fichier. Les valeurs possibles sont :
   - *phong* : Matériaux Phong.
-  - *blinn_phong* : Blinn-Phong.
-  - *metallic_roughness* : Matériaux PBR metallic/roughness.
-  - *specular_glossiness* : Matériaux PBR specular/glossiness.
+  - *blinn_phong* : Matériaux Blinn-Phong.
+  - *pbr* : Matériaux PBR.
+- **default_unit** : *value*  
+  Définit l'untié de longueur par défaut du moteur. Les valeurs possibles sont :
+  - *mm* : Millimètres.
+  - *cm* : Centimètres.
+  - *m* : Mètres.
+  - *km* : Kilomètres.
+  - *yd* : Yards.
+  - *ft* : Pieds.
+  - *in* : Pouces.
 - **max_image_size**: *entier*
   Permet de limiter les dimensions des images chargées (tout en conservant leurs proportions).
 - **sampler** : *section*  

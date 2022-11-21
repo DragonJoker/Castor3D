@@ -30,6 +30,7 @@ namespace castor3d
 		 *\param[in]	device		The GPU device.
 		 *\param[in]	size		The render area dimensions.
 		 *\param[in]	matrixUbo	The scene matrices UBO.
+		 *\param[in]	sceneUbo	The scene UBO.
 		 *\param[in]	culler		The culler for this pass.
 		 *\~french
 		 *\brief		Constructeur.
@@ -39,6 +40,7 @@ namespace castor3d
 		 *\param[in]	device		Le device GPU.
 		 *\param[in]	size		Les dimensions de la zone de rendu.
 		 *\param[in]	matrixUbo	L'UBO de matrices de la scène.
+		 *\param[in]	sceneUbo	L'UBO de scène.
 		 *\param[in]	culler		Le culler pour cette passe.
 		 */
 		C3D_API explicit PickingPass( crg::FramePass const & pass
@@ -80,7 +82,7 @@ namespace castor3d
 		*/
 		/**@{*/
 		/**
-		 *\copydoc		castor3d::RenderTechniquePass::getComponentsMask
+		 *\copydoc		castor3d::RenderNodesPass::getComponentsMask
 		 */
 		C3D_API ComponentModeFlags getComponentsMask()const override;
 

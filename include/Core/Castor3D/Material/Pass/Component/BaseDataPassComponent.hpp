@@ -18,15 +18,18 @@ namespace castor3d
 		*\name
 		*	Construction / Destruction.
 		*/
+		/**@{*/
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	submesh	The parent pass.
+		 *\param[in]	pass	The parent pass.
 		 *\param[in]	type	The component type.
+		 *\param[in]	params	The component data construction params.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	submesh	Le sous-maillage pass.
+		 *\param[in]	pass	Le sous-maillage pass.
 		 *\param[in]	type	Le type de composant.
+		 *\param[in]	params	Les paramètres de construction des données du composant.
 		 */
 		template< typename ... ParamsT >
 		BaseDataPassComponentT( Pass & pass

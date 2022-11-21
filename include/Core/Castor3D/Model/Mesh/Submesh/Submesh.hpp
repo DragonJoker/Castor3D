@@ -72,24 +72,28 @@ namespace castor3d
 		C3D_API ~Submesh();
 		/**
 		 *\~english
-		 *\brief		Initialises the submesh
+		 *\brief		Initialises the submesh.
+		 *\param[in]	device	The render device.
 		 *\~french
-		 *\brief		Initialise le sous-maillage
+		 *\brief		Initialise le sous-maillage.
+		 *\param[in]	device	Le périphérique de rendu.
 		 */
 		C3D_API void initialise( RenderDevice const & device );
 		/**
-		*\~english
-		*\brief		Cleans the submesh
-		*\~french
-		*\brief		Nettoie le sous-maillage
-		*/
+		 *\~english
+		 *\brief		Cleans the submesh.
+		 *\param[in]	device	The render device.
+		 *\~french
+		 *\brief		Nettoie le sous-maillage.
+		 *\param[in]	device	Le périphérique de rendu.
+		 */
 		C3D_API void cleanup( RenderDevice const & device );
 		/**
-		*\~english
-		*\brief		Updates the buffers.
-		*\~french
-		*\brief		Met à jour les tampons.
-		*/
+		 *\~english
+		 *\brief		Updates the buffers.
+		 *\~french
+		 *\brief		Met à jour les tampons.
+		 */
 		C3D_API void update();
 		/**
 		 *\~english
@@ -182,33 +186,39 @@ namespace castor3d
 		 *\~english
 		 *\brief		Adds a points list to my list.
 		 *\param[in]	begin	The vertices data begin.
-		 *\param[in]	end	The vertices data end.
+		 *\param[in]	end		The vertices data end.
 		 *\~french
 		 *\brief		Ajoute des points à la liste.
 		 *\param[in]	begin	Le début des données de sommets.
-		 *\param[in]	end	La fin des données de sommets.
+		 *\param[in]	end		La fin des données de sommets.
 		 */
 		C3D_API void addPoints( InterleavedVertex const * const begin
 			, InterleavedVertex const * const end );
 		/**
 		 *\~english
-		 *\brief		Generates normals and tangents
+		 *\brief		Generates normals and tangents.
+		 *\param[in]	reverted	\p true to inverse normals.
 		 *\~french
-		 *\brief		Génère les normales et les tangentes
+		 *\brief		Génère les normales et les tangentes.
+		 *\param[in]	reverted	\p true pour inverser les normales.
 		 */
 		C3D_API void computeNormals( bool reverted = false );
 		/**
 		 *\~english
 		 *\return		The program flags.
+		 *\param[in]	material	The material for which we want the flags.
 		 *\~french
 		 *\return		Les indicateurs de programme.
+		 *\param[in]	material	Le matériau pour lequel on veut les indicateurs.
 		 */
 		C3D_API ProgramFlags getProgramFlags( Material const & material )const;
 		/**
 		 *\~english
 		 *\return		The submesh flags.
+		 *\param[in]	pass	The pass for which we want the flags.
 		 *\~french
 		 *\return		Les indicateurs de submesh.
+		 *\param[in]	pass	La passe pour laquelle on veut les indicateurs.
 		 */
 		C3D_API SubmeshFlags getSubmeshFlags( Pass const * pass )const;
 		/**
@@ -239,18 +249,12 @@ namespace castor3d
 		/**
 		*\~english
 		*\return		The geometry buffers for given render node.
-		 *\param[in]	node			The render node using this submesh.
-		 *\param[in]	shaderFlags		The shader flags.
-		 *\param[in]	programFlags	The program flags.
-		 *\param[in]	submeshFlags	The submesh flags.
-		 *\param[in]	mask			The textures mask.
+		 *\param[in]	node	The render node using this submesh.
+		 *\param[in]	flags	The pipeline flags.
 		*\~french
 		*\return		Les tampons de géométrie associés au noeud de rendu donné.
-		 *\param[in]	node			Le noeud de rendu utilisant ce sous-maillage.
-		 *\param[in]	shaderFlags		Les shader flags.
-		 *\param[in]	programFlags	Les program flags.
-		 *\param[in]	submeshFlags	Les submesh flags.
-		 *\param[in]	mask			Le masque de textures.
+		 *\param[in]	node	Le noeud de rendu utilisant ce sous-maillage.
+		 *\param[in]	flags	Les indicateurs de pipeline.
 		*/
 		C3D_API GeometryBuffers const & getGeometryBuffers( SubmeshRenderNode const & node
 			, PipelineFlags const & flags )const;

@@ -209,9 +209,11 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Updates the passes buffer.
+		 *\param[in]	specifics		The buffers specific to pass components.
 		 *\param[in]	commandBuffer	Receives the update commands.
 		 *\~french
 		 *\brief		Met à jour le tampon de passes.
+		 *\param[in]	specifics		Le buffers spécifiques aux composants de passe.
 		 *\param[in]	commandBuffer	Reçoit les commandes de mise à jour.
 		 */
 		C3D_API void update( SpecificsBuffers const & specifics

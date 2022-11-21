@@ -23,6 +23,7 @@ namespace castor3d
 		 *\param[in]	graph				The runnable graph.
 		 *\param[in]	device				The render device.
 		 *\param[in]	typeName			The pass type name.
+		 *\param[in]	targetImage			The image this pass renders to.
 		 *\param[in]	renderPassDesc		The scene render pass construction data.
 		 *\param[in]	techniquePassDesc	The technique render pass construction data.
 		 *\~french
@@ -33,6 +34,7 @@ namespace castor3d
 		 *\param[in]	graph				Le runnable graph.
 		 *\param[in]	device				Le render device.
 		 *\param[in]	typeName			La nom du type de la passe.
+		 *\param[in]	targetImage			L'image dans laquelle cette passe fait son rendu.
 		 *\param[in]	renderPassDesc		Les données de construction de passe de rendu de scène.
 		 *\param[in]	techniquePassDesc	Les données de construction de passe de rendu de technique.
 		 */
@@ -50,7 +52,7 @@ namespace castor3d
 		 */
 		C3D_API void accept( RenderTechniqueVisitor & visitor )override;
 		/**
-		 *\copydoc		castor3d::RenderTechniquePass::getComponentsMask
+		 *\copydoc		castor3d::RenderNodesPass::getComponentsMask
 		 */
 		C3D_API ComponentModeFlags getComponentsMask()const override;
 

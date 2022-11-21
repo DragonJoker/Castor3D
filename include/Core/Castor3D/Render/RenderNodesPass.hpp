@@ -121,12 +121,14 @@ namespace castor3d
 		 *\brief		Constructor for transparent passes.
 		 *\param[in]	size		The render area dimensions.
 		 *\param[in]	matrixUbo	The scene matrices UBO.
+		 *\param[in]	sceneUbo	The scene UBO.
 		 *\param[in]	culler		The scene culler for this pass.
 		 *\param[in]	oit			The order independant status.
 		 *\~french
 		 *\brief		Constructeur pour les passes transparents.
 		 *\param[in]	size		Les dimensions de la zone de rendu.
 		 *\param[in]	matrixUbo	L'UBO des matrices de la scène.
+		 *\param[in]	sceneUbo	L'UBO de scène.
 		 *\param[in]	culler		Le culler pour cette passe.
 		 *\param[in]	oit			Le statut de rendu indépendant de l'ordre des objets.
 		 */
@@ -405,6 +407,7 @@ namespace castor3d
 		 *\param[in]	sceneFlags			Scene related flags.
 		 *\param[in]	topology			The render topology.
 		 *\param[in]	isFrontCulled		\p true for front face culling, \p false for back face culling.
+		 *\param[in]	passLayerIndex		The material pass layer index.
 		 *\param[in]	morphTargets		The morph targets buffer.
 		 *\~french
 		 *\brief		Crée les indicateurs de pipeline pour la configuration donnée.
@@ -421,6 +424,7 @@ namespace castor3d
 		 *\param[in]	sceneFlags			Les indicateurs relatifs à la scène.
 		 *\param[in]	topology			La topologie de rendu.
 		 *\param[in]	isFrontCulled		\p true pour front face culling, \p false pour back face culling.
+		 *\param[in]	passLayerIndex		L'indice de la couche de la passe de matériau.
 		 *\param[in]	morphTargets		Le buffer de morph targets.
 		 */
 		C3D_API PipelineFlags createPipelineFlags( PassComponentCombine components

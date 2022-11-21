@@ -129,12 +129,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief			Adds or removes texture components, whether they are needed or not, from given pass.
-		 *\param[in,out]	texConfigs	Used to determine if a map component is needed.
-		 *\param[in]		pass		The pass.
+		 *\param[in]		texConfigs	Used to determine if a map component is needed.
+		 *\param[in,out]	result		The pass.
 		 *\~french
 		 *\brief			Ajoute ou supprime les composants de texture de la passe, selon s'ils sont nécessaires ou pas.
-		 *\param[in,out]	texConfigs	Utilisé pour déterminer si un composant de texture est nécessaire.
-		 *\param[in]		pass		La passe.
+		 *\param[in]		texConfigs	Utilisé pour déterminer si un composant de texture est nécessaire.
+		 *\param[in,out]	result		La passe.
 		 */
 		C3D_API void updateMapComponents( std::vector< TextureFlagConfiguration > const & texConfigs
 			, Pass & result );

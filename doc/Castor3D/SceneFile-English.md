@@ -61,8 +61,16 @@ Some sections can have child subsections :
   Defines the material type used in the whole file. The possible values are :
   - *phong* : Phong materials.
   - *blinn_phong* : Blinn-Phong materials.
-  - *metallic_roughness* : PBR metallic/roughness materials.
-  - *specular_glossiness* : PBR specular/glossiness materials.
+  - *pbr* : PBR materials.
+- **default_unit** : *value*  
+  Defines the unit length used by the engine. The possible values are :
+  - *mm* : Millimetres.
+  - *cm* : Centimetres.
+  - *m* : Metres.
+  - *km* : Kilometres.
+  - *yd* : Yards.
+  - *ft* : Feet.
+  - *in* : Inches.
 - **max_image_size**: *int*
   Allows limitation of the loaded images (keeping their aspect ratio).
 - **sampler** : *section*  

@@ -46,6 +46,8 @@ namespace castor3d
 			*	Receives Specular (RGB) and Roughness (A).
 			*\param[out] colMtl
 			*	Receives Colour (RGB) and Metalness (A).
+			*\param[out] sheen
+			*	Receives Sheen Specular (RGB) and Sheen Roughness (A).
 			*\~french
 			*\brief		Met à jour les valeurs nécessaires à l'éclairage (specular, metalness, roughness et colour).
 			*\param[in] components
@@ -56,6 +58,8 @@ namespace castor3d
 			*	Reçoit la Specular (RGB) et la Roughness (A).
 			*\param[out] colMtl
 			*	Reçoit la Colour (RGB) et la Metalness (A).
+			*\param[out] sheen
+			*	Reçoit la Sheen Specular (RGB) et la Sheen Roughness (A).
 			*/
 			C3D_API virtual void updateOutputs( sdw::StructInstance const & components
 				, sdw::StructInstance const & surface
@@ -112,6 +116,8 @@ namespace castor3d
 			*	Used to retrieve needed data for this component.
 			*\param[in] surface
 			*	Used to retrieve needed data for this component.
+			*\param[in] clrCot
+			*	Used to retrieve needed data for this component.
 			*\param[in,out] inits
 			*	Receives the initialisers.
 			*\~french
@@ -126,6 +132,8 @@ namespace castor3d
 			*\param[in] material
 			*	Utilisé pour récupérer les données pour ce composant.
 			*\param[in] surface
+			*	Utilisé pour récupérer les données pour ce composant.
+			*\param[in] clrCot
 			*	Utilisé pour récupérer les données pour ce composant.
 			*\param[in,out] inits
 			*	Reçoit les initialiseurs
@@ -238,6 +246,8 @@ namespace castor3d
 			*	Used to check if the render pass is configured so the component is usable.
 			*\param[in] config
 			*	Used to say if the texture has the needed configuration for this component.
+			*\param[in] imgCompConfig
+			*	The current image component(s) to use.
 			*\param[in] sampled
 			*	The data retrieved from the texture.
 			*\param[in] components
@@ -251,6 +261,8 @@ namespace castor3d
 			*	Utilisé pour vérifier si la passe de rendu est configurée pour que le composant soit utilisable.
 			*\param[in] config
 			*	Utilisé pour dire si la texture a la configuration pour ce composant.
+			*\param[in] imgCompConfig
+			*	Les composantes de l'image à utiliser.
 			*\param[in] sampled
 			*	Les données récupérées depuis la texture.
 			*\param[in] components
@@ -319,12 +331,16 @@ namespace castor3d
 			*	The texture.
 			*\param[in] texCoords
 			*	The texture coordinates.
+			*\param[in] components
+			*	Contains the component members.
 			*\~french
 			*	Laisse le composant échantillonner la texture.
 			*\param[in] map
 			*	La texture.
 			*\param[in] texCoords
 			*	Les coordonnées de texture.
+			*\param[in] components
+			*	Contient les membres du composants.
 			*/
 			C3D_API virtual sdw::Vec4 sampleMap( sdw::CombinedImage2DRgba32 const & map
 				, sdw::Vec3 const & texCoords
@@ -336,12 +352,16 @@ namespace castor3d
 			*	The texture.
 			*\param[in] texCoords
 			*	The texture coordinates.
+			*\param[in] components
+			*	Contains the component members.
 			*\~french
 			*	Laisse le composant échantillonner la texture.
 			*\param[in] map
 			*	La texture.
 			*\param[in] texCoords
 			*	Les coordonnées de texture.
+			*\param[in] components
+			*	Contient les membres du composants.
 			*/
 			C3D_API virtual sdw::Vec4 sampleMap( sdw::CombinedImage2DRgba32 const & map
 				, shader::DerivTex const & texCoords
@@ -431,9 +451,13 @@ namespace castor3d
 			*\param[in] colour
 			*	The material colour.
 			*\param[in] spcRgh
-			*	Receives Specular (RGB) and Roughness (A).
+			*	Specular (RGB) and Roughness (A).
 			*\param[in] colMtl
-			*	Receives Colour (RGB) and Metalness (A).
+			*	Colour (RGB) and Metalness (A).
+			*\param[in] crTsIr
+			*	Clearcoat Roughness (R), Transmission (G), Iridescence Factor (B) and Iridescence Thickness (A).
+			*\param[in] sheen
+			*	Sheen Specular (RGB) and Sheen Roughness (A).
 			*\param[out] material
 			*	Receives the values necessary for this component.
 			*\~french
@@ -441,9 +465,13 @@ namespace castor3d
 			*\param[in] colour
 			*	La couleur du matériau.
 			*\param[out] spcRgh
-			*	La Specular (RGB) et la Roughness (A).
+			*	Specular (RGB) et la Roughness (A).
 			*\param[out] colMtl
-			*	la Colour (RGB) et la Metalness (A).
+			*	Colour (RGB) et la Metalness (A).
+			*\param[in] crTsIr
+			*	Clearcoat Roughness (R), Transmission (G), Iridescence Factor (B) et Iridescence Thickness (A).
+			*\param[in] sheen
+			*	Sheen Specular (RGB) et Sheen Roughness (A).
 			*\param[out] material
 			*	Reçoit les valeurs nécessaires pour ce composant.
 			*/
@@ -494,11 +522,19 @@ namespace castor3d
 		C3D_API PassComponentPlugin( PassComponentPlugin && rhs ) = default;
 		/**
 		*\~english
+		*\param[in] passComponents
+		*	The components registrar.
 		*\param[in] pupdateComponent
 		*	The function to adjust the component data after textures have been parsed.
+		*\param[in] pfinishComponent
+		*	The function to adjust the component data after materials are blended.
 		*\~french
+		*\param[in] passComponents
+		*	Le registre de composants.
 		*\param[in] pupdateComponent
 		*	Fonction pour ajuster les données du composant après que les textures ont été traitées.
+		*\param[in] pfinishComponent
+		*	Fonction pour ajuster les données du composant après que les matériaux aon tété blended.
 		*/
 		C3D_API explicit PassComponentPlugin( PassComponentRegister const & passComponents
 			, UpdateComponent pupdateComponent = nullptr
@@ -1043,11 +1079,9 @@ namespace castor3d
 		 *\~english
 		 *\brief			Fills the pass buffer with this pass data.
 		 *\param[in,out]	buffer			The pass buffer.
-		 *\param[in]		passTypeIndex	The pass type index.
 		 *\~french
 		 *\brief			Remplit le pass buffer aves les données de cette passe.
 		 *\param[in,out]	buffer			Le pass buffer.
-		 *\param[in]		passTypeIndex	L'indice du type de passe.
 		 */
 		C3D_API void fillBuffer( PassBuffer & buffer )const;
 		/**
@@ -1193,10 +1227,16 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief			Writes the component content to text.
-		 *\param[in,out]	result	Receives the merged textures.
+		 *\param[in]		tabs		The current tabulation level.
+		 *\param[in]		folder		The resources folder.
+		 *\param[in]		subfolder	The resources subfolder.
+		 *\param[in,out]	file		The output file.
 		 *\~french
 		 *\brief			Ecrit le contenu du composant en texte.
-		 *\param[in,out]	result		Reçoit les textures fusionnées.
+		 *\param[in]		tabs		Le niveau actuel de tabulation.
+		 *\param[in]		folder		Le dossier de ressources.
+		 *\param[in]		subfolder	Le sous-dossier de ressources.
+		 *\param[in,out]	file		Le fichier de sortie.
 		 */
 		virtual bool doWriteText( castor::String const & tabs
 			, castor::Path const & folder
@@ -1208,12 +1248,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief			Fills the pass buffer with this pass data.
-		 *\param[in,out]	buffer			The pass buffer.
-		 *\param[in]		passTypeIndex	The pass type index.
+		 *\param[in,out]	buffer	The pass buffer.
 		 *\~french
 		 *\brief			Remplit le pass buffer aves les données de cette passe.
-		 *\param[in,out]	buffer			Le pass buffer.
-		 *\param[in]		passTypeIndex	L'indice du type de passe.
+		 *\param[in,out]	buffer	Le pass buffer.
 		 */
 		virtual void doFillBuffer( PassBuffer & buffer )const
 		{

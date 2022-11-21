@@ -25,11 +25,13 @@ namespace castor3d
 		 *\~english
 		 *\brief		Initialises deferred rendering related stuff.
 		 *\param[in]	graph				The graph passes group.
-		 *\param[in]	opaquePass			The opaque nodes render pass.
+		 *\param[in]	previousPasses		The previous frame passes this pass depends on.
+		 *\param[in]	ssaoPass			The SSAO frame pass.
 		 *\param[in]	device				The GPU device.
 		 *\param[in]	progress			The progress status.
 		 *\param[in]	brdf				The prefiltered BRDF map.
-		 *\param[in]	depth				The render target depth texture.
+		 *\param[in]	depth				The depth texture.
+		 *\param[in]	depthObj			The depths and objects texture.
 		 *\param[in]	opaquePassResult	The geometry pass buffers.
 		 *\param[in]	resultTexture		The render technique texture.
 		 *\param[in]	smDirectionalResult	The directional lights shadow map.
@@ -52,11 +54,13 @@ namespace castor3d
 		 *\~french
 		 *\brief		Initialise les données liées au deferred rendering.
 		 *\param[in]	graph				Le groupe de passes du graphe.
-		 *\param[in]	opaquePass			La passe de rendu des noeuds opaques.
+		 *\param[in]	previousPasses		Les passes de frame dont cette passe dépend.
+		 *\param[in]	ssaoPass			La passe de SSAO.
 		 *\param[in]	device				Le device GPU.
 		 *\param[in]	progress			Le statut de progression.
 		 *\param[in]	brdf				La texture de BRDF.
-		 *\param[in]	depth				La texture de profondeur de la cible de rendu.
+		 *\param[in]	depth				La texture de profondeur.
+		 *\param[in]	depthObj			La texture de profondeurs et d'objets.
 		 *\param[in]	opaquePassResult	Le résultat de la geometry pass.
 		 *\param[in]	resultTexture		La texture de la technique de rendu.
 		 *\param[in]	smDirectionalResult	La shadow map des source lumineuses directionnelles.

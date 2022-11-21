@@ -150,7 +150,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::AnimationImporter::doImportNode
 		 */
-		C3D_API bool doImportNode( SceneNodeAnimation & scene )override;
+		C3D_API bool doImportNode( SceneNodeAnimation & node )override;
 
 	public:
 		static castor::String const MeshAnimType;

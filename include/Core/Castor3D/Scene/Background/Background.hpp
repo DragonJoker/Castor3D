@@ -151,37 +151,61 @@ namespace castor3d
 		*\~english
 		*\brief
 		*	Creates the background render pass.
-		*\param pass
-		*	The parent frame pass.
-		*\param context
-		* The rendering context.
 		*\param graph
 		*	The runnable graph.
 		*\param device
 		*	The GPU device.
+		*\param progress
+		*	The optional progress bar.
 		*\param size
 		*	The render area dimensions.
-		*\param usesDepth
-		*	\p true to account for depth buffer.
+		*\param colour
+		*	The colour result.
+		*\param depth
+		*	The optional depth image.
+		*\param depthObj
+		*	The optional depths and objects image.
+		*\param modelUbo
+		*	The model UBO.
 		*\param matrixUbo
 		*	The matrix UBO.
+		*\param hdrConfigUbo
+		*	The HDR configuration UBO.
+		*\param sceneUbo
+		*	The scene UBO.
+		*\param clearColour
+		*	\p true to clear the colour result.
+		*\param[out] backgroundPass
+		*	Receives the background pass.
 		*\~french
 		*\brief
 		*	Crée la passe de rendu du fond.
-		*\param pass
-		*	La frame pass parente.
-		*\param context
-		*	Le contexte de rendu.
 		*\param graph
 		*	Le runnable graph.
 		*\param device
 		*	Le device GPU.
+		*\param progress
+		*	La barre de progression, optionnelle.
 		*\param size
 		*	Les dimensions de la zone de rendu.
-		*\param usesDepth
-		*	\p true pour prendre en compte le depth buffer.
+		*\param colour
+		*	Le résultat de couleur.
+		*\param depth
+		*	L'image de profondeur, optionnelle.
+		*\param depthObj
+		*	L'image de profondeurs de d'objets, optionnelle.
+		*\param modelUbo
+		*	L'UBO de modèle.
 		*\param matrixUbo
 		*	L'UBO de matrices.
+		*\param hdrConfigUbo
+		*	L'UBO de configuration HDR.
+		*\param sceneUbo
+		*	L'UBO de scène.
+		*\param clearColour
+		*	\p true pour vider le résultat de couleur.
+		*\param[out] backgroundPass
+		*	Reçoit la passe de rendu du fond.
 		*/
 		C3D_API virtual crg::FramePass & createBackgroundPass( crg::FramePassGroup & graph
 			, RenderDevice const & device
@@ -202,6 +226,8 @@ namespace castor3d
 		*	Adds the background specific bindings to a frame pass.
 		*\param	pass
 		*	Receives the bindings.
+		*\param	targetImage
+		*	The image this pass renders to.
 		*\param	index
 		*	The bindings start index.
 		*\~french
@@ -209,6 +235,8 @@ namespace castor3d
 		*	Ajoute les bindings spécifiques au fond à une passe de frame.
 		*\param	pass
 		*	Reçoit les bindings.
+		*\param	targetImage
+		*	L'image dans laquelle cette passe fait son rendu.
 		*\param	index
 		*	L'indice de départ des bindings.
 		*/
@@ -237,15 +265,19 @@ namespace castor3d
 		*\~english
 		*\brief
 		*	Adds the background specific descriptors.
-		*\param	bindings
+		*\param	descriptorWrites
 		*	Receives the descriptors.
+		*\param	targetImage
+		*	The image this pass renders to.
 		*\param	index
 		*	The descriptors start index.
 		*\~french
 		*\brief
 		*	Ajoute les descripteurs spécifiques au fond.
-		*\param	bindings
+		*\param	descriptorWrites
 		*	Reçoit les descripteurs.
+		*\param	targetImage
+		*	L'image dans laquelle cette passe fait son rendu.
 		*\param	index
 		*	L'indice de départ des descripteurs.
 		*/
@@ -381,59 +413,11 @@ namespace castor3d
 		virtual void doCleanup() = 0;
 		virtual void doCpuUpdate( CpuUpdater & updater )const = 0;
 		virtual void doGpuUpdate( GpuUpdater & updater )const = 0;
-		/**
-		*\~english
-		*\brief
-		*	Adds the background specific bindings to a frame pass.
-		*\param	pass
-		*	Receives the bindings.
-		*\param	index
-		*	The bindings start index.
-		*\~french
-		*\brief
-		*	Ajoute les bindings spécifiques au fond à une passe de frame.
-		*\param	pass
-		*	Reçoit les bindings.
-		*\param	index
-		*	L'indice de départ des bindings.
-		*/
 		virtual void doAddPassBindings( crg::FramePass & pass
 			, crg::ImageData const & targetImage
 			, uint32_t & index )const = 0;
-		/**
-		*\~english
-		*\brief
-		*	Adds the background specific bindings.
-		*\param	bindings
-		*	Receives the bindings.
-		*\param	index
-		*	The bindings start index.
-		*\~french
-		*\brief
-		*	Ajoute les bindings spécifiques au fond.
-		*\param	bindings
-		*	Reçoit les bindings.
-		*\param	index
-		*	L'indice de départ des bindings.
-		*/
 		virtual void doAddBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
 			, uint32_t & index )const = 0;
-		/**
-		*\~english
-		*\brief
-		*	Adds the background specific descriptors.
-		*\param	bindings
-		*	Receives the descriptors.
-		*\param	index
-		*	The descriptors start index.
-		*\~french
-		*\brief
-		*	Ajoute les descripteurs spécifiques au fond.
-		*\param	bindings
-		*	Reçoit les descripteurs.
-		*\param	index
-		*	L'indice de départ des descripteurs.
-		*/
 		virtual void doAddDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
 			, crg::ImageData const & targetImage
 			, uint32_t & index )const = 0;

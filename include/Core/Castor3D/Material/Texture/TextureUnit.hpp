@@ -38,12 +38,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param		engine		The engine.
-		 *\param		sourceInfo	The source informations.
+		 *\param		engine	The engine.
+		 *\param		data	The texture informations.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param		engine		Le moteur.
-		 *\param		sourceInfo	Les informations de la source.
+		 *\param		engine	Le moteur.
+		 *\param		data	Les données de la texture.
 		 */
 		C3D_API explicit TextureUnit( Engine & engine
 			, TextureUnitData & data );

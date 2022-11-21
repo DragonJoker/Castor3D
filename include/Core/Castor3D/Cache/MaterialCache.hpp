@@ -134,14 +134,14 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief			Addw the pass' specific data buffer into the given descriptor layout bindings array.
-		 *\param[in,out]	descriptorWrites	Receives the buffers descriptor layout bindings.
-		 *\param[in]		shaderStages		The shader stage flags.
-		 *\param[in,out]	index				The binding index.
+		 *\param[in,out]	bindings		Receives the buffers descriptor layout bindings.
+		 *\param[in]		shaderStages	The shader stage flags.
+		 *\param[in,out]	index			The binding index.
 		 *\~french
 		 *\brief			Ecrit les shader buffers de données spécifiques dans le tableau de descriptor layout bindings donné.
-		 *\param[in,out]	descriptorWrites	Reçoit les descriptor layout bindings des buffers.
-		 *\param[in]		shaderStages		Les indicateurs de shader stage.
-		 *\param[in,out]	index				L'indice de binding.
+		 *\param[in,out]	bindings		Reçoit les descriptor layout bindings des buffers.
+		 *\param[in]		shaderStages	Les indicateurs de shader stage.
+		 *\param[in,out]	index			L'indice de binding.
 		 */
 		C3D_API void addSpecificsBuffersBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
 			, VkShaderStageFlags shaderStages
@@ -264,12 +264,8 @@ namespace castor
 		{
 		public:
 			/**
-			*\~english
-			*name
-			*	.
-			*\~french
-			*name
-			*	.
+			*\name
+			*	Initialisation / Update.
 			*/
 			/**@{*/
 			void initialise( castor3d::RenderDevice const & device );
@@ -279,10 +275,10 @@ namespace castor
 			/**@}*/
 			/**
 			*\~english
-			*name
+			*\name
 			*	Registration.
 			*\~french
-			*name
+			*\name
 			*	Enregistrement.
 			*/
 			/**@{*/
@@ -291,7 +287,7 @@ namespace castor
 			void unregisterBuffer( std::string const & name );
 			/**@}*/
 			/**
-			*name
+			*\name
 			*	Descriptor layout / set.
 			*/
 			/**@{*/
@@ -304,7 +300,7 @@ namespace castor
 				, uint32_t & index )const;
 			/**@}*/
 			/**
-			*name
+			*\name
 			*	Shader declarations.
 			*/
 			/**@{*/
@@ -312,6 +308,7 @@ namespace castor
 				, std::map< std::string, castor3d::shader::BufferBaseUPtr > & buffers
 				, uint32_t & binding
 				, uint32_t set )const;
+			/**@}*/
 
 		private:
 			castor3d::SpecificsBuffers m_buffers;

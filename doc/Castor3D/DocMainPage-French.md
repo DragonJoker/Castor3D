@@ -1,11 +1,11 @@
 Castor3D	{#mainpage}
 ========
 
-Castor3D est un moteur 3D multi-plateformes écrit en C++17.
+Castor3D est un moteur 3D multi-plateformes écrit en C++ 20.
 
 Il fonctionne sur les plateformes GNU/Linux et Windows.
 
-Il est basé sur l'API de rendu Ashes et supporte donc les API OpenGL, Direct3D 11 et Vulkan.
+Il est basé sur l'API de rendu Vulkan.
 
 Le projet en lui-même est compilable sur les plateformes supportées en utilisant CMake (cf. [génération](Build-French.md)).
 
@@ -37,12 +37,9 @@ Le projet en lui-même est compilable sur les plateformes supportées en utilisa
 ## Plugins implémentés
 
 ### Importers
-
 - ASSIMP, utilisant la bibliothèque assimp pour l'import d'une grande variété de formats.
-- PLY, permettant l'import de gros maillage PLY.
 
 ### PostEffect
-
 - Bloom : une implémentation de HDR Bloom.
 - PbrBloom : une implémentation de PBR Bloom.
 - DrawEdges : Détecte et dessine les bordures, basé sur les normales, la profondeur, et/ou l'ID d'objet.
@@ -54,11 +51,9 @@ Le projet en lui-même est compilable sur les plateformes supportées en utilisa
 - Linear Motion Blur.
 
 ### Generators
-
 - DiamondSquareTerrain : Génération de terrains, utilisant l'algorithme diamond square pour générer des reliefs.
 
 ### Generic
-
 - CastorGui : Etend les fichiers de scène pour ajouter et dessiner des IHM (boutons, zones de texte, ...) via les incrustations 2D.
 - ToonMaterial : Un ensemble de matériaux toon, à combiner avec le plugin DrawEdges.
 - FFTOceanRendering : Permet le rendu d'océan en se basant sur les transformées de Fourier.
@@ -67,7 +62,6 @@ Le projet en lui-même est compilable sur les plateformes supportées en utilisa
 - AtmosphereScattering : Implémentation de rendu de ciel et d'atmosphère (Implémentation de [Scalable and Production Ready Sky and Atmosphere Rendering Technique](https://sebh.github.io/publications/egsr2020.pdf)).
 
 ### ToneMapping
-
 - Linear : l'opérateur par défaut.
 - Haarm Pieter Duiker.
 - Hejl Burgess Dawson (aussi appelé Filmic).
