@@ -57,11 +57,13 @@ namespace castor
 		~RgbaColourT() = default;
 		/**
 		 *\~english
-		 *\brief		Specified constructor
-		 *\param[in]	value	The component value
+		 *\brief		Constructor from other component type
+		 *\param[in]	rhs		The colour value.
+		 *\param[in]	gamma	The gamma correction value.
 		 *\~french
-		 *\brief		Constructeur spécifié
-		 *\param[in]	value	La valeur de la composante
+		 *\brief		Constructeur depuis un autre type de composante.
+		 *\param[in]	rhs		La valeur de la couleur.
+		 *\param[in]	gamma	La valeur de la correction gamma.
 		 */
 		template< typename ComponentU >
 		explicit RgbaColourT( RgbaColourT< ComponentU > const & rhs

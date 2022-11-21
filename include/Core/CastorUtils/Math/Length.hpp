@@ -53,10 +53,14 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Specified Constructor
-		 *\remarks		Private so specified construction only available through named ctors
+		 *\remarks		Private so specified construction only available through named ctors.
+		 *\param[in]	value	The length value.
+		 *\param[in]	unit	The length unit.
 		 *\~french
 		 *\brief		Constructeur spécifié
-		 *\remarks		Privé afin que la construction spécifiée ne soit accessible qu'à partir des constructeurs nommés
+		 *\remarks		Privé afin que la construction spécifiée ne soit accessible qu'à partir des constructeurs nommés.
+		 *\param[in]	value	La valeur de la longueur.
+		 *\param[in]	unit	L'unité de la longueur.
 		 */
 		template< typename TypeU >
 		LengthT( TypeU value, LengthUnit unit )noexcept
@@ -70,10 +74,12 @@ namespace castor
 		 *\~english
 		 *\brief		Named constructor, expressed in the specified unit.
 		 *\param[in]	value	The value.
+		 *\param[in]	unit	The length unit.
 		 *\return		The length.
 		 *\~french
 		 *\brief		Constructeur nommé, à partir d'une valeur exprimée dans l'unité donnée.
 		 *\param[in]	value	La valeur.
+		 *\param[in]	unit	L'unité de la longueur.
 		 *\return		La longueur.
 		 */
 		template< typename TypeU >
