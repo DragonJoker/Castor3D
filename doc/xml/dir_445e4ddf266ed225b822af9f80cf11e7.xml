@@ -2,9 +2,9 @@
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="dir_445e4ddf266ed225b822af9f80cf11e7" kind="dir">
     <compoundname>Scene/Animation/Mesh</compoundname>
-    <innerfile refid="d9/db3/a01064">MeshAnimationInstance.hpp</innerfile>
-    <innerfile refid="d2/d49/a01067">MeshAnimationInstanceSubmesh.hpp</innerfile>
-    <innerfile refid="de/d08/a11380">MeshAnimationModule.hpp</innerfile>
+    <innerfile refid="d3/d07/a01241">MeshAnimationInstance.hpp</innerfile>
+    <innerfile refid="d4/dd5/a01244">MeshAnimationInstanceSubmesh.hpp</innerfile>
+    <innerfile refid="dc/df4/a13248">MeshAnimationModule.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

@@ -2,9 +2,9 @@
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="dir_31a7e93f4a090e94e6809272d6d3605b" kind="dir">
     <compoundname>Render/EnvironmentMap</compoundname>
-    <innerfile refid="db/d77/a00683">EnvironmentMap.hpp</innerfile>
-    <innerfile refid="df/d9e/a00686">EnvironmentMapModule.hpp</innerfile>
-    <innerfile refid="d1/d87/a00689">EnvironmentMapPass.hpp</innerfile>
+    <innerfile refid="dc/d6e/a00833">EnvironmentMap.hpp</innerfile>
+    <innerfile refid="d3/d13/a00836">EnvironmentMapModule.hpp</innerfile>
+    <innerfile refid="df/de8/a00839">EnvironmentMapPass.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

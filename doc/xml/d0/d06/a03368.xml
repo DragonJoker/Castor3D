@@ -1,0 +1,202 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d0/d06/a03368" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ClearcoatMapComponent::ComponentsShader</compoundname>
+    <basecompoundref refid="d4/d43/a03700" prot="public" virt="non-virtual">castor3d::shader::PassComponentsShader</basecompoundref>
+    <includes local="no">ClearcoatMapComponent.hpp</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d0/d06/a03368_1a4841771a1c8d9fda9b605eca6d1f1c41" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::ClearcoatMapComponent::ComponentsShader::ComponentsShader</definition>
+        <argsstring>(PassComponentPlugin const &amp;plugin)</argsstring>
+        <name>ComponentsShader</name>
+        <qualifiedname>castor3d::ClearcoatMapComponent::ComponentsShader::ComponentsShader</qualifiedname>
+        <param>
+          <type><ref refid="dc/d0d/a03708" kindref="compound">PassComponentPlugin</ref> const &amp;</type>
+          <declname>plugin</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Map/ClearcoatMapComponent.hpp" line="23" column="10" bodyfile="Material/Pass/Component/Map/ClearcoatMapComponent.hpp" bodystart="23" bodyend="26"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d06/a03368_1a6eabd35fc923ad10878a5185c88c3dad" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ClearcoatMapComponent::ComponentsShader::applyComponents</definition>
+        <argsstring>(TextureCombine const &amp;combine, PipelineFlags const *flags, shader::TextureConfigData const &amp;config, sdw::U32Vec3 const &amp;imgCompConfig, sdw::Vec4 const &amp;sampled, shader::BlendComponents &amp;components) const override</argsstring>
+        <name>applyComponents</name>
+        <qualifiedname>castor3d::ClearcoatMapComponent::ComponentsShader::applyComponents</qualifiedname>
+        <reimplements refid="d4/d43/a03700_1ab25c5779aec7c1abcf7f275e8ac032e3">applyComponents</reimplements>
+        <param>
+          <type><ref refid="de/d0b/a03040" kindref="compound">TextureCombine</ref> const &amp;</type>
+          <declname>combine</declname>
+        </param>
+        <param>
+          <type><ref refid="db/dd9/a05012" kindref="compound">PipelineFlags</ref> const *</type>
+          <declname>flags</declname>
+        </param>
+        <param>
+          <type><ref refid="de/da4/a06128" kindref="compound">shader::TextureConfigData</ref> const &amp;</type>
+          <declname>config</declname>
+        </param>
+        <param>
+          <type>sdw::U32Vec3 const &amp;</type>
+          <declname>imgCompConfig</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>sampled</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d4b/a05980" kindref="compound">shader::BlendComponents</ref> &amp;</type>
+          <declname>components</declname>
+        </param>
+        <briefdescription>
+<para>Fills this component&apos;s values with the data retrieved from a texture. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">combine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Used to check if the component&apos;s textures are enabled. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">flags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Used to check if the render pass is configured so the component is usable. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">config</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Used to say if the texture has the needed configuration for this component. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">imgCompConfig</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The current image component(s) to use. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">sampled</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The data retrieved from the texture. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">components</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Contains the component members. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Map/ClearcoatMapComponent.hpp" line="28" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d06/a03368_1ac640fd9062d45d6733b640faf023c555" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d3/d22/a01572_1a21f6621faaf5293fd7452f7fa0cd4136" kindref="member">PassComponentTextureFlag</ref></type>
+        <definition>PassComponentTextureFlag castor3d::ClearcoatMapComponent::ComponentsShader::getTextureFlags</definition>
+        <argsstring>() const</argsstring>
+        <name>getTextureFlags</name>
+        <qualifiedname>castor3d::ClearcoatMapComponent::ComponentsShader::getTextureFlags</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Map/ClearcoatMapComponent.hpp" line="35" column="26" bodyfile="Material/Pass/Component/Map/ClearcoatMapComponent.hpp" bodystart="35" bodyend="38"/>
+        <references refid="d4/dd6/a03364_1a33a094c6b697a2734bafd03196c4381e" compoundref="db/dbc/a00395" startline="18">castor3d::ClearcoatMapComponent::Clearcoat</references>
+        <references refid="d4/d43/a03700_1a846afb362f8cdb6bd2dc1a3f98db9f64">castor3d::shader::PassComponentsShader::getId</references>
+        <references refid="d3/d22/a01572_1ad3ac6fb5275f7db88138f87aa2f270d8" compoundref="de/d55/a00323" startline="41" endline="46">castor3d::makeTextureFlag</references>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::ClearcoatMapComponent::ComponentsShader</label>
+        <link refid="d0/d06/a03368"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::shader::PassComponentsShader</label>
+        <link refid="d4/d43/a03700"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::shader::PassShader</label>
+        <link refid="df/d9f/a03696"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::ClearcoatMapComponent::ComponentsShader</label>
+        <link refid="d0/d06/a03368"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::shader::PassComponentsShader</label>
+        <link refid="d4/d43/a03700"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::shader::PassShader</label>
+        <link refid="df/d9f/a03696"/>
+      </node>
+    </collaborationgraph>
+    <location file="Material/Pass/Component/Map/ClearcoatMapComponent.hpp" line="20" column="1" bodyfile="Material/Pass/Component/Map/ClearcoatMapComponent.hpp" bodystart="22" bodyend="39"/>
+    <listofallmembers>
+      <member refid="d0/d06/a03368_1a6eabd35fc923ad10878a5185c88c3dad" prot="public" virt="virtual"><scope>castor3d::ClearcoatMapComponent::ComponentsShader</scope><name>applyComponents</name></member>
+      <member refid="d4/d43/a03700_1a616999e78117d42a2aa12e8e1c09a7fe" prot="protected" virt="non-virtual"><scope>castor3d::ClearcoatMapComponent::ComponentsShader</scope><name>applyFloatComponent</name></member>
+      <member refid="d4/d43/a03700_1a5b84ef8cb9fbdeac8fce698fe02b04e8" prot="protected" virt="non-virtual"><scope>castor3d::ClearcoatMapComponent::ComponentsShader</scope><name>applyVec3Component</name></member>
+      <member refid="d4/d43/a03700_1a277de8d6d8fa8c0e3d50edb51fe2157c" prot="public" virt="virtual"><scope>castor3d::ClearcoatMapComponent::ComponentsShader</scope><name>blendComponents</name></member>
+      <member refid="d0/d06/a03368_1a4841771a1c8d9fda9b605eca6d1f1c41" prot="public" virt="non-virtual"><scope>castor3d::ClearcoatMapComponent::ComponentsShader</scope><name>ComponentsShader</name></member>
+      <member refid="d4/d43/a03700_1a088ad8fd801823896872e5a749657065" prot="public" virt="virtual"><scope>castor3d::ClearcoatMapComponent::ComponentsShader</scope><name>computeTexcoord</name></member>
+      <member refid="d4/d43/a03700_1a3d431198b1bf91e0d49b84d1950249b5" prot="public" virt="virtual"><scope>castor3d::ClearcoatMapComponent::ComponentsShader</scope><name>computeTexcoord</name></member>
+      <member refid="d4/d43/a03700_1a23dbc602d3b0621c9df19b77038ae79e" prot="public" virt="virtual"><scope>castor3d::ClearcoatMapComponent::ComponentsShader</scope><name>fillComponents</name></member>
+      <member refid="d4/d43/a03700_1a80a16a96d3e5d71cb6b631a77c73217f" prot="public" virt="virtual"><scope>castor3d::ClearcoatMapComponent::ComponentsShader</scope><name>fillComponentsInits</name></member>
+      <member refid="d4/d43/a03700_1a846afb362f8cdb6bd2dc1a3f98db9f64" prot="public" virt="non-virtual"><scope>castor3d::ClearcoatMapComponent::ComponentsShader</scope><name>getId</name></member>
+      <member refid="d4/d43/a03700_1a1727bca64233903f00c27aacd146429b" prot="public" virt="non-virtual"><scope>castor3d::ClearcoatMapComponent::ComponentsShader</scope><name>getPlugin</name></member>
+      <member refid="d0/d06/a03368_1ac640fd9062d45d6733b640faf023c555" prot="public" virt="non-virtual"><scope>castor3d::ClearcoatMapComponent::ComponentsShader</scope><name>getTextureFlags</name></member>
+      <member refid="d4/d43/a03700_1ae6acbd6edb3df14dcecccd2598bed038" prot="public" virt="virtual"><scope>castor3d::ClearcoatMapComponent::ComponentsShader</scope><name>isMapSampling</name></member>
+      <member refid="df/d9f/a03696_1a06fad613f64fa717de3e8032393fdbd7" prot="public" virt="non-virtual"><scope>castor3d::ClearcoatMapComponent::ComponentsShader</scope><name>operator=</name></member>
+      <member refid="df/d9f/a03696_1a0e5c7fea4f6928009d6da51c4d78a9df" prot="public" virt="non-virtual"><scope>castor3d::ClearcoatMapComponent::ComponentsShader</scope><name>operator=</name></member>
+      <member refid="d4/d43/a03700_1a4a8895df635a573d33aee3fdd42385b2" prot="public" virt="non-virtual"><scope>castor3d::ClearcoatMapComponent::ComponentsShader</scope><name>PassComponentsShader</name></member>
+      <member refid="df/d9f/a03696_1ab439edbbb2da660939e0209d9bfba3b0" prot="public" virt="non-virtual"><scope>castor3d::ClearcoatMapComponent::ComponentsShader</scope><name>PassShader</name></member>
+      <member refid="df/d9f/a03696_1ae0263dc410ae3d05ddea8cc9ad7eac73" prot="public" virt="non-virtual"><scope>castor3d::ClearcoatMapComponent::ComponentsShader</scope><name>PassShader</name></member>
+      <member refid="df/d9f/a03696_1aee18e0dfda227ed54fb966d7d75a1ea5" prot="public" virt="non-virtual"><scope>castor3d::ClearcoatMapComponent::ComponentsShader</scope><name>PassShader</name></member>
+      <member refid="d4/d43/a03700_1adae1f04a5d2866590f4f3204b233dd99" prot="public" virt="virtual"><scope>castor3d::ClearcoatMapComponent::ComponentsShader</scope><name>sampleMap</name></member>
+      <member refid="d4/d43/a03700_1a226e2c05d6cff43678f171ef5f413887" prot="public" virt="virtual"><scope>castor3d::ClearcoatMapComponent::ComponentsShader</scope><name>sampleMap</name></member>
+      <member refid="d4/d43/a03700_1a7ce76843425ffd3e570eaa9ddd7b059e" prot="public" virt="virtual"><scope>castor3d::ClearcoatMapComponent::ComponentsShader</scope><name>updateComponent</name></member>
+      <member refid="df/d9f/a03696_1a2bdc8907317b8a1f12d3b60ab767f9c6" prot="public" virt="virtual"><scope>castor3d::ClearcoatMapComponent::ComponentsShader</scope><name>updateOutputs</name></member>
+      <member refid="df/d9f/a03696_1a56338db0aed5f44427291aa6c631872b" prot="public" virt="virtual"><scope>castor3d::ClearcoatMapComponent::ComponentsShader</scope><name>~PassShader</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

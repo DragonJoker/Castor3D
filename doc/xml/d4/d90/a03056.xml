@@ -1,0 +1,397 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d4/d90/a03056" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::FractalMappingComponent</compoundname>
+    <basecompoundref refid="d0/dcc/a03148" prot="public" virt="non-virtual">castor3d::BaseDataPassComponentT&lt; castor::AtomicGroupChangeTracked&lt; bool &gt; &gt;</basecompoundref>
+    <includes local="no">FractalMappingComponent.hpp</includes>
+    <innerclass refid="d7/db8/a03060" prot="public">castor3d::FractalMappingComponent::ComponentsShader</innerclass>
+    <innerclass refid="de/d38/a03064" prot="public">castor3d::FractalMappingComponent::Plugin</innerclass>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d4/d90/a03056_1a1ea1a74b397ef4b52c6cf5b252824418" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>constexpr <ref refid="d3/d22/a01572_1a043cb84a97fa62d2b78e9f4ec3238f70" kindref="member">PassFlag</ref></type>
+        <definition>constexpr PassFlag castor3d::FractalMappingComponent::eFractalMapping</definition>
+        <argsstring></argsstring>
+        <name>eFractalMapping</name>
+        <qualifiedname>castor3d::FractalMappingComponent::eFractalMapping</qualifiedname>
+        <initializer>= <ref refid="d3/d22/a01572_1a043cb84a97fa62d2b78e9f4ec3238f70" kindref="member">PassFlag</ref>( 0x01u )</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Base/FractalMappingComponent.hpp" line="17" column="27" bodyfile="Material/Pass/Component/Base/FractalMappingComponent.hpp" bodystart="17" bodyend="-1"/>
+        <referencedby refid="de/d38/a03064_1a85244eafacf9ce3b94b8c8c869b28197" compoundref="dd/d4e/a00329" startline="94" endline="97">castor3d::FractalMappingComponent::Plugin::getComponentFlags</referencedby>
+        <referencedby refid="d4/d90/a03056_1aa5888ee1b8ca2fec57654168dd325c36" compoundref="dd/d4e/a00329" startline="109" endline="115">getPassFlags</referencedby>
+        <referencedby refid="d7/db8/a03060_1a8cff249962763369c8252f68c385cf27" compoundref="dd/d4e/a00329" startline="43" endline="47">castor3d::FractalMappingComponent::ComponentsShader::isMapSampling</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d90/a03056_1a8754a3c410924ce29d2a451a175c13bb" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::FractalMappingComponent::TypeName</definition>
+        <argsstring></argsstring>
+        <name>TypeName</name>
+        <qualifiedname>castor3d::FractalMappingComponent::TypeName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Base/FractalMappingComponent.hpp" line="127" column="37" bodyfile="Material/Pass/Component/Base/FractalMappingComponent.hpp" bodystart="127" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d4/d90/a03056_1a7140d85d2a0fab943f446b49e2369abf" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>PassComponentPluginUPtr</type>
+        <definition>static PassComponentPluginUPtr castor3d::FractalMappingComponent::createPlugin</definition>
+        <argsstring>(PassComponentRegister const &amp;passComponent)</argsstring>
+        <name>createPlugin</name>
+        <qualifiedname>castor3d::FractalMappingComponent::createPlugin</qualifiedname>
+        <param>
+          <type><ref refid="d5/d35/a03716" kindref="compound">PassComponentRegister</ref> const &amp;</type>
+          <declname>passComponent</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Base/FractalMappingComponent.hpp" line="100" column="32" bodyfile="Material/Pass/Component/Base/FractalMappingComponent.hpp" bodystart="100" bodyend="103"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d4/d90/a03056_1acb532871c7a9e3f0c5dbf5e802f684d1" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::FractalMappingComponent::FractalMappingComponent</definition>
+        <argsstring>(Pass &amp;pass)</argsstring>
+        <name>FractalMappingComponent</name>
+        <qualifiedname>castor3d::FractalMappingComponent::FractalMappingComponent</qualifiedname>
+        <param>
+          <type><ref refid="d3/d86/a03732" kindref="compound">Pass</ref> &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Base/FractalMappingComponent.hpp" line="105" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d90/a03056_1a498d42b470f13a858ed1e24681ebbd0e" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::FractalMappingComponent::accept</definition>
+        <argsstring>(PassVisitorBase &amp;vis) override</argsstring>
+        <name>accept</name>
+        <qualifiedname>castor3d::FractalMappingComponent::accept</qualifiedname>
+        <reimplements refid="d8/d23/a03712_1a4e315225c20ace9097adfd65e8413e4f">accept</reimplements>
+        <param>
+          <type><ref refid="d6/db4/a03748" kindref="compound">PassVisitorBase</ref> &amp;</type>
+          <declname>vis</declname>
+        </param>
+        <briefdescription>
+<para><ref refid="d1/d5d/a03756" kindref="compound">PassVisitor</ref> acceptance function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>vis</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ... visitor. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Base/FractalMappingComponent.hpp" line="107" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d90/a03056_1aa5888ee1b8ca2fec57654168dd325c36" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d3/d22/a01572_1a9c5abb1c7b30c2de4e67a8f9f64c08a6" kindref="member">PassComponentFlag</ref></type>
+        <definition>C3D_API PassComponentFlag castor3d::FractalMappingComponent::getPassFlags</definition>
+        <argsstring>() const override</argsstring>
+        <name>getPassFlags</name>
+        <qualifiedname>castor3d::FractalMappingComponent::getPassFlags</qualifiedname>
+        <reimplements refid="d8/d23/a03712_1af015484800f32c718d067a80b76709e9">getPassFlags</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Base/FractalMappingComponent.hpp" line="109" column="27" bodyfile="Material/Pass/Component/Base/FractalMappingComponent.hpp" bodystart="109" bodyend="115"/>
+        <references refid="d4/d90/a03056_1a1ea1a74b397ef4b52c6cf5b252824418" compoundref="dd/d4e/a00329" startline="17">eFractalMapping</references>
+        <references refid="d3/d22/a01572_1a043cb84a97fa62d2b78e9f4ec3238f70abe988781e4e1de1c6a36fb698afbbe1f">castor3d::eNone</references>
+        <references refid="d8/d23/a03712_1a625adfcb001824768e8a99a3c03dcbb1" compoundref="d0/d29/a00470" startline="1195" endline="1198">castor3d::PassComponent::getId</references>
+        <references refid="d4/d90/a03056_1aa9a6ed5904894627c98382805836552e" compoundref="dd/d4e/a00329" startline="117" endline="120">isFractal</references>
+        <references refid="d3/d22/a01572_1a337a580df6760b157e78a64b55014233" compoundref="de/d55/a00323" startline="78" endline="83">castor3d::makePassComponentFlag</references>
+      </memberdef>
+      <memberdef kind="function" id="d4/d90/a03056_1aa9a6ed5904894627c98382805836552e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::FractalMappingComponent::isFractal</definition>
+        <argsstring>() const</argsstring>
+        <name>isFractal</name>
+        <qualifiedname>castor3d::FractalMappingComponent::isFractal</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Base/FractalMappingComponent.hpp" line="117" column="6" bodyfile="Material/Pass/Component/Base/FractalMappingComponent.hpp" bodystart="117" bodyend="120"/>
+        <references refid="d0/dcc/a03148_1a23ec881a6e2aa2e40c21e108cb6458f7" compoundref="db/ddc/a00353" startline="73" endline="76">castor3d::BaseDataPassComponentT&lt; castor::AtomicGroupChangeTracked&lt; bool &gt; &gt;::getData</references>
+        <referencedby refid="d4/d90/a03056_1aa5888ee1b8ca2fec57654168dd325c36" compoundref="dd/d4e/a00329" startline="109" endline="115">getPassFlags</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d4/d90/a03056_1a810e42578854927cb3a3ded945450177" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::FractalMappingComponent::setFractal</definition>
+        <argsstring>(bool v)</argsstring>
+        <name>setFractal</name>
+        <qualifiedname>castor3d::FractalMappingComponent::setFractal</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Base/FractalMappingComponent.hpp" line="122" column="6" bodyfile="Material/Pass/Component/Base/FractalMappingComponent.hpp" bodystart="122" bodyend="125"/>
+        <references refid="d0/dcc/a03148_1a074de9b2f9579c56a85617b514089545" compoundref="db/ddc/a00353" startline="53" endline="56">castor3d::BaseDataPassComponentT&lt; castor::AtomicGroupChangeTracked&lt; bool &gt; &gt;::setData</references>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d4/d90/a03056_1a287a9391f4eccc8d1be3bbeabf2012f4" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>PassComponentUPtr</type>
+        <definition>PassComponentUPtr castor3d::FractalMappingComponent::doClone</definition>
+        <argsstring>(Pass &amp;pass) const override</argsstring>
+        <name>doClone</name>
+        <qualifiedname>castor3d::FractalMappingComponent::doClone</qualifiedname>
+        <reimplements refid="d8/d23/a03712_1ad87fbb1539bb6c5004cbcb02ddfcd46f">doClone</reimplements>
+        <param>
+          <type><ref refid="d3/d86/a03732" kindref="compound">Pass</ref> &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Clones this component into given pass. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">pass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the cloned component. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Base/FractalMappingComponent.hpp" line="130" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d90/a03056_1aa4c51f8b49730ff474c38a49efef8e6c" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>bool</type>
+        <definition>bool castor3d::FractalMappingComponent::doWriteText</definition>
+        <argsstring>(castor::String const &amp;tabs, castor::Path const &amp;folder, castor::String const &amp;subfolder, castor::StringStream &amp;file) const override</argsstring>
+        <name>doWriteText</name>
+        <qualifiedname>castor3d::FractalMappingComponent::doWriteText</qualifiedname>
+        <reimplements refid="d8/d23/a03712_1af8c7cb8f4c2e0753c0ebbb6adf802c9c">doWriteText</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>tabs</declname>
+        </param>
+        <param>
+          <type>castor::Path const &amp;</type>
+          <declname>folder</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>subfolder</declname>
+        </param>
+        <param>
+          <type>castor::StringStream &amp;</type>
+          <declname>file</declname>
+        </param>
+        <briefdescription>
+<para>Writes the component content to text. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">tabs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The current tabulation level. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">folder</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The resources folder. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">subfolder</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The resources subfolder. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">file</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The output file. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Base/FractalMappingComponent.hpp" line="131" column="6"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::BaseDataPassComponentT&lt; castor::AtomicGroupChangeTracked&lt; bool &gt; &gt;</label>
+        <link refid="d0/dcc/a03148"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; castor::AtomicGroupChangeTracked&lt; bool &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::BaseDataPassComponentT&lt; DataT &gt;</label>
+        <link refid="d0/dcc/a03148"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::FractalMappingComponent</label>
+        <link refid="d4/d90/a03056"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::PassComponent</label>
+        <link refid="d8/d23/a03712"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Pass &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::BaseDataPassComponentT&lt; castor::AtomicGroupChangeTracked&lt; bool &gt; &gt;</label>
+        <link refid="d0/dcc/a03148"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; castor::AtomicGroupChangeTracked&lt; bool &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor3d::BaseDataPassComponentT&lt; DataT &gt;</label>
+        <link refid="d0/dcc/a03148"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::FractalMappingComponent</label>
+        <link refid="d4/d90/a03056"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::PassComponent</label>
+        <link refid="d8/d23/a03712"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_plugin</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>m_materialShader</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::PassComponentPlugin</label>
+        <link refid="dc/d0d/a03708"/>
+      </node>
+      <node id="6">
+        <label>castor3d::shader::PassMaterialShader</label>
+        <link refid="d7/da2/a03704"/>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor3d::shader::PassShader</label>
+        <link refid="df/d9f/a03696"/>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Pass &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Material/Pass/Component/Base/FractalMappingComponent.hpp" line="14" column="1" bodyfile="Material/Pass/Component/Base/FractalMappingComponent.hpp" bodystart="16" bodyend="135"/>
+    <listofallmembers>
+      <member refid="d4/d90/a03056_1a498d42b470f13a858ed1e24681ebbd0e" prot="public" virt="virtual"><scope>castor3d::FractalMappingComponent</scope><name>accept</name></member>
+      <member refid="d0/dcc/a03148_1adda77c8f497beaa00a738357311190a7" prot="public" virt="non-virtual"><scope>castor3d::FractalMappingComponent</scope><name>BaseDataPassComponentT</name></member>
+      <member refid="d8/d23/a03712_1ae7c88041d1aae747532e537b23e41d24" prot="public" virt="non-virtual"><scope>castor3d::FractalMappingComponent</scope><name>clone</name></member>
+      <member refid="d4/d90/a03056_1a7140d85d2a0fab943f446b49e2369abf" prot="public" virt="non-virtual"><scope>castor3d::FractalMappingComponent</scope><name>createPlugin</name></member>
+      <member refid="d4/d90/a03056_1a287a9391f4eccc8d1be3bbeabf2012f4" prot="private" virt="virtual"><scope>castor3d::FractalMappingComponent</scope><name>doClone</name></member>
+      <member refid="d4/d90/a03056_1aa4c51f8b49730ff474c38a49efef8e6c" prot="private" virt="virtual"><scope>castor3d::FractalMappingComponent</scope><name>doWriteText</name></member>
+      <member refid="d4/d90/a03056_1a1ea1a74b397ef4b52c6cf5b252824418" prot="public" virt="non-virtual"><scope>castor3d::FractalMappingComponent</scope><name>eFractalMapping</name></member>
+      <member refid="d8/d23/a03712_1a8f6b8c698164310e2052be733834224a" prot="public" virt="non-virtual"><scope>castor3d::FractalMappingComponent</scope><name>fillBuffer</name></member>
+      <member refid="d8/d23/a03712_1a32dba2f2f6b92d5119c677d4faa6a324" prot="public" virt="non-virtual"><scope>castor3d::FractalMappingComponent</scope><name>fillChannel</name></member>
+      <member refid="d8/d23/a03712_1ae53af67cd5f807b90d8e31e52d6582af" prot="public" virt="virtual"><scope>castor3d::FractalMappingComponent</scope><name>fillConfig</name></member>
+      <member refid="d4/d90/a03056_1acb532871c7a9e3f0c5dbf5e802f684d1" prot="public" virt="non-virtual"><scope>castor3d::FractalMappingComponent</scope><name>FractalMappingComponent</name></member>
+      <member refid="d8/d23/a03712_1a89e385760304300908e5b308b2f1da4e" prot="public" virt="virtual"><scope>castor3d::FractalMappingComponent</scope><name>getColour</name></member>
+      <member refid="d0/dcc/a03148_1a23ec881a6e2aa2e40c21e108cb6458f7" prot="public" virt="non-virtual"><scope>castor3d::FractalMappingComponent</scope><name>getData</name></member>
+      <member refid="d0/dcc/a03148_1aa79468a338c3ff3c31682894db721fab" prot="public" virt="non-virtual"><scope>castor3d::FractalMappingComponent</scope><name>getData</name></member>
+      <member refid="d8/d23/a03712_1a625adfcb001824768e8a99a3c03dcbb1" prot="public" virt="non-virtual"><scope>castor3d::FractalMappingComponent</scope><name>getId</name></member>
+      <member refid="d4/d90/a03056_1aa5888ee1b8ca2fec57654168dd325c36" prot="public" virt="virtual"><scope>castor3d::FractalMappingComponent</scope><name>getPassFlags</name></member>
+      <member refid="d8/d23/a03712_1a5da51664f6736be0199d66266779b395" prot="public" virt="non-virtual"><scope>castor3d::FractalMappingComponent</scope><name>getPlugin</name></member>
+      <member refid="d8/d23/a03712_1a6aae2659952d2e9a76caabf56d69fba5" prot="public" virt="non-virtual"><scope>castor3d::FractalMappingComponent</scope><name>getType</name></member>
+      <member refid="d8/d23/a03712_1a5af951f374ee82fd61e57f96e6193f1c" prot="public" virt="virtual"><scope>castor3d::FractalMappingComponent</scope><name>hasColour</name></member>
+      <member refid="d4/d90/a03056_1aa9a6ed5904894627c98382805836552e" prot="public" virt="non-virtual"><scope>castor3d::FractalMappingComponent</scope><name>isFractal</name></member>
+      <member refid="d8/d23/a03712_1a01ecec7d563666b63d7d888061e84ab1" prot="protected" virt="non-virtual"><scope>castor3d::FractalMappingComponent</scope><name>m_dirty</name></member>
+      <member refid="d8/d23/a03712_1a3d2b1319d92ba70ff8450c7873492b67" prot="protected" virt="non-virtual"><scope>castor3d::FractalMappingComponent</scope><name>m_id</name></member>
+      <member refid="d8/d23/a03712_1abc188311e9251e933a838a256802c4c6" prot="protected" virt="non-virtual"><scope>castor3d::FractalMappingComponent</scope><name>m_materialShader</name></member>
+      <member refid="d8/d23/a03712_1ae62babd07d3faf3014f1d0af1ab03357" prot="protected" virt="non-virtual"><scope>castor3d::FractalMappingComponent</scope><name>m_plugin</name></member>
+      <member refid="d8/d23/a03712_1ae5775b9cf42c79c375cbd4a033e6629f" prot="protected" virt="non-virtual"><scope>castor3d::FractalMappingComponent</scope><name>m_type</name></member>
+      <member refid="d0/dcc/a03148_1aa297ac5faf886e6b766533f5fc0b25d1" prot="protected" virt="non-virtual"><scope>castor3d::FractalMappingComponent</scope><name>m_value</name></member>
+      <member refid="d8/d23/a03712_1a24173c973bd439f4c1c145cd70573bca" prot="public" virt="non-virtual"><scope>castor3d::FractalMappingComponent</scope><name>PassComponent</name></member>
+      <member refid="d8/d23/a03712_1a2541aa58a662bd8566c602335387cb98" prot="public" virt="virtual"><scope>castor3d::FractalMappingComponent</scope><name>setColour</name></member>
+      <member refid="d8/d23/a03712_1ab6a5bf94fc25210c03c9bed7ddf1ae31" prot="public" virt="non-virtual"><scope>castor3d::FractalMappingComponent</scope><name>setColour</name></member>
+      <member refid="d8/d23/a03712_1a61fa7c8562281c049a874b1ebc2635e4" prot="public" virt="non-virtual"><scope>castor3d::FractalMappingComponent</scope><name>setColour</name></member>
+      <member refid="d8/d23/a03712_1a2256e542753e1f85e6812de7e6fdc261" prot="public" virt="non-virtual"><scope>castor3d::FractalMappingComponent</scope><name>setColour</name></member>
+      <member refid="d0/dcc/a03148_1a074de9b2f9579c56a85617b514089545" prot="public" virt="non-virtual"><scope>castor3d::FractalMappingComponent</scope><name>setData</name></member>
+      <member refid="d0/dcc/a03148_1abf51560ee823896159de61bea9326391" prot="public" virt="non-virtual"><scope>castor3d::FractalMappingComponent</scope><name>setData</name></member>
+      <member refid="d4/d90/a03056_1a810e42578854927cb3a3ded945450177" prot="public" virt="non-virtual"><scope>castor3d::FractalMappingComponent</scope><name>setFractal</name></member>
+      <member refid="d4/d90/a03056_1a8754a3c410924ce29d2a451a175c13bb" prot="public" virt="non-virtual"><scope>castor3d::FractalMappingComponent</scope><name>TypeName</name></member>
+      <member refid="d8/d23/a03712_1acfedf31a75536a40a891b3308083d738" prot="public" virt="virtual"><scope>castor3d::FractalMappingComponent</scope><name>update</name></member>
+      <member refid="d8/d23/a03712_1a967ba1259e24663e4a89352251acf841" prot="public" virt="non-virtual"><scope>castor3d::FractalMappingComponent</scope><name>writeText</name></member>
+      <member refid="d8/d23/a03712_1a6a3e343b81806ff616280b4eca87140b" prot="public" virt="virtual"><scope>castor3d::FractalMappingComponent</scope><name>~PassComponent</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

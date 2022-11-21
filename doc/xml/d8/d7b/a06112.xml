@@ -1,0 +1,288 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d8/d7b/a06112" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::VoxelSurfaceT</compoundname>
+    <basecompoundref refid="d7/da0/a06092" prot="public" virt="non-virtual">castor3d::shader::SurfaceBase</basecompoundref>
+    <includes local="no">GlslSurface.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>sdw::var::Flag</type>
+        <declname>FlagT</declname>
+        <defname>FlagT</defname>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d8/d7b/a06112_1a2d87b9e71f9300ec31a3ef35c133cadb" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::VoxelSurfaceT&lt; FlagT &gt;::texture0</definition>
+        <argsstring></argsstring>
+        <name>texture0</name>
+        <qualifiedname>castor3d::shader::VoxelSurfaceT::texture0</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="236" column="11" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="236" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d7b/a06112_1a6f2b2add0c5f1fac5f2d56171a6cea1d" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::VoxelSurfaceT&lt; FlagT &gt;::texture1</definition>
+        <argsstring></argsstring>
+        <name>texture1</name>
+        <qualifiedname>castor3d::shader::VoxelSurfaceT::texture1</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="237" column="11" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="237" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d7b/a06112_1a20734d923a4d2d9511e465c3e3842beb" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::VoxelSurfaceT&lt; FlagT &gt;::texture2</definition>
+        <argsstring></argsstring>
+        <name>texture2</name>
+        <qualifiedname>castor3d::shader::VoxelSurfaceT::texture2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="238" column="11" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="238" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d7b/a06112_1afce2824e344fb95972394ad3cdda18ff" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::VoxelSurfaceT&lt; FlagT &gt;::texture3</definition>
+        <argsstring></argsstring>
+        <name>texture3</name>
+        <qualifiedname>castor3d::shader::VoxelSurfaceT::texture3</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="239" column="11" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="239" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d7b/a06112_1ab3a37fec38d93094b8b2393b03604a09" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::VoxelSurfaceT&lt; FlagT &gt;::colour</definition>
+        <argsstring></argsstring>
+        <name>colour</name>
+        <qualifiedname>castor3d::shader::VoxelSurfaceT::colour</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="240" column="11" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="240" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d7b/a06112_1ab9f6b94e3ba33d680ae60a888552e0ea" prot="public" static="no" mutable="no">
+        <type>sdw::UInt</type>
+        <definition>sdw::UInt castor3d::shader::VoxelSurfaceT&lt; FlagT &gt;::nodeId</definition>
+        <argsstring></argsstring>
+        <name>nodeId</name>
+        <qualifiedname>castor3d::shader::VoxelSurfaceT::nodeId</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="241" column="11" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="241" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d7b/a06112_1a35d10fe0fd3add2d94dd85939e279a78" prot="public" static="no" mutable="no">
+        <type>sdw::Array&lt; sdw::Vec4 &gt;</type>
+        <definition>sdw::Array&lt; sdw::Vec4 &gt; castor3d::shader::VoxelSurfaceT&lt; FlagT &gt;::passMultipliers</definition>
+        <argsstring></argsstring>
+        <name>passMultipliers</name>
+        <qualifiedname>castor3d::shader::VoxelSurfaceT::passMultipliers</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="242" column="12" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="242" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d8/d7b/a06112_1aef8f2649891b22748e431ae8beba4e25" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::VoxelSurfaceT&lt; FlagT &gt;::VoxelSurfaceT</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, sdw::expr::ExprPtr expr, bool enabled=true)</argsstring>
+        <name>VoxelSurfaceT</name>
+        <qualifiedname>castor3d::shader::VoxelSurfaceT::VoxelSurfaceT</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>sdw::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="224" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d7b/a06112_1a154fe127ec0cc8a4e30c8dff11409a18" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::VoxelSurfaceT&lt; FlagT &gt;::SDW_DeclStructInstance</definition>
+        <argsstring>(, VoxelSurfaceT)</argsstring>
+        <name>SDW_DeclStructInstance</name>
+        <qualifiedname>castor3d::shader::VoxelSurfaceT::SDW_DeclStructInstance</qualifiedname>
+        <param>
+          <type><ref refid="d8/d7b/a06112" kindref="compound">VoxelSurfaceT</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="228" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d8/d7b/a06112_1ae89ec8f468831e109f60c0e1e4b05694" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::type::IOStructPtr</type>
+        <definition>static sdw::type::IOStructPtr castor3d::shader::VoxelSurfaceT&lt; FlagT &gt;::makeIOType</definition>
+        <argsstring>(sdw::type::TypesCache &amp;cache, PipelineFlags const &amp;flags)</argsstring>
+        <name>makeIOType</name>
+        <qualifiedname>castor3d::shader::VoxelSurfaceT::makeIOType</qualifiedname>
+        <param>
+          <type>sdw::type::TypesCache &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <param>
+          <type><ref refid="db/dd9/a05012" kindref="compound">PipelineFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="230" column="31"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d7b/a06112_1a01174ddd6c523d4a5b26b65e4523b976" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::type::BaseStructPtr</type>
+        <definition>static sdw::type::BaseStructPtr castor3d::shader::VoxelSurfaceT&lt; FlagT &gt;::makeType</definition>
+        <argsstring>(sdw::type::TypesCache &amp;cache, PipelineFlags const &amp;flags)</argsstring>
+        <name>makeType</name>
+        <qualifiedname>castor3d::shader::VoxelSurfaceT::makeType</qualifiedname>
+        <param>
+          <type>sdw::type::TypesCache &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <param>
+          <type><ref refid="db/dd9/a05012" kindref="compound">PipelineFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="232" column="33"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d7b/a06112_1a253539eaa3a8db2d9ca57e46c3672bb7" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::type::BaseStructPtr</type>
+        <definition>static sdw::type::BaseStructPtr castor3d::shader::VoxelSurfaceT&lt; FlagT &gt;::makeType</definition>
+        <argsstring>(sdw::type::TypesCache &amp;cache)</argsstring>
+        <name>makeType</name>
+        <qualifiedname>castor3d::shader::VoxelSurfaceT::makeType</qualifiedname>
+        <param>
+          <type>sdw::type::TypesCache &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="234" column="33"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::shader::SurfaceBase</label>
+        <link refid="d7/da0/a06092"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::shader::VoxelSurfaceT&lt; FlagT &gt;</label>
+        <link refid="d8/d7b/a06112"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>sdw::StructInstance</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::shader::SurfaceBase</label>
+        <link refid="d7/da0/a06092"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::shader::VoxelSurfaceT&lt; FlagT &gt;</label>
+        <link refid="d8/d7b/a06112"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>sdw::StructInstance</label>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Shaders/GlslSurface.hpp" line="221" column="1" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="223" bodyend="243"/>
+    <listofallmembers>
+      <member refid="d7/da0/a06092_1a30ed99b6598407031d872f6f193b9a8b" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelSurfaceT</scope><name>clipPosition</name></member>
+      <member refid="d8/d7b/a06112_1ab3a37fec38d93094b8b2393b03604a09" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelSurfaceT</scope><name>colour</name></member>
+      <member refid="d7/da0/a06092_1a67806ae0e7c4266f601f1242b0da0d28" prot="protected" virt="non-virtual"><scope>castor3d::shader::VoxelSurfaceT</scope><name>fillInit</name></member>
+      <member refid="d7/da0/a06092_1a114217f67594554ff934db7550efa3da" prot="protected" virt="non-virtual"><scope>castor3d::shader::VoxelSurfaceT</scope><name>fillInit</name></member>
+      <member refid="d7/da0/a06092_1af6ca7cbf5dd3dbbbd3af4c443e8002f5" prot="protected" virt="non-virtual"><scope>castor3d::shader::VoxelSurfaceT</scope><name>fillIOType</name></member>
+      <member refid="d7/da0/a06092_1aabe805bce86784127d1b499550d37d0e" prot="protected" virt="non-virtual"><scope>castor3d::shader::VoxelSurfaceT</scope><name>fillType</name></member>
+      <member refid="d7/da0/a06092_1a4e3537c72ebc2ef7d9c38ced95b0baaa" prot="protected" virt="non-virtual"><scope>castor3d::shader::VoxelSurfaceT</scope><name>fillType</name></member>
+      <member refid="d8/d7b/a06112_1ae89ec8f468831e109f60c0e1e4b05694" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelSurfaceT</scope><name>makeIOType</name></member>
+      <member refid="d8/d7b/a06112_1a01174ddd6c523d4a5b26b65e4523b976" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelSurfaceT</scope><name>makeType</name></member>
+      <member refid="d8/d7b/a06112_1a253539eaa3a8db2d9ca57e46c3672bb7" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelSurfaceT</scope><name>makeType</name></member>
+      <member refid="d8/d7b/a06112_1ab9f6b94e3ba33d680ae60a888552e0ea" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelSurfaceT</scope><name>nodeId</name></member>
+      <member refid="d7/da0/a06092_1acf420dd8cfde9daee41e9875fee66aec" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelSurfaceT</scope><name>normal</name></member>
+      <member refid="d8/d7b/a06112_1a35d10fe0fd3add2d94dd85939e279a78" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelSurfaceT</scope><name>passMultipliers</name></member>
+      <member refid="d8/d7b/a06112_1a154fe127ec0cc8a4e30c8dff11409a18" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelSurfaceT</scope><name>SDW_DeclStructInstance</name></member>
+      <member refid="d7/da0/a06092_1adbce10b697015259dbafab0a44712c09" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelSurfaceT</scope><name>SurfaceBase</name></member>
+      <member refid="d8/d7b/a06112_1a2d87b9e71f9300ec31a3ef35c133cadb" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelSurfaceT</scope><name>texture0</name></member>
+      <member refid="d8/d7b/a06112_1a6f2b2add0c5f1fac5f2d56171a6cea1d" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelSurfaceT</scope><name>texture1</name></member>
+      <member refid="d8/d7b/a06112_1a20734d923a4d2d9511e465c3e3842beb" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelSurfaceT</scope><name>texture2</name></member>
+      <member refid="d8/d7b/a06112_1afce2824e344fb95972394ad3cdda18ff" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelSurfaceT</scope><name>texture3</name></member>
+      <member refid="d7/da0/a06092_1aa692353372a33e2f8053da9e965c884b" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelSurfaceT</scope><name>viewPosition</name></member>
+      <member refid="d8/d7b/a06112_1aef8f2649891b22748e431ae8beba4e25" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelSurfaceT</scope><name>VoxelSurfaceT</name></member>
+      <member refid="d7/da0/a06092_1acfe343a6ffd7ddb714a63497b11cb50d" prot="public" virt="non-virtual"><scope>castor3d::shader::VoxelSurfaceT</scope><name>worldPosition</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

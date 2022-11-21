@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d9/d53/a03816" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::TextureFlagConfiguration</compoundname>
+    <includes local="no">TextureConfiguration.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d9/d53/a03816_1a8c3001caf5e4d445a2c687225cd43ebb" prot="public" static="no" mutable="no">
+        <type><ref refid="d3/d22/a01572_1a21f6621faaf5293fd7452f7fa0cd4136" kindref="member">PassComponentTextureFlag</ref></type>
+        <definition>PassComponentTextureFlag castor3d::TextureFlagConfiguration::flag</definition>
+        <argsstring></argsstring>
+        <name>flag</name>
+        <qualifiedname>castor3d::TextureFlagConfiguration::flag</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+<para>To know what this configuration relates to. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureConfiguration.hpp" line="52" column="26" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="52" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d53/a03816_1aa3d220cb6c4909a1a8fa228211c88b6b" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::TextureFlagConfiguration::componentsMask</definition>
+        <argsstring></argsstring>
+        <name>componentsMask</name>
+        <qualifiedname>castor3d::TextureFlagConfiguration::componentsMask</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+<para>Mask, used with start index to filter image components (AARRGGBB). </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureConfiguration.hpp" line="61" column="10" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d53/a03816_1a2cc571337eec323aab9d1fad88e715ce" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::TextureFlagConfiguration::startIndex</definition>
+        <argsstring></argsstring>
+        <name>startIndex</name>
+        <qualifiedname>castor3d::TextureFlagConfiguration::startIndex</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+<para>Start index, used with the mask to filter image components (AARRGGBB). </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureConfiguration.hpp" line="70" column="10" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="70" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Material/Texture/TextureConfiguration.hpp" line="42" column="1" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="43" bodyend="71"/>
+    <listofallmembers>
+      <member refid="d9/d53/a03816_1aa3d220cb6c4909a1a8fa228211c88b6b" prot="public" virt="non-virtual"><scope>castor3d::TextureFlagConfiguration</scope><name>componentsMask</name></member>
+      <member refid="d9/d53/a03816_1a8c3001caf5e4d445a2c687225cd43ebb" prot="public" virt="non-virtual"><scope>castor3d::TextureFlagConfiguration</scope><name>flag</name></member>
+      <member refid="d9/d53/a03816_1a2cc571337eec323aab9d1fad88e715ce" prot="public" virt="non-virtual"><scope>castor3d::TextureFlagConfiguration</scope><name>startIndex</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

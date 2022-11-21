@@ -1,0 +1,101 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d0/ddb/a05824" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::SceneImporter::AnimObjects</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d0/ddb/a05824_1a7d46ffa7168ab9f347852809a4e2f383" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; SkeletonRPtr &gt;</type>
+        <definition>std::vector&lt; SkeletonRPtr &gt; castor3d::SceneImporter::AnimObjects::skeletons</definition>
+        <argsstring></argsstring>
+        <name>skeletons</name>
+        <qualifiedname>castor3d::SceneImporter::AnimObjects::skeletons</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneImporter.hpp" line="120" column="13" bodyfile="Scene/SceneImporter.hpp" bodystart="120" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/ddb/a05824_1ae9544d4291e1a6961c73a38fdd1267c0" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; MeshRPtr &gt;</type>
+        <definition>std::vector&lt; MeshRPtr &gt; castor3d::SceneImporter::AnimObjects::meshes</definition>
+        <argsstring></argsstring>
+        <name>meshes</name>
+        <qualifiedname>castor3d::SceneImporter::AnimObjects::meshes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneImporter.hpp" line="121" column="13" bodyfile="Scene/SceneImporter.hpp" bodystart="121" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/ddb/a05824_1a6a6edecbb1c65d2f3a75268448870bd6" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; SceneNodeRPtr &gt;</type>
+        <definition>std::vector&lt; SceneNodeRPtr &gt; castor3d::SceneImporter::AnimObjects::nodes</definition>
+        <argsstring></argsstring>
+        <name>nodes</name>
+        <qualifiedname>castor3d::SceneImporter::AnimObjects::nodes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneImporter.hpp" line="122" column="13" bodyfile="Scene/SceneImporter.hpp" bodystart="122" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="4">
+        <label>T</label>
+      </node>
+      <node id="1">
+        <label>castor3d::SceneImporter::AnimObjects</label>
+        <childnode refid="2" relation="usage">
+          <edgelabel>skeletons</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>meshes</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>nodes</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="4" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>std::vector&lt; MeshRPtr &gt;</label>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; MeshRPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>std::vector&lt; SceneNodeRPtr &gt;</label>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; SceneNodeRPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::vector&lt; SkeletonRPtr &gt;</label>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; SkeletonRPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Scene/SceneImporter.hpp" line="118" column="1" bodyfile="Scene/SceneImporter.hpp" bodystart="119" bodyend="123"/>
+    <listofallmembers>
+      <member refid="d0/ddb/a05824_1ae9544d4291e1a6961c73a38fdd1267c0" prot="public" virt="non-virtual"><scope>castor3d::SceneImporter::AnimObjects</scope><name>meshes</name></member>
+      <member refid="d0/ddb/a05824_1a6a6edecbb1c65d2f3a75268448870bd6" prot="public" virt="non-virtual"><scope>castor3d::SceneImporter::AnimObjects</scope><name>nodes</name></member>
+      <member refid="d0/ddb/a05824_1a7d46ffa7168ab9f347852809a4e2f383" prot="public" virt="non-virtual"><scope>castor3d::SceneImporter::AnimObjects</scope><name>skeletons</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

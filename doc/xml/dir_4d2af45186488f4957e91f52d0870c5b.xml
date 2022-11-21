@@ -2,16 +2,16 @@
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="dir_4d2af45186488f4957e91f52d0870c5b" kind="dir">
     <compoundname>Render/ShadowMap</compoundname>
-    <innerfile refid="dd/db2/a00866">ShadowMap.hpp</innerfile>
-    <innerfile refid="d3/db2/a00869">ShadowMapDirectional.hpp</innerfile>
-    <innerfile refid="dc/d17/a00872">ShadowMapModule.hpp</innerfile>
-    <innerfile refid="d1/d93/a00875">ShadowMapPass.hpp</innerfile>
-    <innerfile refid="d5/d69/a00878">ShadowMapPassDirectional.hpp</innerfile>
-    <innerfile refid="df/d41/a00881">ShadowMapPassPoint.hpp</innerfile>
-    <innerfile refid="dd/d08/a00884">ShadowMapPassSpot.hpp</innerfile>
-    <innerfile refid="d7/d92/a00887">ShadowMapPoint.hpp</innerfile>
-    <innerfile refid="d7/d46/a00890">ShadowMapResult.hpp</innerfile>
-    <innerfile refid="dc/d2c/a00893">ShadowMapSpot.hpp</innerfile>
+    <innerfile refid="da/d4e/a01106">ShadowMap.hpp</innerfile>
+    <innerfile refid="d8/dbf/a01109">ShadowMapDirectional.hpp</innerfile>
+    <innerfile refid="d0/d39/a01112">ShadowMapModule.hpp</innerfile>
+    <innerfile refid="df/dd5/a01115">ShadowMapPass.hpp</innerfile>
+    <innerfile refid="dd/d09/a01118">ShadowMapPassDirectional.hpp</innerfile>
+    <innerfile refid="dd/de4/a01121">ShadowMapPassPoint.hpp</innerfile>
+    <innerfile refid="d0/dc8/a01124">ShadowMapPassSpot.hpp</innerfile>
+    <innerfile refid="d9/d5b/a01127">ShadowMapPoint.hpp</innerfile>
+    <innerfile refid="d0/d61/a01130">ShadowMapResult.hpp</innerfile>
+    <innerfile refid="db/d28/a01133">ShadowMapSpot.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

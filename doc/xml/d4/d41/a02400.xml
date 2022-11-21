@@ -1,0 +1,587 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d4/d41/a02400" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>castor3d::AnimationImporter</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; Engine &gt;</basecompoundref>
+    <derivedcompoundref refid="df/dc7/a02712" prot="public" virt="non-virtual">castor3d::CmshAnimationImporter</derivedcompoundref>
+    <includes local="no">AnimationImporter.hpp</includes>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="d4/d41/a02400_1ac05f6472defe8fc407aa97d503b47ded" prot="protected" static="no" mutable="no">
+        <type><ref refid="d0/d9d/a03016" kindref="compound">ImporterFile</ref> *</type>
+        <definition>ImporterFile* castor3d::AnimationImporter::m_file</definition>
+        <argsstring></argsstring>
+        <name>m_file</name>
+        <qualifiedname>castor3d::AnimationImporter::m_file</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/AnimationImporter.hpp" line="171" column="15" bodyfile="Animation/AnimationImporter.hpp" bodystart="171" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d41/a02400_1a82a39c4933b2e056776a64f19b14c0d3" prot="protected" static="no" mutable="no">
+        <type><ref refid="d3/d22/a01572_1acd099f112fdafb8d7d06ba8dc9cf4a47" kindref="member">Parameters</ref></type>
+        <definition>Parameters castor3d::AnimationImporter::m_parameters</definition>
+        <argsstring></argsstring>
+        <name>m_parameters</name>
+        <qualifiedname>castor3d::AnimationImporter::m_parameters</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Import configuration parameters. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/AnimationImporter.hpp" line="174" column="12" bodyfile="Animation/AnimationImporter.hpp" bodystart="174" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d4/d41/a02400_1a541b4514f669cd111e11094ccc534836" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>virtual castor3d::AnimationImporter::~AnimationImporter</definition>
+        <argsstring>()=default</argsstring>
+        <name>~AnimationImporter</name>
+        <qualifiedname>castor3d::AnimationImporter::~AnimationImporter</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/AnimationImporter.hpp" line="22" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d41/a02400_1ab22bb26ca83542220520dca04e7e6bb3" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::AnimationImporter::AnimationImporter</definition>
+        <argsstring>(Engine &amp;engine)</argsstring>
+        <name>AnimationImporter</name>
+        <qualifiedname>castor3d::AnimationImporter::AnimationImporter</qualifiedname>
+        <param>
+          <type><ref refid="d2/d0c/a02932" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The engine. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/AnimationImporter.hpp" line="31" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d41/a02400_1a9ad0b88b692cb2324af912528ab3fd19" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::AnimationImporter::import</definition>
+        <argsstring>(SkeletonAnimation &amp;animation, ImporterFile *file, Parameters const &amp;parameters)</argsstring>
+        <name>import</name>
+        <qualifiedname>castor3d::AnimationImporter::import</qualifiedname>
+        <param>
+          <type><ref refid="de/d79/a04372" kindref="compound">SkeletonAnimation</ref> &amp;</type>
+          <declname>animation</declname>
+        </param>
+        <param>
+          <type><ref refid="d0/d9d/a03016" kindref="compound">ImporterFile</ref> *</type>
+          <declname>file</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d22/a01572_1acd099f112fdafb8d7d06ba8dc9cf4a47" kindref="member">Parameters</ref> const &amp;</type>
+          <declname>parameters</declname>
+        </param>
+        <briefdescription>
+<para><ref refid="de/d79/a04372" kindref="compound">SkeletonAnimation</ref> import function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">animation</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the imported data. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">file</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The location of the file to import. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parameters</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Import configuration parameters. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any problem occured. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/AnimationImporter.hpp" line="46" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d41/a02400_1adcc6f74a352776a1a23a58b0a9ec0265" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::AnimationImporter::import</definition>
+        <argsstring>(MeshAnimation &amp;animation, ImporterFile *file, Parameters const &amp;parameters)</argsstring>
+        <name>import</name>
+        <qualifiedname>castor3d::AnimationImporter::import</qualifiedname>
+        <param>
+          <type><ref refid="d4/dd4/a04196" kindref="compound">MeshAnimation</ref> &amp;</type>
+          <declname>animation</declname>
+        </param>
+        <param>
+          <type><ref refid="d0/d9d/a03016" kindref="compound">ImporterFile</ref> *</type>
+          <declname>file</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d22/a01572_1acd099f112fdafb8d7d06ba8dc9cf4a47" kindref="member">Parameters</ref> const &amp;</type>
+          <declname>parameters</declname>
+        </param>
+        <briefdescription>
+<para><ref refid="d4/dd4/a04196" kindref="compound">MeshAnimation</ref> import function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">animation</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the imported data. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">file</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The location of the file to import. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parameters</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Import configuration parameters. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any problem occured. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/AnimationImporter.hpp" line="80" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d41/a02400_1a3185b397d5849a4b6f1348b0484b1a07" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::AnimationImporter::import</definition>
+        <argsstring>(SceneNodeAnimation &amp;animation, ImporterFile *file, Parameters const &amp;parameters)</argsstring>
+        <name>import</name>
+        <qualifiedname>castor3d::AnimationImporter::import</qualifiedname>
+        <param>
+          <type><ref refid="d4/db7/a05476" kindref="compound">SceneNodeAnimation</ref> &amp;</type>
+          <declname>animation</declname>
+        </param>
+        <param>
+          <type><ref refid="d0/d9d/a03016" kindref="compound">ImporterFile</ref> *</type>
+          <declname>file</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d22/a01572_1acd099f112fdafb8d7d06ba8dc9cf4a47" kindref="member">Parameters</ref> const &amp;</type>
+          <declname>parameters</declname>
+        </param>
+        <briefdescription>
+<para><ref refid="d4/db7/a05476" kindref="compound">SceneNodeAnimation</ref> import function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">animation</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the imported data. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">file</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The location of the file to import. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parameters</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Import configuration parameters. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any problem occured. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/AnimationImporter.hpp" line="114" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d41/a02400_1a59bcd12bf439d0eae36d65e1f8f570d7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::AnimationImporter::import</definition>
+        <argsstring>(SceneNodeAnimation &amp;animation, castor::Path const &amp;pathFile, Parameters const &amp;parameters)</argsstring>
+        <name>import</name>
+        <qualifiedname>castor3d::AnimationImporter::import</qualifiedname>
+        <param>
+          <type><ref refid="d4/db7/a05476" kindref="compound">SceneNodeAnimation</ref> &amp;</type>
+          <declname>animation</declname>
+        </param>
+        <param>
+          <type>castor::Path const &amp;</type>
+          <declname>pathFile</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d22/a01572_1acd099f112fdafb8d7d06ba8dc9cf4a47" kindref="member">Parameters</ref> const &amp;</type>
+          <declname>parameters</declname>
+        </param>
+        <briefdescription>
+<para><ref refid="d4/db7/a05476" kindref="compound">SceneNodeAnimation</ref> import function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">animation</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the imported data. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pathFile</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The location of the file to import. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parameters</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Import configuration parameters. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any problem occured. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/AnimationImporter.hpp" line="131" column="14"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d4/d41/a02400_1a626589fde9b16826ab56949b9a7e11df" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>static C3D_API bool castor3d::AnimationImporter::import</definition>
+        <argsstring>(SkeletonAnimation &amp;animation, castor::Path const &amp;pathFile, Parameters const &amp;parameters)</argsstring>
+        <name>import</name>
+        <qualifiedname>castor3d::AnimationImporter::import</qualifiedname>
+        <param>
+          <type><ref refid="de/d79/a04372" kindref="compound">SkeletonAnimation</ref> &amp;</type>
+          <declname>animation</declname>
+        </param>
+        <param>
+          <type>castor::Path const &amp;</type>
+          <declname>pathFile</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d22/a01572_1acd099f112fdafb8d7d06ba8dc9cf4a47" kindref="member">Parameters</ref> const &amp;</type>
+          <declname>parameters</declname>
+        </param>
+        <briefdescription>
+<para><ref refid="de/d79/a04372" kindref="compound">SkeletonAnimation</ref> import function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">animation</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the imported data. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pathFile</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The location of the file to import. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parameters</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Import configuration parameters. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any problem occured. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/AnimationImporter.hpp" line="63" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d41/a02400_1a66d4da844b5fd8bc6c21344c19f59130" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>static C3D_API bool castor3d::AnimationImporter::import</definition>
+        <argsstring>(MeshAnimation &amp;animation, castor::Path const &amp;pathFile, Parameters const &amp;parameters)</argsstring>
+        <name>import</name>
+        <qualifiedname>castor3d::AnimationImporter::import</qualifiedname>
+        <param>
+          <type><ref refid="d4/dd4/a04196" kindref="compound">MeshAnimation</ref> &amp;</type>
+          <declname>animation</declname>
+        </param>
+        <param>
+          <type>castor::Path const &amp;</type>
+          <declname>pathFile</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d22/a01572_1acd099f112fdafb8d7d06ba8dc9cf4a47" kindref="member">Parameters</ref> const &amp;</type>
+          <declname>parameters</declname>
+        </param>
+        <briefdescription>
+<para><ref refid="d4/dd4/a04196" kindref="compound">MeshAnimation</ref> import function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">animation</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the imported data. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pathFile</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The location of the file to import. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parameters</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Import configuration parameters. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any problem occured. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/AnimationImporter.hpp" line="97" column="21"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-func">
+      <memberdef kind="function" id="d4/d41/a02400_1a7ad20b0cc0b7204c036b34069b7ad7aa" prot="protected" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>virtual C3D_API bool castor3d::AnimationImporter::doImportSkeleton</definition>
+        <argsstring>(SkeletonAnimation &amp;skeleton)=0</argsstring>
+        <name>doImportSkeleton</name>
+        <qualifiedname>castor3d::AnimationImporter::doImportSkeleton</qualifiedname>
+        <reimplementedby refid="df/dc7/a02712_1a38ecadb5c08005c0e88e4074b25384a6">doImportSkeleton</reimplementedby>
+        <param>
+          <type><ref refid="de/d79/a04372" kindref="compound">SkeletonAnimation</ref> &amp;</type>
+          <declname>skeleton</declname>
+        </param>
+        <briefdescription>
+<para><ref refid="de/d79/a04372" kindref="compound">SkeletonAnimation</ref> import Function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">skeleton</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the imported data. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any problem occured. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/AnimationImporter.hpp" line="146" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d41/a02400_1a3fc43e53d6b6f936ace81f92402237ad" prot="protected" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>virtual C3D_API bool castor3d::AnimationImporter::doImportMesh</definition>
+        <argsstring>(MeshAnimation &amp;mesh)=0</argsstring>
+        <name>doImportMesh</name>
+        <qualifiedname>castor3d::AnimationImporter::doImportMesh</qualifiedname>
+        <reimplementedby refid="df/dc7/a02712_1a8df544e86224d43fa854e5451704f5ef">doImportMesh</reimplementedby>
+        <param>
+          <type><ref refid="d4/dd4/a04196" kindref="compound">MeshAnimation</ref> &amp;</type>
+          <declname>mesh</declname>
+        </param>
+        <briefdescription>
+<para><ref refid="d4/dd4/a04196" kindref="compound">MeshAnimation</ref> import function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">mesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the imported data. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any problem occured. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/AnimationImporter.hpp" line="157" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d41/a02400_1a754abfa8ff745a5d0e9b086d87774f5b" prot="protected" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>virtual C3D_API bool castor3d::AnimationImporter::doImportNode</definition>
+        <argsstring>(SceneNodeAnimation &amp;node)=0</argsstring>
+        <name>doImportNode</name>
+        <qualifiedname>castor3d::AnimationImporter::doImportNode</qualifiedname>
+        <reimplementedby refid="df/dc7/a02712_1a0fcfa7a4451a4cdacbc0d7688fbeaf93">doImportNode</reimplementedby>
+        <param>
+          <type><ref refid="d4/db7/a05476" kindref="compound">SceneNodeAnimation</ref> &amp;</type>
+          <declname>node</declname>
+        </param>
+        <briefdescription>
+<para><ref refid="d4/db7/a05476" kindref="compound">SceneNodeAnimation</ref> import Function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">node</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the imported data. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any problem occured. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/AnimationImporter.hpp" line="168" column="22"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::AnimationImporter</label>
+        <link refid="d4/d41/a02400"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::CmshAnimationImporter</label>
+        <link refid="df/dc7/a02712"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="4">
+        <label>castor3d::ParametersT&lt; castor::String &gt;</label>
+        <link refid="dc/d95/a04160"/>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; castor::String &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::AnimationImporter</label>
+        <link refid="d4/d41/a02400"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_file</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_parameters</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::ImporterFile</label>
+        <link refid="d0/d9d/a03016"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::ParametersT&lt; KeyT &gt;</label>
+        <link refid="dc/d95/a04160"/>
+      </node>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Animation/AnimationImporter.hpp" line="18" column="1" bodyfile="Animation/AnimationImporter.hpp" bodystart="20" bodyend="175"/>
+    <listofallmembers>
+      <member refid="d4/d41/a02400_1ab22bb26ca83542220520dca04e7e6bb3" prot="public" virt="non-virtual"><scope>castor3d::AnimationImporter</scope><name>AnimationImporter</name></member>
+      <member refid="d4/d41/a02400_1a3fc43e53d6b6f936ace81f92402237ad" prot="protected" virt="pure-virtual"><scope>castor3d::AnimationImporter</scope><name>doImportMesh</name></member>
+      <member refid="d4/d41/a02400_1a754abfa8ff745a5d0e9b086d87774f5b" prot="protected" virt="pure-virtual"><scope>castor3d::AnimationImporter</scope><name>doImportNode</name></member>
+      <member refid="d4/d41/a02400_1a7ad20b0cc0b7204c036b34069b7ad7aa" prot="protected" virt="pure-virtual"><scope>castor3d::AnimationImporter</scope><name>doImportSkeleton</name></member>
+      <member refid="d4/d41/a02400_1a9ad0b88b692cb2324af912528ab3fd19" prot="public" virt="non-virtual"><scope>castor3d::AnimationImporter</scope><name>import</name></member>
+      <member refid="d4/d41/a02400_1a626589fde9b16826ab56949b9a7e11df" prot="public" virt="non-virtual"><scope>castor3d::AnimationImporter</scope><name>import</name></member>
+      <member refid="d4/d41/a02400_1adcc6f74a352776a1a23a58b0a9ec0265" prot="public" virt="non-virtual"><scope>castor3d::AnimationImporter</scope><name>import</name></member>
+      <member refid="d4/d41/a02400_1a66d4da844b5fd8bc6c21344c19f59130" prot="public" virt="non-virtual"><scope>castor3d::AnimationImporter</scope><name>import</name></member>
+      <member refid="d4/d41/a02400_1a3185b397d5849a4b6f1348b0484b1a07" prot="public" virt="non-virtual"><scope>castor3d::AnimationImporter</scope><name>import</name></member>
+      <member refid="d4/d41/a02400_1a59bcd12bf439d0eae36d65e1f8f570d7" prot="public" virt="non-virtual"><scope>castor3d::AnimationImporter</scope><name>import</name></member>
+      <member refid="d4/d41/a02400_1ac05f6472defe8fc407aa97d503b47ded" prot="protected" virt="non-virtual"><scope>castor3d::AnimationImporter</scope><name>m_file</name></member>
+      <member refid="d4/d41/a02400_1a82a39c4933b2e056776a64f19b14c0d3" prot="protected" virt="non-virtual"><scope>castor3d::AnimationImporter</scope><name>m_parameters</name></member>
+      <member refid="d4/d41/a02400_1a541b4514f669cd111e11094ccc534836" prot="public" virt="virtual"><scope>castor3d::AnimationImporter</scope><name>~AnimationImporter</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

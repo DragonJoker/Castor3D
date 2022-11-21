@@ -1,0 +1,479 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d7/d32/a05312" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::SsaoPass</compoundname>
+    <includes local="no">SsaoPass.hpp</includes>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d7/d32/a05312_1a681318a06c176ca1affb6ab66ac7e1c1" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d5/db3/a05328" kindref="compound">Texture</ref> const &amp;</type>
+        <definition>C3D_API Texture const  &amp; castor3d::SsaoPass::getResult</definition>
+        <argsstring>() const</argsstring>
+        <name>getResult</name>
+        <qualifiedname>castor3d::SsaoPass::getResult</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Getters. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoPass.hpp" line="80" column="24"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d32/a05312_1affeb6df07add80d275a581dd6af8871f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d5/db3/a05328" kindref="compound">Texture</ref> const &amp;</type>
+        <definition>C3D_API Texture const  &amp; castor3d::SsaoPass::getBentNormals</definition>
+        <argsstring>() const</argsstring>
+        <name>getBentNormals</name>
+        <qualifiedname>castor3d::SsaoPass::getBentNormals</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoPass.hpp" line="81" column="24"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d32/a05312_1a6b4387920d4324d494ba1577043eeacc" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d6/d72/a05308" kindref="compound">SsaoConfig</ref> const &amp;</type>
+        <definition>SsaoConfig const  &amp; castor3d::SsaoPass::getConfig</definition>
+        <argsstring>() const</argsstring>
+        <name>getConfig</name>
+        <qualifiedname>castor3d::SsaoPass::getConfig</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoPass.hpp" line="83" column="19" bodyfile="Render/Ssao/SsaoPass.hpp" bodystart="83" bodyend="86"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d32/a05312_1aa4ab1acf4df65ad959f9d1ea5f7621ab" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>crg::FramePass const &amp;</type>
+        <definition>crg::FramePass const  &amp; castor3d::SsaoPass::getLastPass</definition>
+        <argsstring>() const</argsstring>
+        <name>getLastPass</name>
+        <qualifiedname>castor3d::SsaoPass::getLastPass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoPass.hpp" line="88" column="23" bodyfile="Render/Ssao/SsaoPass.hpp" bodystart="88" bodyend="91"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d32/a05312_1a295f3d86b3af6c5bee7284d91e0f47ad" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>static uint32_t castor3d::SsaoPass::countInitialisationSteps</definition>
+        <argsstring>()</argsstring>
+        <name>countInitialisationSteps</name>
+        <qualifiedname>castor3d::SsaoPass::countInitialisationSteps</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoPass.hpp" line="93" column="17" bodyfile="Render/Ssao/SsaoPass.hpp" bodystart="93" bodyend="101"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d7/d32/a05312_1ae6f46422b6648b191ac4c0ebc108e8c6" prot="private" static="no" mutable="no">
+        <type><ref refid="d3/d96/a05072" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::SsaoPass::m_device</definition>
+        <argsstring></argsstring>
+        <name>m_device</name>
+        <qualifiedname>castor3d::SsaoPass::m_device</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoPass.hpp" line="105" column="21" bodyfile="Render/Ssao/SsaoPass.hpp" bodystart="105" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d32/a05312_1a01cfafdc56872e208e50808aca0cbe78" prot="private" static="no" mutable="no">
+        <type><ref refid="d6/d72/a05308" kindref="compound">SsaoConfig</ref> &amp;</type>
+        <definition>SsaoConfig&amp; castor3d::SsaoPass::m_ssaoConfig</definition>
+        <argsstring></argsstring>
+        <name>m_ssaoConfig</name>
+        <qualifiedname>castor3d::SsaoPass::m_ssaoConfig</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoPass.hpp" line="106" column="13" bodyfile="Render/Ssao/SsaoPass.hpp" bodystart="106" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d32/a05312_1acb692d886e5f241015ab8d8cf70beb01" prot="private" static="no" mutable="no">
+        <type><ref refid="d3/df8/a06168" kindref="compound">GpInfoUbo</ref> const  &amp;</type>
+        <definition>GpInfoUbo const&amp; castor3d::SsaoPass::m_gpInfoUbo</definition>
+        <argsstring></argsstring>
+        <name>m_gpInfoUbo</name>
+        <qualifiedname>castor3d::SsaoPass::m_gpInfoUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoPass.hpp" line="107" column="18" bodyfile="Render/Ssao/SsaoPass.hpp" bodystart="107" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d32/a05312_1ae0389a09c00da724a5ff3ef943da4885" prot="private" static="no" mutable="no">
+        <type>crg::FramePassGroup &amp;</type>
+        <definition>crg::FramePassGroup&amp; castor3d::SsaoPass::m_group</definition>
+        <argsstring></argsstring>
+        <name>m_group</name>
+        <qualifiedname>castor3d::SsaoPass::m_group</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoPass.hpp" line="108" column="22" bodyfile="Render/Ssao/SsaoPass.hpp" bodystart="108" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d32/a05312_1a9df8673cc61605ebc78b445f221c3644" prot="private" static="no" mutable="no">
+        <type>VkExtent2D</type>
+        <definition>VkExtent2D castor3d::SsaoPass::m_size</definition>
+        <argsstring></argsstring>
+        <name>m_size</name>
+        <qualifiedname>castor3d::SsaoPass::m_size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoPass.hpp" line="109" column="12" bodyfile="Render/Ssao/SsaoPass.hpp" bodystart="109" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d32/a05312_1aea73f20419bc3f9e7b1cf43bb046336f" prot="private" static="no" mutable="no">
+        <type><ref refid="df/df2/a06208" kindref="compound">MatrixUbo</ref></type>
+        <definition>MatrixUbo castor3d::SsaoPass::m_matrixUbo</definition>
+        <argsstring></argsstring>
+        <name>m_matrixUbo</name>
+        <qualifiedname>castor3d::SsaoPass::m_matrixUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoPass.hpp" line="110" column="11" bodyfile="Render/Ssao/SsaoPass.hpp" bodystart="110" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d32/a05312_1a45e6dc7b48a2a2549985c2deb4a43a59" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::SsaoPass::m_passIndex</definition>
+        <argsstring></argsstring>
+        <name>m_passIndex</name>
+        <qualifiedname>castor3d::SsaoPass::m_passIndex</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoPass.hpp" line="111" column="10" bodyfile="Render/Ssao/SsaoPass.hpp" bodystart="111" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d32/a05312_1a36c92bf55196f4f26ddd6388f8af7355" prot="private" static="no" mutable="no">
+        <type>LineariseDepthPassUPtr</type>
+        <definition>LineariseDepthPassUPtr castor3d::SsaoPass::m_linearisePass</definition>
+        <argsstring></argsstring>
+        <name>m_linearisePass</name>
+        <qualifiedname>castor3d::SsaoPass::m_linearisePass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoPass.hpp" line="112" column="24" bodyfile="Render/Ssao/SsaoPass.hpp" bodystart="112" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d32/a05312_1a7d1d20eff6a241ae36762d236b3010a8" prot="private" static="no" mutable="no">
+        <type><ref refid="d8/d0b/a06280" kindref="compound">SsaoConfigUbo</ref></type>
+        <definition>SsaoConfigUbo castor3d::SsaoPass::m_ssaoConfigUbo</definition>
+        <argsstring></argsstring>
+        <name>m_ssaoConfigUbo</name>
+        <qualifiedname>castor3d::SsaoPass::m_ssaoConfigUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoPass.hpp" line="113" column="15" bodyfile="Render/Ssao/SsaoPass.hpp" bodystart="113" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d32/a05312_1ab1c297f0bca45e2c8025ec4d72126aeb" prot="private" static="no" mutable="no">
+        <type>SsaoRawAOPassUPtr</type>
+        <definition>SsaoRawAOPassUPtr castor3d::SsaoPass::m_rawAoPass</definition>
+        <argsstring></argsstring>
+        <name>m_rawAoPass</name>
+        <qualifiedname>castor3d::SsaoPass::m_rawAoPass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoPass.hpp" line="114" column="19" bodyfile="Render/Ssao/SsaoPass.hpp" bodystart="114" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d32/a05312_1abd564897b7d060773681bd31fba8fcc0" prot="private" static="no" mutable="no">
+        <type>SsaoBlurPassUPtr</type>
+        <definition>SsaoBlurPassUPtr castor3d::SsaoPass::m_horizontalBlur</definition>
+        <argsstring></argsstring>
+        <name>m_horizontalBlur</name>
+        <qualifiedname>castor3d::SsaoPass::m_horizontalBlur</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoPass.hpp" line="115" column="18" bodyfile="Render/Ssao/SsaoPass.hpp" bodystart="115" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d32/a05312_1acf94af0fb4e81c2e76e25ef711d08c9d" prot="private" static="no" mutable="no">
+        <type>SsaoBlurPassUPtr</type>
+        <definition>SsaoBlurPassUPtr castor3d::SsaoPass::m_verticalBlur</definition>
+        <argsstring></argsstring>
+        <name>m_verticalBlur</name>
+        <qualifiedname>castor3d::SsaoPass::m_verticalBlur</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoPass.hpp" line="116" column="18" bodyfile="Render/Ssao/SsaoPass.hpp" bodystart="116" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d32/a05312_1aa21a2effed6f4903b7364e778520a582" prot="private" static="no" mutable="no">
+        <type>crg::FramePass const  *</type>
+        <definition>crg::FramePass const* castor3d::SsaoPass::m_lastPass</definition>
+        <argsstring></argsstring>
+        <name>m_lastPass</name>
+        <qualifiedname>castor3d::SsaoPass::m_lastPass</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoPass.hpp" line="117" column="23" bodyfile="Render/Ssao/SsaoPass.hpp" bodystart="117" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d7/d32/a05312_1a607427c714f70702c7f7825ed87b0f23" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SsaoPass::SsaoPass</definition>
+        <argsstring>(crg::FramePassGroup &amp;graph, RenderDevice const &amp;device, ProgressBar *progress, crg::FramePassArray const &amp;previousPasses, castor::Size const &amp;size, SsaoConfig &amp;ssaoConfig, Texture const &amp;depth, Texture const &amp;normal, GpInfoUbo const &amp;gpInfoUbo)</argsstring>
+        <name>SsaoPass</name>
+        <qualifiedname>castor3d::SsaoPass::SsaoPass</qualifiedname>
+        <param>
+          <type>crg::FramePassGroup &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d96/a05072" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/dea/a04180" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
+        </param>
+        <param>
+          <type>crg::FramePassArray const &amp;</type>
+          <declname>previousPasses</declname>
+        </param>
+        <param>
+          <type>castor::Size const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/d72/a05308" kindref="compound">SsaoConfig</ref> &amp;</type>
+          <declname>ssaoConfig</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/db3/a05328" kindref="compound">Texture</ref> const &amp;</type>
+          <declname>depth</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/db3/a05328" kindref="compound">Texture</ref> const &amp;</type>
+          <declname>normal</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/df8/a06168" kindref="compound">GpInfoUbo</ref> const &amp;</type>
+          <declname>gpInfoUbo</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">graph</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render graph. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">progress</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The progress bar. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">previousPasses</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The previous frame passes. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render area dimensions. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">ssaoConfig</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The SSAO configuration. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">depth</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The depth buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">normal</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The normals buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">gpInfoUbo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GBuffer configuration UBO. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoPass.hpp" line="49" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d32/a05312_1a6a75b0a97bba21131f6594e703ef96e4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SsaoPass::update</definition>
+        <argsstring>(CpuUpdater &amp;updater)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::SsaoPass::update</qualifiedname>
+        <param>
+          <type><ref refid="d7/d13/a05156" kindref="compound">CpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+<para>Updates the render pass, CPU wise. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">updater</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The update data. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoPass.hpp" line="66" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d32/a05312_1a1678e3bb5f9f0c996a99dbd80109818a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SsaoPass::accept</definition>
+        <argsstring>(PipelineVisitorBase &amp;visitor)</argsstring>
+        <name>accept</name>
+        <qualifiedname>castor3d::SsaoPass::accept</qualifiedname>
+        <param>
+          <type><ref refid="dc/d85/a04168" kindref="compound">PipelineVisitorBase</ref> &amp;</type>
+          <declname>visitor</declname>
+        </param>
+        <briefdescription>
+<para>Visitor acceptance function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>visitor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ... visitor. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoPass.hpp" line="70" column="14"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/Ssao/SsaoPass.hpp" line="22" column="1" bodyfile="Render/Ssao/SsaoPass.hpp" bodystart="23" bodyend="118"/>
+    <listofallmembers>
+      <member refid="d7/d32/a05312_1a1678e3bb5f9f0c996a99dbd80109818a" prot="public" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>accept</name></member>
+      <member refid="d7/d32/a05312_1a295f3d86b3af6c5bee7284d91e0f47ad" prot="public" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>countInitialisationSteps</name></member>
+      <member refid="d7/d32/a05312_1affeb6df07add80d275a581dd6af8871f" prot="public" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>getBentNormals</name></member>
+      <member refid="d7/d32/a05312_1a6b4387920d4324d494ba1577043eeacc" prot="public" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>getConfig</name></member>
+      <member refid="d7/d32/a05312_1aa4ab1acf4df65ad959f9d1ea5f7621ab" prot="public" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>getLastPass</name></member>
+      <member refid="d7/d32/a05312_1a681318a06c176ca1affb6ab66ac7e1c1" prot="public" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>getResult</name></member>
+      <member refid="d7/d32/a05312_1ae6f46422b6648b191ac4c0ebc108e8c6" prot="private" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>m_device</name></member>
+      <member refid="d7/d32/a05312_1acb692d886e5f241015ab8d8cf70beb01" prot="private" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>m_gpInfoUbo</name></member>
+      <member refid="d7/d32/a05312_1ae0389a09c00da724a5ff3ef943da4885" prot="private" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>m_group</name></member>
+      <member refid="d7/d32/a05312_1abd564897b7d060773681bd31fba8fcc0" prot="private" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>m_horizontalBlur</name></member>
+      <member refid="d7/d32/a05312_1aa21a2effed6f4903b7364e778520a582" prot="private" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>m_lastPass</name></member>
+      <member refid="d7/d32/a05312_1a36c92bf55196f4f26ddd6388f8af7355" prot="private" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>m_linearisePass</name></member>
+      <member refid="d7/d32/a05312_1aea73f20419bc3f9e7b1cf43bb046336f" prot="private" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>m_matrixUbo</name></member>
+      <member refid="d7/d32/a05312_1a45e6dc7b48a2a2549985c2deb4a43a59" prot="private" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>m_passIndex</name></member>
+      <member refid="d7/d32/a05312_1ab1c297f0bca45e2c8025ec4d72126aeb" prot="private" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>m_rawAoPass</name></member>
+      <member refid="d7/d32/a05312_1a9df8673cc61605ebc78b445f221c3644" prot="private" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>m_size</name></member>
+      <member refid="d7/d32/a05312_1a01cfafdc56872e208e50808aca0cbe78" prot="private" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>m_ssaoConfig</name></member>
+      <member refid="d7/d32/a05312_1a7d1d20eff6a241ae36762d236b3010a8" prot="private" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>m_ssaoConfigUbo</name></member>
+      <member refid="d7/d32/a05312_1acf94af0fb4e81c2e76e25ef711d08c9d" prot="private" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>m_verticalBlur</name></member>
+      <member refid="d7/d32/a05312_1a607427c714f70702c7f7825ed87b0f23" prot="public" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>SsaoPass</name></member>
+      <member refid="d7/d32/a05312_1a6a75b0a97bba21131f6594e703ef96e4" prot="public" virt="non-virtual"><scope>castor3d::SsaoPass</scope><name>update</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

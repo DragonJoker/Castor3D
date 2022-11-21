@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="da/d26/a02644" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ChunkTyper&lt; SkinComponent &gt;</compoundname>
+    <includes local="no">BinarySkinComponent.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="da/d26/a02644_1a11620866f7623d1474cb552c467f22c6" prot="public" static="yes" mutable="no">
+        <type><ref refid="d3/d22/a01572_1a742783d4e4b7354fac3e375ae107414d" kindref="member">ChunkType</ref> const</type>
+        <definition>ChunkType const castor3d::ChunkTyper&lt; SkinComponent &gt;::Value</definition>
+        <argsstring></argsstring>
+        <name>Value</name>
+        <qualifiedname>castor3d::ChunkTyper&lt; SkinComponent &gt;::Value</qualifiedname>
+        <initializer>= <ref refid="d3/d22/a01572_1a742783d4e4b7354fac3e375ae107414dafe8ec950199cfa5dc10b05235822becd" kindref="member">ChunkType::eBonesComponent</ref></initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinarySkinComponent.hpp" line="27" column="24" bodyfile="Binary/BinarySkinComponent.hpp" bodystart="27" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Helper structure to find ChunkType from a type. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
+</simplesect>
+<simplesect kind="date"><para>09/11/2017</para>
+</simplesect>
+<simplesect kind="remark"><para>Specialisation for <ref refid="d9/dd1/a04340" kindref="compound">SkinComponent</ref>. </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <location file="Binary/BinarySkinComponent.hpp" line="25" column="1" bodyfile="Binary/BinarySkinComponent.hpp" bodystart="26" bodyend="28"/>
+    <listofallmembers>
+      <member refid="da/d26/a02644_1a11620866f7623d1474cb552c467f22c6" prot="public" virt="non-virtual"><scope>castor3d::ChunkTyper&lt; SkinComponent &gt;</scope><name>Value</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

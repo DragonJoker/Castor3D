@@ -104,8 +104,8 @@
         <label>vector</label>
       </node>
     </incdepgraph>
-    <innerclass refid="d8/d4a/a02550" prot="public">castor3d::GpuBufferLinearAllocator</innerclass>
-    <innernamespace refid="da/dab/a01362">castor3d</innernamespace>
+    <innerclass refid="d3/d55/a02760" prot="public">castor3d::GpuBufferLinearAllocator</innerclass>
+    <innernamespace refid="d3/d22/a01572">castor3d</innernamespace>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

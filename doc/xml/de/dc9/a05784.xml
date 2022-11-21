@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="de/dc9/a05784" kind="struct" language="C++" prot="public">
+    <compoundname>castor::ParserEnumTraits&lt; castor3d::TextWrappingMode &gt;</compoundname>
+    <includes local="no">SceneFileParser.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="de/dc9/a05784_1a2067ab630b068659895b224ac6a61d5a" prot="public" static="yes" mutable="no">
+        <type>xchar const  *const</type>
+        <definition>xchar const* const castor::ParserEnumTraits&lt; castor3d::TextWrappingMode &gt;::Name</definition>
+        <argsstring></argsstring>
+        <name>Name</name>
+        <qualifiedname>castor::ParserEnumTraits&lt; castor3d::TextWrappingMode &gt;::Name</qualifiedname>
+        <initializer>= cuT( &quot;TextWrappingMode&quot; )</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="582" column="34" bodyfile="Scene/SceneFileParser.hpp" bodystart="582" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dc9/a05784_1a0d6bded0844ed4e88e326f54bebef915" prot="public" static="yes" mutable="no">
+        <type>UInt32StrMap const</type>
+        <definition>UInt32StrMap const castor::ParserEnumTraits&lt; castor3d::TextWrappingMode &gt;::Values</definition>
+        <argsstring></argsstring>
+        <name>Values</name>
+        <qualifiedname>castor::ParserEnumTraits&lt; castor3d::TextWrappingMode &gt;::Values</qualifiedname>
+        <initializer>= []()
+		{
+			UInt32StrMap result;
+			result = <ref refid="d3/d22/a01572_1a89ee8e4edb4c883ef7c66b8dc60cc430" kindref="member">castor3d::getEnumMapT</ref>&lt; <ref refid="d3/d22/a01572_1a0589990d8ef06cfe12058a892f79e25c" kindref="member">castor3d::TextWrappingMode</ref> &gt;();
+			return result;
+		}( )</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="583" column="34" bodyfile="Scene/SceneFileParser.hpp" bodystart="583" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor::ParserEnumTraits&lt; castor3d::TextWrappingMode &gt;</label>
+        <link refid="de/dc9/a05784"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>Name</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>Values</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>UInt32StrMap</label>
+      </node>
+      <node id="2">
+        <label>xchar</label>
+      </node>
+    </collaborationgraph>
+    <location file="Scene/SceneFileParser.hpp" line="580" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="581" bodyend="589"/>
+    <listofallmembers>
+      <member refid="de/dc9/a05784_1a2067ab630b068659895b224ac6a61d5a" prot="public" virt="non-virtual"><scope>castor::ParserEnumTraits&lt; castor3d::TextWrappingMode &gt;</scope><name>Name</name></member>
+      <member refid="de/dc9/a05784_1a0d6bded0844ed4e88e326f54bebef915" prot="public" virt="non-virtual"><scope>castor::ParserEnumTraits&lt; castor3d::TextWrappingMode &gt;</scope><name>Values</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

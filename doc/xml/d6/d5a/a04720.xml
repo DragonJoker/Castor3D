@@ -1,0 +1,1024 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d6/d5a/a04720" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::VoxelizePass</compoundname>
+    <basecompoundref refid="d8/de4/a05172" prot="public" virt="non-virtual">castor3d::RenderNodesPass</basecompoundref>
+    <includes local="no">VoxelizePass.hpp</includes>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d6/d5a/a04720_1a14269d9b743551f0cee6937e24ad92a0" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d3/d22/a01572_1af8308e78be327186fc4533308ee5cd19" kindref="member">ShaderFlags</ref></type>
+        <definition>C3D_API ShaderFlags castor3d::VoxelizePass::getShaderFlags</definition>
+        <argsstring>() const override</argsstring>
+        <name>getShaderFlags</name>
+        <qualifiedname>castor3d::VoxelizePass::getShaderFlags</qualifiedname>
+        <reimplements refid="d8/de4/a05172_1a33262c301469007dd09a6f1191bd8584">getShaderFlags</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Getters. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelizePass.hpp" line="77" column="21" bodyfile="Render/GlobalIllumination/VoxelConeTracing/VoxelizePass.hpp" bodystart="77" bodyend="85"/>
+        <references refid="d3/d22/a01572_1af2b45637ae87ee95eb6b6641d9415d45a933e146a34d99e16a319642574089a34">castor3d::eColour</references>
+        <references refid="d3/d22/a01572_1af2b45637ae87ee95eb6b6641d9415d45a602580dcfaed9d9ddf07cad7276c3103">castor3d::eGeometry</references>
+        <references refid="d3/d22/a01572_1af2b45637ae87ee95eb6b6641d9415d45aeb97df2a505ca2b5140ffd98519fe19b">castor3d::eLighting</references>
+        <references refid="d3/d22/a01572_1af2b45637ae87ee95eb6b6641d9415d45ab4f88a7e09f780f6246448ebb0f6a44b">castor3d::eNormal</references>
+        <references refid="d3/d22/a01572_1af2b45637ae87ee95eb6b6641d9415d45aa3a957357b758bcbb55d221bf975b545">castor3d::eOpacity</references>
+        <references refid="d3/d22/a01572_1af2b45637ae87ee95eb6b6641d9415d45ad2b5722680c0d6238d583746bb8b698d">castor3d::eWorldSpace</references>
+      </memberdef>
+      <memberdef kind="function" id="d6/d5a/a04720_1ad48925888b33f10a9464ddb9fd2c26f2" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d3/d22/a01572_1afa74b47fdeea208a304fc7d1d8a4b1dd" kindref="member">ComponentModeFlags</ref></type>
+        <definition>C3D_API ComponentModeFlags castor3d::VoxelizePass::getComponentsMask</definition>
+        <argsstring>() const override</argsstring>
+        <name>getComponentsMask</name>
+        <qualifiedname>castor3d::VoxelizePass::getComponentsMask</qualifiedname>
+        <reimplements refid="d8/de4/a05172_1a4c1d6976b36d7b71aaf5e22db345bfa6">getComponentsMask</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Getters. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelizePass.hpp" line="87" column="28" bodyfile="Render/GlobalIllumination/VoxelConeTracing/VoxelizePass.hpp" bodystart="87" bodyend="93"/>
+        <references refid="d3/d22/a01572_1a5a21f743634dd3f3fbe545a01fd7c536a933e146a34d99e16a319642574089a34">castor3d::eColour</references>
+        <references refid="d3/d22/a01572_1a5a21f743634dd3f3fbe545a01fd7c536a7c7381bc4f47a398c93911cc01d77975">castor3d::eDiffuseLighting</references>
+        <references refid="d3/d22/a01572_1a5a21f743634dd3f3fbe545a01fd7c536aca16ec8aa6a422c2e2b106f1d6ba1f02">castor3d::eNormals</references>
+        <references refid="d3/d22/a01572_1a5a21f743634dd3f3fbe545a01fd7c536a44d60a032c3058ba73d192d2caac51aa">castor3d::eOcclusion</references>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d6/d5a/a04720_1a98579c2abfe65a07d81f95d7622610de" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::VoxelizePass::Type</definition>
+        <argsstring></argsstring>
+        <name>Type</name>
+        <qualifiedname>castor3d::VoxelizePass::Type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelizePass.hpp" line="113" column="37" bodyfile="Render/GlobalIllumination/VoxelConeTracing/VoxelizePass.hpp" bodystart="113" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d6/d5a/a04720_1a085b441bff38758ff66629fbb6b61799" prot="private" static="no" mutable="no">
+        <type><ref refid="d6/d0e/a05676" kindref="compound">Scene</ref> const  &amp;</type>
+        <definition>Scene const&amp; castor3d::VoxelizePass::m_scene</definition>
+        <argsstring></argsstring>
+        <name>m_scene</name>
+        <qualifiedname>castor3d::VoxelizePass::m_scene</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelizePass.hpp" line="116" column="14" bodyfile="Render/GlobalIllumination/VoxelConeTracing/VoxelizePass.hpp" bodystart="116" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d5a/a04720_1a5411774afd19cbae06755871a9c9a74c" prot="private" static="no" mutable="no">
+        <type><ref refid="d6/dfa/a05552" kindref="compound">Camera</ref> const  &amp;</type>
+        <definition>Camera const&amp; castor3d::VoxelizePass::m_camera</definition>
+        <argsstring></argsstring>
+        <name>m_camera</name>
+        <qualifiedname>castor3d::VoxelizePass::m_camera</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelizePass.hpp" line="117" column="15" bodyfile="Render/GlobalIllumination/VoxelConeTracing/VoxelizePass.hpp" bodystart="117" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d5a/a04720_1a8acc5eac2f37255c87a5f357f29319cf" prot="private" static="no" mutable="no">
+        <type>ashes::Buffer&lt; <ref refid="df/d38/a04716" kindref="compound">Voxel</ref> &gt; const  &amp;</type>
+        <definition>ashes::Buffer&lt; Voxel &gt; const&amp; castor3d::VoxelizePass::m_voxels</definition>
+        <argsstring></argsstring>
+        <name>m_voxels</name>
+        <qualifiedname>castor3d::VoxelizePass::m_voxels</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelizePass.hpp" line="118" column="22" bodyfile="Render/GlobalIllumination/VoxelConeTracing/VoxelizePass.hpp" bodystart="118" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d5a/a04720_1a17b02f2a303f74da78be1ec5ae1fbcf3" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/d96/a06360" kindref="compound">VoxelizerUbo</ref> const  &amp;</type>
+        <definition>VoxelizerUbo const&amp; castor3d::VoxelizePass::m_voxelizerUbo</definition>
+        <argsstring></argsstring>
+        <name>m_voxelizerUbo</name>
+        <qualifiedname>castor3d::VoxelizePass::m_voxelizerUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelizePass.hpp" line="119" column="21" bodyfile="Render/GlobalIllumination/VoxelConeTracing/VoxelizePass.hpp" bodystart="119" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d5a/a04720_1a6143c6c29cb4613d70b238b65259e055" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/deb/a04728" kindref="compound">VoxelSceneData</ref> const  &amp;</type>
+        <definition>VoxelSceneData const&amp; castor3d::VoxelizePass::m_voxelConfig</definition>
+        <argsstring></argsstring>
+        <name>m_voxelConfig</name>
+        <qualifiedname>castor3d::VoxelizePass::m_voxelConfig</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelizePass.hpp" line="120" column="23" bodyfile="Render/GlobalIllumination/VoxelConeTracing/VoxelizePass.hpp" bodystart="120" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d6/d5a/a04720_1a388526e70f51a766f46f7a7e9871aa03" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::VoxelizePass::VoxelizePass</definition>
+        <argsstring>(crg::FramePass const &amp;pass, crg::GraphContext &amp;context, crg::RunnableGraph &amp;graph, RenderDevice const &amp;device, MatrixUbo &amp;matrixUbo, SceneUbo &amp;sceneUbo, SceneCuller &amp;culler, VoxelizerUbo const &amp;voxelizerUbo, ashes::Buffer&lt; Voxel &gt; const &amp;voxels, VoxelSceneData const &amp;voxelConfig)</argsstring>
+        <name>VoxelizePass</name>
+        <qualifiedname>castor3d::VoxelizePass::VoxelizePass</qualifiedname>
+        <param>
+          <type>crg::FramePass const &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type>crg::GraphContext &amp;</type>
+          <declname>context</declname>
+        </param>
+        <param>
+          <type>crg::RunnableGraph &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d96/a05072" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="df/df2/a06208" kindref="compound">MatrixUbo</ref> &amp;</type>
+          <declname>matrixUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="db/d2c/a06256" kindref="compound">SceneUbo</ref> &amp;</type>
+          <declname>sceneUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dfe/a04620" kindref="compound">SceneCuller</ref> &amp;</type>
+          <declname>culler</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/d96/a06360" kindref="compound">VoxelizerUbo</ref> const &amp;</type>
+          <declname>voxelizerUbo</declname>
+        </param>
+        <param>
+          <type>ashes::Buffer&lt; <ref refid="df/d38/a04716" kindref="compound">Voxel</ref> &gt; const &amp;</type>
+          <declname>voxels</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/deb/a04728" kindref="compound">VoxelSceneData</ref> const &amp;</type>
+          <declname>voxelConfig</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">pass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent frame pass. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">context</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The rendering context. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">graph</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The runnable graph. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">matrixUbo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The scene matrices UBO. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">sceneUbo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The scene UBO. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">culler</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The culler for this pass. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">voxelizerUbo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The voxelizer configuration UBO. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">voxels</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The voxels buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">voxelConfig</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The voxelizer configuration. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelizePass.hpp" line="45" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d5a/a04720_1aa814dd1001ba5f6502e5cc253574c33e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::VoxelizePass::accept</definition>
+        <argsstring>(RenderTechniqueVisitor &amp;visitor)</argsstring>
+        <name>accept</name>
+        <qualifiedname>castor3d::VoxelizePass::accept</qualifiedname>
+        <param>
+          <type><ref refid="df/d2e/a05216" kindref="compound">RenderTechniqueVisitor</ref> &amp;</type>
+          <declname>visitor</declname>
+        </param>
+        <briefdescription>
+<para>Visitor acceptance function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>visitor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ... visitor. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelizePass.hpp" line="58" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d5a/a04720_1a175acb68bfd8d15d2fbb81e0b489e4f5" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::VoxelizePass::update</definition>
+        <argsstring>(CpuUpdater &amp;updater) override</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::VoxelizePass::update</qualifiedname>
+        <reimplements refid="d8/de4/a05172_1a63e0a2137b063c8eb22eb7043d4edc2b">update</reimplements>
+        <param>
+          <type><ref refid="d7/d13/a05156" kindref="compound">CpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+<para>Updates the render pass, CPU wise. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">updater</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The update data. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelizePass.hpp" line="67" column="14"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d6/d5a/a04720_1acc5714d0b0cc5a46f73e5e0c0eff2511" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::VoxelizePass::doFillAdditionalBindings</definition>
+        <argsstring>(ashes::VkDescriptorSetLayoutBindingArray &amp;bindings) const override</argsstring>
+        <name>doFillAdditionalBindings</name>
+        <qualifiedname>castor3d::VoxelizePass::doFillAdditionalBindings</qualifiedname>
+        <reimplements refid="d8/de4/a05172_1a0f1c5bd56a2d5eaf06d492bdbd5a4b32">doFillAdditionalBindings</reimplements>
+        <param>
+          <type>ashes::VkDescriptorSetLayoutBindingArray &amp;</type>
+          <declname>bindings</declname>
+        </param>
+        <briefdescription>
+<para>Fills the render pass specific descriptor layout bindings. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">bindings</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the additional bindings. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelizePass.hpp" line="99" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d5a/a04720_1a97e10f3eb8d0c74fe74453183917491a" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>ashes::PipelineDepthStencilStateCreateInfo</type>
+        <definition>ashes::PipelineDepthStencilStateCreateInfo castor3d::VoxelizePass::doCreateDepthStencilState</definition>
+        <argsstring>(PipelineFlags const &amp;flags) const override</argsstring>
+        <name>doCreateDepthStencilState</name>
+        <qualifiedname>castor3d::VoxelizePass::doCreateDepthStencilState</qualifiedname>
+        <reimplements refid="d8/de4/a05172_1a57b12814d0acb734bd8dde18c00c8677">doCreateDepthStencilState</reimplements>
+        <param>
+          <type><ref refid="db/dd9/a05012" kindref="compound">PipelineFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <briefdescription>
+<para>Creates the depth stencil state. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">flags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pipeline flags. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelizePass.hpp" line="100" column="44"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d5a/a04720_1aa6e532b649e1f2a0c74c02a6d1e5b498" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>ashes::PipelineColorBlendStateCreateInfo</type>
+        <definition>ashes::PipelineColorBlendStateCreateInfo castor3d::VoxelizePass::doCreateBlendState</definition>
+        <argsstring>(PipelineFlags const &amp;flags) const override</argsstring>
+        <name>doCreateBlendState</name>
+        <qualifiedname>castor3d::VoxelizePass::doCreateBlendState</qualifiedname>
+        <reimplements refid="d8/de4/a05172_1a282a48ba3376468aa2d6145f15dc916f">doCreateBlendState</reimplements>
+        <param>
+          <type><ref refid="db/dd9/a05012" kindref="compound">PipelineFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <briefdescription>
+<para>Creates the colour blend state. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">flags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pipeline flags. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelizePass.hpp" line="101" column="42"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d5a/a04720_1a8a7566495b32631c8c1977bb1596dfca" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::VoxelizePass::doFillAdditionalDescriptor</definition>
+        <argsstring>(ashes::WriteDescriptorSetArray &amp;descriptorWrites, ShadowMapLightTypeArray const &amp;shadowMaps) override</argsstring>
+        <name>doFillAdditionalDescriptor</name>
+        <qualifiedname>castor3d::VoxelizePass::doFillAdditionalDescriptor</qualifiedname>
+        <reimplements refid="d8/de4/a05172_1a162c7fffa76184c7c7f040d430fb1b83">doFillAdditionalDescriptor</reimplements>
+        <param>
+          <type>ashes::WriteDescriptorSetArray &amp;</type>
+          <declname>descriptorWrites</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d22/a01572_1ad3137fb4b01f8deea8b1e20522ec8e6c" kindref="member">ShadowMapLightTypeArray</ref> const &amp;</type>
+          <declname>shadowMaps</declname>
+        </param>
+        <briefdescription>
+<para>Initialises the additional descriptor set. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">descriptorWrites</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the descriptor writes. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">shadowMaps</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The shadow maps. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelizePass.hpp" line="102" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d5a/a04720_1a856f7a9f16bbb1d144e26c7d353fd96a" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d3/d22/a01572_1a456f43ef4580c9527b0e71aa45a237ee" kindref="member">SubmeshFlags</ref></type>
+        <definition>SubmeshFlags castor3d::VoxelizePass::doAdjustSubmeshFlags</definition>
+        <argsstring>(SubmeshFlags flags) const override</argsstring>
+        <name>doAdjustSubmeshFlags</name>
+        <qualifiedname>castor3d::VoxelizePass::doAdjustSubmeshFlags</qualifiedname>
+        <reimplements refid="d8/de4/a05172_1a0b2b0ee6960cf3649d664c8993bd01a0">doAdjustSubmeshFlags</reimplements>
+        <param>
+          <type><ref refid="d3/d22/a01572_1a456f43ef4580c9527b0e71aa45a237ee" kindref="member">SubmeshFlags</ref></type>
+          <declname>flags</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelizePass.hpp" line="104" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d5a/a04720_1a53bc4c4cd8be34c21a8dbd7fa73afddb" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d3/d22/a01572_1ab503144f281345b45ccc3f3a94543dce" kindref="member">ProgramFlags</ref></type>
+        <definition>ProgramFlags castor3d::VoxelizePass::doAdjustProgramFlags</definition>
+        <argsstring>(ProgramFlags flags) const override</argsstring>
+        <name>doAdjustProgramFlags</name>
+        <qualifiedname>castor3d::VoxelizePass::doAdjustProgramFlags</qualifiedname>
+        <reimplements refid="d8/de4/a05172_1ad8c1a88c258efc8678041251077c101a">doAdjustProgramFlags</reimplements>
+        <param>
+          <type><ref refid="d3/d22/a01572_1ab503144f281345b45ccc3f3a94543dce" kindref="member">ProgramFlags</ref></type>
+          <declname>flags</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelizePass.hpp" line="105" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d5a/a04720_1ac6c4b426d2dd098cc11e490132e39b06" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d3/d22/a01572_1a525bec5d25db94bcff4168e9e1a826fa" kindref="member">SceneFlags</ref></type>
+        <definition>SceneFlags castor3d::VoxelizePass::doAdjustSceneFlags</definition>
+        <argsstring>(SceneFlags flags) const override</argsstring>
+        <name>doAdjustSceneFlags</name>
+        <qualifiedname>castor3d::VoxelizePass::doAdjustSceneFlags</qualifiedname>
+        <reimplements refid="d8/de4/a05172_1ac1a751301d940ffa1f049b1192581f5b">doAdjustSceneFlags</reimplements>
+        <param>
+          <type><ref refid="d3/d22/a01572_1a525bec5d25db94bcff4168e9e1a826fa" kindref="member">SceneFlags</ref></type>
+          <declname>flags</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelizePass.hpp" line="106" column="12"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d5a/a04720_1ab5296f762c7c23c7452b3d8748932890" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d3/d22/a01572_1aec4f86dd5fea51ba4c7a8a10c7f503c7" kindref="member">ShaderPtr</ref></type>
+        <definition>ShaderPtr castor3d::VoxelizePass::doGetVertexShaderSource</definition>
+        <argsstring>(PipelineFlags const &amp;flags) const override</argsstring>
+        <name>doGetVertexShaderSource</name>
+        <qualifiedname>castor3d::VoxelizePass::doGetVertexShaderSource</qualifiedname>
+        <reimplements refid="d8/de4/a05172_1a2d71bc1e3e34b482735bb6b262bda37f">doGetVertexShaderSource</reimplements>
+        <param>
+          <type><ref refid="db/dd9/a05012" kindref="compound">PipelineFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <briefdescription>
+<para>Retrieves the vertex shader source matching the given flags. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">flags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pipeline flags. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelizePass.hpp" line="107" column="11"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d5a/a04720_1ad78f450ead64f287762757e1e3ac764e" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d3/d22/a01572_1aec4f86dd5fea51ba4c7a8a10c7f503c7" kindref="member">ShaderPtr</ref></type>
+        <definition>ShaderPtr castor3d::VoxelizePass::doGetBillboardShaderSource</definition>
+        <argsstring>(PipelineFlags const &amp;flags) const override</argsstring>
+        <name>doGetBillboardShaderSource</name>
+        <qualifiedname>castor3d::VoxelizePass::doGetBillboardShaderSource</qualifiedname>
+        <reimplements refid="d8/de4/a05172_1a46bd93a35f6daafa0bac237fe748ef55">doGetBillboardShaderSource</reimplements>
+        <param>
+          <type><ref refid="db/dd9/a05012" kindref="compound">PipelineFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <briefdescription>
+<para>Retrieves the billboards&apos; vertex shader source matching the given flags. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">flags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pipeline flags. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelizePass.hpp" line="108" column="11"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d5a/a04720_1ae4ebc4e45172a62f204aad1989f82ab5" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d3/d22/a01572_1aec4f86dd5fea51ba4c7a8a10c7f503c7" kindref="member">ShaderPtr</ref></type>
+        <definition>ShaderPtr castor3d::VoxelizePass::doGetGeometryShaderSource</definition>
+        <argsstring>(PipelineFlags const &amp;flags) const override</argsstring>
+        <name>doGetGeometryShaderSource</name>
+        <qualifiedname>castor3d::VoxelizePass::doGetGeometryShaderSource</qualifiedname>
+        <reimplements refid="d8/de4/a05172_1a289c48dd28ce613e660366ba05e2de09">doGetGeometryShaderSource</reimplements>
+        <param>
+          <type><ref refid="db/dd9/a05012" kindref="compound">PipelineFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <briefdescription>
+<para>Retrieves the geometry shader source matching the given flags. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">flags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pipeline flags. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelizePass.hpp" line="109" column="11"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d5a/a04720_1ae95994146518376eaa23384c6fa8ef97" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d3/d22/a01572_1aec4f86dd5fea51ba4c7a8a10c7f503c7" kindref="member">ShaderPtr</ref></type>
+        <definition>ShaderPtr castor3d::VoxelizePass::doGetPixelShaderSource</definition>
+        <argsstring>(PipelineFlags const &amp;flags) const override</argsstring>
+        <name>doGetPixelShaderSource</name>
+        <qualifiedname>castor3d::VoxelizePass::doGetPixelShaderSource</qualifiedname>
+        <reimplements refid="d8/de4/a05172_1ae07890bc4e2c205decdb9490a3171eb1">doGetPixelShaderSource</reimplements>
+        <param>
+          <type><ref refid="db/dd9/a05012" kindref="compound">PipelineFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <briefdescription>
+<para>Retrieves the pixel shader source matching the given flags. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">flags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pipeline flags. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelizePass.hpp" line="110" column="11"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d5a/a04720_1a63e0a2137b063c8eb22eb7043d4edc2b" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::RenderNodesPass::update</definition>
+        <argsstring>(CpuUpdater &amp;updater)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::VoxelizePass::update</qualifiedname>
+        <reimplements refid="d8/de4/a05172_1a63e0a2137b063c8eb22eb7043d4edc2b">update</reimplements>
+        <param>
+          <type><ref refid="d7/d13/a05156" kindref="compound">CpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+<para>Updates the render pass, CPU wise. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">updater</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The update data. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelizePass.hpp" line="97" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::RenderNodesPass</label>
+        <link refid="d8/de4/a05172"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::VoxelizePass</label>
+        <link refid="d6/d5a/a04720"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::Named</label>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="4">
+        <label>crg::RenderPass</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="19">
+        <label>Animable</label>
+        <link refid="d5/df1/a02392"/>
+        <childnode refid="20" relation="public-inheritance">
+        </childnode>
+        <childnode refid="21" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+        <childnode refid="24" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="23">
+        <label>K</label>
+      </node>
+      <node id="11">
+        <label>T</label>
+      </node>
+      <node id="24">
+        <label>castor3d::AnimableT&lt; AnimableHandlerT &gt;</label>
+        <link refid="d5/df1/a02392"/>
+        <childnode refid="25" relation="public-inheritance">
+        </childnode>
+        <childnode refid="21" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+      </node>
+      <node id="14">
+        <label>castor3d::Camera</label>
+        <link refid="d6/dfa/a05552"/>
+        <childnode refid="15" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="12">
+        <label>castor3d::MatrixUbo</label>
+        <link refid="df/df2/a06208"/>
+      </node>
+      <node id="15">
+        <label>castor3d::MovableObject</label>
+        <link refid="dd/dd4/a05604"/>
+        <childnode refid="16" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="17" relation="usage">
+          <edgelabel>m_sceneNode</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>castor3d::QueuesData</label>
+        <link refid="d2/d8c/a05064"/>
+      </node>
+      <node id="6">
+        <label>castor3d::RenderDevice</label>
+        <link refid="d3/d96/a05072"/>
+        <childnode refid="7" relation="usage">
+          <edgelabel>renderSystem</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>queueFamilies</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::RenderNodesPass</label>
+        <link refid="d8/de4/a05172"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>m_device</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>m_renderSystem</edgelabel>
+        </childnode>
+        <childnode refid="12" relation="usage">
+          <edgelabel>m_matrixUbo</edgelabel>
+        </childnode>
+        <childnode refid="13" relation="usage">
+          <edgelabel>m_culler</edgelabel>
+        </childnode>
+        <childnode refid="30" relation="usage">
+          <edgelabel>m_sceneUbo</edgelabel>
+        </childnode>
+        <childnode refid="31" relation="usage">
+          <edgelabel>m_additionalDescriptors</edgelabel>
+        </childnode>
+      </node>
+      <node id="32">
+        <label>castor3d::RenderNodesPass::PassDescriptors</label>
+        <link refid="d3/dd2/a05176"/>
+      </node>
+      <node id="7">
+        <label>castor3d::RenderSystem</label>
+        <link refid="d9/d4a/a05192"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="13">
+        <label>castor3d::SceneCuller</label>
+        <link refid="d2/dfe/a04620"/>
+        <childnode refid="14" relation="usage">
+          <edgelabel>m_camera</edgelabel>
+        </childnode>
+        <childnode refid="26" relation="usage">
+          <edgelabel>m_renderPasses</edgelabel>
+        </childnode>
+      </node>
+      <node id="27">
+        <label>castor3d::SceneCuller::RenderPassBuffers</label>
+        <link refid="d3/d6e/a04628"/>
+        <childnode refid="28" relation="usage">
+          <edgelabel>nodesIds</edgelabel>
+        </childnode>
+        <childnode refid="29" relation="usage">
+          <edgelabel>nodesPipelinesIds</edgelabel>
+        </childnode>
+      </node>
+      <node id="17">
+        <label>castor3d::SceneNode</label>
+        <link refid="d8/dad/a05856"/>
+        <childnode refid="18" relation="public-inheritance">
+        </childnode>
+        <childnode refid="19" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="30">
+        <label>castor3d::SceneUbo</label>
+        <link refid="db/d2c/a06256"/>
+      </node>
+      <node id="1">
+        <label>castor3d::VoxelizePass</label>
+        <link refid="d6/d5a/a04720"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::Named</label>
+      </node>
+      <node id="25">
+        <label>castor::OwnedBy&lt; AnimableHandlerT &gt;</label>
+      </node>
+      <node id="20">
+        <label>castor::OwnedBy&lt; Engine  &gt;</label>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="16">
+        <label>castor::OwnedBy&lt; Scene &gt;</label>
+      </node>
+      <node id="4">
+        <label>crg::RenderPass</label>
+      </node>
+      <node id="26">
+        <label>std::map&lt; castor3d::RenderNodesPass const *, castor3d::SceneCuller::RenderPassBuffers &gt;</label>
+        <childnode refid="2" relation="usage">
+          <edgelabel>keys</edgelabel>
+        </childnode>
+        <childnode refid="27" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="22" relation="template-instance">
+          <edgelabel>&lt; castor3d::RenderNodesPass const *, castor3d::SceneCuller::RenderPassBuffers &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="21">
+        <label>std::map&lt; castor::String, AnimationPtr &gt;</label>
+        <childnode refid="22" relation="template-instance">
+          <edgelabel>&lt; castor::String, AnimationPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="31">
+        <label>std::map&lt; size_t, castor3d::RenderNodesPass::PassDescriptors &gt;</label>
+        <childnode refid="32" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="22" relation="template-instance">
+          <edgelabel>&lt; size_t, castor3d::RenderNodesPass::PassDescriptors &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="29">
+        <label>std::map&lt; uint32_t, uint32_t &gt;</label>
+        <childnode refid="22" relation="template-instance">
+          <edgelabel>&lt; uint32_t, uint32_t &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="18">
+        <label>std::enable_shared_from_this&lt; SceneNode &gt;</label>
+      </node>
+      <node id="22">
+        <label>std::map&lt; K, T &gt;</label>
+        <childnode refid="23" relation="usage">
+          <edgelabel>keys</edgelabel>
+        </childnode>
+        <childnode refid="11" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="11" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="28">
+        <label>std::vector&lt; PipelineBuffer &gt;</label>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; PipelineBuffer &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>std::vector&lt; QueuesData &gt;</label>
+        <childnode refid="9" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; QueuesData &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/GlobalIllumination/VoxelConeTracing/VoxelizePass.hpp" line="15" column="1" bodyfile="Render/GlobalIllumination/VoxelConeTracing/VoxelizePass.hpp" bodystart="17" bodyend="121"/>
+    <listofallmembers>
+      <member refid="d6/d5a/a04720_1aa814dd1001ba5f6502e5cc253574c33e" prot="public" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>accept</name></member>
+      <member refid="d8/de4/a05172_1a14b4e362f41e0a47b829a0e269c05e4c" prot="public" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>adjustFlags</name></member>
+      <member refid="d8/de4/a05172_1a8d5aad5e318ad5f1520900502a8ba7c5" prot="public" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>adjustFlags</name></member>
+      <member refid="d8/de4/a05172_1ae7c0725098dbbcaf8ee541543783ef9f" prot="public" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>adjustFlags</name></member>
+      <member refid="d8/de4/a05172_1a8ae3e04cfcf1b985f40506be53ca5df5" prot="public" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>adjustFlags</name></member>
+      <member refid="d8/de4/a05172_1af698e424908fb58fa2d84a845458e2ca" prot="public" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>adjustFlags</name></member>
+      <member refid="d8/de4/a05172_1aa854838a1f9dd4f203179e64d193e6c4" prot="public" virt="virtual"><scope>castor3d::VoxelizePass</scope><name>areValidPassFlags</name></member>
+      <member refid="d8/de4/a05172_1a670b6db34472ea0bd4228c3ae86a1865" prot="public" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>createBlendState</name></member>
+      <member refid="d8/de4/a05172_1aca3add8597562593809153f070d57290" prot="public" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>createPipelineFlags</name></member>
+      <member refid="d8/de4/a05172_1a167b65d1efdba84fcce2c579c1fe9705" prot="public" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>createPipelineFlags</name></member>
+      <member refid="d6/d5a/a04720_1a53bc4c4cd8be34c21a8dbd7fa73afddb" prot="private" virt="virtual"><scope>castor3d::VoxelizePass</scope><name>doAdjustProgramFlags</name></member>
+      <member refid="d6/d5a/a04720_1ac6c4b426d2dd098cc11e490132e39b06" prot="private" virt="virtual"><scope>castor3d::VoxelizePass</scope><name>doAdjustSceneFlags</name></member>
+      <member refid="d6/d5a/a04720_1a856f7a9f16bbb1d144e26c7d353fd96a" prot="private" virt="virtual"><scope>castor3d::VoxelizePass</scope><name>doAdjustSubmeshFlags</name></member>
+      <member refid="d6/d5a/a04720_1aa6e532b649e1f2a0c74c02a6d1e5b498" prot="private" virt="virtual"><scope>castor3d::VoxelizePass</scope><name>doCreateBlendState</name></member>
+      <member refid="d6/d5a/a04720_1a97e10f3eb8d0c74fe74453183917491a" prot="private" virt="virtual"><scope>castor3d::VoxelizePass</scope><name>doCreateDepthStencilState</name></member>
+      <member refid="d6/d5a/a04720_1acc5714d0b0cc5a46f73e5e0c0eff2511" prot="private" virt="virtual"><scope>castor3d::VoxelizePass</scope><name>doFillAdditionalBindings</name></member>
+      <member refid="d6/d5a/a04720_1a8a7566495b32631c8c1977bb1596dfca" prot="private" virt="virtual"><scope>castor3d::VoxelizePass</scope><name>doFillAdditionalDescriptor</name></member>
+      <member refid="d6/d5a/a04720_1ad78f450ead64f287762757e1e3ac764e" prot="private" virt="virtual"><scope>castor3d::VoxelizePass</scope><name>doGetBillboardShaderSource</name></member>
+      <member refid="d6/d5a/a04720_1ae4ebc4e45172a62f204aad1989f82ab5" prot="private" virt="virtual"><scope>castor3d::VoxelizePass</scope><name>doGetGeometryShaderSource</name></member>
+      <member refid="d6/d5a/a04720_1ae95994146518376eaa23384c6fa8ef97" prot="private" virt="virtual"><scope>castor3d::VoxelizePass</scope><name>doGetPixelShaderSource</name></member>
+      <member refid="d8/de4/a05172_1ab7fb074f5e4ac4f26b7373115d839b0d" prot="protected" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>doGetProgram</name></member>
+      <member refid="d6/d5a/a04720_1ab5296f762c7c23c7452b3d8748932890" prot="private" virt="virtual"><scope>castor3d::VoxelizePass</scope><name>doGetVertexShaderSource</name></member>
+      <member refid="d8/de4/a05172_1a0b81195776352e7dde7ec0c193513dcc" prot="protected" virt="virtual"><scope>castor3d::VoxelizePass</scope><name>doIsValidPass</name></member>
+      <member refid="d8/de4/a05172_1a4c12be9f679d565586c1a58423cd0236" prot="protected" virt="virtual"><scope>castor3d::VoxelizePass</scope><name>doIsValidRenderable</name></member>
+      <member refid="d8/de4/a05172_1abfb05246334007ec0cafb80ca96645b8" prot="protected" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>doUpdateFlags</name></member>
+      <member refid="d8/de4/a05172_1a6fa640d927538884f1f380391f418efe" prot="protected" virt="virtual"><scope>castor3d::VoxelizePass</scope><name>doUpdateUbos</name></member>
+      <member refid="d8/de4/a05172_1a29743b67e4341587479435c0c24bccf8" prot="public" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>forceTwoSided</name></member>
+      <member refid="d6/d5a/a04720_1ad48925888b33f10a9464ddb9fd2c26f2" prot="public" virt="virtual"><scope>castor3d::VoxelizePass</scope><name>getComponentsMask</name></member>
+      <member refid="d8/de4/a05172_1afefc4d6096aa652fdd56e98693d09bd9" prot="public" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>getCuller</name></member>
+      <member refid="d8/de4/a05172_1adac28e18184888a9400996aa675a5b4d" prot="public" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>getDomainShaderSource</name></member>
+      <member refid="d8/de4/a05172_1a847aad003a7cc54ec5136b9d17d5743c" prot="public" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>getGeometryShaderSource</name></member>
+      <member refid="d8/de4/a05172_1aecaa4a30c38a4c3e195d6944632d7193" prot="public" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>getHullShaderSource</name></member>
+      <member refid="d8/de4/a05172_1ad011bdbd6a7788eae66801f9356a76c8" prot="public" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>getIgnoredNode</name></member>
+      <member refid="d8/de4/a05172_1ad6e44c1aabdf67de076a69c2af69aa7e" prot="public" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>getMatrixUbo</name></member>
+      <member refid="d8/de4/a05172_1a61b87dd3da5ee1672077cb2d32cbe37f" prot="public" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>getMeshShaderSource</name></member>
+      <member refid="d8/de4/a05172_1ab61f0cd7fb1cd1bc443092f06cb3197a" prot="public" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>getPipelinesCount</name></member>
+      <member refid="d8/de4/a05172_1a922c1cd3195693687a8a2f0a6949535f" prot="public" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>getPixelShaderSource</name></member>
+      <member refid="d8/de4/a05172_1ad0e55bce068f609844f838171c950859" prot="public" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>getRenderFilters</name></member>
+      <member refid="d8/de4/a05172_1a29524f70d74aa931588ac8c243dec0e4" prot="public" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>getScene</name></member>
+      <member refid="d6/d5a/a04720_1a14269d9b743551f0cee6937e24ad92a0" prot="public" virt="virtual"><scope>castor3d::VoxelizePass</scope><name>getShaderFlags</name></member>
+      <member refid="d8/de4/a05172_1a82ae5835c57b10a3d4beeb00255ffce1" prot="public" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>getTaskShaderSource</name></member>
+      <member refid="d8/de4/a05172_1a5e79f4502284d4b15874f25f251bdf65" prot="public" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>getTypeID</name></member>
+      <member refid="d8/de4/a05172_1a64a02af1aeceaa01c193875e91246e3e" prot="public" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>getTypeName</name></member>
+      <member refid="d8/de4/a05172_1ad35e2dc27955cd30a29483b4fddc60b9" prot="public" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>getVertexShaderSource</name></member>
+      <member refid="d8/de4/a05172_1a39a984d4b308042079590df32ee93e30" prot="public" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>hasNodes</name></member>
+      <member refid="d8/de4/a05172_1a994ed8de34e84e17282024d4009e46b6" prot="public" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>initialiseAdditionalDescriptor</name></member>
+      <member refid="d8/de4/a05172_1a8d78bd23c3114246345736a20012bf0b" prot="public" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>isDirty</name></member>
+      <member refid="d8/de4/a05172_1abc1ffc4a924647a7b4598885ca74c41e" prot="public" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>isMeshShading</name></member>
+      <member refid="d8/de4/a05172_1a42d3ef0bcc3e3995cd5170fdf32dcd98" prot="public" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>isOrderIndependent</name></member>
+      <member refid="d8/de4/a05172_1a06e38fbdec989ad3b879b860438057e0" prot="public" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>isPassEnabled</name></member>
+      <member refid="d8/de4/a05172_1a493ba1a2b2dae58c295795b97cb707ee" prot="public" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>isValidPass</name></member>
+      <member refid="d8/de4/a05172_1a8f41333bbfa7918dfa9d3ae61c12f329" prot="public" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>isValidRenderable</name></member>
+      <member refid="d8/de4/a05172_1a9963f77040ab129a48a8914c35e99a7f" prot="protected" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>m_additionalDescriptors</name></member>
+      <member refid="d6/d5a/a04720_1a5411774afd19cbae06755871a9c9a74c" prot="private" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>m_camera</name></member>
+      <member refid="d8/de4/a05172_1a6d6c070855ebca54019a12e7f3490220" prot="protected" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>m_category</name></member>
+      <member refid="d8/de4/a05172_1a59ba48c6244d1ea4826c554ddd7373a0" prot="protected" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>m_culler</name></member>
+      <member refid="d8/de4/a05172_1a7869b4d26567e9de01eb5cc2a497f8b6" prot="protected" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>m_device</name></member>
+      <member refid="d8/de4/a05172_1a99bd721ed2680d641fa3b8a8fa97c14d" prot="protected" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>m_filters</name></member>
+      <member refid="d8/de4/a05172_1a00e35214ad070e24c4d6781acdafe33e" prot="protected" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>m_forceTwoSided</name></member>
+      <member refid="d8/de4/a05172_1aec485b6959629cdeafb0888f752837a5" prot="protected" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>m_index</name></member>
+      <member refid="d8/de4/a05172_1a506d22126296803c8096b5897c506d22" prot="protected" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>m_isDirty</name></member>
+      <member refid="d8/de4/a05172_1a5206977985bece388ad40a4dc19a4464" prot="protected" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>m_matrixUbo</name></member>
+      <member refid="d8/de4/a05172_1a3f4ae4d22173cd2ecd9200c7a1ca4ea6" prot="protected" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>m_meshShading</name></member>
+      <member refid="d8/de4/a05172_1aacaa3131286df41ac9f40abe4de8846a" prot="protected" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>m_oit</name></member>
+      <member refid="d8/de4/a05172_1ae9670aec542192792ab596e65d9d7558" prot="protected" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>m_renderQueue</name></member>
+      <member refid="d8/de4/a05172_1a1894fb32c0494abfeae9cddc6eecb402" prot="protected" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>m_renderSystem</name></member>
+      <member refid="d8/de4/a05172_1abe9ae7c14c7abfe881a52f22fecbc9d0" prot="protected" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>m_safeBand</name></member>
+      <member refid="d6/d5a/a04720_1a085b441bff38758ff66629fbb6b61799" prot="private" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>m_scene</name></member>
+      <member refid="d8/de4/a05172_1a2039b4754fab06c62c4c2dabcb78255e" prot="protected" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>m_sceneUbo</name></member>
+      <member refid="d8/de4/a05172_1a916bbd8f5333ca63b34f1815753b477b" prot="protected" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>m_size</name></member>
+      <member refid="d8/de4/a05172_1ad96ed6491ca83fc16eee6801f579f393" prot="protected" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>m_targetImage</name></member>
+      <member refid="d8/de4/a05172_1ad5b1bf0dbc1d04d7f0d78780b7aee2b6" prot="protected" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>m_typeID</name></member>
+      <member refid="d8/de4/a05172_1af1e2549069672c4b478b76e8c039e4a2" prot="protected" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>m_typeName</name></member>
+      <member refid="d6/d5a/a04720_1a6143c6c29cb4613d70b238b65259e055" prot="private" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>m_voxelConfig</name></member>
+      <member refid="d6/d5a/a04720_1a17b02f2a303f74da78be1ec5ae1fbcf3" prot="private" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>m_voxelizerUbo</name></member>
+      <member refid="d6/d5a/a04720_1a8acc5eac2f37255c87a5f357f29319cf" prot="private" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>m_voxels</name></member>
+      <member refid="d8/de4/a05172_1a768e6b213ebef805d5dc8008bf1a3273" prot="public" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>prepareBackPipeline</name></member>
+      <member refid="d8/de4/a05172_1a6f5a98c7c19698c36a7fd2a35f37640a" prot="public" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>prepareFrontPipeline</name></member>
+      <member refid="d8/de4/a05172_1a1174db3a40623e3381ed265a0a7810a0" prot="protected" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>RenderNodesPass</name></member>
+      <member refid="d8/de4/a05172_1aefaeb0db8236eae2d8c2a5e1549e4cc0" prot="public" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>setIgnoredNode</name></member>
+      <member refid="d6/d5a/a04720_1a98579c2abfe65a07d81f95d7622610de" prot="public" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>Type</name></member>
+      <member refid="d6/d5a/a04720_1a175acb68bfd8d15d2fbb81e0b489e4f5" prot="public" virt="virtual"><scope>castor3d::VoxelizePass</scope><name>update</name></member>
+      <member refid="d6/d5a/a04720_1a63e0a2137b063c8eb22eb7043d4edc2b" prot="private" virt="virtual"><scope>castor3d::VoxelizePass</scope><name>update</name></member>
+      <member refid="d6/d5a/a04720_1a388526e70f51a766f46f7a7e9871aa03" prot="public" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>VoxelizePass</name></member>
+      <member refid="d8/de4/a05172_1a60d047aebffab135a9dd6663df316c59" prot="public" virt="non-virtual"><scope>castor3d::VoxelizePass</scope><name>~RenderNodesPass</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

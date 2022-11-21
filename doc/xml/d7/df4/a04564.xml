@@ -1,0 +1,174 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d7/df4/a04564" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::TextOverlay::DisplayableChar</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d7/df4/a04564_1a9e4bb5efb7a4edc4df3c4f4fe756a255" prot="public" static="no" mutable="no">
+        <type>castor::Point2d</type>
+        <definition>castor::Point2d castor3d::TextOverlay::DisplayableChar::m_position</definition>
+        <argsstring></argsstring>
+        <name>m_position</name>
+        <qualifiedname>castor3d::TextOverlay::DisplayableChar::m_position</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The character position, relative to its line. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="264" column="17" bodyfile="Overlay/TextOverlay.hpp" bodystart="264" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/df4/a04564_1af84b833128db6996ffd0ae27d2978640" prot="public" static="no" mutable="no">
+        <type>castor::Point2d</type>
+        <definition>castor::Point2d castor3d::TextOverlay::DisplayableChar::m_size</definition>
+        <argsstring></argsstring>
+        <name>m_size</name>
+        <qualifiedname>castor3d::TextOverlay::DisplayableChar::m_size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The character dimensions. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="267" column="17" bodyfile="Overlay/TextOverlay.hpp" bodystart="267" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/df4/a04564_1aa7c0972fe90e078a4cd5a0d6ce875a9d" prot="public" static="no" mutable="no">
+        <type>castor::Glyph const  &amp;</type>
+        <definition>castor::Glyph const&amp; castor3d::TextOverlay::DisplayableChar::m_glyph</definition>
+        <argsstring></argsstring>
+        <name>m_glyph</name>
+        <qualifiedname>castor3d::TextOverlay::DisplayableChar::m_glyph</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The character to display. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="270" column="22" bodyfile="Overlay/TextOverlay.hpp" bodystart="270" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d7/df4/a04564_1ab698c99baf19934b02c2d6021edb2fd3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::TextOverlay::DisplayableChar::DisplayableChar</definition>
+        <argsstring>(castor::Point2d const &amp;position, castor::Point2d const &amp;size, castor::Glyph const &amp;glyph)</argsstring>
+        <name>DisplayableChar</name>
+        <qualifiedname>castor3d::TextOverlay::DisplayableChar::DisplayableChar</qualifiedname>
+        <param>
+          <type>castor::Point2d const &amp;</type>
+          <declname>position</declname>
+        </param>
+        <param>
+          <type>castor::Point2d const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>castor::Glyph const &amp;</type>
+          <declname>glyph</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="272" column="1" bodyfile="Overlay/TextOverlay.hpp" bodystart="272" bodyend="279"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/df4/a04564_1acfd1f3bd9cf4b469d3fab2c5096eb08a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::TextOverlay::DisplayableChar::DisplayableChar</definition>
+        <argsstring>(DisplayableChar const &amp;rhs)</argsstring>
+        <name>DisplayableChar</name>
+        <qualifiedname>castor3d::TextOverlay::DisplayableChar::DisplayableChar</qualifiedname>
+        <param>
+          <type>DisplayableChar const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="281" column="1" bodyfile="Overlay/TextOverlay.hpp" bodystart="281" bodyend="286"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/df4/a04564_1aa72bc9794b7d66d99a0d1c9a57f423f8" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::TextOverlay::DisplayableChar::DisplayableChar</definition>
+        <argsstring>(DisplayableChar &amp;&amp;rhs) noexcept</argsstring>
+        <name>DisplayableChar</name>
+        <qualifiedname>castor3d::TextOverlay::DisplayableChar::DisplayableChar</qualifiedname>
+        <param>
+          <type>DisplayableChar &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="288" column="1" bodyfile="Overlay/TextOverlay.hpp" bodystart="288" bodyend="293"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/df4/a04564_1ae82dca64a7e1b7a5b83df53bb48a9eca" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>DisplayableChar &amp;</type>
+        <definition>DisplayableChar &amp; castor3d::TextOverlay::DisplayableChar::operator=</definition>
+        <argsstring>(DisplayableChar const &amp;rhs)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::TextOverlay::DisplayableChar::operator=</qualifiedname>
+        <param>
+          <type>DisplayableChar const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="295" column="18" bodyfile="Overlay/TextOverlay.hpp" bodystart="295" bodyend="300"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/df4/a04564_1af1aeb7518323fe5683728b050aeba70f" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>DisplayableChar &amp;</type>
+        <definition>DisplayableChar &amp; castor3d::TextOverlay::DisplayableChar::operator=</definition>
+        <argsstring>(DisplayableChar &amp;&amp;rhs) noexcept</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::TextOverlay::DisplayableChar::operator=</qualifiedname>
+        <param>
+          <type>DisplayableChar &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/TextOverlay.hpp" line="302" column="18" bodyfile="Overlay/TextOverlay.hpp" bodystart="302" bodyend="311"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>A character, along with its size and relative position. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="author"><para>Sylvain DOREMUS </para>
+</simplesect>
+<simplesect kind="date"><para>28/01/2016 </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <location file="Overlay/TextOverlay.hpp" line="260" column="1" bodyfile="Overlay/TextOverlay.hpp" bodystart="261" bodyend="312"/>
+    <listofallmembers>
+      <member refid="d7/df4/a04564_1ab698c99baf19934b02c2d6021edb2fd3" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay::DisplayableChar</scope><name>DisplayableChar</name></member>
+      <member refid="d7/df4/a04564_1acfd1f3bd9cf4b469d3fab2c5096eb08a" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay::DisplayableChar</scope><name>DisplayableChar</name></member>
+      <member refid="d7/df4/a04564_1aa72bc9794b7d66d99a0d1c9a57f423f8" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay::DisplayableChar</scope><name>DisplayableChar</name></member>
+      <member refid="d7/df4/a04564_1aa7c0972fe90e078a4cd5a0d6ce875a9d" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay::DisplayableChar</scope><name>m_glyph</name></member>
+      <member refid="d7/df4/a04564_1a9e4bb5efb7a4edc4df3c4f4fe756a255" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay::DisplayableChar</scope><name>m_position</name></member>
+      <member refid="d7/df4/a04564_1af84b833128db6996ffd0ae27d2978640" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay::DisplayableChar</scope><name>m_size</name></member>
+      <member refid="d7/df4/a04564_1ae82dca64a7e1b7a5b83df53bb48a9eca" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay::DisplayableChar</scope><name>operator=</name></member>
+      <member refid="d7/df4/a04564_1af1aeb7518323fe5683728b050aeba70f" prot="public" virt="non-virtual"><scope>castor3d::TextOverlay::DisplayableChar</scope><name>operator=</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

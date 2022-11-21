@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dir_4d2af45186488f4957e91f52d0870c5b" kind="dir">
+    <compoundname>Render/ShadowMap</compoundname>
+    <innerfile refid="dd/db2/a00866">ShadowMap.hpp</innerfile>
+    <innerfile refid="d3/db2/a00869">ShadowMapDirectional.hpp</innerfile>
+    <innerfile refid="dc/d17/a00872">ShadowMapModule.hpp</innerfile>
+    <innerfile refid="d1/d93/a00875">ShadowMapPass.hpp</innerfile>
+    <innerfile refid="d5/d69/a00878">ShadowMapPassDirectional.hpp</innerfile>
+    <innerfile refid="df/d41/a00881">ShadowMapPassPoint.hpp</innerfile>
+    <innerfile refid="dd/d08/a00884">ShadowMapPassSpot.hpp</innerfile>
+    <innerfile refid="d7/d92/a00887">ShadowMapPoint.hpp</innerfile>
+    <innerfile refid="d7/d46/a00890">ShadowMapResult.hpp</innerfile>
+    <innerfile refid="dc/d2c/a00893">ShadowMapSpot.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/ShadowMap/"/>
+  </compounddef>
+</doxygen>

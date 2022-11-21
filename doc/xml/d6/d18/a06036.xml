@@ -1,0 +1,1997 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d6/d18/a06036" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>castor3d::shader::LightingModel</compoundname>
+    <derivedcompoundref refid="d2/d87/a03764" prot="public" virt="non-virtual">castor3d::shader::PbrLightingModel</derivedcompoundref>
+    <derivedcompoundref refid="dd/d5a/a03780" prot="public" virt="non-virtual">castor3d::shader::PhongLightingModel</derivedcompoundref>
+    <includes local="no">GlslLighting.hpp</includes>
+      <sectiondef kind="user-defined">
+      <description><para><ref refid="d7/d13/a06020" kindref="compound">Light</ref> accessors </para>
+</description>
+      <memberdef kind="variable" id="d6/d18/a06036_1a129490d8e4f0ea553f16dcaeb2b2c089" prot="protected" static="no" mutable="no">
+        <type>sdw::ShaderWriter &amp;</type>
+        <definition>sdw::ShaderWriter&amp; castor3d::shader::LightingModel::m_writer</definition>
+        <argsstring></argsstring>
+        <name>m_writer</name>
+        <qualifiedname>castor3d::shader::LightingModel::m_writer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="350" column="20" bodyfile="Shader/Shaders/GlslLighting.hpp" bodystart="350" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d18/a06036_1a6dd820a0a3dbb47a71024f49fd45a1bf" prot="protected" static="no" mutable="no">
+        <type><ref refid="d1/dc9/a06044" kindref="compound">Materials</ref> const  &amp;</type>
+        <definition>Materials const&amp; castor3d::shader::LightingModel::m_materials</definition>
+        <argsstring></argsstring>
+        <name>m_materials</name>
+        <qualifiedname>castor3d::shader::LightingModel::m_materials</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="351" column="18" bodyfile="Shader/Shaders/GlslLighting.hpp" bodystart="351" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d18/a06036_1a9e5d3c9e33f06597c63d4c64b62bc564" prot="protected" static="no" mutable="no">
+        <type><ref refid="d3/da4/a06136" kindref="compound">Utils</ref> &amp;</type>
+        <definition>Utils&amp; castor3d::shader::LightingModel::m_utils</definition>
+        <argsstring></argsstring>
+        <name>m_utils</name>
+        <qualifiedname>castor3d::shader::LightingModel::m_utils</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="352" column="8" bodyfile="Shader/Shaders/GlslLighting.hpp" bodystart="352" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d18/a06036_1adff9bdb8fb5bd4f7c6f1d4ce7af4edf1" prot="protected" static="no" mutable="no">
+        <type>std::unique_ptr&lt; sdw::Struct &gt;</type>
+        <definition>std::unique_ptr&lt; sdw::Struct &gt; castor3d::shader::LightingModel::m_type</definition>
+        <argsstring></argsstring>
+        <name>m_type</name>
+        <qualifiedname>castor3d::shader::LightingModel::m_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="353" column="17" bodyfile="Shader/Shaders/GlslLighting.hpp" bodystart="353" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d18/a06036_1ae9018f65dde3747697e9e00c6c39c78f" prot="protected" static="no" mutable="no">
+        <type>std::unique_ptr&lt; sdw::StorageBuffer &gt;</type>
+        <definition>std::unique_ptr&lt; sdw::StorageBuffer &gt; castor3d::shader::LightingModel::m_ssbo</definition>
+        <argsstring></argsstring>
+        <name>m_ssbo</name>
+        <qualifiedname>castor3d::shader::LightingModel::m_ssbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="354" column="17" bodyfile="Shader/Shaders/GlslLighting.hpp" bodystart="354" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d18/a06036_1a2a11c8a808450c5db734fe58007c5ad1" prot="protected" static="no" mutable="no">
+        <type>std::unique_ptr&lt; sdw::RImageBufferRgba32 &gt;</type>
+        <definition>std::unique_ptr&lt; sdw::RImageBufferRgba32 &gt; castor3d::shader::LightingModel::m_tbo</definition>
+        <argsstring></argsstring>
+        <name>m_tbo</name>
+        <qualifiedname>castor3d::shader::LightingModel::m_tbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="355" column="18" bodyfile="Shader/Shaders/GlslLighting.hpp" bodystart="355" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d18/a06036_1ae1d302ee6ef967d87ded305060b82120" prot="protected" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::shader::LightingModel::m_enableVolumetric</definition>
+        <argsstring></argsstring>
+        <name>m_enableVolumetric</name>
+        <qualifiedname>castor3d::shader::LightingModel::m_enableVolumetric</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="356" column="6" bodyfile="Shader/Shaders/GlslLighting.hpp" bodystart="356" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d18/a06036_1afef4b07d66515b86040b952a529c80a3" prot="protected" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string castor3d::shader::LightingModel::m_prefix</definition>
+        <argsstring></argsstring>
+        <name>m_prefix</name>
+        <qualifiedname>castor3d::shader::LightingModel::m_prefix</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="357" column="13" bodyfile="Shader/Shaders/GlslLighting.hpp" bodystart="357" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d18/a06036_1a3e9407685cf7ba55a752a27437c09a74" prot="protected" static="no" mutable="no">
+        <type>std::shared_ptr&lt; <ref refid="d1/db6/a06072" kindref="compound">Shadow</ref> &gt;</type>
+        <definition>std::shared_ptr&lt; Shadow &gt; castor3d::shader::LightingModel::m_shadowModel</definition>
+        <argsstring></argsstring>
+        <name>m_shadowModel</name>
+        <qualifiedname>castor3d::shader::LightingModel::m_shadowModel</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="358" column="17" bodyfile="Shader/Shaders/GlslLighting.hpp" bodystart="358" bodyend="-1"/>
+        <referencedby refid="d6/d18/a06036_1ab08881a2f6849c79d50c70320d65d82c" compoundref="d2/d2f/a01460" startline="295" endline="298">getShadowModel</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d18/a06036_1ad7a37427798d2c79b0ee95e8c713dea9" prot="protected" static="no" mutable="no">
+        <type>std::shared_ptr&lt; <ref refid="db/d46/a06088" kindref="compound">SssTransmittance</ref> &gt;</type>
+        <definition>std::shared_ptr&lt; SssTransmittance &gt; castor3d::shader::LightingModel::m_sssTransmittance</definition>
+        <argsstring></argsstring>
+        <name>m_sssTransmittance</name>
+        <qualifiedname>castor3d::shader::LightingModel::m_sssTransmittance</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="359" column="17" bodyfile="Shader/Shaders/GlslLighting.hpp" bodystart="359" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d18/a06036_1a64689c5bb7ce2682e205cd001b5f6fd8" prot="protected" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, sdw::InVec3, sdw::InVec4, sdw::InUInt &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , sdw::InVec3 , sdw::InVec4 , sdw::InUInt &gt; castor3d::shader::LightingModel::m_getCascadeFactors</definition>
+        <argsstring></argsstring>
+        <name>m_getCascadeFactors</name>
+        <qualifiedname>castor3d::shader::LightingModel::m_getCascadeFactors</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="363" column="2" bodyfile="Shader/Shaders/GlslLighting.hpp" bodystart="363" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d18/a06036_1aa640956be672845c769c8127833993d3" prot="protected" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, sdw::InVec3, sdw::InVec4Array, sdw::InUInt &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , sdw::InVec3 , sdw::InVec4Array , sdw::InUInt &gt; castor3d::shader::LightingModel::m_getTileFactors</definition>
+        <argsstring></argsstring>
+        <name>m_getTileFactors</name>
+        <qualifiedname>castor3d::shader::LightingModel::m_getTileFactors</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="367" column="2" bodyfile="Shader/Shaders/GlslLighting.hpp" bodystart="367" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d18/a06036_1a05823d225d40ae50737469729a128bca" prot="protected" static="no" mutable="no">
+        <type>sdw::Function&lt; <ref refid="d7/d13/a06020" kindref="compound">shader::Light</ref>, sdw::InOutUInt &gt;</type>
+        <definition>sdw::Function&lt; shader::Light , sdw::InOutUInt &gt; castor3d::shader::LightingModel::m_getBaseLight</definition>
+        <argsstring></argsstring>
+        <name>m_getBaseLight</name>
+        <qualifiedname>castor3d::shader::LightingModel::m_getBaseLight</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="369" column="2" bodyfile="Shader/Shaders/GlslLighting.hpp" bodystart="369" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d18/a06036_1ab368de32c7f8f54ef2066cbb18dc199b" prot="protected" static="no" mutable="no">
+        <type>sdw::Function&lt; <ref refid="df/d9b/a06024" kindref="compound">shader::DirectionalLight</ref>, sdw::InUInt &gt;</type>
+        <definition>sdw::Function&lt; shader::DirectionalLight , sdw::InUInt &gt; castor3d::shader::LightingModel::m_getDirectionalLight</definition>
+        <argsstring></argsstring>
+        <name>m_getDirectionalLight</name>
+        <qualifiedname>castor3d::shader::LightingModel::m_getDirectionalLight</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="371" column="2" bodyfile="Shader/Shaders/GlslLighting.hpp" bodystart="371" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d18/a06036_1a98044cfa7b6795c534cc0f5382e3b694" prot="protected" static="no" mutable="no">
+        <type>sdw::Function&lt; <ref refid="d4/d91/a06028" kindref="compound">shader::PointLight</ref>, sdw::InUInt &gt;</type>
+        <definition>sdw::Function&lt; shader::PointLight , sdw::InUInt &gt; castor3d::shader::LightingModel::m_getPointLight</definition>
+        <argsstring></argsstring>
+        <name>m_getPointLight</name>
+        <qualifiedname>castor3d::shader::LightingModel::m_getPointLight</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="373" column="2" bodyfile="Shader/Shaders/GlslLighting.hpp" bodystart="373" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d18/a06036_1a22c68d438a913ae1437848af29e31e63" prot="protected" static="no" mutable="no">
+        <type>sdw::Function&lt; <ref refid="d4/ddf/a06032" kindref="compound">shader::SpotLight</ref>, sdw::InUInt &gt;</type>
+        <definition>sdw::Function&lt; shader::SpotLight , sdw::InUInt &gt; castor3d::shader::LightingModel::m_getSpotLight</definition>
+        <argsstring></argsstring>
+        <name>m_getSpotLight</name>
+        <qualifiedname>castor3d::shader::LightingModel::m_getSpotLight</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="375" column="2" bodyfile="Shader/Shaders/GlslLighting.hpp" bodystart="375" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d18/a06036_1a9dce2a67af8cfaefa176a0c4068bea7b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="df/d9b/a06024" kindref="compound">DirectionalLight</ref></type>
+        <definition>C3D_API DirectionalLight castor3d::shader::LightingModel::getDirectionalLight</definition>
+        <argsstring>(sdw::UInt const &amp;index) const</argsstring>
+        <name>getDirectionalLight</name>
+        <qualifiedname>castor3d::shader::LightingModel::getDirectionalLight</qualifiedname>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="290" column="26"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d18/a06036_1a0b32c9c9d9666a7e01ac4490b007de09" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d4/d91/a06028" kindref="compound">PointLight</ref></type>
+        <definition>C3D_API PointLight castor3d::shader::LightingModel::getPointLight</definition>
+        <argsstring>(sdw::UInt const &amp;index) const</argsstring>
+        <name>getPointLight</name>
+        <qualifiedname>castor3d::shader::LightingModel::getPointLight</qualifiedname>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="291" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d18/a06036_1add93c5e5787f7810a4c9375c27ae96e3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d4/ddf/a06032" kindref="compound">SpotLight</ref></type>
+        <definition>C3D_API SpotLight castor3d::shader::LightingModel::getSpotLight</definition>
+        <argsstring>(sdw::UInt const &amp;index) const</argsstring>
+        <name>getSpotLight</name>
+        <qualifiedname>castor3d::shader::LightingModel::getSpotLight</qualifiedname>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="292" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d18/a06036_1ab08881a2f6849c79d50c70320d65d82c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d1/db6/a06072" kindref="compound">Shadow</ref> &amp;</type>
+        <definition>Shadow &amp; castor3d::shader::LightingModel::getShadowModel</definition>
+        <argsstring>() const</argsstring>
+        <name>getShadowModel</name>
+        <qualifiedname>castor3d::shader::LightingModel::getShadowModel</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="295" column="16" bodyfile="Shader/Shaders/GlslLighting.hpp" bodystart="295" bodyend="298"/>
+        <references refid="d6/d18/a06036_1a3e9407685cf7ba55a752a27437c09a74" compoundref="d2/d2f/a01460" startline="358">m_shadowModel</references>
+      </memberdef>
+      <memberdef kind="function" id="d6/d18/a06036_1a5b33578c25cb0eb3401590f772e13691" prot="protected" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d7/d13/a06020" kindref="compound">Light</ref></type>
+        <definition>C3D_API Light castor3d::shader::LightingModel::getBaseLight</definition>
+        <argsstring>(sdw::UInt &amp;offset) const</argsstring>
+        <name>getBaseLight</name>
+        <qualifiedname>castor3d::shader::LightingModel::getBaseLight</qualifiedname>
+        <param>
+          <type>sdw::UInt &amp;</type>
+          <declname>offset</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="301" column="15"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d18/a06036_1ac2dc1856992461f592d5c2fe6161444d" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::LightingModel::doDeclareLightsBuffer</definition>
+        <argsstring>(uint32_t binding, uint32_t set)</argsstring>
+        <name>doDeclareLightsBuffer</name>
+        <qualifiedname>castor3d::shader::LightingModel::doDeclareLightsBuffer</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>set</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="302" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d18/a06036_1a078ef33656d17feb0bc301563131dd54" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::LightingModel::doDeclareDirectionalLightUbo</definition>
+        <argsstring>(uint32_t binding, uint32_t set)</argsstring>
+        <name>doDeclareDirectionalLightUbo</name>
+        <qualifiedname>castor3d::shader::LightingModel::doDeclareDirectionalLightUbo</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>set</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="304" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d18/a06036_1af4625cc4704620632fb7cc920a18527e" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::LightingModel::doDeclarePointLightUbo</definition>
+        <argsstring>(uint32_t binding, uint32_t set)</argsstring>
+        <name>doDeclarePointLightUbo</name>
+        <qualifiedname>castor3d::shader::LightingModel::doDeclarePointLightUbo</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>set</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="306" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d18/a06036_1afd671443970f1e4798d5707fce08a2a8" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::LightingModel::doDeclareSpotLightUbo</definition>
+        <argsstring>(uint32_t binding, uint32_t set)</argsstring>
+        <name>doDeclareSpotLightUbo</name>
+        <qualifiedname>castor3d::shader::LightingModel::doDeclareSpotLightUbo</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>set</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="308" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d18/a06036_1a601b0d6adbf1d1cfe51140debba408a9" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::LightingModel::doDeclareGetBaseLight</definition>
+        <argsstring>()</argsstring>
+        <name>doDeclareGetBaseLight</name>
+        <qualifiedname>castor3d::shader::LightingModel::doDeclareGetBaseLight</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="310" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d18/a06036_1a47f393ce5b750d7a8132df92ede2eaab" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::LightingModel::doDeclareGetDirectionalLight</definition>
+        <argsstring>()</argsstring>
+        <name>doDeclareGetDirectionalLight</name>
+        <qualifiedname>castor3d::shader::LightingModel::doDeclareGetDirectionalLight</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="311" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d18/a06036_1aa639e3a479f852a8738a962669961f79" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::LightingModel::doDeclareGetPointLight</definition>
+        <argsstring>()</argsstring>
+        <name>doDeclareGetPointLight</name>
+        <qualifiedname>castor3d::shader::LightingModel::doDeclareGetPointLight</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="312" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d18/a06036_1a14e3657549948e3665c5b7f47bc0e2a2" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::LightingModel::doDeclareGetSpotLight</definition>
+        <argsstring>()</argsstring>
+        <name>doDeclareGetSpotLight</name>
+        <qualifiedname>castor3d::shader::LightingModel::doDeclareGetSpotLight</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="313" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d18/a06036_1a581d0e6a5c217533e521488ae0309d3c" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::LightingModel::doDeclareGetCascadeFactors</definition>
+        <argsstring>()</argsstring>
+        <name>doDeclareGetCascadeFactors</name>
+        <qualifiedname>castor3d::shader::LightingModel::doDeclareGetCascadeFactors</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="314" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d18/a06036_1a136198c89ab49d0696b2e9f3cb78105a" prot="private" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>sdw::Vec3</type>
+        <definition>virtual sdw::Vec3 castor3d::shader::LightingModel::doCombine</definition>
+        <argsstring>(BlendComponents const &amp;components, sdw::Vec3 const &amp;incident, sdw::Vec3 const &amp;directDiffuse, sdw::Vec3 const &amp;indirectDiffuse, sdw::Vec3 const &amp;directSpecular, sdw::Vec3 const &amp;directScattering, sdw::Vec3 const &amp;directCoatingSpecular, sdw::Vec2 const &amp;directSheen, sdw::Vec3 const &amp;indirectSpecular, sdw::Vec3 const &amp;directAmbient, sdw::Vec3 const &amp;indirectAmbient, sdw::Float const &amp;ambientOcclusion, sdw::Vec3 const &amp;emissive, sdw::Vec3 const &amp;reflectedDiffuse, sdw::Vec3 const &amp;reflectedSpecular, sdw::Vec3 const &amp;refracted, sdw::Vec3 const &amp;coatReflected, sdw::Vec3 const &amp;sheenReflected)=0</argsstring>
+        <name>doCombine</name>
+        <qualifiedname>castor3d::shader::LightingModel::doCombine</qualifiedname>
+        <reimplementedby refid="d2/d87/a03764_1a48071ef3e619b87279156eb00d2c2df3">doCombine</reimplementedby>
+        <reimplementedby refid="dd/d5a/a03780_1aa943ca08e7eba126597fd2d904b22860">doCombine</reimplementedby>
+        <param>
+          <type><ref refid="d7/d4b/a05980" kindref="compound">BlendComponents</ref> const &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>incident</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>directDiffuse</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>indirectDiffuse</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>directSpecular</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>directScattering</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>directCoatingSpecular</declname>
+        </param>
+        <param>
+          <type>sdw::Vec2 const &amp;</type>
+          <declname>directSheen</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>indirectSpecular</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>directAmbient</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>indirectAmbient</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>ambientOcclusion</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>emissive</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>reflectedDiffuse</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>reflectedSpecular</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>refracted</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>coatReflected</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>sheenReflected</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="317" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d18/a06036_1a55cbf965f5e1fd0f540e531df52c1791" prot="private" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d9/df5/a01574_1a69009a36ab335c9cd7d4eed926a70037" kindref="member">LightingModelPtr</ref></type>
+        <definition>static C3D_API LightingModelPtr castor3d::shader::LightingModel::createModel</definition>
+        <argsstring>(Engine const &amp;engine, Materials const &amp;materials, Utils &amp;utils, BRDFHelpers &amp;brdf, castor::String const &amp;name, LightType light, bool lightUbo, uint32_t lightBinding, uint32_t lightSet, ShadowOptions const &amp;shadows, SssProfiles const *sssProfiles, uint32_t &amp;shadowMapBinding, uint32_t shadowMapSet)</argsstring>
+        <name>createModel</name>
+        <qualifiedname>castor3d::shader::LightingModel::createModel</qualifiedname>
+        <param>
+          <type><ref refid="d2/d0c/a02932" kindref="compound">Engine</ref> const &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/dc9/a06044" kindref="compound">Materials</ref> const &amp;</type>
+          <declname>materials</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/da4/a06136" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d71/a05988" kindref="compound">BRDFHelpers</ref> &amp;</type>
+          <declname>brdf</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d22/a01572_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">LightType</ref></type>
+          <declname>light</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>lightUbo</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>lightBinding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>lightSet</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/db3/a06144" kindref="compound">ShadowOptions</ref> const &amp;</type>
+          <declname>shadows</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d0a/a06084" kindref="compound">SssProfiles</ref> const *</type>
+          <declname>sssProfiles</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>shadowMapBinding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>shadowMapSet</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="335" column="33"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <description><para>Diffuse + Specular </para>
+</description>
+      <memberdef kind="function" id="d6/d18/a06036_1a311bee3a27615b2cb051884164725877" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::LightingModel::declareModel</definition>
+        <argsstring>(uint32_t lightsBufBinding, uint32_t lightsBufSet, uint32_t &amp;shadowMapBinding, uint32_t shadowMapSet)</argsstring>
+        <name>declareModel</name>
+        <qualifiedname>castor3d::shader::LightingModel::declareModel</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>lightsBufBinding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>lightsBufSet</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>shadowMapBinding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>shadowMapSet</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="86" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d18/a06036_1a01db8f30680a13ddb9a4553102e2567b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::LightingModel::computeCombined</definition>
+        <argsstring>(BlendComponents const &amp;components, SceneData const &amp;sceneData, BackgroundModel &amp;background, Surface const &amp;surface, sdw::Vec3 const &amp;worldEye, sdw::UInt const &amp;receivesShadows, OutputComponents &amp;output)</argsstring>
+        <name>computeCombined</name>
+        <qualifiedname>castor3d::shader::LightingModel::computeCombined</qualifiedname>
+        <param>
+          <type><ref refid="d7/d4b/a05980" kindref="compound">BlendComponents</ref> const &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type><ref refid="db/d70/a06252" kindref="compound">SceneData</ref> const &amp;</type>
+          <declname>sceneData</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/d4e/a05972" kindref="compound">BackgroundModel</ref> &amp;</type>
+          <declname>background</declname>
+        </param>
+        <param>
+          <type><ref refid="da/db0/a06096" kindref="compound">Surface</ref> const &amp;</type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>worldEye</declname>
+        </param>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>receivesShadows</declname>
+        </param>
+        <param>
+          <type><ref refid="de/dcd/a06052" kindref="compound">OutputComponents</ref> &amp;</type>
+          <declname>output</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="90" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d18/a06036_1ac7f2a9e19c5c30ee29ca506d03321535" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d9/df5/a01574_1a69009a36ab335c9cd7d4eed926a70037" kindref="member">LightingModelPtr</ref></type>
+        <definition>static C3D_API LightingModelPtr castor3d::shader::LightingModel::createModel</definition>
+        <argsstring>(Engine const &amp;engine, Materials const &amp;materials, Utils &amp;utils, BRDFHelpers &amp;brdf, castor::String const &amp;name, uint32_t lightsBufBinding, uint32_t lightsBufSet, ShadowOptions const &amp;shadows, SssProfiles const *sssProfiles, uint32_t &amp;shadowMapBinding, uint32_t shadowMapSet, bool enableVolumetric)</argsstring>
+        <name>createModel</name>
+        <qualifiedname>castor3d::shader::LightingModel::createModel</qualifiedname>
+        <param>
+          <type><ref refid="d2/d0c/a02932" kindref="compound">Engine</ref> const &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/dc9/a06044" kindref="compound">Materials</ref> const &amp;</type>
+          <declname>materials</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/da4/a06136" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d71/a05988" kindref="compound">BRDFHelpers</ref> &amp;</type>
+          <declname>brdf</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>lightsBufBinding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>lightsBufSet</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/db3/a06144" kindref="compound">ShadowOptions</ref> const &amp;</type>
+          <declname>shadows</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d0a/a06084" kindref="compound">SssProfiles</ref> const *</type>
+          <declname>sssProfiles</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>shadowMapBinding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>shadowMapSet</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enableVolumetric</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="97" column="33"/>
+        <referencedby refid="d6/d18/a06036_1a3dc172977fa1373fc0495ff3f6f61a82" compoundref="d2/d2f/a01460" startline="137" endline="164">createModel</referencedby>
+        <referencedby refid="d6/d18/a06036_1a43dbfd8d3b2dee181319d1ddce5f1287" compoundref="d2/d2f/a01460" startline="110" endline="135">createModelT</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d6/d18/a06036_1a43dbfd8d3b2dee181319d1ddce5f1287" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename LightsBufBindingT</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d9/df5/a01574_1a69009a36ab335c9cd7d4eed926a70037" kindref="member">LightingModelPtr</ref></type>
+        <definition>static LightingModelPtr castor3d::shader::LightingModel::createModelT</definition>
+        <argsstring>(Engine const &amp;engine, Materials const &amp;materials, Utils &amp;utils, BRDFHelpers &amp;brdf, castor::String const &amp;name, LightsBufBindingT lightsBufBinding, uint32_t lightsBufSet, ShadowOptions const &amp;shadows, SssProfiles const *sssProfiles, uint32_t &amp;shadowMapBinding, uint32_t shadowMapSet, bool enableVolumetric)</argsstring>
+        <name>createModelT</name>
+        <qualifiedname>castor3d::shader::LightingModel::createModelT</qualifiedname>
+        <param>
+          <type><ref refid="d2/d0c/a02932" kindref="compound">Engine</ref> const &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/dc9/a06044" kindref="compound">Materials</ref> const &amp;</type>
+          <declname>materials</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/da4/a06136" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d71/a05988" kindref="compound">BRDFHelpers</ref> &amp;</type>
+          <declname>brdf</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>LightsBufBindingT</type>
+          <declname>lightsBufBinding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>lightsBufSet</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/db3/a06144" kindref="compound">ShadowOptions</ref> const &amp;</type>
+          <declname>shadows</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d0a/a06084" kindref="compound">SssProfiles</ref> const *</type>
+          <declname>sssProfiles</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>shadowMapBinding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>shadowMapSet</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enableVolumetric</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="110" column="25" bodyfile="Shader/Shaders/GlslLighting.hpp" bodystart="110" bodyend="135"/>
+        <references refid="d6/d18/a06036_1ac7f2a9e19c5c30ee29ca506d03321535">createModel</references>
+      </memberdef>
+      <memberdef kind="function" id="d6/d18/a06036_1a3dc172977fa1373fc0495ff3f6f61a82" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename LightBindingT</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d9/df5/a01574_1a69009a36ab335c9cd7d4eed926a70037" kindref="member">LightingModelPtr</ref></type>
+        <definition>static LightingModelPtr castor3d::shader::LightingModel::createModel</definition>
+        <argsstring>(Engine const &amp;engine, Materials const &amp;materials, Utils &amp;utils, BRDFHelpers &amp;brdf, castor::String const &amp;name, LightType light, LightBindingT lightBinding, uint32_t lightSet, bool lightUbo, ShadowOptions const &amp;shadows, SssProfiles const *sssProfiles, uint32_t &amp;shadowMapBinding, uint32_t shadowMapSet)</argsstring>
+        <name>createModel</name>
+        <qualifiedname>castor3d::shader::LightingModel::createModel</qualifiedname>
+        <param>
+          <type><ref refid="d2/d0c/a02932" kindref="compound">Engine</ref> const &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/dc9/a06044" kindref="compound">Materials</ref> const &amp;</type>
+          <declname>materials</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/da4/a06136" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d71/a05988" kindref="compound">BRDFHelpers</ref> &amp;</type>
+          <declname>brdf</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d22/a01572_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">LightType</ref></type>
+          <declname>light</declname>
+        </param>
+        <param>
+          <type>LightBindingT</type>
+          <declname>lightBinding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>lightSet</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>lightUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/db3/a06144" kindref="compound">ShadowOptions</ref> const &amp;</type>
+          <declname>shadows</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d0a/a06084" kindref="compound">SssProfiles</ref> const *</type>
+          <declname>sssProfiles</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>shadowMapBinding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>shadowMapSet</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="137" column="25" bodyfile="Shader/Shaders/GlslLighting.hpp" bodystart="137" bodyend="164"/>
+        <references refid="d6/d18/a06036_1ac7f2a9e19c5c30ee29ca506d03321535">createModel</references>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <description><para>Diffuse only </para>
+</description>
+      <memberdef kind="function" id="d6/d18/a06036_1aa24840058a44d68dc0524f87f7b5b3cb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::LightingModel::declareDiffuseModel</definition>
+        <argsstring>(uint32_t lightsBufBinding, uint32_t lightsBufSet, uint32_t &amp;shadowMapBinding, uint32_t shadowMapSet)</argsstring>
+        <name>declareDiffuseModel</name>
+        <qualifiedname>castor3d::shader::LightingModel::declareDiffuseModel</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>lightsBufBinding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>lightsBufSet</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>shadowMapBinding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>shadowMapSet</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="171" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d18/a06036_1a1d4181a356bb0986f85a3afa4082dbef" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::LightingModel::computeCombinedDiffuse</definition>
+        <argsstring>(BlendComponents const &amp;components, SceneData const &amp;sceneData, Surface const &amp;surface, sdw::Vec3 const &amp;worldEye, sdw::UInt const &amp;receivesShadows)</argsstring>
+        <name>computeCombinedDiffuse</name>
+        <qualifiedname>castor3d::shader::LightingModel::computeCombinedDiffuse</qualifiedname>
+        <param>
+          <type><ref refid="d7/d4b/a05980" kindref="compound">BlendComponents</ref> const &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type><ref refid="db/d70/a06252" kindref="compound">SceneData</ref> const &amp;</type>
+          <declname>sceneData</declname>
+        </param>
+        <param>
+          <type><ref refid="da/db0/a06096" kindref="compound">Surface</ref> const &amp;</type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>worldEye</declname>
+        </param>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>receivesShadows</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="175" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d18/a06036_1ad7078e190a241d232a4a57dcec15d0da" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d9/df5/a01574_1a69009a36ab335c9cd7d4eed926a70037" kindref="member">LightingModelPtr</ref></type>
+        <definition>static C3D_API LightingModelPtr castor3d::shader::LightingModel::createDiffuseModel</definition>
+        <argsstring>(Engine const &amp;engine, Materials const &amp;materials, Utils &amp;utils, BRDFHelpers &amp;brdf, castor::String const &amp;name, uint32_t lightsBufBinding, uint32_t lightsBufSet, ShadowOptions const &amp;shadows, uint32_t &amp;shadowMapBinding, uint32_t shadowMapSet, bool enableVolumetric)</argsstring>
+        <name>createDiffuseModel</name>
+        <qualifiedname>castor3d::shader::LightingModel::createDiffuseModel</qualifiedname>
+        <param>
+          <type><ref refid="d2/d0c/a02932" kindref="compound">Engine</ref> const &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/dc9/a06044" kindref="compound">Materials</ref> const &amp;</type>
+          <declname>materials</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/da4/a06136" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d71/a05988" kindref="compound">BRDFHelpers</ref> &amp;</type>
+          <declname>brdf</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>lightsBufBinding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>lightsBufSet</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/db3/a06144" kindref="compound">ShadowOptions</ref> const &amp;</type>
+          <declname>shadows</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>shadowMapBinding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>shadowMapSet</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enableVolumetric</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="180" column="33"/>
+        <referencedby refid="d6/d18/a06036_1ac4da253f6fbd696ab58a06c7c12bf7eb" compoundref="d2/d2f/a01460" startline="192" endline="215">createDiffuseModelT</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d6/d18/a06036_1ac4da253f6fbd696ab58a06c7c12bf7eb" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename LightsBufBindingT</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d9/df5/a01574_1a69009a36ab335c9cd7d4eed926a70037" kindref="member">LightingModelPtr</ref></type>
+        <definition>static LightingModelPtr castor3d::shader::LightingModel::createDiffuseModelT</definition>
+        <argsstring>(Engine const &amp;engine, Materials const &amp;materials, Utils &amp;utils, BRDFHelpers &amp;brdf, castor::String const &amp;name, LightsBufBindingT lightsBufBinding, uint32_t lightsBufSet, ShadowOptions const &amp;shadows, uint32_t &amp;shadowMapBinding, uint32_t shadowMapSet, bool enableVolumetric)</argsstring>
+        <name>createDiffuseModelT</name>
+        <qualifiedname>castor3d::shader::LightingModel::createDiffuseModelT</qualifiedname>
+        <param>
+          <type><ref refid="d2/d0c/a02932" kindref="compound">Engine</ref> const &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/dc9/a06044" kindref="compound">Materials</ref> const &amp;</type>
+          <declname>materials</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/da4/a06136" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d71/a05988" kindref="compound">BRDFHelpers</ref> &amp;</type>
+          <declname>brdf</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>LightsBufBindingT</type>
+          <declname>lightsBufBinding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>lightsBufSet</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/db3/a06144" kindref="compound">ShadowOptions</ref> const &amp;</type>
+          <declname>shadows</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>shadowMapBinding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>shadowMapSet</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enableVolumetric</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="192" column="25" bodyfile="Shader/Shaders/GlslLighting.hpp" bodystart="192" bodyend="215"/>
+        <references refid="d6/d18/a06036_1ad7078e190a241d232a4a57dcec15d0da">createDiffuseModel</references>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <description><para>Deferred renderring </para>
+</description>
+      <memberdef kind="function" id="d6/d18/a06036_1a0cc52dad90b5068bad9d341f2cabb0ea" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::LightingModel::declareDirectionalModel</definition>
+        <argsstring>(bool lightUbo, uint32_t lightBinding, uint32_t lightSet, uint32_t &amp;shadowMapBinding, uint32_t shadowMapSet)</argsstring>
+        <name>declareDirectionalModel</name>
+        <qualifiedname>castor3d::shader::LightingModel::declareDirectionalModel</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>lightUbo</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>lightBinding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>lightSet</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>shadowMapBinding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>shadowMapSet</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="223" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d18/a06036_1a10744331a5704a42668d96a4fe7ecaa1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::LightingModel::declarePointModel</definition>
+        <argsstring>(bool lightUbo, uint32_t lightBinding, uint32_t lightSet, uint32_t &amp;shadowMapBinding, uint32_t shadowMapSet)</argsstring>
+        <name>declarePointModel</name>
+        <qualifiedname>castor3d::shader::LightingModel::declarePointModel</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>lightUbo</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>lightBinding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>lightSet</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>shadowMapBinding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>shadowMapSet</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="228" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d18/a06036_1a9d2f3cd6795aa79d0f5a4e31de12e97d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::LightingModel::declareSpotModel</definition>
+        <argsstring>(bool lightUbo, uint32_t lightBinding, uint32_t lightSet, uint32_t &amp;shadowMapBinding, uint32_t shadowMapSet)</argsstring>
+        <name>declareSpotModel</name>
+        <qualifiedname>castor3d::shader::LightingModel::declareSpotModel</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>lightUbo</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>lightBinding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>lightSet</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>shadowMapBinding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>shadowMapSet</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="233" column="14"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <description><para>Diffuse + Specular </para>
+</description>
+      <memberdef kind="function" id="d6/d18/a06036_1a517aa4f3bbbabc38848b8d31ef4e0fff" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::shader::LightingModel::compute</definition>
+        <argsstring>(DirectionalLight const &amp;light, BlendComponents const &amp;components, Surface const &amp;surface, BackgroundModel &amp;background, sdw::Vec3 const &amp;worldEye, sdw::UInt const &amp;receivesShadows, OutputComponents &amp;output)=0</argsstring>
+        <name>compute</name>
+        <qualifiedname>castor3d::shader::LightingModel::compute</qualifiedname>
+        <reimplementedby refid="d2/d87/a03764_1a15ea2fc60a3957379dcb80e27a09aea0">compute</reimplementedby>
+        <reimplementedby refid="dd/d5a/a03780_1a17ba194cefd94a3bc6ce19396c198539">compute</reimplementedby>
+        <param>
+          <type><ref refid="df/d9b/a06024" kindref="compound">DirectionalLight</ref> const &amp;</type>
+          <declname>light</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d4b/a05980" kindref="compound">BlendComponents</ref> const &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type><ref refid="da/db0/a06096" kindref="compound">Surface</ref> const &amp;</type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/d4e/a05972" kindref="compound">BackgroundModel</ref> &amp;</type>
+          <declname>background</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>worldEye</declname>
+        </param>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>receivesShadows</declname>
+        </param>
+        <param>
+          <type><ref refid="de/dcd/a06052" kindref="compound">OutputComponents</ref> &amp;</type>
+          <declname>output</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="243" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d18/a06036_1a5cfcb33cd2282c6fbfe672b0e528df7e" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::shader::LightingModel::compute</definition>
+        <argsstring>(PointLight const &amp;light, BlendComponents const &amp;components, Surface const &amp;surface, sdw::Vec3 const &amp;worldEye, sdw::UInt const &amp;receivesShadows, OutputComponents &amp;output)=0</argsstring>
+        <name>compute</name>
+        <qualifiedname>castor3d::shader::LightingModel::compute</qualifiedname>
+        <reimplementedby refid="d2/d87/a03764_1a303fe864480037279a8568a3cbea9aa9">compute</reimplementedby>
+        <reimplementedby refid="dd/d5a/a03780_1a7c9913dc32350fef9e3219a406e88f52">compute</reimplementedby>
+        <param>
+          <type><ref refid="d4/d91/a06028" kindref="compound">PointLight</ref> const &amp;</type>
+          <declname>light</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d4b/a05980" kindref="compound">BlendComponents</ref> const &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type><ref refid="da/db0/a06096" kindref="compound">Surface</ref> const &amp;</type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>worldEye</declname>
+        </param>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>receivesShadows</declname>
+        </param>
+        <param>
+          <type><ref refid="de/dcd/a06052" kindref="compound">OutputComponents</ref> &amp;</type>
+          <declname>output</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="250" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d18/a06036_1a0237cc94316026ab2998424a3619db9c" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::shader::LightingModel::compute</definition>
+        <argsstring>(SpotLight const &amp;light, BlendComponents const &amp;components, Surface const &amp;surface, sdw::Vec3 const &amp;worldEye, sdw::UInt const &amp;receivesShadows, OutputComponents &amp;output)=0</argsstring>
+        <name>compute</name>
+        <qualifiedname>castor3d::shader::LightingModel::compute</qualifiedname>
+        <reimplementedby refid="d2/d87/a03764_1a852bada16cdbdbbcc3b2db38157ea4c8">compute</reimplementedby>
+        <reimplementedby refid="dd/d5a/a03780_1a7b466b26fc7595314224231699b46073">compute</reimplementedby>
+        <param>
+          <type><ref refid="d4/ddf/a06032" kindref="compound">SpotLight</ref> const &amp;</type>
+          <declname>light</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d4b/a05980" kindref="compound">BlendComponents</ref> const &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type><ref refid="da/db0/a06096" kindref="compound">Surface</ref> const &amp;</type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>worldEye</declname>
+        </param>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>receivesShadows</declname>
+        </param>
+        <param>
+          <type><ref refid="de/dcd/a06052" kindref="compound">OutputComponents</ref> &amp;</type>
+          <declname>output</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="256" column="22"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <description><para>Diffuse only </para>
+</description>
+      <memberdef kind="function" id="d6/d18/a06036_1a7003e4ca14a9a35e43ba600259057590" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>virtual C3D_API sdw::Vec3 castor3d::shader::LightingModel::computeDiffuse</definition>
+        <argsstring>(DirectionalLight const &amp;light, BlendComponents const &amp;components, Surface const &amp;surface, sdw::Vec3 const &amp;worldEye, sdw::UInt const &amp;receivesShadows)=0</argsstring>
+        <name>computeDiffuse</name>
+        <qualifiedname>castor3d::shader::LightingModel::computeDiffuse</qualifiedname>
+        <reimplementedby refid="d2/d87/a03764_1a9db263963351b8caf06a1209945c7f61">computeDiffuse</reimplementedby>
+        <reimplementedby refid="dd/d5a/a03780_1a03ea9d951800fea8c3515989b53ccc76">computeDiffuse</reimplementedby>
+        <param>
+          <type><ref refid="df/d9b/a06024" kindref="compound">DirectionalLight</ref> const &amp;</type>
+          <declname>light</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d4b/a05980" kindref="compound">BlendComponents</ref> const &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type><ref refid="da/db0/a06096" kindref="compound">Surface</ref> const &amp;</type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>worldEye</declname>
+        </param>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>receivesShadows</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="268" column="27"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d18/a06036_1a6b2a8d9b181d4329100f265092c271d9" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>virtual C3D_API sdw::Vec3 castor3d::shader::LightingModel::computeDiffuse</definition>
+        <argsstring>(PointLight const &amp;light, BlendComponents const &amp;components, Surface const &amp;surface, sdw::Vec3 const &amp;worldEye, sdw::UInt const &amp;receivesShadows)=0</argsstring>
+        <name>computeDiffuse</name>
+        <qualifiedname>castor3d::shader::LightingModel::computeDiffuse</qualifiedname>
+        <reimplementedby refid="d2/d87/a03764_1a429d144c52b9a68ab452cc7a5215f77f">computeDiffuse</reimplementedby>
+        <reimplementedby refid="dd/d5a/a03780_1a7b2f8eb143bdcbf7b050d85aaebe3954">computeDiffuse</reimplementedby>
+        <param>
+          <type><ref refid="d4/d91/a06028" kindref="compound">PointLight</ref> const &amp;</type>
+          <declname>light</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d4b/a05980" kindref="compound">BlendComponents</ref> const &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type><ref refid="da/db0/a06096" kindref="compound">Surface</ref> const &amp;</type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>worldEye</declname>
+        </param>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>receivesShadows</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="273" column="27"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d18/a06036_1a33a46dc5222474597ba9da7686fb4603" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>virtual C3D_API sdw::Vec3 castor3d::shader::LightingModel::computeDiffuse</definition>
+        <argsstring>(SpotLight const &amp;light, BlendComponents const &amp;components, Surface const &amp;surface, sdw::Vec3 const &amp;worldEye, sdw::UInt const &amp;receivesShadows)=0</argsstring>
+        <name>computeDiffuse</name>
+        <qualifiedname>castor3d::shader::LightingModel::computeDiffuse</qualifiedname>
+        <reimplementedby refid="d2/d87/a03764_1a985620b184aad83baa2841e553008352">computeDiffuse</reimplementedby>
+        <reimplementedby refid="dd/d5a/a03780_1aff66c2a43959db2c56908d241d4acbf2">computeDiffuse</reimplementedby>
+        <param>
+          <type><ref refid="d4/ddf/a06032" kindref="compound">SpotLight</ref> const &amp;</type>
+          <declname>light</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d4b/a05980" kindref="compound">BlendComponents</ref> const &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type><ref refid="da/db0/a06096" kindref="compound">Surface</ref> const &amp;</type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>worldEye</declname>
+        </param>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>receivesShadows</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="278" column="27"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d6/d18/a06036_1a040360a4e657fcaf394096a0d97f0315" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::LightingModel::LightingModel</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, Materials const &amp;materials, Utils &amp;utils, BRDFHelpers &amp;brdf, ShadowOptions shadowOptions, SssProfiles const *sssProfiles, bool enableVolumetric, std::string prefix)</argsstring>
+        <name>LightingModel</name>
+        <qualifiedname>castor3d::shader::LightingModel::LightingModel</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/dc9/a06044" kindref="compound">Materials</ref> const &amp;</type>
+          <declname>materials</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/da4/a06136" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d71/a05988" kindref="compound">BRDFHelpers</ref> &amp;</type>
+          <declname>brdf</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/db3/a06144" kindref="compound">ShadowOptions</ref></type>
+          <declname>shadowOptions</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d0a/a06084" kindref="compound">SssProfiles</ref> const *</type>
+          <declname>sssProfiles</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enableVolumetric</declname>
+        </param>
+        <param>
+          <type>std::string</type>
+          <declname>prefix</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="25" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d18/a06036_1abe10ab0abda22bc960dc51b76be2c739" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>virtual C3D_API castor3d::shader::LightingModel::~LightingModel</definition>
+        <argsstring>()=default</argsstring>
+        <name>~LightingModel</name>
+        <qualifiedname>castor3d::shader::LightingModel::~LightingModel</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="33" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d18/a06036_1a9e23ff3f810fab10ffdd314fc969f33b" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Float</type>
+        <definition>virtual C3D_API sdw::Float castor3d::shader::LightingModel::getFinalTransmission</definition>
+        <argsstring>(BlendComponents const &amp;components, sdw::Vec3 const &amp;incident)=0</argsstring>
+        <name>getFinalTransmission</name>
+        <qualifiedname>castor3d::shader::LightingModel::getFinalTransmission</qualifiedname>
+        <reimplementedby refid="d2/d87/a03764_1a841f166436db01b7f49d36175cd8f7d7">getFinalTransmission</reimplementedby>
+        <reimplementedby refid="dd/d5a/a03780_1a2822bb20f63376ec35b231f0c12f70fa">getFinalTransmission</reimplementedby>
+        <param>
+          <type><ref refid="d7/d4b/a05980" kindref="compound">BlendComponents</ref> const &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>incident</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="34" column="28"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d18/a06036_1a946c9afb12abcada072e86e961817661" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::LightingModel::combine</definition>
+        <argsstring>(BlendComponents const &amp;components, sdw::Vec3 const &amp;incident, sdw::Vec3 const &amp;directDiffuse, sdw::Vec3 const &amp;indirectDiffuse, sdw::Vec3 const &amp;directSpecular, sdw::Vec3 const &amp;directScattering, sdw::Vec3 const &amp;directCoatingSpecular, sdw::Vec2 const &amp;directSheen, sdw::Vec3 const &amp;indirectSpecular, sdw::Vec3 const &amp;directAmbient, sdw::Vec3 const &amp;indirectAmbient, sdw::Float const &amp;ambientOcclusion, sdw::Vec3 const &amp;emissive, sdw::Vec3 reflectedDiffuse, sdw::Vec3 reflectedSpecular, sdw::Vec3 refracted, sdw::Vec3 coatReflected, sdw::Vec3 sheenReflected)</argsstring>
+        <name>combine</name>
+        <qualifiedname>castor3d::shader::LightingModel::combine</qualifiedname>
+        <param>
+          <type><ref refid="d7/d4b/a05980" kindref="compound">BlendComponents</ref> const &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>incident</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>directDiffuse</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>indirectDiffuse</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>directSpecular</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>directScattering</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>directCoatingSpecular</declname>
+        </param>
+        <param>
+          <type>sdw::Vec2 const &amp;</type>
+          <declname>directSheen</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>indirectSpecular</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>directAmbient</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>indirectAmbient</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>ambientOcclusion</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>emissive</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3</type>
+          <declname>reflectedDiffuse</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3</type>
+          <declname>reflectedSpecular</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3</type>
+          <declname>refracted</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3</type>
+          <declname>coatReflected</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3</type>
+          <declname>sheenReflected</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="36" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d18/a06036_1aebd44da246355aed11352a9967c974ed" prot="public" static="no" const="yes" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>virtual C3D_API sdw::Vec3 castor3d::shader::LightingModel::adjustDirectAmbient</definition>
+        <argsstring>(BlendComponents const &amp;components, sdw::Vec3 const &amp;directAmbient) const =0</argsstring>
+        <name>adjustDirectAmbient</name>
+        <qualifiedname>castor3d::shader::LightingModel::adjustDirectAmbient</qualifiedname>
+        <reimplementedby refid="d2/d87/a03764_1a0ac0264378f6ec071e3417af81e20e19">adjustDirectAmbient</reimplementedby>
+        <reimplementedby refid="dd/d5a/a03780_1a170b5ecdcffaa45f9134ddc520e47b6b">adjustDirectAmbient</reimplementedby>
+        <param>
+          <type><ref refid="d7/d4b/a05980" kindref="compound">BlendComponents</ref> const &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>directAmbient</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="54" column="27"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d18/a06036_1a4aa61d845274e0d89e16c415d00c8328" prot="public" static="no" const="yes" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>virtual C3D_API sdw::Vec3 castor3d::shader::LightingModel::adjustDirectSpecular</definition>
+        <argsstring>(BlendComponents const &amp;components, sdw::Vec3 const &amp;directSpecular) const =0</argsstring>
+        <name>adjustDirectSpecular</name>
+        <qualifiedname>castor3d::shader::LightingModel::adjustDirectSpecular</qualifiedname>
+        <reimplementedby refid="d2/d87/a03764_1aa9b4b6f63d99a63f607e760fdf23507e">adjustDirectSpecular</reimplementedby>
+        <reimplementedby refid="dd/d5a/a03780_1aa07d70ef78837c444daac0a3b30bae75">adjustDirectSpecular</reimplementedby>
+        <param>
+          <type><ref refid="d7/d4b/a05980" kindref="compound">BlendComponents</ref> const &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>directSpecular</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="56" column="27"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d18/a06036_1a7a748985c50ec371f09abc303cdbd3fd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::LightingModel::combine</definition>
+        <argsstring>(BlendComponents const &amp;components, sdw::Vec3 const &amp;incident, sdw::Vec3 const &amp;directDiffuse, sdw::Vec3 const &amp;indirectDiffuse, sdw::Vec3 const &amp;directSpecular, sdw::Vec3 const &amp;directScattering, sdw::Vec3 const &amp;directCoatingSpecular, sdw::Vec2 const &amp;directSheen, sdw::Vec3 const &amp;indirectSpecular, sdw::Vec3 const &amp;directAmbient, sdw::Vec3 const &amp;indirectAmbient, sdw::Vec3 reflectedDiffuse, sdw::Vec3 reflectedSpecular, sdw::Vec3 refracted, sdw::Vec3 coatReflected, sdw::Vec3 sheenReflected)</argsstring>
+        <name>combine</name>
+        <qualifiedname>castor3d::shader::LightingModel::combine</qualifiedname>
+        <param>
+          <type><ref refid="d7/d4b/a05980" kindref="compound">BlendComponents</ref> const &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>incident</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>directDiffuse</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>indirectDiffuse</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>directSpecular</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>directScattering</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>directCoatingSpecular</declname>
+        </param>
+        <param>
+          <type>sdw::Vec2 const &amp;</type>
+          <declname>directSheen</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>indirectSpecular</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>directAmbient</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>indirectAmbient</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3</type>
+          <declname>reflectedDiffuse</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3</type>
+          <declname>reflectedSpecular</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3</type>
+          <declname>refracted</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3</type>
+          <declname>coatReflected</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3</type>
+          <declname>sheenReflected</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="58" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d18/a06036_1a35846c33000b56f135010af80666af2a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d9/df5/a01574_1ae10c352f0c2ff7850fca0043640a06bb" kindref="member">ReflectionModelPtr</ref></type>
+        <definition>virtual C3D_API ReflectionModelPtr castor3d::shader::LightingModel::getReflectionModel</definition>
+        <argsstring>(uint32_t &amp;envMapBinding, uint32_t envMapSet) const =0</argsstring>
+        <name>getReflectionModel</name>
+        <qualifiedname>castor3d::shader::LightingModel::getReflectionModel</qualifiedname>
+        <reimplementedby refid="d2/d87/a03764_1a6c78a9e9eea5eb66a44df19474a0e575">getReflectionModel</reimplementedby>
+        <reimplementedby refid="dd/d5a/a03780_1ab30a16c4b0cdb50ec842cdbd97ff8cb0">getReflectionModel</reimplementedby>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>envMapBinding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>envMapSet</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLighting.hpp" line="74" column="36"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="4">
+        <label>castor3d::shader::BlinnPhongLightingModel</label>
+        <link refid="d4/d6e/a03784"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::shader::LightingModel</label>
+        <link refid="d6/d18/a06036"/>
+      </node>
+      <node id="2">
+        <label>castor3d::shader::PbrLightingModel</label>
+        <link refid="d2/d87/a03764"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::shader::PhongLightingModel</label>
+        <link refid="dd/d5a/a03780"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="3">
+        <label>castor3d::shader::BufferT&lt; Material &gt;</label>
+        <link refid="d5/d2a/a05996"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; Material &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>T</label>
+      </node>
+      <node id="4">
+        <label>castor3d::shader::BufferBase</label>
+        <link refid="d4/dc4/a05992"/>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_ssbo</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>m_variableName</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>castor3d::shader::BufferT&lt; DataT &gt;</label>
+        <link refid="d5/d2a/a05996"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::shader::LightingModel</label>
+        <link refid="d6/d18/a06036"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>m_materials</edgelabel>
+        </childnode>
+        <childnode refid="11" relation="usage">
+          <edgelabel>m_utils</edgelabel>
+        </childnode>
+        <childnode refid="12" relation="usage">
+          <edgelabel>m_type</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_ssbo</edgelabel>
+        </childnode>
+        <childnode refid="13" relation="usage">
+          <edgelabel>m_tbo</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>m_prefix</edgelabel>
+        </childnode>
+        <childnode refid="14" relation="usage">
+          <edgelabel>m_shadowModel</edgelabel>
+        </childnode>
+        <childnode refid="17" relation="usage">
+          <edgelabel>m_sssTransmittance</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::shader::Materials</label>
+        <link refid="d1/dc9/a06044"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="15">
+        <label>castor3d::shader::Shadow</label>
+        <link refid="d1/db6/a06072"/>
+      </node>
+      <node id="18">
+        <label>castor3d::shader::SssTransmittance</label>
+        <link refid="db/d46/a06088"/>
+      </node>
+      <node id="11">
+        <label>castor3d::shader::Utils</label>
+        <link refid="d3/da4/a06136"/>
+      </node>
+      <node id="14">
+        <label>std::shared_ptr&lt; castor3d::shader::Shadow &gt;</label>
+        <childnode refid="15" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+        <childnode refid="16" relation="template-instance">
+          <edgelabel>&lt; castor3d::shader::Shadow &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="17">
+        <label>std::shared_ptr&lt; castor3d::shader::SssTransmittance &gt;</label>
+        <childnode refid="18" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+        <childnode refid="16" relation="template-instance">
+          <edgelabel>&lt; castor3d::shader::SssTransmittance &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+      <node id="16">
+        <label>std::shared_ptr&lt; T &gt;</label>
+        <childnode refid="7" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>std::string</label>
+        <childnode refid="9" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>std::unique_ptr&lt; T &gt;</label>
+        <childnode refid="7" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="13">
+        <label>std::unique_ptr&lt; sdw::RImageBufferRgba32 &gt;</label>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; sdw::RImageBufferRgba32 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>std::unique_ptr&lt; sdw::StorageBuffer &gt;</label>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; sdw::StorageBuffer &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>std::unique_ptr&lt; sdw::Struct &gt;</label>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; sdw::Struct &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Shaders/GlslLighting.hpp" line="22" column="1" bodyfile="Shader/Shaders/GlslLighting.hpp" bodystart="23" bodyend="376"/>
+    <listofallmembers>
+      <member refid="d6/d18/a06036_1aebd44da246355aed11352a9967c974ed" prot="public" virt="pure-virtual"><scope>castor3d::shader::LightingModel</scope><name>adjustDirectAmbient</name></member>
+      <member refid="d6/d18/a06036_1a4aa61d845274e0d89e16c415d00c8328" prot="public" virt="pure-virtual"><scope>castor3d::shader::LightingModel</scope><name>adjustDirectSpecular</name></member>
+      <member refid="d6/d18/a06036_1a946c9afb12abcada072e86e961817661" prot="public" virt="non-virtual"><scope>castor3d::shader::LightingModel</scope><name>combine</name></member>
+      <member refid="d6/d18/a06036_1a7a748985c50ec371f09abc303cdbd3fd" prot="public" virt="non-virtual"><scope>castor3d::shader::LightingModel</scope><name>combine</name></member>
+      <member refid="d6/d18/a06036_1a517aa4f3bbbabc38848b8d31ef4e0fff" prot="public" virt="pure-virtual"><scope>castor3d::shader::LightingModel</scope><name>compute</name></member>
+      <member refid="d6/d18/a06036_1a5cfcb33cd2282c6fbfe672b0e528df7e" prot="public" virt="pure-virtual"><scope>castor3d::shader::LightingModel</scope><name>compute</name></member>
+      <member refid="d6/d18/a06036_1a0237cc94316026ab2998424a3619db9c" prot="public" virt="pure-virtual"><scope>castor3d::shader::LightingModel</scope><name>compute</name></member>
+      <member refid="d6/d18/a06036_1a01db8f30680a13ddb9a4553102e2567b" prot="public" virt="non-virtual"><scope>castor3d::shader::LightingModel</scope><name>computeCombined</name></member>
+      <member refid="d6/d18/a06036_1a1d4181a356bb0986f85a3afa4082dbef" prot="public" virt="non-virtual"><scope>castor3d::shader::LightingModel</scope><name>computeCombinedDiffuse</name></member>
+      <member refid="d6/d18/a06036_1a7003e4ca14a9a35e43ba600259057590" prot="public" virt="pure-virtual"><scope>castor3d::shader::LightingModel</scope><name>computeDiffuse</name></member>
+      <member refid="d6/d18/a06036_1a6b2a8d9b181d4329100f265092c271d9" prot="public" virt="pure-virtual"><scope>castor3d::shader::LightingModel</scope><name>computeDiffuse</name></member>
+      <member refid="d6/d18/a06036_1a33a46dc5222474597ba9da7686fb4603" prot="public" virt="pure-virtual"><scope>castor3d::shader::LightingModel</scope><name>computeDiffuse</name></member>
+      <member refid="d6/d18/a06036_1ad7078e190a241d232a4a57dcec15d0da" prot="public" virt="non-virtual"><scope>castor3d::shader::LightingModel</scope><name>createDiffuseModel</name></member>
+      <member refid="d6/d18/a06036_1ac4da253f6fbd696ab58a06c7c12bf7eb" prot="public" virt="non-virtual"><scope>castor3d::shader::LightingModel</scope><name>createDiffuseModelT</name></member>
+      <member refid="d6/d18/a06036_1ac7f2a9e19c5c30ee29ca506d03321535" prot="public" virt="non-virtual"><scope>castor3d::shader::LightingModel</scope><name>createModel</name></member>
+      <member refid="d6/d18/a06036_1a3dc172977fa1373fc0495ff3f6f61a82" prot="public" virt="non-virtual"><scope>castor3d::shader::LightingModel</scope><name>createModel</name></member>
+      <member refid="d6/d18/a06036_1a55cbf965f5e1fd0f540e531df52c1791" prot="private" virt="non-virtual"><scope>castor3d::shader::LightingModel</scope><name>createModel</name></member>
+      <member refid="d6/d18/a06036_1a43dbfd8d3b2dee181319d1ddce5f1287" prot="public" virt="non-virtual"><scope>castor3d::shader::LightingModel</scope><name>createModelT</name></member>
+      <member refid="d6/d18/a06036_1aa24840058a44d68dc0524f87f7b5b3cb" prot="public" virt="non-virtual"><scope>castor3d::shader::LightingModel</scope><name>declareDiffuseModel</name></member>
+      <member refid="d6/d18/a06036_1a0cc52dad90b5068bad9d341f2cabb0ea" prot="public" virt="non-virtual"><scope>castor3d::shader::LightingModel</scope><name>declareDirectionalModel</name></member>
+      <member refid="d6/d18/a06036_1a311bee3a27615b2cb051884164725877" prot="public" virt="non-virtual"><scope>castor3d::shader::LightingModel</scope><name>declareModel</name></member>
+      <member refid="d6/d18/a06036_1a10744331a5704a42668d96a4fe7ecaa1" prot="public" virt="non-virtual"><scope>castor3d::shader::LightingModel</scope><name>declarePointModel</name></member>
+      <member refid="d6/d18/a06036_1a9d2f3cd6795aa79d0f5a4e31de12e97d" prot="public" virt="non-virtual"><scope>castor3d::shader::LightingModel</scope><name>declareSpotModel</name></member>
+      <member refid="d6/d18/a06036_1a136198c89ab49d0696b2e9f3cb78105a" prot="private" virt="pure-virtual"><scope>castor3d::shader::LightingModel</scope><name>doCombine</name></member>
+      <member refid="d6/d18/a06036_1a078ef33656d17feb0bc301563131dd54" prot="protected" virt="non-virtual"><scope>castor3d::shader::LightingModel</scope><name>doDeclareDirectionalLightUbo</name></member>
+      <member refid="d6/d18/a06036_1a601b0d6adbf1d1cfe51140debba408a9" prot="protected" virt="non-virtual"><scope>castor3d::shader::LightingModel</scope><name>doDeclareGetBaseLight</name></member>
+      <member refid="d6/d18/a06036_1a581d0e6a5c217533e521488ae0309d3c" prot="protected" virt="non-virtual"><scope>castor3d::shader::LightingModel</scope><name>doDeclareGetCascadeFactors</name></member>
+      <member refid="d6/d18/a06036_1a47f393ce5b750d7a8132df92ede2eaab" prot="protected" virt="non-virtual"><scope>castor3d::shader::LightingModel</scope><name>doDeclareGetDirectionalLight</name></member>
+      <member refid="d6/d18/a06036_1aa639e3a479f852a8738a962669961f79" prot="protected" virt="non-virtual"><scope>castor3d::shader::LightingModel</scope><name>doDeclareGetPointLight</name></member>
+      <member refid="d6/d18/a06036_1a14e3657549948e3665c5b7f47bc0e2a2" prot="protected" virt="non-virtual"><scope>castor3d::shader::LightingModel</scope><name>doDeclareGetSpotLight</name></member>
+      <member refid="d6/d18/a06036_1ac2dc1856992461f592d5c2fe6161444d" prot="protected" virt="non-virtual"><scope>castor3d::shader::LightingModel</scope><name>doDeclareLightsBuffer</name></member>
+      <member refid="d6/d18/a06036_1af4625cc4704620632fb7cc920a18527e" prot="protected" virt="non-virtual"><scope>castor3d::shader::LightingModel</scope><name>doDeclarePointLightUbo</name></member>
+      <member refid="d6/d18/a06036_1afd671443970f1e4798d5707fce08a2a8" prot="protected" virt="non-virtual"><scope>castor3d::shader::LightingModel</scope><name>doDeclareSpotLightUbo</name></member>
+      <member refid="d6/d18/a06036_1a5b33578c25cb0eb3401590f772e13691" prot="protected" virt="non-virtual"><scope>castor3d::shader::LightingModel</scope><name>getBaseLight</name></member>
+      <member refid="d6/d18/a06036_1a9dce2a67af8cfaefa176a0c4068bea7b" prot="public" virt="non-virtual"><scope>castor3d::shader::LightingModel</scope><name>getDirectionalLight</name></member>
+      <member refid="d6/d18/a06036_1a9e23ff3f810fab10ffdd314fc969f33b" prot="public" virt="pure-virtual"><scope>castor3d::shader::LightingModel</scope><name>getFinalTransmission</name></member>
+      <member refid="d6/d18/a06036_1a0b32c9c9d9666a7e01ac4490b007de09" prot="public" virt="non-virtual"><scope>castor3d::shader::LightingModel</scope><name>getPointLight</name></member>
+      <member refid="d6/d18/a06036_1a35846c33000b56f135010af80666af2a" prot="public" virt="pure-virtual"><scope>castor3d::shader::LightingModel</scope><name>getReflectionModel</name></member>
+      <member refid="d6/d18/a06036_1ab08881a2f6849c79d50c70320d65d82c" prot="public" virt="non-virtual"><scope>castor3d::shader::LightingModel</scope><name>getShadowModel</name></member>
+      <member refid="d6/d18/a06036_1add93c5e5787f7810a4c9375c27ae96e3" prot="public" virt="non-virtual"><scope>castor3d::shader::LightingModel</scope><name>getSpotLight</name></member>
+      <member refid="d6/d18/a06036_1a040360a4e657fcaf394096a0d97f0315" prot="public" virt="non-virtual"><scope>castor3d::shader::LightingModel</scope><name>LightingModel</name></member>
+      <member refid="d6/d18/a06036_1ae1d302ee6ef967d87ded305060b82120" prot="protected" virt="non-virtual"><scope>castor3d::shader::LightingModel</scope><name>m_enableVolumetric</name></member>
+      <member refid="d6/d18/a06036_1a05823d225d40ae50737469729a128bca" prot="protected" virt="non-virtual"><scope>castor3d::shader::LightingModel</scope><name>m_getBaseLight</name></member>
+      <member refid="d6/d18/a06036_1a64689c5bb7ce2682e205cd001b5f6fd8" prot="protected" virt="non-virtual"><scope>castor3d::shader::LightingModel</scope><name>m_getCascadeFactors</name></member>
+      <member refid="d6/d18/a06036_1ab368de32c7f8f54ef2066cbb18dc199b" prot="protected" virt="non-virtual"><scope>castor3d::shader::LightingModel</scope><name>m_getDirectionalLight</name></member>
+      <member refid="d6/d18/a06036_1a98044cfa7b6795c534cc0f5382e3b694" prot="protected" virt="non-virtual"><scope>castor3d::shader::LightingModel</scope><name>m_getPointLight</name></member>
+      <member refid="d6/d18/a06036_1a22c68d438a913ae1437848af29e31e63" prot="protected" virt="non-virtual"><scope>castor3d::shader::LightingModel</scope><name>m_getSpotLight</name></member>
+      <member refid="d6/d18/a06036_1aa640956be672845c769c8127833993d3" prot="protected" virt="non-virtual"><scope>castor3d::shader::LightingModel</scope><name>m_getTileFactors</name></member>
+      <member refid="d6/d18/a06036_1a6dd820a0a3dbb47a71024f49fd45a1bf" prot="protected" virt="non-virtual"><scope>castor3d::shader::LightingModel</scope><name>m_materials</name></member>
+      <member refid="d6/d18/a06036_1afef4b07d66515b86040b952a529c80a3" prot="protected" virt="non-virtual"><scope>castor3d::shader::LightingModel</scope><name>m_prefix</name></member>
+      <member refid="d6/d18/a06036_1a3e9407685cf7ba55a752a27437c09a74" prot="protected" virt="non-virtual"><scope>castor3d::shader::LightingModel</scope><name>m_shadowModel</name></member>
+      <member refid="d6/d18/a06036_1ae9018f65dde3747697e9e00c6c39c78f" prot="protected" virt="non-virtual"><scope>castor3d::shader::LightingModel</scope><name>m_ssbo</name></member>
+      <member refid="d6/d18/a06036_1ad7a37427798d2c79b0ee95e8c713dea9" prot="protected" virt="non-virtual"><scope>castor3d::shader::LightingModel</scope><name>m_sssTransmittance</name></member>
+      <member refid="d6/d18/a06036_1a2a11c8a808450c5db734fe58007c5ad1" prot="protected" virt="non-virtual"><scope>castor3d::shader::LightingModel</scope><name>m_tbo</name></member>
+      <member refid="d6/d18/a06036_1adff9bdb8fb5bd4f7c6f1d4ce7af4edf1" prot="protected" virt="non-virtual"><scope>castor3d::shader::LightingModel</scope><name>m_type</name></member>
+      <member refid="d6/d18/a06036_1a9e5d3c9e33f06597c63d4c64b62bc564" prot="protected" virt="non-virtual"><scope>castor3d::shader::LightingModel</scope><name>m_utils</name></member>
+      <member refid="d6/d18/a06036_1a129490d8e4f0ea553f16dcaeb2b2c089" prot="protected" virt="non-virtual"><scope>castor3d::shader::LightingModel</scope><name>m_writer</name></member>
+      <member refid="d6/d18/a06036_1abe10ab0abda22bc960dc51b76be2c739" prot="public" virt="virtual"><scope>castor3d::shader::LightingModel</scope><name>~LightingModel</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

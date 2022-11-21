@@ -1,0 +1,244 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dd/d91/a06248" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::RsmConfigUbo</compoundname>
+    <includes local="no">RsmConfigUbo.hpp</includes>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="dd/d91/a06248_1aa9747da5cde15d324013b50e2db47344" prot="public" static="no">
+        <type><ref refid="dd/d2b/a06336" kindref="compound">RsmUboConfiguration</ref></type>
+        <definition>using castor3d::RsmConfigUbo::Configuration =  RsmUboConfiguration</definition>
+        <argsstring></argsstring>
+        <name>Configuration</name>
+        <qualifiedname>castor3d::RsmConfigUbo::Configuration</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/RsmConfigUbo.hpp" line="47" column="1" bodyfile="Shader/Ubos/RsmConfigUbo.hpp" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="dd/d91/a06248_1a361fb0f84cea0e243f7d9e236f0885ca" prot="private" static="no" mutable="no">
+        <type><ref refid="d3/d96/a05072" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::RsmConfigUbo::m_device</definition>
+        <argsstring></argsstring>
+        <name>m_device</name>
+        <qualifiedname>castor3d::RsmConfigUbo::m_device</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/RsmConfigUbo.hpp" line="78" column="21" bodyfile="Shader/Ubos/RsmConfigUbo.hpp" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d91/a06248_1a48767860fe5a91e0d05835522369cfe8" prot="private" static="no" mutable="no">
+        <type><ref refid="db/d59/a02728" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="dd/d91/a06248_1aa9747da5cde15d324013b50e2db47344" kindref="member">Configuration</ref> &gt;</type>
+        <definition>UniformBufferOffsetT&lt; Configuration &gt; castor3d::RsmConfigUbo::m_ubo</definition>
+        <argsstring></argsstring>
+        <name>m_ubo</name>
+        <qualifiedname>castor3d::RsmConfigUbo::m_ubo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/RsmConfigUbo.hpp" line="79" column="22" bodyfile="Shader/Ubos/RsmConfigUbo.hpp" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="dd/d91/a06248_1a8605726892160b26766887c089158d1a" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::RsmConfigUbo::RsmConfigUbo</definition>
+        <argsstring>(RenderDevice const &amp;device)</argsstring>
+        <name>RsmConfigUbo</name>
+        <qualifiedname>castor3d::RsmConfigUbo::RsmConfigUbo</qualifiedname>
+        <param>
+          <type><ref refid="d3/d96/a05072" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/RsmConfigUbo.hpp" line="50" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06248_1aa0b5b04a1147a1bb54d35eebb4c596e5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::RsmConfigUbo::RsmConfigUbo</definition>
+        <argsstring>(RsmConfigUbo const &amp;rhs)=delete</argsstring>
+        <name>RsmConfigUbo</name>
+        <qualifiedname>castor3d::RsmConfigUbo::RsmConfigUbo</qualifiedname>
+        <param>
+          <type><ref refid="dd/d91/a06248" kindref="compound">RsmConfigUbo</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/RsmConfigUbo.hpp" line="51" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06248_1acb1d9cc28196a4f7be133fdca4d8c27c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="dd/d91/a06248" kindref="compound">RsmConfigUbo</ref> &amp;</type>
+        <definition>C3D_API RsmConfigUbo &amp; castor3d::RsmConfigUbo::operator=</definition>
+        <argsstring>(RsmConfigUbo const &amp;rhs)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::RsmConfigUbo::operator=</qualifiedname>
+        <param>
+          <type><ref refid="dd/d91/a06248" kindref="compound">RsmConfigUbo</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/RsmConfigUbo.hpp" line="52" column="23"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06248_1ae54af85de42ad6b49eb969933f4acdb8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::RsmConfigUbo::RsmConfigUbo</definition>
+        <argsstring>(RsmConfigUbo &amp;&amp;rhs)=default</argsstring>
+        <name>RsmConfigUbo</name>
+        <qualifiedname>castor3d::RsmConfigUbo::RsmConfigUbo</qualifiedname>
+        <param>
+          <type><ref refid="dd/d91/a06248" kindref="compound">RsmConfigUbo</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/RsmConfigUbo.hpp" line="53" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06248_1a5af829a12918995e94d08edfad208ad3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="dd/d91/a06248" kindref="compound">RsmConfigUbo</ref> &amp;</type>
+        <definition>C3D_API RsmConfigUbo &amp; castor3d::RsmConfigUbo::operator=</definition>
+        <argsstring>(RsmConfigUbo &amp;&amp;rhs)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::RsmConfigUbo::operator=</qualifiedname>
+        <param>
+          <type><ref refid="dd/d91/a06248" kindref="compound">RsmConfigUbo</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/RsmConfigUbo.hpp" line="54" column="23"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06248_1ad9e1d5ae613996d779467c631a7b5c79" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::RsmConfigUbo::~RsmConfigUbo</definition>
+        <argsstring>()</argsstring>
+        <name>~RsmConfigUbo</name>
+        <qualifiedname>castor3d::RsmConfigUbo::~RsmConfigUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/RsmConfigUbo.hpp" line="55" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06248_1ab897494355d37f5e9c3a2ecfe3918a24" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RsmConfigUbo::update</definition>
+        <argsstring>(Light const &amp;light)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::RsmConfigUbo::update</qualifiedname>
+        <param>
+          <type><ref refid="d3/d7c/a05572" kindref="compound">Light</ref> const &amp;</type>
+          <declname>light</declname>
+        </param>
+        <briefdescription>
+<para>Updates the UBO from given values. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">light</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The light source. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/RsmConfigUbo.hpp" line="64" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06248_1a409d04099ce176f7ba8601720b85c9b5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::RsmConfigUbo::createSizedBinding</definition>
+        <argsstring>(ashes::DescriptorSet &amp;descriptorSet, VkDescriptorSetLayoutBinding const &amp;layoutBinding) const</argsstring>
+        <name>createSizedBinding</name>
+        <qualifiedname>castor3d::RsmConfigUbo::createSizedBinding</qualifiedname>
+        <param>
+          <type>ashes::DescriptorSet &amp;</type>
+          <declname>descriptorSet</declname>
+        </param>
+        <param>
+          <type>VkDescriptorSetLayoutBinding const &amp;</type>
+          <declname>layoutBinding</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/RsmConfigUbo.hpp" line="66" column="6" bodyfile="Shader/Ubos/RsmConfigUbo.hpp" bodystart="66" bodyend="70"/>
+        <references refid="db/d59/a02728_1a2c6ad146d4910651544564c25ca7dccd" compoundref="d5/df1/a00206" startline="96" endline="105">castor3d::UniformBufferOffsetT&lt; DataT &gt;::createSizedBinding</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d91/a06248_1aaf5479deec21c5f86dd53d37be8198b4" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="db/d59/a02728" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="dd/d91/a06248_1aa9747da5cde15d324013b50e2db47344" kindref="member">Configuration</ref> &gt; const &amp;</type>
+        <definition>UniformBufferOffsetT&lt; Configuration &gt; const  &amp; castor3d::RsmConfigUbo::getUbo</definition>
+        <argsstring>() const</argsstring>
+        <name>getUbo</name>
+        <qualifiedname>castor3d::RsmConfigUbo::getUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/RsmConfigUbo.hpp" line="72" column="29" bodyfile="Shader/Ubos/RsmConfigUbo.hpp" bodystart="72" bodyend="75"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/Ubos/RsmConfigUbo.hpp" line="44" column="1" bodyfile="Shader/Ubos/RsmConfigUbo.hpp" bodystart="45" bodyend="80"/>
+    <listofallmembers>
+      <member refid="dd/d91/a06248_1aa9747da5cde15d324013b50e2db47344" prot="public" virt="non-virtual"><scope>castor3d::RsmConfigUbo</scope><name>Configuration</name></member>
+      <member refid="dd/d91/a06248_1a409d04099ce176f7ba8601720b85c9b5" prot="public" virt="non-virtual"><scope>castor3d::RsmConfigUbo</scope><name>createSizedBinding</name></member>
+      <member refid="dd/d91/a06248_1aaf5479deec21c5f86dd53d37be8198b4" prot="public" virt="non-virtual"><scope>castor3d::RsmConfigUbo</scope><name>getUbo</name></member>
+      <member refid="dd/d91/a06248_1a361fb0f84cea0e243f7d9e236f0885ca" prot="private" virt="non-virtual"><scope>castor3d::RsmConfigUbo</scope><name>m_device</name></member>
+      <member refid="dd/d91/a06248_1a48767860fe5a91e0d05835522369cfe8" prot="private" virt="non-virtual"><scope>castor3d::RsmConfigUbo</scope><name>m_ubo</name></member>
+      <member refid="dd/d91/a06248_1acb1d9cc28196a4f7be133fdca4d8c27c" prot="public" virt="non-virtual"><scope>castor3d::RsmConfigUbo</scope><name>operator=</name></member>
+      <member refid="dd/d91/a06248_1a5af829a12918995e94d08edfad208ad3" prot="public" virt="non-virtual"><scope>castor3d::RsmConfigUbo</scope><name>operator=</name></member>
+      <member refid="dd/d91/a06248_1a8605726892160b26766887c089158d1a" prot="public" virt="non-virtual"><scope>castor3d::RsmConfigUbo</scope><name>RsmConfigUbo</name></member>
+      <member refid="dd/d91/a06248_1aa0b5b04a1147a1bb54d35eebb4c596e5" prot="public" virt="non-virtual"><scope>castor3d::RsmConfigUbo</scope><name>RsmConfigUbo</name></member>
+      <member refid="dd/d91/a06248_1ae54af85de42ad6b49eb969933f4acdb8" prot="public" virt="non-virtual"><scope>castor3d::RsmConfigUbo</scope><name>RsmConfigUbo</name></member>
+      <member refid="dd/d91/a06248_1ab897494355d37f5e9c3a2ecfe3918a24" prot="public" virt="non-virtual"><scope>castor3d::RsmConfigUbo</scope><name>update</name></member>
+      <member refid="dd/d91/a06248_1ad9e1d5ae613996d779467c631a7b5c79" prot="public" virt="non-virtual"><scope>castor3d::RsmConfigUbo</scope><name>~RsmConfigUbo</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

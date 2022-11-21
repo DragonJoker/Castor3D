@@ -1,0 +1,426 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d5/de9/a03236" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::MetalnessComponent</compoundname>
+    <basecompoundref refid="d0/dcc/a03148" prot="public" virt="non-virtual">castor3d::BaseDataPassComponentT&lt; castor::AtomicGroupChangeTracked&lt; castor::AtomicChangeTracked&lt; float &gt; &gt; &gt;</basecompoundref>
+    <includes local="no">MetalnessComponent.hpp</includes>
+    <innerclass refid="d9/de5/a03240" prot="public">castor3d::MetalnessComponent::ComponentsShader</innerclass>
+    <innerclass refid="d1/dfa/a03244" prot="public">castor3d::MetalnessComponent::MaterialShader</innerclass>
+    <innerclass refid="d9/d01/a03248" prot="public">castor3d::MetalnessComponent::Plugin</innerclass>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d5/de9/a03236_1acf3e9c7297c4ff4738511c9ed723be9f" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::MetalnessComponent::TypeName</definition>
+        <argsstring></argsstring>
+        <name>TypeName</name>
+        <qualifiedname>castor3d::MetalnessComponent::TypeName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Lighting/MetalnessComponent.hpp" line="112" column="37" bodyfile="Material/Pass/Component/Lighting/MetalnessComponent.hpp" bodystart="112" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/de9/a03236_1ae2ec71bab8a0156241e48f74d1c14848" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>float constexpr</type>
+        <definition>float constexpr castor3d::MetalnessComponent::Default</definition>
+        <argsstring></argsstring>
+        <name>Default</name>
+        <qualifiedname>castor3d::MetalnessComponent::Default</qualifiedname>
+        <initializer>= 0.0f</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Lighting/MetalnessComponent.hpp" line="113" column="24" bodyfile="Material/Pass/Component/Lighting/MetalnessComponent.hpp" bodystart="113" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d5/de9/a03236_1ad7515dcbfa2e3ef92db291bcede20dc4" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>PassComponentPluginUPtr</type>
+        <definition>static PassComponentPluginUPtr castor3d::MetalnessComponent::createPlugin</definition>
+        <argsstring>(PassComponentRegister const &amp;passComponent)</argsstring>
+        <name>createPlugin</name>
+        <qualifiedname>castor3d::MetalnessComponent::createPlugin</qualifiedname>
+        <param>
+          <type><ref refid="d5/d35/a03716" kindref="compound">PassComponentRegister</ref> const &amp;</type>
+          <declname>passComponent</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Lighting/MetalnessComponent.hpp" line="87" column="32" bodyfile="Material/Pass/Component/Lighting/MetalnessComponent.hpp" bodystart="87" bodyend="90"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d5/de9/a03236_1abb37209f55a891fcf0532333cd71e493" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::MetalnessComponent::MetalnessComponent</definition>
+        <argsstring>(Pass &amp;pass, float defaultValue=Default)</argsstring>
+        <name>MetalnessComponent</name>
+        <qualifiedname>castor3d::MetalnessComponent::MetalnessComponent</qualifiedname>
+        <param>
+          <type><ref refid="d3/d86/a03732" kindref="compound">Pass</ref> &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>defaultValue</declname>
+          <defval><ref refid="d5/de9/a03236_1ae2ec71bab8a0156241e48f74d1c14848" kindref="member">Default</ref></defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Lighting/MetalnessComponent.hpp" line="92" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/de9/a03236_1a3747f820b26671e0554e5e66183af797" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::MetalnessComponent::accept</definition>
+        <argsstring>(PassVisitorBase &amp;vis) override</argsstring>
+        <name>accept</name>
+        <qualifiedname>castor3d::MetalnessComponent::accept</qualifiedname>
+        <reimplements refid="d8/d23/a03712_1a4e315225c20ace9097adfd65e8413e4f">accept</reimplements>
+        <param>
+          <type><ref refid="d6/db4/a03748" kindref="compound">PassVisitorBase</ref> &amp;</type>
+          <declname>vis</declname>
+        </param>
+        <briefdescription>
+<para><ref refid="d1/d5d/a03756" kindref="compound">PassVisitor</ref> acceptance function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>vis</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ... visitor. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Lighting/MetalnessComponent.hpp" line="95" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/de9/a03236_1abdc0aea4ab389379d6f4febba1b0fc7d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::MetalnessComponent::isValueSet</definition>
+        <argsstring>() const</argsstring>
+        <name>isValueSet</name>
+        <qualifiedname>castor3d::MetalnessComponent::isValueSet</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Lighting/MetalnessComponent.hpp" line="97" column="6" bodyfile="Material/Pass/Component/Lighting/MetalnessComponent.hpp" bodystart="97" bodyend="100"/>
+        <references refid="d0/dcc/a03148_1aa297ac5faf886e6b766533f5fc0b25d1" compoundref="db/ddc/a00353" startline="85">castor3d::BaseDataPassComponentT&lt; castor::AtomicGroupChangeTracked&lt; castor::AtomicChangeTracked&lt; float &gt; &gt; &gt;::m_value</references>
+      </memberdef>
+      <memberdef kind="function" id="d5/de9/a03236_1aa83ee8779da8dc162e4150c7827f6867" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>float</type>
+        <definition>float castor3d::MetalnessComponent::getMetalness</definition>
+        <argsstring>() const</argsstring>
+        <name>getMetalness</name>
+        <qualifiedname>castor3d::MetalnessComponent::getMetalness</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Lighting/MetalnessComponent.hpp" line="102" column="7" bodyfile="Material/Pass/Component/Lighting/MetalnessComponent.hpp" bodystart="102" bodyend="105"/>
+        <references refid="d0/dcc/a03148_1a23ec881a6e2aa2e40c21e108cb6458f7" compoundref="db/ddc/a00353" startline="73" endline="76">castor3d::BaseDataPassComponentT&lt; castor::AtomicGroupChangeTracked&lt; castor::AtomicChangeTracked&lt; float &gt; &gt; &gt;::getData</references>
+      </memberdef>
+      <memberdef kind="function" id="d5/de9/a03236_1ad6207ac4f12991f85b40bb1ca0ee60f1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::MetalnessComponent::setMetalness</definition>
+        <argsstring>(float v)</argsstring>
+        <name>setMetalness</name>
+        <qualifiedname>castor3d::MetalnessComponent::setMetalness</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Lighting/MetalnessComponent.hpp" line="107" column="6" bodyfile="Material/Pass/Component/Lighting/MetalnessComponent.hpp" bodystart="107" bodyend="110"/>
+        <references refid="d0/dcc/a03148_1a074de9b2f9579c56a85617b514089545" compoundref="db/ddc/a00353" startline="53" endline="56">castor3d::BaseDataPassComponentT&lt; castor::AtomicGroupChangeTracked&lt; castor::AtomicChangeTracked&lt; float &gt; &gt; &gt;::setData</references>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d5/de9/a03236_1adadaa4b630ee104084fedb71e58f5657" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>PassComponentUPtr</type>
+        <definition>PassComponentUPtr castor3d::MetalnessComponent::doClone</definition>
+        <argsstring>(Pass &amp;pass) const override</argsstring>
+        <name>doClone</name>
+        <qualifiedname>castor3d::MetalnessComponent::doClone</qualifiedname>
+        <reimplements refid="d8/d23/a03712_1ad87fbb1539bb6c5004cbcb02ddfcd46f">doClone</reimplements>
+        <param>
+          <type><ref refid="d3/d86/a03732" kindref="compound">Pass</ref> &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Clones this component into given pass. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">pass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the cloned component. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Lighting/MetalnessComponent.hpp" line="116" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/de9/a03236_1a3d2506fb49022c56f2bd27121998656a" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>bool</type>
+        <definition>bool castor3d::MetalnessComponent::doWriteText</definition>
+        <argsstring>(castor::String const &amp;tabs, castor::Path const &amp;folder, castor::String const &amp;subfolder, castor::StringStream &amp;file) const override</argsstring>
+        <name>doWriteText</name>
+        <qualifiedname>castor3d::MetalnessComponent::doWriteText</qualifiedname>
+        <reimplements refid="d8/d23/a03712_1af8c7cb8f4c2e0753c0ebbb6adf802c9c">doWriteText</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>tabs</declname>
+        </param>
+        <param>
+          <type>castor::Path const &amp;</type>
+          <declname>folder</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>subfolder</declname>
+        </param>
+        <param>
+          <type>castor::StringStream &amp;</type>
+          <declname>file</declname>
+        </param>
+        <briefdescription>
+<para>Writes the component content to text. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">tabs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The current tabulation level. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">folder</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The resources folder. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">subfolder</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The resources subfolder. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">file</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The output file. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Lighting/MetalnessComponent.hpp" line="117" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/de9/a03236_1abb4c4cc8534ec43ba4986a459fb66ae2" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::MetalnessComponent::doFillBuffer</definition>
+        <argsstring>(PassBuffer &amp;buffer) const override</argsstring>
+        <name>doFillBuffer</name>
+        <qualifiedname>castor3d::MetalnessComponent::doFillBuffer</qualifiedname>
+        <reimplements refid="d8/d23/a03712_1a3b157d130e41a31b1a6313ef26cd675c">doFillBuffer</reimplements>
+        <param>
+          <type><ref refid="db/dbf/a05920" kindref="compound">PassBuffer</ref> &amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+<para>Fills the pass buffer with this pass data. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pass buffer. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Lighting/MetalnessComponent.hpp" line="121" column="6"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::BaseDataPassComponentT&lt; castor::AtomicGroupChangeTracked&lt; castor::AtomicChangeTracked&lt; float &gt; &gt; &gt;</label>
+        <link refid="d0/dcc/a03148"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; castor::AtomicGroupChangeTracked&lt; castor::AtomicChangeTracked&lt; float &gt; &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::BaseDataPassComponentT&lt; DataT &gt;</label>
+        <link refid="d0/dcc/a03148"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::MetalnessComponent</label>
+        <link refid="d5/de9/a03236"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::PassComponent</label>
+        <link refid="d8/d23/a03712"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Pass &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::BaseDataPassComponentT&lt; castor::AtomicGroupChangeTracked&lt; castor::AtomicChangeTracked&lt; float &gt; &gt; &gt;</label>
+        <link refid="d0/dcc/a03148"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; castor::AtomicGroupChangeTracked&lt; castor::AtomicChangeTracked&lt; float &gt; &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor3d::BaseDataPassComponentT&lt; DataT &gt;</label>
+        <link refid="d0/dcc/a03148"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::MetalnessComponent</label>
+        <link refid="d5/de9/a03236"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::PassComponent</label>
+        <link refid="d8/d23/a03712"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_plugin</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>m_materialShader</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::PassComponentPlugin</label>
+        <link refid="dc/d0d/a03708"/>
+      </node>
+      <node id="6">
+        <label>castor3d::shader::PassMaterialShader</label>
+        <link refid="d7/da2/a03704"/>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor3d::shader::PassShader</label>
+        <link refid="df/d9f/a03696"/>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Pass &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Material/Pass/Component/Lighting/MetalnessComponent.hpp" line="14" column="1" bodyfile="Material/Pass/Component/Lighting/MetalnessComponent.hpp" bodystart="16" bodyend="122"/>
+    <listofallmembers>
+      <member refid="d5/de9/a03236_1a3747f820b26671e0554e5e66183af797" prot="public" virt="virtual"><scope>castor3d::MetalnessComponent</scope><name>accept</name></member>
+      <member refid="d0/dcc/a03148_1adda77c8f497beaa00a738357311190a7" prot="public" virt="non-virtual"><scope>castor3d::MetalnessComponent</scope><name>BaseDataPassComponentT</name></member>
+      <member refid="d8/d23/a03712_1ae7c88041d1aae747532e537b23e41d24" prot="public" virt="non-virtual"><scope>castor3d::MetalnessComponent</scope><name>clone</name></member>
+      <member refid="d5/de9/a03236_1ad7515dcbfa2e3ef92db291bcede20dc4" prot="public" virt="non-virtual"><scope>castor3d::MetalnessComponent</scope><name>createPlugin</name></member>
+      <member refid="d5/de9/a03236_1ae2ec71bab8a0156241e48f74d1c14848" prot="public" virt="non-virtual"><scope>castor3d::MetalnessComponent</scope><name>Default</name></member>
+      <member refid="d5/de9/a03236_1adadaa4b630ee104084fedb71e58f5657" prot="private" virt="virtual"><scope>castor3d::MetalnessComponent</scope><name>doClone</name></member>
+      <member refid="d5/de9/a03236_1abb4c4cc8534ec43ba4986a459fb66ae2" prot="private" virt="virtual"><scope>castor3d::MetalnessComponent</scope><name>doFillBuffer</name></member>
+      <member refid="d5/de9/a03236_1a3d2506fb49022c56f2bd27121998656a" prot="private" virt="virtual"><scope>castor3d::MetalnessComponent</scope><name>doWriteText</name></member>
+      <member refid="d8/d23/a03712_1a8f6b8c698164310e2052be733834224a" prot="public" virt="non-virtual"><scope>castor3d::MetalnessComponent</scope><name>fillBuffer</name></member>
+      <member refid="d8/d23/a03712_1a32dba2f2f6b92d5119c677d4faa6a324" prot="public" virt="non-virtual"><scope>castor3d::MetalnessComponent</scope><name>fillChannel</name></member>
+      <member refid="d8/d23/a03712_1ae53af67cd5f807b90d8e31e52d6582af" prot="public" virt="virtual"><scope>castor3d::MetalnessComponent</scope><name>fillConfig</name></member>
+      <member refid="d8/d23/a03712_1a89e385760304300908e5b308b2f1da4e" prot="public" virt="virtual"><scope>castor3d::MetalnessComponent</scope><name>getColour</name></member>
+      <member refid="d0/dcc/a03148_1a23ec881a6e2aa2e40c21e108cb6458f7" prot="public" virt="non-virtual"><scope>castor3d::MetalnessComponent</scope><name>getData</name></member>
+      <member refid="d0/dcc/a03148_1aa79468a338c3ff3c31682894db721fab" prot="public" virt="non-virtual"><scope>castor3d::MetalnessComponent</scope><name>getData</name></member>
+      <member refid="d8/d23/a03712_1a625adfcb001824768e8a99a3c03dcbb1" prot="public" virt="non-virtual"><scope>castor3d::MetalnessComponent</scope><name>getId</name></member>
+      <member refid="d5/de9/a03236_1aa83ee8779da8dc162e4150c7827f6867" prot="public" virt="non-virtual"><scope>castor3d::MetalnessComponent</scope><name>getMetalness</name></member>
+      <member refid="d8/d23/a03712_1af015484800f32c718d067a80b76709e9" prot="public" virt="virtual"><scope>castor3d::MetalnessComponent</scope><name>getPassFlags</name></member>
+      <member refid="d8/d23/a03712_1a5da51664f6736be0199d66266779b395" prot="public" virt="non-virtual"><scope>castor3d::MetalnessComponent</scope><name>getPlugin</name></member>
+      <member refid="d8/d23/a03712_1a6aae2659952d2e9a76caabf56d69fba5" prot="public" virt="non-virtual"><scope>castor3d::MetalnessComponent</scope><name>getType</name></member>
+      <member refid="d8/d23/a03712_1a5af951f374ee82fd61e57f96e6193f1c" prot="public" virt="virtual"><scope>castor3d::MetalnessComponent</scope><name>hasColour</name></member>
+      <member refid="d5/de9/a03236_1abdc0aea4ab389379d6f4febba1b0fc7d" prot="public" virt="non-virtual"><scope>castor3d::MetalnessComponent</scope><name>isValueSet</name></member>
+      <member refid="d8/d23/a03712_1a01ecec7d563666b63d7d888061e84ab1" prot="protected" virt="non-virtual"><scope>castor3d::MetalnessComponent</scope><name>m_dirty</name></member>
+      <member refid="d8/d23/a03712_1a3d2b1319d92ba70ff8450c7873492b67" prot="protected" virt="non-virtual"><scope>castor3d::MetalnessComponent</scope><name>m_id</name></member>
+      <member refid="d8/d23/a03712_1abc188311e9251e933a838a256802c4c6" prot="protected" virt="non-virtual"><scope>castor3d::MetalnessComponent</scope><name>m_materialShader</name></member>
+      <member refid="d8/d23/a03712_1ae62babd07d3faf3014f1d0af1ab03357" prot="protected" virt="non-virtual"><scope>castor3d::MetalnessComponent</scope><name>m_plugin</name></member>
+      <member refid="d8/d23/a03712_1ae5775b9cf42c79c375cbd4a033e6629f" prot="protected" virt="non-virtual"><scope>castor3d::MetalnessComponent</scope><name>m_type</name></member>
+      <member refid="d0/dcc/a03148_1aa297ac5faf886e6b766533f5fc0b25d1" prot="protected" virt="non-virtual"><scope>castor3d::MetalnessComponent</scope><name>m_value</name></member>
+      <member refid="d5/de9/a03236_1abb37209f55a891fcf0532333cd71e493" prot="public" virt="non-virtual"><scope>castor3d::MetalnessComponent</scope><name>MetalnessComponent</name></member>
+      <member refid="d8/d23/a03712_1a24173c973bd439f4c1c145cd70573bca" prot="public" virt="non-virtual"><scope>castor3d::MetalnessComponent</scope><name>PassComponent</name></member>
+      <member refid="d8/d23/a03712_1a2541aa58a662bd8566c602335387cb98" prot="public" virt="virtual"><scope>castor3d::MetalnessComponent</scope><name>setColour</name></member>
+      <member refid="d8/d23/a03712_1ab6a5bf94fc25210c03c9bed7ddf1ae31" prot="public" virt="non-virtual"><scope>castor3d::MetalnessComponent</scope><name>setColour</name></member>
+      <member refid="d8/d23/a03712_1a61fa7c8562281c049a874b1ebc2635e4" prot="public" virt="non-virtual"><scope>castor3d::MetalnessComponent</scope><name>setColour</name></member>
+      <member refid="d8/d23/a03712_1a2256e542753e1f85e6812de7e6fdc261" prot="public" virt="non-virtual"><scope>castor3d::MetalnessComponent</scope><name>setColour</name></member>
+      <member refid="d0/dcc/a03148_1a074de9b2f9579c56a85617b514089545" prot="public" virt="non-virtual"><scope>castor3d::MetalnessComponent</scope><name>setData</name></member>
+      <member refid="d0/dcc/a03148_1abf51560ee823896159de61bea9326391" prot="public" virt="non-virtual"><scope>castor3d::MetalnessComponent</scope><name>setData</name></member>
+      <member refid="d5/de9/a03236_1ad6207ac4f12991f85b40bb1ca0ee60f1" prot="public" virt="non-virtual"><scope>castor3d::MetalnessComponent</scope><name>setMetalness</name></member>
+      <member refid="d5/de9/a03236_1acf3e9c7297c4ff4738511c9ed723be9f" prot="public" virt="non-virtual"><scope>castor3d::MetalnessComponent</scope><name>TypeName</name></member>
+      <member refid="d8/d23/a03712_1acfedf31a75536a40a891b3308083d738" prot="public" virt="virtual"><scope>castor3d::MetalnessComponent</scope><name>update</name></member>
+      <member refid="d8/d23/a03712_1a967ba1259e24663e4a89352251acf841" prot="public" virt="non-virtual"><scope>castor3d::MetalnessComponent</scope><name>writeText</name></member>
+      <member refid="d8/d23/a03712_1a6a3e343b81806ff616280b4eca87140b" prot="public" virt="virtual"><scope>castor3d::MetalnessComponent</scope><name>~PassComponent</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

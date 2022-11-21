@@ -2,13 +2,14 @@
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="dir_1956ab8499f3d6675d52a03f8658751b" kind="dir">
     <compoundname>Material/Pass</compoundname>
+    <innerdir refid="dir_eccd3726f38e033a60ddecbeceab6fea">Material/Pass/Component</innerdir>
     <innerdir refid="dir_e759c1ab0baf106406b5438364459ce5">Material/Pass/PBR</innerdir>
     <innerdir refid="dir_f182e9647ea46591f09b239bead2ee84">Material/Pass/Phong</innerdir>
-    <innerfile refid="d8/d23/a00326">Pass.hpp</innerfile>
-    <innerfile refid="dd/d4e/a00329">PassFactory.hpp</innerfile>
-    <innerfile refid="dc/d50/a00332">PassModule.hpp</innerfile>
-    <innerfile refid="df/d91/a00335">PassVisitor.hpp</innerfile>
-    <innerfile refid="dd/db5/a00365">SubsurfaceScattering.hpp</innerfile>
+    <innerfile refid="d9/d4a/a00479">Pass.hpp</innerfile>
+    <innerfile refid="db/d8e/a00482">PassFactory.hpp</innerfile>
+    <innerfile refid="d6/d1a/a00485">PassModule.hpp</innerfile>
+    <innerfile refid="d4/ddf/a00488">PassVisitor.hpp</innerfile>
+    <innerfile refid="d4/dfb/a00512">SubsurfaceScattering.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

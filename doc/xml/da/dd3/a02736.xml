@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="da/dd3/a02736" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::MemChunk</compoundname>
+    <includes local="no">BufferModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="da/dd3/a02736_1ae4819cf2e478269cde2e24ff1e187765" prot="public" static="no" mutable="no">
+        <type>VkDeviceSize</type>
+        <definition>VkDeviceSize castor3d::MemChunk::offset</definition>
+        <argsstring></argsstring>
+        <name>offset</name>
+        <qualifiedname>castor3d::MemChunk::offset</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/BufferModule.hpp" line="197" column="14" bodyfile="Buffer/BufferModule.hpp" bodystart="197" bodyend="-1"/>
+        <referencedby refid="df/de4/a02780_1ab95abd80940cdaef3c701f874c4fdb4e" compoundref="d9/dd0/a00191" startline="82" endline="93">castor3d::ObjectBufferOffset::GpuBufferChunk::directUpload</referencedby>
+        <referencedby refid="d5/d95/a02720_1a97b5122f677a123e2bd2c7853927aa94" compoundref="d7/d25/a00182" startline="112" endline="115">castor3d::GpuBufferOffsetT&lt; DataT &gt;::getOffset</referencedby>
+        <referencedby refid="df/de4/a02780_1ac401c87d432b109d1d4328c80275c82c" compoundref="d9/dd0/a00191" startline="54" endline="57">castor3d::ObjectBufferOffset::GpuBufferChunk::getOffset</referencedby>
+        <referencedby refid="d3/d22/a01572_1a3283783fefa9a54a9caa19451d521bc1" compoundref="dc/de6/a00167" startline="202" endline="206">castor3d::operator&lt;</referencedby>
+        <referencedby refid="df/de4/a02780_1acdb80dae0bcfe3543339b3b27105c96b" compoundref="d9/dd0/a00191" startline="74" endline="80">castor3d::ObjectBufferOffset::GpuBufferChunk::reset</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="da/dd3/a02736_1a3f23e680ab897700f1cd7a3e09d262f1" prot="public" static="no" mutable="no">
+        <type>VkDeviceSize</type>
+        <definition>VkDeviceSize castor3d::MemChunk::size</definition>
+        <argsstring></argsstring>
+        <name>size</name>
+        <qualifiedname>castor3d::MemChunk::size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/BufferModule.hpp" line="198" column="14" bodyfile="Buffer/BufferModule.hpp" bodystart="198" bodyend="-1"/>
+        <referencedby refid="d5/d95/a02720_1a44e450480561c1253f21a8a3fd548b69" compoundref="d7/d25/a00182" startline="107" endline="110">castor3d::GpuBufferOffsetT&lt; DataT &gt;::getSize</referencedby>
+        <referencedby refid="df/de4/a02780_1acdb80dae0bcfe3543339b3b27105c96b" compoundref="d9/dd0/a00191" startline="74" endline="80">castor3d::ObjectBufferOffset::GpuBufferChunk::reset</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="da/dd3/a02736_1a5f876cf7f1c47c40d002bb5e9f962510" prot="public" static="no" mutable="no">
+        <type>VkDeviceSize</type>
+        <definition>VkDeviceSize castor3d::MemChunk::askedSize</definition>
+        <argsstring></argsstring>
+        <name>askedSize</name>
+        <qualifiedname>castor3d::MemChunk::askedSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/BufferModule.hpp" line="199" column="14" bodyfile="Buffer/BufferModule.hpp" bodystart="199" bodyend="-1"/>
+        <referencedby refid="df/de4/a02780_1ab95abd80940cdaef3c701f874c4fdb4e" compoundref="d9/dd0/a00191" startline="82" endline="93">castor3d::ObjectBufferOffset::GpuBufferChunk::directUpload</referencedby>
+        <referencedby refid="d5/d95/a02720_1a612d2762f73a4ef70cfd450af25ad3ed" compoundref="d7/d25/a00182" startline="102" endline="105">castor3d::GpuBufferOffsetT&lt; DataT &gt;::getCount</referencedby>
+        <referencedby refid="df/de4/a02780_1a6e5b66e1fcf11fd2f1a773ad482c39ca" compoundref="d9/dd0/a00191" startline="41" endline="46">castor3d::ObjectBufferOffset::GpuBufferChunk::getData</referencedby>
+        <referencedby refid="df/de4/a02780_1a040d013ed261b3ac93a5028d42805a1c" compoundref="d9/dd0/a00191" startline="35" endline="38">castor3d::ObjectBufferOffset::GpuBufferChunk::getSize</referencedby>
+        <referencedby refid="df/de4/a02780_1a762dcb2c50ab97281160fe95bb42be35" compoundref="d9/dd0/a00191" startline="30" endline="33">castor3d::ObjectBufferOffset::GpuBufferChunk::hasData</referencedby>
+        <referencedby refid="df/de4/a02780_1acdb80dae0bcfe3543339b3b27105c96b" compoundref="d9/dd0/a00191" startline="74" endline="80">castor3d::ObjectBufferOffset::GpuBufferChunk::reset</referencedby>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>A memory range, in bytes. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Buffer/BufferModule.hpp" line="195" column="1" bodyfile="Buffer/BufferModule.hpp" bodystart="196" bodyend="200"/>
+    <listofallmembers>
+      <member refid="da/dd3/a02736_1a5f876cf7f1c47c40d002bb5e9f962510" prot="public" virt="non-virtual"><scope>castor3d::MemChunk</scope><name>askedSize</name></member>
+      <member refid="da/dd3/a02736_1ae4819cf2e478269cde2e24ff1e187765" prot="public" virt="non-virtual"><scope>castor3d::MemChunk</scope><name>offset</name></member>
+      <member refid="da/dd3/a02736_1a3f23e680ab897700f1cd7a3e09d262f1" prot="public" virt="non-virtual"><scope>castor3d::MemChunk</scope><name>size</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

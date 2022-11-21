@@ -6,16 +6,16 @@
     <innerdir refid="dir_adca96594a9f2b1f8e20f892db14748e">Scene/Animation/SceneNode</innerdir>
     <innerdir refid="dir_7ae9340dfd2e99071768353d974fafa4">Scene/Animation/Skeleton</innerdir>
     <innerdir refid="dir_bf7d606a9e146adc3707e5329f55d213">Scene/Animation/Texture</innerdir>
-    <innerfile refid="d8/d27/a01043">AnimatedMesh.hpp</innerfile>
-    <innerfile refid="da/d17/a01046">AnimatedObject.hpp</innerfile>
-    <innerfile refid="d0/d22/a01049">AnimatedObjectGroup.hpp</innerfile>
-    <innerfile refid="d9/dce/a01052">AnimatedSceneNode.hpp</innerfile>
-    <innerfile refid="d2/d71/a01055">AnimatedSkeleton.hpp</innerfile>
-    <innerfile refid="d5/d4c/a01058">AnimatedTexture.hpp</innerfile>
-    <innerfile refid="de/d9e/a01061">AnimationInstance.hpp</innerfile>
-    <innerfile refid="d8/d1b/a11368">AnimationModule.hpp</innerfile>
-    <innerfile refid="d6/d80/a01076">SceneNodeAnimation.hpp</innerfile>
-    <innerfile refid="d2/d4d/a01079">SceneNodeAnimationKeyFrame.hpp</innerfile>
+    <innerfile refid="db/d42/a01220">AnimatedMesh.hpp</innerfile>
+    <innerfile refid="d7/ddd/a01223">AnimatedObject.hpp</innerfile>
+    <innerfile refid="dd/d9e/a01226">AnimatedObjectGroup.hpp</innerfile>
+    <innerfile refid="db/d1c/a01229">AnimatedSceneNode.hpp</innerfile>
+    <innerfile refid="d0/d67/a01232">AnimatedSkeleton.hpp</innerfile>
+    <innerfile refid="dd/dad/a01235">AnimatedTexture.hpp</innerfile>
+    <innerfile refid="d8/ddf/a01238">AnimationInstance.hpp</innerfile>
+    <innerfile refid="d6/d6b/a13230">AnimationModule.hpp</innerfile>
+    <innerfile refid="d3/d0b/a01253">SceneNodeAnimation.hpp</innerfile>
+    <innerfile refid="d6/d0f/a01256">SceneNodeAnimationKeyFrame.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

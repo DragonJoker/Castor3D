@@ -2,10 +2,11 @@
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="dir_60224d060cc31e4c570b52945980330e" kind="dir">
     <compoundname>Render/Culling</compoundname>
-    <innerfile refid="d8/d13/a00671">CullingModule.hpp</innerfile>
-    <innerfile refid="d8/d73/a00674">DummyCuller.hpp</innerfile>
-    <innerfile refid="dc/de4/a00677">FrustumCuller.hpp</innerfile>
-    <innerfile refid="d4/d9b/a00680">SceneCuller.hpp</innerfile>
+    <innerfile refid="d3/d60/a00818">CullingModule.hpp</innerfile>
+    <innerfile refid="d6/d8b/a00821">DummyCuller.hpp</innerfile>
+    <innerfile refid="d8/d1c/a00824">FrustumCuller.hpp</innerfile>
+    <innerfile refid="dc/d1b/a00827">PipelineNodes.hpp</innerfile>
+    <innerfile refid="d9/daf/a00830">SceneCuller.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

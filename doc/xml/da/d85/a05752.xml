@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="da/d85/a05752" kind="struct" language="C++" prot="public">
+    <compoundname>castor::ParserEnumTraits&lt; castor3d::ParallaxOcclusionMode &gt;</compoundname>
+    <includes local="no">SceneFileParser.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="da/d85/a05752_1ad7bf6d1dd1f914bd60bb770fcef231cc" prot="public" static="yes" mutable="no">
+        <type>xchar const  *const</type>
+        <definition>xchar const* const castor::ParserEnumTraits&lt; castor3d::ParallaxOcclusionMode &gt;::Name</definition>
+        <argsstring></argsstring>
+        <name>Name</name>
+        <qualifiedname>castor::ParserEnumTraits&lt; castor3d::ParallaxOcclusionMode &gt;::Name</qualifiedname>
+        <initializer>= cuT( &quot;ParallaxOcclusionMode&quot; )</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="486" column="34" bodyfile="Scene/SceneFileParser.hpp" bodystart="486" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d85/a05752_1a47662a4014fe540c25bc3ce45ea93c4e" prot="public" static="yes" mutable="no">
+        <type>UInt32StrMap const</type>
+        <definition>UInt32StrMap const castor::ParserEnumTraits&lt; castor3d::ParallaxOcclusionMode &gt;::Values</definition>
+        <argsstring></argsstring>
+        <name>Values</name>
+        <qualifiedname>castor::ParserEnumTraits&lt; castor3d::ParallaxOcclusionMode &gt;::Values</qualifiedname>
+        <initializer>= []()
+		{
+			UInt32StrMap result;
+			result = <ref refid="d3/d22/a01572_1a89ee8e4edb4c883ef7c66b8dc60cc430" kindref="member">castor3d::getEnumMapT</ref>&lt; <ref refid="d3/d22/a01572_1a808c81c0da4ffd2515292e95b6b4c124" kindref="member">castor3d::ParallaxOcclusionMode</ref> &gt;();
+			return result;
+		}( )</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="487" column="34" bodyfile="Scene/SceneFileParser.hpp" bodystart="487" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor::ParserEnumTraits&lt; castor3d::ParallaxOcclusionMode &gt;</label>
+        <link refid="da/d85/a05752"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>Name</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>Values</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>UInt32StrMap</label>
+      </node>
+      <node id="2">
+        <label>xchar</label>
+      </node>
+    </collaborationgraph>
+    <location file="Scene/SceneFileParser.hpp" line="484" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="485" bodyend="493"/>
+    <listofallmembers>
+      <member refid="da/d85/a05752_1ad7bf6d1dd1f914bd60bb770fcef231cc" prot="public" virt="non-virtual"><scope>castor::ParserEnumTraits&lt; castor3d::ParallaxOcclusionMode &gt;</scope><name>Name</name></member>
+      <member refid="da/d85/a05752_1a47662a4014fe540c25bc3ce45ea93c4e" prot="public" virt="non-virtual"><scope>castor::ParserEnumTraits&lt; castor3d::ParallaxOcclusionMode &gt;</scope><name>Values</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d0/d9f/a03152" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::PassComponentCombine</compoundname>
+    <includes local="no">ComponentModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d0/d9f/a03152_1aa10338b166595191031147d9d2b1872d" prot="public" static="no" mutable="no">
+        <type><ref refid="d3/d22/a01572_1af6093e41bb1d28fdaa187df3ec768e3f" kindref="member">PassComponentCombineID</ref></type>
+        <definition>PassComponentCombineID castor3d::PassComponentCombine::baseId</definition>
+        <argsstring></argsstring>
+        <name>baseId</name>
+        <qualifiedname>castor3d::PassComponentCombine::baseId</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/ComponentModule.hpp" line="182" column="24" bodyfile="Material/Pass/Component/ComponentModule.hpp" bodystart="182" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d9f/a03152_1adcfe5503942adb84a5ab9823d799747b" prot="public" static="no" mutable="no">
+        <type><ref refid="d3/d22/a01572_1a78c5c1953f615a95a6e3d529f9b3b2e7" kindref="member">PassComponentFlagsSet</ref></type>
+        <definition>PassComponentFlagsSet castor3d::PassComponentCombine::flags</definition>
+        <argsstring></argsstring>
+        <name>flags</name>
+        <qualifiedname>castor3d::PassComponentCombine::flags</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/ComponentModule.hpp" line="183" column="23" bodyfile="Material/Pass/Component/ComponentModule.hpp" bodystart="183" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="4">
+        <label>K</label>
+      </node>
+      <node id="1">
+        <label>castor3d::PassComponentCombine</label>
+        <link refid="d0/d9f/a03152"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>flags</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::set&lt; PassComponentFlag &gt;</label>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; PassComponentFlag &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::set&lt; K &gt;</label>
+        <childnode refid="4" relation="usage">
+          <edgelabel>keys</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Material/Pass/Component/ComponentModule.hpp" line="180" column="1" bodyfile="Material/Pass/Component/ComponentModule.hpp" bodystart="181" bodyend="184"/>
+    <listofallmembers>
+      <member refid="d0/d9f/a03152_1aa10338b166595191031147d9d2b1872d" prot="public" virt="non-virtual"><scope>castor3d::PassComponentCombine</scope><name>baseId</name></member>
+      <member refid="d0/d9f/a03152_1adcfe5503942adb84a5ab9823d799747b" prot="public" virt="non-virtual"><scope>castor3d::PassComponentCombine</scope><name>flags</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

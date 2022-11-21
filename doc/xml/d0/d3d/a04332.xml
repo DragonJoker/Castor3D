@@ -1,0 +1,536 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d0/d3d/a04332" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::MorphComponent</compoundname>
+    <basecompoundref refid="dc/d81/a04344" prot="public" virt="non-virtual">castor3d::SubmeshComponent</basecompoundref>
+    <includes local="no">MorphComponent.hpp</includes>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d0/d3d/a04332_1ab93e0c391ee3abd3ab2fe6fba2f2a980" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::MorphComponent::Name</definition>
+        <argsstring></argsstring>
+        <name>Name</name>
+        <qualifiedname>castor3d::MorphComponent::Name</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/MorphComponent.hpp" line="116" column="37" bodyfile="Model/Mesh/Submesh/Component/MorphComponent.hpp" bodystart="116" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d0/d3d/a04332_1acbca3c66b8eb2ed50f5f3a9bb41491b7" prot="private" static="no" mutable="no">
+        <type><ref refid="d3/d22/a01572_1abbe6548fefe6fd18e7c24e7d6f7b7f14" kindref="member">MorphFlags</ref></type>
+        <definition>MorphFlags castor3d::MorphComponent::m_flags</definition>
+        <argsstring></argsstring>
+        <name>m_flags</name>
+        <qualifiedname>castor3d::MorphComponent::m_flags</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/MorphComponent.hpp" line="119" column="12" bodyfile="Model/Mesh/Submesh/Component/MorphComponent.hpp" bodystart="119" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d3d/a04332_1acac50b1f6f5b1348637467b2ba6c877b" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::MorphComponent::m_targetDataCount</definition>
+        <argsstring></argsstring>
+        <name>m_targetDataCount</name>
+        <qualifiedname>castor3d::MorphComponent::m_targetDataCount</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/MorphComponent.hpp" line="120" column="10" bodyfile="Model/Mesh/Submesh/Component/MorphComponent.hpp" bodystart="120" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d3d/a04332_1ad6c0280a2ffa6d500712335084583986" prot="private" static="no" mutable="no">
+        <type><ref refid="d5/d95/a02720" kindref="compound">GpuBufferOffsetT</ref>&lt; castor::Point4f &gt;</type>
+        <definition>GpuBufferOffsetT&lt; castor::Point4f &gt; castor3d::MorphComponent::m_buffer</definition>
+        <argsstring></argsstring>
+        <name>m_buffer</name>
+        <qualifiedname>castor3d::MorphComponent::m_buffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/MorphComponent.hpp" line="121" column="18" bodyfile="Model/Mesh/Submesh/Component/MorphComponent.hpp" bodystart="121" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d3d/a04332_1a114e3b4c173977005de916335a3dc809" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="d3/dd1/a04364" kindref="compound">SubmeshAnimationBuffer</ref> &gt;</type>
+        <definition>std::vector&lt; SubmeshAnimationBuffer &gt; castor3d::MorphComponent::m_targets</definition>
+        <argsstring></argsstring>
+        <name>m_targets</name>
+        <qualifiedname>castor3d::MorphComponent::m_targets</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/MorphComponent.hpp" line="122" column="13" bodyfile="Model/Mesh/Submesh/Component/MorphComponent.hpp" bodystart="122" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="friend">
+      <memberdef kind="friend" id="d0/d3d/a04332_1acc7d261bef9216d2d478c0ca838aa8b6" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class BinaryWriter&lt; MorphComponent &gt;</definition>
+        <argsstring></argsstring>
+        <name>BinaryWriter&lt; MorphComponent &gt;</name>
+        <qualifiedname>castor3d::MorphComponent::BinaryWriter&lt; MorphComponent &gt;</qualifiedname>
+        <param>
+          <type><ref refid="db/da2/a02512" kindref="compound">BinaryWriter</ref>&lt; <ref refid="d0/d3d/a04332" kindref="compound">MorphComponent</ref> &gt;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/MorphComponent.hpp" line="122" column="13" bodyfile="Model/Mesh/Submesh/Component/MorphComponent.hpp" bodystart="124" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="friend" id="d0/d3d/a04332_1a592eea4fc59c7fdae91f67881b92b546" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class BinaryParser&lt; MorphComponent &gt;</definition>
+        <argsstring></argsstring>
+        <name>BinaryParser&lt; MorphComponent &gt;</name>
+        <qualifiedname>castor3d::MorphComponent::BinaryParser&lt; MorphComponent &gt;</qualifiedname>
+        <param>
+          <type><ref refid="d3/df4/a02504" kindref="compound">BinaryParser</ref>&lt; <ref refid="d0/d3d/a04332" kindref="compound">MorphComponent</ref> &gt;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/MorphComponent.hpp" line="122" column="13" bodyfile="Model/Mesh/Submesh/Component/MorphComponent.hpp" bodystart="125" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d0/d3d/a04332_1ab480ceafb7d4e1bdeba44893b9e69804" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::MorphComponent::MorphComponent</definition>
+        <argsstring>(Submesh &amp;submesh, MorphFlags flags)</argsstring>
+        <name>MorphComponent</name>
+        <qualifiedname>castor3d::MorphComponent::MorphComponent</qualifiedname>
+        <param>
+          <type><ref refid="db/d20/a04356" kindref="compound">Submesh</ref> &amp;</type>
+          <declname>submesh</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d22/a01572_1abbe6548fefe6fd18e7c24e7d6f7b7f14" kindref="member">MorphFlags</ref></type>
+          <declname>flags</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">submesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent submesh. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">flags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The flags for the affected components. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/MorphComponent.hpp" line="32" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d3d/a04332_1a0f1dcbdc4b6b3364c38cb24137e95add" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::MorphComponent::gather</definition>
+        <argsstring>(PipelineFlags const &amp;flags, MaterialRPtr material, ashes::BufferCRefArray &amp;buffers, std::vector&lt; uint64_t &gt; &amp;offsets, ashes::PipelineVertexInputStateCreateInfoCRefArray &amp;layouts, uint32_t &amp;currentBinding, uint32_t &amp;currentLocation) override</argsstring>
+        <name>gather</name>
+        <qualifiedname>castor3d::MorphComponent::gather</qualifiedname>
+        <reimplements refid="dc/d81/a04344_1aadd11f3f2e1da364487a4c54f1be751f">gather</reimplements>
+        <param>
+          <type><ref refid="db/dd9/a05012" kindref="compound">PipelineFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <param>
+          <type>MaterialRPtr</type>
+          <declname>material</declname>
+        </param>
+        <param>
+          <type>ashes::BufferCRefArray &amp;</type>
+          <declname>buffers</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; uint64_t &gt; &amp;</type>
+          <declname>offsets</declname>
+        </param>
+        <param>
+          <type>ashes::PipelineVertexInputStateCreateInfoCRefArray &amp;</type>
+          <declname>layouts</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>currentBinding</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>currentLocation</declname>
+        </param>
+        <briefdescription>
+<para>Gathers buffers that need to go in a vertex layout. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">flags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pipeline flags. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">material</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The material. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">buffers</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the buffers. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">offsets</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the buffers offsets. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">layouts</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the vertex layouts. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">currentBinding</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The current buffer binding. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">currentLocation</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The current attribute location. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/MorphComponent.hpp" line="37" column="14" bodyfile="Model/Mesh/Submesh/Component/MorphComponent.hpp" bodystart="37" bodyend="45"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d3d/a04332_1a4812e391fc18631e49f5be06cbed6be7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> SubmeshComponentSPtr</type>
+        <definition>C3D_API SubmeshComponentSPtr castor3d::MorphComponent::clone</definition>
+        <argsstring>(Submesh &amp;submesh) const override</argsstring>
+        <name>clone</name>
+        <qualifiedname>castor3d::MorphComponent::clone</qualifiedname>
+        <reimplements refid="dc/d81/a04344_1af23b7cb5e0e0f3bbfd1bd07fbae9f24a">clone</reimplements>
+        <param>
+          <type><ref refid="db/d20/a04356" kindref="compound">Submesh</ref> &amp;</type>
+          <declname>submesh</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Clones this component into given submesh. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">submesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the cloned component. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/MorphComponent.hpp" line="49" column="30"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d3d/a04332_1a0e6600c7fe5e92f6f4ab2f0bd88b258e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::MorphComponent::addMorphTarget</definition>
+        <argsstring>(SubmeshAnimationBuffer data)</argsstring>
+        <name>addMorphTarget</name>
+        <qualifiedname>castor3d::MorphComponent::addMorphTarget</qualifiedname>
+        <param>
+          <type><ref refid="d3/dd1/a04364" kindref="compound">SubmeshAnimationBuffer</ref></type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+<para>Adds a morph target. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">data</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The morph target. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/MorphComponent.hpp" line="58" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d3d/a04332_1a1e9e0dcb265db5ec090f4e3f4c969eef" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d3/d22/a01572_1abbe6548fefe6fd18e7c24e7d6f7b7f14" kindref="member">MorphFlags</ref></type>
+        <definition>MorphFlags castor3d::MorphComponent::getMorphFlags</definition>
+        <argsstring>() const</argsstring>
+        <name>getMorphFlags</name>
+        <qualifiedname>castor3d::MorphComponent::getMorphFlags</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The morphing flags. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/MorphComponent.hpp" line="65" column="12" bodyfile="Model/Mesh/Submesh/Component/MorphComponent.hpp" bodystart="65" bodyend="68"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d3d/a04332_1ab9d8b7a58540b40490606c1272b74901" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d5/d95/a02720" kindref="compound">GpuBufferOffsetT</ref>&lt; castor::Point4f &gt; const &amp;</type>
+        <definition>GpuBufferOffsetT&lt; castor::Point4f &gt; const  &amp; castor3d::MorphComponent::getMorphTargets</definition>
+        <argsstring>() const</argsstring>
+        <name>getMorphTargets</name>
+        <qualifiedname>castor3d::MorphComponent::getMorphTargets</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The morph targets buffer. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/MorphComponent.hpp" line="75" column="25" bodyfile="Model/Mesh/Submesh/Component/MorphComponent.hpp" bodystart="75" bodyend="78"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d3d/a04332_1a5a59162f955161c864428516a586a353" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::vector&lt; <ref refid="d3/dd1/a04364" kindref="compound">SubmeshAnimationBuffer</ref> &gt; const &amp;</type>
+        <definition>std::vector&lt; SubmeshAnimationBuffer &gt; const  &amp; castor3d::MorphComponent::getMorphTargetsBuffers</definition>
+        <argsstring>() const</argsstring>
+        <name>getMorphTargetsBuffers</name>
+        <qualifiedname>castor3d::MorphComponent::getMorphTargetsBuffers</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The morph targets data. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/MorphComponent.hpp" line="85" column="20" bodyfile="Model/Mesh/Submesh/Component/MorphComponent.hpp" bodystart="85" bodyend="88"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d3d/a04332_1abd2421a812c470bd2d1f135e06204e2b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::vector&lt; <ref refid="d3/dd1/a04364" kindref="compound">SubmeshAnimationBuffer</ref> &gt; &amp;</type>
+        <definition>std::vector&lt; SubmeshAnimationBuffer &gt; &amp; castor3d::MorphComponent::getMorphTargetsBuffers</definition>
+        <argsstring>()</argsstring>
+        <name>getMorphTargetsBuffers</name>
+        <qualifiedname>castor3d::MorphComponent::getMorphTargetsBuffers</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The morph targets data. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/MorphComponent.hpp" line="95" column="14" bodyfile="Model/Mesh/Submesh/Component/MorphComponent.hpp" bodystart="95" bodyend="98"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d3d/a04332_1a86fa8f544c3e887a887ab8b65e2d1a7a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::MorphComponent::getMorphTargetsCount</definition>
+        <argsstring>() const</argsstring>
+        <name>getMorphTargetsCount</name>
+        <qualifiedname>castor3d::MorphComponent::getMorphTargetsCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The number of morph targets. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/MorphComponent.hpp" line="105" column="10" bodyfile="Model/Mesh/Submesh/Component/MorphComponent.hpp" bodystart="105" bodyend="108"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d0/d3d/a04332_1a70b00b312e7c034b3f5b4996118eb9ea" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>bool</type>
+        <definition>bool castor3d::MorphComponent::doInitialise</definition>
+        <argsstring>(RenderDevice const &amp;device) override</argsstring>
+        <name>doInitialise</name>
+        <qualifiedname>castor3d::MorphComponent::doInitialise</qualifiedname>
+        <reimplements refid="dc/d81/a04344_1a02633de92cd3a940ea28bc2ee63cdefb">doInitialise</reimplements>
+        <param>
+          <type><ref refid="d3/d96/a05072" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/MorphComponent.hpp" line="111" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d3d/a04332_1a2102e9cdfe95774de574f47937b7ffee" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::MorphComponent::doCleanup</definition>
+        <argsstring>(RenderDevice const &amp;device) override</argsstring>
+        <name>doCleanup</name>
+        <qualifiedname>castor3d::MorphComponent::doCleanup</qualifiedname>
+        <reimplements refid="dc/d81/a04344_1a038f333e5365ecd8afe4ede6a4a428d7">doCleanup</reimplements>
+        <param>
+          <type><ref refid="d3/d96/a05072" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/MorphComponent.hpp" line="112" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d3d/a04332_1aabd246ad3d2bfd09d79fd9027574eac5" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::MorphComponent::doUpload</definition>
+        <argsstring>() override</argsstring>
+        <name>doUpload</name>
+        <qualifiedname>castor3d::MorphComponent::doUpload</qualifiedname>
+        <reimplements refid="dc/d81/a04344_1a66e01bf8274e1d77bd20a669cb637a2e">doUpload</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/MorphComponent.hpp" line="113" column="6"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::MorphComponent</label>
+        <link refid="d0/d3d/a04332"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::SubmeshComponent</label>
+        <link refid="dc/d81/a04344"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Submesh &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::MorphComponent</label>
+        <link refid="d0/d3d/a04332"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::SubmeshComponent</label>
+        <link refid="dc/d81/a04344"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Submesh &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Model/Mesh/Submesh/Component/MorphComponent.hpp" line="18" column="1" bodyfile="Model/Mesh/Submesh/Component/MorphComponent.hpp" bodystart="20" bodyend="126"/>
+    <listofallmembers>
+      <member refid="d0/d3d/a04332_1a0e6600c7fe5e92f6f4ab2f0bd88b258e" prot="public" virt="non-virtual"><scope>castor3d::MorphComponent</scope><name>addMorphTarget</name></member>
+      <member refid="d0/d3d/a04332_1a592eea4fc59c7fdae91f67881b92b546" prot="private" virt="non-virtual"><scope>castor3d::MorphComponent</scope><name>BinaryParser&lt; MorphComponent &gt;</name></member>
+      <member refid="d0/d3d/a04332_1acc7d261bef9216d2d478c0ca838aa8b6" prot="private" virt="non-virtual"><scope>castor3d::MorphComponent</scope><name>BinaryWriter&lt; MorphComponent &gt;</name></member>
+      <member refid="dc/d81/a04344_1abdbf83eb05497bd5765a2aed22ebc429" prot="public" virt="non-virtual"><scope>castor3d::MorphComponent</scope><name>cleanup</name></member>
+      <member refid="d0/d3d/a04332_1a4812e391fc18631e49f5be06cbed6be7" prot="public" virt="virtual"><scope>castor3d::MorphComponent</scope><name>clone</name></member>
+      <member refid="d0/d3d/a04332_1a2102e9cdfe95774de574f47937b7ffee" prot="private" virt="virtual"><scope>castor3d::MorphComponent</scope><name>doCleanup</name></member>
+      <member refid="d0/d3d/a04332_1a70b00b312e7c034b3f5b4996118eb9ea" prot="private" virt="virtual"><scope>castor3d::MorphComponent</scope><name>doInitialise</name></member>
+      <member refid="d0/d3d/a04332_1aabd246ad3d2bfd09d79fd9027574eac5" prot="private" virt="virtual"><scope>castor3d::MorphComponent</scope><name>doUpload</name></member>
+      <member refid="d0/d3d/a04332_1a0f1dcbdc4b6b3364c38cb24137e95add" prot="public" virt="virtual"><scope>castor3d::MorphComponent</scope><name>gather</name></member>
+      <member refid="dc/d81/a04344_1a98577223b3e5556ec5027ecdc6d4e184" prot="public" virt="non-virtual"><scope>castor3d::MorphComponent</scope><name>getID</name></member>
+      <member refid="d0/d3d/a04332_1a1e9e0dcb265db5ec090f4e3f4c969eef" prot="public" virt="non-virtual"><scope>castor3d::MorphComponent</scope><name>getMorphFlags</name></member>
+      <member refid="d0/d3d/a04332_1ab9d8b7a58540b40490606c1272b74901" prot="public" virt="non-virtual"><scope>castor3d::MorphComponent</scope><name>getMorphTargets</name></member>
+      <member refid="d0/d3d/a04332_1a5a59162f955161c864428516a586a353" prot="public" virt="non-virtual"><scope>castor3d::MorphComponent</scope><name>getMorphTargetsBuffers</name></member>
+      <member refid="d0/d3d/a04332_1abd2421a812c470bd2d1f135e06204e2b" prot="public" virt="non-virtual"><scope>castor3d::MorphComponent</scope><name>getMorphTargetsBuffers</name></member>
+      <member refid="d0/d3d/a04332_1a86fa8f544c3e887a887ab8b65e2d1a7a" prot="public" virt="non-virtual"><scope>castor3d::MorphComponent</scope><name>getMorphTargetsCount</name></member>
+      <member refid="dc/d81/a04344_1ab285ab330fbb2cc71abb95bfb62d91ed" prot="public" virt="virtual"><scope>castor3d::MorphComponent</scope><name>getProgramFlags</name></member>
+      <member refid="dc/d81/a04344_1a66706b12f3ac80870bf232d030ceb8d4" prot="public" virt="virtual"><scope>castor3d::MorphComponent</scope><name>getSubmeshFlags</name></member>
+      <member refid="dc/d81/a04344_1abc8fcfaed4a21cec91176b0394cca0cd" prot="public" virt="non-virtual"><scope>castor3d::MorphComponent</scope><name>getType</name></member>
+      <member refid="dc/d81/a04344_1a1aef8af9949b1ca401d65bd6b8abdb4d" prot="public" virt="virtual"><scope>castor3d::MorphComponent</scope><name>getUsageFlags</name></member>
+      <member refid="dc/d81/a04344_1a98c6ad3457d19448c1eaa261598103ad" prot="public" virt="non-virtual"><scope>castor3d::MorphComponent</scope><name>initialise</name></member>
+      <member refid="d0/d3d/a04332_1ad6c0280a2ffa6d500712335084583986" prot="private" virt="non-virtual"><scope>castor3d::MorphComponent</scope><name>m_buffer</name></member>
+      <member refid="d0/d3d/a04332_1acbca3c66b8eb2ed50f5f3a9bb41491b7" prot="private" virt="non-virtual"><scope>castor3d::MorphComponent</scope><name>m_flags</name></member>
+      <member refid="d0/d3d/a04332_1acac50b1f6f5b1348637467b2ba6c877b" prot="private" virt="non-virtual"><scope>castor3d::MorphComponent</scope><name>m_targetDataCount</name></member>
+      <member refid="d0/d3d/a04332_1a114e3b4c173977005de916335a3dc809" prot="private" virt="non-virtual"><scope>castor3d::MorphComponent</scope><name>m_targets</name></member>
+      <member refid="d0/d3d/a04332_1ab480ceafb7d4e1bdeba44893b9e69804" prot="public" virt="non-virtual"><scope>castor3d::MorphComponent</scope><name>MorphComponent</name></member>
+      <member refid="d0/d3d/a04332_1ab93e0c391ee3abd3ab2fe6fba2f2a980" prot="public" virt="non-virtual"><scope>castor3d::MorphComponent</scope><name>Name</name></member>
+      <member refid="dc/d81/a04344_1a7e21e4eda223d50b6751c40cb44f77a7" prot="public" virt="non-virtual"><scope>castor3d::MorphComponent</scope><name>needsUpdate</name></member>
+      <member refid="dc/d81/a04344_1a4cee79e84bacc48828a48a42555c6977" prot="public" virt="non-virtual"><scope>castor3d::MorphComponent</scope><name>SubmeshComponent</name></member>
+      <member refid="dc/d81/a04344_1a2dbcda2b8c26f4c9c52db78a5740a0f8" prot="public" virt="non-virtual"><scope>castor3d::MorphComponent</scope><name>upload</name></member>
+      <member refid="dc/d81/a04344_1a30231a167367ba38b41f9bf5b3bcd005" prot="public" virt="virtual"><scope>castor3d::MorphComponent</scope><name>~SubmeshComponent</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dir_fcb43395d330995dd2aec2f440085857" kind="dir">
+    <compoundname>Render/Transform</compoundname>
+    <innerfile refid="de/db5/a01181">MeshletBoundsTransformingPass.hpp</innerfile>
+    <innerfile refid="d1/d35/a01184">MeshletBoundsTransformPass.hpp</innerfile>
+    <innerfile refid="dc/d70/a01187">TransformModule.hpp</innerfile>
+    <innerfile refid="dc/d19/a01190">TransformPipeline.hpp</innerfile>
+    <innerfile refid="dd/d43/a01193">VertexTransforming.hpp</innerfile>
+    <innerfile refid="d2/d22/a01196">VertexTransformingPass.hpp</innerfile>
+    <innerfile refid="d0/d5a/a01199">VertexTransformPass.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/Transform/"/>
+  </compounddef>
+</doxygen>

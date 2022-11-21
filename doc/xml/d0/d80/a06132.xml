@@ -1,0 +1,435 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d0/d80/a06132" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::shader::TextureConfigurations</compoundname>
+    <basecompoundref refid="d5/d2a/a05996" prot="public" virt="non-virtual">castor3d::shader::BufferT&lt; TextureConfigData &gt;</basecompoundref>
+    <includes local="no">GlslTextureConfiguration.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d0/d80/a06132_1a3f6d4080bc2e3dde31546025a64344fd" prot="private" static="no" mutable="yes">
+        <type>sdw::Function&lt; sdw::Void, sdw::InUInt, sdw::InVec3, sdw::InOutVec3, sdw::InOutVec3, sdw::InOutVec3, sdw::InOutVec3 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Void , sdw::InUInt , sdw::InVec3 , sdw::InOutVec3 , sdw::InOutVec3 , sdw::InOutVec3 , sdw::InOutVec3 &gt; castor3d::shader::TextureConfigurations::m_setTexcoord4</definition>
+        <argsstring></argsstring>
+        <name>m_setTexcoord4</name>
+        <qualifiedname>castor3d::shader::TextureConfigurations::m_setTexcoord4</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="186" column="2" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="186" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d80/a06132_1af1aaa79392a4808a8f983e228cc79fa6" prot="private" static="no" mutable="yes">
+        <type>sdw::Function&lt; sdw::Void, sdw::InUInt, sdw::InVec3, sdw::InOutVec3, sdw::InOutVec3, sdw::InOutVec3 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Void , sdw::InUInt , sdw::InVec3 , sdw::InOutVec3 , sdw::InOutVec3 , sdw::InOutVec3 &gt; castor3d::shader::TextureConfigurations::m_setTexcoord3</definition>
+        <argsstring></argsstring>
+        <name>m_setTexcoord3</name>
+        <qualifiedname>castor3d::shader::TextureConfigurations::m_setTexcoord3</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="192" column="2" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="192" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d80/a06132_1a0bec5cebb1d2742b5e9588477c60439f" prot="private" static="no" mutable="yes">
+        <type>sdw::Function&lt; sdw::Void, sdw::InUInt, sdw::InVec3, sdw::InOutVec3, sdw::InOutVec3 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Void , sdw::InUInt , sdw::InVec3 , sdw::InOutVec3 , sdw::InOutVec3 &gt; castor3d::shader::TextureConfigurations::m_setTexcoord2</definition>
+        <argsstring></argsstring>
+        <name>m_setTexcoord2</name>
+        <qualifiedname>castor3d::shader::TextureConfigurations::m_setTexcoord2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="197" column="2" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="197" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d80/a06132_1af2f71607c6f8b85d817680141f7143af" prot="private" static="no" mutable="yes">
+        <type>sdw::Function&lt; sdw::Void, sdw::InUInt, InOutBlendComponents &gt;</type>
+        <definition>sdw::Function&lt; sdw::Void , sdw::InUInt , InOutBlendComponents &gt; castor3d::shader::TextureConfigurations::m_applyTexture</definition>
+        <argsstring></argsstring>
+        <name>m_applyTexture</name>
+        <qualifiedname>castor3d::shader::TextureConfigurations::m_applyTexture</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="200" column="2" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="200" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d0/d80/a06132_1aaaaee2d9f57922f83785453ec3f60bcd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::TextureConfigurations::TextureConfigurations</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, uint32_t binding, uint32_t set, bool enable=true)</argsstring>
+        <name>TextureConfigurations</name>
+        <qualifiedname>castor3d::shader::TextureConfigurations::TextureConfigurations</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>set</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enable</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="137" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d80/a06132_1a47e150c5b7c83b8545712f3be7dab8c6" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::TextureConfigurations::computeMapsContributions</definition>
+        <argsstring>(PassShaders const &amp;passShaders, PipelineFlags const &amp;flags, TextureAnimations const &amp;textureAnims, sdw::Array&lt; sdw::CombinedImage2DRgba32 &gt; const &amp;maps, Material const &amp;material, BlendComponents &amp;components) const</argsstring>
+        <name>computeMapsContributions</name>
+        <qualifiedname>castor3d::shader::TextureConfigurations::computeMapsContributions</qualifiedname>
+        <param>
+          <type><ref refid="d9/d58/a06056" kindref="compound">PassShaders</ref> const &amp;</type>
+          <declname>passShaders</declname>
+        </param>
+        <param>
+          <type><ref refid="db/dd9/a05012" kindref="compound">PipelineFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d15/a06124" kindref="compound">TextureAnimations</ref> const &amp;</type>
+          <declname>textureAnims</declname>
+        </param>
+        <param>
+          <type>sdw::Array&lt; sdw::CombinedImage2DRgba32 &gt; const &amp;</type>
+          <declname>maps</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d32/a06040" kindref="compound">Material</ref> const &amp;</type>
+          <declname>material</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d4b/a05980" kindref="compound">BlendComponents</ref> &amp;</type>
+          <declname>components</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="141" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d80/a06132_1aa39cb77a04f8ef7bc92f06b3bb77dbd0" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::TextureConfigurations::computeMapsContributions</definition>
+        <argsstring>(PassShaders const &amp;passShaders, TextureCombine const &amp;texturesFlags, TextureAnimations const &amp;textureAnims, sdw::Array&lt; sdw::CombinedImage2DRgba32 &gt; const &amp;maps, Material const &amp;material, BlendComponents &amp;components) const</argsstring>
+        <name>computeMapsContributions</name>
+        <qualifiedname>castor3d::shader::TextureConfigurations::computeMapsContributions</qualifiedname>
+        <param>
+          <type><ref refid="d9/d58/a06056" kindref="compound">PassShaders</ref> const &amp;</type>
+          <declname>passShaders</declname>
+        </param>
+        <param>
+          <type><ref refid="de/d0b/a03040" kindref="compound">TextureCombine</ref> const &amp;</type>
+          <declname>texturesFlags</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d15/a06124" kindref="compound">TextureAnimations</ref> const &amp;</type>
+          <declname>textureAnims</declname>
+        </param>
+        <param>
+          <type>sdw::Array&lt; sdw::CombinedImage2DRgba32 &gt; const &amp;</type>
+          <declname>maps</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d32/a06040" kindref="compound">Material</ref> const &amp;</type>
+          <declname>material</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d4b/a05980" kindref="compound">BlendComponents</ref> &amp;</type>
+          <declname>components</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="147" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d80/a06132_1af06e5fb9702e303595ecd23c32070e6f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename TexcoordT</type>
+          </param>
+          <param>
+            <type>typename FlagsT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor3d::shader::TextureConfigurations::computeMapsContributionsT</definition>
+        <argsstring>(PassShaders const &amp;passShaders, FlagsT const &amp;flags, TextureAnimations const &amp;textureAnims, sdw::Array&lt; sdw::CombinedImage2DRgba32 &gt; const &amp;maps, Material const &amp;material, BlendComponents &amp;components) const</argsstring>
+        <name>computeMapsContributionsT</name>
+        <qualifiedname>castor3d::shader::TextureConfigurations::computeMapsContributionsT</qualifiedname>
+        <param>
+          <type><ref refid="d9/d58/a06056" kindref="compound">PassShaders</ref> const &amp;</type>
+          <declname>passShaders</declname>
+        </param>
+        <param>
+          <type>FlagsT const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d15/a06124" kindref="compound">TextureAnimations</ref> const &amp;</type>
+          <declname>textureAnims</declname>
+        </param>
+        <param>
+          <type>sdw::Array&lt; sdw::CombinedImage2DRgba32 &gt; const &amp;</type>
+          <declname>maps</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d32/a06040" kindref="compound">Material</ref> const &amp;</type>
+          <declname>material</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d4b/a05980" kindref="compound">BlendComponents</ref> &amp;</type>
+          <declname>components</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="154" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d80/a06132_1a4971040d3641e8a0f0a769aea61dc9de" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="de/da4/a06128" kindref="compound">TextureConfigData</ref></type>
+        <definition>TextureConfigData castor3d::shader::TextureConfigurations::getTextureConfiguration</definition>
+        <argsstring>(sdw::UInt const &amp;index) const</argsstring>
+        <name>getTextureConfiguration</name>
+        <qualifiedname>castor3d::shader::TextureConfigurations::getTextureConfiguration</qualifiedname>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="174" column="19" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="174" bodyend="177"/>
+        <references refid="d5/d2a/a05996_1a7fed7db7c6ddd5ec43d4b243a608ee8a" compoundref="d0/de2/a01442" startline="97" endline="103">castor3d::shader::BufferT&lt; DataT &gt;::getData</references>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d0/d80/a06132_1ad81995f5fa50274b5c76926272570870" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename TexcoordT</type>
+          </param>
+        </templateparamlist>
+        <type>TexcoordT</type>
+        <definition>static TexcoordT castor3d::shader::TextureConfigurations::getTexcoord</definition>
+        <argsstring>(TextureConfigData const &amp;data, TexcoordT const &amp;texCoords0, TexcoordT const &amp;texCoords1, TexcoordT const &amp;texCoords2, TexcoordT const &amp;texCoords3)</argsstring>
+        <name>getTexcoord</name>
+        <qualifiedname>castor3d::shader::TextureConfigurations::getTexcoord</qualifiedname>
+        <param>
+          <type><ref refid="de/da4/a06128" kindref="compound">TextureConfigData</ref> const &amp;</type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type>TexcoordT const &amp;</type>
+          <declname>texCoords0</declname>
+        </param>
+        <param>
+          <type>TexcoordT const &amp;</type>
+          <declname>texCoords1</declname>
+        </param>
+        <param>
+          <type>TexcoordT const &amp;</type>
+          <declname>texCoords2</declname>
+        </param>
+        <param>
+          <type>TexcoordT const &amp;</type>
+          <declname>texCoords3</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="161" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d80/a06132_1a106858da1cb1eace70a77d537fdea704" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename TexcoordT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>static void castor3d::shader::TextureConfigurations::setTexcoord</definition>
+        <argsstring>(TextureConfigData const &amp;data, TexcoordT const &amp;value, TexcoordT &amp;texCoords0, TexcoordT &amp;texCoords1, TexcoordT &amp;texCoords2, TexcoordT &amp;texCoords3)</argsstring>
+        <name>setTexcoord</name>
+        <qualifiedname>castor3d::shader::TextureConfigurations::setTexcoord</qualifiedname>
+        <param>
+          <type><ref refid="de/da4/a06128" kindref="compound">TextureConfigData</ref> const &amp;</type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type>TexcoordT const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>TexcoordT &amp;</type>
+          <declname>texCoords0</declname>
+        </param>
+        <param>
+          <type>TexcoordT &amp;</type>
+          <declname>texCoords1</declname>
+        </param>
+        <param>
+          <type>TexcoordT &amp;</type>
+          <declname>texCoords2</declname>
+        </param>
+        <param>
+          <type>TexcoordT &amp;</type>
+          <declname>texCoords3</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="167" column="13"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::shader::BufferT&lt; TextureConfigData &gt;</label>
+        <link refid="d5/d2a/a05996"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; TextureConfigData &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::shader::BufferBase</label>
+        <link refid="d4/dc4/a05992"/>
+      </node>
+      <node id="4">
+        <label>castor3d::shader::BufferT&lt; DataT &gt;</label>
+        <link refid="d5/d2a/a05996"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::shader::TextureConfigurations</label>
+        <link refid="d0/d80/a06132"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::shader::BufferT&lt; TextureConfigData &gt;</label>
+        <link refid="d5/d2a/a05996"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="9" relation="template-instance">
+          <edgelabel>&lt; TextureConfigData &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>T</label>
+      </node>
+      <node id="3">
+        <label>castor3d::shader::BufferBase</label>
+        <link refid="d4/dc4/a05992"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_ssbo</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>m_variableName</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>castor3d::shader::BufferT&lt; DataT &gt;</label>
+        <link refid="d5/d2a/a05996"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::shader::TextureConfigurations</label>
+        <link refid="d0/d80/a06132"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+      <node id="7">
+        <label>std::string</label>
+        <childnode refid="8" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>std::unique_ptr&lt; T &gt;</label>
+        <childnode refid="6" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>std::unique_ptr&lt; sdw::StorageBuffer &gt;</label>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; sdw::StorageBuffer &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Shaders/GlslTextureConfiguration.hpp" line="133" column="1" bodyfile="Shader/Shaders/GlslTextureConfiguration.hpp" bodystart="135" bodyend="201"/>
+    <listofallmembers>
+      <member refid="d4/dc4/a05992_1a4625e7c6c7426433390143ef91de516d" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigurations</scope><name>BufferBase</name></member>
+      <member refid="d5/d2a/a05996_1a3121cc6273753a4bda1b99bf8313ac8e" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigurations</scope><name>BufferT</name></member>
+      <member refid="d0/d80/a06132_1a47e150c5b7c83b8545712f3be7dab8c6" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigurations</scope><name>computeMapsContributions</name></member>
+      <member refid="d0/d80/a06132_1aa39cb77a04f8ef7bc92f06b3bb77dbd0" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigurations</scope><name>computeMapsContributions</name></member>
+      <member refid="d0/d80/a06132_1af06e5fb9702e303595ecd23c32070e6f" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigurations</scope><name>computeMapsContributionsT</name></member>
+      <member refid="d4/dc4/a05992_1ac39085e1f563915a9270c99d3837a6b7" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigurations</scope><name>getCount</name></member>
+      <member refid="d5/d2a/a05996_1a7fed7db7c6ddd5ec43d4b243a608ee8a" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigurations</scope><name>getData</name></member>
+      <member refid="d4/dc4/a05992_1a4b36d8c822ebaf12e2c31d9fbc0d4a8f" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigurations</scope><name>getSecondaryCount</name></member>
+      <member refid="d0/d80/a06132_1ad81995f5fa50274b5c76926272570870" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigurations</scope><name>getTexcoord</name></member>
+      <member refid="d0/d80/a06132_1a4971040d3641e8a0f0a769aea61dc9de" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigurations</scope><name>getTextureConfiguration</name></member>
+      <member refid="d4/dc4/a05992_1a30e5f486cf48f99e981f62c0eaf4c4f2" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigurations</scope><name>getWriter</name></member>
+      <member refid="d4/dc4/a05992_1a17f3f731aeca6327e611dd45636d0760" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigurations</scope><name>isEnabled</name></member>
+      <member refid="d0/d80/a06132_1af2f71607c6f8b85d817680141f7143af" prot="private" virt="non-virtual"><scope>castor3d::shader::TextureConfigurations</scope><name>m_applyTexture</name></member>
+      <member refid="d0/d80/a06132_1a0bec5cebb1d2742b5e9588477c60439f" prot="private" virt="non-virtual"><scope>castor3d::shader::TextureConfigurations</scope><name>m_setTexcoord2</name></member>
+      <member refid="d0/d80/a06132_1af1aaa79392a4808a8f983e228cc79fa6" prot="private" virt="non-virtual"><scope>castor3d::shader::TextureConfigurations</scope><name>m_setTexcoord3</name></member>
+      <member refid="d0/d80/a06132_1a3f6d4080bc2e3dde31546025a64344fd" prot="private" virt="non-virtual"><scope>castor3d::shader::TextureConfigurations</scope><name>m_setTexcoord4</name></member>
+      <member refid="d4/dc4/a05992_1a5d932674ed8f6e0d34a71affbc88bca8" prot="protected" virt="non-virtual"><scope>castor3d::shader::TextureConfigurations</scope><name>m_ssbo</name></member>
+      <member refid="d4/dc4/a05992_1aae02f484169333d895df1f92ab6db2a3" prot="protected" virt="non-virtual"><scope>castor3d::shader::TextureConfigurations</scope><name>m_variableName</name></member>
+      <member refid="d4/dc4/a05992_1a8094a884d182023869e7b4a9be80c93e" prot="protected" virt="non-virtual"><scope>castor3d::shader::TextureConfigurations</scope><name>m_writer</name></member>
+      <member refid="d0/d80/a06132_1a106858da1cb1eace70a77d537fdea704" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigurations</scope><name>setTexcoord</name></member>
+      <member refid="d0/d80/a06132_1aaaaee2d9f57922f83785453ec3f60bcd" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureConfigurations</scope><name>TextureConfigurations</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

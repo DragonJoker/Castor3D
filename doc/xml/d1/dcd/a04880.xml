@@ -1,0 +1,90 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d1/dcd/a04880" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::VisibilityResolvePass::Pipeline::ShaderStages</compoundname>
+    <includes local="no">VisibilityResolvePass.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d1/dcd/a04880_1a5ebd14f3a4430226301f1aa05c528ccb" prot="public" static="no" mutable="no">
+        <type><ref refid="d8/d3f/a05960" kindref="compound">ShaderModule</ref></type>
+        <definition>ShaderModule castor3d::VisibilityResolvePass::Pipeline::ShaderStages::shader</definition>
+        <argsstring></argsstring>
+        <name>shader</name>
+        <qualifiedname>castor3d::VisibilityResolvePass::Pipeline::ShaderStages::shader</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/VisibilityResolvePass.hpp" line="108" column="14" bodyfile="Render/Opaque/VisibilityResolvePass.hpp" bodystart="108" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/dcd/a04880_1a66db8bc37ad14ad7af1be2fe95780d30" prot="public" static="no" mutable="no">
+        <type>ashes::PipelinePtr</type>
+        <definition>ashes::PipelinePtr castor3d::VisibilityResolvePass::Pipeline::ShaderStages::pipeline</definition>
+        <argsstring></argsstring>
+        <name>pipeline</name>
+        <qualifiedname>castor3d::VisibilityResolvePass::Pipeline::ShaderStages::pipeline</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/VisibilityResolvePass.hpp" line="109" column="20" bodyfile="Render/Opaque/VisibilityResolvePass.hpp" bodystart="109" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="7">
+        <label>T</label>
+      </node>
+      <node id="2">
+        <label>castor3d::ShaderModule</label>
+        <link refid="d8/d3f/a05960"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>name</edgelabel>
+          <edgelabel>source</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>shader</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::VisibilityResolvePass::Pipeline::ShaderStages</label>
+        <link refid="d1/dcd/a04880"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>shader</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+      <node id="3">
+        <label>std::string</label>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>std::unique_ptr&lt; T &gt;</label>
+        <childnode refid="7" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>std::unique_ptr&lt; ast::Shader &gt;</label>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; ast::Shader &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Opaque/VisibilityResolvePass.hpp" line="106" column="1" bodyfile="Render/Opaque/VisibilityResolvePass.hpp" bodystart="107" bodyend="110"/>
+    <listofallmembers>
+      <member refid="d1/dcd/a04880_1a66db8bc37ad14ad7af1be2fe95780d30" prot="public" virt="non-virtual"><scope>castor3d::VisibilityResolvePass::Pipeline::ShaderStages</scope><name>pipeline</name></member>
+      <member refid="d1/dcd/a04880_1a5ebd14f3a4430226301f1aa05c528ccb" prot="public" virt="non-virtual"><scope>castor3d::VisibilityResolvePass::Pipeline::ShaderStages</scope><name>shader</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

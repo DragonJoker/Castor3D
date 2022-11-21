@@ -1,0 +1,74 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d3/df8/a05704" kind="struct" language="C++" prot="public">
+    <compoundname>castor::ParserEnumTraits&lt; VkSamplerMipmapMode &gt;</compoundname>
+    <includes local="no">SceneFileParser.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d3/df8/a05704_1a5221117d3f07f3ac0afbd99a9db7c207" prot="public" static="yes" mutable="no">
+        <type>xchar const  *const</type>
+        <definition>xchar const* const castor::ParserEnumTraits&lt; VkSamplerMipmapMode &gt;::Name</definition>
+        <argsstring></argsstring>
+        <name>Name</name>
+        <qualifiedname>castor::ParserEnumTraits&lt; VkSamplerMipmapMode &gt;::Name</qualifiedname>
+        <initializer>= cuT( &quot;MipmapMode&quot; )</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="338" column="34" bodyfile="Scene/SceneFileParser.hpp" bodystart="338" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/df8/a05704_1a40dbbb03ab1f5ec92e695f0944135fdf" prot="public" static="yes" mutable="no">
+        <type>UInt32StrMap const</type>
+        <definition>UInt32StrMap const castor::ParserEnumTraits&lt; VkSamplerMipmapMode &gt;::Values</definition>
+        <argsstring></argsstring>
+        <name>Values</name>
+        <qualifiedname>castor::ParserEnumTraits&lt; VkSamplerMipmapMode &gt;::Values</qualifiedname>
+        <initializer>= []()
+		{
+			UInt32StrMap result;
+			result = <ref refid="d3/d22/a01572_1a89ee8e4edb4c883ef7c66b8dc60cc430" kindref="member">castor3d::getEnumMapT</ref>( VK_SAMPLER_MIPMAP_MODE_NEAREST, VK_SAMPLER_MIPMAP_MODE_LINEAR );
+			result[cuT( &quot;none&quot; )] = uint32_t( VK_SAMPLER_MIPMAP_MODE_NEAREST );
+			return result;
+		}( )</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="339" column="34" bodyfile="Scene/SceneFileParser.hpp" bodystart="339" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor::ParserEnumTraits&lt; VkSamplerMipmapMode &gt;</label>
+        <link refid="d3/df8/a05704"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>Name</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>Values</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>UInt32StrMap</label>
+      </node>
+      <node id="2">
+        <label>xchar</label>
+      </node>
+    </collaborationgraph>
+    <location file="Scene/SceneFileParser.hpp" line="336" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="337" bodyend="346"/>
+    <listofallmembers>
+      <member refid="d3/df8/a05704_1a5221117d3f07f3ac0afbd99a9db7c207" prot="public" virt="non-virtual"><scope>castor::ParserEnumTraits&lt; VkSamplerMipmapMode &gt;</scope><name>Name</name></member>
+      <member refid="d3/df8/a05704_1a40dbbb03ab1f5ec92e695f0944135fdf" prot="public" virt="non-virtual"><scope>castor::ParserEnumTraits&lt; VkSamplerMipmapMode &gt;</scope><name>Values</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

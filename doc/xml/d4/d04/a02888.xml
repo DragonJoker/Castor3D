@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d4/d04/a02888" kind="struct" language="C++" prot="public">
+    <compoundname>castor::OverlayCategorySort</compoundname>
+    <includes local="no">OverlayCache.hpp</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d4/d04/a02888_1a40e4a26b5f15a5987cfa83554cba6ab5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor::OverlayCategorySort::operator()</definition>
+        <argsstring>(castor3d::OverlayCategorySPtr a, castor3d::OverlayCategorySPtr b) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>castor::OverlayCategorySort::operator()</qualifiedname>
+        <param>
+          <type>castor3d::OverlayCategorySPtr</type>
+          <declname>a</declname>
+        </param>
+        <param>
+          <type>castor3d::OverlayCategorySPtr</type>
+          <declname>b</declname>
+        </param>
+        <briefdescription>
+<para>Comparison operator. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/OverlayCache.hpp" line="33" column="13" bodyfile="Cache/OverlayCache.hpp" bodystart="33" bodyend="38"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Structure used to sort overlays by order. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Cache/OverlayCache.hpp" line="25" column="1" bodyfile="Cache/OverlayCache.hpp" bodystart="26" bodyend="39"/>
+    <listofallmembers>
+      <member refid="d4/d04/a02888_1a40e4a26b5f15a5987cfa83554cba6ab5" prot="public" virt="non-virtual"><scope>castor::OverlayCategorySort</scope><name>operator()</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

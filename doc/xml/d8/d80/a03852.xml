@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d8/d80/a03852" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::TextureSourceInfoHasher</compoundname>
+    <includes local="no">TextureModule.hpp</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d8/d80/a03852_1a13c35ea63a4683b626c9aa08b3664338" prot="public" static="no" const="yes" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> size_t</type>
+        <definition>C3D_API size_t castor3d::TextureSourceInfoHasher::operator()</definition>
+        <argsstring>(TextureSourceInfo const &amp;value) const noexcept</argsstring>
+        <name>operator()</name>
+        <qualifiedname>castor3d::TextureSourceInfoHasher::operator()</qualifiedname>
+        <param>
+          <type><ref refid="db/d62/a03860" kindref="compound">TextureSourceInfo</ref> const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureModule.hpp" line="277" column="16"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Material/Texture/TextureModule.hpp" line="275" column="1" bodyfile="Material/Texture/TextureModule.hpp" bodystart="276" bodyend="278"/>
+    <listofallmembers>
+      <member refid="d8/d80/a03852_1a13c35ea63a4683b626c9aa08b3664338" prot="public" virt="non-virtual"><scope>castor3d::TextureSourceInfoHasher</scope><name>operator()</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

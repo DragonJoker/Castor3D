@@ -1,0 +1,37 @@
+<map id="castor3d::BinaryWriterBase&lt; TWritten &gt;" name="castor3d::BinaryWriterBase&lt; TWritten &gt;">
+<area shape="rect" id="node1" title="Binary data chunk writer base class." alt="" coords="5,535,188,577"/>
+<area shape="rect" id="node2" href="$d9/de2/a02508.html" title=" " alt="" coords="473,13,656,54"/>
+<area shape="rect" id="node4" href="$d9/de2/a02508.html" title=" " alt="" coords="473,78,656,119"/>
+<area shape="rect" id="node6" href="$d9/de2/a02508.html" title=" " alt="" coords="473,143,656,185"/>
+<area shape="rect" id="node8" href="$d9/de2/a02508.html" title=" " alt="" coords="473,209,656,250"/>
+<area shape="rect" id="node10" href="$d9/de2/a02508.html" title=" " alt="" coords="473,274,656,315"/>
+<area shape="rect" id="node12" href="$d9/de2/a02508.html" title=" " alt="" coords="473,339,656,381"/>
+<area shape="rect" id="node14" href="$d9/de2/a02508.html" title=" " alt="" coords="473,405,656,446"/>
+<area shape="rect" id="node16" href="$d9/de2/a02508.html" title=" " alt="" coords="449,470,680,511"/>
+<area shape="rect" id="node18" href="$d9/de2/a02508.html" title=" " alt="" coords="473,535,656,577"/>
+<area shape="rect" id="node20" href="$d9/de2/a02508.html" title=" " alt="" coords="473,601,656,642"/>
+<area shape="rect" id="node22" href="$d9/de2/a02508.html" title=" " alt="" coords="472,666,657,707"/>
+<area shape="rect" id="node24" href="$d9/de2/a02508.html" title=" " alt="" coords="457,731,672,773"/>
+<area shape="rect" id="node26" href="$d9/de2/a02508.html" title=" " alt="" coords="472,797,657,838"/>
+<area shape="rect" id="node28" href="$d9/de2/a02508.html" title=" " alt="" coords="468,862,661,903"/>
+<area shape="rect" id="node30" href="$d9/de2/a02508.html" title=" " alt="" coords="473,927,656,969"/>
+<area shape="rect" id="node32" href="$d9/de2/a02508.html" title=" " alt="" coords="473,993,656,1034"/>
+<area shape="rect" id="node34" href="$d9/de2/a02508.html" title=" " alt="" coords="473,1058,656,1099"/>
+<area shape="rect" id="node3" href="$db/d5f/a02440.html" title="Animation binary loader." alt="" coords="769,13,921,54"/>
+<area shape="rect" id="node5" href="$da/d23/a02452.html" title="Animable binary loader." alt="" coords="769,78,921,119"/>
+<area shape="rect" id="node7" href="$d2/d35/a02468.html" title="MovableObject loader." alt="" coords="769,143,921,185"/>
+<area shape="rect" id="node9" href="$d2/d35/a02480.html" title="MeshAnimation binary loader." alt="" coords="769,209,921,250"/>
+<area shape="rect" id="node11" href="$d6/d90/a02492.html" title="MeshMorphTarget binary loader." alt="" coords="769,274,921,315"/>
+<area shape="rect" id="node13" href="$d8/d65/a02528.html" title="MorphComponent loader." alt="" coords="769,339,921,381"/>
+<area shape="rect" id="node15" href="$d4/db0/a02540.html" title="SceneNodeAnimation binary loader." alt="" coords="759,405,930,446"/>
+<area shape="rect" id="node17" href="$de/d48/a02552.html" title="SceneNodeAnimationKeyFrame binary loader." alt="" coords="729,470,960,511"/>
+<area shape="rect" id="node19" href="$db/d44/a02564.html" title="Animable binary loader." alt="" coords="769,535,921,577"/>
+<area shape="rect" id="node21" href="$d0/df5/a02576.html" title="SkeletonAnimation binary loader." alt="" coords="767,601,922,642"/>
+<area shape="rect" id="node23" href="$d4/d61/a02588.html" title="MovingBone binary loader." alt="" coords="752,666,937,707"/>
+<area shape="rect" id="node25" href="$d1/d88/a02600.html" title="SkeletonAnimationKeyFrame binary loader." alt="" coords="737,731,952,773"/>
+<area shape="rect" id="node27" href="$d6/dfc/a02612.html" title="MovingBone binary loader." alt="" coords="752,797,937,838"/>
+<area shape="rect" id="node29" href="$d8/d09/a02624.html" title="SkeletonAnimationObject binary loader." alt="" coords="748,862,941,903"/>
+<area shape="rect" id="node31" href="$dd/d32/a02636.html" title="Animable binary loader." alt="" coords="769,927,921,969"/>
+<area shape="rect" id="node33" href="$dc/dcb/a02648.html" title="SkinComponent loader." alt="" coords="769,993,921,1034"/>
+<area shape="rect" id="node35" href="$de/d7b/a02660.html" title="MovableObject loader." alt="" coords="769,1058,921,1099"/>
+</map>

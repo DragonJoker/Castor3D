@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="df/da8/a04320" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::LineIndices</compoundname>
+    <includes local="no">LineIndices.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="df/da8/a04320_1ac8d2569b7f8e6030b425ffb8e651b617" prot="public" static="no" mutable="no">
+        <type>std::array&lt; uint32_t, 2 &gt;</type>
+        <definition>std::array&lt; uint32_t, 2 &gt; castor3d::LineIndices::m_index</definition>
+        <argsstring></argsstring>
+        <name>m_index</name>
+        <qualifiedname>castor3d::LineIndices::m_index</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The indices. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/LineIndices.hpp" line="15" column="12" bodyfile="Model/Mesh/Submesh/Component/LineIndices.hpp" bodystart="15" bodyend="-1"/>
+        <referencedby refid="de/d38/a04316_1acd37f954f3a44a3ae092cd5431253fc7" compoundref="d8/d13/a00671" startline="33" endline="37">castor3d::Line::operator[]</referencedby>
+        <referencedby refid="d3/d22/a01572_1a1281cbf080321b1041acc691028f9d97" compoundref="d3/df8/a00155" startline="1306" endline="1313">castor3d::prepareChunkData</referencedby>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="4">
+        <label>T</label>
+      </node>
+      <node id="2">
+        <label>std::array&lt; uint32_t, 2 &gt;</label>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; uint32_t, 2 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::LineIndices</label>
+        <link refid="df/da8/a04320"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>m_index</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="4" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Model/Mesh/Submesh/Component/LineIndices.hpp" line="11" column="1" bodyfile="Model/Mesh/Submesh/Component/LineIndices.hpp" bodystart="12" bodyend="16"/>
+    <listofallmembers>
+      <member refid="df/da8/a04320_1ac8d2569b7f8e6030b425ffb8e651b617" prot="public" virt="non-virtual"><scope>castor3d::LineIndices</scope><name>m_index</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

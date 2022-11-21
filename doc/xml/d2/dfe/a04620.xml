@@ -1,0 +1,1610 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d2/dfe/a04620" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>castor3d::SceneCuller</compoundname>
+    <derivedcompoundref refid="d7/dc4/a04612" prot="public" virt="non-virtual">castor3d::DummyCuller</derivedcompoundref>
+    <derivedcompoundref refid="de/dfb/a04616" prot="public" virt="non-virtual">castor3d::FrustumCuller</derivedcompoundref>
+    <includes local="no">SceneCuller.hpp</includes>
+    <innerclass refid="d9/d38/a04624" prot="public">castor3d::SceneCuller::CulledNodeT</innerclass>
+    <innerclass refid="d3/d6e/a04628" prot="public">castor3d::SceneCuller::RenderPassBuffers</innerclass>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d2/dfe/a04620_1a3590fca4f928b3743f8275bbe1c2fd13" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d6/d0e/a05676" kindref="compound">Scene</ref> &amp;</type>
+        <definition>Scene &amp; castor3d::SceneCuller::getScene</definition>
+        <argsstring>() const</argsstring>
+        <name>getScene</name>
+        <qualifiedname>castor3d::SceneCuller::getScene</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Getters. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="125" column="8" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="125" bodyend="128"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dfe/a04620_1a602a1b5c0447c9a02eaf7d65cde84e8c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::SceneCuller::hasCamera</definition>
+        <argsstring>() const</argsstring>
+        <name>hasCamera</name>
+        <qualifiedname>castor3d::SceneCuller::hasCamera</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="130" column="6" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="130" bodyend="133"/>
+        <references refid="d2/dfe/a04620_1a7368dd7328e770423fc67641b857e43f" compoundref="d9/daf/a00830" startline="262">m_camera</references>
+        <referencedby refid="d2/dfe/a04620_1a7d8e0e08c971df07a39eee8182cd864c" compoundref="d9/daf/a00830" startline="135" endline="139">getCamera</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d2/dfe/a04620_1a7d8e0e08c971df07a39eee8182cd864c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d6/dfa/a05552" kindref="compound">Camera</ref> const &amp;</type>
+        <definition>Camera const  &amp; castor3d::SceneCuller::getCamera</definition>
+        <argsstring>() const</argsstring>
+        <name>getCamera</name>
+        <qualifiedname>castor3d::SceneCuller::getCamera</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="135" column="15" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="135" bodyend="139"/>
+        <references refid="d2/dfe/a04620_1a602a1b5c0447c9a02eaf7d65cde84e8c" compoundref="d9/daf/a00830" startline="130" endline="133">hasCamera</references>
+        <references refid="d2/dfe/a04620_1a7368dd7328e770423fc67641b857e43f" compoundref="d9/daf/a00830" startline="262">m_camera</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/dfe/a04620_1ad025465f2c7325847ad75ecd4e9f3470" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d6/dfa/a05552" kindref="compound">Camera</ref> &amp;</type>
+        <definition>Camera &amp; castor3d::SceneCuller::getCamera</definition>
+        <argsstring>()</argsstring>
+        <name>getCamera</name>
+        <qualifiedname>castor3d::SceneCuller::getCamera</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="141" column="9" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="141" bodyend="145"/>
+        <references refid="d2/dfe/a04620_1a602a1b5c0447c9a02eaf7d65cde84e8c" compoundref="d9/daf/a00830" startline="130" endline="133">hasCamera</references>
+        <references refid="d2/dfe/a04620_1a7368dd7328e770423fc67641b857e43f" compoundref="d9/daf/a00830" startline="262">m_camera</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/dfe/a04620_1ab38e1111b66f862727a55036e5457b7c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::SceneCuller::areAnyChanged</definition>
+        <argsstring>() const</argsstring>
+        <name>areAnyChanged</name>
+        <qualifiedname>castor3d::SceneCuller::areAnyChanged</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="147" column="6" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="147" bodyend="150"/>
+        <references refid="d2/dfe/a04620_1a7fa4173c20b5d95752609dc38b4dfdad" compoundref="d9/daf/a00830" startline="265">m_anyChanged</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/dfe/a04620_1a28bd1305c7e968e95dfc30a0b60829da" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::SceneCuller::areCulledChanged</definition>
+        <argsstring>() const</argsstring>
+        <name>areCulledChanged</name>
+        <qualifiedname>castor3d::SceneCuller::areCulledChanged</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="152" column="6" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="152" bodyend="155"/>
+        <references refid="d2/dfe/a04620_1a92023fa128d7fd1c053bf5fccb4e7693" compoundref="d9/daf/a00830" startline="266">m_culledChanged</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/dfe/a04620_1a96b401de419980460139e52b73da97eb" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::SceneCuller::hasCulledNodes</definition>
+        <argsstring>(RenderNodesPass const &amp;renderPass) const</argsstring>
+        <name>hasCulledNodes</name>
+        <qualifiedname>castor3d::SceneCuller::hasCulledNodes</qualifiedname>
+        <param>
+          <type><ref refid="d8/de4/a05172" kindref="compound">RenderNodesPass</ref> const &amp;</type>
+          <declname>renderPass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="157" column="6" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="157" bodyend="164"/>
+        <references refid="d2/dfe/a04620_1ac8ff5db4d88280106fd24d798ed8f676" compoundref="d9/daf/a00830" startline="275">m_renderPasses</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/dfe/a04620_1afc93f8bfe6ad8dac4429937200be1715" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::Buffer&lt; VkDrawIndexedIndirectCommand &gt; const &amp;</type>
+        <definition>ashes::Buffer&lt; VkDrawIndexedIndirectCommand &gt; const  &amp; castor3d::SceneCuller::getSubmeshIdxCommands</definition>
+        <argsstring>(RenderNodesPass const &amp;renderPass) const</argsstring>
+        <name>getSubmeshIdxCommands</name>
+        <qualifiedname>castor3d::SceneCuller::getSubmeshIdxCommands</qualifiedname>
+        <param>
+          <type><ref refid="d8/de4/a05172" kindref="compound">RenderNodesPass</ref> const &amp;</type>
+          <declname>renderPass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="177" column="22" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="177" bodyend="182"/>
+        <references refid="d2/dfe/a04620_1ac8ff5db4d88280106fd24d798ed8f676" compoundref="d9/daf/a00830" startline="275">m_renderPasses</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/dfe/a04620_1a4f52ea00a27f70b3138dac472293dd96" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::Buffer&lt; VkDrawIndirectCommand &gt; const &amp;</type>
+        <definition>ashes::Buffer&lt; VkDrawIndirectCommand &gt; const  &amp; castor3d::SceneCuller::getSubmeshNIdxCommands</definition>
+        <argsstring>(RenderNodesPass const &amp;renderPass) const</argsstring>
+        <name>getSubmeshNIdxCommands</name>
+        <qualifiedname>castor3d::SceneCuller::getSubmeshNIdxCommands</qualifiedname>
+        <param>
+          <type><ref refid="d8/de4/a05172" kindref="compound">RenderNodesPass</ref> const &amp;</type>
+          <declname>renderPass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="184" column="22" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="184" bodyend="189"/>
+        <references refid="d2/dfe/a04620_1ac8ff5db4d88280106fd24d798ed8f676" compoundref="d9/daf/a00830" startline="275">m_renderPasses</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/dfe/a04620_1a9003118298fe8916dfd1e05f442506ca" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::Buffer&lt; VkDrawIndirectCommand &gt; const &amp;</type>
+        <definition>ashes::Buffer&lt; VkDrawIndirectCommand &gt; const  &amp; castor3d::SceneCuller::getBillboardCommands</definition>
+        <argsstring>(RenderNodesPass const &amp;renderPass) const</argsstring>
+        <name>getBillboardCommands</name>
+        <qualifiedname>castor3d::SceneCuller::getBillboardCommands</qualifiedname>
+        <param>
+          <type><ref refid="d8/de4/a05172" kindref="compound">RenderNodesPass</ref> const &amp;</type>
+          <declname>renderPass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="191" column="22" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="191" bodyend="196"/>
+        <references refid="d2/dfe/a04620_1ac8ff5db4d88280106fd24d798ed8f676" compoundref="d9/daf/a00830" startline="275">m_renderPasses</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/dfe/a04620_1a0873968915bcde09a46c8805458fba13" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::Buffer&lt; <ref refid="d3/d22/a01572_1a01e432521d318761ffe05a4ef06bd0ae" kindref="member">PipelineNodes</ref> &gt; const &amp;</type>
+        <definition>ashes::Buffer&lt; PipelineNodes &gt; const  &amp; castor3d::SceneCuller::getNodesIds</definition>
+        <argsstring>(RenderNodesPass const &amp;renderPass) const</argsstring>
+        <name>getNodesIds</name>
+        <qualifiedname>castor3d::SceneCuller::getNodesIds</qualifiedname>
+        <param>
+          <type><ref refid="d8/de4/a05172" kindref="compound">RenderNodesPass</ref> const &amp;</type>
+          <declname>renderPass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="198" column="22" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="198" bodyend="203"/>
+        <references refid="d2/dfe/a04620_1ac8ff5db4d88280106fd24d798ed8f676" compoundref="d9/daf/a00830" startline="275">m_renderPasses</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/dfe/a04620_1a55adac9263b85d93e7b675edfade1337" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d2/dfe/a04620_1a74b17a17d444335cca2d4c576b8c8700" kindref="member">SidedNodePipelineMapT</ref>&lt; <ref refid="da/deb/a04764" kindref="compound">SubmeshRenderNode</ref> &gt; const &amp;</type>
+        <definition>SidedNodePipelineMapT&lt; SubmeshRenderNode &gt; const  &amp; castor3d::SceneCuller::getSubmeshNodes</definition>
+        <argsstring>(RenderNodesPass const &amp;renderPass) const</argsstring>
+        <name>getSubmeshNodes</name>
+        <qualifiedname>castor3d::SceneCuller::getSubmeshNodes</qualifiedname>
+        <param>
+          <type><ref refid="d8/de4/a05172" kindref="compound">RenderNodesPass</ref> const &amp;</type>
+          <declname>renderPass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="205" column="30" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="205" bodyend="210"/>
+        <references refid="d2/dfe/a04620_1ac8ff5db4d88280106fd24d798ed8f676" compoundref="d9/daf/a00830" startline="275">m_renderPasses</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/dfe/a04620_1aa0ede0892ee9df11bbcce8bfa310779d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d2/dfe/a04620_1a9fcbbc3a15d05a822400afefe302aef6" kindref="member">SidedObjectNodePipelineMapT</ref>&lt; <ref refid="da/deb/a04764" kindref="compound">SubmeshRenderNode</ref> &gt; const &amp;</type>
+        <definition>SidedObjectNodePipelineMapT&lt; SubmeshRenderNode &gt; const  &amp; castor3d::SceneCuller::getInstancedSubmeshNodes</definition>
+        <argsstring>(RenderNodesPass const &amp;renderPass) const</argsstring>
+        <name>getInstancedSubmeshNodes</name>
+        <qualifiedname>castor3d::SceneCuller::getInstancedSubmeshNodes</qualifiedname>
+        <param>
+          <type><ref refid="d8/de4/a05172" kindref="compound">RenderNodesPass</ref> const &amp;</type>
+          <declname>renderPass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="212" column="36" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="212" bodyend="217"/>
+        <references refid="d2/dfe/a04620_1ac8ff5db4d88280106fd24d798ed8f676" compoundref="d9/daf/a00830" startline="275">m_renderPasses</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/dfe/a04620_1a0dec79342b1ddc5d58f6d942520012ee" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d2/dfe/a04620_1a74b17a17d444335cca2d4c576b8c8700" kindref="member">SidedNodePipelineMapT</ref>&lt; <ref refid="d4/da9/a04736" kindref="compound">BillboardRenderNode</ref> &gt; const &amp;</type>
+        <definition>SidedNodePipelineMapT&lt; BillboardRenderNode &gt; const  &amp; castor3d::SceneCuller::getBillboardNodes</definition>
+        <argsstring>(RenderNodesPass const &amp;renderPass) const</argsstring>
+        <name>getBillboardNodes</name>
+        <qualifiedname>castor3d::SceneCuller::getBillboardNodes</qualifiedname>
+        <param>
+          <type><ref refid="d8/de4/a05172" kindref="compound">RenderNodesPass</ref> const &amp;</type>
+          <declname>renderPass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="219" column="30" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="219" bodyend="224"/>
+        <references refid="d2/dfe/a04620_1ac8ff5db4d88280106fd24d798ed8f676" compoundref="d9/daf/a00830" startline="275">m_renderPasses</references>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d2/dfe/a04620_1abc257a73d93fc77fa7993bf8c94d372e" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>typename NodeT</type>
+          </param>
+        </templateparamlist>
+        <type>std::vector&lt; <ref refid="d9/d38/a04624" kindref="compound">CulledNodeT</ref>&lt; NodeT &gt; &gt;</type>
+        <definition>using castor3d::SceneCuller::NodeArrayT =  std::vector&lt; CulledNodeT&lt; NodeT &gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>NodeArrayT</name>
+        <qualifiedname>castor3d::SceneCuller::NodeArrayT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="43" column="1" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d2/dfe/a04620_1a47dc13a20ba395dd0b4eac6b4118288f" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>typename NodeT</type>
+          </param>
+        </templateparamlist>
+        <type>std::pair&lt; <ref refid="d9/d38/a04624" kindref="compound">CulledNodeT</ref>&lt; NodeT &gt;, bool &gt;</type>
+        <definition>using castor3d::SceneCuller::SidedNodeT =  std::pair&lt; CulledNodeT&lt; NodeT &gt;, bool &gt;</definition>
+        <argsstring></argsstring>
+        <name>SidedNodeT</name>
+        <qualifiedname>castor3d::SceneCuller::SidedNodeT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="45" column="1" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d2/dfe/a04620_1a08ca690df1bf7b6eeb7246d18ef8bb46" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>typename NodeT</type>
+          </param>
+        </templateparamlist>
+        <type>std::vector&lt; <ref refid="d2/dfe/a04620_1a47dc13a20ba395dd0b4eac6b4118288f" kindref="member">SidedNodeT</ref>&lt; NodeT &gt; &gt;</type>
+        <definition>using castor3d::SceneCuller::SidedNodeArrayT =  std::vector&lt; SidedNodeT&lt; NodeT &gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>SidedNodeArrayT</name>
+        <qualifiedname>castor3d::SceneCuller::SidedNodeArrayT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="47" column="1" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d2/dfe/a04620_1a9b9bf62edb2c5e226b2041377cdd0bc5" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>typename NodeT</type>
+          </param>
+        </templateparamlist>
+        <type>std::map&lt; ashes::BufferBase const *, <ref refid="d2/dfe/a04620_1a08ca690df1bf7b6eeb7246d18ef8bb46" kindref="member">SidedNodeArrayT</ref>&lt; NodeT &gt; &gt;</type>
+        <definition>using castor3d::SceneCuller::SidedNodeBufferMapT =  std::map&lt; ashes::BufferBase const *, SidedNodeArrayT&lt; NodeT &gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>SidedNodeBufferMapT</name>
+        <qualifiedname>castor3d::SceneCuller::SidedNodeBufferMapT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="50" column="1" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d2/dfe/a04620_1a74b17a17d444335cca2d4c576b8c8700" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>typename NodeT</type>
+          </param>
+        </templateparamlist>
+        <type>std::map&lt; <ref refid="de/d7d/a05000" kindref="compound">PipelineBaseHash</ref>, <ref refid="d2/dfe/a04620_1a9b9bf62edb2c5e226b2041377cdd0bc5" kindref="member">SidedNodeBufferMapT</ref>&lt; NodeT &gt; &gt;</type>
+        <definition>using castor3d::SceneCuller::SidedNodePipelineMapT =  std::map&lt; PipelineBaseHash, SidedNodeBufferMapT&lt; NodeT &gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>SidedNodePipelineMapT</name>
+        <qualifiedname>castor3d::SceneCuller::SidedNodePipelineMapT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="52" column="1" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="52" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d2/dfe/a04620_1af6ec96e40813b400947495d60019740c" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>typename NodeT</type>
+          </param>
+        </templateparamlist>
+        <type>std::map&lt; <ref refid="d3/d22/a01572_1aa0c1444a71267b454e977f3ad5b2cea9" kindref="member">NodeObjectT</ref>&lt; NodeT &gt; const *, <ref refid="d2/dfe/a04620_1a08ca690df1bf7b6eeb7246d18ef8bb46" kindref="member">SidedNodeArrayT</ref>&lt; NodeT &gt; &gt;</type>
+        <definition>using castor3d::SceneCuller::SidedObjectNodeMapT =  std::map&lt; NodeObjectT&lt; NodeT &gt; const *, SidedNodeArrayT&lt; NodeT &gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>SidedObjectNodeMapT</name>
+        <qualifiedname>castor3d::SceneCuller::SidedObjectNodeMapT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="55" column="1" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="55" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d2/dfe/a04620_1a6c735e4da690af7cba24dddc5abce0a2" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>typename NodeT</type>
+          </param>
+        </templateparamlist>
+        <type>std::map&lt; <ref refid="d3/d86/a03732" kindref="compound">Pass</ref> const *, <ref refid="d2/dfe/a04620_1af6ec96e40813b400947495d60019740c" kindref="member">SidedObjectNodeMapT</ref>&lt; NodeT &gt; &gt;</type>
+        <definition>using castor3d::SceneCuller::SidedObjectNodePassMapT =  std::map&lt; Pass const *, SidedObjectNodeMapT&lt; NodeT &gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>SidedObjectNodePassMapT</name>
+        <qualifiedname>castor3d::SceneCuller::SidedObjectNodePassMapT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="57" column="1" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="57" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d2/dfe/a04620_1ade4e2bab3f4456a4798a956f1bcee8c0" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>typename NodeT</type>
+          </param>
+        </templateparamlist>
+        <type>std::map&lt; ashes::BufferBase const *, <ref refid="d2/dfe/a04620_1a6c735e4da690af7cba24dddc5abce0a2" kindref="member">SidedObjectNodePassMapT</ref>&lt; NodeT &gt; &gt;</type>
+        <definition>using castor3d::SceneCuller::SidedObjectNodeBufferMapT =  std::map&lt; ashes::BufferBase const *, SidedObjectNodePassMapT&lt; NodeT &gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>SidedObjectNodeBufferMapT</name>
+        <qualifiedname>castor3d::SceneCuller::SidedObjectNodeBufferMapT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="59" column="1" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="59" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d2/dfe/a04620_1a9fcbbc3a15d05a822400afefe302aef6" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>typename NodeT</type>
+          </param>
+        </templateparamlist>
+        <type>std::map&lt; <ref refid="de/d7d/a05000" kindref="compound">PipelineBaseHash</ref>, <ref refid="d2/dfe/a04620_1ade4e2bab3f4456a4798a956f1bcee8c0" kindref="member">SidedObjectNodeBufferMapT</ref>&lt; NodeT &gt; &gt;</type>
+        <definition>using castor3d::SceneCuller::SidedObjectNodePipelineMapT =  std::map&lt; PipelineBaseHash, SidedObjectNodeBufferMapT&lt; NodeT &gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>SidedObjectNodePipelineMapT</name>
+        <qualifiedname>castor3d::SceneCuller::SidedObjectNodePipelineMapT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="61" column="1" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d2/dfe/a04620_1a9c5df1fcfd55a6050920465031ee16fe" prot="public" static="no">
+        <type>ashes::BufferPtr&lt; VkDrawIndexedIndirectCommand &gt;</type>
+        <definition>using castor3d::SceneCuller::IndexedDrawCommandsBuffer =  ashes::BufferPtr&lt; VkDrawIndexedIndirectCommand &gt;</definition>
+        <argsstring></argsstring>
+        <name>IndexedDrawCommandsBuffer</name>
+        <qualifiedname>castor3d::SceneCuller::IndexedDrawCommandsBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="66" column="1" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="66" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d2/dfe/a04620_1aab980445b5e3b308a83202c17ed319fe" prot="public" static="no">
+        <type>ashes::BufferPtr&lt; VkDrawIndirectCommand &gt;</type>
+        <definition>using castor3d::SceneCuller::DrawCommandsBuffer =  ashes::BufferPtr&lt; VkDrawIndirectCommand &gt;</definition>
+        <argsstring></argsstring>
+        <name>DrawCommandsBuffer</name>
+        <qualifiedname>castor3d::SceneCuller::DrawCommandsBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="67" column="1" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="67" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d2/dfe/a04620_1ae574a8f382f045af7ef6da4649e40d36" prot="public" static="no">
+        <type>ashes::BufferPtr&lt; <ref refid="d3/d22/a01572_1a01e432521d318761ffe05a4ef06bd0ae" kindref="member">PipelineNodes</ref> &gt;</type>
+        <definition>using castor3d::SceneCuller::PipelineNodesBuffer =  ashes::BufferPtr&lt; PipelineNodes &gt;</definition>
+        <argsstring></argsstring>
+        <name>PipelineNodesBuffer</name>
+        <qualifiedname>castor3d::SceneCuller::PipelineNodesBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="68" column="1" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="68" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d2/dfe/a04620_1a0df54bafb8f37f2b9d2729913c034dbc" prot="public" static="no">
+        <type>std::vector&lt; <ref refid="d3/d22/a01572_1abb8a6405264a378e696290c96aa2f4a9" kindref="member">PipelineBuffer</ref> &gt;</type>
+        <definition>using castor3d::SceneCuller::PipelineBufferArray =  std::vector&lt; PipelineBuffer &gt;</definition>
+        <argsstring></argsstring>
+        <name>PipelineBufferArray</name>
+        <qualifiedname>castor3d::SceneCuller::PipelineBufferArray</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="70" column="1" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="70" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d2/dfe/a04620_1a332ff2fc76d0928ad82d675f863c1529" prot="public" static="no" mutable="yes">
+        <type><ref refid="d3/d22/a01572_1af052f073f26317f55103522fcd456256" kindref="member">SceneCullerSignal</ref></type>
+        <definition>SceneCullerSignal castor3d::SceneCuller::onCompute</definition>
+        <argsstring></argsstring>
+        <name>onCompute</name>
+        <qualifiedname>castor3d::SceneCuller::onCompute</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="228" column="27" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="228" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d2/dfe/a04620_1aaa7aa212ce314d696d6fec9c8a8ef623" prot="private" static="no" mutable="no">
+        <type><ref refid="d6/d0e/a05676" kindref="compound">Scene</ref> &amp;</type>
+        <definition>Scene&amp; castor3d::SceneCuller::m_scene</definition>
+        <argsstring></argsstring>
+        <name>m_scene</name>
+        <qualifiedname>castor3d::SceneCuller::m_scene</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="259" column="8" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="259" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="d2/dfe/a04620_1a7368dd7328e770423fc67641b857e43f" prot="protected" static="no" mutable="no">
+        <type><ref refid="d6/dfa/a05552" kindref="compound">Camera</ref> *</type>
+        <definition>Camera* castor3d::SceneCuller::m_camera</definition>
+        <argsstring></argsstring>
+        <name>m_camera</name>
+        <qualifiedname>castor3d::SceneCuller::m_camera</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="262" column="9" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="262" bodyend="-1"/>
+        <referencedby refid="d2/dfe/a04620_1a7d8e0e08c971df07a39eee8182cd864c" compoundref="d9/daf/a00830" startline="135" endline="139">getCamera</referencedby>
+        <referencedby refid="d2/dfe/a04620_1a602a1b5c0447c9a02eaf7d65cde84e8c" compoundref="d9/daf/a00830" startline="130" endline="133">hasCamera</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d2/dfe/a04620_1a4a83c5a413e1d842bbd0f1843f63e57e" prot="protected" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::SceneCuller::m_index</definition>
+        <argsstring></argsstring>
+        <name>m_index</name>
+        <qualifiedname>castor3d::SceneCuller::m_index</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="263" column="10" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="263" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/dfe/a04620_1ad2f923ebff12cc5b1d69cda12a39a7fe" prot="protected" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::SceneCuller::m_first</definition>
+        <argsstring></argsstring>
+        <name>m_first</name>
+        <qualifiedname>castor3d::SceneCuller::m_first</qualifiedname>
+        <initializer>{ true }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="264" column="6" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="264" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/dfe/a04620_1a7fa4173c20b5d95752609dc38b4dfdad" prot="protected" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::SceneCuller::m_anyChanged</definition>
+        <argsstring></argsstring>
+        <name>m_anyChanged</name>
+        <qualifiedname>castor3d::SceneCuller::m_anyChanged</qualifiedname>
+        <initializer>{ true }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="265" column="6" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="265" bodyend="-1"/>
+        <referencedby refid="d2/dfe/a04620_1ab38e1111b66f862727a55036e5457b7c" compoundref="d9/daf/a00830" startline="147" endline="150">areAnyChanged</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d2/dfe/a04620_1a92023fa128d7fd1c053bf5fccb4e7693" prot="protected" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::SceneCuller::m_culledChanged</definition>
+        <argsstring></argsstring>
+        <name>m_culledChanged</name>
+        <qualifiedname>castor3d::SceneCuller::m_culledChanged</qualifiedname>
+        <initializer>{ true }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="266" column="6" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="266" bodyend="-1"/>
+        <referencedby refid="d2/dfe/a04620_1a28bd1305c7e968e95dfc30a0b60829da" compoundref="d9/daf/a00830" startline="152" endline="155">areCulledChanged</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d2/dfe/a04620_1af660e9b2be570b41c1d9198d7acbcf98" prot="protected" static="no" mutable="no">
+        <type>FramePassTimerUPtr</type>
+        <definition>FramePassTimerUPtr castor3d::SceneCuller::m_timer</definition>
+        <argsstring></argsstring>
+        <name>m_timer</name>
+        <qualifiedname>castor3d::SceneCuller::m_timer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="267" column="20" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="267" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/dfe/a04620_1ad549673fad5a8975678096c1e6007db6" prot="protected" static="no" mutable="no">
+        <type>FramePassTimerUPtr</type>
+        <definition>FramePassTimerUPtr castor3d::SceneCuller::m_timerDirty</definition>
+        <argsstring></argsstring>
+        <name>m_timerDirty</name>
+        <qualifiedname>castor3d::SceneCuller::m_timerDirty</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="268" column="20" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="268" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/dfe/a04620_1a5adf428f8451213fbc8d11ea2530d3fd" prot="protected" static="no" mutable="no">
+        <type>FramePassTimerUPtr</type>
+        <definition>FramePassTimerUPtr castor3d::SceneCuller::m_timerCompute</definition>
+        <argsstring></argsstring>
+        <name>m_timerCompute</name>
+        <qualifiedname>castor3d::SceneCuller::m_timerCompute</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="269" column="20" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="269" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/dfe/a04620_1a9840b13c4d194dbab7a1adc375479e6d" prot="protected" static="no" mutable="no">
+        <type>FramePassTimerUPtr</type>
+        <definition>FramePassTimerUPtr castor3d::SceneCuller::m_timerIndirect</definition>
+        <argsstring></argsstring>
+        <name>m_timerIndirect</name>
+        <qualifiedname>castor3d::SceneCuller::m_timerIndirect</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="270" column="20" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="270" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/dfe/a04620_1a8d0bab282d0f0f6155bfb7f1ab44ec65" prot="protected" static="no" mutable="no">
+        <type><ref refid="d2/dfe/a04620_1abc257a73d93fc77fa7993bf8c94d372e" kindref="member">NodeArrayT</ref>&lt; <ref refid="da/deb/a04764" kindref="compound">SubmeshRenderNode</ref> &gt;</type>
+        <definition>NodeArrayT&lt; SubmeshRenderNode &gt; castor3d::SceneCuller::m_culledSubmeshes</definition>
+        <argsstring></argsstring>
+        <name>m_culledSubmeshes</name>
+        <qualifiedname>castor3d::SceneCuller::m_culledSubmeshes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="272" column="12" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="272" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/dfe/a04620_1a4a80d7b1c3b7cc6bfd50cc3055b6cc6f" prot="protected" static="no" mutable="no">
+        <type><ref refid="d2/dfe/a04620_1abc257a73d93fc77fa7993bf8c94d372e" kindref="member">NodeArrayT</ref>&lt; <ref refid="d4/da9/a04736" kindref="compound">BillboardRenderNode</ref> &gt;</type>
+        <definition>NodeArrayT&lt; BillboardRenderNode &gt; castor3d::SceneCuller::m_culledBillboards</definition>
+        <argsstring></argsstring>
+        <name>m_culledBillboards</name>
+        <qualifiedname>castor3d::SceneCuller::m_culledBillboards</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="273" column="12" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="273" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/dfe/a04620_1ac8ff5db4d88280106fd24d798ed8f676" prot="protected" static="no" mutable="no">
+        <type>std::map&lt; <ref refid="d8/de4/a05172" kindref="compound">RenderNodesPass</ref> const *, <ref refid="d3/d6e/a04628" kindref="compound">RenderPassBuffers</ref> &gt;</type>
+        <definition>std::map&lt; RenderNodesPass const *, RenderPassBuffers &gt; castor3d::SceneCuller::m_renderPasses</definition>
+        <argsstring></argsstring>
+        <name>m_renderPasses</name>
+        <qualifiedname>castor3d::SceneCuller::m_renderPasses</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="275" column="10" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="275" bodyend="-1"/>
+        <referencedby refid="d2/dfe/a04620_1a9003118298fe8916dfd1e05f442506ca" compoundref="d9/daf/a00830" startline="191" endline="196">getBillboardCommands</referencedby>
+        <referencedby refid="d2/dfe/a04620_1a0dec79342b1ddc5d58f6d942520012ee" compoundref="d9/daf/a00830" startline="219" endline="224">getBillboardNodes</referencedby>
+        <referencedby refid="d2/dfe/a04620_1aa0ede0892ee9df11bbcce8bfa310779d" compoundref="d9/daf/a00830" startline="212" endline="217">getInstancedSubmeshNodes</referencedby>
+        <referencedby refid="d2/dfe/a04620_1a0873968915bcde09a46c8805458fba13" compoundref="d9/daf/a00830" startline="198" endline="203">getNodesIds</referencedby>
+        <referencedby refid="d2/dfe/a04620_1afc93f8bfe6ad8dac4429937200be1715" compoundref="d9/daf/a00830" startline="177" endline="182">getSubmeshIdxCommands</referencedby>
+        <referencedby refid="d2/dfe/a04620_1a4f52ea00a27f70b3138dac472293dd96" compoundref="d9/daf/a00830" startline="184" endline="189">getSubmeshNIdxCommands</referencedby>
+        <referencedby refid="d2/dfe/a04620_1a55adac9263b85d93e7b675edfade1337" compoundref="d9/daf/a00830" startline="205" endline="210">getSubmeshNodes</referencedby>
+        <referencedby refid="d2/dfe/a04620_1a96b401de419980460139e52b73da97eb" compoundref="d9/daf/a00830" startline="157" endline="164">hasCulledNodes</referencedby>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d2/dfe/a04620_1a9dc2a4be078ba6b83fe40c434166f779" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SceneCuller::SceneCuller</definition>
+        <argsstring>(Scene &amp;scene, Camera *camera)</argsstring>
+        <name>SceneCuller</name>
+        <qualifiedname>castor3d::SceneCuller::SceneCuller</qualifiedname>
+        <param>
+          <type><ref refid="d6/d0e/a05676" kindref="compound">Scene</ref> &amp;</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/dfa/a05552" kindref="compound">Camera</ref> *</type>
+          <declname>camera</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="89" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dfe/a04620_1a3ab6ffbb1d25eb9a8a422dc114e402ea" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>virtual C3D_API castor3d::SceneCuller::~SceneCuller</definition>
+        <argsstring>()</argsstring>
+        <name>~SceneCuller</name>
+        <qualifiedname>castor3d::SceneCuller::~SceneCuller</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="91" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dfe/a04620_1ab1455532a46b0ff41f24e0e54966c086" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SceneCuller::registerRenderPass</definition>
+        <argsstring>(RenderNodesPass const &amp;renderPass)</argsstring>
+        <name>registerRenderPass</name>
+        <qualifiedname>castor3d::SceneCuller::registerRenderPass</qualifiedname>
+        <param>
+          <type><ref refid="d8/de4/a05172" kindref="compound">RenderNodesPass</ref> const &amp;</type>
+          <declname>renderPass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="92" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dfe/a04620_1a8aa4b091ae983edaae8340bec88d6e94" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SceneCuller::unregisterRenderPass</definition>
+        <argsstring>(RenderNodesPass const &amp;renderPass)</argsstring>
+        <name>unregisterRenderPass</name>
+        <qualifiedname>castor3d::SceneCuller::unregisterRenderPass</qualifiedname>
+        <param>
+          <type><ref refid="d8/de4/a05172" kindref="compound">RenderNodesPass</ref> const &amp;</type>
+          <declname>renderPass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="93" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dfe/a04620_1ad03213c206fba998e08673c6faa57aeb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SceneCuller::update</definition>
+        <argsstring>(CpuUpdater &amp;updater)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::SceneCuller::update</qualifiedname>
+        <param>
+          <type><ref refid="d7/d13/a05156" kindref="compound">CpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="94" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dfe/a04620_1ab4950b20eea41fedd6fc983dca6bb987" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> std::pair&lt; uint32_t, uint32_t &gt;</type>
+        <definition>C3D_API std::pair&lt; uint32_t, uint32_t &gt; castor3d::SceneCuller::fillPipelinesIds</definition>
+        <argsstring>(RenderNodesPass const &amp;renderPass, castor::ArrayView&lt; uint32_t &gt; nodesPipelinesIds) const</argsstring>
+        <name>fillPipelinesIds</name>
+        <qualifiedname>castor3d::SceneCuller::fillPipelinesIds</qualifiedname>
+        <param>
+          <type><ref refid="d8/de4/a05172" kindref="compound">RenderNodesPass</ref> const &amp;</type>
+          <declname>renderPass</declname>
+        </param>
+        <param>
+          <type>castor::ArrayView&lt; uint32_t &gt;</type>
+          <declname>nodesPipelinesIds</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="95" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dfe/a04620_1aa4859e35de3b11639d8ea07014f8c24b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SceneCuller::registerNodePipeline</definition>
+        <argsstring>(RenderNodesPass const &amp;renderPass, uint32_t nodeId, uint32_t pipelineId)</argsstring>
+        <name>registerNodePipeline</name>
+        <qualifiedname>castor3d::SceneCuller::registerNodePipeline</qualifiedname>
+        <param>
+          <type><ref refid="d8/de4/a05172" kindref="compound">RenderNodesPass</ref> const &amp;</type>
+          <declname>renderPass</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>nodeId</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>pipelineId</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="97" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dfe/a04620_1ad7607ddd0a4d6e899408eb8ad81cf610" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d2/dfe/a04620_1a0df54bafb8f37f2b9d2729913c034dbc" kindref="member">PipelineBufferArray</ref> const &amp;</type>
+        <definition>C3D_API PipelineBufferArray const  &amp; castor3d::SceneCuller::getPassPipelineNodes</definition>
+        <argsstring>(RenderNodesPass const &amp;renderPass) const</argsstring>
+        <name>getPassPipelineNodes</name>
+        <qualifiedname>castor3d::SceneCuller::getPassPipelineNodes</qualifiedname>
+        <param>
+          <type><ref refid="d8/de4/a05172" kindref="compound">RenderNodesPass</ref> const &amp;</type>
+          <declname>renderPass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="100" column="36"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dfe/a04620_1a3fe2a20c8138ab87c9df425f379d3ea1" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
+        <definition>C3D_API uint32_t castor3d::SceneCuller::getPipelineNodesIndex</definition>
+        <argsstring>(RenderNodesPass const &amp;renderPass, PipelineBaseHash const &amp;hash, ashes::BufferBase const &amp;buffer) const</argsstring>
+        <name>getPipelineNodesIndex</name>
+        <qualifiedname>castor3d::SceneCuller::getPipelineNodesIndex</qualifiedname>
+        <param>
+          <type><ref refid="d8/de4/a05172" kindref="compound">RenderNodesPass</ref> const &amp;</type>
+          <declname>renderPass</declname>
+        </param>
+        <param>
+          <type><ref refid="de/d7d/a05000" kindref="compound">PipelineBaseHash</ref> const &amp;</type>
+          <declname>hash</declname>
+        </param>
+        <param>
+          <type>ashes::BufferBase const &amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="101" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dfe/a04620_1a4a19eb863c0e17f0bf785f9c3db955aa" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
+        <definition>C3D_API uint32_t castor3d::SceneCuller::getPipelineNodesIndex</definition>
+        <argsstring>(RenderNodesPass const &amp;renderPass, Submesh const &amp;submesh, Pass const &amp;pass, ashes::BufferBase const &amp;buffer, bool isFrontCulled) const</argsstring>
+        <name>getPipelineNodesIndex</name>
+        <qualifiedname>castor3d::SceneCuller::getPipelineNodesIndex</qualifiedname>
+        <param>
+          <type><ref refid="d8/de4/a05172" kindref="compound">RenderNodesPass</ref> const &amp;</type>
+          <declname>renderPass</declname>
+        </param>
+        <param>
+          <type><ref refid="db/d20/a04356" kindref="compound">Submesh</ref> const &amp;</type>
+          <declname>submesh</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d86/a03732" kindref="compound">Pass</ref> const &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type>ashes::BufferBase const &amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>isFrontCulled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="104" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dfe/a04620_1aecd806adeb988c145bc486f1d883a0ee" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
+        <definition>C3D_API uint32_t castor3d::SceneCuller::getPipelineNodesIndex</definition>
+        <argsstring>(RenderNodesPass const &amp;renderPass, BillboardBase const &amp;billboard, Pass const &amp;pass, ashes::BufferBase const &amp;buffer, bool isFrontCulled) const</argsstring>
+        <name>getPipelineNodesIndex</name>
+        <qualifiedname>castor3d::SceneCuller::getPipelineNodesIndex</qualifiedname>
+        <param>
+          <type><ref refid="d8/de4/a05172" kindref="compound">RenderNodesPass</ref> const &amp;</type>
+          <declname>renderPass</declname>
+        </param>
+        <param>
+          <type><ref refid="df/d64/a05544" kindref="compound">BillboardBase</ref> const &amp;</type>
+          <declname>billboard</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d86/a03732" kindref="compound">Pass</ref> const &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type>ashes::BufferBase const &amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>isFrontCulled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="109" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dfe/a04620_1a702cb580824afdab7981ecfcc7c77f9d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SceneCuller::removeCulled</definition>
+        <argsstring>(SubmeshRenderNode const &amp;node)</argsstring>
+        <name>removeCulled</name>
+        <qualifiedname>castor3d::SceneCuller::removeCulled</qualifiedname>
+        <param>
+          <type><ref refid="da/deb/a04764" kindref="compound">SubmeshRenderNode</ref> const &amp;</type>
+          <declname>node</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="114" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dfe/a04620_1aef46bb66d1262837ea0cc724ae1739fd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SceneCuller::removeCulled</definition>
+        <argsstring>(BillboardRenderNode const &amp;node)</argsstring>
+        <name>removeCulled</name>
+        <qualifiedname>castor3d::SceneCuller::removeCulled</qualifiedname>
+        <param>
+          <type><ref refid="d4/da9/a04736" kindref="compound">BillboardRenderNode</ref> const &amp;</type>
+          <declname>node</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="115" column="14"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d2/dfe/a04620_1a4f3f904483e38ab4d52092a2badde5da" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::SceneCuller::doInitialiseCulled</definition>
+        <argsstring>()</argsstring>
+        <name>doInitialiseCulled</name>
+        <qualifiedname>castor3d::SceneCuller::doInitialiseCulled</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="231" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dfe/a04620_1ab886ea5e459eaf90f1ec18b02a559e3b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::SceneCuller::doUpdateChanged</definition>
+        <argsstring>(CpuUpdater::DirtyObjects &amp;sceneObjs)</argsstring>
+        <name>doUpdateChanged</name>
+        <qualifiedname>castor3d::SceneCuller::doUpdateChanged</qualifiedname>
+        <param>
+          <type><ref refid="df/df0/a05160" kindref="compound">CpuUpdater::DirtyObjects</ref> &amp;</type>
+          <declname>sceneObjs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="232" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dfe/a04620_1aa770f562b6967ad34f4e08ca372d3c85" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::SceneCuller::doUpdateCulled</definition>
+        <argsstring>(CpuUpdater::DirtyObjects &amp;sceneObjs)</argsstring>
+        <name>doUpdateCulled</name>
+        <qualifiedname>castor3d::SceneCuller::doUpdateCulled</qualifiedname>
+        <param>
+          <type><ref refid="df/df0/a05160" kindref="compound">CpuUpdater::DirtyObjects</ref> &amp;</type>
+          <declname>sceneObjs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="233" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dfe/a04620_1a755e28da8e1fe3f105292a78b7151604" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::SceneCuller::doSortNodes</definition>
+        <argsstring>()</argsstring>
+        <name>doSortNodes</name>
+        <qualifiedname>castor3d::SceneCuller::doSortNodes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="234" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dfe/a04620_1a2a025230ae16367c2faffe2aea1a1095" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::SceneCuller::doInitGpuBuffers</definition>
+        <argsstring>()</argsstring>
+        <name>doInitGpuBuffers</name>
+        <qualifiedname>castor3d::SceneCuller::doInitGpuBuffers</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="235" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dfe/a04620_1ad91df163c9ea9bf33127d56ec74e652a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::SceneCuller::doFillIndirect</definition>
+        <argsstring>()</argsstring>
+        <name>doFillIndirect</name>
+        <qualifiedname>castor3d::SceneCuller::doFillIndirect</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="236" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dfe/a04620_1a8f5969d8f8b4d0596a88cb90a3a06f95" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::SceneCuller::doMarkDirty</definition>
+        <argsstring>(CpuUpdater::DirtyObjects &amp;sceneObjs, std::vector&lt; SubmeshRenderNode const * &gt; &amp;dirtySubmeshes, std::vector&lt; BillboardRenderNode const * &gt; &amp;dirtyBillboards)</argsstring>
+        <name>doMarkDirty</name>
+        <qualifiedname>castor3d::SceneCuller::doMarkDirty</qualifiedname>
+        <param>
+          <type><ref refid="df/df0/a05160" kindref="compound">CpuUpdater::DirtyObjects</ref> &amp;</type>
+          <declname>sceneObjs</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; <ref refid="da/deb/a04764" kindref="compound">SubmeshRenderNode</ref> const * &gt; &amp;</type>
+          <declname>dirtySubmeshes</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; <ref refid="d4/da9/a04736" kindref="compound">BillboardRenderNode</ref> const * &gt; &amp;</type>
+          <declname>dirtyBillboards</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="237" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dfe/a04620_1a1fc492ebcb294d41b531064af6d9af17" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::SceneCuller::duUpdateCulledSubmeshes</definition>
+        <argsstring>(std::vector&lt; SubmeshRenderNode const * &gt; const &amp;dirtySubmeshes)</argsstring>
+        <name>duUpdateCulledSubmeshes</name>
+        <qualifiedname>castor3d::SceneCuller::duUpdateCulledSubmeshes</qualifiedname>
+        <param>
+          <type>std::vector&lt; <ref refid="da/deb/a04764" kindref="compound">SubmeshRenderNode</ref> const * &gt; const &amp;</type>
+          <declname>dirtySubmeshes</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="240" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dfe/a04620_1a9407cf6ce9e005bd05830ff7b9e2880e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::SceneCuller::duUpdateCulledBillboards</definition>
+        <argsstring>(std::vector&lt; BillboardRenderNode const * &gt; const &amp;dirtyBillboards)</argsstring>
+        <name>duUpdateCulledBillboards</name>
+        <qualifiedname>castor3d::SceneCuller::duUpdateCulledBillboards</qualifiedname>
+        <param>
+          <type>std::vector&lt; <ref refid="d4/da9/a04736" kindref="compound">BillboardRenderNode</ref> const * &gt; const &amp;</type>
+          <declname>dirtyBillboards</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="241" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dfe/a04620_1a865d2122ca6255bf3319cd9cf0dde3f4" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::SceneCuller::doMakeDirty</definition>
+        <argsstring>(Geometry const &amp;object, std::vector&lt; SubmeshRenderNode const * &gt; &amp;dirtySubmeshes) const</argsstring>
+        <name>doMakeDirty</name>
+        <qualifiedname>castor3d::SceneCuller::doMakeDirty</qualifiedname>
+        <param>
+          <type><ref refid="d9/d3f/a05560" kindref="compound">Geometry</ref> const &amp;</type>
+          <declname>object</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; <ref refid="da/deb/a04764" kindref="compound">SubmeshRenderNode</ref> const * &gt; &amp;</type>
+          <declname>dirtySubmeshes</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="242" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dfe/a04620_1a6d9b3ba05471ed4ca08ff539fe3e35ee" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::SceneCuller::doMakeDirty</definition>
+        <argsstring>(BillboardBase const &amp;object, std::vector&lt; BillboardRenderNode const * &gt; &amp;dirtyBillboards) const</argsstring>
+        <name>doMakeDirty</name>
+        <qualifiedname>castor3d::SceneCuller::doMakeDirty</qualifiedname>
+        <param>
+          <type><ref refid="df/d64/a05544" kindref="compound">BillboardBase</ref> const &amp;</type>
+          <declname>object</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; <ref refid="d4/da9/a04736" kindref="compound">BillboardRenderNode</ref> const * &gt; &amp;</type>
+          <declname>dirtyBillboards</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="244" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dfe/a04620_1af44a2f344e2e61d1ef15aee5f8ff4f47" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::SceneCuller::doAddSubmesh</definition>
+        <argsstring>(CulledNodeT&lt; SubmeshRenderNode &gt; const &amp;culled, RenderNodesPass const &amp;renderPass, SidedNodePipelineMapT&lt; SubmeshRenderNode &gt; &amp;sorted, SidedObjectNodePipelineMapT&lt; SubmeshRenderNode &gt; &amp;sortedInstanced, PipelineBufferArray &amp;nodesIds)</argsstring>
+        <name>doAddSubmesh</name>
+        <qualifiedname>castor3d::SceneCuller::doAddSubmesh</qualifiedname>
+        <param>
+          <type><ref refid="d9/d38/a04624" kindref="compound">CulledNodeT</ref>&lt; <ref refid="da/deb/a04764" kindref="compound">SubmeshRenderNode</ref> &gt; const &amp;</type>
+          <declname>culled</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/de4/a05172" kindref="compound">RenderNodesPass</ref> const &amp;</type>
+          <declname>renderPass</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dfe/a04620_1a74b17a17d444335cca2d4c576b8c8700" kindref="member">SidedNodePipelineMapT</ref>&lt; <ref refid="da/deb/a04764" kindref="compound">SubmeshRenderNode</ref> &gt; &amp;</type>
+          <declname>sorted</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dfe/a04620_1a9fcbbc3a15d05a822400afefe302aef6" kindref="member">SidedObjectNodePipelineMapT</ref>&lt; <ref refid="da/deb/a04764" kindref="compound">SubmeshRenderNode</ref> &gt; &amp;</type>
+          <declname>sortedInstanced</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dfe/a04620_1a0df54bafb8f37f2b9d2729913c034dbc" kindref="member">PipelineBufferArray</ref> &amp;</type>
+          <declname>nodesIds</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="246" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dfe/a04620_1ae5401c26ddf0f51cb946b58592acf46b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::SceneCuller::doAddBillboard</definition>
+        <argsstring>(CulledNodeT&lt; BillboardRenderNode &gt; const &amp;culled, RenderNodesPass const &amp;renderPass, SidedNodePipelineMapT&lt; BillboardRenderNode &gt; &amp;sorted, PipelineBufferArray &amp;nodesIds)</argsstring>
+        <name>doAddBillboard</name>
+        <qualifiedname>castor3d::SceneCuller::doAddBillboard</qualifiedname>
+        <param>
+          <type><ref refid="d9/d38/a04624" kindref="compound">CulledNodeT</ref>&lt; <ref refid="d4/da9/a04736" kindref="compound">BillboardRenderNode</ref> &gt; const &amp;</type>
+          <declname>culled</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/de4/a05172" kindref="compound">RenderNodesPass</ref> const &amp;</type>
+          <declname>renderPass</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dfe/a04620_1a74b17a17d444335cca2d4c576b8c8700" kindref="member">SidedNodePipelineMapT</ref>&lt; <ref refid="d4/da9/a04736" kindref="compound">BillboardRenderNode</ref> &gt; &amp;</type>
+          <declname>sorted</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dfe/a04620_1a0df54bafb8f37f2b9d2729913c034dbc" kindref="member">PipelineBufferArray</ref> &amp;</type>
+          <declname>nodesIds</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="251" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dfe/a04620_1af2904b95f4c387653e96e03178a632d1" prot="private" static="no" const="yes" explicit="no" inline="no" virt="pure-virtual">
+        <type>bool</type>
+        <definition>virtual bool castor3d::SceneCuller::isSubmeshVisible</definition>
+        <argsstring>(SubmeshRenderNode const &amp;node) const =0</argsstring>
+        <name>isSubmeshVisible</name>
+        <qualifiedname>castor3d::SceneCuller::isSubmeshVisible</qualifiedname>
+        <reimplementedby refid="d7/dc4/a04612_1a50b6d4c64bbcfa5297bea7f2316f24df">isSubmeshVisible</reimplementedby>
+        <reimplementedby refid="de/dfb/a04616_1a778340bfb637c60457bec2470a3eca6b">isSubmeshVisible</reimplementedby>
+        <param>
+          <type><ref refid="da/deb/a04764" kindref="compound">SubmeshRenderNode</ref> const &amp;</type>
+          <declname>node</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="255" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dfe/a04620_1a30244b7c5165ac3fbdf71c10aa47950e" prot="private" static="no" const="yes" explicit="no" inline="no" virt="pure-virtual">
+        <type>bool</type>
+        <definition>virtual bool castor3d::SceneCuller::isBillboardVisible</definition>
+        <argsstring>(BillboardRenderNode const &amp;node) const =0</argsstring>
+        <name>isBillboardVisible</name>
+        <qualifiedname>castor3d::SceneCuller::isBillboardVisible</qualifiedname>
+        <reimplementedby refid="d7/dc4/a04612_1a978d798ef6a2cdaed39eba9612268e8e">isBillboardVisible</reimplementedby>
+        <reimplementedby refid="de/dfb/a04616_1ae7215f064214584dbe7e64cc8f804a60">isBillboardVisible</reimplementedby>
+        <param>
+          <type><ref refid="d4/da9/a04736" kindref="compound">BillboardRenderNode</ref> const &amp;</type>
+          <declname>node</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Culling/SceneCuller.hpp" line="256" column="14"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::DummyCuller</label>
+        <link refid="d7/dc4/a04612"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::FrustumCuller</label>
+        <link refid="de/dfb/a04616"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::SceneCuller</label>
+        <link refid="d2/dfe/a04620"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="8">
+        <label>Animable</label>
+        <link refid="d5/df1/a02392"/>
+        <childnode refid="9" relation="public-inheritance">
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+        <childnode refid="14" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>K</label>
+      </node>
+      <node id="13">
+        <label>T</label>
+      </node>
+      <node id="14">
+        <label>castor3d::AnimableT&lt; AnimableHandlerT &gt;</label>
+        <link refid="d5/df1/a02392"/>
+        <childnode refid="15" relation="public-inheritance">
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::Camera</label>
+        <link refid="d6/dfa/a05552"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="25">
+        <label>castor3d::MatrixUbo</label>
+        <link refid="df/df2/a06208"/>
+      </node>
+      <node id="3">
+        <label>castor3d::MovableObject</label>
+        <link refid="dd/dd4/a05604"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>m_sceneNode</edgelabel>
+        </childnode>
+      </node>
+      <node id="23">
+        <label>castor3d::QueuesData</label>
+        <link refid="d2/d8c/a05064"/>
+      </node>
+      <node id="20">
+        <label>castor3d::RenderDevice</label>
+        <link refid="d3/d96/a05072"/>
+        <childnode refid="21" relation="usage">
+          <edgelabel>renderSystem</edgelabel>
+        </childnode>
+        <childnode refid="22" relation="usage">
+          <edgelabel>queueFamilies</edgelabel>
+        </childnode>
+      </node>
+      <node id="17">
+        <label>castor3d::RenderNodesPass</label>
+        <link refid="d8/de4/a05172"/>
+        <childnode refid="18" relation="public-inheritance">
+        </childnode>
+        <childnode refid="19" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="20" relation="usage">
+          <edgelabel>m_device</edgelabel>
+        </childnode>
+        <childnode refid="21" relation="usage">
+          <edgelabel>m_renderSystem</edgelabel>
+        </childnode>
+        <childnode refid="25" relation="usage">
+          <edgelabel>m_matrixUbo</edgelabel>
+        </childnode>
+        <childnode refid="1" relation="usage">
+          <edgelabel>m_culler</edgelabel>
+        </childnode>
+        <childnode refid="26" relation="usage">
+          <edgelabel>m_sceneUbo</edgelabel>
+        </childnode>
+        <childnode refid="27" relation="usage">
+          <edgelabel>m_additionalDescriptors</edgelabel>
+        </childnode>
+      </node>
+      <node id="28">
+        <label>castor3d::RenderNodesPass::PassDescriptors</label>
+        <link refid="d3/dd2/a05176"/>
+      </node>
+      <node id="21">
+        <label>castor3d::RenderSystem</label>
+        <link refid="d9/d4a/a05192"/>
+        <childnode refid="18" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::SceneCuller</label>
+        <link refid="d2/dfe/a04620"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>m_camera</edgelabel>
+        </childnode>
+        <childnode refid="16" relation="usage">
+          <edgelabel>m_renderPasses</edgelabel>
+        </childnode>
+      </node>
+      <node id="29">
+        <label>castor3d::SceneCuller::RenderPassBuffers</label>
+        <link refid="d3/d6e/a04628"/>
+        <childnode refid="30" relation="usage">
+          <edgelabel>nodesIds</edgelabel>
+        </childnode>
+        <childnode refid="31" relation="usage">
+          <edgelabel>nodesPipelinesIds</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::SceneNode</label>
+        <link refid="d8/dad/a05856"/>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+        <childnode refid="8" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="26">
+        <label>castor3d::SceneUbo</label>
+        <link refid="db/d2c/a06256"/>
+      </node>
+      <node id="5">
+        <label>castor::Named</label>
+      </node>
+      <node id="15">
+        <label>castor::OwnedBy&lt; AnimableHandlerT &gt;</label>
+      </node>
+      <node id="9">
+        <label>castor::OwnedBy&lt; Engine  &gt;</label>
+      </node>
+      <node id="18">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Scene &gt;</label>
+      </node>
+      <node id="19">
+        <label>crg::RenderPass</label>
+      </node>
+      <node id="16">
+        <label>std::map&lt; castor3d::RenderNodesPass const *, castor3d::SceneCuller::RenderPassBuffers &gt;</label>
+        <childnode refid="17" relation="usage">
+          <edgelabel>keys</edgelabel>
+        </childnode>
+        <childnode refid="29" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="11" relation="template-instance">
+          <edgelabel>&lt; castor3d::RenderNodesPass const *, castor3d::SceneCuller::RenderPassBuffers &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>std::map&lt; castor::String, AnimationPtr &gt;</label>
+        <childnode refid="11" relation="template-instance">
+          <edgelabel>&lt; castor::String, AnimationPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="27">
+        <label>std::map&lt; size_t, castor3d::RenderNodesPass::PassDescriptors &gt;</label>
+        <childnode refid="28" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="11" relation="template-instance">
+          <edgelabel>&lt; size_t, castor3d::RenderNodesPass::PassDescriptors &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="31">
+        <label>std::map&lt; uint32_t, uint32_t &gt;</label>
+        <childnode refid="11" relation="template-instance">
+          <edgelabel>&lt; uint32_t, uint32_t &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>std::enable_shared_from_this&lt; SceneNode &gt;</label>
+      </node>
+      <node id="11">
+        <label>std::map&lt; K, T &gt;</label>
+        <childnode refid="12" relation="usage">
+          <edgelabel>keys</edgelabel>
+        </childnode>
+        <childnode refid="13" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="24">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="13" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="30">
+        <label>std::vector&lt; PipelineBuffer &gt;</label>
+        <childnode refid="24" relation="template-instance">
+          <edgelabel>&lt; PipelineBuffer &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="22">
+        <label>std::vector&lt; QueuesData &gt;</label>
+        <childnode refid="23" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="24" relation="template-instance">
+          <edgelabel>&lt; QueuesData &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Culling/SceneCuller.hpp" line="31" column="1" bodyfile="Render/Culling/SceneCuller.hpp" bodystart="32" bodyend="276"/>
+    <listofallmembers>
+      <member refid="d2/dfe/a04620_1ab38e1111b66f862727a55036e5457b7c" prot="public" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>areAnyChanged</name></member>
+      <member refid="d2/dfe/a04620_1a28bd1305c7e968e95dfc30a0b60829da" prot="public" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>areCulledChanged</name></member>
+      <member refid="d2/dfe/a04620_1ae5401c26ddf0f51cb946b58592acf46b" prot="private" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>doAddBillboard</name></member>
+      <member refid="d2/dfe/a04620_1af44a2f344e2e61d1ef15aee5f8ff4f47" prot="private" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>doAddSubmesh</name></member>
+      <member refid="d2/dfe/a04620_1ad91df163c9ea9bf33127d56ec74e652a" prot="private" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>doFillIndirect</name></member>
+      <member refid="d2/dfe/a04620_1a2a025230ae16367c2faffe2aea1a1095" prot="private" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>doInitGpuBuffers</name></member>
+      <member refid="d2/dfe/a04620_1a4f3f904483e38ab4d52092a2badde5da" prot="private" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>doInitialiseCulled</name></member>
+      <member refid="d2/dfe/a04620_1a865d2122ca6255bf3319cd9cf0dde3f4" prot="private" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>doMakeDirty</name></member>
+      <member refid="d2/dfe/a04620_1a6d9b3ba05471ed4ca08ff539fe3e35ee" prot="private" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>doMakeDirty</name></member>
+      <member refid="d2/dfe/a04620_1a8f5969d8f8b4d0596a88cb90a3a06f95" prot="private" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>doMarkDirty</name></member>
+      <member refid="d2/dfe/a04620_1a755e28da8e1fe3f105292a78b7151604" prot="private" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>doSortNodes</name></member>
+      <member refid="d2/dfe/a04620_1ab886ea5e459eaf90f1ec18b02a559e3b" prot="private" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>doUpdateChanged</name></member>
+      <member refid="d2/dfe/a04620_1aa770f562b6967ad34f4e08ca372d3c85" prot="private" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>doUpdateCulled</name></member>
+      <member refid="d2/dfe/a04620_1aab980445b5e3b308a83202c17ed319fe" prot="public" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>DrawCommandsBuffer</name></member>
+      <member refid="d2/dfe/a04620_1a9407cf6ce9e005bd05830ff7b9e2880e" prot="private" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>duUpdateCulledBillboards</name></member>
+      <member refid="d2/dfe/a04620_1a1fc492ebcb294d41b531064af6d9af17" prot="private" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>duUpdateCulledSubmeshes</name></member>
+      <member refid="d2/dfe/a04620_1ab4950b20eea41fedd6fc983dca6bb987" prot="public" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>fillPipelinesIds</name></member>
+      <member refid="d2/dfe/a04620_1a9003118298fe8916dfd1e05f442506ca" prot="public" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>getBillboardCommands</name></member>
+      <member refid="d2/dfe/a04620_1a0dec79342b1ddc5d58f6d942520012ee" prot="public" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>getBillboardNodes</name></member>
+      <member refid="d2/dfe/a04620_1a7d8e0e08c971df07a39eee8182cd864c" prot="public" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>getCamera</name></member>
+      <member refid="d2/dfe/a04620_1ad025465f2c7325847ad75ecd4e9f3470" prot="public" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>getCamera</name></member>
+      <member refid="d2/dfe/a04620_1aa0ede0892ee9df11bbcce8bfa310779d" prot="public" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>getInstancedSubmeshNodes</name></member>
+      <member refid="d2/dfe/a04620_1a0873968915bcde09a46c8805458fba13" prot="public" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>getNodesIds</name></member>
+      <member refid="d2/dfe/a04620_1ad7607ddd0a4d6e899408eb8ad81cf610" prot="public" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>getPassPipelineNodes</name></member>
+      <member refid="d2/dfe/a04620_1a3fe2a20c8138ab87c9df425f379d3ea1" prot="public" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>getPipelineNodesIndex</name></member>
+      <member refid="d2/dfe/a04620_1a4a19eb863c0e17f0bf785f9c3db955aa" prot="public" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>getPipelineNodesIndex</name></member>
+      <member refid="d2/dfe/a04620_1aecd806adeb988c145bc486f1d883a0ee" prot="public" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>getPipelineNodesIndex</name></member>
+      <member refid="d2/dfe/a04620_1a3590fca4f928b3743f8275bbe1c2fd13" prot="public" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>getScene</name></member>
+      <member refid="d2/dfe/a04620_1afc93f8bfe6ad8dac4429937200be1715" prot="public" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>getSubmeshIdxCommands</name></member>
+      <member refid="d2/dfe/a04620_1a4f52ea00a27f70b3138dac472293dd96" prot="public" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>getSubmeshNIdxCommands</name></member>
+      <member refid="d2/dfe/a04620_1a55adac9263b85d93e7b675edfade1337" prot="public" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>getSubmeshNodes</name></member>
+      <member refid="d2/dfe/a04620_1a602a1b5c0447c9a02eaf7d65cde84e8c" prot="public" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>hasCamera</name></member>
+      <member refid="d2/dfe/a04620_1a96b401de419980460139e52b73da97eb" prot="public" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>hasCulledNodes</name></member>
+      <member refid="d2/dfe/a04620_1a9c5df1fcfd55a6050920465031ee16fe" prot="public" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>IndexedDrawCommandsBuffer</name></member>
+      <member refid="d2/dfe/a04620_1a30244b7c5165ac3fbdf71c10aa47950e" prot="private" virt="pure-virtual"><scope>castor3d::SceneCuller</scope><name>isBillboardVisible</name></member>
+      <member refid="d2/dfe/a04620_1af2904b95f4c387653e96e03178a632d1" prot="private" virt="pure-virtual"><scope>castor3d::SceneCuller</scope><name>isSubmeshVisible</name></member>
+      <member refid="d2/dfe/a04620_1a7fa4173c20b5d95752609dc38b4dfdad" prot="protected" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>m_anyChanged</name></member>
+      <member refid="d2/dfe/a04620_1a7368dd7328e770423fc67641b857e43f" prot="protected" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>m_camera</name></member>
+      <member refid="d2/dfe/a04620_1a4a80d7b1c3b7cc6bfd50cc3055b6cc6f" prot="protected" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>m_culledBillboards</name></member>
+      <member refid="d2/dfe/a04620_1a92023fa128d7fd1c053bf5fccb4e7693" prot="protected" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>m_culledChanged</name></member>
+      <member refid="d2/dfe/a04620_1a8d0bab282d0f0f6155bfb7f1ab44ec65" prot="protected" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>m_culledSubmeshes</name></member>
+      <member refid="d2/dfe/a04620_1ad2f923ebff12cc5b1d69cda12a39a7fe" prot="protected" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>m_first</name></member>
+      <member refid="d2/dfe/a04620_1a4a83c5a413e1d842bbd0f1843f63e57e" prot="protected" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>m_index</name></member>
+      <member refid="d2/dfe/a04620_1ac8ff5db4d88280106fd24d798ed8f676" prot="protected" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>m_renderPasses</name></member>
+      <member refid="d2/dfe/a04620_1aaa7aa212ce314d696d6fec9c8a8ef623" prot="private" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>m_scene</name></member>
+      <member refid="d2/dfe/a04620_1af660e9b2be570b41c1d9198d7acbcf98" prot="protected" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>m_timer</name></member>
+      <member refid="d2/dfe/a04620_1a5adf428f8451213fbc8d11ea2530d3fd" prot="protected" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>m_timerCompute</name></member>
+      <member refid="d2/dfe/a04620_1ad549673fad5a8975678096c1e6007db6" prot="protected" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>m_timerDirty</name></member>
+      <member refid="d2/dfe/a04620_1a9840b13c4d194dbab7a1adc375479e6d" prot="protected" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>m_timerIndirect</name></member>
+      <member refid="d2/dfe/a04620_1abc257a73d93fc77fa7993bf8c94d372e" prot="public" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>NodeArrayT</name></member>
+      <member refid="d2/dfe/a04620_1a332ff2fc76d0928ad82d675f863c1529" prot="public" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>onCompute</name></member>
+      <member refid="d2/dfe/a04620_1a0df54bafb8f37f2b9d2729913c034dbc" prot="public" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>PipelineBufferArray</name></member>
+      <member refid="d2/dfe/a04620_1ae574a8f382f045af7ef6da4649e40d36" prot="public" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>PipelineNodesBuffer</name></member>
+      <member refid="d2/dfe/a04620_1aa4859e35de3b11639d8ea07014f8c24b" prot="public" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>registerNodePipeline</name></member>
+      <member refid="d2/dfe/a04620_1ab1455532a46b0ff41f24e0e54966c086" prot="public" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>registerRenderPass</name></member>
+      <member refid="d2/dfe/a04620_1a702cb580824afdab7981ecfcc7c77f9d" prot="public" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>removeCulled</name></member>
+      <member refid="d2/dfe/a04620_1aef46bb66d1262837ea0cc724ae1739fd" prot="public" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>removeCulled</name></member>
+      <member refid="d2/dfe/a04620_1a9dc2a4be078ba6b83fe40c434166f779" prot="public" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>SceneCuller</name></member>
+      <member refid="d2/dfe/a04620_1a08ca690df1bf7b6eeb7246d18ef8bb46" prot="public" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>SidedNodeArrayT</name></member>
+      <member refid="d2/dfe/a04620_1a9b9bf62edb2c5e226b2041377cdd0bc5" prot="public" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>SidedNodeBufferMapT</name></member>
+      <member refid="d2/dfe/a04620_1a74b17a17d444335cca2d4c576b8c8700" prot="public" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>SidedNodePipelineMapT</name></member>
+      <member refid="d2/dfe/a04620_1a47dc13a20ba395dd0b4eac6b4118288f" prot="public" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>SidedNodeT</name></member>
+      <member refid="d2/dfe/a04620_1ade4e2bab3f4456a4798a956f1bcee8c0" prot="public" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>SidedObjectNodeBufferMapT</name></member>
+      <member refid="d2/dfe/a04620_1af6ec96e40813b400947495d60019740c" prot="public" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>SidedObjectNodeMapT</name></member>
+      <member refid="d2/dfe/a04620_1a6c735e4da690af7cba24dddc5abce0a2" prot="public" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>SidedObjectNodePassMapT</name></member>
+      <member refid="d2/dfe/a04620_1a9fcbbc3a15d05a822400afefe302aef6" prot="public" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>SidedObjectNodePipelineMapT</name></member>
+      <member refid="d2/dfe/a04620_1a8aa4b091ae983edaae8340bec88d6e94" prot="public" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>unregisterRenderPass</name></member>
+      <member refid="d2/dfe/a04620_1ad03213c206fba998e08673c6faa57aeb" prot="public" virt="non-virtual"><scope>castor3d::SceneCuller</scope><name>update</name></member>
+      <member refid="d2/dfe/a04620_1a3ab6ffbb1d25eb9a8a422dc114e402ea" prot="public" virt="virtual"><scope>castor3d::SceneCuller</scope><name>~SceneCuller</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

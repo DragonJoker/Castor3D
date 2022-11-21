@@ -1,0 +1,441 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d0/d0c/a04484" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>castor3d::DoubleBufferedResourceT</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; Engine &gt;</basecompoundref>
+    <derivedcompoundref refid="de/d37/a04488" prot="public" virt="non-virtual">castor3d::FontTexture</derivedcompoundref>
+    <includes local="no">FontTexture.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename ResourceT</type>
+      </param>
+      <param>
+        <type>template&lt; typename ResT &gt; typename</type>
+        <declname>PointerT</declname>
+        <defname>PointerT</defname>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d0/d0c/a04484_1a1770714a87ef49a80d35acd020c6465b" prot="public" static="no">
+        <type>PointerT&lt; ResourceT &gt;</type>
+        <definition>using castor3d::DoubleBufferedResourceT&lt; ResourceT, PointerT &gt;::ResourcePtrT =  PointerT&lt; ResourceT &gt;</definition>
+        <argsstring></argsstring>
+        <name>ResourcePtrT</name>
+        <qualifiedname>castor3d::DoubleBufferedResourceT::ResourcePtrT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/FontTexture.hpp" line="29" column="1" bodyfile="Overlay/FontTexture.hpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d0/d0c/a04484_1a619fc629dea63590807c628ba1a261d0" prot="public" static="no">
+        <type>std::function&lt; void(<ref refid="d0/d0c/a04484" kindref="compound">DoubleBufferedResourceT</ref> const &amp;) &gt;</type>
+        <definition>using castor3d::DoubleBufferedResourceT&lt; ResourceT, PointerT &gt;::OnChangedFunction =  std::function&lt; void( DoubleBufferedResourceT const &amp; ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>OnChangedFunction</name>
+        <qualifiedname>castor3d::DoubleBufferedResourceT::OnChangedFunction</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/FontTexture.hpp" line="30" column="1" bodyfile="Overlay/FontTexture.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d0/d0c/a04484_1a379faa0b85c1dcd6d993addcb61796f6" prot="public" static="no">
+        <type>castor::SignalT&lt; <ref refid="d0/d0c/a04484_1a619fc629dea63590807c628ba1a261d0" kindref="member">OnChangedFunction</ref> &gt;</type>
+        <definition>using castor3d::DoubleBufferedResourceT&lt; ResourceT, PointerT &gt;::OnChanged =  castor::SignalT&lt; OnChangedFunction &gt;</definition>
+        <argsstring></argsstring>
+        <name>OnChanged</name>
+        <qualifiedname>castor3d::DoubleBufferedResourceT::OnChanged</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/FontTexture.hpp" line="31" column="1" bodyfile="Overlay/FontTexture.hpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d0/d0c/a04484_1a1105eaf3aa2ae6d858ac4ce6620a5c86" prot="public" static="no" mutable="no">
+        <type><ref refid="d0/d0c/a04484_1a379faa0b85c1dcd6d993addcb61796f6" kindref="member">OnChanged</ref></type>
+        <definition>OnChanged castor3d::DoubleBufferedResourceT&lt; ResourceT, PointerT &gt;::onChanged</definition>
+        <argsstring></argsstring>
+        <name>onChanged</name>
+        <qualifiedname>castor3d::DoubleBufferedResourceT::onChanged</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The signal used to notify clients that this resource has changed. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/FontTexture.hpp" line="48" column="11" bodyfile="Overlay/FontTexture.hpp" bodystart="48" bodyend="-1"/>
+        <referencedby refid="d0/d0c/a04484_1a6742b419c96445fd002c58b8fb1d9eb7" compoundref="d3/d4f/a00761" startline="101" endline="130">castor3d::DoubleBufferedResourceT&lt; ResourceT, PointerT &gt;::doRefresh</referencedby>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="d0/d0c/a04484_1ae67d8d898615cb9b25fcc42977e62cef" prot="protected" static="no" mutable="no">
+        <type><ref refid="d0/d0c/a04484_1a1770714a87ef49a80d35acd020c6465b" kindref="member">ResourcePtrT</ref></type>
+        <definition>ResourcePtrT castor3d::DoubleBufferedResourceT&lt; ResourceT, PointerT &gt;::m_back</definition>
+        <argsstring></argsstring>
+        <name>m_back</name>
+        <qualifiedname>castor3d::DoubleBufferedResourceT::m_back</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/FontTexture.hpp" line="66" column="14" bodyfile="Overlay/FontTexture.hpp" bodystart="66" bodyend="-1"/>
+        <referencedby refid="d0/d0c/a04484_1a8a21fcfe1a2dd8347790c92a201523e5" compoundref="d3/d4f/a00761" startline="90" endline="94">castor3d::DoubleBufferedResourceT&lt; ResourceT, PointerT &gt;::doCleanup</referencedby>
+        <referencedby refid="d0/d0c/a04484_1a4ef7841bfce55d91a9cf72d942bd03dd" compoundref="d3/d4f/a00761" startline="78" endline="83">castor3d::DoubleBufferedResourceT&lt; ResourceT, PointerT &gt;::doInitialise</referencedby>
+        <referencedby refid="d0/d0c/a04484_1a6742b419c96445fd002c58b8fb1d9eb7" compoundref="d3/d4f/a00761" startline="101" endline="130">castor3d::DoubleBufferedResourceT&lt; ResourceT, PointerT &gt;::doRefresh</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d0c/a04484_1a9ebeb144fc77aa6af1c0a30526b60ceb" prot="protected" static="no" mutable="no">
+        <type><ref refid="d0/d0c/a04484_1a1770714a87ef49a80d35acd020c6465b" kindref="member">ResourcePtrT</ref></type>
+        <definition>ResourcePtrT castor3d::DoubleBufferedResourceT&lt; ResourceT, PointerT &gt;::m_front</definition>
+        <argsstring></argsstring>
+        <name>m_front</name>
+        <qualifiedname>castor3d::DoubleBufferedResourceT::m_front</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/FontTexture.hpp" line="67" column="14" bodyfile="Overlay/FontTexture.hpp" bodystart="67" bodyend="-1"/>
+        <referencedby refid="d0/d0c/a04484_1a8a21fcfe1a2dd8347790c92a201523e5" compoundref="d3/d4f/a00761" startline="90" endline="94">castor3d::DoubleBufferedResourceT&lt; ResourceT, PointerT &gt;::doCleanup</referencedby>
+        <referencedby refid="d0/d0c/a04484_1a4ef7841bfce55d91a9cf72d942bd03dd" compoundref="d3/d4f/a00761" startline="78" endline="83">castor3d::DoubleBufferedResourceT&lt; ResourceT, PointerT &gt;::doInitialise</referencedby>
+        <referencedby refid="d0/d0c/a04484_1a6742b419c96445fd002c58b8fb1d9eb7" compoundref="d3/d4f/a00761" startline="101" endline="130">castor3d::DoubleBufferedResourceT&lt; ResourceT, PointerT &gt;::doRefresh</referencedby>
+        <referencedby refid="d0/d0c/a04484_1a0ac8a766f03a8a814f8b0c94bce24e01" compoundref="d3/d4f/a00761" startline="60" endline="63">castor3d::DoubleBufferedResourceT&lt; ResourceT, PointerT &gt;::getResource</referencedby>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d0/d0c/a04484_1a1ca84eec76b829bcd675a81a6c25a2f8" prot="private" static="no" mutable="no">
+        <type>std::atomic_bool</type>
+        <definition>std::atomic_bool castor3d::DoubleBufferedResourceT&lt; ResourceT, PointerT &gt;::m_first</definition>
+        <argsstring></argsstring>
+        <name>m_first</name>
+        <qualifiedname>castor3d::DoubleBufferedResourceT::m_first</qualifiedname>
+        <initializer>{ true }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/FontTexture.hpp" line="133" column="18" bodyfile="Overlay/FontTexture.hpp" bodystart="133" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-func">
+      <memberdef kind="function" id="d0/d0c/a04484_1a63f8c2530eb43241d3a437aab7c06f88" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::DoubleBufferedResourceT&lt; ResourceT, PointerT &gt;::DoubleBufferedResourceT</definition>
+        <argsstring>(Engine &amp;parent, ResourcePtrT back, ResourcePtrT front)</argsstring>
+        <name>DoubleBufferedResourceT</name>
+        <qualifiedname>castor3d::DoubleBufferedResourceT::DoubleBufferedResourceT</qualifiedname>
+        <param>
+          <type><ref refid="d2/d0c/a02932" kindref="compound">Engine</ref> &amp;</type>
+          <declname>parent</declname>
+        </param>
+        <param>
+          <type><ref refid="d0/d0c/a04484_1a1770714a87ef49a80d35acd020c6465b" kindref="member">ResourcePtrT</ref></type>
+          <declname>back</declname>
+        </param>
+        <param>
+          <type><ref refid="d0/d0c/a04484_1a1770714a87ef49a80d35acd020c6465b" kindref="member">ResourcePtrT</ref></type>
+          <declname>front</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/FontTexture.hpp" line="34" column="1" bodyfile="Overlay/FontTexture.hpp" bodystart="34" bodyend="41"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d0c/a04484_1a3cf816583977fa29a00155243356f28c" prot="protected" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>virtual C3D_API castor3d::DoubleBufferedResourceT&lt; ResourceT, PointerT &gt;::~DoubleBufferedResourceT</definition>
+        <argsstring>()=default</argsstring>
+        <name>~DoubleBufferedResourceT</name>
+        <qualifiedname>castor3d::DoubleBufferedResourceT::~DoubleBufferedResourceT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/FontTexture.hpp" line="43" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d0c/a04484_1a4ef7841bfce55d91a9cf72d942bd03dd" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::DoubleBufferedResourceT&lt; ResourceT, PointerT &gt;::doInitialise</definition>
+        <argsstring>(RenderDevice const &amp;device, QueueData const &amp;queueData)</argsstring>
+        <name>doInitialise</name>
+        <qualifiedname>castor3d::DoubleBufferedResourceT::doInitialise</qualifiedname>
+        <param>
+          <type><ref refid="d3/d96/a05072" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/d9d/a05056" kindref="compound">QueueData</ref> const &amp;</type>
+          <declname>queueData</declname>
+        </param>
+        <briefdescription>
+<para>Initialises the texture. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">queueData</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The queue receiving the GPU commands. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/FontTexture.hpp" line="78" column="6" bodyfile="Overlay/FontTexture.hpp" bodystart="78" bodyend="83"/>
+        <references refid="d0/d0c/a04484_1ae67d8d898615cb9b25fcc42977e62cef" compoundref="d3/d4f/a00761" startline="66">castor3d::DoubleBufferedResourceT&lt; ResourceT, PointerT &gt;::m_back</references>
+        <references refid="d0/d0c/a04484_1a9ebeb144fc77aa6af1c0a30526b60ceb" compoundref="d3/d4f/a00761" startline="67">castor3d::DoubleBufferedResourceT&lt; ResourceT, PointerT &gt;::m_front</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/d0c/a04484_1a8a21fcfe1a2dd8347790c92a201523e5" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::DoubleBufferedResourceT&lt; ResourceT, PointerT &gt;::doCleanup</definition>
+        <argsstring>()</argsstring>
+        <name>doCleanup</name>
+        <qualifiedname>castor3d::DoubleBufferedResourceT::doCleanup</qualifiedname>
+        <briefdescription>
+<para>Flushes the teture. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/FontTexture.hpp" line="90" column="6" bodyfile="Overlay/FontTexture.hpp" bodystart="90" bodyend="94"/>
+        <references refid="d0/d0c/a04484_1ae67d8d898615cb9b25fcc42977e62cef" compoundref="d3/d4f/a00761" startline="66">castor3d::DoubleBufferedResourceT&lt; ResourceT, PointerT &gt;::m_back</references>
+        <references refid="d0/d0c/a04484_1a9ebeb144fc77aa6af1c0a30526b60ceb" compoundref="d3/d4f/a00761" startline="67">castor3d::DoubleBufferedResourceT&lt; ResourceT, PointerT &gt;::m_front</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/d0c/a04484_1a6742b419c96445fd002c58b8fb1d9eb7" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::DoubleBufferedResourceT&lt; ResourceT, PointerT &gt;::doRefresh</definition>
+        <argsstring>(bool clean, bool front)</argsstring>
+        <name>doRefresh</name>
+        <qualifiedname>castor3d::DoubleBufferedResourceT::doRefresh</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>clean</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>front</declname>
+        </param>
+        <briefdescription>
+<para>Orders events to refresh the resource. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/FontTexture.hpp" line="101" column="6" bodyfile="Overlay/FontTexture.hpp" bodystart="101" bodyend="130"/>
+        <references refid="d3/d22/a01572_1a6156f808b49950e93706c41c83090e96">castor3d::getEngine</references>
+        <references refid="d0/d0c/a04484_1ae67d8d898615cb9b25fcc42977e62cef" compoundref="d3/d4f/a00761" startline="66">castor3d::DoubleBufferedResourceT&lt; ResourceT, PointerT &gt;::m_back</references>
+        <references refid="d0/d0c/a04484_1a9ebeb144fc77aa6af1c0a30526b60ceb" compoundref="d3/d4f/a00761" startline="67">castor3d::DoubleBufferedResourceT&lt; ResourceT, PointerT &gt;::m_front</references>
+        <references refid="d0/d0c/a04484_1a1105eaf3aa2ae6d858ac4ce6620a5c86" compoundref="d3/d4f/a00761" startline="48">castor3d::DoubleBufferedResourceT&lt; ResourceT, PointerT &gt;::onChanged</references>
+        <references refid="d3/d22/a01572_1a373b99b726a1a7b15cba5e9f17d06a2a">castor3d::postPreRenderGpuEvent</references>
+        <references refid="d3/d22/a01572_1a57584356b33efc044702ab05eb59ed6c">castor3d::postQueueRenderCpuEvent</references>
+        <referencedby refid="d0/d0c/a04484_1a7853caa76c1f94e868e5d1f190f7d01b" compoundref="d3/d4f/a00761" startline="55" endline="58">castor3d::DoubleBufferedResourceT&lt; ResourceT, PointerT &gt;::update</referencedby>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d0/d0c/a04484_1a7853caa76c1f94e868e5d1f190f7d01b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::DoubleBufferedResourceT&lt; ResourceT, PointerT &gt;::update</definition>
+        <argsstring>(bool clean)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::DoubleBufferedResourceT::update</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>clean</declname>
+        </param>
+        <briefdescription>
+<para>Updates the resource. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/FontTexture.hpp" line="55" column="6" bodyfile="Overlay/FontTexture.hpp" bodystart="55" bodyend="58"/>
+        <references refid="d0/d0c/a04484_1a6742b419c96445fd002c58b8fb1d9eb7" compoundref="d3/d4f/a00761" startline="101" endline="130">castor3d::DoubleBufferedResourceT&lt; ResourceT, PointerT &gt;::doRefresh</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/d0c/a04484_1a0ac8a766f03a8a814f8b0c94bce24e01" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d0/d0c/a04484_1a1770714a87ef49a80d35acd020c6465b" kindref="member">ResourcePtrT</ref> const &amp;</type>
+        <definition>ResourcePtrT const  &amp; castor3d::DoubleBufferedResourceT&lt; ResourceT, PointerT &gt;::getResource</definition>
+        <argsstring>() const</argsstring>
+        <name>getResource</name>
+        <qualifiedname>castor3d::DoubleBufferedResourceT::getResource</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/FontTexture.hpp" line="60" column="28" bodyfile="Overlay/FontTexture.hpp" bodystart="60" bodyend="63"/>
+        <references refid="d0/d0c/a04484_1a9ebeb144fc77aa6af1c0a30526b60ceb" compoundref="d3/d4f/a00761" startline="67">castor3d::DoubleBufferedResourceT&lt; ResourceT, PointerT &gt;::m_front</references>
+        <referencedby refid="de/d37/a04488_1a49378db45013e39c123ca95ca6249387" compoundref="d3/d4f/a00761" startline="230" endline="233">castor3d::FontTexture::getTexture</referencedby>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d0/d0c/a04484_1aaec79c32ae4f344c03d0231cd543edfd" prot="private" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::DoubleBufferedResourceT&lt; ResourceT, PointerT &gt;::initialiseResource</definition>
+        <argsstring>(ResourceT &amp;resource, RenderDevice const &amp;device, QueueData const &amp;queueData)=0</argsstring>
+        <name>initialiseResource</name>
+        <qualifiedname>castor3d::DoubleBufferedResourceT::initialiseResource</qualifiedname>
+        <param>
+          <type>ResourceT &amp;</type>
+          <declname>resource</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d96/a05072" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/d9d/a05056" kindref="compound">QueueData</ref> const &amp;</type>
+          <declname>queueData</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/FontTexture.hpp" line="135" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d0c/a04484_1a7106d9e17b2b4fed5bca78c2406981b6" prot="private" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::DoubleBufferedResourceT&lt; ResourceT, PointerT &gt;::cleanupResource</definition>
+        <argsstring>(ResourceT &amp;resource)=0</argsstring>
+        <name>cleanupResource</name>
+        <qualifiedname>castor3d::DoubleBufferedResourceT::cleanupResource</qualifiedname>
+        <param>
+          <type>ResourceT &amp;</type>
+          <declname>resource</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/FontTexture.hpp" line="138" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d0c/a04484_1ae3af2bedc632d10d4c2107fb9a7cb2b5" prot="private" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::DoubleBufferedResourceT&lt; ResourceT, PointerT &gt;::updateResource</definition>
+        <argsstring>(ResourceT &amp;resource, bool front)=0</argsstring>
+        <name>updateResource</name>
+        <qualifiedname>castor3d::DoubleBufferedResourceT::updateResource</qualifiedname>
+        <param>
+          <type>ResourceT &amp;</type>
+          <declname>resource</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>front</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/FontTexture.hpp" line="139" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d0c/a04484_1a36a2371243d671c6181a8c5dce98e71b" prot="private" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::DoubleBufferedResourceT&lt; ResourceT, PointerT &gt;::swapResources</definition>
+        <argsstring>()=0</argsstring>
+        <name>swapResources</name>
+        <qualifiedname>castor3d::DoubleBufferedResourceT::swapResources</qualifiedname>
+        <reimplementedby refid="de/d37/a04488_1a50183dc409501adbb4826923dace2bb2">swapResources</reimplementedby>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/FontTexture.hpp" line="141" column="22"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::DoubleBufferedResourceT&lt; ResourceT, PointerT &gt;</label>
+        <link refid="d0/d0c/a04484"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::FontTexture</label>
+        <link refid="de/d37/a04488"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::DoubleBufferedResourceT&lt; ResourceT, PointerT &gt;</label>
+        <link refid="d0/d0c/a04484"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Overlay/FontTexture.hpp" line="25" column="1" bodyfile="Overlay/FontTexture.hpp" bodystart="27" bodyend="142"/>
+    <listofallmembers>
+      <member refid="d0/d0c/a04484_1a7106d9e17b2b4fed5bca78c2406981b6" prot="private" virt="pure-virtual"><scope>castor3d::DoubleBufferedResourceT</scope><name>cleanupResource</name></member>
+      <member refid="d0/d0c/a04484_1a8a21fcfe1a2dd8347790c92a201523e5" prot="protected" virt="non-virtual"><scope>castor3d::DoubleBufferedResourceT</scope><name>doCleanup</name></member>
+      <member refid="d0/d0c/a04484_1a4ef7841bfce55d91a9cf72d942bd03dd" prot="protected" virt="non-virtual"><scope>castor3d::DoubleBufferedResourceT</scope><name>doInitialise</name></member>
+      <member refid="d0/d0c/a04484_1a6742b419c96445fd002c58b8fb1d9eb7" prot="protected" virt="non-virtual"><scope>castor3d::DoubleBufferedResourceT</scope><name>doRefresh</name></member>
+      <member refid="d0/d0c/a04484_1a63f8c2530eb43241d3a437aab7c06f88" prot="protected" virt="non-virtual"><scope>castor3d::DoubleBufferedResourceT</scope><name>DoubleBufferedResourceT</name></member>
+      <member refid="d0/d0c/a04484_1a0ac8a766f03a8a814f8b0c94bce24e01" prot="public" virt="non-virtual"><scope>castor3d::DoubleBufferedResourceT</scope><name>getResource</name></member>
+      <member refid="d0/d0c/a04484_1aaec79c32ae4f344c03d0231cd543edfd" prot="private" virt="pure-virtual"><scope>castor3d::DoubleBufferedResourceT</scope><name>initialiseResource</name></member>
+      <member refid="d0/d0c/a04484_1ae67d8d898615cb9b25fcc42977e62cef" prot="protected" virt="non-virtual"><scope>castor3d::DoubleBufferedResourceT</scope><name>m_back</name></member>
+      <member refid="d0/d0c/a04484_1a1ca84eec76b829bcd675a81a6c25a2f8" prot="private" virt="non-virtual"><scope>castor3d::DoubleBufferedResourceT</scope><name>m_first</name></member>
+      <member refid="d0/d0c/a04484_1a9ebeb144fc77aa6af1c0a30526b60ceb" prot="protected" virt="non-virtual"><scope>castor3d::DoubleBufferedResourceT</scope><name>m_front</name></member>
+      <member refid="d0/d0c/a04484_1a379faa0b85c1dcd6d993addcb61796f6" prot="public" virt="non-virtual"><scope>castor3d::DoubleBufferedResourceT</scope><name>OnChanged</name></member>
+      <member refid="d0/d0c/a04484_1a1105eaf3aa2ae6d858ac4ce6620a5c86" prot="public" virt="non-virtual"><scope>castor3d::DoubleBufferedResourceT</scope><name>onChanged</name></member>
+      <member refid="d0/d0c/a04484_1a619fc629dea63590807c628ba1a261d0" prot="public" virt="non-virtual"><scope>castor3d::DoubleBufferedResourceT</scope><name>OnChangedFunction</name></member>
+      <member refid="d0/d0c/a04484_1a1770714a87ef49a80d35acd020c6465b" prot="public" virt="non-virtual"><scope>castor3d::DoubleBufferedResourceT</scope><name>ResourcePtrT</name></member>
+      <member refid="d0/d0c/a04484_1a36a2371243d671c6181a8c5dce98e71b" prot="private" virt="pure-virtual"><scope>castor3d::DoubleBufferedResourceT</scope><name>swapResources</name></member>
+      <member refid="d0/d0c/a04484_1a7853caa76c1f94e868e5d1f190f7d01b" prot="public" virt="non-virtual"><scope>castor3d::DoubleBufferedResourceT</scope><name>update</name></member>
+      <member refid="d0/d0c/a04484_1ae3af2bedc632d10d4c2107fb9a7cb2b5" prot="private" virt="pure-virtual"><scope>castor3d::DoubleBufferedResourceT</scope><name>updateResource</name></member>
+      <member refid="d0/d0c/a04484_1a3cf816583977fa29a00155243356f28c" prot="protected" virt="virtual"><scope>castor3d::DoubleBufferedResourceT</scope><name>~DoubleBufferedResourceT</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

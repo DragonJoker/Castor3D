@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="df/d0d/a03176" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ClearcoatData</compoundname>
+    <includes local="no">ClearcoatComponent.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="df/d0d/a03176_1a84c0a2d841902d900f6daaa0c4e5668a" prot="public" static="no" mutable="no">
+        <type>castor::AtomicGroupChangeTracked&lt; float &gt;</type>
+        <definition>castor::AtomicGroupChangeTracked&lt; float &gt; castor3d::ClearcoatData::factor</definition>
+        <argsstring></argsstring>
+        <name>factor</name>
+        <qualifiedname>castor3d::ClearcoatData::factor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Lighting/ClearcoatComponent.hpp" line="23" column="34" bodyfile="Material/Pass/Component/Lighting/ClearcoatComponent.hpp" bodystart="23" bodyend="-1"/>
+        <referencedby refid="d6/da1/a03180_1a776f14d4551337fdbf035b494e1d61ee" compoundref="de/dd7/a00362" startline="104" endline="107">castor3d::ClearcoatComponent::getClearcoatFactor</referencedby>
+        <referencedby refid="d6/da1/a03180_1ae2b39a4b346deebb7ba78b128f76b504" compoundref="de/dd7/a00362" startline="114" endline="117">castor3d::ClearcoatComponent::setClearcoatFactor</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="df/d0d/a03176_1afef3458aadde951b749c474eca4c80f8" prot="public" static="no" mutable="no">
+        <type>castor::AtomicGroupChangeTracked&lt; float &gt;</type>
+        <definition>castor::AtomicGroupChangeTracked&lt; float &gt; castor3d::ClearcoatData::roughness</definition>
+        <argsstring></argsstring>
+        <name>roughness</name>
+        <qualifiedname>castor3d::ClearcoatData::roughness</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Lighting/ClearcoatComponent.hpp" line="24" column="34" bodyfile="Material/Pass/Component/Lighting/ClearcoatComponent.hpp" bodystart="24" bodyend="-1"/>
+        <referencedby refid="d6/da1/a03180_1a56f4bf8c1ff628ff1f9b237750d8464f" compoundref="de/dd7/a00362" startline="109" endline="112">castor3d::ClearcoatComponent::getRoughnessFactor</referencedby>
+        <referencedby refid="d6/da1/a03180_1adc8b72d0278247e2c9a1e28aa5101015" compoundref="de/dd7/a00362" startline="119" endline="122">castor3d::ClearcoatComponent::setRoughnessFactor</referencedby>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="df/d0d/a03176_1ae6cc063cd6322bbbed8e1e5638f735b0" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::ClearcoatData::ClearcoatData</definition>
+        <argsstring>(std::atomic_bool &amp;dirty)</argsstring>
+        <name>ClearcoatData</name>
+        <qualifiedname>castor3d::ClearcoatData::ClearcoatData</qualifiedname>
+        <param>
+          <type>std::atomic_bool &amp;</type>
+          <declname>dirty</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Lighting/ClearcoatComponent.hpp" line="17" column="10" bodyfile="Material/Pass/Component/Lighting/ClearcoatComponent.hpp" bodystart="17" bodyend="21"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Material/Pass/Component/Lighting/ClearcoatComponent.hpp" line="15" column="1" bodyfile="Material/Pass/Component/Lighting/ClearcoatComponent.hpp" bodystart="16" bodyend="25"/>
+    <listofallmembers>
+      <member refid="df/d0d/a03176_1ae6cc063cd6322bbbed8e1e5638f735b0" prot="public" virt="non-virtual"><scope>castor3d::ClearcoatData</scope><name>ClearcoatData</name></member>
+      <member refid="df/d0d/a03176_1a84c0a2d841902d900f6daaa0c4e5668a" prot="public" virt="non-virtual"><scope>castor3d::ClearcoatData</scope><name>factor</name></member>
+      <member refid="df/d0d/a03176_1afef3458aadde951b749c474eca4c80f8" prot="public" virt="non-virtual"><scope>castor3d::ClearcoatData</scope><name>roughness</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

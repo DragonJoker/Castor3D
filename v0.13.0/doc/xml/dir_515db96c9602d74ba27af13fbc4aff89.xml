@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dir_515db96c9602d74ba27af13fbc4aff89" kind="dir">
+    <compoundname>Scene/Light</compoundname>
+    <innerfile refid="db/d28/a01133">DirectionalLight.hpp</innerfile>
+    <innerfile refid="d1/dae/a01136">Light.hpp</innerfile>
+    <innerfile refid="d5/d3e/a01139">LightCategory.hpp</innerfile>
+    <innerfile refid="d3/ddc/a01142">LightFactory.hpp</innerfile>
+    <innerfile refid="d9/d65/a01145">LightImporter.hpp</innerfile>
+    <innerfile refid="db/d17/a01148">LightModule.hpp</innerfile>
+    <innerfile refid="de/df1/a01151">PointLight.hpp</innerfile>
+    <innerfile refid="d5/d16/a01154">SpotLight.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Scene/Light/"/>
+  </compounddef>
+</doxygen>

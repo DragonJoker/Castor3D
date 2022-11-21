@@ -1,0 +1,231 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d7/d61/a04868" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::VisibilityReorderPass</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::Named</basecompoundref>
+    <includes local="no">VisibilityReorderPass.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d7/d61/a04868_1acafce66d1ba9b573a4ff089028b94051" prot="private" static="no" mutable="no">
+        <type><ref refid="d8/d3f/a05960" kindref="compound">ShaderModule</ref></type>
+        <definition>ShaderModule castor3d::VisibilityReorderPass::m_computeCountsShader</definition>
+        <argsstring></argsstring>
+        <name>m_computeCountsShader</name>
+        <qualifiedname>castor3d::VisibilityReorderPass::m_computeCountsShader</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/VisibilityReorderPass.hpp" line="39" column="14" bodyfile="Render/Opaque/VisibilityReorderPass.hpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d61/a04868_1abfeb1f4def518f85fed9fa94d6f40964" prot="private" static="no" mutable="no">
+        <type>ashes::PipelineShaderStageCreateInfoArray</type>
+        <definition>ashes::PipelineShaderStageCreateInfoArray castor3d::VisibilityReorderPass::m_countsStages</definition>
+        <argsstring></argsstring>
+        <name>m_countsStages</name>
+        <qualifiedname>castor3d::VisibilityReorderPass::m_countsStages</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/VisibilityReorderPass.hpp" line="40" column="43" bodyfile="Render/Opaque/VisibilityReorderPass.hpp" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d61/a04868_1a4ffe7df71753b0073ad9c4c93d2235d7" prot="private" static="no" mutable="no">
+        <type><ref refid="d8/d3f/a05960" kindref="compound">ShaderModule</ref></type>
+        <definition>ShaderModule castor3d::VisibilityReorderPass::m_computeStartsShader</definition>
+        <argsstring></argsstring>
+        <name>m_computeStartsShader</name>
+        <qualifiedname>castor3d::VisibilityReorderPass::m_computeStartsShader</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/VisibilityReorderPass.hpp" line="41" column="14" bodyfile="Render/Opaque/VisibilityReorderPass.hpp" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d61/a04868_1a4070ca0b5b879a8269383d3c41f86528" prot="private" static="no" mutable="no">
+        <type>ashes::PipelineShaderStageCreateInfoArray</type>
+        <definition>ashes::PipelineShaderStageCreateInfoArray castor3d::VisibilityReorderPass::m_startsStages</definition>
+        <argsstring></argsstring>
+        <name>m_startsStages</name>
+        <qualifiedname>castor3d::VisibilityReorderPass::m_startsStages</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/VisibilityReorderPass.hpp" line="42" column="43" bodyfile="Render/Opaque/VisibilityReorderPass.hpp" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d61/a04868_1a717cfb86d8f0915feadc28e55b51f0ec" prot="private" static="no" mutable="no">
+        <type><ref refid="d8/d3f/a05960" kindref="compound">ShaderModule</ref></type>
+        <definition>ShaderModule castor3d::VisibilityReorderPass::m_computePixelsShader</definition>
+        <argsstring></argsstring>
+        <name>m_computePixelsShader</name>
+        <qualifiedname>castor3d::VisibilityReorderPass::m_computePixelsShader</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/VisibilityReorderPass.hpp" line="43" column="14" bodyfile="Render/Opaque/VisibilityReorderPass.hpp" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d61/a04868_1ab2e9288a64b30a7b09dc0ebbf5314e46" prot="private" static="no" mutable="no">
+        <type>ashes::PipelineShaderStageCreateInfoArray</type>
+        <definition>ashes::PipelineShaderStageCreateInfoArray castor3d::VisibilityReorderPass::m_pixelsStages</definition>
+        <argsstring></argsstring>
+        <name>m_pixelsStages</name>
+        <qualifiedname>castor3d::VisibilityReorderPass::m_pixelsStages</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/VisibilityReorderPass.hpp" line="44" column="43" bodyfile="Render/Opaque/VisibilityReorderPass.hpp" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d61/a04868_1aba42c2de8a028011cc11c7c3745c6d90" prot="private" static="no" mutable="no">
+        <type>crg::FramePass const  *</type>
+        <definition>crg::FramePass const* castor3d::VisibilityReorderPass::m_lastPass</definition>
+        <argsstring></argsstring>
+        <name>m_lastPass</name>
+        <qualifiedname>castor3d::VisibilityReorderPass::m_lastPass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/VisibilityReorderPass.hpp" line="45" column="23" bodyfile="Render/Opaque/VisibilityReorderPass.hpp" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d7/d61/a04868_1a387b09d0e0a1b5df10ef7e736a5e8e2c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::VisibilityReorderPass::VisibilityReorderPass</definition>
+        <argsstring>(crg::FramePassGroup &amp;graph, crg::FramePassArray const &amp;previousPasses, RenderDevice const &amp;device, crg::ImageViewId const &amp;data, ShaderBuffer const &amp;pipelinesIds, ashes::Buffer&lt; uint32_t &gt; const &amp;counts1, ashes::Buffer&lt; uint32_t &gt; const &amp;counts2, ashes::Buffer&lt; uint32_t &gt; const &amp;starts, ashes::Buffer&lt; castor::Point2ui &gt; const &amp;pixels)</argsstring>
+        <name>VisibilityReorderPass</name>
+        <qualifiedname>castor3d::VisibilityReorderPass::VisibilityReorderPass</qualifiedname>
+        <param>
+          <type>crg::FramePassGroup &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <param>
+          <type>crg::FramePassArray const &amp;</type>
+          <declname>previousPasses</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d96/a05072" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>crg::ImageViewId const &amp;</type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type><ref refid="d0/d83/a05884" kindref="compound">ShaderBuffer</ref> const &amp;</type>
+          <declname>pipelinesIds</declname>
+        </param>
+        <param>
+          <type>ashes::Buffer&lt; uint32_t &gt; const &amp;</type>
+          <declname>counts1</declname>
+        </param>
+        <param>
+          <type>ashes::Buffer&lt; uint32_t &gt; const &amp;</type>
+          <declname>counts2</declname>
+        </param>
+        <param>
+          <type>ashes::Buffer&lt; uint32_t &gt; const &amp;</type>
+          <declname>starts</declname>
+        </param>
+        <param>
+          <type>ashes::Buffer&lt; castor::Point2ui &gt; const &amp;</type>
+          <declname>pixels</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/VisibilityReorderPass.hpp" line="22" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d61/a04868_1aa6374c2107cf272ac8588f304b90829c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::VisibilityReorderPass::accept</definition>
+        <argsstring>(PipelineVisitor &amp;visitor)</argsstring>
+        <name>accept</name>
+        <qualifiedname>castor3d::VisibilityReorderPass::accept</qualifiedname>
+        <param>
+          <type><ref refid="d2/d38/a04176" kindref="compound">PipelineVisitor</ref> &amp;</type>
+          <declname>visitor</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/VisibilityReorderPass.hpp" line="31" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d61/a04868_1aedd98291044f0cce9a943974831d6ee4" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>crg::FramePass const &amp;</type>
+        <definition>crg::FramePass const  &amp; castor3d::VisibilityReorderPass::getLastPass</definition>
+        <argsstring>() const</argsstring>
+        <name>getLastPass</name>
+        <qualifiedname>castor3d::VisibilityReorderPass::getLastPass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/VisibilityReorderPass.hpp" line="33" column="23" bodyfile="Render/Opaque/VisibilityReorderPass.hpp" bodystart="33" bodyend="36"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::VisibilityReorderPass</label>
+        <link refid="d7/d61/a04868"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::Named</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::VisibilityReorderPass</label>
+        <link refid="d7/d61/a04868"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::Named</label>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Opaque/VisibilityReorderPass.hpp" line="18" column="1" bodyfile="Render/Opaque/VisibilityReorderPass.hpp" bodystart="20" bodyend="46"/>
+    <listofallmembers>
+      <member refid="d7/d61/a04868_1aa6374c2107cf272ac8588f304b90829c" prot="public" virt="non-virtual"><scope>castor3d::VisibilityReorderPass</scope><name>accept</name></member>
+      <member refid="d7/d61/a04868_1aedd98291044f0cce9a943974831d6ee4" prot="public" virt="non-virtual"><scope>castor3d::VisibilityReorderPass</scope><name>getLastPass</name></member>
+      <member refid="d7/d61/a04868_1acafce66d1ba9b573a4ff089028b94051" prot="private" virt="non-virtual"><scope>castor3d::VisibilityReorderPass</scope><name>m_computeCountsShader</name></member>
+      <member refid="d7/d61/a04868_1a717cfb86d8f0915feadc28e55b51f0ec" prot="private" virt="non-virtual"><scope>castor3d::VisibilityReorderPass</scope><name>m_computePixelsShader</name></member>
+      <member refid="d7/d61/a04868_1a4ffe7df71753b0073ad9c4c93d2235d7" prot="private" virt="non-virtual"><scope>castor3d::VisibilityReorderPass</scope><name>m_computeStartsShader</name></member>
+      <member refid="d7/d61/a04868_1abfeb1f4def518f85fed9fa94d6f40964" prot="private" virt="non-virtual"><scope>castor3d::VisibilityReorderPass</scope><name>m_countsStages</name></member>
+      <member refid="d7/d61/a04868_1aba42c2de8a028011cc11c7c3745c6d90" prot="private" virt="non-virtual"><scope>castor3d::VisibilityReorderPass</scope><name>m_lastPass</name></member>
+      <member refid="d7/d61/a04868_1ab2e9288a64b30a7b09dc0ebbf5314e46" prot="private" virt="non-virtual"><scope>castor3d::VisibilityReorderPass</scope><name>m_pixelsStages</name></member>
+      <member refid="d7/d61/a04868_1a4070ca0b5b879a8269383d3c41f86528" prot="private" virt="non-virtual"><scope>castor3d::VisibilityReorderPass</scope><name>m_startsStages</name></member>
+      <member refid="d7/d61/a04868_1a387b09d0e0a1b5df10ef7e736a5e8e2c" prot="public" virt="non-virtual"><scope>castor3d::VisibilityReorderPass</scope><name>VisibilityReorderPass</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

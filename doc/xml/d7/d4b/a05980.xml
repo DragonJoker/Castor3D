@@ -1,0 +1,1132 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d7/d4b/a05980" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::BlendComponents</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstance</basecompoundref>
+    <includes local="no">GlslBlendComponents.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d7/d4b/a05980_1a85b9aa574a48e32e35b891444cffaad4" prot="public" static="no" mutable="no">
+        <type>sdw::DefaultedT&lt; sdw::Vec3 &gt;</type>
+        <definition>sdw::DefaultedT&lt; sdw::Vec3 &gt; castor3d::shader::BlendComponents::normal</definition>
+        <argsstring></argsstring>
+        <name>normal</name>
+        <qualifiedname>castor3d::shader::BlendComponents::normal</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="107" column="17" bodyfile="Shader/Shaders/GlslBlendComponents.hpp" bodystart="107" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d4b/a05980_1ac0dbe62d2f025eed62c353afa2c9ad0c" prot="public" static="no" mutable="no">
+        <type>sdw::DefaultedT&lt; sdw::Vec3 &gt;</type>
+        <definition>sdw::DefaultedT&lt; sdw::Vec3 &gt; castor3d::shader::BlendComponents::colour</definition>
+        <argsstring></argsstring>
+        <name>colour</name>
+        <qualifiedname>castor3d::shader::BlendComponents::colour</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="108" column="17" bodyfile="Shader/Shaders/GlslBlendComponents.hpp" bodystart="108" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d4b/a05980_1a915a88951234601c450740071645c6db" prot="public" static="no" mutable="no">
+        <type>sdw::DefaultedT&lt; sdw::Vec3 &gt;</type>
+        <definition>sdw::DefaultedT&lt; sdw::Vec3 &gt; castor3d::shader::BlendComponents::emissiveColour</definition>
+        <argsstring></argsstring>
+        <name>emissiveColour</name>
+        <qualifiedname>castor3d::shader::BlendComponents::emissiveColour</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="109" column="17" bodyfile="Shader/Shaders/GlslBlendComponents.hpp" bodystart="109" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d4b/a05980_1a23d3c7eb005cd23c543cc99612d77bee" prot="public" static="no" mutable="no">
+        <type>sdw::DefaultedT&lt; sdw::Float &gt;</type>
+        <definition>sdw::DefaultedT&lt; sdw::Float &gt; castor3d::shader::BlendComponents::emissiveFactor</definition>
+        <argsstring></argsstring>
+        <name>emissiveFactor</name>
+        <qualifiedname>castor3d::shader::BlendComponents::emissiveFactor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="110" column="17" bodyfile="Shader/Shaders/GlslBlendComponents.hpp" bodystart="110" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d4b/a05980_1a4146f16d501177c6559be69d953f5611" prot="public" static="no" mutable="no">
+        <type>sdw::DefaultedT&lt; sdw::Vec3 &gt;</type>
+        <definition>sdw::DefaultedT&lt; sdw::Vec3 &gt; castor3d::shader::BlendComponents::specular</definition>
+        <argsstring></argsstring>
+        <name>specular</name>
+        <qualifiedname>castor3d::shader::BlendComponents::specular</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="111" column="17" bodyfile="Shader/Shaders/GlslBlendComponents.hpp" bodystart="111" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d4b/a05980_1a2f39e5809c4381ad573a8b0f59936a23" prot="public" static="no" mutable="no">
+        <type>sdw::DefaultedT&lt; sdw::Float &gt;</type>
+        <definition>sdw::DefaultedT&lt; sdw::Float &gt; castor3d::shader::BlendComponents::transmission</definition>
+        <argsstring></argsstring>
+        <name>transmission</name>
+        <qualifiedname>castor3d::shader::BlendComponents::transmission</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="112" column="17" bodyfile="Shader/Shaders/GlslBlendComponents.hpp" bodystart="112" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d4b/a05980_1aead4f2dbc063cda744035b0327fd081a" prot="public" static="no" mutable="no">
+        <type>sdw::DefaultedT&lt; sdw::UInt &gt;</type>
+        <definition>sdw::DefaultedT&lt; sdw::UInt &gt; castor3d::shader::BlendComponents::hasTransmission</definition>
+        <argsstring></argsstring>
+        <name>hasTransmission</name>
+        <qualifiedname>castor3d::shader::BlendComponents::hasTransmission</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="113" column="17" bodyfile="Shader/Shaders/GlslBlendComponents.hpp" bodystart="113" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d4b/a05980_1a6a98f7274fc37e5c40871f6dbc238ef5" prot="public" static="no" mutable="no">
+        <type>sdw::DefaultedT&lt; sdw::Float &gt;</type>
+        <definition>sdw::DefaultedT&lt; sdw::Float &gt; castor3d::shader::BlendComponents::opacity</definition>
+        <argsstring></argsstring>
+        <name>opacity</name>
+        <qualifiedname>castor3d::shader::BlendComponents::opacity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="114" column="17" bodyfile="Shader/Shaders/GlslBlendComponents.hpp" bodystart="114" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d4b/a05980_1aa1abf81c0cc5fe1c151a15f690616597" prot="public" static="no" mutable="no">
+        <type>sdw::DefaultedT&lt; sdw::UInt &gt;</type>
+        <definition>sdw::DefaultedT&lt; sdw::UInt &gt; castor3d::shader::BlendComponents::bwAccumulationOperator</definition>
+        <argsstring></argsstring>
+        <name>bwAccumulationOperator</name>
+        <qualifiedname>castor3d::shader::BlendComponents::bwAccumulationOperator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="115" column="17" bodyfile="Shader/Shaders/GlslBlendComponents.hpp" bodystart="115" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d4b/a05980_1a5cd4207d5bb1cb82686a9c5313c93263" prot="public" static="no" mutable="no">
+        <type>sdw::DefaultedT&lt; sdw::Float &gt;</type>
+        <definition>sdw::DefaultedT&lt; sdw::Float &gt; castor3d::shader::BlendComponents::alphaRef</definition>
+        <argsstring></argsstring>
+        <name>alphaRef</name>
+        <qualifiedname>castor3d::shader::BlendComponents::alphaRef</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="116" column="17" bodyfile="Shader/Shaders/GlslBlendComponents.hpp" bodystart="116" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d4b/a05980_1ab2523e76133688cfc790727991e3a842" prot="public" static="no" mutable="no">
+        <type>sdw::DefaultedT&lt; sdw::Float &gt;</type>
+        <definition>sdw::DefaultedT&lt; sdw::Float &gt; castor3d::shader::BlendComponents::occlusion</definition>
+        <argsstring></argsstring>
+        <name>occlusion</name>
+        <qualifiedname>castor3d::shader::BlendComponents::occlusion</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="117" column="17" bodyfile="Shader/Shaders/GlslBlendComponents.hpp" bodystart="117" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d4b/a05980_1ad033cb74a7098dad0cd0f010b5b8d36d" prot="public" static="no" mutable="no">
+        <type>sdw::DefaultedT&lt; sdw::Float &gt;</type>
+        <definition>sdw::DefaultedT&lt; sdw::Float &gt; castor3d::shader::BlendComponents::transmittance</definition>
+        <argsstring></argsstring>
+        <name>transmittance</name>
+        <qualifiedname>castor3d::shader::BlendComponents::transmittance</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="118" column="17" bodyfile="Shader/Shaders/GlslBlendComponents.hpp" bodystart="118" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d4b/a05980_1a91068c7e2dd2eecf041ae984b0b32055" prot="public" static="no" mutable="no">
+        <type>sdw::DefaultedT&lt; sdw::Float &gt;</type>
+        <definition>sdw::DefaultedT&lt; sdw::Float &gt; castor3d::shader::BlendComponents::refractionRatio</definition>
+        <argsstring></argsstring>
+        <name>refractionRatio</name>
+        <qualifiedname>castor3d::shader::BlendComponents::refractionRatio</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="119" column="17" bodyfile="Shader/Shaders/GlslBlendComponents.hpp" bodystart="119" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d4b/a05980_1a81b5afff8f6575b4385cd3d7e7e1cb49" prot="public" static="no" mutable="no">
+        <type>sdw::DefaultedT&lt; sdw::UInt &gt;</type>
+        <definition>sdw::DefaultedT&lt; sdw::UInt &gt; castor3d::shader::BlendComponents::hasReflection</definition>
+        <argsstring></argsstring>
+        <name>hasReflection</name>
+        <qualifiedname>castor3d::shader::BlendComponents::hasReflection</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="120" column="17" bodyfile="Shader/Shaders/GlslBlendComponents.hpp" bodystart="120" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d4b/a05980_1a35d143a6191718d11416fff7f950c6cb" prot="public" static="no" mutable="no">
+        <type>sdw::DefaultedT&lt; sdw::Float &gt;</type>
+        <definition>sdw::DefaultedT&lt; sdw::Float &gt; castor3d::shader::BlendComponents::metalness</definition>
+        <argsstring></argsstring>
+        <name>metalness</name>
+        <qualifiedname>castor3d::shader::BlendComponents::metalness</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="121" column="17" bodyfile="Shader/Shaders/GlslBlendComponents.hpp" bodystart="121" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d4b/a05980_1a81d27ad19275a648f8a3ba30a5785965" prot="public" static="no" mutable="no">
+        <type>sdw::DefaultedT&lt; sdw::Float &gt;</type>
+        <definition>sdw::DefaultedT&lt; sdw::Float &gt; castor3d::shader::BlendComponents::roughness</definition>
+        <argsstring></argsstring>
+        <name>roughness</name>
+        <qualifiedname>castor3d::shader::BlendComponents::roughness</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="122" column="17" bodyfile="Shader/Shaders/GlslBlendComponents.hpp" bodystart="122" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d4b/a05980_1acf5917c72bfc908e53d369229a8ea56e" prot="public" static="no" mutable="no">
+        <type>sdw::DefaultedT&lt; sdw::Float &gt;</type>
+        <definition>sdw::DefaultedT&lt; sdw::Float &gt; castor3d::shader::BlendComponents::thicknessFactor</definition>
+        <argsstring></argsstring>
+        <name>thicknessFactor</name>
+        <qualifiedname>castor3d::shader::BlendComponents::thicknessFactor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="123" column="17" bodyfile="Shader/Shaders/GlslBlendComponents.hpp" bodystart="123" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d4b/a05980_1a8cfbd3d3b6ef5ca71e9f18fec87469d5" prot="public" static="no" mutable="no">
+        <type>sdw::DefaultedT&lt; sdw::Float &gt;</type>
+        <definition>sdw::DefaultedT&lt; sdw::Float &gt; castor3d::shader::BlendComponents::attenuationDistance</definition>
+        <argsstring></argsstring>
+        <name>attenuationDistance</name>
+        <qualifiedname>castor3d::shader::BlendComponents::attenuationDistance</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="124" column="17" bodyfile="Shader/Shaders/GlslBlendComponents.hpp" bodystart="124" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d4b/a05980_1ac8526401f038475aa0e01ad5e084a5f8" prot="public" static="no" mutable="no">
+        <type>sdw::DefaultedT&lt; sdw::Vec3 &gt;</type>
+        <definition>sdw::DefaultedT&lt; sdw::Vec3 &gt; castor3d::shader::BlendComponents::attenuationColour</definition>
+        <argsstring></argsstring>
+        <name>attenuationColour</name>
+        <qualifiedname>castor3d::shader::BlendComponents::attenuationColour</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="125" column="17" bodyfile="Shader/Shaders/GlslBlendComponents.hpp" bodystart="125" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d4b/a05980_1a936b99940317e4c39ab6d81e88515709" prot="public" static="no" mutable="no">
+        <type>sdw::DefaultedT&lt; sdw::Float &gt;</type>
+        <definition>sdw::DefaultedT&lt; sdw::Float &gt; castor3d::shader::BlendComponents::clearcoatFactor</definition>
+        <argsstring></argsstring>
+        <name>clearcoatFactor</name>
+        <qualifiedname>castor3d::shader::BlendComponents::clearcoatFactor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="126" column="17" bodyfile="Shader/Shaders/GlslBlendComponents.hpp" bodystart="126" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d4b/a05980_1ad1e669bd519439d65b90259a7734bf27" prot="public" static="no" mutable="no">
+        <type>sdw::DefaultedT&lt; sdw::Vec3 &gt;</type>
+        <definition>sdw::DefaultedT&lt; sdw::Vec3 &gt; castor3d::shader::BlendComponents::clearcoatNormal</definition>
+        <argsstring></argsstring>
+        <name>clearcoatNormal</name>
+        <qualifiedname>castor3d::shader::BlendComponents::clearcoatNormal</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="127" column="17" bodyfile="Shader/Shaders/GlslBlendComponents.hpp" bodystart="127" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d4b/a05980_1a656f5c83600d8b164d9d1cd407ddf97c" prot="public" static="no" mutable="no">
+        <type>sdw::DefaultedT&lt; sdw::Float &gt;</type>
+        <definition>sdw::DefaultedT&lt; sdw::Float &gt; castor3d::shader::BlendComponents::clearcoatRoughness</definition>
+        <argsstring></argsstring>
+        <name>clearcoatRoughness</name>
+        <qualifiedname>castor3d::shader::BlendComponents::clearcoatRoughness</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="128" column="17" bodyfile="Shader/Shaders/GlslBlendComponents.hpp" bodystart="128" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d4b/a05980_1adc5a38e10a99cf7164a3143cf050f43c" prot="public" static="no" mutable="no">
+        <type>sdw::DefaultedT&lt; sdw::Vec3 &gt;</type>
+        <definition>sdw::DefaultedT&lt; sdw::Vec3 &gt; castor3d::shader::BlendComponents::sheenFactor</definition>
+        <argsstring></argsstring>
+        <name>sheenFactor</name>
+        <qualifiedname>castor3d::shader::BlendComponents::sheenFactor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="129" column="17" bodyfile="Shader/Shaders/GlslBlendComponents.hpp" bodystart="129" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d4b/a05980_1af133bcb8f5f0ba63d38592afebd484bc" prot="public" static="no" mutable="no">
+        <type>sdw::DefaultedT&lt; sdw::Float &gt;</type>
+        <definition>sdw::DefaultedT&lt; sdw::Float &gt; castor3d::shader::BlendComponents::sheenRoughness</definition>
+        <argsstring></argsstring>
+        <name>sheenRoughness</name>
+        <qualifiedname>castor3d::shader::BlendComponents::sheenRoughness</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="130" column="17" bodyfile="Shader/Shaders/GlslBlendComponents.hpp" bodystart="130" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d4b/a05980_1ab0dd84bd7578aa008c891d9007a1a9ce" prot="public" static="no" mutable="no">
+        <type>sdw::DefaultedT&lt; sdw::Float &gt;</type>
+        <definition>sdw::DefaultedT&lt; sdw::Float &gt; castor3d::shader::BlendComponents::iridescenceFactor</definition>
+        <argsstring></argsstring>
+        <name>iridescenceFactor</name>
+        <qualifiedname>castor3d::shader::BlendComponents::iridescenceFactor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="131" column="17" bodyfile="Shader/Shaders/GlslBlendComponents.hpp" bodystart="131" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d4b/a05980_1a28ca042c78296654c51a757a77eb7884" prot="public" static="no" mutable="no">
+        <type>sdw::DefaultedT&lt; sdw::Float &gt;</type>
+        <definition>sdw::DefaultedT&lt; sdw::Float &gt; castor3d::shader::BlendComponents::iridescenceThickness</definition>
+        <argsstring></argsstring>
+        <name>iridescenceThickness</name>
+        <qualifiedname>castor3d::shader::BlendComponents::iridescenceThickness</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="132" column="17" bodyfile="Shader/Shaders/GlslBlendComponents.hpp" bodystart="132" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d4b/a05980_1a4d6de96e1fa1803befb19e80b94f5bac" prot="public" static="no" mutable="no">
+        <type>sdw::DefaultedT&lt; sdw::Float &gt;</type>
+        <definition>sdw::DefaultedT&lt; sdw::Float &gt; castor3d::shader::BlendComponents::iridescenceIor</definition>
+        <argsstring></argsstring>
+        <name>iridescenceIor</name>
+        <qualifiedname>castor3d::shader::BlendComponents::iridescenceIor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="133" column="17" bodyfile="Shader/Shaders/GlslBlendComponents.hpp" bodystart="133" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d4b/a05980_1a44cf431bd178fefce81514eced527563" prot="public" static="no" mutable="no">
+        <type>sdw::DefaultedT&lt; sdw::Vec3 &gt;</type>
+        <definition>sdw::DefaultedT&lt; sdw::Vec3 &gt; castor3d::shader::BlendComponents::iridescenceFresnel</definition>
+        <argsstring></argsstring>
+        <name>iridescenceFresnel</name>
+        <qualifiedname>castor3d::shader::BlendComponents::iridescenceFresnel</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="134" column="17" bodyfile="Shader/Shaders/GlslBlendComponents.hpp" bodystart="134" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d4b/a05980_1a4482261bfb51033993e7aa800c83130d" prot="public" static="no" mutable="no">
+        <type>sdw::DefaultedT&lt; sdw::Vec3 &gt;</type>
+        <definition>sdw::DefaultedT&lt; sdw::Vec3 &gt; castor3d::shader::BlendComponents::iridescenceF0</definition>
+        <argsstring></argsstring>
+        <name>iridescenceF0</name>
+        <qualifiedname>castor3d::shader::BlendComponents::iridescenceF0</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="135" column="17" bodyfile="Shader/Shaders/GlslBlendComponents.hpp" bodystart="135" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d4b/a05980_1a3597eb16e4636e6e9281c130bbe01af1" prot="public" static="no" mutable="no">
+        <type>sdw::Float const</type>
+        <definition>sdw::Float const castor3d::shader::BlendComponents::shininess</definition>
+        <argsstring></argsstring>
+        <name>shininess</name>
+        <qualifiedname>castor3d::shader::BlendComponents::shininess</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="136" column="18" bodyfile="Shader/Shaders/GlslBlendComponents.hpp" bodystart="136" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d7/d4b/a05980_1a0f8bc808a5f8da5a85449508676c6575" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::BlendComponents::BlendComponents</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, sdw::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>BlendComponents</name>
+        <qualifiedname>castor3d::shader::BlendComponents::BlendComponents</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>sdw::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="38" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d4b/a05980_1a01b3751694b2048c40a9f305a62e272f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::BlendComponents::BlendComponents</definition>
+        <argsstring>(Materials const &amp;materials, Material const &amp;material, SurfaceBase const &amp;surface)</argsstring>
+        <name>BlendComponents</name>
+        <qualifiedname>castor3d::shader::BlendComponents::BlendComponents</qualifiedname>
+        <param>
+          <type><ref refid="d1/dc9/a06044" kindref="compound">Materials</ref> const &amp;</type>
+          <declname>materials</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d32/a06040" kindref="compound">Material</ref> const &amp;</type>
+          <declname>material</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/da0/a06092" kindref="compound">SurfaceBase</ref> const &amp;</type>
+          <declname>surface</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="41" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d4b/a05980_1aca6c88d218026e86f11e62f3892c9dcb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::BlendComponents::BlendComponents</definition>
+        <argsstring>(Materials const &amp;materials, Material const &amp;material, SurfaceBase const &amp;surface, sdw::Vec4 const &amp;clrCot)</argsstring>
+        <name>BlendComponents</name>
+        <qualifiedname>castor3d::shader::BlendComponents::BlendComponents</qualifiedname>
+        <param>
+          <type><ref refid="d1/dc9/a06044" kindref="compound">Materials</ref> const &amp;</type>
+          <declname>materials</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d32/a06040" kindref="compound">Material</ref> const &amp;</type>
+          <declname>material</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/da0/a06092" kindref="compound">SurfaceBase</ref> const &amp;</type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>clrCot</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="44" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d4b/a05980_1a84bb3a06744f248931963b1cb507ef24" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::BlendComponents::BlendComponents</definition>
+        <argsstring>(Materials const &amp;materials, bool zeroInit=false)</argsstring>
+        <name>BlendComponents</name>
+        <qualifiedname>castor3d::shader::BlendComponents::BlendComponents</qualifiedname>
+        <param>
+          <type><ref refid="d1/dc9/a06044" kindref="compound">Materials</ref> const &amp;</type>
+          <declname>materials</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>zeroInit</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="48" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d4b/a05980_1afa9ab3da77708c1ab8bf4176ca2b8e62" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::BlendComponents::SDW_DeclStructInstance</definition>
+        <argsstring>(, BlendComponents)</argsstring>
+        <name>SDW_DeclStructInstance</name>
+        <qualifiedname>castor3d::shader::BlendComponents::SDW_DeclStructInstance</qualifiedname>
+        <param>
+          <type><ref refid="d7/d4b/a05980" kindref="compound">BlendComponents</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="51" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d4b/a05980_1a716ae21b3c57857fe164fe572d2c7fca" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::BlendComponents::finish</definition>
+        <argsstring>(PassShaders const &amp;passShaders, SurfaceBase const &amp;surface, Utils &amp;utils, sdw::Vec3 const worldEye)</argsstring>
+        <name>finish</name>
+        <qualifiedname>castor3d::shader::BlendComponents::finish</qualifiedname>
+        <param>
+          <type><ref refid="d9/d58/a06056" kindref="compound">PassShaders</ref> const &amp;</type>
+          <declname>passShaders</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/da0/a06092" kindref="compound">SurfaceBase</ref> const &amp;</type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/da4/a06136" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const</type>
+          <declname>worldEye</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="53" column="6"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d7/d4b/a05980_1a2b00848fa321cf2a2a9bdb19f1033a0f" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>ast::type::BaseStructPtr</type>
+        <definition>static ast::type::BaseStructPtr castor3d::shader::BlendComponents::makeType</definition>
+        <argsstring>(ast::type::TypesCache &amp;cache, Materials const &amp;materials, bool zeroInit, sdw::expr::ExprList &amp;inits)</argsstring>
+        <name>makeType</name>
+        <qualifiedname>castor3d::shader::BlendComponents::makeType</qualifiedname>
+        <param>
+          <type>ast::type::TypesCache &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/dc9/a06044" kindref="compound">Materials</ref> const &amp;</type>
+          <declname>materials</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>zeroInit</declname>
+        </param>
+        <param>
+          <type>sdw::expr::ExprList &amp;</type>
+          <declname>inits</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="58" column="33"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d4b/a05980_1a24d034c922ceb7bbac64bda2ae903829" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>ast::type::BaseStructPtr</type>
+        <definition>static ast::type::BaseStructPtr castor3d::shader::BlendComponents::makeType</definition>
+        <argsstring>(ast::type::TypesCache &amp;cache, Materials const &amp;materials, Material const &amp;material, sdw::StructInstance const &amp;surface, sdw::Vec4 const *clrCot, sdw::expr::ExprList &amp;inits)</argsstring>
+        <name>makeType</name>
+        <qualifiedname>castor3d::shader::BlendComponents::makeType</qualifiedname>
+        <param>
+          <type>ast::type::TypesCache &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/dc9/a06044" kindref="compound">Materials</ref> const &amp;</type>
+          <declname>materials</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d32/a06040" kindref="compound">Material</ref> const &amp;</type>
+          <declname>material</declname>
+        </param>
+        <param>
+          <type>sdw::StructInstance const &amp;</type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const *</type>
+          <declname>clrCot</declname>
+        </param>
+        <param>
+          <type>sdw::expr::ExprList &amp;</type>
+          <declname>inits</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="62" column="33"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d4b/a05980_1a179fc83f08d54003f1929ecc7c43139f" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>ast::type::BaseStructPtr</type>
+        <definition>static ast::type::BaseStructPtr castor3d::shader::BlendComponents::makeType</definition>
+        <argsstring>(ast::type::TypesCache &amp;cache, BlendComponents const &amp;rhs)</argsstring>
+        <name>makeType</name>
+        <qualifiedname>castor3d::shader::BlendComponents::makeType</qualifiedname>
+        <param>
+          <type>ast::type::TypesCache &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d4b/a05980" kindref="compound">BlendComponents</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="68" column="33"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d4b/a05980_1a50f8c35ba4ace8b9ce7c15d679323339" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>ast::type::BaseStructPtr</type>
+        <definition>static ast::type::BaseStructPtr castor3d::shader::BlendComponents::makeType</definition>
+        <argsstring>(ast::type::TypesCache &amp;cache, Materials const &amp;materials, bool zeroInit=false)</argsstring>
+        <name>makeType</name>
+        <qualifiedname>castor3d::shader::BlendComponents::makeType</qualifiedname>
+        <param>
+          <type>ast::type::TypesCache &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/dc9/a06044" kindref="compound">Materials</ref> const &amp;</type>
+          <declname>materials</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>zeroInit</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="71" column="33" bodyfile="Shader/Shaders/GlslBlendComponents.hpp" bodystart="71" bodyend="77"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d4b/a05980_1adc367f1bd14526457d4875fb6cc1b948" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>ast::type::BaseStructPtr</type>
+        <definition>static ast::type::BaseStructPtr castor3d::shader::BlendComponents::makeType</definition>
+        <argsstring>(ast::type::TypesCache &amp;cache, Materials const &amp;materials, Material const &amp;material, sdw::StructInstance const &amp;surface, sdw::Vec4 const *clrCot)</argsstring>
+        <name>makeType</name>
+        <qualifiedname>castor3d::shader::BlendComponents::makeType</qualifiedname>
+        <param>
+          <type>ast::type::TypesCache &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/dc9/a06044" kindref="compound">Materials</ref> const &amp;</type>
+          <declname>materials</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d32/a06040" kindref="compound">Material</ref> const &amp;</type>
+          <declname>material</declname>
+        </param>
+        <param>
+          <type>sdw::StructInstance const &amp;</type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const *</type>
+          <declname>clrCot</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="79" column="33" bodyfile="Shader/Shaders/GlslBlendComponents.hpp" bodystart="79" bodyend="87"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d4b/a05980_1a06aa3237c5fbc0dfac70300990a4c469" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::Vec3</type>
+        <definition>static sdw::Vec3 castor3d::shader::BlendComponents::computeF0</definition>
+        <argsstring>(sdw::Vec3 const &amp;albedo, sdw::Float const &amp;metalness)</argsstring>
+        <name>computeF0</name>
+        <qualifiedname>castor3d::shader::BlendComponents::computeF0</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>albedo</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>metalness</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="89" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d4b/a05980_1a626ffaae3f0cc124ab8b7bc740ff4e72" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::Float</type>
+        <definition>static sdw::Float castor3d::shader::BlendComponents::computeRoughnessFromGlossiness</definition>
+        <argsstring>(sdw::Float const &amp;glossiness)</argsstring>
+        <name>computeRoughnessFromGlossiness</name>
+        <qualifiedname>castor3d::shader::BlendComponents::computeRoughnessFromGlossiness</qualifiedname>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>glossiness</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="91" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d4b/a05980_1a1344a7bbd6aceb7778f5ec5539afdfbe" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::Float</type>
+        <definition>static sdw::Float castor3d::shader::BlendComponents::computeGlossinessFromRoughness</definition>
+        <argsstring>(sdw::Float const &amp;roughness)</argsstring>
+        <name>computeGlossinessFromRoughness</name>
+        <qualifiedname>castor3d::shader::BlendComponents::computeGlossinessFromRoughness</qualifiedname>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>roughness</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="92" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d4b/a05980_1a13a6d737042d789f670e54f1a33e83c7" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::Float</type>
+        <definition>static sdw::Float castor3d::shader::BlendComponents::computeGlossinessFromShininess</definition>
+        <argsstring>(sdw::Float const &amp;shininess)</argsstring>
+        <name>computeGlossinessFromShininess</name>
+        <qualifiedname>castor3d::shader::BlendComponents::computeGlossinessFromShininess</qualifiedname>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>shininess</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="93" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d4b/a05980_1ae754207700c5f5e80e1d4c6c17be7561" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::Float</type>
+        <definition>static sdw::Float castor3d::shader::BlendComponents::computeShininessFromGlossiness</definition>
+        <argsstring>(sdw::Float const &amp;glossiness)</argsstring>
+        <name>computeShininessFromGlossiness</name>
+        <qualifiedname>castor3d::shader::BlendComponents::computeShininessFromGlossiness</qualifiedname>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>glossiness</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="94" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d4b/a05980_1aa31eea217c8c5c45bf9905d324ff2047" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>sdw::Float</type>
+        <definition>static sdw::Float castor3d::shader::BlendComponents::computeRoughnessFromShininess</definition>
+        <argsstring>(sdw::Float const &amp;shininess)</argsstring>
+        <name>computeRoughnessFromShininess</name>
+        <qualifiedname>castor3d::shader::BlendComponents::computeRoughnessFromShininess</qualifiedname>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>shininess</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="96" column="19" bodyfile="Shader/Shaders/GlslBlendComponents.hpp" bodystart="96" bodyend="99"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d4b/a05980_1a0d0e63b13d6087dc08136a87b76f804f" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>sdw::Float</type>
+        <definition>static sdw::Float castor3d::shader::BlendComponents::computeShininessFromRoughness</definition>
+        <argsstring>(sdw::Float const &amp;roughness)</argsstring>
+        <name>computeShininessFromRoughness</name>
+        <qualifiedname>castor3d::shader::BlendComponents::computeShininessFromRoughness</qualifiedname>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>roughness</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="101" column="19" bodyfile="Shader/Shaders/GlslBlendComponents.hpp" bodystart="101" bodyend="104"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-static-func">
+      <memberdef kind="function" id="d7/d4b/a05980_1a777f87132137f042f2c34f1317f24c36" prot="protected" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>static void castor3d::shader::BlendComponents::fillType</definition>
+        <argsstring>(ast::type::BaseStruct &amp;type, Materials const &amp;materials, sdw::expr::ExprList &amp;inits)</argsstring>
+        <name>fillType</name>
+        <qualifiedname>castor3d::shader::BlendComponents::fillType</qualifiedname>
+        <param>
+          <type>ast::type::BaseStruct &amp;</type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/dc9/a06044" kindref="compound">Materials</ref> const &amp;</type>
+          <declname>materials</declname>
+        </param>
+        <param>
+          <type>sdw::expr::ExprList &amp;</type>
+          <declname>inits</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="139" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d4b/a05980_1ae379599f546181304c70acb7c0adb8ea" prot="protected" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>static void castor3d::shader::BlendComponents::fillType</definition>
+        <argsstring>(ast::type::BaseStruct &amp;type, Materials const &amp;materials, Material const &amp;material, sdw::StructInstance const &amp;surface, sdw::Vec4 const *clrCot, sdw::expr::ExprList &amp;inits)</argsstring>
+        <name>fillType</name>
+        <qualifiedname>castor3d::shader::BlendComponents::fillType</qualifiedname>
+        <param>
+          <type>ast::type::BaseStruct &amp;</type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/dc9/a06044" kindref="compound">Materials</ref> const &amp;</type>
+          <declname>materials</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d32/a06040" kindref="compound">Material</ref> const &amp;</type>
+          <declname>material</declname>
+        </param>
+        <param>
+          <type>sdw::StructInstance const &amp;</type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const *</type>
+          <declname>clrCot</declname>
+        </param>
+        <param>
+          <type>sdw::expr::ExprList &amp;</type>
+          <declname>inits</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="142" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d4b/a05980_1a2062144d0724496006ece56b74ae34cf" prot="protected" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>static void castor3d::shader::BlendComponents::fillInit</definition>
+        <argsstring>(sdw::type::BaseStruct const &amp;components, Materials const &amp;materials, sdw::expr::ExprList &amp;inits)</argsstring>
+        <name>fillInit</name>
+        <qualifiedname>castor3d::shader::BlendComponents::fillInit</qualifiedname>
+        <param>
+          <type>sdw::type::BaseStruct const &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/dc9/a06044" kindref="compound">Materials</ref> const &amp;</type>
+          <declname>materials</declname>
+        </param>
+        <param>
+          <type>sdw::expr::ExprList &amp;</type>
+          <declname>inits</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="148" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d4b/a05980_1a22e5465784a21336c9a91c0552fc22eb" prot="protected" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>static void castor3d::shader::BlendComponents::fillInit</definition>
+        <argsstring>(sdw::type::BaseStruct const &amp;components, Materials const &amp;materials, Material const &amp;material, sdw::StructInstance const &amp;surface, sdw::Vec4 const *clrCot, sdw::expr::ExprList &amp;inits)</argsstring>
+        <name>fillInit</name>
+        <qualifiedname>castor3d::shader::BlendComponents::fillInit</qualifiedname>
+        <param>
+          <type>sdw::type::BaseStruct const &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/dc9/a06044" kindref="compound">Materials</ref> const &amp;</type>
+          <declname>materials</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d32/a06040" kindref="compound">Material</ref> const &amp;</type>
+          <declname>material</declname>
+        </param>
+        <param>
+          <type>sdw::StructInstance const &amp;</type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const *</type>
+          <declname>clrCot</declname>
+        </param>
+        <param>
+          <type>sdw::expr::ExprList &amp;</type>
+          <declname>inits</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="151" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d4b/a05980_1a5be147f33c5f80d0edaf40be9c571add" prot="protected" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::expr::ExprPtr</type>
+        <definition>static sdw::expr::ExprPtr castor3d::shader::BlendComponents::makeInit</definition>
+        <argsstring>(Materials const &amp;materials, bool zeroInit)</argsstring>
+        <name>makeInit</name>
+        <qualifiedname>castor3d::shader::BlendComponents::makeInit</qualifiedname>
+        <param>
+          <type><ref refid="d1/dc9/a06044" kindref="compound">Materials</ref> const &amp;</type>
+          <declname>materials</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>zeroInit</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="157" column="27"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d4b/a05980_1ac66231f97f9d1214bde88a836bb4fe1c" prot="protected" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::expr::ExprPtr</type>
+        <definition>static sdw::expr::ExprPtr castor3d::shader::BlendComponents::makeInit</definition>
+        <argsstring>(Materials const &amp;materials, Material const &amp;material, sdw::StructInstance const &amp;surface, sdw::Vec4 const *clrCot)</argsstring>
+        <name>makeInit</name>
+        <qualifiedname>castor3d::shader::BlendComponents::makeInit</qualifiedname>
+        <param>
+          <type><ref refid="d1/dc9/a06044" kindref="compound">Materials</ref> const &amp;</type>
+          <declname>materials</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d32/a06040" kindref="compound">Material</ref> const &amp;</type>
+          <declname>material</declname>
+        </param>
+        <param>
+          <type>sdw::StructInstance const &amp;</type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const *</type>
+          <declname>clrCot</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="159" column="27"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::BlendComponents</label>
+        <link refid="d7/d4b/a05980"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstance</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::shader::BlendComponents</label>
+        <link refid="d7/d4b/a05980"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstance</label>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Shaders/GlslBlendComponents.hpp" line="35" column="1" bodyfile="Shader/Shaders/GlslBlendComponents.hpp" bodystart="37" bodyend="163"/>
+    <listofallmembers>
+      <member refid="d7/d4b/a05980_1a5cd4207d5bb1cb82686a9c5313c93263" prot="public" virt="non-virtual"><scope>castor3d::shader::BlendComponents</scope><name>alphaRef</name></member>
+      <member refid="d7/d4b/a05980_1ac8526401f038475aa0e01ad5e084a5f8" prot="public" virt="non-virtual"><scope>castor3d::shader::BlendComponents</scope><name>attenuationColour</name></member>
+      <member refid="d7/d4b/a05980_1a8cfbd3d3b6ef5ca71e9f18fec87469d5" prot="public" virt="non-virtual"><scope>castor3d::shader::BlendComponents</scope><name>attenuationDistance</name></member>
+      <member refid="d7/d4b/a05980_1a0f8bc808a5f8da5a85449508676c6575" prot="public" virt="non-virtual"><scope>castor3d::shader::BlendComponents</scope><name>BlendComponents</name></member>
+      <member refid="d7/d4b/a05980_1a01b3751694b2048c40a9f305a62e272f" prot="public" virt="non-virtual"><scope>castor3d::shader::BlendComponents</scope><name>BlendComponents</name></member>
+      <member refid="d7/d4b/a05980_1aca6c88d218026e86f11e62f3892c9dcb" prot="public" virt="non-virtual"><scope>castor3d::shader::BlendComponents</scope><name>BlendComponents</name></member>
+      <member refid="d7/d4b/a05980_1a84bb3a06744f248931963b1cb507ef24" prot="public" virt="non-virtual"><scope>castor3d::shader::BlendComponents</scope><name>BlendComponents</name></member>
+      <member refid="d7/d4b/a05980_1aa1abf81c0cc5fe1c151a15f690616597" prot="public" virt="non-virtual"><scope>castor3d::shader::BlendComponents</scope><name>bwAccumulationOperator</name></member>
+      <member refid="d7/d4b/a05980_1a936b99940317e4c39ab6d81e88515709" prot="public" virt="non-virtual"><scope>castor3d::shader::BlendComponents</scope><name>clearcoatFactor</name></member>
+      <member refid="d7/d4b/a05980_1ad1e669bd519439d65b90259a7734bf27" prot="public" virt="non-virtual"><scope>castor3d::shader::BlendComponents</scope><name>clearcoatNormal</name></member>
+      <member refid="d7/d4b/a05980_1a656f5c83600d8b164d9d1cd407ddf97c" prot="public" virt="non-virtual"><scope>castor3d::shader::BlendComponents</scope><name>clearcoatRoughness</name></member>
+      <member refid="d7/d4b/a05980_1ac0dbe62d2f025eed62c353afa2c9ad0c" prot="public" virt="non-virtual"><scope>castor3d::shader::BlendComponents</scope><name>colour</name></member>
+      <member refid="d7/d4b/a05980_1a06aa3237c5fbc0dfac70300990a4c469" prot="public" virt="non-virtual"><scope>castor3d::shader::BlendComponents</scope><name>computeF0</name></member>
+      <member refid="d7/d4b/a05980_1a1344a7bbd6aceb7778f5ec5539afdfbe" prot="public" virt="non-virtual"><scope>castor3d::shader::BlendComponents</scope><name>computeGlossinessFromRoughness</name></member>
+      <member refid="d7/d4b/a05980_1a13a6d737042d789f670e54f1a33e83c7" prot="public" virt="non-virtual"><scope>castor3d::shader::BlendComponents</scope><name>computeGlossinessFromShininess</name></member>
+      <member refid="d7/d4b/a05980_1a626ffaae3f0cc124ab8b7bc740ff4e72" prot="public" virt="non-virtual"><scope>castor3d::shader::BlendComponents</scope><name>computeRoughnessFromGlossiness</name></member>
+      <member refid="d7/d4b/a05980_1aa31eea217c8c5c45bf9905d324ff2047" prot="public" virt="non-virtual"><scope>castor3d::shader::BlendComponents</scope><name>computeRoughnessFromShininess</name></member>
+      <member refid="d7/d4b/a05980_1ae754207700c5f5e80e1d4c6c17be7561" prot="public" virt="non-virtual"><scope>castor3d::shader::BlendComponents</scope><name>computeShininessFromGlossiness</name></member>
+      <member refid="d7/d4b/a05980_1a0d0e63b13d6087dc08136a87b76f804f" prot="public" virt="non-virtual"><scope>castor3d::shader::BlendComponents</scope><name>computeShininessFromRoughness</name></member>
+      <member refid="d7/d4b/a05980_1a915a88951234601c450740071645c6db" prot="public" virt="non-virtual"><scope>castor3d::shader::BlendComponents</scope><name>emissiveColour</name></member>
+      <member refid="d7/d4b/a05980_1a23d3c7eb005cd23c543cc99612d77bee" prot="public" virt="non-virtual"><scope>castor3d::shader::BlendComponents</scope><name>emissiveFactor</name></member>
+      <member refid="d7/d4b/a05980_1a2062144d0724496006ece56b74ae34cf" prot="protected" virt="non-virtual"><scope>castor3d::shader::BlendComponents</scope><name>fillInit</name></member>
+      <member refid="d7/d4b/a05980_1a22e5465784a21336c9a91c0552fc22eb" prot="protected" virt="non-virtual"><scope>castor3d::shader::BlendComponents</scope><name>fillInit</name></member>
+      <member refid="d7/d4b/a05980_1a777f87132137f042f2c34f1317f24c36" prot="protected" virt="non-virtual"><scope>castor3d::shader::BlendComponents</scope><name>fillType</name></member>
+      <member refid="d7/d4b/a05980_1ae379599f546181304c70acb7c0adb8ea" prot="protected" virt="non-virtual"><scope>castor3d::shader::BlendComponents</scope><name>fillType</name></member>
+      <member refid="d7/d4b/a05980_1a716ae21b3c57857fe164fe572d2c7fca" prot="public" virt="non-virtual"><scope>castor3d::shader::BlendComponents</scope><name>finish</name></member>
+      <member refid="d7/d4b/a05980_1a81b5afff8f6575b4385cd3d7e7e1cb49" prot="public" virt="non-virtual"><scope>castor3d::shader::BlendComponents</scope><name>hasReflection</name></member>
+      <member refid="d7/d4b/a05980_1aead4f2dbc063cda744035b0327fd081a" prot="public" virt="non-virtual"><scope>castor3d::shader::BlendComponents</scope><name>hasTransmission</name></member>
+      <member refid="d7/d4b/a05980_1a4482261bfb51033993e7aa800c83130d" prot="public" virt="non-virtual"><scope>castor3d::shader::BlendComponents</scope><name>iridescenceF0</name></member>
+      <member refid="d7/d4b/a05980_1ab0dd84bd7578aa008c891d9007a1a9ce" prot="public" virt="non-virtual"><scope>castor3d::shader::BlendComponents</scope><name>iridescenceFactor</name></member>
+      <member refid="d7/d4b/a05980_1a44cf431bd178fefce81514eced527563" prot="public" virt="non-virtual"><scope>castor3d::shader::BlendComponents</scope><name>iridescenceFresnel</name></member>
+      <member refid="d7/d4b/a05980_1a4d6de96e1fa1803befb19e80b94f5bac" prot="public" virt="non-virtual"><scope>castor3d::shader::BlendComponents</scope><name>iridescenceIor</name></member>
+      <member refid="d7/d4b/a05980_1a28ca042c78296654c51a757a77eb7884" prot="public" virt="non-virtual"><scope>castor3d::shader::BlendComponents</scope><name>iridescenceThickness</name></member>
+      <member refid="d7/d4b/a05980_1a5be147f33c5f80d0edaf40be9c571add" prot="protected" virt="non-virtual"><scope>castor3d::shader::BlendComponents</scope><name>makeInit</name></member>
+      <member refid="d7/d4b/a05980_1ac66231f97f9d1214bde88a836bb4fe1c" prot="protected" virt="non-virtual"><scope>castor3d::shader::BlendComponents</scope><name>makeInit</name></member>
+      <member refid="d7/d4b/a05980_1a2b00848fa321cf2a2a9bdb19f1033a0f" prot="public" virt="non-virtual"><scope>castor3d::shader::BlendComponents</scope><name>makeType</name></member>
+      <member refid="d7/d4b/a05980_1a24d034c922ceb7bbac64bda2ae903829" prot="public" virt="non-virtual"><scope>castor3d::shader::BlendComponents</scope><name>makeType</name></member>
+      <member refid="d7/d4b/a05980_1a179fc83f08d54003f1929ecc7c43139f" prot="public" virt="non-virtual"><scope>castor3d::shader::BlendComponents</scope><name>makeType</name></member>
+      <member refid="d7/d4b/a05980_1a50f8c35ba4ace8b9ce7c15d679323339" prot="public" virt="non-virtual"><scope>castor3d::shader::BlendComponents</scope><name>makeType</name></member>
+      <member refid="d7/d4b/a05980_1adc367f1bd14526457d4875fb6cc1b948" prot="public" virt="non-virtual"><scope>castor3d::shader::BlendComponents</scope><name>makeType</name></member>
+      <member refid="d7/d4b/a05980_1a35d143a6191718d11416fff7f950c6cb" prot="public" virt="non-virtual"><scope>castor3d::shader::BlendComponents</scope><name>metalness</name></member>
+      <member refid="d7/d4b/a05980_1a85b9aa574a48e32e35b891444cffaad4" prot="public" virt="non-virtual"><scope>castor3d::shader::BlendComponents</scope><name>normal</name></member>
+      <member refid="d7/d4b/a05980_1ab2523e76133688cfc790727991e3a842" prot="public" virt="non-virtual"><scope>castor3d::shader::BlendComponents</scope><name>occlusion</name></member>
+      <member refid="d7/d4b/a05980_1a6a98f7274fc37e5c40871f6dbc238ef5" prot="public" virt="non-virtual"><scope>castor3d::shader::BlendComponents</scope><name>opacity</name></member>
+      <member refid="d7/d4b/a05980_1a91068c7e2dd2eecf041ae984b0b32055" prot="public" virt="non-virtual"><scope>castor3d::shader::BlendComponents</scope><name>refractionRatio</name></member>
+      <member refid="d7/d4b/a05980_1a81d27ad19275a648f8a3ba30a5785965" prot="public" virt="non-virtual"><scope>castor3d::shader::BlendComponents</scope><name>roughness</name></member>
+      <member refid="d7/d4b/a05980_1afa9ab3da77708c1ab8bf4176ca2b8e62" prot="public" virt="non-virtual"><scope>castor3d::shader::BlendComponents</scope><name>SDW_DeclStructInstance</name></member>
+      <member refid="d7/d4b/a05980_1adc5a38e10a99cf7164a3143cf050f43c" prot="public" virt="non-virtual"><scope>castor3d::shader::BlendComponents</scope><name>sheenFactor</name></member>
+      <member refid="d7/d4b/a05980_1af133bcb8f5f0ba63d38592afebd484bc" prot="public" virt="non-virtual"><scope>castor3d::shader::BlendComponents</scope><name>sheenRoughness</name></member>
+      <member refid="d7/d4b/a05980_1a3597eb16e4636e6e9281c130bbe01af1" prot="public" virt="non-virtual"><scope>castor3d::shader::BlendComponents</scope><name>shininess</name></member>
+      <member refid="d7/d4b/a05980_1a4146f16d501177c6559be69d953f5611" prot="public" virt="non-virtual"><scope>castor3d::shader::BlendComponents</scope><name>specular</name></member>
+      <member refid="d7/d4b/a05980_1acf5917c72bfc908e53d369229a8ea56e" prot="public" virt="non-virtual"><scope>castor3d::shader::BlendComponents</scope><name>thicknessFactor</name></member>
+      <member refid="d7/d4b/a05980_1a2f39e5809c4381ad573a8b0f59936a23" prot="public" virt="non-virtual"><scope>castor3d::shader::BlendComponents</scope><name>transmission</name></member>
+      <member refid="d7/d4b/a05980_1ad033cb74a7098dad0cd0f010b5b8d36d" prot="public" virt="non-virtual"><scope>castor3d::shader::BlendComponents</scope><name>transmittance</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -2,9 +2,9 @@
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="dir_83dd0b6e9a230a71a17985a017af57f9" kind="dir">
     <compoundname>Material/Texture/Animation</compoundname>
-    <innerfile refid="d8/d21/a00368">TextureAnimation.hpp</innerfile>
-    <innerfile refid="d6/d80/a00371">TextureAnimationKeyFrame.hpp</innerfile>
-    <innerfile refid="df/d72/a11371">TextureAnimationModule.hpp</innerfile>
+    <innerfile refid="dc/d19/a00515">TextureAnimation.hpp</innerfile>
+    <innerfile refid="d5/dee/a00518">TextureAnimationKeyFrame.hpp</innerfile>
+    <innerfile refid="d3/dbf/a13239">TextureAnimationModule.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

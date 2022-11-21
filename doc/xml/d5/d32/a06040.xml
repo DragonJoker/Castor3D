@@ -1,0 +1,745 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d5/d32/a06040" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::Material</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstance</basecompoundref>
+    <includes local="no">GlslMaterial.hpp</includes>
+      <sectiondef kind="friend">
+      <memberdef kind="friend" id="d5/d32/a06040_1a95d87f2fc964dc08b53b1c5665f230f4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class Materials</definition>
+        <argsstring></argsstring>
+        <name>Materials</name>
+        <qualifiedname>castor3d::shader::Material::Materials</qualifiedname>
+        <param>
+          <type><ref refid="d1/dc9/a06044" kindref="compound">Materials</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="19" column="14" bodyfile="Shader/Shaders/GlslMaterial.hpp" bodystart="19" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d5/d32/a06040_1a2688d161a2d2f2c99ac2348416abf42f" prot="public" static="no" mutable="no">
+        <type>sdw::UInt</type>
+        <definition>sdw::UInt castor3d::shader::Material::passId</definition>
+        <argsstring></argsstring>
+        <name>passId</name>
+        <qualifiedname>castor3d::shader::Material::passId</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="108" column="11" bodyfile="Shader/Shaders/GlslMaterial.hpp" bodystart="108" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d32/a06040_1a8da1a72be2e33490f8eca0b2c374f68f" prot="public" static="no" mutable="no">
+        <type>sdw::UInt</type>
+        <definition>sdw::UInt castor3d::shader::Material::index</definition>
+        <argsstring></argsstring>
+        <name>index</name>
+        <qualifiedname>castor3d::shader::Material::index</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="109" column="11" bodyfile="Shader/Shaders/GlslMaterial.hpp" bodystart="109" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d32/a06040_1ad466f2feadecfe5f37fe74c5223b59da" prot="public" static="no" mutable="no">
+        <type>sdw::UInt</type>
+        <definition>sdw::UInt castor3d::shader::Material::passCount</definition>
+        <argsstring></argsstring>
+        <name>passCount</name>
+        <qualifiedname>castor3d::shader::Material::passCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="110" column="11" bodyfile="Shader/Shaders/GlslMaterial.hpp" bodystart="110" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d32/a06040_1ab1014dab983b24b67e4d9f79aafe845e" prot="public" static="no" mutable="no">
+        <type>sdw::UInt</type>
+        <definition>sdw::UInt castor3d::shader::Material::lighting</definition>
+        <argsstring></argsstring>
+        <name>lighting</name>
+        <qualifiedname>castor3d::shader::Material::lighting</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="111" column="11" bodyfile="Shader/Shaders/GlslMaterial.hpp" bodystart="111" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d32/a06040_1afbf8590e469a169bc40d8fe41b109405" prot="public" static="no" mutable="no">
+        <type>sdw::Array&lt; sdw::UInt32 &gt;</type>
+        <definition>sdw::Array&lt; sdw::UInt32 &gt; castor3d::shader::Material::textures</definition>
+        <argsstring></argsstring>
+        <name>textures</name>
+        <qualifiedname>castor3d::shader::Material::textures</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="112" column="12" bodyfile="Shader/Shaders/GlslMaterial.hpp" bodystart="112" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d32/a06040_1a242f074ceebdc70eced1d3f884c74750" prot="public" static="no" mutable="no">
+        <type>sdw::UInt</type>
+        <definition>sdw::UInt castor3d::shader::Material::texturesCount</definition>
+        <argsstring></argsstring>
+        <name>texturesCount</name>
+        <qualifiedname>castor3d::shader::Material::texturesCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="113" column="11" bodyfile="Shader/Shaders/GlslMaterial.hpp" bodystart="113" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d32/a06040_1a51e2dbc1363c3c88768afc2e920e737b" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::Material::colour</definition>
+        <argsstring></argsstring>
+        <name>colour</name>
+        <qualifiedname>castor3d::shader::Material::colour</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="114" column="11" bodyfile="Shader/Shaders/GlslMaterial.hpp" bodystart="114" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d32/a06040_1a08de5d90bde393c937a2ce276ae2b63b" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::Material::specular</definition>
+        <argsstring></argsstring>
+        <name>specular</name>
+        <qualifiedname>castor3d::shader::Material::specular</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="115" column="11" bodyfile="Shader/Shaders/GlslMaterial.hpp" bodystart="115" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d32/a06040_1a9efc18eaa8fbc9b74953bceda23aecf4" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::Material::transmission</definition>
+        <argsstring></argsstring>
+        <name>transmission</name>
+        <qualifiedname>castor3d::shader::Material::transmission</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="116" column="12" bodyfile="Shader/Shaders/GlslMaterial.hpp" bodystart="116" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d32/a06040_1a5ecaeb08f696d841b688ab85945c1f60" prot="public" static="no" mutable="no">
+        <type>sdw::UInt</type>
+        <definition>sdw::UInt castor3d::shader::Material::hasTransmission</definition>
+        <argsstring></argsstring>
+        <name>hasTransmission</name>
+        <qualifiedname>castor3d::shader::Material::hasTransmission</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="117" column="11" bodyfile="Shader/Shaders/GlslMaterial.hpp" bodystart="117" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d32/a06040_1af6351720983cbc9e655776a2254790ae" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::Material::opacity</definition>
+        <argsstring></argsstring>
+        <name>opacity</name>
+        <qualifiedname>castor3d::shader::Material::opacity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="118" column="12" bodyfile="Shader/Shaders/GlslMaterial.hpp" bodystart="118" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d32/a06040_1a54347c786b1d6b9c1eec79baa2cc0aba" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::Material::alphaRef</definition>
+        <argsstring></argsstring>
+        <name>alphaRef</name>
+        <qualifiedname>castor3d::shader::Material::alphaRef</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="119" column="12" bodyfile="Shader/Shaders/GlslMaterial.hpp" bodystart="119" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d32/a06040_1a9378839b1685c241681a16959ebbc592" prot="public" static="no" mutable="no">
+        <type>sdw::UInt</type>
+        <definition>sdw::UInt castor3d::shader::Material::hasReflection</definition>
+        <argsstring></argsstring>
+        <name>hasReflection</name>
+        <qualifiedname>castor3d::shader::Material::hasReflection</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="120" column="11" bodyfile="Shader/Shaders/GlslMaterial.hpp" bodystart="120" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d32/a06040_1a9ef0a98c570845d67e6f2dbdf5dd48f5" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::Material::refractionRatio</definition>
+        <argsstring></argsstring>
+        <name>refractionRatio</name>
+        <qualifiedname>castor3d::shader::Material::refractionRatio</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="121" column="12" bodyfile="Shader/Shaders/GlslMaterial.hpp" bodystart="121" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d32/a06040_1a644d14b27e2aa780264a406577e17f97" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::Material::attenuationColour</definition>
+        <argsstring></argsstring>
+        <name>attenuationColour</name>
+        <qualifiedname>castor3d::shader::Material::attenuationColour</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="122" column="11" bodyfile="Shader/Shaders/GlslMaterial.hpp" bodystart="122" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d32/a06040_1ad0821a85925b4bb2e8cc006112ff8689" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::Material::attenuationDistance</definition>
+        <argsstring></argsstring>
+        <name>attenuationDistance</name>
+        <qualifiedname>castor3d::shader::Material::attenuationDistance</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="123" column="12" bodyfile="Shader/Shaders/GlslMaterial.hpp" bodystart="123" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d32/a06040_1a5a88f898c04b4d71045bfd8a5d1bca1c" prot="public" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::Material::thicknessFactor</definition>
+        <argsstring></argsstring>
+        <name>thicknessFactor</name>
+        <qualifiedname>castor3d::shader::Material::thicknessFactor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="124" column="12" bodyfile="Shader/Shaders/GlslMaterial.hpp" bodystart="124" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d5/d32/a06040_1a6a5efc64335a77cf3605598f84dcf9d5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::Material::Material</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>Material</name>
+        <qualifiedname>castor3d::shader::Material::Material</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="21" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d32/a06040_1ad5ac7415e674c0e06dfbf6c3c8beb9e3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::Material::SDW_DeclStructInstance</definition>
+        <argsstring>(C3D_API, Material)</argsstring>
+        <name>SDW_DeclStructInstance</name>
+        <qualifiedname>castor3d::shader::Material::SDW_DeclStructInstance</qualifiedname>
+        <param>
+          <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        </param>
+        <param>
+          <type><ref refid="d5/d32/a06040" kindref="compound">Material</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="24" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d32/a06040_1ab2fc7fac0925a2bb7b48e8c017ce43a8" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::Material::applyAlphaFunc</definition>
+        <argsstring>(VkCompareOp alphaFunc, sdw::Float &amp;opacity, sdw::Float const &amp;passMultiplier, bool opaque=true) const</argsstring>
+        <name>applyAlphaFunc</name>
+        <qualifiedname>castor3d::shader::Material::applyAlphaFunc</qualifiedname>
+        <param>
+          <type>VkCompareOp</type>
+          <declname>alphaFunc</declname>
+        </param>
+        <param>
+          <type>sdw::Float &amp;</type>
+          <declname>opacity</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>passMultiplier</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>opaque</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+<para>Writes the alpha function in GLSL. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>alphaFunc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The alpha function. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">opacity</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The alpha TypeEnum. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">passMultiplier</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pass multiplier factor. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">opaque</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><computeroutput>true</computeroutput> for opaque nodes, <computeroutput>false</computeroutput> for transparent ones. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="51" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d32/a06040_1aea2641159e6a73175c6a7f9d0e4218a2" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::Material::applyAlphaFunc</definition>
+        <argsstring>(VkCompareOp alphaFunc, sdw::Float &amp;opacity, sdw::Float const &amp;alphaRef, sdw::Float const &amp;passMultiplier, bool opaque=true) const</argsstring>
+        <name>applyAlphaFunc</name>
+        <qualifiedname>castor3d::shader::Material::applyAlphaFunc</qualifiedname>
+        <param>
+          <type>VkCompareOp</type>
+          <declname>alphaFunc</declname>
+        </param>
+        <param>
+          <type>sdw::Float &amp;</type>
+          <declname>opacity</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>alphaRef</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>passMultiplier</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>opaque</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+<para>Writes the alpha function in GLSL. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>alphaFunc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The alpha function. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">opacity</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The opacity value. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">alphaRef</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The alpha comparison reference value. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">passMultiplier</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pass multiplier factor. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">opaque</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><computeroutput>true</computeroutput> for opaque nodes, <computeroutput>false</computeroutput> for transparent ones. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="71" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d32/a06040_1abc41ef3ce4c2543264097e929a889db7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::Material::getPassMultipliers</definition>
+        <argsstring>(PipelineFlags const &amp;flags, sdw::UVec4 const &amp;passMasks, sdw::Array&lt; sdw::Vec4 &gt; &amp;passMultipliers) const</argsstring>
+        <name>getPassMultipliers</name>
+        <qualifiedname>castor3d::shader::Material::getPassMultipliers</qualifiedname>
+        <param>
+          <type><ref refid="db/dd9/a05012" kindref="compound">PipelineFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <param>
+          <type>sdw::UVec4 const &amp;</type>
+          <declname>passMasks</declname>
+        </param>
+        <param>
+          <type>sdw::Array&lt; sdw::Vec4 &gt; &amp;</type>
+          <declname>passMultipliers</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="101" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d32/a06040_1a5ff0080cee9a55a744cd51ed8a5c1f68" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::UInt</type>
+        <definition>C3D_API sdw::UInt castor3d::shader::Material::getTexture</definition>
+        <argsstring>(uint32_t index) const</argsstring>
+        <name>getTexture</name>
+        <qualifiedname>castor3d::shader::Material::getTexture</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="104" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d32/a06040_1a582000b33d9901317e1969072e7c95bb" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::UInt</type>
+        <definition>C3D_API sdw::UInt castor3d::shader::Material::getTexture</definition>
+        <argsstring>(sdw::UInt const &amp;index) const</argsstring>
+        <name>getTexture</name>
+        <qualifiedname>castor3d::shader::Material::getTexture</qualifiedname>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="105" column="19"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d5/d32/a06040_1aaa046eed1ab10085cad95ed54ff76572" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ast::type::BaseStructPtr</type>
+        <definition>static C3D_API ast::type::BaseStructPtr castor3d::shader::Material::makeType</definition>
+        <argsstring>(ast::type::TypesCache &amp;cache, PassShaders &amp;passShaders, sdw::expr::ExprList &amp;inits)</argsstring>
+        <name>makeType</name>
+        <qualifiedname>castor3d::shader::Material::makeType</qualifiedname>
+        <param>
+          <type>ast::type::TypesCache &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/d58/a06056" kindref="compound">PassShaders</ref> &amp;</type>
+          <declname>passShaders</declname>
+        </param>
+        <param>
+          <type>sdw::expr::ExprList &amp;</type>
+          <declname>inits</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="26" column="41"/>
+        <referencedby refid="d5/d32/a06040_1a812dd0c182e569739ffa453580f92cc8" compoundref="d7/d42/a01463" startline="30" endline="35">makeType</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d5/d32/a06040_1a812dd0c182e569739ffa453580f92cc8" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>ast::type::BaseStructPtr</type>
+        <definition>static ast::type::BaseStructPtr castor3d::shader::Material::makeType</definition>
+        <argsstring>(ast::type::TypesCache &amp;cache, PassShaders &amp;passShaders)</argsstring>
+        <name>makeType</name>
+        <qualifiedname>castor3d::shader::Material::makeType</qualifiedname>
+        <param>
+          <type>ast::type::TypesCache &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/d58/a06056" kindref="compound">PassShaders</ref> &amp;</type>
+          <declname>passShaders</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="30" column="33" bodyfile="Shader/Shaders/GlslMaterial.hpp" bodystart="30" bodyend="35"/>
+        <references refid="d5/d32/a06040_1aaa046eed1ab10085cad95ed54ff76572">makeType</references>
+      </memberdef>
+      <memberdef kind="function" id="d5/d32/a06040_1a35a074472efd36348f8cafd076727513" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>static C3D_API void castor3d::shader::Material::applyAlphaFunc</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, VkCompareOp alphaFunc, sdw::Float &amp;opacity, sdw::Float const &amp;alphaRef, sdw::Float const &amp;passMultiplier, bool opaque=true)</argsstring>
+        <name>applyAlphaFunc</name>
+        <qualifiedname>castor3d::shader::Material::applyAlphaFunc</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>VkCompareOp</type>
+          <declname>alphaFunc</declname>
+        </param>
+        <param>
+          <type>sdw::Float &amp;</type>
+          <declname>opacity</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>alphaRef</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>passMultiplier</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>opaque</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+<para>Writes the alpha function in GLSL. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>writer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The writer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>alphaFunc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The alpha function. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">opacity</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The opacity value. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">alphaRef</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The alpha comparison reference value. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">passMultiplier</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pass multiplier factor. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">opaque</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><computeroutput>true</computeroutput> for opaque nodes, <computeroutput>false</computeroutput> for transparent ones. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="94" column="21"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-static-func">
+      <memberdef kind="function" id="d5/d32/a06040_1a5713cab5b52f110af78fedb4a8a4bb32" prot="private" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::expr::ExprPtr</type>
+        <definition>static sdw::expr::ExprPtr castor3d::shader::Material::makeInit</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, PassShaders &amp;passShaders)</argsstring>
+        <name>makeInit</name>
+        <qualifiedname>castor3d::shader::Material::makeInit</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/d58/a06056" kindref="compound">PassShaders</ref> &amp;</type>
+          <declname>passShaders</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMaterial.hpp" line="127" column="27"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::Material</label>
+        <link refid="d5/d32/a06040"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstance</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::shader::Material</label>
+        <link refid="d5/d32/a06040"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstance</label>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Shaders/GlslMaterial.hpp" line="16" column="1" bodyfile="Shader/Shaders/GlslMaterial.hpp" bodystart="18" bodyend="129"/>
+    <listofallmembers>
+      <member refid="d5/d32/a06040_1a54347c786b1d6b9c1eec79baa2cc0aba" prot="public" virt="non-virtual"><scope>castor3d::shader::Material</scope><name>alphaRef</name></member>
+      <member refid="d5/d32/a06040_1ab2fc7fac0925a2bb7b48e8c017ce43a8" prot="public" virt="non-virtual"><scope>castor3d::shader::Material</scope><name>applyAlphaFunc</name></member>
+      <member refid="d5/d32/a06040_1aea2641159e6a73175c6a7f9d0e4218a2" prot="public" virt="non-virtual"><scope>castor3d::shader::Material</scope><name>applyAlphaFunc</name></member>
+      <member refid="d5/d32/a06040_1a35a074472efd36348f8cafd076727513" prot="public" virt="non-virtual"><scope>castor3d::shader::Material</scope><name>applyAlphaFunc</name></member>
+      <member refid="d5/d32/a06040_1a644d14b27e2aa780264a406577e17f97" prot="public" virt="non-virtual"><scope>castor3d::shader::Material</scope><name>attenuationColour</name></member>
+      <member refid="d5/d32/a06040_1ad0821a85925b4bb2e8cc006112ff8689" prot="public" virt="non-virtual"><scope>castor3d::shader::Material</scope><name>attenuationDistance</name></member>
+      <member refid="d5/d32/a06040_1a51e2dbc1363c3c88768afc2e920e737b" prot="public" virt="non-virtual"><scope>castor3d::shader::Material</scope><name>colour</name></member>
+      <member refid="d5/d32/a06040_1abc41ef3ce4c2543264097e929a889db7" prot="public" virt="non-virtual"><scope>castor3d::shader::Material</scope><name>getPassMultipliers</name></member>
+      <member refid="d5/d32/a06040_1a5ff0080cee9a55a744cd51ed8a5c1f68" prot="public" virt="non-virtual"><scope>castor3d::shader::Material</scope><name>getTexture</name></member>
+      <member refid="d5/d32/a06040_1a582000b33d9901317e1969072e7c95bb" prot="public" virt="non-virtual"><scope>castor3d::shader::Material</scope><name>getTexture</name></member>
+      <member refid="d5/d32/a06040_1a9378839b1685c241681a16959ebbc592" prot="public" virt="non-virtual"><scope>castor3d::shader::Material</scope><name>hasReflection</name></member>
+      <member refid="d5/d32/a06040_1a5ecaeb08f696d841b688ab85945c1f60" prot="public" virt="non-virtual"><scope>castor3d::shader::Material</scope><name>hasTransmission</name></member>
+      <member refid="d5/d32/a06040_1a8da1a72be2e33490f8eca0b2c374f68f" prot="public" virt="non-virtual"><scope>castor3d::shader::Material</scope><name>index</name></member>
+      <member refid="d5/d32/a06040_1ab1014dab983b24b67e4d9f79aafe845e" prot="public" virt="non-virtual"><scope>castor3d::shader::Material</scope><name>lighting</name></member>
+      <member refid="d5/d32/a06040_1a5713cab5b52f110af78fedb4a8a4bb32" prot="private" virt="non-virtual"><scope>castor3d::shader::Material</scope><name>makeInit</name></member>
+      <member refid="d5/d32/a06040_1aaa046eed1ab10085cad95ed54ff76572" prot="public" virt="non-virtual"><scope>castor3d::shader::Material</scope><name>makeType</name></member>
+      <member refid="d5/d32/a06040_1a812dd0c182e569739ffa453580f92cc8" prot="public" virt="non-virtual"><scope>castor3d::shader::Material</scope><name>makeType</name></member>
+      <member refid="d5/d32/a06040_1a6a5efc64335a77cf3605598f84dcf9d5" prot="public" virt="non-virtual"><scope>castor3d::shader::Material</scope><name>Material</name></member>
+      <member refid="d5/d32/a06040_1a95d87f2fc964dc08b53b1c5665f230f4" prot="public" virt="non-virtual"><scope>castor3d::shader::Material</scope><name>Materials</name></member>
+      <member refid="d5/d32/a06040_1af6351720983cbc9e655776a2254790ae" prot="public" virt="non-virtual"><scope>castor3d::shader::Material</scope><name>opacity</name></member>
+      <member refid="d5/d32/a06040_1ad466f2feadecfe5f37fe74c5223b59da" prot="public" virt="non-virtual"><scope>castor3d::shader::Material</scope><name>passCount</name></member>
+      <member refid="d5/d32/a06040_1a2688d161a2d2f2c99ac2348416abf42f" prot="public" virt="non-virtual"><scope>castor3d::shader::Material</scope><name>passId</name></member>
+      <member refid="d5/d32/a06040_1a9ef0a98c570845d67e6f2dbdf5dd48f5" prot="public" virt="non-virtual"><scope>castor3d::shader::Material</scope><name>refractionRatio</name></member>
+      <member refid="d5/d32/a06040_1ad5ac7415e674c0e06dfbf6c3c8beb9e3" prot="public" virt="non-virtual"><scope>castor3d::shader::Material</scope><name>SDW_DeclStructInstance</name></member>
+      <member refid="d5/d32/a06040_1a08de5d90bde393c937a2ce276ae2b63b" prot="public" virt="non-virtual"><scope>castor3d::shader::Material</scope><name>specular</name></member>
+      <member refid="d5/d32/a06040_1afbf8590e469a169bc40d8fe41b109405" prot="public" virt="non-virtual"><scope>castor3d::shader::Material</scope><name>textures</name></member>
+      <member refid="d5/d32/a06040_1a242f074ceebdc70eced1d3f884c74750" prot="public" virt="non-virtual"><scope>castor3d::shader::Material</scope><name>texturesCount</name></member>
+      <member refid="d5/d32/a06040_1a5a88f898c04b4d71045bfd8a5d1bca1c" prot="public" virt="non-virtual"><scope>castor3d::shader::Material</scope><name>thicknessFactor</name></member>
+      <member refid="d5/d32/a06040_1a9efc18eaa8fbc9b74953bceda23aecf4" prot="public" virt="non-virtual"><scope>castor3d::shader::Material</scope><name>transmission</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

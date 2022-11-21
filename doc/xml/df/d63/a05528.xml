@@ -1,0 +1,207 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="df/d63/a05528" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::shader::ImgBackgroundModel</compoundname>
+    <basecompoundref refid="d1/d4e/a05972" prot="public" virt="non-virtual">castor3d::shader::BackgroundModel</basecompoundref>
+    <includes local="no">GlslImgBackground.hpp</includes>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="df/d63/a05528_1a50ff5168cc07b0a022a651b57efdcb69" prot="public" static="yes" mutable="no">
+        <type>castor::String const</type>
+        <definition>castor::String const castor3d::shader::ImgBackgroundModel::Name</definition>
+        <argsstring></argsstring>
+        <name>Name</name>
+        <qualifiedname>castor3d::shader::ImgBackgroundModel::Name</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Background/Shaders/GlslImgBackground.hpp" line="35" column="29" bodyfile="Scene/Background/Shaders/GlslImgBackground.hpp" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="df/d63/a05528_1acf0a799faf23018701124c5c66024044" prot="public" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 &gt; castor3d::shader::ImgBackgroundModel::m_computeRefractions</definition>
+        <argsstring></argsstring>
+        <name>m_computeRefractions</name>
+        <qualifiedname>castor3d::shader::ImgBackgroundModel::m_computeRefractions</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Background/Shaders/GlslImgBackground.hpp" line="36" column="15" bodyfile="Scene/Background/Shaders/GlslImgBackground.hpp" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="df/d63/a05528_1a3a39e03d0be30ed3ff031af03fc6b4b3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::ImgBackgroundModel::ImgBackgroundModel</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, Utils &amp;utils, VkExtent2D targetSize, uint32_t &amp;binding, uint32_t set)</argsstring>
+        <name>ImgBackgroundModel</name>
+        <qualifiedname>castor3d::shader::ImgBackgroundModel::ImgBackgroundModel</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/da4/a06136" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type>VkExtent2D</type>
+          <declname>targetSize</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>binding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>set</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Background/Shaders/GlslImgBackground.hpp" line="15" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d63/a05528_1aad71fcb9b5a99fddd3f83b0fcb59f7c8" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::RetVec3</type>
+        <definition>C3D_API sdw::RetVec3 castor3d::shader::ImgBackgroundModel::computeRefractions</definition>
+        <argsstring>(sdw::Vec3 const &amp;wsIncident, sdw::Vec3 const &amp;wsNormal, sdw::Float const &amp;refractionRatio, BlendComponents &amp;components) override</argsstring>
+        <name>computeRefractions</name>
+        <qualifiedname>castor3d::shader::ImgBackgroundModel::computeRefractions</qualifiedname>
+        <reimplements refid="d1/d4e/a05972_1ad055ac48cf8f3171ee2bf1ca2b3c6cc2">computeRefractions</reimplements>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsIncident</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsNormal</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>refractionRatio</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d4b/a05980" kindref="compound">BlendComponents</ref> &amp;</type>
+          <declname>components</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Background/Shaders/GlslImgBackground.hpp" line="29" column="22"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="df/d63/a05528_1af5f09efb01ccd30eddbbf289803a7af5" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d9/df5/a01574_1a2660230d5a6d243f34ddd9ddaf49ca34" kindref="member">BackgroundModelPtr</ref></type>
+        <definition>static C3D_API BackgroundModelPtr castor3d::shader::ImgBackgroundModel::create</definition>
+        <argsstring>(Engine const &amp;engine, sdw::ShaderWriter &amp;writer, Utils &amp;utils, VkExtent2D targetSize, bool needsForeground, uint32_t &amp;binding, uint32_t set)</argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::shader::ImgBackgroundModel::create</qualifiedname>
+        <param>
+          <type><ref refid="d2/d0c/a02932" kindref="compound">Engine</ref> const &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/da4/a06136" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type>VkExtent2D</type>
+          <declname>targetSize</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>needsForeground</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>binding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>set</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Background/Shaders/GlslImgBackground.hpp" line="21" column="35"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::shader::BackgroundModel</label>
+        <link refid="d1/d4e/a05972"/>
+      </node>
+      <node id="1">
+        <label>castor3d::shader::ImgBackgroundModel</label>
+        <link refid="df/d63/a05528"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::shader::BackgroundModel</label>
+        <link refid="d1/d4e/a05972"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_utils</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::shader::ImgBackgroundModel</label>
+        <link refid="df/d63/a05528"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::shader::Utils</label>
+        <link refid="d3/da4/a06136"/>
+      </node>
+    </collaborationgraph>
+    <location file="Scene/Background/Shaders/GlslImgBackground.hpp" line="11" column="1" bodyfile="Scene/Background/Shaders/GlslImgBackground.hpp" bodystart="13" bodyend="37"/>
+    <listofallmembers>
+      <member refid="d1/d4e/a05972_1adf4d6bd8fb5dfdbb4ef98fc9b2f8cb21" prot="public" virt="virtual"><scope>castor3d::shader::ImgBackgroundModel</scope><name>applyVolume</name></member>
+      <member refid="d1/d4e/a05972_1a639f543ce81e3aff3b6ec97b994b295b" prot="public" virt="non-virtual"><scope>castor3d::shader::ImgBackgroundModel</scope><name>BackgroundModel</name></member>
+      <member refid="d1/d4e/a05972_1a85bbaf91c57019ac16c8513525028df4" prot="public" virt="virtual"><scope>castor3d::shader::ImgBackgroundModel</scope><name>computeIridescenceReflections</name></member>
+      <member refid="d1/d4e/a05972_1a2a8c6fef740609d6a78c4d5d639671ee" prot="public" virt="virtual"><scope>castor3d::shader::ImgBackgroundModel</scope><name>computeReflections</name></member>
+      <member refid="df/d63/a05528_1aad71fcb9b5a99fddd3f83b0fcb59f7c8" prot="public" virt="virtual"><scope>castor3d::shader::ImgBackgroundModel</scope><name>computeRefractions</name></member>
+      <member refid="d1/d4e/a05972_1ac6b9d920750c483f72f8e8b7f84d1e07" prot="public" virt="virtual"><scope>castor3d::shader::ImgBackgroundModel</scope><name>computeSheenReflections</name></member>
+      <member refid="d1/d4e/a05972_1abafdcd8cb35832a9769ab59022ebf1dc" prot="public" virt="virtual"><scope>castor3d::shader::ImgBackgroundModel</scope><name>computeSpecularReflections</name></member>
+      <member refid="d1/d4e/a05972_1a6276a72666bd1eec55b14d95882268f6" prot="public" virt="virtual"><scope>castor3d::shader::ImgBackgroundModel</scope><name>computeSpecularRefractions</name></member>
+      <member refid="df/d63/a05528_1af5f09efb01ccd30eddbbf289803a7af5" prot="public" virt="non-virtual"><scope>castor3d::shader::ImgBackgroundModel</scope><name>create</name></member>
+      <member refid="d1/d4e/a05972_1a3886b5c2d8ef732edde0094d59da592d" prot="public" virt="non-virtual"><scope>castor3d::shader::ImgBackgroundModel</scope><name>createModel</name></member>
+      <member refid="d1/d4e/a05972_1a9d1380bd9e91ae5a75c041bb706ba02c" prot="public" virt="non-virtual"><scope>castor3d::shader::ImgBackgroundModel</scope><name>getTargetSize</name></member>
+      <member refid="df/d63/a05528_1a3a39e03d0be30ed3ff031af03fc6b4b3" prot="public" virt="non-virtual"><scope>castor3d::shader::ImgBackgroundModel</scope><name>ImgBackgroundModel</name></member>
+      <member refid="df/d63/a05528_1acf0a799faf23018701124c5c66024044" prot="public" virt="non-virtual"><scope>castor3d::shader::ImgBackgroundModel</scope><name>m_computeRefractions</name></member>
+      <member refid="d1/d4e/a05972_1a0fd1043112df7879bc6953db8be49328" prot="protected" virt="non-virtual"><scope>castor3d::shader::ImgBackgroundModel</scope><name>m_targetSize</name></member>
+      <member refid="d1/d4e/a05972_1a37da18fc5b76f0cb1bc71dc6e3f520f0" prot="protected" virt="non-virtual"><scope>castor3d::shader::ImgBackgroundModel</scope><name>m_utils</name></member>
+      <member refid="d1/d4e/a05972_1a8f41ed56bb77baa66ea1e21fc35545da" prot="protected" virt="non-virtual"><scope>castor3d::shader::ImgBackgroundModel</scope><name>m_writer</name></member>
+      <member refid="df/d63/a05528_1a50ff5168cc07b0a022a651b57efdcb69" prot="public" virt="non-virtual"><scope>castor3d::shader::ImgBackgroundModel</scope><name>Name</name></member>
+      <member refid="d1/d4e/a05972_1ac68016721d3f75fc1f1e4bde1f4c788e" prot="public" virt="virtual"><scope>castor3d::shader::ImgBackgroundModel</scope><name>~BackgroundModel</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

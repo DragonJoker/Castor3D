@@ -129,23 +129,23 @@
       </node>
       <node id="4">
         <label>Render/RenderWindow.hpp</label>
-        <link refid="d7/d49/a00863"/>
+        <link refid="d9/d10/a01103"/>
         <childnode refid="5" relation="include">
         </childnode>
       </node>
       <node id="5">
         <label>Scene/SceneFileParser.hpp</label>
-        <link refid="d2/d22/a01196"/>
+        <link refid="de/d9d/a01382"/>
         <childnode refid="6" relation="include">
         </childnode>
       </node>
       <node id="6">
         <label>Scene/SceneFileParser_Parsers.hpp</label>
-        <link refid="d0/d5a/a01199"/>
+        <link refid="df/d68/a01385"/>
       </node>
     </invincdepgraph>
-    <innerclass refid="df/d91/a02774" prot="public">castor3d::HandlerEvent</innerclass>
-    <innernamespace refid="da/dab/a01362">castor3d</innernamespace>
+    <innerclass refid="d8/d7d/a02988" prot="public">castor3d::HandlerEvent</innerclass>
+    <innernamespace refid="d3/d22/a01572">castor3d</innernamespace>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

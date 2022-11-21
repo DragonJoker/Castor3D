@@ -1,0 +1,1238 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="db/dd9/a05012" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::PipelineFlags</compoundname>
+    <basecompoundref refid="d7/d8a/a05004" prot="public" virt="non-virtual">castor3d::PipelineHiHashDetails</basecompoundref>
+    <basecompoundref refid="d6/df3/a05008" prot="public" virt="non-virtual">castor3d::PipelineLoHashDetails</basecompoundref>
+    <includes local="no">PipelineFlags.hpp</includes>
+      <sectiondef kind="user-defined">
+      <header>Textures</header>
+      <memberdef kind="variable" id="db/dd9/a05012_1a1dfad853886ec783dc12f49701632150" prot="public" static="no" mutable="no">
+        <type><ref refid="d3/d22/a01572_1a525bec5d25db94bcff4168e9e1a826fa" kindref="member">SceneFlags</ref></type>
+        <definition>SceneFlags castor3d::PipelineFlags::m_sceneFlags</definition>
+        <argsstring></argsstring>
+        <name>m_sceneFlags</name>
+        <qualifiedname>castor3d::PipelineFlags::m_sceneFlags</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="339" column="12" bodyfile="Render/PipelineFlags.hpp" bodystart="339" bodyend="-1"/>
+        <referencedby refid="db/dd9/a05012_1a1a8282387718c1bbd33814a55b02b65a" compoundref="db/d23/a01025" startline="280" endline="283">getGlobalIlluminationFlags</referencedby>
+        <referencedby refid="db/dd9/a05012_1a31423099c0b2e464dd6bbf45fb236aa9" compoundref="db/d23/a01025" startline="275" endline="278">getShadowFlags</referencedby>
+        <referencedby refid="db/dd9/a05012_1a5e71a7d11ea746adabefe0525dab212c" compoundref="db/d23/a01025" startline="285" endline="288">hasDiffuseGI</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="db/dd9/a05012_1aab051b1ee46ace763681dfea200198d2" prot="public" static="no" mutable="no">
+        <type><ref refid="d3/d22/a01572_1a840ab6fd50c1a08fcc1b6dc3f98d90fa" kindref="member">BlendMode</ref></type>
+        <definition>BlendMode castor3d::PipelineFlags::colourBlendMode</definition>
+        <argsstring></argsstring>
+        <name>colourBlendMode</name>
+        <qualifiedname>castor3d::PipelineFlags::colourBlendMode</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="340" column="11" bodyfile="Render/PipelineFlags.hpp" bodystart="340" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dd9/a05012_1a0831b5262611024fcac18f42f7a29f92" prot="public" static="no" mutable="no">
+        <type><ref refid="d3/d22/a01572_1a840ab6fd50c1a08fcc1b6dc3f98d90fa" kindref="member">BlendMode</ref></type>
+        <definition>BlendMode castor3d::PipelineFlags::alphaBlendMode</definition>
+        <argsstring></argsstring>
+        <name>alphaBlendMode</name>
+        <qualifiedname>castor3d::PipelineFlags::alphaBlendMode</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="341" column="11" bodyfile="Render/PipelineFlags.hpp" bodystart="341" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dd9/a05012_1a98434d111c8a331f820f9e1366c15ca8" prot="public" static="no" mutable="no">
+        <type><ref refid="d3/d22/a01572_1a567298c1844e69d8252f0b8c14206f60" kindref="member">RenderPassTypeID</ref></type>
+        <definition>RenderPassTypeID castor3d::PipelineFlags::renderPassType</definition>
+        <argsstring></argsstring>
+        <name>renderPassType</name>
+        <qualifiedname>castor3d::PipelineFlags::renderPassType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="342" column="18" bodyfile="Render/PipelineFlags.hpp" bodystart="342" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dd9/a05012_1a82e267d99f0d0f3103eb76e4ab1a22b2" prot="public" static="no" mutable="no">
+        <type>VkPrimitiveTopology</type>
+        <definition>VkPrimitiveTopology castor3d::PipelineFlags::topology</definition>
+        <argsstring></argsstring>
+        <name>topology</name>
+        <qualifiedname>castor3d::PipelineFlags::topology</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="343" column="21" bodyfile="Render/PipelineFlags.hpp" bodystart="343" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dd9/a05012_1a0d59a3d9de048c7a8b6a9c6e3b1f49ca" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::PipelineFlags::patchVertices</definition>
+        <argsstring></argsstring>
+        <name>patchVertices</name>
+        <qualifiedname>castor3d::PipelineFlags::patchVertices</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="344" column="10" bodyfile="Render/PipelineFlags.hpp" bodystart="344" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dd9/a05012_1a43d982fe99b1cf074bfcd02ca9924591" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::PipelineFlags::hasMap</definition>
+        <argsstring>(PassComponentTextureFlag flag) const</argsstring>
+        <name>hasMap</name>
+        <qualifiedname>castor3d::PipelineFlags::hasMap</qualifiedname>
+        <param>
+          <type><ref refid="d3/d22/a01572_1a21f6621faaf5293fd7452f7fa0cd4136" kindref="member">PassComponentTextureFlag</ref></type>
+          <declname>flag</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="335" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dd9/a05012_1a0976500493be244d080f5db0e87ba3c2" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::PipelineFlags::enableTexcoord</definition>
+        <argsstring>(SubmeshFlag data) const</argsstring>
+        <name>enableTexcoord</name>
+        <qualifiedname>castor3d::PipelineFlags::enableTexcoord</qualifiedname>
+        <param>
+          <type><ref refid="d3/d22/a01572_1a0566fe3f97e08d9cae963049711ff271" kindref="member">SubmeshFlag</ref></type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="347" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dd9/a05012_1a0e7fa4c8c7c54d2e85db48513026ce2c" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::PipelineFlags::enableNonTexcoord</definition>
+        <argsstring>(SubmeshFlag data) const</argsstring>
+        <name>enableNonTexcoord</name>
+        <qualifiedname>castor3d::PipelineFlags::enableNonTexcoord</qualifiedname>
+        <param>
+          <type><ref refid="d3/d22/a01572_1a0566fe3f97e08d9cae963049711ff271" kindref="member">SubmeshFlag</ref></type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="348" column="6"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <header>ShaderFlags</header>
+      <memberdef kind="function" id="db/dd9/a05012_1a451505ae797dd5838163f8802edb4a71" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::PipelineFlags::usesWorldSpace</definition>
+        <argsstring>() const</argsstring>
+        <name>usesWorldSpace</name>
+        <qualifiedname>castor3d::PipelineFlags::usesWorldSpace</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="196" column="6" bodyfile="Render/PipelineFlags.hpp" bodystart="196" bodyend="199"/>
+        <references refid="d3/d22/a01572_1aff53303d5484577f7e5e747a6a602c2f">castor3d::checkFlag</references>
+        <references refid="d3/d22/a01572_1af2b45637ae87ee95eb6b6641d9415d45ad2b5722680c0d6238d583746bb8b698d">castor3d::eWorldSpace</references>
+        <references refid="d7/d8a/a05004_1a8e1dc2ee4bc6e7f843caf6a6cf8e0191" compoundref="db/d23/a01025" startline="62">castor3d::PipelineHiHashDetails::m_shaderFlags</references>
+      </memberdef>
+      <memberdef kind="function" id="db/dd9/a05012_1aee50d56db636b1aa1db5a4ef625bd737" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::PipelineFlags::usesViewSpace</definition>
+        <argsstring>() const</argsstring>
+        <name>usesViewSpace</name>
+        <qualifiedname>castor3d::PipelineFlags::usesViewSpace</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="201" column="6" bodyfile="Render/PipelineFlags.hpp" bodystart="201" bodyend="204"/>
+        <references refid="d3/d22/a01572_1aff53303d5484577f7e5e747a6a602c2f">castor3d::checkFlag</references>
+        <references refid="d3/d22/a01572_1af2b45637ae87ee95eb6b6641d9415d45a347c31380f35ea049138b555e6e0d8a8">castor3d::eViewSpace</references>
+        <references refid="d7/d8a/a05004_1a8e1dc2ee4bc6e7f843caf6a6cf8e0191" compoundref="db/d23/a01025" startline="62">castor3d::PipelineHiHashDetails::m_shaderFlags</references>
+      </memberdef>
+      <memberdef kind="function" id="db/dd9/a05012_1ab2508e03cecb0fde81186df83ead3c47" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::PipelineFlags::usesGeometry</definition>
+        <argsstring>() const</argsstring>
+        <name>usesGeometry</name>
+        <qualifiedname>castor3d::PipelineFlags::usesGeometry</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="206" column="6" bodyfile="Render/PipelineFlags.hpp" bodystart="206" bodyend="209"/>
+        <references refid="d3/d22/a01572_1aff53303d5484577f7e5e747a6a602c2f">castor3d::checkFlag</references>
+        <references refid="d3/d22/a01572_1af2b45637ae87ee95eb6b6641d9415d45a602580dcfaed9d9ddf07cad7276c3103">castor3d::eGeometry</references>
+        <references refid="d7/d8a/a05004_1a8e1dc2ee4bc6e7f843caf6a6cf8e0191" compoundref="db/d23/a01025" startline="62">castor3d::PipelineHiHashDetails::m_shaderFlags</references>
+      </memberdef>
+      <memberdef kind="function" id="db/dd9/a05012_1ab2a066c7947a505a36410a7ba259cc65" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::PipelineFlags::usesTessellation</definition>
+        <argsstring>() const</argsstring>
+        <name>usesTessellation</name>
+        <qualifiedname>castor3d::PipelineFlags::usesTessellation</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="211" column="6" bodyfile="Render/PipelineFlags.hpp" bodystart="211" bodyend="214"/>
+        <references refid="d3/d22/a01572_1aff53303d5484577f7e5e747a6a602c2f">castor3d::checkFlag</references>
+        <references refid="d3/d22/a01572_1af2b45637ae87ee95eb6b6641d9415d45a0fb3bd0563d917f4b478bee4bd901580">castor3d::eTessellation</references>
+        <references refid="d7/d8a/a05004_1a8e1dc2ee4bc6e7f843caf6a6cf8e0191" compoundref="db/d23/a01025" startline="62">castor3d::PipelineHiHashDetails::m_shaderFlags</references>
+      </memberdef>
+      <memberdef kind="function" id="db/dd9/a05012_1ab473bf637e917d885d5b787f55f33b38" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::PipelineFlags::usesColour</definition>
+        <argsstring>() const</argsstring>
+        <name>usesColour</name>
+        <qualifiedname>castor3d::PipelineFlags::usesColour</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="216" column="6" bodyfile="Render/PipelineFlags.hpp" bodystart="216" bodyend="219"/>
+        <references refid="d3/d22/a01572_1aff53303d5484577f7e5e747a6a602c2f">castor3d::checkFlag</references>
+        <references refid="d3/d22/a01572_1af2b45637ae87ee95eb6b6641d9415d45a933e146a34d99e16a319642574089a34">castor3d::eColour</references>
+        <references refid="d7/d8a/a05004_1a8e1dc2ee4bc6e7f843caf6a6cf8e0191" compoundref="db/d23/a01025" startline="62">castor3d::PipelineHiHashDetails::m_shaderFlags</references>
+      </memberdef>
+      <memberdef kind="function" id="db/dd9/a05012_1a178a4151e9f0021a58024b5b63158171" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::PipelineFlags::usesOpacity</definition>
+        <argsstring>() const</argsstring>
+        <name>usesOpacity</name>
+        <qualifiedname>castor3d::PipelineFlags::usesOpacity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="221" column="6" bodyfile="Render/PipelineFlags.hpp" bodystart="221" bodyend="224"/>
+        <references refid="d3/d22/a01572_1aff53303d5484577f7e5e747a6a602c2f">castor3d::checkFlag</references>
+        <references refid="d3/d22/a01572_1af2b45637ae87ee95eb6b6641d9415d45aa3a957357b758bcbb55d221bf975b545">castor3d::eOpacity</references>
+        <references refid="d7/d8a/a05004_1a8e1dc2ee4bc6e7f843caf6a6cf8e0191" compoundref="db/d23/a01025" startline="62">castor3d::PipelineHiHashDetails::m_shaderFlags</references>
+      </memberdef>
+      <memberdef kind="function" id="db/dd9/a05012_1aa92fdf599f942761918262d5f4379386" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::PipelineFlags::forceTexCoords</definition>
+        <argsstring>() const</argsstring>
+        <name>forceTexCoords</name>
+        <qualifiedname>castor3d::PipelineFlags::forceTexCoords</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="226" column="6" bodyfile="Render/PipelineFlags.hpp" bodystart="226" bodyend="229"/>
+        <references refid="d3/d22/a01572_1aff53303d5484577f7e5e747a6a602c2f">castor3d::checkFlag</references>
+        <references refid="d3/d22/a01572_1af2b45637ae87ee95eb6b6641d9415d45afe0e95a2600ebf3539396ba07998b96a">castor3d::eForceTexCoords</references>
+        <references refid="d7/d8a/a05004_1a8e1dc2ee4bc6e7f843caf6a6cf8e0191" compoundref="db/d23/a01025" startline="62">castor3d::PipelineHiHashDetails::m_shaderFlags</references>
+      </memberdef>
+      <memberdef kind="function" id="db/dd9/a05012_1a4e9d74a5d8b45061e29ab64dfc45e02e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::PipelineFlags::writeEnvironmentMap</definition>
+        <argsstring>() const</argsstring>
+        <name>writeEnvironmentMap</name>
+        <qualifiedname>castor3d::PipelineFlags::writeEnvironmentMap</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="231" column="6" bodyfile="Render/PipelineFlags.hpp" bodystart="231" bodyend="234"/>
+        <references refid="d3/d22/a01572_1aff53303d5484577f7e5e747a6a602c2f">castor3d::checkFlag</references>
+        <references refid="d3/d22/a01572_1af2b45637ae87ee95eb6b6641d9415d45abe4173784548d4708cd1322d33bf6a26">castor3d::eEnvironmentMapping</references>
+        <references refid="d7/d8a/a05004_1a8e1dc2ee4bc6e7f843caf6a6cf8e0191" compoundref="db/d23/a01025" startline="62">castor3d::PipelineHiHashDetails::m_shaderFlags</references>
+      </memberdef>
+      <memberdef kind="function" id="db/dd9/a05012_1a6f66e212153662075dfb531535a1ab97" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::PipelineFlags::writeShadowMap</definition>
+        <argsstring>() const</argsstring>
+        <name>writeShadowMap</name>
+        <qualifiedname>castor3d::PipelineFlags::writeShadowMap</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="236" column="6" bodyfile="Render/PipelineFlags.hpp" bodystart="236" bodyend="241"/>
+        <references refid="d3/d22/a01572_1aff53303d5484577f7e5e747a6a602c2f">castor3d::checkFlag</references>
+        <references refid="d3/d22/a01572_1af2b45637ae87ee95eb6b6641d9415d45aeb723f851d718b4b5a20b9753f5c9f30">castor3d::eShadowMapDirectional</references>
+        <references refid="d3/d22/a01572_1af2b45637ae87ee95eb6b6641d9415d45af2c66955d3cd06ca2dc76347feeb7c9a">castor3d::eShadowMapPoint</references>
+        <references refid="d3/d22/a01572_1af2b45637ae87ee95eb6b6641d9415d45a65500600404fff625f48587c511e4227">castor3d::eShadowMapSpot</references>
+        <references refid="d7/d8a/a05004_1a8e1dc2ee4bc6e7f843caf6a6cf8e0191" compoundref="db/d23/a01025" startline="62">castor3d::PipelineHiHashDetails::m_shaderFlags</references>
+      </memberdef>
+      <memberdef kind="function" id="db/dd9/a05012_1a9b3f56d5aff60c0810e0b68ceca2abe0" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::PipelineFlags::writeShadowVSM</definition>
+        <argsstring>() const</argsstring>
+        <name>writeShadowVSM</name>
+        <qualifiedname>castor3d::PipelineFlags::writeShadowVSM</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="243" column="6" bodyfile="Render/PipelineFlags.hpp" bodystart="243" bodyend="246"/>
+        <references refid="d3/d22/a01572_1aff53303d5484577f7e5e747a6a602c2f">castor3d::checkFlag</references>
+        <references refid="d3/d22/a01572_1af2b45637ae87ee95eb6b6641d9415d45a8ad4cc1078329899aab2c6db3d3192a7">castor3d::eVsmShadowMap</references>
+        <references refid="d7/d8a/a05004_1a8e1dc2ee4bc6e7f843caf6a6cf8e0191" compoundref="db/d23/a01025" startline="62">castor3d::PipelineHiHashDetails::m_shaderFlags</references>
+      </memberdef>
+      <memberdef kind="function" id="db/dd9/a05012_1aa2ea4fdd23b2f04fcf25b837cacbc779" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::PipelineFlags::writeShadowRSM</definition>
+        <argsstring>() const</argsstring>
+        <name>writeShadowRSM</name>
+        <qualifiedname>castor3d::PipelineFlags::writeShadowRSM</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="248" column="6" bodyfile="Render/PipelineFlags.hpp" bodystart="248" bodyend="251"/>
+        <references refid="d3/d22/a01572_1aff53303d5484577f7e5e747a6a602c2f">castor3d::checkFlag</references>
+        <references refid="d3/d22/a01572_1af2b45637ae87ee95eb6b6641d9415d45a5f3d543551c7bea0c052c11524157fe0">castor3d::eRsmShadowMap</references>
+        <references refid="d7/d8a/a05004_1a8e1dc2ee4bc6e7f843caf6a6cf8e0191" compoundref="db/d23/a01025" startline="62">castor3d::PipelineHiHashDetails::m_shaderFlags</references>
+      </memberdef>
+      <memberdef kind="function" id="db/dd9/a05012_1ae1107a13e68031773c41436c3b93bd2e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::PipelineFlags::writeVelocity</definition>
+        <argsstring>() const</argsstring>
+        <name>writeVelocity</name>
+        <qualifiedname>castor3d::PipelineFlags::writeVelocity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="253" column="6" bodyfile="Render/PipelineFlags.hpp" bodystart="253" bodyend="256"/>
+        <references refid="d3/d22/a01572_1aff53303d5484577f7e5e747a6a602c2f">castor3d::checkFlag</references>
+        <references refid="d3/d22/a01572_1af2b45637ae87ee95eb6b6641d9415d45ab2c25b5cef640a0733b40b4ded88d091">castor3d::eVelocity</references>
+        <references refid="d7/d8a/a05004_1a8e1dc2ee4bc6e7f843caf6a6cf8e0191" compoundref="db/d23/a01025" startline="62">castor3d::PipelineHiHashDetails::m_shaderFlags</references>
+      </memberdef>
+      <memberdef kind="function" id="db/dd9/a05012_1a15562da594bdeda18286af08250d8b7a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::PipelineFlags::writeVisibility</definition>
+        <argsstring>() const</argsstring>
+        <name>writeVisibility</name>
+        <qualifiedname>castor3d::PipelineFlags::writeVisibility</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="258" column="6" bodyfile="Render/PipelineFlags.hpp" bodystart="258" bodyend="261"/>
+        <references refid="d3/d22/a01572_1aff53303d5484577f7e5e747a6a602c2f">castor3d::checkFlag</references>
+        <references refid="d3/d22/a01572_1af2b45637ae87ee95eb6b6641d9415d45ae8e6f14417dffd0d30f3c6aa069b04fb">castor3d::eVisibility</references>
+        <references refid="d7/d8a/a05004_1a8e1dc2ee4bc6e7f843caf6a6cf8e0191" compoundref="db/d23/a01025" startline="62">castor3d::PipelineHiHashDetails::m_shaderFlags</references>
+      </memberdef>
+      <memberdef kind="function" id="db/dd9/a05012_1adb94e6454a259773115bcf5fca3c7670" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::PipelineFlags::writeDepth</definition>
+        <argsstring>() const</argsstring>
+        <name>writeDepth</name>
+        <qualifiedname>castor3d::PipelineFlags::writeDepth</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="263" column="6" bodyfile="Render/PipelineFlags.hpp" bodystart="263" bodyend="266"/>
+        <references refid="d3/d22/a01572_1aff53303d5484577f7e5e747a6a602c2f">castor3d::checkFlag</references>
+        <references refid="d3/d22/a01572_1af2b45637ae87ee95eb6b6641d9415d45a2a37044e2d0bed7cbb63527176543d73">castor3d::eDepth</references>
+        <references refid="d7/d8a/a05004_1a8e1dc2ee4bc6e7f843caf6a6cf8e0191" compoundref="db/d23/a01025" startline="62">castor3d::PipelineHiHashDetails::m_shaderFlags</references>
+      </memberdef>
+      <memberdef kind="function" id="db/dd9/a05012_1a2cc7249e990cc287925f51dd2fc9b568" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::PipelineFlags::writePicking</definition>
+        <argsstring>() const</argsstring>
+        <name>writePicking</name>
+        <qualifiedname>castor3d::PipelineFlags::writePicking</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="268" column="6" bodyfile="Render/PipelineFlags.hpp" bodystart="268" bodyend="271"/>
+        <references refid="d3/d22/a01572_1aff53303d5484577f7e5e747a6a602c2f">castor3d::checkFlag</references>
+        <references refid="d3/d22/a01572_1af2b45637ae87ee95eb6b6641d9415d45ad87941418fd9e2238ccb07af845ae4a2">castor3d::ePicking</references>
+        <references refid="d7/d8a/a05004_1a8e1dc2ee4bc6e7f843caf6a6cf8e0191" compoundref="db/d23/a01025" startline="62">castor3d::PipelineHiHashDetails::m_shaderFlags</references>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <header>SceneFlags</header>
+      <memberdef kind="function" id="db/dd9/a05012_1a31423099c0b2e464dd6bbf45fb236aa9" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d3/d22/a01572_1a525bec5d25db94bcff4168e9e1a826fa" kindref="member">SceneFlags</ref></type>
+        <definition>SceneFlags castor3d::PipelineFlags::getShadowFlags</definition>
+        <argsstring>() const</argsstring>
+        <name>getShadowFlags</name>
+        <qualifiedname>castor3d::PipelineFlags::getShadowFlags</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="275" column="12" bodyfile="Render/PipelineFlags.hpp" bodystart="275" bodyend="278"/>
+        <references refid="d3/d22/a01572_1a0282168ae87222228c5a154c419deb51afc9a4467a136023d484aa192809023b1">castor3d::eShadowAny</references>
+        <references refid="db/dd9/a05012_1a1dfad853886ec783dc12f49701632150" compoundref="db/d23/a01025" startline="339">m_sceneFlags</references>
+      </memberdef>
+      <memberdef kind="function" id="db/dd9/a05012_1a1a8282387718c1bbd33814a55b02b65a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d3/d22/a01572_1a525bec5d25db94bcff4168e9e1a826fa" kindref="member">SceneFlags</ref></type>
+        <definition>SceneFlags castor3d::PipelineFlags::getGlobalIlluminationFlags</definition>
+        <argsstring>() const</argsstring>
+        <name>getGlobalIlluminationFlags</name>
+        <qualifiedname>castor3d::PipelineFlags::getGlobalIlluminationFlags</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="280" column="12" bodyfile="Render/PipelineFlags.hpp" bodystart="280" bodyend="283"/>
+        <references refid="d3/d22/a01572_1a0282168ae87222228c5a154c419deb51ab290c1fcaac8fdba845e6725e59cf211">castor3d::eGIAny</references>
+        <references refid="db/dd9/a05012_1a1dfad853886ec783dc12f49701632150" compoundref="db/d23/a01025" startline="339">m_sceneFlags</references>
+      </memberdef>
+      <memberdef kind="function" id="db/dd9/a05012_1a5e71a7d11ea746adabefe0525dab212c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::PipelineFlags::hasDiffuseGI</definition>
+        <argsstring>() const</argsstring>
+        <name>hasDiffuseGI</name>
+        <qualifiedname>castor3d::PipelineFlags::hasDiffuseGI</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="285" column="6" bodyfile="Render/PipelineFlags.hpp" bodystart="285" bodyend="288"/>
+        <references refid="d3/d22/a01572_1a0282168ae87222228c5a154c419deb51ab290c1fcaac8fdba845e6725e59cf211">castor3d::eGIAny</references>
+        <references refid="d3/d22/a01572_1a77300ce1912b533c6630218c9bf746a6">castor3d::hasAny</references>
+        <references refid="db/dd9/a05012_1a1dfad853886ec783dc12f49701632150" compoundref="db/d23/a01025" startline="339">m_sceneFlags</references>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <header>SubmeshFlags</header>
+      <memberdef kind="function" id="db/dd9/a05012_1a52d54f489ec8545671d6ff6a2ae39e4e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::PipelineFlags::hasSubmeshData</definition>
+        <argsstring>(SubmeshFlag flag) const</argsstring>
+        <name>hasSubmeshData</name>
+        <qualifiedname>castor3d::PipelineFlags::hasSubmeshData</qualifiedname>
+        <param>
+          <type><ref refid="d3/d22/a01572_1a0566fe3f97e08d9cae963049711ff271" kindref="member">SubmeshFlag</ref></type>
+          <declname>flag</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="292" column="6" bodyfile="Render/PipelineFlags.hpp" bodystart="292" bodyend="295"/>
+        <references refid="d3/d22/a01572_1aff53303d5484577f7e5e747a6a602c2f">castor3d::checkFlag</references>
+        <references refid="d7/d8a/a05004_1a6491d94e45fbbfe66321f03958829c63" compoundref="db/d23/a01025" startline="60">castor3d::PipelineHiHashDetails::m_submeshFlags</references>
+        <referencedby refid="db/dd9/a05012_1acd8b91d6e450dcd43e44372e1cf2660b" compoundref="db/d23/a01025" startline="302" endline="305">hasSkinData</referencedby>
+        <referencedby refid="db/dd9/a05012_1a77b97a0fd7228432acdb5e748333bd54" compoundref="db/d23/a01025" startline="297" endline="300">hasWorldPosInputs</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="db/dd9/a05012_1a77b97a0fd7228432acdb5e748333bd54" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::PipelineFlags::hasWorldPosInputs</definition>
+        <argsstring>() const</argsstring>
+        <name>hasWorldPosInputs</name>
+        <qualifiedname>castor3d::PipelineFlags::hasWorldPosInputs</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="297" column="6" bodyfile="Render/PipelineFlags.hpp" bodystart="297" bodyend="300"/>
+        <references refid="d3/d22/a01572_1a0566fe3f97e08d9cae963049711ff271ab2c25b5cef640a0733b40b4ded88d091">castor3d::eVelocity</references>
+        <references refid="db/dd9/a05012_1a52d54f489ec8545671d6ff6a2ae39e4e" compoundref="db/d23/a01025" startline="292" endline="295">hasSubmeshData</references>
+      </memberdef>
+      <memberdef kind="function" id="db/dd9/a05012_1acd8b91d6e450dcd43e44372e1cf2660b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::PipelineFlags::hasSkinData</definition>
+        <argsstring>() const</argsstring>
+        <name>hasSkinData</name>
+        <qualifiedname>castor3d::PipelineFlags::hasSkinData</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="302" column="6" bodyfile="Render/PipelineFlags.hpp" bodystart="302" bodyend="305"/>
+        <references refid="d3/d22/a01572_1a0566fe3f97e08d9cae963049711ff271a926d2e286a0b837df7fc130e7b26f391">castor3d::eSkin</references>
+        <references refid="db/dd9/a05012_1a52d54f489ec8545671d6ff6a2ae39e4e" compoundref="db/d23/a01025" startline="292" endline="295">hasSubmeshData</references>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <header>ProgramFlags</header>
+      <memberdef kind="function" id="db/dd9/a05012_1a150b8f0e9f123261814672ebeba612de" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::PipelineFlags::isBillboard</definition>
+        <argsstring>() const</argsstring>
+        <name>isBillboard</name>
+        <qualifiedname>castor3d::PipelineFlags::isBillboard</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="309" column="6" bodyfile="Render/PipelineFlags.hpp" bodystart="309" bodyend="312"/>
+        <references refid="d3/d22/a01572_1aff53303d5484577f7e5e747a6a602c2f">castor3d::checkFlag</references>
+        <references refid="d3/d22/a01572_1a936ab837f9d458e7c234bb1ef4061cabaa7242bffc1057f5048a657a799909415">castor3d::eBillboards</references>
+        <references refid="d7/d8a/a05004_1a62d5a49b36d90f5d0f4cb8ef2333f6f7" compoundref="db/d23/a01025" startline="61">castor3d::PipelineHiHashDetails::m_programFlags</references>
+      </memberdef>
+      <memberdef kind="function" id="db/dd9/a05012_1aced74e5bafd87c8d16f3cdf6d904c8fa" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::PipelineFlags::hasInvertNormals</definition>
+        <argsstring>() const</argsstring>
+        <name>hasInvertNormals</name>
+        <qualifiedname>castor3d::PipelineFlags::hasInvertNormals</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="314" column="6" bodyfile="Render/PipelineFlags.hpp" bodystart="314" bodyend="317"/>
+        <references refid="d3/d22/a01572_1aff53303d5484577f7e5e747a6a602c2f">castor3d::checkFlag</references>
+        <references refid="d3/d22/a01572_1a936ab837f9d458e7c234bb1ef4061caba448bacc71942a4fb0a408f1304b4857e">castor3d::eInvertNormals</references>
+        <references refid="d7/d8a/a05004_1a62d5a49b36d90f5d0f4cb8ef2333f6f7" compoundref="db/d23/a01025" startline="61">castor3d::PipelineHiHashDetails::m_programFlags</references>
+      </memberdef>
+      <memberdef kind="function" id="db/dd9/a05012_1af3684ae5cc6d57d11d5f5a2804789379" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::PipelineFlags::usesMesh</definition>
+        <argsstring>() const</argsstring>
+        <name>usesMesh</name>
+        <qualifiedname>castor3d::PipelineFlags::usesMesh</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="319" column="6" bodyfile="Render/PipelineFlags.hpp" bodystart="319" bodyend="322"/>
+        <references refid="d3/d22/a01572_1aff53303d5484577f7e5e747a6a602c2f">castor3d::checkFlag</references>
+        <references refid="d3/d22/a01572_1a936ab837f9d458e7c234bb1ef4061cabaec84e1d87320c8e306d51f02c81142b9">castor3d::eHasMesh</references>
+        <references refid="d7/d8a/a05004_1a62d5a49b36d90f5d0f4cb8ef2333f6f7" compoundref="db/d23/a01025" startline="61">castor3d::PipelineHiHashDetails::m_programFlags</references>
+      </memberdef>
+      <memberdef kind="function" id="db/dd9/a05012_1a946e8b61a4b98d17536c74cae50b93b7" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::PipelineFlags::usesTask</definition>
+        <argsstring>() const</argsstring>
+        <name>usesTask</name>
+        <qualifiedname>castor3d::PipelineFlags::usesTask</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="324" column="6" bodyfile="Render/PipelineFlags.hpp" bodystart="324" bodyend="327"/>
+        <references refid="d3/d22/a01572_1aff53303d5484577f7e5e747a6a602c2f">castor3d::checkFlag</references>
+        <references refid="d3/d22/a01572_1a936ab837f9d458e7c234bb1ef4061caba56f930c82b2339c938dbc8df25498dfc">castor3d::eHasTask</references>
+        <references refid="d7/d8a/a05004_1a62d5a49b36d90f5d0f4cb8ef2333f6f7" compoundref="db/d23/a01025" startline="61">castor3d::PipelineHiHashDetails::m_programFlags</references>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <header>Components</header>
+      <memberdef kind="function" id="db/dd9/a05012_1a1eeb01bd4db225b2bca8e5e03af8c68a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::PipelineFlags::hasFlag</definition>
+        <argsstring>(PassComponentFlag flag) const</argsstring>
+        <name>hasFlag</name>
+        <qualifiedname>castor3d::PipelineFlags::hasFlag</qualifiedname>
+        <param>
+          <type><ref refid="d3/d22/a01572_1a9c5abb1c7b30c2de4e67a8f9f64c08a6" kindref="member">PassComponentFlag</ref></type>
+          <declname>flag</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="331" column="14"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="db/dd9/a05012_1a4ac780d671fa6d39bbe94191e418ba45" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::PipelineFlags::PipelineFlags</definition>
+        <argsstring>(PipelineHiHashDetails hiDetails, PipelineLoHashDetails loDetails=PipelineLoHashDetails{}, SceneFlags sceneFlags=SceneFlag::eNone, BlendMode colourBlendMode=BlendMode::eNoBlend, BlendMode alphaBlendMode=BlendMode::eNoBlend, RenderPassTypeID renderPassType=0u, VkPrimitiveTopology ptopology=VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, uint32_t ppatchVertices=3u)</argsstring>
+        <name>PipelineFlags</name>
+        <qualifiedname>castor3d::PipelineFlags::PipelineFlags</qualifiedname>
+        <param>
+          <type><ref refid="d7/d8a/a05004" kindref="compound">PipelineHiHashDetails</ref></type>
+          <declname>hiDetails</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/df3/a05008" kindref="compound">PipelineLoHashDetails</ref></type>
+          <declname>loDetails</declname>
+          <defval><ref refid="d6/df3/a05008" kindref="compound">PipelineLoHashDetails</ref>{}</defval>
+        </param>
+        <param>
+          <type><ref refid="d3/d22/a01572_1a525bec5d25db94bcff4168e9e1a826fa" kindref="member">SceneFlags</ref></type>
+          <declname>sceneFlags</declname>
+          <defval><ref refid="d3/d22/a01572_1a0282168ae87222228c5a154c419deb51abe988781e4e1de1c6a36fb698afbbe1f" kindref="member">SceneFlag::eNone</ref></defval>
+        </param>
+        <param>
+          <type><ref refid="d3/d22/a01572_1a840ab6fd50c1a08fcc1b6dc3f98d90fa" kindref="member">BlendMode</ref></type>
+          <declname>colourBlendMode</declname>
+          <defval><ref refid="d3/d22/a01572_1a840ab6fd50c1a08fcc1b6dc3f98d90faa12c10e6e0388d587340cfbe98b5045ae" kindref="member">BlendMode::eNoBlend</ref></defval>
+        </param>
+        <param>
+          <type><ref refid="d3/d22/a01572_1a840ab6fd50c1a08fcc1b6dc3f98d90fa" kindref="member">BlendMode</ref></type>
+          <declname>alphaBlendMode</declname>
+          <defval><ref refid="d3/d22/a01572_1a840ab6fd50c1a08fcc1b6dc3f98d90faa12c10e6e0388d587340cfbe98b5045ae" kindref="member">BlendMode::eNoBlend</ref></defval>
+        </param>
+        <param>
+          <type><ref refid="d3/d22/a01572_1a567298c1844e69d8252f0b8c14206f60" kindref="member">RenderPassTypeID</ref></type>
+          <declname>renderPassType</declname>
+          <defval>0u</defval>
+        </param>
+        <param>
+          <type>VkPrimitiveTopology</type>
+          <declname>ptopology</declname>
+          <defval>VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST</defval>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>ppatchVertices</declname>
+          <defval>3u</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="90" column="10" bodyfile="Render/PipelineFlags.hpp" bodystart="90" bodyend="108"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dd9/a05012_1a9d3970146614e351d764f883a7a7e994" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::PipelineFlags::PipelineFlags</definition>
+        <argsstring>(PassComponentCombine pcomponents, PassTypeID ppassType, BlendMode pcolourBlendMode=BlendMode::eNoBlend, BlendMode palphaBlendMode=BlendMode::eNoBlend, RenderPassTypeID prenderPassType=0u, SubmeshFlags psubmeshFlags=SubmeshFlag::eIndex, ProgramFlags pprogramFlags=ProgramFlag::eNone, SceneFlags psceneFlags=SceneFlag::eNone, ShaderFlags pshaderFlags=ShaderFlag::eNone, VkPrimitiveTopology ptopology=VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, uint32_t ppatchVertices=3u, VkCompareOp palphaFunc=VK_COMPARE_OP_ALWAYS, TextureCombine textures={}, uint32_t ppassLayerIndex={}, VkDeviceSize pmorphTargetsOffset={})</argsstring>
+        <name>PipelineFlags</name>
+        <qualifiedname>castor3d::PipelineFlags::PipelineFlags</qualifiedname>
+        <param>
+          <type><ref refid="d0/d9f/a03152" kindref="compound">PassComponentCombine</ref></type>
+          <declname>pcomponents</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d22/a01572_1a773fcfeb825d3fe54eb4a3dce23bca11" kindref="member">PassTypeID</ref></type>
+          <declname>ppassType</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d22/a01572_1a840ab6fd50c1a08fcc1b6dc3f98d90fa" kindref="member">BlendMode</ref></type>
+          <declname>pcolourBlendMode</declname>
+          <defval><ref refid="d3/d22/a01572_1a840ab6fd50c1a08fcc1b6dc3f98d90faa12c10e6e0388d587340cfbe98b5045ae" kindref="member">BlendMode::eNoBlend</ref></defval>
+        </param>
+        <param>
+          <type><ref refid="d3/d22/a01572_1a840ab6fd50c1a08fcc1b6dc3f98d90fa" kindref="member">BlendMode</ref></type>
+          <declname>palphaBlendMode</declname>
+          <defval><ref refid="d3/d22/a01572_1a840ab6fd50c1a08fcc1b6dc3f98d90faa12c10e6e0388d587340cfbe98b5045ae" kindref="member">BlendMode::eNoBlend</ref></defval>
+        </param>
+        <param>
+          <type><ref refid="d3/d22/a01572_1a567298c1844e69d8252f0b8c14206f60" kindref="member">RenderPassTypeID</ref></type>
+          <declname>prenderPassType</declname>
+          <defval>0u</defval>
+        </param>
+        <param>
+          <type><ref refid="d3/d22/a01572_1a456f43ef4580c9527b0e71aa45a237ee" kindref="member">SubmeshFlags</ref></type>
+          <declname>psubmeshFlags</declname>
+          <defval><ref refid="d3/d22/a01572_1a0566fe3f97e08d9cae963049711ff271ae208cdff5827a0e8177419adff46b168" kindref="member">SubmeshFlag::eIndex</ref></defval>
+        </param>
+        <param>
+          <type><ref refid="d3/d22/a01572_1ab503144f281345b45ccc3f3a94543dce" kindref="member">ProgramFlags</ref></type>
+          <declname>pprogramFlags</declname>
+          <defval><ref refid="d3/d22/a01572_1a936ab837f9d458e7c234bb1ef4061cababe988781e4e1de1c6a36fb698afbbe1f" kindref="member">ProgramFlag::eNone</ref></defval>
+        </param>
+        <param>
+          <type><ref refid="d3/d22/a01572_1a525bec5d25db94bcff4168e9e1a826fa" kindref="member">SceneFlags</ref></type>
+          <declname>psceneFlags</declname>
+          <defval><ref refid="d3/d22/a01572_1a0282168ae87222228c5a154c419deb51abe988781e4e1de1c6a36fb698afbbe1f" kindref="member">SceneFlag::eNone</ref></defval>
+        </param>
+        <param>
+          <type><ref refid="d3/d22/a01572_1af8308e78be327186fc4533308ee5cd19" kindref="member">ShaderFlags</ref></type>
+          <declname>pshaderFlags</declname>
+          <defval><ref refid="d3/d22/a01572_1af2b45637ae87ee95eb6b6641d9415d45abe988781e4e1de1c6a36fb698afbbe1f" kindref="member">ShaderFlag::eNone</ref></defval>
+        </param>
+        <param>
+          <type>VkPrimitiveTopology</type>
+          <declname>ptopology</declname>
+          <defval>VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST</defval>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>ppatchVertices</declname>
+          <defval>3u</defval>
+        </param>
+        <param>
+          <type>VkCompareOp</type>
+          <declname>palphaFunc</declname>
+          <defval>VK_COMPARE_OP_ALWAYS</defval>
+        </param>
+        <param>
+          <type><ref refid="de/d0b/a03040" kindref="compound">TextureCombine</ref></type>
+          <declname>textures</declname>
+          <defval>{}</defval>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>ppassLayerIndex</declname>
+          <defval>{}</defval>
+        </param>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>pmorphTargetsOffset</declname>
+          <defval>{}</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="110" column="10" bodyfile="Render/PipelineFlags.hpp" bodystart="110" bodyend="142"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dd9/a05012_1aa8839ec185bbbd295c94f80cbe82fdf5" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::PipelineFlags::PipelineFlags</definition>
+        <argsstring>(PassComponentCombine pcomponents, PassTypeID passType, SubmeshFlags submeshFlags, ProgramFlags programFlags, TextureCombine textures, ShaderFlags shaderFlags, VkCompareOp alphaFunc, uint32_t passLayerIndex=0u)</argsstring>
+        <name>PipelineFlags</name>
+        <qualifiedname>castor3d::PipelineFlags::PipelineFlags</qualifiedname>
+        <param>
+          <type><ref refid="d0/d9f/a03152" kindref="compound">PassComponentCombine</ref></type>
+          <declname>pcomponents</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d22/a01572_1a773fcfeb825d3fe54eb4a3dce23bca11" kindref="member">PassTypeID</ref></type>
+          <declname>passType</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d22/a01572_1a456f43ef4580c9527b0e71aa45a237ee" kindref="member">SubmeshFlags</ref></type>
+          <declname>submeshFlags</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d22/a01572_1ab503144f281345b45ccc3f3a94543dce" kindref="member">ProgramFlags</ref></type>
+          <declname>programFlags</declname>
+        </param>
+        <param>
+          <type><ref refid="de/d0b/a03040" kindref="compound">TextureCombine</ref></type>
+          <declname>textures</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d22/a01572_1af8308e78be327186fc4533308ee5cd19" kindref="member">ShaderFlags</ref></type>
+          <declname>shaderFlags</declname>
+        </param>
+        <param>
+          <type>VkCompareOp</type>
+          <declname>alphaFunc</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>passLayerIndex</declname>
+          <defval>0u</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="144" column="1" bodyfile="Render/PipelineFlags.hpp" bodystart="144" bodyend="169"/>
+        <references refid="d3/d22/a01572_1a840ab6fd50c1a08fcc1b6dc3f98d90faa12c10e6e0388d587340cfbe98b5045ae">castor3d::eNoBlend</references>
+        <references refid="d3/d22/a01572_1ad372dd0cc65f28ad7f558f07c78becb7abe988781e4e1de1c6a36fb698afbbe1f">castor3d::eNone</references>
+        <references refid="d7/d8a/a05004_1a0b69d032d38ce594520c4f0b7246ec32" compoundref="db/d23/a01025" startline="56">castor3d::PipelineHiHashDetails::passType</references>
+      </memberdef>
+      <memberdef kind="function" id="db/dd9/a05012_1a725f98fc29ca2d456b764e95b3c531e9" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::PipelineFlags::enableTexcoords</definition>
+        <argsstring>() const</argsstring>
+        <name>enableTexcoords</name>
+        <qualifiedname>castor3d::PipelineFlags::enableTexcoords</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="172" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dd9/a05012_1a05ff7b2da7285e496faa61e296b89ac2" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::PipelineFlags::enableVertexInput</definition>
+        <argsstring>(SubmeshFlag data) const</argsstring>
+        <name>enableVertexInput</name>
+        <qualifiedname>castor3d::PipelineFlags::enableVertexInput</qualifiedname>
+        <param>
+          <type><ref refid="d3/d22/a01572_1a0566fe3f97e08d9cae963049711ff271" kindref="member">SubmeshFlag</ref></type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="173" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dd9/a05012_1ad4957e52c63dfd963c4e3c2d63606939" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::PipelineFlags::enableIndices</definition>
+        <argsstring>() const</argsstring>
+        <name>enableIndices</name>
+        <qualifiedname>castor3d::PipelineFlags::enableIndices</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="174" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dd9/a05012_1a6358ad4115fb9be3538993739ffd6eda" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::PipelineFlags::enablePosition</definition>
+        <argsstring>() const</argsstring>
+        <name>enablePosition</name>
+        <qualifiedname>castor3d::PipelineFlags::enablePosition</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="175" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dd9/a05012_1a9d6e964ef16fc5a6e10a79a2bdfa85a3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::PipelineFlags::enableNormal</definition>
+        <argsstring>() const</argsstring>
+        <name>enableNormal</name>
+        <qualifiedname>castor3d::PipelineFlags::enableNormal</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="176" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dd9/a05012_1a0ec363ab35174679b0b744b1f0be1dcd" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::PipelineFlags::enableTangentSpace</definition>
+        <argsstring>() const</argsstring>
+        <name>enableTangentSpace</name>
+        <qualifiedname>castor3d::PipelineFlags::enableTangentSpace</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="177" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dd9/a05012_1a129ef5e30a2a18a7ddf698d2653d20e3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::PipelineFlags::enableColours</definition>
+        <argsstring>() const</argsstring>
+        <name>enableColours</name>
+        <qualifiedname>castor3d::PipelineFlags::enableColours</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="178" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dd9/a05012_1a70f7d35c8ad3d796a971a4fe74b2aabf" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::PipelineFlags::enablePassMasks</definition>
+        <argsstring>() const</argsstring>
+        <name>enablePassMasks</name>
+        <qualifiedname>castor3d::PipelineFlags::enablePassMasks</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="179" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dd9/a05012_1a022949b08e4f0c712ca05d69faa56cc3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::PipelineFlags::enableTexcoord0</definition>
+        <argsstring>() const</argsstring>
+        <name>enableTexcoord0</name>
+        <qualifiedname>castor3d::PipelineFlags::enableTexcoord0</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="180" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dd9/a05012_1aff1db41db8760619a29d81e155269348" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::PipelineFlags::enableTexcoord1</definition>
+        <argsstring>() const</argsstring>
+        <name>enableTexcoord1</name>
+        <qualifiedname>castor3d::PipelineFlags::enableTexcoord1</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="181" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dd9/a05012_1af87b549837d33a8aca11aa0468b73dd2" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::PipelineFlags::enableTexcoord2</definition>
+        <argsstring>() const</argsstring>
+        <name>enableTexcoord2</name>
+        <qualifiedname>castor3d::PipelineFlags::enableTexcoord2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="182" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dd9/a05012_1a5c0f654138450e2234066f582ee58086" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::PipelineFlags::enableTexcoord3</definition>
+        <argsstring>() const</argsstring>
+        <name>enableTexcoord3</name>
+        <qualifiedname>castor3d::PipelineFlags::enableTexcoord3</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="183" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dd9/a05012_1ac8fb5bc3df84595ada27d0ba241e2732" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::PipelineFlags::enableTextures</definition>
+        <argsstring>() const</argsstring>
+        <name>enableTextures</name>
+        <qualifiedname>castor3d::PipelineFlags::enableTextures</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="185" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dd9/a05012_1a7545bc98b30cb4c53943372d2f2f561d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::PipelineFlags::enableVertexID</definition>
+        <argsstring>() const</argsstring>
+        <name>enableVertexID</name>
+        <qualifiedname>castor3d::PipelineFlags::enableVertexID</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="186" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dd9/a05012_1a0173397498f7ed1f47b1109a66763821" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::PipelineFlags::enableInstantiation</definition>
+        <argsstring>() const</argsstring>
+        <name>enableInstantiation</name>
+        <qualifiedname>castor3d::PipelineFlags::enableInstantiation</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="187" column="14"/>
+        <referencedby refid="d9/df5/a01574_1ab7f5fc0e24fc4cc72adb2c9bab6570a7" compoundref="d6/d83/a01544" startline="83" endline="95">castor3d::shader::getNodeId</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="db/dd9/a05012_1aa014a6d6c10677c427d306e4643b210c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::PipelineFlags::enableParallaxOcclusionMapping</definition>
+        <argsstring>(PassComponentRegister const &amp;passComponents) const</argsstring>
+        <name>enableParallaxOcclusionMapping</name>
+        <qualifiedname>castor3d::PipelineFlags::enableParallaxOcclusionMapping</qualifiedname>
+        <param>
+          <type><ref refid="d5/d35/a03716" kindref="compound">PassComponentRegister</ref> const &amp;</type>
+          <declname>passComponents</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="188" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dd9/a05012_1affc3c81b14d4401f1001ee409ccf0753" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::PipelineFlags::enableParallaxOcclusionMappingOne</definition>
+        <argsstring>(PassComponentRegister const &amp;passComponents) const</argsstring>
+        <name>enableParallaxOcclusionMappingOne</name>
+        <qualifiedname>castor3d::PipelineFlags::enableParallaxOcclusionMappingOne</qualifiedname>
+        <param>
+          <type><ref refid="d5/d35/a03716" kindref="compound">PassComponentRegister</ref> const &amp;</type>
+          <declname>passComponents</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="189" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dd9/a05012_1a26f93b5a6ea94ea045c4c1285b56fb85" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::PipelineFlags::enableVelocity</definition>
+        <argsstring>() const</argsstring>
+        <name>enableVelocity</name>
+        <qualifiedname>castor3d::PipelineFlags::enableVelocity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="190" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dd9/a05012_1a84cfb5d9f9a378cc1ce10da65ab661e3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::PipelineFlags::hasFog</definition>
+        <argsstring>() const</argsstring>
+        <name>hasFog</name>
+        <qualifiedname>castor3d::PipelineFlags::hasFog</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="192" column="14"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Pipeline flags. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::PipelineFlags</label>
+        <link refid="db/dd9/a05012"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::PipelineHiHashDetails</label>
+        <link refid="d7/d8a/a05004"/>
+      </node>
+      <node id="3">
+        <label>castor3d::PipelineLoHashDetails</label>
+        <link refid="d6/df3/a05008"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="6">
+        <label>K</label>
+      </node>
+      <node id="3">
+        <label>castor3d::PassComponentCombine</label>
+        <link refid="d0/d9f/a03152"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>flags</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::PipelineFlags</label>
+        <link refid="db/dd9/a05012"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="9" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::PipelineHiHashDetails</label>
+        <link refid="d7/d8a/a05004"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>components</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>textures</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>castor3d::PipelineLoHashDetails</label>
+        <link refid="d6/df3/a05008"/>
+      </node>
+      <node id="7">
+        <label>castor3d::TextureCombine</label>
+        <link refid="de/d0b/a03040"/>
+        <childnode refid="8" relation="usage">
+          <edgelabel>flags</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>std::set&lt; PassComponentFlag &gt;</label>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; PassComponentFlag &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>std::set&lt; PassComponentTextureFlag &gt;</label>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; PassComponentTextureFlag &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>std::set&lt; K &gt;</label>
+        <childnode refid="6" relation="usage">
+          <edgelabel>keys</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/PipelineFlags.hpp" line="86" column="1" bodyfile="Render/PipelineFlags.hpp" bodystart="89" bodyend="349"/>
+    <listofallmembers>
+      <member refid="db/dd9/a05012_1a0831b5262611024fcac18f42f7a29f92" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>alphaBlendMode</name></member>
+      <member refid="d7/d8a/a05004_1ae1caa64c9d99c801e3cbb0336c100b85" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>alphaFunc</name></member>
+      <member refid="db/dd9/a05012_1aab051b1ee46ace763681dfea200198d2" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>colourBlendMode</name></member>
+      <member refid="d7/d8a/a05004_1a06aa85d79eda2367ce61a2f2748509f9" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>components</name></member>
+      <member refid="db/dd9/a05012_1a129ef5e30a2a18a7ddf698d2653d20e3" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>enableColours</name></member>
+      <member refid="db/dd9/a05012_1ad4957e52c63dfd963c4e3c2d63606939" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>enableIndices</name></member>
+      <member refid="db/dd9/a05012_1a0173397498f7ed1f47b1109a66763821" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>enableInstantiation</name></member>
+      <member refid="db/dd9/a05012_1a0e7fa4c8c7c54d2e85db48513026ce2c" prot="private" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>enableNonTexcoord</name></member>
+      <member refid="db/dd9/a05012_1a9d6e964ef16fc5a6e10a79a2bdfa85a3" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>enableNormal</name></member>
+      <member refid="db/dd9/a05012_1aa014a6d6c10677c427d306e4643b210c" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>enableParallaxOcclusionMapping</name></member>
+      <member refid="db/dd9/a05012_1affc3c81b14d4401f1001ee409ccf0753" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>enableParallaxOcclusionMappingOne</name></member>
+      <member refid="db/dd9/a05012_1a70f7d35c8ad3d796a971a4fe74b2aabf" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>enablePassMasks</name></member>
+      <member refid="db/dd9/a05012_1a6358ad4115fb9be3538993739ffd6eda" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>enablePosition</name></member>
+      <member refid="db/dd9/a05012_1a0ec363ab35174679b0b744b1f0be1dcd" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>enableTangentSpace</name></member>
+      <member refid="db/dd9/a05012_1a0976500493be244d080f5db0e87ba3c2" prot="private" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>enableTexcoord</name></member>
+      <member refid="db/dd9/a05012_1a022949b08e4f0c712ca05d69faa56cc3" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>enableTexcoord0</name></member>
+      <member refid="db/dd9/a05012_1aff1db41db8760619a29d81e155269348" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>enableTexcoord1</name></member>
+      <member refid="db/dd9/a05012_1af87b549837d33a8aca11aa0468b73dd2" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>enableTexcoord2</name></member>
+      <member refid="db/dd9/a05012_1a5c0f654138450e2234066f582ee58086" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>enableTexcoord3</name></member>
+      <member refid="db/dd9/a05012_1a725f98fc29ca2d456b764e95b3c531e9" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>enableTexcoords</name></member>
+      <member refid="db/dd9/a05012_1ac8fb5bc3df84595ada27d0ba241e2732" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>enableTextures</name></member>
+      <member refid="db/dd9/a05012_1a26f93b5a6ea94ea045c4c1285b56fb85" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>enableVelocity</name></member>
+      <member refid="db/dd9/a05012_1a7545bc98b30cb4c53943372d2f2f561d" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>enableVertexID</name></member>
+      <member refid="db/dd9/a05012_1a05ff7b2da7285e496faa61e296b89ac2" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>enableVertexInput</name></member>
+      <member refid="db/dd9/a05012_1aa92fdf599f942761918262d5f4379386" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>forceTexCoords</name></member>
+      <member refid="db/dd9/a05012_1a1a8282387718c1bbd33814a55b02b65a" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>getGlobalIlluminationFlags</name></member>
+      <member refid="db/dd9/a05012_1a31423099c0b2e464dd6bbf45fb236aa9" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>getShadowFlags</name></member>
+      <member refid="db/dd9/a05012_1a5e71a7d11ea746adabefe0525dab212c" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>hasDiffuseGI</name></member>
+      <member refid="db/dd9/a05012_1a1eeb01bd4db225b2bca8e5e03af8c68a" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>hasFlag</name></member>
+      <member refid="db/dd9/a05012_1a84cfb5d9f9a378cc1ce10da65ab661e3" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>hasFog</name></member>
+      <member refid="db/dd9/a05012_1aced74e5bafd87c8d16f3cdf6d904c8fa" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>hasInvertNormals</name></member>
+      <member refid="db/dd9/a05012_1a43d982fe99b1cf074bfcd02ca9924591" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>hasMap</name></member>
+      <member refid="db/dd9/a05012_1acd8b91d6e450dcd43e44372e1cf2660b" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>hasSkinData</name></member>
+      <member refid="db/dd9/a05012_1a52d54f489ec8545671d6ff6a2ae39e4e" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>hasSubmeshData</name></member>
+      <member refid="db/dd9/a05012_1a77b97a0fd7228432acdb5e748333bd54" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>hasWorldPosInputs</name></member>
+      <member refid="db/dd9/a05012_1a150b8f0e9f123261814672ebeba612de" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>isBillboard</name></member>
+      <member refid="d7/d8a/a05004_1a62d5a49b36d90f5d0f4cb8ef2333f6f7" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>m_programFlags</name></member>
+      <member refid="db/dd9/a05012_1a1dfad853886ec783dc12f49701632150" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>m_sceneFlags</name></member>
+      <member refid="d7/d8a/a05004_1a8e1dc2ee4bc6e7f843caf6a6cf8e0191" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>m_shaderFlags</name></member>
+      <member refid="d7/d8a/a05004_1a6491d94e45fbbfe66321f03958829c63" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>m_submeshFlags</name></member>
+      <member refid="d6/df3/a05008_1aee7ca1762b576e2c122e6e526a12192a" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>morphTargetsOffset</name></member>
+      <member refid="d7/d8a/a05004_1acbd79cf0102ba557c72f5f917619a68f" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>passLayerIndex</name></member>
+      <member refid="d7/d8a/a05004_1a0b69d032d38ce594520c4f0b7246ec32" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>passType</name></member>
+      <member refid="db/dd9/a05012_1a0d59a3d9de048c7a8b6a9c6e3b1f49ca" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>patchVertices</name></member>
+      <member refid="db/dd9/a05012_1a4ac780d671fa6d39bbe94191e418ba45" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>PipelineFlags</name></member>
+      <member refid="db/dd9/a05012_1a9d3970146614e351d764f883a7a7e994" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>PipelineFlags</name></member>
+      <member refid="db/dd9/a05012_1aa8839ec185bbbd295c94f80cbe82fdf5" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>PipelineFlags</name></member>
+      <member refid="d7/d8a/a05004_1a39f38742b0e9cf94c86d0e6b86b6460a" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>PipelineHiHashDetails</name></member>
+      <member refid="d6/df3/a05008_1af0957477b80ff27f15e16c0d862b48f7" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>PipelineLoHashDetails</name></member>
+      <member refid="db/dd9/a05012_1a98434d111c8a331f820f9e1366c15ca8" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>renderPassType</name></member>
+      <member refid="d7/d8a/a05004_1a41047dbde3b9b3a4368e76b012bc491b" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>textures</name></member>
+      <member refid="db/dd9/a05012_1a82e267d99f0d0f3103eb76e4ab1a22b2" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>topology</name></member>
+      <member refid="db/dd9/a05012_1ab473bf637e917d885d5b787f55f33b38" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>usesColour</name></member>
+      <member refid="db/dd9/a05012_1ab2508e03cecb0fde81186df83ead3c47" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>usesGeometry</name></member>
+      <member refid="db/dd9/a05012_1af3684ae5cc6d57d11d5f5a2804789379" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>usesMesh</name></member>
+      <member refid="db/dd9/a05012_1a178a4151e9f0021a58024b5b63158171" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>usesOpacity</name></member>
+      <member refid="db/dd9/a05012_1a946e8b61a4b98d17536c74cae50b93b7" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>usesTask</name></member>
+      <member refid="db/dd9/a05012_1ab2a066c7947a505a36410a7ba259cc65" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>usesTessellation</name></member>
+      <member refid="db/dd9/a05012_1aee50d56db636b1aa1db5a4ef625bd737" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>usesViewSpace</name></member>
+      <member refid="db/dd9/a05012_1a451505ae797dd5838163f8802edb4a71" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>usesWorldSpace</name></member>
+      <member refid="db/dd9/a05012_1adb94e6454a259773115bcf5fca3c7670" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>writeDepth</name></member>
+      <member refid="db/dd9/a05012_1a4e9d74a5d8b45061e29ab64dfc45e02e" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>writeEnvironmentMap</name></member>
+      <member refid="db/dd9/a05012_1a2cc7249e990cc287925f51dd2fc9b568" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>writePicking</name></member>
+      <member refid="db/dd9/a05012_1a6f66e212153662075dfb531535a1ab97" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>writeShadowMap</name></member>
+      <member refid="db/dd9/a05012_1aa2ea4fdd23b2f04fcf25b837cacbc779" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>writeShadowRSM</name></member>
+      <member refid="db/dd9/a05012_1a9b3f56d5aff60c0810e0b68ceca2abe0" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>writeShadowVSM</name></member>
+      <member refid="db/dd9/a05012_1ae1107a13e68031773c41436c3b93bd2e" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>writeVelocity</name></member>
+      <member refid="db/dd9/a05012_1a15562da594bdeda18286af08250d8b7a" prot="public" virt="non-virtual"><scope>castor3d::PipelineFlags</scope><name>writeVisibility</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

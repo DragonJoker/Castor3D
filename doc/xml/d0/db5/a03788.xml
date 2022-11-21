@@ -1,0 +1,191 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d0/db5/a03788" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::shader::PhongReflectionModel</compoundname>
+    <basecompoundref refid="d8/d17/a06068" prot="public" virt="non-virtual">castor3d::shader::ReflectionModel</basecompoundref>
+    <includes local="no">GlslPhongReflection.hpp</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d0/db5/a03788_1a91c07fcf824ae1175c1c84c1515fc3ad" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::PhongReflectionModel::PhongReflectionModel</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, Utils &amp;utils, uint32_t &amp;envMapBinding, uint32_t envMapSet)</argsstring>
+        <name>PhongReflectionModel</name>
+        <qualifiedname>castor3d::shader::PhongReflectionModel::PhongReflectionModel</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/da4/a06136" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>envMapBinding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>envMapSet</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/Shaders/GlslPhongReflection.hpp" line="17" column="9"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d0/db5/a03788_1a019fbe4cc3a77e258d14e28a564f3b83" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::PhongReflectionModel::doAdjustAmbient</definition>
+        <argsstring>(sdw::Vec3 &amp;ambient) const override</argsstring>
+        <name>doAdjustAmbient</name>
+        <qualifiedname>castor3d::shader::PhongReflectionModel::doAdjustAmbient</qualifiedname>
+        <reimplements refid="d8/d17/a06068_1a5f68297ccf2adcbde34f64cf8e36b0a5">doAdjustAmbient</reimplements>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>ambient</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/Shaders/GlslPhongReflection.hpp" line="23" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/db5/a03788_1a00e19bf73cd2b2455aed133a3c30fad9" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::PhongReflectionModel::doAdjustAlbedo</definition>
+        <argsstring>(sdw::Vec3 &amp;albedo) const override</argsstring>
+        <name>doAdjustAlbedo</name>
+        <qualifiedname>castor3d::shader::PhongReflectionModel::doAdjustAlbedo</qualifiedname>
+        <reimplements refid="d8/d17/a06068_1a8402c9d34098578beb2df3905baa1c67">doAdjustAlbedo</reimplements>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>albedo</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/Shaders/GlslPhongReflection.hpp" line="24" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/db5/a03788_1a8dcb32a1e2e14662187232d8a826302c" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::PhongReflectionModel::doDeclareComputeReflEnvMaps</definition>
+        <argsstring>() override</argsstring>
+        <name>doDeclareComputeReflEnvMaps</name>
+        <qualifiedname>castor3d::shader::PhongReflectionModel::doDeclareComputeReflEnvMaps</qualifiedname>
+        <reimplements refid="d8/d17/a06068_1a0d4ff5b964eec02d0b41a75d0620428a">doDeclareComputeReflEnvMaps</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/Shaders/GlslPhongReflection.hpp" line="25" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/db5/a03788_1a8e67f66510b47f105a70e2a1dce25f48" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::PhongReflectionModel::doDeclareComputeSpecularReflEnvMaps</definition>
+        <argsstring>() override</argsstring>
+        <name>doDeclareComputeSpecularReflEnvMaps</name>
+        <qualifiedname>castor3d::shader::PhongReflectionModel::doDeclareComputeSpecularReflEnvMaps</qualifiedname>
+        <reimplements refid="d8/d17/a06068_1aa0f0fae6cf9912bc72aa7655ce9898c3">doDeclareComputeSpecularReflEnvMaps</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/Shaders/GlslPhongReflection.hpp" line="26" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/db5/a03788_1ad8aa81b9bc25789e62646d7ca138ef14" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::PhongReflectionModel::doDeclareComputeRefrEnvMaps</definition>
+        <argsstring>() override</argsstring>
+        <name>doDeclareComputeRefrEnvMaps</name>
+        <qualifiedname>castor3d::shader::PhongReflectionModel::doDeclareComputeRefrEnvMaps</qualifiedname>
+        <reimplements refid="d8/d17/a06068_1abe0d52e2bd2c1192ee5e8732e365f054">doDeclareComputeRefrEnvMaps</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/Shaders/GlslPhongReflection.hpp" line="27" column="6"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::PhongReflectionModel</label>
+        <link refid="d0/db5/a03788"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::shader::ReflectionModel</label>
+        <link refid="d8/d17/a06068"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::shader::PhongReflectionModel</label>
+        <link refid="d0/db5/a03788"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::shader::ReflectionModel</label>
+        <link refid="d8/d17/a06068"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_utils</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::shader::Utils</label>
+        <link refid="d3/da4/a06136"/>
+      </node>
+    </collaborationgraph>
+    <location file="Material/Pass/Phong/Shaders/GlslPhongReflection.hpp" line="13" column="1" bodyfile="Material/Pass/Phong/Shaders/GlslPhongReflection.hpp" bodystart="15" bodyend="28"/>
+    <listofallmembers>
+      <member refid="d8/d17/a06068_1afdfa3fa7100de19b4cb1ce1287ba229b" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>computeCombined</name></member>
+      <member refid="d8/d17/a06068_1a1d5178593d1ce2a07e562ab00247ceae" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>computeCombined</name></member>
+      <member refid="d8/d17/a06068_1af8477b6bdb68264bd9efcc9a32e45cc5" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>computeIncident</name></member>
+      <member refid="d8/d17/a06068_1aa34d98ba0f8786d19d41a516797e0180" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>computeReflections</name></member>
+      <member refid="d8/d17/a06068_1a92bb7f8a94898cf2a545ab50a9461980" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>computeRefractions</name></member>
+      <member refid="d8/d17/a06068_1ab2585a5602912c735611268e28991e36" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>computeScreenSpace</name></member>
+      <member refid="d0/db5/a03788_1a00e19bf73cd2b2455aed133a3c30fad9" prot="private" virt="virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>doAdjustAlbedo</name></member>
+      <member refid="d0/db5/a03788_1a019fbe4cc3a77e258d14e28a564f3b83" prot="private" virt="virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>doAdjustAmbient</name></member>
+      <member refid="d8/d17/a06068_1acd65511b9a8ce1dd5a24a30a6477bdad" prot="protected" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>doComputeRefrEnvMaps</name></member>
+      <member refid="d0/db5/a03788_1a8dcb32a1e2e14662187232d8a826302c" prot="private" virt="virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>doDeclareComputeReflEnvMaps</name></member>
+      <member refid="d0/db5/a03788_1ad8aa81b9bc25789e62646d7ca138ef14" prot="private" virt="virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>doDeclareComputeRefrEnvMaps</name></member>
+      <member refid="d0/db5/a03788_1a8e67f66510b47f105a70e2a1dce25f48" prot="private" virt="virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>doDeclareComputeSpecularReflEnvMaps</name></member>
+      <member refid="d8/d17/a06068_1a45aa8674370ca23436611a8dd779d839" prot="protected" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>m_computeDeferred</name></member>
+      <member refid="d8/d17/a06068_1aee7d77422033dfb01497ba196cdef222" prot="protected" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>m_computeForward</name></member>
+      <member refid="d8/d17/a06068_1a13a8e54e825737ebff8c2ff6b084af0b" prot="protected" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>m_computeReflEnvMaps</name></member>
+      <member refid="d8/d17/a06068_1a8b5f2cf6beb19134ad1827c3ad91b9ca" prot="protected" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>m_computeRefrEnvMaps</name></member>
+      <member refid="d8/d17/a06068_1a3544a403387ed982732736c7148493d5" prot="protected" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>m_computeRefrSceneMap</name></member>
+      <member refid="d8/d17/a06068_1a4dacf94e9e976b47e13deed31611e60e" prot="protected" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>m_computeScreenSpace</name></member>
+      <member refid="d8/d17/a06068_1ae618404a9382d17fe595599e8e080327" prot="protected" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>m_computeSheenReflEnvMaps</name></member>
+      <member refid="d8/d17/a06068_1af32353800e48f972998b0e014e47a8ab" prot="protected" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>m_computeSpecularReflEnvMaps</name></member>
+      <member refid="d8/d17/a06068_1a7efe38f9db325fde8d26111ac4d865ba" prot="protected" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>m_hasIblSupport</name></member>
+      <member refid="d8/d17/a06068_1a6295894be3ea19ea49a9ce8c8ca01474" prot="protected" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>m_traceScreenSpace</name></member>
+      <member refid="d8/d17/a06068_1aca7e4f987a800a07a60e70823d3c227b" prot="protected" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>m_utils</name></member>
+      <member refid="d8/d17/a06068_1ae525d4f79a6aeb9c3283ad34fa60400d" prot="protected" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>m_writer</name></member>
+      <member refid="d0/db5/a03788_1a91c07fcf824ae1175c1c84c1515fc3ad" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>PhongReflectionModel</name></member>
+      <member refid="d8/d17/a06068_1a6c8c6c2966a64329a71c5c814917fda2" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>ReflectionModel</name></member>
+      <member refid="d8/d17/a06068_1ab9b0bb3765e3bdf38bdacf7bef6b4b20" prot="public" virt="non-virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>traceScreenSpace</name></member>
+      <member refid="d8/d17/a06068_1ab741a9bc5a596e2f5684120b015bd578" prot="public" virt="virtual"><scope>castor3d::shader::PhongReflectionModel</scope><name>~ReflectionModel</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

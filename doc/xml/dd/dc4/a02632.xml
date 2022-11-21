@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dd/dc4/a02632" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ChunkTyper&lt; SkeletonNode &gt;</compoundname>
+    <includes local="no">BinarySkeletonNode.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="dd/dc4/a02632_1abd0f4593086476d07e2246f9d8e6ff9d" prot="public" static="yes" mutable="no">
+        <type><ref refid="d3/d22/a01572_1a742783d4e4b7354fac3e375ae107414d" kindref="member">ChunkType</ref> const</type>
+        <definition>ChunkType const castor3d::ChunkTyper&lt; SkeletonNode &gt;::Value</definition>
+        <argsstring></argsstring>
+        <name>Value</name>
+        <qualifiedname>castor3d::ChunkTyper&lt; SkeletonNode &gt;::Value</qualifiedname>
+        <initializer>= <ref refid="d3/d22/a01572_1a742783d4e4b7354fac3e375ae107414da6567e76763dfb5c0a1ec2c34d70a19b3" kindref="member">ChunkType::eSkeletonNode</ref></initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinarySkeletonNode.hpp" line="25" column="24" bodyfile="Binary/BinarySkeletonNode.hpp" bodystart="25" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Helper structure to find ChunkType from a type. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="remark"><para>Specialisation for <ref refid="dd/db3/a04416" kindref="compound">SkeletonNode</ref>. </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <location file="Binary/BinarySkeletonNode.hpp" line="23" column="1" bodyfile="Binary/BinarySkeletonNode.hpp" bodystart="24" bodyend="26"/>
+    <listofallmembers>
+      <member refid="dd/dc4/a02632_1abd0f4593086476d07e2246f9d8e6ff9d" prot="public" virt="non-virtual"><scope>castor3d::ChunkTyper&lt; SkeletonNode &gt;</scope><name>Value</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

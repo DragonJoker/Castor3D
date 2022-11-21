@@ -52,7 +52,8 @@ var menudata={children:[
 {text:"v",url:"namespacemembers_v.html#index_v"},
 {text:"w",url:"namespacemembers_w.html#index_w"}]},
 {text:"Functions",url:"namespacemembers_func.html",children:[
-{text:"b",url:"namespacemembers_func.html#index_b"},
+{text:"a",url:"namespacemembers_func.html#index_a"},
+{text:"b",url:"namespacemembers_func_b.html#index_b"},
 {text:"c",url:"namespacemembers_func_c.html#index_c"},
 {text:"f",url:"namespacemembers_func_f.html#index_f"},
 {text:"g",url:"namespacemembers_func_g.html#index_g"},
@@ -97,7 +98,9 @@ var menudata={children:[
 {text:"q",url:"namespacemembers_type_q.html#index_q"},
 {text:"r",url:"namespacemembers_type_r.html#index_r"},
 {text:"s",url:"namespacemembers_type_s.html#index_s"},
-{text:"t",url:"namespacemembers_type_t.html#index_t"}]},
+{text:"t",url:"namespacemembers_type_t.html#index_t"},
+{text:"u",url:"namespacemembers_type_u.html#index_u"},
+{text:"v",url:"namespacemembers_type_v.html#index_v"}]},
 {text:"Enumerations",url:"namespacemembers_enum.html",children:[
 {text:"a",url:"namespacemembers_enum.html#index_a"},
 {text:"b",url:"namespacemembers_enum.html#index_b"},
@@ -178,6 +181,7 @@ var menudata={children:[
 {text:"v",url:"functions_func_v.html#index_v"},
 {text:"w",url:"functions_func_w.html#index_w"},
 {text:"y",url:"functions_func_y.html#index_y"},
+{text:"z",url:"functions_func_z.html#index_z"},
 {text:"~",url:"functions_func_~.html#index__7E"}]},
 {text:"Variables",url:"functions_vars.html",children:[
 {text:"a",url:"functions_vars.html#index_a"},
@@ -230,11 +234,8 @@ var menudata={children:[
 {text:"d",url:"functions_eval.html#index_d"},
 {text:"e",url:"functions_eval.html#index_e"},
 {text:"g",url:"functions_eval.html#index_g"},
-{text:"h",url:"functions_eval.html#index_h"},
 {text:"l",url:"functions_eval.html#index_l"},
-{text:"m",url:"functions_eval.html#index_m"},
-{text:"r",url:"functions_eval.html#index_r"},
-{text:"s",url:"functions_eval.html#index_s"}]},
+{text:"r",url:"functions_eval.html#index_r"}]},
 {text:"Related Functions",url:"functions_rela.html",children:[
 {text:"b",url:"functions_rela.html#index_b"},
 {text:"c",url:"functions_rela.html#index_c"},

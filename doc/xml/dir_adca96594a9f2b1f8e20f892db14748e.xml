@@ -2,8 +2,8 @@
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="dir_adca96594a9f2b1f8e20f892db14748e" kind="dir">
     <compoundname>Scene/Animation/SceneNode</compoundname>
-    <innerfile refid="d5/d67/a01070">SceneNodeAnimationInstance.hpp</innerfile>
-    <innerfile refid="d9/d7c/a01073">SceneNodeAnimationModule.hpp</innerfile>
+    <innerfile refid="dd/d95/a01247">SceneNodeAnimationInstance.hpp</innerfile>
+    <innerfile refid="d4/d22/a01250">SceneNodeAnimationModule.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d0/d8b/a05048" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ExtensionStruct</compoundname>
+    <includes local="no">RenderDevice.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d0/d8b/a05048_1a5fa72f7da46681dad4f5ce5332be5273" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string castor3d::ExtensionStruct::extName</definition>
+        <argsstring></argsstring>
+        <name>extName</name>
+        <qualifiedname>castor3d::ExtensionStruct::extName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="35" column="13" bodyfile="Render/RenderDevice.hpp" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d8b/a05048_1af6bd7a2e6eed1b8ed92fe261b0692f85" prot="public" static="no" mutable="no">
+        <type><ref refid="db/df9/a05044" kindref="compound">VkStructure</ref> *</type>
+        <definition>VkStructure* castor3d::ExtensionStruct::extStruct</definition>
+        <argsstring></argsstring>
+        <name>extStruct</name>
+        <qualifiedname>castor3d::ExtensionStruct::extStruct</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="36" column="14" bodyfile="Render/RenderDevice.hpp" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::ExtensionStruct</label>
+        <link refid="d0/d8b/a05048"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>extName</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>extStruct</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::VkStructure</label>
+        <link refid="db/df9/a05044"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>pNext</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+      <node id="2">
+        <label>std::string</label>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/RenderDevice.hpp" line="33" column="1" bodyfile="Render/RenderDevice.hpp" bodystart="34" bodyend="37"/>
+    <listofallmembers>
+      <member refid="d0/d8b/a05048_1a5fa72f7da46681dad4f5ce5332be5273" prot="public" virt="non-virtual"><scope>castor3d::ExtensionStruct</scope><name>extName</name></member>
+      <member refid="d0/d8b/a05048_1af6bd7a2e6eed1b8ed92fe261b0692f85" prot="public" virt="non-virtual"><scope>castor3d::ExtensionStruct</scope><name>extStruct</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

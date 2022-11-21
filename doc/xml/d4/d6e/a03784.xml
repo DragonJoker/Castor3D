@@ -1,0 +1,354 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d4/d6e/a03784" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::shader::BlinnPhongLightingModel</compoundname>
+    <basecompoundref refid="dd/d5a/a03780" prot="public" virt="non-virtual">castor3d::shader::PhongLightingModel</basecompoundref>
+    <includes local="no">GlslPhongLighting.hpp</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d4/d6e/a03784_1a0ad69f4520003f28f5a14942108938a7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::BlinnPhongLightingModel::BlinnPhongLightingModel</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, Materials const &amp;materials, Utils &amp;utils, BRDFHelpers &amp;brdf, ShadowOptions shadowOptions, SssProfiles const *sssProfiles, bool enableVolumetric)</argsstring>
+        <name>BlinnPhongLightingModel</name>
+        <qualifiedname>castor3d::shader::BlinnPhongLightingModel::BlinnPhongLightingModel</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/dc9/a06044" kindref="compound">Materials</ref> const &amp;</type>
+          <declname>materials</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/da4/a06136" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d71/a05988" kindref="compound">BRDFHelpers</ref> &amp;</type>
+          <declname>brdf</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/db3/a06144" kindref="compound">ShadowOptions</ref></type>
+          <declname>shadowOptions</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d0a/a06084" kindref="compound">SssProfiles</ref> const *</type>
+          <declname>sssProfiles</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enableVolumetric</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/Shaders/GlslPhongLighting.hpp" line="189" column="9"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d4/d6e/a03784_1ab21d721f05c885df469068fb66d537d3" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d9/df5/a01574_1a69009a36ab335c9cd7d4eed926a70037" kindref="member">LightingModelPtr</ref></type>
+        <definition>static C3D_API LightingModelPtr castor3d::shader::BlinnPhongLightingModel::create</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, Materials const &amp;materials, Utils &amp;utils, BRDFHelpers &amp;brdf, ShadowOptions shadowOptions, SssProfiles const *sssProfiles, bool enableVolumetric)</argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::shader::BlinnPhongLightingModel::create</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/dc9/a06044" kindref="compound">Materials</ref> const &amp;</type>
+          <declname>materials</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/da4/a06136" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d71/a05988" kindref="compound">BRDFHelpers</ref> &amp;</type>
+          <declname>brdf</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/db3/a06144" kindref="compound">ShadowOptions</ref></type>
+          <declname>shadowOptions</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d0a/a06084" kindref="compound">SssProfiles</ref> const *</type>
+          <declname>sssProfiles</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enableVolumetric</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/Shaders/GlslPhongLighting.hpp" line="197" column="33"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d6e/a03784_1afc8dec2a5cfe14be3ea720eaab3e06ca" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String</type>
+        <definition>static C3D_API castor::String castor3d::shader::BlinnPhongLightingModel::getName</definition>
+        <argsstring>()</argsstring>
+        <name>getName</name>
+        <qualifiedname>castor3d::shader::BlinnPhongLightingModel::getName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/Shaders/GlslPhongLighting.hpp" line="204" column="31"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::BlinnPhongLightingModel</label>
+        <link refid="d4/d6e/a03784"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::shader::LightingModel</label>
+        <link refid="d6/d18/a06036"/>
+      </node>
+      <node id="2">
+        <label>castor3d::shader::PhongLightingModel</label>
+        <link refid="dd/d5a/a03780"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="5">
+        <label>castor3d::shader::BufferT&lt; Material &gt;</label>
+        <link refid="d5/d2a/a05996"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+        <childnode refid="12" relation="template-instance">
+          <edgelabel>&lt; Material &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>T</label>
+      </node>
+      <node id="1">
+        <label>castor3d::shader::BlinnPhongLightingModel</label>
+        <link refid="d4/d6e/a03784"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::shader::BufferBase</label>
+        <link refid="d4/dc4/a05992"/>
+        <childnode refid="7" relation="usage">
+          <edgelabel>m_ssbo</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>m_variableName</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>castor3d::shader::BufferT&lt; DataT &gt;</label>
+        <link refid="d5/d2a/a05996"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::shader::LightingModel</label>
+        <link refid="d6/d18/a06036"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_materials</edgelabel>
+        </childnode>
+        <childnode refid="13" relation="usage">
+          <edgelabel>m_utils</edgelabel>
+        </childnode>
+        <childnode refid="14" relation="usage">
+          <edgelabel>m_type</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>m_ssbo</edgelabel>
+        </childnode>
+        <childnode refid="15" relation="usage">
+          <edgelabel>m_tbo</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>m_prefix</edgelabel>
+        </childnode>
+        <childnode refid="16" relation="usage">
+          <edgelabel>m_shadowModel</edgelabel>
+        </childnode>
+        <childnode refid="19" relation="usage">
+          <edgelabel>m_sssTransmittance</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::shader::Materials</label>
+        <link refid="d1/dc9/a06044"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::shader::PhongLightingModel</label>
+        <link refid="dd/d5a/a03780"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>m_prefix</edgelabel>
+        </childnode>
+      </node>
+      <node id="17">
+        <label>castor3d::shader::Shadow</label>
+        <link refid="d1/db6/a06072"/>
+      </node>
+      <node id="20">
+        <label>castor3d::shader::SssTransmittance</label>
+        <link refid="db/d46/a06088"/>
+      </node>
+      <node id="13">
+        <label>castor3d::shader::Utils</label>
+        <link refid="d3/da4/a06136"/>
+      </node>
+      <node id="16">
+        <label>std::shared_ptr&lt; castor3d::shader::Shadow &gt;</label>
+        <childnode refid="17" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+        <childnode refid="18" relation="template-instance">
+          <edgelabel>&lt; castor3d::shader::Shadow &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="19">
+        <label>std::shared_ptr&lt; castor3d::shader::SssTransmittance &gt;</label>
+        <childnode refid="20" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+        <childnode refid="18" relation="template-instance">
+          <edgelabel>&lt; castor3d::shader::SssTransmittance &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+      <node id="18">
+        <label>std::shared_ptr&lt; T &gt;</label>
+        <childnode refid="9" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>std::string</label>
+        <childnode refid="11" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>std::unique_ptr&lt; T &gt;</label>
+        <childnode refid="9" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="15">
+        <label>std::unique_ptr&lt; sdw::RImageBufferRgba32 &gt;</label>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; sdw::RImageBufferRgba32 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>std::unique_ptr&lt; sdw::StorageBuffer &gt;</label>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; sdw::StorageBuffer &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="14">
+        <label>std::unique_ptr&lt; sdw::Struct &gt;</label>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; sdw::Struct &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Material/Pass/Phong/Shaders/GlslPhongLighting.hpp" line="185" column="1" bodyfile="Material/Pass/Phong/Shaders/GlslPhongLighting.hpp" bodystart="187" bodyend="205"/>
+    <listofallmembers>
+      <member refid="dd/d5a/a03780_1a170b5ecdcffaa45f9134ddc520e47b6b" prot="public" virt="virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>adjustDirectAmbient</name></member>
+      <member refid="dd/d5a/a03780_1aa07d70ef78837c444daac0a3b30bae75" prot="public" virt="virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>adjustDirectSpecular</name></member>
+      <member refid="d4/d6e/a03784_1a0ad69f4520003f28f5a14942108938a7" prot="public" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>BlinnPhongLightingModel</name></member>
+      <member refid="d6/d18/a06036_1a946c9afb12abcada072e86e961817661" prot="public" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>combine</name></member>
+      <member refid="d6/d18/a06036_1a7a748985c50ec371f09abc303cdbd3fd" prot="public" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>combine</name></member>
+      <member refid="dd/d5a/a03780_1a17ba194cefd94a3bc6ce19396c198539" prot="public" virt="virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>compute</name></member>
+      <member refid="dd/d5a/a03780_1a7c9913dc32350fef9e3219a406e88f52" prot="public" virt="virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>compute</name></member>
+      <member refid="dd/d5a/a03780_1a7b466b26fc7595314224231699b46073" prot="public" virt="virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>compute</name></member>
+      <member refid="d6/d18/a06036_1a01db8f30680a13ddb9a4553102e2567b" prot="public" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>computeCombined</name></member>
+      <member refid="d6/d18/a06036_1a1d4181a356bb0986f85a3afa4082dbef" prot="public" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>computeCombinedDiffuse</name></member>
+      <member refid="dd/d5a/a03780_1a03ea9d951800fea8c3515989b53ccc76" prot="public" virt="virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>computeDiffuse</name></member>
+      <member refid="dd/d5a/a03780_1a7b2f8eb143bdcbf7b050d85aaebe3954" prot="public" virt="virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>computeDiffuse</name></member>
+      <member refid="dd/d5a/a03780_1aff66c2a43959db2c56908d241d4acbf2" prot="public" virt="virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>computeDiffuse</name></member>
+      <member refid="d4/d6e/a03784_1ab21d721f05c885df469068fb66d537d3" prot="public" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>create</name></member>
+      <member refid="d6/d18/a06036_1ad7078e190a241d232a4a57dcec15d0da" prot="public" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>createDiffuseModel</name></member>
+      <member refid="d6/d18/a06036_1ac4da253f6fbd696ab58a06c7c12bf7eb" prot="public" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>createDiffuseModelT</name></member>
+      <member refid="d6/d18/a06036_1ac7f2a9e19c5c30ee29ca506d03321535" prot="public" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>createModel</name></member>
+      <member refid="d6/d18/a06036_1a3dc172977fa1373fc0495ff3f6f61a82" prot="public" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>createModel</name></member>
+      <member refid="d6/d18/a06036_1a43dbfd8d3b2dee181319d1ddce5f1287" prot="public" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>createModelT</name></member>
+      <member refid="d6/d18/a06036_1aa24840058a44d68dc0524f87f7b5b3cb" prot="public" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>declareDiffuseModel</name></member>
+      <member refid="d6/d18/a06036_1a0cc52dad90b5068bad9d341f2cabb0ea" prot="public" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>declareDirectionalModel</name></member>
+      <member refid="d6/d18/a06036_1a311bee3a27615b2cb051884164725877" prot="public" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>declareModel</name></member>
+      <member refid="d6/d18/a06036_1a10744331a5704a42668d96a4fe7ecaa1" prot="public" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>declarePointModel</name></member>
+      <member refid="d6/d18/a06036_1a9d2f3cd6795aa79d0f5a4e31de12e97d" prot="public" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>declareSpotModel</name></member>
+      <member refid="dd/d5a/a03780_1adceb660ca1f1a2e753f8db0f986b1e04" prot="protected" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>doComputeLight</name></member>
+      <member refid="dd/d5a/a03780_1ada3fe8a28175b3b123e048689c73ed06" prot="protected" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>doComputeLightDiffuse</name></member>
+      <member refid="d6/d18/a06036_1a078ef33656d17feb0bc301563131dd54" prot="protected" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>doDeclareDirectionalLightUbo</name></member>
+      <member refid="d6/d18/a06036_1a601b0d6adbf1d1cfe51140debba408a9" prot="protected" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>doDeclareGetBaseLight</name></member>
+      <member refid="d6/d18/a06036_1a581d0e6a5c217533e521488ae0309d3c" prot="protected" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>doDeclareGetCascadeFactors</name></member>
+      <member refid="d6/d18/a06036_1a47f393ce5b750d7a8132df92ede2eaab" prot="protected" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>doDeclareGetDirectionalLight</name></member>
+      <member refid="d6/d18/a06036_1aa639e3a479f852a8738a962669961f79" prot="protected" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>doDeclareGetPointLight</name></member>
+      <member refid="d6/d18/a06036_1a14e3657549948e3665c5b7f47bc0e2a2" prot="protected" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>doDeclareGetSpotLight</name></member>
+      <member refid="d6/d18/a06036_1ac2dc1856992461f592d5c2fe6161444d" prot="protected" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>doDeclareLightsBuffer</name></member>
+      <member refid="d6/d18/a06036_1af4625cc4704620632fb7cc920a18527e" prot="protected" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>doDeclarePointLightUbo</name></member>
+      <member refid="d6/d18/a06036_1afd671443970f1e4798d5707fce08a2a8" prot="protected" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>doDeclareSpotLightUbo</name></member>
+      <member refid="d6/d18/a06036_1a5b33578c25cb0eb3401590f772e13691" prot="protected" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>getBaseLight</name></member>
+      <member refid="d6/d18/a06036_1a9dce2a67af8cfaefa176a0c4068bea7b" prot="public" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>getDirectionalLight</name></member>
+      <member refid="dd/d5a/a03780_1a2822bb20f63376ec35b231f0c12f70fa" prot="public" virt="virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>getFinalTransmission</name></member>
+      <member refid="d4/d6e/a03784_1afc8dec2a5cfe14be3ea720eaab3e06ca" prot="public" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>getName</name></member>
+      <member refid="d6/d18/a06036_1a0b32c9c9d9666a7e01ac4490b007de09" prot="public" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>getPointLight</name></member>
+      <member refid="dd/d5a/a03780_1ab30a16c4b0cdb50ec842cdbd97ff8cb0" prot="public" virt="virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>getReflectionModel</name></member>
+      <member refid="d6/d18/a06036_1ab08881a2f6849c79d50c70320d65d82c" prot="public" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>getShadowModel</name></member>
+      <member refid="d6/d18/a06036_1add93c5e5787f7810a4c9375c27ae96e3" prot="public" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>getSpotLight</name></member>
+      <member refid="dd/d5a/a03780_1a63960916819ba45a7f17c36088ba1530" prot="public" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>isBlinnPhong</name></member>
+      <member refid="d6/d18/a06036_1a040360a4e657fcaf394096a0d97f0315" prot="public" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>LightingModel</name></member>
+      <member refid="dd/d5a/a03780_1a0fafd324f0574640cf8516d4f1195388" prot="public" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>m_computeDirectional</name></member>
+      <member refid="dd/d5a/a03780_1a658e84d053d20eba68222fdfb5c79668" prot="public" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>m_computeDirectionalDiffuse</name></member>
+      <member refid="dd/d5a/a03780_1abf52271dfdc0eaea4e6d8699b92be1c8" prot="public" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>m_computeLight</name></member>
+      <member refid="dd/d5a/a03780_1a7355865dd4ab92f91658dd2dd8bdc8c6" prot="public" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>m_computeLightDiffuse</name></member>
+      <member refid="dd/d5a/a03780_1a499ee928de4f4fac146dd9d1c2d58990" prot="public" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>m_computePoint</name></member>
+      <member refid="dd/d5a/a03780_1a27e78aaec0fcf808c76f436a71fcdb40" prot="public" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>m_computePointDiffuse</name></member>
+      <member refid="dd/d5a/a03780_1a25bd2bb50b289620dd717c8a956717bf" prot="public" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>m_computeSpot</name></member>
+      <member refid="dd/d5a/a03780_1af4b641b68494008274473f8b604f80f3" prot="public" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>m_computeSpotDiffuse</name></member>
+      <member refid="d6/d18/a06036_1ae1d302ee6ef967d87ded305060b82120" prot="protected" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>m_enableVolumetric</name></member>
+      <member refid="d6/d18/a06036_1a05823d225d40ae50737469729a128bca" prot="protected" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>m_getBaseLight</name></member>
+      <member refid="d6/d18/a06036_1a64689c5bb7ce2682e205cd001b5f6fd8" prot="protected" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>m_getCascadeFactors</name></member>
+      <member refid="d6/d18/a06036_1ab368de32c7f8f54ef2066cbb18dc199b" prot="protected" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>m_getDirectionalLight</name></member>
+      <member refid="d6/d18/a06036_1a98044cfa7b6795c534cc0f5382e3b694" prot="protected" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>m_getPointLight</name></member>
+      <member refid="d6/d18/a06036_1a22c68d438a913ae1437848af29e31e63" prot="protected" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>m_getSpotLight</name></member>
+      <member refid="d6/d18/a06036_1aa640956be672845c769c8127833993d3" prot="protected" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>m_getTileFactors</name></member>
+      <member refid="dd/d5a/a03780_1ae79d30cd20af8340b39bc2620aa2d256" prot="public" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>m_isBlinnPhong</name></member>
+      <member refid="d6/d18/a06036_1a6dd820a0a3dbb47a71024f49fd45a1bf" prot="protected" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>m_materials</name></member>
+      <member refid="dd/d5a/a03780_1afb6acc2da134bacec46128b178200abe" prot="public" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>m_prefix</name></member>
+      <member refid="d6/d18/a06036_1a3e9407685cf7ba55a752a27437c09a74" prot="protected" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>m_shadowModel</name></member>
+      <member refid="d6/d18/a06036_1ae9018f65dde3747697e9e00c6c39c78f" prot="protected" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>m_ssbo</name></member>
+      <member refid="d6/d18/a06036_1ad7a37427798d2c79b0ee95e8c713dea9" prot="protected" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>m_sssTransmittance</name></member>
+      <member refid="d6/d18/a06036_1a2a11c8a808450c5db734fe58007c5ad1" prot="protected" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>m_tbo</name></member>
+      <member refid="d6/d18/a06036_1adff9bdb8fb5bd4f7c6f1d4ce7af4edf1" prot="protected" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>m_type</name></member>
+      <member refid="d6/d18/a06036_1a9e5d3c9e33f06597c63d4c64b62bc564" prot="protected" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>m_utils</name></member>
+      <member refid="d6/d18/a06036_1a129490d8e4f0ea553f16dcaeb2b2c089" prot="protected" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>m_writer</name></member>
+      <member refid="dd/d5a/a03780_1a22548979c3ef3bef7a341ddc9716e951" prot="public" virt="non-virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>PhongLightingModel</name></member>
+      <member refid="d6/d18/a06036_1abe10ab0abda22bc960dc51b76be2c739" prot="public" virt="virtual"><scope>castor3d::shader::BlinnPhongLightingModel</scope><name>~LightingModel</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,436 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d8/d08/a03160" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::AttenuationComponent</compoundname>
+    <basecompoundref refid="d0/dcc/a03148" prot="public" virt="non-virtual">castor3d::BaseDataPassComponentT&lt; AttenuationData &gt;</basecompoundref>
+    <includes local="no">AttenuationComponent.hpp</includes>
+    <innerclass refid="d8/dec/a03164" prot="public">castor3d::AttenuationComponent::ComponentsShader</innerclass>
+    <innerclass refid="d8/d87/a03168" prot="public">castor3d::AttenuationComponent::MaterialShader</innerclass>
+    <innerclass refid="db/dc1/a03172" prot="public">castor3d::AttenuationComponent::Plugin</innerclass>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d8/d08/a03160_1a0b9f6228f7ce7c9fe4c0806d1262762b" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::AttenuationComponent::TypeName</definition>
+        <argsstring></argsstring>
+        <name>TypeName</name>
+        <qualifiedname>castor3d::AttenuationComponent::TypeName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Lighting/AttenuationComponent.hpp" line="118" column="37" bodyfile="Material/Pass/Component/Lighting/AttenuationComponent.hpp" bodystart="118" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d8/d08/a03160_1ac554f4c510172da052dcdeea0f183627" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>PassComponentPluginUPtr</type>
+        <definition>static PassComponentPluginUPtr castor3d::AttenuationComponent::createPlugin</definition>
+        <argsstring>(PassComponentRegister const &amp;passComponent)</argsstring>
+        <name>createPlugin</name>
+        <qualifiedname>castor3d::AttenuationComponent::createPlugin</qualifiedname>
+        <param>
+          <type><ref refid="d5/d35/a03716" kindref="compound">PassComponentRegister</ref> const &amp;</type>
+          <declname>passComponent</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Lighting/AttenuationComponent.hpp" line="89" column="32" bodyfile="Material/Pass/Component/Lighting/AttenuationComponent.hpp" bodystart="89" bodyend="92"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d8/d08/a03160_1a4352fd254aaca8dd66830c9297ea7d3c" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::AttenuationComponent::AttenuationComponent</definition>
+        <argsstring>(Pass &amp;pass)</argsstring>
+        <name>AttenuationComponent</name>
+        <qualifiedname>castor3d::AttenuationComponent::AttenuationComponent</qualifiedname>
+        <param>
+          <type><ref refid="d3/d86/a03732" kindref="compound">Pass</ref> &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Lighting/AttenuationComponent.hpp" line="94" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d08/a03160_1a12fe5ec40e9bfc58a07a831c70f27771" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::AttenuationComponent::accept</definition>
+        <argsstring>(PassVisitorBase &amp;vis) override</argsstring>
+        <name>accept</name>
+        <qualifiedname>castor3d::AttenuationComponent::accept</qualifiedname>
+        <reimplements refid="d8/d23/a03712_1a4e315225c20ace9097adfd65e8413e4f">accept</reimplements>
+        <param>
+          <type><ref refid="d6/db4/a03748" kindref="compound">PassVisitorBase</ref> &amp;</type>
+          <declname>vis</declname>
+        </param>
+        <briefdescription>
+<para><ref refid="d1/d5d/a03756" kindref="compound">PassVisitor</ref> acceptance function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>vis</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ... visitor. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Lighting/AttenuationComponent.hpp" line="96" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d08/a03160_1ad2d2608d444918d17a7369824f55830f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::RgbColour const &amp;</type>
+        <definition>castor::RgbColour const  &amp; castor3d::AttenuationComponent::getAttenuationColour</definition>
+        <argsstring>() const</argsstring>
+        <name>getAttenuationColour</name>
+        <qualifiedname>castor3d::AttenuationComponent::getAttenuationColour</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Lighting/AttenuationComponent.hpp" line="98" column="26" bodyfile="Material/Pass/Component/Lighting/AttenuationComponent.hpp" bodystart="98" bodyend="101"/>
+        <references refid="d7/da0/a03156_1a395b75646e9010d9d2492006eb4e307d" compoundref="d4/def/a00359" startline="23">castor3d::AttenuationData::colour</references>
+        <references refid="d0/dcc/a03148_1aa297ac5faf886e6b766533f5fc0b25d1" compoundref="db/ddc/a00353" startline="85">castor3d::BaseDataPassComponentT&lt; AttenuationData &gt;::m_value</references>
+      </memberdef>
+      <memberdef kind="function" id="d8/d08/a03160_1a7a9a883a839cfe82b81819d0a20074b6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::AttenuationComponent::setAttenuationColour</definition>
+        <argsstring>(castor::RgbColour const &amp;v)</argsstring>
+        <name>setAttenuationColour</name>
+        <qualifiedname>castor3d::AttenuationComponent::setAttenuationColour</qualifiedname>
+        <param>
+          <type>castor::RgbColour const &amp;</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Lighting/AttenuationComponent.hpp" line="103" column="6" bodyfile="Material/Pass/Component/Lighting/AttenuationComponent.hpp" bodystart="103" bodyend="106"/>
+        <references refid="d7/da0/a03156_1a395b75646e9010d9d2492006eb4e307d" compoundref="d4/def/a00359" startline="23">castor3d::AttenuationData::colour</references>
+        <references refid="d0/dcc/a03148_1aa297ac5faf886e6b766533f5fc0b25d1" compoundref="db/ddc/a00353" startline="85">castor3d::BaseDataPassComponentT&lt; AttenuationData &gt;::m_value</references>
+      </memberdef>
+      <memberdef kind="function" id="d8/d08/a03160_1af059471b4902387a02934d62ec816d9d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>float const &amp;</type>
+        <definition>float const  &amp; castor3d::AttenuationComponent::getAttenuationDistance</definition>
+        <argsstring>() const</argsstring>
+        <name>getAttenuationDistance</name>
+        <qualifiedname>castor3d::AttenuationComponent::getAttenuationDistance</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Lighting/AttenuationComponent.hpp" line="108" column="14" bodyfile="Material/Pass/Component/Lighting/AttenuationComponent.hpp" bodystart="108" bodyend="111"/>
+        <references refid="d7/da0/a03156_1a45c9d83948d3742921ac19a58013ca1d" compoundref="d4/def/a00359" startline="24">castor3d::AttenuationData::distance</references>
+        <references refid="d0/dcc/a03148_1aa297ac5faf886e6b766533f5fc0b25d1" compoundref="db/ddc/a00353" startline="85">castor3d::BaseDataPassComponentT&lt; AttenuationData &gt;::m_value</references>
+      </memberdef>
+      <memberdef kind="function" id="d8/d08/a03160_1a246b3dbb5c8c0beca335e33b842e4f10" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::AttenuationComponent::setAttenuationDistance</definition>
+        <argsstring>(float v)</argsstring>
+        <name>setAttenuationDistance</name>
+        <qualifiedname>castor3d::AttenuationComponent::setAttenuationDistance</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Lighting/AttenuationComponent.hpp" line="113" column="6" bodyfile="Material/Pass/Component/Lighting/AttenuationComponent.hpp" bodystart="113" bodyend="116"/>
+        <references refid="d7/da0/a03156_1a45c9d83948d3742921ac19a58013ca1d" compoundref="d4/def/a00359" startline="24">castor3d::AttenuationData::distance</references>
+        <references refid="d0/dcc/a03148_1aa297ac5faf886e6b766533f5fc0b25d1" compoundref="db/ddc/a00353" startline="85">castor3d::BaseDataPassComponentT&lt; AttenuationData &gt;::m_value</references>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d8/d08/a03160_1a80133456439a61d19742ad097b9c3f61" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>PassComponentUPtr</type>
+        <definition>PassComponentUPtr castor3d::AttenuationComponent::doClone</definition>
+        <argsstring>(Pass &amp;pass) const override</argsstring>
+        <name>doClone</name>
+        <qualifiedname>castor3d::AttenuationComponent::doClone</qualifiedname>
+        <reimplements refid="d8/d23/a03712_1ad87fbb1539bb6c5004cbcb02ddfcd46f">doClone</reimplements>
+        <param>
+          <type><ref refid="d3/d86/a03732" kindref="compound">Pass</ref> &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Clones this component into given pass. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">pass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the cloned component. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Lighting/AttenuationComponent.hpp" line="121" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d08/a03160_1ad2a432b5d0fa4202a00a4d57f6a7a830" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>bool</type>
+        <definition>bool castor3d::AttenuationComponent::doWriteText</definition>
+        <argsstring>(castor::String const &amp;tabs, castor::Path const &amp;folder, castor::String const &amp;subfolder, castor::StringStream &amp;file) const override</argsstring>
+        <name>doWriteText</name>
+        <qualifiedname>castor3d::AttenuationComponent::doWriteText</qualifiedname>
+        <reimplements refid="d8/d23/a03712_1af8c7cb8f4c2e0753c0ebbb6adf802c9c">doWriteText</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>tabs</declname>
+        </param>
+        <param>
+          <type>castor::Path const &amp;</type>
+          <declname>folder</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>subfolder</declname>
+        </param>
+        <param>
+          <type>castor::StringStream &amp;</type>
+          <declname>file</declname>
+        </param>
+        <briefdescription>
+<para>Writes the component content to text. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">tabs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The current tabulation level. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">folder</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The resources folder. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">subfolder</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The resources subfolder. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">file</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The output file. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Lighting/AttenuationComponent.hpp" line="122" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d08/a03160_1aa54052905d2e51a8fac454a9fa95c670" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::AttenuationComponent::doFillBuffer</definition>
+        <argsstring>(PassBuffer &amp;buffer) const override</argsstring>
+        <name>doFillBuffer</name>
+        <qualifiedname>castor3d::AttenuationComponent::doFillBuffer</qualifiedname>
+        <reimplements refid="d8/d23/a03712_1a3b157d130e41a31b1a6313ef26cd675c">doFillBuffer</reimplements>
+        <param>
+          <type><ref refid="db/dbf/a05920" kindref="compound">PassBuffer</ref> &amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+<para>Fills the pass buffer with this pass data. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pass buffer. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Lighting/AttenuationComponent.hpp" line="126" column="6"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::BaseDataPassComponentT&lt; AttenuationData &gt;</label>
+        <link refid="d0/dcc/a03148"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; AttenuationData &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::AttenuationComponent</label>
+        <link refid="d8/d08/a03160"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::BaseDataPassComponentT&lt; DataT &gt;</label>
+        <link refid="d0/dcc/a03148"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::PassComponent</label>
+        <link refid="d8/d23/a03712"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Pass &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::BaseDataPassComponentT&lt; AttenuationData &gt;</label>
+        <link refid="d0/dcc/a03148"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>m_value</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="template-instance">
+          <edgelabel>&lt; AttenuationData &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::AttenuationComponent</label>
+        <link refid="d8/d08/a03160"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor3d::AttenuationData</label>
+        <link refid="d7/da0/a03156"/>
+      </node>
+      <node id="9">
+        <label>castor3d::BaseDataPassComponentT&lt; DataT &gt;</label>
+        <link refid="d0/dcc/a03148"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::PassComponent</label>
+        <link refid="d8/d23/a03712"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_plugin</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>m_materialShader</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::PassComponentPlugin</label>
+        <link refid="dc/d0d/a03708"/>
+      </node>
+      <node id="6">
+        <label>castor3d::shader::PassMaterialShader</label>
+        <link refid="d7/da2/a03704"/>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor3d::shader::PassShader</label>
+        <link refid="df/d9f/a03696"/>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Pass &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Material/Pass/Component/Lighting/AttenuationComponent.hpp" line="27" column="1" bodyfile="Material/Pass/Component/Lighting/AttenuationComponent.hpp" bodystart="29" bodyend="127"/>
+    <listofallmembers>
+      <member refid="d8/d08/a03160_1a12fe5ec40e9bfc58a07a831c70f27771" prot="public" virt="virtual"><scope>castor3d::AttenuationComponent</scope><name>accept</name></member>
+      <member refid="d8/d08/a03160_1a4352fd254aaca8dd66830c9297ea7d3c" prot="public" virt="non-virtual"><scope>castor3d::AttenuationComponent</scope><name>AttenuationComponent</name></member>
+      <member refid="d0/dcc/a03148_1adda77c8f497beaa00a738357311190a7" prot="public" virt="non-virtual"><scope>castor3d::AttenuationComponent</scope><name>BaseDataPassComponentT</name></member>
+      <member refid="d8/d23/a03712_1ae7c88041d1aae747532e537b23e41d24" prot="public" virt="non-virtual"><scope>castor3d::AttenuationComponent</scope><name>clone</name></member>
+      <member refid="d8/d08/a03160_1ac554f4c510172da052dcdeea0f183627" prot="public" virt="non-virtual"><scope>castor3d::AttenuationComponent</scope><name>createPlugin</name></member>
+      <member refid="d8/d08/a03160_1a80133456439a61d19742ad097b9c3f61" prot="private" virt="virtual"><scope>castor3d::AttenuationComponent</scope><name>doClone</name></member>
+      <member refid="d8/d08/a03160_1aa54052905d2e51a8fac454a9fa95c670" prot="private" virt="virtual"><scope>castor3d::AttenuationComponent</scope><name>doFillBuffer</name></member>
+      <member refid="d8/d08/a03160_1ad2a432b5d0fa4202a00a4d57f6a7a830" prot="private" virt="virtual"><scope>castor3d::AttenuationComponent</scope><name>doWriteText</name></member>
+      <member refid="d8/d23/a03712_1a8f6b8c698164310e2052be733834224a" prot="public" virt="non-virtual"><scope>castor3d::AttenuationComponent</scope><name>fillBuffer</name></member>
+      <member refid="d8/d23/a03712_1a32dba2f2f6b92d5119c677d4faa6a324" prot="public" virt="non-virtual"><scope>castor3d::AttenuationComponent</scope><name>fillChannel</name></member>
+      <member refid="d8/d23/a03712_1ae53af67cd5f807b90d8e31e52d6582af" prot="public" virt="virtual"><scope>castor3d::AttenuationComponent</scope><name>fillConfig</name></member>
+      <member refid="d8/d08/a03160_1ad2d2608d444918d17a7369824f55830f" prot="public" virt="non-virtual"><scope>castor3d::AttenuationComponent</scope><name>getAttenuationColour</name></member>
+      <member refid="d8/d08/a03160_1af059471b4902387a02934d62ec816d9d" prot="public" virt="non-virtual"><scope>castor3d::AttenuationComponent</scope><name>getAttenuationDistance</name></member>
+      <member refid="d8/d23/a03712_1a89e385760304300908e5b308b2f1da4e" prot="public" virt="virtual"><scope>castor3d::AttenuationComponent</scope><name>getColour</name></member>
+      <member refid="d0/dcc/a03148_1a23ec881a6e2aa2e40c21e108cb6458f7" prot="public" virt="non-virtual"><scope>castor3d::AttenuationComponent</scope><name>getData</name></member>
+      <member refid="d0/dcc/a03148_1aa79468a338c3ff3c31682894db721fab" prot="public" virt="non-virtual"><scope>castor3d::AttenuationComponent</scope><name>getData</name></member>
+      <member refid="d8/d23/a03712_1a625adfcb001824768e8a99a3c03dcbb1" prot="public" virt="non-virtual"><scope>castor3d::AttenuationComponent</scope><name>getId</name></member>
+      <member refid="d8/d23/a03712_1af015484800f32c718d067a80b76709e9" prot="public" virt="virtual"><scope>castor3d::AttenuationComponent</scope><name>getPassFlags</name></member>
+      <member refid="d8/d23/a03712_1a5da51664f6736be0199d66266779b395" prot="public" virt="non-virtual"><scope>castor3d::AttenuationComponent</scope><name>getPlugin</name></member>
+      <member refid="d8/d23/a03712_1a6aae2659952d2e9a76caabf56d69fba5" prot="public" virt="non-virtual"><scope>castor3d::AttenuationComponent</scope><name>getType</name></member>
+      <member refid="d8/d23/a03712_1a5af951f374ee82fd61e57f96e6193f1c" prot="public" virt="virtual"><scope>castor3d::AttenuationComponent</scope><name>hasColour</name></member>
+      <member refid="d8/d23/a03712_1a01ecec7d563666b63d7d888061e84ab1" prot="protected" virt="non-virtual"><scope>castor3d::AttenuationComponent</scope><name>m_dirty</name></member>
+      <member refid="d8/d23/a03712_1a3d2b1319d92ba70ff8450c7873492b67" prot="protected" virt="non-virtual"><scope>castor3d::AttenuationComponent</scope><name>m_id</name></member>
+      <member refid="d8/d23/a03712_1abc188311e9251e933a838a256802c4c6" prot="protected" virt="non-virtual"><scope>castor3d::AttenuationComponent</scope><name>m_materialShader</name></member>
+      <member refid="d8/d23/a03712_1ae62babd07d3faf3014f1d0af1ab03357" prot="protected" virt="non-virtual"><scope>castor3d::AttenuationComponent</scope><name>m_plugin</name></member>
+      <member refid="d8/d23/a03712_1ae5775b9cf42c79c375cbd4a033e6629f" prot="protected" virt="non-virtual"><scope>castor3d::AttenuationComponent</scope><name>m_type</name></member>
+      <member refid="d0/dcc/a03148_1aa297ac5faf886e6b766533f5fc0b25d1" prot="protected" virt="non-virtual"><scope>castor3d::AttenuationComponent</scope><name>m_value</name></member>
+      <member refid="d8/d23/a03712_1a24173c973bd439f4c1c145cd70573bca" prot="public" virt="non-virtual"><scope>castor3d::AttenuationComponent</scope><name>PassComponent</name></member>
+      <member refid="d8/d08/a03160_1a7a9a883a839cfe82b81819d0a20074b6" prot="public" virt="non-virtual"><scope>castor3d::AttenuationComponent</scope><name>setAttenuationColour</name></member>
+      <member refid="d8/d08/a03160_1a246b3dbb5c8c0beca335e33b842e4f10" prot="public" virt="non-virtual"><scope>castor3d::AttenuationComponent</scope><name>setAttenuationDistance</name></member>
+      <member refid="d8/d23/a03712_1a2541aa58a662bd8566c602335387cb98" prot="public" virt="virtual"><scope>castor3d::AttenuationComponent</scope><name>setColour</name></member>
+      <member refid="d8/d23/a03712_1ab6a5bf94fc25210c03c9bed7ddf1ae31" prot="public" virt="non-virtual"><scope>castor3d::AttenuationComponent</scope><name>setColour</name></member>
+      <member refid="d8/d23/a03712_1a61fa7c8562281c049a874b1ebc2635e4" prot="public" virt="non-virtual"><scope>castor3d::AttenuationComponent</scope><name>setColour</name></member>
+      <member refid="d8/d23/a03712_1a2256e542753e1f85e6812de7e6fdc261" prot="public" virt="non-virtual"><scope>castor3d::AttenuationComponent</scope><name>setColour</name></member>
+      <member refid="d0/dcc/a03148_1a074de9b2f9579c56a85617b514089545" prot="public" virt="non-virtual"><scope>castor3d::AttenuationComponent</scope><name>setData</name></member>
+      <member refid="d0/dcc/a03148_1abf51560ee823896159de61bea9326391" prot="public" virt="non-virtual"><scope>castor3d::AttenuationComponent</scope><name>setData</name></member>
+      <member refid="d8/d08/a03160_1a0b9f6228f7ce7c9fe4c0806d1262762b" prot="public" virt="non-virtual"><scope>castor3d::AttenuationComponent</scope><name>TypeName</name></member>
+      <member refid="d8/d23/a03712_1acfedf31a75536a40a891b3308083d738" prot="public" virt="virtual"><scope>castor3d::AttenuationComponent</scope><name>update</name></member>
+      <member refid="d8/d23/a03712_1a967ba1259e24663e4a89352251acf841" prot="public" virt="non-virtual"><scope>castor3d::AttenuationComponent</scope><name>writeText</name></member>
+      <member refid="d8/d23/a03712_1a6a3e343b81806ff616280b4eca87140b" prot="public" virt="virtual"><scope>castor3d::AttenuationComponent</scope><name>~PassComponent</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

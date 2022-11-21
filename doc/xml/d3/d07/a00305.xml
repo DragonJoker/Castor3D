@@ -163,24 +163,24 @@
       </node>
       <node id="8">
         <label>Render/RenderWindow.hpp</label>
-        <link refid="d7/d49/a00863"/>
+        <link refid="d9/d10/a01103"/>
         <childnode refid="9" relation="include">
         </childnode>
       </node>
       <node id="9">
         <label>Scene/SceneFileParser.hpp</label>
-        <link refid="d2/d22/a01196"/>
+        <link refid="de/d9d/a01382"/>
         <childnode refid="10" relation="include">
         </childnode>
       </node>
       <node id="10">
         <label>Scene/SceneFileParser_Parsers.hpp</label>
-        <link refid="d0/d5a/a01199"/>
+        <link refid="df/d68/a01385"/>
       </node>
     </invincdepgraph>
-    <innerclass refid="dc/da5/a02790" prot="public">castor3d::KeyboardState</innerclass>
-    <innerclass refid="d0/dc9/a02794" prot="public">castor3d::MouseState</innerclass>
-    <innernamespace refid="da/dab/a01362">castor3d</innernamespace>
+    <innerclass refid="da/d96/a03004" prot="public">castor3d::KeyboardState</innerclass>
+    <innerclass refid="d8/dbd/a03008" prot="public">castor3d::MouseState</innerclass>
+    <innernamespace refid="d3/d22/a01572">castor3d</innernamespace>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

@@ -1,6 +1,6 @@
 [Back to Main page](http://dragonjoker.github.io/Castor3D)
 
-# Castor3D v0.11.0
+# Castor3D v0.12.0
 Castor3D is a 3D engine written in C++ 17.
 It works on Windows and GNU/Linux.
 It supports Vulkan, and relies on Ashes to extend this support to Direct3D 11 and and OpenGL.

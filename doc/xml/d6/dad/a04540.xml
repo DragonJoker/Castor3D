@@ -1,0 +1,115 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d6/dad/a04540" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::OverlayRenderer::OverlayGeometryBuffers</compoundname>
+    <includes local="no">OverlayRenderer.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d6/dad/a04540_1a57455e19b577c00849cea6668f886c95" prot="public" static="no" mutable="no">
+        <type><ref refid="da/d20/a02740" kindref="compound">GeometryBuffers</ref></type>
+        <definition>GeometryBuffers castor3d::OverlayRenderer::OverlayGeometryBuffers::noTexture</definition>
+        <argsstring></argsstring>
+        <name>noTexture</name>
+        <qualifiedname>castor3d::OverlayRenderer::OverlayGeometryBuffers::noTexture</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayRenderer.hpp" line="185" column="17" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="185" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/dad/a04540_1aea3cf9053350e45b9c797d398217406e" prot="public" static="no" mutable="no">
+        <type><ref refid="da/d20/a02740" kindref="compound">GeometryBuffers</ref></type>
+        <definition>GeometryBuffers castor3d::OverlayRenderer::OverlayGeometryBuffers::textured</definition>
+        <argsstring></argsstring>
+        <name>textured</name>
+        <qualifiedname>castor3d::OverlayRenderer::OverlayGeometryBuffers::textured</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayRenderer.hpp" line="186" column="17" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="186" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="10">
+        <label>T</label>
+      </node>
+      <node id="8">
+        <label>std::array&lt; castor3d::ObjectBufferOffset::GpuBufferChunk, size_t(SubmeshData::eCount) &gt;</label>
+        <childnode refid="3" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="template-instance">
+          <edgelabel>&lt; castor3d::ObjectBufferOffset::GpuBufferChunk, size_t(SubmeshData::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::GeometryBuffers</label>
+        <link refid="da/d20/a02740"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>indexOffset</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>bufferOffset</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::GpuBufferBase</label>
+        <link refid="d5/dc7/a02744"/>
+      </node>
+      <node id="4">
+        <label>castor3d::GpuBufferT&lt; AllocatorT &gt;</label>
+        <link refid="db/d1d/a02716"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::MemChunk</label>
+        <link refid="da/dd3/a02736"/>
+      </node>
+      <node id="7">
+        <label>castor3d::ObjectBufferOffset</label>
+        <link refid="d5/dba/a02776"/>
+        <childnode refid="8" relation="usage">
+          <edgelabel>buffers</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::ObjectBufferOffset::GpuBufferChunk</label>
+        <link refid="df/de4/a02780"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>buffer</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>chunk</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::OverlayRenderer::OverlayGeometryBuffers</label>
+        <link refid="d6/dad/a04540"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>noTexture</edgelabel>
+          <edgelabel>textured</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="10" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Overlay/OverlayRenderer.hpp" line="183" column="1" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="184" bodyend="187"/>
+    <listofallmembers>
+      <member refid="d6/dad/a04540_1a57455e19b577c00849cea6668f886c95" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::OverlayGeometryBuffers</scope><name>noTexture</name></member>
+      <member refid="d6/dad/a04540_1aea3cf9053350e45b9c797d398217406e" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::OverlayGeometryBuffers</scope><name>textured</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

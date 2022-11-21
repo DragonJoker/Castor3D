@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dir_517eb4e4681f670c5a2adec1eb9b993a" kind="dir">
+    <compoundname>Model/Mesh/Submesh/Component</compoundname>
+    <innerfile refid="d4/d1f/a00506">BaseDataComponent.hpp</innerfile>
+    <innerfile refid="df/db6/a00509">ComponentModule.hpp</innerfile>
+    <innerfile refid="d4/dfb/a00512">Face.hpp</innerfile>
+    <innerfile refid="dc/d19/a00515">FaceIndices.hpp</innerfile>
+    <innerfile refid="d5/dee/a00518">FaceInfos.hpp</innerfile>
+    <innerfile refid="d7/def/a00521">IndexMapping.hpp</innerfile>
+    <innerfile refid="d9/d24/a00524">InstantiationComponent.hpp</innerfile>
+    <innerfile refid="d9/d44/a00527">Line.hpp</innerfile>
+    <innerfile refid="da/d7e/a00530">LineIndices.hpp</innerfile>
+    <innerfile refid="db/d44/a00533">LinesMapping.hpp</innerfile>
+    <innerfile refid="d4/d33/a00536">MeshletComponent.hpp</innerfile>
+    <innerfile refid="d3/d87/a00539">MorphComponent.hpp</innerfile>
+    <innerfile refid="d0/ddb/a00542">SkinComponent.hpp</innerfile>
+    <innerfile refid="d8/deb/a00545">SubmeshComponent.hpp</innerfile>
+    <innerfile refid="dd/de6/a00548">TriFaceMapping.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Model/Mesh/Submesh/Component/"/>
+  </compounddef>
+</doxygen>

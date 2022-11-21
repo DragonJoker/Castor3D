@@ -2,10 +2,11 @@
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="dir_96f48ddc76a06734e9b1f6b0446df030" kind="dir">
     <compoundname>Render/Ssao</compoundname>
-    <innerfile refid="da/dd6/a00896">SsaoBlurPass.hpp</innerfile>
-    <innerfile refid="d3/d8a/a00899">SsaoConfig.hpp</innerfile>
-    <innerfile refid="d5/dd3/a00902">SsaoModule.hpp</innerfile>
-    <innerfile refid="da/d5b/a00905">SsaoRawAOPass.hpp</innerfile>
+    <innerfile refid="d1/dae/a01136">SsaoBlurPass.hpp</innerfile>
+    <innerfile refid="d5/d3e/a01139">SsaoConfig.hpp</innerfile>
+    <innerfile refid="d3/ddc/a01142">SsaoModule.hpp</innerfile>
+    <innerfile refid="d9/d65/a01145">SsaoPass.hpp</innerfile>
+    <innerfile refid="db/d17/a01148">SsaoRawAOPass.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

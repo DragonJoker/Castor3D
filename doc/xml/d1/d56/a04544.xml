@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d1/d56/a04544" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::OverlayRenderer::OverlayDescriptorConnection</compoundname>
+    <includes local="no">OverlayRenderer.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d1/d56/a04544_1afda7cec2de36608753172ef61e68b532" prot="public" static="no" mutable="no">
+        <type>ashes::DescriptorSetPtr</type>
+        <definition>ashes::DescriptorSetPtr castor3d::OverlayRenderer::OverlayDescriptorConnection::descriptorSet</definition>
+        <argsstring></argsstring>
+        <name>descriptorSet</name>
+        <qualifiedname>castor3d::OverlayRenderer::OverlayDescriptorConnection::descriptorSet</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayRenderer.hpp" line="191" column="25" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="191" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d56/a04544_1ac54eaa725af4143a1945eb682f295590" prot="public" static="no" mutable="no">
+        <type>FontTexture::OnChanged::connection</type>
+        <definition>FontTexture::OnChanged::connection castor3d::OverlayRenderer::OverlayDescriptorConnection::connection</definition>
+        <argsstring></argsstring>
+        <name>connection</name>
+        <qualifiedname>castor3d::OverlayRenderer::OverlayDescriptorConnection::connection</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayRenderer.hpp" line="192" column="36" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="192" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Overlay/OverlayRenderer.hpp" line="189" column="1" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="190" bodyend="193"/>
+    <listofallmembers>
+      <member refid="d1/d56/a04544_1ac54eaa725af4143a1945eb682f295590" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::OverlayDescriptorConnection</scope><name>connection</name></member>
+      <member refid="d1/d56/a04544_1afda7cec2de36608753172ef61e68b532" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::OverlayDescriptorConnection</scope><name>descriptorSet</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

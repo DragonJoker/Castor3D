@@ -105,7 +105,7 @@
     <includes local="no">ShaderWriter/BaseTypes/SampledImage.hpp</includes>
     <includes local="no">ShaderWriter/BaseTypes/Sampler.hpp</includes>
     <includes local="no">ShaderWriter/BaseTypes/UInt.hpp</includes>
-    <includes local="no">ShaderWriter/CompositeTypes/ArraySsbo.hpp</includes>
+    <includes local="no">ShaderWriter/CompositeTypes/ArrayStorageBuffer.hpp</includes>
     <includes local="no">ShaderWriter/CompositeTypes/Function.hpp</includes>
     <includes local="no">ShaderWriter/CompositeTypes/Struct.hpp</includes>
     <includes local="no">ShaderWriter/CompositeTypes/StructInstance.hpp</includes>
@@ -495,7 +495,7 @@
         <label>ShaderWriter/BaseTypes/UInt.hpp</label>
       </node>
       <node id="105">
-        <label>ShaderWriter/CompositeTypes/ArraySsbo.hpp</label>
+        <label>ShaderWriter/CompositeTypes/ArrayStorageBuffer.hpp</label>
       </node>
       <node id="106">
         <label>ShaderWriter/CompositeTypes/Function.hpp</label>

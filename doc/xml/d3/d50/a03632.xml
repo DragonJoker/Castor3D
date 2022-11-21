@@ -1,0 +1,452 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d3/d50/a03632" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::HeightComponent</compoundname>
+    <basecompoundref refid="d0/dcc/a03148" prot="public" virt="non-virtual">castor3d::BaseDataPassComponentT&lt; castor::AtomicGroupChangeTracked&lt; ParallaxOcclusionMode &gt; &gt;</basecompoundref>
+    <includes local="no">HeightComponent.hpp</includes>
+    <innerclass refid="da/d9f/a03636" prot="public">castor3d::HeightComponent::ComponentsShader</innerclass>
+    <innerclass refid="dc/d8f/a03640" prot="public">castor3d::HeightComponent::Plugin</innerclass>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d3/d50/a03632_1a964228e374010281de49632e0e57802e" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>constexpr <ref refid="d3/d22/a01572_1a043cb84a97fa62d2b78e9f4ec3238f70" kindref="member">PassFlag</ref></type>
+        <definition>constexpr PassFlag castor3d::HeightComponent::eParallaxOcclusionMappingOne</definition>
+        <argsstring></argsstring>
+        <name>eParallaxOcclusionMappingOne</name>
+        <qualifiedname>castor3d::HeightComponent::eParallaxOcclusionMappingOne</qualifiedname>
+        <initializer>= <ref refid="d3/d22/a01572_1a043cb84a97fa62d2b78e9f4ec3238f70" kindref="member">PassFlag</ref>( 0x01u )</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Other/HeightComponent.hpp" line="17" column="27" bodyfile="Material/Pass/Component/Other/HeightComponent.hpp" bodystart="17" bodyend="-1"/>
+        <referencedby refid="dc/d8f/a03640_1a87e47332802686e3f98028de27ddbf19" compoundref="da/d65/a00458" startline="63" endline="66">castor3d::HeightComponent::Plugin::getParallaxOcclusionMappingOneFlag</referencedby>
+        <referencedby refid="d3/d50/a03632_1a91b02e5af5da2fec6068044e083dd677" compoundref="da/d65/a00458" startline="97" endline="105">getPassFlags</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d50/a03632_1a5aa7e2523773c7e354a8804596e85753" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>constexpr <ref refid="d3/d22/a01572_1a043cb84a97fa62d2b78e9f4ec3238f70" kindref="member">PassFlag</ref></type>
+        <definition>constexpr PassFlag castor3d::HeightComponent::eParallaxOcclusionMappingRepeat</definition>
+        <argsstring></argsstring>
+        <name>eParallaxOcclusionMappingRepeat</name>
+        <qualifiedname>castor3d::HeightComponent::eParallaxOcclusionMappingRepeat</qualifiedname>
+        <initializer>= <ref refid="d3/d22/a01572_1a043cb84a97fa62d2b78e9f4ec3238f70" kindref="member">PassFlag</ref>( 0x02u )</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Other/HeightComponent.hpp" line="18" column="27" bodyfile="Material/Pass/Component/Other/HeightComponent.hpp" bodystart="18" bodyend="-1"/>
+        <referencedby refid="dc/d8f/a03640_1aa8294f2ccafa0d6358e5a9f66ca5bb81" compoundref="da/d65/a00458" startline="68" endline="71">castor3d::HeightComponent::Plugin::getParallaxOcclusionMappingRepeatFlag</referencedby>
+        <referencedby refid="d3/d50/a03632_1a91b02e5af5da2fec6068044e083dd677" compoundref="da/d65/a00458" startline="97" endline="105">getPassFlags</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d50/a03632_1adf07f7917fc75defc0dd72b9a878efa7" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>constexpr <ref refid="d3/d22/a01572_1a043cb84a97fa62d2b78e9f4ec3238f70" kindref="member">PassFlag</ref></type>
+        <definition>constexpr PassFlag castor3d::HeightComponent::eAll</definition>
+        <argsstring></argsstring>
+        <name>eAll</name>
+        <qualifiedname>castor3d::HeightComponent::eAll</qualifiedname>
+        <initializer>= <ref refid="d3/d22/a01572_1a043cb84a97fa62d2b78e9f4ec3238f70" kindref="member">PassFlag</ref>( 0x03u )</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Other/HeightComponent.hpp" line="19" column="27" bodyfile="Material/Pass/Component/Other/HeightComponent.hpp" bodystart="19" bodyend="-1"/>
+        <referencedby refid="dc/d8f/a03640_1a389a65a59795928dc16129b013928e2a" compoundref="da/d65/a00458" startline="73" endline="76">castor3d::HeightComponent::Plugin::getComponentFlags</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d50/a03632_1a07d42519faf86a15641d9da7fcfa5f6a" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::HeightComponent::TypeName</definition>
+        <argsstring></argsstring>
+        <name>TypeName</name>
+        <qualifiedname>castor3d::HeightComponent::TypeName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Other/HeightComponent.hpp" line="122" column="37" bodyfile="Material/Pass/Component/Other/HeightComponent.hpp" bodystart="122" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d3/d50/a03632_1a55be288598fa0074bfd70331113b9c2e" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>PassComponentPluginUPtr</type>
+        <definition>static PassComponentPluginUPtr castor3d::HeightComponent::createPlugin</definition>
+        <argsstring>(PassComponentRegister const &amp;passComponent)</argsstring>
+        <name>createPlugin</name>
+        <qualifiedname>castor3d::HeightComponent::createPlugin</qualifiedname>
+        <param>
+          <type><ref refid="d5/d35/a03716" kindref="compound">PassComponentRegister</ref> const &amp;</type>
+          <declname>passComponent</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Other/HeightComponent.hpp" line="88" column="32" bodyfile="Material/Pass/Component/Other/HeightComponent.hpp" bodystart="88" bodyend="91"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d3/d50/a03632_1a866d935293e6878227b71c0b81cda425" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::HeightComponent::HeightComponent</definition>
+        <argsstring>(Pass &amp;pass)</argsstring>
+        <name>HeightComponent</name>
+        <qualifiedname>castor3d::HeightComponent::HeightComponent</qualifiedname>
+        <param>
+          <type><ref refid="d3/d86/a03732" kindref="compound">Pass</ref> &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Other/HeightComponent.hpp" line="93" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d50/a03632_1a6f0da6fe999de6e3c91bf99eb157bb7d" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::HeightComponent::accept</definition>
+        <argsstring>(PassVisitorBase &amp;vis) override</argsstring>
+        <name>accept</name>
+        <qualifiedname>castor3d::HeightComponent::accept</qualifiedname>
+        <reimplements refid="d8/d23/a03712_1a4e315225c20ace9097adfd65e8413e4f">accept</reimplements>
+        <param>
+          <type><ref refid="d6/db4/a03748" kindref="compound">PassVisitorBase</ref> &amp;</type>
+          <declname>vis</declname>
+        </param>
+        <briefdescription>
+<para><ref refid="d1/d5d/a03756" kindref="compound">PassVisitor</ref> acceptance function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>vis</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ... visitor. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Other/HeightComponent.hpp" line="95" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d50/a03632_1a91b02e5af5da2fec6068044e083dd677" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d3/d22/a01572_1a9c5abb1c7b30c2de4e67a8f9f64c08a6" kindref="member">PassComponentFlag</ref></type>
+        <definition>C3D_API PassComponentFlag castor3d::HeightComponent::getPassFlags</definition>
+        <argsstring>() const override</argsstring>
+        <name>getPassFlags</name>
+        <qualifiedname>castor3d::HeightComponent::getPassFlags</qualifiedname>
+        <reimplements refid="d8/d23/a03712_1af015484800f32c718d067a80b76709e9">getPassFlags</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Other/HeightComponent.hpp" line="97" column="27" bodyfile="Material/Pass/Component/Other/HeightComponent.hpp" bodystart="97" bodyend="105"/>
+        <references refid="d3/d22/a01572_1a043cb84a97fa62d2b78e9f4ec3238f70abe988781e4e1de1c6a36fb698afbbe1f">castor3d::eNone</references>
+        <references refid="d3/d22/a01572_1a808c81c0da4ffd2515292e95b6b4c124a14e829df2f6aded577b1326558cec415">castor3d::eOne</references>
+        <references refid="d3/d50/a03632_1a964228e374010281de49632e0e57802e" compoundref="da/d65/a00458" startline="17">eParallaxOcclusionMappingOne</references>
+        <references refid="d3/d50/a03632_1a5aa7e2523773c7e354a8804596e85753" compoundref="da/d65/a00458" startline="18">eParallaxOcclusionMappingRepeat</references>
+        <references refid="d3/d22/a01572_1a808c81c0da4ffd2515292e95b6b4c124a63a63e3fefbb6e5459aa2e951740c277">castor3d::eRepeat</references>
+        <references refid="d8/d23/a03712_1a625adfcb001824768e8a99a3c03dcbb1" compoundref="d0/d29/a00470" startline="1195" endline="1198">castor3d::PassComponent::getId</references>
+        <references refid="d3/d50/a03632_1a4ad749fca05dbe8b6c6d351136c10e08" compoundref="da/d65/a00458" startline="112" endline="115">getParallaxOcclusion</references>
+        <references refid="d3/d22/a01572_1a337a580df6760b157e78a64b55014233" compoundref="de/d55/a00323" startline="78" endline="83">castor3d::makePassComponentFlag</references>
+      </memberdef>
+      <memberdef kind="function" id="d3/d50/a03632_1ada3a486f8ed370b2ee09f8c8503577fe" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::HeightComponent::setParallaxOcclusion</definition>
+        <argsstring>(ParallaxOcclusionMode v)</argsstring>
+        <name>setParallaxOcclusion</name>
+        <qualifiedname>castor3d::HeightComponent::setParallaxOcclusion</qualifiedname>
+        <param>
+          <type><ref refid="d3/d22/a01572_1a808c81c0da4ffd2515292e95b6b4c124" kindref="member">ParallaxOcclusionMode</ref></type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Other/HeightComponent.hpp" line="107" column="6" bodyfile="Material/Pass/Component/Other/HeightComponent.hpp" bodystart="107" bodyend="110"/>
+        <references refid="d0/dcc/a03148_1a074de9b2f9579c56a85617b514089545" compoundref="db/ddc/a00353" startline="53" endline="56">castor3d::BaseDataPassComponentT&lt; castor::AtomicGroupChangeTracked&lt; ParallaxOcclusionMode &gt; &gt;::setData</references>
+      </memberdef>
+      <memberdef kind="function" id="d3/d50/a03632_1a4ad749fca05dbe8b6c6d351136c10e08" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d3/d22/a01572_1a808c81c0da4ffd2515292e95b6b4c124" kindref="member">ParallaxOcclusionMode</ref></type>
+        <definition>ParallaxOcclusionMode castor3d::HeightComponent::getParallaxOcclusion</definition>
+        <argsstring>() const</argsstring>
+        <name>getParallaxOcclusion</name>
+        <qualifiedname>castor3d::HeightComponent::getParallaxOcclusion</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Other/HeightComponent.hpp" line="112" column="23" bodyfile="Material/Pass/Component/Other/HeightComponent.hpp" bodystart="112" bodyend="115"/>
+        <references refid="d0/dcc/a03148_1a23ec881a6e2aa2e40c21e108cb6458f7" compoundref="db/ddc/a00353" startline="73" endline="76">castor3d::BaseDataPassComponentT&lt; castor::AtomicGroupChangeTracked&lt; ParallaxOcclusionMode &gt; &gt;::getData</references>
+        <referencedby refid="d3/d50/a03632_1a91b02e5af5da2fec6068044e083dd677" compoundref="da/d65/a00458" startline="97" endline="105">getPassFlags</referencedby>
+        <referencedby refid="d3/d50/a03632_1a842f49e2738e85c85955156cde37aa9f" compoundref="da/d65/a00458" startline="117" endline="120">hasParallaxOcclusion</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d3/d50/a03632_1a842f49e2738e85c85955156cde37aa9f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::HeightComponent::hasParallaxOcclusion</definition>
+        <argsstring>() const</argsstring>
+        <name>hasParallaxOcclusion</name>
+        <qualifiedname>castor3d::HeightComponent::hasParallaxOcclusion</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Other/HeightComponent.hpp" line="117" column="6" bodyfile="Material/Pass/Component/Other/HeightComponent.hpp" bodystart="117" bodyend="120"/>
+        <references refid="d3/d22/a01572_1a808c81c0da4ffd2515292e95b6b4c124abe988781e4e1de1c6a36fb698afbbe1f">castor3d::eNone</references>
+        <references refid="d3/d50/a03632_1a4ad749fca05dbe8b6c6d351136c10e08" compoundref="da/d65/a00458" startline="112" endline="115">getParallaxOcclusion</references>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d3/d50/a03632_1ae1957913fb61849d5a4a84d31712cad2" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>PassComponentUPtr</type>
+        <definition>PassComponentUPtr castor3d::HeightComponent::doClone</definition>
+        <argsstring>(Pass &amp;pass) const override</argsstring>
+        <name>doClone</name>
+        <qualifiedname>castor3d::HeightComponent::doClone</qualifiedname>
+        <reimplements refid="d8/d23/a03712_1ad87fbb1539bb6c5004cbcb02ddfcd46f">doClone</reimplements>
+        <param>
+          <type><ref refid="d3/d86/a03732" kindref="compound">Pass</ref> &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Clones this component into given pass. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">pass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the cloned component. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Other/HeightComponent.hpp" line="125" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d50/a03632_1af90cfe026311ab694325ea4ba3e072f9" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>bool</type>
+        <definition>bool castor3d::HeightComponent::doWriteText</definition>
+        <argsstring>(castor::String const &amp;tabs, castor::Path const &amp;folder, castor::String const &amp;subfolder, castor::StringStream &amp;file) const override</argsstring>
+        <name>doWriteText</name>
+        <qualifiedname>castor3d::HeightComponent::doWriteText</qualifiedname>
+        <reimplements refid="d8/d23/a03712_1af8c7cb8f4c2e0753c0ebbb6adf802c9c">doWriteText</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>tabs</declname>
+        </param>
+        <param>
+          <type>castor::Path const &amp;</type>
+          <declname>folder</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>subfolder</declname>
+        </param>
+        <param>
+          <type>castor::StringStream &amp;</type>
+          <declname>file</declname>
+        </param>
+        <briefdescription>
+<para>Writes the component content to text. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">tabs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The current tabulation level. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">folder</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The resources folder. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">subfolder</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The resources subfolder. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">file</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The output file. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Other/HeightComponent.hpp" line="126" column="6"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::BaseDataPassComponentT&lt; castor::AtomicGroupChangeTracked&lt; ParallaxOcclusionMode &gt; &gt;</label>
+        <link refid="d0/dcc/a03148"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; castor::AtomicGroupChangeTracked&lt; ParallaxOcclusionMode &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::BaseDataPassComponentT&lt; DataT &gt;</label>
+        <link refid="d0/dcc/a03148"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::HeightComponent</label>
+        <link refid="d3/d50/a03632"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::PassComponent</label>
+        <link refid="d8/d23/a03712"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Pass &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::BaseDataPassComponentT&lt; castor::AtomicGroupChangeTracked&lt; ParallaxOcclusionMode &gt; &gt;</label>
+        <link refid="d0/dcc/a03148"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; castor::AtomicGroupChangeTracked&lt; ParallaxOcclusionMode &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor3d::BaseDataPassComponentT&lt; DataT &gt;</label>
+        <link refid="d0/dcc/a03148"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::HeightComponent</label>
+        <link refid="d3/d50/a03632"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::PassComponent</label>
+        <link refid="d8/d23/a03712"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_plugin</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>m_materialShader</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::PassComponentPlugin</label>
+        <link refid="dc/d0d/a03708"/>
+      </node>
+      <node id="6">
+        <label>castor3d::shader::PassMaterialShader</label>
+        <link refid="d7/da2/a03704"/>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor3d::shader::PassShader</label>
+        <link refid="df/d9f/a03696"/>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Pass &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Material/Pass/Component/Other/HeightComponent.hpp" line="14" column="1" bodyfile="Material/Pass/Component/Other/HeightComponent.hpp" bodystart="16" bodyend="130"/>
+    <listofallmembers>
+      <member refid="d3/d50/a03632_1a6f0da6fe999de6e3c91bf99eb157bb7d" prot="public" virt="virtual"><scope>castor3d::HeightComponent</scope><name>accept</name></member>
+      <member refid="d0/dcc/a03148_1adda77c8f497beaa00a738357311190a7" prot="public" virt="non-virtual"><scope>castor3d::HeightComponent</scope><name>BaseDataPassComponentT</name></member>
+      <member refid="d8/d23/a03712_1ae7c88041d1aae747532e537b23e41d24" prot="public" virt="non-virtual"><scope>castor3d::HeightComponent</scope><name>clone</name></member>
+      <member refid="d3/d50/a03632_1a55be288598fa0074bfd70331113b9c2e" prot="public" virt="non-virtual"><scope>castor3d::HeightComponent</scope><name>createPlugin</name></member>
+      <member refid="d3/d50/a03632_1ae1957913fb61849d5a4a84d31712cad2" prot="private" virt="virtual"><scope>castor3d::HeightComponent</scope><name>doClone</name></member>
+      <member refid="d3/d50/a03632_1af90cfe026311ab694325ea4ba3e072f9" prot="private" virt="virtual"><scope>castor3d::HeightComponent</scope><name>doWriteText</name></member>
+      <member refid="d3/d50/a03632_1adf07f7917fc75defc0dd72b9a878efa7" prot="public" virt="non-virtual"><scope>castor3d::HeightComponent</scope><name>eAll</name></member>
+      <member refid="d3/d50/a03632_1a964228e374010281de49632e0e57802e" prot="public" virt="non-virtual"><scope>castor3d::HeightComponent</scope><name>eParallaxOcclusionMappingOne</name></member>
+      <member refid="d3/d50/a03632_1a5aa7e2523773c7e354a8804596e85753" prot="public" virt="non-virtual"><scope>castor3d::HeightComponent</scope><name>eParallaxOcclusionMappingRepeat</name></member>
+      <member refid="d8/d23/a03712_1a8f6b8c698164310e2052be733834224a" prot="public" virt="non-virtual"><scope>castor3d::HeightComponent</scope><name>fillBuffer</name></member>
+      <member refid="d8/d23/a03712_1a32dba2f2f6b92d5119c677d4faa6a324" prot="public" virt="non-virtual"><scope>castor3d::HeightComponent</scope><name>fillChannel</name></member>
+      <member refid="d8/d23/a03712_1ae53af67cd5f807b90d8e31e52d6582af" prot="public" virt="virtual"><scope>castor3d::HeightComponent</scope><name>fillConfig</name></member>
+      <member refid="d8/d23/a03712_1a89e385760304300908e5b308b2f1da4e" prot="public" virt="virtual"><scope>castor3d::HeightComponent</scope><name>getColour</name></member>
+      <member refid="d0/dcc/a03148_1a23ec881a6e2aa2e40c21e108cb6458f7" prot="public" virt="non-virtual"><scope>castor3d::HeightComponent</scope><name>getData</name></member>
+      <member refid="d0/dcc/a03148_1aa79468a338c3ff3c31682894db721fab" prot="public" virt="non-virtual"><scope>castor3d::HeightComponent</scope><name>getData</name></member>
+      <member refid="d8/d23/a03712_1a625adfcb001824768e8a99a3c03dcbb1" prot="public" virt="non-virtual"><scope>castor3d::HeightComponent</scope><name>getId</name></member>
+      <member refid="d3/d50/a03632_1a4ad749fca05dbe8b6c6d351136c10e08" prot="public" virt="non-virtual"><scope>castor3d::HeightComponent</scope><name>getParallaxOcclusion</name></member>
+      <member refid="d3/d50/a03632_1a91b02e5af5da2fec6068044e083dd677" prot="public" virt="virtual"><scope>castor3d::HeightComponent</scope><name>getPassFlags</name></member>
+      <member refid="d8/d23/a03712_1a5da51664f6736be0199d66266779b395" prot="public" virt="non-virtual"><scope>castor3d::HeightComponent</scope><name>getPlugin</name></member>
+      <member refid="d8/d23/a03712_1a6aae2659952d2e9a76caabf56d69fba5" prot="public" virt="non-virtual"><scope>castor3d::HeightComponent</scope><name>getType</name></member>
+      <member refid="d8/d23/a03712_1a5af951f374ee82fd61e57f96e6193f1c" prot="public" virt="virtual"><scope>castor3d::HeightComponent</scope><name>hasColour</name></member>
+      <member refid="d3/d50/a03632_1a842f49e2738e85c85955156cde37aa9f" prot="public" virt="non-virtual"><scope>castor3d::HeightComponent</scope><name>hasParallaxOcclusion</name></member>
+      <member refid="d3/d50/a03632_1a866d935293e6878227b71c0b81cda425" prot="public" virt="non-virtual"><scope>castor3d::HeightComponent</scope><name>HeightComponent</name></member>
+      <member refid="d8/d23/a03712_1a01ecec7d563666b63d7d888061e84ab1" prot="protected" virt="non-virtual"><scope>castor3d::HeightComponent</scope><name>m_dirty</name></member>
+      <member refid="d8/d23/a03712_1a3d2b1319d92ba70ff8450c7873492b67" prot="protected" virt="non-virtual"><scope>castor3d::HeightComponent</scope><name>m_id</name></member>
+      <member refid="d8/d23/a03712_1abc188311e9251e933a838a256802c4c6" prot="protected" virt="non-virtual"><scope>castor3d::HeightComponent</scope><name>m_materialShader</name></member>
+      <member refid="d8/d23/a03712_1ae62babd07d3faf3014f1d0af1ab03357" prot="protected" virt="non-virtual"><scope>castor3d::HeightComponent</scope><name>m_plugin</name></member>
+      <member refid="d8/d23/a03712_1ae5775b9cf42c79c375cbd4a033e6629f" prot="protected" virt="non-virtual"><scope>castor3d::HeightComponent</scope><name>m_type</name></member>
+      <member refid="d0/dcc/a03148_1aa297ac5faf886e6b766533f5fc0b25d1" prot="protected" virt="non-virtual"><scope>castor3d::HeightComponent</scope><name>m_value</name></member>
+      <member refid="d8/d23/a03712_1a24173c973bd439f4c1c145cd70573bca" prot="public" virt="non-virtual"><scope>castor3d::HeightComponent</scope><name>PassComponent</name></member>
+      <member refid="d8/d23/a03712_1a2541aa58a662bd8566c602335387cb98" prot="public" virt="virtual"><scope>castor3d::HeightComponent</scope><name>setColour</name></member>
+      <member refid="d8/d23/a03712_1ab6a5bf94fc25210c03c9bed7ddf1ae31" prot="public" virt="non-virtual"><scope>castor3d::HeightComponent</scope><name>setColour</name></member>
+      <member refid="d8/d23/a03712_1a61fa7c8562281c049a874b1ebc2635e4" prot="public" virt="non-virtual"><scope>castor3d::HeightComponent</scope><name>setColour</name></member>
+      <member refid="d8/d23/a03712_1a2256e542753e1f85e6812de7e6fdc261" prot="public" virt="non-virtual"><scope>castor3d::HeightComponent</scope><name>setColour</name></member>
+      <member refid="d0/dcc/a03148_1a074de9b2f9579c56a85617b514089545" prot="public" virt="non-virtual"><scope>castor3d::HeightComponent</scope><name>setData</name></member>
+      <member refid="d0/dcc/a03148_1abf51560ee823896159de61bea9326391" prot="public" virt="non-virtual"><scope>castor3d::HeightComponent</scope><name>setData</name></member>
+      <member refid="d3/d50/a03632_1ada3a486f8ed370b2ee09f8c8503577fe" prot="public" virt="non-virtual"><scope>castor3d::HeightComponent</scope><name>setParallaxOcclusion</name></member>
+      <member refid="d3/d50/a03632_1a07d42519faf86a15641d9da7fcfa5f6a" prot="public" virt="non-virtual"><scope>castor3d::HeightComponent</scope><name>TypeName</name></member>
+      <member refid="d8/d23/a03712_1acfedf31a75536a40a891b3308083d738" prot="public" virt="virtual"><scope>castor3d::HeightComponent</scope><name>update</name></member>
+      <member refid="d8/d23/a03712_1a967ba1259e24663e4a89352251acf841" prot="public" virt="non-virtual"><scope>castor3d::HeightComponent</scope><name>writeText</name></member>
+      <member refid="d8/d23/a03712_1a6a3e343b81806ff616280b4eca87140b" prot="public" virt="virtual"><scope>castor3d::HeightComponent</scope><name>~PassComponent</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

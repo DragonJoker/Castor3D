@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dir_8ecc8570da425ca0c18525339547a1ce" kind="dir">
+    <compoundname>Shader/ShaderBuffers</compoundname>
+    <innerfile refid="dd/d9e/a01226">LightBuffer.hpp</innerfile>
+    <innerfile refid="db/d1c/a01229">PassBuffer.hpp</innerfile>
+    <innerfile refid="d0/d67/a01232">ShaderBuffersModule.hpp</innerfile>
+    <innerfile refid="dd/dad/a01235">SssProfileBuffer.hpp</innerfile>
+    <innerfile refid="d8/ddf/a01238">TextureAnimationBuffer.hpp</innerfile>
+    <innerfile refid="d3/d07/a01241">TextureConfigurationBuffer.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/ShaderBuffers/"/>
+  </compounddef>
+</doxygen>

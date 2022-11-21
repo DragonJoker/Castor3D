@@ -143,23 +143,23 @@
       </node>
       <node id="4">
         <label>Model/Mesh/Submesh/Submesh.hpp</label>
-        <link refid="d9/d87/a00551"/>
+        <link refid="df/dbb/a00698"/>
       </node>
       <node id="5">
         <label>Overlay/OverlayRenderer.hpp</label>
-        <link refid="da/dd1/a00629"/>
+        <link refid="d9/dd4/a00776"/>
         <childnode refid="6" relation="include">
         </childnode>
       </node>
       <node id="11">
         <label>Render/PBR/BrdfPrefilter.hpp</label>
-        <link refid="d5/d12/a00794"/>
+        <link refid="d6/d8d/a01007"/>
         <childnode refid="12" relation="include">
         </childnode>
       </node>
       <node id="12">
         <label>Render/PBR/IblTextures.hpp</label>
-        <link refid="df/d0e/a00800"/>
+        <link refid="d7/d59/a01013"/>
         <childnode refid="13" relation="include">
         </childnode>
         <childnode refid="16" relation="include">
@@ -167,13 +167,13 @@
       </node>
       <node id="6">
         <label>Render/RenderWindow.hpp</label>
-        <link refid="d7/d49/a00863"/>
+        <link refid="d9/d10/a01103"/>
         <childnode refid="7" relation="include">
         </childnode>
       </node>
       <node id="13">
         <label>Scene/Background/Background.hpp</label>
-        <link refid="d3/dbd/a01100"/>
+        <link refid="d2/d1d/a01277"/>
         <childnode refid="14" relation="include">
         </childnode>
         <childnode refid="15" relation="include">
@@ -183,34 +183,34 @@
       </node>
       <node id="14">
         <label>Scene/Background/Colour.hpp</label>
-        <link refid="d8/dbf/a01109"/>
+        <link refid="d0/d00/a01286"/>
       </node>
       <node id="15">
         <label>Scene/Background/Image.hpp</label>
-        <link refid="d0/d39/a01112"/>
+        <link refid="d9/dda/a01289"/>
       </node>
       <node id="16">
         <label>Scene/Background/Skybox.hpp</label>
-        <link refid="df/dd5/a01115"/>
+        <link refid="d3/d07/a01301"/>
       </node>
       <node id="9">
         <label>Scene/BillboardList.hpp</label>
-        <link refid="dd/de4/a01121"/>
+        <link refid="d2/d4c/a01307"/>
       </node>
       <node id="7">
         <label>Scene/SceneFileParser.hpp</label>
-        <link refid="d2/d22/a01196"/>
+        <link refid="de/d9d/a01382"/>
         <childnode refid="8" relation="include">
         </childnode>
       </node>
       <node id="8">
         <label>Scene/SceneFileParser_Parsers.hpp</label>
-        <link refid="d0/d5a/a01199"/>
+        <link refid="df/d68/a01385"/>
       </node>
     </invincdepgraph>
-    <innerclass refid="d1/dfc/a02554" prot="public">castor3d::GpuBufferPackedAllocator</innerclass>
-    <innerclass refid="df/d23/a02558" prot="private">castor3d::GpuBufferPackedAllocator::MemChunkCompare</innerclass>
-    <innernamespace refid="da/dab/a01362">castor3d</innernamespace>
+    <innerclass refid="df/d25/a02764" prot="public">castor3d::GpuBufferPackedAllocator</innerclass>
+    <innerclass refid="d3/d7e/a02768" prot="private">castor3d::GpuBufferPackedAllocator::MemChunkCompare</innerclass>
+    <innernamespace refid="d3/d22/a01572">castor3d</innernamespace>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

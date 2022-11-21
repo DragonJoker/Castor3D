@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d9/dfe/a06292" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::DrawParamsConfiguration</compoundname>
+    <includes local="no">UbosModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d9/dfe/a06292_1aa7b3193e1ae7b4c4a9df63b65c4f4a06" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::DrawParamsConfiguration::nodeId</definition>
+        <argsstring></argsstring>
+        <name>nodeId</name>
+        <qualifiedname>castor3d::DrawParamsConfiguration::nodeId</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="110" column="10" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="110" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/dfe/a06292_1abca744caf1229e55cbfc113653f4741e" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::DrawParamsConfiguration::instanceCount</definition>
+        <argsstring></argsstring>
+        <name>instanceCount</name>
+        <qualifiedname>castor3d::DrawParamsConfiguration::instanceCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="111" column="10" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="111" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/dfe/a06292_1a1cb45a1aed21cf3863c6a562ed696df2" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::DrawParamsConfiguration::instanceOffset</definition>
+        <argsstring></argsstring>
+        <name>instanceOffset</name>
+        <qualifiedname>castor3d::DrawParamsConfiguration::instanceOffset</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="112" column="10" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="112" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para><ref refid="dc/dca/a04260" kindref="compound">Meshlet</ref> draw parameters. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/Ubos/UbosModule.hpp" line="108" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="109" bodyend="113"/>
+    <listofallmembers>
+      <member refid="d9/dfe/a06292_1abca744caf1229e55cbfc113653f4741e" prot="public" virt="non-virtual"><scope>castor3d::DrawParamsConfiguration</scope><name>instanceCount</name></member>
+      <member refid="d9/dfe/a06292_1a1cb45a1aed21cf3863c6a562ed696df2" prot="public" virt="non-virtual"><scope>castor3d::DrawParamsConfiguration</scope><name>instanceOffset</name></member>
+      <member refid="d9/dfe/a06292_1aa7b3193e1ae7b4c4a9df63b65c4f4a06" prot="public" virt="non-virtual"><scope>castor3d::DrawParamsConfiguration</scope><name>nodeId</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

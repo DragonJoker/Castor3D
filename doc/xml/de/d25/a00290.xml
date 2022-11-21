@@ -173,25 +173,25 @@
       </node>
       <node id="3">
         <label>Render/RenderWindow.hpp</label>
-        <link refid="d7/d49/a00863"/>
+        <link refid="d9/d10/a01103"/>
         <childnode refid="4" relation="include">
         </childnode>
       </node>
       <node id="4">
         <label>Scene/SceneFileParser.hpp</label>
-        <link refid="d2/d22/a01196"/>
+        <link refid="de/d9d/a01382"/>
         <childnode refid="5" relation="include">
         </childnode>
       </node>
       <node id="5">
         <label>Scene/SceneFileParser_Parsers.hpp</label>
-        <link refid="d0/d5a/a01199"/>
+        <link refid="df/d68/a01385"/>
       </node>
     </invincdepgraph>
-    <innerclass refid="de/d8e/a02762" prot="public">castor3d::EventHandler</innerclass>
-    <innerclass refid="dd/deb/a02766" prot="public">castor3d::NonClientEventHandler</innerclass>
-    <innerclass refid="d6/d92/a02770" prot="public">castor3d::MouseEventHandler</innerclass>
-    <innernamespace refid="da/dab/a01362">castor3d</innernamespace>
+    <innerclass refid="d3/dff/a02976" prot="public">castor3d::EventHandler</innerclass>
+    <innerclass refid="d6/db9/a02980" prot="public">castor3d::NonClientEventHandler</innerclass>
+    <innerclass refid="dd/d7e/a02984" prot="public">castor3d::MouseEventHandler</innerclass>
+    <innernamespace refid="d3/d22/a01572">castor3d</innernamespace>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

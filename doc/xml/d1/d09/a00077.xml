@@ -3,16 +3,16 @@
   <compounddef id="d1/d09/a00077" kind="file" language="C++">
     <compoundname>AnimationImporter.hpp</compoundname>
     <includes refid="dd/dd7/a00260" local="yes">Castor3D/Castor3DModule.hpp</includes>
-    <includes refid="db/dbd/a11365" local="yes">Castor3D/Animation/AnimationModule.hpp</includes>
-    <includes refid="dc/d2f/a00425" local="yes">Castor3D/Miscellaneous/Parameter.hpp</includes>
-    <includes refid="da/da4/a11377" local="yes">Castor3D/Model/Mesh/Animation/MeshAnimationModule.hpp</includes>
-    <includes refid="d8/d69/a11383" local="yes">Castor3D/Model/Skeleton/Animation/SkeletonAnimationModule.hpp</includes>
-    <includes refid="d8/d1b/a11368" local="yes">Castor3D/Scene/Animation/AnimationModule.hpp</includes>
+    <includes refid="dc/dc3/a13227" local="yes">Castor3D/Animation/AnimationModule.hpp</includes>
+    <includes refid="d6/d06/a00572" local="yes">Castor3D/Miscellaneous/Parameter.hpp</includes>
+    <includes refid="db/df1/a13245" local="yes">Castor3D/Model/Mesh/Animation/MeshAnimationModule.hpp</includes>
+    <includes refid="d0/d63/a13251" local="yes">Castor3D/Model/Skeleton/Animation/SkeletonAnimationModule.hpp</includes>
+    <includes refid="d6/d6b/a13230" local="yes">Castor3D/Scene/Animation/AnimationModule.hpp</includes>
     <includes local="no">CastorUtils/Data/Path.hpp</includes>
     <includedby refid="db/ddf/a00164" local="yes">Binary/CmshImporter.hpp</includedby>
-    <includedby refid="d4/d5d/a01202" local="yes">Scene/SceneImporter.hpp</includedby>
+    <includedby refid="d0/d36/a01388" local="yes">Scene/SceneImporter.hpp</includedby>
     <incdepgraph>
-      <node id="45">
+      <node id="46">
         <label>CastorUtils/Data/Path.hpp</label>
       </node>
       <node id="30">
@@ -36,10 +36,10 @@
       <node id="6">
         <label>CastorUtils/Exception/Assertion.hpp</label>
       </node>
-      <node id="42">
+      <node id="43">
         <label>CastorUtils/Graphics/BoundingBox.hpp</label>
       </node>
-      <node id="43">
+      <node id="44">
         <label>CastorUtils/Graphics/BoundingSphere.hpp</label>
       </node>
       <node id="7">
@@ -60,7 +60,7 @@
       <node id="33">
         <label>CastorUtils/Math/SquareMatrix.hpp</label>
       </node>
-      <node id="44">
+      <node id="45">
         <label>CastorUtils/Miscellaneous/BitSize.hpp</label>
       </node>
       <node id="21">
@@ -87,12 +87,12 @@
         </childnode>
         <childnode refid="34" relation="include">
         </childnode>
-        <childnode refid="45" relation="include">
+        <childnode refid="46" relation="include">
         </childnode>
       </node>
       <node id="17">
         <label>Castor3D/Animation/AnimationModule.hpp</label>
-        <link refid="db/dbd/a11365"/>
+        <link refid="dc/dc3/a13227"/>
         <childnode refid="2" relation="include">
         </childnode>
         <childnode refid="18" relation="include">
@@ -150,6 +150,12 @@
         <childnode refid="25" relation="include">
         </childnode>
       </node>
+      <node id="41">
+        <label>Castor3D/Limits.hpp</label>
+        <link refid="d0/d39/a00314"/>
+        <childnode refid="13" relation="include">
+        </childnode>
+      </node>
       <node id="37">
         <label>Castor3D/Material/MaterialModule.hpp</label>
         <link refid="de/d55/a00323"/>
@@ -162,13 +168,13 @@
       </node>
       <node id="20">
         <label>MiscellaneousModule.hpp</label>
-        <link refid="db/d43/a00422"/>
+        <link refid="d4/d9e/a00569"/>
         <childnode refid="2" relation="include">
         </childnode>
       </node>
       <node id="19">
         <label>Castor3D/Miscellaneous/Parameter.hpp</label>
-        <link refid="dc/d2f/a00425"/>
+        <link refid="d6/d06/a00572"/>
         <childnode refid="20" relation="include">
         </childnode>
         <childnode refid="21" relation="include">
@@ -178,13 +184,13 @@
       </node>
       <node id="23">
         <label>Castor3D/Model/Mesh/Animation/MeshAnimationModule.hpp</label>
-        <link refid="da/da4/a11377"/>
+        <link refid="db/df1/a13245"/>
         <childnode refid="24" relation="include">
         </childnode>
       </node>
       <node id="24">
         <label>Castor3D/Model/Mesh/MeshModule.hpp</label>
-        <link refid="de/d4e/a00500"/>
+        <link refid="d3/d8e/a00647"/>
         <childnode refid="25" relation="include">
         </childnode>
         <childnode refid="29" relation="include">
@@ -194,7 +200,7 @@
       </node>
       <node id="40">
         <label>Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp</label>
-        <link refid="dc/df9/a00554"/>
+        <link refid="dd/d57/a00701"/>
         <childnode refid="24" relation="include">
         </childnode>
         <childnode refid="41" relation="include">
@@ -205,18 +211,20 @@
         </childnode>
         <childnode refid="44" relation="include">
         </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
         <childnode refid="13" relation="include">
         </childnode>
       </node>
       <node id="29">
         <label>Castor3D/Model/ModelModule.hpp</label>
-        <link refid="d9/d19/a00560"/>
+        <link refid="d1/d56/a00707"/>
         <childnode refid="2" relation="include">
         </childnode>
       </node>
       <node id="31">
         <label>Castor3D/Model/Skeleton/Animation/SkeletonAnimationModule.hpp</label>
-        <link refid="d8/d69/a11383"/>
+        <link refid="d0/d63/a13251"/>
         <childnode refid="32" relation="include">
         </childnode>
         <childnode refid="18" relation="include">
@@ -226,7 +234,7 @@
       </node>
       <node id="32">
         <label>Castor3D/Model/Skeleton/SkeletonModule.hpp</label>
-        <link refid="d2/da3/a00593"/>
+        <link refid="dc/dce/a00740"/>
         <childnode refid="25" relation="include">
         </childnode>
         <childnode refid="29" relation="include">
@@ -234,15 +242,17 @@
         <childnode refid="18" relation="include">
         </childnode>
       </node>
-      <node id="41">
+      <node id="42">
         <label>Castor3D/Model/Skeleton/VertexBoneData.hpp</label>
-        <link refid="d5/d8a/a00599"/>
+        <link refid="d4/dfa/a00746"/>
         <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="41" relation="include">
         </childnode>
       </node>
       <node id="34">
         <label>Castor3D/Scene/Animation/AnimationModule.hpp</label>
-        <link refid="d8/d1b/a11368"/>
+        <link refid="d6/d6b/a13230"/>
         <childnode refid="35" relation="include">
         </childnode>
         <childnode refid="17" relation="include">
@@ -250,7 +260,7 @@
       </node>
       <node id="35">
         <label>Castor3D/Scene/SceneModule.hpp</label>
-        <link refid="de/d61/a01205"/>
+        <link refid="dc/dbc/a01391"/>
         <childnode refid="36" relation="include">
         </childnode>
         <childnode refid="37" relation="include">
@@ -300,11 +310,11 @@
       </node>
       <node id="3">
         <label>Scene/SceneImporter.hpp</label>
-        <link refid="d4/d5d/a01202"/>
+        <link refid="d0/d36/a01388"/>
       </node>
     </invincdepgraph>
-    <innerclass refid="dc/dc3/a02190" prot="public">castor3d::AnimationImporter</innerclass>
-    <innernamespace refid="da/dab/a01362">castor3d</innernamespace>
+    <innerclass refid="d4/d41/a02400" prot="public">castor3d::AnimationImporter</innerclass>
+    <innernamespace refid="d3/d22/a01572">castor3d</innernamespace>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

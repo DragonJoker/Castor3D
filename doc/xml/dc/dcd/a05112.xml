@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dc/dcd/a05112" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::NonTexturedCube</compoundname>
+    <includes local="no">RenderModule.hpp</includes>
+    <innerclass refid="db/dbc/a05116" prot="public">castor3d::NonTexturedCube::Quad</innerclass>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="dc/dcd/a05112_1a3ca1389f7c1a928dbc394ea83f1306f2" prot="public" static="no" mutable="no">
+        <type><ref refid="db/dbc/a05116" kindref="compound">Quad</ref></type>
+        <definition>Quad castor3d::NonTexturedCube::faces[6]</definition>
+        <argsstring>[6]</argsstring>
+        <name>faces</name>
+        <qualifiedname>castor3d::NonTexturedCube::faces</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="86" column="6" bodyfile="Render/RenderModule.hpp" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>A cube without UV. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::NonTexturedCube</label>
+        <link refid="dc/dcd/a05112"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>faces</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::NonTexturedCube::Quad</label>
+        <link refid="db/dbc/a05116"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>vertex</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::NonTexturedCube::Quad::Vertex</label>
+        <link refid="d0/d7d/a05120"/>
+      </node>
+    </collaborationgraph>
+    <location file="Render/RenderModule.hpp" line="74" column="1" bodyfile="Render/RenderModule.hpp" bodystart="75" bodyend="87"/>
+    <listofallmembers>
+      <member refid="dc/dcd/a05112_1a3ca1389f7c1a928dbc394ea83f1306f2" prot="public" virt="non-virtual"><scope>castor3d::NonTexturedCube</scope><name>faces</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

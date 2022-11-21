@@ -1,0 +1,140 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d5/d6a/a03864" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::TextureUnitData</compoundname>
+    <includes local="no">TextureUnit.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d5/d6a/a03864_1a7e21980cb53dbf9d699e97a92d8c193c" prot="public" static="no" mutable="no">
+        <type><ref refid="db/d62/a03860" kindref="compound">TextureSourceInfo</ref></type>
+        <definition>TextureSourceInfo castor3d::TextureUnitData::sourceInfo</definition>
+        <argsstring></argsstring>
+        <name>sourceInfo</name>
+        <qualifiedname>castor3d::TextureUnitData::sourceInfo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="24" column="19" bodyfile="Material/Texture/TextureUnit.hpp" bodystart="24" bodyend="-1"/>
+        <referencedby refid="d0/de0/a03868_1ad6ff53c37d614d27efaa329077e35f9b" compoundref="d0/ddb/a00542" startline="197" endline="200">castor3d::TextureUnit::getSourceInfo</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d6a/a03864_1a0b2318c92d25f82be2939249b82a1938" prot="public" static="no" mutable="no">
+        <type><ref refid="dc/d0f/a03824" kindref="compound">PassTextureConfig</ref></type>
+        <definition>PassTextureConfig castor3d::TextureUnitData::passConfig</definition>
+        <argsstring></argsstring>
+        <name>passConfig</name>
+        <qualifiedname>castor3d::TextureUnitData::passConfig</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="25" column="19" bodyfile="Material/Texture/TextureUnit.hpp" bodystart="25" bodyend="-1"/>
+        <referencedby refid="d0/de0/a03868_1a51b608f1f70761704ff404cdc270815a" compoundref="d0/ddb/a00542" startline="202" endline="205">castor3d::TextureUnit::getTexcoordSet</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d6a/a03864_1af3f7096e239e390d642532f95c6938f7" prot="public" static="no" mutable="no">
+        <type>AnimationUPtr</type>
+        <definition>AnimationUPtr castor3d::TextureUnitData::animation</definition>
+        <argsstring></argsstring>
+        <name>animation</name>
+        <qualifiedname>castor3d::TextureUnitData::animation</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="26" column="15" bodyfile="Material/Texture/TextureUnit.hpp" bodystart="26" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d6a/a03864_1a0afcb8a442047f51c7498c81dfe767ae" prot="public" static="no" mutable="no">
+        <type>castor::PxBufferBaseUPtr</type>
+        <definition>castor::PxBufferBaseUPtr castor3d::TextureUnitData::buffer</definition>
+        <argsstring></argsstring>
+        <name>buffer</name>
+        <qualifiedname>castor3d::TextureUnitData::buffer</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureUnit.hpp" line="27" column="26" bodyfile="Material/Texture/TextureUnit.hpp" bodystart="27" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="8">
+        <label>T</label>
+      </node>
+      <node id="5">
+        <label>std::array&lt; TextureFlagConfiguration, 4u &gt;</label>
+        <childnode refid="6" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; TextureFlagConfiguration, 4u &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::PassTextureConfig</label>
+        <link refid="dc/d0f/a03824"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>config</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::TextureConfiguration</label>
+        <link refid="d5/db0/a03820"/>
+        <childnode refid="5" relation="usage">
+          <edgelabel>components</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>transform</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::TextureFlagConfiguration</label>
+        <link refid="d9/d53/a03816"/>
+      </node>
+      <node id="2">
+        <label>castor3d::TextureSourceInfo</label>
+        <link refid="db/d62/a03860"/>
+      </node>
+      <node id="9">
+        <label>castor3d::TextureTransform</label>
+        <link refid="d0/dd4/a03812"/>
+      </node>
+      <node id="1">
+        <label>castor3d::TextureUnitData</label>
+        <link refid="d5/d6a/a03864"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>sourceInfo</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>passConfig</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="8" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Material/Texture/TextureUnit.hpp" line="22" column="1" bodyfile="Material/Texture/TextureUnit.hpp" bodystart="23" bodyend="28"/>
+    <listofallmembers>
+      <member refid="d5/d6a/a03864_1af3f7096e239e390d642532f95c6938f7" prot="public" virt="non-virtual"><scope>castor3d::TextureUnitData</scope><name>animation</name></member>
+      <member refid="d5/d6a/a03864_1a0afcb8a442047f51c7498c81dfe767ae" prot="public" virt="non-virtual"><scope>castor3d::TextureUnitData</scope><name>buffer</name></member>
+      <member refid="d5/d6a/a03864_1a0b2318c92d25f82be2939249b82a1938" prot="public" virt="non-virtual"><scope>castor3d::TextureUnitData</scope><name>passConfig</name></member>
+      <member refid="d5/d6a/a03864_1a7e21980cb53dbf9d699e97a92d8c193c" prot="public" virt="non-virtual"><scope>castor3d::TextureUnitData</scope><name>sourceInfo</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

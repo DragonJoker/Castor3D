@@ -15,8 +15,8 @@ Tested compilers are:
 
 ### Main projects
 
-- CastorUtils depends on Zlib and Freetype.
-- Castor3D is based on CastorUtils, Ashes and ShaderWriter.
+- CastorUtils depends on Zlib, Freetype, GLI, and optionnally on FreeImage.
+- Castor3D is based on CastorUtils, Ashes, RenderGraph and ShaderWriter.
 - GuiCommon depends on Castor3D and wxWidgets (from 2.9.5, currently 3.1).
 - CastorViewer depends on GuiCommon and wxWidgets.
 
@@ -24,10 +24,10 @@ Tested compilers are:
 
 - Importers
   - ASSIMP: Depends on Castor3D and Assimp.
-  - PLY: Depend on Castor3D.
 
 - PostEffects
   - Bloom: Depend on Castor3D.
+  - PbrBloom: Depend on Castor3D.
   - DrawEdges: Depend on Castor3D.
   - FilmGrain: Depend on Castor3D.
   - FXAA: Depend on Castor3D.
@@ -41,10 +41,11 @@ Tested compilers are:
 
 - Generic
   - CastorGUI: Depend on Castor3D.
-  - FFTOceanRendering: Depend on Castor3D.
+  - FFTOceanRendering: Depend on Castor3D and glslang C interface.
   - OceanRendering: Depend on Castor3D.
   - ToonMaterial: Depend on Castor3D.
   - WaterRendering: Depend on Castor3D.
+  - AtmosphereScattering: Depend on Castor3D.
 
 - Particles
   - FireworksParticle: Depend on Castor3D

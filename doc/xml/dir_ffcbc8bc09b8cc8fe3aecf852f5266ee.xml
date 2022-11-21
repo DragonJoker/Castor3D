@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dir_ffcbc8bc09b8cc8fe3aecf852f5266ee" kind="dir">
+    <compoundname>Material/Pass/Component/Map</compoundname>
+    <innerfile refid="d4/d27/a00392">AttenuationMapComponent.hpp</innerfile>
+    <innerfile refid="db/dbc/a00395">ClearcoatMapComponent.hpp</innerfile>
+    <innerfile refid="d9/dd1/a00398">ClearcoatNormalMapComponent.hpp</innerfile>
+    <innerfile refid="d7/d00/a00401">ClearcoatRoughnessMapComponent.hpp</innerfile>
+    <innerfile refid="d9/de6/a00404">ColourMapComponent.hpp</innerfile>
+    <innerfile refid="d1/d98/a00407">EmissiveMapComponent.hpp</innerfile>
+    <innerfile refid="d8/d91/a00410">GlossinessMapComponent.hpp</innerfile>
+    <innerfile refid="da/d9c/a00413">HeightMapComponent.hpp</innerfile>
+    <innerfile refid="df/d15/a00416">IridescenceMapComponent.hpp</innerfile>
+    <innerfile refid="d3/d29/a00419">IridescenceThicknessMapComponent.hpp</innerfile>
+    <innerfile refid="db/d43/a00422">MetalnessMapComponent.hpp</innerfile>
+    <innerfile refid="dc/d2f/a00425">NormalMapComponent.hpp</innerfile>
+    <innerfile refid="d4/dd3/a00428">OcclusionMapComponent.hpp</innerfile>
+    <innerfile refid="df/d70/a00431">OpacityMapComponent.hpp</innerfile>
+    <innerfile refid="d1/d7e/a00434">RoughnessMapComponent.hpp</innerfile>
+    <innerfile refid="d4/da8/a00437">SheenMapComponent.hpp</innerfile>
+    <innerfile refid="de/df8/a00440">SheenRoughnessMapComponent.hpp</innerfile>
+    <innerfile refid="d0/dc4/a00443">SpecularMapComponent.hpp</innerfile>
+    <innerfile refid="d3/def/a00446">TransmissionMapComponent.hpp</innerfile>
+    <innerfile refid="d9/d10/a00449">TransmittanceMapComponent.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Material/Pass/Component/Map/"/>
+  </compounddef>
+</doxygen>

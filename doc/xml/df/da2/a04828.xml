@@ -1,0 +1,219 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="df/da2/a04828" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::StencilPipeline</compoundname>
+    <includes local="no">StencilPipeline.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="df/da2/a04828_1a7cb803b3c8c7b858f194a196d32f4042" prot="private" static="no" mutable="no">
+        <type><ref refid="d8/d3f/a05960" kindref="compound">ShaderModule</ref></type>
+        <definition>ShaderModule castor3d::StencilPipeline::m_vertexShader</definition>
+        <argsstring></argsstring>
+        <name>m_vertexShader</name>
+        <qualifiedname>castor3d::StencilPipeline::m_vertexShader</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/Lighting/StencilPipeline.hpp" line="45" column="14" bodyfile="Render/Opaque/Lighting/StencilPipeline.hpp" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/da2/a04828_1a7b5a4d2c5bf3a1184535eca0e2322570" prot="private" static="no" mutable="no">
+        <type>ashes::PipelineShaderStageCreateInfoArray</type>
+        <definition>ashes::PipelineShaderStageCreateInfoArray castor3d::StencilPipeline::m_stages</definition>
+        <argsstring></argsstring>
+        <name>m_stages</name>
+        <qualifiedname>castor3d::StencilPipeline::m_stages</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/Lighting/StencilPipeline.hpp" line="46" column="43" bodyfile="Render/Opaque/Lighting/StencilPipeline.hpp" bodystart="46" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/da2/a04828_1a55254ddba844a34e9649f11e91c19351" prot="private" static="no" mutable="no">
+        <type>crg::PipelineHolder</type>
+        <definition>crg::PipelineHolder castor3d::StencilPipeline::m_holder</definition>
+        <argsstring></argsstring>
+        <name>m_holder</name>
+        <qualifiedname>castor3d::StencilPipeline::m_holder</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/Lighting/StencilPipeline.hpp" line="47" column="21" bodyfile="Render/Opaque/Lighting/StencilPipeline.hpp" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/da2/a04828_1a7c0b77a53387ceaa81292f3cc48d5b09" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="dd/df4/a04800" kindref="compound">LightRenderPass</ref> &gt; const  &amp;</type>
+        <definition>std::vector&lt; LightRenderPass &gt; const&amp; castor3d::StencilPipeline::m_renderPasses</definition>
+        <argsstring></argsstring>
+        <name>m_renderPasses</name>
+        <qualifiedname>castor3d::StencilPipeline::m_renderPasses</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/Lighting/StencilPipeline.hpp" line="48" column="20" bodyfile="Render/Opaque/Lighting/StencilPipeline.hpp" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="df/da2/a04828_1a7384f03f2479d02a1f123dcb45dd4cc4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::StencilPipeline::StencilPipeline</definition>
+        <argsstring>(crg::FramePass const &amp;pass, crg::GraphContext &amp;context, crg::RunnableGraph &amp;graph, RenderDevice const &amp;device, LightPipelineConfig const &amp;config, std::vector&lt; LightRenderPass &gt; const &amp;renderPasses, VkDescriptorSetLayout descriptorSetLayout)</argsstring>
+        <name>StencilPipeline</name>
+        <qualifiedname>castor3d::StencilPipeline::StencilPipeline</qualifiedname>
+        <param>
+          <type>crg::FramePass const &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type>crg::GraphContext &amp;</type>
+          <declname>context</declname>
+        </param>
+        <param>
+          <type>crg::RunnableGraph &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d96/a05072" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/dc6/a04796" kindref="compound">LightPipelineConfig</ref> const &amp;</type>
+          <declname>config</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; <ref refid="dd/df4/a04800" kindref="compound">LightRenderPass</ref> &gt; const &amp;</type>
+          <declname>renderPasses</declname>
+        </param>
+        <param>
+          <type>VkDescriptorSetLayout</type>
+          <declname>descriptorSetLayout</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/Lighting/StencilPipeline.hpp" line="14" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="df/da2/a04828_1a52f0d21951705f0792d06bb71f1ebb71" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>VkPipeline</type>
+        <definition>VkPipeline castor3d::StencilPipeline::getPipeline</definition>
+        <argsstring>()</argsstring>
+        <name>getPipeline</name>
+        <qualifiedname>castor3d::StencilPipeline::getPipeline</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/Lighting/StencilPipeline.hpp" line="22" column="12" bodyfile="Render/Opaque/Lighting/StencilPipeline.hpp" bodystart="22" bodyend="25"/>
+      </memberdef>
+      <memberdef kind="function" id="df/da2/a04828_1a7d6b516bf6dbe77a797efb334b813af0" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>VkPipelineLayout</type>
+        <definition>VkPipelineLayout castor3d::StencilPipeline::getPipelineLayout</definition>
+        <argsstring>() const</argsstring>
+        <name>getPipelineLayout</name>
+        <qualifiedname>castor3d::StencilPipeline::getPipelineLayout</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/Lighting/StencilPipeline.hpp" line="27" column="18" bodyfile="Render/Opaque/Lighting/StencilPipeline.hpp" bodystart="27" bodyend="30"/>
+      </memberdef>
+      <memberdef kind="function" id="df/da2/a04828_1a2c97b56abfcf0eb73941e075c391d9ad" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>VkDescriptorSet</type>
+        <definition>VkDescriptorSet castor3d::StencilPipeline::getDescriptorSet</definition>
+        <argsstring>()</argsstring>
+        <name>getDescriptorSet</name>
+        <qualifiedname>castor3d::StencilPipeline::getDescriptorSet</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/Lighting/StencilPipeline.hpp" line="32" column="17" bodyfile="Render/Opaque/Lighting/StencilPipeline.hpp" bodystart="32" bodyend="35"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-func">
+      <memberdef kind="function" id="df/da2/a04828_1a82b212da58bdf9b68ad223f8910aeff7" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::StencilPipeline::doCreatePipeline</definition>
+        <argsstring>()</argsstring>
+        <name>doCreatePipeline</name>
+        <qualifiedname>castor3d::StencilPipeline::doCreatePipeline</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/Lighting/StencilPipeline.hpp" line="38" column="6"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="df/da2/a04828_1a83d7f01280288369a040f681632d81d2" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>ashes::PipelineVertexInputStateCreateInfo</type>
+        <definition>ashes::PipelineVertexInputStateCreateInfo castor3d::StencilPipeline::doCreateVertexLayout</definition>
+        <argsstring>()</argsstring>
+        <name>doCreateVertexLayout</name>
+        <qualifiedname>castor3d::StencilPipeline::doCreateVertexLayout</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/Lighting/StencilPipeline.hpp" line="41" column="43"/>
+      </memberdef>
+      <memberdef kind="function" id="df/da2/a04828_1a1784d8e9672e8b42bc874e6f5acebaee" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>ashes::PipelineViewportStateCreateInfo</type>
+        <definition>ashes::PipelineViewportStateCreateInfo castor3d::StencilPipeline::doCreateViewportState</definition>
+        <argsstring>(ashes::FrameBuffer const &amp;framebuffer)</argsstring>
+        <name>doCreateViewportState</name>
+        <qualifiedname>castor3d::StencilPipeline::doCreateViewportState</qualifiedname>
+        <param>
+          <type>ashes::FrameBuffer const &amp;</type>
+          <declname>framebuffer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/Lighting/StencilPipeline.hpp" line="42" column="40"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/Opaque/Lighting/StencilPipeline.hpp" line="11" column="1" bodyfile="Render/Opaque/Lighting/StencilPipeline.hpp" bodystart="12" bodyend="49"/>
+    <listofallmembers>
+      <member refid="df/da2/a04828_1a82b212da58bdf9b68ad223f8910aeff7" prot="protected" virt="non-virtual"><scope>castor3d::StencilPipeline</scope><name>doCreatePipeline</name></member>
+      <member refid="df/da2/a04828_1a83d7f01280288369a040f681632d81d2" prot="private" virt="non-virtual"><scope>castor3d::StencilPipeline</scope><name>doCreateVertexLayout</name></member>
+      <member refid="df/da2/a04828_1a1784d8e9672e8b42bc874e6f5acebaee" prot="private" virt="non-virtual"><scope>castor3d::StencilPipeline</scope><name>doCreateViewportState</name></member>
+      <member refid="df/da2/a04828_1a2c97b56abfcf0eb73941e075c391d9ad" prot="public" virt="non-virtual"><scope>castor3d::StencilPipeline</scope><name>getDescriptorSet</name></member>
+      <member refid="df/da2/a04828_1a52f0d21951705f0792d06bb71f1ebb71" prot="public" virt="non-virtual"><scope>castor3d::StencilPipeline</scope><name>getPipeline</name></member>
+      <member refid="df/da2/a04828_1a7d6b516bf6dbe77a797efb334b813af0" prot="public" virt="non-virtual"><scope>castor3d::StencilPipeline</scope><name>getPipelineLayout</name></member>
+      <member refid="df/da2/a04828_1a55254ddba844a34e9649f11e91c19351" prot="private" virt="non-virtual"><scope>castor3d::StencilPipeline</scope><name>m_holder</name></member>
+      <member refid="df/da2/a04828_1a7c0b77a53387ceaa81292f3cc48d5b09" prot="private" virt="non-virtual"><scope>castor3d::StencilPipeline</scope><name>m_renderPasses</name></member>
+      <member refid="df/da2/a04828_1a7b5a4d2c5bf3a1184535eca0e2322570" prot="private" virt="non-virtual"><scope>castor3d::StencilPipeline</scope><name>m_stages</name></member>
+      <member refid="df/da2/a04828_1a7cb803b3c8c7b858f194a196d32f4042" prot="private" virt="non-virtual"><scope>castor3d::StencilPipeline</scope><name>m_vertexShader</name></member>
+      <member refid="df/da2/a04828_1a7384f03f2479d02a1f123dcb45dd4cc4" prot="public" virt="non-virtual"><scope>castor3d::StencilPipeline</scope><name>StencilPipeline</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

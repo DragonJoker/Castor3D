@@ -1,0 +1,709 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dc/d61/a05028" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::PrepassRendering</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; RenderTechnique &gt;</basecompoundref>
+    <includes local="no">PrepassRendering.hpp</includes>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="dc/d61/a05028_1ac8cdf7fe81521ac535a190f3e914927f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d2/d0c/a02932" kindref="compound">Engine</ref> *</type>
+        <definition>C3D_API Engine * castor3d::PrepassRendering::getEngine</definition>
+        <argsstring>() const</argsstring>
+        <name>getEngine</name>
+        <qualifiedname>castor3d::PrepassRendering::getEngine</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Getters. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Prepass/PrepassRendering.hpp" line="112" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d61/a05028_1a96155e93438dba5ec293c353e559ae2b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> crg::FramePass const &amp;</type>
+        <definition>C3D_API crg::FramePass const  &amp; castor3d::PrepassRendering::getLastPass</definition>
+        <argsstring>() const</argsstring>
+        <name>getLastPass</name>
+        <qualifiedname>castor3d::PrepassRendering::getLastPass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Prepass/PrepassRendering.hpp" line="113" column="31"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d61/a05028_1afc2090988c46b9d4e637e40d442cab8a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d5/db3/a05328" kindref="compound">Texture</ref> const &amp;</type>
+        <definition>Texture const  &amp; castor3d::PrepassRendering::getDepthObj</definition>
+        <argsstring>() const</argsstring>
+        <name>getDepthObj</name>
+        <qualifiedname>castor3d::PrepassRendering::getDepthObj</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Prepass/PrepassRendering.hpp" line="115" column="16" bodyfile="Render/Prepass/PrepassRendering.hpp" bodystart="115" bodyend="118"/>
+        <referencedby refid="d6/d6a/a05200_1a4fc03b685e08378d5b56f1e7bdedda93" compoundref="d6/dea/a01094" startline="197" endline="200">castor3d::RenderTechnique::getDepthObj</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="dc/d61/a05028_1aff018390b23cb7fdd546d4b3eb9b30e0" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::PrepassRendering::hasVisibility</definition>
+        <argsstring>() const</argsstring>
+        <name>hasVisibility</name>
+        <qualifiedname>castor3d::PrepassRendering::hasVisibility</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Prepass/PrepassRendering.hpp" line="120" column="6" bodyfile="Render/Prepass/PrepassRendering.hpp" bodystart="120" bodyend="123"/>
+        <referencedby refid="dc/d61/a05028_1a390e045fc5eec22f28f358d0dbf55789" compoundref="da/d17/a01046" startline="125" endline="129">getVisibility</referencedby>
+        <referencedby refid="d6/d6a/a05200_1a63b1e05fe7250de56898f381d171d8b6" compoundref="d6/dea/a01094" startline="313" endline="316">castor3d::RenderTechnique::hasVisibility</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="dc/d61/a05028_1a390e045fc5eec22f28f358d0dbf55789" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d5/db3/a05328" kindref="compound">Texture</ref> const &amp;</type>
+        <definition>Texture const  &amp; castor3d::PrepassRendering::getVisibility</definition>
+        <argsstring>() const</argsstring>
+        <name>getVisibility</name>
+        <qualifiedname>castor3d::PrepassRendering::getVisibility</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Prepass/PrepassRendering.hpp" line="125" column="16" bodyfile="Render/Prepass/PrepassRendering.hpp" bodystart="125" bodyend="129"/>
+        <references refid="dc/d61/a05028_1aff018390b23cb7fdd546d4b3eb9b30e0" compoundref="da/d17/a01046" startline="120" endline="123">hasVisibility</references>
+        <referencedby refid="d6/d6a/a05200_1ac36184bed609814000534761aa413c8a" compoundref="d6/dea/a01094" startline="323" endline="326">castor3d::RenderTechnique::getVisibilityResult</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="dc/d61/a05028_1a8fb6007415f3d7b401d20cdcbd1d024a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::Buffer&lt; int32_t &gt; const &amp;</type>
+        <definition>ashes::Buffer&lt; int32_t &gt; const  &amp; castor3d::PrepassRendering::getDepthRange</definition>
+        <argsstring>() const</argsstring>
+        <name>getDepthRange</name>
+        <qualifiedname>castor3d::PrepassRendering::getDepthRange</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Prepass/PrepassRendering.hpp" line="131" column="22" bodyfile="Render/Prepass/PrepassRendering.hpp" bodystart="131" bodyend="135"/>
+        <referencedby refid="d6/d6a/a05200_1a6e40d4fc96ba9f156d01270937c1679a" compoundref="d6/dea/a01094" startline="202" endline="205">castor3d::RenderTechnique::getDepthRange</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="dc/d61/a05028_1a6b81d01411df11f1a1dd2dd9d8d9e38e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::PrepassRendering::needsDepthRange</definition>
+        <argsstring>() const</argsstring>
+        <name>needsDepthRange</name>
+        <qualifiedname>castor3d::PrepassRendering::needsDepthRange</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Prepass/PrepassRendering.hpp" line="137" column="6" bodyfile="Render/Prepass/PrepassRendering.hpp" bodystart="137" bodyend="140"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d61/a05028_1a813f9d47b11d5c5119cfc6c6f335f07a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::PrepassRendering::setNeedsDepthRange</definition>
+        <argsstring>(bool value)</argsstring>
+        <name>setNeedsDepthRange</name>
+        <qualifiedname>castor3d::PrepassRendering::setNeedsDepthRange</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Prepass/PrepassRendering.hpp" line="142" column="6" bodyfile="Render/Prepass/PrepassRendering.hpp" bodystart="142" bodyend="145"/>
+        <referencedby refid="d6/d6a/a05200_1a7edf49adb60c10efd7309d8100e048c5" compoundref="d6/dea/a01094" startline="207" endline="210">castor3d::RenderTechnique::setNeedsDepthRange</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="dc/d61/a05028_1af31e8fb7b0017237c06238696b07da4e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d8/d09/a05036" kindref="compound">VisibilityPass</ref> const &amp;</type>
+        <definition>VisibilityPass const  &amp; castor3d::PrepassRendering::getVisibilityPass</definition>
+        <argsstring>() const</argsstring>
+        <name>getVisibilityPass</name>
+        <qualifiedname>castor3d::PrepassRendering::getVisibilityPass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Prepass/PrepassRendering.hpp" line="147" column="23" bodyfile="Render/Prepass/PrepassRendering.hpp" bodystart="147" bodyend="151"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="dc/d61/a05028_1abe36cd491ced23104c45dbd314281591" prot="private" static="no" mutable="no">
+        <type><ref refid="d3/d96/a05072" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::PrepassRendering::m_device</definition>
+        <argsstring></argsstring>
+        <name>m_device</name>
+        <qualifiedname>castor3d::PrepassRendering::m_device</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Prepass/PrepassRendering.hpp" line="164" column="21" bodyfile="Render/Prepass/PrepassRendering.hpp" bodystart="164" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d61/a05028_1ac637bafeba090217655181797cd72f2c" prot="private" static="no" mutable="no">
+        <type>crg::FramePassGroup &amp;</type>
+        <definition>crg::FramePassGroup&amp; castor3d::PrepassRendering::m_graph</definition>
+        <argsstring></argsstring>
+        <name>m_graph</name>
+        <qualifiedname>castor3d::PrepassRendering::m_graph</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Prepass/PrepassRendering.hpp" line="165" column="22" bodyfile="Render/Prepass/PrepassRendering.hpp" bodystart="165" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d61/a05028_1a4dda8e1c2c46287c50e8cccb91bc1aef" prot="private" static="no" mutable="no">
+        <type><ref refid="d3/d22/a01572_1a174cedaf5dfc3b47caa264f344279af2" kindref="member">TexturePtr</ref></type>
+        <definition>TexturePtr castor3d::PrepassRendering::m_depthObj</definition>
+        <argsstring></argsstring>
+        <name>m_depthObj</name>
+        <qualifiedname>castor3d::PrepassRendering::m_depthObj</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Prepass/PrepassRendering.hpp" line="166" column="12" bodyfile="Render/Prepass/PrepassRendering.hpp" bodystart="166" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d61/a05028_1a5a7b016dd6e57ff968d7698f66226e85" prot="private" static="no" mutable="no">
+        <type><ref refid="d3/d22/a01572_1a174cedaf5dfc3b47caa264f344279af2" kindref="member">TexturePtr</ref></type>
+        <definition>TexturePtr castor3d::PrepassRendering::m_visibility</definition>
+        <argsstring></argsstring>
+        <name>m_visibility</name>
+        <qualifiedname>castor3d::PrepassRendering::m_visibility</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Prepass/PrepassRendering.hpp" line="167" column="12" bodyfile="Render/Prepass/PrepassRendering.hpp" bodystart="167" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d61/a05028_1a0321adf0bcbc6206d578c888425a8022" prot="private" static="no" mutable="no">
+        <type>crg::FramePass *</type>
+        <definition>crg::FramePass* castor3d::PrepassRendering::m_visibilityPassDesc</definition>
+        <argsstring></argsstring>
+        <name>m_visibilityPassDesc</name>
+        <qualifiedname>castor3d::PrepassRendering::m_visibilityPassDesc</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Prepass/PrepassRendering.hpp" line="168" column="17" bodyfile="Render/Prepass/PrepassRendering.hpp" bodystart="168" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d61/a05028_1ad75447412a755fc65b730b90243a33af" prot="private" static="no" mutable="no">
+        <type><ref refid="d8/d09/a05036" kindref="compound">VisibilityPass</ref> *</type>
+        <definition>VisibilityPass* castor3d::PrepassRendering::m_visibilityPass</definition>
+        <argsstring></argsstring>
+        <name>m_visibilityPass</name>
+        <qualifiedname>castor3d::PrepassRendering::m_visibilityPass</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Prepass/PrepassRendering.hpp" line="169" column="17" bodyfile="Render/Prepass/PrepassRendering.hpp" bodystart="169" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d61/a05028_1aa9b2781f6c365c55933424c28a5de105" prot="private" static="no" mutable="no">
+        <type>crg::FramePass *</type>
+        <definition>crg::FramePass* castor3d::PrepassRendering::m_depthPassDesc</definition>
+        <argsstring></argsstring>
+        <name>m_depthPassDesc</name>
+        <qualifiedname>castor3d::PrepassRendering::m_depthPassDesc</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Prepass/PrepassRendering.hpp" line="170" column="17" bodyfile="Render/Prepass/PrepassRendering.hpp" bodystart="170" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d61/a05028_1a6722d8818e38607e49ce39c5afb043b5" prot="private" static="no" mutable="no">
+        <type><ref refid="d7/d17/a05024" kindref="compound">DepthPass</ref> *</type>
+        <definition>DepthPass* castor3d::PrepassRendering::m_depthPass</definition>
+        <argsstring></argsstring>
+        <name>m_depthPass</name>
+        <qualifiedname>castor3d::PrepassRendering::m_depthPass</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Prepass/PrepassRendering.hpp" line="171" column="12" bodyfile="Render/Prepass/PrepassRendering.hpp" bodystart="171" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d61/a05028_1ab0e860a8266d327bc1bc24c800553ed1" prot="private" static="no" mutable="no">
+        <type>ashes::BufferPtr&lt; int32_t &gt;</type>
+        <definition>ashes::BufferPtr&lt; int32_t &gt; castor3d::PrepassRendering::m_depthRange</definition>
+        <argsstring></argsstring>
+        <name>m_depthRange</name>
+        <qualifiedname>castor3d::PrepassRendering::m_depthRange</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Prepass/PrepassRendering.hpp" line="172" column="18" bodyfile="Render/Prepass/PrepassRendering.hpp" bodystart="172" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d61/a05028_1ad0b56b8926772e40ca3d53db3800e9a5" prot="private" static="no" mutable="no">
+        <type>crg::FramePass *</type>
+        <definition>crg::FramePass* castor3d::PrepassRendering::m_computeDepthRangeDesc</definition>
+        <argsstring></argsstring>
+        <name>m_computeDepthRangeDesc</name>
+        <qualifiedname>castor3d::PrepassRendering::m_computeDepthRangeDesc</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Prepass/PrepassRendering.hpp" line="173" column="17" bodyfile="Render/Prepass/PrepassRendering.hpp" bodystart="173" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d61/a05028_1a1a985cb03bd0d982dd3e1f269d5c6b36" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::PrepassRendering::m_needsDepthRange</definition>
+        <argsstring></argsstring>
+        <name>m_needsDepthRange</name>
+        <qualifiedname>castor3d::PrepassRendering::m_needsDepthRange</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Prepass/PrepassRendering.hpp" line="174" column="6" bodyfile="Render/Prepass/PrepassRendering.hpp" bodystart="174" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="dc/d61/a05028_1ac93d3f82fe8e5762f4217ed7dbacd253" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::PrepassRendering::PrepassRendering</definition>
+        <argsstring>(RenderTechnique &amp;parent, RenderDevice const &amp;device, QueueData const &amp;queueData, crg::FramePassArray const &amp;previousPasses, ProgressBar *progress, bool deferred, bool visbuffer)</argsstring>
+        <name>PrepassRendering</name>
+        <qualifiedname>castor3d::PrepassRendering::PrepassRendering</qualifiedname>
+        <param>
+          <type><ref refid="d6/d6a/a05200" kindref="compound">RenderTechnique</ref> &amp;</type>
+          <declname>parent</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d96/a05072" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/d9d/a05056" kindref="compound">QueueData</ref> const &amp;</type>
+          <declname>queueData</declname>
+        </param>
+        <param>
+          <type>crg::FramePassArray const &amp;</type>
+          <declname>previousPasses</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/dea/a04180" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>deferred</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>visbuffer</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">parent</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent technique. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">queueData</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The queue receiving the GPU commands. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">previousPasses</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The passes this pass depends on. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">progress</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The optional progress bar. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">deferred</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><computeroutput>true</computeroutput> to enable deferred rendering. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">visbuffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><computeroutput>true</computeroutput> to enable visibility buffer. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Prepass/PrepassRendering.hpp" line="42" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d61/a05028_1ab0d5d9ab2303fbaf591f747c8e9bb0f4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::PrepassRendering::~PrepassRendering</definition>
+        <argsstring>()</argsstring>
+        <name>~PrepassRendering</name>
+        <qualifiedname>castor3d::PrepassRendering::~PrepassRendering</qualifiedname>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Prepass/PrepassRendering.hpp" line="55" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d61/a05028_1a7ac6be22c220f99fd6a3fc9cd63c3d3a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::PrepassRendering::listIntermediates</definition>
+        <argsstring>(std::vector&lt; IntermediateView &gt; &amp;intermediates)</argsstring>
+        <name>listIntermediates</name>
+        <qualifiedname>castor3d::PrepassRendering::listIntermediates</qualifiedname>
+        <param>
+          <type>std::vector&lt; <ref refid="d8/d27/a05332" kindref="compound">IntermediateView</ref> &gt; &amp;</type>
+          <declname>intermediates</declname>
+        </param>
+        <briefdescription>
+<para>Lists the intermediate view used by the whole technique. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">intermediates</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the intermediate views. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Prepass/PrepassRendering.hpp" line="71" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d61/a05028_1a4caed8681314b87aa1beda14bfc1d754" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::PrepassRendering::update</definition>
+        <argsstring>(CpuUpdater &amp;updater)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::PrepassRendering::update</qualifiedname>
+        <param>
+          <type><ref refid="d7/d13/a05156" kindref="compound">CpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+<para>Updates the render pass, CPU wise. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">updater</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The update data. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Prepass/PrepassRendering.hpp" line="80" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d61/a05028_1ada3cf1d133f63c4c5f0a8e121f847f36" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::PrepassRendering::update</definition>
+        <argsstring>(GpuUpdater &amp;updater)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::PrepassRendering::update</qualifiedname>
+        <param>
+          <type><ref refid="d9/dab/a05164" kindref="compound">GpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+<para>Updates the render pass, GPU wise. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">updater</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The update data. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Prepass/PrepassRendering.hpp" line="89" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d61/a05028_1a62b5a2a7e26c1f0d68ce784e31b1aef6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::PrepassRendering::accept</definition>
+        <argsstring>(RenderTechniqueVisitor &amp;visitor)</argsstring>
+        <name>accept</name>
+        <qualifiedname>castor3d::PrepassRendering::accept</qualifiedname>
+        <param>
+          <type><ref refid="df/d2e/a05216" kindref="compound">RenderTechniqueVisitor</ref> &amp;</type>
+          <declname>visitor</declname>
+        </param>
+        <briefdescription>
+<para>Visitor acceptance function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>visitor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ... visitor. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Prepass/PrepassRendering.hpp" line="102" column="14"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="dc/d61/a05028_1a9e93f4309bed8b38ebf7184e61b0c352" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
+        <definition>static C3D_API uint32_t castor3d::PrepassRendering::countInitialisationSteps</definition>
+        <argsstring>()</argsstring>
+        <name>countInitialisationSteps</name>
+        <qualifiedname>castor3d::PrepassRendering::countInitialisationSteps</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The number of steps needed for initialisation, to show progression. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Prepass/PrepassRendering.hpp" line="62" column="25"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="dc/d61/a05028_1ae6c7a8572bc601ecb8e0a34cbf657266" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>crg::FramePass &amp;</type>
+        <definition>crg::FramePass &amp; castor3d::PrepassRendering::doCreateVisibilityPass</definition>
+        <argsstring>(ProgressBar *progress, crg::FramePassArray const &amp;previousPasses)</argsstring>
+        <name>doCreateVisibilityPass</name>
+        <qualifiedname>castor3d::PrepassRendering::doCreateVisibilityPass</qualifiedname>
+        <param>
+          <type><ref refid="d6/dea/a04180" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
+        </param>
+        <param>
+          <type>crg::FramePassArray const &amp;</type>
+          <declname>previousPasses</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Prepass/PrepassRendering.hpp" line="155" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d61/a05028_1a02286e85379351af432a169043330a8c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>crg::FramePass &amp;</type>
+        <definition>crg::FramePass &amp; castor3d::PrepassRendering::doCreateForwardDepthPass</definition>
+        <argsstring>(ProgressBar *progress, crg::FramePassArray const &amp;previousPasses)</argsstring>
+        <name>doCreateForwardDepthPass</name>
+        <qualifiedname>castor3d::PrepassRendering::doCreateForwardDepthPass</qualifiedname>
+        <param>
+          <type><ref refid="d6/dea/a04180" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
+        </param>
+        <param>
+          <type>crg::FramePassArray const &amp;</type>
+          <declname>previousPasses</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Prepass/PrepassRendering.hpp" line="157" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d61/a05028_1a1e1f3868267fe668c4e940508f0937a2" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>crg::FramePass &amp;</type>
+        <definition>crg::FramePass &amp; castor3d::PrepassRendering::doCreateDeferredDepthPass</definition>
+        <argsstring>(ProgressBar *progress, crg::FramePassArray const &amp;previousPasses)</argsstring>
+        <name>doCreateDeferredDepthPass</name>
+        <qualifiedname>castor3d::PrepassRendering::doCreateDeferredDepthPass</qualifiedname>
+        <param>
+          <type><ref refid="d6/dea/a04180" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
+        </param>
+        <param>
+          <type>crg::FramePassArray const &amp;</type>
+          <declname>previousPasses</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Prepass/PrepassRendering.hpp" line="159" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d61/a05028_1a6a8e7555c7c1ad94cbab7b38888ec8f8" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>crg::FramePass &amp;</type>
+        <definition>crg::FramePass &amp; castor3d::PrepassRendering::doCreateComputeDepthRange</definition>
+        <argsstring>(ProgressBar *progress)</argsstring>
+        <name>doCreateComputeDepthRange</name>
+        <qualifiedname>castor3d::PrepassRendering::doCreateComputeDepthRange</qualifiedname>
+        <param>
+          <type><ref refid="d6/dea/a04180" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Prepass/PrepassRendering.hpp" line="161" column="17"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::PrepassRendering</label>
+        <link refid="dc/d61/a05028"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::OwnedBy&lt; RenderTechnique &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::PrepassRendering</label>
+        <link refid="dc/d61/a05028"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::OwnedBy&lt; RenderTechnique &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Prepass/PrepassRendering.hpp" line="18" column="1" bodyfile="Render/Prepass/PrepassRendering.hpp" bodystart="20" bodyend="175"/>
+    <listofallmembers>
+      <member refid="dc/d61/a05028_1a62b5a2a7e26c1f0d68ce784e31b1aef6" prot="public" virt="non-virtual"><scope>castor3d::PrepassRendering</scope><name>accept</name></member>
+      <member refid="dc/d61/a05028_1a9e93f4309bed8b38ebf7184e61b0c352" prot="public" virt="non-virtual"><scope>castor3d::PrepassRendering</scope><name>countInitialisationSteps</name></member>
+      <member refid="dc/d61/a05028_1a6a8e7555c7c1ad94cbab7b38888ec8f8" prot="private" virt="non-virtual"><scope>castor3d::PrepassRendering</scope><name>doCreateComputeDepthRange</name></member>
+      <member refid="dc/d61/a05028_1a1e1f3868267fe668c4e940508f0937a2" prot="private" virt="non-virtual"><scope>castor3d::PrepassRendering</scope><name>doCreateDeferredDepthPass</name></member>
+      <member refid="dc/d61/a05028_1a02286e85379351af432a169043330a8c" prot="private" virt="non-virtual"><scope>castor3d::PrepassRendering</scope><name>doCreateForwardDepthPass</name></member>
+      <member refid="dc/d61/a05028_1ae6c7a8572bc601ecb8e0a34cbf657266" prot="private" virt="non-virtual"><scope>castor3d::PrepassRendering</scope><name>doCreateVisibilityPass</name></member>
+      <member refid="dc/d61/a05028_1afc2090988c46b9d4e637e40d442cab8a" prot="public" virt="non-virtual"><scope>castor3d::PrepassRendering</scope><name>getDepthObj</name></member>
+      <member refid="dc/d61/a05028_1a8fb6007415f3d7b401d20cdcbd1d024a" prot="public" virt="non-virtual"><scope>castor3d::PrepassRendering</scope><name>getDepthRange</name></member>
+      <member refid="dc/d61/a05028_1ac8cdf7fe81521ac535a190f3e914927f" prot="public" virt="non-virtual"><scope>castor3d::PrepassRendering</scope><name>getEngine</name></member>
+      <member refid="dc/d61/a05028_1a96155e93438dba5ec293c353e559ae2b" prot="public" virt="non-virtual"><scope>castor3d::PrepassRendering</scope><name>getLastPass</name></member>
+      <member refid="dc/d61/a05028_1a390e045fc5eec22f28f358d0dbf55789" prot="public" virt="non-virtual"><scope>castor3d::PrepassRendering</scope><name>getVisibility</name></member>
+      <member refid="dc/d61/a05028_1af31e8fb7b0017237c06238696b07da4e" prot="public" virt="non-virtual"><scope>castor3d::PrepassRendering</scope><name>getVisibilityPass</name></member>
+      <member refid="dc/d61/a05028_1aff018390b23cb7fdd546d4b3eb9b30e0" prot="public" virt="non-virtual"><scope>castor3d::PrepassRendering</scope><name>hasVisibility</name></member>
+      <member refid="dc/d61/a05028_1a7ac6be22c220f99fd6a3fc9cd63c3d3a" prot="public" virt="non-virtual"><scope>castor3d::PrepassRendering</scope><name>listIntermediates</name></member>
+      <member refid="dc/d61/a05028_1ad0b56b8926772e40ca3d53db3800e9a5" prot="private" virt="non-virtual"><scope>castor3d::PrepassRendering</scope><name>m_computeDepthRangeDesc</name></member>
+      <member refid="dc/d61/a05028_1a4dda8e1c2c46287c50e8cccb91bc1aef" prot="private" virt="non-virtual"><scope>castor3d::PrepassRendering</scope><name>m_depthObj</name></member>
+      <member refid="dc/d61/a05028_1a6722d8818e38607e49ce39c5afb043b5" prot="private" virt="non-virtual"><scope>castor3d::PrepassRendering</scope><name>m_depthPass</name></member>
+      <member refid="dc/d61/a05028_1aa9b2781f6c365c55933424c28a5de105" prot="private" virt="non-virtual"><scope>castor3d::PrepassRendering</scope><name>m_depthPassDesc</name></member>
+      <member refid="dc/d61/a05028_1ab0e860a8266d327bc1bc24c800553ed1" prot="private" virt="non-virtual"><scope>castor3d::PrepassRendering</scope><name>m_depthRange</name></member>
+      <member refid="dc/d61/a05028_1abe36cd491ced23104c45dbd314281591" prot="private" virt="non-virtual"><scope>castor3d::PrepassRendering</scope><name>m_device</name></member>
+      <member refid="dc/d61/a05028_1ac637bafeba090217655181797cd72f2c" prot="private" virt="non-virtual"><scope>castor3d::PrepassRendering</scope><name>m_graph</name></member>
+      <member refid="dc/d61/a05028_1a1a985cb03bd0d982dd3e1f269d5c6b36" prot="private" virt="non-virtual"><scope>castor3d::PrepassRendering</scope><name>m_needsDepthRange</name></member>
+      <member refid="dc/d61/a05028_1a5a7b016dd6e57ff968d7698f66226e85" prot="private" virt="non-virtual"><scope>castor3d::PrepassRendering</scope><name>m_visibility</name></member>
+      <member refid="dc/d61/a05028_1ad75447412a755fc65b730b90243a33af" prot="private" virt="non-virtual"><scope>castor3d::PrepassRendering</scope><name>m_visibilityPass</name></member>
+      <member refid="dc/d61/a05028_1a0321adf0bcbc6206d578c888425a8022" prot="private" virt="non-virtual"><scope>castor3d::PrepassRendering</scope><name>m_visibilityPassDesc</name></member>
+      <member refid="dc/d61/a05028_1a6b81d01411df11f1a1dd2dd9d8d9e38e" prot="public" virt="non-virtual"><scope>castor3d::PrepassRendering</scope><name>needsDepthRange</name></member>
+      <member refid="dc/d61/a05028_1ac93d3f82fe8e5762f4217ed7dbacd253" prot="public" virt="non-virtual"><scope>castor3d::PrepassRendering</scope><name>PrepassRendering</name></member>
+      <member refid="dc/d61/a05028_1a813f9d47b11d5c5119cfc6c6f335f07a" prot="public" virt="non-virtual"><scope>castor3d::PrepassRendering</scope><name>setNeedsDepthRange</name></member>
+      <member refid="dc/d61/a05028_1a4caed8681314b87aa1beda14bfc1d754" prot="public" virt="non-virtual"><scope>castor3d::PrepassRendering</scope><name>update</name></member>
+      <member refid="dc/d61/a05028_1ada3cf1d133f63c4c5f0a8e121f847f36" prot="public" virt="non-virtual"><scope>castor3d::PrepassRendering</scope><name>update</name></member>
+      <member refid="dc/d61/a05028_1ab0d5d9ab2303fbaf591f747c8e9bb0f4" prot="public" virt="non-virtual"><scope>castor3d::PrepassRendering</scope><name>~PrepassRendering</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

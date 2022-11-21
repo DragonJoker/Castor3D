@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d6/db5/a01573" kind="namespace" language="C++">
+    <compoundname>castor</compoundname>
+    <innerclass refid="d4/d04/a02888" prot="public">castor::OverlayCategorySort</innerclass>
+    <innerclass refid="d6/d3b/a05780" prot="public">castor::ParserEnumTraits&lt; castor3d::BillboardSize &gt;</innerclass>
+    <innerclass refid="d7/d3c/a05776" prot="public">castor::ParserEnumTraits&lt; castor3d::BillboardType &gt;</innerclass>
+    <innerclass refid="db/d37/a05748" prot="public">castor::ParserEnumTraits&lt; castor3d::BlendMode &gt;</innerclass>
+    <innerclass refid="d0/d9e/a05788" prot="public">castor::ParserEnumTraits&lt; castor3d::BorderPosition &gt;</innerclass>
+    <innerclass refid="d7/d32/a05772" prot="public">castor::ParserEnumTraits&lt; castor3d::FogType &gt;</innerclass>
+    <innerclass refid="d5/db1/a05812" prot="public">castor::ParserEnumTraits&lt; castor3d::GlobalIlluminationType &gt;</innerclass>
+    <innerclass refid="d3/dcf/a05796" prot="public">castor::ParserEnumTraits&lt; castor3d::HAlign &gt;</innerclass>
+    <innerclass refid="d3/da1/a05816" prot="public">castor::ParserEnumTraits&lt; castor3d::InterpolatorType &gt;</innerclass>
+    <innerclass refid="dc/ddc/a05756" prot="public">castor::ParserEnumTraits&lt; castor3d::LightType &gt;</innerclass>
+    <innerclass refid="d2/db8/a05740" prot="public">castor::ParserEnumTraits&lt; castor3d::LimitedType&lt; VkCompareOp &gt; &gt;</innerclass>
+    <innerclass refid="d5/d12/a05744" prot="public">castor::ParserEnumTraits&lt; castor3d::LimitedType&lt; VkPrimitiveTopology &gt; &gt;</innerclass>
+    <innerclass refid="d6/d6d/a05768" prot="public">castor::ParserEnumTraits&lt; castor3d::MovableType &gt;</innerclass>
+    <innerclass refid="da/d85/a05752" prot="public">castor::ParserEnumTraits&lt; castor3d::ParallaxOcclusionMode &gt;</innerclass>
+    <innerclass refid="d3/da4/a05764" prot="public">castor::ParserEnumTraits&lt; castor3d::ParticleFormat &gt;</innerclass>
+    <innerclass refid="db/d2a/a05808" prot="public">castor::ParserEnumTraits&lt; castor3d::ShadowType &gt;</innerclass>
+    <innerclass refid="d9/d19/a05804" prot="public">castor::ParserEnumTraits&lt; castor3d::TextLineSpacingMode &gt;</innerclass>
+    <innerclass refid="d0/d5d/a05800" prot="public">castor::ParserEnumTraits&lt; castor3d::TextTexturingMode &gt;</innerclass>
+    <innerclass refid="de/dc9/a05784" prot="public">castor::ParserEnumTraits&lt; castor3d::TextWrappingMode &gt;</innerclass>
+    <innerclass refid="d8/dde/a05792" prot="public">castor::ParserEnumTraits&lt; castor3d::VAlign &gt;</innerclass>
+    <innerclass refid="d1/d47/a05760" prot="public">castor::ParserEnumTraits&lt; castor3d::ViewportType &gt;</innerclass>
+    <innerclass refid="da/dff/a05696" prot="public">castor::ParserEnumTraits&lt; LengthUnit &gt;</innerclass>
+    <innerclass refid="d2/d02/a05708" prot="public">castor::ParserEnumTraits&lt; VkBlendFactor &gt;</innerclass>
+    <innerclass refid="da/de9/a05716" prot="public">castor::ParserEnumTraits&lt; VkBlendOp &gt;</innerclass>
+    <innerclass refid="d8/dcc/a05728" prot="public">castor::ParserEnumTraits&lt; VkBorderColor &gt;</innerclass>
+    <innerclass refid="d8/d78/a05732" prot="public">castor::ParserEnumTraits&lt; VkCompareOp &gt;</innerclass>
+    <innerclass refid="d2/d20/a05720" prot="public">castor::ParserEnumTraits&lt; VkFilter &gt;</innerclass>
+    <innerclass refid="d4/dd8/a05712" prot="public">castor::ParserEnumTraits&lt; VkImageType &gt;</innerclass>
+    <innerclass refid="d7/df8/a05736" prot="public">castor::ParserEnumTraits&lt; VkPrimitiveTopology &gt;</innerclass>
+    <innerclass refid="de/d6e/a05724" prot="public">castor::ParserEnumTraits&lt; VkSamplerAddressMode &gt;</innerclass>
+    <innerclass refid="d3/df8/a05704" prot="public">castor::ParserEnumTraits&lt; VkSamplerMipmapMode &gt;</innerclass>
+    <innerclass refid="dd/dd5/a05700" prot="public">castor::ParserEnumTraits&lt; VkShaderStageFlagBits &gt;</innerclass>
+    <innerclass refid="d4/d97/a02816" prot="public">castor::ResourceCacheT&lt; castor3d::AnimatedObjectGroup, String, castor3d::AnimatedObjectGroupCacheTraits &gt;</innerclass>
+    <innerclass refid="d7/d35/a02880" prot="public">castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;</innerclass>
+    <innerclass refid="d7/d07/a02892" prot="public">castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;</innerclass>
+    <innerclass refid="de/dd8/a02896" prot="public">castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;</innerclass>
+      <sectiondef kind="typedef">
+      <memberdef kind="typedef" id="d6/db5/a01573_1a7010f4ef16215727e7d77584cdcbffac" prot="public" static="no">
+        <type>std::set&lt; castor3d::OverlayCategorySPtr, <ref refid="d4/d04/a02888" kindref="compound">OverlayCategorySort</ref> &gt;</type>
+        <definition>using castor::OverlayCategorySet = typedef std::set&lt; castor3d::OverlayCategorySPtr, OverlayCategorySort &gt;</definition>
+        <argsstring></argsstring>
+        <name>OverlayCategorySet</name>
+        <qualifiedname>castor::OverlayCategorySet</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/OverlayCache.hpp" line="40" column="1" bodyfile="Cache/OverlayCache.hpp" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Cache/AnimatedObjectGroupCache.hpp" line="21" column="1"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,197 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dd/db3/a06320" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ModelBufferConfiguration</compoundname>
+    <includes local="no">UbosModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="dd/db3/a06320_1afe6add37bd8e3d198f049d5237be71d3" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::ModelBufferConfiguration::prvModel</definition>
+        <argsstring></argsstring>
+        <name>prvModel</name>
+        <qualifiedname>castor3d::ModelBufferConfiguration::prvModel</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="279" column="20" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="279" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/db3/a06320_1a9a2fbadbdb51b0c1815d90612e85422f" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::ModelBufferConfiguration::curModel</definition>
+        <argsstring></argsstring>
+        <name>curModel</name>
+        <qualifiedname>castor3d::ModelBufferConfiguration::curModel</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="280" column="20" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="280" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/db3/a06320_1a5292c4f9c5299e18cd6acbfeb9d5839e" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::ModelBufferConfiguration::normal</definition>
+        <argsstring></argsstring>
+        <name>normal</name>
+        <qualifiedname>castor3d::ModelBufferConfiguration::normal</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="281" column="20" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="281" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/db3/a06320_1af31fdc58c8f80954d2784f41614ed921" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ModelBufferConfiguration::materialId</definition>
+        <argsstring></argsstring>
+        <name>materialId</name>
+        <qualifiedname>castor3d::ModelBufferConfiguration::materialId</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="282" column="10" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="282" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/db3/a06320_1aefad36fd97c56ef255608efddfc4c528" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ModelBufferConfiguration::shadowReceiver</definition>
+        <argsstring></argsstring>
+        <name>shadowReceiver</name>
+        <qualifiedname>castor3d::ModelBufferConfiguration::shadowReceiver</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="283" column="10" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="283" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/db3/a06320_1a6a9f5b06b1b5ce7ed3b0baa70560e296" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ModelBufferConfiguration::envMapId</definition>
+        <argsstring></argsstring>
+        <name>envMapId</name>
+        <qualifiedname>castor3d::ModelBufferConfiguration::envMapId</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="284" column="10" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="284" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/db3/a06320_1ab9b4c6eb4993f541c257f6dba6abc0b8" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ModelBufferConfiguration::vertexOffset</definition>
+        <argsstring></argsstring>
+        <name>vertexOffset</name>
+        <qualifiedname>castor3d::ModelBufferConfiguration::vertexOffset</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="285" column="10" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="285" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/db3/a06320_1a60ab8010c151655ba983feaf151e670c" prot="public" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::ModelBufferConfiguration::scale</definition>
+        <argsstring></argsstring>
+        <name>scale</name>
+        <qualifiedname>castor3d::ModelBufferConfiguration::scale</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="286" column="17" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="286" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/db3/a06320_1a1f829c7ef60df68dc0c3ff3c2e86033c" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ModelBufferConfiguration::meshletCount</definition>
+        <argsstring></argsstring>
+        <name>meshletCount</name>
+        <qualifiedname>castor3d::ModelBufferConfiguration::meshletCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="287" column="10" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="287" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/db3/a06320_1a8f07487fed37d36d3589b92bf72e11a4" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ModelBufferConfiguration::indexOffset</definition>
+        <argsstring></argsstring>
+        <name>indexOffset</name>
+        <qualifiedname>castor3d::ModelBufferConfiguration::indexOffset</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="288" column="10" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="288" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/db3/a06320_1a64aec86288d16b450ffa295bd20f79a8" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ModelBufferConfiguration::meshletOffset</definition>
+        <argsstring></argsstring>
+        <name>meshletOffset</name>
+        <qualifiedname>castor3d::ModelBufferConfiguration::meshletOffset</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="289" column="10" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="289" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/db3/a06320_1a2eff7f9413cea204b83752762980f6f5" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ModelBufferConfiguration::pad[2]</definition>
+        <argsstring>[2]</argsstring>
+        <name>pad</name>
+        <qualifiedname>castor3d::ModelBufferConfiguration::pad</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="290" column="10" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="290" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Model index data. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/Ubos/UbosModule.hpp" line="277" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="278" bodyend="291"/>
+    <listofallmembers>
+      <member refid="dd/db3/a06320_1a9a2fbadbdb51b0c1815d90612e85422f" prot="public" virt="non-virtual"><scope>castor3d::ModelBufferConfiguration</scope><name>curModel</name></member>
+      <member refid="dd/db3/a06320_1a6a9f5b06b1b5ce7ed3b0baa70560e296" prot="public" virt="non-virtual"><scope>castor3d::ModelBufferConfiguration</scope><name>envMapId</name></member>
+      <member refid="dd/db3/a06320_1a8f07487fed37d36d3589b92bf72e11a4" prot="public" virt="non-virtual"><scope>castor3d::ModelBufferConfiguration</scope><name>indexOffset</name></member>
+      <member refid="dd/db3/a06320_1af31fdc58c8f80954d2784f41614ed921" prot="public" virt="non-virtual"><scope>castor3d::ModelBufferConfiguration</scope><name>materialId</name></member>
+      <member refid="dd/db3/a06320_1a1f829c7ef60df68dc0c3ff3c2e86033c" prot="public" virt="non-virtual"><scope>castor3d::ModelBufferConfiguration</scope><name>meshletCount</name></member>
+      <member refid="dd/db3/a06320_1a64aec86288d16b450ffa295bd20f79a8" prot="public" virt="non-virtual"><scope>castor3d::ModelBufferConfiguration</scope><name>meshletOffset</name></member>
+      <member refid="dd/db3/a06320_1a5292c4f9c5299e18cd6acbfeb9d5839e" prot="public" virt="non-virtual"><scope>castor3d::ModelBufferConfiguration</scope><name>normal</name></member>
+      <member refid="dd/db3/a06320_1a2eff7f9413cea204b83752762980f6f5" prot="public" virt="non-virtual"><scope>castor3d::ModelBufferConfiguration</scope><name>pad</name></member>
+      <member refid="dd/db3/a06320_1afe6add37bd8e3d198f049d5237be71d3" prot="public" virt="non-virtual"><scope>castor3d::ModelBufferConfiguration</scope><name>prvModel</name></member>
+      <member refid="dd/db3/a06320_1a60ab8010c151655ba983feaf151e670c" prot="public" virt="non-virtual"><scope>castor3d::ModelBufferConfiguration</scope><name>scale</name></member>
+      <member refid="dd/db3/a06320_1aefad36fd97c56ef255608efddfc4c528" prot="public" virt="non-virtual"><scope>castor3d::ModelBufferConfiguration</scope><name>shadowReceiver</name></member>
+      <member refid="dd/db3/a06320_1ab9b4c6eb4993f541c257f6dba6abc0b8" prot="public" virt="non-virtual"><scope>castor3d::ModelBufferConfiguration</scope><name>vertexOffset</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d6/df3/a05008" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::PipelineLoHashDetails</compoundname>
+    <derivedcompoundref refid="db/dd9/a05012" prot="public" virt="non-virtual">castor3d::PipelineFlags</derivedcompoundref>
+    <includes local="no">PipelineFlags.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d6/df3/a05008_1aee7ca1762b576e2c122e6e526a12192a" prot="public" static="no" mutable="no">
+        <type>VkDeviceSize</type>
+        <definition>VkDeviceSize castor3d::PipelineLoHashDetails::morphTargetsOffset</definition>
+        <argsstring></argsstring>
+        <name>morphTargetsOffset</name>
+        <qualifiedname>castor3d::PipelineLoHashDetails::morphTargetsOffset</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="74" column="14" bodyfile="Render/PipelineFlags.hpp" bodystart="74" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d6/df3/a05008_1af0957477b80ff27f15e16c0d862b48f7" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::PipelineLoHashDetails::PipelineLoHashDetails</definition>
+        <argsstring>(VkDeviceSize morphTargetsOffset=0u)</argsstring>
+        <name>PipelineLoHashDetails</name>
+        <qualifiedname>castor3d::PipelineLoHashDetails::PipelineLoHashDetails</qualifiedname>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>morphTargetsOffset</declname>
+          <defval>0u</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="69" column="10" bodyfile="Render/PipelineFlags.hpp" bodystart="69" bodyend="72"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::PipelineFlags</label>
+        <link refid="db/dd9/a05012"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::PipelineLoHashDetails</label>
+        <link refid="d6/df3/a05008"/>
+      </node>
+    </inheritancegraph>
+    <location file="Render/PipelineFlags.hpp" line="67" column="1" bodyfile="Render/PipelineFlags.hpp" bodystart="68" bodyend="75"/>
+    <listofallmembers>
+      <member refid="d6/df3/a05008_1aee7ca1762b576e2c122e6e526a12192a" prot="public" virt="non-virtual"><scope>castor3d::PipelineLoHashDetails</scope><name>morphTargetsOffset</name></member>
+      <member refid="d6/df3/a05008_1af0957477b80ff27f15e16c0d862b48f7" prot="public" virt="non-virtual"><scope>castor3d::PipelineLoHashDetails</scope><name>PipelineLoHashDetails</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

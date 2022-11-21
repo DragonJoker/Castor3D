@@ -1,0 +1,186 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d1/ddd/a05076" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::RenderInfo</compoundname>
+    <includes local="no">RenderInfo.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d1/ddd/a05076_1a0497479b98bd27d3fe7515c72adbe9c2" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RenderInfo::totalVertexCount</definition>
+        <argsstring></argsstring>
+        <name>totalVertexCount</name>
+        <qualifiedname>castor3d::RenderInfo::totalVertexCount</qualifiedname>
+        <initializer>{ 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The total vertex count. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderInfo.hpp" line="15" column="10" bodyfile="Render/RenderInfo.hpp" bodystart="15" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/ddd/a05076_1aacdc3a2ffe28992af0ae1bbdf139bc91" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RenderInfo::totalFaceCount</definition>
+        <argsstring></argsstring>
+        <name>totalFaceCount</name>
+        <qualifiedname>castor3d::RenderInfo::totalFaceCount</qualifiedname>
+        <initializer>{ 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The total face count. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderInfo.hpp" line="18" column="10" bodyfile="Render/RenderInfo.hpp" bodystart="18" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/ddd/a05076_1aee75864040c485cadfdeff82b5dbc107" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RenderInfo::visibleVertexCount</definition>
+        <argsstring></argsstring>
+        <name>visibleVertexCount</name>
+        <qualifiedname>castor3d::RenderInfo::visibleVertexCount</qualifiedname>
+        <initializer>{ 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The visble objects vertex count. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderInfo.hpp" line="21" column="10" bodyfile="Render/RenderInfo.hpp" bodystart="21" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/ddd/a05076_1a1d0e63998f4b31d45effc34d1e910386" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RenderInfo::visibleFaceCount</definition>
+        <argsstring></argsstring>
+        <name>visibleFaceCount</name>
+        <qualifiedname>castor3d::RenderInfo::visibleFaceCount</qualifiedname>
+        <initializer>{ 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The visible objects face count. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderInfo.hpp" line="24" column="10" bodyfile="Render/RenderInfo.hpp" bodystart="24" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/ddd/a05076_1a1109e4252826732bb1f72dbefcd8af91" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RenderInfo::totalObjectsCount</definition>
+        <argsstring></argsstring>
+        <name>totalObjectsCount</name>
+        <qualifiedname>castor3d::RenderInfo::totalObjectsCount</qualifiedname>
+        <initializer>{ 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The total object count. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderInfo.hpp" line="27" column="10" bodyfile="Render/RenderInfo.hpp" bodystart="27" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/ddd/a05076_1ae5009fb16ee9a900ae6d414e3b0484e8" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RenderInfo::visibleObjectsCount</definition>
+        <argsstring></argsstring>
+        <name>visibleObjectsCount</name>
+        <qualifiedname>castor3d::RenderInfo::visibleObjectsCount</qualifiedname>
+        <initializer>{ 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The visible objects count. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderInfo.hpp" line="30" column="10" bodyfile="Render/RenderInfo.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/ddd/a05076_1a75b626aacb294e9bf3a888d40e02da63" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RenderInfo::particlesCount</definition>
+        <argsstring></argsstring>
+        <name>particlesCount</name>
+        <qualifiedname>castor3d::RenderInfo::particlesCount</qualifiedname>
+        <initializer>{ 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The particles count. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderInfo.hpp" line="33" column="10" bodyfile="Render/RenderInfo.hpp" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/ddd/a05076_1a881e2d5cb91a2b78f2f984055dc24cce" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RenderInfo::totalLightsCount</definition>
+        <argsstring></argsstring>
+        <name>totalLightsCount</name>
+        <qualifiedname>castor3d::RenderInfo::totalLightsCount</qualifiedname>
+        <initializer>{ 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The total lights count. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderInfo.hpp" line="36" column="10" bodyfile="Render/RenderInfo.hpp" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/ddd/a05076_1a2ed6181a4018e3e437a043c2f6003de7" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RenderInfo::visibleLightsCount</definition>
+        <argsstring></argsstring>
+        <name>visibleLightsCount</name>
+        <qualifiedname>castor3d::RenderInfo::visibleLightsCount</qualifiedname>
+        <initializer>{ 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The visible lights count. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderInfo.hpp" line="39" column="10" bodyfile="Render/RenderInfo.hpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/ddd/a05076_1a02ac5018430c82a92d839820810f722c" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RenderInfo::drawCalls</definition>
+        <argsstring></argsstring>
+        <name>drawCalls</name>
+        <qualifiedname>castor3d::RenderInfo::drawCalls</qualifiedname>
+        <initializer>{ 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The draw calls count. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderInfo.hpp" line="42" column="10" bodyfile="Render/RenderInfo.hpp" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/RenderInfo.hpp" line="11" column="1" bodyfile="Render/RenderInfo.hpp" bodystart="12" bodyend="43"/>
+    <listofallmembers>
+      <member refid="d1/ddd/a05076_1a02ac5018430c82a92d839820810f722c" prot="public" virt="non-virtual"><scope>castor3d::RenderInfo</scope><name>drawCalls</name></member>
+      <member refid="d1/ddd/a05076_1a75b626aacb294e9bf3a888d40e02da63" prot="public" virt="non-virtual"><scope>castor3d::RenderInfo</scope><name>particlesCount</name></member>
+      <member refid="d1/ddd/a05076_1aacdc3a2ffe28992af0ae1bbdf139bc91" prot="public" virt="non-virtual"><scope>castor3d::RenderInfo</scope><name>totalFaceCount</name></member>
+      <member refid="d1/ddd/a05076_1a881e2d5cb91a2b78f2f984055dc24cce" prot="public" virt="non-virtual"><scope>castor3d::RenderInfo</scope><name>totalLightsCount</name></member>
+      <member refid="d1/ddd/a05076_1a1109e4252826732bb1f72dbefcd8af91" prot="public" virt="non-virtual"><scope>castor3d::RenderInfo</scope><name>totalObjectsCount</name></member>
+      <member refid="d1/ddd/a05076_1a0497479b98bd27d3fe7515c72adbe9c2" prot="public" virt="non-virtual"><scope>castor3d::RenderInfo</scope><name>totalVertexCount</name></member>
+      <member refid="d1/ddd/a05076_1a1d0e63998f4b31d45effc34d1e910386" prot="public" virt="non-virtual"><scope>castor3d::RenderInfo</scope><name>visibleFaceCount</name></member>
+      <member refid="d1/ddd/a05076_1a2ed6181a4018e3e437a043c2f6003de7" prot="public" virt="non-virtual"><scope>castor3d::RenderInfo</scope><name>visibleLightsCount</name></member>
+      <member refid="d1/ddd/a05076_1ae5009fb16ee9a900ae6d414e3b0484e8" prot="public" virt="non-virtual"><scope>castor3d::RenderInfo</scope><name>visibleObjectsCount</name></member>
+      <member refid="d1/ddd/a05076_1aee75864040c485cadfdeff82b5dbc107" prot="public" virt="non-virtual"><scope>castor3d::RenderInfo</scope><name>visibleVertexCount</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

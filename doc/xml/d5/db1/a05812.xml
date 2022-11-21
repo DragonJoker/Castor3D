@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d5/db1/a05812" kind="struct" language="C++" prot="public">
+    <compoundname>castor::ParserEnumTraits&lt; castor3d::GlobalIlluminationType &gt;</compoundname>
+    <includes local="no">SceneFileParser.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d5/db1/a05812_1a55b150ecd2a08d8779e5bc115e6a7e84" prot="public" static="yes" mutable="no">
+        <type>xchar const  *const</type>
+        <definition>xchar const* const castor::ParserEnumTraits&lt; castor3d::GlobalIlluminationType &gt;::Name</definition>
+        <argsstring></argsstring>
+        <name>Name</name>
+        <qualifiedname>castor::ParserEnumTraits&lt; castor3d::GlobalIlluminationType &gt;::Name</qualifiedname>
+        <initializer>= cuT( &quot;GlobalIlluminationType&quot; )</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="666" column="34" bodyfile="Scene/SceneFileParser.hpp" bodystart="666" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/db1/a05812_1afd68aac1d464db28acca848ed6245800" prot="public" static="yes" mutable="no">
+        <type>UInt32StrMap const</type>
+        <definition>UInt32StrMap const castor::ParserEnumTraits&lt; castor3d::GlobalIlluminationType &gt;::Values</definition>
+        <argsstring></argsstring>
+        <name>Values</name>
+        <qualifiedname>castor::ParserEnumTraits&lt; castor3d::GlobalIlluminationType &gt;::Values</qualifiedname>
+        <initializer>= []()
+		{
+			UInt32StrMap result;
+			result = <ref refid="d3/d22/a01572_1a89ee8e4edb4c883ef7c66b8dc60cc430" kindref="member">castor3d::getEnumMapT</ref>&lt; <ref refid="d3/d22/a01572_1a94045726cb02c9deb4926f3bf0d0443e" kindref="member">castor3d::GlobalIlluminationType</ref> &gt;();
+			return result;
+		}( )</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="667" column="34" bodyfile="Scene/SceneFileParser.hpp" bodystart="667" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor::ParserEnumTraits&lt; castor3d::GlobalIlluminationType &gt;</label>
+        <link refid="d5/db1/a05812"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>Name</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>Values</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>UInt32StrMap</label>
+      </node>
+      <node id="2">
+        <label>xchar</label>
+      </node>
+    </collaborationgraph>
+    <location file="Scene/SceneFileParser.hpp" line="664" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="665" bodyend="673"/>
+    <listofallmembers>
+      <member refid="d5/db1/a05812_1a55b150ecd2a08d8779e5bc115e6a7e84" prot="public" virt="non-virtual"><scope>castor::ParserEnumTraits&lt; castor3d::GlobalIlluminationType &gt;</scope><name>Name</name></member>
+      <member refid="d5/db1/a05812_1afd68aac1d464db28acca848ed6245800" prot="public" virt="non-virtual"><scope>castor::ParserEnumTraits&lt; castor3d::GlobalIlluminationType &gt;</scope><name>Values</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -2,9 +2,9 @@
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="db/dab/a00089" kind="file" language="C++">
     <compoundname>Interpolator.hpp</compoundname>
-    <includes refid="db/dbd/a11365" local="yes">AnimationModule.hpp</includes>
-    <includedby refid="d5/d67/a01070" local="yes">Scene/Animation/SceneNode/SceneNodeAnimationInstance.hpp</includedby>
-    <includedby refid="d6/dea/a01094" local="yes">Scene/Animation/Skeleton/SkeletonAnimationInstanceObject.hpp</includedby>
+    <includes refid="dc/dc3/a13227" local="yes">AnimationModule.hpp</includes>
+    <includedby refid="dd/d95/a01247" local="yes">Scene/Animation/SceneNode/SceneNodeAnimationInstance.hpp</includedby>
+    <includedby refid="dd/d39/a01271" local="yes">Scene/Animation/Skeleton/SkeletonAnimationInstanceObject.hpp</includedby>
     <incdepgraph>
       <node id="5">
         <label>CastorUtils/Design/FlagCombination.hpp</label>
@@ -38,7 +38,7 @@
       </node>
       <node id="2">
         <label>AnimationModule.hpp</label>
-        <link refid="db/dbd/a11365"/>
+        <link refid="dc/dc3/a13227"/>
         <childnode refid="3" relation="include">
         </childnode>
         <childnode refid="18" relation="include">
@@ -109,30 +109,30 @@
       </node>
       <node id="2">
         <label>Scene/Animation/SceneNode/SceneNodeAnimationInstance.hpp</label>
-        <link refid="d5/d67/a01070"/>
+        <link refid="dd/d95/a01247"/>
       </node>
       <node id="4">
         <label>Scene/Animation/Skeleton/SkeletonAnimationInstanceBone.hpp</label>
-        <link refid="d2/df3/a01085"/>
+        <link refid="d3/d53/a01262"/>
       </node>
       <node id="5">
         <label>Scene/Animation/Skeleton/SkeletonAnimationInstanceNode.hpp</label>
-        <link refid="d6/d0d/a01091"/>
+        <link refid="dc/dd9/a01268"/>
       </node>
       <node id="3">
         <label>Scene/Animation/Skeleton/SkeletonAnimationInstanceObject.hpp</label>
-        <link refid="d6/dea/a01094"/>
+        <link refid="dd/d39/a01271"/>
         <childnode refid="4" relation="include">
         </childnode>
         <childnode refid="5" relation="include">
         </childnode>
       </node>
     </invincdepgraph>
-    <innerclass refid="d0/d9d/a02202" prot="public">castor3d::Interpolator</innerclass>
-    <innerclass refid="d6/deb/a02214" prot="public">castor3d::InterpolatorT&lt; DataT, InterpolatorType::eNearest &gt;</innerclass>
-    <innerclass refid="d4/d54/a02218" prot="public">castor3d::InterpolatorT&lt; DataT, InterpolatorType::eLinear &gt;</innerclass>
-    <innerclass refid="d6/d41/a02222" prot="public">castor3d::InterpolatorT&lt; castor::Quaternion, InterpolatorType::eLinear &gt;</innerclass>
-    <innernamespace refid="da/dab/a01362">castor3d</innernamespace>
+    <innerclass refid="d0/da6/a02412" prot="public">castor3d::Interpolator</innerclass>
+    <innerclass refid="d5/de6/a02424" prot="public">castor3d::InterpolatorT&lt; DataT, InterpolatorType::eNearest &gt;</innerclass>
+    <innerclass refid="d5/d04/a02428" prot="public">castor3d::InterpolatorT&lt; DataT, InterpolatorType::eLinear &gt;</innerclass>
+    <innerclass refid="da/d5c/a02432" prot="public">castor3d::InterpolatorT&lt; castor::Quaternion, InterpolatorType::eLinear &gt;</innerclass>
+    <innernamespace refid="d3/d22/a01572">castor3d</innernamespace>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

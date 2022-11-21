@@ -1,0 +1,11 @@
+<map id="castor3d::UniformBufferOffsetT::getDescriptorWrite" name="castor3d::UniformBufferOffsetT::getDescriptorWrite">
+<area shape="rect" id="node1" title=" " alt="" coords="469,201,660,243"/>
+<area shape="rect" id="node2" href="$d9/d07/a06184.html#ab52a7b1884fb67ab3d0a4513bc761f0f" title=" " alt="" coords="224,5,421,47"/>
+<area shape="rect" id="node3" href="$db/d65/a06192.html#a5062748475183244f2c4d15e7d42a3f0" title=" " alt="" coords="231,71,414,112"/>
+<area shape="rect" id="node4" href="$df/df2/a06208.html#a4872797ae1ca5fc2943359a8f257ef43" title=" " alt="" coords="253,136,392,177"/>
+<area shape="rect" id="node5" href="$db/d2c/a06256.html#ae5f71b06a038fe75dc103fe5d834e405" title=" " alt="" coords="253,201,393,243"/>
+<area shape="rect" id="node6" href="$d2/dea/a06264.html#a587585de7c15fb59c8a7f3456dbae3f8" title=" " alt="" coords="235,267,410,308"/>
+<area shape="rect" id="node7" href="$d2/d96/a06360.html#a7183186f335e2d45d790998b42f8c0fe" title=" " alt="" coords="244,332,401,373"/>
+<area shape="rect" id="node8" href="$d3/d22/a01572.html#abbd4d499a27a5b3204b5db0e98efb4dd" title="Creates a descriptor write for uniform buffer range." alt="" coords="237,397,408,439"/>
+<area shape="rect" id="node9" href="$d3/d22/a01572.html#aea0fabbeff5860da34e8e820ff644d69" title="Creates a descriptor write for storage buffer." alt="" coords="5,397,176,439"/>
+</map>

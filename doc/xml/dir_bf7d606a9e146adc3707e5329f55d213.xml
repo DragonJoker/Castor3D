@@ -2,8 +2,8 @@
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="dir_bf7d606a9e146adc3707e5329f55d213" kind="dir">
     <compoundname>Scene/Animation/Texture</compoundname>
-    <innerfile refid="d1/dfa/a01097">TextureAnimationInstance.hpp</innerfile>
-    <innerfile refid="de/dfc/a11374">TextureAnimationModule.hpp</innerfile>
+    <innerfile refid="de/d33/a01274">TextureAnimationInstance.hpp</innerfile>
+    <innerfile refid="d7/d06/a13242">TextureAnimationModule.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

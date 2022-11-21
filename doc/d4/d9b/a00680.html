@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.3"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: Render/Culling/SceneCuller.hpp File Reference</title>
+<title>Castor3D: Model/Mesh/Submesh/Component/MeshletComponent.hpp File Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -20,7 +20,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.13.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.14.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -42,65 +42,31 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dir_ee81606feaed1a7650f95054c2670416.html">Render</a></li><li class="navelem"><a class="el" href="../../dir_60224d060cc31e4c570b52945980330e.html">Culling</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../dir_48b9b82601b5e90070b208b7d796c277.html">Model</a></li><li class="navelem"><a class="el" href="../../dir_eb05c2e81f584c27ccf0b1e73c563a6d.html">Mesh</a></li><li class="navelem"><a class="el" href="../../dir_19beb1677fd60f69f1adee84ca7ad745.html">Submesh</a></li><li class="navelem"><a class="el" href="../../dir_517eb4e4681f670c5a2adec1eb9b993a.html">Component</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#namespaces">Namespaces</a> &#124;
-<a href="#typedef-members">Typedefs</a> &#124;
-<a href="#func-members">Functions</a>  </div>
-  <div class="headertitle"><div class="title">SceneCuller.hpp File Reference</div></div>
+<a href="#namespaces">Namespaces</a>  </div>
+  <div class="headertitle"><div class="title">MeshletComponent.hpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d94/a03698.html">castor3d::SceneCuller</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/d7d/a03702.html">castor3d::SceneCuller::CulledNodeT&lt; NodeT &gt;</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d5f/a03706.html">castor3d::SceneCuller::RenderPassBuffers</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d69/a04328.html">castor3d::MeshletComponent</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
 Namespaces</h2></td></tr>
-<tr class="memitem:da/dab/a01362"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html">castor3d</a></td></tr>
+<tr class="memitem:d3/d22/a01572"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d22/a01572.html">castor3d</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
-Typedefs</h2></td></tr>
-<tr class="memitem:a3e48fb7f51f82b37e70f6e25ab578c76"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html#a3e48fb7f51f82b37e70f6e25ab578c76">castor3d::PipelineNodes</a> = std::array&lt; castor::Point4ui, MaxNodesPerPipeline &gt;</td></tr>
-<tr class="separator:a3e48fb7f51f82b37e70f6e25ab578c76"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abb8a6405264a378e696290c96aa2f4a9"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html#abb8a6405264a378e696290c96aa2f4a9">castor3d::PipelineBuffer</a> = std::pair&lt; PipelineBaseHash, ashes::BufferBase const * &gt;</td></tr>
-<tr class="separator:abb8a6405264a378e696290c96aa2f4a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
-Functions</h2></td></tr>
-<tr class="memitem:a2fead49887fd9edd9b47df1d588bb369"><td class="memItemLeft" align="right" valign="top">AnimatedObjectSPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html#a2fead49887fd9edd9b47df1d588bb369">castor3d::findAnimatedObject</a> (Scene const &amp;scene, castor::String const &amp;name)</td></tr>
-<tr class="separator:a2fead49887fd9edd9b47df1d588bb369"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab302309ec661588411d41fe8d5427d41"><td class="memItemLeft" align="right" valign="top">PipelineBaseHash&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html#ab302309ec661588411d41fe8d5427d41">castor3d::getPipelineBaseHash</a> (RenderNodesPass const &amp;renderPass, Submesh const &amp;data, Pass const &amp;pass, bool isFrontCulled)</td></tr>
-<tr class="separator:ab302309ec661588411d41fe8d5427d41"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a146a2458bf40c7b9a0bc024fa2ceb532"><td class="memItemLeft" align="right" valign="top">PipelineBaseHash&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html#a146a2458bf40c7b9a0bc024fa2ceb532">castor3d::getPipelineBaseHash</a> (RenderNodesPass const &amp;renderPass, BillboardBase const &amp;data, Pass const &amp;pass, bool isFrontCulled)</td></tr>
-<tr class="separator:a146a2458bf40c7b9a0bc024fa2ceb532"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5ca86ac2c65acb0a9ea440a0ee30641d"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html#a5ca86ac2c65acb0a9ea440a0ee30641d">castor3d::hash</a> (SubmeshRenderNode const &amp;culled)</td></tr>
-<tr class="separator:a5ca86ac2c65acb0a9ea440a0ee30641d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a73c73a6928e02e00d7d748d11b2756b4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html#a73c73a6928e02e00d7d748d11b2756b4">castor3d::isVisible</a> (Camera const &amp;camera, SubmeshRenderNode const &amp;node)</td></tr>
-<tr class="separator:a73c73a6928e02e00d7d748d11b2756b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7afbf73c66f67acf3522ebb699e4e8e8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html#a7afbf73c66f67acf3522ebb699e4e8e8">castor3d::isVisible</a> (Frustum const &amp;frustum, SubmeshRenderNode const &amp;node)</td></tr>
-<tr class="separator:a7afbf73c66f67acf3522ebb699e4e8e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a616cb5e5a74e45e741f348c0a6fb7e3a"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html#a616cb5e5a74e45e741f348c0a6fb7e3a">castor3d::hash</a> (BillboardRenderNode const &amp;culled)</td></tr>
-<tr class="separator:a616cb5e5a74e45e741f348c0a6fb7e3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae9a1d05b9a495785bbea03efcceaf121"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html#ae9a1d05b9a495785bbea03efcceaf121">castor3d::isVisible</a> (Camera const &amp;camera, BillboardRenderNode const &amp;node)</td></tr>
-<tr class="separator:ae9a1d05b9a495785bbea03efcceaf121"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af342395f282df0e5571bfb5a06c8324d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html#af342395f282df0e5571bfb5a06c8324d">castor3d::isVisible</a> (Frustum const &amp;frustum, BillboardRenderNode const &amp;node)</td></tr>
-<tr class="separator:af342395f282df0e5571bfb5a06c8324d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jun 8 2022 13:04:46 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Mon Nov 21 2022 20:20:32 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

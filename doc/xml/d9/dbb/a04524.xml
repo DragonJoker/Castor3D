@@ -1,0 +1,330 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d9/dbb/a04524" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::OverlayRenderer::Preparer</compoundname>
+    <basecompoundref refid="dd/d61/a04548" prot="public" virt="non-virtual">castor3d::OverlayVisitor</basecompoundref>
+    <includes local="no">OverlayRenderer.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d9/dbb/a04524_1a296eeb81a1488e8cfb1f62bb259efc3c" prot="private" static="no" mutable="no">
+        <type><ref refid="d1/def/a04512" kindref="compound">OverlayRenderer</ref> &amp;</type>
+        <definition>OverlayRenderer&amp; castor3d::OverlayRenderer::Preparer::m_renderer</definition>
+        <argsstring></argsstring>
+        <name>m_renderer</name>
+        <qualifiedname>castor3d::OverlayRenderer::Preparer::m_renderer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayRenderer.hpp" line="71" column="18" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="71" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/dbb/a04524_1a695b334bf1737dc7e3288e742aa42673" prot="private" static="no" mutable="no">
+        <type><ref refid="d3/d96/a05072" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::OverlayRenderer::Preparer::m_device</definition>
+        <argsstring></argsstring>
+        <name>m_device</name>
+        <qualifiedname>castor3d::OverlayRenderer::Preparer::m_device</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayRenderer.hpp" line="72" column="21" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="72" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/dbb/a04524_1ad65cbd3f67fa54d0a184b26439990145" prot="private" static="no" mutable="no">
+        <type>VkRenderPass</type>
+        <definition>VkRenderPass castor3d::OverlayRenderer::Preparer::m_renderPass</definition>
+        <argsstring></argsstring>
+        <name>m_renderPass</name>
+        <qualifiedname>castor3d::OverlayRenderer::Preparer::m_renderPass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayRenderer.hpp" line="73" column="14" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="73" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d9/dbb/a04524_1ac242c8aaf32d8b4c3326d81ccdc9f3ea" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::OverlayRenderer::Preparer::Preparer</definition>
+        <argsstring>(Preparer const &amp;)=delete</argsstring>
+        <name>Preparer</name>
+        <qualifiedname>castor3d::OverlayRenderer::Preparer::Preparer</qualifiedname>
+        <param>
+          <type><ref refid="d9/dbb/a04524" kindref="compound">Preparer</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayRenderer.hpp" line="46" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/dbb/a04524_1a39fd0cc922df231715437ae5d1a11ac1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d9/dbb/a04524" kindref="compound">Preparer</ref> &amp;</type>
+        <definition>C3D_API Preparer &amp; castor3d::OverlayRenderer::Preparer::operator=</definition>
+        <argsstring>(Preparer const &amp;)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::OverlayRenderer::Preparer::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d9/dbb/a04524" kindref="compound">Preparer</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayRenderer.hpp" line="47" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/dbb/a04524_1aec3ec52ba7431597f13a847a7e5b4c56" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::OverlayRenderer::Preparer::Preparer</definition>
+        <argsstring>(OverlayRenderer &amp;renderer, RenderDevice const &amp;device, VkRenderPass renderPass, VkFramebuffer framebuffer)</argsstring>
+        <name>Preparer</name>
+        <qualifiedname>castor3d::OverlayRenderer::Preparer::Preparer</qualifiedname>
+        <param>
+          <type><ref refid="d1/def/a04512" kindref="compound">OverlayRenderer</ref> &amp;</type>
+          <declname>renderer</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d96/a05072" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>VkRenderPass</type>
+          <declname>renderPass</declname>
+        </param>
+        <param>
+          <type>VkFramebuffer</type>
+          <declname>framebuffer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayRenderer.hpp" line="48" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/dbb/a04524_1af70a4b6b1398fcec3c1f0327b92fcd51" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::OverlayRenderer::Preparer::Preparer</definition>
+        <argsstring>(Preparer &amp;&amp;rhs)</argsstring>
+        <name>Preparer</name>
+        <qualifiedname>castor3d::OverlayRenderer::Preparer::Preparer</qualifiedname>
+        <param>
+          <type><ref refid="d9/dbb/a04524" kindref="compound">Preparer</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayRenderer.hpp" line="52" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/dbb/a04524_1a25f7313707e4dfdb4f1bf78933caea54" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d9/dbb/a04524" kindref="compound">Preparer</ref> &amp;</type>
+        <definition>C3D_API Preparer &amp; castor3d::OverlayRenderer::Preparer::operator=</definition>
+        <argsstring>(Preparer &amp;&amp;rhs)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::OverlayRenderer::Preparer::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d9/dbb/a04524" kindref="compound">Preparer</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayRenderer.hpp" line="53" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/dbb/a04524_1ae2d1067a26ce49f230612b4c6820a629" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::OverlayRenderer::Preparer::~Preparer</definition>
+        <argsstring>() override</argsstring>
+        <name>~Preparer</name>
+        <qualifiedname>castor3d::OverlayRenderer::Preparer::~Preparer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayRenderer.hpp" line="54" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/dbb/a04524_1ab329d3757df8f98db5913beb3f81e43b" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::OverlayRenderer::Preparer::visit</definition>
+        <argsstring>(PanelOverlay const &amp;overlay) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::OverlayRenderer::Preparer::visit</qualifiedname>
+        <reimplements refid="dd/d61/a04548_1ae2d7c4f7df14a0ed05e5cc4f5870e701">visit</reimplements>
+        <param>
+          <type><ref refid="d0/df1/a04552" kindref="compound">PanelOverlay</ref> const &amp;</type>
+          <declname>overlay</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayRenderer.hpp" line="56" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/dbb/a04524_1a83d1827a4589cf052e5dc18e30cd20b5" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::OverlayRenderer::Preparer::visit</definition>
+        <argsstring>(BorderPanelOverlay const &amp;overlay) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::OverlayRenderer::Preparer::visit</qualifiedname>
+        <reimplements refid="dd/d61/a04548_1a5d126de418a8ae350b89dfface6aac4c">visit</reimplements>
+        <param>
+          <type><ref refid="d5/d8e/a04448" kindref="compound">BorderPanelOverlay</ref> const &amp;</type>
+          <declname>overlay</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayRenderer.hpp" line="57" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/dbb/a04524_1ac8982edcec00df52b60feeed6adfaa70" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::OverlayRenderer::Preparer::visit</definition>
+        <argsstring>(TextOverlay const &amp;overlay) override</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::OverlayRenderer::Preparer::visit</qualifiedname>
+        <reimplements refid="dd/d61/a04548_1a7adc92b8b93307b1ba2b5a784488e918">visit</reimplements>
+        <param>
+          <type><ref refid="d4/d81/a04556" kindref="compound">TextOverlay</ref> const &amp;</type>
+          <declname>overlay</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayRenderer.hpp" line="58" column="6"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d9/dbb/a04524_1ae9b9f63df723291bd323970fdb736a7e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename QuadT</type>
+          </param>
+          <param>
+            <type>typename OverlayT</type>
+          </param>
+          <param>
+            <type>typename VertexT</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>CountT</declname>
+            <defname>CountT</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor3d::OverlayRenderer::Preparer::doPrepareOverlay</definition>
+        <argsstring>(RenderDevice const &amp;device, OverlayT const &amp;overlay, Pass const &amp;pass, std::map&lt; size_t, VertexBufferIndexT&lt; VertexT, CountT &gt; &gt; &amp;overlays, std::vector&lt; VertexBufferPoolPtrT&lt; VertexT, CountT &gt; &gt; &amp;vertexBuffers, std::vector&lt; VertexT &gt; const &amp;vertices, FontTextureSPtr fontTexture)</argsstring>
+        <name>doPrepareOverlay</name>
+        <qualifiedname>castor3d::OverlayRenderer::Preparer::doPrepareOverlay</qualifiedname>
+        <param>
+          <type><ref refid="d3/d96/a05072" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>OverlayT const &amp;</type>
+          <declname>overlay</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d86/a03732" kindref="compound">Pass</ref> const &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type>std::map&lt; size_t, <ref refid="d5/d91/a04516" kindref="compound">VertexBufferIndexT</ref>&lt; VertexT, CountT &gt; &gt; &amp;</type>
+          <declname>overlays</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; <ref refid="d1/def/a04512_1a331f86f02b7bc1f6c9335b1fed81b212" kindref="member">VertexBufferPoolPtrT</ref>&lt; VertexT, CountT &gt; &gt; &amp;</type>
+          <declname>vertexBuffers</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; VertexT &gt; const &amp;</type>
+          <declname>vertices</declname>
+        </param>
+        <param>
+          <type>FontTextureSPtr</type>
+          <declname>fontTexture</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayRenderer.hpp" line="62" column="6"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::OverlayRenderer::Preparer</label>
+        <link refid="d9/dbb/a04524"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::OverlayVisitor</label>
+        <link refid="dd/d61/a04548"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::OverlayRenderer::Preparer</label>
+        <link refid="d9/dbb/a04524"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::OverlayVisitor</label>
+        <link refid="dd/d61/a04548"/>
+      </node>
+    </collaborationgraph>
+    <location file="Overlay/OverlayRenderer.hpp" line="42" column="1" bodyfile="Overlay/OverlayRenderer.hpp" bodystart="44" bodyend="74"/>
+    <listofallmembers>
+      <member refid="d9/dbb/a04524_1ae9b9f63df723291bd323970fdb736a7e" prot="private" virt="non-virtual"><scope>castor3d::OverlayRenderer::Preparer</scope><name>doPrepareOverlay</name></member>
+      <member refid="d9/dbb/a04524_1a695b334bf1737dc7e3288e742aa42673" prot="private" virt="non-virtual"><scope>castor3d::OverlayRenderer::Preparer</scope><name>m_device</name></member>
+      <member refid="d9/dbb/a04524_1a296eeb81a1488e8cfb1f62bb259efc3c" prot="private" virt="non-virtual"><scope>castor3d::OverlayRenderer::Preparer</scope><name>m_renderer</name></member>
+      <member refid="d9/dbb/a04524_1ad65cbd3f67fa54d0a184b26439990145" prot="private" virt="non-virtual"><scope>castor3d::OverlayRenderer::Preparer</scope><name>m_renderPass</name></member>
+      <member refid="d9/dbb/a04524_1a39fd0cc922df231715437ae5d1a11ac1" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::Preparer</scope><name>operator=</name></member>
+      <member refid="d9/dbb/a04524_1a25f7313707e4dfdb4f1bf78933caea54" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::Preparer</scope><name>operator=</name></member>
+      <member refid="d9/dbb/a04524_1ac242c8aaf32d8b4c3326d81ccdc9f3ea" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::Preparer</scope><name>Preparer</name></member>
+      <member refid="d9/dbb/a04524_1aec3ec52ba7431597f13a847a7e5b4c56" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::Preparer</scope><name>Preparer</name></member>
+      <member refid="d9/dbb/a04524_1af70a4b6b1398fcec3c1f0327b92fcd51" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::Preparer</scope><name>Preparer</name></member>
+      <member refid="d9/dbb/a04524_1ab329d3757df8f98db5913beb3f81e43b" prot="public" virt="virtual"><scope>castor3d::OverlayRenderer::Preparer</scope><name>visit</name></member>
+      <member refid="d9/dbb/a04524_1a83d1827a4589cf052e5dc18e30cd20b5" prot="public" virt="virtual"><scope>castor3d::OverlayRenderer::Preparer</scope><name>visit</name></member>
+      <member refid="d9/dbb/a04524_1ac8982edcec00df52b60feeed6adfaa70" prot="public" virt="virtual"><scope>castor3d::OverlayRenderer::Preparer</scope><name>visit</name></member>
+      <member refid="dd/d61/a04548_1ab177d0be7b6eb0efc27240c929ee9c90" prot="public" virt="virtual"><scope>castor3d::OverlayRenderer::Preparer</scope><name>~OverlayVisitor</name></member>
+      <member refid="d9/dbb/a04524_1ae2d1067a26ce49f230612b4c6820a629" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::Preparer</scope><name>~Preparer</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

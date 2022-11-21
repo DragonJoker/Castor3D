@@ -1,0 +1,222 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d3/d8a/a00899" kind="file" language="C++">
+    <compoundname>SsaoConfig.hpp</compoundname>
+    <includes refid="d5/dd3/a00902" local="yes">SsaoModule.hpp</includes>
+    <includes refid="db/d43/a00422" local="yes">Castor3D/Miscellaneous/MiscellaneousModule.hpp</includes>
+    <includes local="no">CastorUtils/Data/TextWriter.hpp</includes>
+    <includes local="no">CastorUtils/Design/ChangeTracked.hpp</includes>
+    <includes local="no">CastorUtils/Math/RangedValue.hpp</includes>
+    <includedby refid="d2/d5e/a00860" local="yes">Render/RenderTarget.hpp</includedby>
+    <includedby refid="da/d5b/a00905" local="yes">Render/Ssao/SsaoRawAOPass.hpp</includedby>
+    <includedby refid="df/d88/a00962" local="yes">Render/Technique/RenderTechnique.hpp</includedby>
+    <includedby refid="d3/dcd/a00965" local="yes">Render/Technique/RenderTechniquePass.hpp</includedby>
+    <includedby refid="d2/d22/a01196" local="yes">Scene/SceneFileParser.hpp</includedby>
+    <incdepgraph>
+      <node id="18">
+        <label>CastorUtils/CastorUtilsPrerequisites.hpp</label>
+      </node>
+      <node id="19">
+        <label>CastorUtils/Config/SmartPtr.hpp</label>
+      </node>
+      <node id="21">
+        <label>CastorUtils/Data/TextWriter.hpp</label>
+      </node>
+      <node id="22">
+        <label>CastorUtils/Design/ChangeTracked.hpp</label>
+      </node>
+      <node id="5">
+        <label>CastorUtils/Design/FlagCombination.hpp</label>
+      </node>
+      <node id="6">
+        <label>CastorUtils/Design/OwnedBy.hpp</label>
+      </node>
+      <node id="7">
+        <label>CastorUtils/Exception/Assertion.hpp</label>
+      </node>
+      <node id="8">
+        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
+      </node>
+      <node id="9">
+        <label>CastorUtils/Graphics/Size.hpp</label>
+      </node>
+      <node id="10">
+        <label>CastorUtils/Math/Coords.hpp</label>
+      </node>
+      <node id="11">
+        <label>CastorUtils/Math/Point.hpp</label>
+      </node>
+      <node id="23">
+        <label>CastorUtils/Math/RangedValue.hpp</label>
+      </node>
+      <node id="4">
+        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
+      </node>
+      <node id="13">
+        <label>RenderGraph/FrameGraphPrerequisites.hpp</label>
+      </node>
+      <node id="3">
+        <label>Castor3D/Castor3DModule.hpp</label>
+        <link refid="dd/dd7/a00260"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+      </node>
+      <node id="20">
+        <label>Castor3D/Miscellaneous/MiscellaneousModule.hpp</label>
+        <link refid="db/d43/a00422"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>Render/Ssao/SsaoConfig.hpp</label>
+        <link refid="d3/d8a/a00899"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>SsaoModule.hpp</label>
+        <link refid="d5/dd3/a00902"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+      </node>
+      <node id="12">
+        <label>ashespp/AshesPPPrerequisites.hpp</label>
+      </node>
+      <node id="14">
+        <label>cstdint</label>
+      </node>
+      <node id="15">
+        <label>memory</label>
+      </node>
+      <node id="16">
+        <label>string</label>
+      </node>
+      <node id="17">
+        <label>vector</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="7">
+        <label>Render/Passes/DepthPass.hpp</label>
+        <link refid="d0/d7e/a00770"/>
+      </node>
+      <node id="3">
+        <label>Render/PostEffect/PostEffect.hpp</label>
+        <link refid="d8/db7/a00812"/>
+      </node>
+      <node id="2">
+        <label>Render/RenderTarget.hpp</label>
+        <link refid="d2/d5e/a00860"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>Render/Ssao/SsaoConfig.hpp</label>
+        <link refid="d3/d8a/a00899"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>Render/Ssao/SsaoRawAOPass.hpp</label>
+        <link refid="da/d5b/a00905"/>
+      </node>
+      <node id="8">
+        <label>Render/Technique/ForwardRenderTechniquePass.hpp</label>
+        <link refid="d0/d85/a00908"/>
+      </node>
+      <node id="9">
+        <label>Render/Technique/Opaque/OpaquePass.hpp</label>
+        <link refid="d5/da3/a00953"/>
+      </node>
+      <node id="5">
+        <label>Render/Technique/RenderTechnique.hpp</label>
+        <link refid="df/d88/a00962"/>
+      </node>
+      <node id="6">
+        <label>Render/Technique/RenderTechniquePass.hpp</label>
+        <link refid="d3/dcd/a00965"/>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>Render/Technique/Transparent/TransparentPass.hpp</label>
+        <link refid="db/d20/a00980"/>
+        <childnode refid="11" relation="include">
+        </childnode>
+      </node>
+      <node id="11">
+        <label>Render/Technique/Transparent/WeightedBlendRendering.hpp</label>
+        <link refid="d3/d7b/a00986"/>
+      </node>
+      <node id="12">
+        <label>Scene/SceneFileParser.hpp</label>
+        <link refid="d2/d22/a01196"/>
+        <childnode refid="13" relation="include">
+        </childnode>
+      </node>
+      <node id="13">
+        <label>Scene/SceneFileParser_Parsers.hpp</label>
+        <link refid="d0/d5a/a01199"/>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="d2/d73/a04226" prot="public">castor3d::SsaoConfig</innerclass>
+    <innernamespace refid="da/dab/a01362">castor3d</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/Ssao/SsaoConfig.hpp"/>
+  </compounddef>
+</doxygen>

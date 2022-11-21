@@ -1,0 +1,1101 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d2/d56/a04348" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::TriFaceMapping</compoundname>
+    <basecompoundref refid="d9/d2b/a04300" prot="public" virt="non-virtual">castor3d::IndexMapping</basecompoundref>
+    <includes local="no">TriFaceMapping.hpp</includes>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d2/d56/a04348_1a2729e37105aa4cfa04ce6d322ed2549e" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::TriFaceMapping::Name</definition>
+        <argsstring></argsstring>
+        <name>Name</name>
+        <qualifiedname>castor3d::TriFaceMapping::Name</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="277" column="37" bodyfile="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" bodystart="277" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d2/d56/a04348_1a69a75f6a4237224ec7ebe5abf07b7566" prot="private" static="no" mutable="no">
+        <type>FaceArray</type>
+        <definition>FaceArray castor3d::TriFaceMapping::m_faces</definition>
+        <argsstring></argsstring>
+        <name>m_faces</name>
+        <qualifiedname>castor3d::TriFaceMapping::m_faces</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The faces in the submesh. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="282" column="11" bodyfile="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" bodystart="282" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d56/a04348_1a536ab89280367629495bfa2e367b9b86" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::TriFaceMapping::m_hasNormals</definition>
+        <argsstring></argsstring>
+        <name>m_hasNormals</name>
+        <qualifiedname>castor3d::TriFaceMapping::m_hasNormals</qualifiedname>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Tells if normals exist or need to be computed. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="285" column="6" bodyfile="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" bodystart="285" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d56/a04348_1ab8c25ef8ae17b8c9d21e01dcc1a5c627" prot="private" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::TriFaceMapping::m_cameraPosition</definition>
+        <argsstring></argsstring>
+        <name>m_cameraPosition</name>
+        <qualifiedname>castor3d::TriFaceMapping::m_cameraPosition</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The transformed camera position at last sort. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="288" column="17" bodyfile="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" bodystart="288" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d2/d56/a04348_1ab644756fb00fd29457d2013ee029d8dd" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::TriFaceMapping::TriFaceMapping</definition>
+        <argsstring>(Submesh &amp;submesh, VkBufferUsageFlags bufferUsageFlags={})</argsstring>
+        <name>TriFaceMapping</name>
+        <qualifiedname>castor3d::TriFaceMapping::TriFaceMapping</qualifiedname>
+        <param>
+          <type><ref refid="db/d20/a04356" kindref="compound">Submesh</ref> &amp;</type>
+          <declname>submesh</declname>
+        </param>
+        <param>
+          <type>VkBufferUsageFlags</type>
+          <declname>bufferUsageFlags</declname>
+          <defval>{}</defval>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">submesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent submesh. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">bufferUsageFlags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The buffer usage flags. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="28" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d56/a04348_1aae0c3befa1e3e73872245300acc110de" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TriFaceMapping::clearFaces</definition>
+        <argsstring>()</argsstring>
+        <name>clearFaces</name>
+        <qualifiedname>castor3d::TriFaceMapping::clearFaces</qualifiedname>
+        <briefdescription>
+<para>Clears this submesh&apos;s face array. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="36" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d56/a04348_1a614af1061e30260787d01f9032cb5920" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="dd/ddf/a04284" kindref="compound">Face</ref></type>
+        <definition>C3D_API Face castor3d::TriFaceMapping::addFace</definition>
+        <argsstring>(uint32_t a, uint32_t b, uint32_t c)</argsstring>
+        <name>addFace</name>
+        <qualifiedname>castor3d::TriFaceMapping::addFace</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>a</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>b</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>c</declname>
+        </param>
+        <briefdescription>
+<para>Creates and adds a face to the submesh. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">a</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The first face&apos;s vertex index. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">b</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The second face&apos;s vertex index. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">c</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The third face&apos;s vertex index. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The created face. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="51" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d56/a04348_1a8458083da6c3f1f13a70378f6775a375" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TriFaceMapping::addFaceGroup</definition>
+        <argsstring>(FaceIndices const *const begin, FaceIndices const *const end)</argsstring>
+        <name>addFaceGroup</name>
+        <qualifiedname>castor3d::TriFaceMapping::addFaceGroup</qualifiedname>
+        <param>
+          <type><ref refid="df/dfd/a04288" kindref="compound">FaceIndices</ref> const *const</type>
+          <declname>begin</declname>
+        </param>
+        <param>
+          <type><ref refid="df/dfd/a04288" kindref="compound">FaceIndices</ref> const *const</type>
+          <declname>end</declname>
+        </param>
+        <briefdescription>
+<para>Creates and adds faces to the submesh. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">begin</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The faces data begin. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">end</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The faces data end. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="62" column="14"/>
+        <referencedby refid="d2/d56/a04348_1a69606c982ff152ce221372b8d9a50ea0" compoundref="d5/d5b/a00695" startline="220" endline="223">addFaceGroup</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d2/d56/a04348_1a61dc6f308e11d7d3b4fdb56506c3ee99" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TriFaceMapping::addQuadFace</definition>
+        <argsstring>(uint32_t a, uint32_t b, uint32_t c, uint32_t d, castor::Point3f const &amp;minUV=castor::Point3f(), castor::Point3f const &amp;maxUV=castor::Point3f(1, 1, 1))</argsstring>
+        <name>addQuadFace</name>
+        <qualifiedname>castor3d::TriFaceMapping::addQuadFace</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>a</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>b</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>c</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>d</declname>
+        </param>
+        <param>
+          <type>castor::Point3f const &amp;</type>
+          <declname>minUV</declname>
+          <defval>castor::Point3f()</defval>
+        </param>
+        <param>
+          <type>castor::Point3f const &amp;</type>
+          <declname>maxUV</declname>
+          <defval>castor::Point3f(1, 1, 1)</defval>
+        </param>
+        <briefdescription>
+<para>Creates and adds a quad face to the submesh. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">a</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The first face&apos;s vertex index. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">b</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The second face&apos;s vertex index. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">c</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The third face&apos;s vertex index. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">d</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The fourth face&apos;s vertex index. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">minUV</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The UV of the bottom left corner. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">maxUV</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The UV of the top right corner. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="82" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d56/a04348_1a2468296783b8a341c9d0074f2e193ee3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TriFaceMapping::computeFacesFromPolygonVertex</definition>
+        <argsstring>()</argsstring>
+        <name>computeFacesFromPolygonVertex</name>
+        <qualifiedname>castor3d::TriFaceMapping::computeFacesFromPolygonVertex</qualifiedname>
+        <briefdescription>
+<para>Creates faces from the points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>This function assumes the points are sorted like triangles fan. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="93" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d56/a04348_1a47fa8a95381dbcee1a1432dc65602bc4" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TriFaceMapping::computeNormals</definition>
+        <argsstring>(castor::Point3fArray const &amp;positions, castor::Point3fArray const &amp;texcoords, castor::Point3fArray &amp;normals, castor::Point3fArray &amp;tangents, bool reverted=false) const</argsstring>
+        <name>computeNormals</name>
+        <qualifiedname>castor3d::TriFaceMapping::computeNormals</qualifiedname>
+        <param>
+          <type>castor::Point3fArray const &amp;</type>
+          <declname>positions</declname>
+        </param>
+        <param>
+          <type>castor::Point3fArray const &amp;</type>
+          <declname>texcoords</declname>
+        </param>
+        <param>
+          <type>castor::Point3fArray &amp;</type>
+          <declname>normals</declname>
+        </param>
+        <param>
+          <type>castor::Point3fArray &amp;</type>
+          <declname>tangents</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>reverted</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+<para>Computes normal and tangent for each vertex of the given face. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">positions</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The vertices positions. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">texcoords</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The vertices texture coordinates. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">normals</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The vertices normals. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">tangents</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The vertices tangents. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">reverted</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><computeroutput>true</computeroutput> to invert normals. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="110" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d56/a04348_1a9c3fb39743810be7038d7ce94cf17aaf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TriFaceMapping::computeNormals</definition>
+        <argsstring>(Face const &amp;face)</argsstring>
+        <name>computeNormals</name>
+        <qualifiedname>castor3d::TriFaceMapping::computeNormals</qualifiedname>
+        <param>
+          <type><ref refid="dd/ddf/a04284" kindref="compound">Face</ref> const &amp;</type>
+          <declname>face</declname>
+        </param>
+        <briefdescription>
+<para>Computes normal and tangent for each vertex of the given face. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">face</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The face. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="123" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d56/a04348_1ae79b1e60aed74fe0ec5aee0181dca42d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TriFaceMapping::computeNormals</definition>
+        <argsstring>(castor::Point3fArray const &amp;positions, castor::Point3fArray const &amp;texcoords, castor::Point3fArray &amp;normals, castor::Point3fArray &amp;tangents, Face const &amp;face) const</argsstring>
+        <name>computeNormals</name>
+        <qualifiedname>castor3d::TriFaceMapping::computeNormals</qualifiedname>
+        <param>
+          <type>castor::Point3fArray const &amp;</type>
+          <declname>positions</declname>
+        </param>
+        <param>
+          <type>castor::Point3fArray const &amp;</type>
+          <declname>texcoords</declname>
+        </param>
+        <param>
+          <type>castor::Point3fArray &amp;</type>
+          <declname>normals</declname>
+        </param>
+        <param>
+          <type>castor::Point3fArray &amp;</type>
+          <declname>tangents</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/ddf/a04284" kindref="compound">Face</ref> const &amp;</type>
+          <declname>face</declname>
+        </param>
+        <briefdescription>
+<para>Computes normal and tangent for each vertex of the given face. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">positions</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The vertices positions. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">texcoords</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The vertices texture coordinates. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">normals</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The vertices normals. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">tangents</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The vertices tangents. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">face</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The face. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="140" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d56/a04348_1ab00cf919f043bf88a5d7b27a7edc1b36" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TriFaceMapping::computeTangents</definition>
+        <argsstring>(Face const &amp;face)</argsstring>
+        <name>computeTangents</name>
+        <qualifiedname>castor3d::TriFaceMapping::computeTangents</qualifiedname>
+        <param>
+          <type><ref refid="dd/ddf/a04284" kindref="compound">Face</ref> const &amp;</type>
+          <declname>face</declname>
+        </param>
+        <briefdescription>
+<para>Computes tangent for each vertex of the given face. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">face</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The face. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="153" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d56/a04348_1a0fb2d78e0b6754a7bc6fc2fa25e1108f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TriFaceMapping::computeTangents</definition>
+        <argsstring>(castor::Point3fArray const &amp;positions, castor::Point3fArray const &amp;texcoords, castor::Point3fArray &amp;tangents, Face const &amp;face) const</argsstring>
+        <name>computeTangents</name>
+        <qualifiedname>castor3d::TriFaceMapping::computeTangents</qualifiedname>
+        <param>
+          <type>castor::Point3fArray const &amp;</type>
+          <declname>positions</declname>
+        </param>
+        <param>
+          <type>castor::Point3fArray const &amp;</type>
+          <declname>texcoords</declname>
+        </param>
+        <param>
+          <type>castor::Point3fArray &amp;</type>
+          <declname>tangents</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/ddf/a04284" kindref="compound">Face</ref> const &amp;</type>
+          <declname>face</declname>
+        </param>
+        <briefdescription>
+<para>Computes tangent for each vertex of the given face. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">positions</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The vertices positions. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">texcoords</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The vertices texture coordinates. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">tangents</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The vertices tangents. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">face</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The face. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="168" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d56/a04348_1a23e2c3d73c3d4c34e3354cc590c8bfa9" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TriFaceMapping::computeTangentsFromNormals</definition>
+        <argsstring>(castor::Point3fArray const &amp;positions, castor::Point3fArray const &amp;texcoords, castor::Point3fArray const &amp;normals, castor::Point3fArray &amp;tangents) const</argsstring>
+        <name>computeTangentsFromNormals</name>
+        <qualifiedname>castor3d::TriFaceMapping::computeTangentsFromNormals</qualifiedname>
+        <param>
+          <type>castor::Point3fArray const &amp;</type>
+          <declname>positions</declname>
+        </param>
+        <param>
+          <type>castor::Point3fArray const &amp;</type>
+          <declname>texcoords</declname>
+        </param>
+        <param>
+          <type>castor::Point3fArray const &amp;</type>
+          <declname>normals</declname>
+        </param>
+        <param>
+          <type>castor::Point3fArray &amp;</type>
+          <declname>tangents</declname>
+        </param>
+        <briefdescription>
+<para>Computes tangent for each vertex of the submesh. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>This function supposes the normals are defined. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">positions</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The vertices positions. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">texcoords</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The vertices texture coordinates. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">normals</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The vertices normals. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">tangents</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The vertices tangents. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="188" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d56/a04348_1adfb71fd0c8a6c5526100c09c304c165d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
+        <definition>C3D_API uint32_t castor3d::TriFaceMapping::getCount</definition>
+        <argsstring>() const override</argsstring>
+        <name>getCount</name>
+        <qualifiedname>castor3d::TriFaceMapping::getCount</qualifiedname>
+        <reimplements refid="d9/d2b/a04300_1a0fb15d1b3d6cea8907affb64e235b698">getCount</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The elements count. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="195" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d56/a04348_1a7ade6d9d5e5b8980fb52bbc5ce1b7840" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
+        <definition>C3D_API uint32_t castor3d::TriFaceMapping::getComponentsCount</definition>
+        <argsstring>() const override</argsstring>
+        <name>getComponentsCount</name>
+        <qualifiedname>castor3d::TriFaceMapping::getComponentsCount</qualifiedname>
+        <reimplements refid="d9/d2b/a04300_1a3962862bad288beb93936541cf128e88">getComponentsCount</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The components count in an element. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="199" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d56/a04348_1ac9057e5d18c8e160e78d09b8da5253f3" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TriFaceMapping::computeNormals</definition>
+        <argsstring>(bool reverted=false) override</argsstring>
+        <name>computeNormals</name>
+        <qualifiedname>castor3d::TriFaceMapping::computeNormals</qualifiedname>
+        <reimplements refid="d9/d2b/a04300_1a6f19747b6795855d0048b85952e54521">computeNormals</reimplements>
+        <param>
+          <type>bool</type>
+          <declname>reverted</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+<para>Generates normals and tangents. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">reverted</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Tells if normals are inverted. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="203" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d56/a04348_1a2f3a6a810044d2d6935bd47576c456c5" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::TriFaceMapping::computeTangents</definition>
+        <argsstring>() override</argsstring>
+        <name>computeTangents</name>
+        <qualifiedname>castor3d::TriFaceMapping::computeTangents</qualifiedname>
+        <reimplements refid="d9/d2b/a04300_1aa5ba1af157f5cc1cd14d2fc1248aecfb">computeTangents</reimplements>
+        <briefdescription>
+<para>Generates tangents. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>This function supposes the normals are defined. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="207" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d56/a04348_1a82e7c76fe9e5730a11d6df7ae938c74f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> SubmeshComponentSPtr</type>
+        <definition>C3D_API SubmeshComponentSPtr castor3d::TriFaceMapping::clone</definition>
+        <argsstring>(Submesh &amp;submesh) const override</argsstring>
+        <name>clone</name>
+        <qualifiedname>castor3d::TriFaceMapping::clone</qualifiedname>
+        <reimplements refid="dc/d81/a04344_1af23b7cb5e0e0f3bbfd1bd07fbae9f24a">clone</reimplements>
+        <param>
+          <type><ref refid="db/d20/a04356" kindref="compound">Submesh</ref> &amp;</type>
+          <declname>submesh</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Clones this component into given submesh. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">submesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the cloned component. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="211" column="30"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d56/a04348_1a69606c982ff152ce221372b8d9a50ea0" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::TriFaceMapping::addFaceGroup</definition>
+        <argsstring>(std::vector&lt; FaceIndices &gt; const &amp;faces)</argsstring>
+        <name>addFaceGroup</name>
+        <qualifiedname>castor3d::TriFaceMapping::addFaceGroup</qualifiedname>
+        <param>
+          <type>std::vector&lt; <ref refid="df/dfd/a04288" kindref="compound">FaceIndices</ref> &gt; const &amp;</type>
+          <declname>faces</declname>
+        </param>
+        <briefdescription>
+<para>Creates and adds faces to the submesh. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">faces</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The faces. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="220" column="6" bodyfile="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" bodystart="220" bodyend="223"/>
+        <references refid="d2/d56/a04348_1a8458083da6c3f1f13a70378f6775a375">addFaceGroup</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/d56/a04348_1a3ba3975413f57256077cdef34f6e745c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>size_t</type>
+            <declname>Count</declname>
+            <defname>Count</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor3d::TriFaceMapping::addFaceGroup</definition>
+        <argsstring>(std::array&lt; FaceIndices, Count &gt; const &amp;faces)</argsstring>
+        <name>addFaceGroup</name>
+        <qualifiedname>castor3d::TriFaceMapping::addFaceGroup</qualifiedname>
+        <param>
+          <type>std::array&lt; <ref refid="df/dfd/a04288" kindref="compound">FaceIndices</ref>, Count &gt; const &amp;</type>
+          <declname>faces</declname>
+        </param>
+        <briefdescription>
+<para>Creates and adds faces to the submesh. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">faces</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The faces. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="233" column="6" bodyfile="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" bodystart="233" bodyend="236"/>
+        <references refid="d2/d56/a04348_1a8458083da6c3f1f13a70378f6775a375">addFaceGroup</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/d56/a04348_1aaee34d39a1c960cd51c1aeaba30a4729" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>uint32_t</type>
+            <declname>Count</declname>
+            <defname>Count</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor3d::TriFaceMapping::addFaceGroup</definition>
+        <argsstring>(FaceIndices(&amp;faces)[Count])</argsstring>
+        <name>addFaceGroup</name>
+        <qualifiedname>castor3d::TriFaceMapping::addFaceGroup</qualifiedname>
+        <param>
+          <type><ref refid="df/dfd/a04288" kindref="compound">FaceIndices</ref>(&amp;)</type>
+          <declname>faces</declname>
+          <array>[Count]</array>
+        </param>
+        <briefdescription>
+<para>Creates and adds faces to the submesh. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">faces</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The faces. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="246" column="6" bodyfile="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" bodystart="246" bodyend="249"/>
+        <references refid="d2/d56/a04348_1a8458083da6c3f1f13a70378f6775a375">addFaceGroup</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/d56/a04348_1a2e6ea04cae70020b17e38e3703462065" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="dd/ddf/a04284" kindref="compound">Face</ref> const &amp;</type>
+        <definition>Face const  &amp; castor3d::TriFaceMapping::operator[]</definition>
+        <argsstring>(uint32_t index) const</argsstring>
+        <name>operator[]</name>
+        <qualifiedname>castor3d::TriFaceMapping::operator[]</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="251" column="13" bodyfile="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" bodystart="251" bodyend="255"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d56/a04348_1ad7333f0af62fca1aae59f5ffd82db93d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>FaceArray const &amp;</type>
+        <definition>FaceArray const  &amp; castor3d::TriFaceMapping::getFaces</definition>
+        <argsstring>() const</argsstring>
+        <name>getFaces</name>
+        <qualifiedname>castor3d::TriFaceMapping::getFaces</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="257" column="18" bodyfile="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" bodystart="257" bodyend="260"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d56/a04348_1afe3027eeb738c59925ff428872bcae95" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>FaceArray &amp;</type>
+        <definition>FaceArray &amp; castor3d::TriFaceMapping::getFaces</definition>
+        <argsstring>()</argsstring>
+        <name>getFaces</name>
+        <qualifiedname>castor3d::TriFaceMapping::getFaces</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="262" column="12" bodyfile="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" bodystart="262" bodyend="265"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d56/a04348_1ad68315f638a3605b78015de1639aa870" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::TriFaceMapping::setData</definition>
+        <argsstring>(FaceArray faces)</argsstring>
+        <name>setData</name>
+        <qualifiedname>castor3d::TriFaceMapping::setData</qualifiedname>
+        <param>
+          <type>FaceArray</type>
+          <declname>faces</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="267" column="6" bodyfile="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" bodystart="267" bodyend="270"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d2/d56/a04348_1a21b8f5c936845e12da6e09da0e863b21" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::TriFaceMapping::doCleanup</definition>
+        <argsstring>(RenderDevice const &amp;device) override</argsstring>
+        <name>doCleanup</name>
+        <qualifiedname>castor3d::TriFaceMapping::doCleanup</qualifiedname>
+        <reimplements refid="d9/d2b/a04300_1a84a88b9a01bb0ef5653c589d4cb4e5a1">doCleanup</reimplements>
+        <param>
+          <type><ref refid="d3/d96/a05072" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="273" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d56/a04348_1a44b68a2bd1c451b534e520d761d7def3" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::TriFaceMapping::doUpload</definition>
+        <argsstring>() override</argsstring>
+        <name>doUpload</name>
+        <qualifiedname>castor3d::TriFaceMapping::doUpload</qualifiedname>
+        <reimplements refid="d9/d2b/a04300_1a0bae680c96d93257ac710bcebb708504">doUpload</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="274" column="6"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::IndexMapping</label>
+        <link refid="d9/d2b/a04300"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::SubmeshComponent</label>
+        <link refid="dc/d81/a04344"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::TriFaceMapping</label>
+        <link refid="d2/d56/a04348"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Submesh &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::IndexMapping</label>
+        <link refid="d9/d2b/a04300"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::SubmeshComponent</label>
+        <link refid="dc/d81/a04344"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::TriFaceMapping</label>
+        <link refid="d2/d56/a04348"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Submesh &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" line="14" column="1" bodyfile="Model/Mesh/Submesh/Component/TriFaceMapping.hpp" bodystart="16" bodyend="289"/>
+    <listofallmembers>
+      <member refid="d2/d56/a04348_1a614af1061e30260787d01f9032cb5920" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>addFace</name></member>
+      <member refid="d2/d56/a04348_1a8458083da6c3f1f13a70378f6775a375" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>addFaceGroup</name></member>
+      <member refid="d2/d56/a04348_1a69606c982ff152ce221372b8d9a50ea0" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>addFaceGroup</name></member>
+      <member refid="d2/d56/a04348_1a3ba3975413f57256077cdef34f6e745c" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>addFaceGroup</name></member>
+      <member refid="d2/d56/a04348_1aaee34d39a1c960cd51c1aeaba30a4729" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>addFaceGroup</name></member>
+      <member refid="d2/d56/a04348_1a61dc6f308e11d7d3b4fdb56506c3ee99" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>addQuadFace</name></member>
+      <member refid="dc/d81/a04344_1abdbf83eb05497bd5765a2aed22ebc429" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>cleanup</name></member>
+      <member refid="d2/d56/a04348_1aae0c3befa1e3e73872245300acc110de" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>clearFaces</name></member>
+      <member refid="d2/d56/a04348_1a82e7c76fe9e5730a11d6df7ae938c74f" prot="public" virt="virtual"><scope>castor3d::TriFaceMapping</scope><name>clone</name></member>
+      <member refid="d2/d56/a04348_1a2468296783b8a341c9d0074f2e193ee3" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>computeFacesFromPolygonVertex</name></member>
+      <member refid="d2/d56/a04348_1a47fa8a95381dbcee1a1432dc65602bc4" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>computeNormals</name></member>
+      <member refid="d2/d56/a04348_1a9c3fb39743810be7038d7ce94cf17aaf" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>computeNormals</name></member>
+      <member refid="d2/d56/a04348_1ae79b1e60aed74fe0ec5aee0181dca42d" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>computeNormals</name></member>
+      <member refid="d2/d56/a04348_1ac9057e5d18c8e160e78d09b8da5253f3" prot="public" virt="virtual"><scope>castor3d::TriFaceMapping</scope><name>computeNormals</name></member>
+      <member refid="d2/d56/a04348_1ab00cf919f043bf88a5d7b27a7edc1b36" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>computeTangents</name></member>
+      <member refid="d2/d56/a04348_1a0fb2d78e0b6754a7bc6fc2fa25e1108f" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>computeTangents</name></member>
+      <member refid="d2/d56/a04348_1a2f3a6a810044d2d6935bd47576c456c5" prot="public" virt="virtual"><scope>castor3d::TriFaceMapping</scope><name>computeTangents</name></member>
+      <member refid="d2/d56/a04348_1a23e2c3d73c3d4c34e3354cc590c8bfa9" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>computeTangentsFromNormals</name></member>
+      <member refid="d2/d56/a04348_1a21b8f5c936845e12da6e09da0e863b21" prot="private" virt="virtual"><scope>castor3d::TriFaceMapping</scope><name>doCleanup</name></member>
+      <member refid="d2/d56/a04348_1a44b68a2bd1c451b534e520d761d7def3" prot="private" virt="virtual"><scope>castor3d::TriFaceMapping</scope><name>doUpload</name></member>
+      <member refid="d9/d2b/a04300_1ad1bf7434cbd2c4229b1f81e189ca0eeb" prot="public" virt="virtual"><scope>castor3d::TriFaceMapping</scope><name>gather</name></member>
+      <member refid="d2/d56/a04348_1a7ade6d9d5e5b8980fb52bbc5ce1b7840" prot="public" virt="virtual"><scope>castor3d::TriFaceMapping</scope><name>getComponentsCount</name></member>
+      <member refid="d2/d56/a04348_1adfb71fd0c8a6c5526100c09c304c165d" prot="public" virt="virtual"><scope>castor3d::TriFaceMapping</scope><name>getCount</name></member>
+      <member refid="d2/d56/a04348_1ad7333f0af62fca1aae59f5ffd82db93d" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>getFaces</name></member>
+      <member refid="d2/d56/a04348_1afe3027eeb738c59925ff428872bcae95" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>getFaces</name></member>
+      <member refid="dc/d81/a04344_1a98577223b3e5556ec5027ecdc6d4e184" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>getID</name></member>
+      <member refid="dc/d81/a04344_1ab285ab330fbb2cc71abb95bfb62d91ed" prot="public" virt="virtual"><scope>castor3d::TriFaceMapping</scope><name>getProgramFlags</name></member>
+      <member refid="d9/d2b/a04300_1a2d3be4c3e210105e6a51929c66171da9" prot="public" virt="virtual"><scope>castor3d::TriFaceMapping</scope><name>getSubmeshFlags</name></member>
+      <member refid="dc/d81/a04344_1abc8fcfaed4a21cec91176b0394cca0cd" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>getType</name></member>
+      <member refid="d9/d2b/a04300_1a1cfef785ca927aa0ddf2a73fdb4a3362" prot="public" virt="virtual"><scope>castor3d::TriFaceMapping</scope><name>getUsageFlags</name></member>
+      <member refid="d9/d2b/a04300_1ac9d8753467404d3b6e1e6bf389b24c01" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>IndexMapping</name></member>
+      <member refid="dc/d81/a04344_1a98c6ad3457d19448c1eaa261598103ad" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>initialise</name></member>
+      <member refid="d2/d56/a04348_1ab8c25ef8ae17b8c9d21e01dcc1a5c627" prot="private" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>m_cameraPosition</name></member>
+      <member refid="d2/d56/a04348_1a69a75f6a4237224ec7ebe5abf07b7566" prot="private" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>m_faces</name></member>
+      <member refid="d2/d56/a04348_1a536ab89280367629495bfa2e367b9b86" prot="private" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>m_hasNormals</name></member>
+      <member refid="d9/d2b/a04300_1a197a5e0e065e5d027974d1572fccb13a" prot="protected" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>m_staging</name></member>
+      <member refid="d2/d56/a04348_1a2729e37105aa4cfa04ce6d322ed2549e" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>Name</name></member>
+      <member refid="dc/d81/a04344_1a7e21e4eda223d50b6751c40cb44f77a7" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>needsUpdate</name></member>
+      <member refid="d2/d56/a04348_1a2e6ea04cae70020b17e38e3703462065" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>operator[]</name></member>
+      <member refid="d2/d56/a04348_1ad68315f638a3605b78015de1639aa870" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>setData</name></member>
+      <member refid="dc/d81/a04344_1a4cee79e84bacc48828a48a42555c6977" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>SubmeshComponent</name></member>
+      <member refid="d2/d56/a04348_1ab644756fb00fd29457d2013ee029d8dd" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>TriFaceMapping</name></member>
+      <member refid="dc/d81/a04344_1a2dbcda2b8c26f4c9c52db78a5740a0f8" prot="public" virt="non-virtual"><scope>castor3d::TriFaceMapping</scope><name>upload</name></member>
+      <member refid="dc/d81/a04344_1a30231a167367ba38b41f9bf5b3bcd005" prot="public" virt="virtual"><scope>castor3d::TriFaceMapping</scope><name>~SubmeshComponent</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

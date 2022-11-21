@@ -1,0 +1,590 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d4/da9/a04736" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::BillboardRenderNode</compoundname>
+    <includes local="no">BillboardRenderNode.hpp</includes>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d4/da9/a04736_1ae3f9ebcf47785d41f2ff668692e34e59" prot="public" static="no">
+        <type><ref refid="df/d64/a05544" kindref="compound">BillboardBase</ref></type>
+        <definition>using castor3d::BillboardRenderNode::DataType =  BillboardBase</definition>
+        <argsstring></argsstring>
+        <name>DataType</name>
+        <qualifiedname>castor3d::BillboardRenderNode::DataType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/BillboardRenderNode.hpp" line="18" column="1" bodyfile="Render/Node/BillboardRenderNode.hpp" bodystart="18" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d4/da9/a04736_1ac8509a01d5cb9288f9f815bc2e79d431" prot="public" static="no">
+        <type><ref refid="df/d64/a05544" kindref="compound">BillboardBase</ref></type>
+        <definition>using castor3d::BillboardRenderNode::InstanceType =  BillboardBase</definition>
+        <argsstring></argsstring>
+        <name>InstanceType</name>
+        <qualifiedname>castor3d::BillboardRenderNode::InstanceType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/BillboardRenderNode.hpp" line="19" column="1" bodyfile="Render/Node/BillboardRenderNode.hpp" bodystart="19" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d4/da9/a04736_1a0981168dadf17a266a9418a341170fcc" prot="public" static="no" mutable="no">
+        <type><ref refid="d3/d86/a03732" kindref="compound">Pass</ref> *</type>
+        <definition>Pass* castor3d::BillboardRenderNode::pass</definition>
+        <argsstring></argsstring>
+        <name>pass</name>
+        <qualifiedname>castor3d::BillboardRenderNode::pass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/BillboardRenderNode.hpp" line="40" column="7" bodyfile="Render/Node/BillboardRenderNode.hpp" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/da9/a04736_1afa4b5cab598a2e7e6769454fc41983c2" prot="public" static="no" mutable="no">
+        <type><ref refid="d4/da9/a04736_1ae3f9ebcf47785d41f2ff668692e34e59" kindref="member">DataType</ref> &amp;</type>
+        <definition>DataType&amp; castor3d::BillboardRenderNode::data</definition>
+        <argsstring></argsstring>
+        <name>data</name>
+        <qualifiedname>castor3d::BillboardRenderNode::data</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/BillboardRenderNode.hpp" line="41" column="11" bodyfile="Render/Node/BillboardRenderNode.hpp" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/da9/a04736_1aca1393f2ad046474fe67af2e3f5fdb0e" prot="public" static="no" mutable="no">
+        <type><ref refid="d4/da9/a04736_1ac8509a01d5cb9288f9f815bc2e79d431" kindref="member">InstanceType</ref> &amp;</type>
+        <definition>InstanceType&amp; castor3d::BillboardRenderNode::instance</definition>
+        <argsstring></argsstring>
+        <name>instance</name>
+        <qualifiedname>castor3d::BillboardRenderNode::instance</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/BillboardRenderNode.hpp" line="42" column="15" bodyfile="Render/Node/BillboardRenderNode.hpp" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/da9/a04736_1a9fe972c636e978a788a54f89e3b07f97" prot="public" static="no" mutable="no">
+        <type><ref refid="dd/db3/a06320" kindref="compound">ModelBufferConfiguration</ref> &amp;</type>
+        <definition>ModelBufferConfiguration&amp; castor3d::BillboardRenderNode::modelData</definition>
+        <argsstring></argsstring>
+        <name>modelData</name>
+        <qualifiedname>castor3d::BillboardRenderNode::modelData</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/BillboardRenderNode.hpp" line="43" column="27" bodyfile="Render/Node/BillboardRenderNode.hpp" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/da9/a04736_1acf81f2877a4f378dfad993f87ec1fe25" prot="public" static="no" mutable="no">
+        <type><ref refid="d8/dc1/a06288" kindref="compound">BillboardUboConfiguration</ref> &amp;</type>
+        <definition>BillboardUboConfiguration&amp; castor3d::BillboardRenderNode::billboardData</definition>
+        <argsstring></argsstring>
+        <name>billboardData</name>
+        <qualifiedname>castor3d::BillboardRenderNode::billboardData</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/BillboardRenderNode.hpp" line="44" column="28" bodyfile="Render/Node/BillboardRenderNode.hpp" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d4/da9/a04736_1ae61d5e19f2b29b00b47b87c94d48448f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::BillboardRenderNode::BillboardRenderNode</definition>
+        <argsstring>(BillboardRenderNode const &amp;)=delete</argsstring>
+        <name>BillboardRenderNode</name>
+        <qualifiedname>castor3d::BillboardRenderNode::BillboardRenderNode</qualifiedname>
+        <param>
+          <type><ref refid="d4/da9/a04736" kindref="compound">BillboardRenderNode</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/BillboardRenderNode.hpp" line="21" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/da9/a04736_1a7aa06914d100447a3521f7b968282066" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::BillboardRenderNode::BillboardRenderNode</definition>
+        <argsstring>(BillboardRenderNode &amp;&amp;)=default</argsstring>
+        <name>BillboardRenderNode</name>
+        <qualifiedname>castor3d::BillboardRenderNode::BillboardRenderNode</qualifiedname>
+        <param>
+          <type><ref refid="d4/da9/a04736" kindref="compound">BillboardRenderNode</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/BillboardRenderNode.hpp" line="22" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/da9/a04736_1ad0d91207c413a9edd80d3e572a32623b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d4/da9/a04736" kindref="compound">BillboardRenderNode</ref> &amp;</type>
+        <definition>C3D_API BillboardRenderNode &amp; castor3d::BillboardRenderNode::operator=</definition>
+        <argsstring>(BillboardRenderNode const &amp;)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::BillboardRenderNode::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d4/da9/a04736" kindref="compound">BillboardRenderNode</ref> const &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/BillboardRenderNode.hpp" line="23" column="30"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/da9/a04736_1a5d8a261a0665a79cb30a2405e0e96c5b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d4/da9/a04736" kindref="compound">BillboardRenderNode</ref> &amp;</type>
+        <definition>C3D_API BillboardRenderNode &amp; castor3d::BillboardRenderNode::operator=</definition>
+        <argsstring>(BillboardRenderNode &amp;&amp;)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::BillboardRenderNode::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d4/da9/a04736" kindref="compound">BillboardRenderNode</ref> &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/BillboardRenderNode.hpp" line="24" column="30"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/da9/a04736_1aaf916dc65ea2c653a636518f986dc74d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::BillboardRenderNode::BillboardRenderNode</definition>
+        <argsstring>(Pass &amp;pass, DataType &amp;data, ModelBufferConfiguration &amp;modelData, BillboardUboConfiguration &amp;billboardData)</argsstring>
+        <name>BillboardRenderNode</name>
+        <qualifiedname>castor3d::BillboardRenderNode::BillboardRenderNode</qualifiedname>
+        <param>
+          <type><ref refid="d3/d86/a03732" kindref="compound">Pass</ref> &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/da9/a04736_1ae3f9ebcf47785d41f2ff668692e34e59" kindref="member">DataType</ref> &amp;</type>
+          <declname>data</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/db3/a06320" kindref="compound">ModelBufferConfiguration</ref> &amp;</type>
+          <declname>modelData</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/dc1/a06288" kindref="compound">BillboardUboConfiguration</ref> &amp;</type>
+          <declname>billboardData</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/BillboardRenderNode.hpp" line="26" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/da9/a04736_1ac5325b7bb33395fe87188198e1063cae" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
+        <definition>C3D_API uint32_t castor3d::BillboardRenderNode::getId</definition>
+        <argsstring>() const</argsstring>
+        <name>getId</name>
+        <qualifiedname>castor3d::BillboardRenderNode::getId</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/BillboardRenderNode.hpp" line="31" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/da9/a04736_1a583b84d26b7240f99c74d785427c2c4f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
+        <definition>C3D_API uint32_t castor3d::BillboardRenderNode::getInstanceCount</definition>
+        <argsstring>() const</argsstring>
+        <name>getInstanceCount</name>
+        <qualifiedname>castor3d::BillboardRenderNode::getInstanceCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/BillboardRenderNode.hpp" line="32" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/da9/a04736_1a7704d804a3914112a0d321ad221d0eaa" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d5/dba/a02776" kindref="compound">ObjectBufferOffset</ref> const &amp;</type>
+        <definition>C3D_API ObjectBufferOffset const  &amp; castor3d::BillboardRenderNode::getSourceBufferOffsets</definition>
+        <argsstring>() const</argsstring>
+        <name>getSourceBufferOffsets</name>
+        <qualifiedname>castor3d::BillboardRenderNode::getSourceBufferOffsets</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/BillboardRenderNode.hpp" line="33" column="35"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/da9/a04736_1a58b159c26532c1a8ae21803dbb66e086" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d5/dba/a02776" kindref="compound">ObjectBufferOffset</ref> const &amp;</type>
+        <definition>C3D_API ObjectBufferOffset const  &amp; castor3d::BillboardRenderNode::getFinalBufferOffsets</definition>
+        <argsstring>() const</argsstring>
+        <name>getFinalBufferOffsets</name>
+        <qualifiedname>castor3d::BillboardRenderNode::getFinalBufferOffsets</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/BillboardRenderNode.hpp" line="34" column="35"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/da9/a04736_1a7e3599eba6e380d58e7f3f0787fad018" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d3/d22/a01572_1a456f43ef4580c9527b0e71aa45a237ee" kindref="member">SubmeshFlags</ref></type>
+        <definition>C3D_API SubmeshFlags castor3d::BillboardRenderNode::getSubmeshFlags</definition>
+        <argsstring>() const</argsstring>
+        <name>getSubmeshFlags</name>
+        <qualifiedname>castor3d::BillboardRenderNode::getSubmeshFlags</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/BillboardRenderNode.hpp" line="35" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/da9/a04736_1afc263f8e6054a24b4827f2b9b8ab61c5" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d3/d22/a01572_1abbe6548fefe6fd18e7c24e7d6f7b7f14" kindref="member">MorphFlags</ref></type>
+        <definition>C3D_API MorphFlags castor3d::BillboardRenderNode::getMorphFlags</definition>
+        <argsstring>() const</argsstring>
+        <name>getMorphFlags</name>
+        <qualifiedname>castor3d::BillboardRenderNode::getMorphFlags</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/BillboardRenderNode.hpp" line="36" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/da9/a04736_1aad69b3cb1c43e95860ff0fe49ebea0be" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d3/d22/a01572_1ab503144f281345b45ccc3f3a94543dce" kindref="member">ProgramFlags</ref></type>
+        <definition>C3D_API ProgramFlags castor3d::BillboardRenderNode::getProgramFlags</definition>
+        <argsstring>() const</argsstring>
+        <name>getProgramFlags</name>
+        <qualifiedname>castor3d::BillboardRenderNode::getProgramFlags</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/BillboardRenderNode.hpp" line="37" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/da9/a04736_1aab07ff837b81f7cd9edd65531b923944" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="da/d20/a02740" kindref="compound">GeometryBuffers</ref> const &amp;</type>
+        <definition>C3D_API GeometryBuffers const  &amp; castor3d::BillboardRenderNode::getGeometryBuffers</definition>
+        <argsstring>(PipelineFlags const &amp;flags) const</argsstring>
+        <name>getGeometryBuffers</name>
+        <qualifiedname>castor3d::BillboardRenderNode::getGeometryBuffers</qualifiedname>
+        <param>
+          <type><ref refid="db/dd9/a05012" kindref="compound">PipelineFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/BillboardRenderNode.hpp" line="38" column="32"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="12">
+        <label>Animable</label>
+        <link refid="d5/df1/a02392"/>
+        <childnode refid="13" relation="public-inheritance">
+        </childnode>
+        <childnode refid="14" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+        <childnode refid="18" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="20">
+        <label>castor3d::GpuBufferOffsetT&lt; uint8_t &gt;</label>
+        <link refid="d5/d95/a02720"/>
+        <childnode refid="21" relation="usage">
+          <edgelabel>buffer</edgelabel>
+        </childnode>
+        <childnode refid="22" relation="usage">
+          <edgelabel>chunk</edgelabel>
+        </childnode>
+        <childnode refid="23" relation="template-instance">
+          <edgelabel>&lt; uint8_t &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="16">
+        <label>K</label>
+      </node>
+      <node id="17">
+        <label>T</label>
+      </node>
+      <node id="28">
+        <label>std::array&lt; castor3d::ObjectBufferOffset::GpuBufferChunk, size_t(SubmeshData::eCount) &gt;</label>
+        <childnode refid="25" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="29" relation="template-instance">
+          <edgelabel>&lt; castor3d::ObjectBufferOffset::GpuBufferChunk, size_t(SubmeshData::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="18">
+        <label>castor3d::AnimableT&lt; AnimableHandlerT &gt;</label>
+        <link refid="d5/df1/a02392"/>
+        <childnode refid="19" relation="public-inheritance">
+        </childnode>
+        <childnode refid="14" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::BillboardBase</label>
+        <link refid="df/d64/a05544"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>m_scene</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>m_node</edgelabel>
+        </childnode>
+        <childnode refid="20" relation="usage">
+          <edgelabel>m_vertexBuffer</edgelabel>
+        </childnode>
+        <childnode refid="24" relation="usage">
+          <edgelabel>m_geometryBuffers</edgelabel>
+        </childnode>
+        <childnode refid="30" relation="usage">
+          <edgelabel>m_ids</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::BillboardRenderNode</label>
+        <link refid="d4/da9/a04736"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>pass</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>data</edgelabel>
+          <edgelabel>instance</edgelabel>
+        </childnode>
+        <childnode refid="32" relation="usage">
+          <edgelabel>modelData</edgelabel>
+        </childnode>
+        <childnode refid="33" relation="usage">
+          <edgelabel>billboardData</edgelabel>
+        </childnode>
+      </node>
+      <node id="33">
+        <label>castor3d::BillboardUboConfiguration</label>
+        <link refid="d8/dc1/a06288"/>
+      </node>
+      <node id="24">
+        <label>castor3d::GeometryBuffers</label>
+        <link refid="da/d20/a02740"/>
+        <childnode refid="25" relation="usage">
+          <edgelabel>indexOffset</edgelabel>
+        </childnode>
+        <childnode refid="27" relation="usage">
+          <edgelabel>bufferOffset</edgelabel>
+        </childnode>
+      </node>
+      <node id="21">
+        <label>castor3d::GpuBufferBase</label>
+        <link refid="d5/dc7/a02744"/>
+      </node>
+      <node id="23">
+        <label>castor3d::GpuBufferOffsetT&lt; DataT &gt;</label>
+        <link refid="d5/d95/a02720"/>
+        <childnode refid="21" relation="usage">
+          <edgelabel>buffer</edgelabel>
+        </childnode>
+        <childnode refid="22" relation="usage">
+          <edgelabel>chunk</edgelabel>
+        </childnode>
+      </node>
+      <node id="26">
+        <label>castor3d::GpuBufferT&lt; AllocatorT &gt;</label>
+        <link refid="db/d1d/a02716"/>
+        <childnode refid="21" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="22">
+        <label>castor3d::MemChunk</label>
+        <link refid="da/dd3/a02736"/>
+      </node>
+      <node id="32">
+        <label>castor3d::ModelBufferConfiguration</label>
+        <link refid="dd/db3/a06320"/>
+      </node>
+      <node id="27">
+        <label>castor3d::ObjectBufferOffset</label>
+        <link refid="d5/dba/a02776"/>
+        <childnode refid="28" relation="usage">
+          <edgelabel>buffers</edgelabel>
+        </childnode>
+      </node>
+      <node id="25">
+        <label>castor3d::ObjectBufferOffset::GpuBufferChunk</label>
+        <link refid="df/de4/a02780"/>
+        <childnode refid="26" relation="usage">
+          <edgelabel>buffer</edgelabel>
+        </childnode>
+        <childnode refid="22" relation="usage">
+          <edgelabel>chunk</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::Pass</label>
+        <link refid="d3/d86/a03732"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::RenderedObject</label>
+        <link refid="da/df1/a05668"/>
+      </node>
+      <node id="6">
+        <label>castor3d::Scene</label>
+        <link refid="d6/d0e/a05676"/>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+        <childnode refid="8" relation="public-inheritance">
+        </childnode>
+        <childnode refid="9" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>castor3d::SceneNode</label>
+        <link refid="d8/dad/a05856"/>
+        <childnode refid="11" relation="public-inheritance">
+        </childnode>
+        <childnode refid="12" relation="public-inheritance">
+        </childnode>
+        <childnode refid="9" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>castor::Named</label>
+      </node>
+      <node id="19">
+        <label>castor::OwnedBy&lt; AnimableHandlerT &gt;</label>
+      </node>
+      <node id="13">
+        <label>castor::OwnedBy&lt; Engine  &gt;</label>
+      </node>
+      <node id="8">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Material &gt;</label>
+      </node>
+      <node id="14">
+        <label>std::map&lt; castor::String, AnimationPtr &gt;</label>
+        <childnode refid="15" relation="template-instance">
+          <edgelabel>&lt; castor::String, AnimationPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="29">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="17" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>std::enable_shared_from_this&lt; Scene &gt;</label>
+      </node>
+      <node id="11">
+        <label>std::enable_shared_from_this&lt; SceneNode &gt;</label>
+      </node>
+      <node id="15">
+        <label>std::map&lt; K, T &gt;</label>
+        <childnode refid="16" relation="usage">
+          <edgelabel>keys</edgelabel>
+        </childnode>
+        <childnode refid="17" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="31">
+        <label>std::unordered_map&lt; K, T &gt;</label>
+        <childnode refid="16" relation="usage">
+          <edgelabel>keys</edgelabel>
+        </childnode>
+        <childnode refid="17" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="30">
+        <label>std::unordered_map&lt; castor3d::Pass const *, IdRenderNode &gt;</label>
+        <childnode refid="2" relation="usage">
+          <edgelabel>keys</edgelabel>
+        </childnode>
+        <childnode refid="31" relation="template-instance">
+          <edgelabel>&lt; castor3d::Pass const *, IdRenderNode &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Node/BillboardRenderNode.hpp" line="16" column="1" bodyfile="Render/Node/BillboardRenderNode.hpp" bodystart="17" bodyend="45"/>
+    <listofallmembers>
+      <member refid="d4/da9/a04736_1acf81f2877a4f378dfad993f87ec1fe25" prot="public" virt="non-virtual"><scope>castor3d::BillboardRenderNode</scope><name>billboardData</name></member>
+      <member refid="d4/da9/a04736_1ae61d5e19f2b29b00b47b87c94d48448f" prot="public" virt="non-virtual"><scope>castor3d::BillboardRenderNode</scope><name>BillboardRenderNode</name></member>
+      <member refid="d4/da9/a04736_1a7aa06914d100447a3521f7b968282066" prot="public" virt="non-virtual"><scope>castor3d::BillboardRenderNode</scope><name>BillboardRenderNode</name></member>
+      <member refid="d4/da9/a04736_1aaf916dc65ea2c653a636518f986dc74d" prot="public" virt="non-virtual"><scope>castor3d::BillboardRenderNode</scope><name>BillboardRenderNode</name></member>
+      <member refid="d4/da9/a04736_1afa4b5cab598a2e7e6769454fc41983c2" prot="public" virt="non-virtual"><scope>castor3d::BillboardRenderNode</scope><name>data</name></member>
+      <member refid="d4/da9/a04736_1ae3f9ebcf47785d41f2ff668692e34e59" prot="public" virt="non-virtual"><scope>castor3d::BillboardRenderNode</scope><name>DataType</name></member>
+      <member refid="d4/da9/a04736_1a58b159c26532c1a8ae21803dbb66e086" prot="public" virt="non-virtual"><scope>castor3d::BillboardRenderNode</scope><name>getFinalBufferOffsets</name></member>
+      <member refid="d4/da9/a04736_1aab07ff837b81f7cd9edd65531b923944" prot="public" virt="non-virtual"><scope>castor3d::BillboardRenderNode</scope><name>getGeometryBuffers</name></member>
+      <member refid="d4/da9/a04736_1ac5325b7bb33395fe87188198e1063cae" prot="public" virt="non-virtual"><scope>castor3d::BillboardRenderNode</scope><name>getId</name></member>
+      <member refid="d4/da9/a04736_1a583b84d26b7240f99c74d785427c2c4f" prot="public" virt="non-virtual"><scope>castor3d::BillboardRenderNode</scope><name>getInstanceCount</name></member>
+      <member refid="d4/da9/a04736_1afc263f8e6054a24b4827f2b9b8ab61c5" prot="public" virt="non-virtual"><scope>castor3d::BillboardRenderNode</scope><name>getMorphFlags</name></member>
+      <member refid="d4/da9/a04736_1aad69b3cb1c43e95860ff0fe49ebea0be" prot="public" virt="non-virtual"><scope>castor3d::BillboardRenderNode</scope><name>getProgramFlags</name></member>
+      <member refid="d4/da9/a04736_1a7704d804a3914112a0d321ad221d0eaa" prot="public" virt="non-virtual"><scope>castor3d::BillboardRenderNode</scope><name>getSourceBufferOffsets</name></member>
+      <member refid="d4/da9/a04736_1a7e3599eba6e380d58e7f3f0787fad018" prot="public" virt="non-virtual"><scope>castor3d::BillboardRenderNode</scope><name>getSubmeshFlags</name></member>
+      <member refid="d4/da9/a04736_1aca1393f2ad046474fe67af2e3f5fdb0e" prot="public" virt="non-virtual"><scope>castor3d::BillboardRenderNode</scope><name>instance</name></member>
+      <member refid="d4/da9/a04736_1ac8509a01d5cb9288f9f815bc2e79d431" prot="public" virt="non-virtual"><scope>castor3d::BillboardRenderNode</scope><name>InstanceType</name></member>
+      <member refid="d4/da9/a04736_1a9fe972c636e978a788a54f89e3b07f97" prot="public" virt="non-virtual"><scope>castor3d::BillboardRenderNode</scope><name>modelData</name></member>
+      <member refid="d4/da9/a04736_1ad0d91207c413a9edd80d3e572a32623b" prot="public" virt="non-virtual"><scope>castor3d::BillboardRenderNode</scope><name>operator=</name></member>
+      <member refid="d4/da9/a04736_1a5d8a261a0665a79cb30a2405e0e96c5b" prot="public" virt="non-virtual"><scope>castor3d::BillboardRenderNode</scope><name>operator=</name></member>
+      <member refid="d4/da9/a04736_1a0981168dadf17a266a9418a341170fcc" prot="public" virt="non-virtual"><scope>castor3d::BillboardRenderNode</scope><name>pass</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

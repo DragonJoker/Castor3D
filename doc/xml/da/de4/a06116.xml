@@ -1,0 +1,149 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="da/de4/a06116" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::PayloadT</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstance</basecompoundref>
+    <includes local="no">GlslTaskPayload.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>sdw::var::Flag</type>
+        <declname>FlagT</declname>
+        <defname>FlagT</defname>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="da/de4/a06116_1a6e892dcc026235a3f3831fc273825aa6" prot="public" static="no" mutable="no">
+        <type>sdw::Array&lt; sdw::UInt &gt;</type>
+        <definition>sdw::Array&lt; sdw::UInt &gt; castor3d::shader::PayloadT&lt; FlagT &gt;::meshletIndices</definition>
+        <argsstring></argsstring>
+        <name>meshletIndices</name>
+        <qualifiedname>castor3d::shader::PayloadT::meshletIndices</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTaskPayload.hpp" line="29" column="12" bodyfile="Shader/Shaders/GlslTaskPayload.hpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="da/de4/a06116_1a6ed8bbc4bceb3630b065a4fc6a7c87e4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::PayloadT&lt; FlagT &gt;::PayloadT</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, sdw::expr::ExprPtr expr, bool enabled=true)</argsstring>
+        <name>PayloadT</name>
+        <qualifiedname>castor3d::shader::PayloadT::PayloadT</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>sdw::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTaskPayload.hpp" line="20" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="da/de4/a06116_1a0acb3213d552dfcba3993fe04f81bfc8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::PayloadT&lt; FlagT &gt;::SDW_DeclStructInstance</definition>
+        <argsstring>(, PayloadT)</argsstring>
+        <name>SDW_DeclStructInstance</name>
+        <qualifiedname>castor3d::shader::PayloadT::SDW_DeclStructInstance</qualifiedname>
+        <param>
+          <type><ref refid="da/de4/a06116" kindref="compound">PayloadT</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTaskPayload.hpp" line="24" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="da/de4/a06116_1a32c906a3b6926950e32b7eb77ccc952f" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::type::IOStructPtr</type>
+        <definition>static sdw::type::IOStructPtr castor3d::shader::PayloadT&lt; FlagT &gt;::makeIOType</definition>
+        <argsstring>(sdw::type::TypesCache &amp;cache)</argsstring>
+        <name>makeIOType</name>
+        <qualifiedname>castor3d::shader::PayloadT::makeIOType</qualifiedname>
+        <param>
+          <type>sdw::type::TypesCache &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTaskPayload.hpp" line="26" column="31"/>
+      </memberdef>
+      <memberdef kind="function" id="da/de4/a06116_1a497c143bfedc49f957002c1154fd8cac" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::type::BaseStructPtr</type>
+        <definition>static sdw::type::BaseStructPtr castor3d::shader::PayloadT&lt; FlagT &gt;::makeType</definition>
+        <argsstring>(sdw::type::TypesCache &amp;cache)</argsstring>
+        <name>makeType</name>
+        <qualifiedname>castor3d::shader::PayloadT::makeType</qualifiedname>
+        <param>
+          <type>sdw::type::TypesCache &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTaskPayload.hpp" line="27" column="33"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::PayloadT&lt; FlagT &gt;</label>
+        <link refid="da/de4/a06116"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstance</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::shader::PayloadT&lt; FlagT &gt;</label>
+        <link refid="da/de4/a06116"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstance</label>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Shaders/GlslTaskPayload.hpp" line="17" column="1" bodyfile="Shader/Shaders/GlslTaskPayload.hpp" bodystart="19" bodyend="30"/>
+    <listofallmembers>
+      <member refid="da/de4/a06116_1a32c906a3b6926950e32b7eb77ccc952f" prot="public" virt="non-virtual"><scope>castor3d::shader::PayloadT</scope><name>makeIOType</name></member>
+      <member refid="da/de4/a06116_1a497c143bfedc49f957002c1154fd8cac" prot="public" virt="non-virtual"><scope>castor3d::shader::PayloadT</scope><name>makeType</name></member>
+      <member refid="da/de4/a06116_1a6e892dcc026235a3f3831fc273825aa6" prot="public" virt="non-virtual"><scope>castor3d::shader::PayloadT</scope><name>meshletIndices</name></member>
+      <member refid="da/de4/a06116_1a6ed8bbc4bceb3630b065a4fc6a7c87e4" prot="public" virt="non-virtual"><scope>castor3d::shader::PayloadT</scope><name>PayloadT</name></member>
+      <member refid="da/de4/a06116_1a0acb3213d552dfcba3993fe04f81bfc8" prot="public" virt="non-virtual"><scope>castor3d::shader::PayloadT</scope><name>SDW_DeclStructInstance</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

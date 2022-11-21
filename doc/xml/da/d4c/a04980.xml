@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="da/d4c/a04980" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::EnvironmentPrefilter::MipRenderCube::FrameBuffer</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="da/d4c/a04980_1a676bed7d810efce29b4043ecebb7d694" prot="public" static="no" mutable="no">
+        <type>VkImageView</type>
+        <definition>VkImageView castor3d::EnvironmentPrefilter::MipRenderCube::FrameBuffer::dstView</definition>
+        <argsstring></argsstring>
+        <name>dstView</name>
+        <qualifiedname>castor3d::EnvironmentPrefilter::MipRenderCube::FrameBuffer::dstView</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/EnvironmentPrefilter.hpp" line="48" column="13" bodyfile="Render/PBR/EnvironmentPrefilter.hpp" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d4c/a04980_1abb0b54ea5c0183acd99ceab6307c998d" prot="public" static="no" mutable="no">
+        <type>ashes::FrameBufferPtr</type>
+        <definition>ashes::FrameBufferPtr castor3d::EnvironmentPrefilter::MipRenderCube::FrameBuffer::frameBuffer</definition>
+        <argsstring></argsstring>
+        <name>frameBuffer</name>
+        <qualifiedname>castor3d::EnvironmentPrefilter::MipRenderCube::FrameBuffer::frameBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/EnvironmentPrefilter.hpp" line="49" column="23" bodyfile="Render/PBR/EnvironmentPrefilter.hpp" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/PBR/EnvironmentPrefilter.hpp" line="46" column="1" bodyfile="Render/PBR/EnvironmentPrefilter.hpp" bodystart="47" bodyend="50"/>
+    <listofallmembers>
+      <member refid="da/d4c/a04980_1a676bed7d810efce29b4043ecebb7d694" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter::MipRenderCube::FrameBuffer</scope><name>dstView</name></member>
+      <member refid="da/d4c/a04980_1abb0b54ea5c0183acd99ceab6307c998d" prot="public" virt="non-virtual"><scope>castor3d::EnvironmentPrefilter::MipRenderCube::FrameBuffer</scope><name>frameBuffer</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -2,21 +2,22 @@
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="dir_517eb4e4681f670c5a2adec1eb9b993a" kind="dir">
     <compoundname>Model/Mesh/Submesh/Component</compoundname>
-    <innerfile refid="d4/d1f/a00506">BaseDataComponent.hpp</innerfile>
-    <innerfile refid="df/db6/a00509">ComponentModule.hpp</innerfile>
-    <innerfile refid="d4/dfb/a00512">Face.hpp</innerfile>
-    <innerfile refid="dc/d19/a00515">FaceIndices.hpp</innerfile>
-    <innerfile refid="d5/dee/a00518">FaceInfos.hpp</innerfile>
-    <innerfile refid="d7/def/a00521">IndexMapping.hpp</innerfile>
-    <innerfile refid="d9/d24/a00524">InstantiationComponent.hpp</innerfile>
-    <innerfile refid="d9/d44/a00527">Line.hpp</innerfile>
-    <innerfile refid="da/d7e/a00530">LineIndices.hpp</innerfile>
-    <innerfile refid="db/d44/a00533">LinesMapping.hpp</innerfile>
-    <innerfile refid="d4/d33/a00536">MeshletComponent.hpp</innerfile>
-    <innerfile refid="d3/d87/a00539">MorphComponent.hpp</innerfile>
-    <innerfile refid="d0/ddb/a00542">SkinComponent.hpp</innerfile>
-    <innerfile refid="d8/deb/a00545">SubmeshComponent.hpp</innerfile>
-    <innerfile refid="dd/de6/a00548">TriFaceMapping.hpp</innerfile>
+    <innerfile refid="de/ddd/a00653">BaseDataComponent.hpp</innerfile>
+    <innerfile refid="d6/d01/a13236">ComponentModule.hpp</innerfile>
+    <innerfile refid="dc/df2/a00656">Face.hpp</innerfile>
+    <innerfile refid="dc/d91/a00659">FaceIndices.hpp</innerfile>
+    <innerfile refid="dc/df1/a00662">FaceInfos.hpp</innerfile>
+    <innerfile refid="da/d46/a00665">IndexMapping.hpp</innerfile>
+    <innerfile refid="d0/d5c/a00668">InstantiationComponent.hpp</innerfile>
+    <innerfile refid="d8/d13/a00671">Line.hpp</innerfile>
+    <innerfile refid="d8/d73/a00674">LineIndices.hpp</innerfile>
+    <innerfile refid="dc/de4/a00677">LinesMapping.hpp</innerfile>
+    <innerfile refid="d4/d9b/a00680">MeshletComponent.hpp</innerfile>
+    <innerfile refid="db/d77/a00683">MorphComponent.hpp</innerfile>
+    <innerfile refid="df/d9e/a00686">PassMasksComponent.hpp</innerfile>
+    <innerfile refid="d1/d87/a00689">SkinComponent.hpp</innerfile>
+    <innerfile refid="d0/db6/a00692">SubmeshComponent.hpp</innerfile>
+    <innerfile refid="d5/d5b/a00695">TriFaceMapping.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.3"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: Plugin/PluginModule.hpp File Reference</title>
+<title>Castor3D: Model/Mesh/Submesh/Component/FaceInfos.hpp File Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -20,7 +20,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.13.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.14.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -42,84 +42,34 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dir_57142e14a7f7b0849a2232e480543b36.html">Plugin</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../dir_48b9b82601b5e90070b208b7d796c277.html">Model</a></li><li class="navelem"><a class="el" href="../../dir_eb05c2e81f584c27ccf0b1e73c563a6d.html">Mesh</a></li><li class="navelem"><a class="el" href="../../dir_19beb1677fd60f69f1adee84ca7ad745.html">Submesh</a></li><li class="navelem"><a class="el" href="../../dir_517eb4e4681f670c5a2adec1eb9b993a.html">Component</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a>  </div>
-  <div class="headertitle"><div class="title">PluginModule.hpp File Reference</div></div>
+  <div class="headertitle"><div class="title">FaceInfos.hpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/db1/a03678.html">castor3d::PtrCacheTraitsT&lt; Plugin, castor::String &gt;</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d31/a04292.html">castor3d::FaceInfos</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/de4/a04296.html">castor3d::FaceInfos::Vertex</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Holds vertex informations.  <a href="../../d7/de4/a04296.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
 Namespaces</h2></td></tr>
-<tr class="memitem:da/dab/a01362"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html">castor3d</a></td></tr>
+<tr class="memitem:d3/d22/a01572"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d22/a01572.html">castor3d</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:dd/d8b/a01363"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d8b/a01363.html">castor</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader">Plugin</h2></td></tr>
-<tr class="memitem:aecf8304db7dd49c874ec216f139e5f67"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html#aecf8304db7dd49c874ec216f139e5f67">castor3d::PluginType</a> : uint8_t { <br />
-&#160;&#160;<a class="el" href="../../da/dab/a01362.html#aecf8304db7dd49c874ec216f139e5f67a9db2478afc0b6cd916b8d3e784e92e06">castor3d::eImporter</a>
-, <a class="el" href="../../da/dab/a01362.html#aecf8304db7dd49c874ec216f139e5f67ad0f2b607af72bdb927b63124396ab3a9">castor3d::eDivider</a>
-, <a class="el" href="../../da/dab/a01362.html#aecf8304db7dd49c874ec216f139e5f67a4a7730b0ef464dc847d27504eadced82">castor3d::eGenerator</a>
-, <a class="el" href="../../da/dab/a01362.html#aecf8304db7dd49c874ec216f139e5f67a85e134f1e400e7be8070c6c5679a5d86">castor3d::eToneMapping</a>
-, <br />
-&#160;&#160;<a class="el" href="../../da/dab/a01362.html#aecf8304db7dd49c874ec216f139e5f67a3da12cda0135e5b11759bd13757b295c">castor3d::ePostEffect</a>
-, <a class="el" href="../../da/dab/a01362.html#aecf8304db7dd49c874ec216f139e5f67aa4b8ab5cdae56cdd29bf58b29baa4ffb">castor3d::eGeneric</a>
-, <a class="el" href="../../da/dab/a01362.html#aecf8304db7dd49c874ec216f139e5f67a409b3d66125fe5a0c1519fe195685cbd">castor3d::eParticle</a>
-, <a class="el" href="../../da/dab/a01362.html#aecf8304db7dd49c874ec216f139e5f67ae558bb69fadec037d9eae46601a4df8e">castor3d::eCount</a>
-, <br />
-&#160;&#160;<a class="el" href="../../da/dab/a01362.html#aecf8304db7dd49c874ec216f139e5f67abd967862789968b1f8571ca888fffc77">castor3d::eMin</a> = eImporter
-, <a class="el" href="../../da/dab/a01362.html#aecf8304db7dd49c874ec216f139e5f67a66119c64f8564b693324347fd2bea820">castor3d::eMax</a> =eCount-1
-<br />
- }</td></tr>
-<tr class="memdesc:aecf8304db7dd49c874ec216f139e5f67"><td class="mdescLeft">&#160;</td><td class="mdescRight">Plugin types enumeration.  <a href="../../da/dab/a01362.html#aecf8304db7dd49c874ec216f139e5f67">More...</a><br /></td></tr>
-<tr class="separator:aecf8304db7dd49c874ec216f139e5f67"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8a6a4a75becbe8c5672e9e5b4027a94e"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html#a8a6a4a75becbe8c5672e9e5b4027a94e">castor3d::PluginCacheTraits</a> = PtrCacheTraitsT&lt; Plugin, castor::String &gt;</td></tr>
-<tr class="separator:a8a6a4a75becbe8c5672e9e5b4027a94e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5cbd08e806e2929e0ba41373f95ccf37"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html#a5cbd08e806e2929e0ba41373f95ccf37">castor3d::PluginCache</a> = castor::ResourceCacheT&lt; Plugin, castor::String, PluginCacheTraits &gt;</td></tr>
-<tr class="separator:a5cbd08e806e2929e0ba41373f95ccf37"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0a6a3b594497969cebca8be8d9d8210d"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html#a0a6a3b594497969cebca8be8d9d8210d">castor3d::PluginRes</a> = PluginCacheTraits::ElementPtrT</td></tr>
-<tr class="separator:a0a6a3b594497969cebca8be8d9d8210d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9f0ab313d24b75e5cfdf3f9a121886fa"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html#a9f0ab313d24b75e5cfdf3f9a121886fa">castor3d::PluginResPtr</a> = PluginCacheTraits::ElementObsT</td></tr>
-<tr class="separator:a9f0ab313d24b75e5cfdf3f9a121886fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a623d65c31e80ba892acc6b448fdaa6fe"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html#a623d65c31e80ba892acc6b448fdaa6fe">castor3d::CU_DeclareSmartPtr</a> (Plugin)</td></tr>
-<tr class="separator:a623d65c31e80ba892acc6b448fdaa6fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adb98811e05a594a71348e6d6c39f470f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html#adb98811e05a594a71348e6d6c39f470f">castor3d::CU_DeclareSmartPtr</a> (ImporterPlugin)</td></tr>
-<tr class="separator:adb98811e05a594a71348e6d6c39f470f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a13e0f3548d85146ecdc45bc4fccf9511"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html#a13e0f3548d85146ecdc45bc4fccf9511">castor3d::CU_DeclareSmartPtr</a> (DividerPlugin)</td></tr>
-<tr class="separator:a13e0f3548d85146ecdc45bc4fccf9511"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:addf2a8c44d210a073b19b26eff44a200"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html#addf2a8c44d210a073b19b26eff44a200">castor3d::CU_DeclareSmartPtr</a> (GenericPlugin)</td></tr>
-<tr class="separator:addf2a8c44d210a073b19b26eff44a200"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2de21b5da04af86cb5fb25230e7cbf0b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html#a2de21b5da04af86cb5fb25230e7cbf0b">castor3d::CU_DeclareSmartPtr</a> (PostFxPlugin)</td></tr>
-<tr class="separator:a2de21b5da04af86cb5fb25230e7cbf0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a967ad22a1cc3dabe52206ae9e4a6b369"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html#a967ad22a1cc3dabe52206ae9e4a6b369">castor3d::CU_DeclareSmartPtr</a> (ParticlePlugin)</td></tr>
-<tr class="separator:a967ad22a1cc3dabe52206ae9e4a6b369"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae57f8a1786493ccbdeb99c08dcc4b797"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html#ae57f8a1786493ccbdeb99c08dcc4b797">castor3d::CU_DeclareMap</a> (castor::String, PluginSPtr, PluginStr)</td></tr>
-<tr class="separator:ae57f8a1786493ccbdeb99c08dcc4b797"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3c0ee51b5e83f3d1ba15c29d5a31c4c0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html#a3c0ee51b5e83f3d1ba15c29d5a31c4c0">castor3d::CU_DeclareArray</a> (PluginStrMap, PluginType::eCount, PluginStrMap)</td></tr>
-<tr class="separator:a3c0ee51b5e83f3d1ba15c29d5a31c4c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acc6b5dc0ff4362d6c0566b56b92e398a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html#acc6b5dc0ff4362d6c0566b56b92e398a">castor3d::CU_DeclareMap</a> (castor::Path, castor::DynamicLibrarySPtr, DynamicLibraryPtrPath)</td></tr>
-<tr class="separator:acc6b5dc0ff4362d6c0566b56b92e398a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a15df7c1e07d0476e0e6acc07f42b02dc"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html#a15df7c1e07d0476e0e6acc07f42b02dc">castor3d::CU_DeclareArray</a> (DynamicLibraryPtrPathMap, PluginType::eCount, DynamicLibraryPtrPathMap)</td></tr>
-<tr class="separator:a15df7c1e07d0476e0e6acc07f42b02dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a65a88c0c07cea957355e149464899b24"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html#a65a88c0c07cea957355e149464899b24">castor3d::CU_DeclareMap</a> (castor::Path, PluginType, PluginTypePath)</td></tr>
-<tr class="separator:a65a88c0c07cea957355e149464899b24"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ace5d0a65b09bd7c6c04505cd7fc0bae9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html#ace5d0a65b09bd7c6c04505cd7fc0bae9">castor3d::CU_DeclareCUSmartPtr</a> (castor3d, PluginCache, <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>)</td></tr>
-<tr class="separator:ace5d0a65b09bd7c6c04505cd7fc0bae9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jun 8 2022 13:04:46 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Mon Nov 21 2022 20:20:32 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

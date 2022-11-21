@@ -6,20 +6,20 @@
     <innerdir refid="dir_7c37f15c4f52caabe2725945716123e2">Scene/Background</innerdir>
     <innerdir refid="dir_515db96c9602d74ba27af13fbc4aff89">Scene/Light</innerdir>
     <innerdir refid="dir_eddf2ff1f2f73ff4c7ae36625ceded65">Scene/ParticleSystem</innerdir>
-    <innerfile refid="dd/de4/a01121">BillboardList.hpp</innerfile>
-    <innerfile refid="d0/dc8/a01124">Camera.hpp</innerfile>
-    <innerfile refid="d9/d5b/a01127">Fog.hpp</innerfile>
-    <innerfile refid="d0/d61/a01130">Geometry.hpp</innerfile>
-    <innerfile refid="d9/d25/a01157">MovableObject.hpp</innerfile>
-    <innerfile refid="dc/d19/a01190">RenderedObject.hpp</innerfile>
-    <innerfile refid="dd/d43/a01193">Scene.hpp</innerfile>
-    <innerfile refid="d2/d22/a01196">SceneFileParser.hpp</innerfile>
-    <innerfile refid="d0/d5a/a01199">SceneFileParser_Parsers.hpp</innerfile>
-    <innerfile refid="d4/d5d/a01202">SceneImporter.hpp</innerfile>
-    <innerfile refid="de/d61/a01205">SceneModule.hpp</innerfile>
-    <innerfile refid="d9/d31/a01208">SceneNode.hpp</innerfile>
-    <innerfile refid="d1/d34/a01211">SceneNodeImporter.hpp</innerfile>
-    <innerfile refid="d5/d32/a01214">Shadow.hpp</innerfile>
+    <innerfile refid="d2/d4c/a01307">BillboardList.hpp</innerfile>
+    <innerfile refid="da/d79/a01310">Camera.hpp</innerfile>
+    <innerfile refid="de/d90/a01313">Fog.hpp</innerfile>
+    <innerfile refid="d4/d49/a01316">Geometry.hpp</innerfile>
+    <innerfile refid="d3/da4/a01343">MovableObject.hpp</innerfile>
+    <innerfile refid="d2/d29/a01376">RenderedObject.hpp</innerfile>
+    <innerfile refid="d0/d9b/a01379">Scene.hpp</innerfile>
+    <innerfile refid="de/d9d/a01382">SceneFileParser.hpp</innerfile>
+    <innerfile refid="df/d68/a01385">SceneFileParser_Parsers.hpp</innerfile>
+    <innerfile refid="d0/d36/a01388">SceneImporter.hpp</innerfile>
+    <innerfile refid="dc/dbc/a01391">SceneModule.hpp</innerfile>
+    <innerfile refid="d6/d2f/a01394">SceneNode.hpp</innerfile>
+    <innerfile refid="d7/d1c/a01397">SceneNodeImporter.hpp</innerfile>
+    <innerfile refid="dc/d35/a01400">Shadow.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

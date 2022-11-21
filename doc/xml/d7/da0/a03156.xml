@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d7/da0/a03156" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::AttenuationData</compoundname>
+    <includes local="no">AttenuationComponent.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d7/da0/a03156_1a395b75646e9010d9d2492006eb4e307d" prot="public" static="no" mutable="no">
+        <type>castor::AtomicGroupChangeTracked&lt; castor::RgbColour &gt;</type>
+        <definition>castor::AtomicGroupChangeTracked&lt; castor::RgbColour &gt; castor3d::AttenuationData::colour</definition>
+        <argsstring></argsstring>
+        <name>colour</name>
+        <qualifiedname>castor3d::AttenuationData::colour</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Lighting/AttenuationComponent.hpp" line="23" column="34" bodyfile="Material/Pass/Component/Lighting/AttenuationComponent.hpp" bodystart="23" bodyend="-1"/>
+        <referencedby refid="d8/d08/a03160_1ad2d2608d444918d17a7369824f55830f" compoundref="d4/def/a00359" startline="98" endline="101">castor3d::AttenuationComponent::getAttenuationColour</referencedby>
+        <referencedby refid="d8/d08/a03160_1a7a9a883a839cfe82b81819d0a20074b6" compoundref="d4/def/a00359" startline="103" endline="106">castor3d::AttenuationComponent::setAttenuationColour</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d7/da0/a03156_1a45c9d83948d3742921ac19a58013ca1d" prot="public" static="no" mutable="no">
+        <type>castor::AtomicGroupChangeTracked&lt; float &gt;</type>
+        <definition>castor::AtomicGroupChangeTracked&lt; float &gt; castor3d::AttenuationData::distance</definition>
+        <argsstring></argsstring>
+        <name>distance</name>
+        <qualifiedname>castor3d::AttenuationData::distance</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Lighting/AttenuationComponent.hpp" line="24" column="34" bodyfile="Material/Pass/Component/Lighting/AttenuationComponent.hpp" bodystart="24" bodyend="-1"/>
+        <referencedby refid="d8/d08/a03160_1af059471b4902387a02934d62ec816d9d" compoundref="d4/def/a00359" startline="108" endline="111">castor3d::AttenuationComponent::getAttenuationDistance</referencedby>
+        <referencedby refid="d8/d08/a03160_1a246b3dbb5c8c0beca335e33b842e4f10" compoundref="d4/def/a00359" startline="113" endline="116">castor3d::AttenuationComponent::setAttenuationDistance</referencedby>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d7/da0/a03156_1a77c41b35d4d658d247bc62f790abfe17" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::AttenuationData::AttenuationData</definition>
+        <argsstring>(std::atomic_bool &amp;dirty)</argsstring>
+        <name>AttenuationData</name>
+        <qualifiedname>castor3d::AttenuationData::AttenuationData</qualifiedname>
+        <param>
+          <type>std::atomic_bool &amp;</type>
+          <declname>dirty</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Lighting/AttenuationComponent.hpp" line="17" column="10" bodyfile="Material/Pass/Component/Lighting/AttenuationComponent.hpp" bodystart="17" bodyend="21"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Material/Pass/Component/Lighting/AttenuationComponent.hpp" line="15" column="1" bodyfile="Material/Pass/Component/Lighting/AttenuationComponent.hpp" bodystart="16" bodyend="25"/>
+    <listofallmembers>
+      <member refid="d7/da0/a03156_1a77c41b35d4d658d247bc62f790abfe17" prot="public" virt="non-virtual"><scope>castor3d::AttenuationData</scope><name>AttenuationData</name></member>
+      <member refid="d7/da0/a03156_1a395b75646e9010d9d2492006eb4e307d" prot="public" virt="non-virtual"><scope>castor3d::AttenuationData</scope><name>colour</name></member>
+      <member refid="d7/da0/a03156_1a45c9d83948d3742921ac19a58013ca1d" prot="public" virt="non-virtual"><scope>castor3d::AttenuationData</scope><name>distance</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

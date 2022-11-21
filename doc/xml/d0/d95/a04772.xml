@@ -1,0 +1,865 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d0/d95/a04772" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::IndirectLightingPass</compoundname>
+    <includes local="no">IndirectLightingPass.hpp</includes>
+    <innerclass refid="db/d2a/a04776" prot="public">castor3d::IndirectLightingPass::Config</innerclass>
+    <innerclass refid="d6/db2/a04780" prot="public">castor3d::IndirectLightingPass::Program</innerclass>
+      <sectiondef kind="public-type">
+      <memberdef kind="enum" id="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bf" prot="public" static="no" strong="no">
+        <type>uint32_t</type>
+        <name>DescriptorIdx</name>
+        <qualifiedname>castor3d::IndirectLightingPass::DescriptorIdx</qualifiedname>
+        <enumvalue id="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfaaebd7998ca0c0397eaed2d48383a321b" prot="public">
+          <name>eModels</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfa9601fe5800b88d314310cc55d362525f" prot="public">
+          <name>eGpInfo</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfac1f50d7a93ef1740d30cbe790c3c6a27" prot="public">
+          <name>eScene</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfadabaee4857883244b9284eb2c1d12f01" prot="public">
+          <name>eMaterials</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfa5aa633d9e9cfacf7054eeca39575ddb9" prot="public">
+          <name>eLpvGridConfig</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfa7dccccc07391a65907f9c99ddf1745d3" prot="public">
+          <name>eLayeredLpvGridConfig</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfaef992e616d56f8b8b77c8d8b5f87e024" prot="public">
+          <name>eVoxelData</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfa558069fab018f1fa0da14c5d1b944586" prot="public">
+          <name>eDepthObj</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfa91e74fce73665586d7abb39107207cba" prot="public">
+          <name>eNmlOcc</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfabdec1b19e71ca1d980450fc5cefc38ae" prot="public">
+          <name>eColMtl</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfa1801928a0e7ec22d55ddce5d1de3efdb" prot="public">
+          <name>eSpcRgh</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfac600b43e8006b1658fa1c3939e4821d5" prot="public">
+          <name>eBrdf</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfac5bdab7f47a2b5dbd49201052f2fbdee" prot="public">
+          <name>eVctFirstBounce</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfa99a86de9d66e73f716939a739e02564d" prot="public">
+          <name>eVctSecondBounce</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfa954a37e64fa8bef71cea2eba9a49f4b2" prot="public">
+          <name>eLpvR</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfa0267cb2f6395bdbd9504aa29bcb03205" prot="public">
+          <name>eLpvG</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfa5b3696dc9a04b3749a192be3b8564272" prot="public">
+          <name>eLpvB</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfa3886f992add2f373fc0f6d3aaa883482" prot="public">
+          <name>eLayeredLpv1R</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfabd7403cbba0ee505d4e3e009b56b4676" prot="public">
+          <name>eLayeredLpv1G</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfa51f3ee4f9d80eb08eca6957130154a9e" prot="public">
+          <name>eLayeredLpv1B</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfa22f4e463e0cbe32348a12637893f4817" prot="public">
+          <name>eLayeredLpv2R</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfa2fba8dd51e6fddbc1fe9cce3329a6c6a" prot="public">
+          <name>eLayeredLpv2G</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfa138246f7a8a63718ce575e72004df631" prot="public">
+          <name>eLayeredLpv2B</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfa279d77745cfd5563713259ff4446f3f7" prot="public">
+          <name>eLayeredLpv3R</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfa8671815c6fe66b23a8e3af3409eab737" prot="public">
+          <name>eLayeredLpv3G</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfa811977054b3c55fa1d8e70db5b8569a3" prot="public">
+          <name>eLayeredLpv3B</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfa2606f1bed36ffe00104d7777675bb5ce" prot="public">
+          <name>eCount</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfa7e95ea185a365f4d3f4fe61b68d155b0" prot="public">
+          <name>eVctStart</name>
+          <initializer>= eVctFirstBounce</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfaeaa57ba1b92ffe323feac0535a957aac" prot="public">
+          <name>eLpvStart</name>
+          <initializer>= eLpvR</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfa74f68ab47632eb3964f3bff17b70efff" prot="public">
+          <name>eLayeredLpvStart</name>
+          <initializer>= eLayeredLpv1R</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/IndirectLightingPass.hpp" line="22" column="1" bodyfile="Render/Opaque/IndirectLightingPass.hpp" bodystart="24" bodyend="55"/>
+      </memberdef>
+      <memberdef kind="enum" id="d0/d95/a04772_1a042f6bb87837ea819a017ab9c99ee46f" prot="public" static="no" strong="yes">
+        <type></type>
+        <name>ProgramType</name>
+        <qualifiedname>castor3d::IndirectLightingPass::ProgramType</qualifiedname>
+        <enumvalue id="d0/d95/a04772_1a042f6bb87837ea819a017ab9c99ee46fa2c5915a4999e0963bb1fb15444c1a22e" prot="public">
+          <name>eNoGI</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d0/d95/a04772_1a042f6bb87837ea819a017ab9c99ee46faa2ba85411d69d5b35fa3b198c734a668" prot="public">
+          <name>eVCT</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d0/d95/a04772_1a042f6bb87837ea819a017ab9c99ee46faed3bd761f1f6480dd30f344b0d063593" prot="public">
+          <name>eLPV</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d0/d95/a04772_1a042f6bb87837ea819a017ab9c99ee46fa97adf70bf4949ec7c3e5eb55947e98af" prot="public">
+          <name>eLLPV</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d0/d95/a04772_1a042f6bb87837ea819a017ab9c99ee46fa9bdcec5a24da27cdf0ad8af043a014c8" prot="public">
+          <name>eLPVLLPV</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d0/d95/a04772_1a042f6bb87837ea819a017ab9c99ee46fae558bb69fadec037d9eae46601a4df8e" prot="public">
+          <name>eCount</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/IndirectLightingPass.hpp" line="57" column="1" bodyfile="Render/Opaque/IndirectLightingPass.hpp" bodystart="58" bodyend="65"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d0/d95/a04772_1a1a718040b2894e3d38e0e149e7fc6e2c" prot="public" static="no">
+        <type>std::unique_ptr&lt; <ref refid="d6/db2/a04780" kindref="compound">Program</ref> &gt;</type>
+        <definition>using castor3d::IndirectLightingPass::ProgramPtr =  std::unique_ptr&lt; Program &gt;</definition>
+        <argsstring></argsstring>
+        <name>ProgramPtr</name>
+        <qualifiedname>castor3d::IndirectLightingPass::ProgramPtr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/IndirectLightingPass.hpp" line="90" column="1" bodyfile="Render/Opaque/IndirectLightingPass.hpp" bodystart="90" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d0/d95/a04772_1a5fa7558dd09ff5f1bb7b5f996d13d8d1" prot="private" static="no" mutable="no">
+        <type><ref refid="d3/d96/a05072" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::IndirectLightingPass::m_device</definition>
+        <argsstring></argsstring>
+        <name>m_device</name>
+        <qualifiedname>castor3d::IndirectLightingPass::m_device</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/IndirectLightingPass.hpp" line="138" column="21" bodyfile="Render/Opaque/IndirectLightingPass.hpp" bodystart="138" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d95/a04772_1ad24df6c7edd35d67e82154c9ac334580" prot="private" static="no" mutable="no">
+        <type><ref refid="d6/d0e/a05676" kindref="compound">Scene</ref> const  &amp;</type>
+        <definition>Scene const&amp; castor3d::IndirectLightingPass::m_scene</definition>
+        <argsstring></argsstring>
+        <name>m_scene</name>
+        <qualifiedname>castor3d::IndirectLightingPass::m_scene</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/IndirectLightingPass.hpp" line="139" column="14" bodyfile="Render/Opaque/IndirectLightingPass.hpp" bodystart="139" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d95/a04772_1a2cbb726fcc7472baa99de47ea2708b9f" prot="private" static="no" mutable="no">
+        <type><ref refid="d5/db3/a05328" kindref="compound">Texture</ref> const  &amp;</type>
+        <definition>Texture const&amp; castor3d::IndirectLightingPass::m_brdf</definition>
+        <argsstring></argsstring>
+        <name>m_brdf</name>
+        <qualifiedname>castor3d::IndirectLightingPass::m_brdf</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/IndirectLightingPass.hpp" line="140" column="16" bodyfile="Render/Opaque/IndirectLightingPass.hpp" bodystart="140" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d95/a04772_1a0c3e4da543e5a75015b85d82d1c8d27b" prot="private" static="no" mutable="no">
+        <type><ref refid="d5/db3/a05328" kindref="compound">Texture</ref> const  &amp;</type>
+        <definition>Texture const&amp; castor3d::IndirectLightingPass::m_depthObj</definition>
+        <argsstring></argsstring>
+        <name>m_depthObj</name>
+        <qualifiedname>castor3d::IndirectLightingPass::m_depthObj</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/IndirectLightingPass.hpp" line="141" column="16" bodyfile="Render/Opaque/IndirectLightingPass.hpp" bodystart="141" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d95/a04772_1a5fd0aaaedcbda39e9bc5ef4fa26f764c" prot="private" static="no" mutable="no">
+        <type><ref refid="de/d75/a04852" kindref="compound">OpaquePassResult</ref> const  &amp;</type>
+        <definition>OpaquePassResult const&amp; castor3d::IndirectLightingPass::m_gpResult</definition>
+        <argsstring></argsstring>
+        <name>m_gpResult</name>
+        <qualifiedname>castor3d::IndirectLightingPass::m_gpResult</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/IndirectLightingPass.hpp" line="142" column="25" bodyfile="Render/Opaque/IndirectLightingPass.hpp" bodystart="142" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d95/a04772_1af6436ddea29b27a8341a8a18c8a6382a" prot="private" static="no" mutable="no">
+        <type><ref refid="da/d11/a04792" kindref="compound">LightPassResult</ref> const  &amp;</type>
+        <definition>LightPassResult const&amp; castor3d::IndirectLightingPass::m_lpResult</definition>
+        <argsstring></argsstring>
+        <name>m_lpResult</name>
+        <qualifiedname>castor3d::IndirectLightingPass::m_lpResult</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/IndirectLightingPass.hpp" line="143" column="24" bodyfile="Render/Opaque/IndirectLightingPass.hpp" bodystart="143" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d95/a04772_1ac1e62448004ecacef75c9930e4f4afdc" prot="private" static="no" mutable="no">
+        <type><ref refid="d8/d4b/a04700" kindref="compound">LightVolumePassResult</ref> const  &amp;</type>
+        <definition>LightVolumePassResult const&amp; castor3d::IndirectLightingPass::m_lpvResult</definition>
+        <argsstring></argsstring>
+        <name>m_lpvResult</name>
+        <qualifiedname>castor3d::IndirectLightingPass::m_lpvResult</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/IndirectLightingPass.hpp" line="144" column="30" bodyfile="Render/Opaque/IndirectLightingPass.hpp" bodystart="144" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d95/a04772_1a0d97242e60c124d656d132f535b7b40a" prot="private" static="no" mutable="no">
+        <type>LightVolumePassResultArray const  &amp;</type>
+        <definition>LightVolumePassResultArray const&amp; castor3d::IndirectLightingPass::m_llpvResult</definition>
+        <argsstring></argsstring>
+        <name>m_llpvResult</name>
+        <qualifiedname>castor3d::IndirectLightingPass::m_llpvResult</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/IndirectLightingPass.hpp" line="145" column="35" bodyfile="Render/Opaque/IndirectLightingPass.hpp" bodystart="145" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d95/a04772_1ad9604cbe72c9c53accc3ceb002e1188c" prot="private" static="no" mutable="no">
+        <type><ref refid="d5/db3/a05328" kindref="compound">Texture</ref> const  &amp;</type>
+        <definition>Texture const&amp; castor3d::IndirectLightingPass::m_vctFirstBounce</definition>
+        <argsstring></argsstring>
+        <name>m_vctFirstBounce</name>
+        <qualifiedname>castor3d::IndirectLightingPass::m_vctFirstBounce</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/IndirectLightingPass.hpp" line="146" column="16" bodyfile="Render/Opaque/IndirectLightingPass.hpp" bodystart="146" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d95/a04772_1a346162ce7948a7ebaa02d7e004e8b73e" prot="private" static="no" mutable="no">
+        <type><ref refid="d5/db3/a05328" kindref="compound">Texture</ref> const  &amp;</type>
+        <definition>Texture const&amp; castor3d::IndirectLightingPass::m_vctSecondaryBounce</definition>
+        <argsstring></argsstring>
+        <name>m_vctSecondaryBounce</name>
+        <qualifiedname>castor3d::IndirectLightingPass::m_vctSecondaryBounce</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/IndirectLightingPass.hpp" line="147" column="16" bodyfile="Render/Opaque/IndirectLightingPass.hpp" bodystart="147" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d95/a04772_1a4d847aa2afb1b6bf302fa2b9f0856d52" prot="private" static="no" mutable="no">
+        <type><ref refid="db/d2c/a06256" kindref="compound">SceneUbo</ref> const  &amp;</type>
+        <definition>SceneUbo const&amp; castor3d::IndirectLightingPass::m_sceneUbo</definition>
+        <argsstring></argsstring>
+        <name>m_sceneUbo</name>
+        <qualifiedname>castor3d::IndirectLightingPass::m_sceneUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/IndirectLightingPass.hpp" line="148" column="17" bodyfile="Render/Opaque/IndirectLightingPass.hpp" bodystart="148" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d95/a04772_1a68440964bf0414eed15827938f899e7c" prot="private" static="no" mutable="no">
+        <type><ref refid="d3/df8/a06168" kindref="compound">GpInfoUbo</ref> const  &amp;</type>
+        <definition>GpInfoUbo const&amp; castor3d::IndirectLightingPass::m_gpInfoUbo</definition>
+        <argsstring></argsstring>
+        <name>m_gpInfoUbo</name>
+        <qualifiedname>castor3d::IndirectLightingPass::m_gpInfoUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/IndirectLightingPass.hpp" line="149" column="18" bodyfile="Render/Opaque/IndirectLightingPass.hpp" bodystart="149" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d95/a04772_1a274cb6c00278766a4f9a41c46806cb70" prot="private" static="no" mutable="no">
+        <type><ref refid="db/d65/a06192" kindref="compound">LpvGridConfigUbo</ref> const  &amp;</type>
+        <definition>LpvGridConfigUbo const&amp; castor3d::IndirectLightingPass::m_lpvConfigUbo</definition>
+        <argsstring></argsstring>
+        <name>m_lpvConfigUbo</name>
+        <qualifiedname>castor3d::IndirectLightingPass::m_lpvConfigUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/IndirectLightingPass.hpp" line="150" column="25" bodyfile="Render/Opaque/IndirectLightingPass.hpp" bodystart="150" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d95/a04772_1ac9c8c5e004c28ae28c73f232b5daf514" prot="private" static="no" mutable="no">
+        <type><ref refid="d9/d07/a06184" kindref="compound">LayeredLpvGridConfigUbo</ref> const  &amp;</type>
+        <definition>LayeredLpvGridConfigUbo const&amp; castor3d::IndirectLightingPass::m_llpvConfigUbo</definition>
+        <argsstring></argsstring>
+        <name>m_llpvConfigUbo</name>
+        <qualifiedname>castor3d::IndirectLightingPass::m_llpvConfigUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/IndirectLightingPass.hpp" line="151" column="32" bodyfile="Render/Opaque/IndirectLightingPass.hpp" bodystart="151" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d95/a04772_1a6464b26f97fa521e69ff19a9dc5a52e4" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/d96/a06360" kindref="compound">VoxelizerUbo</ref> const  &amp;</type>
+        <definition>VoxelizerUbo const&amp; castor3d::IndirectLightingPass::m_vctConfigUbo</definition>
+        <argsstring></argsstring>
+        <name>m_vctConfigUbo</name>
+        <qualifiedname>castor3d::IndirectLightingPass::m_vctConfigUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/IndirectLightingPass.hpp" line="152" column="21" bodyfile="Render/Opaque/IndirectLightingPass.hpp" bodystart="152" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d95/a04772_1aedb5a323d87d104dd9aa35686a218c34" prot="private" static="no" mutable="no">
+        <type>crg::FramePassGroup &amp;</type>
+        <definition>crg::FramePassGroup&amp; castor3d::IndirectLightingPass::m_group</definition>
+        <argsstring></argsstring>
+        <name>m_group</name>
+        <qualifiedname>castor3d::IndirectLightingPass::m_group</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/IndirectLightingPass.hpp" line="153" column="22" bodyfile="Render/Opaque/IndirectLightingPass.hpp" bodystart="153" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d95/a04772_1a214ae250c3b34dd2cb84654cfda91a17" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="d0/d95/a04772_1a1a718040b2894e3d38e0e149e7fc6e2c" kindref="member">ProgramPtr</ref> &gt;</type>
+        <definition>std::vector&lt; ProgramPtr &gt; castor3d::IndirectLightingPass::m_programs</definition>
+        <argsstring></argsstring>
+        <name>m_programs</name>
+        <qualifiedname>castor3d::IndirectLightingPass::m_programs</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/IndirectLightingPass.hpp" line="154" column="13" bodyfile="Render/Opaque/IndirectLightingPass.hpp" bodystart="154" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d95/a04772_1a544d43f6670c910872a097d96f5d8143" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::IndirectLightingPass::m_programIndex</definition>
+        <argsstring></argsstring>
+        <name>m_programIndex</name>
+        <qualifiedname>castor3d::IndirectLightingPass::m_programIndex</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/IndirectLightingPass.hpp" line="155" column="10" bodyfile="Render/Opaque/IndirectLightingPass.hpp" bodystart="155" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d95/a04772_1aef65fafc8772f388dd1123ed2138c479" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::IndirectLightingPass::m_enabled</definition>
+        <argsstring></argsstring>
+        <name>m_enabled</name>
+        <qualifiedname>castor3d::IndirectLightingPass::m_enabled</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/IndirectLightingPass.hpp" line="156" column="6" bodyfile="Render/Opaque/IndirectLightingPass.hpp" bodystart="156" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d95/a04772_1ad6973143811d1b1c07ede2eabe84831a" prot="private" static="no" mutable="no">
+        <type>crg::FramePass const  *</type>
+        <definition>crg::FramePass const* castor3d::IndirectLightingPass::m_lastPass</definition>
+        <argsstring></argsstring>
+        <name>m_lastPass</name>
+        <qualifiedname>castor3d::IndirectLightingPass::m_lastPass</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/IndirectLightingPass.hpp" line="157" column="23" bodyfile="Render/Opaque/IndirectLightingPass.hpp" bodystart="157" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d0/d95/a04772_1a0c84076d00f5eeff3b40fd05d20fdc4e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::IndirectLightingPass::IndirectLightingPass</definition>
+        <argsstring>(RenderDevice const &amp;device, ProgressBar *progress, Scene const &amp;scene, crg::FramePassGroup &amp;graph, crg::FramePass const &amp;previousPass, Texture const &amp;brdf, Texture const &amp;depthObj, OpaquePassResult const &amp;gpResult, LightPassResult const &amp;lpResult, LightVolumePassResult const &amp;lpvResult, LightVolumePassResultArray const &amp;llpvResult, Texture const &amp;vctFirstBounce, Texture const &amp;vctSecondaryBounce, SceneUbo const &amp;sceneUbo, GpInfoUbo const &amp;gpInfoUbo, LpvGridConfigUbo const &amp;lpvConfigUbo, LayeredLpvGridConfigUbo const &amp;llpvConfigUbo, VoxelizerUbo const &amp;vctConfigUbo)</argsstring>
+        <name>IndirectLightingPass</name>
+        <qualifiedname>castor3d::IndirectLightingPass::IndirectLightingPass</qualifiedname>
+        <param>
+          <type><ref refid="d3/d96/a05072" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/dea/a04180" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/d0e/a05676" kindref="compound">Scene</ref> const &amp;</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type>crg::FramePassGroup &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <param>
+          <type>crg::FramePass const &amp;</type>
+          <declname>previousPass</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/db3/a05328" kindref="compound">Texture</ref> const &amp;</type>
+          <declname>brdf</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/db3/a05328" kindref="compound">Texture</ref> const &amp;</type>
+          <declname>depthObj</declname>
+        </param>
+        <param>
+          <type><ref refid="de/d75/a04852" kindref="compound">OpaquePassResult</ref> const &amp;</type>
+          <declname>gpResult</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d11/a04792" kindref="compound">LightPassResult</ref> const &amp;</type>
+          <declname>lpResult</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d4b/a04700" kindref="compound">LightVolumePassResult</ref> const &amp;</type>
+          <declname>lpvResult</declname>
+        </param>
+        <param>
+          <type>LightVolumePassResultArray const &amp;</type>
+          <declname>llpvResult</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/db3/a05328" kindref="compound">Texture</ref> const &amp;</type>
+          <declname>vctFirstBounce</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/db3/a05328" kindref="compound">Texture</ref> const &amp;</type>
+          <declname>vctSecondaryBounce</declname>
+        </param>
+        <param>
+          <type><ref refid="db/d2c/a06256" kindref="compound">SceneUbo</ref> const &amp;</type>
+          <declname>sceneUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/df8/a06168" kindref="compound">GpInfoUbo</ref> const &amp;</type>
+          <declname>gpInfoUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="db/d65/a06192" kindref="compound">LpvGridConfigUbo</ref> const &amp;</type>
+          <declname>lpvConfigUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/d07/a06184" kindref="compound">LayeredLpvGridConfigUbo</ref> const &amp;</type>
+          <declname>llpvConfigUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/d96/a06360" kindref="compound">VoxelizerUbo</ref> const &amp;</type>
+          <declname>vctConfigUbo</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/IndirectLightingPass.hpp" line="93" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d95/a04772_1a195c6ac71f52295a14f6ce5d5ad2a79b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::IndirectLightingPass::update</definition>
+        <argsstring>(CpuUpdater &amp;updater)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::IndirectLightingPass::update</qualifiedname>
+        <param>
+          <type><ref refid="d7/d13/a05156" kindref="compound">CpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+<para>Updates the render pass, CPU wise. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">updater</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The update data. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/IndirectLightingPass.hpp" line="119" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d95/a04772_1a57f91afda023a18bddccb05a359b08ff" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::IndirectLightingPass::accept</definition>
+        <argsstring>(PipelineVisitorBase &amp;visitor)</argsstring>
+        <name>accept</name>
+        <qualifiedname>castor3d::IndirectLightingPass::accept</qualifiedname>
+        <param>
+          <type><ref refid="dc/d85/a04168" kindref="compound">PipelineVisitorBase</ref> &amp;</type>
+          <declname>visitor</declname>
+        </param>
+        <briefdescription>
+<para>Visitor acceptance function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>visitor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ... visitor. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/IndirectLightingPass.hpp" line="123" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d95/a04772_1ae11e02bbc47b71d54d510de8eb9f2d85" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>crg::FramePass const &amp;</type>
+        <definition>crg::FramePass const  &amp; castor3d::IndirectLightingPass::getLastPass</definition>
+        <argsstring>() const</argsstring>
+        <name>getLastPass</name>
+        <qualifiedname>castor3d::IndirectLightingPass::getLastPass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/IndirectLightingPass.hpp" line="125" column="23" bodyfile="Render/Opaque/IndirectLightingPass.hpp" bodystart="125" bodyend="128"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d0/d95/a04772_1aa3912d104d9497502fefc9e65c3339a1" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>crg::FramePass const &amp;</type>
+        <definition>crg::FramePass const  &amp; castor3d::IndirectLightingPass::doCreateLightingPass</definition>
+        <argsstring>(crg::FramePassGroup &amp;graph, Scene const &amp;scene, crg::FramePass const &amp;previousPass, ProgressBar *progress)</argsstring>
+        <name>doCreateLightingPass</name>
+        <qualifiedname>castor3d::IndirectLightingPass::doCreateLightingPass</qualifiedname>
+        <param>
+          <type>crg::FramePassGroup &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/d0e/a05676" kindref="compound">Scene</ref> const &amp;</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type>crg::FramePass const &amp;</type>
+          <declname>previousPass</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/dea/a04180" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/IndirectLightingPass.hpp" line="131" column="23"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d95/a04772_1ac2f4969ef30e65ffaea4227c67903639" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d6/db2/a04780" kindref="compound">Program</ref> &amp;</type>
+        <definition>Program &amp; castor3d::IndirectLightingPass::doCreateProgram</definition>
+        <argsstring>(uint32_t index)</argsstring>
+        <name>doCreateProgram</name>
+        <qualifiedname>castor3d::IndirectLightingPass::doCreateProgram</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/IndirectLightingPass.hpp" line="135" column="10"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/Opaque/IndirectLightingPass.hpp" line="19" column="1" bodyfile="Render/Opaque/IndirectLightingPass.hpp" bodystart="20" bodyend="158"/>
+    <listofallmembers>
+      <member refid="d0/d95/a04772_1a57f91afda023a18bddccb05a359b08ff" prot="public" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>accept</name></member>
+      <member refid="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bf" prot="public" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>DescriptorIdx</name></member>
+      <member refid="d0/d95/a04772_1aa3912d104d9497502fefc9e65c3339a1" prot="private" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>doCreateLightingPass</name></member>
+      <member refid="d0/d95/a04772_1ac2f4969ef30e65ffaea4227c67903639" prot="private" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>doCreateProgram</name></member>
+      <member refid="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfac600b43e8006b1658fa1c3939e4821d5" prot="public" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>eBrdf</name></member>
+      <member refid="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfabdec1b19e71ca1d980450fc5cefc38ae" prot="public" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>eColMtl</name></member>
+      <member refid="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfa2606f1bed36ffe00104d7777675bb5ce" prot="public" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>eCount</name></member>
+      <member refid="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfa558069fab018f1fa0da14c5d1b944586" prot="public" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>eDepthObj</name></member>
+      <member refid="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfa9601fe5800b88d314310cc55d362525f" prot="public" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>eGpInfo</name></member>
+      <member refid="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfa51f3ee4f9d80eb08eca6957130154a9e" prot="public" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>eLayeredLpv1B</name></member>
+      <member refid="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfabd7403cbba0ee505d4e3e009b56b4676" prot="public" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>eLayeredLpv1G</name></member>
+      <member refid="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfa3886f992add2f373fc0f6d3aaa883482" prot="public" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>eLayeredLpv1R</name></member>
+      <member refid="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfa138246f7a8a63718ce575e72004df631" prot="public" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>eLayeredLpv2B</name></member>
+      <member refid="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfa2fba8dd51e6fddbc1fe9cce3329a6c6a" prot="public" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>eLayeredLpv2G</name></member>
+      <member refid="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfa22f4e463e0cbe32348a12637893f4817" prot="public" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>eLayeredLpv2R</name></member>
+      <member refid="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfa811977054b3c55fa1d8e70db5b8569a3" prot="public" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>eLayeredLpv3B</name></member>
+      <member refid="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfa8671815c6fe66b23a8e3af3409eab737" prot="public" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>eLayeredLpv3G</name></member>
+      <member refid="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfa279d77745cfd5563713259ff4446f3f7" prot="public" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>eLayeredLpv3R</name></member>
+      <member refid="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfa7dccccc07391a65907f9c99ddf1745d3" prot="public" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>eLayeredLpvGridConfig</name></member>
+      <member refid="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfa74f68ab47632eb3964f3bff17b70efff" prot="public" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>eLayeredLpvStart</name></member>
+      <member refid="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfa5b3696dc9a04b3749a192be3b8564272" prot="public" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>eLpvB</name></member>
+      <member refid="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfa0267cb2f6395bdbd9504aa29bcb03205" prot="public" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>eLpvG</name></member>
+      <member refid="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfa5aa633d9e9cfacf7054eeca39575ddb9" prot="public" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>eLpvGridConfig</name></member>
+      <member refid="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfa954a37e64fa8bef71cea2eba9a49f4b2" prot="public" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>eLpvR</name></member>
+      <member refid="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfaeaa57ba1b92ffe323feac0535a957aac" prot="public" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>eLpvStart</name></member>
+      <member refid="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfadabaee4857883244b9284eb2c1d12f01" prot="public" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>eMaterials</name></member>
+      <member refid="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfaaebd7998ca0c0397eaed2d48383a321b" prot="public" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>eModels</name></member>
+      <member refid="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfa91e74fce73665586d7abb39107207cba" prot="public" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>eNmlOcc</name></member>
+      <member refid="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfac1f50d7a93ef1740d30cbe790c3c6a27" prot="public" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>eScene</name></member>
+      <member refid="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfa1801928a0e7ec22d55ddce5d1de3efdb" prot="public" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>eSpcRgh</name></member>
+      <member refid="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfac5bdab7f47a2b5dbd49201052f2fbdee" prot="public" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>eVctFirstBounce</name></member>
+      <member refid="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfa99a86de9d66e73f716939a739e02564d" prot="public" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>eVctSecondBounce</name></member>
+      <member refid="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfa7e95ea185a365f4d3f4fe61b68d155b0" prot="public" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>eVctStart</name></member>
+      <member refid="d0/d95/a04772_1a9754d8d594e3b8c2fe7ff6690d08c5bfaef992e616d56f8b8b77c8d8b5f87e024" prot="public" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>eVoxelData</name></member>
+      <member refid="d0/d95/a04772_1ae11e02bbc47b71d54d510de8eb9f2d85" prot="public" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>getLastPass</name></member>
+      <member refid="d0/d95/a04772_1a0c84076d00f5eeff3b40fd05d20fdc4e" prot="public" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>IndirectLightingPass</name></member>
+      <member refid="d0/d95/a04772_1a2cbb726fcc7472baa99de47ea2708b9f" prot="private" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>m_brdf</name></member>
+      <member refid="d0/d95/a04772_1a0c3e4da543e5a75015b85d82d1c8d27b" prot="private" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>m_depthObj</name></member>
+      <member refid="d0/d95/a04772_1a5fa7558dd09ff5f1bb7b5f996d13d8d1" prot="private" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>m_device</name></member>
+      <member refid="d0/d95/a04772_1aef65fafc8772f388dd1123ed2138c479" prot="private" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>m_enabled</name></member>
+      <member refid="d0/d95/a04772_1a68440964bf0414eed15827938f899e7c" prot="private" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>m_gpInfoUbo</name></member>
+      <member refid="d0/d95/a04772_1a5fd0aaaedcbda39e9bc5ef4fa26f764c" prot="private" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>m_gpResult</name></member>
+      <member refid="d0/d95/a04772_1aedb5a323d87d104dd9aa35686a218c34" prot="private" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>m_group</name></member>
+      <member refid="d0/d95/a04772_1ad6973143811d1b1c07ede2eabe84831a" prot="private" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>m_lastPass</name></member>
+      <member refid="d0/d95/a04772_1ac9c8c5e004c28ae28c73f232b5daf514" prot="private" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>m_llpvConfigUbo</name></member>
+      <member refid="d0/d95/a04772_1a0d97242e60c124d656d132f535b7b40a" prot="private" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>m_llpvResult</name></member>
+      <member refid="d0/d95/a04772_1af6436ddea29b27a8341a8a18c8a6382a" prot="private" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>m_lpResult</name></member>
+      <member refid="d0/d95/a04772_1a274cb6c00278766a4f9a41c46806cb70" prot="private" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>m_lpvConfigUbo</name></member>
+      <member refid="d0/d95/a04772_1ac1e62448004ecacef75c9930e4f4afdc" prot="private" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>m_lpvResult</name></member>
+      <member refid="d0/d95/a04772_1a544d43f6670c910872a097d96f5d8143" prot="private" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>m_programIndex</name></member>
+      <member refid="d0/d95/a04772_1a214ae250c3b34dd2cb84654cfda91a17" prot="private" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>m_programs</name></member>
+      <member refid="d0/d95/a04772_1ad24df6c7edd35d67e82154c9ac334580" prot="private" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>m_scene</name></member>
+      <member refid="d0/d95/a04772_1a4d847aa2afb1b6bf302fa2b9f0856d52" prot="private" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>m_sceneUbo</name></member>
+      <member refid="d0/d95/a04772_1a6464b26f97fa521e69ff19a9dc5a52e4" prot="private" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>m_vctConfigUbo</name></member>
+      <member refid="d0/d95/a04772_1ad9604cbe72c9c53accc3ceb002e1188c" prot="private" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>m_vctFirstBounce</name></member>
+      <member refid="d0/d95/a04772_1a346162ce7948a7ebaa02d7e004e8b73e" prot="private" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>m_vctSecondaryBounce</name></member>
+      <member refid="d0/d95/a04772_1a1a718040b2894e3d38e0e149e7fc6e2c" prot="public" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>ProgramPtr</name></member>
+      <member refid="d0/d95/a04772_1a042f6bb87837ea819a017ab9c99ee46f" prot="public" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>ProgramType</name></member>
+      <member refid="d0/d95/a04772_1a195c6ac71f52295a14f6ce5d5ad2a79b" prot="public" virt="non-virtual"><scope>castor3d::IndirectLightingPass</scope><name>update</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

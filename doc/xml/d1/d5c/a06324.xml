@@ -1,0 +1,95 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d1/d5c/a06324" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::MorphingWeightsConfiguration</compoundname>
+    <includes local="no">UbosModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d1/d5c/a06324_1ad6d64b1e921f0e054c0b130cfb6a420e" prot="public" static="no" mutable="no">
+        <type>castor::Point4ui</type>
+        <definition>castor::Point4ui castor3d::MorphingWeightsConfiguration::morphTargetsData</definition>
+        <argsstring></argsstring>
+        <name>morphTargetsData</name>
+        <qualifiedname>castor3d::MorphingWeightsConfiguration::morphTargetsData</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="312" column="18" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="312" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d5c/a06324_1a2aead1a1ed7358c265d8a30bb72cc62e" prot="public" static="no" mutable="no">
+        <type>std::array&lt; uint32_t, <ref refid="d3/d22/a01572_1a5175d215c061637ba38a005884f73fec" kindref="member">MaxMorphTargets</ref> *4u &gt;</type>
+        <definition>std::array&lt; uint32_t, MaxMorphTargets * 4u &gt; castor3d::MorphingWeightsConfiguration::morphTargetsIndices</definition>
+        <argsstring></argsstring>
+        <name>morphTargetsIndices</name>
+        <qualifiedname>castor3d::MorphingWeightsConfiguration::morphTargetsIndices</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="314" column="12" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="314" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d5c/a06324_1a20cf72fff781e72a1ab7b8c4bfb45f19" prot="public" static="no" mutable="no">
+        <type>std::array&lt; float, <ref refid="d3/d22/a01572_1a5175d215c061637ba38a005884f73fec" kindref="member">MaxMorphTargets</ref> *4u &gt;</type>
+        <definition>std::array&lt; float, MaxMorphTargets * 4u &gt; castor3d::MorphingWeightsConfiguration::morphTargetsWeights</definition>
+        <argsstring></argsstring>
+        <name>morphTargetsWeights</name>
+        <qualifiedname>castor3d::MorphingWeightsConfiguration::morphTargetsWeights</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="316" column="12" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="316" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Morphing data. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="4">
+        <label>T</label>
+      </node>
+      <node id="5">
+        <label>std::array&lt; float, MaxMorphTargets *4u &gt;</label>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; float, MaxMorphTargets *4u &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::array&lt; uint32_t, MaxMorphTargets *4u &gt;</label>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; uint32_t, MaxMorphTargets *4u &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::MorphingWeightsConfiguration</label>
+        <link refid="d1/d5c/a06324"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>morphTargetsIndices</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>morphTargetsWeights</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="4" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Ubos/UbosModule.hpp" line="309" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="310" bodyend="317"/>
+    <listofallmembers>
+      <member refid="d1/d5c/a06324_1ad6d64b1e921f0e054c0b130cfb6a420e" prot="public" virt="non-virtual"><scope>castor3d::MorphingWeightsConfiguration</scope><name>morphTargetsData</name></member>
+      <member refid="d1/d5c/a06324_1a2aead1a1ed7358c265d8a30bb72cc62e" prot="public" virt="non-virtual"><scope>castor3d::MorphingWeightsConfiguration</scope><name>morphTargetsIndices</name></member>
+      <member refid="d1/d5c/a06324_1a20cf72fff781e72a1ab7b8c4bfb45f19" prot="public" virt="non-virtual"><scope>castor3d::MorphingWeightsConfiguration</scope><name>morphTargetsWeights</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -2,7 +2,7 @@
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="da/dec/a00080" kind="file" language="C++">
     <compoundname>AnimationImporterFactory.hpp</compoundname>
-    <includes refid="db/dbd/a11365" local="yes">AnimationModule.hpp</includes>
+    <includes refid="dc/dc3/a13227" local="yes">AnimationModule.hpp</includes>
     <includes local="no">CastorUtils/Design/Factory.hpp</includes>
     <incdepgraph>
       <node id="19">
@@ -48,7 +48,7 @@
       </node>
       <node id="2">
         <label>AnimationModule.hpp</label>
-        <link refid="db/dbd/a11365"/>
+        <link refid="dc/dc3/a13227"/>
         <childnode refid="3" relation="include">
         </childnode>
         <childnode refid="18" relation="include">
@@ -102,8 +102,8 @@
         <label>vector</label>
       </node>
     </incdepgraph>
-    <innerclass refid="d0/db2/a02194" prot="public">castor3d::AnimationImporterFactory</innerclass>
-    <innernamespace refid="da/dab/a01362">castor3d</innernamespace>
+    <innerclass refid="db/db1/a02404" prot="public">castor3d::AnimationImporterFactory</innerclass>
+    <innernamespace refid="d3/d22/a01572">castor3d</innernamespace>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

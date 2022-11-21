@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.3"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: Render/Technique/Opaque/OpaqueModule.hpp File Reference</title>
+<title>Castor3D: Render/Opaque/OpaqueModule.hpp File Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -20,7 +20,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.13.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.14.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -42,7 +42,7 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dir_ee81606feaed1a7650f95054c2670416.html">Render</a></li><li class="navelem"><a class="el" href="../../dir_76410ba93165758e25a17769a661127f.html">Technique</a></li><li class="navelem"><a class="el" href="../../dir_b2e7b976d4c5d2a40d21a3ed19987c6c.html">Opaque</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../dir_ee81606feaed1a7650f95054c2670416.html">Render</a></li><li class="navelem"><a class="el" href="../../dir_2a1dce6d6ed9900e28576b7efd92dbd2.html">Opaque</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -54,55 +54,62 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
 Namespaces</h2></td></tr>
-<tr class="memitem:da/dab/a01362"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html">castor3d</a></td></tr>
+<tr class="memitem:d3/d22/a01572"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d22/a01572.html">castor3d</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader">Opaque</h2></td></tr>
-<tr class="memitem:a26cc94de349e5c40496343ae7a977d65"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html#a26cc94de349e5c40496343ae7a977d65">castor3d::DsTexture</a> : uint8_t { <br />
-&#160;&#160;<a class="el" href="../../da/dab/a01362.html#a26cc94de349e5c40496343ae7a977d65ab9b8322da5016882fd8c814f6ecf8aae">castor3d::eData0</a>
-, <a class="el" href="../../da/dab/a01362.html#a26cc94de349e5c40496343ae7a977d65a176c19311eebcba5053e7e18a6c2943d">castor3d::eData1</a>
-, <a class="el" href="../../da/dab/a01362.html#a26cc94de349e5c40496343ae7a977d65a8a7478ff5303b8a3583d0d785be98b9c">castor3d::eData2</a>
-, <a class="el" href="../../da/dab/a01362.html#a26cc94de349e5c40496343ae7a977d65a4aaa1db219bf8ad8a83b6a06c45f6789">castor3d::eData3</a>
+<tr class="memitem:a26cc94de349e5c40496343ae7a977d65"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d22/a01572.html#a26cc94de349e5c40496343ae7a977d65">castor3d::DsTexture</a> : uint8_t { <br />
+&#160;&#160;<a class="el" href="../../d3/d22/a01572.html#a26cc94de349e5c40496343ae7a977d65aa6c0af9dd610e2b72c91a50b29c44c10">castor3d::eNmlOcc</a>
+, <a class="el" href="../../d3/d22/a01572.html#a26cc94de349e5c40496343ae7a977d65a47ff81d2613793930f05c5888853421d">castor3d::eColMtl</a>
+, <a class="el" href="../../d3/d22/a01572.html#a26cc94de349e5c40496343ae7a977d65a1ff300f8c4aebba392eb5c62682f9ab4">castor3d::eSpcRgh</a>
+, <a class="el" href="../../d3/d22/a01572.html#a26cc94de349e5c40496343ae7a977d65abe1d6c2d4faa0501d5e63ce1a670d8d7">castor3d::eEmsTrn</a>
 , <br />
-&#160;&#160;<a class="el" href="../../da/dab/a01362.html#a26cc94de349e5c40496343ae7a977d65a1becdb19469fbc7301a1ee56bb792c22">castor3d::eData4</a>
-, <a class="el" href="../../da/dab/a01362.html#a26cc94de349e5c40496343ae7a977d65a60c22916ba359a87d83140501ea05fce">castor3d::eData5</a>
-, <a class="el" href="../../da/dab/a01362.html#a26cc94de349e5c40496343ae7a977d65ae558bb69fadec037d9eae46601a4df8e">castor3d::eCount</a>
-, <a class="el" href="../../da/dab/a01362.html#a26cc94de349e5c40496343ae7a977d65abd967862789968b1f8571ca888fffc77">castor3d::eMin</a> = eData0
+&#160;&#160;<a class="el" href="../../d3/d22/a01572.html#a26cc94de349e5c40496343ae7a977d65acc33dae0c0762a5f444d1efab6cdf9cc">castor3d::eClrCot</a>
+, <a class="el" href="../../d3/d22/a01572.html#a26cc94de349e5c40496343ae7a977d65aa0329a422cf0551cddde893afdce3b20">castor3d::eCrTsIr</a>
+, <a class="el" href="../../d3/d22/a01572.html#a26cc94de349e5c40496343ae7a977d65a5ebb9f8fae21f8728e3fdfcbb4a7ea43">castor3d::eSheen</a>
+, <a class="el" href="../../d3/d22/a01572.html#a26cc94de349e5c40496343ae7a977d65ae558bb69fadec037d9eae46601a4df8e">castor3d::eCount</a>
 , <br />
-&#160;&#160;<a class="el" href="../../da/dab/a01362.html#a26cc94de349e5c40496343ae7a977d65a66119c64f8564b693324347fd2bea820">castor3d::eMax</a> =eCount-1
+&#160;&#160;<a class="el" href="../../d3/d22/a01572.html#a26cc94de349e5c40496343ae7a977d65abd967862789968b1f8571ca888fffc77">castor3d::eMin</a> = eNmlOcc
+, <a class="el" href="../../d3/d22/a01572.html#a26cc94de349e5c40496343ae7a977d65a66119c64f8564b693324347fd2bea820">castor3d::eMax</a> =eCount-1
 <br />
  }</td></tr>
-<tr class="memdesc:a26cc94de349e5c40496343ae7a977d65"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enumerator of textures used by the deferred renderer's GBUffer.  <a href="../../da/dab/a01362.html#a26cc94de349e5c40496343ae7a977d65">More...</a><br /></td></tr>
+<tr class="memdesc:a26cc94de349e5c40496343ae7a977d65"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enumerator of textures used by the deferred renderer's GBUffer.  <a href="../../d3/d22/a01572.html#a26cc94de349e5c40496343ae7a977d65">More...</a><br /></td></tr>
 <tr class="separator:a26cc94de349e5c40496343ae7a977d65"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a28462a6faeffc1514f56031885e57aba"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor::String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html#a28462a6faeffc1514f56031885e57aba">castor3d::getTextureName</a> (DsTexture texture)</td></tr>
+<tr class="memitem:a28462a6faeffc1514f56031885e57aba"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor::String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d22/a01572.html#a28462a6faeffc1514f56031885e57aba">castor3d::getTextureName</a> (DsTexture texture)</td></tr>
 <tr class="separator:a28462a6faeffc1514f56031885e57aba"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8bdb9572c10b7ecd8cd0cc11766a1deb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor::String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html#a8bdb9572c10b7ecd8cd0cc11766a1deb">castor3d::getTexName</a> (DsTexture texture)</td></tr>
+<tr class="memitem:a475846902285631337a365b7f7812b23"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor::String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d22/a01572.html#a475846902285631337a365b7f7812b23">castor3d::getImageName</a> (DsTexture texture)</td></tr>
+<tr class="separator:a475846902285631337a365b7f7812b23"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8bdb9572c10b7ecd8cd0cc11766a1deb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor::String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d22/a01572.html#a8bdb9572c10b7ecd8cd0cc11766a1deb">castor3d::getTexName</a> (DsTexture texture)</td></tr>
 <tr class="separator:a8bdb9572c10b7ecd8cd0cc11766a1deb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af1515f9579dd221df23af882f8759c75"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> VkFormat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html#af1515f9579dd221df23af882f8759c75">castor3d::getFormat</a> (RenderDevice const &amp;device, DsTexture texture)</td></tr>
+<tr class="memitem:af1515f9579dd221df23af882f8759c75"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> VkFormat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d22/a01572.html#af1515f9579dd221df23af882f8759c75">castor3d::getFormat</a> (RenderDevice const &amp;device, DsTexture texture)</td></tr>
 <tr class="separator:af1515f9579dd221df23af882f8759c75"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a85f883f81f0f234fe5032543f338db90"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> VkClearValue&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html#a85f883f81f0f234fe5032543f338db90">castor3d::getClearValue</a> (DsTexture texture)</td></tr>
+<tr class="memitem:a85f883f81f0f234fe5032543f338db90"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> VkClearValue&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d22/a01572.html#a85f883f81f0f234fe5032543f338db90">castor3d::getClearValue</a> (DsTexture texture)</td></tr>
 <tr class="separator:a85f883f81f0f234fe5032543f338db90"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a21fa6ef146519802a2395c33cf6ac529"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> VkImageUsageFlags&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html#a21fa6ef146519802a2395c33cf6ac529">castor3d::getUsageFlags</a> (DsTexture texture)</td></tr>
+<tr class="memitem:a21fa6ef146519802a2395c33cf6ac529"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> VkImageUsageFlags&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d22/a01572.html#a21fa6ef146519802a2395c33cf6ac529">castor3d::getUsageFlags</a> (DsTexture texture)</td></tr>
 <tr class="separator:a21fa6ef146519802a2395c33cf6ac529"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a11055d38261d5f72a3862042903a76d8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> VkBorderColor&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html#a11055d38261d5f72a3862042903a76d8">castor3d::getBorderColor</a> (DsTexture texture)</td></tr>
+<tr class="memitem:a11055d38261d5f72a3862042903a76d8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> VkBorderColor&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d22/a01572.html#a11055d38261d5f72a3862042903a76d8">castor3d::getBorderColor</a> (DsTexture texture)</td></tr>
 <tr class="separator:a11055d38261d5f72a3862042903a76d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a42030d00acb5a73fbe51ebd5624e5c76"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html#a42030d00acb5a73fbe51ebd5624e5c76">castor3d::getMipLevels</a> (RenderDevice const &amp;device, DsTexture texture, castor::Size const &amp;size)</td></tr>
+<tr class="memitem:a42030d00acb5a73fbe51ebd5624e5c76"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d22/a01572.html#a42030d00acb5a73fbe51ebd5624e5c76">castor3d::getMipLevels</a> (RenderDevice const &amp;device, DsTexture texture, castor::Size const &amp;size)</td></tr>
 <tr class="separator:a42030d00acb5a73fbe51ebd5624e5c76"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2cf98cfc7fbb8c2ae944883b77f7f934"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html#a2cf98cfc7fbb8c2ae944883b77f7f934">castor3d::CU_DeclareCUSmartPtr</a> (castor3d, DeferredRendering, <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>)</td></tr>
+<tr class="memitem:a2cf98cfc7fbb8c2ae944883b77f7f934"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d22/a01572.html#a2cf98cfc7fbb8c2ae944883b77f7f934">castor3d::CU_DeclareCUSmartPtr</a> (castor3d, DeferredRendering, <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>)</td></tr>
 <tr class="separator:a2cf98cfc7fbb8c2ae944883b77f7f934"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a51c40adeb75ab12f4c07118cd2474d82"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html#a51c40adeb75ab12f4c07118cd2474d82">castor3d::CU_DeclareCUSmartPtr</a> (castor3d, IndirectLightingPass, <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>)</td></tr>
+<tr class="memitem:a51c40adeb75ab12f4c07118cd2474d82"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d22/a01572.html#a51c40adeb75ab12f4c07118cd2474d82">castor3d::CU_DeclareCUSmartPtr</a> (castor3d, IndirectLightingPass, <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>)</td></tr>
 <tr class="separator:a51c40adeb75ab12f4c07118cd2474d82"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6c66a1476d7b955aa0ff71a24597e9ce"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html#a6c66a1476d7b955aa0ff71a24597e9ce">castor3d::CU_DeclareCUSmartPtr</a> (castor3d, LightingPass, <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>)</td></tr>
+<tr class="memitem:a6c66a1476d7b955aa0ff71a24597e9ce"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d22/a01572.html#a6c66a1476d7b955aa0ff71a24597e9ce">castor3d::CU_DeclareCUSmartPtr</a> (castor3d, LightingPass, <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>)</td></tr>
 <tr class="separator:a6c66a1476d7b955aa0ff71a24597e9ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3c08a80cb4c32de99e8256cd0201797f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html#a3c08a80cb4c32de99e8256cd0201797f">castor3d::CU_DeclareCUSmartPtr</a> (castor3d, OpaqueResolvePass, <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>)</td></tr>
-<tr class="separator:a3c08a80cb4c32de99e8256cd0201797f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad2d4912204c847a238a1dc90e221f707"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html#ad2d4912204c847a238a1dc90e221f707">castor3d::CU_DeclareCUSmartPtr</a> (castor3d, OpaquePassResult, <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>)</td></tr>
+<tr class="memitem:ad2d4912204c847a238a1dc90e221f707"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d22/a01572.html#ad2d4912204c847a238a1dc90e221f707">castor3d::CU_DeclareCUSmartPtr</a> (castor3d, OpaquePassResult, <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>)</td></tr>
 <tr class="separator:ad2d4912204c847a238a1dc90e221f707"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac459bce4aa563c980d702bc2639de485"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d22/a01572.html#ac459bce4aa563c980d702bc2639de485">castor3d::CU_DeclareCUSmartPtr</a> (castor3d, OpaqueRendering, <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>)</td></tr>
+<tr class="separator:ac459bce4aa563c980d702bc2639de485"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c08a80cb4c32de99e8256cd0201797f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d22/a01572.html#a3c08a80cb4c32de99e8256cd0201797f">castor3d::CU_DeclareCUSmartPtr</a> (castor3d, OpaqueResolvePass, <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>)</td></tr>
+<tr class="separator:a3c08a80cb4c32de99e8256cd0201797f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a61faaff1386f283f229fdbf959991a7b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d22/a01572.html#a61faaff1386f283f229fdbf959991a7b">castor3d::CU_DeclareCUSmartPtr</a> (castor3d, VisibilityReorderPass, <a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a>)</td></tr>
+<tr class="separator:a61faaff1386f283f229fdbf959991a7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jun 8 2022 13:04:46 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Mon Nov 21 2022 20:20:32 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

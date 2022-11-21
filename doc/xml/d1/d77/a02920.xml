@@ -1,0 +1,224 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d1/d77/a02920" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::TextureUnitCache::ThreadData</compoundname>
+    <includes local="no">TextureCache.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d1/d77/a02920_1a42a94a6c4c025d3aaf23d4171f25c40e" prot="public" static="no" mutable="no">
+        <type><ref refid="d5/d6a/a03864" kindref="compound">TextureUnitData</ref> *</type>
+        <definition>TextureUnitData* castor3d::TextureUnitCache::ThreadData::data</definition>
+        <argsstring></argsstring>
+        <name>data</name>
+        <qualifiedname>castor3d::TextureUnitCache::ThreadData::data</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TextureCache.hpp" line="35" column="18" bodyfile="Cache/TextureCache.hpp" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d77/a02920_1a69c77d43d35880eda8dbdbfa33efd089" prot="public" static="no" mutable="no">
+        <type>TextureLayoutSPtr</type>
+        <definition>TextureLayoutSPtr castor3d::TextureUnitCache::ThreadData::layout</definition>
+        <argsstring></argsstring>
+        <name>layout</name>
+        <qualifiedname>castor3d::TextureUnitCache::ThreadData::layout</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TextureCache.hpp" line="36" column="19" bodyfile="Cache/TextureCache.hpp" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d77/a02920_1a33fd2d582afe8debe310b19e465b2968" prot="public" static="no" mutable="no">
+        <type><ref refid="d0/de0/a03868" kindref="compound">TextureUnit</ref> *</type>
+        <definition>TextureUnit* castor3d::TextureUnitCache::ThreadData::unit</definition>
+        <argsstring></argsstring>
+        <name>unit</name>
+        <qualifiedname>castor3d::TextureUnitCache::ThreadData::unit</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TextureCache.hpp" line="37" column="14" bodyfile="Cache/TextureCache.hpp" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d77/a02920_1a30e3dd73f29349489dcabf8c1cf5f7cc" prot="public" static="no" mutable="no">
+        <type>std::atomic_bool</type>
+        <definition>std::atomic_bool castor3d::TextureUnitCache::ThreadData::interrupted</definition>
+        <argsstring></argsstring>
+        <name>interrupted</name>
+        <qualifiedname>castor3d::TextureUnitCache::ThreadData::interrupted</qualifiedname>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TextureCache.hpp" line="38" column="18" bodyfile="Cache/TextureCache.hpp" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d1/d77/a02920_1addc1fecefb2fd12216ae3da23804dd1c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::TextureUnitCache::ThreadData::ThreadData</definition>
+        <argsstring>(TextureUnitData &amp;pdata, TextureUnit &amp;punit)</argsstring>
+        <name>ThreadData</name>
+        <qualifiedname>castor3d::TextureUnitCache::ThreadData::ThreadData</qualifiedname>
+        <param>
+          <type><ref refid="d5/d6a/a03864" kindref="compound">TextureUnitData</ref> &amp;</type>
+          <declname>pdata</declname>
+        </param>
+        <param>
+          <type><ref refid="d0/de0/a03868" kindref="compound">TextureUnit</ref> &amp;</type>
+          <declname>punit</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/TextureCache.hpp" line="28" column="1" bodyfile="Cache/TextureCache.hpp" bodystart="28" bodyend="33"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="12">
+        <label>castor3d::AnimableT&lt; Engine &gt;</label>
+        <link refid="d5/df1/a02392"/>
+        <childnode refid="13" relation="public-inheritance">
+        </childnode>
+        <childnode refid="14" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+        <childnode refid="17" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="16">
+        <label>K</label>
+      </node>
+      <node id="9">
+        <label>T</label>
+      </node>
+      <node id="6">
+        <label>std::array&lt; TextureFlagConfiguration, 4u &gt;</label>
+        <childnode refid="7" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; TextureFlagConfiguration, 4u &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="17">
+        <label>castor3d::AnimableT&lt; AnimableHandlerT &gt;</label>
+        <link refid="d5/df1/a02392"/>
+        <childnode refid="18" relation="public-inheritance">
+        </childnode>
+        <childnode refid="14" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::PassTextureConfig</label>
+        <link refid="dc/d0f/a03824"/>
+        <childnode refid="5" relation="usage">
+          <edgelabel>config</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::TextureConfiguration</label>
+        <link refid="d5/db0/a03820"/>
+        <childnode refid="6" relation="usage">
+          <edgelabel>components</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>transform</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor3d::TextureFlagConfiguration</label>
+        <link refid="d9/d53/a03816"/>
+      </node>
+      <node id="3">
+        <label>castor3d::TextureSourceInfo</label>
+        <link refid="db/d62/a03860"/>
+      </node>
+      <node id="10">
+        <label>castor3d::TextureTransform</label>
+        <link refid="d0/dd4/a03812"/>
+      </node>
+      <node id="11">
+        <label>castor3d::TextureUnit</label>
+        <link refid="d0/de0/a03868"/>
+        <childnode refid="12" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::TextureUnitCache::ThreadData</label>
+        <link refid="d1/d77/a02920"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>data</edgelabel>
+        </childnode>
+        <childnode refid="11" relation="usage">
+          <edgelabel>unit</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::TextureUnitData</label>
+        <link refid="d5/d6a/a03864"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>sourceInfo</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>passConfig</edgelabel>
+        </childnode>
+      </node>
+      <node id="18">
+        <label>castor::OwnedBy&lt; AnimableHandlerT &gt;</label>
+      </node>
+      <node id="13">
+        <label>castor::OwnedBy&lt; Engine  &gt;</label>
+      </node>
+      <node id="14">
+        <label>std::map&lt; castor::String, AnimationPtr &gt;</label>
+        <childnode refid="15" relation="template-instance">
+          <edgelabel>&lt; castor::String, AnimationPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="9" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="15">
+        <label>std::map&lt; K, T &gt;</label>
+        <childnode refid="16" relation="usage">
+          <edgelabel>keys</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Cache/TextureCache.hpp" line="26" column="1" bodyfile="Cache/TextureCache.hpp" bodystart="27" bodyend="39"/>
+    <listofallmembers>
+      <member refid="d1/d77/a02920_1a42a94a6c4c025d3aaf23d4171f25c40e" prot="public" virt="non-virtual"><scope>castor3d::TextureUnitCache::ThreadData</scope><name>data</name></member>
+      <member refid="d1/d77/a02920_1a30e3dd73f29349489dcabf8c1cf5f7cc" prot="public" virt="non-virtual"><scope>castor3d::TextureUnitCache::ThreadData</scope><name>interrupted</name></member>
+      <member refid="d1/d77/a02920_1a69c77d43d35880eda8dbdbfa33efd089" prot="public" virt="non-virtual"><scope>castor3d::TextureUnitCache::ThreadData</scope><name>layout</name></member>
+      <member refid="d1/d77/a02920_1addc1fecefb2fd12216ae3da23804dd1c" prot="public" virt="non-virtual"><scope>castor3d::TextureUnitCache::ThreadData</scope><name>ThreadData</name></member>
+      <member refid="d1/d77/a02920_1a33fd2d582afe8debe310b19e465b2968" prot="public" virt="non-virtual"><scope>castor3d::TextureUnitCache::ThreadData</scope><name>unit</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

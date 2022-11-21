@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d7/d18/a05108" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::TexturedQuad::Vertex</compoundname>
+    <includes local="no">RenderModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d7/d18/a05108_1a46c959bbf682a633989eeec003d5904a" prot="public" static="no" mutable="no">
+        <type>castor::Point2f</type>
+        <definition>castor::Point2f castor3d::TexturedQuad::Vertex::position</definition>
+        <argsstring></argsstring>
+        <name>position</name>
+        <qualifiedname>castor3d::TexturedQuad::Vertex::position</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="60" column="17" bodyfile="Render/RenderModule.hpp" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/d18/a05108_1ae245badc2699427b74fdf255ddb3a8e2" prot="public" static="no" mutable="no">
+        <type>castor::Point2f</type>
+        <definition>castor::Point2f castor3d::TexturedQuad::Vertex::texture</definition>
+        <argsstring></argsstring>
+        <name>texture</name>
+        <qualifiedname>castor3d::TexturedQuad::Vertex::texture</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="61" column="17" bodyfile="Render/RenderModule.hpp" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/RenderModule.hpp" line="58" column="1" bodyfile="Render/RenderModule.hpp" bodystart="59" bodyend="62"/>
+    <listofallmembers>
+      <member refid="d7/d18/a05108_1a46c959bbf682a633989eeec003d5904a" prot="public" virt="non-virtual"><scope>castor3d::TexturedQuad::Vertex</scope><name>position</name></member>
+      <member refid="d7/d18/a05108_1ae245badc2699427b74fdf255ddb3a8e2" prot="public" virt="non-virtual"><scope>castor3d::TexturedQuad::Vertex</scope><name>texture</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

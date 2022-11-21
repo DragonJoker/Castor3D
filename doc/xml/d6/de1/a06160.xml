@@ -1,0 +1,187 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d6/de1/a06160" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::BillboardData</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstanceHelperT&lt; &quot;C3D_BillboardData&quot;, sdw::type::MemoryLayout::eStd430, sdw::Vec2Field&lt; &quot;dimensions&quot; &gt;, sdw::UIntField&lt; &quot;isSpherical&quot; &gt;, sdw::UIntField&lt; &quot;isFixedSize&quot; &gt; &gt;</basecompoundref>
+    <includes local="no">BillboardUbo.hpp</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d6/de1/a06160_1a1e069a3831c0934a51a0a225e856480e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::BillboardData::BillboardData</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>BillboardData</name>
+        <qualifiedname>castor3d::shader::BillboardData::BillboardData</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/BillboardUbo.hpp" line="23" column="1" bodyfile="Shader/Ubos/BillboardUbo.hpp" bodystart="23" bodyend="28"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/de1/a06160_1a5b85b2e3ee88cf1c41fb769cfd76cdd8" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::BillboardData::getCameraRight</definition>
+        <argsstring>(MatrixData const &amp;matrixData) const</argsstring>
+        <name>getCameraRight</name>
+        <qualifiedname>castor3d::shader::BillboardData::getCameraRight</qualifiedname>
+        <param>
+          <type><ref refid="d1/dec/a06204" kindref="compound">MatrixData</ref> const &amp;</type>
+          <declname>matrixData</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/BillboardUbo.hpp" line="30" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/de1/a06160_1a0c38e420b2eb2b660331b81ba14dbf52" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::BillboardData::getCameraUp</definition>
+        <argsstring>(MatrixData const &amp;matrixData) const</argsstring>
+        <name>getCameraUp</name>
+        <qualifiedname>castor3d::shader::BillboardData::getCameraUp</qualifiedname>
+        <param>
+          <type><ref refid="d1/dec/a06204" kindref="compound">MatrixData</ref> const &amp;</type>
+          <declname>matrixData</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/BillboardUbo.hpp" line="31" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/de1/a06160_1a945ffbf342a83a81f1926ba57d4198a9" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Float</type>
+        <definition>C3D_API sdw::Float castor3d::shader::BillboardData::getWidth</definition>
+        <argsstring>(SceneData const &amp;sceneData) const</argsstring>
+        <name>getWidth</name>
+        <qualifiedname>castor3d::shader::BillboardData::getWidth</qualifiedname>
+        <param>
+          <type><ref refid="db/d70/a06252" kindref="compound">SceneData</ref> const &amp;</type>
+          <declname>sceneData</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/BillboardUbo.hpp" line="32" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/de1/a06160_1a7d927073e408a3adf7d3b3d6f35895b8" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Float</type>
+        <definition>C3D_API sdw::Float castor3d::shader::BillboardData::getHeight</definition>
+        <argsstring>(SceneData const &amp;sceneData) const</argsstring>
+        <name>getHeight</name>
+        <qualifiedname>castor3d::shader::BillboardData::getHeight</qualifiedname>
+        <param>
+          <type><ref refid="db/d70/a06252" kindref="compound">SceneData</ref> const &amp;</type>
+          <declname>sceneData</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/BillboardUbo.hpp" line="33" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/de1/a06160_1a11cf42189ed836c50c8d25e5444a91c5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::BillboardData::dimensions</definition>
+        <argsstring>() const</argsstring>
+        <name>dimensions</name>
+        <qualifiedname>castor3d::shader::BillboardData::dimensions</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/BillboardUbo.hpp" line="35" column="6" bodyfile="Shader/Ubos/BillboardUbo.hpp" bodystart="35" bodyend="35"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/de1/a06160_1a0c9cf2d163282877706b197cf40504cb" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::BillboardData::isSpherical</definition>
+        <argsstring>() const</argsstring>
+        <name>isSpherical</name>
+        <qualifiedname>castor3d::shader::BillboardData::isSpherical</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/BillboardUbo.hpp" line="36" column="6" bodyfile="Shader/Ubos/BillboardUbo.hpp" bodystart="36" bodyend="36"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/de1/a06160_1a5096dd696ec36d0538c9a9cdb8dbb0de" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::BillboardData::isFixedSize</definition>
+        <argsstring>() const</argsstring>
+        <name>isFixedSize</name>
+        <qualifiedname>castor3d::shader::BillboardData::isFixedSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/BillboardUbo.hpp" line="37" column="6" bodyfile="Shader/Ubos/BillboardUbo.hpp" bodystart="37" bodyend="37"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::BillboardData</label>
+        <link refid="d6/de1/a06160"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;C3D_BillboardData&quot;, sdw::type::MemoryLayout::eStd430, sdw::Vec2Field&lt; &quot;dimensions&quot; &gt;, sdw::UIntField&lt; &quot;isSpherical&quot; &gt;, sdw::UIntField&lt; &quot;isFixedSize&quot; &gt; &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::shader::BillboardData</label>
+        <link refid="d6/de1/a06160"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;C3D_BillboardData&quot;, sdw::type::MemoryLayout::eStd430, sdw::Vec2Field&lt; &quot;dimensions&quot; &gt;, sdw::UIntField&lt; &quot;isSpherical&quot; &gt;, sdw::UIntField&lt; &quot;isFixedSize&quot; &gt; &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Ubos/BillboardUbo.hpp" line="16" column="1" bodyfile="Shader/Ubos/BillboardUbo.hpp" bodystart="22" bodyend="38"/>
+    <listofallmembers>
+      <member refid="d6/de1/a06160_1a1e069a3831c0934a51a0a225e856480e" prot="public" virt="non-virtual"><scope>castor3d::shader::BillboardData</scope><name>BillboardData</name></member>
+      <member refid="d6/de1/a06160_1a11cf42189ed836c50c8d25e5444a91c5" prot="public" virt="non-virtual"><scope>castor3d::shader::BillboardData</scope><name>dimensions</name></member>
+      <member refid="d6/de1/a06160_1a5b85b2e3ee88cf1c41fb769cfd76cdd8" prot="public" virt="non-virtual"><scope>castor3d::shader::BillboardData</scope><name>getCameraRight</name></member>
+      <member refid="d6/de1/a06160_1a0c38e420b2eb2b660331b81ba14dbf52" prot="public" virt="non-virtual"><scope>castor3d::shader::BillboardData</scope><name>getCameraUp</name></member>
+      <member refid="d6/de1/a06160_1a7d927073e408a3adf7d3b3d6f35895b8" prot="public" virt="non-virtual"><scope>castor3d::shader::BillboardData</scope><name>getHeight</name></member>
+      <member refid="d6/de1/a06160_1a945ffbf342a83a81f1926ba57d4198a9" prot="public" virt="non-virtual"><scope>castor3d::shader::BillboardData</scope><name>getWidth</name></member>
+      <member refid="d6/de1/a06160_1a5096dd696ec36d0538c9a9cdb8dbb0de" prot="public" virt="non-virtual"><scope>castor3d::shader::BillboardData</scope><name>isFixedSize</name></member>
+      <member refid="d6/de1/a06160_1a0c9cf2d163282877706b197cf40504cb" prot="public" virt="non-virtual"><scope>castor3d::shader::BillboardData</scope><name>isSpherical</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

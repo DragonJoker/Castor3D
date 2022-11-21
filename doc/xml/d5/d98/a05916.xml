@@ -1,0 +1,173 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d5/d98/a05916" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::LightBuffer::LightData</compoundname>
+    <includes local="no">LightBuffer.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d5/d98/a05916_1aa8f1d4a50c73a0ba9f2a2ca3d60ff7bc" prot="public" static="no" mutable="no">
+        <type><ref refid="d3/da5/a05892" kindref="compound">Float4</ref></type>
+        <definition>Float4 castor3d::LightBuffer::LightData::colourIndex</definition>
+        <argsstring></argsstring>
+        <name>colourIndex</name>
+        <qualifiedname>castor3d::LightBuffer::LightData::colourIndex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="107" column="8" bodyfile="Shader/ShaderBuffers/LightBuffer.hpp" bodystart="107" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d98/a05916_1ad136768a0f7dbe07813cee25f318c257" prot="public" static="no" mutable="no">
+        <type><ref refid="d3/da5/a05892" kindref="compound">Float4</ref></type>
+        <definition>Float4 castor3d::LightBuffer::LightData::intensityFarPlane</definition>
+        <argsstring></argsstring>
+        <name>intensityFarPlane</name>
+        <qualifiedname>castor3d::LightBuffer::LightData::intensityFarPlane</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="108" column="8" bodyfile="Shader/ShaderBuffers/LightBuffer.hpp" bodystart="108" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d98/a05916_1a1256e00ee0917560659557002446a7f3" prot="public" static="no" mutable="no">
+        <type><ref refid="d3/da5/a05892" kindref="compound">Float4</ref></type>
+        <definition>Float4 castor3d::LightBuffer::LightData::volumetric</definition>
+        <argsstring></argsstring>
+        <name>volumetric</name>
+        <qualifiedname>castor3d::LightBuffer::LightData::volumetric</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="109" column="8" bodyfile="Shader/ShaderBuffers/LightBuffer.hpp" bodystart="109" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d98/a05916_1ab62828d6da6a71e98032a686a35b01ba" prot="public" static="no" mutable="no">
+        <type><ref refid="d3/da5/a05892" kindref="compound">Float4</ref></type>
+        <definition>Float4 castor3d::LightBuffer::LightData::shadowsOffsets</definition>
+        <argsstring></argsstring>
+        <name>shadowsOffsets</name>
+        <qualifiedname>castor3d::LightBuffer::LightData::shadowsOffsets</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="110" column="8" bodyfile="Shader/ShaderBuffers/LightBuffer.hpp" bodystart="110" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d98/a05916_1a72fdbc95f788eae691cc8b0975cfb8b5" prot="public" static="no" mutable="no">
+        <type><ref refid="d3/da5/a05892" kindref="compound">Float4</ref></type>
+        <definition>Float4 castor3d::LightBuffer::LightData::shadowsVariances</definition>
+        <argsstring></argsstring>
+        <name>shadowsVariances</name>
+        <qualifiedname>castor3d::LightBuffer::LightData::shadowsVariances</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="111" column="8" bodyfile="Shader/ShaderBuffers/LightBuffer.hpp" bodystart="111" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d98/a05916_1abb390b37b5a65cd29a5c0a7f8ae34812" prot="public" static="no" mutable="no">
+        <type><ref refid="d3/d9b/a05900" kindref="compound">SpecLight</ref></type>
+        <definition>SpecLight castor3d::LightBuffer::LightData::specific</definition>
+        <argsstring></argsstring>
+        <name>specific</name>
+        <qualifiedname>castor3d::LightBuffer::LightData::specific</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="112" column="11" bodyfile="Shader/ShaderBuffers/LightBuffer.hpp" bodystart="112" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="7">
+        <label>T</label>
+      </node>
+      <node id="4">
+        <label>std::array&lt; castor3d::LightBuffer::Float4x4, 4u &gt;</label>
+        <childnode refid="5" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; castor3d::LightBuffer::Float4x4, 4u &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::LightBuffer::Float4</label>
+        <link refid="d3/da5/a05892"/>
+      </node>
+      <node id="5">
+        <label>castor3d::LightBuffer::Float4x4</label>
+        <link refid="d5/dd4/a05896"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>c0</edgelabel>
+          <edgelabel>c1</edgelabel>
+          <edgelabel>c2</edgelabel>
+          <edgelabel>c3</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::LightBuffer::LightData</label>
+        <link refid="d5/d98/a05916"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>colourIndex</edgelabel>
+          <edgelabel>intensityFarPlane</edgelabel>
+          <edgelabel>shadowsOffsets</edgelabel>
+          <edgelabel>shadowsVariances</edgelabel>
+          <edgelabel>volumetric</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>specific</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::LightBuffer::SpecLight</label>
+        <link refid="d3/d9b/a05900"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>attenuation</edgelabel>
+          <edgelabel>direction</edgelabel>
+          <edgelabel>directionCount</edgelabel>
+          <edgelabel>exponentCutOff</edgelabel>
+          <edgelabel>position</edgelabel>
+          <edgelabel>splitDepths</edgelabel>
+          <edgelabel>splitScales</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>transforms</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>transform</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="7" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="105" column="1" bodyfile="Shader/ShaderBuffers/LightBuffer.hpp" bodystart="106" bodyend="113"/>
+    <listofallmembers>
+      <member refid="d5/d98/a05916_1aa8f1d4a50c73a0ba9f2a2ca3d60ff7bc" prot="public" virt="non-virtual"><scope>castor3d::LightBuffer::LightData</scope><name>colourIndex</name></member>
+      <member refid="d5/d98/a05916_1ad136768a0f7dbe07813cee25f318c257" prot="public" virt="non-virtual"><scope>castor3d::LightBuffer::LightData</scope><name>intensityFarPlane</name></member>
+      <member refid="d5/d98/a05916_1ab62828d6da6a71e98032a686a35b01ba" prot="public" virt="non-virtual"><scope>castor3d::LightBuffer::LightData</scope><name>shadowsOffsets</name></member>
+      <member refid="d5/d98/a05916_1a72fdbc95f788eae691cc8b0975cfb8b5" prot="public" virt="non-virtual"><scope>castor3d::LightBuffer::LightData</scope><name>shadowsVariances</name></member>
+      <member refid="d5/d98/a05916_1abb390b37b5a65cd29a5c0a7f8ae34812" prot="public" virt="non-virtual"><scope>castor3d::LightBuffer::LightData</scope><name>specific</name></member>
+      <member refid="d5/d98/a05916_1a1256e00ee0917560659557002446a7f3" prot="public" virt="non-virtual"><scope>castor3d::LightBuffer::LightData</scope><name>volumetric</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

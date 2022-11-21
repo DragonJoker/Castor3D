@@ -1,0 +1,519 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d9/d21/a05448" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::AnimatedTexture</compoundname>
+    <basecompoundref refid="d0/d73/a05432" prot="public" virt="non-virtual">castor3d::AnimatedObject</basecompoundref>
+    <includes local="no">AnimatedTexture.hpp</includes>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d9/d21/a05448_1a0904e74a0132beaf2e0a0b169ad9f612" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::AnimatedTexture::AnimatedTexture</definition>
+        <argsstring>(AnimatedTexture &amp;&amp;rhs)=default</argsstring>
+        <name>AnimatedTexture</name>
+        <qualifiedname>castor3d::AnimatedTexture::AnimatedTexture</qualifiedname>
+        <param>
+          <type><ref refid="d9/d21/a05448" kindref="compound">AnimatedTexture</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Copy / Move. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimatedTexture.hpp" line="27" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d21/a05448_1a6546012f07752e8da5fd8817d11cf73f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d9/d21/a05448" kindref="compound">AnimatedTexture</ref> &amp;</type>
+        <definition>C3D_API AnimatedTexture &amp; castor3d::AnimatedTexture::operator=</definition>
+        <argsstring>(AnimatedTexture &amp;&amp;rhs)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::AnimatedTexture::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d9/d21/a05448" kindref="compound">AnimatedTexture</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimatedTexture.hpp" line="28" column="26"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d21/a05448_1a00e21960e08367c63533d8ffa44a89ec" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::AnimatedTexture::AnimatedTexture</definition>
+        <argsstring>(AnimatedTexture const &amp;rhs)=delete</argsstring>
+        <name>AnimatedTexture</name>
+        <qualifiedname>castor3d::AnimatedTexture::AnimatedTexture</qualifiedname>
+        <param>
+          <type><ref refid="d9/d21/a05448" kindref="compound">AnimatedTexture</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimatedTexture.hpp" line="29" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d21/a05448_1ab8b01d0bba7332bdc8bc881968976a86" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d9/d21/a05448" kindref="compound">AnimatedTexture</ref> &amp;</type>
+        <definition>C3D_API AnimatedTexture &amp; castor3d::AnimatedTexture::operator=</definition>
+        <argsstring>(AnimatedTexture const &amp;rhs)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::AnimatedTexture::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d9/d21/a05448" kindref="compound">AnimatedTexture</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimatedTexture.hpp" line="30" column="26"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d9/d21/a05448_1a239afd3d40aea1a7e8ecdc0789795ed4" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::AnimatedTexture::hasTexture</definition>
+        <argsstring>() const</argsstring>
+        <name>hasTexture</name>
+        <qualifiedname>castor3d::AnimatedTexture::hasTexture</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Getters. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimatedTexture.hpp" line="63" column="6" bodyfile="Scene/Animation/AnimatedTexture.hpp" bodystart="63" bodyend="66"/>
+        <referencedby refid="d9/d21/a05448_1a33e90b58524104c6994e8b0998c5008e" compoundref="dd/dad/a01235" startline="68" endline="72">getTexture</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d9/d21/a05448_1a33e90b58524104c6994e8b0998c5008e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d0/de0/a03868" kindref="compound">TextureUnit</ref> &amp;</type>
+        <definition>TextureUnit &amp; castor3d::AnimatedTexture::getTexture</definition>
+        <argsstring>() const</argsstring>
+        <name>getTexture</name>
+        <qualifiedname>castor3d::AnimatedTexture::getTexture</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimatedTexture.hpp" line="68" column="14" bodyfile="Scene/Animation/AnimatedTexture.hpp" bodystart="68" bodyend="72"/>
+        <references refid="d9/d21/a05448_1a239afd3d40aea1a7e8ecdc0789795ed4" compoundref="dd/dad/a01235" startline="63" endline="66">hasTexture</references>
+      </memberdef>
+      <memberdef kind="function" id="d9/d21/a05448_1a316e9cad230eb742e576e5fe0f3f3a86" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d3/d86/a03732" kindref="compound">Pass</ref> &amp;</type>
+        <definition>Pass &amp; castor3d::AnimatedTexture::getPass</definition>
+        <argsstring>() const</argsstring>
+        <name>getPass</name>
+        <qualifiedname>castor3d::AnimatedTexture::getPass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimatedTexture.hpp" line="74" column="7" bodyfile="Scene/Animation/AnimatedTexture.hpp" bodystart="74" bodyend="77"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d21/a05448_1a2b8c41c3b5aeebe8206ac27bba8673e4" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d2/d81/a05504" kindref="compound">TextureAnimationInstance</ref> &amp;</type>
+        <definition>TextureAnimationInstance &amp; castor3d::AnimatedTexture::getPlayingAnimation</definition>
+        <argsstring>() const</argsstring>
+        <name>getPlayingAnimation</name>
+        <qualifiedname>castor3d::AnimatedTexture::getPlayingAnimation</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimatedTexture.hpp" line="79" column="27" bodyfile="Scene/Animation/AnimatedTexture.hpp" bodystart="79" bodyend="83"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d9/d21/a05448_1a254e45ef692bacf292f73b3d498cb124" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::AnimatedTexture::setTexture</definition>
+        <argsstring>(TextureUnit &amp;texture)</argsstring>
+        <name>setTexture</name>
+        <qualifiedname>castor3d::AnimatedTexture::setTexture</qualifiedname>
+        <param>
+          <type><ref refid="d0/de0/a03868" kindref="compound">TextureUnit</ref> &amp;</type>
+          <declname>texture</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Setters. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimatedTexture.hpp" line="89" column="6" bodyfile="Scene/Animation/AnimatedTexture.hpp" bodystart="89" bodyend="93"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d9/d21/a05448_1ad43c8ff9c5316c8ac117030ba23ea4f0" prot="private" static="no" mutable="no">
+        <type><ref refid="d0/de0/a03868" kindref="compound">TextureUnit</ref> *</type>
+        <definition>TextureUnit* castor3d::AnimatedTexture::m_texture</definition>
+        <argsstring></argsstring>
+        <name>m_texture</name>
+        <qualifiedname>castor3d::AnimatedTexture::m_texture</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimatedTexture.hpp" line="103" column="14" bodyfile="Scene/Animation/AnimatedTexture.hpp" bodystart="103" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d21/a05448_1aceb1cef93c384ef8b0018345674e9809" prot="private" static="no" mutable="no">
+        <type><ref refid="d3/d86/a03732" kindref="compound">Pass</ref> &amp;</type>
+        <definition>Pass&amp; castor3d::AnimatedTexture::m_pass</definition>
+        <argsstring></argsstring>
+        <name>m_pass</name>
+        <qualifiedname>castor3d::AnimatedTexture::m_pass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimatedTexture.hpp" line="104" column="7" bodyfile="Scene/Animation/AnimatedTexture.hpp" bodystart="104" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d21/a05448_1afe7ded4d0977700823e4db745a920194" prot="private" static="no" mutable="no">
+        <type>TextureAnimationInstanceRPtr</type>
+        <definition>TextureAnimationInstanceRPtr castor3d::AnimatedTexture::m_playingAnimation</definition>
+        <argsstring></argsstring>
+        <name>m_playingAnimation</name>
+        <qualifiedname>castor3d::AnimatedTexture::m_playingAnimation</qualifiedname>
+        <initializer>{ nullptr }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimatedTexture.hpp" line="105" column="30" bodyfile="Scene/Animation/AnimatedTexture.hpp" bodystart="105" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d9/d21/a05448_1aa16134090eabb3e666e072aae474482c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::AnimatedTexture::AnimatedTexture</definition>
+        <argsstring>(TextureSourceInfo const &amp;sourceInfo, TextureConfiguration const &amp;config, Pass &amp;pass)</argsstring>
+        <name>AnimatedTexture</name>
+        <qualifiedname>castor3d::AnimatedTexture::AnimatedTexture</qualifiedname>
+        <param>
+          <type><ref refid="db/d62/a03860" kindref="compound">TextureSourceInfo</ref> const &amp;</type>
+          <declname>sourceInfo</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/db0/a03820" kindref="compound">TextureConfiguration</ref> const &amp;</type>
+          <declname>config</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d86/a03732" kindref="compound">Pass</ref> &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">sourceInfo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The texture source informations. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">config</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The texture configuration. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pass using the texture. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimatedTexture.hpp" line="44" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d21/a05448_1afc1b444905e2763e02e4285139577a5a" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::AnimatedTexture::update</definition>
+        <argsstring>(castor::Milliseconds const &amp;elapsed) override</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::AnimatedTexture::update</qualifiedname>
+        <reimplements refid="d0/d73/a05432_1aa1ecac49a3faba10459c8089911216df">update</reimplements>
+        <param>
+          <type>castor::Milliseconds const &amp;</type>
+          <declname>elapsed</declname>
+        </param>
+        <briefdescription>
+<para>Updates the animations of the object, given the time since the last frame. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">elapsed</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Time elapsed since the last frame </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimatedTexture.hpp" line="50" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d21/a05448_1ad0752ac52c1ec6713a2c2d5f0e0286ec" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::AnimatedTexture::fillBuffer</definition>
+        <argsstring>(TextureAnimationData *buffer) const</argsstring>
+        <name>fillBuffer</name>
+        <qualifiedname>castor3d::AnimatedTexture::fillBuffer</qualifiedname>
+        <param>
+          <type><ref refid="d7/d50/a03804" kindref="compound">TextureAnimationData</ref> *</type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimatedTexture.hpp" line="51" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d21/a05448_1afdd0b9a478e69d2c1ced312fa33b0b03" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::AnimatedTexture::isPlayingAnimation</definition>
+        <argsstring>() const override</argsstring>
+        <name>isPlayingAnimation</name>
+        <qualifiedname>castor3d::AnimatedTexture::isPlayingAnimation</qualifiedname>
+        <reimplements refid="d0/d73/a05432_1a1c375eacf4a34296dca2ca8f490761d0">isPlayingAnimation</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><computeroutput>true</computeroutput> if the object is playing an animation. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimatedTexture.hpp" line="55" column="14" bodyfile="Scene/Animation/AnimatedTexture.hpp" bodystart="55" bodyend="58"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d9/d21/a05448_1acdc097c0f87ef07efa0f68d7bcc306f9" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::AnimatedTexture::doAddAnimation</definition>
+        <argsstring>(castor::String const &amp;name) override</argsstring>
+        <name>doAddAnimation</name>
+        <qualifiedname>castor3d::AnimatedTexture::doAddAnimation</qualifiedname>
+        <reimplements refid="d0/d73/a05432_1a2c7ed6f3a0ba8312617894ac212bf88c">doAddAnimation</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+<para>adds the animation to the list </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The animation to add </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimatedTexture.hpp" line="97" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d21/a05448_1aa5c1843b9d6be1dbdc865bcabf2a302e" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::AnimatedTexture::doStartAnimation</definition>
+        <argsstring>(AnimationInstance &amp;animation) override</argsstring>
+        <name>doStartAnimation</name>
+        <qualifiedname>castor3d::AnimatedTexture::doStartAnimation</qualifiedname>
+        <reimplements refid="d0/d73/a05432_1a596f9c943daffeb70db5a29de2606c7d">doStartAnimation</reimplements>
+        <param>
+          <type><ref refid="dd/d67/a05452" kindref="compound">AnimationInstance</ref> &amp;</type>
+          <declname>animation</declname>
+        </param>
+        <briefdescription>
+<para>Starts the given animation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">animation</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The animation. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimatedTexture.hpp" line="98" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d21/a05448_1a735fefb5e63b0e8037a81f2cc0bdb356" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::AnimatedTexture::doStopAnimation</definition>
+        <argsstring>(AnimationInstance &amp;animation) override</argsstring>
+        <name>doStopAnimation</name>
+        <qualifiedname>castor3d::AnimatedTexture::doStopAnimation</qualifiedname>
+        <reimplements refid="d0/d73/a05432_1ab4296cdec28662f6241d2bf774f90a20">doStopAnimation</reimplements>
+        <param>
+          <type><ref refid="dd/d67/a05452" kindref="compound">AnimationInstance</ref> &amp;</type>
+          <declname>animation</declname>
+        </param>
+        <briefdescription>
+<para>Stops the given animation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">animation</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The animation. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimatedTexture.hpp" line="99" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d21/a05448_1ad29418d6b182db8b698e1068671a3567" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::AnimatedTexture::doClearAnimations</definition>
+        <argsstring>() override</argsstring>
+        <name>doClearAnimations</name>
+        <qualifiedname>castor3d::AnimatedTexture::doClearAnimations</qualifiedname>
+        <reimplements refid="d0/d73/a05432_1adc5a40387c363ce020fbd743598c645c">doClearAnimations</reimplements>
+        <briefdescription>
+<para>Stops all animations. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Animation/AnimatedTexture.hpp" line="100" column="6"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::AnimatedObject</label>
+        <link refid="d0/d73/a05432"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::AnimatedTexture</label>
+        <link refid="d9/d21/a05448"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::Named</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::AnimatedObject</label>
+        <link refid="d0/d73/a05432"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::AnimatedTexture</label>
+        <link refid="d9/d21/a05448"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::Named</label>
+      </node>
+    </collaborationgraph>
+    <location file="Scene/Animation/AnimatedTexture.hpp" line="16" column="1" bodyfile="Scene/Animation/AnimatedTexture.hpp" bodystart="18" bodyend="106"/>
+    <listofallmembers>
+      <member refid="d0/d73/a05432_1ac19f279d240afe5d9aaee8ab764eb260" prot="public" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>addAnimation</name></member>
+      <member refid="d0/d73/a05432_1a5fcebbda75e25b1806d1b5c2141a2924" prot="public" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>AnimatedObject</name></member>
+      <member refid="d0/d73/a05432_1af2eccff6842dec84ce84d0e0c599f38c" prot="public" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>AnimatedObject</name></member>
+      <member refid="d0/d73/a05432_1a1e050f4dc3a1962ca4cf375d9b16b89b" prot="public" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>AnimatedObject</name></member>
+      <member refid="d9/d21/a05448_1a0904e74a0132beaf2e0a0b169ad9f612" prot="public" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>AnimatedTexture</name></member>
+      <member refid="d9/d21/a05448_1a00e21960e08367c63533d8ffa44a89ec" prot="public" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>AnimatedTexture</name></member>
+      <member refid="d9/d21/a05448_1aa16134090eabb3e666e072aae474482c" prot="public" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>AnimatedTexture</name></member>
+      <member refid="d9/d21/a05448_1acdc097c0f87ef07efa0f68d7bcc306f9" prot="private" virt="virtual"><scope>castor3d::AnimatedTexture</scope><name>doAddAnimation</name></member>
+      <member refid="d9/d21/a05448_1ad29418d6b182db8b698e1068671a3567" prot="private" virt="virtual"><scope>castor3d::AnimatedTexture</scope><name>doClearAnimations</name></member>
+      <member refid="d9/d21/a05448_1aa5c1843b9d6be1dbdc865bcabf2a302e" prot="private" virt="virtual"><scope>castor3d::AnimatedTexture</scope><name>doStartAnimation</name></member>
+      <member refid="d9/d21/a05448_1a735fefb5e63b0e8037a81f2cc0bdb356" prot="private" virt="virtual"><scope>castor3d::AnimatedTexture</scope><name>doStopAnimation</name></member>
+      <member refid="d9/d21/a05448_1ad0752ac52c1ec6713a2c2d5f0e0286ec" prot="public" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>fillBuffer</name></member>
+      <member refid="d0/d73/a05432_1a779fc1e97feca6c7b48c9148f18901e5" prot="public" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>getAnimation</name></member>
+      <member refid="d0/d73/a05432_1a2b7f1dcedebd594dd1f02ce399d06e59" prot="public" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>getAnimations</name></member>
+      <member refid="d0/d73/a05432_1aa371efe8253bc63995bf46f238c2a1d8" prot="public" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>getKind</name></member>
+      <member refid="d9/d21/a05448_1a316e9cad230eb742e576e5fe0f3f3a86" prot="public" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>getPass</name></member>
+      <member refid="d9/d21/a05448_1a2b8c41c3b5aeebe8206ac27bba8673e4" prot="public" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>getPlayingAnimation</name></member>
+      <member refid="d9/d21/a05448_1a33e90b58524104c6994e8b0998c5008e" prot="public" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>getTexture</name></member>
+      <member refid="d0/d73/a05432_1ab2df0c8e698bcfdb593900ad8c146266" prot="public" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>hasAnimation</name></member>
+      <member refid="d9/d21/a05448_1a239afd3d40aea1a7e8ecdc0789795ed4" prot="public" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>hasTexture</name></member>
+      <member refid="d9/d21/a05448_1afdd0b9a478e69d2c1ced312fa33b0b03" prot="public" virt="virtual"><scope>castor3d::AnimatedTexture</scope><name>isPlayingAnimation</name></member>
+      <member refid="d0/d73/a05432_1a28e41bc599481520db66d3b41ec73a2d" prot="protected" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>m_animations</name></member>
+      <member refid="d9/d21/a05448_1aceb1cef93c384ef8b0018345674e9809" prot="private" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>m_pass</name></member>
+      <member refid="d9/d21/a05448_1afe7ded4d0977700823e4db745a920194" prot="private" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>m_playingAnimation</name></member>
+      <member refid="d9/d21/a05448_1ad43c8ff9c5316c8ac117030ba23ea4f0" prot="private" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>m_texture</name></member>
+      <member refid="d9/d21/a05448_1a6546012f07752e8da5fd8817d11cf73f" prot="public" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>operator=</name></member>
+      <member refid="d9/d21/a05448_1ab8b01d0bba7332bdc8bc881968976a86" prot="public" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>operator=</name></member>
+      <member refid="d0/d73/a05432_1a4fae64cf33b1a473e421691f2037f723" prot="public" virt="non-virtual" ambiguityscope="castor3d::AnimatedObject::"><scope>castor3d::AnimatedTexture</scope><name>operator=</name></member>
+      <member refid="d0/d73/a05432_1a681a62403a76ff582f254ff7c43d3c10" prot="public" virt="non-virtual" ambiguityscope="castor3d::AnimatedObject::"><scope>castor3d::AnimatedTexture</scope><name>operator=</name></member>
+      <member refid="d0/d73/a05432_1abdbb6424aa1619e85ef330dcab9ce2a0" prot="public" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>pauseAllAnimations</name></member>
+      <member refid="d0/d73/a05432_1a7660dd415cda3afa98031e4fdc194944" prot="public" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>pauseAnimation</name></member>
+      <member refid="d9/d21/a05448_1a254e45ef692bacf292f73b3d498cb124" prot="public" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>setTexture</name></member>
+      <member refid="d0/d73/a05432_1a21fa4e1c150e3f1829fd698e10dc5d74" prot="public" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>startAllAnimations</name></member>
+      <member refid="d0/d73/a05432_1a6ccec881b1147baafaa43c5ee286e0c7" prot="public" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>startAnimation</name></member>
+      <member refid="d0/d73/a05432_1af7a31c3fd0ac07fcb49df40e4cbc1f9f" prot="public" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>stopAllAnimations</name></member>
+      <member refid="d0/d73/a05432_1af9cdab619fab70599c9568167075b9ac" prot="public" virt="non-virtual"><scope>castor3d::AnimatedTexture</scope><name>stopAnimation</name></member>
+      <member refid="d9/d21/a05448_1afc1b444905e2763e02e4285139577a5a" prot="public" virt="virtual"><scope>castor3d::AnimatedTexture</scope><name>update</name></member>
+      <member refid="d0/d73/a05432_1ab7b23d33b93065511e6eccd2201410f1" prot="public" virt="virtual"><scope>castor3d::AnimatedTexture</scope><name>~AnimatedObject</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

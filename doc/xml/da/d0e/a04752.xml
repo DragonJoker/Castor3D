@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="da/d0e/a04752" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::CountedNodeT</compoundname>
+    <includes local="no">RenderNodeModule.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename NodeT</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="da/d0e/a04752_1a1340012d459e464eae38028d91cb1af5" prot="public" static="no" mutable="no">
+        <type>NodeT const  *</type>
+        <definition>NodeT const* castor3d::CountedNodeT&lt; NodeT &gt;::node</definition>
+        <argsstring></argsstring>
+        <name>node</name>
+        <qualifiedname>castor3d::CountedNodeT::node</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/RenderNodeModule.hpp" line="104" column="14" bodyfile="Render/Node/RenderNodeModule.hpp" bodystart="104" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d0e/a04752_1ac8670b93de6747e8f5deb9cf326b7ba9" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::CountedNodeT&lt; NodeT &gt;::drawCount</definition>
+        <argsstring></argsstring>
+        <name>drawCount</name>
+        <qualifiedname>castor3d::CountedNodeT::drawCount</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/RenderNodeModule.hpp" line="105" column="10" bodyfile="Render/Node/RenderNodeModule.hpp" bodystart="105" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/Node/RenderNodeModule.hpp" line="102" column="1" bodyfile="Render/Node/RenderNodeModule.hpp" bodystart="103" bodyend="106"/>
+    <listofallmembers>
+      <member refid="da/d0e/a04752_1ac8670b93de6747e8f5deb9cf326b7ba9" prot="public" virt="non-virtual"><scope>castor3d::CountedNodeT</scope><name>drawCount</name></member>
+      <member refid="da/d0e/a04752_1a1340012d459e464eae38028d91cb1af5" prot="public" virt="non-virtual"><scope>castor3d::CountedNodeT</scope><name>node</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

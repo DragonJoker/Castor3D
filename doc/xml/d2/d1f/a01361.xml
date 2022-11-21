@@ -1,110 +1,290 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
-  <compounddef id="d2/d1f/a01361" kind="namespace" language="Unknown">
-    <compoundname>std</compoundname>
-    <innerclass refid="d8/dbe/a01370" prot="public">std::allocator</innerclass>
-    <innerclass refid="d2/dd9/a02046" prot="public">std::array</innerclass>
-    <innerclass refid="d6/d2f/a01394" prot="public">std::atomic</innerclass>
-    <innerclass refid="da/de3/a01398" prot="public">std::atomic_ref</innerclass>
-    <innerclass refid="d2/dff/a01374" prot="public">std::auto_ptr</innerclass>
-    <innerclass refid="da/da0/a02126" prot="public">std::bad_alloc</innerclass>
-    <innerclass refid="db/d6c/a02130" prot="public">std::bad_cast</innerclass>
-    <innerclass refid="d4/d5d/a02150" prot="public">std::bad_exception</innerclass>
-    <innerclass refid="da/d42/a02134" prot="public">std::bad_typeid</innerclass>
-    <innerclass refid="de/d3c/a01490" prot="public">std::basic_fstream</innerclass>
-    <innerclass refid="da/d36/a01482" prot="public">std::basic_ifstream</innerclass>
-    <innerclass refid="d5/d67/a01466" prot="public">std::basic_ios</innerclass>
-    <innerclass refid="d8/d7b/a01478" prot="public">std::basic_iostream</innerclass>
-    <innerclass refid="d0/da4/a01470" prot="public">std::basic_istream</innerclass>
-    <innerclass refid="d6/d51/a01494" prot="public">std::basic_istringstream</innerclass>
-    <innerclass refid="d0/d34/a01486" prot="public">std::basic_ofstream</innerclass>
-    <innerclass refid="df/d2f/a01474" prot="public">std::basic_ostream</innerclass>
-    <innerclass refid="d6/dc9/a01498" prot="public">std::basic_ostringstream</innerclass>
-    <innerclass refid="d1/d88/a01578" prot="public">std::basic_string</innerclass>
-    <innerclass refid="d5/da6/a01698" prot="public">std::basic_string_view</innerclass>
-    <innerclass refid="de/dc6/a01502" prot="public">std::basic_stringstream</innerclass>
-    <innerclass refid="d1/dba/a01822" prot="public">std::bitset</innerclass>
-    <innerclass refid="d4/d56/a01818" prot="public">std::complex</innerclass>
-    <innerclass refid="d2/d45/a01826" prot="public">std::deque</innerclass>
-    <innerclass refid="d9/d8d/a02154" prot="public">std::domain_error</innerclass>
-    <innerclass refid="d1/df4/a01422" prot="public">std::error_category</innerclass>
-    <innerclass refid="d4/d3c/a01418" prot="public">std::error_code</innerclass>
-    <innerclass refid="d8/dd0/a01430" prot="public">std::error_condition</innerclass>
-    <innerclass refid="d8/d23/a02122" prot="public">std::exception</innerclass>
-    <innerclass refid="d3/d7e/a01866" prot="public">std::forward_list</innerclass>
-    <innerclass refid="d9/da1/a01546" prot="public">std::fstream</innerclass>
-    <innerclass refid="d7/d90/a01530" prot="public">std::ifstream</innerclass>
-    <innerclass refid="dc/dae/a02158" prot="public">std::invalid_argument</innerclass>
-    <innerclass refid="db/d57/a01506" prot="public">std::ios</innerclass>
-    <innerclass refid="d8/df1/a01414" prot="public">std::ios_base</innerclass>
-    <innerclass refid="d7/d22/a01514" prot="public">std::istream</innerclass>
-    <innerclass refid="d7/d1d/a01554" prot="public">std::istringstream</innerclass>
-    <innerclass refid="d5/dd0/a01438" prot="public">std::jthread</innerclass>
-    <innerclass refid="d7/d26/a02162" prot="public">std::length_error</innerclass>
-    <innerclass refid="d4/df4/a01846" prot="public">std::list</innerclass>
-    <innerclass refid="d0/dc7/a01402" prot="public">std::lock_guard</innerclass>
-    <innerclass refid="db/df6/a02138" prot="public">std::logic_error</innerclass>
-    <innerclass refid="d9/dd5/a01886" prot="public">std::map</innerclass>
-    <innerclass refid="d2/db9/a01926" prot="public">std::multimap</innerclass>
-    <innerclass refid="d9/de8/a02006" prot="public">std::multiset</innerclass>
-    <innerclass refid="d0/de2/a01442" prot="public">std::mutex</innerclass>
-    <innerclass refid="d7/def/a01538" prot="public">std::ofstream</innerclass>
-    <innerclass refid="da/da6/a01522" prot="public">std::ostream</innerclass>
-    <innerclass refid="d2/dc1/a01562" prot="public">std::ostringstream</innerclass>
-    <innerclass refid="de/d38/a02166" prot="public">std::out_of_range</innerclass>
-    <innerclass refid="d6/d6e/a02174" prot="public">std::overflow_error</innerclass>
-    <innerclass refid="d5/d23/a02110" prot="public">std::priority_queue</innerclass>
-    <innerclass refid="d4/d18/a02106" prot="public">std::queue</innerclass>
-    <innerclass refid="d9/d86/a02170" prot="public">std::range_error</innerclass>
-    <innerclass refid="d3/da3/a01450" prot="public">std::recursive_mutex</innerclass>
-    <innerclass refid="da/df6/a01454" prot="public">std::recursive_timed_mutex</innerclass>
-    <innerclass refid="d8/de7/a02146" prot="public">std::runtime_error</innerclass>
-    <innerclass refid="d7/dfb/a01966" prot="public">std::set</innerclass>
-    <innerclass refid="d8/d01/a01410" prot="public">std::shared_lock</innerclass>
-    <innerclass refid="d7/dd1/a01458" prot="public">std::shared_mutex</innerclass>
-    <innerclass refid="d3/deb/a01386" prot="public">std::shared_ptr</innerclass>
-    <innerclass refid="de/d36/a01462" prot="public">std::shared_timed_mutex</innerclass>
-    <innerclass refid="db/d74/a01378" prot="public">std::smart_ptr</innerclass>
-    <innerclass refid="df/d4d/a02086" prot="public">std::span</innerclass>
-    <innerclass refid="da/d4a/a02114" prot="public">std::stack</innerclass>
-    <innerclass refid="d3/da5/a01598" prot="public">std::string</innerclass>
-    <innerclass refid="db/d7f/a01718" prot="public">std::string_view</innerclass>
-    <innerclass refid="d5/d75/a01570" prot="public">std::stringstream</innerclass>
-    <innerclass refid="dc/de6/a01426" prot="public">std::system_error</innerclass>
-    <innerclass refid="d1/de7/a01434" prot="public">std::thread</innerclass>
-    <innerclass refid="d8/d22/a01446" prot="public">std::timed_mutex</innerclass>
-    <innerclass refid="d9/d79/a01658" prot="public">std::u16string</innerclass>
-    <innerclass refid="df/d21/a01778" prot="public">std::u16string_view</innerclass>
-    <innerclass refid="d6/d26/a01678" prot="public">std::u32string</innerclass>
-    <innerclass refid="d2/d86/a01798" prot="public">std::u32string_view</innerclass>
-    <innerclass refid="dd/d55/a01638" prot="public">std::u8string</innerclass>
-    <innerclass refid="d9/de3/a01758" prot="public">std::u8string_view</innerclass>
-    <innerclass refid="d3/d8d/a02178" prot="public">std::underflow_error</innerclass>
-    <innerclass refid="dc/d25/a01406" prot="public">std::unique_lock</innerclass>
-    <innerclass refid="de/d9d/a01382" prot="public">std::unique_ptr</innerclass>
-    <innerclass refid="d3/d1b/a01906" prot="public">std::unordered_map</innerclass>
-    <innerclass refid="d0/dce/a01946" prot="public">std::unordered_multimap</innerclass>
-    <innerclass refid="d9/dd6/a02026" prot="public">std::unordered_multiset</innerclass>
-    <innerclass refid="d4/d10/a01986" prot="public">std::unordered_set</innerclass>
-    <innerclass refid="db/d34/a02118" prot="public">std::valarray</innerclass>
-    <innerclass refid="da/d14/a02066" prot="public">std::vector</innerclass>
-    <innerclass refid="d5/d8e/a01390" prot="public">std::weak_ptr</innerclass>
-    <innerclass refid="d8/daf/a01550" prot="public">std::wfstream</innerclass>
-    <innerclass refid="dc/d2d/a01534" prot="public">std::wifstream</innerclass>
-    <innerclass refid="dc/d47/a01510" prot="public">std::wios</innerclass>
-    <innerclass refid="d0/d1a/a01518" prot="public">std::wistream</innerclass>
-    <innerclass refid="da/dcf/a01558" prot="public">std::wistringstream</innerclass>
-    <innerclass refid="d6/d02/a01542" prot="public">std::wofstream</innerclass>
-    <innerclass refid="da/d0a/a01526" prot="public">std::wostream</innerclass>
-    <innerclass refid="d1/d9b/a01566" prot="public">std::wostringstream</innerclass>
-    <innerclass refid="d9/d6a/a01618" prot="public">std::wstring</innerclass>
-    <innerclass refid="d5/d10/a01738" prot="public">std::wstring_view</innerclass>
-    <innerclass refid="d9/df5/a01574" prot="public">std::wstringstream</innerclass>
+  <compounddef id="d2/d1f/a01361" kind="file" language="C++">
+    <compoundname>ParticleEmitter.hpp</compoundname>
+    <includes refid="de/d1f/a01364" local="yes">ParticleModule.hpp</includes>
+    <includes refid="d6/d06/a00572" local="yes">Castor3D/Miscellaneous/Parameter.hpp</includes>
+    <includes refid="d8/d4e/a01355" local="yes">Castor3D/Scene/ParticleSystem/ParticleDeclaration.hpp</includes>
+    <includes local="no">CastorUtils/Design/Signal.hpp</includes>
+    <includedby refid="de/d6c/a01349" local="yes">Scene/ParticleSystem/CpuParticleSystem.hpp</includedby>
+    <incdepgraph>
+      <node id="31">
+        <label>CastorUtils/Design/Factory.hpp</label>
+      </node>
+      <node id="6">
+        <label>CastorUtils/Design/FlagCombination.hpp</label>
+      </node>
+      <node id="7">
+        <label>CastorUtils/Design/OwnedBy.hpp</label>
+      </node>
+      <node id="26">
+        <label>CastorUtils/Design/Resource.hpp</label>
+      </node>
+      <node id="22">
+        <label>CastorUtils/Design/ResourceCache.hpp</label>
+      </node>
+      <node id="27">
+        <label>CastorUtils/Design/Signal.hpp</label>
+      </node>
+      <node id="8">
+        <label>CastorUtils/Exception/Assertion.hpp</label>
+      </node>
+      <node id="36">
+        <label>CastorUtils/Graphics/BoundingBox.hpp</label>
+      </node>
+      <node id="37">
+        <label>CastorUtils/Graphics/BoundingSphere.hpp</label>
+      </node>
+      <node id="9">
+        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
+      </node>
+      <node id="10">
+        <label>CastorUtils/Graphics/Size.hpp</label>
+      </node>
+      <node id="11">
+        <label>CastorUtils/Math/Coords.hpp</label>
+      </node>
+      <node id="12">
+        <label>CastorUtils/Math/Point.hpp</label>
+      </node>
+      <node id="35">
+        <label>CastorUtils/Math/Quaternion.hpp</label>
+      </node>
+      <node id="38">
+        <label>CastorUtils/Miscellaneous/BitSize.hpp</label>
+      </node>
+      <node id="40">
+        <label>CastorUtils/Miscellaneous/StringUtils.hpp</label>
+      </node>
+      <node id="5">
+        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
+      </node>
+      <node id="14">
+        <label>RenderGraph/FrameGraphPrerequisites.hpp</label>
+      </node>
+      <node id="21">
+        <label>Castor3D/Cache/CacheModule.hpp</label>
+        <link refid="dc/d9a/a00218"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="24" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>Castor3D/Castor3DModule.hpp</label>
+        <link refid="dd/dd7/a00260"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+      </node>
+      <node id="20">
+        <label>Castor3D/Event/Frame/FrameEventModule.hpp</label>
+        <link refid="dc/d5d/a00278"/>
+        <childnode refid="21" relation="include">
+        </childnode>
+      </node>
+      <node id="32">
+        <label>Castor3D/Limits.hpp</label>
+        <link refid="d0/d39/a00314"/>
+        <childnode refid="15" relation="include">
+        </childnode>
+      </node>
+      <node id="25">
+        <label>Castor3D/Material/MaterialModule.hpp</label>
+        <link refid="de/d55/a00323"/>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>Castor3D/Miscellaneous/MiscellaneousModule.hpp</label>
+        <link refid="d4/d9e/a00569"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="39">
+        <label>Castor3D/Miscellaneous/Parameter.hpp</label>
+        <link refid="d6/d06/a00572"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="40" relation="include">
+        </childnode>
+        <childnode refid="41" relation="include">
+        </childnode>
+      </node>
+      <node id="29">
+        <label>Castor3D/Model/Mesh/MeshModule.hpp</label>
+        <link refid="d3/d8e/a00647"/>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="31" relation="include">
+        </childnode>
+      </node>
+      <node id="28">
+        <label>Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp</label>
+        <link refid="dd/d57/a00701"/>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+      </node>
+      <node id="30">
+        <label>Castor3D/Model/ModelModule.hpp</label>
+        <link refid="d1/d56/a00707"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="34">
+        <label>SkeletonModule.hpp</label>
+        <link refid="dc/dce/a00740"/>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+      </node>
+      <node id="33">
+        <label>Castor3D/Model/Skeleton/VertexBoneData.hpp</label>
+        <link refid="d4/dfa/a00746"/>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+      </node>
+      <node id="42">
+        <label>Castor3D/Scene/ParticleSystem/ParticleDeclaration.hpp</label>
+        <link refid="d8/d4e/a01355"/>
+        <childnode refid="43" relation="include">
+        </childnode>
+      </node>
+      <node id="43">
+        <label>Castor3D/Scene/ParticleSystem/ParticleElementDeclaration.hpp</label>
+        <link refid="de/d5c/a01358"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>Scene/ParticleSystem/ParticleEmitter.hpp</label>
+        <link refid="d2/d1f/a01361"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="39" relation="include">
+        </childnode>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>ParticleModule.hpp</label>
+        <link refid="de/d1f/a01364"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+      </node>
+      <node id="19">
+        <label>Castor3D/Scene/SceneModule.hpp</label>
+        <link refid="dc/dbc/a01391"/>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+      </node>
+      <node id="13">
+        <label>ashespp/AshesPPPrerequisites.hpp</label>
+      </node>
+      <node id="15">
+        <label>cstdint</label>
+      </node>
+      <node id="41">
+        <label>cstring</label>
+      </node>
+      <node id="23">
+        <label>functional</label>
+      </node>
+      <node id="16">
+        <label>memory</label>
+      </node>
+      <node id="17">
+        <label>string</label>
+      </node>
+      <node id="24">
+        <label>unordered_map</label>
+      </node>
+      <node id="18">
+        <label>vector</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="2">
+        <label>Scene/ParticleSystem/CpuParticleSystem.hpp</label>
+        <link refid="de/d6c/a01349"/>
+      </node>
+      <node id="1">
+        <label>Scene/ParticleSystem/ParticleEmitter.hpp</label>
+        <link refid="d2/d1f/a01361"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="da/d28/a05644" prot="public">castor3d::ParticleEmitter</innerclass>
+    <innernamespace refid="d3/d22/a01572">castor3d</innernamespace>
     <briefdescription>
-<para>STL namespace. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="[STL]" line="1" column="1"/>
+    <location file="Scene/ParticleSystem/ParticleEmitter.hpp"/>
   </compounddef>
 </doxygen>

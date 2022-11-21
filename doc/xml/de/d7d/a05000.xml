@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="de/d7d/a05000" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::PipelineBaseHash</compoundname>
+    <includes local="no">PipelineFlags.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="de/d7d/a05000_1acf43a2636b3a4e79bbce0027f5455eaa" prot="public" static="no" mutable="no">
+        <type>uint64_t</type>
+        <definition>uint64_t castor3d::PipelineBaseHash::hi</definition>
+        <argsstring></argsstring>
+        <name>hi</name>
+        <qualifiedname>castor3d::PipelineBaseHash::hi</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="19" column="10" bodyfile="Render/PipelineFlags.hpp" bodystart="19" bodyend="-1"/>
+        <referencedby refid="d3/d22/a01572_1aa7542cf43fa353734ccc1b214146bd27" compoundref="db/d23/a01025" startline="26" endline="31">castor3d::operator==</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="de/d7d/a05000_1a8eb01612d455a9e78e19cd3a2810bf31" prot="public" static="no" mutable="no">
+        <type>uint64_t</type>
+        <definition>uint64_t castor3d::PipelineBaseHash::lo</definition>
+        <argsstring></argsstring>
+        <name>lo</name>
+        <qualifiedname>castor3d::PipelineBaseHash::lo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PipelineFlags.hpp" line="20" column="10" bodyfile="Render/PipelineFlags.hpp" bodystart="20" bodyend="-1"/>
+        <referencedby refid="d3/d22/a01572_1aa7542cf43fa353734ccc1b214146bd27" compoundref="db/d23/a01025" startline="26" endline="31">castor3d::operator==</referencedby>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/PipelineFlags.hpp" line="17" column="1" bodyfile="Render/PipelineFlags.hpp" bodystart="18" bodyend="21"/>
+    <listofallmembers>
+      <member refid="de/d7d/a05000_1acf43a2636b3a4e79bbce0027f5455eaa" prot="public" virt="non-virtual"><scope>castor3d::PipelineBaseHash</scope><name>hi</name></member>
+      <member refid="de/d7d/a05000_1a8eb01612d455a9e78e19cd3a2810bf31" prot="public" virt="non-virtual"><scope>castor3d::PipelineBaseHash</scope><name>lo</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

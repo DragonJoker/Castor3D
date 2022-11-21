@@ -1,0 +1,6 @@
+<map id="castor3d::OcclusionMapComponent::Plugin::getTextureFlags" name="castor3d::OcclusionMapComponent::Plugin::getTextureFlags">
+<area shape="rect" id="node1" title=" " alt="" coords="283,71,512,112"/>
+<area shape="rect" id="node2" href="$dd/d5d/a03504.html#a7d94714c39f34d0e25ce00b1160468ec" title="Fills the texture configuration for use with this component." alt="" coords="5,5,235,47"/>
+<area shape="rect" id="node3" href="$dd/d5d/a03504.html#a81ee034b4e490cfe21c03efef7467c9d" title="Removes from given texture flags the ones that are useless given the provided filter." alt="" coords="5,71,235,112"/>
+<area shape="rect" id="node4" href="$dd/d5d/a03504.html#acae1b4522717193312dfb7e447314265" title=" " alt="" coords="5,136,235,177"/>
+</map>

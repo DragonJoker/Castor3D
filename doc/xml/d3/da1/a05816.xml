@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d3/da1/a05816" kind="struct" language="C++" prot="public">
+    <compoundname>castor::ParserEnumTraits&lt; castor3d::InterpolatorType &gt;</compoundname>
+    <includes local="no">SceneFileParser.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d3/da1/a05816_1a64672df39b42d1d12bfb1bac523dc0b7" prot="public" static="yes" mutable="no">
+        <type>xchar const  *const</type>
+        <definition>xchar const* const castor::ParserEnumTraits&lt; castor3d::InterpolatorType &gt;::Name</definition>
+        <argsstring></argsstring>
+        <name>Name</name>
+        <qualifiedname>castor::ParserEnumTraits&lt; castor3d::InterpolatorType &gt;::Name</qualifiedname>
+        <initializer>= cuT( &quot;InterpolatorType&quot; )</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="678" column="34" bodyfile="Scene/SceneFileParser.hpp" bodystart="678" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/da1/a05816_1a752499d5e6c1c6629d18032e38df63e8" prot="public" static="yes" mutable="no">
+        <type>UInt32StrMap const</type>
+        <definition>UInt32StrMap const castor::ParserEnumTraits&lt; castor3d::InterpolatorType &gt;::Values</definition>
+        <argsstring></argsstring>
+        <name>Values</name>
+        <qualifiedname>castor::ParserEnumTraits&lt; castor3d::InterpolatorType &gt;::Values</qualifiedname>
+        <initializer>= []()
+		{
+			UInt32StrMap result;
+			result = <ref refid="d3/d22/a01572_1a89ee8e4edb4c883ef7c66b8dc60cc430" kindref="member">castor3d::getEnumMapT</ref>&lt; <ref refid="d3/d22/a01572_1ad38387ab8e17377a42314bc21c171ab0" kindref="member">castor3d::InterpolatorType</ref> &gt;();
+			return result;
+		}( )</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="679" column="34" bodyfile="Scene/SceneFileParser.hpp" bodystart="679" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor::ParserEnumTraits&lt; castor3d::InterpolatorType &gt;</label>
+        <link refid="d3/da1/a05816"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>Name</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>Values</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>UInt32StrMap</label>
+      </node>
+      <node id="2">
+        <label>xchar</label>
+      </node>
+    </collaborationgraph>
+    <location file="Scene/SceneFileParser.hpp" line="676" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="677" bodyend="685"/>
+    <listofallmembers>
+      <member refid="d3/da1/a05816_1a64672df39b42d1d12bfb1bac523dc0b7" prot="public" virt="non-virtual"><scope>castor::ParserEnumTraits&lt; castor3d::InterpolatorType &gt;</scope><name>Name</name></member>
+      <member refid="d3/da1/a05816_1a752499d5e6c1c6629d18032e38df63e8" prot="public" virt="non-virtual"><scope>castor::ParserEnumTraits&lt; castor3d::InterpolatorType &gt;</scope><name>Values</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

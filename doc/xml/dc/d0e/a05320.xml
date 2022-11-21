@@ -1,0 +1,105 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dc/d0e/a05320" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::SsaoRawAOPass::RenderQuad</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">crg::RenderQuad</basecompoundref>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="dc/d0e/a05320_1ab21252941513454f351d6014452a7f0a" prot="private" static="no" mutable="no">
+        <type><ref refid="d6/d72/a05308" kindref="compound">SsaoConfig</ref> const  &amp;</type>
+        <definition>SsaoConfig const&amp; castor3d::SsaoRawAOPass::RenderQuad::ssaoConfig</definition>
+        <argsstring></argsstring>
+        <name>ssaoConfig</name>
+        <qualifiedname>castor3d::SsaoRawAOPass::RenderQuad::ssaoConfig</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="116" column="19" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="116" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="dc/d0e/a05320_1ade63656ead262dc93abf43c5bbaeb1a0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::SsaoRawAOPass::RenderQuad::RenderQuad</definition>
+        <argsstring>(crg::FramePass const &amp;pass, crg::GraphContext &amp;context, crg::RunnableGraph &amp;graph, crg::rq::Config config, SsaoConfig const &amp;ssaoConfig)</argsstring>
+        <name>RenderQuad</name>
+        <qualifiedname>castor3d::SsaoRawAOPass::RenderQuad::RenderQuad</qualifiedname>
+        <param>
+          <type>crg::FramePass const &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type>crg::GraphContext &amp;</type>
+          <declname>context</declname>
+        </param>
+        <param>
+          <type>crg::RunnableGraph &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <param>
+          <type>crg::rq::Config</type>
+          <declname>config</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/d72/a05308" kindref="compound">SsaoConfig</ref> const &amp;</type>
+          <declname>ssaoConfig</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="106" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-func">
+      <memberdef kind="function" id="dc/d0e/a05320_1ae3cf1c3343a542bef46eb07390e7c6b4" prot="protected" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::SsaoRawAOPass::RenderQuad::doGetPassIndex</definition>
+        <argsstring>() const</argsstring>
+        <name>doGetPassIndex</name>
+        <qualifiedname>castor3d::SsaoRawAOPass::RenderQuad::doGetPassIndex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Ssao/SsaoRawAOPass.hpp" line="113" column="10"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::SsaoRawAOPass::RenderQuad</label>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>crg::RenderQuad</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::SsaoRawAOPass::RenderQuad</label>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>crg::RenderQuad</label>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Ssao/SsaoRawAOPass.hpp" line="103" column="1" bodyfile="Render/Ssao/SsaoRawAOPass.hpp" bodystart="105" bodyend="117"/>
+    <listofallmembers>
+      <member refid="dc/d0e/a05320_1ae3cf1c3343a542bef46eb07390e7c6b4" prot="protected" virt="non-virtual"><scope>castor3d::SsaoRawAOPass::RenderQuad</scope><name>doGetPassIndex</name></member>
+      <member refid="dc/d0e/a05320_1ade63656ead262dc93abf43c5bbaeb1a0" prot="public" virt="non-virtual"><scope>castor3d::SsaoRawAOPass::RenderQuad</scope><name>RenderQuad</name></member>
+      <member refid="dc/d0e/a05320_1ab21252941513454f351d6014452a7f0a" prot="private" virt="non-virtual"><scope>castor3d::SsaoRawAOPass::RenderQuad</scope><name>ssaoConfig</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,94 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d2/d7a/a04384" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ObjectTransform</compoundname>
+    <includes local="no">SkeletonAnimationModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d2/d7a/a04384_1a6163dd40c26d5388bee6d6e1e2b63584" prot="public" static="no" mutable="no">
+        <type><ref refid="dd/d8e/a04392" kindref="compound">SkeletonAnimationObject</ref> *</type>
+        <definition>SkeletonAnimationObject* castor3d::ObjectTransform::object</definition>
+        <argsstring></argsstring>
+        <name>object</name>
+        <qualifiedname>castor3d::ObjectTransform::object</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/Animation/SkeletonAnimationModule.hpp" line="74" column="26" bodyfile="Model/Skeleton/Animation/SkeletonAnimationModule.hpp" bodystart="74" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d7a/a04384_1ad2b8a6ccf39b2dc56381c0ce1dae7d63" prot="public" static="no" mutable="no">
+        <type><ref refid="db/daf/a04412" kindref="compound">NodeTransform</ref></type>
+        <definition>NodeTransform castor3d::ObjectTransform::transform</definition>
+        <argsstring></argsstring>
+        <name>transform</name>
+        <qualifiedname>castor3d::ObjectTransform::transform</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/Animation/SkeletonAnimationModule.hpp" line="75" column="15" bodyfile="Model/Skeleton/Animation/SkeletonAnimationModule.hpp" bodystart="75" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d7a/a04384_1a518854aa1eb7ad9d81598962dc8a66d5" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::ObjectTransform::cumulative</definition>
+        <argsstring></argsstring>
+        <name>cumulative</name>
+        <qualifiedname>castor3d::ObjectTransform::cumulative</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/Animation/SkeletonAnimationModule.hpp" line="76" column="20" bodyfile="Model/Skeleton/Animation/SkeletonAnimationModule.hpp" bodystart="76" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="5">
+        <label>castor3d::NodeTransform</label>
+        <link refid="db/daf/a04412"/>
+      </node>
+      <node id="1">
+        <label>castor3d::ObjectTransform</label>
+        <link refid="d2/d7a/a04384"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>object</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>transform</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::SkeletonAnimationObject</label>
+        <link refid="dd/d8e/a04392"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; SkeletonAnimation &gt;</label>
+      </node>
+      <node id="4">
+        <label>std::enable_shared_from_this&lt; SkeletonAnimationObject &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Model/Skeleton/Animation/SkeletonAnimationModule.hpp" line="72" column="1" bodyfile="Model/Skeleton/Animation/SkeletonAnimationModule.hpp" bodystart="73" bodyend="77"/>
+    <listofallmembers>
+      <member refid="d2/d7a/a04384_1a518854aa1eb7ad9d81598962dc8a66d5" prot="public" virt="non-virtual"><scope>castor3d::ObjectTransform</scope><name>cumulative</name></member>
+      <member refid="d2/d7a/a04384_1a6163dd40c26d5388bee6d6e1e2b63584" prot="public" virt="non-virtual"><scope>castor3d::ObjectTransform</scope><name>object</name></member>
+      <member refid="d2/d7a/a04384_1ad2b8a6ccf39b2dc56381c0ce1dae7d63" prot="public" virt="non-virtual"><scope>castor3d::ObjectTransform</scope><name>transform</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

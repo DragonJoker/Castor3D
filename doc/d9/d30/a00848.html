@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.3"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: Render/RenderPipeline.hpp File Reference</title>
+<title>Castor3D: Render/GlobalIllumination/GlobalIlluminationModule.hpp File Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -20,7 +20,7 @@
  <tr id="projectrow">
   <td id="projectlogo"><img alt="Logo" src="../../castor-small.png"/></td>
   <td id="projectalign">
-   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.13.0</span>
+   <div id="projectname">Castor3D<span id="projectnumber">&#160;0.14.0</span>
    </div>
    <div id="projectbrief">Multiplatform 3D engine</div>
   </td>
@@ -42,31 +42,46 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dir_ee81606feaed1a7650f95054c2670416.html">Render</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../dir_ee81606feaed1a7650f95054c2670416.html">Render</a></li><li class="navelem"><a class="el" href="../../dir_f6c92a291074146be370fc7e944c054f.html">GlobalIllumination</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a>  </div>
-  <div class="headertitle"><div class="title">RenderPipeline.hpp File Reference</div></div>
+  <div class="headertitle"><div class="title">GlobalIlluminationModule.hpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
-Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d4/ddb/a04118.html">castor3d::RenderPipeline</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
 Namespaces</h2></td></tr>
-<tr class="memitem:da/dab/a01362"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dab/a01362.html">castor3d</a></td></tr>
+<tr class="memitem:d3/d22/a01572"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d22/a01572.html">castor3d</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader">Global Illumination</h2></td></tr>
+<tr class="memitem:a94045726cb02c9deb4926f3bf0d0443e"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d22/a01572.html#a94045726cb02c9deb4926f3bf0d0443e">castor3d::GlobalIlluminationType</a> : uint8_t { <br />
+&#160;&#160;<a class="el" href="../../d3/d22/a01572.html#a94045726cb02c9deb4926f3bf0d0443eabe988781e4e1de1c6a36fb698afbbe1f">castor3d::eNone</a>
+, <a class="el" href="../../d3/d22/a01572.html#a94045726cb02c9deb4926f3bf0d0443ea2f8b0bf26e55e24cd393b32d912828c0">castor3d::eRsm</a>
+, <a class="el" href="../../d3/d22/a01572.html#a94045726cb02c9deb4926f3bf0d0443ea2801d8ef53f92c196110f842add78e1c">castor3d::eVoxelConeTracing</a>
+, <a class="el" href="../../d3/d22/a01572.html#a94045726cb02c9deb4926f3bf0d0443ea933088ce1b93a7a6a9e1d9a0bb2db604">castor3d::eLpv</a>
+, <br />
+&#160;&#160;<a class="el" href="../../d3/d22/a01572.html#a94045726cb02c9deb4926f3bf0d0443eac3a9f7fcd396aed98c223206d8de403a">castor3d::eLpvG</a>
+, <a class="el" href="../../d3/d22/a01572.html#a94045726cb02c9deb4926f3bf0d0443ea09b00b69e0958c0aeeb2dce094199d11">castor3d::eLayeredLpv</a>
+, <a class="el" href="../../d3/d22/a01572.html#a94045726cb02c9deb4926f3bf0d0443eaafd64de38933583add90e847ccd7e101">castor3d::eLayeredLpvG</a>
+, <a class="el" href="../../d3/d22/a01572.html#a94045726cb02c9deb4926f3bf0d0443eae558bb69fadec037d9eae46601a4df8e">castor3d::eCount</a>
+, <br />
+&#160;&#160;<a class="el" href="../../d3/d22/a01572.html#a94045726cb02c9deb4926f3bf0d0443eabd967862789968b1f8571ca888fffc77">castor3d::eMin</a> = eNone
+, <a class="el" href="../../d3/d22/a01572.html#a94045726cb02c9deb4926f3bf0d0443ea66119c64f8564b693324347fd2bea820">castor3d::eMax</a> =eCount-1
+<br />
+ }</td></tr>
+<tr class="memdesc:a94045726cb02c9deb4926f3bf0d0443e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enumerator of supported global illumination algorithms.  <a href="../../d3/d22/a01572.html#a94045726cb02c9deb4926f3bf0d0443e">More...</a><br /></td></tr>
+<tr class="separator:a94045726cb02c9deb4926f3bf0d0443e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a27a7d5dfb3d329c8e393ace375b1813c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/dd7/a00260.html#ab7d762f315ad9902201ba70979ed2ef0">C3D_API</a> castor::String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d3/d22/a01572.html#a27a7d5dfb3d329c8e393ace375b1813c">castor3d::getName</a> (GlobalIlluminationType giType)</td></tr>
+<tr class="separator:a27a7d5dfb3d329c8e393ace375b1813c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jun 8 2022 13:04:46 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
+Generated on Mon Nov 21 2022 20:20:32 for Castor3D by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.3
 </small></address>
 </body>
 </html>

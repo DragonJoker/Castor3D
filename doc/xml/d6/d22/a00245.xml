@@ -4,8 +4,8 @@
     <compoundname>PluginCache.hpp</compoundname>
     <includes local="no">CastorUtils/Design/ResourceCache.hpp</includes>
     <includes refid="dc/d9a/a00218" local="yes">Castor3D/Cache/CacheModule.hpp</includes>
-    <includes refid="dc/df1/a00662" local="yes">Castor3D/Plugin/PluginModule.hpp</includes>
-    <includes refid="dc/df2/a00656" local="yes">Castor3D/Plugin/Plugin.hpp</includes>
+    <includes refid="dd/d7e/a00809" local="yes">Castor3D/Plugin/PluginModule.hpp</includes>
+    <includes refid="d5/d72/a00803" local="yes">Castor3D/Plugin/Plugin.hpp</includes>
     <includedby refid="d5/d42/a00269" local="yes">Engine.hpp</includedby>
     <incdepgraph>
       <node id="22">
@@ -101,13 +101,13 @@
       </node>
       <node id="24">
         <label>Castor3D/Miscellaneous/MiscellaneousModule.hpp</label>
-        <link refid="db/d43/a00422"/>
+        <link refid="d4/d9e/a00569"/>
         <childnode refid="4" relation="include">
         </childnode>
       </node>
       <node id="23">
         <label>Castor3D/Plugin/Plugin.hpp</label>
-        <link refid="dc/df2/a00656"/>
+        <link refid="d5/d72/a00803"/>
         <childnode refid="21" relation="include">
         </childnode>
         <childnode refid="24" relation="include">
@@ -115,7 +115,7 @@
       </node>
       <node id="21">
         <label>Castor3D/Plugin/PluginModule.hpp</label>
-        <link refid="dc/df1/a00662"/>
+        <link refid="dd/d7e/a00809"/>
         <childnode refid="3" relation="include">
         </childnode>
         <childnode refid="22" relation="include">
@@ -155,8 +155,8 @@
         <link refid="d5/d42/a00269"/>
       </node>
     </invincdepgraph>
-    <innerclass refid="df/dad/a02682" prot="public">castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;</innerclass>
-    <innernamespace refid="dd/d8b/a01363">castor</innernamespace>
+    <innerclass refid="de/dd8/a02896" prot="public">castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;</innerclass>
+    <innernamespace refid="d6/db5/a01573">castor</innernamespace>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

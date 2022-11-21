@@ -1,3 +1,6 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$d3/d10/a02226.html" title="Helper structure to find ChunkType from a type." alt="" coords="5,5,155,47"/>
+<area shape="rect" id="node1" href="$d9/d5b/a02668.html" title=" " alt="" coords="5,64,191,91"/>
+<area shape="rect" id="node2" href="$d0/d9f/a02672.html" title="Chunk parser." alt="" coords="239,5,425,32"/>
+<area shape="rect" id="node3" href="$d5/d6a/a02680.html" title="ChunkParser specialisation for castor::Path." alt="" coords="255,57,409,98"/>
+<area shape="rect" id="node4" href="$df/d97/a02676.html" title="ChunkParser specialisation for castor::String." alt="" coords="255,122,409,163"/>
 </map>

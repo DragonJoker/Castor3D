@@ -1,32 +1,46 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
   <compounddef id="dc/d19/a00515" kind="file" language="C++">
-    <compoundname>FaceIndices.hpp</compoundname>
-    <includes refid="df/db6/a00509" local="yes">ComponentModule.hpp</includes>
-    <includes local="no">array</includes>
-    <includedby refid="d3/df8/a00155" local="yes">Binary/ChunkData.hpp</includedby>
-    <includedby refid="d4/dfb/a00512" local="yes">Model/Mesh/Submesh/Component/Face.hpp</includedby>
-    <includedby refid="dd/de6/a00548" local="yes">Model/Mesh/Submesh/Component/TriFaceMapping.hpp</includedby>
+    <compoundname>TextureAnimation.hpp</compoundname>
+    <includes refid="d3/dbf/a13239" local="yes">TextureAnimationModule.hpp</includes>
+    <includes refid="d4/d81/a00110" local="yes">Castor3D/Binary/BinaryModule.hpp</includes>
+    <includes refid="d6/d6b/a13230" local="yes">Castor3D/Scene/Animation/AnimationModule.hpp</includes>
+    <includes refid="db/d44/a00533" local="yes">Castor3D/Material/Texture/TextureModule.hpp</includes>
+    <includes refid="db/db6/a00074" local="yes">Castor3D/Animation/Animation.hpp</includes>
+    <includes local="no">CastorUtils/Math/Speed.hpp</includes>
+    <includedby refid="de/d9d/a01382" local="yes">Scene/SceneFileParser.hpp</includedby>
     <incdepgraph>
-      <node id="25">
+      <node id="46">
+        <label>Animation.inl</label>
+      </node>
+      <node id="34">
         <label>CastorUtils/Design/Factory.hpp</label>
       </node>
       <node id="8">
         <label>CastorUtils/Design/FlagCombination.hpp</label>
       </node>
+      <node id="45">
+        <label>CastorUtils/Design/Named.hpp</label>
+      </node>
       <node id="9">
         <label>CastorUtils/Design/OwnedBy.hpp</label>
+      </node>
+      <node id="24">
+        <label>CastorUtils/Design/Resource.hpp</label>
       </node>
       <node id="21">
         <label>CastorUtils/Design/ResourceCache.hpp</label>
       </node>
+      <node id="25">
+        <label>CastorUtils/Design/Signal.hpp</label>
+      </node>
       <node id="10">
         <label>CastorUtils/Exception/Assertion.hpp</label>
       </node>
-      <node id="29">
+      <node id="39">
         <label>CastorUtils/Graphics/BoundingBox.hpp</label>
       </node>
-      <node id="30">
+      <node id="40">
         <label>CastorUtils/Graphics/BoundingSphere.hpp</label>
       </node>
       <node id="11">
@@ -38,13 +52,19 @@
       <node id="13">
         <label>CastorUtils/Math/Coords.hpp</label>
       </node>
+      <node id="26">
+        <label>CastorUtils/Math/MathModule.hpp</label>
+      </node>
       <node id="14">
         <label>CastorUtils/Math/Point.hpp</label>
       </node>
-      <node id="28">
+      <node id="38">
         <label>CastorUtils/Math/Quaternion.hpp</label>
       </node>
-      <node id="31">
+      <node id="47">
+        <label>CastorUtils/Math/Speed.hpp</label>
+      </node>
+      <node id="41">
         <label>CastorUtils/Miscellaneous/BitSize.hpp</label>
       </node>
       <node id="7">
@@ -52,6 +72,40 @@
       </node>
       <node id="16">
         <label>RenderGraph/FrameGraphPrerequisites.hpp</label>
+      </node>
+      <node id="43">
+        <label>Castor3D/Animation/Animation.hpp</label>
+        <link refid="db/db6/a00074"/>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="44" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+        <childnode refid="46" relation="include">
+        </childnode>
+      </node>
+      <node id="44">
+        <label>Castor3D/Animation/AnimationKeyFrame.hpp</label>
+        <link refid="d2/d1f/a00083"/>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="39" relation="include">
+        </childnode>
+      </node>
+      <node id="42">
+        <label>Castor3D/Animation/AnimationModule.hpp</label>
+        <link refid="dc/dc3/a13227"/>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+      </node>
+      <node id="27">
+        <label>Castor3D/Binary/BinaryModule.hpp</label>
+        <link refid="d4/d81/a00110"/>
+        <childnode refid="6" relation="include">
+        </childnode>
       </node>
       <node id="5">
         <label>Castor3D/Cache/CacheModule.hpp</label>
@@ -99,9 +153,21 @@
         <childnode refid="20" relation="include">
         </childnode>
       </node>
+      <node id="30">
+        <label>Castor3D/Event/Frame/FrameEventModule.hpp</label>
+        <link refid="dc/d5d/a00278"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="35">
+        <label>Castor3D/Limits.hpp</label>
+        <link refid="d0/d39/a00314"/>
+        <childnode refid="17" relation="include">
+        </childnode>
+      </node>
       <node id="4">
-        <label>Castor3D/Model/Mesh/MeshModule.hpp</label>
-        <link refid="de/d4e/a00500"/>
+        <label>Castor3D/Material/MaterialModule.hpp</label>
+        <link refid="de/d55/a00323"/>
         <childnode refid="5" relation="include">
         </childnode>
         <childnode refid="24" relation="include">
@@ -109,60 +175,109 @@
         <childnode refid="25" relation="include">
         </childnode>
       </node>
-      <node id="2">
-        <label>ComponentModule.hpp</label>
-        <link refid="df/db6/a00509"/>
-        <childnode refid="3" relation="include">
-        </childnode>
-      </node>
       <node id="1">
-        <label>Model/Mesh/Submesh/Component/FaceIndices.hpp</label>
+        <label>Material/Texture/Animation/TextureAnimation.hpp</label>
         <link refid="dc/d19/a00515"/>
         <childnode refid="2" relation="include">
         </childnode>
-        <childnode refid="32" relation="include">
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="43" relation="include">
+        </childnode>
+        <childnode refid="47" relation="include">
         </childnode>
       </node>
-      <node id="3">
-        <label>Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp</label>
-        <link refid="dc/df9/a00554"/>
-        <childnode refid="4" relation="include">
+      <node id="2">
+        <label>TextureAnimationModule.hpp</label>
+        <link refid="d3/dbf/a13239"/>
+        <childnode refid="3" relation="include">
         </childnode>
         <childnode refid="26" relation="include">
         </childnode>
-        <childnode refid="29" relation="include">
+      </node>
+      <node id="3">
+        <label>Castor3D/Material/Texture/TextureModule.hpp</label>
+        <link refid="db/d44/a00533"/>
+        <childnode refid="4" relation="include">
         </childnode>
-        <childnode refid="30" relation="include">
+        <childnode refid="25" relation="include">
         </childnode>
-        <childnode refid="31" relation="include">
+      </node>
+      <node id="32">
+        <label>Castor3D/Model/Mesh/MeshModule.hpp</label>
+        <link refid="d3/d8e/a00647"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+      </node>
+      <node id="31">
+        <label>Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp</label>
+        <link refid="dd/d57/a00701"/>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="39" relation="include">
+        </childnode>
+        <childnode refid="40" relation="include">
+        </childnode>
+        <childnode refid="41" relation="include">
         </childnode>
         <childnode refid="17" relation="include">
         </childnode>
       </node>
-      <node id="24">
+      <node id="33">
         <label>Castor3D/Model/ModelModule.hpp</label>
-        <link refid="d9/d19/a00560"/>
+        <link refid="d1/d56/a00707"/>
         <childnode refid="6" relation="include">
         </childnode>
       </node>
-      <node id="27">
+      <node id="37">
         <label>SkeletonModule.hpp</label>
-        <link refid="d2/da3/a00593"/>
+        <link refid="dc/dce/a00740"/>
         <childnode refid="5" relation="include">
         </childnode>
-        <childnode refid="24" relation="include">
+        <childnode refid="33" relation="include">
         </childnode>
-        <childnode refid="28" relation="include">
+        <childnode refid="38" relation="include">
         </childnode>
       </node>
-      <node id="26">
+      <node id="36">
         <label>Castor3D/Model/Skeleton/VertexBoneData.hpp</label>
-        <link refid="d5/d8a/a00599"/>
-        <childnode refid="27" relation="include">
+        <link refid="d4/dfa/a00746"/>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
         </childnode>
       </node>
-      <node id="32">
-        <label>array</label>
+      <node id="28">
+        <label>Castor3D/Scene/Animation/AnimationModule.hpp</label>
+        <link refid="d6/d6b/a13230"/>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="42" relation="include">
+        </childnode>
+      </node>
+      <node id="29">
+        <label>Castor3D/Scene/SceneModule.hpp</label>
+        <link refid="dc/dbc/a01391"/>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="31" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
       </node>
       <node id="15">
         <label>ashespp/AshesPPPrerequisites.hpp</label>
@@ -187,221 +302,29 @@
       </node>
     </incdepgraph>
     <invincdepgraph>
-      <node id="6">
-        <label>Binary/BinaryAnimation.hpp</label>
-        <link refid="d1/dc1/a00092"/>
-      </node>
-      <node id="7">
-        <label>Binary/BinaryBoneNode.hpp</label>
-        <link refid="d9/d77/a00095"/>
-      </node>
-      <node id="3">
-        <label>Binary/BinaryChunk.hpp</label>
-        <link refid="d1/d44/a00098"/>
-        <childnode refid="4" relation="include">
-        </childnode>
-        <childnode refid="26" relation="include">
-        </childnode>
-      </node>
-      <node id="8">
-        <label>Binary/BinaryMesh.hpp</label>
-        <link refid="d4/d3a/a00101"/>
-      </node>
-      <node id="9">
-        <label>Binary/BinaryMeshAnimation.hpp</label>
-        <link refid="d0/dc2/a00104"/>
-      </node>
-      <node id="10">
-        <label>Binary/BinaryMeshMorphTarget.hpp</label>
-        <link refid="df/d98/a00107"/>
-      </node>
-      <node id="11">
-        <label>Binary/BinaryMorphComponent.hpp</label>
-        <link refid="d3/d00/a00113"/>
-      </node>
-      <node id="5">
-        <label>Binary/BinaryParser.hpp</label>
-        <link refid="d4/d3e/a00116"/>
-        <childnode refid="6" relation="include">
-        </childnode>
-        <childnode refid="7" relation="include">
-        </childnode>
-        <childnode refid="8" relation="include">
-        </childnode>
-        <childnode refid="9" relation="include">
-        </childnode>
-        <childnode refid="10" relation="include">
-        </childnode>
-        <childnode refid="11" relation="include">
-        </childnode>
-        <childnode refid="12" relation="include">
-        </childnode>
-        <childnode refid="13" relation="include">
-        </childnode>
-        <childnode refid="14" relation="include">
-        </childnode>
-        <childnode refid="15" relation="include">
-        </childnode>
-        <childnode refid="16" relation="include">
-        </childnode>
-        <childnode refid="17" relation="include">
-        </childnode>
-        <childnode refid="18" relation="include">
-        </childnode>
-        <childnode refid="19" relation="include">
-        </childnode>
-        <childnode refid="20" relation="include">
-        </childnode>
-        <childnode refid="21" relation="include">
-        </childnode>
-        <childnode refid="22" relation="include">
-        </childnode>
-        <childnode refid="23" relation="include">
-        </childnode>
-        <childnode refid="24" relation="include">
-        </childnode>
-        <childnode refid="25" relation="include">
-        </childnode>
-      </node>
-      <node id="12">
-        <label>Binary/BinarySceneNodeAnimation.hpp</label>
-        <link refid="df/d6a/a00119"/>
-      </node>
-      <node id="13">
-        <label>Binary/BinarySceneNodeAnimationKeyFrame.hpp</label>
-        <link refid="df/dc8/a00122"/>
-      </node>
-      <node id="14">
-        <label>Binary/BinarySkeleton.hpp</label>
-        <link refid="dc/dfe/a00125"/>
-      </node>
-      <node id="15">
-        <label>Binary/BinarySkeletonAnimation.hpp</label>
-        <link refid="d1/d88/a00128"/>
-      </node>
-      <node id="16">
-        <label>Binary/BinarySkeletonAnimationBone.hpp</label>
-        <link refid="d7/d06/a00131"/>
-      </node>
-      <node id="17">
-        <label>Binary/BinarySkeletonAnimationKeyFrame.hpp</label>
-        <link refid="de/d76/a00134"/>
-      </node>
-      <node id="18">
-        <label>Binary/BinarySkeletonAnimationNode.hpp</label>
-        <link refid="d2/df5/a00137"/>
-      </node>
-      <node id="19">
-        <label>Binary/BinarySkeletonAnimationObject.hpp</label>
-        <link refid="d5/db1/a00140"/>
-      </node>
-      <node id="20">
-        <label>Binary/BinarySkeletonNode.hpp</label>
-        <link refid="d7/dce/a00143"/>
-      </node>
-      <node id="21">
-        <label>Binary/BinarySkinComponent.hpp</label>
-        <link refid="d9/db6/a00146"/>
-      </node>
-      <node id="22">
-        <label>Binary/BinarySubmesh.hpp</label>
-        <link refid="da/d1e/a00149"/>
-      </node>
-      <node id="27">
-        <label>Binary/BinaryWriter.hpp</label>
-        <link refid="d7/d9a/a00152"/>
-        <childnode refid="6" relation="include">
-        </childnode>
-        <childnode refid="7" relation="include">
-        </childnode>
-        <childnode refid="8" relation="include">
-        </childnode>
-        <childnode refid="9" relation="include">
-        </childnode>
-        <childnode refid="10" relation="include">
-        </childnode>
-        <childnode refid="11" relation="include">
-        </childnode>
-        <childnode refid="12" relation="include">
-        </childnode>
-        <childnode refid="13" relation="include">
-        </childnode>
-        <childnode refid="14" relation="include">
-        </childnode>
-        <childnode refid="15" relation="include">
-        </childnode>
-        <childnode refid="16" relation="include">
-        </childnode>
-        <childnode refid="17" relation="include">
-        </childnode>
-        <childnode refid="18" relation="include">
-        </childnode>
-        <childnode refid="19" relation="include">
-        </childnode>
-        <childnode refid="20" relation="include">
-        </childnode>
-        <childnode refid="21" relation="include">
-        </childnode>
-        <childnode refid="22" relation="include">
-        </childnode>
-      </node>
-      <node id="2">
-        <label>Binary/ChunkData.hpp</label>
-        <link refid="d3/df8/a00155"/>
-        <childnode refid="3" relation="include">
-        </childnode>
-      </node>
-      <node id="4">
-        <label>Binary/ChunkParser.hpp</label>
-        <link refid="d6/db8/a00158"/>
-        <childnode refid="5" relation="include">
-        </childnode>
-      </node>
-      <node id="26">
-        <label>Binary/ChunkWriter.hpp</label>
-        <link refid="d6/d7d/a00161"/>
-        <childnode refid="27" relation="include">
-        </childnode>
-      </node>
-      <node id="23">
-        <label>Material/Texture/Animation/TextureAnimationKeyFrame.hpp</label>
-        <link refid="d6/d80/a00371"/>
-      </node>
-      <node id="24">
-        <label>Model/Mesh/Animation/MeshMorphTarget.hpp</label>
-        <link refid="dd/d63/a00455"/>
-      </node>
-      <node id="28">
-        <label>Model/Mesh/Submesh/Component/Face.hpp</label>
-        <link refid="d4/dfb/a00512"/>
-        <childnode refid="29" relation="include">
-        </childnode>
-      </node>
       <node id="1">
-        <label>Model/Mesh/Submesh/Component/FaceIndices.hpp</label>
+        <label>Material/Texture/Animation/TextureAnimation.hpp</label>
         <link refid="dc/d19/a00515"/>
         <childnode refid="2" relation="include">
         </childnode>
-        <childnode refid="28" relation="include">
-        </childnode>
-        <childnode refid="29" relation="include">
+      </node>
+      <node id="2">
+        <label>Scene/SceneFileParser.hpp</label>
+        <link refid="de/d9d/a01382"/>
+        <childnode refid="3" relation="include">
         </childnode>
       </node>
-      <node id="29">
-        <label>Model/Mesh/Submesh/Component/TriFaceMapping.hpp</label>
-        <link refid="dd/de6/a00548"/>
-      </node>
-      <node id="25">
-        <label>Scene/Animation/SceneNodeAnimationKeyFrame.hpp</label>
-        <link refid="d2/d4d/a01079"/>
+      <node id="3">
+        <label>Scene/SceneFileParser_Parsers.hpp</label>
+        <link refid="df/d68/a01385"/>
       </node>
     </invincdepgraph>
-    <innerclass refid="de/d83/a03382" prot="public">castor3d::FaceIndices</innerclass>
-    <innernamespace refid="da/dab/a01362">castor3d</innernamespace>
+    <innerclass refid="dc/ddb/a03796" prot="public">castor3d::TextureAnimation</innerclass>
+    <innernamespace refid="d3/d22/a01572">castor3d</innernamespace>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="Model/Mesh/Submesh/Component/FaceIndices.hpp"/>
+    <location file="Material/Texture/Animation/TextureAnimation.hpp"/>
   </compounddef>
 </doxygen>

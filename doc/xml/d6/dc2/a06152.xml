@@ -1,0 +1,159 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d6/dc2/a06152" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::DerivTex</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstanceHelperT&lt; &quot;DerivTex&quot;, sdw::type::MemoryLayout::eC, sdw::Vec2Field&lt; &quot;uv&quot; &gt;, sdw::Vec2Field&lt; &quot;dPdx&quot; &gt;, sdw::Vec2Field&lt; &quot;dPdy&quot; &gt; &gt;</basecompoundref>
+    <includes local="no">SdwModule.hpp</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d6/dc2/a06152_1a3759476f8e2cdb07c14013192ca1ffb6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::DerivTex::DerivTex</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>DerivTex</name>
+        <qualifiedname>castor3d::shader::DerivTex::DerivTex</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/SdwModule.hpp" line="205" column="1" bodyfile="Shader/Shaders/SdwModule.hpp" bodystart="205" bodyend="210"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/dc2/a06152_1a0e846e048f402d82728be4d5b33eaaa9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::DerivTex::DerivTex</definition>
+        <argsstring>(sdw::Vec2 const &amp;puv, sdw::Vec2 const &amp;pdPdx, sdw::Vec2 const &amp;pdPdy)</argsstring>
+        <name>DerivTex</name>
+        <qualifiedname>castor3d::shader::DerivTex::DerivTex</qualifiedname>
+        <param>
+          <type>sdw::Vec2 const &amp;</type>
+          <declname>puv</declname>
+        </param>
+        <param>
+          <type>sdw::Vec2 const &amp;</type>
+          <declname>pdPdx</declname>
+        </param>
+        <param>
+          <type>sdw::Vec2 const &amp;</type>
+          <declname>pdPdy</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/SdwModule.hpp" line="212" column="1" bodyfile="Shader/Shaders/SdwModule.hpp" bodystart="212" bodyend="227"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/dc2/a06152_1a18cd796132eb8f5142e1b71291d95766" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Float</type>
+        <definition>C3D_API sdw::Float castor3d::shader::DerivTex::computeMip</definition>
+        <argsstring>(sdw::Vec2 const &amp;texSize) const</argsstring>
+        <name>computeMip</name>
+        <qualifiedname>castor3d::shader::DerivTex::computeMip</qualifiedname>
+        <param>
+          <type>sdw::Vec2 const &amp;</type>
+          <declname>texSize</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/SdwModule.hpp" line="229" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/dc2/a06152_1a2b057a5f9f784d147849d1743d591fd9" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::DerivTex::uv</definition>
+        <argsstring>() const</argsstring>
+        <name>uv</name>
+        <qualifiedname>castor3d::shader::DerivTex::uv</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/SdwModule.hpp" line="231" column="6" bodyfile="Shader/Shaders/SdwModule.hpp" bodystart="231" bodyend="231"/>
+        <referencedby refid="de/da4/a06128_1a4ef5855e63f942b80b18ad7243742a62" compoundref="de/dc6/a01502" startline="114" endline="117">castor3d::shader::TextureConfigData::getUv</referencedby>
+        <referencedby refid="de/da4/a06128_1a5e756fa725222f3c47f69614850d687e" compoundref="de/dc6/a01502" startline="124" endline="128">castor3d::shader::TextureConfigData::setUv</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d6/dc2/a06152_1ae3f81cfecf9ffe36e0eacbf02271b47c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::DerivTex::dPdx</definition>
+        <argsstring>() const</argsstring>
+        <name>dPdx</name>
+        <qualifiedname>castor3d::shader::DerivTex::dPdx</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/SdwModule.hpp" line="232" column="6" bodyfile="Shader/Shaders/SdwModule.hpp" bodystart="232" bodyend="232"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/dc2/a06152_1aae2bce070d97343e4b054deae4456e7b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::DerivTex::dPdy</definition>
+        <argsstring>() const</argsstring>
+        <name>dPdy</name>
+        <qualifiedname>castor3d::shader::DerivTex::dPdy</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/SdwModule.hpp" line="233" column="6" bodyfile="Shader/Shaders/SdwModule.hpp" bodystart="233" bodyend="233"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::DerivTex</label>
+        <link refid="d6/dc2/a06152"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;DerivTex&quot;, sdw::type::MemoryLayout::eC, sdw::Vec2Field&lt; &quot;uv&quot; &gt;, sdw::Vec2Field&lt; &quot;dPdx&quot; &gt;, sdw::Vec2Field&lt; &quot;dPdy&quot; &gt; &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::shader::DerivTex</label>
+        <link refid="d6/dc2/a06152"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;DerivTex&quot;, sdw::type::MemoryLayout::eC, sdw::Vec2Field&lt; &quot;uv&quot; &gt;, sdw::Vec2Field&lt; &quot;dPdx&quot; &gt;, sdw::Vec2Field&lt; &quot;dPdy&quot; &gt; &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Shaders/SdwModule.hpp" line="198" column="1" bodyfile="Shader/Shaders/SdwModule.hpp" bodystart="204" bodyend="234"/>
+    <listofallmembers>
+      <member refid="d6/dc2/a06152_1a18cd796132eb8f5142e1b71291d95766" prot="public" virt="non-virtual"><scope>castor3d::shader::DerivTex</scope><name>computeMip</name></member>
+      <member refid="d6/dc2/a06152_1a3759476f8e2cdb07c14013192ca1ffb6" prot="public" virt="non-virtual"><scope>castor3d::shader::DerivTex</scope><name>DerivTex</name></member>
+      <member refid="d6/dc2/a06152_1a0e846e048f402d82728be4d5b33eaaa9" prot="public" virt="non-virtual"><scope>castor3d::shader::DerivTex</scope><name>DerivTex</name></member>
+      <member refid="d6/dc2/a06152_1ae3f81cfecf9ffe36e0eacbf02271b47c" prot="public" virt="non-virtual"><scope>castor3d::shader::DerivTex</scope><name>dPdx</name></member>
+      <member refid="d6/dc2/a06152_1aae2bce070d97343e4b054deae4456e7b" prot="public" virt="non-virtual"><scope>castor3d::shader::DerivTex</scope><name>dPdy</name></member>
+      <member refid="d6/dc2/a06152_1a2b057a5f9f784d147849d1743d591fd9" prot="public" virt="non-virtual"><scope>castor3d::shader::DerivTex</scope><name>uv</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

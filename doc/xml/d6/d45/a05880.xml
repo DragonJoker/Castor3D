@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d6/d45/a05880" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ShaderProgram::CompiledShader</compoundname>
+    <includes local="no">Program.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d6/d45/a05880_1ada4fd2d93d6fe2a4be70a9c8911b7364" prot="public" static="no" mutable="no">
+        <type>castor::String</type>
+        <definition>castor::String castor3d::ShaderProgram::CompiledShader::name</definition>
+        <argsstring></argsstring>
+        <name>name</name>
+        <qualifiedname>castor3d::ShaderProgram::CompiledShader::name</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Program.hpp" line="33" column="16" bodyfile="Shader/Program.hpp" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d45/a05880_1a6492314f5b959b083dce55a5cfbe67b1" prot="public" static="no" mutable="no">
+        <type><ref refid="dc/d76/a05964" kindref="compound">SpirVShader</ref></type>
+        <definition>SpirVShader castor3d::ShaderProgram::CompiledShader::shader</definition>
+        <argsstring></argsstring>
+        <name>shader</name>
+        <qualifiedname>castor3d::ShaderProgram::CompiledShader::shader</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Program.hpp" line="34" column="13" bodyfile="Shader/Program.hpp" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::ShaderProgram::CompiledShader</label>
+        <link refid="d6/d45/a05880"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>shader</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::SpirVShader</label>
+        <link refid="dc/d76/a05964"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>spirv</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>text</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>UInt32Array</label>
+      </node>
+      <node id="5">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+      <node id="4">
+        <label>std::string</label>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Program.hpp" line="31" column="1" bodyfile="Shader/Program.hpp" bodystart="32" bodyend="35"/>
+    <listofallmembers>
+      <member refid="d6/d45/a05880_1ada4fd2d93d6fe2a4be70a9c8911b7364" prot="public" virt="non-virtual"><scope>castor3d::ShaderProgram::CompiledShader</scope><name>name</name></member>
+      <member refid="d6/d45/a05880_1a6492314f5b959b083dce55a5cfbe67b1" prot="public" virt="non-virtual"><scope>castor3d::ShaderProgram::CompiledShader</scope><name>shader</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

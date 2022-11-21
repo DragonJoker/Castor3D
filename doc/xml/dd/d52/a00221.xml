@@ -7,7 +7,7 @@
     <includes local="no">CastorUtils/Design/Named.hpp</includes>
     <includes local="no">CastorUtils/Design/ResourceCache.hpp</includes>
     <includes local="yes">Castor3D/Cache/CacheView.inl</includes>
-    <includedby refid="dd/d43/a01193" local="yes">Scene/Scene.hpp</includedby>
+    <includedby refid="d0/d9b/a01379" local="yes">Scene/Scene.hpp</includedby>
     <incdepgraph>
       <node id="23">
         <label>Castor3D/Cache/CacheView.inl</label>
@@ -142,11 +142,11 @@
       </node>
       <node id="2">
         <label>Scene/Scene.hpp</label>
-        <link refid="dd/d43/a01193"/>
+        <link refid="d0/d9b/a01379"/>
       </node>
     </invincdepgraph>
-    <innerclass refid="d0/d3f/a02630" prot="public">castor3d::CacheViewT</innerclass>
-    <innernamespace refid="da/dab/a01362">castor3d</innernamespace>
+    <innerclass refid="d9/d4d/a02840" prot="public">castor3d::CacheViewT</innerclass>
+    <innernamespace refid="d3/d22/a01572">castor3d</innernamespace>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dd/d8b/a01363" kind="namespace" language="C++">
+    <compoundname>castor</compoundname>
+    <innerclass refid="d5/dc3/a02674" prot="public">castor::OverlayCategorySort</innerclass>
+    <innerclass refid="d2/dca/a02606" prot="public">castor::ResourceCacheT&lt; castor3d::AnimatedObjectGroup, String, castor3d::AnimatedObjectGroupCacheTraits &gt;</innerclass>
+    <innerclass refid="d1/d47/a02670" prot="public">castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;</innerclass>
+    <innerclass refid="dc/d64/a02678" prot="public">castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;</innerclass>
+    <innerclass refid="df/dad/a02682" prot="public">castor::ResourceCacheT&lt; castor3d::Plugin, String, castor3d::PluginCacheTraits &gt;</innerclass>
+      <sectiondef kind="typedef">
+      <memberdef kind="typedef" id="dd/d8b/a01363_1a7010f4ef16215727e7d77584cdcbffac" prot="public" static="no">
+        <type>std::set&lt; castor3d::OverlayCategorySPtr, <ref refid="d5/dc3/a02674" kindref="compound">OverlayCategorySort</ref> &gt;</type>
+        <definition>using castor::OverlayCategorySet = typedef std::set&lt; castor3d::OverlayCategorySPtr, OverlayCategorySort &gt;</definition>
+        <argsstring></argsstring>
+        <name>OverlayCategorySet</name>
+        <qualifiedname>castor::OverlayCategorySet</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/OverlayCache.hpp" line="40" column="1" bodyfile="Cache/OverlayCache.hpp" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Cache/AnimatedObjectGroupCache.hpp" line="21" column="1"/>
+  </compounddef>
+</doxygen>

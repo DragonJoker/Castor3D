@@ -1,0 +1,471 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="df/df0/a05160" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::CpuUpdater::DirtyObjects</compoundname>
+    <includes local="no">RenderModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="df/df0/a05160_1a6631938ae17cc2cddff2ac2e9a078608" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="d8/dad/a05856" kindref="compound">SceneNode</ref> * &gt;</type>
+        <definition>std::vector&lt; SceneNode * &gt; castor3d::CpuUpdater::DirtyObjects::dirtyNodes</definition>
+        <argsstring></argsstring>
+        <name>dirtyNodes</name>
+        <qualifiedname>castor3d::CpuUpdater::DirtyObjects::dirtyNodes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="779" column="13" bodyfile="Render/RenderModule.hpp" bodystart="779" bodyend="-1"/>
+        <referencedby refid="df/df0/a05160_1aef3d7db590573f1b2aa080ad34b60558" compoundref="d9/d7c/a01073" startline="770" endline="777">isEmpty</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="df/df0/a05160_1a33de78a8d8fefafed5c5b1bac245deab" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="d9/d3f/a05560" kindref="compound">Geometry</ref> * &gt;</type>
+        <definition>std::vector&lt; Geometry * &gt; castor3d::CpuUpdater::DirtyObjects::dirtyGeometries</definition>
+        <argsstring></argsstring>
+        <name>dirtyGeometries</name>
+        <qualifiedname>castor3d::CpuUpdater::DirtyObjects::dirtyGeometries</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="780" column="13" bodyfile="Render/RenderModule.hpp" bodystart="780" bodyend="-1"/>
+        <referencedby refid="df/df0/a05160_1aef3d7db590573f1b2aa080ad34b60558" compoundref="d9/d7c/a01073" startline="770" endline="777">isEmpty</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="df/df0/a05160_1a5cb34f5f09c55afd859d31f1300f40a2" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="df/d64/a05544" kindref="compound">BillboardBase</ref> * &gt;</type>
+        <definition>std::vector&lt; BillboardBase * &gt; castor3d::CpuUpdater::DirtyObjects::dirtyBillboards</definition>
+        <argsstring></argsstring>
+        <name>dirtyBillboards</name>
+        <qualifiedname>castor3d::CpuUpdater::DirtyObjects::dirtyBillboards</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="781" column="13" bodyfile="Render/RenderModule.hpp" bodystart="781" bodyend="-1"/>
+        <referencedby refid="df/df0/a05160_1aef3d7db590573f1b2aa080ad34b60558" compoundref="d9/d7c/a01073" startline="770" endline="777">isEmpty</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="df/df0/a05160_1a6cedb35401f83092e34a75d5f8e8bd85" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="d3/d7c/a05572" kindref="compound">Light</ref> * &gt;</type>
+        <definition>std::vector&lt; Light * &gt; castor3d::CpuUpdater::DirtyObjects::dirtyLights</definition>
+        <argsstring></argsstring>
+        <name>dirtyLights</name>
+        <qualifiedname>castor3d::CpuUpdater::DirtyObjects::dirtyLights</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="782" column="13" bodyfile="Render/RenderModule.hpp" bodystart="782" bodyend="-1"/>
+        <referencedby refid="df/df0/a05160_1aef3d7db590573f1b2aa080ad34b60558" compoundref="d9/d7c/a01073" startline="770" endline="777">isEmpty</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="df/df0/a05160_1a223f5729b3e0714b24f049099d5ce4e0" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="d6/dfa/a05552" kindref="compound">Camera</ref> * &gt;</type>
+        <definition>std::vector&lt; Camera * &gt; castor3d::CpuUpdater::DirtyObjects::dirtyCameras</definition>
+        <argsstring></argsstring>
+        <name>dirtyCameras</name>
+        <qualifiedname>castor3d::CpuUpdater::DirtyObjects::dirtyCameras</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="783" column="13" bodyfile="Render/RenderModule.hpp" bodystart="783" bodyend="-1"/>
+        <referencedby refid="df/df0/a05160_1aef3d7db590573f1b2aa080ad34b60558" compoundref="d9/d7c/a01073" startline="770" endline="777">isEmpty</referencedby>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="df/df0/a05160_1aef3d7db590573f1b2aa080ad34b60558" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::CpuUpdater::DirtyObjects::isEmpty</definition>
+        <argsstring>() const</argsstring>
+        <name>isEmpty</name>
+        <qualifiedname>castor3d::CpuUpdater::DirtyObjects::isEmpty</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="770" column="6" bodyfile="Render/RenderModule.hpp" bodystart="770" bodyend="777"/>
+        <references refid="df/df0/a05160_1a5cb34f5f09c55afd859d31f1300f40a2" compoundref="d9/d7c/a01073" startline="781">dirtyBillboards</references>
+        <references refid="df/df0/a05160_1a223f5729b3e0714b24f049099d5ce4e0" compoundref="d9/d7c/a01073" startline="783">dirtyCameras</references>
+        <references refid="df/df0/a05160_1a33de78a8d8fefafed5c5b1bac245deab" compoundref="d9/d7c/a01073" startline="780">dirtyGeometries</references>
+        <references refid="df/df0/a05160_1a6cedb35401f83092e34a75d5f8e8bd85" compoundref="d9/d7c/a01073" startline="782">dirtyLights</references>
+        <references refid="df/df0/a05160_1a6631938ae17cc2cddff2ac2e9a078608" compoundref="d9/d7c/a01073" startline="779">dirtyNodes</references>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="5">
+        <label>Animable</label>
+        <link refid="d5/df1/a02392"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+        <childnode refid="11" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="25">
+        <label>castor3d::GpuBufferOffsetT&lt; uint8_t &gt;</label>
+        <link refid="d5/d95/a02720"/>
+        <childnode refid="26" relation="usage">
+          <edgelabel>buffer</edgelabel>
+        </childnode>
+        <childnode refid="27" relation="usage">
+          <edgelabel>chunk</edgelabel>
+        </childnode>
+        <childnode refid="28" relation="template-instance">
+          <edgelabel>&lt; uint8_t &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>K</label>
+      </node>
+      <node id="10">
+        <label>T</label>
+      </node>
+      <node id="33">
+        <label>std::array&lt; castor3d::ObjectBufferOffset::GpuBufferChunk, size_t(SubmeshData::eCount) &gt;</label>
+        <childnode refid="30" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="34" relation="template-instance">
+          <edgelabel>&lt; castor3d::ObjectBufferOffset::GpuBufferChunk, size_t(SubmeshData::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="44">
+        <label>std::atomic&lt; GlobalIlluminationType &gt;</label>
+        <childnode refid="45" relation="template-instance">
+          <edgelabel>&lt; GlobalIlluminationType &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>castor3d::AnimableT&lt; AnimableHandlerT &gt;</label>
+        <link refid="d5/df1/a02392"/>
+        <childnode refid="12" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+      </node>
+      <node id="21">
+        <label>castor3d::BillboardBase</label>
+        <link refid="df/d64/a05544"/>
+        <childnode refid="19" relation="public-inheritance">
+        </childnode>
+        <childnode refid="22" relation="usage">
+          <edgelabel>m_scene</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_node</edgelabel>
+        </childnode>
+        <childnode refid="25" relation="usage">
+          <edgelabel>m_vertexBuffer</edgelabel>
+        </childnode>
+        <childnode refid="29" relation="usage">
+          <edgelabel>m_geometryBuffers</edgelabel>
+        </childnode>
+        <childnode refid="35" relation="usage">
+          <edgelabel>m_ids</edgelabel>
+        </childnode>
+      </node>
+      <node id="47">
+        <label>castor3d::Camera</label>
+        <link refid="d6/dfa/a05552"/>
+        <childnode refid="17" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::CpuUpdater::DirtyObjects</label>
+        <link refid="df/df0/a05160"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>dirtyNodes</edgelabel>
+        </childnode>
+        <childnode refid="15" relation="usage">
+          <edgelabel>dirtyGeometries</edgelabel>
+        </childnode>
+        <childnode refid="20" relation="usage">
+          <edgelabel>dirtyBillboards</edgelabel>
+        </childnode>
+        <childnode refid="39" relation="usage">
+          <edgelabel>dirtyLights</edgelabel>
+        </childnode>
+        <childnode refid="46" relation="usage">
+          <edgelabel>dirtyCameras</edgelabel>
+        </childnode>
+      </node>
+      <node id="16">
+        <label>castor3d::Geometry</label>
+        <link refid="d9/d3f/a05560"/>
+        <childnode refid="17" relation="public-inheritance">
+        </childnode>
+        <childnode refid="19" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="29">
+        <label>castor3d::GeometryBuffers</label>
+        <link refid="da/d20/a02740"/>
+        <childnode refid="30" relation="usage">
+          <edgelabel>indexOffset</edgelabel>
+        </childnode>
+        <childnode refid="32" relation="usage">
+          <edgelabel>bufferOffset</edgelabel>
+        </childnode>
+      </node>
+      <node id="26">
+        <label>castor3d::GpuBufferBase</label>
+        <link refid="d5/dc7/a02744"/>
+      </node>
+      <node id="28">
+        <label>castor3d::GpuBufferOffsetT&lt; DataT &gt;</label>
+        <link refid="d5/d95/a02720"/>
+        <childnode refid="26" relation="usage">
+          <edgelabel>buffer</edgelabel>
+        </childnode>
+        <childnode refid="27" relation="usage">
+          <edgelabel>chunk</edgelabel>
+        </childnode>
+      </node>
+      <node id="31">
+        <label>castor3d::GpuBufferT&lt; AllocatorT &gt;</label>
+        <link refid="db/d1d/a02716"/>
+        <childnode refid="26" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="40">
+        <label>castor3d::Light</label>
+        <link refid="d3/d7c/a05572"/>
+        <childnode refid="17" relation="public-inheritance">
+        </childnode>
+        <childnode refid="41" relation="usage">
+          <edgelabel>m_shadows</edgelabel>
+        </childnode>
+        <childnode refid="44" relation="usage">
+          <edgelabel>m_currentGlobalIllumination</edgelabel>
+        </childnode>
+      </node>
+      <node id="43">
+        <label>castor3d::LpvConfig</label>
+        <link refid="d2/d88/a04704"/>
+      </node>
+      <node id="27">
+        <label>castor3d::MemChunk</label>
+        <link refid="da/dd3/a02736"/>
+      </node>
+      <node id="17">
+        <label>castor3d::MovableObject</label>
+        <link refid="dd/dd4/a05604"/>
+        <childnode refid="18" relation="public-inheritance">
+        </childnode>
+        <childnode refid="13" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_sceneNode</edgelabel>
+        </childnode>
+      </node>
+      <node id="32">
+        <label>castor3d::ObjectBufferOffset</label>
+        <link refid="d5/dba/a02776"/>
+        <childnode refid="33" relation="usage">
+          <edgelabel>buffers</edgelabel>
+        </childnode>
+      </node>
+      <node id="30">
+        <label>castor3d::ObjectBufferOffset::GpuBufferChunk</label>
+        <link refid="df/de4/a02780"/>
+        <childnode refid="31" relation="usage">
+          <edgelabel>buffer</edgelabel>
+        </childnode>
+        <childnode refid="27" relation="usage">
+          <edgelabel>chunk</edgelabel>
+        </childnode>
+      </node>
+      <node id="36">
+        <label>castor3d::Pass</label>
+        <link refid="d3/d86/a03732"/>
+        <childnode refid="37" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="19">
+        <label>castor3d::RenderedObject</label>
+        <link refid="da/df1/a05668"/>
+      </node>
+      <node id="42">
+        <label>castor3d::RsmConfig</label>
+        <link refid="d0/d38/a05588"/>
+      </node>
+      <node id="22">
+        <label>castor3d::Scene</label>
+        <link refid="d6/d0e/a05676"/>
+        <childnode refid="23" relation="public-inheritance">
+        </childnode>
+        <childnode refid="24" relation="public-inheritance">
+        </childnode>
+        <childnode refid="13" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::SceneNode</label>
+        <link refid="d8/dad/a05856"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="13" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="41">
+        <label>castor3d::ShadowConfig</label>
+        <link refid="d8/d73/a05872"/>
+        <childnode refid="42" relation="usage">
+          <edgelabel>rsmConfig</edgelabel>
+        </childnode>
+        <childnode refid="43" relation="usage">
+          <edgelabel>lpvConfig</edgelabel>
+        </childnode>
+      </node>
+      <node id="13">
+        <label>castor::Named</label>
+      </node>
+      <node id="12">
+        <label>castor::OwnedBy&lt; AnimableHandlerT &gt;</label>
+      </node>
+      <node id="6">
+        <label>castor::OwnedBy&lt; Engine  &gt;</label>
+      </node>
+      <node id="24">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="37">
+        <label>castor::OwnedBy&lt; Material &gt;</label>
+      </node>
+      <node id="18">
+        <label>castor::OwnedBy&lt; Scene &gt;</label>
+      </node>
+      <node id="7">
+        <label>std::map&lt; castor::String, AnimationPtr &gt;</label>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; castor::String, AnimationPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="34">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="10" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="45">
+        <label>std::atomic&lt; T &gt;</label>
+        <childnode refid="10" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="23">
+        <label>std::enable_shared_from_this&lt; Scene &gt;</label>
+      </node>
+      <node id="4">
+        <label>std::enable_shared_from_this&lt; SceneNode &gt;</label>
+      </node>
+      <node id="8">
+        <label>std::map&lt; K, T &gt;</label>
+        <childnode refid="9" relation="usage">
+          <edgelabel>keys</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="38">
+        <label>std::unordered_map&lt; K, T &gt;</label>
+        <childnode refid="9" relation="usage">
+          <edgelabel>keys</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="14">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="10" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="35">
+        <label>std::unordered_map&lt; castor3d::Pass const *, IdRenderNode &gt;</label>
+        <childnode refid="36" relation="usage">
+          <edgelabel>keys</edgelabel>
+        </childnode>
+        <childnode refid="38" relation="template-instance">
+          <edgelabel>&lt; castor3d::Pass const *, IdRenderNode &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="20">
+        <label>std::vector&lt; castor3d::BillboardBase * &gt;</label>
+        <childnode refid="21" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="14" relation="template-instance">
+          <edgelabel>&lt; castor3d::BillboardBase * &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="46">
+        <label>std::vector&lt; castor3d::Camera * &gt;</label>
+        <childnode refid="47" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="14" relation="template-instance">
+          <edgelabel>&lt; castor3d::Camera * &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="15">
+        <label>std::vector&lt; castor3d::Geometry * &gt;</label>
+        <childnode refid="16" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="14" relation="template-instance">
+          <edgelabel>&lt; castor3d::Geometry * &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="39">
+        <label>std::vector&lt; castor3d::Light * &gt;</label>
+        <childnode refid="40" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="14" relation="template-instance">
+          <edgelabel>&lt; castor3d::Light * &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::vector&lt; castor3d::SceneNode * &gt;</label>
+        <childnode refid="3" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="14" relation="template-instance">
+          <edgelabel>&lt; castor3d::SceneNode * &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/RenderModule.hpp" line="768" column="1" bodyfile="Render/RenderModule.hpp" bodystart="769" bodyend="784"/>
+    <listofallmembers>
+      <member refid="df/df0/a05160_1a5cb34f5f09c55afd859d31f1300f40a2" prot="public" virt="non-virtual"><scope>castor3d::CpuUpdater::DirtyObjects</scope><name>dirtyBillboards</name></member>
+      <member refid="df/df0/a05160_1a223f5729b3e0714b24f049099d5ce4e0" prot="public" virt="non-virtual"><scope>castor3d::CpuUpdater::DirtyObjects</scope><name>dirtyCameras</name></member>
+      <member refid="df/df0/a05160_1a33de78a8d8fefafed5c5b1bac245deab" prot="public" virt="non-virtual"><scope>castor3d::CpuUpdater::DirtyObjects</scope><name>dirtyGeometries</name></member>
+      <member refid="df/df0/a05160_1a6cedb35401f83092e34a75d5f8e8bd85" prot="public" virt="non-virtual"><scope>castor3d::CpuUpdater::DirtyObjects</scope><name>dirtyLights</name></member>
+      <member refid="df/df0/a05160_1a6631938ae17cc2cddff2ac2e9a078608" prot="public" virt="non-virtual"><scope>castor3d::CpuUpdater::DirtyObjects</scope><name>dirtyNodes</name></member>
+      <member refid="df/df0/a05160_1aef3d7db590573f1b2aa080ad34b60558" prot="public" virt="non-virtual"><scope>castor3d::CpuUpdater::DirtyObjects</scope><name>isEmpty</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

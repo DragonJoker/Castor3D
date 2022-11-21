@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="df/df7/a03776" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::PhongPass</compoundname>
+    <includes local="no">PhongPass.hpp</includes>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="df/df7/a03776_1a8d3b30d21c521b09be4f5fbced086ea7" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::PhongPass::Type</definition>
+        <argsstring></argsstring>
+        <name>Type</name>
+        <qualifiedname>castor3d::PhongPass::Type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/PhongPass.hpp" line="16" column="37" bodyfile="Material/Pass/Phong/PhongPass.hpp" bodystart="16" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/df7/a03776_1a4bf71f3674708a244c92f56f68adca44" prot="public" static="yes" mutable="no">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::PhongPass::LightingModel</definition>
+        <argsstring></argsstring>
+        <name>LightingModel</name>
+        <qualifiedname>castor3d::PhongPass::LightingModel</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/PhongPass.hpp" line="17" column="37" bodyfile="Material/Pass/Phong/PhongPass.hpp" bodystart="17" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="df/df7/a03776_1ae603b6bb90ba3670ef44a5d2de6c0755" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> PassSPtr</type>
+        <definition>static C3D_API PassSPtr castor3d::PhongPass::create</definition>
+        <argsstring>(Material &amp;parent)</argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::PhongPass::create</qualifiedname>
+        <param>
+          <type><ref refid="de/dae/a03028" kindref="compound">Material</ref> &amp;</type>
+          <declname>parent</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Phong/PhongPass.hpp" line="14" column="25"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Material/Pass/Phong/PhongPass.hpp" line="11" column="1" bodyfile="Material/Pass/Phong/PhongPass.hpp" bodystart="12" bodyend="18"/>
+    <listofallmembers>
+      <member refid="df/df7/a03776_1ae603b6bb90ba3670ef44a5d2de6c0755" prot="public" virt="non-virtual"><scope>castor3d::PhongPass</scope><name>create</name></member>
+      <member refid="df/df7/a03776_1a4bf71f3674708a244c92f56f68adca44" prot="public" virt="non-virtual"><scope>castor3d::PhongPass</scope><name>LightingModel</name></member>
+      <member refid="df/df7/a03776_1a8d3b30d21c521b09be4f5fbced086ea7" prot="public" virt="non-virtual"><scope>castor3d::PhongPass</scope><name>Type</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

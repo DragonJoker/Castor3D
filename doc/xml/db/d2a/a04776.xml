@@ -1,0 +1,136 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="db/d2a/a04776" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::IndirectLightingPass::Config</compoundname>
+    <includes local="no">IndirectLightingPass.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="db/d2a/a04776_1a93bdbd4a366acc41e4020ec357993dd5" prot="public" static="no" mutable="no">
+        <type><ref refid="d3/d22/a01572_1a525bec5d25db94bcff4168e9e1a826fa" kindref="member">SceneFlags</ref></type>
+        <definition>SceneFlags castor3d::IndirectLightingPass::Config::sceneFlags</definition>
+        <argsstring></argsstring>
+        <name>sceneFlags</name>
+        <qualifiedname>castor3d::IndirectLightingPass::Config::sceneFlags</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/IndirectLightingPass.hpp" line="72" column="12" bodyfile="Render/Opaque/IndirectLightingPass.hpp" bodystart="72" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d2a/a04776_1a650fd6b7e4173072de8c837b02e35ca9" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::IndirectLightingPass::Config::voxels</definition>
+        <argsstring></argsstring>
+        <name>voxels</name>
+        <qualifiedname>castor3d::IndirectLightingPass::Config::voxels</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/IndirectLightingPass.hpp" line="73" column="6" bodyfile="Render/Opaque/IndirectLightingPass.hpp" bodystart="73" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d2a/a04776_1aca9aaf36aaf2c12b63c844b4c2d2e311" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::IndirectLightingPass::Config::lpv</definition>
+        <argsstring></argsstring>
+        <name>lpv</name>
+        <qualifiedname>castor3d::IndirectLightingPass::Config::lpv</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/IndirectLightingPass.hpp" line="74" column="6" bodyfile="Render/Opaque/IndirectLightingPass.hpp" bodystart="74" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d2a/a04776_1a06de0867b6f19a5812673365e4c8469c" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::IndirectLightingPass::Config::llpv</definition>
+        <argsstring></argsstring>
+        <name>llpv</name>
+        <qualifiedname>castor3d::IndirectLightingPass::Config::llpv</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/IndirectLightingPass.hpp" line="75" column="6" bodyfile="Render/Opaque/IndirectLightingPass.hpp" bodystart="75" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d2a/a04776_1a0b3898652e02f346a47bce1a02ff22a9" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::IndirectLightingPass::Config::index</definition>
+        <argsstring></argsstring>
+        <name>index</name>
+        <qualifiedname>castor3d::IndirectLightingPass::Config::index</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/IndirectLightingPass.hpp" line="76" column="10" bodyfile="Render/Opaque/IndirectLightingPass.hpp" bodystart="76" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="db/d2a/a04776_1a0ded625c0dc671e570493d01cac204fe" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::IndirectLightingPass::Config::Config</definition>
+        <argsstring>(SceneFlags const &amp;sceneFlags)</argsstring>
+        <name>Config</name>
+        <qualifiedname>castor3d::IndirectLightingPass::Config::Config</qualifiedname>
+        <param>
+          <type><ref refid="d3/d22/a01572_1a525bec5d25db94bcff4168e9e1a826fa" kindref="member">SceneFlags</ref> const &amp;</type>
+          <declname>sceneFlags</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/IndirectLightingPass.hpp" line="69" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d2a/a04776_1a8df4d27d1b9b09756213f299a43de2d8" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::IndirectLightingPass::Config::Config</definition>
+        <argsstring>(uint32_t index)</argsstring>
+        <name>Config</name>
+        <qualifiedname>castor3d::IndirectLightingPass::Config::Config</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/IndirectLightingPass.hpp" line="70" column="10"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/Opaque/IndirectLightingPass.hpp" line="67" column="1" bodyfile="Render/Opaque/IndirectLightingPass.hpp" bodystart="68" bodyend="77"/>
+    <listofallmembers>
+      <member refid="db/d2a/a04776_1a0ded625c0dc671e570493d01cac204fe" prot="public" virt="non-virtual"><scope>castor3d::IndirectLightingPass::Config</scope><name>Config</name></member>
+      <member refid="db/d2a/a04776_1a8df4d27d1b9b09756213f299a43de2d8" prot="public" virt="non-virtual"><scope>castor3d::IndirectLightingPass::Config</scope><name>Config</name></member>
+      <member refid="db/d2a/a04776_1a0b3898652e02f346a47bce1a02ff22a9" prot="public" virt="non-virtual"><scope>castor3d::IndirectLightingPass::Config</scope><name>index</name></member>
+      <member refid="db/d2a/a04776_1a06de0867b6f19a5812673365e4c8469c" prot="public" virt="non-virtual"><scope>castor3d::IndirectLightingPass::Config</scope><name>llpv</name></member>
+      <member refid="db/d2a/a04776_1aca9aaf36aaf2c12b63c844b4c2d2e311" prot="public" virt="non-virtual"><scope>castor3d::IndirectLightingPass::Config</scope><name>lpv</name></member>
+      <member refid="db/d2a/a04776_1a93bdbd4a366acc41e4020ec357993dd5" prot="public" virt="non-virtual"><scope>castor3d::IndirectLightingPass::Config</scope><name>sceneFlags</name></member>
+      <member refid="db/d2a/a04776_1a650fd6b7e4173072de8c837b02e35ca9" prot="public" virt="non-virtual"><scope>castor3d::IndirectLightingPass::Config</scope><name>voxels</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

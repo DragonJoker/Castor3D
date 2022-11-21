@@ -1,0 +1,296 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d5/d64/a04968" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::BrdfPrefilter</compoundname>
+    <includes local="no">BrdfPrefilter.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d5/d64/a04968_1aac34b86e29ee71d93647922d9c33e068" prot="private" static="no" mutable="no">
+        <type><ref refid="d9/d4a/a05192" kindref="compound">RenderSystem</ref> &amp;</type>
+        <definition>RenderSystem&amp; castor3d::BrdfPrefilter::m_renderSystem</definition>
+        <argsstring></argsstring>
+        <name>m_renderSystem</name>
+        <qualifiedname>castor3d::BrdfPrefilter::m_renderSystem</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/BrdfPrefilter.hpp" line="53" column="15" bodyfile="Render/PBR/BrdfPrefilter.hpp" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d64/a04968_1a95aa99486f0069ac5bb710dbf354e10e" prot="private" static="no" mutable="no">
+        <type><ref refid="d3/d96/a05072" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::BrdfPrefilter::m_device</definition>
+        <argsstring></argsstring>
+        <name>m_device</name>
+        <qualifiedname>castor3d::BrdfPrefilter::m_device</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/BrdfPrefilter.hpp" line="54" column="21" bodyfile="Render/PBR/BrdfPrefilter.hpp" bodystart="54" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d64/a04968_1ae288194104f7144676981f8392e9d4db" prot="private" static="no" mutable="no">
+        <type>ashes::ImagePtr</type>
+        <definition>ashes::ImagePtr castor3d::BrdfPrefilter::m_image</definition>
+        <argsstring></argsstring>
+        <name>m_image</name>
+        <qualifiedname>castor3d::BrdfPrefilter::m_image</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/BrdfPrefilter.hpp" line="55" column="17" bodyfile="Render/PBR/BrdfPrefilter.hpp" bodystart="55" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d64/a04968_1aae4dbad3c9f7ca537a065cbae36ef35c" prot="private" static="no" mutable="no">
+        <type>ashes::ImageView</type>
+        <definition>ashes::ImageView castor3d::BrdfPrefilter::m_view</definition>
+        <argsstring></argsstring>
+        <name>m_view</name>
+        <qualifiedname>castor3d::BrdfPrefilter::m_view</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/BrdfPrefilter.hpp" line="56" column="18" bodyfile="Render/PBR/BrdfPrefilter.hpp" bodystart="56" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d64/a04968_1a997615a8dd6950cd4bb385713d0d17ad" prot="private" static="no" mutable="no">
+        <type><ref refid="d5/dba/a02776" kindref="compound">ObjectBufferOffset</ref></type>
+        <definition>ObjectBufferOffset castor3d::BrdfPrefilter::m_vertexBuffer</definition>
+        <argsstring></argsstring>
+        <name>m_vertexBuffer</name>
+        <qualifiedname>castor3d::BrdfPrefilter::m_vertexBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/BrdfPrefilter.hpp" line="57" column="20" bodyfile="Render/PBR/BrdfPrefilter.hpp" bodystart="57" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d64/a04968_1a25a31e94a2203ee6d38a97d6a068ec8f" prot="private" static="no" mutable="no">
+        <type>ashes::PipelineVertexInputStateCreateInfoPtr</type>
+        <definition>ashes::PipelineVertexInputStateCreateInfoPtr castor3d::BrdfPrefilter::m_vertexLayout</definition>
+        <argsstring></argsstring>
+        <name>m_vertexLayout</name>
+        <qualifiedname>castor3d::BrdfPrefilter::m_vertexLayout</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/BrdfPrefilter.hpp" line="58" column="46" bodyfile="Render/PBR/BrdfPrefilter.hpp" bodystart="58" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d64/a04968_1aa8d7e52a08587d715a3901f12c7c3925" prot="private" static="no" mutable="no">
+        <type>ashes::RenderPassPtr</type>
+        <definition>ashes::RenderPassPtr castor3d::BrdfPrefilter::m_renderPass</definition>
+        <argsstring></argsstring>
+        <name>m_renderPass</name>
+        <qualifiedname>castor3d::BrdfPrefilter::m_renderPass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/BrdfPrefilter.hpp" line="59" column="22" bodyfile="Render/PBR/BrdfPrefilter.hpp" bodystart="59" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d64/a04968_1af39b1f4f8bda6adf43770da3fa9401fa" prot="private" static="no" mutable="no">
+        <type>ashes::FrameBufferPtr</type>
+        <definition>ashes::FrameBufferPtr castor3d::BrdfPrefilter::m_frameBuffer</definition>
+        <argsstring></argsstring>
+        <name>m_frameBuffer</name>
+        <qualifiedname>castor3d::BrdfPrefilter::m_frameBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/BrdfPrefilter.hpp" line="60" column="23" bodyfile="Render/PBR/BrdfPrefilter.hpp" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d64/a04968_1a46c3af75ce78362f0e46dcffef7f4ee0" prot="private" static="no" mutable="no">
+        <type>ashes::PipelineLayoutPtr</type>
+        <definition>ashes::PipelineLayoutPtr castor3d::BrdfPrefilter::m_pipelineLayout</definition>
+        <argsstring></argsstring>
+        <name>m_pipelineLayout</name>
+        <qualifiedname>castor3d::BrdfPrefilter::m_pipelineLayout</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/BrdfPrefilter.hpp" line="61" column="26" bodyfile="Render/PBR/BrdfPrefilter.hpp" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d64/a04968_1a4b034a94a3b00e694f596d2e4f906fcd" prot="private" static="no" mutable="no">
+        <type>ashes::GraphicsPipelinePtr</type>
+        <definition>ashes::GraphicsPipelinePtr castor3d::BrdfPrefilter::m_pipeline</definition>
+        <argsstring></argsstring>
+        <name>m_pipeline</name>
+        <qualifiedname>castor3d::BrdfPrefilter::m_pipeline</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/BrdfPrefilter.hpp" line="62" column="28" bodyfile="Render/PBR/BrdfPrefilter.hpp" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d64/a04968_1a0c6388f6bf1e013da1c1c4d4d0cde36c" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/d1f/a04896" kindref="compound">CommandsSemaphore</ref></type>
+        <definition>CommandsSemaphore castor3d::BrdfPrefilter::m_commands</definition>
+        <argsstring></argsstring>
+        <name>m_commands</name>
+        <qualifiedname>castor3d::BrdfPrefilter::m_commands</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/BrdfPrefilter.hpp" line="63" column="19" bodyfile="Render/PBR/BrdfPrefilter.hpp" bodystart="63" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d5/d64/a04968_1aa42b9b65786563120c074f6ca24e0ebb" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::BrdfPrefilter::BrdfPrefilter</definition>
+        <argsstring>(Engine &amp;engine, RenderDevice const &amp;device, castor::Size const &amp;size, Texture const &amp;dstTexture)</argsstring>
+        <name>BrdfPrefilter</name>
+        <qualifiedname>castor3d::BrdfPrefilter::BrdfPrefilter</qualifiedname>
+        <param>
+          <type><ref refid="d2/d0c/a02932" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d96/a05072" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>castor::Size const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/db3/a05328" kindref="compound">Texture</ref> const &amp;</type>
+          <declname>dstTexture</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The engine. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The current device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render dimensions. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">dstTexture</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The cube texture destination. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/BrdfPrefilter.hpp" line="35" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d64/a04968_1a3b4b4822a0f66df9fbc8329b644cbb62" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::BrdfPrefilter::render</definition>
+        <argsstring>(QueueData const &amp;queueData)</argsstring>
+        <name>render</name>
+        <qualifiedname>castor3d::BrdfPrefilter::render</qualifiedname>
+        <param>
+          <type><ref refid="d2/d9d/a05056" kindref="compound">QueueData</ref> const &amp;</type>
+          <declname>queueData</declname>
+        </param>
+        <briefdescription>
+<para>Computes the convoluted BRDF. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">queueData</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The queue receiving the GPU commands. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/BrdfPrefilter.hpp" line="47" column="14"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d5/d64/a04968_1a4061df070adf64c5a97a6f97e40b6ae8" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>ashes::PipelineShaderStageCreateInfoArray</type>
+        <definition>ashes::PipelineShaderStageCreateInfoArray castor3d::BrdfPrefilter::doCreateProgram</definition>
+        <argsstring>()</argsstring>
+        <name>doCreateProgram</name>
+        <qualifiedname>castor3d::BrdfPrefilter::doCreateProgram</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/BrdfPrefilter.hpp" line="50" column="43"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/PBR/BrdfPrefilter.hpp" line="18" column="1" bodyfile="Render/PBR/BrdfPrefilter.hpp" bodystart="19" bodyend="64"/>
+    <listofallmembers>
+      <member refid="d5/d64/a04968_1aa42b9b65786563120c074f6ca24e0ebb" prot="public" virt="non-virtual"><scope>castor3d::BrdfPrefilter</scope><name>BrdfPrefilter</name></member>
+      <member refid="d5/d64/a04968_1a4061df070adf64c5a97a6f97e40b6ae8" prot="private" virt="non-virtual"><scope>castor3d::BrdfPrefilter</scope><name>doCreateProgram</name></member>
+      <member refid="d5/d64/a04968_1a0c6388f6bf1e013da1c1c4d4d0cde36c" prot="private" virt="non-virtual"><scope>castor3d::BrdfPrefilter</scope><name>m_commands</name></member>
+      <member refid="d5/d64/a04968_1a95aa99486f0069ac5bb710dbf354e10e" prot="private" virt="non-virtual"><scope>castor3d::BrdfPrefilter</scope><name>m_device</name></member>
+      <member refid="d5/d64/a04968_1af39b1f4f8bda6adf43770da3fa9401fa" prot="private" virt="non-virtual"><scope>castor3d::BrdfPrefilter</scope><name>m_frameBuffer</name></member>
+      <member refid="d5/d64/a04968_1ae288194104f7144676981f8392e9d4db" prot="private" virt="non-virtual"><scope>castor3d::BrdfPrefilter</scope><name>m_image</name></member>
+      <member refid="d5/d64/a04968_1a4b034a94a3b00e694f596d2e4f906fcd" prot="private" virt="non-virtual"><scope>castor3d::BrdfPrefilter</scope><name>m_pipeline</name></member>
+      <member refid="d5/d64/a04968_1a46c3af75ce78362f0e46dcffef7f4ee0" prot="private" virt="non-virtual"><scope>castor3d::BrdfPrefilter</scope><name>m_pipelineLayout</name></member>
+      <member refid="d5/d64/a04968_1aa8d7e52a08587d715a3901f12c7c3925" prot="private" virt="non-virtual"><scope>castor3d::BrdfPrefilter</scope><name>m_renderPass</name></member>
+      <member refid="d5/d64/a04968_1aac34b86e29ee71d93647922d9c33e068" prot="private" virt="non-virtual"><scope>castor3d::BrdfPrefilter</scope><name>m_renderSystem</name></member>
+      <member refid="d5/d64/a04968_1a997615a8dd6950cd4bb385713d0d17ad" prot="private" virt="non-virtual"><scope>castor3d::BrdfPrefilter</scope><name>m_vertexBuffer</name></member>
+      <member refid="d5/d64/a04968_1a25a31e94a2203ee6d38a97d6a068ec8f" prot="private" virt="non-virtual"><scope>castor3d::BrdfPrefilter</scope><name>m_vertexLayout</name></member>
+      <member refid="d5/d64/a04968_1aae4dbad3c9f7ca537a065cbae36ef35c" prot="private" virt="non-virtual"><scope>castor3d::BrdfPrefilter</scope><name>m_view</name></member>
+      <member refid="d5/d64/a04968_1a3b4b4822a0f66df9fbc8329b644cbb62" prot="public" virt="non-virtual"><scope>castor3d::BrdfPrefilter</scope><name>render</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

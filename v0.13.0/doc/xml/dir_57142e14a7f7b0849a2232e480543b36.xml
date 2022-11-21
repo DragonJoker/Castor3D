@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dir_57142e14a7f7b0849a2232e480543b36" kind="dir">
+    <compoundname>Plugin</compoundname>
+    <innerfile refid="db/d3a/a00641">DividerPlugin.hpp</innerfile>
+    <innerfile refid="d9/d0f/a00644">GeneratorPlugin.hpp</innerfile>
+    <innerfile refid="d3/d8e/a00647">GenericPlugin.hpp</innerfile>
+    <innerfile refid="da/d36/a00650">ImporterPlugin.hpp</innerfile>
+    <innerfile refid="de/ddd/a00653">ParticlePlugin.hpp</innerfile>
+    <innerfile refid="dc/df2/a00656">Plugin.hpp</innerfile>
+    <innerfile refid="dc/d91/a00659">PluginException.hpp</innerfile>
+    <innerfile refid="dc/df1/a00662">PluginModule.hpp</innerfile>
+    <innerfile refid="da/d46/a00665">PostFxPlugin.hpp</innerfile>
+    <innerfile refid="d0/d5c/a00668">ToneMappingPlugin.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Plugin/"/>
+  </compounddef>
+</doxygen>

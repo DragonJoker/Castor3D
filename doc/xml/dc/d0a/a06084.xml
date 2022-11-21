@@ -1,0 +1,162 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dc/d0a/a06084" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::shader::SssProfiles</compoundname>
+    <basecompoundref refid="d5/d2a/a05996" prot="public" virt="non-virtual">castor3d::shader::BufferT&lt; SssProfile &gt;</basecompoundref>
+    <includes local="no">GlslSssProfile.hpp</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="dc/d0a/a06084_1a34ae09771843f9086979464d7dd4a233" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="dd/dd7/a00260_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::SssProfiles::SssProfiles</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, uint32_t binding, uint32_t set, bool enable=true)</argsstring>
+        <name>SssProfiles</name>
+        <qualifiedname>castor3d::shader::SssProfiles::SssProfiles</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>set</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enable</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSssProfile.hpp" line="43" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d0a/a06084_1add1750110976007d5c75848e7b6281f8" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="df/d47/a06080" kindref="compound">SssProfile</ref></type>
+        <definition>SssProfile castor3d::shader::SssProfiles::getProfile</definition>
+        <argsstring>(sdw::UInt const &amp;index) const</argsstring>
+        <name>getProfile</name>
+        <qualifiedname>castor3d::shader::SssProfiles::getProfile</qualifiedname>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSssProfile.hpp" line="48" column="12" bodyfile="Shader/Shaders/GlslSssProfile.hpp" bodystart="48" bodyend="51"/>
+        <references refid="d5/d2a/a05996_1a7fed7db7c6ddd5ec43d4b243a608ee8a" compoundref="d0/de2/a01442" startline="97" endline="103">castor3d::shader::BufferT&lt; DataT &gt;::getData</references>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::shader::BufferT&lt; SssProfile &gt;</label>
+        <link refid="d5/d2a/a05996"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; SssProfile &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::shader::BufferBase</label>
+        <link refid="d4/dc4/a05992"/>
+      </node>
+      <node id="4">
+        <label>castor3d::shader::BufferT&lt; DataT &gt;</label>
+        <link refid="d5/d2a/a05996"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::shader::SssProfiles</label>
+        <link refid="dc/d0a/a06084"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::shader::BufferT&lt; SssProfile &gt;</label>
+        <link refid="d5/d2a/a05996"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="9" relation="template-instance">
+          <edgelabel>&lt; SssProfile &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>T</label>
+      </node>
+      <node id="3">
+        <label>castor3d::shader::BufferBase</label>
+        <link refid="d4/dc4/a05992"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_ssbo</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>m_variableName</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>castor3d::shader::BufferT&lt; DataT &gt;</label>
+        <link refid="d5/d2a/a05996"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::shader::SssProfiles</label>
+        <link refid="dc/d0a/a06084"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+      <node id="7">
+        <label>std::string</label>
+        <childnode refid="8" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>std::unique_ptr&lt; T &gt;</label>
+        <childnode refid="6" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>std::unique_ptr&lt; sdw::StorageBuffer &gt;</label>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; sdw::StorageBuffer &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Shaders/GlslSssProfile.hpp" line="39" column="1" bodyfile="Shader/Shaders/GlslSssProfile.hpp" bodystart="41" bodyend="52"/>
+    <listofallmembers>
+      <member refid="d4/dc4/a05992_1a4625e7c6c7426433390143ef91de516d" prot="public" virt="non-virtual"><scope>castor3d::shader::SssProfiles</scope><name>BufferBase</name></member>
+      <member refid="d5/d2a/a05996_1a3121cc6273753a4bda1b99bf8313ac8e" prot="public" virt="non-virtual"><scope>castor3d::shader::SssProfiles</scope><name>BufferT</name></member>
+      <member refid="d4/dc4/a05992_1ac39085e1f563915a9270c99d3837a6b7" prot="public" virt="non-virtual"><scope>castor3d::shader::SssProfiles</scope><name>getCount</name></member>
+      <member refid="d5/d2a/a05996_1a7fed7db7c6ddd5ec43d4b243a608ee8a" prot="public" virt="non-virtual"><scope>castor3d::shader::SssProfiles</scope><name>getData</name></member>
+      <member refid="dc/d0a/a06084_1add1750110976007d5c75848e7b6281f8" prot="public" virt="non-virtual"><scope>castor3d::shader::SssProfiles</scope><name>getProfile</name></member>
+      <member refid="d4/dc4/a05992_1a4b36d8c822ebaf12e2c31d9fbc0d4a8f" prot="public" virt="non-virtual"><scope>castor3d::shader::SssProfiles</scope><name>getSecondaryCount</name></member>
+      <member refid="d4/dc4/a05992_1a30e5f486cf48f99e981f62c0eaf4c4f2" prot="public" virt="non-virtual"><scope>castor3d::shader::SssProfiles</scope><name>getWriter</name></member>
+      <member refid="d4/dc4/a05992_1a17f3f731aeca6327e611dd45636d0760" prot="public" virt="non-virtual"><scope>castor3d::shader::SssProfiles</scope><name>isEnabled</name></member>
+      <member refid="d4/dc4/a05992_1a5d932674ed8f6e0d34a71affbc88bca8" prot="protected" virt="non-virtual"><scope>castor3d::shader::SssProfiles</scope><name>m_ssbo</name></member>
+      <member refid="d4/dc4/a05992_1aae02f484169333d895df1f92ab6db2a3" prot="protected" virt="non-virtual"><scope>castor3d::shader::SssProfiles</scope><name>m_variableName</name></member>
+      <member refid="d4/dc4/a05992_1a8094a884d182023869e7b4a9be80c93e" prot="protected" virt="non-virtual"><scope>castor3d::shader::SssProfiles</scope><name>m_writer</name></member>
+      <member refid="dc/d0a/a06084_1a34ae09771843f9086979464d7dd4a233" prot="public" virt="non-virtual"><scope>castor3d::shader::SssProfiles</scope><name>SssProfiles</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>
