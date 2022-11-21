@@ -134,7 +134,15 @@ namespace castor
 	\~french
 	\brief		Structure d'aide pour les paramètres de parseur.
 	*/
-	template< ParameterType Type >
+	template< typename EnumType >
+	struct ParserEnumTraits;
+	/**
+	\~english
+	\brief		Parser parameter helper structure.
+	\~french
+	\brief		Structure d'aide pour les paramètres de parseur.
+	*/
+	template< ParameterType Type, typename ParserValueHelperT=void >
 	struct ParserParameterHelper;
 	/**
 	\~english
@@ -191,7 +199,6 @@ namespace castor
 	{
 		ParserFunction function;
 		ParserParameterArray params;
-		String comment{};
 	};
 	/**
 	*\~english
@@ -268,23 +275,20 @@ namespace castor
 		, uint32_t section
 		, castor::String const & name
 		, castor::ParserFunction function
-		, castor::ParserParameterArray array = castor::ParserParameterArray{}
-		, castor::String comment = castor::String{} );
+		, castor::ParserParameterArray params = castor::ParserParameterArray{} );
 
 	template< typename SectionT >
 	inline void addParserT( castor::AttributeParsers & parsers
 		, SectionT section
 		, castor::String const & name
 		, castor::ParserFunction function
-		, castor::ParserParameterArray array = castor::ParserParameterArray{}
-		, castor::String comment = castor::String{} )
+		, castor::ParserParameterArray params = castor::ParserParameterArray{} )
 	{
 		addParser( parsers
 			, uint32_t( section )
 			, name
 			, function
-			, std::move( array )
-			, std::move( comment ) );
+			, std::move( params ) );
 
 	}
 	//@}

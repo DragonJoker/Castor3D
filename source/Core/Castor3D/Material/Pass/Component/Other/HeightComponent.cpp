@@ -120,13 +120,11 @@ namespace castor3d
 	void HeightComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		static UInt32StrMap const parallaxOcclusionModes{ getEnumMapT< ParallaxOcclusionMode >() };
-
 		castor::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "parallax_occlusion" )
 			, hgtcmp::parserPassParallaxOcclusion
-			, { castor::makeParameter< castor::ParameterType::eCheckedText >( parallaxOcclusionModes ) } );
+			, { castor::makeParameter< castor::ParameterType::eCheckedText, ParallaxOcclusionMode >() } );
 	}
 
 	bool HeightComponent::Plugin::isComponentNeeded( TextureCombine const & textures

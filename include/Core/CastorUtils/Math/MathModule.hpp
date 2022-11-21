@@ -13,6 +13,17 @@ namespace castor
 {
 	/**@name Math */
 	//@{
+	enum class LengthUnit
+	{
+		eKilometre,
+		eMetre,
+		eCentimetre,
+		eMillimetre,
+		eYard,
+		eFoot,
+		eInch,
+		CU_ScopedEnumBounds( eKilometre )
+	};
 	template< typename Type >
 	static constexpr Type Pi{ Type( 3.1415926535897932384626433832795028841968 ) };
 	template< typename Type >

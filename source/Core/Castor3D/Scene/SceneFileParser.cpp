@@ -28,10 +28,10 @@ namespace castor3d
 			addParser( result, uint32_t( CSCNSection::eRoot ), cuT( "sampler" ), parserSamplerState, { makeParameter< ParameterType::eName >() } );
 			addParser( result, uint32_t( CSCNSection::eRoot ), cuT( "debug_overlays" ), parserRootDebugOverlays, { makeParameter< ParameterType::eBool >() } );
 			addParser( result, uint32_t( CSCNSection::eRoot ), cuT( "window" ), parserRootWindow, { makeParameter< ParameterType::eName >() } );
-			addParser( result, uint32_t( CSCNSection::eRoot ), cuT( "materials" ), parserRootMaterials, { makeParameter< ParameterType::eCheckedText >( SceneFileParser::materialTypes ) } );
+			addParser( result, uint32_t( CSCNSection::eRoot ), cuT( "materials" ), parserRootMaterials, { makeParameter< ParameterType::eCheckedText >( "MaterialType", SceneFileParser::materialTypes ) } );
 			addParser( result, uint32_t( CSCNSection::eRoot ), cuT( "max_image_size" ), parserRootMaxImageSize, { makeParameter< ParameterType::eUInt32 >() } );
 			addParser( result, uint32_t( CSCNSection::eRoot ), cuT( "lpv_grid_size" ), parserRootLpvGridSize, { makeParameter< ParameterType::eUInt32 >() } );
-			addParser( result, uint32_t( CSCNSection::eRoot ), cuT( "default_unit" ), parserRootDefaultUnit, { makeParameter< ParameterType::eCheckedText >( SceneFileParser::lengthUnits ) } );
+			addParser( result, uint32_t( CSCNSection::eRoot ), cuT( "default_unit" ), parserRootDefaultUnit, { makeParameter< ParameterType::eCheckedText, castor::LengthUnit >() } );
 		}
 
 		static void addWindowParsers( castor::AttributeParsers & result )
@@ -59,20 +59,20 @@ namespace castor3d
 		static void addSamplerParsers( castor::AttributeParsers & result )
 		{
 			using namespace castor;
-			addParser( result, uint32_t( CSCNSection::eSampler ), cuT( "min_filter" ), parserSamplerMinFilter, { makeParameter< ParameterType::eCheckedText >( SceneFileParser::filters ) } );
-			addParser( result, uint32_t( CSCNSection::eSampler ), cuT( "mag_filter" ), parserSamplerMagFilter, { makeParameter< ParameterType::eCheckedText >( SceneFileParser::filters ) } );
-			addParser( result, uint32_t( CSCNSection::eSampler ), cuT( "mip_filter" ), parserSamplerMipFilter, { makeParameter< ParameterType::eCheckedText >( SceneFileParser::mipmapModes ) } );
+			addParser( result, uint32_t( CSCNSection::eSampler ), cuT( "min_filter" ), parserSamplerMinFilter, { makeParameter< ParameterType::eCheckedText, VkFilter >() } );
+			addParser( result, uint32_t( CSCNSection::eSampler ), cuT( "mag_filter" ), parserSamplerMagFilter, { makeParameter< ParameterType::eCheckedText, VkFilter >() } );
+			addParser( result, uint32_t( CSCNSection::eSampler ), cuT( "mip_filter" ), parserSamplerMipFilter, { makeParameter< ParameterType::eCheckedText, VkSamplerMipmapMode >() } );
 			addParser( result, uint32_t( CSCNSection::eSampler ), cuT( "min_lod" ), parserSamplerMinLod, { makeParameter< ParameterType::eFloat >() } );
 			addParser( result, uint32_t( CSCNSection::eSampler ), cuT( "max_lod" ), parserSamplerMaxLod, { makeParameter< ParameterType::eFloat >() } );
 			addParser( result, uint32_t( CSCNSection::eSampler ), cuT( "lod_bias" ), parserSamplerLodBias, { makeParameter< ParameterType::eFloat >() } );
-			addParser( result, uint32_t( CSCNSection::eSampler ), cuT( "u_wrap_mode" ), parserSamplerUWrapMode, { makeParameter< ParameterType::eCheckedText >( SceneFileParser::wrappingModes ) } );
-			addParser( result, uint32_t( CSCNSection::eSampler ), cuT( "v_wrap_mode" ), parserSamplerVWrapMode, { makeParameter< ParameterType::eCheckedText >( SceneFileParser::wrappingModes ) } );
-			addParser( result, uint32_t( CSCNSection::eSampler ), cuT( "w_wrap_mode" ), parserSamplerWWrapMode, { makeParameter< ParameterType::eCheckedText >( SceneFileParser::wrappingModes ) } );
-			addParser( result, uint32_t( CSCNSection::eSampler ), cuT( "border_colour" ), parserSamplerBorderColour, { makeParameter< ParameterType::eCheckedText >( SceneFileParser::borderColours ) } );
+			addParser( result, uint32_t( CSCNSection::eSampler ), cuT( "u_wrap_mode" ), parserSamplerUWrapMode, { makeParameter< ParameterType::eCheckedText, VkSamplerAddressMode >() } );
+			addParser( result, uint32_t( CSCNSection::eSampler ), cuT( "v_wrap_mode" ), parserSamplerVWrapMode, { makeParameter< ParameterType::eCheckedText, VkSamplerAddressMode >() } );
+			addParser( result, uint32_t( CSCNSection::eSampler ), cuT( "w_wrap_mode" ), parserSamplerWWrapMode, { makeParameter< ParameterType::eCheckedText, VkSamplerAddressMode >() } );
+			addParser( result, uint32_t( CSCNSection::eSampler ), cuT( "border_colour" ), parserSamplerBorderColour, { makeParameter< ParameterType::eCheckedText, VkBorderColor >() } );
 			addParser( result, uint32_t( CSCNSection::eSampler ), cuT( "anisotropic_filtering" ), parserSamplerAnisotropicFiltering, { makeParameter< ParameterType::eBool >() } );
 			addParser( result, uint32_t( CSCNSection::eSampler ), cuT( "max_anisotropy" ), parserSamplerMaxAnisotropy, { makeParameter< ParameterType::eFloat >() } );
-			addParser( result, uint32_t( CSCNSection::eSampler ), cuT( "comparison_mode" ), parserSamplerComparisonMode, { makeParameter< ParameterType::eCheckedText >( SceneFileParser::comparisonModes ) } );
-			addParser( result, uint32_t( CSCNSection::eSampler ), cuT( "comparison_func" ), parserSamplerComparisonFunc, { makeParameter< ParameterType::eCheckedText >( SceneFileParser::comparisonFuncs ) } );
+			addParser( result, uint32_t( CSCNSection::eSampler ), cuT( "comparison_mode" ), parserSamplerComparisonMode, { makeParameter< ParameterType::eCheckedText, LimitedType< VkCompareOp > >() } );
+			addParser( result, uint32_t( CSCNSection::eSampler ), cuT( "comparison_func" ), parserSamplerComparisonFunc, { makeParameter< ParameterType::eCheckedText, VkCompareOp >() } );
 			addParser( result, uint32_t( CSCNSection::eSampler ), cuT( "}" ), parserSamplerEnd, {} );
 		}
 
@@ -97,7 +97,7 @@ namespace castor3d
 			addParser( result, uint32_t( CSCNSection::eScene ), cuT( "border_panel_overlay" ), parserSceneBorderPanelOverlay, { makeParameter< ParameterType::eName >() } );
 			addParser( result, uint32_t( CSCNSection::eScene ), cuT( "text_overlay" ), parserSceneTextOverlay, { makeParameter< ParameterType::eName >() } );
 			addParser( result, uint32_t( CSCNSection::eScene ), cuT( "skybox" ), parserSceneSkybox );
-			addParser( result, uint32_t( CSCNSection::eScene ), cuT( "fog_type" ), parserSceneFogType, { makeParameter< ParameterType::eCheckedText >( SceneFileParser::fogTypes ) } );
+			addParser( result, uint32_t( CSCNSection::eScene ), cuT( "fog_type" ), parserSceneFogType, { makeParameter< ParameterType::eCheckedText, FogType >() } );
 			addParser( result, uint32_t( CSCNSection::eScene ), cuT( "fog_density" ), parserSceneFogDensity, { makeParameter< ParameterType::eFloat >() } );
 			addParser( result, uint32_t( CSCNSection::eScene ), cuT( "particle_system" ), parserSceneParticleSystem, { makeParameter< ParameterType::eName >() } );
 			addParser( result, uint32_t( CSCNSection::eScene ), cuT( "skeleton" ), parserSkeleton, { makeParameter< ParameterType::eName >() } );
@@ -140,7 +140,7 @@ namespace castor3d
 		static void addParticleParsers( castor::AttributeParsers & result )
 		{
 			using namespace castor;
-			addParser( result, uint32_t( CSCNSection::eParticle ), cuT( "variable" ), parserParticleVariable, { makeParameter< ParameterType::eName >(), makeParameter< ParameterType::eCheckedText >( SceneFileParser::variableTypes ), makeParameter< ParameterType::eText >() } );
+			addParser( result, uint32_t( CSCNSection::eParticle ), cuT( "variable" ), parserParticleVariable, { makeParameter< ParameterType::eName >(), makeParameter< ParameterType::eCheckedText, ParticleFormat >(), makeParameter< ParameterType::eText >() } );
 			addParser( result, uint32_t( CSCNSection::eParticle ), cuT( "type" ), parserParticleType, { makeParameter< ParameterType::eName >() } );
 		}
 
@@ -148,7 +148,7 @@ namespace castor3d
 		{
 			using namespace castor;
 			addParser( result, uint32_t( CSCNSection::eLight ), cuT( "parent" ), parserLightParent, { makeParameter< ParameterType::eName >() } );
-			addParser( result, uint32_t( CSCNSection::eLight ), cuT( "type" ), parserLightType, { makeParameter< ParameterType::eCheckedText >( SceneFileParser::lightTypes ) } );
+			addParser( result, uint32_t( CSCNSection::eLight ), cuT( "type" ), parserLightType, { makeParameter< ParameterType::eCheckedText, LightType >() } );
 			addParser( result, uint32_t( CSCNSection::eLight ), cuT( "colour" ), parserLightColour, { makeParameter< ParameterType::ePoint3F >() } );
 			addParser( result, uint32_t( CSCNSection::eLight ), cuT( "intensity" ), parserLightIntensity, { makeParameter< ParameterType::ePoint2F >() } );
 			addParser( result, uint32_t( CSCNSection::eLight ), cuT( "attenuation" ), parserLightAttenuation, { makeParameter< ParameterType::ePoint3F >() } );
@@ -165,8 +165,8 @@ namespace castor3d
 		{
 			using namespace castor;
 			addParser( result, uint32_t( CSCNSection::eShadows ), cuT( "producer" ), parserShadowsProducer, { makeParameter< ParameterType::eBool >() } );
-			addParser( result, uint32_t( CSCNSection::eShadows ), cuT( "filter" ), parserShadowsFilter, { makeParameter< ParameterType::eCheckedText >( SceneFileParser::shadowFilters ) } );
-			addParser( result, uint32_t( CSCNSection::eShadows ), cuT( "global_illumination" ), parserShadowsGlobalIllumination, { makeParameter< ParameterType::eCheckedText >( SceneFileParser::globalIlluminations ) } );
+			addParser( result, uint32_t( CSCNSection::eShadows ), cuT( "filter" ), parserShadowsFilter, { makeParameter< ParameterType::eCheckedText, ShadowType >() } );
+			addParser( result, uint32_t( CSCNSection::eShadows ), cuT( "global_illumination" ), parserShadowsGlobalIllumination, { makeParameter< ParameterType::eCheckedText, GlobalIlluminationType >() } );
 			addParser( result, uint32_t( CSCNSection::eShadows ), cuT( "volumetric_steps" ), parserShadowsVolumetricSteps, { makeParameter< ParameterType::eUInt32 >() } );
 			addParser( result, uint32_t( CSCNSection::eShadows ), cuT( "volumetric_scattering" ), parserShadowsVolumetricScatteringFactor, { makeParameter< ParameterType::eFloat >() } );
 			addParser( result, uint32_t( CSCNSection::eShadows ), cuT( "raw_config" ), parserShadowsRawConfig );
@@ -315,7 +315,7 @@ namespace castor3d
 			, castor::UInt32StrMap const & textureChannels )
 		{
 			using namespace castor;
-			addParser( result, uint32_t( CSCNSection::eTextureUnit ), cuT( "channel" ), parserUnitChannel, { makeParameter< ParameterType::eBitwiseOred32BitsCheckedText >( textureChannels ) } );
+			addParser( result, uint32_t( CSCNSection::eTextureUnit ), cuT( "channel" ), parserUnitChannel, { makeParameter< ParameterType::eBitwiseOred32BitsCheckedText >( "TextureChannel", textureChannels ) } );
 			addParser( result, uint32_t( CSCNSection::eTextureUnit ), cuT( "image" ), parserUnitImage, { makeParameter< ParameterType::ePath >() } );
 			addParser( result, uint32_t( CSCNSection::eTextureUnit ), cuT( "levels_count" ), parserUnitLevelsCount, { makeParameter< ParameterType::eUInt32 >() } );
 			addParser( result, uint32_t( CSCNSection::eTextureUnit ), cuT( "render_target" ), parserUnitRenderTarget );
@@ -370,7 +370,7 @@ namespace castor3d
 		static void addShaderUBOParsers( castor::AttributeParsers & result )
 		{
 			using namespace castor;
-			addParser( result, uint32_t( CSCNSection::eShaderUBO ), cuT( "shaders" ), parserShaderUboShaders, { makeParameter< ParameterType::eBitwiseOred32BitsCheckedText >( SceneFileParser::shaderTypes ) } );
+			addParser( result, uint32_t( CSCNSection::eShaderUBO ), cuT( "shaders" ), parserShaderUboShaders, { makeParameter< ParameterType::eBitwiseOred32BitsCheckedText, VkShaderStageFlagBits >() } );
 			addParser( result, uint32_t( CSCNSection::eShaderUBO ), cuT( "variable" ), parserShaderUboVariable, { makeParameter< ParameterType::eName >() } );
 		}
 
@@ -378,7 +378,7 @@ namespace castor3d
 		{
 			using namespace castor;
 			addParser( result, uint32_t( CSCNSection::eUBOVariable ), cuT( "count" ), parserShaderVariableCount, { makeParameter< ParameterType::eUInt32 >() } );
-			addParser( result, uint32_t( CSCNSection::eUBOVariable ), cuT( "type" ), parserShaderVariableType, { makeParameter< ParameterType::eCheckedText >( SceneFileParser::variableTypes ) } );
+			addParser( result, uint32_t( CSCNSection::eUBOVariable ), cuT( "type" ), parserShaderVariableType, { makeParameter< ParameterType::eCheckedText, ParticleFormat >() } );
 			addParser( result, uint32_t( CSCNSection::eUBOVariable ), cuT( "value" ), parserShaderVariableValue, { makeParameter< ParameterType::eText >() } );
 		}
 
@@ -420,7 +420,7 @@ namespace castor3d
 			addParser( result, uint32_t( CSCNSection::eBorderPanelOverlay ), cuT( "border_material" ), parserBorderPanelOverlayMaterial, { makeParameter< ParameterType::eName >() } );
 			addParser( result, uint32_t( CSCNSection::eBorderPanelOverlay ), cuT( "border_size" ), parserBorderPanelOverlaySizes, { makeParameter< ParameterType::ePoint4D >() } );
 			addParser( result, uint32_t( CSCNSection::eBorderPanelOverlay ), cuT( "pxl_border_size" ), parserBorderPanelOverlayPixelSizes, { makeParameter< ParameterType::eRectangle >() } );
-			addParser( result, uint32_t( CSCNSection::eBorderPanelOverlay ), cuT( "border_position" ), parserBorderPanelOverlayPosition, { makeParameter< ParameterType::eCheckedText >( SceneFileParser::borderPositions ) } );
+			addParser( result, uint32_t( CSCNSection::eBorderPanelOverlay ), cuT( "border_position" ), parserBorderPanelOverlayPosition, { makeParameter< ParameterType::eCheckedText, BorderPosition >() } );
 			addParser( result, uint32_t( CSCNSection::eBorderPanelOverlay ), cuT( "center_uv" ), parserBorderPanelOverlayCenterUvs, { makeParameter< ParameterType::ePoint4D >() } );
 			addParser( result, uint32_t( CSCNSection::eBorderPanelOverlay ), cuT( "border_inner_uv" ), parserBorderPanelOverlayInnerUvs, { makeParameter< ParameterType::ePoint4D >() } );
 			addParser( result, uint32_t( CSCNSection::eBorderPanelOverlay ), cuT( "border_outer_uv" ), parserBorderPanelOverlayOuterUvs, { makeParameter< ParameterType::ePoint4D >() } );
@@ -439,11 +439,11 @@ namespace castor3d
 			addParser( result, uint32_t( CSCNSection::eTextOverlay ), cuT( "text_overlay" ), parserOverlayTextOverlay, { makeParameter< ParameterType::eName >() } );
 			addParser( result, uint32_t( CSCNSection::eTextOverlay ), cuT( "font" ), parserTextOverlayFont, { makeParameter< ParameterType::eName >() } );
 			addParser( result, uint32_t( CSCNSection::eTextOverlay ), cuT( "text" ), parserTextOverlayText, { makeParameter< ParameterType::eText >() } );
-			addParser( result, uint32_t( CSCNSection::eTextOverlay ), cuT( "text_wrapping" ), parserTextOverlayTextWrapping, { makeParameter< ParameterType::eCheckedText >( SceneFileParser::textWrappingModes ) } );
-			addParser( result, uint32_t( CSCNSection::eTextOverlay ), cuT( "vertical_align" ), parserTextOverlayVerticalAlign, { makeParameter< ParameterType::eCheckedText >( SceneFileParser::verticalAligns ) } );
-			addParser( result, uint32_t( CSCNSection::eTextOverlay ), cuT( "horizontal_align" ), parserTextOverlayHorizontalAlign, { makeParameter< ParameterType::eCheckedText >( SceneFileParser::horizontalAligns ) } );
-			addParser( result, uint32_t( CSCNSection::eTextOverlay ), cuT( "texturing_mode" ), parserTextOverlayTexturingMode, { makeParameter< ParameterType::eCheckedText >( SceneFileParser::textTexturingModes ) } );
-			addParser( result, uint32_t( CSCNSection::eTextOverlay ), cuT( "line_spacing_mode" ), parserTextOverlayLineSpacingMode, { makeParameter< ParameterType::eCheckedText >( SceneFileParser::lineSpacingModes ) } );
+			addParser( result, uint32_t( CSCNSection::eTextOverlay ), cuT( "text_wrapping" ), parserTextOverlayTextWrapping, { makeParameter< ParameterType::eCheckedText, TextWrappingMode >() } );
+			addParser( result, uint32_t( CSCNSection::eTextOverlay ), cuT( "vertical_align" ), parserTextOverlayVerticalAlign, { makeParameter< ParameterType::eCheckedText, VAlign >() } );
+			addParser( result, uint32_t( CSCNSection::eTextOverlay ), cuT( "horizontal_align" ), parserTextOverlayHorizontalAlign, { makeParameter< ParameterType::eCheckedText, HAlign >() } );
+			addParser( result, uint32_t( CSCNSection::eTextOverlay ), cuT( "texturing_mode" ), parserTextOverlayTexturingMode, { makeParameter< ParameterType::eCheckedText, TextTexturingMode >() } );
+			addParser( result, uint32_t( CSCNSection::eTextOverlay ), cuT( "line_spacing_mode" ), parserTextOverlayLineSpacingMode, { makeParameter< ParameterType::eCheckedText, TextLineSpacingMode >() } );
 			addParser( result, uint32_t( CSCNSection::eTextOverlay ), cuT( "}" ), parserOverlayEnd );
 		}
 
@@ -453,14 +453,14 @@ namespace castor3d
 			addParser( result, uint32_t( CSCNSection::eCamera ), cuT( "parent" ), parserCameraParent, { makeParameter< ParameterType::eName >() } );
 			addParser( result, uint32_t( CSCNSection::eCamera ), cuT( "viewport" ), parserCameraViewport );
 			addParser( result, uint32_t( CSCNSection::eCamera ), cuT( "hdr_config" ), parserCameraHdrConfig );
-			addParser( result, uint32_t( CSCNSection::eCamera ), cuT( "primitive" ), parserCameraPrimitive, { makeParameter< ParameterType::eCheckedText >( SceneFileParser::primitiveTypes ) } );
+			addParser( result, uint32_t( CSCNSection::eCamera ), cuT( "primitive" ), parserCameraPrimitive, { makeParameter< ParameterType::eCheckedText, LimitedType< VkPrimitiveTopology > >() } );
 			addParser( result, uint32_t( CSCNSection::eCamera ), cuT( "}" ), parserCameraEnd );
 		}
 
 		static void addViewportParsers( castor::AttributeParsers & result )
 		{
 			using namespace castor;
-			addParser( result, uint32_t( CSCNSection::eViewport ), cuT( "type" ), parserViewportType, { makeParameter< ParameterType::eCheckedText >( SceneFileParser::viewportModes ) } );
+			addParser( result, uint32_t( CSCNSection::eViewport ), cuT( "type" ), parserViewportType, { makeParameter< ParameterType::eCheckedText, ViewportType >() } );
 			addParser( result, uint32_t( CSCNSection::eViewport ), cuT( "left" ), parserViewportLeft, { makeParameter< ParameterType::eFloat >() } );
 			addParser( result, uint32_t( CSCNSection::eViewport ), cuT( "right" ), parserViewportRight, { makeParameter< ParameterType::eFloat >() } );
 			addParser( result, uint32_t( CSCNSection::eViewport ), cuT( "top" ), parserViewportTop, { makeParameter< ParameterType::eFloat >() } );
@@ -476,8 +476,8 @@ namespace castor3d
 		{
 			using namespace castor;
 			addParser( result, uint32_t( CSCNSection::eBillboard ), cuT( "parent" ), parserBillboardParent, { makeParameter< ParameterType::eName >() } );
-			addParser( result, uint32_t( CSCNSection::eBillboard ), cuT( "type" ), parserBillboardType, { makeParameter < ParameterType::eCheckedText >( SceneFileParser::billboardTypes ) } );
-			addParser( result, uint32_t( CSCNSection::eBillboard ), cuT( "size" ), parserBillboardSize, { makeParameter < ParameterType::eCheckedText >( SceneFileParser::billboardSizes ) } );
+			addParser( result, uint32_t( CSCNSection::eBillboard ), cuT( "type" ), parserBillboardType, { makeParameter < ParameterType::eCheckedText, BillboardType >() } );
+			addParser( result, uint32_t( CSCNSection::eBillboard ), cuT( "size" ), parserBillboardSize, { makeParameter < ParameterType::eCheckedText, BillboardSize >() } );
 			addParser( result, uint32_t( CSCNSection::eBillboard ), cuT( "positions" ), parserBillboardPositions );
 			addParser( result, uint32_t( CSCNSection::eBillboard ), cuT( "material" ), parserBillboardMaterial, { makeParameter< ParameterType::eName >() } );
 			addParser( result, uint32_t( CSCNSection::eBillboard ), cuT( "dimensions" ), parserBillboardDimensions, { makeParameter< ParameterType::ePoint2F >() } );
@@ -510,7 +510,7 @@ namespace castor3d
 			addParser( result, uint32_t( CSCNSection::eAnimation ), cuT( "scale" ), parserAnimationScale, { makeParameter< ParameterType::eFloat >() } );
 			addParser( result, uint32_t( CSCNSection::eAnimation ), cuT( "start_at" ), parserAnimationStartAt, { makeParameter< ParameterType::eFloat >() } );
 			addParser( result, uint32_t( CSCNSection::eAnimation ), cuT( "stop_at" ), parserAnimationStopAt, { makeParameter< ParameterType::eFloat >() } );
-			addParser( result, uint32_t( CSCNSection::eAnimation ), cuT( "interpolation" ), parserAnimationInterpolation, { makeParameter< ParameterType::eCheckedText >( SceneFileParser::interpolatorTypes ) } );
+			addParser( result, uint32_t( CSCNSection::eAnimation ), cuT( "interpolation" ), parserAnimationInterpolation, { makeParameter< ParameterType::eCheckedText, InterpolatorType >() } );
 			addParser( result, uint32_t( CSCNSection::eAnimation ), cuT( "}" ), parserAnimationEnd );
 		}
 
@@ -698,7 +698,7 @@ namespace castor3d
 		static castor::AdditionalParsers createParsers( Engine & engine )
 		{
 			return { registerParsers( engine )
-				, registerSections() 
+				, registerSections()
 				, &createContext };
 		}
 	}
@@ -726,91 +726,15 @@ namespace castor3d
 
 	//****************************************************************************************************
 
-	UInt32StrMap SceneFileParser::blendFactors;
-	UInt32StrMap SceneFileParser::types;
-	UInt32StrMap SceneFileParser::comparisonFuncs;
-	UInt32StrMap SceneFileParser::textureArguments;
-	UInt32StrMap SceneFileParser::textureBlendModes;
-	UInt32StrMap SceneFileParser::lightTypes;
-	UInt32StrMap SceneFileParser::primitiveTypes;
-	UInt32StrMap SceneFileParser::primitiveOutputTypes;
-	UInt32StrMap SceneFileParser::models;
-	UInt32StrMap SceneFileParser::viewportModes;
-	UInt32StrMap SceneFileParser::filters;
-	UInt32StrMap SceneFileParser::mipmapModes;
-	UInt32StrMap SceneFileParser::wrappingModes;
-	UInt32StrMap SceneFileParser::borderColours;
-	UInt32StrMap SceneFileParser::shaderTypes;
-	UInt32StrMap SceneFileParser::variableTypes;
-	UInt32StrMap SceneFileParser::elementTypes;
-	UInt32StrMap SceneFileParser::movables;
-	UInt32StrMap SceneFileParser::textWrappingModes;
-	UInt32StrMap SceneFileParser::borderPositions;
-	UInt32StrMap SceneFileParser::verticalAligns;
-	UInt32StrMap SceneFileParser::horizontalAligns;
-	UInt32StrMap SceneFileParser::toneMappings;
-	UInt32StrMap SceneFileParser::textTexturingModes;
-	UInt32StrMap SceneFileParser::lineSpacingModes;
-	UInt32StrMap SceneFileParser::fogTypes;
 	UInt32StrMap SceneFileParser::comparisonModes;
-	UInt32StrMap SceneFileParser::billboardTypes;
-	UInt32StrMap SceneFileParser::billboardSizes;
 	UInt32StrMap SceneFileParser::materialTypes;
-	UInt32StrMap SceneFileParser::shadowFilters;
-	UInt32StrMap SceneFileParser::globalIlluminations;
-	UInt32StrMap SceneFileParser::interpolatorTypes;
-	UInt32StrMap SceneFileParser::lengthUnits;
 
 	SceneFileParser::SceneFileParser( Engine & engine )
 		: OwnedBy< Engine >( engine )
 		, FileParser{ engine.getLogger(), uint32_t( CSCNSection::eRoot ) }
 	{
-		if ( primitiveOutputTypes.empty() )
+		if ( materialTypes.empty() )
 		{
-			primitiveOutputTypes[ashes::getName( VK_PRIMITIVE_TOPOLOGY_POINT_LIST )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_POINT_LIST );
-			primitiveOutputTypes[ashes::getName( VK_PRIMITIVE_TOPOLOGY_LINE_STRIP )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_LINE_STRIP );
-			primitiveOutputTypes[ashes::getName( VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP );
-
-			shaderTypes[ashes::getName( VK_SHADER_STAGE_VERTEX_BIT )] = uint32_t( VK_SHADER_STAGE_VERTEX_BIT );
-			shaderTypes[ashes::getName( VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT )] = uint32_t( VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT );
-			shaderTypes[ashes::getName( VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT )] = uint32_t( VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT );
-			shaderTypes[ashes::getName( VK_SHADER_STAGE_GEOMETRY_BIT )] = uint32_t( VK_SHADER_STAGE_GEOMETRY_BIT );
-			shaderTypes[ashes::getName( VK_SHADER_STAGE_FRAGMENT_BIT )] = uint32_t( VK_SHADER_STAGE_FRAGMENT_BIT );
-			shaderTypes[ashes::getName( VK_SHADER_STAGE_COMPUTE_BIT )] = uint32_t( VK_SHADER_STAGE_COMPUTE_BIT );
-
-			comparisonModes[cuT( "none" )] = uint32_t( false );
-			comparisonModes[cuT( "ref_to_texture" )] = uint32_t( true );
-
-			mipmapModes[cuT( "none" )] = uint32_t( VK_SAMPLER_MIPMAP_MODE_NEAREST );
-
-			blendFactors = getEnumMapT( VK_BLEND_FACTOR_ZERO, VK_BLEND_FACTOR_ONE_MINUS_SRC1_ALPHA );
-			types = getEnumMapT( VK_IMAGE_TYPE_1D, VK_IMAGE_TYPE_3D );
-			comparisonFuncs = getEnumMapT( VK_COMPARE_OP_NEVER, VK_COMPARE_OP_ALWAYS );
-			textureBlendModes = getEnumMapT( VK_BLEND_OP_ADD, VK_BLEND_OP_MAX );
-			primitiveTypes = getEnumMapT( VK_PRIMITIVE_TOPOLOGY_POINT_LIST, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP_WITH_ADJACENCY );
-			filters = getEnumMapT( VK_FILTER_NEAREST, VK_FILTER_LINEAR );
-			mipmapModes = getEnumMapT( VK_SAMPLER_MIPMAP_MODE_NEAREST, VK_SAMPLER_MIPMAP_MODE_LINEAR );
-			wrappingModes = getEnumMapT( VK_SAMPLER_ADDRESS_MODE_REPEAT, VK_SAMPLER_ADDRESS_MODE_MIRROR_CLAMP_TO_EDGE );
-			borderColours = getEnumMapT( VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK, VK_BORDER_COLOR_INT_OPAQUE_WHITE );
-
-			lightTypes = getEnumMapT< LightType >();
-			viewportModes = getEnumMapT< ViewportType >();
-			variableTypes = getEnumMapT< ParticleFormat >();
-			movables = getEnumMapT< MovableType >();
-			fogTypes = getEnumMapT< FogType >();
-			billboardTypes = getEnumMapT< BillboardType >();
-			billboardSizes = getEnumMapT< BillboardSize >();
-			textWrappingModes = getEnumMapT< TextWrappingMode >();
-			borderPositions = getEnumMapT< BorderPosition >();
-			verticalAligns = getEnumMapT< VAlign >();
-			horizontalAligns = getEnumMapT< HAlign >();
-			textTexturingModes = getEnumMapT< TextTexturingMode >();
-			lineSpacingModes = getEnumMapT< TextLineSpacingMode >();
-			shadowFilters = getEnumMapT< ShadowType >();
-			globalIlluminations = getEnumMapT< GlobalIlluminationType >();
-			interpolatorTypes = getEnumMapT< InterpolatorType >();
-			lengthUnits = getEnumMapT< castor::LengthUnit >();
-
 			for ( auto & it : engine.getPassFactory().listRegisteredTypes() )
 			{
 				materialTypes.emplace( it.first, uint32_t( it.second ) );

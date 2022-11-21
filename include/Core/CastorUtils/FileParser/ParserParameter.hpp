@@ -23,7 +23,8 @@ namespace castor
 	\brief		Parmètre de parseur spécifié.
 	*/
 	template< ParameterType Type >
-	class ParserParameter < Type, typename std::enable_if < !HasBaseParameterType< Type >::value && !IsArithmeticType< Type >::value >::type >
+	class ParserParameter < Type
+			, std::enable_if_t< !HasBaseParameterType< Type >::value && !IsArithmeticType< Type >::value > >
 		: public ParserParameterBase
 	{
 	public:
@@ -81,7 +82,8 @@ namespace castor
 	\brief		Parmètre de parseur spécifié.
 	*/
 	template< ParameterType Type >
-	class ParserParameter < Type, typename std::enable_if < IsArithmeticType< Type >::value >::type >
+	class ParserParameter < Type
+			, std::enable_if_t< IsArithmeticType< Type >::value > >
 		: public ParserParameterBase
 	{
 	public:
@@ -210,7 +212,8 @@ namespace castor
 		 *\brief		Constructor.
 		 *\param[in]	values	Les valeurs utilisées pour valider la valeur récupérée.
 		 */
-		explicit ParserParameter( UInt32StrMap const & values );
+		explicit ParserParameter( UInt32StrMap const & values
+			, xchar const * name = ParserParameterHelper< ParameterType::eCheckedText >::StringType );
 		/**
 		 *\copydoc		castor::ParserParameterBase::getType
 		 */
@@ -234,6 +237,7 @@ namespace castor
 			, String & params )override;
 
 	public:
+		xchar const * m_name;
 		UInt32StrMap const m_values;
 	};
 	/**
@@ -255,7 +259,8 @@ namespace castor
 		 *\brief		Constructor.
 		 *\param[in]	values	Les valeurs utilisées pour valider la valeur récupérée.
 		 */
-		explicit ParserParameter( UInt32StrMap const & values );
+		explicit ParserParameter( UInt32StrMap const & values
+			, xchar const * name = ParserParameterHelper< ParameterType::eBitwiseOred32BitsCheckedText >::StringType );
 		/**
 		 *\copydoc		castor::ParserParameterBase::getType
 		 */
@@ -279,6 +284,7 @@ namespace castor
 			, String & params )override;
 
 	public:
+		xchar const * m_name;
 		UInt32StrMap const m_values;
 	};
 	/**
@@ -300,7 +306,8 @@ namespace castor
 		 *\brief		Constructor.
 		 *\param[in]	values	Les valeurs utilisées pour valider la valeur récupérée.
 		 */
-		explicit ParserParameter( UInt64StrMap const & values );
+		explicit ParserParameter( UInt64StrMap const & values
+			, xchar const * name = ParserParameterHelper< ParameterType::eBitwiseOred64BitsCheckedText >::StringType );
 		/**
 		 *\copydoc		castor::ParserParameterBase::getType
 		 */
@@ -324,6 +331,7 @@ namespace castor
 			, String & params )override;
 
 	public:
+		xchar const * m_name;
 		UInt64StrMap const m_values;
 	};
 	/**
@@ -378,10 +386,11 @@ namespace castor
 	 *\return		Le paramètre créé.
 	 */
 	template< ParameterType Type >
-	ParserParameterBaseSPtr makeParameter( UInt32StrMap const & values )
+	ParserParameterBaseSPtr makeParameter( xchar const * name
+		, UInt32StrMap const & values )
 	{
 		static_assert( Type == ParameterType::eCheckedText || Type == ParameterType::eBitwiseOred32BitsCheckedText, "Only for ParameterType::eCheckedText or ParameterType::eBitwiseOred32BitsCheckedText" );
-		return std::make_shared< ParserParameter< Type > >( values );
+		return std::make_shared< ParserParameter< Type > >( values, name );
 	}
 	/**
 	 *\~english
@@ -394,10 +403,27 @@ namespace castor
 	 *\return		Le paramètre créé.
 	 */
 	template< ParameterType Type >
-	ParserParameterBaseSPtr makeParameter( UInt64StrMap const & values )
+	ParserParameterBaseSPtr makeParameter( xchar const * name
+		, UInt64StrMap const & values )
 	{
 		static_assert( Type == ParameterType::eBitwiseOred64BitsCheckedText, "Only for ParameterType::eBitwiseOred64BitsCheckedText" );
-		return std::make_shared< ParserParameter< Type > >( values );
+		return std::make_shared< ParserParameter< Type > >( values, name );
+	}
+	/**
+	 *\~english
+	 *\brief		Creates a parameter of given type.
+	 *\return		The created parameter.
+	 *\~french
+	 *\brief		Crée un paramètre du type donné.
+	 *\return		Le paramètre créé.
+	 */
+	template< ParameterType Type, typename EnumType >
+	ParserParameterBaseSPtr makeParameter()
+	{
+		static_assert( Type == ParameterType::eCheckedText || Type == ParameterType::eBitwiseOred32BitsCheckedText || Type == ParameterType::eBitwiseOred64BitsCheckedText
+			, "Only for ParameterType::eCheckedText or ParameterType::eBitwiseOred32BitsCheckedText or ParameterType::eBitwiseOred64BitsCheckedText" );
+		return std::make_shared< ParserParameter< Type > >( ParserEnumTraits< EnumType >::Values
+			, ParserEnumTraits< EnumType >::Name );
 	}
 }
 

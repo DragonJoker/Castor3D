@@ -10,18 +10,6 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	enum class LengthUnit
-	{
-		eKilometre,
-		eMetre,
-		eCentimetre,
-		eMillimetre,
-		eYard,
-		eFoot,
-		eInch,
-		CU_ScopedEnumBounds( eKilometre )
-	};
-
 	inline String getName( LengthUnit value )
 	{
 		switch ( value )

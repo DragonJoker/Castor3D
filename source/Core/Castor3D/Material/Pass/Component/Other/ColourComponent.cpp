@@ -170,26 +170,22 @@ namespace castor3d
 			, CSCNSection::ePass
 			, cuT( "colour_hdr" )
 			, albcmp::parserPassHdrColour
-			, { castor::makeParameter< castor::ParameterType::eHdrRgbColour >() }
-		, "The pass colour" );
+			, { castor::makeParameter< castor::ParameterType::eHdrRgbColour >() } );
 		castor::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "colour_srgb" )
 			, albcmp::parserPassSrgbColour
-			, { castor::makeParameter< castor::ParameterType::eRgbColour >() }
-		, "The pass colour" );
+			, { castor::makeParameter< castor::ParameterType::eRgbColour >() } );
 		castor::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "albedo" )
 			, albcmp::parserPassHdrColour
-			, { castor::makeParameter< castor::ParameterType::eHdrRgbColour >() }
-		, "The pass base colour" );
+			, { castor::makeParameter< castor::ParameterType::eHdrRgbColour >() } );
 		castor::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "diffuse" )
 			, albcmp::parserPassSrgbColour
-			, { castor::makeParameter< castor::ParameterType::eRgbColour >() }
-		, "The pass diffuse colour" );
+			, { castor::makeParameter< castor::ParameterType::eRgbColour >() } );
 	}
 
 	void ColourComponent::Plugin::zeroBuffer( Pass const & pass

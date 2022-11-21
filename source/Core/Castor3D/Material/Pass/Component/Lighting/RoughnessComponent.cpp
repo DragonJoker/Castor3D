@@ -193,20 +193,17 @@ namespace castor3d
 			, CSCNSection::ePass
 			, cuT( "roughness" )
 			, rghcmp::parserPassRoughness
-			, { castor::makeParameter< castor::ParameterType::eFloat >() }
-		, "The microfacet roughness factor for the pass" );
+			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
 		castor::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "glossiness" )
 			, rghcmp::parserPassGlossiness
-			, { castor::makeParameter< castor::ParameterType::eFloat >() }
-		, "The specular glossiness (or shininess exponent) for the pass" );
+			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
 		castor::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "shininess" )
 			, rghcmp::parserPassShininess
-			, { castor::makeParameter< castor::ParameterType::eFloat >() }
-		, "The specular shininess exponent (or glossiness) for the pass" );
+			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
 	}
 
 	void RoughnessComponent::Plugin::zeroBuffer( Pass const & pass
