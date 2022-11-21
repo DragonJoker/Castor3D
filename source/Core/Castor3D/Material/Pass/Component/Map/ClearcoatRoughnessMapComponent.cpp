@@ -131,18 +131,18 @@ namespace castor3d
 					, 0x0000FF00u );
 			} } );
 
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::eTextureUnit
 			, cuT( "clearcoat_roughness_mask" )
 			, trscmp::parserUnitClearcoatRoughnessMask
 			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
 
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::eTextureRemap
 			, cuT( "clearcoat_roughness" )
 			, trscmp::parserTexRemapClearcoatRoughness );
 
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "clearcoat_roughness_mask" )
 			, trscmp::parserTexRemapClearcoatRoughnessMask

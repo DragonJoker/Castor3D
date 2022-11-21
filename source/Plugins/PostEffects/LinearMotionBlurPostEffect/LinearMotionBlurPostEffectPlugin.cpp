@@ -23,32 +23,6 @@
 
 namespace
 {
-	void parseError( castor::String const & error )
-	{
-		castor::StringStream stream{ castor::makeStringStream() };
-		stream << cuT( "Error, : " ) << error;
-		castor::Logger::logError( stream.str() );
-	}
-
-	void addParser( castor::AttributeParsers & parsers
-		, uint32_t section
-		, castor::String const & name
-		, castor::ParserFunction function
-		, castor::ParserParameterArray && array = castor::ParserParameterArray{} )
-	{
-		auto nameIt = parsers.find( name );
-
-		if ( nameIt != parsers.end()
-			&& nameIt->second.find( section ) != nameIt->second.end() )
-		{
-			parseError( cuT( "Parser " ) + name + cuT( " for section " ) + castor::string::toString( section ) + cuT( " already exists." ) );
-		}
-		else
-		{
-			parsers[name][section] = { function, array };
-		}
-	}
-
 	castor::AttributeParsers createParsers()
 	{
 		castor::AttributeParsers result;

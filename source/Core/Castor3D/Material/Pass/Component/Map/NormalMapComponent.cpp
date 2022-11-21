@@ -200,33 +200,33 @@ namespace castor3d
 					, 0x00FFFFFF );
 			} } );
 
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::eTextureUnit
 			, cuT( "normal_mask" )
 			, nmlcmp::parserUnitNormalMask
 			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::eTextureUnit
 			, cuT( "normal_factor" )
 			, nmlcmp::parserUnitNormalFactor
 			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::eTextureUnit
 			, cuT( "normal_directx" )
 			, nmlcmp::parserUnitNormalDirectX
 			, { castor::makeParameter< castor::ParameterType::eBool >() } );
 
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::eTextureRemap
 			, cuT( "normal" )
 			, nmlcmp::parserTexRemapNormal );
 
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "normal_mask" )
 			, nmlcmp::parserTexRemapNormalMask
 			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "normal_directx" )
 			, nmlcmp::parserTexRemapNormalDirectX

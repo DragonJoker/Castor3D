@@ -157,12 +157,12 @@ namespace castor3d
 	void AttenuationComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "attenuation_colour" )
 			, trsatt::parserPassAttenuationColour
 			, { castor::makeParameter< castor::ParameterType::eRgbColour >() } );
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "attenuation_distance" )
 			, trsatt::parserPassAttenuationDistance

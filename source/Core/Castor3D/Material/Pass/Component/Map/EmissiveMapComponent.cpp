@@ -125,18 +125,18 @@ namespace castor3d
 					, 0x00FFFFFF );
 			} } );
 
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::eTextureUnit
 			, cuT( "emissive_mask" )
 			, emscmp::parserUnitEmissiveMask
 			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
 
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::eTextureRemap
 			, cuT( "emissive" )
 			, emscmp::parserTexRemapEmissive );
 
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "emissive_mask" )
 			, emscmp::parserTexRemapEmissiveMask

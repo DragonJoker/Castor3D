@@ -166,25 +166,25 @@ namespace castor3d
 	void ColourComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "colour_hdr" )
 			, albcmp::parserPassHdrColour
 			, { castor::makeParameter< castor::ParameterType::eHdrRgbColour >() }
 		, "The pass colour" );
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "colour_srgb" )
 			, albcmp::parserPassSrgbColour
 			, { castor::makeParameter< castor::ParameterType::eRgbColour >() }
 		, "The pass colour" );
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "albedo" )
 			, albcmp::parserPassHdrColour
 			, { castor::makeParameter< castor::ParameterType::eHdrRgbColour >() }
 		, "The pass base colour" );
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "diffuse" )
 			, albcmp::parserPassSrgbColour

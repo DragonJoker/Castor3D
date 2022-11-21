@@ -140,46 +140,46 @@ namespace castor3d
 					, 0x00FFFFFF );
 			} } );
 
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::eTextureUnit
 			, cuT( "colour_mask" )
 			, colcmp::parserUnitColourMask
 			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::eTextureUnit
 			, cuT( "albedo_mask" )
 			, colcmp::parserUnitColourMask
 			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::eTextureUnit
 			, cuT( "diffuse_mask" )
 			, colcmp::parserUnitColourMask
 			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
 
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::eTextureRemap
 			, cuT( "colour" )
 			, colcmp::parserTexRemapColour );
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::eTextureRemap
 			, cuT( "albedo" )
 			, colcmp::parserTexRemapColour );
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::eTextureRemap
 			, cuT( "diffuse" )
 			, colcmp::parserTexRemapColour );
 
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "colour_mask" )
 			, colcmp::parserTexRemapColourMask
 			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "albedo_mask" )
 			, colcmp::parserTexRemapColourMask
 			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "diffuse_mask" )
 			, colcmp::parserTexRemapColourMask

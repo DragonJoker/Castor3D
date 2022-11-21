@@ -122,7 +122,7 @@ namespace castor3d
 	{
 		static UInt32StrMap const parallaxOcclusionModes{ getEnumMapT< ParallaxOcclusionMode >() };
 
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "parallax_occlusion" )
 			, hgtcmp::parserPassParallaxOcclusion

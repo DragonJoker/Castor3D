@@ -158,12 +158,12 @@ namespace castor3d
 	void SheenComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "sheen_colour" )
 			, coating::parserPassSheenFactor
 			, { castor::makeParameter< castor::ParameterType::eHdrRgbColour >() } );
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "sheen_roughness" )
 			, coating::parserPassRoughnessFactor

@@ -30,6 +30,34 @@ namespace castor
 
 	//*********************************************************************************************
 
+	void addParser( AttributeParsers & parsers
+		, uint32_t section
+		, String const & name
+		, ParserFunction function
+		, ParserParameterArray array
+		, castor::String comment )
+	{
+		auto nameIt = parsers.find( name );
+
+		if ( nameIt != parsers.end()
+			&& nameIt->second.find( section ) != nameIt->second.end() )
+		{
+			StringStream stream{ makeStringStream() };
+			stream << cuT( "Error: Parser " ) << name
+				<< cuT( " for section " ) << string::toString( section )
+				<< cuT( " already exists." );
+			Logger::logError( stream.str() );
+		}
+		else
+		{
+			parsers[name][section] = { std::move( function )
+				, std::move( array )
+				, std::move( comment ) };
+		}
+	}
+
+	//*********************************************************************************************
+
 	PreprocessedFile::PreprocessedFile( FileParser & parser )
 		: m_parser{ parser }
 	{

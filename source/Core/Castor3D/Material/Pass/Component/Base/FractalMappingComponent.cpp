@@ -205,7 +205,7 @@ namespace castor3d
 	void FractalMappingComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "fractal" )
 			, fractal::parserPassFractal

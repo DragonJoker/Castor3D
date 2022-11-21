@@ -236,6 +236,57 @@ namespace castor
 		StrUInt32Map sections;
 		UserContextCreator contextCreator;
 	};
+	/**
+	*\~english
+	*\brief
+	*	Adds a parser function to the parsers list.
+	*\param[in,out] parsers
+	*	Receives the added parser.
+	*\param[in] section
+	*	The parser section.
+	*\param[in] name
+	*	The parser name.
+	*\param[in] function
+	*	The parser function.
+	*\param[in] params
+	*	The expected parameters.
+	*\~french
+	*\brief
+	*	Ajoute une fonction d'analyse à la liste.
+	*\param[in,out] parsers
+	*	Reçoit le parser ajouté.
+	*\param[in] section
+	*	La section.
+	*\param[in] name
+	*	Le nom de la fonction.
+	*\param[in] function
+	*	La fonction d'analyse.
+	*\param[in] params
+	*	Les paramètres attendus.
+	*/
+	CU_API void addParser( castor::AttributeParsers & parsers
+		, uint32_t section
+		, castor::String const & name
+		, castor::ParserFunction function
+		, castor::ParserParameterArray array = castor::ParserParameterArray{}
+		, castor::String comment = castor::String{} );
+
+	template< typename SectionT >
+	inline void addParserT( castor::AttributeParsers & parsers
+		, SectionT section
+		, castor::String const & name
+		, castor::ParserFunction function
+		, castor::ParserParameterArray array = castor::ParserParameterArray{}
+		, castor::String comment = castor::String{} )
+	{
+		addParser( parsers
+			, uint32_t( section )
+			, name
+			, function
+			, std::move( array )
+			, std::move( comment ) );
+
+	}
 	//@}
 }
 

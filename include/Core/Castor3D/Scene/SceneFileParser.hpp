@@ -268,40 +268,8 @@ namespace castor3d
 		RenderWindowDesc m_renderWindow;
 
 	public:
-		C3D_API static UInt32StrMap blendFactors;
-		C3D_API static UInt32StrMap types;
-		C3D_API static UInt32StrMap comparisonFuncs;
-		C3D_API static UInt32StrMap textureArguments;
-		C3D_API static UInt32StrMap textureBlendModes;
-		C3D_API static UInt32StrMap lightTypes;
-		C3D_API static UInt32StrMap primitiveTypes;
-		C3D_API static UInt32StrMap primitiveOutputTypes;
-		C3D_API static UInt32StrMap models;
-		C3D_API static UInt32StrMap viewportModes;
-		C3D_API static UInt32StrMap filters;
-		C3D_API static UInt32StrMap mipmapModes;
-		C3D_API static UInt32StrMap wrappingModes;
-		C3D_API static UInt32StrMap borderColours;
-		C3D_API static UInt32StrMap shaderTypes;
-		C3D_API static UInt32StrMap variableTypes;
-		C3D_API static UInt32StrMap elementTypes;
-		C3D_API static UInt32StrMap movables;
-		C3D_API static UInt32StrMap textWrappingModes;
-		C3D_API static UInt32StrMap borderPositions;
-		C3D_API static UInt32StrMap verticalAligns;
-		C3D_API static UInt32StrMap horizontalAligns;
-		C3D_API static UInt32StrMap toneMappings;
-		C3D_API static UInt32StrMap textTexturingModes;
-		C3D_API static UInt32StrMap lineSpacingModes;
-		C3D_API static UInt32StrMap fogTypes;
 		C3D_API static UInt32StrMap comparisonModes;
-		C3D_API static UInt32StrMap billboardTypes;
-		C3D_API static UInt32StrMap billboardSizes;
 		C3D_API static UInt32StrMap materialTypes;
-		C3D_API static UInt32StrMap shadowFilters;
-		C3D_API static UInt32StrMap globalIlluminations;
-		C3D_API static UInt32StrMap interpolatorTypes;
-		C3D_API static UInt32StrMap lengthUnits;
 	};
 
 	C3D_API SceneFileContext & getParserContext( castor::FileParserContext & context );

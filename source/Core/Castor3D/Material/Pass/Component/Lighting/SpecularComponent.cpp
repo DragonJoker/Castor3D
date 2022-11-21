@@ -154,7 +154,7 @@ namespace castor3d
 	void SpecularComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "specular" )
 			, spccmp::parserPassSpecular

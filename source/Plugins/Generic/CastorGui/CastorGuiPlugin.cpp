@@ -13,32 +13,6 @@ namespace CastorGui
 {
 	namespace
 	{
-		void parseError( castor::String const & p_error )
-		{
-			castor::StringStream strError{ castor::makeStringStream() };
-			strError << cuT( "Error, : " ) << p_error;
-			castor3d::log::error << strError.str() << std::endl;
-		}
-
-		void addParser( castor::AttributeParsers & parsers
-			, uint32_t section
-			, castor::String const & name
-			, castor::ParserFunction function
-			, castor::ParserParameterArray && array = castor::ParserParameterArray() )
-		{
-			auto nameIt = parsers.find( name );
-
-			if ( nameIt != parsers.end()
-				&& nameIt->second.find( section ) != nameIt->second.end() )
-			{
-				parseError( cuT( "Parser " ) + name + cuT( " for section " ) + castor::string::toString( section ) + cuT( " already exists." ) );
-			}
-			else
-			{
-				parsers[name][section] = { function, array };
-			}
-		}
-
 		void createDefaultParsers( castor::AttributeParsers & parsers
 			, uint32_t section
 			, castor::ParserFunction endFunction )
