@@ -5,9 +5,9 @@ option( CASTOR_DEBUG_TARGETS "Allows displaying intermediate render targets resu
 set( ${PROJECT_NAME}_DESCRIPTION "Castor3D Core engine" )
 set( ${PROJECT_NAME}_BRIEF "Multiplatform 3D engine" )
 set( ${PROJECT_NAME}_ICON "${CMAKE_SOURCE_DIR}/data/Images/castor-small.png" )
-set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
-set( ${PROJECT_NAME}_VERSION_MINOR 13 )
-set( ${PROJECT_NAME}_VERSION_BUILD	0 )
+set( ${PROJECT_NAME}_VERSION_MAJOR 0 )
+set( ${PROJECT_NAME}_VERSION_MINOR 14 )
+set( ${PROJECT_NAME}_VERSION_BUILD 0 )
 
 if ( NOT DEFINED CASTOR_USE_WEIGHED_BLENDED_OIT )
 	option( CASTOR_USE_WEIGHED_BLENDED_OIT "Use Weighted Blended OIT for translucent objects" ON )
