@@ -22,31 +22,35 @@ namespace castor3d
 		 *\~english
 		 *\brief		Initialises deferred rendering related stuff.
 		 *\param[in]	graph				The render graph.
-		 *\param[in]	previousPass		The previous frame pass.
+		 *\param[in]	previousPasses		The previous frame passes.
 		 *\param[in]	device				The GPU device.
 		 *\param[in]	progress			The progress bar.
 		 *\param[in]	scene				The scene.
 		 *\param[in]	depth				The depth texture.
+		 *\param[in]	depthObj			The depths and objects texture.
 		 *\param[in]	gpResult			The geometry pass buffers.
 		 *\param[in]	smDirectionalResult	The directional lights shadow map.
 		 *\param[in]	smPointResult		The point lights shadow map.
 		 *\param[in]	smSpotResult		The spot lights shadow map.
 		 *\param[in]	lpResult			The lighting pass result.
+		 *\param[in]	targetColourResult	The image for which this pass runs.
 		 *\param[in]	sceneUbo			The scene UBO.
 		 *\param[in]	gpInfoUbo			The GBuffer configuration UBO.
 		 *\~french
 		 *\brief		Initialise les données liées au deferred rendering.
 		 *\param[in]	graph				Le render graph.
-		 *\param[in]	previousPass		La frame pass précédente.
+		 *\param[in]	previousPasses		Les frame passes précédentes.
 		 *\param[in]	device				Le device GPU.
 		 *\param[in]	progress			La barre de progression.
 		 *\param[in]	scene				La scène.
 		 *\param[in]	depth				La texxture de profondeur.
+		 *\param[in]	depthObj			La texture de profondeurs et d'objets.
 		 *\param[in]	gpResult			Les textures de la passe de géométries.
 		 *\param[in]	smDirectionalResult	La shadow map des source lumineuses directionnelles.
 		 *\param[in]	smPointResult		La shadow map des source lumineuses omnidirectionnelles.
 		 *\param[in]	smSpotResult		La shadow map des source lumineuses projecteurs.
 		 *\param[in]	lpResult			Le résulta de la lighting pass.
+		 *\param[in]	targetColourResult	L'image pour laquelle cette passe fait son rendu.
 		 *\param[in]	sceneUbo			L'UBO de scène.
 		 *\param[in]	gpInfoUbo			L'UBO de configuration du GBuffer.
 		 */

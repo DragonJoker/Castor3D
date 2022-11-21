@@ -3,6 +3,31 @@ Change log	{#changelog}
 
 This page is here to inform about the changes since the earliest versions of the engine.
 
+## Version 0.14.0
+
+### Important Changes
+- Allowed to change Castor3D engine length unit.
+- Allowed background passes customisation.
+- Added support for multi-pass blending.
+- Full rework of Pass, introducing PassComponent to improve flexibility.
+- Implemented full support of glTF material specification and extensions.
+
+### New features
+
+#### Generic
+- Implemented atmosphere scattering from [Scalable and Production Ready Sky and Atmosphere Rendering Technique](https://sebh.github.io/publications/egsr2020.pdf).
+- Implemented an ugly form of clouds.
+
+#### Generators
+- Improved DiamondSquareTerrain, adding island mode and support for biomes.
+
+#### Importers
+- Improved AssimpImporter regarding glTF materials.
+- Removed PlyImporter plugin.
+
+#### PostEffects
+- Implemented PBR bloom, which blooms the whole image.
+
 ## Version 0.13.0
 
 ### Important Changes

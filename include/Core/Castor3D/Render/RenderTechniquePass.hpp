@@ -192,13 +192,13 @@ namespace castor3d
 	public:
 		C3D_API virtual ~RenderTechniquePass() = default;
 		/**
-		 *\copydoc	RenderNodesPass::accept
+		 *\copydoc	RenderTechniqueNodesPass::accept
 		 */
 		C3D_API virtual void accept( RenderTechniqueVisitor & visitor )
 		{
 		}
 		/**
-		 *\copydoc	RenderNodesPass::accept
+		 *\copydoc	RenderNodesPass::update
 		 */
 		C3D_API virtual void update( CpuUpdater & updater )
 		{
@@ -275,6 +275,7 @@ namespace castor3d
 		 *\param[in]	graph				The runnable graph.
 		 *\param[in]	device				The GPU device.
 		 *\param[in]	typeName			The pass type name.
+		 *\param[in]	targetImage			The image this pass renders to.
 		 *\param[in]	renderPassDesc		The scene render pass construction data.
 		 *\param[in]	techniquePassDesc	The technique render pass construction data.
 		 *\~french
@@ -285,6 +286,7 @@ namespace castor3d
 		 *\param[in]	graph				Le runnable graph.
 		 *\param[in]	device				Le device GPU.
 		 *\param[in]	typeName			Le nom du type de la passe.
+		 *\param[in]	targetImage			L'image dans laquelle cette passe fait son rendu.
 		 *\param[in]	renderPassDesc		Les données de construction de passe de rendu de scène.
 		 *\param[in]	techniquePassDesc	Les données de construction de passe de rendu de technique.
 		 */
@@ -300,11 +302,20 @@ namespace castor3d
 
 	public:
 		/**
-		 *\copydoc	RenderNodesPass::accept
-		 */
+		*\~english
+		*\brief
+		*	Visitor acceptance function.
+		*\param visitor
+		*	The ... visitor.
+		*\~french
+		*\brief
+		*	Fonction d'acceptation de visiteur.
+		*\param visitor
+		*	Le ... visiteur.
+		*/
 		C3D_API void accept( RenderTechniqueVisitor & visitor )override;
 		/**
-		 *\copydoc	RenderNodesPass::accept
+		 *\copydoc	RenderNodesPass::update
 		 */
 		C3D_API void update( CpuUpdater & updater )override;
 		/**

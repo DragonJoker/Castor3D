@@ -3,6 +3,31 @@ Suivi de versions	{#changelog}
 
 Cette page sert à informer des évolutions du moteur depuis les premières versions.
 
+## Version 0.14.0
+
+### Important Changes
+- Ajout du support de changement d'unité de longueur du moteur.
+- Ajout de la personnalisation des passes de rendu du fond.
+- Ajout du support de mélange des matériaux multi-passes.
+- Refonte complète de Pass, en introduisant des PassComponent, pour une meilleur flexibilité.
+- Implémentation du support complet des matériaux glTF et de leurs extensions.
+
+### New features
+
+#### Generic
+- Implémentation d'atmosphere scattering depluis [Scalable and Production Ready Sky and Atmosphere Rendering Technique](https://sebh.github.io/publications/egsr2020.pdf).
+- Premier jet d'implementation de nuages.
+
+#### Generators
+- Amélioration pour DiamondSquareTerrain, ajout du mode île, et support des biomes.
+
+#### Importers
+- Amélioration d'AssimpImporter par rapport aux matériaux glTF.
+- Suppression du plugin PlyImporter.
+
+#### PostEffects
+- Implémentation du PBR Bloom, effectuant un bloom sur l'image complète.
+
 ## Version 0.13.0
 
 ### Important Changes

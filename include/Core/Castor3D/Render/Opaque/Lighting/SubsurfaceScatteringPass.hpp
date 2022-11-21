@@ -32,6 +32,7 @@ namespace castor3d
 		 *\param[in]	scene			The scene.
 		 *\param[in]	gpInfoUbo		The geometry pass UBO.
 		 *\param[in]	sceneUbo		The scene UBO.
+		 *\param[in]	depthObj		The depths and objects image.
 		 *\param[in]	gpResult		The geometry pass result.
 		 *\param[in]	lpResult		The light pass result.
 		 *\~french
@@ -43,6 +44,7 @@ namespace castor3d
 		 *\param[in]	scene			La scène.
 		 *\param[in]	gpInfoUbo		L'UBO de la passe géométrique.
 		 *\param[in]	sceneUbo		L'UBO de la scène.
+		 *\param[in]	depthObj		La texture de profondeurs et d'objets.
 		 *\param[in]	gpResult		Le résultat de la geometry pass.
 		 *\param[in]	lpResult		Le résultat de la light pass.
 		 */

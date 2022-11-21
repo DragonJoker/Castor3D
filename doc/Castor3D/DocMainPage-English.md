@@ -1,11 +1,11 @@
 Castor3D	{#mainpage}
 ========
 
-Castor3D is a 3D engine written in C++ 17.
+Castor3D is a 3D engine written in C++ 20.
 
 It works on Windows and GNU/Linux.
 
-It relies on Ashes as a rendering API, allowing Vulkan, Direct3D 11, and OpenGL.
+It relies on Vulkan as a rendering API.
 
 The project itself is compilable on supported platforms using CMake (cf. [build](Build-English.md)).
 
@@ -31,19 +31,13 @@ The project itself is compilable on supported platforms using CMake (cf. [build]
 - Shaders are generated automatically from pipeline configuration.
 - Shaders are writable directly from C++ code.
 - Scenes are described using a text format easily comprehensible and extensible. ([Scene File](SceneFile-English.md))
-- Asynchronous (timers) or synchronour (thread) rendering.
+- Synchronous (user defined) or asynchronous (thread) rendering.
 - Using Mesh and Task shaders, if available.
 
 ## Implemented Plug-ins
 
 ### Importers
 - ASSIMP: Multiple format mesh importer.
-- PLY: Stanford Polygon library mesh importer.
-
-### Dividers
-- Loop subdivision surfaces.
-- Phong tessellation.
-- PN-Triangles surfaces.
 
 ### PostEffects
 - Bloom : HDR Bloom implementation.
@@ -60,7 +54,7 @@ The project itself is compilable on supported platforms using CMake (cf. [build]
 - DiamondSquareTerrain : to generate terrains inside Castor3D scenes, using diamond-quare algorithm.
 
 ### Generic
-- DiamondSquareTerrain: to generate terrains inside Castor3D scenes, using diamond-quare algorithm.
+- CastorGUI: to build GUIs inside Castor3D scenes.
 - ToonMaterial: A toon material (to be combined with DrawEdges plugin).
 - FFTOceanRendering: Ocean rendering using FFT generated surfaces.
 - OceanRendering: Basic ocean rendering, specifying waves attributes.

@@ -19,7 +19,9 @@ namespace castor3d
 		 *\param[in]	graph					The frame graph.
 		 *\param[in]	device					The GPU device.
 		 *\param[in]	progress				The progress bar.
+		 *\param[in]	enabled					The pass' enabled status.
 		 *\param[in]	transparentPassDesc		The transparent nodes render pass.
+		 *\param[in]	depth					The scene depth image.
 		 *\param[in]	transparentPassResult	The Weighted Blended OIT result.
 		 *\param[in]	targetColourView		The target colour buffer.
 		 *\param[in]	size					The render dimensions.
@@ -31,7 +33,9 @@ namespace castor3d
 		 *\param[in]	graph					Le frame graph.
 		 *\param[in]	device					Le device GPU.
 		 *\param[in]	progress				La barre de progression.
+		 *\param[in]	enabled					L'état d'activation de la passe.
 		 *\param[in]	transparentPassDesc		La passe de rendu des noeuds transparents.
+		 *\param[in]	depth					L'image de profondeur de la scène.
 		 *\param[in]	transparentPassResult	Le résultat du Weighted Blended OIT.
 		 *\param[in]	targetColourView		Le tampon de couleurs cible.
 		 *\param[in]	size					Les dimensions du rendu.

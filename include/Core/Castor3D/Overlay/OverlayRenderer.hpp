@@ -110,10 +110,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Begins the overlays preparation.
+		 *\param[in]	device		The render device.
 		 *\param[in]	renderPass	The render pass.
 		 *\param[in]	framebuffer	The framebuffer receiving the result.
 		 *\~french
 		 *\brief		Commence la préparation des incrustations.
+		 *\param[in]	device		Le périphérique de rendu.
 		 *\param[in]	renderPass	La passe de rendu.
 		 *\param[in]	framebuffer	Le framebuffer recevant le résultat.
 		 */

@@ -45,18 +45,16 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	graph					The render graph.
+		 *\param[in]	previousPasses			The passes this pass depends on.
 		 *\param[in]	device					The GPU device.
 		 *\param[in]	progress				The progress bar.
-		 *\param[in]	previousPass			The previous frame pass.
 		 *\param[in]	scene					The rendered scene.
+		 *\param[in]	depthObj				The depths and objects texture.
 		 *\param[in]	gp						The geometry pass result.
 		 *\param[in]	ssao					The SSAO configuration.
 		 *\param[in]	ssaoResult				The SSAO image.
 		 *\param[in]	subsurfaceScattering	The subsurface scattering result.
-		 *\param[in]	lightDiffuse			The diffuse result of the lighting pass.
-		 *\param[in]	lightSpecular			The specular result of the lighting pass.
-		 *\param[in]	lightIndirectDiffuse	The indirect diffuse result of the lighting pass.
-		 *\param[in]	lightIndirectSpecular	The indirect specular result of the lighting pass.
+		 *\param[in]	lighting				The lighting pass result.
 		 *\param[in]	result					The texture receiving the result.
 		 *\param[in]	sceneUbo				The scene UBO.
 		 *\param[in]	gpInfoUbo				The geometry pass UBO.
@@ -64,18 +62,16 @@ namespace castor3d
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	graph					Le render graph.
+		 *\param[in]	previousPasses			Les passes dont celle-ci dépend.
 		 *\param[in]	device					Le device GPU.
 		 *\param[in]	progress				La barre de progression.
-		 *\param[in]	previousPass			La frame pass précédente.
 		 *\param[in]	scene					La scène rendue.
+		 *\param[in]	depthObj				La texture de profondeurs et d'objets.
 		 *\param[in]	gp						Le résultat de la passe géométrique.
 		 *\param[in]	ssao					La configuration du SSAO.
 		 *\param[in]	ssaoResult				L'image SSAO.
 		 *\param[in]	subsurfaceScattering	Le résultat du subsurface scattering.
-		 *\param[in]	lightDiffuse			Le résultat diffus de la passe d'éclairage.
-		 *\param[in]	lightSpecular			Le résultat spéculaire de la passe d'éclairage.
-		 *\param[in]	lightIndirectDiffuse	Le résultat indirect diffus de la passe d'éclairage.
-		 *\param[in]	lightIndirectSpecular	Le résultat indirect spéculaire de la passe d'éclairage.
+		 *\param[in]	lighting				Le résultat de la passe d'éclairage.
 		 *\param[in]	result					La texture recevant le résultat.
 		 *\param[in]	sceneUbo				L'UBO de la scène.
 		 *\param[in]	gpInfoUbo				L'UBO de la passe géométrique.

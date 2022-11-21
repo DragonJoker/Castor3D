@@ -41,7 +41,7 @@ namespace castor3d
 		C3D_API SubmeshComponentSPtr clone( Submesh & submesh )const override;
 		/**
 		 *\~english
-		 *\brief		adds bone datas.
+		 *\brief		Adds bone datas.
 		 *\param[in]	begin	The bones data begin.
 		 *\param[in]	end		The bones data end.
 		 *\~french
@@ -53,20 +53,20 @@ namespace castor3d
 			, PassMasks const * const end );
 		/**
 		 *\~english
-		 *\brief		adds bone datas.
-		 *\param[in]	boneData	The bone datas.
+		 *\brief		Adds masks datas.
+		 *\param[in]	data	The masks.
 		 *\~french
-		 *\brief		Ajoute des données de bones.
-		 *\param[in]	boneData	Les données de bones.
+		 *\brief		Ajoute des données de masques.
+		 *\param[in]	data	Les données de masques.
 		 */
 		C3D_API void addDatas( std::vector< PassMasks > const & data );
 		/**
 		 *\~english
-		 *\brief		adds bone datas.
-		 *\param[in]	boneData	The bone datas.
+		 *\brief		Adds masks datas.
+		 *\param[in]	data	The masks datas.
 		 *\~french
-		 *\brief		Ajoute des données de bones.
-		 *\param[in]	boneData	Les données de bones.
+		 *\brief		Ajoute des données de masques.
+		 *\param[in]	data	Les données de masques.
 		 */
 		template< size_t Count >
 		void addDatas( std::array< PassMasks, Count > const & data )

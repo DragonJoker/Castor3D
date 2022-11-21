@@ -43,17 +43,23 @@ namespace castor3d
 		 *\param[in]	parent			The parent technique.
 		 *\param[in]	device			The GPU device.
 		 *\param[in]	queueData		The queue receiving the GPU commands.
-		 *\param[in]	parameters		The technique parameters.
+		 *\param[in]	previous		The prepass renderer.
+		 *\param[in]	previousPasses	The passes this pass depends on.
 		 *\param[in]	ssaoConfig		The SSAO configuration.
 		 *\param[in]	progress		The optional progress bar.
+		 *\param[in]	normal			The scene normals map.
+		 *\param[in]	deferred		\p true to enable deferred rendering.
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	parent			La technique parente.
 		 *\param[in]	device			Le device GPU.
 		 *\param[in]	queueData		La queue recevant les commandes GPU.
-		 *\param[in]	parameters		Les paramètres de la technique.
+		 *\param[in]	previous		Le renderer de prépasse.
+		 *\param[in]	previousPasses	Les passes dont celle-ci dépend.
 		 *\param[in]	ssaoConfig		La configuration du SSAO.
 		 *\param[in]	progress		La barre de progression optionnelle.
+		 *\param[in]	normal			La texture de normales de la scène.
+		 *\param[in]	deferred		\p true pour activer le deferred rendering.
 		 */
 		C3D_API OpaqueRendering( RenderTechnique & parent
 			, RenderDevice const & device

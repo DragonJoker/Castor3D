@@ -24,6 +24,7 @@ namespace castor3d
 		 *\param		device			The GPU device.
 		 *\param[in]	ssaoConfig		The SSAO configuration.
 		 *\param[in]	renderPassDesc	The render pass description.
+		 *\param[in]	deferred		\p true if the opaque pass is using deferred rendering.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	parent			La technique parente.
@@ -33,6 +34,7 @@ namespace castor3d
 		 *\param[in]	device			Le device GPU.
 		 *\param[in]	ssaoConfig		La configuration du SSAO.
 		 *\param[in]	renderPassDesc	La description de la passe de rendu.
+		 *\param[in]	deferred		\p true si la passe opaque utilise le deferred rendering.
 		 */
 		C3D_API DepthPass( RenderTechnique * parent
 			, crg::FramePass const & pass
@@ -43,11 +45,11 @@ namespace castor3d
 			, RenderNodesPassDesc const & renderPassDesc
 			, bool deferred );
 		/**
-		 *\copydoc		castor3d::RenderTechniquePass::getComponentsMask
+		 *\copydoc		castor3d::RenderNodesPass::getComponentsMask
 		 */
 		C3D_API ComponentModeFlags getComponentsMask()const override;
 		/**
-		 *\copydoc		castor3d::RenderTechniquePass::getShaderFlags
+		 *\copydoc		castor3d::RenderNodesPass::getShaderFlags
 		 */
 		C3D_API ShaderFlags getShaderFlags()const override;
 

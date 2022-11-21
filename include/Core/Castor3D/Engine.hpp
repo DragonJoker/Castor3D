@@ -425,14 +425,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief			Addw the pass' specific data buffer into the given descriptor layout bindings array.
-		 *\param[in,out]	descriptorWrites	Receives the buffers descriptor layout bindings.
-		 *\param[in]		shaderStages		The shader stage flags.
-		 *\param[in,out]	index				The binding index.
+		 *\param[in,out]	bindings		Receives the buffers descriptor layout bindings.
+		 *\param[in]		shaderStages	The shader stage flags.
+		 *\param[in,out]	index			The binding index.
 		 *\~french
 		 *\brief			Ecrit les shader buffers de données spécifiques dans le tableau de descriptor layout bindings donné.
-		 *\param[in,out]	descriptorWrites	Reçoit les descriptor layout bindings des buffers.
-		 *\param[in]		shaderStages		Les indicateurs de shader stage.
-		 *\param[in,out]	index				L'indice de binding.
+		 *\param[in,out]	bindings		Reçoit les descriptor layout bindings des buffers.
+		 *\param[in]		shaderStages	Les indicateurs de shader stage.
+		 *\param[in,out]	index			L'indice de binding.
 		 */
 		C3D_API void addSpecificsBuffersBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
 			, VkShaderStageFlags shaderStages
@@ -482,12 +482,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Registers a pass component.
-		 *\param[in]	type	The component type name.
-		 *\param[in]	data	The component's specific functions.
+		 *\param[in]	type			The component type name.
+		 *\param[in]	componentPlugin	The component's specific functions.
 		 *\~french
 		 *\brief		Enregistre un composant de passe.
-		 *\param[in]	type	Le nom du type de composant.
-		 *\param[in]	data	Les fonctions spécifiques du composant.
+		 *\param[in]	type			Le nom du type de composant.
+		 *\param[in]	componentPlugin	Les fonctions spécifiques du composant.
 		 */
 		C3D_API PassComponentID registerPassComponent( castor::String const & type
 			, PassComponentPluginUPtr componentPlugin );

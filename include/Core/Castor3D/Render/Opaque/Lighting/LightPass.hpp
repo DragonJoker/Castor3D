@@ -27,21 +27,21 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source for a light type.
-		 *\param[in]	passType		The material pass type ID.
-		 *\param[in]	renderSystem	The render system.
-		 *\param[in]	sceneFlags		The scene flags.
-		 *\param[in]	lightType		The light source type.
-		 *\param[in]	shadowType		The shadow type.
-		 *\param[in]	shadows			Tells if shadows are used.
+		 *\param[in]	scene		The scene.
+		 *\param[in]	sceneFlags	The scene flags.
+		 *\param[in]	lightType	The light source type.
+		 *\param[in]	shadowType	The shadow type.
+		 *\param[in]	shadows		Tells if shadows are used.
+		 *\param[in]	targetSize	The target image size.
 		 *\return		The source.
 		 *\~french
 		 *\brief		Récupère le source du fragment shader pour un type de source lumineuse.
-		 *\param[in]	passType		L'ID du type de material pass.
-		 *\param[in]	renderSystem	Le render system.
-		 *\param[in]	sceneFlags		Les indicateurs de scène.
-		 *\param[in]	lightType		Le type de source lumineuse.
-		 *\param[in]	shadowType		Le type d'ombres.
-		 *\param[in]	shadows			Dit si les ombres sont utilisées.
+		 *\param[in]	scene		La scène.
+		 *\param[in]	sceneFlags	Les indicateurs de scène.
+		 *\param[in]	lightType	Le type de source lumineuse.
+		 *\param[in]	shadowType	Le type d'ombres.
+		 *\param[in]	shadows		Dit si les ombres sont utilisées.
+		 *\param[in]	targetSize	Les dimensions de l'image cible.
 		 *\return		Le source.
 		 */
 		static ShaderPtr getPixelShaderSource( Scene const & scene

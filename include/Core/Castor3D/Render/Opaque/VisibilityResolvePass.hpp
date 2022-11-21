@@ -23,18 +23,30 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	parent	The parent technique.
-		 *\param[in]	pass	The parent frame pass.
-		 *\param[in]	context	The rendering context.
-		 *\param[in]	graph	The runnable graph.
-		 *\param[in]	device	The GPU device.
+		 *\param[in]	parent				The parent technique.
+		 *\param[in]	pass				The parent frame pass.
+		 *\param[in]	context				The rendering context.
+		 *\param[in]	graph				The runnable graph.
+		 *\param[in]	device				The GPU device.
+		 *\param[in]	category			The pass category name.
+		 *\param[in]	name				The pass name.
+		 *\param[in]	nodesPass			The visibility nodes pass.
+		 *\param[in]	pipelinesIds		The pipelines IDs buffer.
+		 *\param[in]	renderPassDesc		The scene render pass construction data.
+		 *\param[in]	techniquePassDesc	The technique render pass construction data.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	parent	La technique parente.
-		 *\param[in]	pass	La frame pass parente.
-		 *\param[in]	context	Le contexte de rendu.
-		 *\param[in]	graph	Le runnable graph.
-		 *\param[in]	device	Le device GPU.
+		 *\param[in]	parent				La technique parente.
+		 *\param[in]	pass				La frame pass parente.
+		 *\param[in]	context				Le contexte de rendu.
+		 *\param[in]	graph				Le runnable graph.
+		 *\param[in]	device				Le device GPU.
+		 *\param[in]	category			Le nom de la catégorie de la passe.
+		 *\param[in]	name				Le nom de la passe.
+		 *\param[in]	nodesPass			La passe de visibilité des noeuds.
+		 *\param[in]	pipelinesIds		Le buffer de pipeline IDs.
+		 *\param[in]	renderPassDesc		Les données de construction de passe de rendu de scène.
+		 *\param[in]	techniquePassDesc	Les données de construction de passe de rendu de technique.
 		 */
 		C3D_API VisibilityResolvePass( RenderTechnique * parent
 			, crg::FramePass const & pass
@@ -52,7 +64,7 @@ namespace castor3d
 		 */
 		C3D_API void accept( RenderTechniqueVisitor & visitor )override;
 		/**
-		 *\copydoc		castor3d::RenderTechniquePass::accept
+		 *\copydoc		castor3d::RenderTechniquePass::update
 		 */
 		C3D_API void update( CpuUpdater & updater )override;
 		/**
@@ -78,11 +90,11 @@ namespace castor3d
 		 */
 		C3D_API bool areValidPassFlags( PassComponentCombine const & passFlags )const override;
 		/**
-		 *\copydoc		castor3d::RenderTechniquePass::getShaderFlags
+		 *\copydoc		castor3d::RenderNodesPass::getShaderFlags
 		 */
 		C3D_API ShaderFlags getShaderFlags()const override;
 		/**
-		 *\copydoc		castor3d::RenderTechniquePass::getComponentsMask
+		 *\copydoc		castor3d::RenderNodesPass::getComponentsMask
 		 */
 		C3D_API static ComponentModeFlags getComponentsMask();
 

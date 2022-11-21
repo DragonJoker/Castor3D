@@ -28,7 +28,6 @@ namespace castor3d
 		 *\param[in]	prefix			The pass name prefix.
 		 *\param[in]	scene			The rendered scene.
 		 *\param[in]	camera			The camera viewing the scene.
-		 *\param[in]	matrixUbo		The scene matrices UBO.
 		 *\param[in]	voxelizerUbo	The voxelizer configuration UBO.
 		 *\param[in]	voxelConfig		The voxelizer configuration.
 		 *\~french
@@ -39,7 +38,6 @@ namespace castor3d
 		 *\param[in]	prefix			Le préfixe du nom de la passe.
 		 *\param[in]	scene			La scène rendue.
 		 *\param[in]	camera			La caméra regardant la scène.
-		 *\param[in]	matrixUbo		L'UBO de matrices de la scène.
 		 *\param[in]	voxelizerUbo	L'UBO de configuration du voxelizer.
 		 *\param[in]	voxelConfig		La configuration du voxelizer.
 		 */

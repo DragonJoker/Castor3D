@@ -51,6 +51,9 @@ namespace castor3d
 		 *\param[in]	parameters		The technique parameters.
 		 *\param[in]	ssaoConfig		The SSAO configuration.
 		 *\param[in]	progress		The optional progress bar.
+		 *\param[in]	deferred		\p true to enable deferred rendering.
+		 *\param[in]	visbuffer		\p true to enable visibility buffer.
+		 *\param[in]	weightedBlended	\p true to enable weighted blended rendering.
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	name			Le nom de la technique.
@@ -60,6 +63,9 @@ namespace castor3d
 		 *\param[in]	parameters		Les paramètres de la technique.
 		 *\param[in]	ssaoConfig		La configuration du SSAO.
 		 *\param[in]	progress		La barre de progression optionnelle.
+		 *\param[in]	deferred		\p true pour activer le deferred rendering.
+		 *\param[in]	visbuffer		\p true pour activer le visibility buffer.
+		 *\param[in]	weightedBlended	\p true pour activer le weighed blended rendering.
 		 */
 		C3D_API RenderTechnique( castor::String const & name
 			, RenderTarget & renderTarget

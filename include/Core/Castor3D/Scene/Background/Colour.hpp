@@ -100,20 +100,11 @@ namespace castor3d
 		void doCleanup()override;
 		void doCpuUpdate( CpuUpdater & updater )const override;
 		void doGpuUpdate( GpuUpdater & updater )const override;
-		/**
-		*\copydoc	castor3d::SceneBackground::write
-		*/
 		void doAddPassBindings( crg::FramePass & pass
 			, crg::ImageData const & targetImage
 			, uint32_t & index )const override;
-		/**
-		*\copydoc	castor3d::SceneBackground::write
-		*/
 		void doAddBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
 			, uint32_t & index )const override;
-		/**
-		*\copydoc	castor3d::SceneBackground::write
-		*/
 		void doAddDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
 			, crg::ImageData const & targetImage
 			, uint32_t & index )const override;

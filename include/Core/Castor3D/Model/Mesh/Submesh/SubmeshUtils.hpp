@@ -38,7 +38,7 @@ namespace castor3d
 		 *\param[in]	texcoords	The vertices texture coordinates.
 		 *\param[out]	normals		The vertices normals.
 		 *\param[out]	tangents	The vertices tangents.
-		 *\param[in]	faces		The triangles.
+		 *\param[in]	triFace		The triangles.
 		 *\param[in]	reverted	Tells if the normals must be inverted.
 		 *\~french
 		 *\brief		Génère les normales et les tangentes.
@@ -46,7 +46,7 @@ namespace castor3d
 		 *\param[in]	texcoords	Les coordonnées de texture des sommets.
 		 *\param[out]	normals		Les normales des sommets.
 		 *\param[out]	tangents	Les tangentes des sommets.
-		 *\param[in]	faces		Les triangles.
+		 *\param[in]	triFace		Les triangles.
 		 *\param[in]	reverted	Dit si les normales doivent être inversées.
 		 */
 		C3D_API static void computeNormals( castor::Point3fArray const & positions

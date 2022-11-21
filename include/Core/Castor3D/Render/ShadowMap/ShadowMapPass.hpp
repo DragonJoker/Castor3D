@@ -72,7 +72,7 @@ namespace castor3d
 			return !m_outOfDate;
 		}
 		/**
-		 *\copydoc		castor3d::RenderTechniquePass::getComponentsMask
+		 *\copydoc		castor3d::RenderNodesPass::getComponentsMask
 		 */
 		ComponentModeFlags getComponentsMask()const override
 		{
@@ -82,7 +82,7 @@ namespace castor3d
 				| ( m_needsRsm ? ComponentModeFlag::eColour : ComponentModeFlag::eNone );
 		}
 		/**
-		 *\copydoc		castor3d::RenderTechniquePass::getShaderFlags
+		 *\copydoc		castor3d::RenderNodesPass::getShaderFlags
 		 */
 		ShaderFlags getShaderFlags()const override
 		{
