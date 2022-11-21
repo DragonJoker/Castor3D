@@ -169,28 +169,62 @@ Les matériaux pouvant être multi-passes, il est possible de définir plusieurs
 
 ### Section pass
 
-- **diffuse** : *couleur_rvb*  
-  Définit la couleur diffuse de cette passe (matériaux phong uniquement).
-- **albedo** : *couleur_rvb*  
-  Defines la couleur d’albédo de cette passe (non disponible pour les matériaux phong).
+- **colour_srgb** : *couleur_rvb*  
+  Définit la couleur .
+- **colour_hdr** : *couleur_hdr_rvb*  
+  Defines la couleur.
 - **specular** : *couleur_rvb*  
-  Définit la couleur réfléchie par cette passe (non disponible pour les matériaux metallic/roughness).
+  Définit la couleur de réflexion spéculaire.
 - **metallic** : *réel (entre 0 et 1)*  
-  Definit la metallitude de cette pass (matériaux metallic/roughness uniquement).
+  Definit la metalness.
 - **shininess** : *réel (entre 0 et 128)*  
-  Définit la façon dont la lumière est réfléchie (matériaux phong uniquement).
+  Définit la façon dont l'exposant spéculaire.
 - **glossiness** : *réel (entre 0 et 1)*  
-  Définit l’éclat de la surface (matériaux specular/glossiness materials uniquement).
+  Définit l’éclat de la surface.
 - **roughness** : *réel (entre 0 et 1)*  
-  Définit la rugosité de la surface (matériaux metallic/roughness uniquement).
-- **ambient** : *réel (entre 0 et 1)*  
-  Définit la couleur ambiante de cette passe (matériaux phong seulement).
-- **emissive** : *réel (entre 0 et 1)*  
-  Définit la couleur émise par cette passe.
-- **alpha** : *réel (entre 0 et 1)*  
-  Définit la valeur d’alpha des couleurs du material.
+  Définit la rugosité de la surface.
+- **emissive_colour** : *couleur_rvb*  
+  Définit la couleur émise.
+- **emissive_factor** : *réel (entre 0 et 1)*  
+  Définit le facteur d'émission.
+- **attenuation_colour** : *rgb_colour*  
+  Définit la couleur d'atténuation.
+- **attenuation_distance** : *real*  
+  Définit la distance d'atténuation.
+- **thickness_factor** : *real*  
+  Définit le facteur d'épaisseur.
+- **transmission** : *real*  
+  Définit le facteur de transmission.
+- **clearcoat_factor** : *real*  
+  Définit le facteur de clearcoat.
+- **clearcoat_roughness_factor** : *real*  
+  Définit la rugosité de clearcoat.
+- **iridescence_factor** : *real*  
+  Définit le facteur d'iridescence.
+- **iridescence_ior** : *real*  
+  Définit l'indice de réfraction de la couche d'iridescence.
+- **iridescence_min_thickness** : *real*  
+  Définit l'épaisseur maximale de la couche d'iridescence.
+- **iridescence_max_thickness** : *real*  
+  Définit l'épaisseur minimale de la couche d'iridescence.
+- **sheen_colour** : *real*  
+  Définit la couleur de la couche de sheen.
+- **sheen_roughness** : *real*  
+  Définit la rugosité de la couche de sheen.
+- **opacity** : *réel (entre 0 et 1)*  
+  Définit l'opacité.
 - **two_sided** : *booléen*  
-  Définit si le material est double face (true) ou pas (false).
+  Définit si la passe est double face (défaut à false).
+- **reflections** : *boolean*  
+  Active les  réflexions (défaut à false).  
+- **fractal** : *boolean*  
+  Active le fractal UV mapping (défaut à false).  
+- **untile** : *boolean*  
+  Active l'untiled UV mapping (défaut à false).  
+- **lighting** : *boolean*  
+  Active l'éclairage (défaut à true).  
+- **pickable** : *boolean*  
+  Active le picking (défaut à true).  
 - **texture_unit** : *section*  
   Définit une nouvelle section concernant une texture.
 - **alpha_blend_mode** : *valeur*  
@@ -226,17 +260,16 @@ Les matériaux pouvant être multi-passes, il est possible de définir plusieurs
 - **mixed_interpolation** : *section*  
   Helper définissant **alpha_blend_mode** à *interpolative*, **blend_alpha_func** à *less_or_equal* et **alpha_func** à *greater* avec une valeur de référence à 0.95.
 - **refraction_ratio** : *réel*  
-  Définit le ratio de réfraction de la passe. Notez que même s’il n’y a pas de refraction map, la réfraction sera appliquée tout de même, en utilisant seulement la skybox.
+  Définit l'indice de réfraction. Notez que même s’il n’y a pas de refraction map, la réfraction sera appliquée tout de même, en utilisant seulement la skybox.
 - **subsurface_scattering** : *section*  
-  Définit une nouvelle section décrivant le subsurface scattering pour cette passe.
-- **parallax_occlusion** : *booléen*  
-  Active ou désactive le parallax occlusion mapping (nécessite une normal map et une height map).
+  Définit une nouvelle section décrivant le subsurface scattering.
+- **parallax_occlusion** : *valeur*  
+  Active ou désactive le parallax occlusion mapping (nécessite une normal map et une height map), les valeurs possibles sont :
+  - *none* : Désactivé.
+  - *one* : Pas de tiling.
+  - *repeat* : Tiling répété.
 - **bw_accumulation** : *entier compris entre 0 et 5*  
   Définit la fonction d'accumulation, pour le blended weighted rendering.
-- **reflections** :  
-  Active les réflexions.
-- **refractions** :  
-  Active la réfraction.
 
 #### Section texture_unit
 
@@ -264,35 +297,53 @@ Les matériaux pouvant être multi-passes, il est possible de définir plusieurs
 - **level_count** : *entier*
   Définit le nombre maximal de mip levels.
 - **diffuse_mask** : *masque_3*  
-  Définit les composantes de la texture utilisées pour la couleur diffuse (Phong uniquement).
+  Définit les composantes de la texture utilisées pour la couleur.
 - **albedo_mask** : *masque_3*  
-  Définit les composantes de la texture utilisées pour la couleur de base (PBR uniquement).
+  Définit les composantes de la texture utilisées pour la couleur.
 - **specular_mask** : *masque_3*  
-  Définit les composantes de la texture utilisées pour la couleur spéculaire (Phong ou PBR Specular/Glossiness).
+  Définit les composantes de la texture utilisées pour la couleur de réflexion spéculaire.
 - **metalness_mask** : *masque_1*  
-  Définit la composante de la texture utilisée pour le facteur métallique (PBR Metallic/Roughness uniquement).
+  Définit la composante de la texture utilisée pour le facteur métallique.
 - **shininess_mask** : *masque_1*  
-  Définit la composante de la texture utilisée pour l'exposant spéculaire (Phong uniquement).
+  Définit la composante de la texture utilisée pour l'exposant spéculaire.
 - **glossiness_mask** : *masque_1*  
-  Définit la composante de la texture utilisée pour le facteur de glossiness (PBR Specular/Glossiness uniquement).
+  Définit la composante de la texture utilisée pour le facteur de glossiness.
 - **roughness_mask** : *masque_1*  
-  Définit la composante de la texture utilisée pour le facteur de roughness (PBR Metallic/Roughness uniquement).
-- **opacity** : *masque_1*  
+  Définit la composante de la texture utilisée pour le facteur de roughness.
+- **opacity_mask** : *masque_1*  
   Définit la composante de la texture utilisée pour le facteur d'opacité.
-- **emissive** : *masque_3*  
+- **emissive_mask** : *masque_3*  
   Définit les composantes de la texture utilisées pour la couleur émissive.
-- **transmittance** : *masque_1*  
-  Définit la composante de la texture utilisée pour le facteur de transmittance (pour le subsurface scattering.
-- **occlusion** : *masque_1*  
+- **transmittance_mask** : *masque_1*  
+  Définit la composante de la texture utilisée pour le facteur de transmittance (pour le subsurface scattering).
+- **occlusion_mask** : *masque_1*  
   Définit la composante de la texture utilisée pour le facteur d'occlusion.
-- **normal** : *masque_3*  
+- **normal_mask** : *masque_3*  
   Définit les composantes de la texture utilisées pour les normales.
 - **normal_directx** : *booléen*  
   Dit si les normales de la texture sont exprimées pour DirectX (la composante verte sera alors inversée).
-- **height** : *masque_1*  
+- **height_mask** : *masque_1*  
   Définit la composante de la texture utilisée pour la hauteur.
 - **height_factor** : *réel*  
   Définit le facteur de hauteur.
+- **thickness_mask** : *mask_1*  
+  Définit la composante de la texture utilisée pour le facteur d'épaisseur.
+- **transmission_mask** : *mask_1*  
+  Définit la composante de la texture utilisée pour le facteur de transmission.
+- **clearcoat_normal_mask** : *mask_3*  
+  Définit la composante de la texture utilisée pour la normal map de la couche de clearcoat.
+- **clearcoat_mask** : *mask_1*  
+  Définit la composante de la texture utilisée pour le facteur de clearcoat.
+- **clearcoat_roughness_mask** : *mask_1*  
+  Définit la composante de la texture utilisée pour le facteur de rugosité de la couche de clearcoat.
+- **iridescence_mask** : *mask_1*  
+  Définit la composante de la texture utilisée pour le facteur d'iridescence.
+- **iridescence_thickness_mask** : *mask_1*  
+  Définit la composante de la texture utilisée pour le facteur d'épaisseur de la couche d'iridescence.
+- **sheen_mask** : *mask_3*  
+  Définit la composante de la texture utilisée pour la couleur de la couche de sheen.
+- **sheen_roughness_mask** : *mask_1*  
+  Définit la composante de la texture utilisée pour la rugosité de la couche de sheen.
 - **invert_y** : *booléen*  
   Définit si l'image doit être inversée sur l'axe Y.
 - **transform** : *section*  

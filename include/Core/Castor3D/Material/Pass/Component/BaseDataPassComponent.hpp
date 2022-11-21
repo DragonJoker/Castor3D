@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_BaseDataPassComponent_H___
@@ -29,7 +29,7 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	pass	Le sous-maillage pass.
 		 *\param[in]	type	Le type de composant.
-		 *\param[in]	params	Les paramètres de construction des données du composant.
+		 *\param[in]	params	Les paramÃ¨tres de construction des donnÃ©es du composant.
 		 */
 		template< typename ... ParamsT >
 		BaseDataPassComponentT( Pass & pass

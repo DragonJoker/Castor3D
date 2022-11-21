@@ -167,28 +167,62 @@ Materials can be multi-pass, so you can declare more than one pass subsection.
 
 ### pass section
 
-- **diffuse** : *rgb_colour*  
-  Defines diffuse colour of the pass (phong materials only).
-- **albedo** : *rgb_colour*  
-  Defines albedo colour of the pass (not available with phong materials).
+- **colour_srgb** : *rgb_colour*  
+  Defines the pass colour.
+- **colour_hdr** : *rgb_hdr_colour*  
+  Defines the pass colour.
 - **specular** : *rgb_colour*  
-  Defines specular colour of the pass (not available with metallic/roughness materials).
-- **metallic** : *real (between 0 and 1)*  
-  Defines the metallness of the pass (metallic/roughness materials only).
+  Defines specular colour.
+- **metalness** : *real (between 0 and 1)*  
+  Defines the metalness.
 - **shininess** : *real (between 0 and 128)*  
-  Defines the specular exponent of the pass (phong materials only).
+  Defines the specular exponent.
 - **glossiness** : *real (between 0 and 1)*  
-  Defines the glossiness of the pass (specular/glossiness materials only).
+  Defines the glossiness.
 - **roughness** : *real (between 0 and 1)*  
-  Defines the roughness of the pass (metallic/roughness materials only).
-- **ambient** : *real (between 0 and 1)*  
-  Defines ambient factor of the pass (phong materials only).
-- **emissive** : *real (between 0 and 1)*  
-  Defines emissive factor of the pass.
-- **alpha** : *real (between 0 and 1)*  
-  Defines the global alpha value for the pass.
+  Defines the roughness.
+- **emissive_colour** : *rgb_colour*  
+  Defines emissive colour.
+- **emissive_factor** : *real*  
+  Defines emissive factor.
+- **attenuation_colour** : *rgb_colour*  
+  Defines the attenuation colour.
+- **attenuation_distance** : *real*  
+  Defines the attenuation distance.
+- **thickness_factor** : *real*  
+  Defines the thickness factor.
+- **transmission** : *real*  
+  Defines the transmission factor.
+- **clearcoat_factor** : *real*  
+  Defines the clearcoat factor.
+- **clearcoat_roughness_factor** : *real*  
+  Defines the clearcoat roughness.
+- **iridescence_factor** : *real*  
+  Defines the iridescence factor.
+- **iridescence_ior** : *real*  
+  Defines the iridescence layer index of refraction.
+- **iridescence_min_thickness** : *real*  
+  Defines the iridescence layer minimum thickness.
+- **iridescence_max_thickness** : *real*  
+  Defines the iridescence layer minimum thickness.
+- **sheen_colour** : *real*  
+  Defines the sheen layer colour.
+- **sheen_roughness** : *real*  
+  Defines the sheen layer roughness.
+- **opacity** : *real (between 0 and 1)*  
+  Defines the opacity factor.
 - **two_sided** : *boolean*  
-  Tells the pass is two sided (true) or not (false).
+  Tells the pass is two sided (default is false).
+- **reflections** : *boolean*  
+  Enables reflections (default is false).  
+- **fractal** : *boolean*  
+  Enables fractal UV mapping (default is false).  
+- **untile** : *boolean*  
+  Enables untiled UV mapping (default is false).  
+- **lighting** : *boolean*  
+  Enables lighting (default is true).  
+- **pickable** : *boolean*  
+  Enables picking (default is true).  
 - **texture_unit** : *section*  
   Defines a new section describing a texture unit.
 - **alpha_blend_mode** : *value*  
@@ -196,11 +230,13 @@ Materials can be multi-pass, so you can declare more than one pass subsection.
   - *none* : No alpha blending.
   - *additive* : Source and destination alpha values are added.
   - *multiplicative* : Source and destination alpha values are multiplied.
+  - *interpolative* : Source and destination alpha values are interpolated.
 - **colour_blend_mode** : *value*  
   Colour blending mode name, can be one of:
   - *none* : No colour blending.
   - *additive* : Source and destination colour values are added.
   - *multiplicative* : Source and destination colour values are multiplied.
+  - *interpolative* : Source and destination colour values are interpolated.
 - **alpha_func** : func : *value* ref-val: *real*  
   Defines the way alpha rejection is applied to the pass. The second parameter is the reference value used in alpha rejection function. The first parameter values can be :
   - *always* : The sample colour is always applied.
@@ -224,17 +260,16 @@ Materials can be multi-pass, so you can declare more than one pass subsection.
 - **mixed_interpolation** : *section*  
   Helper that sets **alpha_blend_mode** to *interpolative*, **blend_alpha_func** to *less_or_equal* and **alpha_func** to *greater* with a ref. value to 0.95.
 - **refraction_ratio** : *real*  
-  Defines the refraction ratio of the pass. Note that if there is no refraction map, the refraction is still applied, using only the skybox.
+  Defines the refraction ratio. Note that if there is no refraction map, the refraction is still applied, using only the skybox.
 - **subsurface_scattering** : *section*  
   Defines a new section describing subsurface scattering for the pass.
-- **parallax_occlusion** : *boolean*  
-  Enables or disables parallax occlusion mapping (needs a normal map and a height map).
+- **parallax_occlusion** : *value*  
+  Enables or disables parallax occlusion mapping (needs a normal map and a height map), can be one of:
+  - *none* : Disabled.
+  - *one* : No tiling.
+  - *repeat* : Repeated tiling.
 - **bw_accumulation** : *int between 0 and 5*  
   Defines the accumulation function, for blended weighted rendering.
-- **reflections** :  
-  Enables reflections.  
-- **refractions** :  
-  Enables refraction.
 
 #### texture_unit section
 
@@ -244,13 +279,13 @@ Materials can be multi-pass, so you can declare more than one pass subsection.
   Defines a new section describing a render target.
 - **channel** : *value {| value}*  
   The channels to which the texture is bound. Can be one of the following :
-  - *diffuse* : Diffuse lighting colour (Phong only).
-  - *albedo* : Base colour (PBR only).
-  - *specular* : Specular colour (Phong and PBR Specular/Glossiness).
-  - *metallic* : Metallic factor (PBR Metallic/Roughness only).
-  - *shininess* : Specular exponent (Phong only).
-  - *glossiness* : Glossiness factor (PBR Specular/Glossiness only).
-  - *roughness* : Roughness factor (PBR Metallic/Roughness only).
+  - *diffuse* : Diffuse lighting colour.
+  - *albedo* : Base colour.
+  - *specular* : Specular colour.
+  - *metallic* : Metallic factor.
+  - *shininess* : Specular exponent.
+  - *glossiness* : Glossiness factor.
+  - *roughness* : Roughness factor.
   - *opacity* : Opacity factor.
   - *emissive* : Emissive colour.
   - *transmittance* : Transmittance factor (for subsurface scattering).
@@ -262,35 +297,55 @@ Materials can be multi-pass, so you can declare more than one pass subsection.
 - **level_count** : *entier*
   Defines the maximum mip levels count.
 - **diffuse_mask** : *mask_3*  
-  Defines the components from the texture used for the diffuse colour (Phong only).
+  Defines the components from the texture used for the colour.
 - **albedo_mask** : *mask_3*  
-  Defines the components from the texture used for the base colour (PBR only).
+  Defines the components from the texture used for the colour.
+- **colour_mask** : *mask_3*  
+  Defines the components from the texture used for the colour.
 - **specular_mask** : *mask_3*  
-  Defines the components from the texture used for the specular colour (Phong or PBR Specular/Glossiness).
+  Defines the components from the texture used for the specular colour.
 - **metalness_mask** : *mask_1*  
-  Defines the component from the texture used for the metallic factor (PBR Metallic/Roughness only).
+  Defines the component from the texture used for the metallic factor
 - **shininess_mask** : *mask_1*  
-  Defines the component from the texture used for the specular exponent (Phong only).
+  Defines the component from the texture used for the specular exponent.
 - **glossiness_mask** : *mask_1*  
-  Defines the component from the texture used for the glossiness factor (PBR Specular/Glossiness only).
+  Defines the component from the texture used for the glossiness factor.
 - **roughness_mask** : *mask_1*  
-  Defines the component from the texture used for the roughness factor (PBR Metallic/Roughness only).
-- **opacity** : *mask_1*  
+  Defines the component from the texture used for the roughness factor.
+- **opacity_mask** : *mask_1*  
   Defines the component from the texture used for the opacity factor.
-- **emissive** : *mask_3*  
+- **emissive_mask** : *mask_3*  
   Defines the components from the texture used for the emissive colour.
-- **transmittance** : *mask_1*  
-  Defines the component from the texture used for the transmittance factor (for subsurface scattering.
-- **occlusion** : *mask_1*  
+- **transmittance_mask** : *mask_1*  
+  Defines the component from the texture used for the transmittance factor (for subsurface scattering).
+- **occlusion_mask** : *mask_1*  
   Defines the component from the texture used for the occlusion factor.
-- **normal** : *mask_3*  
+- **normal_mask** : *mask_3*  
   Defines the components from the texture used for the normals.
 - **normal_directx** : *booléen*  
   Tells if the texture normals are expressed for DirectX (green component will then be inverted).
-- **height** : *mask_1*  
+- **height_mask** : *mask_1*  
   Defines the component from the texture used for the height.
 - **height_factor** : *real*  
   The height factor multiplier.
+- **thickness_mask** : *mask_1*  
+  Defines the component from the texture used for the thickness factor.
+- **transmission_mask** : *mask_1*  
+  Defines the component from the texture used for the transmission factor.
+- **clearcoat_normal_mask** : *mask_3*  
+  Defines the component from the texture used for the clearcoat layer normal map.
+- **clearcoat_mask** : *mask_1*  
+  Defines the component from the texture used for the clearcoat factor.
+- **clearcoat_roughness_mask** : *mask_1*  
+  Defines the component from the texture used for the clearcoat layer roughness factor.
+- **iridescence_mask** : *mask_1*  
+  Defines the component from the texture used for the iridescence factor.
+- **iridescence_thickness_mask** : *mask_1*  
+  Defines the component from the texture used for the iridescence layer thickness factor.
+- **sheen_mask** : *mask_3*  
+  Defines the component from the texture used for the sheen layer colour.
+- **sheen_roughness_mask** : *mask_1*  
+  Defines the component from the texture used for the sheen layer roughness factor.
 - **invert_y** : *boolean*  
   Defines if the image must be inverted along Y axis.
 - **transform** : *section*  
