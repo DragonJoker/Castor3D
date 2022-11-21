@@ -57,7 +57,7 @@ namespace castor3d
 	void PickableComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "pickable" )
 			, tws::parserPassPickable

@@ -146,17 +146,17 @@ namespace castor3d
 	void EmissiveComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "emissive" )
 			, emscmp::parserPassEmissive
 			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "emissive_factor" )
 			, emscmp::parserPassEmissive
 			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "emissive_colour" )
 			, emscmp::parserPassEmissiveColour

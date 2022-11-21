@@ -189,19 +189,19 @@ namespace castor3d
 	void RoughnessComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "roughness" )
 			, rghcmp::parserPassRoughness
 			, { castor::makeParameter< castor::ParameterType::eFloat >() }
 		, "The microfacet roughness factor for the pass" );
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "glossiness" )
 			, rghcmp::parserPassGlossiness
 			, { castor::makeParameter< castor::ParameterType::eFloat >() }
 		, "The specular glossiness (or shininess exponent) for the pass" );
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "shininess" )
 			, rghcmp::parserPassShininess

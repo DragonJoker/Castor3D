@@ -194,17 +194,17 @@ namespace castor3d
 	void OpacityComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "alpha" )
 			, opacmp::parserPassAlpha
 			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "mixed_interpolation" )
 			, opacmp::parserPassMixedInterpolative
 			, { castor::makeParameter< castor::ParameterType::eBool >() } );
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "bw_accumulation" )
 			, opacmp::parserPassBWAccumulationOperator

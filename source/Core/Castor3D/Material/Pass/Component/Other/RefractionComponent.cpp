@@ -128,7 +128,7 @@ namespace castor3d
 	void RefractionComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "refraction_ratio" )
 			, refrcmp::parserPassRefractionRatio

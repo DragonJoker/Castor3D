@@ -706,26 +706,6 @@ namespace castor3d
 		castor::Logger::logError( stream.str() );
 	}
 
-	void Pass::addParser( castor::AttributeParsers & parsers
-		, uint32_t section
-		, castor::String const & name
-		, castor::ParserFunction function
-		, castor::ParserParameterArray array
-		, castor::String comment )
-	{
-		auto nameIt = parsers.find( name );
-
-		if ( nameIt != parsers.end()
-			&& nameIt->second.find( section ) != nameIt->second.end() )
-		{
-			parseError( cuT( "Parser " ) + name + cuT( " for section " ) + castor::string::toString( section ) + cuT( " already exists." ) );
-		}
-		else
-		{
-			parsers[name][section] = { function, std::move( array ), std::move( comment ) };
-		}
-	}
-
 	castor::RgbColour Pass::computeF0( castor::HdrRgbColour const & albedo
 		, float metalness )
 	{

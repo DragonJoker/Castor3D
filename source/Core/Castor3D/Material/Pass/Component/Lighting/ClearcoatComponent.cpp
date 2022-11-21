@@ -194,12 +194,12 @@ namespace castor3d
 	void ClearcoatComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "clearcoat_factor" )
 			, coating::parserPassClearcoatFactor
 			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "clearcoat_roughness_factor" )
 			, coating::parserPassRoughnessFactor

@@ -235,22 +235,22 @@ namespace castor3d
 	void IridescenceComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "iridescence_factor" )
 			, irid::parserPassIridescenceFactor
 			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "iridescence_ior" )
 			, irid::parserPassIridescenceIor
 			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "iridescence_min_thickness" )
 			, irid::parserPassIridescenceMinThickness
 			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "iridescence_max_thickness" )
 			, irid::parserPassIridescenceMaxThickness

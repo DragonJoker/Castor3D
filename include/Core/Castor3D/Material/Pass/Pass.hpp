@@ -330,29 +330,6 @@ namespace castor3d
 		C3D_API void fillConfig( TextureConfiguration & config
 			, PassVisitorBase & vis );
 
-		C3D_API static void addParser( castor::AttributeParsers & parsers
-			, uint32_t section
-			, castor::String const & name
-			, castor::ParserFunction function
-			, castor::ParserParameterArray array = castor::ParserParameterArray{}
-			, castor::String comment = castor::String{} );
-
-		template< typename SectionT >
-		static void addParserT( castor::AttributeParsers & parsers
-			, SectionT section
-			, castor::String const & name
-			, castor::ParserFunction function
-			, castor::ParserParameterArray array = castor::ParserParameterArray{}
-			, castor::String comment = castor::String{} )
-		{
-			addParser( parsers
-				, uint32_t( section )
-				, name
-				, function
-				, std::move( array )
-				, std::move( comment ) );
-		}
-
 		C3D_API static castor::AttributeParsers createParsers( Engine const & engine );
 
 		C3D_API static castor::RgbColour computeF0( castor::HdrRgbColour const & albedo

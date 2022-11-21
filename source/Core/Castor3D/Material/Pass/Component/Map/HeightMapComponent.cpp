@@ -510,23 +510,23 @@ namespace castor3d
 					, 0x00FF0000 );
 			} } );
 
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::eTextureUnit
 			, cuT( "height_mask" )
 			, hgtcmp::parserUnitHeightMask
 			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::eTextureUnit
 			, cuT( "height_factor" )
 			, hgtcmp::parserUnitHeightFactor
 			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
 
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::eTextureRemap
 			, cuT( "height" )
 			, hgtcmp::parserTexRemapHeight );
 
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "height_mask" )
 			, hgtcmp::parserTexRemapHeightMask

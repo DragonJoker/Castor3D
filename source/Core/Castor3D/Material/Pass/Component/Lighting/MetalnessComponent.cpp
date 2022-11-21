@@ -161,7 +161,7 @@ namespace castor3d
 	void MetalnessComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "metalness" )
 			, mtlcmp::parserPassMetalness

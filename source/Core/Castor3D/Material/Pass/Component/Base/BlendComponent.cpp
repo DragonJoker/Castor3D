@@ -90,12 +90,12 @@ namespace castor3d
 	{
 		static UInt32StrMap const blendModes{ getEnumMapT< BlendMode >() };
 
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "alpha_blend_mode" )
 			, bldcmp::parserPassAlphaBlendMode
 			, { castor::makeParameter< castor::ParameterType::eCheckedText >( blendModes ) } );
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "colour_blend_mode" )
 			, bldcmp::parserPassColourBlendMode

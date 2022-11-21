@@ -178,12 +178,12 @@ namespace castor3d
 		, ChannelFillers & channelFillers )const
 	{
 		static UInt32StrMap const comparisonFuncs = getEnumMapT( VK_COMPARE_OP_NEVER, VK_COMPARE_OP_ALWAYS );
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "alpha_func" )
 			, alptst::parserPassAlphaFunc
 			, { castor::makeParameter< castor::ParameterType::eCheckedText >( comparisonFuncs ), castor::makeParameter< castor::ParameterType::eFloat >() } );
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "blend_alpha_func" )
 			, alptst::parserPassBlendAlphaFunc

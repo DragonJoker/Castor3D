@@ -244,32 +244,32 @@ namespace toon
 	void EdgesComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, castor3d::ChannelFillers & channelFillers )const
 	{
-		castor3d::Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, castor3d::CSCNSection::ePass
 			, cuT( "smooth_band_width" )
 			, toonpass::parserPassSmoothBandWidth
 			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		castor3d::Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, castor3d::CSCNSection::ePass
 			, cuT( "edge_width" )
 			, toonpass::parserPassEdgeWidth
 			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		castor3d::Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, castor3d::CSCNSection::ePass
 			, cuT( "edge_depth_factor" )
 			, toonpass::parserPassDepthFactor
 			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		castor3d::Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, castor3d::CSCNSection::ePass
 			, cuT( "edge_normal_factor" )
 			, toonpass::parserPassNormalFactor
 			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		castor3d::Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, castor3d::CSCNSection::ePass
 			, cuT( "edge_object_factor" )
 			, toonpass::parserPassObjectFactor
 			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		castor3d::Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, castor3d::CSCNSection::ePass
 			, cuT( "edge_colour" )
 			, toonpass::parserPassEdgeColour

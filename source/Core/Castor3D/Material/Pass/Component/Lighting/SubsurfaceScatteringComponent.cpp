@@ -246,31 +246,31 @@ namespace castor3d
 	void SubsurfaceScatteringComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "subsurface_scattering" )
 			, sss::parserPassSubsurfaceScattering );
 
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, sss::Section::eSubsurfaceScattering
 			, cuT( "strength" )
 			, sss::parserSubsurfaceScatteringStrength
 			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, sss::Section::eSubsurfaceScattering
 			, cuT( "gaussian_width" )
 			, sss::parserSubsurfaceScatteringGaussianWidth
 			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, sss::Section::eSubsurfaceScattering
 			, cuT( "transmittance_profile" )
 			, sss::parserSubsurfaceScatteringTransmittanceProfile );
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, sss::Section::eSubsurfaceScattering
 			, cuT( "}" )
 			, sss::parserSubsurfaceScatteringEnd );
 
-		Pass::addParserT( parsers
+		castor::addParserT( parsers
 			, sss::Section::eTransmittanceProfile
 			, cuT( "factor" )
 			, sss::parserTransmittanceProfileFactor
