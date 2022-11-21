@@ -34,8 +34,7 @@ namespace castor
 		, uint32_t section
 		, String const & name
 		, ParserFunction function
-		, ParserParameterArray array
-		, castor::String comment )
+		, ParserParameterArray array )
 	{
 		auto nameIt = parsers.find( name );
 
@@ -51,8 +50,7 @@ namespace castor
 		else
 		{
 			parsers[name][section] = { std::move( function )
-				, std::move( array )
-				, std::move( comment ) };
+				, std::move( array ) };
 		}
 	}
 
@@ -315,7 +313,7 @@ namespace castor
 
 		if ( !ires.second )
 		{
-			CU_Exception( "Addiional parsers for name [" + string::stringCast< char >( name ) + "] already exist." );
+			CU_Exception( "Additional parsers for name [" + string::stringCast< char >( name ) + "] already exist." );
 		}
 	}
 

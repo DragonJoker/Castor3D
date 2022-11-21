@@ -153,14 +153,12 @@ namespace castor3d
 			, CSCNSection::eTextureUnit
 			, cuT( "glossiness_mask" )
 			, glscmp::parserUnitGlossinessMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() }
-			, "The specular glossiness (or shininess exponent) channels mask for the texture" );
+			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
 		castor::addParserT( parsers
 			, CSCNSection::eTextureUnit
 			, cuT( "shininess_mask" )
 			, glscmp::parserUnitGlossinessMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() }
-			, "The specular shininess exponent (or glossiness) channels mask for the texture" );
+			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
 
 		castor::addParserT( parsers
 			, CSCNSection::eTextureRemap
@@ -171,14 +169,12 @@ namespace castor3d
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "glossiness_mask" )
 			, glscmp::parserTexRemapGlossinessMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() }
-			, "The specular glossiness (or shininess exponent) remapping channels mask for the texture" );
+			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
 		castor::addParserT( parsers
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "shininess_mask" )
 			, glscmp::parserUnitGlossinessMask
-			, { castor::makeParameter< castor::ParameterType::eUInt32 >() }
-			, "The specular shininess exponent (or glossiness) remapping channels mask for the texture" );
+			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
 	}
 
 	bool GlossinessMapComponent::Plugin::isComponentNeeded( TextureCombine const & textures

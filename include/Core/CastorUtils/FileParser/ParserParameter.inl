@@ -1023,8 +1023,10 @@ namespace castor
 
 	//*************************************************************************************************
 
-	inline ParserParameter< ParameterType::eCheckedText >::ParserParameter( UInt32StrMap const & p_values )
+	inline ParserParameter< ParameterType::eCheckedText >::ParserParameter( UInt32StrMap const & p_values
+		, xchar const * name )
 		: ParserParameter< ParameterType::eUInt32 >()
+		, m_name( name )
 		, m_values( p_values )
 	{
 	}
@@ -1041,7 +1043,7 @@ namespace castor
 
 	inline xchar const * ParserParameter< ParameterType::eCheckedText >::getStrType()const
 	{
-		return ParserParameterHelper< ParameterType::eCheckedText >::StringType;
+		return m_name;
 	}
 
 	inline ParserParameterBaseSPtr ParserParameter< ParameterType::eCheckedText >::clone()const
@@ -1077,8 +1079,10 @@ namespace castor
 
 	//*************************************************************************************************
 
-	inline ParserParameter< ParameterType::eBitwiseOred32BitsCheckedText >::ParserParameter( UInt32StrMap const & p_values )
+	inline ParserParameter< ParameterType::eBitwiseOred32BitsCheckedText >::ParserParameter( UInt32StrMap const & p_values
+		, xchar const * name )
 		: ParserParameter< ParameterType::eUInt32 >()
+		, m_name( name )
 		, m_values( p_values )
 	{
 	}
@@ -1095,7 +1099,7 @@ namespace castor
 
 	inline xchar const * ParserParameter< ParameterType::eBitwiseOred32BitsCheckedText >::getStrType()const
 	{
-		return ParserParameterHelper< ParameterType::eBitwiseOred32BitsCheckedText >::StringType;
+		return m_name;
 	}
 
 	inline ParserParameterBaseSPtr ParserParameter< ParameterType::eBitwiseOred32BitsCheckedText >::clone()const
@@ -1155,8 +1159,10 @@ namespace castor
 
 	//*************************************************************************************************
 
-	inline ParserParameter< ParameterType::eBitwiseOred64BitsCheckedText >::ParserParameter( UInt64StrMap const & p_values )
+	inline ParserParameter< ParameterType::eBitwiseOred64BitsCheckedText >::ParserParameter( UInt64StrMap const & p_values
+		, xchar const * name )
 		: ParserParameter< ParameterType::eUInt64 >()
+		, m_name( name )
 		, m_values( p_values )
 	{
 	}
@@ -1173,7 +1179,7 @@ namespace castor
 
 	inline xchar const * ParserParameter< ParameterType::eBitwiseOred64BitsCheckedText >::getStrType()const
 	{
-		return ParserParameterHelper< ParameterType::eBitwiseOred64BitsCheckedText >::StringType;
+		return m_name;
 	}
 
 	inline ParserParameterBaseSPtr ParserParameter< ParameterType::eBitwiseOred64BitsCheckedText >::clone()const

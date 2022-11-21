@@ -9,9 +9,6 @@ See LICENSE file in root folder
 namespace castor
 {
 	/**
-	\author		Sylvain DOREMUS
-	\version	0.8.0
-	\date		16/02/2016
 	\~english
 	\brief		RegexFormat specialisation for uint8_t.
 	\~french
@@ -23,9 +20,6 @@ namespace castor
 		CU_API static xchar const * const Value;
 	};
 	/**
-	\author		Sylvain DOREMUS
-	\version	0.8.0
-	\date		16/02/2016
 	\~english
 	\brief		RegexFormat specialisation for int8_t.
 	\~french
@@ -37,9 +31,6 @@ namespace castor
 		CU_API static xchar const * const Value;
 	};
 	/**
-	\author		Sylvain DOREMUS
-	\version	0.8.0
-	\date		16/02/2016
 	\~english
 	\brief		RegexFormat specialisation for uint16_t.
 	\~french
@@ -51,9 +42,6 @@ namespace castor
 		CU_API static xchar const * const Value;
 	};
 	/**
-	\author		Sylvain DOREMUS
-	\version	0.8.0
-	\date		16/02/2016
 	\~english
 	\brief		RegexFormat specialisation for int16_t.
 	\~french
@@ -65,9 +53,6 @@ namespace castor
 		CU_API static xchar const * const Value;
 	};
 	/**
-	\author		Sylvain DOREMUS
-	\version	0.8.0
-	\date		16/02/2016
 	\~english
 	\brief		RegexFormat specialisation for uint32_t.
 	\~french
@@ -79,9 +64,6 @@ namespace castor
 		CU_API static xchar const * const Value;
 	};
 	/**
-	\author		Sylvain DOREMUS
-	\version	0.8.0
-	\date		16/02/2016
 	\~english
 	\brief		RegexFormat specialisation for int32_t.
 	\~french
@@ -93,9 +75,6 @@ namespace castor
 		CU_API static xchar const * const Value;
 	};
 	/**
-	\author		Sylvain DOREMUS
-	\version	0.8.0
-	\date		16/02/2016
 	\~english
 	\brief		RegexFormat specialisation for uint64_t.
 	\~french
@@ -107,9 +86,6 @@ namespace castor
 		CU_API static xchar const * const Value;
 	};
 	/**
-	\author		Sylvain DOREMUS
-	\version	0.8.0
-	\date		16/02/2016
 	\~english
 	\brief		RegexFormat specialisation for int64_t.
 	\~french
@@ -121,9 +97,6 @@ namespace castor
 		CU_API static xchar const * const Value;
 	};
 	/**
-	\author		Sylvain DOREMUS
-	\version	0.8.0
-	\date		16/02/2016
 	\~english
 	\brief		RegexFormat specialisation for float.
 	\~french
@@ -135,9 +108,6 @@ namespace castor
 		CU_API static xchar const * const Value;
 	};
 	/**
-	\author		Sylvain DOREMUS
-	\version	0.8.0
-	\date		16/02/2016
 	\~english
 	\brief		RegexFormat specialisation for double.
 	\~french
@@ -149,9 +119,6 @@ namespace castor
 		CU_API static xchar const * const Value;
 	};
 	/**
-	\author		Sylvain DOREMUS
-	\version	0.8.0
-	\date		16/02/2016
 	\~english
 	\brief		RegexFormat specialisation for long double.
 	\~french
@@ -163,9 +130,6 @@ namespace castor
 		CU_API static xchar const * const Value;
 	};
 	/**
-	\author		Sylvain DOREMUS
-	\version	0.8.0
-	\date		16/02/2016
 	\~english
 	\brief		RegexFormat specialisation for RgbColour.
 	\~french
@@ -177,9 +141,6 @@ namespace castor
 		CU_API static xchar const * const Value;
 	};
 	/**
-	\author		Sylvain DOREMUS
-	\version	0.8.0
-	\date		16/02/2016
 	\~english
 	\brief		RegexFormat specialisation for RgbaColour.
 	\~french
@@ -191,9 +152,6 @@ namespace castor
 		CU_API static xchar const * const Value;
 	};
 	/**
-	\author		Sylvain DOREMUS
-	\version	0.8.0
-	\date		16/02/2016
 	\~english
 	\brief		RegexFormat specialisation for HdrRgbColour.
 	\~french
@@ -205,9 +163,6 @@ namespace castor
 		CU_API static xchar const * const Value;
 	};
 	/**
-	\author		Sylvain DOREMUS
-	\version	0.8.0
-	\date		16/02/2016
 	\~english
 	\brief		RegexFormat specialisation for HdrRgbaColour.
 	\~french
@@ -219,9 +174,6 @@ namespace castor
 		CU_API static xchar const * const Value;
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		ParserParameterHelper specialisation for ParameterType::eText.
 	\~french
@@ -237,9 +189,6 @@ namespace castor
 		CU_API static xchar const * const StringType;
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		ParserParameterHelper specialisation for ParameterType::eName.
 	\~french
@@ -257,9 +206,6 @@ namespace castor
 		CU_API static xchar const * const StringType;
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		ParserParameterHelper specialisation for ParameterType::ePath.
 	\~french
@@ -275,9 +221,6 @@ namespace castor
 		CU_API static xchar const * const StringType;
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		ParserParameterHelper specialisation for ParameterType::eCheckedText.
 	\~french
@@ -295,9 +238,6 @@ namespace castor
 		CU_API static xchar const * const StringType;
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		ParserParameterHelper specialisation for ParameterType::eBitwiseOred32BitsCheckedText.
 	\~french
@@ -315,9 +255,6 @@ namespace castor
 		CU_API static xchar const * const StringType;
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		ParserParameterHelper specialisation for ParameterType::eBitwiseOred64BitsCheckedText.
 	\~french
@@ -335,9 +272,6 @@ namespace castor
 		CU_API static xchar const * const StringType;
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		ParserParameterHelper specialisation for ParameterType::eBool.
 	\~french
@@ -353,9 +287,6 @@ namespace castor
 		CU_API static xchar const * const StringType;
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		ParserParameterHelper specialisation for ParameterType::eInt8.
 	\~french
@@ -371,9 +302,6 @@ namespace castor
 		CU_API static xchar const * const StringType;
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		ParserParameterHelper specialisation for ParameterType::eInt16.
 	\~french
@@ -389,9 +317,6 @@ namespace castor
 		CU_API static xchar const * const StringType;
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		ParserParameterHelper specialisation for ParameterType::eInt32.
 	\~french
@@ -407,9 +332,6 @@ namespace castor
 		CU_API static xchar const * const StringType;
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		ParserParameterHelper specialisation for ParameterType::eInt64.
 	\~french
@@ -425,9 +347,6 @@ namespace castor
 		CU_API static xchar const * const StringType;
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		ParserParameterHelper specialisation for ParameterType::eUInt8.
 	\~french
@@ -443,9 +362,6 @@ namespace castor
 		CU_API static xchar const * const StringType;
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		ParserParameterHelper specialisation for ParameterType::eUInt16.
 	\~french
@@ -461,9 +377,6 @@ namespace castor
 		CU_API static xchar const * const StringType;
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		ParserParameterHelper specialisation for ParameterType::eUInt32.
 	\~french
@@ -479,9 +392,6 @@ namespace castor
 		CU_API static xchar const * const StringType;
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		ParserParameterHelper specialisation for ParameterType::eUInt64.
 	\~french
@@ -497,9 +407,6 @@ namespace castor
 		CU_API static xchar const * const StringType;
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		ParserParameterHelper specialisation for ParameterType::eFloat.
 	\~french
@@ -515,9 +422,6 @@ namespace castor
 		CU_API static xchar const * const StringType;
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		ParserParameterHelper specialisation for ParameterType::eDouble.
 	\~french
@@ -533,9 +437,6 @@ namespace castor
 		CU_API static xchar const * const StringType;
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		ParserParameterHelper specialisation for ParameterType::eLongDouble.
 	\~french
@@ -551,9 +452,6 @@ namespace castor
 		CU_API static xchar const * const StringType;
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		ParserParameterHelper specialisation for ParameterType::ePixelFormat.
 	\~french
@@ -569,9 +467,6 @@ namespace castor
 		CU_API static xchar const * const StringType;
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		ParserParameterHelper specialisation for ParameterType::ePoint2I.
 	\~french
@@ -587,9 +482,6 @@ namespace castor
 		CU_API static xchar const * const StringType;
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		ParserParameterHelper specialisation for ParameterType::ePoint3I.
 	\~french
@@ -605,9 +497,6 @@ namespace castor
 		CU_API static xchar const * const StringType;
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		ParserParameterHelper specialisation for ParameterType::ePoint4I.
 	\~french
@@ -668,9 +557,6 @@ namespace castor
 		CU_API static xchar const * const StringType;
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		ParserParameterHelper specialisation for ParameterType::ePoint2F.
 	\~french
@@ -686,9 +572,6 @@ namespace castor
 		CU_API static xchar const * const StringType;
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		ParserParameterHelper specialisation for ParameterType::ePoint3F.
 	\~french
@@ -704,9 +587,6 @@ namespace castor
 		CU_API static xchar const * const StringType;
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		ParserParameterHelper specialisation for ParameterType::ePoint4F.
 	\~french
@@ -722,9 +602,6 @@ namespace castor
 		CU_API static xchar const * const StringType;
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		ParserParameterHelper specialisation for ParameterType::ePoint2D.
 	\~french
@@ -740,9 +617,6 @@ namespace castor
 		CU_API static xchar const * const StringType;
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		ParserParameterHelper specialisation for ParameterType::ePoint3D.
 	\~french
@@ -758,9 +632,6 @@ namespace castor
 		CU_API static xchar const * const StringType;
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		ParserParameterHelper specialisation for ParameterType::ePoint4D.
 	\~french
@@ -776,9 +647,6 @@ namespace castor
 		CU_API static xchar const * const StringType;
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		ParserParameterHelper specialisation for ParameterType::eSize.
 	\~french
@@ -794,9 +662,6 @@ namespace castor
 		CU_API static xchar const * const StringType;
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		ParserParameterHelper specialisation for ParameterType::ePosition.
 	\~french
@@ -812,9 +677,6 @@ namespace castor
 		CU_API static xchar const * const StringType;
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		ParserParameterHelper specialisation for ParameterType::eRectangle.
 	\~french
@@ -830,9 +692,6 @@ namespace castor
 		CU_API static xchar const * const StringType;
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		ParserParameterHelper specialisation for ParameterType::eColour.
 	\~french
@@ -848,9 +707,6 @@ namespace castor
 		CU_API static xchar const * const StringType;
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		ParserParameterHelper specialisation for ParameterType::eColour.
 	\~french
@@ -866,9 +722,6 @@ namespace castor
 		CU_API static xchar const * const StringType;
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		ParserParameterHelper specialisation for ParameterType::eHdrColour.
 	\~french
@@ -884,9 +737,6 @@ namespace castor
 		CU_API static xchar const * const StringType;
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		ParserParameterHelper specialisation for ParameterType::eHdrColour.
 	\~french
@@ -902,9 +752,6 @@ namespace castor
 		CU_API static xchar const * const StringType;
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		HasBaseParameterType specialisation for ParameterType::eName.
 	\~french
@@ -916,9 +763,6 @@ namespace castor
 	{
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		HasBaseParameterType specialisation for ParameterType::eCheckedText.
 	\~french
@@ -930,9 +774,6 @@ namespace castor
 	{
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		HasBaseParameterType specialisation for ParameterType::eBitwiseOred32BitsCheckedText.
 	\~french
@@ -944,9 +785,6 @@ namespace castor
 	{
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		HasBaseParameterType specialisation for ParameterType::eBitwiseOred64BitsCheckedText.
 	\~french
@@ -958,9 +796,6 @@ namespace castor
 	{
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		Structure used to tell if a ParameterType is an arithmetic type.
 	\~french
@@ -972,9 +807,6 @@ namespace castor
 	{
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		Structure used to tell if a ParameterType is an arithmetic type.
 	\remarks	Specialization for ParameterType::eInt8.
@@ -988,9 +820,6 @@ namespace castor
 	{
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		Structure used to tell if a ParameterType is an arithmetic type.
 	\remarks	Specialization for ParameterType::eInt16.
@@ -1004,9 +833,6 @@ namespace castor
 	{
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		Structure used to tell if a ParameterType is an arithmetic type.
 	\remarks	Specialization for ParameterType::eInt32.
@@ -1020,9 +846,6 @@ namespace castor
 	{
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		Structure used to tell if a ParameterType is an arithmetic type.
 	\remarks	Specialization for ParameterType::eInt64.
@@ -1036,9 +859,6 @@ namespace castor
 	{
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		Structure used to tell if a ParameterType is an arithmetic type.
 	\remarks	Specialization for ParameterType::eUInt8.
@@ -1052,9 +872,6 @@ namespace castor
 	{
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		Structure used to tell if a ParameterType is an arithmetic type.
 	\remarks	Specialization for ParameterType::eUInt16.
@@ -1068,9 +885,6 @@ namespace castor
 	{
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		Structure used to tell if a ParameterType is an arithmetic type.
 	\remarks	Specialization for ParameterType::eUInt32.
@@ -1084,9 +898,6 @@ namespace castor
 	{
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		Structure used to tell if a ParameterType is an arithmetic type.
 	\remarks	Specialization for ParameterType::eUInt64.
@@ -1100,9 +911,6 @@ namespace castor
 	{
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		Structure used to tell if a ParameterType is an arithmetic type.
 	\remarks	Specialization for ParameterType::eFloat.
@@ -1116,9 +924,6 @@ namespace castor
 	{
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		Structure used to tell if a ParameterType is an arithmetic type.
 	\remarks	Specialization for ParameterType::eDouble.
@@ -1132,9 +937,6 @@ namespace castor
 	{
 	};
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
 	\~english
 	\brief		Structure used to tell if a ParameterType is an arithmetic type.
 	\remarks	Specialization for ParameterType::eLongDouble.

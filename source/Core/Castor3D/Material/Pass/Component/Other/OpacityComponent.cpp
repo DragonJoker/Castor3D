@@ -33,7 +33,7 @@ namespace castor
 
 			if ( object.getOpacity() < 1 )
 			{
-				result = write( file, cuT( "alpha" ), object.getOpacity() )
+				result = write( file, cuT( "opacity" ), object.getOpacity() )
 					&& write( file, cuT( "bw_accumulation" ), object.getBWAccumulationOperator() );
 			}
 
@@ -197,6 +197,11 @@ namespace castor3d
 		castor::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "alpha" )
+			, opacmp::parserPassAlpha
+			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+		castor::addParserT( parsers
+			, CSCNSection::ePass
+			, cuT( "opacity" )
 			, opacmp::parserPassAlpha
 			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
 		castor::addParserT( parsers

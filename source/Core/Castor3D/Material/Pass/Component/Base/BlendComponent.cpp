@@ -88,18 +88,16 @@ namespace castor3d
 	void BlendComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		static UInt32StrMap const blendModes{ getEnumMapT< BlendMode >() };
-
 		castor::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "alpha_blend_mode" )
 			, bldcmp::parserPassAlphaBlendMode
-			, { castor::makeParameter< castor::ParameterType::eCheckedText >( blendModes ) } );
+			, { castor::makeParameter< castor::ParameterType::eCheckedText, BlendMode >() } );
 		castor::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "colour_blend_mode" )
 			, bldcmp::parserPassColourBlendMode
-			, { castor::makeParameter< castor::ParameterType::eCheckedText >( blendModes ) } );
+			, { castor::makeParameter< castor::ParameterType::eCheckedText, BlendMode >() } );
 	}
 
 	//*********************************************************************************************

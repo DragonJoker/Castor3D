@@ -177,17 +177,16 @@ namespace castor3d
 	void AlphaTestComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		static UInt32StrMap const comparisonFuncs = getEnumMapT( VK_COMPARE_OP_NEVER, VK_COMPARE_OP_ALWAYS );
 		castor::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "alpha_func" )
 			, alptst::parserPassAlphaFunc
-			, { castor::makeParameter< castor::ParameterType::eCheckedText >( comparisonFuncs ), castor::makeParameter< castor::ParameterType::eFloat >() } );
+			, { castor::makeParameter< castor::ParameterType::eCheckedText, VkCompareOp >(), castor::makeParameter< castor::ParameterType::eFloat >() } );
 		castor::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "blend_alpha_func" )
 			, alptst::parserPassBlendAlphaFunc
-			, { castor::makeParameter< castor::ParameterType::eCheckedText >( comparisonFuncs ), castor::makeParameter< castor::ParameterType::eFloat >() } );
+			, { castor::makeParameter< castor::ParameterType::eCheckedText, VkCompareOp >(), castor::makeParameter< castor::ParameterType::eFloat >() } );
 	}
 
 	void AlphaTestComponent::Plugin::zeroBuffer( Pass const & pass
