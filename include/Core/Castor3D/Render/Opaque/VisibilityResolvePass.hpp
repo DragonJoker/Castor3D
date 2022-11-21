@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_VisibilityResolvePass_H___
@@ -41,12 +41,12 @@ namespace castor3d
 		 *\param[in]	context				Le contexte de rendu.
 		 *\param[in]	graph				Le runnable graph.
 		 *\param[in]	device				Le device GPU.
-		 *\param[in]	category			Le nom de la catégorie de la passe.
+		 *\param[in]	category			Le nom de la catÃ©gorie de la passe.
 		 *\param[in]	name				Le nom de la passe.
-		 *\param[in]	nodesPass			La passe de visibilité des noeuds.
+		 *\param[in]	nodesPass			La passe de visibilitÃ© des noeuds.
 		 *\param[in]	pipelinesIds		Le buffer de pipeline IDs.
-		 *\param[in]	renderPassDesc		Les données de construction de passe de rendu de scène.
-		 *\param[in]	techniquePassDesc	Les données de construction de passe de rendu de technique.
+		 *\param[in]	renderPassDesc		Les donnÃ©es de construction de passe de rendu de scÃ¨ne.
+		 *\param[in]	techniquePassDesc	Les donnÃ©es de construction de passe de rendu de technique.
 		 */
 		C3D_API VisibilityResolvePass( RenderTechnique * parent
 			, crg::FramePass const & pass

@@ -208,9 +208,11 @@ namespace castor
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	values	The values used to validate the parsed value.
+		 *\param[in]	name	The parameter type name.
 		 *\~french
 		 *\brief		Constructor.
 		 *\param[in]	values	Les valeurs utilisées pour valider la valeur récupérée.
+		 *\param[in]	name	Le nom du type de paramètre.
 		 */
 		explicit ParserParameter( UInt32StrMap const & values
 			, xchar const * name = ParserParameterHelper< ParameterType::eCheckedText >::StringType );
@@ -255,9 +257,11 @@ namespace castor
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	values	The values used to validate the parsed value.
+		 *\param[in]	name	The parameter type name.
 		 *\~french
 		 *\brief		Constructor.
 		 *\param[in]	values	Les valeurs utilisées pour valider la valeur récupérée.
+		 *\param[in]	name	Le nom du type de paramètre.
 		 */
 		explicit ParserParameter( UInt32StrMap const & values
 			, xchar const * name = ParserParameterHelper< ParameterType::eBitwiseOred32BitsCheckedText >::StringType );
@@ -302,9 +306,11 @@ namespace castor
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	values	The values used to validate the parsed value.
+		 *\param[in]	name	The parameter type name.
 		 *\~french
 		 *\brief		Constructor.
 		 *\param[in]	values	Les valeurs utilisées pour valider la valeur récupérée.
+		 *\param[in]	name	Le nom du type de paramètre.
 		 */
 		explicit ParserParameter( UInt64StrMap const & values
 			, xchar const * name = ParserParameterHelper< ParameterType::eBitwiseOred64BitsCheckedText >::StringType );
@@ -378,10 +384,12 @@ namespace castor
 	/**
 	 *\~english
 	 *\brief		Creates a parameter of given type.
+	 *\param[in]	name	The parameter type name.
 	 *\param[in]	values	The values used to validate the parsed value.
 	 *\return		The created parameter.
 	 *\~french
 	 *\brief		Crée un paramètre du type donné.
+	 *\param[in]	name	Le nom du type de paramètre.
 	 *\param[in]	values	Les valeurs utilisées pour valider la valeur récupérée.
 	 *\return		Le paramètre créé.
 	 */
@@ -395,10 +403,12 @@ namespace castor
 	/**
 	 *\~english
 	 *\brief		Creates a parameter of given type.
+	 *\param[in]	name	The parameter type name.
 	 *\param[in]	values	The values used to validate the parsed value.
 	 *\return		The created parameter.
 	 *\~french
 	 *\brief		Crée un paramètre du type donné.
+	 *\param[in]	name	Le nom du type de paramètre.
 	 *\param[in]	values	Les valeurs utilisées pour valider la valeur récupérée.
 	 *\return		Le paramètre créé.
 	 */
