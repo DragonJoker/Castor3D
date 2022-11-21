@@ -68,11 +68,11 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Named constructor, from a turns angle
-		 *\param[in]	degrees	The angle in turns
+		 *\param[in]	turns	The angle in turns
 		 *\return		The built angle
 		 *\~french
 		 *\brief		Constructeur nommé, à partir d'un angle en tours
-		 *\param[in]	degrees	L'angle, exprimé en tours
+		 *\param[in]	turns	L'angle, exprimé en tours
 		 *\return		L'angle construit
 		 */
 		template< typename T >

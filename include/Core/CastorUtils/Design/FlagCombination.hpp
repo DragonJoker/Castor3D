@@ -631,12 +631,12 @@ namespace castor
 	 *\~english
 	 *\brief			Removes a flag combination from the given value.
 	 *\param[in,out]	value	The value.
-	 *\param[in]		flag	The flag to remove.
+	 *\param[in]		flags	The flags to remove.
 	 *\return			The value.
 	 *\~french
 	 *\brief			Enlève une combinaison d'indicateurs de la valeur donnée.
 	 *\param[in,out]	value	La valeur.
-	 *\param[in]		flag	L'indicateur à enlever.
+	 *\param[in]		flags	Les indicateurs à enlever.
 	 *\return			La valeur.
 	 */
 	template< typename FlagType >

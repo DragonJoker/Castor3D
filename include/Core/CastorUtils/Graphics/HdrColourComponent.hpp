@@ -19,11 +19,13 @@ namespace castor
 		~HdrColourComponent() = default;
 		/**
 		 *\~english
-		 *\brief		Specified constructor
-		 *\param[in]	value	The component value
+		 *\brief		Constructor from SRGB component.
+		 *\param[in]	rhs		The SRGB component value.
+		 *\param[in]	gamma	The gamma correction value.
 		 *\~french
-		 *\brief		Constructeur spécifié
-		 *\param[in]	value	La valeur de la composante
+		 *\brief		Constructeur depuis une componsante SRGB.
+		 *\param[in]	rhs		La valeur de la composante SRGB.
+		 *\param[in]	gamma	La valeur de la correction gamma.
 		 */
 		CU_API explicit HdrColourComponent( ColourComponent const & rhs
 			, float gamma = 2.2f );
