@@ -5,7 +5,7 @@
 #include "ComCastor3D/ComParameterCast.hpp"
 
 #include <Castor3D/Engine.hpp>
-#include <Castor3D/Event/Frame/FunctorEvent.hpp>
+#include <Castor3D/Event/Frame/CpuFunctorEvent.hpp>
 
 namespace CastorCom
 {
@@ -113,7 +113,7 @@ namespace CastorCom
 
 			if ( m_instance )
 			{
-				m_instance->getEngine()->postEvent( castor3d::makeFunctorEvent( castor3d::EventType::ePreRender, [this, index, value]()
+				m_instance->getEngine()->postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePreRender, [this, index, value]()
 				{
 					( m_instance->*m_function )( parameterCast< Index >( index ), parameterCast< Value >( value ) );
 				} ) );

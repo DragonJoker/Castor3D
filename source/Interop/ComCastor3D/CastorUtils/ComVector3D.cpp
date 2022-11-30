@@ -3,40 +3,33 @@
 
 namespace CastorCom
 {
-	CVector3D::CVector3D()
+	STDMETHODIMP CVector3D::Negate()noexcept
 	{
-	}
-
-	CVector3D::~CVector3D()
-	{
-	}
-
-	STDMETHODIMP CVector3D::Negate()
-	{
-		castor::point::negate( *this );
+		castor::point::negate( m_internal );
 		return S_OK;
 	}
 
-	STDMETHODIMP CVector3D::Normalise()
+	STDMETHODIMP CVector3D::Normalise()noexcept
 	{
-		castor::point::normalise( *this );
+		castor::point::normalise( m_internal );
 		return S_OK;
 	}
 
-	STDMETHODIMP CVector3D::Dot( IVector3D * pVal, FLOAT * pRet )
+	STDMETHODIMP CVector3D::Dot( IVector3D * pVal, FLOAT * pRet )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
 		if ( pVal && pRet )
 		{
-			*pRet = castor::point::dot( *this, *reinterpret_cast< CVector3D * >( pVal ) );
+			*pRet = castor::point::dot( m_internal
+				, static_cast< CVector3D * >( pVal )->getInternal() );
 			hr = S_OK;
 		}
 
 		return hr;
 	}
 
-	STDMETHODIMP CVector3D::Cross( IVector3D * pVal, IVector3D ** pRet )
+	STDMETHODIMP CVector3D::Cross( IVector3D * pVal, IVector3D ** pRet )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -46,22 +39,21 @@ namespace CastorCom
 
 			if ( hr == S_OK )
 			{
-				CVector3D * ret = reinterpret_cast< CVector3D * >( *pRet );
-				castor::Point3f tmp = castor::point::cross( *this, *reinterpret_cast< CVector3D * >( pVal ) );
-				std::memcpy( ret->ptr(), tmp.ptr(), tmp.size() );
+				static_cast< CVector3D * >( *pRet )->setInternal( castor::point::cross( m_internal
+					, static_cast< CVector3D * >( pVal )->getInternal() ) );
 			}
 		}
 
 		return hr;
 	}
 
-	STDMETHODIMP CVector3D::Length( FLOAT * pVal )
+	STDMETHODIMP CVector3D::Length( FLOAT * pVal )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
 		if ( pVal && pVal )
 		{
-			*pVal = FLOAT( castor::point::length( *this ) );
+			*pVal = FLOAT( castor::point::length( m_internal ) );
 			hr = S_OK;
 		}
 

@@ -7,9 +7,6 @@
 namespace CastorCom
 {
 	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.7.0
-	\date		10/09/2014
 	\~english
 	\brief		ScriptError class allows to use the COM error mechanism.
 	\~french

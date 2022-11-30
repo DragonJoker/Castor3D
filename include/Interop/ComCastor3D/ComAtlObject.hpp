@@ -10,41 +10,195 @@
 
 namespace CastorCom
 {
-	template< typename Class, const CLSID * ClsidClass, typename CObject, typename IObject, const CLSID * IidObject, UINT Resource >
-	class CComAtlObject
-		: public ATL::CComObjectRootEx< ATL::CComSingleThreadModel >
-		, public ATL::CComCoClass< CObject, ClsidClass >
-		, public ATL::IDispatchImpl< IObject, IidObject, &LIBID_Castor3D, MAJOR_VERSION, MINOR_VERSION >
+	namespace details
 	{
+		template< typename SrcT >
+		SrcT makeMbr( SrcT src )
+		{
+			return src;
+		}
+
+		template< typename SrcT, typename KeyT >
+		castor::ResourceSPtrT< SrcT, KeyT > makeMbr( castor::ResourceWPtrT< SrcT, KeyT > src )
+		{
+			return src.lock();
+		}
+
+		template< typename SrcT >
+		std::shared_ptr< SrcT > makeMbr( std::weak_ptr< SrcT > src )
+		{
+			return src.lock();
+		}
+	}
+
+	template< typename Class, typename Object >
+	class CComAtlObjectBaseT
+		: public ATL::CComObjectRootEx< ATL::CComSingleThreadModel >
+		, public ATL::CComCoClass< ComTypeCTypeT< Object >, &ComTypeClsidT< Object > >
+		, public ATL::IDispatchImpl< ComTypeITypeT< Object >, &ComTypeIidT< Object >, &LIBID_Castor3D, MAJOR_VERSION, MINOR_VERSION >
+	{
+	protected:
+		using CObject = ComTypeCTypeT< Object >;
+		using IObject = ComTypeITypeT< Object >;
+
 	public:
-		CComAtlObject()
+		CComAtlObjectBaseT() = default;
+		CComAtlObjectBaseT( CComAtlObjectBaseT const & ) = default;
+		CComAtlObjectBaseT( CComAtlObjectBaseT && ) = default;
+		CComAtlObjectBaseT & operator=( CComAtlObjectBaseT const & ) = default;
+		CComAtlObjectBaseT & operator=( CComAtlObjectBaseT && ) = default;
+		virtual ~CComAtlObjectBaseT() = default;
+
+		inline HRESULT FinalConstruct()
+		{
+			return S_OK;
+		}
+
+		inline void FinalRelease()
 		{
 		}
 
-		~CComAtlObject()
-		{
-		}
-
-		DECLARE_REGISTRY_RESOURCEID( Resource )
+		DECLARE_REGISTRY_RESOURCEID( ComTypeRidT< Object > )
 		BEGIN_COM_MAP( CObject )
 		COM_INTERFACE_ENTRY( IObject )
 		COM_INTERFACE_ENTRY( IDispatch )
 		END_COM_MAP()
 		DECLARE_PROTECT_FINAL_CONSTRUCT()
+	};
 
-		HRESULT FinalConstruct()
+	template< typename Class, typename Object >
+	class CComAtlObject
+		: public CComAtlObjectBaseT< Class, Object >
+	{
+	protected:
+		using Internal = ComTypeInternalT< Object >;
+		using InternalMbr = ComTypeInternalMbrT< Object >;
+		using GetInternal = ComTypeGetInternalT< Object >;
+		using SetInternal = ComTypeSetInternalT< Object >;
+
+		InternalMbr m_internal{};
+
+	public:
+		inline GetInternal getInternal()const
 		{
-			return S_OK;
+			return m_internal;
 		}
-		void FinalRelease()
+
+		inline void setInternal( SetInternal internal )
 		{
+			m_internal = details::makeMbr( internal );
 		}
 	};
 
 #define CONCAT( x, y ) x ## y
 #define STRINGIFY( x ) TEXT( #x )
 
-#define COM_ATL_OBJECT( Name ) public CComAtlObject< Name, &CONCAT( CLSID_, Name ), CONCAT( C, Name ), CONCAT( I, Name ), &CONCAT( IID_I, Name ), CONCAT( IDR_, Name ) >
+#define COM_TYPE_TRAITS_EX( Name, Nmspc, Class )\
+	class C##Name;\
+	template<>\
+	struct ComITypeTraitsT< I##Name >\
+	{\
+		static constexpr bool hasIType = true;\
+		using Type = Nmspc::Class;\
+	};\
+	template<>\
+	struct ComTypeTraitsT< Nmspc::Class >\
+	{\
+		static constexpr bool hasIType = true;\
+		static constexpr bool hasType = true;\
+		static constexpr bool hasInternalType = true;\
+		using IType = I##Name;\
+		using CType = C##Name;\
+		static inline const CLSID clsid = CLSID_##Name;\
+		static inline const CLSID iid = IID_I##Name;\
+		static inline const UINT rid = IDR_##Name;\
+		using Internal = Nmspc::Class;\
+		using InternalMbr = Internal;\
+		using GetInternal = Internal;\
+		using SetInternal = Internal;\
+	}
+
+#define COM_TYPE_TRAITS_PTR_EX( Name, Nmspc, Class )\
+	class C##Name;\
+	template<>\
+	struct ComITypeTraitsT< I##Name >\
+	{\
+		static constexpr bool hasIType = true;\
+		using Type = Nmspc::Class;\
+	};\
+	template<>\
+	struct ComTypeTraitsT< Nmspc::Class >\
+	{\
+		static constexpr bool hasIType = true;\
+		static constexpr bool hasType = true;\
+		static constexpr bool hasInternalType = true;\
+		using IType = I##Name;\
+		using CType = C##Name;\
+		static inline const CLSID clsid = CLSID_##Name;\
+		static inline const CLSID iid = IID_I##Name;\
+		static inline const UINT rid = IDR_##Name;\
+		using Internal = Nmspc::Class;\
+		using InternalMbr = Internal *;\
+		using GetInternal = Internal *;\
+		using SetInternal = Internal *;\
+	}
+
+#define COM_TYPE_TRAITS_SPTR_EX( Name, Nmspc, Class )\
+	class C##Name;\
+	template<>\
+	struct ComITypeTraitsT< I##Name >\
+	{\
+		static constexpr bool hasIType = true;\
+		using Type = Nmspc::Class;\
+	};\
+	template<>\
+	struct ComTypeTraitsT< Nmspc::Class >\
+	{\
+		static constexpr bool hasIType = true;\
+		static constexpr bool hasType = true;\
+		static constexpr bool hasInternalType = true;\
+		using IType = I##Name;\
+		using CType = C##Name;\
+		static inline const CLSID clsid = CLSID_##Name;\
+		static inline const CLSID iid = IID_I##Name;\
+		static inline const UINT rid = IDR_##Name;\
+		using Internal = Nmspc::Class;\
+		using InternalMbr = std::shared_ptr< Internal >;\
+		using GetInternal = std::shared_ptr< Internal >;\
+		using SetInternal = std::shared_ptr< Internal >;\
+	}
+
+#define COM_TYPE_TRAITS_RES_EX( Name, Nmspc, Class, Key )\
+	class C##Name;\
+	template<>\
+	struct ComITypeTraitsT< I##Name >\
+	{\
+		static constexpr bool hasIType = true;\
+		using Type = Nmspc::Class;\
+		using GetSrcType = I##Name;\
+		using GetDstType = C##Name;\
+	};\
+	template<>\
+	struct ComTypeTraitsT< Nmspc::Class >\
+	{\
+		static constexpr bool hasIType = true;\
+		static constexpr bool hasType = true;\
+		static constexpr bool hasInternalType = true;\
+		using IType = I##Name;\
+		using CType = C##Name;\
+		static inline const CLSID clsid = CLSID_##Name;\
+		static inline const CLSID iid = IID_I##Name;\
+		static inline const UINT rid = IDR_##Name;\
+		using Internal = Nmspc::Class;\
+		using InternalMbr = castor::ResourceSPtrT< Internal, Key >;\
+		using GetInternal = castor::ResourceWPtrT< Internal, Key >;\
+		using SetInternal = castor::ResourceWPtrT< Internal, Key >;\
+	}
+
+#define COM_TYPE_TRAITS( Nmspc, Class ) COM_TYPE_TRAITS_EX( Class, Nmspc, Class )
+#define COM_TYPE_TRAITS_PTR( Nmspc, Class ) COM_TYPE_TRAITS_PTR_EX( Class, Nmspc, Class )
+#define COM_TYPE_TRAITS_SPTR( Nmspc, Class ) COM_TYPE_TRAITS_SPTR_EX( Class, Nmspc, Class )
+#define COM_TYPE_TRAITS_RES( Nmspc, Class, Key ) COM_TYPE_TRAITS_RES_EX( Class, Nmspc, Class, Key )
 
 #define COM_PROPERTY_GET( Name, Type, Functor )\
 	STDMETHODIMP CONCAT( get_, Name )( /* [retval][out] */ Type * pVal )\
@@ -58,19 +212,21 @@ namespace CastorCom
 		return Functor( val );\
 	}
 
-#define COM_EVT_PROPERTY_PUT( Name, Type, Functor )\
-	STDMETHODIMP CONCAT( put_, Name )( /* [in] */ Type val )\
-	{\
-		return Functor( val );\
-	}
-
 #define COM_PROPERTY( Name, Type, Getter, Putter )\
 	COM_PROPERTY_GET( Name, Type, Getter )\
 	COM_PROPERTY_PUT( Name, Type, Putter )
 
+#define COMEX_PROPERTY( Name, Type, Instance, Getter, Putter )\
+	COM_PROPERTY_GET( Name, Type, makeGetter( Instance, Getter ) )\
+	COM_PROPERTY_PUT( Name, Type, makePutter( Instance, Putter ) )
+
+#define COMEX_PROPERTY_IDX( Name, Index, Type, Instance, Getter, Putter )\
+	COM_PROPERTY_GET( Name, Type, makeGetter( Instance, Getter, Index ) )\
+	COM_PROPERTY_PUT( Name, Type, makePutter( Instance, Putter, Index ) )
+
 #define COM_EVT_PROPERTY( Name, Type, Getter, Putter )\
 	COM_PROPERTY_GET( Name, Type, Getter )\
-	COM_EVT_PROPERTY_PUT( Name, Type, Putter )
+	COM_PROPERTY_PUT( Name, Type, Putter )
 
 #define COM_PROPERTY_INDEXED_GET( Name, Index, Type, Functor )\
 	STDMETHODIMP CONCAT( get_, Name )( /* [in] */ Index index, /* [retval][out] */ Type * pVal )\

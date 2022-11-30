@@ -10,60 +10,55 @@
 
 namespace CastorCom
 {
+	class CFont;
+	template<>
+	struct ComITypeTraitsT< ICastorFont >
+	{
+		static constexpr bool hasIType = true;
+		using Type = castor::Font;
+	};
+	template<>
+	struct ComTypeTraitsT< castor::Font >
+	{
+		static constexpr bool hasIType = true;
+		static constexpr bool hasType = true;
+		static constexpr bool hasInternalType = true;
+
+		using IType = ICastorFont;
+		using CType = CFont;
+
+		static inline const CLSID clsid = CLSID_Font;
+		static inline const CLSID iid = IID_ICastorFont;
+		static inline const UINT rid = IDR_Font;
+
+		using Internal = castor::Font;
+		using InternalMbr = castor::FontSPtr;
+		using GetInternal = castor::FontSPtr;
+		using SetInternal = castor::FontSPtr;
+	};
 	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.7.0
-	\date		10/09/2014
 	\~english
 	\brief		This class defines a CImage object accessible from COM.
 	\~french
 	\brief		Cette classe définit un CImage accessible depuis COM.
 	*/
-	class ATL_NO_VTABLE CFont
-		:	 public CComAtlObject< Font, &CLSID_Font, CFont, ICastorFont, &IID_ICastorFont, IDR_Font >
+	class CFont
+		: public CComAtlObject< Font, castor::Font >
 	{
 	public:
-		/**
-		 *\~english
-		 *\brief		Default constructor.
-		 *\~french
-		 *\brief		Constructeur par défaut.
-		 */
-		CFont();
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		virtual ~CFont();
-
-		inline void setInternal( castor::FontSPtr p_font )
-		{
-			m_font = p_font;
-		}
-
-		inline castor::FontSPtr getInternal()const
-		{
-			return m_font;
-		}
-
-		COM_PROPERTY_GET( Height, UINT, makeGetter( m_font.get(), &castor::Font::getHeight ) );
-		COM_PROPERTY_GET( MaxHeight, INT, makeGetter( m_font.get(), &castor::Font::getMaxHeight ) );
-		COM_PROPERTY_GET( MaxWidth, INT, makeGetter( m_font.get(), &castor::Font::getMaxWidth ) );
+		COM_PROPERTY_GET( Height, UINT, makeGetter( m_internal.get(), &castor::Font::getHeight ) );
+		COM_PROPERTY_GET( MaxHeight, UINT, makeGetter( m_internal.get(), &castor::Font::getMaxHeight ) );
+		COM_PROPERTY_GET( MaxWidth, UINT, makeGetter( m_internal.get(), &castor::Font::getMaxWidth ) );
 
 		STDMETHOD( LoadFromFile )( /* [in] */ IEngine * engine, /* [in] */ BSTR path, /* [in] */ BSTR name, /* [in] */ UINT height );
 		STDMETHOD( GetGlyph )( /* [in] */ WORD glyph, /* [out, retval] */ IGlyph ** pGlyph );
 
 	private:
-		castor::FontSPtr m_font;
 		std::map< WORD, IGlyph * > m_glyphs;
 	};
-	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
+	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object
+	//!\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
 	OBJECT_ENTRY_AUTO( __uuidof( Font ), CFont );
-
-	DECLARE_VARIABLE_PTR_GETTER( Font, castor, Font );
-	DECLARE_VARIABLE_PTR_PUTTER( Font, castor, Font );
 }
 
 #endif

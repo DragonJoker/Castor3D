@@ -10,62 +10,40 @@
 
 namespace CastorCom
 {
+	COM_TYPE_TRAITS_PTR( castor3d, RenderTarget );
 	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.7.0
-	\date		10/09/2014
 	\~english
 	\brief		This class defines a CRenderWindow object accessible from COM.
 	\~french
 	\brief		Cette classe définit un CRenderWindow accessible depuis COM.
 	*/
 	class ATL_NO_VTABLE CRenderTarget
-		:	COM_ATL_OBJECT( RenderTarget )
+		: public CComAtlObject< RenderTarget, castor3d::RenderTarget >
 	{
 	public:
-		/**
-		 *\~english
-		 *\brief		Default constructor.
-		 *\~french
-		 *\brief		Constructeur par défaut.
-		 */
-		CRenderTarget();
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		virtual ~CRenderTarget();
-
-		inline castor3d::RenderTargetSPtr getInternal()const
+		static void setCamera( castor3d::RenderTarget * target, castor3d::Camera * camera )
 		{
-			return m_internal;
+			target->setCamera( *camera );
 		}
 
-		inline void setInternal( castor3d::RenderTargetSPtr value )
+		static void setScene( castor3d::RenderTarget * target, castor3d::Scene * scene )
 		{
-			m_internal = value;
+			target->setScene( *scene );
 		}
 
-		COM_PROPERTY( Camera, ICamera *, makeGetter( m_internal.get(), &castor3d::RenderTarget::getCamera ), makePutter( m_internal.get(), &castor3d::RenderTarget::setCamera ) );
-		COM_PROPERTY( ViewportType, eVIEWPORT_TYPE, makeGetter( m_internal.get(), &castor3d::RenderTarget::getViewportType ), makePutter( m_internal.get(), &castor3d::RenderTarget::setViewportType ) );
-		COM_PROPERTY( Scene, IScene *, makeGetter( m_internal.get(), &castor3d::RenderTarget::getScene ), makePutter( m_internal.get(), &castor3d::RenderTarget::setScene ) );
-		COM_PROPERTY( PixelFormat, ePIXEL_FORMAT, makeGetter( m_internal.get(), &castor3d::RenderTarget::getPixelFormat ), makePutter( m_internal.get(), &castor3d::RenderTarget::setPixelFormat ) );
+		COM_PROPERTY( ViewportType, eVIEWPORT_TYPE, makeGetter( m_internal, &castor3d::RenderTarget::getViewportType ), makePutter( m_internal, &castor3d::RenderTarget::setViewportType ) );
+		COM_PROPERTY( Camera, ICamera *, makeGetter( m_internal, &castor3d::RenderTarget::getCamera ), makePutter( m_internal, setCamera ) );
+		COM_PROPERTY( Scene, IScene *, makeGetter( m_internal, &castor3d::RenderTarget::getScene ), makePutter( m_internal, setScene ) );
 
-		COM_PROPERTY_GET( Size, ISize *, makeGetter( m_internal.get(), &castor3d::RenderTarget::getSize ) );
+		COM_PROPERTY_GET( PixelFormat, ePIXEL_FORMAT, makeGetter( m_internal, &castor3d::RenderTarget::getPixelFormat ) );
+		COM_PROPERTY_GET( Size, ISize *, makeGetter( m_internal, &castor3d::RenderTarget::getSize ) );
 
 		STDMETHOD( Initialise )();
 		STDMETHOD( Cleanup )();
-
-	private:
-		castor3d::RenderTargetSPtr m_internal;
 	};
-	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
+	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object
+	//!\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
 	OBJECT_ENTRY_AUTO( __uuidof( RenderTarget ), CRenderTarget );
-
-	DECLARE_VARIABLE_PTR_GETTER( RenderTarget, castor3d, RenderTarget );
-	DECLARE_VARIABLE_PTR_PUTTER( RenderTarget, castor3d, RenderTarget );
 }
 
 #endif

@@ -8,62 +8,91 @@
 #include <CastorUtils/Math/RangedValue.hpp>
 #include <CastorUtils/Graphics/ColourComponent.hpp>
 
-namespace CastorCom
+namespace CastorCom::details
 {
-	template< typename Value, typename _Value >
-	inline Value parameterCast( _Value const & value )
+	template< typename LhsT, typename RhsT, typename LhsU, typename RhsU >
+	static inline constexpr bool areCompatibleV = ( std::is_same_v< LhsT, LhsU > && std::is_same_v< RhsT, RhsU > )
+		|| ( std::is_same_v< LhsT, RhsU > && std::is_same_v< RhsT, LhsU > );
+
+	template< typename DstT, typename SrcT >
+	inline DstT parameterCast( SrcT const & src )
 	{
-		return Value( value );
+		static_assert( std::is_same_v< DstT, SrcT >
+			|| areCompatibleV< SrcT, DstT, uint32_t, UINT >
+			|| areCompatibleV< SrcT, DstT, uint16_t, UINT >
+			|| areCompatibleV< SrcT, DstT, FLOAT, float >
+			|| areCompatibleV< SrcT, DstT, FLOAT, double >
+			|| areCompatibleV< SrcT, DstT, FLOAT, castor::ColourComponent >
+			|| areCompatibleV< SrcT, DstT, FLOAT, castor::HdrColourComponent >
+			|| areCompatibleV< SrcT, DstT, ePIXEL_FORMAT, castor::PixelFormat >
+			|| areCompatibleV< SrcT, DstT, eMOVABLE_TYPE, castor3d::MovableType >
+			|| areCompatibleV< SrcT, DstT, eLIGHT_TYPE, castor3d::LightType >
+			|| areCompatibleV< SrcT, DstT, eVIEWPORT_TYPE, castor3d::ViewportType >
+			|| areCompatibleV< SrcT, DstT, eBORDER_COLOUR, VkBorderColor >
+			|| areCompatibleV< SrcT, DstT, eFILTER_MODE, VkFilter >
+			|| areCompatibleV< SrcT, DstT, eIMAGE_TYPE, VkImageType >
+			|| areCompatibleV< SrcT, DstT, eMIPMAP_MODE, VkSamplerMipmapMode >
+			|| areCompatibleV< SrcT, DstT, eWRAP_MODE, VkSamplerAddressMode >
+			|| areCompatibleV< SrcT, DstT, ePIXEL_FORMAT, VkFormat > );
+		return DstT( src );
 	}
-	template< typename Value, typename _Value >
-	inline bool parameterCast( castor::RangedValue< _Value > const & value )
+
+	template< ComITypeT ITypeT >
+	inline ComITypeGetDstTypeT< ITypeT > parameterCast( ITypeT * src )
 	{
-		return parameterCast< Value >( value.value() );
+		return ComITypeGetDstTypeT< ITypeT >( static_cast< ComITypeCTypeT< ITypeT > * >( src )->getInternal() );
+	}
+	template< ComTypeT TypeT >
+	inline ComTypeITypeT< TypeT > * parameterCast( ComTypeInternalMbrT< TypeT > src )
+	{
+		ComTypeITypeT< TypeT > ** result{};
+		auto hr = ComTypeCTypeT< TypeT >::CreateInstance( result );
+
+		if ( hr == S_OK )
+		{
+			static_cast< ComTypeCTypeT< TypeT > * >( *result )->setInternal( ComTypeSetInternalT< TypeT >( src ) );
+		}
+
+		return *result;
+	}
+
+	template< typename DstT, typename SrcT >
+	inline DstT parameterCast( castor::RangedValue< SrcT > const & src )
+	{
+		return parameterCast< DstT >( src.value() );
+	}
+
+	template<>
+	inline bool parameterCast< bool, boolean >( boolean const & src )
+	{
+		return src != 0;
 	}
 	template<>
-	inline bool parameterCast< bool, boolean >( boolean const & value )
+	inline boolean parameterCast< boolean, bool >( bool const & src )
 	{
-		return value != 0;
+		return src ? 1 : 0;
+	}
+
+	template<>
+	inline BSTR parameterCast< BSTR, castor::String >( castor::String const & src )
+	{
+		return toBstr( src );
 	}
 	template<>
-	inline boolean parameterCast< boolean, bool >( bool const & value )
+	inline castor::String parameterCast< castor::String, BSTR >( BSTR const & src )
 	{
-		return value ? 1 : 0;
+		return fromBstr( src );
+	}
+
+	template<>
+	inline BSTR parameterCast< BSTR, castor::Path >( castor::Path const & src )
+	{
+		return toBstr( src );
 	}
 	template<>
-	inline BSTR parameterCast< BSTR, castor::String >( castor::String const & value )
+	inline castor::Path parameterCast< castor::Path, BSTR >( BSTR const & src )
 	{
-		return toBstr( value );
-	}
-	template<>
-	inline castor::String parameterCast< castor::String, BSTR >( BSTR const & value )
-	{
-		return fromBstr( value );
-	}
-	template<>
-	inline BSTR parameterCast< BSTR, castor::Path >( castor::Path const & value )
-	{
-		return toBstr( value );
-	}
-	template<>
-	inline castor::Path parameterCast< castor::Path, BSTR >( BSTR const & value )
-	{
-		return castor::Path{ fromBstr( value ) };
-	}
-	template<>
-	inline FLOAT parameterCast< FLOAT, castor::ColourComponent >( castor::ColourComponent const & value )
-	{
-		return ( FLOAT )value;
-	}
-	template<>
-	inline IScene * parameterCast< IScene *, castor3d::SceneSPtr >( castor3d::SceneSPtr const & value )
-	{
-		return reinterpret_cast< IScene *>( value.get() );
-	}
-	template<>
-	inline IPixelBuffer * parameterCast< IPixelBuffer *, castor::PxBufferBaseSPtr >( castor::PxBufferBaseSPtr const & value )
-	{
-		return reinterpret_cast< IPixelBuffer *>( value.get() );
+		return castor::Path{ fromBstr( src ) };
 	}
 }
 

@@ -5,316 +5,156 @@
 #include "ComCastor3D/ComParameterCast.hpp"
 
 #include <Castor3D/Engine.hpp>
-#include <Castor3D/Event/Frame/FunctorEvent.hpp>
+#include <Castor3D/Event/Frame/CpuFunctorEvent.hpp>
 
 namespace CastorCom
 {
-	template< typename Class, typename Value >
-	struct VariablePutter
+	template< typename ValueT >
+	struct VariablePutterT
 	{
-		using Function = void ( Class::* )( Value );
-		VariablePutter( Class * instance, Function function )
-			: m_instance( instance )
-			, m_function( function )
+		using Function = std::function< void( ValueT ) >;
+
+		VariablePutterT( Function function )
+			: m_function( function )
 		{
 		}
-		template< typename _Value >
-		HRESULT operator()( _Value value )
-		{
-			HRESULT hr = E_POINTER;
 
-			if ( m_instance )
+		template< typename ITypePtrT >
+		HRESULT operator()( ITypePtrT value )
+		{
+			if ( !value )
 			{
-				if ( value )
-				{
-					( m_instance->*m_function )( parameterCast< Value >( value ) );
-					hr = S_OK;
-				}
-			}
-			else
-			{
-				hr = CComError::dispatchError( E_FAIL
+				return CComError::dispatchError( E_FAIL
 					, LIBID_Castor3D
-					, _T( "Null instance" )
+					, _T( "Null value" )
 					, ERROR_UNINITIALISED_INSTANCE.c_str()
 					, 0
 					, nullptr );
 			}
 
-			return hr;
+			if constexpr ( isComITypeV< ITypePtrT > )
+			{
+				m_function( static_cast< ComITypeCTypeT< ITypePtrT > * >( value )->getInternal() );
+			}
+			else
+			{
+				m_function( details::parameterCast< ValueT >( value ) );
+			}
+
+			return S_OK;
 		}
 
 	private:
-		Class * m_instance;
 		Function m_function;
 	};
 
-	template< typename Class, typename Value, typename _Class >
-	VariablePutter< Class, Value >
-	makePutter( _Class * instance, void ( Class::*function )( Value ) )
+	template< typename ClassT, typename ValueT, typename InstanceT >
+	auto makePutter( InstanceT * instance
+		, void ( ClassT::* function )( ValueT ) )
 	{
-		return VariablePutter< Class, Value >( ( Class * )instance, function );
+		return VariablePutterT< ValueT >( [function, instance]( ValueT value )
+			{
+				( static_cast< ClassT * >( instance )->*function )( value );
+			} );
 	}
 
-	template< typename Class, typename Value >
-	struct VariablePutterEvt
+	template< typename ClassT, typename ValueT, typename InstanceT >
+	auto makePutter( InstanceT * instance
+		, void ( *function )( ClassT *, ValueT ) )
 	{
-		using Function = void ( Class::* )( Value );
-		VariablePutterEvt( Class * instance, Function function )
-			: m_instance( instance )
+		return VariablePutterT< ValueT >( [function, instance]( ValueT value )
+			{
+				( *function )( static_cast< ClassT * >( instance ), value );
+			} );
+	}
+
+	template< typename ClassT, typename ValueT, typename InstanceT >
+	auto makePutter( InstanceT * instance
+		, ValueT & ( ClassT::* function )() )
+	{
+		return VariablePutterT< ValueT >( [function, instance]( ValueT value )
+			{
+				( static_cast< ClassT * >( instance )->*function )() = value;
+			} );
+	}
+
+	template< typename ClassT, typename ValueT, typename IndexT, typename InstanceT, typename IndexU >
+	auto makePutter( InstanceT * instance
+		, ValueT & ( ClassT:: * function )( IndexT )
+		, IndexU index )
+	{
+		return VariablePutterT< ValueT >( [function, instance, index]( ValueT value )
+			{
+				( static_cast< ClassT * >( instance )->*function )( IndexT( index ) ) = value;
+			} );
+	}
+
+	template< typename ClassT, typename ValueT, typename IndexT, typename InstanceT, typename IndexU >
+	auto makePutter( InstanceT * instance
+		, void( ClassT:: * function )( IndexT, ValueT )
+		, IndexU index )
+	{
+		return VariablePutterT< ValueT >( [function, instance, index]( ValueT value )
+			{
+				( static_cast< ClassT * >( instance )->*function )( IndexT( index ), value );
+			} );
+	}
+
+	template< typename ValueT >
+	struct VariablePutterEvtT
+	{
+		using Function = std::function< void( ValueT ) >;
+
+		VariablePutterEvtT( castor3d::Engine & engine
+			, Function function )
+			: m_engine( engine )
 			, m_function( function )
 		{
 		}
-		template< typename _Value >
-		HRESULT operator()( _Value value )
-		{
-			HRESULT hr = E_POINTER;
 
-			if ( m_instance )
+		template< typename ITypePtrT >
+		HRESULT operator()( ITypePtrT value )
+		{
+			if ( !value )
 			{
-				if ( value )
+				return CComError::dispatchError( E_FAIL
+					, LIBID_Castor3D
+					, _T( "Null value" )
+					, ERROR_UNINITIALISED_INSTANCE.c_str()
+					, 0
+					, nullptr );
+			}
+
+			m_engine.postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePreRender
+				, [value, this]()
 				{
-					m_instance->getEngine()->postEvent( castor3d::makeFunctorEvent( castor3d::EventType::ePreRender, [this, value]
+					if constexpr ( isComITypeV< ITypePtrT > )
 					{
-						( m_instance->*m_function )( parameterCast< Value >( value ) );
-					} ) );
-					hr = S_OK;
-				}
-			}
-			else
-			{
-				hr = CComError::dispatchError( E_FAIL
-					, LIBID_Castor3D
-					, _T( "Null instance" )
-					, ERROR_UNINITIALISED_INSTANCE.c_str()
-					, 0
-					, nullptr );
-			}
+						m_function( static_cast< ComITypeCTypeT< ITypePtrT > * >( value )->getInternal() );
+					}
+					else
+					{
+						m_function( details::parameterCast< ValueT >( value ) );
+					}
+				} ) );
 
-			return hr;
+			return S_OK;
 		}
 
 	private:
-		Class * m_instance;
+		castor3d::Engine & m_engine;
 		Function m_function;
 	};
 
-	template< typename Class, typename Value, typename _Class >
-	VariablePutterEvt< Class, Value >
-	makePutterEvt( _Class * instance, void ( Class::*function )( Value ) )
+	template< typename ClassT, typename ValueT, typename InstanceT >
+	auto makePutterEvt( InstanceT * instance
+		, void ( ClassT::* function )( ValueT ) )
 	{
-		return VariablePutterEvt< Class, Value >( ( Class * )instance, function );
-	}
-
-	template< typename Class, typename Value >
-	struct VariableRetPutter
-	{
-		using Function = Value & ( Class::* )();
-		VariableRetPutter( Class * instance, Function function )
-			: m_instance( instance )
-			, m_function( function )
-		{
-		}
-		template< typename Parameter >
-		HRESULT operator()( Parameter value )
-		{
-			HRESULT hr = E_POINTER;
-
-			if ( m_instance )
+		return VariablePutterEvtT< ValueT >( *instance->getEngine()
+			, [function, instance]( ValueT value )
 			{
-				( m_instance->*m_function )() = parameterCast< Value >( value );
-				hr = S_OK;
-			}
-			else
-			{
-				hr = CComError::dispatchError( E_FAIL
-					, LIBID_Castor3D
-					, _T( "Null instance" )
-					, ERROR_UNINITIALISED_INSTANCE.c_str()
-					, 0
-					, nullptr );
-			}
-
-			return hr;
-		}
-
-	private:
-		Class * m_instance;
-		Function m_function;
-	};
-
-	template< typename Class, typename Value, typename _Class >
-	VariableRetPutter< Class, Value >
-	makePutter( _Class * instance, Value & ( Class::*function )() )
-	{
-		return VariableRetPutter< Class, Value >( ( Class * )instance, function );
-	}
-
-	template< typename Class, typename Value, typename Index >
-	struct ParameteredVariablePutter
-	{
-		using Function = Value & ( Class::* )( Index );
-		ParameteredVariablePutter( Class * instance, Function function, Index index )
-			: m_instance( instance )
-			, m_function( function )
-			, m_index( index )
-		{
-		}
-		template< typename _Value >
-		HRESULT operator()( _Value value )
-		{
-			HRESULT hr = E_POINTER;
-
-			if ( m_instance )
-			{
-				// No parameterCast here, to be able to compile this with Value = castor3d::ColourComponent and _Value = FLOAT
-				( m_instance->*m_function )( m_index ) = value;
-				hr = S_OK;
-			}
-			else
-			{
-				hr = CComError::dispatchError( E_FAIL
-					, LIBID_Castor3D
-					, _T( "Null instance" )
-					, ERROR_UNINITIALISED_INSTANCE.c_str()
-					, 0
-					, nullptr );
-			}
-
-			return hr;
-		}
-
-	private:
-		Class * m_instance;
-		Function m_function;
-		Index m_index;
-	};
-
-	template< typename Class, typename Value, typename Index, typename _Class, typename _Index >
-	ParameteredVariablePutter< Class, Value, Index >
-	makePutter( _Class * instance, Value & ( Class::*function )( Index ), _Index index )
-	{
-		return ParameteredVariablePutter< Class, Value, Index >( ( Class * )instance, function, Index( index ) );
-	}
-
-	template< typename Class, typename Value, typename Index >
-	struct ParameteredParVariablePutter
-	{
-		using Function = void ( Class::* )( Index, Value );
-		ParameteredParVariablePutter( Class * instance, Function function, Index index )
-			: m_instance( instance )
-			, m_function( function )
-			, m_index( index )
-		{
-		}
-		template< typename _Value >
-		HRESULT operator()( _Value value )
-		{
-			HRESULT hr = E_POINTER;
-
-			if ( m_instance )
-			{
-				( m_instance->*m_function )( m_index, parameterCast< Value >( value ) );
-				hr = S_OK;
-			}
-			else
-			{
-				hr = CComError::dispatchError( E_FAIL
-					, LIBID_Castor3D
-					, _T( "Null instance" )
-					, ERROR_UNINITIALISED_INSTANCE.c_str()
-					, 0
-					, nullptr );
-			}
-
-			return hr;
-		}
-
-	private:
-		Class * m_instance;
-		Function m_function;
-		Index m_index;
-	};
-
-	template< typename Class, typename Value, typename Index, typename _Class, typename _Index >
-	ParameteredParVariablePutter< Class, Value, Index >
-	makePutter( _Class * instance, void ( Class::*function )( Index, Value ), _Index index )
-	{
-		return ParameteredParVariablePutter< Class, Value, Index >( ( Class * )instance, function, Index( index ) );
-	}
-
-#define DECLARE_VARIABLE_REF_PUTTER( ctype, nmspc, type )\
-	template< typename Class >\
-	struct VariablePutter< Class, nmspc::type const & >\
-	{\
-		typedef void ( Class::*Function )( nmspc::type const & );\
-		VariablePutter( Class * instance, Function function )\
-			: m_instance( instance )\
-			, m_function( function )\
-		{\
-		}\
-		HRESULT operator()( I##ctype * value )\
-		{\
-			HRESULT hr = E_POINTER;\
-			if ( m_instance )\
-			{\
-				if ( value )\
-				{\
-					( m_instance->*m_function )( *static_cast< C##ctype * >( value ) );\
-					hr = S_OK;\
-				}\
-			}\
-			else\
-			{\
-				hr = CComError::dispatchError( E_FAIL\
-					, IID_I##ctype\
-					, _T( "Null instance" )\
-					, ERROR_UNINITIALISED_INSTANCE.c_str()\
-					, 0\
-					, nullptr );\
-			}\
-			return hr;\
-		}\
-	private:\
-		Class * m_instance;\
-		Function m_function;\
-	}
-
-#define DECLARE_VARIABLE_PTR_PUTTER( ctype, nmspc, type )\
-	template< typename Class >\
-	struct VariablePutter< Class, std::shared_ptr< nmspc::type > >\
-	{\
-		typedef void ( Class::*Function )( std::shared_ptr< nmspc::type > );\
-		VariablePutter( Class * instance, Function function )\
-			: m_instance( instance )\
-			, m_function( function )\
-		{\
-		}\
-		HRESULT operator()( I##ctype * value )\
-		{\
-			HRESULT hr = E_POINTER;\
-			if ( m_instance )\
-			{\
-				if ( value )\
-				{\
-					( m_instance->*m_function )( static_cast< C##ctype * >( value )->getInternal() );\
-					hr = S_OK;\
-				}\
-			}\
-			else\
-			{\
-				hr = CComError::dispatchError( E_FAIL\
-					, IID_I##ctype\
-					, _T( "Null instance" )\
-					, ERROR_UNINITIALISED_INSTANCE.c_str()\
-					, 0\
-					, nullptr );\
-			}\
-			return hr;\
-		}\
-	private:\
-		Class * m_instance;\
-		Function m_function;\
+				( static_cast< ClassT * >( instance )->*function )( value );
+			} );
 	}
 }
 

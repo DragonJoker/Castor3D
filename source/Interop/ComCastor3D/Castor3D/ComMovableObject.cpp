@@ -5,15 +5,7 @@ namespace CastorCom
 {
 	static const tstring ERROR_UNINITIALISED = _T( "The movable object must be initialised" );
 
-	CMovableObject::CMovableObject()
-	{
-	}
-
-	CMovableObject::~CMovableObject()
-	{
-	}
-
-	STDMETHODIMP CMovableObject::AttachTo( /* [in] */ ISceneNode * val )
+	STDMETHODIMP CMovableObject::AttachTo( /* [in] */ ISceneNode * val )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -36,7 +28,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CMovableObject::Detach()
+	STDMETHODIMP CMovableObject::Detach()noexcept
 	{
 		HRESULT hr = E_POINTER;
 

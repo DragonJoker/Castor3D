@@ -2,23 +2,15 @@
 
 namespace CastorCom
 {
-	CMatrix4x4::CMatrix4x4()
+	STDMETHODIMP CMatrix4x4::Transpose()noexcept
 	{
-	}
-
-	CMatrix4x4::~CMatrix4x4()
-	{
-	}
-
-	STDMETHODIMP CMatrix4x4::Transpose()
-	{
-		castor::Matrix4x4f::transpose();
+		m_internal.transpose();
 		return S_OK;
 	}
 
-	STDMETHODIMP CMatrix4x4::Invert()
+	STDMETHODIMP CMatrix4x4::Invert()noexcept
 	{
-		castor::Matrix4x4f::invert();
+		m_internal.invert();
 		return S_OK;
 	}
 }

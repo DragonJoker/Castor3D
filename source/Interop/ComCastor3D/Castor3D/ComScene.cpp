@@ -6,12 +6,7 @@
 #include "ComCastor3D/Castor3D/ComRenderWindow.hpp"
 
 #include <Castor3D/Cache/BillboardCache.hpp>
-#include <Castor3D/Cache/CameraCache.hpp>
-#include <Castor3D/Cache/GeometryCache.hpp>
-#include <Castor3D/Cache/LightCache.hpp>
 #include <Castor3D/Cache/SceneNodeCache.hpp>
-#include <Castor3D/Cache/MeshCache.hpp>
-#include <Castor3D/Cache/WindowCache.hpp>
 #include <Castor3D/Miscellaneous/Parameter.hpp>
 #include <Castor3D/Model/Mesh/MeshFactory.hpp>
 #include <Castor3D/Model/Mesh/MeshGenerator.hpp>
@@ -22,15 +17,7 @@ namespace CastorCom
 	static const tstring ERROR_UNINITIALISED = _T( "The scene must be initialised" );
 	static const tstring ERROR_NULL_PARENT_NODE = _T( "The parent node must not be null." );
 
-	CScene::CScene()
-	{
-	}
-
-	CScene::~CScene()
-	{
-	}
-
-	STDMETHODIMP CScene::ClearScene()
+	STDMETHODIMP CScene::ClearScene()noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -53,7 +40,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CScene::CreateSceneNode( /* [in] */ BSTR name, /* [in] */ ISceneNode * parent, /* [out, retval] */ ISceneNode ** pVal )
+	STDMETHODIMP CScene::CreateSceneNode( /* [in] */ BSTR name, /* [in] */ ISceneNode * parent, /* [out, retval] */ ISceneNode ** pVal )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -65,7 +52,12 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CSceneNode * >( *pVal )->setInternal( m_internal->getSceneNodeCache().add( fromBstr( name ), static_cast< CSceneNode * >( parent )->getInternal() ) );
+					if ( auto node = m_internal->createSceneNode( fromBstr( name ), *m_internal ) )
+					{
+						static_cast< CSceneNode * >( *pVal )->setInternal( node.get() );
+						node->attachTo( *static_cast< CSceneNode * >( parent )->getInternal() );
+						m_internal->addSceneNode( node->getName(), node );
+					}
 				}
 			}
 		}
@@ -83,7 +75,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CScene::CreateGeometry( /* [in] */ BSTR name, /*[in] */ ISceneNode * node, /* [out, retval] */ IGeometry ** pVal )
+	STDMETHODIMP CScene::CreateGeometry( /* [in] */ BSTR name, /*[in] */ ISceneNode * node, /* [out, retval] */ IGeometry ** pVal )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -107,9 +99,12 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CGeometry * >( *pVal )->setInternal( m_internal->getGeometryCache().add( fromBstr( name )
+					auto geom = m_internal->createGeometry( fromBstr( name )
+						, *m_internal
 						, *static_cast< CSceneNode * >( node )->getInternal()
-						, nullptr ) );
+						, castor3d::MeshResPtr{} );
+					static_cast< CGeometry * >( *pVal )->setInternal( geom.get() );
+					m_internal->addGeometry( geom );
 				}
 			}
 		}
@@ -127,7 +122,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CScene::CreateCamera( /* [in] */ BSTR name, /* [in] */ int ww, /* [in] */ int wh, /* [in] */ ISceneNode * node, /* [out, retval] */ ICamera ** pVal )
+	STDMETHODIMP CScene::CreateCamera( /* [in] */ BSTR name, /* [in] */ int ww, /* [in] */ int wh, /* [in] */ ISceneNode * node, /* [out, retval] */ ICamera ** pVal )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -152,12 +147,14 @@ namespace CastorCom
 				if ( hr == S_OK )
 				{
 					castor3d::Viewport l_viewport{ *getInternal()->getEngine() };
-					l_viewport.setPerspective( castor::Angle::fromDegrees( 120 ), 4.0f / 3.0f, 0.1f, 1000.0f );
-					l_viewport.resize( castor::Size( ww, wh ) );
-					auto l_camera = m_internal->getCameraCache().add( fromBstr( name )
+					l_viewport.setPerspective( castor::Angle::fromDegrees( 120.0f ), 4.0f / 3.0f, 0.1f, 1000.0f );
+					l_viewport.resize( castor::Size( uint32_t( std::abs( ww ) ), uint32_t( std::abs( wh ) ) ) );
+					auto camera = m_internal->createCamera( fromBstr( name )
+						, *m_internal
 						, *static_cast< CSceneNode * >( node )->getInternal()
 						, std::move( l_viewport ) );
-					static_cast< CCamera * >( *pVal )->setInternal( l_camera );
+					static_cast< CCamera * >( *pVal )->setInternal( camera.get() );
+					m_internal->addCamera( camera->getName(), camera );
 				}
 			}
 		}
@@ -175,7 +172,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CScene::CreateLight( /* [in] */ BSTR name, /* [in] */ ISceneNode * node, /* [in] */ eLIGHT_TYPE type, /* [out, retval] */ ILight ** pVal )
+	STDMETHODIMP CScene::CreateLight( /* [in] */ BSTR name, /* [in] */ ISceneNode * node, /* [in] */ eLIGHT_TYPE type, /* [out, retval] */ ILight ** pVal )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -199,9 +196,13 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CLight * >( *pVal )->setInternal( m_internal->getLightCache().add( fromBstr( name )
+					auto light = m_internal->createLight( fromBstr( name )
+						, *m_internal
 						, *static_cast< CSceneNode * >( node )->getInternal()
-						, castor3d::LightType( type ) ) );
+						, m_internal->getLightsFactory()
+						, castor3d::LightType( type ) );
+					static_cast< CLight * >( *pVal )->setInternal( light.get() );
+					m_internal->addLight( light->getName(), light );
 				}
 			}
 		}
@@ -219,7 +220,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CScene::CreateMesh( /* [in] */ BSTR type, /* [in] */ BSTR name, /* [out, retval] */ IMesh ** pVal )
+	STDMETHODIMP CScene::CreateMesh( /* [in] */ BSTR type, /* [in] */ BSTR name, /* [out, retval] */ IMesh ** pVal )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -231,7 +232,7 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					auto l_mesh = m_internal->getMeshCache().add( fromBstr( name ) );
+					auto l_mesh = m_internal->createMesh( fromBstr( name ), *m_internal );
 					m_internal->getEngine()->getMeshFactory().create( fromBstr( name ) )->generate( *l_mesh, castor3d::Parameters{} );
 					static_cast< CMesh * >( *pVal )->setInternal( l_mesh );
 				}
@@ -245,7 +246,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CScene::GetNode( /* [in] */ BSTR name, /* [out, retval] */ ISceneNode ** pVal )
+	STDMETHODIMP CScene::GetNode( /* [in] */ BSTR name, /* [out, retval] */ ISceneNode ** pVal )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -257,7 +258,10 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CSceneNode * >( *pVal )->setInternal( m_internal->getSceneNodeCache().find( fromBstr( name ) ) );
+					if ( auto found = m_internal->findSceneNode( fromBstr( name ) ).lock() )
+					{
+						static_cast< CSceneNode * >( *pVal )->setInternal( found.get() );
+					}
 				}
 			}
 		}
@@ -275,7 +279,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CScene::GetGeometry( /* [in] */ BSTR name, /* [out, retval] */ IGeometry ** pVal )
+	STDMETHODIMP CScene::GetGeometry( /* [in] */ BSTR name, /* [out, retval] */ IGeometry ** pVal )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -287,7 +291,10 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CGeometry * >( *pVal )->setInternal( m_internal->getGeometryCache().find( fromBstr( name ) ) );
+					if ( auto found = m_internal->findGeometry( fromBstr( name ) ).lock() )
+					{
+						static_cast< CGeometry * >( *pVal )->setInternal( found.get() );
+					}
 				}
 			}
 		}
@@ -305,7 +312,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CScene::GetLight( /* [in] */ BSTR name, /* [out, retval] */ ILight ** pVal )
+	STDMETHODIMP CScene::GetLight( /* [in] */ BSTR name, /* [out, retval] */ ILight ** pVal )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -317,7 +324,10 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CLight * >( *pVal )->setInternal( m_internal->getLightCache().find( fromBstr( name ) ) );
+					if ( auto found = m_internal->findLight( fromBstr( name ) ).lock() )
+					{
+						static_cast< CLight * >( *pVal )->setInternal( found.get() );
+					}
 				}
 			}
 		}
@@ -335,7 +345,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CScene::GetCamera( /* [in] */ BSTR name, /* [out, retval] */ ICamera ** pVal )
+	STDMETHODIMP CScene::GetCamera( /* [in] */ BSTR name, /* [out, retval] */ ICamera ** pVal )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -347,7 +357,10 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CCamera * >( *pVal )->setInternal( m_internal->getCameraCache().find( fromBstr( name ) ) );
+					if ( auto found = m_internal->findCamera( fromBstr( name ) ).lock() )
+					{
+						static_cast< CCamera * >( *pVal )->setInternal( found.get() );
+					}
 				}
 			}
 		}
@@ -365,7 +378,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CScene::RemoveLight( /* [in] */ ILight * val )
+	STDMETHODIMP CScene::RemoveLight( /* [in] */ ILight * val )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -374,6 +387,7 @@ namespace CastorCom
 			if ( val )
 			{
 				m_internal->getLightCache().remove( static_cast< CLight * >( val )->getInternal()->getName() );
+				static_cast< CLight * >( val )->setInternal( nullptr );
 				hr = S_OK;
 			}
 		}
@@ -391,7 +405,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CScene::RemoveNode( /* [in] */ ISceneNode * val )
+	STDMETHODIMP CScene::RemoveNode( /* [in] */ ISceneNode * val )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -400,6 +414,7 @@ namespace CastorCom
 			if ( val )
 			{
 				m_internal->getSceneNodeCache().remove( static_cast< CSceneNode * >( val )->getInternal()->getName() );
+				static_cast< CSceneNode * >( val )->setInternal( nullptr );
 				hr = S_OK;
 			}
 		}
@@ -417,7 +432,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CScene::RemoveGeometry( /* [in] */ IGeometry * val )
+	STDMETHODIMP CScene::RemoveGeometry( /* [in] */ IGeometry * val )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -426,6 +441,7 @@ namespace CastorCom
 			if ( val )
 			{
 				m_internal->getGeometryCache().remove( static_cast< CGeometry * >( val )->getInternal()->getName() );
+				static_cast< CGeometry * >( val )->setInternal( nullptr );
 				hr = S_OK;
 			}
 		}
@@ -443,7 +459,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CScene::RemoveCamera( /* [in] */ ICamera * val )
+	STDMETHODIMP CScene::RemoveCamera( /* [in] */ ICamera * val )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -452,6 +468,7 @@ namespace CastorCom
 			if ( val )
 			{
 				m_internal->getCameraCache().remove( static_cast< CCamera * >( val )->getInternal()->getName() );
+				static_cast< CCamera * >( val )->setInternal( nullptr );
 				hr = S_OK;
 			}
 		}

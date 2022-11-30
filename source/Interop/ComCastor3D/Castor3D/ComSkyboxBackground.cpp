@@ -4,15 +4,7 @@ namespace CastorCom
 {
 	static const tstring ERROR_UNINITIALISED = _T( "The SkyboxBackground must be initialised" );
 
-	CSkyboxBackground::CSkyboxBackground()
-	{
-	}
-
-	CSkyboxBackground::~CSkyboxBackground()
-	{
-	}
-
-	STDMETHODIMP CSkyboxBackground::put_LeftImage( BSTR filePath )
+	STDMETHODIMP CSkyboxBackground::put_LeftImage( BSTR filePath )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -35,7 +27,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CSkyboxBackground::put_RightImage( BSTR filePath )
+	STDMETHODIMP CSkyboxBackground::put_RightImage( BSTR filePath )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -58,7 +50,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CSkyboxBackground::put_TopImage( BSTR filePath )
+	STDMETHODIMP CSkyboxBackground::put_TopImage( BSTR filePath )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -81,7 +73,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CSkyboxBackground::put_BottomImage( BSTR filePath )
+	STDMETHODIMP CSkyboxBackground::put_BottomImage( BSTR filePath )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -104,7 +96,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CSkyboxBackground::put_FrontImage( BSTR filePath )
+	STDMETHODIMP CSkyboxBackground::put_FrontImage( BSTR filePath )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -127,7 +119,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CSkyboxBackground::put_BackImage( BSTR filePath )
+	STDMETHODIMP CSkyboxBackground::put_BackImage( BSTR filePath )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -150,7 +142,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CSkyboxBackground::put_CrossImage( BSTR filePath )
+	STDMETHODIMP CSkyboxBackground::put_CrossImage( BSTR filePath )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -173,7 +165,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CSkyboxBackground::LoadEquirectangularImage( BSTR filePath, unsigned int size )
+	STDMETHODIMP CSkyboxBackground::LoadEquirectangularImage( BSTR filePath, unsigned int size )noexcept
 	{
 		HRESULT hr = E_POINTER;
 

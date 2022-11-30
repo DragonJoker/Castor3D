@@ -436,33 +436,6 @@ typedef enum
 	eSKELETON_ANIMATION_OBJECT_TYPE_COUNT
 }	eSKELETON_ANIMATION_OBJECT_TYPE;
 
-// eTEXTURE_FLAG
-[
-	uuid( C0F75923-E03E-49B7-B7C9-EFAC55630B7F ),
-	helpstring( "Castor3D Texture flags enumeration." )
-]
-typedef enum
-{
-	eTEXTURE_FLAG_NONE = 0x0000,
-	eTEXTURE_FLAG_HEIGHT = 0x0001,
-	eTEXTURE_FLAG_OPACITY = 0x0002,
-	eTEXTURE_FLAG_NORMAL = 0x0004,
-	eTEXTURE_FLAG_EMISSIVE = 0x0008,
-	eTEXTURE_FLAG_OCCLUSION = 0x0010,
-	eTEXTURE_FLAG_TRANSMITTANCE = 0x0020,
-	eTEXTURE_FLAG_DIFFUSE = 0x0040,
-	eTEXTURE_FLAG_ALBEDO = eTEXTURE_FLAG_DIFFUSE,
-	eTEXTURE_FLAG_SPECULAR = 0x0080,
-	eTEXTURE_FLAG_METALNESS = eTEXTURE_FLAG_SPECULAR,
-	eTEXTURE_FLAG_GLOSSINESS = 0x0100,
-	eTEXTURE_FLAG_SHININESS = eTEXTURE_FLAG_GLOSSINESS,
-	eTEXTURE_FLAG_ROUGHNESS = eTEXTURE_FLAG_GLOSSINESS,
-	eTEXTURE_FLAG_ALL = 0x1FF,
-	eTEXTURE_FLAG_ALL_BUT_OPACITY = eTEXTURE_FLAG_ALL & ~( eTEXTURE_FLAG_OPACITY ),
-	eTEXTURE_FLAG_ALL_BUT_COLOUR_AND_OPACITY = eTEXTURE_FLAG_ALL_BUT_OPACITY & ~( eTEXTURE_FLAG_DIFFUSE ),
-	eTEXTURE_FLAG_ALL_BUT_NORMAL_AND_OPACITY = eTEXTURE_FLAG_ALL_BUT_OPACITY & ~( eTEXTURE_FLAG_NORMAL ),
-}	eTEXTURE_FLAG;
-
 // eCOMPARISON_FUNC
 [
 	uuid( 64B09ACE-F388-40FE-83BE-DB4A85BCB84E ),
@@ -607,6 +580,7 @@ interface IVector2D;
 interface IVector3D;
 interface IVector4D;
 interface IAngle;
+interface ILength;
 interface IQuaternion;
 interface IMatrix4x4;
 interface IPosition;
@@ -817,15 +791,43 @@ interface IAngle
 	[propput, id( 2 ), helpstring( "The radians value for the angle" )] HRESULT Radians( [in] float val );
 	[propget, id( 3 ), helpstring( "The grads value for the angle" )] HRESULT Grads( [out, retval] float * pVal );
 	[propput, id( 3 ), helpstring( "The grads value for the angle" )] HRESULT Grads( [in] float val );
-	[id( 4 ), helpstring( "The cosine value for this angle" )] HRESULT Cos( [out, retval] float * pVal );
-	[id( 5 ), helpstring( "The sine value for this angle" )] HRESULT Sin( [out, retval] float * pVal );
-	[id( 6 ), helpstring( "The tangent value for this angle" )] HRESULT Tan( [out, retval] float * pVal );
-	[id( 7 ), helpstring( "Sets this angle value from a cosine" )] HRESULT ACos( [in] float val );
-	[id( 8 ), helpstring( "Sets this angle value from a sine" )] HRESULT ASin( [in] float val );
-	[id( 9 ), helpstring( "Sets this angle value from a tangent" )] HRESULT ATan( [in] float val );
-	[id( 10 ), helpstring( "The hyperbolic cosine value for this angle" )] HRESULT Cosh( [out, retval] float * pVal );
-	[id( 11 ), helpstring( "The hyperbolic sine value for this angle" )] HRESULT Sinh( [out, retval] float * pVal );
-	[id( 12 ), helpstring( "The hyperbolic tangent value for this angle" )] HRESULT Tanh( [out, retval] float * pVal );
+	[propget, id( 4 ), helpstring( "The turns value for the angle" )] HRESULT Turns( [out, retval] float * pVal );
+	[propput, id( 4 ), helpstring( "The turns value for the angle" )] HRESULT Turns( [in] float val );
+	[id( 5 ), helpstring( "The cosine value for this angle" )] HRESULT Cos( [out, retval] float * pVal );
+	[id( 6 ), helpstring( "The sine value for this angle" )] HRESULT Sin( [out, retval] float * pVal );
+	[id( 7 ), helpstring( "The tangent value for this angle" )] HRESULT Tan( [out, retval] float * pVal );
+	[id( 8 ), helpstring( "Sets this angle value from a cosine" )] HRESULT ACos( [in] float val );
+	[id( 9 ), helpstring( "Sets this angle value from a sine" )] HRESULT ASin( [in] float val );
+	[id( 10 ), helpstring( "Sets this angle value from a tangent" )] HRESULT ATan( [in] float val );
+	[id( 11 ), helpstring( "The hyperbolic cosine value for this angle" )] HRESULT Cosh( [out, retval] float * pVal );
+	[id( 12 ), helpstring( "The hyperbolic sine value for this angle" )] HRESULT Sinh( [out, retval] float * pVal );
+	[id( 13 ), helpstring( "The hyperbolic tangent value for this angle" )] HRESULT Tanh( [out, retval] float * pVal );
+};
+
+// ILength
+[
+	uuid( F610D185-9AB4-4398-ABFC-BE5CE2704CC8 ),
+	helpstring( "Castor Length interface" ),
+	dual,
+	oleautomation
+]
+interface ILength
+	: IDispatch
+{
+	[propget, id( 1 ), helpstring( "The kilometres value for the length" )] HRESULT Kilometres( [out, retval] float * pVal );
+	[propput, id( 1 ), helpstring( "The kilometres value for the length" )] HRESULT Kilometres( [in] float val );
+	[propget, id( 2 ), helpstring( "The metres value for the length" )] HRESULT Metres( [out, retval] float * pVal );
+	[propput, id( 2 ), helpstring( "The metres value for the length" )] HRESULT Metres( [in] float val );
+	[propget, id( 3 ), helpstring( "The centimetres value for the length" )] HRESULT Centimetres( [out, retval] float * pVal );
+	[propput, id( 3 ), helpstring( "The centimetres value for the length" )] HRESULT Centimetres( [in] float val );
+	[propget, id( 4 ), helpstring( "The millimetres value for the length" )] HRESULT Millimetres( [out, retval] float * pVal );
+	[propput, id( 4 ), helpstring( "The millimetres value for the length" )] HRESULT Millimetres( [in] float val );
+	[propget, id( 5 ), helpstring( "The yards value for the length" )] HRESULT Yards( [out, retval] float * pVal );
+	[propput, id( 5 ), helpstring( "The yards value for the length" )] HRESULT Yards( [in] float val );
+	[propget, id( 6 ), helpstring( "The feet value for the length" )] HRESULT Feet( [out, retval] float * pVal );
+	[propput, id( 6 ), helpstring( "The feet value for the length" )] HRESULT Feet( [in] float val );
+	[propget, id( 7 ), helpstring( "The inches value for the length" )] HRESULT Inches( [out, retval] float * pVal );
+	[propput, id( 7 ), helpstring( "The inches value for the length" )] HRESULT Inches( [in] float val );
 };
 
 // IQuaternion
@@ -957,8 +959,8 @@ interface ICastorFont
 	: IDispatch
 {
 	[propget, id( 1 ), helpstring( "property Height" )] HRESULT Height( [out, retval] UINT * pVal );
-	[propget, id( 2 ), helpstring( "property MaxHeight" )] HRESULT MaxHeight( [out, retval] INT * pVal );
-	[propget, id( 3 ), helpstring( "property MaxWidth" )] HRESULT MaxWidth( [out, retval] INT * pVal );
+	[propget, id( 2 ), helpstring( "property MaxHeight" )] HRESULT MaxHeight( [out, retval] UINT * pVal );
+	[propget, id( 3 ), helpstring( "property MaxWidth" )] HRESULT MaxWidth( [out, retval] UINT * pVal );
 	[id( 4 ), helpstring( "method LoadFromFile" )] HRESULT LoadFromFile( [in] IEngine * engine, [in] BSTR path, [in] BSTR name, [in] UINT height );
 	[id( 5 ), helpstring( "method GetGlyph" )] HRESULT GetGlyph( [in] WORD glyph, [out, retval] IGlyph ** pGlyph );
 };
@@ -1039,7 +1041,6 @@ interface IRenderTarget
 	[propget, id( 3 ), helpstring( "The rendered scene" )] HRESULT Scene( [out, retval] IScene ** pVal );
 	[propput, id( 3 ), helpstring( "The rendered scene" )] HRESULT Scene( [in] IScene * val );
 	[propget, id( 4 ), helpstring( "The target pixel format" )] HRESULT PixelFormat( [out, retval] ePIXEL_FORMAT * pVal );
-	[propput, id( 4 ), helpstring( "The target pixel format" )] HRESULT PixelFormat( [in] ePIXEL_FORMAT val );
 	[propget, id( 5 ), helpstring( "The target size" )] HRESULT Size( [out, retval] ISize ** pVal );
 	[id( 6 ), helpstring( "Initialises the render target" ), local] HRESULT Initialise();
 	[id( 7 ), helpstring( "Cleans the render target up" )] HRESULT Cleanup();
@@ -1130,78 +1131,39 @@ interface IPass
 {
 	[propget, id( 1 ), helpstring( "The pass two sided status" )] HRESULT TwoSided( [out, retval] boolean * pVal );
 	[propput, id( 1 ), helpstring( "The pass two sided status" )] HRESULT TwoSided( [in] boolean val );
-	[propget, id( 2 ), helpstring( "The pass global opacity value" )] HRESULT Opacity( [out, retval] float * pVal );
-	[propput, id( 2 ), helpstring( "The pass global opacity value" )] HRESULT Opacity( [in] float val );
-	[propget, id( 3 ), helpstring( "The pass emissive factor" )] HRESULT Emissive( [out, retval] float * pVal );
-	[propput, id( 3 ), helpstring( "The pass emissive factor" )] HRESULT Emissive( [in] float val );
-	[propget, id( 4 ), helpstring( "The pass refraction ratio" )] HRESULT RefractionRatio( [out, retval] float * pVal );
-	[propput, id( 4 ), helpstring( "The pass refraction ratio" )] HRESULT RefractionRatio( [in] float val );
-	[propget, id( 5 ), helpstring( "The pass alpha function" )] HRESULT AlphaFunc( [out, retval] eCOMPARISON_FUNC * pVal );
-	[propput, id( 5 ), helpstring( "The pass alpha function" )] HRESULT AlphaFunc( [in] eCOMPARISON_FUNC val );
-	[propget, id( 6 ), helpstring( "The pass alpha reference value" )] HRESULT AlphaRefValue( [out, retval] float * pVal );
-	[propput, id( 6 ), helpstring( "The pass alpha reference value" )] HRESULT AlphaRefValue( [in] float val );
-	[propget, id( 7 ), helpstring( "Retrieves the units count" )] HRESULT TextureUnitCount( [out, retval] unsigned int * pVal );
-	[propget, id( 8 ), helpstring( "The pass type" )] HRESULT Type( [out, retval] ePASS_TYPE * pVal );
-	[id( 9 ), helpstring( "Creates a texture unit" )] HRESULT CreateTextureUnit( [out, retval] ITextureUnit ** pVal );
-	[id( 11 ), helpstring( "Destroys the texture unit" )] HRESULT DestroyTextureUnit( [in] ITextureUnit * val );
-	[id( 10 ), helpstring( "Retrieves the texture unit at given index" )] HRESULT GetTextureUnitByIndex( [in] unsigned int index, [out, retval] ITextureUnit ** pVal );
-	[id( 12 ), helpstring( "Retrieves the texture unit at given flag" )] HRESULT GetTextureUnitByFlag( [in] eTEXTURE_FLAG flag, [out, retval] ITextureUnit ** pVal );
-};
-
-// IPhongPass
-[
-	uuid( A9DD38BB-99D9-4251-B7CB-5148DC766B4F ),
-	helpstring( "Castor3D PhongPass interface" ),
-	dual,
-	oleautomation
-]
-interface IPhongPass
-	: IPass
-{
+	[propget, id( 2 ), helpstring( "The pass global opacity factor" )] HRESULT Opacity( [out, retval] float * pVal );
+	[propput, id( 2 ), helpstring( "The pass global opacity factor" )] HRESULT Opacity( [in] float val );
+	[propget, id( 3 ), helpstring( "The pass emissive colour" )] HRESULT EmissiveColour( [out, retval] IRgbColour ** pVal );
+	[propput, id( 3 ), helpstring( "The pass emissive colour" )] HRESULT EmissiveColour( [in] IRgbColour * val );
+	[propget, id( 4 ), helpstring( "The pass emissive factor" )] HRESULT EmissiveFactor( [out, retval] float * pVal );
+	[propput, id( 4 ), helpstring( "The pass emissive factor" )] HRESULT EmissiveFactor( [in] float val );
+	[propget, id( 5 ), helpstring( "The pass refraction ratio" )] HRESULT RefractionRatio( [out, retval] float * pVal );
+	[propput, id( 5 ), helpstring( "The pass refraction ratio" )] HRESULT RefractionRatio( [in] float val );
+	[propget, id( 6 ), helpstring( "The pass alpha function" )] HRESULT AlphaFunc( [out, retval] eCOMPARISON_FUNC * pVal );
+	[propput, id( 6 ), helpstring( "The pass alpha function" )] HRESULT AlphaFunc( [in] eCOMPARISON_FUNC val );
+	[propget, id( 7 ), helpstring( "The pass blend alpha function" )] HRESULT BlendAlphaFunc( [out, retval] eCOMPARISON_FUNC * pVal );
+	[propput, id( 7 ), helpstring( "The pass blend alpha function" )] HRESULT BlendAlphaFunc( [in] eCOMPARISON_FUNC val );
+	[propget, id( 8 ), helpstring( "The pass alpha reference value" )] HRESULT AlphaRefValue( [out, retval] float * pVal );
+	[propput, id( 8 ), helpstring( "The pass alpha reference value" )] HRESULT AlphaRefValue( [in] float val );
+	[propget, id( 9 ), helpstring( "The pass type" )] HRESULT Type( [out, retval] UINT * pVal );
+	[propget, id( 10 ), helpstring( "Retrieves the texture units count" )] HRESULT TextureUnitCount( [out, retval] unsigned int * pVal );
+	[id( 11 ), helpstring( "Creates a texture unit" )] HRESULT CreateTextureUnit( [out, retval] ITextureUnit ** pVal );
+	[id( 12 ), helpstring( "Retrieves the texture unit at given index" )] HRESULT GetTextureUnitByIndex( [in] unsigned int index, [out, retval] ITextureUnit ** pVal );
+	[id( 13 ), helpstring( "Destroys the texture unit" )] HRESULT DestroyTextureUnit( [in] ITextureUnit * val );
 	[propget, id( 20 ), helpstring( "The pass diffuse colour" )] HRESULT Diffuse( [out, retval] IRgbColour ** pVal );
 	[propput, id( 20 ), helpstring( "The pass diffuse colour" )] HRESULT Diffuse( [in] IRgbColour * val );
-	[propget, id( 21 ), helpstring( "The pass specular colour" )] HRESULT Specular( [out, retval] IRgbColour ** pVal );
-	[propput, id( 21 ), helpstring( "The pass specular colour" )] HRESULT Specular( [in] IRgbColour * val );
-	[propget, id( 22 ), helpstring( "The pass ambient factor" )] HRESULT Ambient( [out, retval] float * pVal );
-	[propput, id( 22 ), helpstring( "The pass ambient factor" )] HRESULT Ambient( [in] float val );
-	[propget, id( 23 ), helpstring( "The pass shininess value" )] HRESULT Shininess( [out, retval] float * pVal );
-	[propput, id( 23 ), helpstring( "The pass shininess value" )] HRESULT Shininess( [in] float val );
-};
-
-// IMetallicRoughnessPbrPass
-[
-	uuid( 976972FC-91B2-4A8D-A1A9-B7F81D96D637 ),
-	helpstring( "Castor3D MetallicRoughnessPbrPass interface" ),
-	dual,
-	oleautomation
-]
-interface IMetallicRoughnessPbrPass
-	: IPass
-{
-	[propget, id( 20 ), helpstring( "The pass albedo colour" )] HRESULT Albedo( [out, retval] IRgbColour ** pVal );
-	[propput, id( 20 ), helpstring( "The pass albedo colour" )] HRESULT Albedo( [in] IRgbColour * val );
-	[propget, id( 21 ), helpstring( "The pass metallic value" )] HRESULT Metallic( [out, retval] float * pVal );
-	[propput, id( 21 ), helpstring( "The pass metallic value" )] HRESULT Metallic( [in] float val );
-	[propget, id( 22 ), helpstring( "The pass roughness value" )] HRESULT Roughness( [out, retval] float * pVal );
-	[propput, id( 22 ), helpstring( "The pass roughness value" )] HRESULT Roughness( [in] float val );
-};
-
-// ISpecularGlossinessPbrPass
-[
-	uuid( 30D6118F-EDA3-43DC-8F78-42BD70CEF47E ),
-	helpstring( "Castor3D SpecularGlossinessPbrPass interface" ),
-	dual,
-	oleautomation
-]
-interface ISpecularGlossinessPbrPass
-	: IPass
-{
-	[propget, id( 20 ), helpstring( "The pass diffuse colour" )] HRESULT Diffuse( [out, retval] IRgbColour ** pVal );
-	[propput, id( 20 ), helpstring( "The pass diffuse colour" )] HRESULT Diffuse( [in] IRgbColour * val );
-	[propget, id( 21 ), helpstring( "The pass specular colour" )] HRESULT Specular( [out, retval] IRgbColour ** pVal );
-	[propput, id( 21 ), helpstring( "The pass specular colour" )] HRESULT Specular( [in] IRgbColour * val );
-	[propget, id( 22 ), helpstring( "The pass glossiness value" )] HRESULT Glossiness( [out, retval] float * pVal );
-	[propput, id( 22 ), helpstring( "The pass glossiness value" )] HRESULT Glossiness( [in] float val );
+	[propget, id( 21 ), helpstring( "The pass albedo colour" )] HRESULT Albedo( [out, retval] IHdrRgbColour ** pVal );
+	[propput, id( 21 ), helpstring( "The pass albedo colour" )] HRESULT Albedo( [in] IHdrRgbColour * val );
+	[propget, id( 22 ), helpstring( "The pass specular colour" )] HRESULT Specular( [out, retval] IRgbColour ** pVal );
+	[propput, id( 22 ), helpstring( "The pass specular colour" )] HRESULT Specular( [in] IRgbColour * val );
+	[propget, id( 23 ), helpstring( "The pass metalness value" )] HRESULT Metalness( [out, retval] float * pVal );
+	[propput, id( 23 ), helpstring( "The pass metalness value" )] HRESULT Metalness( [in] float val );
+	[propget, id( 24 ), helpstring( "The pass shininess value" )] HRESULT Shininess( [out, retval] float * pVal );
+	[propput, id( 24 ), helpstring( "The pass shininess value" )] HRESULT Shininess( [in] float val );
+	[propget, id( 25 ), helpstring( "The pass roughness value" )] HRESULT Roughness( [out, retval] float * pVal );
+	[propput, id( 25 ), helpstring( "The pass roughness value" )] HRESULT Roughness( [in] float val );
+	[propget, id( 26 ), helpstring( "The pass glossiness value" )] HRESULT Glossiness( [out, retval] float * pVal );
+	[propput, id( 26 ), helpstring( "The pass glossiness value" )] HRESULT Glossiness( [in] float val );
 };
 
 // IMaterial
@@ -1305,19 +1267,17 @@ interface IMesh
 interface IRenderWindow
 	: IDispatch
 {
-	[propget, id( 1 ), helpstring( "The render target" )] HRESULT RenderTarget( [out, retval] IRenderTarget ** pVal );
-	[propput, id( 1 ), helpstring( "The render target" )] HRESULT RenderTarget( [in] IRenderTarget * camera );
-	[propget, id( 2 ), helpstring( "The window name" )] HRESULT Name( [out, retval] BSTR * pVal );
-	[id( 3 ), helpstring( "Initialises the render window" ), local] HRESULT Initialise( [in] ISize * size, [in] LPVOID val, [out, retval] VARIANT_BOOL * pVal );
-	[id( 4 ), helpstring( "Cleans the render window up" )] HRESULT Cleanup();
-	[id( 5 ), helpstring( "Resizes the render window" )] HRESULT Resize( [in] ISize * size );
-	[id( 6 ), helpstring( "MouseMove event processing" )] HRESULT OnMouseMove( [in] IPosition * pos );
-	[id( 7 ), helpstring( "MouseMouseLButtondown event processing" )] HRESULT OnMouseLButtonDown( [in] IPosition * pos );
-	[id( 8 ), helpstring( "MouseMouseLButtonUp event processing" )] HRESULT OnMouseLButtonUp( [in] IPosition * pos );
-	[id( 9 ), helpstring( "MouseMouseMButtondown event processing" )] HRESULT OnMouseMButtonDown( [in] IPosition * pos );
-	[id( 10 ), helpstring( "MouseMouseLButtonUp event processing" )] HRESULT OnMouseMButtonUp( [in] IPosition * pos );
-	[id( 11 ), helpstring( "MouseMouseRButtondown event processing" )] HRESULT OnMouseRButtonDown( [in] IPosition * pos );
-	[id( 12 ), helpstring( "MouseMouseRButtonUp event processing" )] HRESULT OnMouseRButtonUp( [in] IPosition * pos );
+	[propget, id( 1 ), helpstring( "The window name" )] HRESULT Name( [out, retval] BSTR * pVal );
+	[id( 2 ), helpstring( "Initialises the render window" )] HRESULT Initialise( [in] IRenderTarget * target );
+	[id( 3 ), helpstring( "Cleans the render window up" )] HRESULT Cleanup();
+	[id( 4 ), helpstring( "Resizes the render window" )] HRESULT Resize( [in] ISize * size );
+	[id( 5 ), helpstring( "MouseMove event processing" )] HRESULT OnMouseMove( [in] IPosition * pos );
+	[id( 6 ), helpstring( "MouseMouseLButtondown event processing" )] HRESULT OnMouseLButtonDown( [in] IPosition * pos );
+	[id( 7 ), helpstring( "MouseMouseLButtonUp event processing" )] HRESULT OnMouseLButtonUp( [in] IPosition * pos );
+	[id( 8 ), helpstring( "MouseMouseMButtondown event processing" )] HRESULT OnMouseMButtonDown( [in] IPosition * pos );
+	[id( 9 ), helpstring( "MouseMouseLButtonUp event processing" )] HRESULT OnMouseMButtonUp( [in] IPosition * pos );
+	[id( 10 ), helpstring( "MouseMouseRButtondown event processing" )] HRESULT OnMouseRButtonDown( [in] IPosition * pos );
+	[id( 11 ), helpstring( "MouseMouseRButtonUp event processing" )] HRESULT OnMouseRButtonUp( [in] IPosition * pos );
 };
 
 // ISceneBackground
@@ -1330,7 +1290,7 @@ interface IRenderWindow
 interface ISceneBackground
 	: IDispatch
 {
-	[propget, id( 1 ), helpstring( "The background type" )] HRESULT Type( [out, retval] eBACKGROUND_TYPE * pVal );
+	[propget, id( 1 ), helpstring( "The background type" )] HRESULT Type( [out, retval] BSTR * pVal );
 };
 
 // IColourBackground
@@ -1393,7 +1353,6 @@ interface IScene
 	[propget, id( 2 ), helpstring( "The background colour" )] HRESULT BackgroundColour( [out, retval] IRgbColour ** pVal );
 	[propput, id( 2 ), helpstring( "The background colour" )] HRESULT BackgroundColour( [in] IRgbColour * val );
 	[propget, id( 3 ), helpstring( "The scene name" )] HRESULT Name( [out, retval] BSTR * pVal );
-	[propput, id( 3 ), helpstring( "The scene name" )] HRESULT Name( [in] BSTR val );
 	[propget, id( 4 ), helpstring( "The ambient light colour" )] HRESULT AmbientLight( [out, retval] IRgbColour ** pVal );
 	[propput, id( 4 ), helpstring( "The ambient light colour" )] HRESULT AmbientLight( [in] IRgbColour * val );
 	[propget, id( 5 ), helpstring( "The root scene node" )] HRESULT RootNode( [out, retval] ISceneNode ** pVal );
@@ -1514,8 +1473,10 @@ interface ISpotLight
 	[propput, id( 2 ), helpstring( "The light attenuation values (constant, linear and quadratic)" )] HRESULT Attenuation( [in] IVector3D * val );
 	[propget, id( 3 ), helpstring( "The light exponent value" )] HRESULT Exponent( [out, retval] float * pVal );
 	[propput, id( 3 ), helpstring( "The light exponent value" )] HRESULT Exponent( [in] float val );
-	[propget, id( 4 ), helpstring( "The light cut off value" )] HRESULT CutOff( [out, retval] IAngle ** pVal );
-	[propput, id( 4 ), helpstring( "The light cut off value" )] HRESULT CutOff( [in] IAngle * val );
+	[propget, id( 4 ), helpstring( "The light inner cut off value" )] HRESULT InnerCutOff( [out, retval] IAngle ** pVal );
+	[propput, id( 4 ), helpstring( "The light inner cut off value" )] HRESULT InnerCutOff( [in] IAngle * val );
+	[propget, id( 5 ), helpstring( "The light outer cut off value" )] HRESULT OuterCutOff( [out, retval] IAngle ** pVal );
+	[propput, id( 5 ), helpstring( "The light outer cut off value" )] HRESULT OuterCutOff( [in] IAngle * val );
 };
 
 // ICamera
@@ -1765,27 +1726,30 @@ interface IEngine
 	[propget, id( 1 ), helpstring( "Retrieves the plugins directory" )] HRESULT PluginsDirectory( [out, retval] BSTR * path );
 	[propget, id( 2 ), helpstring( "Retrieves engine directory" )] HRESULT EngineDirectory( [out, retval] BSTR * path );
 	[propget, id( 3 ), helpstring( "Retrieves data directory" )] HRESULT DataDirectory( [out, retval] BSTR * path );
-	[id( 11 ), helpstring( "Creates the engine" )] HRESULT Create( [in] BSTR appName, [in] boolean enableValidation );
-	[id( 12 ), helpstring( "Destroys the engine" )] HRESULT Destroy();
-	[id( 13 ), helpstring( "Initialises the engine" )] HRESULT Initialise( [in] int fps );
-	[id( 14 ), helpstring( "Cleans up the engine" )] HRESULT Cleanup();
-	[id( 15 ), helpstring( "Creates a scene" )] HRESULT CreateScene( [in] BSTR name, [out, retval] IScene ** pVal );
-	[id( 16 ), helpstring( "Cleans up the scenes" )] HRESULT ClearScenes();
-	[id( 17 ), helpstring( "Loads a renderer" )] HRESULT LoadRenderer( [in] BSTR type );
-	[id( 18 ), helpstring( "Renders a frame" )] HRESULT RenderOneFrame();
-	[id( 19 ), helpstring( "Loads a plugin from its path" )] HRESULT LoadPlugin( [in] BSTR path );
-	[id( 21 ), helpstring( "Creates an overlay" )] HRESULT CreateOverlay( [in] eOVERLAY_TYPE type, [in] BSTR name, [in] IOverlay * parent, [in] IScene * scene, [out, retval] IOverlay ** pVal );
-	[id( 22 ), helpstring( "Creates a render window" )] HRESULT CreateRenderWindow( [in] BSTR name, [out, retval] IRenderWindow ** pVal );
-	[id( 23 ), helpstring( "Removes a render window" )] HRESULT RemoveWindow( [in] IRenderWindow * val );
-	[id( 24 ), helpstring( "Creates a sampler" )] HRESULT CreateSampler( [in] BSTR name, [out, retval] ISampler ** pVal );
-	[id( 29 ), helpstring( "Removes the scene with the given name" )] HRESULT RemoveScene( [in] BSTR name );
-	[id( 30 ), helpstring( "Loads a scene file" )] HRESULT LoadScene( [in] BSTR name, [out, retval] IRenderWindow ** window );
+	[id( 4 ), helpstring( "Creates the engine" )] HRESULT Create( [in] BSTR appName, [in] boolean enableValidation );
+	[id( 5 ), helpstring( "Destroys the engine" )] HRESULT Destroy();
+	[id( 6 ), helpstring( "Initialises the engine" )] HRESULT Initialise( [in] int fps, [in] boolean threaded );
+	[id( 7 ), helpstring( "Cleans up the engine" )] HRESULT Cleanup();
+	[id( 8 ), helpstring( "Creates a scene" )] HRESULT CreateScene( [in] BSTR name, [out, retval] IScene ** pVal );
+	[id( 9 ), helpstring( "Cleans up the scenes" )] HRESULT ClearScenes();
+	[id( 10 ), helpstring( "Loads a renderer" )] HRESULT LoadRenderer( [in] BSTR type );
+	[id( 11 ), helpstring( "Renders a frame (non-threaded rendering only)" )] HRESULT RenderOneFrame();
+	[id( 12 ), helpstring( "Loads a plugin from its path" )] HRESULT LoadPlugin( [in] BSTR path );
+	[id( 13 ), helpstring( "Creates an overlay" )] HRESULT CreateOverlay( [in] eOVERLAY_TYPE type, [in] BSTR name, [in] IOverlay * parent, [in] IScene * scene, [out, retval] IOverlay ** pVal );
+	[id( 14 ), helpstring( "Creates a render window" ), local] HRESULT CreateRenderWindow( [in] BSTR name, [in] ISize * size, [in] LPVOID hWnd, [out, retval] IRenderWindow ** pVal );
+	[id( 15 ), helpstring( "Removes a render window" )] HRESULT RemoveWindow( [in] IRenderWindow * val );
+	[id( 16 ), helpstring( "Creates a sampler" )] HRESULT CreateSampler( [in] BSTR name, [out, retval] ISampler ** pVal );
+	[id( 17 ), helpstring( "Removes the scene with the given name" )] HRESULT RemoveScene( [in] BSTR name );
+	[id( 18 ), helpstring( "Loads a scene file" )] HRESULT LoadScene( [in] BSTR name, [out, retval] IRenderTarget ** pTarget );
+	[id( 19 ), helpstring( "Starts the render loop (threaded rendering only)" )] HRESULT StartRendering();
+	[id( 20 ), helpstring( "Pauses the render loop (threaded rendering only)" )] HRESULT PauseRendering();
+	[id( 21 ), helpstring( "Ends the render loop (threaded rendering only)" )] HRESULT EndRendering();
 };
 
 // Castor3DLib
 [
 	uuid( AE7400FF-58CB-40F5-9D8B-3373BCC45E54 ),
-	version( 0.8 ),
+	version( 0.14 ),
 	helpstring( "Castor3D interfaces" )
 ]
 library Castor3D
@@ -1863,6 +1827,15 @@ library Castor3D
 	coclass Angle
 	{
 		[default] interface IAngle;
+	};
+
+	// Length
+	[
+		uuid( EEEBC83E-C216-4D5E-84BD-E3462E448A24 )
+	]
+	coclass Length
+	{
+		[default] interface ILength;
 	};
 
 	// Quaternion
@@ -1989,33 +1962,6 @@ library Castor3D
 	coclass Pass
 	{
 		[default] interface IPass;
-	}
-
-	// PhongPass
-	[
-		uuid( 2A4B5235-063A-454B-860C-CA91ED042E2D )
-	]
-	coclass PhongPass
-	{
-		[default] interface IPhongPass;
-	}
-
-	// MetallicRoughnessPbrPass
-	[
-		uuid( 20C67D15-677C-43DE-98B5-E328293740AF )
-	]
-	coclass MetallicRoughnessPbrPass
-	{
-		[default] interface IMetallicRoughnessPbrPass;
-	}
-
-	// SpecularGlossinessPass
-	[
-		uuid( 5ED10C5B-248B-427A-818F-C4F94A5FA54F )
-	]
-	coclass SpecularGlossinessPbrPass
-	{
-		[default] interface ISpecularGlossinessPbrPass;
 	}
 
 	// Material

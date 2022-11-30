@@ -10,52 +10,32 @@
 
 namespace CastorCom
 {
+	COM_TYPE_TRAITS_EX( Rect, castor, Rectangle );
 	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.7.0
-	\date		10/09/2014
 	\~english
 	\brief		This class defines a CRect object accessible from COM.
 	\~french
 	\brief		Cette classe définit un CRect accessible depuis COM.
 	*/
-	class ATL_NO_VTABLE CRect
-		:	COM_ATL_OBJECT( Rect )
-		,	public castor::Rectangle
+	class CRect
+		: public CComAtlObject< Rect, castor::Rectangle >
 	{
 	public:
-		/**
-		 *\~english
-		 *\brief		Default constructor.
-		 *\~french
-		 *\brief		Constructeur par défaut.
-		 */
-		CRect();
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		virtual ~CRect();
+		COMEX_PROPERTY( Left, INT, &m_internal, &Internal::left, &Internal::left );
+		COMEX_PROPERTY( Right, INT, &m_internal, &Internal::right, &Internal::right );
+		COMEX_PROPERTY( Top, INT, &m_internal, &Internal::top, &Internal::top );
+		COMEX_PROPERTY( Bottom, INT, &m_internal, &Internal::bottom, &Internal::bottom );
 
-		COM_PROPERTY( Left, INT, makeGetter( this, &castor::Rectangle::left ), makePutter( this, &castor::Rectangle::left ) );
-		COM_PROPERTY( Right, INT, makeGetter( this, &castor::Rectangle::right ), makePutter( this, &castor::Rectangle::right ) );
-		COM_PROPERTY( Top, INT, makeGetter( this, &castor::Rectangle::top ), makePutter( this, &castor::Rectangle::top ) );
-		COM_PROPERTY( Bottom, INT, makeGetter( this, &castor::Rectangle::bottom ), makePutter( this, &castor::Rectangle::bottom ) );
-
-		COM_PROPERTY_GET( Width, INT, makeGetter( this, &castor::Rectangle::getWidth ) );
-		COM_PROPERTY_GET( Height, INT, makeGetter( this, &castor::Rectangle::getHeight ) );
+		COM_PROPERTY_GET( Width, INT, makeGetter( &m_internal, &castor::Rectangle::getWidth ) );
+		COM_PROPERTY_GET( Height, INT, makeGetter( &m_internal, &castor::Rectangle::getHeight ) );
 
 		STDMETHOD( Set )( /* [in] */ INT left, /* [in] */ INT top, /* [in] */ INT right, /* [in] */ INT bottom );
 		STDMETHOD( IntersectsPosition )( /* [in] */ IPosition * pos, /* [retval][out] */ eINTERSECTION * pVal );
 		STDMETHOD( IntersectsRectangle )( /* [in] */ IRect * pos, /* [retval][out] */ eINTERSECTION * pVal );
 	};
-	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
+	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object
+	//!\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
 	OBJECT_ENTRY_AUTO( __uuidof( Rect ), CRect );
-
-	DECLARE_VARIABLE_REF_GETTER( Rect, castor, Rectangle );
-	DECLARE_VARIABLE_REF_PUTTER( Rect, castor, Rectangle );
 }
 
 #endif

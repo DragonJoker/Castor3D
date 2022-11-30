@@ -17,13 +17,11 @@ if ( MSVC )
 
 		set( ${PROJECT_NAME}_SRC_FILES
 			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/ComCastor3DModule.cpp
-			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/ComCastor3DPch.cpp
 			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/ComError.cpp
 		)
 		set( ${PROJECT_NAME}_HDR_FILES
 			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/ComAtlObject.hpp
 			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/ComCastor3DModule.hpp
-			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/ComCastor3DPch.hpp
 			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/ComCastor3DPrerequisites.hpp
 			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/ComError.hpp
 			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/ComParameterCast.hpp
@@ -128,6 +126,7 @@ if ( MSVC )
 			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/CastorUtils/ComHdrRgbaColour.cpp
 			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/CastorUtils/ComHdrRgbColour.cpp
 			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/CastorUtils/ComImage.cpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/CastorUtils/ComLength.cpp
 			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/CastorUtils/ComLogger.cpp
 			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/CastorUtils/ComMatrix4x4.cpp
 			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/CastorUtils/ComPixelBuffer.cpp
@@ -148,6 +147,7 @@ if ( MSVC )
 			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/CastorUtils/ComHdrRgbaColour.hpp
 			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/CastorUtils/ComHdrRgbColour.hpp
 			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/CastorUtils/ComImage.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/CastorUtils/ComLength.hpp
 			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/CastorUtils/ComLogger.hpp
 			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/CastorUtils/ComMatrix4x4.hpp
 			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/CastorUtils/ComPixelBuffer.hpp
@@ -188,6 +188,7 @@ if ( MSVC )
 		add_interface( "A25F52A6-5CF2-45F5-BED8-FB0294FCA339" RESRC_LIST RESH_LIST RESOURCE_ID "HdrRgbaColour" )
 		add_interface( "097DF712-996C-4E4B-89FB-9C0D06F42BE7" RESRC_LIST RESH_LIST RESOURCE_ID "HdrRgbColour" )
 		add_interface( "236D0939-4F04-4D7C-A8CD-1415F3CCBA71" RESRC_LIST RESH_LIST RESOURCE_ID "Angle" )
+		add_interface( "EEEBC83E-C216-4D5E-84BD-E3462E448A24" RESRC_LIST RESH_LIST RESOURCE_ID "Length" )
 		add_interface( "7A301C67-36E2-483D-925A-62E3C5DBE871" RESRC_LIST RESH_LIST RESOURCE_ID "Quaternion" )
 		add_interface( "3353741E-3F82-4A99-B8DC-6D6AB0584E04" RESRC_LIST RESH_LIST RESOURCE_ID "Matrix4x4" )
 		add_interface( "E8EB965B-EB5E-413D-B119-FADC081C8AD9" RESRC_LIST RESH_LIST RESOURCE_ID "Glyph" )
@@ -234,9 +235,6 @@ if ( MSVC )
 		add_interface( "E8DD6F29-F296-4687-AADD-F6FD1D0AC670" RESRC_LIST RESH_LIST RESOURCE_ID "TextureUnit" )
 		add_interface( "B62FE384-D806-4DA7-B091-A7E260D95D7F" RESRC_LIST RESH_LIST RESOURCE_ID "ShaderProgram" )
 		add_interface( "1B6D6829-C5D7-4B75-8A92-E016C63147B3" RESRC_LIST RESH_LIST RESOURCE_ID "Pass" )
-		add_interface( "2A4B5235-063A-454B-860C-CA91ED042E2D" RESRC_LIST RESH_LIST RESOURCE_ID "PhongPass" )
-		add_interface( "20C67D15-677C-43DE-98B5-E328293740AF" RESRC_LIST RESH_LIST RESOURCE_ID "MetallicRoughnessPbrPass" )
-		add_interface( "5ED10C5B-248B-427A-818F-C4F94A5FA54F" RESRC_LIST RESH_LIST RESOURCE_ID "SpecularGlossinessPbrPass" )
 		add_interface( "A9F3E2A5-A54C-4E4A-8448-0A663BE88E40" RESRC_LIST RESH_LIST RESOURCE_ID "Material" )
 
 		# Add RGS files to the sources
@@ -253,6 +251,8 @@ if ( MSVC )
 			NEWLINE_STYLE LF
 		)
 
+		find_rsc_file( ${PROJECT_NAME} dll )
+
 		if ( MSVC )
 			set( CMAKE_SHARED_LINKER_FLAGS_DEBUG "${CMAKE_SHARED_LINKER_FLAGS_DEBUG} /DEF:${${PROJECT_NAME}_DEF_FILES_DEBUG}")
 			set( CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /DEF:${${PROJECT_NAME}_DEF_FILES_RELEASE}")
@@ -264,6 +264,7 @@ if ( MSVC )
 		set( ${PROJECT_NAME}_ADDITIONAL_FILES
 			${${PROJECT_NAME}_IDL_FILES}
 			${${PROJECT_NAME}_RGS_FILES}
+			${${PROJECT_NAME}_RSC_FILES}
 			${${PROJECT_NAME}_SOURCES_IDL_FILES}
 		)
 		source_group( "IDL Files" FILES ${${PROJECT_NAME}_SOURCES_IDL_FILES} )
@@ -275,7 +276,8 @@ if ( MSVC )
 			${${PROJECT_NAME}_DEF_FILES}
 			${${PROJECT_NAME}_RGS_FILES}
 		)
-
+		set( PROJECTS_UNITY_BUILD OFF )
+		set( PROJECTS_USE_PRECOMPILED_HEADERS OFF )
 		add_target_min(
 			${PROJECT_NAME}
 			dll
@@ -305,7 +307,6 @@ if ( MSVC )
 			${PROJECT_NAME}
 			PARENT_SCOPE
 		)
-
 		# Copy tlb files into binaries directory.
 		add_custom_command( TARGET ${PROJECT_NAME}
 			POST_BUILD
@@ -313,7 +314,6 @@ if ( MSVC )
 				${CMAKE_CURRENT_BINARY_DIR}/Castor3D.tlb
 				${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin/
 		)
-
 		# install tlb files
 		install(
 			FILES ${CMAKE_CURRENT_BINARY_DIR}/Castor3D.tlb
@@ -321,7 +321,7 @@ if ( MSVC )
 			COMPONENT ${PROJECT_NAME}
 		)
 
-		register_target( ${PROJECT_NAME} )
+		# register_target( ${PROJECT_NAME} )
 
 		set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Interop" )
 		add_target_astyle( ${PROJECT_NAME} ".hpp;.inl;.cpp" )

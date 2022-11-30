@@ -3,46 +3,39 @@
 
 namespace CastorCom
 {
-	CVector2D::CVector2D()
+	STDMETHODIMP CVector2D::Negate()noexcept
 	{
-	}
-
-	CVector2D::~CVector2D()
-	{
-	}
-
-	STDMETHODIMP CVector2D::Negate()
-	{
-		castor::point::negate( *this );
+		castor::point::negate( m_internal );
 		return S_OK;
 	}
 
-	STDMETHODIMP CVector2D::Normalise()
+	STDMETHODIMP CVector2D::Normalise()noexcept
 	{
-		castor::point::normalise( *this );
+		castor::point::normalise( m_internal );
 		return S_OK;
 	}
 
-	STDMETHODIMP CVector2D::Dot( IVector2D * pVal, FLOAT * pRet )
+	STDMETHODIMP CVector2D::Dot( IVector2D * pVal, FLOAT * pRet )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
 		if ( pVal && pRet )
 		{
-			*pRet = castor::point::dot( *this, *reinterpret_cast< CVector2D * >( pVal ) );
+			*pRet = castor::point::dot( m_internal
+				, static_cast< CVector2D * >( pVal )->getInternal() );
 			return S_OK;
 		}
 
 		return hr;
 	}
 
-	STDMETHODIMP CVector2D::Length( FLOAT * pVal )
+	STDMETHODIMP CVector2D::Length( FLOAT * pVal )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
 		if ( pVal && pVal )
 		{
-			*pVal = FLOAT( castor::point::length( *this ) );
+			*pVal = FLOAT( castor::point::length( m_internal ) );
 			return S_OK;
 		}
 
