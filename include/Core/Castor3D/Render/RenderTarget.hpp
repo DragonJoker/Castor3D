@@ -369,6 +369,16 @@ namespace castor3d
 		{
 			return m_initialising;
 		}
+
+		bool isUsingStereo()const
+		{
+			return m_stereo.enabled;
+		}
+
+		float getIntraOcularDistance()const
+		{
+			return m_stereo.intraOcularDistance;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -390,6 +400,16 @@ namespace castor3d
 		void setJitter( castor::Point2f const & value )
 		{
 			m_jitter = value;
+		}
+
+		void setStereo( bool value )
+		{
+			m_stereo.enabled = value;
+		}
+
+		void setIntraOcularDistance( float value )
+		{
+			m_stereo.intraOcularDistance = value;
 		}
 		/**@}*/
 
@@ -459,6 +479,13 @@ namespace castor3d
 		ashes::SemaphorePtr m_combineSemaphore;
 		OnInitialised m_onInitialised;
 		std::vector< OnInitialisedConnection > m_onTargetInitialised;
+
+		struct StereoConfig
+		{
+			bool enabled{};
+			float intraOcularDistance{};
+		};
+		StereoConfig m_stereo;
 	};
 }
 

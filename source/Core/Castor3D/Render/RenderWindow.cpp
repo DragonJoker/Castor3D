@@ -818,7 +818,7 @@ namespace castor3d
 
 		if ( auto target = getRenderTarget() )
 		{
-			//l_result = target->isUsingStereo();
+			result = target->isUsingStereo();
 		}
 
 		return result;
@@ -828,7 +828,7 @@ namespace castor3d
 	{
 		if ( auto target = getRenderTarget() )
 		{
-			//l_target->setStereo( value );
+			target->setStereo( value );
 		}
 	}
 
@@ -838,7 +838,7 @@ namespace castor3d
 
 		if ( auto target = getRenderTarget() )
 		{
-			//l_result = target->getIntraOcularDistance();
+			result = target->getIntraOcularDistance();
 		}
 
 		return result;
@@ -848,7 +848,7 @@ namespace castor3d
 	{
 		if ( auto target = getRenderTarget() )
 		{
-			//l_target->setIntraOcularDistance( value );
+			target->setIntraOcularDistance( value );
 		}
 	}
 
