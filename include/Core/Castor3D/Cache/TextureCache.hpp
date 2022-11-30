@@ -10,12 +10,11 @@ See LICENSE file in root folder
 #include "Castor3D/Material/Texture/TextureSourceInfo.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4365 )
+#include <CastorUtils/Config/BeginExternHeaderGuard.hpp>
 #include <atomic>
 #include <mutex>
 #include <unordered_set>
-#pragma warning( pop )
+#include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
 namespace castor3d
 {

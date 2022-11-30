@@ -24,12 +24,11 @@ See LICENSE file in root folder
 #include <CastorUtils/Math/RangedValue.hpp>
 #include <CastorUtils/Multithreading/SpinMutex.hpp>
 
-#pragma warning( push )
-#pragma warning( disable:4365 )
+#include <CastorUtils/Config/BeginExternHeaderGuard.hpp>
 #include <atomic>
 #include <unordered_map>
 #include <unordered_set>
-#pragma warning( pop )
+#include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
 namespace castor3d
 {

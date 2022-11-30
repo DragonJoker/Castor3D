@@ -6,12 +6,10 @@ See LICENSE file in root folder
 
 #include "DesignModule.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4365 )
-#pragma warning( disable:5262 )
+#include "CastorUtils/Config/BeginExternHeaderGuard.hpp"
 #include <atomic>
 #include <memory>
-#pragma warning( pop )
+#include "CastorUtils/Config/EndExternHeaderGuard.hpp"
 
 namespace castor
 {

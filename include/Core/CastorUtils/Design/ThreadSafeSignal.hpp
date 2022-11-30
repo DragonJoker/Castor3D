@@ -13,10 +13,9 @@ See LICENSE file in root folder
 #include <map>
 #include <set>
 
-#pragma warning( push )
-#pragma warning( disable:5262 )
+#include "CastorUtils/Config/BeginExternHeaderGuard.hpp"
 #include <mutex>
-#pragma warning( pop )
+#include "CastorUtils/Config/EndExternHeaderGuard.hpp"
 
 namespace castor
 {

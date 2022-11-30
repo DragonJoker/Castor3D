@@ -16,16 +16,12 @@
 #include <ashespp/Core/PlatformWindowHandle.hpp>
 #include <ashespp/Core/WindowHandle.hpp>
 
-#pragma warning( push )
-#pragma warning( disable: 4127 )
-#pragma warning( disable: 4365 )
-#pragma warning( disable: 4371 )
-#pragma warning( disable: 5054 )
+#include <CastorUtils/Config/BeginExternHeaderGuard.hpp>
 #include <wx/display.h>
 #include <wx/mstream.h>
 #include <wx/renderer.h>
 #include <wx/rawbmp.h>
-#pragma warning( pop )
+#include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
 #if defined( CU_PlatformApple )
 #	include "MetalLayer.h"

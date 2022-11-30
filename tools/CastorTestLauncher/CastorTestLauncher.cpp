@@ -8,13 +8,10 @@
 #include <CastorUtils/Exception/Exception.hpp>
 #include <CastorUtils/Miscellaneous/StringUtils.hpp>
 
-#pragma warning( push )
-#pragma warning( disable: 4365 )
-#pragma warning( disable: 4371 )
-#pragma warning( disable: 5054 )
+#include <CastorUtils/Config/BeginExternHeaderGuard.hpp>
 #include <wx/cmdline.h>
 #include <wx/image.h>
-#pragma warning( pop )
+#include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
 wxIMPLEMENT_APP( test_launcher::CastorTestLauncher );
 

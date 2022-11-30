@@ -6,10 +6,9 @@ See LICENSE file in root folder
 
 #include "FrameListener.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4365 )
+#include <CastorUtils/Config/BeginExternHeaderGuard.hpp>
 #include <atomic>
-#pragma warning( pop )
+#include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
 namespace castor3d
 {

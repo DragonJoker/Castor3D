@@ -5,21 +5,9 @@
 #include "CastorUtils/Graphics/PixelBuffer.hpp"
 
 #define TINYEXR_IMPLEMENTATION
-#pragma warning( push )
-#pragma warning( disable: 4242 )
-#pragma warning( disable: 4365 )
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wreserved-identifier"
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Walloc-zero"
-#pragma GCC diagnostic ignored "-Wcast-qual"
-#pragma GCC diagnostic ignored "-Wconversion"
-#pragma GCC diagnostic ignored "-Wuseless-cast"
-#pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
+#include "CastorUtils/Config/BeginExternHeaderGuard.hpp"
 #include "tinyexr.h"
-#pragma GCC diagnostic pop
-#pragma clang diagnostic pop
-#pragma warning( pop )
+#include "CastorUtils/Config/EndExternHeaderGuard.hpp"
 
 namespace castor
 {

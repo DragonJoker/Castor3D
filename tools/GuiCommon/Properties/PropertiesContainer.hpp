@@ -6,11 +6,9 @@ See LICENSE file in root folder
 
 #include "GuiCommon/Properties/TreeItems/TreeItemProperty.hpp"
 
-#pragma warning( push )
-#pragma warning( disable: 4365 )
-#pragma warning( disable: 5054 )
+#include <CastorUtils/Config/BeginExternHeaderGuard.hpp>
 #include <wx/propgrid/propgrid.h>
-#pragma warning( pop )
+#include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
 namespace GuiCommon
 {

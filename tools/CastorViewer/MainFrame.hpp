@@ -6,16 +6,13 @@ See LICENSE file in root folder
 
 #include <GuiCommon/GuiCommonPrerequisites.hpp>
 
-#pragma warning( push )
-#pragma warning( disable: 4365 )
-#pragma warning( disable: 5054 )
-#pragma warning( disable: 5262 )
+#include <CastorUtils/Config/BeginExternHeaderGuard.hpp>
 #include <wx/frame.h>
 #include <wx/listctrl.h>
 #include <wx/aui/framemanager.h>
 #include <wx/aui/auibook.h>
 #include <wx/aui/auibar.h>
-#pragma warning( pop )
+#include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
 #include <GuiCommon/GuiCommonPrerequisites.hpp>
 

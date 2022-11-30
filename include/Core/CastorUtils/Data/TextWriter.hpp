@@ -17,11 +17,10 @@ See LICENSE file in root folder
 #include <cstring>
 #include <numeric>
 
-#pragma warning( push )
-#pragma warning( disable:5262 )
+#include "CastorUtils/Config/BeginExternHeaderGuard.hpp"
 #include <iomanip>
 #include <iostream>
-#pragma warning( pop )
+#include "CastorUtils/Config/EndExternHeaderGuard.hpp"
 
 namespace castor
 {

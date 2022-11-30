@@ -11,10 +11,9 @@ See LICENSE file in root folder
 #include <CastorUtils/Design/GroupChangeTracked.hpp>
 #include <CastorUtils/Multithreading/SpinMutex.hpp>
 
-#pragma warning( push )
-#pragma warning( disable:4365 )
+#include <CastorUtils/Config/BeginExternHeaderGuard.hpp>
 #include <atomic>
-#pragma warning( pop )
+#include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
 #if defined( CU_CompilerMSVC )
 #	pragma warning( push )

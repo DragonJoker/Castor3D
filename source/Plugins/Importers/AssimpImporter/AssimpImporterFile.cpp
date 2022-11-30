@@ -16,12 +16,10 @@
 
 #include <CastorUtils/Design/ArrayView.hpp>
 
-#pragma warning( push )
-#pragma warning( disable: 4365 )
-#pragma warning( disable: 4619 )
+#include <CastorUtils/Config/BeginExternHeaderGuard.hpp>
 #include <assimp/material.h>
 #include <assimp/postprocess.h>
-#pragma warning( pop )
+#include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
 namespace c3d_assimp
 {

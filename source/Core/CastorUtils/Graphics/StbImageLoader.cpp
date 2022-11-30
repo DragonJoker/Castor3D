@@ -9,32 +9,9 @@
 
 #define STB_IMAGE_IMPLEMENTATION
 #define STBI_FAILURE_USERMSG
-#pragma warning( push )
-#pragma warning( disable: 4100 )
-#pragma warning( disable: 4365 )
-#pragma warning( disable: 5054 )
-#pragma warning( disable: 5219 )
-#pragma warning( disable: 5262 )
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wcast-align"
-#pragma clang diagnostic ignored "-Wcomma"
-#pragma clang diagnostic ignored "-Wimplicit-fallthrough"
-#pragma clang diagnostic ignored "-Wdisabled-macro-expansion"
-#pragma clang diagnostic ignored "-Wold-style-cast"
-#pragma clang diagnostic ignored "-Wreserved-identifier"
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Walloc-zero"
-#pragma GCC diagnostic ignored "-Wcast-qual"
-#pragma GCC diagnostic ignored "-Wconversion"
-#pragma GCC diagnostic ignored "-Wimplicit-fallthrough="
-#pragma GCC diagnostic ignored "-Wshift-negative-value"
-#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
-#pragma GCC diagnostic ignored "-Wuseless-cast"
-#pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
+#include "CastorUtils/Config/BeginExternHeaderGuard.hpp"
 #include "stb_image.h"
-#pragma GCC diagnostic pop
-#pragma clang diagnostic pop
-#pragma warning( pop )
+#include "CastorUtils/Config/EndExternHeaderGuard.hpp"
 
 namespace castor
 {

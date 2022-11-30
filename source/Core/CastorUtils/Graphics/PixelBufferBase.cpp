@@ -7,16 +7,9 @@
 
 #include <ashes/common/Format.hpp>
 
-#pragma warning( push )
-#pragma warning( disable: 4365 )
-#pragma warning( disable: 5219 )
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wconversion"
-#pragma GCC diagnostic ignored "-Wcast-qual"
-#pragma GCC diagnostic ignored "-Wuseless-cast"
+#include "CastorUtils/Config/BeginExternHeaderGuard.hpp"
 #include "stb_image_resize.h"
-#pragma GCC diagnostic pop
-#pragma warning( pop )
+#include "CastorUtils/Config/EndExternHeaderGuard.hpp"
 
 CU_ImplementCUSmartPtr( castor, PxBufferBase )
 

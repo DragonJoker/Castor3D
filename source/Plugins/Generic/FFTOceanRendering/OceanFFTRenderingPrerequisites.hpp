@@ -6,16 +6,9 @@ See LICENSE file in root folder
 
 #include <ashes/ashes.h>
 
-#pragma warning( push )
-#pragma warning( disable:4189 )
-#pragma warning( disable:4244 )
-#pragma warning( disable:4245 )
-#pragma warning( disable:4365 )
-#pragma warning( disable:4456 )
-#pragma warning( disable:4616 )
-#pragma warning( disable:5219 )
+#include <CastorUtils/Config/BeginExternHeaderGuard.hpp>
 #include <VkFFT/vkFFT.h>
-#pragma warning( pop )
+#include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
 #include <Castor3D/Render/RenderModule.hpp>
 #include <Castor3D/Render/RenderNodesPass.hpp>

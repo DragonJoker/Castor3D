@@ -11,11 +11,9 @@ See LICENSE file in root folder
 #include "CastorUtils/Log/Logger.hpp"
 #include "CastorUtils/Multithreading/MultithreadingModule.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4365 )
-#pragma warning( disable:5262 )
+#include "CastorUtils/Config/BeginExternHeaderGuard.hpp"
 #include <mutex>
-#pragma warning( pop )
+#include "CastorUtils/Config/EndExternHeaderGuard.hpp"
 
 #include <unordered_map>
 

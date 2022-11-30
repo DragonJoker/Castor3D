@@ -4,13 +4,9 @@ See LICENSE file in root folder
 #ifndef ___CTL_CastorTestLauncher_HPP___
 #define ___CTL_CastorTestLauncher_HPP___
 
-#pragma warning( push )
-#pragma warning( disable: 4365 )
-#pragma warning( disable: 4371 )
-#pragma warning( disable: 5054 )
-#pragma warning( disable: 5262 )
+#include <CastorUtils/Config/BeginExternHeaderGuard.hpp>
 #include <wx/app.h>
-#pragma warning( pop )
+#include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
 #include <Castor3D/Castor3DModule.hpp>
 

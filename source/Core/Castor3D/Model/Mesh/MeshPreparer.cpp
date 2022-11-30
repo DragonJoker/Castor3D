@@ -13,14 +13,9 @@
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4365 )
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
-#pragma GCC diagnostic ignored "-Wold-style-cast"
+#include <CastorUtils/Config/BeginExternHeaderGuard.hpp>
 #include <meshoptimizer.h>
-#pragma GCC diagnostic pop
-#pragma warning( pop )
+#include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
 namespace castor3d
 {

@@ -8,21 +8,9 @@
 #include "CastorUtils/Miscellaneous/StringUtils.hpp"
 #include "CastorUtils/Log/Logger.hpp"
 
-#pragma warning( push )
-#pragma warning( disable: 4100 )
-#pragma warning( disable: 4189 )
-#pragma warning( disable: 4201 )
-#pragma warning( disable: 4242 )
-#pragma warning( disable: 4244 )
-#pragma warning( disable: 4296 )
-#pragma warning( disable: 4365 )
-#pragma warning( disable: 4458 )
-#pragma warning( disable: 4464 )
-#pragma warning( disable: 5054 )
-#pragma warning( disable: 5214 )
-#pragma warning( disable: 5219 )
+#include "CastorUtils/Config/BeginExternHeaderGuard.hpp"
 #include <gli/gli.hpp>
-#pragma warning( pop )
+#include "CastorUtils/Config/EndExternHeaderGuard.hpp"
 
 namespace castor
 {

@@ -6,16 +6,12 @@ See LICENSE file in root folder
 
 #include <GuiCommon/GuiCommonPrerequisites.hpp>
 
-#pragma warning( push )
-#pragma warning( disable: 4365 )
-#pragma warning( disable: 4371 )
-#pragma warning( disable: 5054 )
-#pragma warning( disable: 5262 )
+#include <CastorUtils/Config/BeginExternHeaderGuard.hpp>
 #include <wx/wx.h>
 #include <wx/frame.h>
 #include <wx/panel.h>
 #include <wx/timer.h>
-#pragma warning( pop )
+#include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
 #include <GuiCommon/System/CubeBoxManager.hpp>
 #include <GuiCommon/System/NodeState.hpp>

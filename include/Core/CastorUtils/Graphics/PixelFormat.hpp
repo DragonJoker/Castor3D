@@ -10,14 +10,13 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Exception/Exception.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4365 )
-#pragma warning( disable:5262 )
 #include <algorithm>
-#include <atomic>
 #include <numeric>
 #include <vector>
-#pragma warning( pop )
+
+#include "CastorUtils/Config/BeginExternHeaderGuard.hpp"
+#include <atomic>
+#include "CastorUtils/Config/EndExternHeaderGuard.hpp"
 
 namespace castor
 {
