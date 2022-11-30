@@ -135,6 +135,15 @@ namespace castor3d
 		 *\brief		Supprime le submesh s'il est dans les submesh du mesh
 		 *\param[in]	submesh	Le submesh à supprimer
 		 */
+		C3D_API void deleteSubmesh( SubmeshRPtr submesh );
+		/**
+		 *\~english
+		 *\brief		Deletes a given submesh if it is in the mesh's submeshes
+		 *\param[in]	submesh	The submesh to delete
+		 *\~french
+		 *\brief		Supprime le submesh s'il est dans les submesh du mesh
+		 *\param[in]	submesh	Le submesh à supprimer
+		 */
 		C3D_API void deleteSubmesh( SubmeshSPtr & submesh );
 		/**
 		 *\~english

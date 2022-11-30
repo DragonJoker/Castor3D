@@ -34,21 +34,21 @@ namespace castor3d
 		m_category->fillBuffer( data );
 	}
 
-	DirectionalLightSPtr Light::getDirectionalLight()const
+	DirectionalLightRPtr Light::getDirectionalLight()const
 	{
 		CU_Require( m_category->getLightType() == LightType::eDirectional );
-		return std::static_pointer_cast< DirectionalLight >( m_category );
+		return static_cast< DirectionalLight * >( m_category.get() );
 	}
 
-	PointLightSPtr Light::getPointLight()const
+	PointLightRPtr Light::getPointLight()const
 	{
 		CU_Require( m_category->getLightType() == LightType::ePoint );
-		return std::static_pointer_cast< PointLight >( m_category );
+		return static_cast< PointLight * >( m_category.get() );
 	}
 
-	SpotLightSPtr Light::getSpotLight()const
+	SpotLightRPtr Light::getSpotLight()const
 	{
 		CU_Require( m_category->getLightType() == LightType::eSpot );
-		return std::static_pointer_cast< SpotLight >( m_category );
+		return static_cast< SpotLight * >( m_category.get() );
 	}
 }

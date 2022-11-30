@@ -415,7 +415,7 @@ namespace castor3d
 
 			for ( auto & nodeIt : nodes )
 			{
-				if ( nodeIt.second->getParent() == scene.getObjectRootNode().get() )
+				if ( nodeIt.second->getParent() == scene.getObjectRootNode() )
 				{
 					nodeIt.second->attachTo( *transformNode );
 				}

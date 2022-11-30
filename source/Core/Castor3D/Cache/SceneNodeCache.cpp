@@ -11,9 +11,9 @@ namespace castor3d
 	//*********************************************************************************************
 
 	ObjectCacheT< SceneNode, castor::String, SceneNodeCacheTraits >::ObjectCacheT( Scene & scene
-		, SceneNodeSPtr rootNode
-		, SceneNodeSPtr rootCameraNode
-		, SceneNodeSPtr rootObjectNode
+		, SceneNodeRPtr rootNode
+		, SceneNodeRPtr rootCameraNode
+		, SceneNodeRPtr rootObjectNode
 		, ElementInitialiserT initialise
 		, ElementCleanerT clean
 		, ElementMergerT merge

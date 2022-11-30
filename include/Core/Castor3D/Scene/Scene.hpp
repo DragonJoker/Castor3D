@@ -56,8 +56,7 @@ namespace castor3d
 	C3D_API std::string print( castor::BoundingBox const & obj );
 
 	class Scene
-		: public std::enable_shared_from_this< Scene >
-		, public castor::OwnedBy< Engine >
+		: public castor::OwnedBy< Engine >
 		, public castor::Named
 	{
 	public:
@@ -323,19 +322,19 @@ namespace castor3d
 			return m_backgroundColour;
 		}
 
-		SceneNodeSPtr getRootNode()const
+		SceneNodeRPtr getRootNode()const
 		{
-			return m_rootNode;
+			return m_rootNode.get();
 		}
 
-		SceneNodeSPtr getCameraRootNode()const
+		SceneNodeRPtr getCameraRootNode()const
 		{
-			return m_rootCameraNode;
+			return m_rootCameraNode.get();
 		}
 
-		SceneNodeSPtr getObjectRootNode()const
+		SceneNodeRPtr getObjectRootNode()const
 		{
-			return m_rootObjectNode;
+			return m_rootObjectNode.get();
 		}
 
 		castor::RgbColour const & getAmbientLight()const

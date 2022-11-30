@@ -78,9 +78,9 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		C3D_API DirectionalLightSPtr getDirectionalLight()const;
-		C3D_API PointLightSPtr getPointLight()const;
-		C3D_API SpotLightSPtr getSpotLight()const;
+		C3D_API DirectionalLightRPtr getDirectionalLight()const;
+		C3D_API PointLightRPtr getPointLight()const;
+		C3D_API SpotLightRPtr getSpotLight()const;
 
 		LightType getLightType()const
 		{

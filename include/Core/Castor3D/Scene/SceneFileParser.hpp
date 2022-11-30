@@ -141,6 +141,7 @@ namespace castor3d
 		RenderWindowDesc window{};
 		bool inWindow{};
 		SceneNodeSPtr sceneNode{};
+		SceneNodeRPtr parentNode{};
 		GeometrySPtr geometry{};
 		SkeletonRPtr skeleton{};
 		MeshResPtr mesh{};

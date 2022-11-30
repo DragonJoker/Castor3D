@@ -205,10 +205,11 @@ namespace GuiCommon
 				, _( "Scene Nodes" )
 				, eBMP_NODE
 				, eBMP_NODE_SEL );
-			castor3d::SceneNodeSPtr rootNode = scene->getRootNode();
+			auto rootNode = scene->getRootNode();
+
 			if ( rootNode )
 			{
-				doAddNode( catId, rootNode );
+				doAddNode( catId, *rootNode );
 			}
 
 			catId = AppendItem( sceneId
@@ -452,9 +453,9 @@ namespace GuiCommon
 	}
 
 	void SceneObjectsList::doAddNode( wxTreeItemId id
-		, castor3d::SceneNodeSPtr node )
+		, castor3d::SceneNode & node )
 	{
-		for ( auto & object : node->getObjects() )
+		for ( auto & object : node.getObjects() )
 		{
 			switch ( object.get().getType() )
 			{
@@ -478,14 +479,14 @@ namespace GuiCommon
 			}
 		}
 
-		for ( auto pair : node->getChildren() )
+		for ( auto pair : node.getChildren() )
 		{
 			doAddNode( AppendItem( id
 					, pair.first
 					, eBMP_NODE
 					, eBMP_NODE_SEL
-					, new NodeTreeItemProperty( m_propertiesHolder->isEditable(), m_engine, pair.second.lock() ) )
-				, pair.second.lock() );
+					, new NodeTreeItemProperty( m_propertiesHolder->isEditable(), m_engine, *pair.second ) )
+				, *pair.second );
 		}
 	}
 

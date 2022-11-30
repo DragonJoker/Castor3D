@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___CU_FontCache_H___
 
 #include "CastorUtils/Graphics/GraphicsModule.hpp"
+#include "CastorUtils/Graphics/Font.hpp"
 
 #include "CastorUtils/Data/Path.hpp"
 #include "CastorUtils/Design/Resource.hpp"

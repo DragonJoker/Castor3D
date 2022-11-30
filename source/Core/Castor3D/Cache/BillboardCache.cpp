@@ -34,9 +34,9 @@ namespace castor3d
 	//*********************************************************************************************
 
 	ObjectCacheT< BillboardList, castor::String, BillboardCacheTraits >::ObjectCacheT( Scene & scene
-		, SceneNodeSPtr rootNode
-		, SceneNodeSPtr rootCameraNode
-		, SceneNodeSPtr rootObjectNode )
+		, SceneNodeRPtr rootNode
+		, SceneNodeRPtr rootCameraNode
+		, SceneNodeRPtr rootObjectNode )
 		: ElementObjectCacheT{ scene
 			, rootNode
 			, rootCameraNode

@@ -17,15 +17,14 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	class SceneNode
-		: public std::enable_shared_from_this< SceneNode >
-		, public Animable
+		: public Animable
 		, public castor::Named
 	{
 	public:
 		//!\~english	The total number of scene nodes.
 		//!\~french		Le nombre total de noeuds de scène.
 		static uint64_t Count;
-		using SceneNodeMap = std::map< castor::String, SceneNodeWPtr >;
+		using SceneNodeMap = std::map< castor::String, SceneNodeRPtr >;
 		using MovableArray = std::list< std::reference_wrapper< MovableObject > >;
 
 	public:
@@ -115,7 +114,7 @@ namespace castor3d
 		 *\brief		Ajoute le noeud donné aux enfants de ce noeud, s'il n'y est pas encore
 		 *\param[in]	child	Le noeud à ajouter
 		 */
-		C3D_API void addChild( SceneNodeSPtr child );
+		C3D_API void addChild( SceneNode & child );
 		/**
 		 *\~english
 		 *\brief		Detaches a child from my child's list, if it is one of my childs
@@ -124,7 +123,7 @@ namespace castor3d
 		 *\brief		Détache un noeud des enfants de ce noeud, s'il en fait partie
 		 *\param[in]	child	Le noeud à détacher
 		 */
-		C3D_API void detachChild( SceneNodeSPtr child );
+		C3D_API void detachChild( SceneNode & child );
 		/**
 		 *\~english
 		 *\brief		Detaches a child from my child's list, if it is one of my childs
@@ -289,7 +288,7 @@ namespace castor3d
 		C3D_API void setScale( castor::Point3f const & scale );
 		C3D_API void setVisible( bool visible );
 		C3D_API SceneNodeMap const & getChildren()const;
-		C3D_API SceneNodeSPtr getChild( castor::String const & name )const;
+		C3D_API SceneNodeRPtr getChild( castor::String const & name )const;
 		C3D_API MovableArray const & getObjects()const;
 
 		bool isModified()const
@@ -343,9 +342,9 @@ namespace castor3d
 
 		void operator()( ElementT & element
 			, SceneNode & parent
-			, SceneNodeSPtr rootNode
-			, SceneNodeSPtr rootCameraNode
-			, SceneNodeSPtr rootObjectNode )
+			, SceneNodeRPtr rootNode
+			, SceneNodeRPtr rootCameraNode
+			, SceneNodeRPtr rootObjectNode )
 		{
 			element.attachTo( parent );
 		}

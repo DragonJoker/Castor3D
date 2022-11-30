@@ -117,6 +117,21 @@ namespace castor3d
 		return submesh;
 	}
 
+	void Mesh::deleteSubmesh( SubmeshRPtr submesh )
+	{
+		auto it = std::find_if( m_submeshes.begin()
+			, m_submeshes.end()
+			, [&submesh]( SubmeshSPtr lookup )
+			{
+				return submesh == lookup.get();
+			} );
+
+		if ( it != m_submeshes.end() )
+		{
+			m_submeshes.erase( it );
+		}
+	}
+
 	void Mesh::deleteSubmesh( SubmeshSPtr & submesh )
 	{
 		auto it = std::find( m_submeshes.begin(), m_submeshes.end(), submesh );
@@ -125,7 +140,6 @@ namespace castor3d
 		{
 			m_submeshes.erase( it );
 			submesh.reset();
-			it = m_submeshes.end();
 		}
 	}
 

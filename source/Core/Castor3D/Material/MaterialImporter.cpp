@@ -118,12 +118,12 @@ namespace castor3d
 
 		try
 		{
-			auto & cache = getEngine()->getImageCache();
-			auto image = cache.tryFind( name );
+			auto image = getEngine()->tryFindImage( name );
 
 			if ( !image.lock() )
 			{
-				image = cache.add( name, params );
+				auto img = getEngine()->createImage( name, params );
+				image = getEngine()->addImage( name, img );
 			}
 
 			result = image.lock();

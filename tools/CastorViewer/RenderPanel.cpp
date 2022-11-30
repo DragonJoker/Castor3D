@@ -4,6 +4,8 @@
 #include "CastorViewer/RotateNodeEvent.hpp"
 #include "CastorViewer/TranslateNodeEvent.hpp"
 
+#include <wx/display.h>
+
 #include <Castor3D/Cache/ObjectCache.hpp>
 #include <Castor3D/Event/Frame/CpuFunctorEvent.hpp>
 #include <Castor3D/Event/Frame/FrameListener.hpp>
@@ -13,14 +15,13 @@
 #include <Castor3D/Render/ShadowMap/ShadowMapPass.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Render/RenderWindow.hpp>
+#include <Castor3D/Scene/Camera.hpp>
 #include <Castor3D/Scene/Scene.hpp>
 #include <Castor3D/Scene/SceneNode.hpp>
 
 #include <CastorUtils/Design/ResourceCache.hpp>
 
 #include <ashespp/Core/WindowHandle.hpp>
-
-#include <wx/display.h>
 
 CU_ImplementCUSmartPtr( CastorViewer, MouseNodeEvent )
 CU_ImplementCUSmartPtr( CastorViewer, TranslateNodeEvent )
@@ -122,7 +123,7 @@ namespace CastorViewer
 		m_selectedGeometry.reset();
 		m_currentState = nullptr;
 		m_nodesStates.clear();
-		m_camera.reset();
+		m_camera = {};
 		m_scene = {};
 		m_currentNode = nullptr;
 		m_lightsNode = nullptr;
@@ -135,7 +136,7 @@ namespace CastorViewer
 	void RenderPanel::setTarget( castor3d::RenderTargetSPtr target )
 	{
 		m_listener = m_renderWindow->getListener();
-		m_renderWindow->initialise( target );
+		m_renderWindow->initialise( *target );
 		auto scene = target->getScene();
 
 		if ( scene )
@@ -242,7 +243,7 @@ namespace CastorViewer
 	void RenderPanel::doTurnCameraVertic()
 	{
 		doResetTimers();
-		auto camera = m_camera.lock();
+		auto camera = m_camera;
 
 		if ( camera )
 		{
@@ -259,7 +260,7 @@ namespace CastorViewer
 
 	void RenderPanel::doChangeCamera()
 	{
-		auto camera = m_camera.lock();
+		auto camera = m_camera;
 		auto scene = m_scene;
 
 		if ( camera && scene )
@@ -283,7 +284,7 @@ namespace CastorViewer
 	float RenderPanel::doTransformX( int x )
 	{
 		float result = float( x );
-		auto camera = m_camera.lock();
+		auto camera = m_camera;
 
 		if ( camera )
 		{
@@ -296,7 +297,7 @@ namespace CastorViewer
 	float RenderPanel::doTransformY( int y )
 	{
 		float result = float( y );
-		auto camera = m_camera.lock();
+		auto camera = m_camera;
 
 		if ( camera )
 		{
@@ -309,7 +310,7 @@ namespace CastorViewer
 	int RenderPanel::doTransformX( float x )
 	{
 		int result = int( x );
-		auto camera = m_camera.lock();
+		auto camera = m_camera;
 
 		if ( camera )
 		{
@@ -322,7 +323,7 @@ namespace CastorViewer
 	int RenderPanel::doTransformY( float y )
 	{
 		int result = int( y );
-		auto camera = m_camera.lock();
+		auto camera = m_camera;
 
 		if ( camera )
 		{
@@ -368,7 +369,7 @@ namespace CastorViewer
 		{
 			m_currentNode = m_selectedGeometry->getParent();
 		}
-		else if ( auto camera = m_camera.lock() )
+		else if ( auto camera = m_camera )
 		{
 			m_currentNode = camera->getParent();
 		}
@@ -697,7 +698,7 @@ namespace CastorViewer
 				break;
 
 			case 'L':
-				if ( auto camera = m_camera.lock() )
+				if ( auto camera = m_camera )
 				{
 					m_currentNode = camera->getParent();
 					m_currentState = &doAddNodeState( m_currentNode, false );

@@ -63,9 +63,9 @@ namespace castor3d
 		 *\param[in]	detach			Le détacheur d'objet (d'un noeud de scène).
 		 */
 		inline ObjectCacheBaseT( Scene & scene
-			, SceneNodeSPtr rootNode
-			, SceneNodeSPtr rootCameraNode
-			, SceneNodeSPtr rootObjectNode
+			, SceneNodeRPtr rootNode
+			, SceneNodeRPtr rootCameraNode
+			, SceneNodeRPtr rootObjectNode
 			, ElementInitialiserT initialise = ElementInitialiserT{}
 			, ElementCleanerT clean = ElementCleanerT{}
 			, ElementMergerT merge = ElementMergerT{}
@@ -82,9 +82,9 @@ namespace castor3d
 
 					m_attach( element
 						, *element.getParent()
-						, m_rootNode.lock()
-						, m_rootCameraNode.lock()
-						, m_rootObjectNode.lock() );
+						, m_rootNode
+						, m_rootCameraNode
+						, m_rootObjectNode );
 					onChanged();
 				}
 				, [this, clean]( ElementT & element )
@@ -138,8 +138,8 @@ namespace castor3d
 					m_merge( *this
 						, destination.m_resources
 						, it.second
-						, destination.m_rootCameraNode.lock()
-						, destination.m_rootObjectNode.lock() );
+						, destination.m_rootCameraNode
+						, destination.m_rootObjectNode );
 				}
 			}
 
@@ -181,13 +181,13 @@ namespace castor3d
 		Engine & m_engine;
 		//!\~english	The root node.
 		//!\~french		Le noeud père de tous les noeuds de la scène.
-		SceneNodeWPtr m_rootNode;
+		SceneNodeRPtr m_rootNode;
 		//!\~english	The root node used only for cameras.
 		//!\~french		Le noeud père de tous les noeuds de caméra.
-		SceneNodeWPtr m_rootCameraNode;
+		SceneNodeRPtr m_rootCameraNode;
 		//!\~english	The root node for every object other than camera.
 		//!\~french		Le noeud père de tous les noeuds d'objet.
-		SceneNodeWPtr m_rootObjectNode;
+		SceneNodeRPtr m_rootObjectNode;
 		//!\~english	The object attacher.
 		//!\~french		L'attacheur d'objet.
 		ElementMergerT m_merge;

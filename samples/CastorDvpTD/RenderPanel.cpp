@@ -73,10 +73,10 @@ namespace castortd
 
 	void RenderPanel::setRenderTarget( castor3d::RenderTargetSPtr target )
 	{
-		m_renderWindow->initialise( target );
-
 		if ( target )
 		{
+			m_renderWindow->initialise( *target );
+
 			castor::Size sizeWnd = GuiCommon::makeSize( GetClientSize() );
 			castor::Size sizeScreen;
 			castor::System::getScreenSize( 0, sizeScreen );

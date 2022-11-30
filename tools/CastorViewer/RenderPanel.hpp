@@ -149,7 +149,7 @@ namespace CastorViewer
 		castor3d::GeometrySPtr m_selectedGeometry;
 		castor3d::SubmeshSPtr m_selectedSubmesh;
 
-		castor3d::CameraWPtr m_camera;
+		castor3d::CameraRPtr m_camera{};
 		castor3d::SceneRPtr m_scene{};
 		castor3d::FrameListenerSPtr m_listener;
 	};

@@ -489,13 +489,13 @@ namespace castor3d
 		using ElementMergerT = std::function< void( ElementCacheT const &
 			, ElementContT &
 			, ElementPtrT
-			, SceneNodeSPtr
-			, SceneNodeSPtr ) >;
+			, SceneNodeRPtr
+			, SceneNodeRPtr ) >;
 		using ElementAttacherT = std::function< void( ElementT &
 			, SceneNode &
-			, SceneNodeSPtr
-			, SceneNodeSPtr
-			, SceneNodeSPtr ) >;
+			, SceneNodeRPtr
+			, SceneNodeRPtr
+			, SceneNodeRPtr ) >;
 		using ElementDetacherT = std::function< void( ElementT & ) >;
 
 		template< typename ... ParametersT >
