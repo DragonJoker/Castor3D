@@ -4,6 +4,8 @@ See LICENSE file in root folder
 #ifndef ___MainFrame___
 #define ___MainFrame___
 
+#include <GuiCommon/GuiCommonPrerequisites.hpp>
+
 #pragma warning( push )
 #pragma warning( disable: 4365 )
 #pragma warning( disable: 5054 )

@@ -6,6 +6,7 @@
 #pragma GCC diagnostic ignored "-Wsuggest-override"
 #pragma GCC diagnostic ignored "-Wsuggest-destructor-override"
 #pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
+#include <wx/wx.h>
 #include <wx/display.h>
 #include <wx/mstream.h>
 #include <wx/renderer.h>

@@ -22,6 +22,9 @@
 *.gch
 *.*~
 *.exe
+*.dll
+*.cache
+*.AssemblyAttributes.cs
 /.vs
 CMakeSettings.json
 .DS_Store

@@ -57,8 +57,12 @@ namespace CastorViewerSharp
 				m_engine.LoadPlugin( file );
 			}
 
-			m_engine.LoadRenderer( "opengl" );
-		}
+			m_engine.LoadRenderer( "vk" );
+			m_engine.Initialise( 1000, 1 );
+			m_engine.StartRendering();
+
+
+        }
 
 		/// <summary>
 		/// Opens a file selector dialog, to open a scene file.
@@ -95,26 +99,21 @@ namespace CastorViewerSharp
 			if ( filename.Length > 0 )
 			{
 				if ( m_scene != null )
-				{
-					m_scene.ClearScene();
+                {
+                    m_engine.PauseRendering();
+                    m_scene.ClearScene();
 					m_engine.RemoveScene( m_scene.Name );
+					m_renderTarget = null;
 					m_scene = null;
 				}
 
-				m_renderWindow = m_engine.LoadScene( filename );
+                m_engine.StartRendering();
+                m_renderTarget = m_engine.LoadScene( filename );
 
-				if ( m_renderWindow != null )
+				if (m_renderTarget != null )
 				{
-					var window = GetWindow( RenderPanel );
-					Size l_size = new Size();
-					l_size.Set( ( uint )window.Width, ( uint )window.Height );
-
-					if ( m_renderWindow.Initialise( l_size, new WindowInteropHelper( window ).Handle ) )
-					{
-						m_scene = m_renderWindow.RenderTarget.Scene;
-					}
-
-					m_timer.Start();
+					m_renderWindow.Initialise( m_renderTarget );
+					m_scene = m_renderTarget.Scene;
 				}
 			}
 		}
@@ -130,8 +129,8 @@ namespace CastorViewerSharp
 			var window = GetWindow( RenderPanel );
 			double l_ww = window.Width;
 			double l_wh = window.Height;
-			int l_cw = ( int )m_renderWindow.RenderTarget.camera.Width;
-			int l_ch = ( int )m_renderWindow.RenderTarget.camera.Height;
+			int l_cw = ( int )m_renderTarget.camera.Width;
+			int l_ch = ( int )m_renderTarget.camera.Height;
 			l_return.Set( ( int )( ( p_point.X * l_cw ) / l_ww ), ( int )( ( p_point.Y * l_ch ) / l_wh ) );
 			return l_return;
 		}
@@ -148,12 +147,19 @@ namespace CastorViewerSharp
 		protected override void OnInitialized( EventArgs e )
 		{
 			base.OnInitialized( e );
+			base.Show();
 			m_engine = new engine();
 			m_engine.Create( "CastorViewerSharp", 1 );
 			LoadPlugins();
-			m_timer = new DispatcherTimer();
-			m_timer.Tick += new EventHandler( OnTimer );
-			m_timer.Interval = new TimeSpan( 0, 0, 0, 0, 40 );
+
+			var window = GetWindow( RenderPanel );
+			window.Show();
+			Size size = new Size();
+			size.Set((uint)window.Width, (uint)window.Height);
+			var handle = new WindowInteropHelper(window).Handle;
+			m_renderWindow = m_engine.CreateRenderWindow("MainWindow", size, handle);
+
+			LoadScene(DoSelectSceneFile());
 		}
 
 		/// <summary>
@@ -162,8 +168,8 @@ namespace CastorViewerSharp
 		/// <param name="e"></param>
 		protected override void OnClosed( EventArgs e )
 		{
-			m_timer.Stop();
 			m_scene = null;
+			m_renderWindow.Cleanup();
 			m_renderWindow = null;
 			m_engine.Cleanup();
 			m_engine.Destroy();
@@ -182,7 +188,7 @@ namespace CastorViewerSharp
 		/// <param name="e"></param>
 		private void OnMouseMove( object sender, System.Windows.Input.MouseEventArgs e )
 		{
-			if ( m_renderWindow != null )
+			if ( m_renderTarget != null )
 			{
 				m_oldPosition = DoTransform( e.GetPosition( RenderPanel ) );
 				m_renderWindow.OnMouseMove( m_oldPosition );
@@ -196,12 +202,12 @@ namespace CastorViewerSharp
 		/// <param name="e"></param>
 		private void OnSizeChanged( object sender, System.Windows.SizeChangedEventArgs e )
 		{
-			if ( m_renderWindow != null )
+			if ( m_renderTarget != null )
 			{
-				Size l_size = new Size();
-				l_size.Width = ( uint )e.NewSize.Width;
-				l_size.Height = ( uint )e.NewSize.Height;
-				m_renderWindow.Resize( l_size );
+				Size size = new Size();
+                size.Width = ( uint )e.NewSize.Width;
+                size.Height = ( uint )e.NewSize.Height;
+				m_renderWindow.Resize(size);
 			}
 		}
 
@@ -212,20 +218,6 @@ namespace CastorViewerSharp
 		/// <param name="e"></param>
 		private void OnLoaded( object sender, System.Windows.RoutedEventArgs e )
 		{
-			//LoadScene( DoSelectSceneFile() );
-		}
-
-		/// <summary>
-		/// The timer function Renders one frame
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void OnTimer( object sender, EventArgs e )
-		{
-			if ( m_engine != null )
-			{
-				m_engine.RenderOneFrame();
-			}
 		}
 
 		#endregion
@@ -239,15 +231,15 @@ namespace CastorViewerSharp
 		/// <summary>
 		/// The render window
 		/// </summary>
+		private RenderTarget m_renderTarget;
+		/// <summary>
+		/// The render window
+		/// </summary>
 		private RenderWindow m_renderWindow;
 		/// <summary>
 		/// The main scene
 		/// </summary>
 		private Scene m_scene;
-		/// <summary>
-		/// The render timer
-		/// </summary>
-		private DispatcherTimer m_timer;
 		/// <summary>
 		/// The previous mouse position
 		/// </summary>
