@@ -24,6 +24,8 @@ namespace castor
 		eInch,
 		CU_ScopedEnumBounds( eKilometre )
 	};
+	CU_API String getName( LengthUnit value );
+
 	template< typename Type >
 	static constexpr Type Pi{ Type( 3.1415926535897932384626433832795028841968 ) };
 	template< typename Type >

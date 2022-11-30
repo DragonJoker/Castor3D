@@ -12,19 +12,11 @@ namespace CastorCom
 	static const TCHAR * ERROR_UNINITIALISED_IMAGE = _T( "The image must be initialised" );
 	static const TCHAR * ERROR_INITIALISED_IMAGE = _T( "The image is already initialised" );
 
-	CImage::CImage()
-	{
-	}
-
-	CImage::~CImage()
-	{
-	}
-
-	STDMETHODIMP CImage::LoadFromFile( /* [in] */ IEngine * engine, /* [in] */ BSTR name, /* [in] */ BSTR val, /* [in] */ boolean dropAlpha )
+	STDMETHODIMP CImage::LoadFromFile( /* [in] */ IEngine * engine, /* [in] */ BSTR name, /* [in] */ BSTR val, /* [in] */ boolean dropAlpha )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
-		if ( !m_image )
+		if ( !m_internal )
 		{
 			if ( engine )
 			{
@@ -44,10 +36,11 @@ namespace CastorCom
 					l_pathImage = l_engine->getDataDirectory() / cuT( "Texture" ) / l_path;
 				}
 
-				m_image = l_engine->getImageCache().add( l_name
-					, l_pathImage );
+				auto img = l_engine->createImage( l_name
+					, castor::ImageCreateParams{ l_pathImage } );
+				m_internal = l_engine->addImage( l_name, img ).lock();
 
-				if ( !m_image )
+				if ( !m_internal )
 				{
 					hr = CComError::dispatchError( E_FAIL, IID_IImage, _T( "LoadFromFile" ), ERROR_WRONG_FILE_NAME, 0, nullptr );
 				}
@@ -61,7 +54,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CImage::LoadFromFormat( /* [in] */ IEngine * engine, /* [in] */ BSTR name, /* [in] */ ePIXEL_FORMAT fmt, /* [in] */ ISize * size )
+	STDMETHODIMP CImage::LoadFromFormat( /* [in] */ IEngine * engine, /* [in] */ BSTR name, /* [in] */ ePIXEL_FORMAT fmt, /* [in] */ ISize * size )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -71,10 +64,13 @@ namespace CastorCom
 			castor3d::Engine * l_engine = l_engn->getInternal();
 			castor::String l_name = fromBstr( name );
 
-			if ( !m_image )
+			if ( !m_internal )
 			{
 				hr = S_OK;
-				m_image = l_engine->getImageCache().add( l_name, *static_cast< CSize * >( size ), castor::PixelFormat( fmt ) );
+				auto img = l_engine->createImage( l_name
+					, castor::ImageCreateParams{ static_cast< CSize * >( size )->getInternal()
+						, castor::PixelFormat( fmt ) } );
+				m_internal = l_engine->addImage( l_name, img ).lock();
 			}
 			else
 			{
@@ -85,14 +81,14 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CImage::Resample( /* [in] */ ISize * val )
+	STDMETHODIMP CImage::Resample( /* [in] */ ISize * val )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
-		if ( m_image )
+		if ( m_internal )
 		{
 			hr = S_OK;
-			m_image->resample( *static_cast< CSize * >( val ) );
+			m_internal->resample( static_cast< CSize * >( val )->getInternal() );
 		}
 		else
 		{
@@ -102,14 +98,14 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CImage::Fill( /* [in] */ IRgbaColour * val )
+	STDMETHODIMP CImage::Fill( /* [in] */ IRgbaColour * val )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
-		if ( m_image )
+		if ( m_internal )
 		{
 			hr = S_OK;
-			m_image->fill( *static_cast< CRgbaColour * >( val ) );
+			m_internal->fill( static_cast< CRgbaColour * >( val )->getInternal() );
 		}
 		else
 		{
@@ -119,18 +115,18 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CImage::Flip( /* [out, retval] */ IImage ** pVal )
+	STDMETHODIMP CImage::Flip( /* [out, retval] */ IImage ** pVal )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
-		if ( m_image )
+		if ( m_internal )
 		{
 			hr = CImage::CreateInstance( pVal );
 
 			if ( hr == S_OK )
 			{
-				castor::Image l_img = m_image->flip();
-				static_cast< CImage * >( *pVal )->m_image = std::make_shared< castor::Image >( l_img );
+				castor::Image l_img = m_internal->flip();
+				static_cast< CImage * >( *pVal )->m_internal = std::make_shared< castor::Image >( l_img );
 			}
 		}
 		else

@@ -8,7 +8,7 @@
 
 namespace CastorCom
 {
-	TCHAR * CComCastor3DModule::m_appId = _T( "{AE7400FF-58CB-40F5-9D8B-3373BCC45E54}" );
+	TCHAR const * CComCastor3DModule::m_appId = _T( "{AE7400FF-58CB-40F5-9D8B-3373BCC45E54}" );
 	CComCastor3DModule g_module;
 }
 
@@ -78,7 +78,6 @@ HRESULT STDAPICALLTYPE DllInstall( BOOL bInstall, LPCWSTR pszCmdLine )
 // DLL Entry Point
 BOOL STDAPICALLTYPE DllMain( HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved )
 {
-	hInstance;
 	return CastorCom::g_module.DllMain( dwReason, lpReserved );
 }
 

@@ -10,38 +10,20 @@
 
 namespace CastorCom
 {
+	COM_TYPE_TRAITS( castor, Angle );
 	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.7.0
-	\date		10/09/2014
 	\~english
 	\brief		This class defines a CAngle object accessible from COM.
 	\~french
 	\brief		Cette classe définit un CAngle accessible depuis COM
 	*/
 	class CAngle
-		:	COM_ATL_OBJECT( Angle )
-		,	public castor::Angle
+		: public CComAtlObject< Angle, castor::Angle >
 	{
-	public:
-		/**
-		 *\~english
-		 *\brief		Default constructor.
-		 *\~french
-		 *\brief		Constructeur par défaut.
-		 */
-		CAngle();
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		virtual ~CAngle();
-
-		COM_PROPERTY( Degrees, FLOAT, makeGetter( this, &castor::Angle::degrees ), makePutter( this, &castor::Angle::degrees ) );
-		COM_PROPERTY( Radians, FLOAT, makeGetter( this, &castor::Angle::radians ), makePutter( this, &castor::Angle::radians ) );
-		COM_PROPERTY( Grads, FLOAT, makeGetter( this, &castor::Angle::grads ), makePutter( this, &castor::Angle::grads ) );
+		COMEX_PROPERTY( Degrees, FLOAT, &m_internal, &Internal::degrees, &Internal::degrees );
+		COMEX_PROPERTY( Radians, FLOAT, &m_internal, &Internal::radians, &Internal::radians );
+		COMEX_PROPERTY( Grads, FLOAT, &m_internal, &Internal::grads, &Internal::grads );
+		COMEX_PROPERTY( Turns, FLOAT, &m_internal, &Internal::turns, &Internal::turns );
 
 		STDMETHOD( Cos )( /* [out, retval] */ float * pVal );
 		STDMETHOD( Sin )( /* [out, retval] */ float * pVal );
@@ -53,11 +35,9 @@ namespace CastorCom
 		STDMETHOD( Sinh )( /* [out, retval] */ float * pVal );
 		STDMETHOD( Tanh )( /* [out, retval] */ float * pVal );
 	};
-	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
+	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object
+	//!\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
 	OBJECT_ENTRY_AUTO( __uuidof( Angle ), CAngle );
-
-	DECLARE_VARIABLE_REF_GETTER( Angle, castor, Angle );
-	DECLARE_VARIABLE_REF_PUTTER( Angle, castor, Angle );
 }
 
 #endif

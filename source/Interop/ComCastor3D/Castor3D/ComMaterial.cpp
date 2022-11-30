@@ -6,15 +6,7 @@ namespace CastorCom
 	static const tstring ERROR_UNINITIALISED = _T( "The material must be initialised" );
 	static const tstring ERROR_OUT_OF_BOUND_INDEX = _T( "The given index was out of bounds" );
 
-	CMaterial::CMaterial()
-	{
-	}
-
-	CMaterial::~CMaterial()
-	{
-	}
-
-	STDMETHODIMP CMaterial::Initialise()
+	STDMETHODIMP CMaterial::Initialise()noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -37,7 +29,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CMaterial::Cleanup()
+	STDMETHODIMP CMaterial::Cleanup()noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -60,7 +52,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CMaterial::CreatePass( /* [out, retval] */ IPass ** pVal )
+	STDMETHODIMP CMaterial::CreatePass( /* [out, retval] */ IPass ** pVal )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -72,7 +64,7 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CPass * >( *pVal )->setInternal( m_internal->createPass() );
+					static_cast< CPass * >( *pVal )->setInternal( m_internal->createPass().get() );
 				}
 			}
 		}
@@ -90,7 +82,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CMaterial::GetPass( /* [in] */ unsigned int val, /* [out, retval] */ IPass ** pVal )
+	STDMETHODIMP CMaterial::GetPass( /* [in] */ unsigned int val, /* [out, retval] */ IPass ** pVal )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -104,7 +96,7 @@ namespace CastorCom
 				{
 					try
 					{
-						static_cast< CPass * >( *pVal )->setInternal( m_internal->getPass( val ) );
+						static_cast< CPass * >( *pVal )->setInternal( m_internal->getPass( val ).get() );
 					}
 					catch ( std::exception & )
 					{
@@ -133,7 +125,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CMaterial::DestroyPass( /* [in] */ unsigned int val )
+	STDMETHODIMP CMaterial::DestroyPass( /* [in] */ unsigned int val )noexcept
 	{
 		HRESULT hr = E_POINTER;
 

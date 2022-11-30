@@ -1,5 +1,12 @@
 #include "ComCastor3DTestPrerequisites.hpp"
 
+#pragma warning( disable: 4365 )
+#pragma warning( disable: 4471 )
+#pragma warning( disable: 5204 )
+#pragma warning( disable: 5262 )
+
+#import <ComCastor3D/Castor3D.tlb>
+
 #include <tchar.h>
 #include <iostream>
 

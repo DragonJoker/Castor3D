@@ -7,15 +7,7 @@ namespace CastorCom
 {
 	static const tstring ERROR_UNINITIALISED = _T( "The geometry must be initialised" );
 
-	CGeometry::CGeometry()
-	{
-	}
-
-	CGeometry::~CGeometry()
-	{
-	}
-
-	STDMETHODIMP CGeometry::AttachTo( /* [in] */ ISceneNode * val )
+	STDMETHODIMP CGeometry::AttachTo( /* [in] */ ISceneNode * val )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -38,7 +30,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CGeometry::Detach()
+	STDMETHODIMP CGeometry::Detach()noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -61,7 +53,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CGeometry::GetMaterial( /* [in] */ ISubmesh * submesh, /* [out, retval] */ IMaterial ** pVal )
+	STDMETHODIMP CGeometry::GetMaterial( /* [in] */ ISubmesh * submesh, /* [out, retval] */ IMaterial ** pVal )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -91,7 +83,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CGeometry::SetMaterial( /* [in] */ ISubmesh * submesh, /* [in] */ IMaterial * val )
+	STDMETHODIMP CGeometry::SetMaterial( /* [in] */ ISubmesh * submesh, /* [in] */ IMaterial * val )noexcept
 	{
 		HRESULT hr = E_POINTER;
 

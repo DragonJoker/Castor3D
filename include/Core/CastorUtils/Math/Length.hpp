@@ -10,30 +10,6 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	inline String getName( LengthUnit value )
-	{
-		switch ( value )
-		{
-		case LengthUnit::eKilometre:
-			return "km";
-		case LengthUnit::eMetre:
-			return "m";
-		case LengthUnit::eCentimetre:
-			return "cm";
-		case LengthUnit::eMillimetre:
-			return "mm";
-		case LengthUnit::eYard:
-			return "yd";
-		case LengthUnit::eFoot:
-			return "ft";
-		case LengthUnit::eInch:
-			return "in";
-		default:
-			CU_Failure( "Unsupported LengthUnit" );
-			return "Unknown";
-		}
-	}
-
 	template< typename TypeT >
 	class LengthT
 	{

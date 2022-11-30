@@ -31,6 +31,10 @@
 #define _ATL_CSTRING_EXPLICIT_CONSTRUCTORS	// some CString constructors will be explicit
 #define ATL_NO_ASSERT_ON_DESTROY_NONEXISTENT_WINDOW
 
+#pragma warning( disable: 4191 )
+#pragma warning( disable: 4365 )
+#pragma warning( disable: 4371 )
+#pragma warning( disable: 5204 )
 #include <atlbase.h>
 #include <atlcom.h>
 #include <atlwin.h>
@@ -38,6 +42,7 @@
 #include <atlctl.h>
 #include <atlhost.h>
 #include <initguid.h> // Realizes CLSID definitions
+#include <atlsafe.h>
 
 #ifndef TEXT
 #	define TEXT( x ) _T( x )
@@ -64,6 +69,159 @@ namespace CastorCom
 
 		return hr;
 	}
+
+	template< typename ITypeT >
+	struct ComITypeTraitsT
+	{
+		static constexpr bool hasIType = false;
+		using Type = void;
+	};
+
+	template< typename ITypeT >
+	struct ComITypeTraitsT< ITypeT * >
+		: ComITypeTraitsT< ITypeT >
+	{
+	};
+
+	template< typename ITypeT >
+	struct ComITypeTraitsT< ITypeT const * >
+		: ComITypeTraitsT< ITypeT >
+	{
+	};
+
+	template< typename ITypeT >
+	struct ComITypeTraitsT< ITypeT & >
+		: ComITypeTraitsT< ITypeT >
+	{
+	};
+
+	template< typename ITypeT >
+	struct ComITypeTraitsT< ITypeT const & >
+		: ComITypeTraitsT< ITypeT >
+	{
+	};
+
+	template< typename ITypeT >
+	struct ComITypeTraitsT< ITypeT const >
+		: ComITypeTraitsT< ITypeT >
+	{
+	};
+
+	template< typename ITypeT >
+	static inline const bool isComITypeV = ComITypeTraitsT< ITypeT >::hasIType;
+	template< typename ITypeT >
+	concept ComITypeT = isComITypeV< ITypeT >;
+
+	template< ComITypeT ITypeT >
+	using ComITypeTypeT = typename ComITypeTraitsT< ITypeT >::Type;
+
+	template< typename TypeT >
+	struct ComTypeTraitsT
+	{
+		static constexpr bool hasIType = false;
+		static constexpr bool hasType = false;
+		static constexpr bool hasInternalType = false;
+		using IType = void;
+		using CType = void;
+		static inline const CLSID clsid{};
+		static inline const CLSID iid{};
+		static inline const UINT rid{};
+		using Internal = TypeT;
+		using InternalMbr = Internal;
+		using GetInternal = Internal;
+		using SetInternal = Internal;
+	};
+
+	template< typename TypeT >
+	struct ComTypeTraitsT< TypeT * >
+		: ComTypeTraitsT< TypeT >
+	{
+	};
+
+	template< typename TypeT >
+	struct ComTypeTraitsT< TypeT const * >
+		: ComTypeTraitsT< TypeT >
+	{
+	};
+
+	template< typename TypeT >
+	struct ComTypeTraitsT< TypeT & >
+		: ComTypeTraitsT< TypeT >
+	{
+	};
+
+	template< typename TypeT >
+	struct ComTypeTraitsT< TypeT const & >
+		: ComTypeTraitsT< TypeT >
+	{
+	};
+
+	template< typename TypeT >
+	struct ComTypeTraitsT< TypeT const >
+		: ComTypeTraitsT< TypeT >
+	{
+	};
+
+	template< typename TypeT, typename KeyT >
+	struct ComTypeTraitsT< castor::ResourceWPtrT< TypeT, KeyT > >
+		: ComTypeTraitsT< TypeT >
+	{
+	};
+
+	template< typename TypeT >
+	struct ComTypeTraitsT< castor::UniquePtr< TypeT > >
+		: ComTypeTraitsT< TypeT >
+	{
+	};
+
+	template< typename TypeT >
+	struct ComTypeTraitsT< std::shared_ptr< TypeT > >
+		: ComTypeTraitsT< TypeT >
+	{
+	};
+
+	template< typename TypeT >
+	struct ComTypeTraitsT< std::unique_ptr< TypeT > >
+		: ComTypeTraitsT< TypeT >
+	{
+	};
+
+	template< typename TypeT >
+	static inline const bool hasComTypeV = ComTypeTraitsT< TypeT >::hasType;
+	template< typename TypeT >
+	static inline const bool hasComInternalTypeV = ComTypeTraitsT< TypeT >::hasInternalType;
+
+	template< typename TypeT >
+	concept ComTypeT = hasComTypeV< TypeT >;
+	template< typename TypeT >
+	concept ComInternalTypeT = hasComInternalTypeV< TypeT >;
+
+	template< ComTypeT TypeT >
+	using ComTypeITypeT = typename ComTypeTraitsT< TypeT >::IType;
+	template< ComTypeT TypeT >
+	using ComTypeCTypeT = typename ComTypeTraitsT< TypeT >::CType;
+
+	template< ComTypeT TypeT >
+	static inline const CLSID & ComTypeClsidT = ComTypeTraitsT< TypeT >::clsid;
+	template< ComTypeT TypeT >
+	static inline const CLSID & ComTypeIidT = ComTypeTraitsT< TypeT >::iid;
+	template< ComTypeT TypeT >
+	static inline const UINT & ComTypeRidT = ComTypeTraitsT< TypeT >::rid;
+
+	template< typename TypeT >
+	using ComTypeInternalT = typename ComTypeTraitsT< TypeT >::Internal;
+	template< typename TypeT >
+	using ComTypeGetInternalT = typename ComTypeTraitsT< TypeT >::GetInternal;
+
+	template< ComInternalTypeT TypeT >
+	using ComTypeInternalMbrT = typename ComTypeTraitsT< TypeT >::InternalMbr;
+	template< ComInternalTypeT TypeT >
+	using ComTypeSetInternalT = typename ComTypeTraitsT< TypeT >::SetInternal;
+
+	template< ComITypeT ITypeT >
+	using ComITypeCTypeT = ComTypeCTypeT< ComITypeTypeT< ITypeT > >;
+	template< ComITypeT ITypeT >
+	using ComITypeGetDstTypeT = ComTypeITypeT< ComITypeTypeT< ITypeT > >;
 }
 
 #include "ComCastor3D/ComCastorUtils.hpp"

@@ -5,15 +5,7 @@ namespace CastorCom
 {
 	static const tstring ERROR_UNINITIALISED = _T( "The mapping must be initialised" );
 
-	CLinesMapping::CLinesMapping()
-	{
-	}
-
-	CLinesMapping::~CLinesMapping()
-	{
-	}
-
-	STDMETHODIMP CLinesMapping::get_Type( /* [retval][out] */ eINDEX_MAPPING_TYPE * value )
+	STDMETHODIMP CLinesMapping::get_Type( /* [retval][out] */ eINDEX_MAPPING_TYPE * value )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -38,7 +30,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CLinesMapping::AddLine( /* [in] */ unsigned int x, /* [in] */ unsigned int y )
+	STDMETHODIMP CLinesMapping::AddLine( /* [in] */ unsigned int x, /* [in] */ unsigned int y )noexcept
 	{
 		HRESULT hr = E_POINTER;
 

@@ -4,15 +4,7 @@ namespace CastorCom
 {
 	static const tstring ERROR_UNINITIALISED = _T( "The mapping must be initialised" );
 
-	CTriFaceMapping::CTriFaceMapping()
-	{
-	}
-
-	CTriFaceMapping::~CTriFaceMapping()
-	{
-	}
-
-	STDMETHODIMP CTriFaceMapping::get_Type( /* [retval][out] */ eINDEX_MAPPING_TYPE * value )
+	STDMETHODIMP CTriFaceMapping::get_Type( /* [retval][out] */ eINDEX_MAPPING_TYPE * value )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -37,7 +29,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CTriFaceMapping::AddFace( /* [in] */ unsigned int x, /* [in] */ unsigned int y, /* [in] */ unsigned int z )
+	STDMETHODIMP CTriFaceMapping::AddFace( /* [in] */ unsigned int x, /* [in] */ unsigned int y, /* [in] */ unsigned int z )noexcept
 	{
 		HRESULT hr = E_POINTER;
 

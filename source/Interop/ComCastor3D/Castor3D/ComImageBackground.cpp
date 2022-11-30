@@ -4,15 +4,7 @@ namespace CastorCom
 {
 	static const tstring ERROR_UNINITIALISED = _T( "The ImageBackground must be initialised" );
 
-	CImageBackground::CImageBackground()
-	{
-	}
-
-	CImageBackground::~CImageBackground()
-	{
-	}
-
-	STDMETHODIMP CImageBackground::put_Image( BSTR filePath )
+	STDMETHODIMP CImageBackground::put_Image( BSTR filePath )noexcept
 	{
 		HRESULT hr = E_POINTER;
 

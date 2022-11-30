@@ -5,19 +5,11 @@ namespace CastorCom
 {
 	static const tstring ERROR_UNINITIALISED = _T( "The mesh must be initialised" );
 
-	CMesh::CMesh()
-	{
-	}
-
-	CMesh::~CMesh()
-	{
-	}
-
-	STDMETHODIMP CMesh::GetSubmesh( /* [in] */ unsigned int val, /* [out, retval] */ ISubmesh ** pVal )
+	STDMETHODIMP CMesh::GetSubmesh( /* [in] */ unsigned int val, /* [out, retval] */ ISubmesh ** pVal )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
-		if ( m_internal )
+		if ( getMesh() )
 		{
 			if ( pVal )
 			{
@@ -25,7 +17,7 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CSubmesh * >( *pVal )->setInternal( m_internal->getSubmesh( val ) );
+					static_cast< CSubmesh * >( *pVal )->setInternal( getMesh()->getSubmesh( val ).get() );
 				}
 			}
 		}
@@ -43,11 +35,11 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CMesh::CreateSubmesh( /* [out, retval] */ ISubmesh ** pVal )
+	STDMETHODIMP CMesh::CreateSubmesh( /* [out, retval] */ ISubmesh ** pVal )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
-		if ( m_internal )
+		if ( getMesh() )
 		{
 			if ( pVal )
 			{
@@ -55,7 +47,7 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CSubmesh * >( *pVal )->setInternal( m_internal->createSubmesh() );
+					static_cast< CSubmesh * >( *pVal )->setInternal( getMesh()->createSubmesh().get() );
 				}
 			}
 		}
@@ -73,13 +65,15 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CMesh::DeleteSubmesh( /* [in] */ ISubmesh * val )
+	STDMETHODIMP CMesh::DeleteSubmesh( /* [in] */ ISubmesh * val )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
-		if ( m_internal )
+		if ( getMesh() )
 		{
-			m_internal->deleteSubmesh( static_cast< CSubmesh * >( val )->getInternal() );
+			auto submesh = static_cast< CSubmesh * >( val )->getInternal();
+			static_cast< CSubmesh * >( val )->setInternal( nullptr );
+			m_internal->deleteSubmesh( submesh );
 			hr = S_OK;
 		}
 		else
@@ -87,7 +81,7 @@ namespace CastorCom
 			hr = CComError::dispatchError(
 					 E_FAIL,						// This represents the error
 					 IID_IMesh,						// This is the GUID of PixelComponents throwing error
-					 _T( "DeleteSubmesh" ),		// This is generally displayed as the title
+					 _T( "DeleteSubmesh" ),			// This is generally displayed as the title
 					 ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
 					 nullptr );

@@ -4,21 +4,15 @@ namespace CastorCom
 {
 	static const tstring ERROR_UNINITIALISED = _T( "The render target must be initialised" );
 
-	CRenderTarget::CRenderTarget()
-	{
-	}
-
-	CRenderTarget::~CRenderTarget()
-	{
-	}
-
-	STDMETHODIMP CRenderTarget::Initialise()
+	STDMETHODIMP CRenderTarget::Initialise()noexcept
 	{
 		HRESULT hr = E_POINTER;
 
 		if ( m_internal )
 		{
-			m_internal->initialise();
+			auto & device = *m_internal->getOwner()->getRenderDevice();
+			auto queueData = device.graphicsData();
+			m_internal->initialise( device, *queueData );
 			hr = S_OK;
 		}
 		else
@@ -35,13 +29,14 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CRenderTarget::Cleanup()
+	STDMETHODIMP CRenderTarget::Cleanup()noexcept
 	{
 		HRESULT hr = E_POINTER;
 
 		if ( m_internal )
 		{
-			m_internal->cleanup();
+			auto & device = *m_internal->getOwner()->getRenderDevice();
+			m_internal->cleanup( device );
 			hr = S_OK;
 		}
 		else

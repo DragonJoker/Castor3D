@@ -10,15 +10,12 @@
 #undef abs
 
 #include <Castor3D/Cache/MaterialCache.hpp>
-#include <Castor3D/Cache/MeshCache.hpp>
 #include <Castor3D/Cache/PluginCache.hpp>
-#include <Castor3D/Cache/SamplerCache.hpp>
-#include <Castor3D/Cache/SceneCache.hpp>
-#include <Castor3D/Cache/WindowCache.hpp>
-#include <Castor3D/Event/Frame/FunctorEvent.hpp>
-#include <Castor3D/Event/Frame/InitialiseEvent.hpp>
+#include <Castor3D/Event/Frame/CpuFunctorEvent.hpp>
 #include <Castor3D/Render/RenderLoop.hpp>
 #include <Castor3D/Scene/SceneFileParser.hpp>
+
+#include <ashespp/Core/PlatformWindowHandle.hpp>
 
 #define CASTOR3D_THREADED false
 
@@ -32,14 +29,13 @@ namespace CastorCom
 {
 	namespace
 	{
-		castor3d::RenderWindowSPtr doLoadSceneFile( castor3d::Engine & p_engine, castor::Path const & p_fileName )
+		castor3d::RenderWindowDesc doLoadSceneFile( castor3d::Engine & p_engine, castor::Path const & p_fileName )
 		{
-			castor3d::RenderWindowSPtr l_return;
+			castor3d::RenderWindowDesc l_return;
 
 			if ( castor::File::fileExists( p_fileName ) )
 			{
 				castor::Logger::logInfo( cuT( "Loading scene file : " ) + p_fileName );
-				bool l_initialised = false;
 
 				if ( p_fileName.getExtension() == cuT( "cscn" ) || p_fileName.getExtension() == cuT( "zip" ) )
 				{
@@ -73,17 +69,9 @@ namespace CastorCom
 
 	static const tstring ERROR_UNINITIALISED_ENGINE = _T( "The IEngine must be initialised" );
 	static const tstring ERROR_INITIALISED_ENGINE = _T( "The IEngine has already been initialised" );
+	static const tstring ERROR_RENDERER_NOT_LOADED = _T( "The renderer couldn't be loaded" );
 
-	CEngine::CEngine()
-		:	m_internal( nullptr )
-	{
-	}
-
-	CEngine::~CEngine()
-	{
-	}
-
-	STDMETHODIMP CEngine::Create( BSTR appName, boolean enableValidation )
+	STDMETHODIMP CEngine::Create( BSTR appName, boolean enableValidation )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -102,7 +90,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CEngine::Destroy()
+	STDMETHODIMP CEngine::Destroy()noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -120,13 +108,13 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CEngine::Initialise( /* [in] */ int fps )
+	STDMETHODIMP CEngine::Initialise( /* [in] */ int fps, /* [in] */ boolean threaded )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
 		if ( m_internal )
 		{
-			m_internal->initialise( fps );
+			m_internal->initialise( fps, threaded == TRUE );
 			hr = S_OK;
 		}
 		else
@@ -137,7 +125,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CEngine::Cleanup()
+	STDMETHODIMP CEngine::Cleanup()noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -154,7 +142,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CEngine::CreateScene( /* [in] */ BSTR name, /* [out, retval] */ IScene ** pVal )
+	STDMETHODIMP CEngine::CreateScene( /* [in] */ BSTR name, /* [out, retval] */ IScene ** pVal )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -166,7 +154,8 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CScene * >( *pVal )->setInternal( m_internal->getSceneCache().add( fromBstr( name ) ) );
+					static_cast< CScene * >( *pVal )->setInternal( m_internal->createScene( fromBstr( name )
+						, *m_internal ).get() );
 				}
 			}
 		}
@@ -178,7 +167,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CEngine::ClearScenes()
+	STDMETHODIMP CEngine::ClearScenes()noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -195,14 +184,20 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CEngine::LoadRenderer( /* [in] */ BSTR type )
+	STDMETHODIMP CEngine::LoadRenderer( /* [in] */ BSTR type )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
 		if ( m_internal )
 		{
-			m_internal->loadRenderer( fromBstr( type ) );
-			hr = S_OK;
+			if ( m_internal->loadRenderer( fromBstr( type ) ) )
+			{
+				hr = S_OK;
+			}
+			else
+			{
+				hr = CComError::dispatchError( E_FAIL, IID_IEngine, _T( "loadRenderer" ), ERROR_RENDERER_NOT_LOADED.c_str(), 0, nullptr );
+			}
 		}
 		else
 		{
@@ -212,7 +207,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CEngine::RenderOneFrame()
+	STDMETHODIMP CEngine::RenderOneFrame()noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -229,7 +224,58 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CEngine::LoadPlugin( /* [in] */ BSTR path )
+	STDMETHODIMP CEngine::StartRendering()noexcept
+	{
+		HRESULT hr = E_POINTER;
+
+		if ( m_internal )
+		{
+			m_internal->getRenderLoop().beginRendering();
+			hr = S_OK;
+		}
+		else
+		{
+			hr = CComError::dispatchError( E_FAIL, IID_IEngine, _T( "StartRendering" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, nullptr );
+		}
+
+		return hr;
+	}
+
+	STDMETHODIMP CEngine::PauseRendering()noexcept
+	{
+		HRESULT hr = E_POINTER;
+
+		if ( m_internal )
+		{
+			m_internal->getRenderLoop().pause();
+			hr = S_OK;
+		}
+		else
+		{
+			hr = CComError::dispatchError( E_FAIL, IID_IEngine, _T( "PauseRendering" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, nullptr );
+		}
+
+		return hr;
+	}
+
+	STDMETHODIMP CEngine::EndRendering()noexcept
+	{
+		HRESULT hr = E_POINTER;
+
+		if ( m_internal )
+		{
+			m_internal->getRenderLoop().endRendering();
+			hr = S_OK;
+		}
+		else
+		{
+			hr = CComError::dispatchError( E_FAIL, IID_IEngine, _T( "EndRendering" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, nullptr );
+		}
+
+		return hr;
+	}
+
+	STDMETHODIMP CEngine::LoadPlugin( /* [in] */ BSTR path )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -246,7 +292,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CEngine::CreateOverlay( /* [in] */ eOVERLAY_TYPE type, /* [in] */ BSTR name, /* [in] */ IOverlay * parent, /* [in] */ IScene * scene, /* [out, retval] */ IOverlay ** pVal )
+	STDMETHODIMP CEngine::CreateOverlay( /* [in] */ eOVERLAY_TYPE type, /* [in] */ BSTR name, /* [in] */ IOverlay * parent, /* [in] */ IScene * scene, /* [out, retval] */ IOverlay ** pVal )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -262,7 +308,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CEngine::CreateRenderWindow( /* [in] */ BSTR name, /* [out, retval] */ IRenderWindow ** pVal )
+	STDMETHODIMP CEngine::CreateRenderWindow( /* [in] */ BSTR name, /* [in] */ ISize * size, /* [in] */ LPVOID hWnd, /* [out, retval] */ IRenderWindow ** pVal )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -274,7 +320,10 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CRenderWindow * >( *pVal )->setInternal( m_internal->getRenderWindowCache().add( fromBstr( name ) ) );
+					static_cast< CRenderWindow * >( *pVal )->setInternal( std::make_shared< castor3d::RenderWindow >( fromBstr( name )
+						, *m_internal
+						, static_cast< CSize * >( size )->getInternal()
+						, ashes::WindowHandle{ std::make_unique< ashes::IMswWindowHandle >( ::GetModuleHandle( nullptr ), HWND( hWnd ) ) } ) );
 				}
 			}
 		}
@@ -286,7 +335,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CEngine::RemoveWindow( /* [in] */ IRenderWindow * val )
+	STDMETHODIMP CEngine::RemoveWindow( /* [in] */ IRenderWindow * val )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -303,7 +352,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CEngine::CreateSampler( /* [in] */ BSTR name, /* [out, retval] */ ISampler ** pVal )
+	STDMETHODIMP CEngine::CreateSampler( /* [in] */ BSTR name, /* [out, retval] */ ISampler ** pVal )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -315,7 +364,7 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CSampler * >( *pVal )->setInternal( m_internal->getSamplerCache().add( fromBstr( name ) ) );
+					static_cast< CSampler * >( *pVal )->setInternal( m_internal->createSampler( fromBstr( name ), *m_internal ) );
 				}
 			}
 		}
@@ -327,7 +376,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CEngine::RemoveScene( /* [in] */ BSTR name )
+	STDMETHODIMP CEngine::RemoveScene( /* [in] */ BSTR name )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -343,13 +392,13 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CEngine::LoadScene( /* [in] */ BSTR name, /* [out, retval] */ IRenderWindow ** window )
+	STDMETHODIMP CEngine::LoadScene( /* [in] */ BSTR name, /* [out, retval] */ IRenderTarget ** pTarget )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
 		if ( m_internal )
 		{
-			if ( window )
+			if ( pTarget )
 			{
 				castor::Path fileName{ fromBstr( name ) };
 				castor3d::RenderWindowSPtr l_return;
@@ -357,29 +406,15 @@ namespace CastorCom
 				if ( castor::File::fileExists( fileName ) )
 				{
 					castor::String l_strLowered = castor::string::lowerCase( fileName );
-					m_internal->cleanup();
+					auto desc = doLoadSceneFile( *m_internal, fileName );
 
-					bool l_continue = true;
-					castor::Logger::logDebug( cuT( "GuiCommon::LoadSceneFile - Engine cleared" ) );
-
-					try
+					if ( desc.renderTarget && !desc.name.empty() )
 					{
-						m_internal->initialise( CASTOR_WANTED_FPS, CASTOR3D_THREADED );
-					}
-					catch ( std::exception & exc )
-					{
-						castor::Logger::logError( "Castor initialisation failed with following error: " + std::string( exc.what() ) );
-					}
-
-					l_return = doLoadSceneFile( *m_internal, fileName );
-
-					if ( l_return )
-					{
-						hr = CRenderWindow::CreateInstance( window );
+						hr = CRenderTarget::CreateInstance( pTarget );
 
 						if ( hr == S_OK )
 						{
-							static_cast< CRenderWindow * >( *window )->setInternal( l_return );
+							static_cast< CRenderTarget * >( *pTarget )->setInternal( desc.renderTarget.get() );
 						}
 					}
 				}

@@ -3,23 +3,15 @@
 
 namespace CastorCom
 {
-	CPosition::CPosition()
+	STDMETHODIMP CPosition::Set( /* [in] */ INT x, /* [in] */ INT y )noexcept
 	{
-	}
-
-	CPosition::~CPosition()
-	{
-	}
-
-	STDMETHODIMP CPosition::Set( /* [in] */ INT x, /* [in] */ INT y )
-	{
-		this->set( x, y );
+		m_internal.set( x, y );
 		return S_OK;
 	}
 
-	STDMETHODIMP CPosition::Offset( /* [in] */ INT x, /* [in] */ INT y )
+	STDMETHODIMP CPosition::Offset( /* [in] */ INT x, /* [in] */ INT y )noexcept
 	{
-		this->offset( x, y );
+		m_internal.offset( x, y );
 		return S_OK;
 	}
 }

@@ -10,34 +10,31 @@
 
 namespace CastorCom
 {
+	class CLogger;
+	template<>
+	struct ComTypeTraitsT< castor::Logger >
+	{
+		static constexpr bool hasIType = true;
+		static constexpr bool hasType = true;
+		static constexpr bool hasInternalType = false;
+
+		using IType = ILogger;
+		using CType = CLogger;
+
+		static inline const CLSID clsid = CLSID_Logger;
+		static inline const CLSID iid = IID_ILogger;
+		static inline const UINT rid = IDR_Logger;
+	};
 	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.7.0
-	\date		10/09/2014
 	\~english
 	\brief		This class defines a CLogger object accessible from COM.
 	\~french
 	\brief		Cette classe définit un CLogger accessible depuis COM.
 	*/
-	class ATL_NO_VTABLE CLogger
-		:	COM_ATL_OBJECT( Logger )
+	class CLogger
+		: public CComAtlObjectBaseT< Logger, castor::Logger >
 	{
 	public:
-		/**
-		 *\~english
-		 *\brief		Default constructor.
-		 *\~french
-		 *\brief		Constructeur par défaut.
-		 */
-		CLogger();
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		virtual ~CLogger();
-
 		STDMETHOD( Initialise )( /* [in] */ eLOG_TYPE level );
 		STDMETHOD( SetFileName )( /* [in] */ BSTR name, eLOG_TYPE target );
 		STDMETHOD( Cleanup )();
@@ -47,8 +44,9 @@ namespace CastorCom
 		STDMETHOD( LogWarning )( /* [in] */ BSTR msg );
 		STDMETHOD( LogError )( /* [in] */ BSTR msg );
 	};
-	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
-	OBJECT_ENTRY_AUTO( __uuidof( Logger ), CLogger )
+	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object
+	//!\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
+	OBJECT_ENTRY_AUTO( __uuidof( Logger ), CLogger );
 }
 
 #endif

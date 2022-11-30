@@ -1,25 +1,22 @@
 #include "ComCastor3D/Castor3D/ComTextureLayout.hpp"
 #include "ComCastor3D/CastorUtils/ComLogger.hpp"
 
+#include <Castor3D/Render/RenderDevice.hpp>
+#include <Castor3D/Render/RenderSystem.hpp>
+
 namespace CastorCom
 {
 	static const tstring ERROR_UNINITIALISED = _T( "The texture layout must be initialised" );
 
-	CTextureLayout::CTextureLayout()
-	{
-	}
-
-	CTextureLayout::~CTextureLayout()
-	{
-	}
-
-	STDMETHODIMP CTextureLayout::Initialise()
+	STDMETHODIMP CTextureLayout::Initialise()noexcept
 	{
 		HRESULT hr = E_POINTER;
 
 		if ( m_internal )
 		{
-			hr = m_internal->initialise() ? S_OK : E_FAIL;
+			auto & device = m_internal->getOwner()->getRenderDevice();
+			auto queueData = device.graphicsData();
+			hr = m_internal->initialise( device, *queueData ) ? S_OK : E_FAIL;
 		}
 		else
 		{
@@ -35,7 +32,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CTextureLayout::Cleanup()
+	STDMETHODIMP CTextureLayout::Cleanup()noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -58,7 +55,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CTextureLayout::InitFromFile( /* [in] */ BSTR path )
+	STDMETHODIMP CTextureLayout::InitFromFile( /* [in] */ BSTR path )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -84,7 +81,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CTextureLayout::InitFromBuffer( /* [in] */ IPixelBuffer * val )
+	STDMETHODIMP CTextureLayout::InitFromBuffer( /* [in] */ IPixelBuffer * val )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -107,7 +104,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CTextureLayout::Init2D( /* [in] */ unsigned int w, /* [in] */ unsigned int h, /* [in] */ ePIXEL_FORMAT format )
+	STDMETHODIMP CTextureLayout::Init2D( /* [in] */ unsigned int w, /* [in] */ unsigned int h, /* [in] */ ePIXEL_FORMAT format )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -130,7 +127,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CTextureLayout::Init3D( /* [in] */ unsigned int w, /* [in] */ unsigned int h, /* [in] */ unsigned int d, /* [in] */ ePIXEL_FORMAT format )
+	STDMETHODIMP CTextureLayout::Init3D( /* [in] */ unsigned int w, /* [in] */ unsigned int h, /* [in] */ unsigned int d, /* [in] */ ePIXEL_FORMAT format )noexcept
 	{
 		HRESULT hr = E_POINTER;
 

@@ -1,45 +1,31 @@
 #include "ComCastor3D/Castor3D/ComRenderWindow.hpp"
 
-#include <Castor3D/Event/UserInput/UserInputListener.hpp>
+#include "ComCastor3D/Castor3D/ComRenderTarget.hpp"
 
-#include <ashespp/Core/PlatformWindowHandle.hpp>
+#include <Castor3D/Event/UserInput/UserInputListener.hpp>
 
 namespace CastorCom
 {
 	static const tstring ERROR_UNINITIALISED = _T( "The render window must be initialised" );
 
-	CRenderWindow::CRenderWindow()
-	{
-	}
-
-	CRenderWindow::~CRenderWindow()
-	{
-	}
-
-	STDMETHODIMP CRenderWindow::Initialise( /* [in] */ ISize * size, /* [in] */ LPVOID val, /* [out, retval] */ VARIANT_BOOL * pVal )
+	STDMETHODIMP CRenderWindow::Initialise( /* [in] */ IRenderTarget * target )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
 		if ( m_internal )
 		{
-			if ( pVal )
+			try
 			{
-				try
-				{
-					*pVal = m_internal->initialise( *static_cast< CSize * >( size )
-						, ashes::WindowHandle{ std::make_unique< ashes::IMswWindowHandle >( ::GetModuleHandle( nullptr ), HWND( val ) ) } )
-							? VARIANT_TRUE
-							: VARIANT_FALSE;
-					hr = S_OK;
-				}
-				catch ( castor::Exception & p_exc )
-				{
-					castor::Logger::logError( p_exc.getFullDescription() );
-				}
-				catch ( std::exception & p_exc )
-				{
-					castor::Logger::logError( p_exc.what() );
-				}
+				m_internal->initialise( *static_cast< CRenderTarget * >( target )->getInternal() );
+				hr = S_OK;
+			}
+			catch ( castor::Exception & p_exc )
+			{
+				castor::Logger::logError( p_exc.getFullDescription() );
+			}
+			catch ( std::exception & p_exc )
+			{
+				castor::Logger::logError( p_exc.what() );
 			}
 		}
 		else
@@ -50,7 +36,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CRenderWindow::Cleanup()
+	STDMETHODIMP CRenderWindow::Cleanup()noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -67,13 +53,13 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CRenderWindow::Resize( /* [in] */ ISize * size )
+	STDMETHODIMP CRenderWindow::Resize( /* [in] */ ISize * size )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
 		if ( m_internal )
 		{
-			m_internal->resize( *static_cast< CSize * >( size ) );
+			m_internal->resize( static_cast< CSize * >( size )->getInternal() );
 			hr = S_OK;
 		}
 		else
@@ -84,7 +70,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CRenderWindow::OnMouseMove( /* [in] */ IPosition * pos )
+	STDMETHODIMP CRenderWindow::OnMouseMove( /* [in] */ IPosition * pos )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -118,7 +104,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CRenderWindow::OnMouseLButtonDown( /* [in] */ IPosition * pos )
+	STDMETHODIMP CRenderWindow::OnMouseLButtonDown( /* [in] */ IPosition * pos )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -152,7 +138,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CRenderWindow::OnMouseLButtonUp( /* [in] */ IPosition * pos )
+	STDMETHODIMP CRenderWindow::OnMouseLButtonUp( /* [in] */ IPosition * pos )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -186,7 +172,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CRenderWindow::OnMouseMButtonDown( /* [in] */ IPosition * pos )
+	STDMETHODIMP CRenderWindow::OnMouseMButtonDown( /* [in] */ IPosition * pos )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -220,7 +206,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CRenderWindow::OnMouseMButtonUp( /* [in] */ IPosition * pos )
+	STDMETHODIMP CRenderWindow::OnMouseMButtonUp( /* [in] */ IPosition * pos )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -254,7 +240,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CRenderWindow::OnMouseRButtonDown( /* [in] */ IPosition * pos )
+	STDMETHODIMP CRenderWindow::OnMouseRButtonDown( /* [in] */ IPosition * pos )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -288,7 +274,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CRenderWindow::OnMouseRButtonUp( /* [in] */ IPosition * pos )
+	STDMETHODIMP CRenderWindow::OnMouseRButtonUp( /* [in] */ IPosition * pos )noexcept
 	{
 		HRESULT hr = E_POINTER;
 

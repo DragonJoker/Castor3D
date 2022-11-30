@@ -2,27 +2,22 @@
 #include "ComCastor3D/Castor3D/ComTextureLayout.hpp"
 #include "ComCastor3D/ComUtils.hpp"
 
-#include <Castor3D/Render/RenderSystem.hpp>
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Render/RenderDevice.hpp>
 
 namespace CastorCom
 {
 	static const tstring ERROR_UNINITIALISED = _T( "The texture unit must be initialised" );
 
-	CTextureUnit::CTextureUnit()
-	{
-	}
-
-	CTextureUnit::~CTextureUnit()
-	{
-	}
-
-	STDMETHODIMP CTextureUnit::Initialise()
+	STDMETHODIMP CTextureUnit::Initialise()noexcept
 	{
 		HRESULT hr = E_POINTER;
 
 		if ( m_internal )
 		{
-			m_internal->initialise();
+			auto & device = *m_internal->getOwner()->getRenderDevice();
+			auto queueData = device.graphicsData();
+			m_internal->initialise( device, *queueData );
 		}
 		else
 		{
@@ -38,7 +33,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CTextureUnit::Cleanup()
+	STDMETHODIMP CTextureUnit::Cleanup()noexcept
 	{
 		HRESULT hr = E_POINTER;
 

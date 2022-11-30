@@ -1,5 +1,5 @@
 #include "ComCastor3D/CastorUtils/ComPixelBuffer.hpp"
-#include "ComCastor3D/CastorUtils/ComSize.hpp"
+
 #include "ComCastor3D/ComUtils.hpp"
 
 namespace CastorCom
@@ -7,21 +7,13 @@ namespace CastorCom
 	static const tstring ERROR_UNINITIALISED_BUFFER = _T( "The buffer must be initialised" );
 	static const tstring ERROR_INITIALISED_BUFFER = _T( "The buffer is already initialised" );
 
-	CPixelBuffer::CPixelBuffer()
-	{
-	}
-
-	CPixelBuffer::~CPixelBuffer()
-	{
-	}
-
-	STDMETHODIMP CPixelBuffer::Flip()
+	STDMETHODIMP CPixelBuffer::Flip()noexcept
 	{
 		HRESULT hr = E_POINTER;
 
-		if ( m_buffer )
+		if ( m_internal )
 		{
-			m_buffer->flip();
+			m_internal->flip();
 			hr = S_OK;
 		}
 		else
@@ -38,13 +30,14 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CPixelBuffer::Initialise( /* [in] */ ISize * size, /* [in] */ ePIXEL_FORMAT format )
+	STDMETHODIMP CPixelBuffer::Initialise( /* [in] */ ISize * size, /* [in] */ ePIXEL_FORMAT format )noexcept
 	{
 		HRESULT hr = E_FAIL;
 
-		if ( !m_buffer )
+		if ( !m_internal )
 		{
-			m_buffer = castor::PxBufferBase::create( *static_cast< CSize * >( size ), castor::PixelFormat( format ) );
+			m_internal = castor::PxBufferBase::create( static_cast< CSize * >( size )->getInternal()
+				, castor::PixelFormat( format ) );
 			hr = S_OK;
 		}
 		else

@@ -14,11 +14,10 @@ namespace CastorCom
 
 		static LPCOLESTR GetAppId() throw()
 		{
-			USES_CONVERSION;
-			return T2W( m_appId );
+			return T2CW( m_appId );
 		}
 
-		static TCHAR * GetAppIdT() throw()
+		static TCHAR const * GetAppIdT() throw()
 		{
 			return m_appId;
 		}
@@ -34,7 +33,7 @@ namespace CastorCom
 		}
 
 	private:
-		static TCHAR * m_appId;
+		static TCHAR const * m_appId;
 	};
 
 	extern class CComCastor3DModule _AtlModule;

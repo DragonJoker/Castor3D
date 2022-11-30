@@ -1,10 +1,8 @@
-/* See LICENSE file in root folder */
+﻿/* See LICENSE file in root folder */
 #ifndef __C3DCOM_COM_UTILS_H__
 #define __C3DCOM_COM_UTILS_H__
 
 #include "ComCastor3D/ComError.hpp"
-
-#include <atlsafe.h>
 
 namespace CastorCom
 {
@@ -83,9 +81,6 @@ namespace CastorCom
 		return l_return;
 	}
 	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.7.0
-	\date		10/09/2014
 	\~english
 	\brief		Functor used to fill a VARIANT from a castor::String
 	\remarks	Use it if you need a SAFEARRAY of BSTR
@@ -119,9 +114,6 @@ namespace CastorCom
 	};
 
 	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.7.0
-	\date		10/09/2014
 	\~english
 	\brief		Functor used to fill a castor::String from a VARIANT
 	\remarks	Use it if you need a SAFEARRAY of BSTR
@@ -169,9 +161,6 @@ namespace CastorCom
 	};
 
 	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.7.0
-	\date		10/09/2014
 	\~english
 	\brief		Structure used to fill a VARIANT
 	\arg		ComType		The COM data type
@@ -198,10 +187,10 @@ namespace CastorCom
 		 */
 		HRESULT operator()( VARIANT & variant
 			, CastorType * value
-			, HRESULT( * comsetter )( CastorType *, ComType * ) )
+			, HRESULT( *comSetter )( CastorType *, ComType * ) )
 		{
 			ComType * pValue = static_cast< ComType * >( ComType::CreateInstance() );
-			HRESULT hr = comsetter( value, pValue );
+			HRESULT hr = comSetter( value, pValue );
 
 			if ( hr == S_OK )
 			{
@@ -216,9 +205,6 @@ namespace CastorCom
 	};
 
 	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.7.0
-	\date		10/09/2014
 	\~english
 	\brief		Structure used to fill a value from a VARIANT
 	\arg		ComType		The COM data type
@@ -269,9 +255,6 @@ namespace CastorCom
 	};
 
 	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.7.0
-	\date		10/09/2014
 	\~english
 	\brief		Structure used to fill a SAFEARRAY
 	\arg		CastorType	The Castor data type
@@ -302,8 +285,8 @@ namespace CastorCom
 			, SetterFunc comValueSetter )
 		{
 			///@remarks We create the SAFEARRAY
-			CComSafeArray< VARIANT > array;
-			HRESULT hr = array.create( ULONG( vals.size() ) );
+			ATL::CComSafeArray< VARIANT > array;
+			HRESULT hr = array.Create( ULONG( vals.size() ) );
 
 			///@remarks And we fill it
 			if ( hr == S_OK )
@@ -312,7 +295,7 @@ namespace CastorCom
 				{
 					VARIANT value;
 					::VariantInit( &value );
-					hr = comValuesetter( vals[i], value );
+					hr = comValueSetter( vals[i], value );
 
 					if ( hr == S_OK )
 					{
@@ -322,8 +305,8 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					CComVariant vArray( array.detach() );
-					hr = vArray.detach( pVal );
+					ATL::CComVariant vArray( array.Detach() );
+					hr = vArray.Detach( pVal );
 				}
 			}
 
@@ -332,9 +315,6 @@ namespace CastorCom
 	};
 
 	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.7.0
-	\date		10/09/2014
 	\~english
 	\brief		Structure used to retrieve a value from a SAFEARRAY
 	\arg		CallerType	The caller class type
@@ -387,7 +367,7 @@ namespace CastorCom
 					array = *val.parray;
 				}
 
-				const ULONG nCount = array.getCount();
+				const ULONG nCount = array.GetCount();
 				std::vector< CastorType > vals( nCount, CastorType() );
 
 				for ( ULONG i = 0; i < nCount && hr == S_OK; ++i )
@@ -397,7 +377,7 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					valuesetter( vals );
+					valueSetter( vals );
 				}
 			}
 			else
@@ -432,7 +412,7 @@ namespace CastorCom
 		HRESULT operator()( VARIANT val
 			, PutterFunc valuePutter
 			, CallerType * caller
-			, void ( __thiscall CallerType::* valuesetter )( const std::vector< CastorType > & ) )
+			, void ( __thiscall CallerType::* valueSetter )( const std::vector< CastorType > & ) )
 		{
 			uint32_t type = VT_ARRAY | VT_VARIANT;
 			HRESULT hr = ( ( val.vt & type ) == type ) ? S_OK : E_FAIL;
@@ -450,7 +430,7 @@ namespace CastorCom
 					array = *val.parray;
 				}
 
-				const ULONG nCount = array.getCount();
+				const ULONG nCount = array.GetCount();
 				std::vector< CastorType > vals( nCount, CastorType() );
 
 				for ( ULONG i = 0; i < nCount && hr == S_OK; ++i )
@@ -460,7 +440,7 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					( caller->*valuesetter )( vals );
+					( caller->*valueSetter )( vals );
 				}
 			}
 			else

@@ -5,15 +5,7 @@ namespace CastorCom
 {
 	static const tstring ERROR_UNINITIALISED = _T( "The movable object must be initialised" );
 
-	CLight::CLight()
-	{
-	}
-
-	CLight::~CLight()
-	{
-	}
-
-	STDMETHODIMP CLight::AttachTo( /* [in] */ ISceneNode * val )
+	STDMETHODIMP CLight::AttachTo( /* [in] */ ISceneNode * val )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -36,7 +28,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CLight::Detach()
+	STDMETHODIMP CLight::Detach()noexcept
 	{
 		HRESULT hr = E_POINTER;
 

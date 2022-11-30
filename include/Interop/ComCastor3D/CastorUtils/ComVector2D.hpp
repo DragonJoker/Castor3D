@@ -10,37 +10,19 @@
 
 namespace CastorCom
 {
+	COM_TYPE_TRAITS_EX( Vector2D, castor, Point2f );
 	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.7.0
-	\date		10/09/2014
 	\~english
 	\brief		This class defines a CVector2D object accessible from COM.
 	\~french
 	\brief		Cette classe définit un CVector2D accessible depuis COM.
 	*/
-	class ATL_NO_VTABLE CVector2D
-		:	COM_ATL_OBJECT( Vector2D )
-		,	public castor::Point2f
+	class CVector2D
+		: public CComAtlObject< Vector2D, castor::Point2f >
 	{
 	public:
-		/**
-		 *\~english
-		 *\brief		Default constructor.
-		 *\~french
-		 *\brief		Constructeur par défaut.
-		 */
-		CVector2D();
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		virtual ~CVector2D();
-
-		COM_PROPERTY( X, FLOAT, makeGetter( this, &castor::Point2f::operator[], 0 ), makePutter( this, &castor::Point2f::operator[], 0 ) );
-		COM_PROPERTY( Y, FLOAT, makeGetter( this, &castor::Point2f::operator[], 1 ), makePutter( this, &castor::Point2f::operator[], 1 ) );
+		COMEX_PROPERTY_IDX( X, 0, FLOAT, &m_internal, &Internal::operator[], &Internal::operator[] );
+		COMEX_PROPERTY_IDX( Y, 1, FLOAT, &m_internal, &Internal::operator[], &Internal::operator[] );
 
 		STDMETHOD( Negate )();
 		STDMETHOD( Normalise )();
@@ -49,9 +31,6 @@ namespace CastorCom
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
 	OBJECT_ENTRY_AUTO( __uuidof( Vector2D ), CVector2D );
-
-	DECLARE_VARIABLE_REF_GETTER( Vector2D, castor, Point2f );
-	DECLARE_VARIABLE_REF_PUTTER( Vector2D, castor, Point2f );
 }
 
 #endif

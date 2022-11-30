@@ -5,21 +5,13 @@ namespace CastorCom
 {
 	static const tstring ERROR_UNINITIALISED = _T( "The submesh must be initialised" );
 
-	CSubmesh::CSubmesh()
-	{
-	}
-
-	CSubmesh::~CSubmesh()
-	{
-	}
-
-	STDMETHODIMP CSubmesh::AddPoint( /* [in] */ IVector3D * val )
+	STDMETHODIMP CSubmesh::AddPoint( /* [in] */ IVector3D * val )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
 		if ( m_internal )
 		{
-			m_internal->addPoint( *static_cast< CVector3D * >( val ) );
+			m_internal->addPoint( static_cast< CVector3D * >( val )->getInternal() );
 			hr = S_OK;
 		}
 		else

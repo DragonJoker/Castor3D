@@ -2,15 +2,7 @@
 
 namespace CastorCom
 {
-	CIndexMapping::CIndexMapping()
-	{
-	}
-
-	CIndexMapping::~CIndexMapping()
-	{
-	}
-
-	STDMETHODIMP CIndexMapping::get_Type( /* [retval][out] */ eINDEX_MAPPING_TYPE * value )
+	STDMETHODIMP CIndexMapping::get_Type( /* [retval][out] */ eINDEX_MAPPING_TYPE * value )noexcept
 	{
 		HRESULT hr = E_POINTER;
 

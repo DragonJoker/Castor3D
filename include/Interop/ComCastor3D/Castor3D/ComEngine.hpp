@@ -8,63 +8,44 @@
 
 namespace CastorCom
 {
+	COM_TYPE_TRAITS_PTR( castor3d, Engine );
 	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.7.0
-	\date		10/09/2014
 	\~english
 	\brief		This class defines a CEngine object accessible from COM.
 	\~french
 	\brief		Cette classe définit un CEngine accessible depuis COM.
 	*/
-	class ATL_NO_VTABLE CEngine
-		:	COM_ATL_OBJECT( Engine )
+	class CEngine
+		: public CComAtlObject< Engine, castor3d::Engine >
 	{
 	public:
-		/**
-		 *\~english
-		 *\brief		Default constructor.
-		 *\~french
-		 *\brief		Constructeur par défaut.
-		 */
-		CEngine();
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		virtual ~CEngine();
-
-		inline castor3d::Engine * getInternal()const
-		{
-			return m_internal;
-		}
-
-		COM_PROPERTY_GET( PluginsDirectory, BSTR, makeStaticGetter( &castor3d::Engine::getPluginsDirectory ) );
-		COM_PROPERTY_GET( EngineDirectory, BSTR, makeStaticGetter( &castor3d::Engine::getEngineDirectory ) );
-		COM_PROPERTY_GET( DataDirectory, BSTR, makeStaticGetter( &castor3d::Engine::getDataDirectory ) );
+		COM_PROPERTY_GET( PluginsDirectory, BSTR, makeGetter( &castor3d::Engine::getPluginsDirectory ) );
+		COM_PROPERTY_GET( EngineDirectory, BSTR, makeGetter( &castor3d::Engine::getEngineDirectory ) );
+		COM_PROPERTY_GET( DataDirectory, BSTR, makeGetter( &castor3d::Engine::getDataDirectory ) );
 
 		STDMETHOD( Create )( /* [in] */ BSTR appName, /* [in] */ boolean enableValidation );
-		STDMETHOD( Destroy )( );
-		STDMETHOD( Initialise )( /* [in] */ int fps );
-		STDMETHOD( Cleanup )( );
+		STDMETHOD( Destroy )();
+		STDMETHOD( Initialise )( /* [in] */ int fps, /* [in] */ boolean threaded );
+		STDMETHOD( Cleanup )();
 		STDMETHOD( CreateScene )( /* [in] */ BSTR name, /* [out, retval] */ IScene ** pVal );
-		STDMETHOD( ClearScenes )( );
+		STDMETHOD( ClearScenes )();
 		STDMETHOD( LoadRenderer )( /* [in] */ BSTR type );
-		STDMETHOD( RenderOneFrame )( );
+		STDMETHOD( RenderOneFrame )();
+		STDMETHOD( StartRendering )();
+		STDMETHOD( PauseRendering )();
+		STDMETHOD( EndRendering )();
 		STDMETHOD( LoadPlugin )( /* [in] */ BSTR path );
 		STDMETHOD( CreateOverlay )( /* [in] */ eOVERLAY_TYPE type, /* [in] */ BSTR name, /* [in] */ IOverlay * parent, /* [in] */ IScene * scene, /* [out, retval] */ IOverlay ** pVal );
-		STDMETHOD( CreateRenderWindow )( /* [in] */ BSTR name, /* [out, retval] */ IRenderWindow ** pVal );
+		STDMETHOD( CreateRenderWindow )( /* [in] */ BSTR name, /* [in] */ ISize * size, /* [in] */ LPVOID hWnd, /* [out, retval] */ IRenderWindow ** pVal );
 		STDMETHOD( RemoveWindow )( /* [in] */ IRenderWindow * val );
 		STDMETHOD( CreateSampler )( /* [in] */ BSTR name, /* [out, retval] */ ISampler ** pVal );
 		STDMETHOD( RemoveScene )( /* [in] */ BSTR name );
-		STDMETHOD( LoadScene )( /* [in] */ BSTR name, /* [out, retval] */ IRenderWindow ** window );
+		STDMETHOD( LoadScene )( /* [in] */ BSTR name, /* [out, retval] */ IRenderTarget ** pTarget );
 
 	private:
-		castor3d::Engine * m_internal;
 	};
-	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
+	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object
+	//!\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
 	OBJECT_ENTRY_AUTO( __uuidof( Engine ), CEngine )
 }
 

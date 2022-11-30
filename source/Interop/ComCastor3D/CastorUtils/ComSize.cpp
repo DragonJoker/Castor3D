@@ -3,23 +3,15 @@
 
 namespace CastorCom
 {
-	CSize::CSize()
+	STDMETHODIMP CSize::Set( /* [in] */ UINT x, /* [in] */ UINT y )noexcept
 	{
-	}
-
-	CSize::~CSize()
-	{
-	}
-
-	STDMETHODIMP CSize::Set( /* [in] */ UINT x, /* [in] */ UINT y )
-	{
-		this->set( x, y );
+		m_internal.set( x, y );
 		return S_OK;
 	}
 
-	STDMETHODIMP CSize::Grow( /* [in] */ INT x, /* [in] */ INT y )
+	STDMETHODIMP CSize::Grow( /* [in] */ INT x, /* [in] */ INT y )noexcept
 	{
-		this->grow( x, y );
+		m_internal.grow( x, y );
 		return S_OK;
 	}
 }

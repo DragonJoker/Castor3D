@@ -10,58 +10,25 @@
 
 namespace CastorCom
 {
+	COM_TYPE_TRAITS_PTR( castor3d, TextureUnit );
 	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.7.0
-	\date		10/09/2014
 	\~english
 	\brief		This class defines a CTextureUnit object accessible from COM.
 	\~french
 	\brief		Cette classe définit un CTextureUnit accessible depuis COM.
 	*/
-	class ATL_NO_VTABLE CTextureUnit
-		:	COM_ATL_OBJECT( TextureUnit )
+	class CTextureUnit
+		: public CComAtlObject< TextureUnit, castor3d::TextureUnit >
 	{
 	public:
-		/**
-		 *\~english
-		 *\brief		Default constructor.
-		 *\~french
-		 *\brief		Constructeur par défaut.
-		 */
-		CTextureUnit();
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		virtual ~CTextureUnit();
-
-		inline castor3d::TextureUnitSPtr getInternal()const
-		{
-			return m_internal;
-		}
-
-		inline void setInternal( castor3d::TextureUnitSPtr internal )
-		{
-			m_internal = internal;
-		}
-
-		COM_PROPERTY( Texture, ITextureLayout *, makeGetter( m_internal.get(), &castor3d::TextureUnit::getTexture ), makePutter( m_internal.get(), &castor3d::TextureUnit::setTexture ) );
-		COM_PROPERTY( Sampler, ISampler *, makeGetter( m_internal.get(), &castor3d::TextureUnit::getSampler ), makePutter( m_internal.get(), &castor3d::TextureUnit::setSampler ) );
+		COM_PROPERTY( Texture, ITextureLayout *, makeGetter( m_internal, &castor3d::TextureUnit::getTexture ), makePutter( m_internal, &castor3d::TextureUnit::setTexture ) );
+		COM_PROPERTY( Sampler, ISampler *, makeGetter( m_internal, &castor3d::TextureUnit::getSampler ), makePutter( m_internal, &castor3d::TextureUnit::setSampler ) );
 
 		STDMETHOD( Initialise )();
 		STDMETHOD( Cleanup )();
-
-	private:
-		castor3d::TextureUnitSPtr m_internal;
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
 	OBJECT_ENTRY_AUTO( __uuidof( TextureUnit ), CTextureUnit );
-
-	DECLARE_VARIABLE_PTR_GETTER( TextureUnit, castor3d, TextureUnit );
-	DECLARE_VARIABLE_PTR_PUTTER( TextureUnit, castor3d, TextureUnit );
 }
 
 #endif

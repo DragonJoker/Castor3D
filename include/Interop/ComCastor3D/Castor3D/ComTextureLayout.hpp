@@ -8,44 +8,17 @@
 
 namespace CastorCom
 {
+	COM_TYPE_TRAITS_SPTR( castor3d, TextureLayout );
 	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.7.0
-	\date		10/09/2014
 	\~english
 	\brief		This class defines a CTextureLayout object accessible from COM.
 	\~french
 	\brief		Cette classe définit un CTextureLayout accessible depuis COM.
 	*/
-	class ATL_NO_VTABLE CTextureLayout
-		:	COM_ATL_OBJECT( TextureLayout )
+	class CTextureLayout
+		: public CComAtlObject< TextureLayout, castor3d::TextureLayout >
 	{
 	public:
-		/**
-		 *\~english
-		 *\brief		Default constructor.
-		 *\~french
-		 *\brief		Constructeur par défaut.
-		 */
-		CTextureLayout();
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		virtual ~CTextureLayout();
-
-		inline castor3d::TextureLayoutSPtr getInternal()const
-		{
-			return m_internal;
-		}
-
-		inline void setInternal( castor3d::TextureLayoutSPtr state )
-		{
-			m_internal = state;
-		}
-
 		COM_PROPERTY_GET( Type, eIMAGE_TYPE, makeGetter( m_internal.get(), &castor3d::TextureLayout::getType ) );
 
 		STDMETHOD( Initialise )();
@@ -55,15 +28,9 @@ namespace CastorCom
 		STDMETHOD( InitFromBuffer )( /* [in] */ IPixelBuffer * val );
 		STDMETHOD( Init2D )( /* [in] */ unsigned int w, /* [in] */ unsigned int h, /* [in] */ ePIXEL_FORMAT format );
 		STDMETHOD( Init3D )( /* [in] */ unsigned int w, /* [in] */ unsigned int h, /* [in] */ unsigned int d, /* [in] */ ePIXEL_FORMAT format );
-
-	private:
-		castor3d::TextureLayoutSPtr m_internal;
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
 	OBJECT_ENTRY_AUTO( __uuidof( TextureLayout ), CTextureLayout );
-
-	DECLARE_VARIABLE_PTR_GETTER( TextureLayout, castor3d, TextureLayout );
-	DECLARE_VARIABLE_PTR_PUTTER( TextureLayout, castor3d, TextureLayout );
 }
 
 #endif

@@ -11,48 +11,24 @@
 
 namespace CastorCom
 {
+	COM_TYPE_TRAITS_PTR( castor, Glyph );
 	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.7.0
-	\date		10/09/2014
 	\~english
 	\brief		This class defines a CGlyph object accessible from COM.
 	\~french
 	\brief		Cette classe définit un CGlyph accessible depuis COM.
 	*/
-	class ATL_NO_VTABLE CGlyph
-		: COM_ATL_OBJECT( Glyph )
+	class CGlyph
+		: public CComAtlObject< Glyph, castor::Glyph >
 	{
 	public:
-		/**
-		 *\~english
-		 *\brief		Default constructor.
-		 *\~french
-		 *\brief		Constructeur par défaut.
-		 */
-		CGlyph();
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		virtual ~CGlyph();
-
-		void setInternal( castor::Glyph * p_glyph )
-		{
-			m_glyph = p_glyph;
-		}
-
-		COM_PROPERTY_GET( Size, ISize *, makeGetter( m_glyph, &castor::Glyph::getSize ) );
-		COM_PROPERTY_GET( Bearing, IPosition *, makeGetter( m_glyph, &castor::Glyph::getBearing ) );
-		COM_PROPERTY_GET( Advance, INT, makeGetter( m_glyph, &castor::Glyph::getAdvance ) );
-
-	private:
-		castor::Glyph * m_glyph;
+		COM_PROPERTY_GET( Size, ISize *, makeGetter( m_internal, &castor::Glyph::getSize ) );
+		COM_PROPERTY_GET( Bearing, IPosition *, makeGetter( m_internal, &castor::Glyph::getBearing ) );
+		COM_PROPERTY_GET( Advance, INT, makeGetter( m_internal, &castor::Glyph::getAdvance ) );
 	};
-	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
-	OBJECT_ENTRY_AUTO( __uuidof( Glyph ), CGlyph )
+	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object
+	//!\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
+	OBJECT_ENTRY_AUTO( __uuidof( Glyph ), CGlyph );
 }
 
 #endif
