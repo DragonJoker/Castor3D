@@ -5,6 +5,7 @@
 #pragma warning( disable: 4251 )
 #pragma warning( disable: 4365 )
 #pragma warning( disable: 4371 )
+#pragma warning( disable: 5262 )
 #include <wx/filedlg.h>
 #include <wx/filename.h>
 #include <wx/sizer.h>

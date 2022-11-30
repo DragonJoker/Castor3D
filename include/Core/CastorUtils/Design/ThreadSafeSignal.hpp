@@ -11,8 +11,12 @@ See LICENSE file in root folder
 
 #include <functional>
 #include <map>
-#include <mutex>
 #include <set>
+
+#pragma warning( push )
+#pragma warning( disable:5262 )
+#include <mutex>
+#pragma warning( pop )
 
 namespace castor
 {

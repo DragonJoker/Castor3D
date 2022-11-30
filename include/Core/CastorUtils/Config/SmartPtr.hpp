@@ -6,7 +6,10 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Config/Macros.hpp"
 
+#pragma warning( push )
+#pragma warning( disable:5262 )
 #include <memory>
+#pragma warning( pop )
 
 namespace castor
 {

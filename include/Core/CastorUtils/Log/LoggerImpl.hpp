@@ -10,6 +10,7 @@ See LICENSE file in root folder
 
 #pragma warning( push )
 #pragma warning( disable:4365 )
+#pragma warning( disable:5262 )
 #include <mutex>
 #pragma warning( pop )
 

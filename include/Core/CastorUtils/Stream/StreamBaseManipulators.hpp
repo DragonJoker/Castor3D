@@ -6,7 +6,11 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Stream/StreamModule.hpp"
 
+#pragma warning( push )
+#pragma warning( disable:5262 )
 #include <streambuf>
+#pragma warning( pop )
+
 #include <cassert>
 #include <climits>
 

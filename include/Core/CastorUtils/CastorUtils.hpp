@@ -8,6 +8,7 @@ See LICENSE file in root folder
 
 #pragma warning( push )
 #pragma warning( disable:4365 )
+#pragma warning( disable:5262 )
 #include <array>
 #include <cassert>
 #include <chrono>
@@ -48,6 +49,9 @@ namespace castor
 	CU_DeclareVector( uint32_t, UInt32 );
 }
 
+#pragma warning( push )
+#pragma warning( disable:5262 )
 #include "CastorUtils/Miscellaneous/Debug.hpp"
+#pragma warning( pop )
 
 #endif

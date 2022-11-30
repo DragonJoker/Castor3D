@@ -4,9 +4,12 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_DEBUG_H___
 #define ___CASTOR_DEBUG_H___
 
+#pragma warning( push )
+#pragma warning( disable:5262 )
 #include <ostream>
 #include <sstream>
 #include <string>
+#pragma warning( pop )
 
 namespace castor
 {

@@ -4,9 +4,6 @@ See LICENSE file in root folder
 #ifndef ___GUICOMMON_PCH_H___
 #define ___GUICOMMON_PCH_H___
 
-#include <CastorUtils/config.hpp>
-#include <Castor3D/Castor3DPrerequisites.hpp>
-
 #if CU_UsePCH
 #	include <string>
 
@@ -14,6 +11,7 @@ See LICENSE file in root folder
 #	pragma warning( disable: 4365 )
 #	pragma warning( disable: 4371 )
 #	pragma warning( disable: 5054 )
+#	pragma warning( disable: 5262 )
 #	include <wx/app.h>
 #	include <wx/button.h>
 #	include <wx/bmpbuttn.h>
@@ -100,6 +98,15 @@ See LICENSE file in root folder
 #	include <vector>
 #	include <cmath>
 #else
+#	pragma warning( push )
+#	pragma warning( disable: 4365 )
+#	pragma warning( disable: 4371 )
+#	pragma warning( disable: 5054 )
+#	pragma warning( disable: 5262 )
+#	include <wx/wx.h>
+#	pragma warning( pop )
+
+#	include <CastorUtils/config.hpp>
 #	include <Castor3D/Castor3DPrerequisites.hpp>
 #endif
 

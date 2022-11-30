@@ -15,9 +15,13 @@ See LICENSE file in root folder
 
 #include <cmath>
 #include <cstring>
+#include <numeric>
+
+#pragma warning( push )
+#pragma warning( disable:5262 )
 #include <iomanip>
 #include <iostream>
-#include <numeric>
+#pragma warning( pop )
 
 namespace castor
 {

@@ -1,4 +1,7 @@
+#pragma warning( push )
+#pragma warning( disable:5262 )
 #include <locale>
+#pragma warning( pop )
 
 namespace castor
 {

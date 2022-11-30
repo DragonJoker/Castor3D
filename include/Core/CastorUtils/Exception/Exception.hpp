@@ -7,8 +7,12 @@ See LICENSE file in root folder
 #include "CastorUtils/Exception/Assertion.hpp"
 
 #include <string>
-#include <sstream>
 #include <cstdint>
+
+#pragma warning( push )
+#pragma warning( disable:5262 )
+#include <sstream>
+#pragma warning( pop )
 
 namespace castor
 {

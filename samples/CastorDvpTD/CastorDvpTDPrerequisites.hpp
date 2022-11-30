@@ -1,32 +1,14 @@
 #pragma once
 
-#include <Castor3D/Castor3DPrerequisites.hpp>
 #include <GuiCommon/GuiCommonPrerequisites.hpp>
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wambiguous-reversed-operator"
-#pragma clang diagnostic ignored "-Watomic-implicit-seq-cst"
-#pragma clang diagnostic ignored "-Wcast-function-type"
-#pragma clang diagnostic ignored "-Wcomma"
-#pragma clang diagnostic ignored "-Wdeprecated-copy-with-user-provided-copy"
-#pragma clang diagnostic ignored "-Wdeprecated-copy-with-user-provided-dtor"
-#pragma clang diagnostic ignored "-Wimplicit-int-float-conversion"
-#pragma clang diagnostic ignored "-Winfinite-recursion"
-#pragma clang diagnostic ignored "-Wreserved-identifier"
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-qual"
-#pragma GCC diagnostic ignored "-Wconversion"
-#pragma GCC diagnostic ignored "-Wdeprecated-copy"
-#pragma GCC diagnostic ignored "-Wfloat-conversion"
-#pragma GCC diagnostic ignored "-Wold-style-cast"
-#pragma GCC diagnostic ignored "-Wredundant-decls"
-#pragma GCC diagnostic ignored "-Wsuggest-destructor-override"
-#pragma GCC diagnostic ignored "-Wsuggest-override"
-#pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
+#pragma warning( push )
+#pragma warning( disable: 5262 )
 #include <wx/wx.h>
 #include <wx/windowptr.h>
-#pragma GCC diagnostic pop
-#pragma clang diagnostic pop
+#pragma warning( pop )
+
+#include <Castor3D/Castor3DPrerequisites.hpp>
 
 #include <chrono>
 #include <vector>

@@ -5,19 +5,21 @@ See LICENSE file in root folder
 #define ___GC_CASTOR_APPLICATION_H___
 
 #include "GuiCommon/GuiCommonPrerequisites.hpp"
-#include "GuiCommon/System/ImagesLoader.hpp"
-
-#include <Castor3D/Miscellaneous/Version.hpp>
-
-#include <memory>
 
 #pragma warning( push )
 #pragma warning( disable: 4365 )
 #pragma warning( disable: 4371 )
 #pragma warning( disable: 5054 )
+#pragma warning( disable: 5262 )
 #include <wx/app.h>
 #include <wx/intl.h>
 #pragma warning( pop )
+
+#include "GuiCommon/System/ImagesLoader.hpp"
+
+#include <Castor3D/Miscellaneous/Version.hpp>
+
+#include <memory>
 
 namespace GuiCommon
 {
