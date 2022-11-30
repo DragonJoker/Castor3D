@@ -20,7 +20,7 @@ namespace CastorCom
 		: public CComAtlObject< LinesMapping, castor3d::LinesMapping >
 	{
 	public:
-		COM_PROPERTY_GET( LinesCount, UINT, makeGetter( m_internal, &castor3d::LinesMapping::getCount ) );
+		COMEX_PROPERTY_GET( LinesCount, UINT, m_internal, &castor3d::LinesMapping::getCount );
 
 		STDMETHOD( get_Type )( /* [retval][out] */ eINDEX_MAPPING_TYPE * value );
 		STDMETHOD( AddLine )( /* [in] */ unsigned int x, /* [in] */ unsigned int y );

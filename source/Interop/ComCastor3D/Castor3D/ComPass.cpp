@@ -14,7 +14,10 @@
 
 namespace CastorCom
 {
-	static const tstring ERROR_UNINITIALISED = _T( "The pass must be initialised" );
+	namespace pass
+	{
+		static const tstring ERROR_UNINITIALISED = _T( "The pass must be initialised" );
+	}
 
 	castor::RgbColour CPass::getEmissiveColour( castor3d::Pass const * pass )
 	{
@@ -307,7 +310,7 @@ namespace CastorCom
 					 E_FAIL,						// This represents the error
 					 IID_IPass,						// This is the GUID of PixelComponents throwing error
 					 _T( "CreateTextureUnit" ),		// This is generally displayed as the title
-					 ERROR_UNINITIALISED.c_str(),	// This is the description
+					pass::ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
 					 nullptr );
 		}
@@ -328,7 +331,7 @@ namespace CastorCom
 					 E_FAIL,						// This represents the error
 					 IID_IPass,						// This is the GUID of PixelComponents throwing error
 					 _T( "DestroyTextureUnit" ),	// This is generally displayed as the title
-					 ERROR_UNINITIALISED.c_str(),	// This is the description
+					 pass::ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
 					 nullptr );
 		}
@@ -349,7 +352,7 @@ namespace CastorCom
 					 E_FAIL,						// This represents the error
 					 IID_IPass,						// This is the GUID of PixelComponents throwing error
 					 _T( "GetTextureUnitByIndex" ),	// This is generally displayed as the title
-					 ERROR_UNINITIALISED.c_str(),	// This is the description
+					 pass::ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
 					 nullptr );
 		}

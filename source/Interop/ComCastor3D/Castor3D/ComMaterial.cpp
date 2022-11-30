@@ -3,8 +3,11 @@
 
 namespace CastorCom
 {
-	static const tstring ERROR_UNINITIALISED = _T( "The material must be initialised" );
-	static const tstring ERROR_OUT_OF_BOUND_INDEX = _T( "The given index was out of bounds" );
+	namespace material
+	{
+		static const tstring ERROR_UNINITIALISED = _T( "The material must be initialised" );
+		static const tstring ERROR_OUT_OF_BOUND_INDEX = _T( "The given index was out of bounds" );
+	}
 
 	STDMETHODIMP CMaterial::Initialise()noexcept
 	{
@@ -21,7 +24,7 @@ namespace CastorCom
 					 E_FAIL,						// This represents the error
 					 IID_IMaterial,					// This is the GUID of PixelComponents throwing error
 					 _T( "Initialise" ),			// This is generally displayed as the title
-					 ERROR_UNINITIALISED.c_str(),	// This is the description
+					 material::ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
 					 nullptr );
 		}
@@ -44,7 +47,7 @@ namespace CastorCom
 					 E_FAIL,						// This represents the error
 					 IID_IMaterial,					// This is the GUID of PixelComponents throwing error
 					 _T( "Cleanup" ),				// This is generally displayed as the title
-					 ERROR_UNINITIALISED.c_str(),	// This is the description
+					 material::ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
 					 nullptr );
 		}
@@ -74,7 +77,7 @@ namespace CastorCom
 					 E_FAIL,						// This represents the error
 					 IID_IMaterial,					// This is the GUID of PixelComponents throwing error
 					 _T( "CreatePass" ),			// This is generally displayed as the title
-					 ERROR_UNINITIALISED.c_str(),	// This is the description
+					 material::ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
 					 nullptr );
 		}
@@ -104,7 +107,7 @@ namespace CastorCom
 								 E_FAIL,							// This represents the error
 								 IID_IMaterial,						// This is the GUID of PixelComponents throwing error
 								 _T( "GetPass" ),					// This is generally displayed as the title
-								 ERROR_OUT_OF_BOUND_INDEX.c_str(),	// This is the description
+								 material::ERROR_OUT_OF_BOUND_INDEX.c_str(),	// This is the description
 								 0,									// This is the context in the help file
 								 nullptr );
 					}
@@ -117,7 +120,7 @@ namespace CastorCom
 					 E_FAIL,						// This represents the error
 					 IID_IMaterial,					// This is the GUID of PixelComponents throwing error
 					 _T( "GetPass" ),				// This is generally displayed as the title
-					 ERROR_UNINITIALISED.c_str(),	// This is the description
+					 material::ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
 					 nullptr );
 		}
@@ -142,7 +145,7 @@ namespace CastorCom
 						 E_FAIL,							// This represents the error
 						 IID_IMaterial,						// This is the GUID of PixelComponents throwing error
 						 _T( "DestroyPass" ),				// This is generally displayed as the title
-						 ERROR_OUT_OF_BOUND_INDEX.c_str(),	// This is the description
+						 material::ERROR_OUT_OF_BOUND_INDEX.c_str(),	// This is the description
 						 0,									// This is the context in the help file
 						 nullptr );
 			}
@@ -153,7 +156,7 @@ namespace CastorCom
 					 E_FAIL,						// This represents the error
 					 IID_IMaterial,					// This is the GUID of PixelComponents throwing error
 					 _T( "DestroyPass" ),			// This is generally displayed as the title
-					 ERROR_UNINITIALISED.c_str(),	// This is the description
+					 material::ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
 					 nullptr );
 		}

@@ -20,7 +20,7 @@ namespace CastorCom
 		: public CComAtlObject< RenderWindow, castor3d::RenderWindow >
 	{
 	public:
-		COM_PROPERTY_GET( Name, BSTR, makeGetter( m_internal.get(), &castor3d::RenderWindow::getName ) );
+		COMEX_PROPERTY_GET( Name, BSTR, m_internal.get(), &castor3d::RenderWindow::getName );
 
 		STDMETHOD( Initialise )( /* [in] */ IRenderTarget * target );
 		STDMETHOD( Cleanup )();

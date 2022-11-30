@@ -21,14 +21,14 @@ namespace CastorCom
 		: public CComAtlObject< Scene, castor3d::Scene >
 	{
 	public:
-		COM_PROPERTY( BackgroundColour, IRgbColour *, makeGetter( m_internal, &castor3d::Scene::getBackgroundColour ), makePutter( m_internal, &castor3d::Scene::setBackgroundColour ) );
-		COM_PROPERTY( Background, ISceneBackground *, makeGetter( m_internal, &castor3d::Scene::getBackground ), makePutter( m_internal, &castor3d::Scene::setBackground ) );
-		COM_PROPERTY( AmbientLight, IRgbColour *, makeGetter( m_internal, &castor3d::Scene::getAmbientLight ), makePutter( m_internal, &castor3d::Scene::setAmbientLight ) );
+		COMEX_PROPERTY( BackgroundColour, IRgbColour *, m_internal, &castor3d::Scene::getBackgroundColour, &castor3d::Scene::setBackgroundColour );
+		COMEX_PROPERTY( Background, ISceneBackground *, m_internal, &castor3d::Scene::getBackground, &castor3d::Scene::setBackground );
+		COMEX_PROPERTY( AmbientLight, IRgbColour *, m_internal, &castor3d::Scene::getAmbientLight, &castor3d::Scene::setAmbientLight );
 
-		COM_PROPERTY_GET( Name, BSTR, makeGetter( m_internal, &castor3d::Scene::getName ) );
-		COM_PROPERTY_GET( RootNode, ISceneNode *, makeGetter( m_internal, &castor3d::Scene::getRootNode ) );
-		COM_PROPERTY_GET( ObjectRootNode, ISceneNode *, makeGetter( m_internal, &castor3d::Scene::getObjectRootNode ) );
-		COM_PROPERTY_GET( CameraRootNode, ISceneNode *, makeGetter( m_internal, &castor3d::Scene::getCameraRootNode ) );
+		COMEX_PROPERTY_GET( Name, BSTR, m_internal, &castor3d::Scene::getName );
+		COMEX_PROPERTY_GET( RootNode, ISceneNode *, m_internal, &castor3d::Scene::getRootNode );
+		COMEX_PROPERTY_GET( ObjectRootNode, ISceneNode *, m_internal, &castor3d::Scene::getObjectRootNode );
+		COMEX_PROPERTY_GET( CameraRootNode, ISceneNode *, m_internal, &castor3d::Scene::getCameraRootNode );
 
 		STDMETHOD( ClearScene )();
 		STDMETHOD( CreateSceneNode )( /* [in] */ BSTR name, /* [in] */ ISceneNode * parent, /* [out, retval] */ ISceneNode ** pVal );

@@ -22,7 +22,7 @@ namespace CastorCom
 		: public CComAtlObject< Image, castor::Image >
 	{
 	public:
-		COM_PROPERTY_GET( Buffer, IPixelBuffer *, makeGetter( m_internal.get(), &castor::Image::getPixels ) );
+		COMEX_PROPERTY_GET( Buffer, IPixelBuffer *, m_internal.get(), &castor::Image::getPixels );
 
 		STDMETHOD( LoadFromFile )( /* [in] */ IEngine * engine, /* [in] */ BSTR name, /* [in] */ BSTR val, /* [in] */ boolean dropAlpha );
 		STDMETHOD( LoadFromFormat )( /* [in] */ IEngine * engine, /* [in] */ BSTR name, /* [in] */ ePIXEL_FORMAT fmt, /* [in] */ ISize * size );

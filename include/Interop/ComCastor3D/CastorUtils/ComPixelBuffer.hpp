@@ -22,10 +22,10 @@ namespace CastorCom
 		: public CComAtlObject< PixelBuffer, castor::PxBufferBase >
 	{
 	public:
-		COM_PROPERTY_GET( PixelFormat, ePIXEL_FORMAT, makeGetter( m_internal.get(), &castor::PxBufferBase::getFormat ) );
-		COM_PROPERTY_GET( Width, UINT, makeGetter( m_internal.get(), &castor::PxBufferBase::getWidth ) );
-		COM_PROPERTY_GET( Height, UINT, makeGetter( m_internal.get(), &castor::PxBufferBase::getHeight ) );
-		COM_PROPERTY_GET( Dimensions, ISize *, makeGetter( m_internal.get(), &castor::PxBufferBase::getDimensions ) );
+		COMEX_PROPERTY_GET( PixelFormat, ePIXEL_FORMAT, m_internal.get(), &castor::PxBufferBase::getFormat );
+		COMEX_PROPERTY_GET( Width, UINT, m_internal.get(), &castor::PxBufferBase::getWidth );
+		COMEX_PROPERTY_GET( Height, UINT, m_internal.get(), &castor::PxBufferBase::getHeight );
+		COMEX_PROPERTY_GET( Dimensions, ISize *, m_internal.get(), &castor::PxBufferBase::getDimensions );
 
 		STDMETHOD( Flip )();
 		STDMETHOD( Initialise )( /* [in] */ ISize * size, /* [in] */ ePIXEL_FORMAT format );

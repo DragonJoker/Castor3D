@@ -3,7 +3,10 @@
 
 namespace CastorCom
 {
-	static const tstring ERROR_UNINITIALISED = _T( "The movable object must be initialised" );
+	namespace moveble
+	{
+		static const tstring ERROR_UNINITIALISED = _T( "The movable object must be initialised" );
+	}
 
 	STDMETHODIMP CMovableObject::AttachTo( /* [in] */ ISceneNode * val )noexcept
 	{
@@ -20,7 +23,7 @@ namespace CastorCom
 					 E_FAIL,						// This represents the error
 					 IID_IMovableObject,			// This is the GUID of PixelComponents throwing error
 					 _T( "AttachTo" ),				// This is generally displayed as the title
-					 ERROR_UNINITIALISED.c_str(),	// This is the description
+					 moveble::ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
 					 nullptr );
 		}
@@ -43,7 +46,7 @@ namespace CastorCom
 					 E_FAIL,						// This represents the error
 					 IID_IMovableObject,			// This is the GUID of PixelComponents throwing error
 					 _T( "Detach" ),				// This is generally displayed as the title
-					 ERROR_UNINITIALISED.c_str(),	// This is the description
+					 moveble::ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
 					 nullptr );
 		}

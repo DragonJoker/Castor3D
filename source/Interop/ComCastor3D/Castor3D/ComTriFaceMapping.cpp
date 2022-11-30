@@ -2,7 +2,10 @@
 
 namespace CastorCom
 {
-	static const tstring ERROR_UNINITIALISED = _T( "The mapping must be initialised" );
+	namespace trimap
+	{
+		static const tstring ERROR_UNINITIALISED = _T( "The mapping must be initialised" );
+	}
 
 	STDMETHODIMP CTriFaceMapping::get_Type( /* [retval][out] */ eINDEX_MAPPING_TYPE * value )noexcept
 	{
@@ -44,7 +47,7 @@ namespace CastorCom
 				E_FAIL,						// This represents the error
 				IID_ITriFaceMapping,			// This is the GUID of PixelComponents throwing error
 				_T( "addFace" ),				// This is generally displayed as the title
-				ERROR_UNINITIALISED.c_str(),	// This is the description
+				trimap::ERROR_UNINITIALISED.c_str(),	// This is the description
 				0,								// This is the context in the help file
 				nullptr );
 		}

@@ -31,12 +31,12 @@ namespace CastorCom
 			target->setScene( *scene );
 		}
 
-		COM_PROPERTY( ViewportType, eVIEWPORT_TYPE, makeGetter( m_internal, &castor3d::RenderTarget::getViewportType ), makePutter( m_internal, &castor3d::RenderTarget::setViewportType ) );
-		COM_PROPERTY( Camera, ICamera *, makeGetter( m_internal, &castor3d::RenderTarget::getCamera ), makePutter( m_internal, setCamera ) );
-		COM_PROPERTY( Scene, IScene *, makeGetter( m_internal, &castor3d::RenderTarget::getScene ), makePutter( m_internal, setScene ) );
+		COMEX_PROPERTY( ViewportType, eVIEWPORT_TYPE, m_internal, &castor3d::RenderTarget::getViewportType, &castor3d::RenderTarget::setViewportType );
+		COMEX_PROPERTY( Camera, ICamera *, m_internal, &castor3d::RenderTarget::getCamera, setCamera );
+		COMEX_PROPERTY( Scene, IScene *, m_internal, &castor3d::RenderTarget::getScene, setScene );
 
-		COM_PROPERTY_GET( PixelFormat, ePIXEL_FORMAT, makeGetter( m_internal, &castor3d::RenderTarget::getPixelFormat ) );
-		COM_PROPERTY_GET( Size, ISize *, makeGetter( m_internal, &castor3d::RenderTarget::getSize ) );
+		COMEX_PROPERTY_GET( PixelFormat, ePIXEL_FORMAT, m_internal, &castor3d::RenderTarget::getPixelFormat );
+		COMEX_PROPERTY_GET( Size, ISize *, m_internal, &castor3d::RenderTarget::getSize );
 
 		STDMETHOD( Initialise )();
 		STDMETHOD( Cleanup )();

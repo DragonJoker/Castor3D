@@ -67,77 +67,28 @@ namespace CastorCom
 		static float getShininess( castor3d::Pass const * pass );
 		static void setShininess( castor3d::Pass * pass, float v );
 
-		COM_PROPERTY_GET( Type
-			, UINT
-			, makeGetter( m_internal, &castor3d::Pass::getTypeID ) );
-		COM_PROPERTY_GET( TextureUnitCount
-			, uint32_t
-			, makeGetter( m_internal, &castor3d::Pass::getTextureUnitsCount ) );
+		COMEX_PROPERTY_GET( Type, UINT, m_internal, &castor3d::Pass::getTypeID );
+		COMEX_PROPERTY_GET( TextureUnitCount, uint32_t, m_internal, &castor3d::Pass::getTextureUnitsCount );
 
 		STDMETHOD( CreateTextureUnit )( /* [out, retval] */ ITextureUnit ** pVal );
 		STDMETHOD( DestroyTextureUnit )( /* [in] */ ITextureUnit * val );
 		STDMETHOD( GetTextureUnitByIndex )( /* [in] */ unsigned int index, /* [out, retval] */ ITextureUnit ** pVal );
 
-		COM_PROPERTY( EmissiveColour
-			, IRgbColour *
-			, makeGetter( m_internal, getEmissiveColour )
-			, makePutter( m_internal, setEmissiveColour ) );
-		COM_PROPERTY( EmissiveFactor
-			, float
-			, makeGetter( m_internal, getEmissiveFactor )
-			, makePutter( m_internal, setEmissiveFactor ) );
-		COM_PROPERTY( RefractionRatio
-			, float
-			, makeGetter( m_internal, getRefractionRatio )
-			, makePutter( m_internal, setRefractionRatio ) );
-		COM_PROPERTY( AlphaFunc
-			, eCOMPARISON_FUNC
-			, makeGetter( m_internal, getAlphaFunc )
-			, makePutter( m_internal, setAlphaFunc ) );
-		COM_PROPERTY( BlendAlphaFunc
-			, eCOMPARISON_FUNC
-			, makeGetter( m_internal, getBlendAlphaFunc )
-			, makePutter( m_internal, setBlendAlphaFunc ) );
-		COM_PROPERTY( AlphaRefValue
-			, float
-			, makeGetter( m_internal, getAlphaValue )
-			, makePutter( m_internal, setAlphaValue ) );
-		COM_PROPERTY( TwoSided
-			, boolean
-			, makeGetter( m_internal, isTwoSided )
-			, makePutter( m_internal, setTwoSided ) );
-		COM_PROPERTY( Opacity
-			, float
-			, makeGetter( m_internal, getOpacity )
-			, makePutter( m_internal, setOpacity ) );
-		COM_PROPERTY( Albedo
-			, IHdrRgbColour *
-			, makeGetter( m_internal, getAlbedo )
-			, makePutter( m_internal, setAlbedo ) );
-		COM_PROPERTY( Diffuse
-			, IRgbColour *
-			, makeGetter( m_internal, getDiffuse )
-			, makePutter( m_internal, setDiffuse ) );
-		COM_PROPERTY( Specular
-			, IRgbColour *
-			, makeGetter( m_internal, getSpecular )
-			, makePutter( m_internal, setSpecular ) );
-		COM_PROPERTY( Metalness
-			, float
-			, makeGetter( m_internal, getMetalness )
-			, makePutter( m_internal, setMetalness ) );
-		COM_PROPERTY( Roughness
-			, float
-			, makeGetter( m_internal, getRoughness )
-			, makePutter( m_internal, setRoughness ) );
-		COM_PROPERTY( Glossiness
-			, float
-			, makeGetter( m_internal, getGlossiness )
-			, makePutter( m_internal, setGlossiness ) );
-		COM_PROPERTY( Shininess
-			, float
-			, makeGetter( m_internal, getShininess )
-			, makePutter( m_internal, setShininess ) );
+		COMEX_PROPERTY( EmissiveColour, IRgbColour *, m_internal, getEmissiveColour, setEmissiveColour );
+		COMEX_PROPERTY( EmissiveFactor, float, m_internal, getEmissiveFactor, setEmissiveFactor );
+		COMEX_PROPERTY( RefractionRatio, float, m_internal, getRefractionRatio, setRefractionRatio );
+		COMEX_PROPERTY( AlphaFunc, eCOMPARISON_FUNC, m_internal, getAlphaFunc, setAlphaFunc );
+		COMEX_PROPERTY( BlendAlphaFunc, eCOMPARISON_FUNC, m_internal, getBlendAlphaFunc, setBlendAlphaFunc );
+		COMEX_PROPERTY( AlphaRefValue, float, m_internal, getAlphaValue, setAlphaValue );
+		COMEX_PROPERTY( TwoSided, boolean, m_internal, isTwoSided, setTwoSided );
+		COMEX_PROPERTY( Opacity, float, m_internal, getOpacity, setOpacity );
+		COMEX_PROPERTY( Albedo, IHdrRgbColour *, m_internal, getAlbedo, setAlbedo );
+		COMEX_PROPERTY( Diffuse, IRgbColour *, m_internal, getDiffuse, setDiffuse );
+		COMEX_PROPERTY( Specular, IRgbColour *, m_internal, getSpecular, setSpecular );
+		COMEX_PROPERTY( Metalness, float, m_internal, getMetalness, setMetalness );
+		COMEX_PROPERTY( Roughness, float, m_internal, getRoughness, setRoughness );
+		COMEX_PROPERTY( Glossiness, float, m_internal, getGlossiness, setGlossiness );
+		COMEX_PROPERTY( Shininess, float, m_internal, getShininess, setShininess );
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object
 	//!\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet

@@ -14,8 +14,11 @@
 
 namespace CastorCom
 {
-	static const tstring ERROR_UNINITIALISED = _T( "The scene must be initialised" );
-	static const tstring ERROR_NULL_PARENT_NODE = _T( "The parent node must not be null." );
+	namespace scene
+	{
+		static const tstring ERROR_UNINITIALISED = _T( "The scene must be initialised" );
+		static const tstring ERROR_NULL_PARENT_NODE = _T( "The parent node must not be null." );
+	}
 
 	STDMETHODIMP CScene::ClearScene()noexcept
 	{
@@ -32,7 +35,7 @@ namespace CastorCom
 					 E_FAIL,						// This represents the error
 					 IID_IScene,					// This is the GUID of PixelComponents throwing error
 					 _T( "ClearScene" ),			// This is generally displayed as the title
-					 ERROR_UNINITIALISED.c_str(),	// This is the description
+					 scene::ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
 					 nullptr );
 		}
@@ -67,7 +70,7 @@ namespace CastorCom
 					 E_FAIL,						// This represents the error
 					 IID_IScene,					// This is the GUID of PixelComponents throwing error
 					 _T( "CreateSceneNode" ),		// This is generally displayed as the title
-					 ERROR_UNINITIALISED.c_str(),	// This is the description
+					 scene::ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
 					 nullptr );
 		}
@@ -87,7 +90,7 @@ namespace CastorCom
 					E_POINTER,						// This represents the error
 					IID_IScene,						// This is the GUID of PixelComponents throwing error
 					_T( "CreateLight" ),			// This is generally displayed as the title
-					ERROR_NULL_PARENT_NODE.c_str(),	// This is the description
+					scene::ERROR_NULL_PARENT_NODE.c_str(),	// This is the description
 					0,								// This is the context in the help file
 					nullptr );
 				return hr;
@@ -114,7 +117,7 @@ namespace CastorCom
 					 E_FAIL,						// This represents the error
 					 IID_IScene,					// This is the GUID of PixelComponents throwing error
 					 _T( "CreateGeometry" ),		// This is generally displayed as the title
-					 ERROR_UNINITIALISED.c_str(),	// This is the description
+					 scene::ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
 					 nullptr );
 		}
@@ -134,7 +137,7 @@ namespace CastorCom
 					E_POINTER,						// This represents the error
 					IID_IScene,						// This is the GUID of PixelComponents throwing error
 					_T( "CreateLight" ),			// This is generally displayed as the title
-					ERROR_NULL_PARENT_NODE.c_str(),	// This is the description
+					scene::ERROR_NULL_PARENT_NODE.c_str(),	// This is the description
 					0,								// This is the context in the help file
 					nullptr );
 				return hr;
@@ -164,7 +167,7 @@ namespace CastorCom
 					 E_FAIL,						// This represents the error
 					 IID_IScene,					// This is the GUID of PixelComponents throwing error
 					 _T( "CreateCamera" ),			// This is generally displayed as the title
-					 ERROR_UNINITIALISED.c_str(),	// This is the description
+					 scene::ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
 					 nullptr );
 		}
@@ -184,7 +187,7 @@ namespace CastorCom
 					E_POINTER,						// This represents the error
 					IID_IScene,						// This is the GUID of PixelComponents throwing error
 					_T( "CreateLight" ),			// This is generally displayed as the title
-					ERROR_NULL_PARENT_NODE.c_str(),	// This is the description
+					scene::ERROR_NULL_PARENT_NODE.c_str(),	// This is the description
 					0,								// This is the context in the help file
 					nullptr );
 				return hr;
@@ -212,7 +215,7 @@ namespace CastorCom
 					 E_FAIL,						// This represents the error
 					 IID_IScene,					// This is the GUID of PixelComponents throwing error
 					 _T( "CreateLight" ),			// This is generally displayed as the title
-					 ERROR_UNINITIALISED.c_str(),	// This is the description
+					 scene::ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
 					 nullptr );
 		}
@@ -240,7 +243,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::dispatchError( E_FAIL, IID_IEngine, _T( "CreateMesh" ), ERROR_UNINITIALISED.c_str(), 0, nullptr );
+			hr = CComError::dispatchError( E_FAIL, IID_IEngine, _T( "CreateMesh" ), scene::ERROR_UNINITIALISED.c_str(), 0, nullptr );
 		}
 
 		return hr;
@@ -271,7 +274,7 @@ namespace CastorCom
 					 E_FAIL,						// This represents the error
 					 IID_IScene,					// This is the GUID of PixelComponents throwing error
 					 _T( "GetNode" ),				// This is generally displayed as the title
-					 ERROR_UNINITIALISED.c_str(),	// This is the description
+					 scene::ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
 					 nullptr );
 		}
@@ -304,7 +307,7 @@ namespace CastorCom
 					 E_FAIL,						// This represents the error
 					 IID_IScene,					// This is the GUID of PixelComponents throwing error
 					 _T( "GetGeometry" ),			// This is generally displayed as the title
-					 ERROR_UNINITIALISED.c_str(),	// This is the description
+					 scene::ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
 					 nullptr );
 		}
@@ -337,7 +340,7 @@ namespace CastorCom
 					 E_FAIL,						// This represents the error
 					 IID_IScene,					// This is the GUID of PixelComponents throwing error
 					 _T( "GetLight" ),				// This is generally displayed as the title
-					 ERROR_UNINITIALISED.c_str(),	// This is the description
+					 scene::ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
 					 nullptr );
 		}
@@ -370,7 +373,7 @@ namespace CastorCom
 					 E_FAIL,						// This represents the error
 					 IID_IScene,					// This is the GUID of PixelComponents throwing error
 					 _T( "GetCamera" ),			// This is generally displayed as the title
-					 ERROR_UNINITIALISED.c_str(),	// This is the description
+					 scene::ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
 					 nullptr );
 		}
@@ -397,7 +400,7 @@ namespace CastorCom
 					 E_FAIL,						// This represents the error
 					 IID_IScene,					// This is the GUID of PixelComponents throwing error
 					 _T( "RemoveLight" ),			// This is generally displayed as the title
-					 ERROR_UNINITIALISED.c_str(),	// This is the description
+					 scene::ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
 					 nullptr );
 		}
@@ -424,7 +427,7 @@ namespace CastorCom
 					 E_FAIL,						// This represents the error
 					 IID_IScene,					// This is the GUID of PixelComponents throwing error
 					 _T( "RemoveNode" ),			// This is generally displayed as the title
-					 ERROR_UNINITIALISED.c_str(),	// This is the description
+					 scene::ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
 					 nullptr );
 		}
@@ -451,7 +454,7 @@ namespace CastorCom
 					 E_FAIL,						// This represents the error
 					 IID_IScene,					// This is the GUID of PixelComponents throwing error
 					 _T( "RemoveGeometry" ),		// This is generally displayed as the title
-					 ERROR_UNINITIALISED.c_str(),	// This is the description
+					 scene::ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
 					 nullptr );
 		}
@@ -478,7 +481,7 @@ namespace CastorCom
 					 E_FAIL,						// This represents the error
 					 IID_IScene,					// This is the GUID of PixelComponents throwing error
 					 _T( "RemoveCamera" ),			// This is generally displayed as the title
-					 ERROR_UNINITIALISED.c_str(),	// This is the description
+					 scene::ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
 					 nullptr );
 		}

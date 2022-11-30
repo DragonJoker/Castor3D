@@ -216,14 +216,6 @@ namespace CastorCom
 	COM_PROPERTY_GET( Name, Type, Getter )\
 	COM_PROPERTY_PUT( Name, Type, Putter )
 
-#define COMEX_PROPERTY( Name, Type, Instance, Getter, Putter )\
-	COM_PROPERTY_GET( Name, Type, makeGetter( Instance, Getter ) )\
-	COM_PROPERTY_PUT( Name, Type, makePutter( Instance, Putter ) )
-
-#define COMEX_PROPERTY_IDX( Name, Index, Type, Instance, Getter, Putter )\
-	COM_PROPERTY_GET( Name, Type, makeGetter( Instance, Getter, Index ) )\
-	COM_PROPERTY_PUT( Name, Type, makePutter( Instance, Putter, Index ) )
-
 #define COM_EVT_PROPERTY( Name, Type, Getter, Putter )\
 	COM_PROPERTY_GET( Name, Type, Getter )\
 	COM_PROPERTY_PUT( Name, Type, Putter )
@@ -253,6 +245,20 @@ namespace CastorCom
 #define COM_EVT_PROPERTY_INDEXED( Name, Index, Type, Getter, Putter )\
 	COM_PROPERTY_INDEXED_GET( Name, Index, Type, Getter )\
 	COM_EVT_PROPERTY_INDEXED_PUT( Name, Index, Type, Putter )
+
+#define COMEX_PROPERTY_GET( Name, Type, Instance, Functor )\
+	COM_PROPERTY_GET( Name, Type, makeGetter( Instance, Functor ) )
+
+#define COMEX_PROPERTY_PUT( Name, Type, Instance, Functor )\
+	COM_PROPERTY_PUT( Name, Type, makePutter( Instance, Functor ) )
+
+#define COMEX_PROPERTY( Name, Type, Instance, Getter, Putter )\
+	COM_PROPERTY_GET( Name, Type, makeGetter( Instance, Getter ) )\
+	COM_PROPERTY_PUT( Name, Type, makePutter( Instance, Putter ) )
+
+#define COMEX_PROPERTY_IDX( Name, Index, Type, Instance, Getter, Putter )\
+	COM_PROPERTY_GET( Name, Type, makeGetter( Instance, Getter, Index ) )\
+	COM_PROPERTY_PUT( Name, Type, makePutter( Instance, Putter, Index ) )
 }
 
 #endif

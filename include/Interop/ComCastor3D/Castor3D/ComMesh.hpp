@@ -19,9 +19,9 @@ namespace CastorCom
 		: public CComAtlObject< Mesh, castor3d::Mesh >
 	{
 	public:
-		COM_PROPERTY_GET( SubmeshCount, unsigned int, makeGetter( getMesh(), &castor3d::Mesh::getSubmeshCount ) );
-		COM_PROPERTY_GET( FaceCount, unsigned int, makeGetter( getMesh(), &castor3d::Mesh::getFaceCount ) );
-		COM_PROPERTY_GET( VertexCount, unsigned int, makeGetter( getMesh(), &castor3d::Mesh::getVertexCount ) );
+		COMEX_PROPERTY_GET( SubmeshCount, unsigned int, getMesh(), &castor3d::Mesh::getSubmeshCount );
+		COMEX_PROPERTY_GET( FaceCount, unsigned int, getMesh(), &castor3d::Mesh::getFaceCount );
+		COMEX_PROPERTY_GET( VertexCount, unsigned int, getMesh(), &castor3d::Mesh::getVertexCount );
 
 		STDMETHOD( GetSubmesh )( /* [in] */ unsigned int val, /* [out, retval] */ ISubmesh ** pVal );
 		STDMETHOD( CreateSubmesh )( /* [out, retval] */ ISubmesh ** pVal );

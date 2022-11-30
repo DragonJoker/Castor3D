@@ -46,9 +46,9 @@ namespace CastorCom
 		: public CComAtlObject< Font, castor::Font >
 	{
 	public:
-		COM_PROPERTY_GET( Height, UINT, makeGetter( m_internal.get(), &castor::Font::getHeight ) );
-		COM_PROPERTY_GET( MaxHeight, UINT, makeGetter( m_internal.get(), &castor::Font::getMaxHeight ) );
-		COM_PROPERTY_GET( MaxWidth, UINT, makeGetter( m_internal.get(), &castor::Font::getMaxWidth ) );
+		COMEX_PROPERTY_GET( Height, UINT, m_internal.get(), &castor::Font::getHeight );
+		COMEX_PROPERTY_GET( MaxHeight, UINT, m_internal.get(), &castor::Font::getMaxHeight );
+		COMEX_PROPERTY_GET( MaxWidth, UINT, m_internal.get(), &castor::Font::getMaxWidth );
 
 		STDMETHOD( LoadFromFile )( /* [in] */ IEngine * engine, /* [in] */ BSTR path, /* [in] */ BSTR name, /* [in] */ UINT height );
 		STDMETHOD( GetGlyph )( /* [in] */ WORD glyph, /* [out, retval] */ IGlyph ** pGlyph );

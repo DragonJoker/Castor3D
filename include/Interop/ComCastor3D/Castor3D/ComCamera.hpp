@@ -19,13 +19,13 @@ namespace CastorCom
 		: public CComAtlObject< Camera, castor3d::Camera >
 	{
 	public:
-		COM_PROPERTY( ViewportType, eVIEWPORT_TYPE, makeGetter( m_internal, &castor3d::Camera::getViewportType ), makePutter( m_internal, &castor3d::Camera::setViewportType ) );
+		COMEX_PROPERTY( ViewportType, eVIEWPORT_TYPE, m_internal, &castor3d::Camera::getViewportType, &castor3d::Camera::setViewportType );
 
-		COM_PROPERTY_GET( Width, unsigned int, makeGetter( m_internal, &castor3d::Camera::getWidth ) );
-		COM_PROPERTY_GET( Height, unsigned int, makeGetter( m_internal, &castor3d::Camera::getHeight ) );
-		COM_PROPERTY_GET( Name, BSTR, makeGetter( m_internal, &castor3d::MovableObject::getName ) );
-		COM_PROPERTY_GET( Type, eMOVABLE_TYPE, makeGetter( m_internal, &castor3d::MovableObject::getType ) );
-		COM_PROPERTY_GET( Scene, IScene *, makeGetter( m_internal, &castor3d::MovableObject::getScene ) );
+		COMEX_PROPERTY_GET( Width, unsigned int, m_internal, &castor3d::Camera::getWidth );
+		COMEX_PROPERTY_GET( Height, unsigned int, m_internal, &castor3d::Camera::getHeight );
+		COMEX_PROPERTY_GET( Name, BSTR, m_internal, &castor3d::MovableObject::getName );
+		COMEX_PROPERTY_GET( Type, eMOVABLE_TYPE, m_internal, &castor3d::MovableObject::getType );
+		COMEX_PROPERTY_GET( Scene, IScene *, m_internal, &castor3d::MovableObject::getScene );
 
 		STDMETHOD( AttachTo )( /* [in] */ ISceneNode * val );
 		STDMETHOD( Detach )();

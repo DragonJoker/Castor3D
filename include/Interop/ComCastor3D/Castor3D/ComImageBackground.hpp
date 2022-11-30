@@ -19,9 +19,7 @@ namespace CastorCom
 		: public CComAtlObject< ImageBackground, castor3d::ImageBackground >
 	{
 	public:
-		COM_PROPERTY_GET( Type
-			, BSTR
-			, makeGetter( m_internal, &castor3d::SceneBackground::getType ) );
+		COMEX_PROPERTY_GET( Type, BSTR, m_internal, &castor3d::SceneBackground::getType );
 		STDMETHOD( put_Image )( /* [in] */ BSTR filePath );
 	};
 	//!\~english	Enters the ATL object into the object map, updates the registry and creates an instance of the object.

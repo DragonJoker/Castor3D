@@ -22,9 +22,9 @@ namespace CastorCom
 		: public CComAtlObject< Glyph, castor::Glyph >
 	{
 	public:
-		COM_PROPERTY_GET( Size, ISize *, makeGetter( m_internal, &castor::Glyph::getSize ) );
-		COM_PROPERTY_GET( Bearing, IPosition *, makeGetter( m_internal, &castor::Glyph::getBearing ) );
-		COM_PROPERTY_GET( Advance, INT, makeGetter( m_internal, &castor::Glyph::getAdvance ) );
+		COMEX_PROPERTY_GET( Size, ISize *, m_internal, &castor::Glyph::getSize );
+		COMEX_PROPERTY_GET( Bearing, IPosition *, m_internal, &castor::Glyph::getBearing );
+		COMEX_PROPERTY_GET( Advance, INT, m_internal, &castor::Glyph::getAdvance );
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object
 	//!\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet

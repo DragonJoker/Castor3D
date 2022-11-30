@@ -19,7 +19,7 @@ namespace CastorCom
 		: public CComAtlObject< TriFaceMapping, castor3d::TriFaceMapping >
 	{
 	public:
-		COM_PROPERTY_GET( FacesCount, unsigned int, makeGetter( m_internal, &castor3d::TriFaceMapping::getCount ) );
+		COMEX_PROPERTY_GET( FacesCount, unsigned int, m_internal, &castor3d::TriFaceMapping::getCount );
 
 		STDMETHOD( get_Type )( /* [retval][out] */ eINDEX_MAPPING_TYPE * value );
 		STDMETHOD( AddFace )( /* [in] */ unsigned int x, /* [in] */ unsigned int y, /* [in] */ unsigned int z );

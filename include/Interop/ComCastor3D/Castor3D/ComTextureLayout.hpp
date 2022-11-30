@@ -19,7 +19,7 @@ namespace CastorCom
 		: public CComAtlObject< TextureLayout, castor3d::TextureLayout >
 	{
 	public:
-		COM_PROPERTY_GET( Type, eIMAGE_TYPE, makeGetter( m_internal.get(), &castor3d::TextureLayout::getType ) );
+		COMEX_PROPERTY_GET( Type, eIMAGE_TYPE, m_internal.get(), &castor3d::TextureLayout::getType );
 
 		STDMETHOD( Initialise )();
 		STDMETHOD( Cleanup )();

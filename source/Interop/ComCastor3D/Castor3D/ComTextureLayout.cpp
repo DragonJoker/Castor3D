@@ -6,7 +6,10 @@
 
 namespace CastorCom
 {
-	static const tstring ERROR_UNINITIALISED = _T( "The texture layout must be initialised" );
+	namespace texlayout
+	{
+		static const tstring ERROR_UNINITIALISED = _T( "The texture layout must be initialised" );
+	}
 
 	STDMETHODIMP CTextureLayout::Initialise()noexcept
 	{
@@ -24,7 +27,7 @@ namespace CastorCom
 				E_FAIL,							// This represents the error
 				IID_ITextureLayout,				// This is the GUID of PixelComponents throwing error
 				_T( "Initialise" ),			// This is generally displayed as the title
-				ERROR_UNINITIALISED.c_str(),	// This is the description
+				texlayout::ERROR_UNINITIALISED.c_str(),	// This is the description
 				0,								// This is the context in the help file
 				nullptr );
 		}
@@ -47,7 +50,7 @@ namespace CastorCom
 				E_FAIL,							// This represents the error
 				IID_ITextureLayout,				// This is the GUID of PixelComponents throwing error
 				_T( "Cleanup" ),				// This is generally displayed as the title
-				ERROR_UNINITIALISED.c_str(),	// This is the description
+				texlayout::ERROR_UNINITIALISED.c_str(),	// This is the description
 				0,								// This is the context in the help file
 				nullptr );
 		}
@@ -73,7 +76,7 @@ namespace CastorCom
 				E_FAIL,							// This represents the error
 				IID_ITextureLayout,				// This is the GUID of PixelComponents throwing error
 				_T( "InitFromFile" ),			// This is generally displayed as the title
-				ERROR_UNINITIALISED.c_str(),	// This is the description
+				texlayout::ERROR_UNINITIALISED.c_str(),	// This is the description
 				0,								// This is the context in the help file
 				nullptr );
 		}
@@ -96,7 +99,7 @@ namespace CastorCom
 				E_FAIL,							// This represents the error
 				IID_ITextureLayout,				// This is the GUID of PixelComponents throwing error
 				_T( "InitFromBuffer" ),			// This is generally displayed as the title
-				ERROR_UNINITIALISED.c_str(),	// This is the description
+				texlayout::ERROR_UNINITIALISED.c_str(),	// This is the description
 				0,								// This is the context in the help file
 				nullptr );
 		}
@@ -119,7 +122,7 @@ namespace CastorCom
 				E_FAIL,							// This represents the error
 				IID_ITextureLayout,				// This is the GUID of PixelComponents throwing error
 				_T( "Init2D" ),					// This is generally displayed as the title
-				ERROR_UNINITIALISED.c_str(),	// This is the description
+				texlayout::ERROR_UNINITIALISED.c_str(),	// This is the description
 				0,								// This is the context in the help file
 				nullptr );
 		}
@@ -142,7 +145,7 @@ namespace CastorCom
 				E_FAIL,							// This represents the error
 				IID_ITextureLayout,				// This is the GUID of PixelComponents throwing error
 				_T( "Init3D" ),					// This is generally displayed as the title
-				ERROR_UNINITIALISED.c_str(),	// This is the description
+				texlayout::ERROR_UNINITIALISED.c_str(),	// This is the description
 				0,								// This is the context in the help file
 				nullptr );
 		}

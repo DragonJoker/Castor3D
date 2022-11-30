@@ -26,8 +26,8 @@ namespace CastorCom
 		COMEX_PROPERTY( Top, INT, &m_internal, &Internal::top, &Internal::top );
 		COMEX_PROPERTY( Bottom, INT, &m_internal, &Internal::bottom, &Internal::bottom );
 
-		COM_PROPERTY_GET( Width, INT, makeGetter( &m_internal, &castor::Rectangle::getWidth ) );
-		COM_PROPERTY_GET( Height, INT, makeGetter( &m_internal, &castor::Rectangle::getHeight ) );
+		COMEX_PROPERTY_GET( Width, INT, &m_internal, &castor::Rectangle::getWidth );
+		COMEX_PROPERTY_GET( Height, INT, &m_internal, &castor::Rectangle::getHeight );
 
 		STDMETHOD( Set )( /* [in] */ INT left, /* [in] */ INT top, /* [in] */ INT right, /* [in] */ INT bottom );
 		STDMETHOD( IntersectsPosition )( /* [in] */ IPosition * pos, /* [retval][out] */ eINTERSECTION * pVal );
