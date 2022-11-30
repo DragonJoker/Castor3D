@@ -10,10 +10,9 @@ See LICENSE file in root folder
 #include "CastorUtils/Exception/Exception.hpp"
 #include "CastorUtils/Exception/Assertion.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:5262 )
+#include "CastorUtils/Config/BeginExternHeaderGuard.hpp"
 #include <fstream>
-#pragma warning( pop )
+#include "CastorUtils/Config/EndExternHeaderGuard.hpp"
 
 namespace castor
 {

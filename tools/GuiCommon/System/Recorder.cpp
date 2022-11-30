@@ -2,12 +2,10 @@
 
 #include <emmintrin.h>
 
-#pragma warning( push )
-#	pragma warning( disable:4996 )
-#	pragma warning( disable: 5054 )
-#	include <wx/filedlg.h>
-#	include <wx/msgdlg.h>
-#pragma warning( pop )
+#include <CastorUtils/Config/BeginExternHeaderGuard.hpp>
+#include <wx/filedlg.h>
+#include <wx/msgdlg.h>
+#include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
 #if defined( GUICOMMON_RECORDS )
 
@@ -15,6 +13,7 @@ namespace libffmpeg
 {
 	extern "C"
 	{
+#	include <CastorUtils/Config/BeginExternHeaderGuard.hpp>
 #	include <libavutil/avutil.h>
 #	include <libavutil/error.h>
 #	include <libavutil/opt.h>
@@ -27,8 +26,9 @@ namespace libffmpeg
 #	include <libswscale/swscale.h>
 //#	include <libswresample/swresample.h>
 #	if LIBAVUTIL_VERSION_INT >= AV_VERSION_INT(54, 6, 0)
-#	include <libavutil/imgutils.h>
+#		include <libavutil/imgutils.h>
 #	endif
+#	include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 	}
 
 #ifndef AV_ERROR_MAX_STRING_SIZE

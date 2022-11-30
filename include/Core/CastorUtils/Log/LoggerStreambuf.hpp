@@ -7,11 +7,9 @@ See LICENSE file in root folder
 #include "CastorUtils/Log/LoggerInstance.hpp"
 #include "CastorUtils/Config/MultiThreadConfig.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4365 )
-#pragma warning( disable:5262 )
+#include "CastorUtils/Config/BeginExternHeaderGuard.hpp"
 #include <mutex>
-#pragma warning( pop )
+#include "CastorUtils/Config/EndExternHeaderGuard.hpp"
 
 namespace castor
 {

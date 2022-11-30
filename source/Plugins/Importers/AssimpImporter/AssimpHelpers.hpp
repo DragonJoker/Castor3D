@@ -13,12 +13,10 @@ See LICENSE file in root folder
 #include <CastorUtils/Math/SquareMatrix.hpp>
 #include <CastorUtils/Miscellaneous/StringUtils.hpp>
 
-#pragma warning( push )
-#pragma warning( disable: 4365 )
-#pragma warning( disable: 4619 )
+#include <CastorUtils/Config/BeginExternHeaderGuard.hpp>
 #include <assimp/scene.h>
 #include <assimp/types.h>
-#pragma warning( pop )
+#include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
 namespace c3d_assimp
 {

@@ -52,20 +52,11 @@
 // Materials
 #include <EdgesComponent.hpp>
 
-#pragma warning( push )
-#pragma warning( disable: 4365 )
-#pragma warning( disable: 4619 )
+#include <CastorUtils/Config/BeginExternHeaderGuard.hpp>
 #include <assimp/material.h>
 #include <assimp/version.h>
-#pragma warning( pop )
-
 #if !defined( AI_MATKEY_ROUGHNESS_FACTOR )
-#	pragma warning( push )
-#	pragma warning( disable: 4365 )
-#	pragma warning( disable: 4619 )
 #	include <assimp/pbrmaterial.h>
-#	pragma warning( pop )
-
 #	define AI_MATKEY_ROUGHNESS_FACTOR AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_ROUGHNESS_FACTOR
 #	define AI_MATKEY_GLOSSINESS_FACTOR AI_MATKEY_GLTF_PBRSPECULARGLOSSINESS_GLOSSINESS_FACTOR
 #	define AI_MATKEY_METALLIC_FACTOR AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_METALLIC_FACTOR
@@ -78,6 +69,7 @@
 #else
 #	include <assimp/GltfMaterial.h>
 #endif
+#include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
 namespace c3d_assimp
 {

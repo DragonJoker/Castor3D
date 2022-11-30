@@ -132,8 +132,10 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 	)
 	set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 		${CASTOR_BINARY_DIR}/include/Core/${PROJECT_NAME}/config.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Config/BeginExternHeaderGuard.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Config/CompilerConfig.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Config/ConfigModule.hpp
+		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Config/EndExternHeaderGuard.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Config/Macros.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Config/MultiThreadConfig.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Config/PlatformConfig.hpp

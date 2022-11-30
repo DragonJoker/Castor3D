@@ -2,12 +2,10 @@
 
 #include "GuiCommon/Properties/Math/PointProperties.hpp"
 
-#pragma warning( push )
-#pragma warning( disable: 4365 )
-#pragma warning( disable: 5054 )
+#include <CastorUtils/Config/BeginExternHeaderGuard.hpp>
 #include <wx/propgrid/propgrid.h>
 #include <wx/propgrid/advprops.h>
-#pragma warning( pop )
+#include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
 GC_PG_IMPLEMENT_VARIANT_DATA_DUMMY_EQ( castor, BoundingBox )
 

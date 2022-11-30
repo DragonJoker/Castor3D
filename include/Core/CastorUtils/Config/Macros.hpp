@@ -4,12 +4,11 @@ See LICENSE file in root folder
 #ifndef ___Castor_Macros___
 #define ___Castor_Macros___
 
-#pragma warning( push )
-#pragma warning( disable:5262 )
+#include "CastorUtils/Config/BeginExternHeaderGuard.hpp"
 #include "CastorUtils/config.hpp"
 #include "CastorUtils/Config/PlatformConfig.hpp"
 #include "CastorUtils/Config/CompilerConfig.hpp"
-#pragma warning( pop )
+#include "CastorUtils/Config/EndExternHeaderGuard.hpp"
 
 #if !defined( __FUNCTION__ )
 //! Defines this macro if not in debug
@@ -51,11 +50,9 @@ See LICENSE file in root folder
 #	endif
 #endif
 
-#pragma warning( push )
-#pragma warning( disable:4365 )
-#pragma warning( disable:5262 )
+#include "CastorUtils/Config/BeginExternHeaderGuard.hpp"
 #include <memory>
-#pragma warning( pop )
+#include "CastorUtils/Config/EndExternHeaderGuard.hpp"
 
 #define CU_DeclareSmartPtr( class_name )\
 	using class_name##SPtr = std::shared_ptr< class_name >;\

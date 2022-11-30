@@ -76,18 +76,15 @@ namespace app
 #include "GuiCommon/xpms/viewport_sel.xpm"
 }
 
+#include <CastorUtils/Config/BeginExternHeaderGuard.hpp>
 #if defined( __WXGTK__ )
 #	include <X11/Xlib.h>
 #endif
-
-#pragma warning( push )
-#pragma warning( disable: 4365 )
-#pragma warning( disable: 5054 )
 #include <wx/cmdline.h>
 #include <wx/display.h>
 #include <wx/fileconf.h>
 #include <wx/propgrid/propgrid.h>
-#pragma warning( pop )
+#include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
 namespace GuiCommon
 {

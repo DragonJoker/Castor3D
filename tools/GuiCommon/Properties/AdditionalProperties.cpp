@@ -5,12 +5,11 @@
 #include <Castor3D/Event/Frame/GpuFunctorEvent.hpp>
 #include <CastorUtils/Graphics/ImageLoader.hpp>
 
-#pragma warning( push )
-#pragma warning( disable: 4365 )
-#pragma warning( disable: 5054 )
+#include <CastorUtils/Config/BeginExternHeaderGuard.hpp>
 #include <wx/propgrid/advprops.h>
+
 #include <iostream>
-#pragma warning( pop )
+#include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
 namespace GuiCommon
 {

@@ -8,10 +8,9 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Stream/StreamBaseManipulators.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:5262 )
+#include "CastorUtils/Config/BeginExternHeaderGuard.hpp"
 #include <sstream>
-#pragma warning( pop )
+#include "CastorUtils/Config/EndExternHeaderGuard.hpp"
 
 namespace castor
 {

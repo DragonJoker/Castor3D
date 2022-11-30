@@ -6,9 +6,7 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Config/ConfigModule.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4365 )
-#pragma warning( disable:5262 )
+#include <CastorUtils/Config/BeginExternHeaderGuard.hpp>
 #include <array>
 #include <cassert>
 #include <chrono>
@@ -28,7 +26,7 @@ See LICENSE file in root folder
 #include <deque>
 #include <sstream>
 #include <vector>
-#pragma warning( pop )
+#include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
 namespace castor
 {
@@ -49,9 +47,6 @@ namespace castor
 	CU_DeclareVector( uint32_t, UInt32 );
 }
 
-#pragma warning( push )
-#pragma warning( disable:5262 )
 #include "CastorUtils/Miscellaneous/Debug.hpp"
-#pragma warning( pop )
 
 #endif

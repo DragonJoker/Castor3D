@@ -2,11 +2,10 @@
 
 #include <GuiCommon/GuiCommonPrerequisites.hpp>
 
-#pragma warning( push )
-#pragma warning( disable: 5262 )
+#include <CastorUtils/Config/BeginExternHeaderGuard.hpp>
 #include <wx/wx.h>
 #include <wx/windowptr.h>
-#pragma warning( pop )
+#include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
 #include <Castor3D/Castor3DPrerequisites.hpp>
 

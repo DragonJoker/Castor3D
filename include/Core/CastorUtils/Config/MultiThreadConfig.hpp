@@ -6,15 +6,13 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Config/Macros.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4365 )
-#pragma warning( disable:5262 )
+#include "CastorUtils/Config/BeginExternHeaderGuard.hpp"
 #include <cassert>
 #include <atomic>
 #include <thread>
 #include <mutex>
 #include <condition_variable>
-#pragma warning( pop )
+#include "CastorUtils/Config/EndExternHeaderGuard.hpp"
 
 namespace castor
 {
