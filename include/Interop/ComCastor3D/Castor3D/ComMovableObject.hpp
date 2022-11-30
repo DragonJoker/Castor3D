@@ -21,9 +21,9 @@ namespace CastorCom
 		: public CComAtlObject< MovableObject, castor3d::MovableObject >
 	{
 	public:
-		COM_PROPERTY_GET( Name, BSTR, makeGetter( m_internal, &castor3d::MovableObject::getName ) );
-		COM_PROPERTY_GET( Type, eMOVABLE_TYPE, makeGetter( m_internal, &castor3d::MovableObject::getType ) );
-		COM_PROPERTY_GET( Scene, IScene *, makeGetter( m_internal, &castor3d::MovableObject::getScene ) );
+		COMEX_PROPERTY_GET( Name, BSTR, m_internal, &castor3d::MovableObject::getName );
+		COMEX_PROPERTY_GET( Type, eMOVABLE_TYPE, m_internal, &castor3d::MovableObject::getType );
+		COMEX_PROPERTY_GET( Scene, IScene *, m_internal, &castor3d::MovableObject::getScene );
 
 		STDMETHOD( AttachTo )( /* [in] */ ISceneNode * val );
 		STDMETHOD( Detach )();

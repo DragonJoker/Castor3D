@@ -23,9 +23,9 @@ namespace CastorCom
 		: public CComAtlObject< SceneNode, castor3d::SceneNode >
 	{
 	public:
-		COM_PROPERTY( Position, IVector3D *, makeGetter( m_internal, &castor3d::SceneNode::getPosition ), makePutterEvt( m_internal, &castor3d::SceneNode::setPosition ) );
-		COM_PROPERTY( Orientation, IQuaternion *, makeGetter( m_internal, &castor3d::SceneNode::getOrientation ), makePutterEvt( m_internal, &castor3d::SceneNode::setOrientation ) );
-		COM_PROPERTY( Scaling, IVector3D *, makeGetter( m_internal, &castor3d::SceneNode::getScale ), makePutterEvt( m_internal, &castor3d::SceneNode::setScale ) );
+		COMEX_PROPERTY( Position, IVector3D *, m_internal, &castor3d::SceneNode::getPosition, &castor3d::SceneNode::setPosition );
+		COMEX_PROPERTY( Orientation, IQuaternion *, m_internal, &castor3d::SceneNode::getOrientation, &castor3d::SceneNode::setOrientation );
+		COMEX_PROPERTY( Scaling, IVector3D *, m_internal, &castor3d::SceneNode::getScale, &castor3d::SceneNode::setScale );
 
 		STDMETHOD( AttachObject )( /* [in] */ IMovableObject * val );
 		STDMETHOD( DetachObject )( /* [in] */ IMovableObject * val );

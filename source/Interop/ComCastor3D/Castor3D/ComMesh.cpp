@@ -3,7 +3,10 @@
 
 namespace CastorCom
 {
-	static const tstring ERROR_UNINITIALISED = _T( "The mesh must be initialised" );
+	namespace mesh
+	{
+		static const tstring ERROR_UNINITIALISED = _T( "The mesh must be initialised" );
+	}
 
 	STDMETHODIMP CMesh::GetSubmesh( /* [in] */ unsigned int val, /* [out, retval] */ ISubmesh ** pVal )noexcept
 	{
@@ -27,7 +30,7 @@ namespace CastorCom
 					 E_FAIL,						// This represents the error
 					 IID_IMesh,						// This is the GUID of PixelComponents throwing error
 					 _T( "GetSubmesh" ),			// This is generally displayed as the title
-					 ERROR_UNINITIALISED.c_str(),	// This is the description
+					 mesh::ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
 					 nullptr );
 		}
@@ -57,7 +60,7 @@ namespace CastorCom
 					 E_FAIL,						// This represents the error
 					 IID_IMesh,						// This is the GUID of PixelComponents throwing error
 					 _T( "CreateSubmesh" ),		// This is generally displayed as the title
-					 ERROR_UNINITIALISED.c_str(),	// This is the description
+					 mesh::ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
 					 nullptr );
 		}
@@ -82,7 +85,7 @@ namespace CastorCom
 					 E_FAIL,						// This represents the error
 					 IID_IMesh,						// This is the GUID of PixelComponents throwing error
 					 _T( "DeleteSubmesh" ),			// This is generally displayed as the title
-					 ERROR_UNINITIALISED.c_str(),	// This is the description
+				mesh::ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
 					 nullptr );
 		}

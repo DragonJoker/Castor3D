@@ -19,7 +19,7 @@ namespace CastorCom
 		: public CComAtlObject< Material, castor3d::Material >
 	{
 	public:
-		COM_PROPERTY_GET( PassCount, unsigned int, makeGetter( m_internal, &castor3d::Material::getPassCount ) );
+		COMEX_PROPERTY_GET( PassCount, unsigned int, m_internal, &castor3d::Material::getPassCount );
 
 		STDMETHOD( Initialise )();
 		STDMETHOD( Cleanup )();

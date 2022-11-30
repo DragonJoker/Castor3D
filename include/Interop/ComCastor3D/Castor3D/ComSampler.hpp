@@ -19,17 +19,17 @@ namespace CastorCom
 		: public CComAtlObject< Sampler, castor3d::Sampler >
 	{
 	public:
-		COM_PROPERTY( MinFilter, eFILTER_MODE, makeGetter( getSampler(), &castor3d::Sampler::getMinFilter ), makePutter( getSampler(), &castor3d::Sampler::setMinFilter ) );
-		COM_PROPERTY( MagFilter, eFILTER_MODE, makeGetter( getSampler(), &castor3d::Sampler::getMagFilter ), makePutter( getSampler(), &castor3d::Sampler::setMagFilter ) );
-		COM_PROPERTY( MipmapMode, eMIPMAP_MODE, makeGetter( getSampler(), &castor3d::Sampler::getMipFilter ), makePutter( getSampler(), &castor3d::Sampler::setMipFilter ) );
-		COM_PROPERTY( WrapModeU, eWRAP_MODE, makeGetter( getSampler(), &castor3d::Sampler::getWrapS ), makePutter( getSampler(), &castor3d::Sampler::setWrapS ) );
-		COM_PROPERTY( WrapModeV, eWRAP_MODE, makeGetter( getSampler(), &castor3d::Sampler::getWrapT ), makePutter( getSampler(), &castor3d::Sampler::setWrapT ) );
-		COM_PROPERTY( WrapModeW, eWRAP_MODE, makeGetter( getSampler(), &castor3d::Sampler::getWrapR ), makePutter( getSampler(), &castor3d::Sampler::setWrapR ) );
-		COM_PROPERTY( BorderColour, eBORDER_COLOUR, makeGetter( getSampler(), &castor3d::Sampler::getBorderColour ), makePutter( getSampler(), &castor3d::Sampler::setBorderColour ) );
-		COM_PROPERTY( MaxAnisotropy, float, makeGetter( getSampler(), &castor3d::Sampler::getMaxAnisotropy ), makePutter( getSampler(), &castor3d::Sampler::setMaxAnisotropy ) );
-		COM_PROPERTY( MinLod, float, makeGetter( getSampler(), &castor3d::Sampler::getMinLod ), makePutter( getSampler(), &castor3d::Sampler::setMinLod ) );
-		COM_PROPERTY( MaxLod, float, makeGetter( getSampler(), &castor3d::Sampler::getMaxLod ), makePutter( getSampler(), &castor3d::Sampler::setMaxLod ) );
-		COM_PROPERTY( LodBias, float, makeGetter( getSampler(), &castor3d::Sampler::getLodBias ), makePutter( getSampler(), &castor3d::Sampler::setLodBias ) );
+		COMEX_PROPERTY( MinFilter, eFILTER_MODE, getSampler(), &castor3d::Sampler::getMinFilter, &castor3d::Sampler::setMinFilter );
+		COMEX_PROPERTY( MagFilter, eFILTER_MODE, getSampler(), &castor3d::Sampler::getMagFilter, &castor3d::Sampler::setMagFilter );
+		COMEX_PROPERTY( MipmapMode, eMIPMAP_MODE, getSampler(), &castor3d::Sampler::getMipFilter, &castor3d::Sampler::setMipFilter );
+		COMEX_PROPERTY( WrapModeU, eWRAP_MODE, getSampler(), &castor3d::Sampler::getWrapS, &castor3d::Sampler::setWrapS );
+		COMEX_PROPERTY( WrapModeV, eWRAP_MODE, getSampler(), &castor3d::Sampler::getWrapT, &castor3d::Sampler::setWrapT );
+		COMEX_PROPERTY( WrapModeW, eWRAP_MODE, getSampler(), &castor3d::Sampler::getWrapR, &castor3d::Sampler::setWrapR );
+		COMEX_PROPERTY( BorderColour, eBORDER_COLOUR, getSampler(), &castor3d::Sampler::getBorderColour, &castor3d::Sampler::setBorderColour );
+		COMEX_PROPERTY( MaxAnisotropy, float, getSampler(), &castor3d::Sampler::getMaxAnisotropy, &castor3d::Sampler::setMaxAnisotropy );
+		COMEX_PROPERTY( MinLod, float, getSampler(), &castor3d::Sampler::getMinLod, &castor3d::Sampler::setMinLod );
+		COMEX_PROPERTY( MaxLod, float, getSampler(), &castor3d::Sampler::getMaxLod, &castor3d::Sampler::setMaxLod );
+		COMEX_PROPERTY( LodBias, float, getSampler(), &castor3d::Sampler::getLodBias, &castor3d::Sampler::setLodBias );
 
 		STDMETHOD( Initialise )();
 		STDMETHOD( Cleanup )();

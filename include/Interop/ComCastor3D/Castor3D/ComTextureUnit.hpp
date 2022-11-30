@@ -21,8 +21,8 @@ namespace CastorCom
 		: public CComAtlObject< TextureUnit, castor3d::TextureUnit >
 	{
 	public:
-		COM_PROPERTY( Texture, ITextureLayout *, makeGetter( m_internal, &castor3d::TextureUnit::getTexture ), makePutter( m_internal, &castor3d::TextureUnit::setTexture ) );
-		COM_PROPERTY( Sampler, ISampler *, makeGetter( m_internal, &castor3d::TextureUnit::getSampler ), makePutter( m_internal, &castor3d::TextureUnit::setSampler ) );
+		COMEX_PROPERTY( Texture, ITextureLayout *, m_internal, &castor3d::TextureUnit::getTexture, &castor3d::TextureUnit::setTexture );
+		COMEX_PROPERTY( Sampler, ISampler *, m_internal, &castor3d::TextureUnit::getSampler, &castor3d::TextureUnit::setSampler );
 
 		STDMETHOD( Initialise )();
 		STDMETHOD( Cleanup )();

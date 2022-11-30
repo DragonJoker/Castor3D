@@ -22,13 +22,13 @@ namespace CastorCom
 		: public CComAtlObject< Light, castor3d::Light >
 	{
 	public:
-		COM_PROPERTY_GET( Name, BSTR, makeGetter( m_internal, &castor3d::MovableObject::getName ) );
-		COM_PROPERTY_GET( Type, eMOVABLE_TYPE, makeGetter( m_internal, &castor3d::MovableObject::getType ) );
-		COM_PROPERTY_GET( Scene, IScene *, makeGetter( m_internal, &castor3d::MovableObject::getScene ) );
-		COM_PROPERTY_GET( LightType, eLIGHT_TYPE, makeGetter( m_internal, &castor3d::Light::getLightType ) );
-		COM_PROPERTY_GET( DirectionalLight, IDirectionalLight *, makeGetter( m_internal, &castor3d::Light::getDirectionalLight ) );
-		COM_PROPERTY_GET( PointLight, IPointLight *, makeGetter( m_internal, &castor3d::Light::getPointLight ) );
-		COM_PROPERTY_GET( SpotLight, ISpotLight *, makeGetter( m_internal, &castor3d::Light::getSpotLight ) );
+		COMEX_PROPERTY_GET( Name, BSTR, m_internal, &castor3d::MovableObject::getName );
+		COMEX_PROPERTY_GET( Type, eMOVABLE_TYPE, m_internal, &castor3d::MovableObject::getType );
+		COMEX_PROPERTY_GET( Scene, IScene *, m_internal, &castor3d::MovableObject::getScene );
+		COMEX_PROPERTY_GET( LightType, eLIGHT_TYPE, m_internal, &castor3d::Light::getLightType );
+		COMEX_PROPERTY_GET( DirectionalLight, IDirectionalLight *, m_internal, &castor3d::Light::getDirectionalLight );
+		COMEX_PROPERTY_GET( PointLight, IPointLight *, m_internal, &castor3d::Light::getPointLight );
+		COMEX_PROPERTY_GET( SpotLight, ISpotLight *, m_internal, &castor3d::Light::getSpotLight );
 
 		STDMETHOD( AttachTo )( /* [in] */ ISceneNode * val );
 		STDMETHOD( Detach )();

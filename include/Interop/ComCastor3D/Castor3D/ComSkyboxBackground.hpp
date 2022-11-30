@@ -19,9 +19,8 @@ namespace CastorCom
 		: public CComAtlObject< SkyboxBackground, castor3d::SkyboxBackground >
 	{
 	public:
-		COM_PROPERTY_GET( Type
-			, BSTR
-			, makeGetter( m_internal, &castor3d::SceneBackground::getType ) );
+		COMEX_PROPERTY_GET( Type, BSTR, m_internal, &castor3d::SceneBackground::getType );
+
 		STDMETHOD( put_LeftImage )( /* [in] */ BSTR filePath );
 		STDMETHOD( put_RightImage )( /* [in] */ BSTR filePath );
 		STDMETHOD( put_TopImage )( /* [in] */ BSTR filePath );

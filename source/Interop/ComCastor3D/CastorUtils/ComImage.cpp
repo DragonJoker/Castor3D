@@ -7,10 +7,13 @@
 
 namespace CastorCom
 {
-	static const TCHAR * ERROR_WRONG_FILE_NAME = _T( "The given file doesn't exist" );
-	static const TCHAR * ERROR_IMAGE_EXISTS = _T( "The given image name already exists" );
-	static const TCHAR * ERROR_UNINITIALISED_IMAGE = _T( "The image must be initialised" );
-	static const TCHAR * ERROR_INITIALISED_IMAGE = _T( "The image is already initialised" );
+	namespace image
+	{
+		static const TCHAR * ERROR_WRONG_FILE_NAME = _T( "The given file doesn't exist" );
+		static const TCHAR * ERROR_IMAGE_EXISTS = _T( "The given image name already exists" );
+		static const TCHAR * ERROR_UNINITIALISED_IMAGE = _T( "The image must be initialised" );
+		static const TCHAR * ERROR_INITIALISED_IMAGE = _T( "The image is already initialised" );
+	}
 
 	STDMETHODIMP CImage::LoadFromFile( /* [in] */ IEngine * engine, /* [in] */ BSTR name, /* [in] */ BSTR val, /* [in] */ boolean dropAlpha )noexcept
 	{
@@ -42,13 +45,13 @@ namespace CastorCom
 
 				if ( !m_internal )
 				{
-					hr = CComError::dispatchError( E_FAIL, IID_IImage, _T( "LoadFromFile" ), ERROR_WRONG_FILE_NAME, 0, nullptr );
+					hr = CComError::dispatchError( E_FAIL, IID_IImage, _T( "LoadFromFile" ), image::ERROR_WRONG_FILE_NAME, 0, nullptr );
 				}
 			}
 		}
 		else
 		{
-			hr = CComError::dispatchError( E_FAIL, IID_IImage, _T( "LoadFromFile" ), ERROR_IMAGE_EXISTS, 0, nullptr );
+			hr = CComError::dispatchError( E_FAIL, IID_IImage, _T( "LoadFromFile" ), image::ERROR_IMAGE_EXISTS, 0, nullptr );
 		}
 
 		return hr;
@@ -74,7 +77,7 @@ namespace CastorCom
 			}
 			else
 			{
-				hr = CComError::dispatchError( E_FAIL, IID_IImage, _T( "LoadFromFormat" ), ERROR_IMAGE_EXISTS, 0, nullptr );
+				hr = CComError::dispatchError( E_FAIL, IID_IImage, _T( "LoadFromFormat" ), image::ERROR_IMAGE_EXISTS, 0, nullptr );
 			}
 		}
 
@@ -92,7 +95,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::dispatchError( E_FAIL, IID_IImage, _T( "Resample" ), ERROR_UNINITIALISED_IMAGE, 0, nullptr );
+			hr = CComError::dispatchError( E_FAIL, IID_IImage, _T( "Resample" ), image::ERROR_UNINITIALISED_IMAGE, 0, nullptr );
 		}
 
 		return hr;
@@ -109,7 +112,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::dispatchError( E_FAIL, IID_IImage, _T( "Fill" ), ERROR_UNINITIALISED_IMAGE, 0, nullptr );
+			hr = CComError::dispatchError( E_FAIL, IID_IImage, _T( "Fill" ), image::ERROR_UNINITIALISED_IMAGE, 0, nullptr );
 		}
 
 		return hr;
@@ -131,7 +134,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::dispatchError( E_FAIL, IID_IImage, _T( "Flip" ), ERROR_UNINITIALISED_IMAGE, 0, nullptr );
+			hr = CComError::dispatchError( E_FAIL, IID_IImage, _T( "Flip" ), image::ERROR_UNINITIALISED_IMAGE, 0, nullptr );
 		}
 
 		return hr;

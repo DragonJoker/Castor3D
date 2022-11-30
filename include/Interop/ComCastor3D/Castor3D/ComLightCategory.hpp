@@ -19,9 +19,9 @@ namespace CastorCom
 		: public CComAtlObject< LightCategory, castor3d::LightCategory >
 	{
 	public:
-		COM_PROPERTY( Colour, IVector3D *, makeGetter( m_internal, &castor3d::LightCategory::getColour ), makePutter( m_internal, &castor3d::LightCategory::setColour ) );
-		COM_PROPERTY( DiffuseIntensity, float, makeGetter( m_internal, &castor3d::LightCategory::getDiffuseIntensity ), makePutter( m_internal, &castor3d::LightCategory::setDiffuseIntensity ) );
-		COM_PROPERTY( SpecularIntensity, float, makeGetter( m_internal, &castor3d::LightCategory::getSpecularIntensity ), makePutter( m_internal, &castor3d::LightCategory::setSpecularIntensity ) );
+		COMEX_PROPERTY( Colour, IVector3D *, m_internal, &castor3d::LightCategory::getColour, &castor3d::LightCategory::setColour );
+		COMEX_PROPERTY( DiffuseIntensity, float, m_internal, &castor3d::LightCategory::getDiffuseIntensity, &castor3d::LightCategory::setDiffuseIntensity );
+		COMEX_PROPERTY( SpecularIntensity, float, m_internal, &castor3d::LightCategory::getSpecularIntensity, &castor3d::LightCategory::setSpecularIntensity );
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object
 	//!\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet

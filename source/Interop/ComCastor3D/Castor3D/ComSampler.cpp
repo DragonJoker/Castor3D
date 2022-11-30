@@ -3,8 +3,11 @@
 
 namespace CastorCom
 {
-	static const tstring ERROR_UNINITIALISED = _T( "The sampler must be initialised" );
-	static const tstring ERROR_INITIALISATION = _T( "Sampler initialisation failed" );
+	namespace sampler
+	{
+		static const tstring ERROR_UNINITIALISED = _T( "The sampler must be initialised" );
+		static const tstring ERROR_INITIALISATION = _T( "Sampler initialisation failed" );
+	}
 
 	STDMETHODIMP CSampler::Initialise()noexcept
 	{
@@ -34,7 +37,7 @@ namespace CastorCom
 					 E_FAIL,						// This represents the error
 					 IID_ISampler,					// This is the GUID of PixelComponents throwing error
 					 _T( "Initialise" ),			// This is generally displayed as the title
-					 ERROR_UNINITIALISED.c_str(),	// This is the description
+					 sampler::ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
 					 nullptr );
 		}
@@ -57,7 +60,7 @@ namespace CastorCom
 					 E_FAIL,						// This represents the error
 					 IID_ISampler,					// This is the GUID of PixelComponents throwing error
 					 _T( "Cleanup" ),				// This is generally displayed as the title
-					 ERROR_UNINITIALISED.c_str(),	// This is the description
+					 sampler::ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
 					 nullptr );
 		}

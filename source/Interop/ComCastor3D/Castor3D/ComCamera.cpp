@@ -3,7 +3,10 @@
 
 namespace CastorCom
 {
-	static const tstring ERROR_UNINITIALISED = _T( "The camera must be initialised" );
+	namespace camera
+	{
+		static const tstring ERROR_UNINITIALISED = _T( "The camera must be initialised" );
+	}
 
 	STDMETHODIMP CCamera::AttachTo( /* [in] */ ISceneNode * val )noexcept
 	{
@@ -17,12 +20,12 @@ namespace CastorCom
 		else
 		{
 			hr = CComError::dispatchError(
-					 E_FAIL,						// This represents the error
-					 IID_ICamera,					// This is the GUID of PixelComponents throwing error
-					_T( "attachTo" ),				// This is generally displayed as the title
-					 ERROR_UNINITIALISED.c_str(),	// This is the description
-					 0,								// This is the context in the help file
-					 nullptr );
+				E_FAIL,						// This represents the error
+				IID_ICamera,					// This is the GUID of PixelComponents throwing error
+				_T( "attachTo" ),				// This is generally displayed as the title
+				camera::ERROR_UNINITIALISED.c_str(),	// This is the description
+				0,								// This is the context in the help file
+				nullptr );
 		}
 
 		return hr;
@@ -40,12 +43,12 @@ namespace CastorCom
 		else
 		{
 			hr = CComError::dispatchError(
-					 E_FAIL,						// This represents the error
-					 IID_ICamera,					// This is the GUID of PixelComponents throwing error
-					_T( "Detach" ),					// This is generally displayed as the title
-					 ERROR_UNINITIALISED.c_str(),	// This is the description
-					 0,								// This is the context in the help file
-					 nullptr );
+				E_FAIL,						// This represents the error
+				IID_ICamera,					// This is the GUID of PixelComponents throwing error
+				_T( "Detach" ),					// This is generally displayed as the title
+				camera::ERROR_UNINITIALISED.c_str(),	// This is the description
+				0,								// This is the context in the help file
+				nullptr );
 		}
 
 		return hr;
@@ -63,12 +66,12 @@ namespace CastorCom
 		else
 		{
 			hr = CComError::dispatchError(
-					 E_FAIL,						// This represents the error
-					 IID_ICamera,					// This is the GUID of PixelComponents throwing error
-					 _T( "Resize" ),				// This is generally displayed as the title
-					 ERROR_UNINITIALISED.c_str(),	// This is the description
-					 0,								// This is the context in the help file
-					 nullptr );
+				E_FAIL,						// This represents the error
+				IID_ICamera,					// This is the GUID of PixelComponents throwing error
+				_T( "Resize" ),				// This is generally displayed as the title
+				camera::ERROR_UNINITIALISED.c_str(),	// This is the description
+				0,								// This is the context in the help file
+				nullptr );
 		}
 
 		return hr;
