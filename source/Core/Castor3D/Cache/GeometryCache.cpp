@@ -45,9 +45,9 @@ namespace castor3d
 	//*********************************************************************************************
 
 	ObjectCacheT< Geometry, castor::String, GeometryCacheTraits >::ObjectCacheT( Scene & scene
-		, SceneNodeSPtr rootNode
-		, SceneNodeSPtr rootCameraNode
-		, SceneNodeSPtr rootObjectNode )
+		, SceneNodeRPtr rootNode
+		, SceneNodeRPtr rootCameraNode
+		, SceneNodeRPtr rootObjectNode )
 		: ElementObjectCacheT{ scene
 			, rootNode
 			, rootCameraNode

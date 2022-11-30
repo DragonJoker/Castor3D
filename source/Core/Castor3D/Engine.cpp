@@ -95,7 +95,7 @@ namespace castor3d
 			auto image = std::make_unique< ashes::Image >( *device, result.image, result.imageId.data->info );
 			auto imagePath = Engine::getEngineDirectory() / cuT( "Core" ) / cuT( "brdf.png" );
 			castor::ImageResPtr created;
-			castor::ImageResPtr img = engine.getImageCache().tryAdd( cuT( "BRDF" )
+			castor::ImageResPtr img = engine.tryAddImage( cuT( "BRDF" )
 				, true
 				, created
 				, castor::ImageCreateParams{ imagePath, { false, false, false } } );

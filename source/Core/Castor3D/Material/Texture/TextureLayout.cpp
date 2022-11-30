@@ -583,13 +583,14 @@ namespace castor3d
 			, uint32_t & srcMipLevels
 			, castor::ImageLoaderConfig config )
 		{
-			auto image = engine.getImageCache().tryFind( name );
+			auto image = engine.tryFindImage( name );
 
 			if ( !image.lock() )
 			{
-				image = engine.getImageCache().add( name
+				auto img = engine.createImage( name
 					, castor::ImageCreateParams{ folder / relative
 						, std::move( config ) } );
+				image = engine.addImage( name, img );
 			}
 
 			auto img = image.lock();

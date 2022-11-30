@@ -609,10 +609,10 @@ namespace castor3d
 		C3D_API static std::locale const & getLocale();
 		/**
 		*\~english
-		*name
+		*\name
 		*	Getters.
 		*\~french
-		*name
+		*\name
 		*	Accesseurs.
 		*/
 		/**@{*/
@@ -829,10 +829,10 @@ namespace castor3d
 		/**@}*/
 		/**
 		*\~english
-		*name
+		*\name
 		*	Mutators.
 		*\~french
-		*name
+		*\name
 		*	Mutateurs.
 		*/
 		/**@{*/
@@ -868,6 +868,116 @@ namespace castor3d
 		void setLengthUnit( castor::LengthUnit value )noexcept
 		{
 			m_unit = value;
+		}
+		/**@}*/
+		/**
+		*\name
+		*	Fonts.
+		*/
+		/**@{*/
+		template< typename ... ParametersT >
+		castor::FontCache::ElementPtrT createFont( castor::FontCache::ElementKeyT const & key
+			, ParametersT && ... parameters )const
+		{
+			return getFontCache().create( key
+				, std::forward< ParametersT >( parameters )... );
+		}
+
+		template< typename ... ParametersT >
+		castor::FontCache::ElementObsT addNewFont( castor::FontCache::ElementKeyT const & key
+			, ParametersT && ... parameters )
+		{
+			return getFontCache().add( key
+				, std::forward< ParametersT >( parameters )... );
+		}
+
+		castor::FontCache::ElementObsT addFont( castor::FontCache::ElementKeyT const & key
+			, castor::FontCache::ElementPtrT & element
+			, bool initialise = false )
+		{
+			return getFontCache().add( key, element, initialise );
+		}
+
+		void removeFont( castor::FontCache::ElementKeyT const & key
+			, bool cleanup = false )
+		{
+			getFontCache().remove( key, cleanup );
+		}
+
+		castor::FontCache::ElementObsT findFont( castor::FontCache::ElementKeyT const & key )const
+		{
+			return getFontCache().find( key );
+		}
+
+		bool hasFont( castor::FontCache::ElementKeyT const & key )const
+		{
+			return getFontCache().has( key );
+		}
+
+		castor::FontCache::ElementObsT tryFindFont( castor::FontCache::ElementKeyT const & key )const
+		{
+			return getFontCache().tryFind( key );
+		}
+		/**@}*/
+		/**
+		*\name
+		*	Images.
+		*/
+		/**@{*/
+		template< typename ... ParametersT >
+		castor::ImageCache::ElementPtrT createImage( castor::ImageCache::ElementKeyT const & key
+			, ParametersT && ... parameters )const
+		{
+			return getImageCache().create( key
+				, std::forward< ParametersT >( parameters )... );
+		}
+
+		template< typename ... ParametersT >
+		castor::ImageCache::ElementObsT addNewImage( castor::ImageCache::ElementKeyT const & key
+			, ParametersT && ... parameters )
+		{
+			return getImageCache().add( key
+				, std::forward< ParametersT >( parameters )... );
+		}
+
+		castor::ImageCache::ElementObsT addImage( castor::ImageCache::ElementKeyT const & key
+			, castor::ImageCache::ElementPtrT & element
+			, bool initialise = false )
+		{
+			return getImageCache().add( key, element, initialise );
+		}
+
+		void removeImage( castor::ImageCache::ElementKeyT const & key
+			, bool cleanup = false )
+		{
+			getImageCache().remove( key, cleanup );
+		}
+
+		castor::ImageCache::ElementObsT findImage( castor::ImageCache::ElementKeyT const & key )const
+		{
+			return getImageCache().find( key );
+		}
+
+		bool hasImage( castor::ImageCache::ElementKeyT const & key )const
+		{
+			return getImageCache().has( key );
+		}
+
+		castor::ImageCache::ElementObsT tryFindImage( castor::ImageCache::ElementKeyT const & key )const
+		{
+			return getImageCache().tryFind( key );
+		}
+
+		template< typename ... ParametersT >
+		castor::ImageCache::ElementObsT tryAddImage( castor::ImageCache::ElementKeyT const & name
+			, bool initialise
+			, castor::ImageCache::ElementObsT & created
+			, ParametersT && ... parameters )
+		{
+			return getImageCache().tryAdd( name
+				, initialise
+				, created
+				, std::forward< ParametersT >( parameters )... );
 		}
 		/**@}*/
 

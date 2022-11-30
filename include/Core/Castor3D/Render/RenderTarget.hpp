@@ -189,7 +189,7 @@ namespace castor3d
 		 *\remarks		Définit aussi les caméras des yeux gauche et droit.
 		 *\param[in]	camera	La nouvelle caméra.
 		 */
-		C3D_API void setCamera( CameraSPtr camera );
+		C3D_API void setCamera( Camera & camera );
 		/**
 		 *\~english
 		 *\brief		Sets the scene.
@@ -281,9 +281,9 @@ namespace castor3d
 			return m_scene;
 		}
 
-		CameraSPtr getCamera()const
+		CameraRPtr getCamera()const
 		{
-			return m_camera.lock();
+			return m_camera;
 		}
 
 		Texture const & getTexture()const
@@ -410,10 +410,7 @@ namespace castor3d
 			, crg::FramePass const & previousPass
 			, ProgressBar * progress );
 		void doInitCombineProgram( ProgressBar * progress );
-		crg::SemaphoreWaitArray doRender( RenderDevice const & device
-			, RenderInfo & info
-			, ashes::Queue const & queue
-			, CameraSPtr camera
+		crg::SemaphoreWaitArray doRender( ashes::Queue const & queue
 			, crg::SemaphoreWaitArray signalsToWait );
 
 	public:
@@ -431,7 +428,7 @@ namespace castor3d
 		std::unique_ptr< HdrConfigUbo > m_hdrConfigUbo;
 		RenderTechniqueUPtr m_renderTechnique;
 		SceneRPtr m_scene;
-		CameraWPtr m_camera;
+		CameraRPtr m_camera;
 		uint32_t m_index;
 		castor::String m_name;
 		Parameters m_techniqueParameters;

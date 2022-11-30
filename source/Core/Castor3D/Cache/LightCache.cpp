@@ -32,9 +32,9 @@ namespace castor3d
 	const castor::String ObjectCacheTraitsT< Light, castor::String >::Name = cuT( "Light" );
 
 	ObjectCacheT< Light, castor::String, LightCacheTraits >::ObjectCacheT( Scene & scene
-		, SceneNodeSPtr rootNode
-		, SceneNodeSPtr rootCameraNode
-		, SceneNodeSPtr rootObjectNode )
+		, SceneNodeRPtr rootNode
+		, SceneNodeRPtr rootCameraNode
+		, SceneNodeRPtr rootObjectNode )
 		: ElementObjectCacheT{ scene
 			, rootNode
 			, rootCameraNode

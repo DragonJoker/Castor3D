@@ -108,30 +108,30 @@ namespace castor3d
 		m_rootObjectNode->attachTo( *m_rootNode );
 
 		m_billboardCache = makeObjectCache< BillboardList, castor::String, BillboardListCacheTraits >( *this
-			, m_rootNode
-			, m_rootCameraNode
-			, m_rootObjectNode );
+			, m_rootNode.get()
+			, m_rootCameraNode.get()
+			, m_rootObjectNode.get() );
 		m_cameraCache = makeObjectCache< Camera, castor::String, CameraCacheTraits >( *this
-			, m_rootNode
-			, m_rootCameraNode
-			, m_rootObjectNode
+			, m_rootNode.get()
+			, m_rootCameraNode.get()
+			, m_rootObjectNode.get()
 			, castor::DummyFunctorT< CameraCache >{}
 			, castor::DummyFunctorT< CameraCache >{}
 			, MovableMergerT< CameraCache >{ getName() }
 			, MovableAttacherT< CameraCache >{}
 			, MovableDetacherT< CameraCache >{} );
 		m_geometryCache = makeObjectCache< Geometry, castor::String, GeometryCacheTraits >( *this
-			, m_rootNode
-			, m_rootCameraNode
-			, m_rootObjectNode );
+			, m_rootNode.get()
+			, m_rootCameraNode.get()
+			, m_rootObjectNode.get() );
 		m_lightCache = makeObjectCache< Light, castor::String, LightCacheTraits >( *this
-			, m_rootNode
-			, m_rootCameraNode
-			, m_rootObjectNode );
+			, m_rootNode.get()
+			, m_rootCameraNode.get()
+			, m_rootObjectNode.get() );
 		m_particleSystemCache = makeObjectCache< ParticleSystem, castor::String, ParticleSystemCacheTraits >( *this
-			, m_rootNode
-			, m_rootCameraNode
-			, m_rootObjectNode
+			, m_rootNode.get()
+			, m_rootCameraNode.get()
+			, m_rootObjectNode.get()
 			, [this]( ParticleSystem & element )
 			{
 				auto & nodes = getRenderNodes();
@@ -155,9 +155,9 @@ namespace castor3d
 			, MovableAttacherT< ParticleSystemCache >{}
 			, MovableDetacherT< ParticleSystemCache >{} );
 		m_sceneNodeCache = makeObjectCache< SceneNode, castor::String, SceneNodeCacheTraits >( *this
-			, m_rootNode
-			, m_rootCameraNode
-			, m_rootObjectNode
+			, m_rootNode.get()
+			, m_rootCameraNode.get()
+			, m_rootObjectNode.get()
 			, castor::DummyFunctorT< SceneNodeCache >{}
 			, castor::DummyFunctorT< SceneNodeCache >{}
 			, MovableMergerT< SceneNodeCache >{ getName() }
@@ -722,9 +722,9 @@ namespace castor3d
 
 			for ( auto child : curNode.getChildren() )
 			{
-				if ( auto nd = child.second.lock() )
+				if ( auto nd = child.second )
 				{
-					work.push_back( nd.get() );
+					work.push_back( nd );
 				}
 			}
 		}

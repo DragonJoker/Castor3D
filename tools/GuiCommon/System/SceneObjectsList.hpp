@@ -46,7 +46,7 @@ namespace GuiCommon
 		void doAddBillboard( wxTreeItemId id
 			, castor3d::BillboardList & billboard );
 		void doAddNode( wxTreeItemId id
-			, castor3d::SceneNodeSPtr node );
+			, castor3d::SceneNode & node );
 		void doAddAnimatedObjectGroup( wxTreeItemId id
 			, castor3d::AnimatedObjectGroup & group );
 		void doAddOverlay( wxTreeItemId id

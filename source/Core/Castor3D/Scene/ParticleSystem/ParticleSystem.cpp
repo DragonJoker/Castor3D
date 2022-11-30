@@ -145,7 +145,7 @@ namespace castor3d
 		}
 
 		m_particlesBillboard = std::make_unique< BillboardBase >( *getScene()
-			, getScene()->getObjectRootNode().get()
+			, getScene()->getObjectRootNode()
 			, std::make_unique< ashes::PipelineVertexInputStateCreateInfo >( 0u
 				, bindings
 				, attributes )

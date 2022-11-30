@@ -64,6 +64,15 @@ namespace castor3d
 		 *\brief		Enlève une cible de rendu de la boucle de rendu
 		 *\param[in]	target	La cible de rendu
 		 */
+		C3D_API void remove( RenderTargetRPtr target );
+		/**
+		 *\~english
+		 *\brief		Removes a render target from the render loop
+		 *\param[in]	target	The render target
+		 *\~french
+		 *\brief		Enlève une cible de rendu de la boucle de rendu
+		 *\param[in]	target	La cible de rendu
+		 */
 		C3D_API void remove( RenderTargetSPtr target );
 		/**
 		 *\~english

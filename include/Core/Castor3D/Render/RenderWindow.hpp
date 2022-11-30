@@ -180,7 +180,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Initialises la render window avec la RenderTarget donnée.
 		 */
-		C3D_API void initialise( RenderTargetSPtr value );
+		C3D_API void initialise( RenderTarget & value );
 		/**
 		 *\~english
 		 *\brief		Cleans up the instance.
@@ -256,7 +256,7 @@ namespace castor3d
 		 *\brief		Définit la caméra.
 		 *\param[in]	camera	La caméra.
 		 */
-		C3D_API void setCamera( CameraSPtr camera );
+		C3D_API void setCamera( Camera & camera );
 		/**
 		 *\~english
 		 *\brief		Changes fullscreen status.
@@ -279,7 +279,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La caméra.
 		 */
-		C3D_API CameraSPtr getCamera()const;
+		C3D_API CameraRPtr getCamera()const;
 		/**
 		 *\~english
 		 *\return		The ViewportType.
@@ -423,9 +423,9 @@ namespace castor3d
 			return m_device;
 		}
 
-		RenderTargetSPtr getRenderTarget()const
+		RenderTargetRPtr getRenderTarget()const
 		{
-			return m_renderTarget.lock();
+			return m_renderTarget;
 		}
 
 		bool isVSyncEnabled()const
@@ -568,7 +568,7 @@ namespace castor3d
 		std::vector< ashes::CommandBufferPtrArray > m_commandBuffers;
 		ashes::PipelineShaderStageCreateInfoArray m_program;
 		RenderQuadUPtr m_renderQuad;
-		RenderTargetWPtr m_renderTarget;
+		RenderTargetRPtr m_renderTarget{};
 		FrameListenerWPtr m_listener;
 		bool m_vsync{ false };
 		bool m_fullscreen{ false };

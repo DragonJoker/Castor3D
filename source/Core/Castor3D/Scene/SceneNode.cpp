@@ -38,7 +38,7 @@ namespace castor3d
 
 		if ( parent )
 		{
-			parent->detachChild( shared_from_this() );
+			parent->detachChild( *this );
 		}
 
 		detachChildren();
@@ -81,7 +81,7 @@ namespace castor3d
 			if ( old )
 			{
 				m_parent = nullptr;
-				old->detachChild( shared_from_this() );
+				old->detachChild( *this );
 			}
 
 			m_parent = &node;
@@ -89,7 +89,7 @@ namespace castor3d
 			if ( m_parent )
 			{
 				m_displayable = m_parent->m_displayable;
-				m_parent->addChild( shared_from_this() );
+				m_parent->addChild( *this );
 				m_mtxChanged = true;
 			}
 
@@ -106,7 +106,7 @@ namespace castor3d
 		{
 			m_displayable = false;
 			m_parent = nullptr;
-			parent->detachChild( shared_from_this() );
+			parent->detachChild( *this );
 			m_mtxChanged = true;
 			m_scene.markDirty( *this );
 		}
@@ -120,22 +120,22 @@ namespace castor3d
 		{
 			found = m_children.end() != std::find_if( m_children.begin()
 				, m_children.end()
-				, [&name]( std::pair< castor::String, SceneNodeWPtr > p_pair )
+				, [&name]( std::pair< castor::String, SceneNodeRPtr > p_pair )
 				{
-					return p_pair.second.lock()->hasChild( name );
+					return p_pair.second->hasChild( name );
 				} );
 		}
 
 		return found;
 	}
 
-	void SceneNode::addChild( SceneNodeSPtr child )
+	void SceneNode::addChild( SceneNode & child )
 	{
-		auto name = child->getName();
+		auto name = child.getName();
 
 		if ( m_children.find( name ) == m_children.end() )
 		{
-			m_children.insert( std::make_pair( name, child ) );
+			m_children.insert( std::make_pair( name, &child ) );
 		}
 		else
 		{
@@ -143,16 +143,9 @@ namespace castor3d
 		}
 	}
 
-	void SceneNode::detachChild( SceneNodeSPtr child )
+	void SceneNode::detachChild( SceneNode & child )
 	{
-		if ( child )
-		{
-			detachChild( child->getName() );
-		}
-		else
-		{
-			log::warn << m_name << cuT( " - Can't remove SceneNode - Null pointer given" ) << std::endl;
-		}
+		detachChild( child.getName() );
 	}
 
 	void SceneNode::detachChild( castor::String const & childName )
@@ -161,7 +154,7 @@ namespace castor3d
 
 		if ( it != m_children.end() )
 		{
-			SceneNodeSPtr current = it->second.lock();
+			auto current = it->second;
 			m_children.erase( it );
 
 			if ( current )
@@ -182,7 +175,7 @@ namespace castor3d
 
 		for ( auto it : flush )
 		{
-			SceneNodeSPtr current = it.second.lock();
+			auto current = it.second;
 
 			if ( current )
 			{
@@ -343,9 +336,9 @@ namespace castor3d
 		return m_children;
 	}
 
-	SceneNodeSPtr SceneNode::getChild( castor::String const & name )const
+	SceneNodeRPtr SceneNode::getChild( castor::String const & name )const
 	{
-		return ( m_children.find( name ) != m_children.end() ? m_children.find( name )->second.lock() : nullptr );
+		return ( m_children.find( name ) != m_children.end() ? m_children.find( name )->second : nullptr );
 	}
 
 	SceneNode::MovableArray const & SceneNode::getObjects()const
@@ -381,10 +374,8 @@ namespace castor3d
 
 	void SceneNode::doUpdateChildsDerivedTransform()
 	{
-		for ( auto it : m_children )
+		for ( auto & [key,current] : m_children )
 		{
-			SceneNodeSPtr current = it.second.lock();
-
 			if ( current )
 			{
 				current->doUpdateChildsDerivedTransform();

@@ -31,6 +31,24 @@ namespace castor3d
 		return result;
 	}
 
+	void RenderTargetCache::remove( RenderTargetRPtr target )
+	{
+		cachetgt::LockType lock{ castor::makeUniqueLock( *this ) };
+		auto v = std::next( m_renderTargets.begin()
+			, ptrdiff_t( target->getTargetType() ) );
+		auto it = std::find_if( v->begin()
+			, v->end()
+			, [&target]( RenderTargetSPtr lookup )
+			{
+				return target == lookup.get();
+			} );
+
+		if ( it != v->end() )
+		{
+			v->erase( it );
+		}
+	}
+
 	void RenderTargetCache::remove( RenderTargetSPtr target )
 	{
 		cachetgt::LockType lock{ castor::makeUniqueLock( *this ) };

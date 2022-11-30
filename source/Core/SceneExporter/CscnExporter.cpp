@@ -863,7 +863,7 @@ namespace castor3d::exporter
 
 				for ( auto const & it : scene.getObjectRootNode()->getChildren() )
 				{
-					auto node = it.second.lock();
+					auto node = it.second;
 
 					if ( node->hasAnimation() )
 					{

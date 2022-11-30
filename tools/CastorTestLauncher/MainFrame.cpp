@@ -318,7 +318,7 @@ namespace test_launcher
 			}
 			else
 			{
-				m_renderWindow->initialise( target );
+				m_renderWindow->initialise( *target );
 			}
 		}
 		else

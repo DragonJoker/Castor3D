@@ -33,7 +33,7 @@ namespace GuiCommon
 		 *\param[in]	engine	Le moteur
 		 *\param[in]	p_node		L'objet cible
 		 */
-		NodeTreeItemProperty( bool p_editable, castor3d::Engine * engine, castor3d::SceneNodeSPtr p_node );
+		NodeTreeItemProperty( bool p_editable, castor3d::Engine * engine, castor3d::SceneNode & p_node );
 		/**
 		 *\~english
 		 *\brief		Retrieves the object
@@ -42,9 +42,9 @@ namespace GuiCommon
 		 *\brief		Récupère l'objet
 		 *\return		La valeur
 		 */
-		inline castor3d::SceneNodeSPtr getNode()
+		inline castor3d::SceneNode & getNode()const
 		{
-			return m_node.lock();
+			return m_node;
 		}
 
 	private:
@@ -54,7 +54,7 @@ namespace GuiCommon
 		void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )override;
 
 	private:
-		castor3d::SceneNodeWPtr m_node;
+		castor3d::SceneNode & m_node;
 	};
 }
 

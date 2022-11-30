@@ -198,14 +198,15 @@ namespace castor3d
 			, castor::ByteArray const & data
 			, bool allowSRGB )
 		{
-			auto image = engine.getImageCache().tryFind( name );
+			auto image = engine.tryFindImage( name );
 
 			if ( !image.lock() )
 			{
-				image = engine.getImageCache().add( name
+				auto img = engine.createImage( name
 					, castor::ImageCreateParams{ type
 						, data
 						, { false, false, false } } );
+				image = engine.addImage( name, img );
 			}
 
 			auto img = image.lock();
@@ -224,13 +225,14 @@ namespace castor3d
 			, castor::Path const & relative
 			, bool allowSRGB )
 		{
-			auto image = engine.getImageCache().tryFind( name );
+			auto image = engine.tryFindImage( name );
 
 			if ( !image.lock() )
 			{
-				image = engine.getImageCache().add( name
+				auto img = engine.createImage( name
 					, castor::ImageCreateParams{ folder / relative
 						, { false, false, false } } );
+				image = engine.addImage( name, img );
 			}
 
 			auto img = image.lock();

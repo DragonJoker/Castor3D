@@ -70,7 +70,7 @@ namespace castor
 		{
 			if ( result )
 			{
-				SceneNodeSPtr childNode = it.second.lock();
+				auto childNode = it.second;
 
 				if ( childNode )
 				{

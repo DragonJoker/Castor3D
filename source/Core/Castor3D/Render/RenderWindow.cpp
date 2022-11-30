@@ -420,14 +420,9 @@ namespace castor3d
 		m_device.uboPool->putBuffer( m_configUbo );
 	}
 
-	void RenderWindow::initialise( RenderTargetSPtr target )
+	void RenderWindow::initialise( RenderTarget & target )
 	{
-		m_renderTarget = target;
-
-		if ( !target )
-		{
-			CU_Exception( "No render target for render window." );
-		}
+		m_renderTarget = &target;
 
 		if ( m_loadingScreen )
 		{
@@ -437,17 +432,15 @@ namespace castor3d
 			}
 
 			auto progress = m_progressBar.get();
-			incProgressBarRange( progress, 6u + target->countInitialisationSteps() );
+			incProgressBarRange( progress, 6u + m_renderTarget->countInitialisationSteps() );
 			getEngine()->postEvent( makeCpuFunctorEvent( EventType::ePreRender
 				, [this]()
 				{
-					auto target = m_renderTarget.lock();
-
-					if ( target )
+					if ( m_renderTarget )
 					{
 						auto progress = m_progressBar.get();
 						setProgressBarTitle( progress, "Initialising: Render Window" );
-						target->initialise( [this, progress]( RenderTarget const & rt, QueueData const & queue )
+						m_renderTarget->initialise( [this, progress]( RenderTarget const & rt, QueueData const & queue )
 							{
 								stepProgressBar( progress, "Loading picking" );
 								doCreatePickingPass( queue );
@@ -494,7 +487,7 @@ namespace castor3d
 		else
 		{
 			auto queueData = m_device.graphicsData();
-			target->initialise( m_device, *queueData, nullptr );
+			m_renderTarget->initialise( m_device, *queueData, nullptr );
 			doCreatePickingPass( *queueData );
 			doCreateIntermediateViews( *queueData );
 			doCreateRenderQuad( *queueData );
@@ -654,7 +647,7 @@ namespace castor3d
 			queueData = m_queues->getQueue();
 		}
 
-		RenderTargetSPtr target = getRenderTarget();
+		auto target = getRenderTarget();
 		auto needLoadingScreen = ( !m_initialised
 			|| !target
 			|| target->isInitialising()
@@ -742,11 +735,9 @@ namespace castor3d
 		doResetSwapChainAndCommands();
 	}
 
-	void RenderWindow::setCamera( CameraSPtr camera )
+	void RenderWindow::setCamera( Camera & camera )
 	{
-		RenderTargetSPtr target = getRenderTarget();
-
-		if ( target )
+		if ( auto target = getRenderTarget() )
 		{
 			target->setCamera( camera );
 		}
@@ -760,9 +751,8 @@ namespace castor3d
 	SceneRPtr RenderWindow::getScene()const
 	{
 		SceneRPtr result{};
-		RenderTargetSPtr target = getRenderTarget();
 
-		if ( target )
+		if ( auto target = getRenderTarget() )
 		{
 			result = target->getScene();
 		}
@@ -770,12 +760,11 @@ namespace castor3d
 		return result;
 	}
 
-	CameraSPtr RenderWindow::getCamera()const
+	CameraRPtr RenderWindow::getCamera()const
 	{
-		CameraSPtr result;
-		RenderTargetSPtr target = getRenderTarget();
+		CameraRPtr result{};
 
-		if ( target )
+		if ( auto target = getRenderTarget() )
 		{
 			result = target->getCamera();
 		}
@@ -786,9 +775,8 @@ namespace castor3d
 	ViewportType RenderWindow::getViewportType()const
 	{
 		ViewportType result{};
-		RenderTargetSPtr target = getRenderTarget();
 
-		if ( target )
+		if ( auto target = getRenderTarget() )
 		{
 			result = target->getViewportType();
 		}
@@ -798,9 +786,7 @@ namespace castor3d
 
 	void RenderWindow::setViewportType( ViewportType value )
 	{
-		RenderTargetSPtr target = getRenderTarget();
-
-		if ( target )
+		if ( auto target = getRenderTarget() )
 		{
 			target->setViewportType( value );
 		}
@@ -809,9 +795,8 @@ namespace castor3d
 	VkFormat RenderWindow::getPixelFormat()const
 	{
 		VkFormat result = VK_FORMAT_UNDEFINED;
-		RenderTargetSPtr target = getRenderTarget();
 
-		if ( target )
+		if ( auto target = getRenderTarget() )
 		{
 			result = target->getPixelFormat();
 		}
@@ -821,9 +806,7 @@ namespace castor3d
 
 	void RenderWindow::setScene( Scene & value )
 	{
-		RenderTargetSPtr target = getRenderTarget();
-
-		if ( target )
+		if ( auto target = getRenderTarget() )
 		{
 			target->setScene( value );
 		}
@@ -832,9 +815,8 @@ namespace castor3d
 	bool RenderWindow::isUsingStereo()const
 	{
 		bool result = false;
-		RenderTargetSPtr target = getRenderTarget();
 
-		if ( target )
+		if ( auto target = getRenderTarget() )
 		{
 			//l_result = target->isUsingStereo();
 		}
@@ -844,9 +826,7 @@ namespace castor3d
 
 	void RenderWindow::setStereo( bool value )
 	{
-		RenderTargetSPtr target = getRenderTarget();
-
-		if ( target )
+		if ( auto target = getRenderTarget() )
 		{
 			//l_target->setStereo( value );
 		}
@@ -855,9 +835,8 @@ namespace castor3d
 	float RenderWindow::getIntraOcularDistance()const
 	{
 		float result = 0;
-		RenderTargetSPtr target = getRenderTarget();
 
-		if ( target )
+		if ( auto target = getRenderTarget() )
 		{
 			//l_result = target->getIntraOcularDistance();
 		}
@@ -867,9 +846,7 @@ namespace castor3d
 
 	void RenderWindow::setIntraOcularDistance( float value )
 	{
-		RenderTargetSPtr target = getRenderTarget();
-
-		if ( target )
+		if ( auto target = getRenderTarget() )
 		{
 			//l_target->setIntraOcularDistance( value );
 		}
@@ -1413,7 +1390,7 @@ namespace castor3d
 	void RenderWindow::doCreateIntermediateViews( QueueData const & queueData )
 	{
 #if !C3D_DebugPicking && !C3D_DebugBackgroundPicking
-		auto target = m_renderTarget.lock();
+		auto target = getRenderTarget();
 
 		if ( !target || !target->hasTechnique() )
 		{

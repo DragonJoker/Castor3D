@@ -314,6 +314,7 @@ namespace castor3d
 		, m_pixelFormat{ VkFormat( pixelFormat ) }
 		, m_initialised{ false }
 		, m_renderTechnique{}
+		, m_camera{}
 		, m_index{ ++sm_uiCount }
 		, m_name{ cuT( "Target" ) + castor::string::toString( m_index ) }
 		, m_graph{ getOwner()->getGraphResourceHandler(), m_name }
@@ -600,12 +601,12 @@ namespace castor3d
 		{
 			if ( m_initialised && scene->isInitialised() )
 			{
-				CameraSPtr camera = getCamera();
+				auto camera = getCamera();
 
 				if ( camera )
 				{
 					getEngine()->getRenderSystem()->pushScene( scene );
-					result = doRender( device, info, queue, getCamera(), signalsToWait );
+					result = doRender( queue, signalsToWait );
 					getEngine()->getRenderSystem()->popScene();
 				}
 			}
@@ -628,14 +629,14 @@ namespace castor3d
 		}
 	}
 
-	void RenderTarget::setCamera( CameraSPtr camera )
+	void RenderTarget::setCamera( Camera & camera )
 	{
 		auto myCamera = getCamera();
 
-		if ( myCamera != camera )
+		if ( myCamera != &camera )
 		{
-			m_camera = camera;
-			camera->resize( m_size );
+			m_camera = &camera;
+			m_camera->resize( m_size );
 			m_culler = std::make_unique< FrustumCuller >( *getScene(), *getCamera() );
 		}
 	}
@@ -1117,10 +1118,7 @@ namespace castor3d
 		m_combineStages.push_back( makeShaderState( renderSystem.getRenderDevice(), m_combinePxl ) );
 	}
 
-	crg::SemaphoreWaitArray RenderTarget::doRender( RenderDevice const & device
-		, RenderInfo & info
-		, ashes::Queue const & queue
-		, CameraSPtr camera
+	crg::SemaphoreWaitArray RenderTarget::doRender( ashes::Queue const & queue
 		, crg::SemaphoreWaitArray signalsToWait )
 	{
 		auto scene = getScene();

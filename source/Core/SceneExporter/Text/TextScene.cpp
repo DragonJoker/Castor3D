@@ -422,7 +422,7 @@ namespace castor
 
 				for ( auto const & it : nodes )
 				{
-					auto node = it.second.lock();
+					auto node = it.second;
 
 					if ( result && node && writable( *node ) )
 					{

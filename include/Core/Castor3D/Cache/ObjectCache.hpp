@@ -52,9 +52,9 @@ namespace castor3d
 		 *\param[in]	detach			Le détacheur d'objet (d'un noeud de scène).
 		 */
 		inline ObjectCacheT( Scene & scene
-			, SceneNodeSPtr rootNode
-			, SceneNodeSPtr rootCameraNode
-			, SceneNodeSPtr rootObjectNode
+			, SceneNodeRPtr rootNode
+			, SceneNodeRPtr rootCameraNode
+			, SceneNodeRPtr rootObjectNode
 			, ElementInitialiserT initialise = ElementInitialiserT{}
 			, ElementCleanerT clean = ElementCleanerT{}
 			, ElementMergerT merge = ElementMergerT{}

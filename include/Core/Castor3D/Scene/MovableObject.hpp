@@ -126,8 +126,8 @@ namespace castor3d
 		void operator()( typename CacheT::ElementObjectCacheT const & source
 			, typename CacheT::ElementContT & destination
 			, typename CacheT::ElementPtrT element
-			, SceneNodeSPtr rootCameraNode
-			, SceneNodeSPtr rootObjectNode )const
+			, SceneNodeRPtr rootCameraNode
+			, SceneNodeRPtr rootObjectNode )const
 		{
 			using ElementPtrT = typename CacheT::ElementPtrT;
 
@@ -163,9 +163,9 @@ namespace castor3d
 
 		void operator()( ElementT & element
 			, SceneNode & parent
-			, SceneNodeSPtr rootNode
-			, SceneNodeSPtr rootCameraNode
-			, SceneNodeSPtr rootObjectNode )
+			, SceneNodeRPtr rootNode
+			, SceneNodeRPtr rootCameraNode
+			, SceneNodeRPtr rootObjectNode )
 		{
 			parent.attachObject( element );
 		}
