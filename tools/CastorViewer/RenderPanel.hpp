@@ -4,6 +4,17 @@ See LICENSE file in root folder
 #ifndef ___RenderPanel___
 #define ___RenderPanel___
 
+#pragma warning( push )
+#pragma warning( disable: 4365 )
+#pragma warning( disable: 4371 )
+#pragma warning( disable: 5054 )
+#pragma warning( disable: 5262 )
+#include <wx/wx.h>
+#include <wx/frame.h>
+#include <wx/panel.h>
+#include <wx/timer.h>
+#pragma warning( pop )
+
 #include <GuiCommon/System/CubeBoxManager.hpp>
 #include <GuiCommon/System/NodeState.hpp>
 
@@ -11,10 +22,6 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Math/Point.hpp>
 #include <CastorUtils/Math/Quaternion.hpp>
-
-#include <wx/frame.h>
-#include <wx/panel.h>
-#include <wx/timer.h>
 
 namespace CastorViewer
 {

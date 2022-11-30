@@ -1,3 +1,17 @@
+#pragma warning( push )
+#pragma warning( disable: 4365 )
+#pragma warning( disable: 4371 )
+#pragma warning( disable: 5054 )
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wsuggest-override"
+#pragma GCC diagnostic ignored "-Wsuggest-destructor-override"
+#pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
+#include <wx/display.h>
+#include <wx/mstream.h>
+#include <wx/renderer.h>
+#pragma GCC diagnostic pop
+#pragma warning( pop )
+
 #include "CastorViewer/RenderPanel.hpp"
 
 #include "CastorViewer/MainFrame.hpp"
@@ -29,20 +43,6 @@
 #include <CastorUtils/Design/ResourceCache.hpp>
 #include <CastorUtils/Graphics/PixelBufferBase.hpp>
 #include <CastorUtils/Miscellaneous/BlockTimer.hpp>
-
-#pragma warning( push )
-#pragma warning( disable: 4365 )
-#pragma warning( disable: 4371 )
-#pragma warning( disable: 5054 )
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wsuggest-override"
-#pragma GCC diagnostic ignored "-Wsuggest-destructor-override"
-#pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
-#include <wx/display.h>
-#include <wx/mstream.h>
-#include <wx/renderer.h>
-#pragma GCC diagnostic pop
-#pragma warning( pop )
 
 #include <GuiCommon/xpms/castor.xpm>
 

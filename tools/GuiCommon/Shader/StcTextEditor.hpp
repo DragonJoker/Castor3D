@@ -7,7 +7,11 @@ See LICENSE file in root folder
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wold-style-cast"
 
+#pragma warning( push )
+#pragma warning( disable: 5262 )
 #include <wx/stc/stc.h>
+#pragma warning( pop )
+
 #if wxMAJOR_VERSION >= 3 || ( wxMAJOR_VERSION == 2 && wxMINOR_VERSION >= 9 )
 #	include <wx/textcompleter.h>
 #endif

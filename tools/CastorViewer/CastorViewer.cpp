@@ -3,9 +3,6 @@
 
 #include <wx/cmdline.h>
 
-#include <CastorUtils/Data/File.hpp>
-#include <CastorUtils/Exception/Exception.hpp>
-
 #include <GuiCommon/System/ImagesLoader.hpp>
 #include <GuiCommon/System/RendererSelector.hpp>
 
@@ -15,6 +12,9 @@
 #include <GuiCommon/xpms/print_screen.xpm>
 #include <GuiCommon/xpms/properties.xpm>
 #include <GuiCommon/xpms/scene_blanc.xpm>
+
+#include <CastorUtils/Data/File.hpp>
+#include <CastorUtils/Exception/Exception.hpp>
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wold-style-cast"

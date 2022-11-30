@@ -1,6 +1,9 @@
 #include "UnitTest.hpp"
 
+#pragma warning( push )
+#pragma warning( disable: 5262 )
 #include <sstream>
+#pragma warning( pop )
 
 namespace Testing
 {

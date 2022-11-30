@@ -10,7 +10,11 @@ See LICENSE file in root folder
 #include "CastorUtils/Math/PointData.hpp"
 
 #include <cmath>
+
+#pragma warning( push )
+#pragma warning( disable:5262 )
 #include <iostream>
+#pragma warning( pop )
 
 namespace castor
 {

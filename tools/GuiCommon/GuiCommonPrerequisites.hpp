@@ -4,14 +4,11 @@ See LICENSE file in root folder
 #ifndef ___GUICOMMON_PREREQUISITES_H___
 #define ___GUICOMMON_PREREQUISITES_H___
 
-#include <Castor3D/Castor3DPrerequisites.hpp>
-#include <SceneExporter/SceneExporter.hpp>
-#include <ashespp/Core/WindowHandle.hpp>
-
 #pragma warning( push )
 #pragma warning( disable: 4365 )
 #pragma warning( disable: 4371 )
 #pragma warning( disable: 5054 )
+#pragma warning( disable: 5262 )
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wambiguous-reversed-operator"
 #pragma clang diagnostic ignored "-Watomic-implicit-seq-cst"
@@ -26,9 +23,11 @@ See LICENSE file in root folder
 #pragma GCC diagnostic ignored "-Wcast-qual"
 #pragma GCC diagnostic ignored "-Wconversion"
 #pragma GCC diagnostic ignored "-Wdeprecated-copy"
+#pragma GCC diagnostic ignored "-Wduplicate-enum"
 #pragma GCC diagnostic ignored "-Wfloat-conversion"
 #pragma GCC diagnostic ignored "-Wold-style-cast"
 #pragma GCC diagnostic ignored "-Wredundant-decls"
+#pragma GCC diagnostic ignored "-Wshadow"
 #pragma GCC diagnostic ignored "-Wsuggest-destructor-override"
 #pragma GCC diagnostic ignored "-Wsuggest-override"
 #pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
@@ -36,6 +35,10 @@ See LICENSE file in root folder
 #pragma GCC diagnostic pop
 #pragma clang diagnostic pop
 #pragma warning( pop )
+
+#include <Castor3D/Castor3DPrerequisites.hpp>
+#include <SceneExporter/SceneExporter.hpp>
+#include <ashespp/Core/WindowHandle.hpp>
 
 namespace GuiCommon
 {

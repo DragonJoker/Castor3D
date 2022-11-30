@@ -14,6 +14,7 @@
 #pragma warning( disable: 4365 )
 #pragma warning( disable: 5054 )
 #pragma warning( disable: 5219 )
+#pragma warning( disable: 5262 )
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wcast-align"
 #pragma clang diagnostic ignored "-Wcomma"
