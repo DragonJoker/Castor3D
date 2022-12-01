@@ -23,7 +23,7 @@ namespace CastorCom
 		{
 			*pRet = castor::point::dot( m_internal
 				, static_cast< CVector2D * >( pVal )->getInternal() );
-			return S_OK;
+			hr = S_OK;
 		}
 
 		return hr;
@@ -36,7 +36,143 @@ namespace CastorCom
 		if ( pVal && pVal )
 		{
 			*pVal = FLOAT( castor::point::length( m_internal ) );
-			return S_OK;
+			hr = S_OK;
+		}
+
+		return hr;
+	}
+
+	STDMETHODIMP CVector2D::Set( /* [in] */ FLOAT x, /* [in] */ FLOAT y )noexcept
+	{
+		m_internal->x = x;
+		m_internal->y = y;
+		return S_OK;
+	}
+
+	STDMETHODIMP CVector2D::CompMul( IVector2D * rhs, IVector2D ** pVal )noexcept
+	{
+		HRESULT hr = E_POINTER;
+
+		if ( rhs && pVal )
+		{
+			hr = CVector2D::CreateInstance( pVal );
+
+			if ( hr == S_OK )
+			{
+				auto rhsInternal = static_cast< CVector2D * >( rhs )->getInternal();
+				static_cast< CVector2D * >( *pVal )->setInternal( { m_internal->x * rhsInternal->x
+					, m_internal->y * rhsInternal->y } );
+			}
+		}
+
+		return hr;
+	}
+
+	STDMETHODIMP CVector2D::CompAdd( IVector2D * rhs, IVector2D ** pVal )noexcept
+	{
+		HRESULT hr = E_POINTER;
+
+		if ( rhs && pVal )
+		{
+			hr = CVector2D::CreateInstance( pVal );
+
+			if ( hr == S_OK )
+			{
+				auto rhsInternal = static_cast< CVector2D * >( rhs )->getInternal();
+				static_cast< CVector2D * >( *pVal )->setInternal( { m_internal->x + rhsInternal->x
+					, m_internal->y + rhsInternal->y } );
+			}
+		}
+
+		return hr;
+	}
+
+	STDMETHODIMP CVector2D::CompSub( IVector2D * rhs, IVector2D ** pVal )noexcept
+	{
+		HRESULT hr = E_POINTER;
+
+		if ( rhs && pVal )
+		{
+			hr = CVector2D::CreateInstance( pVal );
+
+			if ( hr == S_OK )
+			{
+				auto rhsInternal = static_cast< CVector2D * >( rhs )->getInternal();
+				static_cast< CVector2D * >( *pVal )->setInternal( { m_internal->x - rhsInternal->x
+					, m_internal->y - rhsInternal->y } );
+			}
+		}
+
+		return hr;
+	}
+
+	STDMETHODIMP CVector2D::Mul( float rhs, IVector2D ** pVal )noexcept
+	{
+		HRESULT hr = E_POINTER;
+
+		if ( rhs && pVal )
+		{
+			hr = CVector2D::CreateInstance( pVal );
+
+			if ( hr == S_OK )
+			{
+				static_cast< CVector2D * >( *pVal )->setInternal( { m_internal->x * rhs
+					, m_internal->y * rhs } );
+			}
+		}
+
+		return hr;
+	}
+
+	STDMETHODIMP CVector2D::Div( float rhs, IVector2D ** pVal )noexcept
+	{
+		HRESULT hr = E_POINTER;
+
+		if ( rhs && pVal )
+		{
+			hr = CVector2D::CreateInstance( pVal );
+
+			if ( hr == S_OK )
+			{
+				static_cast< CVector2D * >( *pVal )->setInternal( { m_internal->x / rhs
+					, m_internal->y / rhs } );
+			}
+		}
+
+		return hr;
+	}
+
+	STDMETHODIMP CVector2D::Add( float rhs, IVector2D ** pVal )noexcept
+	{
+		HRESULT hr = E_POINTER;
+
+		if ( rhs && pVal )
+		{
+			hr = CVector2D::CreateInstance( pVal );
+
+			if ( hr == S_OK )
+			{
+				static_cast< CVector2D * >( *pVal )->setInternal( { m_internal->x + rhs
+					, m_internal->y + rhs } );
+			}
+		}
+
+		return hr;
+	}
+
+	STDMETHODIMP CVector2D::Sub( float rhs, IVector2D ** pVal )noexcept
+	{
+		HRESULT hr = E_POINTER;
+
+		if ( rhs && pVal )
+		{
+			hr = CVector2D::CreateInstance( pVal );
+
+			if ( hr == S_OK )
+			{
+				static_cast< CVector2D * >( *pVal )->setInternal( { m_internal->x - rhs
+					, m_internal->y - rhs } );
+			}
 		}
 
 		return hr;

@@ -25,13 +25,13 @@ namespace CastorCom
 		STDMETHOD( Initialise )( /* [in] */ IRenderTarget * target );
 		STDMETHOD( Cleanup )();
 		STDMETHOD( Resize )( /* [in] */ ISize * size );
-		STDMETHOD( OnMouseMove )( /* [in] */ IPosition * pos );
-		STDMETHOD( OnMouseLButtonDown )( /* [in] */ IPosition * pos );
-		STDMETHOD( OnMouseLButtonUp )( /* [in] */ IPosition * pos );
-		STDMETHOD( OnMouseMButtonDown )( /* [in] */ IPosition * pos );
-		STDMETHOD( OnMouseMButtonUp )( /* [in] */ IPosition * pos );
-		STDMETHOD( OnMouseRButtonDown )( /* [in] */ IPosition * pos );
-		STDMETHOD( OnMouseRButtonUp )( /* [in] */ IPosition * pos );
+		STDMETHOD( OnMouseMove )( /* [in] */ IPosition * pos, /* [out, retval] */ boolean * pVal );
+		STDMETHOD( OnMouseLButtonDown )( /* [in] */ IPosition * pos, /* [out, retval] */ boolean * pVal );
+		STDMETHOD( OnMouseLButtonUp )( /* [in] */ IPosition * pos, /* [out, retval] */ boolean * pVal );
+		STDMETHOD( OnMouseMButtonDown )( /* [in] */ IPosition * pos, /* [out, retval] */ boolean * pVal );
+		STDMETHOD( OnMouseMButtonUp )( /* [in] */ IPosition * pos, /* [out, retval] */ boolean * pVal );
+		STDMETHOD( OnMouseRButtonDown )( /* [in] */ IPosition * pos, /* [out, retval] */ boolean * pVal );
+		STDMETHOD( OnMouseRButtonUp )( /* [in] */ IPosition * pos, /* [out, retval] */ boolean * pVal );
 
 	private:
 		float doTransformX( int x );

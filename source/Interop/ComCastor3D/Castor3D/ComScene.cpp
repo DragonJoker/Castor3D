@@ -20,30 +20,7 @@ namespace CastorCom
 		static const tstring ERROR_NULL_PARENT_NODE = _T( "The parent node must not be null." );
 	}
 
-	STDMETHODIMP CScene::ClearScene()noexcept
-	{
-		HRESULT hr = E_POINTER;
-
-		if ( m_internal )
-		{
-			m_internal->cleanup();
-			hr = S_OK;
-		}
-		else
-		{
-			hr = CComError::dispatchError(
-					 E_FAIL,						// This represents the error
-					 IID_IScene,					// This is the GUID of PixelComponents throwing error
-					 _T( "ClearScene" ),			// This is generally displayed as the title
-					 scene::ERROR_UNINITIALISED.c_str(),	// This is the description
-					 0,								// This is the context in the help file
-					 nullptr );
-		}
-
-		return hr;
-	}
-
-	STDMETHODIMP CScene::CreateSceneNode( /* [in] */ BSTR name, /* [in] */ ISceneNode * parent, /* [out, retval] */ ISceneNode ** pVal )noexcept
+	STDMETHODIMP CScene::CreateNode( /* [in] */ BSTR name, /* [in] */ ISceneNode * parent, /* [out, retval] */ ISceneNode ** pVal )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -381,6 +358,39 @@ namespace CastorCom
 		return hr;
 	}
 
+	STDMETHODIMP CScene::GetMesh( /* [in] */ BSTR name, /* [out, retval] */ IMesh ** pVal )noexcept
+	{
+		HRESULT hr = E_POINTER;
+
+		if ( m_internal )
+		{
+			if ( pVal )
+			{
+				hr = CMesh::CreateInstance( pVal );
+
+				if ( hr == S_OK )
+				{
+					if ( auto found = m_internal->findMesh( fromBstr( name ) ).lock() )
+					{
+						static_cast< CMesh * >( *pVal )->setInternal( found );
+					}
+				}
+			}
+		}
+		else
+		{
+			hr = CComError::dispatchError(
+					 E_FAIL,						// This represents the error
+					 IID_IScene,					// This is the GUID of PixelComponents throwing error
+					 _T( "GetMesh" ),				// This is generally displayed as the title
+					 scene::ERROR_UNINITIALISED.c_str(),	// This is the description
+					 0,								// This is the context in the help file
+					 nullptr );
+		}
+
+		return hr;
+	}
+
 	STDMETHODIMP CScene::RemoveLight( /* [in] */ ILight * val )noexcept
 	{
 		HRESULT hr = E_POINTER;
@@ -481,6 +491,33 @@ namespace CastorCom
 					 E_FAIL,						// This represents the error
 					 IID_IScene,					// This is the GUID of PixelComponents throwing error
 					 _T( "RemoveCamera" ),			// This is generally displayed as the title
+					 scene::ERROR_UNINITIALISED.c_str(),	// This is the description
+					 0,								// This is the context in the help file
+					 nullptr );
+		}
+
+		return hr;
+	}
+
+	STDMETHODIMP CScene::RemoveMesh( /* [in] */ IMesh * val )noexcept
+	{
+		HRESULT hr = E_POINTER;
+
+		if ( m_internal )
+		{
+			if ( val )
+			{
+				m_internal->getMeshCache().remove( static_cast< CMesh * >( val )->getInternal().lock()->getName() );
+				static_cast< CMesh * >( val )->setInternal( {} );
+				hr = S_OK;
+			}
+		}
+		else
+		{
+			hr = CComError::dispatchError(
+					 E_FAIL,						// This represents the error
+					 IID_IScene,					// This is the GUID of PixelComponents throwing error
+					 _T( "RemoveMesh" ),			// This is generally displayed as the title
 					 scene::ERROR_UNINITIALISED.c_str(),	// This is the description
 					 0,								// This is the context in the help file
 					 nullptr );

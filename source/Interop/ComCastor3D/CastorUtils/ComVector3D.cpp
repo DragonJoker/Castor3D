@@ -59,4 +59,148 @@ namespace CastorCom
 
 		return hr;
 	}
+
+	STDMETHODIMP CVector3D::Set( /* [in] */ FLOAT x, /* [in] */ FLOAT y, /* [in] */ FLOAT z )noexcept
+	{
+		m_internal->x = x;
+		m_internal->y = y;
+		m_internal->z = z;
+		return S_OK;
+	}
+
+	STDMETHODIMP CVector3D::CompMul( IVector3D * rhs, IVector3D ** pVal )noexcept
+	{
+		HRESULT hr = E_POINTER;
+
+		if ( rhs && pVal )
+		{
+			hr = CVector3D::CreateInstance( pVal );
+
+			if ( hr == S_OK )
+			{
+				auto rhsInternal = static_cast< CVector3D * >( rhs )->getInternal();
+				static_cast< CVector3D * >( *pVal )->setInternal( { m_internal->x * rhsInternal->x
+					, m_internal->y * rhsInternal->y
+					, m_internal->z * rhsInternal->z } );
+			}
+		}
+
+		return hr;
+	}
+
+	STDMETHODIMP CVector3D::CompAdd( IVector3D * rhs, IVector3D ** pVal )noexcept
+	{
+		HRESULT hr = E_POINTER;
+
+		if ( rhs && pVal )
+		{
+			hr = CVector3D::CreateInstance( pVal );
+
+			if ( hr == S_OK )
+			{
+				auto rhsInternal = static_cast< CVector3D * >( rhs )->getInternal();
+				static_cast< CVector3D * >( *pVal )->setInternal( { m_internal->x + rhsInternal->x
+					, m_internal->y + rhsInternal->y
+					, m_internal->z + rhsInternal->z } );
+			}
+		}
+
+		return hr;
+	}
+
+	STDMETHODIMP CVector3D::CompSub( IVector3D * rhs, IVector3D ** pVal )noexcept
+	{
+		HRESULT hr = E_POINTER;
+
+		if ( rhs && pVal )
+		{
+			hr = CVector3D::CreateInstance( pVal );
+
+			if ( hr == S_OK )
+			{
+				auto rhsInternal = static_cast< CVector3D * >( rhs )->getInternal();
+				static_cast< CVector3D * >( *pVal )->setInternal( { m_internal->x - rhsInternal->x
+					, m_internal->y - rhsInternal->y
+					, m_internal->z - rhsInternal->z } );
+			}
+		}
+
+		return hr;
+	}
+
+	STDMETHODIMP CVector3D::Mul( float rhs, IVector3D ** pVal )noexcept
+	{
+		HRESULT hr = E_POINTER;
+
+		if ( rhs && pVal )
+		{
+			hr = CVector3D::CreateInstance( pVal );
+
+			if ( hr == S_OK )
+			{
+				static_cast< CVector3D * >( *pVal )->setInternal( { m_internal->x * rhs
+					, m_internal->y * rhs
+					, m_internal->z * rhs } );
+			}
+		}
+
+		return hr;
+	}
+
+	STDMETHODIMP CVector3D::Div( float rhs, IVector3D ** pVal )noexcept
+	{
+		HRESULT hr = E_POINTER;
+
+		if ( rhs && pVal )
+		{
+			hr = CVector3D::CreateInstance( pVal );
+
+			if ( hr == S_OK )
+			{
+				static_cast< CVector3D * >( *pVal )->setInternal( { m_internal->x / rhs
+					, m_internal->y / rhs
+					, m_internal->z / rhs } );
+			}
+		}
+
+		return hr;
+	}
+
+	STDMETHODIMP CVector3D::Add( float rhs, IVector3D ** pVal )noexcept
+	{
+		HRESULT hr = E_POINTER;
+
+		if ( rhs && pVal )
+		{
+			hr = CVector3D::CreateInstance( pVal );
+
+			if ( hr == S_OK )
+			{
+				static_cast< CVector3D * >( *pVal )->setInternal( { m_internal->x + rhs
+					, m_internal->y + rhs
+					, m_internal->z + rhs } );
+			}
+		}
+
+		return hr;
+	}
+
+	STDMETHODIMP CVector3D::Sub( float rhs, IVector3D ** pVal )noexcept
+	{
+		HRESULT hr = E_POINTER;
+
+		if ( rhs && pVal )
+		{
+			hr = CVector3D::CreateInstance( pVal );
+
+			if ( hr == S_OK )
+			{
+				static_cast< CVector3D * >( *pVal )->setInternal( { m_internal->x - rhs
+					, m_internal->y - rhs
+					, m_internal->z - rhs } );
+			}
+		}
+
+		return hr;
+	}
 }

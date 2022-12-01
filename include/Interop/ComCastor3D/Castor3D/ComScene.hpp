@@ -30,8 +30,7 @@ namespace CastorCom
 		COMEX_PROPERTY_GET( ObjectRootNode, ISceneNode *, m_internal, &castor3d::Scene::getObjectRootNode );
 		COMEX_PROPERTY_GET( CameraRootNode, ISceneNode *, m_internal, &castor3d::Scene::getCameraRootNode );
 
-		STDMETHOD( ClearScene )();
-		STDMETHOD( CreateSceneNode )( /* [in] */ BSTR name, /* [in] */ ISceneNode * parent, /* [out, retval] */ ISceneNode ** pVal );
+		STDMETHOD( CreateNode )( /* [in] */ BSTR name, /* [in] */ ISceneNode * parent, /* [out, retval] */ ISceneNode ** pVal );
 		STDMETHOD( CreateGeometry )( /* [in] */ BSTR name, /*[in] */ ISceneNode * parent, /* [out, retval] */ IGeometry ** pVal );
 		STDMETHOD( CreateCamera )( /* [in] */ BSTR name, /* [in] */ int ww, /* [in] */ int wh, /* [in] */ ISceneNode * node, /* [out, retval] */ ICamera ** pVal );
 		STDMETHOD( CreateLight )( /* [in] */ BSTR name, /* [in] */ ISceneNode * node, /* [in] */ eLIGHT_TYPE type, /* [out, retval] */ ILight ** pVal );
@@ -40,10 +39,12 @@ namespace CastorCom
 		STDMETHOD( GetGeometry )( /* [in] */ BSTR name, /* [out, retval] */ IGeometry ** pVal );
 		STDMETHOD( GetLight )( /* [in] */ BSTR name, /* [out, retval] */ ILight ** pVal );
 		STDMETHOD( GetCamera )( /* [in] */ BSTR name, /* [out, retval] */ ICamera ** pVal );
+		STDMETHOD( GetMesh )( /* [in] */ BSTR name, /* [out, retval] */ IMesh ** pVal );
 		STDMETHOD( RemoveLight )( /* [in] */ ILight * light );
 		STDMETHOD( RemoveNode )( /* [in] */ ISceneNode * node );
 		STDMETHOD( RemoveGeometry )( /* [in] */ IGeometry * geometry );
 		STDMETHOD( RemoveCamera )( /* [in] */ ICamera * camera );
+		STDMETHOD( RemoveMesh )( /* [in] */ IMesh * mesh );
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object
 	//!\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet

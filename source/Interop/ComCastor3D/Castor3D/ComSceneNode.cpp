@@ -4,6 +4,9 @@
 #include "ComCastor3D/CastorUtils/ComQuaternion.hpp"
 #include "ComCastor3D/CastorUtils/ComVector3D.hpp"
 
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Event/Frame/CpuFunctorEvent.hpp>
+
 namespace CastorCom
 {
 	namespace node
@@ -85,7 +88,12 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->yaw( static_cast< CAngle * >( val )->getInternal() );
+			auto value = static_cast< CAngle * >( val )->getInternal();
+			m_internal->getScene()->getEngine()->postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePostRender
+				, [this, value]()
+				{
+					m_internal->yaw( value );
+				} ) );
 			hr = S_OK;
 		}
 		else
@@ -102,7 +110,12 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->pitch( static_cast< CAngle * >( val )->getInternal() );
+			auto value = static_cast< CAngle * >( val )->getInternal();
+			m_internal->getScene()->getEngine()->postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePostRender
+				, [this, value]()
+				{
+					m_internal->pitch( value );
+				} ) );
 			hr = S_OK;
 		}
 		else
@@ -119,7 +132,12 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->roll( static_cast< CAngle * >( val )->getInternal() );
+			auto value = static_cast< CAngle * >( val )->getInternal();
+			m_internal->getScene()->getEngine()->postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePostRender
+				, [this, value]()
+				{
+					m_internal->roll( value );
+				} ) );
 			hr = S_OK;
 		}
 		else
@@ -136,7 +154,12 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->rotate( static_cast< CQuaternion * >( val )->getInternal() );
+			auto value = static_cast< CQuaternion * >( val )->getInternal();
+			m_internal->getScene()->getEngine()->postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePostRender
+				, [this, value]()
+				{
+					m_internal->rotate( value );
+				} ) );
 			hr = S_OK;
 		}
 		else
@@ -153,7 +176,12 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->translate( static_cast< CVector3D * >( val )->getInternal() );
+			auto value = static_cast< CVector3D * >( val )->getInternal();
+			m_internal->getScene()->getEngine()->postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePostRender
+				, [this, value]()
+				{
+					m_internal->translate( value );
+				} ) );
 			hr = S_OK;
 		}
 		else
@@ -170,7 +198,12 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->scale( static_cast< CVector3D * >( val )->getInternal() );
+			auto value = static_cast< CVector3D * >( val )->getInternal();
+			m_internal->getScene()->getEngine()->postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePostRender
+				, [this, value]()
+				{
+					m_internal->scale( value );
+				} ) );
 			hr = S_OK;
 		}
 		else

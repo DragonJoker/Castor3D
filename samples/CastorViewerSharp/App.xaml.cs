@@ -62,10 +62,9 @@ namespace CastorViewerSharp
 			string path = System.Reflection.Assembly.GetEntryAssembly().Location;
 			path = path.Replace(".exe",".log");
 
-			Logger logger = new Logger();
-			logger.Initialise(eLOG_TYPE.eLOG_TYPE_DEBUG);
-			logger.SetFileName(path, eLOG_TYPE.eLOG_TYPE_COUNT);
-			logger.LogInfo("CastorViewerSharp - Start");
+			m_logger.Initialise(eLOG_TYPE.eLOG_TYPE_DEBUG);
+			m_logger.SetFileName(path, eLOG_TYPE.eLOG_TYPE_COUNT);
+			m_logger.LogInfo("CastorViewerSharp - Start");
 
 			base.OnStartup(e);
 		}
@@ -75,10 +74,13 @@ namespace CastorViewerSharp
 		/// <param name="e"></param>
 		protected override void OnExit(ExitEventArgs e)
 		{
-			Logger logger = new Logger();
-			logger.LogInfo("CastorViewerSharp - Exit");
-			logger.Cleanup();
+			m_logger.LogInfo("CastorViewerSharp - Exit");
+			m_logger.Cleanup();
+			m_logger = null;
+
 			base.OnExit(e);
 		}
+
+		private Logger m_logger = new Logger();
 	}
 }

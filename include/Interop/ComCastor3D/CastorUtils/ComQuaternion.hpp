@@ -34,6 +34,7 @@ namespace CastorCom
 		STDMETHOD( Conjugate )();
 		STDMETHOD( Slerp )( /* [in] */ IQuaternion * quat, /* [in] */ float percent, /* [out, retval] */ IQuaternion ** pQuat );
 		STDMETHOD( Mix )( /* [in] */ IQuaternion * quat, /* [in] */ float percent, /* [out, retval] */ IQuaternion ** pQuat );
+		STDMETHOD( Mul )( /* [in] */ IQuaternion * rhs, /* [out, retval] */ IQuaternion ** pQuat );
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object
 	//!\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet

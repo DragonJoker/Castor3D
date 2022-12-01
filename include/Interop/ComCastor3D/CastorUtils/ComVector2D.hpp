@@ -28,6 +28,14 @@ namespace CastorCom
 		STDMETHOD( Normalise )();
 		STDMETHOD( Dot )( IVector2D * pVal, FLOAT * pRet );
 		STDMETHOD( Length )( /* [out,retval] */ FLOAT * pVal );
+		STDMETHOD( Set )( /* [in] */ FLOAT x, /* [in] */ FLOAT y );
+		STDMETHOD( CompMul )( IVector2D * rhs, IVector2D ** pVal );
+		STDMETHOD( CompAdd )( IVector2D * rhs, IVector2D ** pVal );
+		STDMETHOD( CompSub )( IVector2D * rhs, IVector2D ** pVal );
+		STDMETHOD( Mul )( float rhs, IVector2D ** pVal );
+		STDMETHOD( Div )( float rhs, IVector2D ** pVal );
+		STDMETHOD( Add )( float rhs, IVector2D ** pVal );
+		STDMETHOD( Sub )( float rhs, IVector2D ** pVal );
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
 	OBJECT_ENTRY_AUTO( __uuidof( Vector2D ), CVector2D );

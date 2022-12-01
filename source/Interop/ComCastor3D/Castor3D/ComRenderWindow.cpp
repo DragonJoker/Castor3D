@@ -73,7 +73,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CRenderWindow::OnMouseMove( /* [in] */ IPosition * pos )noexcept
+	STDMETHODIMP CRenderWindow::OnMouseMove( /* [in] */ IPosition * pos, /* [out, retval] */ boolean * pVal )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -81,22 +81,18 @@ namespace CastorCom
 		{
 			pos->get_X( &m_oldX );
 			pos->get_Y( &m_oldY );
-#if HAS_CASTORGUI
 
 			try
 			{
-				auto l_inputListener = m_internal->getEngine()->getUserInputListener();
-
-				if ( l_inputListener )
+				if ( auto inputListener = m_internal->getEngine()->getUserInputListener() )
 				{
-					l_inputListener->fireMouseMove( castor::Position( int32_t( m_oldX ), int32_t( m_oldY ) ) );
+					*pVal = inputListener->fireMouseMove( castor::Position( int32_t( m_oldX ), int32_t( m_oldY ) ) );
 				}
 			}
 			catch ( castor::Exception & )
 			{
 			}
 
-#endif
 			hr = S_OK;
 		}
 		else
@@ -107,7 +103,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CRenderWindow::OnMouseLButtonDown( /* [in] */ IPosition * pos )noexcept
+	STDMETHODIMP CRenderWindow::OnMouseLButtonDown( /* [in] */ IPosition * pos, /* [out, retval] */ boolean * pVal )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -115,22 +111,18 @@ namespace CastorCom
 		{
 			pos->get_X( &m_oldX );
 			pos->get_Y( &m_oldY );
-#if HAS_CASTORGUI
 
 			try
 			{
-				auto l_inputListener = m_internal->getEngine()->getUserInputListener();
-
-				if ( l_inputListener )
+				if ( auto inputListener = m_internal->getEngine()->getUserInputListener() )
 				{
-					l_inputListener->fireMouseButtonPushed( castor3d::eMOUSE_BUTTON_LEFT );
+					*pVal = inputListener->fireMouseButtonPushed( castor3d::MouseButton::eLeft );
 				}
 			}
 			catch ( castor::Exception & )
 			{
 			}
 
-#endif
 			hr = S_OK;
 		}
 		else
@@ -141,7 +133,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CRenderWindow::OnMouseLButtonUp( /* [in] */ IPosition * pos )noexcept
+	STDMETHODIMP CRenderWindow::OnMouseLButtonUp( /* [in] */ IPosition * pos, /* [out, retval] */ boolean * pVal )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -149,22 +141,18 @@ namespace CastorCom
 		{
 			pos->get_X( &m_oldX );
 			pos->get_Y( &m_oldY );
-#if HAS_CASTORGUI
 
 			try
 			{
-				auto l_inputListener = m_internal->getEngine()->getUserInputListener();
-
-				if ( l_inputListener )
+				if ( auto inputListener = m_internal->getEngine()->getUserInputListener() )
 				{
-					l_inputListener->fireMouseButtonReleased( castor3d::eMOUSE_BUTTON_LEFT );
+					*pVal = inputListener->fireMouseButtonReleased( castor3d::MouseButton::eLeft );
 				}
 			}
 			catch ( castor::Exception & )
 			{
 			}
 
-#endif
 			hr = S_OK;
 		}
 		else
@@ -175,7 +163,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CRenderWindow::OnMouseMButtonDown( /* [in] */ IPosition * pos )noexcept
+	STDMETHODIMP CRenderWindow::OnMouseMButtonDown( /* [in] */ IPosition * pos, /* [out, retval] */ boolean * pVal )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -183,22 +171,18 @@ namespace CastorCom
 		{
 			pos->get_X( &m_oldX );
 			pos->get_Y( &m_oldY );
-#if HAS_CASTORGUI
 
 			try
 			{
-				auto l_inputListener = m_internal->getEngine()->getUserInputListener();
-
-				if ( l_inputListener )
+				if ( auto inputListener = m_internal->getEngine()->getUserInputListener() )
 				{
-					l_inputListener->fireMouseButtonPushed( castor3d::eMOUSE_BUTTON_MIDDLE );
+					*pVal = inputListener->fireMouseButtonPushed( castor3d::MouseButton::eMiddle );
 				}
 			}
 			catch ( castor::Exception & )
 			{
 			}
 
-#endif
 			hr = S_OK;
 		}
 		else
@@ -209,7 +193,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CRenderWindow::OnMouseMButtonUp( /* [in] */ IPosition * pos )noexcept
+	STDMETHODIMP CRenderWindow::OnMouseMButtonUp( /* [in] */ IPosition * pos, /* [out, retval] */ boolean * pVal )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -217,22 +201,18 @@ namespace CastorCom
 		{
 			pos->get_X( &m_oldX );
 			pos->get_Y( &m_oldY );
-#if HAS_CASTORGUI
 
 			try
 			{
-				auto l_inputListener = m_internal->getEngine()->getUserInputListener();
-
-				if ( l_inputListener )
+				if ( auto inputListener = m_internal->getEngine()->getUserInputListener() )
 				{
-					l_inputListener->fireMouseButtonReleased( castor3d::eMOUSE_BUTTON_MIDDLE );
+					*pVal = inputListener->fireMouseButtonReleased( castor3d::MouseButton::eMiddle );
 				}
 			}
 			catch ( castor::Exception & )
 			{
 			}
 
-#endif
 			hr = S_OK;
 		}
 		else
@@ -243,7 +223,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CRenderWindow::OnMouseRButtonDown( /* [in] */ IPosition * pos )noexcept
+	STDMETHODIMP CRenderWindow::OnMouseRButtonDown( /* [in] */ IPosition * pos, /* [out, retval] */ boolean * pVal )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -251,22 +231,18 @@ namespace CastorCom
 		{
 			pos->get_X( &m_oldX );
 			pos->get_Y( &m_oldY );
-#if HAS_CASTORGUI
 
 			try
 			{
-				auto l_inputListener = m_internal->getEngine()->getUserInputListener();
-
-				if ( l_inputListener )
+				if ( auto inputListener = m_internal->getEngine()->getUserInputListener() )
 				{
-					l_inputListener->fireMouseButtonPushed( castor3d::eMOUSE_BUTTON_RIGHT );
+					*pVal = inputListener->fireMouseButtonPushed( castor3d::MouseButton::eRight );
 				}
 			}
 			catch ( castor::Exception & )
 			{
 			}
 
-#endif
 			hr = S_OK;
 		}
 		else
@@ -277,7 +253,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CRenderWindow::OnMouseRButtonUp( /* [in] */ IPosition * pos )noexcept
+	STDMETHODIMP CRenderWindow::OnMouseRButtonUp( /* [in] */ IPosition * pos, /* [out, retval] */ boolean * pVal )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -285,22 +261,18 @@ namespace CastorCom
 		{
 			pos->get_X( &m_oldX );
 			pos->get_Y( &m_oldY );
-#if HAS_CASTORGUI
 
 			try
 			{
-				auto l_inputListener = m_internal->getEngine()->getUserInputListener();
-
-				if ( l_inputListener )
+				if ( auto inputListener = m_internal->getEngine()->getUserInputListener() )
 				{
-					l_inputListener->fireMouseButtonReleased( castor3d::eMOUSE_BUTTON_RIGHT );
+					*pVal = inputListener->fireMouseButtonReleased( castor3d::MouseButton::eRight );
 				}
 			}
 			catch ( castor::Exception & )
 			{
 			}
 
-#endif
 			hr = S_OK;
 		}
 		else
