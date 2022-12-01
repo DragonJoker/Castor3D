@@ -5,6 +5,7 @@
 #include "ComCastor3D/ComCastor3DPrerequisites.hpp"
 
 #include "ComCastor3D/ComAtlObject.hpp"
+#include "ComCastor3D/CastorUtils/ComAngle.hpp"
 #include "ComCastor3D/CastorUtils/ComMatrix4x4.hpp"
 
 #include <CastorUtils/Math/Quaternion.hpp>
@@ -22,7 +23,9 @@ namespace CastorCom
 		: public CComAtlObject< Quaternion, castor::Quaternion >
 	{
 	public:
-		//typedef VariablePutter< castor::Quaternion, castor::Matrix4x4f const & > MtxPutter;
+		COMEX_PROPERTY_GET( Pitch, IAngle *, &m_internal, &Internal::getPitch );
+		COMEX_PROPERTY_GET( Yaw, IAngle *, &m_internal, &Internal::getYaw );
+		COMEX_PROPERTY_GET( Roll, IAngle *, &m_internal, &Internal::getRoll );
 		STDMETHOD( get_RotationMatrix )( IMatrix4x4 ** /* [out, retval] */ pVal );
 
 		STDMETHOD( Transform )( /* [in] */ IVector3D * val, /* [out, retval] */ IVector3D ** pVal );

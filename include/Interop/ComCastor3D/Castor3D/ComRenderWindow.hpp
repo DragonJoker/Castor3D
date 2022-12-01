@@ -32,6 +32,9 @@ namespace CastorCom
 		STDMETHOD( OnMouseMButtonUp )( /* [in] */ IPosition * pos, /* [out, retval] */ boolean * pVal );
 		STDMETHOD( OnMouseRButtonDown )( /* [in] */ IPosition * pos, /* [out, retval] */ boolean * pVal );
 		STDMETHOD( OnMouseRButtonUp )( /* [in] */ IPosition * pos, /* [out, retval] */ boolean * pVal );
+		STDMETHOD( OnKeyboardKeyDown )( /* [in] */ eKEYBOARD_KEY key, /* [in] */ boolean isCtrlDown, /* [in] */ boolean isAltDown, /* [in] */ boolean isShiftDown, /* [out, retval] */ boolean * pVal );
+		STDMETHOD( OnKeyboardKeyUp )( /* [in] */ eKEYBOARD_KEY key, /* [in] */ boolean isCtrlDown, /* [in] */ boolean isAltDown, /* [in] */ boolean isShiftDown, /* [out, retval] */ boolean * pVal );
+		STDMETHOD( OnKeyboardChar )( /* [in] */ eKEYBOARD_KEY key, /* [in] */ BSTR c, /* [out, retval] */ boolean * pVal );
 
 	private:
 		float doTransformX( int x );

@@ -572,6 +572,119 @@ typedef enum
 	eBACKGROUND_TYPE_COUNT
 }	eBACKGROUND_TYPE;
 
+// eKEYBOARD_KEY
+[
+	uuid( 765FFD8B-E309-4B69-868F-2A67321733AE ),
+	helpstring( "Castor3D Keyboard keys enumeration." )
+]
+typedef enum eKEYBOARD_KEY
+{
+	eKEYBOARD_KEY_NONE,
+	eKEYBOARD_KEY_BACKSPACE = 0x08,
+	eKEYBOARD_KEY_TAB = 0x0A,
+	eKEYBOARD_KEY_RETURN = 0x0D,
+	eKEYBOARD_KEY_ESCAPE = 0x1B,
+	eKEYBOARD_KEY_SPACE = 0x20,
+
+	// values from 0x21 to 0x7E are reserved for the standard ASCII characters
+	eKEYBOARD_KEY_DELETE = 0x7F,
+
+	// values from 0x80 to 0xFF are reserved for ASCII extended characters
+	eKEYBOARD_KEY_START = 0x100,
+	eKEYBOARD_KEY_LBUTTON,
+	eKEYBOARD_KEY_RBUTTON,
+	eKEYBOARD_KEY_CANCEL,
+	eKEYBOARD_KEY_MBUTTON,
+	eKEYBOARD_KEY_CLEAR,
+	eKEYBOARD_KEY_SHIFT,
+	eKEYBOARD_KEY_ALT,
+	eKEYBOARD_KEY_CONTROL,
+	eKEYBOARD_KEY_MENU,
+	eKEYBOARD_KEY_PAUSE,
+	eKEYBOARD_KEY_CAPITAL,
+	eKEYBOARD_KEY_END,
+	eKEYBOARD_KEY_HOME,
+	eKEYBOARD_KEY_LEFT,
+	eKEYBOARD_KEY_UP,
+	eKEYBOARD_KEY_RIGHT,
+	eKEYBOARD_KEY_DOWN,
+	eKEYBOARD_KEY_SELECT,
+	eKEYBOARD_KEY_PRINT,
+	eKEYBOARD_KEY_EXECUTE,
+	eKEYBOARD_KEY_SNAPSHOT,
+	eKEYBOARD_KEY_INSERT,
+	eKEYBOARD_KEY_HELP,
+	eKEYBOARD_KEY_NUMPAD0,
+	eKEYBOARD_KEY_NUMPAD1,
+	eKEYBOARD_KEY_NUMPAD2,
+	eKEYBOARD_KEY_NUMPAD3,
+	eKEYBOARD_KEY_NUMPAD4,
+	eKEYBOARD_KEY_NUMPAD5,
+	eKEYBOARD_KEY_NUMPAD6,
+	eKEYBOARD_KEY_NUMPAD7,
+	eKEYBOARD_KEY_NUMPAD8,
+	eKEYBOARD_KEY_NUMPAD9,
+	eKEYBOARD_KEY_MULTIPLY,
+	eKEYBOARD_KEY_ADD,
+	eKEYBOARD_KEY_SEPARATOR,
+	eKEYBOARD_KEY_SUBTRACT,
+	eKEYBOARD_KEY_DECIMAL,
+	eKEYBOARD_KEY_DIVIDE,
+	eKEYBOARD_KEY_F1,
+	eKEYBOARD_KEY_F2,
+	eKEYBOARD_KEY_F3,
+	eKEYBOARD_KEY_F4,
+	eKEYBOARD_KEY_F5,
+	eKEYBOARD_KEY_F6,
+	eKEYBOARD_KEY_F7,
+	eKEYBOARD_KEY_F8,
+	eKEYBOARD_KEY_F9,
+	eKEYBOARD_KEY_F10,
+	eKEYBOARD_KEY_F11,
+	eKEYBOARD_KEY_F12,
+	eKEYBOARD_KEY_F13,
+	eKEYBOARD_KEY_F14,
+	eKEYBOARD_KEY_F15,
+	eKEYBOARD_KEY_F16,
+	eKEYBOARD_KEY_F17,
+	eKEYBOARD_KEY_F18,
+	eKEYBOARD_KEY_F19,
+	eKEYBOARD_KEY_F20,
+	eKEYBOARD_KEY_F21,
+	eKEYBOARD_KEY_F22,
+	eKEYBOARD_KEY_F23,
+	eKEYBOARD_KEY_F24,
+	eKEYBOARD_KEY_NUMLOCK,
+	eKEYBOARD_KEY_SCROLL,
+	eKEYBOARD_KEY_PAGEUP,
+	eKEYBOARD_KEY_PAGEDOWN,
+	eKEYBOARD_KEY_NUMPADSPACE,
+	eKEYBOARD_KEY_NUMPADTAB,
+	eKEYBOARD_KEY_NUMPADENTER,
+	eKEYBOARD_KEY_NUMPADF1,
+	eKEYBOARD_KEY_NUMPADF2,
+	eKEYBOARD_KEY_NUMPADF3,
+	eKEYBOARD_KEY_NUMPADF4,
+	eKEYBOARD_KEY_NUMPADHOME,
+	eKEYBOARD_KEY_NUMPADLEFT,
+	eKEYBOARD_KEY_NUMPADUP,
+	eKEYBOARD_KEY_NUMPADRIGHT,
+	eKEYBOARD_KEY_NUMPADDOWN,
+	eKEYBOARD_KEY_NUMPADPAGEUP,
+	eKEYBOARD_KEY_NUMPADPAGEDOWN,
+	eKEYBOARD_KEY_NUMPADEND,
+	eKEYBOARD_KEY_NUMPADBEGIN,
+	eKEYBOARD_KEY_NUMPADINSERT,
+	eKEYBOARD_KEY_NUMPADDELETE,
+	eKEYBOARD_KEY_NUMPADEQUAL,
+	eKEYBOARD_KEY_NUMPADMULTIPLY,
+	eKEYBOARD_KEY_NUMPADADD,
+	eKEYBOARD_KEY_NUMPADSEPARATOR,
+	eKEYBOARD_KEY_NUMPADSUBTRACT,
+	eKEYBOARD_KEY_NUMPADDECIMAL,
+	eKEYBOARD_KEY_NUMPADDIVIDE,
+}	eKEYBOARD_KEY;
+
 interface IRgbaColour;
 interface IRgbColour;
 interface IHdrRgbaColour;
@@ -865,16 +978,19 @@ interface IQuaternion
 	: IDispatch
 {
 	[propget, id( 1 ), helpstring( "The quaternions's rotation matrix" )] HRESULT RotationMatrix( [out, retval] IMatrix4x4 ** pVal );
-	[id( 2 ), helpstring( "Transforms a vector through this quaternion" )] HRESULT Transform( [in] IVector3D * val, [out, retval] IVector3D ** pVal );
-	[id( 3 ), helpstring( "Retrieves the quaternion's axis and angle" )] HRESULT ToAxisAngle( [out] IVector3D ** pAxis, [out] IAngle ** pAngle );
-	[id( 4 ), helpstring( "Defines this quaternion's axis and angle" )] HRESULT FromAxisAngle( [in] IVector3D * axis, [in] IAngle * angle );
-	[id( 5 ), helpstring( "Retrieves the quaternion's axes" )] HRESULT ToAxes( [out] IVector3D ** pX, [out] IVector3D ** pY, [out] IVector3D ** pZ );
-	[id( 6 ), helpstring( "Defines this quaternion's axes" )] HRESULT FromAxes( [in] IVector3D * x, [in] IVector3D * y, [in] IVector3D * z );
-	[id( 7 ), helpstring( "Retrieves the quaternion's magnitude" )] HRESULT GetMagnitude( [out, retval] float * pVal );
-	[id( 8 ), helpstring( "Retrieves the quaternion's conjugate" )] HRESULT Conjugate();
-	[id( 9 ), helpstring( "Spherical linear interpolation with another quaternion, takes the shortest path." )] HRESULT Slerp( [in] IQuaternion * quat, [in] float percent, [out, retval] IQuaternion ** pQuat );
-	[id( 10 ), helpstring( "Spherical linear interpolation with another quaternion." )] HRESULT Mix( [in] IQuaternion * quat, [in] float percent, [out, retval] IQuaternion ** pQuat );
-	[id( 11 ), helpstring( "Multiplies this quaternion with another one." )] HRESULT Mul( [in] IQuaternion * rhs, [out, retval] IQuaternion ** pQuat );
+	[propget, id( 2 ), helpstring( "The quaternions's pitch angle" )] HRESULT Pitch( [out, retval] IAngle ** pVal );
+	[propget, id( 3 ), helpstring( "The quaternions's yaw angle" )] HRESULT Yaw( [out, retval] IAngle ** pVal );
+	[propget, id( 4 ), helpstring( "The quaternions's roll angle" )] HRESULT Roll( [out, retval] IAngle ** pVal );
+	[id( 5 ), helpstring( "Transforms a vector through this quaternion" )] HRESULT Transform( [in] IVector3D * val, [out, retval] IVector3D ** pVal );
+	[id( 6 ), helpstring( "Retrieves the quaternion's axis and angle" )] HRESULT ToAxisAngle( [out] IVector3D ** pAxis, [out] IAngle ** pAngle );
+	[id( 7 ), helpstring( "Defines this quaternion's axis and angle" )] HRESULT FromAxisAngle( [in] IVector3D * axis, [in] IAngle * angle );
+	[id( 8 ), helpstring( "Retrieves the quaternion's axes" )] HRESULT ToAxes( [out] IVector3D ** pX, [out] IVector3D ** pY, [out] IVector3D ** pZ );
+	[id( 9 ), helpstring( "Defines this quaternion's axes" )] HRESULT FromAxes( [in] IVector3D * x, [in] IVector3D * y, [in] IVector3D * z );
+	[id( 10 ), helpstring( "Retrieves the quaternion's magnitude" )] HRESULT GetMagnitude( [out, retval] float * pVal );
+	[id( 11 ), helpstring( "Retrieves the quaternion's conjugate" )] HRESULT Conjugate();
+	[id( 12 ), helpstring( "Spherical linear interpolation with another quaternion, takes the shortest path." )] HRESULT Slerp( [in] IQuaternion * quat, [in] float percent, [out, retval] IQuaternion ** pQuat );
+	[id( 13 ), helpstring( "Spherical linear interpolation with another quaternion." )] HRESULT Mix( [in] IQuaternion * quat, [in] float percent, [out, retval] IQuaternion ** pQuat );
+	[id( 14 ), helpstring( "Multiplies this quaternion with another one." )] HRESULT Mul( [in] IQuaternion * rhs, [out, retval] IQuaternion ** pQuat );
 }
 
 // IMatrix4x4
@@ -1303,6 +1419,9 @@ interface IRenderWindow
 	[id( 9 ), helpstring( "MouseMouseLButtonUp event processing" )] HRESULT OnMouseMButtonUp( [in] IPosition * pos, [out, retval] boolean * pVal );
 	[id( 10 ), helpstring( "MouseMouseRButtondown event processing" )] HRESULT OnMouseRButtonDown( [in] IPosition * pos, [out, retval] boolean * pVal );
 	[id( 11 ), helpstring( "MouseMouseRButtonUp event processing" )] HRESULT OnMouseRButtonUp( [in] IPosition * pos, [out, retval] boolean * pVal );
+	[id( 12 ), helpstring( "KeyboardKeyDown event processing" )] HRESULT OnKeyboardKeyDown( [in] eKEYBOARD_KEY key, [in] boolean isCtrlDown, [in] boolean isAltDown, [in] boolean isShiftDown, [out, retval] boolean * pVal );
+	[id( 13 ), helpstring( "KeyboardKeyUp event processing" )] HRESULT OnKeyboardKeyUp( [in] eKEYBOARD_KEY key, [in] boolean isCtrlDown, [in] boolean isAltDown, [in] boolean isShiftDown, [out, retval] boolean * pVal );
+	[id( 14 ), helpstring( "KeyboardChar event processing" )] HRESULT OnKeyboardChar( [in] eKEYBOARD_KEY key, [in] BSTR c, [out, retval] boolean * pVal );
 };
 
 // ISceneBackground
