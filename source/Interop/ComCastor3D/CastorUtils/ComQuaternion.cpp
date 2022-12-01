@@ -72,7 +72,7 @@ namespace CastorCom
 
 		if ( axis && angle )
 		{
-			castor::Quaternion::fromAxisAngle( static_cast< CVector3D const * >( axis )->getInternal()
+			m_internal = castor::Quaternion::fromAxisAngle( static_cast< CVector3D const * >( axis )->getInternal()
 				, static_cast< CAngle * >( angle )->getInternal() );
 			hr = S_OK;
 		}
@@ -111,7 +111,7 @@ namespace CastorCom
 
 		if ( x && y && z )
 		{
-			m_internal.fromAxes( static_cast< CVector3D * >( x )->getInternal()
+			m_internal = castor::Quaternion::fromAxes( static_cast< CVector3D * >( x )->getInternal()
 				, static_cast< CVector3D * >( y )->getInternal()
 				, static_cast< CVector3D * >( z )->getInternal() );
 			hr = S_OK;
@@ -166,6 +166,23 @@ namespace CastorCom
 			if ( hr == S_OK )
 			{
 				static_cast< CQuaternion * >( *pQuat )->setInternal( m_internal.mix( static_cast< CQuaternion const * >( pquat )->getInternal(), percent ) );
+			}
+		}
+
+		return hr;
+	}
+
+	STDMETHODIMP CQuaternion::Mul( /* [in] */ IQuaternion * rhs, /* [out, retval] */ IQuaternion ** pQuat )noexcept
+	{
+		HRESULT hr = E_POINTER;
+
+		if ( rhs && pQuat )
+		{
+			hr = CQuaternion::CreateInstance( pQuat );
+
+			if ( hr == S_OK )
+			{
+				static_cast< CQuaternion * >( *pQuat )->setInternal( m_internal * static_cast< CQuaternion const * >( rhs )->getInternal() );
 			}
 		}
 

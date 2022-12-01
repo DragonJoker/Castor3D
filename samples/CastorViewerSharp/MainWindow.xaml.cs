@@ -46,9 +46,8 @@ namespace CastorViewerSharp
 		/// <summary>
 		/// Loads the plug-ins alongside the executable
 		/// </summary>
-		private void LoadPlugins()
+		private void DoLoadPlugins()
 		{
-
 			string path = m_engine.PluginsDirectory;
 			string[] files = Directory.GetFiles( path, "*.dll" );
 
@@ -60,9 +59,7 @@ namespace CastorViewerSharp
 			m_engine.LoadRenderer( "vk" );
 			m_engine.Initialise( 1000, 1 );
 			m_engine.StartRendering();
-
-
-        }
+		}
 
 		/// <summary>
 		/// Opens a file selector dialog, to open a scene file.
@@ -94,26 +91,28 @@ namespace CastorViewerSharp
 		/// Loads the given scene file name
 		/// </summary>
 		/// <param name="filename">The scene file name</param>
-		private void LoadScene( string filename )
+		private void DoLoadScene( string filename )
 		{
 			if ( filename.Length > 0 )
 			{
 				if ( m_scene != null )
-                {
-                    m_engine.PauseRendering();
-                    m_scene.ClearScene();
-					m_engine.RemoveScene( m_scene.Name );
-					m_renderTarget = null;
-					m_scene = null;
+				{
+					m_engine.PauseRendering();
+					DoUnloadScene();
+					m_engine.ResumeRendering();
+				}
+				else
+				{
+					m_engine.StartRendering();
 				}
 
-                m_engine.StartRendering();
-                m_renderTarget = m_engine.LoadScene( filename );
+				m_renderTarget = m_engine.LoadScene( filename );
 
 				if (m_renderTarget != null )
 				{
 					m_renderWindow.Initialise( m_renderTarget );
 					m_scene = m_renderTarget.Scene;
+					m_sceneNode = m_renderTarget.camera.Node;
 				}
 			}
 		}
@@ -123,16 +122,70 @@ namespace CastorViewerSharp
 		/// </summary>
 		/// <param name="p_point">The window coordinates</param>
 		/// <returns>The camera coordinates</returns>
-		Position DoTransform( System.Windows.Point p_point )
+		private Vector2D DoTransform( System.Windows.Point point )
 		{
-			Position l_return = new Position();
+			Vector2D result = new Vector2D();
 			var window = GetWindow( RenderPanel );
-			double l_ww = window.Width;
-			double l_wh = window.Height;
-			int l_cw = ( int )m_renderTarget.camera.Width;
-			int l_ch = ( int )m_renderTarget.camera.Height;
-			l_return.Set( ( int )( ( p_point.X * l_cw ) / l_ww ), ( int )( ( p_point.Y * l_ch ) / l_wh ) );
-			return l_return;
+			double ww = window.Width;
+			double wh = window.Height;
+			int cw = ( int )m_renderTarget.camera.Width;
+			int ch = ( int )m_renderTarget.camera.Height;
+			result.Set((float)((point.X * cw) / ww)
+				, (float)((point.Y * ch) / wh));
+			return result;
+		}
+
+		/// <summary>
+		/// Transforms given window coordinates to camera coordinates
+		/// </summary>
+		/// <param name="p_point">The window coordinates</param>
+		/// <returns>The camera coordinates</returns>
+		private void DoUnloadScene()
+		{
+			m_renderWindow.Cleanup();
+			var name = m_scene.Name;
+			m_renderTarget = null;
+			m_scene = null;
+			m_engine.RemoveScene(name);
+		}
+
+		void DoRotateNode( Vector2D newPosition )
+		{
+			var xAxis = new Vector3D { };
+			xAxis.Set(1.0f, 0.0f, 0.0f);
+			m_xAngle.Degrees += newPosition.Y - m_oldPosition.Y;
+			var pitch = new Quaternion { };
+			pitch.FromAxisAngle( xAxis, m_xAngle );
+
+			var yAxis = new Vector3D { };
+			yAxis.Set(0.0f, 1.0f, 0.0f);
+			m_yAngle.Degrees += m_oldPosition.X - newPosition.X;
+			var yaw = new Quaternion { };
+			yaw.FromAxisAngle( yAxis, m_yAngle );
+
+			m_sceneNode.Orientation = yaw.Mul( pitch );
+		}
+
+		void DoTranslateNode( Vector2D newPosition )
+		{
+			var rot = m_sceneNode.Orientation;
+			var xAxis = new Vector3D { };
+			xAxis.Set(1.0f, 0.0f, 0.0f);
+			xAxis = rot.Transform( xAxis );
+			xAxis.Normalise();
+
+			var yAxis = new Vector3D { };
+			yAxis.Set(0.0f, 1.0f, 0.0f);
+			yAxis = rot.Transform( yAxis );
+			yAxis.Normalise();
+
+			var xMod = ( m_oldPosition.X - newPosition.X ) / 10.0f;
+			xAxis = xAxis.Mul(xMod);
+
+			var yMod = ( newPosition.Y - m_oldPosition.Y ) / 10.0f;
+			yAxis = yAxis.Mul(xMod);
+
+			m_sceneNode.Translate( xAxis.CompAdd( yAxis ) );
 		}
 
 		#endregion
@@ -150,7 +203,7 @@ namespace CastorViewerSharp
 			base.Show();
 			m_engine = new engine();
 			m_engine.Create( "CastorViewerSharp", 1 );
-			LoadPlugins();
+			DoLoadPlugins();
 
 			var window = GetWindow( RenderPanel );
 			window.Show();
@@ -159,7 +212,7 @@ namespace CastorViewerSharp
 			var handle = new WindowInteropHelper(window).Handle;
 			m_renderWindow = m_engine.CreateRenderWindow("MainWindow", size, handle);
 
-			LoadScene(DoSelectSceneFile());
+			DoLoadScene(DoSelectSceneFile());
 		}
 
 		/// <summary>
@@ -168,8 +221,9 @@ namespace CastorViewerSharp
 		/// <param name="e"></param>
 		protected override void OnClosed( EventArgs e )
 		{
-			m_scene = null;
-			m_renderWindow.Cleanup();
+			m_engine.EndRendering();
+			DoUnloadScene();
+			m_engine.RemoveWindow(m_renderWindow);
 			m_renderWindow = null;
 			m_engine.Cleanup();
 			m_engine.Destroy();
@@ -190,8 +244,25 @@ namespace CastorViewerSharp
 		{
 			if ( m_renderTarget != null )
 			{
-				m_oldPosition = DoTransform( e.GetPosition( RenderPanel ) );
-				m_renderWindow.OnMouseMove( m_oldPosition );
+				var newPosition = DoTransform( e.GetPosition( RenderPanel ) );
+				var pos = new Position { };
+				pos.Set( (int)newPosition.X, (int)newPosition.Y );
+
+				if ( m_renderWindow.OnMouseMove( pos ) == 0
+					&& m_sceneNode != null
+					&& m_oldPosition != null )
+				{
+					if (e.LeftButton == System.Windows.Input.MouseButtonState.Pressed)
+					{
+						DoRotateNode( newPosition );
+					}
+					else if (e.RightButton == System.Windows.Input.MouseButtonState.Pressed)
+					{
+						DoTranslateNode( newPosition );
+					}
+				}
+
+				m_oldPosition = newPosition;
 			}
 		}
 
@@ -205,8 +276,8 @@ namespace CastorViewerSharp
 			if ( m_renderTarget != null )
 			{
 				Size size = new Size();
-                size.Width = ( uint )e.NewSize.Width;
-                size.Height = ( uint )e.NewSize.Height;
+				size.Width = ( uint )e.NewSize.Width;
+				size.Height = ( uint )e.NewSize.Height;
 				m_renderWindow.Resize(size);
 			}
 		}
@@ -241,9 +312,15 @@ namespace CastorViewerSharp
 		/// </summary>
 		private Scene m_scene;
 		/// <summary>
+		/// The scene node controlled by the mouse
+		/// </summary>
+		private SceneNode m_sceneNode;
+		/// <summary>
 		/// The previous mouse position
 		/// </summary>
-		private Position m_oldPosition;
+		private Vector2D m_oldPosition;
+		private Angle m_xAngle = new Angle();
+		private Angle m_yAngle = new Angle();
 
 		#endregion
 	}

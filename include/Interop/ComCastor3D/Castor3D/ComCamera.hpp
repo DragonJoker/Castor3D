@@ -21,11 +21,12 @@ namespace CastorCom
 	public:
 		COMEX_PROPERTY( ViewportType, eVIEWPORT_TYPE, m_internal, &castor3d::Camera::getViewportType, &castor3d::Camera::setViewportType );
 
-		COMEX_PROPERTY_GET( Width, unsigned int, m_internal, &castor3d::Camera::getWidth );
-		COMEX_PROPERTY_GET( Height, unsigned int, m_internal, &castor3d::Camera::getHeight );
 		COMEX_PROPERTY_GET( Name, BSTR, m_internal, &castor3d::MovableObject::getName );
 		COMEX_PROPERTY_GET( Type, eMOVABLE_TYPE, m_internal, &castor3d::MovableObject::getType );
 		COMEX_PROPERTY_GET( Scene, IScene *, m_internal, &castor3d::MovableObject::getScene );
+		COMEX_PROPERTY_GET( Node, ISceneNode *, m_internal, &castor3d::MovableObject::getParent );
+		COMEX_PROPERTY_GET( Width, unsigned int, m_internal, &castor3d::Camera::getWidth );
+		COMEX_PROPERTY_GET( Height, unsigned int, m_internal, &castor3d::Camera::getHeight );
 
 		STDMETHOD( AttachTo )( /* [in] */ ISceneNode * val );
 		STDMETHOD( Detach )();

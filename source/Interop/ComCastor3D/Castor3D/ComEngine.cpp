@@ -258,6 +258,23 @@ namespace CastorCom
 		return hr;
 	}
 
+	STDMETHODIMP CEngine::ResumeRendering()noexcept
+	{
+		HRESULT hr = E_POINTER;
+
+		if ( m_internal )
+		{
+			m_internal->getRenderLoop().resume();
+			hr = S_OK;
+		}
+		else
+		{
+			hr = CComError::dispatchError( E_FAIL, IID_IEngine, _T( "PauseRendering" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, nullptr );
+		}
+
+		return hr;
+	}
+
 	STDMETHODIMP CEngine::EndRendering()noexcept
 	{
 		HRESULT hr = E_POINTER;
@@ -341,7 +358,9 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			//m_internal->getRenderWindowCache().remove(  static_cast< CRenderWindow * >( val )->getName() );
+			auto window = static_cast< CRenderWindow * >( val )->getInternal();
+			static_cast< CRenderWindow * >( val )->setInternal( nullptr );
+			window.reset();
 			hr = S_OK;
 		}
 		else
@@ -382,7 +401,15 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->getSceneCache().remove( fromBstr( name ) );
+			auto sname = fromBstr( name );
+
+			if ( auto scene = m_internal->tryFindScene( sname ) )
+			{
+				scene->cleanup();
+				m_internal->getSceneCache().remove( sname );
+			}
+
+			hr = S_OK;
 		}
 		else
 		{

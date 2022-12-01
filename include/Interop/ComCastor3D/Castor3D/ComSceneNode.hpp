@@ -27,6 +27,8 @@ namespace CastorCom
 		COMEX_PROPERTY( Orientation, IQuaternion *, m_internal, &castor3d::SceneNode::getOrientation, &castor3d::SceneNode::setOrientation );
 		COMEX_PROPERTY( Scaling, IVector3D *, m_internal, &castor3d::SceneNode::getScale, &castor3d::SceneNode::setScale );
 
+		COMEX_PROPERTY_GET( Parent, ISceneNode *, m_internal, &castor3d::SceneNode::getParent );
+
 		STDMETHOD( AttachObject )( /* [in] */ IMovableObject * val );
 		STDMETHOD( DetachObject )( /* [in] */ IMovableObject * val );
 		STDMETHOD( AttachTo )( /* [in] */ ISceneNode * val );

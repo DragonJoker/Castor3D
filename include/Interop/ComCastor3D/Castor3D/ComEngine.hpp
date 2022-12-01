@@ -33,6 +33,7 @@ namespace CastorCom
 		STDMETHOD( RenderOneFrame )();
 		STDMETHOD( StartRendering )();
 		STDMETHOD( PauseRendering )();
+		STDMETHOD( ResumeRendering )();
 		STDMETHOD( EndRendering )();
 		STDMETHOD( LoadPlugin )( /* [in] */ BSTR path );
 		STDMETHOD( CreateOverlay )( /* [in] */ eOVERLAY_TYPE type, /* [in] */ BSTR name, /* [in] */ IOverlay * parent, /* [in] */ IScene * scene, /* [out, retval] */ IOverlay ** pVal );

@@ -22,18 +22,18 @@ namespace CastorCom
 		template< typename ITypePtrT >
 		HRESULT operator()( ITypePtrT value )
 		{
-			if ( !value )
-			{
-				return CComError::dispatchError( E_FAIL
-					, LIBID_Castor3D
-					, _T( "Null value" )
-					, ERROR_UNINITIALISED_INSTANCE.c_str()
-					, 0
-					, nullptr );
-			}
-
 			if constexpr ( isComITypeV< ITypePtrT > )
 			{
+				if ( !value )
+				{
+					return CComError::dispatchError( E_FAIL
+						, LIBID_Castor3D
+						, _T( "Null value" )
+						, ERROR_UNINITIALISED_INSTANCE.c_str()
+						, 0
+						, nullptr );
+				}
+
 				m_function( static_cast< ComITypeCTypeT< ITypePtrT > * >( value )->getInternal() );
 			}
 			else
