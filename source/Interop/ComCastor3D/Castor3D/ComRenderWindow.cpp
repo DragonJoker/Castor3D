@@ -282,4 +282,92 @@ namespace CastorCom
 
 		return hr;
 	}
+
+	STDMETHODIMP CRenderWindow::OnKeyboardKeyDown( /* [in] */ eKEYBOARD_KEY key, /* [in] */ boolean isCtrlDown, /* [in] */ boolean isAltDown, /* [in] */ boolean isShiftDown, /* [out, retval] */ boolean * pVal )noexcept
+	{
+		HRESULT hr = E_POINTER;
+
+		if ( m_internal )
+		{
+			try
+			{
+				if ( auto inputListener = m_internal->getEngine()->getUserInputListener() )
+				{
+					*pVal = inputListener->fireKeydown( castor3d::KeyboardKey( key )
+						, isCtrlDown != FALSE
+						, isAltDown != FALSE
+						, isShiftDown != FALSE );
+				}
+			}
+			catch ( castor::Exception & )
+			{
+			}
+
+			hr = S_OK;
+		}
+		else
+		{
+			hr = CComError::dispatchError( E_FAIL, IID_IRenderWindow, _T( "OnKeyboardKeyDown" ), window::ERROR_UNINITIALISED.c_str(), 0, nullptr );
+		}
+
+		return hr;
+	}
+
+	STDMETHODIMP CRenderWindow::OnKeyboardKeyUp( /* [in] */ eKEYBOARD_KEY key, /* [in] */ boolean isCtrlDown, /* [in] */ boolean isAltDown, /* [in] */ boolean isShiftDown, /* [out, retval] */ boolean * pVal )noexcept
+	{
+		HRESULT hr = E_POINTER;
+
+		if ( m_internal )
+		{
+			try
+			{
+				if ( auto inputListener = m_internal->getEngine()->getUserInputListener() )
+				{
+					*pVal = inputListener->fireKeyUp( castor3d::KeyboardKey( key )
+						, isCtrlDown != FALSE
+						, isAltDown != FALSE
+						, isShiftDown != FALSE );
+				}
+			}
+			catch ( castor::Exception & )
+			{
+			}
+
+			hr = S_OK;
+		}
+		else
+		{
+			hr = CComError::dispatchError( E_FAIL, IID_IRenderWindow, _T( "OnKeyboardKeyUp" ), window::ERROR_UNINITIALISED.c_str(), 0, nullptr );
+		}
+
+		return hr;
+	}
+
+	STDMETHODIMP CRenderWindow::OnKeyboardChar( /* [in] */ eKEYBOARD_KEY key, /* [in] */ BSTR c, /* [out, retval] */ boolean * pVal )noexcept
+	{
+		HRESULT hr = E_POINTER;
+
+		if ( m_internal )
+		{
+			try
+			{
+				if ( auto inputListener = m_internal->getEngine()->getUserInputListener() )
+				{
+					*pVal = inputListener->fireChar( castor3d::KeyboardKey( key )
+						, fromBstr( c ) );
+				}
+			}
+			catch ( castor::Exception & )
+			{
+			}
+
+			hr = S_OK;
+		}
+		else
+		{
+			hr = CComError::dispatchError( E_FAIL, IID_IRenderWindow, _T( "OnKeyboardKeyUp" ), window::ERROR_UNINITIALISED.c_str(), 0, nullptr );
+		}
+
+		return hr;
+	}
 }

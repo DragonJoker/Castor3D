@@ -8,16 +8,12 @@ if ( MSVC AND ${CASTOR_BUILD_INTEROP_COM} )
 
 	include( CSharpUtilities )
 
-	# configure_file(
-		# ${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.csproj.in
-		# ${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.csproj
-		# @ONLY
-	# )
 	add_executable( ${PROJECT_NAME}
 		App.xaml
 		App.xaml.cs
 		MainWindow.xaml
 		MainWindow.xaml.cs
+		NodeState.cs
 
 		Properties/AssemblyInfo.cs
 		Properties/Resources.Designer.cs

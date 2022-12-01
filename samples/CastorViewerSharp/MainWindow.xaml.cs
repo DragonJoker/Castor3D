@@ -24,6 +24,7 @@ using System.IO;
 using System.Windows.Interop;
 using Castor3D;
 using System.Windows.Threading;
+using System.Windows.Input;
 
 namespace CastorViewerSharp
 {
@@ -49,15 +50,15 @@ namespace CastorViewerSharp
 		private void DoLoadPlugins()
 		{
 			string path = m_engine.PluginsDirectory;
-			string[] files = Directory.GetFiles( path, "*.dll" );
+			string[] files = Directory.GetFiles(path, "*.dll");
 
-			foreach ( string file in files )
+			foreach (string file in files)
 			{
-				m_engine.LoadPlugin( file );
+				m_engine.LoadPlugin(file);
 			}
 
-			m_engine.LoadRenderer( "vk" );
-			m_engine.Initialise( 1000, 1 );
+			m_engine.LoadRenderer("vk");
+			m_engine.Initialise(1000, 1);
 			m_engine.StartRendering();
 		}
 
@@ -75,7 +76,7 @@ namespace CastorViewerSharp
 			bool? result = dlg.ShowDialog();
 			string l_return;
 
-			if ( result == true )
+			if (result == true)
 			{
 				l_return = dlg.FileName;
 			}
@@ -91,11 +92,11 @@ namespace CastorViewerSharp
 		/// Loads the given scene file name
 		/// </summary>
 		/// <param name="filename">The scene file name</param>
-		private void DoLoadScene( string filename )
+		private void DoLoadScene(string filename)
 		{
-			if ( filename.Length > 0 )
+			if (filename.Length > 0)
 			{
-				if ( m_scene != null )
+				if (m_scene != null)
 				{
 					m_engine.PauseRendering();
 					DoUnloadScene();
@@ -106,13 +107,15 @@ namespace CastorViewerSharp
 					m_engine.StartRendering();
 				}
 
-				m_renderTarget = m_engine.LoadScene( filename );
+				m_renderTarget = m_engine.LoadScene(filename);
 
-				if (m_renderTarget != null )
+				if (m_renderTarget != null)
 				{
-					m_renderWindow.Initialise( m_renderTarget );
+					m_renderWindow.Initialise(m_renderTarget);
 					m_scene = m_renderTarget.Scene;
-					m_sceneNode = m_renderTarget.camera.Node;
+					m_nodeState = new NodeState(m_renderTarget.camera.Node);
+
+					m_motionTimer.Start();
 				}
 			}
 		}
@@ -122,14 +125,14 @@ namespace CastorViewerSharp
 		/// </summary>
 		/// <param name="p_point">The window coordinates</param>
 		/// <returns>The camera coordinates</returns>
-		private Vector2D DoTransform( System.Windows.Point point )
+		private Vector2D DoTransform(System.Windows.Point point)
 		{
 			Vector2D result = new Vector2D();
-			var window = GetWindow( RenderPanel );
+			var window = GetWindow(RenderPanel);
 			double ww = window.Width;
 			double wh = window.Height;
-			int cw = ( int )m_renderTarget.camera.Width;
-			int ch = ( int )m_renderTarget.camera.Height;
+			int cw = (int)m_renderTarget.camera.Width;
+			int ch = (int)m_renderTarget.camera.Height;
 			result.Set((float)((point.X * cw) / ww)
 				, (float)((point.Y * ch) / wh));
 			return result;
@@ -142,50 +145,19 @@ namespace CastorViewerSharp
 		/// <returns>The camera coordinates</returns>
 		private void DoUnloadScene()
 		{
+			m_motionTimer.Stop();
 			m_renderWindow.Cleanup();
 			var name = m_scene.Name;
 			m_renderTarget = null;
 			m_scene = null;
+			m_nodeState = null;
 			m_engine.RemoveScene(name);
 		}
 
-		void DoRotateNode( Vector2D newPosition )
+		private eKEYBOARD_KEY DoConvertKey(Key key)
 		{
-			var xAxis = new Vector3D { };
-			xAxis.Set(1.0f, 0.0f, 0.0f);
-			m_xAngle.Degrees += newPosition.Y - m_oldPosition.Y;
-			var pitch = new Quaternion { };
-			pitch.FromAxisAngle( xAxis, m_xAngle );
+			return (eKEYBOARD_KEY)key;
 
-			var yAxis = new Vector3D { };
-			yAxis.Set(0.0f, 1.0f, 0.0f);
-			m_yAngle.Degrees += m_oldPosition.X - newPosition.X;
-			var yaw = new Quaternion { };
-			yaw.FromAxisAngle( yAxis, m_yAngle );
-
-			m_sceneNode.Orientation = yaw.Mul( pitch );
-		}
-
-		void DoTranslateNode( Vector2D newPosition )
-		{
-			var rot = m_sceneNode.Orientation;
-			var xAxis = new Vector3D { };
-			xAxis.Set(1.0f, 0.0f, 0.0f);
-			xAxis = rot.Transform( xAxis );
-			xAxis.Normalise();
-
-			var yAxis = new Vector3D { };
-			yAxis.Set(0.0f, 1.0f, 0.0f);
-			yAxis = rot.Transform( yAxis );
-			yAxis.Normalise();
-
-			var xMod = ( m_oldPosition.X - newPosition.X ) / 10.0f;
-			xAxis = xAxis.Mul(xMod);
-
-			var yMod = ( newPosition.Y - m_oldPosition.Y ) / 10.0f;
-			yAxis = yAxis.Mul(xMod);
-
-			m_sceneNode.Translate( xAxis.CompAdd( yAxis ) );
 		}
 
 		#endregion
@@ -197,20 +169,48 @@ namespace CastorViewerSharp
 		/// Initializes the engine, loads the plug-ins
 		/// </summary>
 		/// <param name="e"></param>
-		protected override void OnInitialized( EventArgs e )
+		protected override void OnInitialized(EventArgs e)
 		{
-			base.OnInitialized( e );
+			base.OnInitialized(e);
 			base.Show();
 			m_engine = new engine();
-			m_engine.Create( "CastorViewerSharp", 1 );
+			m_engine.Create("CastorViewerSharp", 1);
 			DoLoadPlugins();
 
-			var window = GetWindow( RenderPanel );
+			var window = GetWindow(RenderPanel);
 			window.Show();
 			Size size = new Size();
 			size.Set((uint)window.Width, (uint)window.Height);
 			var handle = new WindowInteropHelper(window).Handle;
 			m_renderWindow = m_engine.CreateRenderWindow("MainWindow", size, handle);
+
+			m_motionTimer = new DispatcherTimer();
+			m_motionTimer.Tick += new EventHandler(OnMotionTimer);
+			m_motionTimer.Interval = new TimeSpan(0, 0, 0, 0, 30);
+
+			m_leftTimer = new DispatcherTimer();
+			m_leftTimer.Tick += new EventHandler(OnLeftTimer);
+			m_leftTimer.Interval = new TimeSpan(0, 0, 0, 0, 30);
+
+			m_rightTimer = new DispatcherTimer();
+			m_rightTimer.Tick += new EventHandler(OnRightTimer);
+			m_rightTimer.Interval = new TimeSpan(0, 0, 0, 0, 30);
+
+			m_forwardTimer = new DispatcherTimer();
+			m_forwardTimer.Tick += new EventHandler(OnForwardTimer);
+			m_forwardTimer.Interval = new TimeSpan(0, 0, 0, 0, 30);
+
+			m_backTimer = new DispatcherTimer();
+			m_backTimer.Tick += new EventHandler(OnBackTimer);
+			m_backTimer.Interval = new TimeSpan(0, 0, 0, 0, 30);
+
+			m_upTimer = new DispatcherTimer();
+			m_upTimer.Tick += new EventHandler(OnUpTimer);
+			m_upTimer.Interval = new TimeSpan(0, 0, 0, 0, 30);
+
+			m_downTimer = new DispatcherTimer();
+			m_downTimer.Tick += new EventHandler(OnDownTimer);
+			m_downTimer.Interval = new TimeSpan(0, 0, 0, 0, 30);
 
 			DoLoadScene(DoSelectSceneFile());
 		}
@@ -219,16 +219,18 @@ namespace CastorViewerSharp
 		/// Cleans up the engine
 		/// </summary>
 		/// <param name="e"></param>
-		protected override void OnClosed( EventArgs e )
+		protected override void OnClosed(EventArgs e)
 		{
 			m_engine.EndRendering();
 			DoUnloadScene();
+
+			m_motionTimer = null;
 			m_engine.RemoveWindow(m_renderWindow);
 			m_renderWindow = null;
 			m_engine.Cleanup();
 			m_engine.Destroy();
 			m_engine = null;
-			base.OnClosed( e );
+			base.OnClosed(e);
 		}
 
 		#endregion
@@ -236,33 +238,193 @@ namespace CastorViewerSharp
 		#region Events
 
 		/// <summary>
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void OnKeyUp(object sender, KeyEventArgs e)
+		{
+			if (m_renderTarget != null)
+			{
+				var key = DoConvertKey(e.Key);
+
+				if (m_renderWindow.OnKeyboardKeyUp(key
+						, (sbyte)((e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)) ? 1 : 0)
+						, (sbyte)((e.KeyboardDevice.IsKeyDown(Key.LeftAlt) || e.KeyboardDevice.IsKeyDown(Key.RightAlt)) ? 1 : 0)
+						, (sbyte)((e.KeyboardDevice.IsKeyDown(Key.LeftShift) || e.KeyboardDevice.IsKeyDown(Key.RightShift)) ? 1 : 0)) == 0
+					&& m_nodeState != null)
+				{
+					switch (e.Key)
+					{
+						case Key.Left:
+						case Key.Q:
+							m_leftTimer.Stop();
+							break;
+						case Key.Right:
+						case Key.D:
+							m_rightTimer.Stop();
+							break;
+						case Key.Up:
+						case Key.Z:
+							m_forwardTimer.Stop();
+							break;
+						case Key.Down:
+						case Key.S:
+							m_backTimer.Stop();
+							break;
+						case Key.PageUp:
+						case Key.E:
+							m_upTimer.Stop();
+							break;
+						case Key.PageDown:
+						case Key.A:
+							m_downTimer.Stop();
+							break;
+					}
+				}
+			}
+		}
+
+		/// <summary>
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void OnKeyDown(object sender, KeyEventArgs e)
+		{
+			if (m_renderTarget != null)
+			{
+				var key = DoConvertKey(e.Key);
+
+				if (m_renderWindow.OnKeyboardKeyDown(key
+						, (sbyte)((e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl)) ? 1 : 0)
+						, (sbyte)((e.KeyboardDevice.IsKeyDown(Key.LeftAlt) || e.KeyboardDevice.IsKeyDown(Key.RightAlt)) ? 1 : 0)
+						, (sbyte)((e.KeyboardDevice.IsKeyDown(Key.LeftShift) || e.KeyboardDevice.IsKeyDown(Key.RightShift)) ? 1 : 0)) == 0
+					&& m_nodeState != null)
+				{
+					switch (e.Key)
+					{
+						case Key.Left:
+						case Key.Q:
+							m_leftTimer.Start();
+							break;
+						case Key.Right:
+						case Key.D:
+							m_rightTimer.Start();
+							break;
+						case Key.Up:
+						case Key.Z:
+							m_forwardTimer.Start();
+							break;
+						case Key.Down:
+						case Key.S:
+							m_backTimer.Start();
+							break;
+						case Key.PageUp:
+						case Key.E:
+							m_upTimer.Start();
+							break;
+						case Key.PageDown:
+						case Key.A:
+							m_downTimer.Start();
+							break;
+					}
+				}
+			}
+		}
+
+		/// <summary>
 		/// Forwards the mouse position to the render window
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void OnMouseMove( object sender, System.Windows.Input.MouseEventArgs e )
+		private void OnMouseMove(object sender, System.Windows.Input.MouseEventArgs e)
 		{
-			if ( m_renderTarget != null )
+			if (m_renderTarget != null)
 			{
-				var newPosition = DoTransform( e.GetPosition( RenderPanel ) );
+				var newPosition = DoTransform(e.GetPosition(RenderPanel));
 				var pos = new Position { };
-				pos.Set( (int)newPosition.X, (int)newPosition.Y );
+				pos.Set((int)newPosition.X, (int)newPosition.Y);
 
-				if ( m_renderWindow.OnMouseMove( pos ) == 0
-					&& m_sceneNode != null
-					&& m_oldPosition != null )
+				if (m_renderWindow.OnMouseMove(pos) == 0
+					&& m_nodeState != null
+					&& m_oldPosition != null)
 				{
+					var mult = 8.0f;
+					var deltaX = (m_oldPosition.X - newPosition.X) / mult;
+					var deltaY = (m_oldPosition.Y - newPosition.Y) / mult;
+
 					if (e.LeftButton == System.Windows.Input.MouseButtonState.Pressed)
 					{
-						DoRotateNode( newPosition );
+						m_nodeState.addAngularVelocity(-deltaY, deltaX);
 					}
 					else if (e.RightButton == System.Windows.Input.MouseButtonState.Pressed)
 					{
-						DoTranslateNode( newPosition );
+						m_nodeState.addScalarVelocity(deltaX, -deltaY, 0.0f);
 					}
 				}
 
 				m_oldPosition = newPosition;
+			}
+		}
+
+		private void OnLeftTimer(object sender, EventArgs e)
+		{
+			if (m_nodeState != null)
+			{
+				var speed = 1.0f;
+				m_nodeState.addScalarVelocity(speed, 0.0f, 0.0f);
+			}
+		}
+
+		private void OnRightTimer(object sender, EventArgs e)
+		{
+			if (m_nodeState != null)
+			{
+				var speed = 1.0f;
+				m_nodeState.addScalarVelocity(-speed, 0.0f, 0.0f);
+			}
+		}
+
+		private void OnForwardTimer(object sender, EventArgs e)
+		{
+			if (m_nodeState != null)
+			{
+				var speed = 1.0f;
+				m_nodeState.addScalarVelocity(0.0f, 0.0f, speed);
+			}
+		}
+
+		private void OnBackTimer(object sender, EventArgs e)
+		{
+			if (m_nodeState != null)
+			{
+				var speed = 1.0f;
+				m_nodeState.addScalarVelocity(0.0f, 0.0f, -speed);
+			}
+		}
+
+		private void OnUpTimer(object sender, EventArgs e)
+		{
+			if (m_nodeState != null)
+			{
+				var speed = 1.0f;
+				m_nodeState.addScalarVelocity(0.0f, speed, 0.0f);
+			}
+		}
+
+		private void OnDownTimer(object sender, EventArgs e)
+		{
+			if (m_nodeState != null)
+			{
+				var speed = 1.0f;
+				m_nodeState.addScalarVelocity(0.0f, -speed, 0.0f);
+			}
+		}
+
+		private void OnMotionTimer(object sender, EventArgs e)
+		{
+			if (m_nodeState != null)
+			{
+				m_nodeState.update();
 			}
 		}
 
@@ -271,13 +433,13 @@ namespace CastorViewerSharp
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void OnSizeChanged( object sender, System.Windows.SizeChangedEventArgs e )
+		private void OnSizeChanged(object sender, System.Windows.SizeChangedEventArgs e)
 		{
-			if ( m_renderTarget != null )
+			if (m_renderTarget != null)
 			{
 				Size size = new Size();
-				size.Width = ( uint )e.NewSize.Width;
-				size.Height = ( uint )e.NewSize.Height;
+				size.Width = (uint)e.NewSize.Width;
+				size.Height = (uint)e.NewSize.Height;
 				m_renderWindow.Resize(size);
 			}
 		}
@@ -287,7 +449,7 @@ namespace CastorViewerSharp
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void OnLoaded( object sender, System.Windows.RoutedEventArgs e )
+		private void OnLoaded(object sender, System.Windows.RoutedEventArgs e)
 		{
 		}
 
@@ -314,13 +476,24 @@ namespace CastorViewerSharp
 		/// <summary>
 		/// The scene node controlled by the mouse
 		/// </summary>
-		private SceneNode m_sceneNode;
+		private NodeState m_nodeState;
 		/// <summary>
 		/// The previous mouse position
 		/// </summary>
 		private Vector2D m_oldPosition;
-		private Angle m_xAngle = new Angle();
-		private Angle m_yAngle = new Angle();
+		/// <summary>
+		/// The motion timer
+		/// </summary>
+		private DispatcherTimer m_motionTimer;
+		/// <summary>
+		/// The keyboard timers
+		/// </summary>
+		private DispatcherTimer m_leftTimer;
+		private DispatcherTimer m_rightTimer;
+		private DispatcherTimer m_forwardTimer;
+		private DispatcherTimer m_backTimer;
+		private DispatcherTimer m_upTimer;
+		private DispatcherTimer m_downTimer;
 
 		#endregion
 	}

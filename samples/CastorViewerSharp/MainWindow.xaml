@@ -1,14 +1,14 @@
 <Window
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" x:Class="CastorViewerSharp.MainWindow"
-        Title="CastorViewer#" Height="600" Width="800" SizeToContent="WidthAndHeight" MinWidth="800" MinHeight="600" WindowStartupLocation="CenterScreen" SizeChanged="OnSizeChanged" Loaded="OnLoaded">
-	<Grid Name="MainGrid">
-		<Grid.RowDefinitions>
-			<RowDefinition Height="0" />
-			<RowDefinition />
-			<RowDefinition Height="0" />
-		</Grid.RowDefinitions>
-		<Canvas Name="RenderPanel" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#FFC7C7C7" MouseMove="OnMouseMove" Grid.RowSpan="2"/>
-	</Grid>
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" x:Class="CastorViewerSharp.MainWindow"
+    Title="CastorViewer#" Height="600" Width="800" SizeToContent="WidthAndHeight" MinWidth="800" MinHeight="600" WindowStartupLocation="CenterScreen" SizeChanged="OnSizeChanged" Loaded="OnLoaded" KeyUp="OnKeyUp" KeyDown="OnKeyDown">
+    <Grid Name="MainGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0" />
+            <RowDefinition />
+            <RowDefinition Height="0" />
+        </Grid.RowDefinitions>
+        <Canvas Name="RenderPanel" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#FFC7C7C7" MouseMove="OnMouseMove" KeyUp="OnKeyUp" KeyDown="OnKeyDown" Grid.RowSpan="2"/>
+    </Grid>
 </Window>

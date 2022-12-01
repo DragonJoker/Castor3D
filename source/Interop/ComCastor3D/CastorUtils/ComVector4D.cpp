@@ -118,7 +118,7 @@ namespace CastorCom
 	{
 		HRESULT hr = E_POINTER;
 
-		if ( rhs && pVal )
+		if ( pVal )
 		{
 			hr = CVector4D::CreateInstance( pVal );
 
@@ -138,7 +138,7 @@ namespace CastorCom
 	{
 		HRESULT hr = E_POINTER;
 
-		if ( rhs && pVal )
+		if ( pVal )
 		{
 			hr = CVector4D::CreateInstance( pVal );
 
@@ -158,7 +158,7 @@ namespace CastorCom
 	{
 		HRESULT hr = E_POINTER;
 
-		if ( rhs && pVal )
+		if ( pVal )
 		{
 			hr = CVector4D::CreateInstance( pVal );
 
@@ -178,7 +178,7 @@ namespace CastorCom
 	{
 		HRESULT hr = E_POINTER;
 
-		if ( rhs && pVal )
+		if ( pVal )
 		{
 			hr = CVector4D::CreateInstance( pVal );
 

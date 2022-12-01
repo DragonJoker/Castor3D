@@ -28,6 +28,7 @@ namespace CastorCom::details
 			|| areCompatibleV< SrcT, DstT, eMOVABLE_TYPE, castor3d::MovableType >
 			|| areCompatibleV< SrcT, DstT, eLIGHT_TYPE, castor3d::LightType >
 			|| areCompatibleV< SrcT, DstT, eVIEWPORT_TYPE, castor3d::ViewportType >
+			|| areCompatibleV< SrcT, DstT, eKEYBOARD_KEY, castor3d::KeyboardKey >
 			|| areCompatibleV< SrcT, DstT, eBORDER_COLOUR, VkBorderColor >
 			|| areCompatibleV< SrcT, DstT, eFILTER_MODE, VkFilter >
 			|| areCompatibleV< SrcT, DstT, eIMAGE_TYPE, VkImageType >
