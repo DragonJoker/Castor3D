@@ -138,7 +138,7 @@ namespace atmosphere_scattering
 					{
 						interGround.t() = linearDepth;
 						interGround.point() = ray.step( linearDepth );
-						interGround.valid() = 1_u;
+						interGround.valid() = 1_b;
 						clampOuter = 1_b;
 					}
 					FI;
