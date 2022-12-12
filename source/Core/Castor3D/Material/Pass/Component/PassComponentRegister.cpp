@@ -229,7 +229,7 @@ namespace castor3d
 		return result;
 	}
 
-	PassComponentCombineID PassComponentRegister::registerPassComponentCombine( PassComponentCombine combine )
+	PassComponentCombineID PassComponentRegister::registerPassComponentCombine( PassComponentCombine & combine )
 	{
 		auto it = std::find_if( m_componentCombines.begin()
 			, m_componentCombines.end()
@@ -241,10 +241,15 @@ namespace castor3d
 
 		if ( it == m_componentCombines.end() )
 		{
-			auto idx = passcompreg::addCombine( std::move( combine ), m_componentCombines );
+			auto idx = passcompreg::addCombine( combine, m_componentCombines );
 			it = std::next( m_componentCombines.begin(), idx );
 		}
 
+		combine.hasTransmissionFlag = hasAny( combine, m_transmissionFlag );
+		combine.hasAlphaTestFlag = hasAny( combine, m_alphaTestFlag );
+		combine.hasAlphaBlendingFlag = hasAny( combine, m_alphaBlendingFlag );
+		combine.hasParallaxOcclusionMappingOneFlag = hasAny( combine, m_parallaxOcclusionMappingOneFlag );
+		combine.hasParallaxOcclusionMappingRepeatFlag = hasAny( combine, m_parallaxOcclusionMappingRepeatFlag );
 		return PassComponentCombineID( std::distance( m_componentCombines.begin(), it ) + 1 );
 	}
 
@@ -400,71 +405,6 @@ namespace castor3d
 	{
 		return ( hasAny( flags.components, getAlphaBlendingFlag() )
 			|| ( hasAny( flags.components, getAlphaTestFlag() ) && ( flags.alphaFunc != VK_COMPARE_OP_ALWAYS ) ) );
-	}
-
-	PassComponentFlag PassComponentRegister::getAlphaBlendingFlag()const
-	{
-		auto it = std::find_if( m_registered.begin()
-			, m_registered.end()
-			, []( Components::value_type const & lookup )
-			{
-				return lookup.plugin->getAlphaBlendingFlag() != 0u;
-			} );
-		return it == m_registered.end()
-			? 0u
-			: it->plugin->getAlphaBlendingFlag();
-	}
-
-	PassComponentFlag PassComponentRegister::getAlphaTestFlag()const
-	{
-		auto it = std::find_if( m_registered.begin()
-			, m_registered.end()
-			, []( Components::value_type const & lookup )
-			{
-				return lookup.plugin->getAlphaTestFlag() != 0u;
-			} );
-		return it == m_registered.end()
-			? 0u
-			: it->plugin->getAlphaTestFlag();
-	}
-
-	PassComponentFlag PassComponentRegister::getTransmissionFlag()const
-	{
-		auto it = std::find_if( m_registered.begin()
-			, m_registered.end()
-			, []( Components::value_type const & lookup )
-			{
-				return lookup.plugin->getTransmissionFlag() != 0u;
-			} );
-		return it == m_registered.end()
-			? 0u
-			: it->plugin->getTransmissionFlag();
-	}
-
-	PassComponentFlag PassComponentRegister::getParallaxOcclusionMappingOneFlag()const
-	{
-		auto it = std::find_if( m_registered.begin()
-			, m_registered.end()
-			, []( Components::value_type const & lookup )
-			{
-				return lookup.plugin->getParallaxOcclusionMappingOneFlag() != 0u;
-			} );
-		return it == m_registered.end()
-			? 0u
-			: it->plugin->getParallaxOcclusionMappingOneFlag();
-	}
-
-	PassComponentFlag PassComponentRegister::getParallaxOcclusionMappingRepeatFlag()const
-	{
-		auto it = std::find_if( m_registered.begin()
-			, m_registered.end()
-			, []( Components::value_type const & lookup )
-			{
-				return lookup.plugin->getParallaxOcclusionMappingRepeatFlag() != 0u;
-			} );
-		return it == m_registered.end()
-			? 0u
-			: it->plugin->getParallaxOcclusionMappingRepeatFlag();
 	}
 
 	void PassComponentRegister::updateMapComponents( std::vector< TextureFlagConfiguration > const & texConfigs
@@ -778,6 +718,31 @@ namespace castor3d
 		componentPlugin->setId( componentDesc.id );
 		componentDesc.name = componentType;
 		componentDesc.plugin = std::move( componentPlugin );
+
+		if ( componentDesc.plugin->getAlphaBlendingFlag() != 0u )
+		{
+			m_alphaBlendingFlag = componentDesc.plugin->getAlphaBlendingFlag();
+		}
+
+		if ( componentDesc.plugin->getAlphaTestFlag() != 0u )
+		{
+			m_alphaTestFlag = componentDesc.plugin->getAlphaTestFlag();
+		}
+
+		if ( componentDesc.plugin->getTransmissionFlag() != 0u )
+		{
+			m_transmissionFlag = componentDesc.plugin->getTransmissionFlag();
+		}
+
+		if ( componentDesc.plugin->getParallaxOcclusionMappingOneFlag() != 0u )
+		{
+			m_parallaxOcclusionMappingOneFlag = componentDesc.plugin->getParallaxOcclusionMappingOneFlag();
+		}
+
+		if ( componentDesc.plugin->getParallaxOcclusionMappingRepeatFlag() != 0u )
+		{
+			m_parallaxOcclusionMappingRepeatFlag = componentDesc.plugin->getParallaxOcclusionMappingRepeatFlag();
+		}
 
 		if ( auto shader = componentDesc.plugin->createMaterialShader() )
 		{

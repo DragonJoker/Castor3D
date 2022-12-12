@@ -181,6 +181,12 @@ namespace castor3d
 	{
 		PassComponentCombineID baseId{};
 		PassComponentFlagsSet flags{};
+		// Computed from \p flags
+		bool hasTransmissionFlag{};
+		bool hasAlphaTestFlag{};
+		bool hasAlphaBlendingFlag{};
+		bool hasParallaxOcclusionMappingOneFlag{};
+		bool hasParallaxOcclusionMappingRepeatFlag{};
 	};
 
 	C3D_API bool operator==( PassComponentCombine const & lhs, PassComponentCombine const & rhs );

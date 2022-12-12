@@ -80,6 +80,9 @@ namespace castor3d
 		}
 
 	private:
+		RenderPipeline & doGetPipeline( SubmeshRenderNode const & node
+			, bool frontCulled );
+		RenderPipeline & doGetPipeline( BillboardRenderNode const & node );
 		void doAddSubmesh( ShadowMapLightTypeArray & shadowMaps
 			, SubmeshRenderNode const & node
 			, bool frontCulled );
@@ -90,8 +93,6 @@ namespace castor3d
 			, BillboardRenderNode const & node );
 
 	private:
-		SceneCullerSignalConnection m_onCullerCompute;
-
 		PipelineBufferArray m_nodesIds;
 		std::map< uint32_t, uint32_t > m_nodesPipelinesIds;
 
@@ -108,6 +109,8 @@ namespace castor3d
 
 		using PipelineNodesBuffer = ashes::BufferPtr< PipelineNodes >;
 		PipelineNodesBuffer m_pipelinesNodes;
+
+		std::unordered_map< size_t, RenderPipeline * > m_pipelines;
 
 		//!\~english	The submesh render nodes, sorted by shader program.
 		//!\~french		Les noeuds de rendu de submesh, triés par programme shader.
