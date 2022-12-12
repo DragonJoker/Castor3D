@@ -37,7 +37,7 @@ namespace castor3d
 		 */
 		/**@{*/
 		C3D_API PassComponentCombine registerPassComponentCombine( Pass const & pass );
-		C3D_API PassComponentCombineID registerPassComponentCombine( PassComponentCombine combine );
+		C3D_API PassComponentCombineID registerPassComponentCombine( PassComponentCombine & combine );
 		C3D_API PassComponentCombineID getPassComponentCombineID( PassComponentCombine const & combine )const;
 		C3D_API TextureCombineID getTextureCombineID( TextureCombine const & combine )const;
 		C3D_API PassComponentCombine getPassComponentCombine( Pass const & pass )const;
@@ -111,11 +111,31 @@ namespace castor3d
 		C3D_API PassComponentCombine filterComponentFlags( ComponentModeFlags filter
 			, PassComponentCombine const & combine )const;
 		C3D_API bool hasOpacity( PipelineFlags const & flags )const;
-		C3D_API PassComponentFlag getAlphaBlendingFlag()const;
-		C3D_API PassComponentFlag getAlphaTestFlag()const;
-		C3D_API PassComponentFlag getTransmissionFlag()const;
-		C3D_API PassComponentFlag getParallaxOcclusionMappingOneFlag()const;
-		C3D_API PassComponentFlag getParallaxOcclusionMappingRepeatFlag()const;
+
+		PassComponentFlag getAlphaBlendingFlag()const
+		{
+			return m_alphaBlendingFlag;
+		}
+
+		PassComponentFlag getAlphaTestFlag()const
+		{
+			return m_alphaTestFlag;
+		}
+
+		PassComponentFlag getTransmissionFlag()const
+		{
+			return m_transmissionFlag;
+		}
+
+		PassComponentFlag getParallaxOcclusionMappingOneFlag()const
+		{
+			return m_parallaxOcclusionMappingOneFlag;
+		}
+
+		PassComponentFlag getParallaxOcclusionMappingRepeatFlag()const
+		{
+			return m_parallaxOcclusionMappingRepeatFlag;
+		}
 		/**@}*/
 		/**
 		 *\~english
@@ -240,6 +260,11 @@ namespace castor3d
 		std::vector< FillMaterialType > m_fillMaterial;
 		VkDeviceSize m_bufferStride{};
 		mutable std::vector< PassComponentCombine > m_componentCombines{};
+		PassComponentFlag m_alphaBlendingFlag{};
+		PassComponentFlag m_alphaTestFlag{};
+		PassComponentFlag m_transmissionFlag{};
+		PassComponentFlag m_parallaxOcclusionMappingOneFlag{};
+		PassComponentFlag m_parallaxOcclusionMappingRepeatFlag{};
 	};
 }
 

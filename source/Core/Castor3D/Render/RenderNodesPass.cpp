@@ -466,19 +466,17 @@ namespace castor3d
 
 	bool RenderNodesPass::areValidPassFlags( PassComponentCombine const & passFlags )const
 	{
-		if ( hasAny( passFlags, getEngine()->getPassComponentsRegister().getTransmissionFlag() ) )
+		if ( passFlags.hasTransmissionFlag )
 		{
 			return !checkFlag( m_filters, RenderFilter::eTransmission );
 		}
 
-		if ( hasAny( passFlags, getEngine()->getPassComponentsRegister().getAlphaTestFlag() ) )
+		if ( passFlags.hasAlphaTestFlag )
 		{
-			// Blend alpha test with alpha blending,
-			// alpha test without.
 			return !checkFlag( m_filters, RenderFilter::eAlphaTest );
 		}
 
-		if ( hasAny( passFlags, getEngine()->getPassComponentsRegister().getAlphaBlendingFlag() ) )
+		if ( passFlags.hasAlphaBlendingFlag )
 		{
 			return !checkFlag( m_filters, RenderFilter::eAlphaBlend );
 		}
@@ -846,7 +844,6 @@ namespace castor3d
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		auto & device = renderSystem.getRenderDevice();
 		RenderPipeline * result{};
-		auto program = doGetProgram( flags, cullMode );
 		CU_Require( areValidPassFlags( flags.components ) );
 
 		if ( !flags.isBillboard()
@@ -865,7 +862,7 @@ namespace castor3d
 					, ashes::PipelineRasterizationStateCreateInfo{ 0u, false, false, VK_POLYGON_MODE_FILL, cullMode }
 					, doCreateBlendState( flags )
 					, ashes::PipelineMultisampleStateCreateInfo{}
-					, program
+					, doGetProgram( flags, cullMode )
 					, flags );
 				pipeline->setViewport( makeViewport( m_size ) );
 
