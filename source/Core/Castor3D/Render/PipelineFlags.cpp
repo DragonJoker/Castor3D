@@ -81,7 +81,7 @@ namespace castor3d
 		}
 
 		static uint64_t getHiHash( PassComponentRegister const & passComponents
-			, PipelineHiHashDetails & flags )
+			, PipelineHiHashDetails const & flags )
 		{
 			constexpr auto maxSubmeshSize = castor::getBitSize( uint32_t( SubmeshFlag::eAllBase ) );
 			constexpr auto maxProgramSize = castor::getBitSize( uint32_t( ProgramFlag::eAllBase ) );
@@ -170,15 +170,6 @@ namespace castor3d
 			auto details = getLoHashDetails( result );
 			CU_Require( flags.morphTargetsOffset == details.morphTargetsOffset );
 #endif
-			return result;
-		}
-
-		static PipelineBaseHash getPipelineBaseHash( PassComponentRegister const & passComponents
-			, PipelineFlags flags )
-		{
-			PipelineBaseHash result{};
-			result.hi = getHiHash( passComponents, flags );
-			result.lo = getLoHash( flags );
 			return result;
 		}
 
@@ -371,12 +362,21 @@ namespace castor3d
 
 	//*********************************************************************************************
 
+	PipelineBaseHash getPipelineBaseHash( PassComponentRegister const & passComponents
+		, PipelineFlags const & flags )
+	{
+		PipelineBaseHash result{};
+		result.hi = pipflags::getHiHash( passComponents, flags );
+		result.lo = pipflags::getLoHash( flags );
+		return result;
+	}
+
 	PipelineBaseHash getPipelineBaseHash( RenderNodesPass const & renderPass
 		, Submesh const & data
 		, Pass const & pass
 		, bool isFrontCulled )
 	{
-		return pipflags::getPipelineBaseHash( renderPass.getEngine()->getPassComponentsRegister()
+		return getPipelineBaseHash( renderPass.getEngine()->getPassComponentsRegister()
 			, renderPass.createPipelineFlags( pass
 				, pass.getTexturesMask()
 				, data.getSubmeshFlags( &pass )
@@ -392,7 +392,7 @@ namespace castor3d
 		, Pass const & pass
 		, bool isFrontCulled )
 	{
-		return pipflags::getPipelineBaseHash( renderPass.getEngine()->getPassComponentsRegister()
+		return getPipelineBaseHash( renderPass.getEngine()->getPassComponentsRegister()
 			, renderPass.createPipelineFlags( pass
 				, pass.getTexturesMask()
 				, data.getSubmeshFlags()

@@ -97,50 +97,18 @@ namespace castor3d
 	void countNodes( RenderNodesPass const & renderPass
 		, RenderInfo & info )
 	{
-		for ( auto & pipelineNodes : renderPass.getCuller().getSubmeshNodes( renderPass ) )
+		for ( auto & node : renderPass.getCuller().getSubmeshes() )
 		{
-			for ( auto & bufferNodes : pipelineNodes.second )
+			if ( node.visibleOrFrontCulled )
 			{
-				for ( auto & sidedNode : bufferNodes.second )
-				{
-					if ( sidedNode.first.visible )
-					{
-						++info.visibleObjectsCount;
-						info.visibleFaceCount += sidedNode.first.node->data.getFaceCount();
-						info.visibleVertexCount += sidedNode.first.node->data.getPointsCount();
-					}
-
-					++info.totalObjectsCount;
-					info.totalFaceCount += sidedNode.first.node->data.getFaceCount();
-					info.totalVertexCount += sidedNode.first.node->data.getPointsCount();
-				}
+				++info.visibleObjectsCount;
+				info.visibleFaceCount += node.node->data.getFaceCount();
+				info.visibleVertexCount += node.node->data.getPointsCount();
 			}
-		}
 
-		for ( auto & pipelineNodes : renderPass.getCuller().getInstancedSubmeshNodes( renderPass ) )
-		{
-			for ( auto & bufferNodes : pipelineNodes.second )
-			{
-				for ( auto & passNodes : bufferNodes.second )
-				{
-					for ( auto & dataNodes : passNodes.second )
-					{
-						for ( auto & sidedNode : dataNodes.second )
-						{
-							if ( sidedNode.first.visible )
-							{
-								++info.visibleObjectsCount;
-								info.visibleFaceCount += sidedNode.first.node->data.getFaceCount();
-								info.visibleVertexCount += sidedNode.first.node->data.getPointsCount();
-							}
-
-							++info.totalObjectsCount;
-							info.totalFaceCount += sidedNode.first.node->data.getFaceCount();
-							info.totalVertexCount += sidedNode.first.node->data.getPointsCount();
-						}
-					}
-				}
-			}
+			++info.totalObjectsCount;
+			info.totalFaceCount += node.node->data.getFaceCount();
+			info.totalVertexCount += node.node->data.getPointsCount();
 		}
 	}
 
@@ -557,6 +525,71 @@ namespace castor3d
 #endif
 	}
 
+	NodePtrByPipelineMapT< SubmeshRenderNode > const & RenderNodesPass::getSubmeshNodes()const
+	{
+		if ( m_renderQueue )
+		{
+			return m_renderQueue->getRenderNodes().getSubmeshNodes();
+		}
+
+		static NodePtrByPipelineMapT< SubmeshRenderNode > dummy;
+		return dummy;
+	}
+
+	ObjectNodesPtrByPipelineMapT< SubmeshRenderNode > const & RenderNodesPass::getInstancedSubmeshNodes()const
+	{
+		if ( m_renderQueue )
+		{
+			return m_renderQueue->getRenderNodes().getInstancedSubmeshNodes();
+		}
+
+		static ObjectNodesPtrByPipelineMapT< SubmeshRenderNode > dummy;
+		return dummy;
+	}
+
+	NodePtrByPipelineMapT< BillboardRenderNode > const & RenderNodesPass::getBillboardNodes()const
+	{
+		if ( m_renderQueue )
+		{
+			return m_renderQueue->getRenderNodes().getBillboardNodes();
+		}
+
+		static NodePtrByPipelineMapT< BillboardRenderNode > dummy;
+		return dummy;
+	}
+
+	std::pair< uint32_t, uint32_t > RenderNodesPass::fillPipelinesIds( castor::ArrayView< uint32_t > nodesPipelinesIds )const
+	{
+		if ( m_renderQueue )
+		{
+			return m_renderQueue->getRenderNodes().fillPipelinesIds( std::move( nodesPipelinesIds ) );
+		}
+
+		return {};
+	}
+
+	PipelineBufferArray const & RenderNodesPass::getPassPipelineNodes()const
+	{
+		if ( m_renderQueue )
+		{
+			return m_renderQueue->getRenderNodes().getPassPipelineNodes();
+		}
+
+		static PipelineBufferArray dummy;
+		return dummy;
+	}
+
+	uint32_t RenderNodesPass::getPipelineNodesIndex( PipelineBaseHash const & hash
+		, ashes::BufferBase const & buffer )const
+	{
+		if ( m_renderQueue )
+		{
+			return m_renderQueue->getRenderNodes().getPipelineNodesIndex( hash, buffer );
+		}
+
+		return {};
+	}
+
 	void RenderNodesPass::initialiseAdditionalDescriptor( RenderPipeline & pipeline
 		, ShadowMapLightTypeArray const & shadowMaps
 		, GpuBufferOffsetT< castor::Point4f > const & morphTargets )
@@ -578,7 +611,7 @@ namespace castor3d
 				descriptorWrites.push_back( m_sceneUbo->getDescriptorWrite( uint32_t( GlobalBuffersIdx::eScene ) ) );
 			}
 
-			auto & nodesIds = getCuller().getNodesIds( *this );
+			auto & nodesIds = m_renderQueue->getRenderNodes().getNodesIds();
 			auto nodesIdsWrite = ashes::WriteDescriptorSet{ uint32_t( GlobalBuffersIdx::eObjectsNodeID )
 				, 0u
 				, 1u

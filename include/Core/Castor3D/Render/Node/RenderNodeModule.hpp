@@ -9,6 +9,8 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Culling/CullingModule.hpp"
 #include "Castor3D/Shader/ShaderModule.hpp"
 
+#include <unordered_map>
+
 namespace castor3d
 {
 	/**@name Render */
@@ -92,6 +94,8 @@ namespace castor3d
 	template< typename NodeT >
 	using NodeObjectT = typename RenderNodeTraitsT< NodeT >::Object;
 
+	using PipelineBufferArray = std::vector< PipelineBuffer >;
+
 	//@}
 	/**@name All nodes */
 	//@{
@@ -102,41 +106,34 @@ namespace castor3d
 	struct CountedNodeT
 	{
 		NodeT const * node{};
-		uint32_t drawCount{};
+		uint32_t instanceCount{};
+		bool visibleOrFrontCulled{};
 	};
 
 	template< typename NodeT >
-	using NodePtrArrayT = std::vector< CountedNodeT< NodeT > >;
-
-	using SubmeshRenderNodePtrArray = NodePtrArrayT< SubmeshRenderNode >;
-	using BillboardRenderNodePtrArray = NodePtrArrayT< BillboardRenderNode >;
+	using NodeArrayT = std::vector< CountedNodeT< NodeT > >;
 
 	template< typename NodeT >
-	using NodePtrByBufferMapT = std::map< ashes::BufferBase const *, NodePtrArrayT< NodeT > >;
+	using NodePtrByBufferMapT = std::unordered_map< ashes::BufferBase const *, NodeArrayT< NodeT > >;
 
 	template< typename NodeT >
-	using NodePtrByPipelineMapT = std::map< PipelineBaseHash, std::pair< RenderPipeline *, NodePtrByBufferMapT< NodeT > > >;
-
-	using SubmeshRenderNodePtrByPipelineMap = NodePtrByPipelineMapT< SubmeshRenderNode >;
-	using BillboardRenderNodePtrByPipelineMap = NodePtrByPipelineMapT< BillboardRenderNode >;
+	using NodePtrByPipelineMapT = std::unordered_map< RenderPipeline *, NodePtrByBufferMapT< NodeT > >;
 
 	//@}
 	/**@name Instanced */
 	//@{
 
 	template< typename NodeT >
-	using ObjectNodesPtrMapT = std::map< NodeObjectT< NodeT > *, NodePtrArrayT< NodeT > >;
+	using ObjectNodesPtrMapT = std::unordered_map< NodeObjectT< NodeT > *, NodeArrayT< NodeT > >;
 
 	template< typename NodeT >
-	using ObjectNodesPtrByPassT = std::map< PassRPtr, ObjectNodesPtrMapT< NodeT > >;
+	using ObjectNodesPtrByPassT = std::unordered_map< PassRPtr, ObjectNodesPtrMapT< NodeT > >;
 
 	template< typename NodeT >
-	using ObjectNodesPtrByBufferMapT = std::map< ashes::BufferBase const *, ObjectNodesPtrByPassT< NodeT > >;
+	using ObjectNodesPtrByBufferMapT = std::unordered_map< ashes::BufferBase const *, ObjectNodesPtrByPassT< NodeT > >;
 
 	template< typename NodeT >
-	using ObjectNodesPtrByPipelineMapT = std::map< PipelineBaseHash, std::pair< RenderPipeline *, ObjectNodesPtrByBufferMapT< NodeT > > >;
-
-	using SubmeshRenderNodesPtrByPipelineMap = ObjectNodesPtrByPipelineMapT< SubmeshRenderNode >;
+	using ObjectNodesPtrByPipelineMapT = std::unordered_map< RenderPipeline *, ObjectNodesPtrByBufferMapT< NodeT > >;
 
 	//@}
 	//@}

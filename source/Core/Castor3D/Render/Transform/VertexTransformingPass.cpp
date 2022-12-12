@@ -69,7 +69,7 @@ namespace castor3d
 				, morphTargets
 				, morphingWeights
 				, skinTransforms );
-			resetCommandBuffer();
+			reRecordCurrent();
 		}
 	}
 

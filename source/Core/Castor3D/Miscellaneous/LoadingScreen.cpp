@@ -273,7 +273,7 @@ namespace castor3d
 		, m_renderPass{ renderPass }
 		, m_renderSize{ size }
 		, m_camera{ loadscreen::createCamera( *m_scene, m_renderSize ) }
-		, m_culler{ std::make_unique< FrustumCuller >( *m_camera ) }
+		, m_culler{ castor::makeUniqueDerived< SceneCuller, FrustumCuller >( *m_camera ) }
 		, m_colour{ loadscreen::createColour( m_device, handler, SceneName, m_renderSize ) }
 		, m_depth{ loadscreen::createDepth( m_device, handler, SceneName, m_renderSize ) }
 		, m_matrixUbo{ m_device }

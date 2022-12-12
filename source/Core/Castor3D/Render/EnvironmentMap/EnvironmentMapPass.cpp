@@ -64,7 +64,7 @@ namespace castor3d
 		, m_index{ index }
 		, m_face{ face }
 		, m_camera{ envpass::doCreateCamera( *faceNode, getOwner()->getSize() ) }
-		, m_culler{ std::make_unique< FrustumCuller >( *m_camera ) }
+		, m_culler{ castor::makeUniqueDerived< SceneCuller, FrustumCuller >( *m_camera ) }
 		, m_matrixUbo{ m_device }
 		, m_hdrConfigUbo{ m_device }
 		, m_sceneUbo{ m_device }

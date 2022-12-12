@@ -3,6 +3,7 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Miscellaneous/DebugName.hpp"
+#include "Castor3D/Render/PipelineFlags.hpp"
 #include "Castor3D/Render/RenderNodesPass.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
@@ -44,7 +45,8 @@ namespace castor3d
 		, m_blState{ std::move( blState ) }
 		, m_msState{ std::move( msState ) }
 		, m_program{ std::move( program ) }
-		, m_flags( flags )
+		, m_flags{ flags }
+		, m_flagsHash{ getPipelineBaseHash( owner.getEngine()->getPassComponentsRegister(), m_flags ) }
 	{
 	}
 

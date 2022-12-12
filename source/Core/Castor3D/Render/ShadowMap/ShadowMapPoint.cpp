@@ -92,7 +92,8 @@ namespace castor3d
 				passData.viewport->resize( castor::Size{ ShadowMapPointTextureSize
 					, ShadowMapPointTextureSize } );
 				passData.frustum = castor::makeUnique< Frustum >( *passData.viewport );
-				passData.culler = std::make_unique< FrustumCuller >( scene, *passData.frustum );
+				passData.ownCuller = castor::makeUniqueDerived< SceneCuller, FrustumCuller >( scene, *passData.frustum );
+				passData.culler = passData.ownCuller.get();
 				auto faceIndex = shadowMapIndex * 6u + face;
 				auto name = debugName + "F" + std::to_string( face );
 				auto & pass = graph.createPass( name

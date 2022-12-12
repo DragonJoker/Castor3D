@@ -55,7 +55,7 @@ namespace castor3d
 
 				if ( m_initEvent )
 				{
-					doInitialise( queueData );
+					doInitialise( device, queueData );
 				}
 			} ) ) )
 		{
@@ -113,7 +113,7 @@ namespace castor3d
 
 	bool RenderQueue::hasNodes()const
 	{
-		return getCuller().hasCulledNodes( *getOwner() );
+		return getCuller().hasNodes();
 	}
 
 	RenderFilters RenderQueue::getFilters()const
@@ -139,14 +139,15 @@ namespace castor3d
 
 				auto & device = getOwner()->getEngine()->getRenderSystem()->getRenderDevice();
 				auto queueData = device.graphicsData();
-				doInitialise( *queueData );
+				doInitialise( device, *queueData );
 			}
 		}
 
 		return getCommandBuffer();
 	}
 
-	void RenderQueue::doInitialise( QueueData const & queueData )
+	void RenderQueue::doInitialise( RenderDevice const & device
+		, QueueData const & queueData )
 	{
 		m_commandBuffer.reset();
 		m_commandsChanged = true;
@@ -161,6 +162,7 @@ namespace castor3d
 				, 0u
 				, 0u ) );
 		m_commandBuffer->end();
+		m_renderNodes->initialise( device );
 	}
 
 	void RenderQueue::doPrepareCommandBuffer()
@@ -177,7 +179,7 @@ namespace castor3d
 	void RenderQueue::doSortRenderNodes( ShadowMapLightTypeArray & shadowMaps )
 	{
 		auto & nodes = getRenderNodes();
-		nodes.sort( shadowMaps );
+		nodes.sortNodes( shadowMaps );
 	}
 
 	void RenderQueue::doOnCullerCompute( SceneCuller const & culler )

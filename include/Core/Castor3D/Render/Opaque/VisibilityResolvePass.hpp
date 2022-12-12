@@ -145,7 +145,6 @@ namespace castor3d
 			, PipelineFlags const & flags
 			, uint32_t stride
 			, PipelineContainer & pipelines );
-		void doOnCullerCompute( SceneCuller const & culler );
 
 	private:
 		RenderDevice const & m_device;
@@ -154,7 +153,7 @@ namespace castor3d
 		MatrixUbo & m_matrixUbo;
 		SceneUbo & m_sceneUbo;
 		SceneCuller & m_culler;
-		SceneCullerSignalConnection m_onCullerCompute;
+		PassSortNodesSignalConnection m_onNodesPassSort;
 		ashes::DescriptorSetLayoutPtr m_inOutsDescriptorLayout{};
 		ashes::DescriptorSetPoolPtr m_inOutsDescriptorPool{};
 		ashes::DescriptorSetPtr m_inOutsDescriptorSet{};

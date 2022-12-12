@@ -349,6 +349,8 @@ namespace castor3d
 	};
 
 	C3D_API bool operator==( PipelineFlags const & lhs, PipelineFlags const & rhs );
+	C3D_API PipelineBaseHash getPipelineBaseHash( PassComponentRegister const & passComponents
+		, PipelineFlags const & flags );
 	C3D_API PipelineBaseHash getPipelineBaseHash( RenderNodesPass const & renderPass
 		, Submesh const & data
 		, Pass const & pass

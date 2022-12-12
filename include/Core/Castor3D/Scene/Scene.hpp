@@ -412,6 +412,11 @@ namespace castor3d
 		{
 			return *m_lightFactory;
 		}
+
+		SceneCuller & getDummyCuller()const
+		{
+			return *m_dummyCuller;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -520,6 +525,7 @@ namespace castor3d
 		FramePassTimerUPtr m_timerGpuUpdate;
 		FramePassTimerUPtr m_timerMovables;
 		CpuFrameEvent * m_cleanBackground{};
+		SceneCullerUPtr m_dummyCuller;
 
 	public:
 		//!\~english	The cameras root node name.
