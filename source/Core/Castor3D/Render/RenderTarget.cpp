@@ -474,8 +474,10 @@ namespace castor3d
 			m_signalReady.reset();
 			m_overlayPass = nullptr;
 #if C3D_DebugTimers
-			getEngine()->unregisterTimer( cuT( "AAATests" ), *m_testTimer );
-			m_testTimer.reset();
+			getEngine()->unregisterTimer( cuT( "AAACPUTests" ), *m_cpuUpdateTimer );
+			m_cpuUpdateTimer.reset();
+			getEngine()->unregisterTimer( cuT( "AAAGPUTests" ), *m_gpuUpdateTimer );
+			m_gpuUpdateTimer.reset();
 #endif
 			getEngine()->unregisterTimer( getName() + cuT( "/Overlays/Overlays" ), *m_overlaysTimer );
 			m_overlaysTimer.reset();
@@ -514,7 +516,7 @@ namespace castor3d
 		}
 
 #if C3D_DebugTimers
-		auto block( m_testTimer->start() );
+		auto block( m_cpuUpdateTimer->start() );
 #endif
 
 		auto & camera = *getCamera();
@@ -550,7 +552,7 @@ namespace castor3d
 		}
 
 #if C3D_DebugTimers
-		auto block( m_testTimer->start() );
+		auto block( m_gpuUpdateTimer->start() );
 #endif
 
 		auto & camera = *getCamera();
@@ -637,7 +639,7 @@ namespace castor3d
 		{
 			m_camera = &camera;
 			m_camera->resize( m_size );
-			m_culler = std::make_unique< FrustumCuller >( *getScene(), *getCamera() );
+			m_culler = castor::makeUniqueDerived< SceneCuller, FrustumCuller >( *getScene(), *getCamera() );
 		}
 	}
 
@@ -806,7 +808,7 @@ namespace castor3d
 		, ProgressBar * progress )
 	{
 		m_hdrConfigUbo = std::make_unique< HdrConfigUbo >( device );
-		m_culler = std::make_unique< FrustumCuller >( *getScene(), *getCamera() );
+		m_culler = castor::makeUniqueDerived< SceneCuller, FrustumCuller >( *getScene(), *getCamera() );
 		doInitCombineProgram( progress );
 		auto result = doInitialiseTechnique( device, queueData, progress );
 		setProgressBarTitle( progress, "Initialising: Render Target" );
@@ -911,8 +913,10 @@ namespace castor3d
 		m_overlaysTimer = castor::makeUnique< FramePassTimer >( device.makeContext(), getName() + cuT( "/Overlays" ) );
 		getEngine()->registerTimer( getName() + cuT( "/Overlays/Overlays" ), *m_overlaysTimer );
 #if C3D_DebugTimers
-		m_testTimer = castor::makeUnique< FramePassTimer >( device.makeContext(), cuT( "AAATests" ) );
-		getEngine()->registerTimer( cuT( "AAATests" ), *m_testTimer );
+		m_cpuUpdateTimer = castor::makeUnique< FramePassTimer >( device.makeContext(), cuT( "AAACPUTests" ) );
+		getEngine()->registerTimer( cuT( "AAACPUTests" ), *m_cpuUpdateTimer );
+		m_gpuUpdateTimer = castor::makeUnique< FramePassTimer >( device.makeContext(), cuT( "AAAGPUTests" ) );
+		getEngine()->registerTimer( cuT( "AAAGPUTests" ), *m_gpuUpdateTimer );
 #endif
 		m_signalReady = device->createSemaphore( getName() + "Ready" );
 		m_initialising = false;

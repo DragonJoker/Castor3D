@@ -1564,7 +1564,7 @@ namespace castor3d
 		, m_matrixUbo{ renderPassDesc.m_matrixUbo }
 		, m_sceneUbo{ *renderPassDesc.m_sceneUbo }
 		, m_culler{ renderPassDesc.m_culler }
-		, m_onCullerCompute( m_culler.onCompute.connect( [this]( SceneCuller const & culler ){ doOnCullerCompute( culler ); } ) )
+		, m_onNodesPassSort( m_nodesPass.onSortNodes.connect( [this]( RenderNodesPass const & pass ){ m_commandsChanged = true; } ) )
 		, m_inOutsDescriptorLayout{ visres::createInDescriptorLayout( m_device, getName(), getScene().getOwner()->getMaterialCache() ) }
 		, m_inOutsDescriptorPool{ m_inOutsDescriptorLayout->createPool( 1u ) }
 		, m_inOutsDescriptorSet{ visres::createInDescriptorSet( getName(), *m_inOutsDescriptorPool, m_matrixUbo, m_sceneUbo, *parent, getScene() ) }
@@ -1601,15 +1601,15 @@ namespace castor3d
 
 			if ( m_pipelinesIds )
 			{
-				auto [count, maxPipelineId] = m_culler.fillPipelinesIds( m_nodesPass
-					, castor::makeArrayView( reinterpret_cast< uint32_t * >( m_pipelinesIds->getPtr() ), MaxObjectNodesCount ) );
+				auto [count, maxPipelineId] = m_nodesPass.fillPipelinesIds( castor::makeArrayView( reinterpret_cast< uint32_t * >( m_pipelinesIds->getPtr() )
+					, MaxObjectNodesCount ) );
 				m_pipelinesIds->setCount( count );
 				m_pipelinesIds->setSecondaryCount( maxPipelineId );
 			}
 
 			uint32_t index = 0u;
 
-			for ( auto & bufferIt : m_culler.getPassPipelineNodes( m_nodesPass ) )
+			for ( auto & bufferIt : m_nodesPass.getPassPipelineNodes() )
 			{
 				auto buffer = bufferIt.second;
 				auto pipelineHash = bufferIt.first;
@@ -1649,19 +1649,15 @@ namespace castor3d
 				}
 			}
 
-			for ( auto & itPipeline : m_culler.getBillboardNodes( m_nodesPass ) )
+			for ( auto & itPipeline : m_nodesPass.getBillboardNodes() )
 			{
-				PipelineBaseHash const & pipelineHash = itPipeline.first;
-
 				for ( auto & itBuffer : itPipeline.second )
 				{
-					for ( auto & sidedCulled : itBuffer.second )
+					for ( auto & culled : itBuffer.second )
 					{
-						auto & culled = sidedCulled.first;
 						auto & positionsBuffer = culled.node->data.getVertexBuffer();
-						PipelineFlags pipelineFlags{ getPipelineHiHashDetails( *this
-							, pipelineHash
-							, getShaderFlags() ) };
+						auto & pipelineFlags = itPipeline.first->getFlags();
+						auto pipelineHash = itPipeline.first->getFlagsHash();
 						auto & pipeline = doCreatePipeline( pipelineHash
 							, pipelineFlags
 							, culled.node->data.getVertexStride() );
@@ -1670,8 +1666,7 @@ namespace castor3d
 						auto hash = size_t( positionsBuffer.getOffset() );
 						hash = castor::hashCombinePtr( hash, positionsBuffer.getBuffer().getBuffer() );
 						auto ires = pipeline.descriptorSets.emplace( hash, ashes::DescriptorSetPtr{} );
-						auto pipelineId = m_culler.getPipelineNodesIndex( m_nodesPass
-							, pipelineHash
+						auto pipelineId = m_nodesPass.getPipelineNodesIndex( pipelineHash
 							, *itBuffer.first );
 
 						if ( ires.second )
@@ -2152,10 +2147,5 @@ namespace castor3d
 		}
 
 		return *it->second;
-	}
-
-	void VisibilityResolvePass::doOnCullerCompute( SceneCuller const & culler )
-	{
-		m_commandsChanged = m_commandsChanged || culler.areCulledChanged();
 	}
 }

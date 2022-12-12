@@ -48,7 +48,7 @@ namespace castor3d
 			, RenderDevice const & device
 			, MatrixUbo & matrixUbo
 			, SceneUbo & sceneUbo
-			, SceneCuller & culler
+			, Camera const & camera
 			, VoxelizerUbo const & voxelizerUbo
 			, ashes::Buffer< Voxel > const & voxels
 			, VoxelSceneData const & voxelConfig );

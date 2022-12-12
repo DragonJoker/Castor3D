@@ -46,6 +46,7 @@ namespace castor3d
 			, RenderDevice const & device
 			, MatrixUbo & matrixUbo
 			, SceneCuller & culler
+			, Camera & camera
 			, ShadowMap const & shadowMap
 			, bool needsVsm
 			, bool needsRsm
@@ -78,6 +79,9 @@ namespace castor3d
 
 	public:
 		C3D_API static castor::String const Type;
+
+	private:
+		Camera & m_camera;
 	};
 }
 

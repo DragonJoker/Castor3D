@@ -722,6 +722,10 @@ namespace castor3d
 		CU_ScopedEnumBounds( eBeforeDepth )
 	};
 
+	using PassSortNodesSignalFunction = std::function< void( RenderNodesPass const & ) >;
+	using PassSortNodesSignal = castor::SignalT< PassSortNodesSignalFunction >;
+	using PassSortNodesSignalConnection = castor::ConnectionT< PassSortNodesSignal >;
+
 	using TechniquePassVector = std::vector< RenderTechniqueNodesPass * >;
 	using TechniquePasses = std::array< TechniquePassVector, size_t( TechniquePassEvent::eCount ) >;
 

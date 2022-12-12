@@ -85,8 +85,8 @@ namespace castor3d
 		: m_engine{ *device.renderSystem.getEngine() }
 		, m_device{ device }
 		, m_voxelConfig{ voxelConfig }
+		, m_camera{ camera }
 		, m_graph{ handler, prefix + "/Voxelizer" }
-		, m_culler{ scene, &camera }
 		, m_matrixUbo{ device }
 		, m_sceneUbo{ device }
 		, m_firstBounce{ vxlsr::createTexture( device, handler, "VoxelizedSceneFirstBounce", { m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value() } ) }
@@ -207,7 +207,7 @@ namespace castor3d
 					, m_device
 					, m_matrixUbo
 					, m_sceneUbo
-					, m_culler
+					, m_camera
 					, m_voxelizerUbo
 					, *m_voxels
 					, m_voxelConfig );

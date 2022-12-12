@@ -44,7 +44,7 @@ namespace castor3d
 	*/
 	class SceneCuller;
 
-	CU_DeclareSmartPtr( SceneCuller );
+	CU_DeclareCUSmartPtr( castor3d, SceneCuller, C3D_API );
 
 	using SceneCullerSignalFunction = std::function< void( SceneCuller const & ) >;
 	using SceneCullerSignal = castor::SignalT< SceneCullerSignalFunction >;

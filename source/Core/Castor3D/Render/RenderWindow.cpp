@@ -360,6 +360,8 @@ namespace castor3d
 			, std::move( handle ) ) }
 		, m_queues{ rendwndw::getQueueFamily( *m_surface, m_device.queueFamilies ) }
 		, m_reservedQueue{ m_queues->getQueueSize() > 1 ? m_queues->reserveQueue() : nullptr }
+		, m_commandBufferPool{ m_device->createCommandPool( m_device.getGraphicsQueueFamilyIndex()
+			, VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT ) }
 		, m_listener{ getEngine()->addNewFrameListener( getName() + castor::string::toString( m_index ) ) }
 		, m_size{ size }
 		, m_loading{ engine.isThreaded() }
@@ -1112,7 +1114,7 @@ namespace castor3d
 			m_renderingResources.emplace_back( std::make_unique< RenderingResources >( getDevice()->createSemaphore( getName() + castor::string::toString( i ) + "ImageAvailable" )
 				, getDevice()->createSemaphore( getName() + castor::string::toString( i ) + "FinishedRendering" )
 				, getDevice()->createFence( getName() + castor::string::toString( i ), VkFenceCreateFlags{ 0u } )
-				, queueData.commandPool->createCommandBuffer( getName() + castor::string::toString( i ) )
+				, m_commandBufferPool->createCommandBuffer( getName() + castor::string::toString( i ) )
 				, 0u ) );
 		}
 	}
@@ -1323,7 +1325,7 @@ namespace castor3d
 			{
 				auto & frameBuffer = *m_frameBuffers[index];
 				auto name = getName() + castor::string::toString( index );
-				commandBuffer = queueData.commandPool->createCommandBuffer( name );
+				commandBuffer = m_commandBufferPool->createCommandBuffer( name );
 				commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT );
 				commandBuffer->beginDebugBlock( { "RenderWindow " + name
 					, makeFloatArray( getEngine()->getNextRainbowColour() ) } );

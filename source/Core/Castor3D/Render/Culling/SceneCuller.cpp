@@ -8,8 +8,6 @@
 #include "Castor3D/Cache/ObjectCache.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
-#include "Castor3D/Material/Pass/Component/Lighting/AttenuationComponent.hpp"
-#include "Castor3D/Material/Pass/Component/Lighting/TransmissionComponent.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Render/RenderNodesPass.hpp"
@@ -29,384 +27,13 @@
 #include "Castor3D/Scene/ParticleSystem/ParticleSystem.hpp"
 
 #include <CastorUtils/Miscellaneous/BitSize.hpp>
+#include <CastorUtils/Miscellaneous/BlockTimer.hpp>
 #include <CastorUtils/Miscellaneous/Hash.hpp>
+
+CU_ImplementCUSmartPtr( castor3d, SceneCuller )
 
 namespace castor3d
 {
-	//*********************************************************************************************
-
-	namespace cullscn
-	{
-		static PipelineBaseHash getPipelineHash( RenderNodesPass const & renderPass
-			, SubmeshRenderNode const & culled
-			, bool isFrontCulled )
-		{
-			return getPipelineBaseHash( renderPass, culled.data, *culled.pass, isFrontCulled );
-		}
-
-		static PipelineBaseHash getPipelineHash( RenderNodesPass const & renderPass
-			, BillboardRenderNode const & culled
-			, bool isFrontCulled )
-		{
-			return getPipelineBaseHash( renderPass, culled.data, *culled.pass, isFrontCulled );
-		}
-
-		static void registerCulledNodes( PipelineBaseHash hash
-			, SceneCuller::CulledNodeT< BillboardRenderNode > const & culled
-			, RenderNodesPass const & renderPass
-			, bool isFrontCulled
-			, SceneCuller::SidedNodeArrayT< BillboardRenderNode > & nodes
-			, ashes::BufferBase const & buffer
-			, std::vector< PipelineBuffer > & nodesIds )
-		{
-			nodes.emplace_back( culled, isFrontCulled );
-		}
-
-		static void registerCulledNodes( PipelineBaseHash hash
-			, SceneCuller::CulledNodeT< SubmeshRenderNode > const & culled
-			, RenderNodesPass const & renderPass
-			, bool isFrontCulled
-			, SceneCuller::SidedNodeArrayT< SubmeshRenderNode > & nodes
-			, ashes::BufferBase const & buffer
-			, std::vector< PipelineBuffer > & nodesIds )
-		{
-			if ( renderPass.isMeshShading() )
-			{
-				// Additional filtering because meshlet count will be different from one node to another.
-				auto sidedNodeIt = std::find_if( nodes.begin()
-					, nodes.end()
-					, [&culled]( SceneCuller::SidedNodeT< SubmeshRenderNode > const & lookup )
-					{
-						return culled.node == lookup.first.node;
-					} );
-
-				if ( sidedNodeIt == nodes.end() )
-				{
-					nodes.emplace_back( culled, isFrontCulled );
-					sidedNodeIt = std::next( nodes.begin(), ptrdiff_t( nodes.size() - 1u ) );
-				}
-
-				++sidedNodeIt->first.instanceCount;
-			}
-			else
-			{
-				nodes.emplace_back( culled, isFrontCulled );
-			}
-		}
-
-		template< typename NodeT >
-		static void addRenderNode( SceneCuller::CulledNodeT< NodeT > const & culled
-			, RenderNodesPass const & renderPass
-			, bool isFrontCulled
-			, SceneCuller::SidedNodePipelineMapT< NodeT > & sortedNodes
-			, SceneCuller::PipelineBufferArray & nodesIds )
-		{
-			auto & node = *culled.node;
-			auto & buffer = node.getFinalBufferOffsets().getBuffer( SubmeshFlag::ePositions );
-			auto hash = getPipelineHash( renderPass, node, isFrontCulled );
-			auto & pipelineNodes = sortedNodes.emplace( hash
-				, SceneCuller::SidedNodeBufferMapT< NodeT >{} ).first->second;
-			auto & bufferNodes = pipelineNodes.emplace( &buffer
-				, SceneCuller::SidedNodeArrayT< NodeT >{} ).first->second;
-			registerCulledNodes( hash, culled, renderPass, isFrontCulled, bufferNodes, buffer, nodesIds );
-			registerPipelineNodes( hash, buffer, nodesIds );
-		}
-
-		template< typename NodeT >
-		static void addRenderNode( SceneCuller::CulledNodeT< NodeT > const & culled
-			, RenderNodesPass const & renderPass
-			, bool isFrontCulled
-			, SceneCuller::SidedObjectNodePipelineMapT< NodeT > & sortedInstancedNodes
-			, SceneCuller::PipelineBufferArray & nodesIds )
-		{
-			auto & node = *culled.node;
-			auto & buffer = node.getFinalBufferOffsets().getBuffer( SubmeshFlag::ePositions );
-			auto hash = getPipelineHash( renderPass, node, isFrontCulled );
-			auto & pipelineNodes = sortedInstancedNodes.emplace( hash
-				, SceneCuller::SidedObjectNodeBufferMapT< NodeT >{} ).first->second;
-			auto & bufferNodes = pipelineNodes.emplace( &buffer
-				, SceneCuller::SidedObjectNodePassMapT< NodeT >{} ).first->second;
-			auto & passNodes = bufferNodes.emplace( node.pass
-				, SceneCuller::SidedObjectNodeMapT< NodeT >{} ).first->second;
-			auto & objectNodes = passNodes.emplace( &node.data
-				, SceneCuller::SidedNodeArrayT< NodeT >{} ).first->second;
-			objectNodes.emplace_back( culled, isFrontCulled );
-			registerPipelineNodes( hash, buffer, nodesIds );
-		}
-
-		//*****************************************************************************************
-
-		static uint32_t getInstanceCount( SubmeshRenderNode const & culled )
-		{
-			auto & instantiation = culled.data.getInstantiation();
-			return instantiation.getRefCount( culled.pass->getOwner() );
-		}
-
-		static uint32_t getInstanceCount( BillboardRenderNode const & culled )
-		{
-			return culled.data.getCount();
-		}
-
-		static void fillIndirectCommand( SubmeshRenderNode const & culled
-			, VkDrawIndexedIndirectCommand *& indirectIndexedCommands
-			, uint32_t instanceCount )
-		{
-			auto & indexOffset = culled.getSourceBufferOffsets().getBufferChunk( SubmeshFlag::eIndex );
-			auto & bufferOffsets = culled.getFinalBufferOffsets();
-			indirectIndexedCommands->indexCount = indexOffset.getCount< uint32_t >();
-			indirectIndexedCommands->instanceCount = instanceCount;
-			indirectIndexedCommands->firstIndex = indexOffset.getFirst< uint32_t >();
-			indirectIndexedCommands->vertexOffset = int32_t( bufferOffsets.getFirstVertex< castor::Point4f >() );
-			indirectIndexedCommands->firstInstance = 0u;
-			++indirectIndexedCommands;
-		}
-
-		static void fillIndirectCommand( SubmeshRenderNode const & culled
-			, VkDrawIndirectCommand *& indirectCommands
-			, uint32_t instanceCount )
-		{
-			auto & bufferOffsets = culled.getFinalBufferOffsets();
-			indirectCommands->vertexCount = bufferOffsets.getCount< castor::Point4f >( SubmeshFlag::ePositions );
-			indirectCommands->instanceCount = instanceCount;
-			indirectCommands->firstVertex = bufferOffsets.getFirstVertex< castor::Point3f >();
-			indirectCommands->firstInstance = 0u;
-			++indirectCommands;
-		}
-
-		static void fillIndirectCommand( BillboardRenderNode const & culled
-			, VkDrawIndirectCommand *& indirectCommands )
-		{
-			auto & bufferOffsets = culled.getFinalBufferOffsets();
-			indirectCommands->vertexCount = bufferOffsets.getCount< BillboardVertex >( SubmeshFlag::ePositions );
-			indirectCommands->instanceCount = getInstanceCount( culled );
-			indirectCommands->firstVertex = bufferOffsets.getFirstVertex< BillboardVertex >();
-			indirectCommands->firstInstance = 0u;
-			++indirectCommands;
-		}
-
-#ifndef NDEBUG
-
-		static void checkBuffers( SubmeshRenderNode const & firstNode
-			, SubmeshRenderNode const & currentNode )
-		{
-			auto idxBuffer = firstNode.getSourceBufferOffsets().hasData( SubmeshFlag::eIndex )
-				? &firstNode.getSourceBufferOffsets().getBuffer( SubmeshFlag::eIndex )
-				: nullptr;
-			auto posBuffer = firstNode.getFinalBufferOffsets().hasData( SubmeshFlag::ePositions )
-				? &firstNode.getFinalBufferOffsets().getBuffer( SubmeshFlag::ePositions )
-				: nullptr;
-			auto nmlBuffer = firstNode.getFinalBufferOffsets().hasData( SubmeshFlag::eNormals )
-				? &firstNode.getFinalBufferOffsets().getBuffer( SubmeshFlag::eNormals )
-				: nullptr;
-			auto tanBuffer = firstNode.getFinalBufferOffsets().hasData( SubmeshFlag::eTangents )
-				? &firstNode.getFinalBufferOffsets().getBuffer( SubmeshFlag::eTangents )
-				: nullptr;
-			auto tex0Buffer = firstNode.getFinalBufferOffsets().hasData( SubmeshFlag::eTexcoords0 )
-				? &firstNode.getFinalBufferOffsets().getBuffer( SubmeshFlag::eTexcoords0 )
-				: nullptr;
-			auto tex1Buffer = firstNode.getFinalBufferOffsets().hasData( SubmeshFlag::eTexcoords1 )
-				? &firstNode.getFinalBufferOffsets().getBuffer( SubmeshFlag::eTexcoords1 )
-				: nullptr;
-			auto tex2Buffer = firstNode.getFinalBufferOffsets().hasData( SubmeshFlag::eTexcoords2 )
-				? &firstNode.getFinalBufferOffsets().getBuffer( SubmeshFlag::eTexcoords2 )
-				: nullptr;
-			auto tex3Buffer = firstNode.getFinalBufferOffsets().hasData( SubmeshFlag::eTexcoords3 )
-				? &firstNode.getFinalBufferOffsets().getBuffer( SubmeshFlag::eTexcoords3 )
-				: nullptr;
-			auto colBuffer = firstNode.getFinalBufferOffsets().hasData( SubmeshFlag::eColours )
-				? &firstNode.getFinalBufferOffsets().getBuffer( SubmeshFlag::eColours )
-				: nullptr;
-			auto bonBuffer = firstNode.getFinalBufferOffsets().hasData( SubmeshFlag::eSkin )
-				? &firstNode.getFinalBufferOffsets().getBuffer( SubmeshFlag::eSkin )
-				: nullptr;
-			auto pmkBuffer = firstNode.getFinalBufferOffsets().hasData( SubmeshFlag::ePassMasks )
-				? &firstNode.getFinalBufferOffsets().getBuffer( SubmeshFlag::ePassMasks )
-				: nullptr;
-
-			CU_Require( idxBuffer == ( currentNode.getSourceBufferOffsets().hasData( SubmeshFlag::eIndex )
-				? &currentNode.getSourceBufferOffsets().getBuffer( SubmeshFlag::eIndex )
-				: nullptr ) );
-			CU_Require( posBuffer == ( currentNode.getFinalBufferOffsets().hasData( SubmeshFlag::ePositions )
-				? &currentNode.getFinalBufferOffsets().getBuffer( SubmeshFlag::ePositions )
-				: nullptr ) );
-			CU_Require( nmlBuffer == ( currentNode.getFinalBufferOffsets().hasData( SubmeshFlag::eNormals )
-				? &currentNode.getFinalBufferOffsets().getBuffer( SubmeshFlag::eNormals )
-				: nullptr ) );
-			CU_Require( tanBuffer == ( currentNode.getFinalBufferOffsets().hasData( SubmeshFlag::eTangents )
-				? &currentNode.getFinalBufferOffsets().getBuffer( SubmeshFlag::eTangents )
-				: nullptr ) );
-			CU_Require( tex0Buffer == ( currentNode.getFinalBufferOffsets().hasData( SubmeshFlag::eTexcoords0 )
-				? &currentNode.getFinalBufferOffsets().getBuffer( SubmeshFlag::eTexcoords0 )
-				: nullptr ) );
-			CU_Require( tex1Buffer == ( currentNode.getFinalBufferOffsets().hasData( SubmeshFlag::eTexcoords1 )
-				? &currentNode.getFinalBufferOffsets().getBuffer( SubmeshFlag::eTexcoords1 )
-				: nullptr ) );
-			CU_Require( tex2Buffer == ( currentNode.getFinalBufferOffsets().hasData( SubmeshFlag::eTexcoords2 )
-				? &currentNode.getFinalBufferOffsets().getBuffer( SubmeshFlag::eTexcoords2 )
-				: nullptr ) );
-			CU_Require( tex3Buffer == ( currentNode.getFinalBufferOffsets().hasData( SubmeshFlag::eTexcoords3 )
-				? &currentNode.getFinalBufferOffsets().getBuffer( SubmeshFlag::eTexcoords3 )
-				: nullptr ) );
-			CU_Require( colBuffer == ( currentNode.getFinalBufferOffsets().hasData( SubmeshFlag::eColours )
-				? &currentNode.getFinalBufferOffsets().getBuffer( SubmeshFlag::eColours )
-				: nullptr ) );
-			CU_Require( bonBuffer == ( currentNode.getFinalBufferOffsets().hasData( SubmeshFlag::eSkin )
-				? &currentNode.getFinalBufferOffsets().getBuffer( SubmeshFlag::eSkin )
-				: nullptr ) );
-			CU_Require( pmkBuffer == ( currentNode.getFinalBufferOffsets().hasData( SubmeshFlag::ePassMasks )
-				? &currentNode.getFinalBufferOffsets().getBuffer( SubmeshFlag::ePassMasks )
-				: nullptr ) );
-		}
-
-#endif
-
-#if VK_NV_mesh_shader
-
-		static void fillIndirectCommand( SubmeshRenderNode const & culled
-			, VkDrawMeshTasksIndirectCommandNV *& indirectMeshCommands
-			, uint32_t instanceCount
-			, uint32_t taskCount )
-		{
-			for ( uint32_t i = 0u; i < instanceCount; ++i )
-			{
-				indirectMeshCommands->taskCount = taskCount;
-				indirectMeshCommands->firstTask = 0u;
-				++indirectMeshCommands;
-			}
-		}
-
-		static void fillNodeCommands( SubmeshRenderNode const & node
-			, bool meshShading
-			, VkDrawMeshTasksIndirectCommandNV *& indirectMeshBuffer
-			, VkDrawIndexedIndirectCommand *& indirectIdxBuffer
-			, VkDrawIndirectCommand *& indirectNIdxBuffer
-			, uint32_t instanceCount )
-		{
-			if ( meshShading
-				&& node.data.getMeshletsCount()
-				&& indirectMeshBuffer )
-			{
-				fillIndirectCommand( node
-					, indirectMeshBuffer
-					, node.data.isDynamic() ? 1u : instanceCount
-					, node.data.getMeshletsCount() );
-			}
-			else if ( node.getSourceBufferOffsets().hasData( SubmeshFlag::eIndex ) )
-			{
-				fillIndirectCommand( node
-					, indirectIdxBuffer
-					, instanceCount );
-			}
-			else
-			{
-				fillIndirectCommand( node
-					, indirectNIdxBuffer
-					, instanceCount );
-			}
-		}
-
-		static void fillNodeCommands( SceneCuller::SidedNodeArrayT< SubmeshRenderNode > const & nodes
-			, bool meshShading
-			, VkDrawMeshTasksIndirectCommandNV *& indirectMeshBuffer
-			, VkDrawIndexedIndirectCommand *& indirectIdxBuffer
-			, VkDrawIndirectCommand *& indirectNIdxBuffer )
-		{
-			uint32_t instanceCount = 0u;
-
-			for ( auto & node : nodes )
-			{
-				if ( node.first.node->instance.getParent()->isVisible() )
-				{
-					++instanceCount;
-#	ifndef NDEBUG
-					checkBuffers( *nodes.front().first.node, *node.first.node );
-#	endif
-				}
-			}
-
-			fillNodeCommands( *nodes.front().first.node
-				, meshShading
-				, indirectMeshBuffer
-				, indirectIdxBuffer
-				, indirectNIdxBuffer
-				, instanceCount );
-		}
-
-		static void fillNodeCommands( SubmeshRenderNode const & node
-			, Scene const & scene
-			, bool meshShading
-			, VkDrawMeshTasksIndirectCommandNV *& indirectMeshBuffer
-			, VkDrawIndexedIndirectCommand *& indirectIdxBuffer
-			, VkDrawIndirectCommand *& indirectNIdxBuffer
-			, uint32_t *& pipelinesBuffer )
-		{
-			fillNodeCommands( node
-				, meshShading
-				, indirectMeshBuffer
-				, indirectIdxBuffer
-				, indirectNIdxBuffer
-				, getInstanceCount( node ) );
-			( *pipelinesBuffer ) = node.instance.getId( *node.pass, node.data );
-			++pipelinesBuffer;
-		}
-
-#else
-
-		static void fillNodeCommands( SubmeshRenderNode const & node
-			, VkDrawIndexedIndirectCommand *& indirectIdxBuffer
-			, VkDrawIndirectCommand *& indirectNIdxBuffer
-			, uint32_t instanceCount )
-		{
-			if ( node.getSourceBufferOffsets().hasData( SubmeshFlag::eIndex ) )
-			{
-				fillIndirectCommand( node, indirectIdxBuffer, instanceCount );
-			}
-			else
-			{
-				fillIndirectCommand( node, indirectNIdxBuffer, instanceCount );
-			}
-		}
-
-		static void fillNodeCommands( SceneCuller::SidedNodeArrayT< SubmeshRenderNode > const & nodes
-			, VkDrawIndexedIndirectCommand *& indirectIdxBuffer
-			, VkDrawIndirectCommand *& indirectNIdxBuffer )
-		{
-			uint32_t instanceCount = 0u;
-
-			for ( auto & node : nodes )
-			{
-				if ( node.first.node->instance.getParent()->isVisible() )
-				{
-					++instanceCount;
-#ifndef NDEBUG
-					checkBuffers( *nodes.front().first.node, *node.first.node );
-#endif
-				}
-			}
-
-			fillNodeCommands( *nodes.front().first.node
-				, indirectIdxBuffer
-				, indirectNIdxBuffer
-				, instanceCount );
-		}
-
-		static void fillNodeCommands( SubmeshRenderNode const & node
-			, Scene const & scene
-			, VkDrawIndexedIndirectCommand *& indirectIdxBuffer
-			, VkDrawIndirectCommand *& indirectNIdxBuffer
-			, uint32_t *& pipelinesBuffer )
-		{
-			fillNodeCommands( node
-				, indirectIdxBuffer
-				, indirectNIdxBuffer
-				, getInstanceCount( node ) );
-			( *pipelinesBuffer ) = node.instance.getId( *node.pass, node.data );
-			++pipelinesBuffer;
-		}
-
-#endif
-	}
-
 	//*********************************************************************************************
 
 	AnimatedObjectSPtr findAnimatedObject( Scene const & scene
@@ -496,11 +123,9 @@ namespace castor3d
 		m_timer = castor::makeUnique< FramePassTimer >( device.makeContext(), cuT( "Culling/General" ) );
 		m_timerDirty = castor::makeUnique< FramePassTimer >( device.makeContext(), cuT( "Culling/Dirty" ) );
 		m_timerCompute = castor::makeUnique< FramePassTimer >( device.makeContext(), cuT( "Culling/Compute" ) );
-		m_timerIndirect = castor::makeUnique< FramePassTimer >( device.makeContext(), cuT( "Culling/Indirect" ) );
 		m_scene.getEngine()->registerTimer( cuT( "Culling/General" ), *m_timer );
 		m_scene.getEngine()->registerTimer( cuT( "Culling/Dirty" ), *m_timerDirty );
 		m_scene.getEngine()->registerTimer( cuT( "Culling/Compute" ), *m_timerCompute );
-		m_scene.getEngine()->registerTimer( cuT( "Culling/Indirect" ), *m_timerIndirect );
 #endif
 	}
 
@@ -511,14 +136,14 @@ namespace castor3d
 
 	void SceneCuller::registerRenderPass( RenderNodesPass const & renderPass )
 	{
-		m_renderPasses.emplace( &renderPass, RenderPassBuffers{} );
+		//m_renderPasses.emplace( &renderPass, RenderPassBuffers{} );
 	}
 
 	void SceneCuller::unregisterRenderPass( RenderNodesPass const & renderPass )
 	{
-		auto it = m_renderPasses.find( &renderPass );
-		CU_Require( it != m_renderPasses.end() );
-		m_renderPasses.erase( it );
+		//auto it = m_renderPasses.find( &renderPass );
+		//CU_Require( it != m_renderPasses.end() );
+		//m_renderPasses.erase( it );
 	}
 
 	void SceneCuller::update( CpuUpdater & updater )
@@ -550,83 +175,15 @@ namespace castor3d
 
 		if ( m_culledChanged )
 		{
-			doSortNodes();
-			doInitGpuBuffers();
-			doFillIndirect();
 			onCompute( *this );
 		}
-	}
-
-	std::pair< uint32_t, uint32_t > SceneCuller::fillPipelinesIds( RenderNodesPass const & renderPass
-		, castor::ArrayView< uint32_t > nodesPipelinesIds )const
-	{
-		auto it = m_renderPasses.find( &renderPass );
-		CU_Require( it != m_renderPasses.end() );
-		uint32_t maxId{};
-		uint32_t count{};
-
-		for ( auto & nodeIt : it->second.nodesPipelinesIds )
-		{
-			nodesPipelinesIds[nodeIt.first] = nodeIt.second;
-			maxId = std::max( nodeIt.second, maxId );
-			++count;
-		}
-
-		return { count, maxId };
-	}
-
-	void SceneCuller::registerNodePipeline( RenderNodesPass const & renderPass
-		, uint32_t nodeId
-		, uint32_t pipelineId )
-	{
-		auto it = m_renderPasses.find( &renderPass );
-		CU_Require( it != m_renderPasses.end() );
-		it->second.nodesPipelinesIds.emplace( nodeId, pipelineId );
-	}
-
-	SceneCuller::PipelineBufferArray const & SceneCuller::getPassPipelineNodes( RenderNodesPass const & renderPass )const
-	{
-		auto it = m_renderPasses.find( &renderPass );
-		CU_Require( it != m_renderPasses.end() );
-		return it->second.nodesIds;
-	}
-
-	uint32_t SceneCuller::getPipelineNodesIndex( RenderNodesPass const & renderPass
-		, PipelineBaseHash const & hash
-		, ashes::BufferBase const & buffer )const
-	{
-		return getPipelineNodeIndex( hash
-			, buffer
-			, getPassPipelineNodes( renderPass ) );
-	}
-
-	uint32_t SceneCuller::getPipelineNodesIndex( RenderNodesPass const & renderPass
-		, Submesh const & submesh
-		, Pass const & pass
-		, ashes::BufferBase const & buffer
-		, bool isFrontCulled )const
-	{
-		return getPipelineNodesIndex( renderPass
-			, getPipelineBaseHash( renderPass, submesh, pass, isFrontCulled )
-			, buffer );
-	}
-
-	uint32_t SceneCuller::getPipelineNodesIndex( RenderNodesPass const & renderPass
-		, BillboardBase const & billboard
-		, Pass const & pass
-		, ashes::BufferBase const & buffer
-		, bool isFrontCulled )const
-	{
-		return getPipelineNodesIndex( renderPass
-			, getPipelineBaseHash( renderPass, billboard, pass, isFrontCulled )
-			, buffer );
 	}
 
 	void SceneCuller::removeCulled( SubmeshRenderNode const & node )
 	{
 		auto it = std::find_if( m_culledSubmeshes.begin()
 			, m_culledSubmeshes.end()
-			, [&node]( CulledNodeT< SubmeshRenderNode > const & lookup )
+			, [&node]( CountedNodeT< SubmeshRenderNode > const & lookup )
 			{
 				return &node == lookup.node;
 			} );
@@ -641,7 +198,7 @@ namespace castor3d
 	{
 		auto it = std::find_if( m_culledBillboards.begin()
 			, m_culledBillboards.end()
-			, [&node]( CulledNodeT< BillboardRenderNode > const & lookup )
+			, [&node]( CountedNodeT< BillboardRenderNode > const & lookup )
 			{
 				return &node == lookup.node;
 			} );
@@ -694,15 +251,15 @@ namespace castor3d
 			for ( auto & node : m_culledSubmeshes )
 			{
 				auto visible = isSubmeshVisible( *node.node );
-				m_culledChanged = m_culledChanged || node.visible != visible;
-				node.visible = visible;
+				m_culledChanged = m_culledChanged || node.visibleOrFrontCulled != visible;
+				node.visibleOrFrontCulled = visible;
 			}
 
 			for ( auto & node : m_culledBillboards )
 			{
 				auto visible = isBillboardVisible( *node.node );
-				m_culledChanged = m_culledChanged || node.visible != visible;
-				node.visible = visible;
+				m_culledChanged = m_culledChanged || node.visibleOrFrontCulled != visible;
+				node.visibleOrFrontCulled = visible;
 			}
 		}
 		else
@@ -726,255 +283,6 @@ namespace castor3d
 #endif
 			duUpdateCulledSubmeshes( dirtySubmeshes );
 			duUpdateCulledBillboards( dirtyBillboards );
-		}
-	}
-
-	void SceneCuller::doSortNodes()
-	{
-		for ( auto & renderPassIt : m_renderPasses )
-		{
-			auto & renderPass = *renderPassIt.first;
-			auto & nodesIds = renderPassIt.second.nodesIds;
-			auto & sortedSubmeshes = renderPassIt.second.sortedSubmeshes;
-			auto & sortedInstancedSubmeshes = renderPassIt.second.sortedInstancedSubmeshes;
-			nodesIds.clear();
-			sortedSubmeshes.clear();
-			sortedInstancedSubmeshes.clear();
-
-			for ( auto toAdd : m_culledSubmeshes )
-			{
-				doAddSubmesh( toAdd
-					, renderPass
-					, sortedSubmeshes
-					, sortedInstancedSubmeshes
-					, nodesIds );
-			}
-
-			auto & sortedBillboards = renderPassIt.second.sortedBillboards;
-			sortedBillboards.clear();
-
-			for ( auto toAdd : m_culledBillboards )
-			{
-				doAddBillboard( toAdd
-					, renderPass
-					, sortedBillboards
-					, nodesIds );
-			}
-		}
-	}
-
-	void SceneCuller::doInitGpuBuffers()
-	{
-		auto & device = getScene().getEngine()->getRenderSystem()->getRenderDevice();
-
-		for ( auto & renderPassIt : m_renderPasses )
-		{
-			if ( !renderPassIt.second.pipelinesNodes
-				&& ( !renderPassIt.second.sortedBillboards.empty()
-					|| !renderPassIt.second.sortedSubmeshes.empty()
-					|| !renderPassIt.second.sortedInstancedSubmeshes.empty() ) )
-			{
-				renderPassIt.second.pipelinesNodes = makeBuffer< PipelineNodes >( device
-					, MaxPipelines
-					, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
-					, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-					, renderPassIt.first->getTypeName() + "/NodesIDs" );
-			}
-
-			if ( !renderPassIt.second.submeshIdxIndirectCommands
-				&& ( !renderPassIt.second.sortedSubmeshes.empty()
-					|| !renderPassIt.second.sortedInstancedSubmeshes.empty() ) )
-			{
-#if VK_NV_mesh_shader
-				renderPassIt.second.submeshMeshletIndirectCommands = makeBuffer< VkDrawMeshTasksIndirectCommandNV >( device
-					, MaxSubmeshMeshletDrawIndirectCommand
-					, VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT
-					, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-					, renderPassIt.first->getTypeName() + "/SubmeshMeshletIndirectBuffer" );
-#endif
-				renderPassIt.second.submeshIdxIndirectCommands = makeBuffer< VkDrawIndexedIndirectCommand >( device
-					, MaxSubmeshIdxDrawIndirectCommand
-					, VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT
-					, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-					, renderPassIt.first->getTypeName() + "/SubmeshIndexedIndirectBuffer" );
-				renderPassIt.second.submeshNIdxIndirectCommands = makeBuffer< VkDrawIndirectCommand >( device
-					, MaxSubmeshNIdxDrawIndirectCommand
-					, VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT
-					, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-					, renderPassIt.first->getTypeName() + "/SubmeshIndirectBuffer" );
-			}
-
-			if ( !renderPassIt.second.billboardIndirectCommands
-				&& !renderPassIt.second.sortedBillboards.empty() )
-			{
-				renderPassIt.second.billboardIndirectCommands = makeBuffer< VkDrawIndirectCommand >( device
-					, MaxBillboardDrawIndirectCommand
-					, VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT
-					, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-					, renderPassIt.first->getTypeName() + "/BillboardIndirectBuffer" );
-			}
-		}
-	}
-
-	void SceneCuller::doFillIndirect()
-	{
-#if C3D_DebugTimers
-		auto block( m_timerIndirect->start() );
-#endif
-		for ( auto & renderPassIt : m_renderPasses )
-		{
-			auto & renderPass = *renderPassIt.first;
-			auto & pipelinesNodes = renderPassIt.second.nodesIds;
-
-			if ( !pipelinesNodes.empty() )
-			{
-				auto & nodesIds = renderPassIt.second.pipelinesNodes;
-				auto nodesIdsBuffer = nodesIds->lock( 0u, ashes::WholeSize, 0u );
-				auto maxNodesCount = nodesIds->getCount();
-				auto & sortedSubmeshes = renderPassIt.second.sortedSubmeshes;
-				auto & sortedInstancedSubmeshes = renderPassIt.second.sortedInstancedSubmeshes;
-
-				if ( !sortedSubmeshes.empty()
-					|| !sortedInstancedSubmeshes.empty() )
-				{
-#if VK_NV_mesh_shader
-					auto & indirectMshCommands = renderPassIt.second.submeshMeshletIndirectCommands;
-					auto origIndirectMshBuffer = indirectMshCommands
-						? indirectMshCommands->lock( 0u, ashes::WholeSize, 0u )
-						: nullptr;
-					auto indirectMshBuffer = origIndirectMshBuffer;
-#endif
-					auto & indirectIdxCommands = renderPassIt.second.submeshIdxIndirectCommands;
-					auto origIndirectIdxBuffer = indirectIdxCommands->lock( 0u, ashes::WholeSize, 0u );
-					auto indirectIdxBuffer = origIndirectIdxBuffer;
-
-					auto & indirectNIdxCommands = renderPassIt.second.submeshNIdxIndirectCommands;
-					auto origIndirectNIdxBuffer = indirectNIdxCommands->lock( 0u, ashes::WholeSize, 0u );
-					auto indirectNIdxBuffer = origIndirectNIdxBuffer;
-
-					for ( auto & pipelineIt : sortedSubmeshes )
-					{
-						for ( auto & bufferIt : pipelineIt.second )
-						{
-							auto & pipelineNodes = getPipelineNodes( pipelineIt.first
-								, *bufferIt.first
-								, pipelinesNodes
-								, nodesIdsBuffer
-								, maxNodesCount );
-							auto pipelinesBuffer = pipelineNodes.data();
-
-							for ( auto & sidedCulled : bufferIt.second )
-							{
-								if ( sidedCulled.first.visible )
-								{
-#if VK_NV_mesh_shader
-									cullscn::fillNodeCommands( *sidedCulled.first.node
-										, m_scene
-										, renderPass.isMeshShading()
-										, indirectMshBuffer
-										, indirectIdxBuffer
-										, indirectNIdxBuffer
-										, pipelinesBuffer );
-									CU_Require( size_t( std::distance( origIndirectMshBuffer, indirectMshBuffer ) ) <= indirectMshCommands->getCount() );
-#else
-									cullscn::fillNodeCommands( *sidedCulled.first.node
-										, m_scene
-										, indirectIdxBuffer
-										, indirectNIdxBuffer
-										, pipelinesBuffer );
-#endif
-									CU_Require( size_t( std::distance( origIndirectIdxBuffer, indirectIdxBuffer ) ) <= indirectIdxCommands->getCount() );
-									CU_Require( size_t( std::distance( origIndirectNIdxBuffer, indirectNIdxBuffer ) ) <= indirectNIdxCommands->getCount() );
-									CU_Require( size_t( std::distance( pipelineNodes.data(), pipelinesBuffer ) ) <= pipelineNodes.size() );
-								}
-							}
-						}
-					}
-
-					for ( auto & pipelineIt : sortedInstancedSubmeshes )
-					{
-						for ( auto & bufferIt : pipelineIt.second )
-						{
-							for ( auto & passIt : bufferIt.second )
-							{
-								for ( auto & submeshIt : passIt.second )
-								{
-#if VK_NV_mesh_shader
-									cullscn::fillNodeCommands( submeshIt.second
-										, renderPass.isMeshShading()
-										, indirectMshBuffer
-										, indirectIdxBuffer
-										, indirectNIdxBuffer );
-									CU_Require( size_t( std::distance( origIndirectMshBuffer, indirectMshBuffer ) ) <= indirectMshCommands->getCount() );
-#else
-									cullscn::fillNodeCommands( submeshIt.second
-										, indirectIdxBuffer
-										, indirectNIdxBuffer );
-#endif
-									CU_Require( size_t( std::distance( origIndirectIdxBuffer, indirectIdxBuffer ) ) <= indirectIdxCommands->getCount() );
-									CU_Require( size_t( std::distance( origIndirectNIdxBuffer, indirectNIdxBuffer ) ) <= indirectNIdxCommands->getCount() );
-								}
-							}
-						}
-					}
-
-#if VK_NV_mesh_shader
-
-					if ( indirectMshCommands )
-					{
-						indirectMshCommands->flush( 0u, ashes::WholeSize );
-						indirectMshCommands->unlock();
-					}
-
-#endif
-					indirectIdxCommands->flush( 0u, ashes::WholeSize );
-					indirectIdxCommands->unlock();
-					indirectNIdxCommands->flush( 0u, ashes::WholeSize );
-					indirectNIdxCommands->unlock();
-				}
-
-				auto & sortedBillboards = renderPassIt.second.sortedBillboards;
-
-				if ( !sortedBillboards.empty() )
-				{
-					auto & indirectCommands = renderPassIt.second.billboardIndirectCommands;
-					auto origIndirectBuffer = indirectCommands->lock( 0u, ashes::WholeSize, 0u );
-					auto indirectBuffer = origIndirectBuffer;
-
-					for ( auto & perPipeline : sortedBillboards )
-					{
-						for ( auto & perBuffer : perPipeline.second )
-						{
-							auto & pipelineNodes = getPipelineNodes( perPipeline.first
-								, *perBuffer.first
-								, pipelinesNodes
-								, nodesIdsBuffer
-								, maxNodesCount );
-							auto pipelinesBuffer = pipelineNodes.data();
-
-							for ( auto & sidedCulled : perBuffer.second )
-							{
-								auto culled = sidedCulled.first;
-
-								if ( culled.visible )
-								{
-									cullscn::fillIndirectCommand( *culled.node, indirectBuffer );
-									( *pipelinesBuffer ) = culled.node->instance.getId( *culled.node->pass );
-									++pipelinesBuffer;
-									CU_Require( size_t( std::distance( origIndirectBuffer, indirectBuffer ) ) <= indirectCommands->getCount() );
-									CU_Require( size_t( std::distance( pipelineNodes.data(), pipelinesBuffer ) ) <= pipelineNodes.size() );
-								}
-							}
-						}
-					}
-
-					indirectCommands->flush( 0u, ashes::WholeSize );
-					indirectCommands->unlock();
-				}
-
-				nodesIds->flush( 0u, ashes::WholeSize );
-				nodesIds->unlock();
-			}
 		}
 	}
 
@@ -1002,7 +310,7 @@ namespace castor3d
 		{
 			auto it = std::find_if( m_culledSubmeshes.begin()
 				, m_culledSubmeshes.end()
-				, [dirty]( CulledNodeT< SubmeshRenderNode > const & lookup )
+				, [dirty]( CountedNodeT< SubmeshRenderNode > const & lookup )
 				{
 					return lookup.node == dirty;
 				} );
@@ -1010,8 +318,8 @@ namespace castor3d
 
 			if ( it != m_culledSubmeshes.end() )
 			{
-				m_culledChanged = m_culledChanged || it->visible != visible;
-				it->visible = visible;
+				m_culledChanged = m_culledChanged || it->visibleOrFrontCulled != visible;
+				it->visibleOrFrontCulled = visible;
 			}
 			else
 			{
@@ -1027,7 +335,7 @@ namespace castor3d
 		{
 			auto it = std::find_if( m_culledBillboards.begin()
 				, m_culledBillboards.end()
-				, [dirty]( CulledNodeT< BillboardRenderNode > const & lookup )
+				, [dirty]( CountedNodeT< BillboardRenderNode > const & lookup )
 				{
 					return lookup.node == dirty;
 				} );
@@ -1037,15 +345,15 @@ namespace castor3d
 			if ( it != m_culledBillboards.end() )
 			{
 				m_culledChanged = m_culledChanged
-					|| it->visible != visible
+					|| it->visibleOrFrontCulled != visible
 					|| it->instanceCount != count;
-				it->visible = visible;
+				it->visibleOrFrontCulled = visible;
 				it->instanceCount = count;
 			}
 			else
 			{
 				m_culledChanged = true;
-				m_culledBillboards.push_back( { dirty, visible, count } );
+				m_culledBillboards.push_back( { dirty, count, visible } );
 			}
 		}
 	}
@@ -1084,86 +392,6 @@ namespace castor3d
 					dirtyBillboards.push_back( node );
 				}
 			}
-		}
-	}
-
-	void SceneCuller::doAddSubmesh( CulledNodeT< SubmeshRenderNode > const & culled
-		, RenderNodesPass const & renderPass
-		, SceneCuller::SidedNodePipelineMapT< SubmeshRenderNode > & sorted
-		, SceneCuller::SidedObjectNodePipelineMapT< SubmeshRenderNode > & sortedInstanced
-		, SceneCuller::PipelineBufferArray & nodesIds )
-	{
-		auto & node = *culled.node;
-
-		if ( renderPass.isValidPass( *node.pass )
-			&& renderPass.isValidRenderable( node.instance )
-			&& node.instance.getParent() != renderPass.getIgnoredNode() )
-		{
-			bool needsFront = !node.pass->hasComponent< AttenuationComponent >()
-				&& ( ( !checkFlag( renderPass.getRenderFilters(), RenderFilter::eAlphaBlend ) )
-					|| ( node.pass->hasComponent< TransmissionComponent >()
-						&& !checkFlag( renderPass.getRenderFilters(), RenderFilter::eTransmission ) )
-					|| renderPass.forceTwoSided()
-					|| node.pass->isTwoSided()
-					|| node.pass->hasAlphaBlending() );
-			auto & instantiation = node.data.getInstantiation();
-
-			if ( instantiation.isInstanced( node.instance.getMaterial( node.data ) ) )
-			{
-				if ( node.instance.getParent()->isVisible() )
-				{
-					cullscn::addRenderNode( culled
-						, renderPass
-						, false
-						, sortedInstanced
-						, nodesIds );
-
-					if ( needsFront )
-					{
-						cullscn::addRenderNode( culled
-							, renderPass
-							, true
-							, sortedInstanced
-							, nodesIds );
-					}
-				}
-			}
-			else
-			{
-				cullscn::addRenderNode( culled
-					, renderPass
-					, false
-					, sorted
-					, nodesIds );
-
-				if ( needsFront )
-				{
-					cullscn::addRenderNode( culled
-						, renderPass
-						, true
-						, sorted
-						, nodesIds );
-				}
-			}
-		}
-	}
-
-	void SceneCuller::doAddBillboard( CulledNodeT< BillboardRenderNode > const & culled
-		, RenderNodesPass const & renderPass
-		, SceneCuller::SidedNodePipelineMapT< BillboardRenderNode > & sorted
-		, SceneCuller::PipelineBufferArray & nodesIds )
-	{
-		auto & node = *culled.node;
-
-		if ( renderPass.isValidPass( *node.pass )
-			&& renderPass.isValidRenderable( node.instance )
-			&& node.instance.getNode() != renderPass.getIgnoredNode() )
-		{
-			cullscn::addRenderNode( culled
-				, renderPass
-				, false
-				, sorted
-				, nodesIds );
 		}
 	}
 

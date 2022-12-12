@@ -55,7 +55,7 @@ namespace castor3d
 		, RenderDevice const & device
 		, MatrixUbo & matrixUbo
 		, SceneUbo & sceneUbo
-		, SceneCuller & culler
+		, Camera const & camera
 		, VoxelizerUbo const & voxelizerUbo
 		, ashes::Buffer< Voxel > const & voxels
 		, VoxelSceneData const & voxelConfig )
@@ -65,9 +65,15 @@ namespace castor3d
 			, device
 			, Type
 			, nullptr
-			, RenderNodesPassDesc{ { voxelConfig.gridSize.value(), voxelConfig.gridSize.value(), 1u }, matrixUbo, sceneUbo, culler, RenderFilter::eNone, true, true } }
-		, m_scene{ culler.getScene() }
-		, m_camera{ culler.getCamera() }
+			, RenderNodesPassDesc{ { voxelConfig.gridSize.value(), voxelConfig.gridSize.value(), 1u }
+				, matrixUbo
+				, sceneUbo
+				, camera.getScene()->getDummyCuller()
+				, RenderFilter::eNone
+				, true
+				, true } }
+		, m_scene{ *camera.getScene() }
+		, m_camera{ camera }
 		, m_voxels{ voxels }
 		, m_voxelizerUbo{ voxelizerUbo }
 		, m_voxelConfig{ voxelConfig }

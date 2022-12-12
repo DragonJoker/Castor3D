@@ -20,6 +20,7 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/RenderWindow.hpp"
+#include "Castor3D/Render/Culling/DummyCuller.hpp"
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp"
 #include "Castor3D/Render/Node/BillboardRenderNode.hpp"
@@ -103,6 +104,7 @@ namespace castor3d
 		, m_lightFactory{ std::make_shared< LightFactory >() }
 		, m_listener{ engine.addNewFrameListener( cuT( "Scene_" ) + name + castor::string::toString( intptr_t( this ) ) ) }
 		, m_renderNodes{ castor::makeUnique< SceneRenderNodes >( *this ) }
+		, m_dummyCuller{ castor::makeUniqueDerived< SceneCuller, DummyCuller >( *this ) }
 	{
 		m_rootCameraNode->attachTo( *m_rootNode );
 		m_rootObjectNode->attachTo( *m_rootNode );

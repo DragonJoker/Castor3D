@@ -140,7 +140,8 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		void doInitialise( QueueData const & queueData );
+		void doInitialise( RenderDevice const & device
+			, QueueData const & queueData );
 		void doPrepareCommandBuffer();
 		void doSortRenderNodes( ShadowMapLightTypeArray & shadowMaps );
 		void doOnCullerCompute( SceneCuller const & culler );

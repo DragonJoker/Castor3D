@@ -178,9 +178,8 @@ namespace castor3d
 						, *scene.getCameraRootNode()
 						, viewport
 						, true )
-					, nullptr ) );
+					, &scene.getDummyCuller() ) );
 				auto & passData = *result.back();
-				passData.culler = std::make_unique< DummyCuller >( scene, passData.camera.get() );
 				auto & pass = graph.createPass( debugName
 					, [&passData, &device, &shadowMap, cascade, vsm, rsm]( crg::FramePass const & framePass
 						, crg::GraphContext & context
@@ -192,6 +191,7 @@ namespace castor3d
 							, device
 							, *passData.matrixUbo
 							, *passData.culler
+							, *passData.camera
 							, shadowMap
 							, vsm
 							, rsm

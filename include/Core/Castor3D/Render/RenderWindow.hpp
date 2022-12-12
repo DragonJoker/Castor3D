@@ -554,6 +554,7 @@ namespace castor3d
 		ashes::SurfacePtr m_surface;
 		QueuesData * m_queues{};
 		QueueData const * m_reservedQueue{};
+		ashes::CommandPoolPtr m_commandBufferPool;
 		ashes::SwapChainPtr m_swapChain;
 		ashes::ImageArray m_swapChainImages;
 		std::vector< ashes::ImageViewArray > m_swapchainViews;

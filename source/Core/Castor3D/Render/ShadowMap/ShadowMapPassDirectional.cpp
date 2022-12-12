@@ -52,6 +52,7 @@ namespace castor3d
 		, RenderDevice const & device
 		, MatrixUbo & matrixUbo
 		, SceneCuller & culler
+		, Camera & camera
 		, ShadowMap const & shadowMap
 		, bool needsVsm
 		, bool needsRsm
@@ -66,13 +67,14 @@ namespace castor3d
 			, shadowMap
 			, needsVsm
 			, needsRsm }
+		, m_camera{ camera }
 	{
 		log::trace << "Created " << getName() << std::endl;
 	}
 
 	ShadowMapPassDirectional::~ShadowMapPassDirectional()
 	{
-		getCuller().getCamera().detach();
+		m_camera.detach();
 	}
 
 	void ShadowMapPassDirectional::update( CpuUpdater & updater )

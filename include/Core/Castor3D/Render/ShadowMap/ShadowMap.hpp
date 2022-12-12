@@ -30,7 +30,8 @@ namespace castor3d
 				, SceneCullerUPtr culler )
 				: matrixUbo{ std::move( matrixUbo ) }
 				, camera{ std::move( camera ) }
-				, culler{ std::move( culler ) }
+				, ownCuller{ std::move( culler ) }
+				, culler{ ownCuller.get() }
 				, pass{ nullptr }
 			{
 			}
@@ -40,7 +41,19 @@ namespace castor3d
 				, SceneCullerUPtr culler )
 				: matrixUbo{ std::move( matrixUbo ) }
 				, viewport{ std::move( viewport ) }
-				, culler{ std::move( culler ) }
+				, ownCuller{ std::move( culler ) }
+				, culler{ ownCuller.get() }
+				, pass{ nullptr }
+			{
+			}
+
+			PassData( std::unique_ptr< MatrixUbo > matrixUbo
+				, CameraSPtr camera
+				, SceneCuller * culler )
+				: matrixUbo{ std::move( matrixUbo ) }
+				, camera{ std::move( camera ) }
+				, ownCuller{ nullptr }
+				, culler{ culler }
 				, pass{ nullptr }
 			{
 			}
@@ -49,7 +62,8 @@ namespace castor3d
 			CameraSPtr camera;
 			ViewportUPtr viewport;
 			FrustumUPtr frustum;
-			SceneCullerUPtr culler;
+			SceneCullerUPtr ownCuller;
+			SceneCuller * culler;
 			ShadowMapPass * pass;
 		};
 		using PassDataPtr = std::unique_ptr< PassData >;

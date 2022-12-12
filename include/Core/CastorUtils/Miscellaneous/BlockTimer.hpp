@@ -23,7 +23,7 @@ namespace castor
 		 *\param[in]	file		Le fichier oà se trouve la fonction
 		 *\param[in]	line		La ligne dans la fonction
 		 */
-		CU_API BlockTimer( char const * function
+		CU_API BlockTimer( std::string function
 			, char const * file
 			, uint32_t line );
 		/**
@@ -42,6 +42,7 @@ namespace castor
 	};
 }
 
+#define CU_TimeEx( Name ) castor::BlockTimer timer##__LINE__{ std::string{ __FUNCTION__ } + std::string{ " - " } + Name, __FILE__, uint32_t( __LINE__ ) }
 #define CU_Time() castor::BlockTimer timer##__LINE__{ __FUNCTION__, __FILE__, uint32_t( __LINE__ ) }
 
 #endif

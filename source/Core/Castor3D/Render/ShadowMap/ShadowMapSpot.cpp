@@ -86,7 +86,8 @@ namespace castor3d
 					, std::move( viewport ) )
 				, nullptr ) );
 			auto & passData = *result.back();
-			passData.culler = std::make_unique< FrustumCuller >( scene, *passData.camera );
+			passData.ownCuller = castor::makeUniqueDerived< SceneCuller, FrustumCuller >( scene, *passData.camera );
+			passData.culler = passData.ownCuller.get();
 			auto & pass = graph.createPass( debugName
 				, [shadowMapIndex, &passData, &device, &shadowMap, vsm, rsm]( crg::FramePass const & framePass
 					, crg::GraphContext & context

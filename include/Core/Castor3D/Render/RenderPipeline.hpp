@@ -201,6 +201,11 @@ namespace castor3d
 			return m_flags;
 		}
 
+		PipelineBaseHash const & getFlagsHash()const
+		{
+			return m_flagsHash;
+		}
+
 		bool hasPipeline()const
 		{
 			return m_pipeline != nullptr;
@@ -254,6 +259,7 @@ namespace castor3d
 		ashes::PipelineMultisampleStateCreateInfo m_msState;
 		ShaderProgramSPtr m_program;
 		PipelineFlags m_flags;
+		PipelineBaseHash m_flagsHash;
 		std::vector< ashes::PipelineVertexInputStateCreateInfo > m_vertexLayouts;
 		ashes::VkPushConstantRangeArray m_pushConstantRanges;
 		std::unique_ptr< VkViewport > m_viewport;
