@@ -152,7 +152,6 @@ namespace castor3d
 		ShaderBuffer * m_pipelinesIds;
 		MatrixUbo & m_matrixUbo;
 		SceneUbo & m_sceneUbo;
-		SceneCuller & m_culler;
 		PassSortNodesSignalConnection m_onNodesPassSort;
 		ashes::DescriptorSetLayoutPtr m_inOutsDescriptorLayout{};
 		ashes::DescriptorSetPoolPtr m_inOutsDescriptorPool{};
