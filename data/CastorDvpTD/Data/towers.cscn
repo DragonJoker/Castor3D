@@ -200,9 +200,17 @@ material "Boulder"
 
 // Meshes
 
+skeleton "HeavySplash"
+{
+	import "Meshes/HeavySplash.cskl"
+	import_anim "Meshes/HeavySplash-armature_short_range.1-attack.cska"
+	import_anim "Meshes/HeavySplash-armature_short_range.1-pCylinder7-Take 001-BaseLayer.cska"
+}
+
 mesh "HeavySplash"
 {
 	import "Meshes/HeavySplash.cmsh"
+	skeleton "HeavySplash"
 
 	default_materials
 	{
@@ -212,9 +220,17 @@ mesh "HeavySplash"
 	}
 }
 
+skeleton "Inventor"
+{
+	import "Meshes/Inventor.cskl"
+	import_anim "Meshes/Inventor-armature_inventor.1-Action.cska"
+	import_anim "Meshes/Inventor-armature_inventor.1-pCylinder7-Take 001-BaseLayer.cska"
+}
+
 mesh "Inventor"
 {
 	import "Meshes/Inventor.cmsh"
+	skeleton "Inventor"
 
 	default_materials
 	{
@@ -224,9 +240,18 @@ mesh "Inventor"
 	}
 }
 
+skeleton "ShortRange"
+{
+	import "Meshes/ShortRange.cskl"
+	import_anim "Meshes/ShortRange-armature_short_range.1-attack.cska"
+	import_anim "Meshes/ShortRange-armature_short_range.1-pCylinder7-Take 001-BaseLayer.cska"
+	import_anim "Meshes/ShortRange-armature_short_range.1-standing.cska"
+}
+
 mesh "ShortRange"
 {
 	import "Meshes/ShortRange.cmsh"
+	skeleton "ShortRange"
 
 	default_materials
 	{
