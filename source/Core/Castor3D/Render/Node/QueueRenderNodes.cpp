@@ -32,6 +32,7 @@
 #include "Castor3D/Scene/Animation/AnimatedSkeleton.hpp"
 
 #include <CastorUtils/Miscellaneous/BlockTimer.hpp>
+#include <CastorUtils/Miscellaneous/Hash.hpp>
 
 CU_ImplementCUSmartPtr( castor3d, QueueRenderNodes )
 
@@ -44,20 +45,6 @@ namespace castor3d
 {
 	namespace queuerndnd
 	{
-		static PipelineBaseHash getPipelineHash( RenderNodesPass const & renderPass
-			, SubmeshRenderNode const & culled
-			, bool isFrontCulled )
-		{
-			return getPipelineBaseHash( renderPass, culled.data, *culled.pass, isFrontCulled );
-		}
-
-		static PipelineBaseHash getPipelineHash( RenderNodesPass const & renderPass
-			, BillboardRenderNode const & culled
-			, bool isFrontCulled )
-		{
-			return getPipelineBaseHash( renderPass, culled.data, *culled.pass, isFrontCulled );
-		}
-
 		template< typename NodeT
 			, typename OnSubmeshFuncT >
 		static void doTraverseNodes( ObjectNodesPtrByPipelineMapT< NodeT > & nodes

@@ -114,7 +114,6 @@ namespace castor3d
 
 	private:
 		Scene const & m_scene;
-		Camera const & m_camera;
 		ashes::Buffer< Voxel > const & m_voxels;
 		VoxelizerUbo const & m_voxelizerUbo;
 		VoxelSceneData const & m_voxelConfig;

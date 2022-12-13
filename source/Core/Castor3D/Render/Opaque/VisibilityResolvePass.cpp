@@ -1563,7 +1563,6 @@ namespace castor3d
 		, m_pipelinesIds{ pipelinesIds }
 		, m_matrixUbo{ renderPassDesc.m_matrixUbo }
 		, m_sceneUbo{ *renderPassDesc.m_sceneUbo }
-		, m_culler{ renderPassDesc.m_culler }
 		, m_onNodesPassSort( m_nodesPass.onSortNodes.connect( [this]( RenderNodesPass const & pass ){ m_commandsChanged = true; } ) )
 		, m_inOutsDescriptorLayout{ visres::createInDescriptorLayout( m_device, getName(), getScene().getOwner()->getMaterialCache() ) }
 		, m_inOutsDescriptorPool{ m_inOutsDescriptorLayout->createPool( 1u ) }

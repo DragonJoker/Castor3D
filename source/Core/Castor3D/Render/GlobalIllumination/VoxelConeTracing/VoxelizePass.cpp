@@ -73,7 +73,6 @@ namespace castor3d
 				, true
 				, true } }
 		, m_scene{ *camera.getScene() }
-		, m_camera{ camera }
 		, m_voxels{ voxels }
 		, m_voxelizerUbo{ voxelizerUbo }
 		, m_voxelConfig{ voxelConfig }
