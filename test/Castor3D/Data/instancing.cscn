@@ -42,6 +42,11 @@ scene "Scene"
 		intensity 0.8 1.0
 	}
 
+	mesh "Mesh"
+	{
+		type "torus" -inner_count=40 -outer_count=40 -inner_size=15 -outer_size=35
+	}
+
 	scene_node "FinalNode0"
 	{
 	}
@@ -49,9 +54,6 @@ scene "Scene"
 	{
 		parent "FinalNode0"
 		mesh "Mesh"
-		{
-			type "torus" -inner_count=40 -outer_count=40 -inner_size=15 -outer_size=35
-		}
 		material "Silver"
 	}
 
@@ -272,9 +274,6 @@ scene "Scene"
 	{
 		parent "FinalNode20"
 		mesh "Mesh"
-		{
-			type "torus" -inner_count=40 -outer_count=40 -inner_size=25 -outer_size=50
-		}
 		material "Silver"
 	}
 

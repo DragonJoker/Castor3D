@@ -279,6 +279,7 @@ namespace castor3d
 	void Engine::initialise( uint32_t wanted, bool threaded )
 	{
 		castor::Debug::initialise();
+		m_cpuJobs.reset();
 		m_threaded = threaded;
 
 		if ( !m_renderSystem )

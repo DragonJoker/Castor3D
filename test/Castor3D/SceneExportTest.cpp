@@ -45,9 +45,10 @@ namespace Testing
 			p_cache.add( p_object->getName(), p_object );
 		}
 
-		void cleanup( SceneRPtr & scene )
+		void cleanup( SceneRPtr scene )
 		{
 			auto & engine = *scene->getEngine();
+			engine.getRenderLoop().renderSyncFrame();
 			scene->cleanup();
 			engine.getRenderLoop().renderSyncFrame();
 			engine.removeScene( scene->getName() );
@@ -65,6 +66,7 @@ namespace Testing
 		doRegisterTest( "SceneExportTest::InstancedScene", std::bind( &SceneExportTest::InstancedScene, this ) );
 		doRegisterTest( "SceneExportTest::AlphaScene", std::bind( &SceneExportTest::AlphaScene, this ) );
 		doRegisterTest( "SceneExportTest::AnimatedScene", std::bind( &SceneExportTest::AnimatedScene, this ) );
+		doRegisterTest( "SceneExportTest::LoadSceneThenAnother", std::bind( &SceneExportTest::LoadSceneThenAnother, this ) );
 	}
 
 	void SceneExportTest::SimpleScene()
@@ -87,43 +89,47 @@ namespace Testing
 		doTestScene( cuT( "Anim.zip" ) );
 	}
 
-	SceneRPtr SceneExportTest::doParseScene( Path const & p_path )
+	void SceneExportTest::LoadSceneThenAnother()
+	{
+		cleanup( doParseScene( m_testDataFolder / cuT( "light_directional.cscn" ), true ) );
+		m_engine.cleanup();
+		m_engine.initialise( 1, false );
+		cleanup( doParseScene( m_testDataFolder / cuT( "instancing.cscn" ), true ) );
+		m_engine.cleanup();
+		m_engine.initialise( 1, false );
+		cleanup( doParseScene( m_testDataFolder / cuT( "Alpha.zip" ), true ) );
+		m_engine.cleanup();
+		m_engine.initialise( 1, false );
+		cleanup( doParseScene( m_testDataFolder / cuT( "Anim.zip" ), true ) );
+	}
+
+	SceneRPtr SceneExportTest::doParseScene( Path const & path
+		, bool initialise )
 	{
 		SceneFileParser dstParser{ m_engine };
-		CT_REQUIRE( dstParser.parseFile( p_path ) );
+		CT_REQUIRE( dstParser.parseFile( path ) );
 		CT_REQUIRE( dstParser.scenesBegin() != dstParser.scenesEnd() );
-		auto scene{ dstParser.scenesBegin()->second };
-		auto window = std::make_shared< RenderWindow >( "SceneExportTest"
-			, m_engine
-			, Size{ 800u, 600u }
-			, ashes::WindowHandle{ std::make_unique< TestWindowHandle >() } );
+		auto result = dstParser.scenesBegin()->second;
 
-		if ( window )
+		if ( initialise )
 		{
-			m_engine.getRenderLoop().renderSyncFrame();
-			m_engine.getRenderLoop().renderSyncFrame();
+			result->initialise();
 		}
 
-		return scene;
+		return result;
 	}
 
 	void SceneExportTest::doTestScene( String const & p_name )
 	{
 		SceneRPtr src{ doParseScene( m_testDataFolder / p_name ) };
-		Path path{ cuT( "TestScene.cscn" ) };
+		Path path = Path{ cuT( "TestScene" ) } / cuT( "TestScene.cscn" );
 		CT_CHECK( exportScene( *src, path ) );
-		auto window = std::make_shared< RenderWindow >( "SceneExportTest"
-			, m_engine
-			, Size{ 800u, 600u }
-			, ashes::WindowHandle{ std::make_unique< TestWindowHandle >() } );
-
 		m_engine.getSceneCache().rename( src->getName()
 			, src->getName() + cuT( "_ren" ) );
-		SceneRPtr dst{ doParseScene( Path{ cuT( "TestScene" ) } / cuT( "TestScene.cscn" ) ) };
+		SceneRPtr dst{ doParseScene( path ) };
 		CT_EQUAL( *src, *dst );
 		File::directoryDelete( Path{ cuT( "TestScene" ) } );
 		cleanup( dst );
 		cleanup( src );
-		doCleanupEngine();
 	}
 }

@@ -175,6 +175,12 @@ namespace castor3d
 		}
 	}
 
+	void PassBuffer::cleanup()
+	{
+		auto lock( castor::makeUniqueLock( m_mutex ) );
+		m_dirty.clear();
+	}
+
 	VkDescriptorSetLayoutBinding PassBuffer::createLayoutBinding( uint32_t binding
 		, VkShaderStageFlags stages )const
 	{

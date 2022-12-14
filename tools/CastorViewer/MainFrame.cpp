@@ -504,6 +504,7 @@ namespace CastorViewer
 			}
 
 			m_renderPanel->reset();
+			engine->getRenderLoop().renderSyncFrame();
 			m_mainScene->cleanup();
 			engine->getRenderLoop().renderSyncFrame();
 

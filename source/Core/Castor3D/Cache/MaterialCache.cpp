@@ -211,10 +211,19 @@ namespace castor
 		{
 			auto lock( makeUniqueLock( *this ) );
 			doCleanupNoLock();
+
+			if ( m_passBuffer )
+			{
+				m_passBuffer->cleanup();
+			}
 		}
 		m_engine.postEvent( makeCpuFunctorEvent( EventType::ePostRender
 			, [this]()
 			{
+				auto lock( makeUniqueLock( *this ) );
+				m_pendingPasses.clear();
+				m_pendingUnits.clear();
+				m_pendingTextures.clear();
 				m_specificsBuffers.cleanup();
 				m_passBuffer.reset();
 				m_sssProfileBuffer.reset();

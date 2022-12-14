@@ -472,7 +472,7 @@ namespace castor3d
 			parsingContext.parser->getEngine()->getRenderLoop().showDebugOverlays( params[0]->get( value ) );
 		}
 	}
-	CU_EndAttributePush( CSCNSection::eScene )
+	CU_EndAttribute()
 
 	CU_ImplementAttributeParser( parserRootWindow )
 	{
@@ -1811,7 +1811,7 @@ namespace castor3d
 	}
 	CU_EndAttribute()
 
-		CU_ImplementAttributeParser( parserParticleSystemDimensions )
+	CU_ImplementAttributeParser( parserParticleSystemDimensions )
 	{
 		auto & parsingContext = getParserContext( context );
 

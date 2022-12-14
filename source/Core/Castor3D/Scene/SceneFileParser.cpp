@@ -453,7 +453,7 @@ namespace castor3d
 			addParser( result, uint32_t( CSCNSection::eCamera ), cuT( "parent" ), parserCameraParent, { makeParameter< ParameterType::eName >() } );
 			addParser( result, uint32_t( CSCNSection::eCamera ), cuT( "viewport" ), parserCameraViewport );
 			addParser( result, uint32_t( CSCNSection::eCamera ), cuT( "hdr_config" ), parserCameraHdrConfig );
-			addParser( result, uint32_t( CSCNSection::eCamera ), cuT( "primitive" ), parserCameraPrimitive, { makeParameter< ParameterType::eCheckedText, LimitedType< VkPrimitiveTopology > >() } );
+			addParser( result, uint32_t( CSCNSection::eCamera ), cuT( "primitive" ), parserCameraPrimitive, { makeParameter< ParameterType::eCheckedText, VkPrimitiveTopology >() } );
 			addParser( result, uint32_t( CSCNSection::eCamera ), cuT( "}" ), parserCameraEnd );
 		}
 

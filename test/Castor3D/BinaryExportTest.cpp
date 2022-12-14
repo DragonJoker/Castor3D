@@ -158,12 +158,13 @@ namespace Testing
 		auto & rhs = static_cast< Mesh const & >( *dst );
 		CT_EQUAL( src, rhs );
 		File::deleteFile( path );
+		m_engine.getRenderLoop().renderSyncFrame();
 		scene.cleanup();
 		m_engine.getRenderLoop().renderSyncFrame();
 		src.cleanup();
 		dst->cleanup();
 		dst.reset();
-		doCleanupEngine();
+		m_engine.getRenderLoop().renderSyncFrame();
 	}
 
 	//*********************************************************************************************

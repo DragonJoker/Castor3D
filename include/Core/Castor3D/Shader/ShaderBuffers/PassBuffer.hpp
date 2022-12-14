@@ -219,6 +219,13 @@ namespace castor3d
 			, ashes::CommandBuffer const & commandBuffer );
 		/**
 		 *\~english
+		 *\return		Clears the dirty passes container.
+		 *\~french
+		 *\brief		Vide le conteneur de passes à mettre à jour.
+		 */
+		C3D_API void cleanup();
+		/**
+		 *\~english
 		 *\brief		Creates the descriptor set layout binding.
 		 *\~french
 		 *\brief		Crée une attache de layout de set de descripteurs.

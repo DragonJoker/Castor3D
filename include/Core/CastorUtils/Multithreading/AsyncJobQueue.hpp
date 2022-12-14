@@ -60,6 +60,13 @@ namespace castor
 		 *\brief		Attend que tous les jobs soient terminés, prévient tout nouveau job, iles juste jeté.
 		 */
 		CU_API void finish();
+		/**
+		 *\~english
+		 *\brief		Resets the queue initial state.
+		 *\~french
+		 *\brief		Réinitialise la file à son état initial.
+		 */
+		CU_API void reset();
 
 	private:
 		void doRun();

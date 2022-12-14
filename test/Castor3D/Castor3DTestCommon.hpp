@@ -863,7 +863,6 @@ namespace Testing
 			, castor3d::Engine & engine );
 
 	protected:
-		void doCleanupEngine();
 		using TestCase::compare;
 		bool compare( castor::Angle const & p_a, castor::Angle const & p_b );
 		bool compare( castor::Quaternion const & p_a, castor::Quaternion const & p_b );
@@ -953,6 +952,10 @@ namespace Testing
 
 			return result;
 		}
+
+	protected:
+		void doRegisterTest( std::string const & p_name
+			, TestFunction p_test )override;
 
 	protected:
 		castor3d::Engine & m_engine;

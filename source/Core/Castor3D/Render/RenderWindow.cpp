@@ -420,6 +420,11 @@ namespace castor3d
 		doDestroyRenderPass();
 		doDestroyProgram();
 		m_device.uboPool->putBuffer( m_configUbo );
+
+		if ( m_reservedQueue )
+		{
+			m_queues->unreserveQueue( m_reservedQueue );
+		}
 	}
 
 	void RenderWindow::initialise( RenderTarget & target )
