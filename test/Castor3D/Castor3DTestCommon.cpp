@@ -7,6 +7,74 @@ using namespace castor3d;
 
 namespace Testing
 {
+	namespace details
+	{
+		std::map< castor::String, SceneNodeSPtr > sortNodes( Scene const & scene )
+		{
+			std::map< castor::String, SceneNodeSPtr > result;
+			auto lock = castor::makeUniqueLock( scene.getSceneNodeCache() );
+
+			for ( auto it : scene.getSceneNodeCache() )
+			{
+				result.emplace( it.first, it.second );
+			}
+
+			return result;
+		}
+
+		std::map< castor::String, GeometrySPtr > sortGeometries( Scene const & scene )
+		{
+			std::map< castor::String, GeometrySPtr > result;
+			auto lock = castor::makeUniqueLock( scene.getGeometryCache() );
+
+			for ( auto it : scene.getGeometryCache() )
+			{
+				result.emplace( it.first, it.second );
+			}
+
+			return result;
+		}
+
+		std::map< castor::String, LightSPtr > sortLights( Scene const & scene )
+		{
+			std::map< castor::String, LightSPtr > result;
+			auto lock = castor::makeUniqueLock( scene.getLightCache() );
+
+			for ( auto it : scene.getLightCache() )
+			{
+				result.emplace( it.first, it.second );
+			}
+
+			return result;
+		}
+
+		std::map< castor::String, CameraSPtr > sortCameras( Scene const & scene )
+		{
+			std::map< castor::String, CameraSPtr > result;
+			auto lock = castor::makeUniqueLock( scene.getCameraCache() );
+
+			for ( auto it : scene.getCameraCache() )
+			{
+				result.emplace( it.first, it.second );
+			}
+
+			return result;
+		}
+
+		std::map< castor::String, AnimatedObjectGroupSPtr > sortAnimatedGroups( Scene const & scene )
+		{
+			std::map< castor::String, AnimatedObjectGroupSPtr > result;
+			auto lock = castor::makeUniqueLock( scene.getAnimatedObjectGroupCache() );
+
+			for ( auto it : scene.getAnimatedObjectGroupCache() )
+			{
+				result.emplace( it.first, it.second );
+			}
+
+			return result;
+		}
+	}
+
 	C3DTestCase::C3DTestCase( std::string const & name
 		, castor3d::Engine & engine )
 		: TestCase{ name }
@@ -15,10 +83,16 @@ namespace Testing
 	{
 	}
 
-	void C3DTestCase::doCleanupEngine()
+	void C3DTestCase::doRegisterTest( std::string const & p_name
+		, TestFunction p_test )
 	{
-		m_engine.cleanup();
-		m_engine.initialise( 1, false );
+		TestCase::doRegisterTest( p_name
+			, [this, p_test]()
+			{
+				m_engine.initialise( 1, false );
+				p_test();
+				m_engine.cleanup();
+			} );
 	}
 
 	bool C3DTestCase::compare( Angle const & lhs, Angle const & rhs )
@@ -42,12 +116,12 @@ namespace Testing
 	{
 		bool result = true;
 		{
-			auto lockA = castor::makeUniqueLock( lhs.getSceneNodeCache() );
-			auto lockB = castor::makeUniqueLock( rhs.getSceneNodeCache() );
-			auto itA = lhs.getSceneNodeCache().begin();
-			auto endItA = lhs.getSceneNodeCache().end();
-			auto itB = rhs.getSceneNodeCache().begin();
-			auto endItB = rhs.getSceneNodeCache().end();
+			auto sortedLhs = details::sortNodes( lhs );
+			auto sortedRhs = details::sortNodes( lhs );
+			auto itA = sortedLhs.begin();
+			auto endItA = sortedLhs.end();
+			auto itB = sortedRhs.begin();
+			auto endItB = sortedRhs.end();
 
 			while ( result && itA != endItA && itB != endItB )
 			{
@@ -66,12 +140,12 @@ namespace Testing
 
 		if ( result )
 		{
-			auto lockA = castor::makeUniqueLock( lhs.getGeometryCache() );
-			auto lockB = castor::makeUniqueLock( rhs.getGeometryCache() );
-			auto itA = lhs.getGeometryCache().begin();
-			auto endItA =  lhs.getGeometryCache().end();
-			auto itB = rhs.getGeometryCache().begin();
-			auto endItB = rhs.getGeometryCache().end();
+			auto sortedLhs = details::sortGeometries( lhs );
+			auto sortedRhs = details::sortGeometries( lhs );
+			auto itA = sortedLhs.begin();
+			auto endItA = sortedLhs.end();
+			auto itB = sortedRhs.begin();
+			auto endItB = sortedRhs.end();
 
 			while ( result && itA != endItA && itB != endItB )
 			{
@@ -84,12 +158,12 @@ namespace Testing
 
 		if ( result )
 		{
-			auto lockA = castor::makeUniqueLock( lhs.getLightCache() );
-			auto lockB = castor::makeUniqueLock( rhs.getLightCache() );
-			auto itA = lhs.getLightCache().begin();
-			auto endItA =  lhs.getLightCache().end();
-			auto itB = rhs.getLightCache().begin();
-			auto endItB = rhs.getLightCache().end();
+			auto sortedLhs = details::sortLights( lhs );
+			auto sortedRhs = details::sortLights( lhs );
+			auto itA = sortedLhs.begin();
+			auto endItA = sortedLhs.end();
+			auto itB = sortedRhs.begin();
+			auto endItB = sortedRhs.end();
 
 			while ( result && itA != endItA && itB != endItB )
 			{
@@ -102,12 +176,12 @@ namespace Testing
 
 		if ( result )
 		{
-			auto lockA = castor::makeUniqueLock( lhs.getCameraCache() );
-			auto lockB = castor::makeUniqueLock( rhs.getCameraCache() );
-			auto itA = lhs.getCameraCache().begin();
-			auto endItA =  lhs.getCameraCache().end();
-			auto itB = rhs.getCameraCache().begin();
-			auto endItB = rhs.getCameraCache().end();
+			auto sortedLhs = details::sortCameras( lhs );
+			auto sortedRhs = details::sortCameras( lhs );
+			auto itA = sortedLhs.begin();
+			auto endItA = sortedLhs.end();
+			auto itB = sortedRhs.begin();
+			auto endItB = sortedRhs.end();
 
 			while ( result && itA != endItA && itB != endItB )
 			{
@@ -126,12 +200,12 @@ namespace Testing
 
 		if ( result )
 		{
-			auto lockA = castor::makeUniqueLock( lhs.getAnimatedObjectGroupCache() );
-			auto lockB = castor::makeUniqueLock( rhs.getAnimatedObjectGroupCache() );
-			auto itA = lhs.getAnimatedObjectGroupCache().begin();
-			auto endItA =  lhs.getAnimatedObjectGroupCache().end();
-			auto itB = rhs.getAnimatedObjectGroupCache().begin();
-			auto endItB = rhs.getAnimatedObjectGroupCache().end();
+			auto sortedLhs = details::sortAnimatedGroups( lhs );
+			auto sortedRhs = details::sortAnimatedGroups( lhs );
+			auto itA = sortedLhs.begin();
+			auto endItA = sortedLhs.end();
+			auto itB = sortedRhs.begin();
+			auto endItB = sortedRhs.end();
 
 			while ( result && itA != endItA && itB != endItB )
 			{
@@ -281,8 +355,7 @@ namespace Testing
 
 	bool C3DTestCase::compare( Mesh const & lhs, Mesh const & rhs )
 	{
-		bool result{ CT_EQUAL( lhs.getName(), rhs.getName() ) };
-		result = result && CT_EQUAL( lhs.getSubmeshCount(), rhs.getSubmeshCount() );
+		bool result{ CT_EQUAL( lhs.getSubmeshCount(), rhs.getSubmeshCount() ) };
 		auto itA = lhs.begin();
 		auto const endItA = lhs.end();
 		auto itB = rhs.begin();

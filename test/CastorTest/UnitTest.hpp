@@ -686,7 +686,7 @@ namespace Testing
 		}
 
 	protected:
-		void doRegisterTest( std::string const & p_name
+		virtual void doRegisterTest( std::string const & p_name
 			, TestFunction p_test );
 
 	private:

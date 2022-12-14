@@ -122,7 +122,12 @@ namespace castor3d
 			}
 
 			m_uploadTimer = nullptr;
-			m_reservedQueue = nullptr;
+
+			if ( m_reservedQueue )
+			{
+				device.unreserveGraphicsData( m_reservedQueue );
+				m_reservedQueue = nullptr;
+			}
 		}
 		else
 		{

@@ -206,6 +206,12 @@ namespace castor3d
 		return result;
 	}
 
+	void QueuesData::unreserveQueue( QueueData const * queue )const
+	{
+		auto lock( castor::makeUniqueLock( m_mutex ) );
+		m_remainingQueuesData.push_back( queue );
+	}
+
 	QueueData const * QueuesData::getQueue()
 	{
 		auto lock( castor::makeUniqueLock( m_mutex ) );
@@ -630,6 +636,11 @@ namespace castor3d
 	QueueData const * RenderDevice::reserveGraphicsData()const
 	{
 		return m_preferredGraphicsQueue->reserveQueue();
+	}
+
+	void RenderDevice::unreserveGraphicsData( QueueData const * queueData )const
+	{
+		m_preferredGraphicsQueue->unreserveQueue( queueData );
 	}
 
 	void RenderDevice::putGraphicsData( QueueData const * queueData )const

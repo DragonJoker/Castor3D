@@ -48,27 +48,10 @@ namespace
 			{
 				if ( file.getExtension() == CU_SharedLibExt )
 				{
-					// Since techniques depend on renderers, we load these first
-					if ( file.find( cuT( "RenderSystem" ) ) != String::npos )
+					if ( !engine.getPluginCache().loadPlugin( file ) )
 					{
-						if ( !engine.getPluginCache().loadPlugin( file ) )
-						{
-							arrayFailed.push_back( file );
-						}
+						arrayFailed.push_back( file );
 					}
-					else
-					{
-						otherPlugins.push_back( file );
-					}
-				}
-			}
-
-			// Then we load other plug-ins
-			for ( auto file : otherPlugins )
-			{
-				if ( !engine.getPluginCache().loadPlugin( file ) )
-				{
-					arrayFailed.push_back( file );
 				}
 			}
 
@@ -107,11 +90,7 @@ namespace
 			CU_Exception( "No renderer plug-ins" );
 		}
 
-		if ( result->loadRenderer( "test" ) )
-		{
-			result->initialise( 1, false );
-		}
-		else
+		if ( !result->loadRenderer( "test" ) )
 		{
 			CU_Exception( "Couldn't load renderer." );
 		}
@@ -146,8 +125,6 @@ int main( int argc, char const * argv[] )
 
 		// Tests loop.
 		BENCHLOOP( count, result );
-
-		engine->cleanup();
 	}
 	Logger::cleanup();
 	return int( result );

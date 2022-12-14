@@ -361,6 +361,9 @@ namespace castor3d
 	void Scene::cleanup()
 	{
 		m_initialised = false;
+		m_dirtyNodes.clear();
+		m_dirtyBillboards.clear();
+		m_dirtyObjects.clear();
 		m_animatedObjectGroupCache->cleanup();
 		m_cameraCache->cleanup();
 		m_particleSystemCache->cleanup();
@@ -412,6 +415,25 @@ namespace castor3d
 #endif
 		engine.unregisterTimer( getName() + "/ParticlesGPU", *m_timerParticlesGpu );
 		m_timerParticlesGpu.reset();
+
+		{
+			auto lock( castor::makeUniqueLock( getEngine()->getRenderTargetCache() ) );
+			for ( auto & target : getEngine()->getRenderTargetCache().getRenderTargets( TargetType::eTexture ) )
+			{
+				if ( target->getScene() == this )
+				{
+					target->cleanup( *getEngine()->getRenderDevice() );
+				}
+			}
+
+			for ( auto & target : getEngine()->getRenderTargetCache().getRenderTargets( TargetType::eWindow ) )
+			{
+				if ( target->getScene() == this )
+				{
+					target->cleanup( *getEngine()->getRenderDevice() );
+				}
+			}
+		}
 	}
 
 	void Scene::update( CpuUpdater & updater )

@@ -982,16 +982,15 @@ namespace castor3d
 			return;
 		}
 
-		auto & queue = *getOwner();
-		auto renderPass = queue.getOwner();
-		auto & culler = queue.getCuller();
-		auto & scene = culler.getScene();
 		auto nodesIdsBuffer = m_pipelinesNodes->lock( 0u, ashes::WholeSize, 0u );
 		auto maxNodesCount = m_pipelinesNodes->getCount();
 
 		if ( !m_submeshNodes.empty()
 			|| !m_instancedSubmeshNodes.empty() )
 		{
+			auto & queue = *getOwner();
+			auto & scene = queue.getCuller().getScene();
+			auto renderPass = queue.getOwner();
 #if VK_NV_mesh_shader
 			auto origIndirectMshBuffer = m_submeshMeshletIndirectCommands
 				? m_submeshMeshletIndirectCommands->lock( 0u, ashes::WholeSize, 0u )
@@ -1283,7 +1282,6 @@ namespace castor3d
 	RenderPipeline & QueueRenderNodes::doGetPipeline( SubmeshRenderNode const & node
 		, bool frontCulled )
 	{
-		auto & renderPass = *getOwner()->getOwner();
 		auto & submesh = node.data;
 		auto & pass = *node.pass;
 		size_t hash = std::hash< Submesh const * >{}( &submesh );
@@ -1294,6 +1292,7 @@ namespace castor3d
 
 		if ( it == m_pipelines.end() )
 		{
+			auto & renderPass = *getOwner()->getOwner();
 			auto & scene = getOwner()->getCuller().getScene();
 			auto material = pass.getOwner();
 			auto pipelineFlags = renderPass.createPipelineFlags( pass

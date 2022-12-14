@@ -232,6 +232,7 @@ namespace castor3d
 		C3D_API void initialise( ashes::Device const & device );
 		C3D_API void setQueueSize( size_t count );
 		C3D_API QueueData const * reserveQueue()const;
+		C3D_API void unreserveQueue( QueueData const * queue )const;
 		C3D_API QueueData const * getQueue();
 		C3D_API void putQueue( QueueData const * queue );
 
@@ -296,6 +297,7 @@ namespace castor3d
 		C3D_API QueueDataWrapper graphicsData()const;
 		C3D_API size_t graphicsQueueSize()const;
 		C3D_API QueueData const * reserveGraphicsData()const;
+		C3D_API void unreserveGraphicsData( QueueData const * queueData )const;
 		C3D_API void putGraphicsData( QueueData const * queueData )const;
 		C3D_API crg::GraphContext & makeContext()const;
 		C3D_API bool hasExtension( std::string_view const & name )const;

@@ -43,6 +43,16 @@ namespace castor
 		m_pool.waitAll( Milliseconds{ Milliseconds::max() } );
 	}
 
+	void AsyncJobQueue::reset()
+	{
+		if ( m_ended )
+		{
+			m_worker.join();
+			m_ended = false;
+			m_worker = std::thread{ [this]() { doRun(); } };
+		}
+	}
+
 	void AsyncJobQueue::doRun()
 	{
 		while ( !m_ended )

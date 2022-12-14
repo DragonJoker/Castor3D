@@ -494,18 +494,18 @@ namespace castor3d
 			{
 				effect->cleanup( device );
 			}
-
-			m_renderTechnique.reset();
-			m_objects.destroy();
-			m_overlays.destroy();
-			m_velocity->destroy();
-			m_combined.destroy();
-			m_combineStages.clear();
-			m_combinePxl.shader.reset();
-			m_combineVtx.shader.reset();
-			m_culler.reset();
-			m_hdrConfigUbo.reset();
 		}
+
+		m_renderTechnique.reset();
+		m_objects.destroy();
+		m_overlays.destroy();
+		m_velocity->destroy();
+		m_combined.destroy();
+		m_combineStages.clear();
+		m_combinePxl.shader.reset();
+		m_combineVtx.shader.reset();
+		m_culler.reset();
+		m_hdrConfigUbo.reset();
 	}
 
 	void RenderTarget::update( CpuUpdater & updater )
