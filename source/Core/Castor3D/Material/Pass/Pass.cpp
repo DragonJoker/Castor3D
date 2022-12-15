@@ -311,8 +311,8 @@ namespace castor3d
 		else
 		{
 			m_maxTexcoordSet = std::max( m_maxTexcoordSet, configuration.texcoordSet );
-			it = m_sources.emplace( std::move( sourceInfo )
-				, std::move( configuration ) ).first;
+			m_sources.emplace( std::move( sourceInfo )
+				, std::move( configuration ) );
 		}
 
 		doUpdateTextureFlags();

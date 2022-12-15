@@ -52,7 +52,7 @@ namespace atmosphere_scattering
 		{
 		}
 
-		SingleScatteringResult( sdw::ShaderWriter & writer );
+		explicit SingleScatteringResult( sdw::ShaderWriter & writer );
 
 		// Scattered light (luminance)
 		auto luminance()const { return getMember< "luminance" >(); }
@@ -110,7 +110,7 @@ namespace atmosphere_scattering
 	{
 		struct Settings
 		{
-			Settings( castor::Length l )
+			explicit Settings( castor::Length l )
 				: length{ std::move( l ) }
 			{
 			}

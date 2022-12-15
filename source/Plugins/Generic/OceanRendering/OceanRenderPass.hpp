@@ -19,7 +19,7 @@ namespace ocean
 {
 	struct IsRenderPassEnabled
 	{
-		IsRenderPassEnabled( castor3d::RenderNodesPass const & pass )
+		explicit IsRenderPassEnabled( castor3d::RenderNodesPass const & pass )
 			: m_pass{ &pass }
 		{}
 
