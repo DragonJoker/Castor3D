@@ -990,8 +990,8 @@ namespace castor3d
 		{
 			auto & queue = *getOwner();
 			auto & scene = queue.getCuller().getScene();
-			auto renderPass = queue.getOwner();
 #if VK_NV_mesh_shader
+			auto renderPass = queue.getOwner();
 			auto origIndirectMshBuffer = m_submeshMeshletIndirectCommands
 				? m_submeshMeshletIndirectCommands->lock( 0u, ashes::WholeSize, 0u )
 				: nullptr;
@@ -1324,7 +1324,6 @@ namespace castor3d
 
 	RenderPipeline & QueueRenderNodes::doGetPipeline( BillboardRenderNode const & node )
 	{
-		auto & renderPass = *getOwner()->getOwner();
 		auto & billboard = node.data;
 		auto & pass = *node.pass;
 		size_t hash = std::hash< BillboardBase const * >{}( &billboard );
@@ -1334,6 +1333,7 @@ namespace castor3d
 
 		if ( it == m_pipelines.end() )
 		{
+			auto & renderPass = *getOwner()->getOwner();
 			auto & scene = getOwner()->getCuller().getScene();
 			auto submeshFlags = billboard.getSubmeshFlags();
 			auto programFlags = billboard.getProgramFlags();
