@@ -29,7 +29,7 @@ namespace ocean_fft
 			, crg::FramePassGroup & graph
 			, crg::FramePass const * previousPass
 			, crg::ImageViewId imageView
-			, std::shared_ptr< IsRenderPassEnabled > isEnabled )
+			, std::shared_ptr< castor3d::IsRenderPassEnabled > isEnabled )
 		{
 			auto & result = graph.createPass( "GenMips" + name
 				, [&device, isEnabled]( crg::FramePass const & framePass
@@ -57,7 +57,7 @@ namespace ocean_fft
 			, crg::FramePassGroup & graph
 			, crg::FramePass const * previousPass
 			, crg::ImageViewId imageView
-			, std::shared_ptr< IsRenderPassEnabled > isEnabled )
+			, std::shared_ptr< castor3d::IsRenderPassEnabled > isEnabled )
 		{
 			auto & result = graph.createPass( "GenMips" + name
 				, [&device, isEnabled]( crg::FramePass const & framePass
@@ -87,7 +87,7 @@ namespace ocean_fft
 			, crg::FramePass const & previousPass
 			, ashes::BufferBase const & srcBuffer
 			, crg::ImageViewId dstImageView
-			, std::shared_ptr< IsRenderPassEnabled > isEnabled )
+			, std::shared_ptr< castor3d::IsRenderPassEnabled > isEnabled )
 		{
 			auto data = *dstImageView.data;
 			data.name = data.image.data->name + "_L0";
@@ -194,7 +194,7 @@ namespace ocean_fft
 			, crg::FramePassGroup & graph
 			, crg::FramePassArray previousPasses
 			, OceanUbo const & ubo
-			, std::shared_ptr< IsRenderPassEnabled > isEnabled )
+			, std::shared_ptr< castor3d::IsRenderPassEnabled > isEnabled )
 		: m_device{ device }
 		, m_group{ graph }
 		, m_config{ ocean_fft::getConfig( *device.renderSystem.getEngine() ) }

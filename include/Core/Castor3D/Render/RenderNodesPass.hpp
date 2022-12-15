@@ -814,6 +814,29 @@ namespace castor3d
 		std::vector< RenderPipelineUPtr > m_frontPipelines;
 		std::vector< RenderPipelineUPtr > m_backPipelines;
 	};
+
+	struct IsRenderPassEnabled
+	{
+		explicit IsRenderPassEnabled( RenderNodesPass const & pass )
+			: m_pass{ &pass }
+		{}
+
+		IsRenderPassEnabled()
+			: m_pass{}
+		{}
+
+		void setPass( RenderNodesPass const & pass )
+		{
+			m_pass = &pass;
+		}
+
+		bool operator()()const
+		{
+			return m_pass->isPassEnabled();
+		}
+
+		RenderNodesPass const * m_pass;
+	};
 }
 
 #endif

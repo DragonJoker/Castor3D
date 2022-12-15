@@ -68,31 +68,6 @@ namespace ocean_fft
 		eR2R
 	};
 
-	struct IsRenderPassEnabled
-	{
-		explicit IsRenderPassEnabled( castor3d::RenderNodesPass const & pass )
-			: m_pass{ &pass }
-		{
-		}
-
-		IsRenderPassEnabled()
-			: m_pass{}
-		{
-		}
-
-		void setPass( castor3d::RenderNodesPass const & pass )
-		{
-			m_pass = &pass;
-		}
-
-		bool operator()()const
-		{
-			return m_pass->isPassEnabled();
-		}
-
-		castor3d::RenderNodesPass const * m_pass;
-	};
-
 	bool checkFFTResult( castor::xchar const * action
 		, VkFFTResult result );
 	void checkFFTResultMandat( castor::xchar const * action

@@ -223,7 +223,7 @@ namespace ocean_fft
 			, crg::FramePassArray const & previousPasses
 			, crg::ImageViewId input
 			, crg::ImageViewId output
-			, std::shared_ptr< IsRenderPassEnabled > isEnabled )
+			, std::shared_ptr< castor3d::IsRenderPassEnabled > isEnabled )
 		{
 			auto extent = getExtent( input );
 			auto & result = graph.createPass( name + "Copy"
@@ -257,7 +257,7 @@ namespace ocean_fft
 			, std::shared_ptr< OceanFFT > oceanFFT
 			, castor3d::TexturePtr colourInput
 			, castor3d::TexturePtr depthInput
-			, std::shared_ptr< IsRenderPassEnabled > isEnabled )
+			, std::shared_ptr< castor3d::IsRenderPassEnabled > isEnabled )
 		{
 			auto extent = technique.getResult().getExtent();
 			auto & result = graph.createPass( "NodesPass"
@@ -347,7 +347,7 @@ namespace ocean_fft
 		, std::shared_ptr< castor3d::Texture > depthInput
 		, castor3d::RenderNodesPassDesc const & renderPassDesc
 		, castor3d::RenderTechniquePassDesc const & techniquePassDesc
-			, std::shared_ptr< IsRenderPassEnabled > isEnabled )
+			, std::shared_ptr< castor3d::IsRenderPassEnabled > isEnabled )
 		: castor3d::RenderTechniqueNodesPass{ parent
 			, pass
 			, context
@@ -400,7 +400,7 @@ namespace ocean_fft
 		, castor3d::TechniquePasses & renderPasses
 		, crg::FramePassArray previousPasses )
 	{
-		auto isEnabled = std::make_shared< IsRenderPassEnabled >();
+		auto isEnabled = std::make_shared< castor3d::IsRenderPassEnabled >();
 		auto & graph = technique.getRenderTarget().getGraph().createPassGroup( OceanFFT::Name );
 		auto extent = technique.getResult().getExtent();
 		auto colourInput = std::make_shared< castor3d::Texture >( device

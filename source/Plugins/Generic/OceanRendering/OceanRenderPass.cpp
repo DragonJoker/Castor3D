@@ -207,7 +207,7 @@ namespace ocean
 		, std::shared_ptr< castor3d::Texture > depthInput
 		, castor3d::RenderNodesPassDesc const & renderPassDesc
 		, castor3d::RenderTechniquePassDesc const & techniquePassDesc
-		, std::shared_ptr< IsRenderPassEnabled > isEnabled )
+		, std::shared_ptr< castor3d::IsRenderPassEnabled > isEnabled )
 		: castor3d::RenderTechniqueNodesPass{ parent
 			, pass
 			, context
@@ -266,7 +266,7 @@ namespace ocean
 		, crg::FramePassArray previousPasses )
 	{
 		std::string name{ Name };
-		auto isEnabled = std::make_shared< IsRenderPassEnabled >();
+		auto isEnabled = std::make_shared< castor3d::IsRenderPassEnabled >();
 		auto extent = technique.getResult().getExtent();
 		auto & graph = technique.getRenderTarget().getGraph().createPassGroup( name );
 		auto colourInput = std::make_shared< castor3d::Texture >( device

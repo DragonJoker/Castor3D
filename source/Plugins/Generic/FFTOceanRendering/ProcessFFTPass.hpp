@@ -77,7 +77,7 @@ namespace ocean_fft
 		, FFTConfig const & config
 		, ashes::BufferBase const & input
 		, std::array< ashes::BufferBasePtr, 2u > const & output
-		, std::shared_ptr< IsRenderPassEnabled > isEnabled );
+		, std::shared_ptr< castor3d::IsRenderPassEnabled > isEnabled );
 }
 
 #endif

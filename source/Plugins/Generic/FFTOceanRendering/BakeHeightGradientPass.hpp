@@ -91,7 +91,7 @@ namespace ocean_fft
 		, ashes::BufferBase const & displacement
 		, std::array< castor3d::Texture, 2u > const & heightDisp
 		, std::array< castor3d::Texture, 2u > const & gradJacob
-		, std::shared_ptr< IsRenderPassEnabled > isEnabled );
+		, std::shared_ptr< castor3d::IsRenderPassEnabled > isEnabled );
 }
 
 #endif
