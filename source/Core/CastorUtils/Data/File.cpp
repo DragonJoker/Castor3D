@@ -8,15 +8,17 @@
 
 namespace castor
 {
-	File::File( Path const & p_fileName, FlagCombination< OpenMode > const & p_mode, EncodingMode p_encoding )
-		: m_mode{ p_mode }
-		, m_encoding{ p_encoding }
-		, m_fileFullPath{ p_fileName }
+	File::File( Path const & fileName
+		, FlagCombination< OpenMode > const & modes
+		, EncodingMode encoding )
+		: m_mode{ modes }
+		, m_encoding{ encoding }
+		, m_fileFullPath{ fileName }
 	{
-		CU_Require( !p_fileName.empty() );
+		CU_Require( !fileName.empty() );
 		String mode;
 
-		switch ( p_mode )
+		switch ( modes )
 		{
 		case uint32_t( OpenMode::eRead ):
 			mode = cuT( "r" );
@@ -55,9 +57,9 @@ namespace castor
 			break;
 		}
 
-		if ( !checkFlag( p_mode, OpenMode::eBinary ) )
+		if ( !checkFlag( modes, OpenMode::eBinary ) )
 		{
-			switch ( p_encoding )
+			switch ( encoding )
 			{
 			case EncodingMode::eAuto:
 				m_encoding = EncodingMode::eUTF8;
@@ -105,28 +107,28 @@ namespace castor
 		}
 	}
 
-	int File::seek( long long p_offset, OffsetMode p_origin )
+	int File::seek( long long offset, OffsetMode origin )
 	{
 		CU_CheckInvariants();
 		int iReturn = 0;
 
 		if ( m_file )
 		{
-			switch ( p_origin )
+			switch ( origin )
 			{
 			case OffsetMode::eBeginning:
-				iReturn = castor::fileSeek( m_file, p_offset, SEEK_SET );
-				m_cursor = uint64_t( p_offset );
+				iReturn = castor::fileSeek( m_file, offset, SEEK_SET );
+				m_cursor = uint64_t( offset );
 				break;
 
 			case OffsetMode::eCurrent:
-				iReturn = castor::fileSeek( m_file, p_offset, SEEK_CUR );
-				m_cursor += p_offset;
+				iReturn = castor::fileSeek( m_file, offset, SEEK_CUR );
+				m_cursor += offset;
 				break;
 
 			case OffsetMode::eEnd:
-				iReturn = castor::fileSeek( m_file, p_offset, SEEK_END );
-				m_cursor = uint64_t( getLength() - p_offset );
+				iReturn = castor::fileSeek( m_file, offset, SEEK_END );
+				m_cursor = uint64_t( getLength() - offset );
 				break;
 
 			default:
@@ -187,7 +189,7 @@ namespace castor
 	CU_CheckInvariant( m_file );
 	CU_EndInvariantBlock()
 
-	uint64_t File::doWrite( uint8_t const * p_buffer, uint64_t p_uiSize )
+	uint64_t File::doWrite( uint8_t const * buffer, uint64_t uiSize )
 	{
 		CU_CheckInvariants();
 		CU_Require( isOk() && ( checkFlag( m_mode, OpenMode::eWrite ) || checkFlag( m_mode, OpenMode::eAppend ) ) );
@@ -195,16 +197,16 @@ namespace castor
 
 		if ( isOk() )
 		{
-			uiReturn = fwrite( p_buffer, 1, p_uiSize, m_file );
+			uiReturn = fwrite( buffer, 1, uiSize, m_file );
 			m_cursor += uiReturn;
-			CU_Ensure( uiReturn <= p_uiSize );
+			CU_Ensure( uiReturn <= uiSize );
 		}
 
 		CU_CheckInvariants();
 		return uiReturn;
 	}
 
-	uint64_t File::doRead( uint8_t * p_buffer, uint64_t p_uiSize )
+	uint64_t File::doRead( uint8_t * buffer, uint64_t uiSize )
 	{
 		CU_CheckInvariants();
 		CU_Require( isOk() && checkFlag( m_mode, OpenMode::eRead ) );
@@ -214,14 +216,14 @@ namespace castor
 		{
 			uint64_t uiPrev = 1;
 
-			while ( uiReturn < p_uiSize && uiPrev != uiReturn )
+			while ( uiReturn < uiSize && uiPrev != uiReturn )
 			{
 				uiPrev = uiReturn;
-				uiReturn += fread( p_buffer, 1, p_uiSize - uiReturn, m_file );
+				uiReturn += fread( buffer, 1, uiSize - uiReturn, m_file );
 			}
 
 			m_cursor += uiReturn;
-			CU_Ensure( uiReturn <= p_uiSize );
+			CU_Ensure( uiReturn <= uiSize );
 		}
 
 		CU_CheckInvariants();
@@ -312,7 +314,9 @@ namespace castor
 		return result;
 	}
 
-	bool File::listDirectoryFiles( Path const & folderPath, PathArray & files, bool recursive )
+	bool File::listDirectoryFiles( Path const & folderPath
+		, PathArray & files
+		, bool recursive )
 	{
 		files = filterDirectoryFiles( folderPath
 			, []( Path const & CU_UnusedParam( folder )

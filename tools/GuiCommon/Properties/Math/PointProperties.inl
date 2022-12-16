@@ -7,192 +7,192 @@ namespace GuiCommon
 	//************************************************************************************************
 
 	template<>
-	inline castor::Point< bool, 2 > const & PointRefFromVariant< bool, 2 >( wxVariant const & p_variant )
+	inline castor::Point< bool, 2 > const & PointRefFromVariant< bool, 2 >( wxVariant const & variant )
 	{
-		return Point2bRefFromVariant( p_variant );
+		return Point2bRefFromVariant( variant );
 	}
 
 	template<>
-	inline castor::Point< bool, 3 > const & PointRefFromVariant< bool, 3 >( wxVariant const & p_variant )
+	inline castor::Point< bool, 3 > const & PointRefFromVariant< bool, 3 >( wxVariant const & variant )
 	{
-		return Point3bRefFromVariant( p_variant );
+		return Point3bRefFromVariant( variant );
 	}
 
 	template<>
-	inline castor::Point< bool, 4 > const & PointRefFromVariant< bool, 4 >( wxVariant const & p_variant )
+	inline castor::Point< bool, 4 > const & PointRefFromVariant< bool, 4 >( wxVariant const & variant )
 	{
-		return Point4bRefFromVariant( p_variant );
+		return Point4bRefFromVariant( variant );
 	}
 
 	template<>
-	inline castor::Point< int, 2 > const & PointRefFromVariant< int, 2 >( wxVariant const & p_variant )
+	inline castor::Point< int, 2 > const & PointRefFromVariant< int, 2 >( wxVariant const & variant )
 	{
-		return Point2iRefFromVariant( p_variant );
+		return Point2iRefFromVariant( variant );
 	}
 
 	template<>
-	inline castor::Point< int, 3 > const & PointRefFromVariant< int, 3 >( wxVariant const & p_variant )
+	inline castor::Point< int, 3 > const & PointRefFromVariant< int, 3 >( wxVariant const & variant )
 	{
-		return Point3iRefFromVariant( p_variant );
+		return Point3iRefFromVariant( variant );
 	}
 
 	template<>
-	inline castor::Point< int, 4 > const & PointRefFromVariant< int, 4 >( wxVariant const & p_variant )
+	inline castor::Point< int, 4 > const & PointRefFromVariant< int, 4 >( wxVariant const & variant )
 	{
-		return Point4iRefFromVariant( p_variant );
+		return Point4iRefFromVariant( variant );
 	}
 
 	template<>
-	inline castor::Point< uint32_t, 2 > const & PointRefFromVariant< uint32_t, 2 >( wxVariant const & p_variant )
+	inline castor::Point< uint32_t, 2 > const & PointRefFromVariant< uint32_t, 2 >( wxVariant const & variant )
 	{
-		return Point2uiRefFromVariant( p_variant );
+		return Point2uiRefFromVariant( variant );
 	}
 
 	template<>
-	inline castor::Point< uint32_t, 3 > const & PointRefFromVariant< uint32_t, 3 >( wxVariant const & p_variant )
+	inline castor::Point< uint32_t, 3 > const & PointRefFromVariant< uint32_t, 3 >( wxVariant const & variant )
 	{
-		return Point3uiRefFromVariant( p_variant );
+		return Point3uiRefFromVariant( variant );
 	}
 
 	template<>
-	inline castor::Point< uint32_t, 4 > const & PointRefFromVariant< uint32_t, 4 >( wxVariant const & p_variant )
+	inline castor::Point< uint32_t, 4 > const & PointRefFromVariant< uint32_t, 4 >( wxVariant const & variant )
 	{
-		return Point4uiRefFromVariant( p_variant );
+		return Point4uiRefFromVariant( variant );
 	}
 
 	template<>
-	inline castor::Point< float, 2 > const & PointRefFromVariant< float, 2 >( wxVariant const & p_variant )
+	inline castor::Point< float, 2 > const & PointRefFromVariant< float, 2 >( wxVariant const & variant )
 	{
-		return Point2fRefFromVariant( p_variant );
+		return Point2fRefFromVariant( variant );
 	}
 
 	template<>
-	inline castor::Point< float, 3 > const & PointRefFromVariant< float, 3 >( wxVariant const & p_variant )
+	inline castor::Point< float, 3 > const & PointRefFromVariant< float, 3 >( wxVariant const & variant )
 	{
-		return Point3fRefFromVariant( p_variant );
+		return Point3fRefFromVariant( variant );
 	}
 
 	template<>
-	inline castor::Point< float, 4 > const & PointRefFromVariant< float, 4 >( wxVariant const & p_variant )
+	inline castor::Point< float, 4 > const & PointRefFromVariant< float, 4 >( wxVariant const & variant )
 	{
-		return Point4fRefFromVariant( p_variant );
+		return Point4fRefFromVariant( variant );
 	}
 
 	template<>
-	inline castor::Point< double, 2 > const & PointRefFromVariant< double, 2 >( wxVariant const & p_variant )
+	inline castor::Point< double, 2 > const & PointRefFromVariant< double, 2 >( wxVariant const & variant )
 	{
-		return Point2dRefFromVariant( p_variant );
+		return Point2dRefFromVariant( variant );
 	}
 
 	template<>
-	inline castor::Point< double, 3 > const & PointRefFromVariant< double, 3 >( wxVariant const & p_variant )
+	inline castor::Point< double, 3 > const & PointRefFromVariant< double, 3 >( wxVariant const & variant )
 	{
-		return Point3dRefFromVariant( p_variant );
+		return Point3dRefFromVariant( variant );
 	}
 
 	template<>
-	inline castor::Point< double, 4 > const & PointRefFromVariant< double, 4 >( wxVariant const & p_variant )
+	inline castor::Point< double, 4 > const & PointRefFromVariant< double, 4 >( wxVariant const & variant )
 	{
-		return Point4dRefFromVariant( p_variant );
+		return Point4dRefFromVariant( variant );
 	}
 
 	//************************************************************************************************
 
 	template<>
-	inline castor::Point< bool, 2 > & PointRefFromVariant< bool, 2 >( wxVariant & p_variant )
+	inline castor::Point< bool, 2 > & PointRefFromVariant< bool, 2 >( wxVariant & variant )
 	{
-		return Point2bRefFromVariant( p_variant );
+		return Point2bRefFromVariant( variant );
 	}
 
 	template<>
-	inline castor::Point< bool, 3 > & PointRefFromVariant< bool, 3 >( wxVariant & p_variant )
+	inline castor::Point< bool, 3 > & PointRefFromVariant< bool, 3 >( wxVariant & variant )
 	{
-		return Point3bRefFromVariant( p_variant );
+		return Point3bRefFromVariant( variant );
 	}
 
 	template<>
-	inline castor::Point< bool, 4 > & PointRefFromVariant< bool, 4 >( wxVariant & p_variant )
+	inline castor::Point< bool, 4 > & PointRefFromVariant< bool, 4 >( wxVariant & variant )
 	{
-		return Point4bRefFromVariant( p_variant );
+		return Point4bRefFromVariant( variant );
 	}
 
 	template<>
-	inline castor::Point< int, 2 > & PointRefFromVariant< int, 2 >( wxVariant & p_variant )
+	inline castor::Point< int, 2 > & PointRefFromVariant< int, 2 >( wxVariant & variant )
 	{
-		return Point2iRefFromVariant( p_variant );
+		return Point2iRefFromVariant( variant );
 	}
 
 	template<>
-	inline castor::Point< int, 3 > & PointRefFromVariant< int, 3 >( wxVariant & p_variant )
+	inline castor::Point< int, 3 > & PointRefFromVariant< int, 3 >( wxVariant & variant )
 	{
-		return Point3iRefFromVariant( p_variant );
+		return Point3iRefFromVariant( variant );
 	}
 
 	template<>
-	inline castor::Point< int, 4 > & PointRefFromVariant< int, 4 >( wxVariant & p_variant )
+	inline castor::Point< int, 4 > & PointRefFromVariant< int, 4 >( wxVariant & variant )
 	{
-		return Point4iRefFromVariant( p_variant );
+		return Point4iRefFromVariant( variant );
 	}
 
 	template<>
-	inline castor::Point< uint32_t, 2 > & PointRefFromVariant< uint32_t, 2 >( wxVariant & p_variant )
+	inline castor::Point< uint32_t, 2 > & PointRefFromVariant< uint32_t, 2 >( wxVariant & variant )
 	{
-		return Point2uiRefFromVariant( p_variant );
+		return Point2uiRefFromVariant( variant );
 	}
 
 	template<>
-	inline castor::Point< uint32_t, 3 > & PointRefFromVariant< uint32_t, 3 >( wxVariant & p_variant )
+	inline castor::Point< uint32_t, 3 > & PointRefFromVariant< uint32_t, 3 >( wxVariant & variant )
 	{
-		return Point3uiRefFromVariant( p_variant );
+		return Point3uiRefFromVariant( variant );
 	}
 
 	template<>
-	inline castor::Point< uint32_t, 4 > & PointRefFromVariant< uint32_t, 4 >( wxVariant & p_variant )
+	inline castor::Point< uint32_t, 4 > & PointRefFromVariant< uint32_t, 4 >( wxVariant & variant )
 	{
-		return Point4uiRefFromVariant( p_variant );
+		return Point4uiRefFromVariant( variant );
 	}
 
 	template<>
-	inline castor::Point< float, 2 > & PointRefFromVariant< float, 2 >( wxVariant & p_variant )
+	inline castor::Point< float, 2 > & PointRefFromVariant< float, 2 >( wxVariant & variant )
 	{
-		return Point2fRefFromVariant( p_variant );
+		return Point2fRefFromVariant( variant );
 	}
 
 	template<>
-	inline castor::Point< float, 3 > & PointRefFromVariant< float, 3 >( wxVariant & p_variant )
+	inline castor::Point< float, 3 > & PointRefFromVariant< float, 3 >( wxVariant & variant )
 	{
-		return Point3fRefFromVariant( p_variant );
+		return Point3fRefFromVariant( variant );
 	}
 
 	template<>
-	inline castor::Point< float, 4 > & PointRefFromVariant< float, 4 >( wxVariant & p_variant )
+	inline castor::Point< float, 4 > & PointRefFromVariant< float, 4 >( wxVariant & variant )
 	{
-		return Point4fRefFromVariant( p_variant );
+		return Point4fRefFromVariant( variant );
 	}
 
 	template<>
-	inline castor::Point< double, 2 > & PointRefFromVariant< double, 2 >( wxVariant & p_variant )
+	inline castor::Point< double, 2 > & PointRefFromVariant< double, 2 >( wxVariant & variant )
 	{
-		return Point2dRefFromVariant( p_variant );
+		return Point2dRefFromVariant( variant );
 	}
 
 	template<>
-	inline castor::Point< double, 3 > & PointRefFromVariant< double, 3 >( wxVariant & p_variant )
+	inline castor::Point< double, 3 > & PointRefFromVariant< double, 3 >( wxVariant & variant )
 	{
-		return Point3dRefFromVariant( p_variant );
+		return Point3dRefFromVariant( variant );
 	}
 
 	template<>
-	inline castor::Point< double, 4 > & PointRefFromVariant< double, 4 >( wxVariant & p_variant )
+	inline castor::Point< double, 4 > & PointRefFromVariant< double, 4 >( wxVariant & variant )
 	{
-		return Point4dRefFromVariant( p_variant );
+		return Point4dRefFromVariant( variant );
 	}
 
 	//************************************************************************************************
 
-	template< typename Type, uint32_t Count > void setVariantFromPoint( wxVariant & p_variant, castor::Point< Type, Count > const & p_value )
+	template< typename Type, uint32_t Count > void setVariantFromPoint( wxVariant & variant, castor::Point< Type, Count > const & value )
 	{
-		PointRefFromVariant< Type, Count >( p_variant ) = p_value;
+		PointRefFromVariant< Type, Count >( variant ) = value;
 	}
 
 	//************************************************************************************************
@@ -221,34 +221,34 @@ namespace GuiCommon
 
 	template< typename T, uint32_t Count > struct PointPropertyHelper
 	{
-		static void addChildren( PointProperty< T, Count > * p_prop, wxString const * p_names, castor::Point< T, Count > const & p_value )
+		static void addChildren( PointProperty< T, Count > * pprop, wxString const * names, castor::Point< T, Count > const & value )
 		{
 			for ( uint32_t i = 0; i < Count; ++i )
 			{
-				wxPGProperty * prop = CreateProperty( p_names[i], p_value[i] );
+				wxPGProperty * prop = CreateProperty( names[i], value[i] );
 				prop->SetEditor( wxPGEditor_SpinCtrl );
 				prop->SetAttribute( wxPG_ATTR_SPINCTRL_WRAP, WXVARIANT( true ) );
 #if wxCHECK_VERSION( 3, 1, 0 )
 				prop->SetAttribute( wxPG_ATTR_SPINCTRL_MOTION, WXVARIANT( true ) );
 #endif
-				p_prop->AddPrivateChild( prop );
+				pprop->AddPrivateChild( prop );
 			}
 		}
-		static void refreshChildren( PointProperty< T, Count > * p_prop )
+		static void refreshChildren( PointProperty< T, Count > * pprop )
 		{
-			castor::Point< T, Count > const & point = PointRefFromVariant< T, Count >( p_prop->GetValue() );
+			castor::Point< T, Count > const & point = PointRefFromVariant< T, Count >( pprop->GetValue() );
 
 			for ( uint32_t i = 0; i < Count; ++i )
 			{
-				p_prop->Item( i )->SetValue( getVariant< T >( point[i] ) );
+				pprop->Item( i )->SetValue( getVariant< T >( point[i] ) );
 			}
 		}
-		static wxVariant childChanged( wxVariant & p_thisValue, int p_index, wxVariant & p_newValue )
+		static wxVariant childChanged( wxVariant & thisValue, int index, wxVariant & newValue )
 		{
-			castor::Point< T, Count > & point = PointRefFromVariant< T, Count >( p_thisValue );
-			T val = variantCast< T >( p_newValue );
+			castor::Point< T, Count > & point = PointRefFromVariant< T, Count >( thisValue );
+			T val = variantCast< T >( newValue );
 
-			switch ( p_index )
+			switch ( index )
 			{
 			case 0:
 				point[0] = val;
@@ -293,20 +293,20 @@ namespace GuiCommon
 	}
 
 	template< typename T, uint32_t Count >
-	PointProperty< T, Count >::PointProperty( wxString const( &p_names )[Count], wxString const & label, wxString const & name, castor::Point< T, Count > const & value )
+	PointProperty< T, Count >::PointProperty( wxString const( &names )[Count], wxString const & label, wxString const & name, castor::Point< T, Count > const & value )
 		: wxPGProperty( label, name )
 	{
 		setValueI( value );
-		PointPropertyHelper< T, Count >::addChildren( this, p_names, value );
+		PointPropertyHelper< T, Count >::addChildren( this, names, value );
 	}
 
 	template< typename T, uint32_t Count >
-	PointProperty< T, Count >::PointProperty( wxString const( &p_names )[Count], wxString const & label, wxString const & name, castor::Coords< T, Count > const & value )
+	PointProperty< T, Count >::PointProperty( wxString const( &names )[Count], wxString const & label, wxString const & name, castor::Coords< T, Count > const & value )
 		: wxPGProperty( label, name )
 	{
 		castor::Point< T, Count > point{ value };
 		setValueI( point );
-		PointPropertyHelper< T, Count >::addChildren( this, p_names, point );
+		PointPropertyHelper< T, Count >::addChildren( this, names, point );
 	}
 
 	template< typename T, uint32_t Count >

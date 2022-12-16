@@ -4,29 +4,29 @@
 
 namespace castortd
 {
-	Bullet::Bullet( float p_speed, uint32_t p_damage, castor3d::SceneNode & p_node, Enemy & p_enemy )
-		: m_node{ p_node }
-		, m_target{ p_enemy }
-		, m_speed{ p_speed }
-		, m_damage{ p_damage }
+	Bullet::Bullet( float speed, uint32_t damage, castor3d::SceneNode & node, Enemy & enemy )
+		: m_node{ node }
+		, m_target{ enemy }
+		, m_speed{ speed }
+		, m_damage{ damage }
 	{
 	}
 
-	void Bullet::load( float p_speed, uint32_t p_damage, castor::Point3f const & p_origin, Enemy & p_enemy )
+	void Bullet::load( float speed, uint32_t damage, castor::Point3f const & origin, Enemy & enemy )
 	{
-		m_damage = p_damage;
-		m_node.get().setPosition( p_origin );
-		m_target = p_enemy;
-		m_speed = p_speed;
+		m_damage = damage;
+		m_node.get().setPosition( origin );
+		m_target = enemy;
+		m_speed = speed;
 	}
 
-	bool Bullet::accept( Game & p_game )
+	bool Bullet::accept( Game & game )
 	{
 		bool reachDst{ true };
 
 		if ( m_target.get().isAlive() )
 		{
-			auto speed = float( p_game.getElapsed().count() ) * m_speed / 1000;
+			auto speed = float( game.getElapsed().count() ) * m_speed / 1000;
 			castor::Point3f result = m_target.get().getNode().getPosition();
 			castor::Point3f position{ m_node.get().getPosition() };
 			castor::Point3f direction{ result - position };

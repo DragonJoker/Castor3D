@@ -897,28 +897,6 @@ namespace castor3d
 		}
 	}
 
-	void RenderSystem::pushScene( Scene * p_scene )
-	{
-		m_stackScenes.push( p_scene );
-	}
-
-	void RenderSystem::popScene()
-	{
-		m_stackScenes.pop();
-	}
-
-	Scene * RenderSystem::getTopScene()const
-	{
-		Scene * result = nullptr;
-
-		if ( !m_stackScenes.empty() )
-		{
-			result = m_stackScenes.top();
-		}
-
-		return result;
-	}
-
 	SpirVShader RenderSystem::compileShader( castor3d::ShaderModule const & module )const
 	{
 		if ( module.shader )

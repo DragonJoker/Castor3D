@@ -15,7 +15,7 @@ namespace GuiCommon
 	{
 	public:
 		GradientButton();
-		GradientButton( wxWindow * p_parent, wxWindowID p_id, wxString const & p_label = wxEmptyString, wxPoint const & p_pos = wxDefaultPosition, wxSize const & p_size = wxDefaultSize, long p_style = 0, wxValidator const & p_validator = wxDefaultValidator, wxString const & p_name = wxButtonNameStr );
+		GradientButton( wxWindow * parent, wxWindowID id, wxString const & label = wxEmptyString, wxPoint const & pos = wxDefaultPosition, wxSize const & size = wxDefaultSize, long style = 0, wxValidator const & validator = wxDefaultValidator, wxString const & name = wxButtonNameStr );
 
 	private:
 		void doInitialise();
@@ -23,7 +23,7 @@ namespace GuiCommon
 #pragma clang diagnostic ignored "-Wmissing-override"
 		DECLARE_EVENT_TABLE()
 #pragma clang diagnostic pop
-		void OnPaint( wxPaintEvent & p_event );
+		void OnPaint( wxPaintEvent & event );
 
 	private:
 		wxColour m_gradientTopStartColour;

@@ -19,53 +19,53 @@ namespace castor
 		: m_component{ hdrcol::removeGamma( rhs.value(), gamma ) }
 	{
 	}
-	bool operator==( HdrColourComponent const & p_cpnA, HdrColourComponent const & p_cpnB )
+	bool operator==( HdrColourComponent const & lhs, HdrColourComponent const & rhs )
 	{
 		float uiA;
 		float uiB;
-		p_cpnA.convertTo( uiA );
-		p_cpnB.convertTo( uiB );
+		lhs.convertTo( uiA );
+		rhs.convertTo( uiB );
 		return uiA == uiB;
 	}
 
-	bool operator!=( HdrColourComponent const & p_cpnA, HdrColourComponent const & p_cpnB )
+	bool operator!=( HdrColourComponent const & lhs, HdrColourComponent const & rhs )
 	{
-		return !( p_cpnA == p_cpnB );
+		return !( lhs == rhs );
 	}
 
-	float operator-( HdrColourComponent const & p_cpnt, HdrColourComponent const & p_scalar )
+	float operator-( HdrColourComponent const & lhs, HdrColourComponent const & rhs )
 	{
 		float fValue;
-		p_cpnt.convertTo( fValue );
+		lhs.convertTo( fValue );
 		HdrColourComponent cpnt( fValue );
-		cpnt -= p_scalar;
-		return fValue;
+		cpnt -= rhs;
+		return cpnt;
 	}
 
-	float operator+( HdrColourComponent const & p_cpnt, HdrColourComponent const & p_scalar )
+	float operator+( HdrColourComponent const & lhs, HdrColourComponent const & rhs )
 	{
 		float fValue;
-		p_cpnt.convertTo( fValue );
+		lhs.convertTo( fValue );
 		HdrColourComponent cpnt( fValue );
-		cpnt += p_scalar;
-		return fValue;
+		cpnt += rhs;
+		return cpnt;
 	}
 
-	float operator*( HdrColourComponent const & p_cpnt, HdrColourComponent const & p_scalar )
+	float operator*( HdrColourComponent const & lhs, HdrColourComponent const & rhs )
 	{
 		float fValue;
-		p_cpnt.convertTo( fValue );
+		lhs.convertTo( fValue );
 		HdrColourComponent cpnt( fValue );
-		cpnt *= p_scalar;
-		return fValue;
+		cpnt *= rhs;
+		return cpnt;
 	}
 
-	float operator/( HdrColourComponent const & p_cpnt, HdrColourComponent const & p_scalar )
+	float operator/( HdrColourComponent const & lhs, HdrColourComponent const & rhs )
 	{
 		float fValue;
-		p_cpnt.convertTo( fValue );
+		lhs.convertTo( fValue );
 		HdrColourComponent cpnt( fValue );
-		cpnt /= p_scalar;
-		return fValue;
+		cpnt /= rhs;
+		return cpnt;
 	}
 }

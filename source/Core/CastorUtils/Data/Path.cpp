@@ -19,103 +19,103 @@ namespace castor
 	{
 	}
 
-	Path::Path( char const * p_data )
-		:	String( string::stringCast< xchar >( p_data ) )
+	Path::Path( char const * rhs )
+		:	String( string::stringCast< xchar >( rhs ) )
 	{
 		doNormalise();
 	}
 
-	Path::Path( wchar_t const * p_data )
-		:	String( string::stringCast< xchar >( p_data ) )
+	Path::Path( wchar_t const * rhs )
+		:	String( string::stringCast< xchar >( rhs ) )
 	{
 		doNormalise();
 	}
 
-	Path::Path( String const & p_data )
-		:	String( p_data )
+	Path::Path( String const & rhs )
+		:	String( rhs )
 	{
 		doNormalise();
 	}
 
-	Path::Path( Path const & p_data )
-		:	String( p_data )
+	Path::Path( Path const & rhs )
+		:	String( rhs )
 	{
 		doNormalise();
 	}
 
-	Path::Path( Path && p_data )
-		:	String( std::move( p_data ) )
+	Path::Path( Path && rhs )
+		:	String( std::move( rhs ) )
 	{
 	}
 
-	Path & Path::operator=( Path const & p_data )
+	Path & Path::operator=( Path const & rhs )
 	{
-		Path path( p_data );
+		Path path( rhs );
 		std::swap( *this, path );
 		return *this;
 	}
 
-	Path & Path::operator=( Path && p_data )
+	Path & Path::operator=( Path && rhs )
 	{
-		String::operator=( std::move( p_data ) );
+		String::operator=( std::move( rhs ) );
 		return *this;
 	}
 
-	Path & Path::operator/=( Path const & p_path )
+	Path & Path::operator/=( Path const & rhs )
 	{
 		push_back( NativeSeparator );
-		append( p_path );
+		append( rhs );
 		doNormalise();
 		return *this;
 	}
 
-	Path & Path::operator/=( String const & p_string )
+	Path & Path::operator/=( String const & rhs )
 	{
 		push_back( NativeSeparator );
-		append( p_string );
+		append( rhs );
 		doNormalise();
 		return *this;
 	}
 
-	Path & Path::operator/=( char const * p_buffer )
+	Path & Path::operator/=( char const * rhs )
 	{
 		push_back( NativeSeparator );
-		String::operator+=( string::stringCast< xchar >( p_buffer ) );
+		String::operator+=( string::stringCast< xchar >( rhs ) );
 		doNormalise();
 		return *this;
 	}
 
-	Path & Path::operator/=( wchar_t const * p_buffer )
+	Path & Path::operator/=( wchar_t const * rhs )
 	{
 		push_back( NativeSeparator );
-		String::operator+=( string::stringCast< xchar >( p_buffer ) );
+		String::operator+=( string::stringCast< xchar >( rhs ) );
 		doNormalise();
 		return *this;
 	}
 
-	Path & Path::operator+=( Path const & p_path )
+	Path & Path::operator+=( Path const & rhs )
 	{
-		String::operator+=( p_path );
+		String::operator+=( rhs );
 		return *this;
 	}
 
-	Path & Path::operator+=( String const & p_string )
+	Path & Path::operator+=( String const & rhs )
 	{
-		String::operator+=( p_string );
+		String::operator+=( rhs );
 		doNormalise();
 		return *this;
 	}
 
-	Path & Path::operator+=( char const * p_buffer )
+	Path & Path::operator+=( char const * rhs )
 	{
-		String::operator+=( string::stringCast< xchar >( p_buffer ) );
+		String::operator+=( string::stringCast< xchar >( rhs ) );
 		doNormalise();
 		return *this;
 	}
 
-	Path & Path::operator+=( wchar_t const * p_buffer )
+	Path & Path::operator+=( wchar_t const * rhs )
 	{
-		String::operator+=( string::stringCast< xchar >( p_buffer ) );
+		String::operator+=( string::stringCast< xchar >( rhs ) );
 		doNormalise();
 		return *this;
 	}
@@ -133,7 +133,7 @@ namespace castor
 		return result;
 	}
 
-	Path Path::getFileName( bool p_withExtension )const
+	Path Path::getFileName( bool withExtension )const
 	{
 		Path result = ( * this );
 		std::size_t index = find_last_of( NativeSeparator );
@@ -143,7 +143,7 @@ namespace castor
 			result = Path{ substr( index + 1, String::npos ) };
 		}
 
-		if ( !p_withExtension )
+		if ( !withExtension )
 		{
 			index = result.find_last_of( cuT( "." ) );
 
@@ -273,52 +273,52 @@ namespace castor
 		}
 	}
 
-	Path operator/( Path const & p_lhs, Path const & p_rhs )
+	Path operator/( Path const & lhs, Path const & rhs )
 	{
-		Path path{ p_lhs };
-		path /= p_rhs;
+		Path path{ lhs };
+		path /= rhs;
 		return path;
 	}
 
-	Path operator/( Path const & p_lhs, String const & p_rhs )
+	Path operator/( Path const & lhs, String const & rhs )
 	{
-		Path path{ p_lhs };
-		path /= p_rhs;
+		Path path{ lhs };
+		path /= rhs;
 		return path;
 	}
 
-	Path operator/( Path const & p_lhs, char const * p_rhs )
+	Path operator/( Path const & lhs, char const * rhs )
 	{
-		Path path{ p_lhs };
-		path /= p_rhs;
+		Path path{ lhs };
+		path /= rhs;
 		return path;
 	}
 
-	Path operator/( Path const & p_lhs, wchar_t const * p_rhs )
+	Path operator/( Path const & lhs, wchar_t const * rhs )
 	{
-		Path path{ p_lhs };
-		path /= p_rhs;
+		Path path{ lhs };
+		path /= rhs;
 		return path;
 	}
 
-	Path operator/( String const & p_lhs, Path const & p_rhs )
+	Path operator/( String const & lhs, Path const & rhs )
 	{
-		Path path{ p_lhs };
-		path /= p_rhs;
+		Path path{ lhs };
+		path /= rhs;
 		return path;
 	}
 
-	Path operator/( char const * p_lhs, Path const & p_rhs )
+	Path operator/( char const * lhs, Path const & rhs )
 	{
-		Path path{ p_lhs };
-		path /= p_rhs;
+		Path path{ lhs };
+		path /= rhs;
 		return path;
 	}
 
-	Path operator/( wchar_t const * p_lhs, Path const & p_rhs )
+	Path operator/( wchar_t const * lhs, Path const & rhs )
 	{
-		Path path{ p_lhs };
-		path /= p_rhs;
+		Path path{ lhs };
+		path /= rhs;
 		return path;
 	}
 

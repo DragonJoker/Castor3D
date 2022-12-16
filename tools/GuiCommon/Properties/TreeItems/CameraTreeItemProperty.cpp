@@ -9,9 +9,9 @@
 
 namespace GuiCommon
 {
-	CameraTreeItemProperty::CameraTreeItemProperty( bool p_editable, castor3d::Camera & p_camera )
-		: TreeItemProperty( p_camera.getScene()->getEngine(), p_editable )
-		, m_camera( p_camera )
+	CameraTreeItemProperty::CameraTreeItemProperty( bool editable, castor3d::Camera & camera )
+		: TreeItemProperty( camera.getScene()->getEngine(), editable )
+		, m_camera( camera )
 	{
 		CreateTreeItemMenu();
 	}

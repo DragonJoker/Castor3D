@@ -557,20 +557,20 @@ namespace GuiCommon
 	END_EVENT_TABLE()
 #pragma GCC diagnostic pop
 
-	void SceneObjectsList::onClose( wxCloseEvent & p_event )
+	void SceneObjectsList::onClose( wxCloseEvent & event )
 	{
 		DeleteAllItems();
-		p_event.Skip();
+		event.Skip();
 	}
 
-	void SceneObjectsList::onSelectItem( wxTreeEvent & p_event )
+	void SceneObjectsList::onSelectItem( wxTreeEvent & event )
 	{
-		TreeItemProperty * data = static_cast< TreeItemProperty * >( p_event.GetClientObject() );
+		TreeItemProperty * data = static_cast< TreeItemProperty * >( event.GetClientObject() );
 		m_propertiesHolder->setPropertyData( data );
-		p_event.Skip();
+		event.Skip();
 	}
 
-	void SceneObjectsList::onMouseRButtonUp( wxTreeEvent & p_event )
+	void SceneObjectsList::onMouseRButtonUp( wxTreeEvent & event )
 	{
 	}
 }

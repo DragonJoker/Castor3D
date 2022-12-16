@@ -22,13 +22,13 @@ namespace CastorCom
 				m_internal->initialise( *static_cast< CRenderTarget * >( target )->getInternal() );
 				hr = S_OK;
 			}
-			catch ( castor::Exception & p_exc )
+			catch ( castor::Exception & exc )
 			{
-				castor::Logger::logError( p_exc.getFullDescription() );
+				castor::Logger::logError( exc.getFullDescription() );
 			}
-			catch ( std::exception & p_exc )
+			catch ( std::exception & exc )
 			{
-				castor::Logger::logError( p_exc.what() );
+				castor::Logger::logError( exc.what() );
 			}
 		}
 		else

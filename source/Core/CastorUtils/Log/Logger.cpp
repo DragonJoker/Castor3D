@@ -65,23 +65,23 @@ namespace castor
 		return std::make_unique< LoggerInstance >( *getSingleton().m_console, logLevel );
 	}
 
-	void Logger::registerCallback( LogCallback p_pfnCallback, void * p_pCaller )
+	void Logger::registerCallback( LogCallback pfnCallback, void * pCaller )
 	{
 		CU_Require( getSingleton().m_instance );
-		getSingleton().m_instance->registerCallback( p_pfnCallback, p_pCaller );
+		getSingleton().m_instance->registerCallback( pfnCallback, pCaller );
 	}
 
-	void Logger::unregisterCallback( void * p_pCaller )
+	void Logger::unregisterCallback( void * pCaller )
 	{
 		CU_Require( getSingleton().m_instance );
-		getSingleton().m_instance->unregisterCallback( p_pCaller );
+		getSingleton().m_instance->unregisterCallback( pCaller );
 	}
 
-	void Logger::setFileName( Path const & p_logFilePath, LogType p_eLogType )
+	void Logger::setFileName( Path const & logFilePath, LogType eLogType )
 	{
 		if ( getSingleton().m_instance )
 		{
-			getSingleton().m_instance->setFileName( p_logFilePath, p_eLogType );
+			getSingleton().m_instance->setFileName( logFilePath, eLogType );
 		}
 	}
 
@@ -91,267 +91,267 @@ namespace castor
 		return getSingleton().m_instance->getLevel();
 	}
 
-	void Logger::logTrace( std::string const & p_msg )
+	void Logger::logTrace( std::string const & msg )
 	{
 		CU_Require( getSingleton().m_instance );
-		getSingleton().m_instance->pushMessage( LogType::eTrace, p_msg );
+		getSingleton().m_instance->pushMessage( LogType::eTrace, msg );
 	}
 
-	void Logger::logTrace( std::ostream const & p_msg )
+	void Logger::logTrace( std::ostream const & msg )
 	{
-		auto sbuf = p_msg.rdbuf();
+		auto sbuf = msg.rdbuf();
 		std::stringstream ss;
 		ss << sbuf;
 		logTrace( ss.str() );
 	}
 
-	void Logger::logTrace( std::wstring const & p_msg )
+	void Logger::logTrace( std::wstring const & msg )
 	{
 		CU_Require( getSingleton().m_instance );
-		getSingleton().m_instance->pushMessage( LogType::eTrace, string::stringCast< char >( p_msg ) );
+		getSingleton().m_instance->pushMessage( LogType::eTrace, string::stringCast< char >( msg ) );
 	}
 
-	void Logger::logTrace( std::wostream const & p_msg )
+	void Logger::logTrace( std::wostream const & msg )
 	{
 		std::wstringstream ss;
-		ss << p_msg.rdbuf();
+		ss << msg.rdbuf();
 		logTrace( ss.str() );
 	}
 
-	void Logger::logDebug( std::string const & p_msg )
+	void Logger::logDebug( std::string const & msg )
 	{
 		CU_Require( getSingleton().m_instance );
-		getSingleton().m_instance->pushMessage( LogType::eDebug, p_msg );
+		getSingleton().m_instance->pushMessage( LogType::eDebug, msg );
 	}
 
-	void Logger::logDebug( std::ostream const & p_msg )
+	void Logger::logDebug( std::ostream const & msg )
 	{
-		auto sbuf = p_msg.rdbuf();
+		auto sbuf = msg.rdbuf();
 		std::stringstream ss;
 		ss << sbuf;
 		logDebug( ss.str() );
 	}
 
-	void Logger::logDebug( std::wstring const & p_msg )
+	void Logger::logDebug( std::wstring const & msg )
 	{
 		CU_Require( getSingleton().m_instance );
-		getSingleton().m_instance->pushMessage( LogType::eDebug, string::stringCast< char >( p_msg ) );
+		getSingleton().m_instance->pushMessage( LogType::eDebug, string::stringCast< char >( msg ) );
 	}
 
-	void Logger::logDebug( std::wostream const & p_msg )
+	void Logger::logDebug( std::wostream const & msg )
 	{
 		std::wstringstream ss;
-		ss << p_msg.rdbuf();
+		ss << msg.rdbuf();
 		logDebug( ss.str() );
 	}
 
-	void Logger::logInfo( std::string const & p_msg )
+	void Logger::logInfo( std::string const & msg )
 	{
 		CU_Require( getSingleton().m_instance );
-		getSingleton().m_instance->pushMessage( LogType::eInfo, p_msg );
+		getSingleton().m_instance->pushMessage( LogType::eInfo, msg );
 	}
 
-	void Logger::logInfo( std::ostream const & p_msg )
+	void Logger::logInfo( std::ostream const & msg )
 	{
 		std::stringstream ss;
-		ss << p_msg.rdbuf();
+		ss << msg.rdbuf();
 		logInfo( ss.str() );
 	}
 
-	void Logger::logInfo( std::wstring const & p_msg )
+	void Logger::logInfo( std::wstring const & msg )
 	{
 		CU_Require( getSingleton().m_instance );
-		getSingleton().m_instance->pushMessage( LogType::eInfo, string::stringCast< char >( p_msg ) );
+		getSingleton().m_instance->pushMessage( LogType::eInfo, string::stringCast< char >( msg ) );
 	}
 
-	void Logger::logInfo( std::wostream const & p_msg )
+	void Logger::logInfo( std::wostream const & msg )
 	{
 		std::wstringstream ss;
-		ss << p_msg.rdbuf();
+		ss << msg.rdbuf();
 		logInfo( ss.str() );
 	}
 
-	void Logger::logWarning( std::string const & p_msg )
+	void Logger::logWarning( std::string const & msg )
 	{
 		CU_Require( getSingleton().m_instance );
-		getSingleton().m_instance->pushMessage( LogType::eWarning, p_msg );
+		getSingleton().m_instance->pushMessage( LogType::eWarning, msg );
 	}
 
-	void Logger::logWarning( std::ostream const & p_msg )
+	void Logger::logWarning( std::ostream const & msg )
 	{
 		std::stringstream ss;
-		ss << p_msg.rdbuf();
+		ss << msg.rdbuf();
 		logWarning( ss.str() );
 	}
 
-	void Logger::logWarning( std::wstring const & p_msg )
+	void Logger::logWarning( std::wstring const & msg )
 	{
 		CU_Require( getSingleton().m_instance );
-		getSingleton().m_instance->pushMessage( LogType::eWarning, string::stringCast< char >( p_msg ) );
+		getSingleton().m_instance->pushMessage( LogType::eWarning, string::stringCast< char >( msg ) );
 	}
 
-	void Logger::logWarning( std::wostream const & p_msg )
+	void Logger::logWarning( std::wostream const & msg )
 	{
 		std::wstringstream ss;
-		ss << p_msg.rdbuf();
+		ss << msg.rdbuf();
 		logWarning( ss.str() );
 	}
 
-	void Logger::logError( std::string const & p_msg )
+	void Logger::logError( std::string const & msg )
 	{
 		CU_Require( getSingleton().m_instance );
-		getSingleton().m_instance->pushMessage( LogType::eError, p_msg );
+		getSingleton().m_instance->pushMessage( LogType::eError, msg );
 	}
 
-	void Logger::logError( std::ostream const & p_msg )
+	void Logger::logError( std::ostream const & msg )
 	{
 		std::stringstream ss;
-		ss << p_msg.rdbuf();
+		ss << msg.rdbuf();
 		logError( ss.str() );
 	}
 
-	void Logger::logError( std::wstring const & p_msg )
+	void Logger::logError( std::wstring const & msg )
 	{
 		CU_Require( getSingleton().m_instance );
-		getSingleton().m_instance->pushMessage( LogType::eError, string::stringCast< char >( p_msg ) );
+		getSingleton().m_instance->pushMessage( LogType::eError, string::stringCast< char >( msg ) );
 	}
 
-	void Logger::logError( std::wostream const & p_msg )
+	void Logger::logError( std::wostream const & msg )
 	{
 		std::wstringstream ss;
-		ss << p_msg.rdbuf();
+		ss << msg.rdbuf();
 		logError( ss.str() );
 	}
 
-	void Logger::logTraceNoNL( std::string const & p_msg )
+	void Logger::logTraceNoNL( std::string const & msg )
 	{
 		CU_Require( getSingleton().m_instance );
-		getSingleton().m_instance->pushMessage( LogType::eTrace, p_msg, false );
+		getSingleton().m_instance->pushMessage( LogType::eTrace, msg, false );
 	}
 
-	void Logger::logTraceNoNL( std::ostream const & p_msg )
+	void Logger::logTraceNoNL( std::ostream const & msg )
 	{
-		auto sbuf = p_msg.rdbuf();
+		auto sbuf = msg.rdbuf();
 		std::stringstream ss;
 		ss << sbuf;
 		logTraceNoNL( ss.str() );
 	}
 
-	void Logger::logTraceNoNL( std::wstring const & p_msg )
+	void Logger::logTraceNoNL( std::wstring const & msg )
 	{
 		CU_Require( getSingleton().m_instance );
-		getSingleton().m_instance->pushMessage( LogType::eTrace, string::stringCast< char >( p_msg ), false );
+		getSingleton().m_instance->pushMessage( LogType::eTrace, string::stringCast< char >( msg ), false );
 	}
 
-	void Logger::logTraceNoNL( std::wostream const & p_msg )
+	void Logger::logTraceNoNL( std::wostream const & msg )
 	{
 		std::wstringstream ss;
-		ss << p_msg.rdbuf();
+		ss << msg.rdbuf();
 		logTraceNoNL( ss.str() );
 	}
 
-	void Logger::logDebugNoNL( std::string const & p_msg )
+	void Logger::logDebugNoNL( std::string const & msg )
 	{
 		CU_Require( getSingleton().m_instance );
-		getSingleton().m_instance->pushMessage( LogType::eDebug, p_msg, false );
+		getSingleton().m_instance->pushMessage( LogType::eDebug, msg, false );
 	}
 
-	void Logger::logDebugNoNL( std::ostream const & p_msg )
+	void Logger::logDebugNoNL( std::ostream const & msg )
 	{
-		auto sbuf = p_msg.rdbuf();
+		auto sbuf = msg.rdbuf();
 		std::stringstream ss;
 		ss << sbuf;
 		logDebugNoNL( ss.str() );
 	}
 
-	void Logger::logDebugNoNL( std::wstring const & p_msg )
+	void Logger::logDebugNoNL( std::wstring const & msg )
 	{
 		CU_Require( getSingleton().m_instance );
-		getSingleton().m_instance->pushMessage( LogType::eDebug, string::stringCast< char >( p_msg ), false );
+		getSingleton().m_instance->pushMessage( LogType::eDebug, string::stringCast< char >( msg ), false );
 	}
 
-	void Logger::logDebugNoNL( std::wostream const & p_msg )
+	void Logger::logDebugNoNL( std::wostream const & msg )
 	{
 		std::wstringstream ss;
-		ss << p_msg.rdbuf();
+		ss << msg.rdbuf();
 		logDebugNoNL( ss.str() );
 	}
 
-	void Logger::logInfoNoNL( std::string const & p_msg )
+	void Logger::logInfoNoNL( std::string const & msg )
 	{
 		CU_Require( getSingleton().m_instance );
-		getSingleton().m_instance->pushMessage( LogType::eInfo, p_msg, false );
+		getSingleton().m_instance->pushMessage( LogType::eInfo, msg, false );
 	}
 
-	void Logger::logInfoNoNL( std::ostream const & p_msg )
+	void Logger::logInfoNoNL( std::ostream const & msg )
 	{
 		std::stringstream ss;
-		ss << p_msg.rdbuf();
+		ss << msg.rdbuf();
 		logInfoNoNL( ss.str() );
 	}
 
-	void Logger::logInfoNoNL( std::wstring const & p_msg )
+	void Logger::logInfoNoNL( std::wstring const & msg )
 	{
 		CU_Require( getSingleton().m_instance );
-		getSingleton().m_instance->pushMessage( LogType::eInfo, string::stringCast< char >( p_msg ), false );
+		getSingleton().m_instance->pushMessage( LogType::eInfo, string::stringCast< char >( msg ), false );
 	}
 
-	void Logger::logInfoNoNL( std::wostream const & p_msg )
+	void Logger::logInfoNoNL( std::wostream const & msg )
 	{
 		std::wstringstream ss;
-		ss << p_msg.rdbuf();
+		ss << msg.rdbuf();
 		logInfoNoNL( ss.str() );
 	}
 
-	void Logger::logWarningNoNL( std::string const & p_msg )
+	void Logger::logWarningNoNL( std::string const & msg )
 	{
 		CU_Require( getSingleton().m_instance );
-		getSingleton().m_instance->pushMessage( LogType::eWarning, p_msg, false );
+		getSingleton().m_instance->pushMessage( LogType::eWarning, msg, false );
 	}
 
-	void Logger::logWarningNoNL( std::ostream const & p_msg )
+	void Logger::logWarningNoNL( std::ostream const & msg )
 	{
 		std::stringstream ss;
-		ss << p_msg.rdbuf();
+		ss << msg.rdbuf();
 		logWarningNoNL( ss.str() );
 	}
 
-	void Logger::logWarningNoNL( std::wstring const & p_msg )
+	void Logger::logWarningNoNL( std::wstring const & msg )
 	{
 		CU_Require( getSingleton().m_instance );
-		getSingleton().m_instance->pushMessage( LogType::eWarning, string::stringCast< char >( p_msg ), false );
+		getSingleton().m_instance->pushMessage( LogType::eWarning, string::stringCast< char >( msg ), false );
 	}
 
-	void Logger::logWarningNoNL( std::wostream const & p_msg )
+	void Logger::logWarningNoNL( std::wostream const & msg )
 	{
 		std::wstringstream ss;
-		ss << p_msg.rdbuf();
+		ss << msg.rdbuf();
 		logWarningNoNL( ss.str() );
 	}
 
-	void Logger::logErrorNoNL( std::string const & p_msg )
+	void Logger::logErrorNoNL( std::string const & msg )
 	{
 		CU_Require( getSingleton().m_instance );
-		getSingleton().m_instance->pushMessage( LogType::eError, p_msg, false );
+		getSingleton().m_instance->pushMessage( LogType::eError, msg, false );
 	}
 
-	void Logger::logErrorNoNL( std::ostream const & p_msg )
+	void Logger::logErrorNoNL( std::ostream const & msg )
 	{
 		std::stringstream ss;
-		ss << p_msg.rdbuf();
+		ss << msg.rdbuf();
 		logErrorNoNL( ss.str() );
 	}
 
-	void Logger::logErrorNoNL( std::wstring const & p_msg )
+	void Logger::logErrorNoNL( std::wstring const & msg )
 	{
 		CU_Require( getSingleton().m_instance );
-		getSingleton().m_instance->pushMessage( LogType::eError, string::stringCast< char >( p_msg ), false );
+		getSingleton().m_instance->pushMessage( LogType::eError, string::stringCast< char >( msg ), false );
 	}
 
-	void Logger::logErrorNoNL( std::wostream const & p_msg )
+	void Logger::logErrorNoNL( std::wostream const & msg )
 	{
 		std::wstringstream ss;
-		ss << p_msg.rdbuf();
+		ss << msg.rdbuf();
 		logError( ss.str() );
 	}
 

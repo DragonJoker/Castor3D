@@ -2,72 +2,72 @@
 
 namespace castor
 {
-	Position::Position( int32_t p_x, int32_t p_y )
+	Position::Position( int32_t x, int32_t y )
 		:	BaseType( m_data.buffer )
 	{
-		m_data.position.x	= p_x;
-		m_data.position.y	= p_y;
+		m_data.position.x = x;
+		m_data.position.y = y;
 	}
 
-	Position::Position( Position const & p_obj )
+	Position::Position( Position const & rhs )
 		:	BaseType( m_data.buffer )
 	{
-		m_data.position.x	= p_obj.m_data.position.x;
-		m_data.position.y	= p_obj.m_data.position.y;
+		m_data.position.x = rhs.m_data.position.x;
+		m_data.position.y = rhs.m_data.position.y;
 	}
 
-	Position::Position( Position && p_obj )
+	Position::Position( Position && rhs )
 		:	BaseType( m_data.buffer )
 	{
-		m_data.position.x	= p_obj.m_data.position.x;
-		m_data.position.y	= p_obj.m_data.position.y;
-		p_obj.m_data.position.x = 0;
-		p_obj.m_data.position.y = 0;
+		m_data.position.x = rhs.m_data.position.x;
+		m_data.position.y = rhs.m_data.position.y;
+		rhs.m_data.position.x = 0;
+		rhs.m_data.position.y = 0;
 	}
 
 	Position::~Position()
 	{
 	}
 
-	Position & Position::operator =( Position const & p_obj )
+	Position & Position::operator =( Position const & rhs )
 	{
-		m_data.position.x	= p_obj.m_data.position.x;
-		m_data.position.y	= p_obj.m_data.position.y;
+		m_data.position.x = rhs.m_data.position.x;
+		m_data.position.y = rhs.m_data.position.y;
 		return *this;
 	}
 
-	Position & Position::operator =( Position && p_obj )
+	Position & Position::operator =( Position && rhs )
 	{
-		if ( this != &p_obj )
+		if ( this != &rhs )
 		{
-			m_data.position.x	= p_obj.m_data.position.x;
-			m_data.position.y	= p_obj.m_data.position.y;
-			p_obj.m_data.position.x = 0;
-			p_obj.m_data.position.y = 0;
+			m_data.position.x = rhs.m_data.position.x;
+			m_data.position.y = rhs.m_data.position.y;
+			rhs.m_data.position.x = 0;
+			rhs.m_data.position.y = 0;
 		}
 
 		return *this;
 	}
 
-	void Position::set( int32_t p_x, int32_t p_y )
+	void Position::set( int32_t x, int32_t y )
 	{
-		m_data.position.x	= p_x;
-		m_data.position.y	= p_y;
+		m_data.position.x = x;
+		m_data.position.y = y;
 	}
 
-	void Position::offset( int32_t p_x, int32_t p_y )
+	void Position::offset( int32_t x, int32_t y )
 	{
-		m_data.position.x	+= p_x;
-		m_data.position.y	+= p_y;
+		m_data.position.x += x;
+		m_data.position.y += y;
 	}
 
-	bool operator ==( Position const & p_a, Position const & p_b )
+	bool operator ==( Position const & lhs, Position const & rhs )
 	{
-		return p_a.x() == p_b.x() && p_a.y() == p_b.y();
+		return lhs.x() == rhs.x() && lhs.y() == rhs.y();
 	}
 
-	bool operator !=( Position const & p_a, Position const & p_b )
+	bool operator !=( Position const & lhs, Position const & rhs )
 	{
-		return p_a.x() != p_b.x() || p_a.y() != p_b.y();
+		return lhs.x() != rhs.x() || lhs.y() != rhs.y();
 	}
 }

@@ -30,19 +30,19 @@ namespace Testing
 {
 	namespace
 	{
-		bool exportScene( Scene const & p_scene, Path const & p_fileName )
+		bool exportScene( Scene const & scene, Path const & fileName )
 		{
 			castor3d::exporter::CscnSceneExporter exporter{ castor3d::exporter::ExportOptions{} };
-			return exporter.exportScene( p_scene, p_fileName );
+			return exporter.exportScene( scene, fileName );
 		}
 
 		template< typename ObjT, typename CacheT >
-		void renameObject( ObjT p_object, CacheT & p_cache )
+		void renameObject( ObjT object, CacheT & cache )
 		{
-			auto name = p_object->getName();
-			p_object->rename( name + cuT( "_ren" ) );
-			p_cache.remove( name );
-			p_cache.add( p_object->getName(), p_object );
+			auto name = object->getName();
+			object->rename( name + cuT( "_ren" ) );
+			cache.remove( name );
+			cache.add( object->getName(), object );
 		}
 
 		void cleanup( SceneRPtr scene )
@@ -119,9 +119,9 @@ namespace Testing
 		return result;
 	}
 
-	void SceneExportTest::doTestScene( String const & p_name )
+	void SceneExportTest::doTestScene( String const & name )
 	{
-		SceneRPtr src{ doParseScene( m_testDataFolder / p_name ) };
+		SceneRPtr src{ doParseScene( m_testDataFolder / name ) };
 		Path path = Path{ cuT( "TestScene" ) } / cuT( "TestScene.cscn" );
 		CT_CHECK( exportScene( *src, path ) );
 		m_engine.getSceneCache().rename( src->getName()

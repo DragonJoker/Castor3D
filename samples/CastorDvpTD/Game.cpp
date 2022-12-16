@@ -37,41 +37,41 @@ namespace castortd
 		constexpr uint32_t InitialOre = 750u;
 #	endif
 
-		static void doPrepareGridLine( PathNode const & p_prv, PathNode const & p_cur, Grid & p_grid )
+		static void doPrepareGridLine( PathNode const & prv, PathNode const & cur, Grid & grid )
 		{
-			if ( p_prv.m_x != p_cur.m_x )
+			if ( prv.m_x != cur.m_x )
 			{
-				for ( auto x = std::min( p_prv.m_x, p_cur.m_x ); x < std::max( p_prv.m_x, p_cur.m_x ); ++x )
+				for ( auto x = std::min( prv.m_x, cur.m_x ); x < std::max( prv.m_x, cur.m_x ); ++x )
 				{
-					p_grid( p_prv.m_y - 1, x - 1 ).m_state = Cell::State::Path;
-					p_grid( p_prv.m_y - 1, x - 0 ).m_state = Cell::State::Path;
-					p_grid( p_prv.m_y - 0, x - 1 ).m_state = Cell::State::Path;
-					p_grid( p_prv.m_y - 0, x - 0 ).m_state = Cell::State::Path;
+					grid( prv.m_y - 1, x - 1 ).m_state = Cell::State::Path;
+					grid( prv.m_y - 1, x - 0 ).m_state = Cell::State::Path;
+					grid( prv.m_y - 0, x - 1 ).m_state = Cell::State::Path;
+					grid( prv.m_y - 0, x - 0 ).m_state = Cell::State::Path;
 				}
 			}
 			else
 			{
-				for ( auto y = std::min( p_prv.m_y, p_cur.m_y ); y <= std::max( p_prv.m_y, p_cur.m_y ); ++y )
+				for ( auto y = std::min( prv.m_y, cur.m_y ); y <= std::max( prv.m_y, cur.m_y ); ++y )
 				{
-					p_grid( y - 1, p_prv.m_x - 1 ).m_state = Cell::State::Path;
-					p_grid( y - 1, p_prv.m_x - 0 ).m_state = Cell::State::Path;
-					p_grid( y - 0, p_prv.m_x - 1 ).m_state = Cell::State::Path;
-					p_grid( y - 0, p_prv.m_x - 0 ).m_state = Cell::State::Path;
+					grid( y - 1, prv.m_x - 1 ).m_state = Cell::State::Path;
+					grid( y - 1, prv.m_x - 0 ).m_state = Cell::State::Path;
+					grid( y - 0, prv.m_x - 1 ).m_state = Cell::State::Path;
+					grid( y - 0, prv.m_x - 0 ).m_state = Cell::State::Path;
 				}
 			}
 		}
 
-		static void doPrepareTarget( PathNode const & p_cur, castor3d::Scene & p_scene, Grid & p_grid )
+		static void doPrepareTarget( PathNode const & cur, castor3d::Scene & scene, Grid & grid )
 		{
-			for ( uint32_t x = p_cur.m_x - 2; x <= p_cur.m_x + 2; ++x )
+			for ( uint32_t x = cur.m_x - 2; x <= cur.m_x + 2; ++x )
 			{
-				for ( uint32_t y = p_cur.m_y - 1; y <= p_cur.m_y + 3; ++y )
+				for ( uint32_t y = cur.m_y - 1; y <= cur.m_y + 3; ++y )
 				{
-					p_grid( y, x ).m_state = Cell::State::Path;
+					grid( y, x ).m_state = Cell::State::Path;
 				}
 			}
 
-			p_grid( p_cur.m_y, p_cur.m_x ).m_state = Cell::State::Target;
+			grid( cur.m_y, cur.m_x ).m_state = Cell::State::Target;
 		}
 
 		static void doUpdateMaterials( castor3d::Geometry & geometry
@@ -97,9 +97,9 @@ namespace castortd
 		}
 	}
 
-	Game::Game( castor3d::Scene & p_scene )
-		: m_scene{ p_scene }
-		, m_hud{ *this, p_scene }
+	Game::Game( castor3d::Scene & scene )
+		: m_scene{ scene }
+		, m_hud{ *this, m_scene }
 		, m_path
 		{
 			{ 19,  1 },
@@ -247,21 +247,21 @@ namespace castortd
 		}
 	}
 
-	Cell & Game::getCell( int p_x, int p_y )
+	Cell & Game::getCell( int x, int y )
 	{
-		return m_grid( uint32_t( p_y ), uint32_t( p_x ) );
+		return m_grid( uint32_t( y ), uint32_t( x ) );
 	}
 
-	Cell & Game::getCell( castor::Point2i const & p_position )
+	Cell & Game::getCell( castor::Point2i const & position )
 	{
-		return getCell( p_position[0], p_position[1] );
+		return getCell( position[0], position[1] );
 	}
 
-	Cell & Game::getCell( castor::Point3f const & p_position )
+	Cell & Game::getCell( castor::Point3f const & position )
 	{
 		static Cell dummy;
 		dummy.m_state = Cell::State::Invalid;
-		auto coords = convert( p_position );
+		auto coords = convert( position );
 
 		if ( coords[0] >= 0 && coords[0] < int( m_grid.getWidth() )
 			 && coords[1] >= 0 && coords[1] < int( m_grid.getHeight() ) )
@@ -272,22 +272,22 @@ namespace castortd
 		return dummy;
 	}
 
-	Cell const & Game::getCell( int p_x, int p_y )const
+	Cell const & Game::getCell( int x, int y )const
 	{
-		return m_grid( uint32_t( p_y )
-			, uint32_t( p_x ) );
+		return m_grid( uint32_t( y )
+			, uint32_t( x ) );
 	}
 
-	Cell const & Game::getCell( castor::Point2i const & p_position )const
+	Cell const & Game::getCell( castor::Point2i const & position )const
 	{
-		return getCell( p_position[0], p_position[1] );
+		return getCell( position[0], position[1] );
 	}
 
-	Cell const & Game::getCell( castor::Point3f const & p_position )const
+	Cell const & Game::getCell( castor::Point3f const & position )const
 	{
 		static Cell dummy;
 		dummy.m_state = Cell::State::Invalid;
-		auto coords = convert( p_position );
+		auto coords = convert( position );
 		Cell const * result = &dummy;
 
 		if ( coords[0] >= 0 && coords[0] < int( m_grid.getWidth() )
@@ -299,19 +299,19 @@ namespace castortd
 		return *result;
 	}
 
-	bool Game::buildTower( castor::Point3f const & p_position, Tower::CategoryPtr && p_category )
+	bool Game::buildTower( castor::Point3f const & position, Tower::CategoryPtr && category )
 	{
 		bool result = false;
 
-		if ( canAfford( p_category->getTowerCost() ) )
+		if ( canAfford( category->getTowerCost() ) )
 		{
-			Cell & cell = getCell( p_position );
+			Cell & cell = getCell( position );
 
 			if ( cell.m_state == Cell::State::Empty )
 			{
 				cell.m_state = Cell::State::Tower;
-				spend( p_category->getTowerCost() );
-				doAddTower( cell, std::move( p_category ) );
+				spend( category->getTowerCost() );
+				doAddTower( cell, std::move( category ) );
 				result = true;
 			}
 		}
@@ -319,20 +319,20 @@ namespace castortd
 		return result;
 	}
 
-	castor::Point3f Game::convert( castor::Point2i const & p_position )const
+	castor::Point3f Game::convert( castor::Point2i const & position )const
 	{
-		return castor::Point3f( ( float( p_position[0] ) - float( m_grid.getWidth() ) / 2 ) * m_cellDimensions[0]
+		return castor::Point3f( ( float( position[0] ) - float( m_grid.getWidth() ) / 2 ) * m_cellDimensions[0]
 			, 0
-			, ( float( p_position[1] ) - float( m_grid.getHeight() ) / 2 ) * m_cellDimensions[2] );
+			, ( float( position[1] ) - float( m_grid.getHeight() ) / 2 ) * m_cellDimensions[2] );
 	}
 
-	castor::Point2i Game::convert( castor::Point3f const & p_position )const
+	castor::Point2i Game::convert( castor::Point3f const & position )const
 	{
-		return castor::Point2i( int( p_position[0] / m_cellDimensions[0] + float( m_grid.getWidth() / 2 ) )
-			, int( p_position[2] / m_cellDimensions[2] + float( m_grid.getHeight() / 2 ) ) );
+		return castor::Point2i( int( position[0] / m_cellDimensions[0] + float( m_grid.getWidth() / 2 ) )
+			, int( position[2] / m_cellDimensions[2] + float( m_grid.getHeight() / 2 ) ) );
 	}
 
-	void Game::emitBullet( float p_speed, uint32_t p_damage, castor::Point3f const & p_origin, Enemy & p_target )
+	void Game::emitBullet( float speed, uint32_t damage, castor::Point3f const & origin, Enemy & target )
 	{
 		if ( m_bulletsCache.empty() )
 		{
@@ -342,7 +342,7 @@ namespace castortd
 				, m_scene
 				, *node
 				, m_bulletMesh );
-			node->setPosition( p_origin );
+			node->setPosition( origin );
 			node->attachTo( *m_mapNode );
 
 			for ( auto submesh : *geometry->getMesh().lock() )
@@ -351,12 +351,12 @@ namespace castortd
 			}
 
 			m_scene.addGeometry( geometry );
-			m_bullets.emplace_back( p_speed, p_damage, *node, p_target );
+			m_bullets.emplace_back( speed, damage, *node, target );
 		}
 		else
 		{
 			auto bullet = *m_bulletsCache.begin();
-			bullet.load( p_speed, p_damage, p_origin, p_target );
+			bullet.load( speed, damage, origin, target );
 			m_bullets.insert( m_bullets.end(), bullet );
 			m_bulletsCache.erase( m_bulletsCache.begin() );
 		}
@@ -395,11 +395,11 @@ namespace castortd
 		}
 	}
 
-	void Game::spend( uint32_t p_value )
+	void Game::spend( uint32_t value )
 	{
-		if ( m_ore >= p_value )
+		if ( m_ore >= value )
 		{
-			m_ore -= p_value;
+			m_ore -= value;
 		}
 		else
 		{
@@ -407,16 +407,16 @@ namespace castortd
 		}
 	}
 
-	void Game::earn( uint32_t p_value )
+	void Game::earn( uint32_t value )
 	{
-		m_ore += p_value;
+		m_ore += value;
 	}
 
-	void Game::loseLife( uint32_t p_value )
+	void Game::loseLife( uint32_t value )
 	{
-		if ( m_lives > p_value )
+		if ( m_lives > value )
 		{
-			m_lives -= p_value;
+			m_lives -= value;
 		}
 		else
 		{
@@ -441,18 +441,18 @@ namespace castortd
 		}
 	}
 
-	TowerPtr Game::selectTower( Cell const & p_cell )
+	TowerPtr Game::selectTower( Cell const & cell )
 	{
 		TowerPtr result;
 
-		if ( p_cell.m_state == Cell::State::Tower )
+		if ( cell.m_state == Cell::State::Tower )
 		{
 			auto it = std::find_if( m_towers.begin()
 				, m_towers.end()
-				, [&p_cell]( TowerPtr p_tower )
+				, [&cell]( TowerPtr tower )
 				{
-					return p_tower->getCell().m_x == p_cell.m_x
-						&& p_tower->getCell().m_y == p_cell.m_y;
+					return tower->getCell().m_x == cell.m_x
+						&& tower->getCell().m_y == cell.m_y;
 				} );
 
 			if ( it != m_towers.end() )
@@ -465,39 +465,39 @@ namespace castortd
 		return result;
 	}
 
-	void Game::upgradeTowerSpeed( Tower & p_tower )
+	void Game::upgradeTowerSpeed( Tower & tower )
 	{
-		if ( canAfford( p_tower.getSpeedUpgradeCost() )
-			 && p_tower.canUpgradeSpeed() )
+		if ( canAfford( tower.getSpeedUpgradeCost() )
+			 && tower.canUpgradeSpeed() )
 		{
-			spend( p_tower.getSpeedUpgradeCost() );
-			p_tower.upgradeSpeed();
+			spend( tower.getSpeedUpgradeCost() );
+			tower.upgradeSpeed();
 		}
 	}
 
-	void Game::upgradeTowerRange( Tower & p_tower )
+	void Game::upgradeTowerRange( Tower & tower )
 	{
-		if ( canAfford( p_tower.getRangeUpgradeCost() )
-			 && p_tower.canUpgradeRange() )
+		if ( canAfford( tower.getRangeUpgradeCost() )
+			 && tower.canUpgradeRange() )
 		{
-			spend( p_tower.getRangeUpgradeCost() );
-			p_tower.upgradeRange();
+			spend( tower.getRangeUpgradeCost() );
+			tower.upgradeRange();
 		}
 	}
 
-	void Game::upgradeTowerDamage( Tower & p_tower )
+	void Game::upgradeTowerDamage( Tower & tower )
 	{
-		if ( canAfford( p_tower.getDamageUpgradeCost() )
-			 && p_tower.canUpgradeDamage() )
+		if ( canAfford( tower.getDamageUpgradeCost() )
+			 && tower.canUpgradeDamage() )
 		{
-			spend( p_tower.getDamageUpgradeCost() );
-			p_tower.upgradeDamage();
+			spend( tower.getDamageUpgradeCost() );
+			tower.upgradeDamage();
 		}
 	}
 
-	bool Game::canAfford( uint32_t p_price )
+	bool Game::canAfford( uint32_t price )
 	{
-		return m_ore >= p_price;
+		return m_ore >= price;
 	}
 
 	void Game::doUpdateTowers()
@@ -632,15 +632,15 @@ namespace castortd
 		}
 	}
 
-	void Game::doAddMapCube( Cell & p_cell )
+	void Game::doAddMapCube( Cell & cell )
 	{
-		castor::String name = cuT( "MapCube_" ) + std::to_string( p_cell.m_x ) + cuT( "x" ) + std::to_string( p_cell.m_y );
+		castor::String name = cuT( "MapCube_" ) + std::to_string( cell.m_x ) + cuT( "x" ) + std::to_string( cell.m_y );
 		auto node = m_scene.addNewSceneNode( name ).lock();
 		auto geometry = m_scene.createGeometry( name
 			, m_scene
 			, *node
 			, m_mapCubeMesh );
-		node->setPosition( convert( castor::Point2i{ p_cell.m_x, p_cell.m_y } ) + castor::Point3f{ 0, m_cellDimensions[1] / 2, 0 } );
+		node->setPosition( convert( castor::Point2i{ cell.m_x, cell.m_y } ) + castor::Point3f{ 0, m_cellDimensions[1] / 2, 0 } );
 		node->attachTo( *m_mapNode );
 
 		for ( auto submesh : *geometry->getMesh().lock() )
@@ -650,20 +650,20 @@ namespace castortd
 
 		m_scene.addGeometry( geometry );
 		m_lastMapCube = geometry;
-		p_cell.m_state = Cell::State::Empty;
+		cell.m_state = Cell::State::Empty;
 	}
 
-	void Game::doAddTarget( Cell & p_cell )
+	void Game::doAddTarget( Cell & cell )
 	{
-		m_targetNode->setPosition( convert( castor::Point2i{ p_cell.m_x, p_cell.m_y + 1 } ) );
-		p_cell.m_state = Cell::State::Target;
+		m_targetNode->setPosition( convert( castor::Point2i{ cell.m_x, cell.m_y + 1 } ) );
+		cell.m_state = Cell::State::Target;
 	}
 
-	castor3d::MeshResPtr Game::doSelectMesh( Tower::Category & p_category )
+	castor3d::MeshResPtr Game::doSelectMesh( Tower::Category & category )
 	{
 		castor3d::MeshResPtr result;
 
-		switch ( p_category.getKind() )
+		switch ( category.getKind() )
 		{
 		case Tower::Category::Kind::eLongRange:
 			result = m_longRangeTowerMesh;
@@ -677,13 +677,13 @@ namespace castortd
 		return result;
 	}
 
-	void Game::doAddTower( Cell & p_cell, Tower::CategoryPtr && p_category )
+	void Game::doAddTower( Cell & cell, Tower::CategoryPtr && category )
 	{
-		castor::String name = cuT( "Tower_" ) + std::to_string( p_cell.m_x ) + cuT( "x" ) + std::to_string( p_cell.m_y );
+		castor::String name = cuT( "Tower_" ) + std::to_string( cell.m_x ) + cuT( "x" ) + std::to_string( cell.m_y );
 		auto node = m_scene.addNewSceneNode( name ).lock();
-		node->setPosition( convert( castor::Point2i{ p_cell.m_x, p_cell.m_y } ) + castor::Point3f{ 0, m_cellDimensions[1], 0 } );
+		node->setPosition( convert( castor::Point2i{ cell.m_x, cell.m_y } ) + castor::Point3f{ 0, m_cellDimensions[1], 0 } );
 		node->attachTo( *m_mapNode );
-		auto mesh = doSelectMesh( *p_category );
+		auto mesh = doSelectMesh( *category );
 		auto tower = m_scene.createGeometry( name
 			, m_scene
 			, *node
@@ -705,7 +705,7 @@ namespace castortd
 			{
 			  animGroup->addObject( *tmesh, *tower, tower->getName() );
 				time = std::max( time
-					, tmesh->getAnimation( p_category->getAttackAnimationName() ).getLength() );
+					, tmesh->getAnimation( category->getAttackAnimationName() ).getLength() );
 			}
 
 			auto skeleton = tmesh->getSkeleton();
@@ -716,24 +716,24 @@ namespace castortd
 				{
 					animGroup->addObject( *skeleton, *tmesh, *tower, tower->getName() );
 					time = std::max( time
-						, skeleton->getAnimation( p_category->getAttackAnimationName() ).getLength() );
+						, skeleton->getAnimation( category->getAttackAnimationName() ).getLength() );
 				}
 			}
 		}
 
-		animGroup->addAnimation( p_category->getAttackAnimationName() );
-		animGroup->setAnimationLooped( p_category->getAttackAnimationName(), false );
+		animGroup->addAnimation( category->getAttackAnimationName() );
+		animGroup->setAnimationLooped( category->getAttackAnimationName(), false );
 		game::doUpdateMaterials( *tower
-			, p_category->getKind()
+			, category->getKind()
 			, m_scene.getMaterialView() );
 		m_scene.addGeometry( tower );
-		p_cell.m_state = Cell::State::Tower;
-		p_category->setAttackAnimationTime( time );
-		animGroup->startAnimation( p_category->getAttackAnimationName() );
-		animGroup->pauseAnimation( p_category->getAttackAnimationName() );
+		cell.m_state = Cell::State::Tower;
+		category->setAttackAnimationTime( time );
+		animGroup->startAnimation( category->getAttackAnimationName() );
+		animGroup->pauseAnimation( category->getAttackAnimationName() );
 		node->setScale( castor::Point3f{ 0.15, 0.15, 0.15 } );
 		std::clog << "Animation time: " << time.count() << std::endl;
-		m_towers.push_back( std::make_shared< Tower >( std::move( p_category ), *node, *animGroup, p_cell ) );
+		m_towers.push_back( std::make_shared< Tower >( std::move( category ), *node, *animGroup, cell ) );
 	}
 
 	void Game::doGameOver()

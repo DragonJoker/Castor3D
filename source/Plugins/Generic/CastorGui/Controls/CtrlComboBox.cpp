@@ -219,13 +219,13 @@ namespace CastorGui
 		}
 	}
 
-	void ComboBoxCtrl::doSetPosition( castor::Position const & p_value )
+	void ComboBoxCtrl::doSetPosition( castor::Position const & value )
 	{
 		castor3d::TextOverlaySPtr text = m_text.lock();
 
 		if ( text )
 		{
-			//l_text->setPixelPosition( p_value );
+			//l_text->setPixelPosition( value );
 			text.reset();
 		}
 
@@ -233,20 +233,20 @@ namespace CastorGui
 		m_choices->setPosition( castor::Position( 0, int32_t( getSize().getHeight() ) ) );
 	}
 
-	void ComboBoxCtrl::doSetSize( castor::Size const & p_value )
+	void ComboBoxCtrl::doSetSize( castor::Size const & value )
 	{
 		castor3d::TextOverlaySPtr text = m_text.lock();
 
 		if ( text )
 		{
-			text->setPixelSize( p_value );
+			text->setPixelSize( value );
 			text.reset();
 		}
 
-		m_expand->setSize( castor::Size( p_value.getHeight(), p_value.getHeight() ) );
-		m_choices->setSize( castor::Size( p_value.getWidth() - p_value.getHeight(), ~( 0u ) ) );
-		m_expand->setPosition( castor::Position( int32_t( p_value.getWidth() - p_value.getHeight() ), 0 ) );
-		m_choices->setPosition( castor::Position( 0, int32_t( p_value.getHeight() ) ) );
+		m_expand->setSize( castor::Size( value.getHeight(), value.getHeight() ) );
+		m_choices->setSize( castor::Size( value.getWidth() - value.getHeight(), ~( 0u ) ) );
+		m_expand->setPosition( castor::Position( int32_t( value.getWidth() - value.getHeight() ), 0 ) );
+		m_choices->setPosition( castor::Position( 0, int32_t( value.getHeight() ) ) );
 	}
 
 	bool ComboBoxCtrl::doCatchesMouseEvents()const
@@ -254,19 +254,19 @@ namespace CastorGui
 		return false;
 	}
 
-	void ComboBoxCtrl::onKeyDown( castor3d::KeyboardEvent const & p_event )
+	void ComboBoxCtrl::onKeyDown( castor3d::KeyboardEvent const & event )
 	{
 		if ( getSelected() != -1 )
 		{
 			bool changed = false;
 			int index = getSelected();
 
-			if ( p_event.getKey() == castor3d::KeyboardKey::eUp )
+			if ( event.getKey() == castor3d::KeyboardKey::eUp )
 			{
 				index--;
 				changed = true;
 			}
-			else if ( p_event.getKey() == castor3d::KeyboardKey::edown )
+			else if ( event.getKey() == castor3d::KeyboardKey::edown )
 			{
 				index++;
 				changed = true;
@@ -281,14 +281,14 @@ namespace CastorGui
 		}
 	}
 
-	void ComboBoxCtrl::onNcKeyDown( ControlSPtr p_control, castor3d::KeyboardEvent const & p_event )
+	void ComboBoxCtrl::onNcKeyDown( ControlSPtr control, castor3d::KeyboardEvent const & event )
 	{
-		onKeyDown( p_event );
+		onKeyDown( event );
 	}
 
-	void ComboBoxCtrl::doSetVisible( bool p_visible )
+	void ComboBoxCtrl::doSetVisible( bool visible )
 	{
-		m_expand->setVisible( p_visible );
+		m_expand->setVisible( visible );
 		m_choices->hide();
 	}
 
@@ -297,19 +297,19 @@ namespace CastorGui
 		m_choices->setVisible( !m_choices->isVisible() );
 	}
 
-	void ComboBoxCtrl::onSelected( int p_selected )
+	void ComboBoxCtrl::onSelected( int selected )
 	{
-		if ( p_selected >= 0 )
+		if ( selected >= 0 )
 		{
 			doSwitchExpand();
 			castor3d::TextOverlaySPtr text = m_text.lock();
 
 			if ( text )
 			{
-				text->setCaption( m_choices->getItemText( p_selected ) );
+				text->setCaption( m_choices->getItemText( selected ) );
 			}
 		}
 
-		m_signals[size_t( ComboBoxEvent::eSelected )]( p_selected );
+		m_signals[size_t( ComboBoxEvent::eSelected )]( selected );
 	}
 }

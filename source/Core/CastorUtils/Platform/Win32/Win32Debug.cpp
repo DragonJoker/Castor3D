@@ -73,9 +73,9 @@ namespace castor::Debug
 			}
 
 			template< typename CharU, typename CharT >
-			inline std::basic_string< CharU > demangle( std::basic_string< CharT > const & p_name )
+			inline std::basic_string< CharU > demangle( std::basic_string< CharT > const & name )
 			{
-				std::string ret = string::stringCast< char >( p_name );
+				std::string ret = string::stringCast< char >( name );
 
 				try
 				{
@@ -199,7 +199,7 @@ namespace castor::Debug
 	namespace dbg
 	{
 		template< typename CharT >
-		void showBacktrace( std::basic_ostream< CharT > & p_stream, int, int )
+		void showBacktrace( std::basic_ostream< CharT > & stream, int, int )
 		{
 		}
 	}
@@ -222,20 +222,20 @@ namespace castor::Debug
 
 #endif
 
-	std::wostream & operator<<( std::wostream & p_stream, Backtrace const & p_backtrace )
+	std::wostream & operator<<( std::wostream & stream, Backtrace const & backtrace )
 	{
 		static std::locale const loc{ "C" };
-		p_stream.imbue( loc );
-		dbg::showBacktrace( p_stream, p_backtrace.m_toCapture, p_backtrace.m_toSkip );
-		return p_stream;
+		stream.imbue( loc );
+		dbg::showBacktrace( stream, backtrace.m_toCapture, backtrace.m_toSkip );
+		return stream;
 	}
 
-	std::ostream & operator<<( std::ostream & p_stream, Backtrace const & p_backtrace )
+	std::ostream & operator<<( std::ostream & stream, Backtrace const & backtrace )
 	{
 		static std::locale const loc{ "C" };
-		p_stream.imbue( loc );
-		dbg::showBacktrace( p_stream, p_backtrace.m_toCapture, p_backtrace.m_toSkip );
-		return p_stream;
+		stream.imbue( loc );
+		dbg::showBacktrace( stream, backtrace.m_toCapture, backtrace.m_toSkip );
+		return stream;
 	}
 }
 

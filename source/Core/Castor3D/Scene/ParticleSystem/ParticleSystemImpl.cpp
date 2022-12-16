@@ -4,9 +4,9 @@
 
 namespace castor3d
 {
-	ParticleSystemImpl::ParticleSystemImpl( Type p_type, ParticleSystem & p_parent )
-		: m_parent{ p_parent }
-		, m_type{ p_type }
+	ParticleSystemImpl::ParticleSystemImpl( Type type, ParticleSystem & parent )
+		: m_parent{ parent }
+		, m_type{ type }
 	{
 	}
 

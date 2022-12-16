@@ -7,7 +7,7 @@ namespace castor
 #if defined( NDEBUG )
 
 		template< typename CharT >
-		inline void doShowBacktrace( std::basic_ostream< CharT > & p_stream, int, int )
+		inline void doShowBacktrace( std::basic_ostream< CharT > & stream, int, int )
 		{
 		}
 

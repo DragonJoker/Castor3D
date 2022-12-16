@@ -4,8 +4,8 @@
 
 namespace castor3d
 {
-	PostFxPlugin::PostFxPlugin( castor::DynamicLibrarySPtr p_library, Engine * engine )
-		: Plugin( PluginType::ePostEffect, p_library, *engine )
+	PostFxPlugin::PostFxPlugin( castor::DynamicLibrarySPtr library, Engine * engine )
+		: Plugin( PluginType::ePostEffect, library, *engine )
 	{
 		load();
 	}

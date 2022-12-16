@@ -26,17 +26,17 @@ namespace GuiCommon
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	engine	The engine.
-		 *\param[in]	p_editable	Tells if the properties are modifiable.
-		 *\param[in]	p_group		The target AnimatedObjectGroup.
-		 *\param[in]	p_name		The target animation name.
-		 *\param[in]	p_state		The target animation state.
+		 *\param[in]	editable	Tells if the properties are modifiable.
+		 *\param[in]	group		The target AnimatedObjectGroup.
+		 *\param[in]	name		The target animation name.
+		 *\param[in]	state		The target animation state.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine	Le moteur.
-		 *\param[in]	p_editable	Dit si les propriétés sont modifiables.
-		 *\param[in]	p_group		L'AnimatedObjectGroup cible.
-		 *\param[in]	p_name		Le nom de l'animation cible.
-		 *\param[in]	p_state		L'état de l'animation cible.
+		 *\param[in]	editable	Dit si les propriétés sont modifiables.
+		 *\param[in]	group		L'AnimatedObjectGroup cible.
+		 *\param[in]	name		Le nom de l'animation cible.
+		 *\param[in]	state		L'état de l'animation cible.
 		 */
 		AnimationTreeItemProperty( castor3d::Engine * engine
 			, bool editable
@@ -48,7 +48,7 @@ namespace GuiCommon
 		/**
 		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
-		void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )override;
+		void doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )override;
 
 	private:
 		castor3d::AnimatedObjectGroup & m_group;

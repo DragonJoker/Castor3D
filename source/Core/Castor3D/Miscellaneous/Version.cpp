@@ -23,60 +23,60 @@ namespace castor3d
 		return ashes::makeVersion( m_major, m_minor, m_build );
 	}
 
-	bool operator==( Version const & p_a, Version const & p_b )
+	bool operator==( Version const & lhs, Version const & rhs )
 	{
-		return p_a.getMajor() == p_b.getMajor()
-			&& p_a.getMinor() == p_b.getMinor()
-			&& p_a.getBuild() == p_b.getBuild();
+		return lhs.getMajor() == rhs.getMajor()
+			&& lhs.getMinor() == rhs.getMinor()
+			&& lhs.getBuild() == rhs.getBuild();
 	}
 
-	bool operator!=( Version const & p_a, Version const & p_b )
+	bool operator!=( Version const & lhs, Version const & rhs )
 	{
-		return p_a.getMajor() != p_b.getMajor()
-			|| p_a.getMinor() != p_b.getMinor()
-			|| p_a.getBuild() != p_b.getBuild();
+		return lhs.getMajor() != rhs.getMajor()
+			|| lhs.getMinor() != rhs.getMinor()
+			|| lhs.getBuild() != rhs.getBuild();
 	}
 
-	bool operator<( Version const & p_a, Version const & p_b )
+	bool operator<( Version const & lhs, Version const & rhs )
 	{
-		return	p_a.getMajor() < p_b.getMajor()
-			|| ( p_a.getMajor() == p_b.getMajor() && p_a.getMinor() < p_b.getMinor() )
-			|| ( p_a.getMajor() == p_b.getMajor() && p_a.getMinor() == p_b.getMinor() && p_a.getBuild() < p_b.getBuild() );
+		return	lhs.getMajor() < rhs.getMajor()
+			|| ( lhs.getMajor() == rhs.getMajor() && lhs.getMinor() < rhs.getMinor() )
+			|| ( lhs.getMajor() == rhs.getMajor() && lhs.getMinor() == rhs.getMinor() && lhs.getBuild() < rhs.getBuild() );
 	}
 
-	bool operator>( Version const & p_a, Version const & p_b )
+	bool operator>( Version const & lhs, Version const & rhs )
 	{
-		return	p_a.getMajor() > p_b.getMajor()
-			|| ( p_a.getMajor() == p_b.getMajor() && p_a.getMinor() > p_b.getMinor() )
-			|| ( p_a.getMajor() == p_b.getMajor() && p_a.getMinor() == p_b.getMinor() && p_a.getBuild() < p_b.getBuild() );
+		return	lhs.getMajor() > rhs.getMajor()
+			|| ( lhs.getMajor() == rhs.getMajor() && lhs.getMinor() > rhs.getMinor() )
+			|| ( lhs.getMajor() == rhs.getMajor() && lhs.getMinor() == rhs.getMinor() && lhs.getBuild() < rhs.getBuild() );
 	}
 
-	bool operator<=( Version const & p_a, Version const & p_b )
+	bool operator<=( Version const & lhs, Version const & rhs )
 	{
-		return !( p_a > p_b );
+		return !( lhs > rhs );
 	}
 
-	bool operator>=( Version const & p_a, Version const & p_b )
+	bool operator>=( Version const & lhs, Version const & rhs )
 	{
-		return !( p_a < p_b );
+		return !( lhs < rhs );
 	}
 
-	std::ostream & operator<<( std::ostream & p_stream, castor3d::Version const & p_version )
+	std::ostream & operator<<( std::ostream & stream, castor3d::Version const & version )
 	{
-		p_stream << p_version.getMajor() << "." << p_version.getMinor() << "." << p_version.getBuild();
-		return p_stream;
+		stream << version.getMajor() << "." << version.getMinor() << "." << version.getBuild();
+		return stream;
 	}
 
-	std::wostream & operator<<( std::wostream & p_stream, castor3d::Version const & p_version )
+	std::wostream & operator<<( std::wostream & stream, castor3d::Version const & version )
 	{
-		p_stream << p_version.getMajor() << L"." << p_version.getMinor() << L"." << p_version.getBuild();
-		return p_stream;
+		stream << version.getMajor() << L"." << version.getMinor() << L"." << version.getBuild();
+		return stream;
 	}
 
-	castor::String & operator<<( castor::String & p_stream, castor3d::Version const & p_version )
+	castor::String & operator<<( castor::String & str, castor3d::Version const & version )
 	{
 		castor::StringStream stream( castor::makeStringStream() );
-		stream << p_version;
-		return p_stream += stream.str();
+		stream << version;
+		return str += stream.str();
 	}
 }

@@ -15,7 +15,10 @@ namespace CastorViewer
 		: public castor3d::CpuFrameEvent
 	{
 	public:
-		MouseNodeEvent( castor3d::SceneNodeSPtr p_node, float p_dx, float p_dy, float p_dz );
+		MouseNodeEvent( castor3d::SceneNodeSPtr node
+			, float dx
+			, float dy
+			, float dz );
 
 	protected:
 		castor3d::SceneNodeWPtr m_node;

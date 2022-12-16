@@ -68,40 +68,40 @@ namespace CastorGui
 		/**
 		*\brief
 		*	Creates the given control's overlays and binds its callbacks to appropriate events
-		*\param[in] p_control
+		*\param[in] control
 		*	The control
 		*/
-		C3D_CGui_API void create( ControlSPtr p_control );
+		C3D_CGui_API void create( ControlSPtr control );
 		/**
 		*\brief
 		*	Destroys the given control's overlays and unbinds its callbacks from appropriate events.
-		*\param[in] p_control
+		*\param[in] control
 		*	The control.
 		*/
-		C3D_CGui_API void destroy( ControlSPtr p_control );
+		C3D_CGui_API void destroy( ControlSPtr control );
 		/**
 		*\brief
 		*	adds a control that can an event target
-		*\param[in] p_control
+		*\param[in] control
 		*	The control
 		*/
-		C3D_CGui_API void addControl( ControlSPtr p_control );
+		C3D_CGui_API void addControl( ControlSPtr control );
 		/**
 		*\brief
 		*	Removes a control
-		*\param[in] p_id
+		*\param[in] id
 		*	The control ID
 		*/
-		C3D_CGui_API void removeControl( uint32_t p_id );
+		C3D_CGui_API void removeControl( uint32_t id );
 		/**
 		*\brief
 		*	Retrieves a control
-		*\param[in] p_id
+		*\param[in] id
 		*	The control ID
 		*\return
 		*	The contro
 		*/
-		C3D_CGui_API ControlSPtr getControl( uint32_t p_id );
+		C3D_CGui_API ControlSPtr getControl( uint32_t id );
 
 		//@}
 
@@ -109,73 +109,73 @@ namespace CastorGui
 		/**
 		*\brief
 		*	Connects the manager to given control's events.
-		*\param[in] p_control
+		*\param[in] control
 		*	The control.
 		*/
-		void connectEvents( ButtonCtrl & p_control );
+		void connectEvents( ButtonCtrl & control );
 		/**
 		*\brief
 		*	Connects the manager to given control's events.
-		*\param[in] p_control
+		*\param[in] control
 		*	The control.
 		*/
-		void connectEvents( ComboBoxCtrl & p_control );
+		void connectEvents( ComboBoxCtrl & control );
 		/**
 		*\brief
 		*	Connects the manager to given control's events.
-		*\param[in] p_control
+		*\param[in] control
 		*	The control.
 		*/
-		void connectEvents( EditCtrl & p_control );
+		void connectEvents( EditCtrl & control );
 		/**
 		*\brief
 		*	Connects the manager to given control's events.
-		*\param[in] p_control
+		*\param[in] control
 		*	The control.
 		*/
-		void connectEvents( ListBoxCtrl & p_control );
+		void connectEvents( ListBoxCtrl & control );
 		/**
 		*\brief
 		*	Connects the manager to given control's events.
-		*\param[in] p_control
+		*\param[in] control
 		*	The control.
 		*/
-		void connectEvents( SliderCtrl & p_control );
+		void connectEvents( SliderCtrl & control );
 		/**
 		*\brief
 		*	Disconnects the manager from given control's events.
-		*\param[in] p_control
+		*\param[in] control
 		*	The control.
 		*/
-		void disconnectEvents( ButtonCtrl & p_control );
+		void disconnectEvents( ButtonCtrl & control );
 		/**
 		*\brief
 		*	Disconnects the manager from given control's events.
-		*\param[in] p_control
+		*\param[in] control
 		*	The control.
 		*/
-		void disconnectEvents( ComboBoxCtrl & p_control );
+		void disconnectEvents( ComboBoxCtrl & control );
 		/**
 		*\brief
 		*	Disconnects the manager from given control's events.
-		*\param[in] p_control
+		*\param[in] control
 		*	The control.
 		*/
-		void disconnectEvents( EditCtrl & p_control );
+		void disconnectEvents( EditCtrl & control );
 		/**
 		*\brief
 		*	Disconnects the manager from given control's events.
-		*\param[in] p_control
+		*\param[in] control
 		*	The control.
 		*/
-		void disconnectEvents( ListBoxCtrl & p_control );
+		void disconnectEvents( ListBoxCtrl & control );
 		/**
 		*\brief
 		*	Disconnects the manager from given control's events.
-		*\param[in] p_control
+		*\param[in] control
 		*	The control.
 		*/
-		void disconnectEvents( SliderCtrl & p_control );
+		void disconnectEvents( SliderCtrl & control );
 
 	private:
 		/**
@@ -189,10 +189,10 @@ namespace CastorGui
 		/**
 		*\brief
 		*	Retrieves the first handler which can be targeted by mouse, at its position
-		*\param[in] p_position
+		*\param[in] position
 		*	The mouse position
 		*/
-		castor3d::EventHandler * doGetMouseTargetableHandler( castor::Position const & p_position )const override;
+		castor3d::EventHandler * doGetMouseTargetableHandler( castor::Position const & position )const override;
 		/**
 		*\brief
 		*	Updates the z-index ordered controls array
@@ -201,10 +201,10 @@ namespace CastorGui
 		/**
 		*\brief
 		*	Removes a control
-		*\param[in] p_id
+		*\param[in] id
 		*	The control ID
 		*/
-		void doRemoveControl( uint32_t p_id );
+		void doRemoveControl( uint32_t id );
 		/**
 		*\return
 		*	The controls by z-index.

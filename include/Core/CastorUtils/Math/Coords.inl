@@ -71,9 +71,9 @@ namespace castor
 	}
 
 	template< typename T, uint32_t Count >
-	inline Coords< T, Count > & Coords< T, Count >::operator=( T * p_pValues )
+	inline Coords< T, Count > & Coords< T, Count >::operator=( T * values )
 	{
-		m_coords = p_pValues;
+		m_coords = values;
 		return *this;
 	}
 
@@ -383,9 +383,9 @@ namespace castor
 				std::transform( point.constPtr()
 					, point.constPtr() + Count
 					, point.ptr()
-					, [l]( T const & p_value )
+					, [l]( T const & value )
 					{
-						return p_value / l;
+						return value / l;
 					} );
 			}
 		}

@@ -7,9 +7,9 @@ namespace castor
 {
 	namespace fileprs
 	{
-		static String doStripComments( String const & p_line )
+		static String doStripComments( String const & line )
 		{
-			String result = p_line;
+			String result = line;
 			auto index = result.find( "//" );
 
 			if ( index != String::npos )
@@ -274,9 +274,11 @@ namespace castor
 			auto begin = m_context->sections.begin() + 1;
 			sections << m_parser.getSectionName( *begin );
 
-			std::for_each( begin + 1, m_context->sections.end(), [&sections, this]( uint32_t p_section )
+			std::for_each( begin + 1
+				, m_context->sections.end()
+				, [&sections, this]( uint32_t section )
 				{
-					sections << cuT( "::" ) << m_parser.getSectionName( p_section );
+					sections << cuT( "::" ) << m_parser.getSectionName( section );
 				} );
 		}
 

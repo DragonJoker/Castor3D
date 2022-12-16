@@ -7,9 +7,9 @@ namespace castor
 	namespace
 	{
 		template< typename T >
-		inline T mixValues( T p_a, T p_b, T p_f )
+		inline T mixValues( T a, T b, T f )
 		{
-			return p_a + ( p_f * ( p_b - p_a ) );
+			return a + ( f * ( b - a ) );
 		}
 	}
 
@@ -22,13 +22,13 @@ namespace castor
 	}
 
 	template< typename T >
-	QuaternionT< T >::QuaternionT( T p_x, T p_y, T p_z, T p_w )
+	QuaternionT< T >::QuaternionT( T x, T y, T z, T w )
 		: QuaternionT( NoInit() )
 	{
-		quat.x = p_x;
-		quat.y = p_y;
-		quat.z = p_z;
-		quat.w = p_w;
+		quat.x = x;
+		quat.y = y;
+		quat.z = z;
+		quat.w = w;
 		point::normalise( *this );
 	}
 
@@ -39,39 +39,39 @@ namespace castor
 	}
 
 	template< typename T >
-	QuaternionT< T >::QuaternionT( QuaternionT< T > const & p_q )
-		: QuaternionT( p_q.quat.x, p_q.quat.y, p_q.quat.z, p_q.quat.w )
+	QuaternionT< T >::QuaternionT( QuaternionT< T > const & rhs )
+		: QuaternionT( rhs.quat.x, rhs.quat.y, rhs.quat.z, rhs.quat.w )
 	{
 	}
 
 	template< typename T >
-	QuaternionT< T >::QuaternionT( QuaternionT< T > && p_q )noexcept
+	QuaternionT< T >::QuaternionT( QuaternionT< T > && rhs )noexcept
 		: QuaternionT( NoInit() )
 	{
-		std::memmove( buffer, p_q.buffer, sizeof( buffer ) );
+		std::memmove( buffer, rhs.buffer, sizeof( buffer ) );
 	}
 
 	template< typename T >
-	QuaternionT< T >::QuaternionT( double const * p_values )
-		: QuaternionT( T( p_values[0] ), T( p_values[1] ), T( p_values[2] ), T( p_values[3] ) )
+	QuaternionT< T >::QuaternionT( double const * rhs )
+		: QuaternionT( T( rhs[0] ), T( rhs[1] ), T( rhs[2] ), T( rhs[3] ) )
 	{
 	}
 
 	template< typename T >
-	QuaternionT< T >::QuaternionT( float const * p_values )
-		: QuaternionT( T( p_values[0] ), T( p_values[1] ), T( p_values[2] ), T( p_values[3] ) )
+	QuaternionT< T >::QuaternionT( float const * rhs )
+		: QuaternionT( T( rhs[0] ), T( rhs[1] ), T( rhs[2] ), T( rhs[3] ) )
 	{
 	}
 
 	template< typename T >
-	QuaternionT< T >::QuaternionT( Point4f const & p_values )
-		: QuaternionT( T( p_values[0] ), T( p_values[1] ), T( p_values[2] ), T( p_values[3] ) )
+	QuaternionT< T >::QuaternionT( Point4f const & rhs )
+		: QuaternionT( T( rhs[0] ), T( rhs[1] ), T( rhs[2] ), T( rhs[3] ) )
 	{
 	}
 
 	template< typename T >
-	QuaternionT< T >::QuaternionT( Point4d const & p_values )
-		: QuaternionT( T( p_values[0] ), T( p_values[1] ), T( p_values[2] ), T( p_values[3] ) )
+	QuaternionT< T >::QuaternionT( Point4d const & rhs )
+		: QuaternionT( T( rhs[0] ), T( rhs[1] ), T( rhs[2] ), T( rhs[3] ) )
 	{
 	}
 
@@ -81,116 +81,116 @@ namespace castor
 	}
 
 	template< typename T >
-	QuaternionT< T > & QuaternionT< T >::operator=( QuaternionT< T > const & p_rhs )
+	QuaternionT< T > & QuaternionT< T >::operator=( QuaternionT< T > const & rhs )
 	{
-		std::memcpy( buffer, p_rhs.buffer, sizeof( buffer ) );
+		std::memcpy( buffer, rhs.buffer, sizeof( buffer ) );
 		return *this;
 	}
 
 	template< typename T >
-	QuaternionT< T > & QuaternionT< T >::operator=( QuaternionT< T > && p_rhs )noexcept
+	QuaternionT< T > & QuaternionT< T >::operator=( QuaternionT< T > && rhs )noexcept
 	{
-		if ( this != &p_rhs )
+		if ( this != &rhs )
 		{
-			std::memmove( buffer, p_rhs.buffer, sizeof( buffer ) );
+			std::memmove( buffer, rhs.buffer, sizeof( buffer ) );
 		}
 
 		return *this;
 	}
 
 	template< typename T >
-	QuaternionT< T > & QuaternionT< T >::operator+=( QuaternionT< T > const & p_rhs )
+	QuaternionT< T > & QuaternionT< T >::operator+=( QuaternionT< T > const & rhs )
 	{
-		quat.x += p_rhs.quat.x;
-		quat.y += p_rhs.quat.y;
-		quat.z += p_rhs.quat.z;
-		quat.w += p_rhs.quat.w;
+		quat.x += rhs.quat.x;
+		quat.y += rhs.quat.y;
+		quat.z += rhs.quat.z;
+		quat.w += rhs.quat.w;
 		point::normalise( *this );
 		return *this;
 	}
 
 	template< typename T >
-	QuaternionT< T > & QuaternionT< T >::operator-=( QuaternionT< T > const & p_rhs )
+	QuaternionT< T > & QuaternionT< T >::operator-=( QuaternionT< T > const & rhs )
 	{
-		quat.x -= p_rhs.quat.x;
-		quat.y -= p_rhs.quat.y;
-		quat.z -= p_rhs.quat.z;
-		quat.w -= p_rhs.quat.w;
+		quat.x -= rhs.quat.x;
+		quat.y -= rhs.quat.y;
+		quat.z -= rhs.quat.z;
+		quat.w -= rhs.quat.w;
 		point::normalise( *this );
 		return *this;
 	}
 
 	template< typename T >
-	QuaternionT< T > & QuaternionT< T >::operator*=( QuaternionT< T > const & p_rhs )
+	QuaternionT< T > & QuaternionT< T >::operator*=( QuaternionT< T > const & rhs )
 	{
 		double const x = quat.x;
 		double const y = quat.y;
 		double const z = quat.z;
 		double const w = quat.w;
-		quat.x = T( w * p_rhs.quat.x + x * p_rhs.quat.w + y *  p_rhs.quat.z - z * p_rhs.quat.y );
-		quat.y = T( w * p_rhs.quat.y + y * p_rhs.quat.w + z *  p_rhs.quat.x - x * p_rhs.quat.z );
-		quat.z = T( w * p_rhs.quat.z + z * p_rhs.quat.w + x *  p_rhs.quat.y - y * p_rhs.quat.x );
-		quat.w = T( w * p_rhs.quat.w - x * p_rhs.quat.x - y *  p_rhs.quat.y - z * p_rhs.quat.z );
+		quat.x = T( w * rhs.quat.x + x * rhs.quat.w + y * rhs.quat.z - z * rhs.quat.y );
+		quat.y = T( w * rhs.quat.y + y * rhs.quat.w + z * rhs.quat.x - x * rhs.quat.z );
+		quat.z = T( w * rhs.quat.z + z * rhs.quat.w + x * rhs.quat.y - y * rhs.quat.x );
+		quat.w = T( w * rhs.quat.w - x * rhs.quat.x - y * rhs.quat.y - z * rhs.quat.z );
 		point::normalise( *this );
 		return *this;
 	}
 
 	template< typename T >
-	QuaternionT< T > & QuaternionT< T >::operator*=( double p_rhs )
+	QuaternionT< T > & QuaternionT< T >::operator*=( double rhs )
 	{
-		quat.x = T( quat.x * p_rhs );
-		quat.y = T( quat.y * p_rhs );
-		quat.z = T( quat.z * p_rhs );
-		quat.w = T( quat.w * p_rhs );
+		quat.x = T( quat.x * rhs );
+		quat.y = T( quat.y * rhs );
+		quat.z = T( quat.z * rhs );
+		quat.w = T( quat.w * rhs );
 		point::normalise( *this );
 		return *this;
 	}
 
 	template< typename T >
-	QuaternionT< T > & QuaternionT< T >::operator*=( float p_rhs )
+	QuaternionT< T > & QuaternionT< T >::operator*=( float rhs )
 	{
-		quat.x = T( quat.x * p_rhs );
-		quat.y = T( quat.y * p_rhs );
-		quat.z = T( quat.z * p_rhs );
-		quat.w = T( quat.w * p_rhs );
+		quat.x = T( quat.x * rhs );
+		quat.y = T( quat.y * rhs );
+		quat.z = T( quat.z * rhs );
+		quat.w = T( quat.w * rhs );
 		point::normalise( *this );
 		return *this;
 	}
 
 	template< typename T >
-	QuaternionT< T > QuaternionT< T >::fromMatrix( float const * p_matrix )
+	QuaternionT< T > QuaternionT< T >::fromMatrix( float const * rhs )
 	{
-		return fromMatrix( Matrix4x4f( p_matrix ) );
+		return fromMatrix( Matrix4x4f( rhs ) );
 	}
 
 	template< typename T >
-	QuaternionT< T > QuaternionT< T >::fromMatrix( double const * p_matrix )
+	QuaternionT< T > QuaternionT< T >::fromMatrix( double const * rhs )
 	{
-		return fromMatrix( Matrix4x4d( p_matrix ) );
+		return fromMatrix( Matrix4x4d( rhs ) );
 	}
 
 	template< typename T >
-	QuaternionT< T > QuaternionT< T >::fromMatrix( Matrix4x4f const & p_matrix )
+	QuaternionT< T > QuaternionT< T >::fromMatrix( Matrix4x4f const & rhs )
 	{
 		QuaternionT< T > result;
-		matrix::getRotate( p_matrix, result );
+		matrix::getRotate( rhs, result );
 		return result;
 	}
 
 	template< typename T >
-	QuaternionT< T > QuaternionT< T >::fromMatrix( Matrix4x4d const & p_matrix )
+	QuaternionT< T > QuaternionT< T >::fromMatrix( Matrix4x4d const & rhs )
 	{
 		QuaternionT< T > result;
-		matrix::getRotate( p_matrix, result );
+		matrix::getRotate( rhs, result );
 		return result;
 	}
 
 	template< typename T >
-	QuaternionT< T > QuaternionT< T >::fromAxisAngle( Point3f const & p_vector, Angle const & p_angle )
+	QuaternionT< T > QuaternionT< T >::fromAxisAngle( Point3f const & axis, Angle const & angle )
 	{
 		QuaternionT< T > result;
-		Angle halfAngle = p_angle * 0.5f;
-		auto norm = point::getNormalised( p_vector ) * halfAngle.sin();
+		Angle halfAngle = angle * 0.5f;
+		auto norm = point::getNormalised( axis ) * halfAngle.sin();
 		result.quat.x = T( norm[0] );
 		result.quat.y = T( norm[1] );
 		result.quat.z = T( norm[2] );
@@ -200,11 +200,11 @@ namespace castor
 	}
 
 	template< typename T >
-	QuaternionT< T > QuaternionT< T >::fromAxisAngle( Point3d const & p_vector, Angle const & p_angle )
+	QuaternionT< T > QuaternionT< T >::fromAxisAngle( Point3d const & axis, Angle const & angle )
 	{
 		QuaternionT< T > result;
-		Angle halfAngle = p_angle * 0.5;
-		auto norm = point::getNormalised( p_vector ) * double( halfAngle.sin() );
+		Angle halfAngle = angle * 0.5;
+		auto norm = point::getNormalised( axis ) * double( halfAngle.sin() );
 		result.quat.x = T( norm[0] );
 		result.quat.y = T( norm[1] );
 		result.quat.z = T( norm[2] );
@@ -214,91 +214,91 @@ namespace castor
 	}
 
 	template< typename T >
-	QuaternionT< T > QuaternionT< T >::fromAxes( Point3f const & p_x, Point3f const & p_y, Point3f const & p_z )
+	QuaternionT< T > QuaternionT< T >::fromAxes( Point3f const & x, Point3f const & y, Point3f const & z )
 	{
 		Matrix4x4f mtxRot;
-		mtxRot[0][0] = p_x[0];
-		mtxRot[1][0] = p_x[1];
-		mtxRot[2][0] = p_x[2];
-		mtxRot[0][1] = p_y[0];
-		mtxRot[1][1] = p_y[1];
-		mtxRot[2][1] = p_y[2];
-		mtxRot[0][2] = p_z[0];
-		mtxRot[1][2] = p_z[1];
-		mtxRot[2][2] = p_z[2];
+		mtxRot[0][0] = x[0];
+		mtxRot[1][0] = x[1];
+		mtxRot[2][0] = x[2];
+		mtxRot[0][1] = y[0];
+		mtxRot[1][1] = y[1];
+		mtxRot[2][1] = y[2];
+		mtxRot[0][2] = z[0];
+		mtxRot[1][2] = z[1];
+		mtxRot[2][2] = z[2];
 		return fromMatrix( mtxRot );
 	}
 
 	template< typename T >
-	QuaternionT< T > QuaternionT< T >::fromAxes( Point3d const & p_x, Point3d const & p_y, Point3d const & p_z )
+	QuaternionT< T > QuaternionT< T >::fromAxes( Point3d const & x, Point3d const & y, Point3d const & z )
 	{
 		Matrix4x4d mtxRot;
-		mtxRot[0][0] = p_x[0];
-		mtxRot[1][0] = p_x[1];
-		mtxRot[2][0] = p_x[2];
-		mtxRot[0][1] = p_y[0];
-		mtxRot[1][1] = p_y[1];
-		mtxRot[2][1] = p_y[2];
-		mtxRot[0][2] = p_z[0];
-		mtxRot[1][2] = p_z[1];
-		mtxRot[2][2] = p_z[2];
+		mtxRot[0][0] = x[0];
+		mtxRot[1][0] = x[1];
+		mtxRot[2][0] = x[2];
+		mtxRot[0][1] = y[0];
+		mtxRot[1][1] = y[1];
+		mtxRot[2][1] = y[2];
+		mtxRot[0][2] = z[0];
+		mtxRot[1][2] = z[1];
+		mtxRot[2][2] = z[2];
 		return fromMatrix( mtxRot );
 	}
 
 	template< typename T >
 	template< Vector3fT PtT >
-	PtT & QuaternionT< T >::transform( PtT const & p_vector, PtT & p_result )const
+	PtT & QuaternionT< T >::transform( PtT const & vector, PtT & result )const
 	{
 		Point3d u( quat.x, quat.y, quat.z );
-		Point3d uv( point::cross( u, p_vector ) );
+		Point3d uv( point::cross( u, vector ) );
 		Point3d uuv( point::cross( u, uv ) );
 		uv *= 2.0 * quat.w;
 		uuv *= 2;
-		point::setPoint( p_result, point::getPoint( p_vector ) + uv + uuv );
-		return p_result;
+		point::setPoint( result, point::getPoint( vector ) + uv + uuv );
+		return result;
 	}
 
 	template< typename T >
 	template< Vector3dT PtT >
-	PtT & QuaternionT< T >::transform( PtT const & p_vector, PtT & p_result )const
+	PtT & QuaternionT< T >::transform( PtT const & vector, PtT & result )const
 	{
 		Point3d u( quat.x, quat.y, quat.z );
-		Point3d uv( point::cross( u, p_vector ) );
+		Point3d uv( point::cross( u, vector ) );
 		Point3d uuv( point::cross( u, uv ) );
 		uv *= 2 * quat.w;
 		uuv *= 2;
-		point::setPoint( p_result, point::getPoint( p_vector ) + uv + uuv );
-		return p_result;
+		point::setPoint( result, point::getPoint( vector ) + uv + uuv );
+		return result;
 	}
 
 	template< typename T >
-	void QuaternionT< T >::toMatrix( double * p_matrix )const
+	void QuaternionT< T >::toMatrix( double * matrix )const
 	{
-		Matrix4x4d mtx = Matrix4x4d( p_matrix );
+		Matrix4x4d mtx = Matrix4x4d( matrix );
 		toMatrix( mtx );
 	}
 
 	template< typename T >
-	void QuaternionT< T >::toMatrix( float * p_matrix )const
+	void QuaternionT< T >::toMatrix( float * matrix )const
 	{
-		Matrix4x4f mtx = Matrix4x4f( p_matrix );
+		Matrix4x4f mtx = Matrix4x4f( matrix );
 		toMatrix( mtx );
 	}
 
 	template< typename T >
-	void QuaternionT< T >::toMatrix( Matrix4x4d & p_matrix )const
+	void QuaternionT< T >::toMatrix( Matrix4x4d & matrix )const
 	{
-		matrix::setRotate( p_matrix, *this );
+		matrix::setRotate( matrix, *this );
 	}
 
 	template< typename T >
-	void QuaternionT< T >::toMatrix( Matrix4x4f & p_matrix )const
+	void QuaternionT< T >::toMatrix( Matrix4x4f & matrix )const
 	{
-		matrix::setRotate( p_matrix, *this );
+		matrix::setRotate( matrix, *this );
 	}
 
 	template< typename T >
-	void QuaternionT< T >::toAxisAngle( Point3f & p_vector, Angle & p_angle )const
+	void QuaternionT< T >::toAxisAngle( Point3f & axis, Angle & angle )const
 	{
 		T const x = quat.x;
 		T const y = quat.y;
@@ -309,25 +309,25 @@ namespace castor
 		if ( std::abs( s ) < std::numeric_limits< T >::epsilon() )
 		{
 			// angle is 0 (mod 2*pi), so any axis will do
-			p_angle = 0.0_radians;
-			p_vector[0] = T{ 1 };
-			p_vector[1] = T{ 0 };
-			p_vector[2] = T{ 0 };
+			angle = 0.0_radians;
+			axis[0] = T{ 1 };
+			axis[1] = T{ 0 };
+			axis[2] = T{ 0 };
 		}
 		else
 		{
-			p_angle = castor::acosf( w );
-			p_angle *= 2;
-			p_vector[0] = x / s;
-			p_vector[1] = y / s;
-			p_vector[2] = z / s;
+			angle = castor::acosf( w );
+			angle *= 2;
+			axis[0] = x / s;
+			axis[1] = y / s;
+			axis[2] = z / s;
 		}
 
-		point::normalise( p_vector );
+		point::normalise( axis );
 	}
 
 	template< typename T >
-	void QuaternionT< T >::toAxisAngle( Point3d & p_vector, Angle & p_angle )const
+	void QuaternionT< T >::toAxisAngle( Point3d & axis, Angle & angle )const
 	{
 		T const x = quat.x;
 		T const y = quat.y;
@@ -338,53 +338,53 @@ namespace castor
 		if ( std::abs( s ) < std::numeric_limits< T >::epsilon() )
 		{
 			// angle is 0 (mod 2*pi), so any axis will do
-			p_angle = 0.0_radians;
-			p_vector[0] = T{ 1 };
-			p_vector[1] = T{ 0 };
-			p_vector[2] = T{ 0 };
+			angle = 0.0_radians;
+			axis[0] = T{ 1 };
+			axis[1] = T{ 0 };
+			axis[2] = T{ 0 };
 		}
 		else
 		{
-			p_angle = castor::acosf( w );
-			p_angle *= 2;
-			p_vector[0] = x / s;
-			p_vector[1] = y / s;
-			p_vector[2] = z / s;
+			angle = castor::acosf( w );
+			angle *= 2;
+			axis[0] = x / s;
+			axis[1] = y / s;
+			axis[2] = z / s;
 		}
 
-		point::normalise( p_vector );
+		point::normalise( axis );
 	}
 
 	template< typename T >
-	void QuaternionT< T >::toAxes( Point3f & p_x, Point3f & p_y, Point3f & p_z )const
+	void QuaternionT< T >::toAxes( Point3f & x, Point3f & y, Point3f & z )const
 	{
 		Matrix4x4f mtxRot;
 		toMatrix( mtxRot );
-		p_x[0] = mtxRot[0][0];
-		p_x[1] = mtxRot[1][0];
-		p_x[2] = mtxRot[2][0];
-		p_y[0] = mtxRot[0][1];
-		p_y[1] = mtxRot[1][1];
-		p_y[2] = mtxRot[2][1];
-		p_z[0] = mtxRot[0][2];
-		p_z[1] = mtxRot[1][2];
-		p_z[2] = mtxRot[2][2];
+		x[0] = mtxRot[0][0];
+		x[1] = mtxRot[1][0];
+		x[2] = mtxRot[2][0];
+		y[0] = mtxRot[0][1];
+		y[1] = mtxRot[1][1];
+		y[2] = mtxRot[2][1];
+		z[0] = mtxRot[0][2];
+		z[1] = mtxRot[1][2];
+		z[2] = mtxRot[2][2];
 	}
 
 	template< typename T >
-	void QuaternionT< T >::toAxes( Point3d & p_x, Point3d & p_y, Point3d & p_z )const
+	void QuaternionT< T >::toAxes( Point3d & x, Point3d & y, Point3d & z )const
 	{
 		Matrix4x4d mtxRot;
 		toMatrix( mtxRot );
-		p_x[0] = mtxRot[0][0];
-		p_x[1] = mtxRot[1][0];
-		p_x[2] = mtxRot[2][0];
-		p_y[0] = mtxRot[0][1];
-		p_y[1] = mtxRot[1][1];
-		p_y[2] = mtxRot[2][1];
-		p_z[0] = mtxRot[0][2];
-		p_z[1] = mtxRot[1][2];
-		p_z[2] = mtxRot[2][2];
+		x[0] = mtxRot[0][0];
+		x[1] = mtxRot[1][0];
+		x[2] = mtxRot[2][0];
+		y[0] = mtxRot[0][1];
+		y[1] = mtxRot[1][1];
+		y[2] = mtxRot[2][1];
+		z[0] = mtxRot[0][2];
+		z[1] = mtxRot[1][2];
+		z[2] = mtxRot[2][2];
 	}
 
 	template< typename T >
@@ -446,86 +446,86 @@ namespace castor
 	}
 
 	template< typename T >
-	QuaternionT< T > QuaternionT< T >::mix( QuaternionT< T > const & p_target, double p_factor )const
+	QuaternionT< T > QuaternionT< T >::mix( QuaternionT< T > const & target, double factor )const
 	{
-		T cosTheta = point::dot( *this, p_target );
+		T cosTheta = point::dot( *this, target );
 
 		// Perform a linear interpolation when cosTheta is close to 1 to avoid side effect of sin(angle) becoming a zero denominator
 		if ( cosTheta > 1 - std::numeric_limits< T >::epsilon() )
 		{
 			// Linear interpolation
 			return QuaternionT< T >(
-				mixValues( quat.x, p_target.quat.x, T( p_factor ) ),
-				mixValues( quat.y, p_target.quat.y, T( p_factor ) ),
-				mixValues( quat.z, p_target.quat.z, T( p_factor ) ),
-				mixValues( quat.w, p_target.quat.w, T( p_factor ) ) );
+				mixValues( quat.x, target.quat.x, T( factor ) ),
+				mixValues( quat.y, target.quat.y, T( factor ) ),
+				mixValues( quat.z, target.quat.z, T( factor ) ),
+				mixValues( quat.w, target.quat.w, T( factor ) ) );
 		}
 		else
 		{
 			// Essential Mathematics, page 467
 			T angle = acos( cosTheta );
-			return ( sin( ( 1.0 - p_factor ) * angle ) * ( *this ) + sin( p_factor * angle ) * p_target ) / T( sin( angle ) );
+			return ( sin( ( 1.0 - factor ) * angle ) * ( *this ) + sin( factor * angle ) * target ) / T( sin( angle ) );
 		}
 	}
 
 	template< typename T >
-	QuaternionT< T > QuaternionT< T >::mix( QuaternionT< T > const & p_target, float p_factor )const
+	QuaternionT< T > QuaternionT< T >::mix( QuaternionT< T > const & target, float factor )const
 	{
-		T cosTheta = point::dot( *this, p_target );
+		T cosTheta = point::dot( *this, target );
 
 		// Perform a linear interpolation when cosTheta is close to 1 to avoid side effect of sin(angle) becoming a zero denominator
 		if ( cosTheta > 1 - std::numeric_limits< T >::epsilon() )
 		{
 			// Linear interpolation
 			return QuaternionT< T >(
-				mixValues( quat.x, p_target.quat.x, T( p_factor ) ),
-				mixValues( quat.y, p_target.quat.y, T( p_factor ) ),
-				mixValues( quat.z, p_target.quat.z, T( p_factor ) ),
-				mixValues( quat.w, p_target.quat.w, T( p_factor ) ) );
+				mixValues( quat.x, target.quat.x, T( factor ) ),
+				mixValues( quat.y, target.quat.y, T( factor ) ),
+				mixValues( quat.z, target.quat.z, T( factor ) ),
+				mixValues( quat.w, target.quat.w, T( factor ) ) );
 		}
 		else
 		{
 			// Essential Mathematics, page 467
 			T angle = acos( cosTheta );
-			return QuaternionT{ ( sin( ( 1.0 - p_factor ) * angle ) * ( *this ) + sin( p_factor * angle ) * p_target ) / T( sin( angle ) ) };
+			return QuaternionT{ ( sin( ( 1.0 - factor ) * angle ) * ( *this ) + sin( factor * angle ) * target ) / T( sin( angle ) ) };
 		}
 	}
 
 	template< typename T >
-	QuaternionT< T > QuaternionT< T >::lerp( QuaternionT< T > const & p_target, double p_factor )const
+	QuaternionT< T > QuaternionT< T >::lerp( QuaternionT< T > const & target, double factor )const
 	{
 		// Lerp is only defined in [0, 1]
-		assert( p_factor >= 0 );
-		assert( p_factor <= 1 );
+		assert( factor >= 0 );
+		assert( factor <= 1 );
 
-		return ( *this ) * ( 1.0 - p_factor ) + ( p_target * p_factor );
+		return ( *this ) * ( 1.0 - factor ) + ( target * factor );
 	}
 
 	template< typename T >
-	QuaternionT< T > QuaternionT< T >::lerp( QuaternionT< T > const & p_target, float p_factor )const
+	QuaternionT< T > QuaternionT< T >::lerp( QuaternionT< T > const & target, float factor )const
 	{
 		// Lerp is only defined in [0, 1]
-		assert( p_factor >= 0 );
-		assert( p_factor <= 1 );
+		assert( factor >= 0 );
+		assert( factor <= 1 );
 
-		return ( *this ) * ( 1.0 - p_factor ) + ( p_target * p_factor );
+		return ( *this ) * ( 1.0 - factor ) + ( target * factor );
 	}
 
 	template< typename T >
-	QuaternionT< T > QuaternionT< T >::slerp( QuaternionT< T > const & p_target, double p_factor )const
+	QuaternionT< T > QuaternionT< T >::slerp( QuaternionT< T > const & target, double factor )const
 	{
 		//	Slerp = q1((q1^-1)q2)^t;
-		T cosTheta = point::dot( *this, p_target );
-		QuaternionT< T > target( p_target );
+		T cosTheta = point::dot( *this, target );
+		QuaternionT< T > result( target );
 
 		// do we need to invert rotation?
 		if ( cosTheta < 0 )
 		{
 			cosTheta = -cosTheta;
-			target.quat.x = -target.quat.x;
-			target.quat.y = -target.quat.y;
-			target.quat.z = -target.quat.z;
-			target.quat.w = -target.quat.w;
+			result.quat.x = -result.quat.x;
+			result.quat.y = -result.quat.y;
+			result.quat.z = -result.quat.z;
+			result.quat.w = -result.quat.w;
 		}
 
 		// Calculate coefficients
@@ -537,38 +537,38 @@ namespace castor
 			T omega, sinom;
 			omega = acos( cosTheta ); // extract theta from dot product's cos theta
 			sinom = sin( omega );
-			sclp = T( sin( ( 1.0 - p_factor ) * omega ) / sinom );
-			sclq = T( sin( p_factor * omega ) / sinom );
+			sclp = T( sin( ( 1.0 - factor ) * omega ) / sinom );
+			sclq = T( sin( factor * omega ) / sinom );
 		}
 		else
 		{
 			// Very close, do linear interp (because it's faster)
-			sclp = T( 1.0 - p_factor );
-			sclq = T( p_factor );
+			sclp = T( 1.0 - factor );
+			sclq = T( factor );
 		}
 
-		target.quat.x = sclp * quat.x + sclq * target.quat.x;
-		target.quat.y = sclp * quat.y + sclq * target.quat.y;
-		target.quat.z = sclp * quat.z + sclq * target.quat.z;
-		target.quat.w = sclp * quat.w + sclq * target.quat.w;
-		return target;
+		result.quat.x = sclp * quat.x + sclq * result.quat.x;
+		result.quat.y = sclp * quat.y + sclq * result.quat.y;
+		result.quat.z = sclp * quat.z + sclq * result.quat.z;
+		result.quat.w = sclp * quat.w + sclq * result.quat.w;
+		return result;
 	}
 
 	template< typename T >
-	QuaternionT< T > QuaternionT< T >::slerp( QuaternionT< T > const & p_target, float p_factor )const
+	QuaternionT< T > QuaternionT< T >::slerp( QuaternionT< T > const & target, float factor )const
 	{
 		//	Slerp = q1((q1^-1)q2)^t;
-		T cosTheta = point::dot( *this, p_target );
-		QuaternionT< T > target( p_target );
+		T cosTheta = point::dot( *this, target );
+		QuaternionT< T > result( target );
 
 		// do we need to invert rotation?
 		if ( cosTheta < 0 )
 		{
 			cosTheta = -cosTheta;
-			target.quat.x = -target.quat.x;
-			target.quat.y = -target.quat.y;
-			target.quat.z = -target.quat.z;
-			target.quat.w = -target.quat.w;
+			result.quat.x = -result.quat.x;
+			result.quat.y = -result.quat.y;
+			result.quat.z = -result.quat.z;
+			result.quat.w = -result.quat.w;
 		}
 
 		// Calculate coefficients
@@ -579,21 +579,21 @@ namespace castor
 			// Standard case (slerp)
 			auto omega = T( acos( cosTheta ) ); // extract theta from dot product's cos theta
 			auto sinom = T( sin( omega ) );
-			sclp = T( sin( ( 1.0 - p_factor ) * omega ) / sinom );
-			sclq = T( sin( p_factor * omega ) / sinom );
+			sclp = T( sin( ( 1.0 - factor ) * omega ) / sinom );
+			sclq = T( sin( factor * omega ) / sinom );
 		}
 		else
 		{
 			// Very close, do linear interp (because it's faster)
-			sclp = T( 1.0 - p_factor );
-			sclq = T( p_factor );
+			sclp = T( 1.0 - factor );
+			sclq = T( factor );
 		}
 
-		target.quat.x = sclp * quat.x + sclq * target.quat.x;
-		target.quat.y = sclp * quat.y + sclq * target.quat.y;
-		target.quat.z = sclp * quat.z + sclq * target.quat.z;
-		target.quat.w = sclp * quat.w + sclq * target.quat.w;
-		return target;
+		result.quat.x = sclp * quat.x + sclq * result.quat.x;
+		result.quat.y = sclp * quat.y + sclq * result.quat.y;
+		result.quat.z = sclp * quat.z + sclq * result.quat.z;
+		result.quat.w = sclp * quat.w + sclq * result.quat.w;
+		return result;
 	}
 
 	template< typename T >
@@ -609,65 +609,65 @@ namespace castor
 	}
 
 	template< typename T >
-	QuaternionT< T > operator+( QuaternionT< T > const & p_lhs, QuaternionT< T > const & p_rhs )
+	QuaternionT< T > operator+( QuaternionT< T > const & lhs, QuaternionT< T > const & rhs )
 	{
-		QuaternionT< T > result( p_lhs );
-		result += p_rhs;
+		QuaternionT< T > result( lhs );
+		result += rhs;
 		return result;
 	}
 
 	template< typename T >
-	QuaternionT< T > operator-( QuaternionT< T > const & p_lhs, QuaternionT< T > const & p_rhs )
+	QuaternionT< T > operator-( QuaternionT< T > const & lhs, QuaternionT< T > const & rhs )
 	{
-		QuaternionT< T > result( p_lhs );
-		result -= p_rhs;
+		QuaternionT< T > result( lhs );
+		result -= rhs;
 		return result;
 	}
 
 	template< typename T >
-	QuaternionT< T > operator*( QuaternionT< T > const & p_lhs, QuaternionT< T > const & p_rhs )
+	QuaternionT< T > operator*( QuaternionT< T > const & lhs, QuaternionT< T > const & rhs )
 	{
-		QuaternionT< T > result( p_lhs );
-		result *= p_rhs;
+		QuaternionT< T > result( lhs );
+		result *= rhs;
 		return result;
 	}
 
 	template< typename T >
-	QuaternionT< T > operator*( QuaternionT< T > const & p_lhs, double p_rhs )
+	QuaternionT< T > operator*( QuaternionT< T > const & lhs, double rhs )
 	{
-		QuaternionT< T > result( p_lhs );
-		result *= p_rhs;
+		QuaternionT< T > result( lhs );
+		result *= rhs;
 		return result;
 	}
 
 	template< typename T >
-	QuaternionT< T > operator*( QuaternionT< T > const & p_lhs, float p_rhs )
+	QuaternionT< T > operator*( QuaternionT< T > const & lhs, float rhs )
 	{
-		QuaternionT< T > result( p_lhs );
-		result *= p_rhs;
+		QuaternionT< T > result( lhs );
+		result *= rhs;
 		return result;
 	}
 
 	template< typename T >
-	QuaternionT< T > operator*( double p_lhs, QuaternionT< T > const & p_rhs )
+	QuaternionT< T > operator*( double lhs, QuaternionT< T > const & rhs )
 	{
-		QuaternionT< T > result( p_rhs );
-		result *= p_lhs;
+		QuaternionT< T > result( rhs );
+		result *= lhs;
 		return result;
 	}
 
 	template< typename T >
-	QuaternionT< T > operator*( float p_lhs, QuaternionT< T > const & p_rhs )
+	QuaternionT< T > operator*( float lhs, QuaternionT< T > const & rhs )
 	{
-		QuaternionT< T > result( p_rhs );
-		result *= p_lhs;
+		QuaternionT< T > result( rhs );
+		result *= lhs;
 		return result;
 	}
 
 	template< typename T >
-	QuaternionT< T > operator-( QuaternionT< T > const & p_q )
+	QuaternionT< T > operator-( QuaternionT< T > const & rhs )
 	{
-		QuaternionT< T > result( p_q );
+		QuaternionT< T > result( rhs );
 		result.w = -result.w;
 		return result;
 	}

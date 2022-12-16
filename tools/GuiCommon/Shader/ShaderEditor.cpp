@@ -271,9 +271,9 @@ namespace GuiCommon
 	END_EVENT_TABLE()
 #pragma GCC diagnostic pop
 
-	void ShaderEditor::onClose( wxCloseEvent & p_event )
+	void ShaderEditor::onClose( wxCloseEvent & event )
 	{
 		doCleanup();
-		p_event.Skip();
+		event.Skip();
 	}
 }

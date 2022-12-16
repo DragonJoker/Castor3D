@@ -37,9 +37,9 @@ namespace ImgToIco
 #pragma clang diagnostic ignored "-Wmissing-override"
 		DECLARE_EVENT_TABLE()
 #pragma clang diagnostic pop
-		void _onBrowse( wxCommandEvent & p_event );
-		void _onProcess( wxCommandEvent & p_event );
-		void _onExit( wxCommandEvent & p_event );
+		void _onBrowse( wxCommandEvent & event );
+		void _onProcess( wxCommandEvent & event );
+		void _onExit( wxCommandEvent & event );
 	};
 }
 

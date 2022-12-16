@@ -120,9 +120,9 @@ namespace castor3d
 		{
 			found = m_children.end() != std::find_if( m_children.begin()
 				, m_children.end()
-				, [&name]( std::pair< castor::String, SceneNodeRPtr > p_pair )
+				, [&name]( std::pair< castor::String, SceneNodeRPtr > pair )
 				{
-					return p_pair.second->hasChild( name );
+					return pair.second->hasChild( name );
 				} );
 		}
 

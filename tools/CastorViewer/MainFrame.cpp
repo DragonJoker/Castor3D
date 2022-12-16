@@ -592,9 +592,9 @@ namespace CastorViewer
 				result = m_recorder.StartRecord( m_renderPanel->getRenderWindow().getRenderTarget()->getSize()
 					, recordFps );
 			}
-			catch ( std::exception & p_exc )
+			catch ( std::exception & exc )
 			{
-				wxMessageBox( wxString( p_exc.what(), wxMBConvLibc() ) );
+				wxMessageBox( wxString( exc.what(), wxMBConvLibc() ) );
 				result = false;
 			}
 		}
@@ -629,10 +629,10 @@ namespace CastorViewer
 		{
 			m_recorder.RecordFrame( buffer );
 		}
-		catch ( std::exception & p_exc )
+		catch ( std::exception & exc )
 		{
 			doStopRecord();
-			wxMessageBox( wxString( p_exc.what(), wxMBConvLibc() ) );
+			wxMessageBox( wxString( exc.what(), wxMBConvLibc() ) );
 		}
 
 #endif

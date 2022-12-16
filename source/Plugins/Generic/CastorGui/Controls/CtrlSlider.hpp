@@ -154,21 +154,21 @@ namespace CastorGui
 		void onMouseLButtonUp( castor3d::MouseEvent const & event );
 
 		/** Event when mouse moves over the tick control
-		 *\param[in]	p_control	The tick control
+		 *\param[in]	control	The tick control
 		 *\param[in]	event		The mouse event
 		 */
 		void onTickMouseMove( ControlSPtr control
 			, castor3d::MouseEvent const & event );
 
 		/** Event when mouse left button is released over the tick control
-		 *\param[in]	p_control	The tick control
+		 *\param[in]	control	The tick control
 		 *\param[in]	event		The mouse event
 		 */
 		void onTickMouseLButtonDown( ControlSPtr control
 			, castor3d::MouseEvent const & event );
 
 		/** Event when mouse left button is released over the tick control
-		 *\param[in]	p_control	The tick control
+		 *\param[in]	control	The tick control
 		 *\param[in]	event		The mouse event
 		 */
 		void onTickMouseLButtonUp( ControlSPtr control
@@ -186,12 +186,12 @@ namespace CastorGui
 			, castor3d::KeyboardEvent const & event );
 
 		/** Updates the tick position
-		 *\param[in]	p_delta		The position delta
+		 *\param[in]	delta		The position delta
 		 */
 		void doUpdateTick( castor::Position const & delta );
 
 		/** Updates the mouse position
-		 *\param[in]	p_mouse		The new mouse position
+		 *\param[in]	mouse		The new mouse position
 		 */
 		void doMoveMouse( castor::Position const & mouse );
 

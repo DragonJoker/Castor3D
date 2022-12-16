@@ -19,10 +19,10 @@
 
 namespace GuiCommon
 {
-	OverlayTreeItemProperty::OverlayTreeItemProperty( bool p_editable
-		, castor3d::OverlayCategorySPtr p_overlay )
-		: TreeItemProperty( p_overlay->getOverlay().getEngine(), p_editable )
-		, m_overlay( p_overlay )
+	OverlayTreeItemProperty::OverlayTreeItemProperty( bool editable
+		, castor3d::OverlayCategorySPtr overlay )
+		: TreeItemProperty( overlay->getOverlay().getEngine(), editable )
+		, m_overlay( overlay )
 	{
 		CreateTreeItemMenu();
 	}

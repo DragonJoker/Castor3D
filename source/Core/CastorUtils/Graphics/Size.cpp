@@ -2,95 +2,95 @@
 
 namespace castor
 {
-	Size::Size( uint32_t p_width, uint32_t p_height )
+	Size::Size( uint32_t width, uint32_t height )
 		:	BaseType( m_data.buffer )
 	{
-		m_data.size.cx	= p_width;
-		m_data.size.cy	= p_height;
+		m_data.size.cx = width;
+		m_data.size.cy = height;
 	}
 
-	Size::Size( Size const & p_obj )
+	Size::Size( Size const & rhs )
 		:	BaseType( m_data.buffer )
 	{
-		m_data.size.cx	= p_obj.m_data.size.cx;
-		m_data.size.cy	= p_obj.m_data.size.cy;
+		m_data.size.cx = rhs.m_data.size.cx;
+		m_data.size.cy = rhs.m_data.size.cy;
 	}
 
-	Size::Size( Size && p_obj )
+	Size::Size( Size && rhs )
 		:	BaseType( m_data.buffer )
 	{
-		m_data.size.cx	= p_obj.m_data.size.cx;
-		m_data.size.cy	= p_obj.m_data.size.cy;
-		p_obj.m_data.size.cx = 0;
-		p_obj.m_data.size.cy = 0;
+		m_data.size.cx = rhs.m_data.size.cx;
+		m_data.size.cy = rhs.m_data.size.cy;
+		rhs.m_data.size.cx = 0;
+		rhs.m_data.size.cy = 0;
 	}
 
 	Size::~Size()
 	{
 	}
 
-	Size & Size::operator =( Size const & p_obj )
+	Size & Size::operator =( Size const & rhs )
 	{
-		m_data.size.cx	= p_obj.m_data.size.cx;
-		m_data.size.cy	= p_obj.m_data.size.cy;
+		m_data.size.cx = rhs.m_data.size.cx;
+		m_data.size.cy = rhs.m_data.size.cy;
 		return *this;
 	}
 
-	Size & Size::operator =( Size && p_obj )
+	Size & Size::operator =( Size && rhs )
 	{
-		if ( this != &p_obj )
+		if ( this != &rhs )
 		{
-			m_data.size.cx	= p_obj.m_data.size.cx;
-			m_data.size.cy	= p_obj.m_data.size.cy;
-			p_obj.m_data.size.cx = 0;
-			p_obj.m_data.size.cy = 0;
+			m_data.size.cx = rhs.m_data.size.cx;
+			m_data.size.cy = rhs.m_data.size.cy;
+			rhs.m_data.size.cx = 0;
+			rhs.m_data.size.cy = 0;
 		}
 
 		return *this;
 	}
 
-	void Size::set( uint32_t p_width, uint32_t p_height )
+	void Size::set( uint32_t width, uint32_t height )
 	{
-		m_data.size.cx	= p_width;
-		m_data.size.cy	= p_height;
+		m_data.size.cx = width;
+		m_data.size.cy = height;
 	}
 
-	void Size::grow( int32_t p_cx, int32_t p_cy )
+	void Size::grow( int32_t cx, int32_t cy )
 	{
-		if ( p_cx > 0 && std::numeric_limits< uint32_t >::max() - m_data.size.cx < uint32_t( p_cx ) )
+		if ( cx > 0 && std::numeric_limits< uint32_t >::max() - m_data.size.cx < uint32_t( cx ) )
 		{
 			m_data.size.cx = std::numeric_limits< uint32_t >::max();
 		}
-		else if ( p_cx < 0 && m_data.size.cx < uint32_t( -p_cx ) )
+		else if ( cx < 0 && m_data.size.cx < uint32_t( -cx ) )
 		{
 			m_data.size.cx = 0;
 		}
 		else
 		{
-			m_data.size.cx += p_cx;
+			m_data.size.cx += cx;
 		}
 
-		if ( p_cy > 0 && std::numeric_limits< uint32_t >::max() - m_data.size.cy < uint32_t( p_cy ) )
+		if ( cy > 0 && std::numeric_limits< uint32_t >::max() - m_data.size.cy < uint32_t( cy ) )
 		{
 			m_data.size.cy = std::numeric_limits< uint32_t >::max();
 		}
-		else if ( p_cy < 0 && m_data.size.cy < uint32_t( -p_cy ) )
+		else if ( cy < 0 && m_data.size.cy < uint32_t( -cy ) )
 		{
 			m_data.size.cy = 0;
 		}
 		else
 		{
-			m_data.size.cy += p_cy;
+			m_data.size.cy += cy;
 		}
 	}
 
-	bool operator ==( Size const & p_a, Size const & p_b )
+	bool operator ==( Size const & lhs, Size const & rhs )
 	{
-		return p_a.getWidth() == p_b.getWidth() && p_a.getHeight() == p_b.getHeight();
+		return lhs.getWidth() == rhs.getWidth() && lhs.getHeight() == rhs.getHeight();
 	}
 
-	bool operator !=( Size const & p_a, Size const & p_b )
+	bool operator !=( Size const & lhs, Size const & rhs )
 	{
-		return p_a.getWidth() != p_b.getWidth() || p_a.getHeight() != p_b.getHeight();
+		return lhs.getWidth() != rhs.getWidth() || lhs.getHeight() != rhs.getHeight();
 	}
 }

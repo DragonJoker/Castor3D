@@ -15,7 +15,7 @@ namespace castor
 	{
 #define CHECK_FT_ERR( func, ... ) CheckErr( func( __VA_ARGS__ ), #func )
 
-		inline bool CheckErr( FT_Error p_error, const char * p_name )
+		inline bool CheckErr( FT_Error error, const char * name )
 		{
 			static std::map< FT_Error, std::string > MapErrors =
 			{
@@ -87,19 +87,19 @@ namespace castor
 				{ 0x0B01, "Invalid post table" },
 			};
 
-			bool result = p_error == 0;
+			bool result = error == 0;
 
 			if ( !result )
 			{
-				std::map< FT_Error, std::string >::const_iterator it = MapErrors.find( p_error );
-				std::string error = "ERROR : " + std::string( p_name ) + " failed - " + string::stringCast< char >( string::toString( p_error ) );
+				std::map< FT_Error, std::string >::const_iterator it = MapErrors.find( error );
+				std::string err = "ERROR : " + std::string( name ) + " failed - " + string::stringCast< char >( string::toString( error ) );
 
 				if ( it != MapErrors.end() )
 				{
-					error += " (" + it->second + ")";
+					err += " (" + it->second + ")";
 				}
 
-				CU_LoaderError( error );
+				CU_LoaderError( err );
 			}
 
 			return result;
@@ -108,9 +108,9 @@ namespace castor
 		struct SFreeTypeFontImpl
 			: public Font::SFontImpl
 		{
-			SFreeTypeFontImpl( Path const & p_pathFile, uint32_t p_height )
-				: m_path{ p_pathFile }
-				, m_height{ p_height }
+			SFreeTypeFontImpl( Path const & pathFile, uint32_t height )
+				: m_path{ pathFile }
+				, m_height{ height }
 			{
 			}
 
@@ -134,10 +134,10 @@ namespace castor
 				m_face = nullptr;
 			}
 
-			Glyph loadGlyph( char32_t p_c32 )override
+			Glyph loadGlyph( char32_t c32 )override
 			{
 				FT_Glyph glyph{};
-				FT_ULong const cl( p_c32 );
+				FT_ULong const cl( c32 );
 				FT_UInt const index{ FT_Get_Char_Index( m_face, cl ) };
 				CHECK_FT_ERR( FT_Load_Glyph, m_face, index, FT_LOAD_DEFAULT );
 				CHECK_FT_ERR( FT_Get_Glyph, m_face->glyph, &glyph );
@@ -181,7 +181,7 @@ namespace castor
 				}
 
 				FT_Done_Glyph( glyph );
-				return Glyph{ p_c32, size, bearing, advance, buffer };
+				return Glyph{ c32, size, bearing, advance, buffer };
 			}
 
 		private:
@@ -198,29 +198,32 @@ namespace castor
 	{
 	}
 
-	bool Font::BinaryLoader::operator()( Font & p_font, Path const & p_pathFile, uint32_t p_height )
+	bool Font::BinaryLoader::operator()( Font & font
+		, Path const & pathFile
+		, uint32_t height )
 	{
-		m_height = p_height;
-		return doLoad( p_font, p_pathFile );
+		m_height = height;
+		return doLoad( font, pathFile );
 	}
 
-	bool Font::BinaryLoader::doLoad( Font & p_font, Path const & p_pathFile )
+	bool Font::BinaryLoader::doLoad( Font & font
+		, Path const & pathFile )
 	{
 		bool result = false;
 
-		if ( ! p_pathFile.empty() )
+		if ( ! pathFile.empty() )
 		{
-			String strFontName = p_pathFile.getFullFileName();
+			String strFontName = pathFile.getFullFileName();
 
 			try
 			{
-				if ( !p_font.hasGlyphLoader() )
+				if ( !font.hasGlyphLoader() )
 				{
-					p_font.setGlyphLoader( std::make_unique< ft::SFreeTypeFontImpl >( p_pathFile, m_height ) );
+					font.setGlyphLoader( std::make_unique< ft::SFreeTypeFontImpl >( pathFile, m_height ) );
 				}
 
-				p_font.setFaceName( p_pathFile.getFileName() );
-				p_font.getGlyphLoader().initialise();
+				font.setFaceName( pathFile.getFileName() );
+				font.getGlyphLoader().initialise();
 				uint8_t const min = std::numeric_limits< uint8_t >::lowest();
 				uint8_t const max = std::numeric_limits< uint8_t >::max();
 				uint32_t maxHeight = 0;
@@ -230,19 +233,19 @@ namespace castor
 				for ( uint8_t c = min; c < max; c++ )
 				{
 					char tmp[] { char( c ), 0, 0, 0 };
-					Glyph const & glyph = p_font.doLoadGlyph( string::utf8::toUtf8( tmp ) );
+					Glyph const & glyph = font.doLoadGlyph( string::utf8::toUtf8( tmp ) );
 					maxHeight = std::max( maxHeight, glyph.getSize().getHeight() );
 					maxWidth = uint32_t( std::max( int32_t( maxWidth ), glyph.getAdvance() ) );
 				}
 
-				p_font.getGlyphLoader().cleanup();
-				p_font.setMaxHeight( maxHeight );
-				p_font.setMaxWidth( maxWidth );
+				font.getGlyphLoader().cleanup();
+				font.setMaxHeight( maxHeight );
+				font.setMaxWidth( maxWidth );
 				result = true;
 			}
-			catch ( std::runtime_error & p_exc )
+			catch ( std::runtime_error & exc )
 			{
-				CU_LoaderError( "Font loading failed : " + std::string( p_exc.what() ) );
+				CU_LoaderError( "Font loading failed : " + std::string( exc.what() ) );
 			}
 		}
 
@@ -270,10 +273,10 @@ namespace castor
 		BinaryLoader{}( *this, path, height );
 	}
 
-	void Font::loadGlyph( char32_t p_char )
+	void Font::loadGlyph( char32_t c32 )
 	{
 		m_glyphLoader->initialise();
-		doLoadGlyph( p_char );
+		doLoadGlyph( c32 );
 		m_glyphLoader->cleanup();
 	}
 

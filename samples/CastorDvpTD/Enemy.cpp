@@ -4,29 +4,29 @@
 
 namespace castortd
 {
-	Enemy::Enemy( castor3d::SceneNode & p_node, Game const & p_game, Path const & p_path, Category const & p_category )
-		: m_path{ p_path }
-		, m_node{ p_node }
-		, m_category{ p_category }
-		, m_speed{ p_category.m_speed }
-		, m_life{ p_category.m_life.getValue() }
-		, m_cur{ p_path.begin() }
+	Enemy::Enemy( castor3d::SceneNode & node, Game const & game, Path const & path, Category const & category )
+		: m_path{ path }
+		, m_node{ node }
+		, m_category{ category }
+		, m_speed{ category.m_speed }
+		, m_life{ category.m_life.getValue() }
+		, m_cur{ path.begin() }
 	{
-		m_destination = p_game.convert( castor::Point2i{ m_cur->m_x, m_cur->m_y } ) + castor::Point3f{ 0, p_game.getCellHeight(), 0 };
+		m_destination = game.convert( castor::Point2i{ m_cur->m_x, m_cur->m_y } ) + castor::Point3f{ 0, game.getCellHeight(), 0 };
 	}
 
-	void Enemy::load( Game const & p_game )
+	void Enemy::load( Game const & game )
 	{
 		m_state = State::Walking;
 		m_life = m_category.get().m_life.getValue();
 		m_speed = m_category.get().m_speed;
 		m_cur = m_path.get().begin();
-		m_destination = p_game.convert( castor::Point2i{ m_cur->m_x, m_cur->m_y } ) + castor::Point3f{ 0, p_game.getCellHeight(), 0 };
+		m_destination = game.convert( castor::Point2i{ m_cur->m_x, m_cur->m_y } ) + castor::Point3f{ 0, game.getCellHeight(), 0 };
 	}
 
-	bool Enemy::accept( Game const & p_game )
+	bool Enemy::accept( Game const & game )
 	{
-		auto speed = float( p_game.getElapsed().count() ) * m_speed / 1000;
+		auto speed = float( game.getElapsed().count() ) * m_speed / 1000;
 		castor::Point3f destination = m_destination;
 		castor::Point3f position{ m_node.get().getPosition() };
 		castor::Point3f direction{ destination - position };
@@ -45,10 +45,10 @@ namespace castortd
 
 			if ( m_cur != m_path.get().end() )
 			{
-				m_destination = p_game.convert( castor::Point2i{ m_cur->m_x, m_cur->m_y } ) + castor::Point3f{ 0, p_game.getCellHeight(), 0 };
+				m_destination = game.convert( castor::Point2i{ m_cur->m_x, m_cur->m_y } ) + castor::Point3f{ 0, game.getCellHeight(), 0 };
 				auto save = float( speed - distanceToDst );
 				std::swap( speed, save );
-				accept( p_game );
+				accept( game );
 				std::swap( speed, save );
 			}
 			else
@@ -61,7 +61,7 @@ namespace castortd
 		{
 			// Right on the destination node.
 			++m_cur;
-			m_destination = p_game.convert( castor::Point2i{ m_cur->m_x, m_cur->m_y } ) + castor::Point3f{ 0, p_game.getCellHeight() / 2, 0 };
+			m_destination = game.convert( castor::Point2i{ m_cur->m_x, m_cur->m_y } ) + castor::Point3f{ 0, game.getCellHeight() / 2, 0 };
 		}
 
 		bool result = m_state == State::Arrived;

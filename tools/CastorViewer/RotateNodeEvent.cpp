@@ -14,8 +14,11 @@ namespace CastorViewer
 		}
 	}
 
-	RotateNodeEvent::RotateNodeEvent( castor3d::SceneNodeSPtr p_node, float p_dx, float p_dy, float p_dz )
-		: MouseNodeEvent( p_node, p_dx, p_dy, p_dz )
+	RotateNodeEvent::RotateNodeEvent( castor3d::SceneNodeSPtr node
+		, float dx
+		, float dy
+		, float dz )
+		: MouseNodeEvent( node, dx, dy, dz )
 	{
 	}
 

@@ -135,15 +135,15 @@ namespace castortd
 		return result;
 	}
 
-	void RenderPanel::doUpdateSelectedGeometry( castor3d::GeometrySPtr p_geometry )
+	void RenderPanel::doUpdateSelectedGeometry( castor3d::GeometrySPtr geometry )
 	{
-		auto geometry = m_selectedGeometry.lock();
+		auto curGeometry = m_selectedGeometry.lock();
 
-		if ( p_geometry != geometry )
+		if ( geometry != curGeometry )
 		{
 			bool freeCell = false;
 
-			if ( !p_geometry || p_geometry->getName() == cuT( "MapBase" ) )
+			if ( !geometry || geometry->getName() == cuT( "MapBase" ) )
 			{
 				m_selectedGeometry.reset();
 			}
@@ -151,13 +151,13 @@ namespace castortd
 			{
 				Cell cell{ 0u, 0u, Cell::State::Invalid };
 
-				if ( p_geometry->getName().find( cuT( "Tower" ) ) == castor::String::npos )
+				if ( geometry->getName().find( cuT( "Tower" ) ) == castor::String::npos )
 				{
-					cell = m_game.getCell( p_geometry->getParent()->getPosition() );
+					cell = m_game.getCell( geometry->getParent()->getPosition() );
 				}
 				else
 				{
-					cell = m_game.getCell( p_geometry->getParent()->getParent()->getPosition() );
+					cell = m_game.getCell( geometry->getParent()->getParent()->getPosition() );
 				}
 
 				if ( cell.m_state != Cell::State::Invalid )
@@ -167,15 +167,15 @@ namespace castortd
 					case Cell::State::Empty:
 						freeCell = true;
 						m_listener->postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePostRender
-							, [this, p_geometry]()
+							, [this, geometry]()
 							{
-								if ( p_geometry && m_marker )
+								if ( geometry && m_marker )
 								{
-									if ( auto node = p_geometry->getParent() )
+									if ( auto node = geometry->getParent() )
 									{
 										castor::Point3f position = node->getPosition();
 
-										if ( auto mesh = p_geometry->getMesh().lock() )
+										if ( auto mesh = geometry->getMesh().lock() )
 										{
 											auto height = mesh->getBoundingBox().getMax()[1] - mesh->getBoundingBox().getMin()[1];
 											m_marker->setPosition( castor::Point3f{ position[0], height + 1, position[2] } );
@@ -197,7 +197,7 @@ namespace castortd
 						break;
 					}
 
-					m_selectedGeometry = p_geometry;
+					m_selectedGeometry = geometry;
 				}
 			}
 
@@ -249,16 +249,16 @@ namespace castortd
 		}
 	}
 
-	void RenderPanel::doStartTimer( TimerID p_id )
+	void RenderPanel::doStartTimer( TimerID id )
 	{
-		m_timers[size_t( p_id )]->Start( 10 );
+		m_timers[size_t( id )]->Start( 10 );
 	}
 
-	void RenderPanel::doStopTimer( TimerID p_id )
+	void RenderPanel::doStopTimer( TimerID id )
 	{
-		if ( p_id != TimerID::eCount )
+		if ( id != TimerID::eCount )
 		{
-			m_timers[size_t( p_id )]->Stop();
+			m_timers[size_t( id )]->Stop();
 		}
 		else
 		{
@@ -298,37 +298,37 @@ namespace castortd
 #pragma GCC diagnostic pop
 #pragma clang diagnostic pop
 
-	void RenderPanel::OnSize( wxSizeEvent & p_event )
+	void RenderPanel::OnSize( wxSizeEvent & event )
 	{
-		m_renderWindow->resize( uint32_t( p_event.GetSize().x )
-			, uint32_t( p_event.GetSize().y ) );
-		p_event.Skip();
+		m_renderWindow->resize( uint32_t( event.GetSize().x )
+			, uint32_t( event.GetSize().y ) );
+		event.Skip();
 	}
 
-	void RenderPanel::OnMove( wxMoveEvent & p_event )
+	void RenderPanel::OnMove( wxMoveEvent & event )
 	{
-		p_event.Skip();
+		event.Skip();
 	}
 
-	void RenderPanel::OnPaint( wxPaintEvent & p_event )
+	void RenderPanel::OnPaint( wxPaintEvent & event )
 	{
-		p_event.Skip();
+		event.Skip();
 	}
 
-	void RenderPanel::OnsetFocus( wxFocusEvent & p_event )
+	void RenderPanel::OnsetFocus( wxFocusEvent & event )
 	{
-		p_event.Skip();
+		event.Skip();
 	}
 
-	void RenderPanel::OnKillFocus( wxFocusEvent & p_event )
+	void RenderPanel::OnKillFocus( wxFocusEvent & event )
 	{
 		doStopTimer( TimerID::eCount );
-		p_event.Skip();
+		event.Skip();
 	}
 
-	void RenderPanel::onKeyDown( wxKeyEvent & p_event )
+	void RenderPanel::onKeyDown( wxKeyEvent & event )
 	{
-		switch ( p_event.GetKeyCode() )
+		switch ( event.GetKeyCode() )
 		{
 		case WXK_LEFT:
 		case 'Q':
@@ -351,12 +351,12 @@ namespace castortd
 			break;
 		}
 
-		p_event.Skip();
+		event.Skip();
 	}
 
-	void RenderPanel::onKeyUp( wxKeyEvent & p_event )
+	void RenderPanel::onKeyUp( wxKeyEvent & event )
 	{
-		switch ( p_event.GetKeyCode() )
+		switch ( event.GetKeyCode() )
 		{
 		case WXK_NUMPAD1:
 		case '1':
@@ -440,30 +440,30 @@ namespace castortd
 			break;
 		}
 
-		p_event.Skip();
+		event.Skip();
 	}
 
-	void RenderPanel::OnMouseLdown( wxMouseEvent & p_event )
+	void RenderPanel::OnMouseLdown( wxMouseEvent & event )
 	{
 		m_mouseLeftDown = true;
 
 		if ( m_game.isRunning() )
 		{
-			m_x = doTransformX( p_event.GetX() );
-			m_y = doTransformY( p_event.GetY() );
+			m_x = doTransformX( event.GetX() );
+			m_y = doTransformY( event.GetY() );
 			m_oldX = m_x;
 			m_oldY = m_y;
 		}
 	}
 
-	void RenderPanel::OnMouseLUp( wxMouseEvent & p_event )
+	void RenderPanel::OnMouseLUp( wxMouseEvent & event )
 	{
 		m_mouseLeftDown = false;
 
 		if ( m_game.isRunning() )
 		{
-			m_x = doTransformX( p_event.GetX() );
-			m_y = doTransformY( p_event.GetY() );
+			m_x = doTransformX( event.GetX() );
+			m_y = doTransformY( event.GetY() );
 			m_oldX = m_x;
 			m_oldY = m_y;
 			m_listener->postEvent( castor3d::makeGpuFunctorEvent( castor3d::EventType::ePreRender
@@ -486,10 +486,10 @@ namespace castortd
 				} ) );
 		}
 
-		p_event.Skip();
+		event.Skip();
 	}
 
-	void RenderPanel::OnMouseRUp( wxMouseEvent & p_event )
+	void RenderPanel::OnMouseRUp( wxMouseEvent & event )
 	{
 		if ( m_game.isRunning() && m_selectedTower )
 		{
@@ -528,7 +528,7 @@ namespace castortd
 				menu.Enable( int( panel::MenuID::eUpgradeDamage ), false );
 			}
 
-			PopupMenu( &menu, p_event.GetPosition() );
+			PopupMenu( &menu, event.GetPosition() );
 		}
 		else if ( !m_selectedGeometry.expired() )
 		{
@@ -537,16 +537,16 @@ namespace castortd
 			menu.Append( int( panel::MenuID::eNewSRTower ), wxString( "Nouvelle Tour Courte Distance (" ) << m_shortRange.getTowerCost() << wxT( ")" ) );
 			menu.Enable( int( panel::MenuID::eNewLRTower ), m_game.canAfford( m_longRange.getTowerCost() ) );
 			menu.Enable( int( panel::MenuID::eNewSRTower ), m_game.canAfford( m_shortRange.getTowerCost() ) );
-			PopupMenu( &menu, p_event.GetPosition() );
+			PopupMenu( &menu, event.GetPosition() );
 		}
 
-		p_event.Skip();
+		event.Skip();
 	}
 
-	void RenderPanel::OnMouseMove( wxMouseEvent & p_event )
+	void RenderPanel::OnMouseMove( wxMouseEvent & event )
 	{
-		m_x = doTransformX( p_event.GetX() );
-		m_y = doTransformY( p_event.GetY() );
+		m_x = doTransformX( event.GetX() );
+		m_y = doTransformY( event.GetY() );
 
 		if ( m_game.isRunning() )
 		{
@@ -562,12 +562,12 @@ namespace castortd
 
 		m_oldX = m_x;
 		m_oldY = m_y;
-		p_event.Skip();
+		event.Skip();
 	}
 
-	void RenderPanel::OnMouseWheel( wxMouseEvent & p_event )
+	void RenderPanel::OnMouseWheel( wxMouseEvent & event )
 	{
-		int wheelRotation = p_event.GetWheelRotation();
+		int wheelRotation = event.GetWheelRotation();
 
 		auto inputListener = wxGetApp().getCastor()->getUserInputListener();
 
@@ -583,44 +583,44 @@ namespace castortd
 			}
 		}
 
-		p_event.Skip();
+		event.Skip();
 	}
 
-	void RenderPanel::OnMouseTimer( wxTimerEvent & p_event )
+	void RenderPanel::OnMouseTimer( wxTimerEvent & event )
 	{
 		if ( m_game.isRunning() && m_cameraState )
 		{
 			m_cameraState->update();
 		}
 
-		p_event.Skip();
+		event.Skip();
 	}
 
-	void RenderPanel::OnTimerUp( wxTimerEvent & p_event )
+	void RenderPanel::OnTimerUp( wxTimerEvent & event )
 	{
 		m_cameraState->addScalarVelocity( castor::Point3f{ 0.0f, panel::g_camSpeed, 0.0f } );
-		p_event.Skip();
+		event.Skip();
 	}
 
-	void RenderPanel::OnTimerDown( wxTimerEvent & p_event )
+	void RenderPanel::OnTimerDown( wxTimerEvent & event )
 	{
 		m_cameraState->addScalarVelocity( castor::Point3f{ 0.0f, -panel::g_camSpeed, 0.0f } );
-		p_event.Skip();
+		event.Skip();
 	}
 
-	void RenderPanel::OnTimerLeft( wxTimerEvent & p_event )
+	void RenderPanel::OnTimerLeft( wxTimerEvent & event )
 	{
 		m_cameraState->addScalarVelocity( castor::Point3f{ panel::g_camSpeed, 0.0f, 0.0f } );
-		p_event.Skip();
+		event.Skip();
 	}
 
-	void RenderPanel::OnTimerRight( wxTimerEvent & p_event )
+	void RenderPanel::OnTimerRight( wxTimerEvent & event )
 	{
 		m_cameraState->addScalarVelocity( castor::Point3f{ -panel::g_camSpeed, 0.0f, 0.0f } );
-		p_event.Skip();
+		event.Skip();
 	}
 
-	void RenderPanel::OnNewLongRangeTower( wxCommandEvent & p_event )
+	void RenderPanel::OnNewLongRangeTower( wxCommandEvent & event )
 	{
 		if ( m_game.isRunning() )
 		{
@@ -635,7 +635,7 @@ namespace castortd
 		}
 	}
 
-	void RenderPanel::OnNewShortRangeTower( wxCommandEvent & p_event )
+	void RenderPanel::OnNewShortRangeTower( wxCommandEvent & event )
 	{
 		if ( m_game.isRunning() )
 		{
@@ -650,17 +650,17 @@ namespace castortd
 		}
 	}
 
-	void RenderPanel::OnUpgradeTowerSpeed( wxCommandEvent & p_event )
+	void RenderPanel::OnUpgradeTowerSpeed( wxCommandEvent & event )
 	{
 		doUpgradeTowerSpeed();
 	}
 
-	void RenderPanel::OnUpgradeTowerRange( wxCommandEvent & p_event )
+	void RenderPanel::OnUpgradeTowerRange( wxCommandEvent & event )
 	{
 		doUpgradeTowerRange();
 	}
 
-	void RenderPanel::OnUpgradeTowerDamage( wxCommandEvent & p_event )
+	void RenderPanel::OnUpgradeTowerDamage( wxCommandEvent & event )
 	{
 		doUpgradeTowerDamage();
 	}

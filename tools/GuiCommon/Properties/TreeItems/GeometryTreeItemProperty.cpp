@@ -14,9 +14,9 @@ namespace GuiCommon
 		static wxString PROPERTY_CATEGORY_GEOMETRY = _( "Geometry: " );
 	}
 
-	GeometryTreeItemProperty::GeometryTreeItemProperty( bool p_editable, castor3d::Geometry & p_geometry )
-		: TreeItemProperty( p_geometry.getScene()->getEngine(), p_editable )
-		, m_geometry( p_geometry )
+	GeometryTreeItemProperty::GeometryTreeItemProperty( bool editable, castor3d::Geometry & geometry )
+		: TreeItemProperty( geometry.getScene()->getEngine(), editable )
+		, m_geometry( geometry )
 	{
 		PROPERTY_CATEGORY_GEOMETRY = _( "Geometry: " );
 

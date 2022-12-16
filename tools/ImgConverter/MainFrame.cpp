@@ -45,7 +45,7 @@ namespace ImgToIco
 		END_EVENT_TABLE()
 #pragma GCC diagnostic pop
 
-		void MainFrame::_onBrowse( wxCommandEvent & p_event )
+		void MainFrame::_onBrowse( wxCommandEvent & event )
 	{
 		wxFileDialog l_dialog( this
 			, _( "Choose an image" )
@@ -61,10 +61,10 @@ namespace ImgToIco
 			m_pListImages->InsertItems( l_arrayFiles, m_pListImages->GetCount() );
 		}
 
-		p_event.Skip();
+		event.Skip();
 	}
 
-	void MainFrame::_onProcess( wxCommandEvent & p_event )
+	void MainFrame::_onProcess( wxCommandEvent & event )
 	{
 		wxFileName l_fileName;
 		wxArrayString l_arrayChoices;
@@ -96,12 +96,12 @@ namespace ImgToIco
 			SetStatusText( _( "Done" ) );
 		}
 
-		p_event.Skip();
+		event.Skip();
 	}
 
-	void MainFrame::_onExit( wxCommandEvent & p_event )
+	void MainFrame::_onExit( wxCommandEvent & event )
 	{
 		Close();
-		p_event.Skip();
+		event.Skip();
 	}
 }

@@ -173,11 +173,11 @@ namespace castor3d
 			{
 				std::sort( elements.begin()
 					, elements.end()
-					, [this]( billboard::Element const & p_a
-					, billboard::Element const & p_b )
+					, [this]( billboard::Element const & a
+					, billboard::Element const & b )
 					{
-						return castor::point::lengthSquared( p_a.m_position - m_cameraPosition )
-							> castor::point::lengthSquared( p_b.m_position - m_cameraPosition );
+						return castor::point::lengthSquared( a.m_position - m_cameraPosition )
+							> castor::point::lengthSquared( b.m_position - m_cameraPosition );
 					} );
 
 				for ( auto & element : elements )
@@ -189,9 +189,9 @@ namespace castor3d
 				m_vertexBuffer.markDirty( VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
 					, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
 			}
-			catch ( castor::Exception const & p_exc )
+			catch ( castor::Exception const & exc )
 			{
-				log::error << "Submesh::SortFaces - Error: " << p_exc.what() << std::endl;
+				log::error << "Submesh::SortFaces - Error: " << exc.what() << std::endl;
 			}
 		}
 	}

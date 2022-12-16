@@ -24,14 +24,14 @@ namespace GuiCommon
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_editable	Tells if the properties are modifiable
-		 *\param[in]	p_billboard	The target billboard
+		 *\param[in]	editable	Tells if the properties are modifiable
+		 *\param[in]	billboard	The target billboard
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
-		 *\param[in]	p_billboard	Le billboard cible
+		 *\param[in]	editable	Dit si les propriétés sont modifiables
+		 *\param[in]	billboard	Le billboard cible
 		 */
-		BillboardTreeItemProperty( bool p_editable, castor3d::BillboardList & p_billboard );
+		BillboardTreeItemProperty( bool editable, castor3d::BillboardList & billboard );
 		/**
 		 *\~english
 		 *\brief		Retrieves the billboard
@@ -49,7 +49,7 @@ namespace GuiCommon
 		/**
 		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
-		void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )override;
+		void doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )override;
 
 	private:
 		castor3d::BillboardList & m_billboard;

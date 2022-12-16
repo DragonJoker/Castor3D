@@ -123,29 +123,6 @@ namespace castor3d
 			, ashes::StringArray & names );
 		/**
 		 *\~english
-		 *\brief		Pushes a scene on the stack
-		 *\param[in]	scene	The scene
-		 *\~french
-		 *\brief		Met une scène sur la pile
-		 *\param[in]	scene	La scène
-		 */
-		C3D_API void pushScene( Scene * scene );
-		/**
-		 *\~english
-		 *\brief		Pops a scene from the stack
-		 *\~french
-		 *\brief		Enlève la scène du haut de la pile
-		 */
-		C3D_API void popScene();
-		/**
-		 *\~english
-		 *\return		The top scene from the stack, nullptr if the stack is empty.
-		 *\~french
-		 *\return		La scène du haut de la pile, nullptr si la pile est vide.
-		 */
-		C3D_API Scene * getTopScene()const;
-		/**
-		 *\~english
 		 *\brief		Compiles a shader module to the necessary shader language.
 		 *\param[in]	stage	The shader stage.
 		 *\param[in]	name	The shader name.

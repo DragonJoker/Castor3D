@@ -5,10 +5,10 @@
 
 namespace castor
 {
-	BlockTracker::BlockTracker( char const * p_szFunction, char const * p_szFile, uint32_t p_uiLine )
-		: m_strFile( string::stringCast< xchar >( p_szFile ) )
-		, m_strFunction( string::stringCast< xchar >( p_szFunction ) )
-		, m_uiLine( p_uiLine )
+	BlockTracker::BlockTracker( char const * szFunction, char const * szFile, uint32_t uiLine )
+		: m_strFile( string::stringCast< xchar >( szFile ) )
+		, m_strFunction( string::stringCast< xchar >( szFunction ) )
+		, m_uiLine( uiLine )
 	{
 		Logger::logInfo( makeStringStream() << cuT( "BlockTracker::Entered Block : " ) << m_strFunction << cuT( " in " ) << m_strFile << cuT( ", line " ) << m_uiLine );
 	}

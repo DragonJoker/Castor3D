@@ -59,7 +59,7 @@ namespace CastorGui
 		}
 
 		/** Updates the caption
-		 *\param[in]	p_value		The new value
+		 *\param[in]	value		The new value
 		 */
 		void updateCaption( castor::String const & value )
 		{
@@ -67,8 +67,8 @@ namespace CastorGui
 		}
 
 		/** Connects a function to an edit event
-		 *\param[in]	p_event		The event type
-		 *\param[in]	p_function	The function
+		 *\param[in]	event		The event type
+		 *\param[in]	function	The function
 		 *\return		The internal function index, to be able to disconnect it
 		 */
 		OnEditEventConnection connect( EditEvent event
@@ -110,11 +110,11 @@ namespace CastorGui
 
 		/** @copydoc CastorGui::Control::doSetPosition
 		*/
-		void doSetPosition( castor::Position const & p_value )override;
+		void doSetPosition( castor::Position const & value )override;
 
 		/** @copydoc CastorGui::Control::doSetSize
 		*/
-		void doSetSize( castor::Size const & p_value )override;
+		void doSetSize( castor::Size const & value )override;
 
 		/** @copydoc CastorGui::Control::doUpdateStyle
 		*/
@@ -122,54 +122,54 @@ namespace CastorGui
 
 		/** @copydoc CastorGui::Control::doSetCaption
 		*/
-		void doSetCaption( castor::String const & p_value )override;
+		void doSetCaption( castor::String const & value )override;
 
 		/** @copydoc CastorGui::Control::doSetVisible
 		*/
-		void doSetVisible( bool p_visible )override;
+		void doSetVisible( bool visible )override;
 
 		/** @copydoc CastorGui::Control::doUpdateFlags
 		*/
 		void doUpdateFlags()override;
 
 		/** Event when the control is activated
-		 *\param[in]	p_event		The control event
+		 *\param[in]	event		The control event
 		 */
-		void onActivate( castor3d::HandlerEvent const & p_event );
+		void onActivate( castor3d::HandlerEvent const & event );
 
 		/** Event when the control is deactivated
-		 *\param[in]	p_event		The control event
+		 *\param[in]	event		The control event
 		 */
-		void onDeactivate( castor3d::HandlerEvent const & p_event );
+		void onDeactivate( castor3d::HandlerEvent const & event );
 
 		/** Event when mouse left button is pushed
-		 *\param[in]	p_event		The mouse event
+		 *\param[in]	event		The mouse event
 		 */
-		void onMouseLButtonDown( castor3d::MouseEvent const & p_event );
+		void onMouseLButtonDown( castor3d::MouseEvent const & event );
 
 		/** Event when mouse left button is released
-		 *\param[in]	p_event		The mouse event
+		 *\param[in]	event		The mouse event
 		 */
-		void onMouseLButtonUp( castor3d::MouseEvent const & p_event );
+		void onMouseLButtonUp( castor3d::MouseEvent const & event );
 
 		/** Event when a printable key is pressed
-		 *\param[in]	p_event		The mouse event
+		 *\param[in]	event		The mouse event
 		 */
-		void onChar( castor3d::KeyboardEvent const & p_event );
+		void onChar( castor3d::KeyboardEvent const & event );
 
 		/** Event when a keyboard key is pressed
-		 *\param[in]	p_event		The mouse event
+		 *\param[in]	event		The mouse event
 		 */
-		void onKeyDown( castor3d::KeyboardEvent const & p_event );
+		void onKeyDown( castor3d::KeyboardEvent const & event );
 
 		/** Event when a keyboard key is pressed
-		 *\param[in]	p_event		The mouse event
+		 *\param[in]	event		The mouse event
 		 */
-		void onKeyUp( castor3d::KeyboardEvent const & p_event );
+		void onKeyUp( castor3d::KeyboardEvent const & event );
 
 		/** adds a character at caret index
 		 */
-		void doAddCharAtCaret( castor::String const & p_char );
+		void doAddCharAtCaret( castor::String const & c );
 
 		/** Removes a character at caret index
 		 */

@@ -31,7 +31,7 @@ namespace castor
 	{
 		static std::string getError( int error )
 		{
-			//std::string error( zError( p_error ) );
+			//std::string error( zError( error ) );
 			return "(code " + string::toString( error ) + ")";
 		}
 
@@ -376,22 +376,25 @@ namespace castor
 	{
 	}
 
-	ZipArchive::Folder::Folder( String const & p_name, Path const & p_path )
-		: name( p_name )
+	ZipArchive::Folder::Folder( String const & name
+		, Path const & path )
+		: name( name )
 	{
-		addFile( p_path );
+		addFile( path );
 	}
 
-	ZipArchive::Folder * ZipArchive::Folder::findFolder( Path const & p_path )
+	ZipArchive::Folder * ZipArchive::Folder::findFolder( Path const & path )
 	{
 		ZipArchive::Folder * result = nullptr;
 
 		if ( name.empty() )
 		{
-			FolderList::iterator it = std::find_if( folders.begin(), folders.end(), [&]( Folder & p_folder )
-			{
-				return p_folder.findFolder( p_path );
-			} );
+			FolderList::iterator it = std::find_if( folders.begin()
+				, folders.end()
+				, [&path]( Folder & folder )
+				{
+					return folder.findFolder( path );
+				} );
 
 			if ( it != folders.end() )
 			{
@@ -400,20 +403,22 @@ namespace castor
 				result = &folder;
 			}
 		}
-		else if ( p_path == name )
+		else if ( path == name )
 		{
 			// The file path is this one
 			result = this;
 		}
-		else if ( p_path.find( name + Path::NativeSeparator ) == 0 )
+		else if ( path.find( name + Path::NativeSeparator ) == 0 )
 		{
 			// The file is inside this folder or inside a subfolder
-			Path path = Path{ p_path.substr( name.size() + 1 ) };
+			Path curpath = Path{ path.substr( name.size() + 1 ) };
 
-			FolderList::iterator it = std::find_if( folders.begin(), folders.end(), [&]( Folder & p_folder )
-			{
-				return p_folder.findFolder( path );
-			} );
+			FolderList::iterator it = std::find_if( folders.begin()
+				, folders.end()
+				, [&curpath]( Folder & folder )
+				{
+					return folder.findFolder( curpath );
+				} );
 
 			if ( it != folders.end() )
 			{
@@ -431,48 +436,50 @@ namespace castor
 		return result;
 	}
 
-	void ZipArchive::Folder::addFile( Path const & p_path )
+	void ZipArchive::Folder::addFile( Path const & path )
 	{
-		Path path = p_path.getPath();
+		Path realPath = path.getPath();
 
-		if ( path.empty() )
+		if ( realPath.empty() )
 		{
 			// File path name is just a file name, add it to current folder.
-			std::list< String >::iterator it = std::find( files.begin(), files.end(), p_path );
+			std::list< String >::iterator it = std::find( files.begin(), files.end(), path );
 
 			if ( it == files.end() )
 			{
-				files.push_back( p_path );
+				files.push_back( path );
 			}
 		}
 		else if ( name.empty() )
 		{
 			// The current folder is the root one, add each file path's folder, recursively.
-			folders.push_back( Folder( p_path.substr( 0, p_path.find( Path::NativeSeparator ) ), p_path ) );
+			folders.push_back( Folder( path.substr( 0, path.find( Path::NativeSeparator ) ), path ) );
 		}
 		else
 		{
 			// Try to match file path's folders to this one
-			if ( p_path.find( name + Path::NativeSeparator ) == 0 )
+			if ( path.find( name + Path::NativeSeparator ) == 0 )
 			{
 				// First file folder is this one, complete this folder with the file's ones
-				path = Path{ p_path.substr( name.size() + 1 ) };
+				realPath = Path{ path.substr( name.size() + 1 ) };
 
-				if ( path == p_path.getFileName() + cuT( "." ) + p_path.getExtension() )
+				if ( realPath == path.getFileName() + cuT( "." ) + path.getExtension() )
 				{
-					files.push_back( path );
+					files.push_back( realPath );
 				}
 				else
 				{
-					size_t found = path.find( Path::NativeSeparator );
-					folders.push_back( Folder( path.substr( 0, found ), Path{ path.substr( found + 1 ) } ) );
+					size_t found = realPath.find( Path::NativeSeparator );
+					folders.push_back( Folder( realPath.substr( 0, found )
+						, Path{ realPath.substr( found + 1 ) } ) );
 				}
 			}
 			else
 			{
 				// This file is in a subfolder
-				size_t found = p_path.find( Path::NativeSeparator );
-				folders.push_back( Folder( p_path.substr( 0, found ), Path{ p_path.substr( found + 1 ) } ) );
+				size_t found = path.find( Path::NativeSeparator );
+				folders.push_back( Folder( path.substr( 0, found )
+					, Path{ path.substr( found + 1 ) } ) );
 			}
 		}
 	}
@@ -483,10 +490,10 @@ namespace castor
 
 	//*********************************************************************************************
 
-	ZipArchive::ZipArchive( Path const & p_path, File::OpenMode p_mode )
+	ZipArchive::ZipArchive( Path const & path, File::OpenMode mode )
 		: m_impl( std::make_unique< zlib::ZipImpl >() )
 	{
-		m_impl->open( p_path, p_mode );
+		m_impl->open( path, mode );
 	}
 
 	ZipArchive::~ZipArchive()
@@ -514,14 +521,14 @@ namespace castor
 		return result;
 	}
 
-	bool ZipArchive::inflate( Path const & p_folder )
+	bool ZipArchive::inflate( Path const & folder )
 	{
 		bool result = false;
 
 		try
 		{
-			m_rootFolder = p_folder;
-			StringArray entries = m_impl->inflate( p_folder, m_uncompressed );
+			m_rootFolder = folder;
+			StringArray entries = m_impl->inflate( folder, m_uncompressed );
 
 			for ( StringArray::iterator it = entries.begin(); it != entries.end(); ++it )
 			{
@@ -539,39 +546,39 @@ namespace castor
 		return result;
 	}
 
-	void ZipArchive::addFile( Path const & p_fileName )
+	void ZipArchive::addFile( Path const & fileName )
 	{
-		Path path = p_fileName.getPath();
+		Path path = fileName.getPath();
 		Folder * folder = m_uncompressed.findFolder( path );
 
 		if ( folder )
 		{
-			folder->addFile( p_fileName );
+			folder->addFile( fileName );
 		}
 		else
 		{
-			m_uncompressed.addFile( p_fileName );
+			m_uncompressed.addFile( fileName );
 		}
 	}
 
-	void ZipArchive::removeFile( Path const & p_fileName )
+	void ZipArchive::removeFile( Path const & fileName )
 	{
-		Path path = p_fileName.getPath();
+		Path path = fileName.getPath();
 		Folder * folder = m_uncompressed.findFolder( path );
 
 		if ( folder )
 		{
-			folder->removeFile( p_fileName );
+			folder->removeFile( fileName );
 		}
 	}
 
-	bool ZipArchive::findFolder( String const & p_folder )
+	bool ZipArchive::findFolder( String const & folder )
 	{
-		return m_impl->findFolder( p_folder );
+		return m_impl->findFolder( folder );
 	}
 
-	bool ZipArchive::findFile( String const & p_file )
+	bool ZipArchive::findFile( String const & file )
 	{
-		return m_impl->findFile( p_file );
+		return m_impl->findFile( file );
 	}
 }

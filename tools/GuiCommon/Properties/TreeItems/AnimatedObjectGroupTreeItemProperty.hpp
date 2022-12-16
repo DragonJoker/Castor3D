@@ -24,12 +24,12 @@ namespace GuiCommon
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_editable	Tells if the properties are modifiable
-		 *\param[in]	p_group		The target AnimatedObjectGroup
+		 *\param[in]	editable	Tells if the properties are modifiable
+		 *\param[in]	group		The target AnimatedObjectGroup
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
-		 *\param[in]	p_group		L"AnimatedObjectGroup cible
+		 *\param[in]	editable	Dit si les propriétés sont modifiables
+		 *\param[in]	group		L"AnimatedObjectGroup cible
 		 */
 		AnimatedObjectGroupTreeItemProperty( bool editable
 			, castor3d::AnimatedObjectGroup & group );
@@ -50,7 +50,7 @@ namespace GuiCommon
 		/**
 		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
-		void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )override;
+		void doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )override;
 
 	private:
 		castor3d::AnimatedObjectGroup & m_group;

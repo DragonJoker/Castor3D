@@ -47,8 +47,8 @@ namespace GuiCommon
 		struct wxWidgetsFontImpl
 			: public castor::Font::SFontImpl
 		{
-			explicit wxWidgetsFontImpl( wxFont const & p_font )
-				: m_font( p_font )
+			explicit wxWidgetsFontImpl( wxFont const & font )
+				: m_font( font )
 			{
 			}
 
@@ -95,30 +95,34 @@ namespace GuiCommon
 		}
 	}
 
-	void createBitmapFromBuffer( uint8_t const * p_buffer, uint32_t p_width, uint32_t p_height, bool p_flip, wxBitmap & p_bitmap )
+	void createBitmapFromBuffer( uint8_t const * buffer
+		, uint32_t width
+		, uint32_t height
+		, bool flip
+		, wxBitmap & bitmap )
 	{
-		p_bitmap.Create( int( p_width ), int( p_height ), 24 );
-		wxNativePixelData data( p_bitmap );
+		bitmap.Create( int( width ), int( height ), 24 );
+		wxNativePixelData data( bitmap );
 
-		if ( p_bitmap.IsOk() && uint32_t( data.GetWidth() ) == p_width && uint32_t( data.GetHeight() ) == p_height )
+		if ( bitmap.IsOk() && uint32_t( data.GetWidth() ) == width && uint32_t( data.GetHeight() ) == height )
 		{
 			wxNativePixelData::Iterator it( data );
 
 			try
 			{
-				if ( p_flip )
+				if ( flip )
 				{
-					uint32_t pitch = p_width * 4;
-					uint8_t const * buffer = p_buffer + ( p_height - 1 ) * pitch;
+					uint32_t pitch = width * 4;
+					uint8_t const * buf = buffer + ( height - 1 ) * pitch;
 
-					for ( uint32_t i = 0; i < p_height && it.IsOk(); i++ )
+					for ( uint32_t i = 0; i < height && it.IsOk(); i++ )
 					{
-						uint8_t const * line = buffer;
+						uint8_t const * line = buf;
 #if defined( CU_PlatformWindows )
 						wxNativePixelData::Iterator rowStart = it;
 #endif
 
-						for ( uint32_t j = 0; j < p_width && it.IsOk(); j++ )
+						for ( uint32_t j = 0; j < width && it.IsOk(); j++ )
 						{
 							it.Red() = *line;
 							line++;
@@ -131,7 +135,7 @@ namespace GuiCommon
 							it++;
 						}
 
-						buffer -= pitch;
+						buf -= pitch;
 
 #if defined( CU_PlatformWindows )
 						it = rowStart;
@@ -141,24 +145,24 @@ namespace GuiCommon
 				}
 				else
 				{
-					uint8_t const * buffer = p_buffer;
+					uint8_t const * buf = buffer;
 
-					for ( uint32_t i = 0; i < p_height && it.IsOk(); i++ )
+					for ( uint32_t i = 0; i < height && it.IsOk(); i++ )
 					{
 #if defined( CU_PlatformWindows )
 						wxNativePixelData::Iterator rowStart = it;
 #endif
 
-						for ( uint32_t j = 0; j < p_width && it.IsOk(); j++ )
+						for ( uint32_t j = 0; j < width && it.IsOk(); j++ )
 						{
-							it.Red() = *buffer;
-							buffer++;
-							it.Green() = *buffer;
-							buffer++;
-							it.Blue() = *buffer;
-							buffer++;
+							it.Red() = *buf;
+							buf++;
+							it.Green() = *buf;
+							buf++;
+							it.Blue() = *buf;
+							buf++;
 							// don't write the alpha.
-							buffer++;
+							buf++;
 							it++;
 						}
 

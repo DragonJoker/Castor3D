@@ -75,11 +75,11 @@ namespace GuiCommon
 		PointProperty( wxString const & label
 			, wxString const & name
 			, castor::Coords< T, Count > const & value );
-		explicit PointProperty( wxString const( & p_names )[Count]
+		explicit PointProperty( wxString const( & names )[Count]
 			, wxString const & label = wxPG_LABEL
 			, wxString const & name = wxPG_LABEL
 			, castor::Point< T, Count > const & value = castor::Point< T, Count >() );
-		PointProperty( wxString const( & p_names )[Count]
+		PointProperty( wxString const( & names )[Count]
 			, wxString const & label
 			, wxString const & name
 			, castor::Coords< T, Count > const & value );
@@ -98,9 +98,9 @@ namespace GuiCommon
 		inline void setValueI( castor::Point< T, Count > const & value );
 	};
 
-	template< typename Type, uint32_t Count > castor::Point< Type, Count > const & PointRefFromVariant( wxVariant const & p_variant );
-	template< typename Type, uint32_t Count > castor::Point< Type, Count > & PointRefFromVariant( wxVariant & p_variant );
-	template< typename Type, uint32_t Count > void setVariantFromPoint( wxVariant & p_variant, castor::Point< Type, Count > const & p_value );
+	template< typename Type, uint32_t Count > castor::Point< Type, Count > const & PointRefFromVariant( wxVariant const & variant );
+	template< typename Type, uint32_t Count > castor::Point< Type, Count > & PointRefFromVariant( wxVariant & variant );
+	template< typename Type, uint32_t Count > void setVariantFromPoint( wxVariant & variant, castor::Point< Type, Count > const & value );
 
 	template< uint32_t Count > using BoolPointProperty = PointProperty< bool, Count >;
 	template< uint32_t Count > using IntPointProperty = PointProperty< int, Count >;

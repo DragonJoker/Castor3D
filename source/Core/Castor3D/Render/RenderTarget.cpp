@@ -603,13 +603,9 @@ namespace castor3d
 		{
 			if ( m_initialised && scene->isInitialised() )
 			{
-				auto camera = getCamera();
-
-				if ( camera )
+				if ( getCamera() )
 				{
-					getEngine()->getRenderSystem()->pushScene( scene );
 					result = doRender( queue, signalsToWait );
-					getEngine()->getRenderSystem()->popScene();
 				}
 			}
 		}

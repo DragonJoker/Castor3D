@@ -263,19 +263,19 @@ namespace CastorGui
 	castor::HdrRgbColour const & getMaterialColour( castor3d::Pass const & pass );
 	/** Creates a colour material.
 	 *\param[in]	engine	The engine.
-	 *\param[in]	p_name		The material name.
-	 *\param[in]	p_colour	The material colour.
+	 *\param[in]	name	The material name.
+	 *\param[in]	colour	The material colour.
 	 *\return		The created material.
 	*/
-	castor3d::MaterialRPtr createMaterial( castor3d::Engine & engine, castor::String const & p_name, castor::HdrRgbColour const & p_colour );
+	castor3d::MaterialRPtr createMaterial( castor3d::Engine & engine, castor::String const & name, castor::HdrRgbColour const & colour );
 
 	/** Creates a texture material.
 	 *\param[in]	engine	The engine.
-	 *\param[in]	p_name		The material name.
-	 *\param[in]	p_texture	The material texture.
+	 *\param[in]	name	The material name.
+	 *\param[in]	texture	The material texture.
 	 *\return		The created material.
 	*/
-	castor3d::MaterialRPtr createMaterial( castor3d::Engine & engine, castor::String const & p_name, castor3d::TextureLayoutSPtr p_texture );
+	castor3d::MaterialRPtr createMaterial( castor3d::Engine & engine, castor::String const & name, castor3d::TextureLayoutSPtr texture );
 }
 
 #endif

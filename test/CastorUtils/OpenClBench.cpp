@@ -7,19 +7,19 @@
 
 namespace
 {
-	void randomInit( float * p_pData1, float * p_pData2, int size )
+	void randomInit( float * data1, float * data2, int size )
 	{
 		for ( int i = 0; i < size; ++i )
 		{
-			p_pData1[i] = rand() / float( RAND_MAX );
-			p_pData2[i] = p_pData1[i];
+			data1[i] = rand() / float( RAND_MAX );
+			data2[i] = data1[i];
 		}
 	}
 }
 
 namespace Testing
 {
-	bool CheckErr( cl_int p_iErr, const char * p_szName )
+	bool CheckErr( cl_int iErr, const char * szName )
 	{
 		bool result = true;
 		static std::map< cl_int, std::string > MapErrors;
@@ -105,17 +105,17 @@ namespace Testing
 #endif
 		};
 
-		if ( p_iErr != CL_SUCCESS )
+		if ( iErr != CL_SUCCESS )
 		{
-			std::map< cl_int, std::string >::const_iterator it = MapErrors.find( p_iErr );
+			std::map< cl_int, std::string >::const_iterator it = MapErrors.find( iErr );
 
 			if ( it != MapErrors.end() )
 			{
-				std::cerr << "ERROR: " << p_szName << " - 0x" << std::hex << p_iErr << " (" << it->second << ")" << std::endl;
+				std::cerr << "ERROR: " << szName << " - 0x" << std::hex << iErr << " (" << it->second << ")" << std::endl;
 			}
 			else
 			{
-				std::cerr << "ERROR: " << p_szName << " - 0x" << std::hex << p_iErr << std::endl;
+				std::cerr << "ERROR: " << szName << " - 0x" << std::hex << iErr << std::endl;
 			}
 
 			result = false;
@@ -244,9 +244,9 @@ namespace Testing
 
 			m_bClInitialised = bContinue;
 		}
-		catch ( cl::Error & p_exc )
+		catch ( cl::Error & exc )
 		{
-			bContinue = CheckErr( p_exc.err(), "Kernel::enqueueNDRangeKernel() - m_kernel" );
+			bContinue = CheckErr( exc.err(), "Kernel::enqueueNDRangeKernel() - m_kernel" );
 		}
 	}
 

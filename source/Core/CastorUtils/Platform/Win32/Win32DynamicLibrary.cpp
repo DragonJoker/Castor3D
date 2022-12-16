@@ -31,10 +31,10 @@ namespace castor
 					m_pathLibrary.clear();
 				}
 			}
-			catch ( std::exception & p_exc )
+			catch ( std::exception & exc )
 			{
 				String strError = cuT( "Can't load dynamic library at [" ) + m_pathLibrary + cuT( "]: " );
-				strError += p_exc.what();
+				strError += exc.what();
 				Logger::logError( strError );
 				m_library = nullptr;
 				m_pathLibrary.clear();

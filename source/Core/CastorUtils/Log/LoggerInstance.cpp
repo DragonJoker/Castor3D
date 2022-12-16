@@ -59,14 +59,14 @@ namespace castor
 		doInitialiseThread();
 	}
 
-	void LoggerInstance::registerCallback( LogCallback p_pfnCallback, void * p_pCaller )
+	void LoggerInstance::registerCallback( LogCallback pfnCallback, void * pCaller )
 	{
-		m_impl.registerCallback( p_pfnCallback, p_pCaller );
+		m_impl.registerCallback( pfnCallback, pCaller );
 	}
 
-	void LoggerInstance::unregisterCallback( void * p_pCaller )
+	void LoggerInstance::unregisterCallback( void * pCaller )
 	{
-		m_impl.unregisterCallback( p_pCaller );
+		m_impl.unregisterCallback( pCaller );
 	}
 
 	void LoggerInstance::setFileName( Path const & logFilePath
@@ -81,177 +81,177 @@ namespace castor
 		return m_logLevel;
 	}
 
-	void LoggerInstance::lockedLogTrace( LoggerInstance::my_string const & p_msg )
+	void LoggerInstance::lockedLogTrace( LoggerInstance::my_string const & msg )
 	{
-		doLockedPushMessage( LogType::eTrace, p_msg, true );
+		doLockedPushMessage( LogType::eTrace, msg, true );
 	}
 
-	void LoggerInstance::logTrace( LoggerInstance::my_string const & p_msg )
+	void LoggerInstance::logTrace( LoggerInstance::my_string const & msg )
 	{
-		pushMessage( LogType::eTrace, p_msg, true );
+		pushMessage( LogType::eTrace, msg, true );
 	}
 
-	void LoggerInstance::logTrace( LoggerInstance::my_ostream const & p_msg )
+	void LoggerInstance::logTrace( LoggerInstance::my_ostream const & msg )
 	{
-		auto sbuf = p_msg.rdbuf();
+		auto sbuf = msg.rdbuf();
 		std::stringstream ss;
 		ss << sbuf;
 		logTrace( ss.str() );
 	}
 
-	void LoggerInstance::lockedLogTraceNoLF( LoggerInstance::my_string const & p_msg )
+	void LoggerInstance::lockedLogTraceNoLF( LoggerInstance::my_string const & msg )
 	{
-		doLockedPushMessage( LogType::eTrace, p_msg, false );
+		doLockedPushMessage( LogType::eTrace, msg, false );
 	}
 
-	void LoggerInstance::logTraceNoLF( LoggerInstance::my_string const & p_msg )
+	void LoggerInstance::logTraceNoLF( LoggerInstance::my_string const & msg )
 	{
-		pushMessage( LogType::eTrace, p_msg, false );
+		pushMessage( LogType::eTrace, msg, false );
 	}
 
-	void LoggerInstance::logTraceNoLF( LoggerInstance::my_ostream const & p_msg )
+	void LoggerInstance::logTraceNoLF( LoggerInstance::my_ostream const & msg )
 	{
-		auto sbuf = p_msg.rdbuf();
+		auto sbuf = msg.rdbuf();
 		std::stringstream ss;
 		ss << sbuf;
 		logTraceNoLF( ss.str() );
 	}
 	
-	void LoggerInstance::lockedLogDebugNoLF( LoggerInstance::my_string const & p_msg )
+	void LoggerInstance::lockedLogDebugNoLF( LoggerInstance::my_string const & msg )
 	{
-		doLockedPushMessage( LogType::eDebug, p_msg, false );
+		doLockedPushMessage( LogType::eDebug, msg, false );
 	}
 	
-	void LoggerInstance::logDebugNoLF( LoggerInstance::my_string const & p_msg )
+	void LoggerInstance::logDebugNoLF( LoggerInstance::my_string const & msg )
 	{
-		pushMessage( LogType::eDebug, p_msg, false );
+		pushMessage( LogType::eDebug, msg, false );
 	}
 
-	void LoggerInstance::logDebugNoLF( LoggerInstance::my_ostream const & p_msg )
+	void LoggerInstance::logDebugNoLF( LoggerInstance::my_ostream const & msg )
 	{
-		auto sbuf = p_msg.rdbuf();
+		auto sbuf = msg.rdbuf();
 		std::stringstream ss;
 		ss << sbuf;
 		logDebugNoLF( ss.str() );
 	}
 
-	void LoggerInstance::lockedLogDebug( LoggerInstance::my_string const & p_msg )
+	void LoggerInstance::lockedLogDebug( LoggerInstance::my_string const & msg )
 	{
-		doLockedPushMessage( LogType::eDebug, p_msg, true );
+		doLockedPushMessage( LogType::eDebug, msg, true );
 	}
 
-	void LoggerInstance::logDebug( LoggerInstance::my_string const & p_msg )
+	void LoggerInstance::logDebug( LoggerInstance::my_string const & msg )
 	{
-		pushMessage( LogType::eDebug, p_msg, true );
+		pushMessage( LogType::eDebug, msg, true );
 	}
 
-	void LoggerInstance::logDebug( LoggerInstance::my_ostream const & p_msg )
+	void LoggerInstance::logDebug( LoggerInstance::my_ostream const & msg )
 	{
-		auto sbuf = p_msg.rdbuf();
+		auto sbuf = msg.rdbuf();
 		std::stringstream ss;
 		ss << sbuf;
 		logDebug( ss.str() );
 	}
 
-	void LoggerInstance::lockedLogInfoNoLF( LoggerInstance::my_string const & p_msg )
+	void LoggerInstance::lockedLogInfoNoLF( LoggerInstance::my_string const & msg )
 	{
-		doLockedPushMessage( LogType::eInfo, p_msg, false );
+		doLockedPushMessage( LogType::eInfo, msg, false );
 	}
 
-	void LoggerInstance::logInfoNoLF( LoggerInstance::my_string const & p_msg )
+	void LoggerInstance::logInfoNoLF( LoggerInstance::my_string const & msg )
 	{
-		pushMessage( LogType::eInfo, p_msg, false );
+		pushMessage( LogType::eInfo, msg, false );
 	}
 
-	void LoggerInstance::logInfoNoLF( LoggerInstance::my_ostream const & p_msg )
+	void LoggerInstance::logInfoNoLF( LoggerInstance::my_ostream const & msg )
 	{
 		std::stringstream ss;
-		ss << p_msg.rdbuf();
+		ss << msg.rdbuf();
 		logInfoNoLF( ss.str() );
 	}
 
-	void LoggerInstance::lockedLogInfo( LoggerInstance::my_string const & p_msg )
+	void LoggerInstance::lockedLogInfo( LoggerInstance::my_string const & msg )
 	{
-		doLockedPushMessage( LogType::eInfo, p_msg, true );
+		doLockedPushMessage( LogType::eInfo, msg, true );
 	}
 
-	void LoggerInstance::logInfo( LoggerInstance::my_string const & p_msg )
+	void LoggerInstance::logInfo( LoggerInstance::my_string const & msg )
 	{
-		pushMessage( LogType::eInfo, p_msg, true );
+		pushMessage( LogType::eInfo, msg, true );
 	}
 
-	void LoggerInstance::logInfo( LoggerInstance::my_ostream const & p_msg )
+	void LoggerInstance::logInfo( LoggerInstance::my_ostream const & msg )
 	{
 		std::stringstream ss;
-		ss << p_msg.rdbuf();
+		ss << msg.rdbuf();
 		logInfo( ss.str() );
 	}
 
-	void LoggerInstance::lockedLogWarningNoLF( LoggerInstance::my_string const & p_msg )
+	void LoggerInstance::lockedLogWarningNoLF( LoggerInstance::my_string const & msg )
 	{
-		doLockedPushMessage( LogType::eWarning, p_msg, false );
+		doLockedPushMessage( LogType::eWarning, msg, false );
 	}
 
-	void LoggerInstance::logWarningNoLF( LoggerInstance::my_string const & p_msg )
+	void LoggerInstance::logWarningNoLF( LoggerInstance::my_string const & msg )
 	{
-		pushMessage( LogType::eWarning, p_msg, false );
+		pushMessage( LogType::eWarning, msg, false );
 	}
 
-	void LoggerInstance::logWarningNoLF( LoggerInstance::my_ostream const & p_msg )
+	void LoggerInstance::logWarningNoLF( LoggerInstance::my_ostream const & msg )
 	{
 		std::stringstream ss;
-		ss << p_msg.rdbuf();
+		ss << msg.rdbuf();
 		logWarningNoLF( ss.str() );
 	}
 
-	void LoggerInstance::lockedLogWarning( LoggerInstance::my_string const & p_msg )
+	void LoggerInstance::lockedLogWarning( LoggerInstance::my_string const & msg )
 	{
-		doLockedPushMessage( LogType::eWarning, p_msg, true );
+		doLockedPushMessage( LogType::eWarning, msg, true );
 	}
 
-	void LoggerInstance::logWarning( LoggerInstance::my_string const & p_msg )
+	void LoggerInstance::logWarning( LoggerInstance::my_string const & msg )
 	{
-		pushMessage( LogType::eWarning, p_msg, true );
+		pushMessage( LogType::eWarning, msg, true );
 	}
 
-	void LoggerInstance::logWarning( LoggerInstance::my_ostream const & p_msg )
+	void LoggerInstance::logWarning( LoggerInstance::my_ostream const & msg )
 	{
 		std::stringstream ss;
-		ss << p_msg.rdbuf();
+		ss << msg.rdbuf();
 		logWarning( ss.str() );
 	}
 
-	void LoggerInstance::lockedLogErrorNoLF( LoggerInstance::my_string const & p_msg )
+	void LoggerInstance::lockedLogErrorNoLF( LoggerInstance::my_string const & msg )
 	{
-		doLockedPushMessage( LogType::eError, p_msg, false );
+		doLockedPushMessage( LogType::eError, msg, false );
 	}
 
-	void LoggerInstance::logErrorNoLF( LoggerInstance::my_string const & p_msg )
+	void LoggerInstance::logErrorNoLF( LoggerInstance::my_string const & msg )
 	{
-		pushMessage( LogType::eError, p_msg, false );
+		pushMessage( LogType::eError, msg, false );
 	}
 
-	void LoggerInstance::logErrorNoLF( LoggerInstance::my_ostream const & p_msg )
+	void LoggerInstance::logErrorNoLF( LoggerInstance::my_ostream const & msg )
 	{
 		std::stringstream ss;
-		ss << p_msg.rdbuf();
+		ss << msg.rdbuf();
 		logErrorNoLF( ss.str() );
 	}
 
-	void LoggerInstance::lockedLogError( LoggerInstance::my_string const & p_msg )
+	void LoggerInstance::lockedLogError( LoggerInstance::my_string const & msg )
 	{
-		doLockedPushMessage( LogType::eError, p_msg );
+		doLockedPushMessage( LogType::eError, msg );
 	}
 
-	void LoggerInstance::logError( LoggerInstance::my_string const & p_msg )
+	void LoggerInstance::logError( LoggerInstance::my_string const & msg )
 	{
-		pushMessage( LogType::eError, p_msg );
+		pushMessage( LogType::eError, msg );
 	}
 
-	void LoggerInstance::logError( LoggerInstance::my_ostream const & p_msg )
+	void LoggerInstance::logError( LoggerInstance::my_ostream const & msg )
 	{
 		std::stringstream ss;
-		ss << p_msg.rdbuf();
+		ss << msg.rdbuf();
 		logError( ss.str() );
 	}
 

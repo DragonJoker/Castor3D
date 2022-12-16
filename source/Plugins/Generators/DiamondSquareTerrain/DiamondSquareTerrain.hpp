@@ -30,8 +30,8 @@ namespace diamond_square_terrain
 		/**
 		 *\copydoc		castor3d::MeshGenerator::doGenerate
 		 */
-		virtual void doGenerate( castor3d::Mesh & p_mesh
-			, castor3d::Parameters const & p_parameters )override;
+		virtual void doGenerate( castor3d::Mesh & mesh
+			, castor3d::Parameters const & parameters )override;
 
 	public:
 		static castor::String const Type;

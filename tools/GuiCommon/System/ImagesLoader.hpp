@@ -21,14 +21,14 @@ namespace GuiCommon
 		~ImagesLoader();
 
 		static void cleanup();
-		static void addBitmap( uint32_t p_id, char const * const * p_pBits );
-		static wxImage * getBitmap( uint32_t p_id );
+		static void addBitmap( uint32_t id, char const * const * pBits );
+		static wxImage * getBitmap( uint32_t id );
 		static void waitAsyncLoads();
 
 	private:
 		void doCleanup();
-		void doAddBitmap( uint32_t p_id, char const * const * p_pBits );
-		wxImage * doGetBitmap( uint32_t p_id );
+		void doAddBitmap( uint32_t id, char const * const * pBits );
+		wxImage * doGetBitmap( uint32_t id );
 		void doWaitAsyncLoads();
 
 	protected:

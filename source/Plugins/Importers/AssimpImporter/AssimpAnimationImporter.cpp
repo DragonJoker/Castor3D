@@ -28,9 +28,9 @@ namespace c3d_assimp
 			aiNodeAnim const * result = nullptr;
 			auto it = std::find_if( animation.mChannels
 				, animation.mChannels + animation.mNumChannels
-				, [&nodeName]( aiNodeAnim const * const p_nodeAnim )
+				, [&nodeName]( aiNodeAnim const * const nodeAnim )
 				{
-					return castor::string::stringCast< castor::xchar >( p_nodeAnim->mNodeName.data ) == nodeName;
+					return castor::string::stringCast< castor::xchar >( nodeAnim->mNodeName.data ) == nodeName;
 				} );
 
 			if ( it != animation.mChannels + animation.mNumChannels )

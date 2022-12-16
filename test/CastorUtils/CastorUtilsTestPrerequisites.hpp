@@ -30,27 +30,27 @@ namespace Testing
 	//*********************************************************************************************
 
 	template< typename T >
-	inline void randomInit( T * p_pData1, T * p_pData2, uint32_t size )
+	inline void randomInit( T * data1, T * data2, uint32_t size )
 	{
 		static std::random_device generator;
 		std::uniform_real_distribution< T > distribution( T( 0.0 ), T( 1.0 ) );
 
 		for ( uint32_t i = 0; i < size; ++i )
 		{
-			p_pData1[i] = distribution( generator );
-			p_pData2[i] = p_pData1[i];
+			data1[i] = distribution( generator );
+			data2[i] = data1[i];
 		}
 	}
 
 	template< typename T >
-	inline void randomInit( T * p_pData, uint32_t size )
+	inline void randomInit( T * data, uint32_t size )
 	{
 		static std::random_device generator;
 		std::uniform_real_distribution< T > distribution( T( 0.0 ), T( 1.0 ) );
 
 		for ( uint32_t i = 0; i < size; ++i )
 		{
-			p_pData[i] = distribution( generator );
+			data[i] = distribution( generator );
 		}
 	}
 

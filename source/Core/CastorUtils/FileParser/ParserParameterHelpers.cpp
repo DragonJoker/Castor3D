@@ -196,8 +196,8 @@ namespace castor
 		cuT( "HDR RGBA colour" ),
 	};
 
-	String const & getTypeName( ParameterType p_type )
+	String const & getTypeName( ParameterType type )
 	{
-		return TypeName[uint32_t( p_type )];
+		return TypeName[uint32_t( type )];
 	}
 }

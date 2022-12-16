@@ -6,7 +6,7 @@ namespace castor
 {
 	namespace Platform
 	{
-		void callCpuid( uint32_t func, std::array< int32_t, 4 > & p_data );
+		void callCpuid( uint32_t func, std::array< int32_t, 4 > & data );
 		uint32_t getCoreCount();
 		std::string getCPUModel();
 	}

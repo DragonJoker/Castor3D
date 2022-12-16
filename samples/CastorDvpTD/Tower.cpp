@@ -14,49 +14,49 @@ namespace castortd
 		static castor::Milliseconds constexpr zeroTime{ 0_ms };
 
 		// Nearest enemy
-		EnemyArray doSortNearest( EnemyArray const & p_enemies, castor::Point3f const & p_position )
+		EnemyArray doSortNearest( EnemyArray const & enemies, castor::Point3f const & position )
 		{
-			EnemyArray result{ p_enemies };
+			EnemyArray result{ enemies };
 			std::sort( std::begin( result )
 				, std::end( result )
-				, [&p_position]( EnemyPtr a, EnemyPtr b )
+				, [&position]( EnemyPtr a, EnemyPtr b )
 				{
-					return castor::point::distanceSquared( a->getNode().getPosition(), p_position )
-						< castor::point::distanceSquared( b->getNode().getPosition(), p_position );
+					return castor::point::distanceSquared( a->getNode().getPosition(), position )
+						< castor::point::distanceSquared( b->getNode().getPosition(), position );
 				} );
 			return result;
 		}
 
 		//// First enemy
-		//EnemyArray doSortFirst( EnemyArray const & p_enemies, castor::Point3f const & p_position )
+		//EnemyArray doSortFirst( EnemyArray const & enemies, castor::Point3f const & position )
 		//{
-		//	return p_enemies;
+		//	return enemies;
 		//}
 	}
 
 	//*********************************************************************************************
 
-	Tower::Tower( CategoryPtr && p_category
-		, castor3d::SceneNode & p_node
-		, castor3d::AnimatedObjectGroup & p_anim
-		, Cell const & p_cell )
-		: m_node{ p_node }
-		, m_anim{ p_anim }
-		, m_cell{ p_cell }
-		, m_category( std::move( p_category ) )
+	Tower::Tower( CategoryPtr && category
+		, castor3d::SceneNode & node
+		, castor3d::AnimatedObjectGroup & anim
+		, Cell const & cell )
+		: m_node{ node }
+		, m_anim{ anim }
+		, m_cell{ cell }
+		, m_category( std::move( category ) )
 	{
 	}
 
-	void Tower::accept( Game & p_game )
+	void Tower::accept( Game & game )
 	{
-		doUpdateTimes( p_game.getElapsed() );
+		doUpdateTimes( game.getElapsed() );
 		m_anim.setAnimationScale( m_category->getAttackAnimationName(), m_animScale );
 		EnemyArray sorted;
 
 		switch ( m_state )
 		{
 		case Tower::State::Idle:
-			sorted = doSortNearest( p_game.getEnemies(), m_node.getPosition() );
+			sorted = doSortNearest( game.getEnemies(), m_node.getPosition() );
 			doLookForEnemy( sorted );
 			break;
 
@@ -68,10 +68,10 @@ namespace castortd
 			break;
 
 		case Tower::State::Shooting:
-			sorted = doSortNearest( p_game.getEnemies(), m_node.getPosition() );
+			sorted = doSortNearest( game.getEnemies(), m_node.getPosition() );
 			if ( doAnimEnded( sorted ) )
 			{
-				doShoot( p_game );
+				doShoot( game );
 			}
 			break;
 		}
@@ -84,9 +84,9 @@ namespace castortd
 		}
 	}
 
-	bool Tower::doLookForEnemy( EnemyArray & p_enemies )
+	bool Tower::doLookForEnemy( EnemyArray & enemies )
 	{
-		for ( auto & enemy : p_enemies )
+		for ( auto & enemy : enemies )
 		{
 			if ( enemy->isAlive()
 				&& doIsInRange( *enemy ) )
@@ -119,7 +119,7 @@ namespace castortd
 		m_state = State::Shooting;
 	}
 
-	bool Tower::doAnimEnded( EnemyArray & p_enemies )
+	bool Tower::doAnimEnded( EnemyArray & enemies )
 	{
 		bool result = m_animRemain <= zeroTime;
 
@@ -127,7 +127,7 @@ namespace castortd
 			&& ( !m_target->isAlive()
 			|| !doIsInRange( *m_target ) ) )
 		{
-			if ( !doLookForEnemy( p_enemies ) )
+			if ( !doLookForEnemy( enemies ) )
 			{
 				m_anim.stopAnimation( m_category->getAttackAnimationName() );
 				m_anim.startAnimation( m_category->getAttackAnimationName() );
@@ -185,9 +185,9 @@ namespace castortd
 		}
 	}
 
-	bool Tower::doIsInRange( Enemy const & p_enemy )const
+	bool Tower::doIsInRange( Enemy const & enemy )const
 	{
-		return castor::point::length( m_node.getPosition() - p_enemy.getNode().getPosition() ) <= m_category->getRange();
+		return castor::point::length( m_node.getPosition() - enemy.getNode().getPosition() ) <= m_category->getRange();
 	}
 
 	void Tower::doTurnToTarget()
