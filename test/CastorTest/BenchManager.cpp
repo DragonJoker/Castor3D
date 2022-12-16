@@ -19,15 +19,15 @@ namespace Testing
 		m_cases.clear();
 	}
 
-	void BenchManager::registerType( BenchCaseUPtr p_bench )
+	void BenchManager::registerType( BenchCaseUPtr bench )
 	{
-		m_benchs.push_back( std::move( p_bench ) );
+		m_benchs.push_back( std::move( bench ) );
 	}
 
-	void BenchManager::registerType( TestCaseUPtr p_case )
+	void BenchManager::registerType( TestCaseUPtr test )
 	{
-		p_case->registerTests();
-		m_cases.push_back( std::move( p_case ) );
+		test->registerTests();
+		m_cases.push_back( std::move( test ) );
 	}
 
 	void BenchManager::ExecuteBenchs()
@@ -120,15 +120,15 @@ namespace Testing
 
 	//*************************************************************************************************
 
-	bool registerType( BenchCaseUPtr p_bench )
+	bool registerType( BenchCaseUPtr bench )
 	{
-		BenchManager::registerType( std::move( p_bench ) );
+		BenchManager::registerType( std::move( bench ) );
 		return true;
 	}
 
-	bool registerType( TestCaseUPtr p_case )
+	bool registerType( TestCaseUPtr test )
 	{
-		BenchManager::registerType( std::move( p_case ) );
+		BenchManager::registerType( std::move( test ) );
 		return true;
 	}
 }

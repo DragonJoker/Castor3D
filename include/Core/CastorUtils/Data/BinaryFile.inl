@@ -1,52 +1,52 @@
 namespace castor
 {
 	template< typename T >
-	uint64_t BinaryFile::write( T const & p_toWrite )
+	uint64_t BinaryFile::write( T const & toWrite )
 	{
-		return doWrite( reinterpret_cast< uint8_t const * >( &p_toWrite ), sizeof( T ) );
+		return doWrite( reinterpret_cast< uint8_t const * >( &toWrite ), sizeof( T ) );
 	}
 
 	template< typename T >
-	uint64_t BinaryFile::read( T & p_toRead )
+	uint64_t BinaryFile::read( T & toRead )
 	{
-		return doRead( reinterpret_cast< uint8_t * >( &p_toRead ), sizeof( T ) );
+		return doRead( reinterpret_cast< uint8_t * >( &toRead ), sizeof( T ) );
 	}
 
 	template< typename T >
-	uint64_t BinaryFile::writeArray( T const * p_toWrite, uint64_t p_count )
+	uint64_t BinaryFile::writeArray( T const * toWrite, uint64_t count )
 	{
-		return doWrite( reinterpret_cast< uint8_t const * >( p_toWrite ), sizeof( T ) * p_count );
+		return doWrite( reinterpret_cast< uint8_t const * >( toWrite ), sizeof( T ) * count );
 	}
 
 	template< typename T, uint64_t N >
-	uint64_t BinaryFile::writeArray( T const( & p_toWrite )[N] )
+	uint64_t BinaryFile::writeArray( T const( & toWrite )[N] )
 	{
-		return doWrite( reinterpret_cast< uint8_t const * >( p_toWrite ), sizeof( T ) * N );
+		return doWrite( reinterpret_cast< uint8_t const * >( toWrite ), sizeof( T ) * N );
 	}
 
 	template< typename T >
-	uint64_t BinaryFile::readArray( T * p_toRead, uint64_t p_count )
+	uint64_t BinaryFile::readArray( T * toRead, uint64_t count )
 	{
-		return doRead( reinterpret_cast< uint8_t * >( p_toRead ), sizeof( T ) * p_count );
+		return doRead( reinterpret_cast< uint8_t * >( toRead ), sizeof( T ) * count );
 	}
 
 	template< typename T, uint64_t N >
-	uint64_t BinaryFile::readArray( T( & p_toRead )[N] )
+	uint64_t BinaryFile::readArray( T( & toRead )[N] )
 	{
-		return doRead( reinterpret_cast< uint8_t * >( p_toRead ), sizeof( T ) * N );
+		return doRead( reinterpret_cast< uint8_t * >( toRead ), sizeof( T ) * N );
 	}
 }
 
 template< typename T >
-castor::BinaryFile & castor::operator<<( castor::BinaryFile & p_file, T const & p_toWrite )
+castor::BinaryFile & castor::operator<<( castor::BinaryFile & file, T const & toWrite )
 {
-	p_file.write( p_toWrite );
-	return p_file;
+	file.write( toWrite );
+	return file;
 }
 
 template< typename T >
-castor::BinaryFile & castor::operator>>( castor::BinaryFile & p_file, T & p_toRead )
+castor::BinaryFile & castor::operator>>( castor::BinaryFile & file, T & toRead )
 {
-	p_file.read( p_toRead );
-	return p_file;
+	file.read( toRead );
+	return file;
 }

@@ -10,23 +10,23 @@
 namespace GuiCommon
 {
 #if wxMAJOR_VERSION >= 3 || ( wxMAJOR_VERSION == 2 && wxMINOR_VERSION >= 9 )
-	StcTextEditor::TextAutoCompleter::TextAutoCompleter( wxArrayString const & p_keywords )
+	StcTextEditor::TextAutoCompleter::TextAutoCompleter( wxArrayString const & keywords )
 	{
-		for ( wxArrayString::const_iterator it = p_keywords.begin(); it != p_keywords.end(); ++it )
+		for ( wxArrayString::const_iterator it = keywords.begin(); it != keywords.end(); ++it )
 		{
 			m_keywords.insert( *it );
 		}
 	}
 
-	bool StcTextEditor::TextAutoCompleter::Start( wxString const & p_prefix )
+	bool StcTextEditor::TextAutoCompleter::Start( wxString const & prefix )
 	{
-		m_prefix = p_prefix;
+		m_prefix = prefix;
 
 		if ( m_prefix.size() >= 3 )
 		{
-			m_current = std::find_if( m_keywords.begin(), m_keywords.end(), [&]( wxString const & p_keyword )
+			m_current = std::find_if( m_keywords.begin(), m_keywords.end(), [&]( wxString const & keyword )
 				{
-					return p_keyword.find( m_prefix ) == 0;
+					return keyword.find( m_prefix ) == 0;
 				} );
 		}
 		else

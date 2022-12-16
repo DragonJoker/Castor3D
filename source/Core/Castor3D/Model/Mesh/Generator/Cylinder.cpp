@@ -21,32 +21,32 @@ namespace castor3d
 		return std::make_shared< Cylinder >();
 	}
 
-	void Cylinder::doGenerate( Mesh & p_mesh, Parameters const & p_parameters )
+	void Cylinder::doGenerate( Mesh & mesh, Parameters const & parameters )
 	{
 		castor::String param;
 
-		if ( p_parameters.get( cuT( "faces" ), param ) )
+		if ( parameters.get( cuT( "faces" ), param ) )
 		{
 			m_nbFaces = castor::string::toUInt( param );
 		}
 
-		if ( p_parameters.get( cuT( "radius" ), param ) )
+		if ( parameters.get( cuT( "radius" ), param ) )
 		{
 			m_radius = castor::string::toFloat( param );
 		}
 
-		if ( p_parameters.get( cuT( "height" ), param ) )
+		if ( parameters.get( cuT( "height" ), param ) )
 		{
 			m_height = castor::string::toFloat( param );
 		}
 
 		if ( m_nbFaces >= 2 )
 		{
-			Submesh & submeshBase = *p_mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
+			Submesh & submeshBase = *mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
 			auto indexMappingBase = submeshBase.createComponent< TriFaceMapping >();
-			Submesh & submeshTop = *p_mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
+			Submesh & submeshTop = *mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
 			auto indexMappingTop = submeshTop.createComponent< TriFaceMapping >();
-			Submesh & submeshSide = *p_mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
+			Submesh & submeshSide = *mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
 			auto indexMappingSide = submeshSide.createComponent< TriFaceMapping >();
 
 			//CALCUL DE LA POSITION DES POINTS

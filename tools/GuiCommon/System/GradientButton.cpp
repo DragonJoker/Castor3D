@@ -10,8 +10,8 @@ namespace GuiCommon
 		doInitialise();
 	}
 
-	GradientButton::GradientButton( wxWindow * p_parent, wxWindowID p_id, wxString const & p_label, wxPoint const & p_pos, wxSize const & p_size, long p_style, wxValidator const & p_validator, wxString const & p_name )
-		: wxButton( p_parent, p_id, p_label, p_pos, p_size, p_style, p_validator, p_name )
+	GradientButton::GradientButton( wxWindow * parent, wxWindowID id, wxString const & label, wxPoint const & pos, wxSize const & size, long style, wxValidator const & validator, wxString const & name )
+		: wxButton( parent, id, label, pos, size, style, validator, name )
 	{
 		doInitialise();
 	}
@@ -36,7 +36,7 @@ namespace GuiCommon
 	END_EVENT_TABLE()
 #pragma GCC diagnostic pop
 
-	void GradientButton::OnPaint( wxPaintEvent & p_event )
+	void GradientButton::OnPaint( wxPaintEvent & event )
 	{
 		wxBufferedPaintDC dc( this );
 

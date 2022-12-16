@@ -81,10 +81,10 @@ namespace
 
 extern "C"
 {
-	C3D_OceanRendering_API void getRequiredVersion( castor3d::Version * p_version );
-	C3D_OceanRendering_API void getType( castor3d::PluginType * p_type );
-	C3D_OceanRendering_API void getName( char const ** p_name );
-	C3D_OceanRendering_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * p_plugin );
+	C3D_OceanRendering_API void getRequiredVersion( castor3d::Version * version );
+	C3D_OceanRendering_API void getType( castor3d::PluginType * type );
+	C3D_OceanRendering_API void getName( char const ** name );
+	C3D_OceanRendering_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * plugin );
 	C3D_OceanRendering_API void OnUnload( castor3d::Engine * engine );
 
 	C3D_OceanRendering_API void getRequiredVersion( castor3d::Version * version )

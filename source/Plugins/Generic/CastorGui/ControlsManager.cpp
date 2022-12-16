@@ -51,41 +51,41 @@ namespace CastorGui
 		return it->second.get();
 	}
 
-	void ControlsManager::create( ControlSPtr p_control )
+	void ControlsManager::create( ControlSPtr control )
 	{
-		addControl( p_control );
-		p_control->create( shared_from_this() );
+		addControl( control );
+		control->create( shared_from_this() );
 	}
 
-	void ControlsManager::destroy( ControlSPtr p_control )
+	void ControlsManager::destroy( ControlSPtr control )
 	{
-		p_control->destroy();
-		removeControl( p_control->getId() );
+		control->destroy();
+		removeControl( control->getId() );
 	}
 
-	void ControlsManager::addControl( ControlSPtr p_control )
+	void ControlsManager::addControl( ControlSPtr control )
 	{
-		doAddHandler( p_control );
+		doAddHandler( control );
 		ctrlmgr::LockType lock{ castor::makeUniqueLock( m_mutexControlsById ) };
 
-		if ( m_controlsById.find( p_control->getId() ) != m_controlsById.end() )
+		if ( m_controlsById.find( control->getId() ) != m_controlsById.end() )
 		{
 			CU_Exception( "A control with this ID already exists in the manager" );
 		}
 
-		m_controlsById.insert( std::make_pair( p_control->getId(), p_control ) );
+		m_controlsById.insert( std::make_pair( control->getId(), control ) );
 		m_changed = true;
 	}
 
-	void ControlsManager::removeControl( uint32_t p_id )
+	void ControlsManager::removeControl( uint32_t id )
 	{
-		doRemoveControl( p_id );
+		doRemoveControl( id );
 	}
 
-	ControlSPtr ControlsManager::getControl( uint32_t p_id )
+	ControlSPtr ControlsManager::getControl( uint32_t id )
 	{
 		auto controls = doGetControlsById();
-		auto it = controls.find( p_id );
+		auto it = controls.find( id );
 
 		if ( it == controls.end() )
 		{
@@ -95,59 +95,59 @@ namespace CastorGui
 		return it->second.lock();
 	}
 
-	void ControlsManager::connectEvents( ButtonCtrl & p_control )
+	void ControlsManager::connectEvents( ButtonCtrl & control )
 	{
-		m_onButtonClicks.emplace( &p_control, p_control.connect( ButtonEvent::eClicked
-			, [this, &p_control]()
+		m_onButtonClicks.emplace( &control, control.connect( ButtonEvent::eClicked
+			, [this, &control]()
 			{
-				onClickAction( p_control.getName() );
+				onClickAction( control.getName() );
 			} ) );
 	}
 
-	void ControlsManager::connectEvents( ComboBoxCtrl & p_control )
+	void ControlsManager::connectEvents( ComboBoxCtrl & control )
 	{
-		m_onComboSelects.emplace( &p_control, p_control.connect( ComboBoxEvent::eSelected
-			, [this, &p_control]( int p_index )
+		m_onComboSelects.emplace( &control, control.connect( ComboBoxEvent::eSelected
+			, [this, &control]( int index )
 			{
-				onSelectAction( p_control.getName(), p_index );
+				onSelectAction( control.getName(), index );
 			} ) );
 	}
 
-	void ControlsManager::connectEvents( EditCtrl & p_control )
+	void ControlsManager::connectEvents( EditCtrl & control )
 	{
-		m_onEditUpdates.emplace( &p_control, p_control.connect( EditEvent::eUpdated
-			, [this, &p_control]( castor::String const & p_text )
+		m_onEditUpdates.emplace( &control, control.connect( EditEvent::eUpdated
+			, [this, &control]( castor::String const & text )
 			{
-				onTextAction( p_control.getName(), p_text );
+				onTextAction( control.getName(), text );
 			} ) );
 	}
 
-	void ControlsManager::connectEvents( ListBoxCtrl & p_control )
+	void ControlsManager::connectEvents( ListBoxCtrl & control )
 	{
-		m_onListSelects.emplace( &p_control, p_control.connect( ListBoxEvent::eSelected
-			, [this, &p_control]( int p_index )
+		m_onListSelects.emplace( &control, control.connect( ListBoxEvent::eSelected
+			, [this, &control]( int index )
 			{
-				onSelectAction( p_control.getName(), p_index );
+				onSelectAction( control.getName(), index );
 			} ) );
 	}
 
-	void ControlsManager::connectEvents( SliderCtrl & p_control )
+	void ControlsManager::connectEvents( SliderCtrl & control )
 	{
-		m_onSliderTracks.emplace( &p_control, p_control.connect( SliderEvent::eThumbTrack
-			, [this, &p_control]( int p_index )
+		m_onSliderTracks.emplace( &control, control.connect( SliderEvent::eThumbTrack
+			, [this, &control]( int index )
 			{
-				onSelectAction( p_control.getName(), p_index );
+				onSelectAction( control.getName(), index );
 			} ) );
-		m_onSliderReleases.emplace( &p_control, p_control.connect( SliderEvent::eThumbTrack
-			, [this, &p_control]( int p_index )
+		m_onSliderReleases.emplace( &control, control.connect( SliderEvent::eThumbTrack
+			, [this, &control]( int index )
 			{
-				onSelectAction( p_control.getName(), p_index );
+				onSelectAction( control.getName(), index );
 			} ) );
 	}
 
-	void ControlsManager::disconnectEvents( ButtonCtrl & p_control )
+	void ControlsManager::disconnectEvents( ButtonCtrl & control )
 	{
-		auto it = m_onButtonClicks.find( &p_control );
+		auto it = m_onButtonClicks.find( &control );
 
 		if ( it != m_onButtonClicks.end() )
 		{
@@ -155,9 +155,9 @@ namespace CastorGui
 		}
 	}
 
-	void ControlsManager::disconnectEvents( ComboBoxCtrl & p_control )
+	void ControlsManager::disconnectEvents( ComboBoxCtrl & control )
 	{
-		auto it = m_onComboSelects.find( &p_control );
+		auto it = m_onComboSelects.find( &control );
 
 		if ( it != m_onComboSelects.end() )
 		{
@@ -165,9 +165,9 @@ namespace CastorGui
 		}
 	}
 
-	void ControlsManager::disconnectEvents( EditCtrl & p_control )
+	void ControlsManager::disconnectEvents( EditCtrl & control )
 	{
-		auto it = m_onEditUpdates.find( &p_control );
+		auto it = m_onEditUpdates.find( &control );
 
 		if ( it != m_onEditUpdates.end() )
 		{
@@ -175,9 +175,9 @@ namespace CastorGui
 		}
 	}
 
-	void ControlsManager::disconnectEvents( ListBoxCtrl & p_control )
+	void ControlsManager::disconnectEvents( ListBoxCtrl & control )
 	{
-		auto it = m_onListSelects.find( &p_control );
+		auto it = m_onListSelects.find( &control );
 
 		if ( it != m_onListSelects.end() )
 		{
@@ -185,16 +185,16 @@ namespace CastorGui
 		}
 	}
 
-	void ControlsManager::disconnectEvents( SliderCtrl & p_control )
+	void ControlsManager::disconnectEvents( SliderCtrl & control )
 	{
-		auto it = m_onSliderTracks.find( &p_control );
+		auto it = m_onSliderTracks.find( &control );
 
 		if ( it != m_onSliderTracks.end() )
 		{
 			m_onSliderTracks.erase( it );
 		}
 
-		it = m_onSliderReleases.find( &p_control );
+		it = m_onSliderReleases.find( &control );
 
 		if ( it != m_onSliderReleases.end() )
 		{
@@ -217,7 +217,7 @@ namespace CastorGui
 		}
 	}
 
-	castor3d::EventHandler * ControlsManager::doGetMouseTargetableHandler( castor::Position const & p_position )const
+	castor3d::EventHandler * ControlsManager::doGetMouseTargetableHandler( castor::Position const & position )const
 	{
 		if ( m_changed )
 		{
@@ -234,10 +234,10 @@ namespace CastorGui
 
 			if ( control
 				&& control->catchesMouseEvents()
-				&& control->getAbsolutePosition().x() <= p_position.x()
-				&& control->getAbsolutePosition().x() + int32_t( control->getSize().getWidth() ) > p_position.x()
-				&& control->getAbsolutePosition().y() <= p_position.y()
-				&& control->getAbsolutePosition().y() + int32_t( control->getSize().getHeight() ) > p_position.y() )
+				&& control->getAbsolutePosition().x() <= position.x()
+				&& control->getAbsolutePosition().x() + int32_t( control->getSize().getWidth() ) > position.x()
+				&& control->getAbsolutePosition().y() <= position.y()
+				&& control->getAbsolutePosition().y() + int32_t( control->getSize().getHeight() ) > position.y() )
 			{
 				result = control;
 			}
@@ -293,12 +293,12 @@ namespace CastorGui
 		cleanup();
 	}
 
-	void ControlsManager::doRemoveControl( uint32_t p_id )
+	void ControlsManager::doRemoveControl( uint32_t id )
 	{
 		castor3d::EventHandler * handler;
 		{
 			ctrlmgr::LockType lock{ castor::makeUniqueLock( m_mutexControlsById ) };
-			auto it = m_controlsById.find( p_id );
+			auto it = m_controlsById.find( id );
 
 			if ( it == m_controlsById.end() )
 			{

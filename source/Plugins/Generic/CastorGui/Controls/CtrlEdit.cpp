@@ -285,11 +285,11 @@ namespace CastorGui
 	{
 	}
 
-	void EditCtrl::doAddCharAtCaret( castor::String const & p_char )
+	void EditCtrl::doAddCharAtCaret( castor::String const & c )
 	{
 		auto diff = size_t( std::distance( castor::string::utf8::const_iterator( m_caption.begin() ), m_caretIt ) );
 		m_caption = castor::String( m_caption.cbegin()
-			, m_caretIt.internal() ) + p_char + castor::String( m_caretIt.internal(), m_caption.cend() );
+			, m_caretIt.internal() ) + c + castor::String( m_caretIt.internal(), m_caption.cend() );
 		m_caretIt = castor::string::utf8::const_iterator( m_caption.begin() ) + diff + 1;
 		doUpdateCaption();
 	}

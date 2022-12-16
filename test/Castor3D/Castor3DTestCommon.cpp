@@ -83,14 +83,14 @@ namespace Testing
 	{
 	}
 
-	void C3DTestCase::doRegisterTest( std::string const & p_name
-		, TestFunction p_test )
+	void C3DTestCase::doRegisterTest( std::string const & name
+		, TestFunction test )
 	{
-		TestCase::doRegisterTest( p_name
-			, [this, p_test]()
+		TestCase::doRegisterTest( name
+			, [this, test]()
 			{
 				m_engine.initialise( 1, false );
-				p_test();
+				test();
 				m_engine.cleanup();
 			} );
 	}
@@ -898,11 +898,11 @@ namespace Testing
 		return CT_EQUAL( lhs.getObjectsCount(), rhs.getObjectsCount() );
 	}
 
-	bool C3DTestCase::compare( castor3d::SkeletonAnimationInstanceObject const & p_a, castor3d::SkeletonAnimationInstanceObject const & p_b )
+	bool C3DTestCase::compare( castor3d::SkeletonAnimationInstanceObject const & lhs, castor3d::SkeletonAnimationInstanceObject const & rhs )
 	{
-		bool result{ CT_EQUAL( p_a.getFinalTransform(), p_b.getFinalTransform() ) };
-		auto & childrenA = p_a.getChildren();
-		auto & childrenB = p_b.getChildren();
+		bool result{ CT_EQUAL( lhs.getFinalTransform(), rhs.getFinalTransform() ) };
+		auto & childrenA = lhs.getChildren();
+		auto & childrenB = rhs.getChildren();
 		result = result && ( childrenA.size() == childrenB.size() );
 		auto itA = childrenA.begin();
 		auto itB = childrenB.begin();
@@ -917,26 +917,26 @@ namespace Testing
 		return result;
 	}
 
-	bool C3DTestCase::compare( castor3d::SkeletonAnimationInstanceKeyFrame const & p_a, castor3d::SkeletonAnimationInstanceKeyFrame const & p_b )
+	bool C3DTestCase::compare( castor3d::SkeletonAnimationInstanceKeyFrame const & lhs, castor3d::SkeletonAnimationInstanceKeyFrame const & rhs )
 	{
-		bool result{ CT_EQUAL( p_a.getTimeIndex(), p_b.getTimeIndex() ) };
+		bool result{ CT_EQUAL( lhs.getTimeIndex(), rhs.getTimeIndex() ) };
 		return result;
 	}
 
-	bool C3DTestCase::compare( castor3d::VertexBoneData const & p_a, castor3d::VertexBoneData const & p_b )
+	bool C3DTestCase::compare( castor3d::VertexBoneData const & lhs, castor3d::VertexBoneData const & rhs )
 	{
-		bool result{ CT_EQUAL( p_a.m_ids, p_b.m_ids ) };
-		result = result && CT_EQUAL( p_a.m_weights, p_b.m_weights );
+		bool result{ CT_EQUAL( lhs.m_ids, rhs.m_ids ) };
+		result = result && CT_EQUAL( lhs.m_weights, rhs.m_weights );
 		return result;
 	}
 
-	bool C3DTestCase::compare( castor3d::VertexBoneData::Ids const & p_a, castor3d::VertexBoneData::Ids const & p_b )
+	bool C3DTestCase::compare( castor3d::VertexBoneData::Ids const & lhs, castor3d::VertexBoneData::Ids const & rhs )
 	{
 		bool result = true;
-		auto itA = p_a.begin();
-		auto itB = p_b.begin();
+		auto itA = lhs.begin();
+		auto itB = rhs.begin();
 
-		while ( result && itA != p_a.end() )
+		while ( result && itA != lhs.end() )
 		{
 			result = CT_EQUAL( *itA, *itB );
 			++itA;
@@ -946,13 +946,13 @@ namespace Testing
 		return result;
 	}
 
-	bool C3DTestCase::compare( castor3d::VertexBoneData::Weights const & p_a, castor3d::VertexBoneData::Weights const & p_b )
+	bool C3DTestCase::compare( castor3d::VertexBoneData::Weights const & lhs, castor3d::VertexBoneData::Weights const & rhs )
 	{
 		bool result = true;
-		auto itA = p_a.begin();
-		auto itB = p_b.begin();
+		auto itA = lhs.begin();
+		auto itB = rhs.begin();
 
-		while ( result && itA != p_a.end() )
+		while ( result && itA != lhs.end() )
 		{
 			result = CT_EQUAL( *itA, *itB );
 			++itA;
@@ -962,12 +962,12 @@ namespace Testing
 		return result;
 	}
 
-	bool C3DTestCase::compare( castor3d::InterleavedVertex const & p_a, castor3d::InterleavedVertex const & p_b )
+	bool C3DTestCase::compare( castor3d::InterleavedVertex const & lhs, castor3d::InterleavedVertex const & rhs )
 	{
-		bool result = CT_EQUAL( p_a.pos, p_b.pos );
-		result = result && CT_EQUAL( p_a.nml, p_b.nml );
-		result = result && CT_EQUAL( p_a.tan, p_b.tan );
-		result = result && CT_EQUAL( p_a.tex, p_b.tex );
+		bool result = CT_EQUAL( lhs.pos, rhs.pos );
+		result = result && CT_EQUAL( lhs.nml, rhs.nml );
+		result = result && CT_EQUAL( lhs.tan, rhs.tan );
+		result = result && CT_EQUAL( lhs.tex, rhs.tex );
 		return result;
 	}
 

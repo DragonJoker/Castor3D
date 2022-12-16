@@ -11,11 +11,11 @@
 
 namespace GuiCommon
 {
-	NodeTreeItemProperty::NodeTreeItemProperty( bool p_editable
+	NodeTreeItemProperty::NodeTreeItemProperty( bool editable
 		, castor3d::Engine * engine
-		, castor3d::SceneNode & p_node )
-		: TreeItemProperty( p_node.getScene()->getEngine(), p_editable )
-		, m_node( p_node )
+		, castor3d::SceneNode & node )
+		: TreeItemProperty( node.getScene()->getEngine(), editable )
+		, m_node( node )
 	{
 		CreateTreeItemMenu();
 	}

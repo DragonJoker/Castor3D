@@ -864,98 +864,98 @@ namespace Testing
 
 	protected:
 		using TestCase::compare;
-		bool compare( castor::Angle const & p_a, castor::Angle const & p_b );
-		bool compare( castor::Quaternion const & p_a, castor::Quaternion const & p_b );
-		bool compare( castor3d::Scene const & p_a, castor3d::Scene const & p_b );
-		bool compare( castor3d::SceneNode const & p_a, castor3d::SceneNode const & p_b );
-		bool compare( castor3d::Animable const & p_a, castor3d::Animable const & p_b );
-		bool compare( castor3d::MovableObject const & p_a, castor3d::MovableObject const & p_b );
-		bool compare( castor3d::Camera const & p_a, castor3d::Camera const & p_b );
-		bool compare( castor3d::Light const & p_a, castor3d::Light const & p_b );
-		bool compare( castor3d::Geometry const & p_a, castor3d::Geometry const & p_b );
-		bool compare( castor3d::LightCategory const & p_a, castor3d::LightCategory const & p_b );
-		bool compare( castor3d::DirectionalLight const & p_a, castor3d::DirectionalLight const & p_b );
-		bool compare( castor3d::PointLight const & p_a, castor3d::PointLight const & p_b );
-		bool compare( castor3d::SpotLight const & p_a, castor3d::SpotLight const & p_b );
-		bool compare( castor3d::Viewport const & p_a, castor3d::Viewport const & p_b );
-		bool compare( castor3d::Mesh const & p_a, castor3d::Mesh const & p_b );
-		bool compare( castor3d::Submesh const & p_a, castor3d::Submesh const & p_b );
-		bool compare( castor3d::SubmeshComponent const & p_a, castor3d::SubmeshComponent const & p_b );
-		bool compare( castor3d::SkinComponent const & p_a, castor3d::SkinComponent const & p_b );
-		bool compare( castor3d::PositionsComponent const & p_a, castor3d::PositionsComponent const & p_b );
-		bool compare( castor3d::NormalsComponent const & p_a, castor3d::NormalsComponent const & p_b );
-		bool compare( castor3d::TangentsComponent const & p_a, castor3d::TangentsComponent const & p_b );
-		bool compare( castor3d::Texcoords0Component const & p_a, castor3d::Texcoords0Component const & p_b );
-		bool compare( castor3d::Texcoords1Component const & p_a, castor3d::Texcoords1Component const & p_b );
-		bool compare( castor3d::Texcoords2Component const & p_a, castor3d::Texcoords2Component const & p_b );
-		bool compare( castor3d::Texcoords3Component const & p_a, castor3d::Texcoords3Component const & p_b );
-		bool compare( castor3d::ColoursComponent const & p_a, castor3d::ColoursComponent const & p_b );
-		bool compare( castor3d::Face const & p_a, castor3d::Face const & p_b );
-		bool compare( castor3d::TriFaceMapping const & p_a, castor3d::TriFaceMapping const & p_b );
-		bool compare( castor3d::Line const & p_a, castor3d::Line const & p_b );
-		bool compare( castor3d::LinesMapping const & p_a, castor3d::LinesMapping const & p_b );
-		bool compare( castor3d::Skeleton const & p_a, castor3d::Skeleton const & p_b );
-		bool compare( castor3d::SkeletonNode const & p_a, castor3d::SkeletonNode const & p_b );
-		bool compare( castor3d::BoneNode const & p_a, castor3d::BoneNode const & p_b );
-		bool compare( castor3d::Animation const & p_a, castor3d::Animation const & p_b );
-		bool compare( castor3d::SkeletonAnimation const & p_a, castor3d::SkeletonAnimation const & p_b );
-		bool compare( castor3d::SkeletonAnimationObject const & p_a, castor3d::SkeletonAnimationObject const & p_b );
-		bool compare( castor3d::AnimationKeyFrame const & p_a, castor3d::AnimationKeyFrame const & p_b );
-		bool compare( castor3d::MeshMorphTarget const & p_a, castor3d::MeshMorphTarget const & p_b );
-		bool compare( castor3d::SkeletonAnimationKeyFrame const & p_a, castor3d::SkeletonAnimationKeyFrame const & p_b );
-		bool compare( castor3d::AnimatedObjectGroup const & p_a, castor3d::AnimatedObjectGroup const & p_b );
-		bool compare( castor3d::AnimatedObject const & p_a, castor3d::AnimatedObject const & p_b );
-		bool compare( castor3d::AnimationInstance const & p_a, castor3d::AnimationInstance const & p_b );
-		bool compare( castor3d::SkeletonAnimationInstance const & p_a, castor3d::SkeletonAnimationInstance const & p_b );
-		bool compare( castor3d::SkeletonAnimationInstanceObject const & p_a, castor3d::SkeletonAnimationInstanceObject const & p_b );
-		bool compare( castor3d::SkeletonAnimationInstanceKeyFrame const & p_a, castor3d::SkeletonAnimationInstanceKeyFrame const & p_b );
-		bool compare( castor3d::VertexBoneData const & p_a, castor3d::VertexBoneData const & p_b );
-		bool compare( castor3d::VertexBoneData::Ids const & p_a, castor3d::VertexBoneData::Ids const & p_b );
-		bool compare( castor3d::VertexBoneData::Weights const & p_a, castor3d::VertexBoneData::Weights const & p_b );
-		bool compare( castor3d::InterleavedVertex const & p_a, castor3d::InterleavedVertex const & p_b );
+		bool compare( castor::Angle const & lhs, castor::Angle const & rhs );
+		bool compare( castor::Quaternion const & lhs, castor::Quaternion const & rhs );
+		bool compare( castor3d::Scene const & lhs, castor3d::Scene const & rhs );
+		bool compare( castor3d::SceneNode const & lhs, castor3d::SceneNode const & rhs );
+		bool compare( castor3d::Animable const & lhs, castor3d::Animable const & rhs );
+		bool compare( castor3d::MovableObject const & lhs, castor3d::MovableObject const & rhs );
+		bool compare( castor3d::Camera const & lhs, castor3d::Camera const & rhs );
+		bool compare( castor3d::Light const & lhs, castor3d::Light const & rhs );
+		bool compare( castor3d::Geometry const & lhs, castor3d::Geometry const & rhs );
+		bool compare( castor3d::LightCategory const & lhs, castor3d::LightCategory const & rhs );
+		bool compare( castor3d::DirectionalLight const & lhs, castor3d::DirectionalLight const & rhs );
+		bool compare( castor3d::PointLight const & lhs, castor3d::PointLight const & rhs );
+		bool compare( castor3d::SpotLight const & lhs, castor3d::SpotLight const & rhs );
+		bool compare( castor3d::Viewport const & lhs, castor3d::Viewport const & rhs );
+		bool compare( castor3d::Mesh const & lhs, castor3d::Mesh const & rhs );
+		bool compare( castor3d::Submesh const & lhs, castor3d::Submesh const & rhs );
+		bool compare( castor3d::SubmeshComponent const & lhs, castor3d::SubmeshComponent const & rhs );
+		bool compare( castor3d::SkinComponent const & lhs, castor3d::SkinComponent const & rhs );
+		bool compare( castor3d::PositionsComponent const & lhs, castor3d::PositionsComponent const & rhs );
+		bool compare( castor3d::NormalsComponent const & lhs, castor3d::NormalsComponent const & rhs );
+		bool compare( castor3d::TangentsComponent const & lhs, castor3d::TangentsComponent const & rhs );
+		bool compare( castor3d::Texcoords0Component const & lhs, castor3d::Texcoords0Component const & rhs );
+		bool compare( castor3d::Texcoords1Component const & lhs, castor3d::Texcoords1Component const & rhs );
+		bool compare( castor3d::Texcoords2Component const & lhs, castor3d::Texcoords2Component const & rhs );
+		bool compare( castor3d::Texcoords3Component const & lhs, castor3d::Texcoords3Component const & rhs );
+		bool compare( castor3d::ColoursComponent const & lhs, castor3d::ColoursComponent const & rhs );
+		bool compare( castor3d::Face const & lhs, castor3d::Face const & rhs );
+		bool compare( castor3d::TriFaceMapping const & lhs, castor3d::TriFaceMapping const & rhs );
+		bool compare( castor3d::Line const & lhs, castor3d::Line const & rhs );
+		bool compare( castor3d::LinesMapping const & lhs, castor3d::LinesMapping const & rhs );
+		bool compare( castor3d::Skeleton const & lhs, castor3d::Skeleton const & rhs );
+		bool compare( castor3d::SkeletonNode const & lhs, castor3d::SkeletonNode const & rhs );
+		bool compare( castor3d::BoneNode const & lhs, castor3d::BoneNode const & rhs );
+		bool compare( castor3d::Animation const & lhs, castor3d::Animation const & rhs );
+		bool compare( castor3d::SkeletonAnimation const & lhs, castor3d::SkeletonAnimation const & rhs );
+		bool compare( castor3d::SkeletonAnimationObject const & lhs, castor3d::SkeletonAnimationObject const & rhs );
+		bool compare( castor3d::AnimationKeyFrame const & lhs, castor3d::AnimationKeyFrame const & rhs );
+		bool compare( castor3d::MeshMorphTarget const & lhs, castor3d::MeshMorphTarget const & rhs );
+		bool compare( castor3d::SkeletonAnimationKeyFrame const & lhs, castor3d::SkeletonAnimationKeyFrame const & rhs );
+		bool compare( castor3d::AnimatedObjectGroup const & lhs, castor3d::AnimatedObjectGroup const & rhs );
+		bool compare( castor3d::AnimatedObject const & lhs, castor3d::AnimatedObject const & rhs );
+		bool compare( castor3d::AnimationInstance const & lhs, castor3d::AnimationInstance const & rhs );
+		bool compare( castor3d::SkeletonAnimationInstance const & lhs, castor3d::SkeletonAnimationInstance const & rhs );
+		bool compare( castor3d::SkeletonAnimationInstanceObject const & lhs, castor3d::SkeletonAnimationInstanceObject const & rhs );
+		bool compare( castor3d::SkeletonAnimationInstanceKeyFrame const & lhs, castor3d::SkeletonAnimationInstanceKeyFrame const & rhs );
+		bool compare( castor3d::VertexBoneData const & lhs, castor3d::VertexBoneData const & rhs );
+		bool compare( castor3d::VertexBoneData::Ids const & lhs, castor3d::VertexBoneData::Ids const & rhs );
+		bool compare( castor3d::VertexBoneData::Weights const & lhs, castor3d::VertexBoneData::Weights const & rhs );
+		bool compare( castor3d::InterleavedVertex const & lhs, castor3d::InterleavedVertex const & rhs );
 
 		template< typename Value >
-		inline bool compare( castor::ArrayView< Value > const & p_a, castor::ArrayView< Value > const & p_b )
+		inline bool compare( castor::ArrayView< Value > const & lhs, castor::ArrayView< Value > const & rhs )
 		{
-			bool result{ p_a.size() == p_b.size() };
+			bool result{ lhs.size() == rhs.size() };
 
-			for ( size_t i = 0u; result && i < p_a.size(); ++i )
+			for ( size_t i = 0u; result && i < lhs.size(); ++i )
 			{
-				result = this->compare( p_a[i], p_b[i] );
+				result = this->compare( lhs[i], rhs[i] );
 			}
 
 			return result;
 		}
 
 		template< typename Value >
-		inline bool compare( std::vector< Value > const & p_a, std::vector< Value > const & p_b )
+		inline bool compare( std::vector< Value > const & lhs, std::vector< Value > const & rhs )
 		{
-			auto result = ( p_a.size() == p_b.size() );
+			auto result = ( lhs.size() == rhs.size() );
 
-			for ( size_t i = 0u; result && i < p_a.size(); ++i )
+			for ( size_t i = 0u; result && i < lhs.size(); ++i )
 			{
-				result = this->compare( p_a[i], p_b[i] );
+				result = this->compare( lhs[i], rhs[i] );
 			}
 
 			return result;
 		}
 
 		template< typename Value, size_t N, size_t M >
-		inline bool compare( std::array< Value, N > const & p_a, std::array< Value, M > const & p_b )
+		inline bool compare( std::array< Value, N > const & lhs, std::array< Value, M > const & rhs )
 		{
-			auto result = ( p_a.size() == p_b.size() );
+			auto result = ( lhs.size() == rhs.size() );
 
-			for ( size_t i = 0u; result && i < p_a.size(); ++i )
+			for ( size_t i = 0u; result && i < lhs.size(); ++i )
 			{
-				result = this->compare( p_a[i], p_b[i] );
+				result = this->compare( lhs[i], rhs[i] );
 			}
 
 			return result;
 		}
 
 	protected:
-		void doRegisterTest( std::string const & p_name
-			, TestFunction p_test )override;
+		void doRegisterTest( std::string const & name
+			, TestFunction test )override;
 
 	protected:
 		castor3d::Engine & m_engine;

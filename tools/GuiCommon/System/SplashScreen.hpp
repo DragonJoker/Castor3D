@@ -23,19 +23,19 @@ namespace GuiCommon
 			, castor3d::Version const & appVersion
 			, castor3d::Version const & engineVersion );
 
-		void Step( wxString const & p_strText, int p_iIncrement );
-		void Step( int p_iIncrement );
-		void SubStatus( wxString const & p_strText );
+		void Step( wxString const & strText, int iIncrement );
+		void Step( int iIncrement );
+		void SubStatus( wxString const & strText );
 
 	protected:
-		void doDraw( wxDC * p_pDC );
+		void doDraw( wxDC * pDC );
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wmissing-override"
 		DECLARE_EVENT_TABLE()
 #pragma clang diagnostic pop
-		void OnPaint( wxPaintEvent & p_event );
-		void OnEraseBackground( wxEraseEvent & p_event );
+		void OnPaint( wxPaintEvent & event );
+		void OnEraseBackground( wxEraseEvent & event );
 
 	private:
 		wxBitmap m_bmpSplash;

@@ -209,26 +209,26 @@ namespace GuiCommon
 		: public wxPGEditor
 	{
 	protected:
-		wxPGWindowList CreateControls( wxPropertyGrid * p_propgrid, wxPGProperty * p_property, wxPoint const & p_pos, wxSize const & p_size )const override;
+		wxPGWindowList CreateControls( wxPropertyGrid * propgrid, wxPGProperty * property, wxPoint const & pos, wxSize const & size )const override;
 		void UpdateControl( wxPGProperty * property, wxWindow * ctrl )const override;
-		bool OnEvent( wxPropertyGrid * p_propgrid, wxPGProperty * p_property, wxWindow * p_wnd_primary, wxEvent & p_event )const override;
+		bool OnEvent( wxPropertyGrid * propgrid, wxPGProperty * property, wxWindow * wnd_primary, wxEvent & event )const override;
 	};
 
-	wxFloatProperty * CreateProperty( wxString const & p_name, double const & p_value );
-	wxFloatProperty * CreateProperty( wxString const & p_name, float const & p_value );
-	wxIntProperty * CreateProperty( wxString const & p_name, int const & p_value );
-	wxUIntProperty * CreateProperty( wxString const & p_name, uint32_t const & p_value );
-	wxBoolProperty * CreateProperty( wxString const & p_name, bool const & p_value, bool p_checkbox );
-	wxStringProperty * CreateProperty( wxString const & p_name, wxString const & p_value );
+	wxFloatProperty * CreateProperty( wxString const & name, double const & value );
+	wxFloatProperty * CreateProperty( wxString const & name, float const & value );
+	wxIntProperty * CreateProperty( wxString const & name, int const & value );
+	wxUIntProperty * CreateProperty( wxString const & name, uint32_t const & value );
+	wxBoolProperty * CreateProperty( wxString const & name, bool const & value, bool checkbox );
+	wxStringProperty * CreateProperty( wxString const & name, wxString const & value );
 
 	wxPGProperty * addAttributes( wxPGProperty * prop );
 
 	template< typename PropertyType >
-	PropertyType * CreateProperty( wxString const & p_name, wxVariant && p_value, wxString const & p_help )
+	PropertyType * CreateProperty( wxString const & name, wxVariant && value, wxString const & help )
 	{
-		auto result = new PropertyType( p_name );
-		result->SetValue( p_value );
-		result->SetHelpString( p_help );
+		auto result = new PropertyType( name );
+		result->SetValue( value );
+		result->SetHelpString( help );
 		return result;
 	}
 

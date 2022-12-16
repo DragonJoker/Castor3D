@@ -19,21 +19,21 @@ namespace castor3d
 		return std::make_shared< Cube >();
 	}
 
-	void Cube::doGenerate( Mesh & p_mesh, Parameters const & p_parameters )
+	void Cube::doGenerate( Mesh & mesh, Parameters const & parameters )
 	{
 		castor::String param;
 
-		if ( p_parameters.get( cuT( "width" ), param ) )
+		if ( parameters.get( cuT( "width" ), param ) )
 		{
 			m_width = castor::string::toFloat( param );
 		}
 
-		if ( p_parameters.get( cuT( "height" ), param ) )
+		if ( parameters.get( cuT( "height" ), param ) )
 		{
 			m_height = castor::string::toFloat( param );
 		}
 
-		if ( p_parameters.get( cuT( "depth" ), param ) )
+		if ( parameters.get( cuT( "depth" ), param ) )
 		{
 			m_depth = castor::string::toFloat( param );
 		}
@@ -55,12 +55,12 @@ namespace castor3d
 			CptNegatif++;
 		}
 
-		SubmeshSPtr submesh1 = p_mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
-		SubmeshSPtr submesh2 = p_mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
-		SubmeshSPtr submesh3 = p_mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
-		SubmeshSPtr submesh4 = p_mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
-		SubmeshSPtr submesh5 = p_mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
-		SubmeshSPtr submesh6 = p_mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
+		SubmeshSPtr submesh1 = mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
+		SubmeshSPtr submesh2 = mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
+		SubmeshSPtr submesh3 = mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
+		SubmeshSPtr submesh4 = mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
+		SubmeshSPtr submesh5 = mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
+		SubmeshSPtr submesh6 = mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
 		static castor::Point3f const zero;
 
 		// Face avant

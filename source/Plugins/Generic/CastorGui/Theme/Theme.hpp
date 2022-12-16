@@ -44,7 +44,7 @@ namespace CastorGui
 		/**
 		*\brief
 		*	sets the default font used by controls
-		*\param[in] p_font
+		*\param[in] font
 		*	The font
 		*/
 		void setDefaultFont( castor::FontResPtr font )

@@ -15,10 +15,10 @@
 
 namespace std
 {
-	inline std::ostream & operator<<( std::ostream & p_stream, castor::Nanoseconds const & p_duration )
+	inline std::ostream & operator<<( std::ostream & stream, castor::Nanoseconds const & duration )
 	{
-		p_stream << std::setprecision( 3 ) << ( float( p_duration.count() ) / 1000000.0f ) << cuT( " ms" );
-		return p_stream;
+		stream << std::setprecision( 3 ) << ( float( duration.count() ) / 1000000.0f ) << cuT( " ms" );
+		return stream;
 	}
 }
 

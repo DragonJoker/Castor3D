@@ -18,9 +18,9 @@ namespace GuiCommon
 
 		wxAuiToolBarArt * Clone()override;
 
-		void DrawBackground( wxDC & p_dc, wxWindow * p_window, wxRect const & p_rect )override;
-		void DrawPlainBackground( wxDC & p_dc, wxWindow * p_window, wxRect const & p_rect )override;
-		void DrawSeparator( wxDC & p_dc, wxWindow * p_window, wxRect const & p_rect )override;
+		void DrawBackground( wxDC & dc, wxWindow * window, wxRect const & rect )override;
+		void DrawPlainBackground( wxDC & dc, wxWindow * window, wxRect const & rect )override;
+		void DrawSeparator( wxDC & dc, wxWindow * window, wxRect const & rect )override;
 	};
 }
 

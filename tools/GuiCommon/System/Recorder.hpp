@@ -15,23 +15,23 @@ namespace GuiCommon
 		{
 		public:
 			virtual ~IRecorderImpl() = default;
-			virtual bool StartRecord( castor::Size const & p_size, int p_wantedFPS ) = 0;
+			virtual bool StartRecord( castor::Size const & size, int wantedFPS ) = 0;
 			virtual bool IsRecording() = 0;
 			virtual bool UpdateTime() = 0;
-			virtual bool RecordFrame( castor::PxBufferBaseSPtr p_buffer ) = 0;
+			virtual bool RecordFrame( castor::PxBufferBaseSPtr buffer ) = 0;
 			virtual void StopRecord() = 0;
 		};
 
 	public:
 		Recorder();
 
-		inline bool StartRecord( castor::Size const & p_size, int p_wantedFPS )
+		inline bool StartRecord( castor::Size const & size, int wantedFPS )
 		{
 			bool result = !IsRecording();
 
 			if ( result )
 			{
-				result = m_impl->StartRecord( p_size, p_wantedFPS );
+				result = m_impl->StartRecord( size, wantedFPS );
 			}
 
 			return result;
@@ -47,9 +47,9 @@ namespace GuiCommon
 			return m_impl->UpdateTime();
 		}
 
-		inline bool RecordFrame( castor::PxBufferBaseSPtr p_buffer )
+		inline bool RecordFrame( castor::PxBufferBaseSPtr buffer )
 		{
-			return m_impl->RecordFrame( p_buffer );
+			return m_impl->RecordFrame( buffer );
 		}
 
 		inline void StopRecord()

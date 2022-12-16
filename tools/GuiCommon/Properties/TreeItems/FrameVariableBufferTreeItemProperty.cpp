@@ -14,8 +14,8 @@ namespace GuiCommon
 		CreateTreeItemMenu();
 	}
 
-	void FrameVariableBufferTreeItemProperty::doCreateProperties( wxPGEditor * p_editor
-		, wxPropertyGrid * p_grid )
+	void FrameVariableBufferTreeItemProperty::doCreateProperties( wxPGEditor * editor
+		, wxPropertyGrid * grid )
 	{
 	}
 }

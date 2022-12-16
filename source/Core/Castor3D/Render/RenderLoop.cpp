@@ -144,12 +144,12 @@ namespace castor3d
 			} );
 	}
 
-	void RenderLoop::showDebugOverlays( bool p_show )
+	void RenderLoop::showDebugOverlays( bool show )
 	{
-		m_debugOverlays->show( p_show );
+		m_debugOverlays->show( show );
 	}
 
-	void RenderLoop::enableVSync( bool p_enable )
+	void RenderLoop::enableVSync( bool enable )
 	{
 	}
 

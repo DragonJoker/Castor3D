@@ -174,9 +174,9 @@ namespace
 	template< PixelFormat PFDst, PixelFormat PFSrc >
 	struct PixelConverter
 	{
-		void operator()( Pixel< PFSrc > const & p_source )
+		void operator()( Pixel< PFSrc > const & source )
 		{
-			Pixel< PFDst > dest( p_source );
+			Pixel< PFDst > dest( source );
 			auto stream = castor::makeStringStream();
 			stream.width( 20 );
 			stream << "Converted pixel : " << dest;
@@ -187,15 +187,15 @@ namespace
 	template< PixelFormat PFSrc >
 	struct PixelConverter< PFSrc, PFSrc >
 	{
-		void operator()( Pixel< PFSrc > const & p_source )
+		void operator()( Pixel< PFSrc > const & source )
 		{
 		}
 	};
 
 	template< PixelFormat PFDst, PixelFormat PFSrc >
-	void convertPixel( Pixel< PFSrc > const & p_source )
+	void convertPixel( Pixel< PFSrc > const & source )
 	{
-		PixelConverter< PFDst, PFSrc >()( p_source );
+		PixelConverter< PFDst, PFSrc >()( source );
 	}
 
 	template< PixelFormat PF >
@@ -263,15 +263,15 @@ namespace
 		using PixelBuffer = PxBuffer< PFSrc >;
 		using PixelBufferPtr = std::shared_ptr< PixelBuffer >;
 
-		void operator()( PixelBufferPtr p_source )
+		void operator()( PixelBufferPtr source )
 		{
 		}
 	};
 
 	template< PixelFormat PFDst, PixelFormat PFSrc >
-	void convertBuffer( std::shared_ptr< PxBuffer< PFSrc > > p_source )
+	void convertBuffer( std::shared_ptr< PxBuffer< PFSrc > > source )
 	{
-		BufferConverter< PFDst, PFSrc >()( p_source );
+		BufferConverter< PFDst, PFSrc >()( source );
 	}
 
 	template< PixelFormat PFSrc, typename Enable = void > struct BufferConversionChecker;

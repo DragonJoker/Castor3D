@@ -63,10 +63,10 @@ namespace castor
 		return result;
 	}
 
-	void ThreadPool::pushJob( WorkerThread::Job p_job )
+	void ThreadPool::pushJob( WorkerThread::Job job )
 	{
 		auto & worker = doReserveWorker();
-		worker.feed( p_job );
+		worker.feed( job );
 	}
 
 	WorkerThread & ThreadPool::doReserveWorker()
@@ -84,14 +84,14 @@ namespace castor
 		return worker;
 	}
 
-	void ThreadPool::doFreeWorker( WorkerThread & p_worker )
+	void ThreadPool::doFreeWorker( WorkerThread & worker )
 	{
 		auto lock( makeUniqueLock( m_mutex ) );
 		auto it = std::find_if( m_busy.begin()
 			, m_busy.end()
-			, [&p_worker]( WorkerPtr const & worker )
+			, [&worker]( WorkerPtr const & lookup )
 			{
-				return worker.get() == &p_worker;
+				return lookup.get() == &worker;
 			} );
 		m_available.push_back( std::move( *it ) );
 		m_busy.erase( it );

@@ -24,14 +24,14 @@ namespace GuiCommon
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_editable	Tells if the properties are modifiable
-		 *\param[in]	p_overlay	The target overlay
+		 *\param[in]	editable	Tells if the properties are modifiable
+		 *\param[in]	overlay	The target overlay
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
-		 *\param[in]	p_overlay	L'incrustation cible
+		 *\param[in]	editable	Dit si les propriétés sont modifiables
+		 *\param[in]	overlay	L'incrustation cible
 		 */
-		OverlayTreeItemProperty( bool p_editable, castor3d::OverlayCategorySPtr p_overlay );
+		OverlayTreeItemProperty( bool editable, castor3d::OverlayCategorySPtr overlay );
 		/**
 		 *\~english
 		 *\brief		Retrieves the overlay

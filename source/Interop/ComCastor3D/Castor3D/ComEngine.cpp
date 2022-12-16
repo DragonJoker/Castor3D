@@ -29,23 +29,23 @@ namespace CastorCom
 {
 	namespace
 	{
-		castor3d::RenderWindowDesc doLoadSceneFile( castor3d::Engine & p_engine, castor::Path const & p_fileName )
+		castor3d::RenderWindowDesc doLoadSceneFile( castor3d::Engine & engine, castor::Path const & fileName )
 		{
-			castor3d::RenderWindowDesc l_return;
+			castor3d::RenderWindowDesc result;
 
-			if ( castor::File::fileExists( p_fileName ) )
+			if ( castor::File::fileExists( fileName ) )
 			{
-				castor::Logger::logInfo( cuT( "Loading scene file : " ) + p_fileName );
+				castor::Logger::logInfo( cuT( "Loading scene file : " ) + fileName );
 
-				if ( p_fileName.getExtension() == cuT( "cscn" ) || p_fileName.getExtension() == cuT( "zip" ) )
+				if ( fileName.getExtension() == cuT( "cscn" ) || fileName.getExtension() == cuT( "zip" ) )
 				{
 					try
 					{
-						castor3d::SceneFileParser l_parser( p_engine );
+						castor3d::SceneFileParser parser( engine );
 
-						if ( l_parser.parseFile( p_fileName ) )
+						if ( parser.parseFile( fileName ) )
 						{
-							l_return = l_parser.getRenderWindow();
+							result = parser.getRenderWindow();
 						}
 						else
 						{
@@ -60,10 +60,10 @@ namespace CastorCom
 			}
 			else
 			{
-				castor::Logger::logError( cuT( "Scene file doesn't exist: " ) + p_fileName );
+				castor::Logger::logError( cuT( "Scene file doesn't exist: " ) + fileName );
 			}
 
-			return l_return;
+			return result;
 		}
 	}
 

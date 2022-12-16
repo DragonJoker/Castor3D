@@ -20,53 +20,53 @@ namespace castor
 	{
 	}
 
-	bool operator ==( ColourComponent const & p_cpnA, ColourComponent const & p_cpnB )
+	bool operator ==( ColourComponent const & lhs, ColourComponent const & rhs )
 	{
 		uint8_t uiA;
 		uint8_t uiB;
-		p_cpnA.convertTo( uiA );
-		p_cpnB.convertTo( uiB );
+		lhs.convertTo( uiA );
+		rhs.convertTo( uiB );
 		return uiA == uiB;
 	}
 
-	bool operator !=( ColourComponent const & p_cpnA, ColourComponent const & p_cpnB )
+	bool operator !=( ColourComponent const & lhs, ColourComponent const & rhs )
 	{
-		return !operator ==( p_cpnA, p_cpnB );
+		return !operator ==( lhs, rhs );
 	}
 
-	float operator -( ColourComponent const & p_cpnt, ColourComponent const & p_scalar )
+	float operator -( ColourComponent const & lhs, ColourComponent const & rhs )
 	{
 		float fValue;
-		p_cpnt.convertTo( fValue );
+		lhs.convertTo( fValue );
 		ColourComponent cpnt( fValue );
-		cpnt -= p_scalar;
+		cpnt -= rhs;
 		return fValue;
 	}
 
-	float operator +( ColourComponent const & p_cpnt, ColourComponent const & p_scalar )
+	float operator +( ColourComponent const & lhs, ColourComponent const & rhs )
 	{
 		float fValue;
-		p_cpnt.convertTo( fValue );
+		lhs.convertTo( fValue );
 		ColourComponent cpnt( fValue );
-		cpnt += p_scalar;
+		cpnt += rhs;
 		return fValue;
 	}
 
-	float operator *( ColourComponent const & p_cpnt, ColourComponent const & p_scalar )
+	float operator *( ColourComponent const & lhs, ColourComponent const & rhs )
 	{
 		float fValue;
-		p_cpnt.convertTo( fValue );
+		lhs.convertTo( fValue );
 		ColourComponent cpnt( fValue );
-		cpnt *= p_scalar;
+		cpnt *= rhs;
 		return fValue;
 	}
 
-	float operator /( ColourComponent const & p_cpnt, ColourComponent const & p_scalar )
+	float operator /( ColourComponent const & lhs, ColourComponent const & rhs )
 	{
 		float fValue;
-		p_cpnt.convertTo( fValue );
+		lhs.convertTo( fValue );
 		ColourComponent cpnt( fValue );
-		cpnt /= p_scalar;
+		cpnt /= rhs;
 		return fValue;
 	}
 }

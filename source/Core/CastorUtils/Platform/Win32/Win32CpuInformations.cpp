@@ -15,24 +15,24 @@ namespace castor
 	{
 #if defined( CU_CompilerMSVC )
 
-		void callCpuid( uint32_t func, std::array< int32_t, 4 > & p_data )
+		void callCpuid( uint32_t func, std::array< int32_t, 4 > & data )
 		{
-			__cpuid( p_data.data(), int( func ) );
+			__cpuid( data.data(), int( func ) );
 		}
 
 #else
 
-		void callCpuid( uint32_t func, std::array< int32_t, 4 > & p_data )
+		void callCpuid( uint32_t func, std::array< int32_t, 4 > & data )
 		{
 			uint32_t a;
 			uint32_t b;
 			uint32_t c;
 			uint32_t d;
 			__get_cpuid( func, &a, &b, &c, &d );
-			p_data[0] = int32_t( a );
-			p_data[1] = int32_t( b );
-			p_data[2] = int32_t( c );
-			p_data[3] = int32_t( d );
+			data[0] = int32_t( a );
+			data[1] = int32_t( b );
+			data[2] = int32_t( c );
+			data[3] = int32_t( d );
 		}
 
 #endif

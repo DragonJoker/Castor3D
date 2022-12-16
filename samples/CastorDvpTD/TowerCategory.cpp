@@ -53,29 +53,29 @@ namespace castortd
 		: Category{ Tower::Category::Kind::eShortRange
 			, cuT( "armature_short_range.1|attack" ) }
 	{
-		auto costIncrement = []( uint32_t p_inc
-			, uint32_t p_value
-			, uint32_t p_level )
+		auto costIncrement = []( uint32_t inc
+			, uint32_t value
+			, uint32_t level )
 		{
-			return p_value + p_inc + p_inc * ( p_level / 5 );
+			return value + inc + inc * ( level / 5 );
 		};
-		auto uintIncrement = []( uint32_t p_inc
-			, uint32_t p_value
-			, uint32_t p_level )
+		auto uintIncrement = []( uint32_t inc
+			, uint32_t value
+			, uint32_t level )
 		{
-			return p_value + p_inc;
+			return value + inc;
 		};
-		auto floatIncrement = []( float p_inc
-			, float p_value
-			, uint32_t p_level )
+		auto floatIncrement = []( float inc
+			, float value
+			, uint32_t level )
 		{
-			return p_value + p_inc;
+			return value + inc;
 		};
-		auto speedIncrement = []( float p_inc
-			, float p_value
-			, uint32_t p_level )
+		auto speedIncrement = []( float inc
+			, float value
+			, uint32_t level )
 		{
-			return p_value * p_inc;
+			return value * inc;
 		};
 		m_damage.initialise( 3u
 			, std::bind( uintIncrement, 5u, std::placeholders::_1, std::placeholders::_2 )

@@ -23,11 +23,11 @@ namespace castor3d
 		return std::make_shared< Icosahedron >();
 	}
 
-	void Icosahedron::doGenerate( Mesh & p_mesh, Parameters const & p_parameters )
+	void Icosahedron::doGenerate( Mesh & mesh, Parameters const & parameters )
 	{
 		castor::String param;
 
-		if ( p_parameters.get( cuT( "radius" ), param ) )
+		if ( parameters.get( cuT( "radius" ), param ) )
 		{
 			m_radius = castor::string::toFloat( param );
 		}
@@ -37,7 +37,7 @@ namespace castor3d
 			m_radius = -m_radius;
 		}
 
-		SubmeshSPtr submesh = p_mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
+		SubmeshSPtr submesh = mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
 		auto normals = submesh->getComponent< NormalsComponent >();
 		auto texcoords = submesh->getComponent< Texcoords0Component >();
 

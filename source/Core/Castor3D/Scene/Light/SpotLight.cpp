@@ -24,8 +24,8 @@ namespace castor3d
 
 	//*************************************************************************************************
 
-	SpotLight::SpotLight( Light & p_light )
-		: LightCategory{ LightType::eSpot, p_light }
+	SpotLight::SpotLight( Light & light )
+		: LightCategory{ LightType::eSpot, light }
 		, m_attenuation{ m_dirtyData, castor::Point3f{ 1, 0, 0 } }
 		, m_exponent{ m_dirtyData, 1.0f }
 		, m_innerCutOff{ m_dirtyData, 22.5_degrees }
@@ -35,9 +35,9 @@ namespace castor3d
 	{
 	}
 
-	LightCategoryUPtr SpotLight::create( Light & p_light )
+	LightCategoryUPtr SpotLight::create( Light & light )
 	{
-		return std::unique_ptr< SpotLight >( new SpotLight{ p_light } );
+		return std::unique_ptr< SpotLight >( new SpotLight{ light } );
 	}
 
 	castor::Point3fArray const & SpotLight::generateVertices( uint32_t angle )

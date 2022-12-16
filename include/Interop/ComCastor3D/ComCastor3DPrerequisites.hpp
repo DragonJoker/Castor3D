@@ -57,13 +57,13 @@ namespace CastorCom
 	static tstring const ERROR_UNSUPPORTED_C3D_TYPE = _T( "The type is unsupported" );
 
 	template< typename T, typename FuncT >
-	HRESULT retrieveValue( T * pVal, FuncT p_func )
+	HRESULT retrieveValue( T * pVal, FuncT func )
 	{
 		HRESULT hr = E_POINTER;
 
 		if ( *pVal )
 		{
-			*pVal = p_func();
+			*pVal = func();
 			hr = S_OK;
 		}
 

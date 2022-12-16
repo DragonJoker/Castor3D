@@ -27,11 +27,11 @@ namespace GuiCommon
 
 	//************************************************************************************************
 
-	wxPGWindowList ButtonEventEditor::CreateControls( wxPropertyGrid * p_propgrid, wxPGProperty * p_property, wxPoint const & p_pos, wxSize const & p_size )const
+	wxPGWindowList ButtonEventEditor::CreateControls( wxPropertyGrid * propgrid, wxPGProperty * property, wxPoint const & pos, wxSize const & size )const
 	{
 		// create and return a single button to be used as editor
 		// size and pos represent the entire value cell: use that to position the button
-		return wxPGWindowList( new GradientButton( p_propgrid, wxID_ANY, _( "View" ), p_pos, p_size ) );
+		return wxPGWindowList( new GradientButton( propgrid, wxID_ANY, _( "View" ), pos, size ) );
 	}
 
 	// since the editor does not need to change the primary control (the button)
@@ -40,16 +40,16 @@ namespace GuiCommon
 	{
 	}
 
-	bool ButtonEventEditor::OnEvent( wxPropertyGrid * p_propgrid, wxPGProperty * p_property, wxWindow * p_wnd_primary, wxEvent & p_event )const
+	bool ButtonEventEditor::OnEvent( wxPropertyGrid * propgrid, wxPGProperty * property, wxWindow * wnd_primary, wxEvent & event )const
 	{
 		// handle the button event
-		if ( p_event.GetEventType() == wxEVT_COMMAND_BUTTON_CLICKED )
+		if ( event.GetEventType() == wxEVT_COMMAND_BUTTON_CLICKED )
 		{
 			// extract the client data from the property
-			if ( ButtonData * btn = dynamic_cast< ButtonData * >( p_property->GetClientObject() ) )
+			if ( ButtonData * btn = dynamic_cast< ButtonData * >( property->GetClientObject() ) )
 			{
 				// call the method
-				btn->Call( p_property->GetValue() );
+				btn->Call( property->GetValue() );
 				return false;
 			}
 		}
@@ -58,36 +58,36 @@ namespace GuiCommon
 	}
 	//************************************************************************************************
 
-	wxFloatProperty * CreateProperty( wxString const & p_name, double const & p_value )
+	wxFloatProperty * CreateProperty( wxString const & name, double const & value )
 	{
-		return new wxFloatProperty( p_name, wxPG_LABEL, p_value );
+		return new wxFloatProperty( name, wxPG_LABEL, value );
 	}
 
-	wxFloatProperty * CreateProperty( wxString const & p_name, float const & p_value )
+	wxFloatProperty * CreateProperty( wxString const & name, float const & value )
 	{
-		return new wxFloatProperty( p_name, wxPG_LABEL, p_value );
+		return new wxFloatProperty( name, wxPG_LABEL, value );
 	}
 
-	wxIntProperty * CreateProperty( wxString const & p_name, int const & p_value )
+	wxIntProperty * CreateProperty( wxString const & name, int const & value )
 	{
-		return new wxIntProperty( p_name, wxPG_LABEL, p_value );
+		return new wxIntProperty( name, wxPG_LABEL, value );
 	}
 
-	wxUIntProperty * CreateProperty( wxString const & p_name, uint32_t const & p_value )
+	wxUIntProperty * CreateProperty( wxString const & name, uint32_t const & value )
 	{
-		return new wxUIntProperty( p_name, wxPG_LABEL, p_value );
+		return new wxUIntProperty( name, wxPG_LABEL, value );
 	}
 
-	wxBoolProperty * CreateProperty( wxString const & p_name, bool const & p_value, bool p_checkbox )
+	wxBoolProperty * CreateProperty( wxString const & name, bool const & value, bool checkbox )
 	{
-		wxBoolProperty * result = new wxBoolProperty( p_name, wxPG_LABEL );
-		result->SetAttribute( wxT( "UseCheckbox" ), p_checkbox );
+		wxBoolProperty * result = new wxBoolProperty( name, wxPG_LABEL );
+		result->SetAttribute( wxT( "UseCheckbox" ), checkbox );
 		return result;
 	}
 
-	wxStringProperty * CreateProperty( wxString const & p_name, wxString const & p_value )
+	wxStringProperty * CreateProperty( wxString const & name, wxString const & value )
 	{
-		return new wxStringProperty( p_name, wxPG_LABEL, p_value );
+		return new wxStringProperty( name, wxPG_LABEL, value );
 	}
 
 	wxPGProperty * addAttributes( wxPGProperty * prop )

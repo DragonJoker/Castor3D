@@ -271,10 +271,10 @@ namespace GuiCommon
 	*	Conversions de wxWidgets vers Castor.
 	*/
 	//@{
-	castor::FontSPtr make_Font( wxFont const & p_font );
-	castor::String make_String( wxString const & p_value );
-	castor::Path make_Path( wxString const & p_value );
-	castor::Size makeSize( wxSize const & p_value );
+	castor::FontSPtr make_Font( wxFont const & font );
+	castor::String make_String( wxString const & value );
+	castor::Path make_Path( wxString const & value );
+	castor::Size makeSize( wxSize const & value );
 	castor::StringArray make_StringArray( wxArrayString const & values );
 	//@}
 	/**
@@ -300,7 +300,7 @@ namespace GuiCommon
 		return result;
 	}
 
-	ashes::WindowHandle makeWindowHandle( wxWindow * p_window );
+	ashes::WindowHandle makeWindowHandle( wxWindow * window );
 	ast::ShaderStage convert( VkShaderStageFlagBits stage );
 
 #if wxVERSION_NUMBER >= 2900

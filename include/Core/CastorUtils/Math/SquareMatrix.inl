@@ -830,39 +830,39 @@ namespace castor
 //*************************************************************************************************
 
 	template< typename CharT, typename T, uint32_t Count >
-	inline std::basic_ostream< CharT > & operator<<( std::basic_ostream< CharT > & p_streamOut, castor::SquareMatrix< T, Count > const & p_matrix )
+	inline std::basic_ostream< CharT > & operator<<( std::basic_ostream< CharT > & stream, castor::SquareMatrix< T, Count > const & rhs )
 	{
-		auto precision = p_streamOut.precision( 10 );
+		auto precision = stream.precision( 10 );
 
 		for ( uint32_t i = 0; i < Count; i++ )
 		{
 			for ( uint32_t j = 0; j < Count; j++ )
 			{
-				p_streamOut.width( 15 );
-				p_streamOut << std::right << p_matrix[i][j];
+				stream.width( 15 );
+				stream << std::right << rhs[i][j];
 			}
 
-			p_streamOut << std::endl;
+			stream << std::endl;
 		}
 
-		p_streamOut.precision( precision );
-		return p_streamOut;
+		stream.precision( precision );
+		return stream;
 	}
 
 	template< typename CharT, typename T, uint32_t Count >
-	inline std::basic_istream< CharT > & operator>>( std::basic_istream< CharT > & p_streamIn, castor::SquareMatrix< T, Count > & p_matrix )
+	inline std::basic_istream< CharT > & operator>>( std::basic_istream< CharT > & stream, castor::SquareMatrix< T, Count > & rhs )
 	{
 		for ( uint32_t i = 0; i < Count; i++ )
 		{
 			for ( uint32_t j = 0; j < Count; j++ )
 			{
-				p_streamIn >> p_matrix[i][j];
+				stream >> rhs[i][j];
 			}
 
-			p_streamIn.ignore();
+			stream.ignore();
 		}
 
-		return p_streamIn;
+		return stream;
 	}
 
 //*************************************************************************************************

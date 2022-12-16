@@ -52,9 +52,9 @@ namespace castortd
 			sizer->SetSizeHints( this );
 			SetSizer( sizer );
 		}
-		catch ( std::exception & p_exc )
+		catch ( std::exception & exc )
 		{
-			wxMessageBox( p_exc.what() );
+			wxMessageBox( exc.what() );
 		}
 	}
 

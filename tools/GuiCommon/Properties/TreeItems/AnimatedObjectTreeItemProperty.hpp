@@ -25,15 +25,15 @@ namespace GuiCommon
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	engine	The engine.
-		 *\param[in]	p_editable	Tells if the properties are modifiable.
-		 *\param[in]	p_light		The target AnimatedObject.
+		 *\param[in]	editable	Tells if the properties are modifiable.
+		 *\param[in]	light		The target AnimatedObject.
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	engine	Le moteur.
-		 *\param[in]	p_editable	Dit si les propriétés sont modifiables.
-		 *\param[in]	p_light		L"AnimatedObject cible.
+		 *\param[in]	editable	Dit si les propriétés sont modifiables.
+		 *\param[in]	light		L"AnimatedObject cible.
 		 */
-		AnimatedObjectTreeItemProperty( castor3d::Engine * engine, bool p_editable, castor3d::AnimatedObjectSPtr p_light );
+		AnimatedObjectTreeItemProperty( castor3d::Engine * engine, bool editable, castor3d::AnimatedObjectSPtr light );
 		/**
 		 *\~english
 		 *\brief		Retrieves the AnimatedObject.
@@ -51,7 +51,7 @@ namespace GuiCommon
 		/**
 		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
-		void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )override;
+		void doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )override;
 
 	private:
 		castor3d::AnimatedObjectWPtr m_object;

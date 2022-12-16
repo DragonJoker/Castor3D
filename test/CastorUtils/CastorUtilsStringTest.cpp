@@ -9,24 +9,23 @@ namespace Testing
 	namespace
 	{
 		template< typename InChar, typename OutChar >
-		inline void convert( std::basic_string< InChar > const & p_strIn, std::basic_string< OutChar > & p_strOut, std::locale const & p_locale = std::locale() )
+		inline void convert( std::basic_string< InChar > const & strIn, std::basic_string< OutChar > & strOut, std::locale const & loc = std::locale() )
 		{
-			if ( !p_strIn.empty() )
+			if ( !strIn.empty() )
 			{
 				typedef typename std::codecvt< OutChar, InChar, std::mbstate_t > facet_type;
 				std::mbstate_t state = std::mbstate_t();
-				std::vector< OutChar > buffer( p_strIn.size() );
+				std::vector< OutChar > buffer( strIn.size() );
 				InChar const * pEndIn = nullptr;
 				OutChar * pEndOut = nullptr;
-				std::use_facet< facet_type >( p_locale ).in( state,
-						   p_strIn.data(),		p_strIn.data() + p_strIn.length(),		pEndIn,
-						   &buffer.front(),	&buffer.front() + buffer.size(),	pEndOut
-																	  );
-				p_strOut = std::basic_string< OutChar >( &buffer.front(), pEndOut );
+				std::use_facet< facet_type >( loc ).in( state,
+					strIn.data(), strIn.data() + strIn.length(), pEndIn,
+					 &buffer.front(),	&buffer.front() + buffer.size(), pEndOut );
+				strOut = std::basic_string< OutChar >( &buffer.front(), pEndOut );
 			}
 			else
 			{
-				p_strOut.clear();
+				strOut.clear();
 			}
 		}
 	}

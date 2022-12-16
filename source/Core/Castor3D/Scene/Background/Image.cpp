@@ -114,9 +114,9 @@ namespace castor3d
 			notifyChanged();
 			result = true;
 		}
-		catch ( castor::Exception & p_exc )
+		catch ( castor::Exception & exc )
 		{
-			log::error << p_exc.what() << std::endl;
+			log::error << exc.what() << std::endl;
 		}
 
 		return result;

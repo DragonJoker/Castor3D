@@ -31,14 +31,14 @@ namespace castor3d
 
 	//*************************************************************************************************
 
-	PointLight::PointLight( Light & p_light )
-		: LightCategory{ LightType::ePoint, p_light }
+	PointLight::PointLight( Light & light )
+		: LightCategory{ LightType::ePoint, light }
 	{
 	}
 
-	LightCategoryUPtr PointLight::create( Light & p_light )
+	LightCategoryUPtr PointLight::create( Light & light )
 	{
-		return std::unique_ptr< PointLight >( new PointLight{ p_light } );
+		return std::unique_ptr< PointLight >( new PointLight{ light } );
 	}
 
 	castor::Point3fArray const & PointLight::generateVertices()

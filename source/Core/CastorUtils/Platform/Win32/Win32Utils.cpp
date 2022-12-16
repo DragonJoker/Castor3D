@@ -173,15 +173,15 @@ namespace castor
 		}
 	}
 
-	void getLocaltime( std::tm * p_tm, time_t const * p_pTime )
+	void getLocaltime( std::tm * tm, time_t const * pTime )
 	{
-#	if defined( CU_CompilerMSVC )
+#if defined( CU_CompilerMSVC )
 
-		localtime_s( p_tm, p_pTime );
+		localtime_s( tm, pTime );
 
 #else
 
-		*p_tm = *localtime( p_pTime );
+		*tm = *localtime( pTime );
 
 #endif
 	}

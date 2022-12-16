@@ -6,9 +6,9 @@ namespace castor
 {
 	namespace System
 	{
-		void sleep( uint32_t p_uiTime )
+		void sleep( uint32_t uiTime )
 		{
-			std::this_thread::sleep_for( Milliseconds( p_uiTime ) );
+			std::this_thread::sleep_for( Milliseconds( uiTime ) );
 		}
 	}
 }

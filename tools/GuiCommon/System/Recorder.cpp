@@ -43,15 +43,15 @@ namespace libffmpeg
 #	undef PixelFormat
 #endif
 
-	void checkError( int p_error, char const * const p_action )
+	void checkError( int error, char const * const action )
 	{
-		if ( p_error < 0 )
+		if ( error < 0 )
 		{
 			char err[AV_ERROR_MAX_STRING_SIZE] { 0 };
 			std::stringstream stream;
 			stream << ( char const * )_( "Failure on:" ).mb_str( wxConvUTF8 ) << "\n";
-			stream << "\t" << ( char const * )wxGetTranslation( p_action ).mb_str( wxConvUTF8 );
-			stream << av_make_error_string( err, AV_ERROR_MAX_STRING_SIZE, p_error );
+			stream << "\t" << ( char const * )wxGetTranslation( action ).mb_str( wxConvUTF8 );
+			stream << av_make_error_string( err, AV_ERROR_MAX_STRING_SIZE, error );
 
 			throw std::runtime_error( stream.str() );
 		}
@@ -95,10 +95,10 @@ namespace GuiCommon
 				return doUpdateTime( timeDiff );
 			}
 
-			bool StartRecord( castor::Size const & p_size, int p_wantedFPS )override
+			bool StartRecord( castor::Size const & size, int wantedFPS )override
 			{
 				bool result = false;
-				m_wantedFPS = p_wantedFPS;
+				m_wantedFPS = wantedFPS;
 				m_recordedCount = 0;
 				m_recordedTime = 0;
 				wxString strWildcard = _( "Supported Video files" );
@@ -111,7 +111,7 @@ namespace GuiCommon
 
 					try
 					{
-						doStartRecord( p_size, strFileName );
+						doStartRecord( size, strFileName );
 						result = IsRecording();
 					}
 					catch ( std::bad_alloc & )
@@ -132,18 +132,18 @@ namespace GuiCommon
 				return result;
 			}
 
-			bool RecordFrame( castor::PxBufferBaseSPtr p_buffer )override
+			bool RecordFrame( castor::PxBufferBaseSPtr buffer )override
 			{
-				doRecordFrame( p_buffer );
+				doRecordFrame( buffer );
 				m_saved = clock::now();
 				m_recordedCount++;
 				return true;
 			}
 
 		protected:
-			virtual bool doStartRecord( castor::Size const & p_size, wxString const & p_name ) = 0;
-			virtual bool doUpdateTime( uint64_t p_uiTimeDiff ) = 0;
-			virtual void doRecordFrame( castor::PxBufferBaseSPtr p_buffer ) = 0;
+			virtual bool doStartRecord( castor::Size const & size, wxString const & name ) = 0;
+			virtual bool doUpdateTime( uint64_t uiTimeDiff ) = 0;
+			virtual void doRecordFrame( castor::PxBufferBaseSPtr buffer ) = 0;
 
 		protected:
 			time_point m_saved;
@@ -160,33 +160,33 @@ namespace GuiCommon
 				return m_formatContext && m_stream && m_codec;
 			}
 
-			void FillPacket( libffmpeg::AVPacket & p_packet )
+			void FillPacket( libffmpeg::AVPacket & packet )
 			{
-				p_packet.stream_index = m_formatContext->streams[0]->index;
+				packet.stream_index = m_formatContext->streams[0]->index;
 			}
 
-			void write( libffmpeg::AVPacket & p_packet )
+			void write( libffmpeg::AVPacket & packet )
 			{
-				auto timestamp = p_packet.pts;
+				auto timestamp = packet.pts;
 
-				if ( p_packet.pts != ( 0x8000000000000000LL ) )
+				if ( packet.pts != ( 0x8000000000000000LL ) )
 				{
 					timestamp = av_rescale_q( timestamp, m_codecContext->time_base, m_formatContext->streams[0]->time_base );
 				}
 
-				p_packet.pts = timestamp;
+				packet.pts = timestamp;
 
-				if ( !( p_packet.pts % 10 ) )
+				if ( !( packet.pts % 10 ) )
 				{
-					p_packet.flags |= AV_PKT_FLAG_KEY;
+					packet.flags |= AV_PKT_FLAG_KEY;
 				}
 
-				libffmpeg::av_interleaved_write_frame( m_formatContext, &p_packet );
+				libffmpeg::av_interleaved_write_frame( m_formatContext, &packet );
 			}
 
-			void getFormat( wxString const & p_name )
+			void getFormat( wxString const & name )
 			{
-				m_outputFormat = libffmpeg::av_guess_format( nullptr, p_name.char_str().data(), nullptr );
+				m_outputFormat = libffmpeg::av_guess_format( nullptr, name.char_str().data(), nullptr );
 
 				if ( !m_outputFormat )
 				{
@@ -214,7 +214,7 @@ namespace GuiCommon
 
 				m_formatContext->oformat = m_outputFormat;
 				m_formatContext->video_codec_id = m_outputFormat->video_codec;
-				snprintf( m_formatContext->filename, sizeof( m_formatContext->filename ), "%s", p_name.char_str().data() );
+				snprintf( m_formatContext->filename, sizeof( m_formatContext->filename ), "%s", name.char_str().data() );
 
 				m_stream = libffmpeg::avformat_new_stream( m_formatContext, m_codec );
 
@@ -224,7 +224,7 @@ namespace GuiCommon
 				}
 			}
 
-			bool open( wxString const & p_name )
+			bool open( wxString const & name )
 			{
 #if LIBAVFORMAT_VERSION_MAJOR >= 57 && LIBAVFORMAT_VERSION_MINOR >= 34
 				libffmpeg::checkError( avcodec_parameters_from_context( m_stream->codecpar, m_codecContext )
@@ -241,7 +241,7 @@ namespace GuiCommon
 				libffmpeg::checkError( avcodec_open2( m_codecContext, m_codec, nullptr )
 									   , "Codec opening" );
 
-				libffmpeg::checkError( libffmpeg::avio_open( &m_formatContext->pb, p_name.char_str().data(), AVIO_FLAG_WRITE )
+				libffmpeg::checkError( libffmpeg::avio_open( &m_formatContext->pb, name.char_str().data(), AVIO_FLAG_WRITE )
 									   , "Stream opening" );
 
 				libffmpeg::checkError( libffmpeg::avformat_write_header( m_formatContext, nullptr )
@@ -250,9 +250,9 @@ namespace GuiCommon
 				return true;
 			}
 
-			void close( bool p_wasRecording )
+			void close( bool wasRecording )
 			{
-				if ( p_wasRecording )
+				if ( wasRecording )
 				{
 					libffmpeg::av_write_trailer( m_formatContext );
 				}
@@ -308,7 +308,7 @@ namespace GuiCommon
 			{
 			}
 
-			void AllocateContext( libffmpeg::AVCodec * p_codec, libffmpeg::AVCodecID p_id )
+			void AllocateContext( libffmpeg::AVCodec * codec, libffmpeg::AVCodecID id )
 			{
 			}
 
@@ -366,10 +366,10 @@ namespace GuiCommon
 				return ptimeDiff >= 1000 / m_wantedFPS;
 			}
 
-			bool doStartRecord( castor::Size const & p_size, wxString const & p_name )override
+			bool doStartRecord( castor::Size const & insize, wxString const & name )override
 			{
-				wxSize size( p_size.getWidth(), p_size.getHeight() );
-				getFormat( p_name );
+				wxSize size( insize.getWidth(), insize.getHeight() );
+				getFormat( name );
 
 				try
 				{
@@ -409,7 +409,7 @@ namespace GuiCommon
 						throw std::runtime_error( ( char const * )wxString( _( "Could not initialise conversion context" ) ).mb_str( wxConvUTF8 ) );
 					}
 
-					if ( !open( p_name ) )
+					if ( !open( name ) )
 					{
 						throw std::runtime_error( ( char const * )wxString( _( "Could not open file" ) ).mb_str( wxConvUTF8 ) );
 					}
@@ -423,15 +423,15 @@ namespace GuiCommon
 				return true;
 			}
 
-			void doRecordFrame( castor::PxBufferBaseSPtr p_buffer )override
+			void doRecordFrame( castor::PxBufferBaseSPtr inbuffer )override
 			{
 				if ( IsRecording() )
 				{
 					try
 					{
-						auto buffer = p_buffer->getConstPtr();
+						auto buffer = inbuffer->getConstPtr();
 						int lineSize[8] = { m_codecContext->width * 4, 0, 0, 0, 0, 0, 0, 0 };
-						auto outputHeight = libffmpeg::sws_scale( m_swsContext, &buffer, lineSize, 0, p_buffer->getHeight(), m_frame->data, m_frame->linesize );
+						auto outputHeight = libffmpeg::sws_scale( m_swsContext, &buffer, lineSize, 0, inbuffer->getHeight(), m_frame->data, m_frame->linesize );
 						libffmpeg::AVPacket packet{ 0 };
 						libffmpeg::av_init_packet( &packet );
 						std::vector< uint8_t > outbuf( packet.size );
@@ -476,7 +476,7 @@ namespace GuiCommon
 			: public Recorder::IRecorderImpl
 		{
 		public:
-			bool StartRecord( castor::Size const & p_size, int p_wantedFPS )override
+			bool StartRecord( castor::Size const & size, int wantedFPS )override
 			{
 				return true;
 			}

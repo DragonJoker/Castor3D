@@ -12,9 +12,9 @@ namespace GuiCommon
 		static wxString PROPERTY_CATEGORY_ANIMATED_OBJECT = _( "Animated Object: " );
 	}
 
-	AnimatedObjectTreeItemProperty::AnimatedObjectTreeItemProperty( castor3d::Engine * engine, bool p_editable, castor3d::AnimatedObjectSPtr p_object )
-		: TreeItemProperty( engine, p_editable )
-		, m_object( p_object )
+	AnimatedObjectTreeItemProperty::AnimatedObjectTreeItemProperty( castor3d::Engine * engine, bool editable, castor3d::AnimatedObjectSPtr object )
+		: TreeItemProperty( engine, editable )
+		, m_object( object )
 	{
 		PROPERTY_CATEGORY_ANIMATED_OBJECT = _( "Animated Object: " );
 

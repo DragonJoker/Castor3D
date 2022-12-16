@@ -13,9 +13,9 @@
 
 namespace GuiCommon
 {
-	BillboardTreeItemProperty::BillboardTreeItemProperty( bool p_editable, castor3d::BillboardList & p_billboard )
-		: TreeItemProperty( p_billboard.getParentScene().getEngine(), p_editable )
-		, m_billboard( p_billboard )
+	BillboardTreeItemProperty::BillboardTreeItemProperty( bool editable, castor3d::BillboardList & billboard )
+		: TreeItemProperty( billboard.getParentScene().getEngine(), editable )
+		, m_billboard( billboard )
 	{
 		CreateTreeItemMenu();
 	}

@@ -442,70 +442,70 @@ namespace smaa
 		}
 	}
 
-	bool PostEffect::doWriteInto( castor::StringStream & p_file, castor::String const & tabs )
+	bool PostEffect::doWriteInto( castor::StringStream & file, castor::String const & tabs )
 	{
 		static SmaaConfig::Data const ref;
-		p_file << ( cuT( "\n" ) + tabs + Type + cuT( "\n" ) );
-		p_file << ( tabs + cuT( "{\n" ) );
-		p_file << ( tabs + cuT( "\tmode " ) + smaa::getName( m_config.data.mode ) + cuT( "\n" ) );
-		p_file << ( tabs + cuT( "\tpreset " ) + smaa::getName( m_config.data.preset ) + cuT( "\n" ) );
+		file << ( cuT( "\n" ) + tabs + Type + cuT( "\n" ) );
+		file << ( tabs + cuT( "{\n" ) );
+		file << ( tabs + cuT( "\tmode " ) + smaa::getName( m_config.data.mode ) + cuT( "\n" ) );
+		file << ( tabs + cuT( "\tpreset " ) + smaa::getName( m_config.data.preset ) + cuT( "\n" ) );
 
 		if ( m_config.data.preset == Preset::eCustom )
 		{
-			p_file << ( tabs + cuT( "\tthreshold" ) + castor::string::toString( m_config.data.threshold, std::locale{ "C" } ) + cuT( "\n" ) );
-			p_file << ( tabs + cuT( "\tmaxSearchSteps " ) + castor::string::toString( m_config.data.maxSearchSteps, std::locale{ "C" } ) + cuT( "\n" ) );
-			p_file << ( tabs + cuT( "\tmaxSearchStepsDiag " ) + castor::string::toString( m_config.data.maxSearchStepsDiag, std::locale{ "C" } ) + cuT( "\n" ) );
-			p_file << ( tabs + cuT( "\tcornerRounding " ) + castor::string::toString( m_config.data.cornerRounding, std::locale{ "C" } ) + cuT( "\n" ) );
+			file << ( tabs + cuT( "\tthreshold" ) + castor::string::toString( m_config.data.threshold, std::locale{ "C" } ) + cuT( "\n" ) );
+			file << ( tabs + cuT( "\tmaxSearchSteps " ) + castor::string::toString( m_config.data.maxSearchSteps, std::locale{ "C" } ) + cuT( "\n" ) );
+			file << ( tabs + cuT( "\tmaxSearchStepsDiag " ) + castor::string::toString( m_config.data.maxSearchStepsDiag, std::locale{ "C" } ) + cuT( "\n" ) );
+			file << ( tabs + cuT( "\tcornerRounding " ) + castor::string::toString( m_config.data.cornerRounding, std::locale{ "C" } ) + cuT( "\n" ) );
 		}
 
-		p_file << ( tabs + cuT( "\tedgeDetection " ) + smaa::getName( m_config.data.edgeDetection ) + cuT( "\n" ) );
+		file << ( tabs + cuT( "\tedgeDetection " ) + smaa::getName( m_config.data.edgeDetection ) + cuT( "\n" ) );
 
 		if ( m_config.data.disableDiagonalDetection != ref.disableDiagonalDetection )
 		{
-			p_file << ( tabs + cuT( "\tdisableDiagonalDetection true\n" ) );
+			file << ( tabs + cuT( "\tdisableDiagonalDetection true\n" ) );
 		}
 
 		if ( m_config.data.disableCornerDetection != ref.disableCornerDetection )
 		{
-			p_file << ( tabs + cuT( "\tdisableCornerDetection true\n" ) );
+			file << ( tabs + cuT( "\tdisableCornerDetection true\n" ) );
 		}
 
 		if ( m_config.data.enablePredication != ref.enablePredication )
 		{
-			p_file << ( tabs + cuT( "\tpredication true\n" ) );
+			file << ( tabs + cuT( "\tpredication true\n" ) );
 
 			if ( m_config.data.predicationScale != ref.predicationScale )
 			{
-				p_file << ( tabs + cuT( "\tpredicationScale " ) + castor::string::toString( m_config.data.predicationScale, std::locale{ "C" } ) + cuT( "\n" ) );
+				file << ( tabs + cuT( "\tpredicationScale " ) + castor::string::toString( m_config.data.predicationScale, std::locale{ "C" } ) + cuT( "\n" ) );
 			}
 
 			if ( m_config.data.predicationStrength != ref.predicationStrength )
 			{
-				p_file << ( tabs + cuT( "\tpredicationStrength " ) + castor::string::toString( m_config.data.predicationStrength, std::locale{ "C" } ) + cuT( "\n" ) );
+				file << ( tabs + cuT( "\tpredicationStrength " ) + castor::string::toString( m_config.data.predicationStrength, std::locale{ "C" } ) + cuT( "\n" ) );
 			}
 
 			if ( m_config.data.predicationThreshold != ref.predicationThreshold )
 			{
-				p_file << ( tabs + cuT( "\tpredicationThreshold " ) + castor::string::toString( m_config.data.predicationThreshold, std::locale{ "C" } ) + cuT( "\n" ) );
+				file << ( tabs + cuT( "\tpredicationThreshold " ) + castor::string::toString( m_config.data.predicationThreshold, std::locale{ "C" } ) + cuT( "\n" ) );
 			}
 		}
 
 		if ( m_config.data.enableReprojection != ref.enableReprojection )
 		{
-			p_file << ( tabs + cuT( "\treprojection true\n" ) );
+			file << ( tabs + cuT( "\treprojection true\n" ) );
 
 			if ( m_config.data.reprojectionWeightScale != ref.reprojectionWeightScale )
 			{
-				p_file << ( tabs + cuT( "\treprojectionWeightScale " ) + castor::string::toString( m_config.data.reprojectionWeightScale, std::locale{ "C" } ) + cuT( "\n" ) );
+				file << ( tabs + cuT( "\treprojectionWeightScale " ) + castor::string::toString( m_config.data.reprojectionWeightScale, std::locale{ "C" } ) + cuT( "\n" ) );
 			}
 		}
 
 		if ( m_config.data.localContrastAdaptationFactor != ref.localContrastAdaptationFactor )
 		{
-			p_file << ( tabs + cuT( "\tlocalContrastAdaptationFactor " ) + castor::string::toString( m_config.data.localContrastAdaptationFactor, std::locale{ "C" } ) + cuT( "\n" ) );
+			file << ( tabs + cuT( "\tlocalContrastAdaptationFactor " ) + castor::string::toString( m_config.data.localContrastAdaptationFactor, std::locale{ "C" } ) + cuT( "\n" ) );
 		}
 
-		p_file << ( tabs + cuT( "}\n" ) );
+		file << ( tabs + cuT( "}\n" ) );
 		return true;
 	}
 

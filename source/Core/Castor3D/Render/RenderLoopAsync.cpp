@@ -58,12 +58,12 @@ namespace castor3d
 		return m_paused;
 	}
 
-	void RenderLoopAsync::enableVSync( bool p_enable )
+	void RenderLoopAsync::enableVSync( bool enable )
 	{
 		using type = decltype( m_savedTime );
 		static auto zero = type::zero();
 
-		if ( p_enable && m_savedTime != zero )
+		if ( enable && m_savedTime != zero )
 		{
 			m_frameTime = m_savedTime;
 			m_savedTime = zero;

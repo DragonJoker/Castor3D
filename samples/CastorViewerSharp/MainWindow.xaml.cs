@@ -123,7 +123,7 @@ namespace CastorViewerSharp
 		/// <summary>
 		/// Transforms given window coordinates to camera coordinates
 		/// </summary>
-		/// <param name="p_point">The window coordinates</param>
+		/// <param name="point">The window coordinates</param>
 		/// <returns>The camera coordinates</returns>
 		private Vector2D DoTransform(System.Windows.Point point)
 		{
@@ -141,7 +141,7 @@ namespace CastorViewerSharp
 		/// <summary>
 		/// Transforms given window coordinates to camera coordinates
 		/// </summary>
-		/// <param name="p_point">The window coordinates</param>
+		/// <param name="point">The window coordinates</param>
 		/// <returns>The camera coordinates</returns>
 		private void DoUnloadScene()
 		{

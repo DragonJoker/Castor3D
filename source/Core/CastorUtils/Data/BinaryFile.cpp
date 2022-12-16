@@ -4,8 +4,10 @@
 
 namespace castor
 {
-	BinaryFile::BinaryFile( Path const & p_fileName, FlagCombination< OpenMode > const & p_mode, EncodingMode p_encodingMode )
-		: File{ p_fileName, p_mode | OpenMode::eBinary, p_encodingMode }
+	BinaryFile::BinaryFile( Path const & fileName
+		, FlagCombination< OpenMode > const & mode
+		, EncodingMode encodingMode )
+		: File{ fileName, mode | OpenMode::eBinary, encodingMode }
 	{
 	}
 
@@ -13,26 +15,26 @@ namespace castor
 	{
 	}
 
-	bool BinaryFile::write( String const & p_toWrite )
+	bool BinaryFile::write( String const & toWrite )
 	{
 		CU_CheckInvariants();
 		CU_Require( checkFlag( m_mode, OpenMode::eWrite ) || checkFlag( m_mode, OpenMode::eAppend ) );
-		bool result = write( uint32_t( p_toWrite.size() ) ) == sizeof( uint32_t );
+		bool result = write( uint32_t( toWrite.size() ) ) == sizeof( uint32_t );
 
-		if ( result && p_toWrite.size() > 0 )
+		if ( result && toWrite.size() > 0 )
 		{
-			result = writeArray< xchar >( p_toWrite.c_str(), p_toWrite.size() ) ==  p_toWrite.size() * sizeof( xchar );
+			result = writeArray< xchar >( toWrite.c_str(), toWrite.size() ) ==  toWrite.size() * sizeof( xchar );
 		}
 
 		CU_CheckInvariants();
 		return result;
 	}
 
-	bool BinaryFile::read( String & p_toRead )
+	bool BinaryFile::read( String & toRead )
 	{
 		CU_CheckInvariants();
 		CU_Require( checkFlag( m_mode, OpenMode::eRead ) );
-		p_toRead.clear();
+		toRead.clear();
 		uint32_t uiSize = 0;
 		bool result = read( uiSize ) == sizeof( uint32_t );
 
@@ -43,7 +45,7 @@ namespace castor
 
 			if ( result )
 			{
-				p_toRead = pTmp.data();
+				toRead = pTmp.data();
 			}
 		}
 

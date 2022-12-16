@@ -4,8 +4,8 @@
 
 namespace castor3d
 {
-	ToneMappingPlugin::ToneMappingPlugin( castor::DynamicLibrarySPtr p_library, Engine * engine )
-		: Plugin{ PluginType::eToneMapping, p_library, *engine }
+	ToneMappingPlugin::ToneMappingPlugin( castor::DynamicLibrarySPtr library, Engine * engine )
+		: Plugin{ PluginType::eToneMapping, library, *engine }
 	{
 		load();
 	}

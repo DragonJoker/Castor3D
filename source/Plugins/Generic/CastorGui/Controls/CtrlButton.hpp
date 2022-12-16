@@ -51,12 +51,12 @@ namespace CastorGui
 			, bool visible = true );
 
 		/** Sets the horizontal alignment for the text.
-		*\param[in]	p_align	The new value.
+		*\param[in]	align	The new value.
 		*/
 		void setHAlign( castor3d::HAlign align );
 
 		/** Sets the vertical alignment for the text.
-		*\param[in]	p_align	The new value.
+		*\param[in]	align	The new value.
 		*/
 		void setVAlign( castor3d::VAlign align );
 
@@ -142,7 +142,7 @@ namespace CastorGui
 		 */
 		void onMouseButtonUp( castor3d::MouseEvent const & event );
 
-		/** Creates a material with an ambient colour equal to p_material->ambient + p_offset
+		/** Creates a material with an ambient colour equal to material->colour + offset
 		 *\param[in]	material	The material.
 		 *\param[in]	offset		The colour offset.
 		 *\return		The created material.

@@ -75,9 +75,9 @@ namespace CastorViewer
 	private:
 		void doResetTimers();
 		void doStartMovement();
-		void doStartTimer( int p_iId );
+		void doStartTimer( int id );
 		void doStopMovement();
-		void doStopTimer( int p_iId );
+		void doStopTimer( int id );
 		void doResetNode();
 		void doTurnCameraHoriz();
 		void doTurnCameraVertic();

@@ -211,7 +211,7 @@ namespace CastorGui
 			return *m_style;
 		}
 		/** Creates the control's overlays.
-		 *\param[in]	p_ctrlManager	The controls manager.
+		 *\param[in]	ctrlManager	The controls manager.
 		 */
 		void create( ControlsManagerSPtr ctrlManager );
 
@@ -281,9 +281,9 @@ namespace CastorGui
 
 		/** sets the visibility
 		 *\remarks		Used for derived control specific behavious
-		 *\param[in]	p_value		The new value
+		 *\param[in]	value		The new value
 		 */
-		virtual void doSetVisible( bool p_visible  )
+		virtual void doSetVisible( bool visible  )
 		{
 		}
 

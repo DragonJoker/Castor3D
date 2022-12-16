@@ -24,14 +24,14 @@ namespace GuiCommon
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_editable	Tells if the properties are modifiable
-		 *\param[in]	p_camera	The target camera
+		 *\param[in]	editable	Tells if the properties are modifiable
+		 *\param[in]	camera	The target camera
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
-		 *\param[in]	p_camera	La caméra cible
+		 *\param[in]	editable	Dit si les propriétés sont modifiables
+		 *\param[in]	camera	La caméra cible
 		 */
-		CameraTreeItemProperty( bool p_editable, castor3d::Camera & p_camera );
+		CameraTreeItemProperty( bool editable, castor3d::Camera & camera );
 		/**
 		 *\~english
 		 *\brief		Retrieves the camera
@@ -49,7 +49,7 @@ namespace GuiCommon
 		/**
 		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
-		void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )override;
+		void doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )override;
 
 	private:
 		castor3d::Camera & m_camera;

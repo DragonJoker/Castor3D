@@ -9,7 +9,7 @@ namespace castor
 {
 	//*************************************************************************************************
 
-	String getPredefinedName( PredefinedRgbaColour p_predefined )
+	String getPredefinedName( PredefinedRgbaColour predefined )
 	{
 		static std::map< PredefinedRgbaColour, String > mapNames;
 		typedef std::map< PredefinedRgbaColour, String >::iterator MapIt;
@@ -73,7 +73,7 @@ namespace castor
 			mapNames[PredefinedRgbaColour::eOpaqueWhite] = cuT( "white" );
 		}
 
-		MapIt it = mapNames.find( p_predefined );
+		MapIt it = mapNames.find( predefined );
 		String result = cuT( "black" );
 
 		if ( it != mapNames.end() )
@@ -84,7 +84,7 @@ namespace castor
 		return result;
 	}
 
-	PredefinedRgbaColour getPredefinedRgba( String const & p_name )
+	PredefinedRgbaColour getPredefinedRgba( String const & name )
 	{
 		static std::map< String, PredefinedRgbaColour > mapNames;
 		typedef std::map< String, PredefinedRgbaColour >::iterator MapIt;
@@ -148,7 +148,7 @@ namespace castor
 			mapNames[cuT( "white" )] = PredefinedRgbaColour::eOpaqueWhite;
 		}
 
-		MapIt it = mapNames.find( p_name );
+		MapIt it = mapNames.find( name );
 		PredefinedRgbaColour result = PredefinedRgbaColour::eOpaqueBlack;
 
 		if ( it != mapNames.end() )

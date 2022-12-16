@@ -22,8 +22,8 @@ namespace Testing
 
 	//*************************************************************************************************
 
-	TestCase::TestCase( std::string const & p_name )
-		: m_name( p_name )
+	TestCase::TestCase( std::string const & name )
+		: m_name( name )
 	{
 	}
 
@@ -36,10 +36,10 @@ namespace Testing
 		doRegisterTests();
 	}
 
-	void TestCase::execute( uint32_t & p_errCount, uint32_t & p_testCount )
+	void TestCase::execute( uint32_t & errCount, uint32_t & testCount )
 	{
-		m_errorCount = &p_errCount;
-		m_testCount = &p_testCount;
+		m_errorCount = &errCount;
+		m_testCount = &testCount;
 
 		for ( auto test : m_tests )
 		{
@@ -55,17 +55,17 @@ namespace Testing
 			}
 			catch ( TestFailed & exc )
 			{
-				p_errCount++;
+				errCount++;
 				std::cerr << "*	Test " << test.first << " failed (" << exc.what() << ")" << std::endl;
 			}
 			catch ( std::exception & exc )
 			{
-				p_errCount++;
+				errCount++;
 				std::cerr << "*	Test " << test.first << " execution failed (" << exc.what() << ")" << std::endl;
 			}
 			catch ( ... )
 			{
-				p_errCount++;
+				errCount++;
 				std::cerr << "*	Test " << test.first << " execution failed (Unknown reason)" << std::endl;
 			}
 
@@ -77,9 +77,10 @@ namespace Testing
 		}
 	}
 
-	void TestCase::doRegisterTest( std::string const & p_name, TestFunction p_test )
+	void TestCase::doRegisterTest( std::string const & name
+		, TestFunction test )
 	{
-		m_tests.push_back( { p_name, p_test } );
+		m_tests.push_back( { name, test } );
 	}
 
 	TestBlockPtr TestCase::doPushBlock( std::string const & text )
@@ -110,8 +111,11 @@ namespace Testing
 
 	//*************************************************************************************************
 
-	TestFailed::TestFailed( std::string const & p_what, std::string const & p_file, std::string const & p_function, uint32_t p_line )
-		: m_what( p_file + " - " + p_function + ", line " + toString( p_line ) + " : " + p_what )
+	TestFailed::TestFailed( std::string const & what
+		, std::string const & file
+		, std::string const & function
+		, uint32_t line )
+		: m_what( file + " - " + function + ", line " + toString( line ) + " : " + what )
 	{
 	}
 

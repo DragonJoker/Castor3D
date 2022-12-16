@@ -357,22 +357,22 @@ namespace CastorGui
 		onKeyDown( event );
 	}
 
-	void SliderCtrl::doUpdateTick( castor::Position const & p_delta )
+	void SliderCtrl::doUpdateTick( castor::Position const & delta )
 	{
-		castor::Position delta = p_delta;
+		castor::Position realDelta = delta;
 
 		if ( castor::checkFlag( getFlags(), SliderFlag::eVertical ) )
 		{
-			delta.x() = 0;
+			realDelta.x() = 0;
 		}
 		else
 		{
-			delta.y() = 0;
+			realDelta.y() = 0;
 		}
 
 		if ( auto tick = m_tick.lock() )
 		{
-			castor::Point2i position = tick->getPosition() + delta;
+			castor::Point2i position = tick->getPosition() + realDelta;
 			double tickValue = 0;
 
 			if ( auto line = m_line.lock() )

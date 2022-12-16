@@ -33,7 +33,7 @@ namespace Testing
 		typedef std::function< void() > CallbackBench;
 
 	public:
-		explicit BenchCase( std::string const & p_name );
+		explicit BenchCase( std::string const & name );
 		virtual ~BenchCase();
 		virtual void Execute() = 0;
 		inline std::string const & getSummary()const
@@ -42,7 +42,7 @@ namespace Testing
 		}
 
 	protected:
-		void doBench( std::string p_name, CallbackBench p_bench, uint64_t p_ui64Calls );
+		void doBench( std::string name, CallbackBench bench, uint64_t ui64Calls );
 
 	private:
 		using clock = std::chrono::high_resolution_clock;

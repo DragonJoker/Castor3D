@@ -13,10 +13,10 @@ namespace castortd
 	namespace
 	{
 		castor3d::TextOverlaySPtr getTextOverlay( castor3d::Scene const & scene
-			, castor::String const & p_name )
+			, castor::String const & name )
 		{
 			castor3d::TextOverlaySPtr result;
-			auto overlay = scene.findOverlay( p_name ).lock();
+			auto overlay = scene.findOverlay( name ).lock();
 
 			if ( overlay )
 			{
@@ -27,17 +27,17 @@ namespace castortd
 		}
 	}
 
-	Hud::Hud( Game const & p_game, castor3d::Scene const & p_scene )
-		: m_game{ p_game }
-		, m_lives{ getTextOverlay( p_scene, cuT( "LivesValue" ) ) }
-		, m_ore{ getTextOverlay( p_scene, cuT( "OreValue" ) ) }
-		, m_level{ getTextOverlay( p_scene, cuT( "LevelValue" ) ) }
-		, m_kills{ getTextOverlay( p_scene, cuT( "KillsValue" ) ) }
-		, m_enemyLife{ getTextOverlay( p_scene, cuT( "MonsterLifeValue" ) ) }
-		, m_enemyBounty{ getTextOverlay( p_scene, cuT( "MonsterBountyValue" ) ) }
-		, m_towerSpeed{ getTextOverlay( p_scene, cuT( "TowerSpeedValue" ) ) }
-		, m_towerRange{ getTextOverlay( p_scene, cuT( "TowerRangeValue" ) ) }
-		, m_towerDamage{ getTextOverlay( p_scene, cuT( "TowerDamageValue" ) ) }
+	Hud::Hud( Game const & game, castor3d::Scene const & scene )
+		: m_game{ game }
+		, m_lives{ getTextOverlay( scene, cuT( "LivesValue" ) ) }
+		, m_ore{ getTextOverlay( scene, cuT( "OreValue" ) ) }
+		, m_level{ getTextOverlay( scene, cuT( "LevelValue" ) ) }
+		, m_kills{ getTextOverlay( scene, cuT( "KillsValue" ) ) }
+		, m_enemyLife{ getTextOverlay( scene, cuT( "MonsterLifeValue" ) ) }
+		, m_enemyBounty{ getTextOverlay( scene, cuT( "MonsterBountyValue" ) ) }
+		, m_towerSpeed{ getTextOverlay( scene, cuT( "TowerSpeedValue" ) ) }
+		, m_towerRange{ getTextOverlay( scene, cuT( "TowerRangeValue" ) ) }
+		, m_towerDamage{ getTextOverlay( scene, cuT( "TowerDamageValue" ) ) }
 	{
 	}
 

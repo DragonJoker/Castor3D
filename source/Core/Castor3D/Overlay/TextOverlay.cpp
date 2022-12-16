@@ -131,14 +131,14 @@ namespace castor3d
 		}
 	}
 
-	void TextOverlay::doUpdateBuffer( castor::Size const & p_size
-		, std::function< void( castor::Point2d const & p_size
-			, castor::Rectangle const & p_absolute
-			, castor::Point4f const & p_fontUV
-			, float & p_uvLeft
-			, float & p_uvTop
-			, float & p_uvRight
-			, float & p_uvBottom ) > p_generateUvs )
+	void TextOverlay::doUpdateBuffer( castor::Size const & insize
+		, std::function< void( castor::Point2d const &
+			, castor::Rectangle const &
+			, castor::Point4f const &
+			, float &
+			, float &
+			, float &
+			, float & ) > generateUvs )
 	{
 		FontTextureSPtr fontTexture = getFontTexture();
 
@@ -151,12 +151,12 @@ namespace castor3d
 				if ( m_textChanged )
 				{
 					castor::Point2d const ovAbsSize = getOverlay().getAbsoluteSize();
-					castor::Point2d const size( p_size.getWidth() * ovAbsSize[0], p_size.getHeight() * ovAbsSize[1] );
+					castor::Point2d const size( insize.getWidth() * ovAbsSize[0], insize.getHeight() * ovAbsSize[1] );
 					m_previousCaption = m_currentCaption;
 					m_arrayVtx.clear();
 					m_arrayVtx.reserve( m_previousCaption.size() * 6 );
 
-					DisplayableLineArray lines = doPrepareText( p_size, size );
+					DisplayableLineArray lines = doPrepareText( insize, size );
 					castor::Size const & texDim = { fontTexture->getTexture()->getDimensions().width, fontTexture->getTexture()->getDimensions().height };
 
 					for ( auto const & line : lines )
@@ -210,13 +210,13 @@ namespace castor3d
 									float texUvRight{};
 									float texUvBottom{};
 									float texUvTop{};
-									p_generateUvs( size,
+									generateUvs( size,
 										castor::Rectangle{ left, top, right, bottom },
 										castor::Point4f{ fontUvLeft, fontUvTop, fontUvRight, fontUvBottom },
 										texUvLeft, texUvTop, texUvRight, texUvBottom );
 
-									auto w( float( p_size.getWidth() ) );
-									auto h( float( p_size.getHeight() ) );
+									auto w( float( insize.getWidth() ) );
+									auto h( float( insize.getHeight() ) );
 									//
 									// Fill buffer
 									//
@@ -286,7 +286,8 @@ namespace castor3d
 		}
 	}
 
-	TextOverlay::DisplayableLineArray TextOverlay::doPrepareText( castor::Size const & p_renderSize, castor::Point2d const & p_size )
+	TextOverlay::DisplayableLineArray TextOverlay::doPrepareText( castor::Size const & renderSize
+		, castor::Point2d const & insize )
 	{
 		auto & font = ovrltxt::getFont( *this );
 		castor::StringArray lines = castor::string::split( m_previousCaption
@@ -311,7 +312,7 @@ namespace castor3d
 						|| glyph.getCharacter() == cuT( '\t' ) )
 				{
 					// write the word and leave space before next word.
-					doPrepareWord( p_renderSize, word, wordWidth, p_size, left, line, result );
+					doPrepareWord( renderSize, word, wordWidth, insize, left, line, result );
 					word.clear();
 					wordWidth = 0;
 					left += character.m_size[0];
@@ -325,35 +326,41 @@ namespace castor3d
 
 			if ( !word.empty() )
 			{
-				doPrepareWord( p_renderSize, word, wordWidth, p_size, left, line, result );
+				doPrepareWord( renderSize, word, wordWidth, insize, left, line, result );
 			}
 
-			line = doFinishLine( p_size, line, left, result );
+			line = doFinishLine( insize, line, left, result );
 		}
 
-		doAlignVertically( p_size[1], result );
+		doAlignVertically( insize[1], result );
 		return result;
 	}
 
-	void TextOverlay::doPrepareWord( castor::Size const & p_renderSize, std::u32string const & p_word, double p_wordWidth, castor::Point2d const & p_size, double & p_left, DisplayableLine & p_line, DisplayableLineArray & p_lines )
+	void TextOverlay::doPrepareWord( castor::Size const & renderSize
+		, std::u32string const & word
+		, double wordWidth
+		, castor::Point2d const & insize
+		, double & left
+		, DisplayableLine & line
+		, DisplayableLineArray & lines )
 	{
 		auto & font = ovrltxt::getFont( *this );
 
-		if ( p_left + p_wordWidth > p_size[0] && m_wrappingMode == TextWrappingMode::eBreakWords )
+		if ( left + wordWidth > insize[0] && m_wrappingMode == TextWrappingMode::eBreakWords )
 		{
 			// The word will overflow the overlay size, so we jump to the next line,
 			// and will write the word on this next line.
-			p_line = doFinishLine( p_size, p_line, p_left, p_lines );
+			line = doFinishLine( insize, line, left, lines );
 		}
 
-		for ( auto character : p_word )
+		for ( auto character : word )
 		{
 			castor::Glyph const & glyph = font[character];
 			castor::Point2d charSize( double( glyph.getAdvance() ), double( glyph.getSize().getHeight() ) );
 
-			p_left += glyph.getBearing().x();
+			left += glyph.getBearing().x();
 
-			if ( p_left > p_size[0] )
+			if ( left > insize[0] )
 			{
 				// The character is completely out of the overlay.
 				if ( m_wrappingMode == TextWrappingMode::eNone )
@@ -364,124 +371,132 @@ namespace castor3d
 				else if ( m_wrappingMode == TextWrappingMode::eBreak )
 				{
 					// Break => Jump to the next line.
-					p_line = doFinishLine( p_size, p_line, p_left, p_lines );
+					line = doFinishLine( insize, line, left, lines );
 				}
 			}
-			else if ( p_left + charSize[0] > p_size[0] )
+			else if ( left + charSize[0] > insize[0] )
 			{
 				// The character is partially out of the overlay.
 				if ( m_wrappingMode == TextWrappingMode::eBreak )
 				{
 					// Break => Jump to the next line.
-					p_line = doFinishLine( p_size, p_line, p_left, p_lines );
+					line = doFinishLine( insize, line, left, lines );
 				}
 			}
 
 			if ( charSize[0] > 0 )
 			{
-				p_line.m_characters.emplace_back( castor::Point2d{ p_left, 0.0 }, charSize, glyph );
+				line.m_characters.emplace_back( castor::Point2d{ left, 0.0 }, charSize, glyph );
 			}
 
-			p_left += charSize[0];
+			left += charSize[0];
 		}
 	}
 
-	TextOverlay::DisplayableLine TextOverlay::doFinishLine( castor::Point2d const & p_size, DisplayableLine p_line, double & p_left, DisplayableLineArray & p_lines )
+	TextOverlay::DisplayableLine TextOverlay::doFinishLine( castor::Point2d const & insize
+		, DisplayableLine line
+		, double & left
+		, DisplayableLineArray & lines )
 	{
-		p_line.m_height = 0.0;
+		line.m_height = 0.0;
 		double maxBottomBearing{ 0.0 };
 
-		for ( auto const & character : p_line.m_characters )
+		for ( auto const & character : line.m_characters )
 		{
 			auto bottomBearing = std::max( 0.0, double( character.m_glyph.getSize().getHeight() ) - character.m_glyph.getBearing().y() );
-			p_line.m_height = std::max( p_line.m_height, character.m_size[1] + bottomBearing );
+			line.m_height = std::max( line.m_height, character.m_size[1] + bottomBearing );
 			maxBottomBearing = std::max( maxBottomBearing, bottomBearing );
 		}
 
-		for ( auto & character : p_line.m_characters )
+		for ( auto & character : line.m_characters )
 		{
 			character.m_position[1] = std::max( 0.0, maxBottomBearing + character.m_glyph.getBearing().y() );
 		}
 
-		p_line.m_width = p_left;
-		p_left = 0;
-		doAlignHorizontally( p_size[0], p_line, p_lines );
-		return DisplayableLine{ castor::Point2d{ 0, p_line.m_position[1] + p_line.m_height }, 0.0, 0.0 };
+		line.m_width = left;
+		left = 0;
+		doAlignHorizontally( insize[0], line, lines );
+		return DisplayableLine{ castor::Point2d{ 0, line.m_position[1] + line.m_height }, 0.0, 0.0 };
 	}
 
-	void TextOverlay::doAlignHorizontally( double p_width, DisplayableLine p_line, DisplayableLineArray & p_lines )
+	void TextOverlay::doAlignHorizontally( double width
+		, DisplayableLine line
+		, DisplayableLineArray & lines )
 	{
 		// Move letters according to halign
 		if ( m_hAlign != HAlign::eLeft )
 		{
-			double offset = p_width - p_line.m_width;
+			double offset = width - line.m_width;
 
 			if ( m_hAlign == HAlign::eCenter )
 			{
 				offset /= 2;
 			}
 
-			for ( auto & character : p_line.m_characters )
+			for ( auto & character : line.m_characters )
 			{
 				character.m_position[0] += offset;
 			}
 		}
 
 		// Remove letters overflowing the maximum width
-		auto removed = std::remove_if( p_line.m_characters.begin(), p_line.m_characters.end(), [&p_width]( DisplayableChar const & p_char )
-		{
-			return p_char.m_position[0] > p_width
-				   || p_char.m_position[0] + p_char.m_size[0] < 0;
-		} );
+		auto removed = std::remove_if( line.m_characters.begin()
+			, line.m_characters.end()
+			, [&width]( DisplayableChar const & lookup )
+			{
+				return lookup.m_position[0] > width
+					   || lookup.m_position[0] + lookup.m_size[0] < 0;
+			} );
 
-		if ( !p_line.m_characters.empty() )
+		if ( !line.m_characters.empty() )
 		{
-			p_line.m_characters.erase( removed, p_line.m_characters.end() );
+			line.m_characters.erase( removed, line.m_characters.end() );
 
 			// add the line to the lines array.
-			if ( !p_line.m_characters.empty() )
+			if ( !line.m_characters.empty() )
 			{
-				p_lines.push_back( p_line );
+				lines.push_back( line );
 			}
 		}
 		else
 		{
-			p_lines.push_back( p_line );
+			lines.push_back( line );
 		}
 	}
 
-	void TextOverlay::doAlignVertically( double p_height, DisplayableLineArray & p_lines )
+	void TextOverlay::doAlignVertically( double height
+		, DisplayableLineArray & lines )
 	{
 		// Compute each line height, according to lines spacing mode
 		if ( m_lineSpacingMode != TextLineSpacingMode::eOwnHeight )
 		{
-			double height{ 0.0 };
+			double lineHeight{ 0.0 };
 
 			if ( m_lineSpacingMode == TextLineSpacingMode::eMaxLineHeight )
 			{
-				for ( auto const & line : p_lines )
+				for ( auto const & line : lines )
 				{
-					height = std::max( line.m_height, height );
+					lineHeight = std::max( line.m_height, lineHeight );
 				}
 			}
 			else if ( m_lineSpacingMode == TextLineSpacingMode::eMaxFontHeight )
 			{
-				height = double( ovrltxt::getFont( *this ).getMaxHeight() );
+				lineHeight = double( ovrltxt::getFont( *this ).getMaxHeight() );
 			}
 
 			double offset{ 0.0 };
 
-			for ( auto & line : p_lines )
+			for ( auto & line : lines )
 			{
 				line.m_position[1] += offset;
-				offset += height - line.m_height;
-				line.m_height = height;
+				offset += lineHeight - line.m_height;
+				line.m_height = lineHeight;
 			}
 		}
 
 		double linesHeight{ 0.0 };
 
-		for ( auto const & line : p_lines )
+		for ( auto const & line : lines )
 		{
 			linesHeight += line.m_height;
 		}
@@ -489,26 +504,28 @@ namespace castor3d
 		// Move lines according to valign
 		if ( m_vAlign != VAlign::eTop )
 		{
-			double offset = p_height - linesHeight;
+			double offset = height - linesHeight;
 
 			if ( m_vAlign == VAlign::eCenter )
 			{
 				offset /= 2;
 			}
 
-			for ( auto & line : p_lines )
+			for ( auto & line : lines )
 			{
 				line.m_position[1] += offset;
 			}
 		}
 
 		// Remove lines overflowing the maximum height
-		auto removed = std::remove_if( p_lines.begin(), p_lines.end(), [&p_height]( DisplayableLine const & p_line )
-		{
-			return p_line.m_position[1] > p_height
-				   || p_line.m_position[1] + p_line.m_height < 0;
-		} );
+		auto removed = std::remove_if( lines.begin()
+			, lines.end()
+			, [&height]( DisplayableLine const & line )
+			{
+				return line.m_position[1] > height
+					|| line.m_position[1] + line.m_height < 0;
+			} );
 
-		p_lines.erase( removed, p_lines.end() );
+		lines.erase( removed, lines.end() );
 	}
 }

@@ -136,44 +136,44 @@ namespace castor
 	}
 
 	template< typename Type >
-	AngleT< Type > & AngleT< Type >::operator+=( AngleT< Type > const & p_rhs )noexcept
+	AngleT< Type > & AngleT< Type >::operator+=( AngleT< Type > const & rhs )noexcept
 	{
-		m_radians += p_rhs.m_radians;
+		m_radians += rhs.m_radians;
 		return *this;
 	}
 
 	template< typename Type >
-	AngleT< Type > & AngleT< Type >::operator-=( AngleT< Type > const & p_rhs )noexcept
+	AngleT< Type > & AngleT< Type >::operator-=( AngleT< Type > const & rhs )noexcept
 	{
-		m_radians -= p_rhs.m_radians;
+		m_radians -= rhs.m_radians;
 		return *this;
 	}
 
 	template< typename Type >
-	AngleT< Type > & AngleT< Type >::operator*=( AngleT< Type > const & p_rhs )noexcept
+	AngleT< Type > & AngleT< Type >::operator*=( AngleT< Type > const & rhs )noexcept
 	{
-		m_radians *= p_rhs.m_radians;
+		m_radians *= rhs.m_radians;
 		return *this;
 	}
 
 	template< typename Type >
-	AngleT< Type > & AngleT< Type >::operator/=( AngleT< Type > const & p_rhs )noexcept
+	AngleT< Type > & AngleT< Type >::operator/=( AngleT< Type > const & rhs )noexcept
 	{
-		m_radians /= p_rhs.m_radians;
+		m_radians /= rhs.m_radians;
 		return *this;
 	}
 
 	template< typename Type >
-	AngleT< Type > & AngleT< Type >::operator*=( double p_rhs )noexcept
+	AngleT< Type > & AngleT< Type >::operator*=( double rhs )noexcept
 	{
-		m_radians *= Type( p_rhs );
+		m_radians *= Type( rhs );
 		return *this;
 	}
 
 	template< typename Type >
-	AngleT< Type > & AngleT< Type >::operator/=( double p_rhs )noexcept
+	AngleT< Type > & AngleT< Type >::operator/=( double rhs )noexcept
 	{
-		m_radians /= Type( p_rhs );
+		m_radians /= Type( rhs );
 		return *this;
 	}
 
@@ -226,85 +226,85 @@ namespace castor
 	}
 
 	template< typename Type >
-	bool operator==( AngleT< Type > const & p_lhs, AngleT< Type > const & p_rhs )noexcept
+	bool operator==( AngleT< Type > const & lhs, AngleT< Type > const & rhs )noexcept
 	{
-		return std::abs( p_lhs.m_radians - p_rhs.m_radians ) < std::numeric_limits< Type >::epsilon();
+		return std::abs( lhs.m_radians - rhs.m_radians ) < std::numeric_limits< Type >::epsilon();
 	}
 
 	template< typename Type >
-	bool operator!=( AngleT< Type > const & p_lhs, AngleT< Type > const & p_rhs )noexcept
+	bool operator!=( AngleT< Type > const & lhs, AngleT< Type > const & rhs )noexcept
 	{
-		return !( p_lhs == p_rhs );
+		return !( lhs == rhs );
 	}
 
 	template< typename Type >
-	inline bool operator<( AngleT< Type > const & p_lhs, AngleT< Type > const & p_rhs )noexcept
+	inline bool operator<( AngleT< Type > const & lhs, AngleT< Type > const & rhs )noexcept
 	{
-		return p_lhs.m_radians < p_rhs.m_radians;
+		return lhs.m_radians < rhs.m_radians;
 	}
 
 	template< typename Type >
-	inline bool operator>=( AngleT< Type > const & p_lhs, AngleT< Type > const & p_rhs )noexcept
+	inline bool operator>=( AngleT< Type > const & lhs, AngleT< Type > const & rhs )noexcept
 	{
-		return !( p_lhs < p_rhs );
+		return !( lhs < rhs );
 	}
 
 	template< typename Type >
-	inline bool operator>( AngleT< Type > const & p_lhs, AngleT< Type > const & p_rhs )noexcept
+	inline bool operator>( AngleT< Type > const & lhs, AngleT< Type > const & rhs )noexcept
 	{
-		return p_lhs.m_radians > p_rhs.m_radians;
+		return lhs.m_radians > rhs.m_radians;
 	}
 
 	template< typename Type >
-	inline bool operator<=( AngleT< Type > const & p_lhs, AngleT< Type > const & p_rhs )noexcept
+	inline bool operator<=( AngleT< Type > const & lhs, AngleT< Type > const & rhs )noexcept
 	{
-		return !( p_lhs > p_rhs );
+		return !( lhs > rhs );
 	}
 	template< typename Type >
-	AngleT< Type > operator+( AngleT< Type > const & p_lhs, AngleT< Type > const & p_rhs )noexcept
+	AngleT< Type > operator+( AngleT< Type > const & lhs, AngleT< Type > const & rhs )noexcept
 	{
-		AngleT< Type > result( p_lhs );
-		result += p_rhs;
+		AngleT< Type > result( lhs );
+		result += rhs;
 		return result;
 	}
 
 	template< typename Type >
-	AngleT< Type > operator-( AngleT< Type > const & p_lhs, AngleT< Type > const & p_rhs )noexcept
+	AngleT< Type > operator-( AngleT< Type > const & lhs, AngleT< Type > const & rhs )noexcept
 	{
-		AngleT< Type > result( p_lhs );
-		result -= p_rhs;
+		AngleT< Type > result( lhs );
+		result -= rhs;
 		return result;
 	}
 
 	template< typename Type >
-	AngleT< Type > operator*( AngleT< Type > const & p_lhs, AngleT< Type > const & p_rhs )noexcept
+	AngleT< Type > operator*( AngleT< Type > const & lhs, AngleT< Type > const & rhs )noexcept
 	{
-		AngleT< Type > result( p_lhs );
-		result *= p_rhs;
+		AngleT< Type > result( lhs );
+		result *= rhs;
 		return result;
 	}
 
 	template< typename Type >
-	AngleT< Type > operator/( AngleT< Type > const & p_lhs, AngleT< Type > const & p_rhs )noexcept
+	AngleT< Type > operator/( AngleT< Type > const & lhs, AngleT< Type > const & rhs )noexcept
 	{
-		AngleT< Type > result( p_lhs );
-		result /= p_rhs;
+		AngleT< Type > result( lhs );
+		result /= rhs;
 		return result;
 	}
 
 	template< typename Type >
-	AngleT< Type > operator*( AngleT< Type > const & p_lhs, double p_rhs )noexcept
+	AngleT< Type > operator*( AngleT< Type > const & lhs, double rhs )noexcept
 	{
-		AngleT< Type > result( p_lhs );
-		result *= p_rhs;
+		AngleT< Type > result( lhs );
+		result *= rhs;
 		return result;
 	}
 
 	template< typename Type >
-	AngleT< Type > operator/( AngleT< Type > const & p_lhs, double p_rhs )noexcept
+	AngleT< Type > operator/( AngleT< Type > const & lhs, double rhs )noexcept
 	{
-		AngleT< Type > result( p_lhs );
-		result /= p_rhs;
+		AngleT< Type > result( lhs );
+		result /= rhs;
 		return result;
 	}
 }

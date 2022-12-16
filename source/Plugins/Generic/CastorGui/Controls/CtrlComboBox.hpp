@@ -171,11 +171,11 @@ namespace CastorGui
 
 		/** @copydoc CastorGui::Control::doSetPosition
 		*/
-		void doSetPosition( castor::Position const & p_value )override;
+		void doSetPosition( castor::Position const & value )override;
 
 		/** @copydoc CastorGui::Control::doSetSize
 		*/
-		void doSetSize( castor::Size const & p_value )override;
+		void doSetSize( castor::Size const & value )override;
 
 		/** @copydoc CastorGui::Control::doUpdateStyle
 		*/

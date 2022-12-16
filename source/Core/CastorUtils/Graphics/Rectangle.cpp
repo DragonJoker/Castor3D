@@ -2,47 +2,47 @@
 
 namespace castor
 {
-	Rectangle::Rectangle( Position const & p_ptStart, Size const & p_size )
+	Rectangle::Rectangle( Position const & ptStart, Size const & size )
 		: Coords4i( m_data.buffer )
 	{
-		m_data.rect.left = p_ptStart.x();
-		m_data.rect.top = p_ptStart.y();
-		m_data.rect.right = m_data.rect.left + int32_t( p_size.getWidth() );
-		m_data.rect.bottom = m_data.rect.top + int32_t( p_size.getHeight() );
+		m_data.rect.left = ptStart.x();
+		m_data.rect.top = ptStart.y();
+		m_data.rect.right = m_data.rect.left + int32_t( size.getWidth() );
+		m_data.rect.bottom = m_data.rect.top + int32_t( size.getHeight() );
 	}
 
-	Rectangle::Rectangle( int32_t p_iLeft, int32_t p_iTop, int32_t p_iRight, int32_t p_iBottom )
+	Rectangle::Rectangle( int32_t iLeft, int32_t iTop, int32_t iRight, int32_t iBottom )
 		: Coords4i( m_data.buffer )
 	{
-		m_data.rect.left = p_iLeft;
-		m_data.rect.top = p_iTop;
-		m_data.rect.right = p_iRight;
-		m_data.rect.bottom = p_iBottom;
+		m_data.rect.left = iLeft;
+		m_data.rect.top = iTop;
+		m_data.rect.right = iRight;
+		m_data.rect.bottom = iBottom;
 	}
 
-	Rectangle::Rectangle( Rectangle const & p_rhs )
+	Rectangle::Rectangle( Rectangle const & rhs )
 		: Coords4i( m_data.buffer )
 	{
-		m_data.rect.left = p_rhs.m_data.rect.left;
-		m_data.rect.top = p_rhs.m_data.rect.top;
-		m_data.rect.right = p_rhs.m_data.rect.right;
-		m_data.rect.bottom = p_rhs.m_data.rect.bottom;
+		m_data.rect.left = rhs.m_data.rect.left;
+		m_data.rect.top = rhs.m_data.rect.top;
+		m_data.rect.right = rhs.m_data.rect.right;
+		m_data.rect.bottom = rhs.m_data.rect.bottom;
 	}
 
-	Rectangle & Rectangle::operator=( Rectangle const & p_rhs )
+	Rectangle & Rectangle::operator=( Rectangle const & rhs )
 	{
-		m_data.rect.left = p_rhs.m_data.rect.left;
-		m_data.rect.top = p_rhs.m_data.rect.top;
-		m_data.rect.right = p_rhs.m_data.rect.right;
-		m_data.rect.bottom = p_rhs.m_data.rect.bottom;
+		m_data.rect.left = rhs.m_data.rect.left;
+		m_data.rect.top = rhs.m_data.rect.top;
+		m_data.rect.right = rhs.m_data.rect.right;
+		m_data.rect.bottom = rhs.m_data.rect.bottom;
 		return *this;
 	}
 
-	Intersection Rectangle::intersects( Position const & p_point )const
+	Intersection Rectangle::intersects( Position const & point )const
 	{
 		Intersection eReturn = Intersection::eOut;
 
-		if ( ( p_point.x() >= left() ) && ( p_point.y() >= top() ) && ( p_point.x() <= right() ) && ( p_point.y() <= bottom() ) )
+		if ( ( point.x() >= left() ) && ( point.y() >= top() ) && ( point.x() <= right() ) && ( point.y() <= bottom() ) )
 		{
 			eReturn = Intersection::eIn;
 		}
@@ -50,11 +50,11 @@ namespace castor
 		return eReturn;
 	}
 
-	Intersection Rectangle::intersects( Rectangle const & p_rcRect ) const
+	Intersection Rectangle::intersects( Rectangle const & rcRect ) const
 	{
 		// Calcul du rectangle d'intersection
-		Point2i ptStart( std::max( left(), p_rcRect.left() ), std::max( top(), p_rcRect.top() ) );
-		Point2i ptEnd( std::min( right(), p_rcRect.right() ), std::min( bottom(), p_rcRect.bottom() ) );
+		Point2i ptStart( std::max( left(), rcRect.left() ), std::max( top(), rcRect.top() ) );
+		Point2i ptEnd( std::min( right(), rcRect.right() ), std::min( bottom(), rcRect.bottom() ) );
 		Rectangle rcOverlap( ptStart[0], ptStart[1], ptEnd[0], ptEnd[1] );
 		Intersection eReturn = Intersection::eIntersect;
 
@@ -62,7 +62,7 @@ namespace castor
 		{
 			eReturn = Intersection::eOut;
 		}
-		else if ( ( rcOverlap == * this ) || ( rcOverlap == p_rcRect ) )
+		else if ( ( rcOverlap == * this ) || ( rcOverlap == rcRect ) )
 		{
 			eReturn = Intersection::eIn;
 		}
@@ -70,17 +70,17 @@ namespace castor
 		return eReturn;
 	}
 
-	void Rectangle::set( int32_t p_iLeft, int32_t p_iTop, int32_t p_iRight, int32_t p_iBottom )
+	void Rectangle::set( int32_t iLeft, int32_t iTop, int32_t iRight, int32_t iBottom )
 	{
-		m_data.rect.left	= p_iLeft;
-		m_data.rect.top		= p_iTop;
-		m_data.rect.right	= p_iRight;
-		m_data.rect.bottom	= p_iBottom;
+		m_data.rect.left	= iLeft;
+		m_data.rect.top		= iTop;
+		m_data.rect.right	= iRight;
+		m_data.rect.bottom	= iBottom;
 	}
 
-	void Rectangle::size( Size & p_result )const
+	void Rectangle::size( Size & result )const
 	{
-		p_result.set( uint32_t( abs( getWidth() ) )
+		result.set( uint32_t( abs( getWidth() ) )
 			, uint32_t( abs( getHeight() ) ) );
 	}
 }

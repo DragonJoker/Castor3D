@@ -502,10 +502,10 @@ namespace Testing
 		using getter = std::function< pointer_type() >;
 
 	public:
-		explicit Lazy( std::function< Value() > const & p_expression )
-			: m_thunk{ std::make_shared< getter >( [p_expression]()
+		explicit Lazy( std::function< Value() > const & expression )
+			: m_thunk{ std::make_shared< getter >( [expression]()
 			{
-				return std::make_shared< value_type >( p_expression() );
+				return std::make_shared< value_type >( expression() );
 			} ) }
 		{
 		}
@@ -548,10 +548,10 @@ namespace Testing
 		using getter = std::function< pointer_type() >;
 
 	public:
-		explicit Lazy( std::function< Value &() > const & p_expression )
-			: m_thunk{ std::make_shared< getter >( [p_expression]()
+		explicit Lazy( std::function< Value &() > const & expression )
+			: m_thunk{ std::make_shared< getter >( [expression]()
 			{
-				return std::make_shared< value_type >( std::ref( p_expression() ) );
+				return std::make_shared< value_type >( std::ref( expression() ) );
 			} ) }
 		{
 		}
@@ -593,11 +593,11 @@ namespace Testing
 		using getter = std::function< void() >;
 
 	public:
-		explicit Lazy( std::function< void() > const & p_expression )
-			: m_thunk{ std::make_shared< getter >( [p_expression]()
-		{
-			return p_expression();
-		} ) }
+		explicit Lazy( std::function< void() > const & expression )
+			: m_thunk{ std::make_shared< getter >( [expression]()
+			{
+				return expression();
+			} ) }
 		{
 		}
 
@@ -621,10 +621,10 @@ namespace Testing
 		: public std::exception
 	{
 	public:
-		TestFailed( std::string const & p_what
-			, std::string const & p_file
-			, std::string const & p_function
-			, uint32_t p_line );
+		TestFailed( std::string const & what
+			, std::string const & file
+			, std::string const & function
+			, uint32_t line );
 
 		const char * what()const noexcept override
 		{
@@ -654,11 +654,11 @@ namespace Testing
 		friend struct TestBlock;
 
 	public:
-		explicit TestCase( std::string const & p_name );
+		explicit TestCase( std::string const & name );
 		virtual ~TestCase();
 		void registerTests();
-		void execute( uint32_t & p_errCount
-			, uint32_t & p_testCount );
+		void execute( uint32_t & errCount
+			, uint32_t & testCount );
 
 		TestBlockPtr on( std::string const & text )
 		{
@@ -686,8 +686,8 @@ namespace Testing
 		}
 
 	protected:
-		virtual void doRegisterTest( std::string const & p_name
-			, TestFunction p_test );
+		virtual void doRegisterTest( std::string const & name
+			, TestFunction test );
 
 	private:
 		virtual void doRegisterTests() = 0;
@@ -697,36 +697,36 @@ namespace Testing
 		void doPrintError( std::string const & error );
 
 	public:
-		void fail( char const * const p_file
-			, char const * const p_function
-			, uint32_t const p_line
-			, char const * const p_conditionName )
+		void fail( char const * const file
+			, char const * const function
+			, uint32_t const line
+			, char const * const conditionName )
 		{
 			reportFailure();
 			std::stringstream err;
-			err << "Failure at " << p_file << " - " << p_function << ", line " << p_line << ": " << p_conditionName << std::endl;
+			err << "Failure at " << file << " - " << function << ", line " << line << ": " << conditionName << std::endl;
 			doPrintError( err.str() );
 		}
 
 		template< typename Type >
-		bool check( Lazy< Type > const & p_condition
-			, char const * const p_file
-			, char const * const p_function
-			, uint32_t const p_line
-			, char const * const p_conditionName )
+		bool check( Lazy< Type > const & condition
+			, char const * const file
+			, char const * const function
+			, uint32_t const line
+			, char const * const conditionName )
 		{
 			addTest();
 			bool result = false;
 
 			try
 			{
-				auto const condition = p_condition();
+				auto const cond = condition();
 
-				if ( !condition )
+				if ( !cond )
 				{
 					reportFailure();
 					std::stringstream err;
-					err << "Failure at " << p_file << " - " << p_function << ", line " << p_line << ": " << p_conditionName << std::endl;
+					err << "Failure at " << file << " - " << function << ", line " << line << ": " << conditionName << std::endl;
 					doPrintError( err.str() );
 				}
 				else
@@ -734,21 +734,21 @@ namespace Testing
 					result = true;
 				}
 			}
-			catch ( std::exception & p_exc )
+			catch ( std::exception & exc )
 			{
 				std::stringstream err1;
-				err1 << "Uncaught Exception: " << p_exc.what() << std::endl;
+				err1 << "Uncaught Exception: " << exc.what() << std::endl;
 				doPrintError( err1.str() );
 				reportFailure();
 				std::stringstream err2;
-				err2 << "Failure at " << p_file << " - " << p_function << ", line " << p_line << ": " << p_conditionName << "(Unexpected exception)" << std::endl;
+				err2 << "Failure at " << file << " - " << function << ", line " << line << ": " << conditionName << "(Unexpected exception)" << std::endl;
 				doPrintError( err2.str() );
 			}
 			catch ( ... )
 			{
 				reportFailure();
 				std::stringstream err;
-				err << "Failure at " << p_file << " - " << p_function << ", line " << p_line << ": " << p_conditionName << "(Unexpected exception)" << std::endl;
+				err << "Failure at " << file << " - " << function << ", line " << line << ": " << conditionName << "(Unexpected exception)" << std::endl;
 				doPrintError( err.str() );
 			}
 
@@ -756,55 +756,55 @@ namespace Testing
 		}
 
 		template< typename Type >
-		bool require( Lazy< Type > const & p_condition
-			, char const * const p_file
-			, char const * const p_function
-			, uint32_t const p_line
-			, char const * const p_conditionName )
+		bool require( Lazy< Type > const & condition
+			, char const * const file
+			, char const * const function
+			, uint32_t const line
+			, char const * const conditionName )
 		{
 			addTest();
 			bool result = false;
 
 			try
 			{
-				auto const condition = p_condition();
+				auto const cond = condition();
 
-				if ( !condition )
+				if ( !cond )
 				{
-					throw TestFailed( p_conditionName, p_file, p_function, p_line );
+					throw TestFailed( conditionName, file, function, line );
 				}
 			}
-			catch ( std::exception & p_exc )
+			catch ( std::exception & exc )
 			{
 				std::stringstream err;
-				err << "Uncaught Exception: " << p_exc.what() << std::endl;
+				err << "Uncaught Exception: " << exc.what() << std::endl;
 				doPrintError( err.str() );
-				throw TestFailed( p_conditionName, p_file, p_function, p_line );
+				throw TestFailed( conditionName, file, function, line );
 			}
 			catch ( ... )
 			{
-				throw TestFailed( p_conditionName, p_file, p_function, p_line );
+				throw TestFailed( conditionName, file, function, line );
 			}
 
 			return result;
 		}
 
 		template< typename Type >
-		bool checkThrow( Lazy< Type > const & p_condition
-			, char const * const p_file
-			, char const * const p_function
-			, uint32_t const p_line
-			, char const * const p_conditionName )
+		bool checkThrow( Lazy< Type > const & condition
+			, char const * const file
+			, char const * const function
+			, uint32_t const line
+			, char const * const conditionName )
 		{
 			addTest();
 			bool result = false;
 
 			try
 			{
-				p_condition();
+				condition();
 				reportFailure();
 				std::stringstream err;
-				err << "Failure at " << p_file << " - " << p_function << ", line " << p_line << ": " << p_conditionName << std::endl;
+				err << "Failure at " << file << " - " << function << ", line " << line << ": " << conditionName << std::endl;
 				doPrintError( err.str() );
 			}
 			catch ( ... )
@@ -816,35 +816,35 @@ namespace Testing
 		}
 
 		template< typename Type >
-		bool checkNoThrow( Lazy< Type > const & p_condition
-			, char const * const p_file
-			, char const * const p_function
-			, uint32_t const p_line
-			, char const * const p_conditionName )
+		bool checkNoThrow( Lazy< Type > const & condition
+			, char const * const file
+			, char const * const function
+			, uint32_t const line
+			, char const * const conditionName )
 		{
 			addTest();
 			bool result = false;
 
 			try
 			{
-				p_condition();
+				condition();
 				result = true;
 			}
-			catch ( std::exception & p_exc )
+			catch ( std::exception & exc )
 			{
 				std::stringstream err1;
-				err1 << "Uncaught Exception: " << p_exc.what() << std::endl;
+				err1 << "Uncaught Exception: " << exc.what() << std::endl;
 				doPrintError( err1.str() );
 				reportFailure();
 				std::stringstream err2;
-				err2 << "Failure at " << p_file << " - " << p_function << ", line " << p_line << ": " << p_conditionName << std::endl;
+				err2 << "Failure at " << file << " - " << function << ", line " << line << ": " << conditionName << std::endl;
 				doPrintError( err2.str() );
 			}
 			catch ( ... )
 			{
 				reportFailure();
 				std::stringstream err;
-				err << "Failure at " << p_file << " - " << p_function << ", line " << p_line << ": " << p_conditionName << std::endl;
+				err << "Failure at " << file << " - " << function << ", line " << line << ": " << conditionName << std::endl;
 				doPrintError( err.str() );
 			}
 
@@ -854,47 +854,47 @@ namespace Testing
 		template< typename LhsType
 			, typename RhsType
 			, typename ComparatorType >
-		bool checkEqual( ComparatorType p_compare
-			, Lazy< LhsType > const & p_lhs
-			, Lazy< RhsType > const & p_rhs
-			, char const * const p_file
-			, char const * const p_function
-			, uint32_t const p_line
-			, char const * const p_lhsName
-			, char const * const p_rhsName )
+		bool checkEqual( ComparatorType compare
+			, Lazy< LhsType > const & lhs
+			, Lazy< RhsType > const & rhs
+			, char const * const file
+			, char const * const function
+			, uint32_t const line
+			, char const * const lhsName
+			, char const * const rhsName )
 		{
 			addTest();
 			bool result = false;
 
 			try
 			{
-				auto const & lhs = p_lhs();
-				auto const & rhs = p_rhs();
-				result = p_compare( lhs, rhs );
+				auto const & lhsRes = lhs();
+				auto const & rhsRes = rhs();
+				result = compare( lhsRes, rhsRes );
 
 				if ( !result )
 				{
 					reportFailure();
 					std::stringstream err;
-					err << "Failure at " << p_file << " - " << p_function << ", line " << p_line << ": " << p_lhsName << " == " << p_rhsName << " (" << ::Testing::toString( lhs ) << " != " << ::Testing::toString( rhs ) << ")" << std::endl;
+					err << "Failure at " << file << " - " << function << ", line " << line << ": " << lhsName << " == " << rhsName << " (" << ::Testing::toString( lhsRes ) << " != " << ::Testing::toString( rhsRes ) << ")" << std::endl;
 					doPrintError( err.str() );
 				}
 			}
-			catch ( std::exception & p_exc )
+			catch ( std::exception & exc )
 			{
 				std::stringstream err1;
-				err1 << "Uncaught Exception: " << p_exc.what() << std::endl;
+				err1 << "Uncaught Exception: " << exc.what() << std::endl;
 				doPrintError( err1.str() );
 				reportFailure();
 				std::stringstream err2;
-				err2 << "Failure at " << p_file << " - " << p_function << ", line " << p_line << ": " << p_lhsName << " == " << p_rhsName << "(Unexpected exception)" << std::endl;
+				err2 << "Failure at " << file << " - " << function << ", line " << line << ": " << lhsName << " == " << rhsName << "(Unexpected exception)" << std::endl;
 				doPrintError( err2.str() );
 			}
 			catch ( ... )
 			{
 				reportFailure();
 				std::stringstream err;
-				err << "Failure at " << p_file << " - " << p_function << ", line " << p_line << ": " << p_lhsName << " == " << p_rhsName << "(Unexpected exception)" << std::endl;
+				err << "Failure at " << file << " - " << function << ", line " << line << ": " << lhsName << " == " << rhsName << "(Unexpected exception)" << std::endl;
 				doPrintError( err.str() );
 			}
 
@@ -904,47 +904,47 @@ namespace Testing
 		template< typename LhsType
 			, typename RhsType
 			, typename ComparatorType >
-		bool checkNotEqual( ComparatorType p_compare
-			, Lazy< LhsType > const & p_lhs
-			, Lazy< RhsType > const & p_rhs
-			, char const * const p_file
-			, char const * const p_function
-			, uint32_t const p_line
-			, char const * const p_lhsName
-			, char const * const p_rhsName )
+		bool checkNotEqual( ComparatorType compare
+			, Lazy< LhsType > const & lhs
+			, Lazy< RhsType > const & rhs
+			, char const * const file
+			, char const * const function
+			, uint32_t const line
+			, char const * const lhsName
+			, char const * const rhsName )
 		{
 			addTest();
 			bool result = false;
 
 			try
 			{
-				auto const & lhs = p_lhs();
-				auto const & rhs = p_rhs();
-				result = p_compare( lhs, rhs );
+				auto const & lhsRes = lhs();
+				auto const & rhsRes = rhs();
+				result = compare( lhsRes, rhsRes );
 
 				if ( result )
 				{
 					reportFailure();
 					std::stringstream err;
-					err << "Failure at " << p_file << " - " << p_function << ", line " << p_line << ": " << p_lhsName << " != " << p_rhsName << " (" << ::Testing::toString( lhs ) << " == " << ::Testing::toString( rhs ) << ")" << std::endl;
+					err << "Failure at " << file << " - " << function << ", line " << line << ": " << lhsName << " != " << rhsName << " (" << ::Testing::toString( lhsRes ) << " == " << ::Testing::toString( rhsRes ) << ")" << std::endl;
 					doPrintError( err.str() );
 				}
 			}
-			catch ( std::exception & p_exc )
+			catch ( std::exception & exc )
 			{
 				std::stringstream err1;
-				err1 << "Uncaught Exception: " << p_exc.what() << std::endl;
+				err1 << "Uncaught Exception: " << exc.what() << std::endl;
 				doPrintError( err1.str() );
 				reportFailure();
 				std::stringstream err2;
-				err2 << "Failure at " << p_file << " - " << p_function << ", line " << p_line << ": " << p_lhsName << " != " << p_rhsName << "(Unexpected exception)" << std::endl;
+				err2 << "Failure at " << file << " - " << function << ", line " << line << ": " << lhsName << " != " << rhsName << "(Unexpected exception)" << std::endl;
 				doPrintError( err2.str() );
 			}
 			catch ( ... )
 			{
 				reportFailure();
 				std::stringstream err;
-				err << "Failure at " << p_file << " - " << p_function << ", line " << p_line << ": " << p_lhsName << " != " << p_rhsName << "(Unexpected exception)" << std::endl;
+				err << "Failure at " << file << " - " << function << ", line " << line << ": " << lhsName << " != " << rhsName << "(Unexpected exception)" << std::endl;
 				doPrintError( err.str() );
 			}
 
@@ -952,48 +952,48 @@ namespace Testing
 		}
 
 		template< typename T, typename U >
-		bool compare( T const & p_lhs, U const & p_rhs )
+		bool compare( T const & lhs, U const & rhs )
 		{
-			return p_lhs == p_rhs;
+			return lhs == rhs;
 		}
 
 		template< typename T >
-		bool compare( std::pair< T const *, uint32_t > const & p_a, std::pair< T const *, uint32_t > p_b )
+		bool compare( std::pair< T const *, uint32_t > const & lhs, std::pair< T const *, uint32_t > rhs )
 		{
-			bool result = p_a.second == p_b.second;
+			bool result = lhs.second == rhs.second;
 
 			if ( result )
 			{
-				result = std::memcmp( p_a.first, p_b.first, p_a.second * sizeof( T ) ) == 0;
+				result = std::memcmp( lhs.first, rhs.first, lhs.second * sizeof( T ) ) == 0;
 			}
 
 			return result;
 		}
 
 		template< typename T >
-		bool compare( std::pair< T *, uint32_t > const & p_a, std::pair< T *, uint32_t > p_b )
+		bool compare( std::pair< T *, uint32_t > const & lhs, std::pair< T *, uint32_t > rhs )
 		{
-			bool result = p_a.second == p_b.second;
+			bool result = lhs.second == rhs.second;
 
 			if ( result )
 			{
-				result = std::memcmp( p_a.first, p_b.first, p_a.second * sizeof( T ) ) == 0;
+				result = std::memcmp( lhs.first, rhs.first, lhs.second * sizeof( T ) ) == 0;
 			}
 
 			return result;
 		}
 
 		template< typename Key, typename Value >
-		bool compare( std::map< Key, Value > const & p_a, std::map< Key, Value > p_b )
+		bool compare( std::map< Key, Value > const & lhs, std::map< Key, Value > rhs )
 		{
-			bool result = p_a.size() == p_b.size();
+			bool result = lhs.size() == rhs.size();
 
-			for ( auto & itA : p_a )
+			for ( auto & itA : lhs )
 			{
 				if ( result )
 				{
-					auto itB = p_b.find( itA.first );
-					result = itB != p_b.end();
+					auto itB = rhs.find( itA.first );
+					result = itB != rhs.end();
 					result &= compare( itA.second, itB->second );
 				}
 			}
@@ -1002,16 +1002,16 @@ namespace Testing
 		}
 
 		template< typename Key, typename Value >
-		bool compare( std::map< Key, std::shared_ptr< Value > > const & p_a, std::map< Key, std::shared_ptr< Value > > p_b )
+		bool compare( std::map< Key, std::shared_ptr< Value > > const & lhs, std::map< Key, std::shared_ptr< Value > > rhs )
 		{
-			bool result = p_a.size() == p_b.size();
+			bool result = lhs.size() == rhs.size();
 
-			for ( auto & itA : p_a )
+			for ( auto & itA : lhs )
 			{
 				if ( result )
 				{
-					auto itB = p_b.find( itA.first );
-					result = itB != p_b.end();
+					auto itB = rhs.find( itA.first );
+					result = itB != rhs.end();
 					result &= compare( *itA.second, *itB->second );
 				}
 			}
@@ -1019,42 +1019,42 @@ namespace Testing
 			return result;
 		}
 
-		bool compare( float const & p_a, float const & p_b )
+		bool compare( float const & lhs, float const & rhs )
 		{
 			float epsilon = 0.0001f;
-			return std::abs( p_a - p_b ) < epsilon
-				   || ( std::isnan( p_a ) && std::isnan( p_b ) );
+			return std::abs( lhs - rhs ) < epsilon
+				   || ( std::isnan( lhs ) && std::isnan( rhs ) );
 		}
 
-		bool compare( float const & p_a, double const & p_b )
+		bool compare( float const & lhs, double const & rhs )
 		{
 			float epsilon = 0.0001f;
-			return std::abs( p_a - p_b ) < epsilon
-				   || ( std::isnan( p_a ) && std::isnan( p_b ) );
+			return std::abs( lhs - rhs ) < epsilon
+				   || ( std::isnan( lhs ) && std::isnan( rhs ) );
 		}
 
-		bool compare( double const & p_a, double const & p_b )
+		bool compare( double const & lhs, double const & rhs )
 		{
 			double epsilon = 0.0001;
-			return std::abs( p_a - p_b ) < epsilon
-				   || ( std::isnan( p_a ) && std::isnan( p_b ) );
+			return std::abs( lhs - rhs ) < epsilon
+				   || ( std::isnan( lhs ) && std::isnan( rhs ) );
 		}
 
-		bool compare( double const & p_a, float const & p_b )
+		bool compare( double const & lhs, float const & rhs )
 		{
 			double epsilon = 0.0001;
-			return std::abs( p_a - p_b ) < epsilon
-				|| ( std::isnan( p_a ) && std::isnan( p_b ) );
+			return std::abs( lhs - rhs ) < epsilon
+				|| ( std::isnan( lhs ) && std::isnan( rhs ) );
 		}
 
 		template< typename T, size_t C1, size_t C2 >
-		bool compare( std::array< T, C1 > const & p_a, std::array< T, C2 > const & p_b )
+		bool compare( std::array< T, C1 > const & lhs, std::array< T, C2 > const & rhs )
 		{
 			bool result{ C1 == C2 };
 
 			for ( size_t i = 0u; i < C1 && result; ++i )
 			{
-				result = this->compare( p_a[i], p_b[i] );
+				result = this->compare( lhs[i], rhs[i] );
 			}
 
 			return result;

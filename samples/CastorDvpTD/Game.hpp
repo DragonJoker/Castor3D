@@ -13,7 +13,7 @@ namespace castortd
 	class Game
 	{
 	public:
-		explicit Game( castor3d::Scene & p_scene );
+		explicit Game( castor3d::Scene & scene );
 		~Game();
 
 		void reset();

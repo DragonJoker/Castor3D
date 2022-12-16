@@ -22,11 +22,11 @@ namespace castor
 		m_thread.reset();
 	}
 
-	void WorkerThread::feed( Job p_job )
+	void WorkerThread::feed( Job job )
 	{
 		CU_Require( m_start == false );
 		{
-			m_currentJob = p_job;
+			m_currentJob = job;
 		}
 		m_start = true;
 	}
@@ -36,7 +36,7 @@ namespace castor
 		return !m_start;
 	}
 
-	bool WorkerThread::wait( Milliseconds const & p_timeout )const
+	bool WorkerThread::wait( Milliseconds const & timeout )const
 	{
 		bool result = isEnded() && !m_terminate;
 
@@ -51,7 +51,7 @@ namespace castor
 				result = isEnded();
 				wait = std::chrono::duration_cast< Milliseconds >( std::chrono::high_resolution_clock::now() - begin );
 			}
-			while ( wait < p_timeout && !result && !m_terminate );
+			while ( wait < timeout && !result && !m_terminate );
 		}
 
 		return result;

@@ -2,12 +2,15 @@
 
 namespace CastorViewer
 {
-	MouseNodeEvent::MouseNodeEvent( castor3d::SceneNodeSPtr p_node, float p_dx, float p_dy, float p_dz )
+	MouseNodeEvent::MouseNodeEvent( castor3d::SceneNodeSPtr node
+		, float dx
+		, float dy
+		, float dz )
 		: CpuFrameEvent( castor3d::EventType::ePostRender )
-		, m_node( p_node )
-		, m_dx( p_dx )
-		, m_dy( p_dy )
-		, m_dz( p_dz )
+		, m_node( node )
+		, m_dx( dx )
+		, m_dy( dy )
+		, m_dz( dz )
 	{
 	}
 }

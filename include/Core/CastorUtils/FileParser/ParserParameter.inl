@@ -98,9 +98,9 @@ namespace castor
 				logger.logWarning( castor::makeStringStream() << cuT( "Couldn't parse from " ) << params );
 			}
 		}
-		catch ( std::exception & p_exc )
+		catch ( std::exception & exc )
 		{
-			logger.logError( castor::makeStringStream() << cuT( "Couldn't parse from " ) << params << cuT( ": " ) << string::stringCast< xchar >( p_exc.what() ) );
+			logger.logError( castor::makeStringStream() << cuT( "Couldn't parse from " ) << params << cuT( ": " ) << string::stringCast< xchar >( exc.what() ) );
 		}
 
 		return result;
@@ -314,8 +314,8 @@ namespace castor
 		 *\param[out]	value		Reçoit le résultat.
 		 */
 		static inline bool parse( LoggerInstance & logger
-			, String & 
-			params, ValueType & value )
+			, String & params
+			, ValueType & value )
 		{
 			return parseValues( logger, params, value );
 		}
@@ -643,9 +643,9 @@ namespace castor
 						logger.logWarning( makeStringStream() << cuT( "Couldn't parse from " ) << params );
 					}
 				}
-				catch ( std::exception & p_exc )
+				catch ( std::exception & exc )
 				{
-					logger.logError( makeStringStream() << cuT( "Couldn't parse from " ) << params << cuT( ": " ) << string::stringCast< xchar >( p_exc.what() ) );
+					logger.logError( makeStringStream() << cuT( "Couldn't parse from " ) << params << cuT( ": " ) << string::stringCast< xchar >( exc.what() ) );
 				}
 
 				return result;
@@ -755,9 +755,9 @@ namespace castor
 						logger.logWarning( makeStringStream() << cuT( "Couldn't parse from " ) << params );
 					}
 				}
-				catch ( std::exception & p_exc )
+				catch ( std::exception & exc )
 				{
-					logger.logError( makeStringStream() << cuT( "Couldn't parse from " ) << params << cuT( ": " ) << string::stringCast< xchar >( p_exc.what() ) );
+					logger.logError( makeStringStream() << cuT( "Couldn't parse from " ) << params << cuT( ": " ) << string::stringCast< xchar >( exc.what() ) );
 				}
 
 				return result;
@@ -852,9 +852,9 @@ namespace castor
 						logger.logWarning( makeStringStream() << cuT( "Couldn't parse from " ) << params );
 					}
 				}
-				catch ( std::exception & p_exc )
+				catch ( std::exception & exc )
 				{
-					logger.logError( makeStringStream() << cuT( "Couldn't parse from " ) << params << cuT( ": " ) << string::stringCast< xchar >( p_exc.what() ) );
+					logger.logError( makeStringStream() << cuT( "Couldn't parse from " ) << params << cuT( ": " ) << string::stringCast< xchar >( exc.what() ) );
 				}
 
 				return result;
@@ -964,9 +964,9 @@ namespace castor
 						logger.logWarning( makeStringStream() << cuT( "Couldn't parse from " ) << params );
 					}
 				}
-				catch ( std::exception & p_exc )
+				catch ( std::exception & exc )
 				{
-					logger.logError( makeStringStream() << cuT( "Couldn't parse from " ) << params << cuT( ": " ) << string::stringCast< xchar >( p_exc.what() ) );
+					logger.logError( makeStringStream() << cuT( "Couldn't parse from " ) << params << cuT( ": " ) << string::stringCast< xchar >( exc.what() ) );
 				}
 
 				return result;
@@ -1023,11 +1023,11 @@ namespace castor
 
 	//*************************************************************************************************
 
-	inline ParserParameter< ParameterType::eCheckedText >::ParserParameter( UInt32StrMap const & p_values
+	inline ParserParameter< ParameterType::eCheckedText >::ParserParameter( UInt32StrMap const & values
 		, xchar const * name )
 		: ParserParameter< ParameterType::eUInt32 >()
 		, m_name( name )
-		, m_values( p_values )
+		, m_values( values )
 	{
 	}
 
@@ -1079,11 +1079,11 @@ namespace castor
 
 	//*************************************************************************************************
 
-	inline ParserParameter< ParameterType::eBitwiseOred32BitsCheckedText >::ParserParameter( UInt32StrMap const & p_values
+	inline ParserParameter< ParameterType::eBitwiseOred32BitsCheckedText >::ParserParameter( UInt32StrMap const & values
 		, xchar const * name )
 		: ParserParameter< ParameterType::eUInt32 >()
 		, m_name( name )
-		, m_values( p_values )
+		, m_values( values )
 	{
 	}
 
@@ -1159,11 +1159,11 @@ namespace castor
 
 	//*************************************************************************************************
 
-	inline ParserParameter< ParameterType::eBitwiseOred64BitsCheckedText >::ParserParameter( UInt64StrMap const & p_values
+	inline ParserParameter< ParameterType::eBitwiseOred64BitsCheckedText >::ParserParameter( UInt64StrMap const & values
 		, xchar const * name )
 		: ParserParameter< ParameterType::eUInt64 >()
 		, m_name( name )
-		, m_values( p_values )
+		, m_values( values )
 	{
 	}
 

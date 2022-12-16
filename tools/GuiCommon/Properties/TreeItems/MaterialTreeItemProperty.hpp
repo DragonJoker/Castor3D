@@ -24,14 +24,14 @@ namespace GuiCommon
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_editable	Tells if the properties are modifiable
-		 *\param[in]	p_material	The target material
+		 *\param[in]	editable	Tells if the properties are modifiable
+		 *\param[in]	material	The target material
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
-		 *\param[in]	p_material	Le matàriau cible
+		 *\param[in]	editable	Dit si les propriétés sont modifiables
+		 *\param[in]	material	Le matàriau cible
 		 */
-		MaterialTreeItemProperty( bool p_editable, castor3d::Material & p_material );
+		MaterialTreeItemProperty( bool editable, castor3d::Material & material );
 		/**
 		 *\~english
 		 *\brief		Retrieves the material
@@ -49,7 +49,7 @@ namespace GuiCommon
 		/**
 		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
-		void doCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )override;
+		void doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )override;
 
 	private:
 		castor3d::MaterialRPtr m_material{};
