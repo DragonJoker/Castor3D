@@ -4,9 +4,6 @@
 [submodule "CMake"]
 	path = CMake
 	url = https://github.com/DragonJoker/CMakeUtils.git
-[submodule "external/zlib"]
-	path = external/zlib
-	url = https://github.com/DragonJoker/zlib.git
 [submodule "external/Ashes"]
 	path = external/Ashes
 	url = https://github.com/DragonJoker/Ashes.git
@@ -16,9 +13,6 @@
 [submodule "external/ShaderWriter"]
 	path = external/ShaderWriter
 	url = https://github.com/DragonJoker/ShaderWriter.git
-[submodule "external/FreeType"]
-	path = external/FreeType
-	url = https://github.com/DragonJoker/FreeType.git
 [submodule "external/RenderGraph"]
 	path = external/RenderGraph
 	url = https://github.com/DragonJoker/RenderGraph.git
