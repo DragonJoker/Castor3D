@@ -175,7 +175,7 @@ endif()
 
 option( CASTOR_BUILDGRP_TEST "Build test projects" OFF )
 option( CASTOR_BUILDGRP_SETUP "Build setup projects" OFF )
-option( CASTOR_BUILDGRP_SAMPLE "Build Castor3D samples." OFF )
+option( CASTOR_BUILDGRP_DEMO "Build Castor3D demos." OFF )
 option( CASTOR_BUILD_CASTOR3D "Build Castor3D" ON )
 option( CASTOR_C3D_NEEDS_GLSL "Tells if Castor3D needs CompilerGlsl from ShaderWriter" OFF )
 option( CASTOR_GUICOMMON_NEEDS_HLSL "Tells if GuiCommon needs CompilerHlsl from ShaderWriter" OFF )
@@ -292,7 +292,7 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 	add_subdirectory( tools )
 
 	if ( CASTOR_BUILD_CASTOR3D )
-		add_subdirectory( samples )
+		add_subdirectory( demos )
 	endif ()
 
 	if( CASTOR_BUILDGRP_TEST )
@@ -382,8 +382,8 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 		)
 
 		cpack_add_component_group( Samples
-			DISPLAY_NAME "Samples"
-			DESCRIPTION "Sample applications and scenes using Castor3D."
+			DISPLAY_NAME "Demos"
+			DESCRIPTION "Demo applications and scenes using Castor3D."
 		)
 
 		cpack_add_component_group( Test
@@ -399,7 +399,7 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 		CoreSetup()
 		if ( ${CASTOR_BUILD_CASTOR3D} )
 			PluginsSetup()
-			SamplesSetup()
+			DemosSetup()
 			InteropSetup()
 		endif ()
 		ToolsSetup()
