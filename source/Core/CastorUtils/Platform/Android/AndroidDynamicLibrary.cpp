@@ -30,7 +30,7 @@ namespace castor
 		}
 	}
 
-	void * DynamicLibrary::doGetFunction( String const & name )noexcept
+	VoidFnType DynamicLibrary::doGetFunction( String const & name )noexcept
 	{
 		void * result = nullptr;
 
@@ -65,7 +65,7 @@ namespace castor
 			Logger::logError( cuT( "Can't load function [" ) + name + cuT( "] because dynamic library is not loaded" ) );
 		}
 
-		return result;
+		return reinterpret_cast< VoidFnType >( result );
 	}
 
 	void DynamicLibrary::doClose()noexcept

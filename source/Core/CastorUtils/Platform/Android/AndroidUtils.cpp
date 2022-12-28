@@ -15,7 +15,7 @@ namespace castor
 		bool getScreenSize( uint32_t p_screen, castor::Size & p_size )
 		{
 			bool result = false;
-			auto display = eglgetDisplay( EGLNativeDisplayType( p_screen ) );
+			auto display = eglGetDisplay( EGLNativeDisplayType( p_screen ) );
 
 			if ( !display )
 			{
@@ -23,7 +23,7 @@ namespace castor
 			}
 			else
 			{
-				auto surface = eglgetCurrentSurface( EGL_READ );
+				auto surface = eglGetCurrentSurface( EGL_READ );
 
 				if ( !surface )
 				{

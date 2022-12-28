@@ -90,12 +90,12 @@ namespace castor3d
 #endif
 #ifdef VK_USE_PLATFORM_ANDROID_KHR
 	template<> struct VkStructTraits< VkAndroidSurfaceCreateInfoKHR >{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_ANDROID_SURFACE_CREATE_INFO_KHR; };
-	template<> struct VkStructTraits< VkAndroidHardwareBufferUsageAndroid >{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_ANDROID_HARDWARE_BUFFER_USAGE_ANDROID; };
-	template<> struct VkStructTraits< VkAndroidHardwareBufferPropertiesAndroid >{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_ANDROID_HARDWARE_BUFFER_PROPERTIES_ANDROID; };
-	template<> struct VkStructTraits< VkAndroidHardwareBufferFormatPropertiesAndroid >{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_ANDROID_HARDWARE_BUFFER_FORMAT_PROPERTIES_ANDROID; };
-	template<> struct VkStructTraits< VkImportAndroidHardwareBufferInfoAndroid >{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_IMPORT_ANDROID_HARDWARE_BUFFER_INFO_ANDROID; };
-	template<> struct VkStructTraits< VkMemoryGetAndroidHardwareBufferInfoAndroid >{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_MEMORY_GET_ANDROID_HARDWARE_BUFFER_INFO_ANDROID; };
-	template<> struct VkStructTraits< VkExternalFormatAndroid >{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_EXTERNAL_FORMAT_ANDROID; };
+	template<> struct VkStructTraits< VkAndroidHardwareBufferUsageANDROID >{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_ANDROID_HARDWARE_BUFFER_USAGE_ANDROID; };
+	template<> struct VkStructTraits< VkAndroidHardwareBufferPropertiesANDROID >{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_ANDROID_HARDWARE_BUFFER_PROPERTIES_ANDROID; };
+	template<> struct VkStructTraits< VkAndroidHardwareBufferFormatPropertiesANDROID >{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_ANDROID_HARDWARE_BUFFER_FORMAT_PROPERTIES_ANDROID; };
+	template<> struct VkStructTraits< VkImportAndroidHardwareBufferInfoANDROID >{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_IMPORT_ANDROID_HARDWARE_BUFFER_INFO_ANDROID; };
+	template<> struct VkStructTraits< VkMemoryGetAndroidHardwareBufferInfoANDROID >{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_MEMORY_GET_ANDROID_HARDWARE_BUFFER_INFO_ANDROID; };
+	template<> struct VkStructTraits< VkExternalFormatANDROID >{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_EXTERNAL_FORMAT_ANDROID; };
 #endif
 #ifdef VK_USE_PLATFORM_FUCHSIA
 	template<> struct VkStructTraits< VkImagePipeSurfaceCreateInfoFuchsia >{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_IMAGEPIPE_SURFACE_CREATE_INFO_FUCHSIA; };
