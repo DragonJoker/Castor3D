@@ -36,7 +36,7 @@ namespace castor
 			{
 				if constexpr ( PFSrc == PFDst )
 				{
-					std::memcpy( dstBuffer, srcBuffer, getBytesPerPixel( PFSrc ) );
+					std::memcpy( dstBuffer, srcBuffer, size_t( getBytesPerPixel( PFSrc ) ) );
 				}
 				else if constexpr( PFSrc != PixelFormat::eUNDEFINED
 					&& PFDst != PixelFormat::eUNDEFINED
@@ -45,7 +45,7 @@ namespace castor
 				{
 					if constexpr ( PFSrc == PFDst )
 					{
-						std::memcpy( dstBuffer, srcBuffer, getBytesPerPixel( PFSrc ) );
+						std::memcpy( dstBuffer, srcBuffer, size_t( getBytesPerPixel( PFSrc ) ) );
 					}
 					else if constexpr ( is8SRGBComponentsV< PFDst > )
 					{

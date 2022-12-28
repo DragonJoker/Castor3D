@@ -26,8 +26,11 @@ else ()
 	set( ZLIB_FOUND ON )
 endif ()
 if ( ZLIB_FOUND AND FreeType_FOUND )
-	if ( ANDROID )
-		include_directories( ${ANDROID_NDK}/sources )
+	if ( "Android" STREQUAL ${PROJECTS_OS} )
+		include_directories( ${CMAKE_ANDROID_NDK}/sources )
+		if( NOT DEFINED ANDROID_NDK )
+			set( ANDROID_NDK ${CMAKE_ANDROID_NDK} )
+		endif ()
 		android_ndk_import_module_cpufeatures()
 		set( PLATFORM_LIBRARIES
 			${PLATFORM_LIBRARIES}
@@ -678,6 +681,12 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		target_link_libraries( ${PROJECT_NAME}
 			PUBLIC
 				Dbghelp
+		)
+	endif ()
+	if ( ANDROID )
+		target_link_libraries( ${PROJECT_NAME}
+			PUBLIC
+				log
 		)
 	endif ()
 

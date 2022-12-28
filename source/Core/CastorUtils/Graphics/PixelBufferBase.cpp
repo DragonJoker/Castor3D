@@ -52,7 +52,7 @@ namespace castor
 				, 0u
 				, dstLevels
 				, 0u );
-			result.resize( dstLayerSize * extent.depth );
+			result.resize( size_t( dstLayerSize * extent.depth ) );
 			auto srcLayer = buffer;
 			auto dstLayer = result.data();
 
@@ -66,7 +66,7 @@ namespace castor
 				// Copy level 0 to dst layer buffer
 				std::memcpy( dstLayer
 					, srcLayer
-					, levelSize );
+					, size_t( levelSize ) );
 
 				auto dstLevel = dstLayer;
 
@@ -109,7 +109,7 @@ namespace castor
 			auto dstLayerSize = ashes::getSize( VkExtent2D{ dstDimensions.width, dstDimensions.height }
 				, VkFormat( format ) );
 			ByteArray result;
-			result.resize( dstLayerSize );
+			result.resize( size_t( dstLayerSize ) );
 			auto dst = result.data();
 
 			auto ret = stbir_resize( src, int( srcDimensions.width ), int( srcDimensions.height ), 0
@@ -555,7 +555,7 @@ namespace castor
 					, 0u
 					, m_levels
 					, m_align );
-			m_buffer.resize( newSize );
+			m_buffer.resize( size_t( newSize ) );
 			pxbb::compressBuffer( options
 				, interrupt
 				, m_size
@@ -581,11 +581,11 @@ namespace castor
 					, 0u
 					, m_levels
 					, m_align );
-			m_buffer.resize( newSize );
+			m_buffer.resize( size_t( newSize ) );
 
 			if ( !buffer )
 			{
-				memset( m_buffer.data(), 0, newSize );
+				memset( m_buffer.data(), 0, size_t( newSize ) );
 			}
 			else
 			{
@@ -654,11 +654,11 @@ namespace castor
 		tilesY = uint32_t( std::ceil( float( m_layers ) / float( tilesX ) ) );
 		VkExtent2D dstSize{ m_size.getWidth() * tilesX, m_size.getHeight() * tilesY };
 		PxArray result;
-		result.resize( ashes::getLevelsSize( dstSize
+		result.resize( size_t( ashes::getLevelsSize( dstSize
 			, VkFormat( getFormat() )
 			, 0u
 			, m_levels
-			, m_align ) );
+			, m_align ) ) );
 		auto blockSize = ashes::getBlockSize( VkFormat( m_format ) );
 		auto src = m_buffer.data();
 		auto dst = result.data();
@@ -687,7 +687,7 @@ namespace castor
 					for ( uint32_t line = 0u; line < lines; ++line )
 					{
 						CU_Require( ( dstLevelOffset + srcLineSize ) <= result.size() );
-						std::memcpy( dst + dstLevelOffset, srcLevel, srcLineSize );
+						std::memcpy( dst + dstLevelOffset, srcLevel, size_t( srcLineSize ) );
 						srcLevel += srcLineSize;
 						dstLevelOffset += dstLineSize;
 						written += srcLineSize;
@@ -730,7 +730,7 @@ namespace castor
 					, 0u
 					, m_levels
 					, m_align );
-			m_buffer.resize( newSize );
+			m_buffer.resize( size_t( newSize ) );
 
 			auto srcBuffer = buffer.data();
 			auto srcLayerSize = ashes::getLevelsSize( extent
@@ -747,7 +747,7 @@ namespace castor
 
 			for ( uint32_t layer = 0u; layer < std::min( srcLevels, m_layers ); ++layer )
 			{
-				memcpy( dstBuffer, srcBuffer, std::min( srcLayerSize, dstLayerSize ) );
+				memcpy( dstBuffer, srcBuffer, size_t( std::min( srcLayerSize, dstLayerSize ) ) );
 				srcBuffer += srcLayerSize;
 				dstBuffer += dstLayerSize;
 			}

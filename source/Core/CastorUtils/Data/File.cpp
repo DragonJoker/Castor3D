@@ -197,7 +197,7 @@ namespace castor
 
 		if ( isOk() )
 		{
-			uiReturn = fwrite( buffer, 1, uiSize, m_file );
+			uiReturn = fwrite( buffer, 1, size_t( uiSize ), m_file );
 			m_cursor += uiReturn;
 			CU_Ensure( uiReturn <= uiSize );
 		}
@@ -219,7 +219,7 @@ namespace castor
 			while ( uiReturn < uiSize && uiPrev != uiReturn )
 			{
 				uiPrev = uiReturn;
-				uiReturn += fread( buffer, 1, uiSize - uiReturn, m_file );
+				uiReturn += fread( buffer, 1, size_t( uiSize - uiReturn ), m_file );
 			}
 
 			m_cursor += uiReturn;

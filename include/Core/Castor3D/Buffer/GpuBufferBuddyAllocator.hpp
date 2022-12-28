@@ -63,7 +63,7 @@ namespace castor3d
 		 */
 		size_t getOffset( PointerType pointer )const
 		{
-			return pointer;
+			return size_t( pointer );
 		}
 		/**
 		 *\~english

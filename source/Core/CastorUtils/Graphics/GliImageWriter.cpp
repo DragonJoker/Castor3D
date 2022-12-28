@@ -90,7 +90,7 @@ namespace castor
 					auto dstLevelSize = ashes::getSize( { buffer.getWidth(), buffer.getHeight(), 1u }
 						, VkFormat( buffer.getFormat() )
 						, level );
-					std::memcpy( dstLevel, srcLevel, std::min( srcLevelSize, dstLevelSize ) );
+					std::memcpy( dstLevel, srcLevel, size_t( std::min( srcLevelSize, dstLevelSize ) ) );
 					srcLevel += srcLevelSize;
 					dstLevel += dstLevelSize;
 				}

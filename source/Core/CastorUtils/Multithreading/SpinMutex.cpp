@@ -22,6 +22,7 @@ namespace castor
 			{
 #if defined( CU_CompilerMSVC )
 				_mm_pause();
+#elif defined( CU_PlatformAndroid )
 #else
 				__builtin_ia32_pause();
 #endif

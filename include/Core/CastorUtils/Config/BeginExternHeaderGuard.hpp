@@ -29,6 +29,8 @@ See LICENSE file in root folder
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wambiguous-reversed-operator"
 #pragma clang diagnostic ignored "-Watomic-implicit-seq-cst"
+#pragma clang diagnostic ignored "-Wtautological-type-limit-compare"
+#pragma clang diagnostic ignored "-Wtautological-constant-out-of-range-compare"
 #pragma clang diagnostic ignored "-Wcast-align"
 #pragma clang diagnostic ignored "-Wcast-function-type"
 #pragma clang diagnostic ignored "-Wcomma"

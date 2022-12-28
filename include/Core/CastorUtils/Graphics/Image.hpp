@@ -263,7 +263,7 @@ namespace castor
 
 		std::size_t getSize( uint32_t level = 0u )const
 		{
-			return m_layout.layerMipSize( level );
+			return size_t( m_layout.layerMipSize( level ) );
 		}
 
 		uint32_t getWidth()const
