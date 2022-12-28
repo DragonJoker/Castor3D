@@ -66,7 +66,7 @@ set( PLATFORM_LIBRARIES
 if ( ${CASTOR_BUILD_CASTOR3D} )
 	if ( CASTOR_USE_GLSLANG )
 		option( CASTOR_FORCE_GLSLANG_SUBMODULE "Force use of glslang submodule" OFF )
-		if ( CASTOR_USE_SYSTEM_LIBS AND NOT CASTOR_FORCE_GLSLANG_SUBMODULE )
+		if ( NOT CASTOR_FORCE_GLSLANG_SUBMODULE )
 			if ( VCPKG_TOOLCHAIN )
 				find_package( glslang CONFIG REQUIRED glslang OGLCompiler OSDependent SPIRV SPVRemapper )
 				get_target_property( glslang_INCLUDE_DIR glslang::SPIRV INTERFACE_INCLUDE_DIRECTORIES )
