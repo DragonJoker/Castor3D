@@ -124,7 +124,7 @@ namespace castor3d
 						, "BackgroundIndexBuffer" ) );
 					auto & indexBuffer = *castor::DataHolderT< ashes::BufferPtr< uint16_t > >::getData();
 					auto data = m_device.graphicsData();
-					ashes::StagingBuffer stagingBuffer{ *m_device.device, 0u, sizeof( uint16_t ) * indexData.size() };
+					ashes::StagingBuffer stagingBuffer{ *m_device.device, 0u, VkDeviceSize( sizeof( uint16_t ) * indexData.size() ) };
 					stagingBuffer.uploadBufferData( *data->queue
 						, *data->commandPool
 						, indexData
@@ -165,7 +165,7 @@ namespace castor3d
 						, "Background" ) );
 					auto & vertexBuffer = *castor::DataHolderT< ashes::VertexBufferPtr< castor::Point3f > >::getData();
 					auto data = m_device.graphicsData();
-					ashes::StagingBuffer stagingBuffer{ *m_device.device, 0u, sizeof( Point3f ) * 24u };
+					ashes::StagingBuffer stagingBuffer{ *m_device.device, 0u, VkDeviceSize( sizeof( Point3f ) * 24u ) };
 					stagingBuffer.uploadVertexData( *data->queue
 						, *data->commandPool
 						, vertexData

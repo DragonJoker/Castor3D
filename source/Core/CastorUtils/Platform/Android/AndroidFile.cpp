@@ -18,7 +18,6 @@
 #	include <dirent.h>
 #	include <errno.h>
 #	include <pwd.h>
-#	define getCurrentDir getcwd
 
 namespace castor
 {
@@ -111,7 +110,7 @@ namespace castor
 
 	bool fileSeek( FILE * p_file, int64_t p_offset, int p_iOrigin )
 	{
-		return fseek( p_file, p_offset, p_iOrigin ) == 0;
+		return fseek( p_file, size_t( p_offset ), p_iOrigin ) == 0;
 	}
 
 	int64_t fileTell( FILE * p_file )
@@ -125,7 +124,7 @@ namespace castor
 		char path[FILENAME_MAX];
 		char buffer[32];
 		sprintf( buffer, "/proc/%d/exe", getpid() );
-		int bytes = std::min< std::size_t >( readlink( buffer, path, sizeof( path ) ), sizeof( path ) - 1 );
+		int bytes = int( std::min( size_t( readlink( buffer, path, sizeof( path ) ) ), sizeof( path ) - 1 ) );
 
 		if ( bytes > 0 )
 		{
@@ -149,7 +148,7 @@ namespace castor
 
 	bool File::directoryExists( Path const & p_path )
 	{
-		struct stat status = { 0 };
+		struct stat status = {};
 		stat( string::stringCast< char >( p_path ).c_str(), &status );
 		return ( status.st_mode & S_IFDIR ) == S_IFDIR;
 	}

@@ -126,7 +126,7 @@ elseif ( MSVC )
 		message( FATAL_ERROR "Your compiler is too old, consider an update." )
 	endif ()
 else ()
-	message( FATAL_ERROR "Unsupported compiler." )
+	message( FATAL_ERROR "Unsupported compiler: [${CMAKE_CXX_COMPILER_ID}]." )
 endif ()
 
 add_compile_options( $<$<CXX_COMPILER_ID:Clang>:-Wno-inconsistent-missing-override> ) # for wxWidgets

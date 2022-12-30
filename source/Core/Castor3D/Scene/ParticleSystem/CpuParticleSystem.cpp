@@ -56,7 +56,7 @@ namespace castor3d
 	uint32_t CpuParticleSystem::update( castor3d::GpuUpdater & updater )
 	{
 		auto & vbo = m_parent.getBillboards()->getVertexBuffer();
-		VkDeviceSize stride = m_inputs.stride();
+		auto stride = m_inputs.stride();
 		auto * dst = vbo.getData().data();
 
 		for ( auto i = 0u; i < m_firstUnused; ++i )

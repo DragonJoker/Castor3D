@@ -333,14 +333,14 @@ namespace castor3d
 		, m_device{ rhs.m_device }
 		, m_renderPass{ rhs.m_renderPass }
 	{
-		rhs.m_renderPass = nullptr;
+		rhs.m_renderPass = VkRenderPass{};
 	}
 
 	OverlayRenderer::Preparer & OverlayRenderer::Preparer::operator=( Preparer && rhs )
 	{
 		m_renderPass = rhs.m_renderPass;
 
-		rhs.m_renderPass = nullptr;
+		rhs.m_renderPass = VkRenderPass{};
 
 		return *this;
 	}
@@ -924,7 +924,7 @@ namespace castor3d
 		auto texLayout = getOwner()->getEngine()->getTextureUnitCache().getDescriptorLayout();
 		auto descriptorLayout = device->createDescriptorSetLayout( std::move( bindings ) );
 		auto descriptorPool = descriptorLayout->createPool( 1000u );
-		auto pipelineLayout = device->createPipelineLayout( { *descriptorLayout, *texLayout } );
+		auto pipelineLayout = device->createPipelineLayout( ashes::DescriptorSetLayoutCRefArray{ *descriptorLayout, *texLayout } );
 		auto pipeline = device->createPipeline( { 0u
 			, std::move( program )
 			, *vertexLayout

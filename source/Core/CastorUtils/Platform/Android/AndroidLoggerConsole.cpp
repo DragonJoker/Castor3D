@@ -16,33 +16,31 @@ namespace castor
 		{
 		}
 
-		void beginLog( LogType logLevel )
+		void beginLog( LogType logLevel )override
 		{
 			switch ( logLevel )
 			{
 			case LogType::eTrace:
 				m_logLevel = ANDROID_LOG_VERBOSE;
 				break;
-
 			case LogType::eDebug:
 				m_logLevel = ANDROID_LOG_DEBUG;
 				break;
-
 			case LogType::eInfo:
 				m_logLevel = ANDROID_LOG_INFO;
 				break;
-
 			case LogType::eWarning:
 				m_logLevel = ANDROID_LOG_WARN;
 				break;
-
 			case LogType::eError:
 				m_logLevel = ANDROID_LOG_ERROR;
+				break;
+			default:
 				break;
 			}
 		}
 
-		void print( String const & toLog, bool newLine )
+		void print( String const & toLog, bool newLine )override
 		{
 			__android_log_print( m_logLevel
 				, "Castor3D"

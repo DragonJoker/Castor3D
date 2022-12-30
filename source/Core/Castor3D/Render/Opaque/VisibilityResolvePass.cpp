@@ -1109,7 +1109,7 @@ namespace castor3d
 			writes.push_back( matCache.getTexConfigBuffer().getBinding( InOutBindings::eTexConfigs ) );
 			writes.push_back( matCache.getTexAnimBuffer().getBinding( InOutBindings::eTexAnims ) );
 			auto & visibilityPassResult = technique.getVisibilityResult();
-			writes.push_back( makeDescriptorWrite( visibilityPassResult.targetView
+			writes.push_back( makeImageViewDescriptorWrite( visibilityPassResult.targetView
 				, InOutBindings::eInData ) );
 
 			if constexpr ( VisibilityResolvePass::useCompute )
@@ -1128,19 +1128,19 @@ namespace castor3d
 					, technique.getPixelXY().getCount() ) );
 
 				auto & opaquePassResult = technique.getOpaqueResult();
-				writes.push_back( makeDescriptorWrite( opaquePassResult[DsTexture::eNmlOcc].targetView
+				writes.push_back( makeImageViewDescriptorWrite( opaquePassResult[DsTexture::eNmlOcc].targetView
 					, InOutBindings::eOutNmlOcc ) );
-				writes.push_back( makeDescriptorWrite( opaquePassResult[DsTexture::eColMtl].targetView
+				writes.push_back( makeImageViewDescriptorWrite( opaquePassResult[DsTexture::eColMtl].targetView
 					, InOutBindings::eOutColMtl ) );
-				writes.push_back( makeDescriptorWrite( opaquePassResult[DsTexture::eSpcRgh].targetView
+				writes.push_back( makeImageViewDescriptorWrite( opaquePassResult[DsTexture::eSpcRgh].targetView
 					, InOutBindings::eOutSpcRgh ) );
-				writes.push_back( makeDescriptorWrite( opaquePassResult[DsTexture::eEmsTrn].targetView
+				writes.push_back( makeImageViewDescriptorWrite( opaquePassResult[DsTexture::eEmsTrn].targetView
 					, InOutBindings::eOutEmsTrn ) );
-				writes.push_back( makeDescriptorWrite( opaquePassResult[DsTexture::eClrCot].targetView
+				writes.push_back( makeImageViewDescriptorWrite( opaquePassResult[DsTexture::eClrCot].targetView
 					, InOutBindings::eOutClrCot ) );
-				writes.push_back( makeDescriptorWrite( opaquePassResult[DsTexture::eCrTsIr].targetView
+				writes.push_back( makeImageViewDescriptorWrite( opaquePassResult[DsTexture::eCrTsIr].targetView
 					, InOutBindings::eOutCrTsIr ) );
-				writes.push_back( makeDescriptorWrite( opaquePassResult[DsTexture::eSheen].targetView
+				writes.push_back( makeImageViewDescriptorWrite( opaquePassResult[DsTexture::eSheen].targetView
 					, InOutBindings::eOutSheen ) );
 			}
 
@@ -1780,7 +1780,7 @@ namespace castor3d
 		auto & opaqueResult = m_parent->getOpaqueResult();
 		auto size = uint32_t( m_parent->getMaterialsStarts().getCount() );
 		std::array< VkDescriptorSet, 3u > descriptorSets{ *m_inOutsDescriptorSet
-			, nullptr
+			, VkDescriptorSet{}
 			, *getScene().getBindlessTexDescriptorSet() };
 		visres::PushData pushData{ 0u, 0u };
 		static std::array< VkClearValue, size_t( DsTexture::eCount ) > clearValues{ getClearValue( DsTexture::eNmlOcc )
@@ -1919,7 +1919,7 @@ namespace castor3d
 	{
 		auto & opaqueResult = m_parent->getOpaqueResult();
 		std::array< VkDescriptorSet, 3u > descriptorSets{ *m_inOutsDescriptorSet
-			, nullptr
+			, VkDescriptorSet{}
 			, *getScene().getBindlessTexDescriptorSet() };
 		bool first = true;
 		bool renderPassBound = false;
@@ -1940,9 +1940,9 @@ namespace castor3d
 				auto & extent = m_parent->getNormal().getExtent();
 				VkRenderPassBeginInfo beginInfo{ VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO
 					, nullptr
-					, nullptr
-					, nullptr
-					, { { 0, 0 }, { extent.width, extent.height } }
+					, VkRenderPass{}
+					, VkFramebuffer{}
+					, VkRect2D{ { 0, 0 }, { extent.width, extent.height } }
 					, uint32_t( clearValues.size() )
 					, clearValues.data() };
 

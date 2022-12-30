@@ -72,10 +72,10 @@ namespace castor3d
 	{
 		rhs.device = nullptr;
 		rhs.handler = nullptr;
-		rhs.image = nullptr;
-		rhs.wholeView = nullptr;
-		rhs.targetView = nullptr;
-		rhs.sampledView = nullptr;
+		rhs.image = VkImage{};
+		rhs.wholeView = VkImageView{};
+		rhs.targetView = VkImageView{};
+		rhs.sampledView = VkImageView{};
 	}
 
 	Texture & Texture::operator=( Texture && rhs )
@@ -95,10 +95,10 @@ namespace castor3d
 
 		rhs.device = nullptr;
 		rhs.handler = nullptr;
-		rhs.image = nullptr;
-		rhs.wholeView = nullptr;
-		rhs.targetView = nullptr;
-		rhs.sampledView = nullptr;
+		rhs.image = VkImage{};
+		rhs.wholeView = VkImageView{};
+		rhs.targetView = VkImageView{};
+		rhs.sampledView = VkImageView{};
 
 		return *this;
 	}
@@ -308,19 +308,19 @@ namespace castor3d
 			if ( wholeViewId != sampledViewId )
 			{
 				handler->destroyImageView( context, sampledViewId );
-				sampledView = nullptr;
+				sampledView = VkImageView{};
 			}
 
 			if ( wholeViewId != targetViewId )
 			{
 				handler->destroyImageView( context, targetViewId );
-				targetView = nullptr;
+				targetView = VkImageView{};
 			}
 
 			handler->destroyImageView( context, wholeViewId );
-			wholeView = nullptr;
+			wholeView = VkImageView{};
 			handler->destroyImage( context, imageId );
-			image = nullptr;
+			image = VkImage{};
 		}
 	}
 

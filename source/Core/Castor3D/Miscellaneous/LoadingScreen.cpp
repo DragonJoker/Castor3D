@@ -205,7 +205,7 @@ namespace castor3d
 	{
 		m_renderSize = renderSize;
 		m_renderPass = renderPass;
-		m_framebuffer = nullptr;
+		m_framebuffer = VkFramebuffer{};
 
 		if ( m_renderQuad.isInitialised() )
 		{

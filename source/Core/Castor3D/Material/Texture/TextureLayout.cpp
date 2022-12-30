@@ -633,7 +633,7 @@ namespace castor3d
 
 			if ( auto data = buffer->lock( 0u, mappedSize, 0u ) )
 			{
-				std::memcpy( data, image.getPxBuffer().getConstPtr(), image.getPxBuffer().getSize() );
+				std::memcpy( data, image.getPxBuffer().getConstPtr(), size_t( image.getPxBuffer().getSize() ) );
 				buffer->flush( 0u, mappedSize );
 				buffer->unlock();
 			}

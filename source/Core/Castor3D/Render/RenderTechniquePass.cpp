@@ -52,12 +52,12 @@ namespace castor3d
 		, ashes::WriteDescriptorSetArray & writes
 		, uint32_t & index )
 	{
-		CU_Require( view != nullptr );
-		CU_Require( sampler != nullptr );
+		CU_Require( view != VkImageView{} );
+		CU_Require( sampler != VkSampler{} );
 		writes.push_back( { index++
 			, 0u
-			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, { { sampler
+			, VkDescriptorType{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER }
+			, ashes::VkDescriptorImageInfoArray{ VkDescriptorImageInfo{ sampler
 				, view
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } } );
 	}

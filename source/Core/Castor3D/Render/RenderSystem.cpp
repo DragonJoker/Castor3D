@@ -752,10 +752,10 @@ namespace castor3d
 		auto & rendererList = engine.getRenderersList();
 		auto plugin = rendererList.selectPlugin( desc.name );
 		PFN_vkEnumerateInstanceLayerProperties enumLayerProperties;
-		enumLayerProperties = reinterpret_cast< PFN_vkEnumerateInstanceLayerProperties >( plugin.getInstanceProcAddr( VK_NULL_HANDLE,
+		enumLayerProperties = reinterpret_cast< PFN_vkEnumerateInstanceLayerProperties >( plugin.getInstanceProcAddr( nullptr,
 			"vkEnumerateInstanceLayerProperties" ) );
 		PFN_vkEnumerateInstanceExtensionProperties enumInstanceExtensionProperties;
-		enumInstanceExtensionProperties = reinterpret_cast< PFN_vkEnumerateInstanceExtensionProperties >( plugin.getInstanceProcAddr( VK_NULL_HANDLE,
+		enumInstanceExtensionProperties = reinterpret_cast< PFN_vkEnumerateInstanceExtensionProperties >( plugin.getInstanceProcAddr( nullptr,
 			"vkEnumerateInstanceExtensionProperties" ) );
 
 		auto layers = rendsys::enumerateLayerProperties( enumLayerProperties );
@@ -774,8 +774,8 @@ namespace castor3d
 
 		uint32_t apiVersion{ rendsys::vk1_0 };
 		PFN_vkEnumerateInstanceVersion enumerateInstanceVersion;
-		enumerateInstanceVersion = reinterpret_cast< PFN_vkEnumerateInstanceVersion >( plugin.getInstanceProcAddr( VK_NULL_HANDLE,
-			"vkEnumerateInstanceVersion" ) );
+		enumerateInstanceVersion = reinterpret_cast< PFN_vkEnumerateInstanceVersion >( plugin.getInstanceProcAddr( nullptr
+			, "vkEnumerateInstanceVersion" ) );
 
 		if ( enumerateInstanceVersion )
 		{
