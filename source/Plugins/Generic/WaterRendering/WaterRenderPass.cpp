@@ -65,12 +65,7 @@ namespace water
 			, ashes::WriteDescriptorSetArray & writes
 			, uint32_t & index )
 		{
-			writes.push_back( { index++
-				, 0u
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, { { sampler
-				, view
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } } );
+			writes.push_back( castor3d::makeImageViewDescriptorWrite( view, sampler, index++ ) );
 		}
 
 		void loadImage( castor3d::Parameters const & params

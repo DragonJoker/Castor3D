@@ -173,10 +173,10 @@ namespace castor3d
 
 		if ( result )
 		{
-			m_descriptor = { 0u
+			m_descriptor = ashes::WriteDescriptorSet{ 0u
 				, 0u
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, { { sampler->getSampler()
+				, VkDescriptorType( VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER )
+				, ashes::VkDescriptorImageInfoArray{ VkDescriptorImageInfo{ sampler->getSampler()
 					, m_texture->getDefaultView().getSampledView()
 					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } };
 		}

@@ -334,7 +334,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	ashes::WriteDescriptorSet makeDescriptorWrite( VkImageView const & view
+	ashes::WriteDescriptorSet makeImageViewDescriptorWrite( VkImageView const & view
 		, uint32_t dstBinding
 		, uint32_t dstArrayElement )
 	{
@@ -342,7 +342,7 @@ namespace castor3d
 			, dstArrayElement
 			, 1u
 			, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE };
-		result.imageInfo.push_back( { nullptr, view, VK_IMAGE_LAYOUT_GENERAL } );
+		result.imageInfo.push_back( { VkSampler{}, view, VK_IMAGE_LAYOUT_GENERAL } );
 		return result;
 	}
 
@@ -354,11 +354,11 @@ namespace castor3d
 			, dstArrayElement
 			, 1u
 			, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE };
-		result.imageInfo.push_back( { nullptr, view, VK_IMAGE_LAYOUT_GENERAL } );
+		result.imageInfo.push_back( { VkSampler{}, view, VK_IMAGE_LAYOUT_GENERAL } );
 		return result;
 	}
 
-	ashes::WriteDescriptorSet makeDescriptorWrite( VkImageView const & view
+	ashes::WriteDescriptorSet makeImageViewDescriptorWrite( VkImageView const & view
 		, VkSampler const & sampler
 		, uint32_t dstBinding
 		, uint32_t dstArrayElement )

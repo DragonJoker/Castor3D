@@ -172,24 +172,21 @@ namespace castor3d
 
 			auto presentMode = selectPresentMode( surface );
 			auto surfaceFormat = selectFormat( surface );
-			return ashes::SwapChainCreateInfo
-			{
-				0u,
-				surface,
-				getImageCount( surface ),
-				surfaceFormat.format,
-				surfaceFormat.colorSpace,
-				swapChainExtent,
-				1u,
-				VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
-				VK_SHARING_MODE_EXCLUSIVE,
-				{},
-				preTransform,
-				VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR,
-				presentMode,
-				VK_TRUE,
-				nullptr
-			};
+			return ashes::SwapChainCreateInfo{ 0u
+				, surface
+				, getImageCount( surface )
+				, surfaceFormat.format
+				, surfaceFormat.colorSpace
+				, swapChainExtent
+				, 1u
+				, VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+				, VK_SHARING_MODE_EXCLUSIVE
+				, {}
+				, preTransform
+				, VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR
+				, presentMode
+				, VK_TRUE
+				, VkSwapchainKHR{} };
 		}
 
 #if !C3D_DebugPicking && !C3D_DebugBackgroundPicking
@@ -1276,7 +1273,7 @@ namespace castor3d
 
 #if C3D_DebugPicking || C3D_DebugBackgroundPicking
 
-			m_renderQuad->registerPassInputs( { makeDescriptorWrite( handler.createImageView( context, m_picking->getImageView() )
+			m_renderQuad->registerPassInputs( { makeImageViewDescriptorWrite( handler.createImageView( context, m_picking->getImageView() )
 					, m_renderQuad->getSampler().getSampler(), 0u )
 				, RenderQuad::makeDescriptorWrite( m_configUbo, 1u ) }
 				, true );
@@ -1285,7 +1282,7 @@ namespace castor3d
 
 			for ( auto & intermediate : m_intermediateSampledViews )
 			{
-				m_renderQuad->registerPassInputs( { makeDescriptorWrite( handler.createImageView( context, intermediate.viewId ), m_renderQuad->getSampler().getSampler(), 0u )
+				m_renderQuad->registerPassInputs( { makeImageViewDescriptorWrite( handler.createImageView( context, intermediate.viewId ), m_renderQuad->getSampler().getSampler(), 0u )
 						, makeDescriptorWrite( m_configUbo, 1u ) }
 					, intermediate.factors.invertY );
 			}

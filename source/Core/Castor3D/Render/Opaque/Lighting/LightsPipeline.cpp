@@ -329,7 +329,7 @@ namespace castor3d
 				, uint32_t( data.size() * 3u )
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
 			auto buffer = result.getData();
-			std::memcpy( buffer.data(), data.data()->constPtr(), result.getSize() );
+			std::memcpy( buffer.data(), data.data()->constPtr(), size_t( result.getSize() ) );
 		}
 
 		result.markDirty( VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
@@ -342,7 +342,7 @@ namespace castor3d
 	{
 		auto & data = SpotLight::generateVertices( angle );
 		auto buffer = vertexBuffer.getData();
-		std::memcpy( buffer.data(), data.data()->constPtr(), vertexBuffer.getSize() );
+		std::memcpy( buffer.data(), data.data()->constPtr(), size_t( vertexBuffer.getSize() ) );
 		vertexBuffer.markDirty( VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
 			, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
 	}
