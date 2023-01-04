@@ -21,26 +21,24 @@ namespace ImgToIco
 	bool ImgToIcoApp::OnInit()
 	{
 		int language = wxLANGUAGE_DEFAULT;
-		wxStandardPathsBase & l_stdPaths = wxStandardPaths::Get();
-		wxFileName l_strCurrent = wxFileName( l_stdPaths.GetExecutablePath() ).GetPath();
-		wxString l_strSeparator = wxFileName::GetPathSeparator();
-		wxString l_strShare;
-		wxString l_strPlugins;
+		wxStandardPathsBase & stdPaths = wxStandardPaths::Get();
+		wxFileName current = wxFileName( stdPaths.GetExecutablePath() ).GetPath();
+		static wxString const separator = wxFileName::GetPathSeparator();
 
 		// load language if possible, fall back to english otherwise
 		if ( wxLocale::IsAvailable( language ) )
 		{
 			m_pLocale = new wxLocale( language, wxLOCALE_LOAD_DEFAULT );
 			// add locale search paths
-			l_strShare = l_strCurrent.GetPath() + l_strSeparator + wxT( "share" ) + l_strSeparator + wxT( "ImgConverter" );
-			m_pLocale->AddCatalogLookupPathPrefix( l_strShare );
+			auto share = current.GetPath() + separator + wxT( "share" ) + separator + wxT( "ImgConverter" );
+			m_pLocale->AddCatalogLookupPathPrefix( share );
 #if defined( _MSC_VER )
 #	if defined( NDEBUG )
-			l_strPlugins = wxFileName( l_strCurrent.GetPath() ).GetPath() + l_strSeparator + wxT( "plug-ins" ) + l_strSeparator + wxT( "Release" ) + l_strSeparator + wxT( "ImgConverter" );
+			auto plugins = wxFileName( current.GetPath() ).GetPath() + separator + wxT( "plug-ins" ) + separator + wxT( "Release" ) + separator + wxT( "ImgConverter" );
 #	else
-			l_strPlugins = wxFileName( l_strCurrent.GetPath() ).GetPath() + l_strSeparator + wxT( "plug-ins" ) + l_strSeparator + wxT( "Debug" ) + l_strSeparator + wxT( "ImgConverter" );
+			auto plugins = wxFileName( current.GetPath() ).GetPath() + separator + wxT( "plug-ins" ) + separator + wxT( "Debug" ) + separator + wxT( "ImgConverter" );
 #	endif
-			m_pLocale->AddCatalogLookupPathPrefix( l_strPlugins );
+			m_pLocale->AddCatalogLookupPathPrefix( plugins );
 #endif
 			m_pLocale->AddCatalog( wxT( "ImgConverter" ) );
 

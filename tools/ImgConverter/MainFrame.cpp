@@ -17,23 +17,22 @@ namespace ImgToIco
 		: wxFrame( nullptr, wxID_ANY, _( "Image To ICO/XPM Converter" ), wxPoint( 0, 0 ), wxSize( 400, 300 ), wxSYSTEM_MENU | wxCLOSE_BOX | wxCAPTION )
 	{
 		CreateStatusBar();
-		wxSize l_size = GetClientSize();
-	//	wxPanel * l_pPanel	= new wxPanel( this, wxID_ANY, wxPoint( 0, 0), l_size);
-		m_pListImages = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxSize( l_size.x, l_size.y - 45 ) );
+		wxSize size = GetClientSize();
+		m_pListImages = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxSize( size.x, size.y - 45 ) );
 		m_pButtonBrowse = new wxButton( this, eBrowse, _( "Browse" ) );
 		m_pButtonProcess = new wxButton( this, eProcess, _( "Process" ) );
 		m_pButtonExit = new wxButton( this, eExit, _( "Exit" ) );
-		wxBoxSizer * l_pSizer = new wxBoxSizer( wxVERTICAL );
-		wxBoxSizer * l_pSizerBtn = new wxBoxSizer( wxHORIZONTAL );
-		l_pSizerBtn->Add( m_pButtonBrowse, wxSizerFlags( 0 ).Border( wxALL, 5 ).Left() );
-		l_pSizerBtn->Add( 5, 0, 1 );
-		l_pSizerBtn->Add( m_pButtonProcess, wxSizerFlags( 0 ).Border( wxALL, 5 ).Center() );
-		l_pSizerBtn->Add( 5, 0, 1 );
-		l_pSizerBtn->Add( m_pButtonExit, wxSizerFlags( 0 ).Border( wxALL, 5 ).Right() );
-		l_pSizer->Add( m_pListImages, wxSizerFlags( 1 ).Expand() );
-		l_pSizer->Add( l_pSizerBtn, wxSizerFlags( 0 ).Expand() );
-		SetSizer( l_pSizer );
-		l_pSizer->SetSizeHints( this );
+		wxBoxSizer * sizer = new wxBoxSizer( wxVERTICAL );
+		wxBoxSizer * sizerBtn = new wxBoxSizer( wxHORIZONTAL );
+		sizerBtn->Add( m_pButtonBrowse, wxSizerFlags( 0 ).Border( wxALL, 5 ).Left() );
+		sizerBtn->Add( 5, 0, 1 );
+		sizerBtn->Add( m_pButtonProcess, wxSizerFlags( 0 ).Border( wxALL, 5 ).Center() );
+		sizerBtn->Add( 5, 0, 1 );
+		sizerBtn->Add( m_pButtonExit, wxSizerFlags( 0 ).Border( wxALL, 5 ).Right() );
+		sizer->Add( m_pListImages, wxSizerFlags( 1 ).Expand() );
+		sizer->Add( sizerBtn, wxSizerFlags( 0 ).Expand() );
+		SetSizer( sizer );
+		sizer->SetSizeHints( this );
 	}
 
 #pragma GCC diagnostic push
@@ -47,18 +46,18 @@ namespace ImgToIco
 
 		void MainFrame::_onBrowse( wxCommandEvent & event )
 	{
-		wxFileDialog l_dialog( this
+		wxFileDialog dialog( this
 			, _( "Choose an image" )
 			, wxEmptyString
 			, wxEmptyString
 			, _( "BITMAP Images (*.bmp)|*.bmp|GIF Images (*.gif)|*.gif|JPEG Images (*.jpg)|*.jpg|PNG Images (*.png)|*.png|TARGA Images (*.tga)|*.tga|All Images (*.bmp;*.gif;*.png;*.jpg;*.tga)|*.bmp;*.gif;*.png;*.jpg" )
 			, wxFD_DEFAULT_STYLE | wxFD_MULTIPLE );
 
-		if ( l_dialog.ShowModal() == wxID_OK )
+		if ( dialog.ShowModal() == wxID_OK )
 		{
-			wxArrayString l_arrayFiles;
-			l_dialog.GetPaths( l_arrayFiles );
-			m_pListImages->InsertItems( l_arrayFiles, m_pListImages->GetCount() );
+			wxArrayString arrayFiles;
+			dialog.GetPaths( arrayFiles );
+			m_pListImages->InsertItems( arrayFiles, m_pListImages->GetCount() );
 		}
 
 		event.Skip();
@@ -66,30 +65,29 @@ namespace ImgToIco
 
 	void MainFrame::_onProcess( wxCommandEvent & event )
 	{
-		wxFileName l_fileName;
-		wxArrayString l_arrayChoices;
-		wxString l_strExt;
-		l_arrayChoices.push_back( wxT( "ico" ) );
-		l_arrayChoices.push_back( wxT( "xpm" ) );
-		l_strExt = wxGetSingleChoice( _( "Select output image format" ), _( "Image format" ), l_arrayChoices );
+		wxArrayString arrayChoices;
+		wxString extension;
+		arrayChoices.push_back( wxT( "ico" ) );
+		arrayChoices.push_back( wxT( "xpm" ) );
+		extension = wxGetSingleChoice( _( "Select output image format" ), _( "Image format" ), arrayChoices );
 
-		if ( !l_strExt.empty() )
+		if ( !extension.empty() )
 		{
 			while ( m_pListImages->GetCount() )
 			{
-				l_fileName = m_pListImages->GetString( 0 );
+				wxFileName fileName = m_pListImages->GetString( 0 );
 				m_pListImages->Delete( 0 );
-				wxImage l_image( l_fileName.GetFullPath() );
-				SetStatusText( _( "Processing : " ) + l_fileName.GetFullPath() );
+				wxImage image( fileName.GetFullPath() );
+				SetStatusText( _( "Processing : " ) + fileName.GetFullPath() );
 
-				if ( l_image.IsOk() )
+				if ( image.IsOk() )
 				{
-					if ( ( l_image.GetWidth() > 64 || l_image.GetHeight() > 64 ) && l_strExt == wxT( "ico" ) )
+					if ( ( image.GetWidth() > 64 || image.GetHeight() > 64 ) && extension == wxT( "ico" ) )
 					{
-						l_image.Rescale( 64, 64, wxIMAGE_QUALITY_HIGH );
+						image.Rescale( 64, 64, wxIMAGE_QUALITY_HIGH );
 					}
 
-					l_image.SaveFile( l_fileName.GetPath( wxPATH_GET_VOLUME | wxPATH_GET_SEPARATOR ) + l_fileName.GetName() + wxT( "." ) + l_strExt );
+					image.SaveFile( fileName.GetPath( wxPATH_GET_VOLUME | wxPATH_GET_SEPARATOR ) + fileName.GetName() + wxT( "." ) + extension );
 				}
 			}
 
