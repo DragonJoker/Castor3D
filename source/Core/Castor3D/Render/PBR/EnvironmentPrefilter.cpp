@@ -118,7 +118,7 @@ namespace castor3d
 					, writer.cast< Float >( float( mipLevel ) / float( MaxIblReflectionLod ) ) );
 
 				// Outputs
-				auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_FragColor", 0u );
+				auto outColour = writer.declOutput< Vec4 >( "outColour", 0u );
 
 				writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
 					, FragmentOut out )
@@ -185,7 +185,7 @@ namespace castor3d
 						}
 						FI;
 
-						pxl_fragColor = vec4( prefilteredColor, 1.0_f );
+						outColour = vec4( prefilteredColor, 1.0_f );
 					} );
 
 				pxl.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

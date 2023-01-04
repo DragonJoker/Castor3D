@@ -1045,15 +1045,15 @@ namespace castor3d
 			c3d_config.end();
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0 );
+			auto outColour = writer.declOutput< Vec4 >( "outColour", 0 );
 
 			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
 				, FragmentOut out )
 				{
 #if C3D_DebugPicking || C3D_DebugBackgroundPicking
-					pxl_fragColor = vec4( vec3( c3d_mapResult.sample( vtx_texture ).xyz() ), 1.0_f );
+					outColour = vec4( vec3( c3d_mapResult.sample( vtx_texture ).xyz() ), 1.0_f );
 #else
-					pxl_fragColor = vec4( fma( c3d_mapResult.sample( vtx_texture ).xyz(), c3d_multiply.xyz(), c3d_add.xyz() )
+					outColour = vec4( fma( c3d_mapResult.sample( vtx_texture ).xyz(), c3d_multiply.xyz(), c3d_add.xyz() )
 						, 1.0_f );
 #endif
 				} );

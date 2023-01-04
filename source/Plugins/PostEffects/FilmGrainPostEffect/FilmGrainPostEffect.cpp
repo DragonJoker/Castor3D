@@ -93,7 +93,7 @@ namespace film_grain
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0 );
+			auto outColour = writer.declOutput< Vec4 >( "outColour", 0 );
 			
 			auto overlay = writer.implementFunction< Vec3 >( "overlay"
 				, [&]( Vec3 const & a
@@ -141,7 +141,7 @@ namespace film_grain
 					auto colour = writer.declLocale( "colour"
 						, c3d_srcTex.sample( vtx_texture ).xyz() );
 					colour = addNoise( colour, vtx_texture );
-					pxl_fragColor = vec4( colour, 1.0 );
+					outColour = vec4( colour, 1.0 );
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}

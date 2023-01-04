@@ -288,9 +288,9 @@ namespace castor3d
 		pcb.end();
 
 		// Fragment Outputs
-		auto pxl_accumulation( writer.declOutput< Vec4 >( getTextureName( WbTexture::eAccumulation ), 0 ) );
-		auto pxl_revealage( writer.declOutput< Float >( getTextureName( WbTexture::eRevealage ), 1 ) );
-		auto pxl_velocity( writer.declOutput< Vec2 >( "pxl_velocity", 2 ) );
+		auto outAccumulation( writer.declOutput< Vec4 >( "outAccumulation", 0 ) );
+		auto outRevealage( writer.declOutput< Float >( "outRevealage", 1 ) );
+		auto outVelocity( writer.declOutput< Vec2 >( "outVelocity", 2 ) );
 
 		writer.implementMainT< shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer
 				, passShaders
@@ -443,13 +443,13 @@ namespace castor3d
 				}
 				FI;
 
-				pxl_accumulation = c3d_sceneData.computeAccumulation( utils
+				outAccumulation = c3d_sceneData.computeAccumulation( utils
 					, in.fragCoord.z()
 					, colour
 					, components.opacity
 					, components.bwAccumulationOperator );
-				pxl_revealage = components.opacity;
-				pxl_velocity = in.getVelocity();
+				outRevealage = components.opacity;
+				outVelocity = in.getVelocity();
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

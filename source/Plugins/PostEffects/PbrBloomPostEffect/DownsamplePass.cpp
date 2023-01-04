@@ -54,7 +54,7 @@ namespace PbrBloom
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declOutput< Vec3 >( "pxl_fragColor", 0 );
+			auto outColour = writer.declOutput< Vec3 >( "outColour", 0 );
 
 			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
 				, FragmentOut out )
@@ -115,11 +115,11 @@ namespace PbrBloom
 					// contribute 0.5 to the final color output. The code below is written
 					// to effectively yield this sum. We get:
 					// 0.125*5 + 0.03125*4 + 0.0625*4 = 1
-					pxl_fragColor = e * 0.125f;
-					pxl_fragColor += ( a + c + g + i ) * 0.03125f;
-					pxl_fragColor += ( b + d + f + h ) * 0.0625f;
-					pxl_fragColor += ( j + k + l + m ) * 0.125f;
-					pxl_fragColor = max( pxl_fragColor, vec3( 0.0001_f ) );
+					outColour = e * 0.125f;
+					outColour += ( a + c + g + i ) * 0.03125f;
+					outColour += ( b + d + f + h ) * 0.0625f;
+					outColour += ( j + k + l + m ) * 0.125f;
+					outColour = max( outColour, vec3( 0.0001_f ) );
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}

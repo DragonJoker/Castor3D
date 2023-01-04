@@ -537,14 +537,14 @@ namespace castor3d
 			FragmentWriter writer;
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0u );
+			auto outColour = writer.declOutput< Vec4 >( "outColour", 0u );
 
 			writer.implementMainT< SurfaceT, VoidT >( [&]( FragmentInT< SurfaceT > in
 				, FragmentOut out )
 				{
 					IF( writer, in.voxelColour.a() > 0.0_f )
 					{
-						pxl_fragColor = in.voxelColour;
+						outColour = in.voxelColour;
 					}
 					ELSE
 					{

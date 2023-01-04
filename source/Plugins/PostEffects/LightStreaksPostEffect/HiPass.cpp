@@ -175,23 +175,23 @@ namespace light_streaks
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0 );
+			auto outColour = writer.declOutput< Vec4 >( "outColour", 0 );
 
 			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
 				, FragmentOut out )
 				{
-					pxl_fragColor = vec4( c3d_mapColor.sample( vtx_texture, 0.0_f ).xyz(), 1.0_f );
+					outColour = vec4( c3d_mapColor.sample( vtx_texture, 0.0_f ).xyz(), 1.0_f );
 					auto maxComponent = writer.declLocale( "maxComponent"
-						, max( pxl_fragColor.r(), pxl_fragColor.g() ) );
-					maxComponent = max( maxComponent, pxl_fragColor.b() );
+						, max( outColour.r(), outColour.g() ) );
+					maxComponent = max( maxComponent, outColour.b() );
 
 					IF( writer, maxComponent > 1.0_f )
 					{
-						pxl_fragColor.xyz() /= maxComponent;
+						outColour.xyz() /= maxComponent;
 					}
 					ELSE
 					{
-						pxl_fragColor.xyz() = vec3( 0.0_f, 0.0_f, 0.0_f );
+						outColour.xyz() = vec3( 0.0_f, 0.0_f, 0.0_f );
 					}
 					FI;
 				} );

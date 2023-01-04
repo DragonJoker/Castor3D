@@ -23,7 +23,7 @@ namespace HaarmPieterDuiker
 		auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 		// Shader outputs
-		auto pxl_rgb = writer.declOutput< Vec4 >( "pxl_rgb", 0 );
+		auto outColour = writer.declOutput< Vec4 >( "outColour", 0 );
 
 		auto log10 = writer.implementFunction< Vec3 >( "log10"
 			, [&]( Vec3 const & v )
@@ -56,10 +56,10 @@ namespace HaarmPieterDuiker
 				auto padding = writer.declLocale( "padding", 0.5_f / filmLutWidth );
 
 				//  apply response lookup and color grading for target display
-				pxl_rgb.r() = mix( padding, 1.0f - padding, logColor.r() );
-				pxl_rgb.g() = mix( padding, 1.0f - padding, logColor.g() );
-				pxl_rgb.b() = mix( padding, 1.0f - padding, logColor.b() );
-				pxl_rgb.a() = 1.0f;
+				outColour.r() = mix( padding, 1.0f - padding, logColor.r() );
+				outColour.g() = mix( padding, 1.0f - padding, logColor.g() );
+				outColour.b() = mix( padding, 1.0f - padding, logColor.b() );
+				outColour.a() = 1.0f;
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

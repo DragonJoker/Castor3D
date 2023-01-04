@@ -217,7 +217,7 @@ namespace castor3d
 			shader::Fog fog{ writer };
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0u );
+			auto outColour = writer.declOutput< Vec4 >( "outColour", 0u );
 
 			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
 				, FragmentOut out )
@@ -347,7 +347,7 @@ namespace castor3d
 						}
 						FI;
 
-						pxl_fragColor = vec4( lightingModel->combine( components
+						outColour = vec4( lightingModel->combine( components
 								, incident
 								, lightDiffuse
 								, indirectDiffuse
@@ -369,7 +369,7 @@ namespace castor3d
 					}
 					ELSE
 					{
-						pxl_fragColor = vec4( albedo, 1.0_f );
+						outColour = vec4( albedo, 1.0_f );
 					}
 					FI;
 
@@ -379,8 +379,8 @@ namespace castor3d
 								, vtx_texture
 								, depth )
 							, 1.0_f );
-						pxl_fragColor = fog.apply( c3d_sceneData.getBackgroundColour( c3d_hdrConfigData )
-							, pxl_fragColor
+						outColour = fog.apply( c3d_sceneData.getBackgroundColour( c3d_hdrConfigData )
+							, outColour
 							, surface.worldPosition.xyz()
 							, c3d_sceneData );
 					}
@@ -392,7 +392,7 @@ namespace castor3d
 						, linearDepth
 						, c3d_sceneData.renderSize
 						, c3d_sceneData.cameraPlanes
-						, pxl_fragColor );
+						, outColour );
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}

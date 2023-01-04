@@ -89,7 +89,7 @@ namespace castor3d
 			auto c3d_mapDepth = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapDepth", DepthImgIdx, 0u );
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declOutput< Float >( "pxl_fragColor", 0u );
+			auto outColour = writer.declOutput< Float >( "outColour", 0u );
 
 			auto reconstructCSZ = writer.implementFunction< Float >( "reconstructCSZ"
 				, [&]( Float const & depth
@@ -103,7 +103,7 @@ namespace castor3d
 			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
 				, FragmentOut out )
 				{
-					pxl_fragColor = reconstructCSZ( c3d_mapDepth.fetch( ivec2( in.fragCoord.xy() ), 0_i ).r()
+					outColour = reconstructCSZ( c3d_mapDepth.fetch( ivec2( in.fragCoord.xy() ), 0_i ).r()
 						, c3d_clipInfo );
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -121,7 +121,7 @@ namespace castor3d
 			auto c3d_mapDepth = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapDepth", DepthImgIdx, 0u );
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declOutput< Float >( "pxl_fragColor", 0u );
+			auto outColour = writer.declOutput< Float >( "outColour", 0u );
 
 			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
 				, FragmentOut out )
@@ -130,7 +130,7 @@ namespace castor3d
 						, ivec2( in.fragCoord.xy() ) );
 
 					// Rotated grid subsampling to avoid XY directional bias or Z precision bias while downsampling.
-					pxl_fragColor = c3d_mapDepth.fetch( clamp( ssPosition * 2 + ivec2( ssPosition.y() & 1, ssPosition.x() & 1 )
+					outColour = c3d_mapDepth.fetch( clamp( ssPosition * 2 + ivec2( ssPosition.y() & 1, ssPosition.x() & 1 )
 							, ivec2( 0_i, 0_i )
 							, c3d_textureSize - ivec2( 1_i, 1_i ) )
 						, 0_i ).r();

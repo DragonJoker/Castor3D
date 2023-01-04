@@ -51,16 +51,16 @@ namespace Bloom
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0 );
+			auto outColour = writer.declOutput< Vec4 >( "outColour", 0 );
 
 			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
 				, FragmentOut out )
 				{
-					pxl_fragColor = c3d_mapScene.sample( vtx_texture );
+					outColour = c3d_mapScene.sample( vtx_texture );
 
 					for ( uint32_t i = 0; i < blurPassesCount; ++i )
 					{
-						pxl_fragColor += c3d_mapPasses.sample( vtx_texture, Float( float( i ) ) );
+						outColour += c3d_mapPasses.sample( vtx_texture, Float( float( i ) ) );
 					}
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

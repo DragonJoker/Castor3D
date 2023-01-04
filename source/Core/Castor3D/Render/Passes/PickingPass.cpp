@@ -171,7 +171,7 @@ namespace castor3d
 		pcb.end();
 
 		// Fragment Outputs
-		auto pxl_fragColor( writer.declOutput< UVec4 >( "pxl_fragColor", 0 ) );
+		auto outColour( writer.declOutput< UVec4 >( "outColour", 0 ) );
 
 		writer.implementMainT< shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer
 				, passShaders
@@ -196,7 +196,7 @@ namespace castor3d
 					, modelData.getMaterialId()
 					, in.passMultipliers
 					, components );
-				pxl_fragColor = uvec4( ( flags.isBillboard() ? 2_u : 1_u )
+				outColour = uvec4( ( flags.isBillboard() ? 2_u : 1_u )
 					, in.nodeId
 					, writer.cast< sdw::UInt >( in.primitiveID )
 					, 0_u );

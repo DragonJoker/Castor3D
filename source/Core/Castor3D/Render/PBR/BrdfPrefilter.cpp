@@ -206,7 +206,7 @@ namespace castor3d
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			// Outputs
-			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_FragColor", 0u );
+			auto outColour = writer.declOutput< Vec4 >( "outColour", 0u );
 
 			auto integrateBRDF = writer.implementFunction< Vec3 >( "c3d_integrateBRDF"
 				, [&]( Float const & NdotV
@@ -304,7 +304,7 @@ namespace castor3d
 			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
 				, FragmentOut out )
 				{
-					pxl_fragColor = vec4( integrateBRDF( vtx_texture.x(), vtx_texture.y() ), 1.0_f );
+					outColour = vec4( integrateBRDF( vtx_texture.x(), vtx_texture.y() ), 1.0_f );
 				} );
 
 			pxl.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

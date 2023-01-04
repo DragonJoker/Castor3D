@@ -52,7 +52,7 @@ namespace atmosphere_scattering
 			C3D_AtmosphereScattering( writer
 				, eAtmosphere
 				, 0u );
-			auto pxl_colour( writer.declOutput< sdw::Vec4 >( "pxl_colour", 0 ) );
+			auto outColour( writer.declOutput< sdw::Vec4 >( "outColour", 0 ) );
 
 			auto sampleCountIni = writer.declConstant( "sampleCountIni"
 				, 40.0_f );	// Can go a low as 10 sample but energy lost starts to be visible.
@@ -94,7 +94,7 @@ namespace atmosphere_scattering
 							, depthBufferValue ).opticalDepth() ) );
 
 					// Optical depth to transmittance
-					pxl_colour = vec4( transmittance, 1.0f );
+					outColour = vec4( transmittance, 1.0f );
 				} );
 
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

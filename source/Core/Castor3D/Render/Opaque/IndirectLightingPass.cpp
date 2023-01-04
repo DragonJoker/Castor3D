@@ -63,8 +63,8 @@ namespace castor3d
 			shader::BRDFHelpers brdf{ writer };
 
 			// Shader outputs
-			auto pxl_indirectDiffuse = writer.declOutput< Vec3 >( "pxl_indirectDiffuse", 0 );
-			auto pxl_indirectSpecular = writer.declOutput< Vec3 >( "pxl_indirectSpecular", 1 );
+			auto outIndirectDiffuse = writer.declOutput< Vec3 >( "outIndirectDiffuse", 0 );
+			auto outIndirectSpecular = writer.declOutput< Vec3 >( "outIndirectSpecular", 1 );
 
 			// Shader inputs
 			C3D_ModelsData( writer, IndirectLightingPass::eModels, 0u );
@@ -182,13 +182,13 @@ namespace castor3d
 							, occlusion
 							, indirectDiffuse.w()
 							, c3d_brdfMap );
-						pxl_indirectDiffuse = indirectDiffuse.xyz();
-						pxl_indirectSpecular = indirectSpecular;
+						outIndirectDiffuse = indirectDiffuse.xyz();
+						outIndirectSpecular = indirectSpecular;
 					}
 					ELSE
 					{
-						pxl_indirectDiffuse = vec3( 0.0_f, 0.0_f, 0.0_f );
-						pxl_indirectSpecular = vec3( 0.0_f, 0.0_f, 0.0_f );
+						outIndirectDiffuse = vec3( 0.0_f, 0.0_f, 0.0_f );
+						outIndirectSpecular = vec3( 0.0_f, 0.0_f, 0.0_f );
 					}
 					FI;
 				} );

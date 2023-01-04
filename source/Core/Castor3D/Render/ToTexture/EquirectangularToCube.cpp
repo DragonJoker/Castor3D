@@ -64,7 +64,7 @@ namespace castor3d
 				auto vtx_position = writer.declInput< sdw::Vec3 >( "vtx_position", 0u );
 
 				// Outputs
-				auto pxl_colour = writer.declOutput< sdw::Vec4 >( "pxl_colour", 0u );
+				auto outColour = writer.declOutput< sdw::Vec4 >( "outColour", 0u );
 
 				shader::Utils utils{ writer };
 				
@@ -84,7 +84,7 @@ namespace castor3d
 					{
 						auto uv = writer.declLocale( "uv"
 							, sampleSphericalMap( normalize( vtx_position ) ) );
-						pxl_colour = vec4( mapColour.sample( utils.topDownToBottomUp( uv ) ).rgb(), 1.0_f );
+						outColour = vec4( mapColour.sample( utils.topDownToBottomUp( uv ) ).rgb(), 1.0_f );
 					} );
 				pxl.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 			}

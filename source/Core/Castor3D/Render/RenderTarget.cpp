@@ -1099,7 +1099,7 @@ namespace castor3d
 			auto vtx_textureRhs = writer.declInput< Vec2 >( "vtx_textureRhs", rendtgt::CombineRhsIdx );
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0 );
+			auto outColour = writer.declOutput< Vec4 >( "outColour", 0 );
 
 			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
 				, FragmentOut out )
@@ -1109,7 +1109,7 @@ namespace castor3d
 					auto rhsColor = writer.declLocale( "rhsColor"
 						, c3d_mapRhs.sample( vtx_textureRhs ) );
 					lhsColor.rgb() *= 1.0_f - rhsColor.a();
-					pxl_fragColor = vec4( lhsColor.rgb() + rhsColor.rgb(), 1.0_f );
+					outColour = vec4( lhsColor.rgb() + rhsColor.rgb(), 1.0_f );
 				} );
 			m_combinePxl.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
