@@ -1077,7 +1077,7 @@ namespace ocean_fft
 #	define displayDebugData( OceanDataType, RGB, A )\
 	IF( writer, c3d_oceanData.debug == sdw::UInt( OceanDataType ) )\
 	{\
-		pxl_colour = vec4( RGB, A );\
+		outColour = vec4( RGB, A );\
 		writer.returnStmt();\
 	}\
 	FI
@@ -1172,7 +1172,7 @@ namespace ocean_fft
 			, flags.getGlobalIlluminationFlags() );
 
 		// Fragment Outputs
-		auto pxl_colour( writer.declOutput< Vec4 >( "pxl_colour", 0 ) );
+		auto outColour( writer.declOutput< Vec4 >( "outColour", 0 ) );
 
 		auto getLightAbsorbtion = writer.implementFunction< sdw::Vec3 >( "getLightAbsorbtion"
 			, [&]( sdw::Vec2 const & fftTexcoord
@@ -1411,7 +1411,7 @@ namespace ocean_fft
 					displayDebugData( eFinalReflection, reflectionResult, 1.0_f );
 					refractionResult *= vec3( 1.0_f ) - fresnelFactor;
 					displayDebugData( eFinalRefraction, refractionResult, 1.0_f );
-					pxl_colour = vec4( lightSpecular + lightIndirectSpecular
+					outColour = vec4( lightSpecular + lightIndirectSpecular
 							+ components.emissiveColour * components.emissiveFactor
 							+ refractionResult * colorMod
 							+ ( reflectionResult * colorMod * indirectAmbient )
@@ -1420,14 +1420,14 @@ namespace ocean_fft
 				}
 				ELSE
 				{
-					pxl_colour = vec4( components.colour, 1.0_f );
+					outColour = vec4( components.colour, 1.0_f );
 				}
 				FI;
 
 				if ( flags.hasFog() )
 				{
-					pxl_colour = fog.apply( c3d_sceneData.getBackgroundColour( utils )
-						, pxl_colour
+					outColour = fog.apply( c3d_sceneData.getBackgroundColour( utils )
+						, outColour
 						, in.worldPosition.xyz()
 						, c3d_sceneData );
 				}
@@ -1436,7 +1436,7 @@ namespace ocean_fft
 					, utils.lineariseDepth( in.fragCoord.z(), c3d_sceneData.nearPlane, c3d_sceneData.farPlane )
 					, c3d_sceneData.renderSize
 					, c3d_sceneData.cameraPlanes
-					, pxl_colour );
+					, outColour );
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

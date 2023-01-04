@@ -70,7 +70,7 @@ namespace atmosphere_scattering
 				, 0.01_f );
 
 			// Fragment Outputs
-			auto pxl_colour( writer.declOutput< sdw::Vec4 >( "pxl_colour", 0u ) );
+			auto outColour( writer.declOutput< sdw::Vec4 >( "outColour", 0u ) );
 
 			AtmosphereModel atmosphere{ writer
 				, c3d_atmosphereData
@@ -127,7 +127,7 @@ namespace atmosphere_scattering
 					IF( writer, !atmosphere.moveToTopAtmosphere( ray ) )
 					{
 						// Ray is not intersecting the atmosphere
-						pxl_colour = vec4( 0.0_f, 0.0_f, 0.0_f, 1.0_f );
+						outColour = vec4( 0.0_f, 0.0_f, 0.0_f, 1.0_f );
 					}
 					ELSE
 					{
@@ -137,7 +137,7 @@ namespace atmosphere_scattering
 							, sunDir
 							, sampleCountIni
 							, depthBufferValue ) );
-						pxl_colour = vec4( ss.luminance(), 1.0_f );
+						outColour = vec4( ss.luminance(), 1.0_f );
 					}
 					FI;
 				} );

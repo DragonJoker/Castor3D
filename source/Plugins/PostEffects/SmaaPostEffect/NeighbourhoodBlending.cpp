@@ -195,12 +195,12 @@ namespace smaa
 				, InCombinedImage2DRgba32{ writer, "blendTex" } );
 
 			// Shader outputs
-			auto pxl_fragColour = writer.declOutput< Vec4 >( "pxl_fragColour", 0u );
+			auto outColour = writer.declOutput< Vec4 >( "outColour", 0u );
 
 			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
 				, FragmentOut out )
 				{
-					pxl_fragColour = SMAANeighborhoodBlendingPS( vtx_texture, vtx_offset, c3d_colourTex, c3d_blendTex );
+					outColour = SMAANeighborhoodBlendingPS( vtx_texture, vtx_offset, c3d_colourTex, c3d_blendTex );
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}

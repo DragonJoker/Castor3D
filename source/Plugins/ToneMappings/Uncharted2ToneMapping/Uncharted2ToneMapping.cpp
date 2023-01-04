@@ -24,7 +24,7 @@ namespace Uncharted2
 		auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 		// Shader outputs
-		auto pxl_rgb = writer.declOutput< Vec4 >( "pxl_rgb", 0 );
+		auto outColour = writer.declOutput< Vec4 >( "outColour", 0 );
 
 		auto ShoulderStrength = writer.declConstant( "ShoulderStrength", 0.15_f );
 		auto LinearStrength = writer.declConstant( "LinearStrength", 0.50_f );
@@ -66,7 +66,7 @@ namespace Uncharted2
 				auto colour = writer.declLocale( "colour"
 					, current * whiteScale );
 
-				pxl_rgb = vec4( c3d_hdrConfigData.applyGamma( colour ), 1.0_f );
+				outColour = vec4( c3d_hdrConfigData.applyGamma( colour ), 1.0_f );
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

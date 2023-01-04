@@ -126,11 +126,11 @@ namespace castor3d
 			, utils };
 
 		// Shader outputs
-		auto pxl_diffuse = writer.declOutput< Vec3 >( "pxl_diffuse", 0 );
-		auto pxl_specular = writer.declOutput< Vec3 >( "pxl_specular", 1 );
-		auto pxl_scattering = writer.declOutput< Vec3 >( "pxl_scattering", 2 );
-		auto pxl_coatingSpecular = writer.declOutput< Vec3 >( "pxl_coatingSpecular", 3 );
-		auto pxl_sheen = writer.declOutput< Vec2 >( "pxl_sheen", 4 );
+		auto outLightDiffuse = writer.declOutput< Vec3 >( "outLightDiffuse", 0 );
+		auto outLightSpecular = writer.declOutput< Vec3 >( "outLightSpecular", 1 );
+		auto outLightScattering = writer.declOutput< Vec3 >( "outLightScattering", 2 );
+		auto outLightCoatingSpecular = writer.declOutput< Vec3 >( "outLightCoatingSpecular", 3 );
+		auto outLightSheen = writer.declOutput< Vec2 >( "outLightSheen", 4 );
 
 		// Shader inputs
 		auto index = uint32_t( LightPassIdx::eCount );
@@ -314,19 +314,19 @@ namespace castor3d
 						break;
 					}
 
-					pxl_diffuse = lightDiffuse;
-					pxl_specular = lightSpecular;
-					pxl_scattering = lightScattering;
-					pxl_coatingSpecular = lightCoatingSpecular;
-					pxl_sheen = lightSheen;
+					outLightDiffuse = lightDiffuse;
+					outLightSpecular = lightSpecular;
+					outLightScattering = lightScattering;
+					outLightCoatingSpecular = lightCoatingSpecular;
+					outLightSheen = lightSheen;
 				}
 				ELSE
 				{
-					pxl_diffuse = albedo;
-					pxl_specular = vec3( 0.0_f, 0.0_f, 0.0_f );
-					pxl_scattering = vec3( 0.0_f, 0.0_f, 0.0_f );
-					pxl_coatingSpecular = vec3( 0.0_f, 0.0_f, 0.0_f );
-					pxl_sheen = vec2( 0.0_f, 1.0_f );
+					outLightDiffuse = albedo;
+					outLightSpecular = vec3( 0.0_f, 0.0_f, 0.0_f );
+					outLightScattering = vec3( 0.0_f, 0.0_f, 0.0_f );
+					outLightCoatingSpecular = vec3( 0.0_f, 0.0_f, 0.0_f );
+					outLightSheen = vec2( 0.0_f, 1.0_f );
 				}
 				FI;
 			} );

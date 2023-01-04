@@ -23,7 +23,7 @@ namespace HejlBurgessDawson
 		auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 		// Shader outputs
-		auto pxl_rgb = writer.declOutput< Vec4 >( "pxl_rgb", 0 );
+		auto outColour = writer.declOutput< Vec4 >( "outColour", 0 );
 
 		writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
 			, FragmentOut out )
@@ -33,7 +33,7 @@ namespace HejlBurgessDawson
 				hdrColor *= vec3( c3d_hdrConfigData.getExposure() );
 				auto x = writer.declLocale( "x"
 					, max( hdrColor - 0.004_f, vec3( 0.0_f ) ) );
-				pxl_rgb = vec4( ( x * ( 6.2f * x + 0.5f ) )
+				outColour = vec4( ( x * ( 6.2f * x + 0.5f ) )
 					/ ( x * ( 6.2f * x + 1.7f ) + 0.06f ), 1.0_f );
 			} );
 

@@ -85,7 +85,7 @@ namespace motion_blur
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0u );
+			auto outColour = writer.declOutput< Vec4 >( "outColour", 0u );
 
 			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
 				, FragmentOut out )
@@ -93,17 +93,17 @@ namespace motion_blur
 					auto blurVector = writer.declLocale( "blurVector"
 						, ( c3d_mapVelocity.sample( vtx_texture ) / c3d_vectorDivider ) * c3d_blurScale );
 					blurVector.y() = -blurVector.y();
-					pxl_fragColor = c3d_mapColor.sample( vtx_texture );
+					outColour = c3d_mapColor.sample( vtx_texture );
 
 					FOR( writer, UInt, i, 0u, i < c3d_samplesCount, ++i )
 					{
 						auto offset = writer.declLocale( "offset"
 							, blurVector * ( writer.cast< Float >( i ) / writer.cast< Float >( c3d_samplesCount - 1_u ) - 0.5f ) );
-						pxl_fragColor += c3d_mapColor.sample( vtx_texture + offset );
+						outColour += c3d_mapColor.sample( vtx_texture + offset );
 					}
 					ROF;
 
-					pxl_fragColor /= writer.cast< Float >( c3d_samplesCount );
+					outColour /= writer.cast< Float >( c3d_samplesCount );
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}

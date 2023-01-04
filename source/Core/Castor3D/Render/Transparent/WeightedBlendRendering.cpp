@@ -67,7 +67,7 @@ namespace castor3d
 			auto c3d_mapRevealage = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( WbTexture::eRevealage ), uint32_t( RevealTexIndex ), 0u );
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0u );
+			auto outColour = writer.declOutput< Vec4 >( "outColour", 0u );
 
 			shader::Utils utils{ writer };
 			shader::Fog fog{ writer };
@@ -107,7 +107,7 @@ namespace castor3d
 					auto averageColor = writer.declLocale( "averageColor"
 						, accum.rgb() / max( accum.a(), 0.00001_f ) );
 
-					pxl_fragColor = vec4( averageColor.rgb(), 1.0_f - revealage );
+					outColour = vec4( averageColor.rgb(), 1.0_f - revealage );
 
 					IF( writer, c3d_sceneData.fogType != UInt( uint32_t( FogType::eDisabled ) ) )
 					{
@@ -117,8 +117,8 @@ namespace castor3d
 							, c3d_gpInfoData.projToWorld( utils
 								, texCoord
 								, c3d_mapDepth.sample( texCoord ).r() ) );
-						pxl_fragColor = fog.apply( c3d_sceneData.getBackgroundColour( c3d_hdrConfigData )
-							, pxl_fragColor
+						outColour = fog.apply( c3d_sceneData.getBackgroundColour( c3d_hdrConfigData )
+							, outColour
 							, position
 							, c3d_sceneData );
 					}

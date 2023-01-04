@@ -1049,7 +1049,7 @@ namespace castor3d
 				, hasTexture ) );
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0 );
+			auto outColour = writer.declOutput< Vec4 >( "outColour", 0 );
 
 			writer.implementMainT< ovrlrend::OverlaySurfaceT, VoidT >( FragmentInT< ovrlrend::OverlaySurfaceT >{ writer, false, textOverlay, hasTexture }
 				, FragmentOut{ writer }
@@ -1079,7 +1079,7 @@ namespace castor3d
 							, outComponents );
 					}
 
-					pxl_fragColor = vec4( outComponents.colour, outComponents.opacity );
+					outColour = vec4( outComponents.colour, outComponents.opacity );
 				} );
 
 			pxl.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

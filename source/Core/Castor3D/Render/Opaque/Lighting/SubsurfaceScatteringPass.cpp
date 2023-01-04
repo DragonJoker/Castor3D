@@ -123,7 +123,7 @@ namespace castor3d
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0 );
+			auto outColour = writer.declOutput< Vec4 >( "outColour", 0 );
 
 			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
 				, FragmentOut out )
@@ -163,8 +163,8 @@ namespace castor3d
 					depthM = c3d_gpInfoData.projToView( utils, vtx_texture, depthM ).z();
 
 					// Accumulate center sample, multiplying it with its gaussian weight:
-					pxl_fragColor = colorM;
-					pxl_fragColor.rgb() *= 0.382_f;
+					outColour = colorM;
+					outColour.rgb() *= 0.382_f;
 
 					if ( isVertic )
 					{
@@ -220,7 +220,7 @@ namespace castor3d
 						color = mix( color, colorM.rgb(), vec3( s ) );
 
 						// Accumulate:
-						pxl_fragColor.rgb() += w[i] * color;
+						outColour.rgb() += w[i] * color;
 					}
 					ROF;
 				} );
@@ -251,7 +251,7 @@ namespace castor3d
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0 );
+			auto outColour = writer.declOutput< Vec4 >( "outColour", 0 );
 
 			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
 				, FragmentOut out )
@@ -278,7 +278,7 @@ namespace castor3d
 
 					IF( writer, sssProfileIndex == 0_u )
 					{
-						pxl_fragColor = original;
+						outColour = original;
 					}
 					ELSE
 					{
@@ -308,7 +308,7 @@ namespace castor3d
 							, c3d_mapEmsTrn.lod( vtx_texture, 0.0_f ) );
 						auto translucency = writer.declLocale( "translucency"
 							, emsTrn.w() );
-						pxl_fragColor = original * originalWeight
+						outColour = original * originalWeight
 							+ blur1 * blurWeights[0]
 							+ blur2 * blurWeights[1]
 							+ blur3 * blurWeights[2];

@@ -56,12 +56,12 @@ namespace PbrBloom
 			constants.end();
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0 );
+			auto outColour = writer.declOutput< Vec4 >( "outColour", 0 );
 
 			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
 				, FragmentOut out )
 				{
-					pxl_fragColor = vec4( mix( c3d_mapScene.sample( vtx_texture ).rgb()
+					outColour = vec4( mix( c3d_mapScene.sample( vtx_texture ).rgb()
 							, c3d_mapPasses.sample( vtx_texture ).rgb()
 							, vec3( bloomStrength ) )
 						, 1.0f );

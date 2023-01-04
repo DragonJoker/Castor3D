@@ -56,16 +56,16 @@ namespace light_streaks
 			auto c3d_mapKawase = writer.declCombinedImg< FImg2DArrayRgba32 >( CombinePass::CombineMapKawase, KawaseMapIdx, 0u );
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 			// Shader outputs
-			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0 );
+			auto outColour = writer.declOutput< Vec4 >( "outColour", 0 );
 
 			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
 				, FragmentOut out )
 				{
-					pxl_fragColor = c3d_mapScene.sample( vtx_texture );
-					pxl_fragColor += c3d_mapKawase.sample( vec3( vtx_texture, 0.0f ) );
-					pxl_fragColor += c3d_mapKawase.sample( vec3( vtx_texture, 1.0f ) );
-					pxl_fragColor += c3d_mapKawase.sample( vec3( vtx_texture, 2.0f ) );
-					pxl_fragColor += c3d_mapKawase.sample( vec3( vtx_texture, 3.0f ) );
+					outColour = c3d_mapScene.sample( vtx_texture );
+					outColour += c3d_mapKawase.sample( vec3( vtx_texture, 0.0f ) );
+					outColour += c3d_mapKawase.sample( vec3( vtx_texture, 1.0f ) );
+					outColour += c3d_mapKawase.sample( vec3( vtx_texture, 2.0f ) );
+					outColour += c3d_mapKawase.sample( vec3( vtx_texture, 3.0f ) );
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}

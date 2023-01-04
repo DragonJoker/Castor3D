@@ -523,7 +523,7 @@ namespace water
 #	define displayDebugData( WaterDataType, RGB, A )\
 	IF( writer, c3d_waterData.debug.x() == sdw::UInt( WaterDataType ) )\
 	{\
-		pxl_colour = vec4( RGB, A );\
+		outColour = vec4( RGB, A );\
 		writer.returnStmt();\
 	}\
 	FI
@@ -626,7 +626,7 @@ namespace water
 			, enableTextures ) );
 
 		// Fragment Outputs
-		auto pxl_colour( writer.declOutput< Vec4 >( "pxl_colour", 0 ) );
+		auto outColour( writer.declOutput< Vec4 >( "outColour", 0 ) );
 
 		writer.implementMainT< castor3d::shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< castor3d::shader::FragmentSurfaceT >{ writer
 				, passShaders
@@ -838,7 +838,7 @@ namespace water
 					refractionResult *= vec3( 1.0_f ) - fresnelFactor;
 					displayDebugData( eFinalRefraction, refractionResult, 1.0_f );
 
-					pxl_colour = vec4( lightSpecular + lightIndirectSpecular
+					outColour = vec4( lightSpecular + lightIndirectSpecular
 							+ components.emissiveColour * components.emissiveFactor
 							+ ( refractionResult )
 							+ ( reflectionResult * indirectAmbient )
@@ -848,14 +848,14 @@ namespace water
 				}
 				ELSE
 				{
-					pxl_colour = vec4( components.colour, 1.0_f );
+					outColour = vec4( components.colour, 1.0_f );
 				}
 				FI;
 
 				if ( flags.hasFog() )
 				{
-					pxl_colour = fog.apply( c3d_sceneData.getBackgroundColour( utils )
-						, pxl_colour
+					outColour = fog.apply( c3d_sceneData.getBackgroundColour( utils )
+						, outColour
 						, in.worldPosition.xyz()
 						, c3d_sceneData );
 				}
@@ -864,7 +864,7 @@ namespace water
 					, utils.lineariseDepth( in.fragCoord.z(), c3d_sceneData.nearPlane, c3d_sceneData.farPlane )
 					, c3d_sceneData.renderSize
 					, c3d_sceneData.cameraPlanes
-					, pxl_colour );
+					, outColour );
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

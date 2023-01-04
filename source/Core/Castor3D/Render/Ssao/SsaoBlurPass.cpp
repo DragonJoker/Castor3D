@@ -83,11 +83,11 @@ namespace castor3d
 			auto c3d_readAddSecond = writer.declConstant( "c3d_readAddSecond", vec3( 1.0_f ) );
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declOutput< Vec3 >( "pxl_fragColor", 0u );
-			auto pxl_bentNormal = writer.declOutput< Vec3 >( "pxl_bentNormal", 1u );
+			auto outColour = writer.declOutput< Vec3 >( "outColour", 0u );
+			auto outBentNormal = writer.declOutput< Vec3 >( "outBentNormal", 1u );
 
-#define result pxl_fragColor.r()
-#define keyPassThrough pxl_fragColor.g()
+#define result outColour.r()
+#define keyPassThrough outColour.g()
 
 			/** Returns a number on (0, 1) */
 			auto unpackKey = writer.implementFunction< Float >( "unpackKey"
@@ -278,7 +278,7 @@ namespace castor3d
 					{
 						// Sky pixel (if you aren't using depth keying, disable this test)
 						result = sum;
-						pxl_bentNormal = c3d_gpInfoData.writeNormal( bentNormal );
+						outBentNormal = c3d_gpInfoData.writeNormal( bentNormal );
 						writer.returnStmt();
 					}
 					FI;
@@ -338,7 +338,7 @@ namespace castor3d
 						, 0.0001_f );
 					result = sum / ( totalWeight + epsilon );
 					bentNormal /= ( totalWeight + epsilon );
-					pxl_bentNormal = c3d_gpInfoData.writeNormal( bentNormal );
+					outBentNormal = c3d_gpInfoData.writeNormal( bentNormal );
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 

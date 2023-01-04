@@ -103,7 +103,7 @@ namespace smaa
 			auto vtx_offset = writer.declInputArray< Vec4 >( "vtx_offset", 2u, 3u );
 
 			// Shader outputs
-			auto pxl_fragColour = writer.declOutput< Vec4 >( "pxl_fragColour", 0u );
+			auto outColour = writer.declOutput< Vec4 >( "outColour", 0u );
 
 			/**
 			 * Conditional move:
@@ -795,7 +795,7 @@ namespace smaa
 			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
 				, FragmentOut out )
 				{
-					pxl_fragColour = SMAABlendingWeightCalculationPS( vtx_texture
+					outColour = SMAABlendingWeightCalculationPS( vtx_texture
 						, vtx_pixcoord
 						, vtx_offset
 						, c3d_edgesTex

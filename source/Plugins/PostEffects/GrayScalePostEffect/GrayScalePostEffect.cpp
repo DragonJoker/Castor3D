@@ -78,14 +78,14 @@ namespace grayscale
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0u );
+			auto outColour = writer.declOutput< Vec4 >( "outColour", 0u );
 
 			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
 				, FragmentOut out )
 				{
 					auto colour = writer.declLocale( "colour"
 						, c3d_mapColor.sample( vtx_texture ).xyz() );
-					pxl_fragColor = vec4( vec3( dot( c3d_factors, colour ) ), 1.0_f );
+					outColour = vec4( vec3( dot( c3d_factors, colour ) ), 1.0_f );
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}

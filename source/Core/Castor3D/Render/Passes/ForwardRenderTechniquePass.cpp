@@ -189,8 +189,8 @@ namespace castor3d
 		shader::Fog fog{ writer };
 
 		// Fragment Outputs
-		auto pxl_fragColor( writer.declOutput< Vec4 >( "pxl_fragColor", 0 ) );
-		auto pxl_velocity( writer.declOutput< Vec4 >( "pxl_velocity", 1, flags.writeVelocity() ) );
+		auto outColour( writer.declOutput< Vec4 >( "outColour", 0 ) );
+		auto outVelocity( writer.declOutput< Vec4 >( "outVelocity", 1, flags.writeVelocity() ) );
 
 		writer.implementMainT< shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer
 				, passShaders
@@ -323,7 +323,7 @@ namespace castor3d
 								, surface )
 							: vec3( 0.0_f ) ) );
 
-					pxl_fragColor = vec4( lightingModel->combine( components
+					outColour = vec4( lightingModel->combine( components
 							, incident
 							, lightDiffuse
 							, indirectDiffuse
@@ -343,14 +343,14 @@ namespace castor3d
 				}
 				ELSE
 				{
-					pxl_fragColor = vec4( components.colour, components.opacity );
+					outColour = vec4( components.colour, components.opacity );
 				}
 				FI;
 
 				if ( flags.hasFog() )
 				{
-					pxl_fragColor = fog.apply( c3d_sceneData.getBackgroundColour( utils )
-						, pxl_fragColor
+					outColour = fog.apply( c3d_sceneData.getBackgroundColour( utils )
+						, outColour
 						, in.worldPosition.xyz()
 						, c3d_sceneData );
 				}
@@ -359,8 +359,8 @@ namespace castor3d
 					, utils.lineariseDepth( in.fragCoord.z(), c3d_sceneData.nearPlane, c3d_sceneData.farPlane )
 					, c3d_sceneData.renderSize
 					, c3d_sceneData.cameraPlanes
-					, pxl_fragColor );
-				pxl_velocity.xy() = in.getVelocity();
+					, outColour );
+				outVelocity.xy() = in.getVelocity();
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

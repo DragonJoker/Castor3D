@@ -298,11 +298,11 @@ namespace castor3d
 
 		// Fragment Outputs
 		uint32_t outIndex{};
-		auto pxl_linear( writer.declOutput< Float >( "pxl_linear", outIndex++ ) );
-		auto pxl_variance( writer.declOutput< Vec2 >( "pxl_variance", needsVsm ? outIndex++ : 0u, needsVsm ) );
-		auto pxl_normal( writer.declOutput< Vec4 >( "pxl_normal", needsRsm ? outIndex++ : 0u, needsRsm ) );
-		auto pxl_position( writer.declOutput< Vec4 >( "pxl_position", needsRsm ? outIndex++ : 0u, needsRsm ) );
-		auto pxl_flux( writer.declOutput< Vec4 >( "pxl_flux", needsRsm ? outIndex++ : 0u, needsRsm ) );
+		auto outLinear( writer.declOutput< Float >( "outLinear", outIndex++ ) );
+		auto outVariance( writer.declOutput< Vec2 >( "outVariance", needsVsm ? outIndex++ : 0u, needsVsm ) );
+		auto outNormal( writer.declOutput< Vec4 >( "outNormal", needsRsm ? outIndex++ : 0u, needsRsm ) );
+		auto outPosition( writer.declOutput< Vec4 >( "outPosition", needsRsm ? outIndex++ : 0u, needsRsm ) );
+		auto outFlux( writer.declOutput< Vec4 >( "outFlux", needsRsm ? outIndex++ : 0u, needsRsm ) );
 
 		writer.implementMainT< shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer
 				, passShaders
@@ -311,11 +311,11 @@ namespace castor3d
 			, [&]( FragmentInT< shader::FragmentSurfaceT > in
 				, FragmentOut out )
 			{
-				pxl_linear = 0.0_f;
-				pxl_variance = vec2( 0.0_f );
-				pxl_normal = vec4( 0.0_f );
-				pxl_position = vec4( 0.0_f );
-				pxl_flux = vec4( 0.0_f );
+				outLinear = 0.0_f;
+				outVariance = vec2( 0.0_f );
+				outNormal = vec4( 0.0_f );
+				outPosition = vec4( 0.0_f );
+				outFlux = vec4( 0.0_f );
 
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[in.nodeId - 1u] );
@@ -335,18 +335,18 @@ namespace castor3d
 					, components );
 				auto depth = writer.declLocale( "depth"
 					, c3d_shadowMapData.getNormalisedDepth( in.worldPosition.xyz() ) );
-				pxl_linear = depth;
+				outLinear = depth;
 
 				if ( needsVsm )
 				{
-					pxl_variance.x() = depth;
-					pxl_variance.y() = depth * depth;
+					outVariance.x() = depth;
+					outVariance.y() = depth * depth;
 
 					auto dx = writer.declLocale( "dx"
 						, dFdx( depth ) );
 					auto dy = writer.declLocale( "dy"
 						, dFdy( depth ) );
-					pxl_variance.y() += 0.25_f * ( dx * dx + dy * dy );
+					outVariance.y() += 0.25_f * ( dx * dx + dy * dy );
 				}
 
 				if ( needsRsm )
@@ -360,13 +360,13 @@ namespace castor3d
 					auto attenuation = writer.declLocale( "attenuation"
 						, light.getAttenuationFactor( distance ) );
 					components.colour *= in.colour;
-					pxl_flux.rgb() = ( components.colour
+					outFlux.rgb() = ( components.colour
 							* light.base.colour
 							* light.base.intensity.x()
 							* clamp( dot( lightToVertex / distance, components.normal ), 0.0_f, 1.0_f ) )
 						/ attenuation;
-					pxl_normal.xyz() = components.normal;
-					pxl_position.xyz() = in.worldPosition.xyz();
+					outNormal.xyz() = components.normal;
+					outPosition.xyz() = in.worldPosition.xyz();
 				}
 			} );
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

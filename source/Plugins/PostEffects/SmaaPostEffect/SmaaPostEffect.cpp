@@ -69,7 +69,7 @@ namespace smaa
 			auto c3d_map = writer.declCombinedImg< FImg2DRgba32 >( "c3d_map", SmaaUboIdx + 1, 0u );
 
 			// Shader outputs
-			auto pxl_fragColour = writer.declOutput< Vec4 >( "pxl_fragColour", 0u );
+			auto outColour = writer.declOutput< Vec4 >( "outColour", 0u );
 
 			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
 				, FragmentOut out )
@@ -79,17 +79,17 @@ namespace smaa
 					{
 						IF( writer, c3d_smaaData.enableReprojection != 0 )
 						{
-							pxl_fragColour = vec4( c3d_map.sample( vtx_texture ).xy(), 0.0_f, 1.0_f );
+							outColour = vec4( c3d_map.sample( vtx_texture ).xy(), 0.0_f, 1.0_f );
 						}
 						ELSE
 						{
-							pxl_fragColour = c3d_map.sample( vtx_texture );
+							outColour = c3d_map.sample( vtx_texture );
 						}
 						FI;
 					}
 					else
 					{
-						pxl_fragColour = c3d_map.sample( vtx_texture );
+						outColour = c3d_map.sample( vtx_texture );
 					}
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

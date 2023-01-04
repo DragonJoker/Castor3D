@@ -24,7 +24,7 @@ namespace Reinhard
 		auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 		// Shader outputs
-		auto pxl_rgb = writer.declOutput< Vec4 >( "pxl_rgb", 0 );
+		auto outColour = writer.declOutput< Vec4 >( "outColour", 0 );
 
 		writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
 			, FragmentOut out )
@@ -35,7 +35,7 @@ namespace Reinhard
 				auto mapped = writer.declLocale( "mapped"
 					, vec3( Float( 1.0f ) ) - exp( -hdrColor * c3d_hdrConfigData.getExposure() ) );
 				// Gamma correction
-				pxl_rgb = vec4( c3d_hdrConfigData.applyGamma( mapped ), 1.0_f );
+				outColour = vec4( c3d_hdrConfigData.applyGamma( mapped ), 1.0_f );
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

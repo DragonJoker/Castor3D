@@ -92,11 +92,11 @@ namespace castor3d
 			auto c3d_readMultiplyFirst = writer.declConstant( "c3d_readMultiplyFirst", vec3( 2.0_f ) );
 			auto c3d_readAddSecond = writer.declConstant( "c3d_readAddSecond", vec3( 1.0_f ) );
 
-			auto pxl_fragColor = writer.declOutput< Vec3 >( "pxl_fragColor", 0u );
-			auto pxl_bentNormal = writer.declOutput< Vec4 >( "pxl_bentNormal", 1u );
+			auto outColour = writer.declOutput< Vec3 >( "outColour", 0u );
+			auto outBentNormal = writer.declOutput< Vec4 >( "outBentNormal", 1u );
 
-#define visibility pxl_fragColor.r()
-#define bilateralKey pxl_fragColor.g()
+#define visibility outColour.r()
+#define bilateralKey outColour.g()
 
 			//////////////////////////////////////////////////
 
@@ -402,8 +402,8 @@ namespace castor3d
 							// except at depth discontinuities, where they will be large and lead
 							// to 1-pixel false occlusions because they are not reliable
 							visibility = 1.0_f;
-							pxl_bentNormal.rgb() = normalize( c3d_gpInfoData.writeNormal( normal ) );
-							pxl_bentNormal.a() = 0.0f;
+							outBentNormal.rgb() = normalize( c3d_gpInfoData.writeNormal( normal ) );
+							outBentNormal.a() = 0.0f;
 							writer.returnStmt();
 						}
 						ELSE
@@ -423,8 +423,8 @@ namespace castor3d
 					{
 						// There is no way to compute AO at this radius
 						visibility = 1.0_f;
-						pxl_bentNormal.rgb() = c3d_gpInfoData.writeNormal( normal );
-						pxl_bentNormal.a() = 0.0f;
+						outBentNormal.rgb() = c3d_gpInfoData.writeNormal( normal );
+						outBentNormal.a() = 0.0f;
 						writer.returnStmt();
 					}
 					FI;
@@ -462,7 +462,7 @@ namespace castor3d
 					ROF;
 
 					bentNormal = normalize( bentNormal )/* * 0.5_f + 0.5_f*/;
-					pxl_bentNormal.xyz() = c3d_gpInfoData.writeNormal( bentNormal );
+					outBentNormal.xyz() = c3d_gpInfoData.writeNormal( bentNormal );
 
 					auto A = writer.declLocale< Float >( "A" );
 

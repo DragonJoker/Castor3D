@@ -70,26 +70,26 @@ namespace castor3d
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0u );
+			auto outColour = writer.declOutput< Vec4 >( "outColour", 0u );
 
 			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
 				, FragmentOut out )
 				{
 					auto base = writer.declLocale( "base", vec2( 1.0_f, 0.0_f ) / c3d_textureSize );
 					auto offset = writer.declLocale( "offset", vec2( 0.0_f, 0.0_f ) );
-					pxl_fragColor = c3d_mapSource.sample( vtx_texture ) * c3d_coefficients[0_u][0_u];
+					outColour = c3d_mapSource.sample( vtx_texture ) * c3d_coefficients[0_u][0_u];
 
 					FOR( writer, UInt, i, 1_u, i < c3d_coefficientsCount, ++i )
 					{
 						offset += base;
-						pxl_fragColor += c3d_coefficients[i / 4_u][i % 4_u] * c3d_mapSource.sample( vtx_texture - offset );
-						pxl_fragColor += c3d_coefficients[i / 4_u][i % 4_u] * c3d_mapSource.sample( vtx_texture + offset );
+						outColour += c3d_coefficients[i / 4_u][i % 4_u] * c3d_mapSource.sample( vtx_texture - offset );
+						outColour += c3d_coefficients[i / 4_u][i % 4_u] * c3d_mapSource.sample( vtx_texture + offset );
 					}
 					ROF;
 
 					if ( isDepth )
 					{
-						out.fragDepth = pxl_fragColor.r();
+						out.fragDepth = outColour.r();
 					}
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -111,26 +111,26 @@ namespace castor3d
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0 );
+			auto outColour = writer.declOutput< Vec4 >( "outColour", 0 );
 
 			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
 				, FragmentOut out )
 				{
 					auto base = writer.declLocale( "base", vec2( 0.0_f, 1.0_f ) / c3d_textureSize );
 					auto offset = writer.declLocale( "offset", vec2( 0.0_f, 0.0_f ) );
-					pxl_fragColor = c3d_mapSource.sample( vtx_texture ) * c3d_coefficients[0_u][0_u];
+					outColour = c3d_mapSource.sample( vtx_texture ) * c3d_coefficients[0_u][0_u];
 
 					FOR( writer, UInt, i, 1_u, i < c3d_coefficientsCount, ++i )
 					{
 						offset += base;
-						pxl_fragColor += c3d_coefficients[i / 4_u][i % 4_u] * c3d_mapSource.sample( vtx_texture - offset );
-						pxl_fragColor += c3d_coefficients[i / 4_u][i % 4_u] * c3d_mapSource.sample( vtx_texture + offset );
+						outColour += c3d_coefficients[i / 4_u][i % 4_u] * c3d_mapSource.sample( vtx_texture - offset );
+						outColour += c3d_coefficients[i / 4_u][i % 4_u] * c3d_mapSource.sample( vtx_texture + offset );
 					}
 					ROF;
 
 					if ( isDepth )
 					{
-						out.fragDepth = pxl_fragColor.r();
+						out.fragDepth = outColour.r();
 					}
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

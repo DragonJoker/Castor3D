@@ -44,7 +44,7 @@ namespace smaa
 			auto c3d_depthTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_depthTex", DepthTexIdx, 0u );
 
 			// Shader outputs
-			auto pxl_fragColour = writer.declOutput< Vec4 >( "pxl_fragColour", 0u );
+			auto outColour = writer.declOutput< Vec4 >( "outColour", 0u );
 
 			/**
 			 * Gathers current pixel, and the top-left neighbors.
@@ -90,8 +90,8 @@ namespace smaa
 			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
 				, FragmentOut out )
 				{
-					pxl_fragColour = vec4( 0.0_f );
-					pxl_fragColour.xy() = SMAADepthEdgeDetectionPS( utils.topDownToBottomUp( vtx_texture ), vtx_offset, c3d_depthTex );
+					outColour = vec4( 0.0_f );
+					outColour.xy() = SMAADepthEdgeDetectionPS( utils.topDownToBottomUp( vtx_texture ), vtx_offset, c3d_depthTex );
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}

@@ -82,7 +82,7 @@ namespace draw_edges
 			auto c3d_depthObj = writer.declCombinedImg< FImg2DRgba32 >( "c3d_depthObj", eDepthObj, 0u );
 
 			// Shader outputs
-			auto fragColour = writer.declOutput< Float >( "pxl_fragColour", 0u );
+			auto outColour = writer.declOutput< Float >( "outColour", 0u );
 
 			auto computeContour = writer.implementFunction< sdw::Float >( "c3d_computeContour"
 				, [&]( sdw::IVec2 const & texelCoord
@@ -173,7 +173,7 @@ namespace draw_edges
 					}
 					FI;
 
-					fragColour = toonProfile.objectFactor() * computeContour( texelCoord
+					outColour = toonProfile.objectFactor() * computeContour( texelCoord
 						, writer.cast< sdw::Int >( X.z() )
 						, toonProfile.edgeWidth() );
 

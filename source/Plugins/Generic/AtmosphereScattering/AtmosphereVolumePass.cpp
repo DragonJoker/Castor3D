@@ -147,7 +147,7 @@ namespace atmosphere_scattering
 				, 32.0_f );
 
 			// Fragment Outputs
-			auto pxl_colour( writer.declOutput< sdw::Vec4 >( "pxl_colour", 0 ) );
+			auto outColour( writer.declOutput< sdw::Vec4 >( "outColour", 0 ) );
 
 			AtmosphereModel atmosphere{ writer
 				, c3d_atmosphereData
@@ -257,7 +257,7 @@ namespace atmosphere_scattering
 				, [&]( sdw::FragmentInT< SurfaceT > in
 					, sdw::FragmentOut out )
 				{
-					pxl_colour = process( in.fragCoord.xy(), in.sliceId );
+					outColour = process( in.fragCoord.xy(), in.sliceId );
 				} );
 
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

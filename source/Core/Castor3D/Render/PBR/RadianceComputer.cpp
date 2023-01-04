@@ -111,7 +111,7 @@ namespace castor3d
 				auto c3d_mapEnvironment = writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapEnvironment", 1u, 0u );
 
 				// Outputs
-				auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_FragColor", 0u );
+				auto outColour = writer.declOutput< Vec4 >( "outColour", 0u );
 
 				writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
 					, FragmentOut out )
@@ -154,7 +154,7 @@ namespace castor3d
 						ROF;
 
 						irradiance = irradiance * Float{ castor::Pi< float > } * ( 1.0_f / writer.cast< Float >( nrSamples ) );
-						pxl_fragColor = vec4( irradiance, 1.0_f );
+						outColour = vec4( irradiance, 1.0_f );
 					} );
 
 				pxl.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

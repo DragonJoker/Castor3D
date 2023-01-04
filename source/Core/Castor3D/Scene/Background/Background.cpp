@@ -219,7 +219,7 @@ namespace castor3d
 						shader::Utils utils{ writer };
 
 						// Outputs
-						auto pxl_FragColor = writer.declOutput< Vec4 >( "pxl_FragColor", 0u );
+						auto outColour = writer.declOutput< Vec4 >( "outColour", 0u );
 
 						writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
 							, FragmentOut out )
@@ -231,16 +231,16 @@ namespace castor3d
 
 									if ( !m_background->isHdr() && !m_background->isSRGB() )
 									{
-										pxl_FragColor = vec4( c3d_hdrConfigData.removeGamma( colour.xyz() ), colour.w() );
+										outColour = vec4( c3d_hdrConfigData.removeGamma( colour.xyz() ), colour.w() );
 									}
 									else
 									{
-										pxl_FragColor = vec4( colour.xyz(), colour.w() );
+										outColour = vec4( colour.xyz(), colour.w() );
 									}
 								}
 								ELSE
 								{
-									pxl_FragColor = vec4( c3d_sceneData.getBackgroundColour( c3d_hdrConfigData ).xyz(), 1.0_f );
+									outColour = vec4( c3d_sceneData.getBackgroundColour( c3d_hdrConfigData ).xyz(), 1.0_f );
 								}
 								FI;
 							} );

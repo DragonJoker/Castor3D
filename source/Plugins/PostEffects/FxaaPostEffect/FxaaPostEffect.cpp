@@ -73,7 +73,7 @@ namespace fxaa
 			auto vtx_posPos = writer.declInput< Vec4 >( PosPos, 1u );
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declOutput< Vec4 >( "pxl_fragColor", 0 );
+			auto outColour = writer.declOutput< Vec4 >( "outColour", 0 );
 
 #define FXAA_REDUCE_MIN	Float{ 1.0 / 128.0 }
 
@@ -142,7 +142,7 @@ namespace fxaa
 					auto lumaB = writer.declLocale( "lumaB"
 						, dot( rgbB, luma ) );
 
-					pxl_fragColor = vec4( writer.ternary( lumaB < lumaMin || lumaB > lumaMax, rgbA, rgbB )
+					outColour = vec4( writer.ternary( lumaB < lumaMin || lumaB > lumaMax, rgbA, rgbB )
 						, 1.0_f );
 				} );
 

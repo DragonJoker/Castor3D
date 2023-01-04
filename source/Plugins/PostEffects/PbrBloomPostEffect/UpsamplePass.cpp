@@ -55,7 +55,7 @@ namespace PbrBloom
 			constants.end();
 
 			// Shader outputs
-			auto pxl_fragColor = writer.declOutput< Vec3 >( "pxl_fragColor", 0 );
+			auto outColour = writer.declOutput< Vec3 >( "outColour", 0 );
 
 			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
 				, FragmentOut out )
@@ -97,10 +97,10 @@ namespace PbrBloom
 					//  1   | 1 2 1 |
 					// -- * | 2 4 2 |
 					// 16   | 1 2 1 |
-					pxl_fragColor = e * 4.0f;
-					pxl_fragColor += ( b + d + f + h ) * 2.0f;
-					pxl_fragColor += ( a + c + g + i );
-					pxl_fragColor *= 1.0_f / 16.0f;
+					outColour = e * 4.0f;
+					outColour += ( b + d + f + h ) * 2.0f;
+					outColour += ( a + c + g + i );
+					outColour *= 1.0_f / 16.0f;
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}

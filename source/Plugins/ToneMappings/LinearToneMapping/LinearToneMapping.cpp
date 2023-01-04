@@ -23,7 +23,7 @@ namespace Linear
 		auto vtx_texture = writer.declInput< sdw::Vec2 >( "vtx_texture", 0u );
 
 		// Shader outputs
-		auto pxl_rgb = writer.declOutput< sdw::Vec4 >( "pxl_rgb", 0 );
+		auto outColour = writer.declOutput< sdw::Vec4 >( "outColour", 0 );
 
 		writer.implementMainT< sdw::VoidT, sdw::VoidT >( [&]( sdw::FragmentIn in
 			, sdw::FragmentOut out )
@@ -31,7 +31,7 @@ namespace Linear
 				auto hdrColor = writer.declLocale( "hdrColor"
 					, c3d_mapHdr.sample( vtx_texture ).rgb() );
 				hdrColor *= vec3( c3d_hdrConfigData.getExposure() );
-				pxl_rgb = vec4( c3d_hdrConfigData.applyGamma( hdrColor ), 1.0_f );
+				outColour = vec4( c3d_hdrConfigData.applyGamma( hdrColor ), 1.0_f );
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

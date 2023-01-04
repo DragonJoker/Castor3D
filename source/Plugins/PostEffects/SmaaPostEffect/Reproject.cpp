@@ -70,7 +70,7 @@ namespace smaa
 			auto c3d_velocityTex = writer.declCombinedImg< FImg2DRg32 >( "c3d_velocityTex", VelocityTexIdx, 0u, reprojection );
 
 			// Shader outputs
-			auto pxl_fragColour = writer.declOutput< Vec4 >( "pxl_fragColour", 0u );
+			auto outColour = writer.declOutput< Vec4 >( "outColour", 0u );
 
 			auto SMAAResolvePS = writer.implementFunction< Vec4 >( "SMAAResolvePS"
 				, [&]( Vec2 const & texcoord
@@ -119,7 +119,7 @@ namespace smaa
 			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
 				, FragmentOut out )
 				{
-					pxl_fragColour = SMAAResolvePS( vtx_texture, c3d_currentColourTex, c3d_previousColourTex );
+					outColour = SMAAResolvePS( vtx_texture, c3d_currentColourTex, c3d_previousColourTex );
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
