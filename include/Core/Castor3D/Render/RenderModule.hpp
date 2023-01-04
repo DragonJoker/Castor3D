@@ -901,30 +901,7 @@ namespace castor3d
 	*\param[in] dstArrayElement
 	*	L'indice dans le tableau d'éléments.
 	*/
-	C3D_API ashes::WriteDescriptorSet makeDescriptorWrite( VkImageView const & view
-		, uint32_t dstBinding
-		, uint32_t dstArrayElement = 0u );
-	/**
-	*\~english
-	*\brief
-	*	Creates a descriptor write for storage image.
-	*\param[in] view
-	*	The image view.
-	*\param[in] dstBinding
-	*	The binding inside the descriptor set.
-	*\param[in] dstArrayElement
-	*	The array element index.
-	*\~french
-	*\brief
-	*	Crée un descriptor write pour une storage image.
-	*\param[in] view
-	*	La vue sur l'image.
-	*\param[in] dstBinding
-	*	Le binding dans le descriptor set.
-	*\param[in] dstArrayElement
-	*	L'indice dans le tableau d'éléments.
-	*/
-	C3D_API ashes::WriteDescriptorSet makeDescriptorWrite( ashes::ImageView const & view
+	C3D_API ashes::WriteDescriptorSet makeImageViewDescriptorWrite( VkImageView const & view
 		, uint32_t dstBinding
 		, uint32_t dstArrayElement = 0u );
 	/**
@@ -951,8 +928,31 @@ namespace castor3d
 	*\param[in] dstArrayElement
 	*	L'indice dans le tableau d'éléments.
 	*/
-	C3D_API ashes::WriteDescriptorSet makeDescriptorWrite( VkImageView const & view
+	C3D_API ashes::WriteDescriptorSet makeImageViewDescriptorWrite( VkImageView const & view
 		, VkSampler const & sampler
+		, uint32_t dstBinding
+		, uint32_t dstArrayElement = 0u );
+	/**
+	*\~english
+	*\brief
+	*	Creates a descriptor write for storage image.
+	*\param[in] view
+	*	The image view.
+	*\param[in] dstBinding
+	*	The binding inside the descriptor set.
+	*\param[in] dstArrayElement
+	*	The array element index.
+	*\~french
+	*\brief
+	*	Crée un descriptor write pour une storage image.
+	*\param[in] view
+	*	La vue sur l'image.
+	*\param[in] dstBinding
+	*	Le binding dans le descriptor set.
+	*\param[in] dstArrayElement
+	*	L'indice dans le tableau d'éléments.
+	*/
+	C3D_API ashes::WriteDescriptorSet makeDescriptorWrite( ashes::ImageView const & view
 		, uint32_t dstBinding
 		, uint32_t dstArrayElement = 0u );
 	/**

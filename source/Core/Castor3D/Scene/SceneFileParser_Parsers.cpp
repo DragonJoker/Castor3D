@@ -692,8 +692,8 @@ namespace castor3d
 
 			if ( rIntraOcularDistance > 0 )
 			{
-				//l_parsingContext->renderTarget->setStereo( true );
-				//l_parsingContext->renderTarget->setIntraOcularDistance( rIntraOcularDistance );
+				//parsingContext->renderTarget->setStereo( true );
+				//parsingContext->renderTarget->setIntraOcularDistance( rIntraOcularDistance );
 			}
 		}
 	}

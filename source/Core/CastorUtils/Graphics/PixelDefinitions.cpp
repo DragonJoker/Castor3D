@@ -566,12 +566,12 @@ namespace castor
 
 			for ( int i = 0; i < 16; i++ )
 			{
-				auto control_code = int( bits & 0x7 );
+				auto controlCode = int( bits & 0x7 );
 				int32_t result{};
 
 				if ( lum0 > lum1 )
 				{
-					switch ( control_code )
+					switch ( controlCode )
 					{
 					case 0: result = lum0; break;
 					case 1: result = lum1; break;
@@ -585,7 +585,7 @@ namespace castor
 				}
 				else
 				{
-					switch ( control_code )
+					switch ( controlCode )
 					{
 					case 0: result = lum0; break;
 					case 1: result = lum1; break;

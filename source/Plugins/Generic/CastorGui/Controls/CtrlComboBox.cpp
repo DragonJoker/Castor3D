@@ -225,7 +225,7 @@ namespace CastorGui
 
 		if ( text )
 		{
-			//l_text->setPixelPosition( value );
+			//text->setPixelPosition( value );
 			text.reset();
 		}
 
