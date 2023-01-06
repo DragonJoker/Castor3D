@@ -1,10 +1,9 @@
 #include "ToonMaterial/Shaders/GlslToonLighting.hpp"
 
-#include <Castor3D/Material/Pass/Phong/Shaders/GlslPhongReflection.hpp>
-#include <Castor3D/Material/Pass/PBR/Shaders/GlslPbrReflection.hpp>
 #include <Castor3D/Shader/Shaders/GlslLight.hpp>
 #include <Castor3D/Shader/Shaders/GlslMaterial.hpp>
 #include <Castor3D/Shader/Shaders/GlslOutputComponents.hpp>
+#include <Castor3D/Shader/Shaders/GlslReflection.hpp>
 #include <Castor3D/Shader/Shaders/GlslShadow.hpp>
 #include <Castor3D/Shader/Shaders/GlslSurface.hpp>
 #include <Castor3D/Shader/Shaders/GlslTextureAnimation.hpp>
@@ -65,10 +64,11 @@ namespace toon::shader
 	c3d::ReflectionModelPtr ToonPhongLightingModel::getReflectionModel( uint32_t & envMapBinding
 		, uint32_t envMapSet )const
 	{
-		return std::make_unique< c3d::PhongReflectionModel >( m_writer
+		return std::make_unique< c3d::ReflectionModel >( m_writer
 			, m_utils
 			, envMapBinding
-			, envMapSet );
+			, envMapSet
+			, false );
 	}
 
 	void ToonPhongLightingModel::compute( c3d::DirectionalLight const & plight
@@ -781,10 +781,11 @@ namespace toon::shader
 	c3d::ReflectionModelPtr ToonPbrLightingModel::getReflectionModel( uint32_t & envMapBinding
 		, uint32_t envMapSet )const
 	{
-		return std::make_unique< c3d::PbrReflectionModel >( m_writer
+		return std::make_unique< c3d::ReflectionModel >( m_writer
 			, m_utils
 			, envMapBinding
-			, envMapSet );
+			, envMapSet
+			, true );
 	}
 
 	void ToonPbrLightingModel::compute( c3d::DirectionalLight const & plight

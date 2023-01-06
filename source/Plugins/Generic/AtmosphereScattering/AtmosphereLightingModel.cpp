@@ -3,11 +3,10 @@
 #include "AtmosphereScattering/AtmosphereBackground.hpp"
 #include "AtmosphereScattering/AtmosphereBackgroundModel.hpp"
 
-#include <Castor3D/Material/Pass/Phong/Shaders/GlslPhongReflection.hpp>
-#include <Castor3D/Material/Pass/PBR/Shaders/GlslPbrReflection.hpp>
 #include <Castor3D/Shader/Shaders/GlslLight.hpp>
 #include <Castor3D/Shader/Shaders/GlslMaterial.hpp>
 #include <Castor3D/Shader/Shaders/GlslOutputComponents.hpp>
+#include <Castor3D/Shader/Shaders/GlslReflection.hpp>
 #include <Castor3D/Shader/Shaders/GlslShadow.hpp>
 #include <Castor3D/Shader/Shaders/GlslSurface.hpp>
 #include <Castor3D/Shader/Shaders/GlslTextureAnimation.hpp>

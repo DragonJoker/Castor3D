@@ -12,11 +12,14 @@ namespace castor3d::shader
 {
 	ReflectionModel::ReflectionModel( sdw::ShaderWriter & writer
 		, Utils & utils
+		, uint32_t & envMapBinding
+		, uint32_t envMapSet
 		, bool hasIblSupport )
 		: m_writer{ writer }
 		, m_utils{ utils }
 		, m_hasIblSupport{ hasIblSupport }
 	{
+		m_writer.declCombinedImg< FImgCubeArrayRgba32 >( "c3d_mapEnvironment", envMapBinding++, envMapSet );
 	}
 
 	void ReflectionModel::computeCombined( BlendComponents & pcomponents
@@ -62,7 +65,6 @@ namespace castor3d::shader
 					IF( m_writer, hasEnvmap )
 					{
 						envMapIndex = envMapIndex - 1_u;
-						doAdjustAmbient( ambient );
 
 						IF( m_writer, hasReflection != 0_u )
 						{
@@ -294,7 +296,6 @@ namespace castor3d::shader
 					IF( m_writer, hasEnvmap )
 					{
 						envMapIndex = envMapIndex - 1_u;
-						doAdjustAmbient( ambient );
 
 						IF( m_writer, hasReflection != 0_u )
 						{
@@ -934,7 +935,36 @@ namespace castor3d::shader
 		, sdw::Vec3 & reflectedDiffuse
 		, sdw::Vec3 & reflectedSpecular )
 	{
-		doDeclareComputeReflEnvMaps();
+		if ( !m_computeReflEnvMaps )
+		{
+			m_computeReflEnvMaps = m_writer.implementFunction< sdw::Void >( "c3d_pbr_computeReflEnvMap"
+				, [&]( sdw::Vec3 const & wsIncident
+					, sdw::Vec3 const & wsNormal
+					, sdw::CombinedImageCubeArrayRgba32 const & envMap
+					, sdw::UInt const & envMapIndex
+					, sdw::Vec3 const & specular
+					, sdw::Float const & roughness
+					, sdw::Vec3 reflectedDiffuse
+					, sdw::Vec3 reflectedSpecular )
+				{
+					auto reflected = m_writer.declLocale( "reflected"
+						, reflect( wsIncident, wsNormal ) );
+					auto radiance = m_writer.declLocale( "radiance"
+						, envMap.lod( vec4( reflected, m_writer.cast< sdw::Float >( envMapIndex ) )
+							, roughness * sdw::Float( float( EnvironmentMipLevels ) ) ).xyz() );
+					reflectedDiffuse = vec3( 0.0_f );
+					reflectedSpecular = radiance * specular;
+				}
+				, sdw::InVec3{ m_writer, "wsIncident" }
+				, sdw::InVec3{ m_writer, "wsNormal" }
+				, sdw::InCombinedImageCubeArrayRgba32{ m_writer, "envMap" }
+				, sdw::InUInt{ m_writer, "envMapIndex" }
+				, sdw::InVec3{ m_writer, "specular" }
+				, sdw::InFloat{ m_writer, "roughness" }
+				, sdw::OutVec3{ m_writer, "reflectedDiffuse" }
+				, sdw::OutVec3{ m_writer, "reflectedSpecular" } );
+		}
+
 		m_computeReflEnvMaps( wsIncident
 			, wsNormal
 			, envMap
@@ -952,7 +982,31 @@ namespace castor3d::shader
 		, sdw::UInt const & envMapIndex
 		, BlendComponents & components )
 	{
-		doDeclareComputeSpecularReflEnvMaps();
+		if ( !m_computeSpecularReflEnvMaps )
+		{
+			m_computeSpecularReflEnvMaps = m_writer.implementFunction< sdw::Vec3 >( "c3d_phong_computeSpecularReflEnvMaps"
+				, [&]( sdw::Vec3 const & wsIncident
+					, sdw::Vec3 const & wsNormal
+					, sdw::CombinedImageCubeArrayRgba32 const & envMap
+					, sdw::UInt const & envMapIndex
+					, sdw::Vec3 const & specular
+					, sdw::Float const & roughness )
+				{
+					auto reflected = m_writer.declLocale( "reflected"
+						, reflect( wsIncident, wsNormal ) );
+					auto radiance = m_writer.declLocale( "radiance"
+						, envMap.lod( vec4( reflected, m_writer.cast< sdw::Float >( envMapIndex ) )
+							, roughness * sdw::Float( float( EnvironmentMipLevels ) ) ).xyz() );
+					m_writer.returnStmt( radiance * specular );
+				}
+				, sdw::InVec3{ m_writer, "wsIncident" }
+				, sdw::InVec3{ m_writer, "wsNormal" }
+				, sdw::InCombinedImageCubeArrayRgba32{ m_writer, "envMap" }
+				, sdw::InUInt{ m_writer, "envMapIndex" }
+				, sdw::InVec3{ m_writer, "specular" }
+				, sdw::InFloat{ m_writer, "roughness" } );
+		}
+
 		return m_computeSpecularReflEnvMaps( wsIncident
 			, wsNormal
 			, envMap
@@ -1124,7 +1178,32 @@ namespace castor3d::shader
 		, sdw::Vec3 & albedo
 		, sdw::Float const & roughness )
 	{
-		doDeclareComputeRefrEnvMaps();
+		if ( !m_computeRefrEnvMaps )
+		{
+			m_computeRefrEnvMaps = m_writer.implementFunction< sdw::Vec3 >( "c3d_pbr_computeRefrEnvMap"
+				, [&]( sdw::Vec3 const & wsIncident
+					, sdw::Vec3 const & wsNormal
+					, sdw::CombinedImageCubeArrayRgba32 const & envMap
+					, sdw::UInt const & envMapIndex
+					, sdw::Float const & refractionRatio
+					, sdw::Vec3 const & albedo
+					, sdw::Float const & roughness )
+				{
+					auto refracted = m_writer.declLocale( "refracted"
+						, refract( wsIncident, wsNormal, refractionRatio ) );
+					m_writer.returnStmt( envMap.lod( vec4( refracted, m_writer.cast< sdw::Float >( envMapIndex ) )
+							, roughness * sdw::Float( float( EnvironmentMipLevels ) ) ).xyz()
+						* albedo );
+				}
+				, sdw::InVec3{ m_writer, "wsIncident" }
+				, sdw::InVec3{ m_writer, "wsNormal" }
+				, sdw::InCombinedImageCubeArrayRgba32{ m_writer, "envMap" }
+				, sdw::InUInt{ m_writer, "envMapIndex" }
+				, sdw::InFloat{ m_writer, "refractionRatio" }
+				, sdw::InVec3{ m_writer, "albedo" }
+				, sdw::InFloat{ m_writer, "roughness" } );
+		}
+
 		return m_computeRefrEnvMaps( wsIncident
 			, wsNormal
 			, envMap

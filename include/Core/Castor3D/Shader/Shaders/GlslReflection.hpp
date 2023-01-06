@@ -14,8 +14,9 @@ namespace castor3d::shader
 	public:
 		C3D_API ReflectionModel( sdw::ShaderWriter & writer
 			, Utils & utils
+			, uint32_t & envMapBinding
+			, uint32_t envMapSet
 			, bool hasIblSupport );
-		C3D_API virtual ~ReflectionModel() = default;
 
 		C3D_API sdw::RetVec3 computeIncident( sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & wsCamera )const;
@@ -106,7 +107,7 @@ namespace castor3d::shader
 		*\param csHitPoint
 		*	Camera space location of the ray hit.
 		*/
-		sdw::RetBoolean traceScreenSpace( sdw::Vec3 csOrigin
+		C3D_API sdw::RetBoolean traceScreenSpace( sdw::Vec3 csOrigin
 			, sdw::Vec3 csDirection
 			, sdw::Mat4 projectToPixelMatrix
 			, sdw::CombinedImage2DR32 csZBuffer
@@ -156,21 +157,7 @@ namespace castor3d::shader
 			, sdw::Vec2 sceneUv
 			, sdw::Float const & refractionRatio
 			, BlendComponents & components );
-
-		virtual void doAdjustAmbient( sdw::Vec3 & ambient )const
-		{
-		}
-
-		virtual void doAdjustAlbedo( sdw::Vec3 & albedo )const
-		{
-		}
-
-		virtual void doDeclareComputeReflEnvMaps() = 0;
-		virtual void doDeclareComputeRefrEnvMaps() = 0;
-		virtual void doDeclareComputeSpecularReflEnvMaps() = 0;
-
-	protected:
-		C3D_API sdw::RetVec3 doComputeRefrEnvMaps( sdw::Vec3 const & wsIncident
+		sdw::RetVec3 doComputeRefrEnvMaps( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::CombinedImageCubeArrayRgba32 const & envMap
 			, sdw::UInt const & envMapIndex
@@ -178,7 +165,7 @@ namespace castor3d::shader
 			, sdw::Vec3 & albedo
 			, sdw::Float const & roughness );
 
-	protected:
+	private:
 		sdw::ShaderWriter & m_writer;
 		Utils & m_utils;
 		bool m_hasIblSupport;
