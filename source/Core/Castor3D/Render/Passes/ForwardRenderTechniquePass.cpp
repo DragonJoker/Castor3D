@@ -210,7 +210,7 @@ namespace castor3d
 				components.occlusion = ( m_ssao
 					? c3d_mapOcclusion.fetch( ivec2( in.fragCoord.xy() ), 0_i )
 					: 1.0_f );
-				materials.blendMaterials( !checkFlag( m_filters, RenderFilter::eAlphaBlend )
+				materials.blendMaterials( checkFlag( m_filters, RenderFilter::eAlphaBlend )
 					, flags
 					, textureConfigs
 					, textureAnims
