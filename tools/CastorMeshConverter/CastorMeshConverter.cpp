@@ -7,9 +7,8 @@
 #include <Castor3D/Cache/PluginCache.hpp>
 #include <Castor3D/Material/Material.hpp>
 #include <Castor3D/Material/Pass/PassFactory.hpp>
-#include <Castor3D/Material/Pass/Phong/BlinnPhongPass.hpp>
-#include <Castor3D/Material/Pass/Phong/PhongPass.hpp>
-#include <Castor3D/Material/Pass/PBR/PbrPass.hpp>
+#include <Castor3D/Material/Pass/PhongPass.hpp>
+#include <Castor3D/Material/Pass/PbrPass.hpp>
 #include <Castor3D/Miscellaneous/Parameter.hpp>
 #include <Castor3D/Model/Mesh/MeshImporter.hpp>
 #include <Castor3D/Model/Mesh/Mesh.hpp>
@@ -139,13 +138,9 @@ namespace convert
 		{
 			overridePassType = true;
 
-			if ( value == "phong" )
+			if ( value == "blinn_phong" )
 			{
 				options.passType = castor3d::PhongPass::Type;
-			}
-			else if ( value == "blinn_phong" )
-			{
-				options.passType = castor3d::BlinnPhongPass::Type;
 			}
 			else if ( value == "pbr" )
 			{

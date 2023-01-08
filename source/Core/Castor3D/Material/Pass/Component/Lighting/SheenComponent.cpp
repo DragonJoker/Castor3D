@@ -40,7 +40,7 @@ namespace castor3d
 {
 	//*********************************************************************************************
 
-	namespace coating
+	namespace sheen
 	{
 		static CU_ImplementAttributeParser( parserPassSheenFactor )
 		{
@@ -161,12 +161,12 @@ namespace castor3d
 		castor::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "sheen_colour" )
-			, coating::parserPassSheenFactor
+			, sheen::parserPassSheenFactor
 			, { castor::makeParameter< castor::ParameterType::eHdrRgbColour >() } );
 		castor::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "sheen_roughness" )
-			, coating::parserPassRoughnessFactor
+			, sheen::parserPassRoughnessFactor
 			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
 	}
 

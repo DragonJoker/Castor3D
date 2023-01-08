@@ -6,8 +6,8 @@ See LICENSE file in root folder
 
 #include "GlslToonProfile.hpp"
 
-#include <Castor3D/Material/Pass/PBR/Shaders/GlslPbrLighting.hpp>
-#include <Castor3D/Material/Pass/Phong/Shaders/GlslPhongLighting.hpp>
+#include <Castor3D/Material/Pass/Shaders/GlslPbrLighting.hpp>
+#include <Castor3D/Material/Pass/Shaders/GlslPhongLighting.hpp>
 #include <Castor3D/Render/RenderModule.hpp>
 #include <Castor3D/Shader/Ubos/UbosModule.hpp>
 
@@ -27,8 +27,7 @@ namespace toon::shader
 			, c3d::BRDFHelpers & brdf
 			, c3d::ShadowOptions shadowOptions
 			, c3d::SssProfiles const * sssProfiles
-			, bool enableVolumetric
-			, bool isBlinnPhong );
+			, bool enableVolumetric );
 		static c3d::LightingModelPtr create( sdw::ShaderWriter & writer
 			, c3d::Materials const & materials
 			, c3d::Utils & utils
@@ -154,28 +153,6 @@ namespace toon::shader
 			, c3d::InSurface
 			, sdw::InVec3
 			, sdw::InUInt > m_computeSpotDiffuse;
-	};
-
-	class ToonBlinnPhongLightingModel
-		: public ToonPhongLightingModel
-	{
-	public:
-		ToonBlinnPhongLightingModel( sdw::ShaderWriter & writer
-			, c3d::Materials const & materials
-			, c3d::Utils & utils
-			, c3d::BRDFHelpers & brdf
-			, c3d::ShadowOptions shadowOptions
-			, c3d::SssProfiles const * sssProfiles
-			, bool enableVolumetric );
-
-		static c3d::LightingModelPtr create( sdw::ShaderWriter & writer
-			, c3d::Materials const & materials
-			, c3d::Utils & utils
-			, c3d::BRDFHelpers & brdf
-			, c3d::ShadowOptions shadowOptions
-			, c3d::SssProfiles const * sssProfiles
-			, bool enableVolumetric );
-		static castor::String getName();
 	};
 
 	class ToonPbrLightingModel

@@ -5,8 +5,8 @@
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Cache/MaterialCache.hpp>
 #include <Castor3D/Material/Pass/PassFactory.hpp>
-#include <Castor3D/Material/Pass/PBR/PbrPass.hpp>
-#include <Castor3D/Material/Pass/Phong/BlinnPhongPass.hpp>
+#include <Castor3D/Material/Pass/PbrPass.hpp>
+#include <Castor3D/Material/Pass/PhongPass.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Shader/ShaderBuffers/PassBuffer.hpp>
 
@@ -36,20 +36,7 @@ namespace toon
 			return result;
 		}
 	};
-	castor::String const ToonPhongPass::Type = cuT( "toon_phong" );
-
-	struct ToonBlinnPhongPass
-	{
-		static castor::String const Type;
-
-		static castor3d::PassSPtr create( castor3d::Material & parent )
-		{
-			auto result = castor3d::BlinnPhongPass::create( parent );
-			result->createComponent< EdgesComponent >();
-			return result;
-		}
-	};
-	castor::String const ToonBlinnPhongPass::Type = cuT( "toon_blinn_phong" );
+	castor::String const ToonPhongPass::Type = cuT( "toon_blinn_phong" );
 }
 
 extern "C"
@@ -83,11 +70,6 @@ extern "C"
 				, toon::ToonPhongPass::create
 				, &toon::shader::ToonPhongLightingModel::create
 				, false } );
-		engine->getPassFactory().registerType( toon::ToonBlinnPhongPass::Type
-			, { toon::shader::ToonBlinnPhongLightingModel::getName()
-				, toon::ToonBlinnPhongPass::create
-				, &toon::shader::ToonBlinnPhongLightingModel::create
-				, false } );
 		engine->getPassFactory().registerType( toon::ToonPbrPass::Type
 			, { toon::shader::ToonPbrLightingModel::getName()
 				, toon::ToonPbrPass::create
@@ -103,7 +85,6 @@ extern "C"
 	{
 		engine->unregisterSpecificsBuffer( toon::shader::ToonProfile::getName() );
 		engine->getPassFactory().unregisterType( toon::ToonPbrPass::Type );
-		engine->getPassFactory().unregisterType( toon::ToonBlinnPhongPass::Type );
 		engine->getPassFactory().unregisterType( toon::ToonPhongPass::Type );
 		engine->unregisterPassComponent( toon::EdgesComponent::TypeName );
 	}

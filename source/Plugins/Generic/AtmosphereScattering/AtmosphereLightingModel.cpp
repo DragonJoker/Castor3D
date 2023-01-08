@@ -27,16 +27,14 @@ namespace atmosphere_scattering
 		, c3d::BRDFHelpers & brdf
 		, c3d::ShadowOptions shadowOptions
 		, c3d::SssProfiles const * sssProfiles
-		, bool enableVolumetric
-		, bool isBlinnPhong )
+		, bool enableVolumetric )
 		: c3d::PhongLightingModel{ m_writer
 			, materials
 			, utils
 			, brdf
 			, std::move( shadowOptions )
 			, sssProfiles
-			, enableVolumetric
-			, isBlinnPhong }
+			, enableVolumetric }
 	{
 		m_prefix = m_prefix + "atmosphere_";
 	}
@@ -60,8 +58,7 @@ namespace atmosphere_scattering
 			, brdf
 			, std::move( shadowOptions )
 			, sssProfiles
-			, enableVolumetric
-			, false );
+			, enableVolumetric );
 	}
 
 	void AtmospherePhongLightingModel::compute( c3d::DirectionalLight const & plight
@@ -114,22 +111,10 @@ namespace atmosphere_scattering
 					// Specular term.
 					auto vertexToEye = m_writer.declLocale( "vertexToEye"
 						, normalize( worldEye - surface.worldPosition.xyz() ) );
-
-					if ( m_isBlinnPhong )
-					{
-						auto halfwayDir = m_writer.declLocale( "halfwayDir"
-							, normalize( vertexToEye - lightDirection ) );
-						m_writer.declLocale( "specularFactor"
-							, max( dot( surface.normal, halfwayDir ), 0.0_f ) );
-					}
-					else
-					{
-						auto lightReflect = m_writer.declLocale( "lightReflect"
-							, normalize( reflect( lightDirection, surface.normal ) ) );
-						m_writer.declLocale( "specularFactor"
-							, max( dot( vertexToEye, lightReflect ), 0.0_f ) );
-					}
-
+					auto halfwayDir = m_writer.declLocale( "halfwayDir"
+						, normalize( vertexToEye - lightDirection ) );
+					m_writer.declLocale( "specularFactor"
+						, max( dot( surface.normal, halfwayDir ), 0.0_f ) );
 					auto specularFactor = m_writer.getVariable< sdw::Float >( "specularFactor" );
 					output.m_specular = isLit
 						* radiance
@@ -250,48 +235,6 @@ namespace atmosphere_scattering
 			, pworldEye
 			, preceivesShadows
 			, pparentOutput );
-	}
-
-	//*********************************************************************************************
-
-	AtmosphereBlinnPhongLightingModel::AtmosphereBlinnPhongLightingModel( sdw::ShaderWriter & writer
-		, c3d::Materials const & materials
-		, c3d::Utils & utils
-		, c3d::BRDFHelpers & brdf
-		, c3d::ShadowOptions shadowOptions
-		, c3d::SssProfiles const * sssProfiles
-		, bool enableVolumetric )
-		: AtmospherePhongLightingModel{ writer
-			, materials
-			, utils
-			, brdf
-			, std::move( shadowOptions )
-			, sssProfiles
-			, enableVolumetric
-			, true }
-	{
-	}
-
-	c3d::LightingModelPtr AtmosphereBlinnPhongLightingModel::create( sdw::ShaderWriter & writer
-		, c3d::Materials const & materials
-		, c3d::Utils & utils
-		, c3d::BRDFHelpers & brdf
-		, c3d::ShadowOptions shadowOptions
-		, c3d::SssProfiles const * sssProfiles
-		, bool enableVolumetric )
-	{
-		return std::make_unique< AtmosphereBlinnPhongLightingModel >( writer
-			, materials
-			, utils
-			, brdf
-			, std::move( shadowOptions )
-			, sssProfiles
-			, enableVolumetric );
-	}
-
-	castor::String AtmosphereBlinnPhongLightingModel::getName()
-	{
-		return c3d::concatModelNames( c3d::BlinnPhongLightingModel::getName(), AtmosphereBackgroundModel::Name );
 	}
 
 	//*********************************************************************************************

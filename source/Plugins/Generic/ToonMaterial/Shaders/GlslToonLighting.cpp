@@ -29,16 +29,14 @@ namespace toon::shader
 		, c3d::BRDFHelpers & brdf
 		, c3d::ShadowOptions shadowOptions
 		, c3d::SssProfiles const * sssProfiles
-		, bool enableVolumetric
-		, bool isBlinnPhong )
+		, bool enableVolumetric )
 		: c3d::PhongLightingModel{ m_writer
 			, materials
 			, utils
 			, brdf
 			, std::move( shadowOptions )
 			, sssProfiles
-			, enableVolumetric
-			, isBlinnPhong }
+			, enableVolumetric }
 	{
 		m_prefix = m_prefix + "toon_";
 	}
@@ -57,8 +55,7 @@ namespace toon::shader
 			, brdf
 			, std::move( shadowOptions )
 			, sssProfiles
-			, enableVolumetric
-			, false );
+			, enableVolumetric );
 	}
 
 	c3d::ReflectionModelPtr ToonPhongLightingModel::getReflectionModel( uint32_t & envMapBinding
@@ -616,22 +613,10 @@ namespace toon::shader
 					// Specular term.
 					auto vertexToEye = m_writer.declLocale( "vertexToEye"
 						, normalize( worldEye - surface.worldPosition.xyz() ) );
-
-					if ( m_isBlinnPhong )
-					{
-						auto halfwayDir = m_writer.declLocale( "halfwayDir"
-							, normalize( vertexToEye - lightDirection ) );
-						m_writer.declLocale( "specularFactor"
-							, max( dot( surface.normal, halfwayDir ), 0.0_f ) );
-					}
-					else
-					{
-						auto lightReflect = m_writer.declLocale( "lightReflect"
-							, normalize( reflect( lightDirection, surface.normal ) ) );
-						m_writer.declLocale( "specularFactor"
-							, max( dot( vertexToEye, lightReflect ), 0.0_f ) );
-					}
-
+					auto halfwayDir = m_writer.declLocale( "halfwayDir"
+						, normalize( vertexToEye - lightDirection ) );
+					m_writer.declLocale( "specularFactor"
+						, max( dot( surface.normal, halfwayDir ), 0.0_f ) );
 					auto specularFactor = m_writer.getVariable< sdw::Float >( "specularFactor" );
 					specularFactor = pow( specularFactor * diffuseFactor, clamp( components.shininess, 1.0_f, 256.0_f ) );
 					specularFactor = smoothStep( 0.0_f, 0.01_f * components.getMember< sdw::Float >( "smoothBand", true ), specularFactor );
@@ -692,48 +677,6 @@ namespace toon::shader
 			, psurface
 			, pworldEye
 			, plightDirection );
-	}
-
-	//*********************************************************************************************
-
-	ToonBlinnPhongLightingModel::ToonBlinnPhongLightingModel( sdw::ShaderWriter & writer
-		, c3d::Materials const & materials
-		, c3d::Utils & utils
-		, c3d::BRDFHelpers & brdf
-		, c3d::ShadowOptions shadowOptions
-		, c3d::SssProfiles const * sssProfiles
-		, bool enableVolumetric )
-		: ToonPhongLightingModel{ writer
-			, materials
-			, utils
-			, brdf
-			, std::move( shadowOptions )
-			, sssProfiles
-			, enableVolumetric
-			, true }
-	{
-	}
-
-	c3d::LightingModelPtr ToonBlinnPhongLightingModel::create( sdw::ShaderWriter & writer
-		, c3d::Materials const & materials
-		, c3d::Utils & utils
-		, c3d::BRDFHelpers & brdf
-		, c3d::ShadowOptions shadowOptions
-		, c3d::SssProfiles const * sssProfiles
-		, bool enableVolumetric )
-	{
-		return std::make_unique< ToonBlinnPhongLightingModel >( writer
-			, materials
-			, utils
-			, brdf
-			, std::move( shadowOptions )
-			, sssProfiles
-			, enableVolumetric );
-	}
-
-	castor::String ToonBlinnPhongLightingModel::getName()
-	{
-		return cuT( "c3d.toon.blinn_phong" );
 	}
 
 	//*********************************************************************************************

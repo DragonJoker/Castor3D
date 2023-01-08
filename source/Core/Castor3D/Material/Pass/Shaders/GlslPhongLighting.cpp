@@ -1,4 +1,4 @@
-#include "Castor3D/Material/Pass/Phong/Shaders/GlslPhongLighting.hpp"
+#include "Castor3D/Material/Pass/Shaders/GlslPhongLighting.hpp"
 
 #include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
@@ -30,8 +30,7 @@ namespace castor3d::shader
 		, BRDFHelpers & brdf
 		, ShadowOptions shadowOptions
 		, SssProfiles const * sssProfiles
-		, bool enableVolumetric
-		, bool isBlinnPhong )
+		, bool enableVolumetric )
 		: LightingModel{ m_writer
 			, materials
 			, utils
@@ -39,8 +38,7 @@ namespace castor3d::shader
 			, std::move( shadowOptions )
 			, sssProfiles
 			, enableVolumetric
-			, isBlinnPhong ? std::string{ "c3d_blinnphong_" } : std::string{ "c3d_phong_" } }
-		, m_isBlinnPhong{ isBlinnPhong }
+			, std::string{ "c3d_phong_" } }
 	{
 	}
 
@@ -58,8 +56,7 @@ namespace castor3d::shader
 			, brdf
 			, std::move( shadowOptions )
 			, sssProfiles
-			, enableVolumetric
-			, false );
+			, enableVolumetric );
 	}
 
 	sdw::Float PhongLightingModel::getFinalTransmission( BlendComponents const & components
@@ -686,22 +683,10 @@ namespace castor3d::shader
 					// Specular term.
 					auto vertexToEye = m_writer.declLocale( "vertexToEye"
 						, normalize( worldEye - surface.worldPosition.xyz() ) );
-
-					if ( m_isBlinnPhong )
-					{
-						auto halfwayDir = m_writer.declLocale( "halfwayDir"
-							, normalize( vertexToEye - lightDirection ) );
-						m_writer.declLocale( "specularFactor"
-							, max( dot( surface.normal, halfwayDir ), 0.0_f ) );
-					}
-					else
-					{
-						auto lightReflect = m_writer.declLocale( "lightReflect"
-							, normalize( reflect( lightDirection, surface.normal ) ) );
-						m_writer.declLocale( "specularFactor"
-							, max( dot( vertexToEye, lightReflect ), 0.0_f ) );
-					}
-
+					auto halfwayDir = m_writer.declLocale( "halfwayDir"
+						, normalize( vertexToEye - lightDirection ) );
+					m_writer.declLocale( "specularFactor"
+						, max( dot( surface.normal, halfwayDir ), 0.0_f ) );
 					auto specularFactor = m_writer.getVariable< sdw::Float >( "specularFactor" );
 					output.m_specular = isLit
 						* light.colour
@@ -710,21 +695,10 @@ namespace castor3d::shader
 
 					IF( m_writer, components.clearcoatFactor != 0.0_f )
 					{
-						if ( m_isBlinnPhong )
-						{
-							auto halfwayDir = m_writer.declLocale( "coatHalfwayDir"
-								, normalize( vertexToEye - lightDirection ) );
-							m_writer.declLocale( "coatSpecularFactor"
-								, max( dot( surface.normal, halfwayDir ), 0.0_f ) );
-						}
-						else
-						{
-							auto lightReflect = m_writer.declLocale( "coatLightReflect"
-								, normalize( reflect( lightDirection, surface.normal ) ) );
-							m_writer.declLocale( "coatSpecularFactor"
-								, max( dot( vertexToEye, lightReflect ), 0.0_f ) );
-						}
-
+						auto halfwayDir = m_writer.declLocale( "coatHalfwayDir"
+							, normalize( vertexToEye - lightDirection ) );
+						m_writer.declLocale( "coatSpecularFactor"
+							, max( dot( surface.normal, halfwayDir ), 0.0_f ) );
 						auto coatSpecularFactor = m_writer.getVariable< sdw::Float >( "coatSpecularFactor" );
 						output.m_coatingSpecular = isLit
 							* light.colour
@@ -822,48 +796,6 @@ namespace castor3d::shader
 				+ emissive
 				+ refracted
 				+ directScattering );
-	}
-
-	//*********************************************************************************************
-
-	BlinnPhongLightingModel::BlinnPhongLightingModel( sdw::ShaderWriter & writer
-		, Materials const & materials
-		, Utils & utils
-		, BRDFHelpers & brdf
-		, ShadowOptions shadowOptions
-		, SssProfiles const * sssProfiles
-		, bool enableVolumetric )
-		: PhongLightingModel{ writer
-			, materials
-			, utils
-			, brdf
-			, std::move( shadowOptions )
-			, sssProfiles
-			, enableVolumetric
-			, true }
-	{
-	}
-
-	LightingModelPtr BlinnPhongLightingModel::create( sdw::ShaderWriter & writer
-		, Materials const & materials
-		, Utils & utils
-		, BRDFHelpers & brdf
-		, ShadowOptions shadowOptions
-		, SssProfiles const * sssProfiles
-		, bool enableVolumetric )
-	{
-		return std::make_unique< BlinnPhongLightingModel >( writer
-			, materials
-			, utils
-			, brdf
-			, std::move( shadowOptions )
-			, sssProfiles
-			, enableVolumetric );
-	}
-
-	castor::String BlinnPhongLightingModel::getName()
-	{
-		return cuT( "c3d.blinn_phong" );
 	}
 
 	//*********************************************************************************************
