@@ -5,9 +5,6 @@ See LICENSE file in root folder
 #define ___C3D_ToonPass_H___
 
 #include <Castor3D/Material/Pass/Component/BaseDataPassComponent.hpp>
-#include <Castor3D/Material/Pass/PBR/PbrPass.hpp>
-#include <Castor3D/Material/Pass/Phong/BlinnPhongPass.hpp>
-#include <Castor3D/Material/Pass/Phong/PhongPass.hpp>
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Graphics/RgbColour.hpp>

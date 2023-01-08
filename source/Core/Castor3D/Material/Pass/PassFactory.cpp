@@ -1,11 +1,10 @@
 #include "Castor3D/Material/Pass/PassFactory.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Material/Pass/Phong/BlinnPhongPass.hpp"
-#include "Castor3D/Material/Pass/Phong/PhongPass.hpp"
-#include "Castor3D/Material/Pass/Phong/Shaders/GlslPhongLighting.hpp"
-#include "Castor3D/Material/Pass/PBR/PbrPass.hpp"
-#include "Castor3D/Material/Pass/PBR/Shaders/GlslPbrLighting.hpp"
+#include "Castor3D/Material/Pass/PbrPass.hpp"
+#include "Castor3D/Material/Pass/PhongPass.hpp"
+#include "Castor3D/Material/Pass/Shaders/GlslPbrLighting.hpp"
+#include "Castor3D/Material/Pass/Shaders/GlslPhongLighting.hpp"
 
 CU_ImplementCUSmartPtr( castor3d, PassFactory )
 
@@ -20,13 +19,6 @@ namespace castor3d
 				, PhongPass::create
 				, &shader::PhongLightingModel::create
 				, false } );
-		
-		registerType( BlinnPhongPass::Type
-			, { BlinnPhongPass::LightingModel
-				, BlinnPhongPass::create
-				, &shader::BlinnPhongLightingModel::create
-				, false } );
-
 		registerType( PbrPass::Type
 			, { PbrPass::LightingModel
 				, PbrPass::create

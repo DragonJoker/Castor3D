@@ -1,4 +1,4 @@
-#include "Castor3D/Material/Pass/PBR/Shaders/GlslPbrLighting.hpp"
+#include "Castor3D/Material/Pass/Shaders/GlslPbrLighting.hpp"
 
 #include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"

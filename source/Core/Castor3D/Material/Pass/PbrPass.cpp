@@ -1,4 +1,4 @@
-#include "Castor3D/Material/Pass/PBR/PbrPass.hpp"
+#include "Castor3D/Material/Pass/PbrPass.hpp"
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Material/Pass/PassFactory.hpp"
@@ -6,7 +6,7 @@
 #include "Castor3D/Material/Pass/Component/Lighting/RoughnessComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/SpecularComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Other/ColourComponent.hpp"
-#include "Castor3D/Material/Pass/PBR/Shaders/GlslPbrLighting.hpp"
+#include "Castor3D/Material/Pass/Shaders/GlslPbrLighting.hpp"
 
 namespace castor3d
 {

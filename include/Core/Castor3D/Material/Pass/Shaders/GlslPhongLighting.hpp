@@ -21,8 +21,7 @@ namespace castor3d::shader
 			, BRDFHelpers & brdf
 			, ShadowOptions shadowOptions
 			, SssProfiles const * sssProfiles
-			, bool enableVolumetric
-			, bool isBlinnPhong );
+			, bool enableVolumetric );
 		C3D_API static LightingModelPtr create( sdw::ShaderWriter & writer
 			, Materials const & materials
 			, Utils & utils
@@ -86,11 +85,6 @@ namespace castor3d::shader
 			, sdw::UInt const & receivesShadows )override;
 		//\}
 
-		bool isBlinnPhong()const
-		{
-			return m_isBlinnPhong;
-		}
-
 	protected:
 		C3D_API sdw::RetVec3 doComputeLight( Light const & light
 			, BlendComponents const & components
@@ -126,7 +120,6 @@ namespace castor3d::shader
 
 	public:
 		C3D_API static castor::String getName();
-		bool m_isBlinnPhong{};
 		std::string m_prefix;
 		sdw::Function< sdw::Vec3
 			, InLight
@@ -180,28 +173,6 @@ namespace castor3d::shader
 			, InSurface
 			, sdw::InVec3
 			, sdw::InUInt > m_computeSpotDiffuse;
-	};
-
-	class BlinnPhongLightingModel
-		: public PhongLightingModel
-	{
-	public:
-		C3D_API BlinnPhongLightingModel( sdw::ShaderWriter & writer
-			, Materials const & materials
-			, Utils & utils
-			, BRDFHelpers & brdf
-			, ShadowOptions shadowOptions
-			, SssProfiles const * sssProfiles
-			, bool enableVolumetric );
-
-		C3D_API static LightingModelPtr create( sdw::ShaderWriter & writer
-			, Materials const & materials
-			, Utils & utils
-			, BRDFHelpers & brdf
-			, ShadowOptions shadowOptions
-			, SssProfiles const * sssProfiles
-			, bool enableVolumetric );
-		C3D_API static castor::String getName();
 	};
 }
 
