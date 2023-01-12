@@ -2,6 +2,9 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
+#include "Castor3D/Shader/Shaders/GlslLight.hpp"
+#include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
 #include <ShaderWriter/Intrinsics/Intrinsics.hpp>
 
@@ -16,7 +19,7 @@ namespace castor3d::shader
 	{
 	}
 
-	std::unique_ptr< BackgroundModel > BackgroundModel::createModel( Scene const & scene
+	BackgroundModelPtr BackgroundModel::createModel( Scene const & scene
 		, sdw::ShaderWriter & writer
 		, Utils & utils
 		, VkExtent2D targetSize
@@ -34,58 +37,73 @@ namespace castor3d::shader
 			, set );
 	}
 
-	void BackgroundModel::computeReflections( sdw::Vec3 const & wsIncident
-		, sdw::Vec3 const & wsNormal
+	void BackgroundModel::computeReflections( sdw::Vec3 const & wsNormal
+		, sdw::Vec3 const & difF
+		, sdw::Vec3 const & spcF
+		, sdw::Vec3 const & V
+		, sdw::Float const & NdotV
 		, BlendComponents & components
 		, sdw::CombinedImage2DRgba32 const & brdf
 		, sdw::Vec3 & reflectedDiffuse
 		, sdw::Vec3 & reflectedSpecular )
 	{
-		reflectedDiffuse = vec3( 0.0_f );
-		reflectedSpecular = vec3( 0.0_f );
+		reflectedDiffuse = computeDiffuseReflections( components.colour
+			, wsNormal
+			, difF
+			, components.metalness );
+		reflectedSpecular = computeSpecularReflections( spcF
+			, wsNormal
+			, V
+			, NdotV
+			, components.roughness
+			, brdf );
 	}
 
-	sdw::RetVec3 BackgroundModel::computeSpecularReflections( sdw::Vec3 const & wsIncident
+	sdw::RetVec3 BackgroundModel::computeDiffuseReflections( sdw::Vec3 const & albedo
 		, sdw::Vec3 const & wsNormal
-		, sdw::Vec3 const & specular
+		, sdw::Vec3 const & fresnel
+		, sdw::Float const & metalness )
+	{
+		return sdw::RetVec3{ vec3( 0.0_f ) };
+	}
+
+	sdw::RetVec3 BackgroundModel::computeSpecularReflections( sdw::Vec3 const & fresnel
+		, sdw::Vec3 const & wsNormal
+		, sdw::Vec3 const & V
+		, sdw::Float const & NdotV
 		, sdw::Float const & roughness
+		, sdw::CombinedImage2DRgba32 const & brdf )
+	{
+		return sdw::RetVec3{ vec3( 0.0_f ) };
+	}
+
+	sdw::RetVec3 BackgroundModel::computeSheenReflections( sdw::Vec3 const & wsNormal
+		, sdw::Vec3 const & V
+		, sdw::Float const & NdotV
 		, BlendComponents & components
 		, sdw::CombinedImage2DRgba32 const & brdf )
 	{
 		return sdw::RetVec3{ vec3( 0.0_f ) };
 	}
 
-	sdw::RetVec3 BackgroundModel::computeSpecularRefractions( sdw::Vec3 const & wsIncident
+	sdw::RetVec3 BackgroundModel::computeRefractions( sdw::Vec3 const & wsNormal
+		, sdw::Vec3 const & V
+		, sdw::Float const & refractionRatio
+		, BlendComponents & components )
+	{
+		return sdw::RetVec3{ vec3( 0.0_f ) };
+	}
+
+	sdw::RetVec3 BackgroundModel::computeSpecularRefractions( sdw::Vec3 const & fresnel
 		, sdw::Vec3 const & wsNormal
-		, sdw::Vec3 const & specular
+		, sdw::Vec3 const & V
+		, sdw::Float const & NdotV
 		, sdw::Float const & roughness
 		, sdw::Float const & refractionRatio
 		, BlendComponents & components
 		, sdw::CombinedImage2DRgba32 const & brdf )
 	{
 		return sdw::RetVec3{ vec3( 0.0_f ) };
-	}
-
-	sdw::RetVec3 BackgroundModel::computeSheenReflections( sdw::Vec3 const & wsIncident
-		, sdw::Vec3 const & wsNormal
-		, BlendComponents & components
-		, sdw::CombinedImage2DRgba32 const & brdf )
-	{
-		return sdw::RetVec3{ vec3( 0.0_f ) };
-	}
-
-	void BackgroundModel::computeIridescenceReflections( sdw::Vec3 const & wsIncident
-		, sdw::Vec3 const & wsNormal
-		, BlendComponents & components
-		, sdw::CombinedImage2DRgba32 const & brdf
-		, sdw::Vec3 const & iridescenceFresnel
-		, sdw::Vec3 const & iridescenceF0
-		, sdw::Float const & iridescenceFactor
-		, sdw::Vec3 & reflectedDiffuse
-		, sdw::Vec3 & reflectedSpecular )
-	{
-		reflectedDiffuse = vec3( 0.0_f );
-		reflectedSpecular = vec3( 0.0_f );
 	}
 
 	void BackgroundModel::applyVolume( sdw::Vec2 const fragCoord

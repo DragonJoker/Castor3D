@@ -5,6 +5,8 @@ See LICENSE file in root folder
 #define ___C3D_MaterialPassModule_H___
 
 #include "Castor3D/Material/MaterialModule.hpp"
+#include "Castor3D/Scene/Background/BackgroundModule.hpp"
+#include "Castor3D/Scene/Light/LightModule.hpp"
 #include "Castor3D/Shader/ShaderModule.hpp"
 
 #include <CastorUtils/Design/Signal.hpp>
@@ -145,7 +147,23 @@ namespace castor3d
 		ShaderBufferDeclarator declare;
 	};
 
-	using PassFactoryBase = castor::Factory< Pass, PassTypeID, PassSPtr, std::function< PassSPtr( Material & ) > >;
+	using PassCreator = std::function< PassSPtr( LightingModelID, Material & ) >;
+
+	struct PassFactoryEntry
+	{
+		LightingModelID key;
+		PassCreator create;
+		PassTypeID id;
+		castor::String name;
+		bool hasIBLSupport;
+	};
+
+	using PassFactoryBase = castor::Factory< Pass
+		, LightingModelID
+		, PassSPtr
+		, PassCreator
+		, PassTypeID
+		, PassFactoryEntry >;
 	using SpecificsBuffers = std::map< std::string, std::pair< SpecificsBuffer, ShaderBufferUPtr > >;
 
 	CU_DeclareCUSmartPtr( castor3d, RenderPassRegisterInfo, C3D_API );

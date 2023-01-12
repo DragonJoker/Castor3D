@@ -25,7 +25,6 @@
 #include "Castor3D/Shader/ShaderBuffers/TextureAnimationBuffer.hpp"
 #include "Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp"
-#include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslPassShaders.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
@@ -162,7 +161,7 @@ namespace castor3d
 		Writer_Parameter( BarycentricFullDerivatives );
 
 		struct BarycentricFullDerivatives
-			: public sdw::StructInstanceHelperT< "BarycentricFullDerivatives"
+			: public sdw::StructInstanceHelperT< "C3D_BarycentricFullDerivatives"
 			, sdw::type::MemoryLayout::eC
 			, sdw::Vec3Field< "lambda" >
 			, sdw::Vec3Field< "dx" >
@@ -398,14 +397,6 @@ namespace castor3d
 			auto pipelineId = pcb.declMember< sdw::UInt >( "pipelineId" );
 			auto billboardNodeId = pcb.declMember< sdw::UInt >( "billboardNodeId", stride != 0u );
 			pcb.end();
-
-			auto lightingModel = utils.createLightingModel( engine
-				, materials
-				, brdf
-				, shader::getLightingModelName( engine, flags.passType )
-				, {}
-				, nullptr
-				, true );
 
 			auto calcFullBarycentric = writer.implementFunction< BarycentricFullDerivatives >( "calcFullBarycentric"
 				, [&]( sdw::Vec4 const & pt0
@@ -1691,8 +1682,9 @@ namespace castor3d
 	PipelineFlags VisibilityResolvePass::createPipelineFlags( PassComponentCombine components
 		, BlendMode colourBlendMode
 		, BlendMode alphaBlendMode
-		, RenderPassTypeID renderPassTypeID
-		, PassTypeID passTypeID
+		, RenderPassTypeID renderPassTypeId
+		, LightingModelID lightingModelId
+		, BackgroundModelID backgroundModelId
 		, VkCompareOp alphaFunc
 		, VkCompareOp blendAlphaFunc
 		, TextureCombine const & textures
@@ -1707,8 +1699,9 @@ namespace castor3d
 		auto result = m_nodesPass.createPipelineFlags( std::move( components )
 			, colourBlendMode
 			, alphaBlendMode
-			, renderPassTypeID
-			, passTypeID
+			, renderPassTypeId
+			, lightingModelId
+			, backgroundModelId
 			, alphaFunc
 			, blendAlphaFunc
 			, textures

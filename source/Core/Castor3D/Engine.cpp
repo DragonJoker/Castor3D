@@ -9,7 +9,11 @@
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Pass/PassFactory.hpp"
+#include "Castor3D/Material/Pass/PbrPass.hpp"
+#include "Castor3D/Material/Pass/PhongPass.hpp"
 #include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
+#include "Castor3D/Material/Pass/Shaders/GlslPbrLighting.hpp"
+#include "Castor3D/Material/Pass/Shaders/GlslPhongLighting.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/MeshFactory.hpp"
@@ -30,6 +34,7 @@
 #include "Castor3D/Scene/Background/Shaders/GlslImgBackground.hpp"
 #include "Castor3D/Scene/Background/Shaders/GlslNoIblBackground.hpp"
 #include "Castor3D/Shader/GlslToSpv.hpp"
+#include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 
 #include <CastorUtils/Design/ResourceCache.hpp>
 #include <CastorUtils/FileParser/FileParser.hpp>
@@ -160,7 +165,6 @@ namespace castor3d
 	{
 		m_passFactory = castor::makeUnique< PassFactory >( *this );
 		m_passComponents = castor::makeUnique< PassComponentRegister >( *this );
-		m_passesType = m_passFactory->listRegisteredTypes().begin()->second;
 
 		auto listenerClean = []( auto & element )
 		{
@@ -200,12 +204,24 @@ namespace castor3d
 			castor::File::directoryCreate( getEngineDirectory() );
 		}
 
+		m_lightingModelFactory = castor::makeUnique< shader::LightingModelFactory >();
+
 		registerBackgroundModel( shader::ImgBackgroundModel::Name
 			, shader::ImgBackgroundModel::create );
 		registerBackgroundModel( shader::NoIblBackgroundModel::Name
 			, shader::NoIblBackgroundModel::create );
 		registerBackgroundModel( shader::IblBackgroundModel::Name
 			, shader::IblBackgroundModel::create );
+
+		registerPassModels( { PhongPass::LightingModel
+				, PhongPass::create
+				, &shader::PhongLightingModel::create
+				, false } );
+		registerPassModels( { PbrPass::LightingModel
+				, PbrPass::create
+				, &shader::PbrLightingModel::create
+				, true } );
+		m_lightingModelId = getPassFactory().listRegisteredTypes().begin()->key;
 
 		log::info << cuT( "Castor3D - Core engine version : " ) << Version{} << std::endl;
 		log::info << m_cpuInformations << std::endl;
@@ -567,9 +583,9 @@ namespace castor3d
 		return loc;
 	}
 
-	castor::String Engine::getPassesName()const
+	castor::String Engine::getDefaultLightingModelName()const
 	{
-		return m_passFactory->getIdName( m_passesType );
+		return getPassFactory().getIdName( getDefaultLightingModel() );
 	}
 
 	ToneMappingFactory const & Engine::getToneMappingFactory()const
@@ -652,26 +668,36 @@ namespace castor3d
 		}
 	}
 
-	void Engine::registerLightingModel( castor::String const & name
-		, shader::LightingModelCreator creator )
+	LightingModelID Engine::registerLightingModel( castor::String const & name
+		, shader::LightingModelCreator creator
+		, BackgroundModelID backgroundModelId )
 	{
-		m_lightingModelFactory.registerType( name, creator );
+		return getLightingModelFactory().registerType( name, backgroundModelId, creator );
 	}
 
-	void Engine::unregisterLightingModel( castor::String const & name )
+	void Engine::unregisterLightingModel( castor::String const & name
+		, BackgroundModelID backgroundModelId )
 	{
-		m_lightingModelFactory.unregisterType( name );
+		getLightingModelFactory().unregisterType( name, backgroundModelId );
 	}
 
-	void Engine::registerBackgroundModel( castor::String const & name
+	void Engine::unregisterLightingModel( LightingModelID lightingModelId
+		, BackgroundModelID backgroundModelId )
+	{
+		getLightingModelFactory().unregisterType( lightingModelId, backgroundModelId );
+	}
+
+	BackgroundModelID Engine::registerBackgroundModel( castor::String const & name
 		, shader::BackgroundModelCreator creator )
 	{
-		m_backgroundModelFactory.registerType( name, creator );
+		return BackgroundModelID( getBackgroundModelFactory().registerType( name, creator ).id );
 	}
 
-	void Engine::unregisterBackgroundModel( castor::String const & name )
+	BackgroundModelID Engine::unregisterBackgroundModel( castor::String const & name )
 	{
-		m_backgroundModelFactory.unregisterType( name );
+		auto result = getBackgroundModelFactory().getTypeId( name );
+		getBackgroundModelFactory().unregisterType( name );
+		return BackgroundModelID( result );
 	}
 
 	void Engine::registerBuffer( ShaderBuffer const & buffer )
@@ -690,15 +716,55 @@ namespace castor3d
 		}
 	}
 
-	void Engine::registerPassType( castor::String const & passType
+	void Engine::registerPassModel( BackgroundModelID backgroundModelId
 		, PassRegisterInfo info )
 	{
-		m_passFactory->registerType( passType, std::move( info ) );
+		auto lightingModelId = registerLightingModel( info.lightingModel
+			, info.lightingModelCreator
+			, backgroundModelId );
+		getPassFactory().registerType( lightingModelId
+			, std::move( info ) );
 	}
 
-	void Engine::unregisterPassType( castor::String const & passType )
+	void Engine::registerPassModels( PassRegisterInfo info )
 	{
-		m_passFactory->unregisterType( passType );
+		std::set< LightingModelID > lightingModels;
+
+		for ( auto entry : getBackgroundModelFactory().listRegisteredTypes() )
+		{
+			lightingModels.emplace( registerLightingModel( info.lightingModel
+				, info.lightingModelCreator
+				, entry.id ) );
+		}
+
+		for ( auto lightingModelId : lightingModels )
+		{
+			getPassFactory().registerType( lightingModelId, info );
+		}
+	}
+
+	void Engine::unregisterPassModel( BackgroundModelID backgroundModelId
+		, LightingModelID lightingModelId )
+	{
+		getPassFactory().unregisterType( lightingModelId );
+		unregisterLightingModel( lightingModelId
+			, backgroundModelId );
+	}
+
+	void Engine::unregisterPassModels( castor::String const & type ) try
+	{
+		auto lightingModelId = getPassFactory().getNameId( type );
+		getPassFactory().unregisterType( lightingModelId );
+
+		for ( auto entry : getBackgroundModelFactory().listRegisteredTypes() )
+		{
+			unregisterLightingModel( lightingModelId
+				, entry.id );
+		}
+	}
+	catch ( std::exception & exc )
+	{
+		log::error << "Engine::unregisterPassModels - " << exc.what() << std::endl;
 	}
 
 	void Engine::registerSpecificsBuffer( std::string const & name

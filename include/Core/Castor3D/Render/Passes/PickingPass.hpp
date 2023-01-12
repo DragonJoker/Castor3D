@@ -94,8 +94,10 @@ namespace castor3d
 
 	private:
 		bool doIsValidPass( Pass const & pass )const override;
-		void doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const override;
-		void doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
+		void doFillAdditionalBindings( PipelineFlags const & flags
+			, ashes::VkDescriptorSetLayoutBindingArray & bindings )const override;
+		void doFillAdditionalDescriptor( PipelineFlags const & flags
+			, ashes::WriteDescriptorSetArray & descriptorWrites
 			, ShadowMapLightTypeArray const & shadowMaps )override;
 		SubmeshFlags doAdjustSubmeshFlags( SubmeshFlags flags )const override;
 		ProgramFlags doAdjustProgramFlags( ProgramFlags flags )const override;

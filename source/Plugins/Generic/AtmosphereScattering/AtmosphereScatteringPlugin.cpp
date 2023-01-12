@@ -6,6 +6,9 @@
 #include "AtmosphereScattering/AtmosphereScattering_Parsers.hpp"
 
 #include <Castor3D/Engine.hpp>
+#include <Castor3D/Material/Pass/PassFactory.hpp>
+#include <Castor3D/Material/Pass/PbrPass.hpp>
+#include <Castor3D/Material/Pass/PhongPass.hpp>
 #include <Castor3D/Model/Mesh/MeshFactory.hpp>
 #include <Castor3D/Scene/SceneFileParser.hpp>
 
@@ -357,23 +360,31 @@ extern "C"
 
 	C3D_AtmosphereScattering_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * plugin )
 	{
-		engine->registerLightingModel( atmosphere_scattering::AtmospherePhongLightingModel::getName()
-			, &atmosphere_scattering::AtmospherePhongLightingModel::create );
-		engine->registerLightingModel( atmosphere_scattering::AtmospherePbrLightingModel::getName()
-			, &atmosphere_scattering::AtmospherePbrLightingModel::create );
+		auto backgroundModelId = engine->registerBackgroundModel( atmosphere_scattering::AtmosphereBackgroundModel::Name
+			, atmosphere_scattering::AtmosphereBackgroundModel::create );
+		engine->registerPassModel( backgroundModelId
+			, { atmosphere_scattering::AtmospherePhongLightingModel::getName()
+				, castor3d::PhongPass::create
+				, &atmosphere_scattering::AtmospherePhongLightingModel::create
+				, false } );
+		engine->registerPassModel( backgroundModelId
+			, { atmosphere_scattering::AtmospherePbrLightingModel::getName()
+				, castor3d::PbrPass::create
+				, &atmosphere_scattering::AtmospherePbrLightingModel::create
+				, true } );
 		engine->registerParsers( atmosphere_scattering::PluginType
 			, atmosphere_scattering::parser::createParsers()
 			, atmosphere_scattering::parser::createSections()
 			, &atmosphere_scattering::parser::createContext );
-		engine->registerBackgroundModel( atmosphere_scattering::AtmosphereBackgroundModel::Name
-			, atmosphere_scattering::AtmosphereBackgroundModel::create );
 	}
 
 	C3D_AtmosphereScattering_API void OnUnload( castor3d::Engine * engine )
 	{
-		engine->unregisterBackgroundModel( atmosphere_scattering::AtmosphereBackgroundModel::Name );
+		auto backgroundModelId = engine->unregisterBackgroundModel( atmosphere_scattering::AtmosphereBackgroundModel::Name );
 		engine->unregisterParsers( atmosphere_scattering::PluginType );
-		engine->unregisterLightingModel( atmosphere_scattering::AtmospherePhongLightingModel::getName() );
-		engine->unregisterLightingModel( atmosphere_scattering::AtmospherePbrLightingModel::getName() );
+		engine->unregisterPassModel( backgroundModelId
+			, engine->getPassFactory().getNameId( atmosphere_scattering::AtmospherePhongLightingModel::getName() ) );
+		engine->unregisterPassModel( backgroundModelId
+			, engine->getPassFactory().getNameId( atmosphere_scattering::AtmospherePbrLightingModel::getName() ) );
 	}
 }

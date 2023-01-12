@@ -118,6 +118,7 @@ namespace castor3d::shader
 		, index{ getMember < sdw::UInt >( "index" ) }
 		, passCount{ getMember < sdw::UInt >( "passCount" ) }
 		, lighting{ getMember < sdw::UInt >( "lighting" ) }
+		, lightingModel{ getMember < sdw::UInt >( "lightingModel" ) }
 		, textures{ getMember < sdw::Array< sdw::UInt > >( "textures" ) }
 		, texturesCount{ getMember < sdw::UInt >( "textureCount" ) }
 		, colour{ getMember< sdw::Vec3 >( "colour" ) }

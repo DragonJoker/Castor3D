@@ -2,6 +2,7 @@
 
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
+#include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
@@ -9,6 +10,27 @@
 
 namespace castor3d::shader
 {
+	namespace iblbg
+	{
+		static sdw::Vec3 getPrefiltered( sdw::CombinedImageCubeRgba32 const & prefiltered
+			, sdw::Vec3 const & coord
+			, sdw::Vec3 const & albedo
+			, sdw::Float const & roughness )
+		{
+			return prefiltered.lod( coord, roughness * float( MaxIblReflectionLod ) ).rgb() * albedo;
+		}
+
+		static sdw::Vec3 getBrdf( sdw::CombinedImage2DRgba32 const & brdfMap
+			, sdw::Float const & NdotV
+			, sdw::Float const & roughness )
+		{
+			auto brdfSamplePoint = clamp( vec2( NdotV, roughness )
+				, vec2( 0.0_f, 0.0_f )
+				, vec2( 1.0_f, 1.0_f ) );
+			return brdfMap.sample( brdfSamplePoint ).rgb();
+		}
+	}
+
 	castor::String const IblBackgroundModel::Name = cuT( "c3d.ibl" );
 
 	IblBackgroundModel::IblBackgroundModel( sdw::ShaderWriter & writer
@@ -47,194 +69,183 @@ namespace castor3d::shader
 			, set );
 	}
 
-	void IblBackgroundModel::computeReflections( sdw::Vec3 const & pwsIncident
+	sdw::RetVec3 IblBackgroundModel::computeDiffuseReflections( sdw::Vec3 const & palbedo
 		, sdw::Vec3 const & pwsNormal
-		, BlendComponents & components
-		, sdw::CombinedImage2DRgba32 const & pbrdfMap
-		, sdw::Vec3 & preflectedDiffuse
-		, sdw::Vec3 & preflectedSpecular )
+		, sdw::Vec3 const & pfresnel
+		, sdw::Float const & pmetalness )
 	{
-		if ( !m_computeReflections )
+		if ( !m_computeDiffuseReflections )
 		{
-			m_computeReflections = m_writer.implementFunction< sdw::Void >( "c3d_iblbg_computeReflections"
-				, [&]( sdw::Vec3 const & wsIncident
+			m_computeDiffuseReflections = m_writer.implementFunction< sdw::Vec3 >( "c3d_iblbg_computeReflections"
+				, [&]( sdw::Vec3 const & albedo
 					, sdw::Vec3 const & wsNormal
-					, sdw::Vec3 const & albedo
-					, sdw::Vec3 const & specular
+					, sdw::Vec3 const & fresnel
 					, sdw::Float const & metalness
-					, sdw::Float const & roughness
-					, sdw::CombinedImageCubeRgba32 const & irradianceMap
-					, sdw::CombinedImageCubeRgba32 const & prefilteredEnvMap
-					, sdw::CombinedImage2DRgba32 const & brdfMap
-					, sdw::Vec3 reflectedDiffuse
-					, sdw::Vec3 reflectedSpecular )
+					, sdw::CombinedImageCubeRgba32 const & irradianceMap )
 				{
-					auto V = m_writer.declLocale( "V"
-						, -wsIncident );
-					auto NdotV = m_writer.declLocale( "NdotV"
-						, max( dot( wsNormal, V ), 0.0_f ) );
-					auto F = m_writer.declLocale( "F"
-						, m_utils.conductorFresnel( NdotV, specular ) );
-					auto kS = m_writer.declLocale( "kS"
-						, F );
-
 					auto kD = m_writer.declLocale( "kD"
-						, vec3( 1.0_f ) - kS );
+						, vec3( 1.0_f ) - fresnel );
 					kD *= 1.0_f - metalness;
 					auto irradiance = m_writer.declLocale( "irradiance"
 						, irradianceMap.sample( vec3( wsNormal.x(), -wsNormal.y(), wsNormal.z() ) ).rgb() );
-					reflectedDiffuse = kD * irradiance * albedo;
-
-					auto R = m_writer.declLocale( "R"
-						, reflect( -V, wsNormal ) );
-					R.y() = -R.y();
-					auto prefilteredColor = m_writer.declLocale( "prefilteredColor"
-						, prefilteredEnvMap.lod( R, roughness * sdw::Float( float( MaxIblReflectionLod ) ) ).rgb() );
-					auto envBRDFCoord = m_writer.declLocale( "envBRDFCoord"
-						, vec2( NdotV, roughness ) );
-					auto envBRDF = m_writer.declLocale( "envBRDF"
-						, brdfMap.sample( envBRDFCoord ) );
-					reflectedSpecular = prefilteredColor * sdw::fma( kS
-							, vec3( envBRDF.x() )
-							, vec3( envBRDF.y() ) );
+					m_writer.returnStmt( kD * irradiance * albedo );
 				}
-				, sdw::InVec3{ m_writer, "wsIncident" }
-				, sdw::InVec3{ m_writer, "wsNormal" }
 				, sdw::InVec3{ m_writer, "albedo" }
-				, sdw::InVec3{ m_writer, "specular" }
+				, sdw::InVec3{ m_writer, "wsNormal" }
+				, sdw::InVec3{ m_writer, "fresnel" }
 				, sdw::InFloat{ m_writer, "metalness" }
-				, sdw::InFloat{ m_writer, "roughness" }
-				, sdw::InCombinedImageCubeRgba32{ m_writer, "irradianceMap" }
-				, sdw::InCombinedImageCubeRgba32{ m_writer, "prefilteredEnvMap" }
-				, sdw::InCombinedImage2DRgba32{ m_writer, "brdfMap" }
-				, sdw::OutVec3{ m_writer, "reflectedDiffuse" }
-				, sdw::OutVec3{ m_writer, "reflectedSpecular" } );
+				, sdw::InCombinedImageCubeRgba32{ m_writer, "irradianceMap" } );
 		}
 
 		auto irradianceMap = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapIrradiance" );
-		auto prefilteredEnvMap = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapPrefiltered" );
-		m_computeReflections( pwsIncident
+		return m_computeDiffuseReflections( palbedo
 			, pwsNormal
-			, components.colour
-			, components.specular
-			, components.metalness
-			, components.roughness
-			, irradianceMap
-			, prefilteredEnvMap
-			, pbrdfMap
-			, preflectedDiffuse
-			, preflectedSpecular );
+			, pfresnel
+			, pmetalness
+			, irradianceMap );
 	}
 
-	sdw::RetVec3 IblBackgroundModel::computeRefractions( sdw::Vec3 const & pwsIncident
+	sdw::RetVec3 IblBackgroundModel::computeSpecularReflections( sdw::Vec3 const & pfresnel
 		, sdw::Vec3 const & pwsNormal
+		, sdw::Vec3 const & pV
+		, sdw::Float const & pNdotV
+		, sdw::Float const & proughness
+		, sdw::CombinedImage2DRgba32 const & pbrdfMap )
+	{
+		if ( !m_computeSpecularReflections )
+		{
+			m_computeSpecularReflections = m_writer.implementFunction< sdw::Vec3 >( "c3d_iblbg_computeSpecularReflections"
+				, [&]( sdw::Vec3 const & F
+					, sdw::Vec3 const & N
+					, sdw::Vec3 const & V
+					, sdw::Float const & NdotV
+					, sdw::Float const & roughness
+					, sdw::CombinedImageCubeRgba32 const & prefilteredEnvMap
+					, sdw::CombinedImage2DRgba32 const & brdfMap )
+				{
+					auto reflection = m_writer.declLocale( "reflection"
+						, reflect( -V, N ) );
+					reflection.y() = -reflection.y();
+					auto prefilteredColor = m_writer.declLocale( "prefilteredColor"
+						, iblbg::getPrefiltered( prefilteredEnvMap, reflection, vec3( 1.0_f ), roughness ) );
+					auto brdf = m_writer.declLocale( "brdf"
+						, iblbg::getBrdf( brdfMap, NdotV, roughness ) );
+					m_writer.returnStmt( prefilteredColor * sdw::fma( F
+						, vec3( brdf.x() )
+						, vec3( brdf.y() ) ) );
+				}
+				, sdw::InVec3{ m_writer, "F" }
+				, sdw::InVec3{ m_writer, "N" }
+				, sdw::InVec3{ m_writer, "V" }
+				, sdw::InFloat{ m_writer, "NdotV" }
+				, sdw::InFloat{ m_writer, "roughness" }
+				, sdw::InCombinedImageCubeRgba32{ m_writer, "prefilteredEnvMap" }
+				, sdw::InCombinedImage2DRgba32{ m_writer, "brdfMap" } );
+		}
+
+		auto prefilteredEnvMap = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapPrefiltered" );
+		return m_computeSpecularReflections( pfresnel
+			, pwsNormal
+			, pV
+			, pNdotV
+			, proughness
+			, prefilteredEnvMap
+			, pbrdfMap );
+	}
+
+	sdw::RetVec3 IblBackgroundModel::computeSheenReflections( sdw::Vec3 const & pwsNormal
+		, sdw::Vec3 const & pV
+		, sdw::Float const & pNdotV
+		, BlendComponents & components
+		, sdw::CombinedImage2DRgba32 const & pbrdfMap )
+	{
+		if ( !m_computeSheenReflections )
+		{
+			m_computeSheenReflections = m_writer.implementFunction< sdw::Vec3 >( "c3d_iblbg_computeSheenReflections"
+				, [&]( sdw::Vec3 const & sheenColour
+					, sdw::Vec3 const & N
+					, sdw::Vec3 const & V
+					, sdw::Float const & NdotV
+					, sdw::Float const & sheenRoughness
+					, sdw::CombinedImageCubeRgba32 const & prefilteredEnvMap
+					, sdw::CombinedImage2DRgba32 const & brdfMap )
+				{
+					auto reflection = m_writer.declLocale( "reflection"
+						, normalize( reflect( -V, N ) ) );
+					reflection.y() = -reflection.y();
+					auto prefilteredColor = m_writer.declLocale( "prefilteredColor"
+						, iblbg::getPrefiltered( prefilteredEnvMap
+							, reflection
+							, sheenColour
+							, sheenRoughness ) );
+					auto brdf = m_writer.declLocale( "brdf"
+						, iblbg::getBrdf( brdfMap, NdotV, sheenRoughness ) );
+
+					m_writer.returnStmt( prefilteredColor.rgb() * brdf.z() );
+				}
+				, sdw::InVec3{ m_writer, "sheenColour" }
+				, sdw::InVec3{ m_writer, "N" }
+				, sdw::InVec3{ m_writer, "V" }
+				, sdw::InFloat{ m_writer, "NdotV" }
+				, sdw::InFloat{ m_writer, "sheenRoughness" }
+				, sdw::InCombinedImageCubeRgba32{ m_writer, "prefilteredEnvMap" }
+				, sdw::InCombinedImage2DRgba32{ m_writer, "brdfMap" } );
+		}
+
+		auto prefilteredEnvMap = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapPrefilteredSheen" );
+		return m_computeSheenReflections( components.sheenFactor
+			, pwsNormal
+			, pV
+			, pNdotV
+			, components.sheenRoughness
+			, prefilteredEnvMap
+			, pbrdfMap );
+	}
+
+	sdw::RetVec3 IblBackgroundModel::computeRefractions( sdw::Vec3 const & pwsNormal
+		, sdw::Vec3 const & pV
 		, sdw::Float const & prefractionRatio
 		, BlendComponents & components )
 	{
 		if ( !m_computeRefractions )
 		{
 			m_computeRefractions = m_writer.implementFunction< sdw::Vec3 >( "c3d_iblbg_computeRefractions"
-				, [&]( sdw::Vec3 const & wsIncident
-					, sdw::Vec3 const & wsNormal
-					, sdw::CombinedImageCubeRgba32 const & prefiltered
+				, [&]( sdw::CombinedImageCubeRgba32 const & prefiltered
 					, sdw::Float const & refractionRatio
 					, sdw::Vec3 const & albedo
+					, sdw::Vec3 const & N
+					, sdw::Vec3 const & V
 					, sdw::Float const & roughness )
 				{
 					auto refracted = m_writer.declLocale( "refracted"
-						, refract( wsIncident, wsNormal, refractionRatio ) );
+						, refract( -V, N, refractionRatio ) );
 					refracted.y() = -refracted.y();
-					m_writer.returnStmt( prefiltered.lod( refracted, roughness * sdw::Float( float( MaxIblReflectionLod ) ) ).rgb()
-						* albedo );
+					m_writer.returnStmt( iblbg::getPrefiltered( prefiltered
+						, refracted
+						, albedo
+						, roughness ) );
 				}
-				, sdw::InVec3{ m_writer, "wsIncident" }
-				, sdw::InVec3{ m_writer, "wsNormal" }
 				, sdw::InCombinedImageCubeRgba32{ m_writer, "prefiltered" }
 				, sdw::InFloat{ m_writer, "refractionRatio" }
 				, sdw::InVec3{ m_writer, "albedo" }
+				, sdw::InVec3{ m_writer, "N" }
+				, sdw::InVec3{ m_writer, "V" }
 				, sdw::InFloat{ m_writer, "roughness" } );
 		}
 
 		auto prefiltered = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapPrefiltered" );
-		return m_computeRefractions( pwsIncident
-			, pwsNormal
-			, prefiltered
+		return m_computeRefractions( prefiltered
 			, prefractionRatio
 			, components.colour
+			, pwsNormal
+			, pV
 			, components.roughness );
 	}
 
-	sdw::RetVec3 IblBackgroundModel::computeSpecularReflections( sdw::Vec3 const & pwsIncident
+	sdw::RetVec3 IblBackgroundModel::computeSpecularRefractions( sdw::Vec3 const & pfresnel
 		, sdw::Vec3 const & pwsNormal
-		, sdw::Vec3 const & pspecular
-		, sdw::Float const & proughness
-		, BlendComponents & components
-		, sdw::CombinedImage2DRgba32 const & pbrdfMap )
-	{
-		if ( !m_computeSpecularReflections )
-		{
-			m_computeSpecularReflections = m_writer.implementFunction< sdw::Vec3 >( "c3d_iblbg_computeSpecularReflections"
-				, [&]( sdw::Vec3 const & wsIncident
-					, sdw::Vec3 const & wsNormal
-					, sdw::Vec3 const & albedo
-					, sdw::Vec3 const & specular
-					, sdw::Float const & metalness
-					, sdw::Float const & roughness
-					, sdw::CombinedImageCubeRgba32 const & irradianceMap
-					, sdw::CombinedImageCubeRgba32 const & prefilteredEnvMap
-					, sdw::CombinedImage2DRgba32 const & brdfMap )
-				{
-					auto V = m_writer.declLocale( "V"
-						, -wsIncident );
-					auto NdotV = m_writer.declLocale( "NdotV"
-						, max( dot( wsNormal, V ), 0.0_f ) );
-					auto F = m_writer.declLocale( "F"
-						, m_utils.conductorFresnel( NdotV, specular ) );
-					auto kS = m_writer.declLocale( "kS"
-						, F );
-
-					auto R = m_writer.declLocale( "R"
-						, reflect( -V, wsNormal ) );
-					R.y() = -R.y();
-
-					auto prefilteredColor = m_writer.declLocale( "prefilteredColor"
-						, prefilteredEnvMap.lod( R, roughness * sdw::Float( float( MaxIblReflectionLod ) ) ).rgb() );
-					auto envBRDFCoord = m_writer.declLocale( "envBRDFCoord"
-						, vec2( NdotV, roughness ) );
-					auto envBRDF = m_writer.declLocale( "envBRDF"
-						, brdfMap.sample( envBRDFCoord ) );
-
-					m_writer.returnStmt( prefilteredColor * sdw::fma( kS
-						, vec3( envBRDF.x() )
-						, vec3( envBRDF.y() ) ) );
-				}
-				, sdw::InVec3{ m_writer, "wsIncident" }
-				, sdw::InVec3{ m_writer, "wsNormal" }
-				, sdw::InVec3{ m_writer, "albedo" }
-				, sdw::InVec3{ m_writer, "specular" }
-				, sdw::InFloat{ m_writer, "metalness" }
-				, sdw::InFloat{ m_writer, "roughness" }
-				, sdw::InCombinedImageCubeRgba32{ m_writer, "irradianceMap" }
-				, sdw::InCombinedImageCubeRgba32{ m_writer, "prefilteredEnvMap" }
-				, sdw::InCombinedImage2DRgba32{ m_writer, "brdfMap" } );
-		}
-
-		auto irradianceMap = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapIrradiance" );
-		auto prefilteredEnvMap = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapPrefiltered" );
-		return m_computeSpecularReflections( pwsIncident
-			, pwsNormal
-			, components.colour
-			, pspecular
-			, components.metalness
-			, proughness
-			, irradianceMap
-			, prefilteredEnvMap
-			, pbrdfMap );
-	}
-
-	sdw::RetVec3 IblBackgroundModel::computeSpecularRefractions( sdw::Vec3 const & pwsIncident
-		, sdw::Vec3 const & pwsNormal
-		, sdw::Vec3 const & pspecular
+		, sdw::Vec3 const & pV
+		, sdw::Float const & pNdotV
 		, sdw::Float const & proughness
 		, sdw::Float const & prefractionRatio
 		, BlendComponents & components
@@ -243,212 +254,50 @@ namespace castor3d::shader
 		if ( !m_computeSpecularRefractions )
 		{
 			m_computeSpecularRefractions = m_writer.implementFunction< sdw::Vec3 >( "c3d_iblbg_computeSpecularRefractions"
-				, [&]( sdw::Vec3 const & wsIncident
-					, sdw::Vec3 const & wsNormal
-					, sdw::CombinedImageCubeRgba32 const & prefiltered
+				, [&]( sdw::CombinedImageCubeRgba32 const & prefiltered
 					, sdw::CombinedImage2DRgba32 const & brdfMap
 					, sdw::Float const & refractionRatio
 					, sdw::Vec3 const & albedo
-					, sdw::Vec3 const & specular
+					, sdw::Vec3 const & N
+					, sdw::Vec3 const & V
+					, sdw::Vec3 const & F
+					, sdw::Float const & NdotV
 					, sdw::Float const & roughness )
 				{
 					auto refracted = m_writer.declLocale( "refracted"
-						, refract( wsIncident, wsNormal, refractionRatio ) );
+						, refract( -V, N, refractionRatio ) );
 					refracted.y() = -refracted.y();
 					auto prefilteredColor = m_writer.declLocale( "prefilteredColor"
-						, prefiltered.lod( refracted, roughness * sdw::Float( float( MaxIblReflectionLod ) ) ).rgb() * albedo );
-
-					auto V = m_writer.declLocale( "V"
-						, -wsIncident );
-					auto NdotV = m_writer.declLocale( "NdotV"
-						, max( dot( wsNormal, V ), 0.0_f ) );
-					auto F = m_writer.declLocale( "F"
-						, m_utils.conductorFresnel( NdotV, specular ) );
-					auto kS = m_writer.declLocale( "kS"
-						, F );
-					auto envBRDFCoord = m_writer.declLocale( "envBRDFCoord"
-						, vec2( NdotV, roughness ) );
-					auto envBRDF = m_writer.declLocale( "envBRDF"
-						, brdfMap.sample( envBRDFCoord ) );
-
-					m_writer.returnStmt( prefilteredColor * sdw::fma( kS
-						, vec3( envBRDF.x() )
-						, vec3( envBRDF.y() ) ) );
+						, iblbg::getPrefiltered( prefiltered
+							, refracted
+							, albedo
+							, roughness ) );
+					auto brdf = m_writer.declLocale( "brdf"
+						, iblbg::getBrdf( brdfMap, NdotV, roughness ) );
+					m_writer.returnStmt( prefilteredColor * sdw::fma( F
+						, vec3( brdf.x() )
+						, vec3( brdf.y() ) ) );
 				}
-				, sdw::InVec3{ m_writer, "wsIncident" }
-				, sdw::InVec3{ m_writer, "wsNormal" }
 				, sdw::InCombinedImageCubeRgba32{ m_writer, "prefiltered" }
 				, sdw::InCombinedImage2DRgba32{ m_writer, "brdfMap" }
 				, sdw::InFloat{ m_writer, "refractionRatio" }
 				, sdw::InVec3{ m_writer, "albedo" }
-				, sdw::InVec3{ m_writer, "specular" }
+				, sdw::InVec3{ m_writer, "N" }
+				, sdw::InVec3{ m_writer, "V" }
+				, sdw::InVec3{ m_writer, "F" }
+				, sdw::InFloat{ m_writer, "NdotV" }
 				, sdw::InFloat{ m_writer, "roughness" } );
 		}
 
 		auto prefiltered = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapPrefiltered" );
-		return m_computeSpecularRefractions( pwsIncident
-			, pwsNormal
-			, prefiltered
+		return m_computeSpecularRefractions( prefiltered
 			, pbrdfMap
 			, prefractionRatio
 			, components.colour
-			, pspecular
+			, pwsNormal
+			, pV
+			, pfresnel
+			, pNdotV
 			, proughness );
-	}
-
-	sdw::RetVec3 IblBackgroundModel::computeSheenReflections( sdw::Vec3 const & pwsIncident
-		, sdw::Vec3 const & pwsNormal
-		, BlendComponents & components
-		, sdw::CombinedImage2DRgba32 const & pbrdfMap )
-	{
-		if ( !m_computeSheenReflections )
-		{
-			m_computeSheenReflections = m_writer.implementFunction< sdw::Vec3 >( "c3d_iblbg_computeSheenReflections"
-				, [&]( sdw::Vec3 const & wsIncident
-					, sdw::Vec3 const & wsNormal
-					, sdw::Vec3 const & sheenColour
-					, sdw::Float const & sheenRoughness
-					, sdw::CombinedImageCubeRgba32 const & prefilteredEnvMap
-					, sdw::CombinedImage2DRgba32 const & brdfMap )
-				{
-					auto V = m_writer.declLocale( "V"
-						, -wsIncident );
-					auto NdotV = m_writer.declLocale( "NdotV"
-						, max( dot( wsNormal, V ), 0.0_f ) );
-					auto lod = m_writer.declLocale( "lod"
-						, sheenRoughness * float( MaxIblReflectionLod ) );
-					auto reflection = m_writer.declLocale( "reflection"
-						, normalize( reflect( -V, wsNormal ) ) );
-
-					auto brdfSamplePoint = m_writer.declLocale( "brdfSamplePoint"
-						, clamp( vec2( NdotV, sheenRoughness ), vec2( 0.0_f, 0.0_f ), vec2( 1.0_f, 1.0_f ) ) );
-					auto brdf = m_writer.declLocale( "brdf"
-						, brdfMap.sample( brdfSamplePoint ).z() );
-					auto sheenSample = m_writer.declLocale( "sheenSample"
-						, prefilteredEnvMap.lod( reflection, lod ) );
-
-					m_writer.returnStmt( sheenSample.rgb() * sheenColour * brdf );
-				}
-				, sdw::InVec3{ m_writer, "wsIncident" }
-				, sdw::InVec3{ m_writer, "wsNormal" }
-				, sdw::InVec3{ m_writer, "sheenColour" }
-				, sdw::InFloat{ m_writer, "sheenRoughness" }
-				, sdw::InCombinedImageCubeRgba32{ m_writer, "prefilteredEnvMap" }
-				, sdw::InCombinedImage2DRgba32{ m_writer, "brdfMap" } );
-		}
-
-		auto prefilteredEnvMap = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapPrefilteredSheen" );
-		return m_computeSheenReflections( pwsIncident
-			, pwsNormal
-			, components.sheenFactor
-			, components.sheenRoughness
-			, prefilteredEnvMap
-			, pbrdfMap );
-	}
-
-	void IblBackgroundModel::computeIridescenceReflections( sdw::Vec3 const & pwsIncident
-		, sdw::Vec3 const & pwsNormal
-		, BlendComponents & components
-		, sdw::CombinedImage2DRgba32 const & pbrdfMap
-		, sdw::Vec3 const & piridescenceFresnel
-		, sdw::Vec3 const & piridescenceF0
-		, sdw::Float const & piridescenceFactor
-		, sdw::Vec3 & preflectedDiffuse
-		, sdw::Vec3 & preflectedSpecular )
-	{
-		if ( !m_computeIridescenceReflections )
-		{
-			m_computeIridescenceReflections = m_writer.implementFunction< sdw::Void >( "c3d_iblbg_computeIridescenceReflections"
-				, [&]( sdw::Vec3 const & wsIncident
-					, sdw::Vec3 const & wsNormal
-					, sdw::Vec3 const & albedo
-					, sdw::Vec3 const & f0
-					, sdw::Float const & metalness
-					, sdw::Float const & roughness
-					, sdw::CombinedImageCubeRgba32 const & irradianceMap
-					, sdw::CombinedImageCubeRgba32 const & prefilteredEnvMap
-					, sdw::CombinedImage2DRgba32 const & brdfMap
-					, sdw::Vec3 const & iridescenceFresnel
-					, sdw::Vec3 const & iridescenceF0
-					, sdw::Float const & iridescenceFactor
-					, sdw::Vec3 reflectedDiffuse
-					, sdw::Vec3 reflectedSpecular )
-				{
-					auto V = m_writer.declLocale( "V"
-						, -wsIncident );
-					auto NdotV = m_writer.declLocale( "NdotV"
-						, max( dot( wsNormal, V ), 0.0_f ) );
-					auto specF = m_writer.declLocale( "specF"
-						, m_utils.conductorFresnel( NdotV, f0 ) );
-
-					// Use the maximum component of the iridescence Fresnel color
-					// Maximum is used instead of the RGB value to not get inverse colors for the diffuse BRDF
-					auto iridescenceF0Max = m_writer.declLocale( "iridescenceF0Max"
-						, vec3( max( max( iridescenceF0.r(), iridescenceF0.g() ), iridescenceF0.b() ) ) );
-
-					// Blend between base F0 and iridescence F0
-					auto mixedF0 = m_writer.declLocale( "mixedF0"
-						, mix( f0, iridescenceF0Max, vec3( iridescenceFactor ) ) );
-					auto diffF = m_writer.declLocale( "diffF"
-						, m_utils.conductorFresnel( NdotV, mixedF0 ) );
-
-					auto diffkS = m_writer.declLocale( "diffkS"
-						, diffF );
-					auto speckS = m_writer.declLocale( "speckS"
-						, mix( specF, iridescenceFresnel, vec3( iridescenceFactor ) ) );
-					auto kD = m_writer.declLocale( "kD"
-						, vec3( 1.0_f ) - diffkS );
-					kD *= 1.0_f - metalness;
-
-					auto irradiance = m_writer.declLocale( "irradiance"
-						, irradianceMap.sample( vec3( wsNormal.x(), -wsNormal.y(), wsNormal.z() ) ).rgb() );
-					reflectedDiffuse = kD * irradiance * albedo;
-
-					auto R = m_writer.declLocale( "R"
-						, reflect( -V, wsNormal ) );
-					R.y() = -R.y();
-
-					auto prefilteredColor = m_writer.declLocale( "prefilteredColor"
-						, prefilteredEnvMap.lod( R, roughness * sdw::Float( float( MaxIblReflectionLod ) ) ).rgb() );
-					auto envBRDFCoord = m_writer.declLocale( "envBRDFCoord"
-						, vec2( NdotV, roughness ) );
-					auto envBRDF = m_writer.declLocale( "envBRDF"
-						, brdfMap.sample( envBRDFCoord ) );
-					reflectedSpecular = prefilteredColor * sdw::fma( speckS
-						, vec3( envBRDF.x() )
-						, vec3( envBRDF.y() ) );
-				}
-				, sdw::InVec3{ m_writer, "wsIncident" }
-				, sdw::InVec3{ m_writer, "wsNormal" }
-				, sdw::InVec3{ m_writer, "albedo" }
-				, sdw::InVec3{ m_writer, "f0" }
-				, sdw::InFloat{ m_writer, "metalness" }
-				, sdw::InFloat{ m_writer, "roughness" }
-				, sdw::InCombinedImageCubeRgba32{ m_writer, "irradianceMap" }
-				, sdw::InCombinedImageCubeRgba32{ m_writer, "prefilteredEnvMap" }
-				, sdw::InCombinedImage2DRgba32{ m_writer, "brdfMap" }
-				, sdw::InVec3{ m_writer, "iridescenceFresnel" }
-				, sdw::InVec3{ m_writer, "iridescenceF0" }
-				, sdw::InFloat{ m_writer, "iridescenceFactor" }
-				, sdw::OutVec3{ m_writer, "reflectedDiffuse" }
-				, sdw::OutVec3{ m_writer, "reflectedSpecular" } );
-		}
-
-		auto irradianceMap = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapIrradiance" );
-		auto prefilteredEnvMap = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapPrefiltered" );
-		m_computeIridescenceReflections( pwsIncident
-			, pwsNormal
-			, components.colour
-			, components.specular
-			, components.metalness
-			, components.roughness
-			, irradianceMap
-			, prefilteredEnvMap
-			, pbrdfMap
-			, piridescenceFresnel
-			, piridescenceF0
-			, piridescenceFactor
-			, preflectedDiffuse
-			, preflectedSpecular );
 	}
 }

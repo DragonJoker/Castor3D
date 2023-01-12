@@ -168,8 +168,9 @@ namespace castor3d
 	PipelineFlags RenderTechniqueNodesPass::createPipelineFlags( PassComponentCombine components
 		, BlendMode colourBlendMode
 		, BlendMode alphaBlendMode
-		, RenderPassTypeID renderPassTypeID
-		, PassTypeID passTypeID
+		, RenderPassTypeID renderPassTypeId
+		, LightingModelID lightingModelId
+		, BackgroundModelID backgroundModelId
 		, VkCompareOp alphaFunc
 		, VkCompareOp blendAlphaFunc
 		, TextureCombine const & textures
@@ -184,8 +185,9 @@ namespace castor3d
 		return RenderNodesPass::createPipelineFlags( std::move( components )
 			, colourBlendMode
 			, alphaBlendMode
-			, renderPassTypeID
-			, passTypeID
+			, renderPassTypeId
+			, lightingModelId
+			, backgroundModelId
 			, alphaFunc
 			, blendAlphaFunc
 			, textures
@@ -223,7 +225,8 @@ namespace castor3d
 		return flags;
 	}
 
-	void RenderTechniqueNodesPass::doAddShadowBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+	void RenderTechniqueNodesPass::doAddShadowBindings( PipelineFlags const & flags
+		, ashes::VkDescriptorSetLayoutBindingArray & bindings
 		, uint32_t & index )const
 	{
 		auto sceneFlags = doAdjustSceneFlags( m_scene.getFlags() );
@@ -244,16 +247,18 @@ namespace castor3d
 		}
 	}
 
-	void RenderTechniqueNodesPass::doAddBackgroundBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+	void RenderTechniqueNodesPass::doAddBackgroundBindings( PipelineFlags const & flags
+		, ashes::VkDescriptorSetLayoutBindingArray & bindings
 		, uint32_t & index )const
 	{
 		if ( auto background = m_scene.getBackground() )
 		{
-			background->addBindings( bindings, index );
+			background->addBindings( flags, bindings, index );
 		}
 	}
 
-	void RenderTechniqueNodesPass::doAddEnvBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+	void RenderTechniqueNodesPass::doAddEnvBindings( PipelineFlags const & flags
+		, ashes::VkDescriptorSetLayoutBindingArray & bindings
 		, uint32_t & index )const
 	{
 		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++ // c3d_mapEnvironment
@@ -261,7 +266,8 @@ namespace castor3d
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 	}
 
-	void RenderTechniqueNodesPass::doAddGIBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+	void RenderTechniqueNodesPass::doAddGIBindings( PipelineFlags const & flags
+		, ashes::VkDescriptorSetLayoutBindingArray & bindings
 		, uint32_t & index )const
 	{
 		auto sceneFlags = doAdjustSceneFlags( m_scene.getFlags() );
@@ -327,7 +333,8 @@ namespace castor3d
 		}
 	}
 
-	void RenderTechniqueNodesPass::doAddPassSpecificsBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+	void RenderTechniqueNodesPass::doAddPassSpecificsBindings( PipelineFlags const & flags
+		, ashes::VkDescriptorSetLayoutBindingArray & bindings
 		, uint32_t & index )const
 	{
 		getEngine()->addSpecificsBuffersBindings( bindings
@@ -335,7 +342,8 @@ namespace castor3d
 			, index );
 	}
 
-	void RenderTechniqueNodesPass::doAddShadowDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
+	void RenderTechniqueNodesPass::doAddShadowDescriptor( PipelineFlags const & flags
+		, ashes::WriteDescriptorSetArray & descriptorWrites
 		, ShadowMapLightTypeArray const & shadowMaps
 		, uint32_t & index )const
 	{
@@ -347,17 +355,19 @@ namespace castor3d
 			, index );
 	}
 
-	void RenderTechniqueNodesPass::doAddBackgroundDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
+	void RenderTechniqueNodesPass::doAddBackgroundDescriptor( PipelineFlags const & flags
+		, ashes::WriteDescriptorSetArray & descriptorWrites
 		, crg::ImageData const & targetImage
 		, uint32_t & index )const
 	{
 		if ( auto background = m_scene.getBackground() )
 		{
-			background->addDescriptors( descriptorWrites, targetImage, index );
+			background->addDescriptors( flags, descriptorWrites, targetImage, index );
 		}
 	}
 
-	void RenderTechniqueNodesPass::doAddEnvDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
+	void RenderTechniqueNodesPass::doAddEnvDescriptor( PipelineFlags const & flags
+		, ashes::WriteDescriptorSetArray & descriptorWrites
 		, uint32_t & index )const
 	{
 		bindTexture( m_scene.getEnvironmentMap().getColourId().sampledView
@@ -366,7 +376,8 @@ namespace castor3d
 			, index );
 	}
 
-	void RenderTechniqueNodesPass::doAddGIDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
+	void RenderTechniqueNodesPass::doAddGIDescriptor( PipelineFlags const & flags
+		, ashes::WriteDescriptorSetArray & descriptorWrites
 		, uint32_t & index )const
 	{
 		auto sceneFlags = doAdjustSceneFlags( m_scene.getFlags() );
@@ -442,16 +453,18 @@ namespace castor3d
 		}
 	}
 
-	void RenderTechniqueNodesPass::doAddPassSpecificsDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
+	void RenderTechniqueNodesPass::doAddPassSpecificsDescriptor( PipelineFlags const & flags
+		, ashes::WriteDescriptorSetArray & descriptorWrites
 		, uint32_t & index )const
 	{
 		getEngine()->addSpecificsBuffersDescriptors( descriptorWrites, index );
 	}
 
-	void RenderTechniqueNodesPass::doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const
+	void RenderTechniqueNodesPass::doFillAdditionalBindings( PipelineFlags const & flags
+		, ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
 		auto index = uint32_t( GlobalBuffersIdx::eCount );
-		doAddPassSpecificsBindings( bindings, index );
+		doAddPassSpecificsBindings( flags, bindings, index );
 		bindings.emplace_back( m_scene.getLightCache().createLayoutBinding( index++ ) );
 
 		if ( m_ssao )
@@ -465,17 +478,18 @@ namespace castor3d
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapBrdf
 
-		doAddShadowBindings( bindings, index );
-		doAddEnvBindings( bindings, index );
-		doAddBackgroundBindings( bindings, index );
-		doAddGIBindings( bindings, index );
+		doAddShadowBindings( flags, bindings, index );
+		doAddEnvBindings( flags, bindings, index );
+		doAddBackgroundBindings( flags, bindings, index );
+		doAddGIBindings( flags, bindings, index );
 	}
 
-	void RenderTechniqueNodesPass::doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
+	void RenderTechniqueNodesPass::doFillAdditionalDescriptor( PipelineFlags const & flags
+		, ashes::WriteDescriptorSetArray & descriptorWrites
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
 		auto index = uint32_t( GlobalBuffersIdx::eCount );
-		doAddPassSpecificsDescriptor( descriptorWrites, index );
+		doAddPassSpecificsDescriptor( flags, descriptorWrites, index );
 		descriptorWrites.push_back( m_scene.getLightCache().getBinding( index++ ) );
 
 		if ( m_ssao )
@@ -490,10 +504,10 @@ namespace castor3d
 			, *getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().sampler
 			, descriptorWrites
 			, index );
-		doAddShadowDescriptor( descriptorWrites, shadowMaps, index );
-		doAddEnvDescriptor( descriptorWrites, index );
-		doAddBackgroundDescriptor( descriptorWrites, *m_targetImage, index );
-		doAddGIDescriptor( descriptorWrites, index );
+		doAddShadowDescriptor( flags, descriptorWrites, shadowMaps, index );
+		doAddEnvDescriptor( flags, descriptorWrites, index );
+		doAddBackgroundDescriptor( flags, descriptorWrites, *m_targetImage, index );
+		doAddGIDescriptor( flags, descriptorWrites, index );
 	}
 
 	ashes::PipelineDepthStencilStateCreateInfo RenderTechniqueNodesPass::doCreateDepthStencilState( PipelineFlags const & flags )const

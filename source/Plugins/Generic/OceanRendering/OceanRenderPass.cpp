@@ -22,6 +22,7 @@
 #include <Castor3D/Shader/Shaders/GlslCookTorranceBRDF.hpp>
 #include <Castor3D/Shader/Shaders/GlslFog.hpp>
 #include <Castor3D/Shader/Shaders/GlslGlobalIllumination.hpp>
+#include <Castor3D/Shader/Shaders/GlslLight.hpp>
 #include <Castor3D/Shader/Shaders/GlslMaterial.hpp>
 #include <Castor3D/Shader/Shaders/GlslOutputComponents.hpp>
 #include <Castor3D/Shader/Shaders/GlslReflection.hpp>
@@ -497,7 +498,8 @@ namespace ocean
 			&& areValidPassFlags( pass.getPassFlags() );
 	}
 
-	void OceanRenderPass::doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const
+	void OceanRenderPass::doFillAdditionalBindings( castor3d::PipelineFlags const & flags
+		, ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
 		bindings.emplace_back( getCuller().getScene().getLightCache().createLayoutBinding( WaveIdx::eLightBuffer ) );
 		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( WaveIdx::eWavesUbo
@@ -532,10 +534,10 @@ namespace ocean
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 
 		auto index = uint32_t( WaveIdx::eBrdf ) + 1u;
-		doAddShadowBindings( bindings, index );
-		doAddEnvBindings( bindings, index );
-		doAddBackgroundBindings( bindings, index );
-		doAddGIBindings( bindings, index );
+		doAddShadowBindings( flags, bindings, index );
+		doAddEnvBindings( flags, bindings, index );
+		doAddBackgroundBindings( flags, bindings, index );
+		doAddGIBindings( flags, bindings, index );
 	}
 
 	ashes::PipelineDepthStencilStateCreateInfo OceanRenderPass::doCreateDepthStencilState( castor3d::PipelineFlags const & flags )const
@@ -573,7 +575,8 @@ namespace ocean
 		};
 	}
 
-	void OceanRenderPass::doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
+	void OceanRenderPass::doFillAdditionalDescriptor( castor3d::PipelineFlags const & flags
+		, ashes::WriteDescriptorSetArray & descriptorWrites
 		, castor3d::ShadowMapLightTypeArray const & shadowMaps )
 	{
 		descriptorWrites.push_back( m_scene.getLightCache().getBinding( WaveIdx::eLightBuffer ) );
@@ -590,10 +593,10 @@ namespace ocean
 			, *getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().sampler
 			, descriptorWrites
 			, index );
-		doAddShadowDescriptor( descriptorWrites, shadowMaps, index );
-		doAddEnvDescriptor( descriptorWrites, index );
-		doAddBackgroundDescriptor( descriptorWrites, *m_targetImage, index );
-		doAddGIDescriptor( descriptorWrites, index );
+		doAddShadowDescriptor( flags, descriptorWrites, shadowMaps, index );
+		doAddEnvDescriptor( flags, descriptorWrites, index );
+		doAddBackgroundDescriptor( flags, descriptorWrites, *m_targetImage, index );
+		doAddGIDescriptor( flags, descriptorWrites, index );
 	}
 
 	castor3d::SubmeshFlags OceanRenderPass::doAdjustSubmeshFlags( castor3d::SubmeshFlags flags )const
@@ -1052,7 +1055,7 @@ namespace ocean
 
 		shader::Utils utils{ writer };
 		shader::BRDFHelpers brdf{ writer };
-		shader::CookTorranceBRDF cookTorrance{ writer, utils, brdf };
+		shader::CookTorranceBRDF cookTorrance{ writer, brdf };
 		shader::Fog fog{ writer };
 		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
 			, flags
@@ -1101,20 +1104,24 @@ namespace ocean
 		auto c3d_mapBrdf = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapBrdf"
 			, index++
 			, RenderPipeline::eBuffers );
-		auto lightingModel = shader::LightingModel::createModel( *getEngine()
+		shader::Lights lights{ *getEngine()
+			, flags.lightingModelId
+			, flags.backgroundModelId
 			, materials
-			, utils
 			, brdf
-			, getScene().getLightingModel()
-			, lightsIndex
-			, RenderPipeline::eBuffers
+			, utils
 			, shader::ShadowOptions{ flags.getShadowFlags(), true, false }
 			, nullptr
+			, lightsIndex /* lightBinding */
+			, RenderPipeline::eBuffers /* lightSet */
+			, index /* shadowMapBinding */
+			, RenderPipeline::eBuffers /* shadowMapSet */
+			, false /* enableVolumetric */ };
+		shader::ReflectionModel reflections{ writer
+			, utils
 			, index
-			, RenderPipeline::eBuffers
-			, false );
-		auto reflections = lightingModel->getReflectionModel( index
-			, uint32_t( RenderPipeline::eBuffers ) );
+			, uint32_t( RenderPipeline::eBuffers )
+			, lights.hasIblSupport() };
 		auto backgroundModel = shader::BackgroundModel::createModel( getScene()
 			, writer
 			, utils
@@ -1172,8 +1179,6 @@ namespace ocean
 
 				auto material = writer.declLocale( "material"
 					, materials.getMaterial( modelData.getMaterialId() ) );
-				auto worldEye = writer.declLocale( "worldEye"
-					, c3d_sceneData.cameraPosition );
 				auto surface = writer.declLocale( "surface"
 					, shader::Surface{ in.fragCoord.xyz()
 						, in.viewPosition.xyz()
@@ -1185,34 +1190,30 @@ namespace ocean
 						, surface } );
 				displayDebugData( eMatSpecular, components.specular, 1.0_f );
 
-				IF( writer, material.lighting != 0_u )
+				if ( auto lightingModel = lights.getLightingModel() )
 				{
 					// Direct Lighting
-					auto lightDiffuse = writer.declLocale( "lightDiffuse"
-						, vec3( 0.0_f ) );
-					auto lightSpecular = writer.declLocale( "lightSpecular"
-						, vec3( 0.0_f ) );
-					auto lightScattering = writer.declLocale( "lightScattering"
-						, vec3( 0.0_f ) );
-					auto lightCoatingSpecular = writer.declLocale( "lightCoatingSpecular"
-						, vec3( 0.0_f ) );
-					auto lightSheen = writer.declLocale( "lightSheen"
-						, vec2( 0.0_f ) );
-					shader::OutputComponents output{ lightDiffuse, lightSpecular, lightScattering, lightCoatingSpecular, lightSheen };
+					shader::OutputComponents output{ writer, false };
 					auto rastComponents = writer.declLocale( "rastComponents"
 						, shader::BlendComponents{ components, materials } );
-					lightingModel->computeCombined( rastComponents
+					auto lightSurface = shader::LightSurface::create( writer
+						, "lightSurface"
+						, c3d_sceneData.cameraPosition
+						, surface.worldPosition.xyz()
+						, surface.viewPosition.xyz()
+						, surface.clipPosition
+						, surface.normal );
+					lights.computeCombinedDifSpec( rastComponents
 						, c3d_sceneData
 						, *backgroundModel
-						, surface
-						, worldEye
+						, lightSurface
 						, modelData.isShadowReceiver()
 						, output );
 					lightingModel->adjustDirectSpecular( components
-						, lightSpecular );
-					displayDebugData( eLightDiffuse, lightDiffuse, 1.0_f );
-					displayDebugData( eLightSpecular, lightSpecular, 1.0_f );
-					displayDebugData( eLightScattering, lightScattering, 1.0_f );
+						, output.m_specular );
+					displayDebugData( eLightDiffuse, output.m_diffuse, 1.0_f );
+					displayDebugData( eLightSpecular, output.m_specular, 1.0_f );
+					displayDebugData( eLightScattering, output.m_scattering, 1.0_f );
 					// Standard lighting models don't necessarily translate all that well to water.
 					// It can end up looking very glossy and plastic-like, having much more form than it really should.
 					// So here, I'm sampling some noise with three different sets of texture coordinates to try and achieve
@@ -1221,23 +1222,25 @@ namespace ocean
 						, c3d_waveNoise.sample( normalMapCoords1 * 0.5_f ) );
 					specularNoise *= c3d_waveNoise.sample( normalMapCoords2 * 0.5_f );
 					specularNoise *= c3d_waveNoise.sample( in.texture1.xy() * 0.5_f );
-					lightSpecular *= specularNoise;
-					displayDebugData( eNoisedSpecular, lightSpecular, 1.0_f );
+					output.m_specular *= specularNoise;
+					displayDebugData( eNoisedSpecular, output.m_specular, 1.0_f );
 					displayDebugData( eSpecularNoise, vec3( specularNoise ), 1.0_f );
 
 
 					// Indirect Lighting
-					auto indirectOcclusion = writer.declLocale( "indirectOcclusion"
-						, 1.0_f );
+					lightSurface.updateL( utils
+						, components.normal
+						, components.specular
+						, components );
+					auto indirectOcclusion = indirect.computeOcclusion( flags.getGlobalIlluminationFlags()
+						, lightSurface );
 					auto lightIndirectDiffuse = indirect.computeDiffuse( flags.getGlobalIlluminationFlags()
-						, surface
+						, lightSurface
 						, indirectOcclusion );
 					displayDebugData( eIndirectOcclusion, vec3( indirectOcclusion ), 1.0_f );
 					displayDebugData( eLightIndirectDiffuse, lightIndirectDiffuse.xyz(), 1.0_f );
 					auto lightIndirectSpecular = indirect.computeSpecular( flags.getGlobalIlluminationFlags()
-						, worldEye
-						, c3d_sceneData.getPosToCamera( surface.worldPosition.xyz() )
-						, surface
+						, lightSurface
 						, components.roughness
 						, indirectOcclusion
 						, lightIndirectDiffuse.w()
@@ -1249,11 +1252,9 @@ namespace ocean
 					auto indirectDiffuse = writer.declLocale( "indirectDiffuse"
 						, ( hasDiffuseGI
 							? cookTorrance.computeDiffuse( lightIndirectDiffuse.xyz()
-								, c3d_sceneData.cameraPosition
-								, surface.normal
-								, components.specular
-								, components.metalness
-								, surface )
+								, length( lightIndirectDiffuse.xyz() )
+								, lightSurface.difF()
+								, components.metalness )
 							: vec3( 0.0_f ) ) );
 					displayDebugData( eIndirectDiffuse, indirectDiffuse, 1.0_f );
 
@@ -1263,9 +1264,12 @@ namespace ocean
 						, vec3( 0.0_f ) );
 					auto bgSpecularReflection = writer.declLocale( "bgSpecularReflection"
 						, vec3( 0.0_f ) );
-					reflections->computeReflections( components
-						, surface
-						, c3d_sceneData
+					lightSurface.updateN( utils
+						, components.normal
+						, components.specular
+						, components );
+					reflections.computeReflections( components
+						, lightSurface
 						, *backgroundModel
 						, modelData.getEnvMapIndex()
 						, components.hasReflection
@@ -1274,8 +1278,8 @@ namespace ocean
 					auto backgroundReflection = writer.declLocale( "backgroundReflection"
 						, bgDiffuseReflection + bgSpecularReflection );
 					auto ssrResult = writer.declLocale( "ssrResult"
-						, reflections->computeScreenSpace( c3d_matrixData
-							, surface.viewPosition.xyz()
+						, reflections.computeScreenSpace( c3d_matrixData
+							, lightSurface.viewPosition()
 							, finalNormal
 							, hdrCoords
 							, vec4( c3d_oceanData.ssrStepSize()
@@ -1317,7 +1321,7 @@ namespace ocean
 					auto waterSurfacePosition = writer.declLocale( "waterSurfacePosition"
 						, writer.ternary( distortedPosition.y() < in.worldPosition.y(), distortedPosition, scenePosition ) );
 					auto waterTransmission = writer.declLocale( "waterTransmission"
-						, components.colour * ( indirectAmbient + indirectDiffuse ) * lightDiffuse );
+						, components.colour * ( indirectAmbient + indirectDiffuse ) * output.m_diffuse );
 					auto heightFactor = writer.declLocale( "heightFactor"
 						, c3d_oceanData.refractionHeightFactor() * ( c3d_sceneData.farPlane - c3d_sceneData.nearPlane ) );
 					refractionResult = mix( refractionResult
@@ -1340,14 +1344,14 @@ namespace ocean
 						, utils.saturate( ( in.worldPosition.w() - c3d_oceanData.foamHeightStart() ) / c3d_oceanData.foamFadeDistance() ) * pow( utils.saturate( dot( in.normal.xyz(), vec3( 0.0_f, 1.0_f, 0.0_f ) ) ), c3d_oceanData.foamAngleExponent() ) * foamNoise );
 					foamAmount += pow( ( 1.0_f - depthSoftenedAlpha ), 3.0_f );
 					auto foamResult = writer.declLocale( "foamResult"
-						, lightDiffuse * mix( vec3( 0.0_f )
+						, output.m_diffuse * mix( vec3( 0.0_f )
 							, foamColor * c3d_oceanData.foamBrightness()
 							, vec3( utils.saturate( foamAmount ) * depthSoftenedAlpha ) ) );
 
 
 					//Combine all that
 					auto fresnelFactor = writer.declLocale( "fresnelFactor"
-						, vec3( utils.fresnelMix( reflections->computeIncident( surface.worldPosition.xyz(), c3d_sceneData.cameraPosition )
+						, vec3( utils.fresnelMix( reflections.computeIncident( lightSurface.worldPosition(), c3d_sceneData.cameraPosition )
 							, components.normal
 							, components.roughness
 							, c3d_oceanData.refractionRatio() ) ) );
@@ -1357,19 +1361,18 @@ namespace ocean
 					refractionResult *= vec3( 1.0_f ) - fresnelFactor;
 					displayDebugData( eFinalRefraction, refractionResult, 1.0_f );
 
-					outColour = vec4( lightSpecular + lightIndirectSpecular
+					outColour = vec4( output.m_specular + lightIndirectSpecular
 							+ components.emissiveColour * components.emissiveFactor
 							+ refractionResult
 							+ ( reflectionResult * indirectAmbient )
 							+ foamResult
-							+ lightScattering
+							+ output.m_scattering
 						, depthSoftenedAlpha );
 				}
-				ELSE
+				else
 				{
 					outColour = vec4( components.colour, 1.0_f );
 				}
-				FI;
 
 				if ( flags.hasFog() )
 				{

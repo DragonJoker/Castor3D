@@ -10,8 +10,7 @@
 #include <Castor3D/Render/RenderTechniquePass.hpp>
 #include <Castor3D/Render/RenderTechniqueVisitor.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
-
-#include <ShaderAST/Shader.hpp>
+#include <Castor3D/Scene/Scene.hpp>
 
 #include <wx/propgrid/advprops.h>
 
@@ -38,12 +37,14 @@ namespace GuiCommon
 				, TreeItemProperty & prop
 				, castor3d::RenderTechniqueNodesPass & renderPass )
 			{
+				auto & scene = renderPass.getScene();
 				auto & engine = *renderPass.getEngine();
 				RenderPassConfigurationBuilder vis{ renderPass.createPipelineFlags( castor3d::PassComponentCombine{}
 						, castor3d::BlendMode::eNoBlend
 						, castor3d::BlendMode::eNoBlend
 						, engine.getRenderPassTypeID( renderPass.getTypeName() )
-						, 0u
+						, scene.getDefaultLightingModel()
+						, scene.getBackgroundModelId()
 						, VK_COMPARE_OP_ALWAYS
 						, VK_COMPARE_OP_ALWAYS
 						, castor3d::TextureCombine{}

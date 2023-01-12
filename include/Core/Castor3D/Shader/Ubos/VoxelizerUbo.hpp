@@ -32,21 +32,19 @@ namespace castor3d
 			C3D_API sdw::Vec3 worldToClip( sdw::Vec3 const & wsPosition )const;
 
 			// Raw values
-			sdw::Vec4 gridConv;
-			sdw::Vec4 radiance;
-			sdw::Vec4 other;
-			sdw::UVec4 status;
-			// Specific values
 			sdw::Float worldToGrid;
 			sdw::Float gridToWorld;
 			sdw::Float clipToGrid;
 			sdw::Float gridToClip;
+
 			sdw::Float radianceMaxDistance;
 			sdw::Float radianceMips;
 			sdw::UInt radianceNumCones;
 			sdw::Float radianceNumConesInv;
-			sdw::Vec3 gridCenter;
+
+			// sdw::Vec3 pad;
 			sdw::Float rayStepSize;
+
 			sdw::UInt enabled;
 			sdw::UInt enableConservativeRasterization;
 			sdw::UInt enableOcclusion;
@@ -66,26 +64,36 @@ namespace castor3d
 		*	- float gridToClip: Factor from grid position to clip position
 		*	- float clipToGrid: Factor from clip position to grid position
 		*/
-		castor::Point4f gridConv;
+		float worldToGrid;
+		float gridToWorld;
+		float clipToGrid;
+		float gridToClip;
 		/**
 		*	- float radianceMaxDistance;
 		*	- float radianceMips;
 		*	- uint radianceNumCones;
 		*	- float radianceNumConesInv;
 		*/
-		castor::Point4f radiance;
+		float radianceMaxDistance;
+		float radianceMips;
+		uint32_t radianceNumCones;
+		float radianceNumConesInv;
 		/**
 		*	- vec3 gridCenter: Center of the voxel grid, in world space units
 		*	- float rayStepSize;
 		*/
-		castor::Point4f other;
+		castor::Point3f pad;
+		float rayStepSize;
 		/**
 		*	- uint enabled;
-		*	- uint conservativeRasterization;
+		*	- uint enableConservativeRasterization;
 		*	- uint enableOcclusion;
 		*	- uint enableSecondaryBounce;
 		*/
-		castor::Point4ui status;
+		uint32_t enabled;
+		uint32_t enableConservativeRasterization;
+		uint32_t enableOcclusion;
+		uint32_t enableSecondaryBounce;
 	};
 
 	class VoxelizerUbo

@@ -9,13 +9,14 @@
 
 namespace castor3d
 {
-	castor::String const PhongPass::Type = cuT( "blinn_phong" );
+	castor::String const PhongPass::Type = "blinn_phong";
 	castor::String const PhongPass::LightingModel = shader::PhongLightingModel::getName();
 
-	PassSPtr PhongPass::create( Material & parent )
+	PassSPtr PhongPass::create( LightingModelID lightingModelId
+		, Material & parent )
 	{
 		auto result = std::make_shared< Pass >( parent
-			, parent.getEngine()->getPassFactory().getNameId( Type ) );
+			, lightingModelId );
 		result->createComponent< ColourComponent >();
 		result->createComponent< RoughnessComponent >( Pass::computeRoughnessFromShininess( 50.0f ) );
 		result->createComponent< SpecularComponent >( SpecularComponent::DefaultPhong );

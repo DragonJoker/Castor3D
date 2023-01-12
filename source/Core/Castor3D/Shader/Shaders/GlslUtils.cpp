@@ -36,24 +36,6 @@ namespace castor3d::shader
 	{
 	}
 
-	LightingModelPtr Utils::createLightingModel( Engine const & engine
-		, Materials const & materials
-		, BRDFHelpers & brdf
-		, castor::String const & name
-		, ShadowOptions shadowsOptions
-		, SssProfiles const * sssProfiles
-		, bool enableVolumetric )
-	{
-		return engine.getLightingModelFactory().create( name
-			, m_writer
-			, materials
-			, *this
-			, brdf
-			, std::move( shadowsOptions )
-			, sssProfiles
-			, enableVolumetric );
-	}
-	
 	sdw::Float Utils::saturate( sdw::Float const v )
 	{
 		return clamp( v, 0.0_f, 1.0_f );
@@ -801,7 +783,7 @@ namespace castor3d::shader
 					auto normal = m_writer.declLocale( "normal"
 						, vec3( iNormal ) / 255.0f );
 					normal *= vec3( iNormalSigns );
-					m_writer.returnStmt( normal );
+					m_writer.returnStmt( normalize( normal ) );
 				}
 				, sdw::InUInt{ m_writer, "normalMask" } );
 		}

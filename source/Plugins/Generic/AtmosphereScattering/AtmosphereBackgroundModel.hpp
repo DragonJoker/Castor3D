@@ -38,10 +38,6 @@ namespace atmosphere_scattering
 			, uint32_t & binding
 			, uint32_t set );
 
-		sdw::RetVec3 computeRefractions( sdw::Vec3 const & wsIncident
-			, sdw::Vec3 const & wsNormal
-			, sdw::Float const & refractionRatio
-			, castor3d::shader::BlendComponents & components )override;
 		void applyVolume( sdw::Vec2 const fragCoord
 			, sdw::Float const linearDepth
 			, sdw::Vec2 const targetSize

@@ -376,7 +376,9 @@ namespace castor3d
 	void RenderQuad::registerPassInputs( ashes::WriteDescriptorSetArray const & writes
 		, bool invertY )
 	{
+#if !defined( NDEBUG )
 		CU_Require( passrquad::checkWrites( writes, m_config.bindings ) );
+#endif
 
 		m_passes.emplace_back( writes );
 		m_invertY.emplace_back( invertY );
@@ -411,7 +413,9 @@ namespace castor3d
 		, ashes::VkPushConstantRangeArray const & pushRanges
 		, ashes::PipelineDepthStencilStateCreateInfo dsState )
 	{
+#if !defined( NDEBUG )
 		CU_Require( passrquad::checkWrites( writes, m_config.bindings ) );
+#endif
 		createPipeline( size
 			, position
 			, program

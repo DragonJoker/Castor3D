@@ -227,18 +227,11 @@ namespace castor3d
 		C3D_API castor::String const & getBackgroundModel()const;
 		/**
 		 *\~english
-		 *\return		The lighting model name.
+		 *\return		The lighting models names for the current background model.
 		 *\~french
-		 *\return		Le nom du modèle d'éclairage.
+		 *\return		Les noms des modèles d'éclairage pour le modèle de fond actuel.
 		 */
-		C3D_API castor::String getLightingModel( LightType lightType )const;
-		/**
-		 *\~english
-		 *\return		The lighting model name.
-		 *\~french
-		 *\return		Le nom du modèle d'éclairage.
-		 */
-		C3D_API castor::String getLightingModel()const;
+		C3D_API std::vector< LightingModelID > getLightingModelsID()const;
 		/**
 		 *\~english
 		 *\brief		Creates an animated texture and adds it to animated textures group.
@@ -292,8 +285,9 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		C3D_API PassTypeID getPassesType()const;
-		C3D_API castor::String getPassesName()const;
+		C3D_API BackgroundModelID getBackgroundModelId()const;
+		C3D_API LightingModelID getDefaultLightingModel()const;
+		C3D_API castor::String getDefaultLightingModelName()const;
 		C3D_API bool needsGlobalIllumination()const;
 		C3D_API bool needsGlobalIllumination( LightType ltType
 			, GlobalIlluminationType giType )const;
@@ -305,6 +299,8 @@ namespace castor3d
 		C3D_API ashes::DescriptorSet * getBindlessTexDescriptorSet()const;
 		C3D_API ashes::Buffer< ModelBufferConfiguration > const & getModelBuffer()const;
 		C3D_API ashes::Buffer< BillboardUboConfiguration > const & getBillboardsBuffer()const;
+		C3D_API bool hasObjects( LightingModelID lightingModelId )const;
+		C3D_API bool hasIBLSupport( LightingModelID lightingModelId )const;
 
 		castor::BoundingBox const & getBoundingBox()const
 		{
@@ -429,7 +425,7 @@ namespace castor3d
 		/**@{*/
 		C3D_API void setDirectionalShadowCascades( uint32_t value );
 		C3D_API void setLpvIndirectAttenuation( float value );
-		C3D_API void setPassesType( PassTypeID value );
+		C3D_API void setDefaultLightingModel( LightingModelID value );
 
 		void setBackgroundColour( castor::RgbColour const & value )
 		{

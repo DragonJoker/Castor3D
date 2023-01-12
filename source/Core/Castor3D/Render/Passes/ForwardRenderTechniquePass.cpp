@@ -23,6 +23,7 @@
 #include "Castor3D/Shader/Shaders/GlslFog.hpp"
 #include "Castor3D/Shader/Shaders/GlslCookTorranceBRDF.hpp"
 #include "Castor3D/Shader/Shaders/GlslGlobalIllumination.hpp"
+#include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
@@ -117,7 +118,7 @@ namespace castor3d
 			, flags
 			, getComponentsMask()
 			, utils };
-		shader::CookTorranceBRDF cookTorrance{ writer, utils, brdf };
+		shader::CookTorranceBRDF cookTorrance{ writer, brdf };
 		auto index = uint32_t( GlobalBuffersIdx::eCount );
 
 		C3D_Matrix( writer
@@ -151,20 +152,24 @@ namespace castor3d
 		auto c3d_mapBrdf = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapBrdf"
 			, index++
 			, RenderPipeline::eBuffers );
-		auto lightingModel = shader::LightingModel::createModel( *getEngine()
+		shader::Lights lights{ *getEngine()
+			, flags.lightingModelId
+			, flags.backgroundModelId
 			, materials
-			, utils
 			, brdf
-			, getScene().getLightingModel()
-			, lightsIndex
-			, RenderPipeline::eBuffers
+			, utils
 			, shader::ShadowOptions{ flags.getShadowFlags(), true, false }
 			, nullptr
+			, lightsIndex /* lightBinding */
+			, RenderPipeline::eBuffers /* lightSet */
+			, index /* shadowMapBinding */
+			, RenderPipeline::eBuffers /* shadowMapSet */
+			, checkFlag( m_filters, RenderFilter::eAlphaBlend ) /* enableVolumetric */ };
+		shader::ReflectionModel reflections{ writer
+			, utils
 			, index
-			, RenderPipeline::eBuffers
-			, checkFlag( m_filters, RenderFilter::eAlphaBlend ) );
-		auto reflections = lightingModel->getReflectionModel( index
-			, uint32_t( RenderPipeline::eBuffers ) );
+			, uint32_t( RenderPipeline::eBuffers )
+			, lights.hasIblSupport() };
 		auto backgroundModel = shader::BackgroundModel::createModel( getScene()
 			, writer
 			, utils
@@ -220,13 +225,13 @@ namespace castor3d
 					, in.passMultipliers
 					, components );
 				auto incident = writer.declLocale( "incident"
-					, reflections->computeIncident( in.worldPosition.xyz(), c3d_sceneData.cameraPosition ) );
+					, reflections.computeIncident( in.worldPosition.xyz(), c3d_sceneData.cameraPosition ) );
 
 				if ( !checkFlag( m_filters, RenderFilter::eOpaque ) )
 				{
-					if ( components.transmission.isEnabled() )
+					if ( components.transmission )
 					{
-						IF( writer, lightingModel->getFinalTransmission( components, incident ) >= 0.1_f )
+						IF( writer, lights.getFinalTransmission( components, incident ) >= 0.1_f )
 						{
 							writer.demote();
 						}
@@ -234,10 +239,8 @@ namespace castor3d
 					}
 				}
 
-				IF( writer, material.lighting != 0_u )
+				if ( auto lightingModel = lights.getLightingModel() )
 				{
-					auto worldEye = writer.declLocale( "worldEye"
-						, c3d_sceneData.cameraPosition );
 					auto lightDiffuse = writer.declLocale( "lightDiffuse"
 						, vec3( 0.0_f ) );
 					auto lightSpecular = writer.declLocale( "lightSpecular"
@@ -253,16 +256,22 @@ namespace castor3d
 						, shader::Surface{ in.fragCoord.xyz()
 							, in.viewPosition.xyz()
 							, in.worldPosition.xyz()
-							, components.normal } );
+							, normalize( components.normal ) } );
 					components.finish( passShaders
 						, surface
 						, utils
 						, c3d_sceneData.cameraPosition );
-					lightingModel->computeCombined( components
+					auto lightSurface = shader::LightSurface::create( writer
+						, "lightSurface"
+						, c3d_sceneData.cameraPosition
+						, surface.worldPosition.xyz()
+						, surface.viewPosition.xyz()
+						, surface.clipPosition
+						, surface.normal );
+					lights.computeCombinedDifSpec( components
 						, c3d_sceneData
 						, *backgroundModel
-						, surface
-						, worldEye
+						, lightSurface
 						, modelData.isShadowReceiver()
 						, output );
 
@@ -284,28 +293,33 @@ namespace castor3d
 						components.thicknessFactor *= length( modelData.getScale() );
 					}
 
-					reflections->computeCombined( components
-						, incident
+					lightSurface.updateN( utils
+						, components.normal
+						, components.specular
+						, components );
+					reflections.computeCombined( components
+						, lightSurface
 						, *backgroundModel
 						, modelData.getEnvMapIndex()
 						, components.hasReflection
 						, components.refractionRatio
-						, directAmbient
 						, reflectedDiffuse
 						, reflectedSpecular
 						, refracted
 						, coatReflected
 						, sheenReflected );
 
-					auto indirectOcclusion = writer.declLocale( "indirectOcclusion"
-						, 1.0_f );
+					lightSurface.updateL( utils
+						, components.normal
+						, components.specular
+						, components );
+					auto indirectOcclusion = indirect.computeOcclusion( flags.getGlobalIlluminationFlags()
+						, lightSurface );
 					auto lightIndirectDiffuse = indirect.computeDiffuse( flags.getGlobalIlluminationFlags()
-						, surface
+						, lightSurface
 						, indirectOcclusion );
 					auto lightIndirectSpecular = indirect.computeSpecular( flags.getGlobalIlluminationFlags()
-						, worldEye
-						, c3d_sceneData.getPosToCamera( surface.worldPosition.xyz() )
-						, surface
+						, lightSurface
 						, components.roughness
 						, indirectOcclusion
 						, lightIndirectDiffuse.w()
@@ -313,14 +327,16 @@ namespace castor3d
 					auto indirectAmbient = writer.declLocale( "indirectAmbient"
 						, indirect.computeAmbient( flags.getGlobalIlluminationFlags()
 							, lightIndirectDiffuse.xyz() ) );
+					lightSurface.updateL( utils
+						, components.normal
+						, components.specular
+						, components );
 					auto indirectDiffuse = writer.declLocale( "indirectDiffuse"
 						, ( hasDiffuseGI
 							? cookTorrance.computeDiffuse( lightIndirectDiffuse.xyz()
-								, c3d_sceneData.cameraPosition
-								, components.normal
-								, components.specular
-								, components.metalness
-								, surface )
+								, length( lightIndirectDiffuse.xyz() )
+								, lightSurface.difF()
+								, components.metalness )
 							: vec3( 0.0_f ) ) );
 
 					outColour = vec4( lightingModel->combine( components
@@ -341,11 +357,10 @@ namespace castor3d
 							, sheenReflected )
 						, components.opacity );
 				}
-				ELSE
+				else
 				{
 					outColour = vec4( components.colour, components.opacity );
 				}
-				FI;
 
 				if ( flags.hasFog() )
 				{

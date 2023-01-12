@@ -106,7 +106,9 @@ namespace castor3d
 		}
 	}
 
-	ShaderPtr LightPass::getPixelShaderSource( Scene const & scene
+	ShaderPtr LightPass::getPixelShaderSource( LightingModelID lightingModelId
+		, BackgroundModelID backgroundModelId
+		, Scene const & scene
 		, SceneFlags const & sceneFlags
 		, LightType lightType
 		, ShadowType shadowType
@@ -162,19 +164,20 @@ namespace castor3d
 
 		// Utility functions
 		index = uint32_t( LightPassLgtIdx::eSmLinear );
-		auto lightingModel = shader::LightingModel::createModel( *scene.getEngine() 
+		shader::Lights lights{ *scene.getEngine()
+			, lightingModelId
+			, backgroundModelId
 			, materials
-			, utils
 			, brdf
-			, scene.getLightingModel( lightType )
-			, lightType
-			, uint32_t( LightPassLgtIdx::eLight )
-			, 1u
-			, true
+			, utils
 			, shader::ShadowOptions{ shadows, lightType, shadowType == ShadowType::eVariance, false }
 			, &sssProfiles
-			, index
-			, 1u );
+			, lightType
+			, true /* lightUbo */
+			, uint32_t( LightPassLgtIdx::eLight ) /* lightBinding */
+			, 1u /* lightSet */
+			, index /* shadowMapBinding */
+			, 1u /* shadowMapSet */ };
 		index = uint32_t( LightPassLgtIdx::eCount );
 		auto backgroundModel = shader::BackgroundModel::createModel( scene
 			, writer
@@ -207,6 +210,13 @@ namespace castor3d
 					, modelData.getMaterialId() );
 				auto material = writer.declLocale( "material"
 					, materials.getMaterial( materialId ) );
+
+				IF( writer, material.lightingModel != uint32_t( lightingModelId ) )
+				{
+					writer.demote();
+				}
+				FI;
+
 				auto colMtl = writer.declLocale( "colMtl"
 					, c3d_mapColMtl.lod( texCoord, 0.0_f ) );
 				auto shadowReceiver = writer.declLocale( "shadowReceiver"
@@ -214,7 +224,7 @@ namespace castor3d
 				auto albedo = writer.declLocale( "albedo"
 					, colMtl.xyz() );
 
-				IF( writer, material.lighting != 0_u )
+				if ( auto lightingModel = lights.getLightingModel() )
 				{
 					auto nmlOcc = writer.declLocale( "nmlOcc"
 						, c3d_mapNmlOcc.lod( texCoord, 0.0_f ) );
@@ -238,7 +248,7 @@ namespace castor3d
 					auto wsPosition = writer.declLocale( "wsPosition"
 						, c3d_gpInfoData.projToWorld( utils, texCoord, depth ) );
 					auto wsNormal = writer.declLocale( "wsNormal"
-						, nmlOcc.xyz() );
+						, normalize( nmlOcc.xyz() ) );
 
 					auto lightDiffuse = writer.declLocale( "lightDiffuse"
 						, vec3( 0.0_f ) );
@@ -267,18 +277,23 @@ namespace castor3d
 						, surface
 						, utils
 						, c3d_sceneData.cameraPosition );
+					auto lightSurface = shader::LightSurface::create( writer
+						, "lightSurface"
+						, c3d_sceneData.cameraPosition
+						, surface.worldPosition.xyz()
+						, surface.viewPosition.xyz()
+						, surface.clipPosition
+						, surface.normal );
 
 					switch ( lightType )
 					{
 					case LightType::eDirectional:
 					{
-						auto c3d_light = writer.getVariable< shader::DirectionalLight >( "c3d_light" );
-						auto light = writer.declLocale( "light", c3d_light );
+						auto light = writer.declLocale( "light", lights.getDirectionalLight() );
 						lightingModel->compute( light
 							, components
-							, surface
 							, *backgroundModel
-							, eye
+							, lightSurface
 							, shadowReceiver
 							, output );
 						break;
@@ -286,12 +301,10 @@ namespace castor3d
 
 					case LightType::ePoint:
 					{
-						auto c3d_light = writer.getVariable< shader::PointLight >( "c3d_light" );
-						auto light = writer.declLocale( "light", c3d_light );
+						auto light = writer.declLocale( "light", lights.getPointLight() );
 						lightingModel->compute( light
 							, components
-							, surface
-							, eye
+							, lightSurface
 							, shadowReceiver
 							, output );
 						break;
@@ -299,12 +312,10 @@ namespace castor3d
 
 					case LightType::eSpot:
 					{
-						auto c3d_light = writer.getVariable< shader::SpotLight >( "c3d_light" );
-						auto light = writer.declLocale( "light", c3d_light );
+						auto light = writer.declLocale( "light", lights.getSpotLight() );
 						lightingModel->compute( light
 							, components
-							, surface
-							, eye
+							, lightSurface
 							, shadowReceiver
 							, output );
 						break;
@@ -320,7 +331,7 @@ namespace castor3d
 					outLightCoatingSpecular = lightCoatingSpecular;
 					outLightSheen = lightSheen;
 				}
-				ELSE
+				else
 				{
 					outLightDiffuse = albedo;
 					outLightSpecular = vec3( 0.0_f, 0.0_f, 0.0_f );
@@ -328,7 +339,6 @@ namespace castor3d
 					outLightCoatingSpecular = vec3( 0.0_f, 0.0_f, 0.0_f );
 					outLightSheen = vec2( 0.0_f, 1.0_f );
 				}
-				FI;
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

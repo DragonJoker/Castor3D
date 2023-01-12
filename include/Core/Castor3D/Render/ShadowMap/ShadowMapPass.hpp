@@ -113,8 +113,10 @@ namespace castor3d
 	private:
 		bool doIsValidRenderable( RenderedObject const & object )const override;
 		SubmeshFlags doAdjustSubmeshFlags( SubmeshFlags flags )const override;
-		void doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const override;
-		void doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
+		void doFillAdditionalBindings( PipelineFlags const & flags
+			, ashes::VkDescriptorSetLayoutBindingArray & bindings )const override;
+		void doFillAdditionalDescriptor( PipelineFlags const & flags
+			, ashes::WriteDescriptorSetArray & descriptorWrites
 			, ShadowMapLightTypeArray const & shadowMaps )override;
 
 		C3D_API virtual ShaderFlags doGetShaderFlags()const = 0;

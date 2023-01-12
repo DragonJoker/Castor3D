@@ -16,32 +16,69 @@ namespace castor
 {
 	static const std::string ERROR_UNKNOWN_OBJECT = "Unknown object type";
 
-	template< class ObjT, class KeyT, class PtrTypeT, typename CreatorT, class PredicateT >
+	template< class KeyT
+		, typename CreatorT
+		, class IdT >
+	struct FactoryEntryT
+	{
+		KeyT key;
+		CreatorT create;
+		IdT id;
+	};
+
+	template< class ObjT
+		, class KeyT
+		, class PtrTypeT
+		, typename CreatorT
+		, class IdT
+		, class EntryT >
 	class Factory
 	{
 	public:
 		using Obj = ObjT;
 		using Key = KeyT;
+		using Entry = EntryT;
+		using Id = IdT;
 		using PtrType = PtrTypeT;
 		using Creator = CreatorT;
-		using Predicate = PredicateT;
-		using ObjPtr = PtrType ;
-		using ObjMap = std::map< Key, Creator, Predicate >;
+		using ObjPtr = PtrType;
+		using ObjCont = std::vector< Entry >;
+		struct ListEntry
+		{
+			Key key;
+			Id id;
+		};
 
 	public:
 		/**
 		 *\~english
 		 *\brief		Registers an object type
 		 *\param[in]	key		The object type
-		 *\param[in]	creator	The object creation function
+		 *\param[in]	create	The object creation function
 		 *\~french
 		 *\brief		Enregistre un type d'objet
 		 *\param[in]	key		Le type d'objet
-		 *\param[in]	creator	La fonction de création d'objet
+		 *\param[in]	create	La fonction de création d'objet
 		 */
-		void registerType( Key const & key, Creator creator )
+		Entry & registerType( Key const & key, Creator create )
 		{
-			m_registered[key] = creator;
+			auto it = std::find_if( m_registered.begin()
+				, m_registered.end()
+				, [&key]( Entry const & lookup )
+				{
+					return key == lookup.key;
+				} );
+
+			if ( it != m_registered.end() )
+			{
+				return *it;
+			}
+
+			auto & entry = m_registered.emplace_back();
+			entry.key = key;
+			entry.create = create;
+			entry.id = ++m_currentId;
+			return entry;
 		}
 		/**
 		 *\~english
@@ -53,12 +90,59 @@ namespace castor
 		 */
 		void unregisterType( Key const & key )
 		{
-			auto it = m_registered.find( key );
+			auto it = std::find_if( m_registered.begin()
+				, m_registered.end()
+				, [&key]( Entry const & lookup )
+				{
+					return key == lookup.key;
+				} );
 
 			if ( it != m_registered.end() )
 			{
-				m_registered.erase( key );
+				m_registered.erase( it );
 			}
+		}
+		/**
+		 *\~english
+		 *\param[in]	key	The object type.
+		 *\return		The object type ID.
+		 *\~french
+		 *\param[in]	key	Le type d'objet.
+		 *\return		L'ID du type d'objet.
+		 */
+		Id getTypeId( Key const & key )const
+		{
+			auto it = std::find_if( m_registered.begin()
+				, m_registered.end()
+				, [&key]( Entry const & lookup )
+				{
+					return key == lookup.key;
+				} );
+
+			return it == m_registered.end()
+				? 0u
+				: it->id;
+		}
+		/**
+		 *\~english
+		 *\param[in]	id	The object type ID.
+		 *\return		The object type.
+		 *\~french
+		 *\param[in]	id	L'ID du type d'objet.
+		 *\return		Le type d'objet.
+		 */
+		Key getIdType( Id const & id )const
+		{
+			auto it = std::find_if( m_registered.begin()
+				, m_registered.end()
+				, [&id]( Entry const & lookup )
+				{
+					return id == lookup.id;
+				} );
+
+			return it == m_registered.end()
+				? Key{}
+				: it->key;
 		}
 		/**
 		 *\~english
@@ -70,9 +154,14 @@ namespace castor
 		 *\param[in]	key	Le type d'objet.
 		 *\return		\p true si enregistré.
 		 */
-		bool isTypeRegistered( Key const & key )
+		bool isTypeRegistered( Key const & key )const
 		{
-			return m_registered.find( key ) != m_registered.end();
+			return m_registered.end() != std::find_if( m_registered.begin()
+				, m_registered.end()
+				, [&key]( Entry const & lookup )
+				{
+					return key == lookup.key;
+				} );
 		}
 		/**
 		 *\~english
@@ -80,14 +169,14 @@ namespace castor
 		 *\~french
 		 *\return		La liste des types enregistrés.
 		 */
-		std::vector< Key > listRegisteredTypes()
+		std::vector< ListEntry > listRegisteredTypes()const
 		{
-			std::vector< Key > result;
+			std::vector< ListEntry > result;
 			result.reserve( m_registered.size() );
 
-			for ( auto const & it : m_registered )
+			for ( auto const & entry : m_registered )
 			{
-				result.push_back( it.first );
+				result.push_back( { entry.key, entry.id } );
 			}
 
 			return result;
@@ -105,25 +194,27 @@ namespace castor
 		 *\return		L'objet créé
 		 */
 		template< typename ... Parameters >
-		ObjPtr create( Key const & key, Parameters && ... params )const
+		ObjPtr create( Key const & key
+			, Parameters && ... params )const
 		{
-			ObjPtr result;
-			auto it = m_registered.find( key );
+			auto it = std::find_if( m_registered.begin()
+				, m_registered.end()
+				, [&key]( Entry const & lookup )
+				{
+					return key == lookup.key;
+				} );
 
-			if ( it != m_registered.end() )
-			{
-				result = it->second( std::forward< Parameters >( params )... );
-			}
-			else
+			if ( it == m_registered.end() )
 			{
 				CU_Exception( ERROR_UNKNOWN_OBJECT );
 			}
 
-			return result;
+			return it->create( std::forward< Parameters >( params )... );
 		}
 
 	protected:
-		ObjMap m_registered;
+		Id m_currentId{};
+		ObjCont m_registered;
 	};
 }
 

@@ -33,7 +33,7 @@ namespace castor3d
 	struct PipelineHiHashDetails
 	{
 		explicit PipelineHiHashDetails( PassComponentCombine pcomponents
-			, PassTypeID passType
+			, LightingModelID plightingModelId
 			, SubmeshFlags submeshFlags = SubmeshFlag::eNone
 			, ProgramFlags programFlags = ProgramFlag::eNone
 			, TextureCombine ptextures = TextureCombine{}
@@ -42,7 +42,7 @@ namespace castor3d
 			, uint32_t passLayerIndex = 0u )
 			: components{ std::move( pcomponents ) }
 			, textures{ std::move( ptextures ) }
-			, passType{ passType }
+			, lightingModelId{ plightingModelId }
 			, alphaFunc{ alphaFunc }
 			, passLayerIndex{ passLayerIndex }
 			, m_submeshFlags{ submeshFlags }
@@ -53,7 +53,7 @@ namespace castor3d
 
 		PassComponentCombine components;
 		TextureCombine textures;
-		PassTypeID passType;
+		LightingModelID lightingModelId;
 		VkCompareOp alphaFunc;
 		uint32_t passLayerIndex;
 		//uint32_t maxTexcoordSet;
@@ -66,11 +66,14 @@ namespace castor3d
 
 	struct PipelineLoHashDetails
 	{
-		explicit PipelineLoHashDetails( VkDeviceSize morphTargetsOffset = 0u )
-			: morphTargetsOffset{ morphTargetsOffset }
+		explicit PipelineLoHashDetails( BackgroundModelID backgroundModelId = 0u
+			, VkDeviceSize morphTargetsOffset = 0u )
+			: backgroundModelId{ backgroundModelId }
+			, morphTargetsOffset{ morphTargetsOffset }
 		{
 		}
 
+		BackgroundModelID backgroundModelId{};
 		VkDeviceSize morphTargetsOffset{};
 	};
 
@@ -104,11 +107,12 @@ namespace castor3d
 			, topology{ ptopology }
 			, patchVertices{ ppatchVertices }
 		{
-			CU_Require( passType != 0 );
+			CU_Require( lightingModelId != 0 );
 		}
 
 		explicit PipelineFlags( PassComponentCombine pcomponents
-			, PassTypeID ppassType
+			, LightingModelID plightingModelId
+			, BackgroundModelID pbackgroundModelId
 			, BlendMode pcolourBlendMode = BlendMode::eNoBlend
 			, BlendMode palphaBlendMode = BlendMode::eNoBlend
 			, RenderPassTypeID prenderPassType = 0u
@@ -123,14 +127,14 @@ namespace castor3d
 			, uint32_t ppassLayerIndex = {}
 			, VkDeviceSize pmorphTargetsOffset = {} )
 			: PipelineFlags{ PipelineHiHashDetails{ std::move( pcomponents )
-					, ppassType
+					, plightingModelId
 					, psubmeshFlags
 					, pprogramFlags
 					, std::move( textures )
 					, pshaderFlags
 					, palphaFunc
 					, ppassLayerIndex }
-				, PipelineLoHashDetails{ pmorphTargetsOffset }
+				, PipelineLoHashDetails{ pbackgroundModelId, pmorphTargetsOffset }
 				, psceneFlags
 				, pcolourBlendMode
 				, palphaBlendMode
@@ -138,11 +142,12 @@ namespace castor3d
 				, ptopology
 				, ppatchVertices }
 		{
-			CU_Require( passType != 0 );
+			CU_Require( lightingModelId != 0 );
 		}
 
 		PipelineFlags( PassComponentCombine pcomponents
-			, PassTypeID passType
+			, LightingModelID lightingModelId
+			, BackgroundModelID pbackgroundModelId
 			, SubmeshFlags submeshFlags
 			, ProgramFlags programFlags
 			, TextureCombine textures
@@ -150,14 +155,14 @@ namespace castor3d
 			, VkCompareOp alphaFunc
 			, uint32_t passLayerIndex = 0u )
 			: PipelineFlags{ PipelineHiHashDetails{ std::move( pcomponents )
-					, passType
+					, lightingModelId
 					, submeshFlags
 					, programFlags
 					, std::move( textures )
 					, shaderFlags
 					, alphaFunc
 					, passLayerIndex }
-				, PipelineLoHashDetails{}
+				, PipelineLoHashDetails{ pbackgroundModelId, 0u }
 				, SceneFlag::eNone
 				, BlendMode::eNoBlend
 				, BlendMode::eNoBlend
@@ -165,7 +170,7 @@ namespace castor3d
 				, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST
 				, 3u }
 		{
-			CU_Require( passType != 0 );
+			CU_Require( lightingModelId != 0 );
 		}
 
 		/* Vertex inputs */

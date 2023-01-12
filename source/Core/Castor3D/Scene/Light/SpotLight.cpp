@@ -167,6 +167,7 @@ namespace castor3d
 	void SpotLight::updateShadow( Camera & lightCamera
 		, int32_t index )
 	{
+		getLight().setShadowMapIndex( uint32_t( index ) );
 		auto node = getLight().getParent();
 		node->update();
 		lightCamera.attachTo( *node );
@@ -186,22 +187,19 @@ namespace castor3d
 			getLight().onGPUChanged( getLight() );
 			m_dirtyShadow = false;
 		}
-
-		m_shadowMapIndex = index;
 	}
 
-	void SpotLight::doFillBuffer( LightBuffer::LightData & data )const
+	void SpotLight::doFillBuffer( LightBufferData & data )const
 	{
 		auto & spot = data.specific.spot;
 		auto position = getLight().getParent()->getDerivedPosition();
 
 		spot.position = position;
-		spot.attenuation = ( *m_attenuation );
+		spot.attenuation = m_attenuation;
 		spot.direction = m_direction;
-		spot.exponentCutOff.x = m_exponent;
-		spot.exponentCutOff.y = m_innerCutOff.value().cos();
-		spot.exponentCutOff.z = m_outerCutOff.value().cos();
-		spot.exponentCutOff.w = 0.0f;
+		spot.exponent = m_exponent;
+		spot.innerCutoff = m_innerCutOff.value().cos();
+		spot.outerCutoff = m_outerCutOff.value().cos();
 
 		spot.transform = m_lightSpace;
 	}

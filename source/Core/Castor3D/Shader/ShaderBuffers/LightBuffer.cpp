@@ -18,8 +18,8 @@ namespace castor3d
 		static LightBuffer::LightsData doBindData( uint8_t * buffer
 			, uint32_t count )
 		{
-			return castor::makeArrayView( reinterpret_cast< LightBuffer::LightData * >( buffer )
-				, reinterpret_cast< LightBuffer::LightData * >( buffer ) + count );
+			return castor::makeArrayView( reinterpret_cast< LightBufferData * >( buffer )
+				, reinterpret_cast< LightBufferData * >( buffer ) + count );
 		}
 	}
 
@@ -28,7 +28,7 @@ namespace castor3d
 	LightBuffer::LightBuffer( Engine & engine
 		, RenderDevice const & device
 		, uint32_t count )
-		: m_buffer{ engine, device, count * DataSize, cuT( "LightBuffer" ) }
+		: m_buffer{ engine, device, count * LightBufferDataSize, cuT( "LightBuffer" ) }
 		, m_data{ lgtbuf::doBindData( m_buffer.getPtr(), count ) }
 	{
 	}
@@ -125,7 +125,7 @@ namespace castor3d
 		return m_buffer.getSingleBinding( binding, offset, size );
 	}
 
-	LightBuffer::LightData & LightBuffer::getData( Light const & light )
+	LightBufferData & LightBuffer::getData( Light const & light )
 	{
 		return m_data[getIndex( light )];
 	}

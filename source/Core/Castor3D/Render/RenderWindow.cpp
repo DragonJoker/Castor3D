@@ -371,8 +371,7 @@ namespace castor3d
 			CU_Exception( "Could not create Vulkan surface." );
 		}
 
-		getEngine()->getMaterialCache().initialise( m_device
-			, getEngine()->getPassesType() );
+		getEngine()->getMaterialCache().initialise( m_device );
 		doCreateProgram();
 		auto queueData = m_reservedQueue;
 

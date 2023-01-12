@@ -272,7 +272,7 @@ namespace castor3d
 			{
 				parsingContext.ownMaterial = parsingContext.parser->getEngine()->createMaterial( parsingContext.strName
 					, *parsingContext.parser->getEngine()
-					, parsingContext.parser->getEngine()->getPassesType() );
+					, parsingContext.parser->getEngine()->getDefaultLightingModel() );
 				parsingContext.material = parsingContext.ownMaterial.get();
 			}
 		}
@@ -366,7 +366,7 @@ namespace castor3d
 		{
 			uint32_t value;
 			params[0]->get( value );
-			parsingContext.parser->getEngine()->setPassesType( PassTypeID( value ) );
+			parsingContext.parser->getEngine()->setDefaultLightingModel( LightingModelID( value ) );
 		}
 	}
 	CU_EndAttribute()

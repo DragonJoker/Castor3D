@@ -162,7 +162,7 @@ namespace c3d_assimp
 					AssimpMaterialImporter importer{ *scene.getEngine() };
 					auto mat = getOwner()->createMaterial( matName
 						, *getOwner()
-						, getOwner()->getPassesType() );
+						, getOwner()->getDefaultLightingModel() );
 
 					if ( importer.import( *mat
 						, &file

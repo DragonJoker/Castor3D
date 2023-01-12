@@ -148,6 +148,10 @@ namespace castor
 	*/
 	template< typename BlockType >
 	class DynamicBitsetT;
+	template< class KeyT
+		, typename CreatorT
+		, class IdT = size_t >
+	struct FactoryEntryT;
 	/**
 	\~english
 	\brief		Factory concept implementation
@@ -158,11 +162,12 @@ namespace castor
 	\remark		Les classes pouvant être enregistrées doivent implémenter une fonction de la forme suivante :
 				<br />static std::shared_ptr< Obj > create();
 	*/
-	template< class Obj
-		, class Key
-		, class PtrType = std::shared_ptr< Obj >
-		, typename PFNCreate = std::function< PtrType() >
-		, class Predicate = std::less< Key > >
+	template< class ObjT
+		, class KeyT
+		, class PtrTypeT = std::shared_ptr< ObjT >
+		, typename CreatorT = std::function< PtrTypeT() >
+		, class IdT = size_t
+		, class EntryT = FactoryEntryT< KeyT, CreatorT, IdT > >
 	class Factory;
 	/**
 	*\brief

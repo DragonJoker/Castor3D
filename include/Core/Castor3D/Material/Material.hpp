@@ -20,27 +20,33 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	name	The material name.
-		 *\param[in]	engine	The core engine.
-		 *\param[in]	type	The material type.
+		 *\param[in]	name			The material name.
+		 *\param[in]	engine			The core engine.
+		 *\param[in]	LightingModelID	The material's lighting model ID.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	name	Le nom du matériau.
-		 *\param[in]	engine	Le moteur.
-		 *\param[in]	type	Le type de matériau.
+		 *\param[in]	name			Le nom du matériau.
+		 *\param[in]	engine			Le moteur.
+		 *\param[in]	LightingModelID	L'ID du modèle d'éclairage du matériau.
 		 */
 		C3D_API Material( castor::String const & name
 			, Engine & engine
-			, PassTypeID type );
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API virtual ~Material();
+			, LightingModelID lightingModelId );
+		C3D_API virtual ~Material() = default;
+
 		C3D_API void initialise();
 		C3D_API void cleanup();
+		/**
+		 *\~english
+		 *\brief		Creates a pass.
+		 *\param[in]	LightingModelID	The pass' lighting model ID.
+		 *\return		The created pass.
+		 *\~french
+		 *\brief		Crée une passe.
+		 *\param[in]	LightingModelID	L'ID du modèle d'éclairage de la passe.
+		 *\return		La passe créée.
+		 */
+		C3D_API PassSPtr createPass( LightingModelID lightingModelId );
 		/**
 		 *\~english
 		 *\brief		Creates a pass.
@@ -99,9 +105,9 @@ namespace castor3d
 		C3D_API bool hasEnvironmentMapping()const;
 		C3D_API bool hasSubsurfaceScattering()const;
 
-		PassTypeID getType()const
+		LightingModelID getLightingModelId()const
 		{
-			return m_type;
+			return m_lightingModelId;
 		}
 
 		uint32_t getPassCount()const
@@ -171,7 +177,7 @@ namespace castor3d
 
 	private:
 		PassPtrArray m_passes;
-		PassTypeID m_type{ 0u };
+		LightingModelID m_lightingModelId;
 		std::map< PassSPtr, OnPassChangedConnection > m_passListeners;
 		RenderPassRegisterInfo * m_renderPassInfo{};
 	};

@@ -135,7 +135,7 @@ namespace castor3d
 				{
 					auto material = getOwner()->createMaterial( name
 						, *getOwner()
-						, getOwner()->getPassesType() );
+						, getOwner()->getDefaultLightingModel() );
 
 					if ( materialImporter->import( *material
 						, m_file

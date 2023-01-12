@@ -17,6 +17,7 @@
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp"
 #include "Castor3D/Shader/Shaders/GlslGlobalIllumination.hpp"
+#include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslPassShaders.hpp"
@@ -53,8 +54,7 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static ShaderPtr getPixelShaderSource( PassTypeID passType
-			, RenderSystem const & renderSystem
+		static ShaderPtr getPixelShaderSource( RenderSystem const & renderSystem
 			, IndirectLightingPass::Config const & config )
 		{
 			using namespace sdw;
@@ -81,25 +81,20 @@ namespace castor3d
 				, IndirectLightingPass::eMaterials
 				, 0u
 				, index };
-			shader::GlobalIllumination indirect{ writer, utils, true };
 			uint32_t vctIndex = uint32_t( IndirectLightingPass::eVctStart );
 			uint32_t lpvIndex = uint32_t( IndirectLightingPass::eLpvStart );
 			uint32_t llpvIndex = uint32_t( IndirectLightingPass::eLayeredLpvStart );
-			indirect.declare( uint32_t( IndirectLightingPass::eVoxelData )
+			shader::GlobalIllumination indirect{ writer
+				, utils
+				, uint32_t( IndirectLightingPass::eVoxelData )
 				, uint32_t( IndirectLightingPass::eLpvGridConfig )
 				, uint32_t( IndirectLightingPass::eLayeredLpvGridConfig )
 				, vctIndex
 				, lpvIndex
 				, llpvIndex
 				, 0u
-				, config.sceneFlags );
-			auto lightingModel = utils.createLightingModel( *renderSystem.getEngine()
-				, materials
-				, brdf
-				, shader::getLightingModelName( *renderSystem.getEngine(), passType )
-				, {}
-				, nullptr
-				, true );
+				, config.sceneFlags
+				, true};
 			auto c3d_mapDepthObj = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapDepthObj", uint32_t( IndirectLightingPass::eDepthObj ), 0u );
 			auto c3d_mapNmlOcc = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eNmlOcc ), uint32_t( IndirectLightingPass::eNmlOcc ), 0u );
 			auto c3d_mapColMtl = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eColMtl ), uint32_t( IndirectLightingPass::eColMtl ), 0u );
@@ -129,31 +124,29 @@ namespace castor3d
 						, materials.getMaterial( modelData.getMaterialId() ) );
 					auto shadowReceiver = writer.declLocale( "shadowReceiver"
 						, modelData.isShadowReceiver() );
+					auto nmlOcc = writer.declLocale( "nmlOcc"
+						, c3d_mapNmlOcc.lod( texCoord, 0.0_f ) );
+					auto colMtl = writer.declLocale( "colMtl"
+						, c3d_mapColMtl.lod( texCoord, 0.0_f ) );
+					auto spcRgh = writer.declLocale( "spcRgh"
+						, c3d_mapSpcRgh.lod( texCoord, 0.0_f ) );
+					auto depth = writer.declLocale( "depth"
+						, depthObj.x() );
+					auto vsPosition = writer.declLocale( "vsPosition"
+						, c3d_gpInfoData.projToView( utils, texCoord, depth ) );
+					auto wsPosition = writer.declLocale( "wsPosition"
+						, c3d_gpInfoData.projToWorld( utils, texCoord, depth ) );
 
 					IF( writer, material.lighting != 0_u )
 					{
-						auto nmlOcc = writer.declLocale( "nmlOcc"
-							, c3d_mapNmlOcc.lod( texCoord, 0.0_f ) );
-						auto colMtl = writer.declLocale( "colMtl"
-							, c3d_mapColMtl.lod( texCoord, 0.0_f ) );
-						auto spcRgh = writer.declLocale( "spcRgh"
-							, c3d_mapSpcRgh.lod( texCoord, 0.0_f ) );
 						auto clrCot = writer.declLocale( "clrCot"
 							, vec4( 0.0_f ) );
 						auto crTsIr = writer.declLocale( "crTsIr"
 							, vec4( 0.0_f ) );
 						auto sheen = writer.declLocale( "sheen"
 							, vec4( 0.0_f ) );
-						auto eye = writer.declLocale( "eye"
-							, c3d_sceneData.cameraPosition );
-						auto depth = writer.declLocale( "depth"
-							, depthObj.x() );
-						auto vsPosition = writer.declLocale( "vsPosition"
-							, c3d_gpInfoData.projToView( utils, texCoord, depth ) );
-						auto wsPosition = writer.declLocale( "wsPosition"
-							, c3d_gpInfoData.projToWorld( utils, texCoord, depth ) );
 						auto wsNormal = writer.declLocale( "wsNormal"
-							, nmlOcc.xyz() );
+							, normalize( nmlOcc.xyz() ) );
 						auto surface = writer.declLocale( "surface"
 							, shader::Surface{ vec3( in.fragCoord.xy(), depth )
 								, vsPosition
@@ -166,20 +159,23 @@ namespace castor3d
 								, surface
 								, clrCot } );
 
-						//auto occlusion = indirect.computeOcclusion( sceneFlags
-						//	, lightType
-						//	, surface );
-						auto occlusion = writer.declLocale( "occlusion"
+						auto lightSurface = shader::LightSurface::create( writer
+							, "lightSurface"
+							, c3d_sceneData.cameraPosition
+							, surface.worldPosition.xyz()
+							, surface.viewPosition.xyz()
+							, surface.clipPosition
+							, surface.normal
+							, false, false, false );
+						auto indirectOcclusion = writer.declLocale( "indirectOcclusion"
 							, 1.0_f );
 						auto indirectDiffuse = indirect.computeDiffuse( config.sceneFlags
-							, surface
-							, occlusion );
+							, lightSurface
+							, indirectOcclusion );
 						auto indirectSpecular = indirect.computeSpecular( config.sceneFlags
-							, eye
-							, c3d_sceneData.getPosToCamera( surface.worldPosition.xyz() )
-							, surface
+							, lightSurface
 							, components.roughness
-							, occlusion
+							, indirectOcclusion
 							, indirectDiffuse.w()
 							, c3d_brdfMap );
 						outIndirectDiffuse = indirectDiffuse.xyz();
@@ -236,8 +232,8 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	IndirectLightingPass::Config::Config( SceneFlags const & sceneFlags )
-		: sceneFlags{ drindirlgtpass::adjustSceneFlags( sceneFlags ) }
+	IndirectLightingPass::Config::Config( SceneFlags const & psceneFlags )
+		: sceneFlags{ drindirlgtpass::adjustSceneFlags( psceneFlags ) }
 		, voxels{ checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) }
 		, lpv{ checkFlag( sceneFlags, SceneFlag::eLpvGI ) }
 		, llpv{ checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI ) }
@@ -245,12 +241,12 @@ namespace castor3d
 	{
 	}
 
-	IndirectLightingPass::Config::Config( uint32_t index )
+	IndirectLightingPass::Config::Config( uint32_t pindex )
 		: sceneFlags{ SceneFlag::eNone }
-		, voxels{ index == uint32_t( ProgramType::eVCT ) }
-		, lpv{ ( index == uint32_t( ProgramType::eLPV ) ) || ( index == uint32_t( ProgramType::eLPVLLPV ) ) }
-		, llpv{ ( index == uint32_t( ProgramType::eLLPV ) ) || ( index == uint32_t( ProgramType::eLPVLLPV ) ) }
-		, index{ index }
+		, voxels{ pindex == uint32_t( ProgramType::eVCT ) }
+		, lpv{ ( pindex == uint32_t( ProgramType::eLPV ) ) || ( pindex == uint32_t( ProgramType::eLPVLLPV ) ) }
+		, llpv{ ( pindex == uint32_t( ProgramType::eLLPV ) ) || ( pindex == uint32_t( ProgramType::eLPVLLPV ) ) }
+		, index{ pindex }
 	{
 		if ( voxels )
 		{
@@ -278,9 +274,7 @@ namespace castor3d
 			, drindirlgtpass::getVertexShaderSource() }
 		, pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT
 			, "IndirectLightingPass"
-			, drindirlgtpass::getPixelShaderSource( scene.getPassesType()
-				, device.renderSystem
-				, config ) }
+			, drindirlgtpass::getPixelShaderSource( device.renderSystem, config ) }
 		, stages{ makeShaderState( device, vertexShader )
 			, makeShaderState( device, pixelShader ) }
 	{

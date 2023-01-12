@@ -13,9 +13,9 @@ namespace castor3d::shader
 	public:
 		C3D_API explicit SheenBRDF( sdw::ShaderWriter & writer
 			, BRDFHelpers & brdf );
-		C3D_API sdw::RetVec2 compute( sdw::Float const & NdotH
-			, sdw::Float const & NdotV
+		C3D_API sdw::RetVec2 compute( LightSurface const & lightSurface
 			, sdw::Float const & NdotL
+			, sdw::Float const & NdotH
 			, sdw::Float const & roughness );
 
 	private:

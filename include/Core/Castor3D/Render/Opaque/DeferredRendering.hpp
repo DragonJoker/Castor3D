@@ -138,6 +138,7 @@ namespace castor3d
 
 		C3D_API crg::ImageViewId const & getLightDepthImgView()const;
 		C3D_API Texture const & getLightDiffuse();
+		C3D_API Texture const & getLightScattering();
 
 		crg::FramePass const & getLastPass()const
 		{
@@ -155,16 +156,30 @@ namespace castor3d
 		}
 
 	private:
+		void doCreateResolvePasses( crg::FramePassGroup & graph
+			, crg::FramePassArray previousPasses
+			, ProgressBar * progress
+			, Texture const & depthObj
+			, Texture const & resultTexture
+			, Texture const & ssao
+			, Scene & scene
+			, SceneUbo const & sceneUbo
+			, HdrConfigUbo const & hdrConfigUbo
+			, GpInfoUbo const & gpInfoUbo
+			, SsaoConfig & ssaoConfig );
+
+	private:
 		RenderDevice const & m_device;
-		crg::FramePass const * m_lastPass{};
 		OpaquePassResult const & m_opaquePassResult;
+		crg::FramePass const * m_lastPass{};
 		GpInfoUbo m_lightingGpInfoUbo;
 		castor::Size m_size;
 		LightPassResult m_lightPassResult;
 		LightingPassUPtr m_lightingPass;
 		IndirectLightingPassUPtr m_indirectLightingPass;
 		SubsurfaceScatteringPassUPtr m_subsurfaceScattering;
-		OpaqueResolvePassUPtr m_resolve;
+		std::vector< OpaqueResolvePassUPtr > m_resolves;
+		uint32_t m_index{};
 		std::vector< ashes::ImagePtr > m_results;
 	};
 }

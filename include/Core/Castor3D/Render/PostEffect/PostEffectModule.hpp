@@ -44,6 +44,9 @@ namespace castor3d
 	*	Contient les informations basiques de surface d'un effet: framebuffer, texture de couleur.
 	*/
 	struct PostEffectSurface;
+
+	CU_DeclareSmartPtr( PostEffect );
+	CU_DeclareVector( PostEffectSPtr, PostEffectPtr );
 	/**
 	*\~english
 	*\brief
@@ -54,12 +57,8 @@ namespace castor3d
 	*/
 	using PostEffectFactory = castor::Factory< PostEffect
 		, castor::String
-		, std::shared_ptr< PostEffect >
-		, std::function< std::shared_ptr< PostEffect >( RenderTarget &, RenderSystem &, Parameters const & ) > >;
-
-	CU_DeclareSmartPtr( PostEffect );
-
-	CU_DeclareVector( PostEffectSPtr, PostEffectPtr );
+		, PostEffectSPtr
+		, std::function< PostEffectSPtr( RenderTarget &, RenderSystem &, Parameters const & ) > >;
 
 	//@}
 	//@}

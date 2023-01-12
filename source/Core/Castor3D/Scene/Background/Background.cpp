@@ -264,11 +264,13 @@ namespace castor3d
 	SceneBackground::SceneBackground( Engine & engine
 		, Scene & scene
 		, castor::String const & name
-		, castor::String type )
+		, castor::String type
+		, bool hasIBLSupport )
 		: castor::OwnedBy< Engine >{ engine }
 		, castor::Named{ scene.getName() + name }
 		, m_scene{ scene }
 		, m_type{ std::move( type ) }
+		, m_hasIBLSupport{ hasIBLSupport }
 	{
 	}
 
@@ -307,6 +309,7 @@ namespace castor3d
 			m_sampler = sampler;
 
 			if ( m_initialised
+				&& m_hasIBLSupport
 				&& m_texture->getLayersCount() == 6u )
 			{
 				m_ibl = std::make_unique< IblTextures >( m_scene
@@ -464,7 +467,8 @@ namespace castor3d
 		}
 	}
 
-	void SceneBackground::addBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+	void SceneBackground::addBindings( PipelineFlags const & flags
+		, ashes::VkDescriptorSetLayoutBindingArray & bindings
 		, uint32_t & index )const
 	{
 		doAddBindings( bindings, index );
@@ -483,7 +487,8 @@ namespace castor3d
 		}
 	}
 
-	void SceneBackground::addDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
+	void SceneBackground::addDescriptors( PipelineFlags const & flags
+		, ashes::WriteDescriptorSetArray & descriptorWrites
 		, crg::ImageData const & targetImage
 		, uint32_t & index )const
 	{
@@ -515,6 +520,11 @@ namespace castor3d
 		}
 
 		return shader::NoIblBackgroundModel::Name;
+	}
+
+	BackgroundModelID SceneBackground::getModelID()const
+	{
+		return getEngine()->getBackgroundModelFactory().getTypeId( getModelName() );
 	}
 
 	//*********************************************************************************************

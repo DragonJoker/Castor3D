@@ -209,8 +209,9 @@ namespace castor3d
 		C3D_API virtual PipelineFlags createPipelineFlags( PassComponentCombine components
 			, BlendMode colourBlendMode
 			, BlendMode alphaBlendMode
-			, RenderPassTypeID renderPassTypeID
-			, PassTypeID passTypeID
+			, RenderPassTypeID renderPassTypeId
+			, LightingModelID lightingModelId
+			, BackgroundModelID backgroundModelId
 			, VkCompareOp alphaFunc
 			, VkCompareOp blendAlphaFunc
 			, TextureCombine const & textures
@@ -324,8 +325,9 @@ namespace castor3d
 		C3D_API PipelineFlags createPipelineFlags( PassComponentCombine components
 			, BlendMode colourBlendMode
 			, BlendMode alphaBlendMode
-			, RenderPassTypeID renderPassTypeID
-			, PassTypeID passTypeID
+			, RenderPassTypeID renderPassTypeId
+			, LightingModelID lightingModelId
+			, BackgroundModelID backgroundModelId
 			, VkCompareOp alphaFunc
 			, VkCompareOp blendAlphaFunc
 			, TextureCombine const & textures
@@ -378,34 +380,46 @@ namespace castor3d
 	protected:
 		C3D_API ProgramFlags doAdjustProgramFlags( ProgramFlags flags )const override;
 		C3D_API SceneFlags doAdjustSceneFlags( SceneFlags flags )const override;
-		C3D_API void doAddShadowBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+		C3D_API void doAddShadowBindings( PipelineFlags const & flags
+			, ashes::VkDescriptorSetLayoutBindingArray & bindings
 			, uint32_t & index )const;
-		C3D_API void doAddBackgroundBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+		C3D_API void doAddBackgroundBindings( PipelineFlags const & flags
+			, ashes::VkDescriptorSetLayoutBindingArray & bindings
 			, uint32_t & index )const;
-		C3D_API void doAddEnvBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+		C3D_API void doAddEnvBindings( PipelineFlags const & flags
+			, ashes::VkDescriptorSetLayoutBindingArray & bindings
 			, uint32_t & index )const;
-		C3D_API void doAddGIBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+		C3D_API void doAddGIBindings( PipelineFlags const & flags
+			, ashes::VkDescriptorSetLayoutBindingArray & bindings
 			, uint32_t & index )const;
-		C3D_API void doAddPassSpecificsBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+		C3D_API void doAddPassSpecificsBindings( PipelineFlags const & flags
+			, ashes::VkDescriptorSetLayoutBindingArray & bindings
 			, uint32_t & index )const;
-		C3D_API void doAddShadowDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
+		C3D_API void doAddShadowDescriptor( PipelineFlags const & flags
+			, ashes::WriteDescriptorSetArray & descriptorWrites
 			, ShadowMapLightTypeArray const & shadowMaps
 			, uint32_t & index )const;
-		C3D_API void doAddBackgroundDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
+		C3D_API void doAddBackgroundDescriptor( PipelineFlags const & flags
+			, ashes::WriteDescriptorSetArray & descriptorWrites
 			, crg::ImageData const & targetImage
 			, uint32_t & index )const;
-		C3D_API void doAddEnvDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
+		C3D_API void doAddEnvDescriptor( PipelineFlags const & flags
+			, ashes::WriteDescriptorSetArray & descriptorWrites
 			, uint32_t & index )const;
-		C3D_API void doAddGIDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
+		C3D_API void doAddGIDescriptor( PipelineFlags const & flags
+			, ashes::WriteDescriptorSetArray & descriptorWrites
 			, uint32_t & index )const;
-		C3D_API void doAddPassSpecificsDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
+		C3D_API void doAddPassSpecificsDescriptor( PipelineFlags const & flags
+			, ashes::WriteDescriptorSetArray & descriptorWrites
 			, uint32_t & index )const;
 
 	private:
 		using RenderNodesPass::update;
 
-		void doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const override;
-		void doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
+		void doFillAdditionalBindings( PipelineFlags const & flags
+			, ashes::VkDescriptorSetLayoutBindingArray & bindings )const override;
+		void doFillAdditionalDescriptor( PipelineFlags const & flags
+			, ashes::WriteDescriptorSetArray & descriptorWrites
 			, ShadowMapLightTypeArray const & shadowMaps )override;
 		ashes::PipelineDepthStencilStateCreateInfo doCreateDepthStencilState( PipelineFlags const & flags )const override;
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;

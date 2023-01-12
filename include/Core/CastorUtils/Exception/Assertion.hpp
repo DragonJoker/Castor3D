@@ -8,40 +8,27 @@ See LICENSE file in root folder
 
 #include "CastorUtils/CastorUtils.hpp"
 
-#if CU_UseAssert
+namespace castor
+{
+	CU_API void cuLogError( char const * const description );
+	CU_API void cuLogError( std::stringstream stream );
+	[[ noreturn ]]
+	CU_API void cuFailure( char const * const description );
+}
 
-#include "CastorUtils/Log/Logger.hpp"
+#if CU_UseAssert
 
 #	if defined( CU_Assert )
 #		undef CU_Assert
 #	endif
 
-namespace castor
-{
-	/**
-	 *\~english
-	 *\brief		Checks an assertion.
-	 *\param[in]	expr		The expression to test.
-	 *\param[in]	description	The assertion description.
-	 *\~french
-	 *\brief		Constructeur spécifié
-	 *\param[in]	expr		L'expression à tester
-	 *\param[in]	description	La description de l'assertion.
-	 */
-	template< typename Expr >
-	inline void cuAssert( Expr const & expr
-		, char const * const description )
-	{
-		if ( !expr )
-		{
-			Logger::logError( std::stringstream() << "Assertion failed: " << description );
-			Logger::logError( std::stringstream() << Debug::Backtrace{} );
-			assert( false );
-		}
-	}
-}
-
-#	define CU_Assert( pred, text ) castor::cuAssert( pred, text )
+#	if !defined( NDEBUG )
+#		define CU_Assert( pred, text ) ( !!( pred ) )\
+		|| ( castor::cuFailure( text ), 0 )
+#else
+#		define CU_Assert( pred, text ) ( !!( pred ) )\
+		|| ( castor::cuLogError( text ), 0 )
+#endif
 
 //!\~english	Calls invariant checking function.
 //!\~french		Appelle la fonction de vérification des invariants de classe.

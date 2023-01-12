@@ -696,6 +696,11 @@ namespace castor3d
 		return m_opaque.getDiffuseLightingResult();
 	}
 
+	Texture const & RenderTechnique::getScatteringLightingResult()const
+	{
+		return m_opaque.getScatteringLightingResult();
+	}
+
 	Texture const & RenderTechnique::getBaseColourResult()const
 	{
 		return m_opaque.getBaseColourResult();

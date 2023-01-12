@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_DeferredOpaqueResolvePass_H___
@@ -59,6 +59,7 @@ namespace castor3d
 		 *\param[in]	sceneUbo				The scene UBO.
 		 *\param[in]	gpInfoUbo				The geometry pass UBO.
 		 *\param[in]	hdrConfigUbo			The HDR UBO.
+		 *\param[in]	lightingModelId			The lighting model ID.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	graph					Le render graph.
@@ -76,6 +77,7 @@ namespace castor3d
 		 *\param[in]	sceneUbo				L'UBO de la scène.
 		 *\param[in]	gpInfoUbo				L'UBO de la passe géométrique.
 		 *\param[in]	hdrConfigUbo			L'UBO HDR.
+		 *\param[in]	lightingModelId			L'ID de modèle d'éclairage.
 		 */
 		C3D_API OpaqueResolvePass( crg::FramePassGroup & graph
 			, crg::FramePassArray const & previousPasses
@@ -91,7 +93,9 @@ namespace castor3d
 			, Texture const & result
 			, SceneUbo const & sceneUbo
 			, GpInfoUbo const & gpInfoUbo
-			, HdrConfigUbo const & hdrConfigUbo );
+			, HdrConfigUbo const & hdrConfigUbo
+			, LightingModelID lightingModelId
+			, BackgroundModelID backgroundModelId );
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, GPU wise.
@@ -109,6 +113,11 @@ namespace castor3d
 		crg::FramePass const & getLastPass()const
 		{
 			return *m_lastPass;
+		}
+
+		castor::String getName()const
+		{
+			return m_name;
 		}
 
 	private:
@@ -130,8 +139,12 @@ namespace castor3d
 		Texture const & m_ssaoResult;
 		Texture const & m_subsurfaceScattering;
 		LightPassResult const & m_lighting;
+		castor::String m_name;
 		std::vector< ProgramPtr > m_programs;
+		LightingModelID m_lightingModelId;
+		BackgroundModelID m_backgroundModelId;
 		uint32_t m_programIndex{};
+		bool m_enabled{};
 		crg::FramePass const * m_lastPass{};
 	};
 }

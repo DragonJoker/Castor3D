@@ -10,6 +10,7 @@ See LICENSE file in root folder
 #include "Castor3D/Material/Texture/TextureModule.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Scene/Animation/AnimationModule.hpp"
+#include "Castor3D/Scene/Light/LightModule.hpp"
 #include "Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp"
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
@@ -61,14 +62,11 @@ namespace castor
 		 *\~english
 		 *\brief		Intialises the default material.
 		 *\param[in]	device		The GPU device.
-		 *\param[in]	passType	The materials type.
 		 *\~french
 		 *\brief		Initialise le matériau par défaut.
 		 *\param[in]	device		Le device GPU.
-		 *\param[in]	passType	Le type des matériaux.
 		 */
-		C3D_API void initialise( castor3d::RenderDevice const & device
-			, castor3d::PassTypeID passType );
+		C3D_API void initialise( castor3d::RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Sets all the elements to be cleaned up.

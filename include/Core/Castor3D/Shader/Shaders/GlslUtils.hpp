@@ -17,14 +17,6 @@ namespace castor3d::shader
 	public:
 		C3D_API explicit Utils( sdw::ShaderWriter & writer );
 
-		C3D_API LightingModelPtr createLightingModel( Engine const & engine
-			, Materials const & materials
-			, BRDFHelpers & brdf
-			, castor::String const & name
-			, ShadowOptions shadowsOptions
-			, SssProfiles const * sssProfiles
-			, bool enableVolumetric );
-
 		C3D_API sdw::Float saturate( sdw::Float const v );
 		C3D_API sdw::Vec3 saturate( sdw::Vec3 const v );
 		C3D_API sdw::Vec2 topDownToBottomUp( sdw::Vec2 const texCoord );

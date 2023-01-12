@@ -38,21 +38,4 @@ namespace castor3d::shader
 			, binding
 			, set );
 	}
-
-	sdw::RetVec3 ImgBackgroundModel::computeRefractions( sdw::Vec3 const & pwsIncident
-		, sdw::Vec3 const & pwsNormal
-		, sdw::Float const & prefractionRatio
-		, BlendComponents & components )
-	{
-		if ( !m_computeRefractions )
-		{
-			m_computeRefractions = m_writer.implementFunction< sdw::Vec3 >( "c3d_imgbg_computeRefractions"
-				, [&]()
-				{
-					m_writer.returnStmt( vec3( 0.0_f ) );
-				} );
-		}
-
-		return m_computeRefractions();
-	}
 }

@@ -16,6 +16,7 @@
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Background/Background.hpp"
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
+#include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 
 #include <CastorUtils/Design/ResourceCache.hpp>
 
@@ -100,23 +101,21 @@ namespace castor3d
 			, depthObj
 			, m_opaquePassResult
 			, m_lightPassResult ) }
-		, m_resolve{ castor::makeUnique< OpaqueResolvePass >( graph
-			, crg::FramePassArray{ &m_indirectLightingPass->getLastPass(), &m_subsurfaceScattering->getLastPass(), &ssaoPass }
-			, m_device
-			, progress
-			, scene
-			, depthObj
-			, opaquePassResult
-			, ssaoConfig
-			, ssao
-			, m_subsurfaceScattering->getResult()
-			, m_lightPassResult
-			, resultTexture
-			, sceneUbo
-			, gpInfoUbo
-			, hdrConfigUbo ) }
 	{
-		m_lastPass = &m_resolve->getLastPass();
+		m_resolves.resize( MaxLightingModels );
+		doCreateResolvePasses( graph
+			, crg::FramePassArray{ &m_indirectLightingPass->getLastPass()
+				, &m_subsurfaceScattering->getLastPass()
+				, &ssaoPass }
+			, progress
+			, depthObj
+			, resultTexture
+			, ssao
+			, scene
+			, sceneUbo
+			, hdrConfigUbo
+			, gpInfoUbo
+			, ssaoConfig );
 		m_lightPassResult.create();
 	}
 
@@ -125,7 +124,13 @@ namespace castor3d
 		m_subsurfaceScattering->update( updater );
 		m_lightingPass->update( updater );
 		m_indirectLightingPass->update( updater );
-		m_resolve->update( updater );
+
+		for ( auto & resolve : castor::makeArrayView( m_resolves.begin(), m_index ) )
+		{
+			CU_Require( resolve );
+			resolve->update( updater );
+		}
+
 		auto & camera = *updater.camera;
 		m_lightingGpInfoUbo.cpuUpdate( makeSize( m_lightPassResult[LpTexture::eDiffuse].getExtent() )
 			, camera );
@@ -149,7 +154,12 @@ namespace castor3d
 		m_lightingPass->accept( visitor );
 		m_indirectLightingPass->accept( visitor );
 		m_subsurfaceScattering->accept( visitor );
-		m_resolve->accept( visitor );
+
+		for ( auto & resolve : castor::makeArrayView( m_resolves.begin(), m_index ) )
+		{
+			CU_Require( resolve );
+			resolve->accept( visitor );
+		}
 	}
 
 	crg::ImageViewId const & DeferredRendering::getLightDepthImgView()const
@@ -161,5 +171,50 @@ namespace castor3d
 	{
 		m_lightPassResult.create();
 		return m_lightPassResult[LpTexture::eDiffuse];
+	}
+
+	Texture const & DeferredRendering::getLightScattering()
+	{
+		m_lightPassResult.create();
+		return m_lightPassResult[LpTexture::eScattering];
+	}
+
+	void DeferredRendering::doCreateResolvePasses( crg::FramePassGroup & graph
+		, crg::FramePassArray previousPasses
+		, ProgressBar * progress
+		, Texture const & depthObj
+		, Texture const & resultTexture
+		, Texture const & ssao
+		, Scene & scene
+		, SceneUbo const & sceneUbo
+		, HdrConfigUbo const & hdrConfigUbo
+		, GpInfoUbo const & gpInfoUbo
+		, SsaoConfig & ssaoConfig )
+	{
+		m_index = 0u;
+
+		for ( auto lightingModelId : scene.getEngine()->getLightingModelFactory().getLightingModelsID() )
+		{
+			m_index = std::max( m_index, uint32_t( lightingModelId ) );
+			m_resolves[lightingModelId - 1u] = castor::makeUnique< OpaqueResolvePass >( graph
+				, std::move( previousPasses )
+				, m_device
+				, progress
+				, scene
+				, depthObj
+				, m_opaquePassResult
+				, ssaoConfig
+				, ssao
+				, m_subsurfaceScattering->getResult()
+				, m_lightPassResult
+				, resultTexture
+				, sceneUbo
+				, gpInfoUbo
+				, hdrConfigUbo
+				, lightingModelId
+				, scene.getBackgroundModelId() );
+			m_lastPass = &m_resolves[lightingModelId - 1u]->getLastPass();
+			previousPasses = { m_lastPass };
+		}
 	}
 }

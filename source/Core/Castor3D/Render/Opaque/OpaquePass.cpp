@@ -13,10 +13,12 @@
 #include "Castor3D/Render/RenderTechnique.hpp"
 #include "Castor3D/Render/Opaque/OpaquePassResult.hpp"
 #include "Castor3D/Render/Opaque/Lighting/LightPass.hpp"
+#include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
 #include "Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp"
+#include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
@@ -98,11 +100,13 @@ namespace castor3d
 		return flags;
 	}
 
-	void OpaquePass::doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const
+	void OpaquePass::doFillAdditionalBindings( PipelineFlags const & flags
+		, ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
 	}
 
-	void OpaquePass::doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
+	void OpaquePass::doFillAdditionalDescriptor( PipelineFlags const & flags
+		, ashes::WriteDescriptorSetArray & descriptorWrites
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
 	}
@@ -163,13 +167,14 @@ namespace castor3d
 		auto c3d_imgCrTsIr = writer.declOutput< sdw::Vec4 >( getImageName( DsTexture::eCrTsIr ), idx++ );
 		auto c3d_imgSheen = writer.declOutput< sdw::Vec4 >( getImageName( DsTexture::eSheen ), idx++ );
 
-		auto lightingModel = utils.createLightingModel( *getEngine()
+		shader::Lights lights{ *getEngine()
+			, flags.lightingModelId
+			, flags.backgroundModelId
 			, materials
 			, brdf
-			, shader::getLightingModelName( *getEngine(), flags.passType )
+			, utils
 			, {}
-			, nullptr
-			, true );
+			, nullptr };
 
 		writer.implementMainT< shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer
 				, passShaders
@@ -196,12 +201,13 @@ namespace castor3d
 					, in.passMultipliers
 					, components );
 
-				if ( components.hasTransmission.isEnabled() )
+				if ( components.hasTransmission )
 				{
 					auto incident = writer.declLocale( "incident"
 						, normalize( in.worldPosition.xyz() - c3d_sceneData.cameraPosition ) );
+					auto finalTransmission = lights.getFinalTransmission( components, incident );
 
-					IF( writer, lightingModel->getFinalTransmission( components, incident ) >= 0.1_f )
+					IF( writer, finalTransmission >= 0.1_f )
 					{
 						writer.demote();
 					}

@@ -126,11 +126,11 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		void doFillBuffer( LightBuffer::LightData & data )const override;
+		void doFillBuffer( LightBufferData & data )const override;
 
 	private:
 		bool m_dirtyData{ false };
-		bool m_dirtyShadow{ false };
+		bool m_dirtyShadow{ true };
 		castor::GroupChangeTracked< castor::Point3f > m_attenuation;
 		castor::GroupChangeTracked< float > m_exponent;
 		castor::GroupChangeTracked< castor::Angle > m_innerCutOff;

@@ -47,7 +47,8 @@ namespace castor3d
 			, LightPassResult const & result );
 		LightRenderPass doCreateStencilRenderPass( bool blend
 			, LightPassResult const & result );
-		LightsPipeline & doFindPipeline( Light const & light );
+		LightsPipeline & doFindPipeline( Light const & light
+			, LightingModelID lightingModelId );
 
 	private:
 		RenderDevice const & m_device;

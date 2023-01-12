@@ -169,6 +169,8 @@ namespace castor3d
 	*	Met à jour une particule à la fois.
 	*/
 	class ParticleUpdater;
+
+	CU_DeclareCUSmartPtr( castor3d, CpuParticleSystem, C3D_API );
 	/**
 	*\~english
 	*\brief
@@ -179,14 +181,13 @@ namespace castor3d
 	*/
 	using ParticleFactory = castor::Factory< CpuParticleSystem
 		, castor::String
-		, castor::UniquePtr< CpuParticleSystem >
-		, std::function< castor::UniquePtr< CpuParticleSystem >( ParticleSystem & ) > >;
+		, CpuParticleSystemUPtr
+		, std::function< CpuParticleSystemUPtr( ParticleSystem & ) > >;
 
 	template< ParticleFormat Type >
 	struct ElementTyper;
 	
 	CU_DeclareCUSmartPtr( castor3d, ComputeParticleSystem, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, CpuParticleSystem, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, ParticleElementDeclaration, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, ParticleEmitter, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, ParticleSystem, C3D_API );

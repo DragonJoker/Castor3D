@@ -62,6 +62,7 @@ namespace castor3d
 			, Material const & newMaterial );
 		C3D_API void update( CpuUpdater & updater );
 		C3D_API void update( GpuUpdater & updater );
+		C3D_API bool hasNodes( LightingModelID lightingModelId )const;
 
 		C3D_API crg::FramePass const & createVertexTransformPass( crg::FrameGraph & graph );
 
@@ -106,6 +107,7 @@ namespace castor3d
 		std::vector< SceneCuller * > m_cullers;
 		bool m_dirty{ true };
 		VertexTransformingUPtr m_vertexTransform;
+		std::map< LightingModelID, size_t > m_lightingModels;
 	};
 }
 

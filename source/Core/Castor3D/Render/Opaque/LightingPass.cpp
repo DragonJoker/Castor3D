@@ -126,10 +126,6 @@ namespace castor3d
 			{
 				m_lightPass->enableLight( camera, *light );
 			}
-			else
-			{
-				m_lightPass->disableLight( camera, *light );
-			}
 		}
 	}
 

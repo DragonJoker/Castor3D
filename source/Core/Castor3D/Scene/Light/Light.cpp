@@ -28,7 +28,7 @@ namespace castor3d
 	}
 
 	void Light::fillBuffer( uint32_t index
-		, LightBuffer::LightData & data )
+		, LightBufferData & data )
 	{
 		m_bufferIndex = index;
 		m_category->fillBuffer( data );

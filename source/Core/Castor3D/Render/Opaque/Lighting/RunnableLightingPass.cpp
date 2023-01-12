@@ -60,15 +60,29 @@ namespace castor3d
 	void RunnableLightingPass::enableLight( Camera const & camera
 		, Light const & light )
 	{
-		auto & pipeline = doFindPipeline( light );
-		pipeline.addLight( camera, light );
+		for ( auto lightingModelId : m_scene.getLightingModelsID() )
+		{
+			if ( m_scene.hasObjects( lightingModelId ) )
+			{
+				auto & pipeline = doFindPipeline( light
+					, lightingModelId );
+				pipeline.addLight( camera, light );
+			}
+		}
 	}
 
 	void RunnableLightingPass::disableLight( Camera const & camera
 		, Light const & light )
 	{
-		auto & pipeline = doFindPipeline( light );
-		pipeline.removeLight( camera, light );
+		for ( auto lightingModelId : m_scene.getLightingModelsID() )
+		{
+			if ( m_scene.hasObjects( lightingModelId ) )
+			{
+				auto & pipeline = doFindPipeline( light
+					, lightingModelId );
+				pipeline.removeLight( camera, light );
+			}
+		}
 	}
 
 	void RunnableLightingPass::resetCommandBuffer()
@@ -100,9 +114,9 @@ namespace castor3d
 		{
 			m_renderPasses.resize( 4u );
 			m_renderPasses[getLightRenderPassIndex( false, LightType::eDirectional )] = doCreateRenderPass( false, false, m_lpResult );
-			m_renderPasses[getLightRenderPassIndex( false, LightType::eSpot )] = doCreateRenderPass( false, true, m_lpResult );
+			m_renderPasses[getLightRenderPassIndex( false, LightType::eMax )] = doCreateRenderPass( false, true, m_lpResult );
 			m_renderPasses[getLightRenderPassIndex( true, LightType::eDirectional )] = doCreateRenderPass( true, false, m_lpResult );
-			m_renderPasses[getLightRenderPassIndex( true, LightType::eSpot )] = doCreateRenderPass( true, true, m_lpResult );
+			m_renderPasses[getLightRenderPassIndex( true, LightType::eMax )] = doCreateRenderPass( true, true, m_lpResult );
 		}
 
 		if ( m_stencilRenderPasses.empty() )
@@ -373,9 +387,10 @@ namespace castor3d
 		return result;
 	}
 
-	LightsPipeline & RunnableLightingPass::doFindPipeline( Light const & light )
+	LightsPipeline & RunnableLightingPass::doFindPipeline( Light const & light
+		, LightingModelID lightingModelId )
 	{
-		LightPipelineConfig config{ m_scene.getPassesType()
+		LightPipelineConfig config{ lightingModelId
 			, m_scene.getFlags()
 			, light };
 		auto hash = config.makeHash();

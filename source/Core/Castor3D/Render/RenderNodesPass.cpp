@@ -259,8 +259,9 @@ namespace castor3d
 	PipelineFlags RenderNodesPass::createPipelineFlags( PassComponentCombine components
 		, BlendMode colourBlendMode
 		, BlendMode alphaBlendMode
-		, RenderPassTypeID renderPassTypeID
-		, PassTypeID passTypeID
+		, RenderPassTypeID renderPassTypeId
+		, LightingModelID lightingModelId
+		, BackgroundModelID backgroundModelId
 		, VkCompareOp alphaFunc
 		, VkCompareOp blendAlphaFunc
 		, TextureCombine const & textures
@@ -273,10 +274,11 @@ namespace castor3d
 		, GpuBufferOffsetT< castor::Point4f > const & morphTargets )const
 	{
 		auto result = PipelineFlags{ adjustFlags( components )
-			, passTypeID
+			, lightingModelId
+			, backgroundModelId
 			, colourBlendMode
 			, alphaBlendMode
-			, renderPassTypeID
+			, renderPassTypeId
 			, submeshFlags
 			, programFlags
 			, sceneFlags
@@ -318,7 +320,8 @@ namespace castor3d
 			, ( pass.getRenderPassInfo()
 				? pass.getRenderPassInfo()->id
 				: RenderPassTypeID{} )
-			, pass.getTypeID()
+			, pass.getLightingModelId()
+			, getScene().getBackgroundModelId()
 			, pass.getAlphaFunc()
 			, pass.getBlendAlphaFunc()
 			, textures
@@ -647,7 +650,8 @@ namespace castor3d
 				descriptorWrites.push_back( write );
 			}
 
-			doFillAdditionalDescriptor( descriptorWrites
+			doFillAdditionalDescriptor( pipeline.getFlags()
+				, descriptorWrites
 				, shadowMaps );
 			descriptors.set->setBindings( descriptorWrites );
 			descriptors.set->update();
@@ -812,7 +816,7 @@ namespace castor3d
 				, stageFlags ) );
 		}
 
-		doFillAdditionalBindings( addBindings );
+		doFillAdditionalBindings( flags, addBindings );
 		return addBindings;
 	}
 

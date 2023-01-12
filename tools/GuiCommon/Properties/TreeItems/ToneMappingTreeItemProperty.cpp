@@ -105,8 +105,8 @@ namespace GuiCommon
 
 		for ( auto & toneMapping : types )
 		{
-			auto name = make_wxString( toneMapping );
-			m_nameToChoice[toneMapping] = uint32_t( m_choices.size() );
+			auto name = make_wxString( toneMapping.key );
+			m_nameToChoice[toneMapping.key] = uint32_t( m_choices.size() );
 			name.Replace( wxT( " Tone Mapping" ), wxEmptyString );
 			m_choices.Add( name );
 		}

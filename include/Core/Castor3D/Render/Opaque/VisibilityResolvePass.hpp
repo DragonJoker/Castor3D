@@ -73,8 +73,9 @@ namespace castor3d
 		C3D_API PipelineFlags createPipelineFlags( PassComponentCombine components
 			, BlendMode colourBlendMode
 			, BlendMode alphaBlendMode
-			, RenderPassTypeID renderPassTypeID
-			, PassTypeID passTypeID
+			, RenderPassTypeID renderPassTypeId
+			, LightingModelID lightingModelId
+			, BackgroundModelID backgroundModelId
 			, VkCompareOp alphaFunc
 			, VkCompareOp blendAlphaFunc
 			, TextureCombine const & textures

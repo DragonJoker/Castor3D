@@ -138,7 +138,7 @@ namespace castor3d
 
 	void PointLight::updateShadow( int32_t index )
 	{
-		m_shadowMapIndex = index;
+		getLight().setShadowMapIndex( uint32_t( index ) );
 		m_position = getLight().getParent()->getDerivedPosition();
 
 		if ( m_position.isDirty() )
@@ -149,13 +149,13 @@ namespace castor3d
 		}
 	}
 
-	void PointLight::doFillBuffer( LightBuffer::LightData & data )const
+	void PointLight::doFillBuffer( LightBufferData & data )const
 	{
 		auto & point = data.specific.point;
 		auto position = getLight().getParent()->getDerivedPosition();
 
 		point.position = position;
-		point.attenuation = ( *m_attenuation );
+		point.attenuation = m_attenuation;
 	}
 
 	void PointLight::setAttenuation( castor::Point3f const & attenuation )

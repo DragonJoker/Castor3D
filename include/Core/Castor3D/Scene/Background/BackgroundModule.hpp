@@ -15,6 +15,7 @@ namespace castor3d
 	/**@name Background */
 	//@{
 
+	using BackgroundModelID = uint8_t;
 	/**
 	*\~english
 	*\brief

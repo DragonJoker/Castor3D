@@ -89,6 +89,7 @@ namespace castor3d
 			return ( ComponentModeFlag::eOcclusion
 				| ComponentModeFlag::eColour
 				| ComponentModeFlag::eDiffuseLighting
+				| ComponentModeFlag::eSpecularLighting
 				| ComponentModeFlag::eNormals );
 		}
 		/**@}*/
@@ -96,10 +97,12 @@ namespace castor3d
 	private:
 		using RenderNodesPass::update;
 
-		void doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const override;
+		void doFillAdditionalBindings( PipelineFlags const & flags
+			, ashes::VkDescriptorSetLayoutBindingArray & bindings )const override;
 		ashes::PipelineDepthStencilStateCreateInfo doCreateDepthStencilState( PipelineFlags const & flags )const override;
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
-		void doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
+		void doFillAdditionalDescriptor( PipelineFlags const & flags
+			, ashes::WriteDescriptorSetArray & descriptorWrites
 			, ShadowMapLightTypeArray const & shadowMaps )override;
 		SubmeshFlags doAdjustSubmeshFlags( SubmeshFlags flags )const override;
 		ProgramFlags doAdjustProgramFlags( ProgramFlags flags )const override;

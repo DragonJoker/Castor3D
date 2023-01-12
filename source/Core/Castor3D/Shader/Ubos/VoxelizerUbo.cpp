@@ -21,24 +21,20 @@ namespace castor3d
 			, ast::expr::ExprPtr expr
 			, bool enabled )
 			: StructInstance{ writer, std::move( expr ), enabled }
-			, gridConv{ getMember< sdw::Vec4 >( "gridConv" ) }
-			, radiance{ getMember< sdw::Vec4 >( "radiance" ) }
-			, other{ getMember< sdw::Vec4 >( "other" ) }
-			, status{ getMember< sdw::UVec4 >( "status" ) }
-			, worldToGrid{ gridConv.x() }
-			, gridToWorld{ gridConv.y() }
-			, clipToGrid{ gridConv.z() }
-			, gridToClip{ gridConv.w() }
-			, radianceMaxDistance{ radiance.x() }
-			, radianceMips{ radiance.y() }
-			, radianceNumCones{ writer.cast< sdw::UInt >( radiance.z() ) }
-			, radianceNumConesInv{ radiance.w() }
-			, gridCenter{ other.xyz() }
-			, rayStepSize{ other.w() }
-			, enabled{ status.x() }
-			, enableConservativeRasterization{ status.y() }
-			, enableOcclusion{ status.z() }
-			, enableSecondaryBounce{ status.w() }
+			, worldToGrid{ getMember< sdw::Float >( "worldToGrid" ) }
+			, gridToWorld{ getMember< sdw::Float >( "gridToWorld" ) }
+			, clipToGrid{ getMember< sdw::Float >( "clipToGrid" ) }
+			, gridToClip{ getMember< sdw::Float >( "gridToClip" ) }
+			, radianceMaxDistance{ getMember< sdw::Float >( "radianceMaxDistance" ) }
+			, radianceMips{ getMember< sdw::Float >( "radianceMips" ) }
+			, radianceNumCones{ getMember< sdw::UInt >( "radianceNumCones" ) }
+			, radianceNumConesInv{ getMember< sdw::Float >( "radianceNumConesInv" ) }
+			//, pad{ getMember< sdw::Vec3 >( "pad" ) }
+			, rayStepSize{ getMember< sdw::Float >( "rayStepSize" ) }
+			, enabled{ getMember< sdw::UInt >( "enabled" ) }
+			, enableConservativeRasterization{ getMember< sdw::UInt >( "enableConservativeRasterization" ) }
+			, enableOcclusion{ getMember< sdw::UInt >( "enableOcclusion" ) }
+			, enableSecondaryBounce{ getMember< sdw::UInt >( "enableSecondaryBounce" ) }
 		{
 		}
 
@@ -49,10 +45,23 @@ namespace castor3d
 
 			if ( result->empty() )
 			{
-				result->declMember( "gridConv", ast::type::Kind::eVec4F );
-				result->declMember( "radiance", ast::type::Kind::eVec4F );
-				result->declMember( "other", ast::type::Kind::eVec4F );
-				result->declMember( "status", ast::type::Kind::eVec4U );
+				result->declMember( "worldToGrid", ast::type::Kind::eFloat );
+				result->declMember( "gridToWorld", ast::type::Kind::eFloat );
+				result->declMember( "clipToGrid", ast::type::Kind::eFloat );
+				result->declMember( "gridToClip", ast::type::Kind::eFloat );
+
+				result->declMember( "radianceMaxDistance", ast::type::Kind::eFloat );
+				result->declMember( "radianceMips", ast::type::Kind::eFloat );
+				result->declMember( "radianceNumCones", ast::type::Kind::eUInt32 );
+				result->declMember( "radianceNumConesInv", ast::type::Kind::eFloat );
+
+				result->declMember( "pad", ast::type::Kind::eVec3F );
+				result->declMember( "rayStepSize", ast::type::Kind::eFloat );
+
+				result->declMember( "enabled", ast::type::Kind::eUInt32 );
+				result->declMember( "enableConservativeRasterization", ast::type::Kind::eUInt32 );
+				result->declMember( "enableOcclusion", ast::type::Kind::eUInt32 );
+				result->declMember( "enableSecondaryBounce", ast::type::Kind::eUInt32 );
 			}
 
 			return result;
@@ -99,19 +108,19 @@ namespace castor3d
 	{
 		CU_Require( m_ubo );
 		auto & voxelData = m_ubo.getData();
-		voxelData.gridConv->x = worldToGrid;
-		voxelData.gridConv->y = 1.0f / worldToGrid;
-		voxelData.gridConv->z = float( voxelGridSize );
-		voxelData.gridConv->w = 1.0f / float( voxelGridSize );
-		voxelData.radiance->x = voxelConfig.maxDistance;
-		voxelData.radiance->y = float( castor::getBitSize( voxelGridSize ) );
-		voxelData.radiance->z = float( voxelConfig.numCones.value() );
-		voxelData.radiance->w = 1.0f / voxelData.radiance->z;
-		voxelData.other->w = voxelConfig.rayStepSize;
-		voxelData.status->x = voxelConfig.enabled ? 1u : 0u;
-		voxelData.status->y = voxelConfig.enableConservativeRasterization ? 1u : 0u;
-		voxelData.status->z = voxelConfig.enableOcclusion ? 1u : 0u;
-		voxelData.status->w = voxelConfig.enableSecondaryBounce ? 1u : 0u;
+		voxelData.worldToGrid = worldToGrid;
+		voxelData.gridToWorld = 1.0f / worldToGrid;
+		voxelData.clipToGrid = float( voxelGridSize );
+		voxelData.gridToClip = 1.0f / float( voxelGridSize );
+		voxelData.radianceMaxDistance = voxelConfig.maxDistance;
+		voxelData.radianceMips = float( castor::getBitSize( voxelGridSize ) );
+		voxelData.radianceNumCones = voxelConfig.numCones.value();
+		voxelData.radianceNumConesInv = 1.0f / float( voxelData.radianceNumCones );
+		voxelData.rayStepSize = voxelConfig.rayStepSize;
+		voxelData.enabled = voxelConfig.enabled ? 1u : 0u;
+		voxelData.enableConservativeRasterization = voxelConfig.enableConservativeRasterization ? 1u : 0u;
+		voxelData.enableOcclusion = voxelConfig.enableOcclusion ? 1u : 0u;
+		voxelData.enableSecondaryBounce = voxelConfig.enableSecondaryBounce ? 1u : 0u;
 	}
 
 	//*********************************************************************************************

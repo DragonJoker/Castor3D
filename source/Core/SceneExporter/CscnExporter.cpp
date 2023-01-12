@@ -1069,7 +1069,7 @@ namespace castor3d::exporter
 				{
 					auto name = filePath.getFileName();
 					stream << "// Global configuration\n";
-					stream << "materials " << scene.getPassesName() << "\n";
+					stream << "materials " << scene.getDefaultLightingModelName() << "\n";
 					stream << "\n";
 					stream << "scene \"" << name << "\"\n";
 					stream << "{\n";

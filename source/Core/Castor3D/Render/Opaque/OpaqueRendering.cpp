@@ -288,6 +288,16 @@ namespace castor3d
 		return getOwner()->getResult();
 	}
 
+	Texture const & OpaqueRendering::getScatteringLightingResult()const
+	{
+		if ( m_deferredRendering )
+		{
+			return m_deferredRendering->getLightScattering();
+		}
+
+		return getOwner()->getResult();
+	}
+
 	Texture const & OpaqueRendering::getBaseColourResult()const
 	{
 		if ( m_opaquePassResult )

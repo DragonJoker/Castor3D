@@ -14,29 +14,25 @@ namespace toon
 {
 	struct ToonPbrPass
 	{
-		static castor::String const Type;
-
-		static castor3d::PassSPtr create( castor3d::Material & parent )
+		static castor3d::PassSPtr create( castor3d::LightingModelID lightingModelId
+			, castor3d::Material & parent )
 		{
-			auto result = castor3d::PbrPass::create( parent );
+			auto result = castor3d::PbrPass::create( lightingModelId, parent );
 			result->createComponent< EdgesComponent >();
 			return result;
 		}
 	};
-	castor::String const ToonPbrPass::Type = cuT( "toon_pbr" );
 
 	struct ToonPhongPass
 	{
-		static castor::String const Type;
-
-		static castor3d::PassSPtr create( castor3d::Material & parent )
+		static castor3d::PassSPtr create( castor3d::LightingModelID lightingModelId
+			, castor3d::Material & parent )
 		{
-			auto result = castor3d::PhongPass::create( parent );
+			auto result = castor3d::PhongPass::create( lightingModelId, parent );
 			result->createComponent< EdgesComponent >();
 			return result;
 		}
 	};
-	castor::String const ToonPhongPass::Type = cuT( "toon_blinn_phong" );
 }
 
 extern "C"
@@ -65,16 +61,14 @@ extern "C"
 	C3D_ToonMaterial_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * plugin )
 	{
 		engine->registerPassComponent< toon::EdgesComponent >();
-		engine->getPassFactory().registerType( toon::ToonPhongPass::Type
-			, { toon::shader::ToonPhongLightingModel::getName()
-				, toon::ToonPhongPass::create
-				, &toon::shader::ToonPhongLightingModel::create
-				, false } );
-		engine->getPassFactory().registerType( toon::ToonPbrPass::Type
-			, { toon::shader::ToonPbrLightingModel::getName()
-				, toon::ToonPbrPass::create
-				, &toon::shader::ToonPbrLightingModel::create
-				, true } );
+		engine->registerPassModels( { toon::shader::ToonPhongLightingModel::getName()
+			, toon::ToonPhongPass::create
+			, &toon::shader::ToonPhongLightingModel::create
+			, false } );
+		engine->registerPassModels( { toon::shader::ToonPbrLightingModel::getName()
+			, toon::ToonPbrPass::create
+			, &toon::shader::ToonPbrLightingModel::create
+			, true } );
 		engine->registerSpecificsBuffer( toon::shader::ToonProfile::getName()
 			, { &toon::shader::ToonProfiles::create
 				, &toon::shader::ToonProfiles::update
@@ -84,8 +78,8 @@ extern "C"
 	C3D_ToonMaterial_API void OnUnload( castor3d::Engine * engine )
 	{
 		engine->unregisterSpecificsBuffer( toon::shader::ToonProfile::getName() );
-		engine->getPassFactory().unregisterType( toon::ToonPbrPass::Type );
-		engine->getPassFactory().unregisterType( toon::ToonPhongPass::Type );
+		engine->unregisterPassModels( toon::shader::ToonPbrLightingModel::getName() );
+		engine->unregisterPassModels( toon::shader::ToonPhongLightingModel::getName() );
 		engine->unregisterPassComponent( toon::EdgesComponent::TypeName );
 	}
 }

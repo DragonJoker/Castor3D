@@ -34,7 +34,7 @@ namespace convert
 	{
 		castor::Path input;
 		castor::String output;
-		castor::String passType{ castor3d::PbrPass::Type };
+		castor::String passType{ castor3d::PbrPass::LightingModel };
 		castor3d::exporter::ExportOptions options;
 		castor3d::Parameters params;
 	};
@@ -140,11 +140,11 @@ namespace convert
 
 			if ( value == "blinn_phong" )
 			{
-				options.passType = castor3d::PhongPass::Type;
+				options.passType = castor3d::PhongPass::LightingModel;
 			}
 			else if ( value == "pbr" )
 			{
-				options.passType = castor3d::PbrPass::Type;
+				options.passType = castor3d::PbrPass::LightingModel;
 			}
 			else
 			{
@@ -196,7 +196,7 @@ namespace convert
 		if ( !overridePassType
 			&& ( extension == "gltf" || extension == "glb" ) )
 		{
-			options.passType = castor3d::PbrPass::Type;
+			options.passType = castor3d::PbrPass::LightingModel;
 		}
 
 		return true;
@@ -417,7 +417,7 @@ int main( int argc, char * argv[] )
 					castor3d::Scene scene{ name, engine };
 					scene.setAmbientLight( castor::RgbColour::fromComponents( 1.0f, 1.0f, 1.0f ) );
 					scene.setBackgroundColour( castor::RgbColour::fromComponents( 0.5f, 0.5f, 0.5f ) );
-					scene.setPassesType( scene.getEngine()->getPassFactory().getNameId( options.passType ) );
+					scene.setDefaultLightingModel( scene.getEngine()->getPassFactory().getNameId( options.passType ) );
 					castor3d::SceneImporter importer{ *scene.getEngine() };
 
 					if ( !importer.import( scene

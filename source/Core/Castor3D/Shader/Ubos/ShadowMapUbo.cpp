@@ -65,19 +65,19 @@ namespace castor3d
 			return length( pos - m_lightPosFarPlane.xyz() ) / m_lightPosFarPlane.w();
 		}
 
-		DirectionalLight ShadowMapData::getDirectionalLight( LightingModel const & lighting )const
+		DirectionalLight ShadowMapData::getDirectionalLight( Lights & lights )const
 		{
-			return lighting.getDirectionalLight( m_lightIndex );
+			return lights.getDirectionalLight( m_lightIndex );
 		}
 
-		PointLight ShadowMapData::getPointLight( LightingModel const & lighting )const
+		PointLight ShadowMapData::getPointLight( Lights & lights )const
 		{
-			return lighting.getPointLight( m_lightIndex );
+			return lights.getPointLight( m_lightIndex );
 		}
 
-		SpotLight ShadowMapData::getSpotLight( LightingModel const & lighting )const
+		SpotLight ShadowMapData::getSpotLight( Lights & lights )const
 		{
-			return lighting.getSpotLight( m_lightIndex );
+			return lights.getSpotLight( m_lightIndex );
 		}
 	}
 

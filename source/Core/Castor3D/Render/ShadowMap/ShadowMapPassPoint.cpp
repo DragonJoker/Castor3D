@@ -273,19 +273,21 @@ namespace castor3d
 		C3D_ShadowMap( writer
 			, index++
 			, RenderPipeline::eBuffers );
-		auto lightingModel = shader::LightingModel::createModel( *getEngine()
+		shader::Lights lights{ *getEngine()
+			, flags.lightingModelId
+			, flags.backgroundModelId
 			, materials
-			, utils
 			, brdf
-			, shader::getLightingModelName( *getEngine(), flags.passType )
-			, LightType::ePoint
-			, lightsIndex
-			, RenderPipeline::eBuffers
-			, false
-			, shader::ShadowOptions{ SceneFlag::eNone, true, false }
+			, utils
+			, shader::ShadowOptions{ SceneFlag::eNone, needsVsm, false }
 			, nullptr
-			, index
-			, RenderPipeline::eBuffers );
+			, LightType::ePoint
+			, false /* lightsUbo */
+			, lightsIndex /* lightBinding */
+			, RenderPipeline::eBuffers /* lightSet */
+			, index /* shadowMapBinding */
+			, RenderPipeline::eBuffers /* shadowMapSet */
+			, false /* enableVolumetric */ };
 
 		auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
 			, 0u
@@ -352,17 +354,17 @@ namespace castor3d
 				if ( needsRsm )
 				{
 					auto light = writer.declLocale( "light"
-						, c3d_shadowMapData.getPointLight( *lightingModel ) );
+						, c3d_shadowMapData.getPointLight( lights ) );
 					auto lightToVertex = writer.declLocale( "lightToVertex"
-						, light.position - in.worldPosition.xyz() );
+						, light.position() - in.worldPosition.xyz() );
 					auto distance = writer.declLocale( "distance"
 						, length( lightToVertex ) );
 					auto attenuation = writer.declLocale( "attenuation"
 						, light.getAttenuationFactor( distance ) );
 					components.colour *= in.colour;
 					outFlux.rgb() = ( components.colour
-							* light.base.colour
-							* light.base.intensity.x()
+							* light.base().colour()
+							* light.base().intensity().x()
 							* clamp( dot( lightToVertex / distance, components.normal ), 0.0_f, 1.0_f ) )
 						/ attenuation;
 					outNormal.xyz() = components.normal;

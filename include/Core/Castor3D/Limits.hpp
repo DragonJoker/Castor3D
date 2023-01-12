@@ -10,11 +10,19 @@ namespace castor3d
 {
 	/**
 	*\name
+	*	Shaders.
+	*/
+	//@{
+	// Maximum different lighting models.
+	static uint32_t constexpr MaxLightingModels = 64u;
+	// Maximum different background models.
+	static uint32_t constexpr MaxBackgroundModels = 64u;
+	//@}
+	/**
+	*\name
 	*	Materials.
 	*/
 	//@{
-	// Maximum different pass type IDs.
-	static uint32_t constexpr MaxPassTypes = 64u;
 	// Maximum textures in a pass.
 	static uint32_t constexpr MaxPassTextures = 8u;
 	// Maximum passes in a material.
