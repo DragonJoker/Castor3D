@@ -22,6 +22,7 @@
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp"
+#include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
@@ -123,7 +124,8 @@ namespace castor3d
 		return flags;
 	}
 
-	void VoxelizePass::doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const
+	void VoxelizePass::doFillAdditionalBindings( PipelineFlags const & flags
+		, ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
 		auto sceneFlags = doAdjustSceneFlags( m_scene.getFlags() );
 		auto index = uint32_t( GlobalBuffersIdx::eCount );
@@ -184,7 +186,8 @@ namespace castor3d
 		}
 	}
 
-	void VoxelizePass::doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
+	void VoxelizePass::doFillAdditionalDescriptor( PipelineFlags const & flags
+		, ashes::WriteDescriptorSetArray & descriptorWrites
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
 		auto sceneFlags = doAdjustSceneFlags( m_scene.getFlags() );
@@ -486,17 +489,19 @@ namespace castor3d
 		auto output( writer.declArrayStorageBuffer< shader::Voxel >( "voxels"
 			, addIndex++
 			, RenderPipeline::eBuffers ) );
-		auto lightingModel = shader::LightingModel::createDiffuseModel( *getEngine()
+		shader::Lights lights{ *getEngine()
+			, flags.lightingModelId
+			, flags.backgroundModelId
 			, materials
-			, utils
 			, brdf
-			, shader::getLightingModelName( *getEngine(), flags.passType )
-			, lightsIndex
-			, RenderPipeline::eBuffers
+			, utils
 			, shader::ShadowOptions{ flags.getShadowFlags(), true, false }
-			, addIndex
-			, RenderPipeline::eBuffers
-			, false );
+			, nullptr
+			, lightsIndex /* lightBinding */
+			, RenderPipeline::eBuffers /* lightSet */
+			, addIndex /* shadowMapBinding */
+			, RenderPipeline::eBuffers /* shadowMapSet */
+			, false /* enableVolumetric */ };
 
 		auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
 			, 0u
@@ -542,20 +547,27 @@ namespace castor3d
 
 					IF( writer, material.lighting != 0_u )
 					{
-						auto worldEye = writer.declLocale( "worldEye"
-							, c3d_sceneData.cameraPosition );
-						auto surface = writer.declLocale( "surface"
-							, shader::Surface{ in.fragCoord.xyz()
-								, in.viewPosition
-								, in.worldPosition
-								, components.normal } );
+						auto combined = writer.declLocale( "combined"
+							, vec3( 0.0_f ) );
+						auto lightSurface = shader::LightSurface::create( writer
+							, utils
+							, "lightSurface"
+							, c3d_sceneData.cameraPosition
+							, in.worldPosition.xyz()
+							, in.worldPosition.xyz()
+							, in.fragCoord.xyz()
+							, normalize( components.normal )
+							, components.specular
+							, components
+							, true, true, false );
+						lights.computeCombinedDif( components
+							, c3d_sceneData
+							, lightSurface
+							, modelData.isShadowReceiver()
+							, combined );
 						color += vec3( components.occlusion )
 							* components.colour
-							* lightingModel->computeCombinedDiffuse( components
-								, c3d_sceneData
-								, surface
-								, worldEye
-								, modelData.isShadowReceiver() );
+							* combined;
 					}
 					FI;
 

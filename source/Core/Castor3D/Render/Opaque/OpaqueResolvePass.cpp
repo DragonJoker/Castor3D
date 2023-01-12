@@ -17,6 +17,7 @@
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Background/Background.hpp"
+#include "Castor3D/Scene/Light/LightModule.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslBackground.hpp"
@@ -24,6 +25,7 @@
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslCookTorranceBRDF.hpp"
 #include "Castor3D/Shader/Shaders/GlslFog.hpp"
+#include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslPassShaders.hpp"
@@ -70,7 +72,8 @@ namespace castor3d
 			{
 			}
 
-			explicit ResolveProgramConfig( uint32_t value )
+			explicit ResolveProgramConfig( Scene const & scene
+				, uint32_t value )
 				: hasSsao{ ( ( value >> 3 ) % 2 ) != 0 }
 				, hasSssss{ ( ( value >> 2 ) % 2 ) != 0 }
 				, hasDiffuseGi{ ( ( value >> 1 ) % 2 ) != 0 }
@@ -145,8 +148,9 @@ namespace castor3d
 		static ShaderPtr createPixelProgram( RenderSystem const & renderSystem
 			, Scene const & scene
 			, ResolveProgramConfig const & config
-			, PassTypeID passType
-			, VkExtent3D const & size )
+			, VkExtent3D const & size
+			, LightingModelID lightingModelId
+			, BackgroundModelID backgroundModelId )
 		{
 			using namespace sdw;
 			FragmentWriter writer;
@@ -195,18 +199,22 @@ namespace castor3d
 
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
-			shader::CookTorranceBRDF cookTorrance{ writer, utils, brdf };
-
-			auto lightingModel = utils.createLightingModel( *renderSystem.getEngine()
+			shader::CookTorranceBRDF cookTorrance{ writer, brdf };
+			
+			shader::Lights lights{ *renderSystem.getEngine()
+				, lightingModelId
+				, backgroundModelId
 				, materials
 				, brdf
-				, shader::getLightingModelName( *renderSystem.getEngine(), passType )
+				, utils
 				, {}
-				, nullptr
-				, true );
+				, nullptr };
 			auto index = uint32_t( ResolveBind::eEnvironment );
-			auto reflections = lightingModel->getReflectionModel( index
-				, 0u );
+			shader::ReflectionModel reflections{ writer
+				, utils
+				, index
+				, 0u
+				, lights.hasIblSupport() };
 			auto backgroundModel = shader::BackgroundModel::createModel( scene
 				, writer
 				, utils
@@ -239,6 +247,13 @@ namespace castor3d
 						, writer.cast< UInt >( modelData.getMaterialId() ) );
 					auto material = writer.declLocale( "material"
 						, materials.getMaterial( materialId ) );
+
+					IF( writer, material.lightingModel != uint32_t( lightingModelId ) )
+					{
+						writer.demote();
+					}
+					FI;
+
 					auto nmlOcc = writer.declLocale( "nmlOcc"
 						, c3d_mapNmlOcc.lod( vtx_texture, 0.0_f ) );
 					auto colMtl = writer.declLocale( "colMtl"
@@ -257,12 +272,12 @@ namespace castor3d
 						, colMtl.rgb() );
 					auto surface = writer.declLocale( "surface"
 						, shader::Surface{ vec3( in.fragCoord.xy(), depth )
-							, vec3( 0.0_f )
+							, c3d_gpInfoData.projToView( utils, vtx_texture, depth )
 							, c3d_gpInfoData.projToWorld( utils, vtx_texture, depth )
-							, nmlOcc.rgb()
+							, normalize( nmlOcc.rgb() )
 							, vec3( vtx_texture, 0.0_f ) } );
 
-					IF( writer, material.lighting != 0_u )
+					if ( auto lightingModel = lights.getLightingModel() )
 					{
 						auto spcRgh = writer.declLocale( "spcRgh"
 							, c3d_mapSpcRgh.lod( vtx_texture, 0.0_f ) );
@@ -304,9 +319,19 @@ namespace castor3d
 							, surface
 							, utils
 							, c3d_sceneData.cameraPosition );
+						auto lightSurface = shader::LightSurface::create( writer
+							, utils
+							, "lightSurface"
+							, c3d_sceneData.cameraPosition
+							, surface.worldPosition.xyz()
+							, surface.viewPosition.xyz()
+							, surface.clipPosition
+							, surface.normal
+							, components.specular
+							, components );
 
 						auto incident = writer.declLocale( "incident"
-							, reflections->computeIncident( surface.worldPosition.xyz(), c3d_sceneData.cameraPosition ) );
+							, reflections.computeIncident( lightSurface.worldPosition(), c3d_sceneData.cameraPosition ) );
 						auto reflectedDiffuse = writer.declLocale( "reflectedDiffuse"
 							, vec3( 0.0_f ) );
 						auto reflectedSpecular = writer.declLocale( "reflectedSpecular"
@@ -317,13 +342,12 @@ namespace castor3d
 							, vec3( 0.0_f ) );
 						auto sheenReflected = writer.declLocale( "sheenReflected"
 							, vec3( 0.0_f ) );
-						reflections->computeCombined( components
-							, incident
+						reflections.computeCombined( components
+							, lightSurface
 							, *backgroundModel
 							, envMapIndex
 							, components.hasReflection
 							, components.refractionRatio
-							, directAmbient
 							, reflectedDiffuse
 							, reflectedSpecular
 							, refracted
@@ -333,12 +357,10 @@ namespace castor3d
 							, config.hasDiffuseGi ? lightIndirectDiffuse : vec3( 1.0_f ) );
 						auto indirectDiffuse = writer.declLocale( "indirectDiffuse"
 							, ( config.hasDiffuseGi
-								? cookTorrance.computeDiffuse( lightIndirectDiffuse
-									, c3d_sceneData.cameraPosition
-									, components.normal
-									, components.specular
-									, components.metalness
-									, surface )
+								? cookTorrance.computeDiffuse( normalize( lightIndirectDiffuse )
+									, length( lightIndirectDiffuse )
+									, lightSurface.difF()
+									, components.metalness )
 								: vec3( 0.0_f ) ) );
 
 						IF( writer, material.hasTransmission != 0_u )
@@ -367,18 +389,13 @@ namespace castor3d
 								, sheenReflected )
 							, 1.0_f );
 					}
-					ELSE
+					else
 					{
 						outColour = vec4( albedo, 1.0_f );
 					}
-					FI;
 
 					IF( writer, c3d_sceneData.fogType != UInt( uint32_t( FogType::eDisabled ) ) )
 					{
-						surface.viewPosition = vec4( c3d_gpInfoData.projToView( utils
-								, vtx_texture
-								, depth )
-							, 1.0_f );
 						outColour = fog.apply( c3d_sceneData.getBackgroundColour( c3d_hdrConfigData )
 							, outColour
 							, surface.worldPosition.xyz()
@@ -414,7 +431,9 @@ namespace castor3d
 		, Texture const & result
 		, SceneUbo const & sceneUbo
 		, GpInfoUbo const & gpInfoUbo
-		, HdrConfigUbo const & hdrConfigUbo )
+		, HdrConfigUbo const & hdrConfigUbo
+		, LightingModelID lightingModelId
+		, BackgroundModelID backgroundModelId )
 		: OwnedBy< Engine >{ *device.renderSystem.getEngine() }
 		, m_device{ device }
 		, m_scene{ scene }
@@ -428,7 +447,15 @@ namespace castor3d
 		, m_ssaoResult{ ssaoResult }
 		, m_subsurfaceScattering{ subsurfaceScattering }
 		, m_lighting{ lighting }
+		, m_lightingModelId{ lightingModelId }
+		, m_backgroundModelId{ backgroundModelId }
 	{
+		auto & engine = *getEngine();
+		auto & bmFactory = engine.getBackgroundModelFactory();
+		auto & passFactory = engine.getPassFactory();
+		m_name = "Resolve[" + bmFactory.getIdType( m_backgroundModelId )
+			+ "][" + passFactory.getIdName( m_lightingModelId )
+			+ "]";
 		m_programs.resize( dropqrslv::ResolveProgramConfig::MaxProgramsCount );
 		m_lastPass = &doCreatePass( graph, previousPasses, progress );
 	}
@@ -439,13 +466,19 @@ namespace castor3d
 
 		if ( !m_programs[programIndex] )
 		{
-			dropqrslv::ResolveProgramConfig config{ programIndex };
+			auto name = "Opaque" + m_name + "[" + std::to_string( programIndex ) + "]";
+			dropqrslv::ResolveProgramConfig config{ m_scene, programIndex };
 			m_programs[programIndex] = std::make_unique< Program >( ShaderModule{ VK_SHADER_STAGE_VERTEX_BIT
-					, "OpaqueResolve" + std::to_string( programIndex )
+					, name
 					, dropqrslv::createVertexProgram() }
 				, ShaderModule{ VK_SHADER_STAGE_FRAGMENT_BIT
-					, "OpaqueResolve" + std::to_string( programIndex )
-					, dropqrslv::createPixelProgram( m_device.renderSystem, m_scene, config, m_scene.getPassesType(), m_result.getExtent() ) } );
+					, name
+					, dropqrslv::createPixelProgram( m_device.renderSystem
+						, m_scene
+						, config
+						, m_result.getExtent()
+						, m_lightingModelId
+						, m_backgroundModelId ) } );
 			m_programs[programIndex]->stages = { makeShaderState( m_device, m_programs[programIndex]->vertexShader )
 				, makeShaderState( m_device, m_programs[programIndex]->pixelShader ) };
 		}
@@ -461,7 +494,7 @@ namespace castor3d
 		auto & engine = *getEngine();
 		auto & passBuffer = engine.getMaterialCache().getPassBuffer();
 		auto & modelBuffer = m_scene.getModelBuffer().getBuffer();
-		auto & pass = graph.createPass( "Resolve"
+		auto & pass = graph.createPass( m_name
 			, [this, progress, &engine]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
@@ -471,6 +504,7 @@ namespace castor3d
 					.texcoordConfig( crg::Texcoord{} )
 					.renderSize( makeExtent2D( m_result.getExtent() ) )
 					.passIndex( &m_programIndex )
+					.enabled( &m_enabled )
 					.programCreator( { dropqrslv::ResolveProgramConfig::MaxProgramsCount
 						, [this]( uint32_t programIndex )
 						{
@@ -555,16 +589,20 @@ namespace castor3d
 	{
 		dropqrslv::ResolveProgramConfig config{ m_scene, m_ssao };
 		m_programIndex = config.index;
+		m_enabled = m_scene.hasObjects( m_lightingModelId );
 	}
 
 	void OpaqueResolvePass::accept( PipelineVisitorBase & visitor )
 	{
-		auto & program = m_programs[m_programIndex];
-
-		if ( program )
+		if ( m_enabled )
 		{
-			visitor.visit( program->vertexShader );
-			visitor.visit( program->pixelShader );
+			auto & program = m_programs[m_programIndex];
+
+			if ( program )
+			{
+				visitor.visit( program->vertexShader );
+				visitor.visit( program->pixelShader );
+			}
 		}
 	}
 }

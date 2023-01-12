@@ -26,6 +26,42 @@ namespace castor3d
 		{
 		}
 
+		GlobalIllumination::GlobalIllumination( sdw::ShaderWriter & writer
+			, Utils & utils
+			, uint32_t & bindingIndex
+			, uint32_t setIndex
+			, SceneFlags sceneFlags
+			, bool deferred )
+			: GlobalIllumination{ writer, utils, deferred }
+		{
+			declare( bindingIndex
+				, setIndex
+				, sceneFlags );
+		}
+
+		GlobalIllumination::GlobalIllumination( sdw::ShaderWriter & writer
+			, Utils & utils
+			, uint32_t vctUboBindingIndex
+			, uint32_t lpvUboBindingIndex
+			, uint32_t llpvUboBindingIndex
+			, uint32_t & vctTexBindingIndex
+			, uint32_t & lpvTexBindingIndex
+			, uint32_t & llpvTexBindingIndex
+			, uint32_t texSetIndex
+			, SceneFlags sceneFlags
+			, bool deferred )
+			: GlobalIllumination{ writer, utils, deferred }
+		{
+			declare( vctUboBindingIndex
+				, lpvUboBindingIndex
+				, llpvUboBindingIndex
+				, vctTexBindingIndex
+				, lpvTexBindingIndex
+				, llpvTexBindingIndex
+				, texSetIndex
+				, sceneFlags );
+		}
+
 		void GlobalIllumination::declare( uint32_t & bindingIndex
 			, uint32_t setIndex
 			, SceneFlags sceneFlags )
@@ -123,7 +159,8 @@ namespace castor3d
 				, sdw::InVec3{ m_writer, "direction" } );
 
 			m_computeLPVRadiance = m_writer.implementFunction< sdw::Vec4 >( "computeLPVRadiance"
-				, [this]( Surface surface
+				, [this]( sdw::Vec3 const & wsNormal
+					, sdw::Vec3 const & wsPosition
 					, LpvGridData lpvGridData )
 				{
 					auto c3d_lpvAccumulatorR = m_writer.getVariable< sdw::CombinedImage3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator" ) );
@@ -131,16 +168,17 @@ namespace castor3d
 					auto c3d_lpvAccumulatorB = m_writer.getVariable< sdw::CombinedImage3DRgba16 >( getTextureName( LpvTexture::eB, "Accumulator" ) );
 
 					auto SHintensity = m_writer.declLocale( "SHintensity"
-						, m_evalSH( -surface.normal ) );
+						, m_evalSH( -wsNormal ) );
 					auto lpvCellCoords = m_writer.declLocale( "lpvCellCoords"
-						, lpvGridData.worldToTex( surface.worldPosition.xyz() ) );
+						, lpvGridData.worldToTex( wsPosition ) );
 					auto lpvIntensity = m_writer.declLocale( "lpvIntensity"
 						, vec3( dot( SHintensity, c3d_lpvAccumulatorR.sample( lpvCellCoords ) )
 							, dot( SHintensity, c3d_lpvAccumulatorG.sample( lpvCellCoords ) )
 							, dot( SHintensity, c3d_lpvAccumulatorB.sample( lpvCellCoords ) ) ) );
 					m_writer.returnStmt( vec4( max( lpvIntensity, vec3( 0.0_f ) ), 1.0f ) );
 				}
-				, InSurface{ m_writer, "surface" }
+				, sdw::InVec3{ m_writer, "wsNormal" }
+				, sdw::InVec3{ m_writer, "wsPosition" }
 				, InLpvGridData{ m_writer, "lpvGridData" } );
 		}
 
@@ -191,7 +229,8 @@ namespace castor3d
 			}
 
 			m_computeLLPVRadiance = m_writer.implementFunction< sdw::Vec4 >( "computeLLPVRadiance"
-				, [this]( Surface surface
+				, [this]( sdw::Vec3 const & wsNormal
+					, sdw::Vec3 const & wsPosition
 					, LayeredLpvGridData llpvGridData )
 				{
 					auto c3d_lpvAccumulator1R = m_writer.getVariable< CombinedImage3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator1" ) );
@@ -205,13 +244,13 @@ namespace castor3d
 					auto c3d_lpvAccumulator3B = m_writer.getVariable< CombinedImage3DRgba16 >( getTextureName( LpvTexture::eB, "Accumulator3" ) );
 
 					auto SHintensity = m_writer.declLocale( "SHintensity"
-						, m_evalSH( -surface.normal ) );
+						, m_evalSH( -wsNormal ) );
 					auto lpvCellCoords1 = m_writer.declLocale( "lpvCellCoords1"
-						, ( surface.worldPosition.xyz() - llpvGridData.allMinVolumeCorners[0].xyz() ) / llpvGridData.allCellSizes.x() / llpvGridData.gridSizes );
+						, ( wsPosition - llpvGridData.allMinVolumeCorners[0].xyz() ) / llpvGridData.allCellSizes.x() / llpvGridData.gridSizes );
 					auto lpvCellCoords2 = m_writer.declLocale( "lpvCellCoords2"
-						, ( surface.worldPosition.xyz() - llpvGridData.allMinVolumeCorners[1].xyz() ) / llpvGridData.allCellSizes.y() / llpvGridData.gridSizes );
+						, ( wsPosition - llpvGridData.allMinVolumeCorners[1].xyz() ) / llpvGridData.allCellSizes.y() / llpvGridData.gridSizes );
 					auto lpvCellCoords3 = m_writer.declLocale( "lpvCellCoords3"
-						, ( surface.worldPosition.xyz() - llpvGridData.allMinVolumeCorners[2].xyz() ) / llpvGridData.allCellSizes.z() / llpvGridData.gridSizes );
+						, ( wsPosition - llpvGridData.allMinVolumeCorners[2].xyz() ) / llpvGridData.allCellSizes.z() / llpvGridData.gridSizes );
 
 					auto lpvIntensity1 = m_writer.declLocale( "lpvIntensity1"
 						, vec3( dot( SHintensity, c3d_lpvAccumulator1R.sample( lpvCellCoords1 ) )
@@ -228,31 +267,33 @@ namespace castor3d
 
 					m_writer.returnStmt( vec4( max( lpvIntensity1 + lpvIntensity2 + lpvIntensity3, vec3( 0.0_f ) ), 1.0f ) );
 				}
-				, InSurface{ m_writer, "surface" }
+				, sdw::InVec3{ m_writer, "wsNormal" }
+				, sdw::InVec3{ m_writer, "wsPosition" }
 				, InLayeredLpvGridData{ m_writer, "llpvGridData" } );
 		}
 
-		sdw::Vec4 GlobalIllumination::computeLPVRadiance( Surface surface
+		sdw::Vec4 GlobalIllumination::computeLPVRadiance( LightSurface lightSurface
 			, LpvGridData lpvGridData )
 		{
 			CU_Require( m_computeLPVRadiance );
-			return m_computeLPVRadiance( surface
+			return m_computeLPVRadiance( lightSurface.N()
+				, lightSurface.worldPosition()
 				, lpvGridData );
 		}
 
-		sdw::Vec4 GlobalIllumination::computeLLPVRadiance( Surface surface
+		sdw::Vec4 GlobalIllumination::computeLLPVRadiance( LightSurface lightSurface
 			, LayeredLpvGridData llpvGridData )
 		{
 			CU_Require( m_computeLLPVRadiance );
-			return m_computeLLPVRadiance( surface
+			return m_computeLLPVRadiance( lightSurface.N()
+				, lightSurface.worldPosition()
 				, llpvGridData );
 		}
 
 		sdw::Float GlobalIllumination::computeOcclusion( SceneFlags sceneFlags
-			, LightType lightType
-			, Surface surface )
+			, LightSurface lightSurface )
 		{
-			auto vxlOcclusion = m_writer.declLocale( "vxlOcclusion"
+			auto indirectOcclusion = m_writer.declLocale( "indirectOcclusion"
 				, 1.0_f );
 
 			if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )
@@ -265,85 +306,25 @@ namespace castor3d
 				{
 					IF( m_writer, voxelData.enableSecondaryBounce )
 					{
-						switch ( lightType )
-						{
-						case LightType::eDirectional:
-							{
-								auto c3d_light = m_writer.getVariable< shader::DirectionalLight >( "c3d_light" );
-								vxlOcclusion = traceConeOcclusion( mapVoxelsSecondaryBounce
-									, surface
-									, c3d_light.direction
-									, voxelData );
-							}
-							break;
-						case LightType::ePoint:
-							{
-								auto c3d_light = m_writer.getVariable< shader::PointLight >( "c3d_light" );
-								vxlOcclusion = traceConeOcclusion( mapVoxelsSecondaryBounce
-									, surface
-									, c3d_light.position - surface.worldPosition.xyz()
-									, voxelData );
-							}
-							break;
-						case LightType::eSpot:
-							{
-								auto c3d_light = m_writer.getVariable< shader::SpotLight >( "c3d_light" );
-								vxlOcclusion = traceConeOcclusion( mapVoxelsSecondaryBounce
-									, surface
-									, c3d_light.position - surface.worldPosition.xyz()
-									, voxelData );
-							}
-							break;
-						default:
-							CU_Failure( "Unsupported LightType" );
-							break;
-						}
+						indirectOcclusion = traceConeOcclusion( mapVoxelsSecondaryBounce
+							, lightSurface
+							, voxelData );
 					}
 					ELSE
 					{
-						switch ( lightType )
-						{
-						case LightType::eDirectional:
-							{
-								auto c3d_light = m_writer.getVariable< shader::DirectionalLight >( "c3d_light" );
-								vxlOcclusion = traceConeOcclusion( mapVoxelsFirstBounce
-									, surface
-									, c3d_light.direction
-									, voxelData );
-							}
-							break;
-						case LightType::ePoint:
-							{
-								auto c3d_light = m_writer.getVariable< shader::PointLight >( "c3d_light" );
-								vxlOcclusion = traceConeOcclusion( mapVoxelsFirstBounce
-									, surface
-									, c3d_light.position - surface.worldPosition.xyz()
-									, voxelData );
-							}
-							break;
-						case LightType::eSpot:
-							{
-								auto c3d_light = m_writer.getVariable< shader::SpotLight >( "c3d_light" );
-								vxlOcclusion = traceConeOcclusion( mapVoxelsFirstBounce
-									, surface
-									, c3d_light.position - surface.worldPosition.xyz()
-									, voxelData );
-							}
-							break;
-						default:
-							CU_Failure( "Unsupported LightType" );
-							break;
-						}
+						indirectOcclusion = traceConeOcclusion( mapVoxelsFirstBounce
+							, lightSurface
+							, voxelData );
 					}
 					FI;
 				}
 				FI;
 			}
 
-			return vxlOcclusion;
+			return indirectOcclusion;
 		}
 
-		sdw::Vec4 GlobalIllumination::computeVCTRadiance( Surface const & surface
+		sdw::Vec4 GlobalIllumination::computeVCTRadiance( LightSurface const & lightSurface
 			, VoxelData const & voxelData
 			, sdw::Float const & indirectOcclusion )
 		{
@@ -355,19 +336,19 @@ namespace castor3d
 			IF( m_writer, voxelData.enableSecondaryBounce )
 			{
 				vxlRadiance = traceConeRadiance( mapVoxelsSecondaryBounce
-					, surface
+					, lightSurface
 					, voxelData );
 			}
 			ELSE
 			{
 				vxlRadiance = traceConeRadiance( mapVoxelsFirstBounce
-					, surface
+					, lightSurface
 					, voxelData );
 			}
 			FI;
 
 			auto vxlPosition = m_writer.declLocale( "vxlPosition"
-				, clamp( abs( voxelData.worldToClip( surface.worldPosition.xyz() ) ), vec3( -1.0_f ), vec3( 1.0_f ) ) );
+				, clamp( abs( voxelData.worldToClip( lightSurface.worldPosition() ) ), vec3( -1.0_f ), vec3( 1.0_f ) ) );
 			auto vxlBlend = m_writer.declLocale( "vxlBlend"
 				, 1.0_f - pow( max( vxlPosition.x(), max( vxlPosition.y(), vxlPosition.z() ) ), 4.0_f ) );
 			return vec4( mix( vec3( 0.0_f )
@@ -376,9 +357,7 @@ namespace castor3d
 				, vxlBlend );
 		}
 
-		sdw::Vec3 GlobalIllumination::computeVCTSpecular( sdw::Vec3 const & wsCamera
-			, sdw::Vec3 const & vsPosition
-			, Surface const & surface
+		sdw::Vec3 GlobalIllumination::computeVCTSpecular( LightSurface const & lightSurface
 			, sdw::Float const & roughness
 			, sdw::Float const & indirectOcclusion
 			, sdw::Float const & indirectBlend
@@ -391,16 +370,14 @@ namespace castor3d
 			IF( m_writer, voxelData.enableSecondaryBounce )
 			{
 				vxlReflection = traceConeReflection( mapVoxelsSecondaryBounce
-					, surface
-					, wsCamera - surface.worldPosition.xyz()
+					, lightSurface
 					, roughness
 					, voxelData );
 			}
 			ELSE
 			{
 				vxlReflection = traceConeReflection( mapVoxelsFirstBounce
-					, surface
-					, wsCamera - surface.worldPosition.xyz()
+					, lightSurface
 					, roughness
 					, voxelData );
 			}
@@ -412,7 +389,7 @@ namespace castor3d
 		}
 
 		sdw::Vec4 GlobalIllumination::computeDiffuse( SceneFlags sceneFlags
-			, Surface surface
+			, LightSurface lightSurface
 			, sdw::Float indirectOcclusion )
 		{
 			auto indirectDiffuse = m_writer.declLocale( "lightIndirectDiffuse"
@@ -421,20 +398,20 @@ namespace castor3d
 			if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )
 			{
 				auto voxelData = m_writer.getVariable< VoxelData >( "c3d_voxelData" );
-				indirectDiffuse += computeVCTRadiance( surface, voxelData, indirectOcclusion );
+				indirectDiffuse += computeVCTRadiance( lightSurface, voxelData, indirectOcclusion );
 			}
 			else
 			{
 				if ( checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI ) )
 				{
 					auto llpvGridData = m_writer.getVariable< LayeredLpvGridData >( "c3d_llpvGridData" );
-					indirectDiffuse += ( computeLLPVRadiance( surface, llpvGridData ) * llpvGridData.indirectAttenuation ) / sdw::Float{ castor::Pi< float > };
+					indirectDiffuse += ( computeLLPVRadiance( lightSurface, llpvGridData ) * llpvGridData.indirectAttenuation ) / sdw::Float{ castor::Pi< float > };
 				}
 
 				if ( checkFlag( sceneFlags, SceneFlag::eLpvGI ) )
 				{
 					auto lpvGridData = m_writer.getVariable< LpvGridData >( "c3d_lpvGridData" );
-					indirectDiffuse += ( computeLPVRadiance( surface, lpvGridData ) * lpvGridData.indirectAttenuation() ) / sdw::Float{ castor::Pi< float > };
+					indirectDiffuse += ( computeLPVRadiance( lightSurface, lpvGridData ) * lpvGridData.indirectAttenuation() ) / sdw::Float{ castor::Pi< float > };
 				}
 			}
 
@@ -465,9 +442,7 @@ namespace castor3d
 		}
 
 		sdw::Vec3 GlobalIllumination::computeSpecular( SceneFlags sceneFlags
-			, sdw::Vec3 wsCamera
-			, sdw::Vec3 vsPosition
-			, Surface surface
+			, LightSurface lightSurface
 			, sdw::Float roughness
 			, sdw::Float indirectOcclusion
 			, sdw::Float indirectBlend
@@ -479,18 +454,14 @@ namespace castor3d
 			if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )
 			{
 				auto voxelData = m_writer.getVariable< VoxelData >( "c3d_voxelData" );
-				indirectSpecular = computeVCTSpecular( wsCamera
-					, vsPosition
-					, surface
+				indirectSpecular = computeVCTSpecular( lightSurface
 					, roughness
 					, indirectOcclusion
 					, indirectBlend
 					, voxelData );
-				auto NdotV = m_writer.declLocale( "NdotV"
-					, max( 0.0_f, dot( surface.normal, normalize( vsPosition ) ) ) );
 				auto envBRDF = m_writer.declLocale( "envBRDF"
-					, brdfMap.sample( vec2( NdotV, roughness ) ) );
-				indirectSpecular *= sdw::fma( m_utils.conductorFresnel( NdotV, indirectSpecular.xyz() )
+					, brdfMap.sample( vec2( lightSurface.NdotV(), roughness ) ) );
+				indirectSpecular *= sdw::fma( m_utils.conductorFresnel( lightSurface.NdotV(), indirectSpecular.xyz() )
 					, vec3( envBRDF.x() )
 					, vec3( envBRDF.y() ) );
 			}
@@ -499,7 +470,7 @@ namespace castor3d
 		}
 
 		sdw::Vec4 GlobalIllumination::traceConeRadiance( sdw::CombinedImage3DRgba32 const & pvoxels
-			, Surface psurface
+			, LightSurface plightSurface
 			, VoxelData const & pvoxelData )
 		{
 			if ( !m_traceConeRadiance )
@@ -524,7 +495,8 @@ namespace castor3d
 
 				m_traceConeRadiance = m_writer.implementFunction< sdw::Vec4 >( "traceConeRadiance"
 					, [&]( sdw::CombinedImage3DRgba32 const & voxels
-						, Surface surface
+						, sdw::Vec3 const & wsNormal
+						, sdw::Vec3 const & wsPosition
 						, shader::VoxelData const & voxelData )
 					{
 						auto radiance = m_writer.declLocale( "radiance"
@@ -535,12 +507,13 @@ namespace castor3d
 							// approximate a hemisphere from random points inside a sphere:
 							//  (and modulate cone with surface normal, no banding this way)
 							auto wsConeDirection = m_writer.declLocale( "wsConeDirection"
-								, normalize( cones[cone] + surface.normal ) );
+								, normalize( cones[cone] + wsNormal ) );
 							// if point on sphere is facing below normal (so it's located on bottom hemisphere), put it on the opposite hemisphere instead:
-							wsConeDirection *= m_writer.ternary( dot( wsConeDirection, surface.normal ) < 0.0_f, -1.0_f, 1.0_f );
+							wsConeDirection *= m_writer.ternary( dot( wsConeDirection, wsNormal ) < 0.0_f, -1.0_f, 1.0_f );
 
 							radiance += traceCone( voxels
-								, surface
+								, wsNormal
+								, wsPosition
 								, wsConeDirection
 								, sdw::Float{ castor::Angle::fromRadians( castor::PiDiv2< float > / 3 ).tan() }
 								, voxelData );
@@ -554,17 +527,20 @@ namespace castor3d
 						m_writer.returnStmt( max( vec4( 0.0_f ), radiance ) );
 					}
 					, sdw::InCombinedImage3DRgba32{ m_writer, "voxels" }
-					, InSurface{ m_writer, "surface" }
+					, sdw::InVec3{ m_writer, "wsNormal" }
+					, sdw::InVec3{ m_writer, "wsPosition" }
 					, InVoxelData{ m_writer, "voxelData" } );
 			}
 
 			return m_traceConeRadiance( pvoxels
-				, psurface
+				, plightSurface.N()
+				, plightSurface.worldPosition()
 				, pvoxelData );
 		}
 
 		sdw::Vec4 GlobalIllumination::traceCone( sdw::CombinedImage3DRgba32 const & pvoxels
-			, Surface psurface
+			, sdw::Vec3 const & pwsNormal
+			, sdw::Vec3 const & pwsPosition
 			, sdw::Vec3 const & pwsConeDirection
 			, sdw::Float const & pconeAperture
 			, VoxelData const & pvoxelData )
@@ -573,7 +549,8 @@ namespace castor3d
 			{
 				m_traceCone = m_writer.implementFunction< sdw::Vec4 >( "traceCone"
 					, [&]( sdw::CombinedImage3DRgba32 const & voxels
-						, Surface surface
+						, sdw::Vec3 const & wsNormal
+						, sdw::Vec3 const & wsPosition
 						, sdw::Vec3 const & wsConeDirection
 						, sdw::Float const & coneAperture
 						, VoxelData const & voxelData )
@@ -588,7 +565,7 @@ namespace castor3d
 						auto wsDist = m_writer.declLocale( "wsDist"
 							, voxelData.gridToWorld ); // offset by cone dir so that first sample of all cones are not the same
 						auto wsStartPos = m_writer.declLocale( "wsStartPos"
-							, surface.worldPosition.xyz() + surface.normal * vec3( voxelData.gridToWorld * 2.0f * float( sqrt( 2.0f ) ) ) ); // sqrt2 is diagonal voxel half-extent
+							, wsPosition + wsNormal * vec3( voxelData.gridToWorld * 2.0f * float( sqrt( 2.0f ) ) ) ); // sqrt2 is diagonal voxel half-extent
 
 						// We will break off the loop if the sampling distance is too far for performance reasons:
 						WHILE( m_writer, wsDist < voxelData.radianceMaxDistance && occlusion < 1.0_f )
@@ -625,22 +602,23 @@ namespace castor3d
 						m_writer.returnStmt( vec4( color, occlusion ) );
 					}
 					, sdw::InCombinedImage3DRgba32{ m_writer, "voxels" }
-					, InSurface{ m_writer, "surface" }
+					, sdw::InVec3{ m_writer, "wsNormal" }
+					, sdw::InVec3{ m_writer, "wsPosition" }
 					, sdw::InVec3{ m_writer, "wsConeDirection" }
 					, sdw::InFloat{ m_writer, "coneAperture" }
 					, InVoxelData{ m_writer, "voxelData" } );
 			}
 
 			return m_traceCone( pvoxels
-				, psurface
+				, pwsNormal
+				, pwsPosition
 				, pwsConeDirection
 				, pconeAperture
 				, pvoxelData );
 		}
 
 		sdw::Vec4 GlobalIllumination::traceConeReflection( sdw::CombinedImage3DRgba32 const & pvoxels
-			, Surface psurface
-			, sdw::Vec3 const & pwsViewVector
+			, LightSurface plightSurface
 			, sdw::Float const & proughness
 			, VoxelData const & pvoxelData )
 		{
@@ -648,19 +626,21 @@ namespace castor3d
 			{
 				m_traceConeReflection = m_writer.implementFunction< sdw::Vec4 >( "traceConeReflection"
 					, [&]( sdw::CombinedImage3DRgba32 const & voxels
-						, Surface surface
-						, sdw::Vec3 const & wsViewVector
+						, sdw::Vec3 const & wsNormal
+						, sdw::Vec3 const & wsPosition
+						, sdw::Vec3 const & V
 						, sdw::Float const & roughness
 						, shader::VoxelData const & voxelData )
 					{
 						auto aperture = m_writer.declLocale( "aperture"
 							, tan( roughness * sdw::Float{ castor::PiDiv2< float > / 10 } ) );
 						auto wsConeDirection = m_writer.declLocale( "wsConeDirection"
-							, reflect( -wsViewVector, surface.normal ) );
+							, reflect( -V, wsNormal ) );
 
 						auto reflection = m_writer.declLocale( "reflection"
 							, traceCone( voxels
-								, surface
+								, wsNormal
+								, wsPosition
 								, wsConeDirection
 								, aperture
 								, voxelData ) );
@@ -668,30 +648,32 @@ namespace castor3d
 							, clamp( reflection.a() * ( 1.0_f - roughness ), 0.0_f, 1.0_f ) ) );
 					}
 					, sdw::InCombinedImage3DRgba32{ m_writer, "voxels" }
-					, InSurface{ m_writer, "surface" }
-					, sdw::InVec3{ m_writer, "wsViewVector" }
+					, sdw::InVec3{ m_writer, "wsNormal" }
+					, sdw::InVec3{ m_writer, "wsPosition" }
+					, sdw::InVec3{ m_writer, "V" }
 					, sdw::InFloat{ m_writer, "roughness" }
 					, InVoxelData{ m_writer, "voxelData" } );
 			}
 
 			return m_traceConeReflection( pvoxels
-				, psurface
-				, pwsViewVector
+				, plightSurface.N()
+				, plightSurface.worldPosition()
+				, plightSurface.V()
 				, proughness
 				, pvoxelData );
 		}
 
 		sdw::Float GlobalIllumination::traceConeOcclusion( sdw::CombinedImage3DRgba32 const & pvoxels
-			, Surface psurface
-			, sdw::Vec3 const & pwsConeDirection
+			, LightSurface plightSurface
 			, VoxelData const & pvoxelData )
 		{
 			if ( !m_traceConeOcclusion )
 			{
 				m_traceConeOcclusion = m_writer.implementFunction< sdw::Float >( "traceConeOcclusion"
 					, [&]( sdw::CombinedImage3DRgba32 const & voxels
-						, Surface surface
-						, sdw::Vec3 const & wsConeDirection
+						, sdw::Vec3 const & wsNormal
+						, sdw::Vec3 const & wsPosition
+						, sdw::Vec3 const & L
 						, shader::VoxelData const & voxelData )
 					{
 						auto coneAperture = m_writer.declLocale( "coneAperture"
@@ -703,7 +685,7 @@ namespace castor3d
 						auto wsDist = m_writer.declLocale( "wsDist"
 							, voxelData.gridToWorld ); // offset by cone dir so that first sample of all cones are not the same
 						auto wsStartPos = m_writer.declLocale( "wsStartPos"
-							, surface.worldPosition.xyz() + surface.normal * vec3( voxelData.gridToWorld * 2.0f * float( sqrt( 2.0f ) ) ) ); // sqrt2 is diagonal voxel half-extent
+							, wsPosition + wsNormal * vec3( voxelData.gridToWorld * 2.0f * float( sqrt( 2.0f ) ) ) ); // sqrt2 is diagonal voxel half-extent
 
 						// We will break off the loop if the sampling distance is too far for performance reasons:
 						WHILE( m_writer, wsDist < voxelData.radianceMaxDistance && occlusion < 1.0_f )
@@ -714,7 +696,7 @@ namespace castor3d
 								, log2( wsDiameter * voxelData.worldToGrid ) );
 
 							auto tsCoord = m_writer.declLocale( "tsCoord"
-								, voxelData.worldToTex( wsStartPos + wsConeDirection * vec3( wsDist ) ) );
+								, voxelData.worldToTex( wsStartPos - L * vec3( wsDist ) ) );
 
 							// break if the ray exits the voxel grid, or we sample from the last mip:
 							IF( m_writer, !m_utils.isSaturated( tsCoord ) || mip >= voxelData.radianceMips )
@@ -739,14 +721,16 @@ namespace castor3d
 						m_writer.returnStmt( occlusion );
 					}
 					, sdw::InCombinedImage3DRgba32{ m_writer, "voxels" }
-					, InSurface{ m_writer, "surface" }
-					, sdw::InVec3{ m_writer, "wsConeDirection" }
+					, sdw::InVec3{ m_writer, "wsNormal" }
+					, sdw::InVec3{ m_writer, "wsPosition" }
+					, sdw::InVec3{ m_writer, "L" }
 					, InVoxelData{ m_writer, "voxelData" } );
 			}
 
 			return m_traceConeOcclusion( pvoxels
-				, psurface
-				, pwsConeDirection
+				, plightSurface.N()
+				, plightSurface.worldPosition()
+				, plightSurface.L()
 				, pvoxelData );
 		}
 	}

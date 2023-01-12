@@ -23,96 +23,7 @@ namespace castor3d
 	class LightBuffer
 	{
 	public:
-		struct Float4
-		{
-			Float4 & operator=( float rhs )
-			{
-				x = rhs;
-				return *this;
-			}
-
-			Float4 & operator=( castor::Point2f const & rhs )
-			{
-				x = rhs->x;
-				y = rhs->y;
-				return *this;
-			}
-
-			Float4 & operator=( castor::Point3f const & rhs )
-			{
-				x = rhs->x;
-				y = rhs->y;
-				z = rhs->z;
-				return *this;
-			}
-
-			Float4 & operator=( castor::Point4f const & rhs )
-			{
-				x = rhs->x;
-				y = rhs->y;
-				z = rhs->z;
-				w = rhs->w;
-				return *this;
-			}
-
-			float x{};
-			float y{};
-			float z{};
-			float w{};
-		};
-		struct Float4x4
-		{
-			Float4x4 & operator=( castor::Matrix4x4f const & rhs )
-			{
-				c0 = rhs[0];
-				c1 = rhs[1];
-				c2 = rhs[2];
-				c3 = rhs[3];
-				return *this;
-			}
-
-			Float4 c0{};
-			Float4 c1{};
-			Float4 c2{};
-			Float4 c3{};
-		};
-
-		union SpecLight
-		{
-			struct
-			{
-				Float4 directionCount;
-				Float4 splitDepths;
-				Float4 splitScales;
-				std::array< Float4x4, 4u > transforms;
-			} directional;
-			struct
-			{
-				Float4 position;
-				Float4 attenuation;
-			} point;
-			struct
-			{
-				Float4 position;
-				Float4 attenuation;
-				Float4 direction;
-				Float4 exponentCutOff;
-				Float4x4 transform;
-			} spot;
-		};
-
-		struct LightData
-		{
-			Float4 colourIndex;
-			Float4 intensityFarPlane;
-			Float4 volumetric;
-			Float4 shadowsOffsets;
-			Float4 shadowsVariances;
-			SpecLight specific;
-		};
-		using LightsData = castor::ArrayView< LightData >;
-
-		static constexpr uint32_t DataSize = sizeof( LightData );
+		using LightsData = castor::ArrayView< LightBufferData >;
 
 	public:
 		/**
@@ -214,7 +125,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Le pointeur sur les données pour la source lumineuse donnée.
 		 */
-		C3D_API LightData & getData( Light const & light );
+		C3D_API LightBufferData & getData( Light const & light );
 		/**
 		 *\~english
 		 *\return		The light source buffer index.
@@ -233,12 +144,12 @@ namespace castor3d
 			return m_typeSortedLights[size_t( type )];
 		}
 
-		LightData & operator[]( size_t index )
+		LightBufferData & operator[]( size_t index )
 		{
 			return m_data[index];
 		}
 
-		LightData const & operator[]( size_t index )const
+		LightBufferData const & operator[]( size_t index )const
 		{
 			return m_data[index];
 		}

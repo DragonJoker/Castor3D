@@ -137,7 +137,7 @@ namespace castor3d
 			, getOwner()->getId()
 			, getOwner()->getIndex()
 			, getOwner()->getOwner()->getPassCount()
-			, getLighting()
+			, getData()
 			, 0u );
 	}
 

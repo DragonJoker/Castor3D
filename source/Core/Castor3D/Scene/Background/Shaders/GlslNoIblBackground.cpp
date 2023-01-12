@@ -2,6 +2,7 @@
 
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
+#include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
@@ -38,8 +39,11 @@ namespace castor3d::shader
 			, set );
 	}
 
-	void NoIblBackgroundModel::computeReflections( sdw::Vec3 const & pwsIncident
-		, sdw::Vec3 const & pwsNormal
+	void NoIblBackgroundModel::computeReflections( sdw::Vec3 const & pwsNormal
+		, sdw::Vec3 const & pdifF
+		, sdw::Vec3 const & pspcF
+		, sdw::Vec3 const & pV
+		, sdw::Float const & pNdotV
 		, BlendComponents & components
 		, sdw::CombinedImage2DRgba32 const & pbrdf
 		, sdw::Vec3 & preflectedDiffuse
@@ -63,7 +67,7 @@ namespace castor3d::shader
 				}
 				, sdw::InVec3{ m_writer, "wsIncident" }
 				, sdw::InVec3{ m_writer, "wsNormal" }
-				, sdw::InCombinedImageCubeRgba32{ m_writer, "backgroundMap" }
+				, sdw::InCombinedImageCubeRgba32{ m_writer, "brdfMap" }
 				, sdw::InVec3{ m_writer, "specular" }
 				, sdw::InFloat{ m_writer, "roughness" }
 				, sdw::OutVec3{ m_writer, "reflectedDiffuse" }
@@ -71,7 +75,7 @@ namespace castor3d::shader
 		}
 
 		auto backgroundMap = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapBackground" );
-		m_computeReflections( pwsIncident
+		m_computeReflections( -pV
 			, pwsNormal
 			, backgroundMap
 			, components.specular
@@ -80,8 +84,8 @@ namespace castor3d::shader
 			, preflectedSpecular );
 	}
 
-	sdw::RetVec3 NoIblBackgroundModel::computeRefractions( sdw::Vec3 const & pwsIncident
-		, sdw::Vec3 const & pwsNormal
+	sdw::RetVec3 NoIblBackgroundModel::computeRefractions( sdw::Vec3 const & pwsNormal
+		, sdw::Vec3 const & pV
 		, sdw::Float const & prefractionRatio
 		, BlendComponents & components )
 	{
@@ -112,7 +116,7 @@ namespace castor3d::shader
 		}
 
 		auto backgroundMap = m_writer.getVariable< sdw::CombinedImageCubeRgba32 >( "c3d_mapBackground" );
-		return m_computeRefractions( pwsIncident
+		return m_computeRefractions( -pV
 			, pwsNormal
 			, backgroundMap
 			, prefractionRatio

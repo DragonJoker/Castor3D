@@ -389,7 +389,7 @@ namespace atmosphere_scattering
 
 	AtmosphereBackground::AtmosphereBackground( castor3d::Engine & engine
 		, castor3d::Scene & scene )
-		: SceneBackground{ engine, scene, cuT( "Atmosphere" ), cuT( "atmosphere" ) }
+		: SceneBackground{ engine, scene, cuT( "Atmosphere" ), cuT( "atmosphere" ), false }
 		, m_weatherUbo{ std::make_unique< WeatherUbo >( engine.getRenderSystem()->getRenderDevice()
 			, m_weatherChanged ) }
 		, m_cloudsUbo{ std::make_unique< CloudsUbo >( engine.getRenderSystem()->getRenderDevice()

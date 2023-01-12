@@ -24,6 +24,7 @@
 #include <Castor3D/Shader/Shaders/GlslCookTorranceBRDF.hpp>
 #include <Castor3D/Shader/Shaders/GlslFog.hpp>
 #include <Castor3D/Shader/Shaders/GlslGlobalIllumination.hpp>
+#include <Castor3D/Shader/Shaders/GlslLight.hpp>
 #include <Castor3D/Shader/Shaders/GlslMaterial.hpp>
 #include <Castor3D/Shader/Shaders/GlslOutputComponents.hpp>
 #include <Castor3D/Shader/Shaders/GlslReflection.hpp>
@@ -408,7 +409,8 @@ namespace water
 			&& areValidPassFlags( pass.getPassFlags() );
 	}
 
-	void WaterRenderPass::doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const
+	void WaterRenderPass::doFillAdditionalBindings( castor3d::PipelineFlags const & flags
+		, ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
 		bindings.emplace_back( getCuller().getScene().getLightCache().createLayoutBinding( WaterIdx::eLightBuffer ) );
 		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( WaterIdx::eWaterUbo
@@ -440,10 +442,10 @@ namespace water
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 
 		auto index = uint32_t( WaterIdx::eBrdf ) + 1u;
-		doAddShadowBindings( bindings, index );
-		doAddEnvBindings( bindings, index );
-		doAddBackgroundBindings( bindings, index );
-		doAddGIBindings( bindings, index );
+		doAddShadowBindings( flags, bindings, index );
+		doAddEnvBindings( flags, bindings, index );
+		doAddBackgroundBindings( flags, bindings, index );
+		doAddGIBindings( flags, bindings, index );
 	}
 
 	ashes::PipelineDepthStencilStateCreateInfo WaterRenderPass::doCreateDepthStencilState( castor3d::PipelineFlags const & flags )const
@@ -481,7 +483,8 @@ namespace water
 		};
 	}
 
-	void WaterRenderPass::doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
+	void WaterRenderPass::doFillAdditionalDescriptor( castor3d::PipelineFlags const & flags
+		, ashes::WriteDescriptorSetArray & descriptorWrites
 		, castor3d::ShadowMapLightTypeArray const & shadowMaps )
 	{
 		descriptorWrites.push_back( m_scene.getLightCache().getBinding( WaterIdx::eLightBuffer ) );
@@ -497,10 +500,10 @@ namespace water
 			, *getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().sampler
 			, descriptorWrites
 			, index );
-		doAddShadowDescriptor( descriptorWrites, shadowMaps, index );
-		doAddEnvDescriptor( descriptorWrites, index );
-		doAddBackgroundDescriptor( descriptorWrites, *m_targetImage, index );
-		doAddGIDescriptor( descriptorWrites, index );
+		doAddShadowDescriptor( flags, descriptorWrites, shadowMaps, index );
+		doAddEnvDescriptor( flags, descriptorWrites, index );
+		doAddBackgroundDescriptor( flags, descriptorWrites, *m_targetImage, index );
+		doAddGIDescriptor( flags, descriptorWrites, index );
 	}
 
 	castor3d::SubmeshFlags WaterRenderPass::doAdjustSubmeshFlags( castor3d::SubmeshFlags flags )const
@@ -540,7 +543,7 @@ namespace water
 
 		shader::Utils utils{ writer };
 		shader::BRDFHelpers brdf{ writer };
-		shader::CookTorranceBRDF cookTorrance{ writer, utils, brdf };
+		shader::CookTorranceBRDF cookTorrance{ writer, brdf };
 		shader::Fog fog{ writer };
 		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
 			, flags
@@ -594,20 +597,24 @@ namespace water
 		auto c3d_mapBrdf = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapBrdf"
 			, index++
 			, RenderPipeline::eBuffers );
-		auto lightingModel = shader::LightingModel::createModel( *getEngine()
+		shader::Lights lights{ *getEngine()
+			, flags.lightingModelId
+			, flags.backgroundModelId
 			, materials
-			, utils
 			, brdf
-			, getScene().getLightingModel()
-			, lightsIndex
-			, RenderPipeline::eBuffers
+			, utils
 			, shader::ShadowOptions{ flags.getShadowFlags(), true, false }
 			, nullptr
+			, lightsIndex /* lightBinding */
+			, RenderPipeline::eBuffers /* lightSet */
+			, index /* shadowMapBinding */
+			, RenderPipeline::eBuffers /* shadowMapSet */
+			, false /* enableVolumetric */ };
+		shader::ReflectionModel reflections{ writer
+			, utils
 			, index
-			, RenderPipeline::eBuffers
-			, false );
-		auto reflections = lightingModel->getReflectionModel( index
-			, uint32_t( RenderPipeline::eBuffers ) );
+			, uint32_t( RenderPipeline::eBuffers )
+			, lights.hasIblSupport() };
 		auto backgroundModel = shader::BackgroundModel::createModel( getScene()
 			, writer
 			, utils
@@ -670,8 +677,6 @@ namespace water
 
 				auto material = writer.declLocale( "material"
 					, materials.getMaterial( modelData.getMaterialId() ) );
-				auto worldEye = writer.declLocale( "worldEye"
-					, c3d_sceneData.cameraPosition );
 				auto surface = writer.declLocale( "surface"
 					, shader::Surface{ in.fragCoord.xyz()
 						, in.viewPosition.xyz()
@@ -683,7 +688,7 @@ namespace water
 						, surface } );
 				displayDebugData( eMatSpecular, components.specular, 1.0_f );
 
-				IF( writer, material.lighting != 0_u )
+				if ( auto lightingModel = lights.getLightingModel() )
 				{
 					// Direct Lighting
 					auto lightDiffuse = writer.declLocale( "lightDiffuse"
@@ -697,11 +702,17 @@ namespace water
 					auto lightSheen = writer.declLocale( "lightSheen"
 						, vec2( 0.0_f ) );
 					shader::OutputComponents output{ lightDiffuse, lightSpecular, lightScattering, lightCoatingSpecular, lightSheen };
-					lightingModel->computeCombined( components
+					auto lightSurface = shader::LightSurface::create( writer
+						, "lightSurface"
+						, c3d_sceneData.cameraPosition
+						, surface.worldPosition.xyz()
+						, surface.viewPosition.xyz()
+						, surface.clipPosition
+						, surface.normal );
+					lights.computeCombinedDifSpec( components
 						, c3d_sceneData
 						, *backgroundModel
-						, surface
-						, worldEye
+						, lightSurface
 						, modelData.isShadowReceiver()
 						, output );
 					lightingModel->adjustDirectSpecular( components
@@ -723,17 +734,19 @@ namespace water
 
 
 					// Indirect Lighting
-					auto indirectOcclusion = writer.declLocale( "indirectOcclusion"
-						, 1.0_f );
+					lightSurface.updateL( utils
+						, components.normal
+						, components.specular
+						, components );
+					auto indirectOcclusion = indirect.computeOcclusion( flags.getGlobalIlluminationFlags()
+						, lightSurface );
 					auto lightIndirectDiffuse = indirect.computeDiffuse( flags.getGlobalIlluminationFlags()
-						, surface
+						, lightSurface
 						, indirectOcclusion );
 					displayDebugData( eIndirectOcclusion, vec3( indirectOcclusion ), 1.0_f );
 					displayDebugData( eLightIndirectDiffuse, lightIndirectDiffuse.xyz(), 1.0_f );
 					auto lightIndirectSpecular = indirect.computeSpecular( flags.getGlobalIlluminationFlags()
-						, worldEye
-						, c3d_sceneData.getPosToCamera( surface.worldPosition.xyz() )
-						, surface
+						, lightSurface
 						, components.roughness
 						, indirectOcclusion
 						, lightIndirectDiffuse.w()
@@ -745,11 +758,9 @@ namespace water
 					auto indirectDiffuse = writer.declLocale( "indirectDiffuse"
 						, ( hasDiffuseGI
 							? cookTorrance.computeDiffuse( lightIndirectDiffuse.xyz()
-								, c3d_sceneData.cameraPosition
-								, surface.normal
-								, components.specular
-								, components.metalness
-								, surface )
+								, length( lightIndirectDiffuse.xyz() )
+								, lightSurface.difF()
+								, components.metalness )
 							: vec3( 0.0_f ) ) );
 					displayDebugData( eIndirectDiffuse, indirectDiffuse, 1.0_f );
 
@@ -758,9 +769,12 @@ namespace water
 						, vec3( 0.0_f ) );
 					auto bgSpecularReflection = writer.declLocale( "bgSpecularReflection"
 						, vec3( 0.0_f ) );
-					reflections->computeReflections( components
-						, surface
-						, c3d_sceneData
+					lightSurface.updateN( utils
+						, components.normal
+						, components.specular
+						, components );
+					reflections.computeReflections( components
+						, lightSurface
 						, *backgroundModel
 						, modelData.getEnvMapIndex()
 						, components.hasReflection
@@ -770,8 +784,8 @@ namespace water
 						, bgDiffuseReflection + bgSpecularReflection );
 					displayDebugData( eBackgroundReflection, backgroundReflection, 1.0_f );
 					auto ssrResult = writer.declLocale( "ssrResult"
-						, reflections->computeScreenSpace( c3d_matrixData
-							, surface.viewPosition.xyz()
+						, reflections.computeScreenSpace( c3d_matrixData
+							, lightSurface.viewPosition()
 							, finalNormal
 							, hdrCoords
 							, c3d_waterData.ssrSettings
@@ -828,7 +842,7 @@ namespace water
 
 					//Combine all that
 					auto fresnelFactor = writer.declLocale( "fresnelFactor"
-						, vec3( utils.fresnelMix( reflections->computeIncident( surface.worldPosition.xyz(), c3d_sceneData.cameraPosition )
+						, vec3( utils.fresnelMix( reflections.computeIncident( lightSurface.worldPosition(), c3d_sceneData.cameraPosition )
 							, components.normal
 							, components.roughness
 							, c3d_waterData.refractionRatio ) ) );
@@ -846,11 +860,10 @@ namespace water
 						, depthSoftenedAlpha );
 
 				}
-				ELSE
+				else
 				{
 					outColour = vec4( components.colour, 1.0_f );
 				}
-				FI;
 
 				if ( flags.hasFog() )
 				{

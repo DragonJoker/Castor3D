@@ -11,7 +11,7 @@ See LICENSE file in root folder
 namespace castor3d::shader
 {
 	struct MicrofacetDistributionSample
-		: public sdw::StructInstanceHelperT< "MicrofacetDistributionSample"
+		: public sdw::StructInstanceHelperT< "C3D_MicrofacetDistributionSample"
 		, sdw::type::MemoryLayout::eC
 		, sdw::FloatField< "pdf" >
 		, sdw::FloatField< "cosTheta" >
@@ -25,25 +25,10 @@ namespace castor3d::shader
 		{
 		}
 
-		auto pdf()const
-		{
-			return getMember< "pdf" >();
-		}
-
-		auto cosTheta()const
-		{
-			return getMember< "cosTheta" >();
-		}
-
-		auto sinTheta()const
-		{
-			return getMember< "sinTheta" >();
-		}
-
-		auto phi()const
-		{
-			return getMember< "phi" >();
-		}
+		auto pdf()const { return getMember< "pdf" >(); }
+		auto cosTheta()const { return getMember< "cosTheta" >(); }
+		auto sinTheta()const { return getMember< "sinTheta" >(); }
+		auto phi()const { return getMember< "phi" >(); }
 	};
 
 	Writer_Parameter( MicrofacetDistributionSample );

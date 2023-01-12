@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_PassHeaderComponent_H___
-#define ___C3D_PassHeaderComponent_H___
+#ifndef ___C3D_LightingModelComponent_H___
+#define ___C3D_LightingModelComponent_H___
 
 #include "Castor3D/Material/Pass/Component/BaseDataPassComponent.hpp"
 
@@ -11,7 +11,7 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	struct PassHeaderComponent
+	struct LightingModelComponent
 		: public BaseDataPassComponentT< castor::AtomicGroupChangeTracked< uint32_t > >
 	{
 		struct MaterialShader
@@ -31,18 +31,11 @@ namespace castor3d
 			{
 			}
 
-			void createParsers( castor::AttributeParsers & parsers
-				, ChannelFillers & channelFillers )const override;
 			void zeroBuffer( Pass const & pass
 				, shader::PassMaterialShader const & materialShader
 				, PassBuffer & buffer )const override;
-
 			bool isComponentNeeded( TextureCombine const & textures
-				, ComponentModeFlags const & filter )const override
-			{
-				// Component is never needed in lighting shader.
-				return false;
-			}
+				, ComponentModeFlags const & filter )const override;
 
 			shader::PassMaterialShaderPtr createMaterialShader()const override
 			{
@@ -55,28 +48,26 @@ namespace castor3d
 			return castor::makeUniqueDerived< PassComponentPlugin, Plugin >( passComponent );
 		}
 
-		C3D_API explicit PassHeaderComponent( Pass & pass );
+		C3D_API explicit LightingModelComponent( Pass & pass );
 
 		C3D_API void accept( PassVisitorBase & vis )override;
 
-		bool isLightingEnabled()const
+		C3D_API castor::String getLightingModelName()const;
+
+		LightingModelID getLightingModelId()const
 		{
-			return getData() != 0u;
+			return LightingModelID( getData() );
 		}
 
-		void enableLighting( bool value )
+		void setLightingModelId( LightingModelID v )
 		{
-			setData( value ? 1u : 0u );
+			setData( uint32_t( v ) );
 		}
 
 		C3D_API static castor::String const TypeName;
 
 	private:
 		PassComponentUPtr doClone( Pass & pass )const override;
-		bool doWriteText( castor::String const & tabs
-			, castor::Path const & folder
-			, castor::String const & subfolder
-			, castor::StringStream & file )const override;
 		void doFillBuffer( PassBuffer & buffer )const override;
 	};
 }

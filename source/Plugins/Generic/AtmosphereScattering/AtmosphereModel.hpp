@@ -344,7 +344,7 @@ namespace atmosphere_scattering
 		sdw::Float planetRadiusOffset;
 		sdw::CombinedImage2DRgba32 const * transmittanceTexture{};
 		sdw::CombinedImage2DRgba32 const * multiScatTexture{};
-		std::shared_ptr< castor3d::shader::Shadow > shadows;
+		castor3d::shader::Shadow * shadows;
 
 	private:
 		sdw::Function< Ray

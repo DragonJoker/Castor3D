@@ -65,7 +65,8 @@ namespace castor3d
 		return flags;
 	}
 
-	void ShadowMapPass::doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const
+	void ShadowMapPass::doFillAdditionalBindings( PipelineFlags const & flags
+		, ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
 		auto index = uint32_t( GlobalBuffersIdx::eCount );
 		bindings.emplace_back( m_shadowMap.getScene().getLightCache().createLayoutBinding( index++ ) );
@@ -75,7 +76,8 @@ namespace castor3d
 		m_initialised = true;
 	}
 
-	void ShadowMapPass::doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
+	void ShadowMapPass::doFillAdditionalDescriptor( PipelineFlags const & flags
+		, ashes::WriteDescriptorSetArray & descriptorWrites
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
 		auto index = uint32_t( GlobalBuffersIdx::eCount );

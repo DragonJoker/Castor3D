@@ -81,11 +81,6 @@ namespace castor3d
 			return BaseLightComponentsCount;
 		}
 
-		uint32_t getMaxLightComponentsCount()
-		{
-			return LightBuffer::DataSize / ( 4u * uint32_t( sizeof( float ) ) );
-		}
-
 		castor::String concatModelNames( castor::String lhs
 			, castor::String rhs )
 		{

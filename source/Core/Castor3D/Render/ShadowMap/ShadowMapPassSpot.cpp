@@ -225,8 +225,6 @@ namespace castor3d
 
 	ShaderPtr ShadowMapPassSpot::doGetPixelShaderSource( PipelineFlags const & flags )const
 	{
-		auto & renderSystem = *getEngine()->getRenderSystem();
-
 		using namespace sdw;
 		FragmentWriter writer;
 		bool enableTextures = flags.enableTextures();
@@ -261,19 +259,21 @@ namespace castor3d
 		C3D_ShadowMap( writer
 			, index++
 			, RenderPipeline::eBuffers );
-		auto lightingModel = shader::LightingModel::createModel( *renderSystem.getEngine()
+		shader::Lights lights{ *getEngine()
+			, flags.lightingModelId
+			, flags.backgroundModelId
 			, materials
-			, utils
 			, brdf
-			, shader::getLightingModelName( *getEngine(), flags.passType )
-			, LightType::eSpot
-			, lightsIndex
-			, RenderPipeline::eBuffers
-			, false
+			, utils
 			, shader::ShadowOptions{ SceneFlag::eNone, needsVsm, false }
 			, nullptr
-			, index
-			, RenderPipeline::eBuffers );
+			, LightType::eSpot
+			, false /* lightsUbo */
+			, lightsIndex /* lightBinding */
+			, RenderPipeline::eBuffers /* lightSet */
+			, index /* shadowMapBinding */
+			, RenderPipeline::eBuffers /* shadowMapSet */
+			, false /* enableVolumetric */ };
 
 		auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
 			, 0u
@@ -341,9 +341,9 @@ namespace castor3d
 				if ( needsRsm )
 				{
 					auto light = writer.declLocale( "light"
-						, c3d_shadowMapData.getSpotLight( *lightingModel ) );
+						, c3d_shadowMapData.getSpotLight( lights ) );
 					auto lightToVertex = writer.declLocale( "lightToVertex"
-						, light.position - in.worldPosition.xyz() );
+						, light.position() - in.worldPosition.xyz() );
 					auto distance = writer.declLocale( "distance"
 						, length( lightToVertex ) );
 					auto attenuation = writer.declLocale( "attenuation"
@@ -351,16 +351,16 @@ namespace castor3d
 					auto lightDirection = writer.declLocale( "lightDirection"
 						, lightToVertex / distance );
 					auto spotFactor = writer.declLocale( "spotFactor"
-						, dot( lightDirection, -light.direction ) );
+						, dot( lightDirection, -light.direction() ) );
 					spotFactor = max( 0.0_f
 						, sdw::fma( ( spotFactor - 1.0_f )
-							, 1.0_f / ( 1.0_f - light.outerCutOff )
+							, 1.0_f / ( 1.0_f - light.outerCutOff() )
 							, 1.0_f ) );
 					spotFactor = 1.0_f - step( spotFactor, 0.0_f );
 					components.colour *= in.colour;
 					outFlux.rgb() = ( components.colour
-							* light.base.colour
-							* light.base.intensity.x()
+							* light.base().colour()
+							* light.base().intensity().x()
 							* clamp( dot( lightDirection, components.normal ), 0.0_f, 1.0_f ) )
 						/ attenuation;
 					outNormal.xyz() = components.normal;

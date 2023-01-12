@@ -23,13 +23,13 @@ namespace castor3d
 
 			C3D_API sdw::Vec3 compute( BlendComponents const & components
 				, shader::DirectionalLight const & light
-				, Surface const & surface );
+				, LightSurface const & lightSurface );
 			C3D_API sdw::Vec3 compute( BlendComponents const & components
 				, shader::PointLight const & light
-				, Surface const & surface );
+				, LightSurface const & lightSurface );
 			C3D_API sdw::Vec3 compute( BlendComponents const & components
 				, shader::SpotLight const & light
-				, Surface const & surface );
+				, LightSurface const & lightSurface );
 
 		private:
 			void doDeclare();
@@ -51,17 +51,20 @@ namespace castor3d
 				, sdw::InUInt
 				, sdw::InFloat
 				, InDirectionalLight
-				, InSurface > m_computeDirectional;
+				, sdw::InVec3
+				, sdw::InVec3 > m_computeDirectional;
 			sdw::Function < sdw::Vec3
 				, sdw::InUInt
 				, sdw::InFloat
 				, InPointLight
-				, InSurface > m_computePoint;
+				, sdw::InVec3
+				, sdw::InVec3 > m_computePoint;
 			sdw::Function < sdw::Vec3
 				, sdw::InUInt
 				, sdw::InFloat
 				, InSpotLight
-				, InSurface > m_computeSpot;
+				, sdw::InVec3
+				, sdw::InVec3 > m_computeSpot;
 		};
 	}
 }

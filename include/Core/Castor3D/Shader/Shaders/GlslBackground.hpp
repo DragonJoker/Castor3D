@@ -16,7 +16,7 @@ namespace castor3d::shader
 			, VkExtent2D targetSize );
 		C3D_API virtual ~BackgroundModel() = default;
 
-		C3D_API static std::unique_ptr< BackgroundModel > createModel( Scene const & scene
+		C3D_API static BackgroundModelPtr createModel( Scene const & scene
 			, sdw::ShaderWriter & writer
 			, Utils & utils
 			, VkExtent2D targetSize
@@ -24,42 +24,44 @@ namespace castor3d::shader
 			, uint32_t & binding
 			, uint32_t set );
 
-		C3D_API virtual sdw::RetVec3 computeRefractions( sdw::Vec3 const & wsIncident
-			, sdw::Vec3 const & wsNormal
-			, sdw::Float const & refractionRatio
-			, BlendComponents & components ) = 0;
-		C3D_API virtual void computeReflections( sdw::Vec3 const & wsIncident
-			, sdw::Vec3 const & wsNormal
+		C3D_API virtual void computeReflections( sdw::Vec3 const & wsNormal
+			, sdw::Vec3 const & difF
+			, sdw::Vec3 const & spcF
+			, sdw::Vec3 const & V
+			, sdw::Float const & NdotV
 			, BlendComponents & components
 			, sdw::CombinedImage2DRgba32 const & brdf
 			, sdw::Vec3 & reflectedDiffuse
 			, sdw::Vec3 & reflectedSpecular );
-		C3D_API virtual sdw::RetVec3 computeSpecularReflections( sdw::Vec3 const & wsIncident
+		C3D_API virtual sdw::RetVec3 computeDiffuseReflections( sdw::Vec3 const & albedo
 			, sdw::Vec3 const & wsNormal
-			, sdw::Vec3 const & specular
+			, sdw::Vec3 const & fresnel
+			, sdw::Float const & metalness );
+		C3D_API virtual sdw::RetVec3 computeSpecularReflections( sdw::Vec3 const & fresnel
+			, sdw::Vec3 const & wsNormal
+			, sdw::Vec3 const & V
+			, sdw::Float const & NdotV
 			, sdw::Float const & roughness
+			, sdw::CombinedImage2DRgba32 const & brdf );
+		C3D_API virtual sdw::RetVec3 computeSheenReflections( sdw::Vec3 const & wsNormal
+			, sdw::Vec3 const & V
+			, sdw::Float const & NdotV
 			, BlendComponents & components
 			, sdw::CombinedImage2DRgba32 const & brdf );
-		C3D_API virtual sdw::RetVec3 computeSpecularRefractions( sdw::Vec3 const & wsIncident
+
+		C3D_API virtual sdw::RetVec3 computeRefractions( sdw::Vec3 const & wsNormal
+			, sdw::Vec3 const & V
+			, sdw::Float const & refractionRatio
+			, BlendComponents & components );
+		C3D_API virtual sdw::RetVec3 computeSpecularRefractions( sdw::Vec3 const & fresnel
 			, sdw::Vec3 const & wsNormal
-			, sdw::Vec3 const & specular
+			, sdw::Vec3 const & V
+			, sdw::Float const & NdotV
 			, sdw::Float const & roughness
 			, sdw::Float const & refractionRatio
 			, BlendComponents & components
 			, sdw::CombinedImage2DRgba32 const & brdf );
-		C3D_API virtual sdw::RetVec3 computeSheenReflections( sdw::Vec3 const & wsIncident
-			, sdw::Vec3 const & wsNormal
-			, BlendComponents & components
-			, sdw::CombinedImage2DRgba32 const & brdf );
-		C3D_API virtual void computeIridescenceReflections( sdw::Vec3 const & wsIncident
-			, sdw::Vec3 const & wsNormal
-			, BlendComponents & components
-			, sdw::CombinedImage2DRgba32 const & brdf
-			, sdw::Vec3 const & iridescenceFresnel
-			, sdw::Vec3 const & iridescenceF0
-			, sdw::Float const & iridescenceFactor
-			, sdw::Vec3 & reflectedDiffuse
-			, sdw::Vec3 & reflectedSpecular );
+
 		C3D_API virtual void applyVolume( sdw::Vec2 const fragCoord
 			, sdw::Float const linearDepth
 			, sdw::Vec2 const targetSize

@@ -84,23 +84,6 @@ namespace atmosphere_scattering
 			, set );
 	}
 
-	sdw::RetVec3 AtmosphereBackgroundModel::computeRefractions( sdw::Vec3 const & wsIncident
-		, sdw::Vec3 const & wsNormal
-		, sdw::Float const & refractionRatio
-		, castor3d::shader::BlendComponents & components )
-	{
-		if ( !m_computeRefractions )
-		{
-			m_computeRefractions = m_writer.implementFunction< sdw::Vec3 >( "c3d_atmbg_computeRefractions"
-				, [&]()
-				{
-					m_writer.returnStmt( vec3( 0.0_f ) );
-				} );
-		}
-
-		return m_computeRefractions();
-	}
-
 	void AtmosphereBackgroundModel::applyVolume( sdw::Vec2 const pfragCoord
 		, sdw::Float const plinearDepth
 		, sdw::Vec2 const ptargetSize

@@ -4,6 +4,7 @@
 
 #include <Castor3D/Limits.hpp>
 #include <Castor3D/Engine.hpp>
+#include <Castor3D/Material/Pass/Pass.hpp>
 #include <Castor3D/Material/Pass/PassFactory.hpp>
 #include <Castor3D/Render/RenderDevice.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>

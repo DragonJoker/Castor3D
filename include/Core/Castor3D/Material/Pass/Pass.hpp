@@ -42,14 +42,14 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	parent			The parent material.
-		 *\param[in]	typeID			The pass type ID.
+		 *\param[in]	LightingModelID	The material's lighting model ID.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	parent			Le matériau parent.
-		 *\param[in]	typeID			L'ID du type de la passe.
+		 *\param[in]	LightingModelID	L'ID du modèle d'éclairage du matériau.
 		 */
 		C3D_API explicit Pass( Material & parent
-			, PassTypeID typeID );
+			, LightingModelID lightingModelId );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -396,9 +396,9 @@ namespace castor3d
 			return m_implicit;
 		}
 
-		PassTypeID getTypeID()const
+		LightingModelID getLightingModelId()const
 		{
-			return m_typeID;
+			return m_lightingModelId;
 		}
 
 		RenderPassRegisterInfo * getRenderPassInfo()const
@@ -506,7 +506,7 @@ namespace castor3d
 		mutable std::atomic_bool m_dirty{ true };
 
 	private:
-		PassTypeID m_typeID;
+		LightingModelID m_lightingModelId;
 		PassComponentCombine m_componentCombine;
 		TextureCombine m_textureCombine;
 		uint32_t m_index;

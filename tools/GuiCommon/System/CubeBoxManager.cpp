@@ -73,7 +73,7 @@ namespace GuiCommon
 			{
 				material = scene.getEngine()->addNewMaterial( matName
 					, *scene.getEngine()
-					, scene.getPassesType() );
+					, scene.getDefaultLightingModel() );
 				auto pass = material.lock()->createPass();
 				pass->enableLighting( false );
 				pass->enablePicking( false );

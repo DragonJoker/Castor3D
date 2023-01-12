@@ -139,8 +139,7 @@ namespace castor
 	{
 	}
 
-	void ResourceCacheT< Material, String, MaterialCacheTraits >::initialise( RenderDevice const & device
-		, PassTypeID passType )
+	void ResourceCacheT< Material, String, MaterialCacheTraits >::initialise( RenderDevice const & device )
 	{
 		if ( !m_passBuffer )
 		{
@@ -149,7 +148,8 @@ namespace castor
 			auto defaultMaterial = doTryAddNoLockT( Material::DefaultMaterialName
 				, false
 				, created
-				, m_engine, passType );
+				, m_engine
+				, m_engine.getDefaultLightingModel() );
 			auto material = defaultMaterial.lock();
 
 			if ( created.lock() == material )

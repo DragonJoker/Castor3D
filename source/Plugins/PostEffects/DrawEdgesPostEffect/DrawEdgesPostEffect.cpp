@@ -31,6 +31,7 @@ namespace draw_edges
 			eModels,
 			eDepthObj,
 			eSource,
+			eScattering,
 			eEdgeDN,
 			eEdgeO,
 			eDrawEdges,
@@ -75,6 +76,7 @@ namespace draw_edges
 			C3D_ModelsData( writer, eModels, 0u );
 			auto c3d_depthObj = writer.declCombinedImg< FImg2DRgba32 >( "c3d_depthObj", eDepthObj, 0u );
 			auto c3d_source = writer.declCombinedImg< FImg2DRgba32 >( "c3d_source", eSource, 0u );
+			auto c3d_scattering = writer.declCombinedImg< FImg2DRgba32 >( "c3d_scattering", eScattering, 0u );
 			auto c3d_edgeDN = writer.declCombinedImg< FImg2DR32 >( "c3d_edgeDN", eEdgeDN, 0u );
 			auto c3d_edgeO = writer.declCombinedImg< FImg2DR32 >( "c3d_edgeO", eEdgeO, 0u );
 			C3D_DrawEdges( writer, eDrawEdges, 0u );
@@ -154,10 +156,12 @@ namespace draw_edges
 									, getEdge( c3d_edgeO, texelCoord, c3d_drawEdgesData.objectWidth )
 									, 0.0_f ) );
 
+							auto edgeColour = writer.declLocale( "edgeColour"
+								, toonProfile.edgeColour().rgb() + c3d_scattering.fetch( texelCoord, 0_i ).rgb() );
 							auto edge = writer.declLocale( "edge"
-								, mix( colour.rgb(), toonProfile.edgeColour().rgb(), vec3( edgeDN ) ) );
+								, mix( colour.rgb(), edgeColour, vec3( edgeDN ) ) );
 							// outline contour over inline
-							edge = mix( edge, toonProfile.edgeColour().rgb(), vec3( edgeO ) );
+							edge = mix( edge, edgeColour, vec3( edgeO ) );
 
 							colour.rgb() = mix( colour.rgb(), edge, vec3( toonProfile.edgeColour().a() ) );
 						}
@@ -325,6 +329,7 @@ namespace draw_edges
 			, uint32_t( modelBuffer.getSize() ) );
 		pass.addSampledView( depthObj, px::eDepthObj );
 		pass.addSampledView( *m_target, px::eSource );
+		pass.addSampledView( technique.getScatteringLightingResult().sampledViewId, px::eScattering );
 		pass.addSampledView( m_depthNormal->getResult(), px::eEdgeDN );
 		pass.addSampledView( m_objectID->getResult(), px::eEdgeO );
 		m_ubo.createPassBinding( pass, px::eDrawEdges );

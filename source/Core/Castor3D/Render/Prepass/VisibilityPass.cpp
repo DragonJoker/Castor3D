@@ -8,9 +8,11 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/Opaque/VisibilityResolvePass.hpp"
+#include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
+#include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
@@ -98,11 +100,13 @@ namespace castor3d
 		return SceneFlag::eNone;
 	}
 
-	void VisibilityPass::doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const
+	void VisibilityPass::doFillAdditionalBindings( PipelineFlags const & flags
+		, ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
 	}
 
-	void VisibilityPass::doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
+	void VisibilityPass::doFillAdditionalDescriptor( PipelineFlags const & flags
+		, ashes::WriteDescriptorSetArray & descriptorWrites
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
 	}
@@ -172,13 +176,14 @@ namespace castor3d
 		auto data = writer.declOutput< UVec2 >( "data", 1u );
 		auto velocity = writer.declOutput< Vec2 >( "velocity", 2u, flags.writeVelocity() );
 
-		auto lightingModel = utils.createLightingModel( *getEngine()
+		shader::Lights lights{ *getEngine()
+			, flags.lightingModelId
+			, flags.backgroundModelId
 			, materials
 			, brdf
-			, shader::getLightingModelName( *getEngine(), flags.passType )
+			, utils
 			, {}
-			, nullptr
-			, true );
+			, nullptr };
 
 		writer.implementMainT< shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer
 				, passShaders
@@ -204,12 +209,12 @@ namespace castor3d
 					, in.passMultipliers
 					, components );
 
-				if ( components.transmission.isEnabled() )
+				if ( components.transmission )
 				{
 					auto incident = writer.declLocale( "incident"
 						, normalize( in.worldPosition.xyz() - c3d_sceneData.cameraPosition ) );
 
-					IF( writer, lightingModel->getFinalTransmission( components, incident ) >= 0.1_f )
+					IF( writer, lights.getFinalTransmission( components, incident ) >= 0.1_f )
 					{
 						writer.demote();
 					}

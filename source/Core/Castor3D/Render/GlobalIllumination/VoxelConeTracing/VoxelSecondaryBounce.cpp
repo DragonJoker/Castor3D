@@ -10,6 +10,7 @@
 #include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/VoxelSceneData.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslGlobalIllumination.hpp"
+#include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Shaders/GlslVoxel.hpp"
@@ -150,8 +151,10 @@ namespace castor3d
 					auto coord = writer.declLocale( "coord"
 						, ivec3( utils.unflatten( in.globalInvocationID.x()
 							, uvec3( UInt{ voxelGridSize } ) ) ) );
+					auto clip = writer.declLocale( "clip"
+						, vec3( c3d_voxelData.gridToClip ) * vec3( coord ) );
 					auto color = writer.declLocale( "color"
-						, firstBounce.lod( vec3( c3d_voxelData.gridToClip ) * vec3( coord ), 0.0_f ) );
+						, firstBounce.lod( clip, 0.0_f ) );
 
 					IF( writer, color.a() > 0.0_f )
 					{
@@ -169,11 +172,14 @@ namespace castor3d
 						// to world
 						position *= c3d_voxelData.gridToWorld;
 
-						auto surface = writer.declLocale( "surface"
-							, shader::Surface{ position, normal } );
+						auto lightSurface = shader::LightSurface::create( writer
+							, "lightSurface"
+							, position
+							, clip
+							, normal );
 						auto radiance = writer.declLocale( "radiance"
 							, indirect.traceConeRadiance( firstBounce
-								, surface
+								, lightSurface
 								, c3d_voxelData ) );
 						output.store( coord, vec4( color.rgb() + radiance.rgb(), color.a() ) );
 					}

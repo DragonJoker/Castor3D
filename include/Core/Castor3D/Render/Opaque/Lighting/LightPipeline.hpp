@@ -20,13 +20,13 @@ namespace castor3d
 {
 	struct LightPipelineConfig
 	{
-		LightPipelineConfig( PassTypeID passType
+		LightPipelineConfig( LightingModelID lightingModelId
 			, SceneFlags const & sceneFlags
 			, Light const & light );
 
 		size_t makeHash()const;
 
-		PassTypeID passType;
+		LightingModelID lightingModelId;
 		SceneFlags const & sceneFlags;
 		LightType lightType;
 		ShadowType shadowType;

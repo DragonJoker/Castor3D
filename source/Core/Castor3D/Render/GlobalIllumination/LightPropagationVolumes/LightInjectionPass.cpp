@@ -161,27 +161,26 @@ namespace castor3d
 					, utils };
 				shader::Materials materials{ writer, passShaders };
 				uint32_t index = 0;
-				auto lightingModel = shader::LightingModel::createModel( *renderSystem.getEngine()
+				shader::Lights lights{ *renderSystem.getEngine()
 					, materials
-					, utils
 					, brdf
-					, renderSystem.getEngine()->getPassFactory().getLightingModelName( 1u )
-					, LightType::eDirectional
-					, uint32_t( LightInjectionPass::LightsIdx )
-					, 0u
-					, false
+					, utils
 					, shader::ShadowOptions{ SceneFlag::eNone, false, true }
-					, nullptr
-					, index
-					, 1u );
+					, nullptr /* sssProfiles */
+					, LightType::eDirectional
+					, false /* lightUbo */
+					, LightInjectionPass::LightsIdx /* lightBinding */
+					, 0u /* lightSet */
+					, index /* shadowMapBinding */
+					, 1u /* shadowMapSet */ };
 
 				writer.implementMainT< VoidT, lpvlgt::SurfaceT >( [&]( VertexIn in
 					, VertexOutT< lpvlgt::SurfaceT > out )
 					{
 						auto light = writer.declLocale( "light"
-							, lightingModel->getDirectionalLight( writer.cast< UInt >( c3d_lpvLightData.lightIndex ) ) );
+							, lights.getDirectionalLight( writer.cast< UInt >( c3d_lpvLightData.lightIndex ) ) );
 						auto cascadeIndex = writer.declLocale( "cascadeIndex"
-							, writer.cast< Int >( max( 1_u, light.cascadeCount ) - 1_u ) );
+							, writer.cast< Int >( max( 1_u, light.cascadeCount() ) - 1_u ) );
 						auto rsmCoords = writer.declLocale( "rsmCoords"
 							, ivec3( in.vertexIndex % int32_t( rsmTexSize )
 								, in.vertexIndex / int32_t( rsmTexSize )
@@ -225,19 +224,18 @@ namespace castor3d
 					, utils };
 				shader::Materials materials{ writer, passShaders };
 				uint32_t index = 0;
-				auto lightingModel = shader::LightingModel::createModel( *renderSystem.getEngine()
+				shader::Lights lights{ *renderSystem.getEngine()
 					, materials
-					, utils
 					, brdf
-					, renderSystem.getEngine()->getPassFactory().getLightingModelName( 1u )
-					, LightType::eDirectional
-					, uint32_t( LightInjectionPass::LightsIdx )
-					, 0u
-					, false
+					, utils
 					, shader::ShadowOptions{ SceneFlag::eNone, false, true }
-					, nullptr
-					, index
-					, 1u );
+					, nullptr /* sssProfiles */
+					, LightType::eDirectional
+					, false /* lightUbo */
+					, LightInjectionPass::LightsIdx /* lightBinding */
+					, 0u /* lightSet */
+					, index /* shadowMapBinding */
+					, 1u /* shadowMapSet */ };
 
 				writer.implementMainT< VoidT, lpvlgt::SurfaceT >( [&]( VertexIn in
 					, VertexOutT< lpvlgt::SurfaceT > out )
@@ -293,29 +291,28 @@ namespace castor3d
 				, utils };
 			shader::Materials materials{ writer, passShaders };
 			uint32_t index = 0;
-			auto lightingModel = shader::LightingModel::createModel( *renderSystem.getEngine()
+			shader::Lights lights{ *renderSystem.getEngine()
 				, materials
-				, utils
 				, brdf
-				, renderSystem.getEngine()->getPassFactory().getLightingModelName( 1u )
-				, LightType::ePoint
-				, uint32_t( LightInjectionPass::LightsIdx )
-				, 0u
-				, false
+				, utils
 				, shader::ShadowOptions{ SceneFlag::eNone, false, true }
-				, nullptr
-				, index
-				, 1u );
+				, nullptr /* sssProfiles */
+				, LightType::ePoint
+				, false /* lightUbo */
+				, LightInjectionPass::LightsIdx /* lightBinding */
+				, 0u /* lightSet */
+				, index /* shadowMapBinding */
+				, 1u /* shadowMapSet */ };
 
 			writer.implementMainT< VoidT, lpvlgt::SurfaceT >( [&]( VertexIn in
 				, VertexOutT< lpvlgt::SurfaceT > out )
 				{
 					auto light = writer.declLocale( "light"
-						, lightingModel->getPointLight( writer.cast< UInt >( c3d_lpvLightData.lightIndex ) ) );
+						, lights.getPointLight( writer.cast< UInt >( c3d_lpvLightData.lightIndex ) ) );
 					auto rsmCoords = writer.declLocale( "rsmCoords"
 						, ivec3( in.vertexIndex % int32_t( rsmTexSize )
 							, in.vertexIndex / int32_t( rsmTexSize )
-							, light.base.index * 6_i + int32_t( face ) ) );
+							, light.base().shadowMapIndex() * 6_i + int32_t( face ) ) );
 
 					auto rsmPosition = writer.declLocale( "rsmPosition"
 						, c3d_rsmPositionMap.fetch( rsmCoords, 0_i ).rgb() );
@@ -360,29 +357,28 @@ namespace castor3d
 				, utils };
 			shader::Materials materials{ writer, passShaders };
 			uint32_t index = 0;
-			auto lightingModel = shader::LightingModel::createModel( *renderSystem.getEngine()
+			shader::Lights lights{ *renderSystem.getEngine()
 				, materials
-				, utils
 				, brdf
-				, renderSystem.getEngine()->getPassFactory().getLightingModelName( 1u )
-				, LightType::eSpot
-				, uint32_t( LightInjectionPass::LightsIdx )
-				, 0u
-				, false
+				, utils
 				, shader::ShadowOptions{ SceneFlag::eNone, false, true }
-				, nullptr
-				, index
-				, 1u );
+				, nullptr /* sssProfiles */
+				, LightType::eSpot
+				, false /* lightUbo */
+				, LightInjectionPass::LightsIdx /* lightBinding */
+				, 0u /* lightSet */
+				, index /* shadowMapBinding */
+				, 1u /* shadowMapSet */ };
 
 			writer.implementMainT< VoidT, lpvlgt::SurfaceT >( [&]( VertexIn in
 				, VertexOutT< lpvlgt::SurfaceT > out )
 				{
 					auto light = writer.declLocale( "light"
-						, lightingModel->getSpotLight( writer.cast< UInt >( c3d_lpvLightData.lightIndex ) ) );
+						, lights.getSpotLight( writer.cast< UInt >( c3d_lpvLightData.lightIndex ) ) );
 					auto rsmCoords = writer.declLocale( "rsmCoords"
 						, ivec3( in.vertexIndex % int32_t( rsmTexSize )
 							, in.vertexIndex / int32_t( rsmTexSize )
-							, light.base.index ) );
+							, light.base().shadowMapIndex() ) );
 
 					auto rsmPosition = writer.declLocale( "rsmPosition"
 						, c3d_rsmPositionMap.fetch( rsmCoords, 0_i ).rgb() );

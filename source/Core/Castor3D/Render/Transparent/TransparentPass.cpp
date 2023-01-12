@@ -21,6 +21,7 @@
 #include "Castor3D/Shader/Shaders/GlslCookTorranceBRDF.hpp"
 #include "Castor3D/Shader/Shaders/GlslFog.hpp"
 #include "Castor3D/Shader/Shaders/GlslGlobalIllumination.hpp"
+#include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
@@ -145,10 +146,11 @@ namespace castor3d
 		};
 	}
 
-	void TransparentPass::doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const
+	void TransparentPass::doFillAdditionalBindings( PipelineFlags const & flags
+		, ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
 		auto index = uint32_t( GlobalBuffersIdx::eCount );
-		doAddPassSpecificsBindings( bindings, index );
+		doAddPassSpecificsBindings( flags, bindings, index );
 		bindings.emplace_back( m_scene.getLightCache().createLayoutBinding( index++ ) );
 
 		if ( m_ssao )
@@ -162,21 +164,22 @@ namespace castor3d
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapBrdf
 
-		doAddShadowBindings( bindings, index );
-		doAddEnvBindings( bindings, index );
-		doAddBackgroundBindings( bindings, index );
-		doAddGIBindings( bindings, index );
+		doAddShadowBindings( flags, bindings, index );
+		doAddEnvBindings( flags, bindings, index );
+		doAddBackgroundBindings( flags, bindings, index );
+		doAddGIBindings( flags, bindings, index );
 
 		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapScene
 	}
 
-	void TransparentPass::doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
+	void TransparentPass::doFillAdditionalDescriptor( PipelineFlags const & flags
+		, ashes::WriteDescriptorSetArray & descriptorWrites
 		, castor3d::ShadowMapLightTypeArray const & shadowMaps )
 	{
 		auto index = uint32_t( GlobalBuffersIdx::eCount );
-		doAddPassSpecificsDescriptor( descriptorWrites, index );
+		doAddPassSpecificsDescriptor( flags, descriptorWrites, index );
 		descriptorWrites.push_back( m_scene.getLightCache().getBinding( index++ ) );
 
 		if ( m_ssao )
@@ -191,10 +194,10 @@ namespace castor3d
 			, *getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().sampler
 			, descriptorWrites
 			, index );
-		doAddShadowDescriptor( descriptorWrites, shadowMaps, index );
-		doAddEnvDescriptor( descriptorWrites, index );
-		doAddBackgroundDescriptor( descriptorWrites, *m_targetImage, index );
-		doAddGIDescriptor( descriptorWrites, index );
+		doAddShadowDescriptor( flags, descriptorWrites, shadowMaps, index );
+		doAddEnvDescriptor( flags, descriptorWrites, index );
+		doAddBackgroundDescriptor( flags, descriptorWrites, *m_targetImage, index );
+		doAddGIDescriptor( flags, descriptorWrites, index );
 
 		bindTexture( m_sceneImage.wholeView
 			, *m_sceneImage.sampler
@@ -215,7 +218,7 @@ namespace castor3d
 			, flags
 			, getComponentsMask()
 			, utils };
-		shader::CookTorranceBRDF cookTorrance{ writer, utils, brdf };
+		shader::CookTorranceBRDF cookTorrance{ writer, brdf };
 		auto index = uint32_t( GlobalBuffersIdx::eCount );
 
 		C3D_Matrix( writer
@@ -249,20 +252,24 @@ namespace castor3d
 		auto c3d_mapBrdf = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapBrdf"
 			, index++
 			, RenderPipeline::eBuffers );
-		auto lightingModel = shader::LightingModel::createModel( *getEngine()
+		shader::Lights lights{ *getEngine()
+			, flags.lightingModelId
+			, flags.backgroundModelId
 			, materials
-			, utils
 			, brdf
-			, getScene().getLightingModel()
-			, lightsIndex
-			, RenderPipeline::eBuffers
+			, utils
 			, shader::ShadowOptions{ flags.getShadowFlags(), true, false }
 			, nullptr
+			, lightsIndex /* lightBinding */
+			, RenderPipeline::eBuffers /* lightSet */
+			, index /* shadowMapBinding */
+			, RenderPipeline::eBuffers /* shadowMapSet */
+			, true /* enableVolumetric */ };
+		shader::ReflectionModel reflections{ writer
+			, utils
 			, index
-			, RenderPipeline::eBuffers
-			, true );
-		auto reflections = lightingModel->getReflectionModel( index
-			, uint32_t( RenderPipeline::eBuffers ) );
+			, uint32_t( RenderPipeline::eBuffers )
+			, lights.hasIblSupport() };
 		auto backgroundModel = shader::BackgroundModel::createModel( getScene()
 			, writer
 			, utils
@@ -323,10 +330,8 @@ namespace castor3d
 				auto colour = writer.declLocale( "colour"
 					, vec3( 0.0_f ) );
 
-				IF( writer, material.lighting != 0_u )
+				if ( auto lightingModel = lights.getLightingModel() )
 				{
-					auto worldEye = writer.declLocale( "worldEye"
-						, c3d_sceneData.cameraPosition );
 					auto lightDiffuse = writer.declLocale( "lightDiffuse"
 						, vec3( 0.0_f ) );
 					auto lightSpecular = writer.declLocale( "lightSpecular"
@@ -342,16 +347,22 @@ namespace castor3d
 						, shader::Surface{ in.fragCoord.xyz()
 							, in.viewPosition.xyz()
 							, in.worldPosition.xyz()
-							, components.normal } );
+							, normalize( components.normal ) } );
 					components.finish( passShaders
 						, surface
 						, utils
 						, c3d_sceneData.cameraPosition );
-					lightingModel->computeCombined( components
+					auto lightSurface = shader::LightSurface::create( writer
+						, "lightSurface"
+						, c3d_sceneData.cameraPosition
+						, surface.worldPosition.xyz()
+						, surface.viewPosition.xyz()
+						, surface.clipPosition
+						, surface.normal );
+					lights.computeCombinedDifSpec( components
 						, c3d_sceneData
 						, *backgroundModel
-						, surface
-						, worldEye
+						, lightSurface
 						, modelData.isShadowReceiver()
 						, output );
 
@@ -376,10 +387,14 @@ namespace castor3d
 					}
 
 					auto incident = writer.declLocale( "incident"
-						, reflections->computeIncident( surface.worldPosition.xyz(), c3d_sceneData.cameraPosition ) );
-					reflections->computeCombined( components
-						, incident
-						, surface.worldPosition.xyz()
+						, reflections.computeIncident( lightSurface.worldPosition(), c3d_sceneData.cameraPosition ) );
+					lightSurface.updateN( utils
+						, components.normal
+						, components.specular
+						, components );
+					reflections.computeCombined( components
+						, lightSurface
+						, lightSurface.worldPosition()
 						, *backgroundModel
 						, c3d_mapScene
 						, c3d_matrixData
@@ -387,22 +402,23 @@ namespace castor3d
 						, modelData.getEnvMapIndex()
 						, components.hasReflection
 						, components.refractionRatio
-						, directAmbient
 						, reflectedDiffuse
 						, reflectedSpecular
 						, refracted
 						, coatReflected
 						, sheenReflected );
 
-					auto indirectOcclusion = writer.declLocale( "indirectOcclusion"
-						, 1.0_f );
+					lightSurface.updateL( utils
+						, components.normal
+						, components.specular
+						, components );
+					auto indirectOcclusion = indirect.computeOcclusion( flags.getGlobalIlluminationFlags()
+						, lightSurface );
 					auto lightIndirectDiffuse = indirect.computeDiffuse( flags.getGlobalIlluminationFlags()
-						, surface
+						, lightSurface
 						, indirectOcclusion );
 					auto lightIndirectSpecular = indirect.computeSpecular( flags.getGlobalIlluminationFlags()
-						, worldEye
-						, c3d_sceneData.getPosToCamera( surface.worldPosition.xyz() )
-						, surface
+						, lightSurface
 						, components.roughness
 						, indirectOcclusion
 						, lightIndirectDiffuse.w()
@@ -413,11 +429,9 @@ namespace castor3d
 					auto indirectDiffuse = writer.declLocale( "indirectDiffuse"
 						, ( hasDiffuseGI
 							? cookTorrance.computeDiffuse( lightIndirectDiffuse.xyz()
-								, c3d_sceneData.cameraPosition
-								, components.normal
-								, components.specular
-								, components.metalness
-								, surface )
+								, length( lightIndirectDiffuse.xyz() )
+								, lightSurface.difF()
+								, components.metalness )
 							: vec3( 0.0_f ) ) );
 
 					colour = lightingModel->combine( components
@@ -437,11 +451,10 @@ namespace castor3d
 						, coatReflected
 						, sheenReflected );
 				}
-				ELSE
+				else
 				{
 					colour = components.colour;
 				}
-				FI;
 
 				outAccumulation = c3d_sceneData.computeAccumulation( utils
 					, in.fragCoord.z()

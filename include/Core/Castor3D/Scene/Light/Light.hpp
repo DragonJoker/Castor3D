@@ -67,7 +67,7 @@ namespace castor3d
 		 *\param[out]	data	Reçoit les informations.
 		 */
 		C3D_API void fillBuffer( uint32_t index
-			, LightBuffer::LightData & data );
+			, LightBufferData & data );
 		/**
 		*\~english
 		*name
@@ -295,6 +295,15 @@ namespace castor3d
 		{
 			m_shadowCaster = value;
 			markDirty();
+		}
+
+		void setShadowMapIndex( uint32_t index )
+		{
+			if ( m_shadowMapIndex != index )
+			{
+				m_shadowMapIndex = index;
+				onGPUChanged( *this );
+			}
 		}
 
 		void setShadowMap( ShadowMapRPtr value, uint32_t index = 0u )

@@ -54,7 +54,7 @@ namespace castor3d
 		 *\brief		Met la lumière dans la texture donnée.
 		 *\param[out]	data	Reçoit les données de la source lumineuse.
 		 */
-		C3D_API void fillBuffer( LightBuffer::LightData & data )const;
+		C3D_API void fillBuffer( LightBufferData & data )const;
 		/**
 		*\~english
 		*name
@@ -160,7 +160,7 @@ namespace castor3d
 		 *\brief		Met la lumière dans la texture donnée.
 		 *\param[out]	data	Reçoit les données de la source lumineuse.
 		 */
-		C3D_API virtual void doFillBuffer( LightBuffer::LightData & data )const = 0;
+		C3D_API virtual void doFillBuffer( LightBufferData & data )const = 0;
 
 	protected:
 		//!\~english	The cube box for the light volume of effect.
@@ -169,9 +169,6 @@ namespace castor3d
 		//!\~english	The far plane's depth.
 		//!\~french		La profondeur du plan éloigné.
 		float m_farPlane{ 1.0f };
-		//!\~english	The light source shadow map index.
-		//!\~french		L'index de la shadow map de la source lumineuse.
-		int32_t m_shadowMapIndex{ -1 };
 
 	private:
 		LightType m_lightType;

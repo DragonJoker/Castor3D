@@ -47,46 +47,38 @@ namespace castor3d
 			C3D_API void declareSpot( uint32_t & index
 				, uint32_t set );
 			C3D_API sdw::Float computeDirectional( shader::Light const & light
-				, Surface const & surface
+				, sdw::Vec3 const & wsVertexToLight
+				, sdw::Vec3 const & wsNormal
+				, sdw::Vec3 const & wsPosition
 				, sdw::Mat4 const & lightMatrix
-				, sdw::Vec3 const & lightDirection
 				, sdw::UInt const & cascadeIndex
 				, sdw::UInt const & maxCascade );
 			C3D_API sdw::Float computeDirectional( shader::Light const & light
-				, sdw::Vec3 const & wsPosition
-				, sdw::Vec3 const & wsNormal
+				, LightSurface const & lightSurface
 				, sdw::Mat4 const & lightMatrix
-				, sdw::Vec3 const & lightDirection
 				, sdw::UInt const & cascadeIndex
 				, sdw::UInt const & maxCascade );
 			C3D_API sdw::Float computeSpot( shader::Light const & light
-				, Surface const & surface
-				, sdw::Mat4 const & lightMatrix
-				, sdw::Vec3 const & lightDirection );
+				, LightSurface const & lightSurface
+				, sdw::Mat4 const & lightMatrix );
 			C3D_API sdw::Float computePoint( shader::Light const & light
-				, Surface const & surface
-				, sdw::Vec3 const & lightDirection );
+				, LightSurface const & lightSurface );
 			C3D_API sdw::Float computeVolumetric( shader::Light const & light
-				, Surface const & surface
-				, sdw::Vec3 const & eyePosition
+				, LightSurface const & lightSurface
 				, sdw::Mat4 const & lightMatrix
-				, sdw::Vec3 const & lightDirection
 				, sdw::UInt const & cascadeIndex
 				, sdw::UInt const & maxCascade );
 			C3D_API sdw::Float computeVolumetric( shader::Light const & light
-				, Surface const & surface
-				, sdw::Vec3 const & eyePosition
+				, LightSurface const & lightSurface
 				, sdw::Mat4 const & lightMatrix
-				, sdw::Vec3 const & lightDirection
 				, sdw::UInt const & cascadeIndex
 				, sdw::UInt const & maxCascade
 				, sdw::Float const & scattering );
 			C3D_API sdw::Float computeVolumetric( shader::Light const & light
-				, Surface const & surface
+				, LightSurface const & lightSurface
 				, Ray const & ray
 				, sdw::Float const & stepLength
 				, sdw::Mat4 const & lightMatrix
-				, sdw::Vec3 const & lightDirection
 				, sdw::UInt const & cascadeIndex
 				, sdw::UInt const & maxCascade
 				, sdw::Float const & scattering );
@@ -187,26 +179,28 @@ namespace castor3d
 				, InLight
 				, sdw::InVec3
 				, sdw::InVec3
-				, sdw::InMat4
 				, sdw::InVec3
+				, sdw::InMat4
 				, sdw::InUInt
 				, sdw::InUInt > m_computeDirectional;
 			sdw::Function< sdw::Float
 				, InLight
-				, InSurface
-				, sdw::InMat4
-				, sdw::InVec3 > m_computeSpot;
+				, sdw::InVec3
+				, sdw::InVec3
+				, sdw::InVec3
+				, sdw::InMat4 > m_computeSpot;
 			sdw::Function< sdw::Float
 				, InLight
-				, InSurface
+				, sdw::InVec3
+				, sdw::InVec3
 				, sdw::InVec3 > m_computePoint;
 			sdw::Function < sdw::Float
 				, InLight
-				, InSurface
+				, sdw::InVec3
+				, sdw::InVec3
 				, InRay
 				, sdw::InFloat
 				, sdw::InMat4
-				, sdw::InVec3
 				, sdw::InUInt
 				, sdw::InUInt
 				, sdw::InFloat > m_computeVolumetric;

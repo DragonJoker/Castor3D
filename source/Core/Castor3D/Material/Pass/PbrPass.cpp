@@ -10,13 +10,14 @@
 
 namespace castor3d
 {
-	castor::String const PbrPass::Type = cuT( "pbr" );
+	castor::String const PbrPass::Type = "pbr";
 	castor::String const PbrPass::LightingModel = shader::PbrLightingModel::getName();
 
-	PassSPtr PbrPass::create( Material & parent )
+	PassSPtr PbrPass::create( LightingModelID lightingModelId
+		, Material & parent )
 	{
 		auto result = std::make_shared< Pass >( parent
-			, parent.getEngine()->getPassFactory().getNameId( Type ) );
+			, lightingModelId );
 		result->createComponent< ColourComponent >();
 		result->createComponent< MetalnessComponent >();
 		result->createComponent< RoughnessComponent >();

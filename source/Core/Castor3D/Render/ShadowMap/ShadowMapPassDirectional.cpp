@@ -223,8 +223,6 @@ namespace castor3d
 
 	ShaderPtr ShadowMapPassDirectional::doGetPixelShaderSource( PipelineFlags const & flags )const
 	{
-		auto & renderSystem = *getEngine()->getRenderSystem();
-
 		using namespace sdw;
 		FragmentWriter writer;
 		auto enableTextures = flags.enableTextures();
@@ -259,19 +257,21 @@ namespace castor3d
 		C3D_ShadowMap( writer
 			, index++
 			, RenderPipeline::eBuffers );
-		auto lightingModel = shader::LightingModel::createModel( *renderSystem.getEngine()
+		shader::Lights lights{ *getEngine()
+			, flags.lightingModelId
+			, flags.backgroundModelId
 			, materials
-			, utils
 			, brdf
-			, shader::getLightingModelName( *getEngine(), flags.passType )
-			, LightType::eDirectional
-			, lightsIndex
-			, RenderPipeline::eBuffers
-			, false
-			, shader::ShadowOptions{ SceneFlag::eNone, true, false }
+			, utils
+			, shader::ShadowOptions{ SceneFlag::eNone, needsVsm, false }
 			, nullptr
-			, index
-			, RenderPipeline::eBuffers );
+			, LightType::eDirectional
+			, false /* lightsUbo */
+			, lightsIndex /* lightBinding */
+			, RenderPipeline::eBuffers /* lightSet */
+			, index /* shadowMapBinding */
+			, RenderPipeline::eBuffers /* shadowMapSet */
+			, false /* enableVolumetric */ };
 
 		auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
 			, 0u
@@ -338,11 +338,11 @@ namespace castor3d
 				if ( needsRsm )
 				{
 					auto light = writer.declLocale( "light"
-						, c3d_shadowMapData.getDirectionalLight( *lightingModel ) );
+						, c3d_shadowMapData.getDirectionalLight( lights ) );
 					components.colour *= in.colour;
 					outFlux.rgb() = components.colour
-						* light.base.colour
-						* light.base.intensity.x();
+						* light.base().colour()
+						* light.base().intensity().x();
 					outNormal.xyz() = components.normal;
 					outPosition.xyz() = in.worldPosition.xyz();
 				}

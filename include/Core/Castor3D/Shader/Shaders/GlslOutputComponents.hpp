@@ -14,7 +14,8 @@ namespace castor3d
 	{
 		struct OutputComponents
 		{
-			C3D_API explicit OutputComponents( sdw::ShaderWriter & writer );
+			C3D_API explicit OutputComponents( sdw::ShaderWriter & writer
+				, bool isParam = true );
 			C3D_API OutputComponents( sdw::InOutVec3 const & diffuse
 				, sdw::InOutVec3 const & specular
 				, sdw::InOutVec3 const & scattering

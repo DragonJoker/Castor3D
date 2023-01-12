@@ -15,26 +15,24 @@ namespace castor3d
 	{
 	}
 
-	void LightCategory::fillBuffer( LightBuffer::LightData & data )const
+	void LightCategory::fillBuffer( LightBufferData & data )const
 	{
-		data.colourIndex = getColour();
-		data.colourIndex.w = float( m_shadowMapIndex );
+		data.colour = getColour();
+		data.shadowMapIndex = float( m_light.getShadowMapIndex() );
 
-		data.intensityFarPlane = getIntensity();
-		data.intensityFarPlane.z = getFarPlane();
-		data.intensityFarPlane.w = float( getLight().getShadowType() );
+		data.intensity = getIntensity();
+		data.farPlane = getFarPlane();
+		data.shadowType = float( getLight().isShadowProducer()
+			? getLight().getShadowType()
+			: ShadowType::eNone );
 
-		data.volumetric.x = float( getVolumetricSteps() );
-		data.volumetric.y = getVolumetricScatteringFactor();
-		data.volumetric.z = 0.0f;
-		data.volumetric.w = 0.0f;
+		data.volumetricSteps = float( getVolumetricSteps() );
+		data.volumetricScattering = getVolumetricScatteringFactor();
 
-		data.shadowsOffsets.x = getShadowRawOffsets()->x;
-		data.shadowsOffsets.y = getShadowRawOffsets()->y;
-		data.shadowsOffsets.z = getShadowPcfOffsets()->x;
-		data.shadowsOffsets.w = getShadowPcfOffsets()->y;
+		data.rawShadowsOffsets = getShadowRawOffsets();
+		data.pcfShadowsOffsets = getShadowPcfOffsets();
 
-		data.shadowsVariances = getShadowVariance();
+		data.vsmShadowVariance = getShadowVariance();
 
 		doFillBuffer( data );
 	}

@@ -430,8 +430,9 @@ namespace castor3d
 		C3D_API PipelineFlags createPipelineFlags( PassComponentCombine components
 			, BlendMode colourBlendMode
 			, BlendMode alphaBlendMode
-			, RenderPassTypeID renderPassTypeID
-			, PassTypeID passTypeID
+			, RenderPassTypeID renderPassTypeId
+			, LightingModelID lightingModelId
+			, BackgroundModelID backgroundModelId
 			, VkCompareOp alphaFunc
 			, VkCompareOp blendAlphaFunc
 			, TextureCombine const & textures
@@ -651,7 +652,8 @@ namespace castor3d
 		 *\brief			Remplit les attaches de layout de descripteurs spécifiques à une passe de rendu.
 		 *\param[in,out]	bindings	Reçoit les attaches additionnelles.
 		 */
-		C3D_API virtual void doFillAdditionalBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings )const = 0;
+		C3D_API virtual void doFillAdditionalBindings( PipelineFlags const & flags
+			, ashes::VkDescriptorSetLayoutBindingArray & bindings )const = 0;
 		C3D_API virtual bool doIsValidPass( Pass const & pass )const;
 		C3D_API virtual bool doIsValidRenderable( RenderedObject const & object )const;
 		C3D_API virtual SubmeshFlags doAdjustSubmeshFlags( SubmeshFlags flags )const;
@@ -699,7 +701,8 @@ namespace castor3d
 		 *\param[in,out]	descriptorWrites	Reçoit les descriptor writes.
 		 *\param[in]		shadowMaps			Les shadow maps.
 		 */
-		C3D_API virtual void doFillAdditionalDescriptor( ashes::WriteDescriptorSetArray & descriptorWrites
+		C3D_API virtual void doFillAdditionalDescriptor( PipelineFlags const & flags
+			, ashes::WriteDescriptorSetArray & descriptorWrites
 			, ShadowMapLightTypeArray const & shadowMaps ) = 0;
 		/**
 		 *\~english

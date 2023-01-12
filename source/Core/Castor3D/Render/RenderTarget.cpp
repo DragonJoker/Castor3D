@@ -96,7 +96,8 @@ namespace castor3d
 				ImageViewCache cache;
 
 				PipelineFlags flags{ PassComponentCombine{}
-					, scene.getPassesType()
+					, scene.getDefaultLightingModel()
+					, scene.getBackgroundModelId()
 					, SubmeshFlag::ePosNmlTanTex
 					, ProgramFlag::eNone
 					, TextureCombine{}
@@ -120,7 +121,8 @@ namespace castor3d
 				ImageViewCache cache;
 
 				PipelineFlags flags{ PassComponentCombine{}
-					, scene.getPassesType()
+					, scene.getDefaultLightingModel()
+					, scene.getBackgroundModelId()
 					, SubmeshFlag::ePosNmlTanTex
 					, ProgramFlag::eNone
 					, TextureCombine{}
@@ -380,9 +382,9 @@ namespace castor3d
 		sampler->setMinFilter( VK_FILTER_NEAREST );
 		sampler->setMagFilter( VK_FILTER_NEAREST );
 
-		for ( auto name : engine.getPostEffectFactory().listRegisteredTypes() )
+		for ( auto entry : engine.getPostEffectFactory().listRegisteredTypes() )
 		{
-			PostEffectSPtr effect = engine.getPostEffectFactory().create( name
+			PostEffectSPtr effect = engine.getPostEffectFactory().create( entry.key
 				, *this
 				, *engine.getRenderSystem()
 				, Parameters{} );

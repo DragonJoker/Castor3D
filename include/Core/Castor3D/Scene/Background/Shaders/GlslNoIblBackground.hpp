@@ -26,14 +26,17 @@ namespace castor3d::shader
 			, uint32_t & binding
 			, uint32_t set );
 
-		C3D_API void computeReflections( sdw::Vec3 const & wsIncident
-			, sdw::Vec3 const & wsNormal
+		C3D_API void computeReflections( sdw::Vec3 const & wsNormal
+			, sdw::Vec3 const & difF
+			, sdw::Vec3 const & spcF
+			, sdw::Vec3 const & V
+			, sdw::Float const & NdotV
 			, BlendComponents & components
 			, sdw::CombinedImage2DRgba32 const & brdf
 			, sdw::Vec3 & reflectedDiffuse
 			, sdw::Vec3 & reflectedSpecular )override;
-		C3D_API sdw::RetVec3 computeRefractions( sdw::Vec3 const & wsIncident
-			, sdw::Vec3 const & wsNormal
+		C3D_API sdw::RetVec3 computeRefractions( sdw::Vec3 const & wsNormal
+			, sdw::Vec3 const & V
 			, sdw::Float const & refractionRatio
 			, BlendComponents & components )override;
 

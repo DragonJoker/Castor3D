@@ -115,7 +115,7 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		void doFillBuffer( LightBuffer::LightData & data )const override;
+		void doFillBuffer( LightBufferData & data )const override;
 
 	private:
 		castor::Point3f m_direction;

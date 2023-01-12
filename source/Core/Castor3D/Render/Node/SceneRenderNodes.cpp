@@ -58,6 +58,25 @@ namespace castor3d
 			hash = castor::hashCombinePtr( hash, pass );
 			return hash;
 		}
+
+		static void rem( LightingModelID id
+			, std::map< LightingModelID, size_t > & models )
+		{
+			auto it = models.find( id );
+
+			if ( it != models.end()
+				&& it->second > 0u )
+			{
+				--it->second;
+			}
+		}
+
+		static void add( LightingModelID id
+			, std::map< LightingModelID, size_t > & models )
+		{
+			auto it = models.emplace( id, 0u ).first;
+			it->second++;
+		}
 	}
 
 	//*********************************************************************************************
@@ -191,6 +210,7 @@ namespace castor3d
 				, *instance.getParent()
 				, data.getMeshletsCount()
 				, node.modelData );
+			scnrendnd::add( pass.getLightingModelId(), m_lightingModels );
 
 			if ( data.isDynamic() )
 			{
@@ -249,6 +269,7 @@ namespace castor3d
 				, *instance.getNode()
 				, 0u
 				, it.first->second->modelData );
+			scnrendnd::add( pass.getLightingModelId(), m_lightingModels );
 			m_dirty = true;
 		}
 
@@ -290,6 +311,7 @@ namespace castor3d
 
 		for ( auto pass : oldMaterial )
 		{
+			scnrendnd::rem( pass->getLightingModelId(), m_lightingModels );
 			auto submeshIt = m_submeshNodes.find( scnrendnd::makeNodeHash( *pass, data, instance ) );
 
 			if ( submeshIt != m_submeshNodes.end() )
@@ -315,6 +337,7 @@ namespace castor3d
 				&& passIt != newMaterial.end() )
 			{
 				auto pass = passIt->get();
+				scnrendnd::add( pass->getLightingModelId(), m_lightingModels );
 				auto submeshIt = m_submeshNodes.emplace( scnrendnd::makeNodeHash( *pass, data, instance ), nullptr ).first;
 				submeshIt->second = std::move( nodeIt->second );
 
@@ -349,6 +372,7 @@ namespace castor3d
 				while ( passIt != newMaterial.end() )
 				{
 					auto pass = passIt->get();
+					scnrendnd::add( pass->getLightingModelId(), m_lightingModels );
 					createNode( *pass
 						, data
 						, instance
@@ -368,6 +392,7 @@ namespace castor3d
 
 		for ( auto pass : oldMaterial )
 		{
+			scnrendnd::rem( pass->getLightingModelId(), m_lightingModels );
 			auto billboardIt = m_billboardNodes.find( scnrendnd::makeNodeHash( *pass, billboard ) );
 
 			if ( billboardIt != m_billboardNodes.end() )
@@ -393,6 +418,7 @@ namespace castor3d
 				&& passIt != newMaterial.end() )
 			{
 				auto pass = passIt->get();
+				scnrendnd::add( pass->getLightingModelId(), m_lightingModels );
 				auto billboardIt = m_billboardNodes.emplace( scnrendnd::makeNodeHash( *pass, billboard ), nullptr ).first;
 				billboardIt->second = std::move( nodeIt->second );
 
@@ -417,6 +443,7 @@ namespace castor3d
 			while ( passIt != newMaterial.end() )
 			{
 				auto pass = passIt->get();
+				scnrendnd::add( pass->getLightingModelId(), m_lightingModels );
 				createNode( *pass
 					, billboard );
 				++passIt;
@@ -492,6 +519,14 @@ namespace castor3d
 		{
 			m_billboardsData->flush( 0u, m_nodesData.size() );
 		}
+	}
+
+	bool SceneRenderNodes::hasNodes( LightingModelID lightingModelId )const
+	{
+		auto it = m_lightingModels.find( lightingModelId );
+		return it == m_lightingModels.end()
+			? false
+			: it->second > 0u;
 	}
 
 	crg::FramePass const & SceneRenderNodes::createVertexTransformPass( crg::FrameGraph & graph )

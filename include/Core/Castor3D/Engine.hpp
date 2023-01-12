@@ -26,6 +26,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Opaque/Lighting/LightingModule.hpp"
 #include "Castor3D/Render/ToneMapping/ToneMappingModule.hpp"
 #include "Castor3D/Render/ToTexture/RenderToTextureModule.hpp"
+#include "Castor3D/Scene/Background/BackgroundModule.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleModule.hpp"
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
@@ -323,35 +324,55 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Registers a Lighting Model.
-		 *\param[in]	name	The model name.
-		 *\param[in]	creator	The model creation function.
+		 *\param[in]	name				The model name.
+		 *\param[in]	backgroundModelId	The background model ID.
+		 *\param[in]	creator				The model creation function.
+		 *\return		The model ID.
 		 *\~french
 		 *\brief		Enregistre un Lighting Model.
-		 *\param[in]	name	Le nom du model.
-		 *\param[in]	creator	La fonction de création du modèle.
+		 *\param[in]	name				Le nom du model.
+		 *\param[in]	backgroundModelId	L'ID du modèle de fond.
+		 *\param[in]	creator				La fonction de création du modèle.
+		 *\return		L'ID du modèle.
 		 */
-		C3D_API void registerLightingModel( castor::String const & name
-			, shader::LightingModelCreator creator );
+		C3D_API LightingModelID registerLightingModel( castor::String const & name
+			, shader::LightingModelCreator creator
+			, BackgroundModelID backgroundModelId );
 		/**
 		 *\~english
 		 *\brief		Unregisters a Lighting Model.
-		 *\param[in]	name	The model name.
+		 *\param[in]	lightingModelId	The model ID.
 		 *\~french
 		 *\brief		Désenregistre un Lighting Model.
-		 *\param[in]	name	Le nom du modèle.
+		 *\param[in]	lightingModelId	L'ID du modèle.
 		 */
-		C3D_API void unregisterLightingModel( castor::String const & name );
+		C3D_API void unregisterLightingModel( LightingModelID lightingModelId
+			, BackgroundModelID backgroundModelId );
+		/**
+		 *\~english
+		 *\brief		Unregisters a Lighting Model.
+		 *\param[in]	name				The model name.
+		 *\param[in]	backgroundModelId	The background model ID.
+		 *\~french
+		 *\brief		Désenregistre un Lighting Model.
+		 *\param[in]	name				Le nom du modèle.
+		 *\param[in]	backgroundModelId	L'ID du modèle de fond.
+		 */
+		C3D_API void unregisterLightingModel( castor::String const & name
+			, BackgroundModelID backgroundModelId );
 		/**
 		 *\~english
 		 *\brief		Registers a Background Model.
 		 *\param[in]	name	The model name.
 		 *\param[in]	creator	The model creation function.
+		 *\return		The model ID.
 		 *\~french
 		 *\brief		Enregistre un Background Model.
 		 *\param[in]	name	Le nom du model.
 		 *\param[in]	creator	La fonction dde création du modèle.
+		 *\return		L'ID du modèle.
 		 */
-		C3D_API void registerBackgroundModel( castor::String const & name
+		C3D_API BackgroundModelID registerBackgroundModel( castor::String const & name
 			, shader::BackgroundModelCreator creator );
 		/**
 		 *\~english
@@ -361,7 +382,7 @@ namespace castor3d
 		 *\brief		Désenregistre un Background Model.
 		 *\param[in]	name	Le nom du modèle.
 		 */
-		C3D_API void unregisterBackgroundModel( castor::String const & name );
+		C3D_API BackgroundModelID unregisterBackgroundModel( castor::String const & name );
 		/**
 		 *\~english
 		 *\brief		Registers a ShaderBuffer.
@@ -390,8 +411,19 @@ namespace castor3d
 		 *\param[in]	type	Le nom du type de la passe.
 		 *\param[in]	info	Les informations de création de la passe.
 		 */
-		C3D_API void registerPassType( castor::String const & type
+		C3D_API void registerPassModel( BackgroundModelID backgroundModelId
 			, PassRegisterInfo info );
+		/**
+		 *\~english
+		 *\brief		Registers a material pass type.
+		 *\param[in]	type	The pass type name.
+		 *\param[in]	info	The pass creation informations.
+		 *\~french
+		 *\brief		Enregistre un type de passe de matériau.
+		 *\param[in]	type	Le nom du type de la passe.
+		 *\param[in]	info	Les informations de création de la passe.
+		 */
+		C3D_API void registerPassModels( PassRegisterInfo info );
 		/**
 		 *\~english
 		 *\brief		Unregisters a material pass type.
@@ -400,7 +432,19 @@ namespace castor3d
 		 *\brief		Désenregistre un type de passe de matériau.
 		 *\param[in]	type	Le nom du type de la passe.
 		 */
-		C3D_API void unregisterPassType( castor::String const & type );
+		C3D_API void unregisterPassModel( BackgroundModelID backgroundModelId
+			, LightingModelID lightingModelId );
+		/**
+		 *\~english
+		 *\brief		Registers a material pass type.
+		 *\param[in]	type	The pass type name.
+		 *\param[in]	info	The pass creation informations.
+		 *\~french
+		 *\brief		Enregistre un type de passe de matériau.
+		 *\param[in]	type	Le nom du type de la passe.
+		 *\param[in]	info	Les informations de création de la passe.
+		 */
+		C3D_API void unregisterPassModels( castor::String const & type );
 		/**
 		 *\~english
 		 *\brief			Registers a specific data shader buffer.
@@ -616,7 +660,7 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		C3D_API castor::String getPassesName()const;
+		C3D_API castor::String getDefaultLightingModelName()const;
 		C3D_API ToneMappingFactory const & getToneMappingFactory()const;
 		C3D_API ToneMappingFactory & getToneMappingFactory();
 		C3D_API PostEffectFactory const & getPostEffectFactory()const;
@@ -752,9 +796,9 @@ namespace castor3d
 			return m_cpuInformations;
 		}
 
-		PassTypeID getPassesType()const noexcept
+		LightingModelID getDefaultLightingModel()const noexcept
 		{
-			return m_passesType;
+			return m_lightingModelId;
 		}
 
 		castor::ImageLoader const & getImageLoader()const noexcept
@@ -802,12 +846,17 @@ namespace castor3d
 			return m_resourceHandler;
 		}
 
-		shader::LightingModelFactory const & getLightingModelFactory()const noexcept
+		shader::LightingModelFactory & getLightingModelFactory()const noexcept
 		{
-			return m_lightingModelFactory;
+			return *m_lightingModelFactory;
 		}
 
 		shader::BackgroundModelFactory const & getBackgroundModelFactory()const noexcept
+		{
+			return m_backgroundModelFactory;
+		}
+
+		shader::BackgroundModelFactory & getBackgroundModelFactory()noexcept
 		{
 			return m_backgroundModelFactory;
 		}
@@ -843,9 +892,9 @@ namespace castor3d
 			m_userInputListener = listener;
 		}
 
-		void setPassesType( PassTypeID type )noexcept
+		void setDefaultLightingModel( LightingModelID value )noexcept
 		{
-			m_passesType = type;
+			m_lightingModelId = value;
 		}
 
 		void setMaxImageSize( uint32_t size )noexcept
@@ -1022,7 +1071,7 @@ namespace castor3d
 		PassFactoryUPtr m_passFactory;
 		PassComponentRegisterUPtr m_passComponents;
 		castor::CpuInformations m_cpuInformations;
-		PassTypeID m_passesType{ 0u };
+		LightingModelID m_lightingModelId{};
 		bool m_enableValidation{ false };
 		bool m_enableApiTrace{ false };
 		bool m_enableUpdateOptimisations{ true };
@@ -1030,7 +1079,7 @@ namespace castor3d
 		uint32_t m_maxImageSize{ 0xFFFFFFFF };
 		castor::AsyncJobQueue m_cpuJobs;
 		crg::ResourceHandler m_resourceHandler;
-		shader::LightingModelFactory m_lightingModelFactory;
+		castor::UniquePtr< shader::LightingModelFactory > m_lightingModelFactory;
 		shader::BackgroundModelFactory m_backgroundModelFactory;
 		SceneUPtr m_loadingScene;
 		std::unordered_map< castor::String, castor::UniquePtr< RenderPassRegisterInfo > > m_passRenderPassTypes;

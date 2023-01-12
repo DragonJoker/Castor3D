@@ -9,7 +9,9 @@ See LICENSE file in root folder
 #include "Castor3D/Material/Pass/PassModule.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"
+#include "Castor3D/Scene/Background/BackgroundModule.hpp"
 #include "Castor3D/Scene/Light/LightModule.hpp"
+#include "Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp"
 
 #include <CastorUtils/Design/Factory.hpp>
 
@@ -81,6 +83,7 @@ namespace castor3d::shader
 	struct Intersection;
 	struct Light;
 	struct LightData;
+	struct LightSurface;
 	struct LayeredLpvGridData;
 	struct LpvGridData;
 	struct LpvLightData;
@@ -123,8 +126,9 @@ namespace castor3d::shader
 	class BufferBase;
 	class BRDFHelpers;
 	class Fog;
-	class Materials;
+	class Lights;
 	class LightingModel;
+	class Materials;
 	class PassShaders;
 	class ReflectionModel;
 	class Shadow;
@@ -143,19 +147,22 @@ namespace castor3d::shader
 	template< typename DataT >
 	class BufferT;
 
-	using LightingModelPtr = std::unique_ptr< LightingModel >;
+	CU_DeclareCUSmartPtr( castor3d::shader, LightingModel, C3D_API );
+
 	using ReflectionModelPtr = std::unique_ptr< ReflectionModel >;
-	using LightingModelCreator = std::function< LightingModelPtr( sdw::ShaderWriter & writer
+	using LightingModelCreator = std::function< LightingModelUPtr( LightingModelID lightingModelId
+		, sdw::ShaderWriter & writer
 		, Materials const & materials
 		, Utils & utils
 		, BRDFHelpers & brdf
-		, ShadowOptions shadowsOptions
-		, SssProfiles const * sssProfiles
+		, Shadow & shadowModel
+		, Lights & lights
 		, bool enableVolumetric ) >;
-	using LightingModelFactory = castor::Factory< LightingModel
-		, castor::String
-		, LightingModelPtr
-		, LightingModelCreator >;
+	class LightingModelFactory;
+
+	struct BackgroundModelEntry
+	{
+	};
 
 	using BackgroundModelPtr = std::unique_ptr< BackgroundModel >;
 	using BackgroundModelCreator = std::function< BackgroundModelPtr( Engine const & engine
@@ -168,13 +175,15 @@ namespace castor3d::shader
 	using BackgroundModelFactory = castor::Factory< BackgroundModel
 		, castor::String
 		, BackgroundModelPtr
-		, BackgroundModelCreator >;
+		, BackgroundModelCreator
+		, BackgroundModelID >;
 
 	Writer_Parameter( BlendComponents );
 	Writer_Parameter( DirectionalLight );
 	Writer_Parameter( Intersection );
 	Writer_Parameter( LayeredLpvGridData );
 	Writer_Parameter( Light );
+	Writer_Parameter( LightSurface );
 	Writer_Parameter( LpvGridData );
 	Writer_Parameter( LpvLightData );
 	Writer_Parameter( Material );
@@ -191,12 +200,17 @@ namespace castor3d::shader
 	C3D_API uint32_t getSpotShadowMapCount();
 	C3D_API uint32_t getPointShadowMapCount();
 	C3D_API uint32_t getBaseLightComponentsCount();
-	C3D_API uint32_t getMaxLightComponentsCount();
+
 	C3D_API castor::String concatModelNames( castor::String lhs
 		, castor::String rhs );
 
+	inline constexpr uint32_t getMaxLightComponentsCount()
+	{
+		return LightBufferDataSize / ( 4u * uint32_t( sizeof( float ) ) );
+	}
+
 	struct DerivTex
-		: public sdw::StructInstanceHelperT< "DerivTex"
+		: public sdw::StructInstanceHelperT< "C3D_DerivTex"
 		, sdw::type::MemoryLayout::eC
 		, sdw::Vec2Field< "uv" >
 		, sdw::Vec2Field< "dPdx" >
@@ -235,6 +249,7 @@ namespace castor3d::shader
 
 	Writer_Parameter( DerivTex );
 
+	CU_DeclareCUSmartPtr( castor3d::shader, LightingModelFactory, C3D_API );
 	CU_DeclareSmartPtr( Material );
 
 	//@}

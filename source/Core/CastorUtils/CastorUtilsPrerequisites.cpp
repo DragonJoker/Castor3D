@@ -1,6 +1,7 @@
 #include "CastorUtils/CastorUtilsPrerequisites.hpp"
 
 #include "CastorUtils/Config/SmartPtr.hpp"
+#include "CastorUtils/Log/Logger.hpp"
 #include "CastorUtils/Math/Point.hpp"
 #include "CastorUtils/Math/SquareMatrix.hpp"
 #include "CastorUtils/Math/Angle.hpp"
@@ -75,5 +76,23 @@ namespace castor
 			CU_Failure( "Unsupported LengthUnit" );
 			return "Unknown";
 		}
+	}
+
+	void cuLogError( char const * const description )
+	{
+		Logger::logError( description );
+	}
+
+	void cuLogError( std::stringstream stream )
+	{
+		Logger::logError( stream );
+	}
+
+	[[ noreturn ]]
+	void cuFailure( char const * const description )
+	{
+		cuLogError( std::stringstream() << "Assertion failed: " << description );
+		cuLogError( std::stringstream() << Debug::Backtrace{} );
+		std::abort();
 	}
 }

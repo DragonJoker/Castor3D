@@ -11,7 +11,8 @@ namespace castor3d
 	class PhongPass
 	{
 	public:
-		C3D_API static PassSPtr create( Material & parent );
+		C3D_API static PassSPtr create( LightingModelID lightingModelId
+			, Material & parent );
 
 		C3D_API static castor::String const Type;
 		C3D_API static castor::String const LightingModel;

@@ -31,9 +31,9 @@ namespace castor3d::shader
 	{
 	}
 
-	sdw::RetVec2 SheenBRDF::compute( sdw::Float const & pNdotH
-		, sdw::Float const & pNdotV
+	sdw::RetVec2 SheenBRDF::compute( LightSurface const & lightSurface
 		, sdw::Float const & pNdotL
+		, sdw::Float const & pNdotH
 		, sdw::Float const & proughness )
 	{
 		if ( !m_computeSheen )
@@ -93,7 +93,7 @@ namespace castor3d::shader
 		}
 
 		return m_computeSheen( pNdotH
-			, pNdotV
+			, lightSurface.NdotV()
 			, pNdotL
 			, proughness );
 	}

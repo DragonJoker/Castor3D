@@ -46,7 +46,8 @@ namespace castor3d
 		C3D_API explicit SceneBackground( Engine & engine
 			, Scene & scene
 			, castor::String const & name
-			, castor::String type );
+			, castor::String type
+			, bool hasIBLSupport );
 		/**
 		*\~english
 		*\brief
@@ -259,7 +260,8 @@ namespace castor3d
 		*\param	index
 		*	L'indice de départ des bindings.
 		*/
-		C3D_API void addBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+		C3D_API void addBindings( PipelineFlags const & flags
+			, ashes::VkDescriptorSetLayoutBindingArray & bindings
 			, uint32_t & index )const;
 		/**
 		*\~english
@@ -281,7 +283,8 @@ namespace castor3d
 		*\param	index
 		*	L'indice de départ des descripteurs.
 		*/
-		C3D_API void addDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
+		C3D_API void addDescriptors( PipelineFlags const & flags
+			, ashes::WriteDescriptorSetArray & descriptorWrites
 			, crg::ImageData const & targetImage
 			, uint32_t & index )const;
 		/**
@@ -293,6 +296,7 @@ namespace castor3d
 		*	Le nom du modèle de fond.
 		*/
 		C3D_API virtual castor::String const & getModelName()const;
+		C3D_API BackgroundModelID getModelID()const;
 		/**
 		*\~english
 		*\brief
@@ -435,6 +439,7 @@ namespace castor3d
 		TextureLayoutSPtr m_texture;
 		SamplerResPtr m_sampler;
 		std::unique_ptr< IblTextures > m_ibl;
+		bool m_hasIBLSupport;
 	};
 }
 

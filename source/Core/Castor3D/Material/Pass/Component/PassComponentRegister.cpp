@@ -15,6 +15,7 @@
 #include "Castor3D/Material/Pass/Component/Lighting/ClearcoatComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/EmissiveComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/IridescenceComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Lighting/LightingModelComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/MetalnessComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/RoughnessComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/SheenComponent.hpp"
@@ -142,13 +143,14 @@ namespace castor3d
 		: castor::OwnedBy< Engine >{ engine }
 	{
 		// 
-		// Order is important here, for priority
+		// Order is important here, for priority.
 		// Especially height, opacity and normal which must start
 		// the image related components.
 		// 
 
 		// Pass base configuration
 		registerComponent< PassHeaderComponent >();
+		registerComponent< LightingModelComponent >();
 		registerComponent< TexturesComponent >();
 		registerComponent< TextureCountComponent >();
 		registerComponent< BlendComponent >();

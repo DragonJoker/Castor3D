@@ -53,12 +53,23 @@ namespace castor3d
 
 		//***********************************************************************************************
 
-		OutputComponents::OutputComponents( sdw::ShaderWriter & writer )
-			: OutputComponents{ { writer, "outDiffuse" }
-				, { writer, "outSpecular" }
-				, { writer, "outScattering" }
-				, { writer, "coatingSpecular" }
-				, { writer, "sheen" } }
+		OutputComponents::OutputComponents( sdw::ShaderWriter & writer
+			, bool isParam )
+			: OutputComponents{ ( isParam
+					? sdw::InOutVec3{ writer, "outDiffuse" }
+					: sdw::InOutVec3{ writer.declLocale( "lightDiffuse", vec3( 0.0_f ) ) } )
+				, ( isParam
+					? sdw::InOutVec3{ writer, "outSpecular" }
+					: sdw::InOutVec3{ writer.declLocale( "lightSpecular", vec3( 0.0_f ) ) } )
+				, ( isParam
+					? sdw::InOutVec3{ writer, "outScattering" }
+					: sdw::InOutVec3{ writer.declLocale( "lightScattering", vec3( 0.0_f ) ) } )
+				, ( isParam
+					? sdw::InOutVec3{ writer, "outCoatingSpecular" }
+					: sdw::InOutVec3{ writer.declLocale( "lightCoatingSpecular", vec3( 0.0_f ) ) } )
+				, ( isParam
+					? sdw::InOutVec2{ writer, "outSheen" }
+					: sdw::InOutVec2{ writer.declLocale( "lightSheen", vec2( 0.0_f ) ) } ) }
 		{
 		}
 

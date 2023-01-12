@@ -36,7 +36,7 @@ namespace CastorGui
 			, true
 			, created
 			, engine
-			, engine.getPassesType() );
+			, engine.getDefaultLightingModel() );
 
 		if ( created.lock() == result.lock() )
 		{
@@ -57,7 +57,7 @@ namespace CastorGui
 			, true
 			, created
 			, engine
-			, engine.getPassesType() );
+			, engine.getDefaultLightingModel() );
 
 		if ( created.lock() == result.lock() )
 		{

@@ -62,7 +62,9 @@ namespace castor3d
 			, LightPass::getVertexShaderSource( m_config.lightType ) }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT
 			, castor::string::snakeToCamelCase( getName( m_config.lightType ) )
-			, LightPass::getPixelShaderSource( m_scene
+			, LightPass::getPixelShaderSource( m_config.lightingModelId
+				, m_scene.getBackgroundModelId()
+				, m_scene
 				, m_config.sceneFlags
 				, m_config.lightType
 				, m_config.shadowType
@@ -194,7 +196,8 @@ namespace castor3d
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 
 		auto index = uint32_t( LightPassLgtIdx::eCount );
-		m_scene.getBackground()->addBindings( setLayoutBindings, index );
+		PipelineFlags flags{ PassComponentCombine{}, m_config.lightingModelId, {} };
+		m_scene.getBackground()->addBindings( flags, setLayoutBindings, index );
 
 		return m_device->createDescriptorSetLayout( std::move( setLayoutBindings ) );
 	}
@@ -235,7 +238,8 @@ namespace castor3d
 					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } );
 
 			auto index = uint32_t( LightPassLgtIdx::eCount );
-			m_scene.getBackground()->addDescriptors( writes, *m_targetColourResult.data, index );
+			PipelineFlags flags{ PassComponentCombine{}, m_config.lightingModelId, {} };
+			m_scene.getBackground()->addDescriptors( flags, writes, *m_targetColourResult.data, index );
 
 			result.descriptorSet = m_descriptorPool->createDescriptorSet( 1u );
 			result.descriptorSet->setBindings( writes );

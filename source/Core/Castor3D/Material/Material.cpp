@@ -13,14 +13,10 @@ namespace castor3d
 
 	Material::Material( castor::String const & name
 		, Engine & engine
-		, PassTypeID type )
+		, LightingModelID lightingModelId )
 		: castor::Named{ name }
 		, castor::OwnedBy< Engine >{ engine }
-		, m_type{ type }
-	{
-	}
-
-	Material::~Material()
+		, m_lightingModelId{ lightingModelId }
 	{
 	}
 
@@ -42,7 +38,7 @@ namespace castor3d
 		}
 	}
 
-	PassSPtr Material::createPass()
+	PassSPtr Material::createPass( LightingModelID lightingModelId )
 	{
 		if ( m_passes.size() == MaxPassLayers )
 		{
@@ -51,16 +47,22 @@ namespace castor3d
 			return nullptr;
 		}
 
-		PassSPtr newPass = getEngine()->getPassFactory().create( getType(), *this );
-		CU_Require( newPass );
-		m_passListeners.emplace( newPass
-			, newPass->onChanged.connect( [this]( Pass const & p )
+		auto result = getEngine()->getPassFactory().create( lightingModelId
+			, *this );
+		CU_Require( result );
+		m_passListeners.emplace( result
+			, result->onChanged.connect( [this]( Pass const & p )
 			{
 				onPassChanged( p );
 			} ) );
-		m_passes.push_back( newPass );
+		m_passes.push_back( result );
 		onChanged( *this );
-		return newPass;
+		return result;
+	}
+
+	PassSPtr Material::createPass()
+	{
+		return createPass( m_lightingModelId );
 	}
 
 	void Material::addPass( Pass const & pass )

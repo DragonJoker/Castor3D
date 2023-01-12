@@ -309,7 +309,7 @@ namespace castor3d::shader
 		, PipelineFlags const & flags )
 	{
 		auto result = cache.getIOStruct( sdw::type::MemoryLayout::eStd430
-			, ( FlagT == sdw::var::Flag::eShaderOutput
+			, "C3D_" + ( FlagT == sdw::var::Flag::eShaderOutput
 				? std::string{ "Output" }
 				: std::string{ "Input" } ) + "VoxelSurface"
 			, FlagT );
@@ -362,7 +362,7 @@ namespace castor3d::shader
 		, PipelineFlags const & flags )
 	{
 		auto result = cache.getStruct( sdw::type::MemoryLayout::eStd430
-			, "VoxelSurfaceT" );
+			, "C3D_VoxelSurfaceT" );
 
 		if ( result->empty() )
 		{
@@ -403,7 +403,7 @@ namespace castor3d::shader
 	sdw::type::BaseStructPtr VoxelSurfaceT< FlagT >::makeType( sdw::type::TypesCache & cache )
 	{
 		auto result = cache.getStruct( sdw::type::MemoryLayout::eStd430
-			, "VoxelSurface" );
+			, "C3D_VoxelSurface" );
 
 		if ( result->empty() )
 		{

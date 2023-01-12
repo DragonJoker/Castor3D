@@ -1,10 +1,11 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_PassFactory_H___
 #define ___C3D_PassFactory_H___
 
 #include "PassModule.hpp"
+#include "Castor3D/Scene/Background/BackgroundModule.hpp"
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
 #include <CastorUtils/Design/Factory.hpp>
@@ -21,16 +22,13 @@ namespace castor3d
 		castor::String lightingModel;
 		PassFactoryBase::Creator passCreator;
 		shader::LightingModelCreator lightingModelCreator;
-		bool isIBLNeeded;
+		bool hasIBLSupport;
 	};
 
 	class PassFactory
 		: public castor::OwnedBy< Engine >
 		, private PassFactoryBase
 	{
-	public:
-		using StringIdPair = std::pair< castor::String, PassTypeID >;
-
 	public:
 		/**
 		 *\~english
@@ -47,26 +45,25 @@ namespace castor3d
 		 */
 		C3D_API ~PassFactory();
 
-		C3D_API void registerType( castor::String const & passType
+		C3D_API void registerType( LightingModelID lightingModelId
 			, PassRegisterInfo info );
-		C3D_API void unregisterType( castor::String const & passType );
-		C3D_API PassSPtr create( castor::String const & passType
+		C3D_API PassSPtr create( LightingModelID lightingModelId
 			, Material & parent )const;
 
-		C3D_API PassTypeID getNameId( castor::String const & passType )const;
-		C3D_API castor::String getIdName( PassTypeID passTypeId )const;
-		C3D_API castor::String getLightingModelName( PassTypeID  passTypeId )const;
+		C3D_API LightingModelID getNameId( castor::String const & passType )const;
+		C3D_API castor::String getIdName( LightingModelID lightingModelId )const;
+		C3D_API bool hasIBLSupport( LightingModelID lightingModelId )const;
 
-		std::vector< StringIdPair > const & listRegisteredTypes()const
+		ObjCont const & listRegisteredTypes()const
 		{
-			return m_passTypeNames;
+			return m_registered;
 		}
 
-		using PassFactoryBase::create;
+	public:
+		using PassFactoryBase::unregisterType;
 
 	private:
-		std::vector< StringIdPair > m_passTypeNames;
-		std::unordered_map< PassTypeID, castor::String > m_lightingModels;
+		using PassFactoryBase::create;
 	};
 }
 

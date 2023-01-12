@@ -164,19 +164,18 @@ namespace castor3d
 					, utils };
 				shader::Materials materials{ writer, passShaders };
 				uint32_t index = 0;
-				auto lightingModel = shader::LightingModel::createModel( *renderSystem.getEngine()
+				shader::Lights lights{ *renderSystem.getEngine()
 					, materials
-					, utils
 					, brdf
-					, renderSystem.getEngine()->getPassFactory().getLightingModelName( 1u )
-					, LightType::eDirectional
-					, GeometryInjectionPass::LightsIdx
-					, 0u
-					, false
+					, utils
 					, shader::ShadowOptions{ SceneFlag::eNone, false, true }
-					, nullptr
-					, index
-					, 1u );
+					, nullptr /* sssProfiles */
+					, LightType::eDirectional
+					, false /* lightUbo */
+					, GeometryInjectionPass::LightsIdx /* lightBinding */
+					, 0u /* lightSet */
+					, index /* shadowMapBinding */
+					, 1u /* shadowMapSet */ };
 
 				//Sample from camera
 				auto calculateSurfelAreaLightViewM = writer.implementFunction< Float >( "calculateSurfelAreaLightViewM"
@@ -190,9 +189,9 @@ namespace castor3d
 					, VertexOutT< lpvgeom::SurfaceT > out )
 					{
 						auto light = writer.declLocale( "light"
-							, lightingModel->getDirectionalLight( writer.cast< UInt >( c3d_lpvLightData.lightIndex ) ) );
+							, lights.getDirectionalLight( writer.cast< UInt >( c3d_lpvLightData.lightIndex ) ) );
 						auto cascadeIndex = writer.declLocale( "cascadeIndex"
-							, writer.cast< Int >( max( 1_u, light.cascadeCount ) - 1_u ) );
+							, writer.cast< Int >( max( 1_u, light.cascadeCount() ) - 1_u ) );
 						auto rsmCoords = writer.declLocale( "rsmCoords"
 							, ivec3( in.vertexIndex % int32_t( rsmTexSize )
 								, in.vertexIndex / int32_t( rsmTexSize )
@@ -203,7 +202,7 @@ namespace castor3d
 						auto viewPos = writer.declLocale( "viewPos"
 							, c3d_lpvLightData.lightView * vec4( out.rsmPosition, 1.0 ) );
 						out.surfelArea = calculateSurfelAreaLightViewM( viewPos.xyz() ) * c3d_lpvLightData.texelAreaModifier;
-						out.lightPosition = out.rsmPosition - light.direction;
+						out.lightPosition = out.rsmPosition - light.direction();
 
 						auto volumeCellIndex = writer.declLocale( "volumeCellIndex"
 							, c3d_lpvGridData.worldToGrid( out.rsmPosition ) );
@@ -235,19 +234,18 @@ namespace castor3d
 					, utils };
 				shader::Materials materials{ writer, passShaders };
 				uint32_t index = 0;
-				auto lightingModel = shader::LightingModel::createModel( *renderSystem.getEngine()
+				shader::Lights lights{ *renderSystem.getEngine()
 					, materials
-					, utils
 					, brdf
-					, renderSystem.getEngine()->getPassFactory().getLightingModelName( 1u )
-					, LightType::eDirectional
-					, GeometryInjectionPass::LightsIdx
-					, 0u
-					, false
+					, utils
 					, shader::ShadowOptions{ SceneFlag::eNone, false, true }
-					, nullptr
-					, index
-					, 1u );
+					, nullptr /* sssProfiles */
+					, LightType::eDirectional
+					, false /* lightUbo */
+					, GeometryInjectionPass::LightsIdx /* lightBinding */
+					, 0u /* lightSet */
+					, index /* shadowMapBinding */
+					, 1u /* shadowMapSet */ };
 
 				//Sample from camera
 				auto calculateSurfelAreaLightViewM = writer.implementFunction< Float >( "calculateSurfelAreaLightViewM"
@@ -261,7 +259,7 @@ namespace castor3d
 					, VertexOutT< lpvgeom::SurfaceT > out )
 					{
 						auto light = writer.declLocale( "light"
-							, lightingModel->getDirectionalLight( writer.cast< UInt >( c3d_lpvLightData.lightIndex ) ) );
+							, lights.getDirectionalLight( writer.cast< UInt >( c3d_lpvLightData.lightIndex ) ) );
 						auto rsmCoords = writer.declLocale( "rsmCoords"
 							, ivec2( in.vertexIndex % int32_t( rsmTexSize )
 								, in.vertexIndex / int32_t( rsmTexSize ) ) );
@@ -271,7 +269,7 @@ namespace castor3d
 						auto viewPos = writer.declLocale( "viewPos"
 							, c3d_lpvLightData.lightView * vec4( out.rsmPosition, 1.0 ) );
 						out.surfelArea = calculateSurfelAreaLightViewM( viewPos.xyz() ) * c3d_lpvLightData.texelAreaModifier;
-						out.lightPosition = out.rsmPosition - light.direction;
+						out.lightPosition = out.rsmPosition - light.direction();
 
 						auto volumeCellIndex = writer.declLocale( "volumeCellIndex"
 							, c3d_lpvGridData.worldToGrid( out.rsmPosition ) );
@@ -311,19 +309,18 @@ namespace castor3d
 				, utils };
 			shader::Materials materials{ writer, passShaders };
 			uint32_t index = 0;
-			auto lightingModel = shader::LightingModel::createModel( *renderSystem.getEngine()
+			shader::Lights lights{ *renderSystem.getEngine()
 				, materials
-				, utils
 				, brdf
-				, renderSystem.getEngine()->getPassFactory().getLightingModelName( 1u )
-				, LightType::eSpot
-				, GeometryInjectionPass::LightsIdx
-				, 0u
-				, false
+				, utils
 				, shader::ShadowOptions{ SceneFlag::eNone, false, true }
-				, nullptr
-				, index
-				, 1u );
+				, nullptr /* sssProfiles */
+				, LightType::eSpot
+				, false /* lightUbo */
+				, GeometryInjectionPass::LightsIdx /* lightBinding */
+				, 0u /* lightSet */
+				, index /* shadowMapBinding */
+				, 1u /* shadowMapSet */ };
 
 			//Sample from camera
 			auto calculateSurfelAreaLightViewM = writer.implementFunction< Float >( "calculateSurfelAreaLightViewM"
@@ -337,18 +334,18 @@ namespace castor3d
 				, VertexOutT< lpvgeom::SurfaceT > out )
 				{
 					auto light = writer.declLocale( "light"
-						, lightingModel->getSpotLight( writer.cast< UInt >( c3d_lpvLightData.lightIndex ) ) );
+						, lights.getSpotLight( writer.cast< UInt >( c3d_lpvLightData.lightIndex ) ) );
 					auto rsmCoords = writer.declLocale( "rsmCoords"
 						, ivec3( in.vertexIndex % int32_t( rsmTexSize )
 							, in.vertexIndex / int32_t( rsmTexSize )
-							, light.base.index ) );
+							, light.base().shadowMapIndex() ) );
 
 					out.rsmPosition = c3d_rsmPositionMap.fetch( rsmCoords, 0_i ).rgb();
 					out.rsmNormal = c3d_rsmNormalMap.fetch( rsmCoords, 0_i ).rgb();
 					auto viewPos = writer.declLocale( "viewPos"
 						, c3d_lpvLightData.lightView * vec4( out.rsmPosition, 1.0 ) );
 					out.surfelArea = calculateSurfelAreaLightViewM( viewPos.xyz() ) * c3d_lpvLightData.texelAreaModifier;
-					out.lightPosition = light.position;
+					out.lightPosition = light.position();
 
 					auto volumeCellIndex = writer.declLocale( "volumeCellIndex"
 						, c3d_lpvGridData.worldToGrid( out.rsmPosition ) );
@@ -387,19 +384,18 @@ namespace castor3d
 				, utils };
 			shader::Materials materials{ writer, passShaders };
 			uint32_t index = 0;
-			auto lightingModel = shader::LightingModel::createModel( *renderSystem.getEngine()
+			shader::Lights lights{ *renderSystem.getEngine()
 				, materials
-				, utils
 				, brdf
-				, renderSystem.getEngine()->getPassFactory().getLightingModelName( 1u )
-				, LightType::ePoint
-				, GeometryInjectionPass::LightsIdx
-				, 0u
-				, false
+				, utils
 				, shader::ShadowOptions{ SceneFlag::eNone, false, true }
-				, nullptr
-				, index
-				, 1u );
+				, nullptr /* sssProfiles */
+				, LightType::ePoint
+				, false /* lightUbo */
+				, GeometryInjectionPass::LightsIdx /* lightBinding */
+				, 0u /* lightSet */
+				, index /* shadowMapBinding */
+				, 1u /* shadowMapSet */ };
 
 			//Sample from camera
 			auto calculateSurfelAreaLightViewM = writer.implementFunction< Float >( "calculateSurfelAreaLightViewM"
@@ -413,18 +409,18 @@ namespace castor3d
 				, VertexOutT< lpvgeom::SurfaceT > out )
 				{
 					auto light = writer.declLocale( "light"
-						, lightingModel->getPointLight( writer.cast< UInt >( c3d_lpvLightData.lightIndex ) ) );
+						, lights.getPointLight( writer.cast< UInt >( c3d_lpvLightData.lightIndex ) ) );
 					auto rsmCoords = writer.declLocale( "rsmCoords"
 						, ivec3( in.vertexIndex % int32_t( rsmTexSize )
 							, in.vertexIndex / int32_t( rsmTexSize )
-							, light.base.index * 6_i + int32_t( face ) ) );
+							, light.base().shadowMapIndex() * 6_i + int32_t( face ) ) );
 
 					out.rsmPosition = c3d_rsmPositionMap.fetch( rsmCoords, 0_i ).rgb();
 					out.rsmNormal = c3d_rsmNormalMap.fetch( rsmCoords, 0_i ).rgb();
 					auto viewPos = writer.declLocale( "viewPos"
 						, c3d_lpvLightData.lightView * vec4( out.rsmPosition, 1.0 ) );
 					out.surfelArea = calculateSurfelAreaLightViewM( viewPos.xyz() ) * c3d_lpvLightData.texelAreaModifier;
-					out.lightPosition = light.position;
+					out.lightPosition = light.position();
 
 					auto volumeCellIndex = writer.declLocale( "volumeCellIndex"
 						, c3d_lpvGridData.worldToGrid( out.rsmPosition ) );

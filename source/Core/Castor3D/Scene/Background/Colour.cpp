@@ -7,6 +7,9 @@
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Background/Visitor.hpp"
+#include "Castor3D/Scene/Background/Shaders/GlslIblBackground.hpp"
+#include "Castor3D/Scene/Background/Shaders/GlslImgBackground.hpp"
+#include "Castor3D/Scene/Background/Shaders/GlslNoIblBackground.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
 #include "Castor3D/Shader/Program.hpp"
@@ -30,7 +33,11 @@ namespace castor3d
 	ColourBackground::ColourBackground( Engine & engine
 		, Scene & scene
 		, castor::String const & name )
-		: SceneBackground{ engine, scene, name + cuT( "Colour" ), cuT( "colour" ) }
+		: SceneBackground{ engine
+			, scene
+			, name + cuT( "Colour" )
+			, cuT( "colour" )
+			, true }
 	{
 		m_hdr = false;
 		m_textureId = { engine.getRenderSystem()->getRenderDevice()

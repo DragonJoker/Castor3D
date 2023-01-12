@@ -162,9 +162,9 @@ namespace castor3d
 	//*********************************************************************************************
 
 	Pass::Pass( Material & parent
-		, PassTypeID typeID )
+		, LightingModelID lightingModelId )
 		: OwnedBy< Material >{ parent }
-		, m_typeID{ typeID }
+		, m_lightingModelId{ lightingModelId }
 		, m_index{ parent.getPassCount() }
 		, m_renderPassInfo{ getOwner()->getRenderPassInfo() }
 	{
@@ -636,7 +636,7 @@ namespace castor3d
 
 	PassSPtr Pass::clone( Material & material )const
 	{
-		auto result = std::make_unique< Pass >( material, getTypeID() );
+		auto result = std::make_unique< Pass >( material, getLightingModelId() );
 		result->m_implicit = m_implicit;
 		result->m_automaticShader = m_automaticShader;
 		result->m_renderPassInfo = m_renderPassInfo;

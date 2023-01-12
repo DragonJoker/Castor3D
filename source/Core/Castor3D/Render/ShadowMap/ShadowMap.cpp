@@ -195,7 +195,7 @@ namespace castor3d
 		if ( doIsUpToDate( index )
 			&& getEngine()->areUpdateOptimisationsEnabled() )
 		{
-			return toWait;	
+			return toWait;
 		}
 #endif
 

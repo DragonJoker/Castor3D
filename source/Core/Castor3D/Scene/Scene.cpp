@@ -9,6 +9,7 @@
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
+#include "Castor3D/Material/Pass/PassFactory.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
@@ -651,30 +652,9 @@ namespace castor3d
 		return m_background->getModelName();
 	}
 
-	castor::String Scene::getLightingModel( LightType lightType )const
+	std::vector< LightingModelID > Scene::getLightingModelsID()const
 	{
-		auto result = shader::getLightingModelName( *getEngine(), getPassesType() );
-
-		if ( m_background->hasScattering() && lightType == LightType::eDirectional )
-		{
-			result = shader::concatModelNames( result
-				, m_background->getModelName() );
-		}
-
-		return result;
-	}
-
-	castor::String Scene::getLightingModel()const
-	{
-		auto result = shader::getLightingModelName( *getEngine(), getPassesType() );
-
-		if ( m_background->hasScattering() )
-		{
-			result = shader::concatModelNames( result
-				, m_background->getModelName() );
-		}
-
-		return result;
+		return getEngine()->getLightingModelFactory().getLightingModelsID( m_background->getModelID() );
 	}
 
 	AnimatedObjectSPtr Scene::addAnimatedTexture( TextureSourceInfo const & sourceInfo
@@ -788,14 +768,21 @@ namespace castor3d
 		}
 	}
 
-	PassTypeID Scene::getPassesType()const
+	BackgroundModelID Scene::getBackgroundModelId()const
 	{
-		return getEngine()->getPassesType();
+		return m_background
+			? m_background->getModelID()
+			: BackgroundModelID( 0u );
 	}
 
-	castor::String Scene::getPassesName()const
+	LightingModelID Scene::getDefaultLightingModel()const
 	{
-		return getEngine()->getPassesName();
+		return getEngine()->getDefaultLightingModel();
+	}
+
+	castor::String Scene::getDefaultLightingModelName()const
+	{
+		return getEngine()->getDefaultLightingModelName();
 	}
 
 	bool Scene::needsGlobalIllumination()const
@@ -809,9 +796,9 @@ namespace castor3d
 		return m_giTypes[size_t( ltType )].end() != m_giTypes[size_t( ltType )].find( giType );
 	}
 
-	void Scene::setPassesType( PassTypeID value )
+	void Scene::setDefaultLightingModel( LightingModelID value )
 	{
-		getEngine()->setPassesType( value );
+		getEngine()->setDefaultLightingModel( value );
 	}
 
 	crg::SemaphoreWaitArray Scene::getRenderTargetsSemaphores()const
@@ -870,6 +857,16 @@ namespace castor3d
 	{
 		CU_Require( m_renderNodes );
 		return m_renderNodes->getBillboardsBuffer();
+	}
+
+	bool Scene::hasObjects( LightingModelID lightingModelId )const
+	{
+		return m_renderNodes->hasNodes( lightingModelId );
+	}
+
+	bool Scene::hasIBLSupport( LightingModelID lightingModelId )const
+	{
+		return getEngine()->getPassFactory().hasIBLSupport( lightingModelId );
 	}
 
 	void Scene::setDirectionalShadowCascades( uint32_t value )

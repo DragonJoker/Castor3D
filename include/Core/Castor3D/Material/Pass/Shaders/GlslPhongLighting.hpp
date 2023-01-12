@@ -15,19 +15,22 @@ namespace castor3d::shader
 		: public LightingModel
 	{
 	public:
-		C3D_API PhongLightingModel( sdw::ShaderWriter & writer
+		C3D_API PhongLightingModel( LightingModelID lightingModelId
+			, sdw::ShaderWriter & writer
 			, Materials const & materials
 			, Utils & utils
 			, BRDFHelpers & brdf
-			, ShadowOptions shadowOptions
-			, SssProfiles const * sssProfiles
+			, Shadow & shadowModel
+			, Lights & lights
 			, bool enableVolumetric );
-		C3D_API static LightingModelPtr create( sdw::ShaderWriter & writer
+		C3D_API static castor::String getName();
+		C3D_API static LightingModelUPtr create( LightingModelID lightingModelId
+			, sdw::ShaderWriter & writer
 			, Materials const & materials
 			, Utils & utils
 			, BRDFHelpers & brdf
-			, ShadowOptions shadowOptions
-			, SssProfiles const * sssProfiles
+			, Shadow & shadowModel
+			, Lights & lights
 			, bool enableVolumetric );
 
 		C3D_API sdw::Float getFinalTransmission( BlendComponents const & components
@@ -36,67 +39,26 @@ namespace castor3d::shader
 			, sdw::Vec3 const & directAmbient )const override;
 		C3D_API sdw::Vec3 adjustDirectSpecular( BlendComponents const & components
 			, sdw::Vec3 const & directSpecular )const override;
-		C3D_API ReflectionModelPtr getReflectionModel( uint32_t & envMapBinding
-			, uint32_t envMapSet )const override;
-		/**
-		*\name
-		*	Diffuse + Specular
-		*/
-		//\{
-		C3D_API void compute( DirectionalLight const & light
-			, BlendComponents const & components
-			, Surface const & surface
-			, BackgroundModel & background
-			, sdw::Vec3 const & worldEye
-			, sdw::UInt const & receivesShadows
-			, OutputComponents & output )override;
-		C3D_API void compute( PointLight const & light
-			, BlendComponents const & components
-			, Surface const & surface
-			, sdw::Vec3 const & worldEye
-			, sdw::UInt const & receivesShadows
-			, OutputComponents & output )override;
-		C3D_API void compute( SpotLight const & light
-			, BlendComponents const & components
-			, Surface const & surface
-			, sdw::Vec3 const & worldEye
-			, sdw::UInt const & receivesShadows
-			, OutputComponents & output )override;
-		//\}
-		/**
-		*\name
-		*	Diffuse only
-		*/
-		//\{
-		C3D_API sdw::Vec3 computeDiffuse( DirectionalLight const & light
-			, BlendComponents const & components
-			, Surface const & surface
-			, sdw::Vec3 const & worldEye
-			, sdw::UInt const & receivesShadows )override;
-		C3D_API sdw::Vec3 computeDiffuse( PointLight const & light
-			, BlendComponents const & components
-			, Surface const & surface
-			, sdw::Vec3 const & worldEye
-			, sdw::UInt const & receivesShadows )override;
-		C3D_API sdw::Vec3 computeDiffuse( SpotLight const & light
-			, BlendComponents const & components
-			, Surface const & surface
-			, sdw::Vec3 const & worldEye
-			, sdw::UInt const & receivesShadows )override;
-		//\}
 
 	protected:
-		C3D_API sdw::RetVec3 doComputeLight( Light const & light
+		C3D_API sdw::Vec3 doComputeDiffuseTerm( sdw::Vec3 const & radiance
+			, sdw::Float const & intensity
 			, BlendComponents const & components
-			, Surface const & surface
-			, sdw::Vec3 const & worldEye
-			, sdw::Vec3 const & lightDirection
-			, OutputComponents & output );
-		C3D_API sdw::Vec3 doComputeLightDiffuse( Light const & light
+			, LightSurface const & lightSurface
+			, sdw::Float & isLit
+			, sdw::Vec3 & output )override;
+		C3D_API void doComputeSpecularTerm( sdw::Vec3 const & radiance
+			, sdw::Float const & intensity
 			, BlendComponents const & components
-			, Surface const & surface
-			, sdw::Vec3 const & worldEye
-			, sdw::Vec3 const & lightDirection );
+			, LightSurface const & lightSurface
+			, sdw::Float const & isLit
+			, sdw::Vec3 & output )override;
+		C3D_API void doComputeCoatingTerm( sdw::Vec3 const & radiance
+			, sdw::Float const & intensity
+			, BlendComponents const & components
+			, LightSurface const & lightSurface
+			, sdw::Float const & isLit
+			, sdw::Vec3 & output )override;
 
 	private:
 		C3D_API sdw::Vec3 doCombine( BlendComponents const & components
@@ -117,62 +79,6 @@ namespace castor3d::shader
 			, sdw::Vec3 const & refracted
 			, sdw::Vec3 const & coatReflected
 			, sdw::Vec3 const & sheenReflected )override;
-
-	public:
-		C3D_API static castor::String getName();
-		std::string m_prefix;
-		sdw::Function< sdw::Vec3
-			, InLight
-			, InBlendComponents
-			, InSurface
-			, sdw::InVec3
-			, sdw::InVec3
-			, OutputComponents & > m_computeLight;
-		sdw::Function< sdw::Void
-			, InDirectionalLight
-			, InBlendComponents
-			, InSurface
-			, sdw::InVec3
-			, sdw::InUInt
-			, OutputComponents & > m_computeDirectional;
-		sdw::Function< sdw::Void
-			, InPointLight
-			, InBlendComponents
-			, InSurface
-			, sdw::InVec3
-			, sdw::InUInt
-			, OutputComponents & > m_computePoint;
-		sdw::Function< sdw::Void
-			, InSpotLight
-			, InBlendComponents
-			, InSurface
-			, sdw::InVec3
-			, sdw::InUInt
-			, OutputComponents & > m_computeSpot;
-		sdw::Function< sdw::Vec3
-			, InLight
-			, InBlendComponents
-			, InSurface
-			, sdw::InVec3
-			, sdw::InVec3 > m_computeLightDiffuse;
-		sdw::Function< sdw::Vec3
-			, InOutDirectionalLight
-			, InBlendComponents
-			, InSurface
-			, sdw::InVec3
-			, sdw::InUInt > m_computeDirectionalDiffuse;
-		sdw::Function< sdw::Vec3
-			, InOutPointLight
-			, InBlendComponents
-			, InSurface
-			, sdw::InVec3
-			, sdw::InUInt > m_computePointDiffuse;
-		sdw::Function< sdw::Vec3
-			, InOutSpotLight
-			, InBlendComponents
-			, InSurface
-			, sdw::InVec3
-			, sdw::InUInt > m_computeSpotDiffuse;
 	};
 }
 

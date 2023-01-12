@@ -25,7 +25,7 @@ namespace castor3d
 		
 		sdw::Vec3 SssTransmittance::compute( BlendComponents const & components
 			, DirectionalLight const & plight
-			, Surface const & psurface )
+			, LightSurface const & plightSurface )
 		{
 			if ( !m_shadowMap )
 			{
@@ -39,7 +39,8 @@ namespace castor3d
 					, [&]( sdw::UInt const & sssProfileIndex
 						, sdw::Float const & sssTransmittance
 						, DirectionalLight const & light
-						, Surface const & surface )
+						, sdw::Vec3 const & wsNormal
+						, sdw::Vec3 const & wsPosition )
 					{
 						auto result = m_writer.declLocale( "result"
 							, vec3( 0.0_f ) );
@@ -51,10 +52,10 @@ namespace castor3d
 
 							// We shrink the position inwards the surface to avoid artifacts.
 							auto shrinkedPos = m_writer.declLocale( "shrinkedPos"
-								, vec4( surface.worldPosition.xyz() - surface.normal * 0.005_f, 1.0_f ) );
+								, vec4( wsPosition - wsNormal * 0.005_f, 1.0_f ) );
 
 							auto lightSpacePosition = m_writer.declLocale( "lightSpacePosition"
-								, light.transforms[0] * shrinkedPos );
+								, light.transforms()[0] * shrinkedPos );
 							lightSpacePosition.xy() /= lightSpacePosition.w();
 							lightSpacePosition.xy() = sdw::fma( lightSpacePosition.xy()
 								, vec2( 0.5_f )
@@ -64,10 +65,10 @@ namespace castor3d
 							result = m_compute( lightSpacePosition.z()
 								, shadowDepth
 								, sssProfileIndex
-								, surface.normal
+								, wsNormal
 								, sssTransmittance
-								, light.direction
-								, light.base.farPlane );
+								, light.direction()
+								, light.base().farPlane() );
 						}
 						FI;
 
@@ -76,7 +77,8 @@ namespace castor3d
 					, sdw::InUInt{ m_writer, "sssProfileIndex" }
 					, sdw::InFloat{ m_writer, "sssTransmittance" }
 					, InDirectionalLight{ m_writer, "light" }
-					, InSurface{ m_writer, "surface" } );
+					, sdw::InVec3{ m_writer, "wsNormal" }
+					, sdw::InVec3{ m_writer, "wsPosition" } );
 			}
 
 			auto sssProfileIndex = components.getMember< sdw::Float >( "sssProfileIndex" );
@@ -84,12 +86,13 @@ namespace castor3d
 			return m_computeDirectional( m_writer.cast< sdw::UInt >( sssProfileIndex )
 				, sssTransmittance
 				, plight
-				, psurface );
+				, plightSurface.N()
+				, plightSurface.worldPosition() );
 		}
 
 		sdw::Vec3 SssTransmittance::compute( BlendComponents const & components
 			, PointLight const & plight
-			, Surface const & psurface )
+			, LightSurface const & plightSurface )
 		{
 			if ( !m_shadowMap )
 			{
@@ -103,7 +106,8 @@ namespace castor3d
 					, [&]( sdw::UInt const & sssProfileIndex
 						, sdw::Float const & sssTransmittance
 						, PointLight const & light
-						, Surface const & surface )
+						, sdw::Vec3 const & wsNormal
+						, sdw::Vec3 const & wsPosition )
 					{
 						auto result = m_writer.declLocale( "result"
 							, vec3( 0.0_f ) );
@@ -115,19 +119,19 @@ namespace castor3d
 
 							// We shrink the position inwards the surface to avoid artifacts.
 							auto shrinkedPos = m_writer.declLocale( "shrinkedPos"
-								, surface.worldPosition.xyz() - surface.normal * 0.005_f );
+								, wsPosition - wsNormal * 0.005_f );
 
 							auto vertexToLight = m_writer.declLocale( "vertexToLight"
-								, shrinkedPos - light.position );
+								, shrinkedPos - light.position() );
 							auto shadowDepth = m_writer.declLocale( "shadowDepth"
-								, c3d_mapNormalDepthPoint.sample( vec4( vertexToLight, m_writer.cast< sdw::Float >( light.base.index ) ) ) );
-							result = m_compute( ( shrinkedPos - light.position ).z()
+								, c3d_mapNormalDepthPoint.sample( vec4( vertexToLight, m_writer.cast< sdw::Float >( light.base().shadowMapIndex() ) ) ) );
+							result = m_compute( ( shrinkedPos - light.position() ).z()
 								, shadowDepth
 								, sssProfileIndex
-								, surface.normal
+								, wsNormal
 								, sssTransmittance
 								, -vertexToLight
-								, light.base.farPlane );
+								, light.base().farPlane() );
 						}
 						FI;
 
@@ -136,7 +140,8 @@ namespace castor3d
 					, sdw::InUInt{ m_writer, "sssProfileIndex" }
 					, sdw::InFloat{ m_writer, "sssTransmittance" }
 					, InPointLight{ m_writer, "light" }
-					, InSurface{ m_writer, "surface" } );
+					, sdw::InVec3{ m_writer, "wsNormal" }
+					, sdw::InVec3{ m_writer, "wsPosition" } );
 			}
 
 			auto sssProfileIndex = components.getMember< sdw::UInt >( "sssProfileIndex", true );
@@ -144,12 +149,13 @@ namespace castor3d
 			return m_computePoint( sssProfileIndex
 				, sssTransmittance
 				, plight
-				, psurface );
+				, plightSurface.N()
+				, plightSurface.worldPosition() );
 		}
 
 		sdw::Vec3 SssTransmittance::compute( BlendComponents const & components
 			, SpotLight const & plight
-			, Surface const & psurface )
+			, LightSurface const & plightSurface )
 		{
 			if ( !m_shadowMap )
 			{
@@ -163,7 +169,8 @@ namespace castor3d
 					, [&]( sdw::UInt const & sssProfileIndex
 						, sdw::Float const & sssTransmittance
 						, SpotLight const & light
-						, Surface const & surface )
+						, sdw::Vec3 const & wsNormal
+						, sdw::Vec3 const & wsPosition )
 					{
 						auto result = m_writer.declLocale( "result"
 							, vec3( 0.0_f ) );
@@ -175,24 +182,24 @@ namespace castor3d
 
 							// We shrink the position inwards the surface to avoid artifacts.
 							auto shrinkedPos = m_writer.declLocale( "shrinkedPos"
-								, vec4( surface.worldPosition.xyz() - surface.normal * 0.005_f, 1.0_f ) );
+								, vec4( wsPosition - wsNormal * 0.005_f, 1.0_f ) );
 
 							auto lightSpacePosition = m_writer.declLocale( "lightSpacePosition"
-								, light.transform * shrinkedPos );
+								, light.transform() * shrinkedPos );
 							lightSpacePosition.xy() /= lightSpacePosition.w();
 							lightSpacePosition.xy() = sdw::fma( lightSpacePosition.xy()
 								, vec2( 0.5_f )
 								, vec2( 0.5_f ) );
 							auto shadowDepth = m_writer.declLocale( "shadowDepth"
 								, c3d_mapNormalDepthSpot.sample( vec3( lightSpacePosition.xy()
-									, m_writer.cast< sdw::Float >( light.base.index ) ) ) );
+									, m_writer.cast< sdw::Float >( light.base().shadowMapIndex() ) ) ) );
 							result = m_compute( lightSpacePosition.z()
 								, shadowDepth
 								, sssProfileIndex
-								, surface.normal
+								, wsNormal
 								, sssTransmittance
-								, light.position - surface.worldPosition.xyz()
-								, light.base.farPlane );
+								, light.position() - wsPosition
+								, light.base().farPlane() );
 							//result = vec3( shrinkedPos );
 						}
 						FI;
@@ -202,7 +209,8 @@ namespace castor3d
 					, sdw::InUInt{ m_writer, "sssProfileIndex" }
 					, sdw::InFloat{ m_writer, "sssTransmittance" }
 					, InSpotLight{ m_writer, "light" }
-					, InSurface{ m_writer, "surface" } );
+					, sdw::InVec3{ m_writer, "wsNormal" }
+					, sdw::InVec3{ m_writer, "wsPosition" } );
 			}
 
 			auto sssProfileIndex = components.getMember< sdw::UInt >( "sssProfileIndex", true );
@@ -210,7 +218,8 @@ namespace castor3d
 			return m_computeSpot( sssProfileIndex
 				, sssTransmittance
 				, plight
-				, psurface );
+				, plightSurface.N()
+				, plightSurface.worldPosition() );
 		}
 
 		void SssTransmittance::doDeclare()

@@ -21,92 +21,72 @@ namespace atmosphere_scattering
 		: public c3d::PhongLightingModel
 	{
 	public:
-		AtmospherePhongLightingModel( sdw::ShaderWriter & writer
+		AtmospherePhongLightingModel( castor3d::LightingModelID lightingModelId
+			, sdw::ShaderWriter & writer
 			, c3d::Materials const & materials
 			, c3d::Utils & utils
 			, c3d::BRDFHelpers & brdf
-			, c3d::ShadowOptions shadowOptions
-			, c3d::SssProfiles const * sssProfiles
+			, c3d::Shadow & shadowModel
+			, c3d::Lights & lights
 			, bool enableVolumetric );
 
-		static const castor::String getName();
-		static c3d::LightingModelPtr create( sdw::ShaderWriter & writer
+		static c3d::LightingModelUPtr create( castor3d::LightingModelID lightingModelId
+			, sdw::ShaderWriter & writer
 			, c3d::Materials const & materials
 			, c3d::Utils & utils
 			, c3d::BRDFHelpers & brdf
-			, c3d::ShadowOptions shadowOptions
-			, c3d::SssProfiles const * sssProfiles
+			, c3d::Shadow & shadowModel
+			, c3d::Lights & lights
 			, bool enableVolumetric );
-		/**
-		*\name
-		*	Diffuse + Specular
-		*/
-		//\{
-		void compute( c3d::DirectionalLight const & light
-			, c3d::BlendComponents const & components
-			, c3d::Surface const & surface
-			, c3d::BackgroundModel & background
-			, sdw::Vec3 const & worldEye
-			, sdw::UInt const & receivesShadows
-			, c3d::OutputComponents & output )override;
-		using c3d::PhongLightingModel::compute;
-		//\}
 
 	public:
-		AtmosphereBackgroundModel * m_atmosphereBackground{};
-		sdw::Function< sdw::Void
-			, c3d::InDirectionalLight
-			, c3d::InBlendComponents
-			, c3d::InSurface
-			, sdw::InVec3
-			, sdw::InUInt
-			, c3d::OutputComponents & > m_computeDirectional;
+		AtmosphereBackgroundModel * atmosphereBackground{};
+
+	protected:
+		void doInitialiseBackground( c3d::BackgroundModel & pbackground )override;
+		sdw::Vec3 doComputeRadiance( c3d::Light const & light
+			, sdw::Vec3 const & lightDirection )const override;
+		void doComputeScatteringTerm( sdw::Vec3 const & radiance
+			, c3d::Light const & light
+			, c3d::BlendComponents const & components
+			, c3d::LightSurface const & lightSurface
+			, sdw::Vec3 & output )override;
 	};
 
 	class AtmospherePbrLightingModel
 		: public c3d::PbrLightingModel
 	{
 	public:
-		explicit AtmospherePbrLightingModel( sdw::ShaderWriter & writer
+		explicit AtmospherePbrLightingModel( castor3d::LightingModelID lightingModelId
+			, sdw::ShaderWriter & writer
 			, c3d::Materials const & materials
 			, c3d::Utils & utils
 			, c3d::BRDFHelpers & brdf
-			, c3d::ShadowOptions shadowOptions
-			, c3d::SssProfiles const * sssProfiles
+			, c3d::Shadow & shadowModel
+			, c3d::Lights & lights
 			, bool enableVolumetric );
 
-		static const castor::String getName();
-		static c3d::LightingModelPtr create( sdw::ShaderWriter & writer
+		static c3d::LightingModelUPtr create( castor3d::LightingModelID lightingModelId
+			, sdw::ShaderWriter & writer
 			, c3d::Materials const & materials
 			, c3d::Utils & utils
 			, c3d::BRDFHelpers & brdf
-			, c3d::ShadowOptions shadowOptions
-			, c3d::SssProfiles const * sssProfiles
+			, c3d::Shadow & shadowModel
+			, c3d::Lights & lights
 			, bool enableVolumetric );
-		/**
-		*\name
-		*	Diffuse + Specular
-		*/
-		//\{
-		void compute( c3d::DirectionalLight const & light
+
+	protected:
+		void doInitialiseBackground( c3d::BackgroundModel & pbackground )override;
+		sdw::Vec3 doComputeRadiance( c3d::Light const & light
+			, sdw::Vec3 const & lightDirection )const override;
+		void doComputeScatteringTerm( sdw::Vec3 const & radiance
+			, c3d::Light const & light
 			, c3d::BlendComponents const & components
-			, c3d::Surface const & surface
-			, c3d::BackgroundModel & background
-			, sdw::Vec3 const & worldEye
-			, sdw::UInt const & receivesShadows
-			, c3d::OutputComponents & output )override;
-		using c3d::PbrLightingModel::compute;
-		//\}
+			, c3d::LightSurface const & lightSurface
+			, sdw::Vec3 & output )override;
 
 	public:
-		AtmosphereBackgroundModel * m_atmosphereBackground{};
-		sdw::Function< sdw::Void
-			, c3d::InDirectionalLight
-			, c3d::InBlendComponents
-			, c3d::InSurface
-			, sdw::InVec3
-			, sdw::InUInt
-			, c3d::OutputComponents & > m_computeDirectional;
+		AtmosphereBackgroundModel * atmosphereBackground{};
 	};
  }
 
