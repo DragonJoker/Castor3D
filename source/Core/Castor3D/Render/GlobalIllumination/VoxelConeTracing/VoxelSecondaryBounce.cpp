@@ -114,7 +114,7 @@ namespace castor3d
 
 		static ashes::ComputePipelinePtr createPipeline( RenderDevice const & device
 			, ashes::PipelineLayout const & layout
-			, ShaderModule const & computeShader )
+			, ShaderModule & computeShader )
 		{
 			// Initialise the pipeline.
 			return device->createPipeline( "VoxelSecondaryBounce"

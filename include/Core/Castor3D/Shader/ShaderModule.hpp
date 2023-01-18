@@ -20,6 +20,19 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	A SPIR-V shader module, with SPIR-V binary and debug text source.
+	*\~french
+	*\brief
+	*	Un module shader SPIR-V, avec le binaire SPIR-V et la source en texte.
+	*/
+	struct SpirVShader
+	{
+		castor::UInt32Array spirv;
+		std::string text;
+	};
+	/**
+	*\~english
+	*\brief
 	*	A non compiled shader module, with its source.
 	*\~french
 	*\brief
@@ -48,19 +61,7 @@ namespace castor3d
 		std::string name;
 		std::string source;
 		ShaderPtr shader;
-	};
-	/**
-	*\~english
-	*\brief
-	*	A SPIR-V shader module, with SPIR-V binary and debug text source.
-	*\~french
-	*\brief
-	*	Un module shader SPIR-V, avec le binaire SPIR-V et la source en texte.
-	*/
-	struct SpirVShader
-	{
-		castor::UInt32Array spirv;
-		std::string text;
+		SpirVShader compiled;
 	};
 	/**
 	*\~english

@@ -46,7 +46,7 @@ namespace castor3d
 		{
 			return makeShaderState( *device
 				, stage
-				, compiled.shader
+				, *compiled.shader
 				, compiled.name );
 		}
 	}
@@ -79,7 +79,7 @@ namespace castor3d
 			it->second.source = source;
 			m_compiled.emplace( target
 				, CompiledShader{ getName()
-				, renderSystem.compileShader( it->second ) } );
+					, &renderSystem.compileShader( it->second ) } );
 			m_states.push_back( shdprog::loadShader( renderSystem.getRenderDevice()
 				, m_compiled[target]
 				, target ) );
@@ -112,7 +112,7 @@ namespace castor3d
 			it->second.source = source;
 			m_compiled.emplace( target
 				, CompiledShader{ getName()
-					, renderSystem.compileShader( it->second ) } );
+					, &renderSystem.compileShader( it->second ) } );
 			m_states.push_back( shdprog::loadShader( renderSystem.getRenderDevice()
 				, m_compiled[target]
 				, target ) );
@@ -131,7 +131,7 @@ namespace castor3d
 			it->second.shader = std::move( shader );
 			m_compiled.emplace( target
 				, CompiledShader{ getName()
-					, renderSystem.compileShader( target, getName(), *it->second.shader ) } );
+					, &renderSystem.compileShader( it->second ) } );
 			m_states.push_back( shdprog::loadShader( renderSystem.getRenderDevice()
 				, m_compiled[target]
 				, target ) );
@@ -149,17 +149,17 @@ namespace castor3d
 	{
 		auto it = m_compiled.find( target );
 		return it != m_compiled.end()
-			&& !it->second.shader.spirv.empty();
+			&& !it->second.shader->spirv.empty();
 	}
 
-	SpirVShader compileShader( RenderSystem const & renderSystem
-		, ShaderModule const & module )
+	SpirVShader const & compileShader( RenderSystem const & renderSystem
+		, ShaderModule & module )
 	{
 		return renderSystem.compileShader( module );
 	}
 
-	SpirVShader compileShader( RenderDevice const & device
-		, ShaderModule const & module )
+	SpirVShader const & compileShader( RenderDevice const & device
+		, ShaderModule & module )
 	{
 		return compileShader( device.renderSystem, module );
 	}

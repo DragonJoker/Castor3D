@@ -95,7 +95,7 @@ namespace ocean_fft
 
 		static ashes::ComputePipelinePtr createPipeline( castor3d::RenderDevice const & device
 			, ashes::PipelineLayout const & pipelineLayout
-			, castor3d::ShaderModule const & computeShader )
+			, castor3d::ShaderModule & computeShader )
 		{
 			// Initialise the pipeline.
 			return device->createPipeline( GenerateMipmapsPass::Name
