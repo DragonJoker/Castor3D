@@ -44,9 +44,6 @@ namespace ocean
 
 	//************************************************************************************************
 
-	castor::String const OceanUbo::Buffer = cuT( "Ocean" );
-	castor::String const OceanUbo::Data = cuT( "c3d_oceanData" );
-
 	OceanUbo::OceanUbo( castor3d::RenderDevice const & device )
 		: m_device{ device }
 		, m_ubo{ device.uboPool->getBuffer< Configuration >( 0u ) }

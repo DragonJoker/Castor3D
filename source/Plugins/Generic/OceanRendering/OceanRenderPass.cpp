@@ -48,8 +48,13 @@
 
 namespace ocean
 {
-	namespace
+	namespace rdpass
 	{
+		static uint32_t constexpr OutputVertices = 3u;
+
+		template< ast::var::Flag FlagT >
+		using PatchT = castor3d::shader::FragmentSurfaceT< FlagT >;
+
 		enum WaveIdx : uint32_t
 		{
 			eLightBuffer = uint32_t( castor3d::GlobalBuffersIdx::eCount ),
@@ -242,10 +247,10 @@ namespace ocean
 		}
 
 		auto & loader = getEngine()->getImageLoader();
-		loadImage( params, Foam, getName(), *getEngine(), pass.graph, loader, m_foamImg, m_foamView, m_foam );
-		loadImage( params, Noise, getName(), *getEngine(), pass.graph, loader, m_noiseImg, m_noiseView, m_noise );
-		loadImage( params, Normals1, getName(), *getEngine(), pass.graph, loader, m_normals1Img, m_normals1View, m_normals1 );
-		loadImage( params, Normals2, getName(), *getEngine(), pass.graph, loader, m_normals2Img, m_normals2View, m_normals2 );
+		rdpass::loadImage( params, Foam, getName(), *getEngine(), pass.graph, loader, m_foamImg, m_foamView, m_foam );
+		rdpass::loadImage( params, Noise, getName(), *getEngine(), pass.graph, loader, m_noiseImg, m_noiseView, m_noise );
+		rdpass::loadImage( params, Normals1, getName(), *getEngine(), pass.graph, loader, m_normals1Img, m_normals1View, m_normals1 );
+		rdpass::loadImage( params, Normals2, getName(), *getEngine(), pass.graph, loader, m_normals2Img, m_normals2View, m_normals2 );
 	}
 
 	OceanRenderPass::~OceanRenderPass()
@@ -501,39 +506,39 @@ namespace ocean
 	void OceanRenderPass::doFillAdditionalBindings( castor3d::PipelineFlags const & flags
 		, ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
-		bindings.emplace_back( getCuller().getScene().getLightCache().createLayoutBinding( WaveIdx::eLightBuffer ) );
-		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( WaveIdx::eWavesUbo
+		bindings.emplace_back( getCuller().getScene().getLightCache().createLayoutBinding( rdpass::WaveIdx::eLightBuffer ) );
+		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( rdpass::WaveIdx::eWavesUbo
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, ( VK_SHADER_STAGE_VERTEX_BIT
 				| VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT
 				| VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT
 				| VK_SHADER_STAGE_FRAGMENT_BIT ) ) );
-		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( WaveIdx::eWaveFoam
+		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( rdpass::WaveIdx::eWaveFoam
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( WaveIdx::eWaveNormals1
+		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( rdpass::WaveIdx::eWaveNormals1
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( WaveIdx::eWaveNormals2
+		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( rdpass::WaveIdx::eWaveNormals2
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( WaveIdx::eWaveNoise
+		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( rdpass::WaveIdx::eWaveNoise
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( WaveIdx::eSceneNormals
+		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( rdpass::WaveIdx::eSceneNormals
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( WaveIdx::eSceneDepth
+		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( rdpass::WaveIdx::eSceneDepth
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( WaveIdx::eSceneResult
+		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( rdpass::WaveIdx::eSceneResult
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( WaveIdx::eBrdf
+		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( rdpass::WaveIdx::eBrdf
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 
-		auto index = uint32_t( WaveIdx::eBrdf ) + 1u;
+		auto index = uint32_t( rdpass::WaveIdx::eBrdf ) + 1u;
 		doAddShadowBindings( flags, bindings, index );
 		doAddEnvBindings( flags, bindings, index );
 		doAddBackgroundBindings( flags, bindings, index );
@@ -579,17 +584,17 @@ namespace ocean
 		, ashes::WriteDescriptorSetArray & descriptorWrites
 		, castor3d::ShadowMapLightTypeArray const & shadowMaps )
 	{
-		descriptorWrites.push_back( m_scene.getLightCache().getBinding( WaveIdx::eLightBuffer ) );
-		descriptorWrites.push_back( m_ubo.getDescriptorWrite( WaveIdx::eWavesUbo ) );
-		auto index = uint32_t( WaveIdx::eWaveFoam );
-		bindTexture( m_foam, *m_linearWrapSampler, descriptorWrites, index );
-		bindTexture( m_normals1, *m_linearWrapSampler, descriptorWrites, index );
-		bindTexture( m_normals2, *m_linearWrapSampler, descriptorWrites, index );
-		bindTexture( m_noise, *m_linearWrapSampler, descriptorWrites, index );
-		bindTexture( m_parent->getNormal().sampledView, *m_pointClampSampler, descriptorWrites, index );
-		bindTexture( m_depthInput->sampledView, *m_pointClampSampler, descriptorWrites, index );
-		bindTexture( m_colourInput->sampledView, *m_pointClampSampler, descriptorWrites, index );
-		bindTexture( getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().sampledView
+		descriptorWrites.push_back( m_scene.getLightCache().getBinding( rdpass::WaveIdx::eLightBuffer ) );
+		descriptorWrites.push_back( m_ubo.getDescriptorWrite( rdpass::WaveIdx::eWavesUbo ) );
+		auto index = uint32_t( rdpass::WaveIdx::eWaveFoam );
+		rdpass::bindTexture( m_foam, *m_linearWrapSampler, descriptorWrites, index );
+		rdpass::bindTexture( m_normals1, *m_linearWrapSampler, descriptorWrites, index );
+		rdpass::bindTexture( m_normals2, *m_linearWrapSampler, descriptorWrites, index );
+		rdpass::bindTexture( m_noise, *m_linearWrapSampler, descriptorWrites, index );
+		rdpass::bindTexture( m_parent->getNormal().sampledView, *m_pointClampSampler, descriptorWrites, index );
+		rdpass::bindTexture( m_depthInput->sampledView, *m_pointClampSampler, descriptorWrites, index );
+		rdpass::bindTexture( m_colourInput->sampledView, *m_pointClampSampler, descriptorWrites, index );
+		rdpass::bindTexture( getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().sampledView
 			, *getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().sampler
 			, descriptorWrites
 			, index );
@@ -616,7 +621,7 @@ namespace ocean
 	{
 #if !Ocean_DebugPixelShader
 		flags.topology = VK_PRIMITIVE_TOPOLOGY_PATCH_LIST;
-		flags.patchVertices = 3u;
+		flags.patchVertices = rdpass::OutputVertices;
 #endif
 	}
 
@@ -650,13 +655,13 @@ namespace ocean
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
 		pcb.end();
 
-		writer.implementMainT< castor3d::shader::VertexSurfaceT, castor3d::shader::FragmentSurfaceT >( sdw::VertexInT< castor3d::shader::VertexSurfaceT >{ writer
+		writer.implementMainT< castor3d::shader::VertexSurfaceT, rdpass::PatchT >( sdw::VertexInT< castor3d::shader::VertexSurfaceT >{ writer
 				, flags }
-			, sdw::VertexOutT< castor3d::shader::FragmentSurfaceT >{ writer
+			, sdw::VertexOutT< rdpass::PatchT >{ writer
 				, passShaders
 				, flags }
 			, [&]( VertexInT< castor3d::shader::VertexSurfaceT > in
-				, VertexOutT< castor3d::shader::FragmentSurfaceT > out )
+				, VertexOutT< rdpass::PatchT > out )
 		{
 			out.vtx.position = in.position;
 			out.texture0 = in.texture0;
@@ -736,12 +741,12 @@ namespace ocean
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
 		pcb.end();
 
-		writer.implementMainT< VoidT, castor3d::shader::FragmentSurfaceT >( sdw::VertexInT< sdw::VoidT >{ writer }
-			, sdw::VertexOutT< castor3d::shader::FragmentSurfaceT >{ writer
+		writer.implementMainT< VoidT, rdpass::PatchT >( sdw::VertexInT< sdw::VoidT >{ writer }
+			, sdw::VertexOutT< rdpass::PatchT >{ writer
 				, passShaders
 				, flags }
 			, [&]( VertexInT< VoidT > in
-				, VertexOutT< castor3d::shader::FragmentSurfaceT > out )
+				, VertexOutT< rdpass::PatchT > out )
 			{
 				auto nodeId = writer.declLocale( "nodeId"
 					, shader::getNodeId( c3d_objectIdsData
@@ -806,13 +811,13 @@ namespace ocean
 			, index
 			, RenderPipeline::eBuffers );
 
-		writer.implementPatchRoutineT< castor3d::shader::FragmentSurfaceT, 3u, VoidT >( TessControlListInT< castor3d::shader::FragmentSurfaceT, 3u >{ writer
+		writer.implementPatchRoutineT< rdpass::PatchT, rdpass::OutputVertices, VoidT >( TessControlListInT< rdpass::PatchT, rdpass::OutputVertices >{ writer
 				, false
 				, passShaders
 				, flags }
 			, TrianglesTessPatchOutT< VoidT >{ writer, 9u }
 			, [&]( sdw::TessControlPatchRoutineIn in
-				, sdw::TessControlListInT< castor3d::shader::FragmentSurfaceT, 3u > listIn
+				, sdw::TessControlListInT< rdpass::PatchT, rdpass::OutputVertices > listIn
 				, sdw::TrianglesTessPatchOut patchOut )
 			{
 				patchOut.tessLevelOuter[0] = c3d_oceanData.tessellationFactor();
@@ -822,20 +827,20 @@ namespace ocean
 				patchOut.tessLevelInner[0] = c3d_oceanData.tessellationFactor();
 			} );
 
-		writer.implementMainT< castor3d::shader::FragmentSurfaceT, 3u, castor3d::shader::FragmentSurfaceT >( TessControlListInT< castor3d::shader::FragmentSurfaceT, 3u >{ writer
+		writer.implementMainT< rdpass::PatchT, rdpass::OutputVertices, rdpass::PatchT >( TessControlListInT< rdpass::PatchT, rdpass::OutputVertices >{ writer
 				, true
 				, passShaders
 				, flags }
-			, TrianglesTessControlListOutT< castor3d::shader::FragmentSurfaceT >{ writer
-				, ast::type::Partitioning::eFractionalOdd
+			, TrianglesTessControlListOutT< rdpass::PatchT >{ writer
+				, ast::type::Partitioning::eFractionalEven
 				, ast::type::OutputTopology::eTriangle
 				, ast::type::PrimitiveOrdering::eCCW
-				, 3u
+				, rdpass::OutputVertices
 				, passShaders
 				, flags }
 			, [&]( TessControlMainIn in
-				, TessControlListInT< castor3d::shader::FragmentSurfaceT, 3u > listIn
-				, TrianglesTessControlListOutT< castor3d::shader::FragmentSurfaceT > listOut )
+				, TessControlListInT< rdpass::PatchT, rdpass::OutputVertices > listIn
+				, TrianglesTessControlListOutT< rdpass::PatchT > listOut )
 			{
 				listOut.vtx.position = listIn[in.invocationID].vtx.position;
 				listOut.nodeId = listIn[in.invocationID].nodeId;
@@ -878,14 +883,14 @@ namespace ocean
 			, index
 			, RenderPipeline::eBuffers );
 
-		auto calculateWave = writer.implementFunction< WaveResult >( "calculateWave"
+		auto calculateWave = writer.implementFunction< rdpass::WaveResult >( "calculateWave"
 			, [&]( Wave wave
 				, Vec3 wavePosition
 				, Float edgeDampen
 				, UInt numWaves
 				, Float timeIndex )
 			{
-				auto result = writer.declLocale< WaveResult >( "result" );
+				auto result = writer.declLocale< rdpass::WaveResult >( "result" );
 
 				auto frequency = writer.declLocale( "frequency"
 					, 2.0_f / wave.length() );
@@ -937,9 +942,9 @@ namespace ocean
 			, sdw::InUInt{ writer, "numWaves" }
 			, sdw::InFloat{ writer, "timeIndex" } );
 
-		writer.implementMainT< castor3d::shader::FragmentSurfaceT, 3u, VoidT, castor3d::shader::FragmentSurfaceT >( TessEvalListInT< castor3d::shader::FragmentSurfaceT, 3u >{ writer
+		writer.implementMainT< rdpass::PatchT, rdpass::OutputVertices, VoidT, castor3d::shader::FragmentSurfaceT >( TessEvalListInT< rdpass::PatchT, rdpass::OutputVertices >{ writer
 				, ast::type::PatchDomain::eTriangles
-				, type::Partitioning::eFractionalOdd
+				, type::Partitioning::eFractionalEven
 				, type::PrimitiveOrdering::eCCW
 				, passShaders
 				, flags }
@@ -948,7 +953,7 @@ namespace ocean
 				, passShaders
 				, flags }
 			, [&]( TessEvalMainIn mainIn
-				, TessEvalListInT< castor3d::shader::FragmentSurfaceT, 3u > listIn
+				, TessEvalListInT< rdpass::PatchT, rdpass::OutputVertices > listIn
 				, TrianglesTessPatchInT< VoidT > patchIn
 				, TessEvalDataOutT< castor3d::shader::FragmentSurfaceT > out )
 			{
@@ -971,7 +976,7 @@ namespace ocean
 					, 1.0_f - pow( utils.saturate( abs( texcoord.x() - 0.5_f ) / 0.5_f ), c3d_oceanData.dampeningFactor() ) );
 				dampening *= 1.0_f - pow( utils.saturate( abs( texcoord.y() - 0.5_f ) / 0.5_f ), c3d_oceanData.dampeningFactor() );
 
-				auto finalWaveResult = writer.declLocale< WaveResult >( "finalWaveResult" );
+				auto finalWaveResult = writer.declLocale< rdpass::WaveResult >( "finalWaveResult" );
 				finalWaveResult.position = vec3( 0.0_f );
 				finalWaveResult.normal = vec3( 0.0_f );
 				finalWaveResult.tangent = vec3( 0.0_f );

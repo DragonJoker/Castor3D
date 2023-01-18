@@ -170,7 +170,7 @@ namespace castor3d
 	crg::FramePass & PrepassRendering::doCreateVisibilityPass( ProgressBar * progress
 		, crg::FramePassArray const & previousPasses )
 	{
-		stepProgressBar( progress, "Creating depth pass" );
+		stepProgressBar( progress, "Creating depth/visibility pass" );
 		auto & result = m_graph.createPass( "NodesPass"
 			, [this, progress]( crg::FramePass const & framePass
 				, crg::GraphContext & context
@@ -180,7 +180,7 @@ namespace castor3d
 				auto depthObjIt = std::next( depthIt );
 				auto dataIt = std::next( depthObjIt );
 				auto velocityIt = std::next( dataIt );
-				stepProgressBar( progress, "Initialising depth pass" );
+				stepProgressBar( progress, "Initialising depth/visibility pass" );
 				auto res = std::make_unique< VisibilityPass >( getOwner()
 					, framePass
 					, context
@@ -217,7 +217,7 @@ namespace castor3d
 	crg::FramePass & PrepassRendering::doCreateForwardDepthPass( ProgressBar * progress
 		, crg::FramePassArray const & previousPasses )
 	{
-		stepProgressBar( progress, "Creating depth pass" );
+		stepProgressBar( progress, "Creating forward depth pass" );
 		auto & result = m_graph.createPass( "Depth"
 			, [this, progress]( crg::FramePass const & framePass
 				, crg::GraphContext & context
@@ -227,7 +227,7 @@ namespace castor3d
 				auto depthObjIt = std::next( depthIt );
 				auto velocityIt = std::next( depthObjIt );
 				auto normalIt = std::next( velocityIt );
-				stepProgressBar( progress, "Initialising depth pass" );
+				stepProgressBar( progress, "Initialising forward depth pass" );
 				auto res = std::make_unique< DepthPass >( getOwner()
 					, framePass
 					, context
@@ -264,7 +264,7 @@ namespace castor3d
 	crg::FramePass & PrepassRendering::doCreateDeferredDepthPass( ProgressBar * progress
 		, crg::FramePassArray const & previousPasses )
 	{
-		stepProgressBar( progress, "Creating depth pass" );
+		stepProgressBar( progress, "Creating deferred depth pass" );
 		auto & result = m_graph.createPass( "Depth"
 			, [this, progress]( crg::FramePass const & framePass
 				, crg::GraphContext & context
@@ -273,7 +273,7 @@ namespace castor3d
 				auto depthIt = framePass.images.begin();
 				auto depthObjIt = std::next( depthIt );
 				auto velocityIt = std::next( depthObjIt );
-				stepProgressBar( progress, "Initialising depth pass" );
+				stepProgressBar( progress, "Initialising deferred depth pass" );
 				auto res = std::make_unique< DepthPass >( getOwner()
 					, framePass
 					, context
