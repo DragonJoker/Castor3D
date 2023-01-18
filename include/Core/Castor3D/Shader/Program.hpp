@@ -31,7 +31,7 @@ namespace castor3d
 		struct CompiledShader
 		{
 			castor::String name;
-			SpirVShader shader;
+			SpirVShader const * shader;
 		};
 
 	public:
@@ -153,14 +153,14 @@ namespace castor3d
 		ashes::PipelineShaderStageCreateInfoArray m_states;
 	};
 
-	C3D_API SpirVShader compileShader( RenderDevice const & device
-		, ShaderModule const & module );
-	C3D_API SpirVShader compileShader( RenderSystem const & renderSystem
-		, ShaderModule const & module );
+	C3D_API SpirVShader const & compileShader( RenderDevice const & device
+		, ShaderModule & module );
+	C3D_API SpirVShader const & compileShader( RenderSystem const & renderSystem
+		, ShaderModule & module );
 
 	inline ashes::PipelineShaderStageCreateInfo makeShaderState( ashes::Device const & device
 		, VkShaderStageFlagBits stage
-		, SpirVShader code
+		, SpirVShader const & code
 		, std::string const & name
 		, std::string mainFuncName = "main"
 		, ashes::Optional< ashes::SpecializationInfo > specialization = ashes::nullopt )
@@ -178,7 +178,7 @@ namespace castor3d
 	}
 
 	inline ashes::PipelineShaderStageCreateInfo makeShaderState( RenderDevice const & device
-		, ShaderModule const & shaderModule
+		, ShaderModule & shaderModule
 		, std::string mainFuncName = "main"
 		, ashes::Optional< ashes::SpecializationInfo > specialization = ashes::nullopt )
 	{

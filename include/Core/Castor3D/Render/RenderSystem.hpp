@@ -165,7 +165,7 @@ namespace castor3d
 		 *\param[in]	module	Le shader à compiler.
 		 *\return		Le shader compilé.
 		 */
-		C3D_API SpirVShader compileShader( ShaderModule const & module )const;
+		C3D_API SpirVShader const & compileShader( ShaderModule & module )const;
 		/**
 		*\~english
 		*\brief

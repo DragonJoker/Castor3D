@@ -244,9 +244,9 @@ namespace castor3d
 		static ashes::GraphicsPipelinePtr createPipeline( RenderDevice const & device
 			, ashes::PipelineLayout const & layout
 			, ashes::RenderPass const & renderPass
-			, ShaderModule const & vertexShader
-			, ShaderModule const & geometryShader
-			, ShaderModule const & pixelShader
+			, ShaderModule & vertexShader
+			, ShaderModule & geometryShader
+			, ShaderModule & pixelShader
 			, Texture const & target )
 		{
 			ashes::PipelineShaderStageCreateInfoArray program;
@@ -275,8 +275,8 @@ namespace castor3d
 		static ashes::GraphicsPipelinePtr createPipeline( RenderDevice const & device
 			, ashes::PipelineLayout const & layout
 			, ashes::RenderPass const & renderPass
-			, ShaderModule const & vertexShader
-			, ShaderModule const & pixelShader
+			, ShaderModule & vertexShader
+			, ShaderModule & pixelShader
 			, Texture const & target )
 		{
 			ashes::PipelineShaderStageCreateInfoArray program;

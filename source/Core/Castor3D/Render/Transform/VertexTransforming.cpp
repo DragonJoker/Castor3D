@@ -272,7 +272,7 @@ namespace castor3d
 		}
 
 		static ashes::ComputePipelinePtr createPipeline( RenderDevice const & device
-			, TransformPipeline const & pipeline )
+			, TransformPipeline & pipeline )
 		{
 			// Initialise the pipeline.
 			return device->createPipeline( pipeline.getName()
@@ -282,7 +282,7 @@ namespace castor3d
 		}
 
 		static ashes::ComputePipelinePtr createPipeline( RenderDevice const & device
-			, BoundsTransformPipeline const & pipeline )
+			, BoundsTransformPipeline & pipeline )
 		{
 			// Initialise the pipeline.
 			return device->createPipeline( pipeline.getName()

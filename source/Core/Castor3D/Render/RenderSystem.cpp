@@ -897,18 +897,28 @@ namespace castor3d
 		}
 	}
 
-	SpirVShader RenderSystem::compileShader( castor3d::ShaderModule const & module )const
+	SpirVShader const & RenderSystem::compileShader( castor3d::ShaderModule & module )const
 	{
+		SpirVShader result;
+
 		if ( module.shader )
 		{
-			return compileShader( module.stage
+			result = compileShader( module.stage
 				, module.name
 				, *module.shader );
+			module.shader.reset();
+			module.compiled = result;
+		}
+		else if ( !module.source.empty() )
+		{
+			result = compileShader( module.stage
+				, module.name
+				, module.source );
+			module.source.clear();
+			module.compiled = result;
 		}
 
-		return compileShader( module.stage
-			, module.name
-			, module.source );
+		return module.compiled;
 	}
 
 	SpirVShader RenderSystem::compileShader( VkShaderStageFlagBits stage

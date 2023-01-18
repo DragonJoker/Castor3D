@@ -74,7 +74,7 @@ namespace castor3d
 
 		static ashes::ComputePipelinePtr createPipeline( RenderDevice const & device
 			, ashes::PipelineLayout const & pipelineLayout
-			, ShaderModule const & computeShader )
+			, ShaderModule & computeShader )
 		{
 			// Initialise the pipeline.
 			return device->createPipeline( "ComputeDepthRange"
