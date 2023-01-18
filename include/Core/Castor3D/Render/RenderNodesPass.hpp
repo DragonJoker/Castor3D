@@ -559,7 +559,6 @@ namespace castor3d
 		C3D_API virtual bool areValidPassFlags( PassComponentCombine const & passFlags )const;
 		C3D_API bool isValidPass( Pass const & pass )const;
 		C3D_API bool isValidRenderable( RenderedObject const & object )const;
-		C3D_API bool hasNodes()const;
 		C3D_API bool isPassEnabled()const;
 		C3D_API Scene & getScene()const;
 		C3D_API SceneNode const * getIgnoredNode()const;

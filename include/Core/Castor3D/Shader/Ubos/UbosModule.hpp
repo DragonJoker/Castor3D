@@ -11,8 +11,6 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
-#include <ShaderWriter/ShaderWriterPrerequisites.hpp>
-
 namespace castor3d
 {
 	/**@name Shader */

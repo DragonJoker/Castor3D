@@ -7,7 +7,6 @@ See LICENSE file in root folder
 #include "Castor3D/Castor3DModule.hpp"
 
 #include <ShaderAST/Shader.hpp>
-#include <ShaderWriter/ShaderWriterPrerequisites.hpp>
 
 #include <CastorUtils/Design/FlagCombination.hpp>
 

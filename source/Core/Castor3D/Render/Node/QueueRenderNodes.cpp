@@ -894,6 +894,47 @@ namespace castor3d
 		}
 	}
 
+	void QueueRenderNodes::cleanup()
+	{
+		m_pipelinesNodes.reset();
+		m_billboardIndirectCommands.reset();
+		m_submeshNIdxIndirectCommands.reset();
+		m_submeshIdxIndirectCommands.reset();
+#if VK_NV_mesh_shader
+		m_submeshMeshletIndirectCommands.reset();
+#endif
+	}
+
+	void QueueRenderNodes::checkEmpty()
+	{
+		auto & queue = *getOwner();
+		auto & renderPass = *queue.getOwner();
+		auto & culler = queue.getCuller();
+		auto submeshesIt = std::find_if( culler.getSubmeshes().begin()
+			, culler.getSubmeshes().end()
+			, [&renderPass]( CountedNodeT< SubmeshRenderNode > const & lookup )
+			{
+				auto & node = *lookup.node;
+				return renderPass.isValidPass( *node.pass )
+					&& renderPass.isValidRenderable( node.instance )
+					&& node.instance.getParent() != renderPass.getIgnoredNode()
+					&& ( !node.data.getInstantiation().isInstanced( node.instance.getMaterial( node.data ) )
+						|| node.instance.getParent()->isVisible() );
+			} );
+		auto billboardsIt = std::find_if( culler.getBillboards().begin()
+			, culler.getBillboards().end()
+			, [&renderPass]( CountedNodeT< BillboardRenderNode > const & lookup )
+			{
+				auto & node = *lookup.node;
+				return renderPass.isValidPass( *node.pass )
+					&& renderPass.isValidRenderable( node.instance )
+					&& node.instance.getNode() != renderPass.getIgnoredNode();
+			} );
+
+		m_hasNodes = submeshesIt != culler.getSubmeshes().end()
+			|| billboardsIt != culler.getBillboards().end();
+	}
+
 	void QueueRenderNodes::sortNodes( ShadowMapLightTypeArray & shadowMaps )
 	{
 		auto & queue = *getOwner();
@@ -904,6 +945,7 @@ namespace castor3d
 #endif
 
 		auto & culler = queue.getCuller();
+		m_hasNodes = false;
 		m_nodesIds.clear();
 		m_submeshNodes.clear();
 		m_instancedSubmeshNodes.clear();
@@ -977,7 +1019,7 @@ namespace castor3d
 	void QueueRenderNodes::fillIndirectBuffers()
 	{
 		if ( !m_pipelinesNodes
-			|| m_nodesIds .empty() )
+			|| m_nodesIds.empty() )
 		{
 			return;
 		}
@@ -1371,6 +1413,7 @@ namespace castor3d
 		renderPass.initialiseAdditionalDescriptor( pipeline
 			, shadowMaps
 			, node.data.getMorphTargets() );
+		m_hasNodes = true;
 	}
 
 	void QueueRenderNodes::doAddInstancedSubmesh( ShadowMapLightTypeArray & shadowMaps
@@ -1388,6 +1431,7 @@ namespace castor3d
 		renderPass.initialiseAdditionalDescriptor( pipeline
 			, shadowMaps
 			, node.data.getMorphTargets() );
+		m_hasNodes = true;
 	}
 
 	void QueueRenderNodes::doAddBillboard( ShadowMapLightTypeArray & shadowMaps
@@ -1404,6 +1448,7 @@ namespace castor3d
 		renderPass.initialiseAdditionalDescriptor( pipeline
 			, shadowMaps
 			, {} );
+		m_hasNodes = true;
 	}
 
 	//*********************************************************************************************

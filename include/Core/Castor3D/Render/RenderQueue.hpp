@@ -143,7 +143,6 @@ namespace castor3d
 		void doInitialise( RenderDevice const & device
 			, QueueData const & queueData );
 		void doPrepareCommandBuffer();
-		void doSortRenderNodes( ShadowMapLightTypeArray & shadowMaps );
 		void doOnCullerCompute( SceneCuller const & culler );
 
 	private:

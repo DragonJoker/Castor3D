@@ -497,14 +497,9 @@ namespace castor3d
 		return doIsValidRenderable( object );
 	}
 
-	bool RenderNodesPass::hasNodes()const
-	{
-		return m_renderQueue->hasNodes();
-	}
-
 	bool RenderNodesPass::isPassEnabled()const
 	{
-		return hasNodes();
+		return m_renderQueue->hasNodes();
 	}
 
 	Scene & RenderNodesPass::getScene()const

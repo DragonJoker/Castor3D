@@ -89,7 +89,7 @@ namespace GuiCommon
 
 		for ( auto & renderPass : target.getCustomRenderPasses() )
 		{
-			if ( renderPass->hasNodes() )
+			if ( renderPass->isPassEnabled() )
 			{
 				addProperty( grid, wxT( "Render pass " ) + renderPass->getName() );
 				setPrefix( renderPass->getName() );
