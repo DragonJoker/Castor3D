@@ -24,6 +24,8 @@ namespace castor3d
 		C3D_API explicit QueueRenderNodes( RenderQueue const & queue );
 
 		C3D_API void initialise( RenderDevice const & device );
+		C3D_API void cleanup();
+		C3D_API void checkEmpty();
 		C3D_API void sortNodes( ShadowMapLightTypeArray & shadowMaps );
 		C3D_API void fillIndirectBuffers();
 		C3D_API void prepareCommandBuffers( ashes::Optional< VkViewport > const & viewport
@@ -74,9 +76,7 @@ namespace castor3d
 
 		bool hasCulledNodes()const
 		{
-			return !m_submeshNodes.empty()
-				|| !m_instancedSubmeshNodes.empty()
-				|| !m_billboardNodes.empty();
+			return m_hasNodes;
 		}
 
 	private:
@@ -95,6 +95,7 @@ namespace castor3d
 	private:
 		PipelineBufferArray m_nodesIds;
 		std::map< uint32_t, uint32_t > m_nodesPipelinesIds;
+		bool m_hasNodes{};
 
 #if VK_NV_mesh_shader
 		using IndexedMeshDrawCommandsBuffer = ashes::BufferPtr< VkDrawMeshTasksIndirectCommandNV >;

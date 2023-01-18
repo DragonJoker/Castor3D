@@ -66,7 +66,8 @@ namespace castor3d
 
 	void RenderQueue::cleanup()
 	{
-		m_renderNodes.reset();
+		CU_Require( m_renderNodes );
+		m_renderNodes->cleanup();
 		m_commandBuffer.reset();
 	}
 
@@ -76,7 +77,8 @@ namespace castor3d
 		{
 			if ( m_culledChanged )
 			{
-				doSortRenderNodes( shadowMaps );
+				CU_Require( m_renderNodes );
+				m_renderNodes->sortNodes( shadowMaps );
 				m_culledChanged = false;
 			}
 
@@ -85,6 +87,12 @@ namespace castor3d
 				doPrepareCommandBuffer();
 				m_commandsChanged = false;
 			}
+		}
+		else if ( m_culledChanged )
+		{
+			CU_Require( m_renderNodes );
+			m_renderNodes->checkEmpty();
+			m_culledChanged = false;
 		}
 	}
 
@@ -113,7 +121,9 @@ namespace castor3d
 
 	bool RenderQueue::hasNodes()const
 	{
-		return getCuller().hasNodes();
+		return getCuller().hasNodes()
+			&& m_renderNodes
+			&& m_renderNodes->hasCulledNodes();
 	}
 
 	RenderFilters RenderQueue::getFilters()const
@@ -150,7 +160,6 @@ namespace castor3d
 		, QueueData const & queueData )
 	{
 		m_commandBuffer.reset();
-		m_commandsChanged = true;
 		m_renderPassAtInit = getOwner()->getRenderPass();
 		m_commandBuffer = queueData.commandPool->createCommandBuffer( getOwner()->getName()
 			, VK_COMMAND_BUFFER_LEVEL_SECONDARY );
@@ -163,23 +172,19 @@ namespace castor3d
 				, 0u ) );
 		m_commandBuffer->end();
 		m_renderNodes->initialise( device );
+		m_culledChanged = true;
+		m_commandsChanged = true;
 	}
 
 	void RenderQueue::doPrepareCommandBuffer()
 	{
 		getOwner()->resetCommandBuffer();
 		CU_Require( m_commandBuffer );
+		CU_Require( m_renderNodes );
 		m_commandBuffer->reset();
-		auto & nodes = getRenderNodes();
-		nodes.prepareCommandBuffers( m_viewport.value()
+		m_renderNodes->prepareCommandBuffers( m_viewport.value()
 			, m_scissor.value() );
 		getOwner()->reRecordCurrent();
-	}
-
-	void RenderQueue::doSortRenderNodes( ShadowMapLightTypeArray & shadowMaps )
-	{
-		auto & nodes = getRenderNodes();
-		nodes.sortNodes( shadowMaps );
 	}
 
 	void RenderQueue::doOnCullerCompute( SceneCuller const & culler )

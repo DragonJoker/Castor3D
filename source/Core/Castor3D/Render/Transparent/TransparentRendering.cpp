@@ -105,7 +105,7 @@ namespace castor3d
 
 		auto & scene = *updater.scene;
 		updater.voxelConeTracing = scene.getVoxelConeTracingConfig().enabled;
-		m_enabled = m_transparentPass->hasNodes();
+		m_enabled = m_transparentPass->isPassEnabled();
 		m_transparentPass->update( updater );
 	}
 

@@ -14,17 +14,8 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Design/ChangeTracked.hpp>
 
-#include <ShaderAST/Shader.hpp>
-
-#include <ashespp/Buffer/VertexBuffer.hpp>
-#include <ashespp/Descriptor/DescriptorSet.hpp>
-#include <ashespp/Descriptor/DescriptorSetLayout.hpp>
-#include <ashespp/Descriptor/DescriptorSetPool.hpp>
 #include <ashespp/Image/ImageView.hpp>
-#include <ashespp/Image/Sampler.hpp>
-#include <ashespp/Pipeline/PipelineLayout.hpp>
-#include <ashespp/RenderPass/FrameBuffer.hpp>
-#include <ashespp/RenderPass/RenderPass.hpp>
+#include <ashespp/Pipeline/PipelineShaderStageCreateInfo.hpp>
 #include <ashespp/Sync/Semaphore.hpp>
 
 #define C3D_DebugLinearisePass 0
