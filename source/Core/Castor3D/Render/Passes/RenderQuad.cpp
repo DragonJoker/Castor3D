@@ -182,7 +182,7 @@ namespace castor3d
 		, castor::String const & name
 		, VkFilter samplerFilter
 		, rq::Config config )
-		: castor::Named{ name }
+		: castor::Named{ name + "Quad" }
 		, m_renderSystem{ device.renderSystem }
 		, m_device{ device }
 		, m_sampler{ createSampler( *m_renderSystem.getEngine()

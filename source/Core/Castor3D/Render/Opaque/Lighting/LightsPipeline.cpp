@@ -428,7 +428,6 @@ namespace castor3d
 			, context
 			, commandBuffer
 			, passIndex );
-		m_context.vkCmdEndDebugBlock( commandBuffer );
 	}
 
 	void LightsPipeline::doRecordStencilPrePass( LightRenderPass const & renderPass

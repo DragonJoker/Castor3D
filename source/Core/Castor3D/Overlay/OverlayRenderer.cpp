@@ -831,7 +831,7 @@ namespace castor3d
 		, uint32_t index
 		, bool update )
 	{
-		auto result = pipeline.descriptorPool->createDescriptorSet( "OverlayRenderer" + castor::string::toString( index ) );
+		auto result = pipeline.descriptorPool->createDescriptorSet( "Overlays-" + castor::string::toString( index ) );
 
 		// Pass buffer
 		getRenderSystem()->getEngine()->getMaterialCache().getPassBuffer().createBinding( *result
@@ -896,6 +896,7 @@ namespace castor3d
 			, std::move( attachments ) };
 		auto & materials = getRenderSystem()->getEngine()->getMaterialCache();
 		ashes::VkDescriptorSetLayoutBindingArray bindings;
+		std::string name = "Overlays";
 
 		bindings.emplace_back( materials.getPassBuffer().createLayoutBinding( uint32_t( ovrlrend::OverlayBindingId::eMaterials ) ) );
 		bindings.emplace_back( materials.getTexConfigBuffer().createLayoutBinding( uint32_t( ovrlrend::OverlayBindingId::eTexConfigs ) ) );
@@ -910,34 +911,39 @@ namespace castor3d
 		auto vertexLayout = ( texturesFlags.configCount == 0u
 			? &m_noTexDeclaration
 			: &m_texDeclaration );
+		name += "_" + std::to_string( texturesFlags.configCount );
 
 		if ( text )
 		{
 			vertexLayout = ( texturesFlags.configCount == 0u
 				? &m_noTexTextDeclaration
 				: &m_texTextDeclaration );
+			name = "Text" + name;
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( ovrlrend::OverlayBindingId::eTextMap )
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 		}
 
 		auto texLayout = getOwner()->getEngine()->getTextureUnitCache().getDescriptorLayout();
-		auto descriptorLayout = device->createDescriptorSetLayout( std::move( bindings ) );
+		auto descriptorLayout = device->createDescriptorSetLayout( name
+			, std::move( bindings ) );
 		auto descriptorPool = descriptorLayout->createPool( 1000u );
-		auto pipelineLayout = device->createPipelineLayout( ashes::DescriptorSetLayoutCRefArray{ *descriptorLayout, *texLayout } );
-		auto pipeline = device->createPipeline( { 0u
-			, std::move( program )
-			, *vertexLayout
-			, ashes::PipelineInputAssemblyStateCreateInfo{ 0u, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST }
-			, ashes::nullopt
-			, ashes::PipelineViewportStateCreateInfo{}
-			, ashes::PipelineRasterizationStateCreateInfo{}
-			, ashes::PipelineMultisampleStateCreateInfo{}
-			, ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_FALSE, VK_FALSE }
-			, std::move( blState )
-			, ashes::PipelineDynamicStateCreateInfo{ 0u, { VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR } }
-			, *pipelineLayout
-			, renderPass } );
+		auto pipelineLayout = device->createPipelineLayout( name
+			, ashes::DescriptorSetLayoutCRefArray{ *descriptorLayout, *texLayout } );
+		auto pipeline = device->createPipeline( name
+			, { 0u
+				, std::move( program )
+				, *vertexLayout
+				, ashes::PipelineInputAssemblyStateCreateInfo{ 0u, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST }
+				, ashes::nullopt
+				, ashes::PipelineViewportStateCreateInfo{}
+				, ashes::PipelineRasterizationStateCreateInfo{}
+				, ashes::PipelineMultisampleStateCreateInfo{}
+				, ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_FALSE, VK_FALSE }
+				, std::move( blState )
+				, ashes::PipelineDynamicStateCreateInfo{ 0u, { VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR } }
+				, *pipelineLayout
+				, renderPass } );
 		return Pipeline{ std::move( descriptorLayout )
 			, std::move( descriptorPool )
 			, std::move( pipelineLayout )

@@ -131,7 +131,7 @@ namespace ocean
 	Writer_Parameter( Wave );
 
 	struct OceanData
-		: public sdw::StructInstanceHelperT< "WavesUbo"
+		: public sdw::StructInstanceHelperT< "C3D_OceanData"
 			, sdw::type::MemoryLayout::eStd140
 			, sdw::FloatField< "tessellationFactor" >
 			, sdw::UIntField< "numWaves" >
@@ -225,10 +225,6 @@ namespace ocean
 			return m_ubo;
 		}
 
-	public:
-		static const castor::String Buffer;
-		static const castor::String Data;
-
 	private:
 		castor3d::RenderDevice const & m_device;
 		castor3d::UniformBufferOffsetT< Configuration > m_ubo;
@@ -236,8 +232,13 @@ namespace ocean
 }
 
 #define C3D_Ocean( writer, binding, set )\
-	auto oceanBuffer = writer.declUniformBuffer( ocean::OceanUbo::Buffer, binding, set );\
-	auto c3d_oceanData = oceanBuffer.declMember< ocean::OceanData >( ocean::OceanUbo::Data );\
+	sdw::UniformBuffer oceanBuffer{ writer\
+		, "C3D_Ocean"\
+		, "c3d_oceanData"\
+		, uint32_t( binding )\
+		, uint32_t( set )\
+		, ast::type::MemoryLayout::eStd140 };\
+	auto c3d_oceanData = oceanBuffer.declMember< ocean::OceanData >( "o" );\
 	oceanBuffer.end()
 
 #endif

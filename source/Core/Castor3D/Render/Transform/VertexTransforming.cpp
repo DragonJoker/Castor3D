@@ -258,7 +258,7 @@ namespace castor3d
 		static ashes::PipelineLayoutPtr createPipelineLayout( RenderDevice const & device
 			, TransformPipeline const & pipeline )
 		{
-			return device->createPipelineLayout( pipeline.getName()
+			return device->createPipelineLayout( pipeline.getName() + "/PipelineLayout"
 				, *pipeline.descriptorSetLayout
 				, VkPushConstantRange{ VK_SHADER_STAGE_COMPUTE_BIT, 0u, sizeof( castor::Point4ui ) } );
 		}
@@ -266,7 +266,7 @@ namespace castor3d
 		static ashes::PipelineLayoutPtr createPipelineLayout( RenderDevice const & device
 			, BoundsTransformPipeline const & pipeline )
 		{
-			return device->createPipelineLayout( pipeline.getName()
+			return device->createPipelineLayout( pipeline.getName() + "/PipelineLayout"
 				, *pipeline.descriptorSetLayout
 				, VkPushConstantRange{ VK_SHADER_STAGE_COMPUTE_BIT, 0u, sizeof( uint32_t ) } );
 		}
@@ -275,7 +275,7 @@ namespace castor3d
 			, TransformPipeline & pipeline )
 		{
 			// Initialise the pipeline.
-			return device->createPipeline( pipeline.getName()
+			return device->createPipeline( pipeline.getName() + "/Pipeline"
 				, ashes::ComputePipelineCreateInfo( 0u
 					, makeShaderState( device, pipeline.shader )
 					, *pipeline.pipelineLayout ) );
@@ -285,7 +285,7 @@ namespace castor3d
 			, BoundsTransformPipeline & pipeline )
 		{
 			// Initialise the pipeline.
-			return device->createPipeline( pipeline.getName()
+			return device->createPipeline( pipeline.getName() + "/Pipeline"
 				, ashes::ComputePipelineCreateInfo( 0u
 					, makeShaderState( device, pipeline.shader )
 					, *pipeline.pipelineLayout ) );
