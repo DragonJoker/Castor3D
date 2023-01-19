@@ -139,7 +139,7 @@ namespace castor3d
 		{
 			auto secondaryUV = submesh->createComponent< Texcoords1Component >();
 			auto & tiledUV = secondaryUV->getData();
-			tiledUV.reserve( nbVertexW * nbVertexH );
+			tiledUV.reserve( size_t( nbVertexW ) * nbVertexH );
 
 			for ( uint32_t i = 0; i < nbVertexW; i++ )
 			{
