@@ -24,7 +24,7 @@ namespace castor3d
 			, castor::String name );
 
 	protected:
-		C3D_API TexturePtr doCreateTexture( crg::ResourceHandler & handler
+		C3D_API TexturePtr doCreateTexture( crg::ResourcesCache & resources
 			, castor::String const & name
 			, VkImageCreateFlags createFlags
 			, VkExtent3D const & size
@@ -37,7 +37,7 @@ namespace castor3d
 		*\~english
 		*\brief
 		*	Initialises 2D or 2D array g-buffer textures.
-		*\param[in] handler
+		*\param[in] resources
 		*	The render graph resource handler.
 		*\param[in] inputs
 		*	The already existing images.
@@ -52,7 +52,7 @@ namespace castor3d
 		*\~french
 		*\brief
 		*	Initialise les textures du g-buffer 2D ou 2D array.
-		*\param[in] handler
+		*\param[in] resources
 		*	Le gestionnaire de ressources du graphe.
 		*\param[in] inputs
 		*	Les images déjà existantes.
@@ -66,7 +66,7 @@ namespace castor3d
 		*	Le nombre de layers du g-buffer.
 		*/
 		template< typename TextureEnumT >
-		TextureArray doCreateTextures( crg::ResourceHandler & handler
+		TextureArray doCreateTextures( crg::ResourcesCache & resources
 			, std::array< TexturePtr, size_t( TextureEnumT::eCount ) > const & inputs
 			, castor::String const & prefix
 			, VkImageCreateFlags createFlags
@@ -80,7 +80,7 @@ namespace castor3d
 				if ( !inputs[i] )
 				{
 					auto texture = TextureEnumT( i );
-					result.emplace_back( doCreateTexture( handler
+					result.emplace_back( doCreateTexture( resources
 						, prefix + getTexName( texture )
 						, createFlags
 						, { size.getWidth(), size.getHeight(), 1u }
@@ -102,7 +102,7 @@ namespace castor3d
 		*\~english
 		*\brief
 		*	Initialises 3D g-buffer textures.
-		*\param[in] handler
+		*\param[in] resources
 		*	The render graph resource handler.
 		*\param[in] inputs
 		*	The already existing images.
@@ -115,7 +115,7 @@ namespace castor3d
 		*\~french
 		*\brief
 		*	Initialise les textures du g-buffer 3D.
-		*\param[in] handler
+		*\param[in] resources
 		*	Le gestionnaire de ressources du graphe.
 		*\param[in] inputs
 		*	Les images déjà existantes.
@@ -127,7 +127,7 @@ namespace castor3d
 		*	Les dimensions du g-buffer.
 		*/
 		template< typename TextureEnumT >
-		TextureArray doCreateTextures( crg::ResourceHandler & handler
+		TextureArray doCreateTextures( crg::ResourcesCache & resources
 			, std::array< TexturePtr, size_t( TextureEnumT::eCount ) > const & inputs
 			, castor::String const & prefix
 			, VkImageCreateFlags createFlags
@@ -140,7 +140,7 @@ namespace castor3d
 				if ( !inputs[i] )
 				{
 					auto texture = TextureEnumT( i );
-					result.emplace_back( doCreateTexture( handler
+					result.emplace_back( doCreateTexture( resources
 						, prefix + getTexName( texture )
 						, createFlags
 						, size
@@ -176,7 +176,7 @@ namespace castor3d
 		*\~english
 		*\brief
 		*	Initialises 2D or 2D-Array g-buffer related stuff.
-		*\param[in] handler
+		*\param[in] resources
 		*	The render graph resource handler.
 		*\param[in] device
 		*	The GPU device.
@@ -193,7 +193,7 @@ namespace castor3d
 		*\~french
 		*\brief
 		*	Initialise les données liées au g-buffer 2D ou 2D-Array.
-		*\param[in] handler
+		*\param[in] resources
 		*	Le gestionnaire de ressources du graphe.
 		*\param[in] device
 		*	Le device GPU.
@@ -208,7 +208,7 @@ namespace castor3d
 		*\param[in] layerCount
 		*	Le nombre de layers du g-buffer.
 		*/
-		GBufferT( crg::ResourceHandler & handler
+		GBufferT( crg::ResourcesCache & resources
 			, RenderDevice const & device
 			, castor::String name
 			, std::array< TexturePtr, size_t( TextureEnumT::eCount ) > const & inputs
@@ -216,7 +216,7 @@ namespace castor3d
 			, castor::Size const & size
 			, uint32_t layerCount = 1u )
 			: GBufferBase{ device, std::move( name ) }
-			, m_result{ doCreateTextures< TextureEnumT >( handler
+			, m_result{ doCreateTextures< TextureEnumT >( resources
 				, inputs
 				, getName()
 				, createFlags
@@ -228,7 +228,7 @@ namespace castor3d
 		*\~english
 		*\brief
 		*	Initialises 3D g-buffer related stuff.
-		*\param[in] handler
+		*\param[in] resources
 		*	The render graph resource handler.
 		*\param[in] device
 		*	The GPU device.
@@ -243,7 +243,7 @@ namespace castor3d
 		*\~french
 		*\brief
 		*	Initialise les données liées au g-buffer 3D.
-		*\param[in] handler
+		*\param[in] resources
 		*	Le gestionnaire de ressources du graphe.
 		*\param[in] device
 		*	Le device GPU.
@@ -256,14 +256,14 @@ namespace castor3d
 		*\param[in] size
 		*	Les dimensions du g-buffer.
 		*/
-		GBufferT( crg::ResourceHandler & handler
+		GBufferT( crg::ResourcesCache & resources
 			, RenderDevice const & device
 			, castor::String name
 			, std::array< TexturePtr, size_t( TextureEnumT::eCount ) > const & inputs
 			, VkImageCreateFlags createFlags
 			, VkExtent3D const & size )
 			: GBufferBase{ device, std::move( name ) }
-			, m_result{ doCreateTextures< TextureEnumT >( handler
+			, m_result{ doCreateTextures< TextureEnumT >( resources
 				, inputs
 				, getName()
 				, createFlags

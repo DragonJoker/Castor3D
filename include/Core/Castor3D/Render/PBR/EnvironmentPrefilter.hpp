@@ -28,7 +28,7 @@ namespace castor3d
 		public:
 			MipRenderCube( RenderDevice const & device
 				, QueueData const & queueData
-				, crg::ResourceHandler & handler
+				, crg::ResourcesCache & resources
 				, ashes::RenderPass const & renderPass
 				, uint32_t mipLevel
 				, VkExtent2D const & originalSize

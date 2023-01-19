@@ -315,13 +315,14 @@ namespace castor3d
 		, m_safeBandedSize{ getSafeBandedSize( size ) }
 		, m_pixelFormat{ VkFormat( pixelFormat ) }
 		, m_initialised{ false }
+		, m_resources{ getOwner()->getGraphResourceHandler() }
 		, m_renderTechnique{}
 		, m_camera{}
 		, m_index{ ++sm_uiCount }
 		, m_name{ cuT( "Target" ) + castor::string::toString( m_index ) }
-		, m_graph{ getOwner()->getGraphResourceHandler(), m_name }
+		, m_graph{ m_resources.getHandler(), m_name }
 		, m_velocity{ std::make_shared< Texture >( getOwner()->getRenderSystem()->getRenderDevice()
-			, getOwner()->getGraphResourceHandler()
+			, m_resources
 			, "Velocity"
 			, 0u
 			, makeExtent3D( m_safeBandedSize )
@@ -335,7 +336,7 @@ namespace castor3d
 				| VK_IMAGE_USAGE_STORAGE_BIT )
 			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK ) }
 		, m_objects{ getOwner()->getRenderSystem()->getRenderDevice()
-			, getOwner()->getGraphResourceHandler()
+			, m_resources
 			, "Scene"
 			, 0u
 			, makeExtent3D( m_safeBandedSize )
@@ -348,7 +349,7 @@ namespace castor3d
 				| VK_IMAGE_USAGE_TRANSFER_DST_BIT )
 			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
 		, m_overlays{ getOwner()->getRenderSystem()->getRenderDevice()
-			, getOwner()->getGraphResourceHandler()
+			, m_resources
 			, "Overlays"
 			, 0u
 			, makeExtent3D( m_size )
@@ -360,7 +361,7 @@ namespace castor3d
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT )
 			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
 		, m_combined{ getOwner()->getRenderSystem()->getRenderDevice()
-			, getOwner()->getGraphResourceHandler()
+			, m_resources
 			, "Target"
 			, 0u
 			, makeExtent3D( m_size )

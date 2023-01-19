@@ -28,12 +28,12 @@ namespace castor3d
 	namespace envpref
 	{
 		static Texture doCreatePrefilteredTexture( RenderDevice const & device
-			, crg::ResourceHandler & handler
+			, crg::ResourcesCache & resources
 			, castor::Size const & size
 			, std::string const & prefix )
 		{
 			Texture result{ device
-				, handler
+				, resources
 				, prefix + "EnvironmentPrefilterResult"
 				, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT
 				, { size[0], size[1], 1u }
@@ -256,7 +256,7 @@ namespace castor3d
 
 	EnvironmentPrefilter::MipRenderCube::MipRenderCube( RenderDevice const & device
 		, QueueData const & queueData
-		, crg::ResourceHandler & handler
+		, crg::ResourcesCache & resources
 		, ashes::RenderPass const & renderPass
 		, uint32_t mipLevel
 		, VkExtent2D const & originalSize
@@ -270,6 +270,9 @@ namespace castor3d
 		, m_prefix{ isCharlie ? std::string{ "Sheen" } : std::string{} }
 		, m_commands{ m_device, queueData, "EnvironmentPrefilter" }
 	{
+		auto & handler = resources.getHandler();
+		auto & context = m_device.makeContext();
+
 		for ( auto face = 0u; face < 6u; ++face )
 		{
 			auto name = m_prefix + "EnvironmentPrefilterL" + castor::string::toString( face ) + "M" + castor::string::toString( mipLevel );
@@ -283,7 +286,7 @@ namespace castor3d
 			data.info.subresourceRange.baseMipLevel = mipLevel;
 			data.info.subresourceRange.levelCount = 1u;
 			auto viewId = handler.createViewId( data );
-			facePass.dstView = handler.createImageView( device.makeContext(), viewId );
+			facePass.dstView = resources.createImageView( context, viewId );
 			// Initialise the frame buffer.
 			auto createInfo = makeVkStruct< VkFramebufferCreateInfo >( 0u
 				, renderPass
@@ -351,8 +354,8 @@ namespace castor3d
 		, m_srcView{ srcTexture }
 		, m_prefix{ isCharlie ? std::string{ "Sheen" } : std::string{} }
 		, m_srcImage{ std::make_unique< ashes::Image >( *device, m_srcView.image, m_srcView.imageId.data->info ) }
-		, m_srcImageView{ m_srcImage->createView( "EnvironmentPrefilterSrc", VK_IMAGE_VIEW_TYPE_CUBE, srcTexture.getFormat(), 0u, m_srcView.getMipLevels(), 0u, 6u ) }
-		, m_result{ envpref::doCreatePrefilteredTexture( m_device, engine.getGraphResourceHandler(), size, m_prefix ) }
+		, m_srcImageView{ m_srcImage->createView( "EnvironmentPrefilterSrc", VK_IMAGE_VIEW_TYPE_CUBE, m_srcView.getFormat(), 0u, m_srcView.getMipLevels(), 0u, 6u ) }
+		, m_result{ envpref::doCreatePrefilteredTexture( m_device, *m_srcView.resources, size, m_prefix ) }
 		, m_sampler{ envpref::doCreateSampler( engine, m_device, m_prefix, m_result.getMipLevels() - 1u ) }
 		, m_renderPass{ envpref::doCreateRenderPass( m_device, m_prefix, m_result.getFormat() ) }
 	{
@@ -365,7 +368,7 @@ namespace castor3d
 				, originalSize.height >> mipLevel };
 			m_renderPasses.emplace_back( std::make_unique< MipRenderCube >( m_device
 				, *data
-				, engine.getGraphResourceHandler()
+				, *m_srcView.resources
 				, *m_renderPass
 				, mipLevel
 				, originalSize

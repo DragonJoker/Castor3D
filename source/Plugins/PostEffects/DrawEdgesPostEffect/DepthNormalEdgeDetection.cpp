@@ -216,7 +216,7 @@ namespace draw_edges
 		, m_graph{ graph }
 		, m_extent{ castor3d::getSafeBandedExtent3D( renderTarget.getSize() ) }
 		, m_result{ m_device
-			, m_graph.getHandler()
+			, renderTarget.getResources()
 			, "DNEdges"
 			, 0u
 			, m_extent

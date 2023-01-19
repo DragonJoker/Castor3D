@@ -14,7 +14,7 @@ namespace castor3d
 		: public GBufferT< LpTexture >
 	{
 	public:
-		C3D_API LightPassResult( crg::ResourceHandler & handler
+		C3D_API LightPassResult( crg::ResourcesCache & resources
 			, RenderDevice const & device
 			, castor::Size const & size );
 	};

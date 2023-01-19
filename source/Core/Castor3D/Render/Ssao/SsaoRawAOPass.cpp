@@ -495,14 +495,14 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static Texture doCreateTexture( crg::ResourceHandler & handler
+		static Texture doCreateTexture( crg::ResourcesCache & resources
 			, RenderDevice const & device
 			, castor::String const & name
 			, VkFormat format
 			, VkExtent2D const & size )
 		{
 			return Texture{ device
-				, handler
+				, resources
 				, name
 				, 0u
 				, VkExtent3D{ size.width, size.height, 1u }
@@ -586,13 +586,13 @@ namespace castor3d
 		, m_ssaoConfigUbo{ ssaoConfigUbo }
 		, m_gpInfoUbo{ gpInfoUbo }
 		, m_size{ size }
-		, m_result{ ssaoraw::doCreateTexture( m_graph.getHandler()
+		, m_result{ ssaoraw::doCreateTexture( *normals.resources
 			, m_device
 			, m_graph.getName() + "SsaoRawAOResult"
 			, device.selectSmallestFormatRSFloatFormat( VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
 				| VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT )
 			, m_size ) }
-		, m_bentNormals{ ssaoraw::doCreateTexture( m_graph.getHandler()
+		, m_bentNormals{ ssaoraw::doCreateTexture( *normals.resources
 			, m_device
 			, m_graph.getName() + "BentNormals"
 			, device.selectSmallestFormatRGBSFloatFormat( VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT

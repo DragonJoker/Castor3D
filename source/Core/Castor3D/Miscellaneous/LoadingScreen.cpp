@@ -33,14 +33,14 @@ namespace castor3d
 	namespace loadscreen
 	{
 		static Texture createTexture( RenderDevice const & device
-			, crg::ResourceHandler & handler
+			, crg::ResourcesCache & resources
 			, std::string const & name
 			, castor::Size const & size
 			, VkFormat format
 			, VkImageUsageFlags usage )
 		{
 			auto result = Texture{ device
-				, handler
+				, resources
 				, name
 				, 0u
 				, makeExtent3D( size )
@@ -54,12 +54,12 @@ namespace castor3d
 		}
 
 		static Texture createColour( RenderDevice const & device
-			, crg::ResourceHandler & handler
+			, crg::ResourcesCache & resources
 			, std::string const & name
 			, castor::Size const & size )
 		{
 			return createTexture( device
-				, handler
+				, resources
 				, name + "Col"
 				, size
 				, VK_FORMAT_R8G8B8A8_UNORM
@@ -68,12 +68,12 @@ namespace castor3d
 		}
 
 		static Texture createDepth( RenderDevice const & device
-			, crg::ResourceHandler & handler
+			, crg::ResourcesCache & resources
 			, std::string const & name
 			, castor::Size const & size )
 		{
 			return createTexture( device
-				, handler
+				, resources
 				, name + "Dpt"
 				, size
 				, device.selectSuitableDepthFormat( VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT )
@@ -261,21 +261,21 @@ namespace castor3d
 
 	LoadingScreen::LoadingScreen( ProgressBar & progressBar
 		, RenderDevice const & device
-		, crg::ResourceHandler & handler
+		, crg::ResourcesCache & resources
 		, SceneRPtr scene
 		, VkRenderPass renderPass
 		, castor::Size const & size )
 		: m_device{ device }
 		, m_progressBar{ progressBar }
-		, m_graph{ handler, SceneName }
+		, m_graph{ resources.getHandler(), SceneName }
 		, m_scene{ std::move( scene ) }
 		, m_background{ *m_scene->getBackground() }
 		, m_renderPass{ renderPass }
 		, m_renderSize{ size }
 		, m_camera{ loadscreen::createCamera( *m_scene, m_renderSize ) }
 		, m_culler{ castor::makeUniqueDerived< SceneCuller, FrustumCuller >( *m_camera ) }
-		, m_colour{ loadscreen::createColour( m_device, handler, SceneName, m_renderSize ) }
-		, m_depth{ loadscreen::createDepth( m_device, handler, SceneName, m_renderSize ) }
+		, m_colour{ loadscreen::createColour( m_device, resources, SceneName, m_renderSize ) }
+		, m_depth{ loadscreen::createDepth( m_device, resources, SceneName, m_renderSize ) }
 		, m_matrixUbo{ m_device }
 		, m_hdrConfigUbo{ m_device }
 		, m_sceneUbo{ loadscreen::createSceneUbo( m_device, m_renderSize ) }

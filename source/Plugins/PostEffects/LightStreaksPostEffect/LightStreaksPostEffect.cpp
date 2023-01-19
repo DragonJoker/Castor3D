@@ -108,7 +108,7 @@ namespace light_streaks
 		};
 
 		m_hiImage = { device
-			, m_graph.getHandler()
+			, m_renderTarget.getResources()
 			, "LSHi"
 			, 0u
 			, VkExtent3D{ size.width, size.height, 1u }
@@ -120,7 +120,7 @@ namespace light_streaks
 				| VK_IMAGE_USAGE_TRANSFER_DST_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) };
 		m_kawaseImage = { device
-			, m_graph.getHandler()
+			, m_renderTarget.getResources()
 			, "LSKaw"
 			, 0u
 			, VkExtent3D{ size.width, size.height, 1u }

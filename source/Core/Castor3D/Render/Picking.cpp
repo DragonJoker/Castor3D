@@ -104,7 +104,7 @@ namespace castor3d
 
 	uint32_t const Picking::UboBindingPoint = 7u;
 
-	Picking::Picking( crg::ResourceHandler & handler
+	Picking::Picking( crg::ResourcesCache & resources
 		, RenderDevice const & device
 		, QueueData const & queueData
 		, castor::Size const & size
@@ -115,7 +115,7 @@ namespace castor3d
 		, m_device{ device }
 		, m_bandSize{ getSafeBandSize( size ) }
 		, m_realSize{ getSafeBandedSize( size ) }
-		, m_graph{ handler, "PickingGraph" }
+		, m_graph{ resources.getHandler(), "PickingGraph" }
 		, m_colourImage{ m_graph.createImage( { "PickingColour"
 			, 0u
 			, VK_IMAGE_TYPE_2D

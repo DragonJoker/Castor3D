@@ -135,7 +135,7 @@ namespace castor3d
 
 #endif
 
-		static std::vector< ShadowMap::PassDataPtr > createPasses( crg::ResourceHandler & handler
+		static std::vector< ShadowMap::PassDataPtr > createPasses( crg::ResourcesCache & resources
 			, std::vector< std::unique_ptr< crg::FrameGraph > > & graphs
 			, std::vector< crg::RunnableGraphPtr > & runnables
 			, std::vector< GaussianBlurUPtr > & blurs
@@ -165,7 +165,7 @@ namespace castor3d
 			auto & position = smResult[SmTexture::ePosition];
 			auto & flux = smResult[SmTexture::eFlux];
 
-			graphs.push_back( std::make_unique< crg::FrameGraph >( handler,  "DirectionalSMC" ) );
+			graphs.push_back( std::make_unique< crg::FrameGraph >( resources.getHandler(),  "DirectionalSMC" ) );
 			auto & graph = graphs.back()->getDefaultGroup();
 			crg::FramePass const * previousPass{};
 
@@ -272,11 +272,11 @@ namespace castor3d
 		}
 	}
 
-	ShadowMapDirectional::ShadowMapDirectional( crg::ResourceHandler & handler
+	ShadowMapDirectional::ShadowMapDirectional( crg::ResourcesCache & resources
 		, RenderDevice const & device
 		, Scene & scene
 		, ProgressBar * progress )
-		: ShadowMap{ handler
+		: ShadowMap{ resources
 			, device
 			, scene
 			, LightType::eDirectional
@@ -284,7 +284,7 @@ namespace castor3d
 			, { ShadowMapDirectionalTextureSize, ShadowMapDirectionalTextureSize }
 			, scene.getDirectionalShadowCascades()
 			, 1u }
-		, m_blurIntermediate{ handler.createImageId( crg::ImageData{ "DirectionalGB"
+		, m_blurIntermediate{ resources.getHandler().createImageId( crg::ImageData{ "DirectionalGB"
 			, 0u
 			, VK_IMAGE_TYPE_2D
 			, getFormat( device, SmTexture::eVariance )
@@ -292,7 +292,7 @@ namespace castor3d
 			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) } ) }
-		, m_blurIntermediateView{ handler.createViewId( crg::ImageViewData{ m_blurIntermediate.data->name
+		, m_blurIntermediateView{ resources.getHandler().createViewId( crg::ImageViewData{ m_blurIntermediate.data->name
 			, m_blurIntermediate
 			, 0u
 			, VK_IMAGE_VIEW_TYPE_2D
@@ -400,7 +400,7 @@ namespace castor3d
 		, bool rsm )
 	{
 		auto & myPasses = m_passes[m_passesIndex];
-		return shdmapdir::createPasses( m_handler
+		return shdmapdir::createPasses( m_resources
 			, myPasses.graphs
 			, myPasses.runnables
 			, myPasses.blurs

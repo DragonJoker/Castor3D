@@ -64,10 +64,11 @@ namespace castor3d
 		};
 
 		static Texture createDepthBuffer( RenderDevice const & device
+			, crg::ResourcesCache & resources
 			, Texture const & colourView )
 		{
 			Texture result{ device
-				, device.renderSystem.getEngine()->getGraphResourceHandler()
+				, resources
 				, "Texture3DToTexture2DDepth"
 				, 0u
 				, colourView.getExtent()
@@ -81,10 +82,11 @@ namespace castor3d
 		}
 
 		static Texture createTarget( RenderDevice const & device
+			, crg::ResourcesCache & resources
 			, VkExtent2D const & size )
 		{
 			Texture result{ device
-				, device.renderSystem.getEngine()->getGraphResourceHandler()
+				, resources
 				, "Texture3DToTexture2DColor"
 				, 0u
 				, { size.width, size.height, 1u }
@@ -205,28 +207,29 @@ namespace castor3d
 		}
 
 		static ashes::DescriptorSetPtr createDescriptorSet( RenderDevice const & device
+			, crg::ResourcesCache & resources
 			, SamplerRPtr sampler
 			, ashes::DescriptorSetPool const & pool
 			, UniformBufferOffsetT< Texture3DTo2DData > const & uniformBuffer
 			, MatrixUbo const & matrixUbo
 			, IntermediateView const & texture3D )
 		{
-			auto & handler = device.renderSystem.getEngine()->getGraphResourceHandler();
 			auto descriptorSet = pool.createDescriptorSet( "Texture3DTo2D" );
 			uniformBuffer.createSizedBinding( *descriptorSet
 				, pool.getLayout().getBinding( eGridUbo ) );
+			auto & context = device.makeContext();
 
 			if ( !sampler )
 			{
 				matrixUbo.createSizedBinding( *descriptorSet
 					, pool.getLayout().getBinding( eMatrixUbo ) );
 				descriptorSet->createBinding( pool.getLayout().getBinding( eSource )
-					, handler.createImageView( device.makeContext(), texture3D.viewId ) );
+					, resources.createImageView( context, texture3D.viewId ) );
 			}
 			else
 			{
 				descriptorSet->createBinding( pool.getLayout().getBinding( eSource )
-					, handler.createImageView( device.makeContext(), texture3D.viewId )
+					, resources.createImageView( context, texture3D.viewId )
 					, sampler->getSampler() );
 			}
 
@@ -303,6 +306,7 @@ namespace castor3d
 
 		static CommandsSemaphore createCommandBuffer( RenderDevice const & device
 			, QueueData const & queueData
+			, crg::ResourcesCache & resources
 			, ashes::RenderPass const & renderPass
 			, ashes::FrameBuffer const & frameBuffer
 			, ashes::PipelineLayout const & pipelineLayout
@@ -311,7 +315,7 @@ namespace castor3d
 			, IntermediateView const & view
 			, SamplerRPtr sampler )
 		{
-			auto & handler = device.renderSystem.getEngine()->getGraphResourceHandler();
+			auto & context = device.makeContext();
 			auto textureSize = getExtent( view.viewId ).width;
 			CommandsSemaphore result{ device, queueData, "Texture3DTo2D" };
 			auto & cmd = *result.commandBuffer;
@@ -323,7 +327,7 @@ namespace castor3d
 			{
 				cmd.memoryBarrier( ashes::getStageMask( view.layout )
 					, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-					, makeLayoutTransition( handler.createImage( device.makeContext(), view.viewId.data->image )
+					, makeLayoutTransition( resources.createImage( context, view.viewId.data->image )
 						, view.viewId.data->info.subresourceRange
 						, view.layout
 						, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
@@ -334,7 +338,7 @@ namespace castor3d
 			{
 				cmd.memoryBarrier( ashes::getStageMask( view.layout )
 					, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT
-					, makeLayoutTransition( handler.createImage( device.makeContext(), view.viewId.data->image )
+					, makeLayoutTransition( resources.createImage( context, view.viewId.data->image )
 						, view.viewId.data->info.subresourceRange
 						, view.layout
 						, VK_IMAGE_LAYOUT_GENERAL
@@ -367,7 +371,7 @@ namespace castor3d
 				{
 					cmd.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 						, ashes::getStageMask( view.layout )
-						, makeLayoutTransition( handler.createImage( device.makeContext(), view.viewId.data->image )
+						, makeLayoutTransition( resources.createImage( context, view.viewId.data->image )
 							, view.viewId.data->info.subresourceRange
 							, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 							, view.layout
@@ -380,7 +384,7 @@ namespace castor3d
 			{
 				cmd.memoryBarrier( VK_PIPELINE_STAGE_VERTEX_SHADER_BIT
 					, ashes::getStageMask( view.layout )
-					, makeLayoutTransition( handler.createImage( device.makeContext(), view.viewId.data->image )
+					, makeLayoutTransition( resources.createImage( context, view.viewId.data->image )
 						, view.viewId.data->info.subresourceRange
 						, VK_IMAGE_LAYOUT_GENERAL
 						, view.layout
@@ -602,6 +606,7 @@ namespace castor3d
 
 	Texture3DTo2D::Texture3DToScreen::Texture3DToScreen( RenderDevice const & device
 		, QueueData const & queueData
+		, crg::ResourcesCache & resources
 		, UniformBufferOffsetT< Texture3DTo2DData > const & uniformBuffer
 		, MatrixUbo const & matrixUbo
 		, IntermediateView const & texture3D
@@ -611,8 +616,8 @@ namespace castor3d
 		, ashes::PipelineLayout const & pipelineLayout
 		, ashes::GraphicsPipeline const & pipeline
 		, SamplerRPtr sampler )
-		: descriptorSet{ t3dto2d::createDescriptorSet( device, sampler, descriptorSetPool, uniformBuffer, matrixUbo, texture3D ) }
-		, commands{ t3dto2d::createCommandBuffer( device, queueData, renderPass, frameBuffer, pipelineLayout, pipeline, *descriptorSet, texture3D, sampler ) }
+		: descriptorSet{ t3dto2d::createDescriptorSet( device, resources, sampler, descriptorSetPool, uniformBuffer, matrixUbo, texture3D ) }
+		, commands{ t3dto2d::createCommandBuffer( device, queueData, resources, renderPass, frameBuffer, pipelineLayout, pipeline, *descriptorSet, texture3D, sampler ) }
 	{
 	}
 
@@ -623,12 +628,14 @@ namespace castor3d
 	//*********************************************************************************************
 
 	Texture3DTo2D::Texture3DTo2D( RenderDevice const & device
+		, crg::ResourcesCache & resources
 		, VkExtent2D const & size
 		, MatrixUbo const & matrixUbo )
 		: m_device{ device }
+		, m_resources{ resources }
 		, m_matrixUbo{ matrixUbo }
-		, m_target{ t3dto2d::createTarget( device, size ) }
-		, m_depthBuffer{ t3dto2d::createDepthBuffer( device, m_target ) }
+		, m_target{ t3dto2d::createTarget( device, resources, size ) }
+		, m_depthBuffer{ t3dto2d::createDepthBuffer( device, resources, m_target ) }
 		, m_uniformBuffer{ device.uboPool->getBuffer< Texture3DTo2DData >( 0u ) }
 		, m_renderPass{ t3dto2d::createRenderPass( device, "Texture3DTo2D", m_target, m_depthBuffer ) }
 		, m_frameBuffer{ t3dto2d::createFramebuffer( *m_renderPass, "Texture3DTo2D", m_target, m_depthBuffer ) }
@@ -693,6 +700,7 @@ namespace castor3d
 				{
 					m_texture3DToScreen.emplace_back( m_device
 						, queueData
+						, m_resources
 						, m_uniformBuffer
 						, m_matrixUbo
 						, intermediate
@@ -707,6 +715,7 @@ namespace castor3d
 				{
 					m_texture3DToScreen.emplace_back( m_device
 						, queueData
+						, m_resources
 						, m_uniformBuffer
 						, m_matrixUbo
 						, intermediate

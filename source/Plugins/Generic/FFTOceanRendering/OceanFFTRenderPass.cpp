@@ -400,7 +400,7 @@ namespace ocean_fft
 		auto & graph = technique.getRenderTarget().getGraph().createPassGroup( OceanFFT::Name );
 		auto extent = technique.getResult().getExtent();
 		auto colourInput = std::make_shared< castor3d::Texture >( device
-			, graph.getHandler()
+			, technique.getResources()
 			, OceanFFT::Name + "/Colour"
 			, 0u
 			, extent
@@ -419,7 +419,7 @@ namespace ocean_fft
 			, isEnabled ) );
 
 		auto depthInput = std::make_shared< castor3d::Texture >( device
-			, graph.getHandler()
+			, technique.getResources()
 			, OceanFFT::Name + "Depth"
 			, 0u
 			, extent
@@ -454,6 +454,7 @@ namespace ocean_fft
 		runnable->record();
 #else
 		auto oceanFFT = std::make_shared< OceanFFT >( device
+			, technique.getResources()
 			, graph
 			, previousPasses
 			, *oceanUbo

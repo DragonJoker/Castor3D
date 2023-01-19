@@ -21,13 +21,13 @@ namespace castor3d
 	namespace passdownscl
 	{
 		static TexturePtr doCreateImage( RenderDevice const & device
-			, crg::FrameGraph & graph
+			, crg::ResourcesCache & resources
 			, castor::String const & name
 			, VkFormat format
 			, VkExtent2D const & size )
 		{
 			return std::make_shared< Texture >( device
-				, graph.getHandler()
+				, resources
 				, name
 				, 0u
 				, VkExtent3D{ size.width, size.height, 1u }
@@ -39,20 +39,24 @@ namespace castor3d
 		}
 
 		static TextureArray doCreateImages( RenderDevice const & device
-			, crg::FrameGraph & graph
 			, castor::String const & name
 			, TextureArray const & views
 			, VkExtent2D const & size )
 		{
 			TextureArray result;
 
-			for ( auto & view : views )
+			if ( !views.empty() )
 			{
-				result.emplace_back( doCreateImage( device
-					, graph
-					, name + castor::string::toString( result.size() )
-					, view->getFormat()
-					, size ) );
+				auto & resources = *( *views.begin() )->resources;
+
+				for ( auto & view : views )
+				{
+					result.emplace_back( doCreateImage( device
+						, resources
+						, name + castor::string::toString( result.size() )
+						, view->getFormat()
+						, size ) );
+				}
 			}
 
 			return result;
@@ -68,7 +72,7 @@ namespace castor3d
 		, TextureArray const & srcViews
 		, VkExtent2D const & dstSize )
 		: m_device{ device }
-		, m_result{ passdownscl::doCreateImages( m_device, graph, "Downscaled", srcViews, dstSize ) }
+		, m_result{ passdownscl::doCreateImages( m_device, "Downscaled", srcViews, dstSize ) }
 	{
 		// TODO CRG
 		//m_commandBuffer->begin();

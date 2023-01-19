@@ -31,6 +31,7 @@ namespace castor3d
 	{
 	public:
 		C3D_API Texture3DTo2D( RenderDevice const & device
+			, crg::ResourcesCache & resources
 			, VkExtent2D const & size
 			, MatrixUbo const & matrixUbo );
 		C3D_API ~Texture3DTo2D();
@@ -52,6 +53,7 @@ namespace castor3d
 
 	private:
 		RenderDevice const & m_device;
+		crg::ResourcesCache & m_resources;
 		MatrixUbo const & m_matrixUbo;
 		Texture m_target;
 		Texture m_depthBuffer;
@@ -80,6 +82,7 @@ namespace castor3d
 			Texture3DToScreen();
 			Texture3DToScreen( RenderDevice const & device
 				, QueueData const & queueData
+				, crg::ResourcesCache & resources
 				, UniformBufferOffsetT< Texture3DTo2DData > const & uniformBuffer
 				, MatrixUbo const & matrixUbo
 				, IntermediateView const & texture3D

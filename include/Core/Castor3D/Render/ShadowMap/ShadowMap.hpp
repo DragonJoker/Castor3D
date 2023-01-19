@@ -72,7 +72,7 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	handler		The render graph resources handler.
+		 *\param[in]	resources	The render graph resources handler.
 		 *\param[in]	device		The GPU device.
 		 *\param[in]	scene		The scene.
 		 *\param[in]	lightType	The light source type.
@@ -82,7 +82,7 @@ namespace castor3d
 		 *\param[in]	count		The passes count.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	handler		Le gestionnaire de ressources du render graph.
+		 *\param[in]	resources	Le gestionnaire de ressources du render graph.
 		 *\param[in]	device		Le device GPU.
 		 *\param[in]	scene		La scène.
 		 *\param[in]	lightType	Le type de source lumineuse.
@@ -91,7 +91,7 @@ namespace castor3d
 		 *\param[in]	layerCount	Le nombres de layers de l'image résultat.
 		 *\param[in]	count		Le nombre de passes.
 		 */
-		C3D_API ShadowMap( crg::ResourceHandler & handler
+		C3D_API ShadowMap( crg::ResourcesCache & resources
 			, RenderDevice const & device
 			, Scene & scene
 			, LightType lightType
@@ -203,7 +203,7 @@ namespace castor3d
 
 	protected:
 		RenderDevice const & m_device;
-		crg::ResourceHandler & m_handler;
+		crg::ResourcesCache & m_resources;
 		Scene & m_scene;
 		castor::String m_name;
 		LightType m_lightType;

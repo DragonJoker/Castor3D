@@ -51,7 +51,7 @@ namespace castor3d
 		, m_device{ device }
 		, m_graph{ getOwner()->getRenderTarget().getGraph().createPassGroup( "Opaque" ) }
 		, m_opaquePassResult{ ( deferred
-			? castor::makeUnique< OpaquePassResult >( m_graph.getHandler()
+			? castor::makeUnique< OpaquePassResult >( parent.getResources()
 				, m_device
 				, normal )
 			: nullptr ) }

@@ -1079,6 +1079,7 @@ namespace castor3d
 		uint32_t m_maxImageSize{ 0xFFFFFFFF };
 		castor::AsyncJobQueue m_cpuJobs;
 		crg::ResourceHandler m_resourceHandler;
+		crg::ResourcesCache m_resources;
 		castor::UniquePtr< shader::LightingModelFactory > m_lightingModelFactory;
 		shader::BackgroundModelFactory m_backgroundModelFactory;
 		SceneUPtr m_loadingScene;

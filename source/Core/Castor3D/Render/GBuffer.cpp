@@ -9,7 +9,7 @@ namespace castor3d
 	{
 	}
 
-	TexturePtr GBufferBase::doCreateTexture( crg::ResourceHandler & handler
+	TexturePtr GBufferBase::doCreateTexture( crg::ResourcesCache & resources
 		, castor::String const & name
 		, VkImageCreateFlags createFlags
 		, VkExtent3D const & size
@@ -20,7 +20,7 @@ namespace castor3d
 		, VkBorderColor const & borderColor )const
 	{
 		return std::make_shared< Texture >( m_device
-			, handler
+			, resources
 			, name
 			, createFlags
 			, size

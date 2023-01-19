@@ -44,6 +44,7 @@ See LICENSE file in root folder
 #include <CastorUtils/Multithreading/ThreadPool.hpp>
 
 #include <RenderGraph/FramePassTimer.hpp>
+#include <RenderGraph/ResourceHandler.hpp>
 
 #include <CastorUtils/Config/BeginExternHeaderGuard.hpp>
 #include <atomic>
@@ -413,6 +414,11 @@ namespace castor3d
 		{
 			return *m_dummyCuller;
 		}
+
+		crg::ResourcesCache & getResources()
+		{
+			return m_resources;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -471,6 +477,7 @@ namespace castor3d
 
 	private:
 		bool m_initialised{ false };
+		crg::ResourcesCache m_resources;
 		std::vector< SceneNode * > m_dirtyNodes;
 		std::vector< BillboardBase * > m_dirtyBillboards;
 		std::vector< MovableObject * > m_dirtyObjects;

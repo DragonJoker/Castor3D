@@ -56,7 +56,7 @@ namespace castor3d
 			return result;
 		}
 
-		static std::vector< ShadowMap::PassDataPtr > createPass( crg::ResourceHandler & handler
+		static std::vector< ShadowMap::PassDataPtr > createPass( crg::ResourcesCache & resources
 			, std::vector< std::unique_ptr< crg::FrameGraph > > & graphs
 			, std::vector< GaussianBlurUPtr > & blurs
 			, crg::ImageViewId intermediate
@@ -77,7 +77,7 @@ namespace castor3d
 			auto & variance = smResult[SmTexture::eVariance];
 
 			std::string debugName = getPassName( shadowMapIndex, vsm, rsm );
-			graphs.push_back( std::make_unique< crg::FrameGraph >( handler, debugName ) );
+			graphs.push_back( std::make_unique< crg::FrameGraph >( resources.getHandler(), debugName ) );
 			auto & graph = graphs.back()->getDefaultGroup();
 			result.emplace_back( std::make_unique< ShadowMap::PassData >( std::make_unique< MatrixUbo >( device )
 				, std::make_shared< Camera >( cuT( "ShadowMapSpot" )
@@ -144,11 +144,11 @@ namespace castor3d
 		}
 	}
 
-	ShadowMapSpot::ShadowMapSpot( crg::ResourceHandler & handler
+	ShadowMapSpot::ShadowMapSpot( crg::ResourcesCache & resources
 		, RenderDevice const & device
 		, Scene & scene
 		, ProgressBar * progress )
-		: ShadowMap{ handler
+		: ShadowMap{ resources
 			, device
 			, scene
 			, LightType::eSpot
@@ -156,7 +156,7 @@ namespace castor3d
 			, castor::Size{ ShadowMapSpotTextureSize, ShadowMapSpotTextureSize }
 			, shader::getSpotShadowMapCount()
 			, shader::getSpotShadowMapCount() }
-		, m_blurIntermediate{ handler.createImageId( crg::ImageData{ "SpotGB"
+		, m_blurIntermediate{ resources.getHandler().createImageId( crg::ImageData{ "SpotGB"
 			, 0u
 			, VK_IMAGE_TYPE_2D
 			, getFormat( device, SmTexture::eVariance )
@@ -164,7 +164,7 @@ namespace castor3d
 			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) } ) }
-		, m_blurIntermediateView{ handler.createViewId( crg::ImageViewData{ m_blurIntermediate.data->name
+		, m_blurIntermediateView{ resources.getHandler().createViewId( crg::ImageViewData{ m_blurIntermediate.data->name
 			, m_blurIntermediate
 			, 0u
 			, VK_IMAGE_VIEW_TYPE_2D
@@ -194,7 +194,7 @@ namespace castor3d
 		, bool rsm )
 	{
 		auto & myPasses = m_passes[m_passesIndex];
-		return shdmapspot::createPass( m_handler
+		return shdmapspot::createPass( m_resources
 			, myPasses.graphs
 			, myPasses.blurs
 			, m_blurIntermediateView

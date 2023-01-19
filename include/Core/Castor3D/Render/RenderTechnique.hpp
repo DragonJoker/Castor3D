@@ -174,6 +174,7 @@ namespace castor3d
 		C3D_API Texture const & getDiffuseLightingResult()const;
 		C3D_API Texture const & getScatteringLightingResult()const;
 		C3D_API Texture const & getBaseColourResult()const;
+		C3D_API crg::ResourcesCache & getResources()const;
 
 		castor::Size const & getSize()const
 		{

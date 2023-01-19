@@ -8,7 +8,7 @@ CU_ImplementCUSmartPtr( castor3d, LightVolumePassResult )
 
 namespace castor3d
 {
-	LightVolumePassResult::LightVolumePassResult( crg::ResourceHandler & handler
+	LightVolumePassResult::LightVolumePassResult( crg::ResourcesCache & handler
 		, RenderDevice const & device
 		, castor::String const & prefix
 		, uint32_t size )

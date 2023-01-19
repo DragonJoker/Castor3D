@@ -115,7 +115,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	LightPassResult::LightPassResult( crg::ResourceHandler & handler
+	LightPassResult::LightPassResult( crg::ResourcesCache & handler
 		, RenderDevice const & device
 		, castor::Size const & size )
 		: GBufferT< LpTexture >{ handler

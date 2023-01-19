@@ -318,14 +318,14 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static TexturePtr doCreateImage( crg::FramePassGroup & graph
+		static TexturePtr doCreateImage( crg::ResourcesCache & resources
 			, RenderDevice const & device
 			, castor::Size const & size
 			, VkFormat format
 			, std::string name )
 		{
 			return std::make_shared< Texture >( device
-				, graph.getHandler()
+				, resources
 				, name
 				, 0u
 				, makeExtent3D( size )
@@ -381,11 +381,11 @@ namespace castor3d
 		, m_group{ graph.createPassGroup( "SSSSS" ) }
 		, m_enabled{ m_scene.needsSubsurfaceScattering() }
 		, m_size{ makeSize( m_lpResult[LpTexture::eDiffuse].getExtent() ) }
-		, m_intermediate{ sssss::doCreateImage( graph, m_device, m_size, m_lpResult[LpTexture::eDiffuse].getFormat(), "SSSIntermediate" ) }
-		, m_blurImages{ sssss::doCreateImage( graph, m_device, m_size, m_intermediate->getFormat(), "SSSBlur0" )
-			, sssss::doCreateImage( graph, m_device, m_size, m_intermediate->getFormat(), "SSSBlur1" )
-			, sssss::doCreateImage( graph, m_device, m_size, m_intermediate->getFormat(), "SSSBlur2" ) }
-		, m_result{ sssss::doCreateImage( graph, m_device, m_size, m_intermediate->getFormat(), "SSSResult" ) }
+		, m_intermediate{ sssss::doCreateImage( *depthObj.resources, m_device, m_size, m_lpResult[LpTexture::eDiffuse].getFormat(), "SSSIntermediate" ) }
+		, m_blurImages{ sssss::doCreateImage( *depthObj.resources, m_device, m_size, m_intermediate->getFormat(), "SSSBlur0" )
+			, sssss::doCreateImage( *depthObj.resources, m_device, m_size, m_intermediate->getFormat(), "SSSBlur1" )
+			, sssss::doCreateImage( *depthObj.resources, m_device, m_size, m_intermediate->getFormat(), "SSSBlur2" ) }
+		, m_result{ sssss::doCreateImage( *depthObj.resources, m_device, m_size, m_intermediate->getFormat(), "SSSResult" ) }
 		, m_blurCfgUbo{ m_device.uboPool->getBuffer< BlurConfiguration >( 0u ) }
 		, m_blurWgtUbo{ m_device.uboPool->getBuffer< BlurWeights >( 0u ) }
 		, m_blurHorizVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SSSBlurX", sssss::getVertexProgram() }

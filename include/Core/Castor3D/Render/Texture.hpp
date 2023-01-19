@@ -8,6 +8,7 @@ See LICENSE file in root folder
 
 #include <ashespp/Image/ImageView.hpp>
 
+#include <RenderGraph/GraphContext.hpp>
 #include <RenderGraph/ImageData.hpp>
 #include <RenderGraph/ImageViewData.hpp>
 
@@ -22,7 +23,7 @@ namespace castor3d
 
 		C3D_API Texture();
 		C3D_API Texture( RenderDevice const & device
-			, crg::ResourceHandler & handler
+			, crg::ResourcesCache & resources
 			, castor::String const & name
 			, VkImageCreateFlags createFlags
 			, VkExtent3D const & size
@@ -33,7 +34,7 @@ namespace castor3d
 			, VkBorderColor const & borderColor = VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK
 			, bool createSubviews = true );
 		C3D_API Texture( RenderDevice const & device
-			, crg::ResourceHandler & handler
+			, crg::ResourcesCache & resources
 			, castor::String const & name
 			, VkImageCreateFlags createFlags
 			, VkExtent3D const & size
@@ -119,7 +120,7 @@ namespace castor3d
 			return imageId.data->info.extent;
 		}
 
-		crg::ResourceHandler * handler{};
+		crg::ResourcesCache * resources{};
 		RenderDevice const * device{};
 		crg::ImageId imageId{};
 		VkImage image{};

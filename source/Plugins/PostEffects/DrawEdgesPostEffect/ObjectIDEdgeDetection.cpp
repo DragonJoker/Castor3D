@@ -201,7 +201,7 @@ namespace draw_edges
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
 		, m_result{ m_device
-			, m_graph.getHandler()
+			, renderTarget.getResources()
 			, "DEObjDet"
 			, 0u
 			, m_extent

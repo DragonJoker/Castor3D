@@ -46,7 +46,7 @@ namespace castor3d
 		}
 	}
 
-	ShadowMap::ShadowMap( crg::ResourceHandler & handler
+	ShadowMap::ShadowMap( crg::ResourcesCache & resources
 		, RenderDevice const & device
 		, Scene & scene
 		, LightType lightType
@@ -56,11 +56,11 @@ namespace castor3d
 		, uint32_t count )
 		: OwnedBy< Engine >{ *scene.getEngine() }
 		, m_device{ device }
-		, m_handler{ handler }
+		, m_resources{ resources }
 		, m_scene{ scene }
 		, m_name{ castor::string::snakeToCamelCase( getName( lightType ) ) + "SM" }
 		, m_lightType{ lightType }
-		, m_result{ handler
+		, m_result{ resources
 			, m_device
 			, m_name
 			, createFlags
@@ -77,7 +77,7 @@ namespace castor3d
 		for ( auto & ptexture : m_result )
 		{
 			auto & texture = *ptexture;
-			texture.image = handler.createImage( context, texture.imageId );
+			texture.image = resources.createImage( context, texture.imageId );
 			auto transferBarrier = makeVkStruct< VkImageMemoryBarrier >( 0u
 				, VkAccessFlags( VK_ACCESS_TRANSFER_WRITE_BIT )
 				, VK_IMAGE_LAYOUT_UNDEFINED

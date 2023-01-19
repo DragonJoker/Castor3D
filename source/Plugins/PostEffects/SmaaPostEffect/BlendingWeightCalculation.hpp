@@ -43,6 +43,7 @@ namespace smaa
 	private:
 		castor3d::RenderDevice const & m_device;
 		crg::FramePassGroup & m_graph;
+		crg::ResourcesCache & m_resources;
 		VkExtent3D m_extent;
 		crg::ImageViewId m_areaView;
 		crg::ImageViewId m_searchView;

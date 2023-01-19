@@ -275,7 +275,7 @@ namespace smaa
 		for ( uint32_t i = 0; i < config.maxSubsampleIndices; ++i )
 		{
 			m_images.emplace_back( std::make_shared< castor3d::Texture >( m_device
-				, m_graph.getHandler()
+				, renderTarget.getResources()
 				, "SMNBRes" + std::to_string( i )
 				, 0u
 				, m_extent

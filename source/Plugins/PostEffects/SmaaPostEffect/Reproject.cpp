@@ -148,7 +148,7 @@ namespace smaa
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
 		, m_result{ m_device
-			, m_graph.getHandler()
+			, renderTarget.getResources()
 			, "SMRpRes"
 			, 0u
 			, m_extent
@@ -176,7 +176,6 @@ namespace smaa
 				return result;
 			} ) }
 	{
-		auto & handler = m_graph.getHandler();
 		auto & context = m_device.makeContext();
 		auto data = m_device.graphicsData();
 		auto commandBuffer = data->commandPool->createCommandBuffer( "SmaaReprojectImagesClear" );
@@ -185,7 +184,7 @@ namespace smaa
 		for ( auto & view : m_currentColourViews )
 		{
 			ashes::ImagePtr image = std::make_unique< ashes::Image >( *device
-				, handler.createImage( context, view.data->image )
+				, renderTarget.getResources().createImage( context, view.data->image )
 				, view.data->image.data->info );
 			auto createInfo = view.data->info;
 			createInfo.image = *image;

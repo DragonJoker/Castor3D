@@ -19,6 +19,7 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
 
 #include <RenderGraph/FrameGraph.hpp>
+#include <RenderGraph/ResourceHandler.hpp>
 #include <RenderGraph/RunnableGraph.hpp>
 
 #include <ashespp/RenderPass/FrameBuffer.hpp>
@@ -365,6 +366,11 @@ namespace castor3d
 			return m_graph;
 		}
 
+		crg::ResourcesCache & getResources()
+		{
+			return m_resources;
+		}
+
 		bool isInitialising()const
 		{
 			return m_initialising;
@@ -445,6 +451,7 @@ namespace castor3d
 		VkFormat m_pixelFormat;
 		std::atomic_bool m_initialised;
 		std::atomic_bool m_initialising;
+		crg::ResourcesCache m_resources;
 		std::unique_ptr< HdrConfigUbo > m_hdrConfigUbo;
 		RenderTechniqueUPtr m_renderTechnique;
 		SceneRPtr m_scene;

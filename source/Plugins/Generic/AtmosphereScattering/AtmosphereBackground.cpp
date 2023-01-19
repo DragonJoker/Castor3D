@@ -171,7 +171,7 @@ namespace atmosphere_scattering
 		, uint32_t index
 		, castor3d::BackgroundPassBase *& backgroundPass )
 		: skyView{ device
-			, graph.getHandler()
+			, background.getScene().getResources()
 			, "AtmosphereSkyView" + std::to_string( index )
 			, 0u
 			, { skyViewResolution->x, skyViewResolution->y, 1u }
@@ -183,7 +183,7 @@ namespace atmosphere_scattering
 			, VK_FILTER_LINEAR
 			, VK_SAMPLER_MIPMAP_MODE_NEAREST }
 		, volume{ device
-			, graph.getHandler()
+			, background.getScene().getResources()
 			, "AtmosphereVolume" + std::to_string( index )
 			, 0u
 			, { volumeResolution, volumeResolution, volumeResolution }
@@ -195,7 +195,7 @@ namespace atmosphere_scattering
 			, VK_FILTER_LINEAR
 			, VK_SAMPLER_MIPMAP_MODE_NEAREST }
 		, skyColour{ device
-			, graph.getHandler()
+			, background.getScene().getResources()
 			, "SkyColour" + std::to_string( index )
 			, 0u
 			, { size.width, size.height, 1u }
@@ -208,7 +208,7 @@ namespace atmosphere_scattering
 			, VK_SAMPLER_MIPMAP_MODE_NEAREST
 			, VK_SAMPLER_ADDRESS_MODE_REPEAT }
 		, sunColour{ device
-			, graph.getHandler()
+			, background.getScene().getResources()
 			, "SunColour" + std::to_string( index )
 			, 0u
 			, { size.width, size.height, 1u }
@@ -221,7 +221,7 @@ namespace atmosphere_scattering
 			, VK_SAMPLER_MIPMAP_MODE_NEAREST
 			, VK_SAMPLER_ADDRESS_MODE_REPEAT }
 		, cloudsColour{ device
-			, graph.getHandler()
+			, background.getScene().getResources()
 			, "CloudsColour" + std::to_string( index )
 			, 0u
 			, { size.width, size.height, 1u }
@@ -234,7 +234,7 @@ namespace atmosphere_scattering
 			, VK_SAMPLER_MIPMAP_MODE_NEAREST
 			, VK_SAMPLER_ADDRESS_MODE_REPEAT }
 		, cloudsResult{ device
-			, graph.getHandler()
+			, background.getScene().getResources()
 			, "CloudsResult" + std::to_string( index )
 			, 0u
 			, { size.width, size.height, 1u }
@@ -661,11 +661,11 @@ namespace atmosphere_scattering
 
 	void AtmosphereBackground::loadWorley( uint32_t dimension )
 	{
-		auto & handler = getScene().getEngine()->getGraphResourceHandler();
+		auto & resources = getScene().getResources();
 		auto & device = getScene().getEngine()->getRenderSystem()->getRenderDevice();
 		m_worleyResolution = dimension;
 		m_worley = castor3d::Texture{ device
-			, handler
+			, resources
 			, "WorleyNoise"
 			, 0u
 			, { dimension, dimension, dimension }
@@ -682,11 +682,11 @@ namespace atmosphere_scattering
 
 	void AtmosphereBackground::loadPerlinWorley( uint32_t dimension )
 	{
-		auto & handler = getScene().getEngine()->getGraphResourceHandler();
+		auto & resources = getScene().getResources();
 		auto & device = getScene().getEngine()->getRenderSystem()->getRenderDevice();
 		m_perlinWorleyResolution = dimension;
 		m_perlinWorley = castor3d::Texture{ device
-			, handler
+			, resources
 			, "PerlinWorleyNoise"
 			, 0u
 			, { dimension, dimension, dimension }
@@ -703,11 +703,11 @@ namespace atmosphere_scattering
 
 	void AtmosphereBackground::loadCurl( uint32_t dimension )
 	{
-		auto & handler = getScene().getEngine()->getGraphResourceHandler();
+		auto & resources = getScene().getResources();
 		auto & device = getScene().getEngine()->getRenderSystem()->getRenderDevice();
 		m_curlResolution = dimension;
 		m_curl = castor3d::Texture{ device
-			, handler
+			, resources
 			, "CurlNoise"
 			, 0u
 			, { dimension, dimension, 1u }
@@ -724,11 +724,11 @@ namespace atmosphere_scattering
 
 	void AtmosphereBackground::loadWeather( uint32_t dimension )
 	{
-		auto & handler = getScene().getEngine()->getGraphResourceHandler();
+		auto & resources = getScene().getResources();
 		auto & device = getScene().getEngine()->getRenderSystem()->getRenderDevice();
 		m_weatherResolution = dimension;
 		m_weather = castor3d::Texture{ device
-			, handler
+			, resources
 			, "Weather"
 			, 0u
 			, { dimension, dimension, 1u }
@@ -745,10 +745,10 @@ namespace atmosphere_scattering
 
 	void AtmosphereBackground::loadTransmittance( castor::Point2ui const & dimensions )
 	{
-		auto & handler = getScene().getEngine()->getGraphResourceHandler();
+		auto & resources = getScene().getResources();
 		auto & device = getScene().getEngine()->getRenderSystem()->getRenderDevice();
 		m_transmittance = castor3d::Texture{ device
-			, handler
+			, resources
 			, "Transmittance"
 			, 0u
 			, { dimensions->x, dimensions->y, 1u }
@@ -764,10 +764,10 @@ namespace atmosphere_scattering
 
 	void AtmosphereBackground::loadMultiScatter( uint32_t dimension )
 	{
-		auto & handler = getScene().getEngine()->getGraphResourceHandler();
+		auto & resources = getScene().getResources();
 		auto & device = getScene().getEngine()->getRenderSystem()->getRenderDevice();
 		m_multiScatter = castor3d::Texture{ device
-			, handler
+			, resources
 			, "MultiScatter"
 			, 0u
 			, { dimension, dimension, 1u }
@@ -796,9 +796,9 @@ namespace atmosphere_scattering
 	bool AtmosphereBackground::doInitialise( castor3d::RenderDevice const & device )
 	{
 		auto data = device.graphicsData();
-		auto & engine = *getEngine();
+		auto & resources = getScene().getResources();
 		m_textureId = castor3d::Texture{ device
-			, engine.getGraphResourceHandler()
+			, resources
 			, "Dummy"
 			, 0u
 			, { SkyTexSize, SkyTexSize, 1u }

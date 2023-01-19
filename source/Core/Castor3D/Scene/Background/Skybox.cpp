@@ -414,7 +414,7 @@ namespace castor3d
 
 		// create the cube texture if needed.
 		m_textureId = { device
-			, engine.getGraphResourceHandler()
+			, getScene().getResources()
 			, cuT( "SkyboxBackgroundLayerCube" )
 			, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT
 			, { maxDim, maxDim, 1u }
@@ -487,7 +487,7 @@ namespace castor3d
 			|| m_texture->getDimensions().height != m_equiSize.getHeight() )
 		{
 			m_textureId = { device
-				, getEngine()->getGraphResourceHandler()
+				, getScene().getResources()
 				, cuT( "SkyboxBackgroundEquiCube" )
 				, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT
 				, makeExtent3D( m_equiSize )
@@ -515,7 +515,6 @@ namespace castor3d
 	void SkyboxBackground::doInitialiseCrossTexture( RenderDevice const & device
 		, QueueData const & queueData )
 	{
-		auto & engine = *getEngine();
 		m_crossTexture->initialise( device, queueData );
 		auto width = m_crossTexture->getWidth() / 4u;
 		auto height = m_crossTexture->getHeight() / 3u;
@@ -523,7 +522,7 @@ namespace castor3d
 
 		// create the cube texture if needed.
 		m_textureId = { device
-			, engine.getGraphResourceHandler()
+			, getScene().getResources()
 			, cuT( "SkyboxBackgroundCrossCube" )
 			, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT
 			, { width, width, 1u }

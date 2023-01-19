@@ -35,7 +35,7 @@ namespace castor3d
 		 *\param[in]	scene		La scène.
 		 *\param[in]	progress	La barre de progression optionnelle.
 		 */
-		C3D_API explicit ShadowMapPoint( crg::ResourceHandler & handler
+		C3D_API explicit ShadowMapPoint( crg::ResourcesCache & resources
 			, RenderDevice const & device
 			, Scene & scene
 			, ProgressBar * progress );

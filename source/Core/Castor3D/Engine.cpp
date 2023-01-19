@@ -81,12 +81,12 @@ namespace castor3d
 
 		static Texture doCreatePrefilteredBrdf( Engine & engine
 			, RenderDevice const & device
-			, crg::ResourceHandler & handler
+			, crg::ResourcesCache & resources
 			, castor::Size const & size )
 		{
 #if !C3D_GenerateBRDFIntegration
 			Texture result{ device
-				, handler
+				, resources
 				, "BrdfLUT"
 				, 0u
 				, { size[0], size[1], 1u }
@@ -162,6 +162,7 @@ namespace castor3d
 		, m_enableValidation{ enableValidation }
 		, m_enableApiTrace{ eng::C3D_EnableAPITrace }
 		, m_cpuJobs{ std::max( 8u, std::min( 4u, castor::CpuInformations{}.getCoreCount() / 2u ) ) }
+		, m_resources{ m_resourceHandler }
 	{
 		m_passFactory = castor::makeUnique< PassFactory >( *this );
 		m_passComponents = castor::makeUnique< PassComponentRegister >( *this );
@@ -1045,7 +1046,7 @@ namespace castor3d
 		auto & device = m_renderSystem->getRenderDevice();
 		m_brdf = eng::doCreatePrefilteredBrdf( *this
 			, device
-			, getGraphResourceHandler()
+			, m_resources
 			, { PrefilteredBrdfMapSize, PrefilteredBrdfMapSize } );
 		m_brdf.create();
 

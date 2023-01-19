@@ -35,12 +35,12 @@ namespace castor3d
 		static castor::Size const MapSize{ EnvironmentMapSize, EnvironmentMapSize };
 
 		static Texture createTexture( RenderDevice const & device
-			, crg::ResourceHandler & handler
+			, crg::ResourcesCache & resources
 			, std::string const & name
 			, castor::Size const & size )
 		{
 			return Texture{ device
-				, handler
+				, resources
 				, name
 				, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT
 				, makeExtent3D( size )
@@ -56,12 +56,12 @@ namespace castor3d
 		}
 
 		static Texture createDepthBuffer( RenderDevice const & device
-			, crg::ResourceHandler & handler
+			, crg::ResourcesCache & resources
 			, std::string const & name
 			, castor::Size const & size )
 		{
 			return Texture{ device
-				, handler
+				, resources
 				, name + "/Depth"
 				, 0u
 				, makeExtent3D( size )
@@ -156,15 +156,15 @@ namespace castor3d
 		}
 	}
 
-	EnvironmentMap::EnvironmentMap( crg::ResourceHandler & handler
+	EnvironmentMap::EnvironmentMap( crg::ResourcesCache & resources
 		, RenderDevice const & device
 		, QueueData const & queueData
 		, Scene & scene )
 		: OwnedBy< Engine >{ *device.renderSystem.getEngine() }
 		, m_device{ device }
 		, m_scene{ scene }
-		, m_environmentMap{ envmap::createTexture( device, handler, "Env" + scene.getName(), envmap::MapSize ) }
-		, m_depthBuffer{ envmap::createDepthBuffer( device, handler, "Env" + scene.getName(), envmap::MapSize ) }
+		, m_environmentMap{ envmap::createTexture( device, resources, "Env" + scene.getName(), envmap::MapSize ) }
+		, m_depthBuffer{ envmap::createDepthBuffer( device, resources, "Env" + scene.getName(), envmap::MapSize ) }
 		, m_extent{ getExtent( m_environmentMap.imageId ) }
 		, m_render{ 0u }
 		, m_onSetBackground{ scene.onSetBackground.connect( [this]( SceneBackground const & background )

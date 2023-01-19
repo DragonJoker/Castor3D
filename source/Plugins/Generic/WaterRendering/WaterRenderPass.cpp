@@ -74,6 +74,7 @@ namespace water
 			, castor::String const & name
 			, castor3d::Engine & engine
 			, crg::FrameGraph & graph
+			, crg::RunnableGraph & runnable
 			, castor::ImageLoader & loader
 			, crg::ImageId & img
 			, crg::ImageViewId & view
@@ -119,18 +120,17 @@ namespace water
 				auto buffer = image.getPixels();
 
 				engine.postEvent( castor3d::makeGpuFunctorEvent( castor3d::EventType::ePreRender
-					, [format, dim, buffer, &graph, &img, &view, &result]( castor3d::RenderDevice const & device
+					, [format, dim, buffer, &img, &view, &result, &runnable]( castor3d::RenderDevice const & device
 						, castor3d::QueueData const & queue )
 					{
-						auto & context = device.makeContext();
 						auto staging = device->createStagingTexture( VkFormat( format )
 							, VkExtent2D{ dim.getWidth(), dim.getHeight() }
 							, buffer->getLevels() );
 						ashes::ImagePtr noiseImg = std::make_unique< ashes::Image >( *device
-							, graph.getHandler().createImage( context, img )
+							, runnable.createImage( img )
 							, img.data->info );
 						result = ashes::ImageView{ ashes::ImageViewCreateInfo{ *noiseImg, view.data->info }
-							, graph.getHandler().createImageView( context, view )
+							, runnable.createImageView( view )
 							, noiseImg.get() };
 						auto data = device.graphicsData();
 						staging->uploadTextureData( *queue.queue
@@ -199,9 +199,9 @@ namespace water
 		}
 
 		auto & loader = getEngine()->getImageLoader();
-		loadImage( params, Normals1, getName(), *getEngine(), pass.graph, loader, m_normals1Img, m_normals1View, m_normals1 );
-		loadImage( params, Normals2, getName(), *getEngine(), pass.graph, loader, m_normals2Img, m_normals2View, m_normals2 );
-		loadImage( params, Noise, getName(), *getEngine(), pass.graph, loader, m_noiseImg, m_noiseView, m_noise );
+		loadImage( params, Normals1, getName(), *getEngine(), pass.graph, graph, loader, m_normals1Img, m_normals1View, m_normals1 );
+		loadImage( params, Normals2, getName(), *getEngine(), pass.graph, graph, loader, m_normals2Img, m_normals2View, m_normals2 );
+		loadImage( params, Noise, getName(), *getEngine(), pass.graph, graph, loader, m_noiseImg, m_noiseView, m_noise );
 	}
 
 	WaterRenderPass::~WaterRenderPass()
@@ -222,7 +222,7 @@ namespace water
 		auto extent = getExtent( technique.getResult().imageId );
 		auto & graph = technique.getRenderTarget().getGraph().createPassGroup( name );
 		auto colourInput = std::make_shared< castor3d::Texture >( device
-			, graph.getHandler()
+			, technique.getResources()
 			, name +"/Colour"
 			, 0u
 			, extent
@@ -252,7 +252,7 @@ namespace water
 		blitColourPass.addTransferOutputView( colourInput->sampledViewId );
 
 		auto depthInput = std::make_shared< castor3d::Texture >( device
-			, graph.getHandler()
+			, technique.getResources()
 			, name + "Depth"
 			, 0u
 			, extent

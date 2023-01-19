@@ -121,7 +121,7 @@ namespace castor3d
 		 *\param[in]	index		L'indice de la layer.
 		 *\param[in]	gridSize	Les dimensions de la grille.
 		 */
-		static TexturePtr createResult( crg::ResourceHandler & handler
+		static TexturePtr createResult( crg::ResourcesCache & resources
 			, RenderDevice const & device
 			, castor::String const & prefix
 			, uint32_t index

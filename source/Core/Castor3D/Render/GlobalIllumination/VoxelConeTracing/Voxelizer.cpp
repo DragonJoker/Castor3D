@@ -39,12 +39,12 @@ namespace castor3d
 	namespace vxlsr
 	{
 		static Texture createTexture( RenderDevice const & device
-			, crg::ResourceHandler & handler
+			, crg::ResourcesCache & resources
 			, castor::String const & name
 			, VkExtent3D const & size )
 		{
 			return Texture{ device
-				, handler
+				, resources
 				, name
 				, VK_IMAGE_CREATE_2D_ARRAY_COMPATIBLE_BIT
 				, size
@@ -74,7 +74,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	Voxelizer::Voxelizer( crg::ResourceHandler & handler
+	Voxelizer::Voxelizer( crg::ResourcesCache & resources
 		, RenderDevice const & device
 		, ProgressBar * progress
 		, castor::String const & prefix
@@ -86,11 +86,11 @@ namespace castor3d
 		, m_device{ device }
 		, m_voxelConfig{ voxelConfig }
 		, m_camera{ camera }
-		, m_graph{ handler, prefix + "/Voxelizer" }
+		, m_graph{ resources.getHandler(), prefix + "/Voxelizer" }
 		, m_matrixUbo{ device }
 		, m_sceneUbo{ device }
-		, m_firstBounce{ vxlsr::createTexture( device, handler, "VoxelizedSceneFirstBounce", { m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value() } ) }
-		, m_secondaryBounce{ vxlsr::createTexture( device, handler, "VoxelizedSceneSecondaryBounce", { m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value() } ) }
+		, m_firstBounce{ vxlsr::createTexture( device, resources, "VoxelizedSceneFirstBounce", { m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value() } ) }
+		, m_secondaryBounce{ vxlsr::createTexture( device, resources, "VoxelizedSceneSecondaryBounce", { m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value() } ) }
 		, m_voxels{ vxlsr::createSsbo( m_engine, device, "VoxelizedSceneBuffer", m_voxelConfig.gridSize.value() ) }
 		, m_voxelizerUbo{ voxelizerUbo }
 		, m_voxelizePassDesc{ doCreateVoxelizePass( progress ) }

@@ -139,12 +139,12 @@ namespace castor3d
 		}
 
 		static Texture doCreateTexture( RenderDevice const & device
-			, crg::ResourceHandler & handler
+			, crg::ResourcesCache & resources
 			, VkExtent2D const & size
 			, castor::String const & prefix )
 		{
 			return Texture{ device
-				, handler
+				, resources
 				, prefix + cuT( "LinearisedDepth" )
 				, 0u
 				, { size.width, size.height, 1u }
@@ -160,7 +160,8 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	LineariseDepthPass::LineariseDepthPass( crg::FramePassGroup & graph
+	LineariseDepthPass::LineariseDepthPass( crg::ResourcesCache & resources
+		, crg::FramePassGroup & graph
 		, crg::FramePassArray const & previousPasses
 		, RenderDevice const & device
 		, ProgressBar * progress
@@ -175,7 +176,7 @@ namespace castor3d
 		, m_srcDepthBuffer{ depthBuffer }
 		, m_prefix{ graph.getName() + prefix }
 		, m_size{ size }
-		, m_result{ passlindpth::doCreateTexture( m_device, m_graph.getHandler(), m_size, m_prefix ) }
+		, m_result{ passlindpth::doCreateTexture( m_device, resources, m_size, m_prefix ) }
 		, m_clipInfo{ m_device.uboPool->getBuffer< castor::Point3f >( 0u ) }
 		, m_lastPass{}
 		, m_lineariseVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, m_prefix + "LineariseDepth", passlindpth::getVertexProgram() }

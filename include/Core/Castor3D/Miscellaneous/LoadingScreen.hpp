@@ -35,7 +35,7 @@ namespace castor3d
 	public:
 		C3D_API LoadingScreen( ProgressBar & progressBar
 			, RenderDevice const & device
-			, crg::ResourceHandler & handler
+			, crg::ResourcesCache & resources
 			, SceneRPtr scene
 			, VkRenderPass renderPass
 			, castor::Size const & size );
