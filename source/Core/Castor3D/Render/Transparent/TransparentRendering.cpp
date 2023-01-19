@@ -36,7 +36,7 @@ namespace castor3d
 		, m_device{ device }
 		, m_graph{ getOwner()->getRenderTarget().getGraph().createPassGroup( "Transparent" ) }
 		, m_mippedColour{ m_device
-			, m_graph.getHandler()
+			, parent.getResources()
 			, getOwner()->getName() + "/MippedColour"
 			, 0u
 			, makeExtent3D( getOwner()->getSize() )
@@ -47,7 +47,7 @@ namespace castor3d
 				| VK_IMAGE_USAGE_SAMPLED_BIT )
 			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
 		, m_transparentPassResult{ ( weightedBlended
-			? castor::makeUnique< TransparentPassResult >( m_graph.getHandler()
+			? castor::makeUnique< TransparentPassResult >( parent.getResources()
 				, m_device
 				, makeSize( getOwner()->getDepth().getExtent() ) )
 			: nullptr ) }

@@ -19,6 +19,8 @@ See LICENSE file in root folder
 #include <CastorUtils/Design/Named.hpp>
 #include <CastorUtils/Graphics/Size.hpp>
 
+#include <RenderGraph/ResourceHandler.hpp>
+
 #include <ashespp/Core/Device.hpp>
 #include <ashespp/Core/SwapChain.hpp>
 #include <ashespp/Sync/Fence.hpp>
@@ -560,6 +562,7 @@ namespace castor3d
 		std::vector< ashes::ImageViewArray > m_swapchainViews;
 		RenderingResourcesArray m_renderingResources;
 		size_t m_resourceIndex{ 0u };
+		crg::ResourcesCache m_resources;
 		ashes::RenderPassPtr m_renderPass;
 		ashes::BufferBasePtr m_stagingBuffer;
 		castor::ArrayView< uint8_t > m_stagingData;

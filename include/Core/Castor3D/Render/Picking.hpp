@@ -43,7 +43,7 @@ namespace castor3d
 		 *\param[in]	sceneUbo	L'UBO de scène.
 		 *\param[in]	culler		Le culler pour cette passe.
 		 */
-		C3D_API Picking( crg::ResourceHandler & handler
+		C3D_API Picking( crg::ResourcesCache & resources
 			, RenderDevice const & device
 			, QueueData const & queueData
 			, castor::Size const & size

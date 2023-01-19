@@ -16,7 +16,7 @@ namespace castor3d
 		: public GBufferT< PpTexture >
 	{
 	public:
-		C3D_API PrepassResult( crg::ResourceHandler & handler
+		C3D_API PrepassResult( crg::ResourcesCache & resources
 			, RenderDevice const & device
 			, castor::Size const & size );
 	};

@@ -29,11 +29,11 @@ namespace castor3d
 	namespace radcomp
 	{
 		static Texture doCreateRadianceTexture( RenderDevice const & device
-			, crg::ResourceHandler & handler
+			, crg::ResourcesCache & resources
 			, castor::Size const & size )
 		{
 			Texture result{ device
-				, handler
+				, resources
 				, "RadianceComputerResult"
 				, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT
 				, { size[0], size[1], 1u }
@@ -227,24 +227,23 @@ namespace castor3d
 		, castor::Size const & size
 		, Texture const & srcTexture )
 		: RenderCube{ device, false }
-		, m_result{ radcomp::doCreateRadianceTexture( m_device, engine.getGraphResourceHandler(), size ) }
+		, m_result{ radcomp::doCreateRadianceTexture( m_device, *srcTexture.resources, size ) }
 		, m_sampler{ radcomp::doCreateSampler( engine, m_device ) }
 		, m_srcView{ srcTexture }
-		, m_srcImage{ std::make_unique< ashes::Image >( *device, m_srcView.image, m_srcView.imageId.data->info ) }
+		, m_srcImage{ std::make_unique< ashes::Image >( *m_device, m_srcView.image, m_srcView.imageId.data->info ) }
 		, m_srcImageView{ radcomp::doCreateSrcView( *m_srcImage ) }
 		, m_renderPass{ radcomp::doCreateRenderPass( m_device, m_result.getFormat() ) }
 		, m_commands{ m_device, *m_device.graphicsData(), "RadianceComputer" }
 	{
-		auto & handler = engine.getGraphResourceHandler();
 		auto & dstTexture = m_result;
+		auto & context = m_device.makeContext();
 		
 		for ( auto face = 0u; face < 6u; ++face )
 		{
 			auto & facePass = m_renderPasses[face];
 			auto name = "RadianceComputer" + castor::string::toString( face );
 			// Create the views.
-			facePass.dstView = handler.createImageView( device.makeContext()
-				, dstTexture.subViewsId[face] );
+			facePass.dstView = dstTexture.resources->createImageView( context, dstTexture.subViewsId[face] );
 			// Initialise the frame buffer.
 			auto createInfo = makeVkStruct< VkFramebufferCreateInfo >( 0u
 				, *m_renderPass
@@ -287,6 +286,14 @@ namespace castor3d
 
 	RadianceComputer::~RadianceComputer()
 	{
+		auto & dstTexture = m_result;
+
+		for ( auto face = 0u; face < 6u; ++face )
+		{
+			m_renderPasses[face].frameBuffer.reset();
+			dstTexture.resources->destroyImageView( dstTexture.subViewsId[face] );
+		}
+
 		m_result.destroy();
 	}
 

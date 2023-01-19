@@ -46,7 +46,7 @@ namespace castor3d
 		 *\param[in]	queueData	La queue recevant les commandes d'initialisation.
 		 *\param[in]	scene		La scène.
 		 */
-		C3D_API EnvironmentMap( crg::ResourceHandler & handler
+		C3D_API EnvironmentMap( crg::ResourcesCache & resources
 			, RenderDevice const & device
 			, QueueData const & queueData
 			, Scene & scene );

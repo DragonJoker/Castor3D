@@ -347,14 +347,14 @@ namespace castor3d
 		}
 
 		static Texture doCreateTexture( RenderDevice const & device
-			, crg::ResourceHandler & handler
+			, crg::ResourcesCache & resources
 			, castor::String const & name
 			, VkFormat format
 			, VkExtent2D const & size
 			, bool transferDst )
 		{
 			return { device
-				, handler
+				, resources
 				, name
 				, 0u
 				, { size.width, size.height, 1u }
@@ -466,8 +466,8 @@ namespace castor3d
 		, m_bentInput{ bentInput }
 		, m_config{ config }
 		, m_size{ size }
-		, m_result{ ssaoblr::doCreateTexture( m_device, m_graph.getHandler(), m_graph.getName() + "SsaoBlur" + prefix, input.getFormat(), m_size, axis->y != 0 ) }
-		, m_bentResult{ ssaoblr::doCreateTexture( m_device, m_graph.getHandler(), m_graph.getName() + "SsaoBentNormals" + prefix, m_bentInput.getFormat(), m_size, axis->y != 0 ) }
+		, m_result{ ssaoblr::doCreateTexture( m_device, *input.resources, m_graph.getName() + "SsaoBlur" + prefix, input.getFormat(), m_size, axis->y != 0 ) }
+		, m_bentResult{ ssaoblr::doCreateTexture( m_device, *input.resources, m_graph.getName() + "SsaoBentNormals" + prefix, m_bentInput.getFormat(), m_size, axis->y != 0 ) }
 		, m_configurationUbo{ m_device.uboPool->getBuffer< Configuration >( 0u ) }
 		, m_programs{ Program{ device, false, m_graph.getName() }, Program{ device, true, m_graph.getName() } }
 	{

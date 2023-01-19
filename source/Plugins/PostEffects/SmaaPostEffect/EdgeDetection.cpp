@@ -78,7 +78,7 @@ namespace smaa
 		, m_config{ config }
 		, m_extent{ castor3d::getSafeBandedExtent3D( renderTarget.getSize() ) }
 		, m_outColour{ m_device
-			, m_graph.getHandler()
+			, renderTarget.getResources()
 			, "SMEDRes"
 			, 0u
 			, m_extent
@@ -89,7 +89,7 @@ namespace smaa
 				| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) }
 		, m_outDepth{ m_device
-			, m_graph.getHandler()
+			, renderTarget.getResources()
 			, "SMEDStRes"
 			, 0u
 			, m_extent

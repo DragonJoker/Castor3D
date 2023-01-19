@@ -149,6 +149,7 @@ namespace ocean_fft
 
 	public:
 		OceanFFT( castor3d::RenderDevice const & device
+			, crg::ResourcesCache & resources
 			, crg::FramePassGroup & graph
 			, crg::FramePassArray previousPasses
 			, OceanUbo const & ubo

@@ -41,7 +41,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	Texture::Texture()
-		: handler{}
+		: resources{}
 		, device{}
 		, imageId{}
 		, image{}
@@ -57,7 +57,7 @@ namespace castor3d
 	}
 
 	Texture::Texture( Texture && rhs )
-		: handler{ std::move( rhs.handler ) }
+		: resources{ std::move( rhs.resources ) }
 		, device{ std::move( rhs.device ) }
 		, imageId{ std::move( rhs.imageId ) }
 		, image{ std::move( rhs.image ) }
@@ -71,7 +71,7 @@ namespace castor3d
 		, sampler{ std::move( rhs.sampler ) }
 	{
 		rhs.device = nullptr;
-		rhs.handler = nullptr;
+		rhs.resources = nullptr;
 		rhs.image = VkImage{};
 		rhs.wholeView = VkImageView{};
 		rhs.targetView = VkImageView{};
@@ -80,7 +80,7 @@ namespace castor3d
 
 	Texture & Texture::operator=( Texture && rhs )
 	{
-		handler = std::move( rhs.handler );
+		resources = std::move( rhs.resources );
 		device = std::move( rhs.device );
 		imageId = std::move( rhs.imageId );
 		image = std::move( rhs.image );
@@ -94,7 +94,7 @@ namespace castor3d
 		sampler = std::move( rhs.sampler );
 
 		rhs.device = nullptr;
-		rhs.handler = nullptr;
+		rhs.resources = nullptr;
 		rhs.image = VkImage{};
 		rhs.wholeView = VkImageView{};
 		rhs.targetView = VkImageView{};
@@ -104,7 +104,7 @@ namespace castor3d
 	}
 
 	Texture::Texture( RenderDevice const & device
-		, crg::ResourceHandler & handler
+		, crg::ResourcesCache & resources
 		, castor::String const & name
 		, VkImageCreateFlags createFlags
 		, VkExtent3D const & size
@@ -115,7 +115,7 @@ namespace castor3d
 		, VkBorderColor const & borderColor
 		, bool createSubviews )
 		: Texture{ device
-			, handler
+			, resources
 			, name
 			, createFlags
 			, size
@@ -132,8 +132,8 @@ namespace castor3d
 	{
 	}
 
-	Texture::Texture( RenderDevice const & device
-		, crg::ResourceHandler & handler
+	Texture::Texture( RenderDevice const & pdevice
+		, crg::ResourcesCache & presources
 		, castor::String const & name
 		, VkImageCreateFlags createFlags
 		, VkExtent3D const & size
@@ -147,9 +147,10 @@ namespace castor3d
 		, VkSamplerAddressMode addressMode
 		, VkBorderColor const & borderColor
 		, bool createSubviews )
-		: handler{ &handler }
-		, device{ &device }
+		: resources{ &presources }
+		, device{ &pdevice }
 	{
+		auto & handler = resources->getHandler();
 		mipLevels = std::max( 1u, mipLevels );
 		layerCount = ( size.depth > 1u ? 1u : layerCount );
 		imageId = handler.createImageId( crg::ImageData{ name
@@ -160,7 +161,7 @@ namespace castor3d
 			, ( size.depth > 1u
 				? VK_IMAGE_TYPE_3D
 				: VK_IMAGE_TYPE_2D )
-			, texture::retrieveFormat( device, format )
+			, texture::retrieveFormat( *device, format )
 			, size
 			, ( usageFlags
 				| ( mipLevels > 1u
@@ -234,7 +235,7 @@ namespace castor3d
 			}
 		}
 
-		auto & engine = *device.renderSystem.getEngine();
+		auto & engine = *device->renderSystem.getEngine();
 		SamplerResPtr c3dSampler;
 		auto splName = getSamplerName( minFilter
 			, magFilter
@@ -257,7 +258,7 @@ namespace castor3d
 			created->setWrapT( addressMode );
 			created->setWrapR( addressMode );
 			created->setBorderColour( borderColor );
-			created->initialise( device );
+			created->initialise( *device );
 			c3dSampler = engine.addSampler( splName, created, false );
 		}
 
@@ -271,18 +272,18 @@ namespace castor3d
 
 	void Texture::create()
 	{
-		if ( !device )
+		if ( !device || !resources )
 		{
 			return;
 		}
 
 		auto & context = device->makeContext();
-		image = handler->createImage( context, imageId );
-		wholeView = handler->createImageView( context, wholeViewId );
+		image = resources->createImage( context, imageId );
+		wholeView = resources->createImageView( context, wholeViewId );
 
 		if ( wholeViewId != targetViewId )
 		{
-			targetView = handler->createImageView( context, targetViewId );
+			targetView = resources->createImageView( context, targetViewId );
 		}
 		else
 		{
@@ -291,7 +292,7 @@ namespace castor3d
 
 		if ( wholeViewId != sampledViewId )
 		{
-			sampledView = handler->createImageView( context, sampledViewId );
+			sampledView = resources->createImageView( context, sampledViewId );
 		}
 		else
 		{
@@ -301,27 +302,27 @@ namespace castor3d
 
 	void Texture::destroy()
 	{
-		if ( device && handler )
+		if ( !device || !resources )
 		{
-			auto & context = device->makeContext();
-
-			if ( wholeViewId != sampledViewId )
-			{
-				handler->destroyImageView( context, sampledViewId );
-				sampledView = VkImageView{};
-			}
-
-			if ( wholeViewId != targetViewId )
-			{
-				handler->destroyImageView( context, targetViewId );
-				targetView = VkImageView{};
-			}
-
-			handler->destroyImageView( context, wholeViewId );
-			wholeView = VkImageView{};
-			handler->destroyImage( context, imageId );
-			image = VkImage{};
+			return;
 		}
+
+		if ( wholeViewId != sampledViewId )
+		{
+			resources->destroyImageView( sampledViewId );
+			sampledView = VkImageView{};
+		}
+
+		if ( wholeViewId != targetViewId )
+		{
+			resources->destroyImageView( targetViewId );
+			targetView = VkImageView{};
+		}
+
+		resources->destroyImageView( wholeViewId );
+		wholeView = VkImageView{};
+		resources->destroyImage( imageId );
+		image = VkImage{};
 	}
 
 	VkImageMemoryBarrier Texture::makeGeneralLayout( VkImageLayout srcLayout

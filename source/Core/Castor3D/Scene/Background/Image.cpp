@@ -3,6 +3,7 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Scene/Camera.hpp"
+#include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Background/Visitor.hpp"
 #include "Castor3D/Scene/Background/Shaders/GlslImgBackground.hpp"
@@ -237,7 +238,7 @@ namespace castor3d
 			VkOffset3D const srcOffset{ 0, 0, 0 };
 			VkOffset3D const dstOffset{ int32_t( xOffset ), int32_t( yOffset ), 0 };
 			m_textureId = { device
-				, getEngine()->getGraphResourceHandler()
+				, getScene().getResources()
 				, cuT( "ImageBackgroundCube" )
 				, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT
 				, { dim, dim, 1u }

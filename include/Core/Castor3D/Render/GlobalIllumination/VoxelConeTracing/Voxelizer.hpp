@@ -41,7 +41,7 @@ namespace castor3d
 		 *\param[in]	voxelizerUbo	L'UBO de configuration du voxelizer.
 		 *\param[in]	voxelConfig		La configuration du voxelizer.
 		 */
-		C3D_API Voxelizer( crg::ResourceHandler & handler
+		C3D_API Voxelizer( crg::ResourcesCache & resources
 			, RenderDevice const & device
 			, ProgressBar * progress
 			, castor::String const & prefix

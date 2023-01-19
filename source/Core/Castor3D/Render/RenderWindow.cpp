@@ -359,6 +359,7 @@ namespace castor3d
 		, m_reservedQueue{ m_queues->getQueueSize() > 1 ? m_queues->reserveQueue() : nullptr }
 		, m_commandBufferPool{ m_device->createCommandPool( m_device.getGraphicsQueueFamilyIndex()
 			, VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT ) }
+		, m_resources{ engine.getGraphResourceHandler() }
 		, m_listener{ getEngine()->addNewFrameListener( getName() + castor::string::toString( m_index ) ) }
 		, m_size{ size }
 		, m_loading{ engine.isThreaded() }
@@ -942,9 +943,7 @@ namespace castor3d
 
 	ShadowMapLightTypeArray RenderWindow::getShadowMaps()const
 	{
-		auto target = getRenderTarget();
-
-		if ( target )
+		if ( auto target = getRenderTarget() )
 		{
 			return target->getShadowMaps();
 		}
@@ -1199,7 +1198,7 @@ namespace castor3d
 
 		m_loadingScreen = castor::makeUnique< LoadingScreen >( *m_progressBar
 			, m_device
-			, getEngine()->getGraphResourceHandler()
+			, m_resources
 			, scene
 			, *m_renderPass
 #if C3D_PersistLoadingScreen
@@ -1228,16 +1227,18 @@ namespace castor3d
 	{
 		auto target = getRenderTarget();
 
-		if ( target )
+		if ( !target )
 		{
-			m_picking = std::make_shared< Picking >( getOwner()->getGraphResourceHandler()
-				, m_device
-				, queueData
-				, target->getSize()
-				, target->getTechnique().getMatrixUbo()
-				, target->getTechnique().getSceneUbo()
-				, target->getCuller() );
+			return;
 		}
+
+		m_picking = std::make_shared< Picking >( m_resources
+			, m_device
+			, queueData
+			, target->getSize()
+			, target->getTechnique().getMatrixUbo()
+			, target->getTechnique().getSceneUbo()
+			, target->getCuller() );
 	}
 
 	void RenderWindow::doDestroyPickingPass()
@@ -1249,47 +1250,48 @@ namespace castor3d
 	{
 		auto target = getRenderTarget();
 
-		if ( target )
+		if ( !target )
 		{
-			m_renderQuad = RenderQuadBuilder{}
-				.binding( VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D )
-				.binding( VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER )
-				.texcoordConfig( rq::Texcoord{} )
-				.tex3DResult( m_tex3DTo2DIntermediate )
-				.build( m_device
-					, getName()
-#if C3D_DebugPicking || C3D_DebugBackgroundPicking
-					, VK_FILTER_NEAREST );
-#else
-					, VK_FILTER_LINEAR );
-#endif
-			m_renderQuad->createPipeline( VkExtent2D{ m_size[0], m_size[1] }
-				, castor::Position{}
-				, m_program
-				, *m_renderPass );
-			auto & handler = m_device.renderSystem.getEngine()->getGraphResourceHandler();
-			auto & context = m_device.makeContext();
-
-#if C3D_DebugPicking || C3D_DebugBackgroundPicking
-
-			m_renderQuad->registerPassInputs( { makeImageViewDescriptorWrite( handler.createImageView( context, m_picking->getImageView() )
-					, m_renderQuad->getSampler().getSampler(), 0u )
-				, RenderQuad::makeDescriptorWrite( m_configUbo, 1u ) }
-				, true );
-
-#else
-
-			for ( auto & intermediate : m_intermediateSampledViews )
-			{
-				m_renderQuad->registerPassInputs( { makeImageViewDescriptorWrite( handler.createImageView( context, intermediate.viewId ), m_renderQuad->getSampler().getSampler(), 0u )
-						, makeDescriptorWrite( m_configUbo, 1u ) }
-					, intermediate.factors.invertY );
-			}
-
-#endif
-
-			m_renderQuad->initialisePasses();
+			return;
 		}
+
+		m_renderQuad = RenderQuadBuilder{}
+			.binding( VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_IMAGE_VIEW_TYPE_2D )
+			.binding( VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER )
+			.texcoordConfig( rq::Texcoord{} )
+			.tex3DResult( m_tex3DTo2DIntermediate )
+			.build( m_device
+				, getName()
+#if C3D_DebugPicking || C3D_DebugBackgroundPicking
+				, VK_FILTER_NEAREST );
+#else
+				, VK_FILTER_LINEAR );
+#endif
+		m_renderQuad->createPipeline( VkExtent2D{ m_size[0], m_size[1] }
+			, castor::Position{}
+			, m_program
+			, *m_renderPass );
+		auto & context = m_device.makeContext();
+
+#if C3D_DebugPicking || C3D_DebugBackgroundPicking
+
+		m_renderQuad->registerPassInputs( { makeImageViewDescriptorWrite( m_resources.createImageView( context, m_picking->getImageView() )
+				, m_renderQuad->getSampler().getSampler(), 0u )
+			, RenderQuad::makeDescriptorWrite( m_configUbo, 1u ) }
+			, true );
+
+#else
+
+		for ( auto & intermediate : m_intermediateSampledViews )
+		{
+			m_renderQuad->registerPassInputs( { makeImageViewDescriptorWrite( m_resources.createImageView( context, intermediate.viewId ), m_renderQuad->getSampler().getSampler(), 0u )
+					, makeDescriptorWrite( m_configUbo, 1u ) }
+				, intermediate.factors.invertY );
+		}
+
+#endif
+
+		m_renderQuad->initialisePasses();
 	}
 
 	void RenderWindow::doDestroyRenderQuad()
@@ -1299,7 +1301,9 @@ namespace castor3d
 
 	void RenderWindow::doCreateCommandBuffers( QueueData const & queueData )
 	{
-		if ( !getRenderTarget() )
+		auto target = getRenderTarget();
+
+		if ( !target )
 		{
 			return;
 		}
@@ -1309,7 +1313,6 @@ namespace castor3d
 		m_commandBuffers.resize( 1u );
 #else
 		m_commandBuffers.resize( m_intermediates.size() );
-		auto & handler = m_device.renderSystem.getEngine()->getGraphResourceHandler();
 		auto & context = m_device.makeContext();
 #endif
 
@@ -1337,7 +1340,7 @@ namespace castor3d
 				{
 					commandBuffer->memoryBarrier( ashes::getStageMask( intermediateBarrierView.layout )
 						, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-						, makeLayoutTransition( handler.createImage( context, intermediateBarrierView.viewId.data->image )
+						, makeLayoutTransition( m_resources.createImage( context, intermediateBarrierView.viewId.data->image )
 							, intermediateBarrierView.viewId.data->info.subresourceRange
 							, intermediateBarrierView.layout
 							, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
@@ -1361,7 +1364,7 @@ namespace castor3d
 				{
 					commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 						, ashes::getStageMask( intermediateBarrierView.layout )
-						, makeLayoutTransition( handler.createImage( context, intermediateBarrierView.viewId.data->image )
+						, makeLayoutTransition( m_resources.createImage( context, intermediateBarrierView.viewId.data->image )
 							, intermediateBarrierView.viewId.data->info.subresourceRange
 							, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 							, intermediateBarrierView.layout
@@ -1404,6 +1407,7 @@ namespace castor3d
 
 		VkExtent2D extent{ m_size.getWidth(), m_size.getHeight() };
 		m_texture3Dto2D = castor::makeUnique< Texture3DTo2D >( m_device
+			, m_resources
 			, extent
 			, target->getTechnique().getMatrixUbo() );
 		m_tex3DTo2DIntermediate = { "Texture3DTo2DResult"
@@ -1611,7 +1615,6 @@ namespace castor3d
 			return;
 		}
 
-		auto & handler = m_device.renderSystem.getEngine()->getGraphResourceHandler();
 		auto & context = m_device.makeContext();
 		auto targetExtent = makeExtent2D( m_saveBuffer->getDimensions() );
 
@@ -1626,7 +1629,7 @@ namespace castor3d
 		commands.beginDebugBlock( { "Staging Texture Download"
 			, makeFloatArray( getEngine()->getNextRainbowColour() ) } );
 #if C3D_DebugPicking || C3D_DebugBackgroundPicking
-		VkImage srcImage = handler.createImage( context, m_picking->getImageView().data->image );
+		VkImage srcImage = m_resources.createImage( context, m_picking->getImageView().data->image );
 		commands.memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 			, VK_PIPELINE_STAGE_TRANSFER_BIT
 			, makeLayoutTransition( srcImage
@@ -1636,7 +1639,7 @@ namespace castor3d
 				, VK_QUEUE_FAMILY_IGNORED
 				, VK_QUEUE_FAMILY_IGNORED ) );
 #else
-		VkImage srcImage = handler.createImage( context, intermediateBarrierView.viewId.data->image );
+		VkImage srcImage = m_resources.createImage( context, intermediateBarrierView.viewId.data->image );
 
 		if ( intermediate.layout != VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL )
 		{

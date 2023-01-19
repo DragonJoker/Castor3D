@@ -807,6 +807,7 @@ namespace smaa
 		}
 
 		static crg::ImageViewId createImage( crg::FramePassGroup & graph
+			, crg::ResourcesCache & resources
 			, castor3d::RenderDevice const & device
 			, std::string const & name
 			, VkFormat format
@@ -814,7 +815,6 @@ namespace smaa
 			, castor::ArrayView< const unsigned char > const & bytes )
 		{
 			auto & context = device.makeContext();
-			auto & handler = graph.getHandler();
 			auto imageId = graph.createImage( crg::ImageData{ name
 				, 0u
 				, VK_IMAGE_TYPE_2D
@@ -830,10 +830,10 @@ namespace smaa
 				, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } );
 			auto staging = device->createStagingTexture( format, dimensions );
 			auto image = std::make_unique< ashes::Image >( *device
-				, handler.createImage( context, imageId )
+				, resources.createImage( context, imageId )
 				, imageId.data->info );
 			ashes::ImageView view{ ashes::ImageViewCreateInfo{ *image, result.data->info }
-				, handler.createImageView( context, result )
+				, resources.createImageView( context, result )
 				, image.get() };
 			auto data = device.graphicsData();
 			staging->uploadTextureData( *data->queue
@@ -864,21 +864,24 @@ namespace smaa
 		, bool const * enabled )
 		: m_device{ device }
 		, m_graph{ graph }
+		, m_resources{ renderTarget.getResources() }
 		, m_extent{ castor3d::getSafeBandedExtent3D( renderTarget.getSize() ) }
 		, m_areaView{ bwcalc::createImage( m_graph
+			, m_resources
 			, m_device
 			, "SMBWArea"
 			, VK_FORMAT_R8G8_UNORM
 			, { AREATEX_WIDTH, AREATEX_HEIGHT, 1u }
 			, castor::makeArrayView( std::begin( areaTexBytes ), std::end( areaTexBytes ) ) ) }
 		, m_searchView{ bwcalc::createImage( m_graph
+			, m_resources
 			, m_device
 			, "SMBWSearch"
 			, VK_FORMAT_R8_UNORM
 			, { SEARCHTEX_WIDTH, SEARCHTEX_HEIGHT, 1u }
 			, castor::makeArrayView( std::begin( searchTexBytes ), std::end( searchTexBytes ) ) ) }
 		, m_result{ m_device
-			, m_graph.getHandler()
+			, m_resources
 			, "SMBWRes"
 			, 0u
 			, m_extent
@@ -943,11 +946,10 @@ namespace smaa
 
 	BlendingWeightCalculation::~BlendingWeightCalculation()
 	{
-		auto & context = m_device.makeContext();
-		m_graph.getHandler().destroyImageView( context, m_areaView );
-		m_graph.getHandler().destroyImage( context, m_areaView.data->image );
-		m_graph.getHandler().destroyImageView( context, m_searchView );
-		m_graph.getHandler().destroyImage( context, m_searchView.data->image );
+		m_resources.destroyImageView( m_areaView );
+		m_resources.destroyImage( m_areaView.data->image );
+		m_resources.destroyImageView( m_searchView );
+		m_resources.destroyImage( m_searchView.data->image );
 		m_result.destroy();
 	}
 

@@ -98,6 +98,7 @@ namespace castor3d
 	Scene::Scene( castor::String const & name, Engine & engine )
 		: castor::OwnedBy< Engine >{ engine }
 		, castor::Named{ name }
+		, m_resources{ engine.getGraphResourceHandler() }
 		, m_rootNode{ std::make_shared< SceneNode >( RootNode, *this ) }
 		, m_rootCameraNode{ std::make_shared< SceneNode >( CameraRootNode, *this ) }
 		, m_rootObjectNode{ std::make_shared< SceneNode >( ObjectRootNode, *this ) }
@@ -225,7 +226,7 @@ namespace castor3d
 		m_animatedObjectGroupCache->add( cuT( "C3D_Textures" ), *this );
 		auto & device = engine.getRenderSystem()->getRenderDevice();
 		auto data = device.graphicsData();
-		m_reflectionMap = std::make_unique< EnvironmentMap >( engine.getGraphResourceHandler()
+		m_reflectionMap = std::make_unique< EnvironmentMap >( m_resources
 			, device
 			, *data
 			, *this );

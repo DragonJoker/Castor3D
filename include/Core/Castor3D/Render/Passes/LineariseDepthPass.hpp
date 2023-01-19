@@ -47,7 +47,8 @@ namespace castor3d
 		 *\param[in]	size			Les dimensions de la zone de rendu.
 		 *\param[in]	depthBuffer		Le tampon de profondeur non linéarisé.
 		 */
-		C3D_API LineariseDepthPass( crg::FramePassGroup & graph
+		C3D_API LineariseDepthPass( crg::ResourcesCache & resources
+			, crg::FramePassGroup & graph
 			, crg::FramePassArray const & previousPasses
 			, RenderDevice const & device
 			, ProgressBar * progress

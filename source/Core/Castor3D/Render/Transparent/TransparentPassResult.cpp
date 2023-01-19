@@ -79,7 +79,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	TransparentPassResult::TransparentPassResult( crg::ResourceHandler & handler
+	TransparentPassResult::TransparentPassResult( crg::ResourcesCache & handler
 		, RenderDevice const & device
 		, castor::Size const & size )
 		: GBufferT< WbTexture >{ handler

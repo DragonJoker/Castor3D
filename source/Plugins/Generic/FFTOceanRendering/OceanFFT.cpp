@@ -137,7 +137,7 @@ namespace ocean_fft
 		}
 
 		castor3d::Texture createTexture( castor3d::RenderDevice const & device
-			, crg::FramePassGroup & graph
+			, crg::ResourcesCache & resources
 			, VkExtent2D heightMapSamples
 			, std::string const & name
 			, VkFormat format
@@ -145,7 +145,7 @@ namespace ocean_fft
 		{
 			VkExtent3D dimensions{ heightMapSamples.width, heightMapSamples.height, 1u };
 			castor3d::Texture result{ device
-				, graph.getHandler()
+				, resources
 				, name
 				, 0u
 				, dimensions
@@ -191,6 +191,7 @@ namespace ocean_fft
 	castor::String const OceanFFT::Name{ cuT( "OceanFFT" ) };
 
 	OceanFFT::OceanFFT( castor3d::RenderDevice const & device
+			, crg::ResourcesCache & resources
 			, crg::FramePassGroup & graph
 			, crg::FramePassArray previousPasses
 			, OceanUbo const & ubo
@@ -260,25 +261,25 @@ namespace ocean_fft
 			, FFTMode::eC2C
 			, isEnabled }
 		, m_heightDisplacement{ createTexture( device
-				, graph
+				, resources
 				, m_heightMapSamples
 				, "OceanFFTHeightDisplacement0"
 				, VK_FORMAT_R16G16B16A16_SFLOAT
 				, VK_SAMPLER_MIPMAP_MODE_NEAREST )
 			, createTexture( device
-				, graph
+				, resources
 				, m_heightMapSamples
 				, "OceanFFTHeightDisplacement1"
 				, VK_FORMAT_R16G16B16A16_SFLOAT
 				, VK_SAMPLER_MIPMAP_MODE_NEAREST ) }
 		, m_gradientJacobian{ createTexture( device
-				, graph
+				, resources
 				, m_heightMapSamples
 				, "OceanFFTGradientJacobian0"
 				, VK_FORMAT_R16G16B16A16_SFLOAT
 				, VK_SAMPLER_MIPMAP_MODE_LINEAR )
 			, createTexture( device
-				, graph
+				, resources
 				, m_heightMapSamples
 				, "OceanFFTGradientJacobian1"
 				, VK_FORMAT_R16G16B16A16_SFLOAT
@@ -339,7 +340,7 @@ namespace ocean_fft
 			, FFTMode::eC2C
 			, isEnabled }
 		, m_normals{ createTexture( device
-			, graph
+			, resources
 			, m_heightMapSamples
 			, "OceanFFTNormals"
 			, VK_FORMAT_R32G32_SFLOAT

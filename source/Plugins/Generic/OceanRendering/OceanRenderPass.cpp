@@ -69,7 +69,7 @@ namespace ocean
 			eBrdf,
 		};
 
-		void bindTexture( VkImageView view
+		static void bindTexture( VkImageView view
 			, VkSampler sampler
 			, ashes::WriteDescriptorSetArray & writes
 			, uint32_t & index )
@@ -116,11 +116,12 @@ namespace ocean
 			sdw::Vec3 tangent;
 		};
 
-		void loadImage( castor3d::Parameters const & params
+		static void loadImage( castor3d::Parameters const & params
 			, castor::String const & prefix
 			, castor::String const & name
 			, castor3d::Engine & engine
 			, crg::FrameGraph & graph
+			, crg::RunnableGraph & runnable
 			, castor::ImageLoader & loader
 			, crg::ImageId & img
 			, crg::ImageViewId & view
@@ -166,18 +167,17 @@ namespace ocean
 				auto buffer = image.getPixels();
 
 				engine.postEvent( castor3d::makeGpuFunctorEvent( castor3d::EventType::ePreRender
-					, [format, dim, buffer, &graph, &img, &view, &result]( castor3d::RenderDevice const & device
+					, [format, dim, buffer, &img, &view, &result, &runnable]( castor3d::RenderDevice const & device
 						, castor3d::QueueData const & queue )
 					{
-						auto & context = device.makeContext();
 						auto staging = device->createStagingTexture( VkFormat( format )
 							, VkExtent2D{ dim.getWidth(), dim.getHeight() }
 							, buffer->getLevels() );
 						ashes::ImagePtr noiseImg = std::make_unique< ashes::Image >( *device
-							, graph.getHandler().createImage( context, img )
+							, runnable.createImage( img )
 							, img.data->info );
 						result = ashes::ImageView{ ashes::ImageViewCreateInfo{ *noiseImg, view.data->info }
-							, graph.getHandler().createImageView( context, view )
+							, runnable.createImageView( view )
 							, noiseImg.get() };
 						auto data = device.graphicsData();
 						staging->uploadTextureData( *queue.queue
@@ -247,10 +247,10 @@ namespace ocean
 		}
 
 		auto & loader = getEngine()->getImageLoader();
-		rdpass::loadImage( params, Foam, getName(), *getEngine(), pass.graph, loader, m_foamImg, m_foamView, m_foam );
-		rdpass::loadImage( params, Noise, getName(), *getEngine(), pass.graph, loader, m_noiseImg, m_noiseView, m_noise );
-		rdpass::loadImage( params, Normals1, getName(), *getEngine(), pass.graph, loader, m_normals1Img, m_normals1View, m_normals1 );
-		rdpass::loadImage( params, Normals2, getName(), *getEngine(), pass.graph, loader, m_normals2Img, m_normals2View, m_normals2 );
+		rdpass::loadImage( params, Foam, getName(), *getEngine(), pass.graph, graph, loader, m_foamImg, m_foamView, m_foam );
+		rdpass::loadImage( params, Noise, getName(), *getEngine(), pass.graph, graph, loader, m_noiseImg, m_noiseView, m_noise );
+		rdpass::loadImage( params, Normals1, getName(), *getEngine(), pass.graph, graph, loader, m_normals1Img, m_normals1View, m_normals1 );
+		rdpass::loadImage( params, Normals2, getName(), *getEngine(), pass.graph, graph, loader, m_normals2Img, m_normals2View, m_normals2 );
 	}
 
 	OceanRenderPass::~OceanRenderPass()
@@ -271,7 +271,7 @@ namespace ocean
 		auto extent = technique.getResult().getExtent();
 		auto & graph = technique.getRenderTarget().getGraph().createPassGroup( name );
 		auto colourInput = std::make_shared< castor3d::Texture >( device
-			, graph.getHandler()
+			, technique.getResources()
 			, name +"/Colour"
 			, 0u
 			, extent
@@ -301,7 +301,7 @@ namespace ocean
 		blitColourPass.addTransferOutputView( colourInput->sampledViewId );
 
 		auto depthInput = std::make_shared< castor3d::Texture >( device
-			, graph.getHandler()
+			, technique.getResources()
 			, name + "Depth"
 			, 0u
 			, extent
@@ -906,8 +906,8 @@ namespace ocean
 					, cos( rad ) );
 
 				result.position.x() = wavePosition.x() + qi * wave.amplitude() * wave.direction().x() * cosR * edgeDampen;
-				result.position.z() = wavePosition.z() + qi * wave.amplitude() * wave.direction().z() * cosR * edgeDampen;
 				result.position.y() = wave.amplitude() * sinR * edgeDampen;
+				result.position.z() = wavePosition.z() + qi * wave.amplitude() * wave.direction().z() * cosR * edgeDampen;
 
 				auto waFactor = writer.declLocale( "waFactor"
 					, frequency * wave.amplitude() );
@@ -919,16 +919,16 @@ namespace ocean
 					, cos( radN ) );
 
 				result.bitangent.x() = 1.0_f - ( qi * wave.direction().x() * wave.direction().x() * waFactor * sinN );
-				result.bitangent.z() = -1.0_f * ( qi * wave.direction().x() * wave.direction().z() * waFactor * sinN );
 				result.bitangent.y() = wave.direction().x() * waFactor * cosN;
+				result.bitangent.z() = -1.0_f * ( qi * wave.direction().x() * wave.direction().z() * waFactor * sinN );
 
 				result.tangent.x() = -1.0_f * ( qi * wave.direction().x() * wave.direction().z() * waFactor * sinN );
-				result.tangent.z() = 1.0_f - ( qi * wave.direction().z() * wave.direction().z() * waFactor * sinN );
 				result.tangent.y() = wave.direction().z() * waFactor * cosN;
+				result.tangent.z() = 1.0_f - ( qi * wave.direction().z() * wave.direction().z() * waFactor * sinN );
 
 				result.normal.x() = -1.0_f * ( wave.direction().x() * waFactor * cosN );
-				result.normal.z() = -1.0_f * ( wave.direction().z() * waFactor * cosN );
 				result.normal.y() = 1.0_f - ( qi * waFactor * sinN );
+				result.normal.z() = -1.0_f * ( wave.direction().z() * waFactor * cosN );
 
 				result.bitangent = normalize( result.bitangent );
 				result.tangent = normalize( result.tangent );
@@ -957,20 +957,16 @@ namespace ocean
 				, TrianglesTessPatchInT< VoidT > patchIn
 				, TessEvalDataOutT< castor3d::shader::FragmentSurfaceT > out )
 			{
-				out.vtx.position = patchIn.tessCoord.x() * listIn[0].vtx.position
+				auto position = writer.declLocale( "position"
+					, patchIn.tessCoord.x() * listIn[0].vtx.position
 					+ patchIn.tessCoord.y() * listIn[1].vtx.position
-					+ patchIn.tessCoord.z() * listIn[2].vtx.position;
-				out.texture1 = patchIn.tessCoord.x() * listIn[0].texture1
-					+ patchIn.tessCoord.y() * listIn[1].texture1
-					+ patchIn.tessCoord.z() * listIn[2].texture1;
-				out.colour = patchIn.tessCoord.x() * listIn[0].colour
-					+ patchIn.tessCoord.y() * listIn[1].colour
-					+ patchIn.tessCoord.z() * listIn[2].colour;
-				out.nodeId = listIn[0].nodeId;
+					+ patchIn.tessCoord.z() * listIn[2].vtx.position );
 				auto texcoord = writer.declLocale( "texcoord"
 					, patchIn.tessCoord.x() * listIn[0].texture0
 					+ patchIn.tessCoord.y() * listIn[1].texture0
 					+ patchIn.tessCoord.z() * listIn[2].texture0 );
+				auto nodeId = writer.declLocale( "nodeId"
+					, listIn[0].nodeId );
 
 				auto dampening = writer.declLocale( "dampening"
 					, 1.0_f - pow( utils.saturate( abs( texcoord.x() - 0.5_f ) / 0.5_f ), c3d_oceanData.dampeningFactor() ) );
@@ -991,7 +987,7 @@ namespace ocean
 					{
 						auto waveResult = writer.declLocale( "waveResult"
 							, calculateWave( c3d_oceanData.waves()[waveId]
-								, out.vtx.position.xyz()
+								, position.xyz()
 								, dampening
 								, c3d_oceanData.numWaves()
 								, c3d_oceanData.time() ) );
@@ -1002,14 +998,14 @@ namespace ocean
 					}
 					ROF;
 
-					finalWaveResult.position -= out.vtx.position.xyz() * ( writer.cast< sdw::Float >( c3d_oceanData.numWaves() - 1_u ) );
+					finalWaveResult.position -= position.xyz() * ( writer.cast< sdw::Float >( c3d_oceanData.numWaves() - 1_u ) );
 					finalWaveResult.normal = normalize( finalWaveResult.normal );
 					finalWaveResult.tangent = normalize( finalWaveResult.tangent );
 					finalWaveResult.bitangent = normalize( finalWaveResult.bitangent );
 				}
 				ELSE
 				{
-					finalWaveResult.position = out.vtx.position.xyz();
+					finalWaveResult.position = position.xyz();
 					finalWaveResult.normal = vec3( 0.0_f, 1.0_f, 0.0_f );
 					finalWaveResult.tangent = vec3( 1.0_f, 0.0_f, 0.0_f );
 					finalWaveResult.bitangent = vec3( 0.0_f, 0.0_f, 1.0_f );
@@ -1017,14 +1013,22 @@ namespace ocean
 				FI;
 
 				auto modelData = writer.declLocale( "modelData"
-					, c3d_modelsData[writer.cast< sdw::UInt >( out.nodeId ) - 1u] );
+					, c3d_modelsData[writer.cast< sdw::UInt >( nodeId ) - 1u] );
 				auto height = writer.declLocale( "height"
-					, finalWaveResult.position.y() - out.vtx.position.y() );
+					, finalWaveResult.position.y() - position.y() );
 				auto mtxModel = writer.declLocale( "mtxModel"
 					, modelData.getModelMtx() );
 				auto mtxNormal = writer.declLocale( "mtxNormal"
 					, modelData.getNormalMtx( flags, mtxModel ) );
 
+				out.texture1 = patchIn.tessCoord.x() * listIn[0].texture1
+					+ patchIn.tessCoord.y() * listIn[1].texture1
+					+ patchIn.tessCoord.z() * listIn[2].texture1;
+				out.colour = patchIn.tessCoord.x() * listIn[0].colour
+					+ patchIn.tessCoord.y() * listIn[1].colour
+					+ patchIn.tessCoord.z() * listIn[2].colour;
+				out.texture0 = texcoord;
+				out.nodeId = nodeId;
 				out.normal = normalize( mtxNormal * finalWaveResult.normal );
 				out.tangent = normalize( mtxNormal * finalWaveResult.tangent );
 				out.bitangent = normalize( mtxNormal * finalWaveResult.bitangent );

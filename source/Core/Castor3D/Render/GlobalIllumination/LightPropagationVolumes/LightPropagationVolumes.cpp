@@ -440,7 +440,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	LightPropagationVolumesBase::LightPropagationVolumesBase( crg::ResourceHandler & handler
+	LightPropagationVolumesBase::LightPropagationVolumesBase( crg::ResourcesCache & resources
 		, Scene const & scene
 		, LightType lightType
 		, RenderDevice const & device
@@ -455,24 +455,24 @@ namespace castor3d
 		, m_lpvResult{ lpvResult }
 		, m_lpvGridConfigUbo{ lpvGridConfigUbo }
 		, m_geometryVolumes{ geometryVolumes }
-		, m_graph{ handler, getName() }
+		, m_graph{ resources.getHandler(), getName() }
 		, m_lightType{ lightType }
-		, m_injection{ handler
+		, m_injection{ resources
 			, m_device
 			, getName() + "LightInjection0"
 			, m_scene.getLpvGridSize() }
 		, m_geometry{ ( geometryVolumes
-			? GeometryInjectionPass::createResult( handler
+			? GeometryInjectionPass::createResult( resources
 				, m_device
 				, getName()
 				, 0u
 				, m_scene.getLpvGridSize() )
 			: TexturePtr{} ) }
-		, m_propagate{ LightVolumePassResult{ handler
+		, m_propagate{ LightVolumePassResult{ resources
 				, m_device
 				, getName() + "Propagate0"
 				, m_scene.getLpvGridSize() }
-			, LightVolumePassResult{ handler
+			, LightVolumePassResult{ resources
 				, m_device
 				, getName() + "Propagate1"
 				, m_scene.getLpvGridSize() } }

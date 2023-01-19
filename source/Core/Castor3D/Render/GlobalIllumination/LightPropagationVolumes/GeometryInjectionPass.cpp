@@ -751,14 +751,14 @@ namespace castor3d
 		visitor.visit( m_pixelShader );
 	}
 
-	TexturePtr GeometryInjectionPass::createResult( crg::ResourceHandler & handler
+	TexturePtr GeometryInjectionPass::createResult( crg::ResourcesCache & resources
 		, RenderDevice const & device
 		, castor::String const & prefix
 		, uint32_t index
 		, uint32_t gridSize )
 	{
 		return std::make_shared< Texture >( device
-			, handler
+			, resources
 			, prefix + cuT( "GeometryInjection" ) + castor::string::toString( index )
 			, VK_IMAGE_CREATE_2D_ARRAY_COMPATIBLE_BIT
 			, VkExtent3D{ gridSize, gridSize, gridSize }

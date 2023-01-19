@@ -32,7 +32,7 @@ namespace castor3d
 		: public castor::Named
 	{
 	protected:
-		C3D_API LayeredLightPropagationVolumesBase( crg::ResourceHandler & handler
+		C3D_API LayeredLightPropagationVolumesBase( crg::ResourcesCache & resources
 			, Scene const & scene
 			, LightType lightType
 			, RenderDevice const & device
@@ -137,14 +137,14 @@ namespace castor3d
 		: public LayeredLightPropagationVolumesBase
 	{
 	public:
-		LayeredLightPropagationVolumesT( crg::ResourceHandler & handler
+		LayeredLightPropagationVolumesT( crg::ResourcesCache & resources
 			, Scene const & scene
 			, LightType lightType
 			, RenderDevice const & device
 			, ShadowMapResult const & smResult
 			, LightVolumePassResultArray const & lpvResult
 			, LayeredLpvGridConfigUbo & lpvGridConfigUbo )
-			: LayeredLightPropagationVolumesBase{ handler
+			: LayeredLightPropagationVolumesBase{ resources
 				, scene
 				, lightType
 				, device

@@ -69,7 +69,7 @@ namespace castor3d
 			}
 		};
 
-		static std::vector< LightVolumePassResult > createInjection( crg::ResourceHandler & handler
+		static std::vector< LightVolumePassResult > createInjection( crg::ResourcesCache & resources
 			, RenderDevice const & device
 			, castor::String const & name
 			, uint32_t lpvGridSize
@@ -79,7 +79,7 @@ namespace castor3d
 
 			for ( uint32_t cascade = 0u; cascade < cascadeCount; ++cascade )
 			{
-				result.emplace_back( handler
+				result.emplace_back( resources
 					, device
 					, name + "Injection" + castor::string::toString( cascade )
 					, lpvGridSize );
@@ -88,7 +88,7 @@ namespace castor3d
 			return result;
 		}
 
-		static TextureArray createGeometry( crg::ResourceHandler & handler
+		static TextureArray createGeometry( crg::ResourcesCache & resources
 			, RenderDevice const & device
 			, castor::String const & name
 			, uint32_t lpvGridSize
@@ -100,7 +100,7 @@ namespace castor3d
 			for ( uint32_t cascade = 0u; cascade < cascadeCount; ++cascade )
 			{
 				result.push_back( enabled
-					? GeometryInjectionPass::createResult( handler
+					? GeometryInjectionPass::createResult( resources
 						, device
 						, name
 						, cascade
@@ -111,7 +111,7 @@ namespace castor3d
 			return result;
 		}
 
-		static std::vector< std::array< LightVolumePassResult, 2u > > createPropagation( crg::ResourceHandler & handler
+		static std::vector< std::array< LightVolumePassResult, 2u > > createPropagation( crg::ResourcesCache & resources
 			, RenderDevice const & device
 			, castor::String const & name
 			, uint32_t lpvGridSize
@@ -121,8 +121,8 @@ namespace castor3d
 
 			for ( uint32_t cascade = 0u; cascade < cascadeCount; ++cascade )
 			{
-				result.push_back( { LightVolumePassResult{ handler, device, name + "Propagate" + std::to_string( cascade ) + "0", lpvGridSize }
-					, LightVolumePassResult{ handler, device, name + "Propagate" + std::to_string( cascade ) + "1", lpvGridSize } } );
+				result.push_back( { LightVolumePassResult{ resources, device, name + "Propagate" + std::to_string( cascade ) + "0", lpvGridSize }
+					, LightVolumePassResult{ resources, device, name + "Propagate" + std::to_string( cascade ) + "1", lpvGridSize } } );
 			}
 
 			return result;
@@ -292,7 +292,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	LayeredLightPropagationVolumesBase::LayeredLightPropagationVolumesBase( crg::ResourceHandler & handler
+	LayeredLightPropagationVolumesBase::LayeredLightPropagationVolumesBase( crg::ResourcesCache & resources
 		, Scene const & scene
 		, LightType lightType
 		, RenderDevice const & device
@@ -307,11 +307,11 @@ namespace castor3d
 		, m_lpvResult{ lpvResult }
 		, m_lpvGridConfigUbo{ lpvGridConfigUbo }
 		, m_geometryVolumes{ geometryVolumes }
-		, m_graph{ handler, getName() }
+		, m_graph{ resources.getHandler(), getName() }
 		, m_lightType{ lightType }
-		, m_injection{ llpvpropvol::createInjection( handler, m_device, getName(), m_scene.getLpvGridSize(), LpvMaxCascadesCount ) }
-		, m_geometry{ llpvpropvol::createGeometry( handler, m_device, getName(), m_scene.getLpvGridSize(), LpvMaxCascadesCount, m_geometryVolumes ) }
-		, m_propagate{ llpvpropvol::createPropagation( handler, m_device, getName(), m_scene.getLpvGridSize(), LpvMaxCascadesCount ) }
+		, m_injection{ llpvpropvol::createInjection( resources, m_device, getName(), m_scene.getLpvGridSize(), LpvMaxCascadesCount ) }
+		, m_geometry{ llpvpropvol::createGeometry( resources, m_device, getName(), m_scene.getLpvGridSize(), LpvMaxCascadesCount, m_geometryVolumes ) }
+		, m_propagate{ llpvpropvol::createPropagation( resources, m_device, getName(), m_scene.getLpvGridSize(), LpvMaxCascadesCount ) }
 		, m_clearInjectionPass{ doCreateClearInjectionPass() }
 	{
 		for ( uint32_t cascade = 0u; cascade < LpvMaxCascadesCount; ++cascade )

@@ -33,7 +33,7 @@ namespace castor3d
 		, m_device{ device }
 		, m_graph{ parent.getRenderTarget().getGraph().createPassGroup( "Prepass" ) }
 		, m_depthObj{ std::make_shared< Texture >( m_device
-			, getEngine()->getGraphResourceHandler()
+			, parent.getResources()
 			, parent.getName() + "/DepthObj"
 			, 0u
 			, parent.getResult().getExtent()
@@ -48,7 +48,7 @@ namespace castor3d
 			, VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE ) }
 		, m_visibility{ ( visbuffer && m_device.hasBindless()
 			? std::make_shared< Texture >( m_device
-				, getEngine()->getGraphResourceHandler()
+				, parent.getResources()
 				, parent.getName() + "/Visibility"
 				, 0u
 				, parent.getResult().getExtent()

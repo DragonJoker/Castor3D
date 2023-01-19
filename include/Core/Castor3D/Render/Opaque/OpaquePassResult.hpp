@@ -16,7 +16,7 @@ namespace castor3d
 		: public GBufferT< DsTexture >
 	{
 	public:
-		C3D_API OpaquePassResult( crg::ResourceHandler & handler
+		C3D_API OpaquePassResult( crg::ResourcesCache & resources
 			, RenderDevice const & device
 			, TexturePtr nmlOccTexture );
 	};

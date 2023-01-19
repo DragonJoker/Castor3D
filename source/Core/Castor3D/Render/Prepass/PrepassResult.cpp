@@ -78,7 +78,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	PrepassResult::PrepassResult( crg::ResourceHandler & handler
+	PrepassResult::PrepassResult( crg::ResourcesCache & handler
 		, RenderDevice const & device
 		, castor::Size const & size )
 		: GBufferT< PpTexture >{ handler

@@ -35,7 +35,8 @@ namespace castor3d
 		, m_group{ graph.createPassGroup( "SSAO" ) }
 		, m_size{ makeExtent2D( size ) }
 		, m_matrixUbo{ m_device }
-		, m_linearisePass{ castor::makeUnique< LineariseDepthPass >( m_group
+		, m_linearisePass{ castor::makeUnique< LineariseDepthPass >( *depth.resources
+			, m_group
 			, previousPasses
 			, m_device
 			, progress

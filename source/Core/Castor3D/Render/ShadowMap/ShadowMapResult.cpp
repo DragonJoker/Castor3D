@@ -114,13 +114,13 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	ShadowMapResult::ShadowMapResult( crg::ResourceHandler & handler
+	ShadowMapResult::ShadowMapResult( crg::ResourcesCache & resources
 		, RenderDevice const & device
 		, castor::String const & prefix
 		, VkImageCreateFlags createFlags
 		, castor::Size const & size
 		, uint32_t layerCount )
-		: GBufferT< SmTexture >{ handler
+		: GBufferT< SmTexture >{ resources
 			, device
 			, prefix + cuT( "SMRes" )
 			, { nullptr, nullptr, nullptr, nullptr, nullptr }

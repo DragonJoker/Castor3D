@@ -108,7 +108,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	OpaquePassResult::OpaquePassResult( crg::ResourceHandler & handler
+	OpaquePassResult::OpaquePassResult( crg::ResourcesCache & handler
 		, RenderDevice const & device
 		, TexturePtr nmlOccTexture )
 		: GBufferT< DsTexture >{ handler

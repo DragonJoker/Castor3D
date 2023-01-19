@@ -1,6 +1,7 @@
 #include "CastorUtils/CastorUtilsPrerequisites.hpp"
 
 #include "CastorUtils/Config/SmartPtr.hpp"
+#include "CastorUtils/Exception/Assertion.hpp"
 #include "CastorUtils/Log/Logger.hpp"
 #include "CastorUtils/Math/Point.hpp"
 #include "CastorUtils/Math/SquareMatrix.hpp"
@@ -83,16 +84,13 @@ namespace castor
 		Logger::logError( description );
 	}
 
-	void cuLogError( std::stringstream stream )
-	{
-		Logger::logError( stream );
-	}
-
 	[[ noreturn ]]
 	void cuFailure( char const * const description )
 	{
-		cuLogError( std::stringstream() << "Assertion failed: " << description );
-		cuLogError( std::stringstream() << Debug::Backtrace{} );
+		std::stringstream stream;
+		stream << "Assertion failed: " << description << "\n";
+		stream << Debug::Backtrace{};
+		cuLogError( stream.str().c_str() );
 		std::abort();
 	}
 }

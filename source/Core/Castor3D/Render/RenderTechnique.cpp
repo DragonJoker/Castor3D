@@ -161,7 +161,7 @@ namespace castor3d
 			}
 		}
 
-		static LightVolumePassResultArray doCreateLLPVResult( crg::ResourceHandler & handler
+		static LightVolumePassResultArray doCreateLLPVResult( crg::ResourcesCache & resources
 			, RenderDevice const & device
 			, castor::String const & prefix )
 		{
@@ -170,7 +170,7 @@ namespace castor3d
 
 			for ( uint32_t i = 0u; i < LpvMaxCascadesCount; ++i )
 			{
-				result.emplace_back( castor::makeUnique< LightVolumePassResult >( handler
+				result.emplace_back( castor::makeUnique< LightVolumePassResult >( resources
 					, device
 					, prefix + castor::string::toString( i )
 					, engine.getLpvGridSize() ) );
@@ -179,7 +179,7 @@ namespace castor3d
 			return result;
 		}
 
-		static crg::FrameGraph doCreateClearLpvCommands( crg::ResourceHandler & handler
+		static crg::FrameGraph doCreateClearLpvCommands( crg::ResourcesCache & resources
 			, RenderDevice const & device
 			, ProgressBar * progress
 			, castor::String const & name
@@ -225,7 +225,7 @@ namespace castor3d
 			};
 
 			stepProgressBar( progress, "Creating clear LPV commands" );
-			crg::FrameGraph result{ handler, name + "ClearLpv" };
+			crg::FrameGraph result{ resources.getHandler(), name + "ClearLpv" };
 			auto & pass = result.createPass( name + "LpvClear"
 				, [progress]( crg::FramePass const & framePass
 					, crg::GraphContext & context
@@ -283,7 +283,7 @@ namespace castor3d
 		, m_targetSize{ m_renderTarget.getSize() }
 		, m_rawSize{ getSafeBandedSize( m_targetSize ) }
 		, m_colour{ m_device
-			, getOwner()->getGraphResourceHandler()
+			, m_renderTarget.getResources()
 			, getName() + "/Colour"
 			, 0u
 			, makeExtent3D( m_rawSize )
@@ -296,7 +296,7 @@ namespace castor3d
 				| VK_IMAGE_USAGE_TRANSFER_DST_BIT )
 			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
 		, m_depth{ std::make_shared< Texture >( m_device
-			, getOwner()->getGraphResourceHandler()
+			, m_renderTarget.getResources()
 			, getName() + "/Depth"
 			, 0u
 			, m_colour.getExtent()
@@ -311,7 +311,7 @@ namespace castor3d
 				| VK_IMAGE_USAGE_TRANSFER_DST_BIT )
 			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK ) }
 		, m_normal{ std::make_shared< Texture >( m_device
-			, getOwner()->getGraphResourceHandler()
+			, m_renderTarget.getResources()
 			, getName() + "/NmlOcc"
 			, 0u
 			, m_colour.getExtent()
@@ -326,7 +326,7 @@ namespace castor3d
 		, m_lpvConfigUbo{ m_device }
 		, m_llpvConfigUbo{ m_device }
 		, m_vctConfigUbo{ m_device }
-		, m_voxelizer{ castor::makeUnique< Voxelizer >( getOwner()->getGraphResourceHandler()
+		, m_voxelizer{ castor::makeUnique< Voxelizer >( m_renderTarget.getResources()
 			, m_device
 			, progress
 			, getName()
@@ -334,23 +334,23 @@ namespace castor3d
 			, *m_renderTarget.getCamera()
 			, m_vctConfigUbo
 			, m_renderTarget.getScene()->getVoxelConeTracingConfig() ) }
-		, m_lpvResult{ castor::makeUnique< LightVolumePassResult >( getOwner()->getGraphResourceHandler()
+		, m_lpvResult{ castor::makeUnique< LightVolumePassResult >( m_renderTarget.getResources()
 			, m_device
 			, getName()
 			, getEngine()->getLpvGridSize() ) }
-		, m_llpvResult{ rendtech::doCreateLLPVResult( getOwner()->getGraphResourceHandler()
+		, m_llpvResult{ rendtech::doCreateLLPVResult( m_renderTarget.getResources()
 			, m_device
 			, getName() ) }
 #if !C3D_DebugDisableShadowMaps
-		, m_directionalShadowMap{ castor::makeUniqueDerived< ShadowMap, ShadowMapDirectional >( getOwner()->getGraphResourceHandler()
+		, m_directionalShadowMap{ castor::makeUniqueDerived< ShadowMap, ShadowMapDirectional >( m_renderTarget.getResources()
 			, m_device
 			, *m_renderTarget.getScene()
 			, progress ) }
-		, m_pointShadowMap{ castor::makeUniqueDerived< ShadowMap, ShadowMapPoint >( getOwner()->getGraphResourceHandler()
+		, m_pointShadowMap{ castor::makeUniqueDerived< ShadowMap, ShadowMapPoint >( m_renderTarget.getResources()
 			, m_device
 			, *m_renderTarget.getScene()
 			, progress ) }
-		, m_spotShadowMap{ castor::makeUniqueDerived< ShadowMap, ShadowMapSpot >( getOwner()->getGraphResourceHandler()
+		, m_spotShadowMap{ castor::makeUniqueDerived< ShadowMap, ShadowMapSpot >( m_renderTarget.getResources()
 			, m_device
 			, *m_renderTarget.getScene()
 			, progress ) }
@@ -380,7 +380,7 @@ namespace castor3d
 			, getSsaoConfig()
 			, progress
 			, weightedBlended }
-		, m_clearLpvGraph{ rendtech::doCreateClearLpvCommands( getOwner()->getGraphResourceHandler(), device, progress, getName(), *m_lpvResult, m_llpvResult ) }
+		, m_clearLpvGraph{ rendtech::doCreateClearLpvCommands( m_renderTarget.getResources(), device, progress, getName(), *m_lpvResult, m_llpvResult ) }
 		, m_clearLpvRunnable{ m_clearLpvGraph.compile( m_device.makeContext() ) }
 	{
 		m_renderTarget.getGraph().addDependency( m_voxelizer->getGraph() );
@@ -706,6 +706,11 @@ namespace castor3d
 		return m_opaque.getBaseColourResult();
 	}
 
+	crg::ResourcesCache & RenderTechnique::getResources()const
+	{
+		return m_renderTarget.getResources();
+	}
+
 	crg::FramePassArray RenderTechnique::doCreateRenderPasses( ProgressBar * progress
 		, TechniquePassEvent event
 		, crg::FramePass const * previousPass )
@@ -785,7 +790,7 @@ namespace castor3d
 
 			if ( needLpv && !m_lightPropagationVolumes[i] )
 			{
-				m_lightPropagationVolumes[i] = castor::makeUnique< LightPropagationVolumes >( getOwner()->getGraphResourceHandler()
+				m_lightPropagationVolumes[i] = castor::makeUnique< LightPropagationVolumes >( getResources()
 					, scene
 					, LightType( i )
 					, m_device
@@ -797,7 +802,7 @@ namespace castor3d
 
 			if ( needLpvG && !m_lightPropagationVolumesG[i] )
 			{
-				m_lightPropagationVolumesG[i] = castor::makeUnique< LightPropagationVolumesG >( getOwner()->getGraphResourceHandler()
+				m_lightPropagationVolumesG[i] = castor::makeUnique< LightPropagationVolumesG >( getResources()
 					, scene
 					, LightType( i )
 					, m_device
@@ -809,7 +814,7 @@ namespace castor3d
 
 			if ( needLLpv && !m_layeredLightPropagationVolumes[i] )
 			{
-				m_layeredLightPropagationVolumes[i] = castor::makeUnique< LayeredLightPropagationVolumes >( getOwner()->getGraphResourceHandler()
+				m_layeredLightPropagationVolumes[i] = castor::makeUnique< LayeredLightPropagationVolumes >( getResources()
 					, scene
 					, LightType( i )
 					, m_device
@@ -821,7 +826,7 @@ namespace castor3d
 
 			if ( needLLpvG && !m_layeredLightPropagationVolumesG[i] )
 			{
-				m_layeredLightPropagationVolumesG[i] = castor::makeUnique< LayeredLightPropagationVolumesG >( getOwner()->getGraphResourceHandler()
+				m_layeredLightPropagationVolumesG[i] = castor::makeUnique< LayeredLightPropagationVolumesG >( getResources()
 					, scene
 					, LightType( i )
 					, m_device

@@ -514,7 +514,11 @@ namespace castor3d
 
 	RenderDevice::~RenderDevice()
 	{
-		renderSystem.getEngine()->getGraphResourceHandler().clear( makeContext() );
+		{
+			auto lock = castor::makeUniqueLock( m_mutex );
+			m_contexts.clear();
+		}
+		uboPool.reset();
 		uboPool.reset();
 		vertexPools.reset();
 		geometryPools.reset();
@@ -651,7 +655,7 @@ namespace castor3d
 	crg::GraphContext & RenderDevice::makeContext()const
 	{
 		auto lock( castor::makeUniqueLock( m_mutex ) );
-		auto ires = m_contexts.emplace( std::this_thread::get_id(), nullptr );
+		auto ires = m_contexts.emplace( std::this_thread::get_id(), GraphContextPtr{} );
 		auto it = ires.first;
 
 		if ( ires.second )

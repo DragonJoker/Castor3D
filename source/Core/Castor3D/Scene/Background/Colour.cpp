@@ -41,7 +41,7 @@ namespace castor3d
 	{
 		m_hdr = false;
 		m_textureId = { engine.getRenderSystem()->getRenderDevice()
-			, engine.getGraphResourceHandler()
+			, getScene().getResources()
 			, cuT( "ColourBackground_Colour" )
 			, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT
 			, { bgcolour::Dim, bgcolour::Dim, 1u }
