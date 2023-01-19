@@ -151,7 +151,6 @@ namespace castor3d
 			auto viewportState = doCreateViewportState( *m_renderPasses[rpIndex].framebuffer );
 			auto colourBlend = doCreateBlendState( index != 0u );
 			auto & program = m_holder.getProgram( index );
-			auto & pipeline = m_holder.getPipeline( index );
 			VkPipelineColorBlendStateCreateInfo const & cbState = colourBlend;
 			VkPipelineViewportStateCreateInfo const & vpState = viewportState;
 			auto createInfo = makeVkStruct< VkGraphicsPipelineCreateInfo >( 0u
@@ -171,15 +170,8 @@ namespace castor3d
 				, 0u
 				, VK_NULL_HANDLE
 				, 0 );
-			auto res = m_holder.getContext().vkCreateGraphicsPipelines( m_holder.getContext().device
-				, m_holder.getContext().cache
-				, 1u
-				, &createInfo
-				, m_holder.getContext().allocator
-				, &pipeline );
 			auto name = nameBase + ( index ? std::string{ "/Blend" } : std::string{ "/First" } );
-			crg::checkVkResult( res, name + " - Pipeline creation" );
-			crgRegisterObject( m_holder.getContext(), name, pipeline );
+			m_holder.createPipeline( index, name, createInfo );
 		}
 	}
 

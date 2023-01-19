@@ -114,15 +114,8 @@ namespace castor3d
 					, 0u
 					, VK_NULL_HANDLE
 					, 0 );
-				auto res = m_holder.getContext().vkCreateGraphicsPipelines( m_holder.getContext().device
-					, m_holder.getContext().cache
-					, 1u
-					, &createInfo
-					, m_holder.getContext().allocator
-					, &pipeline );
 				auto name = nameBase + ( index ? std::string{ "/Blend" } : std::string{ "/First" } );
-				crg::checkVkResult( res, name + " - Pipeline creation" );
-				crgRegisterObject( m_holder.getContext(), name, pipeline );
+				m_holder.createPipeline( index, name, createInfo );
 			}
 		}
 	}

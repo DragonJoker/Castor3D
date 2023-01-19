@@ -470,7 +470,6 @@ namespace castor3d
 		VkPipelineVertexInputStateCreateInfo viState = vertexState;
 		VkPipelineColorBlendStateCreateInfo cbState = blendState;
 		auto & program = m_holder.getProgram( index );
-		auto & pipeline = m_holder.getPipeline( index );
 		auto createInfo = makeVkStruct< VkGraphicsPipelineCreateInfo >( 0u
 			, uint32_t( program.size() )
 			, program.data()
@@ -488,14 +487,7 @@ namespace castor3d
 			, 0u
 			, VK_NULL_HANDLE
 			, 0 );
-		auto res = m_holder.getContext().vkCreateGraphicsPipelines( m_holder.getContext().device
-			, m_holder.getContext().cache
-			, 1u
-			, &createInfo
-			, m_holder.getContext().allocator
-			, &pipeline );
-		crg::checkVkResult( res, m_holder.getPass().getGroupName() + " - Pipeline creation" );
-		crgRegisterObject( m_holder.getContext(), m_holder.getPass().getGroupName(), pipeline );
+		m_holder.createPipeline( index, createInfo );
 	}
 
 	//*********************************************************************************************
