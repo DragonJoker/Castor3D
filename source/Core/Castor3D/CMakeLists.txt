@@ -1945,8 +1945,6 @@ add_library( castor::${PROJECT_NAME}
 )
 target_include_directories( ${PROJECT_NAME}
 	PUBLIC
-		$<BUILD_INTERFACE:${ASHES_SOURCE_DIR}/include>
-		$<BUILD_INTERFACE:${ASHES_CONFIG_DIR}>
 		$<INSTALL_INTERFACE:include>
 	PRIVATE
 		${CASTOR_SOURCE_DIR}/include/Core
@@ -1954,6 +1952,14 @@ target_include_directories( ${PROJECT_NAME}
 		${CASTOR_SOURCE_DIR}/source/Core
 		${CASTOR_BINARY_DIR}/source/Core
 )
+if ( VCPKG_BUILD OR CASTOR_FORCE_VCPKG_SUBMODULES )
+else ()
+	target_include_directories( ${PROJECT_NAME}
+		PUBLIC
+			$<BUILD_INTERFACE:${ASHES_SOURCE_DIR}/include>
+			$<BUILD_INTERFACE:${ASHES_CONFIG_DIR}>
+	)
+endif ()
 target_include_directories( ${PROJECT_NAME} SYSTEM
 	PRIVATE
 		${glslang_INCLUDE_DIR}

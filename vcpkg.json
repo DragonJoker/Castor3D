@@ -3,45 +3,39 @@
     "name": "castor3d",
     "version": "0.14.0",
     "builtin-baseline": "28324ed4b463a6cf2fc7c3164c13271f3ad4c66a",
-    "dependencies": [ "freetype",
-        "gli",
-        "vkfft",
-        "meshoptimizer",
-        "minizip",
-        "spirv-cross",
-        "zlib"
-    ],
+    "dependencies": [ "freetype", "gli", "meshoptimizer", "minizip", "zlib" ],
     "default-features": [ "cvtt", "assimp", "freeimage", "glsl", "vkfft" ],
+    "vcpkg-configuration": {
+        "overlay-ports": [
+            "./data/vcpkg/ports/ashes",
+            "./data/vcpkg/ports/shaderwriter",
+            "./data/vcpkg/ports/rendergraph"
+        ]
+    },
     "features": {
         "cvtt": {
             "description": "Use ConvectionKernels library to block compress textures.",
-            "dependencies": [
-                "convectionkernels"
-            ]
+            "dependencies": [ "convectionkernels" ]
         },
         "assimp": {
             "description": "Use Assimp library to import external scenes.",
-            "dependencies": [
-                "assimp"
-            ]
+            "dependencies": [ "assimp" ]
         },
         "freeimage": {
             "description": "Use FreeImage library over stb_image to import TIF, PNG or RAW images.",
-            "dependencies": [
-                "freeimage"
-            ]
+            "dependencies": [ "freeimage" ]
         },
         "glsl": {
             "description": "Enable GLSL shaders import support.",
-            "dependencies": [
-                "glslang"
-            ]
+            "dependencies": [ "glslang", "spirv-cross" ]
         },
         "vkfft": {
             "description": "Use VkFFT to compute Fast Fourier Transforms.",
-            "dependencies": [
-                "vkfft"
-            ]
+            "dependencies": [ "vkfft" ]
+        },
+        "vcpkg-deps": {
+            "description": "Use vcpkg's ashes/rendergraph/shaderwriter.",
+            "dependencies": [ "ashes", "rendergraph", "shaderwriter" ]
         }
     }
 }
