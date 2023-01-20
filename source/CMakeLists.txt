@@ -1,8 +1,17 @@
 get_filename_component( CASTOR_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR} DIRECTORY )
 get_filename_component( CASTOR_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR} DIRECTORY )
 
-set( Vulkan_INCLUDE_DIR ${CASTOR_SOURCE_DIR}/${ASHES_DIR}/external/Vulkan-Headers/include )
-set( Vulkan_INCLUDE_DIRS ${Vulkan_INCLUDE_DIR} )
+if ( NOT EXISTS ${CASTOR_SOURCE_DIR}/${ASHES_DIR}/external/Vulkan-Headers/include/ )
+	if ( VCPKG_PACKAGE_BUILD OR VCPKG_TOOLCHAIN )
+		set( Vulkan_INCLUDE_DIR ${_VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/include )
+		set( Vulkan_INCLUDE_DIRS ${Vulkan_INCLUDE_DIR} )
+	else ()
+		find_package( Vulkan REQUIRED )
+	endif ()
+else ()
+	set( Vulkan_INCLUDE_DIR ${CASTOR_SOURCE_DIR}/${ASHES_DIR}/external/Vulkan-Headers/include )
+	set( Vulkan_INCLUDE_DIRS ${Vulkan_INCLUDE_DIR} )
+endif ()
 
 add_subdirectory( Core )
 if ( ${CASTOR_BUILD_CASTOR3D} )
@@ -16,7 +25,7 @@ else ()
 	set( C3D_LIB_PREFIX libcastor3d )
 endif ()
 
-if ( VCPKG_BUILD )
+if ( VCPKG_BUILD OR CASTOR_FORCE_VCPKG_SUBMODULES )
 	find_package( Ashes CONFIG REQUIRED ashespp )
 else ()
 	# Ashes external library
@@ -118,7 +127,7 @@ if ( ${CASTOR_BUILD_CASTOR3D} )
 		endif ()
 	endif ()
 
-	if ( VCPKG_BUILD )
+	if ( VCPKG_BUILD OR CASTOR_FORCE_VCPKG_SUBMODULES )
 		find_package( RenderGraph CONFIG REQUIRED )
 	else ()
 		# RenderGraph external library
@@ -130,7 +139,7 @@ if ( ${CASTOR_BUILD_CASTOR3D} )
 		add_subdirectory( ../${RENDERGRAPH_DIR} ${CMAKE_BINARY_DIR}/${RENDERGRAPH_DIR} )
 	endif ()
 
-	if ( VCPKG_BUILD )
+	if ( VCPKG_BUILD OR CASTOR_FORCE_VCPKG_SUBMODULES )
 		find_package( ShaderWriter CONFIG REQUIRED ShaderAST ShaderWriter CompilerSpirV )
 	else ()
 		# ShaderWriter external library

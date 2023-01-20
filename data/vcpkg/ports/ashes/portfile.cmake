@@ -1,0 +1,35 @@
+vcpkg_check_linkage(ONLY_DYNAMIC_LIBRARY)
+
+vcpkg_from_github(
+    OUT_SOURCE_PATH SOURCE_PATH
+    REPO DragonJoker/Ashes
+    REF 6e6badcb0baad9e954a8364b9c3bf90a0f2f829e
+    HEAD_REF master
+    SHA512 63a2d72e5cc2820186c0f86415add4f00df8c866dd441260c74177e475a08bf5b7e12e4b243794bb60040c3d89acbdb83d50db1f0f2840d910ca11d002a143d6
+)
+
+vcpkg_from_github(
+    OUT_SOURCE_PATH CMAKE_SOURCE_PATH
+    REPO DragonJoker/CMakeUtils
+    REF 988f2aab2257175e8fb15a33a3a350ff92d25b89
+    HEAD_REF master
+    SHA512 961370c110e77f67ed6f426d410335636ca3b5812ba1837662cc5fea403791cafa443c1a25144b92aed5edfc5928eb6e706883ea7f1e68de1123845cb89acb86
+)
+
+file(REMOVE_RECURSE "${SOURCE_PATH}/CMake")
+file(COPY "${CMAKE_SOURCE_PATH}/" DESTINATION "${SOURCE_PATH}/CMake")
+
+vcpkg_cmake_configure(
+    SOURCE_PATH ${SOURCE_PATH}
+    OPTIONS
+        -DVCPKG_PACKAGE_BUILD=ON
+        -DASHES_BUILD_TEMPLATES=OFF
+        -DASHES_BUILD_TESTS=OFF
+        -DASHES_BUILD_INFO=OFF
+        -DASHES_BUILD_SAMPLES=OFF
+)
+
+vcpkg_cmake_install()
+vcpkg_cmake_config_fixup(CONFIG_PATH lib/cmake/ashes)
+
+file(INSTALL "${SOURCE_PATH}/LICENSE" DESTINATION "${CURRENT_PACKAGES_DIR}/share/${PORT}" RENAME copyright)

@@ -16,3 +16,6 @@
 [submodule "external/RenderGraph"]
 	path = external/RenderGraph
 	url = https://github.com/DragonJoker/RenderGraph.git
+[submodule "external/vcpkg"]
+	path = external/vcpkg
+	url = https://github.com/microsoft/vcpkg.git
