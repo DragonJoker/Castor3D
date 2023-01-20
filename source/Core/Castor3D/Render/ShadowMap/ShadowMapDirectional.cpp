@@ -177,9 +177,10 @@ namespace castor3d
 						, scene
 						, *scene.getCameraRootNode()
 						, viewport
-						, true )
-					, &scene.getDummyCuller() ) );
+						, true ) ) );
 				auto & passData = *result.back();
+				passData.ownCuller = castor::makeUniqueDerived< SceneCuller, DummyCuller >( scene, passData.camera.get() );
+				passData.culler = passData.ownCuller.get();
 				auto & pass = graph.createPass( debugName
 					, [&passData, &device, &shadowMap, cascade, vsm, rsm]( crg::FramePass const & framePass
 						, crg::GraphContext & context

@@ -58,6 +58,16 @@ namespace castor3d
 			{
 			}
 
+			PassData( std::unique_ptr< MatrixUbo > matrixUbo
+				, CameraSPtr camera )
+				: matrixUbo{ std::move( matrixUbo ) }
+				, camera{ std::move( camera ) }
+				, ownCuller{ nullptr }
+				, culler{ nullptr }
+				, pass{ nullptr }
+			{
+			}
+
 			std::unique_ptr< MatrixUbo > matrixUbo;
 			CameraSPtr camera;
 			ViewportUPtr viewport;

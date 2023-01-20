@@ -34,8 +34,6 @@ namespace castor3d
 		C3D_API SceneCuller( Scene & scene
 			, Camera * camera );
 		C3D_API virtual ~SceneCuller();
-		C3D_API void registerRenderPass( RenderNodesPass const & renderPass );
-		C3D_API void unregisterRenderPass( RenderNodesPass const & renderPass );
 		C3D_API void update( CpuUpdater & updater );
 		C3D_API void removeCulled( SubmeshRenderNode const & node );
 		C3D_API void removeCulled( BillboardRenderNode const & node );

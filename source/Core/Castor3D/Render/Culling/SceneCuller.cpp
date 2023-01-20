@@ -134,18 +134,6 @@ namespace castor3d
 		m_scene.getRenderNodes().unregisterCuller( *this );
 	}
 
-	void SceneCuller::registerRenderPass( RenderNodesPass const & renderPass )
-	{
-		//m_renderPasses.emplace( &renderPass, RenderPassBuffers{} );
-	}
-
-	void SceneCuller::unregisterRenderPass( RenderNodesPass const & renderPass )
-	{
-		//auto it = m_renderPasses.find( &renderPass );
-		//CU_Require( it != m_renderPasses.end() );
-		//m_renderPasses.erase( it );
-	}
-
 	void SceneCuller::update( CpuUpdater & updater )
 	{
 #if C3D_DebugTimers
