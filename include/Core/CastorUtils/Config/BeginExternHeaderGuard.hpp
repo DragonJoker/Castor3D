@@ -36,6 +36,7 @@ See LICENSE file in root folder
 #pragma clang diagnostic ignored "-Wcomma"
 #pragma clang diagnostic ignored "-Wdeprecated-copy-with-user-provided-copy"
 #pragma clang diagnostic ignored "-Wdeprecated-copy-with-user-provided-dtor"
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
 #pragma clang diagnostic ignored "-Wdisabled-macro-expansion"
 #pragma clang diagnostic ignored "-Wimplicit-fallthrough"
 #pragma clang diagnostic ignored "-Wimplicit-int-float-conversion"
