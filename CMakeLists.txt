@@ -1,8 +1,10 @@
 cmake_minimum_required( VERSION 3.15 )
 cmake_policy( VERSION 3.15 )
 
-if ( VCPKG_TARGET_TRIPLET )
-	set( VCPKG_TOOLCHAIN ON )
+option( CASTOR_FORCE_VCPKG_SUBMODULES "Build submodules from vcpkg instead of external folder" OFF )
+
+if ( CASTOR_FORCE_VCPKG_SUBMODULES )
+	list( APPEND VCPKG_MANIFEST_FEATURES "vcpkg-deps" )
 endif ()
 
 set( MAIN_PROJECT_NAME "Castor3D" )
@@ -33,11 +35,13 @@ endif ()
 set( CMAKE_TEMPLATES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/CMake/Templates )
 set( CMAKE_POSITION_INDEPENDENT_CODE ON )
 
-include( PrecompiledHeaders )
-
 set( CMAKE_CONFIGURATION_TYPES "Debug;Release;RelWithDebInfo" CACHE STRING "The configuration types" FORCE )
 
 project( ${MAIN_PROJECT_NAME} )
+
+if ( VCPKG_TARGET_TRIPLET )
+	set( VCPKG_TOOLCHAIN ON )
+endif ()
 
 include( Setup )
 include( Project )
@@ -47,6 +51,7 @@ include( CompilationFlags )
 include( AStyleUtils )
 include( Doxygen )
 include( ExternalDependencies )
+include( PrecompiledHeaders )
 
 msg_debug( "PROJECTS_OS [${PROJECTS_OS}]" )
 msg_debug( "PROJECTS_PLATFORM [${PROJECTS_PLATFORM}]" )

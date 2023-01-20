@@ -16,7 +16,7 @@ else ()
 	set( C3D_LIB_PREFIX libcastor3d )
 endif ()
 
-if ( VCPKG_BUILD )
+if ( VCPKG_BUILD OR CASTOR_FORCE_VCPKG_SUBMODULES )
 	find_package( Ashes CONFIG REQUIRED ashespp )
 else ()
 	# Ashes external library
@@ -118,7 +118,7 @@ if ( ${CASTOR_BUILD_CASTOR3D} )
 		endif ()
 	endif ()
 
-	if ( VCPKG_BUILD )
+	if ( VCPKG_BUILD OR CASTOR_FORCE_VCPKG_SUBMODULES )
 		find_package( RenderGraph CONFIG REQUIRED )
 	else ()
 		# RenderGraph external library
@@ -130,7 +130,7 @@ if ( ${CASTOR_BUILD_CASTOR3D} )
 		add_subdirectory( ../${RENDERGRAPH_DIR} ${CMAKE_BINARY_DIR}/${RENDERGRAPH_DIR} )
 	endif ()
 
-	if ( VCPKG_BUILD )
+	if ( VCPKG_BUILD OR CASTOR_FORCE_VCPKG_SUBMODULES )
 		find_package( ShaderWriter CONFIG REQUIRED ShaderAST ShaderWriter CompilerSpirV )
 	else ()
 		# ShaderWriter external library
