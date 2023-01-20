@@ -155,8 +155,6 @@ namespace castor3d
 		{
 			m_sceneUbo->setWindowSize( m_size );
 		}
-
-		m_culler.registerRenderPass( *this );
 	}
 
 	RenderNodesPass::~RenderNodesPass()
