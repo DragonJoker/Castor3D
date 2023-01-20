@@ -1,7 +1,8 @@
-#import <CoreGraphics/CGDisplayConfiguration.h>
-
+#pragma clang diagnostic ignored "-Wimport-preprocessor-directive-pedantic"
 #pragma clang diagnostic ignored "-Wmissing-prototypes"
 #pragma GCC diagnostic ignored "-Wmissing-declarations"
+
+#import <CoreGraphics/CGDisplayConfiguration.h>
 
 void getDisplaySize( uint32_t * ww, uint32_t * hh )
 {
