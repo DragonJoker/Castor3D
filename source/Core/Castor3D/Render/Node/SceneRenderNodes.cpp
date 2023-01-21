@@ -311,11 +311,11 @@ namespace castor3d
 
 		for ( auto pass : oldMaterial )
 		{
-			scnrendnd::rem( pass->getLightingModelId(), m_lightingModels );
 			auto submeshIt = m_submeshNodes.find( scnrendnd::makeNodeHash( *pass, data, instance ) );
 
 			if ( submeshIt != m_submeshNodes.end() )
 			{
+				scnrendnd::rem( pass->getLightingModelId(), m_lightingModels );
 				auto node = std::move( submeshIt->second );
 				m_submeshNodes.erase( submeshIt );
 
@@ -392,11 +392,11 @@ namespace castor3d
 
 		for ( auto pass : oldMaterial )
 		{
-			scnrendnd::rem( pass->getLightingModelId(), m_lightingModels );
 			auto billboardIt = m_billboardNodes.find( scnrendnd::makeNodeHash( *pass, billboard ) );
 
 			if ( billboardIt != m_billboardNodes.end() )
 			{
+				scnrendnd::rem( pass->getLightingModelId(), m_lightingModels );
 				auto node = std::move( billboardIt->second );
 				m_billboardNodes.erase( billboardIt );
 

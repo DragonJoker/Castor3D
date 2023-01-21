@@ -58,24 +58,11 @@ namespace castor3d
 			, crg::RecordContext & context
 			, VkCommandBuffer commandBuffer
 			, uint32_t passIndex );
-		void doRecordDirectionalLightPass( LightRenderPass const & renderPass
-			, VkDescriptorSet baseDS
-			, size_t lightIndex
-			, crg::RecordContext & context
-			, VkCommandBuffer commandBuffer
-			, uint32_t passIndex );
 		void doRecordStencilPrePass( LightRenderPass const & renderPass
 			, VkDescriptorSet baseDS
 			, size_t lightIndex
 			, crg::RecordContext & context
 			, VkCommandBuffer commandBuffer );
-		void doRecordMeshLightPass( LightRenderPass const & renderPass
-			, LightRenderPass const & stencilRenderPass
-			, VkDescriptorSet baseDS
-			, size_t lightIndex
-			, crg::RecordContext & context
-			, VkCommandBuffer commandBuffer
-			, uint32_t passIndex );
 		void doRecordLightPass( LightRenderPass const & renderPass
 			, LightRenderPass const & stencilRenderPass
 			, VkDescriptorSet baseDS

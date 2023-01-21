@@ -1,7 +1,10 @@
 #include "Castor3D/Render/Opaque/Lighting/LightPipeline.hpp"
 
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Material/Pass/PassFactory.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
+#include "Castor3D/Shader/LightingModelFactory.hpp"
 
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
@@ -30,6 +33,14 @@ namespace castor3d
 		hash = castor::hashCombine( hash, size_t( shadowType ) );
 		hash = castor::hashCombine( hash, shadows );
 		return hash;
+	}
+
+	std::string LightPipelineConfig::getName( Engine const & engine )
+	{
+		auto & passFactory = engine.getPassFactory();
+		return "[" + castor3d::getName( lightType )
+			+ "][" + passFactory.getIdName( lightingModelId )
+			+ "]";
 	}
 
 	//*********************************************************************************************

@@ -25,6 +25,7 @@ namespace castor3d
 			, Light const & light );
 
 		size_t makeHash()const;
+		std::string getName( Engine const & engine );
 
 		LightingModelID lightingModelId;
 		SceneFlags const & sceneFlags;

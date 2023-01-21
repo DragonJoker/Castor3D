@@ -58,10 +58,10 @@ namespace castor3d
 		, m_scene{ scene }
 		, m_config{ config }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT
-			, castor::string::snakeToCamelCase( getName( m_config.lightType ) )
+			, "Vtx" + m_config.getName( *m_scene.getEngine() )
 			, LightPass::getVertexShaderSource( m_config.lightType ) }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT
-			, castor::string::snakeToCamelCase( getName( m_config.lightType ) )
+			, "Pxl" + m_config.getName( *m_scene.getEngine() )
 			, LightPass::getPixelShaderSource( m_config.lightingModelId
 				, m_scene.getBackgroundModelId()
 				, m_scene
@@ -415,21 +415,6 @@ namespace castor3d
 		}
 	}
 
-	void LightsPipeline::doRecordDirectionalLightPass( LightRenderPass const & renderPass
-		, VkDescriptorSet baseDS
-		, size_t lightIndex
-		, crg::RecordContext & context
-		, VkCommandBuffer commandBuffer
-		, uint32_t passIndex )
-	{
-		doRecordLightPassBase( renderPass
-			, baseDS
-			, lightIndex
-			, context
-			, commandBuffer
-			, passIndex );
-	}
-
 	void LightsPipeline::doRecordStencilPrePass( LightRenderPass const & renderPass
 		, VkDescriptorSet baseDS
 		, size_t lightIndex
@@ -485,28 +470,6 @@ namespace castor3d
 		m_context.vkCmdEndDebugBlock( commandBuffer );
 	}
 
-	void LightsPipeline::doRecordMeshLightPass( LightRenderPass const & renderPass
-		, LightRenderPass const & stencilRenderPass
-		, VkDescriptorSet baseDS
-		, size_t lightIndex
-		, crg::RecordContext & context
-		, VkCommandBuffer commandBuffer
-		, uint32_t passIndex )
-	{
-		CU_Require( m_stencilPipeline );
-		doRecordStencilPrePass( stencilRenderPass
-			, baseDS
-			, lightIndex
-			, context
-			, commandBuffer );
-		doRecordLightPassBase( renderPass
-			, baseDS
-			, lightIndex
-			, context
-			, commandBuffer
-			, passIndex );
-	}
-
 	void LightsPipeline::doRecordLightPass( LightRenderPass const & renderPass
 		, LightRenderPass const & stencilRenderPass
 		, VkDescriptorSet baseDS
@@ -516,29 +479,25 @@ namespace castor3d
 		, uint32_t passIndex )
 	{
 		m_context.vkCmdBeginDebugBlock( commandBuffer
-			, { castor::string::snakeToCamelCase( getName( m_config.lightType ) ) + "Light" + std::to_string( lightIndex )
+			, { "Light" + std::to_string( lightIndex ) + m_config.getName( *m_scene.getEngine() )
 				, m_context.getNextRainbowColour() } );
 
-		if ( m_config.lightType == LightType::eDirectional )
+		if ( m_config.lightType != LightType::eDirectional )
 		{
-			doRecordDirectionalLightPass( renderPass
+			CU_Require( m_stencilPipeline );
+			doRecordStencilPrePass( stencilRenderPass
 				, baseDS
 				, lightIndex
 				, context
-				, commandBuffer
-				, passIndex );
-		}
-		else
-		{
-			doRecordMeshLightPass( renderPass
-				, stencilRenderPass
-				, baseDS
-				, lightIndex
-				, context
-				, commandBuffer
-				, passIndex );
+				, commandBuffer );
 		}
 
+		doRecordLightPassBase( renderPass
+			, baseDS
+			, lightIndex
+			, context
+			, commandBuffer
+			, passIndex );
 		m_context.vkCmdEndDebugBlock( commandBuffer );
 	}
 

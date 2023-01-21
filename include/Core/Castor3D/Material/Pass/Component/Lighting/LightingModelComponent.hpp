@@ -70,6 +70,10 @@ namespace castor3d
 
 	private:
 		PassComponentUPtr doClone( Pass & pass )const override;
+		bool doWriteText( castor::String const & tabs
+			, castor::Path const & folder
+			, castor::String const & subfolder
+			, castor::StringStream & file )const override;
 		void doFillBuffer( PassBuffer & buffer )const override;
 	};
 }
