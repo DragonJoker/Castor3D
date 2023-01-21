@@ -22,6 +22,7 @@ namespace castor3d
 			{
 				cuT( "Depth" ),
 				cuT( "DepthObj" ),
+				cuT( "Visibility" ),
 			}
 		};
 
@@ -35,6 +36,7 @@ namespace castor3d
 			{
 				device.selectSuitableDepthStencilFormat( getFeatureFlags( getUsageFlags( texture ) ) ),
 				VK_FORMAT_R32G32B32A32_SFLOAT,
+				VK_FORMAT_R32G32_UINT,
 			}
 		};
 		return Values[size_t( texture )];
@@ -47,6 +49,7 @@ namespace castor3d
 			{
 				defaultClearDepthStencil,
 				makeClearValue( 1.0f, std::numeric_limits< float >::max(), 0.0f, 0.0f ),
+				makeClearValue( 0u, 0u, 0u, 0u ),
 			}
 		};
 		return Values[size_t( texture )];
@@ -59,6 +62,7 @@ namespace castor3d
 			{
 				VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT,
 				VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_STORAGE_BIT,
+				VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_STORAGE_BIT,
 			}
 		};
 		return Values[size_t( texture )];
@@ -71,6 +75,7 @@ namespace castor3d
 			{
 				VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK,
 				VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE,
+				VK_BORDER_COLOR_INT_OPAQUE_BLACK,
 			}
 		};
 		return Values[size_t( texture )];
@@ -78,15 +83,16 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	PrepassResult::PrepassResult( crg::ResourcesCache & handler
+	PrepassResult::PrepassResult( crg::ResourcesCache & resources
 		, RenderDevice const & device
-		, castor::Size const & size )
-		: GBufferT< PpTexture >{ handler
+		, TexturePtr depth
+		, bool needsVisibility )
+		: GBufferT< PpTexture >{ resources
 			, device
 			, cuT( "PPResult" )
-			, { nullptr, nullptr }
+			, { depth, nullptr, ( needsVisibility ?  nullptr : std::make_shared< Texture >() ) }
 			, 0u
-			, size }
+			, makeSize( depth->getExtent() ) }
 	{
 	}
 
