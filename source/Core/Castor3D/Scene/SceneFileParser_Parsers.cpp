@@ -354,23 +354,6 @@ namespace castor3d
 	}
 	CU_EndAttributePush( CSCNSection::eFont )
 
-	CU_ImplementAttributeParser( parserRootMaterials )
-	{
-		auto & parsingContext = getParserContext( context );
-
-		if ( params.empty() )
-		{
-			CU_ParsingError( cuT( "Missing parameter." ) );
-		}
-		else if ( !params.empty() )
-		{
-			uint32_t value;
-			params[0]->get( value );
-			parsingContext.parser->getEngine()->setDefaultLightingModel( LightingModelID( value ) );
-		}
-	}
-	CU_EndAttribute()
-
 	CU_ImplementAttributeParser( parserRootPanelOverlay )
 	{
 		auto & parsingContext = getParserContext( context );

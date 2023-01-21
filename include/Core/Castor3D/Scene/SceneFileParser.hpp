@@ -271,7 +271,6 @@ namespace castor3d
 
 	public:
 		C3D_API static UInt32StrMap comparisonModes;
-		C3D_API static UInt32StrMap materialTypes;
 	};
 
 	C3D_API SceneFileContext & getParserContext( castor::FileParserContext & context );

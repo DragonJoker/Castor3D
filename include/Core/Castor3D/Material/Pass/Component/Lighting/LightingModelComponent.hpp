@@ -31,6 +31,8 @@ namespace castor3d
 			{
 			}
 
+			void createParsers( castor::AttributeParsers & parsers
+				, ChannelFillers & channelFillers )const override;
 			void zeroBuffer( Pass const & pass
 				, shader::PassMaterialShader const & materialShader
 				, PassBuffer & buffer )const override;

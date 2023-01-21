@@ -3,8 +3,6 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Limits.hpp"
 #include "Castor3D/Material/Pass/PassFactory.hpp"
-#include "Castor3D/Material/Pass/PbrPass.hpp"
-#include "Castor3D/Material/Pass/PhongPass.hpp"
 #include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
 #include "Castor3D/Render/GlobalIllumination/GlobalIlluminationModule.hpp"
 #include "Castor3D/Scene/SceneFileParser_Parsers.hpp"
@@ -30,7 +28,6 @@ namespace castor3d
 			addParser( result, uint32_t( CSCNSection::eRoot ), cuT( "sampler" ), parserSamplerState, { makeParameter< ParameterType::eName >() } );
 			addParser( result, uint32_t( CSCNSection::eRoot ), cuT( "debug_overlays" ), parserRootDebugOverlays, { makeParameter< ParameterType::eBool >() } );
 			addParser( result, uint32_t( CSCNSection::eRoot ), cuT( "window" ), parserRootWindow, { makeParameter< ParameterType::eName >() } );
-			addParser( result, uint32_t( CSCNSection::eRoot ), cuT( "materials" ), parserRootMaterials, { makeParameter< ParameterType::eCheckedText >( "MaterialType", SceneFileParser::materialTypes ) } );
 			addParser( result, uint32_t( CSCNSection::eRoot ), cuT( "max_image_size" ), parserRootMaxImageSize, { makeParameter< ParameterType::eUInt32 >() } );
 			addParser( result, uint32_t( CSCNSection::eRoot ), cuT( "lpv_grid_size" ), parserRootLpvGridSize, { makeParameter< ParameterType::eUInt32 >() } );
 			addParser( result, uint32_t( CSCNSection::eRoot ), cuT( "default_unit" ), parserRootDefaultUnit, { makeParameter< ParameterType::eCheckedText, castor::LengthUnit >() } );
@@ -729,29 +726,11 @@ namespace castor3d
 	//****************************************************************************************************
 
 	UInt32StrMap SceneFileParser::comparisonModes;
-	UInt32StrMap SceneFileParser::materialTypes;
 
 	SceneFileParser::SceneFileParser( Engine & engine )
 		: OwnedBy< Engine >( engine )
 		, FileParser{ engine.getLogger(), uint32_t( CSCNSection::eRoot ) }
 	{
-		if ( materialTypes.empty() )
-		{
-			for ( auto & entry : engine.getPassFactory().listRegisteredTypes() )
-			{
-				materialTypes.emplace( entry.name, uint32_t( entry.id ) );
-
-				if ( entry.name == PhongPass::LightingModel )
-				{
-					materialTypes.emplace( PhongPass::Type, uint32_t( entry.id ) );
-				}
-				else if ( entry.name == PbrPass::LightingModel )
-				{
-					materialTypes.emplace( PbrPass::Type, uint32_t( entry.id ) );
-				}
-			}
-		}
-
 		for ( auto const & it : getEngine()->getAdditionalParsers() )
 		{
 			registerParsers( it.first, it.second );

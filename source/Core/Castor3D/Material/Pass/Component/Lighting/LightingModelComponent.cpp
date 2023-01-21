@@ -19,6 +19,28 @@ namespace castor3d
 {
 	//*********************************************************************************************
 
+	namespace lgtmdl
+	{
+		static CU_ImplementAttributeParser( parserRootMaterials )
+		{
+			auto & parsingContext = getParserContext( context );
+
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else if ( !params.empty() )
+			{
+				auto name = LightingModelFactory::normaliseName( params[0]->get< castor::String >() );
+				auto & engine = *parsingContext.parser->getEngine();
+				engine.setDefaultLightingModel( engine.getLightingModelFactory().getNameId( name ) );
+			}
+		}
+		CU_EndAttribute()
+	}
+
+	//*********************************************************************************************
+
 	LightingModelComponent::MaterialShader::MaterialShader()
 		: shader::PassMaterialShader{ 4u }
 	{
@@ -35,6 +57,16 @@ namespace castor3d
 	}
 
 	//*********************************************************************************************
+
+	void LightingModelComponent::Plugin::createParsers( castor::AttributeParsers & parsers
+		, ChannelFillers & channelFillers )const
+	{
+		castor::addParserT( parsers
+			, uint32_t( CSCNSection::eRoot )
+			, cuT( "materials" )
+			, lgtmdl::parserRootMaterials
+			, { castor::makeParameter< castor::ParameterType::eText >() } );
+	}
 
 	void LightingModelComponent::Plugin::zeroBuffer( Pass const & pass
 		, shader::PassMaterialShader const & materialShader
