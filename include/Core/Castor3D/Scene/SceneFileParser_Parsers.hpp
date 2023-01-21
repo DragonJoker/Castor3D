@@ -21,7 +21,6 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserRootTextOverlay )
 	CU_DeclareAttributeParser( parserRootDebugOverlays )
 	CU_DeclareAttributeParser( parserRootWindow )
-	CU_DeclareAttributeParser( parserRootMaterials )
 	CU_DeclareAttributeParser( parserRootMaxImageSize )
 	CU_DeclareAttributeParser( parserRootLpvGridSize )
 	CU_DeclareAttributeParser( parserRootDefaultUnit )
