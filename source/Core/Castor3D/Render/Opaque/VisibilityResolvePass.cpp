@@ -1,6 +1,5 @@
 #include "Castor3D/Render/Opaque/VisibilityResolvePass.hpp"
 
-#include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/ObjectBufferPool.hpp"
 #include "Castor3D/Buffer/ObjectBufferOffset.hpp"

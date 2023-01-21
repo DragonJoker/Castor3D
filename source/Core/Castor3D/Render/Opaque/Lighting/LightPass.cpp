@@ -1,6 +1,5 @@
 #include "Castor3D/Render/Opaque/Lighting/LightPass.hpp"
 
-#include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
