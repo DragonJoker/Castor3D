@@ -9,6 +9,7 @@ See LICENSE file in root folder
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
+#include "Castor3D/Render/Prepass/PrepassResult.hpp"
 #include "Castor3D/Scene/Background/BackgroundModule.hpp"
 
 #include <RenderGraph/FramePassGroup.hpp>
@@ -44,6 +45,7 @@ namespace castor3d
 			, QueueData const & queueData
 			, crg::FramePassArray const & previousPasses
 			, ProgressBar * progress
+			, TexturePtr depth
 			, bool deferred
 			, bool visbuffer );
 		/**
@@ -111,21 +113,17 @@ namespace castor3d
 		/**@{*/
 		C3D_API Engine * getEngine()const;
 		C3D_API crg::FramePass const & getLastPass()const;
+		C3D_API bool hasVisibility()const;
 
 		Texture const & getDepthObj()const
 		{
-			return *m_depthObj;
-		}
-
-		bool hasVisibility()const
-		{
-			return m_visibility != nullptr;
+			return m_result[PpTexture::eDepthObj];
 		}
 
 		Texture const & getVisibility()const
 		{
 			CU_Require( hasVisibility() );
-			return *m_visibility;
+			return m_result[PpTexture::eVisibility];
 		}
 
 		ashes::Buffer< int32_t > const & getDepthRange()const
@@ -163,8 +161,7 @@ namespace castor3d
 	private:
 		RenderDevice const & m_device;
 		crg::FramePassGroup & m_graph;
-		TexturePtr m_depthObj;
-		TexturePtr m_visibility;
+		PrepassResult m_result;
 		crg::FramePass * m_visibilityPassDesc{};
 		VisibilityPass * m_visibilityPass{};
 		crg::FramePass * m_depthPassDesc{};

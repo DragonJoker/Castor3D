@@ -53,6 +53,12 @@ namespace castor3d
 		C3D_API void create();
 		C3D_API void destroy();
 
+		operator bool()const
+		{
+			return resources != nullptr
+				&& device != nullptr;
+		}
+
 		C3D_API VkImageMemoryBarrier makeGeneralLayout( VkImageLayout srcLayout
 			, VkAccessFlags dstAccessFlags
 			, uint32_t srcQueueFamily = VK_QUEUE_FAMILY_IGNORED

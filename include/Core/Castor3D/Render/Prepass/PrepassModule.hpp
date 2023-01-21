@@ -26,6 +26,7 @@ namespace castor3d
 	{
 		eDepth, // D => Depth, S => Unused
 		eDepthObj, // R => Normalised depth, G => Linear depth, B => Node ID, A => Unused
+		eVisibility, // R => node ID + pipeline ID, G => primitive ID
 		CU_ScopedEnumBounds( eDepth ),
 	};
 	C3D_API castor::String getTextureName( PpTexture texture );

@@ -355,6 +355,7 @@ namespace castor3d
 			, queueData
 			, doCreateRenderPasses( progress , TechniquePassEvent::eBeforeDepth, &m_renderTarget.createVertexTransformPass() )
 			, progress
+			, m_depth
 			, deferred
 			, visbuffer }
 		, m_background{ doCreateBackgroundPass( progress ) }

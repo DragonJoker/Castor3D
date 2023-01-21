@@ -20,46 +20,21 @@ CU_ImplementCUSmartPtr( castor3d, PrepassRendering )
 
 namespace castor3d
 {
-	//*************************************************************************************************
-
 	PrepassRendering::PrepassRendering( RenderTechnique & parent
 		, RenderDevice const & device
 		, QueueData const & queueData
 		, crg::FramePassArray const & previousPasses
 		, ProgressBar * progress
+		, TexturePtr depth
 		, bool deferred
 		, bool visbuffer )
 		: castor::OwnedBy< RenderTechnique >{ parent }
 		, m_device{ device }
 		, m_graph{ parent.getRenderTarget().getGraph().createPassGroup( "Prepass" ) }
-		, m_depthObj{ std::make_shared< Texture >( m_device
-			, parent.getResources()
-			, parent.getName() + "/DepthObj"
-			, 0u
-			, parent.getResult().getExtent()
-			, 1u
-			, 1u
-			, VK_FORMAT_R32G32B32A32_SFLOAT
-			, ( VK_IMAGE_USAGE_SAMPLED_BIT
-				| VK_IMAGE_USAGE_TRANSFER_DST_BIT
-				| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
-				| VK_IMAGE_USAGE_STORAGE_BIT )
-			, VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE ) }
-		, m_visibility{ ( visbuffer && m_device.hasBindless()
-			? std::make_shared< Texture >( m_device
-				, parent.getResources()
-				, parent.getName() + "/Visibility"
-				, 0u
-				, parent.getResult().getExtent()
-				, 1u
-				, 1u
-				, VK_FORMAT_R32G32_UINT
-				, ( VK_IMAGE_USAGE_SAMPLED_BIT
-					| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-					| VK_IMAGE_USAGE_STORAGE_BIT )
-				, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK )
-			: nullptr ) }
+		, m_result{ parent.getResources()
+			, device
+			, depth
+			, visbuffer && m_device.hasBindless() }
 		, m_visibilityPassDesc{ ( hasVisibility()
 			? &doCreateVisibilityPass( progress, previousPasses )
 			: nullptr ) }
@@ -75,22 +50,11 @@ namespace castor3d
 			, parent.getName() + "/DepthRange" ) }
 		, m_computeDepthRangeDesc{ &doCreateComputeDepthRange( progress ) }
 	{
-		m_depthObj->create();
-
-		if ( hasVisibility() )
-		{
-			m_visibility->create();
-		}
+		m_result.create();
 	}
 
 	PrepassRendering::~PrepassRendering()
 	{
-		if ( hasVisibility() )
-		{
-			m_visibility->destroy();
-		}
-
-		m_depthObj->destroy();
 	}
 
 	uint32_t PrepassRendering::countInitialisationSteps()
@@ -138,8 +102,8 @@ namespace castor3d
 	void PrepassRendering::accept( RenderTechniqueVisitor & visitor )
 	{
 		visitor.visit( "Technique DepthObj"
-			, *m_depthObj
-			, m_graph.getFinalLayoutState( m_depthObj->sampledViewId ).layout
+			, m_result[PpTexture::eDepthObj]
+			, m_graph.getFinalLayoutState( m_result[PpTexture::eDepthObj].sampledViewId ).layout
 			, TextureFactors{}.invert( true ) );
 
 		if ( hasVisibility() )
@@ -165,6 +129,11 @@ namespace castor3d
 		}
 
 		return *m_depthPassDesc;
+	}
+
+	bool PrepassRendering::hasVisibility()const
+	{
+		return bool( m_result[PpTexture::eVisibility] );
 	}
 
 	crg::FramePass & PrepassRendering::doCreateVisibilityPass( ProgressBar * progress
@@ -206,9 +175,9 @@ namespace castor3d
 		result.addDependencies( previousPasses );
 		result.addOutputDepthStencilView( getOwner()->getDepth().targetViewId
 			, defaultClearDepthStencil );
-		result.addOutputColourView( m_depthObj->targetViewId
+		result.addOutputColourView( m_result[PpTexture::eDepthObj].targetViewId
 			, makeClearValue( 1.0f, std::numeric_limits< float >::max(), 0.0f, 0.0f ) );
-		result.addOutputColourView( m_visibility->targetViewId
+		result.addOutputColourView( m_result[PpTexture::eVisibility].targetViewId
 			, opaqueBlackClearColor );
 		result.addOutputColourView( getOwner()->getRenderTarget().getVelocity()->targetViewId );
 		return result;
@@ -253,7 +222,7 @@ namespace castor3d
 		result.addDependencies( previousPasses );
 		result.addOutputDepthStencilView( getOwner()->getDepth().targetViewId
 			, defaultClearDepthStencil );
-		result.addOutputColourView( m_depthObj->targetViewId
+		result.addOutputColourView( m_result[PpTexture::eDepthObj].targetViewId
 			, makeClearValue( 1.0f, std::numeric_limits< float >::max(), 0.0f, 0.0f ) );
 		result.addOutputColourView( getOwner()->getRenderTarget().getVelocity()->targetViewId );
 		result.addOutputColourView( getOwner()->getNormal().targetViewId
@@ -298,7 +267,7 @@ namespace castor3d
 		result.addDependencies( previousPasses );
 		result.addOutputDepthStencilView( getOwner()->getDepth().targetViewId
 			, defaultClearDepthStencil );
-		result.addOutputColourView( m_depthObj->targetViewId
+		result.addOutputColourView( m_result[PpTexture::eDepthObj].targetViewId
 			, makeClearValue( 1.0f, std::numeric_limits< float >::max(), 0.0f, 0.0f ) );
 		result.addOutputColourView( getOwner()->getRenderTarget().getVelocity()->targetViewId );
 		return result;
@@ -323,7 +292,7 @@ namespace castor3d
 				return res;
 			} );
 		result.addDependency( *m_depthPassDesc );
-		result.addInputStorageView( m_depthObj->sampledViewId
+		result.addInputStorageView( m_result[PpTexture::eDepthObj].sampledViewId
 			, ComputeDepthRange::eInput );
 		result.addOutputStorageBuffer( { m_depthRange->getBuffer(), "DepthRange" }
 			, ComputeDepthRange::eOutput
