@@ -138,7 +138,7 @@ namespace convert
 		{
 			overridePassType = true;
 
-			if ( value == "blinn_phong" )
+			if ( value == "blinn_phong" || value == "phong" )
 			{
 				options.passType = castor3d::PhongPass::LightingModel;
 			}

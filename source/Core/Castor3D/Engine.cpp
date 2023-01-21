@@ -34,7 +34,7 @@
 #include "Castor3D/Scene/Background/Shaders/GlslImgBackground.hpp"
 #include "Castor3D/Scene/Background/Shaders/GlslNoIblBackground.hpp"
 #include "Castor3D/Shader/GlslToSpv.hpp"
-#include "Castor3D/Shader/Shaders/GlslLighting.hpp"
+#include "Castor3D/Shader/LightingModelFactory.hpp"
 
 #include <CastorUtils/Design/ResourceCache.hpp>
 #include <CastorUtils/FileParser/FileParser.hpp>
@@ -205,7 +205,7 @@ namespace castor3d
 			castor::File::directoryCreate( getEngineDirectory() );
 		}
 
-		m_lightingModelFactory = castor::makeUnique< shader::LightingModelFactory >();
+		m_lightingModelFactory = castor::makeUnique< LightingModelFactory >();
 
 		registerBackgroundModel( shader::ImgBackgroundModel::Name
 			, shader::ImgBackgroundModel::create );

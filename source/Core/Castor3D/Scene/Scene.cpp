@@ -38,7 +38,7 @@
 #include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Scene/Light/LightFactory.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleSystem.hpp"
-#include "Castor3D/Shader/Shaders/GlslLighting.hpp"
+#include "Castor3D/Shader/LightingModelFactory.hpp"
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
 
 #include <CastorUtils/Design/ResourceCache.hpp>
