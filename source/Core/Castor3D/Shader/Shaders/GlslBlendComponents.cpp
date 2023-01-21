@@ -18,6 +18,8 @@ namespace castor3d::shader
 		, colour{ getMember( "colour", vec3( 0.0_f ) ) }
 		, emissiveColour{ getMember( "emissiveColour", vec3( 0.0_f ) ) }
 		, emissiveFactor{ getMember( "emissiveFactor", 0.0_f ) }
+		, ambientColour{ getMember( "ambientColour", vec3( 1.0_f ) ) }
+		, ambientFactor{ getMember( "ambientFactor", 1.0_f ) }
 		, specular{ getMember( "specular", vec3( 0.0_f ) ) }
 		, transmission{ getMember( "transmission", 0.0_f ) }
 		, hasTransmission{ getMember( "hasTransmission", 0_u ) }
