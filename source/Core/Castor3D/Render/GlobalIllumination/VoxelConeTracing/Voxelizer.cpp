@@ -1,6 +1,5 @@
 #include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp"
 
-#include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Buffer/UniformBufferPool.hpp"

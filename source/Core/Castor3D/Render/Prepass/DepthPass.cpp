@@ -1,6 +1,5 @@
 #include "Castor3D/Render/Prepass/DepthPass.hpp"
 
-#include "Castor3D/Config.hpp"
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureView.hpp"
