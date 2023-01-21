@@ -42,12 +42,9 @@ namespace castor3d
 				VK_FORMAT_D16_UNORM,							// Depth
 				VK_FORMAT_R32_SFLOAT,							// Linear
 				VK_FORMAT_R32G32_SFLOAT,						// Variance
-				device.selectSmallestFormatRGBSFloatFormat( VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
-					| VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT ),	// Normal
-				device.selectSmallestFormatRGBSFloatFormat( VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
-					| VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT ),	// Position
-				device.selectSmallestFormatRGBUFloatFormat( VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
-					| VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT ),	// Flux
+				device.selectSmallestFormatRGBSFloatFormat( getFeatureFlags( getUsageFlags( SmTexture::eNormal ) ) ),	// Normal
+				device.selectSmallestFormatRGBSFloatFormat( getFeatureFlags( getUsageFlags( SmTexture::ePosition ) ) ),	// Position
+				device.selectSmallestFormatRGBUFloatFormat( getFeatureFlags( getUsageFlags( SmTexture::eFlux ) ) ),	// Flux
 			}
 		};
 		return Values[size_t( texture )];

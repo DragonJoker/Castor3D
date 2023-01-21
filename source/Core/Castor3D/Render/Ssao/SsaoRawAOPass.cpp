@@ -590,13 +590,15 @@ namespace castor3d
 			, m_device
 			, m_graph.getName() + "SsaoRawAOResult"
 			, device.selectSmallestFormatRSFloatFormat( VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
-				| VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT )
+				| VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT
+				| VK_FORMAT_FEATURE_TRANSFER_SRC_BIT )
 			, m_size ) }
 		, m_bentNormals{ ssaoraw::doCreateTexture( *normals.resources
 			, m_device
 			, m_graph.getName() + "BentNormals"
 			, device.selectSmallestFormatRGBSFloatFormat( VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
-				| VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT )
+				| VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT
+				| VK_FORMAT_FEATURE_TRANSFER_SRC_BIT )
 			, m_size ) }
 		, m_programs{ Program{ device, false, m_graph.getName() }
 			, Program{ device, true, m_graph.getName() } }

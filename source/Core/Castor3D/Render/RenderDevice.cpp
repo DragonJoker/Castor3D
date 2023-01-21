@@ -624,6 +624,13 @@ namespace castor3d
 			CU_Exception( "Could not find a suitable format." );
 		}
 
+		if ( it != formats.begin() )
+		{
+			log::warn << "The first format (" << ashes::getName( *formats.begin() )
+				<< ") did not support the wanted properties, using a secondary choice (" << ashes::getName( *it )
+				<< ").\n";
+		}
+
 		return *it;
 	}
 

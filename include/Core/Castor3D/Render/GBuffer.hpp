@@ -16,6 +16,8 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	C3D_API VkFormatFeatureFlags getFeatureFlags( VkImageUsageFlags flags );
+
 	class GBufferBase
 		: public castor::Named
 	{

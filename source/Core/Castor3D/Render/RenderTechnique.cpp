@@ -297,22 +297,17 @@ namespace castor3d
 			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
 		, m_depth{ std::make_shared< Texture >( m_device
 			, m_renderTarget.getResources()
-			, getName() + "/Depth"
+			, getName() + "/" + getTexName( PpTexture::eDepth )
 			, 0u
 			, m_colour.getExtent()
 			, 1u
 			, 1u
-			, m_device.selectSuitableDepthStencilFormat( VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
-				| VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT
-				| VK_FORMAT_FEATURE_TRANSFER_SRC_BIT )
-			, ( VK_IMAGE_USAGE_SAMPLED_BIT
-				| VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT
-				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
-				| VK_IMAGE_USAGE_TRANSFER_DST_BIT )
-			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK ) }
+			, getFormat( m_device, PpTexture::eDepth )
+			, getUsageFlags( PpTexture::eDepth )
+			, getBorderColor( PpTexture::eDepth ) ) }
 		, m_normal{ std::make_shared< Texture >( m_device
 			, m_renderTarget.getResources()
-			, getName() + "/NmlOcc"
+			, getName() + "/" + getTexName( DsTexture::eNmlOcc )
 			, 0u
 			, m_colour.getExtent()
 			, 1u

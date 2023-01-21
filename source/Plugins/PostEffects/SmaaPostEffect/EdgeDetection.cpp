@@ -95,7 +95,8 @@ namespace smaa
 			, m_extent
 			, 1u
 			, 1u
-			, device.selectSuitableStencilFormat( VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT )
+			, device.selectSuitableStencilFormat( VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
+				| VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT )
 			, ( VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT ) }
 		, m_outDepthStencilView{ m_graph.createView( crg::ImageViewData{ "SMEDStRes"
