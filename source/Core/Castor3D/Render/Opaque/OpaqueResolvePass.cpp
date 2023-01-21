@@ -298,7 +298,7 @@ namespace castor3d
 								, clrCot } );
 
 						auto directAmbient = writer.declLocale( "directAmbient"
-							, c3d_sceneData.ambientLight );
+							, components.ambientColour * c3d_sceneData.ambientLight * components.ambientFactor );
 						auto lightDiffuse = writer.declLocale( "lightDiffuse"
 							, c3d_mapLightDiffuse.lod( vtx_texture, 0.0_f ).xyz() );
 						auto lightSpecular = writer.declLocale( "lightSpecular"

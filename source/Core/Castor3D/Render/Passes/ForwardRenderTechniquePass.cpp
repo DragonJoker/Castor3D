@@ -276,7 +276,7 @@ namespace castor3d
 						, output );
 
 					auto directAmbient = writer.declLocale( "directAmbient"
-						, c3d_sceneData.ambientLight );
+						, components.ambientColour * c3d_sceneData.ambientLight * components.ambientFactor );
 					auto reflectedDiffuse = writer.declLocale( "reflectedDiffuse"
 						, vec3( 0.0_f ) );
 					auto reflectedSpecular = writer.declLocale( "reflectedSpecular"

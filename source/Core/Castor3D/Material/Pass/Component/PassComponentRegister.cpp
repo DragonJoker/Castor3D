@@ -11,6 +11,7 @@
 #include "Castor3D/Material/Pass/Component/Base/TexturesComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Base/TwoSidedComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Base/UntileMappingComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Lighting/AmbientComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/AttenuationComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/ClearcoatComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/EmissiveComponent.hpp"
@@ -163,6 +164,7 @@ namespace castor3d
 		registerComponent< HeightComponent >();
 		registerComponent< OpacityComponent >();
 		registerComponent< ColourComponent >();
+		registerComponent< AmbientComponent >();
 		registerComponent< EmissiveComponent >();
 		registerComponent< TransmissionComponent >();
 		registerComponent< AttenuationComponent >();

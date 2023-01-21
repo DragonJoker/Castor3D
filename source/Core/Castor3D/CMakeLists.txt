@@ -425,6 +425,7 @@ source_group( "Header Files\\Material\\Pass\\Component\\Base" FILES ${${PROJECT_
 source_group( "Source Files\\Material\\Pass\\Component\\Base" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
 
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Pass/Component/Lighting/AmbientComponent.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Pass/Component/Lighting/AttenuationComponent.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Pass/Component/Lighting/ClearcoatComponent.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Pass/Component/Lighting/EmissiveComponent.cpp
@@ -439,6 +440,7 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Material/Pass/Component/Lighting/TransmissionComponent.cpp
 )
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/Pass/Component/Lighting/AmbientComponent.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/Pass/Component/Lighting/AttenuationComponent.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/Pass/Component/Lighting/ClearcoatComponent.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Material/Pass/Component/Lighting/EmissiveComponent.hpp
