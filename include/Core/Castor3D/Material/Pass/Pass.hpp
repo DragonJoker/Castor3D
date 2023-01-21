@@ -380,6 +380,7 @@ namespace castor3d
 		C3D_API PassComponentTextureFlag getHeightMapFlags()const;
 		C3D_API PassComponentTextureFlag getOcclusionMapFlags()const;
 		C3D_API castor::String getTextureFlagsName( PassComponentTextureFlag flags )const;
+		C3D_API LightingModelID getLightingModelId()const;
 
 		bool hasAutomaticShader()const
 		{
@@ -394,11 +395,6 @@ namespace castor3d
 		bool isImplicit()const
 		{
 			return m_implicit;
-		}
-
-		LightingModelID getLightingModelId()const
-		{
-			return m_lightingModelId;
 		}
 
 		RenderPassRegisterInfo * getRenderPassInfo()const
@@ -506,7 +502,6 @@ namespace castor3d
 		mutable std::atomic_bool m_dirty{ true };
 
 	private:
-		LightingModelID m_lightingModelId;
 		PassComponentCombine m_componentCombine;
 		TextureCombine m_textureCombine;
 		uint32_t m_index;

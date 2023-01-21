@@ -16,6 +16,7 @@
 #include "Castor3D/Material/Pass/Component/Base/TextureCountComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Base/TwoSidedComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Base/UntileMappingComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Lighting/LightingModelComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/TransmissionComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Other/AlphaTestComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Other/OpacityComponent.hpp"
@@ -164,12 +165,12 @@ namespace castor3d
 	Pass::Pass( Material & parent
 		, LightingModelID lightingModelId )
 		: OwnedBy< Material >{ parent }
-		, m_lightingModelId{ lightingModelId }
 		, m_index{ parent.getPassCount() }
 		, m_renderPassInfo{ getOwner()->getRenderPassInfo() }
 	{
 		createComponent< BlendComponent >();
 		createComponent< PassHeaderComponent >();
+		createComponent< LightingModelComponent >()->setLightingModelId( lightingModelId );
 		createComponent< TwoSidedComponent >();
 		createComponent< TexturesComponent >();
 		createComponent< TextureCountComponent >();
@@ -961,6 +962,18 @@ namespace castor3d
 		return it == m_components.end()
 			? castor::String{}
 			: it->second->getPlugin().getTextureFlagsName( flags );
+	}
+
+	LightingModelID Pass::getLightingModelId()const
+	{
+		LightingModelID result{};
+
+		if ( auto component = getComponent< LightingModelComponent >() )
+		{
+			result = component->getLightingModelId();
+		}
+
+		return result;
 	}
 
 	void Pass::enableLighting( bool value )

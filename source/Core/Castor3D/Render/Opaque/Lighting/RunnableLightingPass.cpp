@@ -142,9 +142,12 @@ namespace castor3d
 		, bool hasStencil
 		, LightPassResult const & lpResult )
 	{
-		castor::String name = blend
-			? castor::String{ cuT( "Blend" ) }
-			: castor::String{ cuT( "First" ) };
+		castor::String name = ( hasStencil
+				? castor::String{ cuT( "Stencil" ) }
+				: castor::String{ cuT( "" ) } )
+			+ ( blend
+				? castor::String{ cuT( "Blend" ) }
+				: castor::String{ cuT( "First" ) } );
 		std::array< VkImageLayout, 6u > layouts{ ( ( blend || hasStencil ) ? VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL : VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL )
 			, ( blend ? VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL : VK_IMAGE_LAYOUT_UNDEFINED )
 			, ( blend ? VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL : VK_IMAGE_LAYOUT_UNDEFINED )
@@ -308,8 +311,7 @@ namespace castor3d
 	LightRenderPass RunnableLightingPass::doCreateStencilRenderPass( bool blend
 		, LightPassResult const & lpResult )
 	{
-		castor::String name = cuT( "Stencil" )
-			+ ( blend
+		castor::String name = ( blend
 				? castor::String{ cuT( "Blend" ) }
 				: castor::String{ cuT( "First" ) } );
 		std::array< VkImageLayout, 1u > layouts{ ( blend ? VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL : VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) };
@@ -358,7 +360,7 @@ namespace castor3d
 			std::move( dependencies ),
 		};
 		LightRenderPass result{};
-		result.renderPass = m_device->createRenderPass( "LightPass" + name
+		result.renderPass = m_device->createRenderPass( "StencilPass" + name
 			, std::move( rpCreateInfo ) );
 
 		std::vector< VkImageView > viewAttaches{ lpResult[LpTexture::eDepth].targetView };
@@ -375,7 +377,7 @@ namespace castor3d
 		fbCreateInfo.width = lpResult[LpTexture::eDepth].getExtent().width;
 		fbCreateInfo.height = lpResult[LpTexture::eDepth].getExtent().height;
 		fbCreateInfo.layers = 1u;
-		result.framebuffer = result.renderPass->createFrameBuffer( "LightPass" + name
+		result.framebuffer = result.renderPass->createFrameBuffer( "StencilPass" + name
 			, std::move( fbCreateInfo ) );
 
 		result.clearValues.push_back( defaultClearDepthStencil );

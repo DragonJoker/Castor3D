@@ -4,6 +4,8 @@
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Pass/PassFactory.hpp"
 #include "Castor3D/Material/Pass/PassVisitor.hpp"
+#include "Castor3D/Material/Pass/PbrPass.hpp"
+#include "Castor3D/Material/Pass/PhongPass.hpp"
 #include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Scene/SceneFileParser.hpp"
@@ -14,6 +16,26 @@
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 
 #include <CastorUtils/FileParser/ParserParameter.hpp>
+
+namespace castor
+{
+	template<>
+	class TextWriter< castor3d::LightingModelComponent >
+		: public TextWriterT< castor3d::LightingModelComponent >
+	{
+	public:
+		explicit TextWriter( String const & tabs )
+			: TextWriterT< castor3d::LightingModelComponent >{ tabs }
+		{
+		}
+
+		bool operator()( castor3d::LightingModelComponent const & object
+			, StringStream & file )override
+		{
+			return write( file, cuT( "lighting_model" ), object.getLightingModelName() );
+		}
+	};
+}
 
 namespace castor3d
 {
@@ -34,6 +56,28 @@ namespace castor3d
 				auto name = LightingModelFactory::normaliseName( params[0]->get< castor::String >() );
 				auto & engine = *parsingContext.parser->getEngine();
 				engine.setDefaultLightingModel( engine.getLightingModelFactory().getNameId( name ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParser( parserPassLightingModel )
+		{
+			auto & parsingContext = getParserContext( context );
+
+			if ( !parsingContext.pass )
+			{
+				CU_ParsingError( cuT( "No Pass initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				auto name = LightingModelFactory::normaliseName( params[0]->get< castor::String >() );
+				auto & engine = *parsingContext.parser->getEngine();
+				auto & component = getPassComponent< LightingModelComponent >( parsingContext );
+				component.setLightingModelId( engine.getLightingModelFactory().getNameId( name ) );
 			}
 		}
 		CU_EndAttribute()
@@ -65,6 +109,11 @@ namespace castor3d
 			, uint32_t( CSCNSection::eRoot )
 			, cuT( "materials" )
 			, lgtmdl::parserRootMaterials
+			, { castor::makeParameter< castor::ParameterType::eText >() } );
+		castor::addParserT( parsers
+			, uint32_t( CSCNSection::ePass )
+			, cuT( "lighting_model" )
+			, lgtmdl::parserPassLightingModel
 			, { castor::makeParameter< castor::ParameterType::eText >() } );
 	}
 
@@ -107,6 +156,14 @@ namespace castor3d
 		auto result = std::make_unique< LightingModelComponent >( pass );
 		result->setData( getData() );
 		return result;
+	}
+
+	bool LightingModelComponent::doWriteText( castor::String const & tabs
+		, castor::Path const & folder
+		, castor::String const & subfolder
+		, castor::StringStream & file )const
+	{
+		return castor::TextWriter< LightingModelComponent >{ tabs }( *this, file );
 	}
 
 	void LightingModelComponent::doFillBuffer( PassBuffer & buffer )const
