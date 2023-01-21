@@ -40,20 +40,13 @@ namespace castor3d
 		{
 			{
 				VK_FORMAT_D32_SFLOAT_S8_UINT,
-				device.selectSmallestFormatRGBUFloatFormat( VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
-					| VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT ),
-				device.selectSmallestFormatRGBUFloatFormat( VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
-					| VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT ),
-				device.selectSmallestFormatRGBUFloatFormat( VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
-					| VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT ),
-				device.selectSmallestFormatRGBUFloatFormat( VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
-					| VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT ),
-				device.selectSmallestFormatRGSFloatFormat( VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
-					| VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT ),
-				device.selectSmallestFormatRGBUFloatFormat( VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
-					| VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT ),
-				device.selectSmallestFormatRGBUFloatFormat( VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
-					| VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT ),
+				device.selectSmallestFormatRGBUFloatFormat( getFeatureFlags( getUsageFlags( LpTexture::eDiffuse ) ) ),
+				device.selectSmallestFormatRGBUFloatFormat( getFeatureFlags( getUsageFlags( LpTexture::eSpecular ) ) ),
+				device.selectSmallestFormatRGBUFloatFormat( getFeatureFlags( getUsageFlags( LpTexture::eScattering ) ) ),
+				device.selectSmallestFormatRGBUFloatFormat( getFeatureFlags( getUsageFlags( LpTexture::eCoatingSpecular ) ) ),
+				device.selectSmallestFormatRGSFloatFormat( getFeatureFlags( getUsageFlags( LpTexture::eSheen ) ) ),
+				device.selectSmallestFormatRGBUFloatFormat( getFeatureFlags( getUsageFlags( LpTexture::eIndirectDiffuse ) ) ),
+				device.selectSmallestFormatRGBUFloatFormat( getFeatureFlags( getUsageFlags( LpTexture::eIndirectSpecular ) ) ),
 			}
 		};
 		return Values[size_t( texture )];

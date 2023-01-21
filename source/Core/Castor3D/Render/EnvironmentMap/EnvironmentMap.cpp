@@ -47,7 +47,9 @@ namespace castor3d
 				, 6u * MaxEnvironmentMapCount
 				, uint32_t( castor::getBitSize( MapSize[0] ) )
 				, device.selectSmallestFormatRGBUFloatFormat( VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT
-					| VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT )
+					| VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT
+					| VK_FORMAT_FEATURE_TRANSFER_DST_BIT
+					| VK_FORMAT_FEATURE_TRANSFER_SRC_BIT )
 				, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 					| VK_IMAGE_USAGE_SAMPLED_BIT
 					| VK_IMAGE_USAGE_TRANSFER_DST_BIT
@@ -67,7 +69,8 @@ namespace castor3d
 				, makeExtent3D( size )
 				, 6u * MaxEnvironmentMapCount
 				, 1u
-				, device.selectSuitableDepthStencilFormat( VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT )
+				, device.selectSuitableDepthStencilFormat( VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT
+					| VK_FORMAT_FEATURE_TRANSFER_DST_BIT )
 				, ( VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT
 					| VK_IMAGE_USAGE_TRANSFER_DST_BIT )
 				, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK };
