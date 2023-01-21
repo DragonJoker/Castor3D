@@ -846,7 +846,7 @@ namespace castor3d
 			return m_resourceHandler;
 		}
 
-		shader::LightingModelFactory & getLightingModelFactory()const noexcept
+		LightingModelFactory & getLightingModelFactory()const noexcept
 		{
 			return *m_lightingModelFactory;
 		}
@@ -1080,7 +1080,7 @@ namespace castor3d
 		castor::AsyncJobQueue m_cpuJobs;
 		crg::ResourceHandler m_resourceHandler;
 		crg::ResourcesCache m_resources;
-		castor::UniquePtr< shader::LightingModelFactory > m_lightingModelFactory;
+		LightingModelFactoryUPtr m_lightingModelFactory;
 		shader::BackgroundModelFactory m_backgroundModelFactory;
 		SceneUPtr m_loadingScene;
 		std::unordered_map< castor::String, castor::UniquePtr< RenderPassRegisterInfo > > m_passRenderPassTypes;

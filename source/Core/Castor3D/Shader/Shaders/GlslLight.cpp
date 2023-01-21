@@ -1,6 +1,7 @@
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Shader/LightingModelFactory.hpp"
 #include "Castor3D/Shader/ShaderBuffers/LightBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"

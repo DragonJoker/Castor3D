@@ -158,7 +158,6 @@ namespace castor3d::shader
 		, Shadow & shadowModel
 		, Lights & lights
 		, bool enableVolumetric ) >;
-	class LightingModelFactory;
 
 	struct BackgroundModelEntry
 	{
@@ -249,7 +248,6 @@ namespace castor3d::shader
 
 	Writer_Parameter( DerivTex );
 
-	CU_DeclareCUSmartPtr( castor3d::shader, LightingModelFactory, C3D_API );
 	CU_DeclareSmartPtr( Material );
 
 	//@}

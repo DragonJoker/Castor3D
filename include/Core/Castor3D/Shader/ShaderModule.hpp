@@ -127,6 +127,15 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Factory for shader::LightingModel.
+	*\~french
+	*\brief
+	*	Fabrique de shader::LightingModel.
+	*/
+	class LightingModelFactory;
+	/**
+	*\~english
+	*\brief
 	*	Wrapper class to select between SSBO or TBO.
 	*\remarks
 	*	Allows to user either one or the other in the same way.
@@ -141,6 +150,7 @@ namespace castor3d
 
 	CU_DeclareCUSmartPtr( castor3d, ShaderBuffer, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, ShaderProgram, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, LightingModelFactory, C3D_API );
 
 	//@}
 }
