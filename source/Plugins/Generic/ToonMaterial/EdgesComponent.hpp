@@ -4,20 +4,12 @@ See LICENSE file in root folder
 #ifndef ___C3D_ToonPass_H___
 #define ___C3D_ToonPass_H___
 
+#include "Shaders/GlslToonLighting.hpp"
+
 #include <Castor3D/Material/Pass/Component/BaseDataPassComponent.hpp>
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/Graphics/RgbColour.hpp>
-
-#ifndef CU_PlatformWindows
-#	define C3D_ToonMaterial_API
-#else
-#	ifdef ToonMaterial_EXPORTS
-#		define C3D_ToonMaterial_API __declspec( dllexport )
-#	else
-#		define C3D_ToonMaterial_API __declspec( dllimport )
-#	endif
-#endif
 
 namespace toon
 {

@@ -51,7 +51,7 @@ jobs:
       shell: bash
       working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
       run: |
-        cmake $GITHUB_WORKSPACE --preset ci-${{ matrix.os[1] }} -DCMAKE_TOOLCHAIN_FILE=$GITHUB_WORKSPACE/external/vcpkg/scripts/buildsystems/vcpkg.cmake
+        cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{ matrix.buildType }} -DCMAKE_TOOLCHAIN_FILE=$GITHUB_WORKSPACE/external/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/package/Castor3D -DPROJECTS_WARNINGS_AS_ERRORS=$PROJ_WAE -DPROJECTS_UNITY_BUILD=ON -DPROJECTS_USE_PRECOMPILED_HEADERS=OFF -DSDW_GENERATE_SOURCE=OFF -DCASTOR_BUILD_PLUGINS=ON -DCASTOR_BUILDGRP_INTEROP=OFF -DCASTOR_BUILDGRP_TEST=OFF -DCASTOR_USE_GLSLANG=ON -DCASTOR_DISABLE_DELAYED_INITIALISATION=ON -DASHES_BUILD_RENDERER_OGL=OFF -DCASTOR_BUILDGRP_SAMPLE=OFF -DCASTOR_BUILDGRP_TOOL=OFF -DCASTOR_FORCE_VCPKG_SUBMODULES=ON
     - name: Build
       if: steps.configure.conclusion == 'success'
       id: build
@@ -105,7 +105,7 @@ jobs:
       shell: bash
       working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
       run: |
-        cmake $GITHUB_WORKSPACE --preset ci-${{ matrix.os[1] }} -DCMAKE_TOOLCHAIN_FILE=$GITHUB_WORKSPACE/external/vcpkg/scripts/buildsystems/vcpkg.cmake
+        cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{ matrix.buildType }} -DCMAKE_TOOLCHAIN_FILE=$GITHUB_WORKSPACE/external/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/package/Castor3D -DPROJECTS_UNITY_BUILD=ON -DPROJECTS_USE_PRECOMPILED_HEADERS=OFF -DSDW_GENERATE_SOURCE=OFF -DCASTOR_BUILD_PLUGINS=ON -DCASTOR_BUILDGRP_INTEROP=OFF -DCASTOR_BUILDGRP_TEST=OFF -DCASTOR_USE_GLSLANG=ON -DCASTOR_DISABLE_DELAYED_INITIALISATION=ON -DASHES_BUILD_RENDERER_OGL=OFF -DCASTOR_BUILDGRP_SAMPLE=OFF -DCASTOR_BUILDGRP_TOOL=OFF -DCASTOR_FORCE_VCPKG_SUBMODULES=ON
     - name: Build
       if: steps.configure.conclusion == 'success'
       id: build
@@ -183,7 +183,7 @@ jobs:
       shell: bash
       working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
       run: |
-        cmake $GITHUB_WORKSPACE --preset ci-${{ matrix.os[1] }} -DCMAKE_TOOLCHAIN_FILE=$GITHUB_WORKSPACE/external/vcpkg/scripts/buildsystems/vcpkg.cmake
+        cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{ matrix.buildType }} -DCMAKE_TOOLCHAIN_FILE=$GITHUB_WORKSPACE/external/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/package/Castor3D -DPROJECTS_WARNINGS_AS_ERRORS=$PROJ_WAE -DPROJECTS_UNITY_BUILD=ON -DPROJECTS_USE_PRECOMPILED_HEADERS=OFF -DSDW_GENERATE_SOURCE=OFF -DCASTOR_BUILD_PLUGINS=ON -DCASTOR_BUILDGRP_INTEROP=OFF -DCASTOR_BUILDGRP_TEST=OFF -DCASTOR_USE_GLSLANG=ON -DCASTOR_DISABLE_DELAYED_INITIALISATION=ON -DASHES_BUILD_RENDERER_OGL=OFF -DCASTOR_BUILDGRP_SAMPLE=OFF -DCASTOR_BUILDGRP_TOOL=OFF -DCASTOR_FORCE_VCPKG_SUBMODULES=ON
     - name: Build
       if: steps.configure.conclusion == 'success'
       id: build
@@ -261,7 +261,7 @@ jobs:
       shell: bash
       working-directory: ${{runner.workspace}}/build-${{ matrix.buildType }}
       run: |
-        cmake $GITHUB_WORKSPACE --preset ci-${{ matrix.os[1] }} -DCMAKE_TOOLCHAIN_FILE=$GITHUB_WORKSPACE/external/vcpkg/scripts/buildsystems/vcpkg.cmake
+        cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{ matrix.buildType }} -DCMAKE_TOOLCHAIN_FILE=$GITHUB_WORKSPACE/external/vcpkg/scripts/buildsystems/vcpkg.cmake -DCMAKE_INSTALL_PREFIX=$GITHUB_WORKSPACE/package/Castor3D -DPROJECTS_WARNINGS_AS_ERRORS=$PROJ_WAE -DPROJECTS_UNITY_BUILD=ON -DPROJECTS_USE_PRECOMPILED_HEADERS=OFF -DSDW_GENERATE_SOURCE=OFF -DCASTOR_BUILD_PLUGINS=ON -DCASTOR_BUILDGRP_INTEROP=OFF -DCASTOR_BUILDGRP_TEST=OFF -DCASTOR_USE_GLSLANG=ON -DCASTOR_DISABLE_DELAYED_INITIALISATION=ON -DASHES_BUILD_RENDERER_OGL=OFF -DCASTOR_BUILDGRP_SAMPLE=OFF -DCASTOR_BUILDGRP_TOOL=OFF -DCASTOR_FORCE_VCPKG_SUBMODULES=ON
     - name: Build
       if: steps.configure.conclusion == 'success'
       id: build

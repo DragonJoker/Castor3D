@@ -10,7 +10,6 @@
 			"name": "default",
 			"displayName": "Default Config",
 			"description": "Default build configuration",
-			"generator": "Ninja",
 			"installDir": "${sourceDir}/package/Castor3D",
 			"cacheVariables": {
 				"PROJECTS_UNITY_BUILD": "ON",
@@ -31,7 +30,6 @@
 			"name": "ci-default",
 			"displayName": "Default CI Config",
 			"description": "Default CI build configuration",
-			"generator": "Ninja",
 			"binaryDir": "${sourceDir}/build-Release",
 			"installDir": "${sourceDir}/package/Castor3D",
 			"cacheVariables": {

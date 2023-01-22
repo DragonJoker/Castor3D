@@ -6,6 +6,8 @@
 #include <Castor3D/Material/Pass/Pass.hpp>
 #include <Castor3D/Material/Pass/PassFactory.hpp>
 #include <Castor3D/Material/Pass/PassVisitor.hpp>
+#include <Castor3D/Material/Pass/PhongPass.hpp>
+#include <Castor3D/Material/Pass/PbrPass.hpp>
 #include <Castor3D/Material/Pass/Component/Base/BlendComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Base/PassHeaderComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Base/TextureCountComponent.hpp>
@@ -14,6 +16,7 @@
 #include <Castor3D/Material/Pass/Component/Lighting/AttenuationComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/ClearcoatComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/EmissiveComponent.hpp>
+#include <Castor3D/Material/Pass/Component/Lighting/LightingModelComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/MetalnessComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/RoughnessComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/SheenComponent.hpp>
@@ -48,9 +51,11 @@
 #include <Castor3D/Material/Texture/TextureUnit.hpp>
 #include <Castor3D/Material/Texture/TextureLayout.hpp>
 #include <Castor3D/Miscellaneous/Logger.hpp>
+#include <Castor3D/Shader/LightingModelFactory.hpp>
 
 // Materials
 #include <EdgesComponent.hpp>
+#include <Shaders/GlslToonLighting.hpp>
 
 #include <CastorUtils/Config/BeginExternHeaderGuard.hpp>
 #include <assimp/material.h>
@@ -81,6 +86,7 @@ namespace c3d_assimp
 	static auto constexpr TextureType_METALNESS = aiTextureType( 15 );
 	static auto constexpr TextureType_DIFFUSE_ROUGHNESS = aiTextureType( 16 );
 	static auto constexpr TextureType_AMBIENT_OCCLUSION = aiTextureType( 17 );
+	static auto constexpr TextureType_OCCLUSION_ROUGHNESS_METALNESS = aiTextureType( 18 );
 	static auto constexpr TextureType_SHEEN = aiTextureType( 19 );
 	static auto constexpr TextureType_CLEARCOAT = aiTextureType( 20 );
 	static auto constexpr TextureType_TRANSMISSION = aiTextureType( 21 );
@@ -142,6 +148,7 @@ namespace c3d_assimp
 		private:
 			MaterialParser( aiMaterial const & material
 				, aiScene const & scene
+				, aiShadingMode shadingMode
 				, castor3d::SamplerRes sampler
 				, AssimpMaterialImporter const & importer
 				, float emissiveMult
@@ -153,6 +160,7 @@ namespace c3d_assimp
 				, m_importer{ importer }
 				, m_emissiveMult{ emissiveMult }
 				, m_textureRemaps{ textureRemaps }
+				, m_shadingModel{ shadingMode }
 				, m_isPbr{ detectPbr() }
 				, m_result{ result }
 				, m_colourMapPlugin{ m_result.getComponentPlugin< castor3d::ColourMapComponent >() }
@@ -223,13 +231,14 @@ namespace c3d_assimp
 		public:
 			static void parse( aiMaterial const & material
 				, aiScene const & scene
+				, aiShadingMode shadingMode
 				, castor3d::SamplerRes sampler
 				, AssimpMaterialImporter const & importer
 				, float emissiveMult
 				, std::map< castor3d::PassComponentTextureFlag, castor3d::TextureConfiguration > const & textureRemaps
 				, castor3d::Pass & pass )
 			{
-				MaterialParser parser{ material, scene, sampler, importer, emissiveMult, textureRemaps, pass };
+				MaterialParser parser{ material, scene, shadingMode, sampler, importer, emissiveMult, textureRemaps, pass };
 				parser.parseDatas();
 				parser.finish();
 				pass.prepareTextures();
@@ -945,7 +954,7 @@ namespace c3d_assimp
 			bool detectPbr()
 			{
 				return ( m_material.Get( AI_MATKEY_SHADING_MODEL, m_shadingModel ) == aiReturn_SUCCESS
-						&& ( m_shadingModel == aiShadingMode_PBR_BRDF || m_shadingModel == aiShadingMode_CookTorrance ) )
+						&& ( m_shadingModel == ShadingMode_PBR_BRDF || m_shadingModel == aiShadingMode_CookTorrance ) )
 					|| hasMatKey( AI_MATKEY_USE_COLOR_MAP )
 					|| hasMatKey( AI_MATKEY_BASE_COLOR )
 					|| hasMatKey( AI_MATKEY_USE_METALLIC_MAP )
@@ -1015,7 +1024,7 @@ namespace c3d_assimp
 
 					if ( nmlInfo.name.empty() )
 					{
-						nmlInfo = getTextureInfo( aiTextureType_NORMAL_CAMERA );
+						nmlInfo = getTextureInfo( TextureType_NORMAL_CAMERA );
 					}
 
 					opaInfo = getTextureInfo( aiTextureType_OPACITY );
@@ -1034,7 +1043,7 @@ namespace c3d_assimp
 			{
 				if ( spcInfo.name.empty() )
 				{
-					spcInfo = getTextureInfo( aiTextureType_UNKNOWN );
+					spcInfo = getTextureInfo( TextureType_OCCLUSION_ROUGHNESS_METALNESS );
 
 					if ( !spcInfo.name.empty() )
 					{
@@ -1219,6 +1228,38 @@ namespace c3d_assimp
 			castor3d::TextureConfiguration m_sheenBaseConfiguration;
 			castor3d::TextureConfiguration m_sheenRoughnessBaseConfiguration;
 		};
+
+		static castor3d::LightingModelID getLightingModel( castor3d::Engine const & engine
+			, aiShadingMode shadingMode )
+		{
+			auto & factory = engine.getLightingModelFactory();
+
+			if ( engine.getDefaultLightingModel() != factory.getNameId( castor3d::PhongPass::LightingModel ) )
+			{
+				return engine.getDefaultLightingModel();
+			}
+
+			switch ( shadingMode )
+			{
+			case aiShadingMode_Flat:
+			case aiShadingMode_Gouraud:
+			case aiShadingMode_Phong:
+			case aiShadingMode_Blinn:
+				return factory.getNameId( castor3d::PhongPass::LightingModel );
+			case aiShadingMode_Toon:
+				return factory.getNameId( toon::shader::ToonPhongLightingModel::getName() );
+			case aiShadingMode_OrenNayar:
+			case aiShadingMode_Minnaert:
+			case aiShadingMode_CookTorrance:
+			case aiShadingMode_Fresnel:
+			case aiShadingMode_PBR_BRDF:
+				return factory.getNameId( castor3d::PbrPass::LightingModel );
+			case aiShadingMode_Unlit:
+				return factory.getNameId( castor3d::PbrPass::LightingModel );
+			default:
+				return factory.getNameId( castor3d::PhongPass::LightingModel );
+			}
+		}
 	}
 
 	//*********************************************************************************************
@@ -1248,10 +1289,14 @@ namespace c3d_assimp
 			emissiveMult = value;
 		}
 
+		int ishadingMode{};
+		it->second->Get( AI_MATKEY_SHADING_MODEL, ishadingMode );
+		auto shadingMode = aiShadingMode( ishadingMode );
 		castor3d::log::info << cuT( "  Material found: [" ) << name << cuT( "]" ) << std::endl;
-		auto pass = material.createPass();
+		auto pass = material.createPass( materials::getLightingModel( *getEngine(), shadingMode ) );
 		materials::MaterialParser::parse( *it->second 
 			, file.getAiScene()
+			, shadingMode
 			, getEngine()->getDefaultSampler().lock()
 			, *this
 			, emissiveMult
