@@ -1,5 +1,5 @@
-cmake_minimum_required( VERSION 3.15 )
-cmake_policy( VERSION 3.15 )
+cmake_minimum_required( VERSION 3.21 )
+cmake_policy( VERSION 3.21 )
 
 option( CASTOR_FORCE_VCPKG_SUBMODULES "Build submodules from vcpkg instead of external folder" OFF )
 

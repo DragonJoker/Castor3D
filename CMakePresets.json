@@ -1,0 +1,78 @@
+{
+	"version": 3,
+	"cmakeMinimumRequired": {
+		"major": 3,
+		"minor": 21,
+		"patch": 0
+	},
+	"configurePresets": [
+		{
+			"name": "default",
+			"displayName": "Default Config",
+			"description": "Default build configuration",
+			"generator": "Ninja",
+			"installDir": "${sourceDir}/package/Castor3D",
+			"cacheVariables": {
+				"PROJECTS_UNITY_BUILD": "ON",
+				"PROJECTS_USE_PRECOMPILED_HEADERS": "OFF",
+				"SDW_GENERATE_SOURCE": "OFF",
+				"CASTOR_BUILD_PLUGINS": "ON",
+				"CASTOR_BUILDGRP_INTEROP": "OFF",
+				"CASTOR_BUILDGRP_TEST": "OFF",
+				"CASTOR_USE_GLSLANG": "ON",
+				"CASTOR_DISABLE_DELAYED_INITIALISATION": "ON",
+				"ASHES_BUILD_RENDERER_OGL": "OFF",
+				"CASTOR_BUILDGRP_SAMPLE": "ON",
+				"CASTOR_BUILDGRP_TOOL": "ON",
+				"CASTOR_FORCE_VCPKG_SUBMODULES": "OFF"
+			}
+		},
+		{
+			"name": "ci-default",
+			"displayName": "Default CI Config",
+			"description": "Default CI build configuration",
+			"generator": "Ninja",
+			"binaryDir": "${sourceDir}/build-Release",
+			"installDir": "${sourceDir}/package/Castor3D",
+			"cacheVariables": {
+				"CMAKE_BUILD_TYPE": "Release",
+				"PROJECTS_UNITY_BUILD": "ON",
+				"PROJECTS_USE_PRECOMPILED_HEADERS": "OFF",
+				"SDW_GENERATE_SOURCE": "OFF",
+				"CASTOR_BUILD_PLUGINS": "ON",
+				"CASTOR_BUILDGRP_INTEROP": "OFF",
+				"CASTOR_BUILDGRP_TEST": "OFF",
+				"CASTOR_USE_GLSLANG": "ON",
+				"CASTOR_DISABLE_DELAYED_INITIALISATION": "ON",
+				"ASHES_BUILD_RENDERER_OGL": "OFF",
+				"CASTOR_BUILDGRP_SAMPLE": "OFF",
+				"CASTOR_BUILDGRP_TOOL": "OFF",
+				"CASTOR_FORCE_VCPKG_SUBMODULES": "ON"
+			}
+		},
+		{
+			"name": "ci-x64-windows",
+			"displayName": "X64 Windows CI Config",
+			"inherits": "ci-default",
+			"cacheVariables": {
+				"PROJECTS_WARNINGS_AS_ERRORS": "ON"
+			}
+		},
+		{
+			"name": "ci-x64-linux",
+			"displayName": "X64 Linux CI Config",
+			"inherits": "ci-default",
+			"cacheVariables": {
+				"PROJECTS_WARNINGS_AS_ERRORS": "ON"
+			}
+		},
+		{
+			"name": "ci-x64-osx",
+			"displayName": "X64 MacOS CI Config",
+			"inherits": "ci-default",
+			"cacheVariables": {
+				"PROJECTS_WARNINGS_AS_ERRORS": "OFF"
+			}
+		}
+	]
+}
