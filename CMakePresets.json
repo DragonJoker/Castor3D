@@ -7,69 +7,126 @@
 	},
 	"configurePresets": [
 		{
-			"name": "default",
+			"name": "default-base",
+			"hidden": true,
 			"displayName": "Default Config",
 			"description": "Default build configuration",
 			"installDir": "${sourceDir}/package/Castor3D",
 			"cacheVariables": {
-				"PROJECTS_UNITY_BUILD": "ON",
-				"PROJECTS_USE_PRECOMPILED_HEADERS": "OFF",
-				"SDW_GENERATE_SOURCE": "OFF",
-				"CASTOR_BUILD_PLUGINS": "ON",
-				"CASTOR_BUILDGRP_INTEROP": "OFF",
-				"CASTOR_BUILDGRP_TEST": "OFF",
-				"CASTOR_USE_GLSLANG": "ON",
-				"CASTOR_DISABLE_DELAYED_INITIALISATION": "ON",
-				"ASHES_BUILD_RENDERER_OGL": "OFF",
-				"CASTOR_BUILDGRP_SAMPLE": "ON",
-				"CASTOR_BUILDGRP_TOOL": "ON",
-				"CASTOR_FORCE_VCPKG_SUBMODULES": "OFF"
+				"ASHES_BUILD_RENDERER_OGL": false,
+				"SDW_GENERATE_SOURCE": false,
+				"CASTOR_BUILD_PLUGINS": true,
+				"CASTOR_BUILDGRP_DEMO": true,
+				"CASTOR_BUILDGRP_INTEROP": false,
+				"CASTOR_BUILDGRP_TEST": false,
+				"CASTOR_BUILDGRP_TOOL": true,
+				"CASTOR_DISABLE_DELAYED_INITIALISATION": true,
+				"CASTOR_FORCE_VCPKG_SUBMODULES": true,
+				"CASTOR_USE_GLSLANG": true,
+				"PROJECTS_OUTPUT_DIR": "${sourceDir}",
+				"PROJECTS_UNITY_BUILD": true,
+				"PROJECTS_USE_PRECOMPILED_HEADERS": false
 			}
 		},
 		{
-			"name": "ci-default",
-			"displayName": "Default CI Config",
-			"description": "Default CI build configuration",
+			"name": "default-msvc",
+			"displayName": "Default Visual Studio Config",
+			"description": "Default build configuration using Visual Studio",
+			"inherits": "default-base",
+			"generator": "Visual Studio 17 2022"
+		},
+		{
+			"name": "default-ninja",
+			"displayName": "Default Ninja Config",
+			"description": "Default build configuration using Ninja",
+			"inherits": "default-base",
+			"generator": "Ninja"
+		},
+		{
+			"name": "dev-base",
+			"hidden": true,
+			"installDir": "${sourceDir}/package/Castor3D",
+			"cacheVariables": {
+				"ASHES_BUILD_RENDERER_OGL": false,
+				"SDW_GENERATE_SOURCE": false,
+				"CASTOR_BUILD_PLUGINS": true,
+				"CASTOR_BUILDGRP_DEMO": true,
+				"CASTOR_BUILDGRP_INTEROP": false,
+				"CASTOR_BUILDGRP_TEST": true,
+				"CASTOR_BUILDGRP_TOOL": true,
+				"CASTOR_DEBUG_TARGETS": true,
+				"CASTOR_DISABLE_DELAYED_INITIALISATION": true,
+				"CASTOR_FORCE_VCPKG_SUBMODULES": false,
+				"CASTOR_GUICOMMON_NEEDS_HLSL": true,
+				"CASTOR_USE_GLSLANG": true,
+				"CASTOR_USE_MESH_SHADERS": false,
+				"CASTOR_USE_TASK_SHADERS": false,
+				"PROJECTS_OUTPUT_DIR": "${sourceDir}",
+				"PROJECTS_UNITY_BUILD": true,
+				"PROJECTS_USE_PRECOMPILED_HEADERS": false
+			}
+		},
+		{
+			"name": "dev-msvc",
+			"displayName": "Default Visual Studio Developer Config",
+			"description": "Default build configuration for developing Castor3D using Visual Studio",
+			"inherits": "dev-base",
+			"generator": "Visual Studio 17 2022",
+			"cacheVariables": {
+				"CASTOR_USE_DEPS_WXWIDGETS": true
+			}
+		},
+		{
+			"name": "dev-ninja",
+			"displayName": "Default Ninja Developer Config",
+			"description": "Default build configuration for developing Castor3D using Ninja",
+			"inherits": "dev-base",
+			"generator": "Ninja"
+		},
+		{
+			"name": "ci-base",
+			"hidden": true,
 			"binaryDir": "${sourceDir}/build-Release",
 			"installDir": "${sourceDir}/package/Castor3D",
 			"cacheVariables": {
 				"CMAKE_BUILD_TYPE": "Release",
-				"PROJECTS_UNITY_BUILD": "ON",
-				"PROJECTS_USE_PRECOMPILED_HEADERS": "OFF",
-				"SDW_GENERATE_SOURCE": "OFF",
-				"CASTOR_BUILD_PLUGINS": "ON",
-				"CASTOR_BUILDGRP_INTEROP": "OFF",
-				"CASTOR_BUILDGRP_TEST": "OFF",
-				"CASTOR_USE_GLSLANG": "ON",
-				"CASTOR_DISABLE_DELAYED_INITIALISATION": "ON",
-				"ASHES_BUILD_RENDERER_OGL": "OFF",
-				"CASTOR_BUILDGRP_SAMPLE": "OFF",
-				"CASTOR_BUILDGRP_TOOL": "OFF",
-				"CASTOR_FORCE_VCPKG_SUBMODULES": "ON"
+				"ASHES_BUILD_RENDERER_OGL": false,
+				"SDW_GENERATE_SOURCE": false,
+				"CASTOR_BUILD_PLUGINS": true,
+				"CASTOR_BUILDGRP_DEMO": false,
+				"CASTOR_BUILDGRP_INTEROP": false,
+				"CASTOR_BUILDGRP_TEST": false,
+				"CASTOR_BUILDGRP_TOOL": false,
+				"CASTOR_DISABLE_DELAYED_INITIALISATION": true,
+				"CASTOR_FORCE_VCPKG_SUBMODULES": true,
+				"CASTOR_USE_GLSLANG": true,
+				"PROJECTS_OUTPUT_DIR": "${sourceDir}",
+				"PROJECTS_UNITY_BUILD": true,
+				"PROJECTS_USE_PRECOMPILED_HEADERS": false
 			}
 		},
 		{
 			"name": "ci-x64-windows",
 			"displayName": "X64 Windows CI Config",
-			"inherits": "ci-default",
+			"inherits": "ci-base",
 			"cacheVariables": {
-				"PROJECTS_WARNINGS_AS_ERRORS": "ON"
+				"PROJECTS_WARNINGS_AS_ERRORS": true
 			}
 		},
 		{
 			"name": "ci-x64-linux",
 			"displayName": "X64 Linux CI Config",
-			"inherits": "ci-default",
+			"inherits": "ci-base",
 			"cacheVariables": {
-				"PROJECTS_WARNINGS_AS_ERRORS": "ON"
+				"PROJECTS_WARNINGS_AS_ERRORS": true
 			}
 		},
 		{
 			"name": "ci-x64-osx",
 			"displayName": "X64 MacOS CI Config",
-			"inherits": "ci-default",
+			"inherits": "ci-base",
 			"cacheVariables": {
-				"PROJECTS_WARNINGS_AS_ERRORS": "OFF"
+				"PROJECTS_WARNINGS_AS_ERRORS": false
 			}
 		}
 	]
