@@ -13,6 +13,16 @@ See LICENSE file in root folder
 
 #include <Castor3D/Shader/Shaders/GlslLighting.hpp>
 
+#ifndef CU_PlatformWindows
+#	define C3D_ToonMaterial_API
+#else
+#	ifdef ToonMaterial_EXPORTS
+#		define C3D_ToonMaterial_API __declspec( dllexport )
+#	else
+#		define C3D_ToonMaterial_API __declspec( dllimport )
+#	endif
+#endif
+
 namespace toon::shader
 {
 	namespace c3d = castor3d::shader;
@@ -44,7 +54,7 @@ namespace toon::shader
 			, c3d::Lights & lights
 			, bool enableVolumetric );
 
-		static const castor::String getName();
+		C3D_ToonMaterial_API static const castor::String getName();
 		static c3d::LightingModelUPtr create( castor3d::LightingModelID lightingModelId
 			, sdw::ShaderWriter & writer
 			, c3d::Materials const & materials
@@ -75,7 +85,7 @@ namespace toon::shader
 			, c3d::Lights & lights
 			, bool enableVolumetric );
 
-		static const castor::String getName();
+		C3D_ToonMaterial_API static const castor::String getName();
 		static c3d::LightingModelUPtr create( castor3d::LightingModelID lightingModelId
 			, sdw::ShaderWriter & writer
 			, c3d::Materials const & materials
