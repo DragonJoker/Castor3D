@@ -107,7 +107,8 @@ namespace castor3d
 			, LpvGridConfigUbo const & lpvConfigUbo
 			, LayeredLpvGridConfigUbo const & llpvConfigUbo
 			, VoxelizerUbo const & vctConfigUbo
-			, SsaoConfig & ssaoConfig );
+			, SsaoConfig & ssaoConfig
+			, crg::RunnablePass::IsEnabledCallback const & opaquePassEnabled );
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, CPU wise.
@@ -166,7 +167,8 @@ namespace castor3d
 			, SceneUbo const & sceneUbo
 			, HdrConfigUbo const & hdrConfigUbo
 			, GpInfoUbo const & gpInfoUbo
-			, SsaoConfig & ssaoConfig );
+			, SsaoConfig & ssaoConfig
+			, crg::RunnablePass::IsEnabledCallback const & opaquePassEnabled );
 
 	private:
 		RenderDevice const & m_device;

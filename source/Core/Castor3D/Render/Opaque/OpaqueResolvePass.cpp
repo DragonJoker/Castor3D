@@ -433,7 +433,8 @@ namespace castor3d
 		, GpInfoUbo const & gpInfoUbo
 		, HdrConfigUbo const & hdrConfigUbo
 		, LightingModelID lightingModelId
-		, BackgroundModelID backgroundModelId )
+		, BackgroundModelID backgroundModelId
+		, crg::RunnablePass::IsEnabledCallback const & opaquePassEnabled )
 		: OwnedBy< Engine >{ *device.renderSystem.getEngine() }
 		, m_device{ device }
 		, m_scene{ scene }
@@ -447,6 +448,7 @@ namespace castor3d
 		, m_ssaoResult{ ssaoResult }
 		, m_subsurfaceScattering{ subsurfaceScattering }
 		, m_lighting{ lighting }
+		, m_opaquePassEnabled{ opaquePassEnabled }
 		, m_lightingModelId{ lightingModelId }
 		, m_backgroundModelId{ backgroundModelId }
 	{
@@ -589,7 +591,8 @@ namespace castor3d
 	{
 		dropqrslv::ResolveProgramConfig config{ m_scene, m_ssao };
 		m_programIndex = config.index;
-		m_enabled = m_scene.hasObjects( m_lightingModelId );
+		m_enabled = m_opaquePassEnabled()
+			&& m_scene.hasObjects( m_lightingModelId );
 	}
 
 	void OpaqueResolvePass::accept( PipelineVisitorBase & visitor )

@@ -1731,6 +1731,12 @@ namespace castor3d
 			| ShaderFlag::eColour;
 	}
 
+	bool VisibilityResolvePass::isPassEnabled()const
+	{
+		return m_nodesPass.isPassEnabled()
+			&& doIsEnabled();
+	}
+
 	ComponentModeFlags VisibilityResolvePass::getComponentsMask()
 	{
 		return ( ComponentModeFlag::eColour
