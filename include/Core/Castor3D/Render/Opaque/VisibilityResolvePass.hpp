@@ -95,6 +95,10 @@ namespace castor3d
 		 */
 		C3D_API ShaderFlags getShaderFlags()const override;
 		/**
+		 *\copydoc	RenderNodesPass::isPassEnabled
+		 */
+		C3D_API bool isPassEnabled()const override;
+		/**
 		 *\copydoc		castor3d::RenderNodesPass::getComponentsMask
 		 */
 		C3D_API static ComponentModeFlags getComponentsMask();

@@ -95,7 +95,8 @@ namespace castor3d
 			, GpInfoUbo const & gpInfoUbo
 			, HdrConfigUbo const & hdrConfigUbo
 			, LightingModelID lightingModelId
-			, BackgroundModelID backgroundModelId );
+			, BackgroundModelID backgroundModelId
+			, crg::RunnablePass::IsEnabledCallback const & opaquePassEnabled );
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, GPU wise.
@@ -139,6 +140,7 @@ namespace castor3d
 		Texture const & m_ssaoResult;
 		Texture const & m_subsurfaceScattering;
 		LightPassResult const & m_lighting;
+		crg::RunnablePass::IsEnabledCallback const & m_opaquePassEnabled;
 		castor::String m_name;
 		std::vector< ProgramPtr > m_programs;
 		LightingModelID m_lightingModelId;

@@ -834,7 +834,8 @@ namespace castor3d
 
 		bool operator()()const
 		{
-			return m_pass->isPassEnabled();
+			return m_pass
+				&& m_pass->isPassEnabled();
 		}
 
 		RenderNodesPass const * m_pass;

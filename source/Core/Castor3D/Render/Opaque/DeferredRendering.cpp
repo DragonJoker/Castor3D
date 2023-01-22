@@ -52,7 +52,8 @@ namespace castor3d
 		, LpvGridConfigUbo const & lpvConfigUbo
 		, LayeredLpvGridConfigUbo const & llpvConfigUbo
 		, VoxelizerUbo const & vctConfigUbo
-		, SsaoConfig & ssaoConfig )
+		, SsaoConfig & ssaoConfig
+		, crg::RunnablePass::IsEnabledCallback const & opaquePassEnabled )
 		: m_device{ device }
 		, m_opaquePassResult{ opaquePassResult }
 		, m_lightingGpInfoUbo{ device }
@@ -115,7 +116,8 @@ namespace castor3d
 			, sceneUbo
 			, hdrConfigUbo
 			, gpInfoUbo
-			, ssaoConfig );
+			, ssaoConfig
+			, opaquePassEnabled );
 		m_lightPassResult.create();
 	}
 
@@ -189,7 +191,8 @@ namespace castor3d
 		, SceneUbo const & sceneUbo
 		, HdrConfigUbo const & hdrConfigUbo
 		, GpInfoUbo const & gpInfoUbo
-		, SsaoConfig & ssaoConfig )
+		, SsaoConfig & ssaoConfig
+		, crg::RunnablePass::IsEnabledCallback const & opaquePassEnabled )
 	{
 		m_index = 0u;
 
@@ -212,7 +215,8 @@ namespace castor3d
 				, gpInfoUbo
 				, hdrConfigUbo
 				, lightingModelId
-				, scene.getBackgroundModelId() );
+				, scene.getBackgroundModelId()
+				, opaquePassEnabled );
 			m_lastPass = &m_resolves[lightingModelId - 1u]->getLastPass();
 			previousPasses = { m_lastPass };
 		}

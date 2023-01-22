@@ -178,6 +178,7 @@ namespace castor3d
 		crg::FramePass & doCreateDeferredOpaquePass( ProgressBar * progress
 			, crg::FramePass const & lastPass
 			, crg::FramePassArray const & previousPasses );
+		bool doIsOpaquePassEnabled()const;
 
 	private:
 		RenderDevice const & m_device;
@@ -194,6 +195,7 @@ namespace castor3d
 		SsaoPassUPtr m_ssao;
 		crg::FramePass * m_opaquePassDesc{};
 		RenderTechniquePass * m_opaquePass{};
+		crg::RunnablePass::IsEnabledCallback m_opaquePassEnabled;
 		DeferredRenderingUPtr m_deferredRendering;
 	};
 }

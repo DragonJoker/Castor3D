@@ -231,6 +231,10 @@ namespace castor3d
 		 */
 		C3D_API virtual ShaderFlags getShaderFlags()const = 0;
 		/**
+		 *\copydoc	RenderNodesPass::isPassEnabled
+		 */
+		C3D_API virtual bool isPassEnabled()const = 0;
+		/**
 		*\~english
 		*name
 		*	Getters.
@@ -351,6 +355,13 @@ namespace castor3d
 		C3D_API bool areValidPassFlags( PassComponentCombine const & passFlags )const override
 		{
 			return RenderNodesPass::areValidPassFlags( passFlags );
+		}
+		/**
+		 *\copydoc	RenderNodesPass::isPassEnabled
+		 */
+		C3D_API bool isPassEnabled()const override
+		{
+			return RenderNodesPass::isPassEnabled();
 		}
 		/**
 		*\~english
