@@ -1,7 +1,7 @@
 #include "ToonMaterial/Shaders/GlslToonLighting.hpp"
 
 #include <Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp>
-#include <Castor3D/Shader/Shaders/GlslLight.hpp>
+#include <Castor3D/Shader/Shaders/GlslLightSurface.hpp>
 #include <Castor3D/Shader/Shaders/GlslMaterial.hpp>
 #include <Castor3D/Shader/Shaders/GlslOutputComponents.hpp>
 #include <Castor3D/Shader/Shaders/GlslReflection.hpp>
