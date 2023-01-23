@@ -16,6 +16,8 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Opaque/Lighting/LightPassResult.hpp"
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
 
+#include <RenderGraph/RunnablePass.hpp>
+
 namespace castor3d
 {
 	class DeferredRendering
