@@ -226,7 +226,7 @@ namespace castor3d
 					, in.passMultipliers
 					, components );
 				auto incident = writer.declLocale( "incident"
-					, reflections.computeIncident( in.worldPosition.xyz(), c3d_sceneData.cameraPosition ) );
+					, reflections.computeIncident( in.worldPosition.xyz(), c3d_sceneData.cameraPosition() ) );
 
 				if ( !checkFlag( m_filters, RenderFilter::eOpaque ) )
 				{
@@ -261,23 +261,22 @@ namespace castor3d
 					components.finish( passShaders
 						, surface
 						, utils
-						, c3d_sceneData.cameraPosition );
+						, c3d_sceneData.cameraPosition() );
 					auto lightSurface = shader::LightSurface::create( writer
 						, "lightSurface"
-						, c3d_sceneData.cameraPosition
+						, c3d_sceneData.cameraPosition()
 						, surface.worldPosition.xyz()
 						, surface.viewPosition.xyz()
 						, surface.clipPosition
 						, surface.normal );
 					lights.computeCombinedDifSpec( components
-						, c3d_sceneData
 						, *backgroundModel
 						, lightSurface
 						, modelData.isShadowReceiver()
 						, output );
 
 					auto directAmbient = writer.declLocale( "directAmbient"
-						, components.ambientColour * c3d_sceneData.ambientLight * components.ambientFactor );
+						, components.ambientColour * c3d_sceneData.ambientLight() * components.ambientFactor );
 					auto reflectedDiffuse = writer.declLocale( "reflectedDiffuse"
 						, vec3( 0.0_f ) );
 					auto reflectedSpecular = writer.declLocale( "reflectedSpecular"
@@ -372,9 +371,9 @@ namespace castor3d
 				}
 
 				backgroundModel->applyVolume( in.fragCoord.xy()
-					, utils.lineariseDepth( in.fragCoord.z(), c3d_sceneData.nearPlane, c3d_sceneData.farPlane )
-					, c3d_sceneData.renderSize
-					, c3d_sceneData.cameraPlanes
+					, utils.lineariseDepth( in.fragCoord.z(), c3d_sceneData.nearPlane(), c3d_sceneData.farPlane() )
+					, c3d_sceneData.renderSize()
+					, c3d_sceneData.cameraPlanes()
 					, outColour );
 				outVelocity.xy() = in.getVelocity();
 			} );

@@ -162,7 +162,7 @@ namespace castor3d
 
 						auto lightSurface = shader::LightSurface::create( writer
 							, "lightSurface"
-							, c3d_sceneData.cameraPosition
+							, c3d_sceneData.cameraPosition()
 							, surface.worldPosition.xyz()
 							, surface.viewPosition.xyz()
 							, surface.clipPosition

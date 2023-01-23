@@ -26,14 +26,14 @@ namespace castor3d
 		sdw::Float BillboardData::getWidth( SceneData const & sceneData )const
 		{
 			return getWriter()->ternary( isFixedSize() != 0_u
-				, dimensions().x() / sceneData.m_clipInfo.x()
+				, dimensions().x() / sceneData.renderSize().x()
 				, dimensions().x() );
 		}
 
 		sdw::Float BillboardData::getHeight( SceneData const & sceneData )const
 		{
 			return getWriter()->ternary( isFixedSize() != 0_u
-				, dimensions().y() / sceneData.m_clipInfo.y()
+				, dimensions().y() / sceneData.renderSize().y()
 				, dimensions().y() );
 		}
 	}

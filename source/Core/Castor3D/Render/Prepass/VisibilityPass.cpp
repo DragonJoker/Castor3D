@@ -212,7 +212,7 @@ namespace castor3d
 				if ( components.transmission )
 				{
 					auto incident = writer.declLocale( "incident"
-						, normalize( in.worldPosition.xyz() - c3d_sceneData.cameraPosition ) );
+						, normalize( in.worldPosition.xyz() - c3d_sceneData.cameraPosition() ) );
 
 					IF( writer, lights.getFinalTransmission( components, incident ) >= 0.1_f )
 					{
@@ -222,7 +222,7 @@ namespace castor3d
 				}
 
 				depthObj = vec4( in.fragCoord.z()
-					, length( in.worldPosition.xyz() - c3d_sceneData.cameraPosition )
+					, length( in.worldPosition.xyz() - c3d_sceneData.cameraPosition() )
 					, writer.cast< sdw::Float >( in.nodeId )
 					, writer.cast< sdw::Float >( material.lightingModel ) );
 				data = uvec2( ( in.nodeId << maxPipelinesSize ) | ( pipelineID )

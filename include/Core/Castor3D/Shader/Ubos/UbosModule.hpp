@@ -393,12 +393,17 @@ namespace castor3d
 	*/
 	struct SceneUboConfiguration
 	{
-		castor::Point4f ambientLight;
+		castor::Point3f ambientLight;
+		float gamma;
 		castor::Point4f backgroundColour;
-		castor::Point4f lightsCount;
-		castor::Point4f cameraPos;
-		castor::Point4f clipInfo;
-		castor::Point4f fogInfo;
+		castor::Point3f cameraPos;
+		float pad0;
+		castor::Point2f renderSize;
+		float nearPlane;
+		float farPlane;
+		uint32_t fogType;
+		float fogDensity;
+		castor::Point2f pad1;
 	};
 	/**
 	*\~english

@@ -296,7 +296,7 @@ namespace castor3d
 								, clrCot } );
 
 						auto directAmbient = writer.declLocale( "directAmbient"
-							, components.ambientColour * c3d_sceneData.ambientLight * components.ambientFactor );
+							, components.ambientColour * c3d_sceneData.ambientLight() * components.ambientFactor );
 						auto lightDiffuse = writer.declLocale( "lightDiffuse"
 							, c3d_mapLightDiffuse.lod( vtx_texture, 0.0_f ).xyz() );
 						auto lightSpecular = writer.declLocale( "lightSpecular"
@@ -316,11 +316,11 @@ namespace castor3d
 						components.finish( passShaders
 							, surface
 							, utils
-							, c3d_sceneData.cameraPosition );
+							, c3d_sceneData.cameraPosition() );
 						auto lightSurface = shader::LightSurface::create( writer
 							, utils
 							, "lightSurface"
-							, c3d_sceneData.cameraPosition
+							, c3d_sceneData.cameraPosition()
 							, surface.worldPosition.xyz()
 							, surface.viewPosition.xyz()
 							, surface.clipPosition
@@ -329,7 +329,7 @@ namespace castor3d
 							, components );
 
 						auto incident = writer.declLocale( "incident"
-							, reflections.computeIncident( lightSurface.worldPosition(), c3d_sceneData.cameraPosition ) );
+							, reflections.computeIncident( lightSurface.worldPosition(), c3d_sceneData.cameraPosition() ) );
 						auto reflectedDiffuse = writer.declLocale( "reflectedDiffuse"
 							, vec3( 0.0_f ) );
 						auto reflectedSpecular = writer.declLocale( "reflectedSpecular"
@@ -392,7 +392,7 @@ namespace castor3d
 						outColour = vec4( albedo, 1.0_f );
 					}
 
-					IF( writer, c3d_sceneData.fogType != UInt( uint32_t( FogType::eDisabled ) ) )
+					IF( writer, c3d_sceneData.fogType() != UInt( uint32_t( FogType::eDisabled ) ) )
 					{
 						outColour = fog.apply( c3d_sceneData.getBackgroundColour( c3d_hdrConfigData )
 							, outColour
@@ -402,11 +402,11 @@ namespace castor3d
 					FI;
 
 					auto linearDepth = writer.declLocale( "linearDepth"
-						, min( depthObj.y(), c3d_sceneData.farPlane ) );
+						, min( depthObj.y(), c3d_sceneData.farPlane() ) );
 					backgroundModel->applyVolume( in.fragCoord.xy()
 						, linearDepth
-						, c3d_sceneData.renderSize
-						, c3d_sceneData.cameraPlanes
+						, c3d_sceneData.renderSize()
+						, c3d_sceneData.cameraPlanes()
 						, outColour );
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

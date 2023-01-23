@@ -17,10 +17,10 @@ namespace castor3d
 					, SceneData const & sceneData )
 				{
 					auto result = writer.declLocale( "result", colour );
-					auto density = writer.declLocale( "density", sceneData.fogDensity );
-					auto wsCamera = writer.declLocale( "wsCamera", sceneData.cameraPosition );
+					auto density = writer.declLocale( "density", sceneData.fogDensity() );
+					auto wsCamera = writer.declLocale( "wsCamera", sceneData.cameraPosition() );
 
-					IF( writer, sceneData.fogType == sdw::UInt( uint32_t( FogType::eLinear ) ) )
+					IF( writer, sceneData.fogType() == sdw::UInt( uint32_t( FogType::eLinear ) ) )
 					{
 						// Linear
 						auto dist = writer.declLocale( "dist", length( wsPosition - wsCamera ) );
@@ -30,7 +30,7 @@ namespace castor3d
 						fogFactor = clamp( fogFactor, 0.0_f, 1.0_f );
 						result = vec4( mix( bgColour, colour, vec4( fogFactor ) ).rgb(), colour.a() );
 					}
-					ELSEIF( sceneData.fogType == sdw::UInt( uint32_t( FogType::eExponential ) ) )
+					ELSEIF( sceneData.fogType() == sdw::UInt( uint32_t( FogType::eExponential ) ) )
 					{
 						// Exponential
 						auto dist = writer.declLocale( "dist", length( wsPosition - wsCamera ) );
@@ -40,7 +40,7 @@ namespace castor3d
 						fogFactor = clamp( fogFactor, 0.0_f, 1.0_f );
 						result = vec4( mix( bgColour, colour, vec4( fogFactor ) ).rgb(), colour.a() );
 					}
-					ELSEIF( sceneData.fogType == sdw::UInt( uint32_t( FogType::eSquaredExponential ) ) )
+					ELSEIF( sceneData.fogType() == sdw::UInt( uint32_t( FogType::eSquaredExponential ) ) )
 					{
 						//Squared exponential
 						auto dist = writer.declLocale( "dist", length( wsPosition - wsCamera ) );
@@ -50,7 +50,7 @@ namespace castor3d
 						fogFactor = clamp( fogFactor, 0.0_f, 1.0_f );
 						result = vec4( mix( bgColour, colour, vec4( fogFactor ) ).rgb(), colour.a() );
 					}
-					ELSEIF( sceneData.fogType == sdw::UInt( 4u ) )
+					ELSEIF( sceneData.fogType() == sdw::UInt( 4u ) )
 					{
 						// Ground
 						auto dist = writer.declLocale( "dist", length( wsPosition - wsCamera ) );

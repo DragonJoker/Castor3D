@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "SdwModule.hpp"
 
 #include "Castor3D/Limits.hpp"
+#include "Castor3D/Shader/Shaders/GlslBuffer.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 #include <ShaderWriter/MatTypes/Mat4.hpp>
@@ -152,6 +153,49 @@ namespace castor3d::shader
 		auto transform()const { return getMember< "transform" >(); }
 		// SpecificValues
 		auto cutOffsDiff()const { return innerCutOff() - outerCutOff(); }
+	};
+
+	class LightsBuffer
+		: public BufferT< LightData >
+	{
+	public:
+		C3D_API LightsBuffer( sdw::ShaderWriter & writer
+			, uint32_t binding
+			, uint32_t set
+			, bool enable = true );
+
+		C3D_API DirectionalLight getDirectionalLight( sdw::UInt const & index );
+		C3D_API PointLight getPointLight( sdw::UInt const & index );
+		C3D_API SpotLight getSpotLight( sdw::UInt const & index );
+
+		sdw::UInt getDirectionalLightCount()const
+		{
+			return getFirstCount();
+		}
+
+		sdw::UInt getPointLightCount()const
+		{
+			return getSecondCount();
+		}
+
+		sdw::UInt getSpotLightCount()const
+		{
+			return getThirdCount();
+		}
+
+	private:
+		void getBaseLight( sdw::Vec4Array const & lightsData
+			, sdw::Vec4 & lightData
+			, Light light
+			, sdw::UInt & offset );
+
+	private:
+		sdw::Function< shader::DirectionalLight
+			, sdw::InUInt > m_getDirectionalLight;
+		sdw::Function< shader::PointLight
+			, sdw::InUInt > m_getPointLight;
+		sdw::Function< shader::SpotLight
+			, sdw::InUInt > m_getSpotLight;
 	};
 
 	class Lights
@@ -436,13 +480,11 @@ namespace castor3d::shader
 		*/
 		//\{
 		C3D_API void computeCombinedDifSpec( BlendComponents const & components
-			, SceneData const & sceneData
 			, BackgroundModel & background
 			, LightSurface const & lightSurface
 			, sdw::UInt const & receivesShadows
 			, OutputComponents & output );
 		C3D_API void computeCombinedDif( BlendComponents const & components
-			, SceneData const & sceneData
 			, LightSurface const & lightSurface
 			, sdw::UInt const & receivesShadows
 			, sdw::Vec3 & output );
@@ -529,7 +571,6 @@ namespace castor3d::shader
 		}
 
 	private:
-		C3D_API Light getBaseLight( sdw::UInt & offset );
 		C3D_API void doDeclareLightsBuffer( uint32_t binding
 			, uint32_t set );
 		C3D_API void doDeclareDirectionalLightUbo( uint32_t binding
@@ -551,8 +592,7 @@ namespace castor3d::shader
 		LightingModelUPtr m_lightingModel;
 		std::shared_ptr< Shadow > m_shadowModel;
 		std::shared_ptr< SssTransmittance > m_sssTransmittance;
-		std::unique_ptr< sdw::StorageBuffer > m_ssbo;
-		std::unique_ptr< sdw::RImageBufferRgba32 > m_tbo;
+		std::unique_ptr< LightsBuffer > m_lightsBuffer;
 		sdw::Function< sdw::Float
 			, InBlendComponents
 			, sdw::InVec3 > m_getFinalTransmission;
@@ -564,14 +604,6 @@ namespace castor3d::shader
 			, sdw::InVec3
 			, sdw::InVec4Array
 			, sdw::InUInt > m_getTileFactors;
-		sdw::Function< shader::Light
-			, sdw::InOutUInt > m_getBaseLight;
-		sdw::Function< shader::DirectionalLight
-			, sdw::InUInt > m_getDirectionalLight;
-		sdw::Function< shader::PointLight
-			, sdw::InUInt > m_getPointLight;
-		sdw::Function< shader::SpotLight
-			, sdw::InUInt > m_getSpotLight;
 		std::unique_ptr< DirectionalLight > m_directionalLight;
 		std::unique_ptr< PointLight > m_pointLight;
 		std::unique_ptr< SpotLight > m_spotLight;

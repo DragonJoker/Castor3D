@@ -9,7 +9,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Buffer/UniformBufferOffset.hpp"
 
-#include <ShaderWriter/CompositeTypes/StructInstance.hpp>
+#include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>
 #include <ShaderWriter/VecTypes/Vec4.hpp>
 
 namespace castor3d
@@ -17,20 +17,30 @@ namespace castor3d
 	namespace shader
 	{
 		struct SceneData
-			: public sdw::StructInstance
+			: public sdw::StructInstanceHelperT< "C3D_SceneData"
+				, ast::type::MemoryLayout::eStd140
+				, sdw::Vec3Field< "ambientLight" >
+				, sdw::FloatField< "gamma" >
+				, sdw::Vec4Field< "backgroundColour" >
+				, sdw::Vec3Field< "cameraPosition" >
+				, sdw::FloatField< "pad0" >
+				, sdw::Vec2Field< "renderSize" >
+				, sdw::FloatField< "nearPlane" >
+				, sdw::FloatField< "farPlane" >
+				, sdw::UInt32Field< "fogType" >
+				, sdw::FloatField< "fogDensity" >
+				, sdw::Vec2Field< "pad1" > >
 		{
-			SDW_DeclStructInstance( C3D_API, SceneData );
-
 			friend struct BillboardData;
 			friend class Fog;
 			friend class CommonFog;
 
-			C3D_API SceneData( sdw::ShaderWriter & writer
+			SceneData( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr
-				, bool enabled );
-
-			C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
-			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
+				, bool enabled )
+				: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+			{
+			}
 
 			C3D_API sdw::Vec3 transformCamera( sdw::Mat3 const & transform )const;
 			C3D_API sdw::Vec3 getPosToCamera( sdw::Vec3 const & position )const;
@@ -42,32 +52,18 @@ namespace castor3d
 				, sdw::Vec3 const & colour
 				, sdw::Float const & alpha
 				, sdw::UInt const & accumulationOperator )const;
+			C3D_API sdw::Vec2 cameraPlanes()const;
 
-		private:
-			using sdw::StructInstance::getMember;
-			using sdw::StructInstance::getMemberArray;
-
-		private:
-			sdw::Vec4 m_ambientLight;
-			sdw::Vec4 m_backgroundColour;
-			sdw::Vec4 m_lightsCount;
-			sdw::Vec4 m_cameraPosition;
-			sdw::Vec4 m_clipInfo;
-			sdw::Vec4 m_fogInfo;
-
-		public:
-			sdw::UInt fogType;
-			sdw::Float fogDensity;
-			sdw::Vec3 ambientLight;
-			sdw::Vec3 cameraPosition;
-			sdw::Vec2 renderSize;
-			sdw::Float nearPlane;
-			sdw::Float farPlane;
-			sdw::Vec2 cameraPlanes;
-			sdw::Int directionalLightCount;
-			sdw::Int pointLightCount;
-			sdw::Int spotLightCount;
-			sdw::Float gamma;
+			auto ambientLight()const { return getMember< "ambientLight" >(); }
+			auto gamma()const { return getMember< "gamma" >(); }
+			auto backgroundColour()const { return getMember< "backgroundColour" >(); }
+			auto cameraPosition()const { return getMember< "cameraPosition" >(); }
+			auto pad0()const { return getMember< "pad0" >(); }
+			auto renderSize()const { return getMember< "renderSize" >(); }
+			auto nearPlane()const { return getMember< "nearPlane" >(); }
+			auto farPlane()const { return getMember< "farPlane" >(); }
+			auto fogType()const { return getMember< "fogType" >(); }
+			auto fogDensity()const { return getMember< "fogDensity" >(); }
 		};
 	}
 
@@ -109,16 +105,13 @@ namespace castor3d
 		 *\brief		Updates the UBO from given values.
 		 *\param[in]	scene	The rendered scene.
 		 *\param[in]	camera	The current camera.
-		 *\param[in]	lights	The lights are updated too.
 		 *\~french
 		 *\brief		Met à jour l'UBO avec les valeurs données.
 		 *\param[in]	scene	La scène dessinée.
 		 *\param[in]	camera	La camera actuelle.
-		 *\param[in]	lights	Les sources lumineuses sont mises à jour elles aussi.
 		 */
 		C3D_API void cpuUpdate( Scene const & scene
-			, Camera const * camera
-			, bool lights = true );
+			, Camera const * camera );
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.

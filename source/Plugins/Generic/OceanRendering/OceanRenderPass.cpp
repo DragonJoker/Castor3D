@@ -1208,13 +1208,12 @@ namespace ocean
 						, shader::BlendComponents{ components, materials } );
 					auto lightSurface = shader::LightSurface::create( writer
 						, "lightSurface"
-						, c3d_sceneData.cameraPosition
+						, c3d_sceneData.cameraPosition()
 						, surface.worldPosition.xyz()
 						, surface.viewPosition.xyz()
 						, surface.clipPosition
 						, surface.normal );
 					lights.computeCombinedDifSpec( rastComponents
-						, c3d_sceneData
 						, *backgroundModel
 						, lightSurface
 						, modelData.isShadowReceiver()
@@ -1333,13 +1332,13 @@ namespace ocean
 					auto waterTransmission = writer.declLocale( "waterTransmission"
 						, components.colour * ( indirectAmbient + indirectDiffuse ) * output.m_diffuse );
 					auto heightFactor = writer.declLocale( "heightFactor"
-						, c3d_oceanData.refractionHeightFactor() * ( c3d_sceneData.farPlane - c3d_sceneData.nearPlane ) );
+						, c3d_oceanData.refractionHeightFactor() * ( c3d_sceneData.farPlane() - c3d_sceneData.nearPlane() ) );
 					refractionResult = mix( refractionResult
 						, waterTransmission
 						, vec3( clamp( ( in.worldPosition.y() - waterSurfacePosition.y() ) / heightFactor, 0.0_f, 1.0_f ) ) );
 					displayDebugData( eHeightMixedRefraction, refractionResult, 1.0_f );
 					auto distanceFactor = writer.declLocale( "distanceFactor"
-						, c3d_oceanData.refractionDistanceFactor() * ( c3d_sceneData.farPlane - c3d_sceneData.nearPlane ) );
+						, c3d_oceanData.refractionDistanceFactor() * ( c3d_sceneData.farPlane() - c3d_sceneData.nearPlane() ) );
 					refractionResult = mix( refractionResult
 						, waterTransmission
 						, utils.saturate( vec3( utils.saturate( length( in.viewPosition ) / distanceFactor ) ) ) );
@@ -1361,7 +1360,7 @@ namespace ocean
 
 					//Combine all that
 					auto fresnelFactor = writer.declLocale( "fresnelFactor"
-						, vec3( utils.fresnelMix( reflections.computeIncident( lightSurface.worldPosition(), c3d_sceneData.cameraPosition )
+						, vec3( utils.fresnelMix( reflections.computeIncident( lightSurface.worldPosition(), c3d_sceneData.cameraPosition() )
 							, components.normal
 							, components.roughness
 							, c3d_oceanData.refractionRatio() ) ) );
@@ -1393,9 +1392,9 @@ namespace ocean
 				}
 
 				backgroundModel->applyVolume( in.fragCoord.xy()
-					, utils.lineariseDepth( in.fragCoord.z(), c3d_sceneData.nearPlane, c3d_sceneData.farPlane )
-					, c3d_sceneData.renderSize
-					, c3d_sceneData.cameraPlanes
+					, utils.lineariseDepth( in.fragCoord.z(), c3d_sceneData.nearPlane(), c3d_sceneData.farPlane() )
+					, c3d_sceneData.renderSize()
+					, c3d_sceneData.cameraPlanes()
 					, outColour );
 			} );
 
