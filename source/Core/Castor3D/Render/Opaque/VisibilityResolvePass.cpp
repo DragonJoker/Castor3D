@@ -1593,7 +1593,7 @@ namespace castor3d
 				auto [count, maxPipelineId] = m_nodesPass.fillPipelinesIds( castor::makeArrayView( reinterpret_cast< uint32_t * >( m_pipelinesIds->getPtr() )
 					, MaxObjectNodesCount ) );
 				m_pipelinesIds->setCount( count );
-				m_pipelinesIds->setSecondaryCount( maxPipelineId );
+				m_pipelinesIds->setSecondCount( maxPipelineId );
 			}
 
 			uint32_t index = 0u;

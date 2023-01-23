@@ -182,7 +182,7 @@ namespace castor3d::shader
 
 		sdw::UInt getPassTypesCount()const
 		{
-			return this->getSecondaryCount();
+			return this->getSecondCount();
 		}
 
 		Material getMaterial( sdw::UInt const & index )const
