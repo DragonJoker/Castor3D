@@ -109,7 +109,7 @@ namespace castor3d
 
 					outColour = vec4( averageColor.rgb(), 1.0_f - revealage );
 
-					IF( writer, c3d_sceneData.fogType != UInt( uint32_t( FogType::eDisabled ) ) )
+					IF( writer, c3d_sceneData.fogType() != UInt( uint32_t( FogType::eDisabled ) ) )
 					{
 						auto texCoord = writer.declLocale( "texCoord"
 							, in.fragCoord.xy() );

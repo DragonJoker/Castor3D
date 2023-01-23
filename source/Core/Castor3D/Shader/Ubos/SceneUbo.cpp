@@ -22,78 +22,29 @@ namespace castor3d
 
 	namespace shader
 	{
-		SceneData::SceneData( sdw::ShaderWriter & writer
-			, ast::expr::ExprPtr expr
-			, bool enabled )
-			: StructInstance{ writer, std::move( expr ), enabled }
-			, m_ambientLight{ getMember< sdw::Vec4 >( "ambientLight" ) }
-			, m_backgroundColour{ getMember< sdw::Vec4 >( "backgroundColour" ) }
-			, m_lightsCount{ getMember< sdw::Vec4 >( "lightsCount" ) }
-			, m_cameraPosition{ getMember< sdw::Vec4 >( "cameraPosition" ) }
-			, m_clipInfo{ getMember< sdw::Vec4 >( "clipInfo" ) }
-			, m_fogInfo{ getMember< sdw::Vec4 >( "fogInfo" ) }
-			, fogType{ writer.cast< sdw::UInt >( m_fogInfo.x() ) }
-			, fogDensity{ m_fogInfo.y() }
-			, ambientLight{ m_ambientLight.xyz() }
-			, cameraPosition{ m_cameraPosition.xyz() }
-			, renderSize{ m_clipInfo.xy() }
-			, nearPlane{ m_clipInfo.z() }
-			, farPlane{ m_clipInfo.w() }
-			, cameraPlanes{ m_clipInfo.zw() }
-			, directionalLightCount{ writer.cast< sdw::Int >( m_lightsCount.x() ) }
-			, pointLightCount{ writer.cast< sdw::Int >( m_lightsCount.y() ) }
-			, spotLightCount{ writer.cast< sdw::Int >( m_lightsCount.z() ) }
-			, gamma{ m_ambientLight.a() }
-		{
-		}
-
-		ast::type::BaseStructPtr SceneData::makeType( ast::type::TypesCache & cache )
-		{
-			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
-				, "C3D_SceneData" );
-
-			if ( result->empty() )
-			{
-				result->declMember( "ambientLight", ast::type::Kind::eVec4F );
-				result->declMember( "backgroundColour", ast::type::Kind::eVec4F );
-				result->declMember( "lightsCount", ast::type::Kind::eVec4F );
-				result->declMember( "cameraPosition", ast::type::Kind::eVec4F );
-				result->declMember( "clipInfo", ast::type::Kind::eVec4F );
-				result->declMember( "fogInfo", ast::type::Kind::eVec4F );
-			}
-
-			return result;
-		}
-
-		std::unique_ptr< sdw::Struct > SceneData::declare( sdw::ShaderWriter & writer )
-		{
-			return std::make_unique< sdw::Struct >( writer
-				, makeType( writer.getTypesCache() ) );
-		}
-
 		sdw::Vec3 SceneData::transformCamera( sdw::Mat3 const & transform )const
 		{
-			return transform * cameraPosition;
+			return transform * cameraPosition();
 		}
 
 		sdw::Vec3 SceneData::getPosToCamera( sdw::Vec3 const & position )const
 		{
-			return cameraPosition - position;
+			return cameraPosition() - position;
 		}
 
 		sdw::Vec3 SceneData::getCameraToPos( sdw::Vec3 const & position )const
 		{
-			return position - cameraPosition;
+			return position - cameraPosition();
 		}
 
 		sdw::Vec4 SceneData::getBackgroundColour( Utils & utils )const
 		{
-			return vec4( utils.removeGamma( gamma, m_backgroundColour.rgb() ), m_backgroundColour.a() );
+			return vec4( utils.removeGamma( gamma(), backgroundColour().rgb() ), backgroundColour().a() );
 		}
 
 		sdw::Vec4 SceneData::getBackgroundColour( HdrConfigData const & hdrConfigData )const
 		{
-			return vec4( hdrConfigData.removeGamma( m_backgroundColour.rgb() ), m_backgroundColour.a() );
+			return vec4( hdrConfigData.removeGamma( backgroundColour().rgb() ), backgroundColour().a() );
 		}
 
 		sdw::Vec4 SceneData::computeAccumulation( Utils & utils
@@ -105,9 +56,14 @@ namespace castor3d
 			return utils.computeAccumulation( depth
 				, colour
 				, alpha
-				, nearPlane
-				, farPlane
+				, nearPlane()
+				, farPlane()
 				, accumulationOperator );
+		}
+
+		sdw::Vec2 SceneData::cameraPlanes()const
+		{
+			return vec2( nearPlane(), farPlane() );
 		}
 	}
 
@@ -129,9 +85,10 @@ namespace castor3d
 		CU_Require( m_ubo );
 		auto & configuration = m_ubo.getData();
 		auto position = camera.getParent()->getDerivedPosition();
-		configuration.cameraPos = castor::Point4f{ position[0], position[1], position[2], 0.0 };
-		configuration.ambientLight = toRGBAFloat( camera.getScene()->getAmbientLight() );
-		configuration.ambientLight->w = camera.getHdrConfig().gamma;
+		configuration.cameraPos = castor::Point3f{ position[0], position[1], position[2] };
+		configuration.gamma = camera.getHdrConfig().gamma;
+		configuration.ambientLight = toRGBFloat( camera.getScene()->getAmbientLight() );
+		configuration.gamma = camera.getHdrConfig().gamma;
 		configuration.backgroundColour = toRGBAFloat( camera.getScene()->getBackgroundColour() );
 	}
 
@@ -140,36 +97,21 @@ namespace castor3d
 	{
 		CU_Require( m_ubo );
 		auto & configuration = m_ubo.getData();
-		configuration.fogInfo[0] = float( fog.getType() );
-		configuration.fogInfo[1] = fog.getDensity();
+		configuration.fogType = uint32_t( fog.getType() );
+		configuration.fogDensity = fog.getDensity();
 
 		if ( camera )
 		{
-			configuration.clipInfo[2] = camera->getNear();
-			configuration.clipInfo[3] = camera->getFar();
+			configuration.nearPlane = camera->getNear();
+			configuration.farPlane = camera->getFar();
 			cpuUpdateCameraPosition( *camera );
+			setWindowSize( { camera->getWidth(), camera->getHeight() } );
 		}
-
-		setWindowSize( { camera->getWidth(), camera->getHeight() } );
 	}
 
 	void SceneUbo::cpuUpdate( Scene const & scene
-		, Camera const * camera
-		, bool lights )
+		, Camera const * camera )
 	{
-		CU_Require( m_ubo );
-		auto & configuration = m_ubo.getData();
-
-		if ( lights )
-		{
-			auto & cache = scene.getLightCache();
-			using LockType = std::unique_lock< LightCache const >;
-			LockType lock{ castor::makeUniqueLock( cache ) };
-			configuration.lightsCount[size_t( LightType::eSpot )] = float( cache.getLightsCount( LightType::eSpot ) );
-			configuration.lightsCount[size_t( LightType::ePoint )] = float( cache.getLightsCount( LightType::ePoint ) );
-			configuration.lightsCount[size_t( LightType::eDirectional )] = float( cache.getLightsCount( LightType::eDirectional ) );
-		}
-
 		cpuUpdate( camera, scene.getFog() );
 	}
 
@@ -178,8 +120,7 @@ namespace castor3d
 		CU_Require( m_ubo );
 		auto & data = m_ubo.getData();
 		auto size = getSafeBandedSize( window );
-		data.clipInfo[0] = float( size[0] );
-		data.clipInfo[1] = float( size[1] );
+		data.renderSize = castor::Point2f{ float( size[0] ), float( size[1] ) };
 	}
 
 	//*********************************************************************************************

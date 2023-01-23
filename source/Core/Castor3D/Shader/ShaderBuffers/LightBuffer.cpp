@@ -84,6 +84,9 @@ namespace castor3d
 					auto index = doGetIndex( *light );
 					light->fillBuffer( index, m_data[index] );
 				} );
+			m_buffer.setFirstCount( uint32_t( m_typeSortedLights[0].size() ) );
+			m_buffer.setSecondCount( uint32_t( m_typeSortedLights[1].size() ) );
+			m_buffer.setThirdCount( uint32_t( m_typeSortedLights[2].size() ) );
 			m_wasDirty = true;
 		}
 	}

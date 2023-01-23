@@ -236,8 +236,6 @@ namespace castor3d
 					auto sheen = writer.declLocale( "sheen"
 						, c3d_mapSheen.lod( texCoord, 0.0_f ) );
 
-					auto eye = writer.declLocale( "eye"
-						, c3d_sceneData.cameraPosition );
 					auto depth = writer.declLocale( "depth"
 						, depthObj.x() );
 					auto vsPosition = writer.declLocale( "vsPosition"
@@ -273,10 +271,10 @@ namespace castor3d
 					components.finish( passShaders
 						, surface
 						, utils
-						, c3d_sceneData.cameraPosition );
+						, c3d_sceneData.cameraPosition() );
 					auto lightSurface = shader::LightSurface::create( writer
 						, "lightSurface"
-						, c3d_sceneData.cameraPosition
+						, c3d_sceneData.cameraPosition()
 						, surface.worldPosition.xyz()
 						, surface.viewPosition.xyz()
 						, surface.clipPosition

@@ -352,23 +352,22 @@ namespace castor3d
 					components.finish( passShaders
 						, surface
 						, utils
-						, c3d_sceneData.cameraPosition );
+						, c3d_sceneData.cameraPosition() );
 					auto lightSurface = shader::LightSurface::create( writer
 						, "lightSurface"
-						, c3d_sceneData.cameraPosition
+						, c3d_sceneData.cameraPosition()
 						, surface.worldPosition.xyz()
 						, surface.viewPosition.xyz()
 						, surface.clipPosition
 						, surface.normal );
 					lights.computeCombinedDifSpec( components
-						, c3d_sceneData
 						, *backgroundModel
 						, lightSurface
 						, modelData.isShadowReceiver()
 						, output );
 
 					auto directAmbient = writer.declLocale( "directAmbient"
-						, components.ambientColour * c3d_sceneData.ambientLight * components.ambientFactor );
+						, components.ambientColour * c3d_sceneData.ambientLight() * components.ambientFactor );
 					auto reflectedDiffuse = writer.declLocale( "reflectedDiffuse"
 						, vec3( 0.0_f ) );
 					auto reflectedSpecular = writer.declLocale( "reflectedSpecular"
@@ -380,7 +379,7 @@ namespace castor3d
 					auto sheenReflected = writer.declLocale( "sheenReflected"
 						, vec3( 0.0_f ) );
 					auto sceneUv = writer.declLocale( "sceneUv"
-						, in.fragCoord.xy() / c3d_sceneData.renderSize );
+						, in.fragCoord.xy() / c3d_sceneData.renderSize() );
 
 					if ( components.hasMember( "thicknessFactor" ) )
 					{
@@ -388,7 +387,7 @@ namespace castor3d
 					}
 
 					auto incident = writer.declLocale( "incident"
-						, reflections.computeIncident( lightSurface.worldPosition(), c3d_sceneData.cameraPosition ) );
+						, reflections.computeIncident( lightSurface.worldPosition(), c3d_sceneData.cameraPosition() ) );
 					lightSurface.updateN( utils
 						, components.normal
 						, components.specular

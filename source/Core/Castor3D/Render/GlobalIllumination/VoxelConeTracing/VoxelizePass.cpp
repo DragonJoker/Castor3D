@@ -553,7 +553,7 @@ namespace castor3d
 						auto lightSurface = shader::LightSurface::create( writer
 							, utils
 							, "lightSurface"
-							, c3d_sceneData.cameraPosition
+							, c3d_sceneData.cameraPosition()
 							, in.worldPosition.xyz()
 							, in.worldPosition.xyz()
 							, in.fragCoord.xyz()
@@ -562,7 +562,6 @@ namespace castor3d
 							, components
 							, true, true, false );
 						lights.computeCombinedDif( components
-							, c3d_sceneData
 							, lightSurface
 							, modelData.isShadowReceiver()
 							, combined );

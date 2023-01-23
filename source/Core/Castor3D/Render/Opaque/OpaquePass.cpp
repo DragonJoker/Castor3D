@@ -203,7 +203,7 @@ namespace castor3d
 				if ( components.hasTransmission )
 				{
 					auto incident = writer.declLocale( "incident"
-						, normalize( in.worldPosition.xyz() - c3d_sceneData.cameraPosition ) );
+						, normalize( in.worldPosition.xyz() - c3d_sceneData.cameraPosition() ) );
 					auto finalTransmission = lights.getFinalTransmission( components, incident );
 
 					IF( writer, finalTransmission >= 0.1_f )

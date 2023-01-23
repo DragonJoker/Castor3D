@@ -620,7 +620,7 @@ namespace castor3d
 					result.colour = vec3( 1.0_f );
 
 					auto hdrCoords = writer.declLocale( "hdrCoords"
-						, pixelCoord / c3d_sceneData.renderSize );
+						, pixelCoord / c3d_sceneData.renderSize() );
 					auto screenCoords = writer.declLocale( "screenCoords"
 						, fma( hdrCoords, vec2( 2.0_f ), vec2( -1.0_f ) ) );
 
@@ -647,7 +647,7 @@ namespace castor3d
 							: modelData.modelToCurWorld( v2.position ) ) );
 
 					auto derivatives = writer.declLocale( "derivatives"
-						, calcFullBarycentric( p0, p1, p2, screenCoords, c3d_sceneData.renderSize ) );
+						, calcFullBarycentric( p0, p1, p2, screenCoords, c3d_sceneData.renderSize() ) );
 
 					// Interpolate texture coordinates and calculate the gradients for texture sampling with mipmapping support
 					if ( flags.enableTexcoord0() )
@@ -783,7 +783,7 @@ namespace castor3d
 					if ( flags.enableNormal() )
 					{
 						result.computeTangentSpace( flags
-							, c3d_sceneData.cameraPosition
+							, c3d_sceneData.cameraPosition()
 							, result.worldPosition.xyz()
 							, normal
 							, tangent );

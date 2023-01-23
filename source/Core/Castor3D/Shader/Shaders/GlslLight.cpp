@@ -9,11 +9,8 @@
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
-#include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 
 #include <ShaderWriter/Source.hpp>
-
-#define C3D_DebugLightBuffer 0
 
 namespace castor3d::shader
 {
@@ -66,6 +63,154 @@ namespace castor3d::shader
 			, sdw::fma( attenuation().y()
 				, distance
 				, attenuation().x() ) );
+	}
+
+	//*********************************************************************************************
+
+	LightsBuffer::LightsBuffer( sdw::ShaderWriter & writer
+		, uint32_t binding
+		, uint32_t set
+		, bool enable )
+		: BufferT< LightData >{ writer
+			, "C3D_LightsBuffer"
+			, "c3d_lights"
+			, binding
+			, set
+			, enable }
+	{
+	}
+
+	DirectionalLight LightsBuffer::getDirectionalLight( sdw::UInt const & pindex )
+	{
+		if ( !m_getDirectionalLight )
+		{
+			m_getDirectionalLight = m_writer.implementFunction< DirectionalLight >( "c3d_getDirectionalLight"
+				, [this]( sdw::UInt const & index )
+				{
+					auto lightData = m_writer.declLocale( "lightData"
+						, vec4( 0.0_f ) );
+					auto offset = m_writer.declLocale( "offset"
+						, 0_u );
+					auto lightsData = m_writer.declLocale( "lightsData"
+						, getData( index ).data() );
+
+					auto result = m_writer.declLocale< DirectionalLight >( "result" );
+					getBaseLight( lightsData, lightData, result.base(), offset );
+					lightData = lightsData[offset++];
+					result.direction() = normalize( lightData.xyz() );
+					result.getMember< "cascadeCount" >() = lightData.w();
+					lightData = lightsData[offset++];
+					result.splitDepths() = lightData;
+					lightData = lightsData[offset++];
+					result.splitScales() = lightData;
+					auto col0 = m_writer.declLocale< sdw::Vec4 >( "col0" );
+					auto col1 = m_writer.declLocale< sdw::Vec4 >( "col1" );
+					auto col2 = m_writer.declLocale< sdw::Vec4 >( "col2" );
+					auto col3 = m_writer.declLocale< sdw::Vec4 >( "col3" );
+
+					for ( uint32_t i = 0u; i < DirectionalMaxCascadesCount; ++i )
+					{
+						col0 = lightsData[offset]; ++offset;
+						col1 = lightsData[offset]; ++offset;
+						col2 = lightsData[offset]; ++offset;
+						col3 = lightsData[offset]; ++offset;
+						result.transforms()[i] = mat4( col0, col1, col2, col3 );
+					}
+
+					m_writer.returnStmt( result );
+				}
+				, sdw::InUInt{ m_writer, "index" } );
+		}
+
+		return m_getDirectionalLight( pindex );
+	}
+
+	PointLight LightsBuffer::getPointLight( sdw::UInt const & pindex )
+	{
+		if ( !m_getPointLight )
+		{
+			m_getPointLight = m_writer.implementFunction< PointLight >( "c3d_getPointLight"
+				, [this]( sdw::UInt const & index )
+				{
+					auto lightData = m_writer.declLocale( "lightData"
+						, vec4( 0.0_f ) );
+					auto offset = m_writer.declLocale( "offset"
+						, 0_u );
+					auto lightsData = m_writer.declLocale( "lightsData"
+						, getData( index ).data() );
+
+					auto result = m_writer.declLocale< PointLight >( "result" );
+					getBaseLight( lightsData, lightData, result.base(), offset );
+					lightData = lightsData[offset++];
+					result.position() = lightData.xyz();
+					lightData = lightsData[offset++];
+					result.attenuation() = lightData.xyz();
+
+					m_writer.returnStmt( result );
+				}
+				, sdw::InUInt{ m_writer, "index" } );
+		}
+
+		return m_getPointLight( pindex );
+	}
+
+	SpotLight LightsBuffer::getSpotLight( sdw::UInt const & pindex )
+	{
+		if ( !m_getSpotLight )
+		{
+			m_getSpotLight = m_writer.implementFunction< SpotLight >( "c3d_getSpotLight"
+				, [this]( sdw::UInt const & index )
+				{
+					auto lightData = m_writer.declLocale( "lightData"
+						, vec4( 0.0_f ) );
+					auto offset = m_writer.declLocale( "offset"
+						, 0_u );
+					auto lightsData = m_writer.declLocale( "lightsData"
+						, getData( index ).data() );
+
+					auto result = m_writer.declLocale< SpotLight >( "result" );
+					getBaseLight( lightsData, lightData, result.base(), offset );
+					lightData = lightsData[offset++];
+					result.position() = lightData.xyz();
+					result.exponent() = lightData.w();
+					lightData = lightsData[offset++];
+					result.attenuation() = lightData.xyz();
+					result.innerCutOff() = lightData.w();
+					lightData = lightsData[offset++];
+					result.direction() = normalize( lightData.xyz() );
+					result.outerCutOff() = lightData.w();
+					result.transform() = mat4( lightsData[offset + 0_u]
+						, lightsData[offset + 1_u]
+						, lightsData[offset + 2_u]
+						, lightsData[offset + 3_u] );
+
+					m_writer.returnStmt( result );
+				}
+				, sdw::InUInt{ m_writer, "index" } );
+		}
+
+		return m_getSpotLight( pindex );
+	}
+
+	void LightsBuffer::getBaseLight( sdw::Vec4Array const & lightsData
+		, sdw::Vec4 & lightData
+		, Light light
+		, sdw::UInt & offset )
+	{
+		lightData = lightsData[offset++];
+		light.colour() = lightData.xyz();
+		light.getMember< "shadowMapIndex" >() = lightData.w();
+		lightData = lightsData[offset++];
+		light.intensity() = lightData.xy();
+		light.farPlane() = lightData.z();
+		light.getMember< "shadowType" >() = lightData.w();
+		lightData = lightsData[offset++];
+		light.rawShadowOffsets() = lightData.xy();
+		light.pcfShadowOffsets() = lightData.zw();
+		lightData = lightsData[offset++];
+		light.vsmShadowVariance() = lightData.xy();
+		light.getMember< "volumetricSteps" >() = lightData.z();
+		light.volumetricScattering() = lightData.w();
 	}
 
 	//*********************************************************************************************
@@ -178,7 +323,6 @@ namespace castor3d::shader
 	}
 
 	void Lights::computeCombinedDifSpec( BlendComponents const & components
-		, SceneData const & sceneData
 		, BackgroundModel & background
 		, LightSurface const & lightSurface
 		, sdw::UInt const & receivesShadows
@@ -189,7 +333,7 @@ namespace castor3d::shader
 			auto begin = m_writer.declLocale( "c3d_begin"
 				, 0_u );
 			auto end = m_writer.declLocale( "c3d_end"
-				, m_writer.cast< sdw::UInt >( sceneData.directionalLightCount ) );
+				, m_lightsBuffer->getDirectionalLightCount() );
 
 			FOR( m_writer, sdw::UInt, dir, begin, dir < end, ++dir )
 			{
@@ -203,7 +347,7 @@ namespace castor3d::shader
 			ROF;
 
 			begin = end;
-			end += m_writer.cast< sdw::UInt >( sceneData.pointLightCount );
+			end += m_lightsBuffer->getPointLightCount();
 
 			FOR( m_writer, sdw::UInt, point, begin, point < end, ++point )
 			{
@@ -216,7 +360,7 @@ namespace castor3d::shader
 			ROF;
 
 			begin = end;
-			end += m_writer.cast< sdw::UInt >( sceneData.spotLightCount );
+			end += m_lightsBuffer->getSpotLightCount();
 
 			FOR( m_writer, sdw::UInt, spot, begin, spot < end, ++spot )
 			{
@@ -231,7 +375,6 @@ namespace castor3d::shader
 	}
 
 	void Lights::computeCombinedDif( BlendComponents const & components
-		, SceneData const & sceneData
 		, LightSurface const & lightSurface
 		, sdw::UInt const & receivesShadows
 		, sdw::Vec3 & output )
@@ -241,7 +384,7 @@ namespace castor3d::shader
 			auto begin = m_writer.declLocale( "c3d_begin"
 				, 0_u );
 			auto end = m_writer.declLocale( "c3d_end"
-				, m_writer.cast< sdw::UInt >( sceneData.directionalLightCount ) );
+				, m_lightsBuffer->getDirectionalLightCount() );
 
 			FOR( m_writer, sdw::UInt, dir, begin, dir < end, ++dir )
 			{
@@ -253,7 +396,7 @@ namespace castor3d::shader
 			ROF;
 
 			begin = end;
-			end += m_writer.cast< sdw::UInt >( sceneData.pointLightCount );
+			end += m_lightsBuffer->getPointLightCount();
 
 			FOR( m_writer, sdw::UInt, point, begin, point < end, ++point )
 			{
@@ -265,7 +408,7 @@ namespace castor3d::shader
 			ROF;
 
 			begin = end;
-			end += m_writer.cast< sdw::UInt >( sceneData.spotLightCount );
+			end += m_lightsBuffer->getSpotLightCount();
 
 			FOR( m_writer, sdw::UInt, spot, begin, spot < end, ++spot )
 			{
@@ -407,116 +550,22 @@ namespace castor3d::shader
 		return m_lightingModel.get();
 	}
 
-	DirectionalLight Lights::getDirectionalLight( sdw::UInt const & pindex )
+	DirectionalLight Lights::getDirectionalLight( sdw::UInt const & index )
 	{
-		if ( !m_getDirectionalLight )
-		{
-			m_getDirectionalLight = m_writer.implementFunction< DirectionalLight >( "c3d_getDirectionalLight"
-				, [this]( sdw::UInt const & index )
-				{
-					auto result = m_writer.declLocale< DirectionalLight >( "result" );
-
-#if C3D_DebugLightBuffer
-					result.m_direction = vec3( 0.0_f, -0.7071068287_f, 0.7071067691_f );
-					result.m_transform = mat4( vec4( 1.0_f, 0.0_f, 0.0_f, 0.0_f )
-						, vec4( 0.0_f, 1.0_f, 0.0_f, 0.0_f )
-						, vec4( 0.0_f, 0.0_f, 1.0_f, 0.0_f )
-						, vec4( 0.0_f, 0.0_f, 0.0_f, 1.0_f ) );
-#else
-					auto offset = m_writer.declLocale( "offset", index * sdw::UInt( getMaxLightComponentsCount() ) );
-					result.base() = getBaseLight( offset );
-
-					auto lightsData = m_ssbo->getMemberArray< sdw::Vec4 >( "data" );
-					auto lightData = m_writer.declLocale( "lightData"
-						, lightsData[offset++] );
-					result.direction() = normalize( lightData.xyz() );
-					result.getMember< "cascadeCount" >() = lightData.w();
-					lightData = lightsData[offset++];
-					result.splitDepths() = lightData;
-					lightData = lightsData[offset++];
-					result.splitScales() = lightData;
-					auto col0 = m_writer.declLocale< sdw::Vec4 >( "col0" );
-					auto col1 = m_writer.declLocale< sdw::Vec4 >( "col1" );
-					auto col2 = m_writer.declLocale< sdw::Vec4 >( "col2" );
-					auto col3 = m_writer.declLocale< sdw::Vec4 >( "col3" );
-
-					for ( uint32_t i = 0u; i < DirectionalMaxCascadesCount; ++i )
-					{
-						col0 = lightsData[offset]; ++offset;
-						col1 = lightsData[offset]; ++offset;
-						col2 = lightsData[offset]; ++offset;
-						col3 = lightsData[offset]; ++offset;
-						result.transforms()[i] = mat4( col0, col1, col2, col3 );
-					}
-#endif
-
-					m_writer.returnStmt( result );
-				}
-				, sdw::InUInt{ m_writer, "index" } );
-		}
-
-		return m_getDirectionalLight( pindex );
+		CU_Require( m_lightsBuffer );
+		return m_lightsBuffer->getDirectionalLight( index );
 	}
 
-	PointLight Lights::getPointLight( sdw::UInt const & pindex )
+	PointLight Lights::getPointLight( sdw::UInt const & index )
 	{
-		if ( !m_getPointLight )
-		{
-			m_getPointLight = m_writer.implementFunction< PointLight >( "c3d_getPointLight"
-				, [this]( sdw::UInt const & index )
-				{
-					auto result = m_writer.declLocale< PointLight >( "result" );
-					auto offset = m_writer.declLocale( "offset", index * sdw::UInt( getMaxLightComponentsCount() ) );
-					result.base() = getBaseLight( offset );
-
-					auto lightsData = m_ssbo->getMemberArray< sdw::Vec4 >( "data" );
-					auto lightData = m_writer.declLocale( "lightData"
-						, lightsData[offset++] );
-					result.position() = lightData.xyz();
-					lightData = lightsData[offset++];
-					result.attenuation() = lightData.xyz();
-
-					m_writer.returnStmt( result );
-				}
-				, sdw::InUInt{ m_writer, "index" } );
-		}
-
-		return m_getPointLight( pindex );
+		CU_Require( m_lightsBuffer );
+		return m_lightsBuffer->getPointLight( index );
 	}
 
-	SpotLight Lights::getSpotLight( sdw::UInt const & pindex )
+	SpotLight Lights::getSpotLight( sdw::UInt const & index )
 	{
-		if ( !m_getSpotLight )
-		{
-			m_getSpotLight = m_writer.implementFunction< SpotLight >( "c3d_getSpotLight"
-				, [this]( sdw::UInt const & index )
-				{
-					auto result = m_writer.declLocale< SpotLight >( "result" );
-					auto offset = m_writer.declLocale( "offset", index * sdw::UInt( getMaxLightComponentsCount() ) );
-					result.base() = getBaseLight( offset );
-
-					auto lightsData = m_ssbo->getMemberArray< sdw::Vec4 >( "data" );
-					auto lightData = m_writer.declLocale( "lightData"
-						, lightsData[offset++] );
-					result.position() = lightData.xyz();
-					result.exponent() = lightData.w();
-					lightData = lightsData[offset++];
-					result.attenuation() = lightData.xyz();
-					result.innerCutOff() = lightData.w();
-					lightData = lightsData[offset++];
-					result.direction() = normalize( lightData.xyz() );
-					result.outerCutOff() = lightData.w();
-					result.transform() = mat4( lightsData[offset + 0_u]
-						, lightsData[offset + 1_u]
-						, lightsData[offset + 2_u]
-						, lightsData[offset + 3_u] );
-
-					m_writer.returnStmt( result );
-				}
-				, sdw::InUInt{ m_writer, "index" } );
-		}
-
-		return m_getSpotLight( pindex );
+		CU_Require( m_lightsBuffer );
+		return m_lightsBuffer->getSpotLight( index );
 	}
 
 	sdw::Vec3 Lights::getCascadeFactors( sdw::Vec3 pviewVertex
@@ -565,55 +614,12 @@ namespace castor3d::shader
 		return m_getCascadeFactors( pviewVertex, psplitDepths, pindex );
 	}
 
-	Light Lights::getBaseLight( sdw::UInt & poffset )
-	{
-		if ( !m_getBaseLight )
-		{
-			m_getBaseLight = m_writer.implementFunction< Light >( "c3d_getBaseLight"
-				, [this]( sdw::UInt offset )
-				{
-					auto result = m_writer.declLocale< Light >( "result" );
-	#if C3D_DebugLightBuffer
-					result.m_colourIndex = vec4( 1.0_f, 1.0f, 1.0f, -1.0f );
-					result.m_intensityFarPlane = vec4( 0.8_f, 1.0f, 1.0f, 0.0f );
-	#else
-					auto lightsData = m_ssbo->getMemberArray< sdw::Vec4 >( "data" );
-					auto lightData = m_writer.declLocale( "lightData"
-						, lightsData[offset++] );
-					result.colour() = lightData.xyz();
-					result.getMember< "shadowMapIndex" >() = lightData.w();
-					lightData = lightsData[offset++];
-					result.intensity() = lightData.xy();
-					result.farPlane() = lightData.z();
-					result.getMember< "shadowType" >() = lightData.w();
-					lightData = lightsData[offset++];
-					result.rawShadowOffsets() = lightData.xy();
-					result.pcfShadowOffsets() = lightData.zw();
-					lightData = lightsData[offset++];
-					result.vsmShadowVariance() = lightData.xy();
-					result.getMember< "volumetricSteps" >() = lightData.z();
-					result.volumetricScattering() = lightData.w();
-	#endif
-
-					m_writer.returnStmt( result );
-				}
-				, sdw::InOutUInt( m_writer, "offset" ) );
-		}
-
-		return m_getBaseLight( poffset );
-	}
-
 	void Lights::doDeclareLightsBuffer( uint32_t binding
 		, uint32_t set )
 	{
-		m_ssbo = std::make_unique< sdw::StorageBuffer >( m_writer
-			, "C3D_Lights"
-			, "c3d_lights"
+		m_lightsBuffer = std::make_unique< LightsBuffer >( m_writer
 			, binding
 			, set );
-		m_ssbo->declMember< sdw::UVec4 >( "counts" );
-		m_ssbo->declMemberArray< sdw::Vec4 >( "data" );
-		m_ssbo->end();
 	}
 
 	void Lights::doDeclareDirectionalLightUbo( uint32_t binding

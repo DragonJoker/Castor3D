@@ -888,25 +888,25 @@ namespace ocean_fft
 
 				auto l0 = writer.declLocale( "l0"
 					, lodFactor( p0 + vec3( 0.0_f, 0.0f, 1.0f ) * patchSize
-						, c3d_sceneData.cameraPosition
+						, c3d_sceneData.cameraPosition()
 						, c3d_oceanData.tileScale
 						, c3d_oceanData.maxTessLevel
 						, c3d_oceanData.distanceMod ) );
 				auto l1 = writer.declLocale( "l1"
 					, lodFactor( p0 + vec3( 0.0_f, 0.0f, 0.0f ) * patchSize
-						, c3d_sceneData.cameraPosition
+						, c3d_sceneData.cameraPosition()
 						, c3d_oceanData.tileScale
 						, c3d_oceanData.maxTessLevel
 						, c3d_oceanData.distanceMod ) );
 				auto l2 = writer.declLocale( "l2"
 					, lodFactor( p0 + vec3( 1.0_f, 0.0f, 0.0f ) * patchSize
-						, c3d_sceneData.cameraPosition
+						, c3d_sceneData.cameraPosition()
 						, c3d_oceanData.tileScale
 						, c3d_oceanData.maxTessLevel
 						, c3d_oceanData.distanceMod ) );
 				auto l3 = writer.declLocale( "l3"
 					, lodFactor( p0 + vec3( 1.0_f, 0.0f, 1.0f ) * patchSize
-						, c3d_sceneData.cameraPosition
+						, c3d_sceneData.cameraPosition()
 						, c3d_oceanData.tileScale
 						, c3d_oceanData.maxTessLevel
 						, c3d_oceanData.distanceMod ) );
@@ -1206,7 +1206,7 @@ namespace ocean_fft
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[in.nodeId - 1u] );
 				auto hdrCoords = writer.declLocale( "hdrCoords"
-					, in.fragCoord.xy() / c3d_sceneData.renderSize );
+					, in.fragCoord.xy() / c3d_sceneData.renderSize() );
 				auto gradJacobian = writer.declLocale( "gradJacobian"
 					, c3d_gradientJacobianMap.sample( in.prvPosition.xy() ).xyz() );
 				displayDebugData( eGradJacobian, gradJacobian, 1.0_f );
@@ -1270,13 +1270,12 @@ namespace ocean_fft
 					shader::OutputComponents output{ lightDiffuse, lightSpecular, lightScattering, lightCoatingSpecular, lightSheen };
 					auto lightSurface = shader::LightSurface::create( writer
 						, "lightSurface"
-						, c3d_sceneData.cameraPosition
+						, c3d_sceneData.cameraPosition()
 						, surface.worldPosition.xyz()
 						, surface.viewPosition.xyz()
 						, surface.clipPosition
 						, normalize( components.normal ) );
 					lights.computeCombinedDifSpec( components
-						, c3d_sceneData
 						, *backgroundModel
 						, lightSurface
 						, modelData.isShadowReceiver()
@@ -1367,9 +1366,9 @@ namespace ocean_fft
 
 					// Wobbly refractions
 					auto heightFactor = writer.declLocale( "heightFactor"
-						, c3d_oceanData.refractionHeightFactor * ( c3d_sceneData.farPlane - c3d_sceneData.nearPlane ) );
+						, c3d_oceanData.refractionHeightFactor * ( c3d_sceneData.farPlane() - c3d_sceneData.nearPlane() ) );
 					auto distanceFactor = writer.declLocale( "distanceFactor"
-						, c3d_oceanData.refractionDistanceFactor * ( c3d_sceneData.farPlane - c3d_sceneData.nearPlane ) );
+						, c3d_oceanData.refractionDistanceFactor * ( c3d_sceneData.farPlane() - c3d_sceneData.nearPlane() ) );
 					auto distortedTexCoord = writer.declLocale( "distortedTexCoord"
 						, fma( vec2( ( finalNormal.xz() + finalNormal.xy() ) * 0.5_f )
 							, vec2( c3d_oceanData.refractionDistortionFactor
@@ -1413,7 +1412,7 @@ namespace ocean_fft
 
 					//Combine all that
 					auto fresnelFactor = writer.declLocale( "fresnelFactor"
-						, vec3( utils.fresnelMix( reflections.computeIncident( lightSurface.worldPosition(), c3d_sceneData.cameraPosition )
+						, vec3( utils.fresnelMix( reflections.computeIncident( lightSurface.worldPosition(), c3d_sceneData.cameraPosition() )
 							, components.normal
 							, components.roughness
 							, c3d_oceanData.refractionRatio ) ) );
@@ -1443,9 +1442,9 @@ namespace ocean_fft
 				}
 
 				backgroundModel->applyVolume( in.fragCoord.xy()
-					, utils.lineariseDepth( in.fragCoord.z(), c3d_sceneData.nearPlane, c3d_sceneData.farPlane )
-					, c3d_sceneData.renderSize
-					, c3d_sceneData.cameraPlanes
+					, utils.lineariseDepth( in.fragCoord.z(), c3d_sceneData.nearPlane(), c3d_sceneData.farPlane() )
+					, c3d_sceneData.renderSize()
+					, c3d_sceneData.cameraPlanes()
 					, outColour );
 			} );
 

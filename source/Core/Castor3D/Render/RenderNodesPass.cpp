@@ -1027,7 +1027,7 @@ namespace castor3d
 					FI;
 
 					auto posToCamera = writer.declLocale( "posToCamera"
-						, c3d_sceneData.cameraPosition - sphereCenter );
+						, c3d_sceneData.cameraPosition() - sphereCenter );
 
 					IF( writer, dot( posToCamera, coneNormal ) >= ( coneCutOff * length( posToCamera ) + sphereRadius ) )
 					{
@@ -1259,7 +1259,7 @@ namespace castor3d
 					auto worldPos = writer.declLocale( "worldPos"
 						, curPosition );
 					vtxOut[i].computeTangentSpace( flags
-						, c3d_sceneData.cameraPosition
+						, c3d_sceneData.cameraPosition()
 						, worldPos.xyz()
 						, curNormal
 						, curTangent );
@@ -1274,7 +1274,7 @@ namespace castor3d
 					auto mtxNormal = writer.declLocale( "mtxNormal"
 						, modelData.getNormalMtx( flags, curMtxModel ) );
 					vtxOut[i].computeTangentSpace( flags
-						, c3d_sceneData.cameraPosition
+						, c3d_sceneData.cameraPosition()
 						, worldPos.xyz()
 						, mtxNormal
 						, curNormal
@@ -1416,7 +1416,7 @@ namespace castor3d
 					auto worldPos = writer.declLocale( "worldPos"
 						, curPosition );
 					out.computeTangentSpace( flags
-						, c3d_sceneData.cameraPosition
+						, c3d_sceneData.cameraPosition()
 						, worldPos.xyz()
 						, curNormal
 						, curTangent );
@@ -1431,7 +1431,7 @@ namespace castor3d
 					auto mtxNormal = writer.declLocale( "mtxNormal"
 						, modelData.getNormalMtx( flags, curMtxModel ) );
 					out.computeTangentSpace( flags
-						, c3d_sceneData.cameraPosition
+						, c3d_sceneData.cameraPosition()
 						, worldPos.xyz()
 						, mtxNormal
 						, curNormal
@@ -1567,7 +1567,7 @@ namespace castor3d
 				out.vtx.position = curPosition;
 				out.vertexId = in.instanceIndex - in.baseInstance;
 				out.computeTangentSpace( flags
-					, c3d_sceneData.cameraPosition
+					, c3d_sceneData.cameraPosition()
 					, worldPos.xyz()
 					, curToCamera
 					, up

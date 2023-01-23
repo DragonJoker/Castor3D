@@ -224,7 +224,7 @@ namespace castor3d
 						writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
 							, FragmentOut out )
 							{
-								IF( writer, c3d_sceneData.fogType == UInt( uint32_t( FogType::eDisabled ) ) )
+								IF( writer, c3d_sceneData.fogType() == UInt( uint32_t( FogType::eDisabled ) ) )
 								{
 									auto colour = writer.declLocale( "colour"
 										, c3d_mapSkybox.sample( vtx_texture ) );
