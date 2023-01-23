@@ -207,7 +207,7 @@ namespace castor3d
 				depthObj = vec4( in.fragCoord.z()
 					, length( in.worldPosition.xyz() - c3d_sceneData.cameraPosition )
 					, writer.cast< sdw::Float >( in.nodeId )
-					, 0.0_f );
+					, writer.cast< sdw::Float >( material.lightingModel ) );
 				velocity = in.getVelocity();
 				nmlOcc = vec4( components.normal, components.occlusion );
 			} );

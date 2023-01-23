@@ -224,7 +224,7 @@ namespace castor3d
 				depthObj = vec4( in.fragCoord.z()
 					, length( in.worldPosition.xyz() - c3d_sceneData.cameraPosition )
 					, writer.cast< sdw::Float >( in.nodeId )
-					, 0.0_f );
+					, writer.cast< sdw::Float >( material.lightingModel ) );
 				data = uvec2( ( in.nodeId << maxPipelinesSize ) | ( pipelineID )
 					, ( flags.isBillboard()
 						? in.vertexId * 2_u + writer.cast< sdw::UInt >( in.primitiveID )

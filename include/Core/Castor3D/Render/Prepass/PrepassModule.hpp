@@ -25,7 +25,7 @@ namespace castor3d
 		: uint8_t
 	{
 		eDepth, // D => Depth, S => Unused
-		eDepthObj, // R => Normalised depth, G => Linear depth, B => Node ID, A => Unused
+		eDepthObj, // R => Normalised depth, G => Linear depth, B => Node ID, A => Lighting Model ID
 		eVisibility, // R => node ID + pipeline ID, G => primitive ID
 		CU_ScopedEnumBounds( eDepth ),
 	};

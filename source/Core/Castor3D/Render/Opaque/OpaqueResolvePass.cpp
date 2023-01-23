@@ -235,8 +235,11 @@ namespace castor3d
 						, c3d_mapDepthObj.lod( vtx_texture, 0.0_f ) );
 					auto nodeId = writer.declLocale( "nodeId"
 						, writer.cast< UInt >( depthObj.z() ) );
+					auto lightModelId = writer.declLocale( "lightModelId"
+						, writer.cast< sdw::UInt >( depthObj.w() ) );
 
-					IF( writer, nodeId == 0u )
+					IF( writer, nodeId == 0u
+						|| lightModelId != uint32_t( lightingModelId ) )
 					{
 						writer.demote();
 					}
@@ -248,12 +251,6 @@ namespace castor3d
 						, writer.cast< UInt >( modelData.getMaterialId() ) );
 					auto material = writer.declLocale( "material"
 						, materials.getMaterial( materialId ) );
-
-					IF( writer, material.lightingModel != uint32_t( lightingModelId ) )
-					{
-						writer.demote();
-					}
-					FI;
 
 					auto nmlOcc = writer.declLocale( "nmlOcc"
 						, c3d_mapNmlOcc.lod( vtx_texture, 0.0_f ) );
