@@ -164,7 +164,7 @@ namespace castor3d
 					pass->reset();
 				} );
 			m_buffer.setCount( uint32_t( m_passes.size() ) );
-			m_buffer.setSecondaryCount( uint32_t( m_passTypeIndices.size() ) );
+			m_buffer.setSecondCount( uint32_t( m_passTypeIndices.size() ) );
 			m_buffer.upload( commandBuffer );
 
 			for ( auto & buffer : specifics )

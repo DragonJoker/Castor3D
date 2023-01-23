@@ -151,19 +151,29 @@ namespace castor3d
 		*	Mutateurs.
 		*/
 		/**@{*/
-		void setCount( uint32_t value )
+		void setFirstCount( uint32_t value )
 		{
 			m_counts[0] = value;
 		}
 
-		void setSecondaryCount( uint32_t value )
+		void setSecondCount( uint32_t value )
 		{
 			m_counts[1] = value;
 		}
 
-		void setTertiaryCount( uint32_t value )
+		void setThirdCount( uint32_t value )
 		{
 			m_counts[2] = value;
+		}
+
+		void setFourthCount( uint32_t value )
+		{
+			m_counts[3] = value;
+		}
+
+		void setCount( uint32_t value )
+		{
+			setFirstCount( value );
 		}
 		/**@}*/
 

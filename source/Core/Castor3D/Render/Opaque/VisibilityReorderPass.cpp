@@ -42,7 +42,7 @@ namespace castor3d
 
 			sdw::UInt getPipelinesCount()const
 			{
-				return this->getSecondaryCount();
+				return this->getSecondCount();
 			}
 
 			sdw::UInt operator[]( sdw::UInt const & index )const

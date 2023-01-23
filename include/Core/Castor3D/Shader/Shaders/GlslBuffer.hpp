@@ -36,18 +36,37 @@ namespace castor3d::shader
 			}
 		}
 
-		sdw::UInt getCount()const
+		sdw::UInt getFirstCount()const
 		{
 			return ( m_ssbo
 				? m_ssbo->getMember< sdw::UVec4 >( "counts" ).x()
 				: m_writer.declLocale( "disabled_" + m_variableName + "_cnt", 0_u, false ) );
 		}
 
-		sdw::UInt getSecondaryCount()const
+		sdw::UInt getSecondCount()const
 		{
 			return ( m_ssbo
 				? m_ssbo->getMember< sdw::UVec4 >( "counts" ).y()
 				: m_writer.declLocale( "disabled_" + m_variableName + "_cnt", 0_u, false ) );
+		}
+
+		sdw::UInt getThirdCount()const
+		{
+			return ( m_ssbo
+				? m_ssbo->getMember< sdw::UVec4 >( "counts" ).z()
+				: m_writer.declLocale( "disabled_" + m_variableName + "_cnt", 0_u, false ) );
+		}
+
+		sdw::UInt getFourthCount()const
+		{
+			return ( m_ssbo
+				? m_ssbo->getMember< sdw::UVec4 >( "counts" ).w()
+				: m_writer.declLocale( "disabled_" + m_variableName + "_cnt", 0_u, false ) );
+		}
+
+		sdw::UInt getCount()const
+		{
+			return getFirstCount();
 		}
 
 		bool isEnabled()const noexcept
