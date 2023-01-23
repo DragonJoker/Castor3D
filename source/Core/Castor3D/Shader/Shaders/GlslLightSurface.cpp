@@ -201,11 +201,12 @@ namespace castor3d::shader
 		, BlendComponents const & components
 		, sdw::Float const & dotProduct )const
 	{
-		auto & writer = *getWriter();
 		m_F = utils.conductorFresnel( dotProduct, f0 );
 
 		if ( m_difF )
 		{
+			auto & writer = *getWriter();
+
 			IF( writer, components.iridescenceFactor != 0.0_f )
 			{
 				// Blend default specular Fresnel with iridescence Fresnel
