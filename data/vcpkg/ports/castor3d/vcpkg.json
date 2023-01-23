@@ -1,10 +1,19 @@
 {
   "name": "castor3d",
-  "version": "0.13.0",
+  "version": "0.14.0",
   "description": "C++17 and Vulkan 3D engine.",
   "homepage": "https://github.com/DragonJoker/Castor3D",
   "license": "MIT",
   "dependencies": [
+    "convectionkernels",
+    "freetype",
+    "gli",
+    "meshoptimizer",
+    "minizip",
+    "zlib",
+    "ashes",
+    "rendergraph",
+    "shaderwriter",
     {
       "name": "vcpkg-cmake",
       "host": true
@@ -12,14 +21,30 @@
     {
       "name": "vcpkg-cmake-config",
       "host": true
-    },
+    }
+  ],
+  "default-features": [
     "assimp",
-    "freetype",
-    "glslang",
-    "shaderwriter",
-    "ashes",
-    "rendergraph",
-    "vulkan-headers",
-    "zlib"
-  ]
+    "freeimage",
+    "glsl",
+    "vkfft"
+  ],
+  "features": {
+    "assimp": {
+      "description": "Use Assimp library to import external scenes.",
+      "dependencies": [ "assimp" ]
+    },
+    "freeimage": {
+      "description": "Use FreeImage library over stb_image to import TIF, PNG or RAW images.",
+      "dependencies": [ "freeimage" ]
+    },
+    "glsl": {
+      "description": "Enable GLSL shaders import support.",
+      "dependencies": [ "glslang", "spirv-cross" ]
+    },
+    "vkfft": {
+      "description": "Use VkFFT to compute Fast Fourier Transforms (Necessary for FFTOcean plugin).",
+      "dependencies": [ "vkfft" ]
+    }
+  }
 }

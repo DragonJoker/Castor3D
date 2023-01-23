@@ -1,6 +1,8 @@
 project( CastorUtilsTest )
 
 if ( VCPKG_TOOLCHAIN )
+	set( glm_DIR ${VCPKG_SHARE_DIR}/glm )
+	set( OpenCL_DIR ${VCPKG_SHARE_DIR}/opencl )
 	find_package( glm CONFIG QUIET )
 	find_package( OpenCL CONFIG QUIET )
 	if ( glm_FOUND )

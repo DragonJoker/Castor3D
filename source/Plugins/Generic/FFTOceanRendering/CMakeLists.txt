@@ -1,9 +1,13 @@
 set( FOLDER_NAME FFTOceanRendering )
 project( ${FOLDER_NAME} )
 
-find_path( VKFFT_INCLUDE_DIRS "VkFFT/vkFFT.h" )
+if ( VCPKG_TOOLCHAIN )
+	find_path( VKFFT_INCLUDE_DIRS "VkFFT/vkFFT.h" PATHS ${VCPKG_TRIPLET_DIR}/include )
+else ()
+	find_path( VKFFT_INCLUDE_DIRS "VkFFT/vkFFT.h" )
+endif ()
 
-if ( CASTOR_USE_GLSLANG )
+if ( CASTOR_USE_GLSLANG AND VKFFT_INCLUDE_DIRS )
 	set( VKFFT_BACKEND "0" )
 	set( Castor3DBinsDependencies 
 		${Castor3DBinsDependencies}

@@ -26,6 +26,7 @@ else ()
 endif ()
 
 if ( VCPKG_BUILD OR CASTOR_FORCE_VCPKG_SUBMODULES )
+	set( Ashes_DIR ${VCPKG_SHARE_DIR}/ashes )
 	find_package( Ashes CONFIG REQUIRED ashespp )
 else ()
 	# Ashes external library
@@ -77,16 +78,29 @@ if ( ${CASTOR_BUILD_CASTOR3D} )
 		option( CASTOR_FORCE_GLSLANG_SUBMODULE "Force use of glslang submodule" OFF )
 		if ( NOT CASTOR_FORCE_GLSLANG_SUBMODULE )
 			if ( VCPKG_TOOLCHAIN )
+				set( glslang_DIR ${VCPKG_SHARE_DIR}/glslang )
 				find_package( glslang CONFIG REQUIRED glslang OGLCompiler OSDependent SPIRV SPVRemapper )
-				get_target_property( glslang_INCLUDE_DIR glslang::SPIRV INTERFACE_INCLUDE_DIRECTORIES )
-				find_path( glslang_INCLUDE_DIR glslang/Public/ShaderLang.h )
-				set( glslang_LIBRARIES
-					glslang::OSDependent
-					glslang::glslang
-					glslang::OGLCompiler
-					glslang::SPIRV
-					glslang::SPVRemapper
-				)
+				if ( TARGET glslang::SPIRV )
+					get_target_property( glslang_INCLUDE_DIR glslang::SPIRV INTERFACE_INCLUDE_DIRECTORIES )
+					find_path( glslang_INCLUDE_DIR glslang/Public/ShaderLang.h )
+					set( glslang_LIBRARIES
+						glslang::OSDependent
+						glslang::glslang
+						glslang::OGLCompiler
+						glslang::SPIRV
+						glslang::SPVRemapper
+					)
+				else ()
+					get_target_property( glslang_INCLUDE_DIR SPIRV INTERFACE_INCLUDE_DIRECTORIES )
+					find_path( glslang_INCLUDE_DIR glslang/Public/ShaderLang.h )
+					set( glslang_LIBRARIES
+						OSDependent
+						glslang
+						OGLCompiler
+						SPIRV
+						SPVRemapper
+					)
+				endif ()
 			else ()
 				find_package( glslang REQUIRED glslang OSDependent OGLCompiler SPIRV )
 				if ( glslang_FOUND )
@@ -128,6 +142,7 @@ if ( ${CASTOR_BUILD_CASTOR3D} )
 	endif ()
 
 	if ( VCPKG_BUILD OR CASTOR_FORCE_VCPKG_SUBMODULES )
+		set( RenderGraph_DIR ${VCPKG_SHARE_DIR}/rendergraph )
 		find_package( RenderGraph CONFIG REQUIRED )
 	else ()
 		# RenderGraph external library
@@ -140,6 +155,7 @@ if ( ${CASTOR_BUILD_CASTOR3D} )
 	endif ()
 
 	if ( VCPKG_BUILD OR CASTOR_FORCE_VCPKG_SUBMODULES )
+		set( ShaderWriter_DIR ${VCPKG_SHARE_DIR}/shaderwriter )
 		find_package( ShaderWriter CONFIG REQUIRED ShaderAST ShaderWriter CompilerSpirV )
 	else ()
 		# ShaderWriter external library
@@ -160,6 +176,7 @@ if ( ${CASTOR_BUILD_CASTOR3D} )
 		add_subdirectory( ../${SHADERWRITER_DIR} ${CMAKE_BINARY_DIR}/${SHADERWRITER_DIR} )
 	endif ()
 
+	set( meshoptimizer_DIR ${VCPKG_SHARE_DIR}/meshoptimizer )
 	find_package( meshoptimizer CONFIG REQUIRED )
 endif ()
 

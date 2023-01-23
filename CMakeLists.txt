@@ -7,6 +7,12 @@ if ( CASTOR_FORCE_VCPKG_SUBMODULES )
 	list( APPEND VCPKG_MANIFEST_FEATURES "vcpkg-deps" )
 endif ()
 
+if ( VCPKG_TARGET_TRIPLET )
+	set( VCPKG_TOOLCHAIN ON )
+	set( VCPKG_TRIPLET_DIR ${_VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET} )
+	set( VCPKG_SHARE_DIR ${VCPKG_TRIPLET_DIR}/share )
+endif ()
+
 set( MAIN_PROJECT_NAME "Castor3D" )
 
 set( VERSION_MAJOR 0 )
@@ -38,10 +44,6 @@ set( CMAKE_POSITION_INDEPENDENT_CODE ON )
 set( CMAKE_CONFIGURATION_TYPES "Debug;Release;RelWithDebInfo" CACHE STRING "The configuration types" FORCE )
 
 project( ${MAIN_PROJECT_NAME} )
-
-if ( VCPKG_TARGET_TRIPLET )
-	set( VCPKG_TOOLCHAIN ON )
-endif ()
 
 include( Setup )
 include( Project )
@@ -251,6 +253,8 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 	set( Castor3D_MATERIAL_DEPS )
 
 	if ( VCPKG_TOOLCHAIN )
+		set( ZLIB_DIR ${VCPKG_SHARE_DIR}/zlib )
+		set( freetype_DIR ${VCPKG_SHARE_DIR}/freetype )
 		find_package( ZLIB CONFIG QUIET )
 		find_package( freetype CONFIG QUIET REQUIRED )
 		set( Freetype_LIBRARIES freetype )
