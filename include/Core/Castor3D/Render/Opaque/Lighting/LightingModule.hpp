@@ -59,7 +59,7 @@ namespace castor3d
 	enum class LightPassLgtIdx
 		: uint32_t
 	{
-		eLight,
+		eLights,
 		eMatrix,
 		eModelMatrix,
 		eSmLinear,

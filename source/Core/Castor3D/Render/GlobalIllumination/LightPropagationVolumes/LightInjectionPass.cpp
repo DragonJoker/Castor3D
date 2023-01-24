@@ -167,7 +167,6 @@ namespace castor3d
 					, shader::ShadowOptions{ SceneFlag::eNone, false, true }
 					, nullptr /* sssProfiles */
 					, LightType::eDirectional
-					, false /* lightUbo */
 					, LightInjectionPass::LightsIdx /* lightBinding */
 					, 0u /* lightSet */
 					, index /* shadowMapBinding */
@@ -230,7 +229,6 @@ namespace castor3d
 					, shader::ShadowOptions{ SceneFlag::eNone, false, true }
 					, nullptr /* sssProfiles */
 					, LightType::eDirectional
-					, false /* lightUbo */
 					, LightInjectionPass::LightsIdx /* lightBinding */
 					, 0u /* lightSet */
 					, index /* shadowMapBinding */
@@ -297,7 +295,6 @@ namespace castor3d
 				, shader::ShadowOptions{ SceneFlag::eNone, false, true }
 				, nullptr /* sssProfiles */
 				, LightType::ePoint
-				, false /* lightUbo */
 				, LightInjectionPass::LightsIdx /* lightBinding */
 				, 0u /* lightSet */
 				, index /* shadowMapBinding */
@@ -363,7 +360,6 @@ namespace castor3d
 				, shader::ShadowOptions{ SceneFlag::eNone, false, true }
 				, nullptr /* sssProfiles */
 				, LightType::eSpot
-				, false /* lightUbo */
 				, LightInjectionPass::LightsIdx /* lightBinding */
 				, 0u /* lightSet */
 				, index /* shadowMapBinding */

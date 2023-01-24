@@ -6,6 +6,7 @@
 #include "Castor3D/Render/Opaque/Lighting/DirectionalLightPass.hpp"
 #include "Castor3D/Render/Opaque/Lighting/LightPassResult.hpp"
 #include "Castor3D/Render/Opaque/Lighting/MeshLightPass.hpp"
+#include "Castor3D/Render/Prepass/PrepassModule.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Shader/Program.hpp"
@@ -149,7 +150,7 @@ namespace castor3d
 		C3D_GpInfo( writer, LightPassIdx::eGpInfo, 0u );
 		C3D_Scene( writer, LightPassIdx::eScene, 0u );
 
-		auto c3d_mapDepthObj = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapDepthObj", uint32_t( LightPassIdx::eDepthObj ), 0u );
+		auto c3d_mapDepthObj = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( PpTexture::eDepthObj ), uint32_t( LightPassIdx::eDepthObj ), 0u );
 		auto c3d_mapNmlOcc = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eNmlOcc ), uint32_t( LightPassIdx::eNmlOcc ), 0u );
 		auto c3d_mapColMtl = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eColMtl ), uint32_t( LightPassIdx::eColMtl ), 0u );
 		auto c3d_mapSpcRgh = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eSpcRgh ), uint32_t( LightPassIdx::eSpcRgh ), 0u );
@@ -173,8 +174,7 @@ namespace castor3d
 			, shader::ShadowOptions{ shadows, lightType, shadowType == ShadowType::eVariance, false }
 			, &sssProfiles
 			, lightType
-			, true /* lightUbo */
-			, uint32_t( LightPassLgtIdx::eLight ) /* lightBinding */
+			, uint32_t( LightPassLgtIdx::eLights ) /* lightBinding */
 			, 1u /* lightSet */
 			, index /* shadowMapBinding */
 			, 1u /* shadowMapSet */ };
@@ -186,6 +186,10 @@ namespace castor3d
 			, false
 			, index
 			, 1u );
+
+		auto c3d_lightData = writer.declPushConstantsBuffer( "c3d_lightData" );
+		auto lightIndex = c3d_lightData.declMember< sdw::UInt >( "lightIndex" );
+		c3d_lightData.end();
 
 		writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
 			, FragmentOut out )
@@ -284,7 +288,7 @@ namespace castor3d
 					{
 					case LightType::eDirectional:
 					{
-						auto light = writer.declLocale( "light", lights.getDirectionalLight() );
+						auto light = writer.declLocale( "light", lights.getDirectionalLight( lightIndex ) );
 						lightingModel->compute( light
 							, components
 							, *backgroundModel
@@ -296,7 +300,7 @@ namespace castor3d
 
 					case LightType::ePoint:
 					{
-						auto light = writer.declLocale( "light", lights.getPointLight() );
+						auto light = writer.declLocale( "light", lights.getPointLight( lightIndex ) );
 						lightingModel->compute( light
 							, components
 							, lightSurface
@@ -307,7 +311,7 @@ namespace castor3d
 
 					case LightType::eSpot:
 					{
-						auto light = writer.declLocale( "light", lights.getSpotLight() );
+						auto light = writer.declLocale( "light", lights.getSpotLight( lightIndex ) );
 						lightingModel->compute( light
 							, components
 							, lightSurface

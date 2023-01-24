@@ -265,7 +265,9 @@ namespace castor3d::shader
 			, enableVolumetric }
 	{
 		m_shadowModel->declare( shadowMapBinding, shadowMapSet );
-		doDeclareLightsBuffer( lightsBufBinding, lightsBufSet );
+		m_lightsBuffer = std::make_unique< LightsBuffer >( m_writer
+			, lightsBufBinding
+			, lightsBufSet );
 	}
 
 	Lights::Lights( Engine const & engine
@@ -277,9 +279,8 @@ namespace castor3d::shader
 		, ShadowOptions shadowOptions
 		, SssProfiles const * sssProfiles
 		, LightType lightType
-		, bool lightUbo
-		, uint32_t lightBinding
-		, uint32_t lightSet
+		, uint32_t lightsBufBinding
+		, uint32_t lightsBufSet
 		, uint32_t & shadowMapBinding
 		, uint32_t shadowMapSet
 		, bool enableVolumetric )
@@ -293,33 +294,25 @@ namespace castor3d::shader
 			, sssProfiles
 			, enableVolumetric }
 	{
-		if ( lightUbo )
+		switch ( lightType )
 		{
-			// Deferred rendering mode
-			switch ( lightType )
-			{
-			case castor3d::LightType::eDirectional:
-				m_shadowModel->declareDirectional( shadowMapBinding, shadowMapSet );
-				doDeclareDirectionalLightUbo( lightBinding, lightSet );
-				break;
-			case castor3d::LightType::ePoint:
-				m_shadowModel->declarePoint( shadowMapBinding, shadowMapSet );
-				doDeclarePointLightUbo( lightBinding, lightSet );
-				break;
-			case castor3d::LightType::eSpot:
-				m_shadowModel->declareSpot( shadowMapBinding, shadowMapSet );
-				doDeclareSpotLightUbo( lightBinding, lightSet );
-				break;
-			default:
-				break;
-			}
+		case LightType::eDirectional:
+			m_shadowModel->declareDirectional( shadowMapBinding, shadowMapSet );
+			break;
+		case LightType::ePoint:
+			m_shadowModel->declarePoint( shadowMapBinding, shadowMapSet );
+			break;
+		case LightType::eSpot:
+			m_shadowModel->declareSpot( shadowMapBinding, shadowMapSet );
+			break;
+		default:
+			CU_Failure( "Unsupported light type" );
+			break;
 		}
-		else
-		{
-			// Forward rendering mode
-			m_shadowModel->declare( shadowMapBinding, shadowMapSet );
-			doDeclareLightsBuffer( lightBinding, lightSet );
-		}
+
+		m_lightsBuffer = std::make_unique< LightsBuffer >( m_writer
+			, lightsBufBinding
+			, lightsBufSet );
 	}
 
 	void Lights::computeCombinedDifSpec( BlendComponents const & components
@@ -612,38 +605,6 @@ namespace castor3d::shader
 		}
 
 		return m_getCascadeFactors( pviewVertex, psplitDepths, pindex );
-	}
-
-	void Lights::doDeclareLightsBuffer( uint32_t binding
-		, uint32_t set )
-	{
-		m_lightsBuffer = std::make_unique< LightsBuffer >( m_writer
-			, binding
-			, set );
-	}
-
-	void Lights::doDeclareDirectionalLightUbo( uint32_t binding
-		, uint32_t set )
-	{
-		sdw::StorageBuffer lightUbo{ m_writer, "C3D_LightsSsbo", "c3d_lights", binding, set };
-		m_directionalLight = std::make_unique< DirectionalLight >( lightUbo.declMember< DirectionalLight >( "l" ) );
-		lightUbo.end();
-	}
-
-	void Lights::doDeclarePointLightUbo( uint32_t binding
-		, uint32_t set )
-	{
-		sdw::StorageBuffer lightUbo{ m_writer, "C3D_LightsSsbo", "c3d_lights", binding, set };
-		m_pointLight = std::make_unique< PointLight >( lightUbo.declMember< PointLight >( "l" ) );
-		lightUbo.end();
-	}
-
-	void Lights::doDeclareSpotLightUbo( uint32_t binding
-		, uint32_t set )
-	{
-		sdw::StorageBuffer lightUbo{ m_writer, "C3D_LightsSsbo", "c3d_lights", binding, set };
-		m_spotLight = std::make_unique< SpotLight >( lightUbo.declMember< SpotLight >( "l" ) );
-		lightUbo.end();
 	}
 
 	//*********************************************************************************************

@@ -282,7 +282,6 @@ namespace castor3d
 			, shader::ShadowOptions{ SceneFlag::eNone, needsVsm, false }
 			, nullptr
 			, LightType::ePoint
-			, false /* lightsUbo */
 			, lightsIndex /* lightBinding */
 			, RenderPipeline::eBuffers /* lightSet */
 			, index /* shadowMapBinding */
