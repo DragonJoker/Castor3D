@@ -90,7 +90,8 @@ namespace castor3d
 			, crg::pp::Config{ std::vector< crg::VkPipelineShaderStageCreateInfoArray >{ crg::makeVkArray< VkPipelineShaderStageCreateInfo >( stages )
 					, crg::makeVkArray< VkPipelineShaderStageCreateInfo >( stages ) }
 				, crg::defaultV< crg::ProgramCreator >
-				, std::vector< VkDescriptorSetLayout >{ descriptorSetLayout } }
+				, std::vector< VkDescriptorSetLayout >{ descriptorSetLayout }
+				, crg::VkPushConstantRangeArray{ { VK_SHADER_STAGE_FRAGMENT_BIT, 0u, 4u } } }
 			, VK_PIPELINE_BIND_POINT_GRAPHICS
 			, 2u }
 		, m_config{ config }

@@ -174,7 +174,7 @@ namespace castor3d
 	ashes::DescriptorSetLayoutPtr LightsPipeline::doCreateDescriptorLayout()
 	{
 		ashes::VkDescriptorSetLayoutBindingArray setLayoutBindings;
-		setLayoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( LightPassLgtIdx::eLight )
+		setLayoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( LightPassLgtIdx::eLights )
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 		setLayoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( LightPassLgtIdx::eMatrix )
@@ -210,12 +210,9 @@ namespace castor3d
 		{
 			ires.first->second = std::make_unique< LightDescriptors >( light, m_device );
 			auto & result = *ires.first->second;
-			auto lightSize = shader::getMaxLightComponentsCount() * sizeof( castor::Point4f );
 			auto & scene = *light.getScene();
 			ashes::WriteDescriptorSetArray writes;
-			writes.emplace_back( scene.getLightCache().getBinding( uint32_t( LightPassLgtIdx::eLight )
-				, light.getBufferIndex() * lightSize
-				, lightSize ) );
+			writes.emplace_back( scene.getLightCache().getBinding( uint32_t( LightPassLgtIdx::eLights ) ) );
 			writes.emplace_back( result.matrixUbo.getDescriptorWrite( uint32_t( LightPassLgtIdx::eMatrix ) ) );
 
 			if ( m_config.lightType != LightType::eDirectional )
@@ -398,6 +395,13 @@ namespace castor3d
 			, 1u
 			, &vertexBuffer
 			, &offset );
+		auto bufferIndex = entry.light.getBufferIndex();
+		m_context.vkCmdPushConstants( commandBuffer
+			, m_lightPipeline.getPipelineLayout()
+			, VK_SHADER_STAGE_FRAGMENT_BIT
+			, 0u
+			, 4u
+			, &bufferIndex );
 		m_context.vkCmdDraw( commandBuffer
 			, m_count
 			, 1u

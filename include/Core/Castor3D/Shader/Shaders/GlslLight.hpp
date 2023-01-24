@@ -232,9 +232,8 @@ namespace castor3d::shader
 			, ShadowOptions shadowOptions
 			, SssProfiles const * sssProfiles
 			, LightType lightType
-			, bool lightUbo
-			, uint32_t lightBinding
-			, uint32_t lightSet
+			, uint32_t lightsBufBinding
+			, uint32_t lightsBufSet
 			, uint32_t & shadowMapBinding
 			, uint32_t shadowMapSet
 			, bool enableVolumetric );
@@ -296,9 +295,8 @@ namespace castor3d::shader
 			, ShadowOptions shadowOptions
 			, SssProfiles const * sssProfiles
 			, LightType lightType
-			, bool lightUbo
-			, uint32_t lightBinding
-			, uint32_t lightSet
+			, uint32_t lightsBufBinding
+			, uint32_t lightsBufSet
 			, uint32_t & shadowMapBinding
 			, uint32_t shadowMapSet )
 			: Lights{ engine
@@ -310,9 +308,8 @@ namespace castor3d::shader
 				, shadowOptions
 				, sssProfiles
 				, lightType
-				, lightUbo
-				, lightBinding
-				, lightSet
+				, lightsBufBinding
+				, lightsBufSet
 				, shadowMapBinding
 				, shadowMapSet
 				, true }
@@ -372,9 +369,8 @@ namespace castor3d::shader
 			, ShadowOptions shadowOptions
 			, SssProfiles const * sssProfiles
 			, LightType lightType
-			, bool lightUbo
-			, uint32_t lightBinding
-			, uint32_t lightSet
+			, uint32_t lightsBufBinding
+			, uint32_t lightsBufSet
 			, uint32_t & shadowMapBinding
 			, uint32_t shadowMapSet
 			, bool enableVolumetric )
@@ -387,9 +383,8 @@ namespace castor3d::shader
 				, shadowOptions
 				, sssProfiles
 				, lightType
-				, lightUbo
-				, lightBinding
-				, lightSet
+				, lightsBufBinding
+				, lightsBufSet
 				, shadowMapBinding
 				, shadowMapSet
 				, enableVolumetric }
@@ -447,9 +442,8 @@ namespace castor3d::shader
 			, ShadowOptions shadowOptions
 			, SssProfiles const * sssProfiles
 			, LightType lightType
-			, bool lightUbo
-			, uint32_t lightBinding
-			, uint32_t lightSet
+			, uint32_t lightsBufBinding
+			, uint32_t lightsBufSet
 			, uint32_t & shadowMapBinding
 			, uint32_t shadowMapSet )
 			: Lights{ engine
@@ -461,9 +455,8 @@ namespace castor3d::shader
 				, shadowOptions
 				, sssProfiles
 				, lightType
-				, lightUbo
-				, lightBinding
-				, lightSet
+				, lightsBufBinding
+				, lightsBufSet
 				, shadowMapBinding
 				, shadowMapSet
 				, true }
@@ -552,34 +545,6 @@ namespace castor3d::shader
 			return *m_shadowModel;
 		}
 
-		inline DirectionalLight getDirectionalLight()const
-		{
-			CU_Require( m_directionalLight );
-			return *m_directionalLight;
-		}
-
-		inline PointLight getPointLight()const
-		{
-			CU_Require( m_pointLight );
-			return *m_pointLight;
-		}
-
-		inline SpotLight getSpotLight()const
-		{
-			CU_Require( m_spotLight );
-			return *m_spotLight;
-		}
-
-	private:
-		C3D_API void doDeclareLightsBuffer( uint32_t binding
-			, uint32_t set );
-		C3D_API void doDeclareDirectionalLightUbo( uint32_t binding
-			, uint32_t set );
-		C3D_API void doDeclarePointLightUbo( uint32_t binding
-			, uint32_t set );
-		C3D_API void doDeclareSpotLightUbo( uint32_t binding
-			, uint32_t set );
-
 	private:
 		LightingModelID m_lightingModelId;
 		BackgroundModelID m_backgroundModelId;
@@ -604,9 +569,6 @@ namespace castor3d::shader
 			, sdw::InVec3
 			, sdw::InVec4Array
 			, sdw::InUInt > m_getTileFactors;
-		std::unique_ptr< DirectionalLight > m_directionalLight;
-		std::unique_ptr< PointLight > m_pointLight;
-		std::unique_ptr< SpotLight > m_spotLight;
 	};
 }
 
