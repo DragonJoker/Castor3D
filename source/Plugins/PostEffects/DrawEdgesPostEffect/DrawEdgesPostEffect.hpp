@@ -51,8 +51,10 @@ namespace draw_edges
 		/**
 		*\copydoc		castor3d::PostEffect::doInitialise
 		*/
-		crg::ImageViewId const * doInitialise( castor3d::RenderDevice const & device
-			, crg::FramePass const & previousPass ) override;
+		bool doInitialise( castor3d::RenderDevice const & device
+			, castor3d::Texture const & source
+			, castor3d::Texture const & target
+			, crg::FramePass const & previousPass )override;
 		/**
 		*\copydoc		castor3d::PostEffect::doCleanup
 		*/
@@ -78,8 +80,6 @@ namespace draw_edges
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
 		std::unique_ptr< DepthNormalEdgeDetection > m_depthNormal;
 		std::unique_ptr< ObjectIDEdgeDetection > m_objectID;
-		crg::ImageId m_resultImg;
-		crg::ImageViewId m_resultView;
 		DrawEdgesUbo m_ubo;
 		DrawEdgesUboConfiguration m_config;
 		crg::FramePass const * m_pass{};

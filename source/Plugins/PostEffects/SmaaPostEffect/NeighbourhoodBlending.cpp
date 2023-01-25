@@ -213,14 +213,14 @@ namespace smaa
 		, castor3d::RenderTarget & renderTarget
 		, castor3d::RenderDevice const & device
 		, SmaaUbo const & ubo
-		, crg::ImageViewId const & sourceView
+		, crg::ImageViewIdArray const & sourceView
 		, crg::ImageViewId const & blendView
 		, crg::ImageViewId const * velocityView
 		, SmaaConfig const & config
-		, bool const * enabled )
+		, bool const * enabled
+		, uint32_t const * passIndex )
 		: m_device{ device }
 		, m_graph{ graph }
-		, m_sourceView{ sourceView }
 		, m_blendView{ blendView }
 		, m_velocityView{ velocityView }
 		, m_extent{ castor3d::getSafeBandedExtent3D( renderTarget.getSize() ) }
@@ -229,7 +229,7 @@ namespace smaa
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
 		, m_pass{ m_graph.createPass( "NeighbourhoodBlending"
-			, [this, &device, &config, enabled]( crg::FramePass const & pass
+			, [this, &device, &config, enabled, passIndex]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & framePass )
 			{
@@ -238,14 +238,26 @@ namespace smaa
 					.renderSize( castor3d::makeExtent2D( m_extent ) )
 					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
-					.passIndex( &config.subsampleIndex )
+					.passIndex( passIndex )
 					.enabled( enabled )
-					.build( pass, context, framePass, { config.maxSubsampleIndices } );
+					.build( pass, context, framePass, { config.maxSubsampleIndices * 2u } );
 				device.renderSystem.getEngine()->registerTimer( framePass.getName()
 					, result->getTimer() );
 				return result;
 			} ) }
 	{
+		auto & source = sourceView.front();
+		auto & target = sourceView.back();
+		crg::ImageViewIdArray inputs;
+		crg::ImageViewIdArray addInputs;
+
+		for ( auto index = 0u; index < config.maxSubsampleIndices; ++index )
+		{
+			inputs.push_back( source );
+			addInputs.push_back( target );
+		}
+
+		inputs.insert( inputs.end(), addInputs.begin(), addInputs.end() );
 		crg::SamplerDesc linearSampler{ VK_FILTER_LINEAR
 			, VK_FILTER_LINEAR
 			, VK_SAMPLER_MIPMAP_MODE_NEAREST
@@ -255,7 +267,7 @@ namespace smaa
 		m_pass.addDependency( previousPass );
 		ubo.createPassBinding( m_pass
 			, SmaaUboIdx );
-		m_pass.addSampledView( m_sourceView
+		m_pass.addSampledView( inputs
 			, neighblend::ColorTexIdx
 			, {}
 			, linearSampler );

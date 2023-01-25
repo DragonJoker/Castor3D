@@ -72,7 +72,9 @@ namespace smaa
 		, SmaaUbo const & ubo
 		, SmaaConfig const & config
 		, std::unique_ptr< ast::Shader > pixelShader
-		, bool const * enabled )
+		, bool const * enabled
+		, uint32_t const * passIndex
+		, uint32_t passCount )
 		: m_device{ device }
 		, m_graph{ graph }
 		, m_config{ config }
@@ -110,7 +112,7 @@ namespace smaa
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
 		, m_pass{ m_graph.createPass( "EdgeDetection"
-			, [this, &device, enabled]( crg::FramePass const & framePass
+			, [this, &device, passIndex, enabled, passCount]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
@@ -119,14 +121,23 @@ namespace smaa
 				dsState->front.passOp = VK_STENCIL_OP_REPLACE;
 				dsState->front.reference = 1u;
 				dsState->back = dsState->front;
-				auto result = crg::RenderQuadBuilder{}
+				auto builder = crg::RenderQuadBuilder{}
 					.renderPosition( {} )
 					.renderSize( castor3d::makeExtent2D( m_extent ) )
 					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.depthStencilState( dsState )
-					.enabled( enabled )
-					.build( framePass, context, graph );
+					.enabled( enabled );
+
+				if ( passIndex )
+				{
+					builder.passIndex( passIndex );
+				}
+
+				auto result = builder.build( framePass
+					, context
+					, graph
+					, crg::ru::Config{ passCount } );
 				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, result->getTimer() );
 				return result;

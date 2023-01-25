@@ -178,7 +178,6 @@ namespace castor3d
 		, m_size{ size }
 		, m_result{ passlindpth::doCreateTexture( m_device, resources, m_size, m_prefix ) }
 		, m_clipInfo{ m_device.uboPool->getBuffer< castor::Point3f >( 0u ) }
-		, m_lastPass{}
 		, m_lineariseVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, m_prefix + "LineariseDepth", passlindpth::getVertexProgram() }
 		, m_linearisePixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, m_prefix + "LineariseDepth", passlindpth::getLinearisePixelProgram() }
 		, m_lineariseStages{ makeShaderState( m_device, m_lineariseVertexShader )
@@ -299,7 +298,6 @@ namespace castor3d
 				, VK_IMAGE_VIEW_TYPE_2D
 				, m_result.getFormat()
 				, VkImageSubresourceRange{ VK_IMAGE_ASPECT_COLOR_BIT, index + 1u, 1u, 0u, 1u } } );
-			m_mipViews.push_back( destination );
 			auto & pass = m_graph.createPass( "MinimiseDepth" + std::to_string( index )
 				, [this, progress, size]( crg::FramePass const & framePass
 					, crg::GraphContext & context
@@ -320,6 +318,13 @@ namespace castor3d
 			previousLevel.createPassBinding( pass, "PreviousLvlCfg", passlindpth::PrevLvlUboIdx );
 			pass.addOutputColourView( destination );
 			m_lastPass = &pass;
+
+			if ( m_mipViews.empty() )
+			{
+				m_mipViews.push_back( source );
+			}
+
+			m_mipViews.push_back( destination );
 		}
 	}
 }

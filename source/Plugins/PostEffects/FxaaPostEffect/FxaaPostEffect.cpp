@@ -219,25 +219,12 @@ namespace fxaa
 		}
 	}
 
-	crg::ImageViewId const * PostEffect::doInitialise( castor3d::RenderDevice const & device
+	bool PostEffect::doInitialise( castor3d::RenderDevice const & device
+		, castor3d::Texture const & source
+		, castor3d::Texture const & target
 		, crg::FramePass const & previousPass )
 	{
-		auto extent = castor3d::getSafeBandedExtent3D( m_renderTarget.getSize() );
-		m_resultImg = m_graph.createImage( crg::ImageData{ "FxaaRes"
-			, 0u
-			, VK_IMAGE_TYPE_2D
-			, m_target->data->info.format
-			, extent
-			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-				| VK_IMAGE_USAGE_SAMPLED_BIT
-				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
-				| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) } );
-		m_resultView = m_graph.createView( crg::ImageViewData{ "FxaaRes"
-			, m_resultImg
-			, 0u
-			, VK_IMAGE_VIEW_TYPE_2D
-			, m_resultImg.data->info.format
-			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } );
+		auto extent = castor3d::makeExtent2D( target.getExtent() );
 		m_pass = &m_graph.createPass( "FXAA"
 			, [this, &device, extent]( crg::FramePass const & framePass
 				, crg::GraphContext & context
@@ -245,18 +232,15 @@ namespace fxaa
 			{
 				auto result = crg::RenderQuadBuilder{}
 					.renderPosition( {} )
-					.renderSize( castor3d::makeExtent2D( extent ) )
+					.renderSize( extent )
 					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.enabled( &isEnabled() )
+					.passIndex( &m_passIndex )
 					.build( framePass
 						, context
 						, graph
-						, crg::ru::Config{}
-							.implicitAction( m_resultView
-								, crg::RecordContext::copyImage( *m_target
-									, m_resultView
-									, { extent.width, extent.height } ) ) );
+						, crg::ru::Config{ 2u } );
 				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, result->getTimer() );
 				return result;
@@ -264,10 +248,10 @@ namespace fxaa
 		m_pass->addDependency( previousPass );
 		m_fxaaUbo.createPassBinding( *m_pass
 			, postfx::FxaaCfgUboIdx );
-		m_pass->addSampledView( *m_target
+		m_pass->addSampledView( crg::ImageViewIdArray{ source.sampledViewId, target.sampledViewId }
 			, postfx::ColorTexIdx );
-		m_pass->addOutputColourView( m_resultView );
-		return &m_resultView;
+		m_pass->addOutputColourView( crg::ImageViewIdArray{ target.targetViewId, source.targetViewId } );
+		return true;
 	}
 
 	void PostEffect::doCleanup( castor3d::RenderDevice const & device )

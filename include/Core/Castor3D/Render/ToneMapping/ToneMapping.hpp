@@ -51,19 +51,12 @@ namespace castor3d
 			, RenderDevice const & device
 			, castor::Size const & size
 			, crg::FrameGraph & graph
-			, crg::ImageViewId const & source
+			, crg::ImageViewIdArray const & source
 			, crg::ImageViewId const & target
 			, crg::FramePass const & previousPass
 			, HdrConfigUbo & hdrConfigUbo
 			, Parameters const & parameters
 			, ProgressBar * progress );
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		C3D_API virtual ~ToneMapping();
 		/**
 		 *\~english
 		 *\brief		Initialises tone mapping shader and pipeline.
@@ -73,6 +66,14 @@ namespace castor3d
 		 *\param[in]	name		Le nom du mappage de tons.
 		 */
 		C3D_API void initialise( castor::String const & name );
+		/**
+		 *\~english
+		 *\param[in, out]	updater	The update data.
+		 *\~french
+		 *\param[in, out]	updater	Les données d'update.
+		 */
+		C3D_API void update( CpuUpdater & updater
+			, crg::ImageViewId const & source );
 		/**
 		 *\~english
 		 *\brief		Initialises tone mapping shader and pipeline.
@@ -90,7 +91,7 @@ namespace castor3d
 		 *\brief			Fonction d'acceptation de visiteur.
 		 *\param[in, out]	visitor	Le visiteur.
 		 */
-		C3D_API virtual void accept( ToneMappingVisitor & visitor );
+		C3D_API void accept( ToneMappingVisitor & visitor );
 		/**
 		*\~english
 		*name
@@ -116,7 +117,7 @@ namespace castor3d
 	private:
 		crg::FramePass & doCreatePass( castor::Size const & size
 			, crg::FrameGraph & graph
-			, crg::ImageViewId const & source
+			, crg::ImageViewIdArray const & source
 			, crg::ImageViewId const & target
 			, crg::FramePass const & previousPass
 			, ProgressBar * progress );
@@ -127,9 +128,11 @@ namespace castor3d
 		HdrConfigUbo & m_hdrConfigUbo;
 		castor3d::ShaderModule m_vertexShader;
 		castor3d::ShaderModule m_pixelShader;
+		crg::ImageViewId m_source;
 		ashes::PipelineShaderStageCreateInfoArray m_program;
 		crg::FramePass * m_pass{};
 		crg::RenderQuad * m_quad{};
+		uint32_t m_passIndex{};
 	};
 }
 

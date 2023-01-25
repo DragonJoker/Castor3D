@@ -674,7 +674,7 @@ namespace castor3d
 
 	void LightInjectionPass::doSubInitialise()
 	{
-		m_holder.initialise( getRenderPass() );
+		m_holder.initialise( getRenderPass( 0u ) );
 	}
 
 	void LightInjectionPass::doSubRecordInto( crg::RecordContext & context

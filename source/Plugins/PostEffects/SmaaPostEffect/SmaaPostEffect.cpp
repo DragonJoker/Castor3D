@@ -265,10 +265,11 @@ namespace smaa
 		m_config = SmaaConfig{ parameters };
 	}
 
-	crg::ImageViewId const * PostEffect::doInitialise( castor3d::RenderDevice const & device
+	bool PostEffect::doInitialise( castor3d::RenderDevice const & device
+		, castor3d::Texture const & source
+		, castor3d::Texture const & target
 		, crg::FramePass const & previousPass )
 	{
-		m_srgbTextureView = m_target;
 		m_hdrTextureView = &m_renderTarget.getTechnique().getResult().sampledViewId;
 		auto previous = &previousPass;
 		crg::ImageViewIdArray smaaResult;
@@ -292,10 +293,11 @@ namespace smaa
 				, m_renderTarget
 				, device
 				, m_ubo
-				, *m_srgbTextureView
+				, crg::ImageViewIdArray{ source.sampledViewId, target.sampledViewId }
 				, doGetPredicationTexture()
 				, m_config
-				, &m_enabled );
+				, &m_enabled
+				, &m_passIndex );
 			break;
 
 		case EdgeDetectionType::eLuma:
@@ -304,10 +306,11 @@ namespace smaa
 				, m_renderTarget
 				, device
 				, m_ubo
-				, *m_srgbTextureView
+				, crg::ImageViewIdArray{ source.sampledViewId, target.sampledViewId }
 				, doGetPredicationTexture()
 				, m_config
-				, &m_enabled );
+				, &m_enabled
+				, &m_passIndex );
 			break;
 		}
 
@@ -336,11 +339,12 @@ namespace smaa
 					, m_renderTarget
 					, device
 					, m_ubo
-					, *m_srgbTextureView
+					, crg::ImageViewIdArray{ source.sampledViewId, target.sampledViewId }
 					, m_blendingWeightCalculation->getResult()
 					, velocityView
 					, m_config
-					, &m_enabled );
+					, &m_enabled
+					, &m_subsamplePassIndex );
 				previous = &m_neighbourhoodBlending->getPass();
 				smaaResult = m_neighbourhoodBlending->getResult();
 
@@ -385,9 +389,9 @@ namespace smaa
 					.renderSize( castor3d::makeExtent2D( castor3d::getSafeBandedSize( m_renderTarget.getSize() ) ) )
 					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
-					.passIndex( &m_config.subsampleIndex )
+					.passIndex( &m_subsamplePassIndex )
 					.enabled( &m_enabled )
-					.build( framePass, context, graph, { m_config.maxSubsampleIndices } );
+					.build( framePass, context, graph, { m_config.maxSubsampleIndices * 2u } );
 				getOwner()->getEngine()->registerTimer( framePass.getFullName()
 					, result->getTimer() );
 				return result;
@@ -405,11 +409,21 @@ namespace smaa
 			, SmaaUboIdx + 1
 			, {}
 			, linearSampler );
-		pass.addOutputColourView( *m_target );
+		crg::ImageViewIdArray outputs;
+		crg::ImageViewIdArray addOutputs;
+
+		for ( auto index = 0u; index < m_config.maxSubsampleIndices; ++index )
+		{
+			outputs.push_back( target.targetViewId );
+			addOutputs.push_back( source.targetViewId );
+		}
+
+		outputs.insert( outputs.end(), addOutputs.begin(), addOutputs.end() );
+		pass.addOutputColourView( outputs );
 		previous = &pass;
 
 		m_pass = previous;
-		return m_target;
+		return true;
 	}
 
 	void PostEffect::doCleanup( castor3d::RenderDevice const & device )
@@ -437,6 +451,7 @@ namespace smaa
 			m_ubo.cpuUpdate( castor3d::getSafeBandedSize( m_renderTarget.getSize() )
 				, m_config );
 			m_config.subsampleIndex = m_frameIndex;
+			m_subsamplePassIndex = m_config.subsampleIndex + m_passIndex * m_config.maxSubsampleIndices;
 		}
 		else
 		{

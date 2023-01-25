@@ -130,18 +130,18 @@ namespace PbrBloom
 	DownsamplePass::DownsamplePass( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
 		, castor3d::RenderDevice const & device
-		, crg::ImageViewId const & sceneView
+		, crg::ImageViewIdArray const & sceneView
 		, crg::ImageId const & resultImg
 		, uint32_t passesCount
-		, bool const * enabled )
+		, bool const * enabled
+		, uint32_t const * passIndex )
 		: m_graph{ graph }
-		, m_sceneView{ sceneView }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "PbrBloomDownsample", down::getVertexProgram() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "PbrBloomDownsample", down::getPixelProgram() }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
 		, m_resultViews{ doCreateResultViews( graph, resultImg, passesCount ) }
-		, m_passes{ doCreatePasses( graph, previousPass, device, passesCount, enabled ) }
+		, m_passes{ doCreatePasses( graph, previousPass, device, sceneView, passesCount, enabled, passIndex ) }
 	{
 	}
 
@@ -182,23 +182,26 @@ namespace PbrBloom
 	std::vector< crg::FramePass * > DownsamplePass::doCreatePasses( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
 		, castor3d::RenderDevice const & device
+		, crg::ImageViewIdArray const & sceneView
 		, uint32_t passesCount
-		, bool const * enabled )
+		, bool const * enabled
+		, uint32_t const * passIndex )
 	{
 		std::vector< crg::FramePass * > result;
 		auto prev = &previousPass;
-		auto src = &m_sceneView;
+		auto src = sceneView;
 
 		for ( uint32_t i = 0u; i < passesCount; ++i )
 		{
-			auto srcExtent = castor3d::makeExtent2D( getMipExtent( *src ) );
+			auto srcExtent = castor3d::makeExtent2D( getMipExtent( src.front() ) );
 			auto dstExtent = castor3d::makeExtent2D( getMipExtent( m_resultViews[i] ) );
+			auto count = uint32_t( src.size() );
 			auto & pass = graph.createPass( "Downsample" + std::to_string( i )
-				, [this, &device, enabled, srcExtent, dstExtent, i]( crg::FramePass const & framePass
+				, [this, &device, passIndex, enabled, count, srcExtent, dstExtent, i]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{
-					auto result = crg::RenderQuadBuilder{}
+					auto builder = crg::RenderQuadBuilder{}
 						.enabled( enabled )
 						.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 						.pushConstants( VkPushConstantRange{ VK_SHADER_STAGE_FRAGMENT_BIT, 0u, sizeof( castor::Point2f ) } )
@@ -216,8 +219,17 @@ namespace PbrBloom
 									, 0u
 									, sizeof( castor::Point2f )
 									, invSize.constPtr() );
-							} )
-						.build( framePass, context, graph, crg::ru::Config{} );
+							} );
+
+					if ( count > 1u )
+					{
+						builder.passIndex( passIndex );
+					}
+
+					auto result = builder.build( framePass
+						, context
+						, graph
+						, crg::ru::Config{ count } );
 					m_quads.push_back( result.get() );
 					device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 						, result->getTimer() );
@@ -225,7 +237,7 @@ namespace PbrBloom
 				} );
 
 			pass.addDependency( *prev );
-			pass.addSampledView( *src
+			pass.addSampledView( src
 				, 0u
 				, VK_IMAGE_LAYOUT_UNDEFINED
 				, crg::SamplerDesc{ VK_FILTER_LINEAR
@@ -240,7 +252,7 @@ namespace PbrBloom
 			pass.addOutputColourView( m_resultViews[i] );
 			result.push_back( &pass );
 			prev = &pass;
-			src = &m_resultViews[i];
+			src = { m_resultViews[i] };
 		}
 
 		return result;

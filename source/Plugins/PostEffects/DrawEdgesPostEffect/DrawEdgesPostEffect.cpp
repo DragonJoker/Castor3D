@@ -251,10 +251,11 @@ namespace draw_edges
 		}
 	}
 
-	crg::ImageViewId const * PostEffect::doInitialise( castor3d::RenderDevice const & device
+	bool PostEffect::doInitialise( castor3d::RenderDevice const & device
+		, castor3d::Texture const & source
+		, castor3d::Texture const & target
 		, crg::FramePass const & previousPass )
 	{
-		auto extent = castor3d::getSafeBandedExtent3D( m_renderTarget.getSize() );
 		auto & engine = *device.renderSystem.getEngine();
 		auto & technique = m_renderTarget.getTechnique();
 		auto & passBuffer = engine.getMaterialCache().getPassBuffer();
@@ -281,21 +282,7 @@ namespace draw_edges
 			, &isEnabled() );
 		previous = &m_objectID->getPass();
 
-		m_resultImg = m_graph.createImage( crg::ImageData{ "DECombineRes"
-			, 0u
-			, VK_IMAGE_TYPE_2D
-			, m_target->data->info.format
-			, extent
-			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-				| VK_IMAGE_USAGE_SAMPLED_BIT
-				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
-				| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) } );
-		m_resultView = m_graph.createView( crg::ImageViewData{ "DECombineRes"
-			, m_resultImg
-			, 0u
-			, VK_IMAGE_VIEW_TYPE_2D
-			, m_resultImg.data->info.format
-			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } );
+		auto extent = castor3d::makeExtent2D( target.getExtent() );
 		auto & pass = m_graph.createPass( "Combine"
 			, [this, &device, extent]( crg::FramePass const & framePass
 				, crg::GraphContext & context
@@ -303,18 +290,15 @@ namespace draw_edges
 			{
 				auto result = crg::RenderQuadBuilder{}
 					.renderPosition( {} )
-					.renderSize( castor3d::makeExtent2D( extent ) )
+					.renderSize( extent )
 					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.enabled( &isEnabled() )
+					.passIndex( &m_passIndex )
 					.build( framePass
 						, context
 						, graph
-						, crg::ru::Config{}
-							.implicitAction( m_resultView
-								, crg::RecordContext::copyImage( *m_target
-									, m_resultView
-									, { extent.width, extent.height } ) ) );
+						, crg::ru::Config{ 2u } );
 				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, result->getTimer() );
 				return result;
@@ -328,17 +312,17 @@ namespace draw_edges
 			, 0u
 			, uint32_t( modelBuffer.getSize() ) );
 		pass.addSampledView( depthObj, px::eDepthObj );
-		pass.addSampledView( *m_target, px::eSource );
+		pass.addSampledView( crg::ImageViewIdArray{ source.sampledViewId, target.sampledViewId }, px::eSource );
 		pass.addSampledView( technique.getScatteringLightingResult().sampledViewId, px::eScattering );
 		pass.addSampledView( m_depthNormal->getResult(), px::eEdgeDN );
 		pass.addSampledView( m_objectID->getResult(), px::eEdgeO );
 		m_ubo.createPassBinding( pass, px::eDrawEdges );
 		auto index = uint32_t( px::eSpecifics );
 		device.renderSystem.getEngine()->createSpecificsBuffersPassBindings( pass, index );
-		pass.addOutputColourView( m_resultView );
+		pass.addOutputColourView( crg::ImageViewIdArray{ target.targetViewId, source.targetViewId } );
 
 		m_pass = &pass;
-		return &m_resultView;
+		return true;
 	}
 
 	void PostEffect::doCleanup( castor3d::RenderDevice const & device )

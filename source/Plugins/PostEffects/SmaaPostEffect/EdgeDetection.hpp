@@ -26,7 +26,9 @@ namespace smaa
 			, SmaaUbo const & ubo
 			, SmaaConfig const & config
 			, std::unique_ptr< ast::Shader > pixelShader
-			, bool const * enabled );
+			, bool const * enabled
+			, uint32_t const * passIndex
+			, uint32_t passCount );
 		~EdgeDetection();
 
 		void accept( castor3d::PipelineVisitorBase & visitor );

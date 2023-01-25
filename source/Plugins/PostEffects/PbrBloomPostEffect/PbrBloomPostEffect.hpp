@@ -45,7 +45,9 @@ namespace PbrBloom
 		/**
 		*\copydoc		castor3d::PostEffect::doInitialise
 		*/
-		crg::ImageViewId const * doInitialise( castor3d::RenderDevice const & device
+		bool doInitialise( castor3d::RenderDevice const & device
+			, castor3d::Texture const & source
+			, castor3d::Texture const & target
 			, crg::FramePass const & previousPass )override;
 		/**
 		*\copydoc		castor3d::PostEffect::doCleanup
@@ -74,6 +76,7 @@ namespace PbrBloom
 		uint32_t m_blurRadius;
 		float m_bloomStrength;
 		uint32_t m_duPassesCount;
+		VkExtent3D m_extent{};
 	};
 }
 

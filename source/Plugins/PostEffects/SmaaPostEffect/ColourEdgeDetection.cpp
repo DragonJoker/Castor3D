@@ -291,10 +291,11 @@ namespace smaa
 		, castor3d::RenderTarget & renderTarget
 		, castor3d::RenderDevice const & device
 		, SmaaUbo const & ubo
-		, crg::ImageViewId const & colourView
+		, crg::ImageViewIdArray const & colourView
 		, crg::ImageViewId const * predication
 		, SmaaConfig const & config
-		, bool const * enabled )
+		, bool const * enabled
+		, uint32_t const * passIndex )
 		: EdgeDetection{ graph
 			, previousPass
 			, renderTarget
@@ -304,8 +305,9 @@ namespace smaa
 			, ( predication
 				? coled::doGetEdgeDetectionFPPredication()
 				: coled::doGetEdgeDetectionFPNoPredication() )
-			, enabled }
-		, m_colourView{ colourView }
+			, enabled
+			, passIndex
+			, uint32_t( colourView.size() ) }
 		, m_predicationView{ ( predication
 			? m_graph.createView( coled::doCreatePredicationView( *predication ) )
 			: crg::ImageViewId{} ) }
@@ -316,7 +318,7 @@ namespace smaa
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE };
-		m_pass.addSampledView( m_colourView
+		m_pass.addSampledView( colourView
 			, coled::ColorTexIdx
 			, {}
 			, linearSampler );

@@ -425,17 +425,23 @@ namespace castor3d
 			, ProgressBar * progress = nullptr );
 		crg::FramePass & doCreateOverlayPass( ProgressBar * progress
 			, RenderDevice const & device );
-		crg::FramePass & doCreateCombinePass( ProgressBar * progress );
+		crg::FramePass & doCreateCombinePass( ProgressBar * progress
+			, crg::ImageViewIdArray source );
 		bool doInitialiseTechnique( RenderDevice const & device
 			, QueueData const & queueData
 			, ProgressBar * progress );
 		crg::FramePass const & doInitialiseCopyCommands( RenderDevice const & device
 			, castor::String const & name
-			, crg::ImageViewId const & source
-			, crg::ImageViewId const & target
+			, Texture const & source
+			, Texture const & target
 			, crg::FramePass const & previousPass
-			, ProgressBar * progress );
+			, ProgressBar * progress
+			, bool const * enabled );
 		void doInitCombineProgram( ProgressBar * progress );
+		Texture const & doUpdatePostEffects( CpuUpdater & updater
+			, PostEffectPtrArray const & effects
+			, Texture const & source
+			, Texture const & target )const;
 		crg::SemaphoreWaitArray doRender( ashes::Queue const & queue
 			, crg::SemaphoreWaitArray signalsToWait );
 
@@ -476,12 +482,17 @@ namespace castor3d
 		SceneCullerUPtr m_culler;
 		crg::FrameGraph m_graph;
 		TexturePtr m_velocity;
-		Texture m_objects;
+		Texture m_srgbObjects;
+		Texture m_srgbIntermediate;
+		Texture m_hdrObjects;
+		Texture m_hdrIntermediate;
 		Texture m_overlays;
 		Texture m_combined;
 		crg::FramePass & m_overlayPassDesc;
 		OverlayPass * m_overlayPass{};
-		crg::FramePass & m_combinePass;
+		uint32_t m_combinePassIndex{};
+		Texture const * m_combinePassSource{};
+		crg::FramePass * m_combinePass;
 		crg::FramePass const * m_hdrLastPass{};
 		crg::RunnableGraphPtr m_runnable;
 		ashes::SemaphorePtr m_combineSemaphore;

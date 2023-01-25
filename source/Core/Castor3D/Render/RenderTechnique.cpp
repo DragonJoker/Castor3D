@@ -271,6 +271,7 @@ namespace castor3d
 		, RenderDevice const & device
 		, QueueData const & queueData
 		, Parameters const & parameters
+		, Texture const & colour
 		, SsaoConfig const & ssaoConfig
 		, ProgressBar * progress
 		, bool deferred
@@ -280,21 +281,9 @@ namespace castor3d
 		, castor::Named{ name + cuT( "/Technique") }
 		, m_renderTarget{ renderTarget }
 		, m_device{ device }
+		, m_colour{ colour }
 		, m_targetSize{ m_renderTarget.getSize() }
 		, m_rawSize{ getSafeBandedSize( m_targetSize ) }
-		, m_colour{ m_device
-			, m_renderTarget.getResources()
-			, getName() + "/Colour"
-			, 0u
-			, makeExtent3D( m_rawSize )
-			, 1u
-			, 1u
-			, VK_FORMAT_R16G16B16A16_SFLOAT
-			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-				| VK_IMAGE_USAGE_SAMPLED_BIT
-				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
-				| VK_IMAGE_USAGE_TRANSFER_DST_BIT )
-			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
 		, m_depth{ std::make_shared< Texture >( m_device
 			, m_renderTarget.getResources()
 			, getName() + "/" + getTexName( PpTexture::eDepth )
@@ -384,7 +373,6 @@ namespace castor3d
 			, TechniquePassEvent::eBeforePostEffects
 			, &m_transparent.getLastPass() );
 
-		m_colour.create();
 		m_depth->create();
 		m_normal->create();
 		auto runnable = m_clearLpvRunnable.get();
@@ -409,7 +397,6 @@ namespace castor3d
 		m_lpvResult.reset();
 		m_voxelizer.reset();
 		m_normal->destroy();
-		m_colour.destroy();
 		m_depth->destroy();
 
 		for ( auto & array : m_activeShadowMaps )

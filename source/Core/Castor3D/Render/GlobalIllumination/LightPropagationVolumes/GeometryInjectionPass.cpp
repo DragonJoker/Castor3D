@@ -724,7 +724,7 @@ namespace castor3d
 
 	void GeometryInjectionPass::doSubInitialise()
 	{
-		m_holder.initialise( getRenderPass() );
+		m_holder.initialise( getRenderPass( 0u ) );
 	}
 
 	void GeometryInjectionPass::doSubRecordInto( crg::RecordContext & context

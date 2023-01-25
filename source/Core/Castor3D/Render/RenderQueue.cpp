@@ -134,7 +134,7 @@ namespace castor3d
 	ashes::CommandBuffer const & RenderQueue::initCommandBuffer()
 	{
 		if ( hasCommandBuffer()
-			&& m_renderPassAtInit == getOwner()->getRenderPass() )
+			&& m_renderPassAtInit == getOwner()->getRenderPass( 0u ) )
 		{
 			return getCommandBuffer();
 		}
@@ -160,7 +160,7 @@ namespace castor3d
 		, QueueData const & queueData )
 	{
 		m_commandBuffer.reset();
-		m_renderPassAtInit = getOwner()->getRenderPass();
+		m_renderPassAtInit = getOwner()->getRenderPass( 0u );
 		m_commandBuffer = queueData.commandPool->createCommandBuffer( getOwner()->getName()
 			, VK_COMMAND_BUFFER_LEVEL_SECONDARY );
 		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT | VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT

@@ -43,13 +43,15 @@ namespace castor3d
 	}
 
 	bool PostEffect::initialise( castor3d::RenderDevice const & device
-		, crg::ImageViewId const & texture
+		, Texture const & source
+		, Texture const & target
 		, crg::FramePass const & previousPass )
 	{
-		m_target = &texture;
-		m_result = doInitialise( device
+		m_source = &source;
+		return doInitialise( device
+			, source
+			, target
 			, previousPass );
-		return m_result != nullptr;
 	}
 
 	void PostEffect::cleanup( castor3d::RenderDevice const & device )
@@ -57,9 +59,12 @@ namespace castor3d
 		doCleanup( device );
 	}
 
-	void PostEffect::update( CpuUpdater & updater )
+	bool PostEffect::update( CpuUpdater & updater
+		, Texture const & source )
 	{
+		m_passIndex = ( &source == m_source ) ? 0u : 1u;
 		doCpuUpdate( updater );
+		return isEnabled();
 	}
 
 	void PostEffect::update( GpuUpdater & updater )

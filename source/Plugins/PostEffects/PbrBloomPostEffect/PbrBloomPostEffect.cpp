@@ -89,20 +89,22 @@ namespace PbrBloom
 		m_passesCount = m_duPassesCount * 2u + 1u;
 	}
 
-	crg::ImageViewId const * PostEffect::doInitialise( castor3d::RenderDevice const & device
+	bool PostEffect::doInitialise( castor3d::RenderDevice const & device
+		, castor3d::Texture const & source
+		, castor3d::Texture const & target
 		, crg::FramePass const & previousPass )
 	{
 		m_ubo = device.uboPool->getBuffer< castor::Point2f >( 0u );
 		auto & data = m_ubo.getData();
-		auto extent = getExtent( *m_target );
-		data->x = float( m_blurRadius ) / float( std::max( extent.width, extent.height ) );
+		m_extent = target.getExtent();
+		data->x = float( m_blurRadius ) / float( std::max( m_extent.width, m_extent.height ) );
 		data->y = m_bloomStrength;
-		extent = ashes::getSubresourceDimensions( extent, 1u );
+		auto extent = ashes::getSubresourceDimensions( m_extent, 1u );
 		auto mipCount = ashes::getMaxMipCount( extent );
 		m_intermediateImg = m_graph.createImage( crg::ImageData{ "PBLInt"
 			, 0u
 			, VK_IMAGE_TYPE_2D
-			, m_target->data->info.format
+			, target.getFormat()
 			, extent
 			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_SAMPLED_BIT
@@ -114,10 +116,11 @@ namespace PbrBloom
 		m_downsamplePass = std::make_unique< DownsamplePass >( m_graph
 			, previousPass
 			, device
-			, *m_target
+			, crg::ImageViewIdArray{ source.sampledViewId, target.sampledViewId }
 			, m_intermediateImg
 			, m_duPassesCount
-			, &isEnabled() );
+			, &isEnabled()
+			, &m_passIndex );
 		m_upsamplePass = std::make_unique< UpsamplePass >( m_graph
 			, m_downsamplePass->getPass()
 			, device
@@ -128,13 +131,15 @@ namespace PbrBloom
 		m_combinePass = std::make_unique< CombinePass >( m_graph
 			, m_upsamplePass->getPass()
 			, device
-			, *m_target
+			, crg::ImageViewIdArray{ source.sampledViewId, target.sampledViewId }
 			, m_intermediateImg
+			, crg::ImageViewIdArray{ target.targetViewId, source.targetViewId }
 			, m_ubo
-			, &isEnabled() );
+			, &isEnabled()
+			, &m_passIndex );
 
 		m_pass = &m_combinePass->getPass();
-		return &m_combinePass->getResult();
+		return true;
 	}
 
 	void PostEffect::doCleanup( castor3d::RenderDevice const & device )
@@ -146,9 +151,8 @@ namespace PbrBloom
 
 	void PostEffect::doCpuUpdate( castor3d::CpuUpdater & updater )
 	{
-		auto extent = getExtent( *m_target );
 		auto & data = m_ubo.getData();
-		data->x = float( m_blurRadius ) / float( std::max( extent.width, extent.height ) );
+		data->x = float( m_blurRadius ) / float( std::max( m_extent.width, m_extent.height ) );
 		data->y = m_bloomStrength;
 	}
 

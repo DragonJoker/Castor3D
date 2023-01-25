@@ -124,7 +124,9 @@ namespace smaa
 			, ubo
 			, config
 			, dpthed::doGetEdgeDetectionFP( *renderTarget.getEngine() )
-			, enabled }
+			, enabled
+			, nullptr
+			, 1u }
 		, m_depthView{ m_graph.createView( dpthed::doCreateDepthView( depthView ) ) }
 	{
 		crg::SamplerDesc linearSampler{ VK_FILTER_LINEAR

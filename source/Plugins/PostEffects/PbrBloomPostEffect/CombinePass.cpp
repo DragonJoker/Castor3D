@@ -78,71 +78,55 @@ namespace PbrBloom
 	CombinePass::CombinePass( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
 		, castor3d::RenderDevice const & device
-		, crg::ImageViewId const & sceneView
-		, crg::ImageId const & intermediate
+		, crg::ImageViewIdArray const & lhs
+		, crg::ImageId const & rhs
+		, crg::ImageViewIdArray const & result
 		, castor3d::UniformBufferOffsetT< castor::Point2f > const & ubo
-		, bool const * enabled )
+		, bool const * enabled
+		, uint32_t const * passIndex )
 		: m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "PbrBloomCombine", combine::getVertexProgram() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "PbrBloomCombine", combine::getPixelProgram() }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
-		, m_resultImg{ graph.createImage( crg::ImageData{ "PBLComb"
-			, 0u
-			, VK_IMAGE_TYPE_2D
-			, sceneView.data->info.format
-			, getExtent( sceneView )
-			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-				| VK_IMAGE_USAGE_SAMPLED_BIT
-				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
-				| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) } ) }
-		, m_resultView{ graph.createView( crg::ImageViewData{ "PBLComb"
-			, m_resultImg
-			, 0u
-			, VK_IMAGE_VIEW_TYPE_2D
-			, m_resultImg.data->info.format
-			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } ) }
 		, m_pass{ graph.createPass( "Combine"
-			, [this, &device, &sceneView, enabled]( crg::FramePass const & framePass
+			, [this, &device, lhs, enabled, passIndex]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto extent = getExtent( sceneView );
+				auto extent = getExtent( lhs.front() );
 				auto result = crg::RenderQuadBuilder{}
 					.renderPosition( {} )
 					.renderSize( castor3d::makeExtent2D( extent ) )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.enabled( enabled )
+					.passIndex( passIndex )
 					.build( framePass
 						, context
 						, graph
-						, crg::ru::Config{}
-							.implicitAction( m_resultView
-								, crg::RecordContext::copyImage( sceneView
-									, m_resultView
-									, { extent.width, extent.height } ) ) );
+						, crg::ru::Config{ uint32_t( lhs.size() ) } );
 				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 							, result->getTimer() );
 				return result;
 			} ) }
 	{
-		auto intermediateView = graph.createView( crg::ImageViewData{ intermediate.data->name + "0"
-			, intermediate
+		auto intermediateView = graph.createView( crg::ImageViewData{ rhs.data->name + "0"
+			, rhs
 			, 0u
 			, VK_IMAGE_VIEW_TYPE_2D
-			, intermediate.data->info.format
+			, rhs.data->info.format
 			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } );
 		m_pass.addDependency( previousPass );
 		m_pass.addSampledView( intermediateView
 			, 0u
 			, {}
 			, crg::SamplerDesc{ VK_FILTER_LINEAR, VK_FILTER_LINEAR } );
-		m_pass.addSampledView( sceneView
+		m_pass.addSampledView( lhs
 			, 1u
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 		ubo.createPassBinding( m_pass
 			, std::string{ "PbrBloomUbo" }
 			, 2u );
-		m_pass.addOutputColourView( m_resultView );
+		m_pass.addOutputColourView( result );
 	}
 
 	void CombinePass::accept( castor3d::PipelineVisitorBase & visitor )

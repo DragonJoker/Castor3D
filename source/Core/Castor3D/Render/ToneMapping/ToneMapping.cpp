@@ -30,7 +30,7 @@ namespace castor3d
 		, RenderDevice const & device
 		, castor::Size const & size
 		, crg::FrameGraph & graph
-		, crg::ImageViewId const & source
+		, crg::ImageViewIdArray const & source
 		, crg::ImageViewId const & target
 		, crg::FramePass const & previousPass
 		, HdrConfigUbo & hdrConfigUbo
@@ -41,17 +41,20 @@ namespace castor3d
 		, m_hdrConfigUbo{ hdrConfigUbo }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "ToneMapping" }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "ToneMapping" }
+		, m_source{ source.front() }
 		, m_pass{ &doCreatePass( size, graph, source, target, previousPass, progress ) }
-	{
-	}
-
-	ToneMapping::~ToneMapping()
 	{
 	}
 
 	void ToneMapping::initialise( castor::String const & name )
 	{
 		doCreate( name );
+	}
+
+	void ToneMapping::update( CpuUpdater & updater
+		, crg::ImageViewId const & source )
+	{
+		m_passIndex = ( source == m_source ) ? 1u : 0u;
 	}
 
 	castor::String const & ToneMapping::getFullName()const
@@ -77,7 +80,7 @@ namespace castor3d
 
 	crg::FramePass & ToneMapping::doCreatePass( castor::Size const & size
 		, crg::FrameGraph & graph
-		, crg::ImageViewId const & source
+		, crg::ImageViewIdArray const & source
 		, crg::ImageViewId const & target
 		, crg::FramePass const & previousPass
 		, ProgressBar * progress )
@@ -92,8 +95,9 @@ namespace castor3d
 					.renderPosition( {} )
 					.renderSize( makeExtent2D( getExtent( target ) ) )
 					.texcoordConfig( {} )
+					.passIndex( &m_passIndex )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_program ) )
-					.build( framePass, context, graph );
+					.build( framePass, context, graph, crg::ru::Config{ 2u } );
 				getEngine()->registerTimer( framePass.getFullName()
 					, result->getTimer() );
 				m_quad = result.get();

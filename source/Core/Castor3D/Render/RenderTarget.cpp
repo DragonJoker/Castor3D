@@ -335,14 +335,53 @@ namespace castor3d
 				| VK_IMAGE_USAGE_TRANSFER_DST_BIT
 				| VK_IMAGE_USAGE_STORAGE_BIT )
 			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK ) }
-		, m_objects{ getOwner()->getRenderSystem()->getRenderDevice()
+		, m_srgbObjects{ getOwner()->getRenderSystem()->getRenderDevice()
 			, m_resources
-			, "Scene"
+			, "SRGBScene"
 			, 0u
 			, makeExtent3D( m_safeBandedSize )
 			, 1u
 			, 1u
 			, getPixelFormat()
+			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+				| VK_IMAGE_USAGE_SAMPLED_BIT
+				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
+				| VK_IMAGE_USAGE_TRANSFER_DST_BIT )
+			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
+		, m_srgbIntermediate{ getOwner()->getRenderSystem()->getRenderDevice()
+			, m_resources
+			, "SRGBIntermediate"
+			, 0u
+			, m_srgbObjects.getExtent()
+			, 1u
+			, 1u
+			, m_srgbObjects.getFormat()
+			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+				| VK_IMAGE_USAGE_SAMPLED_BIT
+				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
+				| VK_IMAGE_USAGE_TRANSFER_DST_BIT )
+			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
+		, m_hdrObjects{ getOwner()->getRenderSystem()->getRenderDevice()
+			, m_resources
+			, "HDRScene"
+			, 0u
+			, makeExtent3D( m_safeBandedSize )
+			, 1u
+			, 1u
+			, VK_FORMAT_R16G16B16A16_SFLOAT
+			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+				| VK_IMAGE_USAGE_SAMPLED_BIT
+				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
+				| VK_IMAGE_USAGE_TRANSFER_DST_BIT )
+			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
+		, m_hdrIntermediate{ getOwner()->getRenderSystem()->getRenderDevice()
+			, m_resources
+			, "HDRIntermediate"
+			, 0u
+			, m_hdrObjects.getExtent()
+			, 1u
+			, 1u
+			, m_hdrObjects.getFormat()
 			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
@@ -373,7 +412,6 @@ namespace castor3d
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT )
 			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
 		, m_overlayPassDesc{ doCreateOverlayPass( nullptr, engine.getRenderSystem()->getRenderDevice() ) }
-		, m_combinePass{ doCreateCombinePass( nullptr ) }
 	{
 		auto sampler = engine.addNewSampler( RenderTarget::DefaultSamplerName + getName() + cuT( "Linear" ), engine ).lock();
 		sampler->setMinFilter( VK_FILTER_LINEAR );
@@ -400,6 +438,9 @@ namespace castor3d
 				m_hdrPostEffects.push_back( effect );
 			}
 		}
+
+		m_hdrObjects.create();
+		m_srgbObjects.create();
 	}
 
 	RenderTarget::~RenderTarget()
@@ -500,7 +541,10 @@ namespace castor3d
 		}
 
 		m_renderTechnique.reset();
-		m_objects.destroy();
+		m_srgbObjects.destroy();
+		m_srgbIntermediate.destroy();
+		m_hdrObjects.destroy();
+		m_hdrIntermediate.destroy();
 		m_overlays.destroy();
 		m_velocity->destroy();
 		m_combined.destroy();
@@ -536,15 +580,16 @@ namespace castor3d
 
 		m_hdrConfigUbo->cpuUpdate( getHdrConfig() );
 
-		for ( auto effect : m_hdrPostEffects )
-		{
-			effect->update( updater );
-		}
-
-		for ( auto effect : m_srgbPostEffects )
-		{
-			effect->update( updater );
-		}
+		auto lastTarget = &doUpdatePostEffects( updater
+			, m_hdrPostEffects
+			, m_hdrObjects
+			, m_hdrIntermediate );
+		m_toneMapping->update( updater, lastTarget->sampledViewId );
+		lastTarget = &doUpdatePostEffects( updater
+			, m_srgbPostEffects
+			, m_srgbObjects
+			, m_srgbIntermediate );
+		m_combinePassIndex = ( lastTarget == m_combinePassSource ) ? 1u : 0u;
 	}
 
 	void RenderTarget::update( GpuUpdater & updater )
@@ -761,8 +806,12 @@ namespace castor3d
 		result.emplace_back( "Target Result"
 			, m_combined
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-		result.emplace_back( "Target Colour"
-			, m_objects
+		result.emplace_back( "Target SRGB Colour"
+			, m_srgbObjects
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, TextureFactors{}.invert( true ) );
+		result.emplace_back( "Target HDR Colour"
+			, m_hdrObjects
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) );
 		result.emplace_back( "Target Overlays"
@@ -812,10 +861,11 @@ namespace castor3d
 		auto result = doInitialiseTechnique( device, queueData, progress );
 		setProgressBarTitle( progress, "Initialising: Render Target" );
 		auto * previousPass = &m_renderTechnique->getLastPass();
+		auto hdrSource = &m_hdrObjects;
+		auto hdrTarget = &m_hdrIntermediate;
 
 		if ( !m_hdrPostEffects.empty() )
 		{
-			auto const * sourceView = &m_renderTechnique->getResult().sampledViewId;
 
 			for ( auto effect : m_hdrPostEffects )
 			{
@@ -823,21 +873,12 @@ namespace castor3d
 				{
 					stepProgressBar( progress, "Initialising post effect " + effect->getName() );
 					result = effect->initialise( device
-						, *sourceView
+						, *hdrSource
+						, *hdrTarget
 						, *previousPass );
+					std::swap( hdrSource, hdrTarget );
 					previousPass = &effect->getPass();
-					sourceView = &effect->getResult();
 				}
-			}
-
-			if ( result )
-			{
-				previousPass = &doInitialiseCopyCommands( device
-					, "HDR"
-					, *sourceView
-					, m_renderTechnique->getResult().sampledViewId
-					, *previousPass
-					, progress );
 			}
 		}
 
@@ -849,8 +890,8 @@ namespace castor3d
 				, device
 				, m_size
 				, m_graph
-				, m_renderTechnique->getResult().sampledViewId
-				, m_objects.wholeViewId
+				, crg::ImageViewIdArray{ hdrSource->sampledViewId, hdrTarget->sampledViewId }
+				, m_srgbObjects.wholeViewId
 				, *m_hdrLastPass
 				, *m_hdrConfigUbo
 				, Parameters{}
@@ -859,42 +900,38 @@ namespace castor3d
 			previousPass = &m_toneMapping->getPass();
 		}
 
+		auto srgbSource = &m_srgbObjects;
+		auto srgbTarget = &m_srgbIntermediate;
+
 		if ( !m_srgbPostEffects.empty() )
 		{
-			auto const * sourceView = &m_objects.wholeViewId;
-
 			for ( auto effect : m_srgbPostEffects )
 			{
 				if ( result )
 				{
 					stepProgressBar( progress, "Initialising post effect " + effect->getName() );
 					result = effect->initialise( device
-						, *sourceView
+						, *srgbSource
+						, *srgbTarget
 						, *previousPass );
+					std::swap( srgbSource, srgbTarget );
 					previousPass = &effect->getPass();
-					sourceView = &effect->getResult();
 				}
-			}
-
-			if ( result )
-			{
-				previousPass = &doInitialiseCopyCommands( device
-					, "SRGB"
-					, *sourceView
-					, m_objects.wholeViewId
-					, *previousPass
-					, progress );
 			}
 		}
 
 		if ( result )
 		{
+			m_combinePassSource = srgbSource;
+			m_combinePass = &doCreateCombinePass( progress
+				, crg::ImageViewIdArray{ srgbSource->sampledViewId, srgbTarget->sampledViewId } );
 			stepProgressBar( progress, "Compiling render graph" );
-			m_combinePass.addDependency( *previousPass );
+			m_combinePass->addDependency( *previousPass );
 			m_runnable = m_graph.compile( device.makeContext() );
 			printGraph( *m_runnable );
 
-			m_objects.create();
+			m_hdrIntermediate.create();
+			m_srgbIntermediate.create();
 			m_overlays.create();
 			m_velocity->create();
 			m_combined.create();
@@ -948,7 +985,8 @@ namespace castor3d
 		return result;
 	}
 
-	crg::FramePass & RenderTarget::doCreateCombinePass( ProgressBar * progress )
+	crg::FramePass & RenderTarget::doCreateCombinePass( ProgressBar * progress
+		, crg::ImageViewIdArray source )
 	{
 		stepProgressBar( progress, "Creating combine pass" );
 		auto & result = m_graph.createPass( "Other/Combine"
@@ -961,14 +999,15 @@ namespace castor3d
 					.renderPosition( {} )
 					.renderSize( makeExtent2D( m_combined.getExtent() ) )
 					.texcoordConfig( {} )
+					.passIndex( &m_combinePassIndex )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_combineStages ) )
-					.build( pass, context, graph );
+					.build( pass, context, graph, crg::ru::Config{ 2u } );
 				getOwner()->registerTimer( pass.getFullName()
 					, result->getTimer() );
 				return result;
 			} );
 		result.addDependency( m_overlayPassDesc );
-		result.addSampledView( m_objects.sampledViewId
+		result.addSampledView( source
 			, rendtgt::CombineLhsIdx );
 		result.addSampledView( m_overlays.sampledViewId
 			, rendtgt::CombineRhsIdx
@@ -991,6 +1030,7 @@ namespace castor3d
 					, device
 					, queueData
 					, m_techniqueParameters
+					, m_hdrObjects
 					, m_ssaoConfig
 					, progress
 					, C3D_UseDeferredRendering != 0
@@ -1009,35 +1049,34 @@ namespace castor3d
 
 	crg::FramePass const & RenderTarget::doInitialiseCopyCommands( RenderDevice const & device
 		, castor::String const & name
-		, crg::ImageViewId const & source
-		, crg::ImageViewId const & target
+		, Texture const & source
+		, Texture const & target
 		, crg::FramePass const & previousPass
-		, ProgressBar * progress )
+		, ProgressBar * progress
+		, bool const * enabled )
 	{
-		if ( source != target )
-		{
-			stepProgressBar( progress, "Creating " + name + " copy commands" );
-			auto & pass = m_graph.createPass( "Other/" + name + "Copy"
-				, [this, progress, name]( crg::FramePass const & pass
-					, crg::GraphContext & context
-					, crg::RunnableGraph & graph )
-				{
-					stepProgressBar( progress, "Initialising " + name + " copy commands" );
-					auto result = std::make_unique< crg::ImageCopy >( pass
-						, context
-						, graph
-						, getSafeBandedExtent3D( m_size ) );
-					getOwner()->registerTimer( pass.getFullName()
-						, result->getTimer() );
-					return result;
-				} );
-			pass.addDependency( previousPass );
-			pass.addTransferInputView( source );
-			pass.addTransferOutputView( target );
-			return pass;
-		}
-
-		return previousPass;
+		stepProgressBar( progress, "Creating " + name + " copy commands" );
+		auto & pass = m_graph.createPass( "Other/" + name + "Copy"
+			, [this, progress, name, enabled]( crg::FramePass const & pass
+				, crg::GraphContext & context
+				, crg::RunnableGraph & graph )
+			{
+				stepProgressBar( progress, "Initialising " + name + " copy commands" );
+				auto result = std::make_unique< crg::ImageCopy >( pass
+					, context
+					, graph
+					, getSafeBandedExtent3D( m_size )
+					, crg::ru::Config{}
+					, crg::RunnablePass::GetPassIndexCallback( []() { return 0u; } )
+					, crg::RunnablePass::IsEnabledCallback( [enabled]() { return *enabled; } ) );
+				getOwner()->registerTimer( pass.getFullName()
+					, result->getTimer() );
+				return result;
+			} );
+		pass.addDependency( previousPass );
+		pass.addTransferInputView( source.targetViewId );
+		pass.addTransferOutputView( target.targetViewId );
+		return pass;
 	}
 
 	void RenderTarget::doInitCombineProgram( ProgressBar * progress )
@@ -1119,6 +1158,25 @@ namespace castor3d
 
 		m_combineStages.push_back( makeShaderState( renderSystem.getRenderDevice(), m_combineVtx ) );
 		m_combineStages.push_back( makeShaderState( renderSystem.getRenderDevice(), m_combinePxl ) );
+	}
+
+	Texture const & RenderTarget::doUpdatePostEffects( CpuUpdater & updater
+		, PostEffectPtrArray const & effects
+		, Texture const & source
+		, Texture const & target )const
+	{
+		Texture const * src = &source;
+		Texture const * dst = &target;
+
+		for ( auto effect : effects )
+		{
+			if ( effect->update( updater, *src ) )
+			{
+				std::swap( src, dst );
+			}
+		}
+
+		return *dst;
 	}
 
 	crg::SemaphoreWaitArray RenderTarget::doRender( ashes::Queue const & queue
