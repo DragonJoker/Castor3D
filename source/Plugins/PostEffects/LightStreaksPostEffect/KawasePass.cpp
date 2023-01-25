@@ -87,14 +87,15 @@ namespace light_streaks
 		}
 
 		static std::vector< KawasePass::Subpass > doCreateSubpasses( crg::FramePassGroup & graph
-			, crg::FramePass const *& previousPass
+			, crg::FramePassArray const & previousPasses
 			, castor3d::RenderDevice const & device
 			, crg::ImageViewIdArray const & srcImages
 			, crg::ImageViewIdArray const & dstImages
 			, VkExtent2D dimensions
 			, ashes::PipelineShaderStageCreateInfoArray const & stages
 			, KawaseUbo const & kawaseUbo
-			, bool const * enabled )
+			, bool const * enabled
+			, crg::FramePassArray & lastPasses )
 		{
 			std::vector< KawasePass::Subpass > result;
 			assert( srcImages.size() == dstImages.size() + 1u
@@ -103,8 +104,9 @@ namespace light_streaks
 
 			for ( auto i = 0u; i < PostEffect::Count; ++i )
 			{
-				auto * source = &srcImages[0u];
+				auto * source = &srcImages[i + 1u];
 				auto * destination = &dstImages[i];
+				auto previousPass = previousPasses[i];
 				result.emplace_back( graph
 					, *previousPass
 					, device
@@ -117,7 +119,6 @@ namespace light_streaks
 					, enabled );
 				previousPass = &result.back().pass;
 				++index;
-				source = &srcImages[1u];
 
 				for ( auto j = 1u; j < 3u; ++j )
 				{
@@ -135,6 +136,8 @@ namespace light_streaks
 					previousPass = &result.back().pass;
 					++index;
 				}
+
+				lastPasses.push_back( previousPass );
 			}
 
 			return result;
@@ -190,7 +193,7 @@ namespace light_streaks
 	//*********************************************************************************************
 
 	KawasePass::KawasePass( crg::FramePassGroup & graph
-		, crg::FramePass const & previousPass
+		, crg::FramePassArray const & previousPasses
 		, castor3d::RenderDevice const & device
 		, crg::ImageViewIdArray const & hiViews
 		, crg::ImageViewIdArray const & kawaseViews
@@ -203,16 +206,16 @@ namespace light_streaks
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "LightStreaksKawasePass", kawase::getPixelProgram() }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
-		, m_lastPass{ &previousPass }
 		, m_subpasses{ kawase::doCreateSubpasses( graph
-			, m_lastPass
+			, previousPasses
 			, m_device
 			, hiViews
 			, kawaseViews
 			, dimensions
 			, m_stages
 			, m_kawaseUbo
-			, enabled ) }
+			, enabled
+			, m_lastPasses ) }
 	{
 	}
 

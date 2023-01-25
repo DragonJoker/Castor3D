@@ -577,7 +577,7 @@ namespace castor3d
 		, SsaoConfig const & config
 		, SsaoConfigUbo & ssaoConfigUbo
 		, GpInfoUbo const & gpInfoUbo
-		, Texture const & linearisedDepthBuffer
+		, crg::ImageViewIdArray const & linearisedDepthBufferViews
 		, Texture const & normals
 		, uint32_t const & passIndex )
 		: m_device{ device }
@@ -627,7 +627,7 @@ namespace castor3d
 		pass.addDependency( previousPass );
 		m_ssaoConfigUbo.createPassBinding( pass, ssaoraw::SsaoCfgUboIdx );
 		m_gpInfoUbo.createPassBinding( pass, ssaoraw::GpInfoUboIdx );
-		pass.addSampledView( linearisedDepthBuffer.sampledViewId, ssaoraw::DepthMapIdx );
+		pass.addSampledView( pass.mergeViews( linearisedDepthBufferViews ), ssaoraw::DepthMapIdx );
 		pass.addSampledView( normals.sampledViewId, ssaoraw::NormalMapIdx );
 		pass.addOutputColourView( m_result.targetViewId, opaqueWhiteClearColor );
 		pass.addOutputColourView( m_bentNormals.targetViewId, transparentBlackClearColor );

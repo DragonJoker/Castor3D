@@ -231,7 +231,7 @@ namespace castor3d
 	{
 		uint32_t index = 0u;
 
-		for ( auto & layer : getResult().subViewsId )
+		for ( auto & layer : getResult() )
 		{
 			visitor.visit( "Linearised Depth " + castor::string::toString( index++ )
 				, layer
@@ -299,6 +299,7 @@ namespace castor3d
 				, VK_IMAGE_VIEW_TYPE_2D
 				, m_result.getFormat()
 				, VkImageSubresourceRange{ VK_IMAGE_ASPECT_COLOR_BIT, index + 1u, 1u, 0u, 1u } } );
+			m_mipViews.push_back( destination );
 			auto & pass = m_graph.createPass( "MinimiseDepth" + std::to_string( index )
 				, [this, progress, size]( crg::FramePass const & framePass
 					, crg::GraphContext & context

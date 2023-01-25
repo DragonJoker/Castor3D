@@ -372,7 +372,7 @@ namespace castor3d
 			, m_device
 			, queueData
 			, m_opaque
-			, doCreateRenderPasses( progress , TechniquePassEvent::eBeforeTransparent, nullptr )
+			, doCreateRenderPasses( progress , TechniquePassEvent::eBeforeTransparent, &m_opaque.getLastPass() )
 			, getSsaoConfig()
 			, progress
 			, weightedBlended }

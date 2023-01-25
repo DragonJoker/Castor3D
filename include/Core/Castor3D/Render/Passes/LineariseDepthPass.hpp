@@ -85,9 +85,9 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		Texture const & getResult()const
+		crg::ImageViewIdArray const & getResult()const
 		{
-			return m_result;
+			return m_mipViews;
 		}
 
 		crg::FramePass const & getLastPass()const
@@ -110,6 +110,7 @@ namespace castor3d
 		castor::String m_prefix;
 		VkExtent2D m_size;
 		Texture m_result;
+		crg::ImageViewIdArray m_mipViews;
 		UniformBufferOffsetT< castor::Point3f > m_clipInfo;
 		castor::ChangeTracked< castor::Point3f > m_clipInfoValue;
 		crg::FramePass const * m_lastPass{};
