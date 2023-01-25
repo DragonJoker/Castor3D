@@ -14,10 +14,11 @@ namespace light_streaks
 		HiPass( crg::FramePassGroup & graph
 			, crg::FramePass const & previousPass
 			, castor3d::RenderDevice const & device
-			, crg::ImageViewId const & sceneView
+			, crg::ImageViewIdArray const & sceneView
 			, crg::ImageViewIdArray const & resultViews
 			, VkExtent2D size
-			, bool const * enabled );
+			, bool const * enabled
+			, uint32_t const * passIndex );
 		void accept( castor3d::PipelineVisitorBase & visitor );
 
 		crg::FramePassArray const & getLastPasses()const

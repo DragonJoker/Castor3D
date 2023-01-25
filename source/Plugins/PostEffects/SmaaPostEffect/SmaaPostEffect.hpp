@@ -47,7 +47,9 @@ namespace smaa
 		/**
 		*\copydoc		castor3d::PostEffect::doInitialise
 		*/
-		crg::ImageViewId const * doInitialise( castor3d::RenderDevice const & device
+		bool doInitialise( castor3d::RenderDevice const & device
+			, castor3d::Texture const & source
+			, castor3d::Texture const & target
 			, crg::FramePass const & previousPass )override;
 		/**
 		*\copydoc		castor3d::PostEffect::doCleanup
@@ -81,12 +83,12 @@ namespace smaa
 		std::unique_ptr< BlendingWeightCalculation > m_blendingWeightCalculation;
 		std::unique_ptr< NeighbourhoodBlending > m_neighbourhoodBlending;
 		std::unique_ptr< Reproject > m_reproject;
-		// sRGB view.
-		crg::ImageViewId const * m_srgbTextureView{ nullptr };
 		// Gamma view.
 		crg::ImageViewId const * m_hdrTextureView{ nullptr };
 
 		crg::FramePass const * m_pass{};
+
+		uint32_t m_subsamplePassIndex{};
 	};
 }
 

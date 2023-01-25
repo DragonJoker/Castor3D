@@ -46,8 +46,10 @@ namespace grayscale
 		/**
 		*\copydoc		castor3d::PostEffect::doInitialise
 		*/
-		crg::ImageViewId const * doInitialise( castor3d::RenderDevice const & device
-			, crg::FramePass const & previousPass ) override;
+		bool doInitialise( castor3d::RenderDevice const & device
+			, castor3d::Texture const & source
+			, castor3d::Texture const & target
+			, crg::FramePass const & previousPass )override;
 		/**
 		*\copydoc		castor3d::PostEffect::doCleanup
 		*/
@@ -71,8 +73,6 @@ namespace grayscale
 		castor3d::ShaderModule m_vertexShader;
 		castor3d::ShaderModule m_pixelShader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
-		crg::ImageId m_resultImg;
-		crg::ImageViewId m_resultView;
 		crg::FramePass * m_pass{};
 	};
 }

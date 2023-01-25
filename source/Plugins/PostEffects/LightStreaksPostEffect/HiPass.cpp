@@ -87,10 +87,11 @@ namespace light_streaks
 	HiPass::HiPass( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
 		, castor3d::RenderDevice const & device
-		, crg::ImageViewId const & sceneView
+		, crg::ImageViewIdArray const & sceneView
 		, crg::ImageViewIdArray const & resultViews
 		, VkExtent2D size
-		, bool const * enabled )
+		, bool const * enabled
+		, uint32_t const * passIndex )
 		: m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "LightStreaksHiPass", hipass::getVertexProgram() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "LightStreaksHiPass", hipass::getPixelProgram() }
 		, m_stages{ makeShaderState( device, m_vertexShader )
@@ -98,7 +99,7 @@ namespace light_streaks
 	{
 		auto previous = &previousPass;
 		auto & hiPass = graph.createPass( "HDR"
-			, [this, &device, size, enabled]( crg::FramePass const & framePass
+			, [this, &device, size, enabled, passIndex]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
@@ -106,11 +107,12 @@ namespace light_streaks
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.texcoordConfig( crg::Texcoord{} )
 					.enabled( enabled )
+					.passIndex( passIndex )
 					.renderSize( size )
 					.build( framePass
 						, context
 						, graph
-						, crg::ru::Config{} );
+						, crg::ru::Config{ 2u } );
 				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, result->getTimer() );
 				return result;

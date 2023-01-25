@@ -899,7 +899,7 @@ namespace castor3d
 				}
 
 				pipeline->initialise( device
-					, getRenderPass() );
+					, getRenderPass( 0u ) );
 				pipelines.emplace_back( std::move( pipeline ) );
 				it = std::next( pipelines.begin()
 					, ptrdiff_t( pipelines.size() - 1u ) );

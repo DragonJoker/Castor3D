@@ -79,31 +79,18 @@ namespace light_streaks
 	CombinePass::CombinePass( crg::FramePassGroup & graph
 		, crg::FramePassArray const & previousPasses
 		, castor3d::RenderDevice const & device
-		, crg::ImageViewId const & sceneView
+		, crg::ImageViewIdArray const & sceneView
 		, crg::ImageViewIdArray const & kawaseViews
+		, crg::ImageViewIdArray const & resultView
 		, VkExtent2D const & size
-		, bool const * enabled )
+		, bool const * enabled
+		, uint32_t const * passIndex )
 		: m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "LightStreaksCombine", combine::getVertexProgram() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "LightStreaksCombine", combine::getPixelProgram() }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
-		, m_resultImg{ graph.createImage( crg::ImageData{ "LSComb"
-			, 0u
-			, VK_IMAGE_TYPE_2D
-			, sceneView.data->info.format
-			, VkExtent3D{ size.width, size.height, 1u }
-			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-				| VK_IMAGE_USAGE_SAMPLED_BIT
-				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
-				| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) } ) }
-		, m_resultView{ graph.createView( crg::ImageViewData{ "LSComb"
-			, m_resultImg
-			, 0u
-			, VK_IMAGE_VIEW_TYPE_2D
-			, m_resultImg.data->info.format
-			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } ) }
 		, m_pass{ graph.createPass( "Combine"
-			, [this, &device, &sceneView, size, enabled]( crg::FramePass const & framePass
+			, [this, &device, size, enabled, passIndex]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
@@ -113,14 +100,11 @@ namespace light_streaks
 					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.enabled( enabled )
+					.passIndex( passIndex )
 					.build( framePass
 						, context
 						, graph
-						, crg::ru::Config{}
-							.implicitAction( m_resultView
-								, crg::RecordContext::copyImage( sceneView
-									, m_resultView
-									, size ) ) );
+						, crg::ru::Config{ 2u } );
 				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, result->getTimer() );
 				return result;
@@ -141,7 +125,7 @@ namespace light_streaks
 			, combine::KawaseMapIdx
 			, {}
 			, linearSampler );
-		m_pass.addOutputColourView( m_resultView );
+		m_pass.addOutputColourView( resultView );
 	}
 
 	void CombinePass::accept( castor3d::PipelineVisitorBase & visitor )

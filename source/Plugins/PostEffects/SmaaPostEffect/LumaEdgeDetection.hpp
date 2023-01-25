@@ -17,13 +17,13 @@ namespace smaa
 			, castor3d::RenderTarget & renderTarget
 			, castor3d::RenderDevice const & device
 			, SmaaUbo const & ubo
-			, crg::ImageViewId const & colourView
+			, crg::ImageViewIdArray const & colourView
 			, crg::ImageViewId const * predication
 			, SmaaConfig const & config
-			, bool const * enabled );
+			, bool const * enabled
+			, uint32_t const * passIndex );
 
 	private:
-		crg::ImageViewId const & m_colourView;
 		crg::ImageViewId m_predicationView;
 	};
 }

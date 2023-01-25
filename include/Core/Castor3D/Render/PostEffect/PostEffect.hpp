@@ -83,18 +83,23 @@ namespace castor3d
 		 *\~english
 		 *\brief		Initialisation function.
 		 *\param[in]	device			The GPU device.
-		 *\param[in]	texture			The target texture.
+		 *\param[in]	source			The source texture.
+		 *\param[in]	target			The target texture.
 		 *\param[in]	previousPass	The previous frame pass.
+		 *\param[in]	initialIndex	The pass initial index.
 		 *\return		\p true if ok.
 		 *\~french
 		 *\brief		Fonction d'initialisation.
 		 *\param[in]	device			Le device GPU.
-		 *\param[in]	texture			La texture cible.
+		 *\param[in]	source			La texture source.
+		 *\param[in]	target			La texture cible.
 		 *\param[in]	previousPass	La frame pass précédente.
+		 *\param[in]	initialIndex	L'indice initial de la paase.
 		 *\return		\p true if ok.
 		 */
 		C3D_API bool initialise( castor3d::RenderDevice const & device
-			, crg::ImageViewId const & texture
+			, Texture const & source
+			, Texture const & target
 			, crg::FramePass const & previousPass );
 		/**
 		 *\~english
@@ -111,7 +116,8 @@ namespace castor3d
 		 *\~french
 		 *\param[in, out]	updater	Les données d'update.
 		 */
-		C3D_API void update( CpuUpdater & updater );
+		C3D_API bool update( CpuUpdater & updater
+			, Texture const & source );
 		/**
 		 *\~english
 		 *\param[in, out]	updater	The update data.
@@ -159,12 +165,6 @@ namespace castor3d
 			return m_kind == Kind::eSRGB;
 		}
 
-		crg::ImageViewId const & getResult()const
-		{
-			CU_Require( m_result );
-			return *m_result;
-		}
-
 		castor::String const & getFullName()const
 		{
 			return m_fullName;
@@ -191,14 +191,16 @@ namespace castor3d
 		 *\brief		Initialisation function.
 		 *\param[in]	device			The GPU device.
 		 *\param[in]	previousPass	The previous frame pass.
-		 *\return		The resulting image view.
+		 *\return		\p false on failure.
 		 *\~french
 		 *\brief		Fonction d'initialisation.
 		 *\param[in]	device			Le device GPU.
 		 *\param[in]	previousPass	La frame pass précédente.
-		 *\return		L'image view resultat.
+		 *\return		\p false en cas d'échec.
 		 */
-		C3D_API virtual crg::ImageViewId const * doInitialise( castor3d::RenderDevice const & device
+		C3D_API virtual bool doInitialise( castor3d::RenderDevice const & device
+			, Texture const & source
+			, Texture const & target
 			, crg::FramePass const & previousPass ) = 0;
 		/**
 		 *\~english
@@ -246,9 +248,9 @@ namespace castor3d
 		crg::FramePassGroup & m_graph;
 		uint32_t m_passesCount{ 1u };
 		Kind m_kind{ Kind::eHDR };
-		crg::ImageViewId const * m_target{ nullptr };
-		crg::ImageViewId const * m_result{ nullptr };
 		bool m_enabled;
+		uint32_t m_passIndex{};
+		Texture const * m_source{};
 	};
 }
 

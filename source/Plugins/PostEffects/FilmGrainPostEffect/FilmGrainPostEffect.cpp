@@ -246,7 +246,9 @@ namespace film_grain
 		}
 	}
 
-	crg::ImageViewId const * PostEffect::doInitialise( castor3d::RenderDevice const & device
+	bool PostEffect::doInitialise( castor3d::RenderDevice const & device
+		, castor3d::Texture const & source
+		, castor3d::Texture const & target
 		, crg::FramePass const & previousPass )
 	{
 		auto dim = m_noiseImages[0].getDimensions();
@@ -264,23 +266,9 @@ namespace film_grain
 			, VK_IMAGE_VIEW_TYPE_3D
 			, m_noiseImg.data->info.format
 			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } );
-		m_resultImg = m_graph.createImage( crg::ImageData{ "FGRes"
-			, 0u
-			, VK_IMAGE_TYPE_2D
-			, m_target->data->info.format
-			, castor3d::makeExtent3D( castor3d::getSafeBandedSize( m_renderTarget.getSize() ) )
-			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-				| VK_IMAGE_USAGE_SAMPLED_BIT
-				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
-				| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) } );
-		m_resultView = m_graph.createView( crg::ImageViewData{ "FGRes"
-			, m_resultImg
-			, 0u
-			, VK_IMAGE_VIEW_TYPE_2D
-			, m_resultImg.data->info.format
-			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } );
+		auto extent = castor3d::makeExtent2D( target.getExtent() );
 		m_pass = &m_graph.createPass( "FilmGrain"
-			, [this]( crg::FramePass const & framePass
+			, [this, extent]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
@@ -312,21 +300,17 @@ namespace film_grain
 						, noiseView );
 				}
 
-				auto extent = getExtent( *m_target );
 				auto result = crg::RenderQuadBuilder{}
 					.renderPosition( {} )
-					.renderSize( castor3d::makeExtent2D( castor3d::getSafeBandedSize( m_renderTarget.getSize() ) ) )
+					.renderSize( extent )
 					.texcoordConfig( {} )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.enabled( &isEnabled() )
+					.passIndex( &m_passIndex )
 					.build( framePass
 						, context
 						, graph
-						, crg::ru::Config{}
-							.implicitAction( m_resultView
-								, crg::RecordContext::copyImage( *m_target
-									, m_resultView
-									, { extent.width, extent.height } ) ) );
+						, crg::ru::Config{ 2u } );
 				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, result->getTimer() );
 				return result;
@@ -344,10 +328,10 @@ namespace film_grain
 				, VK_SAMPLER_ADDRESS_MODE_REPEAT
 				, VK_SAMPLER_ADDRESS_MODE_REPEAT
 				, VK_SAMPLER_ADDRESS_MODE_REPEAT } );
-		m_pass->addSampledView( *m_target
+		m_pass->addSampledView( crg::ImageViewIdArray{ source.sampledViewId, target.sampledViewId }
 			, SourceTexIdx );
-		m_pass->addOutputColourView( m_resultView );
-		return &m_resultView;
+		m_pass->addOutputColourView( crg::ImageViewIdArray{ target.targetViewId, source.targetViewId } );
+		return true;
 	}
 
 	void PostEffect::doCleanup( castor3d::RenderDevice const & device )

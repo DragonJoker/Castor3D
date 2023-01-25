@@ -101,17 +101,18 @@ namespace Bloom
 		m_passesCount = m_blurPassesCount * 2u + 2u;
 	}
 
-	crg::ImageViewId const * PostEffect::doInitialise( castor3d::RenderDevice const & device
+	bool PostEffect::doInitialise( castor3d::RenderDevice const & device
+		, castor3d::Texture const & source
+		, castor3d::Texture const & target
 		, crg::FramePass const & previousPass )
 	{
-		VkExtent2D size{ m_target->data->image.data->info.extent.width
-			, m_target->data->image.data->info.extent.height };
+		VkExtent2D size{ castor3d::makeExtent2D( target.getExtent() ) };
 
 #if !Bloom_DebugHiPass
 		m_blurImg = m_graph.createImage( crg::ImageData{ "Blur"
 			, 0u
 			, VK_IMAGE_TYPE_2D
-			, m_target->data->info.format
+			, target.getFormat()
 			, VkExtent3D{ size.width >> 1, size.height >> 1, 1u }
 			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_SAMPLED_BIT
@@ -132,10 +133,11 @@ namespace Bloom
 		m_hiPass = std::make_unique< HiPass >( m_graph
 			, previousPass
 			, device
-			, *m_target
+			, crg::ImageViewIdArray{ source.sampledViewId, target.sampledViewId }
 			, size
 			, m_blurPassesCount
-			, &isEnabled() );
+			, &isEnabled()
+			, &m_passIndex );
 #if !Bloom_DebugHiPass
 		m_blurXPass = std::make_unique< BlurPass >( m_graph
 			, m_hiPass->getPass()
@@ -160,11 +162,13 @@ namespace Bloom
 		m_combinePass = std::make_unique< CombinePass >( m_graph
 			, m_blurYPass->getPasses()
 			, device
-			, *m_target
+			, crg::ImageViewIdArray{ source.sampledViewId, target.sampledViewId }
 			, m_hiPass->getResult()
+			, crg::ImageViewIdArray{ target.targetViewId, source.targetViewId }
 			, size
 			, m_blurPassesCount
-			, &isEnabled() );
+			, &isEnabled()
+			, & m_passIndex );
 #endif
 
 #if Bloom_DebugHiPass
@@ -172,7 +176,7 @@ namespace Bloom
 		return &m_hiPass->getResult();
 #else
 		m_pass = &m_combinePass->getPass();
-		return &m_combinePass->getResult();
+		return true;
 #endif
 	}
 

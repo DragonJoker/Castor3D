@@ -532,7 +532,7 @@ namespace castor3d
 
 	void LightPropagationPass::doSubInitialise()
 	{
-		m_holder.initialise( getRenderPass() );
+		m_holder.initialise( getRenderPass( 0u ) );
 	}
 
 	void LightPropagationPass::doSubRecordInto( crg::RecordContext & context

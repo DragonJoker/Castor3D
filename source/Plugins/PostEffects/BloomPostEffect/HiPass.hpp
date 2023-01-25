@@ -16,10 +16,11 @@ namespace Bloom
 		HiPass( crg::FramePassGroup & graph
 			, crg::FramePass const & previousPass
 			, castor3d::RenderDevice const & device
-			, crg::ImageViewId const & sceneView
+			, crg::ImageViewIdArray const & sceneView
 			, VkExtent2D size
 			, uint32_t blurPassesCount
-			, bool const * enabled );
+			, bool const * enabled
+			, uint32_t const * passIndex );
 		void accept( castor3d::PipelineVisitorBase & visitor );
 
 		crg::ImageViewIdArray const & getResult()const
@@ -34,7 +35,6 @@ namespace Bloom
 
 	private:
 		crg::FramePassGroup & m_graph;
-		crg::ImageViewId const & m_sceneView;
 		castor3d::ShaderModule m_vertexShader;
 		castor3d::ShaderModule m_pixelShader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;

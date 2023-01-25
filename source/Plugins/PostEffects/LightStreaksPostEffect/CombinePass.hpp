@@ -16,16 +16,13 @@ namespace light_streaks
 		CombinePass( crg::FramePassGroup & graph
 			, crg::FramePassArray const & previousPasses
 			, castor3d::RenderDevice const & device
-			, crg::ImageViewId const & sceneView
+			, crg::ImageViewIdArray const & sceneView
 			, crg::ImageViewIdArray const & kawaseViews
+			, crg::ImageViewIdArray const & resultView
 			, VkExtent2D const & size
-			, bool const * enabled );
+			, bool const * enabled
+			, uint32_t const * passIndex );
 		void accept( castor3d::PipelineVisitorBase & visitor );
-
-		crg::ImageViewId const & getResult()const
-		{
-			return m_resultView;
-		}
 
 		crg::FramePass const & getPass()const
 		{
@@ -40,8 +37,6 @@ namespace light_streaks
 		castor3d::ShaderModule m_vertexShader;
 		castor3d::ShaderModule m_pixelShader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
-		crg::ImageId m_resultImg;
-		crg::ImageViewId m_resultView;
 		crg::FramePass & m_pass;
 	};
 }

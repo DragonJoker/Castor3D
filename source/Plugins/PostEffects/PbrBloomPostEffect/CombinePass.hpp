@@ -16,16 +16,13 @@ namespace PbrBloom
 		CombinePass( crg::FramePassGroup & graph
 			, crg::FramePass const & previousPass
 			, castor3d::RenderDevice const & device
-			, crg::ImageViewId const & sceneView
-			, crg::ImageId const & intermediate
+			, crg::ImageViewIdArray const & lhs
+			, crg::ImageId const & rhs
+			, crg::ImageViewIdArray const & result
 			, castor3d::UniformBufferOffsetT< castor::Point2f > const & ubo
-			, bool const * enabled );
+			, bool const * enabled
+			, uint32_t const * passIndex );
 		void accept( castor3d::PipelineVisitorBase & visitor );
-
-		crg::ImageViewId const & getResult()const
-		{
-			return m_resultView;
-		}
 
 		crg::FramePass const & getPass()const
 		{
@@ -40,8 +37,6 @@ namespace PbrBloom
 		castor3d::ShaderModule m_vertexShader;
 		castor3d::ShaderModule m_pixelShader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
-		crg::ImageId m_resultImg;
-		crg::ImageViewId m_resultView;
 		crg::FramePass & m_pass;
 	};
 }

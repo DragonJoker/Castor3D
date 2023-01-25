@@ -72,6 +72,7 @@ namespace castor3d
 			, RenderDevice const & device
 			, QueueData const & queueData
 			, Parameters const & parameters
+			, Texture const & colour
 			, SsaoConfig const & ssaoConfig
 			, ProgressBar * progress
 			, bool deferred
@@ -354,9 +355,9 @@ namespace castor3d
 	private:
 		RenderTarget & m_renderTarget;
 		RenderDevice const & m_device;
+		Texture const & m_colour;
 		castor::Size m_targetSize;
 		castor::Size m_rawSize;
-		Texture m_colour;
 		TexturePtr m_depth;
 		TexturePtr m_normal;
 		MatrixUbo m_matrixUbo;

@@ -64,7 +64,7 @@ namespace castor3d
 		resetCommandBuffer();
 		{
 			auto preparer = m_renderer->beginPrepare( m_device
-				, m_renderPass.getRenderPass()
+				, m_renderPass.getRenderPass( 0u )
 				, m_renderPass.getFramebuffer( 0u ) );
 
 			if ( m_drawGlobal )
@@ -99,10 +99,10 @@ namespace castor3d
 		, VkCommandBuffer commandBuffer
 		, uint32_t index )
 	{
-		if ( m_renderPass.initialise( context, *this ) )
+		if ( m_renderPass.initialise( context, *this, 0u ) )
 		{
 			m_renderer->beginPrepare( m_device
-				, m_renderPass.getRenderPass()
+				, m_renderPass.getRenderPass( 0u )
 				, m_renderPass.getFramebuffer( 0u ) );
 		}
 

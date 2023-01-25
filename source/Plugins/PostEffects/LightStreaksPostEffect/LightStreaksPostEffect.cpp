@@ -87,7 +87,9 @@ namespace light_streaks
 	{
 	}
 
-	crg::ImageViewId const * PostEffect::doInitialise( castor3d::RenderDevice const & device
+	bool PostEffect::doInitialise( castor3d::RenderDevice const & device
+		, castor3d::Texture const & source
+		, castor3d::Texture const & target
 		, crg::FramePass const & previousPass )
 	{
 		auto extent = castor3d::getSafeBandedExtent3D( m_renderTarget.getSize() );
@@ -114,7 +116,7 @@ namespace light_streaks
 			, VkExtent3D{ size.width, size.height, 1u }
 			, Count + 1u
 			, 1u
-			, m_target->data->info.format
+			, target.getFormat()
 			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_TRANSFER_DST_BIT
@@ -126,7 +128,7 @@ namespace light_streaks
 			, VkExtent3D{ size.width, size.height, 1u }
 			, Count
 			, 1u
-			, m_target->data->info.format
+			, target.getFormat()
 			, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_TRANSFER_DST_BIT
@@ -147,10 +149,11 @@ namespace light_streaks
 		m_hiPass = std::make_unique< HiPass >( m_graph
 			, previousPass
 			, device
-			, *m_target
+			, crg::ImageViewIdArray{ source.sampledViewId, target.sampledViewId }
 			, m_hiImage.subViewsId
 			, size
-			, &isEnabled() );
+			, &isEnabled()
+			, &m_passIndex );
 		m_kawasePass = std::make_unique< KawasePass >( m_graph
 			, m_hiPass->getLastPasses()
 			, device
@@ -162,14 +165,16 @@ namespace light_streaks
 		m_combinePass = std::make_unique< CombinePass >( m_graph
 			, m_kawasePass->getLastPasses()
 			, device
-			, *m_target
+			, crg::ImageViewIdArray{ source.sampledViewId, target.sampledViewId }
 			, m_kawaseImage.subViewsId
+			, crg::ImageViewIdArray{ target.targetViewId, source.targetViewId }
 			, castor3d::makeExtent2D( extent )
-			, &isEnabled() );
+			, &isEnabled()
+			, &m_passIndex );
 		m_pass = &m_combinePass->getPass();
 		m_hiImage.create();
 		m_kawaseImage.create();
-		return &m_combinePass->getResult();
+		return true;
 	}
 
 	void PostEffect::doCleanup( castor3d::RenderDevice const & device )

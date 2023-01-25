@@ -24,11 +24,12 @@ namespace smaa
 			, castor3d::RenderTarget & renderTarget
 			, castor3d::RenderDevice const & device
 			, SmaaUbo const & ubo
-			, crg::ImageViewId const & sourceView
+			, crg::ImageViewIdArray const & sourceView
 			, crg::ImageViewId const & blendView
 			, crg::ImageViewId const * velocityView
 			, SmaaConfig const & config
-			, bool const * enabled );
+			, bool const * enabled
+			, uint32_t const * passIndex );
 		~NeighbourhoodBlending();
 
 		void accept( castor3d::PipelineVisitorBase & visitor );
@@ -46,7 +47,6 @@ namespace smaa
 	private:
 		castor3d::RenderDevice const & m_device;
 		crg::FramePassGroup & m_graph;
-		crg::ImageViewId const & m_sourceView;
 		crg::ImageViewId const & m_blendView;
 		crg::ImageViewId const * m_velocityView;
 		VkExtent3D m_extent;

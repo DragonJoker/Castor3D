@@ -14,10 +14,11 @@ namespace PbrBloom
 		DownsamplePass( crg::FramePassGroup & graph
 			, crg::FramePass const & previousPass
 			, castor3d::RenderDevice const & device
-			, crg::ImageViewId const & sceneView
+			, crg::ImageViewIdArray const & sceneView
 			, crg::ImageId const & resultImg
 			, uint32_t passesCount
-			, bool const * enabled );
+			, bool const * enabled
+			, uint32_t const * passIndex );
 		void accept( castor3d::PipelineVisitorBase & visitor );
 
 		crg::FramePass const & getPass()const
@@ -32,12 +33,13 @@ namespace PbrBloom
 		std::vector< crg::FramePass * > doCreatePasses( crg::FramePassGroup & graph
 			, crg::FramePass const & previousPass
 			, castor3d::RenderDevice const & device
+			, crg::ImageViewIdArray const & sceneView
 			, uint32_t passesCount
-			, bool const * enabled );
+			, bool const * enabled
+			, uint32_t const * passIndex );
 
 	private:
 		crg::FramePassGroup & m_graph;
-		crg::ImageViewId const & m_sceneView;
 		castor3d::ShaderModule m_vertexShader;
 		castor3d::ShaderModule m_pixelShader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
