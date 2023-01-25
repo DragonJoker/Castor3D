@@ -77,7 +77,7 @@ namespace light_streaks
 	castor::String const CombinePass::CombineMapKawase = cuT( "c3d_mapKawase" );
 
 	CombinePass::CombinePass( crg::FramePassGroup & graph
-		, crg::FramePass const & previousPass
+		, crg::FramePassArray const & previousPasses
 		, castor3d::RenderDevice const & device
 		, crg::ImageViewId const & sceneView
 		, crg::ImageViewIdArray const & kawaseViews
@@ -132,7 +132,7 @@ namespace light_streaks
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE };
-		m_pass.addDependency( previousPass );
+		m_pass.addDependencies( previousPasses );
 		m_pass.addSampledView( sceneView
 			, combine::SceneMapIdx
 			, {}

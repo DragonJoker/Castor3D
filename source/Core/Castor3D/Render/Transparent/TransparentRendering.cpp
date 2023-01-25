@@ -53,7 +53,7 @@ namespace castor3d
 			: nullptr ) }
 		, m_mipgenPassDesc{ &doCreateMipGenPass( progress
 			, previous.getLastPass()
-			, previousPasses ) }
+			, std::move( previousPasses ) ) }
 		, m_transparentPassDesc{ ( weightedBlended
 			? &doCreateWBTransparentPass( progress
 				, *m_mipgenPassDesc )
@@ -147,8 +147,13 @@ namespace castor3d
 
 	crg::FramePass & TransparentRendering::doCreateMipGenPass( ProgressBar * progress
 		, crg::FramePass const & lastPass
-		, crg::FramePassArray const & previousPasses )
+		, crg::FramePassArray previousPasses )
 	{
+		if ( previousPasses.empty() )
+		{
+			previousPasses.push_back( &lastPass );
+		}
+
 		m_mippedColour.create();
 		stepProgressBar( progress, "Creating colour copy pass" );
 		auto & copy = m_graph.createPass( "ColCopyPass"
@@ -168,7 +173,6 @@ namespace castor3d
 					, res->getTimer() );
 				return res;
 			} );
-		copy.addDependency( lastPass );
 		copy.addDependencies( previousPasses );
 		copy.addTransferInputView( getOwner()->getResult().targetViewId );
 		copy.addTransferOutputView( m_mippedColour.targetViewId );
@@ -238,6 +242,8 @@ namespace castor3d
 				return res;
 			} );
 		result.addDependency( lastPass );
+		result.addImplicitColourView( m_mippedColour.targetViewId
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 		result.addInOutDepthStencilView( getOwner()->getDepth().targetViewId );
 		result.addInOutColourView( getOwner()->getResult().targetViewId );
 
@@ -292,6 +298,8 @@ namespace castor3d
 			} );
 		result.addDependency( lastPass );
 		result.addInOutDepthStencilView( getOwner()->getDepth().targetViewId );
+		result.addImplicitColourView( m_mippedColour.targetViewId
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 		auto & transparentPassResult = *m_transparentPassResult;
 		result.addOutputColourView( transparentPassResult[WbTexture::eAccumulation].targetViewId
 			, getClearValue( WbTexture::eAccumulation ) );

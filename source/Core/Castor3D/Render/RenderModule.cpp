@@ -298,7 +298,12 @@ namespace castor3d
 		auto path = Engine::getEngineDirectory();
 		{
 			auto streams = crg::dot::displayTransitions( graph, { true, true, true, false } );
-			std::ofstream file{ path / ( graph.getGraph()->getName() + "_transitions.dot" ) };
+			std::ofstream file{ path / ( "transitions_" + graph.getGraph()->getName() + ".dot" ) };
+			file << streams.find( std::string{} )->second.str();
+		}
+		{
+			auto streams = crg::dot::displayTransitions( graph, { true, true, false, false } );
+			std::ofstream file{ path / ( "flat_transitions_" + graph.getGraph()->getName() + ".dot" ) };
 			file << streams.find( std::string{} )->second.str();
 		}
 		{
@@ -308,14 +313,19 @@ namespace castor3d
 			{
 				if ( !it.first.empty() )
 				{
-					std::ofstream file{ path / ( graph.getGraph()->getName() + "_transitions_" + it.first + ".dot" ) };
+					std::ofstream file{ path / ( "transitions_" + graph.getGraph()->getName() + "_" + it.first + ".dot" ) };
 					file << it.second.str();
 				}
 			}
 		}
 		{
 			auto streams = crg::dot::displayPasses( graph, { true, true, true, false } );
-			std::ofstream file{ path / ( graph.getGraph()->getName() + "_passes.dot" ) };
+			std::ofstream file{ path / ( "passes_" + graph.getGraph()->getName() + ".dot" ) };
+			file << streams.find( std::string{} )->second.str();
+		}
+		{
+			auto streams = crg::dot::displayPasses( graph, { true, true, false, false } );
+			std::ofstream file{ path / ( "flat_passes_" + graph.getGraph()->getName() + ".dot" ) };
 			file << streams.find( std::string{} )->second.str();
 		}
 		{
@@ -325,7 +335,7 @@ namespace castor3d
 			{
 				if ( !it.first.empty() )
 				{
-					std::ofstream file{ path / ( graph.getGraph()->getName() + "_passes_" + it.first + ".dot" ) };
+					std::ofstream file{ path / ( "passes_" + graph.getGraph()->getName() + "_" + it.first + ".dot" ) };
 					file << it.second.str();
 				}
 			}

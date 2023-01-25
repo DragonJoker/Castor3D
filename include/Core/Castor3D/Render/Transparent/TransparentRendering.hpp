@@ -121,7 +121,7 @@ namespace castor3d
 	private:
 		crg::FramePass & doCreateMipGenPass( ProgressBar * progress
 			, crg::FramePass const & lastPass
-			, crg::FramePassArray const & previousPasses );
+			, crg::FramePassArray previousPasses );
 		crg::FramePass & doCreateForwardTransparentPass( ProgressBar * progress
 			, crg::FramePass const & lastPass );
 		crg::FramePass & doCreateWBTransparentPass( ProgressBar * progress
