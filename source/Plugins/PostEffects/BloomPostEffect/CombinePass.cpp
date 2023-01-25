@@ -87,7 +87,7 @@ namespace Bloom
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
 		, m_pass{ graph.createPass( "Combine"
-			, [this, &device, sceneView, size, enabled, passIndex]( crg::FramePass const & framePass
+			, [this, &device, size, enabled, passIndex]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
