@@ -64,7 +64,7 @@ namespace castor3d
 		C3D_API bool doIsEnabled()const;
 
 	private:
-		virtual void doResetPipeline() = 0;
+		virtual void doResetPipeline( uint32_t index ) = 0;
 
 	protected:
 		RenderDevice const & m_device;

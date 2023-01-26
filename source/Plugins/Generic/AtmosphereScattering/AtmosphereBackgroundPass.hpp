@@ -43,7 +43,7 @@ namespace atmosphere_scattering
 			, VkExtent2D const & size );
 
 	private:
-		void doResetPipeline()override;
+		void doResetPipeline( uint32_t index )override;
 
 		crg::VkPipelineShaderStageCreateInfoArray doInitialiseShader( castor3d::RenderDevice const & device
 			, AtmosphereBackground & background

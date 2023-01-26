@@ -87,7 +87,7 @@ namespace castor3d
 		C3D_API void accept( PipelineVisitorBase & visitor );
 
 	protected:
-		C3D_API void doSubInitialise();
+		C3D_API void doSubInitialise( uint32_t index );
 		C3D_API void doSubRecordInto( crg::RecordContext & context
 			, VkCommandBuffer commandBuffer
 			, uint32_t index );
@@ -103,7 +103,8 @@ namespace castor3d
 				, uint32_t gridSize
 				, BlendMode blendMode );
 
-			void initialise( VkRenderPass renderPass );
+			void initialise( VkRenderPass renderPass
+				, uint32_t index );
 			void recordInto( crg::RecordContext & context
 				, VkCommandBuffer commandBuffer
 				, uint32_t index );

@@ -132,7 +132,6 @@ namespace castor3d
 		using PipelineContainer = std::map< PipelineBaseHash, PipelinePtr >;
 
 	private:
-		void doInitialise();
 		bool doIsEnabled()const;
 		void doRecordInto( crg::RecordContext & context
 			, VkCommandBuffer commandBuffer

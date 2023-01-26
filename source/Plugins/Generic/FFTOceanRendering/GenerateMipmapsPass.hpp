@@ -28,7 +28,7 @@ namespace ocean_fft
 			, crg::RunnablePass::IsEnabledCallback isEnabled = crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
 
 	private:
-		void doInitialise();
+		void doInitialise( uint32_t index );
 		void doRecordInto( crg::RecordContext & context
 			, VkCommandBuffer commandBuffer
 			, uint32_t index );

@@ -59,7 +59,6 @@ namespace ocean_fft
 		};
 
 	private:
-		void doInitialise();
 		void doRecordInto( crg::RecordContext & context
 			, VkCommandBuffer commandBuffer
 			, uint32_t index );

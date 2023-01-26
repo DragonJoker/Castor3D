@@ -68,7 +68,8 @@ namespace castor3d
 			&& m_quad )
 		{
 			doCreate( name );
-			m_quad->resetPipeline( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_program ) );
+			m_quad->resetPipeline( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_program )
+				, m_passIndex );
 		}
 	}
 

@@ -242,7 +242,7 @@ namespace ocean_fft
 		: crg::RunnablePass{ pass
 			, context
 			, graph
-			, { [this](){ doInitialise(); }
+			, { []( uint32_t index ){}
 				, GetPipelineStateCallback( [](){ return crg::getPipelineState( VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT ); } )
 				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i ); }
 				, GetPassIndexCallback( [this](){ return doGetPassIndex(); } )
@@ -265,10 +265,6 @@ namespace ocean_fft
 	void BakeHeightGradientPass::accept( castor3d::RenderTechniqueVisitor & visitor )
 	{
 		visitor.visit( m_shader );
-	}
-
-	void BakeHeightGradientPass::doInitialise()
-	{
 	}
 
 	void BakeHeightGradientPass::doRecordInto( crg::RecordContext & context

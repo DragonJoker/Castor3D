@@ -52,7 +52,6 @@ namespace ocean_fft
 		static castor::String const Name;
 
 	private:
-		void doInitialise();
 		void doRecordInto( crg::RecordContext & context
 			, VkCommandBuffer commandBuffer
 			, uint32_t index );

@@ -151,7 +151,7 @@ namespace ocean_fft
 		: crg::RunnablePass{ pass
 			, context
 			, graph
-			, { [this](){ doInitialise(); }
+			, { [this]( uint32_t index ){ doInitialise( index ); }
 				, GetPipelineStateCallback( [](){ return crg::getPipelineState( VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT ); } )
 				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i );}
 				, passIndex
@@ -177,22 +177,18 @@ namespace ocean_fft
 		}
 	}
 
-	void GenerateMipmapsPass::doInitialise()
+	void GenerateMipmapsPass::doInitialise( uint32_t index )
 	{
 		auto & attach = m_pass.images.front();
-
-		for ( auto passIndex = 0u; passIndex < m_commandBuffers.size(); ++passIndex )
-		{
-			auto viewId = attach.view( passIndex );
-			auto layoutState = ( m_outputLayout.layout != VK_IMAGE_LAYOUT_UNDEFINED
-				? m_outputLayout
-				: m_graph.getOutputLayout( m_pass, viewId, false ) );
-			doUpdateFinalLayout( passIndex
-				, viewId
-				, layoutState.layout
-				, layoutState.state.access
-				, layoutState.state.pipelineStage );
-		}
+		auto viewId = attach.view( index );
+		auto layoutState = ( m_outputLayout.layout != VK_IMAGE_LAYOUT_UNDEFINED
+			? m_outputLayout
+			: m_graph.getOutputLayout( m_pass, viewId, false ) );
+		doUpdateFinalLayout( index
+			, viewId
+			, layoutState.layout
+			, layoutState.state.access
+			, layoutState.state.pipelineStage );
 	}
 
 	void GenerateMipmapsPass::doRecordInto( crg::RecordContext & context
@@ -227,8 +223,7 @@ namespace ocean_fft
 			, 0u
 			, 1u };
 		// Transition first mip level to shader source for read in next iteration
-		m_graph.memoryBarrier( context
-			, commandBuffer
+		context.memoryBarrier( commandBuffer
 			, imageId
 			, viewId.data->info.viewType
 			, mipSubRange
@@ -241,8 +236,7 @@ namespace ocean_fft
 			extent.height >>= 1u;
 			++mipSubRange.baseMipLevel;
 			// Transition current mip level to shader write
-			m_graph.memoryBarrier( context
-				, commandBuffer
+			context.memoryBarrier( commandBuffer
 				, imageId
 				, viewId.data->info.viewType
 				, mipSubRange
@@ -275,8 +269,7 @@ namespace ocean_fft
 			++invSizeIt;
 
 			// Transition previous mip level to wanted output layout
-			m_graph.memoryBarrier( context
-				, commandBuffer
+			context.memoryBarrier( commandBuffer
 				, imageId
 				, viewId.data->info.viewType
 				, { mipSubRange.aspectMask
@@ -290,8 +283,7 @@ namespace ocean_fft
 			if ( mipSubRange.baseMipLevel == ( mipLevels - 1u ) )
 			{
 				// Transition final mip level to wanted output layout
-				m_graph.memoryBarrier( context
-					, commandBuffer
+				context.memoryBarrier( commandBuffer
 					, imageId
 					, viewId.data->info.viewType
 					, mipSubRange
@@ -301,8 +293,7 @@ namespace ocean_fft
 			else
 			{
 				// Transition current mip level to shader source for read in next iteration
-				m_graph.memoryBarrier( context
-					, commandBuffer
+				context.memoryBarrier( commandBuffer
 					, imageId
 					, viewId.data->info.viewType
 					, mipSubRange

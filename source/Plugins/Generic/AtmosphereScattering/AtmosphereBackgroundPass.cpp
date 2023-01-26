@@ -88,10 +88,10 @@ namespace atmosphere_scattering
 	{
 	}
 
-	void AtmosphereBackgroundPass::doResetPipeline()
+	void AtmosphereBackgroundPass::doResetPipeline( uint32_t index )
 	{
 		resetCommandBuffer();
-		resetPipeline( {} );
+		resetPipeline( {}, index );
 		reRecordCurrent();
 	}
 

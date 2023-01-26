@@ -574,11 +574,16 @@ namespace castor3d
 	{
 	}
 
-	void GeometryInjectionPass::PipelineHolder::initialise( VkRenderPass renderPass )
+	void GeometryInjectionPass::PipelineHolder::initialise( VkRenderPass renderPass
+		, uint32_t index )
 	{
 		m_renderPass = renderPass;
 		m_holder.initialise();
-		doCreatePipeline();
+
+		if ( !m_holder.getPipeline( index ) )
+		{
+			doCreatePipeline( index );
+		}
 	}
 
 	void GeometryInjectionPass::PipelineHolder::recordInto( crg::RecordContext & context
@@ -588,7 +593,7 @@ namespace castor3d
 		m_holder.recordInto( context, commandBuffer, index );
 	}
 
-	void GeometryInjectionPass::PipelineHolder::doCreatePipeline()
+	void GeometryInjectionPass::PipelineHolder::doCreatePipeline( uint32_t index )
 	{
 		ashes::PipelineVertexInputStateCreateInfo vertexState{ 0u
 			, ashes::VkVertexInputBindingDescriptionArray{}
@@ -635,7 +640,7 @@ namespace castor3d
 		VkPipelineViewportStateCreateInfo vpState = viewportState;
 		VkPipelineVertexInputStateCreateInfo viState = vertexState;
 		VkPipelineColorBlendStateCreateInfo cbState = blendState;
-		auto & program = m_holder.getProgram( 0u );
+		auto & program = m_holder.getProgram( index );
 		auto createInfo = makeVkStruct< VkGraphicsPipelineCreateInfo >( 0u
 			, uint32_t( program.size() )
 			, program.data()
@@ -653,7 +658,7 @@ namespace castor3d
 			, 0u
 			, VK_NULL_HANDLE
 			, 0 );
-		m_holder.createPipeline( 0u, createInfo );
+		m_holder.createPipeline( index, createInfo );
 	}
 
 	//*********************************************************************************************
@@ -669,7 +674,7 @@ namespace castor3d
 		, crg::RenderPass{ pass
 			, context
 			, graph
-			, { [this](){ doSubInitialise(); }
+			, { [this]( uint32_t index ){ doSubInitialise( index ); }
 				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doSubRecordInto( context, cb, i ); } }
 			, { gridSize, gridSize } }
 		, m_device{ device }
@@ -701,7 +706,7 @@ namespace castor3d
 		, crg::RenderPass{ pass
 			, context
 			, graph
-			, { [this](){ doSubInitialise(); }
+			, { [this]( uint32_t index ){ doSubInitialise( index ); }
 				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doSubRecordInto( context, cb, i ); } }
 			, { gridSize, gridSize } }
 		, m_device{ device }
@@ -722,9 +727,9 @@ namespace castor3d
 	{
 	}
 
-	void GeometryInjectionPass::doSubInitialise()
+	void GeometryInjectionPass::doSubInitialise( uint32_t index )
 	{
-		m_holder.initialise( getRenderPass( 0u ) );
+		m_holder.initialise( getRenderPass( index ), index );
 	}
 
 	void GeometryInjectionPass::doSubRecordInto( crg::RecordContext & context

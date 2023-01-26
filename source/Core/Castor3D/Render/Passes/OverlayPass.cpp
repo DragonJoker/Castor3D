@@ -43,7 +43,7 @@ namespace castor3d
 		: crg::RunnablePass{ pass
 			, context
 			, graph
-			, crg::RunnablePass::Callbacks{ [this](){ doInitialise(); }
+			, crg::RunnablePass::Callbacks{ []( uint32_t index ){}
 				, crg::defaultV< crg::RunnablePass::GetPipelineStateCallback >
 				, [this]( crg::RecordContext & ctx, VkCommandBuffer cb, uint32_t i ){ doRecordInto( ctx, cb, i ); } }
 			, { 1u, true } }
@@ -89,10 +89,6 @@ namespace castor3d
 	void OverlayPass::upload( ashes::CommandBuffer const & cb )
 	{
 		m_renderer->upload( cb );
-	}
-
-	void OverlayPass::doInitialise()
-	{
 	}
 
 	void OverlayPass::doRecordInto( crg::RecordContext & context

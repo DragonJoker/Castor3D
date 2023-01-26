@@ -108,6 +108,7 @@ namespace castor3d
 		*/
 		/**@{*/
 		C3D_API bool hasNodes()const;
+		C3D_API bool needsInitialise()const;
 		C3D_API RenderFilters getFilters()const;
 		C3D_API ashes::CommandBuffer const & initCommandBuffer();
 
@@ -155,6 +156,7 @@ namespace castor3d
 		ashes::CommandBufferPtr m_commandBuffer;
 		bool m_culledChanged{};
 		bool m_commandsChanged{};
+		bool m_initialised{};
 		castor::GroupChangeTracked< ashes::Optional< VkViewport > > m_viewport;
 		castor::GroupChangeTracked< ashes::Optional< VkRect2D > > m_scissor;
 		VkRenderPass m_renderPassAtInit{};

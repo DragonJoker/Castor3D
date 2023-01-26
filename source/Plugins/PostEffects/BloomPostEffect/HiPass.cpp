@@ -95,8 +95,7 @@ namespace Bloom
 				auto transition = getTransition( index, data.viewDesc );
 
 				// Transition source view to transfer src layout
-				m_graph.memoryBarrier( recordContext
-					, commandBuffer
+				recordContext.memoryBarrier( commandBuffer
 					, data.viewDesc
 					, transition.to.layout
 					, { VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
@@ -132,8 +131,7 @@ namespace Bloom
 					imageBlit.dstOffsets[1].z = getSubresourceDimension( depth, imageBlit.dstSubresource.mipLevel );
 
 					// Transition destination mip level to transfer dst layout
-					m_graph.memoryBarrier( recordContext
-						, commandBuffer
+					recordContext.memoryBarrier( commandBuffer
 						, mipGen.dst
 						, VK_IMAGE_LAYOUT_UNDEFINED
 						, { VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
@@ -151,8 +149,7 @@ namespace Bloom
 						, VK_FILTER_LINEAR );
 
 					// Transition destination mip level to transfer src layout
-					m_graph.memoryBarrier( recordContext
-						, commandBuffer
+					recordContext.memoryBarrier( commandBuffer
 						, mipGen.dst
 						, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
 						, { VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
@@ -160,8 +157,7 @@ namespace Bloom
 							, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) } );
 
 					// Transition source mip level to wanted output layout
-					m_graph.memoryBarrier( recordContext
-						, commandBuffer
+					recordContext.memoryBarrier( commandBuffer
 						, mipGen.src
 						, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
 						, transition.to );
@@ -169,8 +165,7 @@ namespace Bloom
 
 				// Transition last destination mip level to wanted output layout
 				auto & mipGen = data.mipGens.back();
-				m_graph.memoryBarrier( recordContext
-					, commandBuffer
+				recordContext.memoryBarrier( commandBuffer
 					, mipGen.dst
 					, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
 					, transition.to );

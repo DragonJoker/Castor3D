@@ -173,7 +173,7 @@ namespace castor3d
 		: crg::RunnablePass{ pass
 			, context
 			, graph
-			, { [this](){ doInitialise(); }
+			, { []( uint32_t index ){}
 				, GetPipelineStateCallback( [](){ return crg::getPipelineState( VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT ); } )
 				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i ); }
 				, GetPassIndexCallback( [this](){ return doGetPassIndex(); } )
@@ -199,10 +199,6 @@ namespace castor3d
 		}
 	}
 
-	void VoxelBufferToTexture::doInitialise()
-	{
-	}
-
 	void VoxelBufferToTexture::doRecordInto( crg::RecordContext & context
 		, VkCommandBuffer commandBuffer
 		, uint32_t index )
@@ -216,8 +212,7 @@ namespace castor3d
 
 		if ( !temporalSmoothing )
 		{
-			m_graph.memoryBarrier( context
-				, commandBuffer
+			context.memoryBarrier( commandBuffer
 				, view.data->image
 				, view.data->info.viewType
 				, view.data->info.subresourceRange
@@ -231,8 +226,7 @@ namespace castor3d
 				, &transparentBlackClearColor.color
 				, 1
 				, &view.data->info.subresourceRange );
-			m_graph.memoryBarrier( context
-				, commandBuffer
+			context.memoryBarrier( commandBuffer
 				, view.data->image
 				, view.data->info.viewType
 				, view.data->info.subresourceRange
