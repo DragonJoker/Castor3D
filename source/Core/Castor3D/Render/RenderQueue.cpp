@@ -64,6 +64,12 @@ namespace castor3d
 		}
 	}
 
+	bool RenderQueue::needsInitialise()const
+	{
+		return !m_initEvent
+			&& !m_initialised;
+	}
+
 	void RenderQueue::cleanup()
 	{
 		CU_Require( m_renderNodes );
@@ -174,6 +180,8 @@ namespace castor3d
 		m_renderNodes->initialise( device );
 		m_culledChanged = true;
 		m_commandsChanged = true;
+		m_initialised = true;
+		m_initEvent = nullptr;
 	}
 
 	void RenderQueue::doPrepareCommandBuffer()

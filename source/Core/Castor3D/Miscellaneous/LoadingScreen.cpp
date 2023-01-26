@@ -181,7 +181,7 @@ namespace castor3d
 		: crg::RunnablePass{ pass
 			, context
 			, graph
-			, { [this]() { doInitialise(); }
+			, { [this]( uint32_t index ) { doInitialise(); }
 				, crg::getDefaultV< crg::RunnablePass::GetPipelineStateCallback >()
 				, [this]( crg::RecordContext & context, VkCommandBuffer cmd, uint32_t i ){ doRecordInto( context, cmd, i ); } }
 			, { 1u, true } }
@@ -211,7 +211,8 @@ namespace castor3d
 		{
 			m_renderQuad.resetRenderPass( m_renderSize
 				, m_renderPass
-				, RenderNodesPass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 1u ) );
+				, RenderNodesPass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 1u )
+				, 0u );
 			reRecordCurrent();
 		}
 	}
@@ -239,7 +240,8 @@ namespace castor3d
 				m_renderQuad.initialise( *this
 					, m_renderSize
 					, m_renderPass
-					, RenderNodesPass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 1u ) );
+					, RenderNodesPass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 1u )
+					, index );
 			}
 
 			auto beginInfo = makeVkStruct< VkRenderPassBeginInfo >( m_renderPass

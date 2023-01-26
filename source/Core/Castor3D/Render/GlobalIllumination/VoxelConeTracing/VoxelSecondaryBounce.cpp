@@ -204,7 +204,7 @@ namespace castor3d
 		: crg::RunnablePass{ pass
 			, context
 			, graph
-			, { [this](){ doInitialise(); }
+			, { []( uint32_t index ){}
 				, GetPipelineStateCallback( [](){ return crg::getPipelineState( VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT ); } )
 				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i ); }
 				, crg::defaultV< crg::RunnablePass::GetPassIndexCallback >
@@ -227,10 +227,6 @@ namespace castor3d
 		visitor.visit( m_shader );
 	}
 
-	void VoxelSecondaryBounce::doInitialise()
-	{
-	}
-
 	void VoxelSecondaryBounce::doRecordInto( crg::RecordContext & context
 		, VkCommandBuffer commandBuffer
 		, uint32_t index )
@@ -242,8 +238,7 @@ namespace castor3d
 		auto image = m_graph.createImage( view.data->image );
 
 		// Clear result
-		m_graph.memoryBarrier( context
-			, commandBuffer
+		context.memoryBarrier( commandBuffer
 			, view
 			, transition.needed.layout
 			, { VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
@@ -255,8 +250,7 @@ namespace castor3d
 			, &transparentBlackClearColor.color
 			, 1
 			, &view.data->info.subresourceRange );
-		m_graph.memoryBarrier( context
-			, commandBuffer
+		context.memoryBarrier( commandBuffer
 			, view
 			, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
 			, transition.needed );

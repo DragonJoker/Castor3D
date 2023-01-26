@@ -138,7 +138,7 @@ namespace castor3d
 		: crg::RunnablePass{ pass
 			, context
 			, graph
-			, { [this](){ doInitialise(); }
+			, { []( uint32_t index ){}
 				, GetPipelineStateCallback( [](){ return crg::getPipelineState( VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT ); } )
 				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i ); }
 				, GetPassIndexCallback( [this](){ return doGetPassIndex(); } )
@@ -158,10 +158,6 @@ namespace castor3d
 	void ComputeDepthRange::accept( RenderTechniqueVisitor & visitor )
 	{
 		visitor.visit( m_shader );
-	}
-
-	void ComputeDepthRange::doInitialise()
-	{
 	}
 
 	void ComputeDepthRange::doRecordInto( crg::RecordContext & context

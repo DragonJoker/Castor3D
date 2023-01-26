@@ -75,7 +75,6 @@ namespace castor3d
 		C3D_API void upload( ashes::CommandBuffer const & cb );
 
 	private:
-		void doInitialise();
 		void doRecordInto( crg::RecordContext & context, 
 			VkCommandBuffer commandBuffer
 			, uint32_t index );

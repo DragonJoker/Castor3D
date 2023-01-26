@@ -41,7 +41,7 @@ namespace castor3d
 				: crg::RunnablePass{ pass
 					, context
 					, graph
-					, { [](){}
+					, { []( uint32_t index ){}
 						, GetPipelineStateCallback( [](){ return crg::getPipelineState( VK_PIPELINE_STAGE_TRANSFER_BIT ); } )
 						, [this]( crg::RecordContext & ctx, VkCommandBuffer cb, uint32_t i ){ doRecordInto( ctx, cb, i ); } } }
 			{
@@ -56,7 +56,7 @@ namespace castor3d
 
 				for ( auto & attach : m_pass.images )
 				{
-					auto view = attach.view();
+					auto view = attach.view( index );
 					auto image = m_graph.createImage( view.data->image );
 					assert( attach.isTransferOutputView() );
 					m_context.vkCmdClearColorImage( commandBuffer

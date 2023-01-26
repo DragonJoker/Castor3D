@@ -29,7 +29,6 @@ namespace castor3d
 		void unregisterNode( SubmeshRenderNode const & node );
 
 	private:
-		void doInitialise();
 		void doRecordInto( crg::RecordContext & context
 			, VkCommandBuffer commandBuffer
 			, uint32_t index );

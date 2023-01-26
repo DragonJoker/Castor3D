@@ -99,8 +99,7 @@ namespace castor3d
 			, { extent.width, extent.height, 1u } };
 		auto srcTransition = runnable.getTransition( index, source );
 		auto dstTransition = runnable.getTransition( index, target );
-		graph.memoryBarrier( recordContext
-			, commandBuffer
+		recordContext.memoryBarrier( commandBuffer
 			, source.data->image
 			, source.data->info.viewType
 			, source.data->info.subresourceRange
@@ -108,8 +107,7 @@ namespace castor3d
 			, { VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
 				, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL )
 				, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) } );
-		graph.memoryBarrier( recordContext
-			, commandBuffer
+		recordContext.memoryBarrier( commandBuffer
 			, target.data->image
 			, target.data->info.viewType
 			, target.data->info.subresourceRange
@@ -124,15 +122,13 @@ namespace castor3d
 			, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
 			, 1u
 			, &region );
-		graph.memoryBarrier( recordContext
-			, commandBuffer
+		recordContext.memoryBarrier( commandBuffer
 			, target.data->image
 			, target.data->info.viewType
 			, target.data->info.subresourceRange
 			, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
 			, dstTransition.to );
-		graph.memoryBarrier( recordContext
-			, commandBuffer
+		recordContext.memoryBarrier( commandBuffer
 			, source.data->image
 			, source.data->info.viewType
 			, source.data->info.subresourceRange

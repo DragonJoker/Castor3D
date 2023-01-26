@@ -24,7 +24,7 @@ namespace castor3d
 		, m_viewport{ *device.renderSystem.getEngine() }
 		, m_onBackgroundChanged{ background.onChanged.connect( [this]( SceneBackground const & )
 			{
-				doResetPipeline();
+				doResetPipeline( 0u );
 			} ) }
 	{
 	}

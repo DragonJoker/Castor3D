@@ -51,7 +51,6 @@ namespace castor3d
 		C3D_API void accept( RenderTechniqueVisitor & visitor );
 
 	private:
-		void doInitialise();
 		void doRecordInto( crg::RecordContext & context
 			, VkCommandBuffer commandBuffer
 			, uint32_t index );

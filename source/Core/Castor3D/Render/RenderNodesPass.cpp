@@ -125,7 +125,7 @@ namespace castor3d
 		, crg::RenderPass{ pass
 			, context
 			, graph
-			, { [this](){ doSubInitialise(); }
+			, { [this]( uint32_t index ){ doSubInitialise(); }
 				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doSubRecordInto( context, cb, i ); }
 				, GetSubpassContentsCallback( [](){ return VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS; } )
 				, GetPassIndexCallback( [](){ return 0u; } )
@@ -655,7 +655,10 @@ namespace castor3d
 
 	void RenderNodesPass::doSubInitialise()
 	{
-		m_renderQueue->initialise();
+		if ( m_renderQueue->needsInitialise() )
+		{
+			m_renderQueue->initialise();
+		}
 	}
 
 	void RenderNodesPass::doSubRecordInto( crg::RecordContext & context

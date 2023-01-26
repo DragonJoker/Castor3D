@@ -91,10 +91,10 @@ namespace castor3d
 			}
 
 		private:
-			void doResetPipeline()override
+			void doResetPipeline( uint32_t index )override
 			{
 				resetCommandBuffer();
-				resetPipeline( {} );
+				resetPipeline( {}, index );
 				reRecordCurrent();
 			}
 

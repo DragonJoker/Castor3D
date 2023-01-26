@@ -23,7 +23,7 @@ namespace castor3d
 		: crg::RunnablePass{ pass
 			, context
 			, graph
-			, { [this](){ doInitialise(); }
+			, { [this]( uint32_t index ){ doInitialise(); }
 				, GetPipelineStateCallback( [](){ return crg::getPipelineState( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT ); } )
 				, [this]( crg::RecordContext & ctx, VkCommandBuffer cb, uint32_t i ){ doRecordInto( ctx, cb, i ); }
 				, GetPassIndexCallback( [](){ return 0u; } )
@@ -60,6 +60,12 @@ namespace castor3d
 	void RunnableLightingPass::enableLight( Camera const & camera
 		, Light const & light )
 	{
+		if ( m_renderPasses.empty() )
+		{
+			m_pendingLights[&light] = &camera;
+			return;
+		}
+
 		for ( auto lightingModelId : m_scene.getLightingModelsID() )
 		{
 			if ( m_scene.hasObjects( lightingModelId ) )
@@ -74,6 +80,18 @@ namespace castor3d
 	void RunnableLightingPass::disableLight( Camera const & camera
 		, Light const & light )
 	{
+		if ( m_renderPasses.empty() )
+		{
+			auto it = m_pendingLights.find( &light );
+
+			if ( it != m_pendingLights.end() )
+			{
+				m_pendingLights.erase( it );
+			}
+
+			return;
+		}
+
 		for ( auto lightingModelId : m_scene.getLightingModelsID() )
 		{
 			if ( m_scene.hasObjects( lightingModelId ) )
@@ -105,7 +123,7 @@ namespace castor3d
 			result += pipeline.second->getLightCount();
 		}
 
-		return result;
+		return result + uint32_t( m_pendingLights.size() );
 	}
 
 	void RunnableLightingPass::doInitialise()
@@ -124,6 +142,13 @@ namespace castor3d
 			m_stencilRenderPasses.emplace_back( doCreateStencilRenderPass( false, m_lpResult ) );
 			m_stencilRenderPasses.emplace_back( doCreateStencilRenderPass( true, m_lpResult ) );
 		}
+
+		for ( auto & pending : m_pendingLights )
+		{
+			enableLight( *pending.second, *pending.first );
+		}
+
+		m_pendingLights.clear();
 	}
 
 	void RunnableLightingPass::doRecordInto( crg::RecordContext & context

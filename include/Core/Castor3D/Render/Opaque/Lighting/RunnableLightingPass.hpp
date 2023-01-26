@@ -61,6 +61,7 @@ namespace castor3d
 		std::vector< LightRenderPass > m_renderPasses;
 		std::vector< LightRenderPass > m_stencilRenderPasses;
 		std::map< size_t, LightsPipelinePtr > m_pipelines;
+		std::map< Light const *, Camera const * > m_pendingLights;
 	};
 }
 

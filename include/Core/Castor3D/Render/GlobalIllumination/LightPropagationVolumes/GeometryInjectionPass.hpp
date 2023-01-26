@@ -128,7 +128,7 @@ namespace castor3d
 			, uint32_t gridSize );
 
 	private:
-		void doSubInitialise();
+		void doSubInitialise( uint32_t index );
 		void doSubRecordInto( crg::RecordContext & context
 			, VkCommandBuffer commandBuffer
 			, uint32_t index );
@@ -143,13 +143,14 @@ namespace castor3d
 				, crg::pp::Config config
 				, uint32_t lpvSize );
 
-			void initialise( VkRenderPass renderPass );
+			void initialise( VkRenderPass renderPass
+				, uint32_t index );
 			void recordInto( crg::RecordContext & context
 				, VkCommandBuffer commandBuffer
 				, uint32_t index );
 
 		protected:
-			void doCreatePipeline();
+			void doCreatePipeline( uint32_t index );
 
 		private:
 			crg::PipelineHolder m_holder;

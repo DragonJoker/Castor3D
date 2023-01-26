@@ -403,11 +403,16 @@ namespace castor3d
 	{
 	}
 
-	void LightPropagationPass::PipelineHolder::initialise( VkRenderPass renderPass )
+	void LightPropagationPass::PipelineHolder::initialise( VkRenderPass renderPass
+		, uint32_t index )
 	{
 		m_renderPass = renderPass;
 		m_holder.initialise();
-		doCreatePipeline( 0u );
+
+		if ( !m_holder.getPipeline( index ) )
+		{
+			doCreatePipeline( index );
+		}
 	}
 
 	void LightPropagationPass::PipelineHolder::recordInto( crg::RecordContext & context
@@ -503,7 +508,7 @@ namespace castor3d
 		, crg::RenderPass{ pass
 			, context
 			, graph
-			, { [this](){ doSubInitialise(); }
+			, { [this]( uint32_t index ){ doSubInitialise( index ); }
 				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doSubRecordInto( context, cb, i ); } }
 			, { gridSize, gridSize } }
 		, m_gridSize{ gridSize }
@@ -530,9 +535,9 @@ namespace castor3d
 	{
 	}
 
-	void LightPropagationPass::doSubInitialise()
+	void LightPropagationPass::doSubInitialise( uint32_t index )
 	{
-		m_holder.initialise( getRenderPass( 0u ) );
+		m_holder.initialise( getRenderPass( index ), index );
 	}
 
 	void LightPropagationPass::doSubRecordInto( crg::RecordContext & context
