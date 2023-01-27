@@ -270,7 +270,6 @@ namespace smaa
 		, castor3d::Texture const & target
 		, crg::FramePass const & previousPass )
 	{
-		m_hdrTextureView = &m_renderTarget.getTechnique().getResult().sampledViewId;
 		auto previous = &previousPass;
 		crg::ImageViewIdArray smaaResult;
 

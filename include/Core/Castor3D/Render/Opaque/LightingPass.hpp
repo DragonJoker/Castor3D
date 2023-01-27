@@ -66,7 +66,7 @@ namespace castor3d
 			, ShadowMapResult const & smPointResult
 			, ShadowMapResult const & smSpotResult
 			, LightPassResult const & lpResult
-			, crg::ImageId const & targetColourResult
+			, crg::ImageViewIdArray const & targetColourResult
 			, SceneUbo const & sceneUbo
 			, GpInfoUbo const & gpInfoUbo );
 		/**
@@ -123,7 +123,7 @@ namespace castor3d
 		ShadowMapResult const & m_smPointResult;
 		ShadowMapResult const & m_smSpotResult;
 		LightPassResult const & m_lpResult;
-		crg::ImageId const & m_targetColourResult;
+		crg::ImageViewIdArray m_targetColourResult;
 		SceneUbo const & m_sceneUbo;
 		GpInfoUbo const & m_gpInfoUbo;
 		crg::FramePassGroup & m_group;

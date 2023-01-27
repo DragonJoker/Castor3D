@@ -40,6 +40,7 @@ namespace castor3d
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
+		, crg::ImageViewIdArray targetImage
 		, RenderNodesPassDesc const & renderPassDesc
 		, RenderTechniquePassDesc const & techniquePassDesc )
 		: RenderTechniqueNodesPass{ parent
@@ -48,7 +49,7 @@ namespace castor3d
 			, graph
 			, device
 			, Type
-			, parent->getResult().imageId.data
+			, targetImage
 			, renderPassDesc
 			, techniquePassDesc }
 	{
@@ -106,7 +107,8 @@ namespace castor3d
 
 	void OpaquePass::doFillAdditionalDescriptor( PipelineFlags const & flags
 		, ashes::WriteDescriptorSetArray & descriptorWrites
-		, ShadowMapLightTypeArray const & shadowMaps )
+		, ShadowMapLightTypeArray const & shadowMaps
+		, uint32_t passIndex )
 	{
 	}
 

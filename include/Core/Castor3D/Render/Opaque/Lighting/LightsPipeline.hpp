@@ -28,7 +28,7 @@ namespace castor3d
 			, ShadowMapResult const & smResult
 			, std::vector< LightRenderPass > const & renderPasses
 			, std::vector< LightRenderPass > const & stencilRenderPasses
-			, crg::ImageId const & targetColourResult );
+			, crg::ImageViewIdArray const & targetColourResult );
 
 		void clear();
 		void addLight( Camera const & camera
@@ -91,7 +91,7 @@ namespace castor3d
 		std::map< size_t, std::unique_ptr< LightDescriptors > > m_lightDescriptors;
 		std::vector< LightDescriptors const * > m_enabledLights;
 		Viewport m_viewport;
-		crg::ImageId m_targetColourResult;
+		crg::ImageViewIdArray m_targetColourResult;
 	};
 
 	using LightsPipelinePtr = std::unique_ptr< LightsPipeline >;

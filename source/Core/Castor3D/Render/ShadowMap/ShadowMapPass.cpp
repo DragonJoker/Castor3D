@@ -38,7 +38,7 @@ namespace castor3d
 			, graph
 			, device
 			, typeName
-			, nullptr
+			, {}
 			, RenderNodesPassDesc{ getExtent( shadowMap.getShadowPassResult()[SmTexture::eDepth].imageId )
 				, matrixUbo
 				, culler } }
@@ -78,7 +78,8 @@ namespace castor3d
 
 	void ShadowMapPass::doFillAdditionalDescriptor( PipelineFlags const & flags
 		, ashes::WriteDescriptorSetArray & descriptorWrites
-		, ShadowMapLightTypeArray const & shadowMaps )
+		, ShadowMapLightTypeArray const & shadowMaps
+		, uint32_t passIndex )
 	{
 		auto index = uint32_t( GlobalBuffersIdx::eCount );
 		descriptorWrites.push_back( getCuller().getScene().getLightCache().getBinding( index++ ) );

@@ -83,8 +83,6 @@ namespace smaa
 		std::unique_ptr< BlendingWeightCalculation > m_blendingWeightCalculation;
 		std::unique_ptr< NeighbourhoodBlending > m_neighbourhoodBlending;
 		std::unique_ptr< Reproject > m_reproject;
-		// Gamma view.
-		crg::ImageViewId const * m_hdrTextureView{ nullptr };
 
 		crg::FramePass const * m_pass{};
 

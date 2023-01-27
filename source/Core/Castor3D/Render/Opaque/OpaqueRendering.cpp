@@ -77,7 +77,7 @@ namespace castor3d
 			: nullptr ) }
 		, m_pixelsXY{ ( ( previous.hasVisibility() && VisibilityResolvePass::useCompute )
 			? makeBuffer< castor::Point2ui >( m_device
-				, getOwner()->getResult().getExtent().width * getOwner()->getResult().getExtent().height
+				, getOwner()->getTargetExtent().width * getOwner()->getTargetExtent().height
 				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, getOwner()->getName() + "/PixelsXY" )
@@ -123,7 +123,7 @@ namespace castor3d
 				, getOwner()->getDepth()
 				, previous.getDepthObj()
 				, *m_opaquePassResult
-				, getOwner()->getResult()
+				, getOwner()->getTargetResult()
 				, getOwner()->getDirectionalShadowPassResult()
 				, getOwner()->getPointShadowPassResult()
 				, getOwner()->getSpotShadowPassResult()
@@ -133,7 +133,7 @@ namespace castor3d
 				, getOwner()->getSecondaryVctBounce()
 				, m_ssao->getResult()
 				, getOwner()->getSize()
-				, *getOwner()->getRenderTarget().getScene()
+				, *getOwner()
 				, getOwner()->getSceneUbo()
 				, getOwner()->getRenderTarget().getHdrConfigUbo()
 				, getOwner()->getGpInfoUbo()
@@ -171,7 +171,7 @@ namespace castor3d
 			, m_device
 			, progress
 			, previousPasses
-			, makeSize( getOwner()->getResult().getExtent() )
+			, makeSize( getOwner()->getTargetExtent() )
 			, getOwner()->getSsaoConfig()
 			, getOwner()->getDepth()
 			, getOwner()->getNormal()
@@ -286,7 +286,7 @@ namespace castor3d
 			return m_deferredRendering->getLightDiffuse();
 		}
 
-		return getOwner()->getResult();
+		return getOwner()->getResultSource();
 	}
 
 	Texture const & OpaqueRendering::getScatteringLightingResult()const
@@ -296,7 +296,7 @@ namespace castor3d
 			return m_deferredRendering->getLightScattering();
 		}
 
-		return getOwner()->getResult();
+		return getOwner()->getResultSource();
 	}
 
 	Texture const & OpaqueRendering::getBaseColourResult()const
@@ -307,7 +307,7 @@ namespace castor3d
 			return ( *m_opaquePassResult )[DsTexture::eColMtl];
 		}
 
-		return getOwner()->getResult();
+		return getOwner()->getResultSource();
 	}
 
 	crg::FramePass & OpaqueRendering::doCreateVisibilityResolve( ProgressBar * progress
@@ -321,7 +321,7 @@ namespace castor3d
 				, crg::RunnableGraph & runnableGraph )
 			{
 				stepProgressBar( progress, "Initialising visibility resolve pass" );
-				RenderNodesPassDesc renderPassDesc{ getOwner()->getResult().getExtent()
+				RenderNodesPassDesc renderPassDesc{ getOwner()->getTargetExtent()
 					, getOwner()->getMatrixUbo()
 					, getOwner()->getSceneUbo()
 					, getOwner()->getRenderTarget().getCuller() };
@@ -427,19 +427,21 @@ namespace castor3d
 		, crg::FramePassArray const & previousPasses )
 	{
 		stepProgressBar( progress, "Creating opaque pass" );
+		auto target = getOwner()->getTargetResult();
 		auto & result = m_graph.createPass( "NodesPass"
-			, [this, progress]( crg::FramePass const & framePass
+			, [this, target, progress]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
 				stepProgressBar( progress, "Initialising opaque pass" );
 				RenderTechniquePassDesc techniquePassDesc{ false, getOwner()->getSsaoConfig() };
-				RenderNodesPassDesc renderPassDesc{ getOwner()->getResult().getExtent()
+				RenderNodesPassDesc renderPassDesc{ getOwner()->getTargetExtent()
 					, getOwner()->getMatrixUbo()
 					, getOwner()->getSceneUbo()
 					, getOwner()->getRenderTarget().getCuller() };
 				renderPassDesc.safeBand( true )
-					.meshShading( true );
+					.meshShading( true )
+					.target( target.front() );
 				techniquePassDesc.ssao( m_ssao->getResult() )
 					.lpvConfigUbo( getOwner()->getLpvConfigUbo() )
 					.llpvConfigUbo( getOwner()->getLlpvConfigUbo() )
@@ -454,7 +456,7 @@ namespace castor3d
 					, runnableGraph
 					, m_device
 					, ForwardRenderTechniquePass::Type
-					, getOwner()->getResult().imageId.data
+					, target
 					, std::move( renderPassDesc )
 					, std::move( techniquePassDesc ) );
 				m_opaquePass = res.get();
@@ -467,7 +469,7 @@ namespace castor3d
 		result.addDependency( m_ssao->getLastPass() );
 		result.addSampledView( m_ssao->getResult().sampledViewId, 0u );
 		result.addInOutDepthStencilView( getOwner()->getDepth().targetViewId );
-		result.addInOutColourView( getOwner()->getResult().targetViewId );
+		result.addInOutColourView( getOwner()->getTargetResult() );
 		return result;
 	}
 
@@ -476,14 +478,15 @@ namespace castor3d
 		, crg::FramePassArray const & previousPasses )
 	{
 		stepProgressBar( progress, "Creating opaque pass" );
+		auto target = getOwner()->getTargetResult();
 		auto & result = m_graph.createPass( "NodesPass"
-			, [this, progress]( crg::FramePass const & framePass
+			, [this, progress, target]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
 				stepProgressBar( progress, "Initialising opaque pass" );
 				RenderTechniquePassDesc techniquePassDesc{ false, getOwner()->getSsaoConfig() };
-				RenderNodesPassDesc renderPassDesc{ getOwner()->getResult().getExtent()
+				RenderNodesPassDesc renderPassDesc{ getOwner()->getTargetExtent()
 					, getOwner()->getMatrixUbo()
 					, getOwner()->getSceneUbo()
 					, getOwner()->getRenderTarget().getCuller() };
@@ -502,6 +505,7 @@ namespace castor3d
 					, context
 					, runnableGraph
 					, m_device
+					, target
 					, std::move( renderPassDesc )
 					, std::move( techniquePassDesc ) );
 				m_opaquePass = res.get();

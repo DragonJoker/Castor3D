@@ -101,12 +101,12 @@ namespace castor3d
 		void doCpuUpdate( CpuUpdater & updater )const override;
 		void doGpuUpdate( GpuUpdater & updater )const override;
 		void doAddPassBindings( crg::FramePass & pass
-			, crg::ImageData const & targetImage
+			, crg::ImageViewIdArray const & targetImage
 			, uint32_t & index )const override;
 		void doAddBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
 			, uint32_t & index )const override;
 		void doAddDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
-			, crg::ImageData const & targetImage
+			, crg::ImageViewIdArray const & targetImage
 			, uint32_t & index )const override;
 		void doUpdateColour( QueueData const & queueData
 			, RenderDevice const & device )const;

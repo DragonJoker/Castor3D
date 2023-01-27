@@ -137,7 +137,7 @@ namespace castor3d
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
 		, castor::String const & typeName
-		, crg::ImageData const * targetImage
+		, crg::ImageViewIdArray targetImage
 		, RenderNodesPassDesc const & renderPassDesc
 		, RenderTechniquePassDesc const & techniquePassDesc )
 		: RenderNodesPass{ pass, context, graph, device, typeName, targetImage, renderPassDesc }
@@ -163,6 +163,11 @@ namespace castor3d
 	void RenderTechniqueNodesPass::update( CpuUpdater & updater )
 	{
 		RenderNodesPass::update( updater );
+
+		if ( m_parent )
+		{
+			RenderNodesPass::doUpdatePassIndex( m_parent->getTargetResult().front() );
+		}
 	}
 
 	PipelineFlags RenderTechniqueNodesPass::createPipelineFlags( PassComponentCombine components
@@ -357,12 +362,15 @@ namespace castor3d
 
 	void RenderTechniqueNodesPass::doAddBackgroundDescriptor( PipelineFlags const & flags
 		, ashes::WriteDescriptorSetArray & descriptorWrites
-		, crg::ImageData const & targetImage
+		, crg::ImageViewIdArray const & targetImage
 		, uint32_t & index )const
 	{
 		if ( auto background = m_scene.getBackground() )
 		{
-			background->addDescriptors( flags, descriptorWrites, targetImage, index );
+			background->addDescriptors( flags
+				, descriptorWrites
+				, targetImage
+				, index );
 		}
 	}
 
@@ -486,7 +494,8 @@ namespace castor3d
 
 	void RenderTechniqueNodesPass::doFillAdditionalDescriptor( PipelineFlags const & flags
 		, ashes::WriteDescriptorSetArray & descriptorWrites
-		, ShadowMapLightTypeArray const & shadowMaps )
+		, ShadowMapLightTypeArray const & shadowMaps
+		, uint32_t passIndex )
 	{
 		auto index = uint32_t( GlobalBuffersIdx::eCount );
 		doAddPassSpecificsDescriptor( flags, descriptorWrites, index );
@@ -506,7 +515,7 @@ namespace castor3d
 			, index );
 		doAddShadowDescriptor( flags, descriptorWrites, shadowMaps, index );
 		doAddEnvDescriptor( flags, descriptorWrites, index );
-		doAddBackgroundDescriptor( flags, descriptorWrites, *m_targetImage, index );
+		doAddBackgroundDescriptor( flags, descriptorWrites, m_targetImage, index );
 		doAddGIDescriptor( flags, descriptorWrites, index );
 	}
 

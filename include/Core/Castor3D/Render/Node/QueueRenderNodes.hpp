@@ -29,7 +29,8 @@ namespace castor3d
 		C3D_API void sortNodes( ShadowMapLightTypeArray & shadowMaps );
 		C3D_API void fillIndirectBuffers();
 		C3D_API void prepareCommandBuffers( ashes::Optional< VkViewport > const & viewport
-			, ashes::Optional< VkRect2D > const & scissors );
+			, ashes::Optional< VkRect2D > const & scissors
+			, uint32_t passIndex );
 
 		C3D_API SubmeshRenderNode & createNode( Pass & pass
 			, Submesh & data

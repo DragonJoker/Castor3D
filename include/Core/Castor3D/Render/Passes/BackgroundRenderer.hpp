@@ -20,7 +20,7 @@ namespace castor3d
 			, SceneBackground & background
 			, HdrConfigUbo const & hdrConfigUbo
 			, SceneUbo const & sceneUbo
-			, crg::ImageViewId const & colour
+			, crg::ImageViewIdArray const & colour
 			, bool clearColour
 			, crg::ImageViewId const * depth
 			, crg::ImageViewId const * depthObj );
@@ -46,7 +46,7 @@ namespace castor3d
 				, background
 				, hdrConfigUbo
 				, sceneUbo
-				, colour
+				, { colour }
 				, clearColour
 				, nullptr
 				, nullptr }
@@ -75,61 +75,7 @@ namespace castor3d
 				, background
 				, hdrConfigUbo
 				, sceneUbo
-				, colour
-				, clearColour
-				, &depth
-				, depthObj }
-		{
-		}
-
-		BackgroundRenderer( crg::FramePassGroup & graph
-			, crg::FramePass const * previousPass
-			, RenderDevice const & device
-			, castor::String const & name
-			, SceneBackground & background
-			, HdrConfigUbo const & hdrConfigUbo
-			, SceneUbo const & sceneUbo
-			, crg::ImageViewId const & colour
-			, bool clearColour = true )
-			: BackgroundRenderer{ graph
-				, ( previousPass
-					? crg::FramePassArray{ previousPass }
-					: crg::FramePassArray{} )
-				, device
-				, nullptr
-				, name
-				, background
-				, hdrConfigUbo
-				, sceneUbo
-				, colour
-				, clearColour
-				, nullptr
-				, nullptr }
-		{
-		}
-
-		BackgroundRenderer( crg::FramePassGroup & graph
-			, crg::FramePass const * previousPass
-			, RenderDevice const & device
-			, castor::String const & name
-			, SceneBackground & background
-			, HdrConfigUbo const & hdrConfigUbo
-			, SceneUbo const & sceneUbo
-			, crg::ImageViewId const & colour
-			, bool clearColour
-			, crg::ImageViewId const & depth
-			, crg::ImageViewId const * depthObj )
-			: BackgroundRenderer{ graph
-				, ( previousPass
-					? crg::FramePassArray{ previousPass }
-					: crg::FramePassArray{} )
-				, device
-				, nullptr
-				, name
-				, background
-				, hdrConfigUbo
-				, sceneUbo
-				, colour
+				, { colour }
 				, clearColour
 				, &depth
 				, depthObj }
@@ -144,32 +90,7 @@ namespace castor3d
 			, SceneBackground & background
 			, HdrConfigUbo const & hdrConfigUbo
 			, SceneUbo const & sceneUbo
-			, crg::ImageViewId const & colour
-			, bool clearColour = true )
-			: BackgroundRenderer{ graph
-				, std::move( previousPasses )
-				, device
-				, progress
-				, name
-				, background
-				, hdrConfigUbo
-				, sceneUbo
-				, colour
-				, clearColour
-				, nullptr
-				, nullptr }
-		{
-		}
-
-		BackgroundRenderer( crg::FramePassGroup & graph
-			, crg::FramePassArray previousPasses
-			, RenderDevice const & device
-			, ProgressBar * progress
-			, castor::String const & name
-			, SceneBackground & background
-			, HdrConfigUbo const & hdrConfigUbo
-			, SceneUbo const & sceneUbo
-			, crg::ImageViewId const & colour
+			, crg::ImageViewIdArray const & colour
 			, bool clearColour
 			, crg::ImageViewId const & depth
 			, crg::ImageViewId const * depthObj )
@@ -177,56 +98,6 @@ namespace castor3d
 				, std::move( previousPasses )
 				, device
 				, progress
-				, name
-				, background
-				, hdrConfigUbo
-				, sceneUbo
-				, colour
-				, clearColour
-				, &depth
-				, depthObj }
-		{
-		}
-
-		BackgroundRenderer( crg::FramePassGroup & graph
-			, crg::FramePassArray previousPasses
-			, RenderDevice const & device
-			, castor::String const & name
-			, SceneBackground & background
-			, HdrConfigUbo const & hdrConfigUbo
-			, SceneUbo const & sceneUbo
-			, crg::ImageViewId const & colour
-			, bool clearColour = true )
-			: BackgroundRenderer{ graph
-				, std::move( previousPasses )
-				, device
-				, nullptr
-				, name
-				, background
-				, hdrConfigUbo
-				, sceneUbo
-				, colour
-				, clearColour
-				, nullptr
-				, nullptr }
-		{
-		}
-
-		BackgroundRenderer( crg::FramePassGroup & graph
-			, crg::FramePassArray previousPasses
-			, RenderDevice const & device
-			, castor::String const & name
-			, SceneBackground & background
-			, HdrConfigUbo const & hdrConfigUbo
-			, SceneUbo const & sceneUbo
-			, crg::ImageViewId const & colour
-			, bool clearColour
-			, crg::ImageViewId const & depth
-			, crg::ImageViewId const * depthObj )
-			: BackgroundRenderer{ graph
-				, std::move( previousPasses )
-				, device
-				, nullptr
 				, name
 				, background
 				, hdrConfigUbo
@@ -270,7 +141,7 @@ namespace castor3d
 			, SceneBackground & background
 			, HdrConfigUbo const & hdrConfigUbo
 			, SceneUbo const & sceneUbo
-			, crg::ImageViewId const & colour
+			, crg::ImageViewIdArray const & colour
 			, bool clearColour
 			, crg::ImageViewId const * depth
 			, crg::ImageViewId const * depthObj
@@ -278,7 +149,7 @@ namespace castor3d
 
 	private:
 		RenderDevice const & m_device;
-		crg::ImageData const * m_colour;
+		crg::ImageViewIdArray m_colour;
 		MatrixUbo m_matrixUbo;
 		UniformBufferOffsetT< ModelBufferConfiguration > m_modelUbo;
 		crg::FramePass const * m_backgroundPassDesc{};

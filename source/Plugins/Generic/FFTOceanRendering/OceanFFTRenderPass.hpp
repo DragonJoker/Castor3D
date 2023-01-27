@@ -29,7 +29,7 @@ namespace ocean_fft
 			, castor3d::RenderDevice const & device
 			, std::shared_ptr< OceanUbo > oceanUbo
 			, std::shared_ptr< OceanFFT > oceanFFT
-			, std::shared_ptr< castor3d::Texture > colourInput
+			, crg::ImageViewIdArray targetImage
 			, std::shared_ptr< castor3d::Texture > depthInput
 			, castor3d::RenderNodesPassDesc const & renderPassDesc
 			, castor3d::RenderTechniquePassDesc const & techniquePassDesc
@@ -73,7 +73,8 @@ namespace ocean_fft
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( castor3d::PipelineFlags const & flags )const override;
 		void doFillAdditionalDescriptor( castor3d::PipelineFlags const & flags
 			, ashes::WriteDescriptorSetArray & descriptorWrites
-			, castor3d::ShadowMapLightTypeArray const & shadowMaps )override;
+			, castor3d::ShadowMapLightTypeArray const & shadowMaps
+			, uint32_t passIndex )override;
 		castor3d::SubmeshFlags doAdjustSubmeshFlags( castor3d::SubmeshFlags flags )const override;
 		castor3d::ProgramFlags doAdjustProgramFlags( castor3d::ProgramFlags flags )const override;
 		void doAdjustFlags( castor3d::PipelineFlags & flags )const override;

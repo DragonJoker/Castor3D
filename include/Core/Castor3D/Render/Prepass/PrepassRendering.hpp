@@ -113,6 +113,7 @@ namespace castor3d
 		/**@{*/
 		C3D_API Engine * getEngine()const;
 		C3D_API crg::FramePass const & getLastPass()const;
+		C3D_API crg::FramePass const & getDepthRangePass()const;
 		C3D_API bool hasVisibility()const;
 
 		Texture const & getDepthObj()const

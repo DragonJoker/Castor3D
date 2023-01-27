@@ -205,7 +205,7 @@ namespace ocean
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, castor3d::RenderDevice const & device
-		, std::shared_ptr< castor3d::Texture > colourInput
+		, crg::ImageViewIdArray targetImage
 		, std::shared_ptr< castor3d::Texture > depthInput
 		, castor3d::RenderNodesPassDesc const & renderPassDesc
 		, castor3d::RenderTechniquePassDesc const & techniquePassDesc
@@ -216,11 +216,10 @@ namespace ocean
 			, graph
 			, device
 			, Type
-			, parent->getResult().imageId.data
+			, targetImage
 			, renderPassDesc
 			, techniquePassDesc }
 		, m_isEnabled{ std::move( isEnabled ) }
-		, m_colourInput{ std::move( colourInput ) }
 		, m_depthInput{ std::move( depthInput ) }
 		, m_linearWrapSampler{ device->createSampler( getName()
 			, VK_SAMPLER_ADDRESS_MODE_REPEAT
@@ -256,8 +255,6 @@ namespace ocean
 
 	OceanRenderPass::~OceanRenderPass()
 	{
-		m_colourInput->destroy();
-		m_colourInput.reset();
 		m_depthInput->destroy();
 		m_depthInput.reset();
 	}
@@ -269,38 +266,8 @@ namespace ocean
 	{
 		std::string name{ Name };
 		auto isEnabled = std::make_shared< castor3d::IsRenderPassEnabled >();
-		auto extent = technique.getResult().getExtent();
+		auto extent = technique.getTargetExtent();
 		auto & graph = technique.getRenderTarget().getGraph().createPassGroup( name );
-		auto colourInput = std::make_shared< castor3d::Texture >( device
-			, technique.getResources()
-			, name +"/Colour"
-			, 0u
-			, extent
-			, 1u
-			, 1u
-			, technique.getResult().imageId.data->info.format
-			, ( VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT ) );
-		colourInput->create();
-		auto & blitColourPass = graph.createPass( "CopyColour"
-			, [extent, isEnabled, &device]( crg::FramePass const & framePass
-				, crg::GraphContext & context
-				, crg::RunnableGraph & runnableGraph )
-			{
-				auto result = std::make_unique< crg::ImageCopy >( framePass
-					, context
-					, runnableGraph
-					, extent
-					, crg::ru::Config{}
-					, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
-					, crg::RunnablePass::IsEnabledCallback( [isEnabled](){ return ( *isEnabled )(); } ) );
-				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
-					, result->getTimer() );
-				return result;
-			} );
-		blitColourPass.addDependencies( previousPasses );
-		blitColourPass.addTransferInputView( technique.getResult().sampledViewId );
-		blitColourPass.addTransferOutputView( colourInput->sampledViewId );
-
 		auto depthInput = std::make_shared< castor3d::Texture >( device
 			, technique.getResources()
 			, name + "Depth"
@@ -327,12 +294,14 @@ namespace ocean
 					, result->getTimer() );
 				return result;
 			} );
-		blitDepthPass.addDependencies( previousPasses );
+		blitDepthPass.addDependency( technique.getGetLastDepthPass() );
 		blitDepthPass.addTransferInputView( technique.getDepth().sampledViewId );
 		blitDepthPass.addTransferOutputView( depthInput->sampledViewId );
 
+		technique.swapResults();
+		auto target = technique.getTargetResult();
 		auto & result = graph.createPass( "NodesPass"
-			, [extent, colourInput, depthInput, isEnabled, &device, &technique, &renderPasses]( crg::FramePass const & framePass
+			, [extent, depthInput, target, isEnabled, &device, &technique, &renderPasses]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 		{
@@ -341,12 +310,12 @@ namespace ocean
 				, context
 				, runnableGraph
 				, device
-				, std::move( colourInput )
+				, target
 				, std::move( depthInput )
 				, castor3d::RenderNodesPassDesc{ extent
 					, technique.getMatrixUbo()
 					, technique.getSceneUbo()
-					, technique.getRenderTarget().getCuller() }.safeBand( true )
+					, technique.getRenderTarget().getCuller() }.safeBand( true ).target( target.front() )
 				, castor3d::RenderTechniquePassDesc{ false, technique.getSsaoConfig() }
 					.ssao( technique.getSsaoResult() )
 					.lpvConfigUbo( technique.getLpvConfigUbo() )
@@ -363,14 +332,14 @@ namespace ocean
 			return res;
 		} );
 
-		result.addDependency( blitColourPass );
+		result.addDependencies( previousPasses );
 		result.addDependency( blitDepthPass );
-		result.addImplicitColourView( colourInput->sampledViewId
+		result.addImplicitColourView( technique.getSampledResult()
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 		result.addImplicitDepthView( depthInput->sampledViewId
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 		result.addInOutDepthStencilView( technique.getDepth().targetViewId );
-		result.addInOutColourView( technique.getResult().targetViewId );
+		result.addInOutColourView( technique.getTargetResult() );
 		return { &result, &blitDepthPass };
 	}
 
@@ -490,6 +459,11 @@ namespace ocean
 
 	void OceanRenderPass::doUpdateUbos( castor3d::CpuUpdater & updater )
 	{
+		if ( isPassEnabled() )
+		{
+			m_parent->swapResults();
+		}
+
 		auto tslf = updater.tslf > 0_ms
 			? updater.tslf
 			: std::chrono::duration_cast< castor::Milliseconds >( m_timer.getElapsed() );
@@ -583,7 +557,8 @@ namespace ocean
 
 	void OceanRenderPass::doFillAdditionalDescriptor( castor3d::PipelineFlags const & flags
 		, ashes::WriteDescriptorSetArray & descriptorWrites
-		, castor3d::ShadowMapLightTypeArray const & shadowMaps )
+		, castor3d::ShadowMapLightTypeArray const & shadowMaps
+		, uint32_t passIndex )
 	{
 		descriptorWrites.push_back( m_scene.getLightCache().getBinding( rdpass::WaveIdx::eLightBuffer ) );
 		descriptorWrites.push_back( m_ubo.getDescriptorWrite( rdpass::WaveIdx::eWavesUbo ) );
@@ -594,14 +569,14 @@ namespace ocean
 		rdpass::bindTexture( m_noise, *m_linearWrapSampler, descriptorWrites, index );
 		rdpass::bindTexture( m_parent->getNormal().sampledView, *m_pointClampSampler, descriptorWrites, index );
 		rdpass::bindTexture( m_depthInput->sampledView, *m_pointClampSampler, descriptorWrites, index );
-		rdpass::bindTexture( m_colourInput->sampledView, *m_pointClampSampler, descriptorWrites, index );
+		rdpass::bindTexture( m_graph.createImageView( m_targetImage[passIndex] ), *m_pointClampSampler, descriptorWrites, index );
 		rdpass::bindTexture( getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().sampledView
 			, *getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().sampler
 			, descriptorWrites
 			, index );
 		doAddShadowDescriptor( flags, descriptorWrites, shadowMaps, index );
 		doAddEnvDescriptor( flags, descriptorWrites, index );
-		doAddBackgroundDescriptor( flags, descriptorWrites, *m_targetImage, index );
+		doAddBackgroundDescriptor( flags, descriptorWrites, m_targetImage, index );
 		doAddGIDescriptor( flags, descriptorWrites, index );
 	}
 

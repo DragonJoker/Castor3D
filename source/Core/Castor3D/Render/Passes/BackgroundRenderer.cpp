@@ -30,12 +30,12 @@ namespace castor3d
 		, SceneBackground & background
 		, HdrConfigUbo const & hdrConfigUbo
 		, SceneUbo const & sceneUbo
-		, crg::ImageViewId const & colour
+		, crg::ImageViewIdArray const & colour
 		, bool clearColour
 		, crg::ImageViewId const * depth
 		, crg::ImageViewId const * depthObj )
 		: m_device{ device }
-		, m_colour{ colour.data->image.data }
+		, m_colour{ colour }
 		, m_matrixUbo{ m_device }
 		, m_modelUbo{ m_device.uboPool->getBuffer< ModelBufferConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) }
 		, m_backgroundPassDesc{ &doCreatePass( graph
@@ -44,7 +44,7 @@ namespace castor3d
 			, background
 			, hdrConfigUbo
 			, sceneUbo
-			, colour
+			, m_colour
 			, clearColour
 			, depth
 			, depthObj
@@ -63,7 +63,7 @@ namespace castor3d
 		{
 			updater.targetImage = m_colour;
 			m_backgroundPass->update( updater );
-			updater.targetImage = nullptr;
+			updater.targetImage = {};
 		}
 
 		m_matrixUbo.cpuUpdate( updater.bgMtxView
@@ -88,14 +88,14 @@ namespace castor3d
 		, SceneBackground & background
 		, HdrConfigUbo const & hdrConfigUbo
 		, SceneUbo const & sceneUbo
-		, crg::ImageViewId const & colour
+		, crg::ImageViewIdArray const & colour
 		, bool clearColour
 		, crg::ImageViewId const * depth
 		, crg::ImageViewId const * depthObj
 		, ProgressBar * progress )
 	{
 		stepProgressBar( progress, "Creating background pass" );
-		auto size = makeExtent2D( getExtent( colour ) );
+		auto size = makeExtent2D( getExtent( colour.front() ) );
 		auto & result = background.createBackgroundPass( graph
 			, m_device
 			, progress

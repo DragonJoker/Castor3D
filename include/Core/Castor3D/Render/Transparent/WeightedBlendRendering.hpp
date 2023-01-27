@@ -50,11 +50,12 @@ namespace castor3d
 			, crg::FramePass const & transparentPassDesc
 			, Texture const & depth
 			, TransparentPassResult const & transparentPassResult
-			, crg::ImageViewId const & targetColourView
+			, crg::ImageViewIdArray const & targetColourView
 			, castor::Size const & size
 			, SceneUbo & sceneUbo
 			, HdrConfigUbo const & hdrConfigUbo
-			, GpInfoUbo const & gpInfoUbo );
+			, GpInfoUbo const & gpInfoUbo
+			, uint32_t const * passIndex );
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
@@ -84,11 +85,12 @@ namespace castor3d
 	private:
 		crg::FramePass & doCreateFinalCombine( crg::FramePassGroup & graph
 			, crg::FramePass const & transparentPassDesc
-			, crg::ImageViewId const & targetColourView
+			, crg::ImageViewIdArray const & targetColourView
 			, SceneUbo & sceneUbo
 			, HdrConfigUbo const & hdrConfigUbo
 			, GpInfoUbo const & gpInfoUbo
-			, ProgressBar * progress );
+			, ProgressBar * progress
+			, uint32_t const * passIndex );
 
 	private:
 		RenderDevice const & m_device;

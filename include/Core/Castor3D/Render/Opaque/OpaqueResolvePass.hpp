@@ -83,14 +83,14 @@ namespace castor3d
 			, crg::FramePassArray const & previousPasses
 			, RenderDevice const & device
 			, ProgressBar * progress
-			, Scene & scene
+			, RenderTechnique const & technique
 			, Texture const & depthObj
 			, OpaquePassResult const & gp
 			, SsaoConfig const & ssao
 			, Texture const & ssaoResult
 			, Texture const & subsurfaceScattering
 			, LightPassResult const & lighting
-			, Texture const & result
+			, crg::ImageViewIdArray result
 			, SceneUbo const & sceneUbo
 			, GpInfoUbo const & gpInfoUbo
 			, HdrConfigUbo const & hdrConfigUbo
@@ -124,13 +124,15 @@ namespace castor3d
 	private:
 		crg::FramePass const & doCreatePass( crg::FramePassGroup & graph
 			, crg::FramePassArray const & previousPasses
-			, ProgressBar * progress );
+			, ProgressBar * progress
+			, crg::ImageViewIdArray result );
 		Program & doCreateProgram( uint32_t index );
 
 	private:
 		RenderDevice const & m_device;
 		Scene const & m_scene;
-		Texture const & m_result;
+		RenderTechnique const & m_technique;
+		crg::ImageViewId m_target;
 		SceneUbo const & m_sceneUbo;
 		GpInfoUbo const & m_gpInfoUbo;
 		HdrConfigUbo const & m_hdrConfigUbo;
@@ -145,6 +147,7 @@ namespace castor3d
 		std::vector< ProgramPtr > m_programs;
 		LightingModelID m_lightingModelId;
 		BackgroundModelID m_backgroundModelId;
+		uint32_t m_passMult{};
 		uint32_t m_programIndex{};
 		bool m_enabled{};
 		crg::FramePass const * m_lastPass{};

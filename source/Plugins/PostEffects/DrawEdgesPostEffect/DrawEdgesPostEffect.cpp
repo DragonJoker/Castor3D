@@ -265,7 +265,7 @@ namespace draw_edges
 		auto previous = &previousPass;
 
 		m_depthNormal = std::make_unique< DepthNormalEdgeDetection >( m_graph
-			, *previous
+			, crg::FramePassArray{ previous, &m_renderTarget.getTechnique().getDepthRangePass() }
 			, m_renderTarget
 			, device
 			, passBuffer

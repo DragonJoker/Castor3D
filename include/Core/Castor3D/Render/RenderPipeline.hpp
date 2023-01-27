@@ -146,9 +146,14 @@ namespace castor3d
 			m_addDescriptorLayout = &layout;
 		}
 
-		void setAdditionalDescriptorSet( ashes::DescriptorSet const & descriptorSet )
+		void setAdditionalDescriptorSet( std::vector< ashes::DescriptorSetPtr > const & descriptorSets )
 		{
-			m_addDescriptorSet = &descriptorSet;
+			m_addDescriptorSets.clear();
+
+			for ( auto & set : descriptorSets )
+			{
+				m_addDescriptorSets.push_back( set.get() );
+			}
 		}
 
 		void setMeshletDescriptorSetLayout( ashes::DescriptorSetLayout const & layout )
@@ -190,10 +195,10 @@ namespace castor3d
 		*	Accesseurs.
 		**/
 		/**@{*/
-		ashes::DescriptorSet const & getAdditionalDescriptorSet()const
+		ashes::DescriptorSet const & getAdditionalDescriptorSet( uint32_t passIndex )const
 		{
-			CU_Require( m_addDescriptorSet );
-			return *m_addDescriptorSet;
+			CU_Require( m_addDescriptorSets.size() > passIndex );
+			return *m_addDescriptorSets[passIndex];
 		}
 
 		PipelineFlags const & getFlags()const
@@ -267,7 +272,7 @@ namespace castor3d
 		ashes::PipelineLayoutPtr m_pipelineLayout;
 		ashes::GraphicsPipelinePtr m_pipeline;
 		ashes::DescriptorSetLayout const * m_addDescriptorLayout{};
-		ashes::DescriptorSet const * m_addDescriptorSet{};
+		std::vector< ashes::DescriptorSet const * > m_addDescriptorSets{};
 		ashes::DescriptorSetLayout const * m_meshletDescriptorLayout{};
 	};
 }

@@ -131,6 +131,11 @@ namespace castor3d
 		return *m_depthPassDesc;
 	}
 
+	crg::FramePass const & PrepassRendering::getDepthRangePass()const
+	{
+		return *m_computeDepthRangeDesc;
+	}
+
 	bool PrepassRendering::hasVisibility()const
 	{
 		return bool( m_result[PpTexture::eVisibility] );

@@ -36,7 +36,7 @@ namespace castor3d
 		, m_device{ device }
 		, m_graph{ getOwner()->getRenderTarget().getGraph().createPassGroup( "Transparent" ) }
 		, m_mippedColour{ m_device
-			, parent.getResources()
+			, getOwner()->getResources()
 			, getOwner()->getName() + "/MippedColour"
 			, 0u
 			, makeExtent3D( getOwner()->getSize() )
@@ -47,10 +47,11 @@ namespace castor3d
 				| VK_IMAGE_USAGE_SAMPLED_BIT )
 			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
 		, m_transparentPassResult{ ( weightedBlended
-			? castor::makeUnique< TransparentPassResult >( parent.getResources()
+			? castor::makeUnique< TransparentPassResult >( getOwner()->getResources()
 				, m_device
 				, makeSize( getOwner()->getDepth().getExtent() ) )
 			: nullptr ) }
+		, m_target{ getOwner()->getTargetResult().front() }
 		, m_mipgenPassDesc{ &doCreateMipGenPass( progress
 			, previous.getLastPass()
 			, std::move( previousPasses ) ) }
@@ -67,11 +68,12 @@ namespace castor3d
 				, *m_transparentPassDesc
 				, getOwner()->getDepth()
 				, *m_transparentPassResult
-				, getOwner()->getResult().wholeViewId
+				, getOwner()->getTargetResult()
 				, getOwner()->getSize()
 				, getOwner()->getSceneUbo()
 				, getOwner()->getRenderTarget().getHdrConfigUbo()
-				, getOwner()->getGpInfoUbo() )
+				, getOwner()->getGpInfoUbo()
+				, &m_passIndex )
 			: nullptr ) }
 	{
 		if ( m_transparentPassResult )
@@ -106,6 +108,9 @@ namespace castor3d
 		auto & scene = *updater.scene;
 		updater.voxelConeTracing = scene.getVoxelConeTracingConfig().enabled;
 		m_enabled = m_transparentPass->isPassEnabled();
+		m_passIndex = ( getOwner()->getTargetResult().front() == m_target )
+			? 0u
+			: 1u;
 		m_transparentPass->update( updater );
 	}
 
@@ -166,15 +171,15 @@ namespace castor3d
 					, context
 					, runnableGraph
 					, m_mippedColour.getExtent()
-					, crg::ru::Config{}
-					, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
+					, crg::ru::Config{ 2u }
+					, crg::RunnablePass::GetPassIndexCallback( [this](){ return m_passIndex; } )
 					, crg::RunnablePass::IsEnabledCallback( [this](){ return m_enabled; } ) );
 				getEngine()->registerTimer( framePass.getFullName()
 					, res->getTimer() );
 				return res;
 			} );
 		copy.addDependencies( previousPasses );
-		copy.addTransferInputView( getOwner()->getResult().targetViewId );
+		copy.addTransferInputView( getOwner()->getTargetResult() );
 		copy.addTransferOutputView( m_mippedColour.targetViewId );
 
 		auto & result = m_graph.createPass( "MipsGenPass"
@@ -203,8 +208,9 @@ namespace castor3d
 		, crg::FramePass const & lastPass )
 	{
 		stepProgressBar( progress, "Creating transparent pass" );
+		auto target = getOwner()->getTargetResult();
 		auto & result = m_graph.createPass( "NodesPass"
-			, [this, progress]( crg::FramePass const & framePass
+			, [this, progress, target]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
@@ -218,14 +224,15 @@ namespace castor3d
 					, runnableGraph
 					, m_device
 					, ForwardRenderTechniquePass::Type
-					, getOwner()->getResult().imageId.data
-					, RenderNodesPassDesc{ getOwner()->getResult().getExtent()
+					, target
+					, RenderNodesPassDesc{ getOwner()->getTargetExtent()
 							, getOwner()->getMatrixUbo()
 							, getOwner()->getSceneUbo()
 							, getOwner()->getRenderTarget().getCuller()
 							, isOit }
 						.safeBand( true )
 						.meshShading( true )
+						.target( m_target )
 					, RenderTechniquePassDesc{ false, getOwner()->getSsaoConfig() }
 						.ssao( getOwner()->getSsaoResult() )
 						.lpvConfigUbo( getOwner()->getLpvConfigUbo() )
@@ -245,7 +252,7 @@ namespace castor3d
 		result.addImplicitColourView( m_mippedColour.targetViewId
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 		result.addInOutDepthStencilView( getOwner()->getDepth().targetViewId );
-		result.addInOutColourView( getOwner()->getResult().targetViewId );
+		result.addInOutColourView( getOwner()->getTargetResult() );
 
 		return result;
 	}
@@ -254,15 +261,16 @@ namespace castor3d
 		, crg::FramePass const & lastPass )
 	{
 		stepProgressBar( progress, "Creating transparent pass" );
+		auto target = getOwner()->getTargetResult();
 		auto & result = m_graph.createPass( "NodesPass"
-			, [this, progress]( crg::FramePass const & framePass
+			, [this, progress, target]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
 				stepProgressBar( progress, "Initialising transparent pass" );
 				castor::String name = cuT( "Accumulation" );
 				static constexpr bool isOit = true;
-				static constexpr bool hasVelocity = true;
+				static constexpr bool hasVelocity = false;
 				auto accumIt = std::next( framePass.images.begin() );
 				auto revealIt = std::next( accumIt );
 				auto res = std::make_unique< TransparentPass >( getOwner()
@@ -271,8 +279,8 @@ namespace castor3d
 					, runnableGraph
 					, m_device
 					, m_mippedColour
-					, getOwner()->getResult().imageId.data
-					, RenderNodesPassDesc{ getOwner()->getResult().getExtent()
+					, target
+					, RenderNodesPassDesc{ getOwner()->getTargetExtent()
 							, getOwner()->getMatrixUbo()
 							, getOwner()->getSceneUbo()
 							, getOwner()->getRenderTarget().getCuller()
@@ -305,7 +313,6 @@ namespace castor3d
 			, getClearValue( WbTexture::eAccumulation ) );
 		result.addOutputColourView( transparentPassResult[WbTexture::eRevealage].targetViewId
 			, getClearValue( WbTexture::eRevealage ) );
-		result.addInOutColourView( getOwner()->getRenderTarget().getVelocity()->targetViewId );
 
 		return result;
 	}

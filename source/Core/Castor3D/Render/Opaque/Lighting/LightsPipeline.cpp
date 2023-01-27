@@ -50,7 +50,7 @@ namespace castor3d
 		, ShadowMapResult const & smResult
 		, std::vector< LightRenderPass > const & renderPasses
 		, std::vector< LightRenderPass > const & stencilRenderPasses
-		, crg::ImageId const & targetColourResult )
+		, crg::ImageViewIdArray const & targetColourResult )
 		: m_context{ context }
 		, m_smResult{ smResult }
 		, m_device{ device }
@@ -69,7 +69,7 @@ namespace castor3d
 				, m_config.lightType
 				, m_config.shadowType
 				, m_config.shadows
-				, makeExtent2D( getExtent( targetColourResult ) ) ) }
+				, makeExtent2D( getExtent( targetColourResult.front() ) ) ) }
 		, m_stages{ makeShaderState( m_device, m_vertexShader )
 			, makeShaderState( m_device, m_pixelShader ) }
 		, m_descriptorLayout{ doCreateDescriptorLayout() }
@@ -236,7 +236,7 @@ namespace castor3d
 
 			auto index = uint32_t( LightPassLgtIdx::eCount );
 			PipelineFlags flags{ PassComponentCombine{}, m_config.lightingModelId, {} };
-			m_scene.getBackground()->addDescriptors( flags, writes, *m_targetColourResult.data, index );
+			m_scene.getBackground()->addDescriptors( flags, writes, m_targetColourResult, index );
 
 			result.descriptorSet = m_descriptorPool->createDescriptorSet( 1u );
 			result.descriptorSet->setBindings( writes );

@@ -54,7 +54,7 @@ namespace castor3d
 			, graph
 			, device
 			, Type
-			, nullptr
+			, {}
 			, renderPassDesc
 			, techniquePassDesc }
 	{
@@ -107,7 +107,8 @@ namespace castor3d
 
 	void VisibilityPass::doFillAdditionalDescriptor( PipelineFlags const & flags
 		, ashes::WriteDescriptorSetArray & descriptorWrites
-		, ShadowMapLightTypeArray const & shadowMaps )
+		, ShadowMapLightTypeArray const & shadowMaps
+		, uint32_t passIndex )
 	{
 	}
 

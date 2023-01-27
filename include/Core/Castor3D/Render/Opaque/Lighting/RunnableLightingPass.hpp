@@ -24,7 +24,7 @@ namespace castor3d
 			, ShadowMapResult const & smDirectionalResult
 			, ShadowMapResult const & smPointResult
 			, ShadowMapResult const & smSpotResult
-			, crg::ImageId const & targetColourResult );
+			, crg::ImageViewIdArray const & targetColourResult );
 
 		void clear();
 		void enableLight( Camera const & camera
@@ -57,7 +57,7 @@ namespace castor3d
 		ShadowMapResult const & m_smDirectionalResult;
 		ShadowMapResult const & m_smPointResult;
 		ShadowMapResult const & m_smSpotResult;
-		crg::ImageId const & m_targetColourResult;
+		crg::ImageViewIdArray m_targetColourResult;
 		std::vector< LightRenderPass > m_renderPasses;
 		std::vector< LightRenderPass > m_stencilRenderPasses;
 		std::map< size_t, LightsPipelinePtr > m_pipelines;

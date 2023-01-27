@@ -30,7 +30,7 @@ namespace draw_edges
 
 	public:
 		DepthNormalEdgeDetection( crg::FramePassGroup & graph
-			, crg::FramePass const & previousPass
+			, crg::FramePassArray const & previousPasses
 			, castor3d::RenderTarget & renderTarget
 			, castor3d::RenderDevice const & device
 			, castor3d::PassBuffer const & passBuffer

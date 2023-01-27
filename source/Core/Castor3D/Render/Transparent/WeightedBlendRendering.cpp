@@ -137,11 +137,12 @@ namespace castor3d
 		, crg::FramePass const & transparentPassDesc
 		, Texture const & depth
 		, TransparentPassResult const & transparentPassResult
-		, crg::ImageViewId const & targetColourView
+		, crg::ImageViewIdArray const & targetColourView
 		, castor::Size const & size
 		, SceneUbo & sceneUbo
 		, HdrConfigUbo const & hdrConfigUbo
-		, GpInfoUbo const & gpInfoUbo )
+		, GpInfoUbo const & gpInfoUbo
+		, uint32_t const * passIndex )
 		: m_device{ device }
 		, m_graph{ graph }
 		, m_enabled{ enabled }
@@ -158,7 +159,8 @@ namespace castor3d
 			, sceneUbo
 			, hdrConfigUbo
 			, gpInfoUbo
-			, progress ) }
+			, progress
+			, passIndex ) }
 	{
 	}
 
@@ -178,15 +180,16 @@ namespace castor3d
 
 	crg::FramePass & WeightedBlendRendering::doCreateFinalCombine( crg::FramePassGroup & graph
 		, crg::FramePass const & transparentPassDesc
-		, crg::ImageViewId const & targetColourView
+		, crg::ImageViewIdArray const & targetColourView
 		, SceneUbo & sceneUbo
 		, HdrConfigUbo const & hdrConfigUbo
 		, GpInfoUbo const & gpInfoUbo
-		, ProgressBar * progress )
+		, ProgressBar * progress
+		, uint32_t const * passIndex )
 	{
 		stepProgressBar( progress, "Creating transparent resolve pass" );
 		auto & result = graph.createPass( "Combine"
-			, [this, progress]( crg::FramePass const & framePass
+			, [this, progress, passIndex]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
@@ -196,7 +199,8 @@ namespace castor3d
 					.renderSize( makeExtent2D( m_size ) )
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.enabled( &m_enabled )
-					.build( framePass, context, graph );
+					.passIndex( passIndex )
+					.build( framePass, context, graph, crg::ru::Config{ 2u } );
 				m_device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, result->getTimer() );
 				return result;

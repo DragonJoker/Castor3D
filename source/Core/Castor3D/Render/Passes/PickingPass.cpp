@@ -66,7 +66,7 @@ namespace castor3d
 			, graph
 			, device
 			, Type
-			, nullptr
+			, {}
 			, RenderNodesPassDesc{ { size.getWidth(), size.getHeight(), 1u }, matrixUbo, sceneUbo, culler, RenderFilter::eNone, true, false }
 				.meshShading( true ) }
 	{
@@ -79,7 +79,7 @@ namespace castor3d
 	void PickingPass::updateArea( VkRect2D const & scissor )
 	{
 		ShadowMapLightTypeArray shadowMaps;
-		m_renderQueue->update( shadowMaps, scissor );
+		m_renderQueue->update( shadowMaps, scissor, 0u );
 	}
 
 	ComponentModeFlags PickingPass::getComponentsMask()const
@@ -106,7 +106,8 @@ namespace castor3d
 
 	void PickingPass::doFillAdditionalDescriptor( PipelineFlags const & flags
 		, ashes::WriteDescriptorSetArray & descriptorWrites
-		, ShadowMapLightTypeArray const & shadowMaps )
+		, ShadowMapLightTypeArray const & shadowMaps
+		, uint32_t passIndex )
 	{
 	}
 

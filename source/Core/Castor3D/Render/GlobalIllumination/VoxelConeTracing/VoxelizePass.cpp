@@ -66,7 +66,7 @@ namespace castor3d
 			, graph
 			, device
 			, Type
-			, nullptr
+			, {}
 			, RenderNodesPassDesc{ { voxelConfig.gridSize.value(), voxelConfig.gridSize.value(), 1u }
 				, matrixUbo
 				, sceneUbo
@@ -189,7 +189,8 @@ namespace castor3d
 
 	void VoxelizePass::doFillAdditionalDescriptor( PipelineFlags const & flags
 		, ashes::WriteDescriptorSetArray & descriptorWrites
-		, ShadowMapLightTypeArray const & shadowMaps )
+		, ShadowMapLightTypeArray const & shadowMaps
+		, uint32_t passIndex )
 	{
 		auto sceneFlags = doAdjustSceneFlags( m_scene.getFlags() );
 		auto index = uint32_t( GlobalBuffersIdx::eCount );

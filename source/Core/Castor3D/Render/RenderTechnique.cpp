@@ -271,7 +271,8 @@ namespace castor3d
 		, RenderDevice const & device
 		, QueueData const & queueData
 		, Parameters const & parameters
-		, Texture const & colour
+		, Texture const & hdrObjects
+		, Texture const & hdrIntermediate
 		, SsaoConfig const & ssaoConfig
 		, ProgressBar * progress
 		, bool deferred
@@ -281,14 +282,15 @@ namespace castor3d
 		, castor::Named{ name + cuT( "/Technique") }
 		, m_renderTarget{ renderTarget }
 		, m_device{ device }
-		, m_colour{ colour }
+		, m_hdrSource{ &hdrIntermediate}
+		, m_hdrTarget{ &hdrObjects }
 		, m_targetSize{ m_renderTarget.getSize() }
 		, m_rawSize{ getSafeBandedSize( m_targetSize ) }
 		, m_depth{ std::make_shared< Texture >( m_device
 			, m_renderTarget.getResources()
 			, getName() + "/" + getTexName( PpTexture::eDepth )
 			, 0u
-			, m_colour.getExtent()
+			, m_hdrSource->getExtent()
 			, 1u
 			, 1u
 			, getFormat( m_device, PpTexture::eDepth )
@@ -298,7 +300,7 @@ namespace castor3d
 			, m_renderTarget.getResources()
 			, getName() + "/" + getTexName( DsTexture::eNmlOcc )
 			, 0u
-			, m_colour.getExtent()
+			, m_hdrSource->getExtent()
 			, 1u
 			, 1u
 			, getFormat( m_device, DsTexture::eNmlOcc )
@@ -347,6 +349,8 @@ namespace castor3d
 			, m_depth
 			, deferred
 			, visbuffer }
+		, m_lastDepthPass{ &m_prepass.getLastPass() }
+		, m_depthRangePass{ &m_prepass.getDepthRangePass() }
 		, m_background{ doCreateBackgroundPass( progress ) }
 		, m_opaque{ *this
 			, m_device
@@ -357,6 +361,7 @@ namespace castor3d
 			, progress
 			, m_normal
 			, deferred }
+		, m_lastOpaquePass{ &m_opaque.getLastPass() }
 		, m_transparent{ *this
 			, m_device
 			, queueData
@@ -365,6 +370,7 @@ namespace castor3d
 			, getSsaoConfig()
 			, progress
 			, weightedBlended }
+		, m_lastTransparentPass{ &m_transparent.getLastPass() }
 		, m_clearLpvGraph{ rendtech::doCreateClearLpvCommands( m_renderTarget.getResources(), device, progress, getName(), *m_lpvResult, m_llpvResult ) }
 		, m_clearLpvRunnable{ m_clearLpvGraph.compile( m_device.makeContext() ) }
 	{
@@ -389,6 +395,8 @@ namespace castor3d
 		m_allShadowMaps[size_t( LightType::ePoint )].emplace_back( std::ref( *m_pointShadowMap ), UInt32Array{} );
 		doInitialiseLpv();
 #endif
+		m_hdrSource = &hdrIntermediate;
+		m_hdrTarget = &hdrObjects;
 	}
 
 	RenderTechnique::~RenderTechnique()
@@ -430,6 +438,8 @@ namespace castor3d
 
 	void RenderTechnique::update( CpuUpdater & updater )
 	{
+		auto saveHdrSource = m_hdrSource;
+		auto saveHdrTarget = m_hdrTarget;
 		auto & scene = *updater.scene;
 		auto & camera = *updater.camera;
 		updater.voxelConeTracing = scene.getVoxelConeTracingConfig().enabled;
@@ -490,8 +500,10 @@ namespace castor3d
 			, camera.getFrustum()
 			, jitterProjSpace );
 		m_sceneUbo.cpuUpdate( scene, &camera );
-		m_gpInfoUbo.cpuUpdate( makeSize( m_colour.getExtent() )
+		m_gpInfoUbo.cpuUpdate( makeSize( m_hdrSource->getExtent() )
 			, camera );
+		m_hdrSource = saveHdrSource;
+		m_hdrTarget = saveHdrTarget;
 	}
 
 	void RenderTechnique::update( GpuUpdater & updater )
@@ -539,8 +551,8 @@ namespace castor3d
 	void RenderTechnique::accept( RenderTechniqueVisitor & visitor )
 	{
 		visitor.visit( "Technique Colour"
-			, m_colour
-			, m_renderTarget.getGraph().getFinalLayoutState( m_colour.sampledViewId ).layout
+			, *m_hdrSource
+			, m_renderTarget.getGraph().getFinalLayoutState( m_hdrSource->sampledViewId ).layout
 			, TextureFactors{}.invert( true ) );
 		visitor.visit( "Technique Depth"
 			, *m_depth
@@ -694,6 +706,11 @@ namespace castor3d
 		return m_renderTarget.getResources();
 	}
 
+	void RenderTechnique::swapResults()
+	{
+		std::swap( m_hdrSource, m_hdrTarget );
+	}
+
 	crg::FramePassArray RenderTechnique::doCreateRenderPasses( ProgressBar * progress
 		, TechniquePassEvent event
 		, crg::FramePass const * previousPass )
@@ -710,7 +727,7 @@ namespace castor3d
 			auto passes = renderPassInfo->create( m_device
 				, *this
 				, m_renderPasses
-				, result );
+				, std::move( result ) );
 
 			if ( !passes.empty() )
 			{
@@ -735,7 +752,7 @@ namespace castor3d
 			, *m_renderTarget.getScene()->getBackground()
 			, m_renderTarget.getHdrConfigUbo()
 			, m_sceneUbo
-			, m_colour.targetViewId
+			, getTargetResult()
 			, true /*clearColour*/
 			, m_depth->targetViewId
 			, &m_prepass.getDepthObj().sampledViewId );

@@ -72,7 +72,8 @@ namespace castor3d
 			, RenderDevice const & device
 			, QueueData const & queueData
 			, Parameters const & parameters
-			, Texture const & colour
+			, Texture const & hdrObjects
+			, Texture const & hdrIntermediate
 			, SsaoConfig const & ssaoConfig
 			, ProgressBar * progress
 			, bool deferred
@@ -176,15 +177,46 @@ namespace castor3d
 		C3D_API Texture const & getScatteringLightingResult()const;
 		C3D_API Texture const & getBaseColourResult()const;
 		C3D_API crg::ResourcesCache & getResources()const;
+		C3D_API void swapResults();
 
 		castor::Size const & getSize()const
 		{
 			return m_rawSize;
 		}
 
-		Texture const & getResult()const
+		crg::ImageViewIdArray getSampledResult()const
 		{
-			return m_colour;
+			return { m_hdrSource->sampledViewId, m_hdrTarget->sampledViewId };
+		}
+
+		crg::ImageViewIdArray getTargetResult()const
+		{
+			return { m_hdrTarget->targetViewId, m_hdrSource->targetViewId };
+		}
+
+		std::vector< Texture const * > getResult()const
+		{
+			return { m_hdrSource, m_hdrTarget };
+		}
+
+		Texture const & getResultSource()const
+		{
+			return *m_hdrSource;
+		}
+
+		Texture const & getResultTarget()const
+		{
+			return *m_hdrTarget;
+		}
+
+		VkExtent3D const & getTargetExtent()const
+		{
+			return m_hdrSource->getExtent();
+		}
+
+		VkFormat getTargetFormat()const
+		{
+			return m_hdrSource->getFormat();
 		}
 
 		Texture const & getNormal()const
@@ -327,6 +359,26 @@ namespace castor3d
 		{
 			return m_prepass.getVisibility();
 		}
+
+		crg::FramePass const & getGetLastDepthPass()const
+		{
+			return *m_lastDepthPass;
+		}
+
+		crg::FramePass const & getDepthRangePass()const
+		{
+			return *m_depthRangePass;
+		}
+
+		crg::FramePass const & getGetLastOpaquePass()const
+		{
+			return *m_lastOpaquePass;
+		}
+
+		crg::FramePass const & getGetLastTransparentPass()const
+		{
+			return *m_lastTransparentPass;
+		}
 		/**@}*/
 
 	public:
@@ -355,7 +407,8 @@ namespace castor3d
 	private:
 		RenderTarget & m_renderTarget;
 		RenderDevice const & m_device;
-		Texture const & m_colour;
+		Texture const * m_hdrSource;
+		Texture const * m_hdrTarget;
 		castor::Size m_targetSize;
 		castor::Size m_rawSize;
 		TexturePtr m_depth;
@@ -374,9 +427,13 @@ namespace castor3d
 		ShadowMapUPtr m_spotShadowMap;
 		TechniquePasses m_renderPasses;
 		PrepassRendering m_prepass;
+		crg::FramePass const * m_lastDepthPass{};
+		crg::FramePass const * m_depthRangePass{};
 		BackgroundRendererUPtr m_background{};
 		OpaqueRendering m_opaque;
+		crg::FramePass const * m_lastOpaquePass{};
 		TransparentRendering m_transparent;
+		crg::FramePass const * m_lastTransparentPass{};
 		crg::FrameGraph m_clearLpvGraph;
 		crg::RunnableGraphPtr m_clearLpvRunnable;
 		ShadowMapLightTypeArray m_allShadowMaps;

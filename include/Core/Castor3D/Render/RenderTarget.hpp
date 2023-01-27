@@ -440,8 +440,7 @@ namespace castor3d
 		void doInitCombineProgram( ProgressBar * progress );
 		Texture const & doUpdatePostEffects( CpuUpdater & updater
 			, PostEffectPtrArray const & effects
-			, Texture const & source
-			, Texture const & target )const;
+			, TextureArray const & images )const;
 		crg::SemaphoreWaitArray doRender( ashes::Queue const & queue
 			, crg::SemaphoreWaitArray signalsToWait );
 
@@ -482,10 +481,8 @@ namespace castor3d
 		SceneCullerUPtr m_culler;
 		crg::FrameGraph m_graph;
 		TexturePtr m_velocity;
-		Texture m_srgbObjects;
-		Texture m_srgbIntermediate;
-		Texture m_hdrObjects;
-		Texture m_hdrIntermediate;
+		TextureArray m_srgbObjects;
+		TextureArray m_hdrObjects;
 		Texture m_overlays;
 		Texture m_combined;
 		crg::FramePass & m_overlayPassDesc;

@@ -212,7 +212,7 @@ namespace castor3d
 			, RenderDevice const & device
 			, ProgressBar * progress
 			, VkExtent2D const & size
-			, crg::ImageViewId const & colour
+			, crg::ImageViewIdArray const & colour
 			, crg::ImageViewId const * depth
 			, crg::ImageViewId const * depthObj
 			, UniformBufferOffsetT< ModelBufferConfiguration > const & modelUbo
@@ -242,7 +242,7 @@ namespace castor3d
 		*	L'indice de départ des bindings.
 		*/
 		C3D_API void addPassBindings( crg::FramePass & pass
-			, crg::ImageData const & targetImage
+			, crg::ImageViewIdArray const & targetImage
 			, uint32_t & index )const;
 		/**
 		*\~english
@@ -285,7 +285,7 @@ namespace castor3d
 		*/
 		C3D_API void addDescriptors( PipelineFlags const & flags
 			, ashes::WriteDescriptorSetArray & descriptorWrites
-			, crg::ImageData const & targetImage
+			, crg::ImageViewIdArray const & targetImage
 			, uint32_t & index )const;
 		/**
 		*\~english
@@ -418,12 +418,12 @@ namespace castor3d
 		virtual void doCpuUpdate( CpuUpdater & updater )const = 0;
 		virtual void doGpuUpdate( GpuUpdater & updater )const = 0;
 		virtual void doAddPassBindings( crg::FramePass & pass
-			, crg::ImageData const & targetImage
+			, crg::ImageViewIdArray const & targetImage
 			, uint32_t & index )const = 0;
 		virtual void doAddBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
 			, uint32_t & index )const = 0;
 		virtual void doAddDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
-			, crg::ImageData const & targetImage
+			, crg::ImageViewIdArray const & targetImage
 			, uint32_t & index )const = 0;
 
 	public:

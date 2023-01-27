@@ -9,8 +9,6 @@
 		{
 			"name": "default-base",
 			"hidden": true,
-			"displayName": "Default Config",
-			"description": "Default build configuration",
 			"installDir": "${sourceDir}/package/Castor3D",
 			"cacheVariables": {
 				"ASHES_BUILD_RENDERER_OGL": false,
@@ -68,8 +66,8 @@
 		},
 		{
 			"name": "dev-msvc",
-			"displayName": "Default Visual Studio Developer Config",
-			"description": "Default build configuration for developing Castor3D using Visual Studio",
+			"displayName": "Developer Visual Studio Config",
+			"description": "Developer build configuration using Visual Studio",
 			"inherits": "dev-base",
 			"generator": "Visual Studio 17 2022",
 			"cacheVariables": {
@@ -78,8 +76,8 @@
 		},
 		{
 			"name": "dev-ninja",
-			"displayName": "Default Ninja Developer Config",
-			"description": "Default build configuration for developing Castor3D using Ninja",
+			"displayName": "Developer Ninja Config",
+			"description": "Developer build configuration using Ninja",
 			"inherits": "dev-base",
 			"generator": "Ninja"
 		},
