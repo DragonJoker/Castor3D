@@ -90,7 +90,7 @@ namespace atmosphere_scattering
 
 	void AtmosphereBackgroundPass::doResetPipeline( uint32_t index )
 	{
-		resetCommandBuffer();
+		resetCommandBuffer( index );
 		resetPipeline( {}, index );
 		reRecordCurrent();
 	}

@@ -192,7 +192,7 @@ namespace castor3d
 	}
 
 	void ImageBackground::doAddPassBindings( crg::FramePass & pass
-		, crg::ImageData const & targetImage
+		, crg::ImageViewIdArray const & targetImage
 		, uint32_t & index )const
 	{
 		pass.addSampledView( m_textureId.wholeViewId
@@ -212,7 +212,7 @@ namespace castor3d
 	}
 
 	void ImageBackground::doAddDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
-		, crg::ImageData const & targetImage
+		, crg::ImageViewIdArray const & targetImage
 		, uint32_t & index )const
 	{
 		bindTexture( m_textureId.wholeView

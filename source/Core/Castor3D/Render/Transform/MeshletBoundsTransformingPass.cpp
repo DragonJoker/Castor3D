@@ -55,7 +55,7 @@ namespace castor3d
 				, node.getFinalBufferOffsets()
 				, node.getMeshletsBuffer()
 				, output );
-			resetCommandBuffer();
+			resetCommandBuffer( 0u );
 		}
 	}
 

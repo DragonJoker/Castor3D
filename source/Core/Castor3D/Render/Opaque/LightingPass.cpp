@@ -37,7 +37,7 @@ namespace castor3d
 		, ShadowMapResult const & smPointResult
 		, ShadowMapResult const & smSpotResult
 		, LightPassResult const & lpResult
-		, crg::ImageId const & targetColourResult
+		, crg::ImageViewIdArray const & targetColourResult
 		, SceneUbo const & sceneUbo
 		, GpInfoUbo const & gpInfoUbo )
 		: m_device{ device }

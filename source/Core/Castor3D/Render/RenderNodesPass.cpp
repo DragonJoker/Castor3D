@@ -119,19 +119,21 @@ namespace castor3d
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
 		, castor::String const & typeName
-		, crg::ImageData const * targetImage
+		, crg::ImageViewIdArray targetImage
 		, RenderNodesPassDesc const & desc )
 		: castor::OwnedBy< Engine >{ *device.renderSystem.getEngine() }
 		, crg::RenderPass{ pass
 			, context
 			, graph
-			, { [this]( uint32_t index ){ doSubInitialise(); }
-				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doSubRecordInto( context, cb, i ); }
+			, { [this]( uint32_t index ){ doSubInitialise( index ); }
+				, [this]( crg::RecordContext & ctx, VkCommandBuffer cb, uint32_t i ){ doSubRecordInto( ctx, cb, i ); }
 				, GetSubpassContentsCallback( [](){ return VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS; } )
-				, GetPassIndexCallback( [](){ return 0u; } )
+				, GetPassIndexCallback( [this](){ return m_passIndex; } )
 				, IsEnabledCallback( [this](){ return isPassEnabled(); } ) }
 			, makeExtent2D( desc.m_size )
-			, desc.m_ruConfig }
+			, crg::ru::Config{ std::max( 1u, uint32_t( targetImage.size() ) )
+				, desc.m_ruConfig.resettable
+				, std::move( desc.m_ruConfig.actions ) } }
 		, castor::Named{ castor::string::stringCast< castor::xchar >( pass.getFullName() ) }
 		, m_device{ device }
 		, m_renderSystem{ m_device.renderSystem }
@@ -141,7 +143,7 @@ namespace castor3d
 		, m_typeName{ typeName }
 		, m_typeID{ getEngine()->getRenderPassTypeID( m_typeName ) }
 		, m_filters{ desc.m_filters }
-		, m_renderQueue{ castor::makeUnique< RenderQueue >( *this, desc.m_ignored ) }
+		, m_renderQueue{ castor::makeUnique< RenderQueue >( *this, desc.m_ignored, std::max( 1u, uint32_t( targetImage.size() ) ) ) }
 		, m_category{ pass.group.getFullName() }
 		, m_size{ desc.m_size.width, desc.m_size.height }
 		, m_oit{ desc.m_oit }
@@ -150,6 +152,7 @@ namespace castor3d
 		, m_meshShading{ desc.m_meshShading && device.hasMeshAndTaskShaders() }
 		, m_sceneUbo{ desc.m_sceneUbo }
 		, m_index{ desc.m_index }
+		, m_target{ desc.m_target }
 	{
 		if ( m_sceneUbo )
 		{
@@ -592,72 +595,79 @@ namespace castor3d
 			, PassDescriptors{} ).first;
 		auto & descriptors = descLayoutIt->second;
 
-		if ( !descriptors.set )
+		if ( descriptors.sets.empty() )
 		{
 			auto & scene = getCuller().getScene();
-			descriptors.set = descriptors.pool->createDescriptorSet( getName() + rendndpass::Suffix
-				, RenderPipeline::eBuffers );
-			ashes::WriteDescriptorSetArray descriptorWrites;
-			descriptorWrites.push_back( m_matrixUbo.getDescriptorWrite( uint32_t( GlobalBuffersIdx::eMatrix ) ) );
+			uint32_t passIndex{};
 
-			if ( m_sceneUbo )
+			for ( uint32_t i = 0u; i < getMaxPassCount(); ++i )
 			{
-				descriptorWrites.push_back( m_sceneUbo->getDescriptorWrite( uint32_t( GlobalBuffersIdx::eScene ) ) );
-			}
+				auto & descriptorSet = *descriptors.sets.emplace_back( descriptors.pool->createDescriptorSet( getName() + rendndpass::Suffix
+					, RenderPipeline::eBuffers ) );
+				ashes::WriteDescriptorSetArray descriptorWrites;
+				descriptorWrites.push_back( m_matrixUbo.getDescriptorWrite( uint32_t( GlobalBuffersIdx::eMatrix ) ) );
 
-			auto & nodesIds = m_renderQueue->getRenderNodes().getNodesIds();
-			auto nodesIdsWrite = ashes::WriteDescriptorSet{ uint32_t( GlobalBuffersIdx::eObjectsNodeID )
-				, 0u
-				, 1u
-				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
-			nodesIdsWrite.bufferInfo.push_back( { nodesIds.getBuffer()
-				, 0u
-				, nodesIds.getBuffer().getSize() } );
-			descriptorWrites.push_back( nodesIdsWrite );
+				if ( m_sceneUbo )
+				{
+					descriptorWrites.push_back( m_sceneUbo->getDescriptorWrite( uint32_t( GlobalBuffersIdx::eScene ) ) );
+				}
 
-			auto & modelBuffer = scene.getModelBuffer();
-			auto modelDataWrite = ashes::WriteDescriptorSet{ uint32_t( GlobalBuffersIdx::eModelsData )
-				, 0u
-				, 1u
-				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
-			modelDataWrite.bufferInfo.push_back( { modelBuffer.getBuffer()
-				, 0u
-				, modelBuffer.getBuffer().getSize() } );
-			descriptorWrites.push_back( modelDataWrite );
-			auto & matCache = getOwner()->getMaterialCache();
-			descriptorWrites.push_back( matCache.getPassBuffer().getBinding( uint32_t( GlobalBuffersIdx::eMaterials ) ) );
-			descriptorWrites.push_back( matCache.getSssProfileBuffer().getBinding( uint32_t( GlobalBuffersIdx::eSssProfiles ) ) );
-			descriptorWrites.push_back( matCache.getTexConfigBuffer().getBinding( uint32_t( GlobalBuffersIdx::eTexConfigs ) ) );
-			descriptorWrites.push_back( matCache.getTexAnimBuffer().getBinding( uint32_t( GlobalBuffersIdx::eTexAnims ) ) );
-
-			if ( pipeline.getFlags().isBillboard() )
-			{
-				auto & billboardDatas = scene.getBillboardsBuffer();
-				auto write = ashes::WriteDescriptorSet{ uint32_t( GlobalBuffersIdx::eBillboardsData )
+				auto & nodesIds = m_renderQueue->getRenderNodes().getNodesIds();
+				auto nodesIdsWrite = ashes::WriteDescriptorSet{ uint32_t( GlobalBuffersIdx::eObjectsNodeID )
 					, 0u
 					, 1u
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
-				write.bufferInfo.push_back( { billboardDatas.getBuffer()
+				nodesIdsWrite.bufferInfo.push_back( { nodesIds.getBuffer()
 					, 0u
-					, billboardDatas.getBuffer().getSize() } );
-				descriptorWrites.push_back( write );
-			}
+					, nodesIds.getBuffer().getSize() } );
+				descriptorWrites.push_back( nodesIdsWrite );
 
-			doFillAdditionalDescriptor( pipeline.getFlags()
-				, descriptorWrites
-				, shadowMaps );
-			descriptors.set->setBindings( descriptorWrites );
-			descriptors.set->update();
+				auto & modelBuffer = scene.getModelBuffer();
+				auto modelDataWrite = ashes::WriteDescriptorSet{ uint32_t( GlobalBuffersIdx::eModelsData )
+					, 0u
+					, 1u
+					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
+				modelDataWrite.bufferInfo.push_back( { modelBuffer.getBuffer()
+					, 0u
+					, modelBuffer.getBuffer().getSize() } );
+				descriptorWrites.push_back( modelDataWrite );
+				auto & matCache = getOwner()->getMaterialCache();
+				descriptorWrites.push_back( matCache.getPassBuffer().getBinding( uint32_t( GlobalBuffersIdx::eMaterials ) ) );
+				descriptorWrites.push_back( matCache.getSssProfileBuffer().getBinding( uint32_t( GlobalBuffersIdx::eSssProfiles ) ) );
+				descriptorWrites.push_back( matCache.getTexConfigBuffer().getBinding( uint32_t( GlobalBuffersIdx::eTexConfigs ) ) );
+				descriptorWrites.push_back( matCache.getTexAnimBuffer().getBinding( uint32_t( GlobalBuffersIdx::eTexAnims ) ) );
+
+				if ( pipeline.getFlags().isBillboard() )
+				{
+					auto & billboardDatas = scene.getBillboardsBuffer();
+					auto write = ashes::WriteDescriptorSet{ uint32_t( GlobalBuffersIdx::eBillboardsData )
+						, 0u
+						, 1u
+						, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
+					write.bufferInfo.push_back( { billboardDatas.getBuffer()
+						, 0u
+						, billboardDatas.getBuffer().getSize() } );
+					descriptorWrites.push_back( write );
+				}
+
+				doFillAdditionalDescriptor( pipeline.getFlags()
+					, descriptorWrites
+					, shadowMaps
+					, passIndex );
+				descriptorSet.setBindings( descriptorWrites );
+				descriptorSet.update();
+				++passIndex;
+			}
 		}
 
-		pipeline.setAdditionalDescriptorSet( *descriptors.set );
+		pipeline.setAdditionalDescriptorSet( descriptors.sets );
 	}
 
-	void RenderNodesPass::doSubInitialise()
+	void RenderNodesPass::doSubInitialise( uint32_t index )
 	{
-		if ( m_renderQueue->needsInitialise() )
+		if ( m_renderQueue->needsInitialise( index ) )
 		{
-			m_renderQueue->initialise();
+			m_renderQueue->initialise( index );
 		}
 	}
 
@@ -665,7 +675,7 @@ namespace castor3d
 		, VkCommandBuffer commandBuffer
 		, uint32_t index )
 	{
-		VkCommandBuffer secondary = m_renderQueue->initCommandBuffer();
+		VkCommandBuffer secondary = m_renderQueue->initCommandBuffer( index );
 		m_context.vkCmdExecuteCommands( commandBuffer
 			, 1u
 			, &secondary );
@@ -750,6 +760,14 @@ namespace castor3d
 		}
 
 		doAdjustFlags( flags );
+	}
+
+	void RenderNodesPass::doUpdatePassIndex( crg::ImageViewId currentTarget )
+	{
+		if ( isPassEnabled() && m_target.data )
+		{
+			m_passIndex = ( currentTarget == m_target ) ? 0u : 1u;
+		}
 	}
 
 	ashes::VkDescriptorSetLayoutBindingArray RenderNodesPass::doCreateAdditionalBindings( PipelineFlags const & flags )const
@@ -880,7 +898,7 @@ namespace castor3d
 					auto bindings = doCreateAdditionalBindings( flags );
 					addDescriptors.layout = device->createDescriptorSetLayout( getName() + rendndpass::Suffix
 						, std::move( bindings ) );
-					addDescriptors.pool = addDescriptors.layout->createPool( 1u );
+					addDescriptors.pool = addDescriptors.layout->createPool( getMaxPassCount() );
 				}
 
 				pipeline->setAdditionalDescriptorSetLayout( *addDescriptors.layout );

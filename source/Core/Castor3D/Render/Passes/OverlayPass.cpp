@@ -61,7 +61,7 @@ namespace castor3d
 
 	void OverlayPass::update( CpuUpdater & updater )
 	{
-		resetCommandBuffer();
+		resetCommandBuffer( 0u );
 		{
 			auto preparer = m_renderer->beginPrepare( m_device
 				, m_renderPass.getRenderPass( 0u )

@@ -73,6 +73,7 @@ namespace castor3d
 		, m_backgroundRenderer{ castor::makeUnique< BackgroundRenderer >( m_graph
 			, m_opaquePassDesc
 			, m_device
+			, nullptr
 			, getName()
 			, m_background
 			, m_hdrConfigUbo
@@ -172,7 +173,7 @@ namespace castor3d
 					, graph
 					, m_device
 					, ForwardRenderTechniquePass::Type
-					, m_colourView.data->image.data
+					, crg::ImageViewIdArray{ m_colourView }
 					, RenderNodesPassDesc{ getOwner()->getSize(), m_matrixUbo, m_sceneUbo, *m_culler }
 						.meshShading( true )
 						.implicitAction( depthView
@@ -211,7 +212,7 @@ namespace castor3d
 					, graph
 					, m_device
 					, ForwardRenderTechniquePass::Type
-					, m_colourView.data->image.data
+					, crg::ImageViewIdArray{ m_colourView }
 					, RenderNodesPassDesc{ getOwner()->getSize(), m_matrixUbo, m_sceneUbo, *m_culler, false }
 						.meshShading( true )
 					, RenderTechniquePassDesc{ true, SsaoConfig{} } );

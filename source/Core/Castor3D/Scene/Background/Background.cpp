@@ -93,7 +93,7 @@ namespace castor3d
 		private:
 			void doResetPipeline( uint32_t index )override
 			{
-				resetCommandBuffer();
+				resetCommandBuffer( index );
 				resetPipeline( {}, index );
 				reRecordCurrent();
 			}
@@ -376,7 +376,7 @@ namespace castor3d
 		, RenderDevice const & device
 		, ProgressBar * progress
 		, VkExtent2D const & size
-		, crg::ImageViewId const & colour
+		, crg::ImageViewIdArray const & colour
 		, crg::ImageViewId const * depth
 		, crg::ImageViewId const * depthObj
 		, UniformBufferOffsetT< ModelBufferConfiguration > const & modelUbo
@@ -438,7 +438,7 @@ namespace castor3d
 	}
 
 	void SceneBackground::addPassBindings( crg::FramePass & pass
-		, crg::ImageData const & targetImage
+		, crg::ImageViewIdArray const & targetImage
 		, uint32_t & index )const
 	{
 		doAddPassBindings( pass, targetImage, index );
@@ -489,7 +489,7 @@ namespace castor3d
 
 	void SceneBackground::addDescriptors( PipelineFlags const & flags
 		, ashes::WriteDescriptorSetArray & descriptorWrites
-		, crg::ImageData const & targetImage
+		, crg::ImageViewIdArray const & targetImage
 		, uint32_t & index )const
 	{
 		doAddDescriptors( descriptorWrites, targetImage, index );

@@ -768,7 +768,7 @@ namespace castor3d
 		castor::Matrix4x4f bgMtxView;
 		castor::Matrix4x4f bgMtxProj;
 		bool isSafeBanded{ true };
-		crg::ImageData const * targetImage{};
+		crg::ImageViewIdArray targetImage{};
 		struct DirtyObjects
 		{
 			bool isEmpty()const

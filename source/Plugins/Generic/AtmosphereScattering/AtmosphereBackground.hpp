@@ -66,7 +66,7 @@ namespace atmosphere_scattering
 			, castor3d::RenderDevice const & device
 			, castor3d::ProgressBar * progress
 			, VkExtent2D const & size
-			, crg::ImageViewId const & colour
+			, crg::ImageViewIdArray const & colour
 			, crg::ImageViewId const * depth
 			, crg::ImageViewId const * depthObj
 			, castor3d::UniformBufferOffsetT< castor3d::ModelBufferConfiguration > const & modelUbo
@@ -204,7 +204,7 @@ namespace atmosphere_scattering
 		*\copydoc	castor3d::SceneBackground::doAddPassBindings
 		*/
 		void doAddPassBindings( crg::FramePass & pass
-			, crg::ImageData const & targetImage
+			, crg::ImageViewIdArray const & targetImage
 			, uint32_t & index )const override;
 		/**
 		*\copydoc	castor3d::SceneBackground::doAddBindings
@@ -215,8 +215,23 @@ namespace atmosphere_scattering
 		*\copydoc	castor3d::SceneBackground::doAddDescriptors
 		*/
 		void doAddDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
-			, crg::ImageData const & targetImage
+			, crg::ImageViewIdArray const & targetImage
 			, uint32_t & index )const override;
+
+		auto findCameraPass( crg::ImageViewIdArray const & images )const
+		{
+			for ( auto image : images )
+			{
+				auto it = m_cameraPasses.find( image.data->image.data );
+
+				if ( it != m_cameraPasses.end() )
+				{
+					return it;
+				}
+			}
+
+			return m_cameraPasses.end();
+		}
 
 	private:
 		struct CameraPasses

@@ -12,6 +12,8 @@
 #include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Render/RenderTarget.hpp"
+#include "Castor3D/Render/RenderTechnique.hpp"
 #include "Castor3D/Render/Opaque/Lighting/LightPassResult.hpp"
 #include "Castor3D/Render/Ssao/SsaoConfig.hpp"
 #include "Castor3D/Scene/Camera.hpp"
@@ -419,14 +421,14 @@ namespace castor3d
 		, crg::FramePassArray const & previousPasses
 		, RenderDevice const & device
 		, ProgressBar * progress
-		, Scene & scene
+		, RenderTechnique const & technique
 		, Texture const & depthObj
 		, OpaquePassResult const & gp
 		, SsaoConfig const & ssao
 		, Texture const & ssaoResult
 		, Texture const & subsurfaceScattering
 		, LightPassResult const & lighting
-		, Texture const & result
+		, crg::ImageViewIdArray result
 		, SceneUbo const & sceneUbo
 		, GpInfoUbo const & gpInfoUbo
 		, HdrConfigUbo const & hdrConfigUbo
@@ -435,8 +437,9 @@ namespace castor3d
 		, crg::RunnablePass::IsEnabledCallback const & opaquePassEnabled )
 		: OwnedBy< Engine >{ *device.renderSystem.getEngine() }
 		, m_device{ device }
-		, m_scene{ scene }
-		, m_result{ result }
+		, m_scene{ *technique.getRenderTarget().getScene() }
+		, m_technique{ technique }
+		, m_target{ result.front() }
 		, m_sceneUbo{ sceneUbo }
 		, m_gpInfoUbo{ gpInfoUbo }
 		, m_hdrConfigUbo{ hdrConfigUbo }
@@ -457,11 +460,12 @@ namespace castor3d
 			+ "][" + passFactory.getIdName( m_lightingModelId )
 			+ "]";
 		m_programs.resize( dropqrslv::ResolveProgramConfig::MaxProgramsCount );
-		m_lastPass = &doCreatePass( graph, previousPasses, progress );
+		m_lastPass = &doCreatePass( graph, previousPasses, progress, result );
 	}
 
 	OpaqueResolvePass::Program & OpaqueResolvePass::doCreateProgram( uint32_t programIndex )
 	{
+		programIndex /= m_passMult;
 		CU_Require( programIndex < dropqrslv::ResolveProgramConfig::MaxProgramsCount );
 
 		if ( !m_programs[programIndex] )
@@ -476,7 +480,7 @@ namespace castor3d
 					, dropqrslv::createPixelProgram( m_device.renderSystem
 						, m_scene
 						, config
-						, m_result.getExtent()
+						, m_depthObj.getExtent()
 						, m_lightingModelId
 						, m_backgroundModelId ) } );
 			m_programs[programIndex]->stages = { makeShaderState( m_device, m_programs[programIndex]->vertexShader )
@@ -488,7 +492,8 @@ namespace castor3d
 
 	crg::FramePass const & OpaqueResolvePass::doCreatePass( crg::FramePassGroup & graph
 		, crg::FramePassArray const & previousPasses
-		, ProgressBar * progress )
+		, ProgressBar * progress
+		, crg::ImageViewIdArray result )
 	{
 		stepProgressBar( progress, "Creating opaque resolve pass" );
 		auto & engine = *getEngine();
@@ -502,7 +507,7 @@ namespace castor3d
 				stepProgressBar( progress, "Initialising opaque resolve pass" );
 				auto result = crg::RenderQuadBuilder{}
 					.texcoordConfig( crg::Texcoord{} )
-					.renderSize( makeExtent2D( m_result.getExtent() ) )
+					.renderSize( makeExtent2D( m_depthObj.getExtent() ) )
 					.passIndex( &m_programIndex )
 					.enabled( &m_enabled )
 					.programCreator( { dropqrslv::ResolveProgramConfig::MaxProgramsCount
@@ -511,7 +516,7 @@ namespace castor3d
 							auto & program = doCreateProgram( programIndex );
 							return crg::makeVkArray< VkPipelineShaderStageCreateInfo >( program.stages );
 						} } )
-					.build( framePass, context, runnableGraph, { uint32_t( m_programs.size() ) } );
+					.build( framePass, context, runnableGraph, { uint32_t( m_programs.size() * 2u ) } );
 				engine.registerTimer( framePass.getFullName()
 					, result->getTimer() );
 				return result;
@@ -579,16 +584,27 @@ namespace castor3d
 		auto & background = *m_scene.getBackground();
 		background.initialise( m_device );
 		auto index = uint32_t( dropqrslv::ResolveBind::eBackground );
-		background.addPassBindings( pass, *m_result.imageId.data, index );
+		background.addPassBindings( pass, result, index );
 
-		pass.addInOutColourView( m_result.targetViewId );
+		crg::ImageViewIdArray outputs;
+		crg::ImageViewIdArray addOutputs;
+
+		for ( size_t i = 0u; i < m_programs.size(); ++i )
+		{
+			outputs.push_back( result.front() );
+			addOutputs.push_back( result.back() );
+		}
+
+		outputs.insert( outputs.end(), addOutputs.begin(), addOutputs.end() );
+		pass.addInOutColourView( outputs );
 		return pass;
 	}
 
 	void OpaqueResolvePass::update( CpuUpdater & updater )
 	{
 		dropqrslv::ResolveProgramConfig config{ m_scene, m_ssao };
-		m_programIndex = config.index;
+		m_passMult = m_target == m_technique.getTargetResult().front() ? 1u : 2u;
+		m_programIndex = config.index * m_passMult;
 		m_enabled = m_opaquePassEnabled()
 			&& m_scene.hasObjects( m_lightingModelId );
 	}
@@ -597,7 +613,7 @@ namespace castor3d
 	{
 		if ( m_enabled )
 		{
-			auto & program = m_programs[m_programIndex];
+			auto & program = m_programs[m_programIndex / m_passMult];
 
 			if ( program )
 			{

@@ -339,7 +339,7 @@ namespace castor3d
 	}
 
 	void SkyboxBackground::doAddPassBindings( crg::FramePass & pass
-		, crg::ImageData const & targetImage
+		, crg::ImageViewIdArray const & targetImage
 		, uint32_t & index )const
 	{
 		pass.addSampledView( m_textureId.wholeViewId
@@ -359,7 +359,7 @@ namespace castor3d
 	}
 
 	void SkyboxBackground::doAddDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
-		, crg::ImageData const & targetImage
+		, crg::ImageViewIdArray const & targetImage
 		, uint32_t & index )const
 	{
 		bindTexture( m_textureId.wholeView

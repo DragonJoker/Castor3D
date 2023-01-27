@@ -301,7 +301,7 @@ namespace castor3d
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
 			, castor::String const & typeName
-			, crg::ImageData const * targetImage
+			, crg::ImageViewIdArray targetImage
 			, RenderNodesPassDesc const & renderPassDesc
 			, RenderTechniquePassDesc const & techniquePassDesc );
 
@@ -412,7 +412,7 @@ namespace castor3d
 			, uint32_t & index )const;
 		C3D_API void doAddBackgroundDescriptor( PipelineFlags const & flags
 			, ashes::WriteDescriptorSetArray & descriptorWrites
-			, crg::ImageData const & targetImage
+			, crg::ImageViewIdArray const & targetImage
 			, uint32_t & index )const;
 		C3D_API void doAddEnvDescriptor( PipelineFlags const & flags
 			, ashes::WriteDescriptorSetArray & descriptorWrites
@@ -431,7 +431,8 @@ namespace castor3d
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings )const override;
 		void doFillAdditionalDescriptor( PipelineFlags const & flags
 			, ashes::WriteDescriptorSetArray & descriptorWrites
-			, ShadowMapLightTypeArray const & shadowMaps )override;
+			, ShadowMapLightTypeArray const & shadowMaps
+			, uint32_t passIndex )override;
 		ashes::PipelineDepthStencilStateCreateInfo doCreateDepthStencilState( PipelineFlags const & flags )const override;
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
 

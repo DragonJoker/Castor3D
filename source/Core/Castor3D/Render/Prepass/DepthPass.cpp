@@ -56,7 +56,7 @@ namespace castor3d
 			, graph
 			, device
 			, Type
-			, nullptr
+			, {}
 			, renderPassDesc
 			, { false, ssaoConfig } }
 		, m_deferred{ deferred }

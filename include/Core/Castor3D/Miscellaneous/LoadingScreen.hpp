@@ -179,7 +179,7 @@ namespace castor3d
 
 			crg::Fence & getFence()
 			{
-				return m_fence;
+				return m_passes[getIndex()].fence;
 			}
 
 		private:

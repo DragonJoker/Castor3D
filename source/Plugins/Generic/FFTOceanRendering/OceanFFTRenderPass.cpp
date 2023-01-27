@@ -252,13 +252,13 @@ namespace ocean_fft
 			, crg::FramePassArray previousPasses
 			, std::shared_ptr< OceanUbo > oceanUbo
 			, std::shared_ptr< OceanFFT > oceanFFT
-			, castor3d::TexturePtr colourInput
 			, castor3d::TexturePtr depthInput
 			, std::shared_ptr< castor3d::IsRenderPassEnabled > isEnabled )
 		{
-			auto extent = technique.getResult().getExtent();
+			auto target = technique.getTargetResult();
+			auto extent = technique.getTargetExtent();
 			auto & result = graph.createPass( "NodesPass"
-				, [extent, colourInput, depthInput, oceanUbo, oceanFFT, isEnabled, &device, &technique, &renderPasses]( crg::FramePass const & framePass
+				, [extent, depthInput, target, oceanUbo, oceanFFT, isEnabled, &device, &technique, &renderPasses]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & runnableGraph )
 			{
@@ -269,12 +269,12 @@ namespace ocean_fft
 						, device
 						, std::move( oceanUbo )
 						, std::move( oceanFFT )
-						, std::move( colourInput )
+						, target
 						, std::move( depthInput )
 						, castor3d::RenderNodesPassDesc{ extent
 							, technique.getMatrixUbo()
 							, technique.getSceneUbo()
-							, technique.getRenderTarget().getCuller() }.safeBand( true )
+							, technique.getRenderTarget().getCuller() }.safeBand( true ).target( target.front() )
 						, castor3d::RenderTechniquePassDesc{ false, technique.getSsaoConfig() }
 							.ssao( technique.getSsaoResult() )
 							.lpvConfigUbo( technique.getLpvConfigUbo() )
@@ -305,7 +305,7 @@ namespace ocean_fft
 			result.addInOutColourView( technique.getResult().targetViewId );
 #else
 			result.addDependencies( oceanFFT->getLastPasses() );
-			result.addImplicitColourView( colourInput->sampledViewId
+			result.addImplicitColourView( technique.getSampledResult()
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 			result.addImplicitDepthView( depthInput->sampledViewId
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
@@ -320,7 +320,7 @@ namespace ocean_fft
 			result.addImplicitColourView( oceanFFT->getGradientJacobian().sampledViewId
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 			result.addInOutDepthStencilView( technique.getDepth().targetViewId );
-			result.addInOutColourView( technique.getResult().targetViewId );
+			result.addInOutColourView( technique.getTargetResult() );
 #endif
 			return { &result };
 		}
@@ -340,7 +340,7 @@ namespace ocean_fft
 		, castor3d::RenderDevice const & device
 		, std::shared_ptr< OceanUbo > oceanUbo
 		, std::shared_ptr< OceanFFT > oceanFFT
-		, std::shared_ptr< castor3d::Texture > colourInput
+		, crg::ImageViewIdArray targetImage
 		, std::shared_ptr< castor3d::Texture > depthInput
 		, castor3d::RenderNodesPassDesc const & renderPassDesc
 		, castor3d::RenderTechniquePassDesc const & techniquePassDesc
@@ -351,13 +351,12 @@ namespace ocean_fft
 			, graph
 			, device
 			, Type
-			, parent->getResult().imageId.data
+			, targetImage
 			, renderPassDesc
 			, techniquePassDesc }
 		, m_isEnabled{ isEnabled }
 		, m_ubo{ oceanUbo }
 		, m_oceanFFT{ std::move( oceanFFT ) }
-		, m_colourInput{ std::move( colourInput ) }
 		, m_depthInput{ std::move( depthInput ) }
 		, m_linearWrapSampler{ device->createSampler( getName()
 			, VK_SAMPLER_ADDRESS_MODE_REPEAT
@@ -386,8 +385,6 @@ namespace ocean_fft
 
 	OceanRenderPass::~OceanRenderPass()
 	{
-		m_colourInput->destroy();
-		m_colourInput.reset();
 		m_depthInput->destroy();
 		m_depthInput.reset();
 	}
@@ -399,25 +396,8 @@ namespace ocean_fft
 	{
 		auto isEnabled = std::make_shared< castor3d::IsRenderPassEnabled >();
 		auto & graph = technique.getRenderTarget().getGraph().createPassGroup( OceanFFT::Name );
-		auto extent = technique.getResult().getExtent();
-		auto colourInput = std::make_shared< castor3d::Texture >( device
-			, technique.getResources()
-			, OceanFFT::Name + "/Colour"
-			, 0u
-			, extent
-			, 1u
-			, 1u
-			, technique.getResult().imageId.data->info.format
-			, ( VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT ) );
-		colourInput->create();
-		crg::FramePassArray passes;
-		passes.push_back( &rdpass::createCopyPass( "Colour"
-			, device
-			, graph
-			, previousPasses
-			, technique.getResult().sampledViewId
-			, colourInput->sampledViewId
-			, isEnabled ) );
+		auto extent = technique.getTargetExtent();
+		crg::FramePassArray passes{ previousPasses };
 
 		auto depthInput = std::make_shared< castor3d::Texture >( device
 			, technique.getResources()
@@ -432,7 +412,7 @@ namespace ocean_fft
 		passes.push_back( &rdpass::createCopyPass( "Depth"
 			, device
 			, graph
-			, previousPasses
+			, { &technique.getGetLastDepthPass() }
 			, technique.getDepth().wholeViewId
 			, depthInput->wholeViewId
 			, isEnabled ) );
@@ -462,6 +442,7 @@ namespace ocean_fft
 			, isEnabled );
 #endif
 
+		technique.swapResults();
 		return rdpass::createNodesPass( device
 			, graph
 			, technique
@@ -469,7 +450,6 @@ namespace ocean_fft
 			, std::move( passes )
 			, std::move( oceanUbo )
 			, std::move( oceanFFT )
-			, std::move( colourInput )
 			, std::move( depthInput )
 			, isEnabled );
 	}
@@ -542,6 +522,11 @@ namespace ocean_fft
 
 	void OceanRenderPass::doUpdateUbos( castor3d::CpuUpdater & updater )
 	{
+		if ( isPassEnabled() )
+		{
+			m_parent->swapResults();
+		}
+
 		auto tslf = updater.tslf > 0_ms
 			? updater.tslf
 			: std::chrono::duration_cast< castor::Milliseconds >( m_timer.getElapsed() );
@@ -641,7 +626,8 @@ namespace ocean_fft
 
 	void OceanRenderPass::doFillAdditionalDescriptor( castor3d::PipelineFlags const & flags
 		, ashes::WriteDescriptorSetArray & descriptorWrites
-		, castor3d::ShadowMapLightTypeArray const & shadowMaps )
+		, castor3d::ShadowMapLightTypeArray const & shadowMaps
+		, uint32_t passIndex )
 	{
 		descriptorWrites.push_back( m_scene.getLightCache().getBinding( rdpass::OceanFFTIdx::eLightBuffer ) );
 		descriptorWrites.push_back( m_ubo->getDescriptorWrite( rdpass::OceanFFTIdx::eOceanUbo ) );
@@ -660,7 +646,7 @@ namespace ocean_fft
 			, index );
 		doAddShadowDescriptor( flags, descriptorWrites, shadowMaps, index );
 		doAddEnvDescriptor( flags, descriptorWrites, index );
-		doAddBackgroundDescriptor( flags, descriptorWrites, *m_targetImage, index );
+		doAddBackgroundDescriptor( flags, descriptorWrites, m_targetImage, index );
 		doAddGIDescriptor( flags, descriptorWrites, index );
 	}
 

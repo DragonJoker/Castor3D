@@ -19,7 +19,7 @@ namespace castor3d
 		, ShadowMapResult const & smDirectionalResult
 		, ShadowMapResult const & smPointResult
 		, ShadowMapResult const & smSpotResult
-		, crg::ImageId const & targetColourResult )
+		, crg::ImageViewIdArray const & targetColourResult )
 		: crg::RunnablePass{ pass
 			, context
 			, graph
@@ -105,7 +105,7 @@ namespace castor3d
 
 	void RunnableLightingPass::resetCommandBuffer()
 	{
-		crg::RunnablePass::resetCommandBuffer();
+		crg::RunnablePass::resetCommandBuffer( 0u );
 		crg::RunnablePass::reRecordCurrent();
 	}
 

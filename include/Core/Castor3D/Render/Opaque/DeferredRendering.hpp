@@ -92,7 +92,7 @@ namespace castor3d
 			, Texture const & depth
 			, Texture const & depthObj
 			, OpaquePassResult const & opaquePassResult
-			, Texture const & resultTexture
+			, crg::ImageViewIdArray resultTexture
 			, ShadowMapResult const & smDirectionalResult
 			, ShadowMapResult const & smPointResult
 			, ShadowMapResult const & smSpotResult
@@ -102,7 +102,7 @@ namespace castor3d
 			, Texture const & vctSecondaryBounce
 			, Texture const & ssao
 			, castor::Size const & size
-			, Scene & scene
+			, RenderTechnique const & technique
 			, SceneUbo const & sceneUbo
 			, HdrConfigUbo const & hdrConfigUbo
 			, GpInfoUbo const & gpInfoUbo
@@ -163,9 +163,8 @@ namespace castor3d
 			, crg::FramePassArray previousPasses
 			, ProgressBar * progress
 			, Texture const & depthObj
-			, Texture const & resultTexture
+			, crg::ImageViewIdArray resultTexture
 			, Texture const & ssao
-			, Scene & scene
 			, SceneUbo const & sceneUbo
 			, HdrConfigUbo const & hdrConfigUbo
 			, GpInfoUbo const & gpInfoUbo
@@ -175,6 +174,7 @@ namespace castor3d
 	private:
 		RenderDevice const & m_device;
 		OpaquePassResult const & m_opaquePassResult;
+		RenderTechnique const & m_technique;
 		crg::FramePass const * m_lastPass{};
 		GpInfoUbo m_lightingGpInfoUbo;
 		castor::Size m_size;

@@ -5,7 +5,8 @@
 #include "Castor3D/Cache/OverlayCache.hpp"
 #include "Castor3D/Cache/PluginCache.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
-#include "Castor3D/Render/RenderModule.hpp"
+#include "Castor3D/Render/RenderTarget.hpp"
+#include "Castor3D/Render/RenderTechnique.hpp"
 #include "Castor3D/Render/RenderTechniqueVisitor.hpp"
 #include "Castor3D/Render/Opaque/IndirectLightingPass.hpp"
 #include "Castor3D/Render/Opaque/LightingPass.hpp"
@@ -35,7 +36,7 @@ namespace castor3d
 		, Texture const & depth
 		, Texture const & depthObj
 		, OpaquePassResult const & opaquePassResult
-		, Texture const & resultTexture
+		, crg::ImageViewIdArray resultTexture
 		, ShadowMapResult const & smDirectionalResult
 		, ShadowMapResult const & smPointResult
 		, ShadowMapResult const & smSpotResult
@@ -45,7 +46,7 @@ namespace castor3d
 		, Texture const & vctSecondaryBounce
 		, Texture const & ssao
 		, castor::Size const & size
-		, Scene & scene
+		, RenderTechnique const & technique
 		, SceneUbo const & sceneUbo
 		, HdrConfigUbo const & hdrConfigUbo
 		, GpInfoUbo const & gpInfoUbo
@@ -56,6 +57,7 @@ namespace castor3d
 		, crg::RunnablePass::IsEnabledCallback const & opaquePassEnabled )
 		: m_device{ device }
 		, m_opaquePassResult{ opaquePassResult }
+		, m_technique{ technique }
 		, m_lightingGpInfoUbo{ device }
 		, m_size{ size }
 		, m_lightPassResult{ *depth.resources, device, m_size }
@@ -63,7 +65,7 @@ namespace castor3d
 			, previousPasses
 			, m_device
 			, progress
-			, scene
+			, *m_technique.getRenderTarget().getScene()
 			, depth
 			, depthObj
 			, m_opaquePassResult
@@ -71,12 +73,12 @@ namespace castor3d
 			, smPointResult
 			, smSpotResult
 			, m_lightPassResult
-			, resultTexture.imageId
+			, resultTexture
 			, sceneUbo
 			, m_lightingGpInfoUbo ) }
 		, m_indirectLightingPass{ castor::makeUnique< IndirectLightingPass >( m_device
 			, progress
-			, scene
+			, *m_technique.getRenderTarget().getScene()
 			, graph
 			, m_lightingPass->getLastPass()
 			, brdf
@@ -96,7 +98,7 @@ namespace castor3d
 			, m_lightingPass->getLastPass()
 			, m_device
 			, progress
-			, scene
+			, *m_technique.getRenderTarget().getScene()
 			, m_lightingGpInfoUbo
 			, sceneUbo
 			, depthObj
@@ -112,7 +114,6 @@ namespace castor3d
 			, depthObj
 			, resultTexture
 			, ssao
-			, scene
 			, sceneUbo
 			, hdrConfigUbo
 			, gpInfoUbo
@@ -185,9 +186,8 @@ namespace castor3d
 		, crg::FramePassArray previousPasses
 		, ProgressBar * progress
 		, Texture const & depthObj
-		, Texture const & resultTexture
+		, crg::ImageViewIdArray resultTexture
 		, Texture const & ssao
-		, Scene & scene
 		, SceneUbo const & sceneUbo
 		, HdrConfigUbo const & hdrConfigUbo
 		, GpInfoUbo const & gpInfoUbo
@@ -195,6 +195,7 @@ namespace castor3d
 		, crg::RunnablePass::IsEnabledCallback const & opaquePassEnabled )
 	{
 		m_index = 0u;
+		auto & scene = *m_technique.getRenderTarget().getScene();
 
 		for ( auto lightingModelId : scene.getEngine()->getLightingModelFactory().getLightingModelsID() )
 		{
@@ -203,7 +204,7 @@ namespace castor3d
 				, std::move( previousPasses )
 				, m_device
 				, progress
-				, scene
+				, m_technique
 				, depthObj
 				, m_opaquePassResult
 				, ssaoConfig

@@ -559,7 +559,7 @@ namespace atmosphere_scattering
 		, castor3d::RenderDevice const & device
 		, castor3d::ProgressBar * progress
 		, VkExtent2D const & size
-		, crg::ImageViewId const & colour
+		, crg::ImageViewIdArray const & colour
 		, crg::ImageViewId const * depth
 		, crg::ImageViewId const * depthObj
 		, castor3d::UniformBufferOffsetT< castor3d::ModelBufferConfiguration > const & modelUbo
@@ -609,11 +609,11 @@ namespace atmosphere_scattering
 				, m_atmosphereChanged );
 		}
 
-		auto it = m_cameraPasses.find( colour.data->image.data );
+		auto it = findCameraPass( colour );
 
 		if ( it == m_cameraPasses.end() )
 		{
-			it = m_cameraPasses.emplace( colour.data->image.data
+			it = m_cameraPasses.emplace( colour.front().data->image.data
 				, std::make_unique< CameraPasses >( graph
 					, device
 					, *this
@@ -854,7 +854,7 @@ namespace atmosphere_scattering
 		m_time += float( time.count() ) / 1000.0f;
 		m_weatherUbo->cpuUpdate( m_weatherCfg );
 		m_cloudsUbo->cpuUpdate( m_cloudsCfg, m_time );
-		auto it = m_cameraPasses.find( updater.targetImage );
+		auto it = findCameraPass( updater.targetImage );
 
 		if ( it != m_cameraPasses.end() )
 		{
@@ -868,10 +868,10 @@ namespace atmosphere_scattering
 	}
 
 	void AtmosphereBackground::doAddPassBindings( crg::FramePass & pass
-		, crg::ImageData const & targetImage
+		, crg::ImageViewIdArray const & targetImage
 		, uint32_t & index )const
 	{
-		auto it = m_cameraPasses.find( &targetImage );
+		auto it = findCameraPass( targetImage );
 
 		if ( it != m_cameraPasses.end() )
 		{
@@ -936,10 +936,10 @@ namespace atmosphere_scattering
 	}
 
 	void AtmosphereBackground::doAddDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
-		, crg::ImageData const & targetImage
+		, crg::ImageViewIdArray const & targetImage
 		, uint32_t & index )const
 	{
-		auto it = m_cameraPasses.find( &targetImage );
+		auto it = findCameraPass( targetImage );
 
 		if ( it != m_cameraPasses.end() )
 		{

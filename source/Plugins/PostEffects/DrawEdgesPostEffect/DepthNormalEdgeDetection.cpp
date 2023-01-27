@@ -204,7 +204,7 @@ namespace draw_edges
 	//*********************************************************************************************
 
 	DepthNormalEdgeDetection::DepthNormalEdgeDetection( crg::FramePassGroup & graph
-		, crg::FramePass const & previousPass
+		, crg::FramePassArray const & previousPasses
 		, castor3d::RenderTarget & renderTarget
 		, castor3d::RenderDevice const & device
 		, castor3d::PassBuffer const & passBuffer
@@ -255,7 +255,7 @@ namespace draw_edges
 			} ) }
 	{
 		auto & modelBuffer = renderTarget.getScene()->getModelBuffer().getBuffer();
-		m_pass.addDependency( previousPass );
+		m_pass.addDependencies( previousPasses );
 		passBuffer.createPassBinding( m_pass, eMaterials );
 		m_pass.addInputStorageBuffer( { modelBuffer, "Models" }
 			, uint32_t( eModels )

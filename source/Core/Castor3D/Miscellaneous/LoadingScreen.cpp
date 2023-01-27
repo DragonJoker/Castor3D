@@ -284,6 +284,7 @@ namespace castor3d
 		, m_backgroundRenderer{ castor::makeUnique< BackgroundRenderer >( m_graph.getDefaultGroup()
 			, nullptr
 			, m_device
+			, nullptr
 			, SceneName
 			, *m_scene->getBackground()
 			, m_hdrConfigUbo
@@ -396,7 +397,7 @@ namespace castor3d
 
 		if ( m_enabled )
 		{
-			m_windowPass->resetCommandBuffer();
+			m_windowPass->resetCommandBuffer( m_windowPass->getIndex() );
 			m_windowPass->setTarget( framebuffer
 				, { transparentBlackClearColor } );
 			m_windowPass->reRecordCurrent();
@@ -420,7 +421,7 @@ namespace castor3d
 					, graph
 					, m_device
 					, ForwardRenderTechniquePass::Type
-					, m_colour.imageId.data
+					, crg::ImageViewIdArray{ m_colour.targetViewId }
 					, RenderNodesPassDesc{ makeExtent3D( m_camera->getSize() ), m_matrixUbo, m_sceneUbo, *m_culler }
 						.meshShading( true )
 					, RenderTechniquePassDesc{ true, SsaoConfig{} } );
@@ -447,7 +448,7 @@ namespace castor3d
 					, graph
 					, m_device
 					, ForwardRenderTechniquePass::Type
-					, m_colour.imageId.data
+					, crg::ImageViewIdArray{ m_colour.targetViewId }
 					, RenderNodesPassDesc{ makeExtent3D( m_camera->getSize() ), m_matrixUbo, m_sceneUbo, *m_culler, false }
 						.meshShading( true )
 					, RenderTechniquePassDesc{ true, SsaoConfig{} } );

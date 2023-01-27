@@ -44,7 +44,7 @@ namespace castor3d
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
 			, castor::String const & typeName
-			, crg::ImageData const * targetImage
+			, crg::ImageViewIdArray targetImage
 			, RenderNodesPassDesc const & renderPassDesc
 			, RenderTechniquePassDesc const & techniquePassDesc );
 		/**

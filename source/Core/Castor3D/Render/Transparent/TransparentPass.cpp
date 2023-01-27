@@ -53,7 +53,7 @@ namespace castor3d
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
 		, Texture const & sceneImage
-		, crg::ImageData const * targetImage
+		, crg::ImageViewIdArray targetImage
 		, RenderNodesPassDesc const & renderPassDesc
 		, RenderTechniquePassDesc const & techniquePassDesc )
 		: RenderTechniqueNodesPass{ parent
@@ -126,17 +126,6 @@ namespace castor3d
 				VK_BLEND_OP_ADD,
 				defaultColorWriteMask,
 			},
-			VkPipelineColorBlendAttachmentState
-			{
-				false,
-				VK_BLEND_FACTOR_ONE,
-				VK_BLEND_FACTOR_ZERO,
-				VK_BLEND_OP_ADD,
-				VK_BLEND_FACTOR_ONE,
-				VK_BLEND_FACTOR_ZERO,
-				VK_BLEND_OP_ADD,
-				defaultColorWriteMask,
-			},
 		};
 		return ashes::PipelineColorBlendStateCreateInfo
 		{
@@ -177,7 +166,8 @@ namespace castor3d
 
 	void TransparentPass::doFillAdditionalDescriptor( PipelineFlags const & flags
 		, ashes::WriteDescriptorSetArray & descriptorWrites
-		, castor3d::ShadowMapLightTypeArray const & shadowMaps )
+		, castor3d::ShadowMapLightTypeArray const & shadowMaps
+		, uint32_t passIndex )
 	{
 		auto index = uint32_t( GlobalBuffersIdx::eCount );
 		doAddPassSpecificsDescriptor( flags, descriptorWrites, index );
@@ -197,7 +187,7 @@ namespace castor3d
 			, index );
 		doAddShadowDescriptor( flags, descriptorWrites, shadowMaps, index );
 		doAddEnvDescriptor( flags, descriptorWrites, index );
-		doAddBackgroundDescriptor( flags, descriptorWrites, *m_targetImage, index );
+		doAddBackgroundDescriptor( flags, descriptorWrites, m_targetImage, index );
 		doAddGIDescriptor( flags, descriptorWrites, index );
 
 		bindTexture( m_sceneImage.wholeView
@@ -298,7 +288,6 @@ namespace castor3d
 		// Fragment Outputs
 		auto outAccumulation( writer.declOutput< Vec4 >( "outAccumulation", 0 ) );
 		auto outRevealage( writer.declOutput< Float >( "outRevealage", 1 ) );
-		auto outVelocity( writer.declOutput< Vec2 >( "outVelocity", 2 ) );
 
 		writer.implementMainT< shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer
 				, passShaders
@@ -462,7 +451,6 @@ namespace castor3d
 					, components.opacity
 					, components.bwAccumulationOperator );
 				outRevealage = components.opacity;
-				outVelocity = in.getVelocity();
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
