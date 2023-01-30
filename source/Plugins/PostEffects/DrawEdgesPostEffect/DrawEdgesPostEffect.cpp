@@ -327,6 +327,8 @@ namespace draw_edges
 
 	void PostEffect::doCleanup( castor3d::RenderDevice const & device )
 	{
+		m_objectID.reset();
+		m_depthNormal.reset();
 	}
 
 	void PostEffect::doCpuUpdate( castor3d::CpuUpdater & updater )

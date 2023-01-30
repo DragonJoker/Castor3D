@@ -764,8 +764,8 @@ namespace castor3d
 			, TechniquePassEvent::eBeforeBackground
 			, &m_prepass.getLastPass() );
 		auto & graph = m_renderTarget.getGraph().createPassGroup( "Background" );
-		graph.addOutput( getTargetResult().front() );
-		graph.addOutput( getTargetResult().back() );
+		graph.addGroupOutput( getTargetResult().front() );
+		graph.addGroupOutput( getTargetResult().back() );
 		auto result = castor::makeUnique< BackgroundRenderer >( graph
 			, previousPasses
 			, m_device

@@ -216,11 +216,9 @@ namespace castor3d
 		result.addSampledView( depthObj
 			, uint32_t( wboit::DepthTexIndex ) );
 		result.addSampledView( m_transparentPassResult[WbTexture::eAccumulation].sampledViewId
-			, uint32_t( wboit::AccumTexIndex )
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			, uint32_t( wboit::AccumTexIndex ) );
 		result.addSampledView( m_transparentPassResult[WbTexture::eRevealage].sampledViewId
-			, uint32_t( wboit::RevealTexIndex )
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			, uint32_t( wboit::RevealTexIndex ) );
 
 		result.addInOutColourView( targetColourView
 			, { VK_TRUE

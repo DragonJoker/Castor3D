@@ -929,14 +929,11 @@ namespace smaa
 			, SmaaUboIdx );
 		m_pass.addSampledView( m_areaView
 			, bwcalc::AreaTexIdx
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, linearSampler );
 		m_pass.addSampledView( m_searchView
-			, bwcalc::SearchTexIdx
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			, bwcalc::SearchTexIdx );
 		m_pass.addSampledView( edgeDetectionView
 			, bwcalc::EdgesTexIdx
-			, {}
 			, linearSampler );
 		m_pass.addInputStencilView( stencilView );
 		m_pass.addOutputColourView( m_result.targetViewId

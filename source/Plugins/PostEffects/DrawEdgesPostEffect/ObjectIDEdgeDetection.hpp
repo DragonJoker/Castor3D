@@ -23,6 +23,8 @@ namespace draw_edges
 			, castor3d::PassBuffer const & passBuffer
 			, crg::ImageViewId const & depthObj
 			, bool const * enabled );
+		~ObjectIDEdgeDetection();
+
 		void accept( castor3d::PipelineVisitorBase & visitor );
 
 		crg::ImageViewId const & getResult()const

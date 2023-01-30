@@ -61,11 +61,11 @@ namespace castor3d
 			, *technique.getRenderTarget().getScene()
 			, progress ) }
 	{
-		m_group.addOutput( m_lpResult[LpTexture::eDiffuse].wholeViewId );
-		m_group.addOutput( m_lpResult[LpTexture::eSpecular].wholeViewId );
-		m_group.addOutput( m_lpResult[LpTexture::eScattering].wholeViewId );
-		m_group.addOutput( m_lpResult[LpTexture::eCoatingSpecular].wholeViewId );
-		m_group.addOutput( m_lpResult[LpTexture::eSheen].wholeViewId );
+		m_group.addGroupOutput( m_lpResult[LpTexture::eDiffuse].wholeViewId );
+		m_group.addGroupOutput( m_lpResult[LpTexture::eSpecular].wholeViewId );
+		m_group.addGroupOutput( m_lpResult[LpTexture::eScattering].wholeViewId );
+		m_group.addGroupOutput( m_lpResult[LpTexture::eCoatingSpecular].wholeViewId );
+		m_group.addGroupOutput( m_lpResult[LpTexture::eSheen].wholeViewId );
 	}
 
 	void LightingPass::update( CpuUpdater & updater )
@@ -204,18 +204,6 @@ namespace castor3d
 		pass.addOutputColourView( m_lpResult[LpTexture::eCoatingSpecular].targetViewId );
 		pass.addOutputColourView( m_lpResult[LpTexture::eSheen].targetViewId );
 
-		pass.addImplicitColourView( m_smDirectionalResult[SmTexture::eLinearDepth].wholeViewId
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-		pass.addImplicitColourView( m_smDirectionalResult[SmTexture::eVariance].wholeViewId
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-		pass.addImplicitColourView( m_smPointResult[SmTexture::eLinearDepth].wholeViewId
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-		pass.addImplicitColourView( m_smPointResult[SmTexture::eVariance].wholeViewId
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-		pass.addImplicitColourView( m_smSpotResult[SmTexture::eLinearDepth].wholeViewId
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-		pass.addImplicitColourView( m_smSpotResult[SmTexture::eVariance].wholeViewId
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 		return pass;
 	}
 }

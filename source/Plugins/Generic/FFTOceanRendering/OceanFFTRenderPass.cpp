@@ -92,12 +92,6 @@ namespace ocean_fft
 			} );
 
 			result.addDependencies( previousPasses );
-			result.addImplicitColourView( a.sampledViewId
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-			result.addImplicitColourView( b.sampledViewId
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-			result.addImplicitColourView( c.sampledViewId
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 		}
 #endif
 
@@ -293,14 +287,6 @@ namespace ocean_fft
 
 			result.addDependencies( previousPasses );
 #if Ocean_DebugFFTGraph
-			result.addImplicitColourView( technique.getSampledResult()
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-			result.addImplicitDepthView( technique.getSampledDepth()
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-			result.addImplicitColourView( technique.getBaseColourResult().sampledViewId
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-			result.addImplicitDepthView( technique.getDiffuseLightingResult().sampledViewId
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 			result.addInOutDepthStencilView( technique.getTargetDepth() );
 			result.addInOutColourView( technique.getTargetResult() );
 #else

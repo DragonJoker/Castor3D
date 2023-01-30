@@ -389,6 +389,17 @@ namespace castor3d
 		, bool clearColour
 		, BackgroundPassBase *& backgroundPass )
 	{
+		//if ( hasIbl() )
+		//{
+		//	auto & ibl = getIbl();
+		//	graph.addInput( ibl.getIrradianceTexture().sampledViewId
+		//		, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+		//	graph.addInput( ibl.getPrefilteredEnvironmentTexture().sampledViewId
+		//		, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+		//	graph.addInput( ibl.getPrefilteredEnvironmentSheenTexture().sampledViewId
+		//		, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+		//}
+
 		auto & result = graph.createPass( "Background"
 			, [this, &backgroundPass, &device, progress, size, colour, depth]( crg::FramePass const & framePass
 				, crg::GraphContext & context
@@ -419,7 +430,6 @@ namespace castor3d
 			, back::Bindings::eScene );
 		result.addSampledView( m_textureId.sampledViewId
 			, back::Bindings::eSkybox
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, crg::SamplerDesc{ VK_FILTER_LINEAR
 				, VK_FILTER_LINEAR } );
 
@@ -452,19 +462,16 @@ namespace castor3d
 			auto & ibl = getIbl();
 			pass.addSampledView( ibl.getIrradianceTexture().sampledViewId
 				, index++
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 				, crg::SamplerDesc{ VK_FILTER_LINEAR
 					, VK_FILTER_LINEAR
 					, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
 			pass.addSampledView( ibl.getPrefilteredEnvironmentTexture().sampledViewId
 				, index++
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 				, crg::SamplerDesc{ VK_FILTER_LINEAR
 					, VK_FILTER_LINEAR
 					, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
 			pass.addSampledView( ibl.getPrefilteredEnvironmentSheenTexture().sampledViewId
 				, index++
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 				, crg::SamplerDesc{ VK_FILTER_LINEAR
 					, VK_FILTER_LINEAR
 					, VK_SAMPLER_MIPMAP_MODE_LINEAR } );

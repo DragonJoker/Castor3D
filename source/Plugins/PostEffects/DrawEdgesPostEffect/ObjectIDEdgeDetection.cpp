@@ -241,6 +241,12 @@ namespace draw_edges
 		device.renderSystem.getEngine()->createSpecificsBuffersPassBindings( m_pass, index );
 		m_pass.addOutputColourView( m_result.targetViewId
 			, castor3d::transparentBlackClearColor );
+		m_result.create();
+	}
+
+	ObjectIDEdgeDetection::~ObjectIDEdgeDetection()
+	{
+		m_result.destroy();
 	}
 
 	void ObjectIDEdgeDetection::accept( castor3d::PipelineVisitorBase & visitor )

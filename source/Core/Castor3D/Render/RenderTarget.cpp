@@ -406,6 +406,8 @@ namespace castor3d
 			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
 		, m_overlayPassDesc{ doCreateOverlayPass( nullptr, engine.getRenderSystem()->getRenderDevice() ) }
 	{
+		m_graph.addInput( getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().sampledViewId
+			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
 		m_graph.addOutput( m_combined.wholeViewId
 			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
 
@@ -995,7 +997,7 @@ namespace castor3d
 				return result;
 			} );
 		result.addOutputColourView( m_overlays.targetViewId );
-		group.addOutput( m_overlays.targetViewId );
+		group.addGroupOutput( m_overlays.targetViewId );
 		return result;
 	}
 

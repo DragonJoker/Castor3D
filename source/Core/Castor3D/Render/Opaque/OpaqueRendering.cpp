@@ -149,8 +149,8 @@ namespace castor3d
 			getEngine()->registerBuffer( *m_visibilityPipelinesIds );
 		}
 
-		m_graph.addOutput( getOwner()->getTargetResult().front() );
-		m_graph.addOutput( getOwner()->getTargetResult().back() );
+		m_graph.addGroupOutput( getOwner()->getTargetResult().front() );
+		m_graph.addGroupOutput( getOwner()->getTargetResult().back() );
 	}
 
 	OpaqueRendering::~OpaqueRendering()

@@ -280,7 +280,6 @@ namespace atmosphere_scattering
 			, VK_FILTER_LINEAR };
 		pass.addSampledView( transmittanceLut
 			, multiscatter::eTransmittance
-			, VK_IMAGE_LAYOUT_UNDEFINED
 			, linearSampler );
 		pass.addOutputStorageView( resultView
 			, multiscatter::eOutput );

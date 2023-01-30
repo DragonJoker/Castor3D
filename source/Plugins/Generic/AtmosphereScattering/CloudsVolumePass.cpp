@@ -351,42 +351,33 @@ namespace atmosphere_scattering
 			, VK_SAMPLER_ADDRESS_MODE_REPEAT };
 		pass.addSampledView( transmittance
 			, volclouds::eTransmittance
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, linearClampSampler );
 		pass.addSampledView( multiscatter
 			, volclouds::eMultiScatter
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, linearClampSampler );
 		pass.addSampledView( skyview
 			, volclouds::eSkyView
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, linearClampSampler );
 		pass.addSampledView( volume
 			, volclouds::eVolume
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, linearClampSampler );
 		pass.addSampledView( perlinWorley
 			, volclouds::ePerlinWorley
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, mipLinearSampler );
 		pass.addSampledView( worley
 			, volclouds::eWorley
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, mipLinearSampler );
 		pass.addSampledView( curl
 			, volclouds::eCurl
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, linearRepeatSampler );
 		pass.addSampledView( weather
 			, volclouds::eWeatherMap
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, linearRepeatSampler );
 
 		if ( depthObj )
 		{
 			pass.addSampledView( *depthObj
 				, volclouds::eDepthMap
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 				, linearClampSampler );
 		}
 

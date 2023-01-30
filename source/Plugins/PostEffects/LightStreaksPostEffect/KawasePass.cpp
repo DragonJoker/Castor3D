@@ -185,7 +185,6 @@ namespace light_streaks
 			, index );
 		pass.addSampledView( srcView
 			, kawase::DifImgIdx
-			, {}
 			, linearSampler );
 		pass.addOutputColourView( dstView );
 	}

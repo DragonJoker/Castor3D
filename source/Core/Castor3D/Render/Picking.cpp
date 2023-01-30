@@ -247,12 +247,10 @@ namespace castor3d
 			, defaultClearDepthStencil );
 #if C3D_DebugPicking
 		result.addOutputColourView( m_colourImageView
-			, makeClearValue( 0u, 0u, 0u, 0u )
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			, makeClearValue( 0u, 0u, 0u, 0u ) );
 #else
 		result.addOutputColourView( m_colourImageView
-			, makeClearValue( 0u, 0u, 0u, 0u )
-			, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL );
+			, makeClearValue( 0u, 0u, 0u, 0u ) );
 #endif
 		return result;
 	}

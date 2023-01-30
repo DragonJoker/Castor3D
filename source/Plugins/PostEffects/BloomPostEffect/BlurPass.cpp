@@ -225,7 +225,6 @@ namespace Bloom
 		blurUbo.createPassBinding( pass, std::string{ "BlurCfg" } + ( isVertical ? "Y" : "X" ), blur::GaussCfgUboIdx );
 		pass.addSampledView( srcView
 			, blur::DifImgIdx
-			, {}
 			, crg::SamplerDesc{ VK_FILTER_NEAREST
 				, VK_FILTER_NEAREST
 				, VK_SAMPLER_MIPMAP_MODE_NEAREST

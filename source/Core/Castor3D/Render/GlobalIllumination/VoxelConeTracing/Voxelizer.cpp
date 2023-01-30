@@ -109,8 +109,6 @@ namespace castor3d
 		, m_runnable{ m_graph.compile( m_device.makeContext() ) }
 	{
 		printGraph( *m_runnable );
-		m_firstBounce.create();
-		m_secondaryBounce.create();
 		m_graph.addOutput( m_firstBounce.wholeViewId
 			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
 		m_graph.addOutput( m_secondaryBounce.wholeViewId
@@ -230,6 +228,7 @@ namespace castor3d
 	crg::FramePass & Voxelizer::doCreateVoxelToTexture( crg::FramePass const & previousPass
 		, ProgressBar * progress )
 	{
+		m_firstBounce.create();
 		stepProgressBar( progress, "Creating voxel buffer to texture pass" );
 		auto & result = m_graph.createPass( "VoxelBufferToTexture"
 			, [this, progress]( crg::FramePass const & framePass
@@ -289,6 +288,7 @@ namespace castor3d
 	crg::FramePass & Voxelizer::doCreateVoxelSecondaryBounce( crg::FramePass const & previousPass
 		, ProgressBar * progress )
 	{
+		m_secondaryBounce.create();
 		stepProgressBar( progress, "Creating voxel secondary bounce pass" );
 		auto & result = m_graph.createPass( "SecondaryBounce"
 			, [this, progress]( crg::FramePass const & framePass

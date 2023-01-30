@@ -109,7 +109,6 @@ namespace Bloom
 		m_pass.addDependencies( previousPasses );
 		m_pass.addSampledView( m_pass.mergeViews( blurViews )
 			, 0u
-			, {}
 			, crg::SamplerDesc{ VK_FILTER_LINEAR
 				, VK_FILTER_LINEAR
 				, VK_SAMPLER_MIPMAP_MODE_NEAREST
@@ -120,8 +119,7 @@ namespace Bloom
 				, 0.0f
 				, float( blurPassesCount ) } );
 		m_pass.addSampledView( sceneView
-			, 1u
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			, 1u );
 		m_pass.addOutputColourView( result );
 	}
 
