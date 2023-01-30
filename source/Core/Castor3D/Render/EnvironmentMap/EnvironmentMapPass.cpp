@@ -89,7 +89,9 @@ namespace castor3d
 			, m_camera->getProjection( false )
 			, m_camera->getFrustum() );
 		m_sceneUbo.setWindowSize( m_camera->getSize() );
-		m_graph.addOutput( m_colourView );
+		m_graph.addOutput( m_colourView
+			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+		m_graph.addGroupOutput( m_colourView );
 		log::trace << "Created EnvironmentMapPass " << m_graph.getName() + "/" + getName() << std::endl;
 	}
 

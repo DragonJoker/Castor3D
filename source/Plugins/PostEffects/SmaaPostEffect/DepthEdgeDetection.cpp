@@ -126,7 +126,6 @@ namespace smaa
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE };
 		m_pass.addSampledView( depthObj
 			, dpthed::DepthTexIdx
-			, {}
 			, linearSampler );
 	}
 }

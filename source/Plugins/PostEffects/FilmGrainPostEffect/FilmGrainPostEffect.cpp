@@ -321,7 +321,6 @@ namespace film_grain
 			, FilmCfgUboIdx );
 		m_pass->addSampledView( m_noiseView
 			, NoiseTexIdx
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, crg::SamplerDesc{ VK_FILTER_LINEAR
 				, VK_FILTER_LINEAR
 				, VK_SAMPLER_MIPMAP_MODE_LINEAR

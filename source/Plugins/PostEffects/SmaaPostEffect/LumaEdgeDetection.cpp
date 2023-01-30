@@ -312,14 +312,12 @@ namespace smaa
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE };
 		m_pass.addSampledView( colourView
 			, lumaed::ColorTexIdx
-			, {}
 			, linearSampler );
 
 		if ( predication )
 		{
 			m_pass.addSampledView( m_predicationView
 				, lumaed::PredicationTexIdx
-				, {}
 				, linearSampler );
 		}
 	}

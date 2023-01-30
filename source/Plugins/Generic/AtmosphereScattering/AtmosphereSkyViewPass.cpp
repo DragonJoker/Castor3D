@@ -188,7 +188,6 @@ namespace atmosphere_scattering
 			, VK_FILTER_LINEAR };
 		pass.addSampledView( transmittanceView
 			, skyview::eTransmittance
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, linearSampler );
 		pass.addOutputColourView( resultView );
 		m_lastPass = &pass;

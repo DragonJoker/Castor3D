@@ -126,7 +126,6 @@ namespace light_streaks
 		hiPass.addDependency( *previous );
 		hiPass.addSampledView( sceneView
 			, 0u
-			, {}
 			, linearSampler );
 		hiPass.addOutputColourView( resultViews[0] );
 

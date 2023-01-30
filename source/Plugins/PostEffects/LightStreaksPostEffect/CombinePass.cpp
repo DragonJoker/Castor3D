@@ -119,11 +119,9 @@ namespace light_streaks
 		m_pass.addDependencies( previousPasses );
 		m_pass.addSampledView( sceneView
 			, combine::SceneMapIdx
-			, {}
 			, linearSampler );
 		m_pass.addSampledView( m_pass.mergeViews( kawaseViews )
 			, combine::KawaseMapIdx
-			, {}
 			, linearSampler );
 		m_pass.addOutputColourView( resultView );
 	}

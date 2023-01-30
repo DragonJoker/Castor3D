@@ -406,7 +406,6 @@ namespace smaa
 			, SmaaUboIdx );
 		pass.addSampledView( smaaResult
 			, SmaaUboIdx + 1
-			, {}
 			, linearSampler );
 		crg::ImageViewIdArray outputs;
 		crg::ImageViewIdArray addOutputs;

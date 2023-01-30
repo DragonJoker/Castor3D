@@ -748,19 +748,16 @@ namespace castor3d
 			, LightPropagationPass::LpvGridUboIdx );
 		result.addSampledView( injection[LpvTexture::eR].sampledViewId
 			, LightPropagationPass::RLpvGridIdx
-			, VK_IMAGE_LAYOUT_UNDEFINED
 			, crg::SamplerDesc{ VK_FILTER_LINEAR
 				, VK_FILTER_LINEAR
 				, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
 		result.addSampledView( injection[LpvTexture::eG].sampledViewId
 			, LightPropagationPass::GLpvGridIdx
-			, VK_IMAGE_LAYOUT_UNDEFINED
 			, crg::SamplerDesc{ VK_FILTER_LINEAR
 				, VK_FILTER_LINEAR
 				, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
 		result.addSampledView( injection[LpvTexture::eB].sampledViewId
 			, LightPropagationPass::BLpvGridIdx
-			, VK_IMAGE_LAYOUT_UNDEFINED
 			, crg::SamplerDesc{ VK_FILTER_LINEAR
 				, VK_FILTER_LINEAR
 				, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
@@ -769,7 +766,6 @@ namespace castor3d
 		{
 			result.addSampledView( m_geometry->sampledViewId
 				, LightPropagationPass::GpGridIdx
-				, VK_IMAGE_LAYOUT_UNDEFINED
 				, crg::SamplerDesc{ VK_FILTER_LINEAR
 					, VK_FILTER_LINEAR
 					, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
@@ -783,18 +779,9 @@ namespace castor3d
 		}
 		else if ( index == LpvMaxPropagationSteps - 1u )
 		{
-			result.addInOutColourView( lpvResult[LpvTexture::eR].targetViewId
-				, {}
-				, VK_IMAGE_LAYOUT_UNDEFINED
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-			result.addInOutColourView( lpvResult[LpvTexture::eG].targetViewId
-				, {}
-				, VK_IMAGE_LAYOUT_UNDEFINED
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-			result.addInOutColourView( lpvResult[LpvTexture::eB].targetViewId
-				, {}
-				, VK_IMAGE_LAYOUT_UNDEFINED
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			result.addInOutColourView( lpvResult[LpvTexture::eR].targetViewId );
+			result.addInOutColourView( lpvResult[LpvTexture::eG].targetViewId );
+			result.addInOutColourView( lpvResult[LpvTexture::eB].targetViewId );
 		}
 		else
 		{

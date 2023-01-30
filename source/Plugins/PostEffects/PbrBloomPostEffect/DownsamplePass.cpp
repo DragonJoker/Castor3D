@@ -239,7 +239,6 @@ namespace PbrBloom
 			pass.addDependency( *prev );
 			pass.addSampledView( src
 				, 0u
-				, VK_IMAGE_LAYOUT_UNDEFINED
 				, crg::SamplerDesc{ VK_FILTER_LINEAR
 					, VK_FILTER_LINEAR
 					, VK_SAMPLER_MIPMAP_MODE_NEAREST

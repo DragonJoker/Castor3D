@@ -325,7 +325,6 @@ namespace atmosphere_scattering
 			, VK_FILTER_LINEAR };
 		pass.addSampledView( cloudsResult.sampledViewId
 			, AtmosphereBackgroundPass::eClouds
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, linearSampler );
 		lastPass = &pass;
 	}
@@ -888,23 +887,18 @@ namespace atmosphere_scattering
 				, VK_FILTER_LINEAR };
 			pass.addSampledView( m_transmittance.wholeViewId
 				, index++
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 				, linearClampSampler );
 			pass.addSampledView( m_multiScatter.wholeViewId
 				, index++
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 				, linearClampSampler );
 			pass.addSampledView( it->second->skyView.wholeViewId
 				, index++
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 				, linearClampSampler );
 			pass.addSampledView( it->second->volume.wholeViewId
 				, index++
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 				, linearClampSampler );
 			pass.addSampledView( it->second->cloudsResult.wholeViewId
 				, index++
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 				, linearClampSampler );
 		}
 	}

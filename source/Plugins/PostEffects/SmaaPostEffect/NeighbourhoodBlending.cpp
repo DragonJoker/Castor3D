@@ -269,18 +269,15 @@ namespace smaa
 			, SmaaUboIdx );
 		m_pass.addSampledView( inputs
 			, neighblend::ColorTexIdx
-			, {}
 			, linearSampler );
 		m_pass.addSampledView( m_blendView
 			, neighblend::BlendTexIdx
-			, {}
 			, linearSampler );
 
 		if ( m_velocityView )
 		{
 			m_pass.addSampledView( *m_velocityView
 				, neighblend::VelocityTexIdx
-				, {}
 				, linearSampler );
 		}
 

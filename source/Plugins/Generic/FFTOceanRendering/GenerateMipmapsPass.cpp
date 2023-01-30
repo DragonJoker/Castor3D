@@ -214,11 +214,14 @@ namespace ocean_fft
 			, 0u
 			, 1u };
 		// Transition first mip level to shader source for read in next iteration
+		auto firstLayoutState = context.getLayoutState( imageId
+			, viewId.data->info.viewType
+			, mipSubRange );
 		context.memoryBarrier( commandBuffer
 			, imageId
 			, viewId.data->info.viewType
 			, mipSubRange
-			, viewAttach.image.initialLayout
+			, firstLayoutState.layout
 			, shaderRead );
 
 		for ( auto & ds : m_descriptorSets )
@@ -268,7 +271,7 @@ namespace ocean_fft
 					, 1u
 					, mipSubRange.baseArrayLayer
 					, 1u }
-				, VK_IMAGE_LAYOUT_UNDEFINED
+				, shaderRead.layout
 				, dstMipImageLayout );
 
 			if ( mipSubRange.baseMipLevel == ( mipLevels - 1u ) )
@@ -278,7 +281,7 @@ namespace ocean_fft
 					, imageId
 					, viewId.data->info.viewType
 					, mipSubRange
-					, VK_IMAGE_LAYOUT_UNDEFINED
+					, shaderWrite.layout
 					, dstMipImageLayout );
 			}
 			else
@@ -288,7 +291,7 @@ namespace ocean_fft
 					, imageId
 					, viewId.data->info.viewType
 					, mipSubRange
-					, VK_IMAGE_LAYOUT_UNDEFINED
+					, shaderWrite.layout
 					, shaderRead );
 			}
 		}

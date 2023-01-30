@@ -216,11 +216,9 @@ namespace smaa
 			, SmaaUboIdx );
 		m_pass.addSampledView( m_currentColourViews
 			, reproj::CurColTexIdx
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, pointSampler );
 		m_pass.addSampledView( m_previousColourViews
 			, reproj::PrvColTexIdx
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, pointSampler );
 		m_result.create();
 
@@ -228,7 +226,6 @@ namespace smaa
 		{
 			m_pass.addSampledView( *m_velocityView
 				, reproj::VelocityTexIdx
-				, {}
 				, pointSampler );
 		}
 	}

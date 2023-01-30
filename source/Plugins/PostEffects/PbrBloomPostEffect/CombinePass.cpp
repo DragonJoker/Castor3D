@@ -118,11 +118,9 @@ namespace PbrBloom
 		m_pass.addDependency( previousPass );
 		m_pass.addSampledView( intermediateView
 			, 0u
-			, {}
 			, crg::SamplerDesc{ VK_FILTER_LINEAR, VK_FILTER_LINEAR } );
 		m_pass.addSampledView( lhs
-			, 1u
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			, 1u );
 		ubo.createPassBinding( m_pass
 			, std::string{ "PbrBloomUbo" }
 			, 2u );

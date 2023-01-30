@@ -50,10 +50,10 @@ namespace castor3d
 		, m_computeDepthRangeDesc{ &doCreateComputeDepthRange( progress ) }
 	{
 		m_result.create();
-		m_graph.addOutput( getOwner()->getTargetDepth().front() );
-		m_graph.addOutput( getOwner()->getTargetDepth().back() );
-		m_graph.addOutput( m_result[PpTexture::eDepthObj].wholeViewId );
-		m_graph.addOutput( m_result[PpTexture::eVisibility].wholeViewId );
+		m_graph.addGroupOutput( getOwner()->getTargetDepth().front() );
+		m_graph.addGroupOutput( getOwner()->getTargetDepth().back() );
+		m_graph.addGroupOutput( m_result[PpTexture::eDepthObj].wholeViewId );
+		m_graph.addGroupOutput( m_result[PpTexture::eVisibility].wholeViewId );
 	}
 
 	PrepassRendering::~PrepassRendering()

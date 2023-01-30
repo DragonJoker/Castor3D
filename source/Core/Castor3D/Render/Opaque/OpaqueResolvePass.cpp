@@ -558,7 +558,6 @@ namespace castor3d
 			, uint32_t( dropqrslv::ResolveBind::eSsao ) );
 		pass.addSampledView( m_device.renderSystem.getPrefilteredBrdfTexture().sampledViewId
 			, uint32_t( dropqrslv::ResolveBind::eBrdf )
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, crg::SamplerDesc{ VK_FILTER_LINEAR
 				, VK_FILTER_LINEAR
 				, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
@@ -579,7 +578,6 @@ namespace castor3d
 
 		pass.addSampledView( m_scene.getEnvironmentMap().getColourId().sampledViewId
 			, uint32_t( dropqrslv::ResolveBind::eEnvironment )
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, crg::SamplerDesc{ VK_FILTER_LINEAR
 				, VK_FILTER_LINEAR
 				, VK_SAMPLER_MIPMAP_MODE_LINEAR } );
