@@ -67,6 +67,7 @@ namespace castor3d
 			, device
 			, Type
 			, {}
+			, {}
 			, RenderNodesPassDesc{ { size.getWidth(), size.getHeight(), 1u }, matrixUbo, sceneUbo, culler, RenderFilter::eNone, true, false }
 				.meshShading( true ) }
 	{

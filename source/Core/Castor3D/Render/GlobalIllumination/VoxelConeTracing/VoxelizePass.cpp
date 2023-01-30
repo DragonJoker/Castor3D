@@ -67,6 +67,7 @@ namespace castor3d
 			, device
 			, Type
 			, {}
+			, {}
 			, RenderNodesPassDesc{ { voxelConfig.gridSize.value(), voxelConfig.gridSize.value(), 1u }
 				, matrixUbo
 				, sceneUbo

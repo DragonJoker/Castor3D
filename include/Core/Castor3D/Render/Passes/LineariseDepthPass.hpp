@@ -55,7 +55,7 @@ namespace castor3d
 			, castor::String const & prefix
 			, SsaoConfig const & ssaoConfig
 			, VkExtent2D const & size
-			, crg::ImageViewId const & depthBuffer );
+			, Texture const & depthObj );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -97,8 +97,9 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		crg::FramePass const & doInitialiseLinearisePass( ProgressBar * progress
-			, crg::FramePassArray const & previousPasses );
+		crg::FramePass const & doInitialiseExtractPass( ProgressBar * progress
+			, crg::FramePassArray const & previousPasses
+			, Texture const & depthObj );
 		void doInitialiseMinifyPass( ProgressBar * progress );
 
 	private:
@@ -106,24 +107,20 @@ namespace castor3d
 		crg::FramePassGroup & m_graph;
 		Engine & m_engine;
 		SsaoConfig const & m_ssaoConfig;
-		crg::ImageViewId m_srcDepthBuffer;
 		castor::String m_prefix;
 		VkExtent2D m_size;
 		Texture m_result;
 		crg::ImageViewIdArray m_mipViews;
-		UniformBufferOffsetT< castor::Point3f > m_clipInfo;
-		castor::ChangeTracked< castor::Point3f > m_clipInfoValue;
 		crg::FramePass const * m_lastPass{};
 		/**
 		*name
 		*	Linearisation.
 		*/
 		/**@{*/
-		ShaderModule m_lineariseVertexShader;
-		ShaderModule m_linearisePixelShader;
-		ashes::PipelineShaderStageCreateInfoArray m_lineariseStages;
-		ashes::ImageView m_linearisedView;
-		crg::FramePass const & m_linearisePass;
+		ShaderModule m_extractVertexShader;
+		ShaderModule m_extractPixelShader;
+		ashes::PipelineShaderStageCreateInfoArray m_extractStages;
+		crg::FramePass const & m_extractPass;
 		/**@}*/
 		/**
 		*name

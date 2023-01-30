@@ -39,7 +39,8 @@ namespace castor3d
 			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
-			, SceneBackground & background );
+			, SceneBackground & background
+			, crg::ImageViewIdArray const & colour );
 		C3D_API virtual ~BackgroundPassBase() = default;
 		/**
 		 *\~english
@@ -71,6 +72,8 @@ namespace castor3d
 		SceneBackground const * m_background;
 		Viewport m_viewport;
 		OnBackgroundChangedConnection m_onBackgroundChanged;
+		crg::ImageViewId m_target;
+		uint32_t m_passIndex{};
 	};
 }
 

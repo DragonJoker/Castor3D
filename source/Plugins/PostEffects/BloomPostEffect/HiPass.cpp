@@ -92,12 +92,12 @@ namespace Bloom
 				auto const height = int32_t( data.imageDesc.data->info.extent.height );
 				auto const depth = int32_t( data.imageDesc.data->info.extent.depth );
 				auto const aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-				auto transition = getTransition( index, data.viewDesc );
+				auto layoutState = recordContext.getNextLayoutState( data.viewDesc );
 
 				// Transition source view to transfer src layout
 				recordContext.memoryBarrier( commandBuffer
 					, data.viewDesc
-					, transition.to.layout
+					, layoutState.layout
 					, { VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
 						, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL )
 						, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) } );
@@ -160,7 +160,7 @@ namespace Bloom
 					recordContext.memoryBarrier( commandBuffer
 						, mipGen.src
 						, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
-						, transition.to );
+						, layoutState );
 				}
 
 				// Transition last destination mip level to wanted output layout
@@ -168,7 +168,7 @@ namespace Bloom
 				recordContext.memoryBarrier( commandBuffer
 					, mipGen.dst
 					, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
-					, transition.to );
+					, layoutState );
 #endif
 			}
 

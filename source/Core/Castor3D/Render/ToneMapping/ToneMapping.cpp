@@ -46,15 +46,17 @@ namespace castor3d
 	{
 	}
 
-	void ToneMapping::initialise( castor::String const & name )
+	void ToneMapping::initialise( castor::String const & name
+		, crg::ImageViewId const & source )
 	{
 		doCreate( name );
+		doUpdatePassIndex( source );
 	}
 
 	void ToneMapping::update( CpuUpdater & updater
 		, crg::ImageViewId const & source )
 	{
-		m_passIndex = ( source == m_source ) ? 1u : 0u;
+		doUpdatePassIndex( source );
 	}
 
 	castor::String const & ToneMapping::getFullName()const
@@ -143,5 +145,10 @@ namespace castor3d
 			makeShaderState( device, m_vertexShader ),
 			makeShaderState( device, m_pixelShader ),
 		};
+	}
+
+	void ToneMapping::doUpdatePassIndex( crg::ImageViewId const & source )
+	{
+		m_passIndex = ( source == m_source ) ? 1u : 0u;
 	}
 }

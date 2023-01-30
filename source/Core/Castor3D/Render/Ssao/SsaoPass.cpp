@@ -26,7 +26,7 @@ namespace castor3d
 		, crg::FramePassArray const & previousPasses
 		, castor::Size const & size
 		, SsaoConfig & ssaoConfig
-		, Texture const & depth
+		, Texture const & depthObj
 		, Texture const & normal
 		, GpInfoUbo const & gpInfoUbo )
 		: m_device{ device }
@@ -35,7 +35,7 @@ namespace castor3d
 		, m_group{ graph.createPassGroup( "SSAO" ) }
 		, m_size{ makeExtent2D( size ) }
 		, m_matrixUbo{ m_device }
-		, m_linearisePass{ castor::makeUnique< LineariseDepthPass >( *depth.resources
+		, m_linearisePass{ castor::makeUnique< LineariseDepthPass >( *depthObj.resources
 			, m_group
 			, previousPasses
 			, m_device
@@ -43,7 +43,7 @@ namespace castor3d
 			, cuT( "Ssao" )
 			, m_ssaoConfig
 			, m_size
-			, depth.sampledViewId ) }
+			, depthObj ) }
 		, m_ssaoConfigUbo{ m_device }
 		, m_rawAoPass{ castor::makeUnique< SsaoRawAOPass >( m_group
 			, m_device

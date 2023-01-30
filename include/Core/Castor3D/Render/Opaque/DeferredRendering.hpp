@@ -89,7 +89,7 @@ namespace castor3d
 			, RenderDevice const & device
 			, ProgressBar * progress
 			, Texture const & brdf
-			, Texture const & depth
+			, crg::ImageViewIdArray const & resultDepth
 			, Texture const & depthObj
 			, OpaquePassResult const & opaquePassResult
 			, crg::ImageViewIdArray resultTexture
@@ -139,7 +139,6 @@ namespace castor3d
 		 */
 		C3D_API void accept( RenderTechniqueVisitor & visitor );
 
-		C3D_API crg::ImageViewId const & getLightDepthImgView()const;
 		C3D_API Texture const & getLightDiffuse();
 		C3D_API Texture const & getLightScattering();
 

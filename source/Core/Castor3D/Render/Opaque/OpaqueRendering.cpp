@@ -120,7 +120,7 @@ namespace castor3d
 				, m_device
 				, progress
 				, m_device.renderSystem.getPrefilteredBrdfTexture()
-				, getOwner()->getDepth()
+				, getOwner()->getTargetDepth()
 				, previous.getDepthObj()
 				, *m_opaquePassResult
 				, getOwner()->getTargetResult()
@@ -148,6 +148,9 @@ namespace castor3d
 		{
 			getEngine()->registerBuffer( *m_visibilityPipelinesIds );
 		}
+
+		m_graph.addOutput( getOwner()->getTargetResult().front() );
+		m_graph.addOutput( getOwner()->getTargetResult().back() );
 	}
 
 	OpaqueRendering::~OpaqueRendering()
@@ -173,7 +176,7 @@ namespace castor3d
 			, previousPasses
 			, makeSize( getOwner()->getTargetExtent() )
 			, getOwner()->getSsaoConfig()
-			, getOwner()->getDepth()
+			, getOwner()->getDepthObj()
 			, getOwner()->getNormal()
 			, getOwner()->getGpInfoUbo() );
 	}
@@ -267,16 +270,6 @@ namespace castor3d
 	Texture const & OpaqueRendering::getSsaoResult()const
 	{
 		return m_ssao->getResult();
-	}
-
-	crg::ImageViewId const & OpaqueRendering::getLightDepthImgView()const
-	{
-		if ( m_deferredRendering )
-		{
-			return m_deferredRendering->getLightDepthImgView();
-		}
-
-		return getOwner()->getDepth().sampledViewId;
 	}
 
 	Texture const & OpaqueRendering::getDiffuseLightingResult()const
@@ -427,9 +420,10 @@ namespace castor3d
 		, crg::FramePassArray const & previousPasses )
 	{
 		stepProgressBar( progress, "Creating opaque pass" );
-		auto target = getOwner()->getTargetResult();
+		auto targetResult = getOwner()->getTargetResult();
+		auto targetDepth = getOwner()->getTargetDepth();
 		auto & result = m_graph.createPass( "NodesPass"
-			, [this, target, progress]( crg::FramePass const & framePass
+			, [this, targetResult, targetDepth, progress]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
@@ -441,7 +435,7 @@ namespace castor3d
 					, getOwner()->getRenderTarget().getCuller() };
 				renderPassDesc.safeBand( true )
 					.meshShading( true )
-					.target( target.front() );
+					.target( targetResult.front() );
 				techniquePassDesc.ssao( m_ssao->getResult() )
 					.lpvConfigUbo( getOwner()->getLpvConfigUbo() )
 					.llpvConfigUbo( getOwner()->getLlpvConfigUbo() )
@@ -456,7 +450,8 @@ namespace castor3d
 					, runnableGraph
 					, m_device
 					, ForwardRenderTechniquePass::Type
-					, target
+					, targetResult
+					, targetDepth
 					, std::move( renderPassDesc )
 					, std::move( techniquePassDesc ) );
 				m_opaquePass = res.get();
@@ -468,8 +463,8 @@ namespace castor3d
 		result.addDependencies( previousPasses );
 		result.addDependency( m_ssao->getLastPass() );
 		result.addSampledView( m_ssao->getResult().sampledViewId, 0u );
-		result.addInOutDepthStencilView( getOwner()->getDepth().targetViewId );
-		result.addInOutColourView( getOwner()->getTargetResult() );
+		result.addInOutDepthStencilView( targetDepth );
+		result.addInOutColourView( targetResult );
 		return result;
 	}
 
@@ -478,9 +473,10 @@ namespace castor3d
 		, crg::FramePassArray const & previousPasses )
 	{
 		stepProgressBar( progress, "Creating opaque pass" );
-		auto target = getOwner()->getTargetResult();
+		auto targetResult = getOwner()->getTargetResult();
+		auto targetDepth = getOwner()->getTargetDepth();
 		auto & result = m_graph.createPass( "NodesPass"
-			, [this, progress, target]( crg::FramePass const & framePass
+			, [this, progress, targetResult, targetDepth]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
@@ -491,7 +487,8 @@ namespace castor3d
 					, getOwner()->getSceneUbo()
 					, getOwner()->getRenderTarget().getCuller() };
 				renderPassDesc.safeBand( true )
-					.meshShading( true );
+					.meshShading( true )
+					.target( targetResult.front() );
 				auto nmlOccIt = std::next( framePass.images.begin(), 1u );
 				auto colRghIt = std::next( nmlOccIt );
 				auto spcMtlIt = std::next( colRghIt );
@@ -505,7 +502,8 @@ namespace castor3d
 					, context
 					, runnableGraph
 					, m_device
-					, target
+					, targetResult
+					, targetDepth
 					, std::move( renderPassDesc )
 					, std::move( techniquePassDesc ) );
 				m_opaquePass = res.get();
@@ -516,7 +514,7 @@ namespace castor3d
 		result.addDependency( lastPass );
 		result.addDependencies( previousPasses );
 		auto & opaquePassResult = *m_opaquePassResult;
-		result.addInOutDepthStencilView( getOwner()->getDepth().targetViewId );
+		result.addInOutDepthStencilView( targetDepth );
 		result.addOutputColourView( opaquePassResult[DsTexture::eNmlOcc].targetViewId
 			, getClearValue( DsTexture::eNmlOcc ) );
 		result.addOutputColourView( opaquePassResult[DsTexture::eColMtl].targetViewId

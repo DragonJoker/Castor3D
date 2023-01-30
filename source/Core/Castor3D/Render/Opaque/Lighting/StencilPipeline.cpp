@@ -16,8 +16,9 @@ namespace castor3d
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
 		, LightPipelineConfig const & config
-		, std::vector< LightRenderPass > const & renderPasses
-		, VkDescriptorSetLayout descriptorSetLayout )
+		, LightRenderPassArray const & renderPasses
+		, VkDescriptorSetLayout descriptorSetLayout
+		, VkExtent2D const & targetExtent )
 		: m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT
 			, castor::string::snakeToCamelCase( getName( config.lightType ) )
 			, MeshLightPass::getVertexShaderSource() }
@@ -33,10 +34,10 @@ namespace castor3d
 		, m_renderPasses{ renderPasses }
 	{
 		m_holder.initialise();
-		doCreatePipeline();
+		doCreatePipeline( targetExtent );
 	}
 
-	void StencilPipeline::doCreatePipeline()
+	void StencilPipeline::doCreatePipeline( VkExtent2D const & targetExtent )
 	{
 		ashes::PipelineVertexInputStateCreateInfo vertexLayout = doCreateVertexLayout();
 		crg::VkVertexInputAttributeDescriptionArray vertexAttribs;
@@ -93,7 +94,7 @@ namespace castor3d
 
 			if ( !pipeline )
 			{
-				auto viewportState = doCreateViewportState( *m_renderPasses[index].framebuffer );
+				auto viewportState = doCreateViewportState( targetExtent );
 				ashes::PipelineColorBlendStateCreateInfo colourBlend;
 				VkPipelineColorBlendStateCreateInfo const & cbState = colourBlend;
 				VkPipelineViewportStateCreateInfo const & vpState = viewportState;
@@ -132,16 +133,15 @@ namespace castor3d
 				, 0u } } };
 	}
 
-	ashes::PipelineViewportStateCreateInfo StencilPipeline::doCreateViewportState( ashes::FrameBuffer const & framebuffer )
+	ashes::PipelineViewportStateCreateInfo StencilPipeline::doCreateViewportState( VkExtent2D const & targetExtent )
 	{
-		auto dim = framebuffer.getDimensions();
 		ashes::VkViewportArray viewports{ { 0.0f
 			, 0.0f
-			, float( dim.width )
-			, float( dim.height )
+			, float( targetExtent.width )
+			, float( targetExtent.height )
 			, 0.0f
 			, 1.0f } };
-		ashes::VkScissorArray scissors{ { {}, dim } };
+		ashes::VkScissorArray scissors{ { {}, targetExtent } };
 		return { 0u
 			, 1u
 			, viewports

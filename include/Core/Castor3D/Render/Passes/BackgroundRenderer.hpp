@@ -11,7 +11,7 @@ namespace castor3d
 {
 	class BackgroundRenderer
 	{
-	private:
+	public:
 		C3D_API BackgroundRenderer( crg::FramePassGroup & graph
 			, crg::FramePassArray previousPasses
 			, RenderDevice const & device
@@ -22,10 +22,9 @@ namespace castor3d
 			, SceneUbo const & sceneUbo
 			, crg::ImageViewIdArray const & colour
 			, bool clearColour
-			, crg::ImageViewId const * depth
+			, crg::ImageViewIdArray const & depth
 			, crg::ImageViewId const * depthObj );
 
-	public:
 		BackgroundRenderer( crg::FramePassGroup & graph
 			, crg::FramePass const * previousPass
 			, RenderDevice const & device
@@ -46,9 +45,9 @@ namespace castor3d
 				, background
 				, hdrConfigUbo
 				, sceneUbo
-				, { colour }
+				, crg::ImageViewIdArray{ colour }
 				, clearColour
-				, nullptr
+				, crg::ImageViewIdArray{}
 				, nullptr }
 		{
 		}
@@ -75,9 +74,9 @@ namespace castor3d
 				, background
 				, hdrConfigUbo
 				, sceneUbo
-				, { colour }
+				, crg::ImageViewIdArray{ colour }
 				, clearColour
-				, &depth
+				, crg::ImageViewIdArray{ depth }
 				, depthObj }
 		{
 		}
@@ -104,7 +103,7 @@ namespace castor3d
 				, sceneUbo
 				, colour
 				, clearColour
-				, &depth
+				, crg::ImageViewIdArray{ depth }
 				, depthObj }
 		{
 		}
@@ -143,7 +142,7 @@ namespace castor3d
 			, SceneUbo const & sceneUbo
 			, crg::ImageViewIdArray const & colour
 			, bool clearColour
-			, crg::ImageViewId const * depth
+			, crg::ImageViewIdArray const & depth
 			, crg::ImageViewId const * depthObj
 			, ProgressBar * progress );
 

@@ -67,7 +67,7 @@ namespace atmosphere_scattering
 			, castor3d::ProgressBar * progress
 			, VkExtent2D const & size
 			, crg::ImageViewIdArray const & colour
-			, crg::ImageViewId const * depth
+			, crg::ImageViewIdArray const & depth
 			, crg::ImageViewId const * depthObj
 			, castor3d::UniformBufferOffsetT< castor3d::ModelBufferConfiguration > const & modelUbo
 			, castor3d::MatrixUbo const & matrixUbo
@@ -248,6 +248,7 @@ namespace atmosphere_scattering
 				, crg::ImageViewId const & perlinWorley
 				, crg::ImageViewId const & curl
 				, crg::ImageViewId const & weather
+				, crg::ImageViewIdArray const & colour
 				, crg::ImageViewId const * depthObj
 				, AtmosphereScatteringUbo const & atmosphereUbo
 				, CloudsUbo const & cloudsUbo

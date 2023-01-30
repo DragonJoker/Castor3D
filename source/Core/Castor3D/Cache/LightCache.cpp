@@ -110,10 +110,6 @@ namespace castor3d
 		}
 	}
 
-	void ObjectCacheT< Light, castor::String, LightCacheTraits >::update( GpuUpdater & updater )
-	{
-	}
-
 	void ObjectCacheT< Light, castor::String, LightCacheTraits >::upload( ashes::CommandBuffer const & cb )const
 	{
 		if ( m_lightBuffer )

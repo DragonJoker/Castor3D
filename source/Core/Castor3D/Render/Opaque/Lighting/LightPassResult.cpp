@@ -21,7 +21,6 @@ namespace castor3d
 		static std::array< castor::String, size_t( LpTexture::eCount ) > Values
 		{
 			{
-				cuT( "Depth" ),
 				cuT( "Diffuse" ),
 				cuT( "Specular" ),
 				cuT( "Scattering" ),
@@ -39,7 +38,6 @@ namespace castor3d
 		static std::array< VkFormat, size_t( LpTexture::eCount ) > Values
 		{
 			{
-				VK_FORMAT_D32_SFLOAT_S8_UINT,
 				device.selectSmallestFormatRGBUFloatFormat( getFeatureFlags( getUsageFlags( LpTexture::eDiffuse ) ) ),
 				device.selectSmallestFormatRGBUFloatFormat( getFeatureFlags( getUsageFlags( LpTexture::eSpecular ) ) ),
 				device.selectSmallestFormatRGBUFloatFormat( getFeatureFlags( getUsageFlags( LpTexture::eScattering ) ) ),
@@ -57,7 +55,6 @@ namespace castor3d
 		static std::array< VkClearValue, size_t( LpTexture::eCount ) > Values
 		{
 			{
-				defaultClearDepthStencil,
 				opaqueBlackClearColor,
 				opaqueBlackClearColor,
 				opaqueBlackClearColor,
@@ -75,7 +72,6 @@ namespace castor3d
 		static std::array< VkImageUsageFlags, size_t( LpTexture::eCount ) > Values
 		{
 			{
-				VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
 				VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
 				VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
 				VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
@@ -93,7 +89,6 @@ namespace castor3d
 		static std::array< VkBorderColor, size_t( LpTexture::eCount ) > Values
 		{
 			{
-				VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE,
 				VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK,
 				VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK,
 				VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK,
@@ -114,7 +109,7 @@ namespace castor3d
 		: GBufferT< LpTexture >{ handler
 			, device
 			, cuT( "LPResult" )
-			, { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr }
+			, { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr }
 			, 0u
 			, size }
 	{

@@ -18,7 +18,8 @@ namespace castor3d
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
-		, SceneBackground & background )
+		, SceneBackground & background
+		, crg::ImageViewIdArray const & colour )
 		: m_device{ device }
 		, m_background{ &background }
 		, m_viewport{ *device.renderSystem.getEngine() }
@@ -26,12 +27,14 @@ namespace castor3d
 			{
 				doResetPipeline( 0u );
 			} ) }
+		, m_target{ colour.front() }
 	{
 	}
 
 	void BackgroundPassBase::update( CpuUpdater & updater )
 	{
 		updater.viewport = &m_viewport;
+		m_passIndex = ( m_target == updater.targetImage.front() ) ? 0u : 1u;
 		m_background->update( updater );
 	}
 

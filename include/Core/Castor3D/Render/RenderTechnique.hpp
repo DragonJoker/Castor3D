@@ -72,8 +72,8 @@ namespace castor3d
 			, RenderDevice const & device
 			, QueueData const & queueData
 			, Parameters const & parameters
-			, Texture const & hdrObjects
-			, Texture const & hdrIntermediate
+			, Texture const & hdrTarget
+			, Texture const & hdrSource
 			, SsaoConfig const & ssaoConfig
 			, ProgressBar * progress
 			, bool deferred
@@ -157,6 +157,13 @@ namespace castor3d
 		*/
 		C3D_API void accept( RenderTechniqueVisitor & visitor );
 		/**
+		 *\~english
+		 *\brief		Swaps source and target results.
+		 *\~french
+		 *\brief		Echange les résultats source et destination.
+		 */
+		C3D_API void swapResults();
+		/**
 		*\~english
 		*name
 		*	Getters.
@@ -171,13 +178,11 @@ namespace castor3d
 		C3D_API Texture const & getSsaoResult()const;
 		C3D_API Texture const & getFirstVctBounce()const;
 		C3D_API Texture const & getSecondaryVctBounce()const;
-		C3D_API crg::ImageViewId const & getLightDepthImgView()const;
 		C3D_API TechniquePassVector getCustomRenderPasses()const;
 		C3D_API Texture const & getDiffuseLightingResult()const;
 		C3D_API Texture const & getScatteringLightingResult()const;
 		C3D_API Texture const & getBaseColourResult()const;
 		C3D_API crg::ResourcesCache & getResources()const;
-		C3D_API void swapResults();
 
 		castor::Size const & getSize()const
 		{
@@ -192,6 +197,16 @@ namespace castor3d
 		crg::ImageViewIdArray getTargetResult()const
 		{
 			return { m_hdrTarget->targetViewId, m_hdrSource->targetViewId };
+		}
+
+		crg::ImageViewIdArray getSampledDepth()const
+		{
+			return { m_depthSource->sampledViewId, m_depthTarget->sampledViewId };
+		}
+
+		crg::ImageViewIdArray getTargetDepth()const
+		{
+			return { m_depthTarget->targetViewId, m_depthSource->targetViewId };
 		}
 
 		std::vector< Texture const * > getResult()const
@@ -222,11 +237,6 @@ namespace castor3d
 		Texture const & getNormal()const
 		{
 			return *m_normal;
-		}
-
-		Texture const & getDepth()const
-		{
-			return *m_depth;
 		}
 
 		Texture const & getDepthObj()const
@@ -411,7 +421,9 @@ namespace castor3d
 		Texture const * m_hdrTarget;
 		castor::Size m_targetSize;
 		castor::Size m_rawSize;
-		TexturePtr m_depth;
+		TextureArray m_depth;
+		Texture const * m_depthSource;
+		Texture const * m_depthTarget;
 		TexturePtr m_normal;
 		MatrixUbo m_matrixUbo;
 		SceneUbo m_sceneUbo;
@@ -419,12 +431,12 @@ namespace castor3d
 		LpvGridConfigUbo m_lpvConfigUbo;
 		LayeredLpvGridConfigUbo m_llpvConfigUbo;
 		VoxelizerUbo m_vctConfigUbo;
-		VoxelizerUPtr m_voxelizer;
-		LightVolumePassResultUPtr m_lpvResult;
-		LightVolumePassResultArray m_llpvResult;
 		ShadowMapUPtr m_directionalShadowMap;
 		ShadowMapUPtr m_pointShadowMap;
 		ShadowMapUPtr m_spotShadowMap;
+		VoxelizerUPtr m_voxelizer;
+		LightVolumePassResultUPtr m_lpvResult;
+		LightVolumePassResultArray m_llpvResult;
 		TechniquePasses m_renderPasses;
 		PrepassRendering m_prepass;
 		crg::FramePass const * m_lastDepthPass{};

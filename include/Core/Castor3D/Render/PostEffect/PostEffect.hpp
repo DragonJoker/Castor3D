@@ -176,15 +176,6 @@ namespace castor3d
 		}
 		/**@}*/
 
-	protected:
-		C3D_API void doCopyImage( crg::RunnableGraph & graph
-			, crg::RunnablePass const & runnable
-			, crg::RecordContext & context
-			, VkCommandBuffer commandBuffer
-			, uint32_t index
-			, crg::ImageViewId const & source
-			, crg::ImageViewId const & target );
-
 	private:
 		/**
 		 *\~english

@@ -31,7 +31,7 @@ namespace castor3d
 
 	void SubmeshComponent::upload()
 	{
-		if ( m_dirty )
+		if ( m_initialised && m_dirty )
 		{
 			doUpload();
 			m_dirty = false;

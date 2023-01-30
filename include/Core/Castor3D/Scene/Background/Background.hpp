@@ -213,7 +213,7 @@ namespace castor3d
 			, ProgressBar * progress
 			, VkExtent2D const & size
 			, crg::ImageViewIdArray const & colour
-			, crg::ImageViewId const * depth
+			, crg::ImageViewIdArray const & depth
 			, crg::ImageViewId const * depthObj
 			, UniformBufferOffsetT< ModelBufferConfiguration > const & modelUbo
 			, MatrixUbo const & matrixUbo

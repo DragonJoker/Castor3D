@@ -177,18 +177,8 @@ namespace ocean_fft
 		}
 	}
 
-	void GenerateMipmapsPass::doInitialise( uint32_t index )
+	void GenerateMipmapsPass::doInitialise( uint32_t passIndex )
 	{
-		auto & attach = m_pass.images.front();
-		auto viewId = attach.view( index );
-		auto layoutState = ( m_outputLayout.layout != VK_IMAGE_LAYOUT_UNDEFINED
-			? m_outputLayout
-			: m_graph.getOutputLayout( m_pass, viewId, false ) );
-		doUpdateFinalLayout( index
-			, viewId
-			, layoutState.layout
-			, layoutState.state.access
-			, layoutState.state.pipelineStage );
 	}
 
 	void GenerateMipmapsPass::doRecordInto( crg::RecordContext & context
@@ -203,7 +193,8 @@ namespace ocean_fft
 		auto range = viewId.data->info.subresourceRange;
 		range.levelCount = getMipLevels( dstViewId );
 		auto invSizeIt = m_invSizes.begin();
-		auto transition = getTransition( index, viewId );
+		auto neededLayoutState = getLayoutState( viewId );
+		auto toLayoutState = context.getNextLayoutState( viewId );
 		crg::LayoutState shaderRead{ VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, VK_ACCESS_SHADER_READ_BIT
 			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT };
@@ -211,10 +202,10 @@ namespace ocean_fft
 			, VK_ACCESS_SHADER_WRITE_BIT
 			, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT };
 		auto mipLevels = imageId.data->info.mipLevels;
-		auto srcImageLayout = transition.needed;
+		auto srcImageLayout = neededLayoutState;
 		auto dstMipImageLayout = ( range.levelCount == mipLevels )
 			? srcImageLayout
-			: transition.to;
+			: toLayoutState;
 		auto format = getFormat( imageId );
 		auto const aspectMask = crg::getAspectMask( format );
 		VkImageSubresourceRange mipSubRange{ aspectMask

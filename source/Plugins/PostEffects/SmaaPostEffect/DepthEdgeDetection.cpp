@@ -41,7 +41,7 @@ namespace smaa
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 			auto vtx_offset = writer.declInputArray< Vec4 >( "vtx_offset", 1u, 3u );
 			C3D_Smaa( writer, SmaaUboIdx, 0u );
-			auto c3d_depthTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_depthTex", DepthTexIdx, 0u );
+			auto c3d_depthObjTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_depthObjTex", DepthTexIdx, 0u );
 
 			// Shader outputs
 			auto outColour = writer.declOutput< Vec4 >( "outColour", 0u );
@@ -52,13 +52,13 @@ namespace smaa
 			auto SMAAGatherNeighbours = writer.implementFunction< Vec3 >( "SMAAGatherNeighbours"
 				, [&]( Vec2 const & texcoord
 					, Array< Vec4 > const & offset
-					, CombinedImage2DRgba32 const & tex )
+					, CombinedImage2DRgba32 const & depthObjTex )
 				{
-					writer.returnStmt( tex.gather( texcoord + c3d_smaaData.rtMetrics.xy() * vec2( -0.5_f, -0.5_f ), 0_i ).grb() );
+					writer.returnStmt( depthObjTex.gather( texcoord + c3d_smaaData.rtMetrics.xy() * vec2( -0.5_f, -0.5_f ), 0_i ).grb() );
 				}
 				, InVec2{ writer, "texcoord" }
 				, InVec4Array{ writer, "offset", 3u }
-				, InCombinedImage2DRgba32{ writer, "tex" } );
+				, InCombinedImage2DRgba32{ writer, "depthObjTex" } );
 
 			/**
 			 * Depth Edge Detection
@@ -91,19 +91,9 @@ namespace smaa
 				, FragmentOut out )
 				{
 					outColour = vec4( 0.0_f );
-					outColour.xy() = SMAADepthEdgeDetectionPS( utils.topDownToBottomUp( vtx_texture ), vtx_offset, c3d_depthTex );
+					outColour.xy() = SMAADepthEdgeDetectionPS( utils.topDownToBottomUp( vtx_texture ), vtx_offset, c3d_depthObjTex );
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-		}
-
-		static crg::ImageViewData doCreateDepthView( crg::ImageViewId const & depthView )
-		{
-			return crg::ImageViewData{ "SMDEDTgt"
-				, depthView.data->image
-				, 0u
-				, VK_IMAGE_VIEW_TYPE_2D
-				, depthView.data->info.format
-				, { VK_IMAGE_ASPECT_DEPTH_BIT, 0u, 1u, 0u, 1u } };
 		}
 	}
 
@@ -114,7 +104,7 @@ namespace smaa
 		, castor3d::RenderTarget & renderTarget
 		, castor3d::RenderDevice const & device
 		, SmaaUbo const & ubo
-		, crg::ImageViewId const & depthView
+		, crg::ImageViewId const & depthObj
 		, SmaaConfig const & config
 		, bool const * enabled )
 		: EdgeDetection{ graph
@@ -127,7 +117,6 @@ namespace smaa
 			, enabled
 			, nullptr
 			, 1u }
-		, m_depthView{ m_graph.createView( dpthed::doCreateDepthView( depthView ) ) }
 	{
 		crg::SamplerDesc linearSampler{ VK_FILTER_LINEAR
 			, VK_FILTER_LINEAR
@@ -135,7 +124,7 @@ namespace smaa
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE };
-		m_pass.addSampledView( m_pass.mergeViews( { m_depthView, depthView } )
+		m_pass.addSampledView( depthObj
 			, dpthed::DepthTexIdx
 			, {}
 			, linearSampler );

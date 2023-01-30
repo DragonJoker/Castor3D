@@ -39,6 +39,7 @@ namespace castor3d
 			, device
 			, typeName
 			, {}
+			, {}
 			, RenderNodesPassDesc{ getExtent( shadowMap.getShadowPassResult()[SmTexture::eDepth].imageId )
 				, matrixUbo
 				, culler } }

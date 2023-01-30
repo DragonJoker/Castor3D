@@ -120,6 +120,7 @@ namespace castor3d
 		, RenderDevice const & device
 		, castor::String const & typeName
 		, crg::ImageViewIdArray targetImage
+		, crg::ImageViewIdArray targetDepth
 		, RenderNodesPassDesc const & desc )
 		: castor::OwnedBy< Engine >{ *device.renderSystem.getEngine() }
 		, crg::RenderPass{ pass
@@ -131,7 +132,7 @@ namespace castor3d
 				, GetPassIndexCallback( [this](){ return m_passIndex; } )
 				, IsEnabledCallback( [this](){ return isPassEnabled(); } ) }
 			, makeExtent2D( desc.m_size )
-			, crg::ru::Config{ std::max( 1u, uint32_t( targetImage.size() ) )
+			, crg::ru::Config{ std::max( 1u, uint32_t( std::max( targetImage.size(), targetDepth.size() ) ) )
 				, desc.m_ruConfig.resettable
 				, std::move( desc.m_ruConfig.actions ) } }
 		, castor::Named{ castor::string::stringCast< castor::xchar >( pass.getFullName() ) }
@@ -139,11 +140,15 @@ namespace castor3d
 		, m_renderSystem{ m_device.renderSystem }
 		, m_matrixUbo{ desc.m_matrixUbo }
 		, m_culler{ desc.m_culler }
-		, m_targetImage{ targetImage }
+		, m_targetImage{ std::move( targetImage ) }
+		, m_targetDepth{ std::move( targetDepth ) }
 		, m_typeName{ typeName }
 		, m_typeID{ getEngine()->getRenderPassTypeID( m_typeName ) }
 		, m_filters{ desc.m_filters }
-		, m_renderQueue{ castor::makeUnique< RenderQueue >( *this, desc.m_ignored, std::max( 1u, uint32_t( targetImage.size() ) ) ) }
+		, m_renderQueue{ castor::makeUnique< RenderQueue >( *this
+			, desc.m_ignored
+			, std::max( 1u
+				, uint32_t( std::max( m_targetImage.size(), m_targetDepth.size() ) ) ) ) }
 		, m_category{ pass.group.getFullName() }
 		, m_size{ desc.m_size.width, desc.m_size.height }
 		, m_oit{ desc.m_oit }
@@ -764,7 +769,7 @@ namespace castor3d
 
 	void RenderNodesPass::doUpdatePassIndex( crg::ImageViewId currentTarget )
 	{
-		if ( isPassEnabled() && m_target.data )
+		if ( m_target.data )
 		{
 			m_passIndex = ( currentTarget == m_target ) ? 0u : 1u;
 		}
@@ -920,7 +925,7 @@ namespace castor3d
 				}
 
 				pipeline->initialise( device
-					, getRenderPass( 0u ) );
+					, getRenderPass( getPassIndex() ) );
 				pipelines.emplace_back( std::move( pipeline ) );
 				it = std::next( pipelines.begin()
 					, ptrdiff_t( pipelines.size() - 1u ) );

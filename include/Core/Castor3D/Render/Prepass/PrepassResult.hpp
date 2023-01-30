@@ -18,7 +18,7 @@ namespace castor3d
 	public:
 		C3D_API PrepassResult( crg::ResourcesCache & resources
 			, RenderDevice const & device
-			, TexturePtr depth
+			, castor::Size const & size
 			, bool needsVisibility );
 	};
 }

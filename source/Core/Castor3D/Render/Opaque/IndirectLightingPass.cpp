@@ -320,6 +320,8 @@ namespace castor3d
 	{
 		m_programs.resize( size_t( IndirectLightingPass::ProgramType::eCount ) );
 		m_lastPass = &doCreateLightingPass( m_group, scene, previousPass, progress );
+		m_group.addOutput( m_lpResult[LpTexture::eIndirectDiffuse].wholeViewId );
+		m_group.addOutput( m_lpResult[LpTexture::eIndirectSpecular].wholeViewId );
 	}
 
 	void IndirectLightingPass::update( CpuUpdater & updater )
@@ -422,15 +424,15 @@ namespace castor3d
 			, linearSampler );
 		pass.addSampledView( m_lpvResult[LpvTexture::eR].sampledViewId
 			, uint32_t( IndirectLightingPass::eLpvR )
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, VK_IMAGE_LAYOUT_UNDEFINED
 			, linearSampler );
 		pass.addSampledView( m_lpvResult[LpvTexture::eG].sampledViewId
 			, uint32_t( IndirectLightingPass::eLpvG )
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, VK_IMAGE_LAYOUT_UNDEFINED
 			, linearSampler );
 		pass.addSampledView( m_lpvResult[LpvTexture::eB].sampledViewId
 			, uint32_t( IndirectLightingPass::eLpvB )
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, VK_IMAGE_LAYOUT_UNDEFINED
 			, linearSampler );
 
 		if ( m_device.renderSystem.hasLLPV() )
@@ -438,41 +440,41 @@ namespace castor3d
 			auto & lpvResult0 = *m_llpvResult[0];
 			pass.addSampledView( lpvResult0[LpvTexture::eR].sampledViewId
 				, uint32_t( IndirectLightingPass::eLayeredLpv1R )
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, VK_IMAGE_LAYOUT_UNDEFINED
 				, linearSampler );
 			pass.addSampledView( lpvResult0[LpvTexture::eG].sampledViewId
 				, uint32_t( IndirectLightingPass::eLayeredLpv1G )
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, VK_IMAGE_LAYOUT_UNDEFINED
 				, linearSampler );
 			pass.addSampledView( lpvResult0[LpvTexture::eB].sampledViewId
 				, uint32_t( IndirectLightingPass::eLayeredLpv1B )
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, VK_IMAGE_LAYOUT_UNDEFINED
 				, linearSampler );
 			auto & lpvResult1 = *m_llpvResult[1];
 			pass.addSampledView( lpvResult1[LpvTexture::eR].sampledViewId
 				, uint32_t( IndirectLightingPass::eLayeredLpv2R )
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, VK_IMAGE_LAYOUT_UNDEFINED
 				, linearSampler );
 			pass.addSampledView( lpvResult1[LpvTexture::eG].sampledViewId
 				, uint32_t( IndirectLightingPass::eLayeredLpv2G )
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, VK_IMAGE_LAYOUT_UNDEFINED
 				, linearSampler );
 			pass.addSampledView( lpvResult1[LpvTexture::eB].sampledViewId
 				, uint32_t( IndirectLightingPass::eLayeredLpv2B )
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, VK_IMAGE_LAYOUT_UNDEFINED
 				, linearSampler );
 			auto & lpvResult2 = *m_llpvResult[2];
 			pass.addSampledView( lpvResult2[LpvTexture::eR].sampledViewId
 				, uint32_t( IndirectLightingPass::eLayeredLpv3R )
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, VK_IMAGE_LAYOUT_UNDEFINED
 				, linearSampler );
 			pass.addSampledView( lpvResult2[LpvTexture::eG].sampledViewId
 				, uint32_t( IndirectLightingPass::eLayeredLpv3G )
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, VK_IMAGE_LAYOUT_UNDEFINED
 				, linearSampler );
 			pass.addSampledView( lpvResult2[LpvTexture::eB].sampledViewId
 				, uint32_t( IndirectLightingPass::eLayeredLpv3B )
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, VK_IMAGE_LAYOUT_UNDEFINED
 				, linearSampler );
 		}
 

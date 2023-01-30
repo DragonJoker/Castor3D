@@ -36,17 +36,24 @@ namespace castor3d
 
 	struct LightRenderPass
 	{
-		ashes::RenderPassPtr renderPass;
-		ashes::FrameBufferPtr framebuffer;
-		ashes::VkClearValueArray clearValues;
 		struct Entry
 		{
-			crg::ImageViewId view;
+			crg::ImageViewIdArray view;
 			VkImageLayout input;
 			VkImageLayout output;
 		};
-		std::vector< Entry > attaches;
+
+		struct Framebuffer
+		{
+			ashes::FrameBufferPtr fbo;
+			std::vector< Entry > attaches;
+		};
+
+		ashes::RenderPassPtr renderPass;
+		ashes::VkClearValueArray clearValues;
+		std::vector< Framebuffer > framebuffers;
 	};
+	using LightRenderPassArray = std::vector< LightRenderPass >;
 
 	uint32_t getLightRenderPassIndex( bool blend
 		, LightType lightType );
@@ -71,9 +78,10 @@ namespace castor3d
 			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
 			, LightPipelineConfig const & config
-			, std::vector< LightRenderPass > const & renderPasses
+			, LightRenderPassArray const & renderPasses
 			, ashes::PipelineShaderStageCreateInfoArray stages
-			, VkDescriptorSetLayout descriptorSetLayout );
+			, VkDescriptorSetLayout descriptorSetLayout
+			, VkExtent2D const & targetExtent );
 
 		VkPipeline getPipeline( uint32_t index )
 		{
@@ -96,18 +104,18 @@ namespace castor3d
 		}
 
 	protected:
-		void doCreatePipeline();
+		void doCreatePipeline( VkExtent2D const & targetExtent );
 
 	private:
 		ashes::PipelineVertexInputStateCreateInfo doCreateVertexLayout();
-		ashes::PipelineViewportStateCreateInfo doCreateViewportState( ashes::FrameBuffer const & framebuffer );
+		ashes::PipelineViewportStateCreateInfo doCreateViewportState( VkExtent2D const & targetExtent );
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( bool blend );
 		VkCullModeFlags doGetCullMode()const;
 
 	private:
 		crg::PipelineHolder m_holder;
 		LightPipelineConfig const & m_config;
-		std::vector< LightRenderPass > const & m_renderPasses;
+		LightRenderPassArray const & m_renderPasses;
 	};
 }
 

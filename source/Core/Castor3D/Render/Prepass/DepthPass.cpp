@@ -47,6 +47,7 @@ namespace castor3d
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
+		, crg::ImageViewIdArray targetDepth
 		, SsaoConfig const & ssaoConfig
 		, RenderNodesPassDesc const & renderPassDesc
 		, bool deferred )
@@ -57,6 +58,7 @@ namespace castor3d
 			, device
 			, Type
 			, {}
+			, std::move( targetDepth )
 			, renderPassDesc
 			, { false, ssaoConfig } }
 		, m_deferred{ deferred }

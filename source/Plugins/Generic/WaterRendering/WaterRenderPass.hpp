@@ -27,7 +27,7 @@ namespace water
 			, crg::RunnableGraph & graph
 			, castor3d::RenderDevice const & device
 			, crg::ImageViewIdArray targetImage
-			, std::shared_ptr< castor3d::Texture > depthInput
+			, crg::ImageViewIdArray targetDepth
 			, castor3d::RenderNodesPassDesc const & renderPassDesc
 			, castor3d::RenderTechniquePassDesc const & techniquePassDesc
 			, std::shared_ptr< castor3d::IsRenderPassEnabled > isEnabled );
@@ -81,7 +81,6 @@ namespace water
 
 	private:
 		std::shared_ptr< castor3d::IsRenderPassEnabled > m_isEnabled;
-		std::shared_ptr< castor3d::Texture > m_depthInput;
 		WaterUboConfiguration m_configuration;
 		ashes::SamplerPtr m_linearWrapSampler;
 		ashes::SamplerPtr m_pointClampSampler;

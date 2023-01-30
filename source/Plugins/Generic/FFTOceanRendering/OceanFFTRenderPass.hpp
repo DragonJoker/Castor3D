@@ -30,7 +30,7 @@ namespace ocean_fft
 			, std::shared_ptr< OceanUbo > oceanUbo
 			, std::shared_ptr< OceanFFT > oceanFFT
 			, crg::ImageViewIdArray targetImage
-			, std::shared_ptr< castor3d::Texture > depthInput
+			, crg::ImageViewIdArray targetDepth
 			, castor3d::RenderNodesPassDesc const & renderPassDesc
 			, castor3d::RenderTechniquePassDesc const & techniquePassDesc
 			, std::shared_ptr< castor3d::IsRenderPassEnabled > isEnabled );
@@ -88,8 +88,6 @@ namespace ocean_fft
 		std::shared_ptr< castor3d::IsRenderPassEnabled > m_isEnabled;
 		std::shared_ptr< OceanUbo > m_ubo;
 		std::shared_ptr< OceanFFT > m_oceanFFT;
-		std::shared_ptr< castor3d::Texture > m_colourInput;
-		std::shared_ptr< castor3d::Texture > m_depthInput;
 		OceanUboConfiguration m_configuration;
 		ashes::SamplerPtr m_linearWrapSampler;
 		ashes::SamplerPtr m_pointClampSampler;

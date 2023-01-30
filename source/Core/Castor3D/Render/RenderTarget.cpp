@@ -362,7 +362,7 @@ namespace castor3d
 				, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK ) }
 		, m_hdrObjects{ std::make_shared< Texture >( getOwner()->getRenderSystem()->getRenderDevice()
 				, m_resources
-				, "HDRScene"
+				, "HDRResult0"
 				, 0u
 				, makeExtent3D( m_safeBandedSize )
 				, 1u
@@ -372,7 +372,7 @@ namespace castor3d
 				, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK )
 			, std::make_shared< Texture >( getOwner()->getRenderSystem()->getRenderDevice()
 				, m_resources
-				, "HDRIntermediate"
+				, "HDRResult1"
 				, 0u
 				, makeExtent3D( m_safeBandedSize )
 				, 1u
@@ -406,6 +406,9 @@ namespace castor3d
 			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
 		, m_overlayPassDesc{ doCreateOverlayPass( nullptr, engine.getRenderSystem()->getRenderDevice() ) }
 	{
+		m_graph.addOutput( m_combined.wholeViewId
+			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+
 		auto sampler = engine.addNewSampler( RenderTarget::DefaultSamplerName + getName() + cuT( "Linear" ), engine ).lock();
 		sampler->setMinFilter( VK_FILTER_LINEAR );
 		sampler->setMagFilter( VK_FILTER_LINEAR );
@@ -613,9 +616,6 @@ namespace castor3d
 		updater.jitter = m_jitter;
 		updater.scene = &scene;
 		updater.camera = &camera;
-		// Scene is GPU updated here, because of LightCache which relies on the camera...
-		// TODO: Move LightCache to RenderTarget :'(
-		updater.scene->update( updater );
 
 		m_renderTechnique->update( updater );
 		m_overlayPass->update( updater );
@@ -720,7 +720,8 @@ namespace castor3d
 					}
 					else
 					{
-						m_toneMapping->initialise( m_toneMappingName );
+						m_toneMapping->initialise( m_toneMappingName
+							, m_hdrObjects.back()->sampledViewId );
 					}
 				} ) );
 		}
@@ -825,7 +826,7 @@ namespace castor3d
 			, TextureFactors{ { 0.5f, 0.5f, 0.5f }, { 0.5f, 0.5f, 0.5f } }.invert( true ) );
 		result.emplace_back( "Target Velocity"
 			, *m_velocity
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL
 			, TextureFactors{}.invert( true ) );
 
 		for ( auto & postEffect : m_hdrPostEffects )
@@ -907,7 +908,8 @@ namespace castor3d
 				, *m_hdrConfigUbo
 				, Parameters{}
 				, progress );
-			m_toneMapping->initialise( m_toneMappingName );
+			m_toneMapping->initialise( m_toneMappingName
+				, m_hdrObjects.back()->sampledViewId );
 			previousPass = &m_toneMapping->getPass();
 		}
 
@@ -938,6 +940,7 @@ namespace castor3d
 				, crg::ImageViewIdArray{ srgbSource->sampledViewId, srgbTarget->sampledViewId } );
 			stepProgressBar( progress, "Compiling render graph" );
 			m_combinePass->addDependency( *previousPass );
+
 			m_runnable = m_graph.compile( device.makeContext() );
 			printGraph( *m_runnable );
 
@@ -971,7 +974,8 @@ namespace castor3d
 		, RenderDevice const & device )
 	{
 		stepProgressBar( progress, "Creating overlays pass" );
-		auto & result = m_graph.createPassGroup( "Overlays" ).createPass( "Overlays"
+		auto & group = m_graph.createPassGroup( "Overlays" );
+		auto & result = group.createPass( "Overlays"
 			, [this, progress, &device]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
@@ -991,6 +995,7 @@ namespace castor3d
 				return result;
 			} );
 		result.addOutputColourView( m_overlays.targetViewId );
+		group.addOutput( m_overlays.targetViewId );
 		return result;
 	}
 
@@ -1019,8 +1024,7 @@ namespace castor3d
 		result.addSampledView( source
 			, rendtgt::CombineLhsIdx );
 		result.addSampledView( m_overlays.sampledViewId
-			, rendtgt::CombineRhsIdx
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			, rendtgt::CombineRhsIdx );
 		result.addOutputColourView( m_combined.targetViewId );
 		return result;
 	}

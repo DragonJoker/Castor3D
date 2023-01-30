@@ -45,7 +45,6 @@ namespace castor3d
 			, QueueData const & queueData
 			, crg::FramePassArray const & previousPasses
 			, ProgressBar * progress
-			, TexturePtr depth
 			, bool deferred
 			, bool visbuffer );
 		/**

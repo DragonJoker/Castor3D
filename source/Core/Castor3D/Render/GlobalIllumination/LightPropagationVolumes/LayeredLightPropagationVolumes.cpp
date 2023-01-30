@@ -224,14 +224,11 @@ namespace castor3d
 		lightCache.createPassBinding( result
 			, LightInjectionPass::LightsIdx );
 		result.addSampledView( smResult[SmTexture::eNormal].sampledViewId
-			, LightInjectionPass::RsmNormalsIdx
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			, LightInjectionPass::RsmNormalsIdx );
 		result.addSampledView( smResult[SmTexture::ePosition].sampledViewId
-			, LightInjectionPass::RsmPositionIdx
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			, LightInjectionPass::RsmPositionIdx );
 		result.addSampledView( smResult[SmTexture::eFlux].sampledViewId
-			, LightInjectionPass::RsmFluxIdx
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			, LightInjectionPass::RsmFluxIdx );
 		lpvGridConfigUbos[cascade].createPassBinding( result
 			, LightInjectionPass::LpvGridUboIdx );
 		lpvLightConfigUbos[cascade].createPassBinding( result
@@ -275,11 +272,9 @@ namespace castor3d
 		lightCache.createPassBinding( result
 			, GeometryInjectionPass::LightsIdx );
 		result.addSampledView( smResult[SmTexture::eNormal].sampledViewId
-			, GeometryInjectionPass::RsmNormalsIdx
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			, GeometryInjectionPass::RsmNormalsIdx );
 		result.addSampledView( smResult[SmTexture::ePosition].sampledViewId
-			, GeometryInjectionPass::RsmPositionIdx
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			, GeometryInjectionPass::RsmPositionIdx );
 		lpvGridConfigUbos[cascade].createPassBinding( result
 			, GeometryInjectionPass::LpvGridUboIdx );
 		lpvLightConfigUbos[cascade].createPassBinding( result
@@ -317,6 +312,13 @@ namespace castor3d
 		for ( uint32_t cascade = 0u; cascade < LpvMaxCascadesCount; ++cascade )
 		{
 			m_lpvGridConfigUbos.emplace_back( m_device );
+			auto & result = *lpvResult[cascade];
+			m_graph.addOutput( result[LpvTexture::eR].targetViewId
+				, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+			m_graph.addOutput( result[LpvTexture::eG].targetViewId
+				, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+			m_graph.addOutput( result[LpvTexture::eB].targetViewId
+				, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
 		}
 	}
 

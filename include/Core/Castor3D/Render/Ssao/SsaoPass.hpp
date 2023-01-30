@@ -52,7 +52,7 @@ namespace castor3d
 			, crg::FramePassArray const & previousPasses
 			, castor::Size const & size
 			, SsaoConfig & ssaoConfig
-			, Texture const & depth
+			, Texture const & depthObj
 			, Texture const & normal
 			, GpInfoUbo const & gpInfoUbo );
 		/**

@@ -5,8 +5,29 @@
 #include "Castor3D/Render/Opaque/Lighting/LightPassResult.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
+#include <RenderGraph/RunnableGraph.hpp>
+
 namespace castor3d
 {
+	//*********************************************************************************************
+
+	namespace runlgt
+	{
+		std::array< VkImageLayout, 6u > getDefaultLayouts( bool blend )
+		{
+			return std::array< VkImageLayout, 6u >{ VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL
+				, ( blend ? VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL : VK_IMAGE_LAYOUT_UNDEFINED )
+				, ( blend ? VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL : VK_IMAGE_LAYOUT_UNDEFINED )
+				, ( blend ? VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL : VK_IMAGE_LAYOUT_UNDEFINED )
+				, ( blend ? VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL : VK_IMAGE_LAYOUT_UNDEFINED )
+				, ( blend ? VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL : VK_IMAGE_LAYOUT_UNDEFINED ) };
+		}
+		std::array< VkImageLayout, 1u > getDefaultLayout()
+		{
+			return std::array< VkImageLayout, 1u >{ VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL };
+		}
+	}
+
 	//*********************************************************************************************
 
 	RunnableLightingPass::RunnableLightingPass( LightingPass const & lightingPass
@@ -19,16 +40,17 @@ namespace castor3d
 		, ShadowMapResult const & smDirectionalResult
 		, ShadowMapResult const & smPointResult
 		, ShadowMapResult const & smSpotResult
-		, crg::ImageViewIdArray const & targetColourResult )
+		, crg::ImageViewIdArray const & targetColourResult
+		, crg::ImageViewIdArray const & targetDepthResult )
 		: crg::RunnablePass{ pass
 			, context
 			, graph
-			, { [this]( uint32_t index ){ doInitialise(); }
+			, { [this]( uint32_t index ){ doInitialise( index ); }
 				, GetPipelineStateCallback( [](){ return crg::getPipelineState( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT ); } )
 				, [this]( crg::RecordContext & ctx, VkCommandBuffer cb, uint32_t i ){ doRecordInto( ctx, cb, i ); }
-				, GetPassIndexCallback( [](){ return 0u; } )
+				, GetPassIndexCallback( [this](){ return m_passIndex; } )
 				, IsEnabledCallback([&lightingPass](){ return lightingPass.isEnabled(); } ) }
-			, crg::ru::Config{ 1u, true }
+			, crg::ru::Config{ uint32_t( std::max( targetColourResult.size(), targetDepthResult.size() ) ), true }
 				.implicitAction( lpResult[LpTexture::eDiffuse].targetViewId
 					, crg::RecordContext::clearAttachment( lpResult[LpTexture::eDiffuse].targetViewId, getClearValue( LpTexture::eDiffuse ) ) )
 				.implicitAction( lpResult[LpTexture::eSpecular].targetViewId
@@ -46,6 +68,8 @@ namespace castor3d
 		, m_smPointResult{ smPointResult }
 		, m_smSpotResult{ smSpotResult }
 		, m_targetColourResult{ targetColourResult }
+		, m_targetDepthResult{ targetDepthResult }
+		, m_target{ m_targetColourResult.front() }
 	{
 	}
 
@@ -103,9 +127,11 @@ namespace castor3d
 		}
 	}
 
-	void RunnableLightingPass::resetCommandBuffer()
+	void RunnableLightingPass::resetCommandBuffer( crg::ImageViewId currentTarget )
 	{
-		crg::RunnablePass::resetCommandBuffer( 0u );
+		m_passIndex = currentTarget == m_target ? 0u : 1u;
+		doInitialise( m_passIndex );
+		crg::RunnablePass::resetCommandBuffer( m_passIndex );
 		crg::RunnablePass::reRecordCurrent();
 	}
 
@@ -126,26 +152,35 @@ namespace castor3d
 		return result + uint32_t( m_pendingLights.size() );
 	}
 
-	void RunnableLightingPass::doInitialise()
+	void RunnableLightingPass::doInitialise( uint32_t index )
 	{
 		if ( m_renderPasses.empty() )
 		{
 			m_renderPasses.resize( 4u );
-			m_renderPasses[getLightRenderPassIndex( false, LightType::eDirectional )] = doCreateRenderPass( false, false, m_lpResult );
-			m_renderPasses[getLightRenderPassIndex( false, LightType::eMax )] = doCreateRenderPass( false, true, m_lpResult );
-			m_renderPasses[getLightRenderPassIndex( true, LightType::eDirectional )] = doCreateRenderPass( true, false, m_lpResult );
-			m_renderPasses[getLightRenderPassIndex( true, LightType::eMax )] = doCreateRenderPass( true, true, m_lpResult );
+			m_renderPasses[getLightRenderPassIndex( false, LightType::eDirectional )] = doCreateRenderPass( false, false );
+			m_renderPasses[getLightRenderPassIndex( false, LightType::eMax )] = doCreateRenderPass( false, true );
+			m_renderPasses[getLightRenderPassIndex( true, LightType::eDirectional )] = doCreateRenderPass( true, false );
+			m_renderPasses[getLightRenderPassIndex( true, LightType::eMax )] = doCreateRenderPass( true, true );
 		}
 
 		if ( m_stencilRenderPasses.empty() )
 		{
-			m_stencilRenderPasses.emplace_back( doCreateStencilRenderPass( false, m_lpResult ) );
-			m_stencilRenderPasses.emplace_back( doCreateStencilRenderPass( true, m_lpResult ) );
+			m_stencilRenderPasses.emplace_back( doCreateStencilRenderPass( false ) );
+			m_stencilRenderPasses.emplace_back( doCreateStencilRenderPass( true ) );
 		}
+
+		doCreateFramebuffer( false, false, m_renderPasses[getLightRenderPassIndex( false, LightType::eDirectional )], index );
+		doCreateFramebuffer( false, true, m_renderPasses[getLightRenderPassIndex( false, LightType::eMax )], index );
+		doCreateFramebuffer( true, false, m_renderPasses[getLightRenderPassIndex( true, LightType::eDirectional )], index );
+		doCreateFramebuffer( true, true, m_renderPasses[getLightRenderPassIndex( true, LightType::eMax )], index );
+
+		doCreateStencilFramebuffer( false, m_stencilRenderPasses[0], index );
+		doCreateStencilFramebuffer( true, m_stencilRenderPasses[1], index );
 
 		for ( auto & pending : m_pendingLights )
 		{
-			enableLight( *pending.second, *pending.first );
+			enableLight( *pending.second
+				, *pending.first );
 		}
 
 		m_pendingLights.clear();
@@ -159,36 +194,31 @@ namespace castor3d
 
 		for ( auto & pipeline : m_pipelines )
 		{
-			pipeline.second->recordInto( context, commandBuffer, pipelineIndex );
+			pipeline.second->recordInto( context, commandBuffer, index, pipelineIndex );
 		}
 	}
 
 	LightRenderPass RunnableLightingPass::doCreateRenderPass( bool blend
-		, bool hasStencil
-		, LightPassResult const & lpResult )
+		, bool hasStencil )
 	{
+		auto & lpResult = m_lpResult;
 		castor::String name = ( hasStencil
 				? castor::String{ cuT( "Stencil" ) }
 				: castor::String{ cuT( "" ) } )
 			+ ( blend
 				? castor::String{ cuT( "Blend" ) }
 				: castor::String{ cuT( "First" ) } );
-		std::array< VkImageLayout, 6u > layouts{ ( ( blend || hasStencil ) ? VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL : VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL )
-			, ( blend ? VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL : VK_IMAGE_LAYOUT_UNDEFINED )
-			, ( blend ? VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL : VK_IMAGE_LAYOUT_UNDEFINED )
-			, ( blend ? VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL : VK_IMAGE_LAYOUT_UNDEFINED )
-			, ( blend ? VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL : VK_IMAGE_LAYOUT_UNDEFINED )
-			, ( blend ? VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL : VK_IMAGE_LAYOUT_UNDEFINED ) };
 		VkAttachmentLoadOp loadOp = blend
 			? VK_ATTACHMENT_LOAD_OP_LOAD
 			: VK_ATTACHMENT_LOAD_OP_CLEAR;
 		VkAttachmentLoadOp stencilLoadOp = hasStencil
 			? VK_ATTACHMENT_LOAD_OP_LOAD
 			: VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+		auto layouts = runlgt::getDefaultLayouts( blend );
 
 		ashes::VkAttachmentDescriptionArray attaches{
 			{ 0u
-				, lpResult[LpTexture::eDepth].getFormat()
+				, getFormat( m_targetDepthResult.front() )
 				, VK_SAMPLE_COUNT_1_BIT
 				, VK_ATTACHMENT_LOAD_OP_LOAD
 				, VK_ATTACHMENT_STORE_OP_STORE
@@ -281,69 +311,27 @@ namespace castor3d
 		LightRenderPass result{};
 		result.renderPass = m_device->createRenderPass( "LightPass" + name
 			, std::move( rpCreateInfo ) );
-
-		std::vector< VkImageView > viewAttaches{ lpResult[LpTexture::eDepth].targetView
-			, lpResult[LpTexture::eDiffuse].targetView
-			, lpResult[LpTexture::eSpecular].targetView
-			, lpResult[LpTexture::eScattering].targetView
-			, lpResult[LpTexture::eCoatingSpecular].targetView
-			, lpResult[LpTexture::eSheen].targetView };
-		auto fbCreateInfo = makeVkStruct< VkFramebufferCreateInfo >( 0u
-			, VkRenderPass{}
-			, uint32_t{}
-			, nullptr
-			, uint32_t{}
-			, uint32_t{}
-			, uint32_t{} );
-		fbCreateInfo.renderPass = *result.renderPass;
-		fbCreateInfo.attachmentCount = uint32_t( viewAttaches.size() );
-		fbCreateInfo.pAttachments = viewAttaches.data();
-		fbCreateInfo.width = lpResult[LpTexture::eDiffuse].getExtent().width;
-		fbCreateInfo.height = lpResult[LpTexture::eDiffuse].getExtent().height;
-		fbCreateInfo.layers = 1u;
-		result.framebuffer = result.renderPass->createFrameBuffer( "LightPass" + name
-			, std::move( fbCreateInfo ) );
-
-		result.clearValues.push_back( getClearValue( LpTexture::eDepth ) );
+		result.clearValues.push_back( defaultClearDepthStencil );
 		result.clearValues.push_back( getClearValue( LpTexture::eDiffuse ) );
 		result.clearValues.push_back( getClearValue( LpTexture::eSpecular ) );
 		result.clearValues.push_back( getClearValue( LpTexture::eScattering ) );
 		result.clearValues.push_back( getClearValue( LpTexture::eCoatingSpecular ) );
 		result.clearValues.push_back( getClearValue( LpTexture::eSheen ) );
-
-		result.attaches.push_back( { lpResult[LpTexture::eDepth].targetViewId
-			, layouts[0]
-			, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL } );
-		result.attaches.push_back( { lpResult[LpTexture::eDiffuse].targetViewId
-			, layouts[1]
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } );
-		result.attaches.push_back( { lpResult[LpTexture::eSpecular].targetViewId
-			, layouts[2]
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } );
-		result.attaches.push_back( { lpResult[LpTexture::eScattering].targetViewId
-			, layouts[3]
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } );
-		result.attaches.push_back( { lpResult[LpTexture::eCoatingSpecular].targetViewId
-			, layouts[4]
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } );
-		result.attaches.push_back( { lpResult[LpTexture::eSheen].targetViewId
-			, layouts[5]
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } );
+		result.framebuffers.resize( std::max( m_targetColourResult.size(), m_targetDepthResult.size() ) );
 
 		return result;
 	}
 
-	LightRenderPass RunnableLightingPass::doCreateStencilRenderPass( bool blend
-		, LightPassResult const & lpResult )
+	LightRenderPass RunnableLightingPass::doCreateStencilRenderPass( bool blend )
 	{
 		castor::String name = ( blend
 				? castor::String{ cuT( "Blend" ) }
 				: castor::String{ cuT( "First" ) } );
-		std::array< VkImageLayout, 1u > layouts{ ( blend ? VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL : VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) };
+		auto layouts = runlgt::getDefaultLayout();
 
 		ashes::VkAttachmentDescriptionArray attaches{
 			{ 0u
-				, lpResult[LpTexture::eDepth].getFormat()
+				, getFormat( m_targetDepthResult.front() )
 				, VK_SAMPLE_COUNT_1_BIT
 				, VK_ATTACHMENT_LOAD_OP_LOAD
 				, VK_ATTACHMENT_STORE_OP_NONE_KHR
@@ -387,8 +375,39 @@ namespace castor3d
 		LightRenderPass result{};
 		result.renderPass = m_device->createRenderPass( "StencilPass" + name
 			, std::move( rpCreateInfo ) );
+		result.clearValues.push_back( defaultClearDepthStencil );
+		result.framebuffers.resize( std::max( m_targetColourResult.size(), m_targetDepthResult.size() ) );
 
-		std::vector< VkImageView > viewAttaches{ lpResult[LpTexture::eDepth].targetView };
+		return result;
+	}
+
+	void RunnableLightingPass::doCreateFramebuffer( bool blend
+		, bool hasStencil
+		, LightRenderPass & renderPass
+		, uint32_t index )
+	{
+		auto & framebuffer = renderPass.framebuffers[index];
+
+		if ( framebuffer.fbo )
+		{
+			return;
+		}
+
+		auto layouts = runlgt::getDefaultLayouts( blend );
+		auto & lpResult = m_lpResult;
+		castor::String name = ( hasStencil
+				? castor::String{ cuT( "Stencil" ) }
+				: castor::String{ cuT( "" ) } )
+			+ ( blend
+				? castor::String{ cuT( "Blend" ) }
+				: castor::String{ cuT( "First" ) } )
+			+ "_" + std::to_string( index );
+		std::vector< VkImageView > viewAttaches{ m_graph.createImageView( m_targetDepthResult[index] )
+			, lpResult[LpTexture::eDiffuse].targetView
+			, lpResult[LpTexture::eSpecular].targetView
+			, lpResult[LpTexture::eScattering].targetView
+			, lpResult[LpTexture::eCoatingSpecular].targetView
+			, lpResult[LpTexture::eSheen].targetView };
 		auto fbCreateInfo = makeVkStruct< VkFramebufferCreateInfo >( 0u
 			, VkRenderPass{}
 			, uint32_t{}
@@ -396,22 +415,70 @@ namespace castor3d
 			, uint32_t{}
 			, uint32_t{}
 			, uint32_t{} );
-		fbCreateInfo.renderPass = *result.renderPass;
+		fbCreateInfo.renderPass = *renderPass.renderPass;
 		fbCreateInfo.attachmentCount = uint32_t( viewAttaches.size() );
 		fbCreateInfo.pAttachments = viewAttaches.data();
-		fbCreateInfo.width = lpResult[LpTexture::eDepth].getExtent().width;
-		fbCreateInfo.height = lpResult[LpTexture::eDepth].getExtent().height;
+		fbCreateInfo.width = lpResult[LpTexture::eDiffuse].getExtent().width;
+		fbCreateInfo.height = lpResult[LpTexture::eDiffuse].getExtent().height;
 		fbCreateInfo.layers = 1u;
-		result.framebuffer = result.renderPass->createFrameBuffer( "StencilPass" + name
+		framebuffer.fbo = renderPass.renderPass->createFrameBuffer( "LightPass" + name
 			, std::move( fbCreateInfo ) );
 
-		result.clearValues.push_back( defaultClearDepthStencil );
-
-		result.attaches.push_back( { lpResult[LpTexture::eDepth].targetViewId
+		framebuffer.attaches.push_back( { m_targetDepthResult
 			, layouts[0]
 			, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL } );
+		framebuffer.attaches.push_back( { crg::ImageViewIdArray{ lpResult[LpTexture::eDiffuse].targetViewId }
+			, layouts[1]
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } );
+		framebuffer.attaches.push_back( { crg::ImageViewIdArray{ lpResult[LpTexture::eSpecular].targetViewId }
+			, layouts[2]
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } );
+		framebuffer.attaches.push_back( { crg::ImageViewIdArray{ lpResult[LpTexture::eScattering].targetViewId }
+			, layouts[3]
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } );
+		framebuffer.attaches.push_back( { crg::ImageViewIdArray{ lpResult[LpTexture::eCoatingSpecular].targetViewId }
+			, layouts[4]
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } );
+		framebuffer.attaches.push_back( { crg::ImageViewIdArray{ lpResult[LpTexture::eSheen].targetViewId }
+			, layouts[5]
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } );
+	}
 
-		return result;
+	void RunnableLightingPass::doCreateStencilFramebuffer( bool blend
+		, LightRenderPass & renderPass
+		, uint32_t index )
+	{
+		auto & framebuffer = renderPass.framebuffers[index];
+
+		if ( framebuffer.fbo )
+		{
+			return;
+		}
+
+		auto layouts = runlgt::getDefaultLayout();
+		castor::String name = ( blend
+				? castor::String{ cuT( "Blend" ) }
+				: castor::String{ cuT( "First" ) } )
+			+ "_" + std::to_string( index );
+		std::vector< VkImageView > viewAttaches{ m_graph.createImageView( m_targetDepthResult[index] ) };
+		auto fbCreateInfo = makeVkStruct< VkFramebufferCreateInfo >( 0u
+			, VkRenderPass{}
+			, uint32_t{}
+			, nullptr
+			, uint32_t{}
+			, uint32_t{}
+			, uint32_t{} );
+		fbCreateInfo.renderPass = *renderPass.renderPass;
+		fbCreateInfo.attachmentCount = uint32_t( viewAttaches.size() );
+		fbCreateInfo.pAttachments = viewAttaches.data();
+		fbCreateInfo.width = getExtent( m_targetDepthResult.front() ).width;
+		fbCreateInfo.height = getExtent( m_targetDepthResult.front() ).height;
+		fbCreateInfo.layers = 1u;
+		framebuffer.fbo = renderPass.renderPass->createFrameBuffer( "StencilPass" + name
+			, std::move( fbCreateInfo ) );
+		framebuffer.attaches.push_back( { m_targetDepthResult
+			, layouts[0]
+			, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL } );
 	}
 
 	LightsPipeline & RunnableLightingPass::doFindPipeline( Light const & light
