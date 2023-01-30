@@ -24,10 +24,9 @@ namespace castor3d
 	enum class PpTexture
 		: uint8_t
 	{
-		eDepth, // D => Depth, S => Unused
 		eDepthObj, // R => Normalised depth, G => Linear depth, B => Node ID, A => Lighting Model ID
 		eVisibility, // R => node ID + pipeline ID, G => primitive ID
-		CU_ScopedEnumBounds( eDepth ),
+		CU_ScopedEnumBounds( eDepthObj ),
 	};
 	C3D_API castor::String getTextureName( PpTexture texture );
 	C3D_API castor::String getTexName( PpTexture texture );

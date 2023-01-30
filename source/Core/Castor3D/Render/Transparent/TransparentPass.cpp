@@ -54,6 +54,7 @@ namespace castor3d
 		, RenderDevice const & device
 		, Texture const & sceneImage
 		, crg::ImageViewIdArray targetImage
+		, crg::ImageViewIdArray targetDepth
 		, RenderNodesPassDesc const & renderPassDesc
 		, RenderTechniquePassDesc const & techniquePassDesc )
 		: RenderTechniqueNodesPass{ parent
@@ -62,7 +63,8 @@ namespace castor3d
 			, graph
 			, device
 			, Type
-			, targetImage
+			, std::move( targetImage )
+			, std::move( targetDepth )
 			, renderPassDesc
 			, techniquePassDesc }
 		, m_sceneImage{ sceneImage }

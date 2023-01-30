@@ -521,6 +521,10 @@ namespace castor3d
 	void Engine::update( GpuUpdater & updater )
 	{
 		getMaterialCache().update( updater );
+		getSceneCache().forEach( [&updater]( Scene & scene )
+			{
+				scene.update( updater );
+			} );
 		getRenderTargetCache().update( updater );
 		m_textureCache->update( updater );
 

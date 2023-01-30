@@ -33,7 +33,7 @@ namespace castor3d
 		, RenderDevice const & device
 		, ProgressBar * progress
 		, Texture const & brdf
-		, Texture const & depth
+		, crg::ImageViewIdArray const & resultDepth
 		, Texture const & depthObj
 		, OpaquePassResult const & opaquePassResult
 		, crg::ImageViewIdArray resultTexture
@@ -60,13 +60,12 @@ namespace castor3d
 		, m_technique{ technique }
 		, m_lightingGpInfoUbo{ device }
 		, m_size{ size }
-		, m_lightPassResult{ *depth.resources, device, m_size }
+		, m_lightPassResult{ *depthObj.resources, device, m_size }
 		, m_lightingPass{ castor::makeUnique< LightingPass >( graph
 			, previousPasses
 			, m_device
 			, progress
-			, *m_technique.getRenderTarget().getScene()
-			, depth
+			, m_technique
 			, depthObj
 			, m_opaquePassResult
 			, smDirectionalResult
@@ -74,6 +73,7 @@ namespace castor3d
 			, smSpotResult
 			, m_lightPassResult
 			, resultTexture
+			, resultDepth
 			, sceneUbo
 			, m_lightingGpInfoUbo ) }
 		, m_indirectLightingPass{ castor::makeUnique< IndirectLightingPass >( m_device
@@ -163,11 +163,6 @@ namespace castor3d
 			CU_Require( resolve );
 			resolve->accept( visitor );
 		}
-	}
-
-	crg::ImageViewId const & DeferredRendering::getLightDepthImgView()const
-	{
-		return m_lightPassResult[LpTexture::eDepth].targetViewId;
 	}
 
 	Texture const & DeferredRendering::getLightDiffuse()

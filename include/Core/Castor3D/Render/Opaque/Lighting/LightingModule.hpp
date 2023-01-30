@@ -77,7 +77,6 @@ namespace castor3d
 	enum class LpTexture
 		: uint8_t
 	{
-		eDepth,
 		eDiffuse,
 		eSpecular,
 		eScattering,
@@ -85,7 +84,7 @@ namespace castor3d
 		eSheen,
 		eIndirectDiffuse,
 		eIndirectSpecular,
-		CU_ScopedEnumBounds( eDepth ),
+		CU_ScopedEnumBounds( eDiffuse ),
 	};
 	castor::String getTextureName( LpTexture texture );
 	castor::String getTexName( LpTexture texture );

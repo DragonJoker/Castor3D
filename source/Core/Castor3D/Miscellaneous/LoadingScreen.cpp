@@ -422,6 +422,7 @@ namespace castor3d
 					, m_device
 					, ForwardRenderTechniquePass::Type
 					, crg::ImageViewIdArray{ m_colour.targetViewId }
+					, crg::ImageViewIdArray{ m_depth.targetViewId }
 					, RenderNodesPassDesc{ makeExtent3D( m_camera->getSize() ), m_matrixUbo, m_sceneUbo, *m_culler }
 						.meshShading( true )
 					, RenderTechniquePassDesc{ true, SsaoConfig{} } );
@@ -449,6 +450,7 @@ namespace castor3d
 					, m_device
 					, ForwardRenderTechniquePass::Type
 					, crg::ImageViewIdArray{ m_colour.targetViewId }
+					, crg::ImageViewIdArray{ m_depth.targetViewId }
 					, RenderNodesPassDesc{ makeExtent3D( m_camera->getSize() ), m_matrixUbo, m_sceneUbo, *m_culler, false }
 						.meshShading( true )
 					, RenderTechniquePassDesc{ true, SsaoConfig{} } );

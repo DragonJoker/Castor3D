@@ -13,6 +13,7 @@
 #include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/VoxelizePass.hpp"
 #include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/VoxelSceneData.hpp"
 #include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/VoxelSecondaryBounce.hpp"
+#include "Castor3D/Render/ShadowMap/ShadowMapResult.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
@@ -110,6 +111,10 @@ namespace castor3d
 		printGraph( *m_runnable );
 		m_firstBounce.create();
 		m_secondaryBounce.create();
+		m_graph.addOutput( m_firstBounce.wholeViewId
+			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+		m_graph.addOutput( m_secondaryBounce.wholeViewId
+			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
 		auto runnable = m_runnable.get();
 		m_device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
 			, [runnable]( RenderDevice const &

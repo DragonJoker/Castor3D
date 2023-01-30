@@ -17,12 +17,9 @@ namespace smaa
 			, castor3d::RenderTarget & renderTarget
 			, castor3d::RenderDevice const & device
 			, SmaaUbo const & ubo
-			, crg::ImageViewId const & depthView
+			, crg::ImageViewId const & depthObj
 			, SmaaConfig const & config
 			, bool const * enabled );
-
-	private:
-		crg::ImageViewId m_depthView;
 	};
 }
 

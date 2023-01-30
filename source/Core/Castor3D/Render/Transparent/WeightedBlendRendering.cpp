@@ -135,7 +135,7 @@ namespace castor3d
 		, ProgressBar * progress
 		, bool & enabled
 		, crg::FramePass const & transparentPassDesc
-		, Texture const & depth
+		, Texture const & depthObj
 		, TransparentPassResult const & transparentPassResult
 		, crg::ImageViewIdArray const & targetColourView
 		, castor::Size const & size
@@ -147,7 +147,6 @@ namespace castor3d
 		, m_graph{ graph }
 		, m_enabled{ enabled }
 		, m_transparentPassResult{ transparentPassResult }
-		, m_depthOnlyView{ depth.sampledViewId }
 		, m_size{ size }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "TransparentCombine", wboit::getVertexProgram() }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "TransparentCombine", wboit::getPixelProgram() }
@@ -155,6 +154,7 @@ namespace castor3d
 			, makeShaderState( device, m_pixelShader ) }
 		, m_finalCombinePassDesc{ doCreateFinalCombine( graph
 			, transparentPassDesc
+			, depthObj.sampledViewId
 			, targetColourView
 			, sceneUbo
 			, hdrConfigUbo
@@ -180,6 +180,7 @@ namespace castor3d
 
 	crg::FramePass & WeightedBlendRendering::doCreateFinalCombine( crg::FramePassGroup & graph
 		, crg::FramePass const & transparentPassDesc
+		, crg::ImageViewId const & depthObj
 		, crg::ImageViewIdArray const & targetColourView
 		, SceneUbo & sceneUbo
 		, HdrConfigUbo const & hdrConfigUbo
@@ -212,7 +213,7 @@ namespace castor3d
 			, uint32_t( wboit::GpuInfoUboIndex ) );
 		hdrConfigUbo.createPassBinding( result
 			, uint32_t( wboit::HdrUboIndex ) );
-		result.addSampledView( m_depthOnlyView
+		result.addSampledView( depthObj
 			, uint32_t( wboit::DepthTexIndex ) );
 		result.addSampledView( m_transparentPassResult[WbTexture::eAccumulation].sampledViewId
 			, uint32_t( wboit::AccumTexIndex )

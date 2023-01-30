@@ -8,6 +8,8 @@
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderInfo.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Render/RenderTarget.hpp"
+#include "Castor3D/Render/RenderTechnique.hpp"
 #include "Castor3D/Render/Opaque/OpaquePassResult.hpp"
 #include "Castor3D/Render/Opaque/Lighting/LightPassResult.hpp"
 #include "Castor3D/Scene/Camera.hpp"
@@ -29,8 +31,7 @@ namespace castor3d
 		, crg::FramePassArray const & previousPasses
 		, RenderDevice const & device
 		, ProgressBar * progress
-		, Scene & scene
-		, Texture const & depth
+		, RenderTechnique const & technique
 		, Texture const & depthObj
 		, OpaquePassResult const & gpResult
 		, ShadowMapResult const & smDirectionalResult
@@ -38,10 +39,11 @@ namespace castor3d
 		, ShadowMapResult const & smSpotResult
 		, LightPassResult const & lpResult
 		, crg::ImageViewIdArray const & targetColourResult
+		, crg::ImageViewIdArray const & targetDepthResult
 		, SceneUbo const & sceneUbo
 		, GpInfoUbo const & gpInfoUbo )
 		: m_device{ device }
-		, m_depth{ depth }
+		, m_technique{ technique }
 		, m_depthObj{ depthObj }
 		, m_gpResult{ gpResult }
 		, m_smDirectionalResult{ smDirectionalResult }
@@ -49,18 +51,21 @@ namespace castor3d
 		, m_smSpotResult{ smSpotResult }
 		, m_lpResult{ lpResult }
 		, m_targetColourResult{ targetColourResult }
+		, m_targetDepthResult{ targetDepthResult }
 		, m_sceneUbo{ sceneUbo }
 		, m_gpInfoUbo{ gpInfoUbo }
 		, m_group{ graph.createPassGroup( "DirectLighting" ) }
 		, m_size{ makeSize( lpResult[LpTexture::eDiffuse].getExtent() ) }
-	{
-		m_lastPass = &doCreateDepthBlitPass( m_group
+		, m_lastPass{ &doCreateLightingPass( m_group
 			, previousPasses
-			, progress );
-		m_lastPass = &doCreateLightingPass( m_group
-			, *m_lastPass
-			, scene
-			, progress );
+			, *technique.getRenderTarget().getScene()
+			, progress ) }
+	{
+		m_group.addOutput( m_lpResult[LpTexture::eDiffuse].wholeViewId );
+		m_group.addOutput( m_lpResult[LpTexture::eSpecular].wholeViewId );
+		m_group.addOutput( m_lpResult[LpTexture::eScattering].wholeViewId );
+		m_group.addOutput( m_lpResult[LpTexture::eCoatingSpecular].wholeViewId );
+		m_group.addOutput( m_lpResult[LpTexture::eSheen].wholeViewId );
 	}
 
 	void LightingPass::update( CpuUpdater & updater )
@@ -79,7 +84,7 @@ namespace castor3d
 				doUpdateLightPasses( updater, LightType::eSpot );
 			}
 
-			m_lightPass->resetCommandBuffer();
+			m_lightPass->resetCommandBuffer( m_technique.getTargetResult().front() );
 		}
 	}
 
@@ -92,7 +97,7 @@ namespace castor3d
 	{
 		visitor.visit( "Light Diffuse"
 			, m_lpResult[LpTexture::eDiffuse]
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
 			, TextureFactors{}.invert( true ) );
 		visitor.visit( "Light Specular"
 			, m_lpResult[LpTexture::eSpecular]
@@ -129,43 +134,8 @@ namespace castor3d
 		}
 	}
 
-	crg::FramePass const & LightingPass::doCreateDepthBlitPass( crg::FramePassGroup & graph
-		, crg::FramePassArray const & previousPasses
-		, ProgressBar * progress )
-	{
-		stepProgressBar( progress, "Creating depth blit pass" );
-		auto & engine = *m_device.renderSystem.getEngine();
-		auto srcSize = m_depth.getExtent();
-		auto dstSize = makeExtent3D( m_size );
-		auto & pass = graph.createPass( "DepthBlit"
-			, [this, progress, srcSize, dstSize, &engine]( crg::FramePass const & framePass
-				, crg::GraphContext & context
-				, crg::RunnableGraph & runGraph )
-			{
-				stepProgressBar( progress, "Initialising depth blit pass" );
-				auto result = std::make_unique< crg::ImageBlit >( framePass
-					, context
-					, runGraph
-					, VkOffset3D{}
-					, srcSize
-					, VkOffset3D{}
-					, dstSize
-					, VK_FILTER_NEAREST
-					, crg::ru::Config{}
-					, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
-					, crg::RunnablePass::IsEnabledCallback( [this](){ return isEnabled(); } ) );
-				engine.registerTimer( framePass.getFullName()
-					, result->getTimer() );
-				return result;
-			} );
-		pass.addDependencies( previousPasses );
-		pass.addTransferInputView( m_depth.wholeViewId );
-		pass.addTransferOutputView( m_lpResult[LpTexture::eDepth].wholeViewId );
-		return pass;
-	}
-
 	crg::FramePass const & LightingPass::doCreateLightingPass( crg::FramePassGroup & graph
-		, crg::FramePass const & previousPass
+		, crg::FramePassArray const & previousPasses
 		, Scene const & scene
 		, ProgressBar * progress )
 	{
@@ -188,13 +158,14 @@ namespace castor3d
 					, m_smDirectionalResult
 					, m_smPointResult
 					, m_smSpotResult
-					, m_targetColourResult );
+					, m_targetColourResult
+					, m_targetDepthResult );
 				engine.registerTimer( framePass.getFullName()
 					, result->getTimer() );
 				m_lightPass = result.get();
 				return result;
 			} );
-		pass.addDependency( previousPass );
+		pass.addDependencies( previousPasses );
 		engine.getMaterialCache().getPassBuffer().createPassBinding( pass
 			, uint32_t( LightPassIdx::eMaterials ) );
 		engine.getMaterialCache().getSssProfileBuffer().createPassBinding( pass
@@ -226,12 +197,25 @@ namespace castor3d
 		auto index = uint32_t( LightPassIdx::eCount );
 		engine.createSpecificsBuffersPassBindings( pass, index );
 
-		pass.addInOutDepthStencilView( m_lpResult[LpTexture::eDepth].targetViewId );
+		pass.addInOutDepthStencilView( m_targetDepthResult );
 		pass.addOutputColourView( m_lpResult[LpTexture::eDiffuse].targetViewId );
 		pass.addOutputColourView( m_lpResult[LpTexture::eSpecular].targetViewId );
 		pass.addOutputColourView( m_lpResult[LpTexture::eScattering].targetViewId );
 		pass.addOutputColourView( m_lpResult[LpTexture::eCoatingSpecular].targetViewId );
 		pass.addOutputColourView( m_lpResult[LpTexture::eSheen].targetViewId );
+
+		pass.addImplicitColourView( m_smDirectionalResult[SmTexture::eLinearDepth].wholeViewId
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+		pass.addImplicitColourView( m_smDirectionalResult[SmTexture::eVariance].wholeViewId
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+		pass.addImplicitColourView( m_smPointResult[SmTexture::eLinearDepth].wholeViewId
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+		pass.addImplicitColourView( m_smPointResult[SmTexture::eVariance].wholeViewId
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+		pass.addImplicitColourView( m_smSpotResult[SmTexture::eLinearDepth].wholeViewId
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+		pass.addImplicitColourView( m_smSpotResult[SmTexture::eVariance].wholeViewId
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 		return pass;
 	}
 }

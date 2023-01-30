@@ -25,7 +25,6 @@ namespace castor3d
 		, QueueData const & queueData
 		, crg::FramePassArray const & previousPasses
 		, ProgressBar * progress
-		, TexturePtr depth
 		, bool deferred
 		, bool visbuffer )
 		: castor::OwnedBy< RenderTechnique >{ parent }
@@ -33,7 +32,7 @@ namespace castor3d
 		, m_graph{ parent.getRenderTarget().getGraph().createPassGroup( "Prepass" ) }
 		, m_result{ parent.getResources()
 			, device
-			, depth
+			, makeSize( parent.getTargetExtent() )
 			, visbuffer && m_device.hasBindless() }
 		, m_visibilityPassDesc{ ( hasVisibility()
 			? &doCreateVisibilityPass( progress, previousPasses )
@@ -51,6 +50,10 @@ namespace castor3d
 		, m_computeDepthRangeDesc{ &doCreateComputeDepthRange( progress ) }
 	{
 		m_result.create();
+		m_graph.addOutput( getOwner()->getTargetDepth().front() );
+		m_graph.addOutput( getOwner()->getTargetDepth().back() );
+		m_graph.addOutput( m_result[PpTexture::eDepthObj].wholeViewId );
+		m_graph.addOutput( m_result[PpTexture::eVisibility].wholeViewId );
 	}
 
 	PrepassRendering::~PrepassRendering()
@@ -145,8 +148,9 @@ namespace castor3d
 		, crg::FramePassArray const & previousPasses )
 	{
 		stepProgressBar( progress, "Creating depth/visibility pass" );
+		auto targetDepth = getOwner()->getTargetDepth();
 		auto & result = m_graph.createPass( "NodesPass"
-			, [this, progress]( crg::FramePass const & framePass
+			, [this, progress, targetDepth]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
@@ -160,7 +164,8 @@ namespace castor3d
 					, context
 					, runnableGraph
 					, m_device
-					, RenderNodesPassDesc{ getOwner()->getDepth().getExtent()
+					, targetDepth
+					, RenderNodesPassDesc{ getExtent( getOwner()->getTargetDepth().front() )
 							, getOwner()->getMatrixUbo()
 							, getOwner()->getSceneUbo()
 							, getOwner()->getRenderTarget().getCuller() }
@@ -178,7 +183,7 @@ namespace castor3d
 				return res;
 			} );
 		result.addDependencies( previousPasses );
-		result.addOutputDepthStencilView( getOwner()->getDepth().targetViewId
+		result.addOutputDepthStencilView( targetDepth
 			, defaultClearDepthStencil );
 		result.addOutputColourView( m_result[PpTexture::eDepthObj].targetViewId
 			, makeClearValue( 1.0f, std::numeric_limits< float >::max(), 0.0f, 0.0f ) );
@@ -192,8 +197,9 @@ namespace castor3d
 		, crg::FramePassArray const & previousPasses )
 	{
 		stepProgressBar( progress, "Creating forward depth pass" );
+		auto targetDepth = getOwner()->getTargetDepth();
 		auto & result = m_graph.createPass( "Depth"
-			, [this, progress]( crg::FramePass const & framePass
+			, [this, progress, targetDepth]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
@@ -207,8 +213,9 @@ namespace castor3d
 					, context
 					, runnableGraph
 					, m_device
+					, targetDepth
 					, getOwner()->getSsaoConfig()
-					, RenderNodesPassDesc{ getOwner()->getDepth().getExtent()
+					, RenderNodesPassDesc{ getExtent( getOwner()->getTargetDepth().front() )
 							, getOwner()->getMatrixUbo()
 							, getOwner()->getSceneUbo()
 							, getOwner()->getRenderTarget().getCuller() }
@@ -225,7 +232,7 @@ namespace castor3d
 				return res;
 			} );
 		result.addDependencies( previousPasses );
-		result.addOutputDepthStencilView( getOwner()->getDepth().targetViewId
+		result.addOutputDepthStencilView( targetDepth
 			, defaultClearDepthStencil );
 		result.addOutputColourView( m_result[PpTexture::eDepthObj].targetViewId
 			, makeClearValue( 1.0f, std::numeric_limits< float >::max(), 0.0f, 0.0f ) );
@@ -239,8 +246,9 @@ namespace castor3d
 		, crg::FramePassArray const & previousPasses )
 	{
 		stepProgressBar( progress, "Creating deferred depth pass" );
+		auto targetDepth = getOwner()->getTargetDepth();
 		auto & result = m_graph.createPass( "Depth"
-			, [this, progress]( crg::FramePass const & framePass
+			, [this, progress, targetDepth]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
@@ -253,8 +261,9 @@ namespace castor3d
 					, context
 					, runnableGraph
 					, m_device
+					, targetDepth
 					, getOwner()->getSsaoConfig()
-					, RenderNodesPassDesc{ getOwner()->getDepth().getExtent()
+					, RenderNodesPassDesc{ getExtent( getOwner()->getTargetDepth().front() )
 							, getOwner()->getMatrixUbo()
 							, getOwner()->getSceneUbo()
 							, getOwner()->getRenderTarget().getCuller() }
@@ -270,7 +279,7 @@ namespace castor3d
 				return res;
 			} );
 		result.addDependencies( previousPasses );
-		result.addOutputDepthStencilView( getOwner()->getDepth().targetViewId
+		result.addOutputDepthStencilView( targetDepth
 			, defaultClearDepthStencil );
 		result.addOutputColourView( m_result[PpTexture::eDepthObj].targetViewId
 			, makeClearValue( 1.0f, std::numeric_limits< float >::max(), 0.0f, 0.0f ) );

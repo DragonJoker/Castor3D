@@ -49,7 +49,7 @@ namespace castor3d
 		, m_transparentPassResult{ ( weightedBlended
 			? castor::makeUnique< TransparentPassResult >( getOwner()->getResources()
 				, m_device
-				, makeSize( getOwner()->getDepth().getExtent() ) )
+				, makeSize( getOwner()->getTargetExtent() ) )
 			: nullptr ) }
 		, m_target{ getOwner()->getTargetResult().front() }
 		, m_mipgenPassDesc{ &doCreateMipGenPass( progress
@@ -66,7 +66,7 @@ namespace castor3d
 				, progress
 				, m_enabled
 				, *m_transparentPassDesc
-				, getOwner()->getDepth()
+				, getOwner()->getDepthObj()
 				, *m_transparentPassResult
 				, getOwner()->getTargetResult()
 				, getOwner()->getSize()
@@ -208,9 +208,10 @@ namespace castor3d
 		, crg::FramePass const & lastPass )
 	{
 		stepProgressBar( progress, "Creating transparent pass" );
-		auto target = getOwner()->getTargetResult();
+		auto targetResult = getOwner()->getTargetResult();
+		auto targetDepth = getOwner()->getTargetDepth();
 		auto & result = m_graph.createPass( "NodesPass"
-			, [this, progress, target]( crg::FramePass const & framePass
+			, [this, progress, targetResult, targetDepth]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
@@ -224,7 +225,8 @@ namespace castor3d
 					, runnableGraph
 					, m_device
 					, ForwardRenderTechniquePass::Type
-					, target
+					, targetResult
+					, targetDepth
 					, RenderNodesPassDesc{ getOwner()->getTargetExtent()
 							, getOwner()->getMatrixUbo()
 							, getOwner()->getSceneUbo()
@@ -251,8 +253,8 @@ namespace castor3d
 		result.addDependency( lastPass );
 		result.addImplicitColourView( m_mippedColour.targetViewId
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-		result.addInOutDepthStencilView( getOwner()->getDepth().targetViewId );
-		result.addInOutColourView( getOwner()->getTargetResult() );
+		result.addInOutDepthStencilView( targetDepth );
+		result.addInOutColourView( targetResult );
 
 		return result;
 	}
@@ -261,9 +263,10 @@ namespace castor3d
 		, crg::FramePass const & lastPass )
 	{
 		stepProgressBar( progress, "Creating transparent pass" );
-		auto target = getOwner()->getTargetResult();
+		auto targetResult = getOwner()->getTargetResult();
+		auto targetDepth = getOwner()->getTargetDepth();
 		auto & result = m_graph.createPass( "NodesPass"
-			, [this, progress, target]( crg::FramePass const & framePass
+			, [this, progress, targetResult, targetDepth]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
@@ -279,7 +282,8 @@ namespace castor3d
 					, runnableGraph
 					, m_device
 					, m_mippedColour
-					, target
+					, targetResult
+					, targetDepth
 					, RenderNodesPassDesc{ getOwner()->getTargetExtent()
 							, getOwner()->getMatrixUbo()
 							, getOwner()->getSceneUbo()
@@ -287,6 +291,7 @@ namespace castor3d
 							, isOit }
 						.safeBand( true )
 						.meshShading( true )
+						.target( m_target )
 						.implicitAction( accumIt->view(), crg::RecordContext::clearAttachment( *accumIt ) )
 						.implicitAction( revealIt->view(), crg::RecordContext::clearAttachment( *revealIt ) )
 					, RenderTechniquePassDesc{ false, getOwner()->getSsaoConfig() }
@@ -305,7 +310,7 @@ namespace castor3d
 				return res;
 			} );
 		result.addDependency( lastPass );
-		result.addInOutDepthStencilView( getOwner()->getDepth().targetViewId );
+		result.addInOutDepthStencilView( targetDepth );
 		result.addImplicitColourView( m_mippedColour.targetViewId
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 		auto & transparentPassResult = *m_transparentPassResult;

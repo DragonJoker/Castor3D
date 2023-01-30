@@ -138,9 +138,17 @@ namespace castor3d
 		, RenderDevice const & device
 		, castor::String const & typeName
 		, crg::ImageViewIdArray targetImage
+		, crg::ImageViewIdArray targetDepth
 		, RenderNodesPassDesc const & renderPassDesc
 		, RenderTechniquePassDesc const & techniquePassDesc )
-		: RenderNodesPass{ pass, context, graph, device, typeName, targetImage, renderPassDesc }
+		: RenderNodesPass{ pass
+			, context
+			, graph
+			, device
+			, typeName
+			, std::move( targetImage )
+			, std::move( targetDepth )
+			, renderPassDesc }
 		, RenderTechniquePass{ parent, renderPassDesc.m_culler.getScene() }
 		, m_camera{ renderPassDesc.m_culler.hasCamera() ? &renderPassDesc.m_culler.getCamera() : nullptr }
 		, m_shaderFlags{ techniquePassDesc.m_shaderFlags }

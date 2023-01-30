@@ -41,6 +41,7 @@ namespace castor3d
 			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
+			, crg::ImageViewIdArray targetDepth
 			, SsaoConfig const & ssaoConfig
 			, RenderNodesPassDesc const & renderPassDesc
 			, bool deferred );

@@ -162,6 +162,7 @@ namespace atmosphere_scattering
 		, crg::ImageViewId const & perlinWorley
 		, crg::ImageViewId const & curl
 		, crg::ImageViewId const & weather
+		, crg::ImageViewIdArray const & colour
 		, crg::ImageViewId const * depthObj
 		, AtmosphereScatteringUbo const & atmosphereUbo
 		, CloudsUbo const & cloudsUbo
@@ -303,7 +304,7 @@ namespace atmosphere_scattering
 		cloudsColour.create();
 		cloudsResult.create();
 		auto & pass = graph.createPass( "Background"
-			, [&background, &backgroundPass, &device, size]( crg::FramePass const & framePass
+			, [&background, &backgroundPass, &device, size, colour]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
@@ -312,7 +313,8 @@ namespace atmosphere_scattering
 					, runnableGraph
 					, device
 					, background
-					, size );
+					, size
+					, colour );
 				backgroundPass = res.get();
 				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, res->getTimer() );
@@ -560,7 +562,7 @@ namespace atmosphere_scattering
 		, castor3d::ProgressBar * progress
 		, VkExtent2D const & size
 		, crg::ImageViewIdArray const & colour
-		, crg::ImageViewId const * depth
+		, crg::ImageViewIdArray const & depth
 		, crg::ImageViewId const * depthObj
 		, castor3d::UniformBufferOffsetT< castor3d::ModelBufferConfiguration > const & modelUbo
 		, castor3d::MatrixUbo const & matrixUbo
@@ -626,6 +628,7 @@ namespace atmosphere_scattering
 					, m_perlinWorley.sampledViewId
 					, m_curl.sampledViewId
 					, m_weather.sampledViewId
+					, colour
 					, depthObj
 					, *m_atmosphereUbo
 					, *m_cloudsUbo
@@ -637,11 +640,11 @@ namespace atmosphere_scattering
 			auto & pass = *it->second->lastPass;
 			pass.addDependency( m_multiScatteringPass->getLastPass() );
 			pass.addDependency( m_weatherPass->getLastPass() );
-			pass.addImplicitDepthStencilView( *depth
+			pass.addImplicitDepthStencilView( depth
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 			pass.addOutputColourView( colour
 				, castor3d::transparentBlackClearColor );
-			pass.addInOutDepthStencilView( *depth );
+			pass.addInOutDepthStencilView( depth );
 		}
 
 		return *it->second->lastPass;

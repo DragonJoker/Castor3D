@@ -24,29 +24,38 @@ namespace castor3d
 			, ShadowMapResult const & smDirectionalResult
 			, ShadowMapResult const & smPointResult
 			, ShadowMapResult const & smSpotResult
-			, crg::ImageViewIdArray const & targetColourResult );
+			, crg::ImageViewIdArray const & targetColourResult
+			, crg::ImageViewIdArray const & targetDepthResult );
 
 		void clear();
 		void enableLight( Camera const & camera
 			, Light const & light );
 		void disableLight( Camera const & camera
 			, Light const & light );
-		void resetCommandBuffer();
+		void resetCommandBuffer( crg::ImageViewId currentTarget );
 		bool hasEnabledLights()const;
 		uint32_t getEnabledLightsCount()const;
 
 	protected:
-		void doInitialise();
+		void doInitialise( uint32_t index );
 		void doRecordInto( crg::RecordContext & context
 			, VkCommandBuffer commandBuffer
 			, uint32_t index );
 
 	private:
+		using RunnablePass::resetCommandBuffer;
+		using RunnablePass::resetCommandBuffers;
+
 		LightRenderPass doCreateRenderPass( bool blend
+			, bool hasStencil );
+		LightRenderPass doCreateStencilRenderPass( bool blend );
+		void doCreateFramebuffer( bool blend
 			, bool hasStencil
-			, LightPassResult const & result );
-		LightRenderPass doCreateStencilRenderPass( bool blend
-			, LightPassResult const & result );
+			, LightRenderPass & renderPass
+			, uint32_t index );
+		void doCreateStencilFramebuffer( bool blend
+			, LightRenderPass & renderPass
+			, uint32_t index );
 		LightsPipeline & doFindPipeline( Light const & light
 			, LightingModelID lightingModelId );
 
@@ -58,10 +67,13 @@ namespace castor3d
 		ShadowMapResult const & m_smPointResult;
 		ShadowMapResult const & m_smSpotResult;
 		crg::ImageViewIdArray m_targetColourResult;
-		std::vector< LightRenderPass > m_renderPasses;
-		std::vector< LightRenderPass > m_stencilRenderPasses;
-		std::map< size_t, LightsPipelinePtr > m_pipelines;
+		crg::ImageViewIdArray m_targetDepthResult;
+		crg::ImageViewId m_target;
+		LightRenderPassArray m_renderPasses;
+		LightRenderPassArray m_stencilRenderPasses;
 		std::map< Light const *, Camera const * > m_pendingLights;
+		std::map< size_t, LightsPipelinePtr > m_pipelines;
+		uint32_t m_passIndex{};
 	};
 }
 

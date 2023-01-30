@@ -62,6 +62,15 @@ namespace castor3d
 		 *\brief			Met à jour les noeuds de rendu.
 		 *\param[in,out]	shadowMaps	Reçoit les shadow maps utilisées par la passe de rendu.
 		 */
+		C3D_API void update( ShadowMapLightTypeArray & shadowMaps );
+		/**
+		 *\~english
+		 *\brief			Updates the render nodes.
+		 *\param[in,out]	shadowMaps	Receives the shadow maps used in the render pass.
+		 *\~french
+		 *\brief			Met à jour les noeuds de rendu.
+		 *\param[in,out]	shadowMaps	Reçoit les shadow maps utilisées par la passe de rendu.
+		 */
 		C3D_API void update( ShadowMapLightTypeArray & shadowMaps
 			, uint32_t passIndex );
 		/**

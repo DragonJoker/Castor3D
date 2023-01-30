@@ -158,7 +158,7 @@ namespace water
 		, crg::RunnableGraph & graph
 		, castor3d::RenderDevice const & device
 		, crg::ImageViewIdArray targetImage
-		, std::shared_ptr< castor3d::Texture > depthInput
+		, crg::ImageViewIdArray targetDepth
 		, castor3d::RenderNodesPassDesc const & renderPassDesc
 		, castor3d::RenderTechniquePassDesc const & techniquePassDesc
 		, std::shared_ptr< castor3d::IsRenderPassEnabled > isEnabled )
@@ -168,11 +168,11 @@ namespace water
 			, graph
 			, device
 			, Type
-			, targetImage
+			, std::move( targetImage )
+			, std::move( targetDepth )
 			, renderPassDesc
 			, techniquePassDesc }
 		, m_isEnabled{ std::move( isEnabled ) }
-		, m_depthInput{ std::move( depthInput ) }
 		, m_linearWrapSampler{ device->createSampler( getName()
 			, VK_SAMPLER_ADDRESS_MODE_REPEAT
 			, VK_SAMPLER_ADDRESS_MODE_REPEAT
@@ -206,8 +206,6 @@ namespace water
 
 	WaterRenderPass::~WaterRenderPass()
 	{
-		m_depthInput->destroy();
-		m_depthInput.reset();
 	}
 
 	crg::FramePassArray WaterRenderPass::create( castor3d::RenderDevice const & device
@@ -220,40 +218,11 @@ namespace water
 		auto extent = technique.getTargetExtent();
 		auto & graph = technique.getRenderTarget().getGraph().createPassGroup( name );
 
-		auto depthInput = std::make_shared< castor3d::Texture >( device
-			, technique.getResources()
-			, name + "Depth"
-			, 0u
-			, extent
-			, 1u
-			, 1u
-			, technique.getDepth().imageId.data->info.format
-			, ( VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT ) );
-		depthInput->create();
-		auto & blitDepthPass = graph.createPass( "CopyDepth"
-			, [extent, &device, isEnabled]( crg::FramePass const & framePass
-				, crg::GraphContext & context
-				, crg::RunnableGraph & runnableGraph )
-			{
-				auto result = std::make_unique< crg::ImageCopy >( framePass
-					, context
-					, runnableGraph
-					, extent
-					, crg::ru::Config{}
-					, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
-					, crg::RunnablePass::IsEnabledCallback( [isEnabled](){ return ( *isEnabled )(); } ) );
-				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
-					, result->getTimer() );
-				return result;
-			} );
-		blitDepthPass.addDependency( technique.getGetLastDepthPass() );
-		blitDepthPass.addTransferInputView( technique.getDepth().sampledViewId );
-		blitDepthPass.addTransferOutputView( depthInput->sampledViewId );
-
 		technique.swapResults();
-		auto target = technique.getTargetResult();
+		auto targetResult = technique.getTargetResult();
+		auto targetDepth = technique.getTargetDepth();
 		auto & result = graph.createPass( "NodesPass"
-			, [extent, depthInput, target, &device, &technique, &renderPasses, isEnabled]( crg::FramePass const & framePass
+			, [extent, targetResult, targetDepth, &device, &technique, &renderPasses, isEnabled]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 		{
@@ -262,12 +231,12 @@ namespace water
 				, context
 				, runnableGraph
 				, device
-				, target
-				, std::move( depthInput )
+				, targetResult
+				, targetDepth
 				, castor3d::RenderNodesPassDesc{ extent
 					, technique.getMatrixUbo()
 					, technique.getSceneUbo()
-					, technique.getRenderTarget().getCuller() }.safeBand( true ).target( target.front() )
+					, technique.getRenderTarget().getCuller() }.safeBand( true ).target( targetResult.front() )
 				, castor3d::RenderTechniquePassDesc{ false, technique.getSsaoConfig() }
 					.lpvConfigUbo( technique.getLpvConfigUbo() )
 					.llpvConfigUbo( technique.getLlpvConfigUbo() )
@@ -284,14 +253,13 @@ namespace water
 		} );
 
 		result.addDependencies( previousPasses );
-		result.addDependency( blitDepthPass );
 		result.addImplicitColourView( technique.getSampledResult()
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-		result.addImplicitDepthView( depthInput->sampledViewId
+		result.addImplicitDepthView( technique.getSampledDepth()
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-		result.addInOutDepthStencilView( technique.getDepth().targetViewId );
+		result.addInOutDepthStencilView( technique.getTargetDepth() );
 		result.addInOutColourView( technique.getTargetResult() );
-		return { &result, &blitDepthPass };
+		return { &result };
 	}
 
 	castor3d::ComponentModeFlags WaterRenderPass::getComponentsMask()const
@@ -471,7 +439,7 @@ namespace water
 		bindTexture( m_normals2, *m_linearWrapSampler, descriptorWrites, index );
 		bindTexture( m_noise, *m_linearWrapSampler, descriptorWrites, index );
 		bindTexture( m_parent->getNormal().sampledView, *m_pointClampSampler, descriptorWrites, index );
-		bindTexture( m_depthInput->sampledView, *m_pointClampSampler, descriptorWrites, index );
+		bindTexture( m_graph.createImageView( m_targetDepth[passIndex] ), *m_pointClampSampler, descriptorWrites, index );
 		bindTexture( m_graph.createImageView( m_targetImage[passIndex] ), *m_pointClampSampler, descriptorWrites, index );
 		bindTexture( getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().sampledView
 			, *getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().sampler

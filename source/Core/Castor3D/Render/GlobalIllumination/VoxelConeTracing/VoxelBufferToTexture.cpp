@@ -206,8 +206,8 @@ namespace castor3d
 		auto temporalSmoothing = ( ( index >> 0 ) % 2 ) == 1u;
 		auto voxelGridSize = m_vctConfig.gridSize.value();
 		VkDescriptorSet descriptorSet = *m_descriptorSet;
-		auto view = m_pass.images.front().view();
-		auto transition = getTransition( index, view );
+		auto view = m_pass.images.front().view( index );
+		auto layoutState = getLayoutState( view );
 		auto image = m_graph.createImage( view.data->image );
 
 		if ( !temporalSmoothing )
@@ -216,7 +216,7 @@ namespace castor3d
 				, view.data->image
 				, view.data->info.viewType
 				, view.data->info.subresourceRange
-				, transition.needed.layout
+				, VK_IMAGE_LAYOUT_UNDEFINED
 				, { VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
 					, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL )
 					, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) } );
@@ -231,7 +231,7 @@ namespace castor3d
 				, view.data->info.viewType
 				, view.data->info.subresourceRange
 				, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
-				, transition.needed );
+				, layoutState );
 		}
 
 		m_context.vkCmdBindPipeline( commandBuffer

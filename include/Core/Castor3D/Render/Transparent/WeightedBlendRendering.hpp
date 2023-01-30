@@ -48,7 +48,7 @@ namespace castor3d
 			, ProgressBar * progress
 			, bool & enabled
 			, crg::FramePass const & transparentPassDesc
-			, Texture const & depth
+			, Texture const & depthObj
 			, TransparentPassResult const & transparentPassResult
 			, crg::ImageViewIdArray const & targetColourView
 			, castor::Size const & size
@@ -85,6 +85,7 @@ namespace castor3d
 	private:
 		crg::FramePass & doCreateFinalCombine( crg::FramePassGroup & graph
 			, crg::FramePass const & transparentPassDesc
+			, crg::ImageViewId const & depthObj
 			, crg::ImageViewIdArray const & targetColourView
 			, SceneUbo & sceneUbo
 			, HdrConfigUbo const & hdrConfigUbo
@@ -97,7 +98,6 @@ namespace castor3d
 		crg::FramePassGroup & m_graph;
 		bool & m_enabled;
 		TransparentPassResult const & m_transparentPassResult;
-		crg::ImageViewId m_depthOnlyView;
 		castor::Size m_size;
 		ShaderModule m_vertexShader;
 		ShaderModule m_pixelShader;

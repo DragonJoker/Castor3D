@@ -81,9 +81,10 @@ namespace castor3d
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, LightPipelineConfig const & config
-		, std::vector< LightRenderPass > const & renderPasses
+		, LightRenderPassArray const & renderPasses
 		, ashes::PipelineShaderStageCreateInfoArray stages
-		, VkDescriptorSetLayout descriptorSetLayout )
+		, VkDescriptorSetLayout descriptorSetLayout
+		, VkExtent2D const & targetExtent )
 		: m_holder{ pass
 			, context
 			, graph
@@ -98,10 +99,10 @@ namespace castor3d
 		, m_renderPasses{ renderPasses }
 	{
 		m_holder.initialise();
-		doCreatePipeline();
+		doCreatePipeline( targetExtent );
 	}
 
-	void LightPipeline::doCreatePipeline()
+	void LightPipeline::doCreatePipeline( VkExtent2D const & targetExtent )
 	{
 		ashes::PipelineVertexInputStateCreateInfo vertexLayout = doCreateVertexLayout();
 		crg::VkVertexInputAttributeDescriptionArray vertexAttribs;
@@ -160,7 +161,7 @@ namespace castor3d
 		for ( uint32_t index = 0u; index < 2u; ++index )
 		{
 			auto rpIndex = getLightRenderPassIndex( index != 0u, getLightType() );
-			auto viewportState = doCreateViewportState( *m_renderPasses[rpIndex].framebuffer );
+			auto viewportState = doCreateViewportState( targetExtent );
 			auto colourBlend = doCreateBlendState( index != 0u );
 			auto & program = m_holder.getProgram( index );
 			VkPipelineColorBlendStateCreateInfo const & cbState = colourBlend;
@@ -211,16 +212,15 @@ namespace castor3d
 				, 0u } } };
 	}
 
-	ashes::PipelineViewportStateCreateInfo LightPipeline::doCreateViewportState( ashes::FrameBuffer const & framebuffer )
+	ashes::PipelineViewportStateCreateInfo LightPipeline::doCreateViewportState( VkExtent2D const & targetExtent )
 	{
-		auto dim = framebuffer.getDimensions();
 		ashes::VkViewportArray viewports{ { 0.0f
 			, 0.0f
-			, float( dim.width )
-			, float( dim.height )
+			, float( targetExtent.width )
+			, float( targetExtent.height )
 			, 0.0f
 			, 1.0f } };
-		ashes::VkScissorArray scissors{ { {}, dim } };
+		ashes::VkScissorArray scissors{ { {}, targetExtent } };
 		return { 0u
 			, 1u
 			, viewports

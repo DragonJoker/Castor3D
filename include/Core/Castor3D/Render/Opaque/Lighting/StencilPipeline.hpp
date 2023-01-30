@@ -16,8 +16,9 @@ namespace castor3d
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
 			, LightPipelineConfig const & config
-			, std::vector< LightRenderPass > const & renderPasses
-			, VkDescriptorSetLayout descriptorSetLayout );
+			, LightRenderPassArray const & renderPasses
+			, VkDescriptorSetLayout descriptorSetLayout
+			, VkExtent2D const & targetExtent );
 
 		VkPipeline getPipeline()
 		{
@@ -35,17 +36,17 @@ namespace castor3d
 		}
 
 	protected:
-		void doCreatePipeline();
+		void doCreatePipeline( VkExtent2D const & targetExtent );
 
 	private:
 		ashes::PipelineVertexInputStateCreateInfo doCreateVertexLayout();
-		ashes::PipelineViewportStateCreateInfo doCreateViewportState( ashes::FrameBuffer const & framebuffer );
+		ashes::PipelineViewportStateCreateInfo doCreateViewportState( VkExtent2D const & targetExtent );
 
 	private:
 		ShaderModule m_vertexShader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
 		crg::PipelineHolder m_holder;
-		std::vector< LightRenderPass > const & m_renderPasses;
+		LightRenderPassArray const & m_renderPasses;
 	};
 
 	using StencilPipelinePtr = std::unique_ptr< StencilPipeline >;

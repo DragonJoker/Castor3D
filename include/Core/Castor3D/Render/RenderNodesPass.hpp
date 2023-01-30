@@ -274,6 +274,7 @@ namespace castor3d
 			, RenderDevice const & device
 			, castor::String const & typeName
 			, crg::ImageViewIdArray targetImage
+			, crg::ImageViewIdArray targetDepth
 			, RenderNodesPassDesc const & desc );
 
 	public:
@@ -635,6 +636,11 @@ namespace castor3d
 		{
 			return m_typeID;
 		}
+
+		uint32_t getPassIndex()const
+		{
+			return m_passIndex;
+		}
 		/**@}*/
 
 		mutable PassSortNodesSignal onSortNodes;
@@ -805,6 +811,7 @@ namespace castor3d
 		MatrixUbo & m_matrixUbo;
 		SceneCuller & m_culler;
 		crg::ImageViewIdArray m_targetImage;
+		crg::ImageViewIdArray m_targetDepth;
 		castor::String m_typeName;
 		RenderPassTypeID m_typeID{};
 		RenderFilters m_filters{ RenderFilter::eNone };

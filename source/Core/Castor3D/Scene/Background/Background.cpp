@@ -66,25 +66,28 @@ namespace castor3d
 				, RenderDevice const & device
 				, SceneBackground & background
 				, VkExtent2D const & size
-				, crg::ImageViewId const * depth )
+				, crg::ImageViewIdArray const & colour
+				, crg::ImageViewIdArray const & depth )
 				: BackgroundPassBase{ pass
 					, context
 					, graph
 					, device
-					, background }
+					, background
+					, colour }
 				, crg::RenderMesh{ pass
 					, context
 					, graph
-					, crg::ru::Config{ 1u, true }
+					, crg::ru::Config{ 2u, true }
 					, crg::rm::Config{}
 						.vertexBuffer( doCreateVertexBuffer( device ) )
 						.indexBuffer( doCreateIndexBuffer( device ) )
-						.depthStencilState( ( depth
-							? ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_TRUE, VK_FALSE, VK_COMPARE_OP_LESS_OR_EQUAL }
-							: ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_FALSE, VK_FALSE, VK_COMPARE_OP_LESS_OR_EQUAL } ) )
+						.depthStencilState( ( depth.empty()
+							? ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_FALSE, VK_FALSE, VK_COMPARE_OP_LESS_OR_EQUAL }
+							: ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_TRUE, VK_FALSE, VK_COMPARE_OP_LESS_OR_EQUAL } ) )
 						.getIndexType( crg::GetIndexTypeCallback( [](){ return VK_INDEX_TYPE_UINT16; } ) )
 						.getPrimitiveCount( crg::GetPrimitiveCountCallback( [](){ return 36u; } ) )
 						.isEnabled( IsEnabledCallback( [this](){ return doIsEnabled(); } ) )
+						.getPassIndex( GetPassIndexCallback( [this](){ return m_passIndex; } ) )
 						.renderSize( size )
 						.program( doInitialiseShader( device ) ) }
 			{
@@ -377,7 +380,7 @@ namespace castor3d
 		, ProgressBar * progress
 		, VkExtent2D const & size
 		, crg::ImageViewIdArray const & colour
-		, crg::ImageViewId const * depth
+		, crg::ImageViewIdArray const & depth
 		, crg::ImageViewId const * depthObj
 		, UniformBufferOffsetT< ModelBufferConfiguration > const & modelUbo
 		, MatrixUbo const & matrixUbo
@@ -387,7 +390,7 @@ namespace castor3d
 		, BackgroundPassBase *& backgroundPass )
 	{
 		auto & result = graph.createPass( "Background"
-			, [this, &backgroundPass, &device, progress, size, depth]( crg::FramePass const & framePass
+			, [this, &backgroundPass, &device, progress, size, colour, depth]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
@@ -398,6 +401,7 @@ namespace castor3d
 					, device
 					, *this
 					, size
+					, colour
 					, depth );
 				backgroundPass = res.get();
 				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
@@ -419,9 +423,9 @@ namespace castor3d
 			, crg::SamplerDesc{ VK_FILTER_LINEAR
 				, VK_FILTER_LINEAR } );
 
-		if ( depth )
+		if ( !depth.empty() )
 		{
-			result.addInOutDepthStencilView( *depth );
+			result.addInOutDepthStencilView( depth );
 		}
 
 		if ( clearColour )

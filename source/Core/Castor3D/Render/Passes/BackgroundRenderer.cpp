@@ -32,7 +32,7 @@ namespace castor3d
 		, SceneUbo const & sceneUbo
 		, crg::ImageViewIdArray const & colour
 		, bool clearColour
-		, crg::ImageViewId const * depth
+		, crg::ImageViewIdArray const & depth
 		, crg::ImageViewId const * depthObj )
 		: m_device{ device }
 		, m_colour{ colour }
@@ -90,7 +90,7 @@ namespace castor3d
 		, SceneUbo const & sceneUbo
 		, crg::ImageViewIdArray const & colour
 		, bool clearColour
-		, crg::ImageViewId const * depth
+		, crg::ImageViewIdArray const & depth
 		, crg::ImageViewId const * depthObj
 		, ProgressBar * progress )
 	{

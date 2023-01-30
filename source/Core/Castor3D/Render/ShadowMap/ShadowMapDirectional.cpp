@@ -165,7 +165,18 @@ namespace castor3d
 			auto & flux = smResult[SmTexture::eFlux];
 
 			graphs.push_back( std::make_unique< crg::FrameGraph >( resources.getHandler(),  "DirectionalSMC" ) );
-			auto & graph = graphs.back()->getDefaultGroup();
+			auto & graph = *graphs.back();
+			graph.addOutput( linear.wholeViewId
+				, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+			graph.addOutput( variance.wholeViewId
+				, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+			graph.addOutput( normal.wholeViewId
+				, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+			graph.addOutput( position.wholeViewId
+				, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+			graph.addOutput( flux.wholeViewId
+				, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+			auto & group = graph.getDefaultGroup();
 			crg::FramePass const * previousPass{};
 
 			for ( uint32_t cascade = 0u; cascade < cascadeCount; ++cascade )
@@ -180,7 +191,7 @@ namespace castor3d
 				auto & passData = *result.back();
 				passData.ownCuller = castor::makeUniqueDerived< SceneCuller, DummyCuller >( scene, passData.camera.get() );
 				passData.culler = passData.ownCuller.get();
-				auto & pass = graph.createPass( debugName
+				auto & pass = group.createPass( debugName
 					, [&passData, &device, &shadowMap, cascade, vsm, rsm]( crg::FramePass const & framePass
 						, crg::GraphContext & context
 						, crg::RunnableGraph & runnableGraph )
@@ -228,7 +239,7 @@ namespace castor3d
 
 					if ( vsm )
 					{
-						blurs.push_back( castor::makeUnique< GaussianBlur >( graph
+						blurs.push_back( castor::makeUnique< GaussianBlur >( group
 							, *previousPass
 							, device
 							, cuT( "ShadowMapDirectional" )
@@ -256,7 +267,7 @@ namespace castor3d
 
 					if ( vsm )
 					{
-						blurs.push_back( castor::makeUnique< GaussianBlur >( graph
+						blurs.push_back( castor::makeUnique< GaussianBlur >( group
 							, *previousPass
 							, device
 							, cuT( "ShadowMapDirectional" )

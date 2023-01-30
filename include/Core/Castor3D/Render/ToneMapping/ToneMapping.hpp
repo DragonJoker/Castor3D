@@ -65,7 +65,8 @@ namespace castor3d
 		 *\brief		Initialise le shader et le pipeline de mappage de tons.
 		 *\param[in]	name		Le nom du mappage de tons.
 		 */
-		C3D_API void initialise( castor::String const & name );
+		C3D_API void initialise( castor::String const & name
+			, crg::ImageViewId const & source );
 		/**
 		 *\~english
 		 *\param[in, out]	updater	The update data.
@@ -122,6 +123,7 @@ namespace castor3d
 			, crg::FramePass const & previousPass
 			, ProgressBar * progress );
 		void doCreate( castor::String const & name );
+		void doUpdatePassIndex( crg::ImageViewId const & source );
 
 	protected:
 		castor::String m_name;

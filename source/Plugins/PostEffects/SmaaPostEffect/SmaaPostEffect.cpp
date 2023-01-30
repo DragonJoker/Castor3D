@@ -281,7 +281,7 @@ namespace smaa
 				, m_renderTarget
 				, device
 				, m_ubo
-				, m_renderTarget.getTechnique().getDepth().sampledViewId
+				, m_renderTarget.getTechnique().getDepthObj().sampledViewId
 				, m_config
 				, &m_enabled );
 			break;
@@ -531,7 +531,7 @@ namespace smaa
 
 		if ( m_config.data.enablePredication )
 		{
-			predication = &m_renderTarget.getTechnique().getDepth().sampledViewId;
+			predication = &m_renderTarget.getTechnique().getDepthObj().sampledViewId;
 		}
 
 		return predication;

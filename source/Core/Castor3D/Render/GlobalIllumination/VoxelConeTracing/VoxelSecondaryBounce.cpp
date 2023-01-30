@@ -233,14 +233,14 @@ namespace castor3d
 	{
 		auto voxelGridSize = m_vctConfig.gridSize.value();
 		VkDescriptorSet descriptorSet = *m_descriptorSet;
-		auto view = m_pass.images.back().view();
-		auto transition = getTransition( index, view );
+		auto view = m_pass.images.back().view( index );
+		auto layoutState = getLayoutState( view );
 		auto image = m_graph.createImage( view.data->image );
 
 		// Clear result
 		context.memoryBarrier( commandBuffer
 			, view
-			, transition.needed.layout
+			, VK_IMAGE_LAYOUT_UNDEFINED
 			, { VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
 				, crg::getAccessMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL )
 				, crg::getStageMask( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) } );
@@ -253,7 +253,7 @@ namespace castor3d
 		context.memoryBarrier( commandBuffer
 			, view
 			, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
-			, transition.needed );
+			, layoutState );
 
 		m_context.vkCmdBindPipeline( commandBuffer
 			, VK_PIPELINE_BIND_POINT_COMPUTE

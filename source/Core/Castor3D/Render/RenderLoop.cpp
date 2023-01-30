@@ -380,7 +380,7 @@ namespace castor3d
 		{
 			for ( auto & queue : techniqueQueues.queues )
 			{
-				queue.get().update( techniqueQueues.shadowMaps, 0u );
+				queue.get().update( techniqueQueues.shadowMaps );
 			}
 		}
 

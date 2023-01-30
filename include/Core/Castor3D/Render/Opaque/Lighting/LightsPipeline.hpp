@@ -26,8 +26,8 @@ namespace castor3d
 			, LightPipelineConfig const & config
 			, LightPassResult const & lpResult
 			, ShadowMapResult const & smResult
-			, std::vector< LightRenderPass > const & renderPasses
-			, std::vector< LightRenderPass > const & stencilRenderPasses
+			, LightRenderPassArray const & renderPasses
+			, LightRenderPassArray const & stencilRenderPasses
 			, crg::ImageViewIdArray const & targetColourResult );
 
 		void clear();
@@ -37,6 +37,7 @@ namespace castor3d
 			, Light const & light );
 		void recordInto( crg::RecordContext & context
 			, VkCommandBuffer commandBuffer
+			, uint32_t passIndex
 			, uint32_t & index );
 
 		uint32_t getLightCount()const
@@ -57,25 +58,28 @@ namespace castor3d
 			, size_t lightIndex
 			, crg::RecordContext & context
 			, VkCommandBuffer commandBuffer
-			, uint32_t passIndex );
+			, uint32_t passIndex
+			, uint32_t pipelineIndex );
 		void doRecordStencilPrePass( LightRenderPass const & renderPass
 			, VkDescriptorSet baseDS
 			, size_t lightIndex
 			, crg::RecordContext & context
-			, VkCommandBuffer commandBuffer );
+			, VkCommandBuffer commandBuffer
+			, uint32_t passIndex );
 		void doRecordLightPass( LightRenderPass const & renderPass
 			, LightRenderPass const & stencilRenderPass
 			, VkDescriptorSet baseDS
 			, size_t lightIndex
 			, crg::RecordContext & context
 			, VkCommandBuffer commandBuffer
-			, uint32_t passIndex );
+			, uint32_t passIndex
+			, uint32_t pipelineIndex );
 
 	private:
 		crg::GraphContext & m_context;
 		ShadowMapResult const & m_smResult;
 		RenderDevice const & m_device;
-		std::vector< LightRenderPass > const & m_renderPasses;
+		LightRenderPassArray const & m_renderPasses;
 		Scene const & m_scene;
 		LightPipelineConfig m_config;
 		ShaderModule m_vertexShader;
@@ -84,7 +88,7 @@ namespace castor3d
 		ashes::DescriptorSetLayoutPtr m_descriptorLayout;
 		ashes::DescriptorSetPoolPtr m_descriptorPool;
 		LightPipeline m_lightPipeline;
-		std::vector< LightRenderPass > const & m_stencilRenderPasses;
+		LightRenderPassArray const & m_stencilRenderPasses;
 		StencilPipelinePtr m_stencilPipeline;
 		uint32_t m_count{};
 		GpuBufferOffsetT< float > m_vertexBuffer;

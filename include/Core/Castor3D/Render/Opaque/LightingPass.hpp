@@ -58,8 +58,7 @@ namespace castor3d
 			, crg::FramePassArray const & previousPasses
 			, RenderDevice const & device
 			, ProgressBar * progress
-			, Scene & scene
-			, Texture const & depth
+			, RenderTechnique const & technique
 			, Texture const & depthObj
 			, OpaquePassResult const & gpResult
 			, ShadowMapResult const & smDirectionalResult
@@ -67,6 +66,7 @@ namespace castor3d
 			, ShadowMapResult const & smSpotResult
 			, LightPassResult const & lpResult
 			, crg::ImageViewIdArray const & targetColourResult
+			, crg::ImageViewIdArray const & targetDepthResult
 			, SceneUbo const & sceneUbo
 			, GpInfoUbo const & gpInfoUbo );
 		/**
@@ -104,11 +104,8 @@ namespace castor3d
 		}
 
 	private:
-		crg::FramePass const & doCreateDepthBlitPass( crg::FramePassGroup & graph
-			, crg::FramePassArray const & previousPasses
-			, ProgressBar * progress );
 		crg::FramePass const & doCreateLightingPass( crg::FramePassGroup & graph
-			, crg::FramePass const & previousPass
+			, crg::FramePassArray const & previousPasses
 			, Scene const & scene
 			, ProgressBar * progress );
 		void doUpdateLightPasses( CpuUpdater & updater
@@ -116,7 +113,7 @@ namespace castor3d
 
 	private:
 		RenderDevice const & m_device;
-		Texture const & m_depth;
+		RenderTechnique const & m_technique;
 		Texture const & m_depthObj;
 		OpaquePassResult const & m_gpResult;
 		ShadowMapResult const & m_smDirectionalResult;
@@ -124,6 +121,7 @@ namespace castor3d
 		ShadowMapResult const & m_smSpotResult;
 		LightPassResult const & m_lpResult;
 		crg::ImageViewIdArray m_targetColourResult;
+		crg::ImageViewIdArray m_targetDepthResult;
 		SceneUbo const & m_sceneUbo;
 		GpInfoUbo const & m_gpInfoUbo;
 		crg::FramePassGroup & m_group;

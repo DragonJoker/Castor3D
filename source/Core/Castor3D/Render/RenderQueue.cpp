@@ -86,6 +86,11 @@ namespace castor3d
 		}
 	}
 
+	void RenderQueue::update( ShadowMapLightTypeArray & shadowMaps )
+	{
+		update( shadowMaps, getOwner()->getPassIndex() );
+	}
+
 	void RenderQueue::update( ShadowMapLightTypeArray & shadowMaps
 		, uint32_t passIndex )
 	{
@@ -190,7 +195,7 @@ namespace castor3d
 	{
 		auto & pass = m_passes[passIndex];
 		pass.commandBuffer.reset();
-		pass.renderPassAtInit = getOwner()->getRenderPass( 0u );
+		pass.renderPassAtInit = getOwner()->getRenderPass( passIndex );
 		pass.commandBuffer = queueData.commandPool->createCommandBuffer( getOwner()->getName()
 			, VK_COMMAND_BUFFER_LEVEL_SECONDARY );
 		pass.commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT | VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT

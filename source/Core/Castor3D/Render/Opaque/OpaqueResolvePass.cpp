@@ -522,6 +522,8 @@ namespace castor3d
 				return result;
 			} );
 		pass.addDependencies( previousPasses );
+		// For DepthObj texture
+		pass.addDependency( m_technique.getGetLastDepthPass() );
 
 		passBuffer.createPassBinding( pass
 			, uint32_t( dropqrslv::ResolveBind::eMaterials ) );

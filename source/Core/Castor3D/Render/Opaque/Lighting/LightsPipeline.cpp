@@ -48,8 +48,8 @@ namespace castor3d
 		, LightPipelineConfig const & config
 		, LightPassResult const & lpResult
 		, ShadowMapResult const & smResult
-		, std::vector< LightRenderPass > const & renderPasses
-		, std::vector< LightRenderPass > const & stencilRenderPasses
+		, LightRenderPassArray const & renderPasses
+		, LightRenderPassArray const & stencilRenderPasses
 		, crg::ImageViewIdArray const & targetColourResult )
 		: m_context{ context }
 		, m_smResult{ smResult }
@@ -74,11 +74,25 @@ namespace castor3d
 			, makeShaderState( m_device, m_pixelShader ) }
 		, m_descriptorLayout{ doCreateDescriptorLayout() }
 		, m_descriptorPool{ m_descriptorLayout->createPool( MaxLightsCount ) }
-		, m_lightPipeline{ pass, context, graph, m_config, m_renderPasses, m_stages, *m_descriptorLayout }
+		, m_lightPipeline{ pass
+			, context
+			, graph
+			, m_config
+			, m_renderPasses
+			, m_stages
+			, *m_descriptorLayout
+			, makeExtent2D( getExtent( targetColourResult.front() ) ) }
 		, m_stencilRenderPasses{ stencilRenderPasses }
 		, m_stencilPipeline{ m_config.lightType == LightType::eDirectional
 			? nullptr
-			: std::make_unique< StencilPipeline >( pass, context, graph, m_device, m_config, stencilRenderPasses, *m_descriptorLayout ) }
+			: std::make_unique< StencilPipeline >( pass
+				, context
+				, graph
+				, m_device
+				, m_config
+				, stencilRenderPasses
+				, *m_descriptorLayout
+				, makeExtent2D( getExtent( targetColourResult.front() ) ) ) }
 		, m_vertexBuffer{ m_config.lightType == LightType::eSpot
 			? GpuBufferOffsetT< float >{}
 			: doCreateVertexBuffer( nullptr ) }
@@ -90,7 +104,7 @@ namespace castor3d
 
 	void LightsPipeline::clear()
 	{
-		m_viewport.resize( makeSize( m_renderPasses[0].framebuffer->getDimensions() ) );
+		m_viewport.resize( makeSize( getExtent( m_targetColourResult.front() ) ) );
 		m_viewport.update();
 		m_enabledLights.clear();
 	}
@@ -138,24 +152,26 @@ namespace castor3d
 
 	void LightsPipeline::recordInto( crg::RecordContext & context
 		, VkCommandBuffer commandBuffer
-		, uint32_t & index )
+		, uint32_t passIndex
+		, uint32_t & pipelineIndex )
 	{
 		if ( !m_enabledLights.empty() )
 		{
 			auto baseDS = m_lightPipeline.getDescriptorSet();
-			doRecordLightPass( m_renderPasses[getLightRenderPassIndex( index != 0u, m_config.lightType )]
-				, m_stencilRenderPasses[index]
+			doRecordLightPass( m_renderPasses[getLightRenderPassIndex( pipelineIndex != 0u, m_config.lightType )]
+				, m_stencilRenderPasses[pipelineIndex]
 				, baseDS
 				, 0u
 				, context
 				, commandBuffer
-				, index );
-			index = 1u;
+				, passIndex
+				, pipelineIndex );
+			pipelineIndex = 1u;
 
 			if ( m_enabledLights.size() > 1u )
 			{
 				auto & renderPass = m_renderPasses[getLightRenderPassIndex( true, m_config.lightType )];
-				auto & stencilRenderPass = m_stencilRenderPasses[index];
+				auto & stencilRenderPass = m_stencilRenderPasses[pipelineIndex];
 
 				for ( size_t i = 1u; i < m_enabledLights.size(); ++i )
 				{
@@ -165,7 +181,8 @@ namespace castor3d
 						, i
 						, context
 						, commandBuffer
-						, index );
+						, passIndex
+						, pipelineIndex );
 				}
 			}
 		}
@@ -353,7 +370,8 @@ namespace castor3d
 		, size_t lightIndex
 		, crg::RecordContext & context
 		, VkCommandBuffer commandBuffer
-		, uint32_t passIndex )
+		, uint32_t passIndex
+		, uint32_t pipelineIndex )
 	{
 		m_context.vkCmdBeginDebugBlock( commandBuffer
 			, { "Light" + std::to_string( lightIndex ) + "/Lighting"
@@ -363,14 +381,14 @@ namespace castor3d
 		VkDeviceSize offset{ entry.vertexBuffer.getOffset() };
 		VkDescriptorSet specDS = *entry.descriptorSet;
 		auto beginRenderPass = makeVkStruct< VkRenderPassBeginInfo >( *renderPass.renderPass
-			, *renderPass.framebuffer
-			, VkRect2D{ {}, renderPass.framebuffer->getDimensions() }
+			, *renderPass.framebuffers[passIndex].fbo
+			, VkRect2D{ {}, renderPass.framebuffers[passIndex].fbo->getDimensions() }
 			, uint32_t( renderPass.clearValues.size() )
 			, renderPass.clearValues.data() );
 		m_context.vkCmdBeginRenderPass( commandBuffer
 			, &beginRenderPass
 			, VK_SUBPASS_CONTENTS_INLINE );
-		auto pipeline = m_lightPipeline.getPipeline( passIndex );
+		auto pipeline = m_lightPipeline.getPipeline( pipelineIndex );
 		m_context.vkCmdBindPipeline( commandBuffer
 			, VK_PIPELINE_BIND_POINT_GRAPHICS
 			, pipeline );
@@ -410,12 +428,16 @@ namespace castor3d
 		m_context.vkCmdEndRenderPass( commandBuffer );
 		m_context.vkCmdEndDebugBlock( commandBuffer );
 
-		for ( auto & attach : renderPass.attaches )
+		for ( auto & attach : renderPass.framebuffers[passIndex].attaches )
 		{
-			context.setLayoutState( attach.view
-				, { attach.output
-				, crg::getAccessMask( attach.output )
-				, crg::getStageMask( attach.output ) } );
+			if ( attach.view.size() == 1u )
+			{
+				auto view = attach.view.front();
+				context.setLayoutState( view
+					, { attach.output
+					, crg::getAccessMask( attach.output )
+					, crg::getStageMask( attach.output ) } );
+			}
 		}
 	}
 
@@ -423,7 +445,8 @@ namespace castor3d
 		, VkDescriptorSet baseDS
 		, size_t lightIndex
 		, crg::RecordContext & context
-		, VkCommandBuffer commandBuffer )
+		, VkCommandBuffer commandBuffer
+		, uint32_t passIndex )
 	{
 		m_context.vkCmdBeginDebugBlock( commandBuffer
 			, { "Light" + std::to_string( lightIndex ) + "/Stencil"
@@ -433,8 +456,8 @@ namespace castor3d
 		VkDeviceSize offset{ entry.vertexBuffer.getOffset() };
 		VkDescriptorSet specDS = *entry.descriptorSet;
 		auto beginRenderPass = makeVkStruct< VkRenderPassBeginInfo >( *renderPass.renderPass
-			, *renderPass.framebuffer
-			, VkRect2D{ {}, renderPass.framebuffer->getDimensions() }
+			, *renderPass.framebuffers[passIndex].fbo
+			, VkRect2D{ {}, renderPass.framebuffers[passIndex].fbo->getDimensions() }
 			, uint32_t( renderPass.clearValues.size() )
 			, renderPass.clearValues.data() );
 		m_context.vkCmdBeginRenderPass( commandBuffer
@@ -480,7 +503,8 @@ namespace castor3d
 		, size_t lightIndex
 		, crg::RecordContext & context
 		, VkCommandBuffer commandBuffer
-		, uint32_t passIndex )
+		, uint32_t passIndex
+		, uint32_t pipelineIndex )
 	{
 		m_context.vkCmdBeginDebugBlock( commandBuffer
 			, { "Light" + std::to_string( lightIndex ) + m_config.getName( *m_scene.getEngine() )
@@ -493,7 +517,8 @@ namespace castor3d
 				, baseDS
 				, lightIndex
 				, context
-				, commandBuffer );
+				, commandBuffer
+				, passIndex );
 		}
 
 		doRecordLightPassBase( renderPass
@@ -501,7 +526,8 @@ namespace castor3d
 			, lightIndex
 			, context
 			, commandBuffer
-			, passIndex );
+			, passIndex
+			, pipelineIndex );
 		m_context.vkCmdEndDebugBlock( commandBuffer );
 	}
 

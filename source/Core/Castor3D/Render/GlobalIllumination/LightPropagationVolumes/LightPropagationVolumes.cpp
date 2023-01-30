@@ -188,14 +188,11 @@ namespace castor3d
 		lightCache.createPassBinding( pass
 			, LightInjectionPass::LightsIdx );
 		pass.addSampledView( smResult[SmTexture::eNormal].sampledViewId
-			, LightInjectionPass::RsmNormalsIdx
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			, LightInjectionPass::RsmNormalsIdx );
 		pass.addSampledView( smResult[SmTexture::ePosition].sampledViewId
-			, LightInjectionPass::RsmPositionIdx
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			, LightInjectionPass::RsmPositionIdx );
 		pass.addSampledView( smResult[SmTexture::eFlux].sampledViewId
-			, LightInjectionPass::RsmFluxIdx
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			, LightInjectionPass::RsmFluxIdx );
 		lpvGridConfigUbo.createPassBinding( pass
 			, LightInjectionPass::LpvGridUboIdx );
 		lpvLightConfigUbos[0].createPassBinding( pass
@@ -239,14 +236,11 @@ namespace castor3d
 		lightCache.createPassBinding( pass
 			, LightInjectionPass::LightsIdx );
 		pass.addSampledView( arrayViews[0u]
-			, LightInjectionPass::RsmNormalsIdx
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			, LightInjectionPass::RsmNormalsIdx );
 		pass.addSampledView( arrayViews[1u]
-			, LightInjectionPass::RsmPositionIdx
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			, LightInjectionPass::RsmPositionIdx );
 		pass.addSampledView( arrayViews[2u]
-			, LightInjectionPass::RsmFluxIdx
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			, LightInjectionPass::RsmFluxIdx );
 		lpvGridConfigUbo.createPassBinding( pass
 			, LightInjectionPass::LpvGridUboIdx );
 		lpvLightConfigUbos[uint32_t( face )].createPassBinding( pass
@@ -333,11 +327,9 @@ namespace castor3d
 		lightCache.createPassBinding( pass
 			, GeometryInjectionPass::LightsIdx );
 		pass.addSampledView( smResult[SmTexture::eNormal].sampledViewId
-			, GeometryInjectionPass::RsmNormalsIdx
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			, GeometryInjectionPass::RsmNormalsIdx );
 		pass.addSampledView( smResult[SmTexture::ePosition].sampledViewId
-			, GeometryInjectionPass::RsmPositionIdx
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			, GeometryInjectionPass::RsmPositionIdx );
 		lpvGridConfigUbo.createPassBinding( pass
 			, GeometryInjectionPass::LpvGridUboIdx );
 		lpvLightConfigUbos[0].createPassBinding( pass
@@ -379,11 +371,9 @@ namespace castor3d
 		lightCache.createPassBinding( pass
 			, GeometryInjectionPass::LightsIdx );
 		pass.addSampledView( arrayViews[0u]
-			, GeometryInjectionPass::RsmNormalsIdx
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			, GeometryInjectionPass::RsmNormalsIdx );
 		pass.addSampledView( arrayViews[1u]
-			, GeometryInjectionPass::RsmPositionIdx
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+			, GeometryInjectionPass::RsmPositionIdx );
 		lpvGridConfigUbo.createPassBinding( pass
 			, GeometryInjectionPass::LpvGridUboIdx );
 		lpvLightConfigUbos[uint32_t( face )].createPassBinding( pass
@@ -478,6 +468,12 @@ namespace castor3d
 				, m_scene.getLpvGridSize() } }
 		, m_clearPass{ doCreateClearPass() }
 	{
+		m_graph.addOutput( lpvResult[LpvTexture::eR].targetViewId
+			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+		m_graph.addOutput( lpvResult[LpvTexture::eG].targetViewId
+			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+		m_graph.addOutput( lpvResult[LpvTexture::eB].targetViewId
+			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
 	}
 
 	void LightPropagationVolumesBase::initialise()

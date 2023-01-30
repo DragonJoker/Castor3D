@@ -89,6 +89,7 @@ namespace castor3d
 			, m_camera->getProjection( false )
 			, m_camera->getFrustum() );
 		m_sceneUbo.setWindowSize( m_camera->getSize() );
+		m_graph.addOutput( m_colourView );
 		log::trace << "Created EnvironmentMapPass " << m_graph.getName() + "/" + getName() << std::endl;
 	}
 
@@ -174,6 +175,7 @@ namespace castor3d
 					, m_device
 					, ForwardRenderTechniquePass::Type
 					, crg::ImageViewIdArray{ m_colourView }
+					, crg::ImageViewIdArray{ depthView }
 					, RenderNodesPassDesc{ getOwner()->getSize(), m_matrixUbo, m_sceneUbo, *m_culler }
 						.meshShading( true )
 						.implicitAction( depthView
@@ -201,8 +203,9 @@ namespace castor3d
 
 	crg::FramePass & EnvironmentMapPass::doCreateTransparentPass( crg::FramePass const * previousPass )
 	{
+		auto depthView = getOwner()->getDepthViewId( m_index, m_face );
 		auto & result = m_graph.createPass( "TransparentPass"
-			, [this]( crg::FramePass const & framePass
+			, [this, depthView]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
@@ -213,6 +216,7 @@ namespace castor3d
 					, m_device
 					, ForwardRenderTechniquePass::Type
 					, crg::ImageViewIdArray{ m_colourView }
+					, crg::ImageViewIdArray{ depthView }
 					, RenderNodesPassDesc{ getOwner()->getSize(), m_matrixUbo, m_sceneUbo, *m_culler, false }
 						.meshShading( true )
 					, RenderTechniquePassDesc{ true, SsaoConfig{} } );
@@ -222,7 +226,7 @@ namespace castor3d
 				return res;
 			} );
 		result.addDependency( *previousPass );
-		result.addInputDepthView( getOwner()->getDepthViewId( m_index, m_face ) );
+		result.addInputDepthView( depthView );
 		result.addInOutColourView( m_colourView );
 		return result;
 	}

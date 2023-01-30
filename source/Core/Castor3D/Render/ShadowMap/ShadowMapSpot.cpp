@@ -75,10 +75,24 @@ namespace castor3d
 			auto & depth = smResult[SmTexture::eDepth];
 			auto & linear = smResult[SmTexture::eLinearDepth];
 			auto & variance = smResult[SmTexture::eVariance];
+			auto & normal = smResult[SmTexture::eNormal];
+			auto & position = smResult[SmTexture::ePosition];
+			auto & flux = smResult[SmTexture::eFlux];
 
 			std::string debugName = getPassName( shadowMapIndex, vsm, rsm );
 			graphs.push_back( std::make_unique< crg::FrameGraph >( resources.getHandler(), debugName ) );
-			auto & graph = graphs.back()->getDefaultGroup();
+			auto & graph = *graphs.back();
+			graph.addOutput( linear.wholeViewId
+				, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+			graph.addOutput( variance.wholeViewId
+				, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+			graph.addOutput( normal.wholeViewId
+				, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+			graph.addOutput( position.wholeViewId
+				, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+			graph.addOutput( flux.wholeViewId
+				, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+			auto & group = graph.getDefaultGroup();
 			result.emplace_back( std::make_unique< ShadowMap::PassData >( std::make_unique< MatrixUbo >( device )
 				, std::make_shared< Camera >( cuT( "ShadowMapSpot" )
 					, scene
@@ -88,7 +102,7 @@ namespace castor3d
 			auto & passData = *result.back();
 			passData.ownCuller = castor::makeUniqueDerived< SceneCuller, FrustumCuller >( scene, *passData.camera );
 			passData.culler = passData.ownCuller.get();
-			auto & pass = graph.createPass( debugName
+			auto & pass = group.createPass( debugName
 				, [shadowMapIndex, &passData, &device, &shadowMap, vsm, rsm]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & runnableGraph )
@@ -119,9 +133,6 @@ namespace castor3d
 
 			if ( rsm )
 			{
-				auto & normal = smResult[SmTexture::eNormal];
-				auto & position = smResult[SmTexture::ePosition];
-				auto & flux = smResult[SmTexture::eFlux];
 				pass.addOutputColourView( normal.subViewsId[shadowMapIndex], getClearValue( SmTexture::eNormal ) );
 				pass.addOutputColourView( position.subViewsId[shadowMapIndex], getClearValue( SmTexture::ePosition ) );
 				pass.addOutputColourView( flux.subViewsId[shadowMapIndex], getClearValue( SmTexture::eFlux ) );
@@ -130,7 +141,7 @@ namespace castor3d
 
 			if ( vsm )
 			{
-				blurs.push_back( castor::makeUnique< GaussianBlur >( graph
+				blurs.push_back( castor::makeUnique< GaussianBlur >( group
 					, *previousPass
 					, device
 					, cuT( "ShadowMapSpot" )
