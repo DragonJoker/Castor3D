@@ -77,7 +77,7 @@ namespace castor3d
 				, crg::RenderMesh{ pass
 					, context
 					, graph
-					, crg::ru::Config{ 2u, true }
+					, crg::ru::Config{ 1u, true }
 					, crg::rm::Config{}
 						.vertexBuffer( doCreateVertexBuffer( device ) )
 						.indexBuffer( doCreateIndexBuffer( device ) )
@@ -87,7 +87,6 @@ namespace castor3d
 						.getIndexType( crg::GetIndexTypeCallback( [](){ return VK_INDEX_TYPE_UINT16; } ) )
 						.getPrimitiveCount( crg::GetPrimitiveCountCallback( [](){ return 36u; } ) )
 						.isEnabled( IsEnabledCallback( [this](){ return doIsEnabled(); } ) )
-						.getPassIndex( GetPassIndexCallback( [this](){ return m_passIndex; } ) )
 						.renderSize( size )
 						.program( doInitialiseShader( device ) ) }
 			{
@@ -389,16 +388,19 @@ namespace castor3d
 		, bool clearColour
 		, BackgroundPassBase *& backgroundPass )
 	{
-		//if ( hasIbl() )
-		//{
-		//	auto & ibl = getIbl();
-		//	graph.addInput( ibl.getIrradianceTexture().sampledViewId
-		//		, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
-		//	graph.addInput( ibl.getPrefilteredEnvironmentTexture().sampledViewId
-		//		, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
-		//	graph.addInput( ibl.getPrefilteredEnvironmentSheenTexture().sampledViewId
-		//		, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
-		//}
+		if ( hasIbl() )
+		{
+			auto & ibl = getIbl();
+			graph.addInput( ibl.getIrradianceTexture().sampledViewId
+				, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+			graph.addInput( ibl.getPrefilteredEnvironmentTexture().sampledViewId
+				, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+			graph.addInput( ibl.getPrefilteredEnvironmentSheenTexture().sampledViewId
+				, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+		}
+
+		graph.addInput( m_textureId.sampledViewId
+			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
 
 		auto & result = graph.createPass( "Background"
 			, [this, &backgroundPass, &device, progress, size, colour, depth]( crg::FramePass const & framePass

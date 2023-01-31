@@ -132,7 +132,6 @@ namespace castor3d
 		RenderDevice const & m_device;
 		Scene const & m_scene;
 		RenderTechnique const & m_technique;
-		crg::ImageViewId m_target;
 		SceneUbo const & m_sceneUbo;
 		GpInfoUbo const & m_gpInfoUbo;
 		HdrConfigUbo const & m_hdrConfigUbo;
@@ -147,7 +146,6 @@ namespace castor3d
 		std::vector< ProgramPtr > m_programs;
 		LightingModelID m_lightingModelId;
 		BackgroundModelID m_backgroundModelId;
-		uint32_t m_passMult{};
 		uint32_t m_programIndex{};
 		bool m_enabled{};
 		crg::FramePass const * m_lastPass{};

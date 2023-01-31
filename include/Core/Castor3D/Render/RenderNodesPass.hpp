@@ -215,17 +215,6 @@ namespace castor3d
 			m_meshShading = value;
 			return *this;
 		}
-		/**
-		 *\~english
-		 *\param[in]	value	The use of mesh shaders status.
-		 *\~french
-		 *\param[in]	value	Le statut d'utilisation des mesh shaders.
-		 */
-		RenderNodesPassDesc & target( crg::ImageViewId value )
-		{
-			m_target = value;
-			return *this;
-		}
 
 		VkExtent3D m_size;
 		MatrixUbo & m_matrixUbo;
@@ -238,7 +227,6 @@ namespace castor3d
 		bool m_meshShading{};
 		SceneNode const * m_ignored{};
 		uint32_t m_index{ 0u };
-		crg::ImageViewId m_target;
 		crg::ru::Config m_ruConfig{ 1u, true };
 	};
 
@@ -636,17 +624,12 @@ namespace castor3d
 		{
 			return m_typeID;
 		}
-
-		uint32_t getPassIndex()const
-		{
-			return m_passIndex;
-		}
 		/**@}*/
 
 		mutable PassSortNodesSignal onSortNodes;
 
 	private:
-		void doSubInitialise( uint32_t index );
+		void doSubInitialise();
 		void doSubRecordInto( crg::RecordContext & context
 			, VkCommandBuffer commandBuffer
 			, uint32_t index );
@@ -679,7 +662,6 @@ namespace castor3d
 		C3D_API ShaderProgramSPtr doGetProgram( PipelineFlags const & flags
 			, VkCullModeFlags cullMode = VK_CULL_MODE_NONE );
 		C3D_API void doUpdateFlags( PipelineFlags & flags )const;
-		C3D_API void doUpdatePassIndex( crg::ImageViewId currentTarget );
 
 	private:
 		ashes::VkDescriptorSetLayoutBindingArray doCreateAdditionalBindings( PipelineFlags const & flags )const;
@@ -721,8 +703,7 @@ namespace castor3d
 		 */
 		C3D_API virtual void doFillAdditionalDescriptor( PipelineFlags const & flags
 			, ashes::WriteDescriptorSetArray & descriptorWrites
-			, ShadowMapLightTypeArray const & shadowMaps
-			, uint32_t passIndex ) = 0;
+			, ShadowMapLightTypeArray const & shadowMaps ) = 0;
 		/**
 		 *\~english
 		 *\brief			Modifies the given flags to make them match the render pass requirements.
@@ -825,15 +806,13 @@ namespace castor3d
 		bool m_meshShading;
 		SceneUbo * m_sceneUbo;
 		uint32_t m_index{ 0u };
-		uint32_t m_passIndex{ 0u };
-		crg::ImageViewId m_target{};
 
 	private:
 		struct PassDescriptors
 		{
 			ashes::DescriptorSetPoolPtr pool;
 			ashes::DescriptorSetLayoutPtr layout;
-			std::vector< ashes::DescriptorSetPtr > sets;
+			ashes::DescriptorSetPtr set;
 		};
 		using PassDescriptorsMap = std::map< size_t, PassDescriptors >;
 

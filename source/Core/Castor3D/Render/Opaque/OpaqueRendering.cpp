@@ -279,7 +279,7 @@ namespace castor3d
 			return m_deferredRendering->getLightDiffuse();
 		}
 
-		return getOwner()->getResultSource();
+		return getOwner()->getResult();
 	}
 
 	Texture const & OpaqueRendering::getScatteringLightingResult()const
@@ -289,7 +289,7 @@ namespace castor3d
 			return m_deferredRendering->getLightScattering();
 		}
 
-		return getOwner()->getResultSource();
+		return getOwner()->getResult();
 	}
 
 	Texture const & OpaqueRendering::getBaseColourResult()const
@@ -300,7 +300,12 @@ namespace castor3d
 			return ( *m_opaquePassResult )[DsTexture::eColMtl];
 		}
 
-		return getOwner()->getResultSource();
+		return getOwner()->getResult();
+	}
+
+	bool OpaqueRendering::isEnabled()const
+	{
+		return m_opaquePassEnabled();
 	}
 
 	crg::FramePass & OpaqueRendering::doCreateVisibilityResolve( ProgressBar * progress
@@ -434,8 +439,7 @@ namespace castor3d
 					, getOwner()->getSceneUbo()
 					, getOwner()->getRenderTarget().getCuller() };
 				renderPassDesc.safeBand( true )
-					.meshShading( true )
-					.target( targetResult.front() );
+					.meshShading( true );
 				techniquePassDesc.ssao( m_ssao->getResult() )
 					.lpvConfigUbo( getOwner()->getLpvConfigUbo() )
 					.llpvConfigUbo( getOwner()->getLlpvConfigUbo() )
@@ -487,8 +491,7 @@ namespace castor3d
 					, getOwner()->getSceneUbo()
 					, getOwner()->getRenderTarget().getCuller() };
 				renderPassDesc.safeBand( true )
-					.meshShading( true )
-					.target( targetResult.front() );
+					.meshShading( true );
 				auto nmlOccIt = std::next( framePass.images.begin(), 1u );
 				auto colRghIt = std::next( nmlOccIt );
 				auto spcMtlIt = std::next( colRghIt );

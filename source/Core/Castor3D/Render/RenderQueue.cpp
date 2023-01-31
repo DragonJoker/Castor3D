@@ -34,42 +34,36 @@ namespace castor3d
 		, m_viewport{ castor::makeGroupChangeTracked< ashes::Optional< VkViewport > >( m_culledChanged, ashes::nullopt ) }
 		, m_scissor{ castor::makeGroupChangeTracked< ashes::Optional< VkRect2D > >( m_culledChanged, ashes::nullopt ) }
 	{
-		for ( uint32_t i = 0u; i < passCount; ++i )
-		{
-			m_passes.emplace_back();
-		}
 	}
 
 	RenderQueue::~RenderQueue()
 	{
-		for ( auto & pass : m_passes )
-		{
-			auto lock( castor::makeUniqueLock( pass.eventMutex ) );
+		auto & pass = m_pass;
+		auto lock( castor::makeUniqueLock( pass.eventMutex ) );
 
-			if ( pass.initEvent )
-			{
-				pass.initEvent->skip();
-				pass.initEvent = {};
-			}
+		if ( pass.initEvent )
+		{
+			pass.initEvent->skip();
+			pass.initEvent = {};
 		}
 	}
 
-	void RenderQueue::initialise( uint32_t passIndex )
+	void RenderQueue::initialise()
 	{
 		if ( auto event = getOwner()->getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
-			, [this, passIndex]( RenderDevice const & device
+			, [this]( RenderDevice const & device
 				, QueueData const & queueData )
 			{
-				auto & pass = m_passes[passIndex];
+				auto & pass = m_pass;
 				auto lock( castor::makeUniqueLock( pass.eventMutex ) );
 
 				if ( pass.initEvent )
 				{
-					doInitialise( device, queueData, passIndex );
+					doInitialise( device, queueData );
 				}
 			} ) ) )
 		{
-			auto & pass = m_passes[passIndex];
+			auto & pass = m_pass;
 			auto lock( castor::makeUniqueLock( pass.eventMutex ) );
 			pass.initEvent = event;
 		}
@@ -79,22 +73,12 @@ namespace castor3d
 	{
 		CU_Require( m_renderNodes );
 		m_renderNodes->cleanup();
-
-		for ( auto & pass : m_passes )
-		{
-			pass.commandBuffer.reset();
-		}
+		m_pass.commandBuffer.reset();
 	}
 
 	void RenderQueue::update( ShadowMapLightTypeArray & shadowMaps )
 	{
-		update( shadowMaps, getOwner()->getPassIndex() );
-	}
-
-	void RenderQueue::update( ShadowMapLightTypeArray & shadowMaps
-		, uint32_t passIndex )
-	{
-		if ( hasCommandBuffer( passIndex ) )
+		if ( hasCommandBuffer() )
 		{
 			if ( m_culledChanged )
 			{
@@ -105,7 +89,7 @@ namespace castor3d
 
 			if ( m_commandsChanged )
 			{
-				doPrepareCommandBuffer( passIndex );
+				doPrepareCommandBuffer();
 				m_commandsChanged = false;
 			}
 		}
@@ -119,21 +103,19 @@ namespace castor3d
 
 	void RenderQueue::update( ShadowMapLightTypeArray & shadowMaps
 		, VkViewport const & viewport
-		, VkRect2D const & scissor
-		, uint32_t passIndex )
+		, VkRect2D const & scissor )
 	{
 		m_viewport = viewport;
 		m_scissor = scissor;
-		update( shadowMaps, passIndex );
+		update( shadowMaps );
 	}
 
 	void RenderQueue::update( ShadowMapLightTypeArray & shadowMaps
-		, VkRect2D const & scissor
-		, uint32_t passIndex )
+		, VkRect2D const & scissor )
 	{
 		m_scissor = scissor;
 		m_commandsChanged = m_commandsChanged || m_scissor.isDirty();
-		update( shadowMaps, passIndex );
+		update( shadowMaps );
 	}
 
 	void RenderQueue::setIgnoredNode( SceneNode const & node )
@@ -149,9 +131,9 @@ namespace castor3d
 			&& m_renderNodes->hasCulledNodes();
 	}
 
-	bool RenderQueue::needsInitialise( uint32_t passIndex )const
+	bool RenderQueue::needsInitialise()const
 	{
-		auto & pass = m_passes[passIndex];
+		auto & pass = m_pass;
 		auto lock( castor::makeUniqueLock( pass.eventMutex ) );
 		return !pass.initEvent
 			&& !pass.initialised;
@@ -162,14 +144,14 @@ namespace castor3d
 		return getOwner()->getRenderFilters();
 	}
 
-	ashes::CommandBuffer const & RenderQueue::initCommandBuffer( uint32_t passIndex )
+	ashes::CommandBuffer const & RenderQueue::initCommandBuffer()
 	{
-		auto & pass = m_passes[passIndex];
+		auto & pass = m_pass;
 
-		if ( hasCommandBuffer( passIndex )
-			&& pass.renderPassAtInit == getOwner()->getRenderPass( passIndex ) )
+		if ( hasCommandBuffer()
+			&& pass.renderPassAtInit == getOwner()->getRenderPass( 0u ) )
 		{
-			return getCommandBuffer( passIndex );
+			return getCommandBuffer();
 		}
 
 		{
@@ -182,20 +164,19 @@ namespace castor3d
 
 				auto & device = getOwner()->getEngine()->getRenderSystem()->getRenderDevice();
 				auto queueData = device.graphicsData();
-				doInitialise( device, *queueData, passIndex );
+				doInitialise( device, *queueData );
 			}
 		}
 
-		return getCommandBuffer( passIndex );
+		return getCommandBuffer();
 	}
 
 	void RenderQueue::doInitialise( RenderDevice const & device
-		, QueueData const & queueData
-		, uint32_t passIndex )
+		, QueueData const & queueData )
 	{
-		auto & pass = m_passes[passIndex];
+		auto & pass = m_pass;
 		pass.commandBuffer.reset();
-		pass.renderPassAtInit = getOwner()->getRenderPass( passIndex );
+		pass.renderPassAtInit = getOwner()->getRenderPass( 0u );
 		pass.commandBuffer = queueData.commandPool->createCommandBuffer( getOwner()->getName()
 			, VK_COMMAND_BUFFER_LEVEL_SECONDARY );
 		pass.commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT | VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT
@@ -214,16 +195,15 @@ namespace castor3d
 		m_commandsChanged = true;
 	}
 
-	void RenderQueue::doPrepareCommandBuffer( uint32_t passIndex )
+	void RenderQueue::doPrepareCommandBuffer()
 	{
-		getOwner()->resetCommandBuffer( passIndex );
-		auto & pass = m_passes[passIndex];
+		getOwner()->resetCommandBuffer( 0u );
+		auto & pass = m_pass;
 		CU_Require( pass.commandBuffer );
 		CU_Require( m_renderNodes );
 		pass.commandBuffer->reset();
 		m_renderNodes->prepareCommandBuffers( m_viewport.value()
-			, m_scissor.value()
-			, passIndex );
+			, m_scissor.value() );
 		getOwner()->reRecordCurrent();
 	}
 

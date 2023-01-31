@@ -1291,12 +1291,82 @@ namespace castor3d
 
 #endif
 
-		m_renderQuad->initialisePasses();
+		m_renderQuad->initialisePass( m_debugConfig.debugIndex );
 	}
 
 	void RenderWindow::doDestroyRenderQuad()
 	{
 		m_renderQuad.reset();
+	}
+
+	void RenderWindow::doRecordCommandBuffer( QueueData const & queueData
+		, uint32_t passIndex )
+	{
+#if C3D_DebugPicking || C3D_DebugBackgroundPicking
+		passIndex = 0u;
+#else
+		auto & intermediate = m_intermediates[passIndex];
+		auto & intermediateBarrierView = m_intermediateBarrierViews[passIndex];
+		auto & context = m_device.makeContext();
+#endif
+		auto & commandBuffers = m_commandBuffers[passIndex];
+		uint32_t index = 0u;
+		m_renderQuad->initialisePass( passIndex );
+
+		for ( auto & commandBuffer : commandBuffers )
+		{
+			auto & frameBuffer = *m_frameBuffers[index];
+			auto name = getName() + castor::string::toString( index );
+			commandBuffer = m_commandBufferPool->createCommandBuffer( name );
+			commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT );
+			commandBuffer->beginDebugBlock( { "RenderWindow " + name
+				, makeFloatArray( getEngine()->getNextRainbowColour() ) } );
+
+#if !C3D_DebugPicking && !C3D_DebugBackgroundPicking
+			if ( intermediate.layout != VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL )
+			{
+				commandBuffer->memoryBarrier( ashes::getStageMask( intermediateBarrierView.layout )
+					, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+					, makeLayoutTransition( m_resources.createImage( context, intermediateBarrierView.viewId.data->image )
+						, intermediateBarrierView.viewId.data->info.subresourceRange
+						, intermediateBarrierView.layout
+						, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+						, VK_QUEUE_FAMILY_IGNORED
+						, VK_QUEUE_FAMILY_IGNORED ) );
+			}
+
+			commandBuffer->beginRenderPass( *m_renderPass
+				, frameBuffer
+				, { opaqueWhiteClearColor }
+			, VK_SUBPASS_CONTENTS_INLINE );
+			m_renderQuad->registerPass( *commandBuffer, passIndex );
+			commandBuffer->endRenderPass();
+
+			if ( intermediate.layout != VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				&& intermediate.layout != VK_IMAGE_LAYOUT_UNDEFINED )
+			{
+				commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+					, ashes::getStageMask( intermediateBarrierView.layout )
+					, makeLayoutTransition( m_resources.createImage( context, intermediateBarrierView.viewId.data->image )
+						, intermediateBarrierView.viewId.data->info.subresourceRange
+						, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+						, intermediateBarrierView.layout
+						, VK_QUEUE_FAMILY_IGNORED
+						, VK_QUEUE_FAMILY_IGNORED ) );
+			}
+#else
+			commandBuffer->beginRenderPass( *m_renderPass
+				, frameBuffer
+				, { opaqueWhiteClearColor }
+			, VK_SUBPASS_CONTENTS_INLINE );
+			m_renderQuad->registerPass( *commandBuffer, passIndex );
+			commandBuffer->endRenderPass();
+#endif
+
+			commandBuffer->endDebugBlock();
+			commandBuffer->end();
+			index++;
+		}
 	}
 
 	void RenderWindow::doCreateCommandBuffers( QueueData const & queueData )
@@ -1308,88 +1378,20 @@ namespace castor3d
 			return;
 		}
 
-		auto pass = 0u;
 #if C3D_DebugPicking || C3D_DebugBackgroundPicking
 		m_commandBuffers.resize( 1u );
 #else
 		m_commandBuffers.resize( m_intermediates.size() );
-		auto & context = m_device.makeContext();
 #endif
 
 		for ( auto & commandBuffers : m_commandBuffers )
 		{
 			commandBuffers.resize( m_swapChainImages.size() );
-#if !C3D_DebugPicking && !C3D_DebugBackgroundPicking
-			auto & intermediate = m_intermediates[pass];
-			auto & intermediateBarrierView = m_intermediateBarrierViews[pass];
-#endif
-			uint32_t index = 0u;
-
-			for ( auto & commandBuffer : commandBuffers )
-			{
-				auto & frameBuffer = *m_frameBuffers[index];
-				auto name = getName() + castor::string::toString( index );
-				commandBuffer = m_commandBufferPool->createCommandBuffer( name );
-				commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT );
-				commandBuffer->beginDebugBlock( { "RenderWindow " + name
-					, makeFloatArray( getEngine()->getNextRainbowColour() ) } );
-
-#if !C3D_DebugPicking && !C3D_DebugBackgroundPicking
-
-				if ( intermediate.layout != VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL )
-				{
-					commandBuffer->memoryBarrier( ashes::getStageMask( intermediateBarrierView.layout )
-						, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-						, makeLayoutTransition( m_resources.createImage( context, intermediateBarrierView.viewId.data->image )
-							, intermediateBarrierView.viewId.data->info.subresourceRange
-							, intermediateBarrierView.layout
-							, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-							, VK_QUEUE_FAMILY_IGNORED
-							, VK_QUEUE_FAMILY_IGNORED ) );
-				}
-
-#endif
-
-				commandBuffer->beginRenderPass( *m_renderPass
-					, frameBuffer
-					, { opaqueWhiteClearColor }
-					, VK_SUBPASS_CONTENTS_INLINE );
-				m_renderQuad->registerPass( *commandBuffer, pass );
-				commandBuffer->endRenderPass();
-
-#if !C3D_DebugPicking && !C3D_DebugBackgroundPicking
-
-				if ( intermediate.layout != VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-					&& intermediate.layout != VK_IMAGE_LAYOUT_UNDEFINED )
-				{
-					commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-						, ashes::getStageMask( intermediateBarrierView.layout )
-						, makeLayoutTransition( m_resources.createImage( context, intermediateBarrierView.viewId.data->image )
-							, intermediateBarrierView.viewId.data->info.subresourceRange
-							, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-							, intermediateBarrierView.layout
-							, VK_QUEUE_FAMILY_IGNORED
-							, VK_QUEUE_FAMILY_IGNORED ) );
-				}
-
-#endif
-
-				commandBuffer->endDebugBlock();
-				commandBuffer->end();
-				index++;
-			}
-
-			++pass;
 		}
 	}
 
 	void RenderWindow::doDestroyCommandBuffers()
 	{
-		for ( auto & commandBuffers : m_commandBuffers )
-		{
-			commandBuffers.clear();
-		}
-
 		m_commandBuffers.clear();
 	}
 
@@ -1773,6 +1775,8 @@ namespace castor3d
 		ashes::VkSemaphoreArray semaphores;
 		ashes::VkPipelineStageFlagsArray stages;
 		crg::convert( toWait, semaphores, stages );
+		auto passIndex = m_debugConfig.debugIndex;
+		doRecordCommandBuffer( queueData, passIndex );
 
 #if !C3D_DebugPicking && !C3D_DebugBackgroundPicking
 #	if C3D_DebugQuads
@@ -1786,10 +1790,10 @@ namespace castor3d
 #if C3D_DebugPicking || C3D_DebugBackgroundPicking
 			m_savedFormat = m_picking->getImageView().data->info.format;
 #else
-			m_savedFormat = m_intermediates[m_debugConfig.debugIndex].viewId.data->info.format;
+			m_savedFormat = m_intermediates[passIndex].viewId.data->info.format;
 #endif
-			auto & transferCommands = m_transferCommands[m_debugConfig.debugIndex];
-			doInitialiseTransferCommands( queueData, transferCommands, m_debugConfig.debugIndex );
+			auto & transferCommands = m_transferCommands[passIndex];
+			doInitialiseTransferCommands( queueData, transferCommands, passIndex );
 			queueData.queue->submit( ashes::VkCommandBufferArray{ *transferCommands.commandBuffer }
 				, semaphores
 				, stages
@@ -1800,7 +1804,7 @@ namespace castor3d
 
 		semaphores.push_back( *resources->imageAvailableSemaphore );
 		stages.push_back( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT );
-		queueData.queue->submit( ashes::VkCommandBufferArray{ *m_commandBuffers[m_debugConfig.debugIndex][resources->imageIndex] }
+		queueData.queue->submit( ashes::VkCommandBufferArray{ *m_commandBuffers[passIndex][resources->imageIndex] }
 			, semaphores
 			, stages
 			, ashes::VkSemaphoreArray{}

@@ -74,8 +74,7 @@ namespace ocean
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( castor3d::PipelineFlags const & flags )const override;
 		void doFillAdditionalDescriptor( castor3d::PipelineFlags const & flags
 			, ashes::WriteDescriptorSetArray & descriptorWrites
-			, castor3d::ShadowMapLightTypeArray const & shadowMaps
-			, uint32_t passIndex )override;
+			, castor3d::ShadowMapLightTypeArray const & shadowMaps )override;
 		castor3d::SubmeshFlags doAdjustSubmeshFlags( castor3d::SubmeshFlags flags )const override;
 		castor3d::ProgramFlags doAdjustProgramFlags( castor3d::ProgramFlags flags )const override;
 		void doAdjustFlags( castor3d::PipelineFlags & flags )const override;

@@ -573,6 +573,130 @@ namespace castor3d::shader
 			, pcolourMap );
 	}
 
+	sdw::RetVec4 ReflectionModel::computeScreenSpace( MatrixData const & matrixData
+		, sdw::Vec3 const & pviewPosition
+		, sdw::Vec3 const & pworldNormal
+		, sdw::Vec2 const & ptexcoord
+		, sdw::Vec4 const & pssrSettings
+		, sdw::CombinedImage2DRgba32 const & pdepthObjMap
+		, sdw::CombinedImage2DRgba32 const & pnormalMap
+		, sdw::CombinedImage2DRgba32 const & pcolourMap )
+	{
+		if ( !m_computeScreenSpace2 )
+		{
+			m_computeScreenSpace2 = m_writer.implementFunction< sdw::Vec4 >( "c3d_computeScreenSpace2"
+				, [&]( sdw::Vec3 const & viewPosition
+					, sdw::Vec3 const & worldNormal
+					, sdw::Vec2 const & texcoord
+					, sdw::Vec4 const & ssrSettings
+					, sdw::CombinedImage2DRgba32 const & depthObjMap
+					, sdw::CombinedImage2DRgba32 const & normalMap
+					, sdw::CombinedImage2DRgba32 const & colourMap )
+				{
+					auto epsilon = m_writer.declConstant( "epsilon", 0.00001_f );
+					auto ssrStepSize = ssrSettings.x();
+					auto ssrForwardMaxStepCount = ssrSettings.y();
+					auto ssrBackwardMaxStepCount = ssrSettings.z();
+					auto ssrDepthMult = ssrSettings.w();
+
+					auto viewDir = m_writer.declLocale( "viewDir"
+						, normalize( viewPosition ) );
+					auto reflectionVector = m_writer.declLocale( "reflectionVector"
+						, normalize( reflect( -viewDir, worldNormal ) ) );
+					auto sceneZ = m_writer.declLocale( "sceneZ"
+						, 0.0_f );
+					auto stepCount = m_writer.declLocale( "stepCount"
+						, 0.0_f );
+					auto forwardStepCount = m_writer.declLocale( "forwardStepCount"
+						, ssrForwardMaxStepCount );
+					auto rayMarchPosition = m_writer.declLocale( "rayMarchPosition"
+						, viewPosition );
+					auto rayMarchTexPosition = m_writer.declLocale( "rayMarchTexPosition"
+						, vec2( 0.0_f ) );
+
+					WHILE( m_writer, stepCount < ssrForwardMaxStepCount )
+					{
+						rayMarchPosition += reflectionVector.xyz() * ssrStepSize;
+						rayMarchTexPosition = matrixData.viewToScreenUV( m_utils, vec4( -rayMarchPosition, 1.0_f ) );
+
+						sceneZ = depthObjMap.lod( rayMarchTexPosition, 0.0_f ).r();
+						sceneZ = matrixData.projToView( m_utils, rayMarchTexPosition, sceneZ ).z();
+
+						IF( m_writer, -sceneZ <= -rayMarchPosition.z() )
+						{
+							forwardStepCount = stepCount;
+							stepCount = ssrForwardMaxStepCount;
+						}
+						ELSE
+						{
+							stepCount += 1.0_f;
+						}
+						FI;
+					}
+					ELIHW;
+
+					IF( m_writer, forwardStepCount < ssrForwardMaxStepCount )
+					{
+						stepCount = 0.0_f;
+
+						WHILE( m_writer, stepCount < ssrBackwardMaxStepCount )
+						{
+							rayMarchPosition -= reflectionVector.xyz() * ssrStepSize / ssrBackwardMaxStepCount;
+							rayMarchTexPosition = matrixData.viewToScreenUV( m_utils, vec4( -rayMarchPosition, 1.0_f ) );
+
+							sceneZ = depthObjMap.lod( rayMarchTexPosition, 0.0_f ).r();
+							sceneZ = matrixData.projToView( m_utils, rayMarchTexPosition, sceneZ ).z();
+
+							IF( m_writer, -sceneZ > -rayMarchPosition.z() )
+							{
+								stepCount = ssrBackwardMaxStepCount;
+							}
+							ELSE
+							{
+								stepCount += 1.0_f;
+							}
+							FI;
+						}
+						ELIHW;
+					}
+					FI;
+
+					auto nDotV = m_writer.declLocale( "nDotV"
+						, abs( dot( worldNormal, viewDir ) ) + epsilon );
+					auto ssrReflectionNormal = m_writer.declLocale( "ssrReflectionNormal"
+						, normalMap.sample( rayMarchTexPosition ).xyz() );
+					auto ssrDistanceFactor = m_writer.declLocale( "ssrDistanceFactor"
+						, vec2( distance( 0.5_f, texcoord.x() ), distance( 0.5_f, texcoord.y() ) ) * 2.0f );
+					auto ssrFactor = m_writer.declLocale( "ssrFactor"
+						, ( 1.0_f - abs( nDotV ) )
+							* ( 1.0f - forwardStepCount / ssrForwardMaxStepCount )
+							* clamp( 1.0f - ssrDistanceFactor.x() - ssrDistanceFactor.y(), 0.0_f, 1.0_f )
+							* ( 1.0f / ( 1.0f + abs( sceneZ - rayMarchPosition.z() ) * ssrDepthMult ) )
+							* ( 1.0f - clamp( dot( ssrReflectionNormal, worldNormal ), 0.0_f, 1.0_f ) ) );
+
+					auto reflectionColor = m_writer.declLocale( "reflectionColor"
+						, colourMap.sample( rayMarchTexPosition ).rgb() );
+
+					m_writer.returnStmt( vec4( reflectionColor, ssrFactor ) );
+				}
+				, sdw::InVec3{ m_writer, "viewPosition" }
+				, sdw::InVec3{ m_writer, "worldNormal" }
+				, sdw::InVec2{ m_writer, "texcoord" }
+				, sdw::InVec4{ m_writer, "ssrSettings" }
+				, sdw::InCombinedImage2DRgba32{ m_writer, "depthObjMap" }
+				, sdw::InCombinedImage2DRgba32{ m_writer, "normalMap" }
+				, sdw::InCombinedImage2DRgba32{ m_writer, "colourMap" } );
+		}
+
+		return m_computeScreenSpace2( pviewPosition
+			, pworldNormal
+			, ptexcoord
+			, pssrSettings
+			, pdepthObjMap
+			, pnormalMap
+			, pcolourMap );
+	}
+
 	sdw::RetBoolean ReflectionModel::traceScreenSpace( sdw::Vec3 pcsOrigin
 		, sdw::Vec3 pcsDirection
 		, sdw::Mat4 pprojectToPixelMatrix

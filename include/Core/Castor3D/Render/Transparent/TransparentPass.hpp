@@ -81,8 +81,7 @@ namespace castor3d
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings )const override;
 		void doFillAdditionalDescriptor( PipelineFlags const & flags
 			, ashes::WriteDescriptorSetArray & descriptorWrites
-			, castor3d::ShadowMapLightTypeArray const & shadowMaps
-			, uint32_t passIndex )override;
+			, castor3d::ShadowMapLightTypeArray const & shadowMaps )override;
 		ShaderPtr doGetPixelShaderSource( PipelineFlags const & flags )const override;
 
 	public:

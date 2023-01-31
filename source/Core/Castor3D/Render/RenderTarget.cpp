@@ -23,6 +23,7 @@
 #include "Castor3D/Render/PostEffect/PostEffect.hpp"
 #include "Castor3D/Render/RenderTechnique.hpp"
 #include "Castor3D/Render/RenderTechniqueVisitor.hpp"
+#include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
 #include "Castor3D/Render/ToneMapping/ToneMapping.hpp"
 #include "Castor3D/Render/ToTexture/Texture3DTo2D.hpp"
 #include "Castor3D/Scene/Camera.hpp"
@@ -594,11 +595,11 @@ namespace castor3d
 
 		auto lastTarget = &doUpdatePostEffects( updater
 			, m_hdrPostEffects
-			, m_hdrObjects );
+			, { m_hdrObjects.front().get(), m_hdrObjects.back().get() } );
 		m_toneMapping->update( updater, lastTarget->sampledViewId );
 		lastTarget = &doUpdatePostEffects( updater
 			, m_srgbPostEffects
-			, m_srgbObjects );
+			, { m_srgbObjects.front().get(), m_srgbObjects.back().get() } );
 		m_combinePassIndex = ( lastTarget == m_combinePassSource ) ? 1u : 0u;
 	}
 
@@ -701,6 +702,8 @@ namespace castor3d
 		if ( myScene != &scene )
 		{
 			m_scene = &scene;
+			m_graph.addInput( m_scene->getEnvironmentMap().getColourId().wholeViewId
+				, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
 			m_culler.reset();
 		}
 	}
@@ -876,8 +879,8 @@ namespace castor3d
 
 		setProgressBarTitle( progress, "Initialising: Render Target" );
 		auto * previousPass = &m_renderTechnique->getLastPass();
-		auto hdrSource = &m_renderTechnique->getResultSource();
-		auto hdrTarget = &m_renderTechnique->getResultTarget();
+		auto hdrSource = m_hdrObjects.front().get();
+		auto hdrTarget = m_hdrObjects.back().get();
 
 		if ( !m_hdrPostEffects.empty() )
 		{
@@ -1178,10 +1181,10 @@ namespace castor3d
 
 	Texture const & RenderTarget::doUpdatePostEffects( CpuUpdater & updater
 		, PostEffectPtrArray const & effects
-		, TextureArray const & images )const
+		, std::vector< Texture const * > const & images )const
 	{
-		Texture const * src = images.front().get();
-		Texture const * dst = images.back().get();
+		Texture const * src = images.front();
+		Texture const * dst = images.back();
 
 		for ( auto effect : effects )
 		{

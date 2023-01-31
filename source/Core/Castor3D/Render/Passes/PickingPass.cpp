@@ -80,7 +80,7 @@ namespace castor3d
 	void PickingPass::updateArea( VkRect2D const & scissor )
 	{
 		ShadowMapLightTypeArray shadowMaps;
-		m_renderQueue->update( shadowMaps, scissor, 0u );
+		m_renderQueue->update( shadowMaps, scissor );
 	}
 
 	ComponentModeFlags PickingPass::getComponentsMask()const
@@ -107,8 +107,7 @@ namespace castor3d
 
 	void PickingPass::doFillAdditionalDescriptor( PipelineFlags const & flags
 		, ashes::WriteDescriptorSetArray & descriptorWrites
-		, ShadowMapLightTypeArray const & shadowMaps
-		, uint32_t passIndex )
+		, ShadowMapLightTypeArray const & shadowMaps )
 	{
 	}
 

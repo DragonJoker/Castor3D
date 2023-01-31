@@ -133,8 +133,6 @@ namespace castor3d
 		Texture m_mippedColour;
 		TransparentPassResultUPtr m_transparentPassResult;
 		bool m_enabled{};
-		crg::ImageViewId m_target{};
-		uint32_t m_passIndex{};
 		crg::FramePass * m_mipgenPassDesc{};
 		crg::FramePass * m_transparentPassDesc{};
 		RenderTechniqueNodesPass * m_transparentPass{};

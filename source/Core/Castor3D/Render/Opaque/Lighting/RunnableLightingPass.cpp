@@ -13,7 +13,7 @@ namespace castor3d
 
 	namespace runlgt
 	{
-		std::array< VkImageLayout, 6u > getDefaultLayouts( bool blend )
+		static std::array< VkImageLayout, 6u > getDefaultLayouts( bool blend )
 		{
 			return std::array< VkImageLayout, 6u >{ VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL
 				, ( blend ? VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL : VK_IMAGE_LAYOUT_UNDEFINED )
@@ -22,7 +22,8 @@ namespace castor3d
 				, ( blend ? VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL : VK_IMAGE_LAYOUT_UNDEFINED )
 				, ( blend ? VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL : VK_IMAGE_LAYOUT_UNDEFINED ) };
 		}
-		std::array< VkImageLayout, 1u > getDefaultLayout()
+
+		static std::array< VkImageLayout, 1u > getDefaultLayout()
 		{
 			return std::array< VkImageLayout, 1u >{ VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL };
 		}
@@ -131,8 +132,7 @@ namespace castor3d
 	{
 		m_passIndex = currentTarget == m_target ? 0u : 1u;
 		doInitialise( m_passIndex );
-		crg::RunnablePass::resetCommandBuffer( m_passIndex );
-		crg::RunnablePass::reRecordCurrent();
+		setToReset( m_passIndex );
 	}
 
 	bool RunnableLightingPass::hasEnabledLights()const

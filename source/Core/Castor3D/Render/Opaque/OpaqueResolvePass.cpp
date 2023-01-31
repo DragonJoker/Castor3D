@@ -439,7 +439,6 @@ namespace castor3d
 		, m_device{ device }
 		, m_scene{ *technique.getRenderTarget().getScene() }
 		, m_technique{ technique }
-		, m_target{ result.front() }
 		, m_sceneUbo{ sceneUbo }
 		, m_gpInfoUbo{ gpInfoUbo }
 		, m_hdrConfigUbo{ hdrConfigUbo }
@@ -465,7 +464,6 @@ namespace castor3d
 
 	OpaqueResolvePass::Program & OpaqueResolvePass::doCreateProgram( uint32_t programIndex )
 	{
-		programIndex /= m_passMult;
 		CU_Require( programIndex < dropqrslv::ResolveProgramConfig::MaxProgramsCount );
 
 		if ( !m_programs[programIndex] )
@@ -585,26 +583,14 @@ namespace castor3d
 		background.initialise( m_device );
 		auto index = uint32_t( dropqrslv::ResolveBind::eBackground );
 		background.addPassBindings( pass, result, index );
-
-		crg::ImageViewIdArray outputs;
-		crg::ImageViewIdArray addOutputs;
-
-		for ( size_t i = 0u; i < m_programs.size(); ++i )
-		{
-			outputs.push_back( result.front() );
-			addOutputs.push_back( result.back() );
-		}
-
-		outputs.insert( outputs.end(), addOutputs.begin(), addOutputs.end() );
-		pass.addInOutColourView( outputs );
+		pass.addInOutColourView( result );
 		return pass;
 	}
 
 	void OpaqueResolvePass::update( CpuUpdater & updater )
 	{
 		dropqrslv::ResolveProgramConfig config{ m_scene, m_ssao };
-		m_passMult = m_target == m_technique.getTargetResult().front() ? 1u : 2u;
-		m_programIndex = config.index * m_passMult;
+		m_programIndex = config.index;
 		m_enabled = m_opaquePassEnabled()
 			&& m_scene.hasObjects( m_lightingModelId );
 	}
@@ -613,7 +599,7 @@ namespace castor3d
 	{
 		if ( m_enabled )
 		{
-			auto & program = m_programs[m_programIndex / m_passMult];
+			auto & program = m_programs[m_programIndex];
 
 			if ( program )
 			{

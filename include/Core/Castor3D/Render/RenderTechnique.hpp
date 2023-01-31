@@ -72,8 +72,8 @@ namespace castor3d
 			, RenderDevice const & device
 			, QueueData const & queueData
 			, Parameters const & parameters
-			, Texture const & hdrTarget
-			, Texture const & hdrSource
+			, Texture const & colour
+			, Texture const & intermediate
 			, SsaoConfig const & ssaoConfig
 			, ProgressBar * progress
 			, bool deferred
@@ -157,13 +157,6 @@ namespace castor3d
 		*/
 		C3D_API void accept( RenderTechniqueVisitor & visitor );
 		/**
-		 *\~english
-		 *\brief		Swaps source and target results.
-		 *\~french
-		 *\brief		Echange les résultats source et destination.
-		 */
-		C3D_API void swapResults();
-		/**
 		*\~english
 		*name
 		*	Getters.
@@ -183,6 +176,7 @@ namespace castor3d
 		C3D_API Texture const & getScatteringLightingResult()const;
 		C3D_API Texture const & getBaseColourResult()const;
 		C3D_API crg::ResourcesCache & getResources()const;
+		C3D_API bool isOpaqueEnabled()const;
 
 		castor::Size const & getSize()const
 		{
@@ -191,47 +185,47 @@ namespace castor3d
 
 		crg::ImageViewIdArray getSampledResult()const
 		{
-			return { m_hdrSource->sampledViewId, m_hdrTarget->sampledViewId };
+			return { m_colour->sampledViewId };
 		}
 
 		crg::ImageViewIdArray getTargetResult()const
 		{
-			return { m_hdrTarget->targetViewId, m_hdrSource->targetViewId };
+			return { m_colour->targetViewId };
 		}
 
-		crg::ImageViewIdArray getSampledDepth()const
+		crg::ImageViewIdArray getSampledIntermediate()const
 		{
-			return { m_depthSource->sampledViewId, m_depthTarget->sampledViewId };
+			return { m_intermediate->sampledViewId };
+		}
+
+		crg::ImageViewIdArray getTargetIntermediate()const
+		{
+			return { m_intermediate->targetViewId };
 		}
 
 		crg::ImageViewIdArray getTargetDepth()const
 		{
-			return { m_depthTarget->targetViewId, m_depthSource->targetViewId };
+			return { m_depth->targetViewId };
 		}
 
-		std::vector< Texture const * > getResult()const
+		Texture const & getResult()const
 		{
-			return { m_hdrSource, m_hdrTarget };
+			return *m_colour;
 		}
 
-		Texture const & getResultSource()const
+		Texture const & getIntermediate()const
 		{
-			return *m_hdrSource;
-		}
-
-		Texture const & getResultTarget()const
-		{
-			return *m_hdrTarget;
+			return *m_intermediate;
 		}
 
 		VkExtent3D const & getTargetExtent()const
 		{
-			return m_hdrSource->getExtent();
+			return m_colour->getExtent();
 		}
 
 		VkFormat getTargetFormat()const
 		{
-			return m_hdrSource->getFormat();
+			return m_colour->getFormat();
 		}
 
 		Texture const & getNormal()const
@@ -417,13 +411,11 @@ namespace castor3d
 	private:
 		RenderTarget & m_renderTarget;
 		RenderDevice const & m_device;
-		Texture const * m_hdrSource;
-		Texture const * m_hdrTarget;
 		castor::Size m_targetSize;
 		castor::Size m_rawSize;
-		TextureArray m_depth;
-		Texture const * m_depthSource;
-		Texture const * m_depthTarget;
+		Texture const * m_colour;
+		Texture const * m_intermediate;
+		TexturePtr m_depth;
 		TexturePtr m_normal;
 		MatrixUbo m_matrixUbo;
 		SceneUbo m_sceneUbo;

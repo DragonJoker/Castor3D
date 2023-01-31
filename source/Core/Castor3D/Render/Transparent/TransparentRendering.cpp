@@ -51,7 +51,6 @@ namespace castor3d
 				, m_device
 				, makeSize( getOwner()->getTargetExtent() ) )
 			: nullptr ) }
-		, m_target{ getOwner()->getTargetResult().front() }
 		, m_mipgenPassDesc{ &doCreateMipGenPass( progress
 			, previous.getLastPass()
 			, std::move( previousPasses ) ) }
@@ -72,8 +71,7 @@ namespace castor3d
 				, getOwner()->getSize()
 				, getOwner()->getSceneUbo()
 				, getOwner()->getRenderTarget().getHdrConfigUbo()
-				, getOwner()->getGpInfoUbo()
-				, &m_passIndex )
+				, getOwner()->getGpInfoUbo() )
 			: nullptr ) }
 	{
 		if ( m_transparentPassResult )
@@ -108,9 +106,6 @@ namespace castor3d
 		auto & scene = *updater.scene;
 		updater.voxelConeTracing = scene.getVoxelConeTracingConfig().enabled;
 		m_enabled = m_transparentPass->isPassEnabled();
-		m_passIndex = ( getOwner()->getTargetResult().front() == m_target )
-			? 0u
-			: 1u;
 		m_transparentPass->update( updater );
 	}
 
@@ -171,8 +166,8 @@ namespace castor3d
 					, context
 					, runnableGraph
 					, m_mippedColour.getExtent()
-					, crg::ru::Config{ 2u }
-					, crg::RunnablePass::GetPassIndexCallback( [this](){ return m_passIndex; } )
+					, crg::ru::Config{ 1u }
+					, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
 					, crg::RunnablePass::IsEnabledCallback( [this](){ return m_enabled; } ) );
 				getEngine()->registerTimer( framePass.getFullName()
 					, res->getTimer() );
@@ -234,7 +229,6 @@ namespace castor3d
 							, isOit }
 						.safeBand( true )
 						.meshShading( true )
-						.target( m_target )
 					, RenderTechniquePassDesc{ false, getOwner()->getSsaoConfig() }
 						.ssao( getOwner()->getSsaoResult() )
 						.lpvConfigUbo( getOwner()->getLpvConfigUbo() )
@@ -291,7 +285,6 @@ namespace castor3d
 							, isOit }
 						.safeBand( true )
 						.meshShading( true )
-						.target( m_target )
 						.implicitAction( accumIt->view(), crg::RecordContext::clearAttachment( *accumIt ) )
 						.implicitAction( revealIt->view(), crg::RecordContext::clearAttachment( *revealIt ) )
 					, RenderTechniquePassDesc{ false, getOwner()->getSsaoConfig() }

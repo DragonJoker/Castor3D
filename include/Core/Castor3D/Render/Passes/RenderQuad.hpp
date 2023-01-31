@@ -203,6 +203,15 @@ namespace castor3d
 		/**
 		*\~english
 		*\brief
+		*	Initialises the descriptor sets for the registered pass at given index.
+		*\~french
+		*\brief
+		*	Crée les descriptor sets pour la passe enregistrée à l'indice donné.
+		*/
+		C3D_API void initialisePass( uint32_t passIndex );
+		/**
+		*\~english
+		*\brief
 		*	Initialises the descriptor sets for all registered passes.
 		*\~french
 		*\brief

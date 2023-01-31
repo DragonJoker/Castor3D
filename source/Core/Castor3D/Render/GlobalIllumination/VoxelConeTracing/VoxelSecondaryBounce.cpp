@@ -210,7 +210,7 @@ namespace castor3d
 				, crg::defaultV< crg::RunnablePass::GetPassIndexCallback >
 				, crg::RunnablePass::IsEnabledCallback( [&vctConfig](){ return vctConfig.enabled && vctConfig.enableSecondaryBounce; } )
 				, IsComputePassCallback( [this](){ return doIsComputePass(); } ) }
-			, crg::ru::Config{ 2u, false }.implicitAction( pass.images.back().view()
+			, crg::ru::Config{ 1u, false }.implicitAction( pass.images.back().view()
 				, crg::RecordContext::clearAttachment( pass.images.back().view(), transparentBlackClearColor ) ) }
 		, m_vctConfig{ vctConfig }
 		, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, "VoxelSecondaryBounce", vxlscnd::createShader( m_vctConfig.gridSize.value(), device.renderSystem ) }

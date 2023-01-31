@@ -109,8 +109,7 @@ namespace castor3d
 
 	void OpaquePass::doFillAdditionalDescriptor( PipelineFlags const & flags
 		, ashes::WriteDescriptorSetArray & descriptorWrites
-		, ShadowMapLightTypeArray const & shadowMaps
-		, uint32_t passIndex )
+		, ShadowMapLightTypeArray const & shadowMaps )
 	{
 	}
 

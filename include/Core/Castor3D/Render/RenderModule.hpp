@@ -14,6 +14,8 @@ See LICENSE file in root folder
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
 #include <RenderGraph/FrameGraphPrerequisites.hpp>
+#include <RenderGraph/ImageData.hpp>
+#include <RenderGraph/ImageViewData.hpp>
 
 #include <ashespp/Descriptor/WriteDescriptorSet.hpp>
 

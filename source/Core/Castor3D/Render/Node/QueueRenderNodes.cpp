@@ -142,8 +142,7 @@ namespace castor3d
 			, ashes::BufferBase const & buffer
 			, NodeT const & node
 			, ashes::Optional< VkViewport > const & viewport
-			, ashes::Optional< VkRect2D > const & scissor
-			, uint32_t passIndex )
+			, ashes::Optional< VkRect2D > const & scissor )
 		{
 			commandBuffer.bindPipeline( pipeline.getPipeline() );
 
@@ -159,7 +158,7 @@ namespace castor3d
 
 			if ( pipeline.hasAdditionalDescriptorSetLayout() )
 			{
-				commandBuffer.bindDescriptorSet( pipeline.getAdditionalDescriptorSet( passIndex ), pipeline.getPipelineLayout() );
+				commandBuffer.bindDescriptorSet( pipeline.getAdditionalDescriptorSet(), pipeline.getPipelineLayout() );
 			}
 
 			uint32_t pipelineId{};
@@ -300,8 +299,7 @@ namespace castor3d
 			, ashes::Buffer< VkDrawIndexedIndirectCommand > const & indirectIndexedCommands
 			, ashes::Buffer< VkDrawIndirectCommand > const & indirectCommands
 			, uint32_t & idxIndex
-			, uint32_t & nidxIndex
-			, uint32_t passIndex )
+			, uint32_t & nidxIndex )
 		{
 			for ( auto & pipelines : inputNodes )
 			{
@@ -315,8 +313,7 @@ namespace castor3d
 						, *buffers.first
 						, *buffers.second.front().node
 						, viewport
-						, scissor
-						, passIndex );
+						, scissor );
 					doAddGeometryNodeCommands( pipeline
 						, *buffers.second.front().node
 						, commandBuffer
@@ -380,8 +377,7 @@ namespace castor3d
 			, ashes::Buffer< VkDrawIndirectCommand > const & indirectCommands
 			, uint32_t & mshIndex
 			, uint32_t & idxIndex
-			, uint32_t & nidxIndex
-			, uint32_t passIndex )
+			, uint32_t & nidxIndex )
 		{
 			for ( auto & pipelineIt : inputNodes )
 			{
@@ -397,8 +393,7 @@ namespace castor3d
 						, *bufferIt.first
 						, *nodes.front().node
 						, viewport
-						, scissor
-						, passIndex );
+						, scissor );
 
 					if ( queueNodes.getOwner()->getOwner()->isMeshShading()
 						&& pipeline.hasMeshletDescriptorSetLayout() )
@@ -456,8 +451,7 @@ namespace castor3d
 			, ashes::Buffer< VkDrawIndirectCommand > const & indirectCommands
 			, uint32_t & mshIndex
 			, uint32_t & idxIndex
-			, uint32_t & nidxIndex
-			, uint32_t passIndex )
+			, uint32_t & nidxIndex )
 		{
 			for ( auto & pipelineIt : inputNodes )
 			{
@@ -480,8 +474,7 @@ namespace castor3d
 								, *bufferIt.first
 								, *submeshIt.second.front().node
 								, viewport
-								, scissor
-								, passIndex );
+								, scissor );
 
 							if constexpr ( VisibilityResolvePass::useCompute )
 							{
@@ -533,8 +526,7 @@ namespace castor3d
 			, ashes::Buffer< VkDrawIndexedIndirectCommand > const & indirectIndexedCommands
 			, ashes::Buffer< VkDrawIndirectCommand > const & indirectCommands
 			, uint32_t & idxIndex
-			, uint32_t & nidxIndex
-			, uint32_t passIndex )
+			, uint32_t & nidxIndex )
 		{
 			for ( auto & pipelineIt : inputNodes )
 			{
@@ -552,8 +544,7 @@ namespace castor3d
 								, *bufferIt.first
 								, *submeshIt.second.front()
 								, viewport
-								, scissor
-								, passIndex );
+								, scissor );
 							doAddGeometryNodeCommands( pipeline
 								, *submeshIt.second.front()
 								, commandBuffer
@@ -1168,15 +1159,14 @@ namespace castor3d
 	}
 
 	void QueueRenderNodes::prepareCommandBuffers( ashes::Optional< VkViewport > const & viewport
-		, ashes::Optional< VkRect2D > const & scissors
-		, uint32_t passIndex )
+		, ashes::Optional< VkRect2D > const & scissors )
 	{
 		auto & queue = *getOwner();
 		auto & rp = *queue.getOwner();
 
-		ashes::CommandBuffer const & cb = queue.getCommandBuffer( passIndex );
+		ashes::CommandBuffer const & cb = queue.getCommandBuffer();
 		cb.begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT | VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT
-			, makeVkStruct< VkCommandBufferInheritanceInfo >( rp.getRenderPass( passIndex )
+			, makeVkStruct< VkCommandBufferInheritanceInfo >( rp.getRenderPass( 0u )
 				, 0u
 				, VkFramebuffer( nullptr )
 				, VK_FALSE
@@ -1201,8 +1191,7 @@ namespace castor3d
 			, submeshNIdxCommands
 			, mshIndex
 			, idxIndex
-			, nidxIndex
-			, passIndex );
+			, nidxIndex );
 		queuerndnd::doParseRenderNodesCommands( m_instancedSubmeshNodes
 			, cb
 			, *this
@@ -1213,8 +1202,7 @@ namespace castor3d
 			, submeshNIdxCommands
 			, mshIndex
 			, idxIndex
-			, nidxIndex
-			, passIndex );
+			, nidxIndex );
 
 #else
 
@@ -1230,8 +1218,7 @@ namespace castor3d
 			, submeshIdxCommands
 			, submeshNIdxCommands
 			, idxIndex
-			, nidxIndex
-			, passIndex );
+			, nidxIndex );
 		queuerndnd::doParseRenderNodesCommands( m_instancedSubmeshNodes
 			, cb
 			, *this
@@ -1240,8 +1227,7 @@ namespace castor3d
 			, submeshIdxCommands
 			, submeshNIdxCommands
 			, idxIndex
-			, nidxIndex
-			, passIndex );
+			, nidxIndex );
 
 #endif
 
@@ -1256,8 +1242,7 @@ namespace castor3d
 			, submeshIdxCommands
 			, billboardCommands
 			, idxIndex
-			, nidxIndex
-			, passIndex );
+			, nidxIndex );
 
 		cb.end();
 	}

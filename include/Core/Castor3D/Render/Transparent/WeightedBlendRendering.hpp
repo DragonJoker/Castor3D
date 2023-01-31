@@ -54,8 +54,7 @@ namespace castor3d
 			, castor::Size const & size
 			, SceneUbo & sceneUbo
 			, HdrConfigUbo const & hdrConfigUbo
-			, GpInfoUbo const & gpInfoUbo
-			, uint32_t const * passIndex );
+			, GpInfoUbo const & gpInfoUbo );
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
@@ -90,8 +89,7 @@ namespace castor3d
 			, SceneUbo & sceneUbo
 			, HdrConfigUbo const & hdrConfigUbo
 			, GpInfoUbo const & gpInfoUbo
-			, ProgressBar * progress
-			, uint32_t const * passIndex );
+			, ProgressBar * progress );
 
 	private:
 		RenderDevice const & m_device;

@@ -126,8 +126,10 @@ namespace castor3d
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 			, getOwner()->getName() + cuT( "BillboardsDimensions" ) ) }
-		, m_modelsBuffer{ m_modelsData->lock( 0u, ashes::WholeSize, 0u ) }
-		, m_billboardsBuffer{ m_billboardsData->lock( 0u, ashes::WholeSize, 0u ) }
+		, m_modelsBuffer{ castor::makeArrayView( m_modelsData->lock( 0u, ashes::WholeSize, 0u )
+			, m_modelsData->getCount() ) }
+		, m_billboardsBuffer{ castor::makeArrayView( m_billboardsData->lock( 0u, ashes::WholeSize, 0u )
+			, m_billboardsData->getCount() ) }
 		, m_vertexTransform{ castor::makeUnique< VertexTransforming >( scene, m_device ) }
 	{
 #if C3D_DebugTimers
