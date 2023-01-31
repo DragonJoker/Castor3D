@@ -111,6 +111,8 @@ namespace castor3d
 		VkExtent2D m_size;
 		Texture m_result;
 		crg::ImageViewIdArray m_mipViews;
+		UniformBufferOffsetT< castor::Point3f > m_clipInfo;
+		castor::ChangeTracked< castor::Point3f > m_clipInfoValue;
 		crg::FramePass const * m_lastPass{};
 		/**
 		*name

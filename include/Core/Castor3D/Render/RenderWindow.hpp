@@ -516,6 +516,8 @@ namespace castor3d
 		void doDestroyPickingPass();
 		void doCreateRenderQuad( QueueData const & queueData );
 		void doDestroyRenderQuad();
+		void doRecordCommandBuffer( QueueData const & queueData
+			, uint32_t index );
 		void doCreateCommandBuffers( QueueData const & queueData );
 		void doDestroyCommandBuffers();
 		void doCreateIntermediateViews( QueueData const & queueData );

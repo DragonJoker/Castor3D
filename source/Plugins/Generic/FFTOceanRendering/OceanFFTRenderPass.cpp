@@ -208,37 +208,6 @@ namespace ocean_fft
 			writes.push_back( castor3d::makeImageViewDescriptorWrite( view, sampler, index++ ) );
 		}
 
-		static crg::FramePass const & createCopyPass( castor::String const & name
-			, castor3d::RenderDevice const & device
-			, crg::FramePassGroup & graph
-			, crg::FramePassArray const & previousPasses
-			, crg::ImageViewId input
-			, crg::ImageViewId output
-			, std::shared_ptr< castor3d::IsRenderPassEnabled > isEnabled )
-		{
-			auto extent = getExtent( input );
-			auto & result = graph.createPass( name + "Copy"
-				, [extent, isEnabled, &device]( crg::FramePass const & framePass
-					, crg::GraphContext & context
-					, crg::RunnableGraph & runnableGraph )
-				{
-						auto result = std::make_unique< crg::ImageCopy >( framePass
-							, context
-							, runnableGraph
-							, extent
-							, crg::ru::Config{}
-							, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
-							, crg::RunnablePass::IsEnabledCallback( [isEnabled](){ return ( *isEnabled )(); } ) );
-						device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
-							, result->getTimer() );
-						return result;
-				} );
-			result.addDependencies( previousPasses );
-			result.addTransferInputView( input );
-			result.addTransferOutputView( output );
-			return result;
-		}
-
 		static crg::FramePassArray createNodesPass( castor3d::RenderDevice const & device
 			, crg::FramePassGroup & graph
 			, castor3d::RenderTechnique & technique
@@ -268,7 +237,7 @@ namespace ocean_fft
 						, castor3d::RenderNodesPassDesc{ extent
 							, technique.getMatrixUbo()
 							, technique.getSceneUbo()
-							, technique.getRenderTarget().getCuller() }.safeBand( true ).target( targetResult.front() )
+							, technique.getRenderTarget().getCuller() }.safeBand( true )
 						, castor3d::RenderTechniquePassDesc{ false, technique.getSsaoConfig() }
 							.ssao( technique.getSsaoResult() )
 							.lpvConfigUbo( technique.getLpvConfigUbo() )
@@ -291,9 +260,10 @@ namespace ocean_fft
 			result.addInOutColourView( technique.getTargetResult() );
 #else
 			result.addDependencies( oceanFFT->getLastPasses() );
-			result.addImplicitColourView( technique.getSampledResult()
+			result.addDependency( technique.getGetLastOpaquePass() );
+			result.addImplicitColourView( technique.getSampledIntermediate()
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-			result.addImplicitDepthView( technique.getSampledDepth()
+			result.addImplicitColourView( technique.getDepthObj().sampledViewId
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 			result.addImplicitColourView( technique.getBaseColourResult().sampledViewId
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
@@ -407,8 +377,28 @@ namespace ocean_fft
 			, *oceanUbo
 			, isEnabled );
 #endif
+		
+		auto & blitColourPass = graph.createPass( "CopyColour"
+			, [extent, &device, isEnabled]( crg::FramePass const & framePass
+				, crg::GraphContext & context
+				, crg::RunnableGraph & runnableGraph )
+			{
+				auto result = std::make_unique< crg::ImageCopy >( framePass
+					, context
+					, runnableGraph
+					, extent
+					, crg::ru::Config{}
+					, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
+					, crg::RunnablePass::IsEnabledCallback( [isEnabled](){ return ( *isEnabled )(); } ) );
+				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+					, result->getTimer() );
+				return result;
+			} );
+		blitColourPass.addDependencies( previousPasses );
+		blitColourPass.addTransferInputView( technique.getSampledResult() );
+		blitColourPass.addTransferOutputView( technique.getSampledIntermediate() );
+		passes.push_back( &blitColourPass );
 
-		technique.swapResults();
 		return rdpass::createNodesPass( device
 			, graph
 			, technique
@@ -487,11 +477,6 @@ namespace ocean_fft
 
 	void OceanRenderPass::doUpdateUbos( castor3d::CpuUpdater & updater )
 	{
-		if ( isPassEnabled() )
-		{
-			m_parent->swapResults();
-		}
-
 		auto tslf = updater.tslf > 0_ms
 			? updater.tslf
 			: std::chrono::duration_cast< castor::Milliseconds >( m_timer.getElapsed() );
@@ -591,8 +576,7 @@ namespace ocean_fft
 
 	void OceanRenderPass::doFillAdditionalDescriptor( castor3d::PipelineFlags const & flags
 		, ashes::WriteDescriptorSetArray & descriptorWrites
-		, castor3d::ShadowMapLightTypeArray const & shadowMaps
-		, uint32_t passIndex )
+		, castor3d::ShadowMapLightTypeArray const & shadowMaps )
 	{
 		descriptorWrites.push_back( m_scene.getLightCache().getBinding( rdpass::OceanFFTIdx::eLightBuffer ) );
 		descriptorWrites.push_back( m_ubo->getDescriptorWrite( rdpass::OceanFFTIdx::eOceanUbo ) );
@@ -601,8 +585,8 @@ namespace ocean_fft
 		rdpass::bindTexture( m_oceanFFT->getGradientJacobian().sampledView, *m_linearWrapSampler, descriptorWrites, index );
 		rdpass::bindTexture( m_oceanFFT->getNormals().sampledView, *m_linearWrapSampler, descriptorWrites, index );
 		rdpass::bindTexture( m_parent->getNormal().sampledView, *m_pointClampSampler, descriptorWrites, index );
-		rdpass::bindTexture( m_graph.createImageView( m_targetDepth[passIndex] ), *m_pointClampSampler, descriptorWrites, index );
-		rdpass::bindTexture( m_graph.createImageView( m_targetImage[passIndex] ), *m_pointClampSampler, descriptorWrites, index );
+		rdpass::bindTexture( getTechnique().getDepthObj().wholeView, *m_pointClampSampler, descriptorWrites, index );
+		rdpass::bindTexture( getTechnique().getIntermediate().wholeView, *m_pointClampSampler, descriptorWrites, index );
 		rdpass::bindTexture( m_parent->getBaseColourResult().sampledView, *m_pointClampSampler, descriptorWrites, index );
 		rdpass::bindTexture( m_parent->getDiffuseLightingResult().sampledView, *m_pointClampSampler, descriptorWrites, index );
 		rdpass::bindTexture( getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().sampledView
@@ -1086,7 +1070,7 @@ namespace ocean_fft
 		auto c3d_sceneNormals = writer.declCombinedImg< FImg2DRgba32 >( "c3d_sceneNormals"
 			, index++
 			, RenderPipeline::eBuffers );
-		auto c3d_sceneDepth = writer.declCombinedImg< FImg2DR32 >( "c3d_sceneDepth"
+		auto c3d_sceneDepthObj = writer.declCombinedImg< FImg2DRgba32 >( "c3d_sceneDepthObj"
 			, index++
 			, RenderPipeline::eBuffers );
 		auto c3d_sceneColour = writer.declCombinedImg< FImg2DRgba32 >( "c3d_sceneColour"
@@ -1272,7 +1256,7 @@ namespace ocean_fft
 
 					//  Retrieve non distorted scene data.
 					auto sceneDepth = writer.declLocale( "sceneDepth"
-						, c3d_sceneDepth.sample( hdrCoords ) );
+						, c3d_sceneDepthObj.sample( hdrCoords ).r() );
 					auto scenePosition = writer.declLocale( "scenePosition"
 						, c3d_matrixData.curProjToWorld( utils, hdrCoords, sceneDepth ) );
 
@@ -1304,7 +1288,7 @@ namespace ocean_fft
 							, lightSurface.N()
 							, hdrCoords
 							, c3d_oceanData.ssrSettings
-							, c3d_sceneDepth
+							, c3d_sceneDepthObj
 							, c3d_sceneNormals
 							, c3d_sceneColour ) );
 					displayDebugData( eSSRResult, ssrResult.xyz(), 1.0_f );
@@ -1326,7 +1310,7 @@ namespace ocean_fft
 								* utils.saturate( length( scenePosition - lightSurface.worldPosition() ) * 0.5_f ) )
 							, hdrCoords ) );
 					auto distortedDepth = writer.declLocale( "distortedDepth"
-						, c3d_sceneDepth.sample( distortedTexCoord ) );
+						, c3d_sceneDepthObj.sample( distortedTexCoord ).r() );
 					auto distortedPosition = writer.declLocale( "distortedPosition"
 						, c3d_matrixData.curProjToWorld( utils, distortedTexCoord, distortedDepth ) );
 					auto refractionTexCoord = writer.declLocale( "refractionTexCoord"

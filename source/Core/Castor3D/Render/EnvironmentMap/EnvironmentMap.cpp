@@ -204,8 +204,13 @@ namespace castor3d
 		for ( auto & view : m_environmentMapViews )
 		{
 			commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
+				, VK_PIPELINE_STAGE_TRANSFER_BIT
+				, view.makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
+			commandBuffer->clear( view
+				, opaqueBlackClearColor.color );
+			commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
 				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-				, view.makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
+				, view.makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
 		}
 
 		commandBuffer->end();

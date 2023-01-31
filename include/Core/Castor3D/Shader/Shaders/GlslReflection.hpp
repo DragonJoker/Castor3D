@@ -118,6 +118,14 @@ namespace castor3d::shader
 			, sdw::CombinedImage2DR32 const & depthMap
 			, sdw::CombinedImage2DRgba32 const & normalMap
 			, sdw::CombinedImage2DRgba32 const & colourMap );
+		C3D_API sdw::RetVec4 computeScreenSpace( MatrixData const & matrixData
+			, sdw::Vec3 const & viewPosition
+			, sdw::Vec3 const & worldNormal
+			, sdw::Vec2 const & texcoord
+			, sdw::Vec4 const & ssrSettings
+			, sdw::CombinedImage2DRgba32 const & depthObjMap
+			, sdw::CombinedImage2DRgba32 const & normalMap
+			, sdw::CombinedImage2DRgba32 const & colourMap );
 		/**
 		*\param csOrigin
 		*	Camera-space ray origin, which must be within the view volume and must have z < -0.01 and project within the valid screen rectangle.
@@ -308,6 +316,14 @@ namespace castor3d::shader
 			, sdw::InCombinedImage2DR32
 			, sdw::InCombinedImage2DRgba32
 			, sdw::InCombinedImage2DRgba32 > m_computeScreenSpace;
+		sdw::Function< sdw::Vec4
+			, sdw::InVec3
+			, sdw::InVec3
+			, sdw::InVec2
+			, sdw::InVec4
+			, sdw::InCombinedImage2DRgba32
+			, sdw::InCombinedImage2DRgba32
+			, sdw::InCombinedImage2DRgba32 > m_computeScreenSpace2;
 
 		sdw::Function< sdw::Void
 			, sdw::InVec3

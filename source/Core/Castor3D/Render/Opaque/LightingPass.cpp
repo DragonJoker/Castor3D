@@ -70,7 +70,7 @@ namespace castor3d
 
 	void LightingPass::update( CpuUpdater & updater )
 	{
-		if ( m_lightPass )
+		if ( m_lightPass && m_technique.isOpaqueEnabled() )
 		{
 			auto & scene = *updater.camera->getScene();
 			auto & cache = scene.getLightCache();
@@ -115,6 +115,13 @@ namespace castor3d
 			, m_lpResult[LpTexture::eSheen]
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) );
+	}
+
+	bool LightingPass::isEnabled()const
+	{
+		return m_lightPass
+			&& m_lightPass->hasEnabledLights()
+			&& m_technique.isOpaqueEnabled();
 	}
 
 	void LightingPass::doUpdateLightPasses( CpuUpdater & updater

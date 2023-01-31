@@ -65,6 +65,7 @@ namespace castor3d
 		float gapH = depth / float( subDivisionsD );
 		SubmeshSPtr submesh = mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
 		InterleavedVertexArray points;
+		points.reserve( size_t( nbVertexW ) * nbVertexH );
 
 		if ( flipYZ )
 		{
@@ -72,10 +73,9 @@ namespace castor3d
 			{
 				for ( uint32_t j = 0; j < nbVertexH; j++ )
 				{
-					points.push_back( InterleavedVertex{}
-						.position( castor::Point3f{ offsetW + ( float( i ) * gapW ), 0.0, offsetH + ( float( j ) * gapH ) } )
-						.normal( castor::Point3f{ 0.0, 1.0, 0.0 } )
-						.texcoord( castor::Point2f{ float( i ) * gapW / width, float( j ) * gapH / depth } ) );
+					points.push_back( InterleavedVertex{ .pos = castor::Point3f{ offsetW + ( float( i ) * gapW ), 0.0, offsetH + ( float( j ) * gapH ) }
+						, .nml = castor::Point3f{ 0.0, 1.0, 0.0 }
+						, .tex = castor::Point3f{ float( i ) * gapW / width, float( j ) * gapH / depth, 0.0f } } );
 				}
 			}
 
@@ -97,10 +97,9 @@ namespace castor3d
 			{
 				for ( uint32_t j = 0; j < nbVertexH; j++ )
 				{
-					points.push_back( InterleavedVertex{}
-						.position( castor::Point3f{ offsetW + ( float( i ) * gapW ), offsetH + ( float( j ) * gapH ), 0.0 } )
-						.normal( castor::Point3f{ 0.0, 0.0, 1.0 } )
-						.texcoord( castor::Point2f{ float( i ) * gapW / width, float( j ) * gapH / depth } ) );
+					points.push_back( InterleavedVertex{ .pos = castor::Point3f{ offsetW + ( float( i ) * gapW ), offsetH + ( float( j ) * gapH ), 0.0 }
+						, .nml = castor::Point3f{ 0.0, 0.0, 1.0 }
+						, .tex = castor::Point3f{ float( i ) * gapW / width, float( j ) * gapH / depth, 0.0f } } );
 				}
 			}
 
@@ -122,16 +121,19 @@ namespace castor3d
 		if ( !sortAroundCenter )
 		{
 			auto indexMapping = submesh->createComponent< TriFaceMapping >();
+			std::vector< FaceIndices > faces;
+			faces.reserve( size_t( subDivisionsW ) * subDivisionsD * 2u );
 
 			for ( uint32_t i = 0; i < subDivisionsW; i++ )
 			{
 				for ( uint32_t j = i * subDivisionsD; j < ( i + 1 ) * subDivisionsD; j++ )
 				{
-					indexMapping->addFace( j + subDivisionsW + 1 + i, j + i, j + subDivisionsW + 2 + i );
-					indexMapping->addFace( j + i + 1, j + subDivisionsW + 2 + i, j + i );
+					faces.push_back( FaceIndices{ j + subDivisionsW + 1 + i, j + i, j + subDivisionsW + 2 + i } );
+					faces.push_back( FaceIndices{ j + i + 1, j + subDivisionsW + 2 + i, j + i } );
 				}
 			}
 
+			indexMapping->addFaceGroup( faces );
 			indexMapping->computeTangents();
 		}
 

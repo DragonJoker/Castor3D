@@ -214,7 +214,8 @@ namespace ocean_fft
 			, 0u
 			, 1u };
 		// Transition first mip level to shader source for read in next iteration
-		auto firstLayoutState = context.getLayoutState( imageId
+		auto firstLayoutState = m_graph.getCurrentLayoutState( context
+			, imageId
 			, viewId.data->info.viewType
 			, mipSubRange );
 		context.memoryBarrier( commandBuffer

@@ -276,8 +276,8 @@ namespace castor3d
 		, RenderDevice const & device
 		, QueueData const & queueData
 		, Parameters const & parameters
-		, Texture const & hdrTarget
-		, Texture const & hdrSource
+		, Texture const & colour
+		, Texture const & intermediate
 		, SsaoConfig const & ssaoConfig
 		, ProgressBar * progress
 		, bool deferred
@@ -287,37 +287,25 @@ namespace castor3d
 		, castor::Named{ name + cuT( "/Technique") }
 		, m_renderTarget{ renderTarget }
 		, m_device{ device }
-		, m_hdrSource{ &hdrSource }
-		, m_hdrTarget{ &hdrTarget }
 		, m_targetSize{ m_renderTarget.getSize() }
 		, m_rawSize{ getSafeBandedSize( m_targetSize ) }
+		, m_colour{ &colour }
+		, m_intermediate{ &intermediate }
 		, m_depth{ std::make_shared< Texture >( m_device
-				, m_renderTarget.getResources()
-				, getName() + "/Depth0"
-				, 0u
-				, m_hdrSource->getExtent()
-				, 1u
-				, 1u
-				, m_device.selectSuitableDepthStencilFormat( getFeatureFlags( rendtech::depthUsageFlags ) )
-				, rendtech::depthUsageFlags
-				, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK )
-			, std::make_shared< Texture >( m_device
-				, m_renderTarget.getResources()
-				, getName() + "/Depth1"
-				, 0u
-				, m_hdrSource->getExtent()
-				, 1u
-				, 1u
-				, m_device.selectSuitableDepthStencilFormat( getFeatureFlags( rendtech::depthUsageFlags ) )
-				, rendtech::depthUsageFlags
-				, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK ) }
-		, m_depthSource{ m_depth.back().get() }
-		, m_depthTarget{ m_depth.front().get() }
+			, m_renderTarget.getResources()
+			, getName() + "/Depth"
+			, 0u
+			, m_colour->getExtent()
+			, 1u
+			, 1u
+			, m_device.selectSuitableDepthStencilFormat( getFeatureFlags( rendtech::depthUsageFlags ) )
+			, rendtech::depthUsageFlags
+			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK ) }
 		, m_normal{ std::make_shared< Texture >( m_device
 			, m_renderTarget.getResources()
 			, getName() + "/" + getTexName( DsTexture::eNmlOcc )
 			, 0u
-			, m_hdrSource->getExtent()
+			, m_colour->getExtent()
 			, 1u
 			, 1u
 			, getFormat( m_device, DsTexture::eNmlOcc )
@@ -395,11 +383,7 @@ namespace castor3d
 			, TechniquePassEvent::eBeforePostEffects
 			, &m_transparent.getLastPass() );
 
-		for ( auto & texture : m_depth )
-		{
-			texture->create();
-		}
-
+		m_depth->create();
 		m_normal->create();
 		auto runnable = m_clearLpvRunnable.get();
 		m_device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
@@ -415,8 +399,6 @@ namespace castor3d
 		m_allShadowMaps[size_t( LightType::ePoint )].emplace_back( std::ref( *m_pointShadowMap ), UInt32Array{} );
 		doInitialiseLpv();
 #endif
-		m_hdrSource = &hdrSource;
-		m_hdrTarget = &hdrTarget;
 	}
 
 	RenderTechnique::~RenderTechnique()
@@ -425,11 +407,7 @@ namespace castor3d
 		m_lpvResult.reset();
 		m_voxelizer.reset();
 		m_normal->destroy();
-
-		for ( auto & texture : m_depth )
-		{
-			texture->destroy();
-		}
+		m_depth->destroy();
 
 		for ( auto & array : m_activeShadowMaps )
 		{
@@ -462,8 +440,6 @@ namespace castor3d
 
 	void RenderTechnique::update( CpuUpdater & updater )
 	{
-		auto saveHdrSource = m_hdrSource;
-		auto saveHdrTarget = m_hdrTarget;
 		auto & scene = *updater.scene;
 		auto & camera = *updater.camera;
 		updater.voxelConeTracing = scene.getVoxelConeTracingConfig().enabled;
@@ -524,10 +500,8 @@ namespace castor3d
 			, camera.getFrustum()
 			, jitterProjSpace );
 		m_sceneUbo.cpuUpdate( scene, &camera );
-		m_gpInfoUbo.cpuUpdate( makeSize( m_hdrSource->getExtent() )
+		m_gpInfoUbo.cpuUpdate( makeSize( m_colour->getExtent() )
 			, camera );
-		m_hdrSource = saveHdrSource;
-		m_hdrTarget = saveHdrTarget;
 	}
 
 	void RenderTechnique::update( GpuUpdater & updater )
@@ -575,12 +549,12 @@ namespace castor3d
 	void RenderTechnique::accept( RenderTechniqueVisitor & visitor )
 	{
 		visitor.visit( "Technique Colour"
-			, *m_hdrSource
-			, m_renderTarget.getGraph().getFinalLayoutState( m_hdrSource->sampledViewId ).layout
+			, *m_colour
+			, m_renderTarget.getGraph().getFinalLayoutState( m_colour->sampledViewId ).layout
 			, TextureFactors{}.invert( true ) );
 		visitor.visit( "Technique Depth"
-			, *m_depthSource
-			, m_renderTarget.getGraph().getFinalLayoutState( m_depthSource->sampledViewId ).layout
+			, *m_depth
+			, m_renderTarget.getGraph().getFinalLayoutState( m_depth->sampledViewId ).layout
 			, TextureFactors{}.invert( true ) );
 
 		rendtech::applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeDepth )]
@@ -725,10 +699,9 @@ namespace castor3d
 		return m_renderTarget.getResources();
 	}
 
-	void RenderTechnique::swapResults()
+	bool RenderTechnique::isOpaqueEnabled()const
 	{
-		std::swap( m_hdrSource, m_hdrTarget );
-		std::swap( m_depthSource, m_depthTarget );
+		return m_opaque.isEnabled();
 	}
 
 	crg::FramePassArray RenderTechnique::doCreateRenderPasses( ProgressBar * progress

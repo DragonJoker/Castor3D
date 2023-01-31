@@ -165,7 +165,7 @@ namespace castor3d
 					, runnableGraph
 					, m_device
 					, targetDepth
-					, RenderNodesPassDesc{ getExtent( getOwner()->getTargetDepth().front() )
+					, RenderNodesPassDesc{ getExtent( targetDepth.front() )
 							, getOwner()->getMatrixUbo()
 							, getOwner()->getSceneUbo()
 							, getOwner()->getRenderTarget().getCuller() }
@@ -215,7 +215,7 @@ namespace castor3d
 					, m_device
 					, targetDepth
 					, getOwner()->getSsaoConfig()
-					, RenderNodesPassDesc{ getExtent( getOwner()->getTargetDepth().front() )
+					, RenderNodesPassDesc{ getExtent( targetDepth.front() )
 							, getOwner()->getMatrixUbo()
 							, getOwner()->getSceneUbo()
 							, getOwner()->getRenderTarget().getCuller() }
@@ -263,7 +263,7 @@ namespace castor3d
 					, m_device
 					, targetDepth
 					, getOwner()->getSsaoConfig()
-					, RenderNodesPassDesc{ getExtent( getOwner()->getTargetDepth().front() )
+					, RenderNodesPassDesc{ getExtent( targetDepth.front() )
 							, getOwner()->getMatrixUbo()
 							, getOwner()->getSceneUbo()
 							, getOwner()->getRenderTarget().getCuller() }

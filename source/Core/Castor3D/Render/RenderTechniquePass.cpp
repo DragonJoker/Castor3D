@@ -171,11 +171,6 @@ namespace castor3d
 	void RenderTechniqueNodesPass::update( CpuUpdater & updater )
 	{
 		RenderNodesPass::update( updater );
-
-		if ( m_parent )
-		{
-			RenderNodesPass::doUpdatePassIndex( m_parent->getTargetResult().front() );
-		}
 	}
 
 	PipelineFlags RenderTechniqueNodesPass::createPipelineFlags( PassComponentCombine components
@@ -502,8 +497,7 @@ namespace castor3d
 
 	void RenderTechniqueNodesPass::doFillAdditionalDescriptor( PipelineFlags const & flags
 		, ashes::WriteDescriptorSetArray & descriptorWrites
-		, ShadowMapLightTypeArray const & shadowMaps
-		, uint32_t passIndex )
+		, ShadowMapLightTypeArray const & shadowMaps )
 	{
 		auto index = uint32_t( GlobalBuffersIdx::eCount );
 		doAddPassSpecificsDescriptor( flags, descriptorWrites, index );

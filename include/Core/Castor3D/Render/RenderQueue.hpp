@@ -46,7 +46,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Initialise la file de rendu.
 		 */
-		C3D_API void initialise( uint32_t passIndex );
+		C3D_API void initialise();
 		/**
 		 *\~english
 		 *\brief		Cleans the queue up.
@@ -67,16 +67,6 @@ namespace castor3d
 		 *\~english
 		 *\brief			Updates the render nodes.
 		 *\param[in,out]	shadowMaps	Receives the shadow maps used in the render pass.
-		 *\~french
-		 *\brief			Met à jour les noeuds de rendu.
-		 *\param[in,out]	shadowMaps	Reçoit les shadow maps utilisées par la passe de rendu.
-		 */
-		C3D_API void update( ShadowMapLightTypeArray & shadowMaps
-			, uint32_t passIndex );
-		/**
-		 *\~english
-		 *\brief			Updates the render nodes.
-		 *\param[in,out]	shadowMaps	Receives the shadow maps used in the render pass.
 		 *\param[in]		viewport	The viewport restraining the render pass.
 		 *\param[in]		scissor		The scissors restraining the render pass.
 		 *\~french
@@ -87,8 +77,7 @@ namespace castor3d
 		 */
 		C3D_API void update( ShadowMapLightTypeArray & shadowMaps
 			, VkViewport const & viewport
-			, VkRect2D const & scissor
-			, uint32_t passIndex );
+			, VkRect2D const & scissor );
 		/**
 		 *\~english
 		 *\brief			Updates the render nodes.
@@ -100,8 +89,7 @@ namespace castor3d
 		 *\param[in]		scissor		Le scissor restreignant par la passe de rendu.
 		 */
 		C3D_API void update( ShadowMapLightTypeArray & shadowMaps
-			, VkRect2D const & scissor
-			, uint32_t passIndex );
+			, VkRect2D const & scissor );
 		/**
 		 *\~english
 		 *\brief		Sets the node to be ignored in rendering.
@@ -121,19 +109,19 @@ namespace castor3d
 		*/
 		/**@{*/
 		C3D_API bool hasNodes()const;
-		C3D_API bool needsInitialise( uint32_t passIndex )const;
+		C3D_API bool needsInitialise()const;
 		C3D_API RenderFilters getFilters()const;
-		C3D_API ashes::CommandBuffer const & initCommandBuffer( uint32_t passIndex );
+		C3D_API ashes::CommandBuffer const & initCommandBuffer();
 
-		bool hasCommandBuffer( uint32_t passIndex )const
+		bool hasCommandBuffer()const
 		{
-			return m_passes[passIndex].commandBuffer != nullptr;
+			return m_pass.commandBuffer != nullptr;
 		}
 		
-		ashes::CommandBuffer const & getCommandBuffer( uint32_t passIndex )const
+		ashes::CommandBuffer const & getCommandBuffer()const
 		{
-			CU_Require( hasCommandBuffer( passIndex ) );
-			return *m_passes[passIndex].commandBuffer;
+			CU_Require( hasCommandBuffer() );
+			return *m_pass.commandBuffer;
 		}
 
 		QueueRenderNodes & getRenderNodes()const
@@ -155,9 +143,8 @@ namespace castor3d
 
 	private:
 		void doInitialise( RenderDevice const & device
-			, QueueData const & queueData
-			, uint32_t passIndex );
-		void doPrepareCommandBuffer( uint32_t passIndex );
+			, QueueData const & queueData );
+		void doPrepareCommandBuffer();
 		void doOnCullerCompute( SceneCuller const & culler );
 
 	private:
@@ -190,7 +177,7 @@ namespace castor3d
 		SceneCullerSignalConnection m_onCullerCompute;
 		SceneNode const * m_ignoredNode{ nullptr };
 		QueueRenderNodesUPtr m_renderNodes;
-		std::vector< PassData > m_passes;
+		PassData m_pass;
 		bool m_culledChanged{};
 		bool m_commandsChanged{};
 		castor::GroupChangeTracked< ashes::Optional< VkViewport > > m_viewport;

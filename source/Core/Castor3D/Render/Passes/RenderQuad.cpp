@@ -384,24 +384,35 @@ namespace castor3d
 		m_invertY.emplace_back( invertY );
 	}
 
+	void RenderQuad::initialisePass( uint32_t passIndex)
+	{
+		CU_Require( m_descriptorSetLayout );
+
+		if ( !m_descriptorSetPool )
+		{
+			auto descriptorSetCount = uint32_t( m_passes.size() );
+			m_descriptorSetPool = m_descriptorSetLayout->createPool( getName()
+				, descriptorSetCount );
+			m_descriptorSets.resize( descriptorSetCount );
+		}
+
+		if ( !m_descriptorSets[passIndex] )
+		{
+			auto prefix = getName() + ", Pass " + castor::string::toString( passIndex );
+			auto descriptorSet = m_descriptorSetPool->createDescriptorSet( prefix );
+			descriptorSet->setBindings( m_passes[passIndex] );
+			descriptorSet->update();
+			m_descriptorSets[passIndex] = std::move( descriptorSet );
+		}
+	}
+
 	void RenderQuad::initialisePasses()
 	{
 		log::debug << "Initialising passes for " << getName() << std::endl;
-		CU_Require( m_descriptorSetLayout );
-		auto descriptorSetCount = uint32_t( m_passes.size() );
-		m_descriptorSetPool = m_descriptorSetLayout->createPool( getName()
-			, descriptorSetCount );
-		m_descriptorSets.reserve( descriptorSetCount );
-		uint32_t index = 0u;
-		auto prefix = getName() + ", Pass ";
 
-		for ( auto & pass : m_passes )
+		for ( uint32_t index = 0u; index < m_passes.size(); ++index )
 		{
-			auto descriptorSet = m_descriptorSetPool->createDescriptorSet( prefix + castor::string::toString( index ) );
-			descriptorSet->setBindings( pass );
-			descriptorSet->update();
-			m_descriptorSets.emplace_back( std::move( descriptorSet ) );
-			++index;
+			initialisePass( index );
 		}
 	}
 

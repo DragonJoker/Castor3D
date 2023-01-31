@@ -440,7 +440,7 @@ namespace castor3d
 		void doInitCombineProgram( ProgressBar * progress );
 		Texture const & doUpdatePostEffects( CpuUpdater & updater
 			, PostEffectPtrArray const & effects
-			, TextureArray const & images )const;
+			, std::vector< Texture const * > const & images )const;
 		crg::SemaphoreWaitArray doRender( ashes::Queue const & queue
 			, crg::SemaphoreWaitArray signalsToWait );
 
@@ -450,18 +450,18 @@ namespace castor3d
 
 	private:
 		static uint32_t sm_uiCount;
-		TargetType m_type;
+		TargetType m_type{};
 		castor::Size m_size;
 		castor::Size m_safeBandedSize;
-		VkFormat m_pixelFormat;
-		std::atomic_bool m_initialised;
-		std::atomic_bool m_initialising;
+		VkFormat m_pixelFormat{};
+		std::atomic_bool m_initialised{};
+		std::atomic_bool m_initialising{};
 		crg::ResourcesCache m_resources;
 		std::unique_ptr< HdrConfigUbo > m_hdrConfigUbo;
 		RenderTechniqueUPtr m_renderTechnique;
-		SceneRPtr m_scene;
-		CameraRPtr m_camera;
-		uint32_t m_index;
+		SceneRPtr m_scene{};
+		CameraRPtr m_camera{};
+		uint32_t m_index{};
 		castor::String m_name;
 		Parameters m_techniqueParameters;
 		PostEffectPtrArray m_hdrPostEffects;
@@ -487,9 +487,9 @@ namespace castor3d
 		Texture m_combined;
 		crg::FramePass & m_overlayPassDesc;
 		OverlayPass * m_overlayPass{};
-		uint32_t m_combinePassIndex{};
+		uint32_t m_combinePassIndex{ 1u };
 		Texture const * m_combinePassSource{};
-		crg::FramePass * m_combinePass;
+		crg::FramePass * m_combinePass{};
 		crg::FramePass const * m_hdrLastPass{};
 		crg::RunnableGraphPtr m_runnable;
 		ashes::SemaphorePtr m_combineSemaphore;

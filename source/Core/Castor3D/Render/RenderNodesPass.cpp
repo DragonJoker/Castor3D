@@ -126,10 +126,10 @@ namespace castor3d
 		, crg::RenderPass{ pass
 			, context
 			, graph
-			, { [this]( uint32_t index ){ doSubInitialise( index ); }
+			, { [this]( uint32_t index ){ doSubInitialise(); }
 				, [this]( crg::RecordContext & ctx, VkCommandBuffer cb, uint32_t i ){ doSubRecordInto( ctx, cb, i ); }
 				, GetSubpassContentsCallback( [](){ return VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS; } )
-				, GetPassIndexCallback( [this](){ return m_passIndex; } )
+				, GetPassIndexCallback( [](){ return 0u; } )
 				, IsEnabledCallback( [this](){ return isPassEnabled(); } ) }
 			, makeExtent2D( desc.m_size )
 			, crg::ru::Config{ std::max( 1u, uint32_t( std::max( targetImage.size(), targetDepth.size() ) ) )
@@ -157,7 +157,6 @@ namespace castor3d
 		, m_meshShading{ desc.m_meshShading && device.hasMeshAndTaskShaders() }
 		, m_sceneUbo{ desc.m_sceneUbo }
 		, m_index{ desc.m_index }
-		, m_target{ desc.m_target }
 	{
 		if ( m_sceneUbo )
 		{
@@ -600,79 +599,73 @@ namespace castor3d
 			, PassDescriptors{} ).first;
 		auto & descriptors = descLayoutIt->second;
 
-		if ( descriptors.sets.empty() )
+		if ( !descriptors.set )
 		{
 			auto & scene = getCuller().getScene();
-			uint32_t passIndex{};
+			descriptors.set = descriptors.pool->createDescriptorSet( getName() + rendndpass::Suffix
+				, RenderPipeline::eBuffers );
+			auto & descriptorSet = *descriptors.set;
+			ashes::WriteDescriptorSetArray descriptorWrites;
+			descriptorWrites.push_back( m_matrixUbo.getDescriptorWrite( uint32_t( GlobalBuffersIdx::eMatrix ) ) );
 
-			for ( uint32_t i = 0u; i < getMaxPassCount(); ++i )
+			if ( m_sceneUbo )
 			{
-				auto & descriptorSet = *descriptors.sets.emplace_back( descriptors.pool->createDescriptorSet( getName() + rendndpass::Suffix
-					, RenderPipeline::eBuffers ) );
-				ashes::WriteDescriptorSetArray descriptorWrites;
-				descriptorWrites.push_back( m_matrixUbo.getDescriptorWrite( uint32_t( GlobalBuffersIdx::eMatrix ) ) );
-
-				if ( m_sceneUbo )
-				{
-					descriptorWrites.push_back( m_sceneUbo->getDescriptorWrite( uint32_t( GlobalBuffersIdx::eScene ) ) );
-				}
-
-				auto & nodesIds = m_renderQueue->getRenderNodes().getNodesIds();
-				auto nodesIdsWrite = ashes::WriteDescriptorSet{ uint32_t( GlobalBuffersIdx::eObjectsNodeID )
-					, 0u
-					, 1u
-					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
-				nodesIdsWrite.bufferInfo.push_back( { nodesIds.getBuffer()
-					, 0u
-					, nodesIds.getBuffer().getSize() } );
-				descriptorWrites.push_back( nodesIdsWrite );
-
-				auto & modelBuffer = scene.getModelBuffer();
-				auto modelDataWrite = ashes::WriteDescriptorSet{ uint32_t( GlobalBuffersIdx::eModelsData )
-					, 0u
-					, 1u
-					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
-				modelDataWrite.bufferInfo.push_back( { modelBuffer.getBuffer()
-					, 0u
-					, modelBuffer.getBuffer().getSize() } );
-				descriptorWrites.push_back( modelDataWrite );
-				auto & matCache = getOwner()->getMaterialCache();
-				descriptorWrites.push_back( matCache.getPassBuffer().getBinding( uint32_t( GlobalBuffersIdx::eMaterials ) ) );
-				descriptorWrites.push_back( matCache.getSssProfileBuffer().getBinding( uint32_t( GlobalBuffersIdx::eSssProfiles ) ) );
-				descriptorWrites.push_back( matCache.getTexConfigBuffer().getBinding( uint32_t( GlobalBuffersIdx::eTexConfigs ) ) );
-				descriptorWrites.push_back( matCache.getTexAnimBuffer().getBinding( uint32_t( GlobalBuffersIdx::eTexAnims ) ) );
-
-				if ( pipeline.getFlags().isBillboard() )
-				{
-					auto & billboardDatas = scene.getBillboardsBuffer();
-					auto write = ashes::WriteDescriptorSet{ uint32_t( GlobalBuffersIdx::eBillboardsData )
-						, 0u
-						, 1u
-						, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
-					write.bufferInfo.push_back( { billboardDatas.getBuffer()
-						, 0u
-						, billboardDatas.getBuffer().getSize() } );
-					descriptorWrites.push_back( write );
-				}
-
-				doFillAdditionalDescriptor( pipeline.getFlags()
-					, descriptorWrites
-					, shadowMaps
-					, passIndex );
-				descriptorSet.setBindings( descriptorWrites );
-				descriptorSet.update();
-				++passIndex;
+				descriptorWrites.push_back( m_sceneUbo->getDescriptorWrite( uint32_t( GlobalBuffersIdx::eScene ) ) );
 			}
+
+			auto & nodesIds = m_renderQueue->getRenderNodes().getNodesIds();
+			auto nodesIdsWrite = ashes::WriteDescriptorSet{ uint32_t( GlobalBuffersIdx::eObjectsNodeID )
+				, 0u
+				, 1u
+				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
+			nodesIdsWrite.bufferInfo.push_back( { nodesIds.getBuffer()
+				, 0u
+				, nodesIds.getBuffer().getSize() } );
+			descriptorWrites.push_back( nodesIdsWrite );
+
+			auto & modelBuffer = scene.getModelBuffer();
+			auto modelDataWrite = ashes::WriteDescriptorSet{ uint32_t( GlobalBuffersIdx::eModelsData )
+				, 0u
+				, 1u
+				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
+			modelDataWrite.bufferInfo.push_back( { modelBuffer.getBuffer()
+				, 0u
+				, modelBuffer.getBuffer().getSize() } );
+			descriptorWrites.push_back( modelDataWrite );
+			auto & matCache = getOwner()->getMaterialCache();
+			descriptorWrites.push_back( matCache.getPassBuffer().getBinding( uint32_t( GlobalBuffersIdx::eMaterials ) ) );
+			descriptorWrites.push_back( matCache.getSssProfileBuffer().getBinding( uint32_t( GlobalBuffersIdx::eSssProfiles ) ) );
+			descriptorWrites.push_back( matCache.getTexConfigBuffer().getBinding( uint32_t( GlobalBuffersIdx::eTexConfigs ) ) );
+			descriptorWrites.push_back( matCache.getTexAnimBuffer().getBinding( uint32_t( GlobalBuffersIdx::eTexAnims ) ) );
+
+			if ( pipeline.getFlags().isBillboard() )
+			{
+				auto & billboardDatas = scene.getBillboardsBuffer();
+				auto write = ashes::WriteDescriptorSet{ uint32_t( GlobalBuffersIdx::eBillboardsData )
+					, 0u
+					, 1u
+					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
+				write.bufferInfo.push_back( { billboardDatas.getBuffer()
+					, 0u
+					, billboardDatas.getBuffer().getSize() } );
+				descriptorWrites.push_back( write );
+			}
+
+			doFillAdditionalDescriptor( pipeline.getFlags()
+				, descriptorWrites
+				, shadowMaps );
+			descriptorSet.setBindings( descriptorWrites );
+			descriptorSet.update();
 		}
 
-		pipeline.setAdditionalDescriptorSet( descriptors.sets );
+		pipeline.setAdditionalDescriptorSet( *descriptors.set );
 	}
 
-	void RenderNodesPass::doSubInitialise( uint32_t index )
+	void RenderNodesPass::doSubInitialise()
 	{
-		if ( m_renderQueue->needsInitialise( index ) )
+		if ( m_renderQueue->needsInitialise() )
 		{
-			m_renderQueue->initialise( index );
+			m_renderQueue->initialise();
 		}
 	}
 
@@ -680,7 +673,7 @@ namespace castor3d
 		, VkCommandBuffer commandBuffer
 		, uint32_t index )
 	{
-		VkCommandBuffer secondary = m_renderQueue->initCommandBuffer( index );
+		VkCommandBuffer secondary = m_renderQueue->initCommandBuffer();
 		m_context.vkCmdExecuteCommands( commandBuffer
 			, 1u
 			, &secondary );
@@ -765,14 +758,6 @@ namespace castor3d
 		}
 
 		doAdjustFlags( flags );
-	}
-
-	void RenderNodesPass::doUpdatePassIndex( crg::ImageViewId currentTarget )
-	{
-		if ( m_target.data )
-		{
-			m_passIndex = ( currentTarget == m_target ) ? 0u : 1u;
-		}
 	}
 
 	ashes::VkDescriptorSetLayoutBindingArray RenderNodesPass::doCreateAdditionalBindings( PipelineFlags const & flags )const
@@ -903,7 +888,7 @@ namespace castor3d
 					auto bindings = doCreateAdditionalBindings( flags );
 					addDescriptors.layout = device->createDescriptorSetLayout( getName() + rendndpass::Suffix
 						, std::move( bindings ) );
-					addDescriptors.pool = addDescriptors.layout->createPool( getMaxPassCount() );
+					addDescriptors.pool = addDescriptors.layout->createPool( 1u );
 				}
 
 				pipeline->setAdditionalDescriptorSetLayout( *addDescriptors.layout );
@@ -925,7 +910,7 @@ namespace castor3d
 				}
 
 				pipeline->initialise( device
-					, getRenderPass( getPassIndex() ) );
+					, getRenderPass( 0u ) );
 				pipelines.emplace_back( std::move( pipeline ) );
 				it = std::next( pipelines.begin()
 					, ptrdiff_t( pipelines.size() - 1u ) );

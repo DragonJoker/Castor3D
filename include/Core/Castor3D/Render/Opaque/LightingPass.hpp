@@ -92,11 +92,7 @@ namespace castor3d
 		 */
 		void accept( PipelineVisitorBase & visitor );
 
-		bool isEnabled()const
-		{
-			return m_lightPass
-				&& m_lightPass->hasEnabledLights();
-		}
+		bool isEnabled()const;
 
 		crg::FramePass const & getLastPass()const
 		{

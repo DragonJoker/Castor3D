@@ -72,8 +72,6 @@ namespace castor3d
 		SceneBackground const * m_background;
 		Viewport m_viewport;
 		OnBackgroundChangedConnection m_onBackgroundChanged;
-		crg::ImageViewId m_target;
-		uint32_t m_passIndex{};
 	};
 }
 

@@ -140,6 +140,9 @@ namespace water
 							, buffer->getConstPtr()
 							, result );
 					} ) );
+
+				graph.addInput( view
+					, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
 			}
 		}
 	}
@@ -218,7 +221,26 @@ namespace water
 		auto extent = technique.getTargetExtent();
 		auto & graph = technique.getRenderTarget().getGraph().createPassGroup( name );
 
-		technique.swapResults();
+		auto & blitColourPass = graph.createPass( "CopyColour"
+			, [extent, &device, isEnabled]( crg::FramePass const & framePass
+				, crg::GraphContext & context
+				, crg::RunnableGraph & runnableGraph )
+			{
+				auto result = std::make_unique< crg::ImageCopy >( framePass
+					, context
+					, runnableGraph
+					, extent
+					, crg::ru::Config{}
+					, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
+					, crg::RunnablePass::IsEnabledCallback( [isEnabled](){ return ( *isEnabled )(); } ) );
+				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+					, result->getTimer() );
+				return result;
+			} );
+		blitColourPass.addDependencies( previousPasses );
+		blitColourPass.addTransferInputView( technique.getSampledResult() );
+		blitColourPass.addTransferOutputView( technique.getSampledIntermediate() );
+
 		auto targetResult = technique.getTargetResult();
 		auto targetDepth = technique.getTargetDepth();
 		auto & result = graph.createPass( "NodesPass"
@@ -236,7 +258,7 @@ namespace water
 				, castor3d::RenderNodesPassDesc{ extent
 					, technique.getMatrixUbo()
 					, technique.getSceneUbo()
-					, technique.getRenderTarget().getCuller() }.safeBand( true ).target( targetResult.front() )
+					, technique.getRenderTarget().getCuller() }.safeBand( true )
 				, castor3d::RenderTechniquePassDesc{ false, technique.getSsaoConfig() }
 					.lpvConfigUbo( technique.getLpvConfigUbo() )
 					.llpvConfigUbo( technique.getLlpvConfigUbo() )
@@ -252,10 +274,14 @@ namespace water
 			return res;
 		} );
 
-		result.addDependencies( previousPasses );
-		result.addImplicitColourView( technique.getSampledResult()
+		result.addDependency( blitColourPass );
+		result.addDependency( technique.getGetLastDepthPass() );
+		result.addDependency( technique.getGetLastOpaquePass() );
+		result.addImplicitColourView( technique.getSampledIntermediate()
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-		result.addImplicitDepthView( technique.getSampledDepth()
+		result.addImplicitColourView( technique.getDepthObj().sampledViewId
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+		result.addImplicitColourView( technique.getNormal().sampledViewId
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 		result.addInOutDepthStencilView( technique.getTargetDepth() );
 		result.addInOutColourView( technique.getTargetResult() );
@@ -334,11 +360,6 @@ namespace water
 
 	void WaterRenderPass::doUpdateUbos( castor3d::CpuUpdater & updater )
 	{
-		if ( isPassEnabled() )
-		{
-			m_parent->swapResults();
-		}
-
 		auto tslf = updater.tslf > 0_ms
 			? updater.tslf
 			: std::chrono::duration_cast< castor::Milliseconds >( m_timer.getElapsed() );
@@ -429,8 +450,7 @@ namespace water
 
 	void WaterRenderPass::doFillAdditionalDescriptor( castor3d::PipelineFlags const & flags
 		, ashes::WriteDescriptorSetArray & descriptorWrites
-		, castor3d::ShadowMapLightTypeArray const & shadowMaps
-		, uint32_t passIndex )
+		, castor3d::ShadowMapLightTypeArray const & shadowMaps )
 	{
 		descriptorWrites.push_back( m_scene.getLightCache().getBinding( WaterIdx::eLightBuffer ) );
 		descriptorWrites.push_back( m_ubo.getDescriptorWrite( WaterIdx::eWaterUbo ) );
@@ -439,8 +459,8 @@ namespace water
 		bindTexture( m_normals2, *m_linearWrapSampler, descriptorWrites, index );
 		bindTexture( m_noise, *m_linearWrapSampler, descriptorWrites, index );
 		bindTexture( m_parent->getNormal().sampledView, *m_pointClampSampler, descriptorWrites, index );
-		bindTexture( m_graph.createImageView( m_targetDepth[passIndex] ), *m_pointClampSampler, descriptorWrites, index );
-		bindTexture( m_graph.createImageView( m_targetImage[passIndex] ), *m_pointClampSampler, descriptorWrites, index );
+		bindTexture( getTechnique().getDepthObj().wholeView, *m_pointClampSampler, descriptorWrites, index );
+		bindTexture( getTechnique().getIntermediate().wholeView, *m_pointClampSampler, descriptorWrites, index );
 		bindTexture( getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().sampledView
 			, *getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().sampler
 			, descriptorWrites
@@ -533,7 +553,7 @@ namespace water
 		auto c3d_normals = writer.declCombinedImg< FImg2DRgba32 >( "c3d_normals"
 			, index++
 			, RenderPipeline::eBuffers );
-		auto c3d_depth = writer.declCombinedImg< FImg2DR32 >( "c3d_depth"
+		auto c3d_depthObj = writer.declCombinedImg< FImg2DRgba32 >( "c3d_depthObj"
 			, index++
 			, RenderPipeline::eBuffers );
 		auto c3d_colour = writer.declCombinedImg< FImg2DRgba32 >( "c3d_colour"
@@ -733,7 +753,7 @@ namespace water
 							, finalNormal
 							, hdrCoords
 							, c3d_waterData.ssrSettings
-							, c3d_depth
+							, c3d_depthObj
 							, c3d_normals
 							, c3d_colour ) );
 					displayDebugData( eSSRResult, ssrResult.xyz(), 1.0_f );
@@ -749,7 +769,7 @@ namespace water
 					auto distortedTexCoord = writer.declLocale( "distortedTexCoord"
 						, ( hdrCoords + ( ( finalNormal.xz() + finalNormal.xy() ) * 0.5_f ) * c3d_waterData.refractionDistortionFactor ) );
 					auto distortedDepth = writer.declLocale( "distortedDepth"
-						, c3d_depth.sample( distortedTexCoord ) );
+						, c3d_depthObj.sample( distortedTexCoord ).r() );
 					auto distortedPosition = writer.declLocale( "distortedPosition"
 						, c3d_matrixData.curProjToWorld( utils, distortedTexCoord, distortedDepth ) );
 					auto refractionTexCoord = writer.declLocale( "refractionTexCoord"
@@ -759,7 +779,7 @@ namespace water
 					displayDebugData( eRefraction, refractionResult, 1.0_f );
 					//  Retrieve non distorted scene colour.
 					auto sceneDepth = writer.declLocale( "sceneDepth"
-						, c3d_depth.sample( hdrCoords ) );
+						, c3d_depthObj.sample( hdrCoords ).r() );
 					auto scenePosition = writer.declLocale( "scenePosition"
 						, c3d_matrixData.curProjToWorld( utils, hdrCoords, sceneDepth ) );
 					// Depth softening, to fade the alpha of the water where it meets the scene geometry by some predetermined distance. 

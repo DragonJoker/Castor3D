@@ -63,8 +63,7 @@ namespace castor3d
 		}
 		void doFillAdditionalDescriptor( PipelineFlags const & flags
 			, ashes::WriteDescriptorSetArray & descriptorWrites
-			, ShadowMapLightTypeArray const & shadowMaps
-			, uint32_t passIndex )override
+			, ShadowMapLightTypeArray const & shadowMaps )override
 		{
 		}
 		ashes::PipelineDepthStencilStateCreateInfo doCreateDepthStencilState( PipelineFlags const & flags )const override;

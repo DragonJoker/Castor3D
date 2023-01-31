@@ -965,15 +965,23 @@ namespace castor3d
 				for ( auto & submeshIt : passIt.second )
 				{
 					auto & submesh = submeshIt.second.second->data;
-					geometry.fillEntry( submeshIt.second.first
-						, *passIt.first
-						, *geometry.getParent()
-						, submesh.getMeshletsCount()
-						, submeshIt.second.second->modelData );
-					geometry.fillEntryOffsets( submeshIt.second.first
-						, submesh.getVertexOffset( geometry )
-						, submesh.getIndexOffset()
-						, submesh.getMeshletOffset() );
+
+					if ( submesh.isInitialised() )
+					{
+						geometry.fillEntry( submeshIt.second.first
+							, *passIt.first
+							, *geometry.getParent()
+							, submesh.getMeshletsCount()
+							, submeshIt.second.second->modelData );
+						geometry.fillEntryOffsets( submeshIt.second.first
+							, submesh.getVertexOffset( geometry )
+							, submesh.getIndexOffset()
+							, submesh.getMeshletOffset() );
+					}
+					else
+					{
+						markDirty( geometry );
+					}
 				}
 
 				dirty = dirty || passIt.first->getId() == 0;

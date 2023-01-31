@@ -13,6 +13,7 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
+#include <CastorUtils/Design/ArrayView.hpp>
 #include <CastorUtils/Design/OwnedBy.hpp>
 
 #include <ashespp/Buffer/Buffer.hpp>
@@ -99,8 +100,8 @@ namespace castor3d
 		NodesPtrMapT< BillboardRenderNode > m_billboardNodes;
 		ashes::BufferPtr< ModelBufferConfiguration > m_modelsData;
 		ashes::BufferPtr< BillboardUboConfiguration > m_billboardsData;
-		ModelBufferConfiguration * m_modelsBuffer{};
-		BillboardUboConfiguration * m_billboardsBuffer{};
+		castor::ArrayView< ModelBufferConfiguration > m_modelsBuffer;
+		castor::ArrayView< BillboardUboConfiguration > m_billboardsBuffer;
 		FramePassTimerUPtr m_timerRenderNodes;
 		NodeDataArray m_nodesData;
 		uint32_t m_nodeId{};

@@ -36,16 +36,16 @@ namespace castor3d
 
 		//!\~english	The vertex coordinates.
 		//!\~french		La position du sommet.
-		castor::Point3f pos;
+		castor::Point3f pos{};
 		//!\~english	The vertex normal.
 		//!\~french		La normale du sommet.
-		castor::Point3f nml;
+		castor::Point3f nml{};
 		//!\~english	The vertex tangent.
 		//!\~french		La tangente du sommet.
-		castor::Point3f tan;
+		castor::Point3f tan{};
 		//!\~english	The vertex texture coordinates.
 		//!\~french		La coordonnées de texture du sommet.
-		castor::Point3f tex;
+		castor::Point3f tex{};
 	};
 }
 

@@ -27,14 +27,12 @@ namespace castor3d
 			{
 				doResetPipeline( 0u );
 			} ) }
-		, m_target{ colour.front() }
 	{
 	}
 
 	void BackgroundPassBase::update( CpuUpdater & updater )
 	{
 		updater.viewport = &m_viewport;
-		m_passIndex = ( m_target == updater.targetImage.front() ) ? 0u : 1u;
 		m_background->update( updater );
 	}
 
