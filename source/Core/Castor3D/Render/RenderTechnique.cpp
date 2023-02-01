@@ -311,7 +311,7 @@ namespace castor3d
 			, getFormat( m_device, DsTexture::eNmlOcc )
 			, getUsageFlags( DsTexture::eNmlOcc )
 			, getBorderColor( DsTexture::eNmlOcc ) ) }
-		, m_matrixUbo{ m_device }
+		, m_cameraUbo{ m_device }
 		, m_sceneUbo{ m_device }
 		, m_gpInfoUbo{ m_device }
 		, m_lpvConfigUbo{ m_device }
@@ -495,11 +495,10 @@ namespace castor3d
 		auto jitterProjSpace = jitter * 2.0f;
 		jitterProjSpace[0] /= float( camera.getWidth() );
 		jitterProjSpace[1] /= float( camera.getHeight() );
-		m_matrixUbo.cpuUpdate( camera.getView()
-			, camera.getProjection( true )
-			, camera.getFrustum()
+		m_cameraUbo.cpuUpdate( camera
+			, true
 			, jitterProjSpace );
-		m_sceneUbo.cpuUpdate( scene, &camera );
+		m_sceneUbo.cpuUpdate( scene );
 		m_gpInfoUbo.cpuUpdate( makeSize( m_colour->getExtent() )
 			, camera );
 	}

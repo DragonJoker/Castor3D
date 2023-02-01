@@ -11,7 +11,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Node/RenderNodeModule.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"
 #include "Castor3D/Scene/Animation/AnimationModule.hpp"
-#include "Castor3D/Shader/Ubos/SceneUbo.hpp"
+#include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 #include <CastorUtils/Design/Named.hpp>
 #include <CastorUtils/Graphics/Size.hpp>
@@ -32,14 +32,14 @@ namespace castor3d
 	{
 	private:
 		RenderNodesPassDesc( VkExtent3D size
-			, MatrixUbo & matrixUbo
-			, SceneUbo * sceneUbo
+			, CameraUbo const & cameraUbo
+			, SceneUbo const * sceneUbo
 			, SceneCuller & culler
 			, RenderFilters filters
 			, bool oit
 			, bool forceTwoSided )
 			: m_size{ std::move( size ) }
-			, m_matrixUbo{ matrixUbo }
+			, m_cameraUbo{ cameraUbo }
 			, m_sceneUbo{ sceneUbo }
 			, m_culler{ culler }
 			, m_filters{ filters }
@@ -50,14 +50,14 @@ namespace castor3d
 
 	public:
 		RenderNodesPassDesc( VkExtent3D size
-			, MatrixUbo & matrixUbo
-			, SceneUbo & sceneUbo
+			, CameraUbo const & cameraUbo
+			, SceneUbo const & sceneUbo
 			, SceneCuller & culler
 			, RenderFilters filters
 			, bool oit
 			, bool forceTwoSided )
 			: RenderNodesPassDesc{ std::move( size )
-				, matrixUbo
+				, cameraUbo
 				, & sceneUbo
 				, culler
 				, filters
@@ -69,19 +69,19 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor for shadow passes.
 		 *\param[in]	size		The render area dimensions.
-		 *\param[in]	matrixUbo	The scene matrices UBO.
+		 *\param[in]	cameraUbo	The scene matrices UBO.
 		 *\param[in]	culler		The scene culler for this pass.
 		 *\~french
 		 *\brief		Constructeur pour les passes d'ombres.
 		 *\param[in]	size		Les dimensions de la zone de rendu.
-		 *\param[in]	matrixUbo	L'UBO des matrices de la scène.
+		 *\param[in]	cameraUbo	L'UBO des matrices de la scène.
 		 *\param[in]	culler		Le culler pour cette passe.
 		 */
 		RenderNodesPassDesc( VkExtent3D size
-			, MatrixUbo & matrixUbo
+			, CameraUbo const & cameraUbo
 			, SceneCuller & culler )
 			: RenderNodesPassDesc{ std::move( size )
-				, matrixUbo
+				, cameraUbo
 				, nullptr
 				, culler
 				, RenderFilter::eNone
@@ -93,22 +93,22 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor for opaque passes.
 		 *\param[in]	size		The render area dimensions.
-		 *\param[in]	matrixUbo	The scene matrices UBO.
+		 *\param[in]	cameraUbo	The scene matrices UBO.
 		 *\param[in]	sceneUbo	The scene UBO.
 		 *\param[in]	culler		The scene culler for this pass.
 		 *\~french
 		 *\brief		Constructeur pour les passes opaques.
 		 *\param[in]	size		Les dimensions de la zone de rendu.
-		 *\param[in]	matrixUbo	L'UBO des matrices de la scène.
+		 *\param[in]	cameraUbo	L'UBO des matrices de la scène.
 		 *\param[in]	sceneUbo	L'UBO de scène.
 		 *\param[in]	culler		Le culler pour cette passe.
 		 */
 		RenderNodesPassDesc( VkExtent3D size
-			, MatrixUbo & matrixUbo
-			, SceneUbo & sceneUbo
+			, CameraUbo const & cameraUbo
+			, SceneUbo const & sceneUbo
 			, SceneCuller & culler )
 			: RenderNodesPassDesc{ std::move( size )
-				, matrixUbo
+				, cameraUbo
 				, sceneUbo
 				, culler
 				, RenderFilter::eAlphaBlend
@@ -120,25 +120,25 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor for transparent passes.
 		 *\param[in]	size		The render area dimensions.
-		 *\param[in]	matrixUbo	The scene matrices UBO.
+		 *\param[in]	cameraUbo	The scene matrices UBO.
 		 *\param[in]	sceneUbo	The scene UBO.
 		 *\param[in]	culler		The scene culler for this pass.
 		 *\param[in]	oit			The order independant status.
 		 *\~french
 		 *\brief		Constructeur pour les passes transparents.
 		 *\param[in]	size		Les dimensions de la zone de rendu.
-		 *\param[in]	matrixUbo	L'UBO des matrices de la scène.
+		 *\param[in]	cameraUbo	L'UBO des matrices de la scène.
 		 *\param[in]	sceneUbo	L'UBO de scène.
 		 *\param[in]	culler		Le culler pour cette passe.
 		 *\param[in]	oit			Le statut de rendu indépendant de l'ordre des objets.
 		 */
 		RenderNodesPassDesc( VkExtent3D size
-			, MatrixUbo & matrixUbo
-			, SceneUbo & sceneUbo
+			, CameraUbo const & cameraUbo
+			, SceneUbo const & sceneUbo
 			, SceneCuller & culler
 			, bool oit )
 			: RenderNodesPassDesc{ std::move( size )
-				, matrixUbo
+				, cameraUbo
 				, sceneUbo
 				, culler
 				, RenderFilter::eOpaque
@@ -217,8 +217,8 @@ namespace castor3d
 		}
 
 		VkExtent3D m_size;
-		MatrixUbo & m_matrixUbo;
-		SceneUbo * m_sceneUbo{};
+		CameraUbo const & m_cameraUbo;
+		SceneUbo const * m_sceneUbo{};
 		SceneCuller & m_culler;
 		RenderFilters m_filters;
 		bool m_oit;
@@ -589,9 +589,9 @@ namespace castor3d
 			return m_culler;
 		}
 
-		MatrixUbo & getMatrixUbo()const
+		CameraUbo const & getMatrixUbo()const
 		{
-			return m_matrixUbo;
+			return m_cameraUbo;
 		}
 
 		uint32_t getPipelinesCount()const
@@ -789,7 +789,7 @@ namespace castor3d
 	protected:
 		RenderDevice const & m_device;
 		RenderSystem & m_renderSystem;
-		MatrixUbo & m_matrixUbo;
+		CameraUbo const & m_cameraUbo;
 		SceneCuller & m_culler;
 		crg::ImageViewIdArray m_targetImage;
 		crg::ImageViewIdArray m_targetDepth;
@@ -803,8 +803,8 @@ namespace castor3d
 		bool m_forceTwoSided{ false };
 		bool m_safeBand{ false };
 		bool m_isDirty{ true };
-		bool m_meshShading;
-		SceneUbo * m_sceneUbo;
+		bool m_meshShading{};
+		SceneUbo const * m_sceneUbo{};
 		uint32_t m_index{ 0u };
 
 	private:

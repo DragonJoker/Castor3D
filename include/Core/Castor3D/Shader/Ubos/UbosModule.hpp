@@ -21,12 +21,12 @@ namespace castor3d
 	namespace shader
 	{
 		struct BillboardData;
+		struct CameraData;
 		struct GpInfoData;
 		struct HdrConfigData;
 		struct LayeredLpvGridData;
 		struct LpvGridData;
 		struct LpvLightData;
-		struct MatrixData;
 		struct ModelData;
 		struct ModelInstancesData;
 		struct MorphTargetData;
@@ -48,7 +48,7 @@ namespace castor3d
 		Writer_Parameter( LayeredLpvGridData );
 		Writer_Parameter( LpvGridData );
 		Writer_Parameter( LpvLightData );
-		Writer_Parameter( MatrixData );
+		Writer_Parameter( CameraData );
 		Writer_Parameter( ModelData );
 		Writer_Parameter( ModelInstancesData );
 		Writer_Parameter( MorphTargetData );
@@ -222,7 +222,7 @@ namespace castor3d
 	*\brief
 	*	UBO des matrices globales.
 	*/
-	class MatrixUbo;
+	class CameraUbo;
 	/**
 	*\~english
 	*\brief
@@ -231,16 +231,22 @@ namespace castor3d
 	*\brief
 	*	Données des matrices globales.
 	*/
-	struct MatrixUboConfiguration
+	struct CameraUboConfiguration
 	{
+		std::array< castor::Point4f, 6u > frustumPlanes;
 		castor::Matrix4x4f projection;
 		castor::Matrix4x4f invProjection;
 		castor::Matrix4x4f curView;
 		castor::Matrix4x4f prvView;
 		castor::Matrix4x4f curViewProj;
 		castor::Matrix4x4f prvViewProj;
-		castor::Point4f jitter;
-		std::array< castor::Point4f, 6u > frustumPlanes;
+		castor::Point2ui size;
+		castor::Point2f jitter;
+		castor::Point3f position;
+		float gamma;
+		castor::Point2f pad;
+		float nearPlane;
+		float farPlane;
 	};
 	/**
 	*\~english
@@ -394,16 +400,9 @@ namespace castor3d
 	struct SceneUboConfiguration
 	{
 		castor::Point3f ambientLight;
-		float gamma;
-		castor::Point4f backgroundColour;
-		castor::Point3f cameraPos;
-		float pad0;
-		castor::Point2f renderSize;
-		float nearPlane;
-		float farPlane;
 		uint32_t fogType;
+		castor::Point3f backgroundColour;
 		float fogDensity;
-		castor::Point2f pad1;
 	};
 	/**
 	*\~english

@@ -14,11 +14,11 @@ namespace castor3d
 				, [&]( sdw::Vec4 const & bgColour
 					, sdw::Vec4 const & colour
 					, sdw::Vec3 const & wsPosition
+					, sdw::Vec3 const & wsCamera
 					, SceneData const & sceneData )
 				{
 					auto result = writer.declLocale( "result", colour );
 					auto density = writer.declLocale( "density", sceneData.fogDensity() );
-					auto wsCamera = writer.declLocale( "wsCamera", sceneData.cameraPosition() );
 
 					IF( writer, sceneData.fogType() == sdw::UInt( uint32_t( FogType::eLinear ) ) )
 					{
@@ -75,17 +75,20 @@ namespace castor3d
 				, sdw::InVec4( writer, "bgColour" )
 				, sdw::InVec4( writer, "colour" )
 				, sdw::InVec3( writer, "wsPosition" )
+				, sdw::InVec3( writer, "wsCamera" )
 				, InSceneData( writer, "sceneData" ) );
 		}
 
 		sdw::Vec4 Fog::apply( sdw::Vec4 const & bgColour
 			, sdw::Vec4 const & colour
 			, sdw::Vec3 const & wsPosition
+			, sdw::Vec3 const & wsCamera
 			, SceneData const & sceneData )
 		{
 			return m_fog( bgColour
 				, colour
 				, wsPosition
+				, wsCamera
 				, sceneData );
 		}
 	}

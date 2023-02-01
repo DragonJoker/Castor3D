@@ -166,7 +166,7 @@ namespace castor3d
 					, m_device
 					, targetDepth
 					, RenderNodesPassDesc{ getExtent( targetDepth.front() )
-							, getOwner()->getMatrixUbo()
+							, getOwner()->getCameraUbo()
 							, getOwner()->getSceneUbo()
 							, getOwner()->getRenderTarget().getCuller() }
 						.safeBand( true )
@@ -216,7 +216,7 @@ namespace castor3d
 					, targetDepth
 					, getOwner()->getSsaoConfig()
 					, RenderNodesPassDesc{ getExtent( targetDepth.front() )
-							, getOwner()->getMatrixUbo()
+							, getOwner()->getCameraUbo()
 							, getOwner()->getSceneUbo()
 							, getOwner()->getRenderTarget().getCuller() }
 						.safeBand( true )
@@ -264,7 +264,7 @@ namespace castor3d
 					, targetDepth
 					, getOwner()->getSsaoConfig()
 					, RenderNodesPassDesc{ getExtent( targetDepth.front() )
-							, getOwner()->getMatrixUbo()
+							, getOwner()->getCameraUbo()
 							, getOwner()->getSceneUbo()
 							, getOwner()->getRenderTarget().getCuller() }
 						.safeBand( true )

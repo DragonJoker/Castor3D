@@ -13,7 +13,6 @@ See LICENSE file in root folder
 #include <Castor3D/Render/Passes/RenderQuad.hpp>
 #include <Castor3D/Material/Texture/TextureUnit.hpp>
 #include <Castor3D/Render/Viewport.hpp>
-#include <Castor3D/Shader/Ubos/MatrixUbo.hpp>
 
 #include <CastorUtils/Design/ChangeTracked.hpp>
 

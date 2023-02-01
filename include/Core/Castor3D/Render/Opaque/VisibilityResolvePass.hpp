@@ -154,8 +154,8 @@ namespace castor3d
 		RenderDevice const & m_device;
 		RenderNodesPass const & m_nodesPass;
 		ShaderBuffer * m_pipelinesIds;
-		MatrixUbo & m_matrixUbo;
-		SceneUbo & m_sceneUbo;
+		CameraUbo const & m_cameraUbo;
+		SceneUbo const & m_sceneUbo;
 		PassSortNodesSignalConnection m_onNodesPassSort;
 		ashes::DescriptorSetLayoutPtr m_inOutsDescriptorLayout{};
 		ashes::DescriptorSetPoolPtr m_inOutsDescriptorPool{};

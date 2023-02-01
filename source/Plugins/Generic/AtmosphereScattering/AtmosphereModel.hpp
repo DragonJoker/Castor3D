@@ -8,7 +8,7 @@ See LICENSE file in root folder
 #include "AtmosphereScatteringUbo.hpp"
 
 #include <Castor3D/Shader/Shaders/GlslRay.hpp>
-#include <Castor3D/Shader/Ubos/MatrixUbo.hpp>
+#include <Castor3D/Shader/Ubos/CameraUbo.hpp>
 
 #include <CastorUtils/Math/Length.hpp>
 

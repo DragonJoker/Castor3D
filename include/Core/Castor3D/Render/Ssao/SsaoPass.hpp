@@ -10,7 +10,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Passes/PassesModule.hpp"
 #include "Castor3D/Render/Ssao/SsaoModule.hpp"
 #include "Castor3D/Render/Opaque/Lighting/LightPass.hpp"
-#include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/SsaoConfigUbo.hpp"
 
 #include <RenderGraph/FrameGraphPrerequisites.hpp>
@@ -107,7 +107,7 @@ namespace castor3d
 		GpInfoUbo const & m_gpInfoUbo;
 		crg::FramePassGroup & m_group;
 		VkExtent2D m_size;
-		MatrixUbo m_matrixUbo;
+		CameraUbo m_cameraUbo;
 		uint32_t m_passIndex{};
 		LineariseDepthPassUPtr m_linearisePass;
 		SsaoConfigUbo m_ssaoConfigUbo;

@@ -23,7 +23,7 @@ namespace castor3d
 		 *\param[in]	context			The rendering context.
 		 *\param[in]	graph			The runnable graph.
 		 *\param[in]	device			The GPU device.
-		 *\param[in]	matrixUbo		The scene matrices UBO.
+		 *\param[in]	cameraUbo		The scene matrices UBO.
 		 *\param[in]	sceneUbo		The scene UBO.
 		 *\param[in]	culler			The culler for this pass.
 		 *\param[in]	voxelizerUbo	The voxelizer configuration UBO.
@@ -35,7 +35,7 @@ namespace castor3d
 		 *\param[in]	context			Le contexte de rendu.
 		 *\param[in]	graph			Le runnable graph.
 		 *\param[in]	device			Le device GPU.
-		 *\param[in]	matrixUbo		L'UBO de matrices de la scène.
+		 *\param[in]	cameraUbo		L'UBO de matrices de la scène.
 		 *\param[in]	sceneUbo		L'UBO de scène.
 		 *\param[in]	culler			Le culler pour cette passe.
 		 *\param[in]	voxelizerUbo	L'UBO de configuration du voxelizer.
@@ -46,8 +46,8 @@ namespace castor3d
 			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
-			, MatrixUbo & matrixUbo
-			, SceneUbo & sceneUbo
+			, CameraUbo const & cameraUbo
+			, SceneUbo const & sceneUbo
 			, Camera const & camera
 			, VoxelizerUbo const & voxelizerUbo
 			, ashes::Buffer< Voxel > const & voxels

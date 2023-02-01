@@ -91,6 +91,7 @@ namespace castor3d
 			, Texture const & subsurfaceScattering
 			, LightPassResult const & lighting
 			, crg::ImageViewIdArray result
+			, CameraUbo const & cameraUbo
 			, SceneUbo const & sceneUbo
 			, GpInfoUbo const & gpInfoUbo
 			, HdrConfigUbo const & hdrConfigUbo
@@ -132,6 +133,7 @@ namespace castor3d
 		RenderDevice const & m_device;
 		Scene const & m_scene;
 		RenderTechnique const & m_technique;
+		CameraUbo const & m_cameraUbo;
 		SceneUbo const & m_sceneUbo;
 		GpInfoUbo const & m_gpInfoUbo;
 		HdrConfigUbo const & m_hdrConfigUbo;

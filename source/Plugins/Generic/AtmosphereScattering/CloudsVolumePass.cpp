@@ -115,7 +115,7 @@ namespace atmosphere_scattering
 			C3D_Clouds( writer
 				, uint32_t( Bindings::eClouds )
 				, 0u );
-			C3D_Camera( writer
+			ATM_Camera( writer
 				, uint32_t( Bindings::eCamera )
 				, 0u );
 
@@ -128,7 +128,7 @@ namespace atmosphere_scattering
 			AtmosphereModel atmosphere{ writer
 				, c3d_atmosphereData
 				, AtmosphereModel::Settings{ castor::Length::fromUnit( 1.0f, engine.getLengthUnit() ) }
-					.setCameraData( &c3d_cameraData )
+					.setCameraData( &atm_cameraData )
 					.setVariableSampleCount( true )
 					.setMieRayPhase( true )
 					.setMultiScatApprox( true )

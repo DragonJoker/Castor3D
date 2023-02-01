@@ -10,7 +10,6 @@ See LICENSE file in root folder
 #include "CloudsUbo.hpp"
 
 #include <Castor3D/Shader/Shaders/SdwModule.hpp>
-#include <Castor3D/Shader/Ubos/MatrixUbo.hpp>
 
 #include <ShaderWriter/BaseTypes/Array.hpp>
 #include <ShaderWriter/BaseTypes/Int.hpp>

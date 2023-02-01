@@ -182,7 +182,7 @@ namespace castor3d
 			for ( uint32_t cascade = 0u; cascade < cascadeCount; ++cascade )
 			{
 				std::string debugName = getPassName( cascade, vsm, rsm );
-				result.emplace_back( std::make_unique< ShadowMap::PassData >( std::make_unique< MatrixUbo >( device )
+				result.emplace_back( std::make_unique< ShadowMap::PassData >( std::make_unique< CameraUbo >( device )
 					, std::make_shared< Camera >( debugName
 						, scene
 						, *scene.getCameraRootNode()
@@ -200,7 +200,7 @@ namespace castor3d
 							, context
 							, runnableGraph
 							, device
-							, *passData.matrixUbo
+							, *passData.cameraUbo
 							, *passData.culler
 							, *passData.camera
 							, shadowMap

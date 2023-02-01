@@ -33,7 +33,7 @@
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/BillboardUbo.hpp"
-#include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
 #include "Castor3D/Shader/Ubos/ObjectIdsUbo.hpp"
 
@@ -58,8 +58,8 @@ namespace castor3d
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
 		, castor::Size const & size
-		, MatrixUbo & matrixUbo
-		, SceneUbo & sceneUbo
+		, CameraUbo const & cameraUbo
+		, SceneUbo const & sceneUbo
 		, SceneCuller & culler )
 		: RenderNodesPass{ pass
 			, context
@@ -68,7 +68,7 @@ namespace castor3d
 			, Type
 			, {}
 			, {}
-			, RenderNodesPassDesc{ { size.getWidth(), size.getHeight(), 1u }, matrixUbo, sceneUbo, culler, RenderFilter::eNone, true, false }
+			, RenderNodesPassDesc{ { size.getWidth(), size.getHeight(), 1u }, cameraUbo, sceneUbo, culler, RenderFilter::eNone, true, false }
 				.meshShading( true ) }
 	{
 	}

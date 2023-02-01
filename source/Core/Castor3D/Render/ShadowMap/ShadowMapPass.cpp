@@ -28,7 +28,7 @@ namespace castor3d
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
 		, castor::String const & typeName
-		, MatrixUbo & matrixUbo
+		, CameraUbo const & cameraUbo
 		, SceneCuller & culler
 		, ShadowMap const & shadowMap
 		, bool needsVsm
@@ -41,7 +41,7 @@ namespace castor3d
 			, {}
 			, {}
 			, RenderNodesPassDesc{ getExtent( shadowMap.getShadowPassResult()[SmTexture::eDepth].imageId )
-				, matrixUbo
+				, cameraUbo
 				, culler } }
 		, m_shadowMap{ shadowMap }
 		, m_shadowMapUbo{ device }

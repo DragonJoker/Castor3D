@@ -28,6 +28,7 @@ namespace castor3d
 	{
 		enum TransparentResolveIdx
 		{
+			CameraUboIndex,
 			SceneUboIndex,
 			GpuInfoUboIndex,
 			HdrUboIndex,
@@ -59,6 +60,7 @@ namespace castor3d
 			FragmentWriter writer;
 
 			// Shader inputs
+			C3D_Camera( writer, CameraUboIndex, 0u );
 			C3D_Scene( writer, SceneUboIndex, 0u );
 			C3D_GpInfo( writer, GpuInfoUboIndex, 0u );
 			C3D_HdrConfig( writer, HdrUboIndex, 0u );
@@ -120,6 +122,7 @@ namespace castor3d
 						outColour = fog.apply( c3d_sceneData.getBackgroundColour( c3d_hdrConfigData )
 							, outColour
 							, position
+							, c3d_cameraData.position()
 							, c3d_sceneData );
 					}
 					FI;
@@ -139,7 +142,8 @@ namespace castor3d
 		, TransparentPassResult const & transparentPassResult
 		, crg::ImageViewIdArray const & targetColourView
 		, castor::Size const & size
-		, SceneUbo & sceneUbo
+		, CameraUbo const & cameraUbo
+		, SceneUbo const & sceneUbo
 		, HdrConfigUbo const & hdrConfigUbo
 		, GpInfoUbo const & gpInfoUbo )
 		: m_device{ device }
@@ -155,6 +159,7 @@ namespace castor3d
 			, transparentPassDesc
 			, depthObj.sampledViewId
 			, targetColourView
+			, cameraUbo
 			, sceneUbo
 			, hdrConfigUbo
 			, gpInfoUbo
@@ -180,7 +185,8 @@ namespace castor3d
 		, crg::FramePass const & transparentPassDesc
 		, crg::ImageViewId const & depthObj
 		, crg::ImageViewIdArray const & targetColourView
-		, SceneUbo & sceneUbo
+		, CameraUbo const & cameraUbo
+		, SceneUbo const & sceneUbo
 		, HdrConfigUbo const & hdrConfigUbo
 		, GpInfoUbo const & gpInfoUbo
 		, ProgressBar * progress )
@@ -203,6 +209,8 @@ namespace castor3d
 				return result;
 			} );
 		result.addDependency( transparentPassDesc );
+		cameraUbo.createPassBinding( result
+			, uint32_t( wboit::CameraUboIndex ) );
 		sceneUbo.createPassBinding( result
 			, uint32_t( wboit::SceneUboIndex ) );
 		gpInfoUbo.createPassBinding( result

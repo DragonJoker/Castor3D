@@ -31,7 +31,7 @@
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/BillboardUbo.hpp"
-#include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
 
 #include <CastorUtils/Miscellaneous/Hash.hpp>
@@ -67,8 +67,7 @@ namespace castor3d
 
 		enum InOutBindings : uint32_t
 		{
-			eMatrix,
-			eScene,
+			eCamera,
 			eModels,
 			eBillboards,
 			eMaterials,
@@ -362,11 +361,8 @@ namespace castor3d
 				, VtxBindings::eInPassMasks
 				, flags.enablePassMasks() );
 
-			C3D_Matrix( writer
-				, InOutBindings::eMatrix
-				, Sets::eInOuts );
-			C3D_Scene( writer
-				, InOutBindings::eScene
+			C3D_Camera( writer
+				, InOutBindings::eCamera
 				, Sets::eInOuts );
 			C3D_ModelsData( writer
 				, InOutBindings::eModels
@@ -536,20 +532,20 @@ namespace castor3d
 						auto bbcenter = writer.declLocale( "bbcenter"
 							, modelData.modelToCurWorld( center ).xyz() );
 						auto centerToCamera = writer.declLocale( "centerToCamera"
-							, c3d_sceneData.getPosToCamera( bbcenter ) );
+							, c3d_cameraData.getPosToCamera( bbcenter ) );
 						centerToCamera.y() = 0.0_f;
 						centerToCamera = normalize( centerToCamera );
 
 						auto billboardData = writer.declLocale( "billboardData"
 							, c3d_billboardData[nodeId - 1u] );
 						auto right = writer.declLocale( "right"
-							, billboardData.getCameraRight( c3d_matrixData ) );
+							, billboardData.getCameraRight( c3d_cameraData ) );
 						auto up = writer.declLocale( "up"
-							, billboardData.getCameraUp( c3d_matrixData ) );
+							, billboardData.getCameraUp( c3d_cameraData ) );
 						auto width = writer.declLocale( "width"
-							, billboardData.getWidth( c3d_sceneData ) );
+							, billboardData.getWidth( c3d_cameraData ) );
 						auto height = writer.declLocale( "height"
-							, billboardData.getHeight( c3d_sceneData ) );
+							, billboardData.getHeight( c3d_cameraData ) );
 
 						auto vertexId = writer.declLocale( "vertexId"
 							, writer.ternary( firstTriangle
@@ -620,7 +616,7 @@ namespace castor3d
 					result.colour = vec3( 1.0_f );
 
 					auto hdrCoords = writer.declLocale( "hdrCoords"
-						, pixelCoord / c3d_sceneData.renderSize() );
+						, pixelCoord / vec2( c3d_cameraData.renderSize() ) );
 					auto screenCoords = writer.declLocale( "screenCoords"
 						, fma( hdrCoords, vec2( 2.0_f ), vec2( -1.0_f ) ) );
 
@@ -634,20 +630,20 @@ namespace castor3d
 
 					// Transform positions to clip space
 					auto p0 = writer.declLocale( "p0"
-						, c3d_matrixData.worldToCurProj( isWorldPos
+						, c3d_cameraData.worldToCurProj( isWorldPos
 							? v0.position
 							: modelData.modelToCurWorld( v0.position ) ) );
 					auto p1 = writer.declLocale( "p1"
-						, c3d_matrixData.worldToCurProj( isWorldPos
+						, c3d_cameraData.worldToCurProj( isWorldPos
 							? v1.position
 							: modelData.modelToCurWorld( v1.position ) ) );
 					auto p2 = writer.declLocale( "p2"
-						, c3d_matrixData.worldToCurProj( isWorldPos
+						, c3d_cameraData.worldToCurProj( isWorldPos
 							? v2.position
 							: modelData.modelToCurWorld( v2.position ) ) );
 
 					auto derivatives = writer.declLocale( "derivatives"
-						, calcFullBarycentric( p0, p1, p2, screenCoords, c3d_sceneData.renderSize() ) );
+						, calcFullBarycentric( p0, p1, p2, screenCoords, vec2( c3d_cameraData.renderSize() ) ) );
 
 					// Interpolate texture coordinates and calculate the gradients for texture sampling with mipmapping support
 					if ( flags.enableTexcoord0() )
@@ -741,9 +737,9 @@ namespace castor3d
 
 					depth = ( curProjPosition.z() / curProjPosition.w() );
 					auto curPosition = writer.declLocale( "curPosition"
-						, c3d_matrixData.projToView( curProjPosition ) );
+						, c3d_cameraData.projToView( curProjPosition ) );
 					result.viewPosition = curPosition;
-					curPosition = c3d_matrixData.curViewToWorld( curPosition );
+					curPosition = c3d_cameraData.curViewToWorld( curPosition );
 					result.worldPosition = curPosition;
 
 					auto prvPosition = writer.declLocale( "prvPosition"
@@ -775,15 +771,15 @@ namespace castor3d
 						}
 					}
 
-					prvPosition = c3d_matrixData.worldToPrvProj( prvPosition );
-					result.computeVelocity( c3d_matrixData
+					prvPosition = c3d_cameraData.worldToPrvProj( prvPosition );
+					result.computeVelocity( c3d_cameraData
 						, curProjPosition
 						, prvPosition );
 
 					if ( flags.enableNormal() )
 					{
 						result.computeTangentSpace( flags
-							, c3d_sceneData.cameraPosition()
+							, c3d_cameraData.position()
 							, result.worldPosition.xyz()
 							, normal
 							, tangent );
@@ -1016,10 +1012,7 @@ namespace castor3d
 			auto stages = VkShaderStageFlags( VisibilityResolvePass::useCompute
 				? VK_SHADER_STAGE_COMPUTE_BIT
 				: VK_SHADER_STAGE_FRAGMENT_BIT );
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eMatrix
-				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, stages ) );
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eScene
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eCamera
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 				, stages ) );
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eModels
@@ -1078,15 +1071,14 @@ namespace castor3d
 
 		static ashes::DescriptorSetPtr createInDescriptorSet( std::string const & name
 			, ashes::DescriptorSetPool const & pool
-			, MatrixUbo const & matrixUbo
+			, CameraUbo const & cameraUbo
 			, SceneUbo const & sceneUbo
 			, RenderTechnique const & technique
 			, Scene const & scene )
 		{
 			auto & matCache = scene.getOwner()->getMaterialCache();
 			ashes::WriteDescriptorSetArray writes;
-			writes.push_back( matrixUbo.getDescriptorWrite( InOutBindings::eMatrix ) );
-			writes.push_back( sceneUbo.getDescriptorWrite( InOutBindings::eScene ) );
+			writes.push_back( cameraUbo.getDescriptorWrite( InOutBindings::eCamera ) );
 			writes.push_back( makeDescriptorWrite( scene.getModelBuffer()
 				, InOutBindings::eModels
 				, 0u
@@ -1551,12 +1543,12 @@ namespace castor3d
 		, m_device{ device }
 		, m_nodesPass{ nodesPass }
 		, m_pipelinesIds{ pipelinesIds }
-		, m_matrixUbo{ renderPassDesc.m_matrixUbo }
+		, m_cameraUbo{ renderPassDesc.m_cameraUbo }
 		, m_sceneUbo{ *renderPassDesc.m_sceneUbo }
 		, m_onNodesPassSort( m_nodesPass.onSortNodes.connect( [this]( RenderNodesPass const & pass ){ m_commandsChanged = true; } ) )
 		, m_inOutsDescriptorLayout{ visres::createInDescriptorLayout( m_device, getName(), getScene().getOwner()->getMaterialCache() ) }
 		, m_inOutsDescriptorPool{ m_inOutsDescriptorLayout->createPool( 1u ) }
-		, m_inOutsDescriptorSet{ visres::createInDescriptorSet( getName(), *m_inOutsDescriptorPool, m_matrixUbo, m_sceneUbo, *parent, getScene() ) }
+		, m_inOutsDescriptorSet{ visres::createInDescriptorSet( getName(), *m_inOutsDescriptorPool, m_cameraUbo, m_sceneUbo, *parent, getScene() ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT
 			, getName()
 			, ( useCompute

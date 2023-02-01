@@ -12,8 +12,8 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/Background/BackgroundModule.hpp"
 
 #include "Castor3D/Miscellaneous/ProgressBar.hpp"
+#include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
-#include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 
 #include <CastorUtils/Math/RangedValue.hpp>
@@ -212,7 +212,7 @@ namespace castor3d
 		SceneCullerUPtr m_culler;
 		Texture m_colour;
 		Texture m_depth;
-		MatrixUbo m_matrixUbo;
+		CameraUbo m_cameraUbo;
 		HdrConfigUbo m_hdrConfigUbo;
 		SceneUbo m_sceneUbo;
 		BackgroundRendererUPtr m_backgroundRenderer;

@@ -1,7 +1,7 @@
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 
 #include "Castor3D/Render/RenderNodesPass.hpp"
-#include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/MorphingUbo.hpp"
 
 #include <ShaderWriter/Intrinsics/Intrinsics.hpp>

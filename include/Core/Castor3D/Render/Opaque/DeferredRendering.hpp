@@ -103,6 +103,7 @@ namespace castor3d
 			, Texture const & ssao
 			, castor::Size const & size
 			, RenderTechnique const & technique
+			, CameraUbo const & cameraUbo
 			, SceneUbo const & sceneUbo
 			, HdrConfigUbo const & hdrConfigUbo
 			, GpInfoUbo const & gpInfoUbo
@@ -164,6 +165,7 @@ namespace castor3d
 			, Texture const & depthObj
 			, crg::ImageViewIdArray resultTexture
 			, Texture const & ssao
+			, CameraUbo const & cameraUbo
 			, SceneUbo const & sceneUbo
 			, HdrConfigUbo const & hdrConfigUbo
 			, GpInfoUbo const & gpInfoUbo

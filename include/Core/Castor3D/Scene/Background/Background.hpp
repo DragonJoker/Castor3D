@@ -168,7 +168,7 @@ namespace castor3d
 		*	The optional depths and objects image.
 		*\param modelUbo
 		*	The model UBO.
-		*\param matrixUbo
+		*\param cameraUbo
 		*	The matrix UBO.
 		*\param hdrConfigUbo
 		*	The HDR configuration UBO.
@@ -197,7 +197,7 @@ namespace castor3d
 		*	L'image de profondeurs de d'objets, optionnelle.
 		*\param modelUbo
 		*	L'UBO de modèle.
-		*\param matrixUbo
+		*\param cameraUbo
 		*	L'UBO de matrices.
 		*\param hdrConfigUbo
 		*	L'UBO de configuration HDR.
@@ -216,7 +216,7 @@ namespace castor3d
 			, crg::ImageViewIdArray const & depth
 			, crg::ImageViewId const * depthObj
 			, UniformBufferOffsetT< ModelBufferConfiguration > const & modelUbo
-			, MatrixUbo const & matrixUbo
+			, CameraUbo const & cameraUbo
 			, HdrConfigUbo const & hdrConfigUbo
 			, SceneUbo const & sceneUbo
 			, bool clearColour

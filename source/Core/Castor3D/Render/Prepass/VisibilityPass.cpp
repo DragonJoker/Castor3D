@@ -18,12 +18,10 @@
 #include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
-#include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Ubos/BillboardUbo.hpp"
-#include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
-#include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 
@@ -144,8 +142,8 @@ namespace castor3d
 				| ComponentModeFlag::eNormals
 				| ComponentModeFlag::eGeometry )
 			, utils };
-		C3D_Scene( writer
-			, GlobalBuffersIdx::eScene
+		C3D_Camera( writer
+			, GlobalBuffersIdx::eCamera
 			, RenderPipeline::eBuffers );
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
@@ -214,7 +212,7 @@ namespace castor3d
 				if ( components.transmission )
 				{
 					auto incident = writer.declLocale( "incident"
-						, normalize( in.worldPosition.xyz() - c3d_sceneData.cameraPosition() ) );
+						, normalize( in.worldPosition.xyz() - c3d_cameraData.position() ) );
 
 					IF( writer, lights.getFinalTransmission( components, incident ) >= 0.1_f )
 					{
@@ -224,7 +222,7 @@ namespace castor3d
 				}
 
 				depthObj = vec4( in.fragCoord.z()
-					, length( in.worldPosition.xyz() - c3d_sceneData.cameraPosition() )
+					, length( in.worldPosition.xyz() - c3d_cameraData.position() )
 					, writer.cast< sdw::Float >( in.nodeId )
 					, writer.cast< sdw::Float >( material.lightingModel ) );
 				data = uvec2( ( in.nodeId << maxPipelinesSize ) | ( pipelineID )

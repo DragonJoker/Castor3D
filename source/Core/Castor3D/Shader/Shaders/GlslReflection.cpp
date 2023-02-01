@@ -5,7 +5,7 @@
 #include "Castor3D/Shader/Shaders/GlslLightSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
-#include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 
 #include <ShaderWriter/Writer.hpp>
 
@@ -28,7 +28,7 @@ namespace castor3d::shader
 		, sdw::Vec3 const & position
 		, BackgroundModel & background
 		, sdw::CombinedImage2DRgba32 const & mippedScene
-		, MatrixData const & matrices
+		, CameraData const & camera
 		, sdw::Vec2 const & sceneUv
 		, sdw::UInt const & envMapIndex
 		, sdw::UInt const & hasReflection
@@ -48,7 +48,7 @@ namespace castor3d::shader
 			, position
 			, background
 			, mippedScene
-			, matrices
+			, camera
 			, sceneUv
 			, envMapIndex
 			, hasReflection
@@ -69,7 +69,7 @@ namespace castor3d::shader
 		, sdw::Vec3 const & pposition
 		, BackgroundModel & background
 		, sdw::CombinedImage2DRgba32 const & pmippedScene
-		, MatrixData const & matrices
+		, CameraData const & camera
 		, sdw::Vec2 const & psceneUv
 		, sdw::UInt const & penvMapIndex
 		, sdw::UInt const & phasReflection
@@ -127,7 +127,7 @@ namespace castor3d::shader
 							, position
 							, wsNormal
 							, mippedScene
-							, matrices
+							, camera
 							, sceneUv
 							, refractionRatio
 							, components );
@@ -449,7 +449,7 @@ namespace castor3d::shader
 		return normalize( wsPosition - wsCamera );
 	}
 
-	sdw::RetVec4 ReflectionModel::computeScreenSpace( MatrixData const & matrixData
+	sdw::RetVec4 ReflectionModel::computeScreenSpace( CameraData const & cameraData
 		, sdw::Vec3 const & pviewPosition
 		, sdw::Vec3 const & pworldNormal
 		, sdw::Vec2 const & ptexcoord
@@ -493,10 +493,10 @@ namespace castor3d::shader
 					WHILE( m_writer, stepCount < ssrForwardMaxStepCount )
 					{
 						rayMarchPosition += reflectionVector.xyz() * ssrStepSize;
-						rayMarchTexPosition = matrixData.viewToScreenUV( m_utils, vec4( -rayMarchPosition, 1.0_f ) );
+						rayMarchTexPosition = cameraData.viewToScreenUV( m_utils, vec4( -rayMarchPosition, 1.0_f ) );
 
 						sceneZ = depthMap.lod( rayMarchTexPosition, 0.0_f );
-						sceneZ = matrixData.projToView( m_utils, rayMarchTexPosition, sceneZ ).z();
+						sceneZ = cameraData.projToView( m_utils, rayMarchTexPosition, sceneZ ).z();
 
 						IF( m_writer, -sceneZ <= -rayMarchPosition.z() )
 						{
@@ -518,10 +518,10 @@ namespace castor3d::shader
 						WHILE( m_writer, stepCount < ssrBackwardMaxStepCount )
 						{
 							rayMarchPosition -= reflectionVector.xyz() * ssrStepSize / ssrBackwardMaxStepCount;
-							rayMarchTexPosition = matrixData.viewToScreenUV( m_utils, vec4( -rayMarchPosition, 1.0_f ) );
+							rayMarchTexPosition = cameraData.viewToScreenUV( m_utils, vec4( -rayMarchPosition, 1.0_f ) );
 
 							sceneZ = depthMap.lod( rayMarchTexPosition, 0.0_f );
-							sceneZ = matrixData.projToView( m_utils, rayMarchTexPosition, sceneZ ).z();
+							sceneZ = cameraData.projToView( m_utils, rayMarchTexPosition, sceneZ ).z();
 
 							IF( m_writer, -sceneZ > -rayMarchPosition.z() )
 							{
@@ -573,7 +573,7 @@ namespace castor3d::shader
 			, pcolourMap );
 	}
 
-	sdw::RetVec4 ReflectionModel::computeScreenSpace( MatrixData const & matrixData
+	sdw::RetVec4 ReflectionModel::computeScreenSpace( CameraData const & cameraData
 		, sdw::Vec3 const & pviewPosition
 		, sdw::Vec3 const & pworldNormal
 		, sdw::Vec2 const & ptexcoord
@@ -617,10 +617,10 @@ namespace castor3d::shader
 					WHILE( m_writer, stepCount < ssrForwardMaxStepCount )
 					{
 						rayMarchPosition += reflectionVector.xyz() * ssrStepSize;
-						rayMarchTexPosition = matrixData.viewToScreenUV( m_utils, vec4( -rayMarchPosition, 1.0_f ) );
+						rayMarchTexPosition = cameraData.viewToScreenUV( m_utils, vec4( -rayMarchPosition, 1.0_f ) );
 
 						sceneZ = depthObjMap.lod( rayMarchTexPosition, 0.0_f ).r();
-						sceneZ = matrixData.projToView( m_utils, rayMarchTexPosition, sceneZ ).z();
+						sceneZ = cameraData.projToView( m_utils, rayMarchTexPosition, sceneZ ).z();
 
 						IF( m_writer, -sceneZ <= -rayMarchPosition.z() )
 						{
@@ -642,10 +642,10 @@ namespace castor3d::shader
 						WHILE( m_writer, stepCount < ssrBackwardMaxStepCount )
 						{
 							rayMarchPosition -= reflectionVector.xyz() * ssrStepSize / ssrBackwardMaxStepCount;
-							rayMarchTexPosition = matrixData.viewToScreenUV( m_utils, vec4( -rayMarchPosition, 1.0_f ) );
+							rayMarchTexPosition = cameraData.viewToScreenUV( m_utils, vec4( -rayMarchPosition, 1.0_f ) );
 
 							sceneZ = depthObjMap.lod( rayMarchTexPosition, 0.0_f ).r();
-							sceneZ = matrixData.projToView( m_utils, rayMarchTexPosition, sceneZ ).z();
+							sceneZ = cameraData.projToView( m_utils, rayMarchTexPosition, sceneZ ).z();
 
 							IF( m_writer, -sceneZ > -rayMarchPosition.z() )
 							{
@@ -1061,7 +1061,7 @@ namespace castor3d::shader
 		, sdw::Vec3 const & pwsPosition
 		, sdw::Vec3 const & pwsNormal
 		, sdw::CombinedImage2DRgba32 const & psceneMap
-		, MatrixData const & pmatrices
+		, CameraData const & pmatrices
 		, sdw::Vec2 psceneUv
 		, sdw::Float const & prefractionRatio
 		, BlendComponents & pcomponents )

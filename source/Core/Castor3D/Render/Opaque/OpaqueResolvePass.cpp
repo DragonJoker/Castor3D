@@ -37,7 +37,7 @@
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
-#include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 #include "Castor3D/Render/Opaque/OpaquePassResult.hpp"
@@ -123,6 +123,7 @@ namespace castor3d
 		{
 			eMaterials,
 			eModels,
+			eCamera,
 			eScene,
 			eGpInfo,
 			eHdrConfig,
@@ -178,6 +179,7 @@ namespace castor3d
 				, uint32_t( ResolveBind::eMaterials )
 				, 0u };
 			C3D_ModelsData( writer, ResolveBind::eModels, 0u );
+			C3D_Camera( writer, ResolveBind::eCamera, 0u );
 			C3D_Scene( writer, ResolveBind::eScene, 0u );
 			C3D_GpInfo( writer, ResolveBind::eGpInfo, 0u );
 			C3D_HdrConfig( writer, ResolveBind::eHdrConfig, 0u );
@@ -318,11 +320,11 @@ namespace castor3d
 						components.finish( passShaders
 							, surface
 							, utils
-							, c3d_sceneData.cameraPosition() );
+							, c3d_cameraData.position() );
 						auto lightSurface = shader::LightSurface::create( writer
 							, utils
 							, "lightSurface"
-							, c3d_sceneData.cameraPosition()
+							, c3d_cameraData.position()
 							, surface.worldPosition.xyz()
 							, surface.viewPosition.xyz()
 							, surface.clipPosition
@@ -331,7 +333,7 @@ namespace castor3d
 							, components );
 
 						auto incident = writer.declLocale( "incident"
-							, reflections.computeIncident( lightSurface.worldPosition(), c3d_sceneData.cameraPosition() ) );
+							, reflections.computeIncident( lightSurface.worldPosition(), c3d_cameraData.position() ) );
 						auto reflectedDiffuse = writer.declLocale( "reflectedDiffuse"
 							, vec3( 0.0_f ) );
 						auto reflectedSpecular = writer.declLocale( "reflectedSpecular"
@@ -399,16 +401,17 @@ namespace castor3d
 						outColour = fog.apply( c3d_sceneData.getBackgroundColour( c3d_hdrConfigData )
 							, outColour
 							, surface.worldPosition.xyz()
+							, c3d_cameraData.position()
 							, c3d_sceneData );
 					}
 					FI;
 
 					auto linearDepth = writer.declLocale( "linearDepth"
-						, min( depthObj.y(), c3d_sceneData.farPlane() ) );
+						, min( depthObj.y(), c3d_cameraData.farPlane() ) );
 					backgroundModel->applyVolume( in.fragCoord.xy()
 						, linearDepth
-						, c3d_sceneData.renderSize()
-						, c3d_sceneData.cameraPlanes()
+						, vec2( c3d_cameraData.renderSize() )
+						, c3d_cameraData.depthPlanes()
 						, outColour );
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -429,6 +432,7 @@ namespace castor3d
 		, Texture const & subsurfaceScattering
 		, LightPassResult const & lighting
 		, crg::ImageViewIdArray result
+		, CameraUbo const & cameraUbo
 		, SceneUbo const & sceneUbo
 		, GpInfoUbo const & gpInfoUbo
 		, HdrConfigUbo const & hdrConfigUbo
@@ -439,6 +443,7 @@ namespace castor3d
 		, m_device{ device }
 		, m_scene{ *technique.getRenderTarget().getScene() }
 		, m_technique{ technique }
+		, m_cameraUbo{ cameraUbo }
 		, m_sceneUbo{ sceneUbo }
 		, m_gpInfoUbo{ gpInfoUbo }
 		, m_hdrConfigUbo{ hdrConfigUbo }
@@ -529,6 +534,8 @@ namespace castor3d
 			, uint32_t( dropqrslv::ResolveBind::eModels )
 			, 0u
 			, uint32_t( modelBuffer.getSize() ) );
+		m_cameraUbo.createPassBinding( pass
+			, uint32_t( dropqrslv::ResolveBind::eCamera ) );
 		m_sceneUbo.createPassBinding( pass
 			, uint32_t( dropqrslv::ResolveBind::eScene ) );
 		m_gpInfoUbo.createPassBinding( pass

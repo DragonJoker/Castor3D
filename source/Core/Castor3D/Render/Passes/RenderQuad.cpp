@@ -384,7 +384,7 @@ namespace castor3d
 		m_invertY.emplace_back( invertY );
 	}
 
-	void RenderQuad::initialisePass( uint32_t passIndex)
+	void RenderQuad::initialisePass( uint32_t passIndex )
 	{
 		CU_Require( m_descriptorSetLayout );
 

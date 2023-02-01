@@ -791,6 +791,18 @@ namespace castor3d
 		return {};
 	}
 
+	CameraUbo const & RenderTarget::getCameraUbo()const
+	{
+		CU_Require( m_renderTechnique );
+		return m_renderTechnique->getCameraUbo();
+	}
+
+	SceneUbo const & RenderTarget::getSceneUbo()const
+	{
+		CU_Require( m_renderTechnique );
+		return m_renderTechnique->getSceneUbo();
+	}
+
 	void RenderTarget::setExposure( float value )
 	{
 		if ( auto camera = getCamera() )

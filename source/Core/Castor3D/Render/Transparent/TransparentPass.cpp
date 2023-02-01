@@ -33,8 +33,9 @@
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp"
 #include "Castor3D/Shader/Ubos/LpvGridConfigUbo.hpp"
-#include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
+#include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 
@@ -213,8 +214,8 @@ namespace castor3d
 		shader::CookTorranceBRDF cookTorrance{ writer, brdf };
 		auto index = uint32_t( GlobalBuffersIdx::eCount );
 
-		C3D_Matrix( writer
-			, GlobalBuffersIdx::eMatrix
+		C3D_Camera( writer
+			, GlobalBuffersIdx::eCamera
 			, RenderPipeline::eBuffers );
 		C3D_Scene( writer
 			, GlobalBuffersIdx::eScene
@@ -342,10 +343,10 @@ namespace castor3d
 					components.finish( passShaders
 						, surface
 						, utils
-						, c3d_sceneData.cameraPosition() );
+						, c3d_cameraData.position() );
 					auto lightSurface = shader::LightSurface::create( writer
 						, "lightSurface"
-						, c3d_sceneData.cameraPosition()
+						, c3d_cameraData.position()
 						, surface.worldPosition.xyz()
 						, surface.viewPosition.xyz()
 						, surface.clipPosition
@@ -369,7 +370,7 @@ namespace castor3d
 					auto sheenReflected = writer.declLocale( "sheenReflected"
 						, vec3( 0.0_f ) );
 					auto sceneUv = writer.declLocale( "sceneUv"
-						, in.fragCoord.xy() / c3d_sceneData.renderSize() );
+						, in.fragCoord.xy() / vec2( c3d_cameraData.renderSize() ) );
 
 					if ( components.hasMember( "thicknessFactor" ) )
 					{
@@ -377,7 +378,7 @@ namespace castor3d
 					}
 
 					auto incident = writer.declLocale( "incident"
-						, reflections.computeIncident( lightSurface.worldPosition(), c3d_sceneData.cameraPosition() ) );
+						, reflections.computeIncident( lightSurface.worldPosition(), c3d_cameraData.position() ) );
 					lightSurface.updateN( utils
 						, components.normal
 						, components.specular
@@ -387,7 +388,7 @@ namespace castor3d
 						, lightSurface.worldPosition()
 						, *backgroundModel
 						, c3d_mapScene
-						, c3d_matrixData
+						, c3d_cameraData
 						, sceneUv
 						, modelData.getEnvMapIndex()
 						, components.hasReflection
@@ -447,6 +448,7 @@ namespace castor3d
 				}
 
 				outAccumulation = c3d_sceneData.computeAccumulation( utils
+					, c3d_cameraData
 					, in.fragCoord.z()
 					, colour
 					, components.opacity

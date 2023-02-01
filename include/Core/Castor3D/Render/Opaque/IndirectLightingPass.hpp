@@ -24,7 +24,7 @@ namespace castor3d
 		{
 			eModels,
 			eGpInfo,
-			eScene,
+			eCamera,
 			eMaterials,
 			eLpvGridConfig,
 			eLayeredLpvGridConfig,
@@ -103,7 +103,7 @@ namespace castor3d
 			, LightVolumePassResultArray const & llpvResult
 			, Texture const & vctFirstBounce
 			, Texture const & vctSecondaryBounce
-			, SceneUbo const & sceneUbo
+			, CameraUbo const & cameraUbo
 			, GpInfoUbo const & gpInfoUbo
 			, LpvGridConfigUbo const & lpvConfigUbo
 			, LayeredLpvGridConfigUbo const & llpvConfigUbo
@@ -145,7 +145,7 @@ namespace castor3d
 		LightVolumePassResultArray const & m_llpvResult;
 		Texture const & m_vctFirstBounce;
 		Texture const & m_vctSecondaryBounce;
-		SceneUbo const & m_sceneUbo;
+		CameraUbo const & m_cameraUbo;
 		GpInfoUbo const & m_gpInfoUbo;
 		LpvGridConfigUbo const & m_lpvConfigUbo;
 		LayeredLpvGridConfigUbo const & m_llpvConfigUbo;

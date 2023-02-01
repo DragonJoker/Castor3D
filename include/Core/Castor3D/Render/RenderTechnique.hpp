@@ -24,7 +24,7 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
 #include "Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp"
 #include "Castor3D/Shader/Ubos/LpvGridConfigUbo.hpp"
-#include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 #include "Castor3D/Shader/Ubos/VoxelizerUbo.hpp"
 
@@ -274,14 +274,14 @@ namespace castor3d
 			return m_llpvResult;
 		}
 
-		MatrixUbo const & getMatrixUbo()const
+		CameraUbo const & getCameraUbo()const
 		{
-			return m_matrixUbo;
+			return m_cameraUbo;
 		}
 
-		MatrixUbo & getMatrixUbo()
+		CameraUbo & getCameraUbo()
 		{
-			return m_matrixUbo;
+			return m_cameraUbo;
 		}
 
 		SceneUbo const & getSceneUbo()const
@@ -417,7 +417,7 @@ namespace castor3d
 		Texture const * m_intermediate;
 		TexturePtr m_depth;
 		TexturePtr m_normal;
-		MatrixUbo m_matrixUbo;
+		CameraUbo m_cameraUbo;
 		SceneUbo m_sceneUbo;
 		GpInfoUbo m_gpInfoUbo;
 		LpvGridConfigUbo m_lpvConfigUbo;

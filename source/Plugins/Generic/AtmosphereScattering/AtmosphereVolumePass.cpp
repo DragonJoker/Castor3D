@@ -9,9 +9,6 @@
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/RenderTechniqueVisitor.hpp>
 #include <Castor3D/Shader/Program.hpp>
-#include <Castor3D/Shader/Shaders/GlslUtils.hpp>
-#include <Castor3D/Shader/Ubos/MatrixUbo.hpp>
-#include <Castor3D/Shader/Ubos/SceneUbo.hpp>
 
 #include <RenderGraph/RunnableGraph.hpp>
 #include <RenderGraph/RunnablePasses/RenderQuad.hpp>
@@ -129,7 +126,7 @@ namespace atmosphere_scattering
 		{
 			sdw::FragmentWriter writer;
 
-			C3D_Camera( writer
+			ATM_Camera( writer
 				, Bindings::eCamera
 				, 0u );
 			C3D_AtmosphereScattering( writer
@@ -152,7 +149,7 @@ namespace atmosphere_scattering
 			AtmosphereModel atmosphere{ writer
 				, c3d_atmosphereData
 				, AtmosphereModel::Settings{ castor::Length::fromUnit( 1.0f, engine.getLengthUnit() ) }
-					.setCameraData( &c3d_cameraData )
+					.setCameraData( &atm_cameraData )
 					.setMieRayPhase( true )
 				, { transmittanceExtent.width, transmittanceExtent.height } };
 			atmosphere.setTransmittanceMap( transmittanceMap );

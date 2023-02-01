@@ -564,7 +564,7 @@ namespace atmosphere_scattering
 		, crg::ImageViewIdArray const & depth
 		, crg::ImageViewId const * depthObj
 		, castor3d::UniformBufferOffsetT< castor3d::ModelBufferConfiguration > const & modelUbo
-		, castor3d::MatrixUbo const & matrixUbo
+		, castor3d::CameraUbo const & cameraUbo
 		, castor3d::HdrConfigUbo const & hdrConfigUbo
 		, castor3d::SceneUbo const & sceneUbo
 		, bool clearColour

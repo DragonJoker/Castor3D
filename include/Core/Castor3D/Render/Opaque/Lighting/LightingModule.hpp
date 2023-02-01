@@ -37,7 +37,7 @@ namespace castor3d
 		eSssProfiles,
 		eModels,
 		eGpInfo,
-		eScene,
+		eCamera,
 		eDepthObj,
 		eNmlOcc,
 		eColMtl,

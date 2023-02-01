@@ -4,7 +4,7 @@
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslPassShaders.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
-#include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/MorphingUbo.hpp"
 
 #include <ShaderWriter/Writer.hpp>
@@ -259,7 +259,7 @@ namespace castor3d::shader
 	{
 	}
 
-	void RasterizerSurfaceBase::computeVelocity( MatrixData const & matrixData
+	void RasterizerSurfaceBase::computeVelocity( CameraData const & cameraData
 		, sdw::Vec4 & csCurPos
 		, sdw::Vec4 & csPrvPos )
 	{
@@ -268,8 +268,8 @@ namespace castor3d::shader
 		// (note that for providing the jitter in non-homogeneous projection space,
 		//  pixel coordinates (screen space) need to multiplied by two in the C++
 		//  code)
-		matrixData.jitter( csCurPos );
-		matrixData.jitter( csPrvPos );
+		cameraData.jitter( csCurPos );
+		cameraData.jitter( csPrvPos );
 
 		curPosition = vec4( csCurPos.xyw(), 1.0_f );
 		prvPosition = vec4( csPrvPos.xyw(), 1.0_f );

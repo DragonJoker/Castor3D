@@ -34,7 +34,7 @@
 #include <Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp>
 #include <Castor3D/Shader/Shaders/GlslUtils.hpp>
 #include <Castor3D/Shader/Ubos/BillboardUbo.hpp>
-#include <Castor3D/Shader/Ubos/MatrixUbo.hpp>
+#include <Castor3D/Shader/Ubos/CameraUbo.hpp>
 #include <Castor3D/Shader/Ubos/ModelDataUbo.hpp>
 #include <Castor3D/Shader/Ubos/MorphingUbo.hpp>
 #include <Castor3D/Shader/Ubos/SceneUbo.hpp>
@@ -256,7 +256,7 @@ namespace water
 				, targetResult
 				, targetDepth
 				, castor3d::RenderNodesPassDesc{ extent
-					, technique.getMatrixUbo()
+					, technique.getCameraUbo()
 					, technique.getSceneUbo()
 					, technique.getRenderTarget().getCuller() }.safeBand( true )
 				, castor3d::RenderTechniquePassDesc{ false, technique.getSsaoConfig() }
@@ -515,8 +515,8 @@ namespace water
 			, getComponentsMask()
 			, utils };
 
-		C3D_Matrix( writer
-			, GlobalBuffersIdx::eMatrix
+		C3D_Camera( writer
+			, GlobalBuffersIdx::eCamera
 			, RenderPipeline::eBuffers );
 		C3D_Scene( writer
 			, GlobalBuffersIdx::eScene
@@ -669,7 +669,7 @@ namespace water
 					shader::OutputComponents output{ lightDiffuse, lightSpecular, lightScattering, lightCoatingSpecular, lightSheen };
 					auto lightSurface = shader::LightSurface::create( writer
 						, "lightSurface"
-						, c3d_sceneData.cameraPosition()
+						, c3d_cameraData.position()
 						, surface.worldPosition.xyz()
 						, surface.viewPosition.xyz()
 						, surface.clipPosition
@@ -748,7 +748,7 @@ namespace water
 						, bgDiffuseReflection + bgSpecularReflection );
 					displayDebugData( eBackgroundReflection, backgroundReflection, 1.0_f );
 					auto ssrResult = writer.declLocale( "ssrResult"
-						, reflections.computeScreenSpace( c3d_matrixData
+						, reflections.computeScreenSpace( c3d_cameraData
 							, lightSurface.viewPosition()
 							, finalNormal
 							, hdrCoords
@@ -771,7 +771,7 @@ namespace water
 					auto distortedDepth = writer.declLocale( "distortedDepth"
 						, c3d_depthObj.sample( distortedTexCoord ).r() );
 					auto distortedPosition = writer.declLocale( "distortedPosition"
-						, c3d_matrixData.curProjToWorld( utils, distortedTexCoord, distortedDepth ) );
+						, c3d_cameraData.curProjToWorld( utils, distortedTexCoord, distortedDepth ) );
 					auto refractionTexCoord = writer.declLocale( "refractionTexCoord"
 						, writer.ternary( distortedPosition.y() < in.worldPosition.y(), distortedTexCoord, hdrCoords ) );
 					auto refractionResult = writer.declLocale( "refractionResult"
@@ -781,7 +781,7 @@ namespace water
 					auto sceneDepth = writer.declLocale( "sceneDepth"
 						, c3d_depthObj.sample( hdrCoords ).r() );
 					auto scenePosition = writer.declLocale( "scenePosition"
-						, c3d_matrixData.curProjToWorld( utils, hdrCoords, sceneDepth ) );
+						, c3d_cameraData.curProjToWorld( utils, hdrCoords, sceneDepth ) );
 					// Depth softening, to fade the alpha of the water where it meets the scene geometry by some predetermined distance. 
 					auto depthSoftenedAlpha = writer.declLocale( "depthSoftenedAlpha"
 						, clamp( distance( scenePosition, in.worldPosition.xyz() ) / c3d_waterData.depthSofteningDistance, 0.0_f, 1.0_f ) );
@@ -791,13 +791,13 @@ namespace water
 					auto waterTransmission = writer.declLocale( "waterTransmission"
 						, components.colour * ( indirectAmbient + indirectDiffuse ) * lightDiffuse );
 					auto heightFactor = writer.declLocale( "heightFactor"
-						, c3d_waterData.refractionHeightFactor * ( c3d_sceneData.farPlane() - c3d_sceneData.nearPlane() ) );
+						, c3d_waterData.refractionHeightFactor * ( c3d_cameraData.farPlane() - c3d_cameraData.nearPlane() ) );
 					refractionResult = mix( refractionResult
 						, waterTransmission
 						, vec3( clamp( ( in.worldPosition.y() - waterSurfacePosition.y() ) / heightFactor, 0.0_f, 1.0_f ) ) );
 					displayDebugData( eHeightMixedRefraction, refractionResult, 1.0_f );
 					auto distanceFactor = writer.declLocale( "distanceFactor"
-						, c3d_waterData.refractionDistanceFactor * ( c3d_sceneData.farPlane() - c3d_sceneData.nearPlane() ) );
+						, c3d_waterData.refractionDistanceFactor * ( c3d_cameraData.farPlane() - c3d_cameraData.nearPlane() ) );
 					refractionResult = mix( refractionResult
 						, waterTransmission
 						, utils.saturate( vec3( utils.saturate( length( in.viewPosition ) / distanceFactor ) ) ) );
@@ -806,7 +806,7 @@ namespace water
 
 					//Combine all that
 					auto fresnelFactor = writer.declLocale( "fresnelFactor"
-						, vec3( utils.fresnelMix( reflections.computeIncident( lightSurface.worldPosition(), c3d_sceneData.cameraPosition() )
+						, vec3( utils.fresnelMix( reflections.computeIncident( lightSurface.worldPosition(), c3d_cameraData.position() )
 							, components.normal
 							, components.roughness
 							, c3d_waterData.refractionRatio ) ) );
@@ -831,16 +831,17 @@ namespace water
 
 				if ( flags.hasFog() )
 				{
-					outColour = fog.apply( c3d_sceneData.getBackgroundColour( utils )
+					outColour = fog.apply( c3d_sceneData.getBackgroundColour( utils, c3d_cameraData.gamma() )
 						, outColour
 						, in.worldPosition.xyz()
+						, c3d_cameraData.position()
 						, c3d_sceneData );
 				}
 
 				backgroundModel->applyVolume( in.fragCoord.xy()
-					, utils.lineariseDepth( in.fragCoord.z(), c3d_sceneData.nearPlane(), c3d_sceneData.farPlane() )
-					, c3d_sceneData.renderSize()
-					, c3d_sceneData.cameraPlanes()
+					, utils.lineariseDepth( in.fragCoord.z(), c3d_cameraData.nearPlane(), c3d_cameraData.farPlane() )
+					, vec2( c3d_cameraData.renderSize() )
+					, c3d_cameraData.depthPlanes()
 					, outColour );
 			} );
 

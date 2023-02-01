@@ -35,7 +35,7 @@
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp"
 #include "Castor3D/Shader/Ubos/LpvGridConfigUbo.hpp"
-#include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 
@@ -124,8 +124,8 @@ namespace castor3d
 		shader::CookTorranceBRDF cookTorrance{ writer, brdf };
 		auto index = uint32_t( GlobalBuffersIdx::eCount );
 
-		C3D_Matrix( writer
-			, GlobalBuffersIdx::eMatrix
+		C3D_Camera( writer
+			, GlobalBuffersIdx::eCamera
 			, RenderPipeline::eBuffers );
 		C3D_Scene( writer
 			, GlobalBuffersIdx::eScene
@@ -228,7 +228,7 @@ namespace castor3d
 					, in.passMultipliers
 					, components );
 				auto incident = writer.declLocale( "incident"
-					, reflections.computeIncident( in.worldPosition.xyz(), c3d_sceneData.cameraPosition() ) );
+					, reflections.computeIncident( in.worldPosition.xyz(), c3d_cameraData.position() ) );
 
 				if ( !checkFlag( m_filters, RenderFilter::eOpaque ) )
 				{
@@ -263,10 +263,10 @@ namespace castor3d
 					components.finish( passShaders
 						, surface
 						, utils
-						, c3d_sceneData.cameraPosition() );
+						, c3d_cameraData.position() );
 					auto lightSurface = shader::LightSurface::create( writer
 						, "lightSurface"
-						, c3d_sceneData.cameraPosition()
+						, c3d_cameraData.position()
 						, surface.worldPosition.xyz()
 						, surface.viewPosition.xyz()
 						, surface.clipPosition
@@ -366,16 +366,17 @@ namespace castor3d
 
 				if ( flags.hasFog() )
 				{
-					outColour = fog.apply( c3d_sceneData.getBackgroundColour( utils )
+					outColour = fog.apply( c3d_sceneData.getBackgroundColour( utils, c3d_cameraData.gamma() )
 						, outColour
 						, in.worldPosition.xyz()
+						, c3d_cameraData.position()
 						, c3d_sceneData );
 				}
 
 				backgroundModel->applyVolume( in.fragCoord.xy()
-					, utils.lineariseDepth( in.fragCoord.z(), c3d_sceneData.nearPlane(), c3d_sceneData.farPlane() )
-					, c3d_sceneData.renderSize()
-					, c3d_sceneData.cameraPlanes()
+					, utils.lineariseDepth( in.fragCoord.z(), c3d_cameraData.nearPlane(), c3d_cameraData.farPlane() )
+					, vec2( c3d_cameraData.renderSize() )
+					, c3d_cameraData.depthPlanes()
 					, outColour );
 				outVelocity.xy() = in.getVelocity();
 			} );

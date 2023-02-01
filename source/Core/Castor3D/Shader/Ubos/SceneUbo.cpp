@@ -10,6 +10,7 @@
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Light/LightModule.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
+#include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
 
 #include <ShaderWriter/Source.hpp>
@@ -22,32 +23,19 @@ namespace castor3d
 
 	namespace shader
 	{
-		sdw::Vec3 SceneData::transformCamera( sdw::Mat3 const & transform )const
+		sdw::Vec4 SceneData::getBackgroundColour( Utils & utils
+			, sdw::Float const gamma )const
 		{
-			return transform * cameraPosition();
-		}
-
-		sdw::Vec3 SceneData::getPosToCamera( sdw::Vec3 const & position )const
-		{
-			return cameraPosition() - position;
-		}
-
-		sdw::Vec3 SceneData::getCameraToPos( sdw::Vec3 const & position )const
-		{
-			return position - cameraPosition();
-		}
-
-		sdw::Vec4 SceneData::getBackgroundColour( Utils & utils )const
-		{
-			return vec4( utils.removeGamma( gamma(), backgroundColour().rgb() ), backgroundColour().a() );
+			return vec4( utils.removeGamma( gamma, backgroundColour() ), 1.0_f );
 		}
 
 		sdw::Vec4 SceneData::getBackgroundColour( HdrConfigData const & hdrConfigData )const
 		{
-			return vec4( hdrConfigData.removeGamma( backgroundColour().rgb() ), backgroundColour().a() );
+			return vec4( hdrConfigData.removeGamma( backgroundColour() ), 1.0_f );
 		}
 
 		sdw::Vec4 SceneData::computeAccumulation( Utils & utils
+			, CameraData const & camera
 			, sdw::Float const & depth
 			, sdw::Vec3 const & colour
 			, sdw::Float const & alpha
@@ -56,14 +44,9 @@ namespace castor3d
 			return utils.computeAccumulation( depth
 				, colour
 				, alpha
-				, nearPlane()
-				, farPlane()
+				, camera.nearPlane()
+				, camera.farPlane()
 				, accumulationOperator );
-		}
-
-		sdw::Vec2 SceneData::cameraPlanes()const
-		{
-			return vec2( nearPlane(), farPlane() );
 		}
 	}
 
@@ -80,47 +63,21 @@ namespace castor3d
 		m_device.uboPool->putBuffer( m_ubo );
 	}
 
-	void SceneUbo::cpuUpdateCameraPosition( Camera const & camera )
-	{
-		CU_Require( m_ubo );
-		auto & configuration = m_ubo.getData();
-		auto position = camera.getParent()->getDerivedPosition();
-		configuration.cameraPos = castor::Point3f{ position[0], position[1], position[2] };
-		configuration.gamma = camera.getHdrConfig().gamma;
-		configuration.ambientLight = toRGBFloat( camera.getScene()->getAmbientLight() );
-		configuration.gamma = camera.getHdrConfig().gamma;
-		configuration.backgroundColour = toRGBAFloat( camera.getScene()->getBackgroundColour() );
-	}
-
-	void SceneUbo::cpuUpdate( Camera const * camera
-		, Fog const & fog )
+	SceneUbo::Configuration & SceneUbo::cpuUpdate( Fog const & fog )
 	{
 		CU_Require( m_ubo );
 		auto & configuration = m_ubo.getData();
 		configuration.fogType = uint32_t( fog.getType() );
 		configuration.fogDensity = fog.getDensity();
-
-		if ( camera )
-		{
-			configuration.nearPlane = camera->getNear();
-			configuration.farPlane = camera->getFar();
-			cpuUpdateCameraPosition( *camera );
-			setWindowSize( { camera->getWidth(), camera->getHeight() } );
-		}
+		return configuration;
 	}
 
-	void SceneUbo::cpuUpdate( Scene const & scene
-		, Camera const * camera )
+	SceneUbo::Configuration & SceneUbo::cpuUpdate( Scene const & scene )
 	{
-		cpuUpdate( camera, scene.getFog() );
-	}
-
-	void SceneUbo::setWindowSize( castor::Size const & window )
-	{
-		CU_Require( m_ubo );
-		auto & data = m_ubo.getData();
-		auto size = getSafeBandedSize( window );
-		data.renderSize = castor::Point2f{ float( size[0] ), float( size[1] ) };
+		auto & configuration = cpuUpdate( scene.getFog() );
+		configuration.ambientLight = toRGBFloat( scene.getAmbientLight() );
+		configuration.backgroundColour = toRGBFloat( scene.getBackgroundColour() );
+		return configuration;
 	}
 
 	//*********************************************************************************************

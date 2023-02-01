@@ -680,7 +680,7 @@ namespace castor3d
 				, { 1u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( TextOverlay::Vertex, texture ) }
 				, { 2u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( TextOverlay::Vertex, text ) } } }
 		, m_size{ makeSize( m_target.getExtent() ) }
-		, m_matrixUbo{ device }
+		, m_cameraUbo{ device }
 	{
 		// Create one panel overlays buffer pool
 		m_panelVertexBuffers.emplace_back( std::make_unique< PanelVertexBufferPool >( *getRenderSystem()->getEngine()
@@ -709,7 +709,7 @@ namespace castor3d
 			, m_texTextDeclaration
 			, MaxOverlayPanelsPerBuffer ) );
 
-		m_matrixUbo.cpuUpdate( getRenderSystem()->getOrtho( 0.0f
+		m_cameraUbo.cpuUpdate( getRenderSystem()->getOrtho( 0.0f
 			, float( m_size.getWidth() )
 			, 0.0f
 			, float( m_size.getHeight() )
@@ -740,7 +740,7 @@ namespace castor3d
 		{
 			m_sizeChanged = true;
 			m_size = size;
-			m_matrixUbo.cpuUpdate( getRenderSystem()->getOrtho( 0.0f
+			m_cameraUbo.cpuUpdate( getRenderSystem()->getOrtho( 0.0f
 				, float( m_size.getWidth() )
 				, 0.0f
 				, float( m_size.getHeight() )
@@ -842,7 +842,7 @@ namespace castor3d
 		getRenderSystem()->getEngine()->getMaterialCache().getTexAnimBuffer().createBinding( *result
 			, pipeline.descriptorLayout->getBinding( uint32_t( ovrlrend::OverlayBindingId::eTexAnims ) ) );
 		// Matrix UBO
-		m_matrixUbo.createSizedBinding( *result
+		m_cameraUbo.createSizedBinding( *result
 			, pipeline.descriptorLayout->getBinding( uint32_t( ovrlrend::OverlayBindingId::eMatrix ) ) );
 		// Overlay UBO
 		overlayUbo.createSizedBinding( *result
@@ -991,7 +991,7 @@ namespace castor3d
 		{
 			VertexWriter writer;
 
-			C3D_Matrix( writer
+			C3D_Camera( writer
 				, ovrlrend::OverlayBindingId::eMatrix
 				, 0u );
 			C3D_Overlay( writer
@@ -1007,7 +1007,7 @@ namespace castor3d
 					out.text = in.text;
 					auto size = writer.declLocale( "size"
 						, c3d_overlayData.getOverlaySize() );
-					out.vtx.position = c3d_matrixData.viewToProj( vec4( size * c3d_overlayData.modelToView( in.position )
+					out.vtx.position = c3d_cameraData.viewToProj( vec4( size * c3d_overlayData.modelToView( in.position )
 							, 0.0_f
 							, 1.0_f ) );
 					out.position = out.vtx.position.xy();

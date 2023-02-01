@@ -60,7 +60,7 @@ namespace atmosphere_scattering
 			sdw::FragmentWriter writer;
 			castor3d::shader::Utils utils{ writer };
 
-			C3D_Camera( writer
+			ATM_Camera( writer
 				, uint32_t( Bindings::eCamera )
 				, 0u );
 			C3D_AtmosphereScattering( writer
@@ -82,7 +82,7 @@ namespace atmosphere_scattering
 			AtmosphereModel atmosphere{ writer
 				, c3d_atmosphereData
 				, AtmosphereModel::Settings{ castor::Length::fromUnit( 1.0f, engine.getLengthUnit() ) }
-					.setCameraData( &c3d_cameraData ) };
+					.setCameraData( &atm_cameraData ) };
 
 			auto fragColour = writer.declOutput< sdw::Vec4 >( "fragColour", 0u );
 

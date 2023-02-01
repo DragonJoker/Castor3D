@@ -28,7 +28,7 @@ namespace castor3d
 		 *\param[in]	graph		The runnable graph.
 		 *\param[in]	device		The GPU device.
 		 *\param[in]	size		The render area dimensions.
-		 *\param[in]	matrixUbo	The scene matrices UBO.
+		 *\param[in]	cameraUbo	The scene matrices UBO.
 		 *\param[in]	sceneUbo	The scene UBO.
 		 *\param[in]	culler		The culler for this pass.
 		 *\~french
@@ -38,7 +38,7 @@ namespace castor3d
 		 *\param[in]	graph		Le runnable graph.
 		 *\param[in]	device		Le device GPU.
 		 *\param[in]	size		Les dimensions de la zone de rendu.
-		 *\param[in]	matrixUbo	L'UBO de matrices de la scène.
+		 *\param[in]	cameraUbo	L'UBO de matrices de la scène.
 		 *\param[in]	sceneUbo	L'UBO de scène.
 		 *\param[in]	culler		Le culler pour cette passe.
 		 */
@@ -47,8 +47,8 @@ namespace castor3d
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
 			, castor::Size const & size
-			, MatrixUbo & matrixUbo
-			, SceneUbo & sceneUbo
+			, CameraUbo const & cameraUbo
+			, SceneUbo const & sceneUbo
 			, SceneCuller & culler );
 		/**
 		 *\~english

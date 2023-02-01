@@ -99,7 +99,7 @@ namespace castor3d
 
 			for ( uint32_t face = 0u; face < 6u; ++face )
 			{
-				result.emplace_back( std::make_unique< ShadowMap::PassData >( std::make_unique< MatrixUbo >( device )
+				result.emplace_back( std::make_unique< ShadowMap::PassData >( std::make_unique< CameraUbo >( device )
 					, castor::makeUnique< Viewport >( engine )
 					, nullptr ) );
 				auto & passData = *result.back();
@@ -120,7 +120,7 @@ namespace castor3d
 							, runnableGraph
 							, device
 							, faceIndex
-							, *passData.matrixUbo
+							, *passData.cameraUbo
 							, *passData.culler
 							, shadowMap
 							, vsm
@@ -280,7 +280,14 @@ namespace castor3d
 			for ( uint32_t face = offset; face < offset + 6u; ++face )
 			{
 				updater.index = face - offset;
-				myPasses.passes[face]->pass->update( updater );
+				auto & pass = *myPasses.passes[face];
+				pass.pass->update( updater );
+
+				auto & pointLight = *updater.light->getPointLight();
+				pass.cameraUbo->cpuUpdate( *updater.camera
+					, false
+					, pointLight.getViewMatrix( CubeMapFace( updater.index ) )
+					, static_cast< ShadowMapPassPoint const & >( *pass.pass ).getProjection() );
 			}
 		}
 	}

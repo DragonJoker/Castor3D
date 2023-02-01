@@ -10,7 +10,6 @@
 #include "Castor3D/Scene/Background/Background.hpp"
 #include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
-#include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 
 #include <ashes/ashes.hpp>
 
@@ -36,7 +35,7 @@ namespace castor3d
 		, crg::ImageViewId const * depthObj )
 		: m_device{ device }
 		, m_colour{ colour }
-		, m_matrixUbo{ m_device }
+		, m_cameraUbo{ m_device }
 		, m_modelUbo{ m_device.uboPool->getBuffer< ModelBufferConfiguration >( VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) }
 		, m_backgroundPassDesc{ &doCreatePass( graph
 			, std::move( previousPasses )
@@ -66,9 +65,10 @@ namespace castor3d
 			updater.targetImage = {};
 		}
 
-		m_matrixUbo.cpuUpdate( updater.bgMtxView
-			, updater.bgMtxProj
-			, updater.camera->getFrustum() );
+		m_cameraUbo.cpuUpdate( *updater.camera
+			, true
+			, updater.bgMtxView
+			, updater.bgMtxProj );
 		auto & configuration = m_modelUbo.getData();
 		configuration.prvModel = configuration.curModel;
 		configuration.curModel = updater.bgMtxModl;
@@ -104,7 +104,7 @@ namespace castor3d
 			, depth
 			, depthObj
 			, m_modelUbo
-			, m_matrixUbo
+			, m_cameraUbo
 			, hdrConfigUbo
 			, sceneUbo
 			, clearColour

@@ -47,6 +47,7 @@ namespace castor3d
 		, Texture const & ssao
 		, castor::Size const & size
 		, RenderTechnique const & technique
+		, CameraUbo const & cameraUbo
 		, SceneUbo const & sceneUbo
 		, HdrConfigUbo const & hdrConfigUbo
 		, GpInfoUbo const & gpInfoUbo
@@ -74,7 +75,7 @@ namespace castor3d
 			, m_lightPassResult
 			, resultTexture
 			, resultDepth
-			, sceneUbo
+			, cameraUbo
 			, m_lightingGpInfoUbo ) }
 		, m_indirectLightingPass{ castor::makeUnique< IndirectLightingPass >( m_device
 			, progress
@@ -89,7 +90,7 @@ namespace castor3d
 			, llpvResult
 			, vctFirstBounce
 			, vctSecondaryBounce
-			, sceneUbo
+			, cameraUbo
 			, m_lightingGpInfoUbo
 			, lpvConfigUbo
 			, llpvConfigUbo
@@ -100,7 +101,6 @@ namespace castor3d
 			, progress
 			, *m_technique.getRenderTarget().getScene()
 			, m_lightingGpInfoUbo
-			, sceneUbo
 			, depthObj
 			, m_opaquePassResult
 			, m_lightPassResult ) }
@@ -114,6 +114,7 @@ namespace castor3d
 			, depthObj
 			, resultTexture
 			, ssao
+			, cameraUbo
 			, sceneUbo
 			, hdrConfigUbo
 			, gpInfoUbo
@@ -183,6 +184,7 @@ namespace castor3d
 		, Texture const & depthObj
 		, crg::ImageViewIdArray resultTexture
 		, Texture const & ssao
+		, CameraUbo const & cameraUbo
 		, SceneUbo const & sceneUbo
 		, HdrConfigUbo const & hdrConfigUbo
 		, GpInfoUbo const & gpInfoUbo
@@ -207,6 +209,7 @@ namespace castor3d
 				, m_subsurfaceScattering->getResult()
 				, m_lightPassResult
 				, resultTexture
+				, cameraUbo
 				, sceneUbo
 				, gpInfoUbo
 				, hdrConfigUbo

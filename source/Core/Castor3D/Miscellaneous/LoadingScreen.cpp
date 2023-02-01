@@ -114,9 +114,7 @@ namespace castor3d
 		static SceneUbo createSceneUbo( RenderDevice const & device
 			, castor::Size const & size )
 		{
-			SceneUbo result{ device };
-			result.setWindowSize( size );
-			return result;
+			return SceneUbo{ device };
 		}
 
 		static ShaderPtr getVertexProgram()
@@ -278,7 +276,7 @@ namespace castor3d
 		, m_culler{ castor::makeUniqueDerived< SceneCuller, FrustumCuller >( *m_camera ) }
 		, m_colour{ loadscreen::createColour( m_device, resources, SceneName, m_renderSize ) }
 		, m_depth{ loadscreen::createDepth( m_device, resources, SceneName, m_renderSize ) }
-		, m_matrixUbo{ m_device }
+		, m_cameraUbo{ m_device }
 		, m_hdrConfigUbo{ m_device }
 		, m_sceneUbo{ loadscreen::createSceneUbo( m_device, m_renderSize ) }
 		, m_backgroundRenderer{ castor::makeUnique< BackgroundRenderer >( m_graph.getDefaultGroup()
@@ -334,11 +332,9 @@ namespace castor3d
 			m_camera->update();
 
 			m_culler->update( updater );
-			m_matrixUbo.cpuUpdate( m_camera->getView()
-				, m_camera->getProjection( false )
-				, m_camera->getFrustum() );
+			m_cameraUbo.cpuUpdate( *m_camera, false );
 			m_hdrConfigUbo.cpuUpdate( m_camera->getHdrConfig() );
-			m_sceneUbo.cpuUpdate( *m_scene, m_camera.get() );
+			m_sceneUbo.cpuUpdate( *m_scene );
 
 			m_backgroundRenderer->update( updater );
 			m_opaquePass->update( updater );
@@ -423,7 +419,7 @@ namespace castor3d
 					, ForwardRenderTechniquePass::Type
 					, crg::ImageViewIdArray{ m_colour.targetViewId }
 					, crg::ImageViewIdArray{ m_depth.targetViewId }
-					, RenderNodesPassDesc{ makeExtent3D( m_camera->getSize() ), m_matrixUbo, m_sceneUbo, *m_culler }
+					, RenderNodesPassDesc{ makeExtent3D( m_camera->getSize() ), m_cameraUbo, m_sceneUbo, *m_culler }
 						.meshShading( true )
 					, RenderTechniquePassDesc{ true, SsaoConfig{} } );
 				m_opaquePass = result.get();
@@ -451,7 +447,7 @@ namespace castor3d
 					, ForwardRenderTechniquePass::Type
 					, crg::ImageViewIdArray{ m_colour.targetViewId }
 					, crg::ImageViewIdArray{ m_depth.targetViewId }
-					, RenderNodesPassDesc{ makeExtent3D( m_camera->getSize() ), m_matrixUbo, m_sceneUbo, *m_culler, false }
+					, RenderNodesPassDesc{ makeExtent3D( m_camera->getSize() ), m_cameraUbo, m_sceneUbo, *m_culler, false }
 						.meshShading( true )
 					, RenderTechniquePassDesc{ true, SsaoConfig{} } );
 				m_transparentPass = result.get();

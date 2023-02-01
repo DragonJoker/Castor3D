@@ -20,16 +20,9 @@ namespace castor3d
 			: public sdw::StructInstanceHelperT< "C3D_SceneData"
 				, ast::type::MemoryLayout::eStd140
 				, sdw::Vec3Field< "ambientLight" >
-				, sdw::FloatField< "gamma" >
-				, sdw::Vec4Field< "backgroundColour" >
-				, sdw::Vec3Field< "cameraPosition" >
-				, sdw::FloatField< "pad0" >
-				, sdw::Vec2Field< "renderSize" >
-				, sdw::FloatField< "nearPlane" >
-				, sdw::FloatField< "farPlane" >
 				, sdw::UInt32Field< "fogType" >
-				, sdw::FloatField< "fogDensity" >
-				, sdw::Vec2Field< "pad1" > >
+				, sdw::Vec3Field< "backgroundColour" >
+				, sdw::FloatField< "fogDensity" > >
 		{
 			friend struct BillboardData;
 			friend class Fog;
@@ -42,26 +35,18 @@ namespace castor3d
 			{
 			}
 
-			C3D_API sdw::Vec3 transformCamera( sdw::Mat3 const & transform )const;
-			C3D_API sdw::Vec3 getPosToCamera( sdw::Vec3 const & position )const;
-			C3D_API sdw::Vec3 getCameraToPos( sdw::Vec3 const & position )const;
-			C3D_API sdw::Vec4 getBackgroundColour( Utils & utils )const;
+			C3D_API sdw::Vec4 getBackgroundColour( Utils & utils
+				, sdw::Float const gamma )const;
 			C3D_API sdw::Vec4 getBackgroundColour( HdrConfigData const & hdrConfigData )const;
 			C3D_API sdw::Vec4 computeAccumulation( Utils & utils
+				, CameraData const & camera
 				, sdw::Float const & depth
 				, sdw::Vec3 const & colour
 				, sdw::Float const & alpha
 				, sdw::UInt const & accumulationOperator )const;
-			C3D_API sdw::Vec2 cameraPlanes()const;
 
 			auto ambientLight()const { return getMember< "ambientLight" >(); }
-			auto gamma()const { return getMember< "gamma" >(); }
 			auto backgroundColour()const { return getMember< "backgroundColour" >(); }
-			auto cameraPosition()const { return getMember< "cameraPosition" >(); }
-			auto pad0()const { return getMember< "pad0" >(); }
-			auto renderSize()const { return getMember< "renderSize" >(); }
-			auto nearPlane()const { return getMember< "nearPlane" >(); }
-			auto farPlane()const { return getMember< "farPlane" >(); }
 			auto fogType()const { return getMember< "fogType" >(); }
 			auto fogDensity()const { return getMember< "fogDensity" >(); }
 		};
@@ -83,23 +68,13 @@ namespace castor3d
 		 *\~english
 		 *\brief		Updates the UBO from given values.
 		 *\param[in]	camera	The current camera.
-		 *\~french
-		 *\brief		Met à jour l'UBO avec les valeurs données.
-		 *\param[in]	camera	La camera actuelle.
-		 */
-		C3D_API void cpuUpdateCameraPosition( Camera const & camera );
-		/**
-		 *\~english
-		 *\brief		Updates the UBO from given values.
-		 *\param[in]	camera	The current camera.
 		 *\param[in]	fog		The fog configuration.
 		 *\~french
 		 *\brief		Met à jour l'UBO avec les valeurs données.
 		 *\param[in]	camera	La camera actuelle.
 		 *\param[in]	fog		La configuration du brouillard.
 		 */
-		C3D_API void cpuUpdate( Camera const * camera
-			, Fog const & fog );
+		C3D_API Configuration & cpuUpdate( Fog const & fog );
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
@@ -110,17 +85,7 @@ namespace castor3d
 		 *\param[in]	scene	La scène dessinée.
 		 *\param[in]	camera	La camera actuelle.
 		 */
-		C3D_API void cpuUpdate( Scene const & scene
-			, Camera const * camera );
-		/**
-		 *\~english
-		 *\brief		Updates the UBO from given values.
-		 *\param[in]	window	The window dimensions.
-		 *\~french
-		 *\brief		Met à jour l'UBO avec les valeurs données.
-		 *\param[in]	window	Les dimensions de la fenêtre.
-		 */
-		C3D_API void setWindowSize( castor::Size const & window );
+		C3D_API Configuration & cpuUpdate( Scene const & scene );
 
 		void createPassBinding( crg::FramePass & pass
 			, uint32_t binding )const

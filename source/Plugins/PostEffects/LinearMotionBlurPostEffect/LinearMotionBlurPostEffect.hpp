@@ -10,7 +10,6 @@ See LICENSE file in root folder
 #include <Castor3D/Render/PostEffect/PostEffectSurface.hpp>
 #include <Castor3D/Material/Texture/TextureUnit.hpp>
 #include <Castor3D/Render/Viewport.hpp>
-#include <Castor3D/Shader/Ubos/MatrixUbo.hpp>
 
 #include <ShaderAST/Shader.hpp>
 
