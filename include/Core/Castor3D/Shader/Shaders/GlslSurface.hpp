@@ -108,7 +108,7 @@ namespace castor3d::shader
 			, bool enabled );
 
 		// Vertex shader side
-		C3D_API void computeVelocity( MatrixData const & matrixData
+		C3D_API void computeVelocity( CameraData const & cameraData
 			, sdw::Vec4 & curPos
 			, sdw::Vec4 & prvPos );
 		C3D_API void computeTangentSpace( PipelineFlags const & flags

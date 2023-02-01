@@ -1236,8 +1236,8 @@ namespace castor3d
 			, m_device
 			, queueData
 			, target->getSize()
-			, target->getTechnique().getMatrixUbo()
-			, target->getTechnique().getSceneUbo()
+			, target->getCameraUbo()
+			, target->getSceneUbo()
 			, target->getCuller() );
 	}
 
@@ -1411,7 +1411,7 @@ namespace castor3d
 		m_texture3Dto2D = castor::makeUnique< Texture3DTo2D >( m_device
 			, m_resources
 			, extent
-			, target->getTechnique().getMatrixUbo() );
+			, target->getCameraUbo() );
 		m_tex3DTo2DIntermediate = { "Texture3DTo2DResult"
 			, m_texture3Dto2D->getTarget().sampledViewId
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL

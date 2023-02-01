@@ -12,7 +12,7 @@
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/ShaderBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
-#include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 
 #include <CastorUtils/Design/ResourceCache.hpp>
 
@@ -59,7 +59,7 @@ namespace castor3d
 		enum IDs : uint32_t
 		{
 			eGridUbo,
-			eMatrixUbo,
+			eCameraUbo,
 			eSource,
 		};
 
@@ -194,7 +194,7 @@ namespace castor3d
 				bindings.push_back( makeDescriptorSetLayoutBinding( eGridUbo
 					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 					, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_GEOMETRY_BIT ) );
-				bindings.push_back( makeDescriptorSetLayoutBinding( eMatrixUbo
+				bindings.push_back( makeDescriptorSetLayoutBinding( eCameraUbo
 					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 					, VK_SHADER_STAGE_GEOMETRY_BIT ) );
 				bindings.push_back( makeDescriptorSetLayoutBinding( eSource
@@ -211,7 +211,7 @@ namespace castor3d
 			, SamplerRPtr sampler
 			, ashes::DescriptorSetPool const & pool
 			, UniformBufferOffsetT< Texture3DTo2DData > const & uniformBuffer
-			, MatrixUbo const & matrixUbo
+			, CameraUbo const & cameraUbo
 			, IntermediateView const & texture3D )
 		{
 			auto descriptorSet = pool.createDescriptorSet( "Texture3DTo2D" );
@@ -221,8 +221,8 @@ namespace castor3d
 
 			if ( !sampler )
 			{
-				matrixUbo.createSizedBinding( *descriptorSet
-					, pool.getLayout().getBinding( eMatrixUbo ) );
+				cameraUbo.createSizedBinding( *descriptorSet
+					, pool.getLayout().getBinding( eCameraUbo ) );
 				descriptorSet->createBinding( pool.getLayout().getBinding( eSource )
 					, resources.createImageView( context, texture3D.viewId ) );
 			}
@@ -483,7 +483,7 @@ namespace castor3d
 
 			// Shader inputs
 			UBO_GRID( writer, eGridUbo );
-			C3D_Matrix( writer, eMatrixUbo, 0u );
+			C3D_Camera( writer, eCameraUbo, 0u );
 
 			// Creates a unit cube triangle strip from just vertex ID (14 vertices)
 			auto createCube = writer.implementFunction< Vec3 >( "createCube"
@@ -522,7 +522,7 @@ namespace castor3d
 							pos *= ( writer.cast< Float >( gridSize ) * ( 1.0_f / cellSize ) ) / writer.cast< Float >( gridSize );
 
 							out.voxelColour = list[0].voxelColour;
-							out.vtx.position = c3d_matrixData.worldToCurProj( vec4( pos, 1.0f ) );
+							out.vtx.position = c3d_cameraData.worldToCurProj( vec4( pos, 1.0f ) );
 
 							out.append();
 						}
@@ -608,7 +608,7 @@ namespace castor3d
 		, QueueData const & queueData
 		, crg::ResourcesCache & resources
 		, UniformBufferOffsetT< Texture3DTo2DData > const & uniformBuffer
-		, MatrixUbo const & matrixUbo
+		, CameraUbo const & cameraUbo
 		, IntermediateView const & texture3D
 		, ashes::RenderPass const & renderPass
 		, ashes::DescriptorSetPool const & descriptorSetPool
@@ -616,7 +616,7 @@ namespace castor3d
 		, ashes::PipelineLayout const & pipelineLayout
 		, ashes::GraphicsPipeline const & pipeline
 		, SamplerRPtr sampler )
-		: descriptorSet{ t3dto2d::createDescriptorSet( device, resources, sampler, descriptorSetPool, uniformBuffer, matrixUbo, texture3D ) }
+		: descriptorSet{ t3dto2d::createDescriptorSet( device, resources, sampler, descriptorSetPool, uniformBuffer, cameraUbo, texture3D ) }
 		, commands{ t3dto2d::createCommandBuffer( device, queueData, resources, renderPass, frameBuffer, pipelineLayout, pipeline, *descriptorSet, texture3D, sampler ) }
 	{
 	}
@@ -630,10 +630,10 @@ namespace castor3d
 	Texture3DTo2D::Texture3DTo2D( RenderDevice const & device
 		, crg::ResourcesCache & resources
 		, VkExtent2D const & size
-		, MatrixUbo const & matrixUbo )
+		, CameraUbo const & cameraUbo )
 		: m_device{ device }
 		, m_resources{ resources }
-		, m_matrixUbo{ matrixUbo }
+		, m_cameraUbo{ cameraUbo }
 		, m_target{ t3dto2d::createTarget( device, resources, size ) }
 		, m_depthBuffer{ t3dto2d::createDepthBuffer( device, resources, m_target ) }
 		, m_uniformBuffer{ device.uboPool->getBuffer< Texture3DTo2DData >( 0u ) }
@@ -702,7 +702,7 @@ namespace castor3d
 						, queueData
 						, m_resources
 						, m_uniformBuffer
-						, m_matrixUbo
+						, m_cameraUbo
 						, intermediate
 						, *m_renderPass
 						, *m_descriptorSetPoolSlice
@@ -717,7 +717,7 @@ namespace castor3d
 						, queueData
 						, m_resources
 						, m_uniformBuffer
-						, m_matrixUbo
+						, m_cameraUbo
 						, intermediate
 						, *m_renderPass
 						, *m_descriptorSetPoolVolume

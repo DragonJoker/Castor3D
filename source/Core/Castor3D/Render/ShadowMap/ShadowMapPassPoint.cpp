@@ -30,7 +30,7 @@
 #include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
-#include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
 #include "Castor3D/Shader/Ubos/ObjectIdsUbo.hpp"
 #include "Castor3D/Shader/Ubos/ShadowMapUbo.hpp"
@@ -51,7 +51,7 @@ namespace castor3d
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
 		, uint32_t index
-		, MatrixUbo & matrixUbo
+		, CameraUbo const & cameraUbo
 		, SceneCuller & culler
 		, ShadowMap const & shadowMap
 		, bool needsVsm
@@ -61,7 +61,7 @@ namespace castor3d
 			, graph
 			, device
 			, Type
-			, matrixUbo
+			, cameraUbo
 			, culler
 			, shadowMap
 			, needsVsm
@@ -96,16 +96,12 @@ namespace castor3d
 		auto & aabb = light.getScene()->getBoundingBox();
 		auto farPlane = light.getFarPlane();
 		m_shadowMapUbo.update( light, updater.index );
-		auto & pointLight = *light.getPointLight();
 		m_projection = m_device.renderSystem.getPerspective( 90.0_degrees
 			, 1.0f
 			, ( std::min( double( farPlane ), castor::point::length( aabb.getDimensions() ) ) > 1000.0
 				? 1.0f
 				: 0.1f )
 			, farPlane );
-		m_matrixUbo.cpuUpdate( pointLight.getViewMatrix( CubeMapFace( updater.index ) )
-			, m_projection
-			, updater.camera->getFrustum() );
 	}
 
 	ashes::PipelineDepthStencilStateCreateInfo ShadowMapPassPoint::doCreateDepthStencilState( PipelineFlags const & flags )const
@@ -150,8 +146,8 @@ namespace castor3d
 			, ComponentModeFlag::eNone
 			, utils };
 
-		C3D_Matrix( writer
-			, GlobalBuffersIdx::eMatrix
+		C3D_Camera( writer
+			, GlobalBuffersIdx::eCamera
 			, RenderPipeline::eBuffers );
 		C3D_ObjectIdsData( writer
 			, flags
@@ -211,7 +207,7 @@ namespace castor3d
 					auto worldPos = writer.declLocale( "worldPos"
 						, curPosition );
 					out.computeTangentSpace( flags
-						, c3d_matrixData.getCurViewCenter()
+						, c3d_cameraData.getCurViewCenter()
 						, worldPos.xyz()
 						, curNormal
 						, curTangent );
@@ -223,7 +219,7 @@ namespace castor3d
 					auto mtxNormal = writer.declLocale< Mat3 >( "mtxNormal"
 						, modelData.getNormalMtx( flags, mtxModel ) );
 					out.computeTangentSpace( flags
-						, c3d_matrixData.getCurViewCenter()
+						, c3d_cameraData.getCurViewCenter()
 						, worldPos.xyz()
 						, mtxNormal
 						, curNormal
@@ -232,7 +228,7 @@ namespace castor3d
 
 				auto worldPos = writer.getVariable< sdw::Vec4 >( "worldPos" );
 				out.worldPosition = worldPos;
-				out.vtx.position = c3d_matrixData.worldToCurProj( worldPos );
+				out.vtx.position = c3d_cameraData.worldToCurProj( worldPos );
 			} );
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}

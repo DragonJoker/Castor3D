@@ -114,9 +114,9 @@ namespace atmosphere_scattering
 	};
 }
 
-#define C3D_Camera( writer, binding, set )\
+#define ATM_Camera( writer, binding, set )\
 	auto cameraBuffer = writer.declUniformBuffer<>( atmosphere_scattering::CameraUbo::Buffer, binding, set );\
-	auto c3d_cameraData = cameraBuffer.declMember< atmosphere_scattering::CameraData >( atmosphere_scattering::CameraUbo::Data );\
+	auto atm_cameraData = cameraBuffer.declMember< atmosphere_scattering::CameraData >( atmosphere_scattering::CameraUbo::Data );\
 	cameraBuffer.end()
 
 #endif

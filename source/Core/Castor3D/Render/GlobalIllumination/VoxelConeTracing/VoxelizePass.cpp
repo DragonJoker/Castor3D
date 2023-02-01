@@ -33,10 +33,9 @@
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Shaders/GlslVoxel.hpp"
 #include "Castor3D/Shader/Ubos/BillboardUbo.hpp"
-#include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
 #include "Castor3D/Shader/Ubos/ObjectIdsUbo.hpp"
-#include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 #include "Castor3D/Shader/Ubos/VoxelizerUbo.hpp"
 
 #include <ShaderWriter/Source.hpp>
@@ -55,8 +54,8 @@ namespace castor3d
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
-		, MatrixUbo & matrixUbo
-		, SceneUbo & sceneUbo
+		, CameraUbo const & cameraUbo
+		, SceneUbo const & sceneUbo
 		, Camera const & camera
 		, VoxelizerUbo const & voxelizerUbo
 		, ashes::Buffer< Voxel > const & voxels
@@ -69,7 +68,7 @@ namespace castor3d
 			, {}
 			, {}
 			, RenderNodesPassDesc{ { voxelConfig.gridSize.value(), voxelConfig.gridSize.value(), 1u }
-				, matrixUbo
+				, cameraUbo
 				, sceneUbo
 				, camera.getScene()->getDummyCuller()
 				, RenderFilter::eNone
@@ -214,8 +213,8 @@ namespace castor3d
 			, ComponentModeFlag::eNone
 			, utils };
 
-		C3D_Matrix( writer
-			, GlobalBuffersIdx::eMatrix
+		C3D_Camera( writer
+			, GlobalBuffersIdx::eCamera
 			, RenderPipeline::eBuffers );
 		C3D_ObjectIdsData( writer
 			, flags
@@ -277,7 +276,7 @@ namespace castor3d
 				}
 
 				out.worldPosition = out.vtx.position;
-				out.viewPosition = c3d_matrixData.worldToCurView( out.vtx.position );
+				out.viewPosition = c3d_cameraData.worldToCurView( out.vtx.position );
 			} );
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
@@ -292,11 +291,8 @@ namespace castor3d
 		auto inTexcoord = writer.declInput< Vec2 >( "inTexcoord", 1u, flags.enableTexcoords() );
 		auto inCenter = writer.declInput< Vec3 >( "inCenter", 2u );
 
-		C3D_Matrix( writer
-			, GlobalBuffersIdx::eMatrix
-			, RenderPipeline::eBuffers );
-		C3D_Scene( writer
-			, GlobalBuffersIdx::eScene
+		C3D_Camera( writer
+			, GlobalBuffersIdx::eCamera
 			, RenderPipeline::eBuffers );
 		C3D_ObjectIdsData( writer
 			, flags
@@ -330,20 +326,20 @@ namespace castor3d
 				auto curBbcenter = writer.declLocale( "curBbcenter"
 					, modelData.modelToCurWorld( vec4( inCenter, 1.0_f ) ).xyz() );
 				auto curToCamera = writer.declLocale( "curToCamera"
-					, c3d_sceneData.getPosToCamera( curBbcenter ) );
+					, c3d_cameraData.getPosToCamera( curBbcenter ) );
 				curToCamera.y() = 0.0_f;
 				curToCamera = normalize( curToCamera );
 
 				auto billboardData = writer.declLocale( "billboardData"
 					, c3d_billboardData[nodeId - 1u] );
 				auto right = writer.declLocale( "right"
-					, billboardData.getCameraRight( c3d_matrixData ) );
+					, billboardData.getCameraRight( c3d_cameraData ) );
 				auto up = writer.declLocale( "up"
-					, billboardData.getCameraUp( c3d_matrixData ) );
+					, billboardData.getCameraUp( c3d_cameraData ) );
 				auto width = writer.declLocale( "width"
-					, billboardData.getWidth( c3d_sceneData ) );
+					, billboardData.getWidth( c3d_cameraData ) );
 				auto height = writer.declLocale( "height"
-					, billboardData.getHeight( c3d_sceneData ) );
+					, billboardData.getHeight( c3d_cameraData ) );
 
 				out.texture0 = vec3( inTexcoord, 0.0_f );
 				out.vtx.position = vec4( curBbcenter
@@ -352,9 +348,9 @@ namespace castor3d
 					, 1.0_f );
 				out.worldPosition = out.vtx.position;
 				auto viewPosition = writer.declLocale( "viewPosition"
-					, c3d_matrixData.worldToCurView( out.vtx.position ) );
+					, c3d_cameraData.worldToCurView( out.vtx.position ) );
 				out.viewPosition = viewPosition;
-				out.normal = normalize( c3d_sceneData.getPosToCamera( curBbcenter ) );
+				out.normal = normalize( c3d_cameraData.getPosToCamera( curBbcenter ) );
 				auto passMultipliers = std::vector< sdw::Vec4 >{ vec4( 1.0_f, 0.0_f, 0.0_f, 0.0_f )
 					, vec4( 0.0_f )
 					, vec4( 0.0_f )
@@ -465,8 +461,8 @@ namespace castor3d
 			, utils };
 		auto addIndex = uint32_t( GlobalBuffersIdx::eCount );
 
-		C3D_Scene( writer
-			, GlobalBuffersIdx::eScene
+		C3D_Camera( writer
+			, GlobalBuffersIdx::eCamera
 			, RenderPipeline::eBuffers );
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
@@ -554,7 +550,7 @@ namespace castor3d
 						auto lightSurface = shader::LightSurface::create( writer
 							, utils
 							, "lightSurface"
-							, c3d_sceneData.cameraPosition()
+							, c3d_cameraData.position()
 							, in.worldPosition.xyz()
 							, in.worldPosition.xyz()
 							, in.fragCoord.xyz()

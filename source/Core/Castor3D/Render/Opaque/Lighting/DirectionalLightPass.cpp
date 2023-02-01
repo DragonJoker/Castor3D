@@ -1,6 +1,6 @@
 #include "Castor3D/Render/Opaque/Lighting/DirectionalLightPass.hpp"
 
-#include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 
 #include <ShaderWriter/Source.hpp>
 
@@ -12,13 +12,13 @@ namespace castor3d
 		VertexWriter writer;
 
 		// Shader inputs
-		C3D_Matrix( writer, uint32_t( LightPassLgtIdx::eMatrix ), 1u );
+		C3D_Camera( writer, uint32_t( LightPassLgtIdx::eMatrix ), 1u );
 		auto position = writer.declInput< Vec2 >( "position", 0u );
 
 		writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
 			, VertexOut out )
 			{
-				out.vtx.position = c3d_matrixData.viewToProj( vec4( position, 0.0_f, 1.0_f ) );
+				out.vtx.position = c3d_cameraData.viewToProj( vec4( position, 0.0_f, 1.0_f ) );
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

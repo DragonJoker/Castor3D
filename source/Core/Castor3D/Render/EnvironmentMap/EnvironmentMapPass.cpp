@@ -65,7 +65,7 @@ namespace castor3d
 		, m_face{ face }
 		, m_camera{ envpass::doCreateCamera( *faceNode, getOwner()->getSize() ) }
 		, m_culler{ castor::makeUniqueDerived< SceneCuller, FrustumCuller >( *m_camera ) }
-		, m_matrixUbo{ m_device }
+		, m_cameraUbo{ m_device }
 		, m_hdrConfigUbo{ m_device }
 		, m_sceneUbo{ m_device }
 		, m_colourView{ environmentMap.getColourViewId( m_index, m_face ) }
@@ -85,10 +85,10 @@ namespace castor3d
 		, m_transparentPassDesc{ &doCreateTransparentPass( &m_backgroundRenderer->getPass() ) }
 	{
 		doCreateGenMipmapsPass( m_transparentPassDesc );
-		m_matrixUbo.cpuUpdate( m_camera->getView()
+		m_cameraUbo.cpuUpdate( m_camera->getView()
 			, m_camera->getProjection( false )
-			, m_camera->getFrustum() );
-		m_sceneUbo.setWindowSize( m_camera->getSize() );
+			, m_camera->getFrustum()
+			, getSafeBandedSize( m_camera->getSize() ) );
 		m_graph.addOutput( m_colourView
 			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
 		m_graph.addGroupOutput( m_colourView );
@@ -122,11 +122,9 @@ namespace castor3d
 		m_backgroundRenderer->update( updater );
 		m_opaquePass->update( updater );
 		m_transparentPass->update( updater );
-		m_matrixUbo.cpuUpdate( camera.getView()
-			, camera.getProjection( false )
-			, camera.getFrustum() );
+		m_cameraUbo.cpuUpdate( camera, false );
 		m_hdrConfigUbo.cpuUpdate( camera.getHdrConfig() );
-		m_sceneUbo.cpuUpdate( *camera.getScene(), &camera );
+		m_sceneUbo.cpuUpdate( *camera.getScene() );
 
 		updater.isSafeBanded = oldSafeBanded;
 		updater.camera = oldCamera;
@@ -178,7 +176,7 @@ namespace castor3d
 					, ForwardRenderTechniquePass::Type
 					, crg::ImageViewIdArray{ m_colourView }
 					, crg::ImageViewIdArray{ depthView }
-					, RenderNodesPassDesc{ getOwner()->getSize(), m_matrixUbo, m_sceneUbo, *m_culler }
+					, RenderNodesPassDesc{ getOwner()->getSize(), m_cameraUbo, m_sceneUbo, *m_culler }
 						.meshShading( true )
 						.implicitAction( depthView
 							, crg::RecordContext::clearAttachment( depthView, defaultClearDepthStencil ) )
@@ -219,7 +217,7 @@ namespace castor3d
 					, ForwardRenderTechniquePass::Type
 					, crg::ImageViewIdArray{ m_colourView }
 					, crg::ImageViewIdArray{ depthView }
-					, RenderNodesPassDesc{ getOwner()->getSize(), m_matrixUbo, m_sceneUbo, *m_culler, false }
+					, RenderNodesPassDesc{ getOwner()->getSize(), m_cameraUbo, m_sceneUbo, *m_culler, false }
 						.meshShading( true )
 					, RenderTechniquePassDesc{ true, SsaoConfig{} } );
 				m_node->getScene()->getEngine()->registerTimer( framePass.getFullName()

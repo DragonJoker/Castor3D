@@ -16,12 +16,7 @@
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 #include "Castor3D/Render/Ssao/SsaoConfig.hpp"
 #include "Castor3D/Scene/Camera.hpp"
-#include "Castor3D/Shader/GlslToSpv.hpp"
 #include "Castor3D/Shader/Program.hpp"
-#include "Castor3D/Shader/Shaders/GlslLight.hpp"
-#include "Castor3D/Shader/Shaders/GlslUtils.hpp"
-#include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
-#include "Castor3D/Shader/Ubos/SsaoConfigUbo.hpp"
 
 #include <CastorUtils/Design/ResourceCache.hpp>
 #include <CastorUtils/Graphics/RgbaColour.hpp>

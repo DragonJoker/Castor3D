@@ -5,7 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_BackgroundPass_H___
 
 #include "BackgroundPassBase.hpp"
-#include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 
 namespace castor3d
 {
@@ -149,7 +149,7 @@ namespace castor3d
 	private:
 		RenderDevice const & m_device;
 		crg::ImageViewIdArray m_colour;
-		MatrixUbo m_matrixUbo;
+		CameraUbo m_cameraUbo;
 		UniformBufferOffsetT< ModelBufferConfiguration > m_modelUbo;
 		crg::FramePass const * m_backgroundPassDesc{};
 		BackgroundPassBase * m_backgroundPass{};

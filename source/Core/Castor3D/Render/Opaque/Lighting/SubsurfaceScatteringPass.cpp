@@ -26,7 +26,6 @@
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
-#include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 
 #include <CastorUtils/Design/ResourceCache.hpp>
 
@@ -55,7 +54,6 @@ namespace castor3d
 			BlurMaterialsUboId,
 			BlurSssProfilesUboId,
 			BlurModelsUboId,
-			BlurSceneUboId,
 			BlurGpInfoUboId,
 			BlurSssUboId,
 			BlurDepthObjImgId,
@@ -367,14 +365,12 @@ namespace castor3d
 		, ProgressBar * progress
 		, Scene const & scene
 		, GpInfoUbo const & gpInfoUbo
-		, SceneUbo const & sceneUbo
 		, Texture const & depthObj
 		, OpaquePassResult const & gpResult
 		, LightPassResult const & lpResult )
 		: OwnedBy< Engine >{ *device.renderSystem.getEngine() }
 		, m_device{ device }
 		, m_gpInfoUbo{ gpInfoUbo }
-		, m_sceneUbo{ sceneUbo }
 		, m_gpResult{ gpResult }
 		, m_lpResult{ lpResult }
 		, m_scene{ scene }
@@ -443,8 +439,6 @@ namespace castor3d
 				, uint32_t( sssss::BlurModelsUboId )
 				, 0u
 				, uint32_t( modelBuffer.getSize() ) );
-			m_sceneUbo.createPassBinding( blurX
-				, sssss::BlurSceneUboId );
 			m_gpInfoUbo.createPassBinding( blurX
 				, sssss::BlurGpInfoUboId );
 			m_blurCfgUbo.createPassBinding( blurX
@@ -482,8 +476,6 @@ namespace castor3d
 				, uint32_t( sssss::BlurModelsUboId )
 				, 0u
 				, uint32_t( modelBuffer.getSize() ) );
-			m_sceneUbo.createPassBinding( blurY
-				, sssss::BlurSceneUboId );
 			m_gpInfoUbo.createPassBinding( blurY
 				, sssss::BlurGpInfoUboId );
 			m_blurCfgUbo.createPassBinding( blurY

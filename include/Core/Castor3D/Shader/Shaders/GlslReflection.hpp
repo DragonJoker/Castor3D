@@ -25,7 +25,7 @@ namespace castor3d::shader
 			, sdw::Vec3 const & position
 			, BackgroundModel & background
 			, sdw::CombinedImage2DRgba32 const & mippedScene
-			, MatrixData const & matrices
+			, CameraData const & camera
 			, sdw::Vec2 const & sceneUv
 			, sdw::UInt const & envMapIndex
 			, sdw::UInt const & hasReflection
@@ -44,7 +44,7 @@ namespace castor3d::shader
 			, sdw::Vec3 const & position
 			, BackgroundModel & background
 			, sdw::CombinedImage2DRgba32 const & mippedScene
-			, MatrixData const & matrices
+			, CameraData const & camera
 			, sdw::Vec2 const & sceneUv
 			, sdw::UInt const & envMapIndex
 			, sdw::UInt const & hasReflection
@@ -110,7 +110,7 @@ namespace castor3d::shader
 			, BackgroundModel & background
 			, sdw::UInt envMapIndex
 			, sdw::Float const & refractionRatio );
-		C3D_API sdw::RetVec4 computeScreenSpace( MatrixData const & matrixData
+		C3D_API sdw::RetVec4 computeScreenSpace( CameraData const & cameraData
 			, sdw::Vec3 const & viewPosition
 			, sdw::Vec3 const & worldNormal
 			, sdw::Vec2 const & texcoord
@@ -118,7 +118,7 @@ namespace castor3d::shader
 			, sdw::CombinedImage2DR32 const & depthMap
 			, sdw::CombinedImage2DRgba32 const & normalMap
 			, sdw::CombinedImage2DRgba32 const & colourMap );
-		C3D_API sdw::RetVec4 computeScreenSpace( MatrixData const & matrixData
+		C3D_API sdw::RetVec4 computeScreenSpace( CameraData const & cameraData
 			, sdw::Vec3 const & viewPosition
 			, sdw::Vec3 const & worldNormal
 			, sdw::Vec2 const & texcoord
@@ -199,7 +199,7 @@ namespace castor3d::shader
 			, sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & wsNormal
 			, sdw::CombinedImage2DRgba32 const & sceneMap
-			, MatrixData const & matrices
+			, CameraData const & camera
 			, sdw::Vec2 sceneUv
 			, sdw::Float const & refractionRatio
 			, BlendComponents & components );

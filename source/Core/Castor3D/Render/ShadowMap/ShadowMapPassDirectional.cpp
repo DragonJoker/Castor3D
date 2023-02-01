@@ -49,7 +49,7 @@ namespace castor3d
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
-		, MatrixUbo & matrixUbo
+		, CameraUbo const & cameraUbo
 		, SceneCuller & culler
 		, Camera & camera
 		, ShadowMap const & shadowMap
@@ -61,7 +61,7 @@ namespace castor3d
 			, graph
 			, device
 			, Type
-			, matrixUbo
+			, cameraUbo
 			, culler
 			, shadowMap
 			, needsVsm

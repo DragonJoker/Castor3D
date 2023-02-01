@@ -193,7 +193,7 @@ namespace castor3d
 
 						// Inputs
 						auto position = writer.declInput< Vec3 >( "position", 0u );
-						C3D_Matrix( writer, Bindings::eMatrix, 0u );
+						C3D_Camera( writer, Bindings::eMatrix, 0u );
 						C3D_ModelData( writer, Bindings::eModel, 0u );
 
 						// Outputs
@@ -202,7 +202,7 @@ namespace castor3d
 						writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
 							, VertexOut out )
 							{
-								out.vtx.position = c3d_matrixData.worldToCurProj( c3d_modelData.modelToWorld( vec4( position, 1.0_f ) ) ).xyww();
+								out.vtx.position = c3d_cameraData.worldToCurProj( c3d_modelData.modelToWorld( vec4( position, 1.0_f ) ) ).xyww();
 								vtx_texture = position;
 							} );
 
@@ -382,7 +382,7 @@ namespace castor3d
 		, crg::ImageViewIdArray const & depth
 		, crg::ImageViewId const * depthObj
 		, UniformBufferOffsetT< ModelBufferConfiguration > const & modelUbo
-		, MatrixUbo const & matrixUbo
+		, CameraUbo const & cameraUbo
 		, HdrConfigUbo const & hdrConfigUbo
 		, SceneUbo const & sceneUbo
 		, bool clearColour
@@ -421,7 +421,7 @@ namespace castor3d
 					, res->getTimer() );
 				return res;
 			} );
-		matrixUbo.createPassBinding( result
+		cameraUbo.createPassBinding( result
 			, back::Bindings::eMatrix );
 		modelUbo.createPassBinding( result
 			, "Model"

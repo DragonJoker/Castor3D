@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Buffer/GpuBufferOffset.hpp"
 #include "Castor3D/Buffer/UniformBufferOffset.hpp"
-#include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 
 #include <ashespp/Descriptor/DescriptorSet.hpp>
 #include <ashespp/RenderPass/FrameBuffer.hpp>
@@ -64,7 +64,7 @@ namespace castor3d
 			, RenderDevice const & device );
 
 		Light const & light;
-		MatrixUbo matrixUbo;
+		CameraUbo cameraUbo;
 		UniformBufferOffsetT< ModelBufferConfiguration > modelMatrixUbo;
 		ashes::DescriptorSetPtr descriptorSet;
 		GpuBufferOffsetT< float > vertexBuffer;

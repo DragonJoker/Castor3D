@@ -24,9 +24,9 @@
 #include "Castor3D/Shader/Shaders/GlslSssProfile.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
+#include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
-#include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 
 #include <ShaderWriter/Source.hpp>
 
@@ -148,7 +148,7 @@ namespace castor3d
 			, 0u };
 		C3D_ModelsData( writer, LightPassIdx::eModels, 0u );
 		C3D_GpInfo( writer, LightPassIdx::eGpInfo, 0u );
-		C3D_Scene( writer, LightPassIdx::eScene, 0u );
+		C3D_Camera( writer, LightPassIdx::eCamera, 0u );
 
 		auto c3d_mapDepthObj = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( PpTexture::eDepthObj ), uint32_t( LightPassIdx::eDepthObj ), 0u );
 		auto c3d_mapNmlOcc = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eNmlOcc ), uint32_t( LightPassIdx::eNmlOcc ), 0u );
@@ -275,10 +275,10 @@ namespace castor3d
 					components.finish( passShaders
 						, surface
 						, utils
-						, c3d_sceneData.cameraPosition() );
+						, c3d_cameraData.position() );
 					auto lightSurface = shader::LightSurface::create( writer
 						, "lightSurface"
-						, c3d_sceneData.cameraPosition()
+						, c3d_cameraData.position()
 						, surface.worldPosition.xyz()
 						, surface.viewPosition.xyz()
 						, surface.clipPosition

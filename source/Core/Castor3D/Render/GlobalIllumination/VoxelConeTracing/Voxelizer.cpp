@@ -87,7 +87,7 @@ namespace castor3d
 		, m_voxelConfig{ voxelConfig }
 		, m_camera{ camera }
 		, m_graph{ resources.getHandler(), prefix + "/Voxelizer" }
-		, m_matrixUbo{ device }
+		, m_cameraUbo{ device }
 		, m_sceneUbo{ device }
 		, m_firstBounce{ vxlsr::createTexture( device, resources, "VoxelizedSceneFirstBounce", { m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value() } ) }
 		, m_secondaryBounce{ vxlsr::createTexture( device, resources, "VoxelizedSceneSecondaryBounce", { m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value() } ) }
@@ -161,11 +161,12 @@ namespace castor3d
 			auto jitterProjSpace = updater.jitter * 2.0f;
 			jitterProjSpace[0] /= float( camera.getWidth() );
 			jitterProjSpace[1] /= float( camera.getHeight() );
-			m_matrixUbo.cpuUpdate( identity
+			m_cameraUbo.cpuUpdate( camera
+				, true
+				, identity
 				, ortho
-				, camera.getFrustum()
 				, jitterProjSpace );
-			m_sceneUbo.cpuUpdate( scene, &camera );
+			m_sceneUbo.cpuUpdate( scene );
 			m_voxelizePass->update( updater );
 			m_voxelizerUbo.cpuUpdate( m_voxelConfig
 				, voxelSize
@@ -207,7 +208,7 @@ namespace castor3d
 					, context
 					, runnableGraph
 					, m_device
-					, m_matrixUbo
+					, m_cameraUbo
 					, m_sceneUbo
 					, m_camera
 					, m_voxelizerUbo

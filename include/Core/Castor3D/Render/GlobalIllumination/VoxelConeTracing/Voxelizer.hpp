@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Render/Culling/DummyCuller.hpp"
-#include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 
 #include <RenderGraph/FrameGraph.hpp>
@@ -131,7 +131,7 @@ namespace castor3d
 		VoxelSceneData const & m_voxelConfig;
 		Camera & m_camera;
 		crg::FrameGraph m_graph;
-		MatrixUbo m_matrixUbo;
+		CameraUbo m_cameraUbo;
 		SceneUbo m_sceneUbo;
 		Texture m_firstBounce;
 		Texture m_secondaryBounce;

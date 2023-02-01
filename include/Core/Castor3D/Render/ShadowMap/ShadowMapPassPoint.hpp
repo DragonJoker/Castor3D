@@ -25,7 +25,7 @@ namespace castor3d
 		 *\param[in]	graph		The runnable graph.
 		 *\param[in]	device		The GPU device.
 		 *\param[in]	index		The pass index.
-		 *\param[in]	matrixUbo	The scene matrices UBO.
+		 *\param[in]	cameraUbo	The scene matrices UBO.
 		 *\param[in]	culler		The culler for this pass.
 		 *\param[in]	shadowMap	The parent shadow map.
 		 *\param[in]	needsVsm	Tells if the pass needs to generate variance shadow map.
@@ -37,7 +37,7 @@ namespace castor3d
 		 *\param[in]	graph		Le runnable graph.
 		 *\param[in]	device		Le device GPU.
 		 *\param[in]	index		L'indice de la passe.
-		 *\param[in]	matrixUbo	L'UBO de matrices de la scène.
+		 *\param[in]	cameraUbo	L'UBO de matrices de la scène.
 		 *\param[in]	culler		Le culler pour cette passe.
 		 *\param[in]	shadowMap	La shadow map parente.
 		 *\param[in]	needsVsm	Dit si la passe doit générer la variance shadow map.
@@ -48,7 +48,7 @@ namespace castor3d
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
 			, uint32_t index
-			, MatrixUbo & matrixUbo
+			, CameraUbo const & cameraUbo
 			, SceneCuller & culler
 			, ShadowMap const & shadowMap
 			, bool needsVsm
@@ -66,6 +66,11 @@ namespace castor3d
 		C3D_API void update( CpuUpdater & updater )override;
 
 		C3D_API void updateFrustum( castor::Matrix4x4f const & viewMatrix );
+
+		auto & getProjection()const
+		{
+			return m_projection;
+		}
 
 	private:
 		void doUpdateUbos( CpuUpdater & updater )override;

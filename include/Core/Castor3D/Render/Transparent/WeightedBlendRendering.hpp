@@ -52,7 +52,8 @@ namespace castor3d
 			, TransparentPassResult const & transparentPassResult
 			, crg::ImageViewIdArray const & targetColourView
 			, castor::Size const & size
-			, SceneUbo & sceneUbo
+			, CameraUbo const & cameraUbo
+			, SceneUbo const & sceneUbo
 			, HdrConfigUbo const & hdrConfigUbo
 			, GpInfoUbo const & gpInfoUbo );
 		/**
@@ -86,7 +87,8 @@ namespace castor3d
 			, crg::FramePass const & transparentPassDesc
 			, crg::ImageViewId const & depthObj
 			, crg::ImageViewIdArray const & targetColourView
-			, SceneUbo & sceneUbo
+			, CameraUbo const & cameraUbo
+			, SceneUbo const & sceneUbo
 			, HdrConfigUbo const & hdrConfigUbo
 			, GpInfoUbo const & gpInfoUbo
 			, ProgressBar * progress );

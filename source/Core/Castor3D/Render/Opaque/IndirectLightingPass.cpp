@@ -24,11 +24,11 @@
 #include "Castor3D/Shader/Shaders/GlslPassShaders.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
+#include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
 #include "Castor3D/Shader/Ubos/LpvGridConfigUbo.hpp"
 #include "Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
-#include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 #include "Castor3D/Shader/Ubos/VoxelizerUbo.hpp"
 
 #include <ShaderWriter/Source.hpp>
@@ -70,7 +70,7 @@ namespace castor3d
 			// Shader inputs
 			C3D_ModelsData( writer, IndirectLightingPass::eModels, 0u );
 			C3D_GpInfo( writer, IndirectLightingPass::eGpInfo, 0u );
-			C3D_Scene( writer, IndirectLightingPass::eScene, 0u );
+			C3D_Camera( writer, IndirectLightingPass::eCamera, 0u );
 			auto index = uint32_t( IndirectLightingPass::eCount );
 			shader::PassShaders passShaders{ renderSystem.getEngine()->getPassComponentsRegister()
 				, TextureCombine{}
@@ -162,7 +162,7 @@ namespace castor3d
 
 						auto lightSurface = shader::LightSurface::create( writer
 							, "lightSurface"
-							, c3d_sceneData.cameraPosition()
+							, c3d_cameraData.position()
 							, surface.worldPosition.xyz()
 							, surface.viewPosition.xyz()
 							, surface.clipPosition
@@ -296,7 +296,7 @@ namespace castor3d
 		, LightVolumePassResultArray const & llpvResult
 		, Texture const & vctFirstBounce
 		, Texture const & vctSecondaryBounce
-		, SceneUbo const & sceneUbo
+		, CameraUbo const & cameraUbo
 		, GpInfoUbo const & gpInfoUbo
 		, LpvGridConfigUbo const & lpvConfigUbo
 		, LayeredLpvGridConfigUbo const & llpvConfigUbo
@@ -311,7 +311,7 @@ namespace castor3d
 		, m_llpvResult{ llpvResult }
 		, m_vctFirstBounce{ vctFirstBounce }
 		, m_vctSecondaryBounce{ vctSecondaryBounce }
-		, m_sceneUbo{ sceneUbo }
+		, m_cameraUbo{ cameraUbo }
 		, m_gpInfoUbo{ gpInfoUbo }
 		, m_lpvConfigUbo{ lpvConfigUbo }
 		, m_llpvConfigUbo{ llpvConfigUbo }
@@ -385,8 +385,8 @@ namespace castor3d
 			, uint32_t( modelBuffer.getSize() ) );
 		m_gpInfoUbo.createPassBinding( pass
 			, uint32_t( IndirectLightingPass::eGpInfo ) );
-		m_sceneUbo.createPassBinding( pass
-			, uint32_t( IndirectLightingPass::eScene ) );
+		m_cameraUbo.createPassBinding( pass
+			, uint32_t( IndirectLightingPass::eCamera ) );
 		engine.getMaterialCache().getPassBuffer().createPassBinding( pass
 			, uint32_t( IndirectLightingPass::eMaterials ) );
 		m_lpvConfigUbo.createPassBinding( pass

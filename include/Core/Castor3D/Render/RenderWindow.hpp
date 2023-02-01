@@ -12,7 +12,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 #include "Castor3D/Render/Passes/RenderQuad.hpp"
 #include "Castor3D/Render/ToTexture/RenderToTextureModule.hpp"
-#include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 
 #include <CastorUtils/Data/TextWriter.hpp>
 #include <CastorUtils/Design/ArrayView.hpp>

@@ -32,7 +32,7 @@
 #include <Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp>
 #include <Castor3D/Shader/Shaders/GlslUtils.hpp>
 #include <Castor3D/Shader/Ubos/BillboardUbo.hpp>
-#include <Castor3D/Shader/Ubos/MatrixUbo.hpp>
+#include <Castor3D/Shader/Ubos/CameraUbo.hpp>
 #include <Castor3D/Shader/Ubos/ModelDataUbo.hpp>
 #include <Castor3D/Shader/Ubos/ObjectIdsUbo.hpp>
 #include <Castor3D/Shader/Ubos/SceneUbo.hpp>
@@ -302,7 +302,7 @@ namespace ocean
 				, targetResult
 				, targetDepth
 				, castor3d::RenderNodesPassDesc{ extent
-					, technique.getMatrixUbo()
+					, technique.getCameraUbo()
 					, technique.getSceneUbo()
 					, technique.getRenderTarget().getCuller() }.safeBand( true )
 				, castor3d::RenderTechniquePassDesc{ false, technique.getSsaoConfig() }
@@ -599,11 +599,8 @@ namespace ocean
 			, getComponentsMask()
 			, utils };
 
-		C3D_Matrix( writer
-			, GlobalBuffersIdx::eMatrix
-			, RenderPipeline::eBuffers );
-		C3D_Scene( writer
-			, GlobalBuffersIdx::eScene
+		C3D_Camera( writer
+			, GlobalBuffersIdx::eCamera
 			, RenderPipeline::eBuffers );
 		C3D_ObjectIdsData( writer
 			, flags
@@ -649,13 +646,13 @@ namespace ocean
 					, in.boneWeights1
 					, in.transform ) );
 			out.worldPosition = curMtxModel * out.vtx.position;
-			out.viewPosition = c3d_matrixData.worldToCurView( out.worldPosition );
-			out.vtx.position = c3d_matrixData.viewToProj( out.viewPosition );
+			out.viewPosition = c3d_cameraData.worldToCurView( out.worldPosition );
+			out.vtx.position = c3d_cameraData.viewToProj( out.viewPosition );
 			auto mtxNormal = writer.declLocale< Mat3 >( "mtxNormal"
 				, c3d_modelData.getNormalMtx( flags.programFlags, curMtxModel ) );
 			out.computeTangentSpace( flags.submeshFlags
 				, flags.programFlags
-				, c3d_sceneData.cameraPosition
+				, c3d_cameraData.position()
 				, out.worldPosition.xyz()
 				, mtxNormal
 				, v4Normal
@@ -682,11 +679,8 @@ namespace ocean
 		auto uv = writer.declInput< Vec2 >( "uv", 1u );
 		auto center = writer.declInput< Vec3 >( "center", 2u );
 
-		C3D_Matrix( writer
-			, GlobalBuffersIdx::eMatrix
-			, RenderPipeline::eBuffers );
-		C3D_Scene( writer
-			, GlobalBuffersIdx::eScene
+		C3D_Camera( writer
+			, GlobalBuffersIdx::eCamera
 			, RenderPipeline::eBuffers );
 		C3D_ObjectIdsData( writer
 			, flags
@@ -723,20 +717,20 @@ namespace ocean
 				auto prvBbcenter = writer.declLocale( "prvBbcenter"
 					, modelData.modelToPrvWorld( vec4( center, 1.0_f ) ).xyz() );
 				auto curToCamera = writer.declLocale( "curToCamera"
-					, c3d_sceneData.getPosToCamera( curBbcenter ) );
+					, c3d_cameraData.getPosToCamera( curBbcenter ) );
 				curToCamera.y() = 0.0_f;
 				curToCamera = normalize( curToCamera );
 
 				auto billboardData = writer.declLocale( "billboardData"
 					, c3d_billboardData[nodeId - 1u] );
 				auto right = writer.declLocale( "right"
-					, billboardData.getCameraRight( c3d_matrixData ) );
+					, billboardData.getCameraRight( c3d_cameraData ) );
 				auto up = writer.declLocale( "up"
-					, billboardData.getCameraUp( c3d_matrixData ) );
+					, billboardData.getCameraUp( c3d_cameraData ) );
 				auto width = writer.declLocale( "width"
-					, billboardData.getWidth( c3d_sceneData ) );
+					, billboardData.getWidth( c3d_cameraData ) );
 				auto height = writer.declLocale( "height"
-					, billboardData.getHeight( c3d_sceneData ) );
+					, billboardData.getHeight( c3d_cameraData ) );
 				auto scaledRight = writer.declLocale( "scaledRight"
 					, right * position.x() * width );
 				auto scaledUp = writer.declLocale( "scaledUp"
@@ -830,11 +824,8 @@ namespace ocean
 			, getComponentsMask()
 			, utils };
 
-		C3D_Matrix( writer
-			, GlobalBuffersIdx::eMatrix
-			, RenderPipeline::eBuffers );
-		C3D_Scene( writer
-			, GlobalBuffersIdx::eScene
+		C3D_Camera( writer
+			, GlobalBuffersIdx::eCamera
 			, RenderPipeline::eBuffers );
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
@@ -995,9 +986,9 @@ namespace ocean
 				out.tangent = normalize( mtxNormal * finalWaveResult.tangent );
 				out.bitangent = normalize( mtxNormal * finalWaveResult.bitangent );
 				out.worldPosition = mtxModel * vec4( finalWaveResult.position, 1.0_f );
-				out.viewPosition = c3d_matrixData.worldToCurView( out.worldPosition );
+				out.viewPosition = c3d_cameraData.worldToCurView( out.worldPosition );
 				out.worldPosition.w() = height;
-				out.vtx.position = c3d_matrixData.viewToProj( out.viewPosition );
+				out.vtx.position = c3d_cameraData.viewToProj( out.viewPosition );
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -1033,8 +1024,8 @@ namespace ocean
 			, getComponentsMask()
 			, utils };
 
-		C3D_Matrix( writer
-			, GlobalBuffersIdx::eMatrix
+		C3D_Camera( writer
+			, GlobalBuffersIdx::eCamera
 			, RenderPipeline::eBuffers );
 		C3D_Scene( writer
 			, GlobalBuffersIdx::eScene
@@ -1169,7 +1160,7 @@ namespace ocean
 						, shader::BlendComponents{ components, materials } );
 					auto lightSurface = shader::LightSurface::create( writer
 						, "lightSurface"
-						, c3d_sceneData.cameraPosition()
+						, c3d_cameraData.position()
 						, surface.worldPosition.xyz()
 						, surface.viewPosition.xyz()
 						, surface.clipPosition
@@ -1248,7 +1239,7 @@ namespace ocean
 					auto backgroundReflection = writer.declLocale( "backgroundReflection"
 						, bgDiffuseReflection + bgSpecularReflection );
 					auto ssrResult = writer.declLocale( "ssrResult"
-						, reflections.computeScreenSpace( c3d_matrixData
+						, reflections.computeScreenSpace( c3d_cameraData
 							, lightSurface.viewPosition()
 							, finalNormal
 							, hdrCoords
@@ -1273,7 +1264,7 @@ namespace ocean
 					auto distortedDepth = writer.declLocale( "distortedDepth"
 						, c3d_depthObj.sample( distortedTexCoord ).r() );
 					auto distortedPosition = writer.declLocale( "distortedPosition"
-						, c3d_matrixData.curProjToWorld( utils, distortedTexCoord, distortedDepth ) );
+						, c3d_cameraData.curProjToWorld( utils, distortedTexCoord, distortedDepth ) );
 					auto refractionTexCoord = writer.declLocale( "refractionTexCoord"
 						, writer.ternary( distortedPosition.y() < in.worldPosition.y(), distortedTexCoord, hdrCoords ) );
 					auto refractionResult = writer.declLocale( "refractionResult"
@@ -1283,7 +1274,7 @@ namespace ocean
 					auto sceneDepth = writer.declLocale( "sceneDepth"
 						, c3d_depthObj.sample( hdrCoords ).r() );
 					auto scenePosition = writer.declLocale( "scenePosition"
-						, c3d_matrixData.curProjToWorld( utils, hdrCoords, sceneDepth ) );
+						, c3d_cameraData.curProjToWorld( utils, hdrCoords, sceneDepth ) );
 					// Depth softening, to fade the alpha of the water where it meets the scene geometry by some predetermined distance. 
 					auto depthSoftenedAlpha = writer.declLocale( "depthSoftenedAlpha"
 						, clamp( distance( scenePosition, in.worldPosition.xyz() ) / c3d_oceanData.depthSofteningDistance(), 0.0_f, 1.0_f ) );
@@ -1293,13 +1284,13 @@ namespace ocean
 					auto waterTransmission = writer.declLocale( "waterTransmission"
 						, components.colour * ( indirectAmbient + indirectDiffuse ) * output.m_diffuse );
 					auto heightFactor = writer.declLocale( "heightFactor"
-						, c3d_oceanData.refractionHeightFactor() * ( c3d_sceneData.farPlane() - c3d_sceneData.nearPlane() ) );
+						, c3d_oceanData.refractionHeightFactor() * ( c3d_cameraData.farPlane() - c3d_cameraData.nearPlane() ) );
 					refractionResult = mix( refractionResult
 						, waterTransmission
 						, vec3( clamp( ( in.worldPosition.y() - waterSurfacePosition.y() ) / heightFactor, 0.0_f, 1.0_f ) ) );
 					displayDebugData( eHeightMixedRefraction, refractionResult, 1.0_f );
 					auto distanceFactor = writer.declLocale( "distanceFactor"
-						, c3d_oceanData.refractionDistanceFactor() * ( c3d_sceneData.farPlane() - c3d_sceneData.nearPlane() ) );
+						, c3d_oceanData.refractionDistanceFactor() * ( c3d_cameraData.farPlane() - c3d_cameraData.nearPlane() ) );
 					refractionResult = mix( refractionResult
 						, waterTransmission
 						, utils.saturate( vec3( utils.saturate( length( in.viewPosition ) / distanceFactor ) ) ) );
@@ -1321,7 +1312,7 @@ namespace ocean
 
 					//Combine all that
 					auto fresnelFactor = writer.declLocale( "fresnelFactor"
-						, vec3( utils.fresnelMix( reflections.computeIncident( lightSurface.worldPosition(), c3d_sceneData.cameraPosition() )
+						, vec3( utils.fresnelMix( reflections.computeIncident( lightSurface.worldPosition(), c3d_cameraData.position() )
 							, components.normal
 							, components.roughness
 							, c3d_oceanData.refractionRatio() ) ) );
@@ -1346,16 +1337,17 @@ namespace ocean
 
 				if ( flags.hasFog() )
 				{
-					outColour = fog.apply( c3d_sceneData.getBackgroundColour( utils )
+					outColour = fog.apply( c3d_sceneData.getBackgroundColour( utils, c3d_cameraData.gamma() )
 						, outColour
 						, in.worldPosition.xyz()
+						, c3d_cameraData.position()
 						, c3d_sceneData );
 				}
 
 				backgroundModel->applyVolume( in.fragCoord.xy()
-					, utils.lineariseDepth( in.fragCoord.z(), c3d_sceneData.nearPlane(), c3d_sceneData.farPlane() )
-					, c3d_sceneData.renderSize()
-					, c3d_sceneData.cameraPlanes()
+					, utils.lineariseDepth( in.fragCoord.z(), c3d_cameraData.nearPlane(), c3d_cameraData.farPlane() )
+					, vec2( c3d_cameraData.renderSize() )
+					, c3d_cameraData.depthPlanes()
 					, outColour );
 			} );
 

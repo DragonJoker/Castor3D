@@ -24,7 +24,7 @@
 #include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
-#include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
 
 #include <ShaderWriter/Source.hpp>
@@ -131,8 +131,8 @@ namespace castor3d
 			, getComponentsMask()
 			, utils };
 
-		C3D_Scene( writer
-			, GlobalBuffersIdx::eScene
+		C3D_Camera( writer
+			, GlobalBuffersIdx::eCamera
 			, RenderPipeline::eBuffers );
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
@@ -206,7 +206,7 @@ namespace castor3d
 				if ( components.hasTransmission )
 				{
 					auto incident = writer.declLocale( "incident"
-						, normalize( in.worldPosition.xyz() - c3d_sceneData.cameraPosition() ) );
+						, normalize( in.worldPosition.xyz() - c3d_cameraData.position() ) );
 					auto finalTransmission = lights.getFinalTransmission( components, incident );
 
 					IF( writer, finalTransmission >= 0.1_f )

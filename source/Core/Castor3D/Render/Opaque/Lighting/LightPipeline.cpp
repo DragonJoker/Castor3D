@@ -48,7 +48,7 @@ namespace castor3d
 	LightDescriptors::LightDescriptors( Light const & plight
 		, RenderDevice const & device )
 		: light{ plight }
-		, matrixUbo{ device }
+		, cameraUbo{ device }
 	{
 	}
 

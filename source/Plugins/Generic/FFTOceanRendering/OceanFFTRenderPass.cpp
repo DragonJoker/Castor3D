@@ -34,7 +34,7 @@
 #include <Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp>
 #include <Castor3D/Shader/Shaders/GlslUtils.hpp>
 #include <Castor3D/Shader/Ubos/BillboardUbo.hpp>
-#include <Castor3D/Shader/Ubos/MatrixUbo.hpp>
+#include <Castor3D/Shader/Ubos/CameraUbo.hpp>
 #include <Castor3D/Shader/Ubos/ModelDataUbo.hpp>
 #include <Castor3D/Shader/Ubos/ObjectIdsUbo.hpp>
 #include <Castor3D/Shader/Ubos/MorphingUbo.hpp>
@@ -235,7 +235,7 @@ namespace ocean_fft
 						, targetResult
 						, targetDepth
 						, castor3d::RenderNodesPassDesc{ extent
-							, technique.getMatrixUbo()
+							, technique.getCameraUbo()
 							, technique.getSceneUbo()
 							, technique.getRenderTarget().getCuller() }.safeBand( true )
 						, castor3d::RenderTechniquePassDesc{ false, technique.getSsaoConfig() }
@@ -625,11 +625,8 @@ namespace ocean_fft
 		using namespace castor3d;
 		VertexWriter writer;
 
-		C3D_Matrix( writer
-			, GlobalBuffersIdx::eMatrix
-			, RenderPipeline::eBuffers );
-		C3D_Scene( writer
-			, GlobalBuffersIdx::eScene
+		C3D_Camera( writer
+			, GlobalBuffersIdx::eCamera
 			, RenderPipeline::eBuffers );
 		C3D_ObjectIdsData( writer
 			, flags
@@ -682,11 +679,8 @@ namespace ocean_fft
 		auto uv = writer.declInput< Vec2 >( "uv", 1u );
 		auto center = writer.declInput< Vec3 >( "center", 2u );
 
-		C3D_Matrix( writer
-			, GlobalBuffersIdx::eMatrix
-			, RenderPipeline::eBuffers );
-		C3D_Scene( writer
-			, GlobalBuffersIdx::eScene
+		C3D_Camera( writer
+			, GlobalBuffersIdx::eCamera
 			, RenderPipeline::eBuffers );
 		C3D_ObjectIdsData( writer
 			, flags
@@ -726,20 +720,20 @@ namespace ocean_fft
 				auto prvBbcenter = writer.declLocale( "prvBbcenter"
 					, modelData.modelToPrvWorld( vec4( center, 1.0_f ) ).xyz() );
 				auto curToCamera = writer.declLocale( "curToCamera"
-					, c3d_sceneData.getPosToCamera( curBbcenter ) );
+					, c3d_cameraData.getPosToCamera( curBbcenter ) );
 				curToCamera.y() = 0.0_f;
 				curToCamera = normalize( curToCamera );
 
 				auto billboardData = writer.declLocale( "billboardData"
 					, c3d_billboardData[nodeId - 1u] );
 				auto right = writer.declLocale( "right"
-					, billboardData.getCameraRight( c3d_matrixData ) );
+					, billboardData.getCameraRight( c3d_cameraData ) );
 				auto up = writer.declLocale( "up"
-					, billboardData.getCameraUp( c3d_matrixData ) );
+					, billboardData.getCameraUp( c3d_cameraData ) );
 				auto width = writer.declLocale( "width"
-					, billboardData.getWidth( c3d_sceneData ) );
+					, billboardData.getWidth( c3d_cameraData ) );
 				auto height = writer.declLocale( "height"
-					, billboardData.getHeight( c3d_sceneData ) );
+					, billboardData.getHeight( c3d_cameraData ) );
 				auto scaledRight = writer.declLocale( "scaledRight"
 					, right * position.x() * width );
 				auto scaledUp = writer.declLocale( "scaledUp"
@@ -759,8 +753,8 @@ namespace ocean_fft
 		using namespace castor3d;
 		TessellationControlWriter writer;
 
-		C3D_Scene( writer
-			, GlobalBuffersIdx::eScene
+		C3D_Camera( writer
+			, GlobalBuffersIdx::eCamera
 			, RenderPipeline::eBuffers );
 		C3D_FftOcean( writer
 			, rdpass::OceanFFTIdx::eOceanUbo
@@ -823,25 +817,25 @@ namespace ocean_fft
 
 				auto l0 = writer.declLocale( "l0"
 					, lodFactor( p0 + vec3( 0.0_f, 0.0f, 1.0f ) * patchSize
-						, c3d_sceneData.cameraPosition()
+						, c3d_cameraData.position()
 						, c3d_oceanData.tileScale
 						, c3d_oceanData.maxTessLevel
 						, c3d_oceanData.distanceMod ) );
 				auto l1 = writer.declLocale( "l1"
 					, lodFactor( p0 + vec3( 0.0_f, 0.0f, 0.0f ) * patchSize
-						, c3d_sceneData.cameraPosition()
+						, c3d_cameraData.position()
 						, c3d_oceanData.tileScale
 						, c3d_oceanData.maxTessLevel
 						, c3d_oceanData.distanceMod ) );
 				auto l2 = writer.declLocale( "l2"
 					, lodFactor( p0 + vec3( 1.0_f, 0.0f, 0.0f ) * patchSize
-						, c3d_sceneData.cameraPosition()
+						, c3d_cameraData.position()
 						, c3d_oceanData.tileScale
 						, c3d_oceanData.maxTessLevel
 						, c3d_oceanData.distanceMod ) );
 				auto l3 = writer.declLocale( "l3"
 					, lodFactor( p0 + vec3( 1.0_f, 0.0f, 1.0f ) * patchSize
-						, c3d_sceneData.cameraPosition()
+						, c3d_cameraData.position()
 						, c3d_oceanData.tileScale
 						, c3d_oceanData.maxTessLevel
 						, c3d_oceanData.distanceMod ) );
@@ -900,11 +894,8 @@ namespace ocean_fft
 			, getComponentsMask()
 			, utils };
 
-		C3D_Matrix( writer
-			, GlobalBuffersIdx::eMatrix
-			, RenderPipeline::eBuffers );
-		C3D_Scene( writer
-			, GlobalBuffersIdx::eScene
+		C3D_Camera( writer
+			, GlobalBuffersIdx::eCamera
 			, RenderPipeline::eBuffers );
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
@@ -1004,8 +995,8 @@ namespace ocean_fft
 					, c3d_modelsData[writer.cast< sdw::UInt >( out.nodeId ) - 1u] );
 				out.curPosition = vec4( pos.x(), heightDisplacement.x(), pos.y(), 1.0_f );
 				out.worldPosition = modelData.modelToWorld( out.curPosition );
-				out.viewPosition = c3d_matrixData.worldToCurView( out.worldPosition );
-				out.vtx.position = c3d_matrixData.viewToProj( out.viewPosition );
+				out.viewPosition = c3d_cameraData.worldToCurView( out.worldPosition );
+				out.vtx.position = c3d_cameraData.viewToProj( out.viewPosition );
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -1040,8 +1031,8 @@ namespace ocean_fft
 			, getComponentsMask()
 			, utils };
 
-		C3D_Matrix( writer
-			, GlobalBuffersIdx::eMatrix
+		C3D_Camera( writer
+			, GlobalBuffersIdx::eCamera
 			, RenderPipeline::eBuffers );
 		C3D_Scene( writer
 			, GlobalBuffersIdx::eScene
@@ -1141,7 +1132,7 @@ namespace ocean_fft
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[in.nodeId - 1u] );
 				auto hdrCoords = writer.declLocale( "hdrCoords"
-					, in.fragCoord.xy() / c3d_sceneData.renderSize() );
+					, in.fragCoord.xy() / vec2( c3d_cameraData.renderSize() ) );
 				auto gradJacobian = writer.declLocale( "gradJacobian"
 					, c3d_gradientJacobianMap.sample( in.prvPosition.xy() ).xyz() );
 				displayDebugData( eGradJacobian, gradJacobian, 1.0_f );
@@ -1202,14 +1193,16 @@ namespace ocean_fft
 						, vec3( 0.0_f ) );
 					auto lightSheen = writer.declLocale( "lightSheen"
 						, vec2( 0.0_f ) );
+					auto nml = writer.declLocale( "nml"
+						, normalize( components.normal ) );
 					shader::OutputComponents output{ lightDiffuse, lightSpecular, lightScattering, lightCoatingSpecular, lightSheen };
 					auto lightSurface = shader::LightSurface::create( writer
 						, "lightSurface"
-						, c3d_sceneData.cameraPosition()
+						, c3d_cameraData.position()
 						, surface.worldPosition.xyz()
 						, surface.viewPosition.xyz()
 						, surface.clipPosition
-						, normalize( components.normal ) );
+						, nml );
 					lights.computeCombinedDifSpec( components
 						, *backgroundModel
 						, lightSurface
@@ -1224,7 +1217,7 @@ namespace ocean_fft
 
 					// Indirect Lighting
 					lightSurface.updateL( utils
-						, components.normal
+						, nml
 						, components.specular
 						, components );
 					auto indirectOcclusion = indirect.computeOcclusion( flags.getGlobalIlluminationFlags()
@@ -1258,7 +1251,7 @@ namespace ocean_fft
 					auto sceneDepth = writer.declLocale( "sceneDepth"
 						, c3d_sceneDepthObj.sample( hdrCoords ).r() );
 					auto scenePosition = writer.declLocale( "scenePosition"
-						, c3d_matrixData.curProjToWorld( utils, hdrCoords, sceneDepth ) );
+						, c3d_cameraData.curProjToWorld( utils, hdrCoords, sceneDepth ) );
 
 
 					// Reflection
@@ -1267,7 +1260,7 @@ namespace ocean_fft
 					auto bgSpecularReflection = writer.declLocale( "bgSpecularReflection"
 						, vec3( 0.0_f ) );
 					lightSurface.updateN( utils
-						, components.normal
+						, nml
 						, components.specular
 						, components );
 					reflections.computeReflections( components
@@ -1283,7 +1276,7 @@ namespace ocean_fft
 					reflected = lightSurface.F() * reflected;
 					displayDebugData( eFresnelBackgroundReflection, reflected, 1.0_f );
 					auto ssrResult = writer.declLocale( "ssrResult"
-						, reflections.computeScreenSpace( c3d_matrixData
+						, reflections.computeScreenSpace( c3d_cameraData
 							, lightSurface.viewPosition()
 							, lightSurface.N()
 							, hdrCoords
@@ -1301,9 +1294,9 @@ namespace ocean_fft
 
 					// Wobbly refractions
 					auto heightFactor = writer.declLocale( "heightFactor"
-						, c3d_oceanData.refractionHeightFactor * ( c3d_sceneData.farPlane() - c3d_sceneData.nearPlane() ) );
+						, c3d_oceanData.refractionHeightFactor * ( c3d_cameraData.farPlane() - c3d_cameraData.nearPlane() ) );
 					auto distanceFactor = writer.declLocale( "distanceFactor"
-						, c3d_oceanData.refractionDistanceFactor * ( c3d_sceneData.farPlane() - c3d_sceneData.nearPlane() ) );
+						, c3d_oceanData.refractionDistanceFactor * ( c3d_cameraData.farPlane() - c3d_cameraData.nearPlane() ) );
 					auto distortedTexCoord = writer.declLocale( "distortedTexCoord"
 						, fma( vec2( ( finalNormal.xz() + finalNormal.xy() ) * 0.5_f )
 							, vec2( c3d_oceanData.refractionDistortionFactor
@@ -1312,7 +1305,7 @@ namespace ocean_fft
 					auto distortedDepth = writer.declLocale( "distortedDepth"
 						, c3d_sceneDepthObj.sample( distortedTexCoord ).r() );
 					auto distortedPosition = writer.declLocale( "distortedPosition"
-						, c3d_matrixData.curProjToWorld( utils, distortedTexCoord, distortedDepth ) );
+						, c3d_cameraData.curProjToWorld( utils, distortedTexCoord, distortedDepth ) );
 					auto refractionTexCoord = writer.declLocale( "refractionTexCoord"
 						, writer.ternary( distortedPosition.y() < in.worldPosition.y(), distortedTexCoord, hdrCoords ) );
 					auto refractionResult = writer.declLocale( "refractionResult"
@@ -1347,8 +1340,8 @@ namespace ocean_fft
 
 					//Combine all that
 					auto fresnelFactor = writer.declLocale( "fresnelFactor"
-						, vec3( utils.fresnelMix( reflections.computeIncident( lightSurface.worldPosition(), c3d_sceneData.cameraPosition() )
-							, components.normal
+						, vec3( utils.fresnelMix( reflections.computeIncident( lightSurface.worldPosition(), c3d_cameraData.position() )
+							, nml
 							, components.roughness
 							, c3d_oceanData.refractionRatio ) ) );
 					displayDebugData( eFresnelFactor, vec3( fresnelFactor ), 1.0_f );
@@ -1370,16 +1363,17 @@ namespace ocean_fft
 
 				if ( flags.hasFog() )
 				{
-					outColour = fog.apply( c3d_sceneData.getBackgroundColour( utils )
+					outColour = fog.apply( c3d_sceneData.getBackgroundColour( utils, c3d_cameraData.gamma() )
 						, outColour
 						, in.worldPosition.xyz()
+						, c3d_cameraData.position()
 						, c3d_sceneData );
 				}
 
 				backgroundModel->applyVolume( in.fragCoord.xy()
-					, utils.lineariseDepth( in.fragCoord.z(), c3d_sceneData.nearPlane(), c3d_sceneData.farPlane() )
-					, c3d_sceneData.renderSize()
-					, c3d_sceneData.cameraPlanes()
+					, utils.lineariseDepth( in.fragCoord.z(), c3d_cameraData.nearPlane(), c3d_cameraData.farPlane() )
+					, vec2( c3d_cameraData.renderSize() )
+					, c3d_cameraData.depthPlanes()
 					, outColour );
 			} );
 

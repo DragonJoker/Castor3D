@@ -33,7 +33,7 @@ namespace castor3d
 		C3D_API Texture3DTo2D( RenderDevice const & device
 			, crg::ResourcesCache & resources
 			, VkExtent2D const & size
-			, MatrixUbo const & matrixUbo );
+			, CameraUbo const & cameraUbo );
 		C3D_API ~Texture3DTo2D();
 
 		C3D_API void createPasses( QueueData const & queueData
@@ -54,7 +54,7 @@ namespace castor3d
 	private:
 		RenderDevice const & m_device;
 		crg::ResourcesCache & m_resources;
-		MatrixUbo const & m_matrixUbo;
+		CameraUbo const & m_cameraUbo;
 		Texture m_target;
 		Texture m_depthBuffer;
 		UniformBufferOffsetT< Texture3DTo2DData > m_uniformBuffer;
@@ -84,7 +84,7 @@ namespace castor3d
 				, QueueData const & queueData
 				, crg::ResourcesCache & resources
 				, UniformBufferOffsetT< Texture3DTo2DData > const & uniformBuffer
-				, MatrixUbo const & matrixUbo
+				, CameraUbo const & cameraUbo
 				, IntermediateView const & texture3D
 				, ashes::RenderPass const & renderPass
 				, ashes::DescriptorSetPool const & descriptorSetPool

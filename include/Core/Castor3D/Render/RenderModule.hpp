@@ -23,7 +23,7 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	class MatrixUbo;
+	class CameraUbo;
 
 	/**@name Render */
 	//@{
@@ -154,7 +154,7 @@ namespace castor3d
 	enum class GlobalBuffersIdx
 		: uint32_t
 	{
-		eMatrix,
+		eCamera,
 		eScene,
 		eObjectsNodeID,
 		eModelsData,
@@ -163,7 +163,7 @@ namespace castor3d
 		eTexConfigs,
 		eTexAnims,
 		eBillboardsData,
-		CU_ScopedEnumBounds( eMatrix ),
+		CU_ScopedEnumBounds( eCamera ),
 	};
 	/**
 	*\~english

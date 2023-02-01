@@ -12,7 +12,7 @@ See LICENSE file in root folder
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Render/Culling/SceneCuller.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapResult.hpp"
-#include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 
 #include <RenderGraph/FrameGraph.hpp>
 #include <RenderGraph/RunnableGraph.hpp>
@@ -25,10 +25,10 @@ namespace castor3d
 	public:
 		struct PassData
 		{
-			PassData( std::unique_ptr< MatrixUbo > matrixUbo
+			PassData( std::unique_ptr< CameraUbo > cameraUbo
 				, CameraSPtr camera
 				, SceneCullerUPtr culler )
-				: matrixUbo{ std::move( matrixUbo ) }
+				: cameraUbo{ std::move( cameraUbo ) }
 				, camera{ std::move( camera ) }
 				, ownCuller{ std::move( culler ) }
 				, culler{ ownCuller.get() }
@@ -36,10 +36,10 @@ namespace castor3d
 			{
 			}
 
-			PassData( std::unique_ptr< MatrixUbo > matrixUbo
+			PassData( std::unique_ptr< CameraUbo > cameraUbo
 				, ViewportUPtr viewport
 				, SceneCullerUPtr culler )
-				: matrixUbo{ std::move( matrixUbo ) }
+				: cameraUbo{ std::move( cameraUbo ) }
 				, viewport{ std::move( viewport ) }
 				, ownCuller{ std::move( culler ) }
 				, culler{ ownCuller.get() }
@@ -47,10 +47,10 @@ namespace castor3d
 			{
 			}
 
-			PassData( std::unique_ptr< MatrixUbo > matrixUbo
+			PassData( std::unique_ptr< CameraUbo > cameraUbo
 				, CameraSPtr camera
 				, SceneCuller * culler )
-				: matrixUbo{ std::move( matrixUbo ) }
+				: cameraUbo{ std::move( cameraUbo ) }
 				, camera{ std::move( camera ) }
 				, ownCuller{ nullptr }
 				, culler{ culler }
@@ -58,9 +58,9 @@ namespace castor3d
 			{
 			}
 
-			PassData( std::unique_ptr< MatrixUbo > matrixUbo
+			PassData( std::unique_ptr< CameraUbo > cameraUbo
 				, CameraSPtr camera )
-				: matrixUbo{ std::move( matrixUbo ) }
+				: cameraUbo{ std::move( cameraUbo ) }
 				, camera{ std::move( camera ) }
 				, ownCuller{ nullptr }
 				, culler{ nullptr }
@@ -68,7 +68,7 @@ namespace castor3d
 			{
 			}
 
-			std::unique_ptr< MatrixUbo > matrixUbo;
+			std::unique_ptr< CameraUbo > cameraUbo;
 			CameraSPtr camera;
 			ViewportUPtr viewport;
 			FrustumUPtr frustum;

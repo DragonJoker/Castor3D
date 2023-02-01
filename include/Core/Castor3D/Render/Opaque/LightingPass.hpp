@@ -34,7 +34,7 @@ namespace castor3d
 		 *\param[in]	smSpotResult		The spot lights shadow map.
 		 *\param[in]	lpResult			The lighting pass result.
 		 *\param[in]	targetColourResult	The image for which this pass runs.
-		 *\param[in]	sceneUbo			The scene UBO.
+		 *\param[in]	cameraUbo			The camera UBO.
 		 *\param[in]	gpInfoUbo			The GBuffer configuration UBO.
 		 *\~french
 		 *\brief		Initialise les données liées au deferred rendering.
@@ -51,7 +51,7 @@ namespace castor3d
 		 *\param[in]	smSpotResult		La shadow map des source lumineuses projecteurs.
 		 *\param[in]	lpResult			Le résulta de la lighting pass.
 		 *\param[in]	targetColourResult	L'image pour laquelle cette passe fait son rendu.
-		 *\param[in]	sceneUbo			L'UBO de scène.
+		 *\param[in]	cameraUbo			L'UBO de caméra.
 		 *\param[in]	gpInfoUbo			L'UBO de configuration du GBuffer.
 		 */
 		LightingPass( crg::FramePassGroup & graph
@@ -67,7 +67,7 @@ namespace castor3d
 			, LightPassResult const & lpResult
 			, crg::ImageViewIdArray const & targetColourResult
 			, crg::ImageViewIdArray const & targetDepthResult
-			, SceneUbo const & sceneUbo
+			, CameraUbo const & cameraUbo
 			, GpInfoUbo const & gpInfoUbo );
 		/**
 		 *\~english
@@ -118,7 +118,7 @@ namespace castor3d
 		LightPassResult const & m_lpResult;
 		crg::ImageViewIdArray m_targetColourResult;
 		crg::ImageViewIdArray m_targetDepthResult;
-		SceneUbo const & m_sceneUbo;
+		CameraUbo const & m_cameraUbo;
 		GpInfoUbo const & m_gpInfoUbo;
 		crg::FramePassGroup & m_group;
 		castor::Size const m_size;

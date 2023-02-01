@@ -11,7 +11,7 @@ See LICENSE file in root folder
 #include "Castor3D/Buffer/GeometryBuffers.hpp"
 #include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
-#include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/OverlayUbo.hpp"
 
 #include <CastorUtils/Graphics/Size.hpp>
@@ -303,7 +303,7 @@ namespace castor3d
 		std::map< uint32_t, Pipeline > m_textPipelines;
 		castor::String m_previousCaption;
 		bool m_sizeChanged{ true };
-		MatrixUbo m_matrixUbo;
+		CameraUbo m_cameraUbo;
 		std::vector< ashes::DescriptorSetPtr > m_retired;
 	};
 }

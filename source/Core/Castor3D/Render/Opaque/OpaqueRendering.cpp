@@ -134,6 +134,7 @@ namespace castor3d
 				, m_ssao->getResult()
 				, getOwner()->getSize()
 				, *getOwner()
+				, getOwner()->getCameraUbo()
 				, getOwner()->getSceneUbo()
 				, getOwner()->getRenderTarget().getHdrConfigUbo()
 				, getOwner()->getGpInfoUbo()
@@ -320,7 +321,7 @@ namespace castor3d
 			{
 				stepProgressBar( progress, "Initialising visibility resolve pass" );
 				RenderNodesPassDesc renderPassDesc{ getOwner()->getTargetExtent()
-					, getOwner()->getMatrixUbo()
+					, getOwner()->getCameraUbo()
 					, getOwner()->getSceneUbo()
 					, getOwner()->getRenderTarget().getCuller() };
 				renderPassDesc.safeBand( true )
@@ -435,7 +436,7 @@ namespace castor3d
 				stepProgressBar( progress, "Initialising opaque pass" );
 				RenderTechniquePassDesc techniquePassDesc{ false, getOwner()->getSsaoConfig() };
 				RenderNodesPassDesc renderPassDesc{ getOwner()->getTargetExtent()
-					, getOwner()->getMatrixUbo()
+					, getOwner()->getCameraUbo()
 					, getOwner()->getSceneUbo()
 					, getOwner()->getRenderTarget().getCuller() };
 				renderPassDesc.safeBand( true )
@@ -487,7 +488,7 @@ namespace castor3d
 				stepProgressBar( progress, "Initialising opaque pass" );
 				RenderTechniquePassDesc techniquePassDesc{ false, getOwner()->getSsaoConfig() };
 				RenderNodesPassDesc renderPassDesc{ getOwner()->getTargetExtent()
-					, getOwner()->getMatrixUbo()
+					, getOwner()->getCameraUbo()
 					, getOwner()->getSceneUbo()
 					, getOwner()->getRenderTarget().getCuller() };
 				renderPassDesc.safeBand( true )

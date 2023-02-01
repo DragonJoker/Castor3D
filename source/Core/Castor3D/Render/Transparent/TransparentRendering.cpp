@@ -69,6 +69,7 @@ namespace castor3d
 				, *m_transparentPassResult
 				, getOwner()->getTargetResult()
 				, getOwner()->getSize()
+				, getOwner()->getCameraUbo()
 				, getOwner()->getSceneUbo()
 				, getOwner()->getRenderTarget().getHdrConfigUbo()
 				, getOwner()->getGpInfoUbo() )
@@ -223,7 +224,7 @@ namespace castor3d
 					, targetResult
 					, targetDepth
 					, RenderNodesPassDesc{ getOwner()->getTargetExtent()
-							, getOwner()->getMatrixUbo()
+							, getOwner()->getCameraUbo()
 							, getOwner()->getSceneUbo()
 							, getOwner()->getRenderTarget().getCuller()
 							, isOit }
@@ -279,7 +280,7 @@ namespace castor3d
 					, targetResult
 					, targetDepth
 					, RenderNodesPassDesc{ getOwner()->getTargetExtent()
-							, getOwner()->getMatrixUbo()
+							, getOwner()->getCameraUbo()
 							, getOwner()->getSceneUbo()
 							, getOwner()->getRenderTarget().getCuller()
 							, isOit }

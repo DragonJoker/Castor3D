@@ -93,7 +93,7 @@ namespace castor3d
 			graph.addOutput( flux.wholeViewId
 				, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
 			auto & group = graph.getDefaultGroup();
-			result.emplace_back( std::make_unique< ShadowMap::PassData >( std::make_unique< MatrixUbo >( device )
+			result.emplace_back( std::make_unique< ShadowMap::PassData >( std::make_unique< CameraUbo >( device )
 				, std::make_shared< Camera >( cuT( "ShadowMapSpot" )
 					, scene
 					, *scene.getCameraRootNode()
@@ -112,7 +112,7 @@ namespace castor3d
 						, runnableGraph
 						, device
 						, shadowMapIndex
-						, *passData.matrixUbo
+						, *passData.cameraUbo
 						, *passData.culler
 						, shadowMap
 						, vsm
@@ -246,7 +246,11 @@ namespace castor3d
 		if ( myPasses.runnables.size() > updater.index
 			&& myPasses.runnables[updater.index] )
 		{
-			myPasses.passes[updater.index]->pass->update( updater );
+			auto & pass = *myPasses.passes[updater.index];
+			pass.pass->update( updater );
+
+			auto & myCamera = pass.pass->getCuller().getCamera();
+			pass.cameraUbo->cpuUpdate( myCamera, false );
 		}
 	}
 

@@ -31,7 +31,6 @@ namespace castor3d
 		 *\param[in]	progress		The optional progress bar.
 		 *\param[in]	scene			The scene.
 		 *\param[in]	gpInfoUbo		The geometry pass UBO.
-		 *\param[in]	sceneUbo		The scene UBO.
 		 *\param[in]	depthObj		The depths and objects image.
 		 *\param[in]	gpResult		The geometry pass result.
 		 *\param[in]	lpResult		The light pass result.
@@ -43,7 +42,6 @@ namespace castor3d
 		 *\param[in]	progress		La barre de progression optionnelle.
 		 *\param[in]	scene			La scène.
 		 *\param[in]	gpInfoUbo		L'UBO de la passe géométrique.
-		 *\param[in]	sceneUbo		L'UBO de la scène.
 		 *\param[in]	depthObj		La texture de profondeurs et d'objets.
 		 *\param[in]	gpResult		Le résultat de la geometry pass.
 		 *\param[in]	lpResult		Le résultat de la light pass.
@@ -54,7 +52,6 @@ namespace castor3d
 			, ProgressBar * progress
 			, Scene const & scene
 			, GpInfoUbo const & gpInfoUbo
-			, SceneUbo const & sceneUbo
 			, Texture const & depthObj
 			, OpaquePassResult const & gpResult
 			, LightPassResult const & lpResult );
@@ -110,7 +107,6 @@ namespace castor3d
 	private:
 		RenderDevice const & m_device;
 		GpInfoUbo const & m_gpInfoUbo;
-		SceneUbo const & m_sceneUbo;
 		OpaquePassResult const & m_gpResult;
 		LightPassResult const & m_lpResult;
 		Scene const & m_scene;

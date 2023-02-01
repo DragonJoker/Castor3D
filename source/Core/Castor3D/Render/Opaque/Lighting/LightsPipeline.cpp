@@ -116,9 +116,7 @@ namespace castor3d
 
 		if ( m_config.lightType != LightType::eDirectional )
 		{
-			entry.matrixUbo.cpuUpdate( camera.getView()
-				, camera.getProjection( false )
-				, camera.getFrustum() );
+			entry.cameraUbo.cpuUpdate( camera, false );
 			auto model = doComputeModelMatrix( light, camera );
 			auto & data = entry.modelMatrixUbo.getData();
 			data.prvModel = data.curModel;
@@ -126,9 +124,10 @@ namespace castor3d
 		}
 		else
 		{
-			entry.matrixUbo.cpuUpdate( camera.getView()
-				, m_viewport.getProjection()
-				, camera.getFrustum() );
+			entry.cameraUbo.cpuUpdate( camera
+				, true
+				, camera.getView()
+				, m_viewport.getProjection() );
 		}
 
 		m_enabledLights.push_back( &entry );
@@ -230,7 +229,7 @@ namespace castor3d
 			auto & scene = *light.getScene();
 			ashes::WriteDescriptorSetArray writes;
 			writes.emplace_back( scene.getLightCache().getBinding( uint32_t( LightPassLgtIdx::eLights ) ) );
-			writes.emplace_back( result.matrixUbo.getDescriptorWrite( uint32_t( LightPassLgtIdx::eMatrix ) ) );
+			writes.emplace_back( result.cameraUbo.getDescriptorWrite( uint32_t( LightPassLgtIdx::eMatrix ) ) );
 
 			if ( m_config.lightType != LightType::eDirectional )
 			{

@@ -44,7 +44,7 @@
 #include "Castor3D/Shader/Shaders/GlslTaskPayload.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/BillboardUbo.hpp"
-#include "Castor3D/Shader/Ubos/MatrixUbo.hpp"
+#include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
 #include "Castor3D/Shader/Ubos/ObjectIdsUbo.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
@@ -138,7 +138,7 @@ namespace castor3d
 		, castor::Named{ castor::string::stringCast< castor::xchar >( pass.getFullName() ) }
 		, m_device{ device }
 		, m_renderSystem{ m_device.renderSystem }
-		, m_matrixUbo{ desc.m_matrixUbo }
+		, m_cameraUbo{ desc.m_cameraUbo }
 		, m_culler{ desc.m_culler }
 		, m_targetImage{ std::move( targetImage ) }
 		, m_targetDepth{ std::move( targetDepth ) }
@@ -158,10 +158,6 @@ namespace castor3d
 		, m_sceneUbo{ desc.m_sceneUbo }
 		, m_index{ desc.m_index }
 	{
-		if ( m_sceneUbo )
-		{
-			m_sceneUbo->setWindowSize( m_size );
-		}
 	}
 
 	RenderNodesPass::~RenderNodesPass()
@@ -606,7 +602,7 @@ namespace castor3d
 				, RenderPipeline::eBuffers );
 			auto & descriptorSet = *descriptors.set;
 			ashes::WriteDescriptorSetArray descriptorWrites;
-			descriptorWrites.push_back( m_matrixUbo.getDescriptorWrite( uint32_t( GlobalBuffersIdx::eMatrix ) ) );
+			descriptorWrites.push_back( m_cameraUbo.getDescriptorWrite( uint32_t( GlobalBuffersIdx::eCamera ) ) );
 
 			if ( m_sceneUbo )
 			{
@@ -786,7 +782,7 @@ namespace castor3d
 		}
 
 		ashes::VkDescriptorSetLayoutBindingArray addBindings;
-		addBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( GlobalBuffersIdx::eMatrix )
+		addBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( GlobalBuffersIdx::eCamera )
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, stageFlags ) );
 
@@ -932,11 +928,8 @@ namespace castor3d
 		bool checkCones = flags.hasSubmeshData( SubmeshFlag::eNormals )
 			&& !flags.hasWorldPosInputs();
 
-		C3D_Matrix( writer
-			, GlobalBuffersIdx::eMatrix
-			, RenderPipeline::eBuffers );
-		C3D_Scene( writer
-			, GlobalBuffersIdx::eScene
+		C3D_Camera( writer
+			, GlobalBuffersIdx::eCamera
 			, RenderPipeline::eBuffers );
 		C3D_ObjectIdsData( writer
 			, flags
@@ -1018,7 +1011,7 @@ namespace castor3d
 
 				FOR( writer, sdw::UInt, i, 0u, i < 6u, ++i )
 				{
-					IF( writer, dot( c3d_matrixData.getFrustumPlane( i ).xyz(), sphereCenter ) + c3d_matrixData.getFrustumPlane( i ).w() <= -sphereRadius )
+					IF( writer, dot( c3d_cameraData.getFrustumPlane( i ).xyz(), sphereCenter ) + c3d_cameraData.getFrustumPlane( i ).w() <= -sphereRadius )
 					{
 						writer.returnStmt( sdw::Boolean{ false } );
 					}
@@ -1038,7 +1031,7 @@ namespace castor3d
 					FI;
 
 					auto posToCamera = writer.declLocale( "posToCamera"
-						, c3d_sceneData.cameraPosition() - sphereCenter );
+						, c3d_cameraData.position() - sphereCenter );
 
 					IF( writer, dot( posToCamera, coneNormal ) >= ( coneCutOff * length( posToCamera ) + sphereRadius ) )
 					{
@@ -1106,11 +1099,8 @@ namespace castor3d
 			, getComponentsMask()
 			, utils };
 
-		C3D_Matrix( writer
-			, GlobalBuffersIdx::eMatrix
-			, RenderPipeline::eBuffers );
-		C3D_Scene( writer
-			, GlobalBuffersIdx::eScene
+		C3D_Camera( writer
+			, GlobalBuffersIdx::eCamera
 			, RenderPipeline::eBuffers );
 		C3D_ObjectIdsData( writer
 			, flags
@@ -1270,7 +1260,7 @@ namespace castor3d
 					auto worldPos = writer.declLocale( "worldPos"
 						, curPosition );
 					vtxOut[i].computeTangentSpace( flags
-						, c3d_sceneData.cameraPosition()
+						, c3d_cameraData.position()
 						, worldPos.xyz()
 						, curNormal
 						, curTangent );
@@ -1279,13 +1269,13 @@ namespace castor3d
 				{
 					auto prvMtxModel = writer.declLocale( "prvMtxModel"
 						, modelData.getPrvModelMtx( flags, curMtxModel ) );
-					prvPosition = c3d_matrixData.worldToPrvProj( prvMtxModel * prvPosition );
+					prvPosition = c3d_cameraData.worldToPrvProj( prvMtxModel * prvPosition );
 					auto worldPos = writer.declLocale( "worldPos"
 						, curMtxModel * curPosition );
 					auto mtxNormal = writer.declLocale( "mtxNormal"
 						, modelData.getNormalMtx( flags, curMtxModel ) );
 					vtxOut[i].computeTangentSpace( flags
-						, c3d_sceneData.cameraPosition()
+						, c3d_cameraData.position()
 						, worldPos.xyz()
 						, mtxNormal
 						, curNormal
@@ -1294,10 +1284,10 @@ namespace castor3d
 
 				auto worldPos = writer.getVariable< sdw::Vec4 >( "worldPos" );
 				vtxOut[i].worldPosition = worldPos;
-				vtxOut[i].viewPosition = c3d_matrixData.worldToCurView( worldPos );
-				curPosition = c3d_matrixData.worldToCurProj( worldPos );
+				vtxOut[i].viewPosition = c3d_cameraData.worldToCurView( worldPos );
+				curPosition = c3d_cameraData.worldToCurProj( worldPos );
 				vtxOut[i].vertexId = vertexIndex;
-				vtxOut[i].computeVelocity( c3d_matrixData
+				vtxOut[i].computeVelocity( c3d_cameraData
 					, curPosition
 					, prvPosition );
 				vtxOut[i].position = curPosition;
@@ -1360,11 +1350,8 @@ namespace castor3d
 			, getComponentsMask()
 			, utils };
 
-		C3D_Matrix( writer
-			, GlobalBuffersIdx::eMatrix
-			, RenderPipeline::eBuffers );
-		C3D_Scene( writer
-			, GlobalBuffersIdx::eScene
+		C3D_Camera( writer
+			, GlobalBuffersIdx::eCamera
 			, RenderPipeline::eBuffers );
 		C3D_ObjectIdsData( writer
 			, flags
@@ -1427,7 +1414,7 @@ namespace castor3d
 					auto worldPos = writer.declLocale( "worldPos"
 						, curPosition );
 					out.computeTangentSpace( flags
-						, c3d_sceneData.cameraPosition()
+						, c3d_cameraData.position()
 						, worldPos.xyz()
 						, curNormal
 						, curTangent );
@@ -1436,13 +1423,13 @@ namespace castor3d
 				{
 					auto prvMtxModel = writer.declLocale( "prvMtxModel"
 						, modelData.getPrvModelMtx( flags, curMtxModel ) );
-					prvPosition = c3d_matrixData.worldToPrvProj( prvMtxModel * prvPosition );
+					prvPosition = c3d_cameraData.worldToPrvProj( prvMtxModel * prvPosition );
 					auto worldPos = writer.declLocale( "worldPos"
 						, curMtxModel * curPosition );
 					auto mtxNormal = writer.declLocale( "mtxNormal"
 						, modelData.getNormalMtx( flags, curMtxModel ) );
 					out.computeTangentSpace( flags
-						, c3d_sceneData.cameraPosition()
+						, c3d_cameraData.position()
 						, worldPos.xyz()
 						, mtxNormal
 						, curNormal
@@ -1451,10 +1438,10 @@ namespace castor3d
 
 				auto worldPos = writer.getVariable< sdw::Vec4 >( "worldPos" );
 				out.worldPosition = worldPos;
-				out.viewPosition = c3d_matrixData.worldToCurView( worldPos );
-				curPosition = c3d_matrixData.worldToCurProj( worldPos );
+				out.viewPosition = c3d_cameraData.worldToCurView( worldPos );
+				curPosition = c3d_cameraData.worldToCurProj( worldPos );
 				out.vertexId = in.vertexIndex - in.baseVertex;
-				out.computeVelocity( c3d_matrixData
+				out.computeVelocity( c3d_cameraData
 					, curPosition
 					, prvPosition );
 				out.vtx.position = curPosition;
@@ -1495,11 +1482,8 @@ namespace castor3d
 		auto uv = writer.declInput< Vec2 >( "uv", 1u, enableTexcoords );
 		auto center = writer.declInput< Vec3 >( "center", 2u );
 
-		C3D_Matrix( writer
-			, GlobalBuffersIdx::eMatrix
-			, RenderPipeline::eBuffers );
-		C3D_Scene( writer
-			, GlobalBuffersIdx::eScene
+		C3D_Camera( writer
+			, GlobalBuffersIdx::eCamera
 			, RenderPipeline::eBuffers );
 		C3D_ObjectIdsData( writer
 			, flags
@@ -1544,20 +1528,20 @@ namespace castor3d
 				auto prvBbcenter = writer.declLocale( "prvBbcenter"
 					, modelData.modelToPrvWorld( vec4( center, 1.0_f ) ).xyz() );
 				auto curToCamera = writer.declLocale( "curToCamera"
-					, c3d_sceneData.getPosToCamera( curBbcenter ) );
+					, c3d_cameraData.getPosToCamera( curBbcenter ) );
 				curToCamera.y() = 0.0_f;
 				curToCamera = normalize( curToCamera );
 
 				auto billboardData = writer.declLocale( "billboardData"
 					, c3d_billboardData[nodeId - 1u] );
 				auto right = writer.declLocale( "right"
-					, billboardData.getCameraRight( c3d_matrixData ) );
+					, billboardData.getCameraRight( c3d_cameraData ) );
 				auto up = writer.declLocale( "up"
-					, billboardData.getCameraUp( c3d_matrixData ) );
+					, billboardData.getCameraUp( c3d_cameraData ) );
 				auto width = writer.declLocale( "width"
-					, billboardData.getWidth( c3d_sceneData ) );
+					, billboardData.getWidth( c3d_cameraData ) );
 				auto height = writer.declLocale( "height"
-					, billboardData.getHeight( c3d_sceneData ) );
+					, billboardData.getHeight( c3d_cameraData ) );
 				auto scaledRight = writer.declLocale( "scaledRight"
 					, right * position.x() * width );
 				auto scaledUp = writer.declLocale( "scaledUp"
@@ -1568,17 +1552,17 @@ namespace castor3d
 				out.texture0 = vec3( uv, 0.0_f );
 
 				auto prvPosition = writer.declLocale( "prvPosition"
-					, c3d_matrixData.worldToPrvProj( vec4( prvBbcenter + scaledRight + scaledUp, 1.0_f ) ) );
+					, c3d_cameraData.worldToPrvProj( vec4( prvBbcenter + scaledRight + scaledUp, 1.0_f ) ) );
 				auto curPosition = writer.declLocale( "curPosition"
-					, c3d_matrixData.worldToCurProj( worldPos ) );
-				out.viewPosition = c3d_matrixData.worldToCurView( worldPos );
-				out.computeVelocity( c3d_matrixData
+					, c3d_cameraData.worldToCurProj( worldPos ) );
+				out.viewPosition = c3d_cameraData.worldToCurView( worldPos );
+				out.computeVelocity( c3d_cameraData
 					, curPosition
 					, prvPosition );
 				out.vtx.position = curPosition;
 				out.vertexId = in.instanceIndex - in.baseInstance;
 				out.computeTangentSpace( flags
-					, c3d_sceneData.cameraPosition()
+					, c3d_cameraData.position()
 					, worldPos.xyz()
 					, curToCamera
 					, up
