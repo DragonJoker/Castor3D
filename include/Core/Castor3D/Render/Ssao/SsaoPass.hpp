@@ -33,7 +33,7 @@ namespace castor3d
 		 *\param[in]	ssaoConfig		The SSAO configuration.
 		 *\param[in]	depth			The depth buffer.
 		 *\param[in]	normal			The normals buffer.
-		 *\param[in]	gpInfoUbo		The GBuffer configuration UBO.
+		 *\param[in]	cameraUbo		The camera configuration UBO.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	graph			Le render graph.
@@ -44,7 +44,7 @@ namespace castor3d
 		 *\param[in]	ssaoConfig		La configuration du SSAO.
 		 *\param[in]	depth			Le depth buffer.
 		 *\param[in]	normal			Le buffer de normales.
-		 *\param[in]	gpInfoUbo		L'UBO de configuration du GBuffer
+		 *\param[in]	cameraUbo		L'UBO de configuration de la caméra.
 		 */
 		C3D_API SsaoPass( crg::FramePassGroup & graph
 			, RenderDevice const & device
@@ -54,7 +54,7 @@ namespace castor3d
 			, SsaoConfig & ssaoConfig
 			, Texture const & depthObj
 			, Texture const & normal
-			, GpInfoUbo const & gpInfoUbo );
+			, CameraUbo const & cameraUbo );
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, CPU wise.
@@ -104,10 +104,8 @@ namespace castor3d
 	private:
 		RenderDevice const & m_device;
 		SsaoConfig & m_ssaoConfig;
-		GpInfoUbo const & m_gpInfoUbo;
 		crg::FramePassGroup & m_group;
 		VkExtent2D m_size;
-		CameraUbo m_cameraUbo;
 		uint32_t m_passIndex{};
 		LineariseDepthPassUPtr m_linearisePass;
 		SsaoConfigUbo m_ssaoConfigUbo;

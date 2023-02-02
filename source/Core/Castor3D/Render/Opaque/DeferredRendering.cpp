@@ -50,7 +50,6 @@ namespace castor3d
 		, CameraUbo const & cameraUbo
 		, SceneUbo const & sceneUbo
 		, HdrConfigUbo const & hdrConfigUbo
-		, GpInfoUbo const & gpInfoUbo
 		, LpvGridConfigUbo const & lpvConfigUbo
 		, LayeredLpvGridConfigUbo const & llpvConfigUbo
 		, VoxelizerUbo const & vctConfigUbo
@@ -59,7 +58,6 @@ namespace castor3d
 		: m_device{ device }
 		, m_opaquePassResult{ opaquePassResult }
 		, m_technique{ technique }
-		, m_lightingGpInfoUbo{ device }
 		, m_size{ size }
 		, m_lightPassResult{ *depthObj.resources, device, m_size }
 		, m_lightingPass{ castor::makeUnique< LightingPass >( graph
@@ -75,8 +73,7 @@ namespace castor3d
 			, m_lightPassResult
 			, resultTexture
 			, resultDepth
-			, cameraUbo
-			, m_lightingGpInfoUbo ) }
+			, cameraUbo ) }
 		, m_indirectLightingPass{ castor::makeUnique< IndirectLightingPass >( m_device
 			, progress
 			, *m_technique.getRenderTarget().getScene()
@@ -91,7 +88,6 @@ namespace castor3d
 			, vctFirstBounce
 			, vctSecondaryBounce
 			, cameraUbo
-			, m_lightingGpInfoUbo
 			, lpvConfigUbo
 			, llpvConfigUbo
 			, vctConfigUbo ) }
@@ -100,7 +96,7 @@ namespace castor3d
 			, m_device
 			, progress
 			, *m_technique.getRenderTarget().getScene()
-			, m_lightingGpInfoUbo
+			, cameraUbo
 			, depthObj
 			, m_opaquePassResult
 			, m_lightPassResult ) }
@@ -117,7 +113,6 @@ namespace castor3d
 			, cameraUbo
 			, sceneUbo
 			, hdrConfigUbo
-			, gpInfoUbo
 			, ssaoConfig
 			, opaquePassEnabled );
 		m_lightPassResult.create();
@@ -134,10 +129,6 @@ namespace castor3d
 			CU_Require( resolve );
 			resolve->update( updater );
 		}
-
-		auto & camera = *updater.camera;
-		m_lightingGpInfoUbo.cpuUpdate( makeSize( m_lightPassResult[LpTexture::eDiffuse].getExtent() )
-			, camera );
 	}
 
 	void DeferredRendering::update( GpuUpdater & updater )
@@ -187,7 +178,6 @@ namespace castor3d
 		, CameraUbo const & cameraUbo
 		, SceneUbo const & sceneUbo
 		, HdrConfigUbo const & hdrConfigUbo
-		, GpInfoUbo const & gpInfoUbo
 		, SsaoConfig & ssaoConfig
 		, crg::RunnablePass::IsEnabledCallback const & opaquePassEnabled )
 	{
@@ -211,7 +201,6 @@ namespace castor3d
 				, resultTexture
 				, cameraUbo
 				, sceneUbo
-				, gpInfoUbo
 				, hdrConfigUbo
 				, lightingModelId
 				, scene.getBackgroundModelId()

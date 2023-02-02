@@ -25,7 +25,6 @@
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
-#include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
 
 #include <ShaderWriter/Source.hpp>
@@ -147,7 +146,6 @@ namespace castor3d
 			, uint32_t( LightPassIdx::eSssProfiles )
 			, 0u };
 		C3D_ModelsData( writer, LightPassIdx::eModels, 0u );
-		C3D_GpInfo( writer, LightPassIdx::eGpInfo, 0u );
 		C3D_Camera( writer, LightPassIdx::eCamera, 0u );
 
 		auto c3d_mapDepthObj = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( PpTexture::eDepthObj ), uint32_t( LightPassIdx::eDepthObj ), 0u );
@@ -195,7 +193,7 @@ namespace castor3d
 			, FragmentOut out )
 			{
 				auto texCoord = writer.declLocale( "texCoord"
-					, c3d_gpInfoData.calcTexCoord( utils
+					, c3d_cameraData.calcTexCoord( utils
 						, in.fragCoord.xy() ) );
 				auto depthObj = writer.declLocale( "depthObj"
 					, c3d_mapDepthObj.lod( texCoord, 0.0_f ) );
@@ -243,9 +241,9 @@ namespace castor3d
 					auto depth = writer.declLocale( "depth"
 						, depthObj.x() );
 					auto vsPosition = writer.declLocale( "vsPosition"
-						, c3d_gpInfoData.projToView( utils, texCoord, depth ) );
+						, c3d_cameraData.projToView( utils, texCoord, depth ) );
 					auto wsPosition = writer.declLocale( "wsPosition"
-						, c3d_gpInfoData.projToWorld( utils, texCoord, depth ) );
+						, c3d_cameraData.curProjToWorld( utils, texCoord, depth ) );
 					auto wsNormal = writer.declLocale( "wsNormal"
 						, normalize( nmlOcc.xyz() ) );
 

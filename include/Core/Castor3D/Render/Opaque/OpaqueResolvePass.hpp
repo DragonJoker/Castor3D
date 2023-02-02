@@ -57,7 +57,7 @@ namespace castor3d
 		 *\param[in]	lighting				The lighting pass result.
 		 *\param[in]	result					The texture receiving the result.
 		 *\param[in]	sceneUbo				The scene UBO.
-		 *\param[in]	gpInfoUbo				The geometry pass UBO.
+		 *\param[in]	cameraUbo				The camera UBO.
 		 *\param[in]	hdrConfigUbo			The HDR UBO.
 		 *\param[in]	lightingModelId			The lighting model ID.
 		 *\~french
@@ -75,7 +75,7 @@ namespace castor3d
 		 *\param[in]	lighting				Le résultat de la passe d'éclairage.
 		 *\param[in]	result					La texture recevant le résultat.
 		 *\param[in]	sceneUbo				L'UBO de la scène.
-		 *\param[in]	gpInfoUbo				L'UBO de la passe géométrique.
+		 *\param[in]	cameraUbo				L'UBO de la caméra.
 		 *\param[in]	hdrConfigUbo			L'UBO HDR.
 		 *\param[in]	lightingModelId			L'ID de modèle d'éclairage.
 		 */
@@ -93,7 +93,6 @@ namespace castor3d
 			, crg::ImageViewIdArray result
 			, CameraUbo const & cameraUbo
 			, SceneUbo const & sceneUbo
-			, GpInfoUbo const & gpInfoUbo
 			, HdrConfigUbo const & hdrConfigUbo
 			, LightingModelID lightingModelId
 			, BackgroundModelID backgroundModelId
@@ -135,7 +134,6 @@ namespace castor3d
 		RenderTechnique const & m_technique;
 		CameraUbo const & m_cameraUbo;
 		SceneUbo const & m_sceneUbo;
-		GpInfoUbo const & m_gpInfoUbo;
 		HdrConfigUbo const & m_hdrConfigUbo;
 		SsaoConfig const & m_ssao;
 		Texture const & m_depthObj;

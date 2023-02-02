@@ -27,7 +27,7 @@ namespace castor3d
 		 *\param[in]	size					The render dimensions.
 		 *\param[in]	sceneUbo				The scene UBO.
 		 *\param[in]	hdrConfigUbo			The HDR configuration UBO.
-		 *\param[in]	gpInfoUbo				The geometry pass UBO.
+		 *\param[in]	cameraUbo				The camera UBO.
 		 *\~french
 		 *\brief		Initialise les données liées au deferred rendering.
 		 *\param[in]	graph					Le frame graph.
@@ -41,7 +41,7 @@ namespace castor3d
 		 *\param[in]	size					Les dimensions du rendu.
 		 *\param[in]	sceneUbo				L'UBO de scène.
 		 *\param[in]	hdrConfigUbo			L'UBO de configuration HDR.
-		 *\param[in]	gpInfoUbo				L'UBO de la passe géométrique.
+		 *\param[in]	cameraUbo				L'UBO de la caméra.
 		 */
 		WeightedBlendRendering( crg::FramePassGroup & graph
 			, RenderDevice const & device
@@ -54,8 +54,7 @@ namespace castor3d
 			, castor::Size const & size
 			, CameraUbo const & cameraUbo
 			, SceneUbo const & sceneUbo
-			, HdrConfigUbo const & hdrConfigUbo
-			, GpInfoUbo const & gpInfoUbo );
+			, HdrConfigUbo const & hdrConfigUbo );
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
@@ -90,7 +89,6 @@ namespace castor3d
 			, CameraUbo const & cameraUbo
 			, SceneUbo const & sceneUbo
 			, HdrConfigUbo const & hdrConfigUbo
-			, GpInfoUbo const & gpInfoUbo
 			, ProgressBar * progress );
 
 	private:

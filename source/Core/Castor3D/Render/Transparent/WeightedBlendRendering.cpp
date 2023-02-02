@@ -9,7 +9,7 @@
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslFog.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
-#include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
+#include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 
@@ -30,7 +30,6 @@ namespace castor3d
 		{
 			CameraUboIndex,
 			SceneUboIndex,
-			GpuInfoUboIndex,
 			HdrUboIndex,
 			DepthTexIndex,
 			AccumTexIndex,
@@ -62,7 +61,6 @@ namespace castor3d
 			// Shader inputs
 			C3D_Camera( writer, CameraUboIndex, 0u );
 			C3D_Scene( writer, SceneUboIndex, 0u );
-			C3D_GpInfo( writer, GpuInfoUboIndex, 0u );
 			C3D_HdrConfig( writer, HdrUboIndex, 0u );
 			auto c3d_mapDepth = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapDepth", uint32_t( DepthTexIndex ), 0u );
 			auto c3d_mapAccumulation = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( WbTexture::eAccumulation ), uint32_t( AccumTexIndex ), 0u );
@@ -116,7 +114,7 @@ namespace castor3d
 						auto texCoord = writer.declLocale( "texCoord"
 							, in.fragCoord.xy() );
 						auto position = writer.declLocale( "position"
-							, c3d_gpInfoData.projToWorld( utils
+							, c3d_cameraData.curProjToWorld( utils
 								, texCoord
 								, c3d_mapDepth.sample( texCoord ).r() ) );
 						outColour = fog.apply( c3d_sceneData.getBackgroundColour( c3d_hdrConfigData )
@@ -144,8 +142,7 @@ namespace castor3d
 		, castor::Size const & size
 		, CameraUbo const & cameraUbo
 		, SceneUbo const & sceneUbo
-		, HdrConfigUbo const & hdrConfigUbo
-		, GpInfoUbo const & gpInfoUbo )
+		, HdrConfigUbo const & hdrConfigUbo )
 		: m_device{ device }
 		, m_graph{ graph }
 		, m_enabled{ enabled }
@@ -162,7 +159,6 @@ namespace castor3d
 			, cameraUbo
 			, sceneUbo
 			, hdrConfigUbo
-			, gpInfoUbo
 			, progress ) }
 	{
 	}
@@ -188,7 +184,6 @@ namespace castor3d
 		, CameraUbo const & cameraUbo
 		, SceneUbo const & sceneUbo
 		, HdrConfigUbo const & hdrConfigUbo
-		, GpInfoUbo const & gpInfoUbo
 		, ProgressBar * progress )
 	{
 		stepProgressBar( progress, "Creating transparent resolve pass" );
@@ -213,8 +208,6 @@ namespace castor3d
 			, uint32_t( wboit::CameraUboIndex ) );
 		sceneUbo.createPassBinding( result
 			, uint32_t( wboit::SceneUboIndex ) );
-		gpInfoUbo.createPassBinding( result
-			, uint32_t( wboit::GpuInfoUboIndex ) );
 		hdrConfigUbo.createPassBinding( result
 			, uint32_t( wboit::HdrUboIndex ) );
 		result.addSampledView( depthObj

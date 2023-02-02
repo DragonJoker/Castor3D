@@ -35,7 +35,6 @@ namespace castor3d
 		 *\param[in]	lpResult			The lighting pass result.
 		 *\param[in]	targetColourResult	The image for which this pass runs.
 		 *\param[in]	cameraUbo			The camera UBO.
-		 *\param[in]	gpInfoUbo			The GBuffer configuration UBO.
 		 *\~french
 		 *\brief		Initialise les données liées au deferred rendering.
 		 *\param[in]	graph				Le render graph.
@@ -52,7 +51,6 @@ namespace castor3d
 		 *\param[in]	lpResult			Le résulta de la lighting pass.
 		 *\param[in]	targetColourResult	L'image pour laquelle cette passe fait son rendu.
 		 *\param[in]	cameraUbo			L'UBO de caméra.
-		 *\param[in]	gpInfoUbo			L'UBO de configuration du GBuffer.
 		 */
 		LightingPass( crg::FramePassGroup & graph
 			, crg::FramePassArray const & previousPasses
@@ -67,8 +65,7 @@ namespace castor3d
 			, LightPassResult const & lpResult
 			, crg::ImageViewIdArray const & targetColourResult
 			, crg::ImageViewIdArray const & targetDepthResult
-			, CameraUbo const & cameraUbo
-			, GpInfoUbo const & gpInfoUbo );
+			, CameraUbo const & cameraUbo );
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, CPU wise.
@@ -119,7 +116,6 @@ namespace castor3d
 		crg::ImageViewIdArray m_targetColourResult;
 		crg::ImageViewIdArray m_targetDepthResult;
 		CameraUbo const & m_cameraUbo;
-		GpInfoUbo const & m_gpInfoUbo;
 		crg::FramePassGroup & m_group;
 		castor::Size const m_size;
 		RunnableLightingPass * m_lightPass{};

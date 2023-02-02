@@ -40,12 +40,12 @@ namespace castor3d
 
 		sdw::Vec4 CameraData::curViewToWorld( sdw::Vec4 const & vsPosition )const
 		{
-			return inverse( curView() ) * vsPosition;
+			return invCurView() * vsPosition;
 		}
 
 		sdw::Vec4 CameraData::prvViewToWorld( sdw::Vec4 const & vsPosition )const
 		{
-			return inverse( prvView() ) * vsPosition;
+			return invPrvView() * vsPosition;
 		}
 
 		sdw::Vec4 CameraData::worldToCurProj( sdw::Vec4 const & wsPosition )const
@@ -80,26 +80,26 @@ namespace castor3d
 			, sdw::Vec2 const & texCoord
 			, sdw::Float const & depth )const
 		{
-			return utils.calcWSPosition( texCoord, depth, invProjection() );
+			return utils.calcVSPosition( texCoord, depth, invProjection() );
 		}
 
 		sdw::Vec4 CameraData::curProjToWorld( sdw::Vec4 const & position )const
 		{
-			return inverse( curViewProj() ) * position;
+			return invCurViewProj() * position;
 		}
 
 		sdw::Vec3 CameraData::curProjToWorld( Utils & utils
 			, sdw::Vec2 const & texCoord
 			, sdw::Float const & depth )const
 		{
-			return utils.calcWSPosition( texCoord, depth, inverse( curViewProj() ) );
+			return utils.calcWSPosition( texCoord, depth, invCurViewProj() );
 		}
 
 		sdw::Vec3 CameraData::prvProjToWorld( Utils & utils
 			, sdw::Vec2 const & texCoord
 			, sdw::Float const & depth )const
 		{
-			return utils.calcWSPosition( texCoord, depth, inverse( prvViewProj() ) );
+			return utils.calcWSPosition( texCoord, depth, invPrvViewProj() );
 		}
 
 		sdw::Vec3 CameraData::getCurViewRight()const
@@ -134,7 +134,7 @@ namespace castor3d
 
 		sdw::Mat4 CameraData::getInvViewProjMtx()const
 		{
-			return inverse( curViewProj() );
+			return invCurViewProj();
 		}
 
 		void CameraData::jitter( sdw::Vec4 & csPosition )const
@@ -161,6 +161,23 @@ namespace castor3d
 		{
 			return vec2( nearPlane(), farPlane() );
 		}
+
+		sdw::Vec2 CameraData::calcTexCoord( Utils & utils
+			, sdw::Vec2 const & fragCoord )const
+		{
+			return utils.calcTexCoord( fragCoord
+				, vec2( renderSize() ) );
+		}
+
+		sdw::Vec3 CameraData::readNormal( sdw::Vec3 const & input )const
+		{
+			return -( transpose( invCurView() ) * vec4( input, 1.0_f ) ).xyz();
+		}
+
+		sdw::Vec3 CameraData::writeNormal( sdw::Vec3 const & input )const
+		{
+			return ( transpose( invCurView() ) * vec4( -input, 1.0_f ) ).xyz();
+		}
 	}
 
 	//*********************************************************************************************
@@ -177,22 +194,49 @@ namespace castor3d
 	}
 
 	CameraUbo::Configuration & CameraUbo::cpuUpdate( Camera const & camera
-		, bool safeBanded
 		, castor::Matrix4x4f const & view
 		, castor::Matrix4x4f const & projection
+		, castor::Size const & size
 		, castor::Point2f const & jitter )
 	{
 		auto & configuration = cpuUpdate( view
 			, projection
 			, camera.getFrustum()
+			, size
+			, jitter );
+		configuration.position = camera.getParent()->getDerivedPosition();
+		configuration.gamma = camera.getHdrConfig().gamma;
+		configuration.nearPlane = camera.getNear();
+		configuration.farPlane = camera.getFar();
+
+		return configuration;
+	}
+
+	CameraUbo::Configuration & CameraUbo::cpuUpdate( Camera const & camera
+		, bool safeBanded
+		, castor::Matrix4x4f const & view
+		, castor::Matrix4x4f const & projection
+		, castor::Point2f const & jitter )
+	{
+		return cpuUpdate( camera
+			, view
+			, projection
 			, ( safeBanded
 				? getSafeBandedSize( camera.getSize() )
 				: camera.getSize() )
 			, jitter );
-		configuration.position = camera.getParent()->getDerivedPosition();
-		configuration.gamma = camera.getHdrConfig().gamma;
+	}
 
-		return configuration;
+	CameraUbo::Configuration & CameraUbo::cpuUpdate( Camera const & camera
+		, bool safeBanded
+		, castor::Size const & size
+		, castor::Point2f const & jitter )
+	{
+		return cpuUpdate( camera
+			, camera.getView()
+			, camera.getProjection( safeBanded )
+			, size
+			, jitter );
 	}
 
 	CameraUbo::Configuration & CameraUbo::cpuUpdate( Camera const & camera
@@ -201,8 +245,9 @@ namespace castor3d
 	{
 		return cpuUpdate( camera
 			, safeBanded
-			, camera.getView()
-			, camera.getProjection( safeBanded )
+			, ( safeBanded
+				? getSafeBandedSize( camera.getSize() )
+				: camera.getSize() )
 			, jitter );
 	}
 
@@ -214,11 +259,15 @@ namespace castor3d
 	{
 		auto & configuration = cpuUpdate( projection );
 		configuration.prvView = configuration.curView;
+		configuration.invPrvView = configuration.invCurView;
 		configuration.prvViewProj = configuration.curViewProj;
+		configuration.invPrvViewProj = configuration.invCurViewProj;
 		configuration.curView = view;
+		configuration.invCurView = view.getInverse();
 		configuration.projection = projection;
-		configuration.curViewProj = projection * view;
 		configuration.invProjection = projection.getInverse();
+		configuration.curViewProj = projection * view;
+		configuration.invCurViewProj = ( configuration.curViewProj ).getInverse();
 		configuration.size = { size.getWidth(), size.getHeight() };
 		configuration.jitter = { jitter->x, jitter->y };
 

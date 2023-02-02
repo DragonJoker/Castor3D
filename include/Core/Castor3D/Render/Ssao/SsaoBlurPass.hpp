@@ -30,7 +30,7 @@ namespace castor3d
 		 *\param[in]	size			The render area dimensions.
 		 *\param[in]	config			The SSAO configuration.
 		 *\param[in]	ssaoConfigUbo	The SSAO configuration UBO.
-		 *\param[in]	gpInfoUbo		The GBuffer configuration UBO.
+		 *\param[in]	cameraUbo		The camera configuration UBO.
 		 *\param[in]	axis			The axis to which the blur applies ({0, 1} for vertical, {1, 0} for horizontal).
 		 *\param[in]	input			The texture to blur.
 		 *\param[in]	bentInput		The bent normals texture to blur.
@@ -46,7 +46,7 @@ namespace castor3d
 		 *\param[in]	size			Les dimensions de la zone de rendu.
 		 *\param[in]	config			La configuration du SSAO.
 		 *\param[in]	ssaoConfigUbo	L'UBO de configuration du SSAO.
-		 *\param[in]	gpInfoUbo		L'UBO de configuration du GBuffer.
+		 *\param[in]	cameraUbo		L'UBO de configuration de la caméra.
 		 *\param[in]	axis			L'axe dans lequel le flou s'applique ({0, 1} pour vertical, {1, 0} pour horizontal).
 		 *\param[in]	input			La texture à flouter.
 		 *\param[in]	bentInput		La texture de bent normals à flouter
@@ -61,7 +61,7 @@ namespace castor3d
 			, VkExtent2D const & size
 			, SsaoConfig const & config
 			, SsaoConfigUbo & ssaoConfigUbo
-			, GpInfoUbo const & gpInfoUbo
+			, CameraUbo const & cameraUbo
 			, castor::Point2i const & axis
 			, Texture const & input
 			, Texture const & bentInput
@@ -157,7 +157,7 @@ namespace castor3d
 		RenderDevice const & m_device;
 		crg::FramePassGroup & m_graph;
 		SsaoConfigUbo & m_ssaoConfigUbo;
-		GpInfoUbo const & m_gpInfoUbo;
+		CameraUbo const & m_cameraUbo;
 		Texture const & m_bentInput;
 		SsaoConfig const & m_config;
 		VkExtent2D m_size;

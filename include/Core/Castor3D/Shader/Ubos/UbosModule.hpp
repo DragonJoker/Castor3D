@@ -22,7 +22,6 @@ namespace castor3d
 	{
 		struct BillboardData;
 		struct CameraData;
-		struct GpInfoData;
 		struct HdrConfigData;
 		struct LayeredLpvGridData;
 		struct LpvGridData;
@@ -43,7 +42,6 @@ namespace castor3d
 		struct VoxelData;
 
 		Writer_Parameter( BillboardData );
-		Writer_Parameter( GpInfoData );
 		Writer_Parameter( HdrConfigData );
 		Writer_Parameter( LayeredLpvGridData );
 		Writer_Parameter( LpvGridData );
@@ -108,32 +106,6 @@ namespace castor3d
 		uint32_t nodeId;
 		uint32_t instanceCount;
 		uint32_t instanceOffset;
-	};
-	/**
-	*\~english
-	*\brief
-	*	Geometry pass UBO.
-	*\~french
-	*\brief
-	*	UBO de la Geometry pass.
-	*/
-	class GpInfoUbo;
-	/**
-	*\~english
-	*\brief
-	*	Geometry pass data.
-	*\~french
-	*\brief
-	*	Données de la Geometry pass.
-	*/
-	struct GpInfoUboConfiguration
-	{
-		castor::Matrix4x4f invViewProj;
-		castor::Matrix4x4f invView;
-		castor::Matrix4x4f invProj;
-		castor::Matrix4x4f gView;
-		castor::Matrix4x4f gProj;
-		castor::Point2f renderSize;
 	};
 	/**
 	*\~english
@@ -237,9 +209,13 @@ namespace castor3d
 		castor::Matrix4x4f projection;
 		castor::Matrix4x4f invProjection;
 		castor::Matrix4x4f curView;
+		castor::Matrix4x4f invCurView;
 		castor::Matrix4x4f prvView;
+		castor::Matrix4x4f invPrvView;
 		castor::Matrix4x4f curViewProj;
+		castor::Matrix4x4f invCurViewProj;
 		castor::Matrix4x4f prvViewProj;
+		castor::Matrix4x4f invPrvViewProj;
 		castor::Point2ui size;
 		castor::Point2f jitter;
 		castor::Point3f position;

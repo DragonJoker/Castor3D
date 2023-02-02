@@ -11,10 +11,10 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Ssao/SsaoModule.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
+#include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 
 #include "Castor3D/Render/Opaque/OpaquePassResult.hpp"
 #include "Castor3D/Render/Opaque/Lighting/LightPassResult.hpp"
-#include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
 
 #include <RenderGraph/RunnablePass.hpp>
 
@@ -48,7 +48,7 @@ namespace castor3d
 		 *\param[in]	scene				The rendered scene.
 		 *\param[in]	sceneUbo			The scene configuration UBO.
 		 *\param[in]	hdrConfigUbo		The HDR configuration UBO.
-		 *\param[in]	gpInfoUbo			The GBuffer configuration UBO.
+		 *\param[in]	cameraUbo			The camera configuration UBO.
 		 *\param[in]	lpvConfigUbo		The LPV configuration UBO.
 		 *\param[in]	llpvConfigUbo		The Layered LPV configuration UBO.
 		 *\param[in]	vctConfigUbo		The VCT configuration UBO.
@@ -77,7 +77,7 @@ namespace castor3d
 		 *\param[in]	scene				La scène rendue.
 		 *\param[in]	sceneUbo			L'UBO de configuration de la scène
 		 *\param[in]	hdrConfigUbo		L'UBO de configuration HDR.
-		 *\param[in]	gpInfoUbo			L'UBO de configuration du GBuffer.
+		 *\param[in]	cameraUbo			L'UBO de configuration de la caméra.
 		 *\param[in]	lpvConfigUbo		L'UBO de configuration des LPV.
 		 *\param[in]	llpvConfigUbo		L'UBO de configuration des Layered LPV.
 		 *\param[in]	vctConfigUbo		L'UBO de configuration du VCT.
@@ -106,7 +106,6 @@ namespace castor3d
 			, CameraUbo const & cameraUbo
 			, SceneUbo const & sceneUbo
 			, HdrConfigUbo const & hdrConfigUbo
-			, GpInfoUbo const & gpInfoUbo
 			, LpvGridConfigUbo const & lpvConfigUbo
 			, LayeredLpvGridConfigUbo const & llpvConfigUbo
 			, VoxelizerUbo const & vctConfigUbo
@@ -168,7 +167,6 @@ namespace castor3d
 			, CameraUbo const & cameraUbo
 			, SceneUbo const & sceneUbo
 			, HdrConfigUbo const & hdrConfigUbo
-			, GpInfoUbo const & gpInfoUbo
 			, SsaoConfig & ssaoConfig
 			, crg::RunnablePass::IsEnabledCallback const & opaquePassEnabled );
 
@@ -177,7 +175,6 @@ namespace castor3d
 		OpaquePassResult const & m_opaquePassResult;
 		RenderTechnique const & m_technique;
 		crg::FramePass const * m_lastPass{};
-		GpInfoUbo m_lightingGpInfoUbo;
 		castor::Size m_size;
 		LightPassResult m_lightPassResult;
 		LightingPassUPtr m_lightingPass;

@@ -313,7 +313,6 @@ namespace castor3d
 			, getBorderColor( DsTexture::eNmlOcc ) ) }
 		, m_cameraUbo{ m_device }
 		, m_sceneUbo{ m_device }
-		, m_gpInfoUbo{ m_device }
 		, m_lpvConfigUbo{ m_device }
 		, m_llpvConfigUbo{ m_device }
 		, m_vctConfigUbo{ m_device }
@@ -499,8 +498,6 @@ namespace castor3d
 			, true
 			, jitterProjSpace );
 		m_sceneUbo.cpuUpdate( scene );
-		m_gpInfoUbo.cpuUpdate( makeSize( m_colour->getExtent() )
-			, camera );
 	}
 
 	void RenderTechnique::update( GpuUpdater & updater )

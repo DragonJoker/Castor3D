@@ -10,7 +10,6 @@
 #include "Castor3D/Render/Ssao/SsaoBlurPass.hpp"
 #include "Castor3D/Render/Ssao/SsaoConfig.hpp"
 #include "Castor3D/Render/Ssao/SsaoRawAOPass.hpp"
-#include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
 
 #include <RenderGraph/FrameGraph.hpp>
 
@@ -28,13 +27,11 @@ namespace castor3d
 		, SsaoConfig & ssaoConfig
 		, Texture const & depthObj
 		, Texture const & normal
-		, GpInfoUbo const & gpInfoUbo )
+		, CameraUbo const & cameraUbo )
 		: m_device{ device }
 		, m_ssaoConfig{ ssaoConfig }
-		, m_gpInfoUbo{ gpInfoUbo }
 		, m_group{ graph.createPassGroup( "SSAO" ) }
 		, m_size{ makeExtent2D( size ) }
-		, m_cameraUbo{ m_device }
 		, m_linearisePass{ castor::makeUnique< LineariseDepthPass >( *depthObj.resources
 			, m_group
 			, previousPasses
@@ -52,7 +49,7 @@ namespace castor3d
 			, m_size
 			, m_ssaoConfig
 			, m_ssaoConfigUbo
-			, m_gpInfoUbo
+			, cameraUbo
 			, m_linearisePass->getResult()
 			, normal
 			, m_passIndex ) }
@@ -65,7 +62,7 @@ namespace castor3d
 			, m_size
 			, m_ssaoConfig
 			, m_ssaoConfigUbo
-			, m_gpInfoUbo
+			, cameraUbo
 			, castor::Point2i{ 1, 0 }
 			, m_rawAoPass->getResult()
 			, m_rawAoPass->getBentResult()
@@ -79,7 +76,7 @@ namespace castor3d
 			, m_size
 			, m_ssaoConfig
 			, m_ssaoConfigUbo
-			, m_gpInfoUbo
+			, cameraUbo
 			, castor::Point2i{ 0, 1 }
 			, m_horizontalBlur->getResult()
 			, m_horizontalBlur->getBentResult()
