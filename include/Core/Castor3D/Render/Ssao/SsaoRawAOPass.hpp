@@ -32,7 +32,7 @@ namespace castor3d
 		 *\param[in]	size					The render area dimensions.
 		 *\param[in]	config					The SSAO configuration.
 		 *\param[in]	ssaoConfigUbo			The SSAO configuration UBO.
-		 *\param[in]	gpInfoUbo				The GBuffer configuration UBO.
+		 *\param[in]	cameraUbo				The camera configuration UBO.
 		 *\param[in]	linearisedDepthBuffer	The linearised depth buffer.
 		 *\param[in]	normals					The normals buffer.
 		 *\param[in]	passIndex				The frame pass index.
@@ -45,7 +45,7 @@ namespace castor3d
 		 *\param[in]	size					Les dimensions de la zone de rendu.
 		 *\param[in]	config					La configuration du SSAO.
 		 *\param[in]	ssaoConfigUbo			L'UBO de configuration du SSAO.
-		 *\param[in]	gpInfoUbo				L'UBO de configuration du GBuffer.
+		 *\param[in]	cameraUbo				L'UBO de configuration de la caméra.
 		 *\param[in]	linearisedDepthBuffer	Le tampon de profondeur linéarisé.
 		 *\param[in]	normals					Le tampon de normales.
 		 *\param[in]	passIndex				L'index de la passe de frame.
@@ -57,7 +57,7 @@ namespace castor3d
 			, VkExtent2D const & size
 			, SsaoConfig const & config
 			, SsaoConfigUbo & ssaoConfigUbo
-			, GpInfoUbo const & gpInfoUbo
+			, CameraUbo const & cameraUbo
 			, crg::ImageViewIdArray const & linearisedDepthBuffer
 			, Texture const & normals
 			, uint32_t const & passIndex );
@@ -132,7 +132,7 @@ namespace castor3d
 		crg::FramePassGroup & m_graph;
 		SsaoConfig const & m_ssaoConfig;
 		SsaoConfigUbo & m_ssaoConfigUbo;
-		GpInfoUbo const & m_gpInfoUbo;
+		CameraUbo const & m_cameraUbo;
 		VkExtent2D m_size;
 		Texture m_result;
 		Texture m_bentNormals;

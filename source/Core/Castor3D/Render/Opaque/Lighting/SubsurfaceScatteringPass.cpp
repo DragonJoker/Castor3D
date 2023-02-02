@@ -24,7 +24,7 @@
 #include "Castor3D/Shader/Shaders/GlslSssProfile.hpp"
 #include "Castor3D/Shader/Shaders/GlslSssTransmittance.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
-#include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
+#include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
 
 #include <CastorUtils/Design/ResourceCache.hpp>
@@ -54,7 +54,7 @@ namespace castor3d
 			BlurMaterialsUboId,
 			BlurSssProfilesUboId,
 			BlurModelsUboId,
-			BlurGpInfoUboId,
+			BlurCameraUboId,
 			BlurSssUboId,
 			BlurDepthObjImgId,
 			BlurEmsTrnImgId,
@@ -109,7 +109,7 @@ namespace castor3d
 			shader::Materials materials{ writer, passShaders, BlurMaterialsUboId, 0u };
 			shader::SssProfiles sssProfiles{ writer, BlurSssProfilesUboId, 0u };
 			C3D_ModelsData( writer, BlurModelsUboId, 0u );
-			C3D_GpInfo( writer, BlurGpInfoUboId, 0u );
+			C3D_Camera( writer, BlurCameraUboId, 0u );
 			UniformBuffer config{ writer, SubsurfaceScatteringPass::Config, BlurSssUboId, 0u };
 			auto c3d_pixelSize = config.declMember< Vec2 >( SubsurfaceScatteringPass::PixelSize );
 			auto c3d_correction = config.declMember< Float >( SubsurfaceScatteringPass::Correction );
@@ -158,7 +158,7 @@ namespace castor3d
 						, c3d_mapLightDiffuse.lod( vtx_texture, 0.0_f ) );
 					auto depthM = writer.declLocale( "depthM"
 						, depthObj.x() );
-					depthM = c3d_gpInfoData.projToView( utils, vtx_texture, depthM ).z();
+					depthM = c3d_cameraData.projToView( utils, vtx_texture, depthM ).z();
 
 					// Accumulate center sample, multiplying it with its gaussian weight:
 					outColour = colorM;
@@ -211,7 +211,7 @@ namespace castor3d
 						color = c3d_mapLightDiffuse.lod( offset, 0.0_f ).rgb();
 						offset = sdw::fma( vec2( o[i] ), finalStep, vtx_texture );
 						depth = c3d_mapDepthObj.lod( offset, 0.0_f ).x();
-						depth = c3d_gpInfoData.projToView( utils, vtx_texture, depth ).z();
+						depth = c3d_cameraData.projToView( utils, vtx_texture, depth ).z();
 
 						// If the difference in depth is huge, we lerp color back to "colorM":
 						s = min( 0.0125_f * c3d_correction * abs( depthM - depth ), 1.0_f );
@@ -364,13 +364,13 @@ namespace castor3d
 		, RenderDevice const & device
 		, ProgressBar * progress
 		, Scene const & scene
-		, GpInfoUbo const & gpInfoUbo
+		, CameraUbo const & cameraUbo
 		, Texture const & depthObj
 		, OpaquePassResult const & gpResult
 		, LightPassResult const & lpResult )
 		: OwnedBy< Engine >{ *device.renderSystem.getEngine() }
 		, m_device{ device }
-		, m_gpInfoUbo{ gpInfoUbo }
+		, m_cameraUbo{ cameraUbo }
 		, m_gpResult{ gpResult }
 		, m_lpResult{ lpResult }
 		, m_scene{ scene }
@@ -439,8 +439,8 @@ namespace castor3d
 				, uint32_t( sssss::BlurModelsUboId )
 				, 0u
 				, uint32_t( modelBuffer.getSize() ) );
-			m_gpInfoUbo.createPassBinding( blurX
-				, sssss::BlurGpInfoUboId );
+			m_cameraUbo.createPassBinding( blurX
+				, sssss::BlurCameraUboId );
 			m_blurCfgUbo.createPassBinding( blurX
 				, "BlurCfg"
 				, sssss::BlurSssUboId );
@@ -476,8 +476,8 @@ namespace castor3d
 				, uint32_t( sssss::BlurModelsUboId )
 				, 0u
 				, uint32_t( modelBuffer.getSize() ) );
-			m_gpInfoUbo.createPassBinding( blurY
-				, sssss::BlurGpInfoUboId );
+			m_cameraUbo.createPassBinding( blurY
+				, sssss::BlurCameraUboId );
 			m_blurCfgUbo.createPassBinding( blurY
 				, "BlurCfg"
 				, sssss::BlurSssUboId );

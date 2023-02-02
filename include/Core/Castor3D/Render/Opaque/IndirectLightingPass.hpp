@@ -23,7 +23,6 @@ namespace castor3d
 			: uint32_t
 		{
 			eModels,
-			eGpInfo,
 			eCamera,
 			eMaterials,
 			eLpvGridConfig,
@@ -104,7 +103,6 @@ namespace castor3d
 			, Texture const & vctFirstBounce
 			, Texture const & vctSecondaryBounce
 			, CameraUbo const & cameraUbo
-			, GpInfoUbo const & gpInfoUbo
 			, LpvGridConfigUbo const & lpvConfigUbo
 			, LayeredLpvGridConfigUbo const & llpvConfigUbo
 			, VoxelizerUbo const & vctConfigUbo );
@@ -146,7 +144,6 @@ namespace castor3d
 		Texture const & m_vctFirstBounce;
 		Texture const & m_vctSecondaryBounce;
 		CameraUbo const & m_cameraUbo;
-		GpInfoUbo const & m_gpInfoUbo;
 		LpvGridConfigUbo const & m_lpvConfigUbo;
 		LayeredLpvGridConfigUbo const & m_llpvConfigUbo;
 		VoxelizerUbo const & m_vctConfigUbo;

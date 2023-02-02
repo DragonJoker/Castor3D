@@ -137,7 +137,6 @@ namespace castor3d
 				, getOwner()->getCameraUbo()
 				, getOwner()->getSceneUbo()
 				, getOwner()->getRenderTarget().getHdrConfigUbo()
-				, getOwner()->getGpInfoUbo()
 				, getOwner()->getLpvConfigUbo()
 				, getOwner()->getLlpvConfigUbo()
 				, getOwner()->getVctConfigUbo()
@@ -179,7 +178,7 @@ namespace castor3d
 			, getOwner()->getSsaoConfig()
 			, getOwner()->getDepthObj()
 			, getOwner()->getNormal()
-			, getOwner()->getGpInfoUbo() );
+			, getOwner()->getCameraUbo() );
 	}
 
 	uint32_t OpaqueRendering::countInitialisationSteps()

@@ -36,7 +36,6 @@
 #include "Castor3D/Shader/Shaders/GlslSssTransmittance.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
-#include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
@@ -125,7 +124,6 @@ namespace castor3d
 			eModels,
 			eCamera,
 			eScene,
-			eGpInfo,
 			eHdrConfig,
 			eDepthObj,
 			eNmlOcc,
@@ -181,7 +179,6 @@ namespace castor3d
 			C3D_ModelsData( writer, ResolveBind::eModels, 0u );
 			C3D_Camera( writer, ResolveBind::eCamera, 0u );
 			C3D_Scene( writer, ResolveBind::eScene, 0u );
-			C3D_GpInfo( writer, ResolveBind::eGpInfo, 0u );
 			C3D_HdrConfig( writer, ResolveBind::eHdrConfig, 0u );
 
 			auto c3d_mapDepthObj = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapDepthObj", uint32_t( ResolveBind::eDepthObj ), 0u );
@@ -272,10 +269,12 @@ namespace castor3d
 						, depthObj.x() );
 					auto albedo = writer.declLocale( "albedo"
 						, colMtl.rgb() );
+					auto vsPosition = writer.declLocale( "vsPosition"
+						, c3d_cameraData.projToView( utils, vtx_texture, depth ) );
 					auto surface = writer.declLocale( "surface"
 						, shader::Surface{ vec3( in.fragCoord.xy(), depth )
-							, c3d_gpInfoData.projToView( utils, vtx_texture, depth )
-							, c3d_gpInfoData.projToWorld( utils, vtx_texture, depth )
+							, vsPosition
+							, c3d_cameraData.curViewToWorld( vec4( vsPosition, 1.0_f ) ).xyz()
 							, normalize( nmlOcc.rgb() )
 							, vec3( vtx_texture, 0.0_f ) } );
 
@@ -434,7 +433,6 @@ namespace castor3d
 		, crg::ImageViewIdArray result
 		, CameraUbo const & cameraUbo
 		, SceneUbo const & sceneUbo
-		, GpInfoUbo const & gpInfoUbo
 		, HdrConfigUbo const & hdrConfigUbo
 		, LightingModelID lightingModelId
 		, BackgroundModelID backgroundModelId
@@ -445,7 +443,6 @@ namespace castor3d
 		, m_technique{ technique }
 		, m_cameraUbo{ cameraUbo }
 		, m_sceneUbo{ sceneUbo }
-		, m_gpInfoUbo{ gpInfoUbo }
 		, m_hdrConfigUbo{ hdrConfigUbo }
 		, m_ssao{ ssao }
 		, m_depthObj{ depthObj }
@@ -538,8 +535,6 @@ namespace castor3d
 			, uint32_t( dropqrslv::ResolveBind::eCamera ) );
 		m_sceneUbo.createPassBinding( pass
 			, uint32_t( dropqrslv::ResolveBind::eScene ) );
-		m_gpInfoUbo.createPassBinding( pass
-			, uint32_t( dropqrslv::ResolveBind::eGpInfo ) );
 		m_hdrConfigUbo.createPassBinding( pass
 			, uint32_t( dropqrslv::ResolveBind::eHdrConfig ) );
 

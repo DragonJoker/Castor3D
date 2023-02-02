@@ -18,7 +18,6 @@
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
 #include "Castor3D/Shader/ShaderBuffers/SssProfileBuffer.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
-#include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
 
 #include <RenderGraph/FramePassGroup.hpp>
 #include <RenderGraph/RunnablePasses/ImageBlit.hpp>
@@ -40,8 +39,7 @@ namespace castor3d
 		, LightPassResult const & lpResult
 		, crg::ImageViewIdArray const & targetColourResult
 		, crg::ImageViewIdArray const & targetDepthResult
-		, CameraUbo const & cameraUbo
-		, GpInfoUbo const & gpInfoUbo )
+		, CameraUbo const & cameraUbo )
 		: m_device{ device }
 		, m_technique{ technique }
 		, m_depthObj{ depthObj }
@@ -53,7 +51,6 @@ namespace castor3d
 		, m_targetColourResult{ targetColourResult }
 		, m_targetDepthResult{ targetDepthResult }
 		, m_cameraUbo{ cameraUbo }
-		, m_gpInfoUbo{ gpInfoUbo }
 		, m_group{ graph.createPassGroup( "DirectLighting" ) }
 		, m_size{ makeSize( lpResult[LpTexture::eDiffuse].getExtent() ) }
 		, m_lastPass{ &doCreateLightingPass( m_group
@@ -181,8 +178,6 @@ namespace castor3d
 			, uint32_t( LightPassIdx::eModels )
 			, 0u
 			, uint32_t( modelBuffer.getSize() ) );
-		m_gpInfoUbo.createPassBinding( pass
-			, uint32_t( LightPassIdx::eGpInfo ) );
 		m_cameraUbo.createPassBinding( pass
 			, uint32_t( LightPassIdx::eCamera ) );
 		pass.addSampledView( m_depthObj.sampledViewId

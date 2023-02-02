@@ -21,7 +21,6 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 #include "Castor3D/Render/Prepass/PrepassRendering.hpp"
 #include "Castor3D/Render/Transparent/TransparentRendering.hpp"
-#include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
 #include "Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp"
 #include "Castor3D/Shader/Ubos/LpvGridConfigUbo.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
@@ -294,11 +293,6 @@ namespace castor3d
 			return m_sceneUbo;
 		}
 
-		GpInfoUbo const & getGpInfoUbo()const
-		{
-			return m_gpInfoUbo;
-		}
-
 		LpvGridConfigUbo const & getLpvConfigUbo()const
 		{
 			return m_lpvConfigUbo;
@@ -419,7 +413,6 @@ namespace castor3d
 		TexturePtr m_normal;
 		CameraUbo m_cameraUbo;
 		SceneUbo m_sceneUbo;
-		GpInfoUbo m_gpInfoUbo;
 		LpvGridConfigUbo m_lpvConfigUbo;
 		LayeredLpvGridConfigUbo m_llpvConfigUbo;
 		VoxelizerUbo m_vctConfigUbo;

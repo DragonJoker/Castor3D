@@ -25,9 +25,13 @@ namespace castor3d
 				, sdw::Mat4x4Field< "projection" >
 				, sdw::Mat4x4Field< "invProjection" >
 				, sdw::Mat4x4Field< "curView" >
+				, sdw::Mat4x4Field< "invCurView" >
 				, sdw::Mat4x4Field< "prvView" >
+				, sdw::Mat4x4Field< "invPrvView" >
 				, sdw::Mat4x4Field< "curViewProj" >
+				, sdw::Mat4x4Field< "invCurViewProj" >
 				, sdw::Mat4x4Field< "prvViewProj" >
+				, sdw::Mat4x4Field< "invPrvViewProj" >
 				, sdw::U32Vec2Field< "renderSize" >
 				, sdw::Vec2Field< "jitter" >
 				, sdw::Vec3Field< "position" >
@@ -62,6 +66,9 @@ namespace castor3d
 			C3D_API sdw::Vec3 projToView( Utils & utils
 				, sdw::Vec2 const & texCoord
 				, sdw::Float const & depth )const;
+			C3D_API sdw::Vec3 curViewToWorld( Utils & utils
+				, sdw::Vec2 const & texCoord
+				, sdw::Float const & depth )const;
 			C3D_API sdw::Vec4 curProjToWorld( sdw::Vec4 const & position )const;
 			C3D_API sdw::Vec3 curProjToWorld( Utils & utils
 				, sdw::Vec2 const & texCoord
@@ -81,6 +88,10 @@ namespace castor3d
 			C3D_API sdw::Vec3 getPosToCamera( sdw::Vec3 const & position )const;
 			C3D_API sdw::Vec3 getCameraToPos( sdw::Vec3 const & position )const;
 			C3D_API sdw::Vec2 depthPlanes()const;
+			C3D_API sdw::Vec2 calcTexCoord( Utils & utils
+				, sdw::Vec2 const & fragCoord )const;
+			C3D_API sdw::Vec3 readNormal( sdw::Vec3 const & input )const;
+			C3D_API sdw::Vec3 writeNormal( sdw::Vec3 const & input )const;
 
 			auto renderSize()const { return getMember< "renderSize" >(); }
 			auto nearPlane()const { return getMember< "nearPlane" >(); }
@@ -92,9 +103,13 @@ namespace castor3d
 			auto projection()const { return getMember< "projection" >(); }
 			auto invProjection()const { return getMember< "invProjection" >(); }
 			auto curView()const { return getMember< "curView" >(); }
+			auto invCurView()const { return getMember< "invCurView" >(); }
 			auto prvView()const { return getMember< "prvView" >(); }
+			auto invPrvView()const { return getMember< "invPrvView" >(); }
 			auto curViewProj()const { return getMember< "curViewProj" >(); }
+			auto invCurViewProj()const { return getMember< "invCurViewProj" >(); }
 			auto prvViewProj()const { return getMember< "prvViewProj" >(); }
+			auto invPrvViewProj()const { return getMember< "invPrvViewProj" >(); }
 			auto jitter()const { return getMember< "jitter" >(); }
 			auto frustumPlanes()const { return getMember< "frustumPlanes" >(); }
 
@@ -130,10 +145,30 @@ namespace castor3d
 		 *\~english
 		 *\brief		Updates the UBO from given values.
 		 *\param[in]	camera		The camera holding the data.
+		 *\param[in]	view		The new view matrix.
+		 *\param[in]	projection	The new projection matrix.
+		 *\param[in]	size		The render size.
+		 *\param[in]	jitter		The jittering value.
+		 *\~french
+		 *\brief		Met à jour l'UBO avec les valeurs données.
+		 *\param[in]	camera		La caméra contenant les données.
+		 *\param[in]	view		La nouvelle matrice de vue.
+		 *\param[in]	projection	La nouvelle matrice de projection.
+		 *\param[in]	size		Les dimensions du rendu.
+		 *\param[in]	jitter		La valeur de jittering.
+		 */
+		C3D_API Configuration & cpuUpdate( Camera const & camera
+			, castor::Matrix4x4f const & view
+			, castor::Matrix4x4f const & projection
+			, castor::Size const & size
+			, castor::Point2f const & jitter = castor::Point2f{} );
+		/**
+		 *\~english
+		 *\brief		Updates the UBO from given values.
+		 *\param[in]	camera		The camera holding the data.
 		 *\param[in]	safeBanded	\p true to use safebanded size.
 		 *\param[in]	view		The new view matrix.
 		 *\param[in]	projection	The new projection matrix.
-		 *\param[in]	frustum		The frustum, from which planes are copied.
 		 *\param[in]	jitter		The jittering value.
 		 *\~french
 		 *\brief		Met à jour l'UBO avec les valeurs données.
@@ -141,7 +176,6 @@ namespace castor3d
 		 *\param[in]	safeBanded	\p true pour utiliser la taille avec les safebands.
 		 *\param[in]	view		La nouvelle matrice de vue.
 		 *\param[in]	projection	La nouvelle matrice de projection.
-		 *\param[in]	frustum		Le frustum depuis lequel les plans sont copiés.
 		 *\param[in]	jitter		La valeur de jittering.
 		 */
 		C3D_API Configuration & cpuUpdate( Camera const & camera
@@ -152,15 +186,13 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
-		 *\param[in]	view		The new view matrix.
-		 *\param[in]	projection	The new projection matrix.
-		 *\param[in]	frustum		The frustum, from which planes are copied.
+		 *\param[in]	camera		The camera holding the data.
+		 *\param[in]	safeBanded	\p true to use safebanded size and projection matrix.
 		 *\param[in]	jitter		The jittering value.
 		 *\~french
 		 *\brief		Met à jour l'UBO avec les valeurs données.
-		 *\param[in]	view		La nouvelle matrice de vue.
-		 *\param[in]	projection	La nouvelle matrice de projection.
-		 *\param[in]	frustum		Le frustum depuis lequel les plans sont copiés.
+		 *\param[in]	camera		La caméra contenant les données.
+		 *\param[in]	safeBanded	\p true pour utiliser la taille et la matrice de projection avec les safebands.
 		 *\param[in]	jitter		La valeur de jittering.
 		 */
 		C3D_API Configuration & cpuUpdate( Camera const & camera
@@ -169,15 +201,35 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
+		 *\param[in]	camera		The camera holding the data.
+		 *\param[in]	safeBanded	\p true to use safebanded projection matrix.
+		 *\param[in]	size		The render size.
+		 *\param[in]	jitter		The jittering value.
+		 *\~french
+		 *\brief		Met à jour l'UBO avec les valeurs données.
+		 *\param[in]	camera		La caméra contenant les données.
+		 *\param[in]	safeBanded	\p true pour utiliser la matrice de projection avec les safebands.
+		 *\param[in]	size		Les dimensions du rendu.
+		 *\param[in]	jitter		La valeur de jittering.
+		 */
+		C3D_API Configuration & cpuUpdate( Camera const & camera
+			, bool safeBanded
+			, castor::Size const & size
+			, castor::Point2f const & jitter = castor::Point2f{} );
+		/**
+		 *\~english
+		 *\brief		Updates the UBO from given values.
 		 *\param[in]	view		The new view matrix.
 		 *\param[in]	projection	The new projection matrix.
 		 *\param[in]	frustum		The frustum, from which planes are copied.
+		 *\param[in]	size		The render size.
 		 *\param[in]	jitter		The jittering value.
 		 *\~french
 		 *\brief		Met à jour l'UBO avec les valeurs données.
 		 *\param[in]	view		La nouvelle matrice de vue.
 		 *\param[in]	projection	La nouvelle matrice de projection.
 		 *\param[in]	frustum		Le frustum depuis lequel les plans sont copiés.
+		 *\param[in]	size		Les dimensions du rendu.
 		 *\param[in]	jitter		La valeur de jittering.
 		 */
 		C3D_API Configuration & cpuUpdate( castor::Matrix4x4f const & view

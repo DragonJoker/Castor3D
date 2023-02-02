@@ -25,7 +25,6 @@
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
-#include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
 #include "Castor3D/Shader/Ubos/LpvGridConfigUbo.hpp"
 #include "Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
@@ -69,7 +68,6 @@ namespace castor3d
 
 			// Shader inputs
 			C3D_ModelsData( writer, IndirectLightingPass::eModels, 0u );
-			C3D_GpInfo( writer, IndirectLightingPass::eGpInfo, 0u );
 			C3D_Camera( writer, IndirectLightingPass::eCamera, 0u );
 			auto index = uint32_t( IndirectLightingPass::eCount );
 			shader::PassShaders passShaders{ renderSystem.getEngine()->getPassComponentsRegister()
@@ -106,7 +104,7 @@ namespace castor3d
 				, FragmentOut out )
 				{
 					auto texCoord = writer.declLocale( "texCoord"
-						, c3d_gpInfoData.calcTexCoord( utils
+						, c3d_cameraData.calcTexCoord( utils
 							, in.fragCoord.xy() ) );
 					auto depthObj = writer.declLocale( "depthObj"
 						, c3d_mapDepthObj.lod( texCoord, 0.0_f ) );
@@ -134,9 +132,9 @@ namespace castor3d
 					auto depth = writer.declLocale( "depth"
 						, depthObj.x() );
 					auto vsPosition = writer.declLocale( "vsPosition"
-						, c3d_gpInfoData.projToView( utils, texCoord, depth ) );
+						, c3d_cameraData.projToView( utils, texCoord, depth ) );
 					auto wsPosition = writer.declLocale( "wsPosition"
-						, c3d_gpInfoData.projToWorld( utils, texCoord, depth ) );
+						, c3d_cameraData.curProjToWorld( utils, texCoord, depth ) );
 
 					IF( writer, material.lighting != 0_u )
 					{
@@ -297,7 +295,6 @@ namespace castor3d
 		, Texture const & vctFirstBounce
 		, Texture const & vctSecondaryBounce
 		, CameraUbo const & cameraUbo
-		, GpInfoUbo const & gpInfoUbo
 		, LpvGridConfigUbo const & lpvConfigUbo
 		, LayeredLpvGridConfigUbo const & llpvConfigUbo
 		, VoxelizerUbo const & vctConfigUbo )
@@ -312,7 +309,6 @@ namespace castor3d
 		, m_vctFirstBounce{ vctFirstBounce }
 		, m_vctSecondaryBounce{ vctSecondaryBounce }
 		, m_cameraUbo{ cameraUbo }
-		, m_gpInfoUbo{ gpInfoUbo }
 		, m_lpvConfigUbo{ lpvConfigUbo }
 		, m_llpvConfigUbo{ llpvConfigUbo }
 		, m_vctConfigUbo{ vctConfigUbo }
@@ -383,8 +379,6 @@ namespace castor3d
 			, uint32_t( IndirectLightingPass::eModels )
 			, 0u
 			, uint32_t( modelBuffer.getSize() ) );
-		m_gpInfoUbo.createPassBinding( pass
-			, uint32_t( IndirectLightingPass::eGpInfo ) );
 		m_cameraUbo.createPassBinding( pass
 			, uint32_t( IndirectLightingPass::eCamera ) );
 		engine.getMaterialCache().getPassBuffer().createPassBinding( pass

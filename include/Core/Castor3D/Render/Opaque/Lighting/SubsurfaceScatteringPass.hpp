@@ -30,7 +30,7 @@ namespace castor3d
 		 *\param[in]	device			The GPU device.
 		 *\param[in]	progress		The optional progress bar.
 		 *\param[in]	scene			The scene.
-		 *\param[in]	gpInfoUbo		The geometry pass UBO.
+		 *\param[in]	cameraUbo		The camera UBO.
 		 *\param[in]	depthObj		The depths and objects image.
 		 *\param[in]	gpResult		The geometry pass result.
 		 *\param[in]	lpResult		The light pass result.
@@ -41,7 +41,7 @@ namespace castor3d
 		 *\param[in]	device			Le device GPU.
 		 *\param[in]	progress		La barre de progression optionnelle.
 		 *\param[in]	scene			La scène.
-		 *\param[in]	gpInfoUbo		L'UBO de la passe géométrique.
+		 *\param[in]	cameraUbo		L'UBO de la caméra.
 		 *\param[in]	depthObj		La texture de profondeurs et d'objets.
 		 *\param[in]	gpResult		Le résultat de la geometry pass.
 		 *\param[in]	lpResult		Le résultat de la light pass.
@@ -51,7 +51,7 @@ namespace castor3d
 			, RenderDevice const & device
 			, ProgressBar * progress
 			, Scene const & scene
-			, GpInfoUbo const & gpInfoUbo
+			, CameraUbo const & cameraUbo
 			, Texture const & depthObj
 			, OpaquePassResult const & gpResult
 			, LightPassResult const & lpResult );
@@ -106,7 +106,7 @@ namespace castor3d
 
 	private:
 		RenderDevice const & m_device;
-		GpInfoUbo const & m_gpInfoUbo;
+		CameraUbo const & m_cameraUbo;
 		OpaquePassResult const & m_gpResult;
 		LightPassResult const & m_lpResult;
 		Scene const & m_scene;

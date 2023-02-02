@@ -71,8 +71,7 @@ namespace castor3d
 				, getOwner()->getSize()
 				, getOwner()->getCameraUbo()
 				, getOwner()->getSceneUbo()
-				, getOwner()->getRenderTarget().getHdrConfigUbo()
-				, getOwner()->getGpInfoUbo() )
+				, getOwner()->getRenderTarget().getHdrConfigUbo() )
 			: nullptr ) }
 	{
 		if ( m_transparentPassResult )

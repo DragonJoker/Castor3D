@@ -13,7 +13,7 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Shader/Program.hpp"
-#include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
+#include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/SsaoConfigUbo.hpp"
 
 #include <CastorUtils/Design/ResourceCache.hpp>
@@ -51,7 +51,7 @@ namespace castor3d
 		enum Idx
 		{
 			SsaoCfgUboIdx,
-			GpInfoUboIdx,
+			CameraUboIdx,
 			DepthMapIdx,
 			NormalMapIdx,
 		};
@@ -80,7 +80,7 @@ namespace castor3d
 			//////////////////////////////////////////////////
 
 			C3D_SsaoConfig( writer, SsaoCfgUboIdx, 0u );
-			C3D_GpInfo( writer, GpInfoUboIdx, 0u );
+			C3D_Camera( writer, CameraUboIdx, 0u );
 			// Negative, "linear" values in world-space units
 			auto c3d_mapDepth = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapDepth", DepthMapIdx, 0u );
 
@@ -382,7 +382,7 @@ namespace castor3d
 					if ( useNormalsBuffer )
 					{
 						normal = c3d_mapNormal.fetch( ivec2( in.fragCoord.xy() ), 0_i ).xyz();
-						normal = normalize( c3d_gpInfoData.readNormal( normal ) );
+						normal = normalize( c3d_cameraData.readNormal( normal ) );
 					}
 					else
 					{
@@ -399,7 +399,7 @@ namespace castor3d
 							// except at depth discontinuities, where they will be large and lead
 							// to 1-pixel false occlusions because they are not reliable
 							visibility = 1.0_f;
-							outBentNormal.rgb() = normalize( c3d_gpInfoData.writeNormal( normal ) );
+							outBentNormal.rgb() = normalize( c3d_cameraData.writeNormal( normal ) );
 							outBentNormal.a() = 0.0f;
 							writer.returnStmt();
 						}
@@ -420,7 +420,7 @@ namespace castor3d
 					{
 						// There is no way to compute AO at this radius
 						visibility = 1.0_f;
-						outBentNormal.rgb() = c3d_gpInfoData.writeNormal( normal );
+						outBentNormal.rgb() = c3d_cameraData.writeNormal( normal );
 						outBentNormal.a() = 0.0f;
 						writer.returnStmt();
 					}
@@ -459,7 +459,7 @@ namespace castor3d
 					ROF;
 
 					bentNormal = normalize( bentNormal )/* * 0.5_f + 0.5_f*/;
-					outBentNormal.xyz() = c3d_gpInfoData.writeNormal( bentNormal );
+					outBentNormal.xyz() = c3d_cameraData.writeNormal( bentNormal );
 
 					auto A = writer.declLocale< Float >( "A" );
 
@@ -573,7 +573,7 @@ namespace castor3d
 		, VkExtent2D const & size
 		, SsaoConfig const & config
 		, SsaoConfigUbo & ssaoConfigUbo
-		, GpInfoUbo const & gpInfoUbo
+		, CameraUbo const & cameraUbo
 		, crg::ImageViewIdArray const & linearisedDepthBufferViews
 		, Texture const & normals
 		, uint32_t const & passIndex )
@@ -581,7 +581,7 @@ namespace castor3d
 		, m_graph{ graph }
 		, m_ssaoConfig{ config }
 		, m_ssaoConfigUbo{ ssaoConfigUbo }
-		, m_gpInfoUbo{ gpInfoUbo }
+		, m_cameraUbo{ cameraUbo }
 		, m_size{ size }
 		, m_result{ ssaoraw::doCreateTexture( *normals.resources
 			, m_device
@@ -623,7 +623,7 @@ namespace castor3d
 		m_lastPass = &pass;
 		pass.addDependency( previousPass );
 		m_ssaoConfigUbo.createPassBinding( pass, ssaoraw::SsaoCfgUboIdx );
-		m_gpInfoUbo.createPassBinding( pass, ssaoraw::GpInfoUboIdx );
+		m_cameraUbo.createPassBinding( pass, ssaoraw::CameraUboIdx );
 		pass.addSampledView( pass.mergeViews( linearisedDepthBufferViews ), ssaoraw::DepthMapIdx );
 		pass.addSampledView( normals.sampledViewId, ssaoraw::NormalMapIdx );
 		pass.addOutputColourView( m_result.targetViewId, opaqueWhiteClearColor );

@@ -12,7 +12,7 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Ssao/SsaoConfig.hpp"
 #include "Castor3D/Shader/Program.hpp"
-#include "Castor3D/Shader/Ubos/GpInfoUbo.hpp"
+#include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/SsaoConfigUbo.hpp"
 
 #include <CastorUtils/Design/ResourceCache.hpp>
@@ -35,7 +35,7 @@ namespace castor3d
 		enum Idx : uint32_t
 		{
 			SsaoCfgUboIdx = 0u,
-			GpInfoUboIdx,
+			CameraUboIdx,
 			BlurCfgUboIdx,
 			NmlImgIdx,
 			InpImgIdx,
@@ -64,7 +64,7 @@ namespace castor3d
 			FragmentWriter writer;
 
 			C3D_SsaoConfig( writer, SsaoCfgUboIdx, 0u );
-			C3D_GpInfo( writer, GpInfoUboIdx, 0u );
+			C3D_Camera( writer, CameraUboIdx, 0u );
 			UniformBuffer configuration{ writer, "BlurConfiguration", BlurCfgUboIdx, 0u };
 			/** (1, 0) or (0, 1)*/
 			auto c3d_axis = configuration.declMember< IVec2 >( "c3d_axis" );
@@ -258,7 +258,7 @@ namespace castor3d
 					auto sum = writer.declLocale( "sum"
 						, temp.r() );
 					auto bentNormal = writer.declLocale( "bentNormal"
-						, c3d_gpInfoData.readNormal( c3d_mapBentInput.fetch( ssCenter, 0_i ).xyz() ) );
+						, c3d_cameraData.readNormal( c3d_mapBentInput.fetch( ssCenter, 0_i ).xyz() ) );
 
 					keyPassThrough = temp.g();
 					auto key = writer.declLocale( "key"
@@ -268,14 +268,14 @@ namespace castor3d
 
 					if ( useNormalsBuffer )
 					{
-						normal = normalize( c3d_gpInfoData.readNormal( c3d_mapNormal.fetch( ssCenter, 0_i ).xyz() ) );
+						normal = normalize( c3d_cameraData.readNormal( c3d_mapNormal.fetch( ssCenter, 0_i ).xyz() ) );
 					}
 
 					IF( writer, key == 1.0_f )
 					{
 						// Sky pixel (if you aren't using depth keying, disable this test)
 						result = sum;
-						outBentNormal = c3d_gpInfoData.writeNormal( bentNormal );
+						outBentNormal = c3d_cameraData.writeNormal( bentNormal );
 						writer.returnStmt();
 					}
 					FI;
@@ -335,7 +335,7 @@ namespace castor3d
 						, 0.0001_f );
 					result = sum / ( totalWeight + epsilon );
 					bentNormal /= ( totalWeight + epsilon );
-					outBentNormal = c3d_gpInfoData.writeNormal( bentNormal );
+					outBentNormal = c3d_cameraData.writeNormal( bentNormal );
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 
@@ -450,7 +450,7 @@ namespace castor3d
 		, VkExtent2D const & size
 		, SsaoConfig const & config
 		, SsaoConfigUbo & ssaoConfigUbo
-		, GpInfoUbo const & gpInfoUbo
+		, CameraUbo const & cameraUbo
 		, castor::Point2i const & axis
 		, Texture const & input
 		, Texture const & bentInput
@@ -459,7 +459,7 @@ namespace castor3d
 		: m_device{ device }
 		, m_graph{ graph }
 		, m_ssaoConfigUbo{ ssaoConfigUbo }
-		, m_gpInfoUbo{ gpInfoUbo }
+		, m_cameraUbo{ cameraUbo }
 		, m_bentInput{ bentInput }
 		, m_config{ config }
 		, m_size{ size }
@@ -498,7 +498,7 @@ namespace castor3d
 		m_lastPass = &pass;
 		pass.addDependency( previousPass );
 		m_ssaoConfigUbo.createPassBinding( pass, ssaoblr::SsaoCfgUboIdx );
-		m_gpInfoUbo.createPassBinding( pass, ssaoblr::GpInfoUboIdx );
+		m_cameraUbo.createPassBinding( pass, ssaoblr::CameraUboIdx );
 		m_configurationUbo.createPassBinding( pass, "SsaoBlurCfg", ssaoblr::BlurCfgUboIdx );
 		pass.addSampledView( normals.sampledViewId, ssaoblr::NmlImgIdx );
 		pass.addSampledView( input.sampledViewId, ssaoblr::InpImgIdx );
