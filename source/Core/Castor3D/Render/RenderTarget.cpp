@@ -691,7 +691,15 @@ namespace castor3d
 		{
 			m_camera = &camera;
 			m_camera->resize( m_size );
-			m_culler = castor::makeUniqueDerived< SceneCuller, FrustumCuller >( *getScene(), *getCamera() );
+
+			if ( m_culler )
+			{
+				m_culler->resetCamera( getCamera() );
+			}
+			else
+			{
+				m_culler = castor::makeUniqueDerived< SceneCuller, FrustumCuller >( *getScene(), *getCamera() );
+			}
 		}
 	}
 

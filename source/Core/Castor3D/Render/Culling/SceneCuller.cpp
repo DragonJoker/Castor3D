@@ -197,6 +197,19 @@ namespace castor3d
 		}
 	}
 
+	void SceneCuller::resetCamera( Camera * camera )
+	{
+		if ( m_camera != camera )
+		{
+			m_camera = camera;
+			m_first = true;
+			m_anyChanged = true;
+			m_culledChanged = true;
+			m_culledSubmeshes.clear();
+			m_culledBillboards.clear();
+		}
+	}
+
 	void SceneCuller::doInitialiseCulled()
 	{
 #if C3D_DebugTimers
