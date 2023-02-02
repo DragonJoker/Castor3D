@@ -37,6 +37,7 @@ namespace castor3d
 		C3D_API void update( CpuUpdater & updater );
 		C3D_API void removeCulled( SubmeshRenderNode const & node );
 		C3D_API void removeCulled( BillboardRenderNode const & node );
+		C3D_API void resetCamera( Camera * camera );
 		/**
 		*\~english
 		*name
