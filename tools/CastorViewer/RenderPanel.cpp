@@ -265,13 +265,29 @@ namespace CastorViewer
 
 		if ( camera && scene )
 		{
-			//auto & shadowMaps = window->getRenderTarget()->getTechnique()->getShadowMaps();
+			auto & cache = scene->getCameraCache();
+			auto lock = castor::makeUniqueLock( cache );
+			auto it = std::find_if( cache.begin()
+				, cache.end()
+				, [camera]( auto const & lookup )
+				{
+					return camera->getName() == lookup.first;
+				} );
 
-			//if ( !shadowMaps.empty() )
-			//{
-			//	auto it = shadowMaps.begin();
-			//	m_currentNode = it->first->getParent();
-			//}
+			if ( it != cache.end() )
+			{
+				++it;
+			}
+
+			if ( it == cache.end() )
+			{
+				it = cache.begin();
+			}
+
+			m_camera = it->second.get();
+			m_currentNode = camera->getParent();
+			m_currentState = &doAddNodeState( m_currentNode, true );
+			m_renderWindow->setCamera( *m_camera );
 		}
 	}
 
