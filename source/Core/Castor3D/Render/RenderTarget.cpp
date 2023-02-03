@@ -531,6 +531,7 @@ namespace castor3d
 #endif
 			getEngine()->unregisterTimer( getName() + cuT( "/Overlays/Overlays" ), *m_overlaysTimer );
 			m_overlaysTimer.reset();
+			m_intermediates.clear();
 			m_runnable.reset();
 
 			for ( auto effect : m_srgbPostEffects )
@@ -832,46 +833,6 @@ namespace castor3d
 		m_techniqueParameters.add( parameters );
 	}
 
-	void RenderTarget::listIntermediateViews( IntermediateViewArray & result )const
-	{
-		result.emplace_back( "Target Result"
-			, m_combined
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-		result.emplace_back( "Target SRGB Colour"
-			, *m_srgbObjects.front()
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-			, TextureFactors{}.invert( true ) );
-		result.emplace_back( "Target HDR Colour"
-			, *m_hdrObjects.front()
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-			, TextureFactors{}.invert( true ) );
-		result.emplace_back( "Target Overlays"
-			, m_overlays
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-			, TextureFactors{ { 0.5f, 0.5f, 0.5f }, { 0.5f, 0.5f, 0.5f } }.invert( true ) );
-		result.emplace_back( "Target Velocity"
-			, *m_velocity
-			, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL
-			, TextureFactors{}.invert( true ) );
-
-		for ( auto & postEffect : m_hdrPostEffects )
-		{
-			rendtgt::IntermediatesLister::submit( *getScene(), *postEffect, result );
-		}
-
-		for ( auto & postEffect : m_srgbPostEffects )
-		{
-			rendtgt::IntermediatesLister::submit( *getScene(), *postEffect, result );
-		}
-
-		if ( m_renderTechnique )
-		{
-			rendtgt::IntermediatesLister::submit( *getScene() , *m_renderTechnique, result );
-		}
-
-		rendtgt::IntermediatesLister::submit( *getScene(), *getScene()->getBackground(), result );
-	}
-
 	void RenderTarget::resetSemaphore()
 	{
 		m_signalFinished.clear();
@@ -963,11 +924,13 @@ namespace castor3d
 			m_combinePassSource = srgbSource;
 			m_combinePass = &doCreateCombinePass( progress
 				, crg::ImageViewIdArray{ srgbSource->sampledViewId, srgbTarget->sampledViewId } );
-			stepProgressBar( progress, "Compiling render graph" );
 			m_combinePass->addDependency( *previousPass );
 
+			stepProgressBar( progress, "Compiling render graph" );
 			m_runnable = m_graph.compile( device.makeContext() );
 			printGraph( *m_runnable );
+
+			doListIntermediateViews( m_intermediates );
 
 			m_overlays.create();
 			m_velocity->create();
@@ -1239,5 +1202,45 @@ namespace castor3d
 			, queue );
 
 		return m_signalFinished;
+	}
+
+	void RenderTarget::doListIntermediateViews( IntermediateViewArray & result )const
+	{
+		result.emplace_back( "Target Result"
+			, m_combined
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+		result.emplace_back( "Target SRGB Colour"
+			, *m_srgbObjects.front()
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, TextureFactors{}.invert( true ) );
+		result.emplace_back( "Target HDR Colour"
+			, *m_hdrObjects.front()
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, TextureFactors{}.invert( true ) );
+		result.emplace_back( "Target Overlays"
+			, m_overlays
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+			, TextureFactors{ { 0.5f, 0.5f, 0.5f }, { 0.5f, 0.5f, 0.5f } }.invert( true ) );
+		result.emplace_back( "Target Velocity"
+			, *m_velocity
+			, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL
+			, TextureFactors{}.invert( true ) );
+
+		for ( auto & postEffect : m_hdrPostEffects )
+		{
+			rendtgt::IntermediatesLister::submit( *getScene(), *postEffect, result );
+		}
+
+		for ( auto & postEffect : m_srgbPostEffects )
+		{
+			rendtgt::IntermediatesLister::submit( *getScene(), *postEffect, result );
+		}
+
+		if ( m_renderTechnique )
+		{
+			rendtgt::IntermediatesLister::submit( *getScene(), *m_renderTechnique, result );
+		}
+
+		rendtgt::IntermediatesLister::submit( *getScene(), *getScene()->getBackground(), result );
 	}
 }

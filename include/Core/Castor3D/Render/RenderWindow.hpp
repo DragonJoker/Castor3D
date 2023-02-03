@@ -35,11 +35,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	struct DebugConfig
-	{
-		uint32_t debugIndex{ 0u };
-	};
-
 	struct RenderWindowDesc
 	{
 		castor::String name;
@@ -376,13 +371,6 @@ namespace castor3d
 		C3D_API PickNodeType pick( castor::Position const & position );
 		/**
 		 *\~english
-		 *\return		The intermediate views used by this render window.
-		 *\~french
-		 *\return		Les vues intermédiaires utilisées par cette render window.
-		 */
-		C3D_API IntermediateViewArray const & listIntermediateViews()const;
-		/**
-		 *\~english
 		 *\brief		Destroys the loading scene.
 		 *\~french
 		 *\brief		Détruit la loading scene.
@@ -453,11 +441,6 @@ namespace castor3d
 		{
 			CU_Require( m_surface );
 			return *m_surface;
-		}
-
-		DebugConfig & getDebugConfig()
-		{
-			return m_debugConfig;
 		}
 
 		ProgressBar & getProgressBar()
@@ -588,10 +571,8 @@ namespace castor3d
 		castor::Position m_mousePosition;
 		Texture3DTo2DUPtr m_texture3Dto2D;
 		IntermediateView m_tex3DTo2DIntermediate;
-		IntermediateViewArray m_intermediates;
 		IntermediateViewArray m_intermediateBarrierViews;
 		IntermediateViewArray m_intermediateSampledViews;
-		DebugConfig m_debugConfig;
 		UniformBufferOffsetT< Configuration > m_configUbo;
 		ProgressBarUPtr m_progressBar;
 		LoadingScreenUPtr m_loadingScreen;

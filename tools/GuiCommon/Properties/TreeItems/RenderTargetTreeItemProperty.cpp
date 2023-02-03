@@ -87,6 +87,21 @@ namespace GuiCommon
 
 		addProperty( grid, PROPERTY_CATEGORY_RENDER_TARGET + TARGETS[size_t( target.getTargetType() )] );
 
+#if C3D_DebugQuads
+		static wxString PROPERTY_RENDER_WINDOW_DEBUG_VIEW = _( "Debug View" );
+
+		auto & intermediates = target.getIntermediateViews();
+		auto & debugConfig = target.getDebugConfig();
+		wxArrayString debugChoices;
+
+		for ( auto & intermediate : intermediates )
+		{
+			debugChoices.Add( make_wxString( intermediate.name ) );
+		}
+
+		addPropertyET( grid, PROPERTY_RENDER_WINDOW_DEBUG_VIEW, debugChoices, &debugConfig.debugIndex );
+#endif
+
 		for ( auto & renderPass : target.getCustomRenderPasses() )
 		{
 			if ( renderPass->isPassEnabled() )
@@ -96,7 +111,6 @@ namespace GuiCommon
 				fillRenderPassConfiguration( grid, *this, *renderPass );
 			}
 		}
-
 
 		setPrefix( {} );
 	}
