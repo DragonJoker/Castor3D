@@ -574,8 +574,10 @@ namespace castor3d
 				config.multiply = castor::Point4f{ 1.0f, 1.0f, 1.0f, 1.0f };
 				config.add = castor::Point4f{};
 #else
-				updater.combineIndex = m_debugConfig.debugIndex;
-				auto & intermediate = m_intermediates[m_debugConfig.debugIndex];
+				auto & intermediates = target->getIntermediateViews();
+				auto & debugConfig = target->getDebugConfig();
+				updater.combineIndex = debugConfig.debugIndex;
+				auto & intermediate = intermediates[debugConfig.debugIndex];
 
 				if ( intermediate.factors.grid )
 				{
@@ -891,11 +893,6 @@ namespace castor3d
 		return result;
 
 #endif
-	}
-
-	IntermediateViewArray const & RenderWindow::listIntermediateViews()const
-	{
-		return m_intermediates;
 	}
 
 	void RenderWindow::destroyLoadingScreen()
@@ -1291,7 +1288,8 @@ namespace castor3d
 
 #endif
 
-		m_renderQuad->initialisePass( m_debugConfig.debugIndex );
+		auto & debugConfig = target->getDebugConfig();
+		m_renderQuad->initialisePass( debugConfig.debugIndex );
 	}
 
 	void RenderWindow::doDestroyRenderQuad()
@@ -1305,7 +1303,10 @@ namespace castor3d
 #if C3D_DebugPicking || C3D_DebugBackgroundPicking
 		passIndex = 0u;
 #else
-		auto & intermediate = m_intermediates[passIndex];
+		auto target = getRenderTarget();
+		CU_Require( target );
+		auto & intermediates = target->getIntermediateViews();
+		auto & intermediate = intermediates[passIndex];
 		auto & intermediateBarrierView = m_intermediateBarrierViews[passIndex];
 		auto & context = m_device.makeContext();
 #endif
@@ -1381,7 +1382,7 @@ namespace castor3d
 #if C3D_DebugPicking || C3D_DebugBackgroundPicking
 		m_commandBuffers.resize( 1u );
 #else
-		m_commandBuffers.resize( m_intermediates.size() );
+		m_commandBuffers.resize( target->getIntermediateViews().size() );
 #endif
 
 		for ( auto & commandBuffers : m_commandBuffers )
@@ -1405,8 +1406,6 @@ namespace castor3d
 			return;
 		}
 
-		target->listIntermediateViews( m_intermediates );
-
 		VkExtent2D extent{ m_size.getWidth(), m_size.getHeight() };
 		m_texture3Dto2D = castor::makeUnique< Texture3DTo2D >( m_device
 			, m_resources
@@ -1417,18 +1416,18 @@ namespace castor3d
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, castor3d::TextureFactors{}.invert( true ) };
 #if C3D_DebugQuads
-		auto intermediates = m_intermediates;
+		auto intermediates = target->getIntermediateViews();
 #else
-		IntermediateViewArray intermediates{ m_intermediates[0] };
+		IntermediateViewArray intermediates{ target->getIntermediateViews()[0] };
 #endif
 		m_texture3Dto2D->createPasses( queueData, intermediates );
 
 		m_intermediateBarrierViews = rendwndw::doCreateBarrierViews( m_device
 			, m_tex3DTo2DIntermediate
-			, m_intermediates );
+			, intermediates );
 		m_intermediateSampledViews = rendwndw::doCreateSampledViews( m_device
 			, m_tex3DTo2DIntermediate
-			, m_intermediates );
+			, intermediates );
 #endif
 	}
 
@@ -1438,7 +1437,6 @@ namespace castor3d
 		m_texture3Dto2D.reset();
 		m_intermediateSampledViews.clear();
 		m_intermediateBarrierViews.clear();
-		m_intermediates.clear();
 #endif
 	}
 
@@ -1466,7 +1464,8 @@ namespace castor3d
 #if C3D_DebugPicking || C3D_DebugBackgroundPicking
 		m_transferCommands.resize( 1u );
 #else
-		m_transferCommands.resize( m_intermediates.size() );
+		auto & intermediates = target->getIntermediateViews();
+		m_transferCommands.resize( intermediates.size() );
 #endif
 	}
 
@@ -1622,7 +1621,10 @@ namespace castor3d
 
 		transferCommands = { getDevice(), queueData, "Snapshot" };
 #if !C3D_DebugPicking && !C3D_DebugBackgroundPicking
-		auto & intermediate = m_intermediates[index];
+		auto target = getRenderTarget();
+		CU_Require( target );
+		auto intermediates = target->getIntermediateViews();
+		auto & intermediate = intermediates[index];
 		auto & intermediateBarrierView = m_intermediateBarrierViews[index];
 		auto & intermediateSampledView = m_intermediateSampledViews[index];
 #endif
@@ -1749,10 +1751,12 @@ namespace castor3d
 #if C3D_DebugPicking || C3D_DebugBackgroundPicking
 				m_savedFormat = m_picking->getImageView().data->info.format;
 #else
-				m_savedFormat = m_intermediates[m_debugConfig.debugIndex].viewId.data->info.format;
+				auto intermediates = target->getIntermediateViews();
+				auto & debugConfig = target->getDebugConfig();
+				m_savedFormat = intermediates[debugConfig.debugIndex].viewId.data->info.format;
 #endif
-				auto & transferCommands = m_transferCommands[m_debugConfig.debugIndex];
-				doInitialiseTransferCommands( queueData, transferCommands, m_debugConfig.debugIndex );
+				auto & transferCommands = m_transferCommands[debugConfig.debugIndex];
+				doInitialiseTransferCommands( queueData, transferCommands, debugConfig.debugIndex );
 				queueData.queue->submit( ashes::VkCommandBufferArray{ *transferCommands.commandBuffer }
 					, semaphores
 					, stages
@@ -1775,7 +1779,10 @@ namespace castor3d
 		ashes::VkSemaphoreArray semaphores;
 		ashes::VkPipelineStageFlagsArray stages;
 		crg::convert( toWait, semaphores, stages );
-		auto passIndex = m_debugConfig.debugIndex;
+		auto target = getRenderTarget();
+		CU_Require( target );
+		auto & debugConfig = target->getDebugConfig();
+		auto passIndex = debugConfig.debugIndex;
 		doRecordCommandBuffer( queueData, passIndex );
 
 #if !C3D_DebugPicking && !C3D_DebugBackgroundPicking
@@ -1790,7 +1797,8 @@ namespace castor3d
 #if C3D_DebugPicking || C3D_DebugBackgroundPicking
 			m_savedFormat = m_picking->getImageView().data->info.format;
 #else
-			m_savedFormat = m_intermediates[passIndex].viewId.data->info.format;
+			auto intermediates = target->getIntermediateViews();
+			m_savedFormat = intermediates[passIndex].viewId.data->info.format;
 #endif
 			auto & transferCommands = m_transferCommands[passIndex];
 			doInitialiseTransferCommands( queueData, transferCommands, passIndex );
@@ -1824,7 +1832,9 @@ namespace castor3d
 			if ( m_toSave )
 			{
 				auto target = getRenderTarget();
-				auto & intermediate = m_intermediateBarrierViews[m_debugConfig.debugIndex];
+				CU_Require( target );
+				auto & debugConfig = target->getDebugConfig();
+				auto & intermediate = m_intermediateBarrierViews[debugConfig.debugIndex];
 				auto srcExtent = getExtent( intermediate.viewId );
 				auto dstExtent = makeExtent2D( target->getSize() );
 				dstExtent.width = std::min( dstExtent.width, srcExtent.width );

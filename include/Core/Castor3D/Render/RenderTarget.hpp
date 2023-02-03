@@ -31,6 +31,11 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	struct DebugConfig
+	{
+		uint32_t debugIndex{ 0u };
+	};
+
 	class RenderTarget
 		: public std::enable_shared_from_this< RenderTarget >
 		, public castor::OwnedBy< Engine >
@@ -221,15 +226,6 @@ namespace castor3d
 		 *\param[in]	name	Le nom de l'effet.
 		 */
 		C3D_API PostEffectSPtr getPostEffect( castor::String const & name )const;
-		/**
-		 *\~english
-		 *\brief			Lists the intermediate views used by this render target.
-		 *\param[in,out]	result	Receives the views.
-		 *\~french
-		 *\brief			Liste les vues intermédiaires utilisées par cette render target.
-		 *\param[in,out]	result	Reçoit les vues.
-		 */
-		C3D_API void listIntermediateViews( IntermediateViewArray & result )const;
 		C3D_API void resetSemaphore();
 		C3D_API crg::FramePass const & createVertexTransformPass();
 		/**
@@ -387,6 +383,11 @@ namespace castor3d
 		{
 			return m_stereo.intraOcularDistance;
 		}
+
+		IntermediateViewArray const & getIntermediateViews()const
+		{
+			return m_intermediates;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -419,6 +420,11 @@ namespace castor3d
 		{
 			m_stereo.intraOcularDistance = value;
 		}
+
+		DebugConfig & getDebugConfig()
+		{
+			return m_debugConfig;
+		}
 		/**@}*/
 
 	private:
@@ -445,6 +451,7 @@ namespace castor3d
 			, std::vector< Texture const * > const & images )const;
 		crg::SemaphoreWaitArray doRender( ashes::Queue const & queue
 			, crg::SemaphoreWaitArray signalsToWait );
+		void doListIntermediateViews( IntermediateViewArray & result )const;
 
 	public:
 		//!\~english The render target default sampler name	\~french Le nom du sampler par défaut pour la cible de rendu
@@ -497,6 +504,8 @@ namespace castor3d
 		ashes::SemaphorePtr m_combineSemaphore;
 		OnInitialised m_onInitialised;
 		std::vector< OnInitialisedConnection > m_onTargetInitialised;
+		IntermediateViewArray m_intermediates;
+		DebugConfig m_debugConfig;
 
 		struct StereoConfig
 		{
