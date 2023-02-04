@@ -1162,11 +1162,10 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			castor::String name;
-			params[0]->get( name );
-			parsingContext.sceneNode = parsingContext.scene->createSceneNode( name
-				, *parsingContext.scene );
-			parsingContext.sceneNode->attachTo( *parsingContext.scene->getCameraRootNode() );
+			parsingContext.nodeConfig = {};
+			params[0]->get( parsingContext.nodeConfig.name );
+			parsingContext.nodeConfig.isCameraNode = true;
+			parsingContext.nodeConfig.parent = parsingContext.scene->getCameraRootNode();
 		}
 	}
 	CU_EndAttributePush( CSCNSection::eNode )
@@ -1181,11 +1180,10 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			castor::String name;
-			params[0]->get( name );
-			parsingContext.sceneNode = parsingContext.scene->createSceneNode( name
-				, *parsingContext.scene );
-			parsingContext.sceneNode->attachTo( *parsingContext.scene->getObjectRootNode() );
+			parsingContext.nodeConfig = {};
+			params[0]->get( parsingContext.nodeConfig.name );
+			parsingContext.nodeConfig.isCameraNode = false;
+			parsingContext.nodeConfig.parent = parsingContext.scene->getObjectRootNode();
 		}
 	}
 	CU_EndAttributePush( CSCNSection::eNode )
@@ -1857,8 +1855,6 @@ namespace castor3d
 			parsingContext.particleSystem->setMaterial( parsingContext.material );
 			parsingContext.particleSystem->setDimensions( parsingContext.point2f );
 		}
-
-		parsingContext.sceneNode.reset();
 	}
 	CU_EndAttributePush( CSCNSection::eParticle )
 
@@ -2041,8 +2037,6 @@ namespace castor3d
 					, parsingContext.scene->getLightsFactory()
 					, parsingContext.lightType );
 			}
-
-			parsingContext.sceneNode.reset();
 		}
 	}
 	CU_EndAttribute()
@@ -2579,11 +2573,11 @@ namespace castor3d
 	{
 		auto & parsingContext = getParserContext( context );
 
-		if ( !parsingContext.sceneNode )
+		if ( params.empty() )
 		{
-			CU_ParsingError( cuT( "No Scene node initialised." ) );
+			CU_ParsingError( cuT( "Missing [parent] parameter." ) );
 		}
-		else if ( !params.empty() )
+		else
 		{
 			castor::String name;
 			params[0]->get( name );
@@ -2608,7 +2602,7 @@ namespace castor3d
 
 			if ( parent )
 			{
-				parsingContext.sceneNode->attachTo( *parent );
+				parsingContext.nodeConfig.parent = parent;
 			}
 			else
 			{
@@ -2622,15 +2616,13 @@ namespace castor3d
 	{
 		auto & parsingContext = getParserContext( context );
 
-		if ( !parsingContext.sceneNode )
+		if ( params.empty() )
 		{
-			CU_ParsingError( cuT( "No Scene node initialised." ) );
+			CU_ParsingError( cuT( "Missing [position] parameter." ) );
 		}
-		else if ( !params.empty() )
+		else
 		{
-			castor::Point3f value;
-			params[0]->get( value );
-			parsingContext.sceneNode->setPosition( value );
+			params[0]->get( parsingContext.nodeConfig.position );
 		}
 	}
 	CU_EndAttribute()
@@ -2639,18 +2631,18 @@ namespace castor3d
 	{
 		auto & parsingContext = getParserContext( context );
 
-		if ( !parsingContext.sceneNode )
+		if ( params.empty() )
 		{
-			CU_ParsingError( cuT( "No Scene node initialised." ) );
+			CU_ParsingError( cuT( "Missing [orientation] parameter." ) );
 		}
-		else if ( !params.empty() )
+		else
 		{
 			castor::Point3f axis;
 			float angle;
 			params[0]->get( axis );
 			params[1]->get( angle );
-			parsingContext.sceneNode->setOrientation( castor::Quaternion::fromAxisAngle( axis
-				, castor::Angle::fromDegrees( angle ) ) );
+			parsingContext.nodeConfig.orientation = castor::Quaternion::fromAxisAngle( axis
+				, castor::Angle::fromDegrees( angle ) );
 		}
 	}
 	CU_EndAttribute()
@@ -2659,17 +2651,17 @@ namespace castor3d
 	{
 		auto & parsingContext = getParserContext( context );
 
-		if ( !parsingContext.sceneNode )
+		if ( params.empty() )
 		{
-			CU_ParsingError( cuT( "No Scene node initialised." ) );
+			CU_ParsingError( cuT( "Missing [direction] parameter." ) );
 		}
-		else if ( !params.empty() )
+		else
 		{
 			castor::Point3f direction;
 			params[0]->get( direction );
 			castor::Point3f up{ 0, 1, 0 };
 			castor::Point3f right{ castor::point::cross( direction, up ) };
-			parsingContext.sceneNode->setOrientation( castor::Quaternion::fromAxes( right, up, direction ) );
+			parsingContext.nodeConfig.orientation = castor::Quaternion::fromAxes( right, up, direction );
 		}
 	}
 	CU_EndAttribute()
@@ -2678,15 +2670,13 @@ namespace castor3d
 	{
 		auto & parsingContext = getParserContext( context );
 
-		if ( !parsingContext.sceneNode )
+		if ( params.empty() )
 		{
-			CU_ParsingError( cuT( "No Scene node initialised." ) );
+			CU_ParsingError( cuT( "Missing [direction] parameter." ) );
 		}
-		else if ( !params.empty() )
+		else
 		{
-			castor::Point3f value;
-			params[0]->get( value );
-			parsingContext.sceneNode->setScale( value );
+			params[0]->get( parsingContext.nodeConfig.scale );
 		}
 	}
 	CU_EndAttribute()
@@ -2694,18 +2684,22 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserNodeEnd )
 	{
 		auto & parsingContext = getParserContext( context );
+		auto & nodeConfig = parsingContext.nodeConfig;
 
-		if ( !parsingContext.sceneNode )
-		{
-			CU_ParsingError( cuT( "No Scene node initialised." ) );
-		}
-		else
-		{
-			parsingContext.parentNode = nullptr;
-			auto name = parsingContext.sceneNode->getName();
-			auto node = parsingContext.scene->addSceneNode( name, parsingContext.sceneNode ).lock();
-			parsingContext.sceneNode.reset();
+		auto sceneNode = parsingContext.scene->createSceneNode( nodeConfig.name
+			, *parsingContext.scene
+			, nodeConfig.parent
+			, nodeConfig.position
+			, nodeConfig.orientation
+			, nodeConfig.scale
+			, nodeConfig.isStatic );
 
+		auto name = sceneNode->getName();
+		auto node = parsingContext.scene->addSceneNode( name, sceneNode ).lock();
+		sceneNode.reset();
+
+		if ( !nodeConfig.isStatic )
+		{
 			for ( auto fileName : parsingContext.csnaFiles )
 			{
 				auto fName = fileName.getFileName();
@@ -5347,8 +5341,6 @@ namespace castor3d
 			camera->setExposure( parsingContext.point2f[1] );
 			parsingContext.viewport.reset();
 		}
-
-		parsingContext.sceneNode.reset();
 	}
 	CU_EndAttributePop()
 

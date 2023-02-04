@@ -39,6 +39,23 @@ namespace castor3d
 		 *\param[in]	scene		La scène parente.
 		 */
 		C3D_API SceneNode( castor::String const & name
+			, Scene & scene
+			, SceneNode * parent
+			, castor::Point3f position
+			, castor::Quaternion orientation
+			, castor::Point3f scale
+			, bool isStatic = true );
+		/**
+		 *\~english
+		 *\brief		Constructor
+		 *\param[in]	name		The node's name.
+		 *\param[in]	scene		The parent scene.
+		 *\~french
+		 *\brief		Constructeur
+		 *\param[in]	name		Le nom du noeud.
+		 *\param[in]	scene		La scène parente.
+		 */
+		C3D_API SceneNode( castor::String const & name
 			, Scene & scene );
 		/**
 		 *\~english
@@ -291,6 +308,11 @@ namespace castor3d
 		C3D_API SceneNodeRPtr getChild( castor::String const & name )const;
 		C3D_API MovableArray const & getObjects()const;
 
+		bool isStatic()const
+		{
+			return m_static;
+		}
+
 		bool isModified()const
 		{
 			return m_mtxChanged || m_derivedMtxChanged;
@@ -310,6 +332,11 @@ namespace castor3d
 	private:
 		void doComputeMatrix();
 		void doUpdateChildsDerivedTransform();
+		void doAttachTo( SceneNode & node );
+		void doDetach();
+		void doAddChild( SceneNode & child );
+		void doDetachChild( castor::String const & childName );
+		void doDetachChildren();
 
 	public:
 		//!\~english	Signal used to notify that the node has been attached to another one.
@@ -320,12 +347,13 @@ namespace castor3d
 		static uint64_t CurrentId;
 		Scene & m_scene;
 		uint64_t m_id;
+		bool m_static{ false };
 		bool m_displayable;
 		bool m_visible{ true };
 		bool m_serialisable{ true };
 		castor::Quaternion m_orientation;
-		castor::Point3f m_position{ 0.0f, 0.0f, 0.0f };
-		castor::Point3f m_scale{ 1.0, 1.0f, 1.0f };
+		castor::Point3f m_position;
+		castor::Point3f m_scale;
 		castor::Matrix4x4f m_transform{ 1.0f };
 		bool m_mtxChanged{ true };
 		castor::Matrix4x4f m_derivedTransform{ 1.0f };

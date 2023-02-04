@@ -133,6 +133,17 @@ namespace castor3d
 			castor::String centerCamera;
 		};
 
+		struct SceneNodeConfig
+		{
+			bool isCameraNode{};
+			bool isStatic{};
+			castor::String name;
+			SceneNode * parent{};
+			castor::Point3f position{};
+			castor::Quaternion orientation{ castor::Quaternion::identity() };
+			castor::Point3f scale{ 1.0f, 1.0f, 1.0f };
+		};
+
 		castor::LoggerInstance * logger{};
 		castor::PathArray files;
 		castor::PathArray csnaFiles;
@@ -140,7 +151,7 @@ namespace castor3d
 		SceneUPtr ownScene{};
 		RenderWindowDesc window{};
 		bool inWindow{};
-		SceneNodeSPtr sceneNode{};
+		SceneNodeConfig nodeConfig{};
 		SceneNodeRPtr parentNode{};
 		GeometrySPtr geometry{};
 		SkeletonRPtr skeleton{};
