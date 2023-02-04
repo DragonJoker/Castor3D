@@ -191,6 +191,11 @@ namespace CastorViewer
 		if ( fullscreen )
 		{
 			m_currentPerspective = m_auiManager.SavePerspective();
+
+#if CV_MainFrameToolbar
+			m_auiManager.GetPane( m_toolBar ).Hide();
+#endif
+			m_fullScreenPerspective = m_auiManager.SavePerspective();
 			m_auiManager.LoadPerspective( m_fullScreenPerspective );
 #if !CV_MainFrameToolbar
 			m_menuBar->Hide();
@@ -276,9 +281,9 @@ namespace CastorViewer
 				.Dockable( false ) );
 		m_auiManager.AddPane( m_logTabsContainer
 			, wxAuiPaneInfo()
-				.CaptionVisible( false )
+				.CaptionVisible()
 				.Hide()
-				.CloseButton()
+				.CloseButton( false )
 				.Name( wxT( "Logs" ) )
 				.Caption( _( "Logs" ) )
 				.Bottom()
@@ -289,12 +294,13 @@ namespace CastorViewer
 				.PinButton()
 				.MinSize( size.x, m_logsHeight )
 				.Layer( 1 )
-				.PaneBorder( false ) );
+				.PaneBorder()
+				.Floatable() );
 		m_auiManager.AddPane( m_sceneTabsContainer
 			, wxAuiPaneInfo()
-				.CaptionVisible( false )
+				.CaptionVisible()
 				.Hide()
-				.CloseButton()
+				.CloseButton( false )
 				.Name( wxT( "Objects" ) )
 				.Caption( _( "Objects" ) )
 				.Left()
@@ -305,7 +311,8 @@ namespace CastorViewer
 				.PinButton()
 				.MinSize( m_propertiesWidth, size.y / 3 )
 				.Layer( 2 )
-				.PaneBorder( false ) );
+				.PaneBorder()
+				.Floatable() );
 
 		auto createLog = [this]( wxString const & name
 			, LogContainer & log )
@@ -428,19 +435,7 @@ namespace CastorViewer
 
 	void MainFrame::doInitialisePerspectives()
 	{
-		wxAuiPaneInfoArray panes = m_auiManager.GetAllPanes();
-		std::vector< bool > visibilities;
 		m_currentPerspective = m_auiManager.SavePerspective();
-
-		for ( size_t i = 0; i < panes.size(); ++i )
-		{
-			panes[i].Hide();
-		}
-
-#if CV_MainFrameToolbar
-		m_auiManager.GetPane( m_toolBar ).Hide();
-#endif
-		m_fullScreenPerspective = m_auiManager.SavePerspective();
 
 		m_auiManager.GetPane( m_sceneTabsContainer ).Show();
 		m_auiManager.GetPane( m_renderPanel ).Show();
@@ -1004,10 +999,6 @@ namespace CastorViewer
 		{
 			m_auiManager.GetPane( m_logTabsContainer ).Show();
 		}
-		else
-		{
-			m_auiManager.GetPane( m_logTabsContainer ).Hide();
-		}
 
 		m_auiManager.Update();
 		event.Skip();
@@ -1018,10 +1009,6 @@ namespace CastorViewer
 		if ( !m_sceneTabsContainer->IsShown() )
 		{
 			m_auiManager.GetPane( m_sceneTabsContainer ).Show();
-		}
-		else
-		{
-			m_auiManager.GetPane( m_sceneTabsContainer ).Hide();
 		}
 
 		m_auiManager.Update();
