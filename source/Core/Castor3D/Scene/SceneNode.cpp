@@ -14,12 +14,22 @@ namespace castor3d
 	uint64_t SceneNode::CurrentId = 0;
 
 	SceneNode::SceneNode( castor::String const & name
-		, Scene & scene )
+		, Scene & scene
+		, SceneNode * parent
+		, castor::Point3f position
+		, castor::Quaternion orientation
+		, castor::Point3f scale
+		, bool isStatic )
 		: Animable{ *scene.getEngine() }
 		, castor::Named{ name }
 		, m_scene{ scene }
 		, m_id{ CurrentId++ }
+		, m_static{ isStatic }
 		, m_displayable{ name == Scene::RootNode }
+		, m_orientation{ std::move( orientation ) }
+		, m_position{ std::move( position ) }
+		, m_scale{ std::move( scale ) }
+		, m_parent{ nullptr }
 	{
 		if ( m_name.empty() )
 		{
@@ -29,6 +39,23 @@ namespace castor3d
 
 		m_scene.markDirty( *this );
 		Count++;
+
+		if ( parent )
+		{
+			doAttachTo( *parent );
+		}
+	}
+
+	SceneNode::SceneNode( castor::String const & name
+		, Scene & scene )
+		: SceneNode{ name
+			, scene
+			, nullptr
+			, castor::Point3f{}
+			, castor::Quaternion::identity()
+			, castor::Point3f{ 1.0f, 1.0f, 1.0f }
+			, false }
+	{
 	}
 
 	SceneNode::~SceneNode()
@@ -38,10 +65,10 @@ namespace castor3d
 
 		if ( parent )
 		{
-			parent->detachChild( *this );
+			parent->doDetachChild( getName() );
 		}
 
-		detachChildren();
+		doDetachChildren();
 		cleanupAnimations();
 	}
 
@@ -74,41 +101,21 @@ namespace castor3d
 
 	void SceneNode::attachTo( SceneNode & node )
 	{
-		auto old = getParent();
+		CU_Require( !m_static );
 
-		if ( old != &node )
+		if ( !m_static )
 		{
-			if ( old )
-			{
-				m_parent = nullptr;
-				old->detachChild( *this );
-			}
-
-			m_parent = &node;
-
-			if ( m_parent )
-			{
-				m_displayable = m_parent->m_displayable;
-				m_parent->addChild( *this );
-				m_mtxChanged = true;
-			}
-
-			onParentChanged( *this );
-			m_scene.markDirty( *this );
+			doAttachTo( node );
 		}
 	}
 
 	void SceneNode::detach()
 	{
-		auto parent = getParent();
+		CU_Require( !m_static );
 
-		if ( parent )
+		if ( !m_static )
 		{
-			m_displayable = false;
-			m_parent = nullptr;
-			parent->detachChild( *this );
-			m_mtxChanged = true;
-			m_scene.markDirty( *this );
+			doDetach();
 		}
 	}
 
@@ -131,100 +138,117 @@ namespace castor3d
 
 	void SceneNode::addChild( SceneNode & child )
 	{
-		auto name = child.getName();
+		CU_Require( !m_static );
 
-		if ( m_children.find( name ) == m_children.end() )
+		if ( !m_static )
 		{
-			m_children.insert( std::make_pair( name, &child ) );
-		}
-		else
-		{
-			log::warn << m_name << cuT( " - Can't add SceneNode " ) << name << cuT( " - Already in childs" ) << std::endl;
+			doAddChild( child );
 		}
 	}
 
 	void SceneNode::detachChild( SceneNode & child )
 	{
-		detachChild( child.getName() );
+		CU_Require( !m_static );
+
+		if ( !m_static )
+		{
+			doDetachChild( child.getName() );
+		}
 	}
 
 	void SceneNode::detachChild( castor::String const & childName )
 	{
-		auto it = m_children.find( childName );
+		CU_Require( !m_static );
 
-		if ( it != m_children.end() )
+		if ( !m_static )
 		{
-			auto current = it->second;
-			m_children.erase( it );
-
-			if ( current )
-			{
-				current->detach();
-			}
-		}
-		else
-		{
-			log::warn << m_name << cuT( " - Can't remove SceneNode " ) << childName << cuT( " - Not in childs" ) << std::endl;
+			doDetachChild( childName );
 		}
 	}
 
 	void SceneNode::detachChildren()
 	{
-		SceneNodeMap flush;
-		std::swap( flush, m_children );
+		CU_Require( !m_static );
 
-		for ( auto it : flush )
+		if ( !m_static )
 		{
-			auto current = it.second;
-
-			if ( current )
-			{
-				current->detach();
-			}
+			doDetachChildren();
 		}
 	}
 
 	void SceneNode::yaw( castor::Angle const & angle )
 	{
-		rotate( castor::Quaternion::fromAxisAngle( castor::Point3d( 0.0, 1.0, 0.0 ), angle ) );
+		CU_Require( !m_static );
+
+		if ( !m_static )
+		{
+			rotate( castor::Quaternion::fromAxisAngle( castor::Point3d( 0.0, 1.0, 0.0 ), angle ) );
+		}
 	}
 
 	void SceneNode::pitch( castor::Angle const & angle )
 	{
-		rotate( castor::Quaternion::fromAxisAngle( castor::Point3d( 1.0, 0.0, 0.0 ), angle ) );
+		CU_Require( !m_static );
+
+		if ( !m_static )
+		{
+			rotate( castor::Quaternion::fromAxisAngle( castor::Point3d( 1.0, 0.0, 0.0 ), angle ) );
+		}
 	}
 
 	void SceneNode::roll( castor::Angle const & angle )
 	{
-		rotate( castor::Quaternion::fromAxisAngle( castor::Point3d( 0.0, 0.0, 1.0 ), angle ) );
+		CU_Require( !m_static );
+
+		if ( !m_static )
+		{
+			rotate( castor::Quaternion::fromAxisAngle( castor::Point3d( 0.0, 0.0, 1.0 ), angle ) );
+		}
 	}
 
 	void SceneNode::rotate( castor::Quaternion const & orientation )
 	{
-		m_orientation *= orientation;
-		doUpdateChildsDerivedTransform();
-		m_mtxChanged = true;
-		m_scene.markDirty( *this );
+		CU_Require( !m_static );
+
+		if ( !m_static )
+		{
+			m_orientation *= orientation;
+			doUpdateChildsDerivedTransform();
+			m_mtxChanged = true;
+			m_scene.markDirty( *this );
+		}
 	}
 
 	void SceneNode::translate( castor::Point3f const & position )
 	{
-		m_position += position;
-		doUpdateChildsDerivedTransform();
-		m_mtxChanged = true;
-		m_scene.markDirty( *this );
+		CU_Require( !m_static );
+
+		if ( !m_static )
+		{
+			m_position += position;
+			doUpdateChildsDerivedTransform();
+			m_mtxChanged = true;
+			m_scene.markDirty( *this );
+		}
 	}
 
 	void SceneNode::scale( castor::Point3f const & scale )
 	{
-		m_scale *= scale;
-		doUpdateChildsDerivedTransform();
-		m_mtxChanged = true;
-		m_scene.markDirty( *this );
+		CU_Require( !m_static );
+
+		if ( !m_static )
+		{
+			m_scale *= scale;
+			doUpdateChildsDerivedTransform();
+			m_mtxChanged = true;
+			m_scene.markDirty( *this );
+		}
 	}
 
 	SceneNodeAnimation & SceneNode::createAnimation( castor::String const & name )
 	{
+		CU_Require( !m_static );
+
 		if ( !hasAnimation( name ) )
 		{
 			addAnimation( std::make_unique< SceneNodeAnimation >( *this, name ) );
@@ -235,6 +259,8 @@ namespace castor3d
 
 	void SceneNode::removeAnimation( castor::String const & name )
 	{
+		CU_Require( !m_static );
+
 		if ( hasAnimation( name ) )
 		{
 			doRemoveAnimation( name );
@@ -243,26 +269,41 @@ namespace castor3d
 
 	void SceneNode::setOrientation( castor::Quaternion const & orientation )
 	{
-		m_orientation = orientation;
-		doUpdateChildsDerivedTransform();
-		m_mtxChanged = true;
-		m_scene.markDirty( *this );
+		CU_Require( !m_static );
+
+		if ( !m_static )
+		{
+			m_orientation = orientation;
+			doUpdateChildsDerivedTransform();
+			m_mtxChanged = true;
+			m_scene.markDirty( *this );
+		}
 	}
 
 	void SceneNode::setPosition( castor::Point3f const & position )
 	{
-		m_position = position;
-		doUpdateChildsDerivedTransform();
-		m_mtxChanged = true;
-		m_scene.markDirty( *this );
+		CU_Require( !m_static );
+
+		if ( !m_static )
+		{
+			m_position = position;
+			doUpdateChildsDerivedTransform();
+			m_mtxChanged = true;
+			m_scene.markDirty( *this );
+		}
 	}
 
 	void SceneNode::setScale( castor::Point3f const & scale )
 	{
-		m_scale = scale;
-		doUpdateChildsDerivedTransform();
-		m_mtxChanged = true;
-		m_scene.markDirty( *this );
+		CU_Require( !m_static );
+
+		if ( !m_static )
+		{
+			m_scale = scale;
+			doUpdateChildsDerivedTransform();
+			m_mtxChanged = true;
+			m_scene.markDirty( *this );
+		}
 	}
 
 	castor::Point3f SceneNode::getDerivedPosition()const
@@ -380,6 +421,96 @@ namespace castor3d
 			{
 				current->doUpdateChildsDerivedTransform();
 				current->m_derivedMtxChanged = true;
+			}
+		}
+	}
+
+	void SceneNode::doAttachTo( SceneNode & node )
+	{
+		auto old = getParent();
+
+		if ( old != &node )
+		{
+			if ( old )
+			{
+				m_parent = nullptr;
+				old->detachChild( *this );
+			}
+
+			m_parent = &node;
+
+			if ( m_parent )
+			{
+				m_displayable = m_parent->m_displayable;
+				m_parent->addChild( *this );
+				m_mtxChanged = true;
+			}
+
+			onParentChanged( *this );
+			m_scene.markDirty( *this );
+		}
+	}
+
+	void SceneNode::doDetach()
+	{
+		auto parent = getParent();
+
+		if ( parent )
+		{
+			m_displayable = false;
+			m_parent = nullptr;
+			parent->detachChild( *this );
+			m_mtxChanged = true;
+			m_scene.markDirty( *this );
+		}
+	}
+
+	void SceneNode::doAddChild( SceneNode & child )
+	{
+		auto name = child.getName();
+
+		if ( m_children.find( name ) == m_children.end() )
+		{
+			m_children.insert( std::make_pair( name, &child ) );
+		}
+		else
+		{
+			log::warn << m_name << cuT( " - Can't add SceneNode " ) << name << cuT( " - Already in childs" ) << std::endl;
+		}
+	}
+
+	void SceneNode::doDetachChild( castor::String const & childName )
+	{
+		auto it = m_children.find( childName );
+
+		if ( it != m_children.end() )
+		{
+			auto current = it->second;
+			m_children.erase( it );
+
+			if ( current )
+			{
+				current->doDetach();
+			}
+		}
+		else
+		{
+			log::warn << m_name << cuT( " - Can't remove SceneNode " ) << childName << cuT( " - Not in childs" ) << std::endl;
+		}
+	}
+
+	void SceneNode::doDetachChildren()
+	{
+		SceneNodeMap flush;
+		std::swap( flush, m_children );
+
+		for ( auto it : flush )
+		{
+			auto current = it.second;
+
+			if ( current )
+			{
+				current->detach();
 			}
 		}
 	}
