@@ -213,6 +213,7 @@ namespace castor3d
 		static void addNodeParsers( castor::AttributeParsers & result )
 		{
 			using namespace castor;
+			addParser( result, uint32_t( CSCNSection::eNode ), cuT( "static" ), parserNodeStatic, { makeParameter< ParameterType::eBool >() } );
 			addParser( result, uint32_t( CSCNSection::eNode ), cuT( "parent" ), parserNodeParent, { makeParameter< ParameterType::eName >() } );
 			addParser( result, uint32_t( CSCNSection::eNode ), cuT( "position" ), parserNodePosition, { makeParameter< ParameterType::ePoint3F >() } );
 			addParser( result, uint32_t( CSCNSection::eNode ), cuT( "orientation" ), parserNodeOrientation, { makeParameter< ParameterType::ePoint3F >(), makeParameter< ParameterType::eFloat >() } );
