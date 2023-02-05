@@ -160,6 +160,7 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserLpvTexelAreaModifier )
 
 	// Scene node parsers
+	CU_DeclareAttributeParser( parserNodeStatic )
 	CU_DeclareAttributeParser( parserNodeParent )
 	CU_DeclareAttributeParser( parserNodePosition )
 	CU_DeclareAttributeParser( parserNodeOrientation )

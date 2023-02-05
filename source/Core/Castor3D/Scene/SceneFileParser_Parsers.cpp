@@ -2569,6 +2569,21 @@ namespace castor3d
 	}
 	CU_EndAttribute()
 
+	CU_ImplementAttributeParser( parserNodeStatic )
+	{
+		auto & parsingContext = getParserContext( context );
+
+		if ( params.empty() )
+		{
+			CU_ParsingError( cuT( "Missing [static] parameter." ) );
+		}
+		else
+		{
+			params[0]->get( parsingContext.nodeConfig.isStatic );
+		}
+	}
+	CU_EndAttribute()
+
 	CU_ImplementAttributeParser( parserNodeParent )
 	{
 		auto & parsingContext = getParserContext( context );
