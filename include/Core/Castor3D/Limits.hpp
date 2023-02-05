@@ -92,7 +92,7 @@ namespace castor3d
 	*	Directional Light Shadows.
 	*/
 	//@{
-	static uint32_t constexpr ShadowMapDirectionalTextureSize = 2'048u;
+	static uint32_t constexpr ShadowMapDirectionalTextureSize = 1024u;
 	static uint32_t constexpr DirectionalMaxCascadesCount = 4u;
 	//@}
 	/**
@@ -100,7 +100,7 @@ namespace castor3d
 	*	Point Light Shadows.
 	*/
 	//@{
-	static uint32_t constexpr ShadowMapPointTextureSize = 512u;
+	static uint32_t constexpr ShadowMapPointTextureSize = 256u;
 	static uint32_t constexpr PointShadowMapCount = 6u;
 	//@}
 	/**
@@ -108,7 +108,7 @@ namespace castor3d
 	*	Spot Light Shadows.
 	*/
 	//@{
-	static uint32_t constexpr ShadowMapSpotTextureSize = 512u;
+	static uint32_t constexpr ShadowMapSpotTextureSize = 256u;
 	static uint32_t constexpr SpotShadowMapCount = 10u;
 	//@}
 	/**
