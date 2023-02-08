@@ -23,17 +23,26 @@ namespace GuiCommon
 	void NodeTreeItemProperty::doCreateProperties( wxPGEditor * editor
 		, wxPropertyGrid * grid )
 	{
-		static wxString PROPERTY_CATEGORY_NODE = _( "Scene Node: " );
-		static wxString PROPERTY_NODE_POSITION = _( "Position" );
-		static wxString PROPERTY_NODE_SCALE = _( "Scale" );
-		static wxString PROPERTY_NODE_ORIENTATION = _( "Orientation" );
 		static wxString PROPERTY_NODE_VISIBLE = _( "Visible" );
 
-		castor3d::SceneNode & node = getNode();
-		addProperty( grid, PROPERTY_CATEGORY_NODE + wxString( node.getName() ) );
-		addPropertyT( grid, PROPERTY_NODE_VISIBLE, node.isVisible(), &node, &castor3d::SceneNode::setVisible );
-		addPropertyT( grid, PROPERTY_NODE_POSITION, node.getPosition(), &node, &castor3d::SceneNode::setPosition );
-		addPropertyT( grid, PROPERTY_NODE_SCALE, node.getScale(), &node, &castor3d::SceneNode::setScale );
-		addPropertyT( grid, PROPERTY_NODE_ORIENTATION, node.getOrientation(), &node, &castor3d::SceneNode::setOrientation );
+		wxString PROPERTY_CATEGORY_NODE = _( "Scene Node: " );
+
+		if ( m_node.isStatic() )
+		{
+			PROPERTY_CATEGORY_NODE = _( "Static Scene Node: " );
+		}
+
+		addProperty( grid, PROPERTY_CATEGORY_NODE + wxString( m_node.getName() ) );
+		addPropertyT( grid, PROPERTY_NODE_VISIBLE, m_node.isVisible(), &m_node, &castor3d::SceneNode::setVisible );
+
+		if ( !m_node.isStatic() )
+		{
+			static wxString PROPERTY_NODE_POSITION = _( "Position" );
+			static wxString PROPERTY_NODE_SCALE = _( "Scale" );
+			static wxString PROPERTY_NODE_ORIENTATION = _( "Orientation" );
+			addPropertyT( grid, PROPERTY_NODE_POSITION, m_node.getPosition(), &m_node, &castor3d::SceneNode::setPosition );
+			addPropertyT( grid, PROPERTY_NODE_SCALE, m_node.getScale(), &m_node, &castor3d::SceneNode::setScale );
+			addPropertyT( grid, PROPERTY_NODE_ORIENTATION, m_node.getOrientation(), &m_node, &castor3d::SceneNode::setOrientation );
+		}
 	}
 }
