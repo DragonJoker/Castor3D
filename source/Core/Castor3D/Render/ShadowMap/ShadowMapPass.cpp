@@ -23,6 +23,52 @@ CU_ImplementCUSmartPtr( castor3d, ShadowMapPass )
 
 namespace castor3d
 {
+	namespace shdmappass
+	{
+		static RenderNodesPassDesc buildDesc( ShadowMap const & shadowMap
+			, CameraUbo const & cameraUbo
+			, SceneCuller & culler
+			, bool needsVsm
+			, bool needsRsm
+			, bool isStatic )
+		{
+			RenderNodesPassDesc result{ getExtent( shadowMap.getShadowPassResult( false )[SmTexture::eDepth].imageId )
+				, cameraUbo
+				, culler };
+			result.isStatic( isStatic );
+
+			if ( !isStatic )
+			{
+				auto & smResult = shadowMap.getShadowPassResult( true );
+				result.implicitAction( smResult[SmTexture::eLinearDepth].sampledViewId
+					, crg::RecordContext::clearAttachment( smResult[SmTexture::eLinearDepth].sampledViewId
+						, getClearValue( SmTexture::eLinearDepth ) ) );
+
+				if ( needsVsm )
+				{
+					result.implicitAction( smResult[SmTexture::eVariance].sampledViewId
+						, crg::RecordContext::clearAttachment( smResult[SmTexture::eVariance].sampledViewId
+							, getClearValue( SmTexture::eVariance ) ) );
+				}
+
+				if ( needsRsm )
+				{
+					result.implicitAction( smResult[SmTexture::eNormal].sampledViewId
+						, crg::RecordContext::clearAttachment( smResult[SmTexture::eNormal].sampledViewId
+							, getClearValue( SmTexture::eNormal ) ) );
+					result.implicitAction( smResult[SmTexture::ePosition].sampledViewId
+						, crg::RecordContext::clearAttachment( smResult[SmTexture::ePosition].sampledViewId
+							, getClearValue( SmTexture::ePosition ) ) );
+					result.implicitAction( smResult[SmTexture::eFlux].sampledViewId
+						, crg::RecordContext::clearAttachment( smResult[SmTexture::eFlux].sampledViewId
+							, getClearValue( SmTexture::eFlux ) ) );
+				}
+			}
+
+			return result;
+		}
+	}
+
 	ShadowMapPass::ShadowMapPass( crg::FramePass const & pass
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
@@ -32,7 +78,8 @@ namespace castor3d
 		, SceneCuller & culler
 		, ShadowMap const & shadowMap
 		, bool needsVsm
-		, bool needsRsm )
+		, bool needsRsm
+		, bool isStatic )
 		: RenderNodesPass{ pass
 			, context
 			, graph
@@ -40,9 +87,12 @@ namespace castor3d
 			, typeName
 			, {}
 			, {}
-			, RenderNodesPassDesc{ getExtent( shadowMap.getShadowPassResult()[SmTexture::eDepth].imageId )
+			, shdmappass::buildDesc( shadowMap
 				, cameraUbo
-				, culler } }
+				, culler
+				, needsVsm
+				, needsRsm
+				, isStatic ) }
 		, m_shadowMap{ shadowMap }
 		, m_shadowMapUbo{ device }
 		, m_needsVsm{ needsVsm }
@@ -73,7 +123,7 @@ namespace castor3d
 		bindings.emplace_back( m_shadowMap.getScene().getLightCache().createLayoutBinding( index++ ) );
 		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT ) );
+			, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT ) );	// ShadowMapUbo
 		m_initialised = true;
 	}
 

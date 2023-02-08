@@ -249,17 +249,17 @@ namespace castor3d
 
 		ShadowMapResult const & getDirectionalShadowPassResult()const
 		{
-			return m_directionalShadowMap->getShadowPassResult();
+			return m_directionalShadowMap->getShadowPassResult( false );
 		}
 
 		ShadowMapResult const & getPointShadowPassResult()const
 		{
-			return m_pointShadowMap->getShadowPassResult();
+			return m_pointShadowMap->getShadowPassResult( false );
 		}
 
 		ShadowMapResult const & getSpotShadowPassResult()const
 		{
-			return m_spotShadowMap->getShadowPassResult();
+			return m_spotShadowMap->getShadowPassResult( false );
 		}
 
 		LightVolumePassResult const & getLpvResult()const

@@ -34,6 +34,7 @@
 
 #include <RenderGraph/FrameGraph.hpp>
 #include <RenderGraph/RunnableGraph.hpp>
+#include <RenderGraph/RunnablePasses/ImageCopy.hpp>
 
 #include <algorithm>
 
@@ -43,7 +44,8 @@ namespace castor3d
 	{
 		static castor::String getPassName( uint32_t index
 			, bool needsVsm
-			, bool needsRsm )
+			, bool needsRsm
+			, bool isStatic )
 		{
 			auto result = cuT( "PointSML" ) + castor::string::toString( index / 6u ) + "F" + castor::string::toString( index % 6u );
 
@@ -57,112 +59,9 @@ namespace castor3d
 				result += "_RSM";
 			}
 
-			return result;
-		}
-
-		static std::vector< ShadowMap::PassDataPtr > createPass( crg::ResourcesCache & resources
-			, std::vector< std::unique_ptr< crg::FrameGraph > > & graphs
-			, std::vector< GaussianBlurUPtr > & blurs
-			, crg::ImageViewId intermediate
-			, uint32_t shadowMapIndex
-			, RenderDevice const & device
-			, Scene & scene
-			, ShadowMap & shadowMap
-			, bool vsm
-			, bool rsm )
-		{
-			auto & engine = *scene.getEngine();
-			std::vector< ShadowMap::PassDataPtr > result;
-			auto & smResult = shadowMap.getShadowPassResult();
-			auto & depth = smResult[SmTexture::eDepth];
-			auto & linear = smResult[SmTexture::eLinearDepth];
-			auto & variance = smResult[SmTexture::eVariance];
-			auto & normal = smResult[SmTexture::eNormal];
-			auto & position = smResult[SmTexture::ePosition];
-			auto & flux = smResult[SmTexture::eFlux];
-
-			std::string debugName = getPassName( shadowMapIndex, vsm, rsm );
-			graphs.push_back( std::make_unique< crg::FrameGraph >( resources.getHandler(), debugName ) );
-			auto & graph = *graphs.back();
-			graph.addOutput( linear.wholeViewId
-				, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
-			graph.addOutput( variance.wholeViewId
-				, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
-			graph.addOutput( normal.wholeViewId
-				, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
-			graph.addOutput( position.wholeViewId
-				, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
-			graph.addOutput( flux.wholeViewId
-				, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
-			auto & group = graph.getDefaultGroup();
-			crg::FramePass const * previousPass{};
-
-			for ( uint32_t face = 0u; face < 6u; ++face )
+			if ( isStatic )
 			{
-				result.emplace_back( std::make_unique< ShadowMap::PassData >( std::make_unique< CameraUbo >( device )
-					, castor::makeUnique< Viewport >( engine )
-					, nullptr ) );
-				auto & passData = *result.back();
-				passData.viewport->resize( castor::Size{ ShadowMapPointTextureSize
-					, ShadowMapPointTextureSize } );
-				passData.frustum = castor::makeUnique< Frustum >( *passData.viewport );
-				passData.ownCuller = castor::makeUniqueDerived< SceneCuller, FrustumCuller >( scene, *passData.frustum );
-				passData.culler = passData.ownCuller.get();
-				auto faceIndex = shadowMapIndex * 6u + face;
-				auto name = debugName + "F" + std::to_string( face );
-				auto & pass = group.createPass( name
-					, [faceIndex, &passData, &device, &shadowMap, vsm, rsm]( crg::FramePass const & framePass
-						, crg::GraphContext & context
-						, crg::RunnableGraph & runnableGraph )
-					{
-						auto res = std::make_unique< ShadowMapPassPoint >( framePass
-							, context
-							, runnableGraph
-							, device
-							, faceIndex
-							, *passData.cameraUbo
-							, *passData.culler
-							, shadowMap
-							, vsm
-							, rsm );
-						passData.pass = res.get();
-						device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
-							, res->getTimer() );
-						return res;
-					} );
-
-				if ( previousPass )
-				{
-					pass.addDependency( *previousPass );
-				}
-
-				previousPass = &pass;
-				pass.addOutputDepthView( depth.subViewsId[faceIndex], getClearValue( SmTexture::eDepth ) );
-				pass.addOutputColourView( linear.subViewsId[faceIndex], getClearValue( SmTexture::eLinearDepth ) );
-
-				if ( vsm )
-				{
-					pass.addOutputColourView( variance.subViewsId[faceIndex], getClearValue( SmTexture::eVariance ) );
-				}
-
-				if ( rsm )
-				{
-					pass.addOutputColourView( normal.subViewsId[faceIndex], getClearValue( SmTexture::eNormal ) );
-					pass.addOutputColourView( position.subViewsId[faceIndex], getClearValue( SmTexture::ePosition ) );
-					pass.addOutputColourView( flux.subViewsId[faceIndex], getClearValue( SmTexture::eFlux ) );
-				}
-
-				if ( vsm )
-				{
-					blurs.push_back( castor::makeUnique< GaussianBlur >( group
-						, *previousPass
-						, device
-						, cuT( "ShadowMapPoint" )
-						, name
-						, variance.subViewsId[faceIndex]
-						, intermediate
-						, 5u ) );
-				}
+				result += "_Statics";
 			}
 
 			return result;
@@ -199,52 +98,185 @@ namespace castor3d
 		stepProgressBar( progress, "Creating ShadowMapPoint" );
 	}
 
-	void ShadowMapPoint::update( GpuUpdater & updater )
+	crg::FramePassArray ShadowMapPoint::doCreatePass( crg::FrameGraph & graph
+		, crg::FramePassArray const & previousPasses
+		, uint32_t index
+		, bool vsm
+		, bool rsm
+		, bool isStatic
+		, Passes & passes )
 	{
-		auto & myPasses = m_passes[m_passesIndex];
+		auto & engine = *m_scene.getEngine();
+		auto & smResult = getShadowPassResult( isStatic );
+		auto & depth = smResult[SmTexture::eDepth];
+		auto & linear = smResult[SmTexture::eLinearDepth];
+		auto & variance = smResult[SmTexture::eVariance];
+		auto & normal = smResult[SmTexture::eNormal];
+		auto & position = smResult[SmTexture::ePosition];
+		auto & flux = smResult[SmTexture::eFlux];
 
-		if ( myPasses.runnables.size() > updater.index
-			&& myPasses.runnables[updater.index] )
+		std::string debugName = shdmappoint::getPassName( index, vsm, rsm, isStatic );
+		doRegisterGraphIO( graph, vsm, rsm, isStatic );
+
+		auto & group = graph.getDefaultGroup();
+		crg::FramePass const * previousPass{};
+		crg::FramePassArray result;
+
+		for ( uint32_t face = 0u; face < 6u; ++face )
 		{
-			auto & pointLight = *updater.light->getPointLight();
-			pointLight.updateShadow( int32_t( updater.index ) );
-			uint32_t offset = updater.index * 6u;
+			passes.passes.emplace_back( std::make_unique< ShadowMap::PassData >( std::make_unique< CameraUbo >( m_device )
+				, castor::makeUnique< Viewport >( engine )
+				, nullptr ) );
+			auto & passData = *passes.passes.back();
+			passData.viewport->resize( castor::Size{ ShadowMapPointTextureSize
+				, ShadowMapPointTextureSize } );
+			passData.frustum = castor::makeUnique< Frustum >( *passData.viewport );
+			passData.ownCuller = castor::makeUniqueDerived< SceneCuller, FrustumCuller >( m_scene, *passData.frustum );
+			passData.culler = passData.ownCuller.get();
+			auto faceIndex = index * 6u + face;
+			auto name = debugName + "F" + std::to_string( face );
+			auto & pass = group.createPass( name
+				, [faceIndex, &passData, this, vsm, rsm, isStatic]( crg::FramePass const & framePass
+					, crg::GraphContext & context
+					, crg::RunnableGraph & runnableGraph )
+				{
+					auto res = std::make_unique< ShadowMapPassPoint >( framePass
+						, context
+						, runnableGraph
+						, m_device
+						, faceIndex
+						, *passData.cameraUbo
+						, *passData.culler
+						, *this
+						, vsm
+						, rsm
+						, isStatic );
+					passData.pass = res.get();
+					m_device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+						, res->getTimer() );
+					return res;
+				} );
 
-			for ( uint32_t face = offset; face < offset + 6u; ++face )
+			if ( !isStatic )
 			{
-				auto & pass = static_cast< ShadowMapPassPoint & >( *myPasses.passes[face]->pass );
-				updater.index = face - offset;
-				pass.updateFrustum( pointLight.getViewMatrix( CubeMapFace( updater.index ) ) );
+				pass.addDependency( *previousPasses[face] );
+			}
+
+			if ( previousPass )
+			{
+				pass.addDependency( *previousPass );
+			}
+
+			previousPass = &pass;
+
+			if ( isStatic )
+			{
+				pass.addOutputDepthView( depth.subViewsId[faceIndex], getClearValue( SmTexture::eDepth ) );
+				pass.addOutputColourView( linear.subViewsId[faceIndex], getClearValue( SmTexture::eLinearDepth ) );
+
+				if ( vsm )
+				{
+					pass.addOutputColourView( variance.subViewsId[faceIndex], getClearValue( SmTexture::eVariance ) );
+				}
+
+				if ( rsm )
+				{
+					pass.addOutputColourView( normal.subViewsId[faceIndex], getClearValue( SmTexture::eNormal ) );
+					pass.addOutputColourView( position.subViewsId[faceIndex], getClearValue( SmTexture::ePosition ) );
+					pass.addOutputColourView( flux.subViewsId[faceIndex], getClearValue( SmTexture::eFlux ) );
+				}
+			}
+			else
+			{
+				pass.addInOutDepthView( depth.subViewsId[faceIndex] );
+				pass.addInOutColourView( linear.subViewsId[faceIndex] );
+
+				if ( vsm )
+				{
+					pass.addInOutColourView( variance.subViewsId[faceIndex] );
+				}
+
+				if ( rsm )
+				{
+					pass.addInOutColourView( normal.subViewsId[faceIndex] );
+					pass.addInOutColourView( position.subViewsId[faceIndex] );
+					pass.addInOutColourView( flux.subViewsId[faceIndex] );
+				}
+			}
+
+			if ( vsm && !isStatic )
+			{
+				passes.blurs.push_back( castor::makeUnique< GaussianBlur >( group
+					, *previousPass
+					, m_device
+					, cuT( "ShadowMapPoint" )
+					, name
+					, variance.subViewsId[faceIndex]
+					, m_blurIntermediateView
+					, 5u ) );
+				result.push_back( &passes.blurs.back()->getLastPass() );
+			}
+			else if ( isStatic )
+			{
+				auto & nstSmResult = getShadowPassResult( false );
+				auto & copyPass = graph.createPass( name + "/CopyToNonStatic"
+					, [this, isStatic]( crg::FramePass const & pass
+						, crg::GraphContext & context
+						, crg::RunnableGraph & runnableGraph )
+					{
+						auto result = std::make_unique< crg::ImageCopy >( pass
+							, context
+							, runnableGraph
+							, getShadowPassResult( isStatic )[SmTexture::eDepth].getExtent()
+							, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+							, crg::ru::Config{} );
+						getOwner()->registerTimer( pass.getFullName()
+							, result->getTimer() );
+						return result;
+					} );
+				copyPass.addDependency( *previousPass );
+				copyPass.addTransferInputView( depth.subViewsId[faceIndex] );
+				copyPass.addTransferOutputView( nstSmResult[SmTexture::eDepth].subViewsId[faceIndex] );
+				copyPass.addTransferInputView( linear.subViewsId[faceIndex] );
+				copyPass.addTransferOutputView( nstSmResult[SmTexture::eLinearDepth].subViewsId[faceIndex] );
+
+				if ( vsm )
+				{
+					copyPass.addTransferInputView( variance.subViewsId[faceIndex] );
+					copyPass.addTransferOutputView( nstSmResult[SmTexture::eVariance].subViewsId[faceIndex] );
+				}
+
+				if ( rsm )
+				{
+					copyPass.addTransferInputView( normal.subViewsId[faceIndex] );
+					copyPass.addTransferOutputView( nstSmResult[SmTexture::eNormal].subViewsId[faceIndex] );
+					copyPass.addTransferInputView( position.subViewsId[faceIndex] );
+					copyPass.addTransferOutputView( nstSmResult[SmTexture::ePosition].subViewsId[faceIndex] );
+					copyPass.addTransferInputView( flux.subViewsId[faceIndex] );
+					copyPass.addTransferOutputView( nstSmResult[SmTexture::eFlux].subViewsId[faceIndex] );
+				}
+
+				previousPass = &copyPass;
+				result.push_back( previousPass );
+			}
+			else
+			{
+				result.push_back( &pass );
 			}
 		}
+
+		return result;
 	}
 
-	std::vector< ShadowMap::PassDataPtr > ShadowMapPoint::doCreatePass( uint32_t index
-		, bool vsm
-		, bool rsm )
+	bool ShadowMapPoint::doIsUpToDate( uint32_t index
+		, ShadowMap::Passes const & passes )const
 	{
-		auto & myPasses = m_passes[m_passesIndex];
-		return shdmappoint::createPass( m_resources
-			, myPasses.graphs
-			, myPasses.blurs
-			, m_blurIntermediateView
-			, index
-			, m_device
-			, m_scene
-			, *this
-			, vsm
-			, rsm );
-	}
-
-	bool ShadowMapPoint::doIsUpToDate( uint32_t index )const
-	{
-		auto & myPasses = m_passes[m_passesIndex];
 		uint32_t offset = index * 6u;
 
-		if ( myPasses.passes.size() >= offset + 6u )
+		if ( passes.passes.size() >= offset + 6u )
 		{
-			return std::all_of( myPasses.passes.begin() + offset
-				, myPasses.passes.begin() + offset + 6u
+			return std::all_of( passes.passes.begin() + offset
+				, passes.passes.begin() + offset + 6u
 				, []( ShadowMap::PassDataPtr const & data )
 				{
 					return data->pass->isUpToDate();
@@ -254,42 +286,58 @@ namespace castor3d
 		return true;
 	}
 
-	void ShadowMapPoint::doSetUpToDate( uint32_t index )
+	void ShadowMapPoint::doSetUpToDate( uint32_t index
+		, ShadowMap::Passes & passes )
 	{
-		auto & myPasses = m_passes[m_passesIndex];
 		uint32_t offset = index * 6u;
 
-		if ( myPasses.passes.size() >= offset + 6u )
+		if ( passes.passes.size() >= offset + 6u )
 		{
-			for ( auto & data : castor::makeArrayView( myPasses.passes.begin() + offset, myPasses.passes.begin() + offset + 6u ) )
+			for ( auto & data : castor::makeArrayView( passes.passes.begin() + offset, passes.passes.begin() + offset + 6u ) )
 			{
 				data->pass->setUpToDate();
 			}
 		}
 	}
 
-	void ShadowMapPoint::doUpdate( CpuUpdater & updater )
+	void ShadowMapPoint::doUpdate( CpuUpdater & updater
+		, ShadowMap::Passes & passes )
 	{
-		auto & myPasses = m_passes[m_passesIndex];
+		auto save = updater.index;
+		uint32_t offset = updater.index * 6u;
 
-		if ( myPasses.runnables.size() > updater.index
-			&& myPasses.runnables[updater.index] )
+		for ( uint32_t face = offset; face < offset + 6u; ++face )
 		{
-			uint32_t offset = updater.index * 6u;
+			updater.index = face - offset;
+			auto & pass = *passes.passes[face];
+			pass.pass->update( updater );
 
-			for ( uint32_t face = offset; face < offset + 6u; ++face )
-			{
-				updater.index = face - offset;
-				auto & pass = *myPasses.passes[face];
-				pass.pass->update( updater );
-
-				auto & pointLight = *updater.light->getPointLight();
-				pass.cameraUbo->cpuUpdate( *updater.camera
-					, false
-					, pointLight.getViewMatrix( CubeMapFace( updater.index ) )
-					, static_cast< ShadowMapPassPoint const & >( *pass.pass ).getProjection() );
-			}
+			auto & pointLight = *updater.light->getPointLight();
+			pass.cameraUbo->cpuUpdate( *updater.camera
+				, false
+				, pointLight.getViewMatrix( CubeMapFace( updater.index ) )
+				, static_cast< ShadowMapPassPoint const & >( *pass.pass ).getProjection() );
 		}
+
+		updater.index = save;
+	}
+
+	void ShadowMapPoint::doUpdate( GpuUpdater & updater
+		, ShadowMapPoint::Passes & passes )
+	{
+		auto save = updater.index;
+		auto & pointLight = *updater.light->getPointLight();
+		pointLight.updateShadow( int32_t( updater.index ) );
+		uint32_t offset = updater.index * 6u;
+
+		for ( uint32_t face = offset; face < offset + 6u; ++face )
+		{
+			auto & pass = static_cast< ShadowMapPassPoint & >( *passes.passes[face]->pass );
+			updater.index = face - offset;
+			pass.updateFrustum( pointLight.getViewMatrix( CubeMapFace( updater.index ) ) );
+		}
+
+		updater.index = save;
 	}
 
 	uint32_t ShadowMapPoint::doGetMaxCount()const

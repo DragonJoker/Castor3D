@@ -785,7 +785,7 @@ namespace castor3d
 					, scene
 					, LightType( i )
 					, m_device
-					, m_allShadowMaps[i].front().first.get().getShadowPassResult()
+					, m_allShadowMaps[i].front().first.get().getShadowPassResult( false )
 					, *m_lpvResult
 					, m_lpvConfigUbo );
 				m_lightPropagationVolumes[i]->initialise();
@@ -797,7 +797,7 @@ namespace castor3d
 					, scene
 					, LightType( i )
 					, m_device
-					, m_allShadowMaps[i].front().first.get().getShadowPassResult()
+					, m_allShadowMaps[i].front().first.get().getShadowPassResult( false )
 					, *m_lpvResult
 					, m_lpvConfigUbo );
 				m_lightPropagationVolumesG[i]->initialise();
@@ -809,7 +809,7 @@ namespace castor3d
 					, scene
 					, LightType( i )
 					, m_device
-					, m_allShadowMaps[i].front().first.get().getShadowPassResult()
+					, m_allShadowMaps[i].front().first.get().getShadowPassResult( false )
 					, m_llpvResult
 					, m_llpvConfigUbo );
 				m_layeredLightPropagationVolumes[i]->initialise();
@@ -821,7 +821,7 @@ namespace castor3d
 					, scene
 					, LightType( i )
 					, m_device
-					, m_allShadowMaps[i].front().first.get().getShadowPassResult()
+					, m_allShadowMaps[i].front().first.get().getShadowPassResult( false )
 					, m_llpvResult
 					, m_llpvConfigUbo );
 				m_layeredLightPropagationVolumesG[i]->initialise();

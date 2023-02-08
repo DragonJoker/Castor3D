@@ -181,6 +181,17 @@ namespace castor3d
 		}
 		/**
 		 *\~english
+		 *\param[in]	value	\p true if the pass is for static nodes.
+		 *\~french
+		 *\param[in]	value	\p true si la passe est pour les noeuds statiques.
+		 */
+		RenderNodesPassDesc & isStatic( bool value )
+		{
+			m_handleStatic = value ? 2u : 1u;
+			return *this;
+		}
+		/**
+		 *\~english
 		 *\param[in]	value	The frame pass resettable status.
 		 *\~french
 		 *\param[in]	value	Le statut resettable de la frame pass.
@@ -227,6 +238,7 @@ namespace castor3d
 		bool m_meshShading{};
 		SceneNode const * m_ignored{};
 		uint32_t m_index{ 0u };
+		uint32_t m_handleStatic{ 0u };
 		crg::ru::Config m_ruConfig{ 1u, true };
 	};
 
@@ -560,6 +572,7 @@ namespace castor3d
 		C3D_API virtual bool areValidPassFlags( PassComponentCombine const & passFlags )const;
 		C3D_API bool isValidPass( Pass const & pass )const;
 		C3D_API bool isValidRenderable( RenderedObject const & object )const;
+		C3D_API bool isValidNode( SceneNode const & node )const;
 		C3D_API bool isPassEnabled()const;
 		C3D_API Scene & getScene()const;
 		C3D_API SceneNode const * getIgnoredNode()const;
@@ -623,6 +636,21 @@ namespace castor3d
 		RenderPassTypeID getTypeID()const
 		{
 			return m_typeID;
+		}
+
+		bool filtersStatic()const
+		{
+			return m_handleStatic == 1;
+		}
+
+		bool filtersNonStatic()const
+		{
+			return m_handleStatic == 2;
+		}
+
+		bool handleStatic()const
+		{
+			return m_handleStatic != 0;
 		}
 		/**@}*/
 
@@ -806,6 +834,7 @@ namespace castor3d
 		bool m_meshShading{};
 		SceneUbo const * m_sceneUbo{};
 		uint32_t m_index{ 0u };
+		uint32_t m_handleStatic{};
 
 	private:
 		struct PassDescriptors

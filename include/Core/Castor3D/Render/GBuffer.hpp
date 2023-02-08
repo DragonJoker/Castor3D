@@ -331,6 +331,11 @@ namespace castor3d
 		{
 			return m_result.end();
 		}
+
+		TextureArray::size_type size()
+		{
+			return m_result.size();
+		}
 		/**@}*/
 
 	protected:
