@@ -36,18 +36,23 @@ namespace castor3d
 			, RenderDevice const & device
 			, Scene & scene
 			, ProgressBar * progress );
-		/**
-		 *\copydoc		castor3d::ShadowMap::update
-		 */
-		C3D_API void update( GpuUpdater & updater )override;
 
 	private:
-		std::vector< ShadowMap::PassDataPtr > doCreatePass( uint32_t index
+		crg::FramePassArray doCreatePass( crg::FrameGraph & graph
+			, crg::FramePassArray const & previousPasses
+			, uint32_t index
 			, bool vsm
-			, bool rsm )override;
-		bool doIsUpToDate( uint32_t index )const override;
-		void doSetUpToDate( uint32_t index )override;
-		void doUpdate( CpuUpdater & updater )override;
+			, bool rsm
+			, bool isStatic
+			, Passes & passes )override;
+		bool doIsUpToDate( uint32_t index
+			, Passes const & passes )const override;
+		void doSetUpToDate( uint32_t index
+			, Passes & passes )override;
+		void doUpdate( CpuUpdater & updater
+			, Passes & passes )override;
+		void doUpdate( GpuUpdater & updater
+			, Passes & passes )override;
 		uint32_t doGetMaxCount()const override;
 
 	private:

@@ -52,7 +52,8 @@ namespace castor3d
 			, SceneCuller & culler
 			, ShadowMap const & shadowMap
 			, bool needsVsm
-			, bool needsRsm );
+			, bool needsRsm
+			, bool isStatic );
 		/**
 		 *\~english
 		 *\brief		Destructor.

@@ -272,7 +272,7 @@ namespace castor3d
 
 	void Texture::create()
 	{
-		if ( !device || !resources )
+		if ( !device || !resources || image )
 		{
 			return;
 		}
@@ -297,6 +297,11 @@ namespace castor3d
 		else
 		{
 			sampledView = wholeView;
+		}
+
+		for ( auto subViewId : subViewsId )
+		{
+			subViews.push_back( resources->createImageView( context, subViewId ) );
 		}
 	}
 

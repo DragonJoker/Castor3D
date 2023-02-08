@@ -55,7 +55,8 @@ namespace castor3d
 		, SceneCuller & culler
 		, ShadowMap const & shadowMap
 		, bool needsVsm
-		, bool needsRsm )
+		, bool needsRsm
+		, bool isStatic )
 		: ShadowMapPass{ pass
 			, context
 			, graph
@@ -65,7 +66,8 @@ namespace castor3d
 			, culler
 			, shadowMap
 			, needsVsm
-			, needsRsm }
+			, needsRsm
+			, isStatic }
 	{
 		log::trace << "Created " << getName() << std::endl;
 	}

@@ -157,6 +157,7 @@ namespace castor3d
 		, m_meshShading{ desc.m_meshShading && device.hasMeshAndTaskShaders() }
 		, m_sceneUbo{ desc.m_sceneUbo }
 		, m_index{ desc.m_index }
+		, m_handleStatic{ desc.m_handleStatic }
 	{
 	}
 
@@ -289,7 +290,8 @@ namespace castor3d
 			, alphaFunc
 			, adjustFlags( textures )
 			, checkFlag( submeshFlags, SubmeshFlag::ePassMasks ) ? 0u : passLayerIndex
-			, morphTargets.getOffset() };
+			, morphTargets.getOffset()
+			, filtersNonStatic() };
 
 		if ( isFrontCulled )
 		{
@@ -496,6 +498,14 @@ namespace castor3d
 	bool RenderNodesPass::isValidRenderable( RenderedObject const & object )const
 	{
 		return doIsValidRenderable( object );
+	}
+
+	bool RenderNodesPass::isValidNode( SceneNode const & node )const
+	{
+		return &node != getIgnoredNode()
+			&& ( !handleStatic()
+				|| ( filtersStatic() && !node.isStatic() )
+				|| ( filtersNonStatic() && node.isStatic() ) );
 	}
 
 	bool RenderNodesPass::isPassEnabled()const

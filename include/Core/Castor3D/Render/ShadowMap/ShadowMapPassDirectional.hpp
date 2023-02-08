@@ -50,6 +50,7 @@ namespace castor3d
 			, ShadowMap const & shadowMap
 			, bool needsVsm
 			, bool needsRsm
+			, bool isStatic
 			, uint32_t cascadeIndex );
 		/**
 		 *\~english

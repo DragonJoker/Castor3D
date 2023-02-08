@@ -44,6 +44,72 @@ namespace castor3d
 
 			return 0u;
 		}
+
+		static void doInitialiseImage( RenderDevice const & device
+			, crg::ResourcesCache & resources
+			, crg::GraphContext & context
+			, ashes::CommandBuffer & commandBuffer
+			, Texture const & texture
+			, VkImageLayout finalLayout
+			, VkClearValue clearValue )
+		{
+			auto transferBarrier = makeVkStruct< VkImageMemoryBarrier >( 0u
+				, VkAccessFlags( VK_ACCESS_TRANSFER_WRITE_BIT )
+				, VK_IMAGE_LAYOUT_UNDEFINED
+				, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+				, VK_QUEUE_FAMILY_IGNORED
+				, VK_QUEUE_FAMILY_IGNORED
+				, texture.image
+				, texture.wholeViewId.data->info.subresourceRange );
+			device->vkCmdPipelineBarrier( commandBuffer
+				, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
+				, VK_PIPELINE_STAGE_TRANSFER_BIT
+				, VK_DEPENDENCY_BY_REGION_BIT
+				, 0u
+				, nullptr
+				, 0u
+				, nullptr
+				, 1u
+				, &transferBarrier );
+
+			if ( ashes::isDepthOrStencilFormat( texture.imageId.data->info.format ) )
+			{
+				device->vkCmdClearDepthStencilImage( commandBuffer
+					, texture.image
+					, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+					, &clearValue.depthStencil
+					, 1u
+					, &texture.wholeViewId.data->info.subresourceRange );
+			}
+			else
+			{
+				device->vkCmdClearColorImage( commandBuffer
+					, texture.image
+					, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+					, &clearValue.color
+					, 1u
+					, &texture.wholeViewId.data->info.subresourceRange );
+			}
+
+			auto shaderBarrier = makeVkStruct< VkImageMemoryBarrier >( 0u
+				, crg::getAccessMask( finalLayout )
+				, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+				, finalLayout
+				, VK_QUEUE_FAMILY_IGNORED
+				, VK_QUEUE_FAMILY_IGNORED
+				, texture.image
+				, texture.wholeViewId.data->info.subresourceRange );
+			device->vkCmdPipelineBarrier( commandBuffer
+				, VK_PIPELINE_STAGE_TRANSFER_BIT
+				, crg::getStageMask( finalLayout )
+				, VK_DEPENDENCY_BY_REGION_BIT
+				, 0u
+				, nullptr
+				, 0u
+				, nullptr
+				, 1u
+				, &shaderBarrier );
+		}
 	}
 
 	ShadowMap::ShadowMap( crg::ResourcesCache & resources
@@ -60,6 +126,12 @@ namespace castor3d
 		, m_scene{ scene }
 		, m_name{ castor::string::snakeToCamelCase( getName( lightType ) ) + "SM" }
 		, m_lightType{ lightType }
+		, m_staticsResult{ resources
+			, m_device
+			, m_name + "/Statics"
+			, createFlags
+			, size
+			, layerCount }
 		, m_result{ resources
 			, m_device
 			, m_name
@@ -68,72 +140,35 @@ namespace castor3d
 			, layerCount }
 		, m_count{ count }
 	{
+		m_staticsResult.create();
 		m_result.create();
 		auto & context = m_device.makeContext();
 		auto queueData = m_device.graphicsData();
 		auto commandBuffer = queueData->commandPool->createCommandBuffer();
 		commandBuffer->begin();
+		auto it = m_result.begin();
+		auto sit = m_staticsResult.begin();
+		uint32_t index{};
 
-		for ( auto & ptexture : m_result )
+		while ( it != m_result.end() )
 		{
-			auto & texture = *ptexture;
-			texture.image = resources.createImage( context, texture.imageId );
-			auto transferBarrier = makeVkStruct< VkImageMemoryBarrier >( 0u
-				, VkAccessFlags( VK_ACCESS_TRANSFER_WRITE_BIT )
-				, VK_IMAGE_LAYOUT_UNDEFINED
-				, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
-				, VK_QUEUE_FAMILY_IGNORED
-				, VK_QUEUE_FAMILY_IGNORED
-				, texture.image
-				, texture.wholeViewId.data->info.subresourceRange );
-			device->vkCmdPipelineBarrier( *commandBuffer
-				, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
-				, VK_PIPELINE_STAGE_TRANSFER_BIT
-				, VK_DEPENDENCY_BY_REGION_BIT
-				, 0u
-				, nullptr
-				, 0u
-				, nullptr
-				, 1u
-				, &transferBarrier );
-
-			if ( ashes::isDepthOrStencilFormat( texture.imageId.data->info.format ) )
-			{
-				device->vkCmdClearDepthStencilImage( *commandBuffer
-					, texture.image
-					, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
-					, &defaultClearDepthStencil.depthStencil
-					, 1u
-					, &texture.wholeViewId.data->info.subresourceRange );
-			}
-			else
-			{
-				device->vkCmdClearColorImage( *commandBuffer
-					, texture.image
-					, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
-					, &transparentBlackClearColor.color
-					, 1u
-					, &texture.wholeViewId.data->info.subresourceRange );
-			}
-
-			auto shaderBarrier = makeVkStruct< VkImageMemoryBarrier >( 0u
-				, VkAccessFlags( VK_ACCESS_SHADER_READ_BIT )
-				, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+			shdmap::doInitialiseImage( device
+				, resources
+				, context
+				, *commandBuffer
+				, **sit
+				, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
+				, getClearValue( SmTexture( index ) ) );
+			shdmap::doInitialiseImage( device
+				, resources
+				, context
+				, *commandBuffer
+				, **it
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-				, VK_QUEUE_FAMILY_IGNORED
-				, VK_QUEUE_FAMILY_IGNORED
-				, texture.image
-				, texture.wholeViewId.data->info.subresourceRange );
-			device->vkCmdPipelineBarrier( *commandBuffer
-				, VK_PIPELINE_STAGE_TRANSFER_BIT
-				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-				, VK_DEPENDENCY_BY_REGION_BIT
-				, 0u
-				, nullptr
-				, 0u
-				, nullptr
-				, 1u
-				, &shaderBarrier );
+				, getClearValue( SmTexture( index ) ) );
+			++it;
+			++sit;
+			++index;
 		}
 
 		commandBuffer->end();
@@ -150,22 +185,36 @@ namespace castor3d
 		auto & myPasses = m_passes[m_passesIndex];
 
 		if ( updater.index < doGetMaxCount()
-			&& updater.index >= myPasses.runnables.size() )
+			&& updater.index >= myPasses.otherNodes.runnables.size() )
 		{
-			auto passes = doCreatePass( updater.index, vsm, rsm );
-
-			for ( auto & pass : passes )
-			{
-				myPasses.passes.emplace_back( std::move( pass ) );
-			}
-
-			myPasses.runnables.push_back( myPasses.graphs.back()->compile( m_device.makeContext() ) );
-			auto runnable = myPasses.runnables.back().get();
-			printGraph( *runnable );
-			runnable->record();
+			auto graph = std::make_unique< crg::FrameGraph >( m_resources.getHandler(), m_name );
+			auto previous = doCreatePasses( *graph
+				, crg::FramePassArray{}
+				, updater.index
+				, vsm
+				, rsm
+				, true
+				, myPasses.staticNodes );
+			doCreatePasses( *graph
+				, previous
+				, updater.index
+				, vsm
+				, rsm
+				, false
+				, myPasses.otherNodes );
+			myPasses.staticNodes.graphs.emplace_back( nullptr );
+			myPasses.otherNodes.graphs.emplace_back( std::move( graph ) );
 		}
 
-		doUpdate( updater );
+		doUpdate( updater, myPasses.staticNodes );
+		doUpdate( updater, myPasses.otherNodes );
+	}
+
+	void ShadowMap::update( GpuUpdater & updater )
+	{
+		auto & myPasses = m_passes[m_passesIndex];
+		doUpdate( updater, myPasses.staticNodes );
+		doUpdate( updater, myPasses.otherNodes );
 	}
 
 	void ShadowMap::accept( PipelineVisitorBase & visitor )
@@ -191,26 +240,27 @@ namespace castor3d
 		, ashes::Queue const & queue
 		, uint32_t index )
 	{
+		auto & myPasses = m_passes[m_passesIndex];
 #if !C3D_MeasureShadowMapImpact
-		if ( doIsUpToDate( index )
+		if ( doIsUpToDate( index, myPasses.staticNodes )
+			&& doIsUpToDate( index, myPasses.otherNodes )
 			&& getEngine()->areUpdateOptimisationsEnabled() )
 		{
 			return toWait;
 		}
 #endif
 
-		auto & myPasses = m_passes[m_passesIndex];
-
-		if ( !myPasses.runnables[index] )
+		if ( !myPasses.otherNodes.runnables[index] )
 		{
-			myPasses.runnables[index] = myPasses.graphs[index]->compile( m_device.makeContext() );
-			auto runnable = myPasses.runnables[index].get();
-			printGraph( *runnable );
-			runnable->record();
+			CU_Require( myPasses.otherNodes.graphs[index] != nullptr );
+			myPasses.otherNodes.runnables[index] = myPasses.otherNodes.graphs[index]->compile( m_device.makeContext() );
+			printGraph( *myPasses.otherNodes.runnables.back() );
+			myPasses.otherNodes.runnables[index]->record();
 		}
 
-		doSetUpToDate( index );
-		return myPasses.runnables[index]->run( toWait, queue );
+		doSetUpToDate( index, myPasses.staticNodes );
+		doSetUpToDate( index, myPasses.otherNodes );
+		return myPasses.otherNodes.runnables[index]->run( toWait, queue );
 	}
 
 	ashes::VkClearValueArray const & ShadowMap::getClearValues()const
@@ -248,5 +298,95 @@ namespace castor3d
 		, uint32_t index )const
 	{
 		return m_result[texture].subViewsId;
+	}
+
+	crg::FramePassArray ShadowMap::doCreatePasses( crg::FrameGraph & graph
+		, crg::FramePassArray const & previousPasses
+		, uint32_t index
+		, bool vsm
+		, bool rsm
+		, bool isStatic
+		, Passes & passes )
+	{
+		auto result = doCreatePass( graph
+			, previousPasses
+			, index
+			, vsm
+			, rsm
+			, isStatic
+			, passes );
+
+		if ( !isStatic )
+		{
+			// The graph will be defined for finale shadow map pass, but not for static one.
+			passes.runnables.push_back( graph.compile( m_device.makeContext() ) );
+			printGraph( *passes.runnables.back() );
+			passes.runnables.back()->record();
+		}
+		else
+		{
+			passes.runnables.push_back( nullptr );
+		}
+
+		return result;
+	}
+
+	void ShadowMap::doRegisterGraphIO( crg::FrameGraph & graph
+		, bool vsm
+		, bool rsm
+		, bool isStatic )const
+	{
+		auto & smResult = getShadowPassResult( isStatic );
+		auto & depth = smResult[SmTexture::eDepth];
+		auto & linear = smResult[SmTexture::eLinearDepth];
+		auto & variance = smResult[SmTexture::eVariance];
+		auto & normal = smResult[SmTexture::eNormal];
+		auto & position = smResult[SmTexture::ePosition];
+		auto & flux = smResult[SmTexture::eFlux];
+
+		if ( isStatic )
+		{
+			graph.addInput( depth.wholeViewId
+				, crg::makeLayoutState( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) );
+			graph.addInput( linear.wholeViewId
+				, crg::makeLayoutState( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) );
+
+			if ( vsm )
+			{
+				graph.addInput( variance.wholeViewId
+					, crg::makeLayoutState( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) );
+			}
+
+			if ( rsm )
+			{
+				graph.addInput( normal.wholeViewId
+					, crg::makeLayoutState( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) );
+				graph.addInput( position.wholeViewId
+					, crg::makeLayoutState( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) );
+				graph.addInput( flux.wholeViewId
+					, crg::makeLayoutState( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) );
+			}
+		}
+		else
+		{
+			graph.addOutput( linear.wholeViewId
+				, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+
+			if ( vsm )
+			{
+				graph.addOutput( variance.wholeViewId
+					, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+			}
+
+			if ( rsm )
+			{
+				graph.addOutput( normal.wholeViewId
+					, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+				graph.addOutput( position.wholeViewId
+					, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+				graph.addOutput( flux.wholeViewId
+					, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+			}
+		}
 	}
 }

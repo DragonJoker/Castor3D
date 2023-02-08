@@ -917,7 +917,7 @@ namespace castor3d
 				auto & node = *lookup.node;
 				return renderPass.isValidPass( *node.pass )
 					&& renderPass.isValidRenderable( node.instance )
-					&& node.instance.getParent() != renderPass.getIgnoredNode()
+					&& renderPass.isValidNode( *node.instance.getParent() )
 					&& ( !node.data.getInstantiation().isInstanced( node.instance.getMaterial( node.data ) )
 						|| node.instance.getParent()->isVisible() );
 			} );
@@ -928,7 +928,7 @@ namespace castor3d
 				auto & node = *lookup.node;
 				return renderPass.isValidPass( *node.pass )
 					&& renderPass.isValidRenderable( node.instance )
-					&& node.instance.getNode() != renderPass.getIgnoredNode();
+					&& renderPass.isValidNode( *node.instance.getNode() );
 			} );
 
 		m_hasNodes = submeshesIt != culler.getSubmeshes().end()
@@ -957,7 +957,7 @@ namespace castor3d
 
 			if ( renderPass.isValidPass( *node.pass )
 				&& renderPass.isValidRenderable( node.instance )
-				&& node.instance.getParent() != renderPass.getIgnoredNode() )
+				&& renderPass.isValidNode( *node.instance.getParent() ) )
 			{
 				auto passFlags = node.pass->getPassFlags();
 				bool needsFront = !node.pass->hasComponent< AttenuationComponent >()
@@ -1006,7 +1006,7 @@ namespace castor3d
 
 			if ( renderPass.isValidPass( *node.pass )
 				&& renderPass.isValidRenderable( node.instance )
-				&& node.instance.getNode() != renderPass.getIgnoredNode() )
+				&& renderPass.isValidNode( *node.instance.getNode() ) )
 			{
 				doAddBillboard( shadowMaps, node );
 			}

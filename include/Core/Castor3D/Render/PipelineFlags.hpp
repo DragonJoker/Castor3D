@@ -38,13 +38,15 @@ namespace castor3d
 			, ProgramFlags programFlags = ProgramFlag::eNone
 			, TextureCombine ptextures = TextureCombine{}
 			, ShaderFlags shaderFlags = ShaderFlag::eNone
-			, VkCompareOp alphaFunc = VkCompareOp::VK_COMPARE_OP_ALWAYS
-			, uint32_t passLayerIndex = 0u )
+			, VkCompareOp palphaFunc = VkCompareOp::VK_COMPARE_OP_ALWAYS
+			, uint32_t ppassLayerIndex = 0u
+			, bool pisStatic = false )
 			: components{ std::move( pcomponents ) }
 			, textures{ std::move( ptextures ) }
 			, lightingModelId{ plightingModelId }
-			, alphaFunc{ alphaFunc }
-			, passLayerIndex{ passLayerIndex }
+			, alphaFunc{ palphaFunc }
+			, passLayerIndex{ ppassLayerIndex }
+			, isStatic{ pisStatic }
 			, m_submeshFlags{ submeshFlags }
 			, m_programFlags{ programFlags }
 			, m_shaderFlags{ shaderFlags }
@@ -56,6 +58,7 @@ namespace castor3d
 		LightingModelID lightingModelId;
 		VkCompareOp alphaFunc;
 		uint32_t passLayerIndex;
+		bool isStatic;
 		//uint32_t maxTexcoordSet;
 		SubmeshFlags m_submeshFlags;
 		ProgramFlags m_programFlags;
@@ -125,7 +128,8 @@ namespace castor3d
 			, VkCompareOp palphaFunc = VK_COMPARE_OP_ALWAYS
 			, TextureCombine textures = {}
 			, uint32_t ppassLayerIndex = {}
-			, VkDeviceSize pmorphTargetsOffset = {} )
+			, VkDeviceSize pmorphTargetsOffset = {}
+			, bool pisStatic = false )
 			: PipelineFlags{ PipelineHiHashDetails{ std::move( pcomponents )
 					, plightingModelId
 					, psubmeshFlags
@@ -133,7 +137,8 @@ namespace castor3d
 					, std::move( textures )
 					, pshaderFlags
 					, palphaFunc
-					, ppassLayerIndex }
+					, ppassLayerIndex
+					, pisStatic }
 				, PipelineLoHashDetails{ pbackgroundModelId, pmorphTargetsOffset }
 				, psceneFlags
 				, pcolourBlendMode

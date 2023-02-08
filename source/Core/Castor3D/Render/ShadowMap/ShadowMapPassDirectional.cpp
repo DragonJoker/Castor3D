@@ -55,6 +55,7 @@ namespace castor3d
 		, ShadowMap const & shadowMap
 		, bool needsVsm
 		, bool needsRsm
+		, bool isStatic
 		, uint32_t cascadeIndex )
 		: ShadowMapPass{ pass
 			, context
@@ -65,7 +66,8 @@ namespace castor3d
 			, culler
 			, shadowMap
 			, needsVsm
-			, needsRsm }
+			, needsRsm
+			, isStatic }
 		, m_camera{ camera }
 	{
 		log::trace << "Created " << getName() << std::endl;

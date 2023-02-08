@@ -146,7 +146,7 @@ namespace castor3d
 		 *\brief			Met à jour la passe de rendu, au niveau GPU.
 		 *\param[in, out]	updater	Les données d'update.
 		 */
-		C3D_API virtual void update( GpuUpdater & updater ) = 0;
+		C3D_API void update( GpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Renders the shadow map.
@@ -181,14 +181,14 @@ namespace castor3d
 		C3D_API virtual crg::ImageViewIdArray getViews( SmTexture texture
 			, uint32_t index = 0u )const;
 
-		ShadowMapResult const & getShadowPassResult()const
+		ShadowMapResult const & getShadowPassResult( bool isStatic )const
 		{
-			return m_result;
+			return isStatic ? m_staticsResult : m_result;
 		}
 
-		ShadowMapResult & getShadowPassResult()
+		ShadowMapResult & getShadowPassResult( bool isStatic )
 		{
-			return m_result;
+			return isStatic ? m_staticsResult : m_result;
 		}
 
 		Scene & getScene()const
@@ -202,13 +202,51 @@ namespace castor3d
 		}
 		/**@}*/
 
-	private:
-		C3D_API virtual std::vector< ShadowMap::PassDataPtr > doCreatePass( uint32_t index
+	protected:
+		struct Passes
+		{
+			std::vector< PassDataPtr > passes;
+			std::vector< std::unique_ptr< crg::FrameGraph > > graphs;
+			std::vector< crg::RunnableGraphPtr > runnables;
+			std::vector< GaussianBlurUPtr > blurs;
+		};
+
+		struct AllPasses
+		{
+			Passes staticNodes;
+			Passes otherNodes;
+		};
+
+	protected:
+		C3D_API void doRegisterGraphIO( crg::FrameGraph & graph
 			, bool vsm
-			, bool rsm ) = 0;
-		C3D_API virtual bool doIsUpToDate( uint32_t index )const = 0;
-		C3D_API virtual void doSetUpToDate( uint32_t index ) = 0;
-		C3D_API virtual void doUpdate( CpuUpdater & updater ) = 0;
+			, bool rsm
+			, bool isStatic )const;
+
+	private:
+		crg::FramePassArray doCreatePasses( crg::FrameGraph & graph
+			, crg::FramePassArray const & previousPasses
+			, uint32_t index
+			, bool vsm
+			, bool rsm
+			, bool isStatic
+			, Passes & passes );
+
+		C3D_API virtual crg::FramePassArray doCreatePass( crg::FrameGraph & graph
+			, crg::FramePassArray const & previousPasses
+			, uint32_t index
+			, bool vsm
+			, bool rsm
+			, bool isStatic
+			, Passes & passes ) = 0;
+		C3D_API virtual bool doIsUpToDate( uint32_t index
+			, Passes const & passes )const = 0;
+		C3D_API virtual void doSetUpToDate( uint32_t index
+			, Passes & passes ) = 0;
+		C3D_API virtual void doUpdate( CpuUpdater & updater
+			, Passes & passes ) = 0;
+		C3D_API virtual void doUpdate( GpuUpdater & updater
+			, Passes & passes ) = 0;
 		C3D_API virtual uint32_t doGetMaxCount()const = 0;
 
 	protected:
@@ -217,17 +255,11 @@ namespace castor3d
 		Scene & m_scene;
 		castor::String m_name;
 		LightType m_lightType;
+		ShadowMapResult m_staticsResult;
 		ShadowMapResult m_result;
 		uint32_t m_count;
 		std::set< std::reference_wrapper< GeometryBuffers > > m_geometryBuffers;
-		struct Passes
-		{
-			std::vector< PassDataPtr > passes;
-			std::vector< std::unique_ptr< crg::FrameGraph > > graphs;
-			std::vector< crg::RunnableGraphPtr > runnables;
-			std::vector< GaussianBlurUPtr > blurs;
-		};
-		std::array< Passes, 4u > m_passes;
+		std::array< AllPasses, 4u > m_passes;
 		uint32_t m_passesIndex{};
 	};
 }
