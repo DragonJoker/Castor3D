@@ -32,6 +32,22 @@ namespace castor3d
 		C3D_API explicit LightCategory( LightType lightType, Light & light );
 
 	public:
+		struct LightData
+			: LightBufferTypes
+		{
+			Float3 colour;
+			Float1 shadowMapIndex;
+			Float2 intensity;
+			Float1 farPlane;
+			Float1 shadowType;
+			Float2 rawShadowsOffsets;
+			Float2 pcfShadowsOffsets;
+			Float2 vsmShadowVariance;
+			Float1 volumetricSteps;
+			Float1 volumetricScattering;
+		};
+
+	public:
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -54,7 +70,7 @@ namespace castor3d
 		 *\brief		Met la lumière dans la texture donnée.
 		 *\param[out]	data	Reçoit les données de la source lumineuse.
 		 */
-		C3D_API void fillBuffer( LightBufferData & data )const;
+		C3D_API void fillBuffer( castor::Point4f * data )const;
 		/**
 		*\~english
 		*name
@@ -160,7 +176,7 @@ namespace castor3d
 		 *\brief		Met la lumière dans la texture donnée.
 		 *\param[out]	data	Reçoit les données de la source lumineuse.
 		 */
-		C3D_API virtual void doFillBuffer( LightBufferData & data )const = 0;
+		C3D_API virtual void doFillBuffer( castor::Point4f * data )const = 0;
 
 	protected:
 		//!\~english	The cube box for the light volume of effect.

@@ -11,7 +11,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Graphics/GraphicsModule.hpp>
 
-#include <ShaderWriter/CompositeTypes/StructInstance.hpp>
+#include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>
 #include <ShaderWriter/MatTypes/Mat4.hpp>
 
 namespace castor3d
@@ -19,28 +19,26 @@ namespace castor3d
 	namespace shader
 	{
 		struct LpvLightData
-			: public sdw::StructInstance
+			: public sdw::StructInstanceHelperT< "C3D_LpvLightData"
+				, sdw::type::MemoryLayout::eStd140
+				, sdw::Mat4x4Field< "lightView" >
+				, sdw::FloatField< "texelAreaModifier" >
+				, sdw::FloatField< "tanFovXHalf" >
+				, sdw::FloatField< "tanFovYHalf" >
+				, sdw::IntField< "lightOffset" > >
 		{
 			C3D_API LpvLightData( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr
-				, bool enabled );
-			SDW_DeclStructInstance( C3D_API, LpvLightData );
+				, bool enabled )
+				: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+			{
+			}
 
-			C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
-			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
-
-			// Raw values
-			sdw::Mat4 lightView;
-			sdw::Vec4 lightConfig;
-			// Specific values
-			sdw::Float texelAreaModifier;
-			sdw::Float tanFovXHalf;
-			sdw::Float tanFovYHalf;
-			sdw::Int lightIndex;
-
-		private:
-			using sdw::StructInstance::getMember;
-			using sdw::StructInstance::getMemberArray;
+			auto lightView()const { return getMember< "lightView" >(); }
+			auto texelAreaModifier()const { return getMember< "texelAreaModifier" >(); }
+			auto tanFovXHalf()const { return getMember< "tanFovXHalf" >(); }
+			auto tanFovYHalf()const { return getMember< "tanFovYHalf" >(); }
+			auto lightOffset()const { return getMember< "lightOffset" >(); }
 		};
 	}
 

@@ -17,67 +17,34 @@ namespace castor3d
 
 	namespace shader
 	{
-		ShadowMapData::ShadowMapData( sdw::ShaderWriter & writer
-			, ast::expr::ExprPtr expr
-			, bool enabled )
-			: StructInstance{ writer, std::move( expr ), enabled }
-			, m_lightProjection{ getMember< sdw::Mat4 >( "lightProjection" ) }
-			, m_lightView{ getMember< sdw::Mat4 >( "lightView" ) }
-			, m_lightPosFarPlane{ getMember< sdw::Vec4 >( "lightPosFarPlane" ) }
-			, m_lightIndex{ getMember< sdw::UInt >( "lightIndex" ) }
-		{
-		}
-
-		ast::type::BaseStructPtr ShadowMapData::makeType( ast::type::TypesCache & cache )
-		{
-			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
-				, "C3D_ShadowMapData" );
-
-			if ( result->empty() )
-			{
-				result->declMember( "lightProjection", ast::type::Kind::eMat4x4F );
-				result->declMember( "lightView", ast::type::Kind::eMat4x4F );
-				result->declMember( "lightPosFarPlane", ast::type::Kind::eVec4F );
-				result->declMember( "lightIndex", ast::type::Kind::eUInt );
-			}
-
-			return result;
-		}
-
-		std::unique_ptr< sdw::Struct > ShadowMapData::declare( sdw::ShaderWriter & writer )
-		{
-			return std::make_unique< sdw::Struct >( writer
-				, makeType( writer.getTypesCache() ) );
-		}
-
 		sdw::Vec4 ShadowMapData::worldToView( sdw::Vec4 const & pos )const
 		{
-			return m_lightView * pos;
+			return lightView() * pos;
 		}
 
 		sdw::Vec4 ShadowMapData::viewToProj( sdw::Vec4 const & pos )const
 		{
-			return m_lightProjection * pos;
+			return lightProjection() * pos;
 		}
 
 		sdw::Float ShadowMapData::getNormalisedDepth( sdw::Vec3 const & pos )const
 		{
-			return length( pos - m_lightPosFarPlane.xyz() ) / m_lightPosFarPlane.w();
+			return length( pos - lightPosFarPlane().xyz() ) / lightPosFarPlane().w();
 		}
 
 		DirectionalLight ShadowMapData::getDirectionalLight( Lights & lights )const
 		{
-			return lights.getDirectionalLight( m_lightIndex );
+			return lights.getDirectionalLight( lightOffset() );
 		}
 
 		PointLight ShadowMapData::getPointLight( Lights & lights )const
 		{
-			return lights.getPointLight( m_lightIndex );
+			return lights.getPointLight( lightOffset() );
 		}
 
 		SpotLight ShadowMapData::getSpotLight( Lights & lights )const
 		{
-			return lights.getSpotLight( m_lightIndex );
+			return lights.getSpotLight( lightOffset() );
 		}
 	}
 
@@ -99,7 +66,7 @@ namespace castor3d
 	{
 		CU_Require( m_ubo );
 		auto & data = m_ubo.getData();
-		data.lightIndex = light.getBufferIndex();
+		data.lightOffset = light.getBufferIndex();
 		auto position = light.getParent()->getDerivedPosition();
 		data.lightPosFarPlane =
 		{

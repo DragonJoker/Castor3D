@@ -61,11 +61,6 @@ namespace castor3d
 
 	namespace shader
 	{
-		namespace
-		{
-			static constexpr uint32_t BaseLightComponentsCount = 5u;
-		}
-
 		uint32_t getSpotShadowMapCount()
 		{
 			return SpotShadowMapCount;
@@ -74,11 +69,6 @@ namespace castor3d
 		uint32_t getPointShadowMapCount()
 		{
 			return PointShadowMapCount;
-		}
-
-		uint32_t getBaseLightComponentsCount()
-		{
-			return BaseLightComponentsCount;
 		}
 
 		castor::String concatModelNames( castor::String lhs

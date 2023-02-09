@@ -15,6 +15,18 @@ namespace castor3d
 	class PointLight
 		: public LightCategory
 	{
+	public:
+		struct LightData
+			: LightCategory::LightData
+		{
+			Float3 position;
+			Float1 pad0;
+			Float3 attenuation;
+			Float1 pad1;
+		};
+
+		static constexpr uint32_t LightDataSize = uint32_t( ashes::getAlignedSize( sizeof( LightData ), 4u ) );
+		static constexpr uint32_t LightDataComponents = LightDataSize / ( 4u * sizeof( float ) );
 
 	private:
 		/**
@@ -87,7 +99,7 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		void doFillBuffer( LightBufferData & data )const override;
+		void doFillBuffer( castor::Point4f * data )const override;
 
 	private:
 		friend class Scene;

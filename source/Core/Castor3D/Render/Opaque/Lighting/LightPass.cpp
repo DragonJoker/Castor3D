@@ -186,7 +186,7 @@ namespace castor3d
 			, 1u );
 
 		auto c3d_lightData = writer.declPushConstantsBuffer( "c3d_lightData" );
-		auto lightIndex = c3d_lightData.declMember< sdw::UInt >( "lightIndex" );
+		auto lightOffset = c3d_lightData.declMember< sdw::UInt >( "lightOffset" );
 		c3d_lightData.end();
 
 		writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
@@ -286,7 +286,7 @@ namespace castor3d
 					{
 					case LightType::eDirectional:
 					{
-						auto light = writer.declLocale( "light", lights.getDirectionalLight( lightIndex ) );
+						auto light = writer.declLocale( "light", lights.getDirectionalLight( lightOffset ) );
 						lightingModel->compute( light
 							, components
 							, *backgroundModel
@@ -298,7 +298,7 @@ namespace castor3d
 
 					case LightType::ePoint:
 					{
-						auto light = writer.declLocale( "light", lights.getPointLight( lightIndex ) );
+						auto light = writer.declLocale( "light", lights.getPointLight( lightOffset ) );
 						lightingModel->compute( light
 							, components
 							, lightSurface
@@ -309,7 +309,7 @@ namespace castor3d
 
 					case LightType::eSpot:
 					{
-						auto light = writer.declLocale( "light", lights.getSpotLight( lightIndex ) );
+						auto light = writer.declLocale( "light", lights.getSpotLight( lightOffset ) );
 						lightingModel->compute( light
 							, components
 							, lightSurface

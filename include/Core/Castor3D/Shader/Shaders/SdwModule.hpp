@@ -198,15 +198,9 @@ namespace castor3d::shader
 
 	C3D_API uint32_t getSpotShadowMapCount();
 	C3D_API uint32_t getPointShadowMapCount();
-	C3D_API uint32_t getBaseLightComponentsCount();
 
 	C3D_API castor::String concatModelNames( castor::String lhs
 		, castor::String rhs );
-
-	inline constexpr uint32_t getMaxLightComponentsCount()
-	{
-		return LightBufferDataSize / ( 4u * uint32_t( sizeof( float ) ) );
-	}
 
 	struct DerivTex
 		: public sdw::StructInstanceHelperT< "C3D_DerivTex"

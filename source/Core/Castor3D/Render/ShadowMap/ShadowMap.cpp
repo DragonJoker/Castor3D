@@ -337,7 +337,6 @@ namespace castor3d
 		, bool isStatic )const
 	{
 		auto & smResult = getShadowPassResult( isStatic );
-		auto & depth = smResult[SmTexture::eDepth];
 		auto & linear = smResult[SmTexture::eLinearDepth];
 		auto & variance = smResult[SmTexture::eVariance];
 		auto & normal = smResult[SmTexture::eNormal];
@@ -346,6 +345,7 @@ namespace castor3d
 
 		if ( isStatic )
 		{
+			auto & depth = smResult[SmTexture::eDepth];
 			graph.addInput( depth.wholeViewId
 				, crg::makeLayoutState( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) );
 			graph.addInput( linear.wholeViewId

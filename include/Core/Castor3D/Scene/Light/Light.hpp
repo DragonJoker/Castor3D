@@ -67,7 +67,7 @@ namespace castor3d
 		 *\param[out]	data	Reçoit les informations.
 		 */
 		C3D_API void fillBuffer( uint32_t index
-			, LightBufferData & data );
+			, castor::Point4f * data );
 		/**
 		*\~english
 		*name

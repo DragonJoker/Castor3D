@@ -15,24 +15,25 @@ namespace castor3d
 	{
 	}
 
-	void LightCategory::fillBuffer( LightBufferData & data )const
+	void LightCategory::fillBuffer( castor::Point4f * data )const
 	{
-		data.colour = getColour();
-		data.shadowMapIndex = float( m_light.getShadowMapIndex() );
+		auto & base = *reinterpret_cast< LightData * >( data->ptr() );
+		base.colour = getColour();
+		base.shadowMapIndex = float( m_light.getShadowMapIndex() );
 
-		data.intensity = getIntensity();
-		data.farPlane = getFarPlane();
-		data.shadowType = float( getLight().isShadowProducer()
+		base.intensity = getIntensity();
+		base.farPlane = getFarPlane();
+		base.shadowType = float( getLight().isShadowProducer()
 			? getLight().getShadowType()
 			: ShadowType::eNone );
 
-		data.volumetricSteps = float( getVolumetricSteps() );
-		data.volumetricScattering = getVolumetricScatteringFactor();
+		base.volumetricSteps = float( getVolumetricSteps() );
+		base.volumetricScattering = getVolumetricScatteringFactor();
 
-		data.rawShadowsOffsets = getShadowRawOffsets();
-		data.pcfShadowsOffsets = getShadowPcfOffsets();
+		base.rawShadowsOffsets = getShadowRawOffsets();
+		base.pcfShadowsOffsets = getShadowPcfOffsets();
 
-		data.vsmShadowVariance = getShadowVariance();
+		base.vsmShadowVariance = getShadowVariance();
 
 		doFillBuffer( data );
 	}

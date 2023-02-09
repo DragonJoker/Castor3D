@@ -197,13 +197,13 @@ namespace castor3d
 		return result;
 	}
 
-	void DirectionalLight::doFillBuffer( LightBufferData & data )const
+	void DirectionalLight::doFillBuffer( castor::Point4f * data )const
 	{
-		auto & directional = data.specific.directional;
+		auto & directional = *reinterpret_cast< LightData * >( data->ptr() );
 		directional.direction = castor::point::getNormalised( m_direction );
 		directional.cascadeCount = float( m_cascades.size() );
-		castor::Point4f splitDepths;
-		castor::Point4f splitScales;
+		LightData::CascasdeFloatArray splitDepths{};
+		LightData::CascasdeFloatArray splitScales{};
 
 		for ( uint32_t i = 0u; i < m_cascades.size(); ++i )
 		{
