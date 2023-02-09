@@ -17,25 +17,25 @@ namespace castor
 	template< typename T >
 	struct PointData< T, 2u >
 	{
-		T x;
-		T y;
+		T x{};
+		T y{};
 	};
 
 	template< typename T >
 	struct PointData< T, 3u >
 	{
-		T x;
-		T y;
-		T z;
+		T x{};
+		T y{};
+		T z{};
 	};
 
 	template< typename T >
 	struct PointData< T, 4u >
 	{
-		T x;
-		T y;
-		T z;
-		T w;
+		T x{};
+		T y{};
+		T z{};
+		T w{};
 	};
 }
 

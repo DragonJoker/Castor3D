@@ -93,7 +93,7 @@ namespace castor3d
 	*/
 	//@{
 	static uint32_t constexpr ShadowMapDirectionalTextureSize = 1024u;
-	static uint32_t constexpr DirectionalMaxCascadesCount = 4u;
+	static uint32_t constexpr DirectionalMaxCascadesCount = 6u;
 	//@}
 	/**
 	*\name

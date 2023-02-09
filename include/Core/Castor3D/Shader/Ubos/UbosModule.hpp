@@ -153,7 +153,7 @@ namespace castor3d
 		float texelAreaModifier = 1.0f;
 		float tanFovXHalf = 1.0f;
 		float tanFovYHalf = 1.0f;
-		float lightIndex = 0.0f;
+		float lightOffset = 0.0f;
 	};
 	/**
 	*\~english
@@ -402,7 +402,7 @@ namespace castor3d
 		castor::Matrix4x4f lightProjection;
 		castor::Matrix4x4f lightView;
 		castor::Point4f lightPosFarPlane;
-		uint32_t lightIndex;
+		uint32_t lightOffset;
 	};
 	/**
 	*\~english

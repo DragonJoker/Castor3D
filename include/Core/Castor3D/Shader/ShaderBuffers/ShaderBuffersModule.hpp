@@ -76,11 +76,13 @@ namespace castor3d
 	CU_DeclareCUSmartPtr( castor3d, TextureConfigurationBuffer, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, TextureAnimationBuffer, C3D_API );
 
-	struct LightBufferData
+	struct LightBufferTypes
 	{
+		using Float1 = float;
+
 		struct Float2
 		{
-			Float2 & operator=( float rhs )
+			Float2 & operator=( Float1 rhs )
 			{
 				x = rhs;
 				return *this;
@@ -93,13 +95,13 @@ namespace castor3d
 				return *this;
 			}
 
-			float x{};
-			float y{};
+			Float1 x{};
+			Float1 y{};
 		};
 
 		struct Float3
 		{
-			Float3 & operator=( float rhs )
+			Float3 & operator=( Float1 rhs )
 			{
 				x = rhs;
 				return *this;
@@ -120,14 +122,14 @@ namespace castor3d
 				return *this;
 			}
 
-			float x{};
-			float y{};
-			float z{};
+			Float1 x{};
+			Float1 y{};
+			Float1 z{};
 		};
 
 		struct Float4
 		{
-			Float4 & operator=( float rhs )
+			Float4 & operator=( Float1 rhs )
 			{
 				x = rhs;
 				return *this;
@@ -157,10 +159,10 @@ namespace castor3d
 				return *this;
 			}
 
-			float x{};
-			float y{};
-			float z{};
-			float w{};
+			Float1 x{};
+			Float1 y{};
+			Float1 z{};
+			Float1 w{};
 		};
 
 		struct Float4x4
@@ -179,54 +181,7 @@ namespace castor3d
 			Float4 c2{};
 			Float4 c3{};
 		};
-
-		union SpecLight
-		{
-			struct Directional
-			{
-				Float3 direction;
-				float cascadeCount;
-				Float4 splitDepths;
-				Float4 splitScales;
-				std::array< Float4x4, 4u > transforms;
-			} directional;
-			struct Point
-			{
-				Float3 position;
-				float pad0;
-				Float3 attenuation;
-				float pad1;
-				Float4 pad2;
-				std::array< Float4x4, 4u > pad3;
-			} point;
-			struct Spot
-			{
-				Float3 position;
-				float exponent;
-				Float3 attenuation;
-				float innerCutoff;
-				Float3 direction;
-				float outerCutoff;
-				Float4x4 transform;
-				std::array< Float4x4, 3u > pad;
-			} spot;
-		};
-
-		Float3 colour;
-		float shadowMapIndex;
-		Float2 intensity;
-		float farPlane;
-		float shadowType;
-		Float2 rawShadowsOffsets;
-		Float2 pcfShadowsOffsets;
-		Float2 vsmShadowVariance;
-		float volumetricSteps;
-		float volumetricScattering;
-		SpecLight specific;
 	};
-	static_assert( sizeof( LightBufferData::SpecLight::Directional ) == sizeof( LightBufferData::SpecLight::Spot ) );
-	static_assert( sizeof( LightBufferData::SpecLight::Directional ) == sizeof( LightBufferData::SpecLight::Point ) );
-	static constexpr uint32_t LightBufferDataSize = sizeof( LightBufferData );
 
 	//@}
 	//@}

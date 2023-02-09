@@ -35,44 +35,6 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	namespace shader
-	{
-		LpvLightData::LpvLightData( sdw::ShaderWriter & writer
-			, ast::expr::ExprPtr expr
-			, bool enabled )
-			: StructInstance{ writer, std::move( expr ), enabled }
-			, lightView{ getMember< sdw::Mat4 >( "lightView" ) }
-			, lightConfig{ getMember< sdw::Vec4 >( "lightConfig" ) }
-			, texelAreaModifier{ lightConfig.x() }
-			, tanFovXHalf{ lightConfig.y() }
-			, tanFovYHalf{ lightConfig.z() }
-			, lightIndex{ writer.cast< sdw::Int >( lightConfig.w() ) }
-		{
-		}
-
-		ast::type::BaseStructPtr LpvLightData::makeType( ast::type::TypesCache & cache )
-		{
-			auto result = cache.getStruct( ast::type::MemoryLayout::eStd140
-				, "C3D_LpvLightData" );
-
-			if ( result->empty() )
-			{
-				result->declMember( "lightView", ast::type::Kind::eMat4x4F );
-				result->declMember( "lightConfig", ast::type::Kind::eVec4F );
-			}
-
-			return result;
-		}
-
-		std::unique_ptr< sdw::Struct > LpvLightData::declare( sdw::ShaderWriter & writer )
-		{
-			return std::make_unique< sdw::Struct >( writer
-				, makeType( writer.getTypesCache() ) );
-		}
-	}
-
-	//*********************************************************************************************
-
 	LpvLightConfigUbo::LpvLightConfigUbo( RenderDevice const & device )
 		: m_device{ device }
 		, m_ubo{ m_device.uboPool->getBuffer< Configuration >( 0u ) }
@@ -92,7 +54,7 @@ namespace castor3d
 		auto & lpvConfig = light.getLpvConfig();
 		auto & configuration = m_ubo.getData();
 
-		configuration.lightIndex = float( light.getBufferIndex() );
+		configuration.lightOffset = float( light.getBufferIndex() );
 		configuration.texelAreaModifier = lpvConfig.texelAreaModifier;
 		auto ltType = light.getLightType();
 
@@ -148,6 +110,6 @@ namespace castor3d
 		configuration.texelAreaModifier = lpvConfig.texelAreaModifier;
 		configuration.tanFovXHalf = 1.0f;
 		configuration.tanFovYHalf = 1.0f;
-		configuration.lightIndex = float( light.getLight().getBufferIndex() );
+		configuration.lightOffset = float( light.getLight().getBufferIndex() );
 	}
 }

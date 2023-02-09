@@ -181,8 +181,10 @@ namespace castor
 	template< typename IterT, typename ValueT = typename IteratorTraits< IterT >::value_type >
 	ArrayView< ValueT > makeArrayView( IterT begin, IterT end )
 	{
-		return ArrayView< ValueT >{ &( *begin )
-			, & ( *begin ) + std::distance( begin, end ) };
+		return ( ( begin != end )
+			? ArrayView< ValueT >{ &( *begin )
+				, &( *begin ) + std::distance( begin, end ) }
+			: ArrayView< ValueT >{} );
 	}
 
 	template< typename ValueT >

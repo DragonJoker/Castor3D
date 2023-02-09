@@ -33,6 +33,19 @@ namespace castor3d
 	public:
 		using Cascade = DirectionalLightCascade;
 
+		struct LightData
+			: LightCategory::LightData
+		{
+			using CascasdeFloatArray = std::array< Float1, ashes::getAlignedSize( DirectionalMaxCascadesCount, 4u ) >;
+			Float3 direction;
+			Float1 cascadeCount;
+			CascasdeFloatArray splitDepths;
+			CascasdeFloatArray splitScales;
+			std::array< Float4x4, DirectionalMaxCascadesCount > transforms;
+		};
+		static constexpr uint32_t LightDataSize = uint32_t( ashes::getAlignedSize( sizeof( LightData ), 4u ) );
+		static constexpr uint32_t LightDataComponents = LightDataSize / ( 4u * sizeof( float ) );
+
 	private:
 		friend class Scene;
 
@@ -115,7 +128,7 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		void doFillBuffer( LightBufferData & data )const override;
+		void doFillBuffer( castor::Point4f * data )const override;
 
 	private:
 		castor::Point3f m_direction;

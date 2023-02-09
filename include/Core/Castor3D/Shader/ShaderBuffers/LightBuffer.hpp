@@ -23,7 +23,7 @@ namespace castor3d
 	class LightBuffer
 	{
 	public:
-		using LightsData = castor::ArrayView< LightBufferData >;
+		using LightsData = castor::ArrayView< castor::Point4f >;
 
 	public:
 		/**
@@ -119,20 +119,6 @@ namespace castor3d
 		 */
 		C3D_API void createBinding( ashes::DescriptorSet & descriptorSet
 			, VkDescriptorSetLayoutBinding const & binding )const;
-		/**
-		 *\~english
-		 *\return		The pointer to the data for given light source.
-		 *\~french
-		 *\brief		Le pointeur sur les données pour la source lumineuse donnée.
-		 */
-		C3D_API LightBufferData & getData( Light const & light );
-		/**
-		 *\~english
-		 *\return		The light source buffer index.
-		 *\~french
-		 *\brief		l'index de la source lumineuse dans le buffer.
-		 */
-		C3D_API uint32_t getIndex( Light const & light )const;
 
 		uint8_t * getPtr()
 		{
@@ -144,25 +130,17 @@ namespace castor3d
 			return m_typeSortedLights[size_t( type )];
 		}
 
-		LightBufferData & operator[]( size_t index )
-		{
-			return m_data[index];
-		}
-
-		LightBufferData const & operator[]( size_t index )const
-		{
-			return m_data[index];
-		}
-
 	private:
-		uint32_t doGetIndex( Light const & light )const;
-		void doUpdateLightsIndices();
+		uint32_t doGetOffset( Light const & light )const;
+		void doMarkNextDirty( LightType type
+			, uint32_t index );
 
 	private:
 		ShaderBuffer m_buffer;
 		LightsMap m_typeSortedLights;
 		std::vector< Light * > m_dirty;
 		std::map< Light *, OnLightChangedConnection > m_connections;
+		std::vector< uint32_t > m_lightSizes;
 		LightsData m_data;
 		mutable std::mutex m_mutex;
 		bool m_wasDirty{};

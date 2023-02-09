@@ -149,9 +149,9 @@ namespace castor3d
 		}
 	}
 
-	void PointLight::doFillBuffer( LightBufferData & data )const
+	void PointLight::doFillBuffer( castor::Point4f * data )const
 	{
-		auto & point = data.specific.point;
+		auto & point = *reinterpret_cast< LightData * >( data->ptr() );
 		auto position = getLight().getParent()->getDerivedPosition();
 
 		point.position = position;

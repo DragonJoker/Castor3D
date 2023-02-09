@@ -18,8 +18,8 @@ namespace castor3d
 		static LightBuffer::LightsData doBindData( uint8_t * buffer
 			, uint32_t count )
 		{
-			return castor::makeArrayView( reinterpret_cast< LightBufferData * >( buffer )
-				, reinterpret_cast< LightBufferData * >( buffer ) + count );
+			return castor::makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
+				, reinterpret_cast< castor::Point4f * >( buffer ) + count );
 		}
 	}
 
@@ -28,7 +28,10 @@ namespace castor3d
 	LightBuffer::LightBuffer( Engine & engine
 		, RenderDevice const & device
 		, uint32_t count )
-		: m_buffer{ engine, device, count * LightBufferDataSize, cuT( "LightBuffer" ) }
+		: m_buffer{ engine, device, count * 512u, cuT( "LightBuffer" ) }
+		, m_lightSizes{ DirectionalLight::LightDataComponents
+			, PointLight::LightDataComponents
+			, SpotLight::LightDataComponents }
 		, m_data{ lgtbuf::doBindData( m_buffer.getPtr(), count ) }
 	{
 	}
@@ -50,6 +53,9 @@ namespace castor3d
 				{
 					m_dirty.emplace_back( &plight );
 				} ) );
+
+			// Mark next lights as dirty (due to sorted container)
+			doMarkNextDirty( LightType( index + 1u ), 0u );
 		}
 	}
 
@@ -63,8 +69,12 @@ namespace castor3d
 
 		if ( it != m_typeSortedLights[index].end() )
 		{
+			auto dist = uint32_t( std::distance( m_typeSortedLights[index].begin(), it ) );
 			m_typeSortedLights[index].erase( it );
 			m_connections.erase( &light );
+
+			// Mark next lights as dirty (due to sorted container)
+			doMarkNextDirty( LightType( index + 1u ), dist );
 		}
 	}
 
@@ -76,17 +86,19 @@ namespace castor3d
 		{
 			std::vector< Light * > dirty;
 			std::swap( m_dirty, dirty );
-			auto end = std::unique( dirty.begin(), dirty.end() );
-			std::for_each( dirty.begin()
-				, end
-				, [this]( Light * light )
-				{
-					auto index = doGetIndex( *light );
-					light->fillBuffer( index, m_data[index] );
-				} );
-			m_buffer.setFirstCount( uint32_t( m_typeSortedLights[0].size() ) );
-			m_buffer.setSecondCount( uint32_t( m_typeSortedLights[1].size() ) );
-			m_buffer.setThirdCount( uint32_t( m_typeSortedLights[2].size() ) );
+
+			for ( auto light : castor::makeArrayView( dirty.begin(), std::unique( dirty.begin(), dirty.end() ) ) )
+			{
+				auto index = doGetOffset( *light );
+				light->fillBuffer( index, &m_data[index] );
+			}
+
+			auto dirEnd = uint32_t( m_typeSortedLights[0].size() * DirectionalLight::LightDataComponents );
+			auto pntEnd = uint32_t( dirEnd + m_typeSortedLights[1].size() * PointLight::LightDataComponents );
+			auto sptEnd = uint32_t( pntEnd + m_typeSortedLights[2].size() * SpotLight::LightDataComponents );
+			m_buffer.setFirstCount( dirEnd );
+			m_buffer.setSecondCount( pntEnd );
+			m_buffer.setThirdCount( sptEnd );
 			m_wasDirty = true;
 		}
 	}
@@ -128,36 +140,40 @@ namespace castor3d
 		return m_buffer.getSingleBinding( binding, offset, size );
 	}
 
-	LightBufferData & LightBuffer::getData( Light const & light )
-	{
-		return m_data[getIndex( light )];
-	}
-
-	uint32_t LightBuffer::getIndex( Light const & light )const
-	{
-		auto lock( castor::makeUniqueLock( m_mutex ) );
-		return doGetIndex( light );
-	}
-
-	uint32_t LightBuffer::doGetIndex( Light const & light )const
+	uint32_t LightBuffer::doGetOffset( Light const & light )const
 	{
 		uint32_t result{};
 		uint32_t index = uint32_t( light.getLightType() );
 
 		for ( uint32_t i = 0u; i < index; ++i )
 		{
-			result += uint32_t( m_typeSortedLights[i].size() );
+			result += uint32_t( m_typeSortedLights[i].size() * m_lightSizes[i] );
 		}
 
 		auto it = std::find( m_typeSortedLights[index].begin()
 			, m_typeSortedLights[index].end()
 			, &light );
+		auto size = m_typeSortedLights[index].size();
 
 		if ( it != m_typeSortedLights[index].end() )
 		{
-			return result + uint32_t( std::distance( m_typeSortedLights[index].begin(), it ) );
+			size = size_t( std::distance( m_typeSortedLights[index].begin(), it ) );
 		}
 
-		return result + uint32_t( m_typeSortedLights[index].size() );
+		return result + uint32_t( size * m_lightSizes[index] );
+	}
+
+	void LightBuffer::doMarkNextDirty( LightType type
+		, uint32_t index )
+	{
+		for ( auto i = uint32_t( type ); i < uint32_t( LightType::eMax ); ++i )
+		{
+			auto begin = m_typeSortedLights[i].begin() + index;
+
+			for ( auto it : castor::makeArrayView( begin, m_typeSortedLights[i].end() ) )
+			{
+				m_dirty.emplace_back( it );
+			}
+		}
 	}
 }

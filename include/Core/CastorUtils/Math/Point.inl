@@ -65,6 +65,7 @@ namespace castor
 
 	template< typename T, uint32_t TCount >
 	Point< T, TCount >::Point( T const * rhs )noexcept
+		: m_data{}
 	{
 		if ( !rhs )
 		{
@@ -82,6 +83,7 @@ namespace castor
 
 	template< typename T, uint32_t TCount >
 	constexpr Point< T, TCount >::Point( Point< T, TCount > const & rhs )noexcept
+		: m_data{}
 	{
 		std::copy( rhs.begin()
 			, rhs.end()
@@ -90,6 +92,7 @@ namespace castor
 
 	template< typename T, uint32_t TCount >
 	constexpr Point< T, TCount >::Point( Point< T, TCount > && rhs )noexcept
+		: m_data{}
 	{
 		std::copy( rhs.begin()
 			, rhs.end()
@@ -99,6 +102,7 @@ namespace castor
 	template< typename T, uint32_t TCount >
 	template< typename U, uint32_t UCount >
 	Point< T, TCount >::Point( Point< U, UCount > const & rhs )noexcept
+		: m_data{}
 	{
 		details::DataCopier< U, T, UCount, TCount > copier;
 		copier( rhs.constPtr(), ptr() );
@@ -107,6 +111,7 @@ namespace castor
 	template< typename T, uint32_t TCount >
 	template< typename U, uint32_t UCount >
 	Point< T, TCount >::Point( Coords< U, UCount > const & rhs )noexcept
+		: m_data{}
 	{
 		details::DataCopier< U, T, UCount, TCount > copier;
 		copier( rhs.constPtr(), ptr() );
@@ -115,6 +120,7 @@ namespace castor
 	template< typename T, uint32_t TCount >
 	template< typename U >
 	Point< T, TCount >::Point( U const * rhs )noexcept
+		: m_data{}
 	{
 		if ( !rhs )
 		{
@@ -587,7 +593,7 @@ namespace castor
 			point::floor( result );
 			return result;
 		}
-		
+
 		template< typename T, uint32_t TCount >
 		static void ceil( Point< T, TCount > & point )
 		{

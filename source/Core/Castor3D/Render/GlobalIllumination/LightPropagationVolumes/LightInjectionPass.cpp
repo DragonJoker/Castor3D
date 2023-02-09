@@ -175,7 +175,7 @@ namespace castor3d
 					, VertexOutT< lpvlgt::SurfaceT > out )
 					{
 						auto light = writer.declLocale( "light"
-							, lights.getDirectionalLight( writer.cast< UInt >( c3d_lpvLightData.lightIndex ) ) );
+							, lights.getDirectionalLight( writer.cast< UInt >( c3d_lpvLightData.lightOffset() ) ) );
 						auto cascadeIndex = writer.declLocale( "cascadeIndex"
 							, writer.cast< Int >( max( 1_u, light.cascadeCount() ) - 1_u ) );
 						auto rsmCoords = writer.declLocale( "rsmCoords"
@@ -303,7 +303,7 @@ namespace castor3d
 				, VertexOutT< lpvlgt::SurfaceT > out )
 				{
 					auto light = writer.declLocale( "light"
-						, lights.getPointLight( writer.cast< UInt >( c3d_lpvLightData.lightIndex ) ) );
+						, lights.getPointLight( writer.cast< UInt >( c3d_lpvLightData.lightOffset() ) ) );
 					auto rsmCoords = writer.declLocale( "rsmCoords"
 						, ivec3( in.vertexIndex % int32_t( rsmTexSize )
 							, in.vertexIndex / int32_t( rsmTexSize )
@@ -368,7 +368,7 @@ namespace castor3d
 				, VertexOutT< lpvlgt::SurfaceT > out )
 				{
 					auto light = writer.declLocale( "light"
-						, lights.getSpotLight( writer.cast< UInt >( c3d_lpvLightData.lightIndex ) ) );
+						, lights.getSpotLight( writer.cast< UInt >( c3d_lpvLightData.lightOffset() ) ) );
 					auto rsmCoords = writer.declLocale( "rsmCoords"
 						, ivec3( in.vertexIndex % int32_t( rsmTexSize )
 							, in.vertexIndex / int32_t( rsmTexSize )

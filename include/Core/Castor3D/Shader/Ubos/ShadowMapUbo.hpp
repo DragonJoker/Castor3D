@@ -9,7 +9,7 @@ See LICENSE file in root folder
 #include "Castor3D/Buffer/UniformBufferOffset.hpp"
 #include "Castor3D/Scene/Light/LightModule.hpp"
 
-#include <ShaderWriter/CompositeTypes/StructInstance.hpp>
+#include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>
 #include <ShaderWriter/MatTypes/Mat4.hpp>
 
 namespace castor3d
@@ -17,15 +17,19 @@ namespace castor3d
 	namespace shader
 	{
 		struct ShadowMapData
-			: public sdw::StructInstance
+			: public sdw::StructInstanceHelperT< "C3D_ShadowMapData"
+				, sdw::type::MemoryLayout::eStd140
+				, sdw::Mat4x4Field< "lightProjection" >
+				, sdw::Mat4x4Field< "lightView" >
+				, sdw::Vec4Field< "lightPosFarPlane" >
+				, sdw::UIntField< "lightOffset" > >
 		{
 			C3D_API ShadowMapData( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr
-				, bool enabled );
-			SDW_DeclStructInstance( C3D_API, ShadowMapData );
-
-			C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
-			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
+				, bool enabled )
+				: StructInstanceHelperT{  writer, std::move( expr ), enabled }
+			{
+			}
 
 			C3D_API sdw::Vec4 worldToView( sdw::Vec4 const & pos )const;
 			C3D_API sdw::Vec4 viewToProj( sdw::Vec4 const & pos )const;
@@ -35,14 +39,10 @@ namespace castor3d
 			C3D_API SpotLight getSpotLight( Lights & lights )const;
 
 		private:
-			using sdw::StructInstance::getMember;
-			using sdw::StructInstance::getMemberArray;
-
-		private:
-			sdw::Mat4 m_lightProjection;
-			sdw::Mat4 m_lightView;
-			sdw::Vec4 m_lightPosFarPlane;
-			sdw::UInt m_lightIndex;
+			auto lightProjection()const { return getMember< "lightProjection" >(); }
+			auto lightView()const { return getMember< "lightView" >(); }
+			auto lightPosFarPlane()const { return getMember< "lightPosFarPlane" >(); }
+			auto lightOffset()const { return getMember< "lightOffset" >(); }
 		};
 	}
 

@@ -178,7 +178,7 @@ namespace castor3d
 				auto calculateSurfelAreaLightViewM = writer.implementFunction< Float >( "calculateSurfelAreaLightViewM"
 					, [&]( Vec3 viewPos )
 					{
-						writer.returnStmt( ( 4.0_f * viewPos.z() * viewPos.z() * c3d_lpvLightData.tanFovXHalf * c3d_lpvLightData.tanFovYHalf ) / Float{ float( rsmTexSize * rsmTexSize ) } );
+						writer.returnStmt( ( 4.0_f * viewPos.z() * viewPos.z() * c3d_lpvLightData.tanFovXHalf() * c3d_lpvLightData.tanFovYHalf() ) / Float{ float( rsmTexSize * rsmTexSize ) } );
 					}
 					, InVec3{ writer, "viewPos" } );
 
@@ -186,7 +186,7 @@ namespace castor3d
 					, VertexOutT< lpvgeom::SurfaceT > out )
 					{
 						auto light = writer.declLocale( "light"
-							, lights.getDirectionalLight( writer.cast< UInt >( c3d_lpvLightData.lightIndex ) ) );
+							, lights.getDirectionalLight( writer.cast< UInt >( c3d_lpvLightData.lightOffset() ) ) );
 						auto cascadeIndex = writer.declLocale( "cascadeIndex"
 							, writer.cast< Int >( max( 1_u, light.cascadeCount() ) - 1_u ) );
 						auto rsmCoords = writer.declLocale( "rsmCoords"
@@ -197,8 +197,8 @@ namespace castor3d
 						out.rsmPosition = c3d_rsmPositionMap.fetch( rsmCoords, 0_i ).rgb();
 						out.rsmNormal = c3d_rsmNormalMap.fetch( rsmCoords, 0_i ).rgb();
 						auto viewPos = writer.declLocale( "viewPos"
-							, c3d_lpvLightData.lightView * vec4( out.rsmPosition, 1.0 ) );
-						out.surfelArea = calculateSurfelAreaLightViewM( viewPos.xyz() ) * c3d_lpvLightData.texelAreaModifier;
+							, c3d_lpvLightData.lightView() * vec4( out.rsmPosition, 1.0 ) );
+						out.surfelArea = calculateSurfelAreaLightViewM( viewPos.xyz() ) * c3d_lpvLightData.texelAreaModifier();
 						out.lightPosition = out.rsmPosition - light.direction();
 
 						auto volumeCellIndex = writer.declLocale( "volumeCellIndex"
@@ -247,7 +247,7 @@ namespace castor3d
 				auto calculateSurfelAreaLightViewM = writer.implementFunction< Float >( "calculateSurfelAreaLightViewM"
 					, [&]( Vec3 viewPos )
 					{
-						writer.returnStmt( ( 4.0_f * viewPos.z() * viewPos.z() * c3d_lpvLightData.tanFovXHalf * c3d_lpvLightData.tanFovYHalf ) / Float{ float( rsmTexSize * rsmTexSize ) } );
+						writer.returnStmt( ( 4.0_f * viewPos.z() * viewPos.z() * c3d_lpvLightData.tanFovXHalf() * c3d_lpvLightData.tanFovYHalf() ) / Float{ float( rsmTexSize * rsmTexSize ) } );
 					}
 					, InVec3{ writer, "viewPos" } );
 
@@ -255,7 +255,7 @@ namespace castor3d
 					, VertexOutT< lpvgeom::SurfaceT > out )
 					{
 						auto light = writer.declLocale( "light"
-							, lights.getDirectionalLight( writer.cast< UInt >( c3d_lpvLightData.lightIndex ) ) );
+							, lights.getDirectionalLight( writer.cast< UInt >( c3d_lpvLightData.lightOffset() ) ) );
 						auto rsmCoords = writer.declLocale( "rsmCoords"
 							, ivec2( in.vertexIndex % int32_t( rsmTexSize )
 								, in.vertexIndex / int32_t( rsmTexSize ) ) );
@@ -263,8 +263,8 @@ namespace castor3d
 						out.rsmPosition = c3d_rsmPositionMap.fetch( rsmCoords, 0_i ).rgb();
 						out.rsmNormal = c3d_rsmNormalMap.fetch( rsmCoords, 0_i ).rgb();
 						auto viewPos = writer.declLocale( "viewPos"
-							, c3d_lpvLightData.lightView * vec4( out.rsmPosition, 1.0 ) );
-						out.surfelArea = calculateSurfelAreaLightViewM( viewPos.xyz() ) * c3d_lpvLightData.texelAreaModifier;
+							, c3d_lpvLightData.lightView() * vec4( out.rsmPosition, 1.0 ) );
+						out.surfelArea = calculateSurfelAreaLightViewM( viewPos.xyz() ) * c3d_lpvLightData.texelAreaModifier();
 						out.lightPosition = out.rsmPosition - light.direction();
 
 						auto volumeCellIndex = writer.declLocale( "volumeCellIndex"
@@ -321,7 +321,7 @@ namespace castor3d
 			auto calculateSurfelAreaLightViewM = writer.implementFunction< Float >( "calculateSurfelAreaLightViewM"
 				, [&]( Vec3 viewPos )
 				{
-					writer.returnStmt( ( 4.0f * viewPos.z() * viewPos.z() * c3d_lpvLightData.tanFovXHalf * c3d_lpvLightData.tanFovYHalf ) / Float{ float( rsmTexSize * rsmTexSize ) } );
+					writer.returnStmt( ( 4.0f * viewPos.z() * viewPos.z() * c3d_lpvLightData.tanFovXHalf() * c3d_lpvLightData.tanFovYHalf() ) / Float{ float( rsmTexSize * rsmTexSize ) } );
 				}
 				, InVec3{ writer, "viewPos" } );
 
@@ -329,7 +329,7 @@ namespace castor3d
 				, VertexOutT< lpvgeom::SurfaceT > out )
 				{
 					auto light = writer.declLocale( "light"
-						, lights.getSpotLight( writer.cast< UInt >( c3d_lpvLightData.lightIndex ) ) );
+						, lights.getSpotLight( writer.cast< UInt >( c3d_lpvLightData.lightOffset() ) ) );
 					auto rsmCoords = writer.declLocale( "rsmCoords"
 						, ivec3( in.vertexIndex % int32_t( rsmTexSize )
 							, in.vertexIndex / int32_t( rsmTexSize )
@@ -338,8 +338,8 @@ namespace castor3d
 					out.rsmPosition = c3d_rsmPositionMap.fetch( rsmCoords, 0_i ).rgb();
 					out.rsmNormal = c3d_rsmNormalMap.fetch( rsmCoords, 0_i ).rgb();
 					auto viewPos = writer.declLocale( "viewPos"
-						, c3d_lpvLightData.lightView * vec4( out.rsmPosition, 1.0 ) );
-					out.surfelArea = calculateSurfelAreaLightViewM( viewPos.xyz() ) * c3d_lpvLightData.texelAreaModifier;
+						, c3d_lpvLightData.lightView() * vec4( out.rsmPosition, 1.0 ) );
+					out.surfelArea = calculateSurfelAreaLightViewM( viewPos.xyz() ) * c3d_lpvLightData.texelAreaModifier();
 					out.lightPosition = light.position();
 
 					auto volumeCellIndex = writer.declLocale( "volumeCellIndex"
@@ -395,7 +395,7 @@ namespace castor3d
 			auto calculateSurfelAreaLightViewM = writer.implementFunction< Float >( "calculateSurfelAreaLightViewM"
 				, [&]( Vec3 viewPos )
 				{
-					writer.returnStmt( ( 4.0_f * viewPos.z() * viewPos.z() * c3d_lpvLightData.tanFovXHalf * c3d_lpvLightData.tanFovYHalf ) / Float{ float( rsmTexSize * rsmTexSize ) } );
+					writer.returnStmt( ( 4.0_f * viewPos.z() * viewPos.z() * c3d_lpvLightData.tanFovXHalf() * c3d_lpvLightData.tanFovYHalf() ) / Float{ float( rsmTexSize * rsmTexSize ) } );
 				}
 				, InVec3{ writer, "viewPos" } );
 
@@ -403,7 +403,7 @@ namespace castor3d
 				, VertexOutT< lpvgeom::SurfaceT > out )
 				{
 					auto light = writer.declLocale( "light"
-						, lights.getPointLight( writer.cast< UInt >( c3d_lpvLightData.lightIndex ) ) );
+						, lights.getPointLight( writer.cast< UInt >( c3d_lpvLightData.lightOffset() ) ) );
 					auto rsmCoords = writer.declLocale( "rsmCoords"
 						, ivec3( in.vertexIndex % int32_t( rsmTexSize )
 							, in.vertexIndex / int32_t( rsmTexSize )
@@ -412,8 +412,8 @@ namespace castor3d
 					out.rsmPosition = c3d_rsmPositionMap.fetch( rsmCoords, 0_i ).rgb();
 					out.rsmNormal = c3d_rsmNormalMap.fetch( rsmCoords, 0_i ).rgb();
 					auto viewPos = writer.declLocale( "viewPos"
-						, c3d_lpvLightData.lightView * vec4( out.rsmPosition, 1.0 ) );
-					out.surfelArea = calculateSurfelAreaLightViewM( viewPos.xyz() ) * c3d_lpvLightData.texelAreaModifier;
+						, c3d_lpvLightData.lightView() * vec4( out.rsmPosition, 1.0 ) );
+					out.surfelArea = calculateSurfelAreaLightViewM( viewPos.xyz() ) * c3d_lpvLightData.texelAreaModifier();
 					out.lightPosition = light.position();
 
 					auto volumeCellIndex = writer.declLocale( "volumeCellIndex"

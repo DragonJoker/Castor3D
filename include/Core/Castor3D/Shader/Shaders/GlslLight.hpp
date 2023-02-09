@@ -18,8 +18,8 @@ namespace castor3d::shader
 {
 	struct LightData
 		: public sdw::StructInstanceHelperT < "C3D_LightData"
-		, sdw::type::MemoryLayout::eStd140
-		, sdw::Vec4ArrayField< "data", getMaxLightComponentsCount() > >
+		, sdw::type::MemoryLayout::eStd430
+		, sdw::Vec4Field< "data" > >
 	{
 		LightData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
@@ -33,7 +33,7 @@ namespace castor3d::shader
 
 	struct Light
 		: public sdw::StructInstanceHelperT< "C3D_Light"
-			, sdw::type::MemoryLayout::eStd140
+			, sdw::type::MemoryLayout::eC
 			, sdw::Vec3Field< "colour" >
 			, sdw::FloatField< "shadowMapIndex" >
 			, sdw::Vec2Field< "intensity" >
@@ -69,12 +69,12 @@ namespace castor3d::shader
 
 	struct DirectionalLight
 		: public sdw::StructInstanceHelperT< "C3D_DirectionalLight"
-			, sdw::type::MemoryLayout::eStd140
+			, sdw::type::MemoryLayout::eC
 			, sdw::StructFieldT< Light, "base" >
 			, sdw::Vec3Field< "direction" >
 			, sdw::FloatField< "cascadeCount" >
-			, sdw::Vec4Field< "splitDepths" >
-			, sdw::Vec4Field< "splitScales" >
+			, sdw::FloatArrayField< "splitDepths", ashes::getAlignedSize( DirectionalMaxCascadesCount, 4u ) >
+			, sdw::FloatArrayField< "splitScales", ashes::getAlignedSize( DirectionalMaxCascadesCount, 4u ) >
 			, sdw::Mat4ArrayField< "transforms", DirectionalMaxCascadesCount > >
 	{
 		DirectionalLight( sdw::ShaderWriter & writer
@@ -96,14 +96,12 @@ namespace castor3d::shader
 
 	struct PointLight
 		: public sdw::StructInstanceHelperT< "C3D_PointLight"
-			, sdw::type::MemoryLayout::eStd140
+			, sdw::type::MemoryLayout::eC
 			, sdw::StructFieldT< Light, "base" >
 			, sdw::Vec3Field< "position" >
 			, sdw::FloatField< "pad0" >
 			, sdw::Vec3Field< "attenuation" >
-			, sdw::FloatField< "pad1" >
-			, sdw::Vec4Field< "pad2" >
-			, sdw::Mat4ArrayField< "pad3", DirectionalMaxCascadesCount > >
+			, sdw::FloatField< "pad1" > >
 	{
 		PointLight( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
@@ -122,7 +120,7 @@ namespace castor3d::shader
 
 	struct SpotLight
 		: public sdw::StructInstanceHelperT< "C3D_SpotLight"
-			, sdw::type::MemoryLayout::eStd140
+			, sdw::type::MemoryLayout::eC
 			, sdw::StructFieldT< Light, "base" >
 			, sdw::Vec3Field< "position" >
 			, sdw::FloatField< "exponent" >
@@ -130,8 +128,7 @@ namespace castor3d::shader
 			, sdw::FloatField< "innerCutOff" >
 			, sdw::Vec3Field< "direction" >
 			, sdw::FloatField< "outerCutOff" >
-			, sdw::Mat4Field< "transform" >
-			, sdw::Mat4ArrayField< "pad", DirectionalMaxCascadesCount - 1u > >
+			, sdw::Mat4Field< "transform" > >
 	{
 		C3D_API SpotLight( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
@@ -164,28 +161,27 @@ namespace castor3d::shader
 			, uint32_t set
 			, bool enable = true );
 
-		C3D_API DirectionalLight getDirectionalLight( sdw::UInt const & index );
-		C3D_API PointLight getPointLight( sdw::UInt const & index );
-		C3D_API SpotLight getSpotLight( sdw::UInt const & index );
+		C3D_API DirectionalLight getDirectionalLight( sdw::UInt const & offset );
+		C3D_API PointLight getPointLight( sdw::UInt const & offset );
+		C3D_API SpotLight getSpotLight( sdw::UInt const & offset );
 
-		sdw::UInt getDirectionalLightCount()const
+		sdw::UInt getDirectionalsEnd()const
 		{
 			return getFirstCount();
 		}
 
-		sdw::UInt getPointLightCount()const
+		sdw::UInt getPointsEnd()const
 		{
 			return getSecondCount();
 		}
 
-		sdw::UInt getSpotLightCount()const
+		sdw::UInt getSpotsEnd()const
 		{
 			return getThirdCount();
 		}
 
 	private:
-		void getBaseLight( sdw::Vec4Array const & lightsData
-			, sdw::Vec4 & lightData
+		void getBaseLight( sdw::Vec4 & lightData
 			, Light light
 			, sdw::UInt & offset );
 
@@ -532,11 +528,11 @@ namespace castor3d::shader
 		*	Light accessors
 		*/
 		//\{
-		C3D_API DirectionalLight getDirectionalLight( sdw::UInt const & index );
-		C3D_API PointLight getPointLight( sdw::UInt const & index );
-		C3D_API SpotLight getSpotLight( sdw::UInt const & index );
+		C3D_API DirectionalLight getDirectionalLight( sdw::UInt const & offset );
+		C3D_API PointLight getPointLight( sdw::UInt const & offset );
+		C3D_API SpotLight getSpotLight( sdw::UInt const & offset );
 		C3D_API sdw::Vec3 getCascadeFactors( sdw::Vec3 viewVertex
-			, sdw::Vec4 splitDepths
+			, sdw::FloatArray splitDepths
 			, sdw::UInt index );
 		//\}
 
@@ -563,7 +559,7 @@ namespace castor3d::shader
 			, sdw::InVec3 > m_getFinalTransmission;
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3
-			, sdw::InVec4
+			, sdw::InFloatArray
 			, sdw::InUInt > m_getCascadeFactors;
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3

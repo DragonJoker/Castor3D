@@ -16,6 +16,22 @@ namespace castor3d
 	class SpotLight
 		: public LightCategory
 	{
+	public:
+		struct LightData
+			: LightCategory::LightData
+		{
+			Float3 position;
+			Float1 exponent;
+			Float3 attenuation;
+			Float1 innerCutoff;
+			Float3 direction;
+			Float1 outerCutoff;
+			Float4x4 transform;
+		};
+
+		static constexpr uint32_t LightDataSize = uint32_t( ashes::getAlignedSize( sizeof( LightData ), 4u ) );
+		static constexpr uint32_t LightDataComponents = LightDataSize / ( 4u * sizeof( float ) );
+
 	private:
 		friend class Scene;
 
@@ -126,7 +142,7 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		void doFillBuffer( LightBufferData & data )const override;
+		void doFillBuffer( castor::Point4f * data )const override;
 
 	private:
 		bool m_dirtyData{ false };
