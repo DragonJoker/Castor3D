@@ -501,7 +501,7 @@ namespace ocean
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 
 		auto index = uint32_t( rdpass::WaveIdx::eBrdf ) + 1u;
-		doAddShadowBindings( flags, bindings, index );
+		doAddShadowBindings( m_scene, flags, bindings, index );
 		doAddEnvBindings( flags, bindings, index );
 		doAddBackgroundBindings( flags, bindings, index );
 		doAddGIBindings( flags, bindings, index );
@@ -560,7 +560,7 @@ namespace ocean
 			, *getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().sampler
 			, descriptorWrites
 			, index );
-		doAddShadowDescriptor( flags, descriptorWrites, shadowMaps, index );
+		doAddShadowDescriptor( m_scene, flags, descriptorWrites, shadowMaps, index );
 		doAddEnvDescriptor( flags, descriptorWrites, index );
 		doAddBackgroundDescriptor( flags, descriptorWrites, m_targetImage, index );
 		doAddGIDescriptor( flags, descriptorWrites, index );

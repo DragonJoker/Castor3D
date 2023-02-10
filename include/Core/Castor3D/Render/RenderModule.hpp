@@ -886,6 +886,22 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Writes the buffer descriptor to the given writes.
+	*\~french
+	*\brief
+	*	Ecrit le descripteur de buffer dans les writes donnés.
+	*/
+	C3D_API void bindBuffer( VkBuffer buffer
+		, VkDeviceSize offset
+		, VkDeviceSize range
+		, ashes::WriteDescriptorSetArray & writes
+		, uint32_t & index );
+	C3D_API void bindBuffer( ashes::BufferBase const & buffer
+		, ashes::WriteDescriptorSetArray & writes
+		, uint32_t & index );
+	/**
+	*\~english
+	*\brief
 	*	Creates a descriptor write for storage image.
 	*\param[in] view
 	*	The image view.

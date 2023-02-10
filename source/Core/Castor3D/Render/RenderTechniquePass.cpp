@@ -85,34 +85,29 @@ namespace castor3d
 			, index );
 	}
 
-	void bindShadowMaps( crg::RunnableGraph & graph
-		, SceneFlags const & sceneFlags
-		, ShadowMapLightTypeArray const & shadowMaps
+	void bindBuffer( VkBuffer buffer
+		, VkDeviceSize offset
+		, VkDeviceSize range
 		, ashes::WriteDescriptorSetArray & writes
 		, uint32_t & index )
 	{
-#if !C3D_DebugDisableShadowMaps
-		for ( auto i = 0u; i < uint32_t( LightType::eCount ); ++i )
-		{
-			if ( checkFlag( sceneFlags, SceneFlag( uint8_t( SceneFlag::eShadowBegin ) << i ) ) )
-			{
-				for ( auto & shadowMapRef : shadowMaps[i] )
-				{
-					auto & result = shadowMapRef.first.get().getShadowPassResult( false );
-					bindTexture( graph
-						, result[SmTexture::eLinearDepth].sampledViewId
-						, *result[SmTexture::eLinearDepth].sampler
-						, writes
-						, index );
-					bindTexture( graph
-						, result[SmTexture::eVariance].sampledViewId
-						, *result[SmTexture::eVariance].sampler
-						, writes
-						, index );
-				}
-			}
-		}
-#endif
+		writes.push_back( { index++
+			, 0u
+			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+			, ashes::VkDescriptorBufferInfoArray{ VkDescriptorBufferInfo{ buffer
+				, offset
+				, range } } } );
+	}
+
+	void bindBuffer( ashes::BufferBase const & buffer
+		, ashes::WriteDescriptorSetArray & writes
+		, uint32_t & index )
+	{
+		bindBuffer( buffer
+			, 0u
+			, buffer.getSize()
+			, writes
+			, index );
 	}
 
 	//*************************************************************************************************
@@ -233,28 +228,6 @@ namespace castor3d
 		return flags;
 	}
 
-	void RenderTechniqueNodesPass::doAddShadowBindings( PipelineFlags const & flags
-		, ashes::VkDescriptorSetLayoutBindingArray & bindings
-		, uint32_t & index )const
-	{
-		auto sceneFlags = doAdjustSceneFlags( m_scene.getFlags() );
-
-		for ( uint32_t j = 0u; j < uint32_t( LightType::eCount ); ++j )
-		{
-			if ( checkFlag( sceneFlags, SceneFlag( uint8_t( SceneFlag::eShadowBegin ) << j ) ) )
-			{
-				// Depth
-				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-				// Variance
-				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-			}
-		}
-	}
-
 	void RenderTechniqueNodesPass::doAddBackgroundBindings( PipelineFlags const & flags
 		, ashes::VkDescriptorSetLayoutBindingArray & bindings
 		, uint32_t & index )const
@@ -347,19 +320,6 @@ namespace castor3d
 	{
 		getEngine()->addSpecificsBuffersBindings( bindings
 			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, index );
-	}
-
-	void RenderTechniqueNodesPass::doAddShadowDescriptor( PipelineFlags const & flags
-		, ashes::WriteDescriptorSetArray & descriptorWrites
-		, ShadowMapLightTypeArray const & shadowMaps
-		, uint32_t & index )const
-	{
-		auto sceneFlags = doAdjustSceneFlags( m_scene.getFlags() );
-		bindShadowMaps( m_graph
-			, sceneFlags
-			, shadowMaps
-			, descriptorWrites
 			, index );
 	}
 
@@ -489,7 +449,7 @@ namespace castor3d
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapBrdf
 
-		doAddShadowBindings( flags, bindings, index );
+		doAddShadowBindings( m_scene, flags, bindings, index );
 		doAddEnvBindings( flags, bindings, index );
 		doAddBackgroundBindings( flags, bindings, index );
 		doAddGIBindings( flags, bindings, index );
@@ -515,7 +475,7 @@ namespace castor3d
 			, *getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().sampler
 			, descriptorWrites
 			, index );
-		doAddShadowDescriptor( flags, descriptorWrites, shadowMaps, index );
+		doAddShadowDescriptor( m_scene, flags, descriptorWrites, shadowMaps, index );
 		doAddEnvDescriptor( flags, descriptorWrites, index );
 		doAddBackgroundDescriptor( flags, descriptorWrites, m_targetImage, index );
 		doAddGIDescriptor( flags, descriptorWrites, index );
