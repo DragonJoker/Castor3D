@@ -104,6 +104,31 @@ namespace castor3d
 		}
 	}
 
+	bool VoxelizePass::isPassEnabled()const
+	{
+		return m_voxelConfig.enabled
+			&& RenderNodesPass::isPassEnabled();
+	}
+
+	ShaderFlags VoxelizePass::getShaderFlags()const
+	{
+		return ShaderFlag::eWorldSpace
+			| ShaderFlag::eNormal
+			| ShaderFlag::eLighting
+			| ShaderFlag::eOpacity
+			| ShaderFlag::eGeometry
+			| ShaderFlag::eColour;
+	}
+
+	ComponentModeFlags VoxelizePass::getComponentsMask()const
+	{
+		return ( ComponentModeFlag::eOcclusion
+			| ComponentModeFlag::eColour
+			| ComponentModeFlag::eDiffuseLighting
+			| ComponentModeFlag::eSpecularLighting
+			| ComponentModeFlag::eNormals );
+	}
+
 	SubmeshFlags VoxelizePass::doAdjustSubmeshFlags( SubmeshFlags flags )const
 	{
 		remFlag( flags, SubmeshFlag::eTangents );
@@ -137,22 +162,7 @@ namespace castor3d
 		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-
-		for ( uint32_t j = 0u; j < uint32_t( LightType::eCount ); ++j )
-		{
-			if ( checkFlag( sceneFlags, SceneFlag( uint8_t( SceneFlag::eShadowBegin ) << j ) ) )
-			{
-				// Depth
-				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-				// Variance
-				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-			}
-		}
-
+		doAddShadowBindings( m_scene, flags, bindings, index );
 	}
 
 	ashes::PipelineDepthStencilStateCreateInfo VoxelizePass::doCreateDepthStencilState( PipelineFlags const & flags )const
@@ -170,37 +180,15 @@ namespace castor3d
 		return RenderNodesPass::createBlendState( flags.colourBlendMode, flags.alphaBlendMode, 1u );
 	}
 
-	namespace
-	{
-		ashes::WriteDescriptorSet getDescriptorWrite( ashes::Buffer< Voxel > const & voxels
-			, uint32_t dstBinding )
-		{
-			auto & buffer = voxels.getBuffer();
-			auto result = ashes::WriteDescriptorSet{ dstBinding
-				, 0u
-				, 1u
-				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
-			result.bufferInfo.push_back( { buffer
-				, 0u
-				, buffer.getSize() } );
-			return result;
-		}
-	}
-
 	void VoxelizePass::doFillAdditionalDescriptor( PipelineFlags const & flags
 		, ashes::WriteDescriptorSetArray & descriptorWrites
 		, ShadowMapLightTypeArray const & shadowMaps )
 	{
-		auto sceneFlags = doAdjustSceneFlags( m_scene.getFlags() );
 		auto index = uint32_t( GlobalBuffersIdx::eCount );
 		descriptorWrites.push_back( m_scene.getLightCache().getBinding( index++ ) );
 		descriptorWrites.push_back( m_voxelizerUbo.getDescriptorWrite( index++ ) );
-		descriptorWrites.push_back( getDescriptorWrite( m_voxels, index++ ) );
-		bindShadowMaps( m_graph
-			, sceneFlags
-			, shadowMaps
-			, descriptorWrites
-			, index );
+		bindBuffer( m_voxels.getBuffer(), descriptorWrites, index );
+		doAddShadowDescriptor( m_scene, flags, descriptorWrites, shadowMaps, index );
 	}
 
 	ShaderPtr VoxelizePass::doGetVertexShaderSource( PipelineFlags const & flags )const

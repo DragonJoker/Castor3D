@@ -570,10 +570,11 @@ namespace castor3d
 		/**@{*/
 		C3D_API virtual ComponentModeFlags getComponentsMask()const;
 		C3D_API virtual bool areValidPassFlags( PassComponentCombine const & passFlags )const;
+		C3D_API virtual bool isPassEnabled()const;
+		C3D_API virtual ShaderFlags getShaderFlags()const;
 		C3D_API bool isValidPass( Pass const & pass )const;
 		C3D_API bool isValidRenderable( RenderedObject const & object )const;
 		C3D_API bool isValidNode( SceneNode const & node )const;
-		C3D_API bool isPassEnabled()const;
 		C3D_API Scene & getScene()const;
 		C3D_API SceneNode const * getIgnoredNode()const;
 		C3D_API bool isMeshShading()const;
@@ -584,13 +585,6 @@ namespace castor3d
 		C3D_API PipelineBufferArray const & getPassPipelineNodes()const;
 		C3D_API uint32_t getPipelineNodesIndex( PipelineBaseHash const & hash
 			, ashes::BufferBase const & buffer )const;
-
-		C3D_API virtual ShaderFlags getShaderFlags()const
-		{
-			return ShaderFlag::eWorldSpace
-				| ShaderFlag::eTangentSpace
-				| ShaderFlag::eColour;
-		}
 
 		bool isOrderIndependent()const
 		{
@@ -690,6 +684,15 @@ namespace castor3d
 		C3D_API ShaderProgramSPtr doGetProgram( PipelineFlags const & flags
 			, VkCullModeFlags cullMode = VK_CULL_MODE_NONE );
 		C3D_API void doUpdateFlags( PipelineFlags & flags )const;
+		C3D_API void doAddShadowBindings( Scene const & scene
+			, PipelineFlags const & flags
+			, ashes::VkDescriptorSetLayoutBindingArray & bindings
+			, uint32_t & index )const;
+		C3D_API void doAddShadowDescriptor( Scene const & scene
+			, PipelineFlags const & flags
+			, ashes::WriteDescriptorSetArray & descriptorWrites
+			, ShadowMapLightTypeArray const & shadowMaps
+			, uint32_t & index )const;
 
 	private:
 		ashes::VkDescriptorSetLayoutBindingArray doCreateAdditionalBindings( PipelineFlags const & flags )const;

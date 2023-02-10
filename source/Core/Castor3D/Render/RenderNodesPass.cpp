@@ -1,6 +1,7 @@
 #include "Castor3D/Render/RenderNodesPass.hpp"
 
 #include "Castor3D/Config.hpp"
+#include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/PoolUniformBuffer.hpp"
 #include "Castor3D/Cache/AnimatedObjectGroupCache.hpp"
@@ -24,6 +25,7 @@
 #include "Castor3D/Render/Node/BillboardRenderNode.hpp"
 #include "Castor3D/Render/Node/SubmeshRenderNode.hpp"
 #include "Castor3D/Render/Node/QueueRenderNodes.hpp"
+#include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
@@ -490,6 +492,18 @@ namespace castor3d
 		return !checkFlag( m_filters, RenderFilter::eOpaque );
 	}
 
+	bool RenderNodesPass::isPassEnabled()const
+	{
+		return m_renderQueue->hasNodes();
+	}
+
+	ShaderFlags RenderNodesPass::getShaderFlags()const
+	{
+		return ShaderFlag::eWorldSpace
+			| ShaderFlag::eTangentSpace
+			| ShaderFlag::eColour;
+	}
+
 	bool RenderNodesPass::isValidPass( Pass const & pass )const
 	{
 		return doIsValidPass( pass );
@@ -506,11 +520,6 @@ namespace castor3d
 			&& ( !handleStatic()
 				|| ( filtersStatic() && !node.isStatic() )
 				|| ( filtersNonStatic() && node.isStatic() ) );
-	}
-
-	bool RenderNodesPass::isPassEnabled()const
-	{
-		return m_renderQueue->hasNodes();
 	}
 
 	Scene & RenderNodesPass::getScene()const
@@ -687,6 +696,61 @@ namespace castor3d
 
 	void RenderNodesPass::doUpdateUbos( CpuUpdater & updater )
 	{
+	}
+
+	void RenderNodesPass::doAddShadowBindings( Scene const & scene
+		, PipelineFlags const & flags
+		, ashes::VkDescriptorSetLayoutBindingArray & bindings
+		, uint32_t & index )const
+	{
+		auto sceneFlags = doAdjustSceneFlags( scene.getFlags() );
+
+		for ( uint32_t j = 0u; j < uint32_t( LightType::eCount ); ++j )
+		{
+			if ( checkFlag( sceneFlags, SceneFlag( uint8_t( SceneFlag::eShadowBegin ) << j ) ) )
+			{
+				// Depth
+				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+				// Variance
+				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+			}
+		}
+	}
+
+	void RenderNodesPass::doAddShadowDescriptor( Scene const & scene
+		, PipelineFlags const & flags
+		, ashes::WriteDescriptorSetArray & descriptorWrites
+		, ShadowMapLightTypeArray const & shadowMaps
+		, uint32_t & index )const
+	{
+#if !C3D_DebugDisableShadowMaps
+		auto sceneFlags = doAdjustSceneFlags( scene.getFlags() );
+
+		for ( auto i = 0u; i < uint32_t( LightType::eCount ); ++i )
+		{
+			if ( checkFlag( sceneFlags, SceneFlag( uint8_t( SceneFlag::eShadowBegin ) << i ) ) )
+			{
+				for ( auto & shadowMapRef : shadowMaps[i] )
+				{
+					auto & result = shadowMapRef.first.get().getShadowPassResult( false );
+					bindTexture( m_graph
+						, result[SmTexture::eLinearDepth].sampledViewId
+						, *result[SmTexture::eLinearDepth].sampler
+						, descriptorWrites
+						, index );
+					bindTexture( m_graph
+						, result[SmTexture::eVariance].sampledViewId
+						, *result[SmTexture::eVariance].sampler
+						, descriptorWrites
+						, index );
+				}
+			}
+		}
+#endif
 	}
 
 	bool RenderNodesPass::doIsValidPass( Pass const & pass )const

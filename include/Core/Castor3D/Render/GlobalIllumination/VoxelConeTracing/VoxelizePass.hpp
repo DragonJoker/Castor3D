@@ -74,24 +74,9 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		C3D_API ShaderFlags getShaderFlags()const override
-		{
-			return ShaderFlag::eWorldSpace
-				| ShaderFlag::eNormal
-				| ShaderFlag::eLighting
-				| ShaderFlag::eOpacity
-				| ShaderFlag::eGeometry
-				| ShaderFlag::eColour;
-		}
-
-		C3D_API ComponentModeFlags getComponentsMask()const override
-		{
-			return ( ComponentModeFlag::eOcclusion
-				| ComponentModeFlag::eColour
-				| ComponentModeFlag::eDiffuseLighting
-				| ComponentModeFlag::eSpecularLighting
-				| ComponentModeFlag::eNormals );
-		}
+		C3D_API bool isPassEnabled()const override;
+		C3D_API ShaderFlags getShaderFlags()const override;
+		C3D_API ComponentModeFlags getComponentsMask()const override;
 		/**@}*/
 
 	private:

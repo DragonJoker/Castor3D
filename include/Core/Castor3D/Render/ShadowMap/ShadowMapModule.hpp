@@ -129,19 +129,6 @@ namespace castor3d
 
 	CU_DeclareCUSmartPtr( castor3d, ShadowMap, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, ShadowMapPass, C3D_API );
-	/**
-	*\~english
-	*\brief
-	*	Writes the shadow maps descriptors to the given writes.
-	*\~french
-	*\brief
-	*	Ecrit les descripteurs des shadow maps dans les writes donnés.
-	*/
-	C3D_API void bindShadowMaps( crg::RunnableGraph & graph
-		, SceneFlags const & sceneFlags
-		, ShadowMapLightTypeArray const & shadowMaps
-		, ashes::WriteDescriptorSetArray & writes
-		, uint32_t & index );
 
 	//@}
 	//@}
