@@ -21,6 +21,7 @@ See LICENSE file in root folder
 #include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/RenderPass/RenderPass.hpp>
 
+#include <optional>
 #include <unordered_map>
 
 namespace castor3d
@@ -187,7 +188,7 @@ namespace castor3d
 		 */
 		RenderNodesPassDesc & isStatic( bool value )
 		{
-			m_handleStatic = value ? 2u : 1u;
+			m_handleStatic = value;
 			return *this;
 		}
 		/**
@@ -238,7 +239,7 @@ namespace castor3d
 		bool m_meshShading{};
 		SceneNode const * m_ignored{};
 		uint32_t m_index{ 0u };
-		uint32_t m_handleStatic{ 0u };
+		std::optional< bool > m_handleStatic{ std::nullopt };
 		crg::ru::Config m_ruConfig{ 1u, true };
 	};
 
@@ -575,6 +576,7 @@ namespace castor3d
 		C3D_API bool isValidPass( Pass const & pass )const;
 		C3D_API bool isValidRenderable( RenderedObject const & object )const;
 		C3D_API bool isValidNode( SceneNode const & node )const;
+		C3D_API bool hasNodes()const;
 		C3D_API Scene & getScene()const;
 		C3D_API SceneNode const * getIgnoredNode()const;
 		C3D_API bool isMeshShading()const;
@@ -634,17 +636,19 @@ namespace castor3d
 
 		bool filtersStatic()const
 		{
-			return m_handleStatic == 1;
+			return handleStatic()
+				&& !*m_handleStatic;
 		}
 
 		bool filtersNonStatic()const
 		{
-			return m_handleStatic == 2;
+			return handleStatic()
+				&& *m_handleStatic;
 		}
 
 		bool handleStatic()const
 		{
-			return m_handleStatic != 0;
+			return m_handleStatic != std::nullopt;
 		}
 		/**@}*/
 
@@ -837,7 +841,7 @@ namespace castor3d
 		bool m_meshShading{};
 		SceneUbo const * m_sceneUbo{};
 		uint32_t m_index{ 0u };
-		uint32_t m_handleStatic{};
+		std::optional< bool > m_handleStatic{ std::nullopt };
 
 	private:
 		struct PassDescriptors
