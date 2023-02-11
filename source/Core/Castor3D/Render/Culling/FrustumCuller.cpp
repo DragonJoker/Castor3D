@@ -15,19 +15,22 @@
 namespace castor3d
 {
 	FrustumCuller::FrustumCuller( Scene & scene
-		, Camera & camera )
-		: SceneCuller{ scene, &camera }
+		, Camera & camera
+		, std::optional< bool > isStatic )
+		: SceneCuller{ scene, &camera, isStatic }
 	{
 	}
 
-	FrustumCuller::FrustumCuller( Camera & camera )
-		: FrustumCuller{ *camera.getScene(), camera }
+	FrustumCuller::FrustumCuller( Camera & camera
+		, std::optional< bool > isStatic )
+		: FrustumCuller{ *camera.getScene(), camera, isStatic }
 	{
 	}
 
 	FrustumCuller::FrustumCuller( Scene & scene
-		, Frustum & frustum )
-		: SceneCuller{ scene, nullptr }
+		, Frustum & frustum
+		, std::optional< bool > isStatic )
+		: SceneCuller{ scene, nullptr, isStatic }
 		, m_frustum{ &frustum }
 	{
 	}
