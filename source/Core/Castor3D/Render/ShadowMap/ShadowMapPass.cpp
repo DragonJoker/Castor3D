@@ -42,26 +42,31 @@ namespace castor3d
 				auto & smResult = shadowMap.getShadowPassResult( true );
 				result.implicitAction( smResult[SmTexture::eLinearDepth].sampledViewId
 					, crg::RecordContext::clearAttachment( smResult[SmTexture::eLinearDepth].sampledViewId
-						, getClearValue( SmTexture::eLinearDepth ) ) );
+						, getClearValue( SmTexture::eLinearDepth )
+						, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
 
 				if ( needsVsm )
 				{
 					result.implicitAction( smResult[SmTexture::eVariance].sampledViewId
 						, crg::RecordContext::clearAttachment( smResult[SmTexture::eVariance].sampledViewId
-							, getClearValue( SmTexture::eVariance ) ) );
+							, getClearValue( SmTexture::eVariance )
+							, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
 				}
 
 				if ( needsRsm )
 				{
 					result.implicitAction( smResult[SmTexture::eNormal].sampledViewId
 						, crg::RecordContext::clearAttachment( smResult[SmTexture::eNormal].sampledViewId
-							, getClearValue( SmTexture::eNormal ) ) );
+							, getClearValue( SmTexture::eNormal )
+							, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
 					result.implicitAction( smResult[SmTexture::ePosition].sampledViewId
 						, crg::RecordContext::clearAttachment( smResult[SmTexture::ePosition].sampledViewId
-							, getClearValue( SmTexture::ePosition ) ) );
+							, getClearValue( SmTexture::ePosition )
+							, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
 					result.implicitAction( smResult[SmTexture::eFlux].sampledViewId
 						, crg::RecordContext::clearAttachment( smResult[SmTexture::eFlux].sampledViewId
-							, getClearValue( SmTexture::eFlux ) ) );
+							, getClearValue( SmTexture::eFlux )
+							, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
 				}
 			}
 

@@ -275,10 +275,12 @@ namespace castor3d
 		m_commandBuffer->memoryBarrier( pipelineStageFlags
 			, VK_PIPELINE_STAGE_TRANSFER_BIT
 			, m_stagingBuffer->getBuffer().makeTransferDestination() );
+		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+			, VK_PIPELINE_STAGE_TRANSFER_BIT
+			, m_colourView.makeTransferSource( VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL ) );
 		m_commandBuffer->copyToBuffer( m_copyRegion
 			, *m_colourTexture
 			, m_stagingBuffer->getBuffer() );
-		VkImageLayout layout = VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL;
 
 #	if C3D_DebugPickingTransfer
 
@@ -314,7 +316,7 @@ namespace castor3d
 			, m_stagingBuffer->getBuffer().makeHostRead() );
 		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
 			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-			, m_colourView.makeColourAttachment( layout ) );
+			, m_colourView.makeColourAttachment( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) );
 		m_commandBuffer->endDebugBlock();
 		m_commandBuffer->end();
 
