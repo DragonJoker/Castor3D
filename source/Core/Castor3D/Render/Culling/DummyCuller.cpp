@@ -9,8 +9,9 @@
 namespace castor3d
 {
 	DummyCuller::DummyCuller( Scene & scene
-		, Camera * camera )
-		: SceneCuller{ scene, camera }
+		, Camera * camera
+		, std::optional< bool > isStatic )
+		: SceneCuller{ scene, camera, isStatic }
 	{
 	}
 

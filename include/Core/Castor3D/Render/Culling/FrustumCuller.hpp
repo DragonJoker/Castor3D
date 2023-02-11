@@ -14,10 +14,13 @@ namespace castor3d
 	{
 	public:
 		C3D_API FrustumCuller( Scene & scene
-			, Camera & camera );
-		C3D_API explicit FrustumCuller( Camera & camera );
+			, Camera & camera
+			, std::optional< bool > isStatic = std::nullopt );
+		C3D_API explicit FrustumCuller( Camera & camera
+			, std::optional< bool > isStatic = std::nullopt );
 		C3D_API FrustumCuller( Scene & scene
-			, Frustum & frustum );
+			, Frustum & frustum
+			, std::optional< bool > isStatic = std::nullopt );
 
 		C3D_API void updateFrustum( castor::Matrix4x4f const & projection
 			, castor::Matrix4x4f const & view );

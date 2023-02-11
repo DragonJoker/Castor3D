@@ -6,6 +6,8 @@ See LICENSE file in root folder
 
 #include "Castor3D/Render/Culling/SceneCuller.hpp"
 
+#include <optional>
+
 namespace castor3d
 {
 	class DummyCuller
@@ -13,7 +15,8 @@ namespace castor3d
 	{
 	public:
 		C3D_API explicit DummyCuller( Scene & scene
-			, Camera * camera = nullptr  );
+			, Camera * camera = nullptr
+			, std::optional< bool > isStatic = std::nullopt );
 
 	private:
 		bool isSubmeshVisible( SubmeshRenderNode const & node )const override;

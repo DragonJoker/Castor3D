@@ -113,9 +113,11 @@ namespace castor3d
 	//*********************************************************************************************
 
 	SceneCuller::SceneCuller( Scene & scene
-		, Camera * camera )
+		, Camera * camera
+		, std::optional< bool > isStatic )
 		: m_scene{ scene }
 		, m_camera{ camera }
+		, m_isStatic{ isStatic }
 	{
 		m_scene.getRenderNodes().registerCuller( *this );
 #if C3D_DebugTimers
@@ -215,26 +217,36 @@ namespace castor3d
 #if C3D_DebugTimers
 		auto blockCompute( m_timerCompute->start() );
 #endif
-		m_first = false;
 		m_anyChanged = true;
 		m_culledChanged = true;
 		auto & submeshNodes = getScene().getRenderNodes().getSubmeshNodes();
 
-		for ( auto & programIt : submeshNodes )
+		for ( auto & nodeIt : submeshNodes )
 		{
-			m_culledSubmeshes.push_back( { programIt.second.get()
-				, isSubmeshVisible( *programIt.second )
-				, 0u } );
+			if ( m_isStatic == std::nullopt
+				|| nodeIt.second->instance.getParent()->isStatic() == m_isStatic )
+			{
+				m_culledSubmeshes.push_back( { nodeIt.second.get()
+					, 1u
+					, isSubmeshVisible( *nodeIt.second ) } );
+			}
 		}
 
 		auto & billboardNodes = getScene().getRenderNodes().getBillboardNodes();
 
-		for ( auto & programIt : billboardNodes )
+		for ( auto & nodeIt : billboardNodes )
 		{
-			m_culledBillboards.push_back( { programIt.second.get()
-				, isBillboardVisible( *programIt.second )
-				, 0u } );
+			if ( m_isStatic == std::nullopt
+				|| nodeIt.second->instance.getNode()->isStatic() == m_isStatic )
+			{
+				m_culledBillboards.push_back( { nodeIt.second.get()
+					, 1u
+					, isBillboardVisible( *nodeIt.second ) } );
+			}
 		}
+
+		m_first = m_culledBillboards.empty()
+			&& m_culledSubmeshes.empty();
 	}
 
 	void SceneCuller::doUpdateChanged( CpuUpdater::DirtyObjects & sceneObjs )
@@ -263,11 +275,6 @@ namespace castor3d
 				node.visibleOrFrontCulled = visible;
 			}
 		}
-		else
-		{
-			m_anyChanged = !sceneObjs.dirtyGeometries.empty()
-				|| !sceneObjs.dirtyBillboards.empty();
-		}
 	}
 
 	void SceneCuller::doUpdateCulled( CpuUpdater::DirtyObjects & sceneObjs )
@@ -284,6 +291,7 @@ namespace castor3d
 #endif
 			duUpdateCulledSubmeshes( dirtySubmeshes );
 			duUpdateCulledBillboards( dirtyBillboards );
+			m_anyChanged = true;
 		}
 	}
 
@@ -325,7 +333,7 @@ namespace castor3d
 			else
 			{
 				m_culledChanged = true;
-				m_culledSubmeshes.push_back( { dirty, visible, 1u } );
+				m_culledSubmeshes.push_back( { dirty, 1u, visible } );
 			}
 		}
 	}
@@ -362,18 +370,22 @@ namespace castor3d
 	void SceneCuller::doMakeDirty( Geometry const & object
 		, std::vector< SubmeshRenderNode const * > & dirtySubmeshes )const
 	{
-		if ( auto mesh = object.getMesh().lock() )
+		if ( m_isStatic == std::nullopt
+			|| object.getParent()->isStatic() == m_isStatic )
 		{
-			for ( auto & submesh : *mesh )
+			if ( auto mesh = object.getMesh().lock() )
 			{
-				if ( auto material = object.getMaterial( *submesh ) )
+				for ( auto & submesh : *mesh )
 				{
-					for ( auto & pass : *material )
+					if ( auto material = object.getMaterial( *submesh ) )
 					{
-						if ( auto node = object.getRenderNode( *pass
-							, *submesh ) )
+						for ( auto & pass : *material )
 						{
-							dirtySubmeshes.push_back( node );
+							if ( auto node = object.getRenderNode( *pass
+								, *submesh ) )
+							{
+								dirtySubmeshes.push_back( node );
+							}
 						}
 					}
 				}
@@ -384,13 +396,17 @@ namespace castor3d
 	void SceneCuller::doMakeDirty( BillboardBase const & object
 		, std::vector< BillboardRenderNode const * > & dirtyBillboards )const
 	{
-		if ( auto material = object.getMaterial() )
+		if ( m_isStatic == std::nullopt
+			|| object.getNode()->isStatic() == m_isStatic )
 		{
-			for ( auto & pass : *material )
+			if ( auto material = object.getMaterial() )
 			{
-				if ( auto node = object.getRenderNode( *pass ) )
+				for ( auto & pass : *material )
 				{
-					dirtyBillboards.push_back( node );
+					if ( auto node = object.getRenderNode( *pass ) )
+					{
+						dirtyBillboards.push_back( node );
+					}
 				}
 			}
 		}

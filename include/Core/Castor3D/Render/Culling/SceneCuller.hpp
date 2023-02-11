@@ -32,7 +32,8 @@ namespace castor3d
 	{
 	public:
 		C3D_API SceneCuller( Scene & scene
-			, Camera * camera );
+			, Camera * camera
+			, std::optional< bool > isStatic = std::nullopt );
 		C3D_API virtual ~SceneCuller();
 		C3D_API void update( CpuUpdater & updater );
 		C3D_API void removeCulled( SubmeshRenderNode const & node );
@@ -127,6 +128,7 @@ namespace castor3d
 		FramePassTimerUPtr m_timer;
 		FramePassTimerUPtr m_timerDirty;
 		FramePassTimerUPtr m_timerCompute;
+		std::optional< bool > m_isStatic;
 
 		NodeArrayT< SubmeshRenderNode > m_culledSubmeshes;
 		NodeArrayT< BillboardRenderNode > m_culledBillboards;
