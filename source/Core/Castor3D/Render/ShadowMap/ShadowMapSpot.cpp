@@ -121,7 +121,7 @@ namespace castor3d
 		if ( m_passes[m_passesIndex].cameras.size() <= index )
 		{
 			m_passes[m_passesIndex].cameraUbos.push_back( std::make_unique< CameraUbo >( m_device ) );
-			m_passes[m_passesIndex].cameras.push_back( std::make_shared< Camera >( cuT( "ShadowMapSpot" )
+			m_passes[m_passesIndex].cameras.push_back( std::make_shared< Camera >( shdmapspot::getPassName( index, false, false, false )
 				, m_scene
 				, *m_scene.getCameraRootNode()
 				, std::move( viewport ) ) );
