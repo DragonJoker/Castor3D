@@ -68,7 +68,7 @@ namespace castor3d
 			parent->doDetachChild( getName() );
 		}
 
-		doDetachChildren();
+		doDetachChildren( true );
 		cleanupAnimations();
 	}
 
@@ -101,21 +101,18 @@ namespace castor3d
 
 	void SceneNode::attachTo( SceneNode & node )
 	{
-		CU_Require( !m_static );
-
-		if ( !m_static )
-		{
-			doAttachTo( node );
-		}
+		doAttachTo( node );
 	}
 
-	void SceneNode::detach()
+	void SceneNode::detach( bool cleanup )
 	{
-		CU_Require( !m_static );
-
-		if ( !m_static )
+		if ( cleanup || !m_static )
 		{
 			doDetach();
+		}
+		else
+		{
+			CU_Require( cleanup || !m_static );
 		}
 	}
 
@@ -138,42 +135,22 @@ namespace castor3d
 
 	void SceneNode::addChild( SceneNode & child )
 	{
-		CU_Require( !m_static );
-
-		if ( !m_static )
-		{
-			doAddChild( child );
-		}
+		doAddChild( child );
 	}
 
 	void SceneNode::detachChild( SceneNode & child )
 	{
-		CU_Require( !m_static );
-
-		if ( !m_static )
-		{
-			doDetachChild( child.getName() );
-		}
+		doDetachChild( child.getName() );
 	}
 
 	void SceneNode::detachChild( castor::String const & childName )
 	{
-		CU_Require( !m_static );
-
-		if ( !m_static )
-		{
-			doDetachChild( childName );
-		}
+		doDetachChild( childName );
 	}
 
-	void SceneNode::detachChildren()
+	void SceneNode::detachChildren( bool cleanup )
 	{
-		CU_Require( !m_static );
-
-		if ( !m_static )
-		{
-			doDetachChildren();
-		}
+		doDetachChildren( cleanup );
 	}
 
 	void SceneNode::yaw( castor::Angle const & angle )
@@ -499,7 +476,7 @@ namespace castor3d
 		}
 	}
 
-	void SceneNode::doDetachChildren()
+	void SceneNode::doDetachChildren( bool cleanup )
 	{
 		SceneNodeMap flush;
 		std::swap( flush, m_children );
@@ -510,7 +487,7 @@ namespace castor3d
 
 			if ( current )
 			{
-				current->detach();
+				current->detach( cleanup );
 			}
 		}
 	}
