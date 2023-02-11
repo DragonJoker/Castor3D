@@ -105,6 +105,22 @@ namespace castor3d
 	{
 	}
 
+	bool ShadowMapPass::isPassEnabled()const
+	{
+		return RenderNodesPass::isPassEnabled()
+			&& ( m_renderQueue->isOutOfDate() || m_outOfDate );
+	}
+
+	bool ShadowMapPass::isUpToDate()const
+	{
+		return !m_outOfDate;
+	}
+
+	void ShadowMapPass::setUpToDate()
+	{
+		m_outOfDate = m_renderQueue->isOutOfDate();
+	}
+
 	bool ShadowMapPass::doIsValidRenderable( RenderedObject const & object )const
 	{
 		return object.isShadowCaster();

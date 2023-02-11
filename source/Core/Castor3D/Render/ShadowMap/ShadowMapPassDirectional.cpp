@@ -80,6 +80,26 @@ namespace castor3d
 
 	void ShadowMapPassDirectional::update( CpuUpdater & updater )
 	{
+		auto sceneIt = updater.dirtyScenes.find( &getScene() );
+
+		if ( sceneIt != updater.dirtyScenes.end() )
+		{
+			auto & sceneObjs = sceneIt->second;
+			auto it = std::find( sceneObjs.dirtyCameras.begin()
+				, sceneObjs.dirtyCameras.end()
+				, &m_camera );
+
+			if ( it == sceneObjs.dirtyCameras.end() )
+			{
+				it = std::find( sceneObjs.dirtyCameras.begin()
+					, sceneObjs.dirtyCameras.end()
+					, updater.camera );
+			}
+
+			m_outOfDate = m_outOfDate
+				|| it != sceneObjs.dirtyCameras.end();
+		}
+
 		getCuller().update( updater );
 		m_outOfDate = m_outOfDate
 			|| getCuller().areAnyChanged();

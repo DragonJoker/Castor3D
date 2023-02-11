@@ -119,7 +119,7 @@ namespace castor3d
 		, uint32_t layerCount )
 		: GBufferT< SmTexture >{ resources
 			, device
-			, prefix + cuT( "SMRes" )
+			, prefix + cuT( "/SMRes" )
 			, { nullptr, nullptr, nullptr, nullptr, nullptr }
 			, createFlags
 			, size

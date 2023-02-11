@@ -68,10 +68,8 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		bool isUpToDate()const
-		{
-			return !m_outOfDate;
-		}
+		C3D_API bool isPassEnabled()const override;
+		C3D_API bool isUpToDate()const;
 		/**
 		 *\copydoc		castor3d::RenderNodesPass::getComponentsMask
 		 */
@@ -105,10 +103,7 @@ namespace castor3d
 		*	Mutateurs.
 		*/
 		/**@{*/
-		void setUpToDate()
-		{
-			m_outOfDate = false;
-		}
+		void setUpToDate();
 		/**@}*/
 
 	private:
