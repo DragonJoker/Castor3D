@@ -161,13 +161,12 @@ namespace castor3d
 			{
 				pass.initEvent->skip();
 				pass.initEvent = nullptr;
-
-				auto & device = getOwner()->getEngine()->getRenderSystem()->getRenderDevice();
-				auto queueData = device.graphicsData();
-				doInitialise( device, *queueData );
 			}
 		}
 
+		auto & device = getOwner()->getEngine()->getRenderSystem()->getRenderDevice();
+		auto queueData = device.graphicsData();
+		doInitialise( device, *queueData );
 		return getCommandBuffer();
 	}
 
