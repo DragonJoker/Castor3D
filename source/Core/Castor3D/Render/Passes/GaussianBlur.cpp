@@ -262,7 +262,8 @@ namespace castor3d
 		, castor::String const & prefix
 		, crg::ImageViewIdArray const & views
 		, crg::ImageViewId const & intermediateView
-		, uint32_t kernelSize )
+		, uint32_t kernelSize
+		, crg::RunnablePass::IsEnabledCallback isEnabled )
 		: OwnedBy< Engine >{ *device.renderSystem.getEngine() }
 		, m_sources{ views }
 		, m_device{ device }
@@ -294,7 +295,7 @@ namespace castor3d
 			{
 				auto name = input.data->name + "BlurX";
 				auto & passX = graph.createPass( name
-					, [this, &input]( crg::FramePass const & framePass
+					, [this, &input, isEnabled]( crg::FramePass const & framePass
 						, crg::GraphContext & context
 						, crg::RunnableGraph & graph )
 					{
@@ -303,6 +304,7 @@ namespace castor3d
 							.renderPosition( {} )
 							.renderSize( { extent.width, extent.height } )
 							.texcoordConfig( {} )
+							.isEnabled( isEnabled )
 							.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stagesX ) )
 							.build( framePass, context, graph );
 						m_device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
@@ -318,7 +320,7 @@ namespace castor3d
 			{
 				auto name = input.data->name + "BlurY";
 				auto & passY = graph.createPass( name
-					, [this, &input]( crg::FramePass const & framePass
+					, [this, &input, isEnabled]( crg::FramePass const & framePass
 						, crg::GraphContext & context
 						, crg::RunnableGraph & graph )
 					{
@@ -327,6 +329,7 @@ namespace castor3d
 							.renderPosition( {} )
 							.renderSize( { extent.width, extent.height } )
 							.texcoordConfig( {} )
+							.isEnabled( isEnabled )
 							.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stagesY ) )
 							.build( framePass, context, graph );
 						m_device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
@@ -348,7 +351,8 @@ namespace castor3d
 		, castor::String const & category
 		, castor::String const & prefix
 		, crg::ImageViewIdArray const & views
-		, uint32_t kernelSize )
+		, uint32_t kernelSize
+		, crg::RunnablePass::IsEnabledCallback isEnabled )
 		: GaussianBlur{ graph
 			, previousPass
 			, device
@@ -356,7 +360,8 @@ namespace castor3d
 			, prefix
 			, views
 			, passgauss::createIntermediate( graph, prefix, getFormat( views[0] ), getExtent( views[0] ), getMipLevels( views[0] ) )
-			, kernelSize }
+			, kernelSize
+			, isEnabled }
 	{
 	}
 
@@ -366,7 +371,8 @@ namespace castor3d
 		, castor::String const & category
 		, castor::String const & prefix
 		, crg::ImageViewId const & view
-		, uint32_t kernelSize )
+		, uint32_t kernelSize
+		, crg::RunnablePass::IsEnabledCallback isEnabled )
 		: GaussianBlur{ graph
 			, previousPass
 			, device
@@ -374,7 +380,8 @@ namespace castor3d
 			, prefix
 			, passgauss::createViews( graph, view )
 			, passgauss::createIntermediate( graph, prefix, getFormat( view ), getExtent( view ), getMipLevels( view ) )
-			, kernelSize }
+			, kernelSize
+			, isEnabled }
 	{
 	}
 
@@ -385,7 +392,8 @@ namespace castor3d
 		, castor::String const & prefix
 		, crg::ImageViewId const & view
 		, crg::ImageViewId const & intermediateView
-		, uint32_t kernelSize )
+		, uint32_t kernelSize
+		, crg::RunnablePass::IsEnabledCallback isEnabled )
 		: GaussianBlur{ graph
 			, previousPass
 			, device
@@ -393,7 +401,8 @@ namespace castor3d
 			, prefix
 			, passgauss::createViews( graph, view )
 			, intermediateView
-			, kernelSize }
+			, kernelSize
+			, isEnabled }
 	{
 	}
 

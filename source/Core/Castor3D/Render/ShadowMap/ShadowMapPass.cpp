@@ -1,5 +1,6 @@
 #include "Castor3D/Render/ShadowMap/ShadowMapPass.hpp"
 
+#include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
@@ -107,8 +108,14 @@ namespace castor3d
 
 	bool ShadowMapPass::isPassEnabled()const
 	{
-		return RenderNodesPass::isPassEnabled()
-			&& ( m_renderQueue->isOutOfDate() || m_outOfDate );
+#if !C3D_MeasureShadowMapImpact
+		if ( getEngine()->areUpdateOptimisationsEnabled() )
+		{
+			return RenderNodesPass::isPassEnabled()
+				&& ( m_renderQueue->isOutOfDate() || m_outOfDate );
+		}
+#endif
+		return RenderNodesPass::isPassEnabled();
 	}
 
 	bool ShadowMapPass::isUpToDate()const

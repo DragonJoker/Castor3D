@@ -259,7 +259,7 @@ namespace castor3d
 			auto & cameraUbo = *m_passes[m_passesIndex].cameraUbos[cascade];
 			passes.passes.emplace_back( std::make_unique< ShadowMap::PassData >() );
 			auto & passData = *passes.passes.back();
-			passData.ownCuller = castor::makeUniqueDerived< SceneCuller, DummyCuller >( m_scene, &camera );
+			passData.ownCuller = castor::makeUniqueDerived< SceneCuller, DummyCuller >( m_scene, &camera, isStatic );
 			passData.culler = passData.ownCuller.get();
 			auto & pass = group.createPass( debugName
 				, [&passData, this, cascade, vsm, rsm, isStatic, &camera, &cameraUbo]( crg::FramePass const & framePass
@@ -332,19 +332,7 @@ namespace castor3d
 						pass.addInOutColourView( flux.targetViewId );
 					}
 				}
-
-				if ( vsm && !isStatic )
-				{
-					passes.blurs.push_back( castor::makeUnique< GaussianBlur >( group
-						, *previousPass
-						, m_device
-						, cuT( "ShadowMapDirectional" )
-						, debugName
-						, variance.wholeViewId
-						, 5u ) );
-					resultPasses.push_back( &passes.blurs.back()->getLastPass() );
-				}
-				else if ( isStatic )
+				if ( isStatic )
 				{
 					auto & nstSmResult = getShadowPassResult( false );
 					auto & copyPass = graph.createPass( "CopyToNonStatic"
@@ -388,6 +376,17 @@ namespace castor3d
 
 					resultPasses.push_back( &copyPass );
 				}
+				else if ( vsm )
+				{
+					passes.blurs.push_back( castor::makeUnique< GaussianBlur >( group
+						, *previousPass
+						, m_device
+						, cuT( "ShadowMapDirectional" )
+						, debugName
+						, variance.wholeViewId
+						, 5u ) );
+					resultPasses.push_back( &passes.blurs.back()->getLastPass() );
+				}
 				else
 				{
 					resultPasses.push_back( &pass );
@@ -430,19 +429,7 @@ namespace castor3d
 					}
 				}
 
-				if ( vsm && !isStatic )
-				{
-					passes.blurs.push_back( castor::makeUnique< GaussianBlur >( group
-						, *previousPass
-						, m_device
-						, cuT( "ShadowMapDirectional" )
-						, debugName
-						, variance.subViewsId[cascade]
-						, m_blurIntermediateView
-						, 5u ) );
-					resultPasses.push_back( &passes.blurs.back()->getLastPass() );
-				}
-				else if ( isStatic )
+				if ( isStatic )
 				{
 					auto & nstSmResult = getShadowPassResult( false );
 					auto & copyPass = graph.createPass( debugName + "/CopyToNonStatic"
@@ -486,6 +473,19 @@ namespace castor3d
 
 					previousPass = &copyPass;
 					resultPasses.push_back( previousPass );
+				}
+				else if ( vsm )
+				{
+					passes.blurs.push_back( castor::makeUnique< GaussianBlur >( group
+						, *previousPass
+						, m_device
+						, cuT( "ShadowMapDirectional" )
+						, debugName
+						, variance.subViewsId[cascade]
+						, m_blurIntermediateView
+						, 5u
+						, crg::ImageCopy::IsEnabledCallback( [this, cascade]() { return doEnableBlur( cascade ); } ) ) );
+					resultPasses.push_back( &passes.blurs.back()->getLastPass() );
 				}
 				else
 				{
