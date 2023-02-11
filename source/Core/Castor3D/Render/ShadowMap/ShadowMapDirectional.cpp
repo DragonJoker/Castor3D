@@ -443,6 +443,7 @@ namespace castor3d
 								, context
 								, runnableGraph
 								, getShadowPassResult( isStatic )[SmTexture::eDepth].getExtent()
+								, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 								, crg::ru::Config{} );
 							getOwner()->registerTimer( framePass.getFullName()
 								, result->getTimer() );
