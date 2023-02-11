@@ -117,17 +117,25 @@ namespace castor3d
 		doRegisterGraphIO( graph, vsm, rsm, isStatic );
 
 		auto & group = graph.getDefaultGroup();
-		passes.passes.emplace_back( std::make_unique< ShadowMap::PassData >( std::make_unique< CameraUbo >( m_device )
-			, std::make_shared< Camera >( cuT( "ShadowMapSpot" )
+
+		if ( m_passes[m_passesIndex].cameras.size() <= index )
+		{
+			m_passes[m_passesIndex].cameraUbos.push_back( std::make_unique< CameraUbo >( m_device ) );
+			m_passes[m_passesIndex].cameras.push_back( std::make_shared< Camera >( cuT( "ShadowMapSpot" )
 				, m_scene
 				, *m_scene.getCameraRootNode()
-				, std::move( viewport ) )
-			, nullptr ) );
+				, std::move( viewport ) ) );
+			CU_Require( m_passes[m_passesIndex].cameras.size() > index );
+		}
+
+		auto & camera = *m_passes[m_passesIndex].cameras[index];
+		auto & cameraUbo = *m_passes[m_passesIndex].cameraUbos[index];
+		passes.passes.emplace_back( std::make_unique< ShadowMap::PassData >( nullptr ) );
 		auto & passData = *passes.passes.back();
-		passData.ownCuller = castor::makeUniqueDerived< SceneCuller, FrustumCuller >( m_scene, *passData.camera );
+		passData.ownCuller = castor::makeUniqueDerived< SceneCuller, FrustumCuller >( m_scene, camera );
 		passData.culler = passData.ownCuller.get();
 		auto & pass = group.createPass( debugName
-			, [index, &passData, this, vsm, rsm, isStatic]( crg::FramePass const & framePass
+			, [index, &passData, this, vsm, rsm, isStatic, &cameraUbo]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
@@ -136,7 +144,7 @@ namespace castor3d
 					, runnableGraph
 					, m_device
 					, index
-					, *passData.cameraUbo
+					, cameraUbo
 					, *passData.culler
 					, *this
 					, vsm
@@ -208,7 +216,7 @@ namespace castor3d
 		{
 			auto & nstSmResult = getShadowPassResult( false );
 			auto & copyPass = graph.createPass( debugName + "/CopyToNonStatic"
-				, [this, isStatic]( crg::FramePass const & pass
+				, [this, isStatic, index]( crg::FramePass const & pass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & runnableGraph )
 				{
@@ -217,7 +225,9 @@ namespace castor3d
 						, runnableGraph
 						, getShadowPassResult( isStatic )[SmTexture::eDepth].getExtent()
 						, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-						, crg::ru::Config{} );
+						, crg::ru::Config{}
+						, crg::ImageCopy::GetPassIndexCallback( [](){ return 0u; } )
+						, crg::ImageCopy::IsEnabledCallback( [this, index](){ return doEnableCopyStatic( index ); } ) );
 					getOwner()->registerTimer( pass.getFullName()
 						, result->getTimer() );
 					return result;
@@ -282,7 +292,7 @@ namespace castor3d
 		pass.pass->update( updater );
 
 		auto & myCamera = pass.pass->getCuller().getCamera();
-		pass.cameraUbo->cpuUpdate( myCamera, false );
+		m_passes[m_passesIndex].cameraUbos[updater.index]->cpuUpdate( myCamera, false );
 	}
 
 	void ShadowMapSpot::doUpdate( GpuUpdater & updater

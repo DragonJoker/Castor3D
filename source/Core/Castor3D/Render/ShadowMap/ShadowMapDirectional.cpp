@@ -243,17 +243,26 @@ namespace castor3d
 		for ( uint32_t cascade = 0u; cascade < cascadeCount; ++cascade )
 		{
 			std::string debugName = shdmapdir::getPassName( cascade, vsm, rsm, isStatic );
-			passes.passes.emplace_back( std::make_unique< ShadowMap::PassData >( std::make_unique< CameraUbo >( m_device )
-				, std::make_shared< Camera >( debugName
+
+			if ( m_passes[m_passesIndex].cameras.size() <= cascade )
+			{
+				m_passes[m_passesIndex].cameraUbos.push_back( std::make_unique< CameraUbo >( m_device ) );
+				m_passes[m_passesIndex].cameras.push_back( std::make_shared< Camera >( shdmapdir::getPassName( cascade, false, false, false )
 					, m_scene
 					, *m_scene.getCameraRootNode()
 					, viewport
-					, true ) ) );
+					, true ) );
+				CU_Require( m_passes[m_passesIndex].cameras.size() > cascade );
+			}
+
+			auto & camera = *m_passes[m_passesIndex].cameras[cascade];
+			auto & cameraUbo = *m_passes[m_passesIndex].cameraUbos[cascade];
+			passes.passes.emplace_back( std::make_unique< ShadowMap::PassData >() );
 			auto & passData = *passes.passes.back();
-			passData.ownCuller = castor::makeUniqueDerived< SceneCuller, DummyCuller >( m_scene, passData.camera.get() );
+			passData.ownCuller = castor::makeUniqueDerived< SceneCuller, DummyCuller >( m_scene, &camera );
 			passData.culler = passData.ownCuller.get();
 			auto & pass = group.createPass( debugName
-				, [&passData, this, cascade, vsm, rsm, isStatic]( crg::FramePass const & framePass
+				, [&passData, this, cascade, vsm, rsm, isStatic, &camera, &cameraUbo]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & runnableGraph )
 				{
@@ -261,9 +270,9 @@ namespace castor3d
 						, context
 						, runnableGraph
 						, m_device
-						, *passData.cameraUbo
+						, cameraUbo
 						, *passData.culler
-						, *passData.camera
+						, camera
 						, *this
 						, vsm
 						, rsm
@@ -339,7 +348,7 @@ namespace castor3d
 				{
 					auto & nstSmResult = getShadowPassResult( false );
 					auto & copyPass = graph.createPass( "CopyToNonStatic"
-						, [this, isStatic]( crg::FramePass const & framePass
+						, [this, isStatic, cascade]( crg::FramePass const & framePass
 							, crg::GraphContext & context
 							, crg::RunnableGraph & runnableGraph )
 						{
@@ -348,7 +357,9 @@ namespace castor3d
 								, runnableGraph
 								, getShadowPassResult( isStatic )[SmTexture::eDepth].getExtent()
 								, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-								, crg::ru::Config{} );
+								, crg::ru::Config{}
+								, crg::ImageCopy::GetPassIndexCallback( [](){ return 0u; } )
+								, crg::ImageCopy::IsEnabledCallback( [this, cascade](){ return doEnableCopyStatic( cascade ); } ) );
 							getOwner()->registerTimer( framePass.getFullName()
 								, result->getTimer() );
 							return result;
@@ -435,7 +446,7 @@ namespace castor3d
 				{
 					auto & nstSmResult = getShadowPassResult( false );
 					auto & copyPass = graph.createPass( debugName + "/CopyToNonStatic"
-						, [this, isStatic]( crg::FramePass const & framePass
+						, [this, isStatic, cascade]( crg::FramePass const & framePass
 							, crg::GraphContext & context
 							, crg::RunnableGraph & runnableGraph )
 						{
@@ -444,7 +455,9 @@ namespace castor3d
 								, runnableGraph
 								, getShadowPassResult( isStatic )[SmTexture::eDepth].getExtent()
 								, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-								, crg::ru::Config{} );
+								, crg::ru::Config{}
+								, crg::ImageCopy::GetPassIndexCallback( [](){ return 0u; } )
+								, crg::ImageCopy::IsEnabledCallback( [this, cascade](){ return doEnableCopyStatic( cascade ); } ) );
 							getOwner()->registerTimer( framePass.getFullName()
 								, result->getTimer() );
 							return result;
@@ -535,7 +548,7 @@ namespace castor3d
 		{
 			if ( shadowModified )
 			{
-				auto & lightCamera = *passes.passes[cascade]->camera;
+				auto & lightCamera = *m_passes[m_passesIndex].cameras[cascade];
 				lightCamera.attachTo( *node );
 				lightCamera.setView( directional.getViewMatrix( cascade ) );
 				lightCamera.setProjection( directional.getProjMatrix( cascade ) );

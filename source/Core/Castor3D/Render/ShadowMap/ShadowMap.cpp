@@ -124,7 +124,7 @@ namespace castor3d
 		, m_device{ device }
 		, m_resources{ resources }
 		, m_scene{ scene }
-		, m_name{ castor::string::snakeToCamelCase( getName( lightType ) ) + "SM" }
+		, m_name{ castor::string::snakeToCamelCase( getName( lightType ) ) }
 		, m_lightType{ lightType }
 		, m_staticsResult{ resources
 			, m_device
@@ -187,7 +187,7 @@ namespace castor3d
 		if ( updater.index < doGetMaxCount()
 			&& updater.index >= myPasses.otherNodes.runnables.size() )
 		{
-			auto graph = std::make_unique< crg::FrameGraph >( m_resources.getHandler(), m_name );
+			auto graph = std::make_unique< crg::FrameGraph >( m_resources.getHandler(), m_name + "SM" );
 			auto previous = doCreatePasses( *graph
 				, crg::FramePassArray{}
 				, updater.index
@@ -226,7 +226,7 @@ namespace castor3d
 
 			for ( auto & view : result.subViewsId )
 			{
-				visitor.visit( m_name + getTexName( SmTexture( i ) ) + cuT( "L" ) + castor::string::toString( index++ )
+				visitor.visit( m_name + "/" + getTexName( SmTexture( i ) ) + cuT( "L" ) + castor::string::toString( index++ )
 					, view
 					, ( ashes::isDepthOrStencilFormat( view.data->info.format )
 						? VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL
@@ -242,9 +242,9 @@ namespace castor3d
 	{
 		auto & myPasses = m_passes[m_passesIndex];
 #if !C3D_MeasureShadowMapImpact
-		if ( doIsUpToDate( index, myPasses.staticNodes )
-			&& doIsUpToDate( index, myPasses.otherNodes )
-			&& getEngine()->areUpdateOptimisationsEnabled() )
+		if ( getEngine()->areUpdateOptimisationsEnabled()
+			&& doIsUpToDate( index, myPasses.staticNodes )
+			&& doIsUpToDate( index, myPasses.otherNodes ) )
 		{
 			return toWait;
 		}
@@ -258,9 +258,10 @@ namespace castor3d
 			myPasses.otherNodes.runnables[index]->record();
 		}
 
+		auto result = myPasses.otherNodes.runnables[index]->run( toWait, queue );
 		doSetUpToDate( index, myPasses.staticNodes );
 		doSetUpToDate( index, myPasses.otherNodes );
-		return myPasses.otherNodes.runnables[index]->run( toWait, queue );
+		return result;
 	}
 
 	ashes::VkClearValueArray const & ShadowMap::getClearValues()const
@@ -388,5 +389,13 @@ namespace castor3d
 					, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
 			}
 		}
+	}
+
+	bool ShadowMap::doEnableCopyStatic( uint32_t index )const
+	{
+		auto & dyn = m_passes[m_passesIndex].otherNodes;
+
+		return !dyn.passes[index]->pass->hasNodes()
+			|| dyn.passes[index]->pass->isPassEnabled();
 	}
 }

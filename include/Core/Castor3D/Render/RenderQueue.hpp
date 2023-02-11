@@ -113,6 +113,11 @@ namespace castor3d
 		C3D_API RenderFilters getFilters()const;
 		C3D_API ashes::CommandBuffer const & initCommandBuffer();
 
+		bool isOutOfDate()const
+		{
+			return m_culledChanged || m_commandsChanged;
+		}
+
 		bool hasCommandBuffer()const
 		{
 			return m_pass.commandBuffer != nullptr;

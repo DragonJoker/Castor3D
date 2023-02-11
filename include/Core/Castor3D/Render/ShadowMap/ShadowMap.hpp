@@ -25,51 +25,36 @@ namespace castor3d
 	public:
 		struct PassData
 		{
-			PassData( std::unique_ptr< CameraUbo > cameraUbo
-				, CameraSPtr camera
+			PassData( SceneCullerUPtr culler )
+				: ownCuller{ std::move( culler ) }
+				, culler{ ownCuller.get() }
+				, pass{ nullptr }
+			{
+			}
+
+			PassData( ViewportUPtr viewport
 				, SceneCullerUPtr culler )
-				: cameraUbo{ std::move( cameraUbo ) }
-				, camera{ std::move( camera ) }
+				: viewport{ std::move( viewport ) }
 				, ownCuller{ std::move( culler ) }
 				, culler{ ownCuller.get() }
 				, pass{ nullptr }
 			{
 			}
 
-			PassData( std::unique_ptr< CameraUbo > cameraUbo
-				, ViewportUPtr viewport
-				, SceneCullerUPtr culler )
-				: cameraUbo{ std::move( cameraUbo ) }
-				, viewport{ std::move( viewport ) }
-				, ownCuller{ std::move( culler ) }
-				, culler{ ownCuller.get() }
-				, pass{ nullptr }
-			{
-			}
-
-			PassData( std::unique_ptr< CameraUbo > cameraUbo
-				, CameraSPtr camera
-				, SceneCuller * culler )
-				: cameraUbo{ std::move( cameraUbo ) }
-				, camera{ std::move( camera ) }
-				, ownCuller{ nullptr }
+			PassData( SceneCuller * culler )
+				: ownCuller{ nullptr }
 				, culler{ culler }
 				, pass{ nullptr }
 			{
 			}
 
-			PassData( std::unique_ptr< CameraUbo > cameraUbo
-				, CameraSPtr camera )
-				: cameraUbo{ std::move( cameraUbo ) }
-				, camera{ std::move( camera ) }
-				, ownCuller{ nullptr }
+			PassData()
+				: ownCuller{ nullptr }
 				, culler{ nullptr }
 				, pass{ nullptr }
 			{
 			}
 
-			std::unique_ptr< CameraUbo > cameraUbo;
-			CameraSPtr camera;
 			ViewportUPtr viewport;
 			FrustumUPtr frustum;
 			SceneCullerUPtr ownCuller;
@@ -77,6 +62,22 @@ namespace castor3d
 			ShadowMapPass * pass;
 		};
 		using PassDataPtr = std::unique_ptr< PassData >;
+
+		struct Passes
+		{
+			std::vector< PassDataPtr > passes;
+			std::vector< std::unique_ptr< crg::FrameGraph > > graphs;
+			std::vector< crg::RunnableGraphPtr > runnables;
+			std::vector< GaussianBlurUPtr > blurs;
+		};
+
+		struct AllPasses
+		{
+			std::vector< std::unique_ptr< CameraUbo > > cameraUbos;
+			std::vector< CameraSPtr > cameras;
+			Passes staticNodes;
+			Passes otherNodes;
+		};
 
 	public:
 		/**
@@ -203,25 +204,11 @@ namespace castor3d
 		/**@}*/
 
 	protected:
-		struct Passes
-		{
-			std::vector< PassDataPtr > passes;
-			std::vector< std::unique_ptr< crg::FrameGraph > > graphs;
-			std::vector< crg::RunnableGraphPtr > runnables;
-			std::vector< GaussianBlurUPtr > blurs;
-		};
-
-		struct AllPasses
-		{
-			Passes staticNodes;
-			Passes otherNodes;
-		};
-
-	protected:
 		C3D_API void doRegisterGraphIO( crg::FrameGraph & graph
 			, bool vsm
 			, bool rsm
 			, bool isStatic )const;
+		C3D_API bool doEnableCopyStatic( uint32_t index )const;
 
 	private:
 		crg::FramePassArray doCreatePasses( crg::FrameGraph & graph

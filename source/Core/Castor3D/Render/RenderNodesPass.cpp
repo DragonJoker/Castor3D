@@ -494,7 +494,7 @@ namespace castor3d
 
 	bool RenderNodesPass::isPassEnabled()const
 	{
-		return m_renderQueue->hasNodes();
+		return hasNodes();
 	}
 
 	ShaderFlags RenderNodesPass::getShaderFlags()const
@@ -520,6 +520,11 @@ namespace castor3d
 			&& ( !handleStatic()
 				|| ( filtersStatic() && !node.isStatic() )
 				|| ( filtersNonStatic() && node.isStatic() ) );
+	}
+
+	bool RenderNodesPass::hasNodes()const
+	{
+		return m_renderQueue->hasNodes();
 	}
 
 	Scene & RenderNodesPass::getScene()const

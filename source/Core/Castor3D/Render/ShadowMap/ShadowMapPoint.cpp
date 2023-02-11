@@ -124,8 +124,16 @@ namespace castor3d
 
 		for ( uint32_t face = 0u; face < 6u; ++face )
 		{
-			passes.passes.emplace_back( std::make_unique< ShadowMap::PassData >( std::make_unique< CameraUbo >( m_device )
-				, castor::makeUnique< Viewport >( engine )
+			auto faceIndex = index * 6u + face;
+
+			if ( m_passes[m_passesIndex].cameraUbos.size() <= faceIndex )
+			{
+				m_passes[m_passesIndex].cameraUbos.push_back( std::make_unique< CameraUbo >( m_device ) );
+				CU_Require( m_passes[m_passesIndex].cameras.size() > faceIndex );
+			}
+
+			auto & cameraUbo = *m_passes[m_passesIndex].cameraUbos[faceIndex];
+			passes.passes.emplace_back( std::make_unique< ShadowMap::PassData >( castor::makeUnique< Viewport >( engine )
 				, nullptr ) );
 			auto & passData = *passes.passes.back();
 			passData.viewport->resize( castor::Size{ ShadowMapPointTextureSize
@@ -133,10 +141,9 @@ namespace castor3d
 			passData.frustum = castor::makeUnique< Frustum >( *passData.viewport );
 			passData.ownCuller = castor::makeUniqueDerived< SceneCuller, FrustumCuller >( m_scene, *passData.frustum );
 			passData.culler = passData.ownCuller.get();
-			auto faceIndex = index * 6u + face;
 			auto name = debugName + "F" + std::to_string( face );
 			auto & pass = group.createPass( name
-				, [faceIndex, &passData, this, vsm, rsm, isStatic]( crg::FramePass const & framePass
+				, [faceIndex, &passData, this, vsm, rsm, isStatic, &cameraUbo]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & runnableGraph )
 				{
@@ -145,7 +152,7 @@ namespace castor3d
 						, runnableGraph
 						, m_device
 						, faceIndex
-						, *passData.cameraUbo
+						, cameraUbo
 						, *passData.culler
 						, *this
 						, vsm
@@ -220,7 +227,7 @@ namespace castor3d
 			{
 				auto & nstSmResult = getShadowPassResult( false );
 				auto & copyPass = graph.createPass( name + "/CopyToNonStatic"
-					, [this, isStatic]( crg::FramePass const & pass
+					, [this, isStatic, faceIndex]( crg::FramePass const & pass
 						, crg::GraphContext & context
 						, crg::RunnableGraph & runnableGraph )
 					{
@@ -229,7 +236,9 @@ namespace castor3d
 							, runnableGraph
 							, getShadowPassResult( isStatic )[SmTexture::eDepth].getExtent()
 							, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-							, crg::ru::Config{} );
+							, crg::ru::Config{}
+							, crg::ImageCopy::GetPassIndexCallback( [](){ return 0u; } )
+							, crg::ImageCopy::IsEnabledCallback( [this, faceIndex](){ return doEnableCopyStatic( faceIndex ); } ) );
 						getOwner()->registerTimer( pass.getFullName()
 							, result->getTimer() );
 						return result;
@@ -313,7 +322,7 @@ namespace castor3d
 			pass.pass->update( updater );
 
 			auto & pointLight = *updater.light->getPointLight();
-			pass.cameraUbo->cpuUpdate( *updater.camera
+			m_passes[m_passesIndex].cameraUbos[updater.index]->cpuUpdate( *updater.camera
 				, false
 				, pointLight.getViewMatrix( CubeMapFace( updater.index ) )
 				, static_cast< ShadowMapPassPoint const & >( *pass.pass ).getProjection() );
