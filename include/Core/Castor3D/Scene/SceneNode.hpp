@@ -113,7 +113,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Détache le noeud de son parent
 		 */
-		C3D_API void detach();
+		C3D_API void detach( bool cleanup );
 		/**
 		 *\~english
 		 *\param[in]	name	The name of the node
@@ -156,7 +156,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Détache tous les enfants de ce noeud
 		 */
-		C3D_API void detachChildren();
+		C3D_API void detachChildren( bool cleanup );
 		/**@}*/
 		/**
 		 *\name Local transformations.
@@ -336,7 +336,7 @@ namespace castor3d
 		void doDetach();
 		void doAddChild( SceneNode & child );
 		void doDetachChild( castor::String const & childName );
-		void doDetachChildren();
+		void doDetachChildren( bool cleanup );
 
 	public:
 		//!\~english	Signal used to notify that the node has been attached to another one.
@@ -385,7 +385,50 @@ namespace castor3d
 
 		void operator()( ElementT & element )
 		{
-			element.detach();
+			element.detach( true );
+		}
+	};
+
+
+	template< typename CacheT >
+	struct SceneNodeMergerT
+		: public castor::Named
+	{
+		explicit SceneNodeMergerT( castor::String const & name )
+			: castor::Named{ name }
+		{
+		}
+
+		void operator()( typename CacheT::ElementObjectCacheT const & source
+			, typename CacheT::ElementContT & destination
+			, typename CacheT::ElementPtrT element
+			, SceneNodeRPtr rootCameraNode
+			, SceneNodeRPtr rootObjectNode )const
+		{
+			using ElementPtrT = typename CacheT::ElementPtrT;
+
+			if ( element->getParent()->getName() == rootCameraNode->getName() )
+			{
+				element->detach( true );
+				element->attachTo( *rootCameraNode );
+			}
+			else if ( element->getParent()->getName() == rootObjectNode->getName() )
+			{
+				element->detach( true );
+				element->attachTo( *rootObjectNode );
+			}
+
+			auto name = element->getName();
+			auto ires = destination.emplace( name, ElementPtrT{} );
+
+			while ( !ires.second )
+			{
+				name = getName() + cuT( "_" ) + name;
+				ires = destination.emplace( name, ElementPtrT{} );
+			}
+
+			ires.first->second = std::move( element );
+			ires.first->second->rename( name );
 		}
 	};
 }

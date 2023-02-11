@@ -164,7 +164,7 @@ namespace castor3d
 			, m_rootObjectNode.get()
 			, castor::DummyFunctorT< SceneNodeCache >{}
 			, castor::DummyFunctorT< SceneNodeCache >{}
-			, MovableMergerT< SceneNodeCache >{ getName() }
+			, SceneNodeMergerT< SceneNodeCache >{ getName() }
 			, SceneNodeAttacherT< SceneNodeCache >{}
 			, SceneNodeDetacherT< SceneNodeCache >{} );
 		m_animatedObjectGroupCache = castor::makeCache< AnimatedObjectGroup, castor::String, AnimatedObjectGroupCacheTraits >( *this );
@@ -261,13 +261,13 @@ namespace castor3d
 
 		if ( m_rootCameraNode )
 		{
-			m_rootCameraNode->detach();
+			m_rootCameraNode->detach( true );
 			m_rootCameraNode.reset();
 		}
 
 		if ( m_rootObjectNode )
 		{
-			m_rootObjectNode->detach();
+			m_rootObjectNode->detach( true );
 			m_rootObjectNode.reset();
 		}
 
@@ -281,7 +281,7 @@ namespace castor3d
 
 		if ( m_rootNode )
 		{
-			m_rootNode->detach();
+			m_rootNode->detach( true );
 		}
 
 		m_rootNode.reset();

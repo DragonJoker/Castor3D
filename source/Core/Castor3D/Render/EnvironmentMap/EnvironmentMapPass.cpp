@@ -97,7 +97,7 @@ namespace castor3d
 
 	EnvironmentMapPass::~EnvironmentMapPass()
 	{
-		m_camera->getParent()->detach();
+		m_camera->getParent()->detach( true );
 	}
 
 	void EnvironmentMapPass::update( CpuUpdater & updater )
