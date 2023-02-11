@@ -186,6 +186,7 @@ namespace castor3d
 			m_lightSpace = ( *m_lightProj ) * ( *m_lightView );
 			getLight().onGPUChanged( getLight() );
 			m_dirtyShadow = false;
+			lightCamera.markDirty();
 		}
 	}
 
