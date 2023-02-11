@@ -115,7 +115,6 @@ namespace castor3d
 		auto & position = smResult[SmTexture::ePosition];
 		auto & flux = smResult[SmTexture::eFlux];
 
-		std::string debugName = shdmappoint::getPassName( index, vsm, rsm, isStatic );
 		doRegisterGraphIO( graph, vsm, rsm, isStatic );
 
 		auto & group = graph.getDefaultGroup();
@@ -125,11 +124,12 @@ namespace castor3d
 		for ( uint32_t face = 0u; face < 6u; ++face )
 		{
 			auto faceIndex = index * 6u + face;
+			std::string debugName = shdmappoint::getPassName( faceIndex, vsm, rsm, isStatic );
 
 			if ( m_passes[m_passesIndex].cameraUbos.size() <= faceIndex )
 			{
 				m_passes[m_passesIndex].cameraUbos.push_back( std::make_unique< CameraUbo >( m_device ) );
-				CU_Require( m_passes[m_passesIndex].cameras.size() > faceIndex );
+				CU_Require( m_passes[m_passesIndex].cameraUbos.size() > faceIndex );
 			}
 
 			auto & cameraUbo = *m_passes[m_passesIndex].cameraUbos[faceIndex];
@@ -139,10 +139,9 @@ namespace castor3d
 			passData.viewport->resize( castor::Size{ ShadowMapPointTextureSize
 				, ShadowMapPointTextureSize } );
 			passData.frustum = castor::makeUnique< Frustum >( *passData.viewport );
-			passData.ownCuller = castor::makeUniqueDerived< SceneCuller, FrustumCuller >( m_scene, *passData.frustum );
+			passData.ownCuller = castor::makeUniqueDerived< SceneCuller, FrustumCuller >( m_scene, *passData.frustum, isStatic );
 			passData.culler = passData.ownCuller.get();
-			auto name = debugName + "F" + std::to_string( face );
-			auto & pass = group.createPass( name
+			auto & pass = group.createPass( debugName
 				, [faceIndex, &passData, this, vsm, rsm, isStatic, &cameraUbo]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & runnableGraph )
@@ -211,22 +210,10 @@ namespace castor3d
 				}
 			}
 
-			if ( vsm && !isStatic )
-			{
-				passes.blurs.push_back( castor::makeUnique< GaussianBlur >( group
-					, *previousPass
-					, m_device
-					, cuT( "ShadowMapPoint" )
-					, name
-					, variance.subViewsId[faceIndex]
-					, m_blurIntermediateView
-					, 5u ) );
-				result.push_back( &passes.blurs.back()->getLastPass() );
-			}
-			else if ( isStatic )
+			if ( isStatic )
 			{
 				auto & nstSmResult = getShadowPassResult( false );
-				auto & copyPass = graph.createPass( name + "/CopyToNonStatic"
+				auto & copyPass = graph.createPass( debugName + "/CopyToNonStatic"
 					, [this, isStatic, faceIndex]( crg::FramePass const & pass
 						, crg::GraphContext & context
 						, crg::RunnableGraph & runnableGraph )
@@ -267,6 +254,19 @@ namespace castor3d
 
 				previousPass = &copyPass;
 				result.push_back( previousPass );
+			}
+			else if ( vsm )
+			{
+				passes.blurs.push_back( castor::makeUnique< GaussianBlur >( group
+					, *previousPass
+					, m_device
+					, cuT( "ShadowMapPoint" )
+					, debugName
+					, variance.subViewsId[faceIndex]
+					, m_blurIntermediateView
+					, 5u
+					, crg::ImageCopy::IsEnabledCallback( [this, faceIndex]() { return doEnableBlur( faceIndex ); } ) ) );
+				result.push_back( &passes.blurs.back()->getLastPass() );
 			}
 			else
 			{
@@ -322,7 +322,7 @@ namespace castor3d
 			pass.pass->update( updater );
 
 			auto & pointLight = *updater.light->getPointLight();
-			m_passes[m_passesIndex].cameraUbos[updater.index]->cpuUpdate( *updater.camera
+			m_passes[m_passesIndex].cameraUbos[face]->cpuUpdate( *updater.camera
 				, false
 				, pointLight.getViewMatrix( CubeMapFace( updater.index ) )
 				, static_cast< ShadowMapPassPoint const & >( *pass.pass ).getProjection() );

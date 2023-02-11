@@ -209,6 +209,7 @@ namespace castor3d
 			, bool rsm
 			, bool isStatic )const;
 		C3D_API bool doEnableCopyStatic( uint32_t index )const;
+		C3D_API bool doEnableBlur( uint32_t index )const;
 
 	private:
 		crg::FramePassArray doCreatePasses( crg::FrameGraph & graph

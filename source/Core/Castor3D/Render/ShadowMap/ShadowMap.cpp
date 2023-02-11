@@ -241,6 +241,7 @@ namespace castor3d
 		, uint32_t index )
 	{
 		auto & myPasses = m_passes[m_passesIndex];
+
 #if !C3D_MeasureShadowMapImpact
 		if ( getEngine()->areUpdateOptimisationsEnabled()
 			&& doIsUpToDate( index, myPasses.staticNodes )
@@ -392,6 +393,14 @@ namespace castor3d
 	}
 
 	bool ShadowMap::doEnableCopyStatic( uint32_t index )const
+	{
+		auto & dyn = m_passes[m_passesIndex].otherNodes;
+
+		return !dyn.passes[index]->pass->hasNodes()
+			|| dyn.passes[index]->pass->isPassEnabled();
+	}
+
+	bool ShadowMap::doEnableBlur( uint32_t index )const
 	{
 		auto & dyn = m_passes[m_passesIndex].otherNodes;
 

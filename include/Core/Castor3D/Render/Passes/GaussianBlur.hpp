@@ -14,6 +14,8 @@ See LICENSE file in root folder
 #include <ashespp/RenderPass/FrameBuffer.hpp>
 #include <ashespp/RenderPass/RenderPass.hpp>
 
+#include <RenderGraph/RunnablePass.hpp>
+
 #include <ShaderAST/Shader.hpp>
 
 namespace castor3d
@@ -54,7 +56,8 @@ namespace castor3d
 			, castor::String const & prefix
 			, crg::ImageViewIdArray const & views
 			, crg::ImageViewId const & intermediateView
-			, uint32_t kernelSize );
+			, uint32_t kernelSize
+			, crg::RunnablePass::IsEnabledCallback isEnabled = crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -81,7 +84,8 @@ namespace castor3d
 			, castor::String const & category
 			, castor::String const & prefix
 			, crg::ImageViewIdArray const & views
-			, uint32_t kernelSize );
+			, uint32_t kernelSize
+			, crg::RunnablePass::IsEnabledCallback isEnabled = crg::RunnablePass::IsEnabledCallback( []() { return true; } ) );
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -108,7 +112,8 @@ namespace castor3d
 			, castor::String const & category
 			, castor::String const & prefix
 			, crg::ImageViewId const & view
-			, uint32_t kernelSize );
+			, uint32_t kernelSize
+			, crg::RunnablePass::IsEnabledCallback isEnabled = crg::RunnablePass::IsEnabledCallback( []() { return true; } ) );
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -138,7 +143,8 @@ namespace castor3d
 			, castor::String const & prefix
 			, crg::ImageViewId const & view
 			, crg::ImageViewId const & intermediateView
-			, uint32_t kernelSize );
+			, uint32_t kernelSize
+			, crg::RunnablePass::IsEnabledCallback isEnabled = crg::RunnablePass::IsEnabledCallback( []() { return true; } ) );
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
