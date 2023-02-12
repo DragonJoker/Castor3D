@@ -48,6 +48,28 @@ namespace castor3d
 {
 	//*********************************************************************************************
 
+	namespace vxlzpass
+	{
+		static RenderNodesPassDesc buildDesc( VoxelSceneData const & voxelConfig
+			, CameraUbo const & cameraUbo
+			, SceneUbo const & sceneUbo
+			, SceneCuller & culler
+			, bool isStatic )
+		{
+			RenderNodesPassDesc result{ { voxelConfig.gridSize.value(), voxelConfig.gridSize.value(), 1u }
+				, cameraUbo
+				, sceneUbo
+				, culler
+				, RenderFilter::eNone
+				, true
+				, true };
+			result.isStatic( isStatic );
+			return result;
+		}
+	}
+
+	//*********************************************************************************************
+
 	castor::String const VoxelizePass::Type = "c3d.voxelize";
 
 	VoxelizePass::VoxelizePass( crg::FramePass const & pass
@@ -57,9 +79,11 @@ namespace castor3d
 		, CameraUbo const & cameraUbo
 		, SceneUbo const & sceneUbo
 		, Camera const & camera
+		, SceneCuller & culler
 		, VoxelizerUbo const & voxelizerUbo
 		, ashes::Buffer< Voxel > const & voxels
-		, VoxelSceneData const & voxelConfig )
+		, VoxelSceneData const & voxelConfig
+		, bool isStatic )
 		: RenderNodesPass{ pass
 			, context
 			, graph
@@ -67,13 +91,11 @@ namespace castor3d
 			, Type
 			, {}
 			, {}
-			, RenderNodesPassDesc{ { voxelConfig.gridSize.value(), voxelConfig.gridSize.value(), 1u }
+			, vxlzpass::buildDesc( voxelConfig
 				, cameraUbo
 				, sceneUbo
-				, camera.getScene()->getDummyCuller()
-				, RenderFilter::eNone
-				, true
-				, true } }
+				, culler
+				, isStatic ) }
 		, m_scene{ *camera.getScene() }
 		, m_voxels{ voxels }
 		, m_voxelizerUbo{ voxelizerUbo }
@@ -99,15 +121,39 @@ namespace castor3d
 	{
 		if ( m_voxelConfig.enabled )
 		{
-			getCuller().update( updater );
+			auto sceneIt = updater.dirtyScenes.find( &getScene() );
+
+			if ( sceneIt != updater.dirtyScenes.end() )
+			{
+				auto & sceneObjs = sceneIt->second;
+				m_outOfDate = m_outOfDate
+					|| !sceneObjs.dirtyLights.empty();
+
+				if ( !m_outOfDate )
+				{
+					auto it = std::find_if( sceneObjs.dirtyNodes.begin()
+						, sceneObjs.dirtyNodes.end()
+						, [this]( SceneNode * node )
+						{
+							return node->isStatic() == filtersNonStatic();
+						} );
+					m_outOfDate = m_outOfDate
+						|| it != sceneObjs.dirtyNodes.end();
+				}
+			}
+
 			RenderNodesPass::update( updater );
+			m_outOfDate = m_outOfDate
+				//|| filtersStatic()
+				|| getCuller().areAnyChanged();
 		}
 	}
 
 	bool VoxelizePass::isPassEnabled()const
 	{
 		return m_voxelConfig.enabled
-			&& RenderNodesPass::isPassEnabled();
+			&& RenderNodesPass::isPassEnabled()
+			&& ( m_renderQueue->isOutOfDate() || m_outOfDate );
 	}
 
 	ShaderFlags VoxelizePass::getShaderFlags()const
@@ -127,6 +173,11 @@ namespace castor3d
 			| ComponentModeFlag::eDiffuseLighting
 			| ComponentModeFlag::eSpecularLighting
 			| ComponentModeFlag::eNormals );
+	}
+
+	void VoxelizePass::setUpToDate()
+	{
+		m_outOfDate = m_renderQueue->isOutOfDate();
 	}
 
 	SubmeshFlags VoxelizePass::doAdjustSubmeshFlags( SubmeshFlags flags )const

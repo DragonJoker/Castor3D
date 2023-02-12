@@ -43,7 +43,8 @@ namespace castor3d
 			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
-			, VoxelSceneData const & voxelConfig );
+			, VoxelSceneData const & voxelConfig
+			, crg::RunnablePass::IsEnabledCallback isEnabled );
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
