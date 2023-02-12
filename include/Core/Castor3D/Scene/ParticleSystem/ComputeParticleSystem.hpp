@@ -101,7 +101,6 @@ namespace castor3d
 
 	private:
 		bool doInitialiseParticleStorage( RenderDevice const & device );
-		bool doCreateRandomStorage( RenderDevice const & device );
 		bool doInitialisePipeline( RenderDevice const & device );
 		void doPrepareCommandBuffers( RenderDevice const & device );
 
@@ -121,7 +120,6 @@ namespace castor3d
 		UniformBufferOffsetT< Configuration > m_ubo;
 		std::array< ashes::BufferPtr< uint8_t >, 2 > m_particlesStorages;
 		ashes::BufferPtr< uint32_t > m_generatedCountBuffer;
-		ashes::BufferPtr< castor::Point4f > m_randomStorage;
 		ashes::DescriptorSetLayoutPtr m_descriptorLayout;
 		ashes::PipelineLayoutPtr m_pipelineLayout;
 		ashes::ComputePipelinePtr m_pipeline;

@@ -17,6 +17,8 @@ namespace castor3d
 	static uint32_t constexpr MaxLightingModels = 64u;
 	// Maximum different background models.
 	static uint32_t constexpr MaxBackgroundModels = 64u;
+	// The number of vec4s in the random buffer.
+	static uint32_t constexpr RandomDataCount = 1024u;
 	//@}
 	/**
 	*\name

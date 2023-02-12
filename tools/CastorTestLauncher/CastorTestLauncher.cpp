@@ -30,6 +30,7 @@ namespace test_launcher
 				static const wxString Generate{ wxT( "generate" ) };
 				static const wxString FrameCount{ wxT( "frames" ) };
 				static const wxString DisUpdOptim{ wxT( "disable_update_optim" ) };
+				static const wxString DisRandom{ wxT( "disable_random" ) };
 			}
 
 			namespace st
@@ -41,6 +42,7 @@ namespace test_launcher
 				static const wxString Generate{ wxT( "e" ) };
 				static const wxString FrameCount{ wxT( "f" ) };
 				static const wxString DisUpdOptim{ wxT( "d" ) };
+				static const wxString DisRandom{ wxT( "r" ) };
 			}
 
 			namespace df
@@ -80,6 +82,7 @@ namespace test_launcher
 		static const wxString Generate{ _( "Generates the reference image, using Vulkan renderer." ) };
 		static const wxString FrameCount{ _( "The number of frames before capture." ) };
 		static const wxString DisUpdOptim{ _( "Disable update optimisations." ) };
+		static const wxString DisRandom{ _( "Disable full randomisation in random buffer." ) };
 		static const wxString SceneFile{ _( "The tested scene file." ) };
 
 		wxCmdLineParser parser( wxApp::argc, wxApp::argv );
@@ -90,6 +93,7 @@ namespace test_launcher
 		parser.AddSwitch( option::st::Generate, option::lg::Generate, Generate );
 		parser.AddOption( option::st::FrameCount, option::lg::FrameCount, FrameCount, wxCMD_LINE_VAL_NUMBER );
 		parser.AddSwitch( option::st::DisUpdOptim, option::lg::DisUpdOptim, DisUpdOptim );
+		parser.AddSwitch( option::st::DisRandom, option::lg::DisRandom, DisUpdOptim );
 		parser.AddParam( SceneFile, wxCMD_LINE_VAL_STRING, wxCMD_LINE_OPTION_MANDATORY );
 
 		for ( auto & plugin : list )
@@ -139,6 +143,7 @@ namespace test_launcher
 		m_config.generate = has( option::st::Generate );
 		m_config.maxFrameCount = getLong( option::st::FrameCount, option::df::FrameCount );
 		m_config.disableUpdateOptimisations = has( option::st::DisUpdOptim );
+		m_config.disableRandom = has( option::st::DisRandom );
 
 		if ( result )
 		{
@@ -187,6 +192,7 @@ namespace test_launcher
 		castor3d::EngineSPtr castor = std::make_shared< castor3d::Engine >( cuT( "CastorTestLauncher" )
 			, castor3d::Version{ CastorTestLauncher_VERSION_MAJOR, CastorTestLauncher_VERSION_MINOR, CastorTestLauncher_VERSION_BUILD }
 			, m_config.validate
+			, !m_config.disableRandom
 			, * castor::Logger::getSingleton().getInstance() );
 		castor::PathArray arrayFiles;
 		castor::File::listDirectoryFiles( castor3d::Engine::getPluginsDirectory(), arrayFiles );

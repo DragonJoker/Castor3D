@@ -724,6 +724,11 @@ namespace castor3d
 					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 			}
 		}
+
+		// Random Storage
+		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 	}
 
 	void RenderNodesPass::doAddShadowDescriptor( Scene const & scene
@@ -755,6 +760,10 @@ namespace castor3d
 				}
 			}
 		}
+
+		bindBuffer( getEngine()->getRenderSystem()->getRandomStorage().getBuffer()
+			, descriptorWrites
+			, index );
 #endif
 	}
 

@@ -19,21 +19,24 @@ namespace castor3d
 	{
 		auto & base = *reinterpret_cast< LightData * >( data->ptr() );
 		base.colour = getColour();
-		base.shadowMapIndex = float( m_light.getShadowMapIndex() );
+		base.farPlane = getFarPlane();
 
 		base.intensity = getIntensity();
-		base.farPlane = getFarPlane();
-		base.shadowType = float( getLight().isShadowProducer()
+
+		auto & shadows = base.shadows;
+		shadows.shadowMapIndex = float( m_light.getShadowMapIndex() );
+		shadows.shadowType = float( getLight().isShadowProducer()
 			? getLight().getShadowType()
 			: ShadowType::eNone );
+		shadows.pcfFilterSize = float( getShadowPcfFilterSize() );
+		shadows.pcfSampleCount = float( getShadowPcfSampleCount().value() );
 
-		base.volumetricSteps = float( getVolumetricSteps() );
-		base.volumetricScattering = getVolumetricScatteringFactor();
+		shadows.rawShadowsOffsets = getShadowRawOffsets();
+		shadows.pcfShadowsOffsets = getShadowPcfOffsets();
 
-		base.rawShadowsOffsets = getShadowRawOffsets();
-		base.pcfShadowsOffsets = getShadowPcfOffsets();
-
-		base.vsmShadowVariance = getShadowVariance();
+		shadows.vsmShadowVariance = getShadowVariance();
+		shadows.volumetricSteps = float( getVolumetricSteps() );
+		shadows.volumetricScattering = getVolumetricScatteringFactor();
 
 		doFillBuffer( data );
 	}
@@ -56,6 +59,16 @@ namespace castor3d
 	castor::Point2f const & LightCategory::getShadowPcfOffsets()const
 	{
 		return m_light.getShadowPcfOffsets();
+	}
+
+	uint32_t LightCategory::getShadowPcfFilterSize()const
+	{
+		return m_light.getShadowPcfFilterSize();
+	}
+
+	castor::RangedValue< uint32_t > LightCategory::getShadowPcfSampleCount()const
+	{
+		return m_light.getShadowPcfSampleCount();
 	}
 
 	castor::Point2f const & LightCategory::getShadowVariance()const
@@ -106,6 +119,16 @@ namespace castor3d
 	void LightCategory::setPcfMaxSlopeOffset( float value )
 	{
 		m_light.setPcfMaxSlopeOffset( value );
+	}
+
+	void LightCategory::setPcfFilterSize( uint32_t value )
+	{
+		m_light.setPcfFilterSize( value );
+	}
+
+	void LightCategory::setPcfSampleCount( uint32_t value )
+	{
+		m_light.setPcfSampleCount( value );
 	}
 
 	void LightCategory::setVsmMaxVariance( float value )

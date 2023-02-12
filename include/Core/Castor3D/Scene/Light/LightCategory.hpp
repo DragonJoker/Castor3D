@@ -32,19 +32,28 @@ namespace castor3d
 		C3D_API explicit LightCategory( LightType lightType, Light & light );
 
 	public:
-		struct LightData
+		struct ShadowData
 			: LightBufferTypes
 		{
-			Float3 colour;
 			Float1 shadowMapIndex;
-			Float2 intensity;
-			Float1 farPlane;
 			Float1 shadowType;
+			Float1 pcfFilterSize;
+			Float1 pcfSampleCount;
 			Float2 rawShadowsOffsets;
 			Float2 pcfShadowsOffsets;
 			Float2 vsmShadowVariance;
 			Float1 volumetricSteps;
 			Float1 volumetricScattering;
+		};
+
+		struct LightData
+			: LightBufferTypes
+		{
+			Float3 colour;
+			Float1 farPlane;
+			Float2 intensity;
+			Float2 pad0;
+			ShadowData shadows;
 		};
 
 	public:
@@ -85,6 +94,8 @@ namespace castor3d
 		C3D_API castor::Point2f const & getShadowRawOffsets()const;
 		C3D_API castor::Point2f const & getShadowPcfOffsets()const;
 		C3D_API castor::Point2f const & getShadowVariance()const;
+		C3D_API uint32_t getShadowPcfFilterSize()const;
+		C3D_API castor::RangedValue< uint32_t > getShadowPcfSampleCount()const;
 		C3D_API ShadowConfig const & getShadowConfig()const;
 		C3D_API RsmConfig const & getRsmConfig()const;
 		C3D_API LpvConfig const & getLpvConfig()const;
@@ -144,6 +155,8 @@ namespace castor3d
 		C3D_API void setRawMaxSlopeOffset( float value );
 		C3D_API void setPcfMinOffset( float value );
 		C3D_API void setPcfMaxSlopeOffset( float value );
+		C3D_API void setPcfFilterSize( uint32_t value );
+		C3D_API void setPcfSampleCount( uint32_t value );
 		C3D_API void setVsmMaxVariance( float value );
 		C3D_API void setVsmVarianceBias( float value );
 		C3D_API void setColour( castor::Point3f const & value );

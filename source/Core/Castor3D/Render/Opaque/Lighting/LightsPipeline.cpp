@@ -210,6 +210,9 @@ namespace castor3d
 		setLayoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( LightPassLgtIdx::eSmVariance )
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+		setLayoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( LightPassLgtIdx::eRandomStorage )
+			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 
 		auto index = uint32_t( LightPassLgtIdx::eCount );
 		PipelineFlags flags{ PassComponentCombine{}, m_config.lightingModelId, {} };
@@ -249,6 +252,13 @@ namespace castor3d
 				, ashes::VkDescriptorImageInfoArray{ { m_device.renderSystem.getEngine()->getDefaultSampler().lock()->getSampler()
 					, m_smResult[SmTexture::eVariance].wholeView
 					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } );
+			auto & randomStorage = m_device.renderSystem.getRandomStorage().getBuffer();
+			writes.emplace_back( uint32_t( LightPassLgtIdx::eRandomStorage )
+				, 0u
+				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+				, ashes::VkDescriptorBufferInfoArray{ { randomStorage
+					, 0u
+					, randomStorage.getSize() } } );
 
 			auto index = uint32_t( LightPassLgtIdx::eCount );
 			PipelineFlags flags{ PassComponentCombine{}, m_config.lightingModelId, {} };

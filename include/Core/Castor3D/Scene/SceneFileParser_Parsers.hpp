@@ -146,6 +146,8 @@ namespace castor3d
 	// PCF shadow parsers
 	CU_DeclareAttributeParser( parserShadowsPcfMinOffset )
 	CU_DeclareAttributeParser( parserShadowsPcfMaxSlopeOffset )
+	CU_DeclareAttributeParser( parserShadowsPcfFilterSize )
+	CU_DeclareAttributeParser( parserShadowsPcfSampleCount )
 
 	// VSM shadow parsers
 	CU_DeclareAttributeParser( parserShadowsVsmVarianceMax )

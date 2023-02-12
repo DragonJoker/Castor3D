@@ -98,10 +98,10 @@ namespace atmosphere_scattering
 			&& m_directionalCascadeIndex
 			&& m_directionalCascadeCount )
 		{
-			IF( m_writer, light.volumetricSteps() != 0_u )
+			IF( m_writer, light.shadows().volumetricSteps() != 0_u )
 			{
 				auto volumetric = m_writer.declLocale( "volumetric"
-					, m_shadowModel.computeVolumetric( light
+					, m_shadowModel.computeVolumetric( light.shadows()
 						, lightSurface
 						, *m_directionalTransform
 						, *m_directionalCascadeIndex
@@ -192,10 +192,10 @@ namespace atmosphere_scattering
 			&& m_directionalCascadeIndex
 			&& m_directionalCascadeCount )
 		{
-			IF( m_writer, light.volumetricSteps() != 0_u )
+			IF( m_writer, light.shadows().volumetricSteps() != 0_u )
 			{
 				auto volumetric = m_writer.declLocale( "volumetric"
-					, m_shadowModel.computeVolumetric( light
+					, m_shadowModel.computeVolumetric( light.shadows()
 						, lightSurface
 						, *m_directionalTransform
 						, *m_directionalCascadeIndex

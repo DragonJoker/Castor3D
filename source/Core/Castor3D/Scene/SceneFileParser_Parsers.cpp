@@ -2457,6 +2457,48 @@ namespace castor3d
 	}
 	CU_EndAttribute()
 
+	CU_ImplementAttributeParser( parserShadowsPcfFilterSize )
+	{
+		auto & parsingContext = getParserContext( context );
+
+		if ( !parsingContext.light )
+		{
+			CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
+		}
+		else if ( params.empty() )
+		{
+			CU_ParsingError( cuT( "Missing parameter" ) );
+		}
+		else
+		{
+			uint32_t value;
+			params[0]->get( value );
+			parsingContext.light->setPcfFilterSize( value );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserShadowsPcfSampleCount )
+	{
+		auto & parsingContext = getParserContext( context );
+
+		if ( !parsingContext.light )
+		{
+			CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
+		}
+		else if ( params.empty() )
+		{
+			CU_ParsingError( cuT( "Missing parameter" ) );
+		}
+		else
+		{
+			uint32_t value;
+			params[0]->get( value );
+			parsingContext.light->setPcfSampleCount( value );
+		}
+	}
+	CU_EndAttribute()
+
 	CU_ImplementAttributeParser( parserShadowsVsmVarianceMax )
 	{
 		auto & parsingContext = getParserContext( context );

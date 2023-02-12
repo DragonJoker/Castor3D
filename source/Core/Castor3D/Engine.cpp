@@ -147,6 +147,7 @@ namespace castor3d
 	Engine::Engine( castor::String const & appName
 		, Version const & appVersion
 		, bool enableValidation
+		, bool enableRandom
 		, castor::LoggerInstancePtr ownedLogger
 		, castor::LoggerInstance * logger )
 		: Unique< Engine >( this )
@@ -161,6 +162,7 @@ namespace castor3d
 		, m_particleFactory{ castor::makeUnique< ParticleFactory >() }
 		, m_enableValidation{ enableValidation }
 		, m_enableApiTrace{ eng::C3D_EnableAPITrace }
+		, m_enableRandom{ enableRandom }
 		, m_cpuJobs{ std::max( 8u, std::min( 4u, castor::CpuInformations{}.getCoreCount() / 2u ) ) }
 		, m_resources{ m_resourceHandler }
 	{
@@ -230,10 +232,12 @@ namespace castor3d
 
 	Engine::Engine( castor::String const & appName
 		, Version const & appVersion
-		, bool enableValidation )
+		, bool enableValidation
+		, bool enableRandom )
 		: Engine{ appName
 			, appVersion
 			, enableValidation
+			, enableRandom
 			, eng::createLogger( castor::Logger::getLevel()
 				, getEngineDirectory() / cuT( "Castor3D.log" )
 				, getEngineDirectory() / cuT( "Castor3D-Debug.log" ) )
@@ -244,10 +248,12 @@ namespace castor3d
 	Engine::Engine( castor::String const & appName
 		, Version const & appVersion
 		, bool enableValidation
+		, bool enableRandom
 		, castor::LoggerInstance & logger )
 		: Engine{ appName
 			, appVersion
 			, enableValidation
+			, enableRandom
 			, nullptr
 			, &logger }
 	{

@@ -125,7 +125,7 @@ namespace castor3d
 							auto vertexToLight = m_writer.declLocale( "vertexToLight"
 								, shrinkedPos - light.position() );
 							auto shadowDepth = m_writer.declLocale( "shadowDepth"
-								, c3d_mapNormalDepthPoint.sample( vec4( vertexToLight, m_writer.cast< sdw::Float >( light.base().shadowMapIndex() ) ) ) );
+								, c3d_mapNormalDepthPoint.sample( vec4( vertexToLight, m_writer.cast< sdw::Float >( light.shadows().shadowMapIndex() ) ) ) );
 							result = m_compute( ( shrinkedPos - light.position() ).z()
 								, shadowDepth
 								, sssProfileIndex
@@ -193,7 +193,7 @@ namespace castor3d
 								, vec2( 0.5_f ) );
 							auto shadowDepth = m_writer.declLocale( "shadowDepth"
 								, c3d_mapNormalDepthSpot.sample( vec3( lightSpacePosition.xy()
-									, m_writer.cast< sdw::Float >( light.base().shadowMapIndex() ) ) ) );
+									, m_writer.cast< sdw::Float >( light.shadows().shadowMapIndex() ) ) ) );
 							result = m_compute( lightSpacePosition.z()
 								, shadowDepth
 								, sssProfileIndex

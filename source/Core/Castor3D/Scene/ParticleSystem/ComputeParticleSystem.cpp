@@ -61,11 +61,6 @@ namespace castor3d
 
 		if ( result )
 		{
-			result = doCreateRandomStorage( device );
-		}
-
-		if ( result )
-		{
 			result = doInitialiseParticleStorage( device );
 		}
 
@@ -96,8 +91,6 @@ namespace castor3d
 		m_pipeline.reset();
 		m_pipelineLayout.reset();
 		m_descriptorLayout.reset();
-
-		m_randomStorage.reset();
 
 		for ( auto & storage : m_particlesStorages )
 		{
@@ -274,37 +267,6 @@ namespace castor3d
 		return true;
 	}
 
-	bool ComputeParticleSystem::doCreateRandomStorage( RenderDevice const & device )
-	{
-		uint32_t size = 1024u;
-		m_randomStorage = makeBuffer< castor::Point4f >( device
-			, 1024
-			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
-			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-			, "ComputeParticleSystemRandom" );
-		std::random_device rddevice;
-		std::uniform_real_distribution< float > distribution{ -1.0f, 1.0f };
-
-		if ( auto buffer = m_randomStorage->lock( 0u
-			, size
-			, 0u ) )
-		{
-			for ( auto i = 0u; i < size; ++i )
-			{
-				( *buffer )[0] = distribution( rddevice );
-				( *buffer )[1] = distribution( rddevice );
-				( *buffer )[2] = distribution( rddevice );
-				( *buffer )[3] = distribution( rddevice );
-				++buffer;
-			}
-
-			m_randomStorage->getBuffer().flush( 0u, size );
-			m_randomStorage->getBuffer().unlock();
-		}
-
-		return true;
-	}
-
 	bool ComputeParticleSystem::doInitialisePipeline( RenderDevice const & device )
 	{
 		ashes::VkDescriptorSetLayoutBindingArray bindings
@@ -338,18 +300,19 @@ namespace castor3d
 				*m_pipelineLayout
 			} );
 
-		auto initialiseDescriptor = [this]( ashes::DescriptorSet & descriptorSet
+		auto initialiseDescriptor = [this, &device]( ashes::DescriptorSet & descriptorSet
 			, uint32_t inIndex
 			, uint32_t outIndex )
 		{
+			auto & randomStorage = device.renderSystem.getRandomStorage();
 			descriptorSet.createBinding( m_descriptorLayout->getBinding( compptcl::IndexBufferBinding )
 				, *m_generatedCountBuffer
 				, 0u
 				, uint32_t( m_generatedCountBuffer->getCount() ) );
 			descriptorSet.createBinding( m_descriptorLayout->getBinding( compptcl::RandomBufferBinding )
-				, *m_randomStorage
+				, randomStorage
 				, 0u
-				, uint32_t( m_randomStorage->getCount() ) );
+				, uint32_t( randomStorage.getCount() ) );
 			descriptorSet.createBinding( m_descriptorLayout->getBinding( compptcl::InParticlesBufferBinding )
 				, *m_particlesStorages[inIndex]
 				, 0u

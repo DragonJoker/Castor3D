@@ -31,19 +31,46 @@ namespace castor3d::shader
 		auto data()const { return getMember< "data" >(); }
 	};
 
+	struct ShadowData
+		: public sdw::StructInstanceHelperT< "C3D_ShadowData"
+			, sdw::type::MemoryLayout::eC
+			, sdw::IntField< "shadowMapIndex" >
+			, sdw::UIntField< "shadowType" >
+			, sdw::UIntField< "pcfFilterSize" >
+			, sdw::UIntField< "pcfSampleCount" >
+			, sdw::Vec2Field< "rawShadowOffsets" >
+			, sdw::Vec2Field< "pcfShadowOffsets" >
+			, sdw::Vec2Field< "vsmShadowVariance" >
+			, sdw::UIntField< "volumetricSteps" >
+			, sdw::FloatField< "volumetricScattering" > >
+	{
+		ShadowData( sdw::ShaderWriter & writer
+			, ast::expr::ExprPtr expr
+			, bool enabled )
+			: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+		{
+		}
+
+		auto shadowMapIndex()const { return getMember< "shadowMapIndex" >(); }
+		auto shadowType()const { return getMember< "shadowType" >(); }
+		auto pcfFilterSize()const { return getMember< "pcfFilterSize" >(); }
+		auto pcfSampleCount()const { return getMember< "pcfSampleCount" >(); }
+		auto rawShadowOffsets()const { return getMember< "rawShadowOffsets" >(); }
+		auto pcfShadowOffsets()const { return getMember< "pcfShadowOffsets" >(); }
+		auto vsmShadowVariance()const { return getMember< "vsmShadowVariance" >(); }
+		auto volumetricSteps()const { return getMember< "volumetricSteps" >(); }
+		auto volumetricScattering()const { return getMember< "volumetricScattering" >(); }
+
+		C3D_API void updateShadowType( ShadowType type );
+	};
+
 	struct Light
 		: public sdw::StructInstanceHelperT< "C3D_Light"
 			, sdw::type::MemoryLayout::eC
 			, sdw::Vec3Field< "colour" >
-			, sdw::FloatField< "shadowMapIndex" >
-			, sdw::Vec2Field< "intensity" >
 			, sdw::FloatField< "farPlane" >
-			, sdw::FloatField< "shadowType" >
-			, sdw::Vec2Field< "rawShadowOffsets" >
-			, sdw::Vec2Field< "pcfShadowOffsets" >
-			, sdw::Vec2Field< "vsmShadowVariance" >
-			, sdw::FloatField< "volumetricSteps" >
-			, sdw::FloatField< "volumetricScattering" > >
+			, sdw::Vec2Field< "intensity" >
+			, sdw::StructFieldT< ShadowData, "shadows" > >
 	{
 		Light( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
@@ -56,15 +83,7 @@ namespace castor3d::shader
 		auto colour()const { return getMember< "colour" >(); }
 		auto intensity()const { return getMember< "intensity" >(); }
 		auto farPlane()const { return getMember< "farPlane" >(); }
-		auto volumetricScattering()const { return getMember< "volumetricScattering" >(); }
-		auto rawShadowOffsets()const { return getMember< "rawShadowOffsets" >(); }
-		auto pcfShadowOffsets()const { return getMember< "pcfShadowOffsets" >(); }
-		auto vsmShadowVariance()const { return getMember< "vsmShadowVariance" >(); }
-
-		C3D_API sdw::Int shadowMapIndex()const;
-		C3D_API sdw::Int shadowType()const;
-		C3D_API sdw::UInt volumetricSteps()const;
-		C3D_API void updateShadowType( ShadowType type );
+		auto shadows()const { return getMember< "shadows" >(); }
 	};
 
 	struct DirectionalLight
@@ -90,6 +109,7 @@ namespace castor3d::shader
 		auto splitDepths()const { return getMember< "splitDepths" >(); }
 		auto splitScales()const { return getMember< "splitScales" >(); }
 		auto transforms()const { return getMember< "transforms" >(); }
+		auto shadows()const { return base().shadows(); }
 
 		C3D_API sdw::UInt cascadeCount()const;
 	};
@@ -116,6 +136,7 @@ namespace castor3d::shader
 		auto base()const { return getMember< "base" >(); }
 		auto position()const { return getMember< "position" >(); }
 		auto attenuation()const { return getMember< "attenuation" >(); }
+		auto shadows()const { return base().shadows(); }
 	};
 
 	struct SpotLight
@@ -148,6 +169,7 @@ namespace castor3d::shader
 		auto direction()const { return getMember< "direction" >(); }
 		auto outerCutOff()const { return getMember< "outerCutOff" >(); }
 		auto transform()const { return getMember< "transform" >(); }
+		auto shadows()const { return base().shadows(); }
 		// SpecificValues
 		auto cutOffsDiff()const { return innerCutOff() - outerCutOff(); }
 	};
@@ -181,6 +203,9 @@ namespace castor3d::shader
 		}
 
 	private:
+		void getShadows( sdw::Vec4 & lightData
+			, ShadowData shadows
+			, sdw::UInt & offset );
 		void getBaseLight( sdw::Vec4 & lightData
 			, Light light
 			, sdw::UInt & offset );

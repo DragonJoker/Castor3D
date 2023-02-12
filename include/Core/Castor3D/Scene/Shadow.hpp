@@ -8,6 +8,8 @@ See LICENSE file in root folder
 
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LpvConfig.hpp"
 
+#include <CastorUtils/Math/RangedValue.hpp>
+
 namespace castor3d
 {
 	struct ShadowConfig
@@ -19,6 +21,8 @@ namespace castor3d
 		castor::Point2f rawOffsets;
 		castor::Point2f pcfOffsets;
 		castor::Point2f variance;
+		uint32_t pcfFilterSize{ 4u };
+		castor::RangedValue< uint32_t > pcfSampleCount{ 16u, castor::makeRange( 0u, 64u ) };
 		RsmConfig rsmConfig;
 		LpvConfig lpvConfig;
 	};
