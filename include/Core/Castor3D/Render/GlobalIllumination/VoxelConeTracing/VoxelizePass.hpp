@@ -49,9 +49,11 @@ namespace castor3d
 			, CameraUbo const & cameraUbo
 			, SceneUbo const & sceneUbo
 			, Camera const & camera
+			, SceneCuller & culler
 			, VoxelizerUbo const & voxelizerUbo
 			, ashes::Buffer< Voxel > const & voxels
-			, VoxelSceneData const & voxelConfig );
+			, VoxelSceneData const & voxelConfig
+			, bool isStatic );
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
@@ -79,6 +81,8 @@ namespace castor3d
 		C3D_API ComponentModeFlags getComponentsMask()const override;
 		/**@}*/
 
+		C3D_API void setUpToDate();
+
 	private:
 		using RenderNodesPass::update;
 
@@ -105,6 +109,7 @@ namespace castor3d
 		ashes::Buffer< Voxel > const & m_voxels;
 		VoxelizerUbo const & m_voxelizerUbo;
 		VoxelSceneData const & m_voxelConfig;
+		bool m_outOfDate{ true };
 	};
 }
 

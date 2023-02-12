@@ -114,7 +114,14 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		crg::FramePass & doCreateVoxelizePass( ProgressBar * progress );
+		crg::FramePass & doCreateClearStaticsPass( ProgressBar * progress );
+		crg::FramePass & doCreateVoxelizePass( crg::FramePassArray const & previousPasses
+			, ProgressBar * progress
+			, ashes::Buffer< Voxel > const & outVoxels
+			, SceneCuller & culler
+			, bool isStatic );
+		crg::FramePass & doCreateMergeStaticsPass( crg::FramePass const & previousPass
+			, ProgressBar * progress );
 		crg::FramePass & doCreateVoxelToTexture( crg::FramePass const & previousPass
 			, ProgressBar * progress );
 		crg::FramePass & doCreateVoxelMipGen( crg::FramePass const & previousPass
@@ -124,22 +131,36 @@ namespace castor3d
 			, ProgressBar * progress );
 		crg::FramePass & doCreateVoxelSecondaryBounce( crg::FramePass const & previousPass
 			, ProgressBar * progress );
+		bool doEnableClearStatic()const;
+		bool doEnableCopyStatic()const;
+		bool doEnableVoxelToTexture()const;
+		bool doEnableSecondaryBounce()const;
+		bool doEnableFirstBounceMipGen()const;
+		bool doEnableSecondaryBounceMipGen()const;
 
 	private:
 		Engine & m_engine;
 		RenderDevice const & m_device;
 		VoxelSceneData const & m_voxelConfig;
+		Scene & m_scene;
 		Camera & m_camera;
+		SceneCullerUPtr m_staticsCuller;
+		SceneCullerUPtr m_dynamicsCuller;
 		crg::FrameGraph m_graph;
 		CameraUbo m_cameraUbo;
 		SceneUbo m_sceneUbo;
 		Texture m_firstBounce;
 		Texture m_secondaryBounce;
-		ashes::BufferPtr< Voxel > m_voxels;
+		ashes::BufferPtr< Voxel > m_staticsVoxels;
+		ashes::BufferPtr< Voxel > m_dynamicsVoxels;
 		VoxelizerUbo & m_voxelizerUbo;
 		castor::Point4f m_grid;
-		crg::FramePass & m_voxelizePassDesc;
-		VoxelizePass * m_voxelizePass{};
+		crg::FramePass & m_clearStatics;
+		crg::FramePass & m_staticsVoxelizePassDesc;
+		VoxelizePass * m_staticsVoxelizePass{};
+		crg::FramePass & m_mergeStaticsDesc;
+		crg::FramePass & m_dynamicsVoxelizePassDesc;
+		VoxelizePass * m_dynamicsVoxelizePass{};
 		crg::FramePass & m_voxelToTextureDesc;
 		VoxelBufferToTexture * m_voxelToTexture{};
 		crg::FramePass & m_voxelMipGen;

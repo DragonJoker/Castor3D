@@ -28,6 +28,7 @@
 
 #include <RenderGraph/FrameGraph.hpp>
 #include <RenderGraph/GraphContext.hpp>
+#include <RenderGraph/RunnablePasses/BufferCopy.hpp>
 #include <RenderGraph/RunnablePasses/GenerateMipmaps.hpp>
 
 CU_ImplementCUSmartPtr( castor3d, Voxelizer )
@@ -66,10 +67,47 @@ namespace castor3d
 		{
 			return castor3d::makeBuffer< Voxel >( device
 				, voxelGridSize * voxelGridSize * voxelGridSize
-				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
+				, ( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
+					| VK_BUFFER_USAGE_TRANSFER_SRC_BIT
+					| VK_BUFFER_USAGE_TRANSFER_DST_BIT )
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, name );
 		}
+
+		class VoxelsClear
+			: public crg::RunnablePass
+		{
+		public:
+			VoxelsClear( crg::FramePass const & pass
+				, crg::GraphContext & context
+				, crg::RunnableGraph & graph
+				, IsEnabledCallback isEnabled )
+				: crg::RunnablePass{ pass
+				, context
+				, graph
+				, { []( uint32_t index ) {}
+					, GetPipelineStateCallback( []() { return crg::getPipelineState( VK_PIPELINE_STAGE_TRANSFER_BIT ); } )
+					, [this]( crg::RecordContext & ctx, VkCommandBuffer cb, uint32_t i ) { doRecordInto( ctx, cb, i ); }
+					, GetPassIndexCallback( [](){ return 0u; } )
+					, isEnabled } }
+			{
+			}
+
+		protected:
+			void doRecordInto( crg::RecordContext & context
+				, VkCommandBuffer commandBuffer
+				, uint32_t index )
+			{
+				for ( auto & attach : m_pass.buffers )
+				{
+					m_context.vkCmdFillBuffer( commandBuffer
+						, attach.buffer.buffer.buffer
+						, attach.buffer.range.offset
+						, attach.buffer.range.size
+						, 0u );
+				}
+			}
+		};
 	}
 
 	//*********************************************************************************************
@@ -85,26 +123,33 @@ namespace castor3d
 		: m_engine{ *device.renderSystem.getEngine() }
 		, m_device{ device }
 		, m_voxelConfig{ voxelConfig }
+		, m_scene{ scene }
 		, m_camera{ camera }
+		, m_staticsCuller{ castor::makeUniqueDerived< SceneCuller, DummyCuller >( m_scene, nullptr, true ) }
+		, m_dynamicsCuller{ castor::makeUniqueDerived< SceneCuller, DummyCuller >( m_scene, nullptr, false ) }
 		, m_graph{ resources.getHandler(), prefix + "/Voxelizer" }
 		, m_cameraUbo{ device }
 		, m_sceneUbo{ device }
 		, m_firstBounce{ vxlsr::createTexture( device, resources, "VoxelizedSceneFirstBounce", { m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value() } ) }
 		, m_secondaryBounce{ vxlsr::createTexture( device, resources, "VoxelizedSceneSecondaryBounce", { m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value(), m_voxelConfig.gridSize.value() } ) }
-		, m_voxels{ vxlsr::createSsbo( m_engine, device, "VoxelizedSceneBuffer", m_voxelConfig.gridSize.value() ) }
+		, m_staticsVoxels{ vxlsr::createSsbo( m_engine, device, "VoxelizedStaticSceneBuffer", m_voxelConfig.gridSize.value() ) }
+		, m_dynamicsVoxels{ vxlsr::createSsbo( m_engine, device, "VoxelizedSceneBuffer", m_voxelConfig.gridSize.value() ) }
 		, m_voxelizerUbo{ voxelizerUbo }
-		, m_voxelizePassDesc{ doCreateVoxelizePass( progress ) }
-		, m_voxelToTextureDesc{ doCreateVoxelToTexture( m_voxelizePassDesc, progress ) }
+		, m_clearStatics{ doCreateClearStaticsPass( progress ) }
+		, m_staticsVoxelizePassDesc{ doCreateVoxelizePass( { &m_clearStatics }, progress, *m_staticsVoxels, *m_staticsCuller, true ) }
+		, m_mergeStaticsDesc{ doCreateMergeStaticsPass( m_staticsVoxelizePassDesc, progress ) }
+		, m_dynamicsVoxelizePassDesc{ doCreateVoxelizePass( { &m_mergeStaticsDesc }, progress, *m_dynamicsVoxels, *m_dynamicsCuller, false ) }
+		, m_voxelToTextureDesc{ doCreateVoxelToTexture( m_dynamicsVoxelizePassDesc, progress ) }
 		, m_voxelMipGen{ doCreateVoxelMipGen( m_voxelToTextureDesc
 			, "FirstBounceMip"
 			, m_firstBounce.wholeViewId
-			, crg::RunnablePass::IsEnabledCallback( [&voxelConfig](){ return voxelConfig.enabled; } )
+			, crg::RunnablePass::IsEnabledCallback( [this](){ return doEnableFirstBounceMipGen(); } )
 			, progress ) }
 		, m_voxelSecondaryBounceDesc{ doCreateVoxelSecondaryBounce( m_voxelMipGen, progress ) }
 		, m_voxelSecondaryMipGen{ doCreateVoxelMipGen( m_voxelSecondaryBounceDesc
 			, "SecondaryBounceMip"
 			, m_secondaryBounce.wholeViewId
-			, crg::RunnablePass::IsEnabledCallback( [&voxelConfig](){ return voxelConfig.enabled && voxelConfig.enableSecondaryBounce; } )
+			, crg::RunnablePass::IsEnabledCallback( [this](){ return doEnableSecondaryBounceMipGen(); } )
 			, progress ) }
 		, m_runnable{ m_graph.compile( m_device.makeContext() ) }
 	{
@@ -127,12 +172,13 @@ namespace castor3d
 		m_runnable.reset();
 		m_firstBounce.destroy();
 		m_secondaryBounce.destroy();
-		m_voxels.reset();
+		m_dynamicsVoxels.reset();
+		m_staticsVoxels.reset();
 	}
 
 	void Voxelizer::update( CpuUpdater & updater )
 	{
-		if ( m_voxelizePass )
+		if ( m_staticsVoxelizePass )
 		{
 			auto & camera = *updater.camera;
 			auto & scene = *updater.scene;
@@ -167,10 +213,14 @@ namespace castor3d
 				, ortho
 				, jitterProjSpace );
 			m_sceneUbo.cpuUpdate( scene );
-			m_voxelizePass->update( updater );
 			m_voxelizerUbo.cpuUpdate( m_voxelConfig
 				, voxelSize
 				, m_voxelConfig.gridSize.value() );
+
+			m_staticsCuller->update( updater );
+			m_dynamicsCuller->update( updater );
+			m_staticsVoxelizePass->update( updater );
+			m_dynamicsVoxelizePass->update( updater );
 		}
 	}
 
@@ -184,7 +234,8 @@ namespace castor3d
 			, m_secondaryBounce
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors::tex3D( &m_grid ) );
-		m_voxelizePass->accept( visitor );
+		m_staticsVoxelizePass->accept( visitor );
+		m_dynamicsVoxelizePass->accept( visitor );
 		m_voxelToTexture->accept( visitor );
 		m_voxelSecondaryBounce->accept( visitor );
 	}
@@ -192,14 +243,37 @@ namespace castor3d
 	crg::SemaphoreWaitArray Voxelizer::render( crg::SemaphoreWaitArray const & semaphore
 		, ashes::Queue const & queue )
 	{
-		return m_runnable->run( semaphore, queue );
+		auto result = m_runnable->run( semaphore, queue );
+
+		if ( m_staticsVoxelizePass->isPassEnabled() )
+		{
+			m_staticsVoxelizePass->setUpToDate();
+		}
+
+		if ( m_dynamicsVoxelizePass->isPassEnabled() )
+		{
+			m_dynamicsVoxelizePass->setUpToDate();
+		}
+
+		return result;
 	}
 
-	crg::FramePass & Voxelizer::doCreateVoxelizePass( ProgressBar * progress )
+	crg::FramePass & Voxelizer::doCreateVoxelizePass( crg::FramePassArray const & previousPasses
+		, ProgressBar * progress
+		, ashes::Buffer< Voxel > const & outVoxels
+		, SceneCuller & culler
+		, bool isStatic )
 	{
+		std::string name = "NodesPass";
+
+		if ( isStatic )
+		{
+			name = "Static" + name;
+		}
+
 		stepProgressBar( progress, "Creating voxelize pass" );
-		auto & result = m_graph.createPass( "NodesPass"
-			, [this, progress]( crg::FramePass const & framePass
+		auto & result = m_graph.createPass( name
+			, [this, progress, isStatic, &outVoxels, &culler]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
@@ -211,18 +285,100 @@ namespace castor3d
 					, m_cameraUbo
 					, m_sceneUbo
 					, m_camera
+					, culler
 					, m_voxelizerUbo
-					, *m_voxels
-					, m_voxelConfig );
-				m_voxelizePass = res.get();
+					, outVoxels
+					, m_voxelConfig
+					, isStatic );
+
+				if ( isStatic )
+				{
+					m_staticsVoxelizePass = res.get();
+				}
+				else
+				{
+					m_dynamicsVoxelizePass = res.get();
+				}
+
 				m_device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, res->getTimer() );
 				return res;
 			} );
-		result.addOutputStorageBuffer( { m_voxels->getBuffer(), "Voxels" }
+
+		if ( !previousPasses.empty() )
+		{
+			result.addDependencies( previousPasses );
+		}
+
+		std::string bufName = "Voxels";
+
+		if ( isStatic )
+		{
+			bufName = "Static" + bufName;
+		}
+
+		result.addInOutStorageBuffer( { outVoxels.getBuffer(), bufName }
 			, 0u
 			, 0u
-			, m_voxels->getBuffer().getSize() );
+			, outVoxels.getBuffer().getSize() );
+		return result;
+	}
+
+	crg::FramePass & Voxelizer::doCreateClearStaticsPass( ProgressBar * progress )
+	{
+		stepProgressBar( progress, "Creating clear static pass" );
+		auto & result = m_graph.createPass( "StaticsClearPass"
+			, [this, progress]( crg::FramePass const & framePass
+				, crg::GraphContext & context
+				, crg::RunnableGraph & runnableGraph )
+			{
+				stepProgressBar( progress, "Initialising clear static pass" );
+				auto res = std::make_unique< vxlsr::VoxelsClear >( framePass
+					, context
+					, runnableGraph
+					, crg::BufferCopy::IsEnabledCallback( [this]() { return doEnableClearStatic(); } ) );
+				m_device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+					, res->getTimer() );
+				return res;
+			} );
+		result.addOutputStorageBuffer( { m_staticsVoxels->getBuffer(), "StaticsVoxels" }
+			, 0u
+			, 0u
+			, m_staticsVoxels->getBuffer().getSize() );
+		return result;
+	}
+
+	crg::FramePass & Voxelizer::doCreateMergeStaticsPass( crg::FramePass const & previousPass
+		, ProgressBar * progress )
+	{
+		stepProgressBar( progress, "Creating copy static to dynamic pass" );
+		auto & result = m_graph.createPass( "StaticsCopyPass"
+			, [this, progress]( crg::FramePass const & framePass
+				, crg::GraphContext & context
+				, crg::RunnableGraph & runnableGraph )
+			{
+				stepProgressBar( progress, "Initialising copy static to dynamic pass" );
+				auto res = std::make_unique< crg::BufferCopy >( framePass
+					, context
+					, runnableGraph
+					, 0u
+					, m_staticsVoxels->getBuffer().getSize()
+					, crg::ru::Config{}
+					, crg::BufferCopy::GetPassIndexCallback( []() { return 0u; } )
+					, crg::BufferCopy::IsEnabledCallback( [this]() { return doEnableCopyStatic(); } ) );
+				m_device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+					, res->getTimer() );
+				return res;
+			} );
+		result.addDependency( previousPass );
+		result.addInputStorageBuffer( { m_staticsVoxels->getBuffer(), "StaticsVoxels" }
+			, 0u
+			, 0u
+			, m_staticsVoxels->getBuffer().getSize() );
+		result.addOutputStorageBuffer( { m_dynamicsVoxels->getBuffer(), "Voxels" }
+			, 0u
+			, 0u
+			, m_dynamicsVoxels->getBuffer().getSize() );
 		return result;
 	}
 
@@ -241,17 +397,18 @@ namespace castor3d
 					, context
 					, runnableGraph
 					, m_device
-					, m_voxelConfig );
+					, m_voxelConfig
+					, crg::RunnablePass::IsEnabledCallback( [this]() { return doEnableVoxelToTexture(); } ) );
 				m_voxelToTexture = res.get();
 				m_device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, res->getTimer() );
 				return res;
 			} );
 		result.addDependency( previousPass );
-		result.addInputStorageBuffer( { m_voxels->getBuffer(), "Voxels" }
+		result.addInputStorageBuffer( { m_dynamicsVoxels->getBuffer(), "Voxels" }
 			, 0u
 			, 0u
-			, m_voxels->getBuffer().getSize() );
+			, m_dynamicsVoxels->getBuffer().getSize() );
 		result.addOutputStorageView( m_firstBounce.wholeViewId
 			, 1u );
 		return result;
@@ -301,17 +458,18 @@ namespace castor3d
 					, context
 					, runnableGraph
 					, m_device
-					, m_voxelConfig );
+					, m_voxelConfig
+					, crg::RunnablePass::IsEnabledCallback( [this]() { return doEnableSecondaryBounce(); } ) );
 				m_voxelSecondaryBounce = res.get();
 				m_device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, res->getTimer() );
 				return res;
 			} );
 		result.addDependency( previousPass );
-		result.addInOutStorageBuffer( { m_voxels->getBuffer(), "Voxels" }
+		result.addInOutStorageBuffer( { m_dynamicsVoxels->getBuffer(), "Voxels" }
 			, 0u
 			, 0u
-			, m_voxels->getBuffer().getSize() );
+			, m_dynamicsVoxels->getBuffer().getSize() );
 		m_voxelizerUbo.createPassBinding( result
 			, 1u );
 		result.addSampledView( m_firstBounce.wholeViewId
@@ -319,5 +477,48 @@ namespace castor3d
 		result.addOutputStorageView( m_secondaryBounce.wholeViewId
 			, 3u );
 		return result;
+	}
+
+	bool Voxelizer::doEnableClearStatic()const
+	{
+		return m_voxelConfig.enabled
+			&& m_staticsVoxelizePass->isPassEnabled();
+	}
+
+	bool Voxelizer::doEnableCopyStatic()const
+	{
+		return m_voxelConfig.enabled
+			&& ( !m_dynamicsVoxelizePass->hasNodes()
+				|| m_dynamicsVoxelizePass->isPassEnabled() );
+	}
+
+	bool Voxelizer::doEnableVoxelToTexture()const
+	{
+		return m_voxelConfig.enabled
+			&& ( m_dynamicsVoxelizePass->isPassEnabled()
+				|| m_staticsVoxelizePass->isPassEnabled() );
+	}
+
+	bool Voxelizer::doEnableSecondaryBounce()const
+	{
+		return m_voxelConfig.enabled
+			&& m_voxelConfig.enableSecondaryBounce
+			&& ( m_dynamicsVoxelizePass->isPassEnabled()
+				|| m_staticsVoxelizePass->isPassEnabled() );
+	}
+
+	bool Voxelizer::doEnableFirstBounceMipGen()const
+	{
+		return m_voxelConfig.enabled
+			&& ( m_dynamicsVoxelizePass->isPassEnabled()
+				|| m_staticsVoxelizePass->isPassEnabled() );
+	}
+
+	bool Voxelizer::doEnableSecondaryBounceMipGen()const
+	{
+		return m_voxelConfig.enabled
+			&& m_voxelConfig.enableSecondaryBounce
+			&& ( m_dynamicsVoxelizePass->isPassEnabled()
+				|| m_staticsVoxelizePass->isPassEnabled() );
 	}
 }

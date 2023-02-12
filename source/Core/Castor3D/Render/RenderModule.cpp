@@ -22,6 +22,17 @@ CU_ImplementExportedOwnedBy( castor3d::RenderDevice, RenderDevice )
 
 namespace castor3d
 {
+	namespace rndmodl
+	{
+		static std::string normalizeName( std::string name )
+		{
+			castor::string::replace( name, "/", "_" );
+			castor::string::replace( name, "\\", "_" );
+			castor::string::replace( name, ":", "_" );
+			return name;
+		}
+	}
+
 	castor::String getName( FrustumCorner value )
 	{
 		switch ( value )
@@ -296,14 +307,15 @@ namespace castor3d
 	void printGraph( crg::RunnableGraph const & graph )
 	{
 		auto path = Engine::getEngineDirectory();
+		auto name = rndmodl::normalizeName( graph.getGraph()->getName() );
 		{
 			auto streams = crg::dot::displayTransitions( graph, { true, true, true, false } );
-			std::ofstream file{ path / ( "transitions_" + graph.getGraph()->getName() + ".dot" ) };
+			std::ofstream file{ path / ( "transitions_" + name + ".dot" ) };
 			file << streams.find( std::string{} )->second.str();
 		}
 		{
 			auto streams = crg::dot::displayTransitions( graph, { true, true, false, false } );
-			std::ofstream file{ path / ( "flat_transitions_" + graph.getGraph()->getName() + ".dot" ) };
+			std::ofstream file{ path / ( "flat_transitions_" + name + ".dot" ) };
 			file << streams.find( std::string{} )->second.str();
 		}
 		{
@@ -313,19 +325,19 @@ namespace castor3d
 			{
 				if ( !it.first.empty() )
 				{
-					std::ofstream file{ path / ( "transitions_" + graph.getGraph()->getName() + "_" + it.first + ".dot" ) };
+					std::ofstream file{ path / ( "transitions_" + name + "_" + it.first + ".dot" ) };
 					file << it.second.str();
 				}
 			}
 		}
 		{
 			auto streams = crg::dot::displayPasses( graph, { true, true, true, false } );
-			std::ofstream file{ path / ( "passes_" + graph.getGraph()->getName() + ".dot" ) };
+			std::ofstream file{ path / ( "passes_" + name + ".dot" ) };
 			file << streams.find( std::string{} )->second.str();
 		}
 		{
 			auto streams = crg::dot::displayPasses( graph, { true, true, false, false } );
-			std::ofstream file{ path / ( "flat_passes_" + graph.getGraph()->getName() + ".dot" ) };
+			std::ofstream file{ path / ( "flat_passes_" + name + ".dot" ) };
 			file << streams.find( std::string{} )->second.str();
 		}
 		{
@@ -335,7 +347,7 @@ namespace castor3d
 			{
 				if ( !it.first.empty() )
 				{
-					std::ofstream file{ path / ( "passes_" + graph.getGraph()->getName() + "_" + it.first + ".dot" ) };
+					std::ofstream file{ path / ( "passes_" + name + "_" + it.first + ".dot" ) };
 					file << it.second.str();
 				}
 			}

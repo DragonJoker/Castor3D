@@ -169,7 +169,8 @@ namespace castor3d
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
-		, VoxelSceneData const & vctConfig )
+		, VoxelSceneData const & vctConfig
+		, crg::RunnablePass::IsEnabledCallback isEnabled )
 		: crg::RunnablePass{ pass
 			, context
 			, graph
@@ -177,7 +178,7 @@ namespace castor3d
 				, GetPipelineStateCallback( [](){ return crg::getPipelineState( VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT ); } )
 				, [this]( crg::RecordContext & context, VkCommandBuffer cb, uint32_t i ){ doRecordInto( context, cb, i ); }
 				, GetPassIndexCallback( [this](){ return doGetPassIndex(); } )
-				, crg::RunnablePass::IsEnabledCallback( [&vctConfig](){ return vctConfig.enabled; } )
+				, isEnabled
 				, IsComputePassCallback( [this](){ return doIsComputePass(); } ) }
 			, crg::ru::Config{ 2u, false }.implicitAction( pass.images.front().view()
 				, crg::RecordContext::clearAttachment( pass.images.front().view(), transparentBlackClearColor ) ) }

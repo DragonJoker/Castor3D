@@ -106,9 +106,6 @@ namespace castor3d
 		, m_lightFactory{ std::make_shared< LightFactory >() }
 		, m_listener{ engine.addNewFrameListener( cuT( "Scene_" ) + name + castor::string::toString( intptr_t( this ) ) ) }
 		, m_renderNodes{ castor::makeUnique< SceneRenderNodes >( *this ) }
-		, m_dummyCuller{ castor::makeUniqueDerived< SceneCuller, DummyCuller >( *this ) }
-		, m_staticsDummyCuller{ castor::makeUniqueDerived< SceneCuller, DummyCuller >( *this, nullptr, true ) }
-		, m_dynamicsDummyCuller{ castor::makeUniqueDerived< SceneCuller, DummyCuller >( *this, nullptr, false ) }
 	{
 		m_rootCameraNode->attachTo( *m_rootNode );
 		m_rootObjectNode->attachTo( *m_rootNode );
