@@ -187,6 +187,8 @@ namespace castor3d
 			using namespace castor;
 			addParser( result, uint32_t( CSCNSection::ePcf ), cuT( "min_offset" ), parserShadowsPcfMinOffset, { makeParameter< ParameterType::eFloat >() } );
 			addParser( result, uint32_t( CSCNSection::ePcf ), cuT( "max_slope_offset" ), parserShadowsPcfMaxSlopeOffset, { makeParameter< ParameterType::eFloat >() } );
+			addParser( result, uint32_t( CSCNSection::ePcf ), cuT( "filter_size" ), parserShadowsPcfFilterSize, { makeParameter< ParameterType::eUInt32 >() } );
+			addParser( result, uint32_t( CSCNSection::ePcf ), cuT( "sample_count" ), parserShadowsPcfSampleCount, { makeParameter< ParameterType::eUInt32 >() } );
 		}
 
 		static void addShadowsVsmParsers( castor::AttributeParsers & result )

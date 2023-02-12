@@ -65,6 +65,7 @@ namespace castor3d
 		Engine( castor::String const & appName
 			, Version const & appVersion
 			, bool enableValidation
+			, bool enableRandom
 			, castor::LoggerInstancePtr ownedLogger
 			, castor::LoggerInstance * logger );
 
@@ -83,7 +84,8 @@ namespace castor3d
 		 */
 		C3D_API Engine( castor::String const & appName
 			, Version const & appVersion
-			, bool enableValidation );
+			, bool enableValidation
+			, bool enableRandom );
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -101,6 +103,7 @@ namespace castor3d
 		C3D_API Engine( castor::String const & appName
 			, Version const & appVersion
 			, bool enableValidation
+			, bool enableRandom
 			, castor::LoggerInstance & logger );
 		/**
 		 *\~english
@@ -746,6 +749,11 @@ namespace castor3d
 			return m_enableUpdateOptimisations;
 		}
 
+		bool isRandomisationEnabled()const noexcept
+		{
+			return m_enableRandom;
+		}
+
 		bool isApiTraceEnabled()const noexcept
 		{
 			return m_enableApiTrace;
@@ -1075,6 +1083,7 @@ namespace castor3d
 		bool m_enableValidation{ false };
 		bool m_enableApiTrace{ false };
 		bool m_enableUpdateOptimisations{ true };
+		bool m_enableRandom{ true };
 		uint32_t m_lpvGridSize{ 32u };
 		uint32_t m_maxImageSize{ 0xFFFFFFFF };
 		castor::AsyncJobQueue m_cpuJobs;

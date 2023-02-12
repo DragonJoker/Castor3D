@@ -217,6 +217,16 @@ namespace castor3d
 			return m_shadows.variance;
 		}
 
+		uint32_t getShadowPcfFilterSize()const
+		{
+			return m_shadows.pcfFilterSize;
+		}
+
+		castor::RangedValue< uint32_t > getShadowPcfSampleCount()const
+		{
+			return m_shadows.pcfSampleCount;
+		}
+
 		ShadowConfig const & getShadowConfig()const
 		{
 			return m_shadows;
@@ -356,6 +366,16 @@ namespace castor3d
 		void setPcfMaxSlopeOffset( float value )
 		{
 			m_shadows.pcfOffsets[1] = value;
+		}
+
+		void setPcfFilterSize( uint32_t value )
+		{
+			m_shadows.pcfFilterSize = value;
+		}
+
+		void setPcfSampleCount( uint32_t value )
+		{
+			m_shadows.pcfSampleCount = value;
 		}
 
 		void setVsmMaxVariance( float value )

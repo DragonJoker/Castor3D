@@ -112,6 +112,7 @@ namespace GuiCommon
 				static const wxString FixedFPS{ wxT( "fps" ) };
 				static const wxString GpuIndex{ wxT( "gpu" ) };
 				static const wxString DisUpdOptim{ wxT( "disable_update_optim" ) };
+				static const wxString DisRandom{ wxT( "disable_random" ) };
 				static const wxString MaxImgSize{ wxT( "max_image_size" ) };
 			}
 
@@ -126,6 +127,7 @@ namespace GuiCommon
 				static const wxString FixedFPS{ wxT( "f" ) };
 				static const wxString GpuIndex{ wxT( "g" ) };
 				static const wxString DisUpdOptim{ wxT( "d" ) };
+				static const wxString DisRandom{ wxT( "r" ) };
 				static const wxString MaxImgSize{ wxT( "i" ) };
 			}
 		}
@@ -149,6 +151,7 @@ namespace GuiCommon
 				static const wxString FixedFPS{ _( "Defines wanted FPS (has no effect if '" ) + option::lg::UnlimFPS + _( "' option is specified)." ) };
 				static const wxString GpuIndex{ _( "The index of the wanted Vulkan physical device." ) };
 				static const wxString DisUpdOptim{ _( "Disable update optimisations." ) };
+				static const wxString DisRandom{ _( "Disable full random in random buffer." ) };
 				static const wxString MaxImgSize{ _( "The maximum material images size." ) };
 				static const wxString SceneFile{ _( "The initial scene file." ) };
 
@@ -161,6 +164,7 @@ namespace GuiCommon
 				parser.AddOption( option::st::FixedFPS, option::lg::FixedFPS, FixedFPS, wxCMD_LINE_VAL_NUMBER );
 				parser.AddOption( option::st::GpuIndex, option::lg::GpuIndex, GpuIndex, wxCMD_LINE_VAL_NUMBER );
 				parser.AddSwitch( option::st::DisUpdOptim, option::lg::DisUpdOptim, DisUpdOptim );
+				parser.AddSwitch( option::st::DisRandom, option::lg::DisRandom, DisRandom );
 				parser.AddOption( option::st::MaxImgSize, option::lg::MaxImgSize, MaxImgSize, wxCMD_LINE_VAL_NUMBER );
 				parser.AddParam( SceneFile, wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL );
 
@@ -227,6 +231,7 @@ namespace GuiCommon
 				config.validate = has( option::st::Validate );
 				config.syncRender = has( option::st::SyncRender );
 				config.disableUpdateOptimisations = has( option::st::DisUpdOptim );
+				config.disableRandom = has( option::st::DisRandom );
 
 				if ( !config.syncRender )
 				{
@@ -467,7 +472,8 @@ namespace GuiCommon
 
 		m_castor = std::make_shared< castor3d::Engine >( m_internalName
 			, m_version
-			, m_config.validate );
+			, m_config.validate
+			, !m_config.disableRandom );
 		doloadPlugins( splashScreen );
 
 		splashScreen.Step( _( "Initialising Castor3D" ), 1 );

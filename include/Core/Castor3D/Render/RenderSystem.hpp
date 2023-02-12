@@ -374,6 +374,11 @@ namespace castor3d
 		{
 			return m_properties.limits.maxDescriptorSetSampledImages > 16u;
 		}
+
+		ashes::Buffer< castor::Point4f > const & getRandomStorage()const
+		{
+			return *m_randomStorage;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -397,6 +402,9 @@ namespace castor3d
 		/**@}*/
 
 	private:
+		bool doCreateRandomStorage( RenderDevice const & device );
+
+	private:
 		std::recursive_mutex m_mutex;
 		Renderer m_renderer;
 		GpuInformations m_gpuInformations;
@@ -407,6 +415,7 @@ namespace castor3d
 		RenderDeviceSPtr m_device;
 		std::stack< SceneRPtr > m_stackScenes;
 		castor::Nanoseconds m_gpuTime;
+		ashes::BufferPtr< castor::Point4f > m_randomStorage;
 	};
 }
 

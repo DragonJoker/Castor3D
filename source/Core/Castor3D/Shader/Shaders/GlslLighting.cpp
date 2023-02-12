@@ -316,7 +316,7 @@ namespace castor3d::shader
 						if ( m_shadowModel.isEnabled() && m_sssTransmittance )
 						{
 							IF( m_writer
-								, ( light.base().shadowType() != sdw::Int( int( ShadowType::eNone ) ) )
+								, ( light.shadows().shadowType() != sdw::UInt( int( ShadowType::eNone ) ) )
 								&& ( light.base().index() >= 0_i )
 								&& ( receivesShadows != 0_u )
 								&& ( material.sssProfileIndex != 0.0_f ) )
@@ -520,7 +520,7 @@ namespace castor3d::shader
 				, 0_u ) );
 
 			IF( m_writer
-				, light.base().shadowType() != sdw::Int( int( ShadowType::eNone ) ) )
+				, light.shadows().shadowType() != sdw::UInt( int( ShadowType::eNone ) ) )
 			{
 				auto cascadeFactors = m_writer.declLocale( "cascadeFactors"
 					, vec3( 0.0_f, 1.0_f, 0.0_f ) );
@@ -553,7 +553,7 @@ namespace castor3d::shader
 				{
 					auto shadowFactor = m_writer.declLocale( "shadowFactor"
 						, cascadeFactors.y()
-							* m_shadowModel.computeDirectional( light.base()
+							* m_shadowModel.computeDirectional( light.shadows()
 								, lightSurface
 								, *m_directionalTransform
 								, *m_directionalCascadeIndex
@@ -562,7 +562,7 @@ namespace castor3d::shader
 					IF( m_writer, *m_directionalCascadeIndex > 0_u )
 					{
 						shadowFactor += cascadeFactors.z()
-							* m_shadowModel.computeDirectional( light.base()
+							* m_shadowModel.computeDirectional( light.shadows()
 								, lightSurface
 								, light.transforms()[*m_directionalCascadeIndex - 1u]
 								, *m_directionalCascadeIndex - 1u
@@ -618,13 +618,14 @@ namespace castor3d::shader
 		if ( m_shadowModel.isEnabled() )
 		{
 			IF( m_writer
-				, light.base().shadowType() != sdw::Int( int( ShadowType::eNone ) )
-				&& light.base().shadowMapIndex() >= 0_i
+				, light.shadows().shadowType() != sdw::UInt( int( ShadowType::eNone ) )
+				&& light.shadows().shadowMapIndex() >= 0_i
 				&& receivesShadows != 0_u )
 			{
 				auto shadowFactor = m_writer.declLocale( "shadowFactor"
-					, m_shadowModel.computePoint( light.base()
-						, lightSurface ) );
+					, m_shadowModel.computePoint( light.shadows()
+						, lightSurface
+						, length( -lightSurface.vertexToLight() ) / light.base().farPlane() ) );
 				output.m_diffuse *= shadowFactor;
 				output.m_specular *= shadowFactor;
 				output.m_coatingSpecular *= shadowFactor;
@@ -643,14 +644,15 @@ namespace castor3d::shader
 		if ( m_shadowModel.isEnabled() )
 		{
 			IF( m_writer
-				, light.base().shadowType() != sdw::Int( int( ShadowType::eNone ) )
-				&& light.base().shadowMapIndex() >= 0_i
+				, light.shadows().shadowType() != sdw::UInt( int( ShadowType::eNone ) )
+				&& light.shadows().shadowMapIndex() >= 0_i
 				&& receivesShadows != 0_u )
 			{
 				auto shadowFactor = m_writer.declLocale( "shadowFactor"
-					, m_shadowModel.computeSpot( light.base()
+					, m_shadowModel.computeSpot( light.shadows()
 						, lightSurface
-						, light.transform() ) );
+						, light.transform()
+						, length( -lightSurface.vertexToLight() ) / light.base().farPlane() ) );
 				output.m_diffuse *= shadowFactor;
 				output.m_specular *= shadowFactor;
 				output.m_coatingSpecular *= shadowFactor;
@@ -674,7 +676,7 @@ namespace castor3d::shader
 				, 0_u ) );
 
 			IF( m_writer
-				, light.base().shadowType() != sdw::Int( int( ShadowType::eNone ) ) )
+				, light.shadows().shadowType() != sdw::UInt( int( ShadowType::eNone ) ) )
 			{
 				*m_directionalCascadeIndex = light.cascadeCount() - 1_u;
 				*m_directionalCascadeCount = light.cascadeCount();
@@ -684,7 +686,7 @@ namespace castor3d::shader
 				IF( m_writer, receivesShadows != 0_u )
 				{
 					auto shadowFactor = m_writer.declLocale( "shadowFactor"
-						, m_shadowModel.computeDirectional( light.base()
+						, m_shadowModel.computeDirectional( light.shadows()
 							, lightSurface
 							, *m_directionalTransform
 							, *m_directionalCascadeIndex
@@ -706,13 +708,14 @@ namespace castor3d::shader
 		if ( m_shadowModel.isEnabled() )
 		{
 			IF( m_writer
-				, light.base().shadowType() != sdw::Int( int( ShadowType::eNone ) )
-				&& light.base().shadowMapIndex() >= 0_i
+				, light.shadows().shadowType() != sdw::UInt( int( ShadowType::eNone ) )
+				&& light.shadows().shadowMapIndex() >= 0_i
 				&& receivesShadows != 0_u )
 			{
 				auto shadowFactor = m_writer.declLocale( "shadowFactor"
-					, m_shadowModel.computePoint( light.base()
-						, lightSurface ) );
+					, m_shadowModel.computePoint( light.shadows()
+						, lightSurface
+						, length( -lightSurface.vertexToLight() ) / light.base().farPlane() ) );
 				output *= shadowFactor;
 			}
 			FI;
@@ -728,14 +731,15 @@ namespace castor3d::shader
 		if ( m_shadowModel.isEnabled() )
 		{
 			IF( m_writer
-				, light.base().shadowType() != sdw::Int( int( ShadowType::eNone ) )
-				&& light.base().shadowMapIndex() >= 0_i
+				, light.shadows().shadowType() != sdw::UInt( int( ShadowType::eNone ) )
+				&& light.shadows().shadowMapIndex() >= 0_i
 				&& receivesShadows != 0_u )
 			{
 				auto shadowFactor = m_writer.declLocale( "shadowFactor"
-					, m_shadowModel.computeSpot( light.base()
+					, m_shadowModel.computeSpot( light.shadows()
 						, lightSurface
-						, light.transform() ) );
+						, light.transform()
+						, length( -lightSurface.vertexToLight() ) / light.base().farPlane() ) );
 				output *= shadowFactor;
 			}
 			FI;
@@ -772,10 +776,10 @@ namespace castor3d::shader
 			&& m_directionalCascadeIndex
 			&& m_directionalCascadeCount )
 		{
-			IF( m_writer, light.volumetricSteps() != 0_u )
+			IF( m_writer, light.shadows().volumetricSteps() != 0_u )
 			{
 				auto volumetric = m_writer.declLocale( "volumetric"
-					, m_shadowModel.computeVolumetric( light
+					, m_shadowModel.computeVolumetric( light.shadows()
 						, lightSurface
 						, *m_directionalTransform
 						, *m_directionalCascadeIndex

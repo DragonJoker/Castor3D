@@ -34,6 +34,7 @@ namespace castor3d
 			C3D_API static castor::String const MapFluxDirectional;
 			C3D_API static castor::String const MapFluxSpot;
 			C3D_API static castor::String const MapFluxPoint;
+			C3D_API static castor::String const RandomBuffer;
 
 		public:
 			C3D_API Shadow( ShadowOptions shadowOptions
@@ -46,35 +47,37 @@ namespace castor3d
 				, uint32_t set );
 			C3D_API void declareSpot( uint32_t & index
 				, uint32_t set );
-			C3D_API sdw::Float computeDirectional( shader::Light const & light
+			C3D_API sdw::Float computeDirectional( shader::ShadowData const & shadows
 				, sdw::Vec3 const & wsVertexToLight
 				, sdw::Vec3 const & wsNormal
 				, sdw::Vec3 const & wsPosition
 				, sdw::Mat4 const & lightMatrix
 				, sdw::UInt const & cascadeIndex
 				, sdw::UInt const & maxCascade );
-			C3D_API sdw::Float computeDirectional( shader::Light const & light
+			C3D_API sdw::Float computeDirectional( shader::ShadowData const & light
 				, LightSurface const & lightSurface
 				, sdw::Mat4 const & lightMatrix
 				, sdw::UInt const & cascadeIndex
 				, sdw::UInt const & maxCascade );
-			C3D_API sdw::Float computeSpot( shader::Light const & light
+			C3D_API sdw::Float computeSpot( shader::ShadowData const & light
 				, LightSurface const & lightSurface
-				, sdw::Mat4 const & lightMatrix );
-			C3D_API sdw::Float computePoint( shader::Light const & light
-				, LightSurface const & lightSurface );
-			C3D_API sdw::Float computeVolumetric( shader::Light const & light
+				, sdw::Mat4 const & lightMatrix
+				, sdw::Float const & depth );
+			C3D_API sdw::Float computePoint( shader::ShadowData const & light
+				, LightSurface const & lightSurface
+				, sdw::Float const & depth );
+			C3D_API sdw::Float computeVolumetric( shader::ShadowData const & light
 				, LightSurface const & lightSurface
 				, sdw::Mat4 const & lightMatrix
 				, sdw::UInt const & cascadeIndex
 				, sdw::UInt const & maxCascade );
-			C3D_API sdw::Float computeVolumetric( shader::Light const & light
+			C3D_API sdw::Float computeVolumetric( shader::ShadowData const & light
 				, LightSurface const & lightSurface
 				, sdw::Mat4 const & lightMatrix
 				, sdw::UInt const & cascadeIndex
 				, sdw::UInt const & maxCascade
 				, sdw::Float const & scattering );
-			C3D_API sdw::Float computeVolumetric( shader::Light const & light
+			C3D_API sdw::Float computeVolumetric( shader::ShadowData const & light
 				, LightSurface const & lightSurface
 				, Ray const & ray
 				, sdw::Float const & stepLength
@@ -98,24 +101,32 @@ namespace castor3d
 			sdw::RetFloat filterPCF( sdw::Vec4 const & lightSpacePosition
 				, sdw::CombinedImage2DR32 const & shadowMap
 				, sdw::Vec2 const & invTexDim
-				, sdw::Float const & bias );
+				, sdw::Float const & bias
+				, sdw::UInt const & sampleCount
+				, sdw::UInt const & filterSize );
 			sdw::RetFloat filterPCF( sdw::Vec4 const & lightSpacePosition
 				, sdw::CombinedImage2DArrayR32 const & shadowMap
 				, sdw::Vec2 const & invTexDim
 				, sdw::UInt const & cascadeIndex
-				, sdw::Float const & bias );
+				, sdw::Float const & bias
+				, sdw::UInt const & sampleCount
+				, sdw::UInt const & filterSize );
 			sdw::RetFloat filterPCF( sdw::Vec4 const & lightSpacePosition
 				, sdw::CombinedImage2DArrayR32 const & shadowMap
 				, sdw::Vec2 const & invTexDim
 				, sdw::Int const & index
 				, sdw::Float const & depth
-				, sdw::Float const & bias );
+				, sdw::Float const & bias
+				, sdw::UInt const & sampleCount
+				, sdw::UInt const & filterSize );
 			sdw::RetFloat filterPCF( sdw::Vec3 const & lightToVertex
 				, sdw::CombinedImageCubeArrayR32 const & shadowMap
 				, sdw::Vec2 const & invTexDim
 				, sdw::Int const & index
 				, sdw::Float const & depth
-				, sdw::Float const & bias );
+				, sdw::Float const & bias
+				, sdw::UInt const & sampleCount
+				, sdw::UInt const & filterSize );
 			sdw::RetFloat chebyshevUpperBound( sdw::Vec2 const & moments
 				, sdw::Float const & depth
 				, sdw::Float const & minVariance
@@ -130,6 +141,8 @@ namespace castor3d
 		private:
 			sdw::ShaderWriter & m_writer;
 			ShadowOptions m_shadowOptions;
+			sdw::Vec2Array m_poissonSamples;
+			std::unique_ptr< sdw::Vec4Array > m_randomData;
 			sdw::Function< sdw::Float
 				, sdw::InVec3
 				, sdw::InVec3
@@ -141,7 +154,9 @@ namespace castor3d
 				, sdw::InVec2
 				, sdw::InInt
 				, sdw::InFloat
-				, sdw::InFloat > m_filterPCF;
+				, sdw::InFloat
+				, sdw::InUInt
+				, sdw::InUInt > m_filterPCF;
 			sdw::Function < sdw::Float
 				, sdw::InVec2
 				, sdw::InFloat
@@ -151,20 +166,26 @@ namespace castor3d
 				, sdw::InVec4
 				, sdw::InCombinedImage2DR32
 				, sdw::InVec2
-				, sdw::InFloat > m_filterPCFNoCascade;
+				, sdw::InFloat
+				, sdw::InUInt
+				, sdw::InUInt > m_filterPCFNoCascade;
 			sdw::Function< sdw::Float
 				, sdw::InVec4
 				, sdw::InCombinedImage2DArrayR32
 				, sdw::InVec2
 				, sdw::InUInt
-				, sdw::InFloat > m_filterPCFCascade;
+				, sdw::InFloat
+				, sdw::InUInt
+				, sdw::InUInt > m_filterPCFCascade;
 			sdw::Function< sdw::Float
 				, sdw::InVec3
 				, sdw::InCombinedImageCubeArrayR32
 				, sdw::InVec2
 				, sdw::InInt
 				, sdw::InFloat
-				, sdw::InFloat > m_filterPCFCube;
+				, sdw::InFloat
+				, sdw::InUInt
+				, sdw::InUInt > m_filterPCFCube;
 			sdw::Function < sdw::Float
 				, sdw::InVec3
 				, sdw::InCombinedImageCubeArrayRg32
@@ -176,7 +197,7 @@ namespace castor3d
 				, sdw::InMat4
 				, sdw::InVec3 > m_getLightSpacePosition;
 			sdw::Function< sdw::Float
-				, InLight
+				, InShadowData
 				, sdw::InVec3
 				, sdw::InVec3
 				, sdw::InVec3
@@ -184,18 +205,20 @@ namespace castor3d
 				, sdw::InUInt
 				, sdw::InUInt > m_computeDirectional;
 			sdw::Function< sdw::Float
-				, InLight
+				, InShadowData
+				, sdw::InFloat
 				, sdw::InVec3
 				, sdw::InVec3
 				, sdw::InVec3
 				, sdw::InMat4 > m_computeSpot;
 			sdw::Function< sdw::Float
-				, InLight
+				, InShadowData
+				, sdw::InFloat
 				, sdw::InVec3
 				, sdw::InVec3
 				, sdw::InVec3 > m_computePoint;
 			sdw::Function < sdw::Float
-				, InLight
+				, InShadowData
 				, sdw::InVec3
 				, sdw::InVec3
 				, InRay
@@ -204,6 +227,7 @@ namespace castor3d
 				, sdw::InUInt
 				, sdw::InUInt
 				, sdw::InFloat > m_computeVolumetric;
+
 		};
 	}
 }

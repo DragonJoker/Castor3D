@@ -136,6 +136,8 @@ namespace GuiCommon
 		static wxString PROPERTY_SHADOW_RAW_MAX_SLOPE_OFFSET = _( "Raw Max. Slope Offset" );
 		static wxString PROPERTY_SHADOW_PCF_MIN_OFFSET = _( "PCF Min. Offset" );
 		static wxString PROPERTY_SHADOW_PCF_MAX_SLOPE_OFFSET = _( "PCF Max. Slope Offset" );
+		static wxString PROPERTY_SHADOW_PCF_FILTER_SIZE = _( "PCF Filter Size" );
+		static wxString PROPERTY_SHADOW_PCF_SAMPLE_COUNT = _( "PCF Sample Count" );
 		static wxString PROPERTY_SHADOW_MAX_VARIANCE = _( "Max. Variance" );
 		static wxString PROPERTY_SHADOW_VARIANCE_BIAS = _( "Variance Bias" );
 		static wxString PROPERTY_SHADOW_VOLUMETRIC_STEPS = _( "Volumetric Steps" );
@@ -184,6 +186,8 @@ namespace GuiCommon
 		auto pcf = addProperty( shadows, PROPERTY_CATEGORY_SHADOW_PCF );
 		addPropertyT( pcf, PROPERTY_SHADOW_PCF_MIN_OFFSET, m_light.getCategory()->getShadowPcfOffsets()[0], m_light.getCategory().get(), &castor3d::LightCategory::setPcfMinOffset );
 		addPropertyT( pcf, PROPERTY_SHADOW_PCF_MAX_SLOPE_OFFSET, m_light.getCategory()->getShadowPcfOffsets()[1], m_light.getCategory().get(), &castor3d::LightCategory::setPcfMaxSlopeOffset );
+		addPropertyT( pcf, PROPERTY_SHADOW_PCF_FILTER_SIZE, m_light.getCategory()->getShadowPcfFilterSize(), m_light.getCategory().get(), &castor3d::LightCategory::setPcfFilterSize );
+		addPropertyT( pcf, PROPERTY_SHADOW_PCF_SAMPLE_COUNT, m_light.getCategory()->getShadowPcfSampleCount(), m_light.getCategory().get(), &castor3d::LightCategory::setPcfSampleCount );
 		auto vsm = addProperty( shadows, PROPERTY_CATEGORY_SHADOW_VSM );
 		addPropertyT( vsm, PROPERTY_SHADOW_MAX_VARIANCE, m_light.getCategory()->getShadowVariance()[0], m_light.getCategory().get(), &castor3d::LightCategory::setVsmMaxVariance );
 		addPropertyT( vsm, PROPERTY_SHADOW_VARIANCE_BIAS, m_light.getCategory()->getShadowVariance()[1], m_light.getCategory().get(), &castor3d::LightCategory::setVsmVarianceBias );

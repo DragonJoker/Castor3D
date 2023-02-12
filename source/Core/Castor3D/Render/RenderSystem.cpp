@@ -3,6 +3,7 @@
 #include "Castor3D/Config.hpp"
 #include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Shader/GlslToSpv.hpp"
 
@@ -609,6 +610,17 @@ namespace castor3d
 
 			return result;
 		}
+
+		static std::default_random_engine createRandomEngine( bool disableRandomSeed )
+		{
+			if ( disableRandomSeed )
+			{
+				return std::default_random_engine{};
+			}
+
+			std::random_device r;
+			return std::default_random_engine{ r() };
+		}
 	}
 
 	//*************************************************************************
@@ -668,6 +680,7 @@ namespace castor3d
 			, gpu
 			, m_renderer.desc
 			, std::move( pdeviceExtensions ) );
+		doCreateRandomStorage( *m_device );
 
 		static std::map< uint32_t, castor::String > vendors
 		{
@@ -744,6 +757,7 @@ namespace castor3d
 
 	RenderSystem::~RenderSystem()
 	{
+		m_randomStorage.reset();
 	}
 
 	ashes::InstancePtr RenderSystem::createInstance( Engine & engine
@@ -1047,6 +1061,37 @@ namespace castor3d
 	Texture const & RenderSystem::getPrefilteredBrdfTexture()const
 	{
 		return getEngine()->getPrefilteredBrdfTexture();
+	}
+
+
+	bool RenderSystem::doCreateRandomStorage( RenderDevice const & device )
+	{
+		m_randomStorage = makeBuffer< castor::Point4f >( device
+			, RandomDataCount
+			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, "C3D_RandomStorage" );
+		auto rddevice = rendsys::createRandomEngine( !getEngine()->isRandomisationEnabled() );
+		std::uniform_real_distribution< float > distribution{ -1.0f, 1.0f };
+
+		if ( auto buffer = m_randomStorage->lock( 0u
+			, RandomDataCount
+			, 0u ) )
+		{
+			for ( auto i = 0u; i < RandomDataCount; ++i )
+			{
+				( *buffer )[0] = distribution( rddevice );
+				( *buffer )[1] = distribution( rddevice );
+				( *buffer )[2] = distribution( rddevice );
+				( *buffer )[3] = distribution( rddevice );
+				++buffer;
+			}
+
+			m_randomStorage->getBuffer().flush( 0u, RandomDataCount );
+			m_randomStorage->getBuffer().unlock();
+		}
+
+		return true;
 	}
 
 	//*************************************************************************

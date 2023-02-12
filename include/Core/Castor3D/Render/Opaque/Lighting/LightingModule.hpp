@@ -63,6 +63,7 @@ namespace castor3d
 		eModelMatrix,
 		eSmLinear,
 		eSmVariance,
+		eRandomStorage,
 		eCount,
 	};
 	/**

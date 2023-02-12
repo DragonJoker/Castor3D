@@ -91,6 +91,7 @@ namespace castor3d::shader
 	struct OutputComponents;
 	struct PointLight;
 	struct Ray;
+	struct ShadowData;
 	struct SpotLight;
 	struct SssProfile;
 	struct TextureAnimData;
@@ -188,6 +189,7 @@ namespace castor3d::shader
 	Writer_Parameter( Material );
 	Writer_Parameter( PointLight );
 	Writer_Parameter( Ray );
+	Writer_Parameter( ShadowData );
 	Writer_Parameter( SpotLight );
 	Writer_Parameter( Surface );
 	Writer_Parameter( TextureAnimData );

@@ -42,6 +42,7 @@ namespace test_launcher
 			castor::String renderer;
 			castor::Path fileName;
 			bool disableUpdateOptimisations{ false };
+			bool disableRandom{ false };
 		};
 
 		MainFrame * m_mainFrame{ nullptr };

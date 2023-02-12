@@ -19,24 +19,9 @@ namespace castor3d::shader
 {
 	//*********************************************************************************************
 
-	sdw::Int Light::shadowMapIndex()const
+	void ShadowData::updateShadowType( ShadowType type )
 	{
-		return getWriter()->cast< sdw::Int >( getMember< "shadowMapIndex" >() );
-	}
-
-	sdw::Int Light::shadowType()const
-	{
-		return getWriter()->cast< sdw::Int >( getMember< "shadowType" >() );
-	}
-
-	sdw::UInt Light::volumetricSteps()const
-	{
-		return getWriter()->cast< sdw::UInt >( getMember< "volumetricSteps" >() );
-	}
-
-	void Light::updateShadowType( ShadowType type )
-	{
-		getMember< "shadowType" >() = sdw::Float{ float( type ) };
+		getMember< "shadowType" >() = uint32_t( type );
 	}
 
 	//*********************************************************************************************
@@ -97,6 +82,7 @@ namespace castor3d::shader
 
 					auto result = m_writer.declLocale< DirectionalLight >( "result" );
 					getBaseLight( lightData, result.base(), offset );
+
 					lightData = getData( offset ).data(); ++offset;
 					result.direction() = normalize( lightData.xyz() );
 					result.getMember< "cascadeCount" >() = lightData.w();
@@ -155,8 +141,10 @@ namespace castor3d::shader
 
 					auto result = m_writer.declLocale< PointLight >( "result" );
 					getBaseLight( lightData, result.base(), offset );
+
 					lightData = getData( offset ).data(); ++offset;
 					result.position() = lightData.xyz();
+
 					lightData = getData( offset ).data(); ++offset;
 					result.attenuation() = lightData.xyz();
 
@@ -182,15 +170,19 @@ namespace castor3d::shader
 
 					auto result = m_writer.declLocale< SpotLight >( "result" );
 					getBaseLight( lightData, result.base(), offset );
+
 					lightData = getData( offset ).data(); ++offset;
 					result.position() = lightData.xyz();
 					result.exponent() = lightData.w();
+
 					lightData = getData( offset ).data(); ++offset;
 					result.attenuation() = lightData.xyz();
 					result.innerCutOff() = lightData.w();
+
 					lightData = getData( offset ).data(); ++offset;
 					result.direction() = normalize( lightData.xyz() );
 					result.outerCutOff() = lightData.w();
+
 					result.transform() = mat4( getData( offset + 0_u ).data()
 						, getData( offset + 1_u ).data()
 						, getData( offset + 2_u ).data()
@@ -204,24 +196,38 @@ namespace castor3d::shader
 		return m_getSpotLight( offset );
 	}
 
+	void LightsBuffer::getShadows( sdw::Vec4 & lightData
+		, ShadowData shadows
+		, sdw::UInt & offset )
+	{
+		lightData = getData( offset ).data(); ++offset;
+		shadows.shadowMapIndex() = m_writer.cast< sdw::Int >( lightData.x() );
+		shadows.shadowType() = m_writer.cast< sdw::UInt >( lightData.y() );
+		shadows.pcfFilterSize() = m_writer.cast< sdw::UInt >( lightData.z() );
+		shadows.pcfSampleCount() = m_writer.cast< sdw::UInt >( lightData.w() );
+
+		lightData = getData( offset ).data(); ++offset;
+		shadows.rawShadowOffsets() = lightData.xy();
+		shadows.pcfShadowOffsets() = lightData.zw();
+
+		lightData = getData( offset ).data(); ++offset;
+		shadows.vsmShadowVariance() = lightData.xy();
+		shadows.volumetricSteps() = m_writer.cast< sdw::UInt >( lightData.z() );
+		shadows.volumetricScattering() = lightData.w();
+	}
+
 	void LightsBuffer::getBaseLight( sdw::Vec4 & lightData
 		, Light light
 		, sdw::UInt & offset )
 	{
 		lightData = getData( offset ).data(); ++offset;
 		light.colour() = lightData.xyz();
-		light.getMember< "shadowMapIndex" >() = lightData.w();
+		light.farPlane() = lightData.w();
+
 		lightData = getData( offset ).data(); ++offset;
 		light.intensity() = lightData.xy();
-		light.farPlane() = lightData.z();
-		light.getMember< "shadowType" >() = lightData.w();
-		lightData = getData( offset ).data(); ++offset;
-		light.rawShadowOffsets() = lightData.xy();
-		light.pcfShadowOffsets() = lightData.zw();
-		lightData = getData( offset ).data(); ++offset;
-		light.vsmShadowVariance() = lightData.xy();
-		light.getMember< "volumetricSteps" >() = lightData.z();
-		light.volumetricScattering() = lightData.w();
+
+		getShadows( lightData, light.shadows(), offset );
 	}
 
 	//*********************************************************************************************

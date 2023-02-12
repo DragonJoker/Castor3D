@@ -307,7 +307,7 @@ namespace castor3d
 					auto rsmCoords = writer.declLocale( "rsmCoords"
 						, ivec3( in.vertexIndex % int32_t( rsmTexSize )
 							, in.vertexIndex / int32_t( rsmTexSize )
-							, light.base().shadowMapIndex() * 6_i + int32_t( face ) ) );
+							, light.shadows().shadowMapIndex() * 6_i + int32_t( face ) ) );
 
 					auto rsmPosition = writer.declLocale( "rsmPosition"
 						, c3d_rsmPositionMap.fetch( rsmCoords, 0_i ).rgb() );
@@ -372,7 +372,7 @@ namespace castor3d
 					auto rsmCoords = writer.declLocale( "rsmCoords"
 						, ivec3( in.vertexIndex % int32_t( rsmTexSize )
 							, in.vertexIndex / int32_t( rsmTexSize )
-							, light.base().shadowMapIndex() ) );
+							, light.shadows().shadowMapIndex() ) );
 
 					auto rsmPosition = writer.declLocale( "rsmPosition"
 						, c3d_rsmPositionMap.fetch( rsmCoords, 0_i ).rgb() );
