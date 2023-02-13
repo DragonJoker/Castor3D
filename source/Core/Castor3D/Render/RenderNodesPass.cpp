@@ -953,7 +953,7 @@ namespace castor3d
 					, doCreateDepthStencilState( flags )
 					, ashes::PipelineRasterizationStateCreateInfo{ 0u, false, false, VK_POLYGON_MODE_FILL, cullMode }
 					, doCreateBlendState( flags )
-					, ashes::PipelineMultisampleStateCreateInfo{}
+					, doCreateMultisampleState( flags )
 					, doGetProgram( flags, cullMode )
 					, flags );
 				pipeline->setViewport( makeViewport( m_size ) );

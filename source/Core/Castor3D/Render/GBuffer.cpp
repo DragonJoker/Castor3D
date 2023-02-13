@@ -118,6 +118,7 @@ namespace castor3d
 		, VkImageCreateFlags createFlags
 		, VkExtent3D const & size
 		, uint32_t layerCount
+		, VkSampleCountFlagBits sampleCount
 		, uint32_t mipLevels
 		, VkFormat format
 		, VkImageUsageFlags usageFlags
@@ -129,6 +130,7 @@ namespace castor3d
 			, createFlags
 			, size
 			, layerCount
+			, sampleCount
 			, mipLevels
 			, format
 			, usageFlags

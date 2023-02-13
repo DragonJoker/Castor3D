@@ -48,6 +48,34 @@ namespace castor3d
 			, VkSamplerAddressMode addressMode = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
 			, VkBorderColor const & borderColor = VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK
 			, bool createSubviews = true );
+		C3D_API Texture( RenderDevice const & device
+			, crg::ResourcesCache & resources
+			, castor::String const & name
+			, VkImageCreateFlags createFlags
+			, VkExtent3D const & size
+			, uint32_t layerCount
+			, VkSampleCountFlagBits sampleCount
+			, uint32_t mipLevels
+			, VkFormat format
+			, VkImageUsageFlags usageFlags
+			, VkBorderColor const & borderColor = VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK
+			, bool createSubviews = true );
+		C3D_API Texture( RenderDevice const & device
+			, crg::ResourcesCache & resources
+			, castor::String const & name
+			, VkImageCreateFlags createFlags
+			, VkExtent3D const & size
+			, uint32_t layerCount
+			, VkSampleCountFlagBits sampleCount
+			, uint32_t mipLevels
+			, VkFormat format
+			, VkImageUsageFlags usageFlags
+			, VkFilter minFilter
+			, VkFilter magFilter
+			, VkSamplerMipmapMode mipFilter
+			, VkSamplerAddressMode addressMode = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
+			, VkBorderColor const & borderColor = VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK
+			, bool createSubviews = true );
 		C3D_API ~Texture();
 
 		C3D_API void create();

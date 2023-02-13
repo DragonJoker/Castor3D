@@ -31,6 +31,7 @@ namespace castor3d
 			, VkImageCreateFlags createFlags
 			, VkExtent3D const & size
 			, uint32_t layerCount
+			, VkSampleCountFlagBits sampleCount
 			, uint32_t mipLevels
 			, VkFormat format
 			, VkImageUsageFlags usageFlags
@@ -73,7 +74,8 @@ namespace castor3d
 			, castor::String const & prefix
 			, VkImageCreateFlags createFlags
 			, castor::Size const & size
-			, uint32_t layerCount = 1u )const
+			, uint32_t layerCount = 1u
+			, VkSampleCountFlagBits sampleCount = VK_SAMPLE_COUNT_1_BIT )const
 		{
 			TextureArray result;
 
@@ -87,6 +89,7 @@ namespace castor3d
 						, createFlags
 						, { size.getWidth(), size.getHeight(), 1u }
 						, layerCount
+						, sampleCount
 						, getMipLevels( m_device, texture, size )
 						, getFormat( m_device, texture )
 						, getUsageFlags( texture )
@@ -133,7 +136,8 @@ namespace castor3d
 			, std::array< TexturePtr, size_t( TextureEnumT::eCount ) > const & inputs
 			, castor::String const & prefix
 			, VkImageCreateFlags createFlags
-			, VkExtent3D const & size )const
+			, VkExtent3D const & size
+			, VkSampleCountFlagBits sampleCount = VK_SAMPLE_COUNT_1_BIT )const
 		{
 			TextureArray result;
 
@@ -147,6 +151,7 @@ namespace castor3d
 						, createFlags
 						, size
 						, 1u
+						, sampleCount
 						, getMipLevels( m_device, texture, size )
 						, getFormat( m_device, texture )
 						, getUsageFlags( texture )
@@ -216,14 +221,16 @@ namespace castor3d
 			, std::array< TexturePtr, size_t( TextureEnumT::eCount ) > const & inputs
 			, VkImageCreateFlags createFlags
 			, castor::Size const & size
-			, uint32_t layerCount = 1u )
+			, uint32_t layerCount = 1u
+			, VkSampleCountFlagBits sampleCount = VK_SAMPLE_COUNT_1_BIT )
 			: GBufferBase{ device, std::move( name ) }
 			, m_result{ doCreateTextures< TextureEnumT >( resources
 				, inputs
 				, getName()
 				, createFlags
 				, size
-				, layerCount ) }
+				, layerCount
+				, sampleCount ) }
 		{
 		}
 		/**
@@ -263,13 +270,15 @@ namespace castor3d
 			, castor::String name
 			, std::array< TexturePtr, size_t( TextureEnumT::eCount ) > const & inputs
 			, VkImageCreateFlags createFlags
-			, VkExtent3D const & size )
+			, VkExtent3D const & size
+			, VkSampleCountFlagBits sampleCount = VK_SAMPLE_COUNT_1_BIT )
 			: GBufferBase{ device, std::move( name ) }
 			, m_result{ doCreateTextures< TextureEnumT >( resources
 				, inputs
 				, getName()
 				, createFlags
-				, size ) }
+				, size
+				, sampleCount ) }
 		{
 		}
 
