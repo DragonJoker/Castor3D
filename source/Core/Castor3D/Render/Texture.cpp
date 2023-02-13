@@ -120,6 +120,7 @@ namespace castor3d
 			, createFlags
 			, size
 			, layerCount
+			, VK_SAMPLE_COUNT_1_BIT
 			, mipLevels
 			, format
 			, usageFlags
@@ -138,6 +139,72 @@ namespace castor3d
 		, VkImageCreateFlags createFlags
 		, VkExtent3D const & size
 		, uint32_t layerCount
+		, uint32_t mipLevels
+		, VkFormat format
+		, VkImageUsageFlags usageFlags
+		, VkFilter minFilter
+		, VkFilter magFilter
+		, VkSamplerMipmapMode mipFilter
+		, VkSamplerAddressMode addressMode
+		, VkBorderColor const & borderColor
+		, bool createSubviews )
+		: Texture{ pdevice
+			, presources
+			, name
+			, createFlags
+			, size
+			, layerCount
+			, VK_SAMPLE_COUNT_1_BIT
+			, mipLevels
+			, format
+			, usageFlags
+			, VK_FILTER_LINEAR
+			, VK_FILTER_LINEAR
+			, VK_SAMPLER_MIPMAP_MODE_LINEAR
+			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
+			, borderColor
+			, createSubviews }
+	{
+	}
+
+	Texture::Texture( RenderDevice const & device
+		, crg::ResourcesCache & resources
+		, castor::String const & name
+		, VkImageCreateFlags createFlags
+		, VkExtent3D const & size
+		, uint32_t layerCount
+		, VkSampleCountFlagBits sampleCount
+		, uint32_t mipLevels
+		, VkFormat format
+		, VkImageUsageFlags usageFlags
+		, VkBorderColor const & borderColor
+		, bool createSubviews )
+		: Texture{ device
+			, resources
+			, name
+			, createFlags
+			, size
+			, layerCount
+			, sampleCount
+			, mipLevels
+			, format
+			, usageFlags
+			, VK_FILTER_LINEAR
+			, VK_FILTER_LINEAR
+			, VK_SAMPLER_MIPMAP_MODE_LINEAR
+			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
+			, borderColor
+			, createSubviews }
+	{
+	}
+
+	Texture::Texture( RenderDevice const & pdevice
+		, crg::ResourcesCache & presources
+		, castor::String const & name
+		, VkImageCreateFlags createFlags
+		, VkExtent3D const & size
+		, uint32_t layerCount
+		, VkSampleCountFlagBits sampleCount
 		, uint32_t mipLevels
 		, VkFormat format
 		, VkImageUsageFlags usageFlags
@@ -168,7 +235,8 @@ namespace castor3d
 					? ( VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT )
 					: VkImageUsageFlags{} ) )
 			, mipLevels
-			, layerCount } );
+			, layerCount
+			, sampleCount } );
 		wholeViewId = handler.createViewId( crg::ImageViewData{ name + "Whole"
 			, imageId
 			, 0u

@@ -713,7 +713,7 @@ namespace castor3d
 		 *\brief		Creates the depth stencil state.
 		 *\param[in]	flags	The pipeline flags.
 		 *\~french
-		 *\brief		Crée l'attache de profondeur et stencil.
+		 *\brief		Crée l'état de profondeur et stencil.
 		 *\param[in]	flags	Les indicateurs de pipeline.
 		 */
 		C3D_API virtual ashes::PipelineDepthStencilStateCreateInfo doCreateDepthStencilState( PipelineFlags const & flags )const = 0;
@@ -722,10 +722,22 @@ namespace castor3d
 		 *\brief		Creates the colour blend state.
 		 *\param[in]	flags	The pipeline flags.
 		 *\~french
-		 *\brief		Crée l'attache de mélange des couleurs.
+		 *\brief		Crée l'état de mélange des couleurs.
 		 *\param[in]	flags	Les indicateurs de pipeline.
 		 */
 		C3D_API virtual ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const = 0;
+		/**
+		 *\~english
+		 *\brief		Creates the multisample state.
+		 *\param[in]	flags	The pipeline flags.
+		 *\~french
+		 *\brief		Crée l'état de multisample.
+		 *\param[in]	flags	Les indicateurs de pipeline.
+		 */
+		C3D_API virtual ashes::PipelineMultisampleStateCreateInfo doCreateMultisampleState( PipelineFlags const & flags )const
+		{
+			return ashes::PipelineMultisampleStateCreateInfo{};
+		}
 		/**
 		 *\~english
 		 *\brief			Initialises the additional descriptor set
