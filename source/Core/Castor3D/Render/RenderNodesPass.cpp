@@ -709,6 +709,7 @@ namespace castor3d
 		, uint32_t & index )const
 	{
 		auto sceneFlags = doAdjustSceneFlags( scene.getFlags() );
+		bool hasShadows{};
 
 		for ( uint32_t j = 0u; j < uint32_t( LightType::eCount ); ++j )
 		{
@@ -722,13 +723,17 @@ namespace castor3d
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+				hasShadows = true;
 			}
 		}
 
-		// Random Storage
-		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+		if ( hasShadows )
+		{
+			// Random Storage
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+		}
 	}
 
 	void RenderNodesPass::doAddShadowDescriptor( Scene const & scene
@@ -739,6 +744,7 @@ namespace castor3d
 	{
 #if !C3D_DebugDisableShadowMaps
 		auto sceneFlags = doAdjustSceneFlags( scene.getFlags() );
+		bool hasShadows{};
 
 		for ( auto i = 0u; i < uint32_t( LightType::eCount ); ++i )
 		{
@@ -757,13 +763,17 @@ namespace castor3d
 						, *result[SmTexture::eVariance].sampler
 						, descriptorWrites
 						, index );
+					hasShadows = true;
 				}
 			}
 		}
 
-		bindBuffer( getEngine()->getRenderSystem()->getRandomStorage().getBuffer()
-			, descriptorWrites
-			, index );
+		if ( hasShadows )
+		{
+			bindBuffer( getEngine()->getRenderSystem()->getRandomStorage().getBuffer()
+				, descriptorWrites
+				, index );
+		}
 #endif
 	}
 

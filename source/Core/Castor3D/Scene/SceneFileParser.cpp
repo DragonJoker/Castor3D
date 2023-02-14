@@ -194,8 +194,8 @@ namespace castor3d
 		static void addShadowsVsmParsers( castor::AttributeParsers & result )
 		{
 			using namespace castor;
-			addParser( result, uint32_t( CSCNSection::eVsm ), cuT( "variance_max" ), parserShadowsVsmVarianceMax, { makeParameter< ParameterType::eFloat >() } );
-			addParser( result, uint32_t( CSCNSection::eVsm ), cuT( "variance_bias" ), parserShadowsVsmVarianceBias, { makeParameter< ParameterType::eFloat >() } );
+			addParser( result, uint32_t( CSCNSection::eVsm ), cuT( "min_variance" ), parserShadowsVsmMinVariance, { makeParameter< ParameterType::eFloat >() } );
+			addParser( result, uint32_t( CSCNSection::eVsm ), cuT( "light_bleeding_reduction" ), parserShadowsVsmLightBleedingReduction, { makeParameter< ParameterType::eFloat >() } );
 		}
 
 		static void addShadowsRsmParsers( castor::AttributeParsers & result )

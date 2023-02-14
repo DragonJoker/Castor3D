@@ -41,7 +41,8 @@ namespace castor3d
 			Float1 pcfSampleCount;
 			Float2 rawShadowsOffsets;
 			Float2 pcfShadowsOffsets;
-			Float2 vsmShadowVariance;
+			Float1 vsmMinVariance;
+			Float1 vsmLightBleedingReduction;
 			Float1 volumetricSteps;
 			Float1 volumetricScattering;
 		};
@@ -93,7 +94,8 @@ namespace castor3d
 		C3D_API float getVolumetricScatteringFactor()const;
 		C3D_API castor::Point2f const & getShadowRawOffsets()const;
 		C3D_API castor::Point2f const & getShadowPcfOffsets()const;
-		C3D_API castor::Point2f const & getShadowVariance()const;
+		C3D_API float getVsmMinVariance()const;
+		C3D_API float getVsmLightBleedingReduction()const;
 		C3D_API uint32_t getShadowPcfFilterSize()const;
 		C3D_API castor::RangedValue< uint32_t > getShadowPcfSampleCount()const;
 		C3D_API ShadowConfig const & getShadowConfig()const;
@@ -157,8 +159,8 @@ namespace castor3d
 		C3D_API void setPcfMaxSlopeOffset( float value );
 		C3D_API void setPcfFilterSize( uint32_t value );
 		C3D_API void setPcfSampleCount( uint32_t value );
-		C3D_API void setVsmMaxVariance( float value );
-		C3D_API void setVsmVarianceBias( float value );
+		C3D_API void setVsmMinVariance( float value );
+		C3D_API void setVsmLightBleedingReduction( float value );
 		C3D_API void setColour( castor::Point3f const & value );
 		C3D_API void setIntensity( castor::Point2f const & value );
 		C3D_API void setDiffuseIntensity( float value );

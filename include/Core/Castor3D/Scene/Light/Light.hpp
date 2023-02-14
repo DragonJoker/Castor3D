@@ -212,9 +212,14 @@ namespace castor3d
 			return m_shadows.pcfOffsets;
 		}
 
-		castor::Point2f const & getShadowVariance()const
+		float getVsmMinVariance()const
 		{
-			return m_shadows.variance;
+			return m_shadows.vsmMinVariance;
+		}
+
+		float getVsmLightBleedingReduction()const
+		{
+			return m_shadows.vsmLightBleedingReduction;
 		}
 
 		uint32_t getShadowPcfFilterSize()const
@@ -378,14 +383,14 @@ namespace castor3d
 			m_shadows.pcfSampleCount = value;
 		}
 
-		void setVsmMaxVariance( float value )
+		void setVsmMinVariance( float value )
 		{
-			m_shadows.variance[0] = value;
+			m_shadows.vsmMinVariance = value;
 		}
 
-		void setVsmVarianceBias( float value )
+		void setVsmLightBleedingReduction( float value )
 		{
-			m_shadows.variance[1] = value;
+			m_shadows.vsmLightBleedingReduction = value;
 		}
 
 		void setBufferIndex( uint32_t value )

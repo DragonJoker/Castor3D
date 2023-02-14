@@ -211,7 +211,8 @@ namespace castor3d::shader
 		shadows.pcfShadowOffsets() = lightData.zw();
 
 		lightData = getData( offset ).data(); ++offset;
-		shadows.vsmShadowVariance() = lightData.xy();
+		shadows.vsmMinVariance() = lightData.x();
+		shadows.vsmLightBleedingReduction() = lightData.y();
 		shadows.volumetricSteps() = m_writer.cast< sdw::UInt >( lightData.z() );
 		shadows.volumetricScattering() = lightData.w();
 	}

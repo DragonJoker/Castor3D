@@ -131,12 +131,6 @@ namespace castor3d
 				, sdw::Float const & depth
 				, sdw::Float const & minVariance
 				, sdw::Float const & varianceBias );
-			sdw::RetFloat filterVSM( sdw::Vec3 const & lightToVertex
-				, sdw::CombinedImageCubeArrayRg32 const & shadowMap
-				, sdw::Int const & index
-				, sdw::Float const & depth
-				, sdw::Float const & minVariance
-				, sdw::Float const & varianceBias );
 
 		private:
 			sdw::ShaderWriter & m_writer;
@@ -186,13 +180,6 @@ namespace castor3d
 				, sdw::InFloat
 				, sdw::InUInt
 				, sdw::InUInt > m_filterPCFCube;
-			sdw::Function < sdw::Float
-				, sdw::InVec3
-				, sdw::InCombinedImageCubeArrayRg32
-				, sdw::InInt
-				, sdw::InFloat
-				, sdw::InFloat
-				, sdw::InFloat > m_filterVSMCube;
 			sdw::Function< sdw::Vec4
 				, sdw::InMat4
 				, sdw::InVec3 > m_getLightSpacePosition;

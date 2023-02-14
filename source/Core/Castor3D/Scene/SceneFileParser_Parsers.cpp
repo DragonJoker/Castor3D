@@ -2499,7 +2499,7 @@ namespace castor3d
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserShadowsVsmVarianceMax )
+	CU_ImplementAttributeParser( parserShadowsVsmMinVariance )
 	{
 		auto & parsingContext = getParserContext( context );
 
@@ -2515,12 +2515,12 @@ namespace castor3d
 		{
 			float value;
 			params[0]->get( value );
-			parsingContext.light->setVsmMaxVariance( value );
+			parsingContext.light->setVsmMinVariance( value );
 		}
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserShadowsVsmVarianceBias )
+	CU_ImplementAttributeParser( parserShadowsVsmLightBleedingReduction )
 	{
 		auto & parsingContext = getParserContext( context );
 
@@ -2536,7 +2536,7 @@ namespace castor3d
 		{
 			float value;
 			params[0]->get( value );
-			parsingContext.light->setVsmVarianceBias( value );
+			parsingContext.light->setVsmLightBleedingReduction( value );
 		}
 	}
 	CU_EndAttribute()
