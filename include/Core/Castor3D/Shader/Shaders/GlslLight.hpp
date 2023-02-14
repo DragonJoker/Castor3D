@@ -40,7 +40,8 @@ namespace castor3d::shader
 			, sdw::UIntField< "pcfSampleCount" >
 			, sdw::Vec2Field< "rawShadowOffsets" >
 			, sdw::Vec2Field< "pcfShadowOffsets" >
-			, sdw::Vec2Field< "vsmShadowVariance" >
+			, sdw::FloatField< "vsmMinVariance" >
+			, sdw::FloatField< "vsmLightBleedingReduction" >
 			, sdw::UIntField< "volumetricSteps" >
 			, sdw::FloatField< "volumetricScattering" > >
 	{
@@ -57,7 +58,8 @@ namespace castor3d::shader
 		auto pcfSampleCount()const { return getMember< "pcfSampleCount" >(); }
 		auto rawShadowOffsets()const { return getMember< "rawShadowOffsets" >(); }
 		auto pcfShadowOffsets()const { return getMember< "pcfShadowOffsets" >(); }
-		auto vsmShadowVariance()const { return getMember< "vsmShadowVariance" >(); }
+		auto vsmMinVariance()const { return getMember< "vsmMinVariance" >(); }
+		auto vsmLightBleedingReduction()const { return getMember< "vsmLightBleedingReduction" >(); }
 		auto volumetricSteps()const { return getMember< "volumetricSteps" >(); }
 		auto volumetricScattering()const { return getMember< "volumetricScattering" >(); }
 

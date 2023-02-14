@@ -20,7 +20,8 @@ namespace castor3d
 		float volumetricScattering{ 0.2f };
 		castor::Point2f rawOffsets;
 		castor::Point2f pcfOffsets;
-		castor::Point2f variance;
+		float vsmMinVariance{};
+		float vsmLightBleedingReduction{};
 		uint32_t pcfFilterSize{ 4u };
 		castor::RangedValue< uint32_t > pcfSampleCount{ 16u, castor::makeRange( 0u, 64u ) };
 		RsmConfig rsmConfig;

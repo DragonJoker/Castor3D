@@ -44,14 +44,16 @@ namespace castor
 			{
 				result = result
 					&& write( file, cuT( "min_offset" ), object.pcfOffsets[0] )
-					&& write( file, cuT( "max_slope_offset" ), object.pcfOffsets[1] );
+					&& write( file, cuT( "max_slope_offset" ), object.pcfOffsets[1] )
+					&& write( file, cuT( "filter_size" ), object.pcfFilterSize )
+					&& write( file, cuT( "sample_count" ), object.pcfSampleCount );
 			}
 
 			if ( auto vsmBlock{ beginBlock( file, "vsm_config" ) } )
 			{
 				result = result
-					&& write( file, cuT( "variance_max" ), object.variance[0] )
-					&& write( file, cuT( "variance_bias" ), object.variance[1] );
+					&& write( file, cuT( "min_variance" ), object.vsmMinVariance )
+					&& write( file, cuT( "light_bleeding_reduction" ), object.vsmLightBleedingReduction );
 			}
 
 			result = result

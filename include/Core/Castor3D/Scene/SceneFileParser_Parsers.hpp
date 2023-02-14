@@ -150,8 +150,8 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserShadowsPcfSampleCount )
 
 	// VSM shadow parsers
-	CU_DeclareAttributeParser( parserShadowsVsmVarianceMax )
-	CU_DeclareAttributeParser( parserShadowsVsmVarianceBias )
+	CU_DeclareAttributeParser( parserShadowsVsmMinVariance )
+	CU_DeclareAttributeParser( parserShadowsVsmLightBleedingReduction )
 
 	// RSM parsers
 	CU_DeclareAttributeParser( parserRsmIntensity )

@@ -34,7 +34,8 @@ namespace castor3d
 		shadows.rawShadowsOffsets = getShadowRawOffsets();
 		shadows.pcfShadowsOffsets = getShadowPcfOffsets();
 
-		shadows.vsmShadowVariance = getShadowVariance();
+		shadows.vsmMinVariance = getVsmMinVariance();
+		shadows.vsmLightBleedingReduction = getVsmLightBleedingReduction();
 		shadows.volumetricSteps = float( getVolumetricSteps() );
 		shadows.volumetricScattering = getVolumetricScatteringFactor();
 
@@ -71,9 +72,14 @@ namespace castor3d
 		return m_light.getShadowPcfSampleCount();
 	}
 
-	castor::Point2f const & LightCategory::getShadowVariance()const
+	float LightCategory::getVsmMinVariance()const
 	{
-		return m_light.getShadowVariance();
+		return m_light.getVsmMinVariance();
+	}
+
+	float LightCategory::getVsmLightBleedingReduction()const
+	{
+		return m_light.getVsmLightBleedingReduction();
 	}
 
 	ShadowConfig const & LightCategory::getShadowConfig()const
@@ -131,14 +137,14 @@ namespace castor3d
 		m_light.setPcfSampleCount( value );
 	}
 
-	void LightCategory::setVsmMaxVariance( float value )
+	void LightCategory::setVsmMinVariance( float value )
 	{
-		m_light.setVsmMaxVariance( value );
+		m_light.setVsmMinVariance( value );
 	}
 
-	void LightCategory::setVsmVarianceBias( float value )
+	void LightCategory::setVsmLightBleedingReduction( float value )
 	{
-		m_light.setVsmVarianceBias( value );
+		m_light.setVsmLightBleedingReduction( value );
 	}
 
 	void LightCategory::setColour( castor::Point3f const & value )
