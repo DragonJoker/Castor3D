@@ -207,6 +207,9 @@ namespace castor3d
 		setLayoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( LightPassLgtIdx::eSmLinear )
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+		setLayoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( LightPassLgtIdx::eSmLinearCmp )
+			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 		setLayoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( LightPassLgtIdx::eSmVariance )
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
@@ -244,6 +247,12 @@ namespace castor3d
 				, 0u
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, ashes::VkDescriptorImageInfoArray{ { m_device.renderSystem.getEngine()->getDefaultSampler().lock()->getSampler()
+					, m_smResult[SmTexture::eLinearDepth].wholeView
+					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } );
+			writes.emplace_back( uint32_t( LightPassLgtIdx::eSmLinearCmp )
+				, 0u
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, ashes::VkDescriptorImageInfoArray{ { *m_smResult[SmTexture::eLinearDepth].sampler
 					, m_smResult[SmTexture::eLinearDepth].wholeView
 					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } );
 			writes.emplace_back( uint32_t( LightPassLgtIdx::eSmVariance )
