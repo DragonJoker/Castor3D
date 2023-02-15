@@ -99,6 +99,22 @@ namespace castor3d
 		return Values[size_t( texture )];
 	}
 
+	inline VkCompareOp getCompareOp( SmTexture texture )
+	{
+		static std::array< VkCompareOp, size_t( SmTexture::eCount ) > Values
+		{
+			{
+				VK_COMPARE_OP_NEVER,			// Depth
+				VK_COMPARE_OP_LESS_OR_EQUAL,	// Linear
+				VK_COMPARE_OP_NEVER,			// Variance
+				VK_COMPARE_OP_NEVER,			// Normal
+				VK_COMPARE_OP_NEVER,			// Position
+				VK_COMPARE_OP_NEVER,			// Flux
+			}
+		};
+		return Values[size_t( texture )];
+	}
+
 	uint32_t getMipLevels( RenderDevice const & device
 		, SmTexture texture
 		, castor::Size const & size )

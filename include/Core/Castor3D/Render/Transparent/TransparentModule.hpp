@@ -51,6 +51,10 @@ namespace castor3d
 			, texture
 			, castor::Size{ size.width, size.height } );
 	}
+	inline VkCompareOp getCompareOp( WbTexture texture )
+	{
+		return VK_COMPARE_OP_NEVER;
+	}
 	/**
 	*\~english
 	*\brief

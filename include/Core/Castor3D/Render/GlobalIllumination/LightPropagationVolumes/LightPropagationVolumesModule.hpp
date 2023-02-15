@@ -58,6 +58,10 @@ namespace castor3d
 			, texture
 			, castor::Size{ size.width, size.height } );
 	}
+	inline VkCompareOp getCompareOp( LpvTexture texture )
+	{
+		return VK_COMPARE_OP_NEVER;
+	}
 	/**
 	*\~english
 	*\brief

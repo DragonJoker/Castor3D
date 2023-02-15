@@ -122,7 +122,8 @@ namespace castor3d
 		, uint32_t mipLevels
 		, VkFormat format
 		, VkImageUsageFlags usageFlags
-		, VkBorderColor const & borderColor )const
+		, VkBorderColor const & borderColor
+		, VkCompareOp compareOp )const
 	{
 		return std::make_shared< Texture >( m_device
 			, resources
@@ -134,6 +135,7 @@ namespace castor3d
 			, mipLevels
 			, format
 			, usageFlags
-			, borderColor );
+			, borderColor
+			, compareOp );
 	}
 }

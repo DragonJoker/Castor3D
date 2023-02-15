@@ -62,6 +62,7 @@ namespace castor3d
 		eMatrix,
 		eModelMatrix,
 		eSmLinear,
+		eSmLinearCmp,
 		eSmVariance,
 		eRandomStorage,
 		eCount,
@@ -105,6 +106,10 @@ namespace castor3d
 		return getMipLevels( device
 			, texture
 			, castor::Size{ size.width, size.height } );
+	}
+	inline VkCompareOp getCompareOp( LpTexture texture )
+	{
+		return VK_COMPARE_OP_NEVER;
 	}
 	/**
 	*\~english

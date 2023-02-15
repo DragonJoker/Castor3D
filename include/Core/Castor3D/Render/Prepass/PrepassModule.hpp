@@ -40,6 +40,10 @@ namespace castor3d
 	{
 		return 1u;
 	}
+	inline VkCompareOp getCompareOp( PpTexture texture )
+	{
+		return VK_COMPARE_OP_NEVER;
+	}
 	/**
 	*\~english
 	*\brief
