@@ -35,7 +35,8 @@ namespace castor3d
 			, uint32_t mipLevels
 			, VkFormat format
 			, VkImageUsageFlags usageFlags
-			, VkBorderColor const & borderColor )const;
+			, VkBorderColor const & borderColor
+			, VkCompareOp compareOp )const;
 		/**
 		*\~english
 		*\brief
@@ -93,7 +94,8 @@ namespace castor3d
 						, getMipLevels( m_device, texture, size )
 						, getFormat( m_device, texture )
 						, getUsageFlags( texture )
-						, getBorderColor( texture ) ) );
+						, getBorderColor( texture )
+						, getCompareOp( texture ) ) );
 				}
 				else
 				{
@@ -155,7 +157,8 @@ namespace castor3d
 						, getMipLevels( m_device, texture, size )
 						, getFormat( m_device, texture )
 						, getUsageFlags( texture )
-						, getBorderColor( texture ) ) );
+						, getBorderColor( texture )
+						, getCompareOp( texture ) ) );
 				}
 				else
 				{

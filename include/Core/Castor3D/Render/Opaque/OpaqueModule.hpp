@@ -50,6 +50,10 @@ namespace castor3d
 	{
 		return 1u;
 	}
+	inline VkCompareOp getCompareOp( DsTexture texture )
+	{
+		return VK_COMPARE_OP_NEVER;
+	}
 	/*
 	*\~english
 	*\brief
