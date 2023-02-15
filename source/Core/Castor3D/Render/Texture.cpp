@@ -113,6 +113,7 @@ namespace castor3d
 		, VkFormat format
 		, VkImageUsageFlags usageFlags
 		, VkBorderColor const & borderColor
+		, VkCompareOp compareOp
 		, bool createSubviews )
 		: Texture{ device
 			, resources
@@ -129,6 +130,7 @@ namespace castor3d
 			, VK_SAMPLER_MIPMAP_MODE_LINEAR
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
 			, borderColor
+			, compareOp
 			, createSubviews }
 	{
 	}
@@ -147,6 +149,7 @@ namespace castor3d
 		, VkSamplerMipmapMode mipFilter
 		, VkSamplerAddressMode addressMode
 		, VkBorderColor const & borderColor
+		, VkCompareOp compareOp
 		, bool createSubviews )
 		: Texture{ pdevice
 			, presources
@@ -163,6 +166,7 @@ namespace castor3d
 			, VK_SAMPLER_MIPMAP_MODE_LINEAR
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
 			, borderColor
+			, compareOp
 			, createSubviews }
 	{
 	}
@@ -178,6 +182,7 @@ namespace castor3d
 		, VkFormat format
 		, VkImageUsageFlags usageFlags
 		, VkBorderColor const & borderColor
+		, VkCompareOp compareOp
 		, bool createSubviews )
 		: Texture{ device
 			, resources
@@ -194,6 +199,7 @@ namespace castor3d
 			, VK_SAMPLER_MIPMAP_MODE_LINEAR
 			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
 			, borderColor
+			, compareOp
 			, createSubviews }
 	{
 	}
@@ -213,6 +219,7 @@ namespace castor3d
 		, VkSamplerMipmapMode mipFilter
 		, VkSamplerAddressMode addressMode
 		, VkBorderColor const & borderColor
+		, VkCompareOp compareOp
 		, bool createSubviews )
 		: resources{ &presources }
 		, device{ &pdevice }
@@ -305,7 +312,8 @@ namespace castor3d
 
 		auto & engine = *device->renderSystem.getEngine();
 		SamplerResPtr c3dSampler;
-		auto splName = getSamplerName( minFilter
+		auto splName = getSamplerName( compareOp
+			, minFilter
 			, magFilter
 			, mipFilter
 			, addressMode
@@ -326,6 +334,13 @@ namespace castor3d
 			created->setWrapT( addressMode );
 			created->setWrapR( addressMode );
 			created->setBorderColour( borderColor );
+
+			if ( compareOp != VK_COMPARE_OP_NEVER )
+			{
+				created->enableCompare( true );
+				created->setCompareOp( compareOp );
+			}
+
 			created->initialise( *device );
 			c3dSampler = engine.addSampler( splName, created, false );
 		}

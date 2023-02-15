@@ -32,6 +32,7 @@ namespace castor3d
 			, VkFormat format
 			, VkImageUsageFlags usageFlags
 			, VkBorderColor const & borderColor = VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK
+			, VkCompareOp compareOp = VK_COMPARE_OP_NEVER
 			, bool createSubviews = true );
 		C3D_API Texture( RenderDevice const & device
 			, crg::ResourcesCache & resources
@@ -47,6 +48,7 @@ namespace castor3d
 			, VkSamplerMipmapMode mipFilter
 			, VkSamplerAddressMode addressMode = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
 			, VkBorderColor const & borderColor = VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK
+			, VkCompareOp compareOp = VK_COMPARE_OP_NEVER
 			, bool createSubviews = true );
 		C3D_API Texture( RenderDevice const & device
 			, crg::ResourcesCache & resources
@@ -59,6 +61,7 @@ namespace castor3d
 			, VkFormat format
 			, VkImageUsageFlags usageFlags
 			, VkBorderColor const & borderColor = VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK
+			, VkCompareOp compareOp = VK_COMPARE_OP_NEVER
 			, bool createSubviews = true );
 		C3D_API Texture( RenderDevice const & device
 			, crg::ResourcesCache & resources
@@ -75,6 +78,7 @@ namespace castor3d
 			, VkSamplerMipmapMode mipFilter
 			, VkSamplerAddressMode addressMode = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
 			, VkBorderColor const & borderColor = VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK
+			, VkCompareOp compareOp = VK_COMPARE_OP_NEVER
 			, bool createSubviews = true );
 		C3D_API ~Texture();
 

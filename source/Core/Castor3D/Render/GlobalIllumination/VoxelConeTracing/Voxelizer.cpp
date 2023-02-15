@@ -57,6 +57,7 @@ namespace castor3d
 					| VK_IMAGE_USAGE_TRANSFER_DST_BIT
 					| VK_IMAGE_USAGE_SAMPLED_BIT )
 				, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK
+				, VK_COMPARE_OP_NEVER
 				, false };
 		}
 

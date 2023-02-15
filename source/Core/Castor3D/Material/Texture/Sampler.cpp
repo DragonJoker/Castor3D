@@ -64,14 +64,16 @@ namespace castor3d
 		return sampler;
 	}
 
-	castor::String getSamplerName( VkFilter minFilter
+	castor::String getSamplerName( VkCompareOp compareOp
+		, VkFilter minFilter
 		, VkFilter magFilter
 		, VkSamplerMipmapMode mipFilter
 		, VkSamplerAddressMode U
 		, VkSamplerAddressMode V
 		, VkSamplerAddressMode W )
 	{
-		return ashes::getName( minFilter )
+		return ashes::getName( compareOp )
+			+ ashes::getName( minFilter )
 			+ ashes::getName( magFilter )
 			+ ashes::getName( mipFilter )
 			+ ashes::getName( U )

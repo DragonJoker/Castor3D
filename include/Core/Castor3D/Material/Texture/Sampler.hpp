@@ -19,7 +19,8 @@ namespace castor3d
 		, castor::String const & baseName
 		, VkFilter filter
 		, VkImageSubresourceRange const * range );
-	castor::String getSamplerName( VkFilter minFilter
+	castor::String getSamplerName( VkCompareOp compareOp
+		, VkFilter minFilter
 		, VkFilter magFilter
 		, VkSamplerMipmapMode mipFilter
 		, VkSamplerAddressMode U
