@@ -32,6 +32,7 @@
 #endif
 
 #include <atomic>
+#include <random>
 
 #if !defined( NDEBUG )
 #	define C3D_DebugSpirV 0

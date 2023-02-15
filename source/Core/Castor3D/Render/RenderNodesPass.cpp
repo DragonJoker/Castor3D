@@ -719,6 +719,10 @@ namespace castor3d
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+				// Depth Compare
+				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 				// Variance
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
@@ -755,7 +759,12 @@ namespace castor3d
 					auto & result = shadowMapRef.first.get().getShadowPassResult( false );
 					bindTexture( m_graph
 						, result[SmTexture::eLinearDepth].sampledViewId
-						, *result[SmTexture::eLinearDepth].sampler
+						, *result[SmTexture::eVariance].sampler
+						, descriptorWrites
+						, index );
+					bindTexture( m_graph
+						, result[SmTexture::eLinearDepth].sampledViewId
+						, *result[SmTexture::eLinearDepth].sampler // Compare sampler
 						, descriptorWrites
 						, index );
 					bindTexture( m_graph

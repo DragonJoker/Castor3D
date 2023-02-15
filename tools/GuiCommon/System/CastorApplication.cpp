@@ -298,9 +298,14 @@ namespace GuiCommon
 			, {}
 			, {}
 			, {}
+			, {}
 			, {} }
 	{
+#if defined( NDEBUG )
+		wxDisableAsserts();
+#else
 		wxSetAssertHandler( assertHandler );
+#endif
 #if defined( __WXGTK__ )
 		XInitThreads();
 #endif
@@ -317,7 +322,6 @@ namespace GuiCommon
 
 	bool CastorApplication::OnInit()
 	{
-		wxSetAssertHandler( &CastorApplication::assertHandler );
 		wxPropertyGrid::RegisterAdditionalEditors();
 		bool result = doParseCommandLine();
 		wxDisplay display;

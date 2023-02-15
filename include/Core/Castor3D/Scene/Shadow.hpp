@@ -23,7 +23,7 @@ namespace castor3d
 		float vsmMinVariance{};
 		float vsmLightBleedingReduction{};
 		uint32_t pcfFilterSize{ 4u };
-		castor::RangedValue< uint32_t > pcfSampleCount{ 16u, castor::makeRange( 0u, 64u ) };
+		castor::RangedValue< uint32_t > pcfSampleCount{ 8u, castor::makeRange( 0u, 64u ) };
 		RsmConfig rsmConfig;
 		LpvConfig lpvConfig;
 	};
