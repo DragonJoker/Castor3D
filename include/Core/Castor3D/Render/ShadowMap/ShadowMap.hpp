@@ -25,7 +25,7 @@ namespace castor3d
 	public:
 		struct PassData
 		{
-			PassData( SceneCullerUPtr culler )
+			explicit PassData( SceneCullerUPtr culler )
 				: ownCuller{ std::move( culler ) }
 				, culler{ ownCuller.get() }
 				, pass{ nullptr }
@@ -41,7 +41,7 @@ namespace castor3d
 			{
 			}
 
-			PassData( SceneCuller * culler )
+			explicit PassData( SceneCuller * culler )
 				: ownCuller{ nullptr }
 				, culler{ culler }
 				, pass{ nullptr }
