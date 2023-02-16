@@ -199,7 +199,7 @@ namespace castor3d
 				}() };
 			//Orthograhic projection
 			auto sceneBoundingBox = scene.getBoundingBox();
-			auto ortho = castor::matrix::ortho( sceneBoundingBox.getMin()->x
+			auto ortho = m_device.renderSystem.getOrtho( sceneBoundingBox.getMin()->x
 				, sceneBoundingBox.getMax()->x
 				, sceneBoundingBox.getMin()->y
 				, sceneBoundingBox.getMax()->y

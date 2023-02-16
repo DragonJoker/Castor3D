@@ -248,7 +248,7 @@ namespace castor3d
 		/**
 		*\~english
 		*	Computes a perspective projection matrix with no far plane clipping.
-		*\param[in] radiansFovY
+		*\param[in] fovy
 		*	The vertical aperture angle.
 		*\param[in] aspect
 		*	The width / height ratio.
@@ -258,14 +258,14 @@ namespace castor3d
 		*\brief
 		*	Calcule une matrice de projection en perspective sans clipping
 		*	d'arrière plan.
-		*\param[in] radiansFovY
+		*\param[in] fovy
 		*	L'angle d'ouverture verticale.
 		*\param[in] aspect
 		*	Le ratio largeur / hauteur.
 		*\param[in] zNear
 		*	La position du premier plan (pour le clipping).
 		*/
-		C3D_API castor::Matrix4x4f getInfinitePerspective( float radiansFovY
+		C3D_API castor::Matrix4x4f getInfinitePerspective( castor::Angle const & fovy
 			, float aspect
 			, float zNear )const;
 		/**

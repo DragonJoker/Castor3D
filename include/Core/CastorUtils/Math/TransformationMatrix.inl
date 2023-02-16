@@ -316,14 +316,13 @@ namespace castor
 			, U znear
 			, U zfar )
 		{
-			// OpenGL right handed (cf. https://www.opengl.org/sdk/docs/man2/xhtml/gluPerspective.xml)
 			T range = T( tan( fovy.radians() * 0.5 ) );
 			matrix.initialise();
 			matrix[0][0] = T( 1 / ( range * aspect ) );
 			matrix[1][1] = T( 1 / range );
-			matrix[2][2] = T( -( zfar + znear ) / ( zfar - znear ) );
+			matrix[2][2] = T( zfar / ( znear - zfar ) );
 			matrix[2][3] = T( -1 );
-			matrix[3][2] = T( -2 * zfar * znear / ( zfar - znear ) );
+			matrix[3][2] = T( ( zfar * znear ) / ( znear - zfar ) );
 			return matrix;
 		}
 
@@ -333,18 +332,13 @@ namespace castor
 			, U aspect
 			, U znear )
 		{
-			T range = T( tan( fovy.radians() * 0.5 ) * znear );
-			T const left = -range * aspect;
-			T const right = range * aspect;
-			T const bottom = -range;
-			T const top = range;
-
+			T range = T( tan( fovy.radians() * 0.5 ) );
 			matrix.initialise();
-			matrix[0][0] = ( static_cast< T >( 2 ) * znear ) / ( right - left );
-			matrix[1][1] = ( static_cast< T >( 2 ) * znear ) / ( top - bottom );
-			matrix[2][2] = -static_cast< T >( 1 );
-			matrix[2][3] = -static_cast< T >( 1 );
-			matrix[3][2] = -static_cast< T >( 2 ) * znear;
+			matrix[0][0] = T( 1 / ( range * aspect ) );
+			matrix[1][1] = T( 1 / range );
+			matrix[2][2] = T( -1 );
+			matrix[2][3] = T( -1 );
+			matrix[3][2] = -znear;
 			return matrix;
 		}
 
@@ -378,14 +372,13 @@ namespace castor
 			, U znear
 			, U zfar )
 		{
-			// OpenGL right handed (cf. https://www.opengl.org/sdk/docs/man2/xhtml/glOrtho.xml)
 			matrix.setIdentity();
 			matrix[0][0] = T( 2 / ( right - left ) );
 			matrix[1][1] = T( 2 / ( top - bottom ) );
-			matrix[2][2] = T( -2 / ( zfar - znear ) );
+			matrix[2][2] = T( 1 / ( znear - zfar ) );
 			matrix[3][0] = T( -( right + left ) / ( right - left ) );
 			matrix[3][1] = T( -( top + bottom ) / ( top - bottom ) );
-			matrix[3][2] = T( -( zfar + znear ) / ( zfar - znear ) );
+			matrix[3][2] = T( znear / ( znear - zfar ) );
 			return matrix;
 		}
 
@@ -411,15 +404,14 @@ namespace castor
 			, U znear
 			, U zfar )
 		{
-			// OpenGL right handed (cf. https://www.opengl.org/sdk/docs/man2/xhtml/glFrustum.xml)
 			matrix.initialise();
 			matrix[0][0] = T( ( 2 * znear ) / ( right - left ) );
 			matrix[1][1] = T( ( 2 * znear ) / ( top - bottom ) );
 			matrix[2][0] = T( ( right + left ) / ( right - left ) );
 			matrix[2][1] = T( ( top + bottom ) / ( top - bottom ) );
-			matrix[2][2] = T( -( zfar + znear ) / ( zfar - znear ) );
+			matrix[2][2] = T( zfar / ( znear - zfar ) );
 			matrix[2][3] = T( -1 );
-			matrix[3][2] = T( -( 2 * zfar * znear ) / ( zfar - znear ) );
+			matrix[3][2] = T( ( zfar * znear ) / ( znear - zfar ) );
 			return matrix;
 		}
 
