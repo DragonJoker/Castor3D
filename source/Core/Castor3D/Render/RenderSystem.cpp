@@ -1031,7 +1031,7 @@ namespace castor3d
 		, float zNear
 		, float zFar )const
 	{
-		return convert( m_renderer.instance->frustum( left, right, bottom, top, zNear, zFar ) );
+		return castor::matrix::frustum( left, right, bottom, top, zNear, zFar );
 	}
 
 	castor::Matrix4x4f RenderSystem::getPerspective( castor::Angle const & fovy
@@ -1039,7 +1039,7 @@ namespace castor3d
 		, float zNear
 		, float zFar )const
 	{
-		return convert( m_renderer.instance->perspective( fovy.radians(), aspect, zNear, zFar ) );
+		return castor::matrix::perspective( fovy, aspect, zNear, zFar );
 	}
 
 	castor::Matrix4x4f RenderSystem::getOrtho( float left
@@ -1049,14 +1049,14 @@ namespace castor3d
 		, float zNear
 		, float zFar )const
 	{
-		return convert( m_renderer.instance->ortho( left, right, bottom, top, zNear, zFar ) );
+		return castor::matrix::ortho( left, right, bottom, top, zNear, zFar );
 	}
 
-	castor::Matrix4x4f RenderSystem::getInfinitePerspective( float radiansFovY
+	castor::Matrix4x4f RenderSystem::getInfinitePerspective( castor::Angle const & fovy
 		, float aspect
 		, float zNear )const
 	{
-		return convert( m_renderer.instance->infinitePerspective( radiansFovY, aspect, zNear ) );
+		return castor::matrix::perspective( fovy, aspect, zNear );
 	}
 
 	Texture const & RenderSystem::getPrefilteredBrdfTexture()const
