@@ -100,7 +100,7 @@ namespace castor3d
 
 	ashes::PipelineDepthStencilStateCreateInfo TransparentPass::doCreateDepthStencilState( PipelineFlags const & flags )const
 	{
-		return ashes::PipelineDepthStencilStateCreateInfo{ 0u, true, false };
+		return ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_TRUE, VK_FALSE, VK_COMPARE_OP_GREATER };
 	}
 
 	ashes::PipelineColorBlendStateCreateInfo TransparentPass::doCreateBlendState( PipelineFlags const & flags )const

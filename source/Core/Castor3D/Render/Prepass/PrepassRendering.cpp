@@ -186,7 +186,7 @@ namespace castor3d
 		result.addOutputDepthStencilView( targetDepth
 			, defaultClearDepthStencil );
 		result.addOutputColourView( m_result[PpTexture::eDepthObj].targetViewId
-			, makeClearValue( 1.0f, std::numeric_limits< float >::max(), 0.0f, 0.0f ) );
+			, getClearValue( PpTexture::eDepthObj ) );
 		result.addOutputColourView( m_result[PpTexture::eVisibility].targetViewId
 			, opaqueBlackClearColor );
 		result.addOutputColourView( getOwner()->getRenderTarget().getVelocity()->targetViewId );
@@ -235,7 +235,7 @@ namespace castor3d
 		result.addOutputDepthStencilView( targetDepth
 			, defaultClearDepthStencil );
 		result.addOutputColourView( m_result[PpTexture::eDepthObj].targetViewId
-			, makeClearValue( 1.0f, std::numeric_limits< float >::max(), 0.0f, 0.0f ) );
+			, getClearValue( PpTexture::eDepthObj ) );
 		result.addOutputColourView( getOwner()->getRenderTarget().getVelocity()->targetViewId );
 		result.addOutputColourView( getOwner()->getNormal().targetViewId
 			, getClearValue( DsTexture::eNmlOcc ) );
@@ -282,7 +282,7 @@ namespace castor3d
 		result.addOutputDepthStencilView( targetDepth
 			, defaultClearDepthStencil );
 		result.addOutputColourView( m_result[PpTexture::eDepthObj].targetViewId
-			, makeClearValue( 1.0f, std::numeric_limits< float >::max(), 0.0f, 0.0f ) );
+			, getClearValue( PpTexture::eDepthObj ) );
 		result.addOutputColourView( getOwner()->getRenderTarget().getVelocity()->targetViewId );
 		return result;
 	}

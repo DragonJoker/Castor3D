@@ -309,6 +309,20 @@ namespace castor
 			getRotate( m, rotation );
 		}
 
+		template< typename T >
+		Matrix4x4< T > reverseDepth( Matrix4x4< T > const & matrix )
+		{
+			static Matrix4x4< T > const revZ{ []()
+				{
+					Matrix4x4< T > result;
+					result.setIdentity();
+					result[2][2] = T( -1 );
+					result[3][2] = T( 1 );
+					return result;
+				}() };
+			return revZ * matrix;
+		}
+
 		template< typename T, typename U >
 		Matrix4x4< T > & perspective( Matrix4x4< T > & matrix
 			, Angle const & fovy

@@ -64,7 +64,7 @@ namespace castor3d
 			, ashes::CommandPool const & pool
 			, bool srcIsCube )
 		{
-			static castor::Matrix4x4f const projection = convert( device->perspective( float( 90.0_degrees ), 1.0f, 0.1f, 10.0f ) );
+			static castor::Matrix4x4f const projection = device.renderSystem.getPerspective( 90.0_degrees, 1.0f, 0.1f, 10.0f );
 
 			static std::array< castor::Matrix4x4f, 6u > const views = []()
 			{
