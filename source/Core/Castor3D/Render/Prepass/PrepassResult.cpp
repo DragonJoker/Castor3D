@@ -45,7 +45,7 @@ namespace castor3d
 		static std::array< VkClearValue, size_t( PpTexture::eCount ) > Values
 		{
 			{
-				makeClearValue( 1.0f, std::numeric_limits< float >::max(), 0.0f, 0.0f ),
+				transparentBlackClearColor,
 				makeClearValue( 0u, 0u, 0u, 0u ),
 			}
 		};

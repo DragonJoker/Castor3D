@@ -67,7 +67,7 @@ namespace castor3d
 		ashes::PipelineDepthStencilStateCreateInfo depthStencil{ 0u
 			, VK_TRUE
 			, VK_FALSE
-			, VK_COMPARE_OP_LESS
+			, VK_COMPARE_OP_GREATER
 			, VK_FALSE
 			, VK_TRUE
 			, { VK_STENCIL_OP_KEEP

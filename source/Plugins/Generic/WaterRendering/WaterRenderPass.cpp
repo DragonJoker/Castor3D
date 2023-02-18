@@ -415,12 +415,10 @@ namespace water
 
 	ashes::PipelineDepthStencilStateCreateInfo WaterRenderPass::doCreateDepthStencilState( castor3d::PipelineFlags const & flags )const
 	{
-		return ashes::PipelineDepthStencilStateCreateInfo
-		{
-			0u,
-			VK_TRUE,
-			VK_TRUE,
-		};
+		return ashes::PipelineDepthStencilStateCreateInfo{ 0u
+			, VK_TRUE
+			, VK_TRUE
+			, VK_COMPARE_OP_GREATER };
 	}
 
 	ashes::PipelineColorBlendStateCreateInfo WaterRenderPass::doCreateBlendState( castor3d::PipelineFlags const & flags )const

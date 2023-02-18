@@ -302,6 +302,18 @@ namespace castor
 			, QuaternionT< V > & rotation );
 		/**
 		 *\~english
+		 *\brief		Inverts depth for given projection matrix.
+		 *\param[in]	matrix	The projection matrix.
+		 *\return		The reversed depth projection matrix.
+		 *\~french
+		 *\brief		Inverse la profondeur pour la matrice de projection donnée.
+		 *\param[in]	matrix	La matrice de projection.
+		 *\return		La matrice de projection à profondeur inversée.
+		 */
+		template< typename T >
+		static Matrix4x4< T > reverseDepth( Matrix4x4< T > const & matrix );
+		/**
+		 *\~english
 		 *\brief		Builds a matrix that sets a centered perspective projection from the given parameters
 		 *\param[out]	matrix	The matrix that will receive the perspective matrix
 		 *\param[in]	fovy	Y Field of View

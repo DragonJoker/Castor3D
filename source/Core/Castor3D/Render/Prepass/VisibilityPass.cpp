@@ -117,8 +117,8 @@ namespace castor3d
 			, VK_TRUE
 			, VK_TRUE
 			, ( flags.passLayerIndex > 0
-				? VK_COMPARE_OP_LESS_OR_EQUAL
-				: VK_COMPARE_OP_LESS ) };
+				? VK_COMPARE_OP_GREATER_OR_EQUAL
+				: VK_COMPARE_OP_GREATER ) };
 	}
 
 	ashes::PipelineColorBlendStateCreateInfo VisibilityPass::doCreateBlendState( PipelineFlags const & flags )const

@@ -370,7 +370,7 @@ namespace castor3d
 		return getEnumMapT( EnumT::eMin, EnumT::eMax );
 	}
 
-	static VkClearValue const defaultClearDepthStencil{ makeClearValue( 1.0f, 0u ) };
+	static VkClearValue const defaultClearDepthStencil{ makeClearValue( 0.0f, 0u ) };
 	static VkClearValue const opaqueBlackClearColor{ makeClearValue( 0.0f, 0.0f, 0.0f, 1.0f ) };
 	static VkClearValue const transparentBlackClearColor{ makeClearValue( 0.0f, 0.0f, 0.0f, 0.0f ) };
 	static VkClearValue const opaqueWhiteClearColor{ makeClearValue( 1.0f, 1.0f, 1.0f, 1.0f ) };

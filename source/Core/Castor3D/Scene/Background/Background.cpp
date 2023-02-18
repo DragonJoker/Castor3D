@@ -82,8 +82,8 @@ namespace castor3d
 						.vertexBuffer( doCreateVertexBuffer( device ) )
 						.indexBuffer( doCreateIndexBuffer( device ) )
 						.depthStencilState( ( depth.empty()
-							? ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_FALSE, VK_FALSE, VK_COMPARE_OP_LESS_OR_EQUAL }
-							: ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_TRUE, VK_FALSE, VK_COMPARE_OP_LESS_OR_EQUAL } ) )
+							? ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_FALSE, VK_FALSE, VK_COMPARE_OP_GREATER_OR_EQUAL }
+							: ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_TRUE, VK_FALSE, VK_COMPARE_OP_GREATER_OR_EQUAL } ) )
 						.getIndexType( crg::GetIndexTypeCallback( [](){ return VK_INDEX_TYPE_UINT16; } ) )
 						.getPrimitiveCount( crg::GetPrimitiveCountCallback( [](){ return 36u; } ) )
 						.isEnabled( IsEnabledCallback( [this](){ return doIsEnabled(); } ) )

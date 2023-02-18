@@ -217,12 +217,10 @@ namespace castor3d
 
 	ashes::PipelineDepthStencilStateCreateInfo VoxelizePass::doCreateDepthStencilState( PipelineFlags const & flags )const
 	{
-		return ashes::PipelineDepthStencilStateCreateInfo
-		{
-			0u,
-			VK_FALSE,
-			VK_FALSE,
-		};
+		return ashes::PipelineDepthStencilStateCreateInfo{ 0u
+			, VK_FALSE
+			, VK_FALSE
+			, VK_COMPARE_OP_GREATER };
 	}
 
 	ashes::PipelineColorBlendStateCreateInfo VoxelizePass::doCreateBlendState( PipelineFlags const & flags )const

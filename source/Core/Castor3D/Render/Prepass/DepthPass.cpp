@@ -98,7 +98,7 @@ namespace castor3d
 	{
 		return ( getTechnique().hasVisibility()
 			? ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_TRUE, VK_FALSE, VK_COMPARE_OP_EQUAL }
-			: ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_TRUE, VK_TRUE } );
+			: ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_TRUE, VK_TRUE, VK_COMPARE_OP_GREATER } );
 	}
 
 	ashes::PipelineColorBlendStateCreateInfo DepthPass::doCreateBlendState( PipelineFlags const & flags )const
