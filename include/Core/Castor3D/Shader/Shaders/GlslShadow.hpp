@@ -101,35 +101,21 @@ namespace castor3d
 				, sdw::Vec3 const & lightDirection
 				, sdw::Float const & minOffset
 				, sdw::Float const & maxSlopeOffset );
-			sdw::RetFloat filterPCF( sdw::Vec4 const & lightSpacePosition
-				, sdw::CombinedImage2DShadowR32 const & shadowMap
-				, sdw::Vec2 const & invTexDim
-				, sdw::Float const & bias
-				, sdw::UInt const & sampleCount
-				, sdw::UInt const & filterSize );
-			sdw::RetFloat filterPCF( sdw::Vec4 const & lightSpacePosition
+			sdw::RetFloat filterPCF( sdw::Vec3 const & lightSpacePosition
 				, sdw::CombinedImage2DArrayShadowR32 const & shadowMap
 				, sdw::Vec2 const & invTexDim
-				, sdw::UInt const & cascadeIndex
-				, sdw::Float const & bias
+				, sdw::UInt const & arrayIndex
+				, sdw::Float const & depthBias
 				, sdw::UInt const & sampleCount
-				, sdw::UInt const & filterSize );
-			sdw::RetFloat filterPCF( sdw::Vec4 const & lightSpacePosition
-				, sdw::CombinedImage2DArrayShadowR32 const & shadowMap
-				, sdw::Vec2 const & invTexDim
-				, sdw::Int const & index
-				, sdw::Float const & depth
-				, sdw::Float const & bias
-				, sdw::UInt const & sampleCount
-				, sdw::UInt const & filterSize );
+				, sdw::Float const & filterSize );
 			sdw::RetFloat filterPCF( sdw::Vec3 const & lightToVertex
 				, sdw::CombinedImageCubeArrayShadowR32 const & shadowMap
 				, sdw::Vec2 const & invTexDim
-				, sdw::Int const & index
+				, sdw::UInt const & cubeIndex
 				, sdw::Float const & depth
-				, sdw::Float const & bias
+				, sdw::Float const & depthBias
 				, sdw::UInt const & sampleCount
-				, sdw::UInt const & filterSize );
+				, sdw::Float const & filterSize );
 			sdw::RetFloat chebyshevUpperBound( sdw::Vec2 const & moments
 				, sdw::Float const & depth
 				, sdw::Float const & minVariance
@@ -145,44 +131,28 @@ namespace castor3d
 				, sdw::InVec3
 				, sdw::InFloat
 				, sdw::InFloat > m_getShadowOffset;
-			sdw::Function< sdw::Float
-				, sdw::InVec4
-				, sdw::InCombinedImage2DArrayShadowR32
-				, sdw::InVec2
-				, sdw::InInt
-				, sdw::InFloat
-				, sdw::InFloat
-				, sdw::InUInt
-				, sdw::InUInt > m_filterPCF;
 			sdw::Function < sdw::Float
 				, sdw::InVec2
 				, sdw::InFloat
 				, sdw::InFloat
 				, sdw::InFloat > m_chebyshevUpperBound;
 			sdw::Function< sdw::Float
-				, sdw::InVec4
-				, sdw::InCombinedImage2DShadowR32
-				, sdw::InVec2
-				, sdw::InFloat
-				, sdw::InUInt
-				, sdw::InUInt > m_filterPCFNoCascade;
-			sdw::Function< sdw::Float
-				, sdw::InVec4
+				, sdw::InVec3
 				, sdw::InCombinedImage2DArrayShadowR32
 				, sdw::InVec2
 				, sdw::InUInt
 				, sdw::InFloat
 				, sdw::InUInt
-				, sdw::InUInt > m_filterPCFCascade;
+				, sdw::InFloat > m_filterPCFArray;
 			sdw::Function< sdw::Float
 				, sdw::InVec3
 				, sdw::InCombinedImageCubeArrayShadowR32
 				, sdw::InVec2
-				, sdw::InInt
+				, sdw::InUInt
 				, sdw::InFloat
 				, sdw::InFloat
 				, sdw::InUInt
-				, sdw::InUInt > m_filterPCFCube;
+				, sdw::InFloat > m_filterPCFCube;
 			sdw::Function< sdw::Vec4
 				, sdw::InMat4
 				, sdw::InVec3 > m_getLightSpacePosition;

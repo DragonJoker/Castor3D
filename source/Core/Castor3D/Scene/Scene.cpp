@@ -871,7 +871,7 @@ namespace castor3d
 
 	void Scene::setDirectionalShadowCascades( uint32_t value )
 	{
-		CU_Require( value <= DirectionalMaxCascadesCount );
+		CU_Require( value <= MaxDirectionalCascadesCount );
 		m_directionalShadowCascades = value;
 	}
 

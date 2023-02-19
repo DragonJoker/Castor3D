@@ -63,12 +63,12 @@ namespace castor3d
 	{
 		uint32_t getSpotShadowMapCount()
 		{
-			return SpotShadowMapCount;
+			return MaxSpotShadowMapCount;
 		}
 
 		uint32_t getPointShadowMapCount()
 		{
-			return PointShadowMapCount;
+			return MaxPointShadowMapCount;
 		}
 
 		castor::String concatModelNames( castor::String lhs

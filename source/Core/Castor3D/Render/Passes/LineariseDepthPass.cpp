@@ -211,10 +211,10 @@ namespace castor3d
 		auto z_n = viewport.getNear();
 		auto clipInfo = ( std::isinf( z_f )
 			? castor::Point3f{ z_n, -1.0f, 1.0f }
-			: castor::Point3f{ z_n * z_f, z_n - z_f, z_f } );
+			: castor::Point3f{ z_n * z_f, z_f - z_n, z_n } );
 		// result = clipInfo[0] / ( clipInfo[1] * depth + clipInfo[2] );
-		// depth = 0 => result = z_n
-		// depth = 1 => result = z_f
+		// depth = 0 => result = z_f
+		// depth = 1 => result = z_n
 		m_clipInfoValue = clipInfo;
 
 		if ( m_clipInfoValue.isDirty() )

@@ -64,6 +64,27 @@ namespace castor3d
 			auto lock( castor::makeUniqueLock( cache ) );
 			std::map< double, LightRPtr > lights;
 
+			if ( cache.getLightsCount( LightType::eDirectional ) <= 1u
+				&& cache.getLightsCount( LightType::ePoint ) <= MaxPointShadowMapCount
+				&& cache.getLightsCount( LightType::eSpot ) <= MaxSpotShadowMapCount )
+			{
+				double index{};
+
+				for ( auto & light : cache.getLights( type ) )
+				{
+					light->setShadowMap( nullptr );
+
+					if ( light->isShadowProducer() )
+					{
+						lights.emplace( index, light );
+					}
+
+					++index;
+				}
+
+				return lights;
+			}
+
 			for ( auto & light : cache.getLights( type ) )
 			{
 				light->setShadowMap( nullptr );
@@ -111,7 +132,7 @@ namespace castor3d
 					updater.index = index;
 					shadowMap.update( updater );
 
-					switch ( lightIt->second->getGlobalIlluminationType() )
+					switch ( updater.light->getGlobalIlluminationType() )
 					{
 					case GlobalIlluminationType::eLpv:
 						if ( lightPropagationVolumes[size_t( type )] )

@@ -640,7 +640,7 @@ namespace atmosphere_scattering
 			pass.addDependency( m_multiScatteringPass->getLastPass() );
 			pass.addDependency( m_weatherPass->getLastPass() );
 			pass.addImplicitDepthStencilView( depth
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+				, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL );
 			pass.addOutputColourView( colour
 				, castor3d::transparentBlackClearColor );
 			pass.addInOutDepthStencilView( depth );

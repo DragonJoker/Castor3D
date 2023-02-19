@@ -36,7 +36,7 @@ namespace castor3d::shader
 			, sdw::type::MemoryLayout::eC
 			, sdw::IntField< "shadowMapIndex" >
 			, sdw::UIntField< "shadowType" >
-			, sdw::UIntField< "pcfFilterSize" >
+			, sdw::FloatField< "pcfFilterSize" >
 			, sdw::UIntField< "pcfSampleCount" >
 			, sdw::Vec2Field< "rawShadowOffsets" >
 			, sdw::Vec2Field< "pcfShadowOffsets" >
@@ -94,9 +94,9 @@ namespace castor3d::shader
 			, sdw::StructFieldT< Light, "base" >
 			, sdw::Vec3Field< "direction" >
 			, sdw::FloatField< "cascadeCount" >
-			, sdw::FloatArrayField< "splitDepths", ashes::getAlignedSize( DirectionalMaxCascadesCount, 4u ) >
-			, sdw::FloatArrayField< "splitScales", ashes::getAlignedSize( DirectionalMaxCascadesCount, 4u ) >
-			, sdw::Mat4ArrayField< "transforms", DirectionalMaxCascadesCount > >
+			, sdw::FloatArrayField< "splitDepths", ashes::getAlignedSize( MaxDirectionalCascadesCount, 4u ) >
+			, sdw::FloatArrayField< "splitScales", ashes::getAlignedSize( MaxDirectionalCascadesCount, 4u ) >
+			, sdw::Mat4ArrayField< "transforms", MaxDirectionalCascadesCount > >
 	{
 		DirectionalLight( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr

@@ -12,6 +12,9 @@ See LICENSE file in root folder
 #include <CastorUtils/Math/RangedValue.hpp>
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Woverloaded-virtual"
+
 namespace castor3d
 {
 	class PassVisitorBase
@@ -496,8 +499,6 @@ namespace castor3d
 		Config const config;
 	};
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Woverloaded-virtual"
 	class PassVisitor
 		: public PassVisitorBase
 	{
@@ -885,7 +886,8 @@ namespace castor3d
 	public:
 		using PassVisitorBase::visit;
 	};
-#pragma GCC diagnostic pop
 }
+
+#pragma GCC diagnostic pop
 
 #endif

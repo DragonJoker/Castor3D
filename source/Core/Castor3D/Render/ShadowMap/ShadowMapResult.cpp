@@ -52,12 +52,11 @@ namespace castor3d
 
 	VkClearValue getClearValue( SmTexture texture )
 	{
-		static float constexpr component = std::numeric_limits< float >::max();
 		static std::array< VkClearValue, size_t( SmTexture::eCount ) > Values
 		{
 			{
 				defaultClearDepthStencil,		// Depth
-				makeClearValue( component ),	// Linear
+				transparentBlackClearColor,		// Linear
 				opaqueWhiteClearColor,			// Variance
 				transparentBlackClearColor,		// Normal
 				transparentBlackClearColor,		// Position
@@ -105,7 +104,7 @@ namespace castor3d
 		{
 			{
 				VK_COMPARE_OP_NEVER,			// Depth
-				VK_COMPARE_OP_LESS_OR_EQUAL,	// Linear
+				VK_COMPARE_OP_GREATER_OR_EQUAL,	// Linear
 				VK_COMPARE_OP_NEVER,			// Variance
 				VK_COMPARE_OP_NEVER,			// Normal
 				VK_COMPARE_OP_NEVER,			// Position

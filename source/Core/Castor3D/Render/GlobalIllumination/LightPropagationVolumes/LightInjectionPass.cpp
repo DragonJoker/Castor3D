@@ -136,125 +136,65 @@ namespace castor3d
 			using namespace sdw;
 			VertexWriter writer;
 
-			if constexpr ( DirectionalMaxCascadesCount > 1u )
-			{
-				auto c3d_rsmNormalMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( LightType::eDirectional, SmTexture::eNormal )
-					, LightInjectionPass::RsmNormalsIdx
-					, 0u );
-				auto c3d_rsmPositionMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( LightType::eDirectional, SmTexture::ePosition )
-					, LightInjectionPass::RsmPositionIdx
-					, 0u );
-				auto c3d_rsmFluxMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( LightType::eDirectional, SmTexture::eFlux )
-					, LightInjectionPass::RsmFluxIdx
-					, 0u );
-				C3D_LpvGridConfig( writer, LightInjectionPass::LpvGridUboIdx, 0u, true );
-				C3D_LpvLightConfig( writer, LightInjectionPass::LpvLightUboIdx, 0u );
+			auto c3d_rsmNormalMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( LightType::eDirectional, SmTexture::eNormal )
+				, LightInjectionPass::RsmNormalsIdx
+				, 0u );
+			auto c3d_rsmPositionMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( LightType::eDirectional, SmTexture::ePosition )
+				, LightInjectionPass::RsmPositionIdx
+				, 0u );
+			auto c3d_rsmFluxMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( LightType::eDirectional, SmTexture::eFlux )
+				, LightInjectionPass::RsmFluxIdx
+				, 0u );
+			C3D_LpvGridConfig( writer, LightInjectionPass::LpvGridUboIdx, 0u, true );
+			C3D_LpvLightConfig( writer, LightInjectionPass::LpvLightUboIdx, 0u );
 
-				// Utility functions
-				shader::Utils utils{ writer };
-				shader::BRDFHelpers brdf{ writer };
-				shader::PassShaders passShaders{ renderSystem.getEngine()->getPassComponentsRegister()
-					, TextureCombine{}
-					, ComponentModeFlag::eDiffuseLighting
-					, utils };
-				shader::Materials materials{ writer, passShaders };
-				uint32_t index = 0;
-				shader::Lights lights{ *renderSystem.getEngine()
-					, materials
-					, brdf
-					, utils
-					, shader::ShadowOptions{ SceneFlag::eNone, false, true }
-					, nullptr /* sssProfiles */
-					, LightType::eDirectional
-					, LightInjectionPass::LightsIdx /* lightBinding */
-					, 0u /* lightSet */
-					, index /* shadowMapBinding */
-					, 1u /* shadowMapSet */ };
+			// Utility functions
+			shader::Utils utils{ writer };
+			shader::BRDFHelpers brdf{ writer };
+			shader::PassShaders passShaders{ renderSystem.getEngine()->getPassComponentsRegister()
+				, TextureCombine{}
+				, ComponentModeFlag::eDiffuseLighting
+				, utils };
+			shader::Materials materials{ writer, passShaders };
+			uint32_t index = 0;
+			shader::Lights lights{ *renderSystem.getEngine()
+				, materials
+				, brdf
+				, utils
+				, shader::ShadowOptions{ SceneFlag::eNone, false, true }
+				, nullptr /* sssProfiles */
+				, LightType::eDirectional
+				, LightInjectionPass::LightsIdx /* lightBinding */
+				, 0u /* lightSet */
+				, index /* shadowMapBinding */
+				, 1u /* shadowMapSet */ };
 
-				writer.implementMainT< VoidT, lpvlgt::SurfaceT >( [&]( VertexIn in
-					, VertexOutT< lpvlgt::SurfaceT > out )
-					{
-						auto light = writer.declLocale( "light"
-							, lights.getDirectionalLight( writer.cast< UInt >( c3d_lpvLightData.lightOffset() ) ) );
-						auto cascadeIndex = writer.declLocale( "cascadeIndex"
-							, writer.cast< Int >( max( 1_u, light.cascadeCount() ) - 1_u ) );
-						auto rsmCoords = writer.declLocale( "rsmCoords"
-							, ivec3( in.vertexIndex % int32_t( rsmTexSize )
-								, in.vertexIndex / int32_t( rsmTexSize )
-								, cascadeIndex ) );
+			writer.implementMainT< VoidT, lpvlgt::SurfaceT >( [&]( VertexIn in
+				, VertexOutT< lpvlgt::SurfaceT > out )
+				{
+					auto light = writer.declLocale( "light"
+						, lights.getDirectionalLight( writer.cast< UInt >( c3d_lpvLightData.lightOffset() ) ) );
+					auto cascadeIndex = writer.declLocale( "cascadeIndex"
+						, writer.cast< Int >( max( 1_u, light.cascadeCount() ) - 1_u ) );
+					auto rsmCoords = writer.declLocale( "rsmCoords"
+						, ivec3( in.vertexIndex % int32_t( rsmTexSize )
+							, in.vertexIndex / int32_t( rsmTexSize )
+							, cascadeIndex ) );
 
-						auto rsmPosition = writer.declLocale( "rsmPosition"
-							, c3d_rsmPositionMap.fetch( rsmCoords, 0_i ).rgb() );
-						out.rsmNormal = c3d_rsmNormalMap.fetch( rsmCoords, 0_i ).rgb();
-						out.rsmFlux = c3d_rsmFluxMap.fetch( rsmCoords, 0_i ).rgb();
-						auto volumeCellIndex = writer.declLocale( "volumeCellIndex"
-							, c3d_lpvGridData.worldToGrid( rsmPosition, out.rsmNormal ) );
-						out.layer = volumeCellIndex.z();
+					auto rsmPosition = writer.declLocale( "rsmPosition"
+						, c3d_rsmPositionMap.fetch( rsmCoords, 0_i ).rgb() );
+					out.rsmNormal = c3d_rsmNormalMap.fetch( rsmCoords, 0_i ).rgb();
+					out.rsmFlux = c3d_rsmFluxMap.fetch( rsmCoords, 0_i ).rgb();
+					auto volumeCellIndex = writer.declLocale( "volumeCellIndex"
+						, c3d_lpvGridData.worldToGrid( rsmPosition, out.rsmNormal ) );
+					out.layer = volumeCellIndex.z();
 
-						auto screenPos = writer.declLocale( "screenPos"
-							, c3d_lpvGridData.gridToScreen( volumeCellIndex.xy() ) );
+					auto screenPos = writer.declLocale( "screenPos"
+						, c3d_lpvGridData.gridToScreen( volumeCellIndex.xy() ) );
 
-						out.vtx.position = vec4( screenPos, 0.0, 1.0 );
-						out.vtx.pointSize = 1.0f;
-					} );
-			}
-			else
-			{
-				auto c3d_rsmNormalMap = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( LightType::eDirectional, SmTexture::eNormal )
-					, LightInjectionPass::RsmNormalsIdx
-					, 0u );
-				auto c3d_rsmPositionMap = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( LightType::eDirectional, SmTexture::ePosition )
-					, LightInjectionPass::RsmPositionIdx
-					, 0u );
-				auto c3d_rsmFluxMap = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( LightType::eDirectional, SmTexture::eFlux )
-					, LightInjectionPass::RsmFluxIdx
-					, 0u );
-				C3D_LpvGridConfig( writer, LightInjectionPass::LpvGridUboIdx, 0u, true );
-				C3D_LpvLightConfig( writer, LightInjectionPass::LpvLightUboIdx, 0u );
-
-				// Utility functions
-				shader::Utils utils{ writer };
-				shader::BRDFHelpers brdf{ writer };
-				shader::PassShaders passShaders{ renderSystem.getEngine()->getPassComponentsRegister()
-					, TextureCombine{}
-					, ComponentModeFlag::eDiffuseLighting
-					, utils };
-				shader::Materials materials{ writer, passShaders };
-				uint32_t index = 0;
-				shader::Lights lights{ *renderSystem.getEngine()
-					, materials
-					, brdf
-					, utils
-					, shader::ShadowOptions{ SceneFlag::eNone, false, true }
-					, nullptr /* sssProfiles */
-					, LightType::eDirectional
-					, LightInjectionPass::LightsIdx /* lightBinding */
-					, 0u /* lightSet */
-					, index /* shadowMapBinding */
-					, 1u /* shadowMapSet */ };
-
-				writer.implementMainT< VoidT, lpvlgt::SurfaceT >( [&]( VertexIn in
-					, VertexOutT< lpvlgt::SurfaceT > out )
-					{
-						auto rsmCoords = writer.declLocale( "rsmCoords"
-							, ivec2( in.vertexIndex % int32_t( rsmTexSize )
-								, in.vertexIndex / int32_t( rsmTexSize ) ) );
-
-						auto rsmPosition = writer.declLocale( "rsmPosition"
-							, c3d_rsmPositionMap.fetch( rsmCoords, 0_i ).rgb() );
-						out.rsmNormal = c3d_rsmNormalMap.fetch( rsmCoords, 0_i ).rgb();
-						out.rsmFlux = c3d_rsmFluxMap.fetch( rsmCoords, 0_i ).rgb();
-						auto volumeCellIndex = writer.declLocale( "volumeCellIndex"
-							, c3d_lpvGridData.worldToGrid( rsmPosition, out.rsmNormal ) );
-						out.layer = volumeCellIndex.z();
-
-						auto screenPos = writer.declLocale( "screenPos"
-							, c3d_lpvGridData.gridToScreen( volumeCellIndex.xy() ) );
-
-						out.vtx.position = vec4( screenPos, 0.0, 1.0 );
-						out.vtx.pointSize = 1.0f;
-					} );
-			}
+					out.vtx.position = vec4( screenPos, 0.0, 1.0 );
+					out.vtx.pointSize = 1.0f;
+				} );
 
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}

@@ -63,7 +63,7 @@ namespace castor3d
 		case LightType::eDirectional:
 			CU_Require( faceIndex == 0u );
 			configuration.lightView = lpvlubo::snapMatrix( lpvCellSize
-				, light.getDirectionalLight()->getViewMatrix( DirectionalMaxCascadesCount - 1u ) );
+				, light.getDirectionalLight()->getViewMatrix( MaxDirectionalCascadesCount - 1u ) );
 			configuration.tanFovXHalf = 1.0f;
 			configuration.tanFovYHalf = 1.0f;
 			break;

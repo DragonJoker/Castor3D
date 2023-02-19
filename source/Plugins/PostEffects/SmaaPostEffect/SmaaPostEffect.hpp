@@ -87,6 +87,7 @@ namespace smaa
 		crg::FramePass const * m_pass{};
 
 		uint32_t m_subsamplePassIndex{};
+		int32_t m_presetIndex{};
 	};
 }
 

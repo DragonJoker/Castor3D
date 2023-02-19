@@ -94,7 +94,7 @@ namespace castor3d
 
 	ashes::PipelineDepthStencilStateCreateInfo ShadowMapPassSpot::doCreateDepthStencilState( PipelineFlags const & flags )const
 	{
-		return ashes::PipelineDepthStencilStateCreateInfo{ 0u, true, true };
+		return ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_TRUE, VK_TRUE, VK_COMPARE_OP_GREATER };
 	}
 
 	ashes::PipelineColorBlendStateCreateInfo ShadowMapPassSpot::doCreateBlendState( PipelineFlags const & flags )const
@@ -215,8 +215,14 @@ namespace castor3d
 				}
 
 				auto worldPos = writer.getVariable< sdw::Vec4 >( "worldPos" );
-				out.worldPosition = worldPos;
-				out.vtx.position = c3d_cameraData.worldToCurProj( worldPos );
+
+				if ( flags.writeShadowRSM() )
+				{
+					out.worldPosition = worldPos;
+				}
+
+				out.viewPosition = c3d_cameraData.worldToCurProj( worldPos );
+				out.vtx.position = out.viewPosition;
 			} );
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
@@ -236,6 +242,9 @@ namespace castor3d
 			, getComponentsMask()
 			, utils };
 
+		C3D_Camera( writer
+			, GlobalBuffersIdx::eCamera
+			, RenderPipeline::eBuffers );
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
 			, RenderPipeline::eBuffers );
@@ -319,8 +328,11 @@ namespace castor3d
 					, in.passMultipliers
 					, components );
 
+				auto csPosition = writer.declLocale( "csPosition"
+					, in.viewPosition );
+				csPosition.xyz() /= csPosition.w();
 				auto depth = writer.declLocale( "depth"
-					, c3d_shadowMapData.getNormalisedDepth( in.worldPosition.xyz() ) );
+					, csPosition.z() );
 				outLinear = depth;
 
 				if ( needsVsm )
