@@ -29,6 +29,11 @@ namespace castor3d
 			bool allowProgramsVisit;
 		};
 
+		template< typename EnumT >
+		using OnEnumValueChangeT = std::function< void( EnumT oldV, EnumT newV ) >;
+		using OnSEnumValueChange = OnEnumValueChangeT< int32_t >;
+		using OnUEnumValueChange = OnEnumValueChangeT< uint32_t >;
+
 	protected:
 		explicit PipelineVisitorBase( Config config )
 			: config{ std::move( config ) }
@@ -129,11 +134,13 @@ namespace castor3d
 		C3D_API virtual void visit( castor::String const & name
 			, int32_t & enumValue
 			, castor::StringArray const & enumNames
-			, bool * control ) = 0;
+			, OnSEnumValueChange onChange = []( int32_t, int32_t ) {}
+			, bool * control = nullptr ) = 0;
 		C3D_API virtual void visit( castor::String const & name
 			, uint32_t & enumValue
 			, castor::StringArray const & enumNames
-			, bool * control ) = 0;
+			, OnUEnumValueChange onChange = []( uint32_t, uint32_t ) {}
+			, bool * control = nullptr ) = 0;
 		C3D_API virtual void visit( castor::String const & name
 			, float & value
 			, bool * control = nullptr ) = 0;
@@ -454,6 +461,7 @@ namespace castor3d
 		void visit( castor::String const & name
 			, int32_t & enumValue
 			, castor::StringArray const & enumNames
+			, OnSEnumValueChange onChange
 			, bool * control )override
 		{
 		}
@@ -461,6 +469,7 @@ namespace castor3d
 		void visit( castor::String const & name
 			, uint32_t & enumValue
 			, castor::StringArray const & enumNames
+			, OnUEnumValueChange onChange
 			, bool * control )override
 		{
 		}

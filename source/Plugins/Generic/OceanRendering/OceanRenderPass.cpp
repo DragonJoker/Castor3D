@@ -366,6 +366,7 @@ namespace ocean
 			visitor.visit( cuT( "Debug" )
 				, m_configuration.debug
 				, getOceanDisplayDataNames()
+				, []( uint32_t, uint32_t ) {}
 				, nullptr );
 #endif
 			visitor.visit( cuT( "Tessellation factor" )

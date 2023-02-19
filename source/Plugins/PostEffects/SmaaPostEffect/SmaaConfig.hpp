@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 namespace smaa
 {
-	enum class Mode
+	enum class Mode: int32_t
 	{
 		e1X,
 		eT2X,
@@ -16,7 +16,7 @@ namespace smaa
 		e4X
 	};
 
-	enum class Preset
+	enum class Preset : int32_t
 	{
 		eLow,
 		eMedium,
@@ -25,7 +25,7 @@ namespace smaa
 		eCustom
 	};
 
-	enum class EdgeDetectionType
+	enum class EdgeDetectionType : int32_t
 	{
 		eDepth,
 		eColour,
@@ -46,34 +46,18 @@ namespace smaa
 			if ( value == cuT( "low" ) )
 			{
 				data.preset = Preset::eLow;
-				data.threshold = 0.15f;
-				data.maxSearchSteps = 4;
-				data.maxSearchStepsDiag = 0;
-				data.cornerRounding = 100;
 			}
 			else if ( value == cuT( "medium" ) )
 			{
 				data.preset = Preset::eMedium;
-				data.threshold = 0.1f;
-				data.maxSearchSteps = 8;
-				data.maxSearchStepsDiag = 0;
-				data.cornerRounding = 100;
 			}
 			else if ( value == cuT( "high" ) )
 			{
 				data.preset = Preset::eHigh;
-				data.threshold = 0.1f;
-				data.maxSearchSteps = 16;
-				data.maxSearchStepsDiag = 8;
-				data.cornerRounding = 25;
 			}
 			else if ( value == cuT( "ultra" ) )
 			{
 				data.preset = Preset::eUltra;
-				data.threshold = 0.05f;
-				data.maxSearchSteps = 32;
-				data.maxSearchStepsDiag = 16;
-				data.cornerRounding = 25;
 			}
 			else if ( value == cuT( "custom" ) )
 			{
@@ -83,6 +67,8 @@ namespace smaa
 				parameters.get( cuT( "maxSearchStepsDiag" ), data.maxSearchStepsDiag );
 				parameters.get( cuT( "cornerRounding" ), data.cornerRounding );
 			}
+
+			updatePreset();
 
 			if ( parameters.get( cuT( "mode" ), value ) )
 			{
@@ -179,6 +165,39 @@ namespace smaa
 			case Mode::e4X:
 				jitters.emplace_back( 0.125, -0.125 );
 				jitters.emplace_back( -0.125, 0.125 );
+				break;
+			}
+		}
+
+		void updatePreset()
+		{
+			switch ( data.preset )
+			{
+			case Preset::eLow:
+				data.threshold = 0.15f;
+				data.maxSearchSteps = 4;
+				data.maxSearchStepsDiag = 0;
+				data.cornerRounding = 100;
+				break;
+			case Preset::eMedium:
+				data.threshold = 0.1f;
+				data.maxSearchSteps = 8;
+				data.maxSearchStepsDiag = 0;
+				data.cornerRounding = 100;
+				break;
+			case Preset::eHigh:
+				data.threshold = 0.1f;
+				data.maxSearchSteps = 16;
+				data.maxSearchStepsDiag = 8;
+				data.cornerRounding = 25;
+				break;
+			case Preset::eUltra:
+				data.threshold = 0.05f;
+				data.maxSearchSteps = 32;
+				data.maxSearchStepsDiag = 16;
+				data.cornerRounding = 25;
+				break;
+			case Preset::eCustom:
 				break;
 			}
 		}

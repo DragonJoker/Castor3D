@@ -86,17 +86,19 @@ namespace GuiCommon
 			void visit( castor::String const & name
 				, int32_t & enumValue
 				, castor::StringArray const & enumNames
+				, OnSEnumValueChange onChange
 				, bool * control )override
 			{
-				m_prop.addPropertyET( m_grid, name, make_wxArrayString( enumNames ), &enumValue, control );
+				m_prop.addPropertyET( m_grid, name, make_wxArrayString( enumNames ), &enumValue, control, onChange );
 			}
 
 			void visit( castor::String const & name
 				, uint32_t & enumValue
 				, castor::StringArray const & enumNames
+				, OnUEnumValueChange onChange
 				, bool * control )override
 			{
-				m_prop.addPropertyET( m_grid, name, make_wxArrayString( enumNames ), &enumValue, control );
+				m_prop.addPropertyET( m_grid, name, make_wxArrayString( enumNames ), &enumValue, control, onChange );
 			}
 
 			void visit( castor::String const & name
