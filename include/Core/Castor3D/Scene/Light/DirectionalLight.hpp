@@ -36,12 +36,12 @@ namespace castor3d
 		struct LightData
 			: LightCategory::LightData
 		{
-			using CascasdeFloatArray = std::array< Float1, ashes::getAlignedSize( DirectionalMaxCascadesCount, 4u ) >;
+			using CascasdeFloatArray = std::array< Float1, ashes::getAlignedSize( MaxDirectionalCascadesCount, 4u ) >;
 			Float3 direction;
 			Float1 cascadeCount;
 			CascasdeFloatArray splitDepths;
 			CascasdeFloatArray splitScales;
-			std::array< Float4x4, DirectionalMaxCascadesCount > transforms;
+			std::array< Float4x4, MaxDirectionalCascadesCount > transforms;
 		};
 		static constexpr uint32_t LightDataSize = uint32_t( ashes::getAlignedSize( sizeof( LightData ), 4u ) );
 		static constexpr uint32_t LightDataComponents = LightDataSize / ( 4u * sizeof( float ) );

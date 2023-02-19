@@ -280,7 +280,7 @@ namespace smaa
 				, 0u
 				, VK_IMAGE_VIEW_TYPE_2D
 				, pred.data->info.format
-				, { VK_IMAGE_ASPECT_DEPTH_BIT, 0u, 1u, 0u, 1u } };
+				, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } };
 		}
 	}
 

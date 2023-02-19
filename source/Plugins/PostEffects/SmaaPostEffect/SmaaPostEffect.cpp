@@ -236,11 +236,13 @@ namespace smaa
 			m_reproject->accept( visitor );
 		}
 
+		m_presetIndex = int32_t( m_config.data.preset );
 		visitor.visit( cuT( "Preset" )
-			, *reinterpret_cast< int32_t * >( &m_config.data.preset )
+			, m_presetIndex
 			, castor::StringArray{ "Low", "Medium", "High", "Ultra", "Custom" }
 			, [this]( int32_t oldV, int32_t newV )
 			{
+				m_config.data.preset = Preset( m_presetIndex );
 				m_config.updatePreset();
 			} );
 

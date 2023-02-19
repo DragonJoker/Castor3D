@@ -91,11 +91,19 @@ namespace castor3d
 	//@}
 	/**
 	*\name
+	*	PCF Filtering.
+	*/
+	//@{
+	static uint32_t constexpr MaxPcfFilterSize = 64u;
+	static uint32_t constexpr MaxPcfSampleCount = 64u;
+	//@}
+	/**
+	*\name
 	*	Directional Light Shadows.
 	*/
 	//@{
-	static uint32_t constexpr ShadowMapDirectionalTextureSize = 1024u;
-	static uint32_t constexpr DirectionalMaxCascadesCount = 6u;
+	static uint32_t constexpr ShadowMapDirectionalTextureSize = 2048u;
+	static uint32_t constexpr MaxDirectionalCascadesCount = 6u;
 	//@}
 	/**
 	*\name
@@ -103,7 +111,7 @@ namespace castor3d
 	*/
 	//@{
 	static uint32_t constexpr ShadowMapPointTextureSize = 256u;
-	static uint32_t constexpr PointShadowMapCount = 6u;
+	static uint32_t constexpr MaxPointShadowMapCount = 8u;
 	//@}
 	/**
 	*\name
@@ -111,7 +119,7 @@ namespace castor3d
 	*/
 	//@{
 	static uint32_t constexpr ShadowMapSpotTextureSize = 256u;
-	static uint32_t constexpr SpotShadowMapCount = 10u;
+	static uint32_t constexpr MaxSpotShadowMapCount = 16u;
 	//@}
 	/**
 	*\name

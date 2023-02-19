@@ -69,9 +69,8 @@ namespace castor3d
 		, m_hdrConfigUbo{ m_device }
 		, m_sceneUbo{ m_device }
 		, m_colourView{ environmentMap.getColourViewId( m_index, m_face ) }
-		, m_opaquePassDesc{ &doCreateOpaquePass( nullptr ) }
 		, m_backgroundRenderer{ castor::makeUnique< BackgroundRenderer >( m_graph
-			, m_opaquePassDesc
+			, nullptr
 			, m_device
 			, nullptr
 			, getName()
@@ -79,10 +78,11 @@ namespace castor3d
 			, m_hdrConfigUbo
 			, m_sceneUbo
 			, m_colourView
-			, false
+			, true
 			, getOwner()->getDepthViewId( m_index, m_face )
 			, nullptr ) }
-		, m_transparentPassDesc{ &doCreateTransparentPass( &m_backgroundRenderer->getPass() ) }
+		, m_opaquePassDesc{ &doCreateOpaquePass( &m_backgroundRenderer->getPass() ) }
+		, m_transparentPassDesc{ &doCreateTransparentPass( m_opaquePassDesc ) }
 	{
 		doCreateGenMipmapsPass( m_transparentPassDesc );
 		m_cameraUbo.cpuUpdate( m_camera->getView()
@@ -178,10 +178,6 @@ namespace castor3d
 					, crg::ImageViewIdArray{ depthView }
 					, RenderNodesPassDesc{ getOwner()->getSize(), m_cameraUbo, m_sceneUbo, *m_culler }
 						.meshShading( true )
-						.implicitAction( depthView
-							, crg::RecordContext::clearAttachment( depthView, defaultClearDepthStencil ) )
-						.implicitAction( m_colourView
-							, crg::RecordContext::clearAttachment( m_colourView, transparentBlackClearColor ) )
 					, RenderTechniquePassDesc{ true, SsaoConfig{} } );
 				m_node->getScene()->getEngine()->registerTimer( framePass.getFullName()
 					, res->getTimer() );
@@ -194,10 +190,8 @@ namespace castor3d
 			result.addDependency( *previousPass );
 		}
 
-		result.addOutputDepthView( depthView
-			, defaultClearDepthStencil );
-		result.addOutputColourView( m_colourView
-			, transparentBlackClearColor );
+		result.addInOutDepthView( depthView );
+		result.addInOutColourView( m_colourView );
 		return result;
 	}
 

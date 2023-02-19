@@ -96,7 +96,7 @@ namespace castor3d
 		C3D_API castor::Point2f const & getShadowPcfOffsets()const;
 		C3D_API float getVsmMinVariance()const;
 		C3D_API float getVsmLightBleedingReduction()const;
-		C3D_API uint32_t getShadowPcfFilterSize()const;
+		C3D_API castor::RangedValue< uint32_t > getShadowPcfFilterSize()const;
 		C3D_API castor::RangedValue< uint32_t > getShadowPcfSampleCount()const;
 		C3D_API ShadowConfig const & getShadowConfig()const;
 		C3D_API RsmConfig const & getRsmConfig()const;

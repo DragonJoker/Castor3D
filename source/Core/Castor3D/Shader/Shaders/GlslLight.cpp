@@ -87,7 +87,7 @@ namespace castor3d::shader
 					result.direction() = normalize( lightData.xyz() );
 					result.getMember< "cascadeCount" >() = lightData.w();
 
-					for ( uint32_t i = 0u; i < ashes::getAlignedSize( DirectionalMaxCascadesCount, 4u ); i += 4 )
+					for ( uint32_t i = 0u; i < ashes::getAlignedSize( MaxDirectionalCascadesCount, 4u ); i += 4 )
 					{
 						lightData = getData( offset ).data(); ++offset;
 						result.splitDepths()[i + 0] = lightData[0];
@@ -96,7 +96,7 @@ namespace castor3d::shader
 						result.splitDepths()[i + 3] = lightData[3];
 					}
 
-					for ( uint32_t i = 0u; i < ashes::getAlignedSize( DirectionalMaxCascadesCount, 4u ); i += 4 )
+					for ( uint32_t i = 0u; i < ashes::getAlignedSize( MaxDirectionalCascadesCount, 4u ); i += 4 )
 					{
 						lightData = getData( offset ).data(); ++offset;
 						result.splitScales()[i + 0] = lightData[0];
@@ -110,7 +110,7 @@ namespace castor3d::shader
 					auto col2 = m_writer.declLocale< sdw::Vec4 >( "col2" );
 					auto col3 = m_writer.declLocale< sdw::Vec4 >( "col3" );
 
-					for ( uint32_t i = 0u; i < DirectionalMaxCascadesCount; ++i )
+					for ( uint32_t i = 0u; i < MaxDirectionalCascadesCount; ++i )
 					{
 						col0 = getData( offset ).data(); ++offset;
 						col1 = getData( offset ).data(); ++offset;
@@ -203,7 +203,7 @@ namespace castor3d::shader
 		lightData = getData( offset ).data(); ++offset;
 		shadows.shadowMapIndex() = m_writer.cast< sdw::Int >( lightData.x() );
 		shadows.shadowType() = m_writer.cast< sdw::UInt >( lightData.y() );
-		shadows.pcfFilterSize() = m_writer.cast< sdw::UInt >( lightData.z() );
+		shadows.pcfFilterSize() = lightData.z();
 		shadows.pcfSampleCount() = m_writer.cast< sdw::UInt >( lightData.w() );
 
 		lightData = getData( offset ).data(); ++offset;
@@ -592,35 +592,42 @@ namespace castor3d::shader
 					, sdw::FloatArray splitDepths
 					, sdw::UInt index )
 				{
-					auto splitDiff = m_writer.declLocale( "splitDiff"
-						, ( splitDepths[index + 1u] - splitDepths[index] ) / 16.0f );
-					auto splitMax = m_writer.declLocale( "splitMax"
-						, splitDepths[index] - splitDiff );
-					splitDiff *= 2.0f;
-					auto splitMin = m_writer.declLocale( "splitMin"
-						, splitMax + splitDiff );
-
-					IF( m_writer, viewVertex.z() < splitMin )
+					IF( m_writer, viewVertex.z() > splitDepths[index] )
 					{
-						m_writer.returnStmt( vec3( m_writer.cast< sdw::Float >( index ) + 1.0_f
+						m_writer.returnStmt( vec3( m_writer.cast< sdw::Float >( index )
 							, 1.0_f
 							, 0.0_f ) );
 					}
 					FI;
-					IF( m_writer, viewVertex.z() >= splitMin && viewVertex.z() < splitMax )
-					{
-						auto factor = m_writer.declLocale( "factor"
-							, ( viewVertex.z() - splitMax ) / splitDiff );
-						m_writer.returnStmt( vec3( m_writer.cast< sdw::Float >( index ) + 1.0_f
-							, factor
-							, 1.0_f - factor ) );
-					}
-					FI;
+					//auto splitDiff = m_writer.declLocale( "splitDiff"
+					//	, ( splitDepths[index + 1u] - splitDepths[index] ) / 16.0f );
+					//auto splitMax = m_writer.declLocale( "splitMax"
+					//	, splitDepths[index] - splitDiff );
+					//splitDiff *= 2.0f;
+					//auto splitMin = m_writer.declLocale( "splitMin"
+					//	, splitMax + splitDiff );
+
+					//IF( m_writer, viewVertex.z() < splitMin )
+					//{
+					//	m_writer.returnStmt( vec3( m_writer.cast< sdw::Float >( index ) + 1.0_f
+					//		, 1.0_f
+					//		, 0.0_f ) );
+					//}
+					//FI;
+					//IF( m_writer, viewVertex.z() >= splitMin && viewVertex.z() < splitMax )
+					//{
+					//	auto factor = m_writer.declLocale( "factor"
+					//		, ( viewVertex.z() - splitMax ) / splitDiff );
+					//	m_writer.returnStmt( vec3( m_writer.cast< sdw::Float >( index ) + 1.0_f
+					//		, factor
+					//		, 1.0_f - factor ) );
+					//}
+					//FI;
 
 					m_writer.returnStmt( vec3( 0.0_f, 1.0_f, 0.0_f ) );
 				}
 				, sdw::InVec3{ m_writer, "viewVertex" }
-				, sdw::InFloatArray{ m_writer, "splitDepths", uint32_t( ashes::getAlignedSize( DirectionalMaxCascadesCount, 4u ) ) }
+				, sdw::InFloatArray{ m_writer, "splitDepths", uint32_t( ashes::getAlignedSize( MaxDirectionalCascadesCount, 4u ) ) }
 				, sdw::InUInt{ m_writer, "index" } );
 		}
 

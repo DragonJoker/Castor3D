@@ -28,7 +28,7 @@ namespace castor3d
 		shadows.shadowType = float( getLight().isShadowProducer()
 			? getLight().getShadowType()
 			: ShadowType::eNone );
-		shadows.pcfFilterSize = float( getShadowPcfFilterSize() );
+		shadows.pcfFilterSize = float( getShadowPcfFilterSize().value() );
 		shadows.pcfSampleCount = float( getShadowPcfSampleCount().value() );
 
 		shadows.rawShadowsOffsets = getShadowRawOffsets();
@@ -62,7 +62,7 @@ namespace castor3d
 		return m_light.getShadowPcfOffsets();
 	}
 
-	uint32_t LightCategory::getShadowPcfFilterSize()const
+	castor::RangedValue< uint32_t > LightCategory::getShadowPcfFilterSize()const
 	{
 		return m_light.getShadowPcfFilterSize();
 	}

@@ -120,43 +120,25 @@ namespace castor3d
 			if ( m_shadowOptions.type )
 			{
 				m_writer.declConstant( "c3d_maxCascadeCount"
-					, sdw::UInt( DirectionalMaxCascadesCount ) );
+					, sdw::UInt( MaxDirectionalCascadesCount ) );
 				m_writer.declConstantArray( "c3d_volumetricDither"
 					, std::vector< sdw::Vec4 >{ vec4( 0.0_f, 0.5_f, 0.125_f, 0.625_f )
 						, vec4( 0.75_f, 0.22_f, 0.875_f, 0.375_f )
 						, vec4( 0.1875_f, 0.6875_f, 0.0625_f, 0.5625_f )
 						, vec4( 0.9375_f, 0.4375_f, 0.8125_f, 0.3125_f ) } );
 
-				if constexpr ( DirectionalMaxCascadesCount > 1u )
-				{
-					m_writer.declCombinedImg< FImg2DArrayR32 >( MapDepthDirectional
-						, ( directionalEnabled ? index++ : index )
-						, set
-						, directionalEnabled );
-					m_writer.declCombinedImg< FImg2DArrayShadowR32 >( MapDepthCmpDirectional
-						, ( directionalEnabled ? index++ : index )
-						, set
-						, directionalEnabled );
-					m_writer.declCombinedImg< FImg2DArrayRg32 >( MapVarianceDirectional
-						, ( directionalEnabled ? index++ : index )
-						, set
-						, directionalEnabled );
-				}
-				else
-				{
-					m_writer.declCombinedImg< FImg2DR32 >( MapDepthDirectional
-						, ( directionalEnabled ? index++ : index )
-						, set
-						, directionalEnabled );
-					m_writer.declCombinedImg< FImg2DShadowR32 >( MapDepthCmpDirectional
-						, ( directionalEnabled ? index++ : index )
-						, set
-						, directionalEnabled );
-					m_writer.declCombinedImg< FImg2DRg32 >( MapVarianceDirectional
-						, ( directionalEnabled ? index++ : index )
-						, set
-						, directionalEnabled );
-				}
+				m_writer.declCombinedImg< FImg2DArrayR32 >( MapDepthDirectional
+					, ( directionalEnabled ? index++ : index )
+					, set
+					, directionalEnabled );
+				m_writer.declCombinedImg< FImg2DArrayShadowR32 >( MapDepthCmpDirectional
+					, ( directionalEnabled ? index++ : index )
+					, set
+					, directionalEnabled );
+				m_writer.declCombinedImg< FImg2DArrayRg32 >( MapVarianceDirectional
+					, ( directionalEnabled ? index++ : index )
+					, set
+					, directionalEnabled );
 
 				m_writer.declCombinedImg< FImgCubeArrayR32 >( MapDepthPoint
 					, ( pointEnabled ? index++ : index )
@@ -183,6 +165,7 @@ namespace castor3d
 					, ( spotEnabled ? index++ : index )
 					, set
 					, spotEnabled );
+
 				auto randomSsbo = m_writer.declStorageBuffer( RandomBuffer
 					, index++
 					, set );
@@ -197,37 +180,22 @@ namespace castor3d
 			if ( checkFlag( m_shadowOptions.type, SceneFlag::eShadowDirectional ) )
 			{
 				m_writer.declConstant( "c3d_maxCascadeCount"
-					, sdw::UInt( DirectionalMaxCascadesCount ) );
+					, sdw::UInt( MaxDirectionalCascadesCount ) );
 				m_writer.declConstantArray( "c3d_volumetricDither"
 					, std::vector< sdw::Vec4 >{ vec4( 0.0_f, 0.5_f, 0.125_f, 0.625_f )
 						, vec4( 0.75_f, 0.22_f, 0.875_f, 0.375_f )
 						, vec4( 0.1875_f, 0.6875_f, 0.0625_f, 0.5625_f )
 						, vec4( 0.9375_f, 0.4375_f, 0.8125_f, 0.3125_f ) } );
 
-				if constexpr ( DirectionalMaxCascadesCount > 1u )
-				{
-					m_writer.declCombinedImg< FImg2DArrayR32 >( MapDepthDirectional
-						, index++
-						, set );
-					m_writer.declCombinedImg< FImg2DArrayShadowR32 >( MapDepthCmpDirectional
-						, index++
-						, set );
-					m_writer.declCombinedImg< FImg2DArrayRg32 >( MapVarianceDirectional
-						, index++
-						, set );
-				}
-				else
-				{
-					m_writer.declCombinedImg< FImg2DR32 >( MapDepthDirectional
-						, index++
-						, set );
-					m_writer.declCombinedImg< FImg2DShadowR32 >( MapDepthCmpDirectional
-						, index++
-						, set );
-					m_writer.declCombinedImg< FImg2DRg32 >( MapVarianceDirectional
-						, index++
-						, set );
-				}
+				m_writer.declCombinedImg< FImg2DArrayR32 >( MapDepthDirectional
+					, index++
+					, set );
+				m_writer.declCombinedImg< FImg2DArrayShadowR32 >( MapDepthCmpDirectional
+					, index++
+					, set );
+				m_writer.declCombinedImg< FImg2DArrayRg32 >( MapVarianceDirectional
+					, index++
+					, set );
 
 				auto randomSsbo = m_writer.declStorageBuffer( RandomBuffer
 					, index++
@@ -251,6 +219,7 @@ namespace castor3d
 				m_writer.declCombinedImg< FImgCubeArrayRg32 >( MapVariancePoint
 					, index++
 					, set );
+
 				auto randomSsbo = m_writer.declStorageBuffer( RandomBuffer
 					, index++
 					, set );
@@ -273,6 +242,7 @@ namespace castor3d
 				m_writer.declCombinedImg< FImg2DArrayRg32 >( MapVarianceSpot
 					, index++
 					, set );
+
 				auto randomSsbo = m_writer.declStorageBuffer( RandomBuffer
 					, index++
 					, set );
@@ -306,109 +276,52 @@ namespace castor3d
 								, 1.0_f );
 							auto lightToVertex = m_writer.declLocale( "lightToVertex"
 								, -normalize( wsVertexToLight ) );
+							auto lightSpacePosition = m_writer.declLocale( "lightSpacePosition"
+								, getLightSpacePosition( lightMatrix, wsPosition ) );
 
-							if constexpr ( DirectionalMaxCascadesCount > 1u )
+							IF( m_writer, shadows.shadowType() == sdw::UInt( int( ShadowType::eVariance ) ) )
 							{
-								auto lightSpacePosition = m_writer.declLocale( "lightSpacePosition"
-									, getLightSpacePosition( lightMatrix, wsPosition ) );
-
-								IF( m_writer, shadows.shadowType() == sdw::UInt( int( ShadowType::eVariance ) ) )
-								{
-									auto c3d_mapVarianceDirectional = m_writer.getVariable< sdw::CombinedImage2DArrayRg32 >( Shadow::MapVarianceDirectional );
-									auto moments = m_writer.declLocale( "moments"
-										, c3d_mapVarianceDirectional
-											.lod( vec3( lightSpacePosition.xy()
-												, m_writer.cast< sdw::Float >( cascadeIndex ) )
-											, 0.0_f ) );
-									result = chebyshevUpperBound( moments
-										, lightSpacePosition.z()
-										, shadows.vsmMinVariance()
-										, shadows.vsmLightBleedingReduction() );
-								}
-								ELSE
-								{
-									IF( m_writer, shadows.shadowType() == sdw::UInt( int( ShadowType::ePCF ) ) )
-									{
-										auto c3d_mapNormalDepthCmpDirectional = m_writer.getVariable< sdw::CombinedImage2DArrayShadowR32 >( Shadow::MapDepthCmpDirectional );
-										auto bias = m_writer.declLocale( "bias"
-											, getShadowOffset( wsNormal
-												, lightToVertex
-												, shadows.pcfShadowOffsets().x()
-												, shadows.pcfShadowOffsets().y() ) );
-										result = filterPCF( lightSpacePosition
-											, c3d_mapNormalDepthCmpDirectional
-											, vec2( sdw::Float( 1.0f / float( ShadowMapDirectionalTextureSize ) ) )
-											, cascadeIndex
-											, bias
-											, shadows.pcfSampleCount()
-											, shadows.pcfFilterSize() );
-									}
-									ELSE
-									{
-									auto c3d_mapNormalDepthDirectional = m_writer.getVariable< sdw::CombinedImage2DArrayR32 >( Shadow::MapDepthDirectional );
-										auto bias = m_writer.declLocale( "bias"
-											, getShadowOffset( wsNormal
-												, lightToVertex
-												, shadows.rawShadowOffsets().x()
-												, shadows.rawShadowOffsets().y() ) );
-										auto shadowMapDepth = m_writer.declLocale( "shadowMapDepth"
-											, c3d_mapNormalDepthDirectional.sample( vec3( lightSpacePosition.xy()
-												, m_writer.cast< sdw::Float >( cascadeIndex ) ) ) );
-										result = step( lightSpacePosition.z() - bias, shadowMapDepth );
-									}
-									FI;
-								}
-								FI;
+								auto c3d_mapVarianceDirectional = m_writer.getVariable< sdw::CombinedImage2DArrayRg32 >( Shadow::MapVarianceDirectional );
+								auto moments = m_writer.declLocale( "moments"
+									, c3d_mapVarianceDirectional
+										.lod( vec3( lightSpacePosition.xy()
+											, m_writer.cast< sdw::Float >( cascadeIndex ) )
+										, 0.0_f ) );
+								result = chebyshevUpperBound( moments
+									, lightSpacePosition.z()
+									, shadows.vsmMinVariance()
+									, shadows.vsmLightBleedingReduction() );
 							}
-							else
+							ELSEIF( shadows.shadowType() == sdw::UInt( int( ShadowType::ePCF ) ) )
 							{
-								auto lightSpacePosition = m_writer.declLocale( "lightSpacePosition"
-									, getLightSpacePosition( lightMatrix, wsPosition ) );
-
-								IF( m_writer, shadows.shadowType() == sdw::UInt( int( ShadowType::eVariance ) ) )
-								{
-									auto c3d_mapVarianceDirectional = m_writer.getVariable< sdw::CombinedImage2DRg32 >( Shadow::MapVarianceDirectional );
-									auto moments = m_writer.declLocale( "moments"
-										, c3d_mapVarianceDirectional
-											.lod( lightSpacePosition.xy(), 0.0_f ) );
-									result = chebyshevUpperBound( moments
-										, lightSpacePosition.z()
-										, shadows.vsmMinVariance()
-										, shadows.vsmLightBleedingReduction() );
-								}
-								ELSE
-								{
-									IF( m_writer, shadows.shadowType() == sdw::UInt( int( ShadowType::ePCF ) ) )
-									{
-										auto c3d_mapNormalDepthCmpDirectional = m_writer.getVariable< sdw::CombinedImage2DShadowR32 >( Shadow::MapDepthCmpDirectional );
-										auto bias = m_writer.declLocale( "bias"
-											, getShadowOffset( wsNormal
-												, lightToVertex
-												, shadows.pcfShadowOffsets().x()
-												, shadows.pcfShadowOffsets().y() ) );
-										result = filterPCF( lightSpacePosition
-											, c3d_mapNormalDepthCmpDirectional
-											, vec2( sdw::Float( 1.0f / float( ShadowMapDirectionalTextureSize ) ) )
-											, bias
-											, shadows.pcfSampleCount()
-											, shadows.pcfFilterSize() );
-									}
-									ELSE
-									{
-									auto c3d_mapNormalDepthDirectional = m_writer.getVariable< sdw::CombinedImage2DR32 >( Shadow::MapDepthDirectional );
-										auto bias = m_writer.declLocale( "bias"
-											, getShadowOffset( wsNormal
-												, lightToVertex
-												, shadows.rawShadowOffsets().x()
-												, shadows.rawShadowOffsets().y() ) );
-										auto shadowMapDepth = m_writer.declLocale( "shadowMapDepth"
-											, c3d_mapNormalDepthDirectional.sample( lightSpacePosition.xy() ) );
-										result += step( lightSpacePosition.z() - bias, shadowMapDepth );
-									}
-									FI;
-								}
-								FI;
+								auto c3d_mapNormalDepthCmpDirectional = m_writer.getVariable< sdw::CombinedImage2DArrayShadowR32 >( Shadow::MapDepthCmpDirectional );
+								auto depthBias = m_writer.declLocale( "depthBias"
+									, getShadowOffset( wsNormal
+										, lightToVertex
+										, -shadows.pcfShadowOffsets().x()
+										, -shadows.pcfShadowOffsets().y() ) );
+								result = filterPCF( lightSpacePosition.xyz()
+									, c3d_mapNormalDepthCmpDirectional
+									, vec2( sdw::Float( 1.0f / float( ShadowMapDirectionalTextureSize ) ) )
+									, cascadeIndex
+									, depthBias
+									, shadows.pcfSampleCount()
+									, shadows.pcfFilterSize() );
 							}
+							ELSE
+							{
+								auto c3d_mapNormalDepthDirectional = m_writer.getVariable< sdw::CombinedImage2DArrayR32 >( Shadow::MapDepthDirectional );
+								auto depthBias = m_writer.declLocale( "depthBias"
+									, getShadowOffset( wsNormal
+										, lightToVertex
+										, -shadows.rawShadowOffsets().x()
+										, -shadows.rawShadowOffsets().y() ) );
+								auto shadowMapDepth = m_writer.declLocale( "shadowMapDepth"
+									, c3d_mapNormalDepthDirectional.sample( vec3( lightSpacePosition.xy()
+										, m_writer.cast< sdw::Float >( cascadeIndex ) ) ) );
+								result = step( 1.0_f - ( lightSpacePosition.z() - depthBias ), 1.0_f - shadowMapDepth );
+							}
+							FI;
 
 							m_writer.returnStmt( result );
 						}
@@ -482,10 +395,10 @@ namespace castor3d
 								auto moments = m_writer.declLocale( "moments"
 									, c3d_mapVarianceSpot
 										.lod( vec3( lightSpacePosition.xy()
-											, shadows.getMember< "shadowMapIndex" >() )
+											, shadows.shadowMapIndex() )
 										, 0.0_f ) );
 								result = chebyshevUpperBound( moments
-									, depth
+									, lightSpacePosition.z()
 									, shadows.vsmMinVariance()
 									, shadows.vsmLightBleedingReduction() );
 							}
@@ -494,32 +407,31 @@ namespace castor3d
 								IF( m_writer, shadows.shadowType() == sdw::UInt( int( ShadowType::ePCF ) ) )
 								{
 									auto c3d_mapNormalDepthCmpSpot = m_writer.getVariable< sdw::CombinedImage2DArrayShadowR32 >( Shadow::MapDepthCmpSpot );
-									auto bias = m_writer.declLocale( "bias"
+									auto depthBias = m_writer.declLocale( "depthBias"
 										, getShadowOffset( wsNormal
 											, lightDirection
-											, shadows.pcfShadowOffsets().x()
-											, shadows.pcfShadowOffsets().y() ) );
-									result = filterPCF( lightSpacePosition
+											, -shadows.pcfShadowOffsets().x()
+											, -shadows.pcfShadowOffsets().y() ) );
+									result = filterPCF( lightSpacePosition.xyz()
 										, c3d_mapNormalDepthCmpSpot
 										, vec2( sdw::Float( 1.0f / float( ShadowMapSpotTextureSize ) ) )
-										, shadows.shadowMapIndex()
-										, depth
-										, bias
+										, m_writer.cast< sdw::UInt >( shadows.shadowMapIndex() )
+										, depthBias
 										, shadows.pcfSampleCount()
 										, shadows.pcfFilterSize() );
 								}
 								ELSE
 								{
 									auto c3d_mapNormalDepthSpot = m_writer.getVariable< sdw::CombinedImage2DArrayR32 >( Shadow::MapDepthSpot );
-									auto bias = m_writer.declLocale( "bias"
+									auto depthBias = m_writer.declLocale( "depthBias"
 										, getShadowOffset( wsNormal
 											, lightDirection
-											, shadows.rawShadowOffsets().x()
-											, shadows.rawShadowOffsets().y() ) );
+											, -shadows.rawShadowOffsets().x()
+											, -shadows.rawShadowOffsets().y() ) );
 									auto shadowMapDepth = m_writer.declLocale( "shadowMapDepth"
 										, c3d_mapNormalDepthSpot.sample( vec3( lightSpacePosition.xy()
-											, shadows.getMember< "shadowMapIndex" >() ) ) );
-									result = step( depth - bias, shadowMapDepth );
+											, shadows.shadowMapIndex() ) ) );
+									result = step( 1.0_f - ( lightSpacePosition.z() - depthBias ), 1.0_f - shadowMapDepth );
 								}
 								FI;
 							}
@@ -588,32 +500,32 @@ namespace castor3d
 								IF( m_writer, shadows.shadowType() == sdw::UInt( int( ShadowType::ePCF ) ) )
 								{
 									auto c3d_mapNormalDepthCmpPoint = m_writer.getVariable< sdw::CombinedImageCubeArrayShadowR32 >( Shadow::MapDepthCmpPoint );
-									auto bias = m_writer.declLocale( "bias"
+									auto depthBias = m_writer.declLocale( "depthBias"
 										, getShadowOffset( wsNormal
 											, lightDirection
-											, shadows.pcfShadowOffsets().x()
-											, shadows.pcfShadowOffsets().y() ) );
+											, -shadows.pcfShadowOffsets().x()
+											, -shadows.pcfShadowOffsets().y() ) );
 									result = filterPCF( lightToVertex
 										, c3d_mapNormalDepthCmpPoint
 										, vec2( sdw::Float( 1.0f / float( ShadowMapPointTextureSize ) ) )
-										, shadows.shadowMapIndex()
+										, m_writer.cast< sdw::UInt >( shadows.shadowMapIndex() )
 										, depth
-										, bias
+										, depthBias
 										, shadows.pcfSampleCount()
 										, shadows.pcfFilterSize() );
 								}
 								ELSE
 								{
 									auto c3d_mapNormalDepthPoint = m_writer.getVariable< sdw::CombinedImageCubeArrayR32 >( Shadow::MapDepthPoint );
-									auto bias = m_writer.declLocale( "bias"
+									auto depthBias = m_writer.declLocale( "depthBias"
 										, getShadowOffset( wsNormal
 											, lightDirection
-											, shadows.rawShadowOffsets().x()
-											, shadows.rawShadowOffsets().y() ) );
+											, -shadows.rawShadowOffsets().x()
+											, -shadows.rawShadowOffsets().y() ) );
 									auto shadowMapDepth = m_writer.declLocale( "shadowMapDepth"
 										, c3d_mapNormalDepthPoint.sample( vec4( lightToVertex
-											, shadows.getMember< "shadowMapIndex" >() ) ) );
-									result = step( depth - bias, shadowMapDepth );
+											, shadows.shadowMapIndex() ) ) );
+									result = step( 1.0_f - ( depth - depthBias ), 1.0_f - shadowMapDepth );
 								}
 								FI;
 							}
@@ -863,29 +775,27 @@ namespace castor3d
 				, pmaxSlopeOffset );
 		}
 
-		sdw::RetFloat Shadow::filterPCF( sdw::Vec4 const & plightSpacePosition
+		sdw::RetFloat Shadow::filterPCF( sdw::Vec3 const & plightSpacePosition
 			, sdw::CombinedImage2DArrayShadowR32 const & pshadowMap
 			, sdw::Vec2 const & pinvTexDim
-			, sdw::Int const & pindex
-			, sdw::Float const & pdepth
-			, sdw::Float const & pbias
+			, sdw::UInt const & parrayIndex
+			, sdw::Float const & pdepthBias
 			, sdw::UInt const & psampleCount
-			, sdw::UInt const & pfilterSize )
+			, sdw::Float const & pfilterSize )
 		{
-			if ( !m_filterPCF )
+			if ( !m_filterPCFArray )
 			{
-				m_filterPCF = m_writer.implementFunction< sdw::Float >( "c3d_shdFilterPCF"
-					, [this]( sdw::Vec4 const & lightSpacePosition
+				m_filterPCFArray = m_writer.implementFunction< sdw::Float >( "c3d_shdFilterPCFArray"
+					, [this]( sdw::Vec3 const & lightSpacePosition
 						, sdw::CombinedImage2DArrayShadowR32 const & shadowMap
 						, sdw::Vec2 const & invTexDim
-						, sdw::Int const & index
-						, sdw::Float const & depth
-						, sdw::Float const & bias
+						, sdw::UInt const & arrayIndex
+						, sdw::Float const & depthBias
 						, sdw::UInt const & sampleCount
-						, sdw::UInt const & filterSize )
+						, sdw::Float const & filterSize )
 					{
 						auto sampleScale = m_writer.declLocale( "sampleScale"
-							, m_writer.cast< sdw::Float >( filterSize ) * invTexDim );
+							, filterSize * invTexDim );
 						auto shadowFactor = m_writer.declLocale( "shadowFactor"
 							, 0.0_f );
 
@@ -893,10 +803,9 @@ namespace castor3d
 						auto screenPos = m_writer.declLocale( "screenPos"
 							, uvec2( lightSpacePosition.xy() * invTexDim ) );
 						auto randomSamplePos = m_writer.declLocale( "randomSamplePos"
-							, uvec2( ( screenPos.x() + screenPos.y() ) % RandomDataCount
-								, ( screenPos.x() + screenPos.y() ) % 4u ) );
+							, screenPos.x() % RandomDataCount );
 						auto theta = m_writer.declLocale( "theta"
-							, ( *m_randomData )[randomSamplePos.x()][randomSamplePos.y()] * sdw::Float{ castor::Tau< float > } );
+							, ( *m_randomData )[randomSamplePos][screenPos.y() % 4_u] * sdw::Float{ castor::Pi< float > } );
 						auto randomRotationMatrix = m_writer.declLocale( "randomRotationMatrix"
 							, mat2x2( vec2( cos( theta ), -sin( theta ) )
 								, vec2( sin( theta ), cos( theta ) ) ) );
@@ -906,156 +815,27 @@ namespace castor3d
 							auto sampleOffset = m_writer.declLocale( "sampleOffset"
 								, ( randomRotationMatrix * m_poissonSamples[i] ) * sampleScale );
 							shadowFactor += shadowMap.sample( vec3( lightSpacePosition.xy() + sampleOffset
-									, m_writer.cast< sdw::Float >( index ) )
-								, depth - bias );
+									, m_writer.cast< sdw::Float >( arrayIndex ) )
+								, lightSpacePosition.z() - depthBias );
 						}
 						ROF;
 
 						m_writer.returnStmt( shadowFactor / m_writer.cast< sdw::Float >( sampleCount ) );
 					}
-					, sdw::InVec4{ m_writer, "lightSpacePosition" }
+					, sdw::InVec3{ m_writer, "lightSpacePosition" }
 					, sdw::InCombinedImage2DArrayShadowR32{ m_writer, "shadowMap" }
 					, sdw::InVec2{ m_writer, "invTexDim" }
-					, sdw::InInt{ m_writer, "index" }
-					, sdw::InFloat{ m_writer, "depth" }
-					, sdw::InFloat{ m_writer, "bias" }
+					, sdw::InUInt{ m_writer, "arrayIndex" }
+					, sdw::InFloat{ m_writer, "depthBias" }
 					, sdw::InUInt{ m_writer, "sampleCount" }
-					, sdw::InUInt{ m_writer, "filterSize" } );
+					, sdw::InFloat{ m_writer, "filterSize" } );
 			}
 
-			return m_filterPCF( plightSpacePosition
+			return m_filterPCFArray( plightSpacePosition
 				, pshadowMap
 				, pinvTexDim
-				, pindex
-				, pdepth
-				, pbias
-				, psampleCount
-				, pfilterSize );
-		}
-
-		sdw::RetFloat Shadow::filterPCF( sdw::Vec4 const & plightSpacePosition
-			, sdw::CombinedImage2DShadowR32 const & pshadowMap
-			, sdw::Vec2 const & pinvTexDim
-			, sdw::Float const & pbias
-			, sdw::UInt const & psampleCount
-			, sdw::UInt const & pfilterSize )
-		{
-			if ( !m_filterPCFNoCascade )
-			{
-				m_filterPCFNoCascade = m_writer.implementFunction< sdw::Float >( "c3d_shdFilterPCFNoCascade"
-					, [this]( sdw::Vec4 const & lightSpacePosition
-						, sdw::CombinedImage2DShadowR32 const & shadowMap
-						, sdw::Vec2 const & invTexDim
-						, sdw::Float const & bias
-						, sdw::UInt const & sampleCount
-						, sdw::UInt const & filterSize )
-					{
-						auto sampleScale = m_writer.declLocale( "sampleScale"
-							, m_writer.cast< sdw::Float >( filterSize ) * invTexDim );
-						auto shadowFactor = m_writer.declLocale( "shadowFactor"
-							, 0.0_f );
-
-						// Get a value to randomly rotate the kernel by
-						auto screenPos = m_writer.declLocale( "screenPos"
-							, uvec2( lightSpacePosition.xy() * invTexDim ) );
-						auto randomSamplePos = m_writer.declLocale( "randomSamplePos"
-							, uvec2( ( screenPos.x() + screenPos.y() ) % RandomDataCount
-								, ( screenPos.x() + screenPos.y() ) % 4u ) );
-						auto theta = m_writer.declLocale( "theta"
-							, ( *m_randomData )[randomSamplePos.x()][randomSamplePos.y()] * sdw::Float{ castor::Tau< float > } );
-						auto randomRotationMatrix = m_writer.declLocale( "randomRotationMatrix"
-							, mat2x2( vec2( cos( theta ), -sin( theta ) )
-								, vec2( sin( theta ), cos( theta ) ) ) );
-
-						FOR( m_writer, sdw::UInt, i, 0_u, i < sampleCount, ++i )
-						{
-							auto sampleOffset = m_writer.declLocale( "sampleOffset"
-								, ( randomRotationMatrix * m_poissonSamples[i] ) * sampleScale );
-							shadowFactor += shadowMap.sample( lightSpacePosition.xy() + sampleOffset
-								, lightSpacePosition.z() - bias );
-						}
-						ROF;
-
-						m_writer.returnStmt( shadowFactor / m_writer.cast< sdw::Float >( sampleCount ) );
-					}
-					, sdw::InVec4{ m_writer, "lightSpacePosition" }
-					, sdw::InCombinedImage2DShadowR32{ m_writer, "shadowMap" }
-					, sdw::InVec2{ m_writer, "invTexDim" }
-					, sdw::InFloat{ m_writer, "bias" }
-					, sdw::InUInt{ m_writer, "sampleCount" }
-					, sdw::InUInt{ m_writer, "filterSize" } );
-			}
-
-			return m_filterPCFNoCascade( plightSpacePosition
-				, pshadowMap
-				, pinvTexDim
-				, pbias
-				, psampleCount
-				, pfilterSize );
-		}
-
-		sdw::RetFloat Shadow::filterPCF( sdw::Vec4 const & plightSpacePosition
-			, sdw::CombinedImage2DArrayShadowR32 const & pshadowMap
-			, sdw::Vec2 const & pinvTexDim
-			, sdw::UInt const & pcascadeIndex
-			, sdw::Float const & pbias
-			, sdw::UInt const & psampleCount
-			, sdw::UInt const & pfilterSize )
-		{
-			if ( !m_filterPCFCascade )
-			{
-				m_filterPCFCascade = m_writer.implementFunction< sdw::Float >( "c3d_shdFilterPCFCascade"
-					, [this]( sdw::Vec4 const & lightSpacePosition
-						, sdw::CombinedImage2DArrayShadowR32 const & shadowMap
-						, sdw::Vec2 const & invTexDim
-						, sdw::UInt const & cascadeIndex
-						, sdw::Float const & bias
-						, sdw::UInt const & sampleCount
-						, sdw::UInt const & filterSize )
-					{
-						auto sampleScale = m_writer.declLocale( "sampleScale"
-							, m_writer.cast< sdw::Float >( filterSize ) * invTexDim );
-						auto shadowFactor = m_writer.declLocale( "shadowFactor"
-							, 0.0_f );
-
-						// Get a value to randomly rotate the kernel by
-						auto screenPos = m_writer.declLocale( "screenPos"
-							, uvec2( lightSpacePosition.xy() * invTexDim ) );
-						auto randomSamplePos = m_writer.declLocale( "randomSamplePos"
-							, uvec2( ( screenPos.x() + screenPos.y() ) % RandomDataCount
-								, ( screenPos.x() + screenPos.y() ) % 4u ) );
-						auto theta = m_writer.declLocale( "theta"
-							, ( *m_randomData )[randomSamplePos.x()][randomSamplePos.y()] * sdw::Float{ castor::Tau< float > } );
-						auto randomRotationMatrix = m_writer.declLocale( "randomRotationMatrix"
-							, mat2x2( vec2( cos( theta ), -sin( theta ) )
-								, vec2( sin( theta ), cos( theta ) ) ) );
-
-						FOR( m_writer, sdw::UInt, i, 0_u, i < sampleCount, ++i )
-						{
-							auto sampleOffset = m_writer.declLocale( "sampleOffset"
-								, ( randomRotationMatrix * m_poissonSamples[i] ) * sampleScale );
-							shadowFactor += shadowMap.sample( vec3( lightSpacePosition.xy() + sampleOffset
-									, m_writer.cast< sdw::Float >( cascadeIndex ) )
-								, lightSpacePosition.z() - bias );
-						}
-						ROF;
-
-						m_writer.returnStmt( shadowFactor / m_writer.cast< sdw::Float >( sampleCount ) );
-					}
-					, sdw::InVec4{ m_writer, "lightSpacePosition" }
-					, sdw::InCombinedImage2DArrayShadowR32{ m_writer, "shadowMap" }
-					, sdw::InVec2{ m_writer, "invTexDim" }
-					, sdw::InUInt{ m_writer, "cascadeIndex" }
-					, sdw::InFloat{ m_writer, "bias" }
-					, sdw::InUInt{ m_writer, "sampleCount" }
-					, sdw::InUInt{ m_writer, "filterSize" } );
-			}
-
-			return m_filterPCFCascade( plightSpacePosition
-				, pshadowMap
-				, pinvTexDim
-				, pcascadeIndex
-				, pbias
+				, parrayIndex
+				, pdepthBias
 				, psampleCount
 				, pfilterSize );
 		}
@@ -1063,11 +843,11 @@ namespace castor3d
 		sdw::RetFloat Shadow::filterPCF( sdw::Vec3 const & plightToVertex
 			, sdw::CombinedImageCubeArrayShadowR32 const & pshadowMap
 			, sdw::Vec2 const & pinvTexDim
-			, sdw::Int const & pindex
+			, sdw::UInt const & pcubeIndex
 			, sdw::Float const & pdepth
-			, sdw::Float const & pbias
+			, sdw::Float const & pdepthBias
 			, sdw::UInt const & psampleCount
-			, sdw::UInt const & pfilterSize )
+			, sdw::Float const & pfilterSize )
 		{
 			if ( !m_filterPCFCube )
 			{
@@ -1075,17 +855,17 @@ namespace castor3d
 					, [this]( sdw::Vec3 const & lightToVertex
 						, sdw::CombinedImageCubeArrayShadowR32 const & shadowMap
 						, sdw::Vec2 const & invTexDim
-						, sdw::Int const & index
+						, sdw::UInt const & cubeIndex
 						, sdw::Float const & depth
-						, sdw::Float const & bias
+						, sdw::Float const & depthBias
 						, sdw::UInt const & sampleCount
-						, sdw::UInt const & filterSize )
+						, sdw::Float const & filterSize )
 					{
 						int count = 0;
 						int const samples = 4;
 
 						auto offset = m_writer.declLocale( "offset"
-							, 20.0_f * depth );
+							, ( filterSize * depth ) / 4.0_f );
 						auto dx = m_writer.declLocale( "dx"
 							, -offset );
 						auto dy = m_writer.declLocale( "dy"
@@ -1109,8 +889,8 @@ namespace castor3d
 								{
 									sampleOffset = vec3( dx, dy, dz );
 									shadowFactor += shadowMap.sample( vec4( lightToVertex + sampleOffset
-											, m_writer.cast< sdw::Float >( index ) )
-										, depth - bias );
+											, m_writer.cast< sdw::Float >( cubeIndex ) )
+										, depth - depthBias );
 									++count;
 									dz += inc;
 								}
@@ -1128,19 +908,19 @@ namespace castor3d
 					, sdw::InVec3{ m_writer, "lightToVertex" }
 					, sdw::InCombinedImageCubeArrayShadowR32{ m_writer, "shadowMap" }
 					, sdw::InVec2{ m_writer, "invTexDim" }
-					, sdw::InInt{ m_writer, "index" }
+					, sdw::InUInt{ m_writer, "cubeIndex" }
 					, sdw::InFloat{ m_writer, "depth" }
-					, sdw::InFloat{ m_writer, "bias" }
+					, sdw::InFloat{ m_writer, "depthBias" }
 					, sdw::InUInt{ m_writer, "sampleCount" }
-					, sdw::InUInt{ m_writer, "filterSize" } );
+					, sdw::InFloat{ m_writer, "filterSize" } );
 			}
 
 			return m_filterPCFCube( plightToVertex
 				, pshadowMap
 				, pinvTexDim
-				, pindex
+				, pcubeIndex
 				, pdepth
-				, pbias
+				, pdepthBias
 				, psampleCount
 				, pfilterSize );
 		}
@@ -1159,12 +939,12 @@ namespace castor3d
 						, sdw::Float const & lightBleedingReduction )
 					{
 						auto p = m_writer.declLocale( "p"
-							, step( moments.x(), depth ) );
+							, step( 1.0_f - moments.x(), 1.0_f - depth ) );
 						auto variance = m_writer.declLocale( "variance"
 							, moments.y() - ( moments.x() * moments.x() ) );
 						variance = sdw::max( variance, minVariance );
 						auto d = m_writer.declLocale( "d"
-							, depth - moments.x() );
+							, moments.x() - depth );
 						variance /= variance + d * d;
 						variance = clamp( ( variance - lightBleedingReduction ) / ( 1.0_f - lightBleedingReduction ), 0.0_f, 1.0_f );
 						m_writer.returnStmt( m_writer.ternary( p == 0.0_f

@@ -222,7 +222,7 @@ namespace castor3d
 			return m_shadows.vsmLightBleedingReduction;
 		}
 
-		uint32_t getShadowPcfFilterSize()const
+		castor::RangedValue< uint32_t > getShadowPcfFilterSize()const
 		{
 			return m_shadows.pcfFilterSize;
 		}

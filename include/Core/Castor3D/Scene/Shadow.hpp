@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "SceneModule.hpp"
 
+#include "Castor3D/Limits.hpp"
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LpvConfig.hpp"
 
 #include <CastorUtils/Math/RangedValue.hpp>
@@ -22,8 +23,8 @@ namespace castor3d
 		castor::Point2f pcfOffsets;
 		float vsmMinVariance{};
 		float vsmLightBleedingReduction{};
-		uint32_t pcfFilterSize{ 4u };
-		castor::RangedValue< uint32_t > pcfSampleCount{ 8u, castor::makeRange( 0u, 64u ) };
+		castor::RangedValue< uint32_t > pcfFilterSize{ 4u, castor::makeRange( 0u, MaxPcfFilterSize ) };
+		castor::RangedValue< uint32_t > pcfSampleCount{ 8u, castor::makeRange( 0u, MaxPcfSampleCount ) };
 		RsmConfig rsmConfig;
 		LpvConfig lpvConfig;
 	};

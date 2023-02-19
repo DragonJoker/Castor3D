@@ -325,8 +325,8 @@ namespace castor3d
 		viewport.resize( updater.camera->getSize() );
 		viewport.setPerspective( updater.camera->getViewport().getFovY()
 			, updater.camera->getRatio()
-			, 0.1f
-			, 2.0f );
+			, updater.camera->getNear()
+			, updater.camera->getFar() );
 		viewport.update();
 		updater.bgMtxView = updater.camera->getView();
 		updater.bgMtxProj = updater.isSafeBanded

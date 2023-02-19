@@ -88,7 +88,8 @@ namespace castor3d
 		ShaderFlags doGetShaderFlags()const override
 		{
 			return ShaderFlag::eShadowMapSpot
-				| ShaderFlag::eWorldSpace;
+				| ShaderFlag::eWorldSpace
+				| ShaderFlag::eViewSpace;
 		}
 
 	public:

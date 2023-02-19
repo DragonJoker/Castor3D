@@ -37,16 +37,17 @@ namespace castor3d
 			castor::Point3f up{ 0.0f, 1.0f, 0.0f };
 			castor::Point3f right( castor::point::getNormalised( castor::point::cross( up, lightDirection ) ) );
 			up = castor::point::getNormalised( castor::point::cross( lightDirection, right ) );
-			auto cameraVP = camera.getProjection( false ) * camera.getView();
-			auto invCameraVP = cameraVP.getInverse();
+			auto const lightViewMatrix = castor::matrix::lookAt( castor::Point3f{}, lightDirection, up );
+			auto const cameraVP = castor::matrix::reverseDepth( camera.getProjection( false ) ) * camera.getView();
+			auto const invCameraVP = cameraVP.getInverse();
 
-			auto lightViewMatrix = castor::matrix::lookAt( castor::Point3f{}, lightDirection, up );
 			auto nearClip = camera.getNear();
 			auto farClip = camera.getFar();
-
 			float clipRange = farClip - nearClip;
+
 			float minZ = nearClip;
 			float maxZ = nearClip + clipRange;
+
 			float ratio = maxZ / minZ;
 
 			// Calculate split depths based on view camera frustum
@@ -219,7 +220,7 @@ namespace castor3d
 			directional.transforms[i] = m_cascades[i].viewProjMatrix;
 		}
 
-		for ( auto i = uint32_t( m_cascades.size() ); i < DirectionalMaxCascadesCount; ++i )
+		for ( auto i = uint32_t( m_cascades.size() ); i < MaxDirectionalCascadesCount; ++i )
 		{
 			directional.transforms[i] = castor::Matrix4x4f{ 0.0f };
 		}

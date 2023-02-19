@@ -529,7 +529,7 @@ namespace castor3d::shader
 					, m_writer.cast< sdw::UInt >( clamp( light.cascadeCount(), 1_u, c3d_maxCascadeCount ) - 1_u ) );
 
 				// Get cascade index for the current fragment's view position
-				FOR( m_writer, sdw::UInt, i, 0u, i < maxCount, ++i )
+				FOR( m_writer, sdw::UInt, i, maxCount, i > 0u, --i )
 				{
 					auto factors = m_writer.declLocale( "factors"
 						, m_lights.getCascadeFactors( lightSurface.viewPosition()
@@ -551,6 +551,13 @@ namespace castor3d::shader
 
 				IF( m_writer, receivesShadows != 0_u )
 				{
+					auto filterScale = m_writer.declLocale( "filterScale"
+						, abs( light.splitScales()[0] / light.splitScales()[*m_directionalCascadeIndex] ) );
+					auto filterSize = m_writer.declLocale( "filterSize"
+						, light.shadows().pcfFilterSize() );
+					light.shadows().pcfFilterSize() = clamp( filterSize * filterScale
+						, 1.0_f
+						, sdw::Float{ float( MaxPcfFilterSize ) } );
 					auto shadowFactor = m_writer.declLocale( "shadowFactor"
 						, cascadeFactors.y()
 							* m_shadowModel.computeDirectional( light.shadows()
@@ -559,8 +566,13 @@ namespace castor3d::shader
 								, *m_directionalCascadeIndex
 								, light.cascadeCount() ) );
 
-					IF( m_writer, *m_directionalCascadeIndex > 0_u )
+					IF( m_writer, cascadeFactors.z() > 0.0_f )
 					{
+						auto filterScale = m_writer.declLocale( "filterScale"
+							, abs( light.splitScales()[0] / light.splitScales()[*m_directionalCascadeIndex - 1u] ) );
+						light.shadows().pcfFilterSize() = clamp( filterSize * filterScale
+							, 1.0_f
+							, 64.0_f );
 						shadowFactor += cascadeFactors.z()
 							* m_shadowModel.computeDirectional( light.shadows()
 								, lightSurface
@@ -625,7 +637,7 @@ namespace castor3d::shader
 				auto shadowFactor = m_writer.declLocale( "shadowFactor"
 					, m_shadowModel.computePoint( light.shadows()
 						, lightSurface
-						, length( -lightSurface.vertexToLight() ) / light.base().farPlane() ) );
+						, 1.0_f - ( length( -lightSurface.vertexToLight() ) / light.base().farPlane() ) ) );
 				output.m_diffuse *= shadowFactor;
 				output.m_specular *= shadowFactor;
 				output.m_coatingSpecular *= shadowFactor;
@@ -715,7 +727,7 @@ namespace castor3d::shader
 				auto shadowFactor = m_writer.declLocale( "shadowFactor"
 					, m_shadowModel.computePoint( light.shadows()
 						, lightSurface
-						, length( -lightSurface.vertexToLight() ) / light.base().farPlane() ) );
+						, 1.0_f - ( length( -lightSurface.vertexToLight() ) / light.base().farPlane() ) ) );
 				output *= shadowFactor;
 			}
 			FI;
