@@ -317,6 +317,7 @@ namespace water
 			visitor.visit( cuT( "Debug" )
 				, m_configuration.debug
 				, getWaterDisplayDataNames()
+				, []( uint32_t, uint32_t ) {}
 				, nullptr );
 #endif
 			visitor.visit( cuT( "Dampening factor" )

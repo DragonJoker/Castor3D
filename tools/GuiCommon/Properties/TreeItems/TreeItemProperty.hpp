@@ -16,6 +16,7 @@ See LICENSE file in root folder
 
 #include <Castor3D/Render/RenderModule.hpp>
 #include <Castor3D/Material/Pass/PassVisitor.hpp>
+#include <Castor3D/Miscellaneous/PipelineVisitor.hpp>
 
 #include <CastorUtils/Graphics/Font.hpp>
 #include <CastorUtils/Math/RangedValue.hpp>
@@ -274,7 +275,8 @@ namespace GuiCommon
 			, wxString const & name
 			, wxArrayString const & choices
 			, EnumT * value
-			, castor3d::PassVisitorBase::ControlsListT< ControlT > controls = castor3d::PassVisitorBase::ControlsListT< ControlT >{} );
+			, castor3d::PassVisitorBase::ControlsListT< ControlT > controls = castor3d::PassVisitorBase::ControlsListT< ControlT >{}
+			, castor3d::PipelineVisitor::OnEnumValueChangeT< EnumT > onChange = []( EnumT, EnumT ) {} );
 		template< typename ParentT, typename ObjectT, typename ObjectU, typename EnumT, typename ControlT = bool >
 		wxPGProperty * addPropertyT( ParentT * parent
 			, wxString const & name
@@ -544,13 +546,15 @@ namespace GuiCommon
 			, wxString const & name
 			, wxArrayString const & choices
 			, EnumT * value
-			, ControlT * control )
+			, ControlT * control
+			, castor3d::PipelineVisitor::OnEnumValueChangeT< EnumT > onChange = []( EnumT, EnumT ) {} )
 		{
 			return addPropertyET( parent
 				, name
 				, choices
 				, value
-				, castor3d::PassVisitorBase::makeControlsList( control ) );
+				, castor3d::PassVisitorBase::makeControlsList( control )
+				, onChange);
 		}
 
 		template< typename ParentT, typename ObjectT, typename ObjectU, typename EnumT, typename ControlT >

@@ -236,14 +236,14 @@ namespace smaa
 			m_reproject->accept( visitor );
 		}
 
-		visitor.visit( cuT( "Threshold" )
-			, m_config.data.threshold );
-		visitor.visit( cuT( "Max. search steps" )
-			, m_config.data.maxSearchSteps );
-		visitor.visit( cuT( "Max. diag. search steps" )
-			, m_config.data.maxSearchStepsDiag );
-		visitor.visit( cuT( "Corner rounding" )
-			, m_config.data.cornerRounding );
+		visitor.visit( cuT( "Preset" )
+			, *reinterpret_cast< int32_t * >( &m_config.data.preset )
+			, castor::StringArray{ "Low", "Medium", "High", "Ultra", "Custom" }
+			, [this]( int32_t oldV, int32_t newV )
+			{
+				m_config.updatePreset();
+			} );
+
 		visitor.visit( cuT( "Disable diagonal detection" )
 			, m_config.data.disableDiagonalDetection );
 		visitor.visit( cuT( "Disable corner detection" )

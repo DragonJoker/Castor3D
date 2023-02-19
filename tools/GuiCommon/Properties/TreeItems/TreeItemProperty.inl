@@ -600,15 +600,18 @@ namespace GuiCommon
 		, wxString const & name
 		, wxArrayString const & choices
 		, EnumT * value
-		, castor3d::PassVisitorBase::ControlsListT< ControlT > controls )
+		, castor3d::PassVisitorBase::ControlsListT< ControlT > controls
+		, castor3d::PipelineVisitor::OnEnumValueChangeT< EnumT > onChange )
 	{
 		return addPropertyE( parent
 			, name
 			, choices
 			, *value
-			, [value]( EnumT type )
+			, [value, onChange]( EnumT type )
 			{
-				*value  = type;
+				auto save = *value;
+				*value = type;
+				onChange( save, *value );
 			}
 			, std::move( controls ) );
 	}
