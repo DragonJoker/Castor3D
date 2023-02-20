@@ -69,6 +69,23 @@ namespace castor3d
 				, nearZ
 				, farZ );
 		}
+
+		static castor::Matrix4x4f getSafeBandedInfinitePerspective( RenderSystem const & renderSystem
+			, castor::Size const & size
+			, castor::Angle fovY
+			, float aspect
+			, float nearZ )
+		{
+			auto opp = size.getHeight();
+			auto adj = opp / ( fovY / 2.0f ).tand();
+			auto halfOpp = opp / 2;
+			auto bandSize = double( getSafeBandSize( size ) );
+			auto halfHeight = halfOpp + bandSize;
+			auto halfWidth = std::ceil( aspect * float( halfOpp ) ) + bandSize;
+			return renderSystem.getInfinitePerspective( fovY + ( castor::atanf( ( bandSize * 2.85f / 4.0f ) / adj ) )
+				, float( halfWidth / halfHeight )
+				, nearZ );
+		}
 	}
 
 	const std::array< castor::String, size_t( ViewportType::eCount ) > Viewport::TypeName
@@ -190,6 +207,22 @@ namespace castor3d
 		m_modified = true;
 	}
 
+	void Viewport::setInfinitePerspective( castor::Angle const & fovY
+		, float aspect
+		, float nearZ )
+	{
+		m_type = ViewportType::eInfinitePerspective;
+		m_fovY = fovY;
+		m_ratio = aspect;
+		m_left = 0;
+		m_right = 1;
+		m_bottom = 0;
+		m_top = 1;
+		m_near = nearZ;
+		m_far = std::numeric_limits< float >::infinity();
+		m_modified = true;
+	}
+
 	void Viewport::setFrustum( float left
 		, float right
 		, float bottom
@@ -257,6 +290,10 @@ namespace castor3d
 				, m_ratio
 				, m_near * scale
 				, m_far * scale );
+		case castor3d::ViewportType::eInfinitePerspective:
+			return m_engine.getRenderSystem()->getInfinitePerspective( m_fovY
+				, m_ratio
+				, m_near * scale );
 		case castor3d::ViewportType::eFrustum:
 		default:
 			return m_engine.getRenderSystem()->getFrustum( m_left
@@ -288,6 +325,12 @@ namespace castor3d
 				, m_ratio
 				, m_near * scale
 				, m_far * scale );
+		case castor3d::ViewportType::eInfinitePerspective:
+			return viewport::getSafeBandedInfinitePerspective( *m_engine.getRenderSystem()
+				, m_size
+				, m_fovY
+				, m_ratio
+				, m_near * scale );
 		case castor3d::ViewportType::eFrustum:
 		default:
 			return viewport::getSafeBandedFrustum( *m_engine.getRenderSystem()

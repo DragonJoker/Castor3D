@@ -121,6 +121,8 @@ namespace castor3d
 			return cuT( "ortho" );
 		case ViewportType::ePerspective:
 			return cuT( "perspective" );
+		case ViewportType::eInfinitePerspective:
+			return cuT( "infinite_perspective" );
 		case ViewportType::eFrustum:
 			return cuT( "frustum" );
 		default:
