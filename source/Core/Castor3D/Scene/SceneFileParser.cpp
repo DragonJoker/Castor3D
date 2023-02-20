@@ -11,6 +11,8 @@
 #include <CastorUtils/Data/ZipArchive.hpp>
 #include <CastorUtils/FileParser/ParserParameter.hpp>
 
+#define C3D_PrintParsers 0
+
 namespace castor3d
 {
 	namespace scnps
@@ -665,11 +667,11 @@ namespace castor3d
 				, { uint32_t( CSCNSection::eHdrConfig ), cuT( "hdr_config" ) }
 				, { uint32_t( CSCNSection::eShadows ), cuT( "shadows" ) }
 				, { uint32_t( CSCNSection::eMeshDefaultMaterials ), cuT( "default_materials" ) }
-				, { uint32_t( CSCNSection::eRsm ), cuT( "rsm" ) }
-				, { uint32_t( CSCNSection::eLpv ), cuT( "lpv" ) }
-				, { uint32_t( CSCNSection::eRaw ), cuT( "raw" ) }
-				, { uint32_t( CSCNSection::ePcf ), cuT( "pcf" ) }
-				, { uint32_t( CSCNSection::eVsm ), cuT( "vsm" ) }
+				, { uint32_t( CSCNSection::eRsm ), cuT( "rsm_config" ) }
+				, { uint32_t( CSCNSection::eLpv ), cuT( "lpv_config" ) }
+				, { uint32_t( CSCNSection::eRaw ), cuT( "raw_config" ) }
+				, { uint32_t( CSCNSection::ePcf ), cuT( "pcf_config" ) }
+				, { uint32_t( CSCNSection::eVsm ), cuT( "vsm_config" ) }
 				, { uint32_t( CSCNSection::eTextureAnimation ), cuT( "texture_animation" ) }
 				, { uint32_t( CSCNSection::eVoxelConeTracing ), cuT( "voxel_cone_tracing" ) }
 				, { uint32_t( CSCNSection::eTextureTransform ), cuT( "texture_transform" ) }
@@ -740,6 +742,38 @@ namespace castor3d
 		}
 
 		registerParsers( "c3d.scene", scnps::createParsers( engine ) );
+
+#if C3D_PrintParsers
+		std::set< castor::String > sections;
+		std::set< castor::String > parsers;
+
+		for ( auto & addParserIt : getAdditionalParsers() )
+		{
+			for ( auto & sectionIt : addParserIt.second.sections )
+			{
+				sections.insert( sectionIt.second );
+			}
+		}
+
+		for ( auto & addParserIt : getAdditionalParsers() )
+		{
+			for ( auto & parserIt : addParserIt.second.parsers )
+			{
+				parsers.insert( parserIt.first );
+			}
+		}
+
+		log::debug << "Registered sections" << std::endl;
+		for ( auto & section : sections )
+		{
+			log::debug << "    " << section << std::endl;
+		}
+		log::debug << std::endl << "Registered parsers" << std::endl;
+		for ( auto & parser : parsers )
+		{
+			log::debug << "    " << parser << std::endl;
+		}
+#endif
 	}
 
 	RenderWindowDesc SceneFileParser::getRenderWindow()
