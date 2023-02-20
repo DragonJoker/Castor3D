@@ -305,6 +305,7 @@ namespace castor3d
 		eUndefined,
 		eOrtho,
 		ePerspective,
+		eInfinitePerspective,
 		eFrustum,
 		CU_ScopedEnumBounds( eUndefined )
 	};

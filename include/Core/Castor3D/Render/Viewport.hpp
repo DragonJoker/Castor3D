@@ -83,6 +83,21 @@ namespace castor3d
 			, float farZ );
 		/**
 		 *\~english
+		 *\brief		Builds a centered perspective viewport with infinite far plane.
+		 *\param[in]	fovy	Y Field of View.
+		 *\param[in]	aspect	Width / Height ratio.
+		 *\param[in]	nearZ	Near clipping plane value.
+		 *\~french
+		 *\brief		Construit vioewport en perspective centrée avec plan éloigné infini.
+		 *\param[in]	fovy	Angle de vision Y.
+		 *\param[in]	aspect	Ratio Largeur / Hauteur.
+		 *\param[in]	nearZ	Position du plan proche.
+		 */
+		C3D_API void setInfinitePerspective( castor::Angle const & fovy
+			, float aspect
+			, float nearZ );
+		/**
+		 *\~english
 		 *\brief		Builds a matrix that Sets a non centered perspective projection from the given parameters.
 		 *\param[in]	left	Left clipping plane value.
 		 *\param[in]	right	Right clipping plane value.

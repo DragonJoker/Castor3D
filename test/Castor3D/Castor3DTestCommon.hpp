@@ -318,6 +318,7 @@ namespace Testing
 			{
 				{ castor3d::ViewportType::eOrtho, "Ortho" },
 				{ castor3d::ViewportType::ePerspective, "Perspective" },
+				{ castor3d::ViewportType::eInfinitePerspective, "Infinite Perspective" },
 				{ castor3d::ViewportType::eFrustum, "Frustum" },
 			};
 			return Names[value];

@@ -96,8 +96,12 @@ namespace castor3d
 			return m_projection;
 		}
 
-		return safeBanded
-			? m_viewport.getRescaledSafeBandedProjection( scale )
-			: m_viewport.getRescaledProjection( scale );
+		return scale == 1.0f
+			? ( safeBanded
+				? m_viewport.getSafeBandedProjection()
+				: m_viewport.getProjection() )
+			: ( safeBanded
+				? m_viewport.getRescaledSafeBandedProjection( scale )
+				: m_viewport.getRescaledProjection( scale ) );
 	}
 }
