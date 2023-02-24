@@ -17,6 +17,7 @@
 #include "Castor3D/Render/Ssao/SsaoConfig.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Shader/Program.hpp"
+#include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
 #include <CastorUtils/Design/ResourceCache.hpp>
 #include <CastorUtils/Graphics/RgbaColour.hpp>
@@ -78,6 +79,8 @@ namespace castor3d
 			using namespace sdw;
 			FragmentWriter writer;
 
+			shader::Utils utils{ writer };
+
 			// Shader inputs
 			UniformBuffer clipInfo{ writer, "ClipInfo", ClipInfoUboIdx, 0u, ast::type::MemoryLayout::eStd140 };
 			auto c3d_clipInfo = clipInfo.declMember< Vec3 >( "c3d_clipInfo" );
@@ -87,22 +90,13 @@ namespace castor3d
 			// Shader outputs
 			auto outColour = writer.declOutput< Float >( "outColour", 0u );
 
-			auto reconstructCSZ = writer.implementFunction< Float >( "reconstructCSZ"
-				, [&]( Float const & depth
-					, Vec3 const & clipInfo )
-				{
-					writer.returnStmt( clipInfo[0] / ( clipInfo[1] * depth + clipInfo[2] ) );
-				}
-				, InFloat{ writer, "d" }
-				, InVec3{ writer, "clipInfo" } );
-
 			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
 				, FragmentOut out )
 				{
 					auto ssPosition = writer.declLocale( "ssPosition"
 						, ivec2( in.fragCoord.xy() ) );
 
-					outColour = reconstructCSZ( c3d_mapDepthObj.fetch( ssPosition, 0_i ).r()
+					outColour = utils.reconstructCSZ( c3d_mapDepthObj.fetch( ssPosition, 0_i ).r()
 						, c3d_clipInfo );
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

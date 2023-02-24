@@ -715,15 +715,6 @@ namespace castor3d::shader
 	{
 		if ( !m_traceScreenSpace )
 		{
-			auto reconstructCSZ = m_writer.implementFunction< sdw::Float >( "c3d_reconstructCSZ"
-				, [&]( sdw::Float const & depthBufferValue
-					, sdw::Vec3 const clipInfo )
-			{
-				m_writer.returnStmt( clipInfo[0] / ( depthBufferValue * clipInfo[1] + clipInfo[2] ) );
-			}
-			, sdw::InFloat{ m_writer, "depthBufferValue" }
-			, sdw::InVec3{ m_writer, "clipInfo" } );
-
 			m_traceScreenSpace = m_writer.implementFunction< sdw::Boolean >( "c3d_traceScreenSpace"
 				, [&]( sdw::Vec3 const & csOrigin
 					, sdw::Vec3 const & csDirection
@@ -893,7 +884,7 @@ namespace castor3d::shader
 					// This compiles away when csZBufferIsHyperbolic = false
 					IF( m_writer, csZBufferIsHyperbolic )
 					{
-						sceneZMax = reconstructCSZ( sceneZMax, clipInfo );
+						sceneZMax = m_utils.reconstructCSZ( sceneZMax, clipInfo );
 					}
 					FI;
 				} // pixel on ray
