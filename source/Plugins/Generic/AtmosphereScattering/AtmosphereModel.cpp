@@ -100,7 +100,7 @@ namespace atmosphere_scattering
 				, [&]( sdw::Vec2 const & uv )
 				{
 					auto clipSpace = writer.declLocale( "clipSpace"
-						, atmodel::getClipSpace( uv, 1.0_f ) );
+						, atmodel::getClipSpace( uv, 0.0_f ) );
 					auto hPos = writer.declLocale( "hPos"
 						, camProjToWorld( vec4( clipSpace, 1.0_f ) ) );
 
@@ -173,8 +173,8 @@ namespace atmosphere_scattering
 
 					if ( settings.cameraData )
 					{
-						IF( writer, depthBufferValue >= 0.0_f
-							&& depthBufferValue < 1.0f )
+						IF( writer, depthBufferValue <= 1.0_f
+							&& depthBufferValue > 0.0f )
 						{
 							auto transmittanceLutExtent = sdw::vec2( float( transmittanceExtent.width ), float( transmittanceExtent.height ) );
 							auto depthBufferWorldPos = writer.declLocale( "depthBufferWorldPos"

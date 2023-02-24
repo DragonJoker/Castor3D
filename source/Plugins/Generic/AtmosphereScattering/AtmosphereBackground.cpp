@@ -22,6 +22,8 @@
 
 #include <RenderGraph/FramePassGroup.hpp>
 
+#define C3D_ATM_DisablePassOptimisations 0
+
 //*************************************************************************************************
 
 namespace castor
@@ -842,6 +844,10 @@ namespace atmosphere_scattering
 		m_generateWorley = m_generateWorley && m_first;
 		m_generatePerlinWorley = m_generatePerlinWorley && m_first;
 		m_generateCurl = m_generateCurl && m_first;
+
+#if C3D_ATM_DisablePassOptimisations
+		m_first = true;
+#endif
 		m_atmosphereChanged = m_first;
 		m_weatherChanged = m_first;
 		m_cloudsChanged = m_first;

@@ -349,8 +349,6 @@ namespace atmosphere_scattering
 	private:
 		sdw::Function< Ray
 			, sdw::InVec2 > m_castRay;
-		sdw::Function< Ray
-			, sdw::InVec2 > m_castRayM;
 		sdw::Function< SingleScatteringResult
 			, sdw::InVec2
 			, InRay
