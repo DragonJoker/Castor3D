@@ -558,9 +558,9 @@ namespace castor3d::shader
 		C3D_API DirectionalLight getDirectionalLight( sdw::UInt const & offset );
 		C3D_API PointLight getPointLight( sdw::UInt const & offset );
 		C3D_API SpotLight getSpotLight( sdw::UInt const & offset );
-		C3D_API sdw::Vec3 getCascadeFactors( sdw::Vec3 viewVertex
-			, sdw::FloatArray splitDepths
-			, sdw::UInt index );
+		C3D_API sdw::Vec3 getCascadeFactors( DirectionalLight const light
+			, sdw::Vec3 viewVertex
+			, sdw::UInt maxCascadeCount );
 		//\}
 
 		inline Shadow & getShadowModel()const
@@ -587,6 +587,7 @@ namespace castor3d::shader
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3
 			, sdw::InFloatArray
+			, sdw::InUInt
 			, sdw::InUInt > m_getCascadeFactors;
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3

@@ -581,57 +581,77 @@ namespace castor3d::shader
 		return m_lightsBuffer->getSpotLight( offset );
 	}
 
-	sdw::Vec3 Lights::getCascadeFactors( sdw::Vec3 pviewVertex
-		, sdw::FloatArray psplitDepths
-		, sdw::UInt pindex )
+	sdw::Vec3 Lights::getCascadeFactors( DirectionalLight const light
+		, sdw::Vec3 pviewVertex
+		, sdw::UInt pmaxCascadeCount )
 	{
 		if ( !m_getCascadeFactors )
 		{
 			m_getCascadeFactors = m_writer.implementFunction< sdw::Vec3 >( "c3d_getCascadeFactors"
-				, [&]( sdw::Vec3 viewVertex
+				, [this]( sdw::Vec3 viewVertex
 					, sdw::FloatArray splitDepths
-					, sdw::UInt index )
+					, sdw::UInt cascadeCount
+					, sdw::UInt maxCascadeCount )
 				{
-					IF( m_writer, viewVertex.z() > splitDepths[index] )
+					auto cascadeFactors = m_writer.declLocale( "cascadeFactors"
+						, vec3( 0.0_f, 1.0_f, 0.0_f ) );
+					auto maxCount = m_writer.declLocale( "maxCount"
+						, m_writer.cast< sdw::UInt >( clamp( cascadeCount, 1_u, maxCascadeCount ) - 1_u ) );
+
+					// Get cascade index for the current fragment's view position
+					FOR( m_writer, sdw::UInt, i, maxCount, i > 0u, --i )
 					{
-						m_writer.returnStmt( vec3( m_writer.cast< sdw::Float >( index )
-							, 1.0_f
-							, 0.0_f ) );
+						IF( m_writer, viewVertex.z() > splitDepths[i] )
+						{
+							auto factors = m_writer.declLocale( "factors"
+								, vec3( m_writer.cast< sdw::Float >( i ), 1.0_f, 0.0_f ) );
+
+							IF( m_writer, factors.x() != 0.0_f )
+							{
+								cascadeFactors = factors;
+							}
+							FI;
+						}
+						FI;
+						//auto splitDiff = m_writer.declLocale( "splitDiff"
+						//	, ( splitDepths[index + 1u] - splitDepths[index] ) / 16.0f );
+						//auto splitMax = m_writer.declLocale( "splitMax"
+						//	, splitDepths[index] - splitDiff );
+						//splitDiff *= 2.0f;
+						//auto splitMin = m_writer.declLocale( "splitMin"
+						//	, splitMax + splitDiff );
+
+						//IF( m_writer, viewVertex.z() < splitMin )
+						//{
+						//	m_writer.returnStmt( vec3( m_writer.cast< sdw::Float >( index ) + 1.0_f
+						//		, 1.0_f
+						//		, 0.0_f ) );
+						//}
+						//FI;
+						//IF( m_writer, viewVertex.z() >= splitMin && viewVertex.z() < splitMax )
+						//{
+						//	auto factor = m_writer.declLocale( "factor"
+						//		, ( viewVertex.z() - splitMax ) / splitDiff );
+						//	m_writer.returnStmt( vec3( m_writer.cast< sdw::Float >( index ) + 1.0_f
+						//		, factor
+						//		, 1.0_f - factor ) );
+						//}
+						//FI;
 					}
-					FI;
-					//auto splitDiff = m_writer.declLocale( "splitDiff"
-					//	, ( splitDepths[index + 1u] - splitDepths[index] ) / 16.0f );
-					//auto splitMax = m_writer.declLocale( "splitMax"
-					//	, splitDepths[index] - splitDiff );
-					//splitDiff *= 2.0f;
-					//auto splitMin = m_writer.declLocale( "splitMin"
-					//	, splitMax + splitDiff );
+					ROF;
 
-					//IF( m_writer, viewVertex.z() < splitMin )
-					//{
-					//	m_writer.returnStmt( vec3( m_writer.cast< sdw::Float >( index ) + 1.0_f
-					//		, 1.0_f
-					//		, 0.0_f ) );
-					//}
-					//FI;
-					//IF( m_writer, viewVertex.z() >= splitMin && viewVertex.z() < splitMax )
-					//{
-					//	auto factor = m_writer.declLocale( "factor"
-					//		, ( viewVertex.z() - splitMax ) / splitDiff );
-					//	m_writer.returnStmt( vec3( m_writer.cast< sdw::Float >( index ) + 1.0_f
-					//		, factor
-					//		, 1.0_f - factor ) );
-					//}
-					//FI;
-
-					m_writer.returnStmt( vec3( 0.0_f, 1.0_f, 0.0_f ) );
+					m_writer.returnStmt( cascadeFactors );
 				}
 				, sdw::InVec3{ m_writer, "viewVertex" }
 				, sdw::InFloatArray{ m_writer, "splitDepths", uint32_t( ashes::getAlignedSize( MaxDirectionalCascadesCount, 4u ) ) }
-				, sdw::InUInt{ m_writer, "index" } );
+				, sdw::InUInt{ m_writer, "cascadeCount" }
+				, sdw::InUInt{ m_writer, "maxCascadeCount" } );
 		}
 
-		return m_getCascadeFactors( pviewVertex, psplitDepths, pindex );
+		return m_getCascadeFactors( pviewVertex
+			, light.splitDepths()
+			, light.cascadeCount()
+			, pmaxCascadeCount );
 	}
 
 	//*********************************************************************************************
