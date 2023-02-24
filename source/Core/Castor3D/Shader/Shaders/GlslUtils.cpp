@@ -634,6 +634,24 @@ namespace castor3d::shader
 		return m_clipToScreen( pin );
 	}
 
+	sdw::RetFloat Utils::reconstructCSZ( sdw::Float const & pdepth
+		, sdw::Vec3 const pclipInfo )
+	{
+		if ( !m_reconstructCSZ )
+		{
+			m_reconstructCSZ = m_writer.implementFunction< sdw::Float >( "c3d_reconstructCSZ"
+				, [&]( sdw::Float const & depth
+					, sdw::Vec3 const clipInfo )
+				{
+					m_writer.returnStmt( clipInfo[0] / ( depth * clipInfo[1] + clipInfo[2] ) );
+				}
+				, sdw::InFloat{ m_writer, "depth" }
+				, sdw::InVec3{ m_writer, "clipInfo" } );
+		}
+
+		return m_reconstructCSZ( pdepth, pclipInfo );
+	}
+
 	sdw::RetBoolean Utils::isSaturated( sdw::Vec3 const & pp )
 	{
 		if ( !m_isSaturated3D )

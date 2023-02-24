@@ -89,6 +89,8 @@ namespace castor3d::shader
 			, sdw::Float const & refractionRatio );
 
 		C3D_API sdw::RetVec4 clipToScreen( sdw::Vec4 const & in );
+		C3D_API sdw::RetFloat reconstructCSZ( sdw::Float const & depth
+			, sdw::Vec3 const clipInfo );
 
 		C3D_API sdw::RetBoolean isSaturated( sdw::Vec3 const & p );
 		C3D_API sdw::RetBoolean isSaturated( sdw::IVec3 const & p
@@ -222,6 +224,9 @@ namespace castor3d::shader
 			, sdw::InUVec3 > m_unflatten3D;
 		sdw::Function< sdw::Vec4
 			, sdw::InVec4 > m_clipToScreen;
+		sdw::Function< sdw::Float
+			, sdw::InFloat
+			, sdw::InVec3 > m_reconstructCSZ;
 		sdw::Function< sdw::Vec2
 			, InTextureConfigData
 			, InTextureAnimData
