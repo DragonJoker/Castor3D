@@ -523,27 +523,9 @@ namespace castor3d::shader
 				, light.shadows().shadowType() != sdw::UInt( int( ShadowType::eNone ) ) )
 			{
 				auto cascadeFactors = m_writer.declLocale( "cascadeFactors"
-					, vec3( 0.0_f, 1.0_f, 0.0_f ) );
-				auto c3d_maxCascadeCount = m_writer.getVariable< sdw::UInt >( "c3d_maxCascadeCount" );
-				auto maxCount = m_writer.declLocale( "maxCount"
-					, m_writer.cast< sdw::UInt >( clamp( light.cascadeCount(), 1_u, c3d_maxCascadeCount ) - 1_u ) );
-
-				// Get cascade index for the current fragment's view position
-				FOR( m_writer, sdw::UInt, i, maxCount, i > 0u, --i )
-				{
-					auto factors = m_writer.declLocale( "factors"
-						, m_lights.getCascadeFactors( lightSurface.viewPosition()
-							, light.splitDepths()
-							, i ) );
-
-					IF( m_writer, factors.x() != 0.0_f )
-					{
-						cascadeFactors = factors;
-					}
-					FI;
-				}
-				ROF;
-
+					, m_lights.getCascadeFactors( light
+						, lightSurface.viewPosition()
+						, m_writer.getVariable< sdw::UInt >( "c3d_maxCascadeCount" ) ) );
 				*m_directionalCascadeIndex = m_writer.cast< sdw::UInt >( cascadeFactors.x() );
 				*m_directionalCascadeCount = light.cascadeCount();
 				m_directionalTransform = std::make_unique< sdw::Mat4 >( m_writer.declLocale( "directionalTransform"
