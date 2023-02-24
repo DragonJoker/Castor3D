@@ -122,7 +122,7 @@ namespace atmosphere_scattering
 			auto targetSize = writer.declConstant( "targetSize"
 				, vec2( sdw::Float{ float( renderSize.width ) }, float( renderSize.height ) ) );
 
-			auto depthBufferValue = 1.0_f;
+			auto depthBufferValue = 0.0_f;
 
 			castor3d::shader::Utils utils{ writer };
 			AtmosphereModel atmosphere{ writer
@@ -182,8 +182,12 @@ namespace atmosphere_scattering
 					auto sceneUv = writer.declLocale( "sceneUv"
 						, fragCoord / targetSize );
 					auto depthObj = writer.declLocale( "depthObj"
-						, hasDepth ? depthMap.lod( vec2( sceneUv.x(), 1.0_f - sceneUv.y() ), 0.0_f ) : vec4( -1.0_f ) );
-					depthObj = depthObj * atmosphere.settings.length.kilometres();
+						, hasDepth ? depthMap.lod( vec2( sceneUv.x(), 1.0_f - sceneUv.y() ), 0.0_f ) : vec4( -1.0_f, -1.0_f, 0.0_f, 0.0_f ) );
+
+					if ( hasDepth )
+					{
+						depthObj.g() *= atmosphere.settings.length.kilometres();
+					}
 
 					cloudsColor = clouds.applyClouds( ray
 						, depthObj.b()
