@@ -134,7 +134,7 @@ namespace castor3d
 				}
 
 				auto & indexBuffer = *castor::DataHolderT< ashes::BufferPtr< uint16_t > >::getData();
-				return { crg::Buffer{ indexBuffer.getBuffer(), "Index" }
+				return crg::IndexBuffer{ crg::Buffer{ indexBuffer.getBuffer(), "Index" }
 					, indexBuffer.getBuffer().getStorage() };
 			}
 
@@ -175,7 +175,7 @@ namespace castor3d
 				}
 
 				auto & vertexBuffer = *castor::DataHolderT< ashes::VertexBufferPtr< castor::Point3f > >::getData();
-				return { crg::Buffer{ vertexBuffer.getBuffer(), "Vertex" }
+				return crg::VertexBuffer{ crg::Buffer{ vertexBuffer.getBuffer(), "Vertex" }
 					, vertexBuffer.getBuffer().getStorage()
 					, { 1u, VkVertexInputAttributeDescription{ 0u, 0u, VK_FORMAT_R32G32B32_SFLOAT, 0u } }
 					, { 1u, VkVertexInputBindingDescription{ 0u, sizeof( castor::Point3f ), VK_VERTEX_INPUT_RATE_VERTEX } } };
