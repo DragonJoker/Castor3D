@@ -116,7 +116,7 @@ namespace castor3d
 		, m_bandSize{ getSafeBandSize( size ) }
 		, m_realSize{ getSafeBandedSize( size ) }
 		, m_graph{ resources.getHandler(), "PickingGraph" }
-		, m_colourImage{ m_graph.createImage( { "PickingColour"
+		, m_colourImage{ m_graph.createImage( crg::ImageData{ "PickingColour"
 			, 0u
 			, VK_IMAGE_TYPE_2D
 			, VK_FORMAT_R32G32B32A32_UINT
@@ -125,20 +125,20 @@ namespace castor3d
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
 				| VK_IMAGE_USAGE_TRANSFER_DST_BIT
 				| VK_IMAGE_USAGE_SAMPLED_BIT ) } ) }
-		, m_colourImageView{ m_graph.createView( { "PickingColour"
+		, m_colourImageView{ m_graph.createView( crg::ImageViewData{ "PickingColour"
 			, m_colourImage
 			, 0u
 			, VK_IMAGE_VIEW_TYPE_2D
 			, m_colourImage.data->info.format
 			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } ) }
-		, m_depthImage{ m_graph.createImage( { "PickingDepth"
+		, m_depthImage{ m_graph.createImage( crg::ImageData{ "PickingDepth"
 			, 0u
 			, VK_IMAGE_TYPE_2D
 			, VK_FORMAT_D32_SFLOAT
 			, makeExtent3D( m_realSize )
 			, ( VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_SAMPLED_BIT ) } ) }
-		, m_depthImageView{ m_graph.createView( { "PickingDepth"
+		, m_depthImageView{ m_graph.createView( crg::ImageViewData{ "PickingDepth"
 			, m_depthImage
 			, 0u
 			, VK_IMAGE_VIEW_TYPE_2D

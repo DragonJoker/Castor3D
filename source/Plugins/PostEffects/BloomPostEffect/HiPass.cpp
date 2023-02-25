@@ -42,7 +42,7 @@ namespace Bloom
 					, graph
 					, crg::ru::Config{ 2u }
 					, crg::rq::Config{}
-						.baseConfig( { std::vector< crg::VkPipelineShaderStageCreateInfoArray >{ std::move( program ) }, {}, {} } )
+						.baseConfig( crg::pp::Config{ std::vector< crg::VkPipelineShaderStageCreateInfoArray >{ std::move( program ) }, {}, {} } )
 						.texcoordConfig( crg::Texcoord{} )
 						.enabled( enabled )
 						.passIndex( passIndex )

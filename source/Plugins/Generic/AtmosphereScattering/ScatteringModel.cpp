@@ -266,7 +266,7 @@ namespace atmosphere_scattering
 	{
 		if ( m_settings.fastSky )
 		{
-			IF( m_writer, viewHeight < m_atmosphere.getAtmosphereRadius() && fragDepth >= 1.0_f )
+			IF( m_writer, viewHeight < m_atmosphere.getAtmosphereRadius() && fragDepth == 0.0_f )
 			{
 				auto uv = m_writer.declLocale< sdw::Vec2 >( "uv" );
 				auto upVector = m_writer.declLocale( "upVector"
@@ -305,7 +305,7 @@ namespace atmosphere_scattering
 		}
 		else if ( m_settings.renderSunDisk )
 		{
-			IF( m_writer, fragDepth >= 1.0_f )
+			IF( m_writer, fragDepth == 0.0_f )
 			{
 				L += getSunLuminance( ray );
 			}
