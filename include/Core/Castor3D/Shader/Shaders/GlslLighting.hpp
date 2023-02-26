@@ -118,6 +118,7 @@ namespace castor3d::shader
 		//\{
 		C3D_API sdw::Vec3 computeDiffuse( DirectionalLight const & light
 			, BlendComponents const & components
+			, BackgroundModel & background
 			, LightSurface const & lightSurface
 			, sdw::UInt const & receivesShadows );
 		C3D_API sdw::Vec3 computeDiffuse( PointLight const & light

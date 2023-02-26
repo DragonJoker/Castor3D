@@ -362,11 +362,13 @@ namespace castor3d::shader
 
 	sdw::Vec3 LightingModel::computeDiffuse( DirectionalLight const & plight
 		, BlendComponents const & pcomponents
+		, BackgroundModel & background
 		, LightSurface const & plightSurface
 		, sdw::UInt const & preceivesShadows )
 	{
 		if ( !m_computeDirectionalDiffuse )
 		{
+			doInitialiseBackground( background );
 			m_computeDirectionalDiffuse = m_writer.implementFunction< sdw::Vec3 >( m_prefix + "computeDirectionalLight"
 				, [this]( DirectionalLight const & light
 					, BlendComponents const & components

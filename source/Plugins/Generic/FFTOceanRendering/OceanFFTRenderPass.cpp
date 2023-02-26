@@ -536,7 +536,7 @@ namespace ocean_fft
 		auto index = uint32_t( rdpass::OceanFFTIdx::eCount );
 		doAddShadowBindings( m_scene, flags, bindings, index );
 		doAddEnvBindings( flags, bindings, index );
-		doAddBackgroundBindings( flags, bindings, index );
+		doAddBackgroundBindings( m_scene, flags, bindings, index );
 		doAddGIBindings( flags, bindings, index );
 	}
 
@@ -594,7 +594,7 @@ namespace ocean_fft
 			, index );
 		doAddShadowDescriptor( m_scene, flags, descriptorWrites, shadowMaps, index );
 		doAddEnvDescriptor( flags, descriptorWrites, index );
-		doAddBackgroundDescriptor( flags, descriptorWrites, m_targetImage, index );
+		doAddBackgroundDescriptor( m_scene, flags, descriptorWrites, m_targetImage, index );
 		doAddGIDescriptor( flags, descriptorWrites, index );
 	}
 

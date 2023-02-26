@@ -159,7 +159,7 @@ namespace castor3d
 
 		doAddShadowBindings( m_scene, flags, bindings, index );
 		doAddEnvBindings( flags, bindings, index );
-		doAddBackgroundBindings( flags, bindings, index );
+		doAddBackgroundBindings( m_scene, flags, bindings, index );
 		doAddGIBindings( flags, bindings, index );
 
 		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
@@ -189,7 +189,7 @@ namespace castor3d
 			, index );
 		doAddShadowDescriptor( m_scene, flags, descriptorWrites, shadowMaps, index );
 		doAddEnvDescriptor( flags, descriptorWrites, index );
-		doAddBackgroundDescriptor( flags, descriptorWrites, m_targetImage, index );
+		doAddBackgroundDescriptor( m_scene, flags, descriptorWrites, m_targetImage, index );
 		doAddGIDescriptor( flags, descriptorWrites, index );
 
 		bindTexture( m_sceneImage.wholeView

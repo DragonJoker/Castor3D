@@ -21,6 +21,7 @@
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp"
+#include "Castor3D/Shader/Shaders/GlslBackground.hpp"
 #include "Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslLightSurface.hpp"
@@ -213,6 +214,7 @@ namespace castor3d
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 		doAddShadowBindings( m_scene, flags, bindings, index );
+		doAddBackgroundBindings( m_scene, flags, bindings, index );
 	}
 
 	ashes::PipelineDepthStencilStateCreateInfo VoxelizePass::doCreateDepthStencilState( PipelineFlags const & flags )const
@@ -237,6 +239,7 @@ namespace castor3d
 		descriptorWrites.push_back( m_voxelizerUbo.getDescriptorWrite( index++ ) );
 		bindBuffer( m_voxels.getBuffer(), descriptorWrites, index );
 		doAddShadowDescriptor( m_scene, flags, descriptorWrites, shadowMaps, index );
+		doAddBackgroundDescriptor( m_scene, flags, descriptorWrites, m_targetImage, index );
 	}
 
 	ShaderPtr VoxelizePass::doGetVertexShaderSource( PipelineFlags const & flags )const
@@ -536,6 +539,13 @@ namespace castor3d
 			, addIndex /* shadowMapBinding */
 			, RenderPipeline::eBuffers /* shadowMapSet */
 			, false /* enableVolumetric */ };
+		auto backgroundModel = shader::BackgroundModel::createModel( getScene()
+			, writer
+			, utils
+			, makeExtent2D( m_size )
+			, true
+			, addIndex
+			, RenderPipeline::eBuffers );
 
 		auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
 			, 0u
@@ -595,6 +605,7 @@ namespace castor3d
 							, components
 							, true, true, false );
 						lights.computeCombinedDif( components
+							, *backgroundModel
 							, lightSurface
 							, modelData.isShadowReceiver()
 							, combined );

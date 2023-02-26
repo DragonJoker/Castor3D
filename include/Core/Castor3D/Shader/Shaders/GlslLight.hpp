@@ -501,6 +501,7 @@ namespace castor3d::shader
 			, sdw::UInt const & receivesShadows
 			, OutputComponents & output );
 		C3D_API void computeCombinedDif( BlendComponents const & components
+			, BackgroundModel & background
 			, LightSurface const & lightSurface
 			, sdw::UInt const & receivesShadows
 			, sdw::Vec3 & output );
@@ -528,6 +529,7 @@ namespace castor3d::shader
 			, OutputComponents & output );
 		C3D_API sdw::Vec3 computeDif( DirectionalLight const & light
 			, BlendComponents const & components
+			, BackgroundModel & background
 			, LightSurface const & lightSurface
 			, sdw::UInt const & receivesShadows );
 		C3D_API sdw::Vec3 computeDif( PointLight const & light
