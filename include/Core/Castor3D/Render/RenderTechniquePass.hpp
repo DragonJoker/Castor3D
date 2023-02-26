@@ -392,9 +392,6 @@ namespace castor3d
 	protected:
 		C3D_API ProgramFlags doAdjustProgramFlags( ProgramFlags flags )const override;
 		C3D_API SceneFlags doAdjustSceneFlags( SceneFlags flags )const override;
-		C3D_API void doAddBackgroundBindings( PipelineFlags const & flags
-			, ashes::VkDescriptorSetLayoutBindingArray & bindings
-			, uint32_t & index )const;
 		C3D_API void doAddEnvBindings( PipelineFlags const & flags
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings
 			, uint32_t & index )const;
@@ -403,10 +400,6 @@ namespace castor3d
 			, uint32_t & index )const;
 		C3D_API void doAddPassSpecificsBindings( PipelineFlags const & flags
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings
-			, uint32_t & index )const;
-		C3D_API void doAddBackgroundDescriptor( PipelineFlags const & flags
-			, ashes::WriteDescriptorSetArray & descriptorWrites
-			, crg::ImageViewIdArray const & targetImage
 			, uint32_t & index )const;
 		C3D_API void doAddEnvDescriptor( PipelineFlags const & flags
 			, ashes::WriteDescriptorSetArray & descriptorWrites

@@ -387,6 +387,7 @@ namespace castor3d::shader
 	}
 
 	void Lights::computeCombinedDif( BlendComponents const & components
+		, BackgroundModel & background
 		, LightSurface const & lightSurface
 		, sdw::UInt const & receivesShadows
 		, sdw::Vec3 & output )
@@ -402,6 +403,7 @@ namespace castor3d::shader
 			{
 				output += lightingModel->computeDiffuse( getDirectionalLight( cur )
 					, components
+					, background
 					, lightSurface
 					, receivesShadows );
 				cur += castor3d::DirectionalLight::LightDataComponents;
@@ -486,6 +488,7 @@ namespace castor3d::shader
 
 	sdw::Vec3 Lights::computeDif( DirectionalLight const & light
 		, BlendComponents const & components
+		, BackgroundModel & background
 		, LightSurface const & lightSurface
 		, sdw::UInt const & receivesShadows )
 	{
@@ -493,6 +496,7 @@ namespace castor3d::shader
 		return lightingModel
 			? lightingModel->computeDiffuse( light
 				, components
+				, background
 				, lightSurface
 				, receivesShadows )
 			: sdw::vec3( 0.0_f );

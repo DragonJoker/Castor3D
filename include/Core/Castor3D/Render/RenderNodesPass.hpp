@@ -692,10 +692,19 @@ namespace castor3d
 			, PipelineFlags const & flags
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings
 			, uint32_t & index )const;
+		C3D_API void doAddBackgroundBindings( Scene const & scene
+			, PipelineFlags const & flags
+			, ashes::VkDescriptorSetLayoutBindingArray & bindings
+			, uint32_t & index )const;
 		C3D_API void doAddShadowDescriptor( Scene const & scene
 			, PipelineFlags const & flags
 			, ashes::WriteDescriptorSetArray & descriptorWrites
 			, ShadowMapLightTypeArray const & shadowMaps
+			, uint32_t & index )const;
+		C3D_API void doAddBackgroundDescriptor( Scene const & scene
+			, PipelineFlags const & flags
+			, ashes::WriteDescriptorSetArray & descriptorWrites
+			, crg::ImageViewIdArray const & targetImage
 			, uint32_t & index )const;
 
 	private:

@@ -33,6 +33,7 @@
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Animation/AnimatedMesh.hpp"
 #include "Castor3D/Scene/Animation/AnimatedSkeleton.hpp"
+#include "Castor3D/Scene/Background/Background.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
 #include "Castor3D/Shader/ShaderBuffers/SssProfileBuffer.hpp"
@@ -740,6 +741,17 @@ namespace castor3d
 		}
 	}
 
+	void RenderNodesPass::doAddBackgroundBindings( Scene const & scene
+		, PipelineFlags const & flags
+		, ashes::VkDescriptorSetLayoutBindingArray & bindings
+		, uint32_t & index )const
+	{
+		if ( auto background = scene.getBackground() )
+		{
+			background->addBindings( flags, bindings, index );
+		}
+	}
+
 	void RenderNodesPass::doAddShadowDescriptor( Scene const & scene
 		, PipelineFlags const & flags
 		, ashes::WriteDescriptorSetArray & descriptorWrites
@@ -784,6 +796,21 @@ namespace castor3d
 				, index );
 		}
 #endif
+	}
+
+	void RenderNodesPass::doAddBackgroundDescriptor( Scene const & scene
+		, PipelineFlags const & flags
+		, ashes::WriteDescriptorSetArray & descriptorWrites
+		, crg::ImageViewIdArray const & targetImage
+		, uint32_t & index )const
+	{
+		if ( auto background = scene.getBackground() )
+		{
+			background->addDescriptors( flags
+				, descriptorWrites
+				, targetImage
+				, index );
+		}
 	}
 
 	bool RenderNodesPass::doIsValidPass( Pass const & pass )const
@@ -970,7 +997,7 @@ namespace castor3d
 				auto pipeline = castor::makeUnique< RenderPipeline >( *this
 					, renderSystem
 					, doCreateDepthStencilState( flags )
-					, ashes::PipelineRasterizationStateCreateInfo{ 0u, false, false, VK_POLYGON_MODE_FILL, cullMode }
+					, doCreateRasterizationState( flags, cullMode )
 					, doCreateBlendState( flags )
 					, doCreateMultisampleState( flags )
 					, doGetProgram( flags, cullMode )
