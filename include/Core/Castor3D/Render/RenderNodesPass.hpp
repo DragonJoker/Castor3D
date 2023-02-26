@@ -719,6 +719,16 @@ namespace castor3d
 			, VkCullModeFlags cullMode );
 		/**
 		 *\~english
+		 *\brief		Creates the rasterization state.
+		 *\param[in]	flags	The pipeline flags.
+		 *\~french
+		 *\brief		Crée l'état de rastérisation.
+		 *\param[in]	flags	Les indicateurs de pipeline.
+		 */
+		C3D_API virtual ashes::PipelineRasterizationStateCreateInfo doCreateRasterizationState( PipelineFlags const & flags
+			, VkCullModeFlags cullMode )const;
+		/**
+		 *\~english
 		 *\brief		Creates the depth stencil state.
 		 *\param[in]	flags	The pipeline flags.
 		 *\~french
