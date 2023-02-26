@@ -1052,6 +1052,12 @@ namespace castor3d
 		return *result;
 	}
 
+	ashes::PipelineRasterizationStateCreateInfo RenderNodesPass::doCreateRasterizationState( PipelineFlags const & flags
+		, VkCullModeFlags cullMode )const
+	{
+		return ashes::PipelineRasterizationStateCreateInfo{ 0u, VK_FALSE, VK_FALSE, VK_POLYGON_MODE_FILL, cullMode };
+	}
+
 	void RenderNodesPass::doAdjustFlags( PipelineFlags & flags )const
 	{
 	}
