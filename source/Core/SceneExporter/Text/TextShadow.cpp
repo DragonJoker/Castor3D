@@ -57,7 +57,6 @@ namespace castor
 			}
 
 			result = result
-				&& writeSub( file, object.rsmConfig )
 				&& writeSub( file, object.lpvConfig );
 		}
 
