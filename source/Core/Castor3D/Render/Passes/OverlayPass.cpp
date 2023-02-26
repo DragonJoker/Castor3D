@@ -54,7 +54,7 @@ namespace castor3d
 			, graph
 			, 1u
 			, size }
-		, m_renderer{ castor::makeUnique< OverlayRenderer >( device, output, VK_COMMAND_BUFFER_LEVEL_SECONDARY ) }
+		, m_renderer{ castor::makeUnique< OverlayRenderer >( device, output, m_timer, VK_COMMAND_BUFFER_LEVEL_SECONDARY ) }
 		, m_drawGlobal{ drawGlobal }
 	{
 	}

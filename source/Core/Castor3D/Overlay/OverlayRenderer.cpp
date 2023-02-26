@@ -650,10 +650,12 @@ namespace castor3d
 
 	OverlayRenderer::OverlayRenderer( RenderDevice const & device
 		, Texture const & target
+		, crg::FramePassTimer & timer
 		, VkCommandBufferLevel level )
 		: OwnedBy< RenderSystem >( device.renderSystem )
 		, m_uboPool{ *device.uboPool }
 		, m_target{ target }
+		, m_timer{ timer }
 		, m_commands{ device, *device.graphicsData(), "OverlayRenderer", level }
 		, m_noTexDeclaration{ 0u
 			, ashes::VkVertexInputBindingDescriptionArray{ { 0u
@@ -777,6 +779,7 @@ namespace castor3d
 	void OverlayRenderer::doBeginPrepare( VkRenderPass renderPass
 		, VkFramebuffer framebuffer )
 	{
+		m_timerBlock = std::make_unique< crg::FramePassTimerBlock >( m_timer.start() );
 		m_retired.clear();
 		m_commands.commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT | VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT
 			, makeVkStruct< VkCommandBufferInheritanceInfo >( renderPass
@@ -791,6 +794,7 @@ namespace castor3d
 	{
 		m_commands.commandBuffer->end();
 		m_sizeChanged = false;
+		m_timerBlock = {};
 	}
 
 	OverlayRenderer::OverlayRenderNode & OverlayRenderer::doGetPanelNode( RenderDevice const & device
@@ -833,18 +837,14 @@ namespace castor3d
 	{
 		auto result = pipeline.descriptorPool->createDescriptorSet( "Overlays-" + castor::string::toString( index ) );
 
-		// Pass buffer
 		getRenderSystem()->getEngine()->getMaterialCache().getPassBuffer().createBinding( *result
 			, pipeline.descriptorLayout->getBinding( uint32_t( ovrlrend::OverlayBindingId::eMaterials ) ) );
-		// Textures buffers
 		getRenderSystem()->getEngine()->getMaterialCache().getTexConfigBuffer().createBinding( *result
 			, pipeline.descriptorLayout->getBinding( uint32_t( ovrlrend::OverlayBindingId::eTexConfigs ) ) );
 		getRenderSystem()->getEngine()->getMaterialCache().getTexAnimBuffer().createBinding( *result
 			, pipeline.descriptorLayout->getBinding( uint32_t( ovrlrend::OverlayBindingId::eTexAnims ) ) );
-		// Matrix UBO
 		m_cameraUbo.createSizedBinding( *result
 			, pipeline.descriptorLayout->getBinding( uint32_t( ovrlrend::OverlayBindingId::eMatrix ) ) );
-		// Overlay UBO
 		overlayUbo.createSizedBinding( *result
 			, pipeline.descriptorLayout->getBinding( uint32_t( ovrlrend::OverlayBindingId::eOverlay ) ) );
 
