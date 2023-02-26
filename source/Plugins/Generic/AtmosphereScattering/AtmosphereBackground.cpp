@@ -59,7 +59,7 @@ namespace castor
 					? writeName( file, "sunNode", background.getSunNode()->getName() )
 					: true );
 				result = result && ( background.getPlanetNode()
-					? write( file, "planetNode", background.getPlanetNode()->getName() )
+					? writeName( file, "planetNode", background.getPlanetNode()->getName() )
 					: true );
 				result = result && write( file, "transmittanceResolution", transmittance.width, transmittance.height );
 				result = result && write( file, "multiScatterResolution", multiScatter );
@@ -83,11 +83,11 @@ namespace castor
 				result = result && write( file, "topRadius", config.topRadius );
 				result = result && write( file, "groundAlbedo", config.groundAlbedo );
 				result = result && writeDensity( file, "minRayleighDensity", config.rayleighDensity[0] );
-				result = result && writeDensity( file, "minRayleighDensity", config.rayleighDensity[1] );
-				result = result && writeDensity( file, "minRayleighDensity", config.mieDensity[0] );
-				result = result && writeDensity( file, "minRayleighDensity", config.mieDensity[1] );
-				result = result && writeDensity( file, "minRayleighDensity", config.absorptionDensity[0] );
-				result = result && writeDensity( file, "minRayleighDensity", config.absorptionDensity[1] );
+				result = result && writeDensity( file, "maxRayleighDensity", config.rayleighDensity[1] );
+				result = result && writeDensity( file, "minMieDensity", config.mieDensity[0] );
+				result = result && writeDensity( file, "maxMieDensity", config.mieDensity[1] );
+				result = result && writeDensity( file, "minAbsorptionDensity", config.absorptionDensity[0] );
+				result = result && writeDensity( file, "maxAbsorptionDensity", config.absorptionDensity[1] );
 
 				if ( auto wblock{ beginBlock( file, "weather" ) } )
 				{
