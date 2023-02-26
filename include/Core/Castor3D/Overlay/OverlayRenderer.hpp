@@ -16,6 +16,8 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Graphics/Size.hpp>
 
+#include <RenderGraph/FramePassTimer.hpp>
+
 #include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/Descriptor/DescriptorSetLayout.hpp>
 #include <ashespp/Descriptor/DescriptorSetPool.hpp>
@@ -90,6 +92,7 @@ namespace castor3d
 		 */
 		C3D_API OverlayRenderer( RenderDevice const & device
 			, Texture const & target
+			, crg::FramePassTimer & timer
 			, VkCommandBufferLevel level = VK_COMMAND_BUFFER_LEVEL_PRIMARY );
 		/**
 		 *\~english
@@ -285,6 +288,8 @@ namespace castor3d
 	private:
 		UniformBufferPool & m_uboPool;
 		Texture const & m_target;
+		crg::FramePassTimer & m_timer;
+		std::unique_ptr< crg::FramePassTimerBlock > m_timerBlock;
 		CommandsSemaphore m_commands;
 		std::vector< std::unique_ptr< PanelVertexBufferPool > > m_panelVertexBuffers;
 		std::vector< std::unique_ptr< BorderPanelVertexBufferPool > > m_borderVertexBuffers;
