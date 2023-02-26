@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Buffer/UniformBufferOffset.hpp"
 
-#include <ShaderWriter/CompositeTypes/StructInstance.hpp>
+#include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>
 #include <ShaderWriter/VecTypes/Vec4.hpp>
 
 namespace castor3d
@@ -16,27 +16,30 @@ namespace castor3d
 	namespace shader
 	{
 		struct OverlayData
-			: public sdw::StructInstance
+			: public sdw::StructInstanceHelperT < "C3D_OverlayData"
+				, sdw::type::MemoryLayout::eStd140
+				, sdw::Vec2Field< "position" >
+				, sdw::Vec2Field< "ratio" >
+				, sdw::UVec2Field< "refRenderSize" >
+				, sdw::UIntField< "materialId" >
+				, sdw::UIntField< "pad" > >
 		{
-			C3D_API OverlayData( sdw::ShaderWriter & writer
+			OverlayData( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr
-				, bool enabled );
-			SDW_DeclStructInstance( C3D_API, OverlayData );
-
-			C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
-			C3D_API static std::unique_ptr< sdw::Struct > declare( sdw::ShaderWriter & writer );
+				, bool enabled )
+				: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+			{
+			}
 
 			C3D_API sdw::Vec2 getOverlaySize()const;
 			C3D_API sdw::Vec2 modelToView( sdw::Vec2 const & pos )const;
 			C3D_API sdw::UInt getMaterialIndex()const;
 
 		private:
-			using sdw::StructInstance::getMember;
-			using sdw::StructInstance::getMemberArray;
-
-		private:
-			sdw::Vec4 m_positionRatio;
-			sdw::IVec4 m_renderSizeIndex;
+			auto position()const { return getMember< "position" >(); }
+			auto ratio()const { return getMember< "ratio" >(); }
+			auto refRenderSize()const { return getMember< "refRenderSize" >(); }
+			auto materialId()const { return getMember< "materialId" >(); }
 		};
 	}
 }
