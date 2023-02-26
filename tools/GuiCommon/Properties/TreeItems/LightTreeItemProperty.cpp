@@ -196,17 +196,13 @@ namespace GuiCommon
 		addPropertyE( globalIllum, PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE, giChoices, convert( m_light.getGlobalIlluminationType() )
 			, [this]( GIType type )
 			{
-				// +2 to account for RSM and VCT.
 				m_light.setGlobalIlluminationType( convert( type ) );
 				doUpdateGIProperties( type );
 			} );
 
-		if ( m_light.getLightType() != castor3d::LightType::ePoint )
-		{
-			auto & lpvConfig = m_light.getLpvConfig();
-			m_lpvProperties = addProperty( globalIllum, PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_LPV );
-			addPropertyT( m_lpvProperties, PROPERTY_SHADOW_LPV_SURFEL_AREA, &lpvConfig.texelAreaModifier );
-		}
+		auto & lpvConfig = m_light.getLpvConfig();
+		m_lpvProperties = addProperty( globalIllum, PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE_LPV );
+		addPropertyT( m_lpvProperties, PROPERTY_SHADOW_LPV_SURFEL_AREA, &lpvConfig.texelAreaModifier );
 
 		doUpdateGIProperties( convert( m_light.getGlobalIlluminationType() ) );
 	}
