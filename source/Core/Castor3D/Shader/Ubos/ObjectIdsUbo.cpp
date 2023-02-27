@@ -68,49 +68,11 @@ namespace castor3d::shader
 
 	//*********************************************************************************************
 
-	PipelineObjectsIds::PipelineObjectsIds( sdw::ShaderWriter & writer
-		, ast::expr::ExprPtr expr
-		, bool enabled )
-		: StructInstance{ writer, std::move( expr ), enabled }
-		, m_data{ getMemberArray< sdw::UVec4 >( "datas" ) }
-	{
-	}
-
-	ast::type::BaseStructPtr PipelineObjectsIds::makeType( ast::type::TypesCache & cache )
-	{
-		auto result = cache.getStruct( ast::type::MemoryLayout::eStd430
-			, "C3D_PipelineObjectsIdsData" );
-
-		if ( result->empty() )
-		{
-			result->declMember( "datas"
-				, ast::type::Kind::eVec4U
-				, uint32_t( objdsubo::MaxUVec4PerPipeline * MaxPipelines ) );
-		}
-
-		return result;
-	}
-
-	sdw::UInt PipelineObjectsIds::getNodeId( sdw::UInt const & pipelineID
-		, sdw::UInt const & drawId )const
-	{
-		return m_data[( objdsubo::MaxUVec4PerPipeline * pipelineID ) + drawId / 4_u][drawId % 4_u];
-	}
-
-	//*********************************************************************************************
-
 	sdw::UInt getNodeId( sdw::Array< shader::ObjectsIds > const & data
 		, sdw::UInt pipelineID
 		, sdw::UInt drawID )
 	{
 		return data[pipelineID].getNodeId( drawID );
-	}
-
-	sdw::UInt getNodeId( sdw::Array< shader::PipelineObjectsIds > const & datas
-		, sdw::UInt pipelineID
-		, sdw::UInt drawID )
-	{
-		return datas[pipelineID].getNodeId( pipelineID, drawID );
 	}
 
 	//*********************************************************************************************
