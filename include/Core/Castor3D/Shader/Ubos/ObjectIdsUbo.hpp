@@ -58,27 +58,6 @@ namespace castor3d::shader
 		sdw::Array< sdw::UVec4 > m_data;
 	};
 
-	struct PipelineObjectsIds
-		: public sdw::StructInstance
-	{
-		C3D_API PipelineObjectsIds( sdw::ShaderWriter & writer
-			, ast::expr::ExprPtr expr
-			, bool enabled );
-		SDW_DeclStructInstance( C3D_API, PipelineObjectsIds );
-
-		C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
-
-		C3D_API sdw::UInt getNodeId( sdw::UInt const & pipelineID
-			, sdw::UInt const & instanceID )const;
-
-	private:
-		using sdw::StructInstance::getMember;
-		using sdw::StructInstance::getMemberArray;
-
-	private:
-		sdw::Array< sdw::UVec4 > m_data;
-	};
-
 	template< ast::var::Flag FlagT >
 	static sdw::UInt getNodeId( sdw::Array< shader::ObjectsIds > const & data
 		, shader::VertexSurfaceT< FlagT > const & surface
@@ -95,9 +74,6 @@ namespace castor3d::shader
 	}
 
 	C3D_API sdw::UInt getNodeId( sdw::Array< shader::ObjectsIds > const & data
-		, sdw::UInt pipelineID
-		, sdw::UInt drawID );
-	C3D_API sdw::UInt getNodeId( sdw::Array< shader::PipelineObjectsIds > const & data
 		, sdw::UInt pipelineID
 		, sdw::UInt drawID );
 
@@ -127,17 +103,5 @@ namespace castor3d::shader
 	auto c3d_objectIdsData = objectIdsDataBuffer.declMemberArray< castor3d::shader::ObjectsIds >( "d"\
 		, !flags.enableInstantiation() );\
 	objectIdsDataBuffer.end()
-
-#define C3D_ObjectsIdsData( writer, flags, binding, set )\
-	sdw::StorageBuffer objectsIdsDataBuffer{ writer\
-		, "C3D_PipelineObjectsIds"\
-		, "c3d_pipelineObjectsIds"\
-		, uint32_t( binding )\
-		, uint32_t( set )\
-		, ast::type::MemoryLayout::eStd430\
-		, !flags.enableInstantiation() };\
-	auto c3d_objectsIdsData = objectsIdsDataBuffer.declMemberArray< castor3d::shader::PipelineObjectsIds >( "d"\
-		, !flags.enableInstantiation() );\
-	objectsIdsDataBuffer.end()
 
 #endif

@@ -206,7 +206,6 @@ namespace castor3d
 
 			VertexBufferPoolT( Engine & engine
 				, std::string const & debugName
-				, UniformBufferPool & uboPool
 				, RenderDevice const & device
 				, ashes::PipelineVertexInputStateCreateInfo const & noTexDecl
 				, ashes::PipelineVertexInputStateCreateInfo const & texDecl
@@ -217,7 +216,8 @@ namespace castor3d
 
 			Engine & engine;
 			RenderDevice const & device;
-			UniformBufferPool & uboPool;
+			ashes::BufferPtr< Configuration > overlaysData;
+			castor::ArrayView< Configuration > overlaysBuffer;
 			ashes::PipelineVertexInputStateCreateInfo const & noTexDeclaration;
 			ashes::PipelineVertexInputStateCreateInfo const & texDeclaration;
 			VertexBufferPoolUPtr buffer;
@@ -235,7 +235,6 @@ namespace castor3d
 			VertexBufferPoolT< VertexT, CountT > & pool;
 			OverlayRenderNode & node;
 			uint32_t index;
-			UniformBufferOffsetT< Configuration > overlayUbo{};
 			OverlayGeometryBuffers geometryBuffers{};
 			std::map< void *, OverlayDescriptorConnection > descriptorSets{};
 		};
@@ -275,18 +274,17 @@ namespace castor3d
 			, bool text );
 		ashes::DescriptorSetPtr doCreateDescriptorSet( OverlayRenderer::Pipeline & pipeline
 			, Pass const & pass
-			, UniformBufferOffsetT< Configuration > const & overlayUbo
+			, ashes::Buffer< Configuration > const & overlaysData
 			, uint32_t index
 			, bool update = true );
 		ashes::DescriptorSetPtr doCreateDescriptorSet( OverlayRenderer::Pipeline & pipeline
 			, Pass const & pass
-			, UniformBufferOffsetT< Configuration > const & overlayUbo
+			, ashes::Buffer< Configuration > const & overlaysData
 			, uint32_t index
 			, TextureLayout const & texture
 			, Sampler const & sampler );
 
 	private:
-		UniformBufferPool & m_uboPool;
 		Texture const & m_target;
 		crg::FramePassTimer & m_timer;
 		std::unique_ptr< crg::FramePassTimerBlock > m_timerBlock;
