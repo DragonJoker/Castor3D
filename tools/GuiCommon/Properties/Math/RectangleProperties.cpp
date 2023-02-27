@@ -30,7 +30,7 @@ namespace GuiCommon
 	{
 		if ( GetChildCount() )
 		{
-			const castor::Point4i & point = Point4iRefFromVariant( m_value );
+			const castor::Rectangle & point = RectangleRefFromVariant( m_value );
 			Item( 0 )->SetValue( point[0] );
 			Item( 1 )->SetValue( point[1] );
 			Item( 2 )->SetValue( point[2] );
@@ -40,7 +40,7 @@ namespace GuiCommon
 
 	wxVariant RectangleProperty::ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const
 	{
-		castor::Point4i & point = Point4iRefFromVariant( thisValue );
+		castor::Rectangle & point = RectangleRefFromVariant( thisValue );
 		auto val = int( childValue.GetLong() );
 
 		switch ( childIndex )
@@ -69,8 +69,7 @@ namespace GuiCommon
 
 	void RectangleProperty::setValueI( castor::Rectangle const & value )
 	{
-		castor::Point4i var( value.left(), value.top(), value.right(), value.bottom() );
-		m_value = WXVARIANT( var );
+		m_value = WXVARIANT( value );
 	}
 
 	//*********************************************************************************************

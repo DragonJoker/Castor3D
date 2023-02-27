@@ -40,16 +40,18 @@ namespace GuiCommon
 
 		if ( overlay )
 		{
+			m_materials = getMaterialsList();
 			addProperty( grid, PROPERTY_CATEGORY_OVERLAY + wxString( overlay->getOverlayName() ) );
 			addPropertyT( grid, PROPERTY_OVERLAY_VISIBLE, overlay->isVisible(), overlay.get(), &castor3d::OverlayCategory::setVisible );
 			addPropertyT( grid, PROPERTY_OVERLAY_POSITION, overlay->getPixelPosition(), overlay.get(), &castor3d::OverlayCategory::setPixelPosition );
 			addPropertyT( grid, PROPERTY_OVERLAY_SIZE, overlay->getPixelSize(), overlay.get(), &castor3d::OverlayCategory::setPixelSize );
-			addProperty( grid, PROPERTY_OVERLAY_MATERIAL, getMaterialsList(), overlay->getMaterial()->getName()
+			addProperty( grid, PROPERTY_OVERLAY_MATERIAL, m_materials, overlay->getMaterial()->getName()
 				, [this]( wxVariant const & var )
 				{
+					auto name = make_String( m_materials[size_t( var.GetLong() )] );
 					castor3d::OverlayCategorySPtr ov = getOverlay();
 					auto & engine = *ov->getOverlay().getEngine();
-					auto material = engine.findMaterial( variantCast< castor::String >( var ) ).lock().get();
+					auto material = engine.findMaterial( name ).lock().get();
 
 					if ( material )
 					{
@@ -60,7 +62,6 @@ namespace GuiCommon
 			switch ( overlay->getType() )
 			{
 			case castor3d::OverlayType::ePanel:
-				doCreatePanelOverlayProperties( grid, std::static_pointer_cast< castor3d::PanelOverlay >( getOverlay() ) );
 				break;
 			case castor3d::OverlayType::eBorderPanel:
 				doCreateBorderPanelOverlayProperties( grid, std::static_pointer_cast< castor3d::BorderPanelOverlay >( getOverlay() ) );
@@ -75,23 +76,15 @@ namespace GuiCommon
 		}
 	}
 
-	void OverlayTreeItemProperty::doCreatePanelOverlayProperties( wxPropertyGrid * grid
-		, castor3d::PanelOverlaySPtr overlay )
-	{
-		static wxString PROPERTY_CATEGORY_PANEL_OVERLAY = _( "Panel Overlay" );
-
-		addProperty( grid, PROPERTY_CATEGORY_PANEL_OVERLAY );
-	}
-
 	void OverlayTreeItemProperty::doCreateBorderPanelOverlayProperties( wxPropertyGrid * grid
 		, castor3d::BorderPanelOverlaySPtr overlay )
 	{
-		static wxString PROPERTY_CATEGORY_BORDER_PANEL_OVERLAY = _( "Border Panel Overlay" );
-		static wxString PROPERTY_OVERLAY_BORDER_SIZE = _( "Border Size" );
-		static wxString PROPERTY_OVERLAY_BORDER_MATERIAL = _( "Border Material" );
-		static wxString PROPERTY_OVERLAY_BORDER_INNER_UV = _( "Border Inner UV" );
-		static wxString PROPERTY_OVERLAY_BORDER_OUTER_UV = _( "Border Outer UV" );
-		static wxString PROPERTY_OVERLAY_BORDER_POSITION = _( "Border Position" );
+		static wxString PROPERTY_CATEGORY_BORDER_PANEL_OVERLAY = _( "Borders" );
+		static wxString PROPERTY_OVERLAY_BORDER_SIZE = _( "Borders Size" );
+		static wxString PROPERTY_OVERLAY_BORDER_MATERIAL = _( "Borders Material" );
+		static wxString PROPERTY_OVERLAY_BORDER_INNER_UV = _( "Borders Inner UV" );
+		static wxString PROPERTY_OVERLAY_BORDER_OUTER_UV = _( "Borders Outer UV" );
+		static wxString PROPERTY_OVERLAY_BORDER_POSITION = _( "Borders Position" );
 		static std::array< wxString, size_t( castor3d::BorderPosition::eCount ) > PROPERTY_OVERLAY_BORDER_POSITION_TEXTS{ _( "Internal" ), _( "Middle" ), _( "External" ) };
 
 		addProperty( grid, PROPERTY_CATEGORY_BORDER_PANEL_OVERLAY );
@@ -101,13 +94,17 @@ namespace GuiCommon
 
 		if ( overlay->getBorderMaterial() )
 		{
-			addProperty( grid, PROPERTY_OVERLAY_BORDER_MATERIAL, getMaterialsList(), overlay->getBorderMaterial()->getName()
-			, [this]( wxVariant const & var )
+			addProperty( grid
+				, PROPERTY_OVERLAY_BORDER_MATERIAL
+				, m_materials
+				, overlay->getBorderMaterial()->getName()
+				, [this]( wxVariant const & var )
 				{
+					auto name = make_String( m_materials[size_t( var.GetLong() )] );
 					castor3d::BorderPanelOverlaySPtr ov = std::static_pointer_cast< castor3d::BorderPanelOverlay >( getOverlay() );
 					CU_Require( ov->getType() == castor3d::OverlayType::eBorderPanel );
 					auto & engine = *ov->getOverlay().getEngine();
-					auto material = engine.findMaterial( variantCast< castor::String >( var ) ).lock().get();
+					auto material = engine.findMaterial( name ).lock().get();
 
 					if ( material )
 					{
@@ -119,13 +116,14 @@ namespace GuiCommon
 		{
 			addProperty( grid
 				, PROPERTY_OVERLAY_BORDER_MATERIAL
-				, getMaterialsList()
+				, m_materials
 				, [this]( wxVariant const & var )
 				{
+					auto name = make_String( m_materials[size_t( var.GetLong() )] );
 					castor3d::BorderPanelOverlaySPtr ov = std::static_pointer_cast< castor3d::BorderPanelOverlay >( getOverlay() );
 					CU_Require( ov->getType() == castor3d::OverlayType::eBorderPanel );
 					auto & engine = *ov->getOverlay().getEngine();
-					auto material = engine.findMaterial( variantCast< castor::String >( var ) ).lock().get();
+					auto material = engine.findMaterial( name ).lock().get();
 
 					if ( material )
 					{
@@ -142,7 +140,7 @@ namespace GuiCommon
 	void OverlayTreeItemProperty::doCreateTextOverlayProperties( wxPropertyGrid * grid
 		, castor3d::TextOverlaySPtr overlay )
 	{
-		static wxString PROPERTY_CATEGORY_TEXT_OVERLAY = _( "Text Overlay" );
+		static wxString PROPERTY_CATEGORY_TEXT_OVERLAY = _( "Text" );
 		static wxString PROPERTY_OVERLAY_FONT = _( "Font" );
 		static wxString PROPERTY_OVERLAY_CAPTION = _( "Caption" );
 		static wxString PROPERTY_OVERLAY_HALIGN = _( "Horiz. align." );

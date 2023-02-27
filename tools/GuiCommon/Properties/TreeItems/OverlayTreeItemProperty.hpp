@@ -52,12 +52,12 @@ namespace GuiCommon
 		void doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )override;
 
 	private:
-		void doCreatePanelOverlayProperties( wxPropertyGrid * grid, castor3d::PanelOverlaySPtr overlay );
 		void doCreateBorderPanelOverlayProperties( wxPropertyGrid * grid, castor3d::BorderPanelOverlaySPtr overlay );
 		void doCreateTextOverlayProperties( wxPropertyGrid * grid, castor3d::TextOverlaySPtr overlay );
 
 	private:
 		castor3d::OverlayCategoryWPtr m_overlay;
+		wxArrayString m_materials;
 	};
 }
 
