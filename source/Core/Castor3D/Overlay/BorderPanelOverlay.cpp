@@ -343,5 +343,7 @@ namespace castor3d
 		m_arrayVtxBorder[index++] = cornerBR3;
 		m_arrayVtxBorder[index++] = cornerBR4;
 		m_arrayVtxBorder[index++] = cornerBR5;
+
+		m_borderChanged = false;
 	}
 }

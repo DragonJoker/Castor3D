@@ -149,19 +149,6 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the borders thicknesses
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère les épaisseurs des bords
-		 *\return		La valeur
-		 */
-		inline castor::Point4d & getBorderSize()
-		{
-			m_borderChanged = true;
-			return m_ptBorderSize;
-		}
-		/**
-		 *\~english
 		 *\brief		Retrieves the border material
 		 *\return		The value
 		 *\~french
@@ -183,6 +170,7 @@ namespace castor3d
 		inline void setLeftBorderSize( double size )
 		{
 			m_ptBorderSize[0] = size;
+			m_sizeChanged = true;
 			m_borderChanged = true;
 		}
 		/**
@@ -196,6 +184,7 @@ namespace castor3d
 		inline void setTopBorderSize( double size )
 		{
 			m_ptBorderSize[1] = size;
+			m_sizeChanged = true;
 			m_borderChanged = true;
 		}
 		/**
@@ -209,6 +198,7 @@ namespace castor3d
 		inline void setRightBorderSize( double size )
 		{
 			m_ptBorderSize[2] = size;
+			m_sizeChanged = true;
 			m_borderChanged = true;
 		}
 		/**
@@ -222,6 +212,7 @@ namespace castor3d
 		inline void setBottomBorderSize( double size )
 		{
 			m_ptBorderSize[3] = size;
+			m_sizeChanged = true;
 			m_borderChanged = true;
 		}
 		/**
@@ -235,6 +226,7 @@ namespace castor3d
 		inline void setBorderSize( castor::Point4d const & size )
 		{
 			m_ptBorderSize = size;
+			m_sizeChanged = true;
 			m_borderChanged = true;
 		}
 		/**
@@ -299,19 +291,6 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the borders thicknesses
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère les épaisseurs des bords
-		 *\return		La valeur
-		 */
-		inline castor::Rectangle & getBorderPixelSize()
-		{
-			m_borderChanged = true;
-			return m_borderSize;
-		}
-		/**
-		 *\~english
 		 *\brief		Sets the left border thickness
 		 *\param[in]	size	The new value
 		 *\~french
@@ -321,6 +300,7 @@ namespace castor3d
 		inline void setLeftBorderPixelSize( int size )
 		{
 			m_borderSize[0] = size;
+			m_sizeChanged = true;
 			m_borderChanged = true;
 		}
 		/**
@@ -334,6 +314,7 @@ namespace castor3d
 		inline void setTopBorderPixelSize( int size )
 		{
 			m_borderSize[1] = size;
+			m_sizeChanged = true;
 			m_borderChanged = true;
 		}
 		/**
@@ -347,6 +328,7 @@ namespace castor3d
 		inline void setRightBorderPixelSize( int size )
 		{
 			m_borderSize[2] = size;
+			m_sizeChanged = true;
 			m_borderChanged = true;
 		}
 		/**
@@ -360,6 +342,7 @@ namespace castor3d
 		inline void setBottomBorderPixelSize( int size )
 		{
 			m_borderSize[3] = size;
+			m_sizeChanged = true;
 			m_borderChanged = true;
 		}
 		/**
@@ -373,6 +356,7 @@ namespace castor3d
 		inline void setBorderPixelSize( castor::Rectangle const & size )
 		{
 			m_borderSize = size;
+			m_sizeChanged = true;
 			m_borderChanged = true;
 		}
 		/**
