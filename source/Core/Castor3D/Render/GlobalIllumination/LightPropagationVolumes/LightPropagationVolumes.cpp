@@ -468,6 +468,13 @@ namespace castor3d
 				, m_scene.getLpvGridSize() } }
 		, m_clearPass{ doCreateClearPass() }
 	{
+		m_graph.addInput( m_smResult[SmTexture::eNormal].targetViewId
+			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+		m_graph.addInput( m_smResult[SmTexture::ePosition].targetViewId
+			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+		m_graph.addInput( m_smResult[SmTexture::eFlux].targetViewId
+			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+
 		m_graph.addOutput( lpvResult[LpvTexture::eR].targetViewId
 			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
 		m_graph.addOutput( lpvResult[LpvTexture::eG].targetViewId

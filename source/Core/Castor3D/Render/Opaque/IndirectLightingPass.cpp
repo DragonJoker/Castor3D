@@ -318,6 +318,28 @@ namespace castor3d
 		m_lastPass = &doCreateLightingPass( m_group, scene, previousPass, progress );
 		m_group.addGroupOutput( m_lpResult[LpTexture::eIndirectDiffuse].wholeViewId );
 		m_group.addGroupOutput( m_lpResult[LpTexture::eIndirectSpecular].wholeViewId );
+
+		m_group.addInput( vctFirstBounce.targetViewId
+			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+		m_group.addInput( vctSecondaryBounce.targetViewId
+			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+		m_group.addInput( m_lpvResult[LpvTexture::eR].targetViewId
+			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+		m_group.addInput( m_lpvResult[LpvTexture::eG].targetViewId
+			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+		m_group.addInput( m_lpvResult[LpvTexture::eB].targetViewId
+			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+
+		for ( auto & plpvResult : m_llpvResult )
+		{
+			auto & lpvRes = *plpvResult;
+			m_group.addInput( lpvRes[LpvTexture::eR].targetViewId
+				, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+			m_group.addInput( lpvRes[LpvTexture::eG].targetViewId
+				, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+			m_group.addInput( lpvRes[LpvTexture::eB].targetViewId
+				, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+		}
 	}
 
 	void IndirectLightingPass::update( CpuUpdater & updater )
