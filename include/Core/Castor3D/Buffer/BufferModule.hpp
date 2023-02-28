@@ -27,10 +27,20 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	A GPU buffer, that uses a buddy allocator to allocate sub-buffers.
+	*	A GPU buffer pool.
 	*\~french
 	*\brief
-	*	Un tampon GPU, utilisant un buddy allocator pour allouer des sous-tampons.
+	*	Un pool de buffer GPU.
+	*\remark
+	*/
+	class GpuBufferBase;
+	/**
+	*\~english
+	*\brief
+	*	A GPU buffer pool, that uses an allocator to allocate sub-buffers.
+	*\~french
+	*\brief
+	*	Un pool de buffer GPU, utilisant un allocateur pour allouer des sous-tampons.
 	*\remark
 	*/
 	template< typename AllocatorT >

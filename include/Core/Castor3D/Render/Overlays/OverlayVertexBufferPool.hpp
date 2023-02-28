@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Render/Overlays/OverlaysModule.hpp"
 
-#include "Castor3D/Buffer/ObjectBufferOffset.hpp"
+#include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 #include <CastorUtils/Design/ArrayView.hpp>
@@ -31,8 +31,10 @@ namespace castor3d
 			, ashes::PipelineVertexInputStateCreateInfo const & noTexDecl
 			, ashes::PipelineVertexInputStateCreateInfo const & texDecl
 			, uint32_t count );
-		OverlayVertexBufferIndexT< VertexT, CountT > allocate( OverlayRenderNode & node );
-		void deallocate( OverlayVertexBufferIndexT< VertexT, CountT > const & index );
+		template< typename OverlayT >
+		OverlayVertexBufferIndexT< VertexT, CountT > fill( OverlayT const & overlay
+			, OverlayRenderNode & node
+			, bool secondary );
 		void upload( ashes::CommandBuffer const & cb );
 
 		Engine & engine;
@@ -41,8 +43,9 @@ namespace castor3d
 		castor::ArrayView< OverlayUboConfiguration > overlaysBuffer;
 		ashes::PipelineVertexInputStateCreateInfo const & noTexDeclaration;
 		ashes::PipelineVertexInputStateCreateInfo const & texDeclaration;
-		VertexBufferPoolUPtr buffer;
-		std::vector< ObjectBufferOffset > allocated;
+		GpuBufferBase vertexBuffer;
+		uint32_t allocated{};
+		uint32_t index{};
 		ashes::DescriptorSetPoolPtr descriptorPool;
 		ashes::DescriptorSetPtr descriptorSet;
 

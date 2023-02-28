@@ -38,6 +38,16 @@ namespace castor3d
 		C3D_API void accept( OverlayVisitor & visitor )const override;
 		/**
 		 *\~english
+		 *\brief		Fills the given buffer.
+		 *\param[out]	buffer	The buffer.
+		 *\~french
+		 *\brief		Remplit le tampon de sommets donné.
+		 *\param[out]	buffer	Le buffer.
+		 */
+		C3D_API uint32_t fillBuffer( Vertex * buffer
+			, bool secondary )const;
+		/**
+		 *\~english
 		 *\brief		Sets the border material
 		 *\param[in]	material	The new value
 		 *\~french
@@ -77,25 +87,13 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the panel vertex buffer
-		 *\return		The buffer
-		 *\~french
-		 *\brief		Récupère le tampon de sommets du panneau
-		 *\return		Le tampon
-		 */
-		inline OverlayCategory::VertexArray const & getPanelVertex()const
-		{
-			return m_arrayVtx;
-		}
-		/**
-		 *\~english
 		 *\brief		Retrieves the left border thickness
 		 *\return		The value
 		 *\~french
 		 *\brief		Récupère l'épaisseur du bord gauche
 		 *\return		La valeur
 		 */
-		inline double getLeftBorderSize()const
+		double getLeftBorderSize()const
 		{
 			return m_ptBorderSize[0];
 		}
@@ -107,7 +105,7 @@ namespace castor3d
 		 *\brief		Récupère l'épaisseur du bord haut
 		 *\return		La valeur
 		 */
-		inline double getTopBorderSize()const
+		double getTopBorderSize()const
 		{
 			return m_ptBorderSize[1];
 		}
@@ -119,7 +117,7 @@ namespace castor3d
 		 *\brief		Récupère l'épaisseur du bord droit
 		 *\return		La valeur
 		 */
-		inline double getRightBorderSize()const
+		double getRightBorderSize()const
 		{
 			return m_ptBorderSize[2];
 		}
@@ -131,7 +129,7 @@ namespace castor3d
 		 *\brief		Récupère l'épaisseur du bord bas
 		 *\return		La valeur
 		 */
-		inline double getBottomBorderSize()const
+		double getBottomBorderSize()const
 		{
 			return m_ptBorderSize[3];
 		}
@@ -143,7 +141,7 @@ namespace castor3d
 		 *\brief		Récupère les épaisseurs des bords
 		 *\return		La valeur
 		 */
-		inline castor::Point4d const & getBorderSize()const
+		castor::Point4d const & getBorderSize()const
 		{
 			return m_ptBorderSize;
 		}
@@ -155,7 +153,7 @@ namespace castor3d
 		 *\brief		Récupère le matériau des bords
 		 *\return		La valeur
 		 */
-		inline MaterialRPtr getBorderMaterial()const
+		MaterialRPtr getBorderMaterial()const
 		{
 			return m_pBorderMaterial;
 		}
@@ -167,7 +165,7 @@ namespace castor3d
 		 *\brief		Définit l'épaisseur du bord gauche
 		 *\param[in]	size	La nouvelle valeur
 		 */
-		inline void setLeftBorderSize( double size )
+		void setLeftBorderSize( double size )
 		{
 			m_ptBorderSize[0] = size;
 			m_sizeChanged = true;
@@ -181,7 +179,7 @@ namespace castor3d
 		 *\brief		Définit l'épaisseur du bord haut
 		 *\param[in]	size	La nouvelle valeur
 		 */
-		inline void setTopBorderSize( double size )
+		void setTopBorderSize( double size )
 		{
 			m_ptBorderSize[1] = size;
 			m_sizeChanged = true;
@@ -195,7 +193,7 @@ namespace castor3d
 		 *\brief		Définit l'épaisseur du bord droit
 		 *\param[in]	size	La nouvelle valeur
 		 */
-		inline void setRightBorderSize( double size )
+		void setRightBorderSize( double size )
 		{
 			m_ptBorderSize[2] = size;
 			m_sizeChanged = true;
@@ -209,7 +207,7 @@ namespace castor3d
 		 *\brief		Définit l'épaisseur du bord bas
 		 *\param[in]	size	La nouvelle valeur
 		 */
-		inline void setBottomBorderSize( double size )
+		void setBottomBorderSize( double size )
 		{
 			m_ptBorderSize[3] = size;
 			m_sizeChanged = true;
@@ -223,7 +221,7 @@ namespace castor3d
 		 *\brief		Définit l'épaisseur des bords
 		 *\param[in]	size	La nouvelle valeur
 		 */
-		inline void setBorderSize( castor::Point4d const & size )
+		void setBorderSize( castor::Point4d const & size )
 		{
 			m_ptBorderSize = size;
 			m_sizeChanged = true;
@@ -237,7 +235,7 @@ namespace castor3d
 		 *\brief		Récupère l'épaisseur du bord gauche
 		 *\return		La valeur
 		 */
-		inline int getLeftBorderPixelSize()const
+		int getLeftBorderPixelSize()const
 		{
 			return m_borderSize[0];
 		}
@@ -249,7 +247,7 @@ namespace castor3d
 		 *\brief		Récupère l'épaisseur du bord haut
 		 *\return		La valeur
 		 */
-		inline int getTopBorderPixelSize()const
+		int getTopBorderPixelSize()const
 		{
 			return m_borderSize[1];
 		}
@@ -261,7 +259,7 @@ namespace castor3d
 		 *\brief		Récupère l'épaisseur du bord droit
 		 *\return		La valeur
 		 */
-		inline int getRightBorderPixelSize()const
+		int getRightBorderPixelSize()const
 		{
 			return m_borderSize[2];
 		}
@@ -273,7 +271,7 @@ namespace castor3d
 		 *\brief		Récupère l'épaisseur du bord bas
 		 *\return		La valeur
 		 */
-		inline int getBottomBorderPixelSize()const
+		int getBottomBorderPixelSize()const
 		{
 			return m_borderSize[3];
 		}
@@ -285,7 +283,7 @@ namespace castor3d
 		 *\brief		Récupère les épaisseurs des bords
 		 *\return		La valeur
 		 */
-		inline castor::Rectangle const & getBorderPixelSize()const
+		castor::Rectangle const & getBorderPixelSize()const
 		{
 			return m_borderSize;
 		}
@@ -297,7 +295,7 @@ namespace castor3d
 		 *\brief		Définit l'épaisseur du bord gauche
 		 *\param[in]	size	La nouvelle valeur
 		 */
-		inline void setLeftBorderPixelSize( int size )
+		void setLeftBorderPixelSize( int size )
 		{
 			m_borderSize[0] = size;
 			m_sizeChanged = true;
@@ -311,7 +309,7 @@ namespace castor3d
 		 *\brief		Définit l'épaisseur du bord haut
 		 *\param[in]	size	La nouvelle valeur
 		 */
-		inline void setTopBorderPixelSize( int size )
+		void setTopBorderPixelSize( int size )
 		{
 			m_borderSize[1] = size;
 			m_sizeChanged = true;
@@ -325,7 +323,7 @@ namespace castor3d
 		 *\brief		Définit l'épaisseur du bord droit
 		 *\param[in]	size	La nouvelle valeur
 		 */
-		inline void setRightBorderPixelSize( int size )
+		void setRightBorderPixelSize( int size )
 		{
 			m_borderSize[2] = size;
 			m_sizeChanged = true;
@@ -339,7 +337,7 @@ namespace castor3d
 		 *\brief		Définit l'épaisseur du bord bas
 		 *\param[in]	size	La nouvelle valeur
 		 */
-		inline void setBottomBorderPixelSize( int size )
+		void setBottomBorderPixelSize( int size )
 		{
 			m_borderSize[3] = size;
 			m_sizeChanged = true;
@@ -353,7 +351,7 @@ namespace castor3d
 		 *\brief		Définit l'épaisseur des bords
 		 *\param[in]	size	La nouvelle valeur
 		 */
-		inline void setBorderPixelSize( castor::Rectangle const & size )
+		void setBorderPixelSize( castor::Rectangle const & size )
 		{
 			m_borderSize = size;
 			m_sizeChanged = true;
@@ -385,25 +383,13 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the borders vertex buffer
-		 *\return		The buffer
-		 *\~french
-		 *\brief		Récupère le tampon de sommets de la bordure
-		 *\return		Le tampon
-		 */
-		inline OverlayCategory::VertexArray const & getBorderVertex()const
-		{
-			return m_arrayVtxBorder;
-		}
-		/**
-		 *\~english
 		 *\brief		Sets the borders outer part UV
 		 *\param[in]	value	The new value (left, top, right and bottom)
 		 *\~french
 		 *\brief		Définit Les UV de la partie extérieure de la bordure
 		 *\param[in]	value	La nouvelle valeur (gauche, haut, droite, bas)
 		 */
-		inline void setBorderOuterUV( castor::Point4d const & value )
+		void setBorderOuterUV( castor::Point4d const & value )
 		{
 			m_borderOuterUv = value;
 		}
@@ -415,7 +401,7 @@ namespace castor3d
 		 *\brief		Récupère Les UV de la partie extérieure de la bordure
 		 *\return		La valeur (gauche, haut, droite, bas)
 		 */
-		inline castor::Point4d const & getBorderOuterUV()const
+		castor::Point4d const & getBorderOuterUV()const
 		{
 			return m_borderOuterUv;
 		}
@@ -427,7 +413,7 @@ namespace castor3d
 		 *\brief		Définit Les UV de la partie intérieure de la bordure
 		 *\param[in]	value	La nouvelle valeur (gauche, haut, droite, bas)
 		 */
-		inline void setBorderInnerUV( castor::Point4d const & value )
+		void setBorderInnerUV( castor::Point4d const & value )
 		{
 			m_borderInnerUv = value;
 		}
@@ -439,7 +425,7 @@ namespace castor3d
 		 *\brief		Récupère Les UV de la partie intérieure de la bordure
 		 *\return		La valeur (gauche, haut, droite, bas)
 		 */
-		inline castor::Point4d const & getBorderInnerUV()const
+		castor::Point4d const & getBorderInnerUV()const
 		{
 			return m_borderInnerUv;
 		}
@@ -478,12 +464,6 @@ namespace castor3d
 		//!\~english	The border material name.
 		//!\~french		Le nom du matériau des bords.
 		BorderPosition m_borderPosition{ BorderPosition::eInternal };
-		//!\~english	The vertex buffer data.
-		//!\~french		Les données du tampon de sommets.
-		VertexArray m_arrayVtx;
-		//!\~english	The borders vertex buffer data.
-		//!\~french		Les données du tampon de sommets pour la bordure.
-		OverlayCategory::VertexArray m_arrayVtxBorder;
 		//!\~english	The UV for the outer part of the border.
 		//!\~french		Les UV de la partie extérieure de la bordure.
 		castor::Point4d m_borderOuterUv;
@@ -493,6 +473,7 @@ namespace castor3d
 		//!\~english	Tells if the border has changed, in any way.
 		//!\~french		Dit si la bordure a changé, de quelque manière que ce soit.
 		bool m_borderChanged;
+		castor::Size m_refSize;
 	};
 }
 

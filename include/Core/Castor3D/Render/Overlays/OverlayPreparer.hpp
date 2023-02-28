@@ -47,10 +47,9 @@ namespace castor3d
 		void doPrepareOverlay( RenderDevice const & device
 			, OverlayT const & overlay
 			, Pass const & pass
-			, std::map< size_t, OverlayVertexBufferIndexT< VertexT, CountT > > & overlays
-			, std::vector< OverlayVertexBufferPoolPtrT< VertexT, CountT > > & vertexBuffers
-			, std::vector < VertexT > const & vertices
-			, FontTextureSPtr fontTexture );
+			, OverlayVertexBufferPoolT< VertexT, CountT > & vertexBuffer
+			, FontTextureSPtr fontTexture
+			, bool secondary );
 
 	private:
 		OverlayRenderer & m_renderer;

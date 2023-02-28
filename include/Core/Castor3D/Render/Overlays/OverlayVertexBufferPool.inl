@@ -2,7 +2,6 @@
 See LICENSE file in root folder
 */
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Buffer/ObjectBufferPool.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
 #include "Castor3D/Shader/ShaderBuffers/TextureAnimationBuffer.hpp"
@@ -35,65 +34,60 @@ namespace castor3d
 			, overlaysData->getCount() ) }
 		, noTexDeclaration{ noTexDecl }
 		, texDeclaration{ texDecl }
-		, buffer{ castor::makeUnique< VertexBufferPool >( device, debugName ) }
+		, vertexBuffer{ device.renderSystem
+			, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT
+			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+			, debugName
+			, ashes::QueueShare{}
+			, MaxPipelines * sizeof( VertexT ) * CountT }
 		, descriptorPool{ descriptorLayout.createPool( 1u ) }
 		, descriptorSet{ doCreateDescriptorSet( cameraUbo, descriptorLayout, debugName ) }
 	{
 	}
 
 	template< typename VertexT, uint32_t CountT >
-	OverlayVertexBufferIndexT< VertexT, CountT > OverlayVertexBufferPoolT< VertexT, CountT >::allocate( OverlayRenderNode & node )
+	template< typename OverlayT >
+	OverlayVertexBufferIndexT< VertexT, CountT > OverlayVertexBufferPoolT< VertexT, CountT >::fill( OverlayT const & overlay
+		, OverlayRenderNode & node
+		, bool secondary )
 	{
-		auto it = std::find_if( allocated.begin()
-			, allocated.end()
-			, []( ObjectBufferOffset const & lookup )
-			{
-				return lookup.getBufferChunk( SubmeshFlag::ePositions ).buffer == nullptr;
-			} );
-
-		if ( it == allocated.end() )
-		{
-			allocated.emplace_back( buffer->getBuffer< Quad >( 1u ) );
-			it = std::next( allocated.begin(), ptrdiff_t( allocated.size() - 1u ) );
-		}
-
 		OverlayVertexBufferIndexT< VertexT, CountT > result{ *this
 			, node
-			, uint32_t( std::distance( allocated.begin(), it ) ) };
-		ObjectBufferOffset & offsets = *it;
+			, index };
 
-		result.geometryBuffers.noTexture.bufferOffset = offsets;
-		result.geometryBuffers.noTexture.layouts.emplace_back( noTexDeclaration );
+		if ( allocated <= ( MaxPipelines * ( CountT - 1u ) ) )
+		{
+			auto offset = allocated * sizeof( VertexT );
+			auto count = overlay.fillBuffer( &vertexBuffer.template getData< VertexT >( offset )
+				, secondary );
 
-		result.geometryBuffers.textured.bufferOffset = offsets;
-		result.geometryBuffers.textured.layouts.emplace_back( texDeclaration );
+			if ( count )
+			{
+				result.geometryBuffers.buffer = &vertexBuffer;
+				result.geometryBuffers.offset = offset;
+				result.geometryBuffers.range = count * sizeof( VertexT );
+				result.geometryBuffers.count = count;
+				allocated += count;
+				++index;
+			}
+		}
 
 		return result;
 	}
 
 	template< typename VertexT, uint32_t CountT >
-	void OverlayVertexBufferPoolT< VertexT, CountT >::deallocate( OverlayVertexBufferIndexT< VertexT, CountT > const & index )
-	{
-		CU_Require( &index.pool == this );
-		auto it = std::find_if( allocated.begin()
-			, allocated.end()
-			, [&index]( auto const & lookup )
-			{
-				return lookup.first == index.index;
-			} );
-		CU_Require( it != allocated.end() );
-		buffer->putBuffer( *it );
-		*it = {};
-		index.geometryBuffers.noTexture.bufferOffset = {};
-		index.geometryBuffers.noTexture.layouts.clear();
-		index.geometryBuffers.textured.bufferOffset = {};
-		index.geometryBuffers.textured.layouts.clear();
-	}
-
-	template< typename VertexT, uint32_t CountT >
 	void OverlayVertexBufferPoolT< VertexT, CountT >::upload( ashes::CommandBuffer const & cb )
 	{
-		buffer->upload( cb );
+		if ( allocated )
+		{
+			vertexBuffer.markDirty( 0u
+				, allocated * sizeof( VertexT )
+				, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
+				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
+			vertexBuffer.upload( cb );
+			allocated = 0u;
+			index = 0u;
+		}
 	}
 
 	template< typename VertexT, uint32_t CountT >
