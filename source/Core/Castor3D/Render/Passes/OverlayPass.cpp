@@ -4,7 +4,8 @@
 #include "Castor3D/Cache/OverlayCache.hpp"
 #include "Castor3D/Overlay/Overlay.hpp"
 #include "Castor3D/Overlay/OverlayCategory.hpp"
-#include "Castor3D/Overlay/OverlayRenderer.hpp"
+#include "Castor3D/Render/Overlays/OverlayPreparer.hpp"
+#include "Castor3D/Render/Overlays/OverlayRenderer.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
 #include <RenderGraph/RunnableGraph.hpp>
@@ -16,7 +17,7 @@ namespace castor3d
 	{
 		static void doParseOverlays( OverlayCache const & cache
 			, OverlayRenderer & renderer
-			, OverlayRenderer::Preparer & preparer )
+			, OverlayPreparer & preparer )
 		{
 			auto lock( castor::makeUniqueLock( cache ) );
 

@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "PassesModule.hpp"
 #include "Castor3D/Overlay/OverlayModule.hpp"
+#include "Castor3D/Render/Overlays/OverlaysModule.hpp"
 
 #include <RenderGraph/RunnablePass.hpp>
 #include <RenderGraph/RunnablePasses/RenderPass.hpp>

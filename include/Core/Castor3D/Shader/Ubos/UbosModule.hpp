@@ -329,8 +329,11 @@ namespace castor3d
 	*/
 	struct OverlayUboConfiguration
 	{
-		castor::Point4f positionRatio;
-		castor::Point4i renderSizeIndex;
+		castor::Point2f position;
+		castor::Point2f ratio;
+		castor::Point2ui refRenderSize;
+		uint32_t materialId;
+		uint32_t pad;
 	};
 	/**
 	*\~english

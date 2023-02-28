@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Overlay/OverlayVisitor.hpp"
 #include "Castor3D/Material/MaterialModule.hpp"
+#include "Castor3D/Render/Overlays/OverlaysModule.hpp"
 
 #include <CastorUtils/Data/TextWriter.hpp>
 #include <CastorUtils/Graphics/Position.hpp>
@@ -17,9 +18,6 @@ namespace castor3d
 	{
 	public:
 		/**
-		\author 	Sylvain DOREMUS
-		\date 		28/11/2014
-		\version	0.7.0
 		\~english
 		\brief		Holds specific vertex data for an Overlay
 		\~french

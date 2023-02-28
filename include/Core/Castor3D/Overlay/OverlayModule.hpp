@@ -228,15 +228,6 @@ namespace castor3d
 	*/
 	class OverlayFactory;
 	/**
-	*\~english
-	*\brief
-	*	The overlay renderer.
-	*\~french
-	*\brief
-	*	Le renderer d'incrustation.
-	*/
-	class OverlayRenderer;
-	/**
 	\~english
 	\brief
 	*	The overlay visitor base class.
@@ -270,7 +261,6 @@ namespace castor3d
 	CU_DeclareCUSmartPtr( castor3d, Overlay, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, OverlayCategory, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, OverlayFactory, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, OverlayRenderer, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, PanelOverlay, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, TextOverlay, C3D_API );
 	/**

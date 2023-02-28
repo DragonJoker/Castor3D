@@ -884,7 +884,6 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Overlay/OverlayCategory.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Overlay/OverlayFactory.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Overlay/OverlayModule.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Overlay/OverlayRenderer.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Overlay/OverlayVisitor.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Overlay/PanelOverlay.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Overlay/TextOverlay.cpp
@@ -898,7 +897,6 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Overlay/OverlayCategory.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Overlay/OverlayFactory.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Overlay/OverlayModule.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Overlay/OverlayRenderer.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Overlay/OverlayVisitor.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Overlay/PanelOverlay.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Overlay/TextOverlay.hpp
@@ -1217,6 +1215,30 @@ set( ${PROJECT_NAME}_HDR_FILES
 )
 source_group( "Header Files\\Render\\Opaque\\Lighting" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
 source_group( "Source Files\\Render\\Opaque\\Lighting" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
+
+set( ${PROJECT_NAME}_FOLDER_SRC_FILES
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Overlays/OverlayPreparer.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Overlays/OverlayRenderer.cpp
+)
+set( ${PROJECT_NAME}_FOLDER_HDR_FILES
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Overlays/OverlaysModule.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Overlays/OverlayPreparer.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Overlays/OverlayPreparer.inl
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Overlays/OverlayRenderer.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Overlays/OverlayVertexBufferIndex.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Overlays/OverlayVertexBufferPool.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Overlays/OverlayVertexBufferPool.inl
+)
+set( ${PROJECT_NAME}_SRC_FILES
+	${${PROJECT_NAME}_SRC_FILES}
+	${${PROJECT_NAME}_FOLDER_SRC_FILES}
+)
+set( ${PROJECT_NAME}_HDR_FILES
+	${${PROJECT_NAME}_HDR_FILES}
+	${${PROJECT_NAME}_FOLDER_HDR_FILES}
+)
+source_group( "Header Files\\Render\\Overlays" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
+source_group( "Source Files\\Render\\Overlays" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
 
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Passes/BackgroundPassBase.cpp

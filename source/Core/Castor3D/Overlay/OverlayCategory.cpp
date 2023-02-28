@@ -4,9 +4,9 @@
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Overlay/BorderPanelOverlay.hpp"
 #include "Castor3D/Overlay/Overlay.hpp"
-#include "Castor3D/Overlay/OverlayRenderer.hpp"
 #include "Castor3D/Overlay/PanelOverlay.hpp"
 #include "Castor3D/Overlay/TextOverlay.hpp"
+#include "Castor3D/Render/Overlays/OverlayRenderer.hpp"
 
 CU_ImplementCUSmartPtr( castor3d, OverlayCategory )
 
