@@ -3,7 +3,7 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Overlay/Overlay.hpp"
-#include "Castor3D/Overlay/OverlayRenderer.hpp"
+#include "Castor3D/Render/Overlays/OverlayRenderer.hpp"
 
 CU_ImplementCUSmartPtr( castor3d, BorderPanelOverlay )
 
