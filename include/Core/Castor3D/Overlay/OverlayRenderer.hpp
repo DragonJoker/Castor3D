@@ -169,8 +169,6 @@ namespace castor3d
 
 		struct Pipeline
 		{
-			ashes::DescriptorSetLayoutPtr descriptorLayout;
-			ashes::DescriptorSetPoolPtr descriptorPool;
 			ashes::PipelineLayoutPtr pipelineLayout;
 			ashes::GraphicsPipelinePtr pipeline;
 		};
@@ -189,7 +187,7 @@ namespace castor3d
 			GeometryBuffers textured;
 		};
 
-		struct OverlayDescriptorConnection
+		struct FontTextureDescriptorConnection
 		{
 			ashes::DescriptorSetPtr descriptorSet;
 			FontTexture::OnChanged::connection connection{};
@@ -207,6 +205,8 @@ namespace castor3d
 			VertexBufferPoolT( Engine & engine
 				, std::string const & debugName
 				, RenderDevice const & device
+				, CameraUbo const & cameraUbo
+				, ashes::DescriptorSetLayout const & descriptorLayout
 				, ashes::PipelineVertexInputStateCreateInfo const & noTexDecl
 				, ashes::PipelineVertexInputStateCreateInfo const & texDecl
 				, uint32_t count );
@@ -222,6 +222,13 @@ namespace castor3d
 			ashes::PipelineVertexInputStateCreateInfo const & texDeclaration;
 			VertexBufferPoolUPtr buffer;
 			std::vector< ObjectBufferOffset > allocated;
+			ashes::DescriptorSetPoolPtr descriptorPool;
+			ashes::DescriptorSetPtr descriptorSet;
+
+		private:
+			ashes::DescriptorSetPtr doCreateDescriptorSet( CameraUbo const & cameraUbo
+				, ashes::DescriptorSetLayout const & descriptorLayout
+				, std::string const & debugName )const;
 		};
 
 		template< typename VertexT, uint32_t CountT >
@@ -236,7 +243,6 @@ namespace castor3d
 			OverlayRenderNode & node;
 			uint32_t index;
 			OverlayGeometryBuffers geometryBuffers{};
-			std::map< void *, OverlayDescriptorConnection > descriptorSets{};
 		};
 
 		using PanelVertexBufferPool = VertexBufferPoolT< OverlayCategory::Vertex, 6u >;
@@ -272,17 +278,7 @@ namespace castor3d
 		ashes::PipelineShaderStageCreateInfoArray doCreateOverlayProgram( RenderDevice const & device
 			, TextureCombine const & texturesFlags
 			, bool text );
-		ashes::DescriptorSetPtr doCreateDescriptorSet( OverlayRenderer::Pipeline & pipeline
-			, Pass const & pass
-			, ashes::Buffer< Configuration > const & overlaysData
-			, uint32_t index
-			, bool update = true );
-		ashes::DescriptorSetPtr doCreateDescriptorSet( OverlayRenderer::Pipeline & pipeline
-			, Pass const & pass
-			, ashes::Buffer< Configuration > const & overlaysData
-			, uint32_t index
-			, TextureLayout const & texture
-			, Sampler const & sampler );
+		ashes::DescriptorSet const & doCreateTextDescriptorSet( FontTexture & fontTexture );
 
 	private:
 		Texture const & m_target;
@@ -308,6 +304,10 @@ namespace castor3d
 		bool m_sizeChanged{ true };
 		CameraUbo m_cameraUbo;
 		std::vector< ashes::DescriptorSetPtr > m_retired;
+		ashes::DescriptorSetLayoutPtr m_baseDescriptorLayout;
+		ashes::DescriptorSetLayoutPtr m_textDescriptorLayout;
+		ashes::DescriptorSetPoolPtr m_textDescriptorPool;
+		std::map< FontTexture const *, FontTextureDescriptorConnection > m_textDescriptorSets;
 	};
 }
 
