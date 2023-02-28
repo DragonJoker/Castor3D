@@ -56,10 +56,9 @@ namespace castor3d
 					doPrepareOverlay< OverlayRenderer::PanelVertexBufferPool::Quad >( m_device
 						, overlay
 						, *pass
-						, m_renderer.m_panelOverlays
-						, m_renderer.m_panelVertexBuffers
-						, overlay.getPanelVertex()
-						, nullptr );
+						, *m_renderer.m_panelVertexBuffer
+						, nullptr
+						, false );
 				}
 			}
 		}
@@ -76,10 +75,9 @@ namespace castor3d
 					doPrepareOverlay< OverlayRenderer::PanelVertexBufferPool::Quad >( m_device
 						, overlay
 						, *pass
-						, m_renderer.m_panelOverlays
-						, m_renderer.m_panelVertexBuffers
-						, overlay.getPanelVertex()
-						, nullptr );
+						, *m_renderer.m_panelVertexBuffer
+						, nullptr
+						, false );
 				}
 			}
 		}
@@ -93,10 +91,9 @@ namespace castor3d
 					doPrepareOverlay< OverlayRenderer::BorderPanelVertexBufferPool::Quad >( m_device
 						, overlay
 						, *pass
-						, m_renderer.m_borderPanelOverlays
-						, m_renderer.m_borderVertexBuffers
-						, overlay.getBorderVertex()
-						, nullptr );
+						, *m_renderer.m_borderVertexBuffer
+						, nullptr
+						, true );
 				}
 			}
 		}
@@ -113,10 +110,9 @@ namespace castor3d
 					doPrepareOverlay< OverlayRenderer::TextVertexBufferPool::Quad >( m_device
 						, overlay
 						, *pass
-						, m_renderer.m_textOverlays
-						, m_renderer.m_textVertexBuffers
-						, overlay.getTextVertex()
-						, overlay.getFontTexture() );
+						, *m_renderer.m_textVertexBuffer
+						, overlay.getFontTexture()
+						, false );
 				}
 			}
 		}

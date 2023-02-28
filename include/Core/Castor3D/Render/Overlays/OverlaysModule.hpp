@@ -5,7 +5,8 @@ See LICENSE file in root folder
 #define ___C3D_OverlaysModule_H___
 
 #include "Castor3D/Limits.hpp"
-#include "Castor3D/Buffer/GeometryBuffers.hpp"
+#include "Castor3D/Buffer/BufferModule.hpp"
+#include "Castor3D/Material/Pass/PassModule.hpp"
 #include "Castor3D/Overlay/OverlayModule.hpp"
 
 #include <CastorUtils/Math/MathModule.hpp>
@@ -86,8 +87,10 @@ namespace castor3d
 
 	struct OverlayGeometryBuffers
 	{
-		GeometryBuffers noTexture;
-		GeometryBuffers textured;
+		GpuBufferBase * buffer;
+		VkDeviceSize offset;
+		VkDeviceSize range;
+		uint32_t count;
 	};
 
 	CU_DeclareCUSmartPtr( castor3d, OverlayRenderer, C3D_API );

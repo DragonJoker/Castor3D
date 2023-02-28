@@ -231,6 +231,24 @@ namespace castor3d
 				return sdw::makeAggrInit( type, std::move( initializers ) );
 			}
 		};
+
+		ashes::DescriptorSetLayoutPtr createBaseDescriptorLayout( RenderDevice const & device )
+		{
+			auto & engine = *device.renderSystem.getEngine();
+			auto & materials = engine.getMaterialCache();
+			ashes::VkDescriptorSetLayoutBindingArray baseBindings;
+			baseBindings.emplace_back( materials.getPassBuffer().createLayoutBinding( uint32_t( OverlayBindingId::eMaterials ) ) );
+			baseBindings.emplace_back( materials.getTexConfigBuffer().createLayoutBinding( uint32_t( OverlayBindingId::eTexConfigs ) ) );
+			baseBindings.emplace_back( materials.getTexAnimBuffer().createLayoutBinding( uint32_t( OverlayBindingId::eTexAnims ) ) );
+			baseBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( OverlayBindingId::eCamera )
+				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+				, VK_SHADER_STAGE_VERTEX_BIT ) );
+			baseBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( OverlayBindingId::eOverlays )
+				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+				, VK_SHADER_STAGE_VERTEX_BIT ) );
+			return device->createDescriptorSetLayout( "OverlaysBase"
+				, std::move( baseBindings ) );
+		}
 	}
 
 	//*********************************************************************************************
@@ -267,23 +285,35 @@ namespace castor3d
 			, ashes::VkVertexInputAttributeDescriptionArray{ { 0u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( TextOverlay::Vertex, coords ) }
 				, { 1u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( TextOverlay::Vertex, texture ) }
 				, { 2u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( TextOverlay::Vertex, text ) } } }
-		, m_size{ makeSize( m_target.getExtent() ) }
 		, m_cameraUbo{ device }
+		, m_baseDescriptorLayout{ ovrlrend::createBaseDescriptorLayout( device ) }
+		, m_panelVertexBuffer{ std::make_unique< PanelVertexBufferPool >( *getRenderSystem()->getEngine()
+			, "PanelOverlays"
+			, device
+			, m_cameraUbo
+			, *m_baseDescriptorLayout
+			, m_noTexDeclaration
+			, m_texDeclaration
+			, MaxOverlayPanelsPerBuffer ) }
+		, m_borderVertexBuffer{ std::make_unique< BorderPanelVertexBufferPool >( *getRenderSystem()->getEngine()
+			, "BorderPanelOverlays"
+			, device
+			, m_cameraUbo
+			, *m_baseDescriptorLayout
+			, m_noTexDeclaration
+			, m_texDeclaration
+			, MaxOverlayPanelsPerBuffer ) }
+		, m_textVertexBuffer{ std::make_unique< TextVertexBufferPool >( *getRenderSystem()->getEngine()
+			, "TextOverlays"
+			, device
+			, m_cameraUbo
+			, *m_baseDescriptorLayout
+			, m_noTexTextDeclaration
+			, m_texTextDeclaration
+			, MaxOverlayPanelsPerBuffer ) }
+		, m_size{ makeSize( m_target.getExtent() ) }
 	{
 		std::string name = "Overlays";
-		auto & materials = getRenderSystem()->getEngine()->getMaterialCache();
-		ashes::VkDescriptorSetLayoutBindingArray baseBindings;
-		baseBindings.emplace_back( materials.getPassBuffer().createLayoutBinding( uint32_t( OverlayBindingId::eMaterials ) ) );
-		baseBindings.emplace_back( materials.getTexConfigBuffer().createLayoutBinding( uint32_t( OverlayBindingId::eTexConfigs ) ) );
-		baseBindings.emplace_back( materials.getTexAnimBuffer().createLayoutBinding( uint32_t( OverlayBindingId::eTexAnims ) ) );
-		baseBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( OverlayBindingId::eCamera )
-			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, VK_SHADER_STAGE_VERTEX_BIT ) );
-		baseBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( OverlayBindingId::eOverlays )
-			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-			, VK_SHADER_STAGE_VERTEX_BIT ) );
-		m_baseDescriptorLayout = device->createDescriptorSetLayout( name + "Base"
-			, std::move( baseBindings ) );
 
 		ashes::VkDescriptorSetLayoutBindingArray textBindings;
 		textBindings.emplace_back( makeDescriptorSetLayoutBinding( 0u
@@ -292,36 +322,6 @@ namespace castor3d
 		m_textDescriptorLayout = device->createDescriptorSetLayout( name + "Text"
 			, std::move( textBindings ) );
 		m_textDescriptorPool = m_textDescriptorLayout->createPool( MaxOverlayPanelsPerBuffer );
-
-		// Create one panel overlays buffer pool
-		m_panelVertexBuffers.emplace_back( std::make_unique< PanelVertexBufferPool >( *getRenderSystem()->getEngine()
-			, "PanelOverlays"
-			, device
-			, m_cameraUbo
-			, *m_baseDescriptorLayout
-			, m_noTexDeclaration
-			, m_texDeclaration
-			, MaxOverlayPanelsPerBuffer ) );
-
-		// Create one border overlays buffer pool
-		m_borderVertexBuffers.emplace_back( std::make_unique< BorderPanelVertexBufferPool >( *getRenderSystem()->getEngine()
-			, "BorderPanelOverlays"
-			, device
-			, m_cameraUbo
-			, *m_baseDescriptorLayout
-			, m_noTexDeclaration
-			, m_texDeclaration
-			, MaxOverlayPanelsPerBuffer ) );
-
-		// create one text overlays buffer
-		m_textVertexBuffers.emplace_back( std::make_unique< TextVertexBufferPool >( *getRenderSystem()->getEngine()
-			, "TextOverlays"
-			, device
-			, m_cameraUbo
-			, *m_baseDescriptorLayout
-			, m_noTexTextDeclaration
-			, m_texTextDeclaration
-			, MaxOverlayPanelsPerBuffer ) );
 
 		m_cameraUbo.cpuUpdate( getRenderSystem()->getOrtho( 0.0f
 			, float( m_size.getWidth() )
@@ -333,16 +333,13 @@ namespace castor3d
 
 	OverlayRenderer::~OverlayRenderer()
 	{
-		m_panelOverlays.clear();
-		m_borderPanelOverlays.clear();
-		m_textOverlays.clear();
 		m_mapPanelNodes.clear();
 		m_mapTextNodes.clear();
 		m_panelPipelines.clear();
 		m_textPipelines.clear();
-		m_panelVertexBuffers.clear();
-		m_borderVertexBuffers.clear();
-		m_textVertexBuffers.clear();
+		m_panelVertexBuffer.reset();
+		m_borderVertexBuffer.reset();
+		m_textVertexBuffer.reset();
 		m_commands = {};
 	}
 
@@ -372,20 +369,9 @@ namespace castor3d
 
 	void OverlayRenderer::upload( ashes::CommandBuffer const & cb )
 	{
-		for ( auto & pool : m_panelVertexBuffers )
-		{
-			pool->upload( cb );
-		}
-
-		for ( auto & pool : m_borderVertexBuffers )
-		{
-			pool->upload( cb );
-		}
-
-		for ( auto & pool : m_textVertexBuffers )
-		{
-			pool->upload( cb );
-		}
+		m_panelVertexBuffer->upload( cb );
+		m_borderVertexBuffer->upload( cb );
+		m_textVertexBuffer->upload( cb );
 	}
 
 	void OverlayRenderer::doBeginPrepare( VkRenderPass renderPass

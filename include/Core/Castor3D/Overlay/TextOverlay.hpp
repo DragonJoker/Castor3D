@@ -14,9 +14,6 @@ namespace castor3d
 	{
 	public:
 		/**
-		\author 	Sylvain DOREMUS
-		\date 		26/03/2016
-		\version	0.8.0
 		\~english
 		\brief		Holds specific vertex data for a TextOverlay.
 		\~french
@@ -54,6 +51,16 @@ namespace castor3d
 		 *\copydoc	castor3d::OverlayCategory::accept
 		 */
 		C3D_API void accept( OverlayVisitor & visitor )const override;
+		/**
+		 *\~english
+		 *\brief		Fills the given buffer.
+		 *\param[out]	buffer	The buffer.
+		 *\~french
+		 *\brief		Remplit le tampon de sommets donné.
+		 *\param[out]	buffer	Le buffer.
+		 */
+		C3D_API uint32_t fillBuffer( Vertex * buffer
+			, bool secondary )const;
 		/**
 		 *\~english
 		 *\brief		Sets the text font
@@ -94,18 +101,6 @@ namespace castor3d
 		inline FontTextureSPtr getFontTexture()const
 		{
 			return m_fontTexture.lock();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the panel vertex buffer
-		 *\return		The buffer
-		 *\~french
-		 *\brief		Récupère le tampon de sommets du panneau
-		 *\return		Le tampon
-		 */
-		inline VertexArray const & getTextVertex()const
-		{
-			return m_arrayVtx;
 		}
 		/**
 		 *\~english
@@ -354,14 +349,14 @@ namespace castor3d
 		 *\param[in]	size		Les dimensions de la cible de rendu.
 		 *\param[in]	generateUvs	La fonction de génération d'UV.
 		 */
-		C3D_API void doUpdateBuffer( castor::Size const & size
+		C3D_API uint32_t doFillBuffer( Vertex *buffer
 			, std::function< void( castor::Point2d const & size
 				, castor::Rectangle const & absolute
 				, castor::Point4f const & fontUV
 				, float & uvLeft
 				, float & uvTop
 				, float & uvRight
-				, float & uvBottom ) > generateUvs );
+				, float & uvBottom ) > generateUvs )const;
 		/**
 		 *\~english
 		 *\brief		Computes the lines to display.
@@ -377,7 +372,7 @@ namespace castor3d
 		 *\return		Les lignes.
 		 */
 		C3D_API DisplayableLineArray doPrepareText( castor::Size const & renderSize
-			, castor::Point2d const & size );
+			, castor::Point2d const & size )const;
 		/**
 		 *\~english
 		 *\brief		adds a word to the vertex buffer.
@@ -404,7 +399,7 @@ namespace castor3d
 			, castor::Point2d const & size
 			, double & left
 			, DisplayableLine & line
-			, DisplayableLineArray & lines );
+			, DisplayableLineArray & lines )const;
 		/**
 		 *\~english
 		 *\brief		Fills the line, and jumps to the next one.
@@ -422,7 +417,7 @@ namespace castor3d
 		C3D_API DisplayableLine doFinishLine( castor::Point2d const & size
 			, DisplayableLine line
 			, double & left
-			, DisplayableLineArray & lines );
+			, DisplayableLineArray & lines )const;
 		/**
 		 *\~english
 		 *\brief		Horizontally align a line.
@@ -437,7 +432,7 @@ namespace castor3d
 		 */
 		C3D_API void doAlignHorizontally( double width
 			, DisplayableLine line
-			, DisplayableLineArray & lines );
+			, DisplayableLineArray & lines )const;
 		/**
 		 *\~english
 		 *\brief		Vertically align text.
@@ -449,10 +444,9 @@ namespace castor3d
 		 *\param[out]	lines		Les lignes.
 		 */
 		C3D_API void doAlignVertically( double height
-			, DisplayableLineArray & lines );
+			, DisplayableLineArray & lines )const;
 
 	private:
-		VertexArray m_arrayVtx;
 		castor::String m_currentCaption;
 		castor::String m_previousCaption;
 		FontTextureWPtr m_fontTexture;
@@ -464,6 +458,7 @@ namespace castor3d
 		FontTexture::OnChanged::connection m_connection;
 		TextTexturingMode m_texturingMode{ TextTexturingMode::eText };
 		TextureCoordsArray m_arrayTextTexture;
+		castor::Size m_refSize;
 	};
 }
 

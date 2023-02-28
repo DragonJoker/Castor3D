@@ -34,16 +34,14 @@ namespace castor3d
 		C3D_API void accept( OverlayVisitor & visitor )const override;
 		/**
 		 *\~english
-		 *\brief		Retrieves the panel vertex buffer
-		 *\return		The buffer
+		 *\brief		Fills the given buffer.
+		 *\param[out]	buffer	The buffer.
 		 *\~french
-		 *\brief		Récupère le tampon de sommets du panneau
-		 *\return		Le tampon
+		 *\brief		Remplit le tampon de sommets donné.
+		 *\param[out]	buffer	Le buffer.
 		 */
-		inline OverlayCategory::VertexArray const & getPanelVertex()const
-		{
-			return m_arrayVtx;
-		}
+		C3D_API uint32_t fillBuffer( Vertex * buffer
+			, bool secondary )const;
 
 	protected:
 		/**
@@ -52,9 +50,7 @@ namespace castor3d
 		C3D_API void doUpdateBuffer( castor::Size const & size )override;
 
 	protected:
-		//!\~english	The vertex buffer data.
-		//!\~french		Les données du tampon de sommets.
-		VertexArray m_arrayVtx;
+		castor::Size m_refSize;
 	};
 }
 
