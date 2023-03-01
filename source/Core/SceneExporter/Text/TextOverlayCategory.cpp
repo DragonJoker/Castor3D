@@ -24,8 +24,8 @@ namespace castor
 	bool TextWriter< OverlayCategory >::operator()( OverlayCategory const & overlay
 		, StringStream & file )
 	{
-		bool result = writeNamedSub( file, cuT( "position" ), overlay.getPosition() )
-			&& writeNamedSub( file, cuT( "size" ), overlay.getSize() );
+		bool result = writeNamedSub( file, cuT( "position" ), overlay.getRelativePosition() )
+			&& writeNamedSub( file, cuT( "size" ), overlay.getRelativeSize() );
 
 		if ( result && overlay.getMaterial() )
 		{

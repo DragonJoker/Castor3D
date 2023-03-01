@@ -116,7 +116,7 @@ namespace castor3d
 		ovrlrend::doUpdateUbo( bufferIndex.pool.overlaysBuffer[bufferIndex.index]
 			, overlay
 			, pass
-			, m_renderer.m_size );
+			, m_renderer.getSize() );
 		ashes::DescriptorSetCRefArray descriptorSets;
 		descriptorSets.push_back( *bufferIndex.pool.descriptorSet );
 		descriptorSets.push_back( *device.renderSystem.getEngine()->getTextureUnitCache().getDescriptorSet() );

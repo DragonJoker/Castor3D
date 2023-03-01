@@ -43,13 +43,10 @@ namespace castor3d
 		C3D_API uint32_t fillBuffer( Vertex * buffer
 			, bool secondary )const;
 
-	protected:
-		/**
-		 *\copydoc	castor3d::OverlayCategory::doUpdateBuffer
-		 */
-		C3D_API void doUpdateBuffer( castor::Size const & size )override;
+	private:
+		void doUpdate( OverlayRenderer const & renderer )override;
 
-	protected:
+	private:
 		castor::Size m_refSize;
 	};
 }

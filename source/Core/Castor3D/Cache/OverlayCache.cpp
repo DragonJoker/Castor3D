@@ -44,8 +44,8 @@ namespace castor
 		{
 			for ( auto child : overlay )
 			{
-				child->setPosition( child->getAbsolutePosition() );
-				child->setSize( child->getAbsoluteSize() );
+				child->setRelativePosition( child->getAbsolutePosition() );
+				child->setRelativeSize( child->getAbsoluteSize() );
 			}
 		}
 

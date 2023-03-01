@@ -4844,7 +4844,7 @@ namespace castor3d
 		{
 			castor::Point2d ptPosition;
 			params[0]->get( ptPosition );
-			parsingContext.overlay->setPosition( ptPosition );
+			parsingContext.overlay->setRelativePosition( ptPosition );
 		}
 		else
 		{
@@ -4861,7 +4861,7 @@ namespace castor3d
 		{
 			castor::Point2d ptSize;
 			params[0]->get( ptSize );
-			parsingContext.overlay->setSize( ptSize );
+			parsingContext.overlay->setRelativeSize( ptSize );
 		}
 		else
 		{

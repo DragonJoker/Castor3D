@@ -85,7 +85,7 @@ namespace castor3d
 
 				if ( m_progressBar )
 				{
-					m_progressBar->setSize( { index, 1.0f } );
+					m_progressBar->setRelativeSize( { index, 1.0f } );
 				}
 
 				m_stepLabelEvent = nullptr;
@@ -158,7 +158,7 @@ namespace castor3d
 
 				if ( m_progressBar )
 				{
-					m_progressBar->setSize( { index, 1.0f } );
+					m_progressBar->setRelativeSize( { index, 1.0f } );
 				}
 
 				m_stepLabelEvent = nullptr;
@@ -181,7 +181,7 @@ namespace castor3d
 			{
 				if ( m_progressBar )
 				{
-					m_progressBar->setSize( { index, 1.0f } );
+					m_progressBar->setRelativeSize( { index, 1.0f } );
 				}
 
 				m_stepEvent = nullptr;
