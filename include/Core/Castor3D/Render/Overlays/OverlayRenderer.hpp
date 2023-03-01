@@ -163,6 +163,8 @@ namespace castor3d
 			, bool text );
 		ComputePipeline doCreatePanelPipeline( RenderDevice const & device );
 		ashes::PipelineShaderStageCreateInfo doCreatePanelProgram( RenderDevice const & device );
+		ComputePipeline doCreateBorderPipeline( RenderDevice const & device );
+		ashes::PipelineShaderStageCreateInfo doCreateBorderProgram( RenderDevice const & device );
 		ashes::PipelineShaderStageCreateInfoArray doCreateOverlayProgram( RenderDevice const & device
 			, TextureCombine const & texturesFlags
 			, bool text );
@@ -194,6 +196,7 @@ namespace castor3d
 		ashes::DescriptorSetPoolPtr m_textDescriptorPool;
 		std::map< FontTexture const *, FontTextureDescriptorConnection > m_textDescriptorSets;
 		ComputePipeline m_computePanelPipeline;
+		ComputePipeline m_computeBorderPipeline;
 	};
 }
 

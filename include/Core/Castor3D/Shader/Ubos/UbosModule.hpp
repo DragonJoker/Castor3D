@@ -332,8 +332,11 @@ namespace castor3d
 		castor::Point4f uv;
 		castor::Point2f position;
 		castor::Point2f size;
+		castor::Point4f border;
+		castor::Point4f borderInnerUV;
+		castor::Point4f borderOuterUV;
 		uint32_t materialId;
-		uint32_t pad1;
+		uint32_t borderPosition;
 		uint32_t pad2;
 		uint32_t pad3;
 	};

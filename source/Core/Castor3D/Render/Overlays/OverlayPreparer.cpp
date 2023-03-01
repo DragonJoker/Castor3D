@@ -52,6 +52,7 @@ namespace castor3d
 		, m_framebuffer{ framebuffer }
 	{
 		m_renderer.m_computePanelPipeline.count = 0u;
+		m_renderer.m_computeBorderPipeline.count = 0u;
 	}
 
 	OverlayPreparer::OverlayPreparer( OverlayPreparer && rhs )noexcept
@@ -141,6 +142,7 @@ namespace castor3d
 						, *m_renderer.m_borderVertexBuffer
 						, nullptr
 						, true );
+					++m_renderer.m_computeBorderPipeline.count;
 				}
 			}
 		}
