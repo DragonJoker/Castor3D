@@ -239,9 +239,9 @@ namespace castor3d
 		 *\brief		Récupère la position de l'incrustation
 		 *\return		La valeur
 		 */
-		castor::Point2d const & getPosition()const
+		castor::Point2d const & getRelativePosition()const
 		{
-			return m_category->getPosition();
+			return m_category->getRelativePosition();
 		}
 		/**
 		 *\~english
@@ -251,9 +251,9 @@ namespace castor3d
 		 *\brief		Récupère la taille de l'incrustation
 		 *\return		La valeur
 		 */
-		castor::Point2d const & getSize()const
+		castor::Point2d const & getRelativeSize()const
 		{
-			return m_category->getSize();
+			return m_category->getRelativeSize();
 		}
 		/**
 		 *\~english
@@ -317,54 +317,6 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the overlay position
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère la position de l'incrustation
-		 *\return		La valeur
-		 */
-		castor::Point2d & getPosition()
-		{
-			return m_category->getPosition();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the overlay size
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère la taille de l'incrustation
-		 *\return		La valeur
-		 */
-		castor::Point2d & getSize()
-		{
-			return m_category->getSize();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the overlay position
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère la position de l'incrustation
-		 *\return		La valeur
-		 */
-		castor::Position & getPixelPosition()
-		{
-			return m_category->getPixelPosition();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the overlay size
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère la taille de l'incrustation
-		 *\return		La valeur
-		 */
-		castor::Size & getPixelSize()
-		{
-			return m_category->getPixelSize();
-		}
-		/**
-		 *\~english
 		 *\brief		Retrieves the parent scene
 		 *\return		The value
 		 *\~french
@@ -409,7 +361,7 @@ namespace castor3d
 		 */
 		uint32_t getChildrenCount()const
 		{
-			return uint32_t( m_overlays.size() );
+			return uint32_t( m_children.size() );
 		}
 		/**
 		 *\~english
@@ -421,7 +373,7 @@ namespace castor3d
 		 */
 		iterator begin()
 		{
-			return m_overlays.begin();
+			return m_children.begin();
 		}
 		/**
 		 *\~english
@@ -433,7 +385,7 @@ namespace castor3d
 		 */
 		const_iterator begin()const
 		{
-			return m_overlays.begin();
+			return m_children.begin();
 		}
 		/**
 		 *\~english
@@ -445,7 +397,7 @@ namespace castor3d
 		 */
 		iterator end()
 		{
-			return m_overlays.end();
+			return m_children.end();
 		}
 		/**
 		 *\~english
@@ -457,7 +409,7 @@ namespace castor3d
 		 */
 		const_iterator end()const
 		{
-			return m_overlays.end();
+			return m_children.end();
 		}
 		/**
 		 *\~english
@@ -505,9 +457,9 @@ namespace castor3d
 		 *\brief		Définit la position relative de l'incrustation
 		 *\param[in]	position	La nouvelle position
 		 */
-		void setPosition( castor::Point2d const & position )
+		void setRelativePosition( castor::Point2d const & position )
 		{
-			m_category->setPosition( position );
+			m_category->setRelativePosition( position );
 		}
 		/**
 		 *\~english
@@ -517,9 +469,9 @@ namespace castor3d
 		 *\brief		Définit les dimensions relatives de l'incrustation
 		 *\param[in]	size	Les nouvelles dimensions
 		 */
-		void setSize( castor::Point2d const & size )
+		void setRelativeSize( castor::Point2d const & size )
 		{
-			m_category->setSize( size );
+			m_category->setRelativeSize( size );
 		}
 		/**
 		 *\~english
@@ -558,24 +510,12 @@ namespace castor3d
 			m_name = name;
 		}
 
-	protected:
-		//!\~english	The overlay name.
-		//!\~french		Le nom de l'incrustation.
+	private:
 		castor::String m_name;
-		//!\~english	The parent overlay, if any.
-		//!\~french		L'incrustation parente, s'il y en a.
 		OverlayRPtr m_parent{};
-		//!\~english	The children.
-		//!\~french		Les enfants.
-		OverlayPtrArray m_overlays;
-		//!\~english	The overlay category.
-		//!\~french		La catégorie de l'incrustation.
+		OverlayPtrArray m_children;
 		OverlayCategorySPtr m_category;
-		//!\~english	The parent scene.
-		//!\~french		La scène parente.
 		Scene * m_scene;
-		//!\~english	The render system.
-		//!\~french		Le système de rendu.
 		RenderSystem * m_renderSystem;
 	};
 }

@@ -62,7 +62,6 @@ namespace castor3d
 	uint32_t TextOverlay::fillBuffer( Vertex * buffer
 		, bool secondary )const
 	{
-
 		switch ( m_texturingMode )
 		{
 		case TextTexturingMode::eLetter:
@@ -107,7 +106,7 @@ namespace castor3d
 	void TextOverlay::setFont( castor::String const & name )
 	{
 		// Récupération / Création de la police
-		Engine * engine = m_pOverlay->getEngine();
+		Engine * engine = m_overlay->getEngine();
 		auto & fontCache = engine->getFontCache();
 
 		if ( auto font = fontCache.find( name ).lock() )
@@ -174,6 +173,14 @@ namespace castor3d
 
 			fontTexture->update( true );
 		}
+
+		if ( !m_currentCaption.empty() )
+		{
+			m_previousCaption = m_currentCaption;
+			m_textChanged = false;
+		}
+
+		m_refSize = renderer.getSize();
 	}
 
 	uint32_t TextOverlay::doFillBuffer( Vertex * buffer
@@ -194,8 +201,11 @@ namespace castor3d
 
 			if ( !m_previousCaption.empty() && font )
 			{
+				double w = double( std::max( 1u, m_refSize.getWidth() ) );
+				double h = double( std::max( 1u, m_refSize.getHeight() ) );
+
 				castor::Point2d const ovAbsSize = getOverlay().getAbsoluteSize();
-				castor::Point2d const size( m_refSize.getWidth() * ovAbsSize[0], m_refSize.getHeight() * ovAbsSize[1] );
+				castor::Point2d const size( w * ovAbsSize[0], h * ovAbsSize[1] );
 
 				DisplayableLineArray lines = doPrepareText( m_refSize, size );
 				castor::Size const & texDim = { fontTexture->getTexture()->getDimensions().width, fontTexture->getTexture()->getDimensions().height };
@@ -256,8 +266,6 @@ namespace castor3d
 									castor::Point4f{ fontUvLeft, fontUvTop, fontUvRight, fontUvBottom },
 									texUvLeft, texUvTop, texUvRight, texUvBottom );
 
-								auto w( float( m_refSize.getWidth() ) );
-								auto h( float( m_refSize.getHeight() ) );
 								//
 								// Fill buffer
 								//
@@ -281,27 +289,6 @@ namespace castor3d
 		}
 
 		return index;
-	}
-
-	void TextOverlay::doUpdateBuffer( castor::Size const & size )
-	{
-		FontTextureSPtr fontTexture = getFontTexture();
-
-		if ( fontTexture )
-		{
-			auto font = fontTexture->getFont();
-
-			if ( !m_currentCaption.empty() && font )
-			{
-				if ( m_textChanged )
-				{
-					m_refSize = size;
-					m_previousCaption = m_currentCaption;
-				}
-
-				m_textChanged = false;
-			}
-		}
 	}
 
 	TextOverlay::DisplayableLineArray TextOverlay::doPrepareText( castor::Size const & renderSize

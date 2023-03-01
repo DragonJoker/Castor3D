@@ -336,10 +336,6 @@ namespace castor3d
 		 */
 		C3D_API void doUpdate( OverlayRenderer const & renderer )override;
 		/**
-		 *\copydoc	castor3d::OverlayCategory::doUpdateBuffer
-		 */
-		C3D_API void doUpdateBuffer( castor::Size const & size )override;
-		/**
 		 *\~english
 		 *\brief		Updates the vertex buffer.
 		 *\param[in]	size		The render target size.

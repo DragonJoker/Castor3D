@@ -38,7 +38,6 @@ namespace castor3d
 			if ( isChanged() || isSizeChanged() || renderer.isSizeChanged() )
 			{
 				doUpdate( renderer );
-				doUpdateBuffer( renderer.getSize() );
 			}
 
 			m_positionChanged = false;
@@ -48,21 +47,12 @@ namespace castor3d
 
 	void OverlayCategory::setMaterial( MaterialRPtr material )
 	{
-		m_pMaterial = material;
-
-		if ( material )
-		{
-			m_strMatName = material->getName();
-		}
-		else
-		{
-			m_strMatName = castor::cuEmptyString;
-		}
+		m_material = material;
 	}
 
 	castor::String const & OverlayCategory::getOverlayName()const
 	{
-		return m_pOverlay->getName();
+		return m_overlay->getName();
 	}
 
 	castor::Position OverlayCategory::getAbsolutePosition( castor::Size const & size )const
@@ -99,7 +89,7 @@ namespace castor3d
 
 	castor::Point2d OverlayCategory::getAbsolutePosition()const
 	{
-		castor::Point2d position = getPosition();
+		castor::Point2d position = getRelativePosition();
 
 		if ( auto parent = getOverlay().getParent() )
 		{
@@ -112,7 +102,7 @@ namespace castor3d
 
 	castor::Point2d OverlayCategory::getAbsoluteSize()const
 	{
-		castor::Point2d size = getSize();
+		castor::Point2d size = getRelativeSize();
 
 		if ( auto parent = getOverlay().getParent() )
 		{
@@ -169,28 +159,30 @@ namespace castor3d
 		if ( isPositionChanged() || renderer.isSizeChanged() )
 		{
 			castor::Size renderSize = renderer.getSize();
-			castor::Point2d totalSize = doGetTotalSize( renderer );
+			castor::Point2d parentSize = doGetTotalSize( renderer );
 			bool changed = m_positionChanged;
-			castor::Position pos = getPixelPosition();
-			castor::Point2d ptPos = getPosition();
+			castor::Position pxPos = getPixelPosition();
+			castor::Point2d relPos = getRelativePosition();
 
-			if ( pos.x() )
+			if ( pxPos.x() )
 			{
-				changed = changed || ( ptPos[0] != double( pos.x() ) / totalSize[0] );
-				ptPos[0] = pos.x() / totalSize[0];
+				auto v = double( pxPos.x() ) / parentSize->x;
+				changed = changed || ( relPos->x != v );
+				relPos->x = v;
 				m_computeSize[0] = renderSize[0];
 			}
 
-			if ( pos.y() )
+			if ( pxPos.y() )
 			{
-				changed = changed || ( ptPos[1] != double( pos.y() ) / totalSize[1] );
-				ptPos[1] = pos.y() / totalSize[1];
+				auto v = double( pxPos.y() ) / parentSize->y;
+				changed = changed || ( relPos->y != v );
+				relPos->y = v;
 				m_computeSize[1] = renderSize[1];
 			}
 
 			if ( changed )
 			{
-				setPosition( ptPos );
+				setRelativePosition( relPos );
 			}
 		}
 	}
@@ -200,28 +192,30 @@ namespace castor3d
 		if ( isSizeChanged() || renderer.isSizeChanged() )
 		{
 			castor::Size renderSize = renderer.getSize();
-			castor::Point2d totalSize = doGetTotalSize( renderer );
+			castor::Point2d parentSize = doGetTotalSize( renderer );
 			bool changed = m_sizeChanged;
-			castor::Size size = getPixelSize();
-			castor::Point2d ptSize = getSize();
+			castor::Size pxSize = getPixelSize();
+			castor::Point2d relSize = getRelativeSize();
 
-			if ( size.getWidth() )
+			if ( pxSize.getWidth() )
 			{
-				changed = changed || ( ptSize[0] != double( size.getWidth() ) / totalSize[0] );
-				ptSize[0] = size.getWidth() / totalSize[0];
+				auto v = double( pxSize.getWidth() ) / parentSize->x;
+				changed = changed || ( relSize->x != v );
+				relSize->x = v;
 				m_computeSize[0] = renderSize[0];
 			}
 
-			if ( size.getHeight() )
+			if ( pxSize.getHeight() )
 			{
-				changed = changed || ( ptSize[1] != double( size.getHeight() ) / totalSize[1] );
-				ptSize[1] = size.getHeight() / totalSize[1];
+				auto v = double( pxSize.getHeight() ) / parentSize->y;
+				changed = changed || ( relSize->y != v );
+				relSize->y = v;
 				m_computeSize[1] = renderSize[1];
 			}
 
 			if ( changed )
 			{
-				setSize( ptSize );
+				setRelativeSize( relSize );
 			}
 		}
 	}

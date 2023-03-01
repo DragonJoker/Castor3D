@@ -439,7 +439,7 @@ namespace castor3d
 		 *\brief		Met à jour le tampon de sommets.
 		 *\param[in]	size	Les dimensions de la cible de rendu.
 		 */
-		C3D_API void doUpdateBuffer( castor::Size const & size )override;
+		C3D_API void doUpdate( OverlayRenderer const & renderer )override;
 		/**
 		 *\~english
 		 *\brief		Updates the overlay size, taking care of wanted pixel size.
@@ -458,9 +458,6 @@ namespace castor3d
 		//!\~english	The absolute size in pixels.
 		//!\~french		La taille absolue en pixels.
 		castor::Rectangle m_borderSize;
-		//!\~english	The border material name.
-		//!\~french		Le nom du matériau des bords.
-		castor::String m_strBorderMatName;
 		//!\~english	The border material name.
 		//!\~french		Le nom du matériau des bords.
 		BorderPosition m_borderPosition{ BorderPosition::eInternal };

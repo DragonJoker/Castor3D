@@ -53,26 +53,30 @@ namespace castor3d
 	{
 		int index = 1;
 
-		if ( !m_overlays.empty() )
+		if ( !m_children.empty() )
 		{
-			index = ( *( m_overlays.end() - 1 ) )->getIndex() + 1;
+			index = m_children.back()->getIndex() + 1;
 		}
 
 		overlay->setOrder( index, getLevel() + 1 );
-		m_overlays.push_back( overlay );
+		m_children.push_back( overlay );
 	}
 
 	uint32_t Overlay::getChildrenCount( int level )const
 	{
 		uint32_t result{ 0 };
 
-		if ( level == getLevel() + 1 )
+		if ( level == getLevel() )
 		{
-			result = uint32_t( m_overlays.size() );
+			result = 1u;
+		}
+		else if ( level == getLevel() + 1 )
+		{
+			result = uint32_t( m_children.size() );
 		}
 		else if ( level > getLevel() )
 		{
-			for ( auto overlay : m_overlays )
+			for ( auto overlay : m_children )
 			{
 				result += overlay->getChildrenCount( level );
 			}
