@@ -114,7 +114,7 @@ namespace castor3d
 		 *\param[in]	size	La taille du rendu
 		 *\return		Le ratio entre les dimensions données et les dimensions utilisées lors du calcul de la position relative depuis la position en pixels.
 		 */
-		C3D_API castor::Point2f getRenderRatio( castor::Size const & size )const;
+		C3D_API castor::Point2d getRenderRatio( castor::Size const & size )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the absolute overlay position

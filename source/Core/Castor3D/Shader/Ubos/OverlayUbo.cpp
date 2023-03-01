@@ -12,12 +12,6 @@ namespace castor3d::shader
 {
 	//*********************************************************************************************
 
-	sdw::Vec2 OverlayData::getOverlaySize()const
-	{
-		return vec2( ratio().x() * getWriter()->cast< sdw::Float >( refRenderSize().x() )
-			, ratio().y() * getWriter()->cast< sdw::Float >( refRenderSize().y() ) );
-	}
-
 	sdw::Vec2 OverlayData::modelToView( sdw::Vec2 const & pos )const
 	{
 		return position() + pos;

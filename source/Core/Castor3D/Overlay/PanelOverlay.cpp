@@ -23,7 +23,8 @@ namespace castor3d
 		visitor.visit( *this );
 	}
 
-	uint32_t PanelOverlay::fillBuffer( Vertex * buffer
+	uint32_t PanelOverlay::fillBuffer( castor::Size const & renderSize
+		, Vertex * buffer
 		, bool secondary )const
 	{
 		double w = double( std::max( 1u, m_refSize.getWidth() ) );

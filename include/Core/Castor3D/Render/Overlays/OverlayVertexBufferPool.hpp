@@ -32,7 +32,8 @@ namespace castor3d
 			, ashes::PipelineVertexInputStateCreateInfo const & texDecl
 			, uint32_t count );
 		template< typename OverlayT >
-		OverlayVertexBufferIndexT< VertexT, CountT > fill( OverlayT const & overlay
+		OverlayVertexBufferIndexT< VertexT, CountT > fill( castor::Size const & renderSize
+			, OverlayT const & overlay
 			, OverlayRenderNode & node
 			, bool secondary );
 		void upload( ashes::CommandBuffer const & cb );

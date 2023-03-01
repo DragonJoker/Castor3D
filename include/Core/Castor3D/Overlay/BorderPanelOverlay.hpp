@@ -44,7 +44,8 @@ namespace castor3d
 		 *\brief		Remplit le tampon de sommets donné.
 		 *\param[out]	buffer	Le buffer.
 		 */
-		C3D_API uint32_t fillBuffer( Vertex * buffer
+		C3D_API uint32_t fillBuffer( castor::Size const & refSize
+			, Vertex * buffer
 			, bool secondary )const;
 		/**
 		 *\~english
@@ -470,7 +471,6 @@ namespace castor3d
 		//!\~english	Tells if the border has changed, in any way.
 		//!\~french		Dit si la bordure a changé, de quelque manière que ce soit.
 		bool m_borderChanged;
-		castor::Size m_refSize;
 	};
 }
 

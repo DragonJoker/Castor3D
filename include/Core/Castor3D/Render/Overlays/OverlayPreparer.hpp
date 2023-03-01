@@ -43,18 +43,31 @@ namespace castor3d
 		void visit( TextOverlay const & overlay )override;
 
 	private:
+		struct OverlayData
+		{
+			Overlay const * overlay{};
+			ashes::DescriptorSetCRefArray descriptorSets{};
+			OverlayGeometryBuffers geometryBuffers{};
+			uint32_t index{};
+			OverlayPipeline const * pipeline{};
+		};
+
 		template< typename QuadT, typename OverlayT, typename VertexT, uint32_t CountT >
-		void doPrepareOverlay( RenderDevice const & device
+		void doPrepareOverlayDescriptors( RenderDevice const & device
 			, OverlayT const & overlay
 			, Pass const & pass
 			, OverlayVertexBufferPoolT< VertexT, CountT > & vertexBuffer
 			, FontTextureSPtr fontTexture
 			, bool secondary );
+		void doPrepareOverlayCommands( OverlayData const & overlay
+			, ashes::CommandBuffer & commandBuffer );
 
 	private:
 		OverlayRenderer & m_renderer;
 		RenderDevice const & m_device;
 		VkRenderPass m_renderPass;
+		VkFramebuffer m_framebuffer;
+		std::vector< OverlayData > m_overlays;
 	};
 }
 

@@ -241,13 +241,16 @@ namespace castor3d
 		 *\~english
 		 *\brief		Updates the UBO from given values.
 		 *\remarks		View matrix won't be updated.
+		 *\param[in]	size		The render size.
 		 *\param[in]	projection	The new projection matrix.
 		 *\~french
 		 *\brief		Met à jour l'UBO avec les valeurs données.
 		 *\remarks		La matrice de vue ne sera pas mise à jour.
+		 *\param[in]	size		Les dimensions du rendu.
 		 *\param[in]	projection	La nouvelle matrice de projection.
 		 */
-		C3D_API Configuration & cpuUpdate( castor::Matrix4x4f const & projection );
+		C3D_API Configuration & cpuUpdate( castor::Size const & size
+			, castor::Matrix4x4f const & projection );
 
 		void createPassBinding( crg::FramePass & pass
 			, uint32_t binding )const

@@ -40,6 +40,7 @@ namespace castor3d
 				doUpdate( renderer );
 			}
 
+			m_computeSize = renderer.getSize();
 			m_positionChanged = false;
 			m_sizeChanged = false;
 		}
@@ -70,18 +71,18 @@ namespace castor3d
 			, uint32_t( size.getHeight() * absoluteSize[1] ) };
 	}
 
-	castor::Point2f OverlayCategory::getRenderRatio( castor::Size const & size )const
+	castor::Point2d OverlayCategory::getRenderRatio( castor::Size const & size )const
 	{
-		castor::Point2f result{ 1, 1 };
+		castor::Point2d result{ 1, 1 };
 
 		if ( m_computeSize.getWidth() != 0 )
 		{
-			result[0] = float( m_computeSize.getWidth() ) / float( size.getWidth() );
+			result[0] = double( m_computeSize.getWidth() ) / double( size.getWidth() );
 		}
 
 		if ( m_computeSize.getHeight() != 0 )
 		{
-			result[1] = float( m_computeSize.getHeight() ) / float( size.getHeight() );
+			result[1] = double( m_computeSize.getHeight() ) / double( size.getHeight() );
 		}
 
 		return result;

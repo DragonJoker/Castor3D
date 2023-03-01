@@ -59,7 +59,8 @@ namespace castor3d
 		 *\brief		Remplit le tampon de sommets donné.
 		 *\param[out]	buffer	Le buffer.
 		 */
-		C3D_API uint32_t fillBuffer( Vertex * buffer
+		C3D_API uint32_t fillBuffer( castor::Size const & refSize
+			, Vertex * buffer
 			, bool secondary )const;
 		/**
 		 *\~english
@@ -345,7 +346,8 @@ namespace castor3d
 		 *\param[in]	size		Les dimensions de la cible de rendu.
 		 *\param[in]	generateUvs	La fonction de génération d'UV.
 		 */
-		C3D_API uint32_t doFillBuffer( Vertex *buffer
+		C3D_API uint32_t doFillBuffer( castor::Size const & refSize
+			, Vertex * buffer
 			, std::function< void( castor::Point2d const & size
 				, castor::Rectangle const & absolute
 				, castor::Point4f const & fontUV
@@ -454,7 +456,6 @@ namespace castor3d
 		FontTexture::OnChanged::connection m_connection;
 		TextTexturingMode m_texturingMode{ TextTexturingMode::eText };
 		TextureCoordsArray m_arrayTextTexture;
-		castor::Size m_refSize;
 	};
 }
 
