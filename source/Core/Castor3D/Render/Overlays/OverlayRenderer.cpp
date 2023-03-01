@@ -34,6 +34,8 @@ See LICENSE file in root folder
 
 #include <ashespp/RenderPass/FrameBuffer.hpp>
 
+#include <RenderGraph/RecordContext.hpp>
+
 #include <ShaderWriter/Source.hpp>
 
 CU_ImplementCUSmartPtr( castor3d, OverlayRenderer )
@@ -74,6 +76,28 @@ namespace castor3d
 			result |= uint32_t( textures.configCount );
 			return result;
 		}
+
+		class PanelVertex
+			: public sdw::StructInstanceHelperT< "C3D_PanelVertex"
+			, sdw::type::MemoryLayout::eStd430
+			, sdw::Vec2Field< "position" >
+			, sdw::Vec2Field< "uv" > >
+		{
+		public:
+			PanelVertex( sdw::ShaderWriter & writer
+				, sdw::expr::ExprPtr expr
+				, bool enabled )
+				: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+			{
+			}
+
+			auto position()const {
+				return getMember< "position" >();
+			}
+			auto uv()const {
+				return getMember< "uv" >();
+			}
+		};
 
 		template< ast::var::Flag FlagT >
 		struct OverlaySurfaceT
@@ -312,6 +336,7 @@ namespace castor3d
 			, m_texTextDeclaration
 			, MaxOverlayPanelsPerBuffer ) }
 		, m_size{ makeSize( m_target.getExtent() ) }
+		, m_computePanelPipeline{ doCreatePanelPipeline( device ) }
 	{
 		std::string name = "Overlays";
 
@@ -374,6 +399,53 @@ namespace castor3d
 		m_panelVertexBuffer->upload( cb );
 		m_borderVertexBuffer->upload( cb );
 		m_textVertexBuffer->upload( cb );
+	}
+
+	void OverlayRenderer::registerComputeCommands( crg::RecordContext & context
+		, VkCommandBuffer commandBuffer )const
+	{
+		if ( m_computePanelPipeline.count )
+		{
+			crg::BufferSubresourceRange range{ 0u, VK_WHOLE_SIZE };
+			context.memoryBarrier( commandBuffer
+				, m_panelVertexBuffer->overlaysData->getBuffer()
+				, range
+				, VK_ACCESS_HOST_WRITE_BIT
+				, VK_PIPELINE_STAGE_HOST_BIT
+				, crg::AccessState{ VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT } );
+			context.memoryBarrier( commandBuffer
+				, m_panelVertexBuffer->vertexBuffer.getBuffer().getBuffer()
+				, range
+				, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
+				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT
+				, crg::AccessState{ VK_ACCESS_SHADER_WRITE_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT } );
+			context.getContext().vkCmdBindPipeline( commandBuffer
+				, VK_PIPELINE_BIND_POINT_COMPUTE
+				, *m_computePanelPipeline.pipeline );
+			VkDescriptorSet descriptorSet = *m_computePanelPipeline.descriptorSet;
+			context.getContext().vkCmdBindDescriptorSets( commandBuffer
+				, VK_PIPELINE_BIND_POINT_COMPUTE
+				, *m_computePanelPipeline.pipelineLayout
+				, 0u
+				, 1u
+				, &descriptorSet
+				, 0u
+				, nullptr );
+			context.getContext().vkCmdDispatch( commandBuffer
+				, m_computePanelPipeline.count, 1u, 1u );
+			context.memoryBarrier( commandBuffer
+				, m_panelVertexBuffer->overlaysData->getBuffer()
+				, range
+				, VK_ACCESS_SHADER_READ_BIT
+				, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT
+				, crg::AccessState{ VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT } );
+			context.memoryBarrier( commandBuffer
+				, m_panelVertexBuffer->vertexBuffer.getBuffer().getBuffer()
+				, range
+				, VK_ACCESS_SHADER_WRITE_BIT
+				, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT
+				, crg::AccessState{ VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT } );
+		}
 	}
 
 	void OverlayRenderer::doBeginPrepare( VkRenderPass renderPass
@@ -536,6 +608,114 @@ namespace castor3d
 		}
 
 		return it->second;
+	}
+
+	OverlayRenderer::ComputePipeline OverlayRenderer::doCreatePanelPipeline( RenderDevice const & device )
+	{
+		OverlayRenderer::ComputePipeline result;
+		ashes::VkDescriptorSetLayoutBindingArray layoutBindings;
+		layoutBindings.emplace_back( makeDescriptorSetLayoutBinding( 0u // Camera
+			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+			, VK_SHADER_STAGE_COMPUTE_BIT ) );
+		layoutBindings.emplace_back( makeDescriptorSetLayoutBinding( 1u // Overlays
+			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+			, VK_SHADER_STAGE_COMPUTE_BIT ) );
+		layoutBindings.emplace_back( makeDescriptorSetLayoutBinding( 2u // Output
+			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+			, VK_SHADER_STAGE_COMPUTE_BIT ) );
+		result.descriptorLayout = device->createDescriptorSetLayout( "PanelOverlayCompute"
+			, layoutBindings );
+
+		result.pipelineLayout = device->createPipelineLayout( "PanelOverlayCompute"
+			, *result.descriptorLayout );
+		result.pipeline = device->createPipeline( "PanelOverlayCompute"
+			, ashes::ComputePipelineCreateInfo{ 0u
+			, doCreatePanelProgram( device )
+			, * result.pipelineLayout } );
+
+		result.descriptorPool = result.descriptorLayout->createPool( "PanelOverlayCompute"
+			, 1u );
+		result.descriptorSet = result.descriptorPool->createDescriptorSet( "PanelOverlayCompute" );
+		ashes::WriteDescriptorSetArray setBindings;
+		m_cameraUbo.createSizedBinding( *result.descriptorSet
+			, result.descriptorLayout->getBinding( 0u ) );
+		result.descriptorSet->createBinding( result.descriptorLayout->getBinding( 1u )
+			, *m_panelVertexBuffer->overlaysData
+			, 0u
+			, uint32_t( m_panelVertexBuffer->overlaysData->getCount() ) );
+		result.descriptorSet->createBinding( result.descriptorLayout->getBinding( 2u )
+			, m_panelVertexBuffer->vertexBuffer.getBuffer().getBuffer()
+			, 0u
+			, uint32_t( m_panelVertexBuffer->vertexBuffer.getBuffer().getBuffer().getSize() ) );
+		result.descriptorSet->update();
+
+		return result;
+	}
+
+	ashes::PipelineShaderStageCreateInfo OverlayRenderer::doCreatePanelProgram( RenderDevice const & device )
+	{
+		ShaderModule comp{ VK_SHADER_STAGE_COMPUTE_BIT, "PanelOverlayCompute" };
+		sdw::ComputeWriter writer;
+
+		C3D_Camera( writer
+			, 0u
+			, 0u );
+		C3D_Overlays( writer
+			, 1u
+			, 0u );
+		auto c3d_vertexData = writer.declArrayStorageBuffer< ovrlrend::PanelVertex >( "c3d_vertexData"
+			, 2u
+			, 0u );
+
+		writer.implementMain( 1u
+			, [&]( sdw::ComputeIn in )
+			{
+				auto overlayData = writer.declLocale( "overlayData"
+					, c3d_overlaysData[in.globalInvocationID.x()] );
+				auto offset = writer.declLocale( "offset"
+					, in.globalInvocationID.x() * 6u );
+				auto renderSize = writer.declLocale( "renderSize"
+					, vec2( c3d_cameraData.renderSize() ) );
+
+				auto l = 0.0_f;
+				auto t = 0.0_f;
+				auto r = overlayData.size().x();
+				auto b = overlayData.size().y();
+
+				auto lt = writer.declLocale( "lt", vec2( l, t ) / renderSize );
+				auto lb = writer.declLocale( "lb", vec2( l, b ) / renderSize );
+				auto rt = writer.declLocale( "rt", vec2( r, t ) / renderSize );
+				auto rb = writer.declLocale( "rb", vec2( r, b ) / renderSize );
+
+				auto ltUV = writer.declLocale( "ltUV", overlayData.uv().xw() );
+				auto lbUV = writer.declLocale( "lbUV", overlayData.uv().xy() );
+				auto rtUV = writer.declLocale( "rtUV", overlayData.uv().zw() );
+				auto rbUV = writer.declLocale( "rbUV", overlayData.uv().zy() );
+
+				uint32_t index = 0;
+
+				c3d_vertexData[offset + index].position() = lt;
+				c3d_vertexData[offset + index].uv() = ltUV;
+				++index;
+				c3d_vertexData[offset + index].position() = lb;
+				c3d_vertexData[offset + index].uv() = lbUV;
+				++index;
+				c3d_vertexData[offset + index].position() = rb;
+				c3d_vertexData[offset + index].uv() = rbUV;
+				++index;
+
+				c3d_vertexData[offset + index].position() = lt;
+				c3d_vertexData[offset + index].uv() = ltUV;
+				++index;
+				c3d_vertexData[offset + index].position() = rb;
+				c3d_vertexData[offset + index].uv() = rbUV;
+				++index;
+				c3d_vertexData[offset + index].position() = rt;
+				c3d_vertexData[offset + index].uv() = rtUV;
+				++index;
+			} );
+		comp.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+		return makeShaderState( device, comp );
 	}
 
 	ashes::PipelineShaderStageCreateInfoArray OverlayRenderer::doCreateOverlayProgram( RenderDevice const & device
