@@ -103,6 +103,7 @@ namespace castor3d
 				, m_renderPass.getFramebuffer( 0u ) );
 		}
 
+		m_renderer->registerComputeCommands( context, commandBuffer );
 		VkCommandBuffer secondary = m_renderer->getCommands();
 		m_renderPass.begin( context
 			, commandBuffer

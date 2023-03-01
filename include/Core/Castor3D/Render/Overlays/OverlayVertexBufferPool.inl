@@ -35,7 +35,7 @@ namespace castor3d
 		, noTexDeclaration{ noTexDecl }
 		, texDeclaration{ texDecl }
 		, vertexBuffer{ device.renderSystem
-			, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT
+			, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, debugName
 			, ashes::QueueShare{}
@@ -82,11 +82,15 @@ namespace castor3d
 	{
 		if ( allocated )
 		{
-			vertexBuffer.markDirty( 0u
-				, allocated * sizeof( VertexT )
-				, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
-				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
-			vertexBuffer.upload( cb );
+			if constexpr ( CountT != 6u )
+			{
+				vertexBuffer.markDirty( 0u
+					, allocated * sizeof( VertexT )
+					, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
+					, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
+				vertexBuffer.upload( cb );
+			}
+
 			allocated = 0u;
 			index = 0u;
 		}

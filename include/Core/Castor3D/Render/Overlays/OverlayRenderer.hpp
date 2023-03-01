@@ -86,6 +86,8 @@ namespace castor3d
 		 *\param[in]	cb	Le command buffer sur lequel les commandes de transfert sont enregistrées.
 		 */
 		C3D_API void upload( ashes::CommandBuffer const & cb );
+		C3D_API void registerComputeCommands( crg::RecordContext & context
+			, VkCommandBuffer commandBuffer )const;
 		/**
 		*\~english
 		*name
@@ -119,6 +121,16 @@ namespace castor3d
 			FontTexture::OnChanged::connection connection{};
 		};
 
+		struct ComputePipeline
+		{
+			ashes::DescriptorSetLayoutPtr descriptorLayout{};
+			ashes::PipelineLayoutPtr pipelineLayout{};
+			ashes::PipelinePtr pipeline{};
+			ashes::DescriptorSetPoolPtr descriptorPool{};
+			ashes::DescriptorSetPtr descriptorSet{};
+			uint32_t count{};
+		};
+
 		using PanelVertexBufferPool = OverlayVertexBufferPoolT< OverlayCategory::Vertex, 6u >;
 		using BorderPanelVertexBufferPool = OverlayVertexBufferPoolT< OverlayCategory::Vertex, 8u * 6u >;
 		using TextVertexBufferPool = OverlayVertexBufferPoolT< TextOverlay::Vertex, MaxOverlayCharsPerBuffer >;
@@ -149,6 +161,8 @@ namespace castor3d
 			, Pass const & pass
 			, std::map< uint32_t, OverlayPipeline > & pipelines
 			, bool text );
+		ComputePipeline doCreatePanelPipeline( RenderDevice const & device );
+		ashes::PipelineShaderStageCreateInfo doCreatePanelProgram( RenderDevice const & device );
 		ashes::PipelineShaderStageCreateInfoArray doCreateOverlayProgram( RenderDevice const & device
 			, TextureCombine const & texturesFlags
 			, bool text );
@@ -179,6 +193,7 @@ namespace castor3d
 		ashes::DescriptorSetLayoutPtr m_textDescriptorLayout;
 		ashes::DescriptorSetPoolPtr m_textDescriptorPool;
 		std::map< FontTexture const *, FontTextureDescriptorConnection > m_textDescriptorSets;
+		ComputePipeline m_computePanelPipeline;
 	};
 }
 
