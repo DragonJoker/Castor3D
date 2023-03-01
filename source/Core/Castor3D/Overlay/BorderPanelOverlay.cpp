@@ -27,13 +27,17 @@ namespace castor3d
 		visitor.visit( *this );
 	}
 
-	uint32_t BorderPanelOverlay::fillBuffer( Vertex * buffer
+	uint32_t BorderPanelOverlay::fillBuffer( castor::Size const & renderSize
+		, Vertex * buffer
 		, bool secondary )const
 	{
-		double w = double( std::max( 1u, m_refSize.getWidth() ) );
-		double h = double( std::max( 1u, m_refSize.getHeight() ) );
-		castor::Size absoluteSize = getAbsoluteSize( m_refSize );
-		castor::Rectangle absoluteBorderSize = getAbsoluteBorderSize( m_refSize );
+		double w = double( std::max( 1u, renderSize.getWidth() ) );
+		double h = double( std::max( 1u, renderSize.getHeight() ) );
+		auto ratio = getRenderRatio( renderSize );
+		w *= ratio->x;
+		h *= ratio->y;
+		castor::Size absoluteSize = getAbsoluteSize( renderSize );
+		castor::Rectangle absoluteBorderSize = getAbsoluteBorderSize( renderSize );
 
 		double centerL = 0;
 		double centerT = 0;
@@ -294,7 +298,6 @@ namespace castor3d
 
 	void BorderPanelOverlay::doUpdate( OverlayRenderer const & renderer )
 	{
-		m_refSize = renderer.getSize();
 		m_borderChanged = false;
 	}
 }

@@ -323,12 +323,13 @@ namespace castor3d
 			, std::move( textBindings ) );
 		m_textDescriptorPool = m_textDescriptorLayout->createPool( MaxOverlayPanelsPerBuffer );
 
-		m_cameraUbo.cpuUpdate( getRenderSystem()->getOrtho( 0.0f
-			, float( m_size.getWidth() )
-			, 0.0f
-			, float( m_size.getHeight() )
-			, -1.0f
-			, 1.0f ) );
+		m_cameraUbo.cpuUpdate( getSize()
+			, getRenderSystem()->getOrtho( 0.0f
+				, float( m_size.getWidth() )
+				, 0.0f
+				, float( m_size.getHeight() )
+				, -1.0f
+				, 1.0f ) );
 	}
 
 	OverlayRenderer::~OverlayRenderer()
@@ -351,12 +352,13 @@ namespace castor3d
 		{
 			m_sizeChanged = true;
 			m_size = size;
-			m_cameraUbo.cpuUpdate( getRenderSystem()->getOrtho( 0.0f
-				, float( m_size.getWidth() )
-				, 0.0f
-				, float( m_size.getHeight() )
-				, -1.0f
-				, 1.0f ) );
+			m_cameraUbo.cpuUpdate( getSize()
+				, getRenderSystem()->getOrtho( 0.0f
+					, float( m_size.getWidth() )
+					, 0.0f
+					, float( m_size.getHeight() )
+					, -1.0f
+					, 1.0f ) );
 		}
 	}
 
@@ -569,9 +571,7 @@ namespace castor3d
 					out.text = in.text;
 					auto overlaysData = writer.declLocale( "overlaysData"
 						, c3d_overlaysData[overlayID] );
-					auto size = writer.declLocale( "size"
-						, overlaysData.getOverlaySize() );
-					out.vtx.position = c3d_cameraData.viewToProj( vec4( size * overlaysData.modelToView( in.position )
+					out.vtx.position = c3d_cameraData.viewToProj( vec4( vec2( c3d_cameraData.renderSize() ) * overlaysData.modelToView( in.position )
 							, 0.0_f
 							, 1.0_f ) );
 					out.position = out.vtx.position.xy();

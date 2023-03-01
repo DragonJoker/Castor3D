@@ -16,11 +16,13 @@ namespace castor3d::shader
 	struct OverlayData
 		: public sdw::StructInstanceHelperT < "C3D_OverlayData"
 			, sdw::type::MemoryLayout::eStd430
+			, sdw::Vec4Field< "uv" >
 			, sdw::Vec2Field< "position" >
-			, sdw::Vec2Field< "ratio" >
-			, sdw::UVec2Field< "refRenderSize" >
+			, sdw::Vec2Field< "size" >
 			, sdw::UIntField< "materialId" >
-			, sdw::UIntField< "pad" > >
+			, sdw::UIntField< "pad1" >
+			, sdw::UIntField< "pad2" >
+			, sdw::UIntField< "pad3" > >
 	{
 		OverlayData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
@@ -29,15 +31,14 @@ namespace castor3d::shader
 		{
 		}
 
-		C3D_API sdw::Vec2 getOverlaySize()const;
 		C3D_API sdw::Vec2 modelToView( sdw::Vec2 const & pos )const;
 
 		auto materialId()const { return getMember< "materialId" >(); }
+		auto size()const { return getMember< "size" >(); }
+		auto uv()const { return getMember< "uv" >(); }
 
 	private:
 		auto position()const { return getMember< "position" >(); }
-		auto ratio()const { return getMember< "ratio" >(); }
-		auto refRenderSize()const { return getMember< "refRenderSize" >(); }
 	};
 }
 

@@ -47,7 +47,8 @@ namespace castor3d
 
 	template< typename VertexT, uint32_t CountT >
 	template< typename OverlayT >
-	OverlayVertexBufferIndexT< VertexT, CountT > OverlayVertexBufferPoolT< VertexT, CountT >::fill( OverlayT const & overlay
+	OverlayVertexBufferIndexT< VertexT, CountT > OverlayVertexBufferPoolT< VertexT, CountT >::fill( castor::Size const & renderSize
+		, OverlayT const & overlay
 		, OverlayRenderNode & node
 		, bool secondary )
 	{
@@ -58,7 +59,8 @@ namespace castor3d
 		if ( allocated <= ( MaxPipelines * ( CountT - 1u ) ) )
 		{
 			auto offset = allocated * sizeof( VertexT );
-			auto count = overlay.fillBuffer( &vertexBuffer.template getData< VertexT >( offset )
+			auto count = overlay.fillBuffer( renderSize
+				, &vertexBuffer.template getData< VertexT >( offset )
 				, secondary );
 
 			if ( count )

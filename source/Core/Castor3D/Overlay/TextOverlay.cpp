@@ -59,13 +59,15 @@ namespace castor3d
 		visitor.visit( *this );
 	}
 
-	uint32_t TextOverlay::fillBuffer( Vertex * buffer
+	uint32_t TextOverlay::fillBuffer( castor::Size const & renderSize
+		, Vertex * buffer
 		, bool secondary )const
 	{
 		switch ( m_texturingMode )
 		{
 		case TextTexturingMode::eLetter:
-			return doFillBuffer( buffer
+			return doFillBuffer( renderSize
+				, buffer
 				, []( castor::Point2d const &
 					, castor::Rectangle const & absolute
 					, castor::Point4f const & fontUV
@@ -82,7 +84,8 @@ namespace castor3d
 			break;
 
 		case TextTexturingMode::eText:
-			return doFillBuffer( buffer
+			return doFillBuffer( renderSize
+				, buffer
 				, []( castor::Point2d const & sz
 					, castor::Rectangle const & absolute
 					, castor::Point4f const & fontUV
@@ -177,13 +180,13 @@ namespace castor3d
 		if ( !m_currentCaption.empty() )
 		{
 			m_previousCaption = m_currentCaption;
-			m_textChanged = false;
 		}
 
-		m_refSize = renderer.getSize();
+		m_textChanged = false;
 	}
 
-	uint32_t TextOverlay::doFillBuffer( Vertex * buffer
+	uint32_t TextOverlay::doFillBuffer( castor::Size const & renderSize
+		, Vertex * buffer
 		, std::function< void( castor::Point2d const &
 			, castor::Rectangle const &
 			, castor::Point4f const &
@@ -201,13 +204,16 @@ namespace castor3d
 
 			if ( !m_previousCaption.empty() && font )
 			{
-				double w = double( std::max( 1u, m_refSize.getWidth() ) );
-				double h = double( std::max( 1u, m_refSize.getHeight() ) );
+				double w = double( std::max( 1u, renderSize.getWidth() ) );
+				double h = double( std::max( 1u, renderSize.getHeight() ) );
+				auto ratio = getRenderRatio( renderSize );
+				w *= ratio->x;
+				h *= ratio->y;
 
 				castor::Point2d const ovAbsSize = getOverlay().getAbsoluteSize();
 				castor::Point2d const size( w * ovAbsSize[0], h * ovAbsSize[1] );
 
-				DisplayableLineArray lines = doPrepareText( m_refSize, size );
+				DisplayableLineArray lines = doPrepareText( renderSize, size );
 				castor::Size const & texDim = { fontTexture->getTexture()->getDimensions().width, fontTexture->getTexture()->getDimensions().height };
 
 				for ( auto const & line : lines )

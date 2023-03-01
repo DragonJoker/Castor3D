@@ -31,52 +31,51 @@ namespace castor3d
 
 	namespace ovrlrend
 	{
-		template< typename OverlayT, typename QuadT >
-		struct BorderSizeGetter
-		{
-			castor::Rectangle operator()( OverlayT const & overlay, castor::Size const & size )const
-			{
-				return castor::Rectangle{};
-			}
-		};
-
-		template<>
-		struct BorderSizeGetter< BorderPanelOverlay, OverlayRenderer::BorderPanelVertexBufferPool::Quad >
-		{
-			castor::Rectangle operator()( BorderPanelOverlay const & overlay, castor::Size const & size )const
-			{
-				castor::Rectangle result = overlay.getAbsoluteBorderSize( size );
-
-				switch ( overlay.getBorderPosition() )
-				{
-				case BorderPosition::eMiddle:
-					result.set( result.left() / 2
-						, result.top() / 2
-						, result.right() / 2
-						, result.bottom() / 2 );
-					break;
-				case BorderPosition::eExternal:
-					break;
-				default:
-					result = castor::Rectangle{};
-					break;
-				}
-
-				return result;
-			}
-		};
-
 		static void doUpdateUbo( OverlayUboConfiguration & data
 			, OverlayCategory const & overlay
 			, Pass const & pass
-			, castor::Size const & size )
+			, castor::Size const & renderSize )
 		{
-			auto position = overlay.getAbsolutePosition();
-			auto ratio = overlay.getRenderRatio( size );
-			data.position = castor::Point2f{ position };
-			data.ratio = castor::Point2f{ ratio };
-			data.refRenderSize = castor::Point2ui{ size.getWidth(), size.getHeight() };
+			auto size = overlay.getAbsoluteSize( renderSize );
+			auto ratio = overlay.getRenderRatio( renderSize );
+			data.size = castor::Point2f{ size.getWidth(), size.getHeight() };
+			data.position = castor::Point2f{ overlay.getAbsolutePosition() };
+			data.size *= ratio;
+			data.uv = castor::Point4f{ overlay.getUV() };
 			data.materialId = pass.getId();
+		}
+
+		static void doUpdateUbo( OverlayUboConfiguration & data
+			, PanelOverlay const & overlay
+			, Pass const & pass
+			, castor::Size const & renderSize )
+		{
+			doUpdateUbo( data
+				, static_cast< OverlayCategory const & >( overlay )
+				, pass
+				, renderSize );
+		}
+
+		static void doUpdateUbo( OverlayUboConfiguration & data
+			, BorderPanelOverlay const & overlay
+			, Pass const & pass
+			, castor::Size const & renderSize )
+		{
+			doUpdateUbo( data
+				, static_cast< OverlayCategory const & >( overlay )
+				, pass
+				, renderSize );
+		}
+
+		static void doUpdateUbo( OverlayUboConfiguration & data
+			, TextOverlay const & overlay
+			, Pass const & pass
+			, castor::Size const & renderSize )
+		{
+			doUpdateUbo( data
+				, static_cast< OverlayCategory const & >( overlay )
+				, pass
+				, renderSize );
 		}
 
 		template< typename VertexT, uint32_t CountT >
@@ -97,16 +96,19 @@ namespace castor3d
 	//*********************************************************************************************
 
 	template< typename QuadT, typename OverlayT, typename VertexT, uint32_t CountT >
-	void OverlayPreparer::doPrepareOverlay( RenderDevice const & device
+	void OverlayPreparer::doPrepareOverlayDescriptors( RenderDevice const & device
 		, OverlayT const & overlay
 		, Pass const & pass
 		, OverlayVertexBufferPoolT< VertexT, CountT > & vertexBuffer
 		, FontTextureSPtr fontTexture
 		, bool secondary )
 	{
-		OverlayVertexBufferIndexT< VertexT, CountT > bufferIndex = ( fontTexture
-			? vertexBuffer.fill( overlay, m_renderer.doGetTextNode( device, m_renderPass, pass, *fontTexture->getTexture(), *fontTexture->getSampler().lock() ), secondary )
-			: vertexBuffer.fill( overlay, m_renderer.doGetPanelNode( device, m_renderPass, pass ), secondary ) );
+		OverlayVertexBufferIndexT< VertexT, CountT > bufferIndex = vertexBuffer.fill( m_renderer.getSize()
+			, overlay
+			, ( fontTexture
+				? m_renderer.doGetTextNode( device, m_renderPass, pass, *fontTexture->getTexture(), *fontTexture->getSampler().lock() )
+				: m_renderer.doGetPanelNode( device, m_renderPass, pass ) )
+			, secondary );
 
 		if ( !bufferIndex.geometryBuffers.buffer )
 		{
@@ -126,32 +128,10 @@ namespace castor3d
 			descriptorSets.push_back( m_renderer.doCreateTextDescriptorSet( *fontTexture ) );
 		}
 
-		auto borderSize = ovrlrend::BorderSizeGetter< OverlayT, QuadT >{}( overlay, m_renderer.m_size );
-		auto borderOffset = castor::Size{ uint32_t( borderSize.left() ), uint32_t( borderSize.top() ) };
-		auto borderExtent = borderOffset + castor::Size{ uint32_t( borderSize.right() ), uint32_t( borderSize.bottom() ) };
-		auto position = overlay.getAbsolutePosition( m_renderer.m_size ) - borderOffset;
-		position->x = std::max( 0, position->x );
-		position->y = std::max( 0, position->y );
-		auto size = overlay.getAbsoluteSize( m_renderer.m_size ) + borderExtent;
-		size->x = std::max( 1u, size->x );
-		size->y = std::max( 1u, size->y );
-		ashes::CommandBuffer & commandBuffer = *m_renderer.m_commands.commandBuffer;
-		commandBuffer.bindPipeline( *bufferIndex.node.pipeline.pipeline );
-		commandBuffer.setViewport( makeViewport( m_renderer.m_size ) );
-		commandBuffer.setScissor( makeScissor( position, size ) );
-		commandBuffer.bindDescriptorSets( descriptorSets, *bufferIndex.node.pipeline.pipelineLayout );
-		DrawConstants constants{ bufferIndex.index };
-		commandBuffer.pushConstants( *bufferIndex.node.pipeline.pipelineLayout
-			, VK_SHADER_STAGE_VERTEX_BIT
-			, 0u
-			, sizeof( constants )
-			, &constants );
-		commandBuffer.bindVertexBuffer( 0u
-			, bufferIndex.geometryBuffers.buffer->getBuffer().getBuffer()
-			, bufferIndex.geometryBuffers.offset );
-		commandBuffer.draw( bufferIndex.geometryBuffers.count
-			, 1u
-			, 0u
-			, 0u );
+		m_overlays.push_back( OverlayData{ &overlay.getOverlay()
+			, descriptorSets
+			, bufferIndex.geometryBuffers
+			, bufferIndex.index
+			, &bufferIndex.node.pipeline } );
 	}
 }

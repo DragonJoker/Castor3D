@@ -257,7 +257,7 @@ namespace castor3d
 		, castor::Size const & size
 		, castor::Point2f const & jitter )
 	{
-		auto & configuration = cpuUpdate( projection );
+		auto & configuration = cpuUpdate( size, projection );
 		configuration.prvView = configuration.curView;
 		configuration.invPrvView = configuration.invCurView;
 		configuration.prvViewProj = configuration.curViewProj;
@@ -268,7 +268,6 @@ namespace castor3d
 		configuration.invProjection = projection.getInverse();
 		configuration.curViewProj = projection * view;
 		configuration.invCurViewProj = ( configuration.curViewProj ).getInverse();
-		configuration.size = { size.getWidth(), size.getHeight() };
 		configuration.jitter = { jitter->x, jitter->y };
 
 		auto itSrc = frustum.getPlanes().begin();
@@ -284,12 +283,14 @@ namespace castor3d
 		return configuration;
 	}
 
-	CameraUbo::Configuration & CameraUbo::cpuUpdate( castor::Matrix4x4f const & projection )
+	CameraUbo::Configuration & CameraUbo::cpuUpdate( castor::Size const & size
+		, castor::Matrix4x4f const & projection )
 	{
 		CU_Require( m_ubo );
 		auto & configuration = m_ubo.getData();
 		configuration.projection = projection;
 		configuration.invProjection = projection.getInverse();
+		configuration.size = { size.getWidth(), size.getHeight() };
 		return configuration;
 	}
 

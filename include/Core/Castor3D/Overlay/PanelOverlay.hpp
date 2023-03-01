@@ -40,14 +40,12 @@ namespace castor3d
 		 *\brief		Remplit le tampon de sommets donné.
 		 *\param[out]	buffer	Le buffer.
 		 */
-		C3D_API uint32_t fillBuffer( Vertex * buffer
+		C3D_API uint32_t fillBuffer( castor::Size const & refSize
+			, Vertex * buffer
 			, bool secondary )const;
 
 	private:
 		void doUpdate( OverlayRenderer const & renderer )override;
-
-	private:
-		castor::Size m_refSize;
 	};
 }
 
