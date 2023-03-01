@@ -337,6 +337,7 @@ namespace castor3d
 			, MaxOverlayPanelsPerBuffer ) }
 		, m_size{ makeSize( m_target.getExtent() ) }
 		, m_computePanelPipeline{ doCreatePanelPipeline( device ) }
+		, m_computeBorderPipeline{ doCreateBorderPipeline( device ) }
 	{
 		std::string name = "Overlays";
 
@@ -441,6 +442,49 @@ namespace castor3d
 				, crg::AccessState{ VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT } );
 			context.memoryBarrier( commandBuffer
 				, m_panelVertexBuffer->vertexBuffer.getBuffer().getBuffer()
+				, range
+				, VK_ACCESS_SHADER_WRITE_BIT
+				, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT
+				, crg::AccessState{ VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT } );
+		}
+
+		if ( m_computeBorderPipeline.count )
+		{
+			crg::BufferSubresourceRange range{ 0u, VK_WHOLE_SIZE };
+			context.memoryBarrier( commandBuffer
+				, m_borderVertexBuffer->overlaysData->getBuffer()
+				, range
+				, VK_ACCESS_HOST_WRITE_BIT
+				, VK_PIPELINE_STAGE_HOST_BIT
+				, crg::AccessState{ VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT } );
+			context.memoryBarrier( commandBuffer
+				, m_borderVertexBuffer->vertexBuffer.getBuffer().getBuffer()
+				, range
+				, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
+				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT
+				, crg::AccessState{ VK_ACCESS_SHADER_WRITE_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT } );
+			context.getContext().vkCmdBindPipeline( commandBuffer
+				, VK_PIPELINE_BIND_POINT_COMPUTE
+				, *m_computeBorderPipeline.pipeline );
+			VkDescriptorSet descriptorSet = *m_computeBorderPipeline.descriptorSet;
+			context.getContext().vkCmdBindDescriptorSets( commandBuffer
+				, VK_PIPELINE_BIND_POINT_COMPUTE
+				, *m_computeBorderPipeline.pipelineLayout
+				, 0u
+				, 1u
+				, &descriptorSet
+				, 0u
+				, nullptr );
+			context.getContext().vkCmdDispatch( commandBuffer
+				, m_computeBorderPipeline.count, 1u, 1u );
+			context.memoryBarrier( commandBuffer
+				, m_borderVertexBuffer->overlaysData->getBuffer()
+				, range
+				, VK_ACCESS_SHADER_READ_BIT
+				, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT
+				, crg::AccessState{ VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT } );
+			context.memoryBarrier( commandBuffer
+				, m_borderVertexBuffer->vertexBuffer.getBuffer().getBuffer()
 				, range
 				, VK_ACCESS_SHADER_WRITE_BIT
 				, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT
@@ -693,26 +737,191 @@ namespace castor3d
 				auto rbUV = writer.declLocale( "rbUV", overlayData.uv().zy() );
 
 				uint32_t index = 0;
+				c3d_vertexData[offset + index].position() = lt; c3d_vertexData[offset + index].uv() = ltUV; ++index;
+				c3d_vertexData[offset + index].position() = lb; c3d_vertexData[offset + index].uv() = lbUV; ++index;
+				c3d_vertexData[offset + index].position() = rb; c3d_vertexData[offset + index].uv() = rbUV; ++index;
+				c3d_vertexData[offset + index].position() = lt; c3d_vertexData[offset + index].uv() = ltUV; ++index;
+				c3d_vertexData[offset + index].position() = rb; c3d_vertexData[offset + index].uv() = rbUV; ++index;
+				c3d_vertexData[offset + index].position() = rt; c3d_vertexData[offset + index].uv() = rtUV; ++index;
+			} );
+		comp.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+		return makeShaderState( device, comp );
+	}
 
-				c3d_vertexData[offset + index].position() = lt;
-				c3d_vertexData[offset + index].uv() = ltUV;
-				++index;
-				c3d_vertexData[offset + index].position() = lb;
-				c3d_vertexData[offset + index].uv() = lbUV;
-				++index;
-				c3d_vertexData[offset + index].position() = rb;
-				c3d_vertexData[offset + index].uv() = rbUV;
-				++index;
+	OverlayRenderer::ComputePipeline OverlayRenderer::doCreateBorderPipeline( RenderDevice const & device )
+	{
+		OverlayRenderer::ComputePipeline result;
+		ashes::VkDescriptorSetLayoutBindingArray layoutBindings;
+		layoutBindings.emplace_back( makeDescriptorSetLayoutBinding( 0u // Camera
+			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+			, VK_SHADER_STAGE_COMPUTE_BIT ) );
+		layoutBindings.emplace_back( makeDescriptorSetLayoutBinding( 1u // Overlays
+			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+			, VK_SHADER_STAGE_COMPUTE_BIT ) );
+		layoutBindings.emplace_back( makeDescriptorSetLayoutBinding( 2u // Output
+			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+			, VK_SHADER_STAGE_COMPUTE_BIT ) );
+		result.descriptorLayout = device->createDescriptorSetLayout( "BorderOverlayCompute"
+			, layoutBindings );
 
-				c3d_vertexData[offset + index].position() = lt;
-				c3d_vertexData[offset + index].uv() = ltUV;
-				++index;
-				c3d_vertexData[offset + index].position() = rb;
-				c3d_vertexData[offset + index].uv() = rbUV;
-				++index;
-				c3d_vertexData[offset + index].position() = rt;
-				c3d_vertexData[offset + index].uv() = rtUV;
-				++index;
+		result.pipelineLayout = device->createPipelineLayout( "BorderOverlayCompute"
+			, *result.descriptorLayout );
+		result.pipeline = device->createPipeline( "BorderOverlayCompute"
+			, ashes::ComputePipelineCreateInfo{ 0u
+			, doCreateBorderProgram( device )
+			, * result.pipelineLayout } );
+
+		result.descriptorPool = result.descriptorLayout->createPool( "BorderOverlayCompute"
+			, 1u );
+		result.descriptorSet = result.descriptorPool->createDescriptorSet("BorderOverlayCompute" );
+		ashes::WriteDescriptorSetArray setBindings;
+		m_cameraUbo.createSizedBinding( *result.descriptorSet
+			, result.descriptorLayout->getBinding( 0u ) );
+		result.descriptorSet->createBinding( result.descriptorLayout->getBinding( 1u )
+			, *m_borderVertexBuffer->overlaysData
+			, 0u
+			, uint32_t( m_borderVertexBuffer->overlaysData->getCount() ) );
+		result.descriptorSet->createBinding( result.descriptorLayout->getBinding( 2u )
+			, m_borderVertexBuffer->vertexBuffer.getBuffer().getBuffer()
+			, 0u
+			, uint32_t( m_borderVertexBuffer->vertexBuffer.getBuffer().getBuffer().getSize() ) );
+		result.descriptorSet->update();
+
+		return result;
+	}
+
+	ashes::PipelineShaderStageCreateInfo OverlayRenderer::doCreateBorderProgram( RenderDevice const & device )
+	{
+		ShaderModule comp{ VK_SHADER_STAGE_COMPUTE_BIT, "BorderOverlayCompute" };
+		sdw::ComputeWriter writer;
+
+		C3D_Camera( writer
+			, 0u
+			, 0u );
+		C3D_Overlays( writer
+			, 1u
+			, 0u );
+		auto c3d_vertexData = writer.declArrayStorageBuffer< ovrlrend::PanelVertex >( "c3d_vertexData"
+			, 2u
+			, 0u );
+
+		writer.implementMain( 1u
+			, [&]( sdw::ComputeIn in )
+			{
+				auto overlayData = writer.declLocale( "overlayData"
+					, c3d_overlaysData[in.globalInvocationID.x()] );
+				auto offset = writer.declLocale( "offset"
+					, in.globalInvocationID.x() * 6u );
+				auto renderSize = writer.declLocale( "renderSize"
+					, vec2( c3d_cameraData.renderSize() ) );
+				auto ww = writer.declLocale( "w"
+					, renderSize.x() );
+				auto hh = writer.declLocale( "h"
+					, renderSize.y() );
+
+				auto centerL = writer.declLocale( "centerL", 0.0_f );
+				auto centerT = writer.declLocale( "centerT", 0.0_f );
+				auto centerR = writer.declLocale( "centerR", overlayData.size().x() );
+				auto centerB = writer.declLocale( "centerB", overlayData.size().y() );
+
+				IF( writer, overlayData.borderPosition() == uint32_t( BorderPosition::eInternal ) )
+				{
+					centerL += overlayData.border().x();
+					centerT += overlayData.border().y();
+					centerR -= overlayData.border().z();
+					centerB -= overlayData.border().w();
+				}
+				ELSEIF( overlayData.borderPosition() == uint32_t( BorderPosition::eMiddle ) )
+				{
+					centerL += overlayData.border().x() / 2.0_f;
+					centerT += overlayData.border().y() / 2.0_f;
+					centerR -= overlayData.border().z() / 2.0_f;
+					centerB -= overlayData.border().w() / 2.0_f;
+				}
+				FI;
+
+				uint32_t index = 0;
+				auto borderL = writer.declLocale( "borderL", ( centerL - overlayData.border().x() ) / ww );
+				auto borderT = writer.declLocale( "borderT", ( centerT - overlayData.border().y() ) / hh );
+				auto borderR = writer.declLocale( "borderR", ( centerR + overlayData.border().z() ) / ww );
+				auto borderB = writer.declLocale( "borderB", ( centerB + overlayData.border().w() ) / hh );
+				centerL /= ww;
+				centerT /= hh;
+				centerR /= ww;
+				centerB /= hh;
+
+				auto borderUvLL = writer.declLocale( "borderUvLL", overlayData.borderOuterUV().x() );
+				auto borderUvTT = writer.declLocale( "borderUvTT", overlayData.borderOuterUV().y() );
+				auto borderUvML = writer.declLocale( "borderUvML", overlayData.borderInnerUV().x() );
+				auto borderUvMT = writer.declLocale( "borderUvMT", overlayData.borderInnerUV().y() );
+				auto borderUvMR = writer.declLocale( "borderUvMR", overlayData.borderInnerUV().z() );
+				auto borderUvMB = writer.declLocale( "borderUvMB", overlayData.borderInnerUV().w() );
+				auto borderUvRR = writer.declLocale( "borderUvRR", overlayData.borderOuterUV().z() );
+				auto borderUvBB = writer.declLocale( "borderUvBB", overlayData.borderOuterUV().w() );
+
+				// Corner Top Left
+				c3d_vertexData[offset + index].position() = vec2( borderL, borderT ); c3d_vertexData[offset + index].uv() = vec2( borderUvLL, borderUvTT ); ++index;
+				c3d_vertexData[offset + index].position() = vec2( borderL, centerT ); c3d_vertexData[offset + index].uv() = vec2( borderUvLL, borderUvMT ); ++index;
+				c3d_vertexData[offset + index].position() = vec2( centerL, centerT ); c3d_vertexData[offset + index].uv() = vec2( borderUvML, borderUvMT ); ++index;
+				c3d_vertexData[offset + index].position() = vec2( borderL, borderT ); c3d_vertexData[offset + index].uv() = vec2( borderUvLL, borderUvTT ); ++index;
+				c3d_vertexData[offset + index].position() = vec2( centerL, centerT ); c3d_vertexData[offset + index].uv() = vec2( borderUvML, borderUvMT ); ++index;
+				c3d_vertexData[offset + index].position() = vec2( centerL, borderT ); c3d_vertexData[offset + index].uv() = vec2( borderUvML, borderUvTT ); ++index;
+
+				// Border Top
+				c3d_vertexData[offset + index].position() = vec2( centerL, borderT ); c3d_vertexData[offset + index].uv() = vec2( borderUvML, borderUvTT ); ++index;
+				c3d_vertexData[offset + index].position() = vec2( centerL, centerT ); c3d_vertexData[offset + index].uv() = vec2( borderUvML, borderUvMT ); ++index;
+				c3d_vertexData[offset + index].position() = vec2( centerR, centerT ); c3d_vertexData[offset + index].uv() = vec2( borderUvMR, borderUvMT ); ++index;
+				c3d_vertexData[offset + index].position() = vec2( centerL, borderT ); c3d_vertexData[offset + index].uv() = vec2( borderUvML, borderUvTT ); ++index;
+				c3d_vertexData[offset + index].position() = vec2( centerR, centerT ); c3d_vertexData[offset + index].uv() = vec2( borderUvMR, borderUvMT ); ++index;
+				c3d_vertexData[offset + index].position() = vec2( centerR, borderT ); c3d_vertexData[offset + index].uv() = vec2( borderUvMR, borderUvTT ); ++index;
+
+				// Corner Top Right
+				c3d_vertexData[offset + index].position() = vec2( centerR, borderT ); c3d_vertexData[offset + index].uv() = vec2( borderUvMR, borderUvTT ); ++index;
+				c3d_vertexData[offset + index].position() = vec2( centerR, centerT ); c3d_vertexData[offset + index].uv() = vec2( borderUvMR, borderUvMT ); ++index;
+				c3d_vertexData[offset + index].position() = vec2( borderR, centerT ); c3d_vertexData[offset + index].uv() = vec2( borderUvRR, borderUvMT ); ++index;
+				c3d_vertexData[offset + index].position() = vec2( centerR, borderT ); c3d_vertexData[offset + index].uv() = vec2( borderUvMR, borderUvTT ); ++index;
+				c3d_vertexData[offset + index].position() = vec2( borderR, centerT ); c3d_vertexData[offset + index].uv() = vec2( borderUvRR, borderUvMT ); ++index;
+				c3d_vertexData[offset + index].position() = vec2( borderR, borderT ); c3d_vertexData[offset + index].uv() = vec2( borderUvRR, borderUvTT ); ++index;
+
+				// Border Left
+				c3d_vertexData[offset + index].position() = vec2( borderL, centerT ); c3d_vertexData[offset + index].uv() = vec2( borderUvLL, borderUvMT ); ++index;
+				c3d_vertexData[offset + index].position() = vec2( borderL, centerB ); c3d_vertexData[offset + index].uv() = vec2( borderUvLL, borderUvMB ); ++index;
+				c3d_vertexData[offset + index].position() = vec2( centerL, centerB ); c3d_vertexData[offset + index].uv() = vec2( borderUvML, borderUvMB ); ++index;
+				c3d_vertexData[offset + index].position() = vec2( borderL, centerT ); c3d_vertexData[offset + index].uv() = vec2( borderUvLL, borderUvMT ); ++index;
+				c3d_vertexData[offset + index].position() = vec2( centerL, centerB ); c3d_vertexData[offset + index].uv() = vec2( borderUvML, borderUvMB ); ++index;
+				c3d_vertexData[offset + index].position() = vec2( centerL, centerT ); c3d_vertexData[offset + index].uv() = vec2( borderUvML, borderUvMT ); ++index;
+
+				// Border Right
+				c3d_vertexData[offset + index].position() = vec2( centerR, centerT ); c3d_vertexData[offset + index].uv() = vec2( borderUvMR, borderUvMT ); ++index;
+				c3d_vertexData[offset + index].position() = vec2( centerR, centerB ); c3d_vertexData[offset + index].uv() = vec2( borderUvMR, borderUvMB ); ++index;
+				c3d_vertexData[offset + index].position() = vec2( borderR, centerB ); c3d_vertexData[offset + index].uv() = vec2( borderUvRR, borderUvMB ); ++index;
+				c3d_vertexData[offset + index].position() = vec2( centerR, centerT ); c3d_vertexData[offset + index].uv() = vec2( borderUvMR, borderUvMT ); ++index;
+				c3d_vertexData[offset + index].position() = vec2( borderR, centerB ); c3d_vertexData[offset + index].uv() = vec2( borderUvRR, borderUvMB ); ++index;
+				c3d_vertexData[offset + index].position() = vec2( borderR, centerT ); c3d_vertexData[offset + index].uv() = vec2( borderUvRR, borderUvMT ); ++index;
+
+				// Corner Bottom Left
+				c3d_vertexData[offset + index].position() = vec2( borderL, centerB ); c3d_vertexData[offset + index].uv() = vec2( borderUvLL, borderUvMB ); ++index;
+				c3d_vertexData[offset + index].position() = vec2( borderL, borderB ); c3d_vertexData[offset + index].uv() = vec2( borderUvLL, borderUvBB ); ++index;
+				c3d_vertexData[offset + index].position() = vec2( centerL, borderB ); c3d_vertexData[offset + index].uv() = vec2( borderUvML, borderUvBB ); ++index;
+				c3d_vertexData[offset + index].position() = vec2( borderL, centerB ); c3d_vertexData[offset + index].uv() = vec2( borderUvLL, borderUvMB ); ++index;
+				c3d_vertexData[offset + index].position() = vec2( centerL, borderB ); c3d_vertexData[offset + index].uv() = vec2( borderUvML, borderUvBB ); ++index;
+				c3d_vertexData[offset + index].position() = vec2( centerL, centerB ); c3d_vertexData[offset + index].uv() = vec2( borderUvML, borderUvMB ); ++index;
+
+				// Border Bottom
+				c3d_vertexData[offset + index].position() = vec2( centerL, centerB ); c3d_vertexData[offset + index].uv() = vec2( borderUvML, borderUvMB ); ++index;
+				c3d_vertexData[offset + index].position() = vec2( centerL, borderB ); c3d_vertexData[offset + index].uv() = vec2( borderUvML, borderUvBB ); ++index;
+				c3d_vertexData[offset + index].position() = vec2( centerR, borderB ); c3d_vertexData[offset + index].uv() = vec2( borderUvMR, borderUvBB ); ++index;
+				c3d_vertexData[offset + index].position() = vec2( centerL, centerB ); c3d_vertexData[offset + index].uv() = vec2( borderUvML, borderUvMB ); ++index;
+				c3d_vertexData[offset + index].position() = vec2( centerR, borderB ); c3d_vertexData[offset + index].uv() = vec2( borderUvMR, borderUvBB ); ++index;
+				c3d_vertexData[offset + index].position() = vec2( centerR, centerB ); c3d_vertexData[offset + index].uv() = vec2( borderUvMR, borderUvMB ); ++index;
+
+				// Corner Bottom Right
+				c3d_vertexData[offset + index].position() = vec2( centerR, centerB ); c3d_vertexData[offset + index].uv() = vec2( borderUvMR, borderUvMB ); ++index;
+				c3d_vertexData[offset + index].position() = vec2( centerR, borderB ); c3d_vertexData[offset + index].uv() = vec2( borderUvMR, borderUvBB ); ++index;
+				c3d_vertexData[offset + index].position() = vec2( borderR, borderB ); c3d_vertexData[offset + index].uv() = vec2( borderUvRR, borderUvBB ); ++index;
+				c3d_vertexData[offset + index].position() = vec2( centerR, centerB ); c3d_vertexData[offset + index].uv() = vec2( borderUvMR, borderUvMB ); ++index;
+				c3d_vertexData[offset + index].position() = vec2( borderR, borderB ); c3d_vertexData[offset + index].uv() = vec2( borderUvRR, borderUvBB ); ++index;
+				c3d_vertexData[offset + index].position() = vec2( borderR, centerB ); c3d_vertexData[offset + index].uv() = vec2( borderUvRR, borderUvMB ); ++index;
 			} );
 		comp.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		return makeShaderState( device, comp );

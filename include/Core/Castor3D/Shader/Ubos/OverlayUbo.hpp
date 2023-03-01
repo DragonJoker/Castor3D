@@ -19,8 +19,11 @@ namespace castor3d::shader
 			, sdw::Vec4Field< "uv" >
 			, sdw::Vec2Field< "position" >
 			, sdw::Vec2Field< "size" >
+			, sdw::Vec4Field< "border" >
+			, sdw::Vec4Field< "borderInnerUV" >
+			, sdw::Vec4Field< "borderOuterUV" >
 			, sdw::UIntField< "materialId" >
-			, sdw::UIntField< "pad1" >
+			, sdw::UIntField< "borderPosition" >
 			, sdw::UIntField< "pad2" >
 			, sdw::UIntField< "pad3" > >
 	{
@@ -36,6 +39,10 @@ namespace castor3d::shader
 		auto materialId()const { return getMember< "materialId" >(); }
 		auto size()const { return getMember< "size" >(); }
 		auto uv()const { return getMember< "uv" >(); }
+		auto border()const { return getMember< "border" >(); }
+		auto borderInnerUV()const { return getMember< "borderInnerUV" >(); }
+		auto borderOuterUV()const { return getMember< "borderOuterUV" >(); }
+		auto borderPosition()const { return getMember< "borderPosition" >(); }
 
 	private:
 		auto position()const { return getMember< "position" >(); }

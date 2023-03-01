@@ -31,7 +31,7 @@ namespace castor3d
 
 	namespace ovrlrend
 	{
-		static void doUpdateUbo( OverlayUboConfiguration & data
+		static castor::Point2d doUpdateUbo( OverlayUboConfiguration & data
 			, OverlayCategory const & overlay
 			, Pass const & pass
 			, castor::Size const & renderSize )
@@ -43,6 +43,7 @@ namespace castor3d
 			data.size *= ratio;
 			data.uv = castor::Point4f{ overlay.getUV() };
 			data.materialId = pass.getId();
+			return ratio;
 		}
 
 		static void doUpdateUbo( OverlayUboConfiguration & data
@@ -61,10 +62,16 @@ namespace castor3d
 			, Pass const & pass
 			, castor::Size const & renderSize )
 		{
-			doUpdateUbo( data
+			auto ratio = doUpdateUbo( data
 				, static_cast< OverlayCategory const & >( overlay )
 				, pass
 				, renderSize );
+			auto border = overlay.getAbsoluteBorderSize( renderSize );
+			data.border = castor::Point4f{ border.left(), border.top(), border.right(), border.bottom() };
+			data.border *= ratio;
+			data.borderInnerUV = castor::Point4f{ overlay.getBorderInnerUV() };
+			data.borderOuterUV = castor::Point4f{ overlay.getBorderOuterUV() };
+			data.borderPosition = uint32_t( overlay.getBorderPosition() );
 		}
 
 		static void doUpdateUbo( OverlayUboConfiguration & data

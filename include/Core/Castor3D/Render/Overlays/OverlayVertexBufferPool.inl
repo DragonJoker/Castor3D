@@ -29,7 +29,7 @@ namespace castor3d
 			, MaxPipelines
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-			, debugName ) }
+			, debugName + "Data" ) }
 		, overlaysBuffer{ castor::makeArrayView( overlaysData->lock( 0u, ashes::WholeSize, 0u )
 			, overlaysData->getCount() ) }
 		, noTexDeclaration{ noTexDecl }
@@ -37,7 +37,7 @@ namespace castor3d
 		, vertexBuffer{ device.renderSystem
 			, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-			, debugName
+			, debugName + "Vertex"
 			, ashes::QueueShare{}
 			, MaxPipelines * sizeof( VertexT ) * CountT }
 		, descriptorPool{ descriptorLayout.createPool( 1u ) }
@@ -82,7 +82,7 @@ namespace castor3d
 	{
 		if ( allocated )
 		{
-			if constexpr ( CountT != 6u )
+			if constexpr ( CountT != 6u && CountT != 48u )
 			{
 				vertexBuffer.markDirty( 0u
 					, allocated * sizeof( VertexT )
