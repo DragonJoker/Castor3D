@@ -169,9 +169,9 @@ namespace castor3d
 		m_cpu.value->setFont( cuT( "Arial10" ) );
 		m_gpu.value->setFont( cuT( "Arial10" ) );
 
-		m_passName->setCaption( name );
-		m_cpu.name->setCaption( cuT( "CPU:" ) );
-		m_gpu.name->setCaption( cuT( "GPU:" ) );
+		m_passName->setCaption( castor::string::toU32String( name ) );
+		m_cpu.name->setCaption( U"CPU:" );
+		m_gpu.name->setCaption( U"GPU:" );
 
 		auto & engine = cache.getEngine();
 		m_panel->setMaterial( engine.findMaterial( cuT( "TransparentBlack" ) ).lock().get() );
@@ -225,8 +225,8 @@ namespace castor3d
 			return;
 		}
 
-		m_cpu.value->setCaption( castor::string::toString( m_cpu.time ) );
-		m_gpu.value->setCaption( castor::string::toString( m_gpu.time ) );
+		m_cpu.value->setCaption( castor::string::toU32String( castor::string::toString( m_cpu.time ) ) );
+		m_gpu.value->setCaption( castor::string::toU32String( castor::string::toString( m_gpu.time ) ) );
 
 		m_panel->setVisible( m_detailed );
 		m_passName->setVisible( m_detailed );
@@ -341,9 +341,9 @@ namespace castor3d
 		m_cpu.value->setFont( cuT( "Arial10" ) );
 		m_gpu.value->setFont( cuT( "Arial10" ) );
 
-		m_name->setCaption( m_categoryName );
-		m_cpu.name->setCaption( cuT( "CPU:" ) );
-		m_gpu.name->setCaption( cuT( "GPU:" ) );
+		m_name->setCaption( castor::string::toU32String( m_categoryName ) );
+		m_cpu.name->setCaption( U"CPU:" );
+		m_gpu.name->setCaption( U"GPU:" );
 
 		auto & engine = cache.getEngine();
 		m_container->setMaterial( engine.findMaterial( cuT( "AlphaDarkBlue" ) ).lock().get() );
@@ -458,8 +458,8 @@ namespace castor3d
 			return;
 		}
 
-		m_cpu.value->setCaption( castor::string::toString( m_cpu.time ) );
-		m_gpu.value->setCaption( castor::string::toString( m_gpu.time ) );
+		m_cpu.value->setCaption( castor::string::toU32String( castor::string::toString( m_cpu.time ) ) );
+		m_gpu.value->setCaption( castor::string::toU32String( castor::string::toString( m_gpu.time ) ) );
 
 		for ( auto & pass : m_passes )
 		{

@@ -194,7 +194,7 @@ namespace CastorGui
 
 		if ( sel >= 0 && uint32_t( sel ) < getItemCount() )
 		{
-			text->setCaption( getItems()[uint32_t( sel )] );
+			text->setCaption( castor::string::toU32String( getItems()[uint32_t( sel )] ) );
 		}
 
 		manager.create( m_expand );
@@ -306,7 +306,7 @@ namespace CastorGui
 
 			if ( text )
 			{
-				text->setCaption( m_choices->getItemText( selected ) );
+				text->setCaption( castor::string::toU32String( m_choices->getItemText( selected ) ) );
 			}
 		}
 

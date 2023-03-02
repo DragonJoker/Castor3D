@@ -34,6 +34,30 @@ namespace castor
 				}
 			};
 
+			template<> struct StringConverter< char, char32_t >
+			{
+				static void convert( std::basic_string< char > const & strIn
+					, std::basic_string< char32_t > & strOut
+					, std::locale const & locale = std::locale( "C" ) )
+				{
+					if ( !strIn.empty() )
+					{
+						typedef std::codecvt< char32_t, char8_t, std::mbstate_t > facet_type;
+						const facet_type & facet = std::use_facet< facet_type >( locale );
+						std::mbstate_t state = std::mbstate_t();
+						std::vector< char32_t > dst( strIn.size() * facet.max_length(), 0 );
+						const char8_t * endSrc = nullptr;
+						char32_t * endDst = nullptr;
+						facet.in( state
+							, reinterpret_cast< char8_t const * >( strIn.data() )
+							, reinterpret_cast< char8_t const * >( strIn.data() ) + strIn.size()
+							, endSrc
+							, &dst[0], &dst[0] + dst.size(), endDst );
+						strOut = std::u32string( &dst.front(), endDst );
+					}
+				}
+			};
+
 			template<> struct StringConverter< wchar_t, char >
 			{
 				static void convert( std::basic_string< wchar_t > const & strIn
@@ -50,8 +74,32 @@ namespace castor
 						char * endDst = nullptr;
 						facet.out( state,
 							strIn.data(), strIn.data() + strIn.size(), endSrc
-								, &dst[0], &dst[0] + dst.size(), endDst );
+							, &dst[0], &dst[0] + dst.size(), endDst );
 						strOut = std::string( &dst.front(), endDst );
+					}
+				}
+			};
+
+			template<> struct StringConverter< char32_t, char >
+			{
+				static void convert( std::basic_string< char32_t > const & strIn
+					, std::basic_string< char > & strOut
+					, std::locale const & locale = std::locale() )
+				{
+					if ( !strIn.empty() )
+					{
+						typedef std::codecvt< char32_t, char8_t, std::mbstate_t > facet_type;
+						const facet_type & facet = std::use_facet< facet_type >( locale );
+						std::mbstate_t state = std::mbstate_t();
+						std::vector< char > dst( strIn.size() * facet.max_length(), 0 );
+						const char32_t * endSrc = nullptr;
+						char8_t * endDst = nullptr;
+						facet.out( state,
+							strIn.data(), strIn.data() + strIn.size(), endSrc
+								, reinterpret_cast< char8_t * >( &dst[0] )
+								, reinterpret_cast< char8_t * >( &dst[0] ) + dst.size()
+								, endDst );
+						strOut = std::string( &dst.front(), reinterpret_cast< char * >( endDst ) );
 					}
 				}
 			};
@@ -94,6 +142,12 @@ namespace castor
 			result.imbue( locale );
 			result << value;
 			return result.str();
+		}
+
+		template< typename T >
+		inline U32String toU32String( T const & value, std::locale const & locale )
+		{
+			return toU32String( toString( value, locale ) );
 		}
 
 		template< typename T, typename U >

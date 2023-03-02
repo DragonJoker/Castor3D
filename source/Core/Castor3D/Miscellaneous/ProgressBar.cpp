@@ -69,7 +69,7 @@ namespace castor3d
 			{
 				if ( m_progressTitle )
 				{
-					m_progressTitle->setCaption( m_title );
+					m_progressTitle->setCaption( castor::string::toU32String( m_title ) );
 				}
 
 				m_titleEvent = nullptr;
@@ -80,7 +80,7 @@ namespace castor3d
 			{
 				if ( m_progressLabel )
 				{
-					m_progressLabel->setCaption( m_label );
+					m_progressLabel->setCaption( castor::string::toU32String( m_label ) );
 				}
 
 				if ( m_progressBar )
@@ -107,7 +107,7 @@ namespace castor3d
 			{
 				if ( m_progressTitle )
 				{
-					m_progressTitle->setCaption( m_title );
+					m_progressTitle->setCaption( castor::string::toU32String( m_title ) );
 				}
 
 				m_titleEvent = nullptr;
@@ -129,7 +129,7 @@ namespace castor3d
 			{
 				if ( m_progressLabel )
 				{
-					m_progressLabel->setCaption( m_label );
+					m_progressLabel->setCaption( castor::string::toU32String( m_label ) );
 				}
 
 				m_labelEvent = nullptr;
@@ -153,7 +153,7 @@ namespace castor3d
 			{
 				if ( m_progressLabel )
 				{
-					m_progressLabel->setCaption( m_label );
+					m_progressLabel->setCaption( castor::string::toU32String( m_label ) );
 				}
 
 				if ( m_progressBar )

@@ -63,7 +63,7 @@ namespace castor3d
 		m_label->setMaterial( engine.findMaterial( cuT( "White" ) ).lock().get() );
 		m_value->setMaterial( engine.findMaterial( cuT( "White" ) ).lock().get() );
 
-		m_label->setCaption( label );
+		m_label->setCaption( castor::string::toU32String( label ) );
 	}
 
 	template< typename T >
@@ -92,7 +92,7 @@ namespace castor3d
 	template< typename T >
 	void DebugOverlays::DebugPanelT< T >::update()
 	{
-		m_value->setCaption( castor::string::toString( m_v ) );
+		m_value->setCaption( castor::string::toU32String( m_v ) );
 	}
 
 	//*********************************************************************************************
@@ -124,7 +124,7 @@ namespace castor3d
 		m_titleText->setHAlign( HAlign::eCenter );
 		m_titleText->setMaterial( engine.findMaterial( cuT( "White" ) ).lock().get() );
 		m_titleText->setFont( cuT( "Arial16" ) );
-		m_titleText->setCaption( title );
+		m_titleText->setCaption( castor::string::toU32String( title ) );
 	}
 
 	template< typename T >

@@ -480,6 +480,15 @@ namespace castor
 		CU_API String toString( uint64_t value, int base = 10, std::locale const & locale = std::locale( std::locale( "C" ), new manip::BaseNumPut< xchar >() ) );
 		/**
 		 *\~english
+		 *\param[in]	text	The castor::String
+		 *\return		The U32String.
+		 *\~french
+		 *\param[in]	text	Le castor::String
+		 *\return		Le U32String.
+		 */
+		CU_API U32String toU32String( String const & text );
+		/**
+		 *\~english
 		 *\param[in]	value	The value.
 		 *\param[in]	suffix	The suffix.
 		 *\return		\p true if \p value ends with \p suffix.
@@ -546,6 +555,20 @@ namespace castor
 		 */
 		template< typename T >
 		inline String toString( T const & value, std::locale const & locale = std::locale( std::locale( "C" ), new manip::BaseNumPut< xchar >() ) );
+		/**
+		 *\~english
+		 *\brief		Puts a value into a String
+		 *\param[in]	value	The value
+		 *\param[in]	locale	The locale used in the conversion
+		 *\return		The String containing the value
+		 *\~french
+		 *\brief		Met une valeur dans un String
+		 *\param[in]	value	La valeur
+		 *\param[in]	locale	La locale utilisée dans la conversion
+		 *\return		Le String contenant la valeur
+		 */
+		template< typename T >
+		inline U32String toU32String( T const & value, std::locale const & locale = std::locale( std::locale( "C" ), new manip::BaseNumPut< xchar >() ) );
 		/**
 		 *\~english
 		 *\brief		Casts a string value in another string type

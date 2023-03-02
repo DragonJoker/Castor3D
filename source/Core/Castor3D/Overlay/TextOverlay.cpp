@@ -126,11 +126,11 @@ namespace castor3d
 
 		std::vector< char32_t > newCaption;
 
-		for ( castor::string::utf8::iterator it{ m_currentCaption.begin() }; it != m_currentCaption.end(); ++it )
+		for ( auto c : m_currentCaption )
 		{
-			if ( !font->hasGlyphAt( *it ) )
+			if ( !font->hasGlyphAt( c ) )
 			{
-				newCaption.push_back( *it );
+				newCaption.push_back( c );
 			}
 		}
 
@@ -304,26 +304,34 @@ namespace castor3d
 		, castor::Point2d const & insize )const
 	{
 		auto & font = ovrltxt::getFont( *this );
-		castor::StringArray lines = castor::string::split( m_previousCaption
-			, cuT( "\n" )
-			, uint32_t( std::count( m_previousCaption.begin(), m_previousCaption.end(), cuT( '\n' ) ) + 1 )
-			, true );
+		auto it = m_previousCaption.begin();
+		double left = 0;
+		double wordWidth = 0;
 		DisplayableLineArray result;
 		DisplayableLine line;
+		std::u32string word;
 
-		for ( auto const & lineText : lines )
+		while ( it != m_previousCaption.end() )
 		{
-			double left = 0;
-			double wordWidth = 0;
-			std::u32string word;
-
-			for ( castor::string::utf8::const_iterator itLine{ lineText.begin() }; itLine != lineText.end(); ++itLine )
+			if ( *it == U'\n' )
 			{
-				castor::Glyph const & glyph{ font.getGlyphAt( *itLine ) };
-				DisplayableChar character{ castor::Point2d{}, castor::Point2d{ glyph.getAdvance(), glyph.getSize().getHeight() }, glyph };
+				if ( !word.empty() )
+				{
+					doPrepareWord( renderSize, word, wordWidth, insize, left, line, result );
+				}
 
-				if ( glyph.getCharacter() == cuT( ' ' )
-						|| glyph.getCharacter() == cuT( '\t' ) )
+				line = doFinishLine( insize, line, left, result );
+				left = 0;
+				wordWidth = 0;
+			}
+			else
+			{
+				castor::Glyph const & glyph{ font.getGlyphAt( *it ) };
+				DisplayableChar character{ castor::Point2d{}
+					, castor::Point2d{ glyph.getAdvance(), glyph.getSize().getHeight() }, glyph };
+
+				if ( glyph.getCharacter() == U' '
+					|| glyph.getCharacter() == U'\t' )
 				{
 					// write the word and leave space before next word.
 					doPrepareWord( renderSize, word, wordWidth, insize, left, line, result );
@@ -338,13 +346,15 @@ namespace castor3d
 				}
 			}
 
-			if ( !word.empty() )
-			{
-				doPrepareWord( renderSize, word, wordWidth, insize, left, line, result );
-			}
-
-			line = doFinishLine( insize, line, left, result );
+			++it;
 		}
+
+		if ( !word.empty() )
+		{
+			doPrepareWord( renderSize, word, wordWidth, insize, left, line, result );
+		}
+
+		line = doFinishLine( insize, line, left, result );
 
 		doAlignVertically( insize[1], result );
 		return result;

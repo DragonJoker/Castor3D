@@ -47,6 +47,7 @@ namespace castor
 		typedef BasicBaseManip< char > BaseManip;
 		typedef BasicBaseManip< wchar_t > WBaseManip;
 		typedef BasicBaseManip< xchar > XBaseManip;
+		typedef BasicBaseManip< u32char > U32BaseManip;
 
 		/**
 		 *\~english
@@ -96,6 +97,21 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Stream operator
+		 *\remarks		Creates a manipulator, to be able to use it in a stream
+		 *\param[in]	b	The base
+		 *\~french
+		 *\brief		Opérateur de flux
+		 *\remarks		Crée un manipulateur, pour l'utiliser dans un flux
+		 *\param[in]	b	La base
+		 */
+		inline U32BaseManip u32base( int b )
+		{
+			return U32BaseManip( b );
+		}
+
+		/**
+		 *\~english
+		 *\brief		Stream operator
 		 *\remarks		We need this so we can apply our custom stream manipulator to the stream.
 		 *\param[in]	stream	The stream
 		 *\param[in]	manip	The manipulator
@@ -124,6 +140,24 @@ namespace castor
 		 *\param[in]	manip	Le manipulateur
 		 */
 		inline std::wostream & operator<<( std::wostream & stream, const manip::WBaseManip & manip )
+		{
+			manip.apply( stream );
+			return stream;
+		}
+
+		/**
+		 *\~english
+		 *\brief		Stream operator
+		 *\remarks		We need this so we can apply our custom stream manipulator to the stream.
+		 *\param[in]	stream	The stream
+		 *\param[in]	manip	The manipulator
+		 *\~french
+		 *\brief		Opérateur de flux
+		 *\remarks		Applique notre manipulateur au flux
+		 *\param[in]	stream	Le flux
+		 *\param[in]	manip	Le manipulateur
+		 */
+		inline U32OutputStream & operator<<( U32OutputStream & stream, const manip::U32BaseManip & manip )
 		{
 			manip.apply( stream );
 			return stream;

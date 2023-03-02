@@ -86,7 +86,7 @@ namespace castor3d
 		 *\brief		Récupère le nom de la police.
 		 *\return		La valeur.
 		 */
-		inline castor::String const & getFontName()const
+		castor::String const & getFontName()const
 		{
 			return getFontTexture()->getFontName();
 		}
@@ -96,7 +96,7 @@ namespace castor3d
 		 *\~french
 		 *\return		\p true si cette incrustation a changé.
 		 */
-		inline bool isChanged()const override
+		bool isChanged()const override
 		{
 			return m_textChanged;
 		}
@@ -106,7 +106,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La FontTexture.
 		 */
-		inline FontTextureSPtr getFontTexture()const
+		FontTextureSPtr getFontTexture()const
 		{
 			return m_fontTexture.lock();
 		}
@@ -118,7 +118,7 @@ namespace castor3d
 		 *\brief		Récupère le texte de l'incrustation
 		 *\return		La valeur
 		 */
-		inline castor::String getCaption()const
+		std::u32string getCaption()const
 		{
 			return m_currentCaption;
 		}
@@ -130,7 +130,7 @@ namespace castor3d
 		 *\brief		Définit le texte de l'incrustation
 		 *\param[in]	value	La nouvelle valeur
 		 */
-		inline void setCaption( castor::String const & value )
+		void setCaption( std::u32string const & value )
 		{
 			m_currentCaption = value;
 			m_textChanged = true;
@@ -141,7 +141,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le mode de découpe du texte.
 		*/
-		inline TextWrappingMode getTextWrappingMode()const
+		TextWrappingMode getTextWrappingMode()const
 		{
 			return m_wrappingMode;
 		}
@@ -153,7 +153,7 @@ namespace castor3d
 		 *\brief		Définit le mode de découpe du texte
 		 *\param[in]	value	La nouvelle valeur
 		 */
-		inline void setTextWrappingMode( TextWrappingMode value )
+		void setTextWrappingMode( TextWrappingMode value )
 		{
 			m_textChanged = m_textChanged || ( m_wrappingMode != value );
 			m_wrappingMode = value;
@@ -164,7 +164,7 @@ namespace castor3d
 		 *\~french
 		 *\return		L'alignement horizontal.
 		*/
-		inline HAlign getHAlign()const
+		HAlign getHAlign()const
 		{
 			return m_hAlign;
 		}
@@ -176,7 +176,7 @@ namespace castor3d
 		 *\brief		Définit l'alignement horizontal
 		 *\param[in]	value	La nouvelle valeur
 		*/
-		inline void setHAlign( HAlign value )
+		void setHAlign( HAlign value )
 		{
 			m_textChanged = m_textChanged || ( m_hAlign != value );
 			m_hAlign = value;
@@ -187,7 +187,7 @@ namespace castor3d
 		 *\~french
 		 *\return		L'alignement vertical.
 		*/
-		inline VAlign getVAlign()const
+		VAlign getVAlign()const
 		{
 			return m_vAlign;
 		}
@@ -199,7 +199,7 @@ namespace castor3d
 		 *\brief		Définit l'alignement vertical
 		 *\param[in]	value	La nouvelle valeur
 		*/
-		inline void setVAlign( VAlign value )
+		void setVAlign( VAlign value )
 		{
 			m_textChanged = m_textChanged || ( m_vAlign != value );
 			m_vAlign = value;
@@ -210,7 +210,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le mode de mappage de texture du texte.
 		*/
-		inline TextTexturingMode getTexturingMode()const
+		TextTexturingMode getTexturingMode()const
 		{
 			return m_texturingMode;
 		}
@@ -222,7 +222,7 @@ namespace castor3d
 		 *\brief		Définit le mode de mappage de texture du texte.
 		 *\param[in]	value	La nouvelle valeur.
 		*/
-		inline void setTexturingMode( TextTexturingMode value )
+		void setTexturingMode( TextTexturingMode value )
 		{
 			m_textChanged = m_textChanged || ( m_texturingMode != value );
 			m_texturingMode = value;
@@ -233,7 +233,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le mode d'espacement des lignes.
 		*/
-		inline TextLineSpacingMode getLineSpacingMode()const
+		TextLineSpacingMode getLineSpacingMode()const
 		{
 			return m_lineSpacingMode;
 		}
@@ -245,7 +245,7 @@ namespace castor3d
 		 *\brief		Définit le mode d'espacement des lignes.
 		 *\param[in]	value	La nouvelle valeur.
 		*/
-		inline void setLineSpacingMode( TextLineSpacingMode value )
+		void setLineSpacingMode( TextLineSpacingMode value )
 		{
 			m_textChanged = m_textChanged || ( m_lineSpacingMode != value );
 			m_lineSpacingMode = value;
@@ -448,8 +448,8 @@ namespace castor3d
 			, DisplayableLineArray & lines )const;
 
 	private:
-		castor::String m_currentCaption;
-		castor::String m_previousCaption;
+		std::u32string m_currentCaption;
+		std::u32string m_previousCaption;
 		FontTextureWPtr m_fontTexture;
 		TextWrappingMode m_wrappingMode{ TextWrappingMode::eNone };
 		TextLineSpacingMode m_lineSpacingMode{ TextLineSpacingMode::eOwnHeight };

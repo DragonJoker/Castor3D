@@ -35,13 +35,21 @@ namespace castor
 {
 	using xchar = char;
 	using ychar = wchar_t;
+	using u32char = char32_t;
 	using String = std::basic_string< xchar >;
+	using U32String = std::basic_string< u32char >;
 	using StringView = std::basic_string_view< xchar >;
+	using U32StringView = std::basic_string_view< u32char >;
 	using StringStream = std::basic_stringstream< xchar >;
+	using U32StringStream = std::basic_stringstream< u32char >;
 	using OutputStringStream = std::basic_ostringstream< xchar >;
+	using U32OutputStringStream = std::basic_ostringstream< u32char >;
 	using InputStringStream = std::basic_istringstream< xchar >;
+	using U32InputStringStream = std::basic_istringstream< u32char >;
 	using OutputStream = std::basic_ostream< xchar >;
+	using U32OutputStream = std::basic_ostream< u32char >;
 	using InputStream = std::basic_istream< xchar >;
+	using U32InputStream = std::basic_istream< u32char >;
 
 	using Seconds = std::chrono::seconds;
 	using Milliseconds = std::chrono::milliseconds;
