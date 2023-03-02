@@ -67,7 +67,7 @@ namespace CastorGui
 				, &getBackground()->getOverlay() ).lock()->getTextOverlay();
 		m_text = text;
 		text->setPixelSize( getSize() );
-		text->setCaption( m_caption );
+		text->setCaption( castor::string::toU32String( m_caption ) );
 		text->setVisible( visible );
 		text->setVAlign( castor3d::VAlign::eCenter );
 		doUpdateStyle();
@@ -131,7 +131,7 @@ namespace CastorGui
 
 		if ( auto text = m_text.lock() )
 		{
-			text->setCaption( value );
+			text->setCaption( castor::string::toU32String( value ) );
 		}
 	}
 

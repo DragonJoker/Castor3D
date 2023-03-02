@@ -442,6 +442,11 @@ namespace GuiCommon
 		return castor::String( value.mb_str( wxConvUTF8 ).data() );
 	}
 
+	castor::U32String make_U32String( wxString const & value )
+	{
+		return castor::string::toU32String( make_String( value ) );
+	}
+
 	castor::Path make_Path( wxString const & value )
 	{
 		return castor::Path( value.mb_str( wxConvUTF8 ).data() );
@@ -450,6 +455,11 @@ namespace GuiCommon
 	wxString make_wxString( castor::String const & value )
 	{
 		return wxString( value.c_str(), wxConvUTF8 );
+	}
+
+	wxString make_wxString( castor::U32String const & value )
+	{
+		return make_wxString( castor::string::stringCast< castor::xchar >( value ) );
 	}
 
 	wxArrayString make_wxArrayString( castor::StringArray const & values )

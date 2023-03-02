@@ -1,5 +1,7 @@
 #include "CastorUtils/Miscellaneous/StringUtils.hpp"
 
+#pragma warning( disable: 4273 )
+
 namespace castor
 {
 	namespace string
@@ -413,6 +415,18 @@ namespace castor
 			result.imbue( locale );
 			result << manip::xbase( base ) << value;
 			return result.str();
+		}
+
+		U32String toU32String( String const & text )
+		{
+			U32String result;
+
+			for ( string::utf8::const_iterator it{ text.begin() }; it != text.end(); ++it )
+			{
+				result += *it;
+			}
+
+			return result;
 		}
 
 		String & replace( String & text, xchar lookup, xchar replacement )

@@ -5308,7 +5308,7 @@ namespace castor3d
 		if ( overlay && overlay->getType() == OverlayType::eText )
 		{
 			castor::string::replace( strParams, cuT( "\\n" ), cuT( "\n" ) );
-			overlay->getTextOverlay()->setCaption( strParams );
+			overlay->getTextOverlay()->setCaption( castor::string::stringCast< char32_t >( strParams ) );
 		}
 		else
 		{

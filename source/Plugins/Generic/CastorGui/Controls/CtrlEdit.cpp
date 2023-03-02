@@ -339,11 +339,11 @@ namespace CastorGui
 		{
 			if ( m_active )
 			{
-				text->setCaption( doGetCaptionWithCaret() );
+				text->setCaption( castor::string::toU32String( doGetCaptionWithCaret() ) );
 			}
 			else
 			{
-				text->setCaption( m_caption );
+				text->setCaption( castor::string::toU32String( m_caption ) );
 			}
 		}
 	}

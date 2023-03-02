@@ -117,7 +117,7 @@ namespace CastorGui
 		text->setPixelSize( getSize() );
 		text->setHAlign( castor3d::HAlign::eCenter );
 		text->setVAlign( castor3d::VAlign::eCenter );
-		text->setCaption( m_caption );
+		text->setCaption( castor::string::toU32String( m_caption ) );
 		text->setVisible( visible );
 		m_text = text;
 
@@ -201,7 +201,7 @@ namespace CastorGui
 
 		if ( auto text = m_text.lock() )
 		{
-			text->setCaption( value );
+			text->setCaption( castor::string::toU32String( value ) );
 		}
 	}
 

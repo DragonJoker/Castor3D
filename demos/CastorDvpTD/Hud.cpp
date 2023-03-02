@@ -113,8 +113,8 @@ namespace castortd
 		scene.findOverlay( cuT( "GameEndPanel" ) ).lock()->setVisible( true );
 		scene.findOverlay( cuT( "HelpPanel" ) ).lock()->setVisible( false );
 
-		getTextOverlay( m_game.getScene(), cuT( "ResultLevelValue" ) )->setCaption( castor::string::toString( m_game.getWave() ) );
-		getTextOverlay( m_game.getScene(), cuT( "ResultKillsValue" ) )->setCaption( castor::string::toString( m_game.getKills() ) );
+		getTextOverlay( m_game.getScene(), cuT( "ResultLevelValue" ) )->setCaption( castor::string::toU32String( m_game.getWave() ) );
+		getTextOverlay( m_game.getScene(), cuT( "ResultKillsValue" ) )->setCaption( castor::string::toU32String( m_game.getKills() ) );
 	}
 
 	void Hud::update()
@@ -123,42 +123,42 @@ namespace castortd
 
 		if ( text )
 		{
-			text->setCaption( castor::string::toString( m_game.getLives() ) );
+			text->setCaption( castor::string::toU32String( m_game.getLives() ) );
 		}
 
 		text = m_ore.lock();
 
 		if ( text )
 		{
-			text->setCaption( castor::string::toString( m_game.getOre() ) );
+			text->setCaption( castor::string::toU32String( m_game.getOre() ) );
 		}
 
 		text = m_level.lock();
 
 		if ( text )
 		{
-			text->setCaption( castor::string::toString( m_game.getWave() ) );
+			text->setCaption( castor::string::toU32String( m_game.getWave() ) );
 		}
 
 		text = m_kills.lock();
 
 		if ( text )
 		{
-			text->setCaption( castor::string::toString( m_game.getKills() ) );
+			text->setCaption( castor::string::toU32String( m_game.getKills() ) );
 		}
 
 		text = m_enemyLife.lock();
 
 		if ( text )
 		{
-			text->setCaption( castor::string::toString( m_game.getEnemiesLife() ) );
+			text->setCaption( castor::string::toU32String( m_game.getEnemiesLife() ) );
 		}
 
 		text = m_enemyBounty.lock();
 
 		if ( text )
 		{
-			text->setCaption( castor::string::toString( m_game.getEnemiesBounty() ) );
+			text->setCaption( castor::string::toU32String( m_game.getEnemiesBounty() ) );
 		}
 
 		TowerPtr tower = m_game.getSelectedTower();
@@ -170,7 +170,7 @@ namespace castortd
 			if ( text )
 			{
 				text->setVisible( true );
-				text->setCaption( castor::string::toString( tower->getDamage() ) );
+				text->setCaption( castor::string::toU32String( tower->getDamage() ) );
 			}
 
 			text = m_towerSpeed.lock();
@@ -178,7 +178,7 @@ namespace castortd
 			if ( text )
 			{
 				text->setVisible( true );
-				text->setCaption( castor::string::toString( tower->getSpeed() ) );
+				text->setCaption( castor::string::toU32String( tower->getSpeed() ) );
 			}
 
 			text = m_towerRange.lock();
@@ -186,7 +186,7 @@ namespace castortd
 			if ( text )
 			{
 				text->setVisible( true );
-				text->setCaption( castor::string::toString( tower->getRange() ) );
+				text->setCaption( castor::string::toU32String( tower->getRange() ) );
 			}
 		}
 		else

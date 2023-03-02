@@ -259,6 +259,7 @@ namespace GuiCommon
 	*/
 	//@{
 	wxString make_wxString( castor::String const & value );
+	wxString make_wxString( castor::U32String const & value );
 	wxSize make_wxSize( castor::Size const & value );
 	wxArrayString make_wxArrayString( castor::StringArray const & values );
 	//@}
@@ -273,6 +274,7 @@ namespace GuiCommon
 	//@{
 	castor::FontSPtr make_Font( wxFont const & font );
 	castor::String make_String( wxString const & value );
+	castor::U32String make_U32String( wxString const & value );
 	castor::Path make_Path( wxString const & value );
 	castor::Size makeSize( wxSize const & value );
 	castor::StringArray make_StringArray( wxArrayString const & values );

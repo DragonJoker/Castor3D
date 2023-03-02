@@ -299,6 +299,10 @@ namespace GuiCommon
 		{
 			return appendProp( parent, new wxEnumProperty( name, m_prefix + name, value ) );
 		}
+		else if constexpr ( std::is_same_v< ValueT, castor::U32String > )
+		{
+			return appendProp( parent, new wxStringProperty( name, m_prefix + name, castor::string::stringCast< castor::xchar >( value ) ) );
+		}
 		else
 		{
 			//static_assert( false, "TreeItemProperty::createProperty - Unsupported ValueT" );

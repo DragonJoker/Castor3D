@@ -130,6 +130,31 @@ namespace GuiCommon
 	//************************************************************************************************
 
 	template<>
+	struct ValueTraitsT< castor::U32String >
+	{
+		using ValueT = castor::U32String;
+		using ParamType = ValueT const &;
+		using RetType = ValueT;
+
+		static inline RetType convert( wxVariant const & var )
+		{
+			return make_U32String( var.GetString() );
+		}
+
+		static inline wxVariant convert( ParamType value )
+		{
+			return WXVARIANT( make_wxString( value ) );
+		}
+
+		static inline wxString getUnit()
+		{
+			return wxEmptyString;
+		}
+	};
+
+	//************************************************************************************************
+
+	template<>
 	struct ValueTraitsT< castor::Seconds >
 	{
 		using ValueT = castor::Seconds;
