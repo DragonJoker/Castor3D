@@ -149,6 +149,24 @@ namespace castor3d
 		C3D_API bool isPositionChanged()const;
 		/**
 		 *\~english
+		 *\brief		Retrieves the overlay size
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère la taille de l'incrustation
+		 *\return		La valeur
+		 */
+		C3D_API castor::Size computePixelSize()const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the overlay position
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère la position de l'incrustation
+		 *\return		La valeur
+		 */
+		C3D_API castor::Position computePixelPosition()const;
+		/**
+		 *\~english
 		 *\return		\p true if this overlay's has changed.
 		 *\~french
 		 *\return		\p true si cette incrustation a changé.
@@ -181,6 +199,8 @@ namespace castor3d
 		void setRelativeSize( castor::Point2d const & size )
 		{
 			m_relSize = size;
+			m_relSize->x = std::max( 0.0, m_relSize->x );
+			m_relSize->y = std::max( 0.0, m_relSize->y );
 			m_sizeChanged = true;
 		}
 		/**

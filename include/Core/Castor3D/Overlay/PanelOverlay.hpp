@@ -6,6 +6,8 @@ See LICENSE file in root folder
 
 #include "Castor3D/Overlay/OverlayCategory.hpp"
 
+#include <ashespp/Pipeline/PipelineShaderStageCreateInfo.hpp>
+
 namespace castor3d
 {
 	class PanelOverlay
@@ -34,15 +36,20 @@ namespace castor3d
 		C3D_API void accept( OverlayVisitor & visitor )const override;
 		/**
 		 *\~english
-		 *\brief		Fills the given buffer.
-		 *\param[out]	buffer	The buffer.
+		 *\return		The vertex count needed for this overlay.
 		 *\~french
-		 *\brief		Remplit le tampon de sommets donné.
-		 *\param[out]	buffer	Le buffer.
+		 *\return		Le nombre de sommets nécessaires pour cette incrustation.
 		 */
-		C3D_API uint32_t fillBuffer( castor::Size const & refSize
-			, Vertex * buffer
-			, bool secondary )const;
+		C3D_API uint32_t getCount( bool )const;
+		/**
+		 *\~english
+		 *\brief		Creates the shader program used to compute the overlay's vertices.
+		 *\return		The program.
+		 *\~french
+		 *\brief		Crée le programme utilisé pour calculer les sommets de l'incrustation.
+		 *\return		Le programme.
+		 */
+		C3D_API static ashes::PipelineShaderStageCreateInfo createProgram( RenderDevice const & device );
 
 	private:
 		void doUpdate( OverlayRenderer const & renderer )override;

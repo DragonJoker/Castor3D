@@ -3,6 +3,9 @@ See LICENSE file in root folder
 */
 #include "Castor3D/Render/Overlays/OverlayPreparer.hpp"
 
+#include "Castor3D/Overlay/BorderPanelOverlay.hpp"
+#include "Castor3D/Overlay/PanelOverlay.hpp"
+#include "Castor3D/Overlay/TextOverlay.hpp"
 #include "Castor3D/Render/Overlays/OverlayRenderer.hpp"
 
 #include "Castor3D/Material/Pass/Pass.hpp"
@@ -11,7 +14,7 @@ namespace castor3d
 {
 	namespace ovrlprep
 	{
-		castor::Rectangle getBorderSize( Overlay const & overlay, castor::Size const & size )
+		static castor::Rectangle getBorderSize( Overlay const & overlay, castor::Size const & size )
 		{
 			castor::Rectangle result{};
 
@@ -39,6 +42,21 @@ namespace castor3d
 			}
 
 			return result;
+		}
+
+		static castor::Point2d updateUbo( OverlayUboConfiguration & data
+			, OverlayCategory const & overlay
+			, Pass const & pass
+			, castor::Size const & renderSize )
+		{
+			auto size = overlay.getAbsoluteSize( renderSize );
+			auto ratio = overlay.getRenderRatio( renderSize );
+			data.size = castor::Point2f{ size.getWidth(), size.getHeight() };
+			data.position = castor::Point2f{ overlay.getAbsolutePosition() };
+			data.size = castor::Point2f{ castor::Point2d{ data.size } *ratio };
+			data.uv = castor::Point4f{ overlay.getUV() };
+			data.materialId = pass.getId();
+			return ratio;
 		}
 	}
 
@@ -178,8 +196,8 @@ namespace castor3d
 		position->x = std::max( 0, position->x );
 		position->y = std::max( 0, position->y );
 		auto size = overlay.getAbsoluteSize( m_renderer.m_size ) + borderExtent;
-		size->x = std::max( 1u, size->x );
-		size->y = std::max( 1u, size->y );
+		size->x = std::min( std::max( 1u, size->x ), m_renderer.m_size[0] - position->x );
+		size->y = std::min( std::max( 1u, size->y ), m_renderer.m_size[1] - position->y );
 		commandBuffer.bindPipeline( *data.pipeline->pipeline );
 		commandBuffer.setViewport( makeViewport( m_renderer.m_size ) );
 		commandBuffer.setScissor( makeScissor( position, size ) );
@@ -197,5 +215,44 @@ namespace castor3d
 			, 1u
 			, 0u
 			, 0u );
+	}
+
+	void OverlayPreparer::doUpdateUbo( OverlayUboConfiguration & data
+		, PanelOverlay const & overlay
+		, Pass const & pass
+		, castor::Size const & renderSize )const
+	{
+		ovrlprep::updateUbo( data
+			, static_cast< OverlayCategory const & >( overlay )
+			, pass
+			, renderSize );
+	}
+
+	void OverlayPreparer::doUpdateUbo( OverlayUboConfiguration & data
+		, BorderPanelOverlay const & overlay
+		, Pass const & pass
+		, castor::Size const & renderSize )const
+	{
+		auto ratio = ovrlprep::updateUbo( data
+			, static_cast< OverlayCategory const & >( overlay )
+			, pass
+			, renderSize );
+		auto border = overlay.getAbsoluteBorderSize( renderSize );
+		data.border = castor::Point4f{ border.left(), border.top(), border.right(), border.bottom() };
+		data.border = castor::Point4f{ castor::Point4d{ data.border } *castor::Point4d{ ratio->x, ratio->y, ratio->x, ratio->y } };
+		data.borderInnerUV = castor::Point4f{ overlay.getBorderInnerUV() };
+		data.borderOuterUV = castor::Point4f{ overlay.getBorderOuterUV() };
+		data.borderPosition = uint32_t( overlay.getBorderPosition() );
+	}
+
+	void OverlayPreparer::doUpdateUbo( OverlayUboConfiguration & data
+		, TextOverlay const & overlay
+		, Pass const & pass
+		, castor::Size const & renderSize )const
+	{
+		ovrlprep::updateUbo( data
+			, static_cast< OverlayCategory const & >( overlay )
+			, pass
+			, renderSize );
 	}
 }

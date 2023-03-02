@@ -59,51 +59,18 @@ namespace castor3d
 		visitor.visit( *this );
 	}
 
-	uint32_t TextOverlay::fillBuffer( castor::Size const & renderSize
+	uint32_t TextOverlay::getCount( bool secondary )const
+	{
+		return uint32_t( m_buffer.size() );
+	}
+
+	void TextOverlay::fillBuffer( castor::Size const & renderSize
 		, Vertex * buffer
 		, bool secondary )const
 	{
-		switch ( m_texturingMode )
-		{
-		case TextTexturingMode::eLetter:
-			return doFillBuffer( renderSize
-				, buffer
-				, []( castor::Point2d const &
-					, castor::Rectangle const & absolute
-					, castor::Point4f const & fontUV
-					, float & uvLeft
-					, float & uvTop
-					, float & uvRight
-					, float & uvBottom )
-				{
-					uvLeft = 0.0f;
-					uvTop = 0.0f;
-					uvRight = 1.0f;
-					uvBottom = 1.0f;
-				} );
-			break;
-
-		case TextTexturingMode::eText:
-			return doFillBuffer( renderSize
-				, buffer
-				, []( castor::Point2d const & sz
-					, castor::Rectangle const & absolute
-					, castor::Point4f const & fontUV
-					, float & uvLeft
-					, float & uvTop
-					, float & uvRight
-					, float & uvBottom )
-				{
-					uvLeft = float( absolute[0] / sz[0] );
-					uvTop = float( absolute[1] / sz[1] );
-					uvRight = float( absolute[2] / sz[0] );
-					uvBottom = float( absolute[3] / sz[1] );
-				} );
-			break;
-
-		default:
-			return 0u;
-		}
+		std::copy( m_buffer.begin()
+			, m_buffer.end()
+			, buffer );
 	}
 
 	void TextOverlay::setFont( castor::String const & name )
@@ -180,121 +147,157 @@ namespace castor3d
 		if ( !m_currentCaption.empty() )
 		{
 			m_previousCaption = m_currentCaption;
+
+			switch ( m_texturingMode )
+			{
+			case TextTexturingMode::eLetter:
+				doFillBuffer( renderer.getSize()
+					, []( castor::Point2d const &
+						, castor::Rectangle const & absolute
+						, castor::Point4f const & fontUV
+						, float & uvLeft
+						, float & uvTop
+						, float & uvRight
+						, float & uvBottom )
+					{
+						uvLeft = 0.0f;
+						uvTop = 0.0f;
+						uvRight = 1.0f;
+						uvBottom = 1.0f;
+					} );
+				break;
+
+			case TextTexturingMode::eText:
+				doFillBuffer( renderer.getSize()
+					, []( castor::Point2d const & sz
+						, castor::Rectangle const & absolute
+						, castor::Point4f const & fontUV
+						, float & uvLeft
+						, float & uvTop
+						, float & uvRight
+						, float & uvBottom )
+					{
+						uvLeft = float( absolute[0] / sz[0] );
+						uvTop = float( absolute[1] / sz[1] );
+						uvRight = float( absolute[2] / sz[0] );
+						uvBottom = float( absolute[3] / sz[1] );
+					} );
+				break;
+
+			default:
+				break;
+			}
 		}
 
 		m_textChanged = false;
 	}
 
-	uint32_t TextOverlay::doFillBuffer( castor::Size const & renderSize
-		, Vertex * buffer
-		, std::function< void( castor::Point2d const &
-			, castor::Rectangle const &
-			, castor::Point4f const &
-			, float &
-			, float &
-			, float &
-			, float & ) > generateUvs )const
+	void TextOverlay::doFillBuffer( castor::Size const & renderSize
+		, UvGenFunc generateUvs )
 	{
-		FontTextureSPtr fontTexture = getFontTexture();
-		uint32_t index{};
-
-		if ( fontTexture )
+		if ( !m_textChanged )
 		{
-			auto font = fontTexture->getFont();
+			return;
+		}
 
-			if ( !m_previousCaption.empty() && font )
+		if ( m_previousCaption.empty() )
+		{
+			m_buffer.clear();
+			return;
+		}
+
+		auto fontTexture = getFontTexture();
+
+		uint32_t index{};
+		m_buffer.resize( m_previousCaption.size() * 6u );
+		auto myBuffer = m_buffer.data();
+		double w = double( std::max( 1u, renderSize.getWidth() ) );
+		double h = double( std::max( 1u, renderSize.getHeight() ) );
+		auto ratio = getRenderRatio( renderSize );
+		w *= ratio->x;
+		h *= ratio->y;
+
+		castor::Point2d const ovAbsSize = getOverlay().getAbsoluteSize();
+		castor::Point2d const size( w * ovAbsSize[0], h * ovAbsSize[1] );
+
+		DisplayableLineArray lines = doPrepareText( renderSize, size );
+		castor::Size const & texDim = { fontTexture->getTexture()->getDimensions().width, fontTexture->getTexture()->getDimensions().height };
+
+		for ( auto const & line : lines )
+		{
+			double const height = line.m_height;
+			double topCrop = std::max( 0.0, -line.m_position[1] );
+			double bottomCrop = std::max( 0.0, line.m_position[1] + height - size[1] );
+
+			if ( topCrop + bottomCrop <= height )
 			{
-				double w = double( std::max( 1u, renderSize.getWidth() ) );
-				double h = double( std::max( 1u, renderSize.getHeight() ) );
-				auto ratio = getRenderRatio( renderSize );
-				w *= ratio->x;
-				h *= ratio->y;
-
-				castor::Point2d const ovAbsSize = getOverlay().getAbsoluteSize();
-				castor::Point2d const size( w * ovAbsSize[0], h * ovAbsSize[1] );
-
-				DisplayableLineArray lines = doPrepareText( renderSize, size );
-				castor::Size const & texDim = { fontTexture->getTexture()->getDimensions().width, fontTexture->getTexture()->getDimensions().height };
-
-				for ( auto const & line : lines )
+				for ( auto const & c : line.m_characters )
 				{
-					double const height = line.m_height;
-					double topCrop = std::max( 0.0, -line.m_position[1] );
-					double bottomCrop = std::max( 0.0, line.m_position[1] + height - size[1] );
+					topCrop = std::max( 0.0, -line.m_position[1] - ( height - c.m_glyph.getBearing().y() ) );
+					bottomCrop = std::max( 0.0, line.m_position[1] + ( height - c.m_position[1] ) + c.m_size[1] - size[1] );
 
-					if ( topCrop + bottomCrop <= height )
+					double const leftUncropped = c.m_position[0] + line.m_position[0];
+					double const leftCrop = std::max( 0.0, -leftUncropped );
+					double const rightCrop = std::max( 0.0, leftUncropped + c.m_size[0] - size[0] );
+
+					if ( leftCrop + rightCrop < c.m_size[0] )
 					{
-						for ( auto const & c : line.m_characters )
-						{
-							topCrop = std::max( 0.0, -line.m_position[1] - ( height - c.m_glyph.getBearing().y() ) );
-							bottomCrop = std::max( 0.0, line.m_position[1] + ( height - c.m_position[1] ) + c.m_size[1] - size[1] );
+						//
+						// Compute Letter's Position.
+						//
+						double const topUncropped = line.m_position[1] + height - c.m_position[1];
+						int32_t const left = std::max( 0, int32_t( leftUncropped + leftCrop ) );
+						int32_t const top = std::max( 0, int32_t( topUncropped + topCrop ) );
+						int32_t const right = int32_t( std::min( leftUncropped + c.m_size[0] - rightCrop, size[0] ) );
+						int32_t const bottom = int32_t( std::min( topUncropped + c.m_size[1] - bottomCrop, size[1] ) );
 
-							double const leftUncropped = c.m_position[0] + line.m_position[0];
-							double const leftCrop = std::max( 0.0, -leftUncropped );
-							double const rightCrop = std::max( 0.0, leftUncropped + c.m_size[0] - size[0] );
+						//
+						// Compute Letter's Font UV.
+						//
+						double const fontUvTopCrop = topCrop / texDim.getHeight();
+						double const fontUvBottomCrop = bottomCrop / texDim.getHeight();
+						castor::Position const fontUvPosition = fontTexture->getGlyphPosition( c.m_glyph.getCharacter() );
+						double const fontUvLeftCrop = leftCrop / texDim.getHeight();
+						double const fontUvRightCrop = rightCrop / texDim.getHeight();
+						double const fontUvLeftUncropped = double( fontUvPosition.x() ) / texDim.getWidth();
+						double const fontUvTopUncropped = double( fontUvPosition.y() ) / texDim.getHeight();
+						float const fontUvLeft = float( fontUvLeftUncropped + fontUvLeftCrop );
+						float const fontUvRight = float( fontUvLeftUncropped + ( c.m_size[0] / texDim.getWidth() ) - fontUvRightCrop );
+						// The UV is vertically inverted since the image is top-bottom, and the overlay is drawn bottom-up.
+						float const fontUvBottom = float( fontUvTopUncropped + fontUvBottomCrop );
+						float const fontUvTop = float( fontUvTopUncropped + ( c.m_size[1] / texDim.getHeight() ) - fontUvTopCrop );
 
-							if ( leftCrop + rightCrop < c.m_size[0] )
-							{
-								//
-								// Compute Letter's Position.
-								//
-								double const topUncropped = line.m_position[1] + height - c.m_position[1];
-								int32_t const left = std::max( 0, int32_t( leftUncropped + leftCrop ) );
-								int32_t const top = std::max( 0, int32_t( topUncropped + topCrop ) );
-								int32_t const right = int32_t( std::min( leftUncropped + c.m_size[0] - rightCrop, size[0] ) );
-								int32_t const bottom = int32_t( std::min( topUncropped + c.m_size[1] - bottomCrop, size[1] ) );
+						//
+						// Compute Letter's Texture UV.
+						//
+						float texUvLeft{};
+						float texUvRight{};
+						float texUvBottom{};
+						float texUvTop{};
+						generateUvs( size,
+							castor::Rectangle{ left, top, right, bottom },
+							castor::Point4f{ fontUvLeft, fontUvTop, fontUvRight, fontUvBottom },
+							texUvLeft, texUvTop, texUvRight, texUvBottom );
 
-								//
-								// Compute Letter's Font UV.
-								//
-								double const fontUvTopCrop = topCrop / texDim.getHeight();
-								double const fontUvBottomCrop = bottomCrop / texDim.getHeight();
-								castor::Position const fontUvPosition = fontTexture->getGlyphPosition( c.m_glyph.getCharacter() );
-								double const fontUvLeftCrop = leftCrop / texDim.getHeight();
-								double const fontUvRightCrop = rightCrop / texDim.getHeight();
-								double const fontUvLeftUncropped = double( fontUvPosition.x() ) / texDim.getWidth();
-								double const fontUvTopUncropped = double( fontUvPosition.y() ) / texDim.getHeight();
-								float const fontUvLeft = float( fontUvLeftUncropped + fontUvLeftCrop );
-								float const fontUvRight = float( fontUvLeftUncropped + ( c.m_size[0] / texDim.getWidth() ) - fontUvRightCrop );
-								// The UV is vertically inverted since the image is top-bottom, and the overlay is drawn bottom-up.
-								float const fontUvBottom = float( fontUvTopUncropped + fontUvBottomCrop );
-								float const fontUvTop = float( fontUvTopUncropped + ( c.m_size[1] / texDim.getHeight() ) - fontUvTopCrop );
+						//
+						// Fill buffer
+						//
+						TextOverlay::Vertex const vertexTR = { { float( right ) / w, float( top ) / h },    { texUvRight, texUvTop },    { fontUvRight, fontUvTop } };
+						TextOverlay::Vertex const vertexTL = { { float( left ) / w,  float( top ) / h },    { texUvLeft,  texUvTop },    { fontUvLeft,  fontUvTop } };
+						TextOverlay::Vertex const vertexBL = { { float( left ) / w,  float( bottom ) / h }, { texUvLeft,  texUvBottom }, { fontUvLeft,  fontUvBottom } };
+						TextOverlay::Vertex const vertexBR = { { float( right ) / w, float( bottom ) / h }, { texUvRight, texUvBottom }, { fontUvRight, fontUvBottom } };
 
-								//
-								// Compute Letter's Texture UV.
-								//
-								float texUvLeft{};
-								float texUvRight{};
-								float texUvBottom{};
-								float texUvTop{};
-								generateUvs( size,
-									castor::Rectangle{ left, top, right, bottom },
-									castor::Point4f{ fontUvLeft, fontUvTop, fontUvRight, fontUvBottom },
-									texUvLeft, texUvTop, texUvRight, texUvBottom );
+						*myBuffer = vertexBL; ++myBuffer; ++index;
+						*myBuffer = vertexBR; ++myBuffer; ++index;
+						*myBuffer = vertexTL; ++myBuffer; ++index;
 
-								//
-								// Fill buffer
-								//
-								TextOverlay::Vertex const vertexTR = { { float( right ) / w, float( top ) / h },    { texUvRight, texUvTop },    { fontUvRight, fontUvTop } };
-								TextOverlay::Vertex const vertexTL = { { float( left ) / w,  float( top ) / h },    { texUvLeft,  texUvTop },    { fontUvLeft,  fontUvTop } };
-								TextOverlay::Vertex const vertexBL = { { float( left ) / w,  float( bottom ) / h }, { texUvLeft,  texUvBottom }, { fontUvLeft,  fontUvBottom } };
-								TextOverlay::Vertex const vertexBR = { { float( right ) / w, float( bottom ) / h }, { texUvRight, texUvBottom }, { fontUvRight, fontUvBottom } };
-
-								*buffer = vertexBL; ++buffer; ++index;
-								*buffer = vertexBR; ++buffer; ++index;
-								*buffer = vertexTL; ++buffer; ++index;
-
-								*buffer = vertexTR; ++buffer; ++index;
-								*buffer = vertexTL; ++buffer; ++index;
-								*buffer = vertexBR; ++buffer; ++index;
-							}
-						}
+						*myBuffer = vertexTR; ++myBuffer; ++index;
+						*myBuffer = vertexTL; ++myBuffer; ++index;
+						*myBuffer = vertexBR; ++myBuffer; ++index;
 					}
 				}
 			}
 		}
-
-		return index;
 	}
 
 	TextOverlay::DisplayableLineArray TextOverlay::doPrepareText( castor::Size const & renderSize

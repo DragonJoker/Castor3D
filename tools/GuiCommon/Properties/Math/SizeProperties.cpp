@@ -15,8 +15,20 @@ namespace GuiCommon
 		: wxPGProperty( label, name )
 	{
 		setValueI( value );
-		AddPrivateChild( addAttributes( new wxIntProperty( _( "Width" ), wxPG_LABEL, long( value.getWidth() ) ) ) );
-		AddPrivateChild( addAttributes( new wxIntProperty( _( "Height" ), wxPG_LABEL, long( value.getHeight() ) ) ) );
+		auto prop = addAttributes( new wxIntProperty( _( "Width" ), wxPG_LABEL, long( value.getWidth() ) ) );
+		prop->SetAttribute( wxPG_ATTR_SPINCTRL_WRAP, WXVARIANT( true ) );
+#if wxCHECK_VERSION( 3, 1, 0 )
+		prop->SetAttribute( wxPG_ATTR_SPINCTRL_MOTION, WXVARIANT( true ) );
+#endif
+		prop->SetAttribute( wxPG_ATTR_MIN, WXVARIANT( 0 ) );
+		AddPrivateChild( prop );
+		prop = addAttributes( new wxIntProperty( _( "Height" ), wxPG_LABEL, long( value.getHeight() ) ) );
+		prop->SetAttribute( wxPG_ATTR_SPINCTRL_WRAP, WXVARIANT( true ) );
+#if wxCHECK_VERSION( 3, 1, 0 )
+		prop->SetAttribute( wxPG_ATTR_SPINCTRL_MOTION, WXVARIANT( true ) );
+#endif
+		prop->SetAttribute( wxPG_ATTR_MIN, WXVARIANT( 0 ) );
+		AddPrivateChild( prop );
 	}
 
 	void SizeProperty::RefreshChildren()
@@ -37,11 +49,11 @@ namespace GuiCommon
 		switch ( childIndex )
 		{
 		case 0:
-			size.getWidth() = uint32_t( val );
+			size.getWidth() = uint32_t( std::max( 0, val ) );
 			break;
 
 		case 1:
-			size.getHeight() = uint32_t( val );
+			size.getHeight() = uint32_t( std::max( 0, val ) );
 			break;
 		}
 

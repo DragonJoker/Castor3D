@@ -29,6 +29,16 @@ namespace castor3d
 	public:
 		friend class OverlayPreparer;
 
+		struct ComputePipeline
+		{
+			ashes::DescriptorSetLayoutPtr descriptorLayout{};
+			ashes::PipelineLayoutPtr pipelineLayout{};
+			ashes::PipelinePtr pipeline{};
+			ashes::DescriptorSetPoolPtr descriptorPool{};
+			ashes::DescriptorSetPtr descriptorSet{};
+			uint32_t count{};
+		};
+
 	public:
 		/**
 		 *\~english
@@ -121,16 +131,6 @@ namespace castor3d
 			FontTexture::OnChanged::connection connection{};
 		};
 
-		struct ComputePipeline
-		{
-			ashes::DescriptorSetLayoutPtr descriptorLayout{};
-			ashes::PipelineLayoutPtr pipelineLayout{};
-			ashes::PipelinePtr pipeline{};
-			ashes::DescriptorSetPoolPtr descriptorPool{};
-			ashes::DescriptorSetPtr descriptorSet{};
-			uint32_t count{};
-		};
-
 		using PanelVertexBufferPool = OverlayVertexBufferPoolT< OverlayCategory::Vertex, 6u >;
 		using BorderPanelVertexBufferPool = OverlayVertexBufferPoolT< OverlayCategory::Vertex, 8u * 6u >;
 		using TextVertexBufferPool = OverlayVertexBufferPoolT< TextOverlay::Vertex, MaxOverlayCharsPerBuffer >;
@@ -162,9 +162,7 @@ namespace castor3d
 			, std::map< uint32_t, OverlayPipeline > & pipelines
 			, bool text );
 		ComputePipeline doCreatePanelPipeline( RenderDevice const & device );
-		ashes::PipelineShaderStageCreateInfo doCreatePanelProgram( RenderDevice const & device );
 		ComputePipeline doCreateBorderPipeline( RenderDevice const & device );
-		ashes::PipelineShaderStageCreateInfo doCreateBorderProgram( RenderDevice const & device );
 		ashes::PipelineShaderStageCreateInfoArray doCreateOverlayProgram( RenderDevice const & device
 			, TextureCombine const & texturesFlags
 			, bool text );

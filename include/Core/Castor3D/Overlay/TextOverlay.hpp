@@ -48,9 +48,16 @@ namespace castor3d
 		 */
 		C3D_API static OverlayCategorySPtr create();
 		/**
-		 *\copydoc	castor3d::OverlayCategory::accept
+		 *\copydoc		castor3d::OverlayCategory::accept
 		 */
 		C3D_API void accept( OverlayVisitor & visitor )const override;
+		/**
+		 *\~english
+		 *\return		The vertex count needed for this overlay.
+		 *\~french
+		 *\return		Le nombre de sommets nécessaires pour cette incrustation.
+		 */
+		C3D_API uint32_t getCount( bool )const;
 		/**
 		 *\~english
 		 *\brief		Fills the given buffer.
@@ -59,7 +66,7 @@ namespace castor3d
 		 *\brief		Remplit le tampon de sommets donné.
 		 *\param[out]	buffer	Le buffer.
 		 */
-		C3D_API uint32_t fillBuffer( castor::Size const & refSize
+		C3D_API void fillBuffer( castor::Size const & refSize
 			, Vertex * buffer
 			, bool secondary )const;
 		/**
@@ -245,9 +252,14 @@ namespace castor3d
 		}
 
 	private:
+		using UvGenFunc = std::function< void( castor::Point2d const & size
+			, castor::Rectangle const & absolute
+			, castor::Point4f const & fontUV
+			, float & uvLeft
+			, float & uvTop
+			, float & uvRight
+			, float & uvBottom ) >;
 		/**
-		\author 	Sylvain DOREMUS
-		\date 		28/01/2016
 		\~english
 		\brief		A character, along with its size and relative position.
 		\~french
@@ -307,8 +319,6 @@ namespace castor3d
 			}
 		};
 		/**
-		\author 	Sylvain DOREMUS
-		\date 		28/01/2016
 		\~english
 		\brief		A text line, along with its size and position.
 		\~french
@@ -346,15 +356,8 @@ namespace castor3d
 		 *\param[in]	size		Les dimensions de la cible de rendu.
 		 *\param[in]	generateUvs	La fonction de génération d'UV.
 		 */
-		C3D_API uint32_t doFillBuffer( castor::Size const & refSize
-			, Vertex * buffer
-			, std::function< void( castor::Point2d const & size
-				, castor::Rectangle const & absolute
-				, castor::Point4f const & fontUV
-				, float & uvLeft
-				, float & uvTop
-				, float & uvRight
-				, float & uvBottom ) > generateUvs )const;
+		C3D_API void doFillBuffer( castor::Size const & refSize
+			, UvGenFunc generateUvs );
 		/**
 		 *\~english
 		 *\brief		Computes the lines to display.
@@ -456,6 +459,7 @@ namespace castor3d
 		FontTexture::OnChanged::connection m_connection;
 		TextTexturingMode m_texturingMode{ TextTexturingMode::eText };
 		TextureCoordsArray m_arrayTextTexture;
+		std::vector< Vertex > m_buffer;
 	};
 }
 

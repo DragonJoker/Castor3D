@@ -61,6 +61,18 @@ namespace castor3d
 			, bool secondary );
 		void doPrepareOverlayCommands( OverlayData const & overlay
 			, ashes::CommandBuffer & commandBuffer );
+		void doUpdateUbo( OverlayUboConfiguration & data
+			, PanelOverlay const & overlay
+			, Pass const & pass
+			, castor::Size const & renderSize )const;
+		void doUpdateUbo( OverlayUboConfiguration & data
+			, BorderPanelOverlay const & overlay
+			, Pass const & pass
+			, castor::Size const & renderSize )const;
+		void doUpdateUbo( OverlayUboConfiguration & data
+			, TextOverlay const & overlay
+			, Pass const & pass
+			, castor::Size const & renderSize )const;
 
 	private:
 		OverlayRenderer & m_renderer;

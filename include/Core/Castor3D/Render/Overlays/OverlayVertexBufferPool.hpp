@@ -22,6 +22,9 @@ namespace castor3d
 	{
 		using MyBufferIndex = OverlayVertexBufferIndexT< VertexT, CountT >;
 		using Quad = std::array< VertexT, CountT >;
+		static bool constexpr isPanel = std::is_same_v< VertexT, OverlayCategory::Vertex > && ( CountT == 6u );
+		static bool constexpr isBorder = std::is_same_v< VertexT, OverlayCategory::Vertex > && ( CountT == 48u );
+		static bool constexpr isGpuFilled = isPanel || isBorder;
 
 		OverlayVertexBufferPoolT( Engine & engine
 			, std::string const & debugName
@@ -40,6 +43,7 @@ namespace castor3d
 
 		Engine & engine;
 		RenderDevice const & device;
+		std::string name;
 		ashes::BufferPtr< OverlayUboConfiguration > overlaysData;
 		castor::ArrayView< OverlayUboConfiguration > overlaysBuffer;
 		ashes::PipelineVertexInputStateCreateInfo const & noTexDeclaration;
