@@ -10,6 +10,8 @@ See LICENSE file in root folder
 #include <CastorUtils/Graphics/Rectangle.hpp>
 #include <CastorUtils/Graphics/Size.hpp>
 
+#include <ashespp/Pipeline/PipelineShaderStageCreateInfo.hpp>
+
 namespace castor3d
 {
 	class BorderPanelOverlay
@@ -38,15 +40,13 @@ namespace castor3d
 		C3D_API void accept( OverlayVisitor & visitor )const override;
 		/**
 		 *\~english
-		 *\brief		Fills the given buffer.
-		 *\param[out]	buffer	The buffer.
+		 *\param[in]	borders	\p true for borders, \p false for center.
+		 *\return		The vertex count needed for this overlay.
 		 *\~french
-		 *\brief		Remplit le tampon de sommets donné.
-		 *\param[out]	buffer	Le buffer.
+		 *\param[in]	borders	\p true pour les bordures, \p false pour le centre.
+		 *\return		Le nombre de sommets nécessaires pour cette incrustation.
 		 */
-		C3D_API uint32_t fillBuffer( castor::Size const & refSize
-			, Vertex * buffer
-			, bool secondary )const;
+		C3D_API uint32_t getCount( bool borders )const;
 		/**
 		 *\~english
 		 *\brief		Sets the border material
@@ -76,6 +76,15 @@ namespace castor3d
 		 *\return		La taille
 		 */
 		C3D_API castor::Point4d getAbsoluteBorderSize()const;
+		/**
+		 *\~english
+		 *\brief		Creates the shader program used to compute the overlay's vertices.
+		 *\return		The program.
+		 *\~french
+		 *\brief		Crée le programme utilisé pour calculer les sommets de l'incrustation.
+		 *\return		Le programme.
+		 */
+		C3D_API static ashes::PipelineShaderStageCreateInfo createProgram( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\return		\p true if this overlay's has changed.
@@ -169,6 +178,7 @@ namespace castor3d
 		void setLeftBorderSize( double size )
 		{
 			m_ptBorderSize[0] = size;
+			m_ptBorderSize[0] = std::max( 0.0, m_ptBorderSize[0] );
 			m_sizeChanged = true;
 			m_borderChanged = true;
 		}
@@ -183,6 +193,7 @@ namespace castor3d
 		void setTopBorderSize( double size )
 		{
 			m_ptBorderSize[1] = size;
+			m_ptBorderSize[1] = std::max( 0.0, m_ptBorderSize[1] );
 			m_sizeChanged = true;
 			m_borderChanged = true;
 		}
@@ -197,6 +208,7 @@ namespace castor3d
 		void setRightBorderSize( double size )
 		{
 			m_ptBorderSize[2] = size;
+			m_ptBorderSize[2] = std::max( 0.0, m_ptBorderSize[2] );
 			m_sizeChanged = true;
 			m_borderChanged = true;
 		}
@@ -211,6 +223,7 @@ namespace castor3d
 		void setBottomBorderSize( double size )
 		{
 			m_ptBorderSize[3] = size;
+			m_ptBorderSize[3] = std::max( 0.0, m_ptBorderSize[3] );
 			m_sizeChanged = true;
 			m_borderChanged = true;
 		}
@@ -225,6 +238,10 @@ namespace castor3d
 		void setBorderSize( castor::Point4d const & size )
 		{
 			m_ptBorderSize = size;
+			m_ptBorderSize[0] = std::max( 0.0, m_ptBorderSize[0] );
+			m_ptBorderSize[1] = std::max( 0.0, m_ptBorderSize[1] );
+			m_ptBorderSize[2] = std::max( 0.0, m_ptBorderSize[2] );
+			m_ptBorderSize[3] = std::max( 0.0, m_ptBorderSize[3] );
 			m_sizeChanged = true;
 			m_borderChanged = true;
 		}
@@ -299,6 +316,7 @@ namespace castor3d
 		void setLeftBorderPixelSize( int size )
 		{
 			m_borderSize[0] = size;
+			m_borderSize[0] = std::max( 0, m_borderSize[0] );
 			m_sizeChanged = true;
 			m_borderChanged = true;
 		}
@@ -313,6 +331,7 @@ namespace castor3d
 		void setTopBorderPixelSize( int size )
 		{
 			m_borderSize[1] = size;
+			m_borderSize[1] = std::max( 0, m_borderSize[1] );
 			m_sizeChanged = true;
 			m_borderChanged = true;
 		}
@@ -327,6 +346,7 @@ namespace castor3d
 		void setRightBorderPixelSize( int size )
 		{
 			m_borderSize[2] = size;
+			m_borderSize[2] = std::max( 0, m_borderSize[2] );
 			m_sizeChanged = true;
 			m_borderChanged = true;
 		}
@@ -341,6 +361,7 @@ namespace castor3d
 		void setBottomBorderPixelSize( int size )
 		{
 			m_borderSize[3] = size;
+			m_borderSize[3] = std::max( 0, m_borderSize[3] );
 			m_sizeChanged = true;
 			m_borderChanged = true;
 		}
@@ -355,6 +376,10 @@ namespace castor3d
 		void setBorderPixelSize( castor::Rectangle const & size )
 		{
 			m_borderSize = size;
+			m_borderSize[0] = std::max( 0, m_borderSize[0] );
+			m_borderSize[1] = std::max( 0, m_borderSize[1] );
+			m_borderSize[2] = std::max( 0, m_borderSize[2] );
+			m_borderSize[3] = std::max( 0, m_borderSize[3] );
 			m_sizeChanged = true;
 			m_borderChanged = true;
 		}

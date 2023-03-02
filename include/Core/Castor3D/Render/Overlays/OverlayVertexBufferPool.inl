@@ -25,11 +25,12 @@ namespace castor3d
 		, uint32_t count )
 		: engine{ engine }
 		, device{ device }
+		, name{ debugName }
 		, overlaysData{ makeBuffer< OverlayUboConfiguration >( device
 			, MaxPipelines
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-			, debugName + "Data" ) }
+			, name + "Data" ) }
 		, overlaysBuffer{ castor::makeArrayView( overlaysData->lock( 0u, ashes::WholeSize, 0u )
 			, overlaysData->getCount() ) }
 		, noTexDeclaration{ noTexDecl }
@@ -37,11 +38,11 @@ namespace castor3d
 		, vertexBuffer{ device.renderSystem
 			, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-			, debugName + "Vertex"
+			, name + "Vertex"
 			, ashes::QueueShare{}
 			, MaxPipelines * sizeof( VertexT ) * CountT }
 		, descriptorPool{ descriptorLayout.createPool( 1u ) }
-		, descriptorSet{ doCreateDescriptorSet( cameraUbo, descriptorLayout, debugName ) }
+		, descriptorSet{ doCreateDescriptorSet( cameraUbo, descriptorLayout, name ) }
 	{
 	}
 
@@ -55,24 +56,35 @@ namespace castor3d
 		OverlayVertexBufferIndexT< VertexT, CountT > result{ *this
 			, node
 			, index };
+		auto count = overlay.getCount( secondary );
 
-		if ( allocated <= ( MaxPipelines * ( CountT - 1u ) ) )
+		if ( !count
+			|| allocated > ( MaxPipelines * CountT - count ) )
 		{
-			auto offset = allocated * sizeof( VertexT );
-			auto count = overlay.fillBuffer( renderSize
-				, &vertexBuffer.template getData< VertexT >( offset )
-				, secondary );
-
 			if ( count )
 			{
-				result.geometryBuffers.buffer = &vertexBuffer;
-				result.geometryBuffers.offset = offset;
-				result.geometryBuffers.range = count * sizeof( VertexT );
-				result.geometryBuffers.count = count;
-				allocated += count;
-				++index;
+				CU_Failure( ": Couldn't allocate overlay" );
+				log::warn << name << ": Couldn't allocate overlay";
 			}
+
+			return result;
 		}
+
+		auto offset = allocated * sizeof( VertexT );
+
+		if constexpr ( !isGpuFilled )
+		{
+			overlay.fillBuffer( renderSize
+				, &vertexBuffer.template getData< VertexT >( offset )
+				, secondary );
+		}
+
+		result.geometryBuffers.buffer = &vertexBuffer;
+		result.geometryBuffers.offset = offset;
+		result.geometryBuffers.range = count * sizeof( VertexT );
+		result.geometryBuffers.count = count;
+		allocated += count;
+		++index;
 
 		return result;
 	}
@@ -82,7 +94,7 @@ namespace castor3d
 	{
 		if ( allocated )
 		{
-			if constexpr ( CountT != 6u && CountT != 48u )
+			if constexpr ( !isGpuFilled )
 			{
 				vertexBuffer.markDirty( 0u
 					, allocated * sizeof( VertexT )

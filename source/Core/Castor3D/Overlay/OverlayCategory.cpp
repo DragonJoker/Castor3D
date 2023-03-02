@@ -139,6 +139,42 @@ namespace castor3d
 		return changed;
 	}
 
+	castor::Size OverlayCategory::computePixelSize()const
+	{
+		auto result = getPixelSize();
+		auto absolute = getAbsoluteSize( m_computeSize );
+
+		if ( result.getWidth() == 0 )
+		{
+			result[0] = absolute[0];
+		}
+
+		if ( result.getHeight() == 0 )
+		{
+			result[1] = absolute[1];
+		}
+
+		return result;
+	}
+
+	castor::Position OverlayCategory::computePixelPosition()const
+	{
+		auto result = getPixelPosition();
+		auto absolute = getAbsolutePosition( m_computeSize );
+
+		if ( result.x() == 0 )
+		{
+			result[0] = absolute[0];
+		}
+
+		if ( result.y() == 0 )
+		{
+			result[1] = absolute[1];
+		}
+
+		return result;
+	}
+
 	castor::Point2d OverlayCategory::doGetTotalSize( OverlayRenderer const & renderer )const
 	{
 		auto parent = getOverlay().getParent();

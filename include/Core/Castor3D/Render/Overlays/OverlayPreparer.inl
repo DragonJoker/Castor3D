@@ -5,11 +5,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
-#include "Castor3D/Material/Pass/Pass.hpp"
-#include "Castor3D/Overlay/BorderPanelOverlay.hpp"
 #include "Castor3D/Overlay/Overlay.hpp"
-#include "Castor3D/Overlay/PanelOverlay.hpp"
-#include "Castor3D/Overlay/TextOverlay.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
@@ -27,81 +23,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	//*********************************************************************************************
-
-	namespace ovrlrend
-	{
-		static castor::Point2d doUpdateUbo( OverlayUboConfiguration & data
-			, OverlayCategory const & overlay
-			, Pass const & pass
-			, castor::Size const & renderSize )
-		{
-			auto size = overlay.getAbsoluteSize( renderSize );
-			auto ratio = overlay.getRenderRatio( renderSize );
-			data.size = castor::Point2f{ size.getWidth(), size.getHeight() };
-			data.position = castor::Point2f{ overlay.getAbsolutePosition() };
-			data.size *= ratio;
-			data.uv = castor::Point4f{ overlay.getUV() };
-			data.materialId = pass.getId();
-			return ratio;
-		}
-
-		static void doUpdateUbo( OverlayUboConfiguration & data
-			, PanelOverlay const & overlay
-			, Pass const & pass
-			, castor::Size const & renderSize )
-		{
-			doUpdateUbo( data
-				, static_cast< OverlayCategory const & >( overlay )
-				, pass
-				, renderSize );
-		}
-
-		static void doUpdateUbo( OverlayUboConfiguration & data
-			, BorderPanelOverlay const & overlay
-			, Pass const & pass
-			, castor::Size const & renderSize )
-		{
-			auto ratio = doUpdateUbo( data
-				, static_cast< OverlayCategory const & >( overlay )
-				, pass
-				, renderSize );
-			auto border = overlay.getAbsoluteBorderSize( renderSize );
-			data.border = castor::Point4f{ border.left(), border.top(), border.right(), border.bottom() };
-			data.border *= ratio;
-			data.borderInnerUV = castor::Point4f{ overlay.getBorderInnerUV() };
-			data.borderOuterUV = castor::Point4f{ overlay.getBorderOuterUV() };
-			data.borderPosition = uint32_t( overlay.getBorderPosition() );
-		}
-
-		static void doUpdateUbo( OverlayUboConfiguration & data
-			, TextOverlay const & overlay
-			, Pass const & pass
-			, castor::Size const & renderSize )
-		{
-			doUpdateUbo( data
-				, static_cast< OverlayCategory const & >( overlay )
-				, pass
-				, renderSize );
-		}
-
-		template< typename VertexT, uint32_t CountT >
-		static void doFillBuffers( typename std::vector< VertexT >::const_iterator begin
-			, uint32_t count
-			, OverlayVertexBufferIndexT< VertexT, CountT > & bufferIndex )
-		{
-			if ( bufferIndex.geometryBuffers.buffer )
-			{
-				GpuBufferBase & buffer = *bufferIndex.geometryBuffers.buffer;
-				std::copy( begin
-					, std::next( begin, count )
-					, &buffer.template getData< VertexT >( bufferIndex.geometryBuffers.offset ) );
-			}
-		}
-	}
-
-	//*********************************************************************************************
-
 	template< typename QuadT, typename OverlayT, typename VertexT, uint32_t CountT >
 	void OverlayPreparer::doPrepareOverlayDescriptors( RenderDevice const & device
 		, OverlayT const & overlay
@@ -122,7 +43,7 @@ namespace castor3d
 			return;
 		}
 
-		ovrlrend::doUpdateUbo( bufferIndex.pool.overlaysBuffer[bufferIndex.index]
+		this->doUpdateUbo( bufferIndex.pool.overlaysBuffer[bufferIndex.index]
 			, overlay
 			, pass
 			, m_renderer.getSize() );
