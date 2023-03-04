@@ -226,21 +226,15 @@ namespace castor
 				font.getGlyphLoader().initialise();
 				uint8_t const min = std::numeric_limits< uint8_t >::lowest();
 				uint8_t const max = std::numeric_limits< uint8_t >::max();
-				uint32_t maxHeight = 0;
-				uint32_t maxWidth = 0;
 
 				// We load the glyphs
 				for ( uint8_t c = min; c < max; c++ )
 				{
 					char tmp[] { char( c ), 0, 0, 0 };
-					Glyph const & glyph = font.doLoadGlyph( string::utf8::toUtf8( tmp ) );
-					maxHeight = std::max( maxHeight, glyph.getSize().getHeight() );
-					maxWidth = uint32_t( std::max( int32_t( maxWidth ), glyph.getAdvance() ) );
+					font.doLoadGlyph( string::utf8::toUtf8( tmp ) );
 				}
 
 				font.getGlyphLoader().cleanup();
-				font.setMaxHeight( maxHeight );
-				font.setMaxWidth( maxWidth );
 				result = true;
 			}
 			catch ( std::runtime_error & exc )
@@ -257,8 +251,8 @@ namespace castor
 	Font::Font( String const & name, uint32_t height )
 		: Named{ name }
 		, m_height{ height }
-		, m_maxHeight{ 0 }
-		, m_maxWidth{ 0 }
+		, m_maxSize{}
+		, m_maxRange{ 100, 0 }
 	{
 	}
 
@@ -266,8 +260,8 @@ namespace castor
 		: Named{ name }
 		, m_height{ height }
 		, m_pathFile{ path }
-		, m_maxHeight{ 0 }
-		, m_maxWidth{ 0 }
+		, m_maxSize{}
+		, m_maxRange{ 100, 0 }
 		, m_glyphLoader{ std::make_unique< ft::SFreeTypeFontImpl >( path, height ) }
 	{
 		BinaryLoader{}( *this, path, height );
@@ -294,6 +288,10 @@ namespace castor
 			m_loadedGlyphs.push_back( m_glyphLoader->loadGlyph( c ) );
 			it = std::next( m_loadedGlyphs.begin()
 				, ptrdiff_t( m_loadedGlyphs.size() - 1u ) );
+			m_maxSize->x = std::max( m_maxSize->x, int32_t( it->getSize().getWidth() ) );
+			m_maxSize->y = std::max( m_maxSize->y, int32_t( it->getSize().getHeight() ) );
+			m_maxRange->x = std::min( m_maxRange->x, it->getBearing().y() );
+			m_maxRange->y = std::max( m_maxRange->y, it->getBearing().y() );
 		}
 
 		return *it;

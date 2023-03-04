@@ -7,6 +7,10 @@ See LICENSE file in root folder
 #include "Castor3D/Overlay/OverlayCategory.hpp"
 #include "Castor3D/Overlay/FontTexture.hpp"
 
+#include <CastorUtils/Design/ArrayView.hpp>
+
+#include <ashespp/Pipeline/PipelineShaderStageCreateInfo.hpp>
+
 namespace castor3d
 {
 	class TextOverlay
@@ -51,6 +55,13 @@ namespace castor3d
 		 *\copydoc		castor3d::OverlayCategory::accept
 		 */
 		C3D_API void accept( OverlayVisitor & visitor )const override;
+		/**
+		 *\~english
+		 *\return		The vertex count needed for this overlay.
+		 *\~french
+		 *\return		Le nombre de sommets nécessaires pour cette incrustation.
+		 */
+		C3D_API uint32_t getDisplayCount()const;
 		/**
 		 *\~english
 		 *\return		The vertex count needed for this overlay.
@@ -252,96 +263,9 @@ namespace castor3d
 		}
 
 	private:
-		using UvGenFunc = std::function< void( castor::Point2d const & size
-			, castor::Rectangle const & absolute
-			, castor::Point4f const & fontUV
-			, float & uvLeft
-			, float & uvTop
-			, float & uvRight
-			, float & uvBottom ) >;
-		/**
-		\~english
-		\brief		A character, along with its size and relative position.
-		\~french
-		\brief		Un caractère, avec ses dimensions et sa position relative.
-		*/
-		struct DisplayableChar
-		{
-			//!\~english	The character position, relative to its line.
-			//!\~french		La position du caractère, relative à sa ligne.
-			castor::Point2d m_position;
-			//!\~english	The character dimensions.
-			//!\~french		Les dimensions du caractère.
-			castor::Point2d m_size;
-			//!\~english	The character to display.
-			//!\~french		Le caractère à afficher.
-			castor::Glyph const & m_glyph;
-
-			DisplayableChar( castor::Point2d const & position
-				, castor::Point2d const & size
-				, castor::Glyph const & glyph )
-				: m_position{ position }
-				, m_size{ size }
-				, m_glyph{ glyph }
-			{
-			}
-
-			DisplayableChar( DisplayableChar const & rhs )
-				: m_position{ rhs.m_position }
-				, m_size{ rhs.m_size }
-				, m_glyph{ rhs.m_glyph }
-			{
-			}
-
-			DisplayableChar( DisplayableChar && rhs )noexcept
-				: m_position{ std::move( rhs.m_position ) }
-				, m_size{ std::move( rhs.m_size ) }
-				, m_glyph{ rhs.m_glyph }
-			{
-			}
-
-			DisplayableChar & operator=( DisplayableChar const & rhs )
-			{
-				m_position = rhs.m_position;
-				m_size = rhs.m_size;
-				return *this;
-			}
-
-			DisplayableChar & operator=( DisplayableChar && rhs )noexcept
-			{
-				if ( &rhs != this )
-				{
-					m_position = std::move( rhs.m_position );
-					m_size = std::move( rhs.m_size );
-				}
-
-				return *this;
-			}
-		};
-		/**
-		\~english
-		\brief		A text line, along with its size and position.
-		\~french
-		\brief		Une ligne de texte, avec ses dimensions et sa position.
-		*/
-		struct DisplayableLine
-		{
-			//!\~english	The line position.
-			//!\~french		La position de la ligne.
-			castor::Point2d m_position;
-			//!\~english	The line width.
-			//!\~french		La largeur de la ligne.
-			double m_width;
-			//!\~english	The line height.
-			//!\~french		La hauteur de la ligne.
-			double m_height;
-			//!\~english	The displayable characters.
-			//!\~french		Les caractères affichables.
-			std::vector< DisplayableChar > m_characters{};
-		};
-		using DisplayableLineArray = std::vector< DisplayableLine >;
-		using TextureCoordinates = std::array< float, 2 >;
-		CU_DeclareVector( TextureCoordinates, TextureCoords );
+		using UvGenFunc = std::function< void( castor::Point2f const & size
+			, castor::Point4i const & absolute
+			, castor::Point4f & uv ) >;
 		/**
 		 *\copydoc	castor3d::OverlayCategory::doUpdate
 		 */
@@ -361,91 +285,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Computes the lines to display.
-		 *\remarks		Takes care of vertical alignment to retrieve the right vertical offset.
-		 *\param[in]	renderSize	The render size.
-		 *\param[in]	size		The overlay dimensions.
-		 *\return		The lines.
+		 *\param[in]	overlaySize	The overlay dimensions.
 		 *\~french
 		 *\brief		Calcule les lignes à afficher.
-		 *\remarks		Prend en compte l'alignement vertical, pour calculer le décalage vertical.
-		 *\param[in]	renderSize	Les dimensions de la zone de rendu.
-		 *\param[in]	size		The overlay dimensions.
-		 *\return		Les lignes.
+		 *\param[in]	overlaySize	The overlay dimensions.
 		 */
-		C3D_API DisplayableLineArray doPrepareText( castor::Size const & renderSize
-			, castor::Point2d const & size )const;
-		/**
-		 *\~english
-		 *\brief		adds a word to the vertex buffer.
-		 *\param[in]	renderSize	The render size.
-		 *\param[in]	word		The word to add.
-		 *\param[in]	wordWidth	The word width.
-		 *\param[in]	size		The overlay size.
-		 *\param[out]	left		The left position.
-		 *\param[out]	line		The line.
-		 *\param[out]	lines		The lines.
-		 *\~french
-		 *\brief		Ajoute un mot au tampon de sommets.
-		 *\param[in]	renderSize	Les dimensions de la zone de rendu.
-		 *\param[in]	word		Le mot à ajouter.
-		 *\param[in]	wordWidth	La largeur du mot.
-		 *\param[in]	size		La taille de l'incrustation.
-		 *\param[out]	left		La position à gauche.
-		 *\param[out]	line		La ligne.
-		 *\param[out]	lines		Les lignes.
-		 */
-		C3D_API void doPrepareWord( castor::Size const & renderSize
-			, std::u32string const & word
-			, double wordWidth
-			, castor::Point2d const & size
-			, double & left
-			, DisplayableLine & line
-			, DisplayableLineArray & lines )const;
-		/**
-		 *\~english
-		 *\brief		Fills the line, and jumps to the next one.
-		 *\param[in]	size	The overlay size.
-		 *\param[in]	line	The line.
-		 *\param[out]	left	The left position.
-		 *\param[out]	lines	The lines.
-		 *\~french
-		 *\brief		Finit la ligne et passe à la ligne suivante.
-		 *\param[in]	size	La taille de l'incrustation.
-		 *\param[in]	line	La ligne.
-		 *\param[out]	left	La position à gauche.
-		 *\param[out]	lines	Les lignes.
-		 */
-		C3D_API DisplayableLine doFinishLine( castor::Point2d const & size
-			, DisplayableLine line
-			, double & left
-			, DisplayableLineArray & lines )const;
-		/**
-		 *\~english
-		 *\brief		Horizontally align a line.
-		 *\param[in]	width	The overlay width.
-		 *\param[in]	line	The line.
-		 *\param[out]	lines	The lines.
-		 *\~french
-		 *\brief		Aligne horizontalement une ligne.
-		 *\param[in]	width	La largeur de l'incrustation.
-		 *\param[in]	line	La ligne.
-		 *\param[out]	lines	Les lignes.
-		 */
-		C3D_API void doAlignHorizontally( double width
-			, DisplayableLine line
-			, DisplayableLineArray & lines )const;
-		/**
-		 *\~english
-		 *\brief		Vertically align text.
-		 *\param[in]	height	The overlay height.
-		 *\param[out]	lines		The lines.
-		 *\~french
-		 *\brief		Aligne verticalement un texte.
-		 *\param[in]	height	La hauteur de l'incrustation.
-		 *\param[out]	lines		Les lignes.
-		 */
-		C3D_API void doAlignVertically( double height
-			, DisplayableLineArray & lines )const;
+		C3D_API void doPrepareText( castor::Point2f const & overlaySize );
 
 	private:
 		std::u32string m_currentCaption;
@@ -458,8 +303,11 @@ namespace castor3d
 		bool m_textChanged{ true };
 		FontTexture::OnChanged::connection m_connection;
 		TextTexturingMode m_texturingMode{ TextTexturingMode::eText };
-		TextureCoordsArray m_arrayTextTexture;
 		std::vector< Vertex > m_buffer;
+		std::array< TextChar, MaxCharsPerOverlay > m_text;
+		uint32_t m_charsCount;
+		OverlayWords m_words;
+		OverlayLines m_lines;
 	};
 }
 

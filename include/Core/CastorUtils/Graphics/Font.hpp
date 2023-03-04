@@ -267,7 +267,7 @@ namespace castor
 		 *\brief		Récupère la hauteur de la police
 		 *\return		La hauteur de la police
 		 */
-		uint32_t getHeight()const
+		uint32_t getHeight()const noexcept
 		{
 			return m_height;
 		}
@@ -279,9 +279,21 @@ namespace castor
 		 *\brief		Récupère la hauteur maximale des glyphes
 		 *\return		La hauteur maximale des glyphes
 		 */
-		uint32_t getMaxHeight()const
+		uint32_t getMaxHeight()const noexcept
 		{
-			return uint32_t( m_maxHeight );
+			return uint32_t( m_maxSize->x );
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the max height of the glyphs
+		 *\return		The glyphs max height
+		 *\~french
+		 *\brief		Récupère la hauteur maximale des glyphes
+		 *\return		La hauteur maximale des glyphes
+		 */
+		castor::Point2i getMaxRange()const noexcept
+		{
+			return m_maxRange;
 		}
 		/**
 		 *\~english
@@ -291,33 +303,9 @@ namespace castor
 		 *\brief		Récupère la largeur maximale des glyphes
 		 *\return		La largeur maximale des glyphes
 		 */
-		uint32_t getMaxWidth()const
+		uint32_t getMaxWidth()const noexcept
 		{
-			return uint32_t( m_maxWidth );
-		}
-		/**
-		 *\~english
-		 *\brief		sets the max height of the glyphs
-		 *\param[in]	value	The new height
-		 *\~french
-		 *\brief		Définit la hauteur maximale des glyphes
-		 *\param[in]	value	La nouvelle hauteur
-		 */
-		void setMaxHeight( uint32_t value )
-		{
-			m_maxHeight = int( value );
-		}
-		/**
-		 *\~english
-		 *\brief		sets the max width of the glyphs
-		 *\param[in]	value	The new width
-		 *\~french
-		 *\brief		Définit la largeur maximale des glyphes
-		 *\param[in]	value	La nouvelle largeur
-		 */
-		void setMaxWidth( uint32_t value )
-		{
-			m_maxWidth = int( value );
+			return uint32_t( m_maxSize->x );
 		}
 		/**
 		 *\~english
@@ -327,7 +315,7 @@ namespace castor
 		 *\brief		Définit le chargeur de glyphes
 		 *\param[in]	loader	La valeur
 		 */
-		void setGlyphLoader( std::unique_ptr< SFontImpl > && loader )
+		void setGlyphLoader( std::unique_ptr< SFontImpl > loader )noexcept
 		{
 			m_glyphLoader = std::move( loader );
 		}
@@ -339,7 +327,7 @@ namespace castor
 		 *\brief		Dit si la police a un loader de glyphes
 		 *\return		Le statut
 		 */
-		bool hasGlyphLoader()
+		bool hasGlyphLoader()const noexcept
 		{
 			return m_glyphLoader != nullptr;
 		}
@@ -351,7 +339,7 @@ namespace castor
 		 *\brief		Définit le loader de glyphes
 		 *\return		Le loader
 		 */
-		SFontImpl & getGlyphLoader()
+		SFontImpl & getGlyphLoader()const noexcept
 		{
 			return *m_glyphLoader;
 		}
@@ -363,7 +351,7 @@ namespace castor
 		 *\brief		Récupère un itérateur sur la première glyphe
 		 *\return		L'itérateur
 		 */
-		auto begin()
+		auto begin()noexcept
 		{
 			return m_loadedGlyphs.begin();
 		}
@@ -375,7 +363,7 @@ namespace castor
 		 *\brief		Récupère un itérateur sur la première glyphe
 		 *\return		L'itérateur
 		 */
-		auto begin()const
+		auto begin()const noexcept
 		{
 			return m_loadedGlyphs.begin();
 		}
@@ -387,7 +375,7 @@ namespace castor
 		 *\brief		Récupère un itérateur sur la fin du tableau de glyphes
 		 *\return		L'itérateur
 		 */
-		auto end()
+		auto end()noexcept
 		{
 			return m_loadedGlyphs.end();
 		}
@@ -399,7 +387,7 @@ namespace castor
 		 *\brief		Récupère un itérateur sur la fin du tableau de glyphes
 		 *\return		L'itérateur
 		 */
-		auto end()const
+		auto end()const noexcept
 		{
 			return m_loadedGlyphs.end();
 		}
@@ -411,9 +399,9 @@ namespace castor
 		 *\brief		Définit le nom de la police
 		 *\param[in]	name	La valeur
 		 */
-		void setFaceName( String const & name )
+		void setFaceName( String name )noexcept
 		{
-			m_faceName = name;
+			m_faceName = std::move( name );
 		}
 		/**
 		 *\~english
@@ -423,7 +411,7 @@ namespace castor
 		 *\brief		Récupère le nom de la police
 		 *\return		La valeur
 		 */
-		String const & getFaceName()const
+		String const & getFaceName()const noexcept
 		{
 			return m_faceName;
 		}
@@ -435,7 +423,7 @@ namespace castor
 		 *\brief		Récupère le chemin du fichier de la police.
 		 *\return		La valeur.
 		 */
-		Path const & getFilePath()const
+		Path const & getFilePath()const noexcept
 		{
 			return m_pathFile;
 		}
@@ -471,12 +459,12 @@ namespace castor
 		//!\~english	The array of loaded glyphs.
 		//!\~french		Le tableau de glyphes chargées.
 		GlyphArray m_loadedGlyphs;
-		//!\~english	The max height of the glyphs.
-		//!\~french		La hauteur maximale des glyphes.
-		int m_maxHeight;
-		//!\~english	The max width of the glyphs.
-		//!\~french		La largeur maximale des glyphes.
-		int m_maxWidth;
+		//!\~english	The max size of the glyphs.
+		//!\~french		La dimension maximale des glyphes.
+		castor::Point2i m_maxSize;
+		//!\~english	The max bearing range of the glyphs.
+		//!\~french		L'intervalle maximal de bearing des glyphes.
+		castor::Point2i m_maxRange;
 		//!\~english	The font face name.
 		//!\~french		Le nom de la police.
 		String m_faceName;
