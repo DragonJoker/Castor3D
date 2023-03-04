@@ -312,7 +312,7 @@ namespace castor3d
 			bool removeTimer( FramePassTimer & timer );
 			void retrieveGpuTime();
 			void compute();
-			void update();
+			void update( uint32_t & top );
 			void setVisible( bool visible );
 
 			uint32_t getPanelCount()const
@@ -337,6 +337,8 @@ namespace castor3d
 			int m_posX{ 0 };
 			std::vector< PassOverlaysPtr > m_passes;
 			PanelOverlaySPtr m_container;
+			bool m_visible{ true };
+			bool m_parentVisible{ true };
 			PanelOverlaySPtr m_firstLinePanel;
 			TextOverlaySPtr m_name;
 			TimeOverlays m_cpu;

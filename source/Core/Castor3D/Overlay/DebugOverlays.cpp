@@ -451,23 +451,33 @@ namespace castor3d
 		}
 	}
 
-	void DebugOverlays::CategoryOverlays::update()
+	void DebugOverlays::CategoryOverlays::update( uint32_t & top )
 	{
 		if ( !m_cpu.value || !m_gpu.value )
 		{
 			return;
 		}
 
-		m_cpu.value->setCaption( castor::string::toU32String( castor::string::toString( m_cpu.time ) ) );
-		m_gpu.value->setCaption( castor::string::toU32String( castor::string::toString( m_gpu.time ) ) );
+		m_visible = m_cpu.time >= std::chrono::duration_cast< castor::Nanoseconds >( std::chrono::microseconds( 10 ) )
+			|| m_gpu.time >= std::chrono::duration_cast< castor::Nanoseconds >( std::chrono::microseconds( 10 ) );
 
-		for ( auto & pass : m_passes )
+		if ( m_visible && m_parentVisible )
 		{
-			if ( pass )
+			m_container->setPixelPosition( { m_container->getPixelPosition().x(), int32_t( top ) } );
+			top += m_container->getPixelSize().getHeight();
+			m_cpu.value->setCaption( castor::string::toU32String( castor::string::toString( m_cpu.time ) ) );
+			m_gpu.value->setCaption( castor::string::toU32String( castor::string::toString( m_gpu.time ) ) );
+
+			for ( auto & pass : m_passes )
 			{
-				pass->update();
+				if ( pass )
+				{
+					pass->update();
+				}
 			}
 		}
+
+		m_container->setVisible( m_visible && m_parentVisible );
 	}
 
 	void DebugOverlays::CategoryOverlays::retrieveGpuTime()
@@ -483,7 +493,8 @@ namespace castor3d
 
 	void DebugOverlays::CategoryOverlays::setVisible( bool visible )
 	{
-		m_container->setVisible( visible );
+		m_parentVisible = visible;
+		m_container->setVisible( m_visible && m_parentVisible );
 	}
 
 	//*********************************************************************************************
@@ -616,10 +627,11 @@ namespace castor3d
 		if ( m_visible )
 		{
 			auto lock( castor::makeUniqueLock( m_mutex ) );
+			uint32_t top{};
 
 			for ( auto & pass : m_renderPasses )
 			{
-				pass.second.update();
+				pass.second.update( top );
 			}
 
 			m_debugPanel->update();

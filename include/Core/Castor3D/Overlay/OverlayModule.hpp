@@ -4,7 +4,10 @@ See LICENSE file in root folder
 #ifndef ___C3D_OverlayModule_H___
 #define ___C3D_OverlayModule_H___
 
+#include "Castor3D/Limits.hpp"
 #include "Castor3D/Cache/CacheModule.hpp"
+
+#include <CastorUtils/Design/ArrayView.hpp>
 
 namespace castor3d
 {
@@ -254,6 +257,155 @@ namespace castor3d
 	*	Une incrustation avec du texte.
 	*/
 	class TextOverlay;
+	/**
+	\~english
+	\brief		A character, along with its size and relative position.
+	\~french
+	\brief		Un caractère, avec ses dimensions et sa position relative.
+	*/
+	struct TextChar
+	{
+		//!\~english	The character dimensions.
+		//!\~french		Les dimensions du caractère.
+		castor::Point2f size{};
+		//!\~english	The character UV position.
+		//!\~french		La position de l'UV du caractère.
+		castor::Point2f uvPosition{};
+		//!\~english	The glyph position relative to cursor.
+		//!\~french		La position de la glyphe par rapport au curseur.
+		castor::Point2f bearing{};
+		//!\~english	The character position, relative to its line.
+		//!\~french		La position du caractère, relative à sa ligne.
+		float left{};
+		//!\~english	The index of the character to display.
+		//!\~french		L'index du caractère à afficher.
+		uint32_t c{};
+		//!\~english	The index of the word holding this character.
+		//!\~french		L'index du mot contenant ce caractère.
+		uint32_t word{};
+		uint32_t pad{};
+	};
+	/**
+	\~english
+	\brief		A text chars container, along with its size and position.
+	\~french
+	\brief		Un conteneur de caractères, avec ses dimensions et sa position.
+	*/
+	struct TextWord
+	{
+		//!\~english	The y range, relative to bearing.
+		//!\~french		L'intervalle y, relatif au bearing.
+		castor::Point2f range{};
+		//!\~english	The word position.
+		//!\~french		La position du mot.
+		float left{};
+		//!\~english	The word width.
+		//!\~french		La longueur du mot.
+		float width{};
+		//!\~english	The index of the beginning of the word.
+		//!\~french		L'indice sur le début du mot.
+		uint32_t charBegin{};
+		//!\~english	The index of the end of the word.
+		//!\~french		L'indice sur la fin du mot.
+		uint32_t charEnd{};
+		//!\~english	The index of the line holding this word.
+		//!\~french		L'index de la ligne contenant ce mot.
+		uint32_t line{};
+		uint32_t pad{};
+
+		auto chars( std::array< TextChar, MaxCharsPerOverlay > & cont )
+		{
+			return castor::makeArrayView( cont.begin() + charBegin, charEnd - charBegin );
+		}
+	};
+	/**
+	\~english
+	\brief		Contains the words forming the overlay.
+	\~french
+	\brief		Contient les mots formant l'incrustation.
+	*/
+	struct OverlayWords
+	{
+		uint32_t count{};
+		uint32_t pad{};
+		std::array< TextWord, MaxTextsContsPerOverlay > elems{};
+
+		auto & getNext()
+		{
+			return elems[count++];
+		}
+
+		auto words()
+		{
+			return castor::makeArrayView( elems.begin(), count );
+		}
+	};
+	/**
+	\~english
+	\brief		A text chars container, along with its size and position.
+	\~french
+	\brief		Un conteneur de caractères, avec ses dimensions et sa position.
+	*/
+	struct TextLine
+	{
+		//!\~english	The line position.
+		//!\~french		La position de la ligne.
+		castor::Point2f position{};
+		//!\~english	The y range, relative to bearing.
+		//!\~french		L'intervalle y, relatif au bearing.
+		castor::Point2f range{};
+		//!\~english	The line width.
+		//!\~french		La longueur de la ligne.
+		float width{};
+		//!\~english	The index of the beginning of the line.
+		//!\~french		L'indice sur le début de la ligne.
+		uint32_t wordBegin{};
+		//!\~english	The index of the end of the line.
+		//!\~french		L'indice sur la fin de la ligne.
+		uint32_t wordEnd{};
+		//!\~english	The index of the beginning of the line.
+		//!\~french		L'indice sur le début de la ligne.
+		uint32_t charBegin{};
+		//!\~english	The index of the end of the line.
+		//!\~french		L'indice sur la fin de la ligne.
+		uint32_t charEnd{};
+		//!\~english	The index of the overlay holding this line.
+		//!\~french		L'overlay de la ligne contenant cette ligne.
+		uint32_t overlay{};
+
+		auto words( OverlayWords & cont )
+		{
+			return castor::makeArrayView( cont.elems.begin() + wordBegin, wordEnd - wordBegin );
+		}
+
+		auto chars( std::array< TextChar, MaxCharsPerOverlay > & cont )
+		{
+			return castor::makeArrayView( cont.begin() + charBegin, charEnd - charBegin );
+		}
+	};
+	/**
+	\~english
+	\brief		Contains the lines forming the overlay.
+	\~french
+	\brief		Contient les lignes formant l'incrustation.
+	*/
+	struct OverlayLines
+	{
+		castor::Point2f maxRange{};
+		float topOffset{};
+		uint32_t count{};
+		std::array< TextLine, MaxTextsContsPerOverlay > elems{};
+
+		auto & getNext()
+		{
+			return elems[count++];
+		}
+
+		auto lines()
+		{
+			return castor::makeArrayView( elems.begin(), count );
+		}
+	};
 
 	CU_DeclareCUSmartPtr( castor3d, BorderPanelOverlay, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, DebugOverlays, C3D_API );

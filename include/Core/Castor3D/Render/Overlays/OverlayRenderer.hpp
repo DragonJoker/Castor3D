@@ -133,7 +133,7 @@ namespace castor3d
 
 		using PanelVertexBufferPool = OverlayVertexBufferPoolT< OverlayCategory::Vertex, 6u >;
 		using BorderPanelVertexBufferPool = OverlayVertexBufferPoolT< OverlayCategory::Vertex, 8u * 6u >;
-		using TextVertexBufferPool = OverlayVertexBufferPoolT< TextOverlay::Vertex, MaxOverlayCharsPerBuffer >;
+		using TextVertexBufferPool = OverlayVertexBufferPoolT< TextOverlay::Vertex, MaxCharsPerOverlay >;
 		using PanelVertexBufferIndex = PanelVertexBufferPool::MyBufferIndex;
 		using BorderPanelVertexBufferIndex = BorderPanelVertexBufferPool::MyBufferIndex;
 		using TextVertexBufferIndex = TextVertexBufferPool::MyBufferIndex;

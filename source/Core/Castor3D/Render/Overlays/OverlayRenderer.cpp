@@ -397,19 +397,22 @@ namespace castor3d
 
 	void OverlayRenderer::update( GpuUpdater & updater )
 	{
-		auto size = updater.camera->getSize();
-
-		if ( m_size != size )
+		if ( auto timerBlock = std::make_unique< crg::FramePassTimerBlock >( m_timer.start() ) )
 		{
-			m_sizeChanged = true;
-			m_size = size;
-			m_cameraUbo.cpuUpdate( getSize()
-				, getRenderSystem()->getOrtho( 0.0f
-					, float( m_size.getWidth() )
-					, 0.0f
-					, float( m_size.getHeight() )
-					, -1.0f
-					, 1.0f ) );
+			auto size = updater.camera->getSize();
+
+			if ( m_size != size )
+			{
+				m_sizeChanged = true;
+				m_size = size;
+				m_cameraUbo.cpuUpdate( getSize()
+					, getRenderSystem()->getOrtho( 0.0f
+						, float( m_size.getWidth() )
+						, 0.0f
+						, float( m_size.getHeight() )
+						, -1.0f
+						, 1.0f ) );
+			}
 		}
 	}
 
