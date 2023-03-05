@@ -33,7 +33,7 @@ namespace castor3d
 
 	public:
 		struct ShadowData
-			: LightBufferTypes
+			: ShaderBufferTypes
 		{
 			Float1 shadowMapIndex;
 			Float1 shadowType;
@@ -48,7 +48,7 @@ namespace castor3d
 		};
 
 		struct LightData
-			: LightBufferTypes
+			: ShaderBufferTypes
 		{
 			Float3 colour;
 			Float1 farPlane;

@@ -39,6 +39,22 @@ namespace castor3d
 			uint32_t count{};
 		};
 
+		struct TextPipelineSet
+		{
+			ashes::DescriptorSetPtr descriptorSet;
+			uint32_t count{};
+			OverlayTextBuffer const * textBuffer{};
+		};
+
+		struct TextPipeline
+		{
+			ashes::DescriptorSetLayoutPtr descriptorLayout{};
+			ashes::PipelineLayoutPtr pipelineLayout{};
+			ashes::PipelinePtr pipeline{};
+			ashes::DescriptorSetPoolPtr descriptorPool{};
+			std::map< FontTexture const *, TextPipelineSet > sets;
+		};
+
 	public:
 		/**
 		 *\~english
@@ -150,6 +166,7 @@ namespace castor3d
 			, Pass const & pass
 			, TextureLayout const & texture
 			, Sampler const & sampler );
+		ashes::DescriptorSet const & doCreateTextDescriptorSet( FontTexture & fontTexture );
 		OverlayPipeline doCreatePipeline( RenderDevice const & device
 			, VkRenderPass renderPass
 			, Pass const & pass
@@ -163,10 +180,12 @@ namespace castor3d
 			, bool text );
 		ComputePipeline doCreatePanelPipeline( RenderDevice const & device );
 		ComputePipeline doCreateBorderPipeline( RenderDevice const & device );
+		TextPipeline doCreateTextPipeline( RenderDevice const & device );
+		ashes::DescriptorSetPtr doGetTextSet( FontTexture const & fontTexture );
+		TextPipelineSet & doGetComputeTextPipeline( FontTexture & fontTexture );
 		ashes::PipelineShaderStageCreateInfoArray doCreateOverlayProgram( RenderDevice const & device
 			, TextureCombine const & texturesFlags
 			, bool text );
-		ashes::DescriptorSet const & doCreateTextDescriptorSet( FontTexture & fontTexture );
 
 	private:
 		Texture const & m_target;
@@ -195,6 +214,7 @@ namespace castor3d
 		std::map< FontTexture const *, FontTextureDescriptorConnection > m_textDescriptorSets;
 		ComputePipeline m_computePanelPipeline;
 		ComputePipeline m_computeBorderPipeline;
+		TextPipeline m_computeTextPipeline;
 	};
 }
 

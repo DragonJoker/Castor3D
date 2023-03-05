@@ -20,6 +20,7 @@ namespace castor3d
 		OverlayRenderNode & node;
 		uint32_t index;
 		OverlayGeometryBuffers geometryBuffers{};
+		OverlayTextBufferIndex textBuffer{};
 	};
 }
 

@@ -171,7 +171,7 @@ namespace castor3d
 				auto overlayData = writer.declLocale( "overlayData"
 				, c3d_overlaysData[in.globalInvocationID.x()] );
 				auto offset = writer.declLocale( "offset"
-					, in.globalInvocationID.x() * 48u );
+					, overlayData.vertexOffset() );
 				auto renderSize = writer.declLocale( "renderSize"
 					, vec2( c3d_cameraData.renderSize() ) );
 				auto ww = writer.declLocale( "w"

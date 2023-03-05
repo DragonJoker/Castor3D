@@ -52,6 +52,19 @@ namespace castor
 		m_overlays.erase( overlay.getCategory() );
 	}
 
+	void ResourceCacheT< Overlay, String, OverlayCacheTraits >::upload( ashes::CommandBuffer const & commandBuffer )
+	{
+		auto lock( makeUniqueLock( *this ) );
+
+		for ( auto & texture : m_fontTextures )
+		{
+			if ( texture.second )
+			{
+				texture.second->upload( commandBuffer );
+			}
+		}
+	}
+
 	ResourceCacheT< Overlay, String, OverlayCacheTraits >::ResourceCacheT( Engine & engine )
 		: ElementCacheT{ engine.getLogger()
 			, [this]( ElementT & resource )

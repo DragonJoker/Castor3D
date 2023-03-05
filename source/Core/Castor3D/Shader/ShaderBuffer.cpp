@@ -17,10 +17,12 @@ namespace castor3d
 	ShaderBuffer::ShaderBuffer( Engine & engine
 		, RenderDevice const & device
 		, VkDeviceSize size
-		, castor::String name )
+		, castor::String name
+		, crg::AccessState wantedState )
 		: m_device{ device }
 		, m_size{ ashes::getAlignedSize( size + 4 * sizeof( uint32_t )
 			, m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) ) }
+		, m_wantedState{ std::move( wantedState ) }
 		, m_buffer{ makeBufferBase( m_device
 			, m_size
 			, ( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT )
@@ -138,8 +140,8 @@ namespace castor3d
 
 		auto dstDstStage = m_buffer->getCompatibleStageFlags();
 		commandBuffer.memoryBarrier( dstDstStage
-			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, m_buffer->makeMemoryTransitionBarrier( VK_ACCESS_SHADER_READ_BIT ) );
+			, m_wantedState.pipelineStage
+			, m_buffer->makeMemoryTransitionBarrier( m_wantedState.access ) );
 
 		auto stgDstStage = m_staging->getBuffer().getCompatibleStageFlags();
 		commandBuffer.memoryBarrier( stgDstStage

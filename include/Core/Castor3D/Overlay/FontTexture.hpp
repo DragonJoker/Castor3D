@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "OverlayModule.hpp"
 #include "Castor3D/Material/Texture/TextureModule.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
+#include "Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp"
 
 #include <CastorUtils/Design/Resource.hpp>
 #include <CastorUtils/Design/Signal.hpp>
@@ -40,12 +41,12 @@ namespace castor3d
 		{
 		}
 
-		C3D_API virtual ~DoubleBufferedResourceT() = default;
+		C3D_API virtual ~DoubleBufferedResourceT()noexcept = default;
 
 	public:
 		//!\~english	The signal used to notify clients that this resource has changed.
 		//!\~french		Signal utilisé pour notifier les clients que cette ressource a changé.
-		OnChanged onChanged;
+		OnChanged onResourceChanged;
 		/**
 		 *\~english
 		 *\brief		Updates the resource.
@@ -123,7 +124,7 @@ namespace castor3d
 							{
 								std::swap( m_front, m_back );
 								swapResources();
-								onChanged( *this );
+								onResourceChanged( *this );
 							} );
 					}
 				} );
@@ -167,7 +168,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API ~FontTexture()override;
+		C3D_API ~FontTexture()noexcept override;
 		/**
 		 *\~english
 		 *\brief		Initialises the texture.
@@ -187,6 +188,20 @@ namespace castor3d
 		 *\brief		Nettoie la texture.
 		 */
 		C3D_API void cleanup( RenderDevice const & device );
+		/**
+		 *\~english
+		 *\brief		Uploads the glyphs info buffer.
+		 *\~french
+		 *\brief		Upload le buffer d'informations des glyphes.
+		 */
+		C3D_API void upload( ashes::CommandBuffer const & commandBuffer );
+		/**
+		 *\~english
+		 *\brief		Converts text to glyph index array.
+		 *\~french
+		 *\brief		Convertit un texte en tableau d'index de glyphe.
+		 */
+		C3D_API castor::UInt32Array convert( castor::U32String const & text )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the font name.
@@ -209,40 +224,43 @@ namespace castor3d
 		C3D_API castor::Position const & getGlyphPosition( char32_t glyphChar )const;
 		/**
 		 *\~english
-		 *\brief		Retrieves the font.
-		 *\return		The value.
+		 *name Getters.
 		 *\~french
-		 *\brief		Récupère la police.
-		 *\return		La valeur.
-		 */
+		 *name Accesseurs.
+		**/
+		/**@{*/
 		castor::FontRPtr getFont()const
 		{
 			return &static_cast< castor::Font & >( *m_font.lock() );
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the texture.
-		 *\return		The texture.
-		 *\~french
-		 *\brief		Récupère la texture.
-		 *\return		La texture.
-		 */
-		inline TextureLayoutSPtr getTexture()const
+
+		FontGlyphBuffer const & getFontBuffer()const
+		{
+			return *m_buffer;
+		}
+
+		TextureLayoutSPtr getTexture()const
 		{
 			return getResource();
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the texture.
-		 *\return		The texture.
-		 *\~french
-		 *\brief		Récupère la texture.
-		 *\return		La texture.
-		 */
-		inline SamplerResPtr getSampler()const
+
+		SamplerResPtr getSampler()const
 		{
 			return m_sampler;
 		}
+		/**@}*/
+		/**
+		 *\~english
+		 *name Mutators.
+		 *\~french
+		 *name Mutateurs.
+		**/
+		/**@{*/
+		void setId( uint32_t v )
+		{
+			m_id = v;
+		}
+		/**@}*/
 
 	private:
 		void initialiseResource( TextureLayout & resource
@@ -258,7 +276,9 @@ namespace castor3d
 		SamplerResPtr m_sampler;
 		GlyphPositionMap m_frontGlyphsPositions;
 		GlyphPositionMap m_backGlyphsPositions;
-
+		uint32_t m_id;
+		FontGlyphBufferUPtr m_buffer;
+		std::map< char32_t, uint32_t > m_charIndices;
 	};
 }
 

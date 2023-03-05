@@ -277,13 +277,15 @@ namespace castor3d
 		//!\~english	The character position, relative to its line.
 		//!\~french		La position du caractère, relative à sa ligne.
 		float left{};
-		//!\~english	The index of the character to display.
-		//!\~french		L'index du caractère à afficher.
-		uint32_t c{};
 		//!\~english	The index of the word holding this character.
 		//!\~french		L'index du mot contenant ce caractère.
 		uint32_t word{};
-		uint32_t pad{};
+		//!\~english	The index of the overlay holding this character.
+		//!\~french		L'overlay de la ligne contenant ce caractère.
+		uint32_t overlay{};
+		//!\~english	The index of this character in the overlays chars.
+		//!\~french		L'indice de ce caractère dans les caractères de l'incrustation.
+		uint32_t index{};
 	};
 	/**
 	\~english
@@ -311,6 +313,8 @@ namespace castor3d
 		//!\~english	The index of the line holding this word.
 		//!\~french		L'index de la ligne contenant ce mot.
 		uint32_t line{};
+		//!\~english
+		//!\~french
 		uint32_t pad{};
 
 		auto chars( std::array< TextChar, MaxCharsPerOverlay > & cont )
@@ -333,6 +337,11 @@ namespace castor3d
 		auto & getNext()
 		{
 			return elems[count++];
+		}
+
+		auto words()const
+		{
+			return castor::makeArrayView( elems.data(), elems.data() + count );
 		}
 
 		auto words()
@@ -369,9 +378,9 @@ namespace castor3d
 		//!\~english	The index of the end of the line.
 		//!\~french		L'indice sur la fin de la ligne.
 		uint32_t charEnd{};
-		//!\~english	The index of the overlay holding this line.
-		//!\~french		L'overlay de la ligne contenant cette ligne.
-		uint32_t overlay{};
+		//!\~english
+		//!\~french
+		uint32_t pad{};
 
 		auto words( OverlayWords & cont )
 		{
@@ -399,6 +408,11 @@ namespace castor3d
 		auto & getNext()
 		{
 			return elems[count++];
+		}
+
+		auto lines()const
+		{
+			return castor::makeArrayView( elems.data(), elems.data() + count );
 		}
 
 		auto lines()

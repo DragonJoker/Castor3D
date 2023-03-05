@@ -36,7 +36,8 @@ namespace castor3d
 		C3D_API ShaderBuffer( Engine & engine
 			, RenderDevice const & device
 			, VkDeviceSize size
-			, castor::String name );
+			, castor::String name
+			, crg::AccessState wantedState = { VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT } );
 		/**
 		 *\~english
 		 *\brief		Updates the buffer.
@@ -141,6 +142,11 @@ namespace castor3d
 		{
 			return m_device;
 		}
+
+		ashes::BufferBase const & getBuffer()const
+		{
+			return *m_buffer;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -185,6 +191,7 @@ namespace castor3d
 	private:
 		RenderDevice const & m_device;
 		VkDeviceSize m_size;
+		crg::AccessState m_wantedState;
 		ashes::BufferBasePtr m_buffer;
 		ashes::StagingBufferPtr m_staging;
 		uint8_t * m_rawData;

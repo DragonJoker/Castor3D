@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Overlays/OverlaysModule.hpp"
 
 #include "Castor3D/Buffer/GpuBuffer.hpp"
+#include "Castor3D/Render/Overlays/OverlayTextBufferPool.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 #include <CastorUtils/Design/ArrayView.hpp>
@@ -24,7 +25,8 @@ namespace castor3d
 		using Quad = std::array< VertexT, CountT >;
 		static bool constexpr isPanel = std::is_same_v< VertexT, OverlayCategory::Vertex > && ( CountT == 6u );
 		static bool constexpr isBorder = std::is_same_v< VertexT, OverlayCategory::Vertex > && ( CountT == 48u );
-		static bool constexpr isGpuFilled = isPanel || isBorder;
+		static bool constexpr isText = !isPanel && !isBorder;
+		static bool constexpr isCpuFilled = isText;
 
 		OverlayVertexBufferPoolT( Engine & engine
 			, std::string const & debugName
@@ -33,16 +35,26 @@ namespace castor3d
 			, ashes::DescriptorSetLayout const & descriptorLayout
 			, ashes::PipelineVertexInputStateCreateInfo const & noTexDecl
 			, ashes::PipelineVertexInputStateCreateInfo const & texDecl
-			, uint32_t count );
+			, uint32_t count
+			, OverlayTextBufferPoolUPtr textBuf = nullptr );
 		template< typename OverlayT >
 		OverlayVertexBufferIndexT< VertexT, CountT > fill( castor::Size const & renderSize
 			, OverlayT const & overlay
 			, OverlayRenderNode & node
-			, bool secondary );
+			, bool secondary
+			, FontTexture const * fontTexture );
 		void upload( ashes::CommandBuffer const & cb );
+
+		ashes::DescriptorSet const & getDrawDescriptorSet( FontTexture const * fontTexture );
+		void fillComputeDescriptorSet( FontTexture const * fontTexture
+			, ashes::DescriptorSetLayout const & descriptorLayout
+			, ashes::DescriptorSet & descriptorSet )const;
+		OverlayTextBuffer const * getTextBuffer( FontTexture const & fontTexture )const;
 
 		Engine & engine;
 		RenderDevice const & device;
+		CameraUbo const & cameraUbo;
+		ashes::DescriptorSetLayout const & descriptorLayout;
 		std::string name;
 		ashes::BufferPtr< OverlayUboConfiguration > overlaysData;
 		castor::ArrayView< OverlayUboConfiguration > overlaysBuffer;
@@ -52,12 +64,14 @@ namespace castor3d
 		uint32_t allocated{};
 		uint32_t index{};
 		ashes::DescriptorSetPoolPtr descriptorPool;
-		ashes::DescriptorSetPtr descriptorSet;
+		OverlayTextBufferPoolUPtr textBuffer;
 
 	private:
-		ashes::DescriptorSetPtr doCreateDescriptorSet( CameraUbo const & cameraUbo
-			, ashes::DescriptorSetLayout const & descriptorLayout
-			, std::string const & debugName )const;
+		std::map< FontTexture const *, ashes::DescriptorSetPtr > descriptorSets;
+
+	private:
+		ashes::DescriptorSetPtr doCreateDescriptorSet( std::string debugName
+			, FontTexture const * fontTexture )const;
 	};
 }
 

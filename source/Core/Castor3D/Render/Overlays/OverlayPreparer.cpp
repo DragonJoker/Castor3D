@@ -47,7 +47,8 @@ namespace castor3d
 		static castor::Point2d updateUbo( OverlayUboConfiguration & data
 			, OverlayCategory const & overlay
 			, Pass const & pass
-			, castor::Size const & renderSize )
+			, castor::Size const & renderSize
+			, uint32_t vertexOffset )
 		{
 			auto size = overlay.getAbsoluteSize( renderSize );
 			auto ratio = overlay.getRenderRatio( renderSize );
@@ -56,6 +57,7 @@ namespace castor3d
 			data.size = castor::Point2f{ castor::Point2d{ data.size } *ratio };
 			data.uv = castor::Point4f{ overlay.getUV() };
 			data.materialId = pass.getId();
+			data.vertexOffset = vertexOffset;
 			return ratio;
 		}
 	}
@@ -71,6 +73,11 @@ namespace castor3d
 	{
 		m_renderer.m_computePanelPipeline.count = 0u;
 		m_renderer.m_computeBorderPipeline.count = 0u;
+
+		for ( auto & it : m_renderer.m_computeTextPipeline.sets )
+		{
+			it.second.count = 0u;
+		}
 	}
 
 	OverlayPreparer::OverlayPreparer( OverlayPreparer && rhs )noexcept
@@ -180,6 +187,7 @@ namespace castor3d
 						, *m_renderer.m_textVertexBuffer
 						, overlay.getFontTexture()
 						, false );
+					m_renderer.doGetComputeTextPipeline( *overlay.getFontTexture() ).count += overlay.getCharCount();
 				}
 			}
 		}
@@ -220,23 +228,29 @@ namespace castor3d
 	void OverlayPreparer::doUpdateUbo( OverlayUboConfiguration & data
 		, PanelOverlay const & overlay
 		, Pass const & pass
-		, castor::Size const & renderSize )const
+		, castor::Size const & renderSize
+		, uint32_t vertexOffset
+		, OverlayTextBufferIndex const & textBuffer )const
 	{
 		ovrlprep::updateUbo( data
 			, static_cast< OverlayCategory const & >( overlay )
 			, pass
-			, renderSize );
+			, renderSize
+			, vertexOffset / sizeof( PanelOverlay::Vertex ) );
 	}
 
 	void OverlayPreparer::doUpdateUbo( OverlayUboConfiguration & data
 		, BorderPanelOverlay const & overlay
 		, Pass const & pass
-		, castor::Size const & renderSize )const
+		, castor::Size const & renderSize
+		, uint32_t vertexOffset
+		, OverlayTextBufferIndex const & textBuffer )const
 	{
 		auto ratio = ovrlprep::updateUbo( data
 			, static_cast< OverlayCategory const & >( overlay )
 			, pass
-			, renderSize );
+			, renderSize
+			, vertexOffset / sizeof( BorderPanelOverlay::Vertex ) );
 		auto border = overlay.getAbsoluteBorderSize( renderSize );
 		data.border = castor::Point4f{ border.left(), border.top(), border.right(), border.bottom() };
 		data.border = castor::Point4f{ castor::Point4d{ data.border } *castor::Point4d{ ratio->x, ratio->y, ratio->x, ratio->y } };
@@ -248,11 +262,18 @@ namespace castor3d
 	void OverlayPreparer::doUpdateUbo( OverlayUboConfiguration & data
 		, TextOverlay const & overlay
 		, Pass const & pass
-		, castor::Size const & renderSize )const
+		, castor::Size const & renderSize
+		, uint32_t vertexOffset
+		, OverlayTextBufferIndex const & textBuffer )const
 	{
 		ovrlprep::updateUbo( data
 			, static_cast< OverlayCategory const & >( overlay )
 			, pass
-			, renderSize );
+			, renderSize
+			, vertexOffset / sizeof( TextOverlay::Vertex ) );
+		data.textTexturingMode = uint32_t( overlay.getTexturingMode() );
+		data.textWordOffset = textBuffer.word;
+		data.textLineOffset = textBuffer.line;
+		data.textTopOffset = textBuffer.top;
 	}
 }

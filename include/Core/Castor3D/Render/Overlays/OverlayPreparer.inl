@@ -36,7 +36,8 @@ namespace castor3d
 			, ( fontTexture
 				? m_renderer.doGetTextNode( device, m_renderPass, pass, *fontTexture->getTexture(), *fontTexture->getSampler().lock() )
 				: m_renderer.doGetPanelNode( device, m_renderPass, pass ) )
-			, secondary );
+			, secondary
+			, fontTexture.get() );
 
 		if ( !bufferIndex.geometryBuffers.buffer )
 		{
@@ -46,9 +47,11 @@ namespace castor3d
 		this->doUpdateUbo( bufferIndex.pool.overlaysBuffer[bufferIndex.index]
 			, overlay
 			, pass
-			, m_renderer.getSize() );
+			, m_renderer.getSize()
+			, uint32_t( bufferIndex.geometryBuffers.offset )
+			, bufferIndex.textBuffer );
 		ashes::DescriptorSetCRefArray descriptorSets;
-		descriptorSets.push_back( *bufferIndex.pool.descriptorSet );
+		descriptorSets.push_back( bufferIndex.pool.getDrawDescriptorSet( fontTexture.get() ) );
 		descriptorSets.push_back( *device.renderSystem.getEngine()->getTextureUnitCache().getDescriptorSet() );
 
 		if ( fontTexture )
