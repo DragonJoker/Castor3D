@@ -96,6 +96,7 @@ namespace castor
 		C3D_API void cleanup();
 		C3D_API void initialise( castor3d::Overlay & overlay );
 		C3D_API void cleanup( castor3d::Overlay & overlay );
+		C3D_API void upload( ashes::CommandBuffer const & commandBuffer );
 		/**
 		 *\~english
 		 *\brief		Retrieves a FontTexture given a font name.

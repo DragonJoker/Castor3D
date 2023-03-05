@@ -7,6 +7,12 @@
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Overlay/Overlay.hpp"
 #include "Castor3D/Render/Overlays/OverlayRenderer.hpp"
+#include "Castor3D/Shader/Program.hpp"
+#include "Castor3D/Shader/Shaders/GlslFont.hpp"
+#include "Castor3D/Shader/Ubos/CameraUbo.hpp"
+#include "Castor3D/Shader/Ubos/OverlayUbo.hpp"
+
+#include <ShaderWriter/Source.hpp>
 
 #include <CastorUtils/Graphics/Font.hpp>
 #include <CastorUtils/Graphics/Image.hpp>
@@ -18,12 +24,131 @@ CU_ImplementCUSmartPtr( castor3d, TextOverlay )
 #	undef drawText
 #endif
 
+#define C3D_Chars( writer, binding, set ) \
+	auto charsBuffer = writer.declStorageBuffer( "C3D_CharsBuffer" \
+		, uint32_t( binding ) \
+		, set ); \
+	auto c3d_chars = charsBuffer.declMember< ovrltxt::TextChar >( "c3d_chars", MaxCharsPerBuffer ); \
+	charsBuffer.end()
+
+#define C3D_Words( writer, binding, set ) \
+	auto wordsBuffer = writer.declStorageBuffer( "C3D_WordsBuffer" \
+		, uint32_t( binding ) \
+		, set ); \
+	auto c3d_words = wordsBuffer.declMember< ovrltxt::TextWord >( "c3d_words", MaxWordsPerBuffer ); \
+	wordsBuffer.end()
+
+#define C3D_Lines( writer, binding, set ) \
+	auto linesBuffer = writer.declStorageBuffer( "C3D_LinesBuffer" \
+		, uint32_t( binding ) \
+		, set ); \
+	auto c3d_lines = linesBuffer.declMember< ovrltxt::TextLine >( "c3d_lines", MaxLinesPerBuffer ); \
+	linesBuffer.end()
+
 namespace castor3d
 {
 	//*********************************************************************************************
 
 	namespace ovrltxt
 	{
+		class Vertex
+			: public sdw::StructInstanceHelperT< "C3D_TextVertex"
+				, sdw::type::MemoryLayout::eStd430
+				, sdw::Vec2Field< "position" >
+				, sdw::Vec2Field< "uv" >
+				, sdw::Vec2Field< "text" > >
+		{
+		public:
+			Vertex( sdw::ShaderWriter & writer
+				, sdw::expr::ExprPtr expr
+				, bool enabled )
+				: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+			{
+			}
+
+			auto position()const { return getMember< "position" >(); }
+			auto uv()const { return getMember< "uv" >(); }
+			auto text()const { return getMember< "text" >(); }
+		};
+
+		class TextChar
+			: public sdw::StructInstanceHelperT< "C3D_TextChar"
+				, sdw::type::MemoryLayout::eStd430
+				, sdw::Vec2Field< "size" >
+				, sdw::Vec2Field< "uvPosition" >
+				, sdw::Vec2Field< "bearing" >
+				, sdw::FloatField< "left" >
+				, sdw::UIntField< "word" >
+				, sdw::UIntField< "overlay" >
+				, sdw::UIntField< "index" > >
+		{
+		public:
+			TextChar( sdw::ShaderWriter & writer
+				, sdw::expr::ExprPtr expr
+				, bool enabled )
+				: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+			{
+			}
+
+			auto size()const { return getMember< "size" >(); }
+			auto uvPosition()const { return getMember< "uvPosition" >(); }
+			auto bearing()const { return getMember< "bearing" >(); }
+			auto left()const { return getMember< "left" >(); }
+			auto word()const { return getMember< "word" >(); }
+			auto overlay()const { return getMember< "overlay" >(); }
+			auto index()const { return getMember< "index" >(); }
+		};
+
+		class TextWord
+			: public sdw::StructInstanceHelperT< "C3D_TextWord"
+				, sdw::type::MemoryLayout::eStd430
+				, sdw::Vec2Field< "range" >
+				, sdw::FloatField< "left" >
+				, sdw::FloatField< "width" >
+				, sdw::UIntField< "charBegin" >
+				, sdw::UIntField< "charEnd" >
+				, sdw::UIntField< "line" >
+				, sdw::UIntField< "pad" > >
+		{
+		public:
+			TextWord( sdw::ShaderWriter & writer
+				, sdw::expr::ExprPtr expr
+				, bool enabled )
+				: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+			{
+			}
+
+			auto range()const { return this->template getMember< "range" >(); }
+			auto left()const { return this->template getMember< "left" >(); }
+			auto width()const { return this->template getMember< "width" >(); }
+			auto line()const { return this->template getMember< "line" >(); }
+		};
+
+		class TextLine
+			: public sdw::StructInstanceHelperT< "C3D_TextLine"
+				, sdw::type::MemoryLayout::eStd430
+				, sdw::Vec2Field< "position" >
+				, sdw::Vec2Field< "range" >
+				, sdw::FloatField< "width" >
+				, sdw::UIntField< "wordBegin" >
+				, sdw::UIntField< "wordEnd" >
+				, sdw::UIntField< "charBegin" >
+				, sdw::UIntField< "charEnd" >
+				, sdw::UIntField< "pad" > >
+		{
+		public:
+			TextLine( sdw::ShaderWriter & writer
+				, sdw::expr::ExprPtr expr
+				, bool enabled )
+				: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+			{
+			}
+
+			auto position()const { return this->template getMember< "position" >(); }
+			auto range()const { return this->template getMember< "range" >(); }
+			auto width()const { return this->template getMember< "width" >(); }
+		};
+
 		static castor::Font & getFont( TextOverlay const & overlay )
 		{
 			FontTextureSPtr fontTexture = overlay.getFontTexture();
@@ -69,26 +194,169 @@ namespace castor3d
 		visitor.visit( *this );
 	}
 
-	uint32_t TextOverlay::getDisplayCount()const
-	{
-		auto count = std::count( m_previousCaption.begin(), m_previousCaption.end(), U' ' );
-		count += std::count( m_previousCaption.begin(), m_previousCaption.end(), U'\t' );
-		count += std::count( m_previousCaption.begin(), m_previousCaption.end(), U'\n' );
-		return uint32_t( 6u * ( m_previousCaption.size() - uint32_t( std::max( ptrdiff_t{}, count ) ) ) );
-	}
-
 	uint32_t TextOverlay::getCount( bool secondary )const
 	{
-		return uint32_t( m_buffer.size() );
+		return m_charsCount * 6u;
 	}
 
-	void TextOverlay::fillBuffer( castor::Size const & renderSize
-		, Vertex * buffer
-		, bool secondary )const
+	float TextOverlay::fillBuffer( uint32_t overlayIndex
+		, castor::ArrayView< TextChar > texts
+		, castor::ArrayView< TextWord > words
+		, castor::ArrayView< TextLine > lines )const
 	{
-		std::copy( m_buffer.begin()
-			, m_buffer.end()
-			, buffer );
+		std::copy( m_text.begin()
+			, m_text.begin() + m_charsCount
+			, texts.begin() );
+		std::copy( m_words.words().begin()
+			, m_words.words().end()
+			, words.begin() );
+		std::copy( m_lines.lines().begin()
+			, m_lines.lines().end()
+			, lines.begin() );
+
+		for ( auto & v : texts )
+		{
+			v.overlay = overlayIndex;
+		}
+
+		return m_lines.topOffset;
+	}
+
+	ashes::PipelineShaderStageCreateInfo TextOverlay::createProgram( RenderDevice const & device )
+	{
+		ShaderModule comp{ VK_SHADER_STAGE_COMPUTE_BIT, "PanelOverlayCompute" };
+		sdw::ComputeWriter writer;
+
+		C3D_Camera( writer
+			, TextOverlay::ComputeBindingIdx::eCamera
+			, 0u );
+		C3D_Overlays( writer
+			, TextOverlay::ComputeBindingIdx::eOverlays
+			, 0u );
+		C3D_Chars( writer
+			, TextOverlay::ComputeBindingIdx::eChars
+			, 0u );
+		C3D_Words( writer
+			, TextOverlay::ComputeBindingIdx::eWords
+			, 0u );
+		C3D_Lines( writer
+			, TextOverlay::ComputeBindingIdx::eLines
+			, 0u );
+		shader::FontData c3d_fontData{ writer
+			, uint32_t( TextOverlay::ComputeBindingIdx::eFont )
+			, 0u };
+		auto c3d_vertexData = writer.declArrayStorageBuffer< ovrltxt::Vertex >( "c3d_vertexData"
+			, uint32_t( TextOverlay::ComputeBindingIdx::eVertex )
+			, 0u );
+
+		auto batchData = writer.declPushConstantsBuffer( "BatchData" );
+		auto c3d_batchOffset = batchData.declMember< sdw::UInt >( "c3d_batchOffset" );
+		auto c3d_charCount = batchData.declMember< sdw::UInt >( "c3d_charCount" );
+		batchData.end();
+
+		auto processChar = [&]( shader::OverlayData const & overlay
+			, ovrltxt::TextChar const & character
+			, sdw::Vec2 const & texDim
+			, std::function< sdw::Vec4( sdw::Vec2 const
+				, sdw::IVec4 const ) > generateUvs )
+		{
+			auto offset = writer.declLocale( "offset"
+				, overlay.vertexOffset() + ( character.index() * 6u ) );
+			auto word = writer.declLocale( "word"
+				, c3d_words[overlay.textWordOffset() + character.word()] );
+			auto line = writer.declLocale( "line"
+				, c3d_lines[overlay.textLineOffset() + word.line()] );
+			auto renderSize = writer.declLocale( "renderSize"
+				, vec2( c3d_cameraData.renderSize() ) );
+
+			auto extent = writer.declLocale( "extent"
+				, ivec4( line.position().x() + word.left() + character.left() + character.bearing().x()
+					, overlay.textTopOffset() + line.position().y() - character.bearing().y()
+					, 0, 0 ) );
+			extent.z() = extent.x() + writer.cast< sdw::Int >( character.size().x() );
+			extent.w() = extent.y() + writer.cast< sdw::Int >( character.size().y() );
+
+			// check for underflow/overflow
+			IF( writer, extent.x() < writer.cast< sdw::Int >( overlay.size().x() )
+				&& extent.y() < writer.cast< sdw::Int >( overlay.size().y() )
+				&& extent.z() > 0
+				&& extent.w() > 0 )
+			{
+				//
+				// Compute Letter's Font UV.
+				//
+				auto fontUv = writer.declLocale( "fontUv"
+					, vec4( character.uvPosition().x() / texDim.x()
+						, 0.0, 0.0
+						, character.uvPosition().y() / texDim.y() ) );
+				fontUv.z() = fontUv.x() + ( character.size().x() / texDim.x() );
+				fontUv.y() = fontUv.w() + ( character.size().y() / texDim.y() );
+				//
+				// Compute Letter's Texture UV.
+				//
+				auto texUv = writer.declLocale( "texUv"
+					, generateUvs( overlay.size(), extent ) );
+				auto relative = writer.declLocale( "relative"
+					, vec4( extent ) / vec4( renderSize.xy(), renderSize.xy() ) );
+				//
+				// Fill buffer
+				//
+				uint32_t index = 0;
+				c3d_vertexData[offset + index].position() = relative.xy(); c3d_vertexData[offset + index].uv() = texUv.xy(); c3d_vertexData[offset + index].text() = fontUv.xy(); ++index;
+				c3d_vertexData[offset + index].position() = relative.xw(); c3d_vertexData[offset + index].uv() = texUv.xw(); c3d_vertexData[offset + index].text() = fontUv.xw(); ++index;
+				c3d_vertexData[offset + index].position() = relative.zw(); c3d_vertexData[offset + index].uv() = texUv.zw(); c3d_vertexData[offset + index].text() = fontUv.zw(); ++index;
+				c3d_vertexData[offset + index].position() = relative.xy(); c3d_vertexData[offset + index].uv() = texUv.xy(); c3d_vertexData[offset + index].text() = fontUv.xy(); ++index;
+				c3d_vertexData[offset + index].position() = relative.zw(); c3d_vertexData[offset + index].uv() = texUv.zw(); c3d_vertexData[offset + index].text() = fontUv.zw(); ++index;
+				c3d_vertexData[offset + index].position() = relative.zy(); c3d_vertexData[offset + index].uv() = texUv.zy(); c3d_vertexData[offset + index].text() = fontUv.zy(); ++index;
+			}
+			FI;
+		};
+
+		writer.implementMain( 1u, 1u
+			, [&]( sdw::ComputeIn in )
+			{
+				auto charIndex = writer.declLocale( "charIndex"
+					, c3d_batchOffset + in.globalInvocationID.x() * 16u + in.globalInvocationID.y() );
+
+				IF( writer, charIndex < MaxCharsPerBuffer
+					&& charIndex < c3d_charCount )
+				{
+					auto character = writer.declLocale( "character"
+						, c3d_chars[charIndex] );
+					auto overlay = writer.declLocale( "overlay"
+						, c3d_overlaysData[character.overlay()] );
+					auto texDim = writer.declLocale( "texDim"
+						, vec2( c3d_fontData.imgWidth(), c3d_fontData.imgHeight() ) );
+
+					IF( writer, overlay.textTexturingMode() == uint32_t( TextTexturingMode::eLetter ) )
+					{
+						processChar( overlay
+							, character
+							, texDim
+							, []( sdw::Vec2 const ratio
+								, sdw::IVec4 const absolute )
+							{
+								return vec4( 0.0_f, 0.0_f, 1.0_f, 1.0_f );
+							} );
+					}
+					ELSE
+					{
+						processChar( overlay
+							, character
+							, texDim
+							, []( sdw::Vec2 const ratio
+								, sdw::IVec4 const absolute )
+							{
+								return vec4( absolute ) / vec4( ratio, ratio );
+							} );
+					}
+					FI;
+				}
+				FI;
+			} );
+
+		comp.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+		return makeShaderState( device, comp );
 	}
 
 	void TextOverlay::setFont( castor::String const & name )
@@ -109,7 +377,7 @@ namespace castor3d
 
 			m_connection.disconnect();
 			m_fontTexture = fontTexture;
-			m_connection = fontTexture->onChanged.connect( [this]( DoubleBufferedTextureLayout const & )
+			m_connection = fontTexture->onResourceChanged.connect( [this]( DoubleBufferedTextureLayout const & )
 			{
 				m_textChanged = true;
 			} );
@@ -165,118 +433,22 @@ namespace castor3d
 		if ( !m_currentCaption.empty() )
 		{
 			m_previousCaption = m_currentCaption;
-			m_charsCount = getDisplayCount() / 6u;
-
-			switch ( m_texturingMode )
-			{
-			case TextTexturingMode::eLetter:
-				doFillBuffer( renderer.getSize()
-					, []( castor::Point2f const & size
-						, castor::Point4i const & extent
-						, castor::Point4f & uv )
-					{
-						uv = { 0.0, 0.0, 1.0, 1.0 };
-					} );
-				break;
-
-			case TextTexturingMode::eText:
-				doFillBuffer( renderer.getSize()
-					, []( castor::Point2f const & size
-						, castor::Point4i const & extent
-						, castor::Point4f & uv )
-					{
-						uv = { float( double( extent->x ) / double( size->x ) )
-							, float( double( extent->y ) / double( size->y ) )
-							, float( double( extent->z ) / double( size->x ) )
-							, float( double( extent->w ) / double( size->y ) ) };
-					} );
-				break;
-
-			default:
-				break;
-			}
+			auto count = std::count( m_previousCaption.begin(), m_previousCaption.end(), U' ' );
+			count += std::count( m_previousCaption.begin(), m_previousCaption.end(), U'\t' );
+			count += std::count( m_previousCaption.begin(), m_previousCaption.end(), U'\n' );
+			m_charsCount = uint32_t( ( m_previousCaption.size() - uint32_t( std::max( ptrdiff_t{}, count ) ) ) );
+			doPrepareText( renderer.getSize() );
 		}
 
 		m_textChanged = false;
 	}
 
-	void TextOverlay::doFillBuffer( castor::Size const & rndSize
-		, UvGenFunc generateUvs )
+	void TextOverlay::doPrepareText( castor::Size const & rndSize )
 	{
-		if ( !m_textChanged )
-		{
-			return;
-		}
-
-		m_buffer.resize( m_charsCount * 6u );
-
-		if ( m_previousCaption.empty() )
-		{
-			return;
-		}
-
-		auto fontTexture = getFontTexture();
-		uint32_t index{};
-		auto myBuffer = m_buffer.data();
 		castor::Point2f renderSize{ castor::Point2f{ rndSize.getWidth(), rndSize.getHeight() }
 			* getRenderRatio( rndSize ) };
 		castor::Point2f overlaySize( renderSize * getOverlay().getAbsoluteSize() );
 
-		doPrepareText( overlaySize );
-		castor::Point2f texDim{ fontTexture->getTexture()->getDimensions().width
-			, fontTexture->getTexture()->getDimensions().height };
-
-		for ( auto character : castor::makeArrayView( m_text.begin(), getDisplayCount() / 6u ) )
-		{
-			auto & word = m_words.words()[character.word];
-			auto & line = m_lines.lines()[word.line];
-			castor::Point4i extent{ line.position->x + word.left + character.left + character.bearing->x
-				, m_lines.topOffset + line.position->y - character.bearing->y
-				, 0.0, 0.0 };
-			extent->z = extent->x + int32_t( character.size->x );
-			extent->w = extent->y + int32_t( character.size->y );
-
-			// check for underflow/overflow
-			if ( extent->x < int32_t( overlaySize->x )
-				&& extent->y < int32_t( overlaySize->y )
-				&& extent->z > 0
-				&& extent->w > 0 )
-			{
-				//
-				// Compute Letter's Font UV.
-				//
-				castor::Point4f fontUv{ character.uvPosition->x / texDim->x
-					, 0.0, 0.0
-					, character.uvPosition->y / texDim->y };
-				fontUv->z = fontUv->x + ( character.size->x / texDim->x );
-				fontUv->y = fontUv->w + ( character.size->y / texDim->y );
-				//
-				// Compute Letter's Texture UV.
-				//
-				castor::Point4f texUv{};
-				generateUvs( overlaySize, extent, texUv );
-				auto relative = castor::Point4f{ extent } / castor::Point4f{ renderSize->x, renderSize->y, renderSize->x, renderSize->y };
-				//
-				// Fill buffer
-				//
-				TextOverlay::Vertex const vertexTR{ { relative->z, relative->y }, { texUv->z, texUv->y }, { fontUv->z, fontUv->y } };
-				TextOverlay::Vertex const vertexTL{ { relative->x, relative->y }, { texUv->x, texUv->y }, { fontUv->x, fontUv->y } };
-				TextOverlay::Vertex const vertexBL{ { relative->x, relative->w }, { texUv->x, texUv->w }, { fontUv->x, fontUv->w } };
-				TextOverlay::Vertex const vertexBR{ { relative->z, relative->w }, { texUv->z, texUv->w }, { fontUv->z, fontUv->w } };
-
-				*myBuffer = vertexBL; ++myBuffer; ++index;
-				*myBuffer = vertexBR; ++myBuffer; ++index;
-				*myBuffer = vertexTL; ++myBuffer; ++index;
-
-				*myBuffer = vertexTR; ++myBuffer; ++index;
-				*myBuffer = vertexTL; ++myBuffer; ++index;
-				*myBuffer = vertexBR; ++myBuffer; ++index;
-			}
-		}
-	}
-
-	void TextOverlay::doPrepareText( castor::Point2f const & overlaySize )
-	{
 		m_words.count = 0u;
 		m_lines.count = 0u;
 		m_lines.maxRange = { 100.0, 0.0 };
@@ -407,12 +579,12 @@ namespace castor3d
 				// Setup char
 				auto uvPosition = fontTexture->getGlyphPosition( *cit );
 				auto & outChar = *tit;
-				outChar.c = *cit;
 				outChar.left = charLeft;
 				outChar.size = charSize;
 				outChar.bearing = bearing;
 				outChar.uvPosition = { uvPosition.x(), uvPosition.y() };
 				outChar.word = wordIndex;
+				outChar.index = charIndex;
 
 				// Complete word
 				word->range->x = std::min( word->range->x, yMin );
@@ -481,6 +653,8 @@ namespace castor3d
 				}
 			}
 
+			m_lines.topOffset = -lines.front().range->x;
+
 			// Move lines according to valign
 			if ( m_vAlign != VAlign::eTop )
 			{
@@ -491,7 +665,7 @@ namespace castor3d
 					offset /= 2;
 				}
 
-				m_lines.topOffset = offset - lines.front().range->x;
+				m_lines.topOffset += offset;
 			}
 		}
 	}

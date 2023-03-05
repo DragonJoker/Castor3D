@@ -161,6 +161,8 @@ namespace castor3d
 	static uint32_t constexpr MaxLinesPerOverlay = 600u;
 	// Max counts for text overlays text buffer
 	static uint32_t constexpr MaxCharsPerBuffer = 65'536u;
+	static uint32_t constexpr MaxWordsPerBuffer = 16'384u;
+	static uint32_t constexpr MaxLinesPerBuffer = 16'384u;
 	// Max counts for text buffers
 	static uint32_t constexpr MaxTextsContsPerOverlay = MaxCharsPerOverlay;
 	static uint32_t constexpr MaxTextsOverlaysPerBuffer = 1'000u;

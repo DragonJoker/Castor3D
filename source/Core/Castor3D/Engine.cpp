@@ -543,6 +543,7 @@ namespace castor3d
 	void Engine::upload( ashes::CommandBuffer const & commandBuffer )
 	{
 		getMaterialCache().upload( commandBuffer );
+		getOverlayCache().upload( commandBuffer );
 		getSceneCache().forEach( [&commandBuffer]( Scene & scene )
 			{
 				scene.getLightCache().upload( commandBuffer );

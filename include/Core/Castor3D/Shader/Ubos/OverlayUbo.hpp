@@ -22,10 +22,14 @@ namespace castor3d::shader
 			, sdw::Vec4Field< "border" >
 			, sdw::Vec4Field< "borderInnerUV" >
 			, sdw::Vec4Field< "borderOuterUV" >
+			, sdw::UIntField< "vertexOffset" >
 			, sdw::UIntField< "materialId" >
 			, sdw::UIntField< "borderPosition" >
-			, sdw::UIntField< "pad2" >
-			, sdw::UIntField< "pad3" > >
+			, sdw::UIntField< "textTexturingMode" >
+			, sdw::UIntField< "textWordOffset" >
+			, sdw::UIntField< "textLineOffset" >
+			, sdw::FloatField< "textTopOffset" >
+			, sdw::UIntField< "pad1" > >
 	{
 		OverlayData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
@@ -35,14 +39,21 @@ namespace castor3d::shader
 		}
 
 		C3D_API sdw::Vec2 modelToView( sdw::Vec2 const & pos )const;
-
+		
+		auto vertexOffset()const { return getMember< "vertexOffset" >(); }
 		auto materialId()const { return getMember< "materialId" >(); }
 		auto size()const { return getMember< "size" >(); }
 		auto uv()const { return getMember< "uv" >(); }
+
 		auto border()const { return getMember< "border" >(); }
 		auto borderInnerUV()const { return getMember< "borderInnerUV" >(); }
 		auto borderOuterUV()const { return getMember< "borderOuterUV" >(); }
 		auto borderPosition()const { return getMember< "borderPosition" >(); }
+
+		auto textWordOffset()const { return getMember< "textWordOffset" >(); }
+		auto textLineOffset()const { return getMember< "textLineOffset" >(); }
+		auto textTopOffset()const { return getMember< "textTopOffset" >(); }
+		auto textTexturingMode()const { return getMember< "textTexturingMode" >(); }
 
 	private:
 		auto position()const { return getMember< "position" >(); }

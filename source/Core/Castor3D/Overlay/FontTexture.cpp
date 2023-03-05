@@ -1,10 +1,12 @@
 #include "Castor3D/Overlay/FontTexture.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Event/Frame/CpuFunctorEvent.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
+#include "Castor3D/Shader/ShaderBuffers/FontGlyphBuffer.hpp"
 
 #include <CastorUtils/Design/ResourceCache.hpp>
 #include <CastorUtils/Graphics/Font.hpp>
@@ -68,6 +70,10 @@ namespace castor3d
 			, fonttex::createTexture( engine, font )
 			, fonttex::createTexture( engine, font ) }
 		, m_font( font )
+		, m_buffer{ castor::makeUnique< FontGlyphBuffer >( engine
+			, *engine.getRenderDevice()
+			, *this
+			, MaxCharsPerBuffer ) }
 	{
 		auto fnt = m_font.lock();
 
@@ -86,7 +92,7 @@ namespace castor3d
 		}
 	}
 
-	FontTexture::~FontTexture()
+	FontTexture::~FontTexture()noexcept
 	{
 	}
 
@@ -94,12 +100,39 @@ namespace castor3d
 		, QueueData const & queueData )
 	{
 		doInitialise( device, queueData );
-		onChanged( *this );
+		onResourceChanged( *this );
 	}
 
 	void FontTexture::cleanup( RenderDevice const & device )
 	{
 		doCleanup();
+	}
+
+	void FontTexture::upload( ashes::CommandBuffer const & commandBuffer )
+	{
+		m_buffer->update( commandBuffer );
+	}
+
+	castor::UInt32Array FontTexture::convert( castor::U32String const & text )const
+	{
+		castor::UInt32Array result;
+		result.resize( text.size() );
+		auto defaultIt = m_charIndices.find( U'?' );
+
+		if ( defaultIt != m_charIndices.end() )
+		{
+			auto dst = result.begin();
+			for ( auto c : text )
+			{
+				auto it = m_charIndices.find( c );
+				*dst = ( it != m_charIndices.end()
+					? it->second
+					: defaultIt->second );
+				++dst;
+			}
+		}
+
+		return result;
 	}
 
 	castor::String const & FontTexture::getFontName()const
@@ -109,7 +142,7 @@ namespace castor3d
 
 	castor::Position const & FontTexture::getGlyphPosition( char32_t glyphChar )const
 	{
-		GlyphPositionMapConstIt it = m_frontGlyphsPositions.find( glyphChar );
+		auto it = m_frontGlyphsPositions.find( glyphChar );
 
 		if ( it == m_frontGlyphsPositions.end() )
 		{
@@ -141,6 +174,9 @@ namespace castor3d
 			uint32_t const maxHeight = font->getMaxHeight();
 			uint32_t const count = uint32_t( std::ceil( float( std::distance( font->begin(), font->end() ) ) / 16.0 ) );
 			castor::Size size{ maxWidth * 16, maxHeight * count };
+			m_buffer->setMaxHeight( font->getMaxHeight() );
+			m_buffer->setImgWidth( size.getWidth() );
+			m_buffer->setImgHeight( size.getHeight() );
 			resource.setSource( castor::PxBufferBase::create( castor::Size( maxWidth * 16, maxHeight * count )
 				, castor::PixelFormat::eR8_UNORM ), true );
 			auto & image = resource.getImage();
@@ -151,6 +187,7 @@ namespace castor3d
 			uint32_t offY = sizeImg.getHeight() - maxHeight;
 			auto buffer = image.getBuffer();
 			uint8_t * dstBuffer = buffer.data();
+			bool modified{};
 
 			for ( uint32_t y = 0; y < count && it != font->end(); ++y )
 			{
@@ -176,6 +213,14 @@ namespace castor3d
 					glyphPositions[glyph.getCharacter()] = castor::Position( int32_t( offX ), int32_t( offY ) );
 					offX += maxWidth;
 					++it;
+
+					auto ires = m_charIndices.emplace( glyph.getCharacter(), uint32_t( m_charIndices.size() ) );
+
+					if ( ires.second )
+					{
+						m_buffer->add( glyph );
+						modified = true;
+					}
 				}
 
 				offY -= maxHeight;

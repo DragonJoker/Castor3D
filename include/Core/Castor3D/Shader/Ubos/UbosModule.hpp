@@ -80,9 +80,9 @@ namespace castor3d
 	*/
 	struct BillboardUboConfiguration
 	{
-		castor::Point2f dimensions;
-		uint32_t isSpherical;
-		uint32_t isFixedSize;
+		castor::Point2f dimensions{};
+		uint32_t isSpherical{};
+		uint32_t isFixedSize{};
 	};
 	/**
 	*\~english
@@ -103,9 +103,9 @@ namespace castor3d
 	*/
 	struct DrawParamsConfiguration
 	{
-		uint32_t nodeId;
-		uint32_t instanceCount;
-		uint32_t instanceOffset;
+		uint32_t nodeId{};
+		uint32_t instanceCount{};
+		uint32_t instanceOffset{};
 	};
 	/**
 	*\~english
@@ -126,9 +126,9 @@ namespace castor3d
 	*/
 	struct LpvGridConfigUboConfiguration
 	{
-		castor::Point4f minVolumeCorner;
-		castor::Point4f gridSizeAtt;
-		castor::Point4f cameraPos;
+		castor::Point4f minVolumeCorner{};
+		castor::Point4f gridSizeAtt{};
+		castor::Point4f cameraPos{};
 	};
 	/**
 	*\~english
@@ -149,7 +149,7 @@ namespace castor3d
 	*/
 	struct LpvLightConfigUboConfiguration
 	{
-		castor::Matrix4x4f lightView;
+		castor::Matrix4x4f lightView{};
 		float texelAreaModifier = 1.0f;
 		float tanFovXHalf = 1.0f;
 		float tanFovYHalf = 1.0f;
@@ -174,9 +174,9 @@ namespace castor3d
 	*/
 	struct LayeredLpvGridConfigUboConfiguration
 	{
-		std::array< castor::Point4f, LpvMaxCascadesCount > allMinVolumeCorners;
-		castor::Point4f allCellSizes;
-		castor::Point4f gridSizeAtt;
+		std::array< castor::Point4f, LpvMaxCascadesCount > allMinVolumeCorners{};
+		castor::Point4f allCellSizes{};
+		castor::Point4f gridSizeAtt{};
 	};
 	/**
 	*\brief
@@ -205,24 +205,24 @@ namespace castor3d
 	*/
 	struct CameraUboConfiguration
 	{
-		std::array< castor::Point4f, 6u > frustumPlanes;
-		castor::Matrix4x4f projection;
-		castor::Matrix4x4f invProjection;
-		castor::Matrix4x4f curView;
-		castor::Matrix4x4f invCurView;
-		castor::Matrix4x4f prvView;
-		castor::Matrix4x4f invPrvView;
-		castor::Matrix4x4f curViewProj;
-		castor::Matrix4x4f invCurViewProj;
-		castor::Matrix4x4f prvViewProj;
-		castor::Matrix4x4f invPrvViewProj;
-		castor::Point2ui size;
-		castor::Point2f jitter;
-		castor::Point3f position;
-		float gamma;
-		castor::Point2f pad;
-		float nearPlane;
-		float farPlane;
+		std::array< castor::Point4f, 6u > frustumPlanes{};
+		castor::Matrix4x4f projection{};
+		castor::Matrix4x4f invProjection{};
+		castor::Matrix4x4f curView{};
+		castor::Matrix4x4f invCurView{};
+		castor::Matrix4x4f prvView{};
+		castor::Matrix4x4f invPrvView{};
+		castor::Matrix4x4f curViewProj{};
+		castor::Matrix4x4f invCurViewProj{};
+		castor::Matrix4x4f prvViewProj{};
+		castor::Matrix4x4f invPrvViewProj{};
+		castor::Point2ui size{};
+		castor::Point2f jitter{};
+		castor::Point3f position{};
+		float gamma{};
+		castor::Point2f pad{};
+		float nearPlane{};
+		float farPlane{};
 	};
 	/**
 	*\~english
@@ -234,8 +234,8 @@ namespace castor3d
 	*/
 	struct MeshInfoConfiguration
 	{
-		uint32_t meshletCount;
-		uint32_t meshletOffset;
+		uint32_t meshletCount{};
+		uint32_t meshletOffset{};
 	};
 	/**
 	*\~english
@@ -256,18 +256,19 @@ namespace castor3d
 	*/
 	struct ModelBufferConfiguration
 	{
-		castor::Matrix4x4f prvModel;
-		castor::Matrix4x4f curModel;
-		castor::Matrix4x4f normal;
-		uint32_t materialId;
-		uint32_t shadowReceiver;
-		uint32_t envMapId;
-		uint32_t vertexOffset;
-		castor::Point3f scale;
-		uint32_t meshletCount;
-		uint32_t indexOffset;
-		uint32_t meshletOffset;
-		uint32_t pad[2];
+		castor::Matrix4x4f prvModel{};
+		castor::Matrix4x4f curModel{};
+		castor::Matrix4x4f normal{};
+		uint32_t materialId{};
+		uint32_t shadowReceiver{};
+		uint32_t envMapId{};
+		uint32_t vertexOffset{};
+		castor::Point3f scale{};
+		uint32_t meshletCount{};
+		uint32_t indexOffset{};
+		uint32_t meshletOffset{};
+		uint32_t pad1{};
+		uint32_t pad2{};
 	};
 	/**
 	*\~english
@@ -289,11 +290,11 @@ namespace castor3d
 	struct MorphingWeightsConfiguration
 	{
 		// Contains the actual number of weights
-		castor::Point4ui morphTargetsData;
+		castor::Point4ui morphTargetsData{};
 		// x4 because the shader stores a uvec4[MaxMorphTargets]
-		std::array< uint32_t, MaxMorphTargets * 4u > morphTargetsIndices;
+		std::array< uint32_t, MaxMorphTargets * 4u > morphTargetsIndices{};
 		// x4 because the shader stores a vec4[MaxMorphTargets]
-		std::array< float, MaxMorphTargets * 4u > morphTargetsWeights;
+		std::array< float, MaxMorphTargets * 4u > morphTargetsWeights{};
 	};
 	/**
 	*\~english
@@ -305,10 +306,10 @@ namespace castor3d
 	*/
 	struct ObjectIdsConfiguration
 	{
-		uint32_t nodeId;
-		uint32_t morphingId;
-		uint32_t skinningId;
-		uint32_t dummy;
+		uint32_t nodeId{};
+		uint32_t morphingId{};
+		uint32_t skinningId{};
+		uint32_t pad{};
 	};
 	/**
 	*\~english
@@ -329,16 +330,20 @@ namespace castor3d
 	*/
 	struct OverlayUboConfiguration
 	{
-		castor::Point4f uv;
-		castor::Point2f position;
-		castor::Point2f size;
-		castor::Point4f border;
-		castor::Point4f borderInnerUV;
-		castor::Point4f borderOuterUV;
-		uint32_t materialId;
-		uint32_t borderPosition;
-		uint32_t pad2;
-		uint32_t pad3;
+		castor::Point4f uv{};
+		castor::Point2f position{};
+		castor::Point2f size{};
+		castor::Point4f border{};
+		castor::Point4f borderInnerUV{};
+		castor::Point4f borderOuterUV{};
+		uint32_t vertexOffset{};
+		uint32_t materialId{};
+		uint32_t borderPosition{};
+		uint32_t textTexturingMode{};
+		uint32_t textWordOffset{};
+		uint32_t textLineOffset{};
+		float textTopOffset{};
+		uint32_t pad1{};
 	};
 	/**
 	*\~english
@@ -359,10 +364,10 @@ namespace castor3d
 	*/
 	struct RsmUboConfiguration
 	{
-		float intensity;
-		float maxRadius;
-		uint32_t sampleCount;
-		uint32_t index;
+		float intensity{};
+		float maxRadius{};
+		uint32_t sampleCount{};
+		uint32_t index{};
 	};
 	/**
 	*\~english
@@ -383,10 +388,10 @@ namespace castor3d
 	*/
 	struct SceneUboConfiguration
 	{
-		castor::Point3f ambientLight;
-		uint32_t fogType;
-		castor::Point3f backgroundColour;
-		float fogDensity;
+		castor::Point3f ambientLight{};
+		uint32_t fogType{};
+		castor::Point3f backgroundColour{};
+		float fogDensity{};
 	};
 	/**
 	*\~english
@@ -407,10 +412,10 @@ namespace castor3d
 	*/
 	struct ShadowMapUboConfiguration
 	{
-		castor::Matrix4x4f lightProjection;
-		castor::Matrix4x4f lightView;
-		castor::Point4f lightPosFarPlane;
-		uint32_t lightOffset;
+		castor::Matrix4x4f lightProjection{};
+		castor::Matrix4x4f lightView{};
+		castor::Point4f lightPosFarPlane{};
+		uint32_t lightOffset{};
 	};
 	/**
 	*\~english
@@ -431,7 +436,7 @@ namespace castor3d
 	*/
 	struct SkinningTransformsConfiguration
 	{
-		std::array< castor::Matrix4x4f, MaxBonesCount > bonesMatrix;
+		std::array< castor::Matrix4x4f, MaxBonesCount > bonesMatrix{};
 	};
 	/**
 	*\~english

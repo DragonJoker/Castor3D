@@ -22,9 +22,12 @@ namespace castor3d
 		, ashes::DescriptorSetLayout const & descriptorLayout
 		, ashes::PipelineVertexInputStateCreateInfo const & noTexDecl
 		, ashes::PipelineVertexInputStateCreateInfo const & texDecl
-		, uint32_t count )
+		, uint32_t count
+		, OverlayTextBufferPoolUPtr textBuf )
 		: engine{ engine }
 		, device{ device }
+		, cameraUbo{ cameraUbo }
+		, descriptorLayout{ descriptorLayout }
 		, name{ debugName }
 		, overlaysData{ makeBuffer< OverlayUboConfiguration >( device
 			, MaxPipelines
@@ -41,9 +44,46 @@ namespace castor3d
 			, name + "Vertex"
 			, ashes::QueueShare{}
 			, MaxPipelines * sizeof( VertexT ) * CountT }
-		, descriptorPool{ descriptorLayout.createPool( 1u ) }
-		, descriptorSet{ doCreateDescriptorSet( cameraUbo, descriptorLayout, name ) }
+		, descriptorPool{ descriptorLayout.createPool( 1000u ) }
+		, textBuffer{ std::move( textBuf ) }
 	{
+	}
+
+	template< typename VertexT, uint32_t CountT >
+	ashes::DescriptorSet const & OverlayVertexBufferPoolT< VertexT, CountT >::getDrawDescriptorSet( FontTexture const * fontTexture )
+	{
+		auto it = descriptorSets.emplace( fontTexture, nullptr ).first;
+
+		if ( !it->second )
+		{
+			it->second = doCreateDescriptorSet( name, fontTexture );
+		}
+
+		return *it->second;
+	}
+
+	template< typename VertexT, uint32_t CountT >
+	void OverlayVertexBufferPoolT< VertexT, CountT >::fillComputeDescriptorSet( FontTexture const * fontTexture
+		, ashes::DescriptorSetLayout const & descLayout
+		, ashes::DescriptorSet & descriptorSet )const
+	{
+		if ( textBuffer && fontTexture )
+		{
+			textBuffer->fillDescriptorSet( fontTexture
+				, descLayout
+				, descriptorSet );
+		}
+	}
+
+	template< typename VertexT, uint32_t CountT >
+	OverlayTextBuffer const * OverlayVertexBufferPoolT< VertexT, CountT >::getTextBuffer( FontTexture const & fontTexture )const
+	{
+		if ( textBuffer )
+		{
+			return textBuffer->get( fontTexture );
+		}
+
+		return nullptr;
 	}
 
 	template< typename VertexT, uint32_t CountT >
@@ -51,7 +91,8 @@ namespace castor3d
 	OverlayVertexBufferIndexT< VertexT, CountT > OverlayVertexBufferPoolT< VertexT, CountT >::fill( castor::Size const & renderSize
 		, OverlayT const & overlay
 		, OverlayRenderNode & node
-		, bool secondary )
+		, bool secondary
+		, FontTexture const * fontTexture )
 	{
 		OverlayVertexBufferIndexT< VertexT, CountT > result{ *this
 			, node
@@ -71,18 +112,19 @@ namespace castor3d
 		}
 
 		auto offset = allocated * sizeof( VertexT );
-
-		if constexpr ( !isGpuFilled )
-		{
-			overlay.fillBuffer( renderSize
-				, &vertexBuffer.template getData< VertexT >( offset )
-				, secondary );
-		}
-
 		result.geometryBuffers.buffer = &vertexBuffer;
 		result.geometryBuffers.offset = offset;
 		result.geometryBuffers.range = count * sizeof( VertexT );
 		result.geometryBuffers.count = count;
+
+		if constexpr ( isText )
+		{
+			if ( textBuffer && fontTexture )
+			{
+				result.textBuffer = textBuffer->fill( result.index, fontTexture, renderSize, overlay, node, secondary );
+			}
+		}
+
 		allocated += count;
 		++index;
 
@@ -94,25 +136,25 @@ namespace castor3d
 	{
 		if ( allocated )
 		{
-			if constexpr ( !isGpuFilled )
-			{
-				vertexBuffer.markDirty( 0u
-					, allocated * sizeof( VertexT )
-					, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
-					, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
-				vertexBuffer.upload( cb );
-			}
-
 			allocated = 0u;
 			index = 0u;
+		}
+
+		if ( textBuffer )
+		{
+			textBuffer->upload( cb );
 		}
 	}
 
 	template< typename VertexT, uint32_t CountT >
-	ashes::DescriptorSetPtr OverlayVertexBufferPoolT< VertexT, CountT >::doCreateDescriptorSet( CameraUbo const & cameraUbo
-		, ashes::DescriptorSetLayout const & descriptorLayout
-		, std::string const & debugName )const
+	ashes::DescriptorSetPtr OverlayVertexBufferPoolT< VertexT, CountT >::doCreateDescriptorSet( std::string debugName
+		, FontTexture const * fontTexture )const
 	{
+		if ( textBuffer && fontTexture )
+		{
+			debugName += fontTexture->getFontName();
+		}
+
 		auto result = descriptorPool->createDescriptorSet( debugName );
 		engine.getMaterialCache().getPassBuffer().createBinding( *result
 			, descriptorLayout.getBinding( uint32_t( OverlayBindingId::eMaterials ) ) );

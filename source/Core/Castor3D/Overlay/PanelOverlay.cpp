@@ -74,50 +74,50 @@ namespace castor3d
 			, [&]( sdw::ComputeIn in )
 			{
 				auto overlayData = writer.declLocale( "overlayData"
-				, c3d_overlaysData[in.globalInvocationID.x()] );
-		auto offset = writer.declLocale( "offset"
-			, in.globalInvocationID.x() * 6u );
-		auto renderSize = writer.declLocale( "renderSize"
-			, vec2( c3d_cameraData.renderSize() ) );
+					, c3d_overlaysData[in.globalInvocationID.x()] );
+				auto offset = writer.declLocale( "offset"
+					, overlayData.vertexOffset() );
+				auto renderSize = writer.declLocale( "renderSize"
+					, vec2( c3d_cameraData.renderSize() ) );
 
-		auto l = writer.declLocale( "l", 0.0_f );
-		auto t = writer.declLocale( "t", 0.0_f );
-		auto r = writer.declLocale( "r", overlayData.size().x() );
-		auto b = writer.declLocale( "b", overlayData.size().y() );
+				auto l = writer.declLocale( "l", 0.0_f );
+				auto t = writer.declLocale( "t", 0.0_f );
+				auto r = writer.declLocale( "r", overlayData.size().x() );
+				auto b = writer.declLocale( "b", overlayData.size().y() );
 
-		IF( writer, overlayData.borderPosition() == uint32_t( BorderPosition::eInternal ) )
-		{
-			l += overlayData.border().x();
-			t += overlayData.border().y();
-			r -= overlayData.border().z();
-			b -= overlayData.border().w();
-		}
-		ELSEIF( overlayData.borderPosition() == uint32_t( BorderPosition::eMiddle ) )
-		{
-			l += overlayData.border().x() / 2.0_f;
-			t += overlayData.border().y() / 2.0_f;
-			r -= overlayData.border().z() / 2.0_f;
-			b -= overlayData.border().w() / 2.0_f;
-		}
-		FI;
+				IF( writer, overlayData.borderPosition() == uint32_t( BorderPosition::eInternal ) )
+				{
+					l += overlayData.border().x();
+					t += overlayData.border().y();
+					r -= overlayData.border().z();
+					b -= overlayData.border().w();
+				}
+				ELSEIF( overlayData.borderPosition() == uint32_t( BorderPosition::eMiddle ) )
+				{
+					l += overlayData.border().x() / 2.0_f;
+					t += overlayData.border().y() / 2.0_f;
+					r -= overlayData.border().z() / 2.0_f;
+					b -= overlayData.border().w() / 2.0_f;
+				}
+				FI;
 
-		auto lt = writer.declLocale( "lt", vec2( l, t ) / renderSize );
-		auto lb = writer.declLocale( "lb", vec2( l, b ) / renderSize );
-		auto rt = writer.declLocale( "rt", vec2( r, t ) / renderSize );
-		auto rb = writer.declLocale( "rb", vec2( r, b ) / renderSize );
+				auto lt = writer.declLocale( "lt", vec2( l, t ) / renderSize );
+				auto lb = writer.declLocale( "lb", vec2( l, b ) / renderSize );
+				auto rt = writer.declLocale( "rt", vec2( r, t ) / renderSize );
+				auto rb = writer.declLocale( "rb", vec2( r, b ) / renderSize );
 
-		auto ltUV = writer.declLocale( "ltUV", overlayData.uv().xw() );
-		auto lbUV = writer.declLocale( "lbUV", overlayData.uv().xy() );
-		auto rtUV = writer.declLocale( "rtUV", overlayData.uv().zw() );
-		auto rbUV = writer.declLocale( "rbUV", overlayData.uv().zy() );
+				auto ltUV = writer.declLocale( "ltUV", overlayData.uv().xw() );
+				auto lbUV = writer.declLocale( "lbUV", overlayData.uv().xy() );
+				auto rtUV = writer.declLocale( "rtUV", overlayData.uv().zw() );
+				auto rbUV = writer.declLocale( "rbUV", overlayData.uv().zy() );
 
-		uint32_t index = 0;
-		c3d_vertexData[offset + index].position() = lt; c3d_vertexData[offset + index].uv() = ltUV; ++index;
-		c3d_vertexData[offset + index].position() = lb; c3d_vertexData[offset + index].uv() = lbUV; ++index;
-		c3d_vertexData[offset + index].position() = rb; c3d_vertexData[offset + index].uv() = rbUV; ++index;
-		c3d_vertexData[offset + index].position() = lt; c3d_vertexData[offset + index].uv() = ltUV; ++index;
-		c3d_vertexData[offset + index].position() = rb; c3d_vertexData[offset + index].uv() = rbUV; ++index;
-		c3d_vertexData[offset + index].position() = rt; c3d_vertexData[offset + index].uv() = rtUV; ++index;
+				uint32_t index = 0;
+				c3d_vertexData[offset + index].position() = lt; c3d_vertexData[offset + index].uv() = ltUV; ++index;
+				c3d_vertexData[offset + index].position() = lb; c3d_vertexData[offset + index].uv() = lbUV; ++index;
+				c3d_vertexData[offset + index].position() = rb; c3d_vertexData[offset + index].uv() = rbUV; ++index;
+				c3d_vertexData[offset + index].position() = lt; c3d_vertexData[offset + index].uv() = ltUV; ++index;
+				c3d_vertexData[offset + index].position() = rb; c3d_vertexData[offset + index].uv() = rbUV; ++index;
+				c3d_vertexData[offset + index].position() = rt; c3d_vertexData[offset + index].uv() = rtUV; ++index;
 			} );
 		comp.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		return makeShaderState( device, comp );

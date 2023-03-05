@@ -17,6 +17,16 @@ namespace castor3d
 		: public OverlayCategory
 	{
 	public:
+		enum class ComputeBindingIdx
+		{
+			eCamera,
+			eOverlays,
+			eChars,
+			eWords,
+			eLines,
+			eFont,
+			eVertex,
+		};
 		/**
 		\~english
 		\brief		Holds specific vertex data for a TextOverlay.
@@ -61,13 +71,6 @@ namespace castor3d
 		 *\~french
 		 *\return		Le nombre de sommets nécessaires pour cette incrustation.
 		 */
-		C3D_API uint32_t getDisplayCount()const;
-		/**
-		 *\~english
-		 *\return		The vertex count needed for this overlay.
-		 *\~french
-		 *\return		Le nombre de sommets nécessaires pour cette incrustation.
-		 */
 		C3D_API uint32_t getCount( bool )const;
 		/**
 		 *\~english
@@ -77,9 +80,19 @@ namespace castor3d
 		 *\brief		Remplit le tampon de sommets donné.
 		 *\param[out]	buffer	Le buffer.
 		 */
-		C3D_API void fillBuffer( castor::Size const & refSize
-			, Vertex * buffer
-			, bool secondary )const;
+		C3D_API float fillBuffer( uint32_t overlayIndex
+			, castor::ArrayView< TextChar > texts
+			, castor::ArrayView< TextWord > words
+			, castor::ArrayView< TextLine > lines )const;
+		/**
+		 *\~english
+		 *\brief		Creates the shader program used to compute the overlay's vertices.
+		 *\return		The program.
+		 *\~french
+		 *\brief		Crée le programme utilisé pour calculer les sommets de l'incrustation.
+		 *\return		Le programme.
+		 */
+		C3D_API static ashes::PipelineShaderStageCreateInfo createProgram( RenderDevice const & device );
 		/**
 		 *\~english
 		 *\brief		Sets the text font
@@ -262,6 +275,21 @@ namespace castor3d
 			m_lineSpacingMode = value;
 		}
 
+		uint32_t getCharCount()const noexcept
+		{
+			return m_charsCount;
+		}
+
+		uint32_t getWordCount()const noexcept
+		{
+			return m_words.count;
+		}
+
+		uint32_t getLineCount()const noexcept
+		{
+			return m_lines.count;
+		}
+
 	private:
 		using UvGenFunc = std::function< void( castor::Point2f const & size
 			, castor::Point4i const & absolute
@@ -272,25 +300,13 @@ namespace castor3d
 		C3D_API void doUpdate( OverlayRenderer const & renderer )override;
 		/**
 		 *\~english
-		 *\brief		Updates the vertex buffer.
-		 *\param[in]	size		The render target size.
-		 *\param[in]	generateUvs	The UV generator function.
-		 *\~french
-		 *\brief		Met à jour le tampon de sommets.
-		 *\param[in]	size		Les dimensions de la cible de rendu.
-		 *\param[in]	generateUvs	La fonction de génération d'UV.
-		 */
-		C3D_API void doFillBuffer( castor::Size const & refSize
-			, UvGenFunc generateUvs );
-		/**
-		 *\~english
 		 *\brief		Computes the lines to display.
 		 *\param[in]	overlaySize	The overlay dimensions.
 		 *\~french
 		 *\brief		Calcule les lignes à afficher.
 		 *\param[in]	overlaySize	The overlay dimensions.
 		 */
-		C3D_API void doPrepareText( castor::Point2f const & overlaySize );
+		C3D_API void doPrepareText( castor::Size const & renderSize );
 
 	private:
 		std::u32string m_currentCaption;
@@ -303,9 +319,8 @@ namespace castor3d
 		bool m_textChanged{ true };
 		FontTexture::OnChanged::connection m_connection;
 		TextTexturingMode m_texturingMode{ TextTexturingMode::eText };
-		std::vector< Vertex > m_buffer;
 		std::array< TextChar, MaxCharsPerOverlay > m_text;
-		uint32_t m_charsCount;
+		uint32_t m_charsCount{};
 		OverlayWords m_words;
 		OverlayLines m_lines;
 	};

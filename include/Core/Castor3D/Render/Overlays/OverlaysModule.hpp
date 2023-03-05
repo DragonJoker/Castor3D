@@ -52,6 +52,24 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Pool for the overlays texts using a specific FontTexture.
+	*\~french
+	*\brief
+	*	Pool pour les textes des overlays utilisant une FontTexture spécifique.
+	*/
+	struct OverlayTextBuffer;
+	/**
+	*\~english
+	*\brief
+	*	Pool for the overlays texts.
+	*\~french
+	*\brief
+	*	Pool pour les textes des overlays.
+	*/
+	struct OverlayTextBufferPool;
+	/**
+	*\~english
+	*\brief
 	*	Pool for the overlays vertices.
 	*\~french
 	*\brief
@@ -87,13 +105,22 @@ namespace castor3d
 
 	struct OverlayGeometryBuffers
 	{
-		GpuBufferBase * buffer;
-		VkDeviceSize offset;
-		VkDeviceSize range;
-		uint32_t count;
+		GpuBufferBase * buffer{};
+		VkDeviceSize offset{};
+		VkDeviceSize range{};
+		uint32_t count{};
+	};
+
+	struct OverlayTextBufferIndex
+	{
+		OverlayTextBuffer * pool{};
+		uint32_t word{};
+		uint32_t line{};
+		float top{};
 	};
 
 	CU_DeclareCUSmartPtr( castor3d, OverlayRenderer, C3D_API );
+	CU_DeclareSmartPtr( OverlayTextBufferPool );
 }
 
 #endif

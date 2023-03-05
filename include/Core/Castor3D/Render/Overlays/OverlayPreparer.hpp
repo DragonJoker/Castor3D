@@ -64,15 +64,21 @@ namespace castor3d
 		void doUpdateUbo( OverlayUboConfiguration & data
 			, PanelOverlay const & overlay
 			, Pass const & pass
-			, castor::Size const & renderSize )const;
+			, castor::Size const & renderSize
+			, uint32_t vertexOffset
+			, OverlayTextBufferIndex const & textBuffer )const;
 		void doUpdateUbo( OverlayUboConfiguration & data
 			, BorderPanelOverlay const & overlay
 			, Pass const & pass
-			, castor::Size const & renderSize )const;
+			, castor::Size const & renderSize
+			, uint32_t vertexOffset
+			, OverlayTextBufferIndex const & textBuffer )const;
 		void doUpdateUbo( OverlayUboConfiguration & data
 			, TextOverlay const & overlay
 			, Pass const & pass
-			, castor::Size const & renderSize )const;
+			, castor::Size const & renderSize
+			, uint32_t vertexOffset
+			, OverlayTextBufferIndex const & textBuffer )const;
 
 	private:
 		OverlayRenderer & m_renderer;

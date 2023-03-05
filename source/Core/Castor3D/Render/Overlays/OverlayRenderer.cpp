@@ -234,6 +234,101 @@ namespace castor3d
 			return result;
 		}
 
+		static void memoryBarrier( crg::RecordContext & context
+			, VkCommandBuffer commandBuffer
+			, ashes::BufferBase const & buffer
+			, crg::BufferSubresourceRange const & range
+			, crg::AccessState after
+			, crg::AccessState before )
+		{
+			buffer.makeMemoryTransitionBarrier( before.access
+				, before.pipelineStage
+				, VK_QUEUE_FAMILY_IGNORED
+				, VK_QUEUE_FAMILY_IGNORED );
+			context.memoryBarrier( commandBuffer
+				, buffer
+				, range
+				, after.access
+				, after.pipelineStage
+				, before );
+		}
+
+		static void registerComputeBufferCommands( crg::RecordContext & context
+			, VkCommandBuffer commandBuffer
+			, OverlayRenderer::TextPipeline const & pipeline
+			, OverlayRenderer::TextPipelineSet const & set )
+		{
+			auto & textBuffer = set.textBuffer;
+			crg::BufferSubresourceRange range{ 0u, VK_WHOLE_SIZE };
+
+			memoryBarrier( context
+				, commandBuffer
+				, textBuffer->charsBuffer.buffer->getBuffer()
+				, range
+				, { VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT }
+				, { VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT } );
+			memoryBarrier( context
+				, commandBuffer
+				, textBuffer->wordsBuffer.buffer->getBuffer()
+				, range
+				, { VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT }
+				, { VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT } );
+			memoryBarrier( context
+				, commandBuffer
+				, textBuffer->linesBuffer.buffer->getBuffer()
+				, range
+				, { VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT }
+				, { VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT } );
+			context.getContext().vkCmdBindPipeline( commandBuffer
+				, VK_PIPELINE_BIND_POINT_COMPUTE
+				, *pipeline.pipeline );
+			VkDescriptorSet descriptorSet = *set.descriptorSet;
+			context.getContext().vkCmdBindDescriptorSets( commandBuffer
+				, VK_PIPELINE_BIND_POINT_COMPUTE
+				, *pipeline.pipelineLayout
+				, 0u
+				, 1u
+				, &descriptorSet
+				, 0u
+				, nullptr );
+			uint32_t batchCountX = 32u;
+			uint32_t batchCountY = 16u;
+			uint32_t batchCount = batchCountX * batchCountY;
+			std::array< uint32_t, 2u > data{ 0u, set.count };
+
+			while ( data[0] < data[1] )
+			{
+				context.getContext().vkCmdPushConstants( commandBuffer
+					, *pipeline.pipelineLayout
+					, VK_SHADER_STAGE_COMPUTE_BIT
+					, 0u
+					, sizeof( uint32_t ) * 2u
+					, data.data() );
+				context.getContext().vkCmdDispatch( commandBuffer
+					, batchCountX, batchCountY, 1u );
+				data[0] += batchCount;
+			}
+
+			memoryBarrier( context
+				, commandBuffer
+				, textBuffer->linesBuffer.buffer->getBuffer()
+				, range
+				, { VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT }
+				, { VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT } );
+			memoryBarrier( context
+				, commandBuffer
+				, textBuffer->wordsBuffer.buffer->getBuffer()
+				, range
+				, { VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT }
+				, { VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT } );
+			memoryBarrier( context
+				, commandBuffer
+				, textBuffer->charsBuffer.buffer->getBuffer()
+				, range
+				, { VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT }
+				, { VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT } );
+		}
+
 		template< typename VertexBufferT >
 		static void registerComputeBufferCommands( crg::RecordContext & context
 			, VkCommandBuffer commandBuffer
@@ -241,17 +336,17 @@ namespace castor3d
 			, VertexBufferT const & vertexBuffer )
 		{
 			crg::BufferSubresourceRange range{ 0u, VK_WHOLE_SIZE };
-			context.memoryBarrier( commandBuffer
+			memoryBarrier( context
+				, commandBuffer
 				, vertexBuffer.overlaysData->getBuffer()
 				, range
-				, VK_ACCESS_HOST_WRITE_BIT
-				, VK_PIPELINE_STAGE_HOST_BIT
+				, crg::AccessState{ VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT }
 				, crg::AccessState{ VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT } );
-			context.memoryBarrier( commandBuffer
+			memoryBarrier( context
+				, commandBuffer
 				, vertexBuffer.vertexBuffer.getBuffer().getBuffer()
 				, range
-				, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
-				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT
+				, crg::AccessState{ VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT }
 				, crg::AccessState{ VK_ACCESS_SHADER_WRITE_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT } );
 			context.getContext().vkCmdBindPipeline( commandBuffer
 				, VK_PIPELINE_BIND_POINT_COMPUTE
@@ -267,17 +362,17 @@ namespace castor3d
 				, nullptr );
 			context.getContext().vkCmdDispatch( commandBuffer
 				, pipeline.count, 1u, 1u );
-			context.memoryBarrier( commandBuffer
+			memoryBarrier( context
+				, commandBuffer
 				, vertexBuffer.overlaysData->getBuffer()
 				, range
-				, VK_ACCESS_SHADER_READ_BIT
-				, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT
+				, crg::AccessState{ VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT }
 				, crg::AccessState{ VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT } );
-			context.memoryBarrier( commandBuffer
+			memoryBarrier( context
+				, commandBuffer
 				, vertexBuffer.vertexBuffer.getBuffer().getBuffer()
 				, range
-				, VK_ACCESS_SHADER_WRITE_BIT
-				, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT
+				, crg::AccessState{ VK_ACCESS_SHADER_WRITE_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT }
 				, crg::AccessState{ VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT } );
 		}
 
@@ -359,10 +454,14 @@ namespace castor3d
 			, *m_baseDescriptorLayout
 			, m_noTexTextDeclaration
 			, m_texTextDeclaration
-			, MaxOverlayPanelsPerBuffer ) }
+			, MaxOverlayPanelsPerBuffer
+			, std::make_unique< OverlayTextBufferPool >( *getRenderSystem()->getEngine()
+				, "TextsGlyphs"
+				, device ) ) }
 		, m_size{ makeSize( m_target.getExtent() ) }
 		, m_computePanelPipeline{ doCreatePanelPipeline( device ) }
 		, m_computeBorderPipeline{ doCreateBorderPipeline( device ) }
+		, m_computeTextPipeline{ doCreateTextPipeline( device ) }
 	{
 		std::string name = "Overlays";
 
@@ -448,6 +547,56 @@ namespace castor3d
 				, m_computeBorderPipeline
 				, *m_borderVertexBuffer );
 		}
+
+		bool hasTexts{};
+
+		for ( auto & it : m_computeTextPipeline.sets )
+		{
+			hasTexts = hasTexts || it.second.count > 0;
+		}
+
+		if ( hasTexts )
+		{
+			crg::BufferSubresourceRange range{ 0u, VK_WHOLE_SIZE };
+			// Common buffers preparation
+			ovrlrend::memoryBarrier( context
+				, commandBuffer
+				, m_textVertexBuffer->overlaysData->getBuffer()
+				, range
+				, { VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT }
+				, { VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT } );
+			ovrlrend::memoryBarrier( context
+				, commandBuffer
+				, m_textVertexBuffer->vertexBuffer.getBuffer().getBuffer()
+				, range
+				, { VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT }
+				, { VK_ACCESS_SHADER_WRITE_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT } );
+
+			for ( auto & it : m_computeTextPipeline.sets )
+			{
+				if ( it.second.count )
+				{
+					ovrlrend::registerComputeBufferCommands( context
+						, commandBuffer
+						, m_computeTextPipeline
+						, it.second );
+				}
+			}
+
+			// Common buffers restore
+			ovrlrend::memoryBarrier( context
+				, commandBuffer
+				, m_textVertexBuffer->vertexBuffer.getBuffer().getBuffer()
+				, range
+				, { VK_ACCESS_SHADER_WRITE_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT }
+				, { VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT } );
+			ovrlrend::memoryBarrier( context
+				, commandBuffer
+				, m_textVertexBuffer->overlaysData->getBuffer()
+				, range
+				, { VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT }
+				, { VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT } );
+		}
 	}
 
 	void OverlayRenderer::doBeginPrepare( VkRenderPass renderPass
@@ -516,7 +665,7 @@ namespace castor3d
 				, fontTexture.getSampler().lock()->getSampler() );
 			result->update();
 			descriptorConnection.descriptorSet = std::move( result );
-			descriptorConnection.connection = fontTexture.onChanged.connect( [this, &descriptorConnection]( DoubleBufferedTextureLayout const & )
+			descriptorConnection.connection = fontTexture.onResourceChanged.connect( [this, &descriptorConnection]( DoubleBufferedTextureLayout const & )
 				{
 					m_retired.emplace_back( std::move( descriptorConnection.descriptorSet ) );
 				} );
@@ -695,6 +844,88 @@ namespace castor3d
 		result.descriptorSet->update();
 
 		return result;
+	}
+
+	OverlayRenderer::TextPipeline OverlayRenderer::doCreateTextPipeline( RenderDevice const & device )
+	{
+		std::string name = "TextOverlayCompute";
+		OverlayRenderer::TextPipeline result;
+		ashes::VkDescriptorSetLayoutBindingArray layoutBindings;
+		layoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( TextOverlay::ComputeBindingIdx::eCamera )
+			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+			, VK_SHADER_STAGE_COMPUTE_BIT ) );
+		layoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( TextOverlay::ComputeBindingIdx::eOverlays )
+			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+			, VK_SHADER_STAGE_COMPUTE_BIT ) );
+		layoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( TextOverlay::ComputeBindingIdx::eChars )
+			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+			, VK_SHADER_STAGE_COMPUTE_BIT ) );
+		layoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( TextOverlay::ComputeBindingIdx::eWords )
+			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+			, VK_SHADER_STAGE_COMPUTE_BIT ) );
+		layoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( TextOverlay::ComputeBindingIdx::eLines )
+			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+			, VK_SHADER_STAGE_COMPUTE_BIT ) );
+		layoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( TextOverlay::ComputeBindingIdx::eFont )
+			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+			, VK_SHADER_STAGE_COMPUTE_BIT ) );
+		layoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( TextOverlay::ComputeBindingIdx::eVertex )
+			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+			, VK_SHADER_STAGE_COMPUTE_BIT ) );
+		result.descriptorLayout = device->createDescriptorSetLayout( name
+			, layoutBindings );
+
+		result.pipelineLayout = device->createPipelineLayout( name
+			, *result.descriptorLayout
+			, VkPushConstantRange{ VK_SHADER_STAGE_COMPUTE_BIT, 0u, sizeof( uint32_t ) * 2u } );
+		result.pipeline = device->createPipeline( name
+			, ashes::ComputePipelineCreateInfo{ 0u
+				, TextOverlay::createProgram( device )
+				, *result.pipelineLayout } );
+
+		result.descriptorPool = result.descriptorLayout->createPool( name
+			, 1000u );
+
+		return result;
+	}
+
+	ashes::DescriptorSetPtr OverlayRenderer::doGetTextSet( FontTexture const & fontTexture )
+	{
+		std::string name = "TextOverlayCompute-" + fontTexture.getFontName();
+		auto result = m_computeTextPipeline.descriptorPool->createDescriptorSet( name );
+		auto & descriptorLayout = *m_computeTextPipeline.descriptorLayout;
+		auto & descriptorSet = *result;
+		ashes::WriteDescriptorSetArray setBindings;
+		m_cameraUbo.createSizedBinding( descriptorSet
+			, descriptorLayout.getBinding( uint32_t( TextOverlay::ComputeBindingIdx::eCamera ) ) );
+		descriptorSet.createBinding( descriptorLayout.getBinding( uint32_t( TextOverlay::ComputeBindingIdx::eOverlays ) )
+			, *m_textVertexBuffer->overlaysData
+			, 0u
+			, uint32_t( m_textVertexBuffer->overlaysData->getCount() ) );
+		m_textVertexBuffer->fillComputeDescriptorSet( &fontTexture
+			, descriptorLayout
+			, descriptorSet );
+		descriptorSet.createBinding( descriptorLayout.getBinding( uint32_t( TextOverlay::ComputeBindingIdx::eVertex ) )
+			, m_textVertexBuffer->vertexBuffer.getBuffer().getBuffer()
+			, 0u
+			, uint32_t( m_textVertexBuffer->vertexBuffer.getBuffer().getBuffer().getSize() ) );
+		descriptorSet.update();
+		return result;
+	}
+
+	OverlayRenderer::TextPipelineSet & OverlayRenderer::doGetComputeTextPipeline( FontTexture & fontTexture )
+	{
+		auto it = m_computeTextPipeline.sets.find( &fontTexture );
+
+		if ( it == m_computeTextPipeline.sets.end() )
+		{
+			it = m_computeTextPipeline.sets.emplace( &fontTexture
+				, TextPipelineSet{ doGetTextSet( fontTexture )
+				, 0u
+				, m_textVertexBuffer->getTextBuffer( fontTexture ) } ).first;
+		}
+
+		return it->second;
 	}
 
 	ashes::PipelineShaderStageCreateInfoArray OverlayRenderer::doCreateOverlayProgram( RenderDevice const & device
