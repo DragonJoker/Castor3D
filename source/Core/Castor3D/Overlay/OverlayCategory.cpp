@@ -175,6 +175,28 @@ namespace castor3d
 		return result;
 	}
 
+	void OverlayCategory::notifyPositionChanged()noexcept
+	{
+		if ( m_overlay )
+		{
+			for ( auto child : *m_overlay )
+			{
+				child->getCategory()->m_positionChanged = true;
+			}
+		}
+	}
+
+	void OverlayCategory::notifySizeChanged()noexcept
+	{
+		if ( m_overlay )
+		{
+			for ( auto child : *m_overlay )
+			{
+				child->getCategory()->m_sizeChanged = true;
+			}
+		}
+	}
+
 	castor::Point2d OverlayCategory::doGetTotalSize( OverlayRenderer const & renderer )const
 	{
 		auto parent = getOverlay().getParent();

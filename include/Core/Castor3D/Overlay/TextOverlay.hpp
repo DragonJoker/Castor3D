@@ -120,7 +120,7 @@ namespace castor3d
 		 *\~french
 		 *\return		\p true si cette incrustation a changé.
 		 */
-		bool isChanged()const override
+		bool isChanged()const noexcept override
 		{
 			return m_textChanged;
 		}

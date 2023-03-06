@@ -40,7 +40,7 @@ namespace castor
 
 	void ResourceCacheT< Overlay, String, OverlayCacheTraits >::cleanup( Overlay & overlay )
 	{
-		if ( overlay.getChildrenCount() )
+		if ( !overlay.empty() )
 		{
 			for ( auto child : overlay )
 			{

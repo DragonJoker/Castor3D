@@ -166,266 +166,155 @@ namespace castor3d
 		 */
 		C3D_API castor::Position computePixelPosition()const;
 		/**
-		 *\~english
-		 *\return		\p true if this overlay's has changed.
-		 *\~french
-		 *\return		\p true si cette incrustation a changé.
-		 */
-		C3D_API virtual bool isChanged()const
+		*\~english
+		*\name
+		*	Getters.
+		*\~french
+		*\name
+		*	Accesseurs.
+		*/
+		/**@{*/
+		C3D_API virtual bool isChanged()const noexcept
 		{
 			return false;
 		}
-		/**
-		 *\~english
-		 *\brief		Sets the overlay position
-		 *\param[in]	position	The new value
-		 *\~french
-		 *\brief		Définit la position de l'incrustation
-		 *\param[in]	position	La nouvelle valeur
-		 */
-		void setRelativePosition( castor::Point2d const & position )
-		{
-			m_relPosition = position;
-			m_positionChanged = true;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the overlay size
-		 *\param[in]	size	The new value
-		 *\~french
-		 *\brief		Définit la taille de l'incrustation
-		 *\param[in]	size	La nouvelle valeur
-		 */
-		void setRelativeSize( castor::Point2d const & size )
-		{
-			m_relSize = size;
-			m_relSize->x = std::max( 0.0, m_relSize->x );
-			m_relSize->y = std::max( 0.0, m_relSize->y );
-			m_sizeChanged = true;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the overlay position
-		 *\param[in]	value	The new value
-		 *\~french
-		 *\brief		Définit la position de l'incrustation
-		 *\param[in]	value	La nouvelle valeur
-		 */
-		void setPixelPosition( castor::Position const & value )
-		{
-			m_pxPosition = value;
-			m_positionChanged = true;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the overlay size
-		 *\param[in]	value	The new value
-		 *\~french
-		 *\brief		Définit la taille de l'incrustation
-		 *\param[in]	value	La nouvelle valeur
-		 */
-		void setPixelSize( castor::Size const & value )
-		{
-			m_pxSize = value;
-			m_sizeChanged = true;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the overlay size
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère la taille de l'incrustation
-		 *\return		La valeur
-		 */
-		castor::Point2d const & getRelativeSize()const
+
+		castor::Point2d const & getRelativeSize()const noexcept
 		{
 			return m_relSize;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the overlay position
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère la position de l'incrustation
-		 *\return		La valeur
-		 */
-		castor::Point2d const & getRelativePosition()const
+
+		castor::Point2d const & getRelativePosition()const noexcept
 		{
 			return m_relPosition;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the overlay size
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère la taille de l'incrustation
-		 *\return		La valeur
-		 */
-		castor::Size const & getPixelSize()const
+
+		castor::Size const & getPixelSize()const noexcept
 		{
 			return m_pxSize;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the overlay position
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère la position de l'incrustation
-		 *\return		La valeur
-		 */
-		castor::Position const & getPixelPosition()const
+
+		castor::Position const & getPixelPosition()const noexcept
 		{
 			return m_pxPosition;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the overlay type
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le type de l'incrustation
-		 *\return		La valeur
-		 */
-		OverlayType getType()const
+
+		OverlayType getType()const noexcept
 		{
 			return m_type;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the visibility status
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le statut de visibilité
-		 *\return		La valeur
-		 */
-		bool isVisible()const
+
+		bool isVisible()const noexcept
 		{
 			return m_visible;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the material
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le matériau
-		 *\return		La valeur
-		 */
-		MaterialRPtr getMaterial()const
+
+		MaterialRPtr getMaterial()const noexcept
 		{
 			return m_material;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the index
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère l'indice
-		 *\return		La valeur
-		 */
-		int getIndex()const
+
+		int getIndex()const noexcept
 		{
 			return m_index;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the level
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le niveau
-		 *\return		La valeur
-		 */
-		int getLevel()const
+
+		int getLevel()const noexcept
 		{
 			return m_level;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the overlay
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère l'incrustation
-		 *\return		La valeur
-		 */
-		Overlay const & getOverlay()const
+
+		Overlay const & getOverlay()const noexcept
 		{
 			return *m_overlay;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the overlay
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère l'incrustation
-		 *\return		La valeur
-		 */
-		Overlay & getOverlay()
+
+		Overlay & getOverlay()noexcept
 		{
 			return *m_overlay;
 		}
+
+		castor::Point4d const & getUV()const noexcept
+		{
+			return m_uv;
+		}
+		/**@}*/
 		/**
-		 *\~english
-		 *\brief		Sets the overlay
-		 *\param[in]	value	The new value
-		 *\~french
-		 *\brief		Définit l'incrustation
-		 *\param[in]	value	La nouvelle valeur
-		 */
-		void setOverlay( Overlay * value )
+		*\~english
+		*\name
+		*	Mutators.
+		*\~french
+		*\name
+		*	Mutateurs.
+		*/
+		/**@{*/
+		void setRelativePosition( castor::Point2d const & value )noexcept
+		{
+			m_relPosition = value;
+			m_positionChanged = true;
+			notifyPositionChanged();
+		}
+
+		void setRelativeSize( castor::Point2d const & value )noexcept
+		{
+			m_relSize = value;
+			m_relSize->x = std::max( 0.0, m_relSize->x );
+			m_relSize->y = std::max( 0.0, m_relSize->y );
+			m_sizeChanged = true;
+			notifySizeChanged();
+		}
+
+		void setPixelPosition( castor::Position const & value )noexcept
+		{
+			m_pxPosition = value;
+			m_positionChanged = true;
+			notifyPositionChanged();
+		}
+
+		void setPixelSize( castor::Size const & value )noexcept
+		{
+			m_pxSize = value;
+			m_sizeChanged = true;
+			notifySizeChanged();
+		}
+
+		void setOverlay( Overlay * value )noexcept
 		{
 			m_overlay = value;
 		}
-		/**
-		 *\~english
-		 *\brief		Sets the visibility status
-		 *\param[in]	value	The new value
-		 *\~french
-		 *\brief		Définit le statut de visibilité
-		 *\param[in]	value	La nouvelle valeur
-		 */
-		void setVisible( bool value )
+
+		void setVisible( bool value )noexcept
 		{
 			m_visible = value;
 		}
-		/**
-		 *\~english
-		 *\brief		Sets the overlay order
-		 *\param[in]	index	The new index
-		 *\param[in]	level	The new level
-		 *\~french
-		 *\brief		Définit l'ordre de l'incrustation
-		 *\param[in]	index	Le nouvel indice
-		 *\param[in]	level	Le nouveau niveau
-		 */
-		void setOrder( int index, int level )
+
+		void setOrder( int index, int level )noexcept
 		{
 			m_index = index;
 			m_level = level;
 		}
-		/**
-		 *\~english
-		 *\brief		Sets the overlay UV
-		 *\param[in]	value	The new value (left, top, right and bottom)
-		 *\~french
-		 *\brief		Définit Les UV de l'incrustation
-		 *\param[in]	value	La nouvelle valeur (gauche, haut, droite, bas)
-		 */
-		void setUV( castor::Point4d const & value )
+
+		void setUV( castor::Point4d const & value )noexcept
 		{
 			m_uv = value;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the overlay UV
-		 *\return		The value (left, top, right and bottom)
-		 *\~french
-		 *\brief		Récupère Les UV de l'incrustation
-		 *\return		La valeur (gauche, haut, droite, bas)
-		 */
-		castor::Point4d const & getUV()const
-		{
-			return m_uv;
-		}
+		/**@}*/
 
 	protected:
+		/**
+		 *\~english
+		 *\brief		Notifies overlay's children of a position change.
+		 *\~french
+		 *\brief		Notifie les enfants de l'incrustation d'un changement de position.
+		 */
+		C3D_API void notifyPositionChanged()noexcept;
+		/**
+		 *\~english
+		 *\brief		Notifies overlay's children of a size change.
+		 *\~french
+		 *\brief		Notifie les enfants de l'incrustation d'un changement de dimensions.
+		 */
+		C3D_API void notifySizeChanged()noexcept;
 		/**
 		 *\~english
 		 *\return		The screen or parent's size.
