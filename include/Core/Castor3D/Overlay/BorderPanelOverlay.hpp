@@ -91,7 +91,7 @@ namespace castor3d
 		 *\~french
 		 *\return		\p true si cette incrustation a changé.
 		 */
-		C3D_API bool isChanged()const override
+		C3D_API bool isChanged()const noexcept override
 		{
 			return m_borderChanged;
 		}

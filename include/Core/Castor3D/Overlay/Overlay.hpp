@@ -136,379 +136,192 @@ namespace castor3d
 		 */
 		C3D_API uint32_t computeLevel()const;
 		/**
-		 *\~english
-		 *\brief		Retrieves the overlay category.
-		 *\return		The category.
-		 *\~french
-		 *\brief		Récupère la categorie d'incrustation.
-		 *\return		La catégorie.
-		 */
-		OverlayCategorySPtr getCategory()const
+		*\~english
+		*\name
+		*	Getters.
+		*\~french
+		*\name
+		*	Accesseurs.
+		*/
+		/**@{*/
+		OverlayCategorySPtr getCategory()const noexcept
 		{
 			return m_category;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the absolute overlay position, in pixels
-		 *\param[in]	size	The screen size
-		 *\return		The position
-		 *\~french
-		 *\brief		Récupère la position absolue de l'incrustation, en pixels
-		 *\param[in]	size	La taille de l'écran
-		 *\return		La position
-		 */
-		castor::Position getAbsolutePosition( castor::Size const & size )const
+
+		castor::Position getAbsolutePosition( castor::Size const & size )const noexcept
 		{
 			return m_category->getAbsolutePosition( size );
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the absolute overlay size, in pixels
-		 *\param[in]	size	The screen size
-		 *\return		The size
-		 *\~french
-		 *\brief		Récupère la taille absolue de l'incrustation, en pixels
-		 *\param[in]	size	La taille de l'écran
-		 *\return		La taille
-		 */
-		castor::Size getAbsoluteSize( castor::Size const & size )const
+
+		castor::Size getAbsoluteSize( castor::Size const & size )const noexcept
 		{
 			return m_category->getAbsoluteSize( size );
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the absolute overlay position
-		 *\return		The position
-		 *\~french
-		 *\brief		Récupère la position absolue de l'incrustation
-		 *\return		La position
-		 */
-		castor::Point2d getAbsolutePosition()const
+
+		castor::Point2d getAbsolutePosition()const noexcept
 		{
 			return m_category->getAbsolutePosition();
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the absolute overlay size
-		 *\return		The size
-		 *\~french
-		 *\brief		Récupère la taille absolue de l'incrustation
-		 *\return		La taille
-		 */
-		castor::Point2d getAbsoluteSize()const
+
+		castor::Point2d getAbsoluteSize()const noexcept
 		{
 			return m_category->getAbsoluteSize();
 		}
-		/**
-		 *\~english
-		 *\return		\p true if this overlay's or one of its parents' size has changed.
-		 *\~french
-		 *\return		\p true si les dimensions de cette incrustation ou d'un de ses parents ont changé.
-		 */
-		bool isSizeChanged()const
+
+		bool isSizeChanged()const noexcept
 		{
 			return m_category->isSizeChanged();
 		}
-		/**
-		 *\~english
-		 *\return		\p true if this overlay's or one of its parents' position has changed.
-		 *\~french
-		 *\return		\p true si la position de cette incrustation ou d'un de ses parents a changé.
-		 */
-		bool isPositionChanged()const
+
+		bool isPositionChanged()const noexcept
 		{
 			return m_category->isPositionChanged();
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the overlay name
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le nom de l'incrustation
-		 *\return		La valeur
-		 */
-		castor::String const & getName()const
+
+		castor::String const & getName()const noexcept
 		{
 			return m_name;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the overlay position
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère la position de l'incrustation
-		 *\return		La valeur
-		 */
-		castor::Point2d const & getRelativePosition()const
+
+		castor::Point2d const & getRelativePosition()const noexcept
 		{
 			return m_category->getRelativePosition();
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the overlay size
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère la taille de l'incrustation
-		 *\return		La valeur
-		 */
-		castor::Point2d const & getRelativeSize()const
+
+		castor::Point2d const & getRelativeSize()const noexcept
 		{
 			return m_category->getRelativeSize();
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the overlay position
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère la position de l'incrustation
-		 *\return		La valeur
-		 */
-		castor::Position const & getPixelPosition()const
+
+		castor::Position const & getPixelPosition()const noexcept
 		{
 			return m_category->getPixelPosition();
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the overlay size
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère la taille de l'incrustation
-		 *\return		La valeur
-		 */
-		castor::Size const & getPixelSize()const
+
+		castor::Size const & getPixelSize()const noexcept
 		{
 			return m_category->getPixelSize();
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the overlay type
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le type de l'incrustation
-		 *\return		La valeur
-		 */
-		OverlayType getType()const
+
+		OverlayType getType()const noexcept
 		{
 			return m_category->getType();
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the parent overlay
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère l'incrustation parente
-		 *\return		La valeur
-		 */
-		OverlayRPtr getParent()const
+
+		OverlayRPtr getParent()const noexcept
 		{
 			return m_parent;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the material
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le matériau
-		 *\return		La valeur
-		 */
-		MaterialRPtr getMaterial()const
+
+		MaterialRPtr getMaterial()const noexcept
 		{
 			return m_category->getMaterial();
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the parent scene
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère la scène parente
-		 *\return		La valeur
-		 */
-		SceneRPtr getScene()const
+
+		SceneRPtr getScene()const noexcept
 		{
 			return m_scene;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the index
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère l'indice
-		 *\return		La valeur
-		 */
-		int getIndex()const
+
+		int getIndex()const noexcept
 		{
 			return m_category->getIndex();
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the level
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le niveau
-		 *\return		La valeur
-		 */
-		int getLevel()const
+
+		int getLevel()const noexcept
 		{
 			return m_category->getLevel();
 		}
+		/**@}*/
 		/**
-		 *\~english
-		 *\brief		Retrieves the childs count
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le nombre d'enfants
-		 *\return		La valeur
-		 */
-		uint32_t getChildrenCount()const
+		*\~english
+		*\name
+		*	Array access to childs.
+		*\~french
+		*\name
+		*	Acces au tableau d'enfants.
+		*/
+		/**@{*/
+		size_t size()const noexcept
 		{
 			return uint32_t( m_children.size() );
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the first child
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère un itérateur sur le premier enfant
-		 *\return		La valeur
-		 */
+
+		bool empty()const noexcept
+		{
+			return m_children.empty();
+		}
+
 		iterator begin()
 		{
 			return m_children.begin();
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the first child
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère un itérateur sur le premier enfant
-		 *\return		La valeur
-		 */
-		const_iterator begin()const
+
+		const_iterator begin()const noexcept
 		{
 			return m_children.begin();
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to after the last child
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère un itérateur sur après le dernier enfant
-		 *\return		La valeur
-		 */
+
 		iterator end()
 		{
 			return m_children.end();
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to after the last child
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère un itérateur sur après le dernier enfant
-		 *\return		La valeur
-		 */
-		const_iterator end()const
+
+		const_iterator end()const noexcept
 		{
 			return m_children.end();
 		}
+		/**@}*/
 		/**
-		 *\~english
-		 *\brief		Sets the visibility status
-		 *\param[in]	val	The new value
-		 *\~french
-		 *\brief		Définit le statut de visibilité
-		 *\param[in]	val	La nouvelle valeur
-		 */
+		*\~english
+		*\name
+		*	Mutators.
+		*\~french
+		*\name
+		*	Mutateurs.
+		*/
+		/**@{*/
 		void setVisible( bool val )
 		{
 			m_category->setVisible( val );
 		}
-		/**
-		 *\~english
-		 *\brief		Sets the overlay order
-		 *\param[in]	index	The new index
-		 *\param[in]	level	The new level
-		 *\~french
-		 *\brief		Définit l'ordre de l'incrustation
-		 *\param[in]	index	Le nouvel indice
-		 *\param[in]	level	Le nouveau niveau
-		 */
+
 		void setOrder( int index, int level )
 		{
 			m_category->setOrder( index, level );
 		}
-		/**
-		 *\~english
-		 *\brief		Sets the material
-		 *\param[in]	material	The new value
-		 *\~french
-		 *\brief		Définit le matériau
-		 *\param[in]	material	La nouvelle valeur
-		 */
+
 		void setMaterial( MaterialRPtr material )
 		{
 			m_category->setMaterial( material );
 		}
-		/**
-		 *\~english
-		 *\brief		Sets the relative position of the overlay
-		 *\param[in]	position	The new position
-		 *\~french
-		 *\brief		Définit la position relative de l'incrustation
-		 *\param[in]	position	La nouvelle position
-		 */
+
 		void setRelativePosition( castor::Point2d const & position )
 		{
 			m_category->setRelativePosition( position );
 		}
-		/**
-		 *\~english
-		 *\brief		Sets the relative size of the overlay
-		 *\param[in]	size	The new size
-		 *\~french
-		 *\brief		Définit les dimensions relatives de l'incrustation
-		 *\param[in]	size	Les nouvelles dimensions
-		 */
+
 		void setRelativeSize( castor::Point2d const & size )
 		{
 			m_category->setRelativeSize( size );
 		}
-		/**
-		 *\~english
-		 *\brief		Sets the relative position of the overlay
-		 *\param[in]	position	The new position
-		 *\~french
-		 *\brief		Définit la position relative de l'incrustation
-		 *\param[in]	position	La nouvelle position
-		 */
+
 		void setPixelPosition( castor::Position const & position )
 		{
 			m_category->setPixelPosition( position );
 		}
-		/**
-		 *\~english
-		 *\brief		Sets the relative size of the overlay
-		 *\param[in]	size	The new size
-		 *\~french
-		 *\brief		Définit les dimensions relatives de l'incrustation
-		 *\param[in]	size	Les nouvelles dimensions
-		 */
+
 		void setPixelSize( castor::Size const & size )
 		{
 			m_category->setPixelSize( size );
 		}
-		/**
-		 *\~english
-		 *\brief		Sets the name of the overlay
-		 *\param[in]	name	The new name
-		 *\~french
-		 *\brief		Définit le nom de l'incrustation
-		 *\param[in]	name	Le nouveau nom
-		 */
+
 		void rename( castor::String const & name )
 		{
 			m_name = name;
 		}
+		/**@}*/
 
 	private:
 		castor::String m_name;
