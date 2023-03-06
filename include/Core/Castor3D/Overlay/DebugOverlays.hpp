@@ -135,9 +135,14 @@ namespace castor3d
 		 *\~french
 		 *\return		Le statut d'affichage des incrustations de débogage.
 		 */
-		inline bool isShown()const
+		bool isShown()const
 		{
 			return m_visible;
+		}
+
+		void enableDetailed( bool value )
+		{
+			m_detailed = value;
 		}
 
 		castor::Nanoseconds getAvgFrameTime()const
@@ -255,7 +260,7 @@ namespace castor3d
 			~PassOverlays();
 			void retrieveGpuTime();
 			void compute();
-			void update();
+			void update( uint32_t & top );
 			void addTimer( FramePassTimer & timer );
 			bool removeTimer( FramePassTimer & timer );
 
@@ -280,6 +285,7 @@ namespace castor3d
 			castor::String m_name;
 			std::map< FramePassTimer *, crg::OnFramePassDestroyConnection > m_timers;
 			PanelOverlaySPtr m_panel;
+			bool m_visible{ true };
 			TextOverlaySPtr m_passName;
 			TimeOverlays m_cpu;
 			TimeOverlays m_gpu;
@@ -307,7 +313,6 @@ namespace castor3d
 				, OverlayCache & cache
 				, bool const & detailed );
 			~CategoryOverlays();
-			void initialise( uint32_t offset );
 			void addTimer( FramePassTimer & timer );
 			bool removeTimer( FramePassTimer & timer );
 			void retrieveGpuTime();
@@ -317,7 +322,7 @@ namespace castor3d
 
 			uint32_t getPanelCount()const
 			{
-				return uint32_t( 1u + m_passes.size() );
+				return m_visibleCount;
 			}
 
 			castor::Nanoseconds getGpuTime()const
@@ -337,6 +342,7 @@ namespace castor3d
 			int m_posX{ 0 };
 			std::vector< PassOverlaysPtr > m_passes;
 			PanelOverlaySPtr m_container;
+			uint32_t m_visibleCount{};
 			bool m_visible{ true };
 			bool m_parentVisible{ true };
 			PanelOverlaySPtr m_firstLinePanel;
@@ -348,18 +354,31 @@ namespace castor3d
 		using CategoryOverlaysArray = std::map< castor::String, CategoryOverlays >;
 
 	private:
-#if defined( _NDEBUG )
-		static const uint32_t FRAME_SAMPLES_COUNT = 100;
+#if defined( NDEBUG )
+		static uint32_t constexpr FrameSamplesCount = 100u;
 #else
-		static const uint32_t FRAME_SAMPLES_COUNT = 20;
+		static uint32_t constexpr FrameSamplesCount = 20u;
 #endif
+		static uint32_t constexpr PanelHeight = 20u;
+		static uint32_t constexpr DebugPanelWidth = 320u;
+		static uint32_t constexpr DebugTitleOffset = 10u;
+		static uint32_t constexpr DebugTitleWidth = DebugPanelWidth - ( DebugTitleOffset - 2u );
+		static uint32_t constexpr PassMainPanelLeft = 20u;
+		static uint32_t constexpr PassPanelLeft = DebugPanelWidth + 10u;
+		static uint32_t constexpr PassNameWidth = 230u;
+		static uint32_t constexpr CategoryNameWidth = 250u;
+		static uint32_t constexpr CpuNameWidth = 30u;
+		static uint32_t constexpr CpuValueWidth = 75u;
+		static uint32_t constexpr GpuNameWidth = 30u;
+		static uint32_t constexpr GpuValueWidth = 75u;
+
 		std::mutex m_mutex;
 		castor::PreciseTimer m_taskTimer{};
 		castor::PreciseTimer m_frameTimer{};
 		castor::PreciseTimer m_debugTimer{};
 		std::unique_ptr< MainDebugPanel > m_debugPanel;
 		CategoryOverlaysArray m_renderPasses;
-		std::array< castor::Nanoseconds, FRAME_SAMPLES_COUNT > m_framesTimes{};
+		std::array< castor::Nanoseconds, FrameSamplesCount > m_framesTimes{};
 		uint32_t m_frameIndex{ 0 };
 		uint64_t m_frameCount{ 0 };
 		bool m_visible{ false };

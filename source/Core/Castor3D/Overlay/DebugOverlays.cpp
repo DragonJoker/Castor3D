@@ -35,7 +35,7 @@ namespace castor3d
 		, m_counts{ std::make_unique< DebugPanelsT< uint32_t > >( cuT( "Counts" ), m_panel, cache ) }
 	{
 		m_panel->setPixelPosition( castor::Position{ 0, 0 } );
-		m_panel->setPixelSize( castor::Size{ 320, 20 } );
+		m_panel->setPixelSize( castor::Size{ DebugPanelWidth, PanelHeight } );
 		m_panel->setMaterial( m_cache.getEngine().findMaterial( cuT( "AlphaDarkBlue" ) ).lock().get() );
 		m_panel->setVisible( true );
 	}
@@ -70,7 +70,7 @@ namespace castor3d
 		int y = m_times->updatePosition( 0 );
 		y = m_fps->updatePosition( y );
 		y = m_counts->updatePosition( y );
-		m_panel->setPixelSize( castor::Size{ 320, uint32_t( y ) } );
+		m_panel->setPixelSize( castor::Size{ DebugPanelWidth, uint32_t( y ) } );
 	}
 
 	void DebugOverlays::MainDebugPanel::addTimePanel( castor::String const & name
@@ -144,24 +144,24 @@ namespace castor3d
 			, nullptr
 			, &m_panel->getOverlay() ).lock()->getTextOverlay();
 
-		m_panel->setPixelPosition( castor::Position{ 0, 20 + int32_t( 20 * index ) } );
+		m_panel->setPixelPosition( castor::Position{ PassMainPanelLeft, int32_t( PanelHeight + PanelHeight * index ) } );
 		auto posX = 0;
 		m_passName->setPixelPosition( castor::Position{ posX, 0 } );
-		m_passName->setPixelSize( castor::Size{ 250, 20 } );
-		posX += 250;
+		m_passName->setPixelSize( castor::Size{ PassNameWidth, PanelHeight } );
+		posX += PassNameWidth;
 		m_cpu.name->setPixelPosition( castor::Position{ posX, 0 } );
-		m_cpu.name->setPixelSize( castor::Size{ 30, 20 } );
-		posX += 30;
+		m_cpu.name->setPixelSize( castor::Size{ CpuNameWidth, PanelHeight } );
+		posX += CpuNameWidth;
 		m_cpu.value->setPixelPosition( castor::Position{ posX, 0 } );
-		m_cpu.value->setPixelSize( castor::Size{ 75, 20 } );
-		posX += 75;
+		m_cpu.value->setPixelSize( castor::Size{ CpuValueWidth, PanelHeight } );
+		posX += CpuValueWidth;
 		m_gpu.name->setPixelPosition( castor::Position{ posX, 0 } );
-		m_gpu.name->setPixelSize( castor::Size{ 30, 20 } );
-		posX += 30;
+		m_gpu.name->setPixelSize( castor::Size{ GpuNameWidth, PanelHeight } );
+		posX += GpuNameWidth;
 		m_gpu.value->setPixelPosition( castor::Position{ posX, 0 } );
-		m_gpu.value->setPixelSize( castor::Size{ 75, 20 } );
-		posX += 75;
-		m_panel->setPixelSize( castor::Size{ uint32_t( posX ), 20 } );
+		m_gpu.value->setPixelSize( castor::Size{ GpuValueWidth, PanelHeight } );
+		posX += GpuValueWidth;
+		m_panel->setPixelSize( castor::Size{ uint32_t( posX ), PanelHeight } );
 
 		m_passName->setFont( cuT( "Arial16" ) );
 		m_cpu.name->setFont( cuT( "Arial10" ) );
@@ -184,12 +184,12 @@ namespace castor3d
 		m_passName->setVAlign( VAlign::eCenter );
 		m_passName->setHAlign( HAlign::eLeft );
 
-		m_panel->setVisible( m_detailed );
-		m_passName->setVisible( m_detailed );
-		m_cpu.name->setVisible( m_detailed );
-		m_gpu.name->setVisible( m_detailed );
-		m_cpu.value->setVisible( m_detailed );
-		m_gpu.value->setVisible( m_detailed );
+		m_panel->setVisible( true );
+		m_passName->setVisible( true );
+		m_cpu.name->setVisible( true );
+		m_gpu.name->setVisible( true );
+		m_cpu.value->setVisible( true );
+		m_gpu.value->setVisible( true );
 	}
 
 	DebugOverlays::PassOverlays::~PassOverlays()
@@ -218,22 +218,24 @@ namespace castor3d
 		}
 	}
 
-	void DebugOverlays::PassOverlays::update()
+	void DebugOverlays::PassOverlays::update( uint32_t & top )
 	{
 		if ( !m_cpu.value || !m_gpu.value )
 		{
 			return;
 		}
 
-		m_cpu.value->setCaption( castor::string::toU32String( castor::string::toString( m_cpu.time ) ) );
-		m_gpu.value->setCaption( castor::string::toU32String( castor::string::toString( m_gpu.time ) ) );
+		m_visible = m_cpu.time > 0_ns && m_gpu.time > 0_ns;
 
-		m_panel->setVisible( m_detailed );
-		m_passName->setVisible( m_detailed );
-		m_cpu.name->setVisible( m_detailed );
-		m_gpu.name->setVisible( m_detailed );
-		m_cpu.value->setVisible( m_detailed );
-		m_gpu.value->setVisible( m_detailed );
+		if ( m_visible && m_detailed )
+		{
+			m_panel->setPixelPosition( castor::Position{ 0, int32_t( top ) } );
+			m_cpu.value->setCaption( castor::string::toU32String( castor::string::toString( m_cpu.time ) ) );
+			m_gpu.value->setCaption( castor::string::toU32String( castor::string::toString( m_gpu.time ) ) );
+			top += PanelHeight;
+		}
+
+		m_panel->setVisible( m_visible && m_detailed );
 	}
 
 	void DebugOverlays::PassOverlays::retrieveGpuTime()
@@ -315,25 +317,25 @@ namespace castor3d
 			, nullptr
 			, &m_container->getOverlay() ).lock()->getTextOverlay();
 
-		m_container->setPixelPosition( castor::Position{ 330, 0 } );
+		m_container->setPixelPosition( castor::Position{ PassPanelLeft, 0 } );
 		m_firstLinePanel->setPixelPosition( castor::Position{ m_posX, 0 } );
 		m_name->setPixelPosition( castor::Position{ 0, 0 } );
-		m_name->setPixelSize( castor::Size{ 250, 20 } );
-		m_posX += 250;
+		m_name->setPixelSize( castor::Size{ CategoryNameWidth, PanelHeight } );
+		m_posX += CategoryNameWidth;
 		m_cpu.name->setPixelPosition( castor::Position{ m_posX, 0 } );
-		m_cpu.name->setPixelSize( castor::Size{ 30, 20 } );
-		m_posX += 30;
+		m_cpu.name->setPixelSize( castor::Size{ CpuNameWidth, PanelHeight } );
+		m_posX += CpuNameWidth;
 		m_cpu.value->setPixelPosition( castor::Position{ m_posX, 0 } );
-		m_cpu.value->setPixelSize( castor::Size{ 75, 20 } );
-		m_posX += 75;
+		m_cpu.value->setPixelSize( castor::Size{ CpuValueWidth, PanelHeight } );
+		m_posX += CpuValueWidth;
 		m_gpu.name->setPixelPosition( castor::Position{ m_posX, 0 } );
-		m_gpu.name->setPixelSize( castor::Size{ 30, 20 } );
-		m_posX += 30;
+		m_gpu.name->setPixelSize( castor::Size{ GpuNameWidth, PanelHeight } );
+		m_posX += GpuNameWidth;
 		m_gpu.value->setPixelPosition( castor::Position{ m_posX, 0 } );
-		m_gpu.value->setPixelSize( castor::Size{ 75, 20 } );
-		m_posX += 75;
-		m_container->setPixelSize( castor::Size{ uint32_t( m_posX ), 20 } );
-		m_firstLinePanel->setPixelSize( castor::Size{ uint32_t( m_posX ), 20 } );
+		m_gpu.value->setPixelSize( castor::Size{ GpuValueWidth, PanelHeight } );
+		m_posX += GpuValueWidth;
+		m_container->setPixelSize( castor::Size{ uint32_t( m_posX ), PanelHeight } );
+		m_firstLinePanel->setPixelSize( castor::Size{ uint32_t( m_posX ), PanelHeight } );
 
 		m_name->setFont( cuT( "Arial16" ) );
 		m_cpu.name->setFont( cuT( "Arial10" ) );
@@ -379,18 +381,6 @@ namespace castor3d
 			m_cache->remove( m_firstLinePanel->getOverlayName() );
 			m_cache->remove( m_container->getOverlayName() );
 		}
-	}
-
-	void DebugOverlays::CategoryOverlays::initialise( uint32_t offset )
-	{
-		if ( !m_container )
-		{
-			return;
-		}
-
-		m_container->setPixelPosition( castor::Position{ 330, int32_t( 20 * offset ) } );
-		m_container->setPixelSize( castor::Size{ uint32_t( m_posX )
-			, ( ( m_detailed && *m_detailed ) ? getPanelCount() : 1u ) * 20u } );
 	}
 
 	void DebugOverlays::CategoryOverlays::addTimer( FramePassTimer & timer )
@@ -458,23 +448,25 @@ namespace castor3d
 			return;
 		}
 
-		m_visible = m_cpu.time >= std::chrono::duration_cast< castor::Nanoseconds >( std::chrono::microseconds( 10 ) )
-			|| m_gpu.time >= std::chrono::duration_cast< castor::Nanoseconds >( std::chrono::microseconds( 10 ) );
+		m_visible = m_cpu.time > 0_ns && m_gpu.time > 0_ns;
 
 		if ( m_visible && m_parentVisible )
 		{
-			m_container->setPixelPosition( { m_container->getPixelPosition().x(), int32_t( top ) } );
-			top += m_container->getPixelSize().getHeight();
+			m_container->setPixelPosition( castor::Position{ PassPanelLeft, int32_t( top ) } );
 			m_cpu.value->setCaption( castor::string::toU32String( castor::string::toString( m_cpu.time ) ) );
 			m_gpu.value->setCaption( castor::string::toU32String( castor::string::toString( m_gpu.time ) ) );
+			uint32_t height = PanelHeight;
 
 			for ( auto & pass : m_passes )
 			{
 				if ( pass )
 				{
-					pass->update();
+					pass->update( height );
 				}
 			}
+
+			m_container->setPixelSize( castor::Size{ uint32_t( m_posX ), height } );
+			top += height;
 		}
 
 		m_container->setVisible( m_visible && m_parentVisible );
@@ -535,21 +527,6 @@ namespace castor3d
 		}
 
 		m_renderInfo = RenderInfo{};
-
-		if ( m_dirty )
-		{
-			uint32_t offset = 0u;
-			auto lock( castor::makeUniqueLock( m_mutex ) );
-
-			for ( auto & renderPass : m_renderPasses )
-			{
-				renderPass.second.initialise( offset );
-				offset += ( m_detailed
-					? renderPass.second.getPanelCount()
-					: 1u );
-			}
-		}
-
 		m_externalTime = m_frameTimer.getElapsed();
 		return m_renderInfo;
 	}
@@ -616,7 +593,7 @@ namespace castor3d
 				, std::next( m_framesTimes.begin(), ptrdiff_t( count ) )
 				, 0_ns ) / count;
 			m_averageFps = 1000000.0f / float( std::chrono::duration_cast< castor::Microseconds >( m_averageTime ).count() );
-			auto v = ( ++m_frameIndex ) % FRAME_SAMPLES_COUNT;
+			auto v = ( ++m_frameIndex ) % FrameSamplesCount;
 			m_frameIndex = v;
 		}
 

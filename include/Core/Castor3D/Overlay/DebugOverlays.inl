@@ -116,10 +116,10 @@ namespace castor3d
 	{
 		auto & engine = m_cache.getEngine();
 
-		m_titlePanel->setPixelSize( castor::Size{ 320, 20 } );
+		m_titlePanel->setPixelSize( castor::Size{ DebugPanelWidth, PanelHeight } );
 		m_titlePanel->setMaterial( engine.findMaterial( cuT( "AlphaDarkBlue" ) ).lock().get() );
 
-		m_titleText->setPixelSize( castor::Size{ 300, 20 } );
+		m_titleText->setPixelSize( castor::Size{ DebugTitleWidth, PanelHeight } );
 		m_titleText->setVAlign( VAlign::eCenter );
 		m_titleText->setHAlign( HAlign::eCenter );
 		m_titleText->setMaterial( engine.findMaterial( cuT( "White" ) ).lock().get() );
@@ -158,13 +158,13 @@ namespace castor3d
 	int DebugOverlays::DebugPanelsT< T >::updatePosition( int y )
 	{
 		m_titlePanel->setPixelPosition( castor::Position{ 0, y } );
-		m_titleText->setPixelPosition( castor::Position{ 10, 0 } );
-		y += 20;
+		m_titleText->setPixelPosition( castor::Position{ DebugTitleOffset, 0 } );
+		y += PanelHeight;
 
 		for ( auto & panel : m_panels )
 		{
 			panel.updatePosition( y );
-			y += 20;
+			y += PanelHeight;
 		}
 
 		return y;

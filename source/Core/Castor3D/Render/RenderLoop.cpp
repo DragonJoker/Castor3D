@@ -49,6 +49,7 @@ namespace castor3d
 	{
 		{
 			auto lock( castor::makeUniqueLock( m_debugOverlaysMtx ) );
+			m_debugOverlays->enableDetailed( true );
 			m_debugOverlays->initialise( getEngine()->getOverlayCache() );
 		}
 
