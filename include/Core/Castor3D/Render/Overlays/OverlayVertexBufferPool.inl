@@ -50,6 +50,22 @@ namespace castor3d
 	}
 
 	template< typename VertexT, uint32_t CountT >
+	void OverlayVertexBufferPoolT< VertexT, CountT >::clearDrawDescriptorSets( FontTexture const * fontTexture )
+	{
+		auto it = m_pipelines.find( fontTexture );
+
+		if ( it != m_pipelines.end() )
+		{
+			for ( auto & pipelines : it->second )
+			{
+				m_retired.emplace_back( std::move( pipelines.second ) );
+			}
+
+			it->second.clear();
+		}
+	}
+
+	template< typename VertexT, uint32_t CountT >
 	ashes::DescriptorSetCRefArray const & OverlayVertexBufferPoolT< VertexT, CountT >::getDrawDescriptorSets( OverlayRenderNode const & node
 		, FontTexture const * fontTexture
 		, ashes::DescriptorSet const * textDescriptorSet )
@@ -190,6 +206,8 @@ namespace castor3d
 		{
 			textBuffer->upload( cb );
 		}
+
+		m_retired.clear();
 	}
 
 	template< typename VertexT, uint32_t CountT >

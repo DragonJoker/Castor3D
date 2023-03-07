@@ -606,9 +606,10 @@ namespace castor3d
 				, fontTexture.getSampler().lock()->getSampler() );
 			result->update();
 			descriptorConnection.descriptorSet = std::move( result );
-			descriptorConnection.connection = fontTexture.onResourceChanged.connect( [this, &descriptorConnection]( DoubleBufferedTextureLayout const & )
+			descriptorConnection.connection = fontTexture.onResourceChanged.connect( [this, &descriptorConnection, &fontTexture]( DoubleBufferedTextureLayout const & )
 				{
 					m_retired.emplace_back( std::move( descriptorConnection.descriptorSet ) );
+					m_textVertexBuffer->clearDrawDescriptorSets( &fontTexture );
 				} );
 		}
 
