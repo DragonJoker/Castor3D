@@ -43,8 +43,18 @@ namespace GuiCommon
 			m_materials = getMaterialsList();
 			addProperty( grid, PROPERTY_CATEGORY_OVERLAY + wxString( overlay->getOverlayName() ) );
 			addPropertyT( grid, PROPERTY_OVERLAY_VISIBLE, overlay->isVisible(), overlay.get(), &castor3d::OverlayCategory::setVisible );
-			addPropertyT( grid, PROPERTY_OVERLAY_POSITION, overlay->computePixelPosition(), overlay.get(), &castor3d::OverlayCategory::setPixelPosition );
-			addPropertyT( grid, PROPERTY_OVERLAY_SIZE, overlay->computePixelSize(), overlay.get(), &castor3d::OverlayCategory::setPixelSize );
+			addProperty( grid, PROPERTY_OVERLAY_POSITION, overlay->computePixelPosition()
+				, [this]( wxVariant const & var )
+				{
+					castor3d::OverlayCategorySPtr ov = getOverlay();
+					ov->setPixelPosition( PositionRefFromVariant( var ) );
+				} );
+			addProperty( grid, PROPERTY_OVERLAY_SIZE, overlay->computePixelSize()
+				, [this]( wxVariant const & var )
+				{
+					castor3d::OverlayCategorySPtr ov = getOverlay();
+					ov->setPixelSize( SizeRefFromVariant( var ) );
+				} );
 			addProperty( grid, PROPERTY_OVERLAY_MATERIAL, m_materials, overlay->getMaterial()->getName()
 				, [this]( wxVariant const & var )
 				{

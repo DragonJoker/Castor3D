@@ -255,34 +255,54 @@ namespace castor3d
 		*	Mutateurs.
 		*/
 		/**@{*/
-		void setRelativePosition( castor::Point2d const & value )noexcept
+		void setRelativePosition( castor::Point2d const & value
+			, bool notify = true )noexcept
 		{
 			m_relPosition = value;
 			m_positionChanged = true;
-			notifyPositionChanged();
+
+			if ( notify )
+			{
+				notifyPositionChanged();
+			}
 		}
 
-		void setRelativeSize( castor::Point2d const & value )noexcept
+		void setRelativeSize( castor::Point2d const & value
+			, bool notify = true )noexcept
 		{
 			m_relSize = value;
 			m_relSize->x = std::max( 0.0, m_relSize->x );
 			m_relSize->y = std::max( 0.0, m_relSize->y );
 			m_sizeChanged = true;
-			notifySizeChanged();
+
+			if ( notify )
+			{
+				notifySizeChanged();
+			}
 		}
 
-		void setPixelPosition( castor::Position const & value )noexcept
+		void setPixelPosition( castor::Position const & value
+			, bool notify = true )noexcept
 		{
 			m_pxPosition = value;
 			m_positionChanged = true;
-			notifyPositionChanged();
+
+			if ( notify )
+			{
+				notifyPositionChanged();
+			}
 		}
 
-		void setPixelSize( castor::Size const & value )noexcept
+		void setPixelSize( castor::Size const & value
+			, bool notify = true )noexcept
 		{
 			m_pxSize = value;
 			m_sizeChanged = true;
-			notifySizeChanged();
+
+			if ( notify )
+			{
+				notifySizeChanged();
+			}
 		}
 
 		void setOverlay( Overlay * value )noexcept

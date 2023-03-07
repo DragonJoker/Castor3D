@@ -34,7 +34,10 @@ namespace castor
 			, castor3d::OverlayCategorySPtr b )const
 		{
 			return a->getLevel() < b->getLevel()
-				|| ( a->getLevel() == b->getLevel() && a->getIndex() < b->getIndex() );
+				|| ( a->getLevel() == b->getLevel()
+					&& ( uint32_t( a->getType() ) < uint32_t( b->getType() )
+						|| ( uint32_t( a->getType() ) == uint32_t( b->getType() )
+							&& a->getIndex() < b->getIndex() ) ) );
 		}
 	};
 	using OverlayCategorySet = std::set< castor3d::OverlayCategorySPtr, OverlayCategorySort >;
@@ -159,9 +162,9 @@ namespace castor
 		castor3d::OverlayFactory m_overlayFactory;
 		OverlayCategorySet m_overlays;
 		castor3d::Viewport m_viewport;
-		std::vector< uint32_t > m_overlayCountPerLevel;
 		Matrix4x4f m_projection;
 		FontTextureStrMap m_fontTextures;
+		std::map< uint32_t, std::map< uint32_t, uint32_t > > m_overlayCountPerLevel;
 	};
 }
 
