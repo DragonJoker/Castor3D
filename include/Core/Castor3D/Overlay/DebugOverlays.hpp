@@ -371,6 +371,7 @@ namespace castor3d
 		static uint32_t constexpr CpuValueWidth = 75u;
 		static uint32_t constexpr GpuNameWidth = 30u;
 		static uint32_t constexpr GpuValueWidth = 75u;
+		static uint32_t constexpr PanelBaseLevel = 65536u;
 
 		std::mutex m_mutex;
 		castor::PreciseTimer m_taskTimer{};

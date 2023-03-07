@@ -214,12 +214,12 @@ namespace castor3d
 			return m_material;
 		}
 
-		int getIndex()const noexcept
+		uint32_t getIndex()const noexcept
 		{
 			return m_index;
 		}
 
-		int getLevel()const noexcept
+		uint32_t getLevel()const noexcept
 		{
 			return m_level;
 		}
@@ -288,7 +288,7 @@ namespace castor3d
 			m_visible = value;
 		}
 
-		void setOrder( int index, int level )noexcept
+		void setOrder( uint32_t level, uint32_t index )noexcept
 		{
 			m_index = index;
 			m_level = level;
@@ -371,10 +371,10 @@ namespace castor3d
 		MaterialRPtr m_material{};
 		//!\~english	The overlay index.
 		//!\~french		L'index de l'overlay.
-		int m_index{ 0 };
+		uint32_t m_index{ 0 };
 		//!\~english	The overlay level.
 		//!\~french		Le niveau de l'overlay.
-		int m_level{ 0 };
+		uint32_t m_level{ 0 };
 		//!\~english	The overlay type.
 		//!\~french		Le type de l'incrustation.
 		OverlayType m_type;

@@ -29,7 +29,8 @@ namespace castor3d
 			, cache.getEngine()
 			, OverlayType::ePanel
 			, nullptr
-			, nullptr ).lock()->getPanelOverlay() }
+			, nullptr
+			, PanelBaseLevel ).lock()->getPanelOverlay() }
 		, m_times{ std::make_unique< DebugPanelsT< castor::Nanoseconds > >( cuT( "Times" ), m_panel, cache ) }
 		, m_fps{ std::make_unique< DebugPanelsT< float > >( cuT( "FPS" ), m_panel, cache ) }
 		, m_counts{ std::make_unique< DebugPanelsT< uint32_t > >( cuT( "Counts" ), m_panel, cache ) }
@@ -285,7 +286,8 @@ namespace castor3d
 			, cache.getEngine()
 			, OverlayType::ePanel
 			, nullptr
-			, nullptr ).lock()->getPanelOverlay();
+			, nullptr
+			, PanelBaseLevel ).lock()->getPanelOverlay();
 		m_firstLinePanel = cache.add( baseName + cuT( "_TitlePanel" )
 			, cache.getEngine()
 			, OverlayType::ePanel

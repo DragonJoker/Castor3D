@@ -34,7 +34,7 @@ namespace castor
 			m_overlayCountPerLevel.resize( m_overlayCountPerLevel.size() * 2 );
 		}
 
-		overlay.setOrder( ++m_overlayCountPerLevel[level], int( level ) );
+		overlay.setOrder( level, ++m_overlayCountPerLevel[level] );
 		m_overlays.insert( overlay.getCategory() );
 	}
 
@@ -78,7 +78,7 @@ namespace castor
 			, castor::ResourceMergerT< OverlayCache >{ "_" } }
 		, m_engine{ engine }
 		, m_viewport{ engine }
-		, m_overlayCountPerLevel{ 1000, 0 }
+		, m_overlayCountPerLevel{ 0u, 1000u }
 	{
 		m_viewport.setOrtho( 0, 1, 1, 0, 0, 1000 );
 	}
