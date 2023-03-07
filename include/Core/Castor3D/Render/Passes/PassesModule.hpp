@@ -116,15 +116,6 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Overlays render pass.
-	*\~french
-	*\brief
-	*	Passe de rendu des overlays.
-	*/
-	class OverlayPass;
-	/**
-	*\~english
-	*\brief
 	*	Picking render pass.
 	*\~french
 	*\brief

@@ -4,8 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_OverlayPass_H___
 #define ___C3D_OverlayPass_H___
 
-#include "PassesModule.hpp"
-#include "Castor3D/Overlay/OverlayModule.hpp"
+#include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Render/Overlays/OverlaysModule.hpp"
 
 #include <RenderGraph/RunnablePass.hpp>

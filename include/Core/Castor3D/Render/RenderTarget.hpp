@@ -10,6 +10,7 @@ See LICENSE file in root folder
 #include "Castor3D/Miscellaneous/Parameter.hpp"
 #include "Castor3D/Overlay/OverlayModule.hpp"
 #include "Castor3D/Render/Culling/CullingModule.hpp"
+#include "Castor3D/Render/Overlays/OverlaysModule.hpp"
 #include "Castor3D/Render/PostEffect/PostEffectModule.hpp"
 #include "Castor3D/Render/Ssao/SsaoConfig.hpp"
 #include "Castor3D/Render/RenderModule.hpp"

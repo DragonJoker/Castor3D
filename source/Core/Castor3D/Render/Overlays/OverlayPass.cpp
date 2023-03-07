@@ -1,4 +1,4 @@
-#include "Castor3D/Render/Passes/OverlayPass.hpp"
+#include "Castor3D/Render/Overlays/OverlayPass.hpp"
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/OverlayCache.hpp"
