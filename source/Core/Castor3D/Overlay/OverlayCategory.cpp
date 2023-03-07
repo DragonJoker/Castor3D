@@ -25,15 +25,9 @@ namespace castor3d
 	{
 		if ( getOverlay().isVisible() )
 		{
-			if ( isPositionChanged() || renderer.isSizeChanged() )
-			{
-				doUpdatePosition( renderer );
-			}
-
-			if ( isSizeChanged() || renderer.isSizeChanged() )
-			{
-				doUpdateSize( renderer );
-			}
+			updatePosition( renderer );
+			updateSize( renderer );
+			updateScissor( renderer );
 
 			if ( isChanged() || isSizeChanged() || renderer.isSizeChanged() )
 			{
@@ -175,6 +169,14 @@ namespace castor3d
 		return result;
 	}
 
+	VkRect2D OverlayCategory::computeScissor( castor::Size const & size )const
+	{
+		return { VkOffset2D{ std::max( 0, int32_t( std::ceil( size.getWidth() * m_scissorOffset[0] ) ) )
+				, std::max( 0, int32_t( std::ceil( size.getHeight() * m_scissorOffset[1] ) ) ) }
+			, VkExtent2D{ std::max( 1u, uint32_t( std::ceil( size.getWidth() * m_scissorExtent[0] ) ) )
+				, std::max( 1u, uint32_t( std::ceil( size.getHeight() * m_scissorExtent[1] ) ) ) } };
+	}
+
 	void OverlayCategory::notifyPositionChanged()noexcept
 	{
 		if ( m_overlay )
@@ -197,28 +199,12 @@ namespace castor3d
 		}
 	}
 
-	castor::Point2d OverlayCategory::doGetTotalSize( OverlayRenderer const & renderer )const
-	{
-		auto parent = getOverlay().getParent();
-		castor::Size renderSize = renderer.getSize();
-		castor::Point2d totalSize( renderSize.getWidth(), renderSize.getHeight() );
-
-		if ( parent )
-		{
-			castor::Point2d parentSize = parent->getAbsoluteSize();
-			totalSize[0] = parentSize[0] * totalSize[0];
-			totalSize[1] = parentSize[1] * totalSize[1];
-		}
-
-		return totalSize;
-	}
-
-	void OverlayCategory::doUpdatePosition( OverlayRenderer const & renderer )
+	void OverlayCategory::updatePosition( OverlayRenderer const & renderer )
 	{
 		if ( isPositionChanged() || renderer.isSizeChanged() )
 		{
 			castor::Size renderSize = renderer.getSize();
-			castor::Point2d parentSize = doGetTotalSize( renderer );
+			castor::Point2d parentSize = doGetParentSize( renderer );
 			bool changed = m_positionChanged;
 			castor::Position pxPos = getPixelPosition();
 			castor::Point2d relPos = getRelativePosition();
@@ -244,14 +230,16 @@ namespace castor3d
 				setRelativePosition( relPos );
 			}
 		}
+
+		doUpdatePosition( renderer );
 	}
 
-	void OverlayCategory::doUpdateSize( OverlayRenderer const & renderer )
+	void OverlayCategory::updateSize( OverlayRenderer const & renderer )
 	{
 		if ( isSizeChanged() || renderer.isSizeChanged() )
 		{
 			castor::Size renderSize = renderer.getSize();
-			castor::Point2d parentSize = doGetTotalSize( renderer );
+			castor::Point2d parentSize = doGetParentSize( renderer );
 			bool changed = m_sizeChanged;
 			castor::Size pxSize = getPixelSize();
 			castor::Point2d relSize = getRelativeSize();
@@ -277,5 +265,35 @@ namespace castor3d
 				setRelativeSize( relSize );
 			}
 		}
+
+		doUpdateSize( renderer );
+	}
+
+	void OverlayCategory::updateScissor( OverlayRenderer const & renderer )
+	{
+		if ( isChanged() || isPositionChanged() || isSizeChanged() || renderer.isSizeChanged() )
+		{
+			m_scissorOffset = getAbsolutePosition();
+			m_scissorExtent = getAbsoluteSize();
+			doUpdateScissor();
+			m_scissorExtent[0] = std::min( m_scissorExtent[0], 1.0 - m_scissorOffset[0] );
+			m_scissorExtent[1] = std::min( m_scissorExtent[1], 1.0 - m_scissorOffset[1] );
+		}
+	}
+
+	castor::Point2d OverlayCategory::doGetParentSize( OverlayRenderer const & renderer )const
+	{
+		auto parent = getOverlay().getParent();
+		castor::Size renderSize = renderer.getSize();
+		castor::Point2d totalSize( renderSize.getWidth(), renderSize.getHeight() );
+
+		if ( parent )
+		{
+			castor::Point2d parentSize = parent->getAbsoluteSize();
+			totalSize[0] = parentSize[0] * totalSize[0];
+			totalSize[1] = parentSize[1] * totalSize[1];
+		}
+
+		return totalSize;
 	}
 }

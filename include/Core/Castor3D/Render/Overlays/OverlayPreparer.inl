@@ -26,16 +26,14 @@ namespace castor3d
 	template< typename QuadT, typename OverlayT, typename VertexT, uint32_t CountT >
 	void OverlayPreparer::doPrepareOverlayDescriptors( RenderDevice const & device
 		, OverlayT const & overlay
-		, Pass const & pass
+		, OverlayData data
 		, OverlayVertexBufferPoolT< VertexT, CountT > & vertexBuffer
 		, FontTextureSPtr fontTexture
 		, bool secondary )
 	{
 		OverlayVertexBufferIndexT< VertexT, CountT > bufferIndex = vertexBuffer.fill( m_renderer.getSize()
 			, overlay
-			, ( fontTexture
-				? m_renderer.doGetTextNode( device, m_renderPass, pass, *fontTexture->getTexture(), *fontTexture->getSampler().lock() )
-				: m_renderer.doGetPanelNode( device, m_renderPass, pass ) )
+			, *data.node
 			, secondary
 			, fontTexture.get() );
 
@@ -46,7 +44,7 @@ namespace castor3d
 
 		this->doUpdateUbo( bufferIndex.pool.overlaysBuffer[bufferIndex.index]
 			, overlay
-			, pass
+			, data.node->pass
 			, m_renderer.getSize()
 			, uint32_t( bufferIndex.geometryBuffers.offset )
 			, bufferIndex.textBuffer );
@@ -59,10 +57,9 @@ namespace castor3d
 			descriptorSets.push_back( m_renderer.doCreateTextDescriptorSet( *fontTexture ) );
 		}
 
-		m_overlays.push_back( OverlayData{ &overlay.getOverlay()
-			, descriptorSets
-			, bufferIndex.geometryBuffers
-			, bufferIndex.index
-			, &bufferIndex.node.pipeline } );
+		data.descriptorSets = descriptorSets;
+		data.geometryBuffers = bufferIndex.geometryBuffers;
+		data.index = bufferIndex.index;
+		m_overlays.push_back( std::move( data ) );
 	}
 }

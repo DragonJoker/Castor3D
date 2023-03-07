@@ -166,6 +166,13 @@ namespace castor3d
 		 */
 		C3D_API castor::Position computePixelPosition()const;
 		/**
+		 *\~english
+		 *\brief		Computes the scissor for given render size.
+		 *\~french
+		 *\brief		Calcule le scissor pour la taille donnée.
+		 */
+		C3D_API VkRect2D computeScissor( castor::Size const & size )const;
+		/**
 		*\~english
 		*\name
 		*	Getters.
@@ -317,25 +324,61 @@ namespace castor3d
 		C3D_API void notifySizeChanged()noexcept;
 		/**
 		 *\~english
-		 *\return		The screen or parent's size.
-		 *\~french
-		 *\return		La taille de l'écran ou du parent.
-		 */
-		castor::Point2d doGetTotalSize( OverlayRenderer const & renderer )const;
-		/**
-		 *\~english
 		 *\brief		Updates the overlay position, taking care of wanted pixel position.
 		 *\~french
 		 *\brief		Met à jour la position de l'incrustation, en prenant en compte la la position en pixel voulue.
 		 */
-		virtual void doUpdatePosition( OverlayRenderer const & renderer );
+		C3D_API void updatePosition( OverlayRenderer const & renderer );
 		/**
 		 *\~english
 		 *\brief		Updates the overlay size, taking care of wanted pixel size.
 		 *\~french
 		 *\brief		Met à jour la taille de l'incrustation, en prenant en compte la taille en pixel voulue.
 		 */
-		virtual void doUpdateSize( OverlayRenderer const & renderer );
+		C3D_API void updateSize( OverlayRenderer const & renderer );
+		/**
+		 *\~english
+		 *\brief		Updates the scissor for this overlay
+		 *\~french
+		 *\brief		Met à jour le scissor pour cette incrustation
+		 */
+		C3D_API void updateScissor( OverlayRenderer const & renderer );
+
+	private:
+		/**
+		 *\~english
+		 *\return		The screen or parent's size.
+		 *\~french
+		 *\return		La taille de l'écran ou du parent.
+		 */
+		castor::Point2d doGetParentSize( OverlayRenderer const & renderer )const;
+		/**
+		 *\~english
+		 *\brief		Updates the overlay position, taking care of wanted pixel position.
+		 *\~french
+		 *\brief		Met à jour la position de l'incrustation, en prenant en compte la la position en pixel voulue.
+		 */
+		virtual void doUpdatePosition( OverlayRenderer const & renderer )
+		{
+		}
+		/**
+		 *\~english
+		 *\brief		Updates the overlay size, taking care of wanted pixel size.
+		 *\~french
+		 *\brief		Met à jour la taille de l'incrustation, en prenant en compte la taille en pixel voulue.
+		 */
+		virtual void doUpdateSize( OverlayRenderer const & renderer )
+		{
+		}
+		/**
+		 *\~english
+		 *\brief		Updates the scissor for this overlay
+		 *\~french
+		 *\brief		Met à jour le scissor pour cette incrustation
+		 */
+		virtual void doUpdateScissor()
+		{
+		}
 		/**
 		 *\~english
 		 *\brief		Updates the overlay position, size...
@@ -387,6 +430,12 @@ namespace castor3d
 		//!\~english	The UV for the panel.
 		//!\~french		Les UV du panneau.
 		castor::Point4d m_uv{ 0.0, 0.0, 1.0, 1.0 };
+		//!\~english	The scissor offset, in [0, 1] range.
+		//!\~french		L'offset du scissor, dans l'intervalle [0, 1].
+		castor::Point2d m_scissorOffset{};
+		//!\~english	The scissor dimensions, in [0, 1] range.
+		//!\~french		Les dimensions du scissor, dans l'intervalle [0, 1].
+		castor::Point2d m_scissorExtent{};
 	};
 }
 

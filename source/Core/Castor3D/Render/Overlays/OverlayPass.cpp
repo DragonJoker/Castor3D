@@ -27,7 +27,7 @@ namespace castor3d
 					&& category->getMaterial() )
 				{
 					category->update( renderer );
-					category->accept( preparer );
+					preparer.fill( category->getOverlay() );
 				}
 			}
 		}

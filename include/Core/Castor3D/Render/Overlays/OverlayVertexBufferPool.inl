@@ -90,7 +90,7 @@ namespace castor3d
 	template< typename OverlayT >
 	OverlayVertexBufferIndexT< VertexT, CountT > OverlayVertexBufferPoolT< VertexT, CountT >::fill( castor::Size const & renderSize
 		, OverlayT const & overlay
-		, OverlayRenderNode & node
+		, OverlayRenderNode const & node
 		, bool secondary
 		, FontTexture const * fontTexture )
 	{
