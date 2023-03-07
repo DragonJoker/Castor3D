@@ -8,6 +8,7 @@ See LICENSE file in root folder
 #include "Castor3D/Buffer/BufferModule.hpp"
 #include "Castor3D/Material/Pass/PassModule.hpp"
 #include "Castor3D/Overlay/OverlayModule.hpp"
+#include "Castor3D/Overlay/FontTexture.hpp"
 
 #include <CastorUtils/Math/MathModule.hpp>
 
@@ -116,6 +117,24 @@ namespace castor3d
 			ashes::DescriptorSetCRefArray all{};
 		};
 		using DescriptorSetsPtr = std::unique_ptr< DescriptorSets >;
+
+		OverlayPipelineData( OverlayPipelineData const & ) = delete;
+		OverlayPipelineData & operator=( OverlayPipelineData const & ) = delete;
+		OverlayPipelineData( OverlayPipelineData && ) = default;
+		OverlayPipelineData & operator=( OverlayPipelineData && ) = default;
+		OverlayPipelineData() = default;
+		~OverlayPipelineData() = default;
+
+		OverlayPipelineData( ashes::BufferPtr< uint32_t > iDsBuffer,
+			castor::ArrayView< uint32_t > ids,
+			DescriptorSetsPtr descs,
+			uint32_t c )
+			: overlaysIDsBuffer{ std::move( iDsBuffer ) }
+			, overlaysIDs{ std::move( ids ) }
+			, descriptorSets{ std::move( descs ) }
+			, count{ c }
+		{
+		}
 
 		ashes::BufferPtr< uint32_t > overlaysIDsBuffer{};
 		castor::ArrayView< uint32_t > overlaysIDs{};

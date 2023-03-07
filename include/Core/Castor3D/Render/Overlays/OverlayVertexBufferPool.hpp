@@ -45,6 +45,7 @@ namespace castor3d
 			, FontTexture const * fontTexture );
 		void upload( ashes::CommandBuffer const & cb );
 
+		void clearDrawDescriptorSets( FontTexture const * fontTexture );
 		ashes::DescriptorSetCRefArray const & getDrawDescriptorSets( OverlayRenderNode const & node
 			, FontTexture const * fontTexture
 			, ashes::DescriptorSet const * textDescriptorSet );
@@ -71,6 +72,7 @@ namespace castor3d
 	private:
 		using PipelineDataMap = std::map< OverlayPipeline const *, OverlayPipelineData >;
 		std::map< FontTexture const *, PipelineDataMap > m_pipelines;
+		std::vector< OverlayPipelineData > m_retired;
 
 	private:
 		ashes::DescriptorSetPtr doCreateDescriptorSet( std::string debugName
