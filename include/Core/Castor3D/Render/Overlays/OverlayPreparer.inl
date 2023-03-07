@@ -42,14 +42,15 @@ namespace castor3d
 			return;
 		}
 
-		this->doUpdateUbo( bufferIndex.pool.overlaysBuffer[bufferIndex.index]
+		this->doUpdateUbo( bufferIndex.pool.overlaysBuffer[bufferIndex.overlayIndex]
 			, overlay
 			, data.node->pass
 			, m_renderer.getSize()
 			, uint32_t( bufferIndex.geometryBuffers.offset )
 			, bufferIndex.textBuffer );
 		data.geometryBuffers = bufferIndex.geometryBuffers;
-		data.index = bufferIndex.index;
+		data.overlayIndex = bufferIndex.overlayIndex;
+		data.pipelineIndex = bufferIndex.pipelineIndex;
 		m_overlays.push_back( std::move( data ) );
 	}
 }

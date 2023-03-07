@@ -128,10 +128,12 @@ namespace castor3d
 		}
 
 		auto & pipelineData = it->second;
+		auto pipelineIndex = pipelineData.count++;
 		OverlayVertexBufferIndexT< VertexT, CountT > result{ *this
 			, node
 			, pipelineData
-			, index };
+			, index
+			, pipelineIndex };
 		auto count = overlay.getCount( secondary );
 
 		if ( !count
@@ -156,11 +158,11 @@ namespace castor3d
 		{
 			if ( textBuffer && fontTexture )
 			{
-				result.textBuffer = textBuffer->fill( result.index, fontTexture, renderSize, overlay, node, secondary );
+				result.textBuffer = textBuffer->fill( result.overlayIndex, fontTexture, renderSize, overlay, node, secondary );
 			}
 		}
 
-		result.pipelineData.overlaysIDs[index] = result.index;
+		result.pipelineData.overlaysIDs[pipelineIndex] = result.overlayIndex;
 		allocated += count;
 		++index;
 
@@ -172,6 +174,14 @@ namespace castor3d
 	{
 		if ( allocated )
 		{
+			for ( auto & pipelines : m_pipelines )
+			{
+				for ( auto & it : pipelines.second )
+				{
+					it.second.count = 0u;
+				}
+			}
+
 			allocated = 0u;
 			index = 0u;
 		}
@@ -201,6 +211,10 @@ namespace castor3d
 			, descriptorLayout.getBinding( uint32_t( OverlayBindingId::eTexAnims ) ) );
 		cameraUbo.createSizedBinding( *result
 			, descriptorLayout.getBinding( uint32_t( OverlayBindingId::eCamera ) ) );
+		result->createBinding( descriptorLayout.getBinding( uint32_t( OverlayBindingId::eOverlaysSurfaces ) )
+			, vertexBuffer.getBuffer().getBuffer()
+			, 0u
+			, uint32_t( vertexBuffer.getBuffer().getBuffer().getSize() ) );
 		result->createBinding( descriptorLayout.getBinding( uint32_t( OverlayBindingId::eOverlays ) )
 			, *overlaysData
 			, 0u

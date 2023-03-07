@@ -111,6 +111,8 @@ namespace castor3d::shader
 	struct VertexSurfaceT;
 	template< sdw::var::Flag FlagT >
 	struct VoxelSurfaceT;
+	template< ast::var::Flag FlagT >
+	struct OverlaySurfaceT;
 
 	template< ast::var::Flag FlagT >
 	using FragmentSurfaceT = RasterizerSurfaceT< sdw::Vec3, FlagT >;
@@ -122,6 +124,7 @@ namespace castor3d::shader
 	using DerivBlendComponents = BlendComponentsT< DerivTex >;
 	using VertexSurface = VertexSurfaceT< sdw::var::Flag::eNone >;
 	using VoxelSurface = VoxelSurfaceT< sdw::var::Flag::eNone >;
+	using OverlaySurface = OverlaySurfaceT< sdw::var::Flag::eNone >;
 
 	class BackgroundModel;
 	class BufferBase;

@@ -9,6 +9,7 @@
 #include "Castor3D/Render/Overlays/OverlayRenderer.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslFont.hpp"
+#include "Castor3D/Shader/Shaders/GlslOverlaySurface.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/OverlayUbo.hpp"
 
@@ -51,26 +52,6 @@ namespace castor3d
 
 	namespace ovrltxt
 	{
-		class Vertex
-			: public sdw::StructInstanceHelperT< "C3D_TextVertex"
-				, sdw::type::MemoryLayout::eStd430
-				, sdw::Vec2Field< "position" >
-				, sdw::Vec2Field< "uv" >
-				, sdw::Vec2Field< "text" > >
-		{
-		public:
-			Vertex( sdw::ShaderWriter & writer
-				, sdw::expr::ExprPtr expr
-				, bool enabled )
-				: StructInstanceHelperT{ writer, std::move( expr ), enabled }
-			{
-			}
-
-			auto position()const { return getMember< "position" >(); }
-			auto uv()const { return getMember< "uv" >(); }
-			auto text()const { return getMember< "text" >(); }
-		};
-
 		class TextChar
 			: public sdw::StructInstanceHelperT< "C3D_TextChar"
 				, sdw::type::MemoryLayout::eStd430
@@ -245,9 +226,11 @@ namespace castor3d
 		shader::FontData c3d_fontData{ writer
 			, uint32_t( TextOverlay::ComputeBindingIdx::eFont )
 			, 0u };
-		auto c3d_vertexData = writer.declArrayStorageBuffer< ovrltxt::Vertex >( "c3d_vertexData"
-			, uint32_t( TextOverlay::ComputeBindingIdx::eVertex )
-			, 0u );
+		C3D_OverlaysSurfaces( writer
+			, TextOverlay::ComputeBindingIdx::eVertex
+			, 0u
+			, true
+			, true );
 
 		auto batchData = writer.declPushConstantsBuffer( "BatchData" );
 		auto c3d_batchOffset = batchData.declMember< sdw::UInt >( "c3d_batchOffset" );
@@ -302,12 +285,12 @@ namespace castor3d
 				// Fill buffer
 				//
 				uint32_t index = 0;
-				c3d_vertexData[offset + index].position() = relative.xy(); c3d_vertexData[offset + index].uv() = texUv.xy(); c3d_vertexData[offset + index].text() = fontUv.xy(); ++index;
-				c3d_vertexData[offset + index].position() = relative.xw(); c3d_vertexData[offset + index].uv() = texUv.xw(); c3d_vertexData[offset + index].text() = fontUv.xw(); ++index;
-				c3d_vertexData[offset + index].position() = relative.zw(); c3d_vertexData[offset + index].uv() = texUv.zw(); c3d_vertexData[offset + index].text() = fontUv.zw(); ++index;
-				c3d_vertexData[offset + index].position() = relative.xy(); c3d_vertexData[offset + index].uv() = texUv.xy(); c3d_vertexData[offset + index].text() = fontUv.xy(); ++index;
-				c3d_vertexData[offset + index].position() = relative.zw(); c3d_vertexData[offset + index].uv() = texUv.zw(); c3d_vertexData[offset + index].text() = fontUv.zw(); ++index;
-				c3d_vertexData[offset + index].position() = relative.zy(); c3d_vertexData[offset + index].uv() = texUv.zy(); c3d_vertexData[offset + index].text() = fontUv.zy(); ++index;
+				c3d_overlaysSurfaces[offset + index].set( relative.xy(), texUv.xy(), fontUv.xy() ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( relative.xw(), texUv.xw(), fontUv.xw() ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( relative.zw(), texUv.zw(), fontUv.zw() ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( relative.xy(), texUv.xy(), fontUv.xy() ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( relative.zw(), texUv.zw(), fontUv.zw() ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( relative.zy(), texUv.zy(), fontUv.zy() ); ++index;
 			}
 			FI;
 		};

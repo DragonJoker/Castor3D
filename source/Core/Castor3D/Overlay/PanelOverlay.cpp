@@ -4,6 +4,7 @@
 #include "Castor3D/Overlay/Overlay.hpp"
 #include "Castor3D/Render/Overlays/OverlayRenderer.hpp"
 #include "Castor3D/Shader/Program.hpp"
+#include "Castor3D/Shader/Shaders/GlslOverlaySurface.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/OverlayUbo.hpp"
 
@@ -38,37 +39,17 @@ namespace castor3d
 		ShaderModule comp{ VK_SHADER_STAGE_COMPUTE_BIT, "PanelOverlayCompute" };
 		sdw::ComputeWriter writer;
 
-		class PanelVertex
-			: public sdw::StructInstanceHelperT< "C3D_PanelVertex"
-			, sdw::type::MemoryLayout::eStd430
-			, sdw::Vec2Field< "position" >
-			, sdw::Vec2Field< "uv" > >
-		{
-		public:
-			PanelVertex( sdw::ShaderWriter & writer
-				, sdw::expr::ExprPtr expr
-				, bool enabled )
-				: StructInstanceHelperT{ writer, std::move( expr ), enabled }
-			{
-			}
-
-			auto position()const {
-				return getMember< "position" >();
-			}
-			auto uv()const {
-				return getMember< "uv" >();
-			}
-		};
-
 		C3D_Camera( writer
 			, 0u
 			, 0u );
 		C3D_Overlays( writer
 			, 1u
 			, 0u );
-		auto c3d_vertexData = writer.declArrayStorageBuffer< PanelVertex >( "c3d_vertexData"
+		C3D_OverlaysSurfaces( writer
 			, 2u
-			, 0u );
+			, 0u
+			, false
+			, true );
 
 		writer.implementMain( 1u
 			, [&]( sdw::ComputeIn in )
@@ -112,12 +93,12 @@ namespace castor3d
 				auto rbUV = writer.declLocale( "rbUV", overlayData.uv().zy() );
 
 				uint32_t index = 0;
-				c3d_vertexData[offset + index].position() = lt; c3d_vertexData[offset + index].uv() = ltUV; ++index;
-				c3d_vertexData[offset + index].position() = lb; c3d_vertexData[offset + index].uv() = lbUV; ++index;
-				c3d_vertexData[offset + index].position() = rb; c3d_vertexData[offset + index].uv() = rbUV; ++index;
-				c3d_vertexData[offset + index].position() = lt; c3d_vertexData[offset + index].uv() = ltUV; ++index;
-				c3d_vertexData[offset + index].position() = rb; c3d_vertexData[offset + index].uv() = rbUV; ++index;
-				c3d_vertexData[offset + index].position() = rt; c3d_vertexData[offset + index].uv() = rtUV; ++index;
+				c3d_overlaysSurfaces[offset + index].set( lt, ltUV ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( lb, lbUV ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( rb, rbUV ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( lt, ltUV ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( rb, rbUV ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( rt, rtUV ); ++index;
 			} );
 		comp.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		return makeShaderState( device, comp );

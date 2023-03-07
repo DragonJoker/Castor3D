@@ -13,13 +13,14 @@ namespace castor3d
 	{
 		operator bool()const
 		{
-			return index != InvalidIndex;
+			return overlayIndex != InvalidIndex;
 		}
 
 		OverlayVertexBufferPoolT< VertexT, CountT > & pool;
 		OverlayRenderNode const & node;
 		OverlayPipelineData const & pipelineData;
-		uint32_t index{};
+		uint32_t overlayIndex{};
+		uint32_t pipelineIndex{};
 		OverlayGeometryBuffers geometryBuffers{};
 		OverlayTextBufferIndex textBuffer{};
 	};

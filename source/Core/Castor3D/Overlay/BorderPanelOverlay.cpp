@@ -5,6 +5,7 @@
 #include "Castor3D/Overlay/Overlay.hpp"
 #include "Castor3D/Render/Overlays/OverlayRenderer.hpp"
 #include "Castor3D/Shader/Program.hpp"
+#include "Castor3D/Shader/Shaders/GlslOverlaySurface.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/OverlayUbo.hpp"
 
@@ -81,37 +82,17 @@ namespace castor3d
 		ShaderModule comp{ VK_SHADER_STAGE_COMPUTE_BIT, "BorderOverlayCompute" };
 		sdw::ComputeWriter writer;
 
-		class PanelVertex
-			: public sdw::StructInstanceHelperT< "C3D_PanelVertex"
-			, sdw::type::MemoryLayout::eStd430
-			, sdw::Vec2Field< "position" >
-			, sdw::Vec2Field< "uv" > >
-		{
-		public:
-			PanelVertex( sdw::ShaderWriter & writer
-				, sdw::expr::ExprPtr expr
-				, bool enabled )
-				: StructInstanceHelperT{ writer, std::move( expr ), enabled }
-			{
-			}
-
-			auto position()const {
-				return getMember< "position" >();
-			}
-			auto uv()const {
-				return getMember< "uv" >();
-			}
-		};
-
 		C3D_Camera( writer
 			, 0u
 			, 0u );
 		C3D_Overlays( writer
 			, 1u
 			, 0u );
-		auto c3d_vertexData = writer.declArrayStorageBuffer< PanelVertex >( "c3d_vertexData"
+		C3D_OverlaysSurfaces( writer
 			, 2u
-			, 0u );
+			, 0u
+			, false
+			, true );
 
 		writer.implementMain( 1u
 			, [&]( sdw::ComputeIn in )
@@ -168,68 +149,68 @@ namespace castor3d
 				auto borderUvBB = writer.declLocale( "borderUvBB", overlayData.borderOuterUV().w() );
 
 				// Corner Top Left
-				c3d_vertexData[offset + index].position() = vec2( borderL, borderT ); c3d_vertexData[offset + index].uv() = vec2( borderUvLL, borderUvTT ); ++index;
-				c3d_vertexData[offset + index].position() = vec2( borderL, centerT ); c3d_vertexData[offset + index].uv() = vec2( borderUvLL, borderUvMT ); ++index;
-				c3d_vertexData[offset + index].position() = vec2( centerL, centerT ); c3d_vertexData[offset + index].uv() = vec2( borderUvML, borderUvMT ); ++index;
-				c3d_vertexData[offset + index].position() = vec2( borderL, borderT ); c3d_vertexData[offset + index].uv() = vec2( borderUvLL, borderUvTT ); ++index;
-				c3d_vertexData[offset + index].position() = vec2( centerL, centerT ); c3d_vertexData[offset + index].uv() = vec2( borderUvML, borderUvMT ); ++index;
-				c3d_vertexData[offset + index].position() = vec2( centerL, borderT ); c3d_vertexData[offset + index].uv() = vec2( borderUvML, borderUvTT ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( borderL, borderT ), vec2( borderUvLL, borderUvTT ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( borderL, centerT ), vec2( borderUvLL, borderUvMT ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( centerL, centerT ), vec2( borderUvML, borderUvMT ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( borderL, borderT ), vec2( borderUvLL, borderUvTT ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( centerL, centerT ), vec2( borderUvML, borderUvMT ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( centerL, borderT ), vec2( borderUvML, borderUvTT ) ); ++index;
 
 				// Border Top
-				c3d_vertexData[offset + index].position() = vec2( centerL, borderT ); c3d_vertexData[offset + index].uv() = vec2( borderUvML, borderUvTT ); ++index;
-				c3d_vertexData[offset + index].position() = vec2( centerL, centerT ); c3d_vertexData[offset + index].uv() = vec2( borderUvML, borderUvMT ); ++index;
-				c3d_vertexData[offset + index].position() = vec2( centerR, centerT ); c3d_vertexData[offset + index].uv() = vec2( borderUvMR, borderUvMT ); ++index;
-				c3d_vertexData[offset + index].position() = vec2( centerL, borderT ); c3d_vertexData[offset + index].uv() = vec2( borderUvML, borderUvTT ); ++index;
-				c3d_vertexData[offset + index].position() = vec2( centerR, centerT ); c3d_vertexData[offset + index].uv() = vec2( borderUvMR, borderUvMT ); ++index;
-				c3d_vertexData[offset + index].position() = vec2( centerR, borderT ); c3d_vertexData[offset + index].uv() = vec2( borderUvMR, borderUvTT ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( centerL, borderT ), vec2( borderUvML, borderUvTT ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( centerL, centerT ), vec2( borderUvML, borderUvMT ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( centerR, centerT ), vec2( borderUvMR, borderUvMT ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( centerL, borderT ), vec2( borderUvML, borderUvTT ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( centerR, centerT ), vec2( borderUvMR, borderUvMT ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( centerR, borderT ), vec2( borderUvMR, borderUvTT ) ); ++index;
 
 				// Corner Top Right
-				c3d_vertexData[offset + index].position() = vec2( centerR, borderT ); c3d_vertexData[offset + index].uv() = vec2( borderUvMR, borderUvTT ); ++index;
-				c3d_vertexData[offset + index].position() = vec2( centerR, centerT ); c3d_vertexData[offset + index].uv() = vec2( borderUvMR, borderUvMT ); ++index;
-				c3d_vertexData[offset + index].position() = vec2( borderR, centerT ); c3d_vertexData[offset + index].uv() = vec2( borderUvRR, borderUvMT ); ++index;
-				c3d_vertexData[offset + index].position() = vec2( centerR, borderT ); c3d_vertexData[offset + index].uv() = vec2( borderUvMR, borderUvTT ); ++index;
-				c3d_vertexData[offset + index].position() = vec2( borderR, centerT ); c3d_vertexData[offset + index].uv() = vec2( borderUvRR, borderUvMT ); ++index;
-				c3d_vertexData[offset + index].position() = vec2( borderR, borderT ); c3d_vertexData[offset + index].uv() = vec2( borderUvRR, borderUvTT ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( centerR, borderT ), vec2( borderUvMR, borderUvTT ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( centerR, centerT ), vec2( borderUvMR, borderUvMT ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( borderR, centerT ), vec2( borderUvRR, borderUvMT ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( centerR, borderT ), vec2( borderUvMR, borderUvTT ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( borderR, centerT ), vec2( borderUvRR, borderUvMT ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( borderR, borderT ), vec2( borderUvRR, borderUvTT ) ); ++index;
 
 				// Border Left
-				c3d_vertexData[offset + index].position() = vec2( borderL, centerT ); c3d_vertexData[offset + index].uv() = vec2( borderUvLL, borderUvMT ); ++index;
-				c3d_vertexData[offset + index].position() = vec2( borderL, centerB ); c3d_vertexData[offset + index].uv() = vec2( borderUvLL, borderUvMB ); ++index;
-				c3d_vertexData[offset + index].position() = vec2( centerL, centerB ); c3d_vertexData[offset + index].uv() = vec2( borderUvML, borderUvMB ); ++index;
-				c3d_vertexData[offset + index].position() = vec2( borderL, centerT ); c3d_vertexData[offset + index].uv() = vec2( borderUvLL, borderUvMT ); ++index;
-				c3d_vertexData[offset + index].position() = vec2( centerL, centerB ); c3d_vertexData[offset + index].uv() = vec2( borderUvML, borderUvMB ); ++index;
-				c3d_vertexData[offset + index].position() = vec2( centerL, centerT ); c3d_vertexData[offset + index].uv() = vec2( borderUvML, borderUvMT ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( borderL, centerT ), vec2( borderUvLL, borderUvMT ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( borderL, centerB ), vec2( borderUvLL, borderUvMB ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( centerL, centerB ), vec2( borderUvML, borderUvMB ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( borderL, centerT ), vec2( borderUvLL, borderUvMT ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( centerL, centerB ), vec2( borderUvML, borderUvMB ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( centerL, centerT ), vec2( borderUvML, borderUvMT ) ); ++index;
 
 				// Border Right
-				c3d_vertexData[offset + index].position() = vec2( centerR, centerT ); c3d_vertexData[offset + index].uv() = vec2( borderUvMR, borderUvMT ); ++index;
-				c3d_vertexData[offset + index].position() = vec2( centerR, centerB ); c3d_vertexData[offset + index].uv() = vec2( borderUvMR, borderUvMB ); ++index;
-				c3d_vertexData[offset + index].position() = vec2( borderR, centerB ); c3d_vertexData[offset + index].uv() = vec2( borderUvRR, borderUvMB ); ++index;
-				c3d_vertexData[offset + index].position() = vec2( centerR, centerT ); c3d_vertexData[offset + index].uv() = vec2( borderUvMR, borderUvMT ); ++index;
-				c3d_vertexData[offset + index].position() = vec2( borderR, centerB ); c3d_vertexData[offset + index].uv() = vec2( borderUvRR, borderUvMB ); ++index;
-				c3d_vertexData[offset + index].position() = vec2( borderR, centerT ); c3d_vertexData[offset + index].uv() = vec2( borderUvRR, borderUvMT ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( centerR, centerT ), vec2( borderUvMR, borderUvMT ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( centerR, centerB ), vec2( borderUvMR, borderUvMB ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( borderR, centerB ), vec2( borderUvRR, borderUvMB ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( centerR, centerT ), vec2( borderUvMR, borderUvMT ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( borderR, centerB ), vec2( borderUvRR, borderUvMB ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( borderR, centerT ), vec2( borderUvRR, borderUvMT ) ); ++index;
 
 				// Corner Bottom Left
-				c3d_vertexData[offset + index].position() = vec2( borderL, centerB ); c3d_vertexData[offset + index].uv() = vec2( borderUvLL, borderUvMB ); ++index;
-				c3d_vertexData[offset + index].position() = vec2( borderL, borderB ); c3d_vertexData[offset + index].uv() = vec2( borderUvLL, borderUvBB ); ++index;
-				c3d_vertexData[offset + index].position() = vec2( centerL, borderB ); c3d_vertexData[offset + index].uv() = vec2( borderUvML, borderUvBB ); ++index;
-				c3d_vertexData[offset + index].position() = vec2( borderL, centerB ); c3d_vertexData[offset + index].uv() = vec2( borderUvLL, borderUvMB ); ++index;
-				c3d_vertexData[offset + index].position() = vec2( centerL, borderB ); c3d_vertexData[offset + index].uv() = vec2( borderUvML, borderUvBB ); ++index;
-				c3d_vertexData[offset + index].position() = vec2( centerL, centerB ); c3d_vertexData[offset + index].uv() = vec2( borderUvML, borderUvMB ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( borderL, centerB ), vec2( borderUvLL, borderUvMB ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( borderL, borderB ), vec2( borderUvLL, borderUvBB ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( centerL, borderB ), vec2( borderUvML, borderUvBB ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( borderL, centerB ), vec2( borderUvLL, borderUvMB ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( centerL, borderB ), vec2( borderUvML, borderUvBB ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( centerL, centerB ), vec2( borderUvML, borderUvMB ) ); ++index;
 
 				// Border Bottom
-				c3d_vertexData[offset + index].position() = vec2( centerL, centerB ); c3d_vertexData[offset + index].uv() = vec2( borderUvML, borderUvMB ); ++index;
-				c3d_vertexData[offset + index].position() = vec2( centerL, borderB ); c3d_vertexData[offset + index].uv() = vec2( borderUvML, borderUvBB ); ++index;
-				c3d_vertexData[offset + index].position() = vec2( centerR, borderB ); c3d_vertexData[offset + index].uv() = vec2( borderUvMR, borderUvBB ); ++index;
-				c3d_vertexData[offset + index].position() = vec2( centerL, centerB ); c3d_vertexData[offset + index].uv() = vec2( borderUvML, borderUvMB ); ++index;
-				c3d_vertexData[offset + index].position() = vec2( centerR, borderB ); c3d_vertexData[offset + index].uv() = vec2( borderUvMR, borderUvBB ); ++index;
-				c3d_vertexData[offset + index].position() = vec2( centerR, centerB ); c3d_vertexData[offset + index].uv() = vec2( borderUvMR, borderUvMB ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( centerL, centerB ), vec2( borderUvML, borderUvMB ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( centerL, borderB ), vec2( borderUvML, borderUvBB ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( centerR, borderB ), vec2( borderUvMR, borderUvBB ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( centerL, centerB ), vec2( borderUvML, borderUvMB ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( centerR, borderB ), vec2( borderUvMR, borderUvBB ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( centerR, centerB ), vec2( borderUvMR, borderUvMB ) ); ++index;
 
 				// Corner Bottom Right
-				c3d_vertexData[offset + index].position() = vec2( centerR, centerB ); c3d_vertexData[offset + index].uv() = vec2( borderUvMR, borderUvMB ); ++index;
-				c3d_vertexData[offset + index].position() = vec2( centerR, borderB ); c3d_vertexData[offset + index].uv() = vec2( borderUvMR, borderUvBB ); ++index;
-				c3d_vertexData[offset + index].position() = vec2( borderR, borderB ); c3d_vertexData[offset + index].uv() = vec2( borderUvRR, borderUvBB ); ++index;
-				c3d_vertexData[offset + index].position() = vec2( centerR, centerB ); c3d_vertexData[offset + index].uv() = vec2( borderUvMR, borderUvMB ); ++index;
-				c3d_vertexData[offset + index].position() = vec2( borderR, borderB ); c3d_vertexData[offset + index].uv() = vec2( borderUvRR, borderUvBB ); ++index;
-				c3d_vertexData[offset + index].position() = vec2( borderR, centerB ); c3d_vertexData[offset + index].uv() = vec2( borderUvRR, borderUvMB ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( centerR, centerB ), vec2( borderUvMR, borderUvMB ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( centerR, borderB ), vec2( borderUvMR, borderUvBB ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( borderR, borderB ), vec2( borderUvRR, borderUvBB ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( centerR, centerB ), vec2( borderUvMR, borderUvMB ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( borderR, borderB ), vec2( borderUvRR, borderUvBB ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( borderR, centerB ), vec2( borderUvRR, borderUvMB ) ); ++index;
 			} );
 		comp.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		return makeShaderState( device, comp );

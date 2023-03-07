@@ -23,6 +23,7 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
+#include "Castor3D/Shader/Shaders/GlslOverlaySurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslPassShaders.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
@@ -56,73 +57,6 @@ namespace castor3d
 			eOpacity = 0x04,
 		};
 
-		template< ast::var::Flag FlagT >
-		struct OverlaySurfaceT
-			: public sdw::StructInstance
-		{
-			OverlaySurfaceT( sdw::ShaderWriter & writer
-				, sdw::expr::ExprPtr expr
-				, bool enabled )
-				: StructInstance{ writer, std::move( expr ), enabled }
-				, position{ this->getMember< sdw::Vec2 >( "position", true ) }
-				, texture{ this->getMember< sdw::Vec2 >( "texture", true ) }
-				, text{ this->getMember< sdw::Vec2 >( "text", true ) }
-				, materialId{ this->getMember< sdw::UInt >( "materialId", true ) }
-			{
-			}
-
-			SDW_DeclStructInstance( , OverlaySurfaceT );
-
-			static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache
-				, bool hasPosition
-				, bool isTextOverlay
-				, bool hasTextures
-				, bool isTransition )
-			{
-				auto result = cache.getStruct( ast::type::MemoryLayout::eC
-					, "C3D_OverlaySurface" );
-
-				if ( result->empty() )
-				{
-					result->declMember( "position", ast::type::Kind::eVec2F, ast::type::NotArray, hasPosition );
-					result->declMember( "texture", ast::type::Kind::eVec2F, ast::type::NotArray, hasTextures );
-					result->declMember( "text", ast::type::Kind::eVec2F, ast::type::NotArray, isTextOverlay );
-					result->declMember( "materialId", ast::type::Kind::eUInt, ast::type::NotArray, isTransition );
-				}
-
-				return result;
-			}
-
-			static ast::type::IOStructPtr makeIOType( ast::type::TypesCache & cache
-				, bool hasPosition
-				, bool isTextOverlay
-				, bool hasTextures
-				, bool isTransition )
-			{
-				auto result = cache.getIOStruct( ast::type::MemoryLayout::eC
-					, "C3D_" + ( FlagT == sdw::var::Flag::eShaderOutput
-						? std::string{ "Out" }
-						: std::string{ "In" } ) + "OverlaySurface"
-					, FlagT );
-
-				if ( result->empty() )
-				{
-					result->declMember( "position", ast::type::Kind::eVec2F, ast::type::NotArray, 0u, hasPosition );
-					result->declMember( "texture", ast::type::Kind::eVec2F, ast::type::NotArray, 1u, hasTextures );
-					result->declMember( "text", ast::type::Kind::eVec2F, ast::type::NotArray, 2u, isTextOverlay );
-					result->declMember( "materialId", ast::type::Kind::eUInt, ast::type::NotArray, 3u, isTransition );
-				}
-
-				return result;
-			}
-
-			sdw::Vec2 position;
-			sdw::Vec2 texture;
-			sdw::Vec2 text;
-			sdw::UInt materialId;
-		};
-		using OverlaySurface = OverlaySurfaceT< sdw::var::Flag::eNone >;
-
 		struct OverlayBlendComponents
 			: public shader::BlendComponents
 		{
@@ -145,7 +79,7 @@ namespace castor3d
 			template< ast::var::Flag FlagT >
 			OverlayBlendComponents( shader::Materials const & materials
 				, shader::Material const & material
-				, OverlaySurfaceT< FlagT > const & surface )
+				, shader::OverlaySurfaceT< FlagT > const & surface )
 				: OverlayBlendComponents{ *materials.getWriter()
 					, makeInit( *materials.getWriter(), materials, material, surface )
 					, true }
@@ -174,7 +108,7 @@ namespace castor3d
 			static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache
 				, shader::Materials const & materials
 				, shader::Material const & material
-				, OverlaySurfaceT< FlagT > const & surface
+				, shader::OverlaySurfaceT< FlagT > const & surface
 				, sdw::expr::ExprList & inits )
 			{
 				auto result = cache.getStruct( ast::type::MemoryLayout::eC, "C3D_OverlayBlendComponents" );
@@ -186,7 +120,7 @@ namespace castor3d
 			static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache
 				, shader::Materials const & materials
 				, shader::Material const & material
-				, OverlaySurfaceT< FlagT > const & surface )
+				, shader::OverlaySurfaceT< FlagT > const & surface )
 			{
 				sdw::expr::ExprList inits;
 				return makeType( cache, materials, material, surface, inits );
@@ -205,7 +139,7 @@ namespace castor3d
 			static sdw::expr::ExprPtr makeInit( sdw::ShaderWriter & writer
 				, shader::Materials const & materials
 				, shader::Material const & material
-				, OverlaySurfaceT< FlagT > const & surface )
+				, shader::OverlaySurfaceT< FlagT > const & surface )
 			{
 				sdw::expr::ExprList initializers;
 				auto type = OverlayBlendComponents::makeType( writer.getTypesCache(), materials, material, surface, initializers );
@@ -391,6 +325,9 @@ namespace castor3d
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 				, VK_SHADER_STAGE_VERTEX_BIT ) );
 			baseBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( OverlayBindingId::eOverlaysIDs )
+				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+				, VK_SHADER_STAGE_VERTEX_BIT ) );
+			baseBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( OverlayBindingId::eOverlaysSurfaces )
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 				, VK_SHADER_STAGE_VERTEX_BIT ) );
 			return device->createDescriptorSetLayout( "OverlaysBase"
@@ -722,7 +659,7 @@ namespace castor3d
 		auto pipeline = device->createPipeline( name
 			, { 0u
 				, std::move( program )
-				, *vertexLayout
+				, ashes::PipelineVertexInputStateCreateInfo{ 0u, {}, {} }
 				, ashes::PipelineInputAssemblyStateCreateInfo{ 0u, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST }
 				, ashes::nullopt
 				, ashes::PipelineViewportStateCreateInfo{}
@@ -954,23 +891,33 @@ namespace castor3d
 			C3D_OverlaysIDs( writer
 				, OverlayBindingId::eOverlaysIDs
 				, 0u );
+			C3D_OverlaysSurfaces( writer
+				, OverlayBindingId::eOverlaysSurfaces
+				, 0u
+				, textOverlay
+				, true  /* hasTextures */ );
 
 			sdw::PushConstantBuffer pcb{ writer, "C3D_DrawData", "c3d_drawData" };
 			auto overlaySubID = pcb.declMember< sdw::UInt >( "overlaySubID" );
 			pcb.end();
 
-			writer.implementMainT< ovrlrend::OverlaySurfaceT, ovrlrend::OverlaySurfaceT >( VertexInT< ovrlrend::OverlaySurfaceT >{ writer, true, textOverlay, hasTexture, false }
-				, VertexOutT< ovrlrend::OverlaySurfaceT >{ writer, false, textOverlay, hasTexture, true }
-				, [&]( VertexInT< ovrlrend::OverlaySurfaceT > in
-					, VertexOutT< ovrlrend::OverlaySurfaceT > out )
+			writer.implementMainT< sdw::VoidT, shader::OverlaySurfaceT >( sdw::VertexIn{ writer }
+				, VertexOutT< shader::OverlaySurfaceT >{ writer, false, textOverlay, hasTexture, true }
+				, [&]( sdw::VertexIn in
+					, VertexOutT< shader::OverlaySurfaceT > out )
 				{
-					out.texture = in.texture;
-					out.text = in.text;
 					auto overlayID = writer.declLocale( "overlayID"
 						, c3d_overlaysIDs[overlaySubID] );
 					auto overlaysData = writer.declLocale( "overlaysData"
 						, c3d_overlaysData[overlayID] );
-					out.vtx.position = c3d_cameraData.viewToProj( vec4( vec2( c3d_cameraData.renderSize() ) * overlaysData.modelToView( in.position )
+					auto vertexOffset = writer.declLocale( "vertexOffset"
+						, writer.cast< sdw::UInt >( in.vertexIndex ) + overlaysData.vertexOffset() );
+					auto surface = writer.declLocale( "vertex"
+						, c3d_overlaysSurfaces[vertexOffset] );
+
+					out.texUV = surface.texUV;
+					out.fontUV = surface.fontUV;
+					out.vtx.position = c3d_cameraData.viewToProj( vec4( vec2( c3d_cameraData.renderSize() ) * overlaysData.modelToView( surface.position )
 							, 0.0_f
 							, 1.0_f ) );
 					out.position = out.vtx.position.xy();
@@ -1017,9 +964,9 @@ namespace castor3d
 			// Shader outputs
 			auto outColour = writer.declOutput< Vec4 >( "outColour", 0 );
 
-			writer.implementMainT< ovrlrend::OverlaySurfaceT, VoidT >( FragmentInT< ovrlrend::OverlaySurfaceT >{ writer, false, textOverlay, hasTexture, true }
+			writer.implementMainT< shader::OverlaySurfaceT, VoidT >( FragmentInT< shader::OverlaySurfaceT >{ writer, false, textOverlay, hasTexture, true }
 				, FragmentOut{ writer }
-					, [&]( FragmentInT< ovrlrend::OverlaySurfaceT > in
+					, [&]( FragmentInT< shader::OverlaySurfaceT > in
 						, FragmentOut out )
 				{
 					auto material = writer.declLocale( "material"
@@ -1027,7 +974,7 @@ namespace castor3d
 
 					if ( textOverlay )
 					{
-						material.opacity *= c3d_mapText.sample( in.text, 0.0_f );
+						material.opacity *= c3d_mapText.sample( in.fontUV, 0.0_f );
 					}
 
 					auto outComponents = writer.declLocale< ovrlrend::OverlayBlendComponents >( "outComponents"
