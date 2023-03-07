@@ -103,176 +103,57 @@ namespace castor3d
 		 */
 		C3D_API void setFont( castor::String const & value );
 		/**
-		 *\~english
-		 *\brief		Retrieves the font name.
-		 *\return		The value.
-		 *\~french
-		 *\brief		Récupère le nom de la police.
-		 *\return		La valeur.
-		 */
-		castor::String const & getFontName()const
-		{
-			return getFontTexture()->getFontName();
-		}
-		/**
-		 *\~english
-		 *\return		\p true if this overlay's has changed.
-		 *\~french
-		 *\return		\p true si cette incrustation a changé.
-		 */
+		*\~english
+		*\name
+		*	Getters.
+		*\~french
+		*\name
+		*	Accesseurs.
+		*/
+		/**@{*/
 		bool isChanged()const noexcept override
 		{
 			return m_textChanged;
 		}
-		/**
-		 *\~english
-		 *\return		The FontTexture.
-		 *\~french
-		 *\return		La FontTexture.
-		 */
+
+		castor::String const & getFontName()const
+		{
+			return getFontTexture()->getFontName();
+		}
+
 		FontTextureSPtr getFontTexture()const
 		{
 			return m_fontTexture.lock();
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the overlay text
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le texte de l'incrustation
-		 *\return		La valeur
-		 */
+
 		std::u32string getCaption()const
 		{
 			return m_currentCaption;
 		}
-		/**
-		 *\~english
-		 *\brief		Sets the overlay text
-		 *\param[in]	value	The new value
-		 *\~french
-		 *\brief		Définit le texte de l'incrustation
-		 *\param[in]	value	La nouvelle valeur
-		 */
-		void setCaption( std::u32string const & value )
-		{
-			m_currentCaption = value;
-			m_textChanged = true;
-		}
-		/**
-		 *\~english
-		 *\return		The text wrapping mode.
-		 *\~french
-		 *\return		Le mode de découpe du texte.
-		*/
+
 		TextWrappingMode getTextWrappingMode()const
 		{
 			return m_wrappingMode;
 		}
-		/**
-		 *\~english
-		 *\brief		Sets text wrapping mode
-		 *\param[in]	value	The new value
-		 *\~french
-		 *\brief		Définit le mode de découpe du texte
-		 *\param[in]	value	La nouvelle valeur
-		 */
-		void setTextWrappingMode( TextWrappingMode value )
-		{
-			m_textChanged = m_textChanged || ( m_wrappingMode != value );
-			m_wrappingMode = value;
-		}
-		/**
-		 *\~english
-		 *\return		The horizontal alignment.
-		 *\~french
-		 *\return		L'alignement horizontal.
-		*/
+
 		HAlign getHAlign()const
 		{
 			return m_hAlign;
 		}
-		/**
-		 *\~english
-		 *\brief		Defines the horizontal alignment
-		 *\param[in]	value	The new value
-		 *\~french
-		 *\brief		Définit l'alignement horizontal
-		 *\param[in]	value	La nouvelle valeur
-		*/
-		void setHAlign( HAlign value )
-		{
-			m_textChanged = m_textChanged || ( m_hAlign != value );
-			m_hAlign = value;
-		}
-		/**
-		 *\~english
-		 *\return		The vertical alignment.
-		 *\~french
-		 *\return		L'alignement vertical.
-		*/
+
 		VAlign getVAlign()const
 		{
 			return m_vAlign;
 		}
-		/**
-		 *\~english
-		 *\brief		Defines the vertical alignment
-		 *\param[in]	value	The new value
-		 *\~french
-		 *\brief		Définit l'alignement vertical
-		 *\param[in]	value	La nouvelle valeur
-		*/
-		void setVAlign( VAlign value )
-		{
-			m_textChanged = m_textChanged || ( m_vAlign != value );
-			m_vAlign = value;
-		}
-		/**
-		 *\~english
-		 *\return		The text texture mapping mode.
-		 *\~french
-		 *\return		Le mode de mappage de texture du texte.
-		*/
+
 		TextTexturingMode getTexturingMode()const
 		{
 			return m_texturingMode;
 		}
-		/**
-		 *\~english
-		 *\brief		Defines the text texture mapping mode.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief		Définit le mode de mappage de texture du texte.
-		 *\param[in]	value	La nouvelle valeur.
-		*/
-		void setTexturingMode( TextTexturingMode value )
-		{
-			m_textChanged = m_textChanged || ( m_texturingMode != value );
-			m_texturingMode = value;
-		}
-		/**
-		 *\~english
-		 *\return		The lines spacing mode.
-		 *\~french
-		 *\return		Le mode d'espacement des lignes.
-		*/
+
 		TextLineSpacingMode getLineSpacingMode()const
 		{
 			return m_lineSpacingMode;
-		}
-		/**
-		 *\~english
-		 *\brief		Defines the lines spacing mode.
-		 *\param[in]	value	The new value.
-		 *\~french
-		 *\brief		Définit le mode d'espacement des lignes.
-		 *\param[in]	value	La nouvelle valeur.
-		*/
-		void setLineSpacingMode( TextLineSpacingMode value )
-		{
-			m_textChanged = m_textChanged || ( m_lineSpacingMode != value );
-			m_lineSpacingMode = value;
 		}
 
 		uint32_t getCharCount()const noexcept
@@ -289,6 +170,52 @@ namespace castor3d
 		{
 			return m_lines.count;
 		}
+		/**@}*/
+		/**
+		*\~english
+		*\name
+		*	Mutators.
+		*\~french
+		*\name
+		*	Mutateurs.
+		*/
+		/**@{*/
+		void setCaption( std::u32string const & value )
+		{
+			m_currentCaption = value;
+			m_textChanged = true;
+		}
+
+		void setTextWrappingMode( TextWrappingMode value )
+		{
+			m_textChanged = m_textChanged || ( m_wrappingMode != value );
+			m_wrappingMode = value;
+		}
+
+		void setHAlign( HAlign value )
+		{
+			m_textChanged = m_textChanged || ( m_hAlign != value );
+			m_hAlign = value;
+		}
+
+		void setVAlign( VAlign value )
+		{
+			m_textChanged = m_textChanged || ( m_vAlign != value );
+			m_vAlign = value;
+		}
+
+		void setTexturingMode( TextTexturingMode value )
+		{
+			m_textChanged = m_textChanged || ( m_texturingMode != value );
+			m_texturingMode = value;
+		}
+
+		void setLineSpacingMode( TextLineSpacingMode value )
+		{
+			m_textChanged = m_textChanged || ( m_lineSpacingMode != value );
+			m_lineSpacingMode = value;
+		}
+		/**@}*/
 
 	private:
 		using UvGenFunc = std::function< void( castor::Point2f const & size
@@ -297,7 +224,7 @@ namespace castor3d
 		/**
 		 *\copydoc	castor3d::OverlayCategory::doUpdate
 		 */
-		C3D_API void doUpdate( OverlayRenderer const & renderer )override;
+		void doUpdate( OverlayRenderer const & renderer )override;
 		/**
 		 *\~english
 		 *\brief		Computes the lines to display.
@@ -306,7 +233,7 @@ namespace castor3d
 		 *\brief		Calcule les lignes à afficher.
 		 *\param[in]	overlaySize	The overlay dimensions.
 		 */
-		C3D_API void doPrepareText( castor::Size const & renderSize );
+		void doPrepareText( castor::Size const & renderSize );
 
 	private:
 		std::u32string m_currentCaption;

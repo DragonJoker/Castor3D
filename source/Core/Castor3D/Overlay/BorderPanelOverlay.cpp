@@ -47,58 +47,6 @@ namespace castor3d
 		m_pBorderMaterial = material;
 	}
 
-	void BorderPanelOverlay::doUpdateSize( OverlayRenderer const & renderer )
-	{
-		OverlayCategory::doUpdateSize( renderer );
-
-		if ( isSizeChanged() || isChanged() || renderer.isSizeChanged() )
-		{
-			auto parent = getOverlay().getParent();
-			auto sz = renderer.getSize();
-			castor::Point2d totalSize( sz.getWidth(), sz.getHeight() );
-
-			if ( parent )
-			{
-				auto parentSize = parent->getAbsoluteSize();
-				totalSize[0] = parentSize[0] * totalSize[0];
-				totalSize[1] = parentSize[1] * totalSize[1];
-			}
-
-			auto sizes = getBorderPixelSize();
-			auto ptSizes = getBorderSize();
-			bool changed = m_borderChanged;
-
-			if ( sizes.left() )
-			{
-				changed = changed || ( ptSizes[0] != double( sizes.left() ) / totalSize[0] );
-				ptSizes[0] = sizes.left() / totalSize[0];
-			}
-
-			if ( sizes.top() )
-			{
-				changed = changed || ( ptSizes[1] != double(  sizes.top() ) / totalSize[1] );
-				ptSizes[1] = sizes.top() / totalSize[1];
-			}
-
-			if ( sizes.right() )
-			{
-				changed = changed || ( ptSizes[2] != double( sizes.right() ) / totalSize[0] );
-				ptSizes[2] = sizes.right() / totalSize[0];
-			}
-
-			if ( sizes.bottom() )
-			{
-				changed = changed || ( ptSizes[3] != double( sizes.bottom() ) / totalSize[1] );
-				ptSizes[3] = sizes.bottom() / totalSize[1];
-			}
-
-			if ( changed )
-			{
-				setBorderSize( ptSizes );
-			}
-		}
-	}
-
 	castor::Rectangle BorderPanelOverlay::getAbsoluteBorderSize( castor::Size const & size )const
 	{
 		auto absoluteSize = getAbsoluteBorderSize();
@@ -285,6 +233,77 @@ namespace castor3d
 			} );
 		comp.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		return makeShaderState( device, comp );
+	}
+
+	void BorderPanelOverlay::doUpdateSize( OverlayRenderer const & renderer )
+	{
+		if ( isSizeChanged() || isChanged() || renderer.isSizeChanged() )
+		{
+			auto parent = getOverlay().getParent();
+			auto sz = renderer.getSize();
+			castor::Point2d totalSize( sz.getWidth(), sz.getHeight() );
+
+			if ( parent )
+			{
+				auto parentSize = parent->getAbsoluteSize();
+				totalSize[0] = parentSize[0] * totalSize[0];
+				totalSize[1] = parentSize[1] * totalSize[1];
+			}
+
+			auto sizes = getBorderPixelSize();
+			auto ptSizes = getBorderSize();
+			bool changed = m_borderChanged;
+
+			if ( sizes.left() )
+			{
+				changed = changed || ( ptSizes[0] != double( sizes.left() ) / totalSize[0] );
+				ptSizes[0] = sizes.left() / totalSize[0];
+			}
+
+			if ( sizes.top() )
+			{
+				changed = changed || ( ptSizes[1] != double( sizes.top() ) / totalSize[1] );
+				ptSizes[1] = sizes.top() / totalSize[1];
+			}
+
+			if ( sizes.right() )
+			{
+				changed = changed || ( ptSizes[2] != double( sizes.right() ) / totalSize[0] );
+				ptSizes[2] = sizes.right() / totalSize[0];
+			}
+
+			if ( sizes.bottom() )
+			{
+				changed = changed || ( ptSizes[3] != double( sizes.bottom() ) / totalSize[1] );
+				ptSizes[3] = sizes.bottom() / totalSize[1];
+			}
+
+			if ( changed )
+			{
+				setBorderSize( ptSizes );
+			}
+		}
+	}
+
+	void BorderPanelOverlay::doUpdateScissor()
+	{
+		auto border = getAbsoluteBorderSize();
+
+		switch ( getBorderPosition() )
+		{
+		case BorderPosition::eMiddle:
+			border /= 2.0;
+			break;
+		case BorderPosition::eExternal:
+			break;
+		default:
+			border = castor::Point4d{};
+			break;
+		}
+
+		castor::Point2d borderTL{ border->x, border->y };
+		m_scissorOffset -= borderTL;
+		m_scissorExtent += borderTL + castor::Point2d{ border->z, border->w };
 	}
 
 	void BorderPanelOverlay::doUpdate( OverlayRenderer const & renderer )

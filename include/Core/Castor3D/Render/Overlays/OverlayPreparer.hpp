@@ -24,7 +24,6 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	class OverlayPreparer
-		: public OverlayVisitor
 	{
 	public:
 		C3D_API OverlayPreparer( OverlayPreparer const & ) = delete;
@@ -36,26 +35,31 @@ namespace castor3d
 			, VkFramebuffer framebuffer );
 		C3D_API OverlayPreparer( OverlayPreparer && rhs )noexcept;
 		C3D_API OverlayPreparer & operator=( OverlayPreparer && rhs )noexcept;
-		C3D_API ~OverlayPreparer()noexcept override;
+		C3D_API ~OverlayPreparer()noexcept;
 
-		void visit( PanelOverlay const & overlay )override;
-		void visit( BorderPanelOverlay const & overlay )override;
-		void visit( TextOverlay const & overlay )override;
+		C3D_API void fill( Overlay const & overlay );
+		C3D_API void prepare();
+
+	private:
+		void visit( PanelOverlay const & overlay );
+		void visit( BorderPanelOverlay const & overlay );
+		void visit( TextOverlay const & overlay );
 
 	private:
 		struct OverlayData
 		{
 			Overlay const * overlay{};
+			OverlayRenderNode const * node{};
 			ashes::DescriptorSetCRefArray descriptorSets{};
 			OverlayGeometryBuffers geometryBuffers{};
 			uint32_t index{};
-			OverlayPipeline const * pipeline{};
+			bool secondary{};
 		};
 
 		template< typename QuadT, typename OverlayT, typename VertexT, uint32_t CountT >
 		void doPrepareOverlayDescriptors( RenderDevice const & device
 			, OverlayT const & overlay
-			, Pass const & pass
+			, OverlayData data
 			, OverlayVertexBufferPoolT< VertexT, CountT > & vertexBuffer
 			, FontTextureSPtr fontTexture
 			, bool secondary );
@@ -83,9 +87,13 @@ namespace castor3d
 	private:
 		OverlayRenderer & m_renderer;
 		RenderDevice const & m_device;
+		using OverlayDataArray = std::vector< OverlayData >;
+		using OverlayDatasMap = std::map< OverlayPipeline const *, OverlayDataArray >;
+		std::map< uint32_t, OverlayDatasMap > m_levelsOverlays;
 		VkRenderPass m_renderPass;
 		VkFramebuffer m_framebuffer;
 		std::vector< OverlayData > m_overlays;
+		ashes::Pipeline const * m_previousPipeline{};
 	};
 }
 

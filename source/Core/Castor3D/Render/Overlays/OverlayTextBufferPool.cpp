@@ -55,7 +55,7 @@ namespace castor3d
 	OverlayTextBufferIndex OverlayTextBuffer::fill( uint32_t overlayIndex
 		, castor::Size const & renderSize
 		, TextOverlay const & overlay
-		, OverlayRenderNode & node
+		, OverlayRenderNode const & node
 		, bool secondary )
 	{
 		auto chars = overlay.getCharCount();
@@ -147,7 +147,7 @@ namespace castor3d
 		, FontTexture const * fontTexture
 		, castor::Size const & renderSize
 		, TextOverlay const & overlay
-		, OverlayRenderNode & node
+		, OverlayRenderNode const & node
 		, bool secondary )
 	{
 		auto it = m_buffers.emplace( fontTexture, nullptr ).first;

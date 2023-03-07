@@ -52,6 +52,9 @@ namespace castor3d
 		C3D_API static ashes::PipelineShaderStageCreateInfo createProgram( RenderDevice const & device );
 
 	private:
+		/**
+		 *\copydoc		castor3d::OverlayCategory::doUpdate
+		 */
 		void doUpdate( OverlayRenderer const & renderer )override;
 	};
 }
