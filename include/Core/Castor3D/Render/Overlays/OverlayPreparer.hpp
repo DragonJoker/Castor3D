@@ -52,7 +52,8 @@ namespace castor3d
 			OverlayRenderNode const * node{};
 			ashes::DescriptorSetCRefArray const * descriptorSets{};
 			OverlayGeometryBuffers geometryBuffers{};
-			uint32_t index{};
+			uint32_t overlayIndex{};
+			uint32_t pipelineIndex{};
 			bool secondary{};
 		};
 

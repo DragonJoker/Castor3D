@@ -131,6 +131,7 @@ namespace castor3d
 							, descriptorSets
 							, OverlayGeometryBuffers{}
 							, uint32_t{}
+							, uint32_t{}
 							, false );
 					}
 				}
@@ -154,6 +155,7 @@ namespace castor3d
 							, node
 							, descriptorSets
 							, OverlayGeometryBuffers{}
+							, uint32_t{}
 							, uint32_t{}
 							, true );
 					}
@@ -247,15 +249,12 @@ namespace castor3d
 			m_previousDescriptorSets = data.descriptorSets;
 		}
 
-		DrawConstants constants{ data.index };
+		DrawConstants constants{ data.pipelineIndex };
 		commandBuffer.pushConstants( *data.node->pipeline.pipelineLayout
 			, VK_SHADER_STAGE_VERTEX_BIT
 			, 0u
 			, sizeof( constants )
 			, &constants );
-		commandBuffer.bindVertexBuffer( 0u
-			, data.geometryBuffers.buffer->getBuffer().getBuffer()
-			, data.geometryBuffers.offset );
 		commandBuffer.setScissor( data.overlay->computeScissor( m_renderer.m_size ) );
 		commandBuffer.draw( data.geometryBuffers.count
 			, 1u

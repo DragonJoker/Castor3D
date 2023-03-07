@@ -31,6 +31,7 @@ namespace castor3d
 		eCamera,
 		eOverlays,
 		eOverlaysIDs,
+		eOverlaysSurfaces,
 	};
 	/**
 	*\~english
@@ -111,14 +112,15 @@ namespace castor3d
 	{
 		struct DescriptorSets
 		{
-			ashes::DescriptorSetPtr draw;
-			ashes::DescriptorSetCRefArray all;
+			ashes::DescriptorSetPtr draw{};
+			ashes::DescriptorSetCRefArray all{};
 		};
 		using DescriptorSetsPtr = std::unique_ptr< DescriptorSets >;
 
-		ashes::BufferPtr< uint32_t > overlaysIDsBuffer;
-		castor::ArrayView< uint32_t > overlaysIDs;
-		DescriptorSetsPtr descriptorSets;
+		ashes::BufferPtr< uint32_t > overlaysIDsBuffer{};
+		castor::ArrayView< uint32_t > overlaysIDs{};
+		DescriptorSetsPtr descriptorSets{};
+		uint32_t count{};
 	};
 
 	struct OverlayRenderNode
