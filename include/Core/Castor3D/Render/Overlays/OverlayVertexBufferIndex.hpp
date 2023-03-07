@@ -18,7 +18,8 @@ namespace castor3d
 
 		OverlayVertexBufferPoolT< VertexT, CountT > & pool;
 		OverlayRenderNode const & node;
-		uint32_t index;
+		OverlayPipelineData const & pipelineData;
+		uint32_t index{};
 		OverlayGeometryBuffers geometryBuffers{};
 		OverlayTextBufferIndex textBuffer{};
 	};

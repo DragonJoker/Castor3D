@@ -58,6 +58,24 @@ namespace castor3d::shader
 	private:
 		auto position()const { return getMember< "position" >(); }
 	};
+
+	struct OverlaysIDs
+		: public sdw::StructInstanceHelperT < "C3D_OverlaysIDs"
+		, sdw::type::MemoryLayout::eStd430
+		, sdw::UIntArrayField< "v", MaxWordsPerBuffer > >
+	{
+		OverlaysIDs( sdw::ShaderWriter & writer
+			, ast::expr::ExprPtr expr
+			, bool enabled )
+			: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+		{
+		}
+
+		auto operator[]( sdw::UInt const & index )
+		{
+			return getMember< "v" >()[index];
+		}
+	};
 }
 
 #define C3D_Overlays( writer, binding, set )\
@@ -70,5 +88,16 @@ namespace castor3d::shader
 		, true };\
 	auto c3d_overlaysData = c3d_overlaysDataBuffer.declMemberArray< castor3d::shader::OverlayData >( "d" );\
 	c3d_overlaysDataBuffer.end()
+
+#define C3D_OverlaysIDs( writer, binding, set )\
+	sdw::StorageBuffer c3d_overlaysIDsBuffer{ writer\
+		, "C3D_OverlaysIDsBuffer"\
+		, "c3d_overlaysIDsBuffer"\
+		, uint32_t( binding )\
+		, uint32_t( set )\
+		, ast::type::MemoryLayout::eStd430\
+		, true };\
+	auto c3d_overlaysIDs = c3d_overlaysIDsBuffer.declMember< castor3d::shader::OverlaysIDs >( "d" );\
+	c3d_overlaysIDsBuffer.end()
 
 #endif

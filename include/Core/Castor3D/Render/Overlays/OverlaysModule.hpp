@@ -30,6 +30,7 @@ namespace castor3d
 		eTexAnims,
 		eCamera,
 		eOverlays,
+		eOverlaysIDs,
 	};
 	/**
 	*\~english
@@ -104,6 +105,20 @@ namespace castor3d
 	{
 		ashes::PipelineLayoutPtr pipelineLayout;
 		ashes::GraphicsPipelinePtr pipeline;
+	};
+
+	struct OverlayPipelineData
+	{
+		struct DescriptorSets
+		{
+			ashes::DescriptorSetPtr draw;
+			ashes::DescriptorSetCRefArray all;
+		};
+		using DescriptorSetsPtr = std::unique_ptr< DescriptorSets >;
+
+		ashes::BufferPtr< uint32_t > overlaysIDsBuffer;
+		castor::ArrayView< uint32_t > overlaysIDs;
+		DescriptorSetsPtr descriptorSets;
 	};
 
 	struct OverlayRenderNode

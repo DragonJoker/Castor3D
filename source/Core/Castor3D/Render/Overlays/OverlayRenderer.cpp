@@ -341,7 +341,7 @@ namespace castor3d
 				, vertexBuffer.overlaysData->getBuffer()
 				, range
 				, crg::AccessState{ VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT }
-				, crg::AccessState{ VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT } );
+				, crg::AccessState{ VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT } );
 			memoryBarrier( context
 				, commandBuffer
 				, vertexBuffer.vertexBuffer.getBuffer().getBuffer()
@@ -364,16 +364,16 @@ namespace castor3d
 				, pipeline.count, 1u, 1u );
 			memoryBarrier( context
 				, commandBuffer
-				, vertexBuffer.overlaysData->getBuffer()
-				, range
-				, crg::AccessState{ VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT }
-				, crg::AccessState{ VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT } );
-			memoryBarrier( context
-				, commandBuffer
 				, vertexBuffer.vertexBuffer.getBuffer().getBuffer()
 				, range
 				, crg::AccessState{ VK_ACCESS_SHADER_WRITE_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT }
 				, crg::AccessState{ VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT } );
+			memoryBarrier( context
+				, commandBuffer
+				, vertexBuffer.overlaysData->getBuffer()
+				, range
+				, crg::AccessState{ VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT }
+				, crg::AccessState{ VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT } );
 		}
 
 		static ashes::DescriptorSetLayoutPtr createBaseDescriptorLayout( RenderDevice const & device )
@@ -388,6 +388,9 @@ namespace castor3d
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 				, VK_SHADER_STAGE_VERTEX_BIT ) );
 			baseBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( OverlayBindingId::eOverlays )
+				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+				, VK_SHADER_STAGE_VERTEX_BIT ) );
+			baseBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( OverlayBindingId::eOverlaysIDs )
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 				, VK_SHADER_STAGE_VERTEX_BIT ) );
 			return device->createDescriptorSetLayout( "OverlaysBase"
@@ -438,7 +441,7 @@ namespace castor3d
 			, *m_baseDescriptorLayout
 			, m_noTexDeclaration
 			, m_texDeclaration
-			, MaxOverlayPanelsPerBuffer ) }
+			, MaxOverlaysPerBuffer ) }
 		, m_borderVertexBuffer{ std::make_unique< BorderPanelVertexBufferPool >( *getRenderSystem()->getEngine()
 			, "BorderOverlays"
 			, device
@@ -446,7 +449,7 @@ namespace castor3d
 			, *m_baseDescriptorLayout
 			, m_noTexDeclaration
 			, m_texDeclaration
-			, MaxOverlayPanelsPerBuffer ) }
+			, MaxOverlaysPerBuffer ) }
 		, m_textVertexBuffer{ std::make_unique< TextVertexBufferPool >( *getRenderSystem()->getEngine()
 			, "TextOverlays"
 			, device
@@ -454,7 +457,7 @@ namespace castor3d
 			, *m_baseDescriptorLayout
 			, m_noTexTextDeclaration
 			, m_texTextDeclaration
-			, MaxOverlayPanelsPerBuffer
+			, MaxOverlaysPerBuffer
 			, std::make_unique< OverlayTextBufferPool >( *getRenderSystem()->getEngine()
 				, "TextsGlyphs"
 				, device ) ) }
@@ -471,7 +474,7 @@ namespace castor3d
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 		m_textDescriptorLayout = device->createDescriptorSetLayout( name + "Text"
 			, std::move( textBindings ) );
-		m_textDescriptorPool = m_textDescriptorLayout->createPool( MaxOverlayPanelsPerBuffer );
+		m_textDescriptorPool = m_textDescriptorLayout->createPool( MaxOverlaysPerBuffer );
 
 		m_cameraUbo.cpuUpdate( getSize()
 			, getRenderSystem()->getOrtho( 0.0f
@@ -764,7 +767,7 @@ namespace castor3d
 
 	OverlayRenderer::ComputePipeline OverlayRenderer::doCreatePanelPipeline( RenderDevice const & device )
 	{
-		OverlayRenderer::ComputePipeline result;
+		ComputePipeline result;
 		ashes::VkDescriptorSetLayoutBindingArray layoutBindings;
 		layoutBindings.emplace_back( makeDescriptorSetLayoutBinding( 0u // Camera
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
@@ -807,7 +810,7 @@ namespace castor3d
 	OverlayRenderer::ComputePipeline OverlayRenderer::doCreateBorderPipeline( RenderDevice const & device )
 	{
 		std::string name = "BorderOverlayCompute";
-		OverlayRenderer::ComputePipeline result;
+		ComputePipeline result;
 		ashes::VkDescriptorSetLayoutBindingArray layoutBindings;
 		layoutBindings.emplace_back( makeDescriptorSetLayoutBinding( 0u // Camera
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
@@ -948,9 +951,12 @@ namespace castor3d
 			C3D_Overlays( writer
 				, OverlayBindingId::eOverlays
 				, 0u );
+			C3D_OverlaysIDs( writer
+				, OverlayBindingId::eOverlaysIDs
+				, 0u );
 
 			sdw::PushConstantBuffer pcb{ writer, "C3D_DrawData", "c3d_drawData" };
-			auto overlayID = pcb.declMember< sdw::UInt >( "overlayID" );
+			auto overlaySubID = pcb.declMember< sdw::UInt >( "overlaySubID" );
 			pcb.end();
 
 			writer.implementMainT< ovrlrend::OverlaySurfaceT, ovrlrend::OverlaySurfaceT >( VertexInT< ovrlrend::OverlaySurfaceT >{ writer, true, textOverlay, hasTexture, false }
@@ -960,6 +966,8 @@ namespace castor3d
 				{
 					out.texture = in.texture;
 					out.text = in.text;
+					auto overlayID = writer.declLocale( "overlayID"
+						, c3d_overlaysIDs[overlaySubID] );
 					auto overlaysData = writer.declLocale( "overlaysData"
 						, c3d_overlaysData[overlayID] );
 					out.vtx.position = c3d_cameraData.viewToProj( vec4( vec2( c3d_cameraData.renderSize() ) * overlaysData.modelToView( in.position )

@@ -45,7 +45,8 @@ namespace castor3d
 			, FontTexture const * fontTexture );
 		void upload( ashes::CommandBuffer const & cb );
 
-		ashes::DescriptorSetCRefArray const & getDrawDescriptorSets( FontTexture const * fontTexture
+		ashes::DescriptorSetCRefArray const & getDrawDescriptorSets( OverlayRenderNode const & node
+			, FontTexture const * fontTexture
 			, ashes::DescriptorSet const * textDescriptorSet );
 		void fillComputeDescriptorSet( FontTexture const * fontTexture
 			, ashes::DescriptorSetLayout const & descriptorLayout
@@ -68,18 +69,13 @@ namespace castor3d
 		OverlayTextBufferPoolUPtr textBuffer;
 
 	private:
-		struct DescriptorSets
-		{
-			ashes::DescriptorSetPtr draw;
-			ashes::DescriptorSetCRefArray all;
-		};
-		using DescriptorSetsPtr = std::unique_ptr< DescriptorSets >;
-
-		std::map< FontTexture const *, DescriptorSetsPtr > descriptorSets;
+		using PipelineDataMap = std::map< OverlayPipeline const *, OverlayPipelineData >;
+		std::map< FontTexture const *, PipelineDataMap > m_pipelines;
 
 	private:
 		ashes::DescriptorSetPtr doCreateDescriptorSet( std::string debugName
-			, FontTexture const * fontTexture )const;
+			, FontTexture const * fontTexture
+			, ashes::BufferBase const & idsBuffer )const;
 	};
 }
 

@@ -104,17 +104,18 @@ namespace castor3d
 					{
 					case OverlayType::ePanel:
 						node = &m_renderer.doGetPanelNode( m_device, m_renderPass, *pass );
-						descriptorSets = &m_renderer.m_panelVertexBuffer->getDrawDescriptorSets( nullptr, nullptr );
+						descriptorSets = &m_renderer.m_panelVertexBuffer->getDrawDescriptorSets( *node, nullptr, nullptr );
 						break;
 					case OverlayType::eBorderPanel:
 						node = &m_renderer.doGetPanelNode( m_device, m_renderPass, *pass );
-						descriptorSets = &m_renderer.m_panelVertexBuffer->getDrawDescriptorSets( nullptr, nullptr );
+						descriptorSets = &m_renderer.m_panelVertexBuffer->getDrawDescriptorSets( *node, nullptr, nullptr );
 						break;
 					case OverlayType::eText:
 						{
 							auto texture = overlay.getTextOverlay()->getFontTexture();
 							node = &m_renderer.doGetTextNode( m_device, m_renderPass, *pass, *texture->getTexture(), *texture->getSampler().lock() );
-							descriptorSets = &m_renderer.m_textVertexBuffer->getDrawDescriptorSets( texture.get()
+							descriptorSets = &m_renderer.m_textVertexBuffer->getDrawDescriptorSets( *node
+								, texture.get()
 								, &m_renderer.doCreateTextDescriptorSet( *texture ) );
 						}
 						break;
@@ -147,7 +148,7 @@ namespace castor3d
 					if ( !pass->isImplicit() )
 					{
 						auto node = &m_renderer.doGetPanelNode( m_device, m_renderPass, *pass );
-						auto descriptorSets = &m_renderer.m_borderVertexBuffer->getDrawDescriptorSets( nullptr, nullptr );
+						auto descriptorSets = &m_renderer.m_borderVertexBuffer->getDrawDescriptorSets( *node, nullptr, nullptr );
 						auto & overlays = pipelines.emplace( &node->pipeline, OverlayDataArray{} ).first->second;
 						overlays.emplace_back( &overlay
 							, node
