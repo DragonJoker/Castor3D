@@ -15,7 +15,8 @@ namespace castor3d
 		, Engine & engine
 		, OverlayType type
 		, SceneRPtr scene
-		, OverlayRPtr parent )
+		, OverlayRPtr parent
+		, uint32_t level )
 		: OwnedBy< Engine >{ engine }
 		, m_name{ name }
 		, m_parent{ parent }
@@ -26,43 +27,48 @@ namespace castor3d
 		, m_renderSystem{ engine.getRenderSystem() }
 	{
 		m_category->setOverlay( this );
+		m_category->setOrder( level, 0u );
 	}
 
 	Overlay::Overlay( Engine & engine
 		, OverlayType type
 		, SceneRPtr scene
-		, OverlayRPtr parent )
+		, OverlayRPtr parent
+		, uint32_t level )
 		: Overlay{ castor::String{}
 			, engine
 			, type
 			, scene
-			, parent }
+			, parent
+		, level }
 	{
 	}
 
 	Overlay::Overlay( Engine & engine
-		, OverlayType type )
+		, OverlayType type
+		, uint32_t level )
 		: Overlay{ engine
 			, type
 			, nullptr
-			, nullptr }
+			, nullptr
+			, level }
 	{
 	}
 
 	void Overlay::addChild( OverlayRPtr overlay )
 	{
-		int index = 1;
+		uint32_t index = 1u;
 
 		if ( !m_children.empty() )
 		{
-			index = m_children.back()->getIndex() + 1;
+			index = m_children.back()->getIndex() + 1u;
 		}
 
-		overlay->setOrder( index, getLevel() + 1 );
+		overlay->setOrder( getLevel() + 1u, index );
 		m_children.push_back( overlay );
 	}
 
-	uint32_t Overlay::getChildrenCount( int level )const
+	uint32_t Overlay::getChildrenCount( uint32_t level )const
 	{
 		uint32_t result{ 0 };
 
@@ -70,7 +76,7 @@ namespace castor3d
 		{
 			result = 1u;
 		}
-		else if ( level == getLevel() + 1 )
+		else if ( level == getLevel() + 1u )
 		{
 			result = uint32_t( m_children.size() );
 		}
@@ -131,7 +137,7 @@ namespace castor3d
 	{
 		if ( !m_parent )
 		{
-			return 0u;
+			return m_category->getLevel();
 		}
 
 		return 1u + m_parent->computeLevel();

@@ -159,7 +159,7 @@ namespace castor
 		castor3d::OverlayFactory m_overlayFactory;
 		OverlayCategorySet m_overlays;
 		castor3d::Viewport m_viewport;
-		std::vector< int > m_overlayCountPerLevel;
+		std::vector< uint32_t > m_overlayCountPerLevel;
 		Matrix4x4f m_projection;
 		FontTextureStrMap m_fontTextures;
 	};

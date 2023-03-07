@@ -41,7 +41,8 @@ namespace castor3d
 			, Engine & engine
 			, OverlayType type
 			, Scene * scene
-			, OverlayRPtr parent );
+			, OverlayRPtr parent
+			, uint32_t level = 0u );
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -59,7 +60,8 @@ namespace castor3d
 		C3D_API Overlay( Engine & engine
 			, OverlayType type
 			, Scene * scene
-			, OverlayRPtr parent );
+			, OverlayRPtr parent
+			, uint32_t level = 0u );
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -71,7 +73,8 @@ namespace castor3d
 		 *\param[in]	type	Le type de l'incrustation.
 		 */
 		C3D_API Overlay( Engine & engine
-			, OverlayType type );
+			, OverlayType type
+			, uint32_t level = 0u );
 		/**
 		 *\~english
 		 *\brief		adds a child to the overlay.
@@ -91,7 +94,7 @@ namespace castor3d
 		 *\param[in]	level	Le niveau voulu
 		 *\return		Le compte
 		 */
-		C3D_API uint32_t getChildrenCount( int level )const;
+		C3D_API uint32_t getChildrenCount( uint32_t level )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the panel overlay.
@@ -224,12 +227,12 @@ namespace castor3d
 			return m_scene;
 		}
 
-		int getIndex()const noexcept
+		uint32_t getIndex()const noexcept
 		{
 			return m_category->getIndex();
 		}
 
-		int getLevel()const noexcept
+		uint32_t getLevel()const noexcept
 		{
 			return m_category->getLevel();
 		}
@@ -287,9 +290,9 @@ namespace castor3d
 			m_category->setVisible( val );
 		}
 
-		void setOrder( int index, int level )
+		void setOrder( uint32_t level, uint32_t index )
 		{
-			m_category->setOrder( index, level );
+			m_category->setOrder( level, index );
 		}
 
 		void setMaterial( MaterialRPtr material )
