@@ -28,14 +28,14 @@ namespace castor3d
 		, OverlayT const & overlay
 		, OverlayData data
 		, OverlayVertexBufferPoolT< VertexT, CountT > & vertexBuffer
-		, FontTextureSPtr fontTexture
+		, FontTexture const * fontTexture
 		, bool secondary )
 	{
 		OverlayVertexBufferIndexT< VertexT, CountT > bufferIndex = vertexBuffer.fill( m_renderer.getSize()
 			, overlay
 			, *data.node
 			, secondary
-			, fontTexture.get() );
+			, fontTexture );
 
 		if ( !bufferIndex.geometryBuffers.buffer )
 		{
@@ -48,16 +48,6 @@ namespace castor3d
 			, m_renderer.getSize()
 			, uint32_t( bufferIndex.geometryBuffers.offset )
 			, bufferIndex.textBuffer );
-		ashes::DescriptorSetCRefArray descriptorSets;
-		descriptorSets.push_back( bufferIndex.pool.getDrawDescriptorSet( fontTexture.get() ) );
-		descriptorSets.push_back( *device.renderSystem.getEngine()->getTextureUnitCache().getDescriptorSet() );
-
-		if ( fontTexture )
-		{
-			descriptorSets.push_back( m_renderer.doCreateTextDescriptorSet( *fontTexture ) );
-		}
-
-		data.descriptorSets = descriptorSets;
 		data.geometryBuffers = bufferIndex.geometryBuffers;
 		data.index = bufferIndex.index;
 		m_overlays.push_back( std::move( data ) );

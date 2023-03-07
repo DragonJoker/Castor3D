@@ -50,7 +50,7 @@ namespace castor3d
 		{
 			Overlay const * overlay{};
 			OverlayRenderNode const * node{};
-			ashes::DescriptorSetCRefArray descriptorSets{};
+			ashes::DescriptorSetCRefArray const * descriptorSets{};
 			OverlayGeometryBuffers geometryBuffers{};
 			uint32_t index{};
 			bool secondary{};
@@ -61,7 +61,7 @@ namespace castor3d
 			, OverlayT const & overlay
 			, OverlayData data
 			, OverlayVertexBufferPoolT< VertexT, CountT > & vertexBuffer
-			, FontTextureSPtr fontTexture
+			, FontTexture const * fontTexture
 			, bool secondary );
 		void doPrepareOverlayCommands( OverlayData const & overlay
 			, ashes::CommandBuffer & commandBuffer );
@@ -94,6 +94,7 @@ namespace castor3d
 		VkFramebuffer m_framebuffer;
 		std::vector< OverlayData > m_overlays;
 		ashes::Pipeline const * m_previousPipeline{};
+		ashes::DescriptorSetCRefArray const * m_previousDescriptorSets{};
 	};
 }
 
