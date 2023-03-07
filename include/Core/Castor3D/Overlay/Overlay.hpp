@@ -295,11 +295,6 @@ namespace castor3d
 			m_category->setVisible( val );
 		}
 
-		void setOrder( uint32_t level, uint32_t index )
-		{
-			m_category->setOrder( level, index );
-		}
-
 		void setMaterial( MaterialRPtr material )
 		{
 			m_category->setMaterial( material );
@@ -307,22 +302,22 @@ namespace castor3d
 
 		void setRelativePosition( castor::Point2d const & position )
 		{
-			m_category->setRelativePosition( position );
+			m_category->setRelativePosition( position, false );
 		}
 
 		void setRelativeSize( castor::Point2d const & size )
 		{
-			m_category->setRelativeSize( size );
+			m_category->setRelativeSize( size, false );
 		}
 
 		void setPixelPosition( castor::Position const & position )
 		{
-			m_category->setPixelPosition( position );
+			m_category->setPixelPosition( position, false );
 		}
 
 		void setPixelSize( castor::Size const & size )
 		{
-			m_category->setPixelSize( size );
+			m_category->setPixelSize( size, false );
 		}
 
 		void rename( castor::String const & name )

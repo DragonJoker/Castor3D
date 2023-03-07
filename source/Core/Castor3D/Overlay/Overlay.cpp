@@ -40,7 +40,7 @@ namespace castor3d
 			, type
 			, scene
 			, parent
-		, level }
+			, level }
 	{
 	}
 
@@ -57,14 +57,6 @@ namespace castor3d
 
 	void Overlay::addChild( OverlayRPtr overlay )
 	{
-		uint32_t index = 1u;
-
-		if ( !m_children.empty() )
-		{
-			index = m_children.back()->getIndex() + 1u;
-		}
-
-		overlay->setOrder( getLevel() + 1u, index );
 		m_children.push_back( overlay );
 	}
 
