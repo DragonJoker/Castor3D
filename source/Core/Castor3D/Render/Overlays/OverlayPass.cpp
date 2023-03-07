@@ -4,6 +4,7 @@
 #include "Castor3D/Cache/OverlayCache.hpp"
 #include "Castor3D/Overlay/Overlay.hpp"
 #include "Castor3D/Overlay/OverlayCategory.hpp"
+#include "Castor3D/Render/RenderInfo.hpp"
 #include "Castor3D/Render/Overlays/OverlayPreparer.hpp"
 #include "Castor3D/Render/Overlays/OverlayRenderer.hpp"
 #include "Castor3D/Scene/Scene.hpp"
@@ -15,10 +16,11 @@ namespace castor3d
 {
 	namespace passovy
 	{
-		static void doParseOverlays( OverlayCache const & cache
+		static uint32_t doParseOverlays( OverlayCache const & cache
 			, OverlayRenderer & renderer
 			, OverlayPreparer & preparer )
 		{
+			uint32_t result{};
 			auto lock( castor::makeUniqueLock( cache ) );
 
 			for ( auto category : cache.getCategories() )
@@ -28,8 +30,11 @@ namespace castor3d
 				{
 					category->update( renderer );
 					preparer.fill( category->getOverlay() );
+					++result;
 				}
 			}
+
+			return result;
 		}
 	}
 
@@ -64,18 +69,19 @@ namespace castor3d
 	{
 		resetCommandBuffer( 0u );
 		{
+			m_count = {};
 			auto preparer = m_renderer->beginPrepare( m_device
 				, m_renderPass.getRenderPass( 0u )
 				, m_renderPass.getFramebuffer( 0u ) );
 
 			if ( m_drawGlobal )
 			{
-				passovy::doParseOverlays( m_scene.getEngine()->getOverlayCache()
+				m_count += passovy::doParseOverlays( m_scene.getEngine()->getOverlayCache()
 					, *m_renderer
 					, preparer );
 			}
 
-			passovy::doParseOverlays( m_scene.getOverlayCache()
+			m_count += passovy::doParseOverlays( m_scene.getOverlayCache()
 				, *m_renderer
 				, preparer );
 		}
@@ -84,6 +90,7 @@ namespace castor3d
 
 	void OverlayPass::update( GpuUpdater & updater )
 	{
+		updater.info.visibleOverlayCount = m_count;
 		m_renderer->update( updater );
 	}
 

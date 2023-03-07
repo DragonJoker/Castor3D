@@ -150,6 +150,11 @@ namespace castor3d
 		m_debugOverlays->show( show );
 	}
 
+	void RenderLoop::enableDetailedDebugOverlays( bool enable )
+	{
+		m_debugOverlays->enableDetailed( enable );
+	}
+
 	void RenderLoop::enableVSync( bool enable )
 	{
 	}
@@ -193,6 +198,11 @@ namespace castor3d
 	bool RenderLoop::hasDebugOverlays()const
 	{
 		return m_debugOverlays->isShown();
+	}
+
+	bool RenderLoop::hasDetailedDebugOverlays()const
+	{
+		return m_debugOverlays->isDetailed();
 	}
 
 	void RenderLoop::dumpFrameTimes( Parameters & params )const

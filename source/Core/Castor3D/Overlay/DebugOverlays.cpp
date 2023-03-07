@@ -712,6 +712,9 @@ namespace castor3d
 		m_debugPanel->addCountPanel( cuT( "VisibleLightCount" )
 			, cuT( "Visible Lights Count:" )
 			, m_renderInfo.visibleLightsCount );
+		m_debugPanel->addCountPanel( cuT( "VisibleOverlayCount" )
+			, cuT( "Visible Overlays Count:" )
+			, m_renderInfo.visibleOverlayCount );
 		m_debugPanel->addCountPanel( cuT( "DrawCalls" )
 			, cuT( "Draw calls:" )
 			, m_renderInfo.drawCalls );
