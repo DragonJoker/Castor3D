@@ -611,6 +611,7 @@ namespace castor3d
 				, VK_FALSE
 				, 0u
 				, 0u ) );
+		m_commands.commandBuffer->setViewport( makeViewport( m_size ) );
 	}
 
 	void OverlayRenderer::doEndPrepare()

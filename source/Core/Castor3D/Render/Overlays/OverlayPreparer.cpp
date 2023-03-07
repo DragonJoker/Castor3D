@@ -98,19 +98,24 @@ namespace castor3d
 				if ( !pass->isImplicit() )
 				{
 					OverlayRenderNode * node{};
+					ashes::DescriptorSetCRefArray const * descriptorSets{};
 
 					switch ( overlay.getType() )
 					{
 					case OverlayType::ePanel:
 						node = &m_renderer.doGetPanelNode( m_device, m_renderPass, *pass );
+						descriptorSets = &m_renderer.m_panelVertexBuffer->getDrawDescriptorSets( nullptr, nullptr );
 						break;
 					case OverlayType::eBorderPanel:
 						node = &m_renderer.doGetPanelNode( m_device, m_renderPass, *pass );
+						descriptorSets = &m_renderer.m_panelVertexBuffer->getDrawDescriptorSets( nullptr, nullptr );
 						break;
 					case OverlayType::eText:
 						{
 							auto texture = overlay.getTextOverlay()->getFontTexture();
 							node = &m_renderer.doGetTextNode( m_device, m_renderPass, *pass, *texture->getTexture(), *texture->getSampler().lock() );
+							descriptorSets = &m_renderer.m_textVertexBuffer->getDrawDescriptorSets( texture.get()
+								, &m_renderer.doCreateTextDescriptorSet( *texture ) );
 						}
 						break;
 					default:
@@ -122,7 +127,7 @@ namespace castor3d
 						auto & overlays = pipelines.emplace( &node->pipeline, OverlayDataArray{} ).first->second;
 						overlays.emplace_back( &overlay
 							, node
-							, ashes::DescriptorSetCRefArray{}
+							, descriptorSets
 							, OverlayGeometryBuffers{}
 							, uint32_t{}
 							, false );
@@ -142,10 +147,11 @@ namespace castor3d
 					if ( !pass->isImplicit() )
 					{
 						auto node = &m_renderer.doGetPanelNode( m_device, m_renderPass, *pass );
+						auto descriptorSets = &m_renderer.m_borderVertexBuffer->getDrawDescriptorSets( nullptr, nullptr );
 						auto & overlays = pipelines.emplace( &node->pipeline, OverlayDataArray{} ).first->second;
 						overlays.emplace_back( &overlay
 							, node
-							, ashes::DescriptorSetCRefArray{}
+							, descriptorSets
 							, OverlayGeometryBuffers{}
 							, uint32_t{}
 							, true );
@@ -211,7 +217,7 @@ namespace castor3d
 								, *cat
 								, std::move( data )
 								, *m_renderer.m_textVertexBuffer
-								, cat->getFontTexture()
+								, cat->getFontTexture().get()
 								, false );
 							m_renderer.doGetComputeTextPipeline( *cat->getFontTexture() ).count += cat->getCharCount();
 						}
@@ -227,10 +233,19 @@ namespace castor3d
 	void OverlayPreparer::doPrepareOverlayCommands( OverlayData const & data
 		, ashes::CommandBuffer & commandBuffer )
 	{
-		commandBuffer.bindPipeline( *data.node->pipeline.pipeline );
-		commandBuffer.setViewport( makeViewport( m_renderer.m_size ) );
-		commandBuffer.setScissor( data.overlay->computeScissor( m_renderer.m_size ) );
-		commandBuffer.bindDescriptorSets( data.descriptorSets, *data.node->pipeline.pipelineLayout );
+		if ( m_previousPipeline != data.node->pipeline.pipeline.get() )
+		{
+			commandBuffer.bindPipeline( *data.node->pipeline.pipeline );
+			m_previousPipeline = data.node->pipeline.pipeline.get();
+			m_previousDescriptorSets = nullptr;
+		}
+
+		if ( m_previousDescriptorSets != data.descriptorSets )
+		{
+			commandBuffer.bindDescriptorSets( *data.descriptorSets, *data.node->pipeline.pipelineLayout );
+			m_previousDescriptorSets = data.descriptorSets;
+		}
+
 		DrawConstants constants{ data.index };
 		commandBuffer.pushConstants( *data.node->pipeline.pipelineLayout
 			, VK_SHADER_STAGE_VERTEX_BIT
@@ -240,6 +255,7 @@ namespace castor3d
 		commandBuffer.bindVertexBuffer( 0u
 			, data.geometryBuffers.buffer->getBuffer().getBuffer()
 			, data.geometryBuffers.offset );
+		commandBuffer.setScissor( data.overlay->computeScissor( m_renderer.m_size ) );
 		commandBuffer.draw( data.geometryBuffers.count
 			, 1u
 			, 0u

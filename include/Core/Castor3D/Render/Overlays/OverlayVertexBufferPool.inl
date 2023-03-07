@@ -50,16 +50,26 @@ namespace castor3d
 	}
 
 	template< typename VertexT, uint32_t CountT >
-	ashes::DescriptorSet const & OverlayVertexBufferPoolT< VertexT, CountT >::getDrawDescriptorSet( FontTexture const * fontTexture )
+	ashes::DescriptorSetCRefArray const & OverlayVertexBufferPoolT< VertexT, CountT >::getDrawDescriptorSets( FontTexture const * fontTexture
+		, ashes::DescriptorSet const * textDescriptorSet )
 	{
 		auto it = descriptorSets.emplace( fontTexture, nullptr ).first;
 
 		if ( !it->second )
 		{
-			it->second = doCreateDescriptorSet( name, fontTexture );
+			it->second = std::make_unique< DescriptorSets >();
+			DescriptorSets & descs = *it->second;
+			descs.draw = doCreateDescriptorSet( name, fontTexture );
+			descs.all.push_back( *descs.draw );
+			descs.all.push_back( *device.renderSystem.getEngine()->getTextureUnitCache().getDescriptorSet() );
+
+			if ( textDescriptorSet )
+			{
+				descs.all.push_back( *textDescriptorSet );
+			}
 		}
 
-		return *it->second;
+		return it->second->all;
 	}
 
 	template< typename VertexT, uint32_t CountT >
