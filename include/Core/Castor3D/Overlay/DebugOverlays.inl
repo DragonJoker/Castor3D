@@ -56,8 +56,8 @@ namespace castor3d
 		m_label->setFont( cuT( "Arial16" ) );
 		m_value->setFont( cuT( "Arial16" ) );
 
-		m_label->setVAlign( VAlign::eCenter );
-		m_value->setVAlign( VAlign::eCenter );
+		m_label->setVAlign( VAlign::eTop );
+		m_value->setVAlign( VAlign::eTop );
 
 		auto & engine = cache.getEngine();
 		m_label->setMaterial( engine.findMaterial( cuT( "White" ) ).lock().get() );

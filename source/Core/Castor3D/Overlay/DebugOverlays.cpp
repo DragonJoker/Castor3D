@@ -297,27 +297,27 @@ namespace castor3d
 			, cache.getEngine()
 			, OverlayType::eText
 			, nullptr
-			, &m_container->getOverlay() ).lock()->getTextOverlay();
+			, &m_firstLinePanel->getOverlay() ).lock()->getTextOverlay();
 		m_cpu.name = cache.add( baseName + cuT( "_CPUName" )
 			, cache.getEngine()
 			, OverlayType::eText
 			, nullptr
-			, &m_container->getOverlay() ).lock()->getTextOverlay();
+			, &m_firstLinePanel->getOverlay() ).lock()->getTextOverlay();
 		m_cpu.value = cache.add( baseName + cuT( "_CPUValue" )
 			, cache.getEngine()
 			, OverlayType::eText
 			, nullptr
-			, &m_container->getOverlay() ).lock()->getTextOverlay();
+			, &m_firstLinePanel->getOverlay() ).lock()->getTextOverlay();
 		m_gpu.name = cache.add( baseName + cuT( "_GPUName" )
 			, cache.getEngine()
 			, OverlayType::eText
 			, nullptr
-			, &m_container->getOverlay() ).lock()->getTextOverlay();
+			, &m_firstLinePanel->getOverlay() ).lock()->getTextOverlay();
 		m_gpu.value = cache.add( baseName + cuT( "_GPUValue" )
 			, cache.getEngine()
 			, OverlayType::eText
 			, nullptr
-			, &m_container->getOverlay() ).lock()->getTextOverlay();
+			, &m_firstLinePanel->getOverlay() ).lock()->getTextOverlay();
 
 		m_container->setPixelPosition( castor::Position{ PassPanelLeft, 0 } );
 		m_firstLinePanel->setPixelPosition( castor::Position{ m_posX, 0 } );
