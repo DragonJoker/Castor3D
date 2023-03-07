@@ -50,16 +50,29 @@ namespace castor3d
 	}
 
 	template< typename VertexT, uint32_t CountT >
-	ashes::DescriptorSetCRefArray const & OverlayVertexBufferPoolT< VertexT, CountT >::getDrawDescriptorSets( FontTexture const * fontTexture
+	ashes::DescriptorSetCRefArray const & OverlayVertexBufferPoolT< VertexT, CountT >::getDrawDescriptorSets( OverlayRenderNode const & node
+		, FontTexture const * fontTexture
 		, ashes::DescriptorSet const * textDescriptorSet )
 	{
-		auto it = descriptorSets.emplace( fontTexture, nullptr ).first;
+		auto & pipelines = m_pipelines.emplace( fontTexture, PipelineDataMap{} ).first->second;
+		auto ires = pipelines.emplace( &node.pipeline, OverlayPipelineData{} );
 
-		if ( !it->second )
+		if ( ires.second )
 		{
-			it->second = std::make_unique< DescriptorSets >();
-			DescriptorSets & descs = *it->second;
-			descs.draw = doCreateDescriptorSet( name, fontTexture );
+			auto & pipeline = ires.first->second;
+			pipeline.overlaysIDsBuffer = makeBuffer< uint32_t >( device
+				, MaxPipelines
+				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
+				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+				, name + "PipelineIDs" );
+			pipeline.overlaysIDs = castor::makeArrayView( pipeline.overlaysIDsBuffer->lock( 0u, ashes::WholeSize, 0u )
+				, pipeline.overlaysIDsBuffer->getCount() );
+			pipeline.descriptorSets = std::make_unique< OverlayPipelineData::DescriptorSets >();
+
+			auto & descs = *pipeline.descriptorSets;
+			descs.draw = doCreateDescriptorSet( name
+				, fontTexture
+				, pipeline.overlaysIDsBuffer->getBuffer() );
 			descs.all.push_back( *descs.draw );
 			descs.all.push_back( *device.renderSystem.getEngine()->getTextureUnitCache().getDescriptorSet() );
 
@@ -69,7 +82,7 @@ namespace castor3d
 			}
 		}
 
-		return it->second->all;
+		return ires.first->second.descriptorSets->all;
 	}
 
 	template< typename VertexT, uint32_t CountT >
@@ -104,8 +117,20 @@ namespace castor3d
 		, bool secondary
 		, FontTexture const * fontTexture )
 	{
+		auto & pipelines = m_pipelines.emplace( fontTexture, PipelineDataMap{} ).first->second;
+		auto it = pipelines.find( &node.pipeline );
+
+		if ( it == pipelines.end() )
+		{
+			log::warn << "Overlay render node not found" << std::endl;
+			CU_Failure( "Overlay render node not found" );
+			throw std::invalid_argument{ "Overlay render node" };
+		}
+
+		auto & pipelineData = it->second;
 		OverlayVertexBufferIndexT< VertexT, CountT > result{ *this
 			, node
+			, pipelineData
 			, index };
 		auto count = overlay.getCount( secondary );
 
@@ -135,6 +160,7 @@ namespace castor3d
 			}
 		}
 
+		result.pipelineData.overlaysIDs[index] = result.index;
 		allocated += count;
 		++index;
 
@@ -158,7 +184,8 @@ namespace castor3d
 
 	template< typename VertexT, uint32_t CountT >
 	ashes::DescriptorSetPtr OverlayVertexBufferPoolT< VertexT, CountT >::doCreateDescriptorSet( std::string debugName
-		, FontTexture const * fontTexture )const
+		, FontTexture const * fontTexture
+		, ashes::BufferBase const & idsBuffer )const
 	{
 		if ( textBuffer && fontTexture )
 		{
@@ -178,6 +205,10 @@ namespace castor3d
 			, *overlaysData
 			, 0u
 			, uint32_t( overlaysData->getCount() ) );
+		result->createBinding( descriptorLayout.getBinding( uint32_t( OverlayBindingId::eOverlaysIDs ) )
+			, idsBuffer
+			, 0u
+			, uint32_t( idsBuffer.getSize() ) );
 		result->update();
 		return result;
 	}

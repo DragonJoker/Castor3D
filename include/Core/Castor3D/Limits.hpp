@@ -40,9 +40,9 @@ namespace castor3d
 	*/
 	//@{
 	// Maximum pipelines and buffer count.
-	static uint64_t constexpr MaxPipelines = 25'000ull;
+	static uint64_t constexpr MaxPipelines = 32'768ull;
 	// Maximum nodes per Pipeline Nodes buffer.
-	static uint64_t constexpr MaxNodesPerPipeline = 1'000ull;
+	static uint64_t constexpr MaxNodesPerPipeline = 1'024ull;
 	// Maximum nodes per meshlet indirect commands buffer.
 	static uint64_t constexpr MaxSubmeshMeshletDrawIndirectCommand = MaxPipelines;
 	// Maximum nodes per indexed indirect commands buffer.
@@ -52,7 +52,7 @@ namespace castor3d
 	// Maximum billboard nodes per indirect commands buffer.
 	static uint64_t constexpr MaxBillboardDrawIndirectCommand = MaxPipelines;
 	// Maximum objects nodes count in a scene (submesh or billboards).
-	static uint64_t constexpr MaxObjectNodesCount = 250'000ull;
+	static uint64_t constexpr MaxObjectNodesCount = 262'144ull;
 	//@}
 	/**
 	*\name
@@ -127,17 +127,15 @@ namespace castor3d
 	*/
 	//@{
 	// Light Buffer.
-	static uint32_t constexpr MaxLightsCount = 2'000u;
+	static uint32_t constexpr MaxLightsCount = 2'048u;
 	// Pass Buffer.
-	static uint32_t constexpr MaxMaterialsCount = 2'000u;
-	static uint32_t constexpr MaxSssProfilesCount = 100u;
+	static uint32_t constexpr MaxMaterialsCount = 2'048u;
+	static uint32_t constexpr MaxSssProfilesCount = 128u;
 	static int32_t constexpr MaxMaterialComponentsCount = 8;
 	// Texture Configuration Buffer.
-	static uint32_t constexpr MaxTextureConfigurationCount = 4'000u;
-	static int constexpr MaxTextureConfigurationComponentsCount = 12;
+	static uint32_t constexpr MaxTextureConfigurationCount = 4'096u;
 	// Texture Animation Buffer.
-	static uint32_t constexpr MaxTextureAnimationCount = MaxTextureConfigurationCount;
-	static int constexpr MaxTextureAnimationComponentsCount = 4;
+	static uint32_t constexpr MaxTextureAnimationCount = 4'096u;
 	//@}
 	/**
 	*\name
@@ -145,45 +143,42 @@ namespace castor3d
 	*/
 	//@{
 	// Nodes IDs buffer
-	static uint32_t constexpr MaxObjectIDNodesCount = 10'000u;
+	static uint32_t constexpr MaxObjectIDNodesCount = 16'384u;
 	// Morphing Data buffer
-	static uint32_t constexpr MaxMorphingDataCount = 1'000u;
+	static uint32_t constexpr MaxMorphingDataCount = 1'024u;
 	// Skinning Data buffer
-	static uint32_t constexpr MaxSkinningDataCount = 1'000u;
+	static uint32_t constexpr MaxSkinningDataCount = 1'024u;
 	//@}
 	/**
 	*\name
 	*	Other.
 	*/
 	//@{
+	// Max overlay count per buffer
+	static uint32_t constexpr MaxOverlaysPerBuffer = 65'536u;
 	// Max counts for text overlays
-	static uint32_t constexpr MaxCharsPerOverlay = 600u;
-	static uint32_t constexpr MaxLinesPerOverlay = 600u;
+	static uint32_t constexpr MaxCharsPerOverlay = 1'024u;
+	static uint32_t constexpr MaxLinesPerOverlay = 1'024u;
 	// Max counts for text overlays text buffer
 	static uint32_t constexpr MaxCharsPerBuffer = 65'536u;
 	static uint32_t constexpr MaxWordsPerBuffer = 16'384u;
 	static uint32_t constexpr MaxLinesPerBuffer = 16'384u;
 	// Max counts for text buffers
 	static uint32_t constexpr MaxTextsContsPerOverlay = MaxCharsPerOverlay;
-	static uint32_t constexpr MaxTextsOverlaysPerBuffer = 1'000u;
-	static uint32_t constexpr MaxTextsCharsPerWord = 60u;
-	static uint32_t constexpr MaxTextsCharsPerLine = 600u;
-	// Max count for (border)panel overlay buffer pool
-	static uint32_t constexpr MaxOverlayPanelsPerBuffer = 100u;
 	// Base count for objects buffers pool
-	static uint32_t constexpr BaseObjectPoolBufferCount = 1'000'000u;
+	static uint32_t constexpr BaseObjectPoolBufferCount = 1'048'576u;
 	// Max bones affecting a vertex
-	static uint32_t constexpr MaxBonesPerVertex = 8;
+	static uint32_t constexpr MaxBonesPerVertex = 8u;
 	// Max bones in a skeleton
-	static uint32_t constexpr MaxBonesCount = 400u;
+	static uint32_t constexpr MaxBonesCount = 512u;
 	// Max morph target in a mesh
-	static uint32_t constexpr MaxMorphTargets = 100u;
+	static uint32_t constexpr MaxMorphTargets = 128u;
 	// Number of mip levels in the linearised depth buffer
 	static uint32_t constexpr MaxLinearizedDepthMipLevel = 5u;
 	// The picking area size
 	static uint32_t constexpr PickingAreaWidth = 32u;
-	static uint32_t constexpr MaxRsmRange = 800u;
-	static uint32_t constexpr MaxBindlessResources = 16536u;
+	static uint32_t constexpr MaxRsmRange = 1'024u;
+	static uint32_t constexpr MaxBindlessResources = 16'384u;
 	// Max supported texture coordinates sets.
 	static uint32_t constexpr MaxTextureCoordinatesSets = 4u;
 	//@}
