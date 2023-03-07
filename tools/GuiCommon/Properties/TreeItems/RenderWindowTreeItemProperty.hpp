@@ -40,6 +40,8 @@ namespace GuiCommon
 		 */
 		void doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )override;
 
+		void doCreateDebugProperties( wxPGEditor * editor, wxPropertyGrid * grid );
+
 	private:
 		castor3d::RenderWindow & m_window;
 	};

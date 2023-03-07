@@ -2,6 +2,8 @@
 
 #include "GuiCommon/Properties/AdditionalProperties.hpp"
 
+#include <Castor3D/Engine.hpp>
+#include <Castor3D/Render/RenderLoop.hpp>
 #include <Castor3D/Render/RenderWindow.hpp>
 
 #include <wx/propgrid/advprops.h>
@@ -22,5 +24,28 @@ namespace GuiCommon
 		static wxString PROPERTY_CATEGORY_RENDER_WINDOW = _( "Render Window: " );
 
 		addProperty( grid, PROPERTY_CATEGORY_RENDER_WINDOW + wxString( m_window.getName() ) );
+
+		doCreateDebugProperties( editor, grid );
+	}
+
+	void RenderWindowTreeItemProperty::doCreateDebugProperties( wxPGEditor * editor
+		, wxPropertyGrid * grid )
+	{
+		static wxString PROPERTY_CATEGORY_DEBUG = _( "Debug" );
+		static wxString PROPERTY_SCENE_DEBUG_OVERLAYS = _( "Debug overlays" );
+		static wxString PROPERTY_SCENE_DETAILED_DEBUG = _( "Detailed" );
+
+		addProperty( grid
+			, PROPERTY_CATEGORY_DEBUG );
+		addPropertyT( grid
+			, PROPERTY_SCENE_DEBUG_OVERLAYS
+			, m_window.getEngine()->getRenderLoop().hasDebugOverlays()
+			, &m_window.getEngine()->getRenderLoop()
+			, &castor3d::RenderLoop::showDebugOverlays );
+		addPropertyT( grid
+			, PROPERTY_SCENE_DETAILED_DEBUG
+			, m_window.getEngine()->getRenderLoop().hasDetailedDebugOverlays()
+			, &m_window.getEngine()->getRenderLoop()
+			, &castor3d::RenderLoop::enableDetailedDebugOverlays );
 	}
 }

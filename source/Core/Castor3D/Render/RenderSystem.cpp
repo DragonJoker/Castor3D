@@ -742,6 +742,39 @@ namespace castor3d
 		m_gpuInformations.setValue( GpuMax::eViewportWidth, limits.maxViewportDimensions[0] );
 		m_gpuInformations.setValue( GpuMax::eViewportHeight, limits.maxViewportDimensions[1] );
 		m_gpuInformations.setValue( GpuMax::eViewports, limits.maxViewports );
+		m_gpuInformations.setValue( GpuMax::eWorkGroupCountX, limits.maxComputeWorkGroupCount[0] );
+		m_gpuInformations.setValue( GpuMax::eWorkGroupCountY, limits.maxComputeWorkGroupCount[1] );
+		m_gpuInformations.setValue( GpuMax::eWorkGroupCountZ, limits.maxComputeWorkGroupCount[2] );
+		m_gpuInformations.setValue( GpuMax::eWorkGroupSizeX, limits.maxComputeWorkGroupSize[0] );
+		m_gpuInformations.setValue( GpuMax::eWorkGroupSizeY, limits.maxComputeWorkGroupSize[1] );
+		m_gpuInformations.setValue( GpuMax::eWorkGroupSizeZ, limits.maxComputeWorkGroupSize[2] );
+		m_gpuInformations.setValue( GpuMax::eWorkGroupInvocations, limits.maxComputeWorkGroupInvocations );
+
+#if VK_NV_mesh_shader
+		if ( m_device->hasMeshShaders() )
+		{
+			auto & meshLimits = m_device->getMeshProperties();
+			m_gpuInformations.setValue( GpuMax::eMeshWorkGroupInvocations, meshLimits.maxMeshWorkGroupInvocations );
+			m_gpuInformations.setValue( GpuMax::eMeshWorkGroupSizeX, meshLimits.maxMeshWorkGroupSize[0] );
+			m_gpuInformations.setValue( GpuMax::eMeshWorkGroupSizeY, meshLimits.maxMeshWorkGroupSize[1] );
+			m_gpuInformations.setValue( GpuMax::eMeshWorkGroupSizeZ, meshLimits.maxMeshWorkGroupSize[2] );
+			m_gpuInformations.setValue( GpuMax::eMeshTotalMemorySize, meshLimits.maxMeshTotalMemorySize );
+			m_gpuInformations.setValue( GpuMax::eMeshOutputVertices, meshLimits.maxMeshOutputVertices );
+			m_gpuInformations.setValue( GpuMax::eMeshOutputPrimitives, meshLimits.maxMeshOutputPrimitives );
+		}
+
+		if ( m_device->hasTaskShaders() )
+		{
+			auto & meshLimits = m_device->getMeshProperties();
+			m_gpuInformations.setValue( GpuMax::eDrawMeshTasksCount, meshLimits.maxDrawMeshTasksCount );
+			m_gpuInformations.setValue( GpuMax::eTaskWorkGroupInvocations, meshLimits.maxTaskWorkGroupInvocations );
+			m_gpuInformations.setValue( GpuMax::eTaskWorkGroupSizeX, meshLimits.maxTaskWorkGroupSize[0] );
+			m_gpuInformations.setValue( GpuMax::eTaskWorkGroupSizeY, meshLimits.maxTaskWorkGroupSize[1] );
+			m_gpuInformations.setValue( GpuMax::eTaskWorkGroupSizeZ, meshLimits.maxTaskWorkGroupSize[2] );
+			m_gpuInformations.setValue( GpuMax::eTaskTotalMemorySize, meshLimits.maxTaskTotalMemorySize );
+			m_gpuInformations.setValue( GpuMax::eTaskOutputCount, meshLimits.maxTaskOutputCount );
+		}
+#endif
 
 		log::info << m_gpuInformations << std::endl;
 	}

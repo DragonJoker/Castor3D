@@ -312,6 +312,12 @@ namespace castor3d
 		C3D_API bool hasBindless()const;
 		C3D_API uint32_t getMaxBindlessSampled()const;
 		C3D_API uint32_t getMaxBindlessStorage()const;
+#if VK_NV_mesh_shader
+		VkPhysicalDeviceMeshShaderPropertiesNV const & getMeshProperties()const noexcept
+		{
+			return m_meshShaderProperties;
+		}
+#endif
 
 		ashes::Device const * operator->()const
 		{

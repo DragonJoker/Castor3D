@@ -140,6 +140,11 @@ namespace castor3d
 			return m_visible;
 		}
 
+		bool isDetailed()const
+		{
+			return m_detailed;
+		}
+
 		void enableDetailed( bool value )
 		{
 			m_detailed = value;
