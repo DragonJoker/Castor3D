@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Render/Culling/CullingModule.hpp"
+#include "Castor3D/Render/Overlays/OverlaysModule.hpp"
 #include "Castor3D/Render/Passes/PassesModule.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"
 #include "Castor3D/Scene/Background/BackgroundModule.hpp"
