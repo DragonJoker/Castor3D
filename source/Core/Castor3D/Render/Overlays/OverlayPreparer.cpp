@@ -20,11 +20,9 @@ namespace castor3d
 			, castor::Size const & renderSize
 			, uint32_t vertexOffset )
 		{
-			auto size = overlay.getAbsoluteSize( renderSize );
 			auto ratio = overlay.getRenderRatio( renderSize );
-			data.size = castor::Point2f{ size.getWidth(), size.getHeight() };
-			data.position = castor::Point2f{ overlay.getAbsolutePosition() };
-			data.size = castor::Point2f{ castor::Point2d{ data.size } *ratio };
+			data.absoluteSize = castor::Point2f{ overlay.getAbsoluteSize() * ratio };
+			data.absolutePosition = castor::Point2f{ overlay.getAbsolutePosition() * ratio };
 			data.uv = castor::Point4f{ overlay.getUV() };
 			data.materialId = pass.getId();
 			data.vertexOffset = vertexOffset;
@@ -288,9 +286,7 @@ namespace castor3d
 			, pass
 			, renderSize
 			, vertexOffset / sizeof( BorderPanelOverlay::Vertex ) );
-		auto border = overlay.getAbsoluteBorderSize( renderSize );
-		data.border = castor::Point4f{ border.left(), border.top(), border.right(), border.bottom() };
-		data.border = castor::Point4f{ castor::Point4d{ data.border } *castor::Point4d{ ratio->x, ratio->y, ratio->x, ratio->y } };
+		data.border = castor::Point4f{ overlay.getAbsoluteBorderSize() * castor::Point4d{ ratio->x, ratio->y, ratio->x, ratio->y } };
 		data.borderInnerUV = castor::Point4f{ overlay.getBorderInnerUV() };
 		data.borderOuterUV = castor::Point4f{ overlay.getBorderOuterUV() };
 		data.borderPosition = uint32_t( overlay.getBorderPosition() );

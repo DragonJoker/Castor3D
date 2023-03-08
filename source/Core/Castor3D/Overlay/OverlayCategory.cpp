@@ -204,7 +204,7 @@ namespace castor3d
 		if ( isPositionChanged() || renderer.isSizeChanged() )
 		{
 			castor::Size renderSize = renderer.getSize();
-			castor::Point2d parentSize = doGetParentSize( renderer );
+			castor::Point2d parentSize = doGetParentSize() * renderSize;
 			bool changed = m_positionChanged;
 			castor::Position pxPos = getPixelPosition();
 			castor::Point2d relPos = getRelativePosition();
@@ -214,7 +214,7 @@ namespace castor3d
 				auto v = double( pxPos.x() ) / parentSize->x;
 				changed = changed || ( relPos->x != v );
 				relPos->x = v;
-				m_computeSize[0] = renderSize[0];
+				m_computeSize[0] = renderSize->x;
 			}
 
 			if ( pxPos.y() )
@@ -222,7 +222,7 @@ namespace castor3d
 				auto v = double( pxPos.y() ) / parentSize->y;
 				changed = changed || ( relPos->y != v );
 				relPos->y = v;
-				m_computeSize[1] = renderSize[1];
+				m_computeSize[1] = renderSize->y;
 			}
 
 			if ( changed )
@@ -239,7 +239,7 @@ namespace castor3d
 		if ( isSizeChanged() || renderer.isSizeChanged() )
 		{
 			castor::Size renderSize = renderer.getSize();
-			castor::Point2d parentSize = doGetParentSize( renderer );
+			castor::Point2d parentSize = doGetParentSize() * renderSize;
 			bool changed = m_sizeChanged;
 			castor::Size pxSize = getPixelSize();
 			castor::Point2d relSize = getRelativeSize();
@@ -249,7 +249,7 @@ namespace castor3d
 				auto v = double( pxSize.getWidth() ) / parentSize->x;
 				changed = changed || ( relSize->x != v );
 				relSize->x = v;
-				m_computeSize[0] = renderSize[0];
+				m_computeSize[0] = renderSize->x;
 			}
 
 			if ( pxSize.getHeight() )
@@ -257,7 +257,7 @@ namespace castor3d
 				auto v = double( pxSize.getHeight() ) / parentSize->y;
 				changed = changed || ( relSize->y != v );
 				relSize->y = v;
-				m_computeSize[1] = renderSize[1];
+				m_computeSize[1] = renderSize->y;
 			}
 
 			if ( changed )
@@ -281,19 +281,15 @@ namespace castor3d
 		}
 	}
 
-	castor::Point2d OverlayCategory::doGetParentSize( OverlayRenderer const & renderer )const
+	castor::Point2d OverlayCategory::doGetParentSize()const
 	{
-		auto parent = getOverlay().getParent();
-		castor::Size renderSize = renderer.getSize();
-		castor::Point2d totalSize( renderSize.getWidth(), renderSize.getHeight() );
+		castor::Point2d result( 1.0, 1.0 );
 
-		if ( parent )
+		if ( auto parent = getOverlay().getParent() )
 		{
-			castor::Point2d parentSize = parent->getAbsoluteSize();
-			totalSize[0] = parentSize[0] * totalSize[0];
-			totalSize[1] = parentSize[1] * totalSize[1];
+			result = parent->getAbsoluteSize();
 		}
 
-		return totalSize;
+		return result;
 	}
 }

@@ -14,7 +14,7 @@ namespace castor3d::shader
 
 	sdw::Vec2 OverlayData::modelToView( sdw::Vec2 const & pos )const
 	{
-		return position() + pos;
+		return absolutePosition() + pos;
 	}
 
 	//*********************************************************************************************

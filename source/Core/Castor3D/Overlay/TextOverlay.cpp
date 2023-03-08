@@ -251,6 +251,8 @@ namespace castor3d
 				, c3d_lines[overlay.textLineOffset() + word.line()] );
 			auto renderSize = writer.declLocale( "renderSize"
 				, vec2( c3d_cameraData.renderSize() ) );
+			auto overlaySize = writer.declLocale( "overlaySize"
+				, overlay.absoluteSize() * vec2( c3d_cameraData.renderSize() ) );
 
 			auto extent = writer.declLocale( "extent"
 				, ivec4( line.position().x() + word.left() + character.left() + character.bearing().x()
@@ -264,8 +266,8 @@ namespace castor3d
 			auto fontUv = writer.declLocale( "fontUv", vec4( 0.0_f ) );
 
 			// check for underflow/overflow
-			IF( writer, extent.x() < writer.cast< sdw::Int >( overlay.size().x() )
-				&& extent.y() < writer.cast< sdw::Int >( overlay.size().y() )
+			IF( writer, extent.x() < writer.cast< sdw::Int >( overlaySize.x() )
+				&& extent.y() < writer.cast< sdw::Int >( overlaySize.y() )
 				&& extent.z() > 0
 				&& extent.w() > 0 )
 			{
@@ -280,7 +282,7 @@ namespace castor3d
 				//
 				// Compute Letter's Texture UV.
 				//
-				texUv = generateUvs( overlay.size(), extent );
+				texUv = generateUvs( overlaySize, extent );
 				relative = vec4( extent ) / vec4( renderSize.xy(), renderSize.xy() );
 			}
 			FI;
