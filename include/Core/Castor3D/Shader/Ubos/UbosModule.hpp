@@ -331,8 +331,9 @@ namespace castor3d
 	struct OverlayUboConfiguration
 	{
 		castor::Point4f uv{};
-		castor::Point2f absolutePosition{};
-		castor::Point2f absoluteSize{};
+		castor::Point4f parentRect{};
+		castor::Point2f relativePosition{};
+		castor::Point2f relativeSize{};
 		castor::Point4f border{};
 		castor::Point4f borderInnerUV{};
 		castor::Point4f borderOuterUV{};

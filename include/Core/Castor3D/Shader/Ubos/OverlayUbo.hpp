@@ -17,8 +17,9 @@ namespace castor3d::shader
 		: public sdw::StructInstanceHelperT < "C3D_OverlayData"
 			, sdw::type::MemoryLayout::eStd430
 			, sdw::Vec4Field< "uv" >
-			, sdw::Vec2Field< "position" >
-			, sdw::U32Vec2Field< "size" >
+			, sdw::Vec4Field< "parentRect" >
+			, sdw::Vec2Field< "relativePosition" >
+			, sdw::Vec2Field< "relativeSize" >
 			, sdw::Vec4Field< "border" >
 			, sdw::Vec4Field< "borderInnerUV" >
 			, sdw::Vec4Field< "borderOuterUV" >
@@ -38,11 +39,11 @@ namespace castor3d::shader
 		{
 		}
 
-		C3D_API sdw::Vec2 modelToView( sdw::Vec2 const & pos )const;
-		
 		auto vertexOffset()const { return getMember< "vertexOffset" >(); }
 		auto materialId()const { return getMember< "materialId" >(); }
-		auto absoluteSize()const { return getMember< "absoluteSize" >(); }
+		auto parentRect()const { return getMember< "parentRect" >(); }
+		auto relativeSize()const { return getMember< "relativeSize" >(); }
+		auto relativePosition()const { return getMember< "relativePosition" >(); }
 		auto uv()const { return getMember< "uv" >(); }
 
 		auto border()const { return getMember< "border" >(); }
@@ -54,9 +55,6 @@ namespace castor3d::shader
 		auto textLineOffset()const { return getMember< "textLineOffset" >(); }
 		auto textTopOffset()const { return getMember< "textTopOffset" >(); }
 		auto textTexturingMode()const { return getMember< "textTexturingMode" >(); }
-
-	private:
-		auto absolutePosition()const { return getMember< "absolutePosition" >(); }
 	};
 
 	struct OverlaysIDs

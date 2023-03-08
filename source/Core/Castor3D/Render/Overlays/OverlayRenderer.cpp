@@ -552,6 +552,7 @@ namespace castor3d
 				, 0u
 				, 0u ) );
 		m_commands.commandBuffer->setViewport( makeViewport( m_size ) );
+		m_commands.commandBuffer->setScissor( makeScissor( m_size ) );
 	}
 
 	void OverlayRenderer::doEndPrepare()
@@ -909,20 +910,26 @@ namespace castor3d
 				{
 					auto overlayID = writer.declLocale( "overlayID"
 						, c3d_overlaysIDs[overlaySubID] );
-					auto overlaysData = writer.declLocale( "overlaysData"
+					auto overlay = writer.declLocale( "overlay"
 						, c3d_overlaysData[overlayID] );
 					auto vertexOffset = writer.declLocale( "vertexOffset"
-						, writer.cast< sdw::UInt >( in.vertexIndex ) + overlaysData.vertexOffset() );
+						, writer.cast< sdw::UInt >( in.vertexIndex ) + overlay.vertexOffset() );
 					auto surface = writer.declLocale( "vertex"
 						, c3d_overlaysSurfaces[vertexOffset] );
+					auto renderSize = writer.declLocale( "renderSize"
+						, vec2( c3d_cameraData.renderSize() ) );
+					auto parentSize = writer.declLocale( "parentSize"
+						, overlay.parentRect().zw() - overlay.parentRect().xy() );
+					auto absolutePosition = writer.declLocale( "absolutePosition"
+						, overlay.relativePosition() * parentSize );
 
 					out.texUV = surface.texUV;
 					out.fontUV = surface.fontUV;
-					out.vtx.position = c3d_cameraData.viewToProj( vec4( vec2( c3d_cameraData.renderSize() ) * overlaysData.modelToView( surface.position )
+					out.vtx.position = c3d_cameraData.viewToProj( vec4( renderSize * ( absolutePosition + surface.position + overlay.parentRect().xy() )
 							, 0.0_f
 							, 1.0_f ) );
 					out.position = out.vtx.position.xy();
-					out.materialId = overlaysData.materialId();
+					out.materialId = overlay.materialId();
 				} );
 
 			vtx.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

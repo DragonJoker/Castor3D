@@ -166,13 +166,6 @@ namespace castor3d
 		 */
 		C3D_API castor::Position computePixelPosition()const;
 		/**
-		 *\~english
-		 *\brief		Computes the scissor for given render size.
-		 *\~french
-		 *\brief		Calcule le scissor pour la taille donnée.
-		 */
-		C3D_API VkRect2D computeScissor( castor::Size const & size )const;
-		/**
 		*\~english
 		*\name
 		*	Getters.
@@ -184,6 +177,11 @@ namespace castor3d
 		C3D_API virtual bool isChanged()const noexcept
 		{
 			return false;
+		}
+
+		castor::Point4d const & getClientArea()const noexcept
+		{
+			return m_clientArea;
 		}
 
 		castor::Point2d const & getRelativeSize()const noexcept
@@ -362,7 +360,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Met à jour le scissor pour cette incrustation
 		 */
-		C3D_API void updateScissor( OverlayRenderer const & renderer );
+		C3D_API void updateClientArea( OverlayRenderer const & renderer );
 
 	private:
 		/**
@@ -388,15 +386,6 @@ namespace castor3d
 		 *\brief		Met à jour la taille de l'incrustation, en prenant en compte la taille en pixel voulue.
 		 */
 		virtual void doUpdateSize( OverlayRenderer const & renderer )
-		{
-		}
-		/**
-		 *\~english
-		 *\brief		Updates the scissor for this overlay
-		 *\~french
-		 *\brief		Met à jour le scissor pour cette incrustation
-		 */
-		virtual void doUpdateScissor()
 		{
 		}
 		/**
@@ -450,12 +439,9 @@ namespace castor3d
 		//!\~english	The UV for the panel.
 		//!\~french		Les UV du panneau.
 		castor::Point4d m_uv{ 0.0, 0.0, 1.0, 1.0 };
-		//!\~english	The scissor offset, in [0, 1] range.
-		//!\~french		L'offset du scissor, dans l'intervalle [0, 1].
-		castor::Point2d m_scissorOffset{};
-		//!\~english	The scissor dimensions, in [0, 1] range.
-		//!\~french		Les dimensions du scissor, dans l'intervalle [0, 1].
-		castor::Point2d m_scissorExtent{};
+		//!\~english	The area where children can be drawn.
+		//!\~french		La zone où les enfants peuvent se dessiner.
+		castor::Point4d m_clientArea{};
 	};
 }
 
