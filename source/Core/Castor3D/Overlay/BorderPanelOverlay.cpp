@@ -103,41 +103,34 @@ namespace castor3d
 					, overlayData.vertexOffset() );
 				auto renderSize = writer.declLocale( "renderSize"
 					, vec2( c3d_cameraData.renderSize() ) );
-				auto ww = writer.declLocale( "w"
-					, renderSize.x() );
-				auto hh = writer.declLocale( "h"
-					, renderSize.y() );
 
-				auto centerL = writer.declLocale( "centerL", 0.0_f );
-				auto centerT = writer.declLocale( "centerT", 0.0_f );
-				auto centerR = writer.declLocale( "centerR", overlayData.size().x() );
-				auto centerB = writer.declLocale( "centerB", overlayData.size().y() );
+				auto center = writer.declLocale( "center"
+					, vec4( vec2( 0.0_f )
+						, overlayData.absoluteSize() * renderSize ) );
+				auto border = writer.declLocale( "border"
+					, center );
+				auto borderExtent = writer.declLocale( "borderExtent"
+					, vec4( overlayData.border().xy() * renderSize
+						, -overlayData.border().zw() * renderSize ) );
 
 				IF( writer, overlayData.borderPosition() == uint32_t( BorderPosition::eInternal ) )
 				{
-					centerL += overlayData.border().x();
-					centerT += overlayData.border().y();
-					centerR -= overlayData.border().z();
-					centerB -= overlayData.border().w();
+					center += borderExtent;
 				}
 				ELSEIF( overlayData.borderPosition() == uint32_t( BorderPosition::eMiddle ) )
 				{
-					centerL += overlayData.border().x() / 2.0_f;
-					centerT += overlayData.border().y() / 2.0_f;
-					centerR -= overlayData.border().z() / 2.0_f;
-					centerB -= overlayData.border().w() / 2.0_f;
+					center += borderExtent / 2.0_f;
+					border -= borderExtent / 2.0_f;
+				}
+				ELSE
+				{
+					border -= borderExtent;
 				}
 				FI;
 
 				uint32_t index = 0;
-				auto borderL = writer.declLocale( "borderL", ( centerL - overlayData.border().x() ) / ww );
-				auto borderT = writer.declLocale( "borderT", ( centerT - overlayData.border().y() ) / hh );
-				auto borderR = writer.declLocale( "borderR", ( centerR + overlayData.border().z() ) / ww );
-				auto borderB = writer.declLocale( "borderB", ( centerB + overlayData.border().w() ) / hh );
-				centerL /= ww;
-				centerT /= hh;
-				centerR /= ww;
-				centerB /= hh;
+				border /= vec4( renderSize.xy(), renderSize.xy() );
+				center /= vec4( renderSize.xy(), renderSize.xy() );
 
 				auto borderUvLL = writer.declLocale( "borderUvLL", overlayData.borderOuterUV().x() );
 				auto borderUvTT = writer.declLocale( "borderUvTT", overlayData.borderOuterUV().y() );
@@ -149,68 +142,68 @@ namespace castor3d
 				auto borderUvBB = writer.declLocale( "borderUvBB", overlayData.borderOuterUV().w() );
 
 				// Corner Top Left
-				c3d_overlaysSurfaces[offset + index].set( vec2( borderL, borderT ), vec2( borderUvLL, borderUvTT ) ); ++index;
-				c3d_overlaysSurfaces[offset + index].set( vec2( borderL, centerT ), vec2( borderUvLL, borderUvMT ) ); ++index;
-				c3d_overlaysSurfaces[offset + index].set( vec2( centerL, centerT ), vec2( borderUvML, borderUvMT ) ); ++index;
-				c3d_overlaysSurfaces[offset + index].set( vec2( borderL, borderT ), vec2( borderUvLL, borderUvTT ) ); ++index;
-				c3d_overlaysSurfaces[offset + index].set( vec2( centerL, centerT ), vec2( borderUvML, borderUvMT ) ); ++index;
-				c3d_overlaysSurfaces[offset + index].set( vec2( centerL, borderT ), vec2( borderUvML, borderUvTT ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( border.x(), border.y() ), vec2( borderUvLL, borderUvTT ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( border.x(), center.y() ), vec2( borderUvLL, borderUvMT ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( center.x(), center.y() ), vec2( borderUvML, borderUvMT ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( border.x(), border.y() ), vec2( borderUvLL, borderUvTT ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( center.x(), center.y() ), vec2( borderUvML, borderUvMT ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( center.x(), border.y() ), vec2( borderUvML, borderUvTT ) ); ++index;
 
 				// Border Top
-				c3d_overlaysSurfaces[offset + index].set( vec2( centerL, borderT ), vec2( borderUvML, borderUvTT ) ); ++index;
-				c3d_overlaysSurfaces[offset + index].set( vec2( centerL, centerT ), vec2( borderUvML, borderUvMT ) ); ++index;
-				c3d_overlaysSurfaces[offset + index].set( vec2( centerR, centerT ), vec2( borderUvMR, borderUvMT ) ); ++index;
-				c3d_overlaysSurfaces[offset + index].set( vec2( centerL, borderT ), vec2( borderUvML, borderUvTT ) ); ++index;
-				c3d_overlaysSurfaces[offset + index].set( vec2( centerR, centerT ), vec2( borderUvMR, borderUvMT ) ); ++index;
-				c3d_overlaysSurfaces[offset + index].set( vec2( centerR, borderT ), vec2( borderUvMR, borderUvTT ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( center.x(), border.y() ), vec2( borderUvML, borderUvTT ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( center.x(), center.y() ), vec2( borderUvML, borderUvMT ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( center.z(), center.y() ), vec2( borderUvMR, borderUvMT ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( center.x(), border.y() ), vec2( borderUvML, borderUvTT ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( center.z(), center.y() ), vec2( borderUvMR, borderUvMT ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( center.z(), border.y() ), vec2( borderUvMR, borderUvTT ) ); ++index;
 
 				// Corner Top Right
-				c3d_overlaysSurfaces[offset + index].set( vec2( centerR, borderT ), vec2( borderUvMR, borderUvTT ) ); ++index;
-				c3d_overlaysSurfaces[offset + index].set( vec2( centerR, centerT ), vec2( borderUvMR, borderUvMT ) ); ++index;
-				c3d_overlaysSurfaces[offset + index].set( vec2( borderR, centerT ), vec2( borderUvRR, borderUvMT ) ); ++index;
-				c3d_overlaysSurfaces[offset + index].set( vec2( centerR, borderT ), vec2( borderUvMR, borderUvTT ) ); ++index;
-				c3d_overlaysSurfaces[offset + index].set( vec2( borderR, centerT ), vec2( borderUvRR, borderUvMT ) ); ++index;
-				c3d_overlaysSurfaces[offset + index].set( vec2( borderR, borderT ), vec2( borderUvRR, borderUvTT ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( center.z(), border.y() ), vec2( borderUvMR, borderUvTT ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( center.z(), center.y() ), vec2( borderUvMR, borderUvMT ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( border.z(), center.y() ), vec2( borderUvRR, borderUvMT ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( center.z(), border.y() ), vec2( borderUvMR, borderUvTT ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( border.z(), center.y() ), vec2( borderUvRR, borderUvMT ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( border.z(), border.y() ), vec2( borderUvRR, borderUvTT ) ); ++index;
 
 				// Border Left
-				c3d_overlaysSurfaces[offset + index].set( vec2( borderL, centerT ), vec2( borderUvLL, borderUvMT ) ); ++index;
-				c3d_overlaysSurfaces[offset + index].set( vec2( borderL, centerB ), vec2( borderUvLL, borderUvMB ) ); ++index;
-				c3d_overlaysSurfaces[offset + index].set( vec2( centerL, centerB ), vec2( borderUvML, borderUvMB ) ); ++index;
-				c3d_overlaysSurfaces[offset + index].set( vec2( borderL, centerT ), vec2( borderUvLL, borderUvMT ) ); ++index;
-				c3d_overlaysSurfaces[offset + index].set( vec2( centerL, centerB ), vec2( borderUvML, borderUvMB ) ); ++index;
-				c3d_overlaysSurfaces[offset + index].set( vec2( centerL, centerT ), vec2( borderUvML, borderUvMT ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( border.x(), center.y() ), vec2( borderUvLL, borderUvMT ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( border.x(), center.w() ), vec2( borderUvLL, borderUvMB ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( center.x(), center.w() ), vec2( borderUvML, borderUvMB ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( border.x(), center.y() ), vec2( borderUvLL, borderUvMT ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( center.x(), center.w() ), vec2( borderUvML, borderUvMB ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( center.x(), center.y() ), vec2( borderUvML, borderUvMT ) ); ++index;
 
 				// Border Right
-				c3d_overlaysSurfaces[offset + index].set( vec2( centerR, centerT ), vec2( borderUvMR, borderUvMT ) ); ++index;
-				c3d_overlaysSurfaces[offset + index].set( vec2( centerR, centerB ), vec2( borderUvMR, borderUvMB ) ); ++index;
-				c3d_overlaysSurfaces[offset + index].set( vec2( borderR, centerB ), vec2( borderUvRR, borderUvMB ) ); ++index;
-				c3d_overlaysSurfaces[offset + index].set( vec2( centerR, centerT ), vec2( borderUvMR, borderUvMT ) ); ++index;
-				c3d_overlaysSurfaces[offset + index].set( vec2( borderR, centerB ), vec2( borderUvRR, borderUvMB ) ); ++index;
-				c3d_overlaysSurfaces[offset + index].set( vec2( borderR, centerT ), vec2( borderUvRR, borderUvMT ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( center.z(), center.y() ), vec2( borderUvMR, borderUvMT ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( center.z(), center.w() ), vec2( borderUvMR, borderUvMB ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( border.z(), center.w() ), vec2( borderUvRR, borderUvMB ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( center.z(), center.y() ), vec2( borderUvMR, borderUvMT ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( border.z(), center.w() ), vec2( borderUvRR, borderUvMB ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( border.z(), center.y() ), vec2( borderUvRR, borderUvMT ) ); ++index;
 
 				// Corner Bottom Left
-				c3d_overlaysSurfaces[offset + index].set( vec2( borderL, centerB ), vec2( borderUvLL, borderUvMB ) ); ++index;
-				c3d_overlaysSurfaces[offset + index].set( vec2( borderL, borderB ), vec2( borderUvLL, borderUvBB ) ); ++index;
-				c3d_overlaysSurfaces[offset + index].set( vec2( centerL, borderB ), vec2( borderUvML, borderUvBB ) ); ++index;
-				c3d_overlaysSurfaces[offset + index].set( vec2( borderL, centerB ), vec2( borderUvLL, borderUvMB ) ); ++index;
-				c3d_overlaysSurfaces[offset + index].set( vec2( centerL, borderB ), vec2( borderUvML, borderUvBB ) ); ++index;
-				c3d_overlaysSurfaces[offset + index].set( vec2( centerL, centerB ), vec2( borderUvML, borderUvMB ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( border.x(), center.w() ), vec2( borderUvLL, borderUvMB ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( border.x(), border.w() ), vec2( borderUvLL, borderUvBB ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( center.x(), border.w() ), vec2( borderUvML, borderUvBB ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( border.x(), center.w() ), vec2( borderUvLL, borderUvMB ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( center.x(), border.w() ), vec2( borderUvML, borderUvBB ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( center.x(), center.w() ), vec2( borderUvML, borderUvMB ) ); ++index;
 
 				// Border Bottom
-				c3d_overlaysSurfaces[offset + index].set( vec2( centerL, centerB ), vec2( borderUvML, borderUvMB ) ); ++index;
-				c3d_overlaysSurfaces[offset + index].set( vec2( centerL, borderB ), vec2( borderUvML, borderUvBB ) ); ++index;
-				c3d_overlaysSurfaces[offset + index].set( vec2( centerR, borderB ), vec2( borderUvMR, borderUvBB ) ); ++index;
-				c3d_overlaysSurfaces[offset + index].set( vec2( centerL, centerB ), vec2( borderUvML, borderUvMB ) ); ++index;
-				c3d_overlaysSurfaces[offset + index].set( vec2( centerR, borderB ), vec2( borderUvMR, borderUvBB ) ); ++index;
-				c3d_overlaysSurfaces[offset + index].set( vec2( centerR, centerB ), vec2( borderUvMR, borderUvMB ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( center.x(), center.w() ), vec2( borderUvML, borderUvMB ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( center.x(), border.w() ), vec2( borderUvML, borderUvBB ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( center.z(), border.w() ), vec2( borderUvMR, borderUvBB ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( center.x(), center.w() ), vec2( borderUvML, borderUvMB ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( center.z(), border.w() ), vec2( borderUvMR, borderUvBB ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( center.z(), center.w() ), vec2( borderUvMR, borderUvMB ) ); ++index;
 
 				// Corner Bottom Right
-				c3d_overlaysSurfaces[offset + index].set( vec2( centerR, centerB ), vec2( borderUvMR, borderUvMB ) ); ++index;
-				c3d_overlaysSurfaces[offset + index].set( vec2( centerR, borderB ), vec2( borderUvMR, borderUvBB ) ); ++index;
-				c3d_overlaysSurfaces[offset + index].set( vec2( borderR, borderB ), vec2( borderUvRR, borderUvBB ) ); ++index;
-				c3d_overlaysSurfaces[offset + index].set( vec2( centerR, centerB ), vec2( borderUvMR, borderUvMB ) ); ++index;
-				c3d_overlaysSurfaces[offset + index].set( vec2( borderR, borderB ), vec2( borderUvRR, borderUvBB ) ); ++index;
-				c3d_overlaysSurfaces[offset + index].set( vec2( borderR, centerB ), vec2( borderUvRR, borderUvMB ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( center.z(), center.w() ), vec2( borderUvMR, borderUvMB ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( center.z(), border.w() ), vec2( borderUvMR, borderUvBB ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( border.z(), border.w() ), vec2( borderUvRR, borderUvBB ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( center.z(), center.w() ), vec2( borderUvMR, borderUvMB ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( border.z(), border.w() ), vec2( borderUvRR, borderUvBB ) ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( vec2( border.z(), center.w() ), vec2( borderUvRR, borderUvMB ) ); ++index;
 			} );
 		comp.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		return makeShaderState( device, comp );

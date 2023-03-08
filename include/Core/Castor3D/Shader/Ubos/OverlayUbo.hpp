@@ -18,7 +18,7 @@ namespace castor3d::shader
 			, sdw::type::MemoryLayout::eStd430
 			, sdw::Vec4Field< "uv" >
 			, sdw::Vec2Field< "position" >
-			, sdw::Vec2Field< "size" >
+			, sdw::U32Vec2Field< "size" >
 			, sdw::Vec4Field< "border" >
 			, sdw::Vec4Field< "borderInnerUV" >
 			, sdw::Vec4Field< "borderOuterUV" >
@@ -42,7 +42,7 @@ namespace castor3d::shader
 		
 		auto vertexOffset()const { return getMember< "vertexOffset" >(); }
 		auto materialId()const { return getMember< "materialId" >(); }
-		auto size()const { return getMember< "size" >(); }
+		auto absoluteSize()const { return getMember< "absoluteSize" >(); }
 		auto uv()const { return getMember< "uv" >(); }
 
 		auto border()const { return getMember< "border" >(); }
@@ -56,7 +56,7 @@ namespace castor3d::shader
 		auto textTexturingMode()const { return getMember< "textTexturingMode" >(); }
 
 	private:
-		auto position()const { return getMember< "position" >(); }
+		auto absolutePosition()const { return getMember< "absolutePosition" >(); }
 	};
 
 	struct OverlaysIDs

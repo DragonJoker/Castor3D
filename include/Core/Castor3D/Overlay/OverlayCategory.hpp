@@ -371,7 +371,7 @@ namespace castor3d
 		 *\~french
 		 *\return		La taille de l'écran ou du parent.
 		 */
-		castor::Point2d doGetParentSize( OverlayRenderer const & renderer )const;
+		castor::Point2d doGetParentSize()const;
 		/**
 		 *\~english
 		 *\brief		Updates the overlay position, taking care of wanted pixel position.

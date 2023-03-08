@@ -26,7 +26,46 @@ namespace castor3d::shader
 		{
 		}
 
+		OverlaySurfaceT( sdw::Vec2 const pos
+			, sdw::Vec2 const uv )
+			: OverlaySurfaceT{ sdw::findWriterMandat( pos, uv )
+				, makeInitExpr( pos, uv )
+				, true }
+		{
+		}
+
+		OverlaySurfaceT( sdw::Vec2 const pos
+			, sdw::Vec2 const uv
+			, sdw::Vec2 const text )
+			: OverlaySurfaceT{ sdw::findWriterMandat( pos, uv, text )
+				, makeInitExpr( pos, uv, text )
+				, true }
+		{
+		}
+
 		SDW_DeclStructInstance( , OverlaySurfaceT );
+
+		static ast::expr::ExprPtr makeInitExpr( sdw::Vec2 const pos
+			, sdw::Vec2 const uv )
+		{
+			sdw::expr::ExprList params;
+			params.emplace_back( sdw::makeExpr( pos ) );
+			params.emplace_back( sdw::makeExpr( uv ) );
+			return sdw::makeAggrInit( makeType( sdw::findTypesCache( pos, uv ), false, true )
+				, std::move( params ) );
+		}
+
+		static ast::expr::ExprPtr makeInitExpr( sdw::Vec2 const pos
+			, sdw::Vec2 const uv
+			, sdw::Vec2 const text )
+		{
+			sdw::expr::ExprList params;
+			params.emplace_back( sdw::makeExpr( pos ) );
+			params.emplace_back( sdw::makeExpr( uv ) );
+			params.emplace_back( sdw::makeExpr( text ) );
+			return sdw::makeAggrInit( makeType( sdw::findTypesCache( pos, uv ), true, true )
+				, std::move( params ) );
+		}
 
 		static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache
 			, bool isTextOverlay

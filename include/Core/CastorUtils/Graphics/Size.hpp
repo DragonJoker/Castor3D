@@ -16,6 +16,17 @@ namespace castor
 	private:
 		typedef Coords< uint32_t, 2 > BaseType;
 
+	private:
+		union Datas
+		{
+			struct Mbr
+			{
+				uint32_t x;
+				uint32_t y;
+			} size;
+			uint32_t buffer[2];
+		}	m_data;
+
 	public:
 		/**
 		 *\~english
@@ -25,7 +36,7 @@ namespace castor
 		 *\brief		Constructeur
 		 *\param[in]	width, height	Les dimensions
 		 */
-		CU_API Size( uint32_t width = 0, uint32_t height = 0 );
+		CU_API Size( uint32_t width = 0, uint32_t height = 0 )noexcept;
 		/**
 		 *\~english
 		 *\brief		Copy Constructor
@@ -34,7 +45,7 @@ namespace castor
 		 *\brief		Constructeur par copie
 		 *\param[in]	obj	L'objet à copier
 		 */
-		CU_API Size( Size const & obj );
+		CU_API Size( Size const & obj )noexcept;
 		/**
 		 *\~english
 		 *\brief		Move assignment Constructor
@@ -43,14 +54,14 @@ namespace castor
 		 *\brief		Constructeur par déplacement
 		 *\param[in]	obj	L'objet à déplacer
 		 */
-		CU_API Size( Size && obj );
+		CU_API Size( Size && obj )noexcept;
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		CU_API ~Size();
+		CU_API ~Size()noexcept;
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator
@@ -61,7 +72,7 @@ namespace castor
 		 *\param[in]	obj	L'objet à copier
 		 *\return		Une référence sur cet objet
 		 */
-		CU_API Size & operator=( Size const & obj );
+		CU_API Size & operator=( Size const & obj )noexcept;
 		/**
 		 *\~english
 		 *\brief		Move assignment operator
@@ -72,7 +83,7 @@ namespace castor
 		 *\param[in]	obj	L'objet à déplacer
 		 *\return		Une référence sur cet objet
 		 */
-		CU_API Size & operator=( Size && obj );
+		CU_API Size & operator=( Size && obj )noexcept;
 		/**
 		 *\~english
 		 *\brief		sets the size values
@@ -81,7 +92,7 @@ namespace castor
 		 *\brief		Définit la taille
 		 *\param[in]	width, height	Les dimensions
 		 */
-		CU_API void set( uint32_t width, uint32_t height );
+		CU_API void set( uint32_t width, uint32_t height )noexcept;
 		/**
 		 *\~english
 		 *\brief		Retrieves the width
@@ -90,9 +101,9 @@ namespace castor
 		 *\brief		Récupère la largeur
 		 *\return		La largeur
 		 */
-		inline uint32_t getWidth()const
+		inline uint32_t getWidth()const noexcept
 		{
-			return m_data.size.cx;
+			return m_data.size.x;
 		}
 		/**
 		 *\~english
@@ -102,9 +113,9 @@ namespace castor
 		 *\brief		Récupère la largeur
 		 *\return		La largeur
 		 */
-		inline uint32_t & getWidth()
+		inline uint32_t & getWidth()noexcept
 		{
-			return m_data.size.cx;
+			return m_data.size.x;
 		}
 		/**
 		 *\~english
@@ -114,9 +125,9 @@ namespace castor
 		 *\brief		Récupère la hauteur
 		 *\return		La hauteur
 		 */
-		inline uint32_t getHeight()const
+		inline uint32_t getHeight()const noexcept
 		{
-			return m_data.size.cy;
+			return m_data.size.y;
 		}
 		/**
 		 *\~english
@@ -126,9 +137,9 @@ namespace castor
 		 *\brief		Récupère la hauteur
 		 *\return		La hauteur
 		 */
-		inline uint32_t & getHeight()
+		inline uint32_t & getHeight()noexcept
 		{
-			return m_data.size.cy;
+			return m_data.size.y;
 		}
 		/**
 		 *\~english
@@ -140,35 +151,34 @@ namespace castor
 		 *\remarks		Si width+cx < 0 (ou height+cy < 0) alors width=0 (respectivement height=0)
 		 *\param[in]	cx, cy	Les valeurs de modification
 		 */
-		CU_API void grow( int32_t cx, int32_t cy );
+		CU_API void grow( int32_t cx, int32_t cy )noexcept;
 
-		inline Size & operator<<=( uint32_t rhs )
+		inline Size & operator<<=( uint32_t rhs )noexcept
 		{
-			m_data.size.cx <<= rhs;
-			m_data.size.cy <<= rhs;
+			m_data.size.x <<= rhs;
+			m_data.size.y <<= rhs;
 			return *this;
 		}
 
-		inline Size & operator>>=( uint32_t rhs )
+		inline Size & operator>>=( uint32_t rhs )noexcept
 		{
-			m_data.size.cx >>= rhs;
-			m_data.size.cy >>= rhs;
+			m_data.size.x >>= rhs;
+			m_data.size.y >>= rhs;
 			return *this;
+		}
+
+		auto const operator->()const noexcept
+		{
+			return &m_data.size;
+		}
+
+		auto operator->()noexcept
+		{
+			return &m_data.size;
 		}
 
 		using BaseType::ptr;
 		using BaseType::constPtr;
-
-	private:
-		union
-		{
-			struct
-			{
-				uint32_t cx;
-				uint32_t cy;
-			} size;
-			uint32_t buffer[2];
-		}	m_data;
 	};
 	/**
 	 *\~english
@@ -180,7 +190,7 @@ namespace castor
 	 *\param[in]	a, b	Les tailles à comparer
 	 *\return		\p true si les tailles ont les mêmes dimensions
 	 */
-	CU_API bool operator==( Size const & a, Size const & b );
+	CU_API bool operator==( Size const & a, Size const & b )noexcept;
 	/**
 	 *\~english
 	 *\brief		Difference operator
@@ -191,16 +201,16 @@ namespace castor
 	 *\param[in]	a, b	Les tailles à comparer
 	 *\return		\p false si les tailles ont les mêmes dimensions
 	 */
-	CU_API bool operator!=( Size const & a, Size const & b );
+	CU_API bool operator!=( Size const & a, Size const & b )noexcept;
 
-	inline Size operator<<( Size const & lhs, uint32_t rhs )
+	inline Size operator<<( Size const & lhs, uint32_t rhs )noexcept
 	{
 		Size tmp{ lhs };
 		tmp <<= rhs;
 		return tmp;
 	}
 
-	inline Size operator>>( Size const & lhs, uint32_t rhs )
+	inline Size operator>>( Size const & lhs, uint32_t rhs )noexcept
 	{
 		Size tmp{ lhs };
 		tmp >>= rhs;
