@@ -97,27 +97,29 @@ namespace castor3d
 		writer.implementMain( 1u
 			, [&]( sdw::ComputeIn in )
 			{
-				auto overlayData = writer.declLocale( "overlayData"
+				auto overlay = writer.declLocale( "overlay"
 				, c3d_overlaysData[in.globalInvocationID.x()] );
 				auto offset = writer.declLocale( "offset"
-					, overlayData.vertexOffset() );
+					, overlay.vertexOffset() );
 				auto renderSize = writer.declLocale( "renderSize"
 					, vec2( c3d_cameraData.renderSize() ) );
+				auto parentSize = writer.declLocale( "parentSize"
+					, overlay.parentRect().zw() - overlay.parentRect().xy() );
 
 				auto center = writer.declLocale( "center"
 					, vec4( vec2( 0.0_f )
-						, overlayData.absoluteSize() * renderSize ) );
+						, overlay.relativeSize() * parentSize ) );
 				auto border = writer.declLocale( "border"
 					, center );
 				auto borderExtent = writer.declLocale( "borderExtent"
-					, vec4( overlayData.border().xy() * renderSize
-						, -overlayData.border().zw() * renderSize ) );
+					, vec4( overlay.border().xy()
+						, -overlay.border().zw() ) );
 
-				IF( writer, overlayData.borderPosition() == uint32_t( BorderPosition::eInternal ) )
+				IF( writer, overlay.borderPosition() == uint32_t( BorderPosition::eInternal ) )
 				{
 					center += borderExtent;
 				}
-				ELSEIF( overlayData.borderPosition() == uint32_t( BorderPosition::eMiddle ) )
+				ELSEIF( overlay.borderPosition() == uint32_t( BorderPosition::eMiddle ) )
 				{
 					center += borderExtent / 2.0_f;
 					border -= borderExtent / 2.0_f;
@@ -129,17 +131,15 @@ namespace castor3d
 				FI;
 
 				uint32_t index = 0;
-				border /= vec4( renderSize.xy(), renderSize.xy() );
-				center /= vec4( renderSize.xy(), renderSize.xy() );
 
-				auto borderUvLL = writer.declLocale( "borderUvLL", overlayData.borderOuterUV().x() );
-				auto borderUvTT = writer.declLocale( "borderUvTT", overlayData.borderOuterUV().y() );
-				auto borderUvML = writer.declLocale( "borderUvML", overlayData.borderInnerUV().x() );
-				auto borderUvMT = writer.declLocale( "borderUvMT", overlayData.borderInnerUV().y() );
-				auto borderUvMR = writer.declLocale( "borderUvMR", overlayData.borderInnerUV().z() );
-				auto borderUvMB = writer.declLocale( "borderUvMB", overlayData.borderInnerUV().w() );
-				auto borderUvRR = writer.declLocale( "borderUvRR", overlayData.borderOuterUV().z() );
-				auto borderUvBB = writer.declLocale( "borderUvBB", overlayData.borderOuterUV().w() );
+				auto borderUvLL = writer.declLocale( "borderUvLL", overlay.borderOuterUV().x() );
+				auto borderUvTT = writer.declLocale( "borderUvTT", overlay.borderOuterUV().y() );
+				auto borderUvML = writer.declLocale( "borderUvML", overlay.borderInnerUV().x() );
+				auto borderUvMT = writer.declLocale( "borderUvMT", overlay.borderInnerUV().y() );
+				auto borderUvMR = writer.declLocale( "borderUvMR", overlay.borderInnerUV().z() );
+				auto borderUvMB = writer.declLocale( "borderUvMB", overlay.borderInnerUV().w() );
+				auto borderUvRR = writer.declLocale( "borderUvRR", overlay.borderOuterUV().z() );
+				auto borderUvBB = writer.declLocale( "borderUvBB", overlay.borderOuterUV().w() );
 
 				// Corner Top Left
 				c3d_overlaysSurfaces[offset + index].set( vec2( border.x(), border.y() ), vec2( borderUvLL, borderUvTT ) ); ++index;
@@ -257,27 +257,6 @@ namespace castor3d
 				setBorderSize( ptSizes );
 			}
 		}
-	}
-
-	void BorderPanelOverlay::doUpdateScissor()
-	{
-		auto border = getAbsoluteBorderSize();
-
-		switch ( getBorderPosition() )
-		{
-		case BorderPosition::eMiddle:
-			border /= 2.0;
-			break;
-		case BorderPosition::eExternal:
-			break;
-		default:
-			border = castor::Point4d{};
-			break;
-		}
-
-		castor::Point2d borderTL{ border->x, border->y };
-		m_scissorOffset -= borderTL;
-		m_scissorExtent += borderTL + castor::Point2d{ border->z, border->w };
 	}
 
 	void BorderPanelOverlay::doUpdate( OverlayRenderer const & renderer )

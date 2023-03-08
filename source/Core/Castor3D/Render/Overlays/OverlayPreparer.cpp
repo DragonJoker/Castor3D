@@ -14,6 +14,24 @@ namespace castor3d
 {
 	namespace ovrlprep
 	{
+		static castor::Point4f getParentRect( Overlay const & overlay
+			, castor::Size const & renderSize )
+		{
+			if ( !overlay.getParent() )
+			{
+				return castor::Point4f{ 0.0f, 0.0f, 1.0f, 1.0f };
+			}
+
+			auto & parent = *overlay.getParent()->getCategory();
+			auto clientArea = parent.getClientArea();
+			auto parentRatio = parent.getRenderRatio( renderSize );
+			clientArea->x *= parentRatio->x;
+			clientArea->y *= parentRatio->y;
+			clientArea->z *= parentRatio->x;
+			clientArea->w *= parentRatio->y;
+			return castor::Point4f{ clientArea };
+		}
+
 		static castor::Point2d updateUbo( OverlayUboConfiguration & data
 			, OverlayCategory const & overlay
 			, Pass const & pass
@@ -21,8 +39,9 @@ namespace castor3d
 			, uint32_t vertexOffset )
 		{
 			auto ratio = overlay.getRenderRatio( renderSize );
-			data.absoluteSize = castor::Point2f{ overlay.getAbsoluteSize() * ratio };
-			data.absolutePosition = castor::Point2f{ overlay.getAbsolutePosition() * ratio };
+			data.relativeSize = castor::Point2f{ overlay.getRelativeSize() * ratio };
+			data.relativePosition = castor::Point2f{ overlay.getRelativePosition() * ratio };
+			data.parentRect = getParentRect( overlay.getOverlay(), renderSize );
 			data.uv = castor::Point4f{ overlay.getUV() };
 			data.materialId = pass.getId();
 			data.vertexOffset = vertexOffset;
@@ -253,7 +272,6 @@ namespace castor3d
 			, 0u
 			, sizeof( constants )
 			, &constants );
-		commandBuffer.setScissor( data.overlay->computeScissor( m_renderer.m_size ) );
 		commandBuffer.draw( data.geometryBuffers.count
 			, 1u
 			, 0u

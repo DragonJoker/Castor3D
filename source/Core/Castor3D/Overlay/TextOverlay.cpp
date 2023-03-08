@@ -241,7 +241,7 @@ namespace castor3d
 			, ovrltxt::TextChar const & character
 			, sdw::Vec2 const & texDim
 			, std::function< sdw::Vec4( sdw::Vec2 const
-				, sdw::IVec4 const ) > generateUvs )
+				, sdw::Vec4 const ) > generateUvs )
 		{
 			auto offset = writer.declLocale( "offset"
 				, overlay.vertexOffset() + ( character.index() * 6u ) );
@@ -251,25 +251,27 @@ namespace castor3d
 				, c3d_lines[overlay.textLineOffset() + word.line()] );
 			auto renderSize = writer.declLocale( "renderSize"
 				, vec2( c3d_cameraData.renderSize() ) );
+			auto parentSize = writer.declLocale( "parentSize"
+				, overlay.parentRect().zw() - overlay.parentRect().xy() );
 			auto overlaySize = writer.declLocale( "overlaySize"
-				, overlay.absoluteSize() * vec2( c3d_cameraData.renderSize() ) );
+				, overlay.relativeSize() * parentSize );
 
 			auto extent = writer.declLocale( "extent"
-				, ivec4( line.position().x() + word.left() + character.left() + character.bearing().x()
+				, vec4( line.position().x() + word.left() + character.left() + character.bearing().x()
 					, overlay.textTopOffset() + line.position().y() - character.bearing().y()
 					, 0, 0 ) );
-			extent.z() = extent.x() + writer.cast< sdw::Int >( character.size().x() );
-			extent.w() = extent.y() + writer.cast< sdw::Int >( character.size().y() );
+			extent.z() = extent.x() + character.size().x();
+			extent.w() = extent.y() + character.size().y();
+			extent /= vec4( renderSize.xy(), renderSize.xy() );
 
-			auto relative = writer.declLocale( "relative", vec4( 0.0_f ) );
 			auto texUv = writer.declLocale( "texUv", vec4( 0.0_f ) );
 			auto fontUv = writer.declLocale( "fontUv", vec4( 0.0_f ) );
 
 			// check for underflow/overflow
-			IF( writer, extent.x() < writer.cast< sdw::Int >( overlaySize.x() )
-				&& extent.y() < writer.cast< sdw::Int >( overlaySize.y() )
-				&& extent.z() > 0
-				&& extent.w() > 0 )
+			IF( writer, extent.x() < overlaySize.x()
+				&& extent.y() < overlaySize.y()
+				&& extent.z() > 0.0_f
+				&& extent.w() > 0.0_f )
 			{
 				//
 				// Compute Letter's Font UV.
@@ -283,7 +285,6 @@ namespace castor3d
 				// Compute Letter's Texture UV.
 				//
 				texUv = generateUvs( overlaySize, extent );
-				relative = vec4( extent ) / vec4( renderSize.xy(), renderSize.xy() );
 			}
 			FI;
 
@@ -291,12 +292,12 @@ namespace castor3d
 			// Fill buffer
 			//
 			uint32_t index = 0;
-			c3d_overlaysSurfaces[offset + index].set( relative.xy(), texUv.xy(), fontUv.xy() ); ++index;
-			c3d_overlaysSurfaces[offset + index].set( relative.xw(), texUv.xw(), fontUv.xw() ); ++index;
-			c3d_overlaysSurfaces[offset + index].set( relative.zw(), texUv.zw(), fontUv.zw() ); ++index;
-			c3d_overlaysSurfaces[offset + index].set( relative.xy(), texUv.xy(), fontUv.xy() ); ++index;
-			c3d_overlaysSurfaces[offset + index].set( relative.zw(), texUv.zw(), fontUv.zw() ); ++index;
-			c3d_overlaysSurfaces[offset + index].set( relative.zy(), texUv.zy(), fontUv.zy() ); ++index;
+			c3d_overlaysSurfaces[offset + index].set( extent.xy(), texUv.xy(), fontUv.xy() ); ++index;
+			c3d_overlaysSurfaces[offset + index].set( extent.xw(), texUv.xw(), fontUv.xw() ); ++index;
+			c3d_overlaysSurfaces[offset + index].set( extent.zw(), texUv.zw(), fontUv.zw() ); ++index;
+			c3d_overlaysSurfaces[offset + index].set( extent.xy(), texUv.xy(), fontUv.xy() ); ++index;
+			c3d_overlaysSurfaces[offset + index].set( extent.zw(), texUv.zw(), fontUv.zw() ); ++index;
+			c3d_overlaysSurfaces[offset + index].set( extent.zy(), texUv.zy(), fontUv.zy() ); ++index;
 		};
 
 		writer.implementMain( 1u, 1u
@@ -321,7 +322,7 @@ namespace castor3d
 							, character
 							, texDim
 							, []( sdw::Vec2 const ratio
-								, sdw::IVec4 const absolute )
+								, sdw::Vec4 const absolute )
 							{
 								return vec4( 0.0_f, 0.0_f, 1.0_f, 1.0_f );
 							} );
@@ -332,7 +333,7 @@ namespace castor3d
 							, character
 							, texDim
 							, []( sdw::Vec2 const ratio
-								, sdw::IVec4 const absolute )
+								, sdw::Vec4 const absolute )
 							{
 								return vec4( absolute ) / vec4( ratio, ratio );
 							} );

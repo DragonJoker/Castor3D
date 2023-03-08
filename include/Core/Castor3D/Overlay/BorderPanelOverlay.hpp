@@ -267,16 +267,20 @@ namespace castor3d
 		void setBorderPosition( BorderPosition position )noexcept
 		{
 			m_borderPosition = position;
+			m_sizeChanged = true;
+			m_borderChanged = true;
 		}
 
 		void setBorderOuterUV( castor::Point4d const & value )noexcept
 		{
 			m_borderOuterUv = value;
+			m_borderChanged = true;
 		}
 
 		void setBorderInnerUV( castor::Point4d const & value )noexcept
 		{
 			m_borderInnerUv = value;
+			m_borderChanged = true;
 		}
 		/**@}*/
 
@@ -285,10 +289,6 @@ namespace castor3d
 		 *\copydoc		castor3d::OverlayCategory::doUpdateSize
 		 */
 		void doUpdateSize( OverlayRenderer const & renderer )override;
-		/**
-		 *\copydoc		castor3d::OverlayCategory::doUpdateScissor
-		 */
-		void doUpdateScissor()override;
 		/**
 		 *\copydoc		castor3d::OverlayCategory::doUpdate
 		 */

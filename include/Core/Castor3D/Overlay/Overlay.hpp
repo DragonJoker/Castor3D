@@ -236,11 +236,6 @@ namespace castor3d
 		{
 			return m_category->getLevel();
 		}
-
-		VkRect2D computeScissor( castor::Size const & size )const
-		{
-			return m_category->computeScissor( size );
-		}
 		/**@}*/
 		/**
 		*\~english

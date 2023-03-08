@@ -27,7 +27,7 @@ namespace castor3d
 		{
 			updatePosition( renderer );
 			updateSize( renderer );
-			updateScissor( renderer );
+			updateClientArea( renderer );
 
 			if ( isChanged() || isSizeChanged() || renderer.isSizeChanged() )
 			{
@@ -169,14 +169,6 @@ namespace castor3d
 		return result;
 	}
 
-	VkRect2D OverlayCategory::computeScissor( castor::Size const & size )const
-	{
-		return { VkOffset2D{ std::max( 0, int32_t( std::ceil( size.getWidth() * m_scissorOffset[0] ) ) )
-				, std::max( 0, int32_t( std::ceil( size.getHeight() * m_scissorOffset[1] ) ) ) }
-			, VkExtent2D{ std::max( 1u, uint32_t( std::ceil( size.getWidth() * m_scissorExtent[0] ) ) )
-				, std::max( 1u, uint32_t( std::ceil( size.getHeight() * m_scissorExtent[1] ) ) ) } };
-	}
-
 	void OverlayCategory::notifyPositionChanged()noexcept
 	{
 		if ( m_overlay )
@@ -269,15 +261,13 @@ namespace castor3d
 		doUpdateSize( renderer );
 	}
 
-	void OverlayCategory::updateScissor( OverlayRenderer const & renderer )
+	void OverlayCategory::updateClientArea( OverlayRenderer const & renderer )
 	{
-		if ( isChanged() || isPositionChanged() || isSizeChanged() || renderer.isSizeChanged() )
+		if ( isPositionChanged() || isSizeChanged() )
 		{
-			m_scissorOffset = getAbsolutePosition();
-			m_scissorExtent = getAbsoluteSize();
-			doUpdateScissor();
-			m_scissorExtent[0] = std::min( m_scissorExtent[0], 1.0 - m_scissorOffset[0] );
-			m_scissorExtent[1] = std::min( m_scissorExtent[1], 1.0 - m_scissorOffset[1] );
+			auto pos = getAbsolutePosition();
+			auto dim = getAbsoluteSize();
+			m_clientArea = { pos->x, pos->y, pos->x + dim->x, pos->y + dim->y };
 		}
 	}
 

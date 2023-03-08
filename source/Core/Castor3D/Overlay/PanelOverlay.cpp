@@ -54,36 +54,38 @@ namespace castor3d
 		writer.implementMain( 1u
 			, [&]( sdw::ComputeIn in )
 			{
-				auto overlayData = writer.declLocale( "overlayData"
+				auto overlay = writer.declLocale( "overlay"
 					, c3d_overlaysData[in.globalInvocationID.x()] );
 				auto offset = writer.declLocale( "offset"
-					, overlayData.vertexOffset() );
+					, overlay.vertexOffset() );
 				auto renderSize = writer.declLocale( "renderSize"
 					, vec2( c3d_cameraData.renderSize() ) );
 
 				auto uv = writer.declLocale( "uv"
-					, overlayData.uv() );
+					, overlay.uv() );
+				auto parentSize = writer.declLocale( "parentSize"
+					, overlay.parentRect().zw() - overlay.parentRect().xy() );
 				auto bounds = writer.declLocale( "bounds"
 					, vec4( vec2( 0.0_f )
-						, overlayData.absoluteSize() * renderSize ) );
+						, overlay.relativeSize() * parentSize ) );
 				auto borderExtent = writer.declLocale( "borderExtent"
-					, vec4( overlayData.border().xy() * renderSize
-						, -overlayData.border().zw() * renderSize ) );
+					, vec4( overlay.border().xy()
+						, -overlay.border().zw() ) );
 
-				IF( writer, overlayData.borderPosition() == uint32_t( BorderPosition::eInternal ) )
+				IF( writer, overlay.borderPosition() == uint32_t( BorderPosition::eInternal ) )
 				{
 					bounds += borderExtent;
 				}
-				ELSEIF( overlayData.borderPosition() == uint32_t( BorderPosition::eMiddle ) )
+				ELSEIF( overlay.borderPosition() == uint32_t( BorderPosition::eMiddle ) )
 				{
 					bounds += borderExtent / 2.0_f;
 				}
 				FI;
 
-				auto lt = writer.declLocale( "lt", shader::OverlaySurface{ bounds.xy() / renderSize, uv.xw() } );
-				auto lb = writer.declLocale( "lb", shader::OverlaySurface{ bounds.xw() / renderSize, uv.xy() } );
-				auto rt = writer.declLocale( "rt", shader::OverlaySurface{ bounds.zy() / renderSize, uv.zw() } );
-				auto rb = writer.declLocale( "rb", shader::OverlaySurface{ bounds.zw() / renderSize, uv.zy() } );
+				auto lt = writer.declLocale( "lt", shader::OverlaySurface{ bounds.xy(), uv.xw() } );
+				auto lb = writer.declLocale( "lb", shader::OverlaySurface{ bounds.xw(), uv.xy() } );
+				auto rt = writer.declLocale( "rt", shader::OverlaySurface{ bounds.zy(), uv.zw() } );
+				auto rb = writer.declLocale( "rb", shader::OverlaySurface{ bounds.zw(), uv.zy() } );
 
 				uint32_t index = 0;
 				c3d_overlaysSurfaces[offset + index] = lt; ++index;
