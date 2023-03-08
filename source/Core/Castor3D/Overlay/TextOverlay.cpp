@@ -461,6 +461,7 @@ namespace castor3d
 				word.range = { 100.0, 0.0 };
 				word.charBegin = charIndex;
 				word.charEnd = word.charBegin;
+				word.line = {};
 				return &word;
 			};
 
@@ -473,6 +474,7 @@ namespace castor3d
 				line.wordEnd = line.wordBegin;
 				line.charBegin = charIndex;
 				line.charEnd = line.charBegin;
+				line.width = 0.0;
 				charLeft = totalLeft - wordLeft;
 				totalLeft = charLeft;
 				wordLeft = 0.0;
@@ -517,7 +519,7 @@ namespace castor3d
 					word->line = lineIndex;
 					line->range->x = std::min( line->range->x, word->range->x );
 					line->range->y = std::max( line->range->y, word->range->y );
-					line->width += word->width;
+					line->width = totalLeft;
 					m_lines.maxRange->x = std::min( m_lines.maxRange->x, line->range->x );
 					m_lines.maxRange->y = std::max( m_lines.maxRange->y, line->range->y );
 					++line->wordEnd;
