@@ -71,7 +71,7 @@ namespace CastorGui
 		/** sets the background borders size.
 		 *\param[in]	value		The new value.
 		 */
-		void setBackgroundBorders( castor::Rectangle const & value );
+		void setBackgroundBorders( castor::Point4ui const & value );
 
 		/** sets the caption.
 		 *\param[in]	caption	The new value
@@ -311,7 +311,7 @@ namespace CastorGui
 		uint32_t m_flags;
 		castor::Position m_position;
 		castor::Size m_size;
-		castor::Rectangle m_borders;
+		castor::Point4ui m_borders;
 		castor3d::BorderPanelOverlayWPtr m_background;
 		std::vector< ControlWPtr > m_children;
 		ControlsManagerWPtr m_ctrlManager;

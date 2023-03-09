@@ -100,7 +100,7 @@ namespace CastorGui
 		{
 			background->setMaterial( m_style->getBackgroundMaterial() );
 			background->setBorderMaterial( m_style->getForegroundMaterial() );
-			background->setBorderPixelSize( m_borders );
+			background->setAbsoluteBorderSize( m_borders );
 		}
 
 		doCreate();
@@ -111,13 +111,13 @@ namespace CastorGui
 		doDestroy();
 	}
 
-	void Control::setBackgroundBorders( castor::Rectangle const & value )
+	void Control::setBackgroundBorders( castor::Point4ui const & value )
 	{
 		m_borders = value;
 
 		if ( auto background = getBackground() )
 		{
-			background->setBorderPixelSize( m_borders );
+			background->setAbsoluteBorderSize( m_borders );
 		}
 	}
 

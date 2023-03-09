@@ -53,7 +53,7 @@ namespace CastorGui
 			, visible }
 		, m_caption{ caption }
 	{
-		setBackgroundBorders( castor::Rectangle{} );
+		setBackgroundBorders( castor::Point4ui{} );
 		auto text = m_scene
 			? m_scene->addNewOverlay( cuT( "T_CtrlStatic_" ) + castor::string::toString( getId() )
 				, getEngine()

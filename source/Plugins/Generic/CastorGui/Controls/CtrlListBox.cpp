@@ -62,7 +62,7 @@ namespace CastorGui
 		, m_values{ values }
 		, m_selected{ selected }
 	{
-		setBackgroundBorders( castor::Rectangle{ 1, 1, 1, 1 } );
+		setBackgroundBorders( castor::Point4ui{ 1, 1, 1, 1 } );
 		doUpdateStyle();
 	}
 
@@ -282,7 +282,7 @@ namespace CastorGui
 
 	void ListBoxCtrl::doCreate()
 	{
-		setBackgroundBorders( castor::Rectangle{ 1, 1, 1, 1 } );
+		setBackgroundBorders( castor::Point4ui{ 1, 1, 1, 1 } );
 		setSize( castor::Size( getSize().getWidth(), uint32_t( m_values.size() * DEFAULT_HEIGHT ) ) );
 
 		EventHandler::connect( castor3d::KeyboardEventType::ePushed

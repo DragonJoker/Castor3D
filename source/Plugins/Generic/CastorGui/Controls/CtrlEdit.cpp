@@ -57,7 +57,7 @@ namespace CastorGui
 		, m_caretIt{ m_caption.end() }
 		, m_active{ false }
 	{
-		setBackgroundBorders( castor::Rectangle{ 1, 1, 1, 1 } );
+		setBackgroundBorders( castor::Point4ui{ 1, 1, 1, 1 } );
 		EventHandler::connect( castor3d::MouseEventType::ePushed
 			, [this]( castor3d::MouseEvent const & event )
 			{
