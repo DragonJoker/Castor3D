@@ -23,11 +23,13 @@ namespace castor3d::shader
 		C3D_API PassShaders( PassComponentRegister const & compRegister
 			, TextureCombine const & combine
 			, ComponentModeFlags filter
-			, Utils & utils );
+			, Utils & utils
+			, bool forceLod0 = false );
 		C3D_API PassShaders( PassComponentRegister const & compRegister
 			, PipelineFlags const & flags
 			, ComponentModeFlags filter
-			, Utils & utils );
+			, Utils & utils
+			, bool forceLod0 = false );
 
 		C3D_API void fillMaterial( sdw::type::BaseStruct & material
 			, sdw::expr::ExprList & inits )const;
@@ -159,6 +161,7 @@ namespace castor3d::shader
 		std::vector< PassComponentsShaderPtr > m_shaders;
 		ComponentModeFlags m_filter;
 		bool m_opacity{};
+		bool m_forceLod0{};
 	};
 }
 

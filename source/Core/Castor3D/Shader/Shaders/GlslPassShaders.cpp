@@ -17,19 +17,22 @@ namespace castor3d::shader
 	PassShaders::PassShaders( PassComponentRegister const & compRegister
 		, TextureCombine const & combine
 		, ComponentModeFlags filter
-		, Utils & utils )
+		, Utils & utils
+		, bool forceLod0 )
 		: m_utils{ utils }
 		, m_compRegister{ compRegister }
 		, m_shaders{ m_compRegister.getComponentsShaders( combine, filter, m_updateComponents, m_finishComponents ) }
 		, m_filter{ filter }
 		, m_opacity{ hasAny( combine, m_compRegister.getOpacityMapFlags() ) }
+		, m_forceLod0{ forceLod0 }
 	{
 	}
 
 	PassShaders::PassShaders( PassComponentRegister const & compRegister
 		, PipelineFlags const & flags
 		, ComponentModeFlags filter
-		, Utils & utils )
+		, Utils & utils
+		, bool forceLod0 )
 		: m_utils{ utils }
 		, m_compRegister{ compRegister }
 		, m_shaders{ m_compRegister.getComponentsShaders( flags, filter, m_updateComponents, m_finishComponents ) }
@@ -37,6 +40,7 @@ namespace castor3d::shader
 		, m_opacity{ ( flags.usesOpacity()
 			&& flags.hasMap( m_compRegister.getOpacityMapFlags() )
 			&& m_compRegister.hasOpacity( flags ) ) }
+		, m_forceLod0{ forceLod0 }
 	{
 	}
 
@@ -244,7 +248,9 @@ namespace castor3d::shader
 
 		return it != m_shaders.end()
 			? ( *it )->sampleMap( map, texCoords, components )
-			: m_utils.sampleMap( map, texCoords );
+			: ( m_forceLod0
+				? m_utils.sampleMap( map, texCoords, 0.0_f )
+				: m_utils.sampleMap( map, texCoords ) );
 	}
 
 	sdw::Vec4 PassShaders::sampleMap( PipelineFlags const & flags
@@ -261,7 +267,9 @@ namespace castor3d::shader
 
 		return it != m_shaders.end()
 			? ( *it )->sampleMap( map, texCoords, components )
-			: m_utils.sampleMap( map, texCoords );
+			: ( m_forceLod0
+				? m_utils.sampleMap( map, texCoords.uv(), 0.0_f )
+				: m_utils.sampleMap( map, texCoords ) );
 	}
 
 	sdw::Vec4 PassShaders::sampleMap( TextureCombine const & flags
@@ -277,7 +285,9 @@ namespace castor3d::shader
 		, DerivTex const texCoords
 		, shader::BlendComponents const & components )const
 	{
-		return m_utils.sampleMap( map, texCoords );
+		return ( m_forceLod0
+			? m_utils.sampleMap( map, texCoords.uv(), 0.0_f )
+			: m_utils.sampleMap( map, texCoords ) );
 	}
 
 	void PassShaders::computeTexcoord( PipelineFlags const & flags

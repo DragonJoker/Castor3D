@@ -140,6 +140,20 @@ namespace castor3d::shader
 	}
 
 	sdw::Vec4 Utils::sampleMap( sdw::CombinedImage2DRgba32 const map
+		, sdw::Vec2 const texCoords
+		, sdw::Float const lod )
+	{
+		return map.sample( texCoords, lod );
+	}
+
+	sdw::Vec4 Utils::sampleMap( sdw::CombinedImage2DRgba32 const map
+		, sdw::Vec3 const texCoords
+		, sdw::Float const lod )
+	{
+		return map.sample( texCoords.xy(), lod );
+	}
+
+	sdw::Vec4 Utils::sampleMap( sdw::CombinedImage2DRgba32 const map
 		, DerivTex const texCoords )
 	{
 		return map.grad( texCoords.uv(), texCoords.dPdx(), texCoords.dPdy() );
