@@ -185,7 +185,7 @@ namespace GuiCommon
 			} );
 		addPropertyT( grid, PROPERTY_OVERLAY_CAPTION, overlay->getCaption(), overlay.get(), &castor3d::TextOverlay::setCaption );
 		addPropertyET( grid, PROPERTY_OVERLAY_HALIGN, haligns, overlay->getHAlign(), overlay.get(), &castor3d::TextOverlay::setHAlign );
-		addPropertyET( grid, PROPERTY_OVERLAY_VALIGN, haligns, overlay->getVAlign(), overlay.get(), &castor3d::TextOverlay::setVAlign );
+		addPropertyET( grid, PROPERTY_OVERLAY_VALIGN, valigns, overlay->getVAlign(), overlay.get(), &castor3d::TextOverlay::setVAlign );
 		addPropertyET( grid, PROPERTY_OVERLAY_WRAPPING, wrappings, overlay->getTextWrappingMode(), overlay.get(), &castor3d::TextOverlay::setTextWrappingMode );
 		addPropertyET( grid, PROPERTY_OVERLAY_SPACING, spacings, overlay->getLineSpacingMode(), overlay.get(), &castor3d::TextOverlay::setLineSpacingMode );
 		addPropertyET( grid, PROPERTY_OVERLAY_TEXTURING, texturings, overlay->getTexturingMode(), overlay.get(), &castor3d::TextOverlay::setTexturingMode );

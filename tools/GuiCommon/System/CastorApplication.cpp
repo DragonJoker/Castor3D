@@ -301,11 +301,7 @@ namespace GuiCommon
 			, {}
 			, {} }
 	{
-#if defined( NDEBUG )
-		wxDisableAsserts();
-#else
 		wxSetAssertHandler( assertHandler );
-#endif
 #if defined( __WXGTK__ )
 		XInitThreads();
 #endif

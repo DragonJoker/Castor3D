@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_OverlayUbo_H___
@@ -8,6 +8,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Buffer/UniformBufferOffset.hpp"
 
+#include <ShaderWriter/CompositeTypes/Function.hpp>
 #include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>
 #include <ShaderWriter/VecTypes/Vec4.hpp>
 
@@ -55,6 +56,146 @@ namespace castor3d::shader
 		auto textLineOffset()const { return getMember< "textLineOffset" >(); }
 		auto textTopOffset()const { return getMember< "textTopOffset" >(); }
 		auto textTexturingMode()const { return getMember< "textTexturingMode" >(); }
+		/**
+		 *\~english
+		 *\brief		Crops a minimum boundary and its UV.
+		 *\~french
+		 *\brief		Découpe une borne minimum et son UV.
+		 */
+		C3D_API void cropMinValue( sdw::Float const & relativePosition
+			, sdw::Float const & ssAbsParentSize
+			, sdw::Float const & ssAbsBoundSize
+			, sdw::Vec2 const & uvRange
+			, sdw::Float ssRelBound
+			, sdw::Float uv );
+		/**
+		 *\~english
+		 *\brief		Crops a maximum boundary and its UV.
+		 *\~french
+		 *\brief		Découpe une borne maximum et son UV.
+		 */
+		C3D_API void cropMaxValue( sdw::Float const & ssRelPosition
+			, sdw::Float const & ssAbsParentSize
+			, sdw::Float const & ssAbsBoundSize
+			, sdw::Vec2 const & uvRange
+			, sdw::Float ssRelBound
+			, sdw::Float uv );
+		/**
+		 *\~english
+		 *\brief		Crops a minimum boundary and its UVs.
+		 *\~french
+		 *\brief		Découpe une borne minimum et son UVs.
+		 */
+		C3D_API void cropMinMinValue( sdw::Float const & ssRelPosition
+			, sdw::Float const & ssAbsParentSize
+			, sdw::Float const & ssAbsBoundSize
+			, sdw::Float const & ssAbsCharSize
+			, sdw::Vec2 const & texUvRange
+			, sdw::Vec2 const & fontUvRange
+			, sdw::Float ssRelBound
+			, sdw::Float texUv
+			, sdw::Float fontUv );
+		/**
+		 *\~english
+		 *\brief		Crops a maximum boundary and its UVs.
+		 *\~french
+		 *\brief		Découpe une borne maximum et son UVs.
+		 */
+		C3D_API void cropMinMaxValue( sdw::Float const & ssRelPosition
+			, sdw::Float const & ssAbsParentSize
+			, sdw::Float const & ssAbsBoundSize
+			, sdw::Float const & ssAbsCharSize
+			, sdw::Vec2 const & texUvRange
+			, sdw::Vec2 const & fontUvRange
+			, sdw::Float ssRelBound
+			, sdw::Float texUv
+			, sdw::Float fontUv );
+		/**
+		 *\~english
+		 *\brief		Crops a minimum boundary and its UVs.
+		 *\~french
+		 *\brief		Découpe une borne minimum et son UVs.
+		 */
+		C3D_API void cropMaxMinValue( sdw::Float const & ssRelPosition
+			, sdw::Float const & ssAbsParentSize
+			, sdw::Float const & ssAbsBoundSize
+			, sdw::Float const & ssAbsCharSize
+			, sdw::Vec2 const & texUvRange
+			, sdw::Vec2 const & fontUvRange
+			, sdw::Float ssRelBound
+			, sdw::Float texUv
+			, sdw::Float fontUv );
+		/**
+		 *\~english
+		 *\brief		Crops a maximum boundary and its UVs.
+		 *\~french
+		 *\brief		Découpe une borne maximum et son UVs.
+		 */
+		C3D_API void cropMaxMaxValue( sdw::Float const & ssRelPosition
+			, sdw::Float const & ssAbsParentSize
+			, sdw::Float const & ssAbsBoundSize
+			, sdw::Float const & ssAbsCharSize
+			, sdw::Vec2 const & texUvRange
+			, sdw::Vec2 const & fontUvRange
+			, sdw::Float ssRelBound
+			, sdw::Float texUv
+			, sdw::Float fontUv );
+
+	private:
+		sdw::Function< sdw::Void
+			, sdw::InFloat
+			, sdw::InFloat
+			, sdw::InFloat
+			, sdw::InVec2
+			, sdw::InOutFloat
+			, sdw::InOutFloat > m_cropMinValue;
+		sdw::Function< sdw::Void
+			, sdw::InFloat
+			, sdw::InFloat
+			, sdw::InFloat
+			, sdw::InVec2
+			, sdw::InOutFloat
+			, sdw::InOutFloat > m_cropMaxValue;
+		sdw::Function< sdw::Void
+			, sdw::InFloat
+			, sdw::InFloat
+			, sdw::InFloat
+			, sdw::InFloat
+			, sdw::InVec2
+			, sdw::InVec2
+			, sdw::InOutFloat
+			, sdw::InOutFloat
+			, sdw::InOutFloat > m_cropMinMinValue;
+		sdw::Function< sdw::Void
+			, sdw::InFloat
+			, sdw::InFloat
+			, sdw::InFloat
+			, sdw::InFloat
+			, sdw::InVec2
+			, sdw::InVec2
+			, sdw::InOutFloat
+			, sdw::InOutFloat
+			, sdw::InOutFloat > m_cropMinMaxValue;
+		sdw::Function< sdw::Void
+			, sdw::InFloat
+			, sdw::InFloat
+			, sdw::InFloat
+			, sdw::InFloat
+			, sdw::InVec2
+			, sdw::InVec2
+			, sdw::InOutFloat
+			, sdw::InOutFloat
+			, sdw::InOutFloat > m_cropMaxMinValue;
+		sdw::Function< sdw::Void
+			, sdw::InFloat
+			, sdw::InFloat
+			, sdw::InFloat
+			, sdw::InFloat
+			, sdw::InVec2
+			, sdw::InVec2
+			, sdw::InOutFloat
+			, sdw::InOutFloat
+			, sdw::InOutFloat > m_cropMaxMaxValue;
 	};
 
 	struct OverlaysIDs

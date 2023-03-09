@@ -194,16 +194,6 @@ namespace castor3d
 			return m_relPosition;
 		}
 
-		castor::Size const & getPixelSize()const noexcept
-		{
-			return m_pxSize;
-		}
-
-		castor::Position const & getPixelPosition()const noexcept
-		{
-			return m_pxPosition;
-		}
-
 		OverlayType getType()const noexcept
 		{
 			return m_type;
@@ -408,10 +398,10 @@ namespace castor3d
 		castor::Point2d m_relSize;
 		//!\~english	The relative position (to parent or screen), in pixels.
 		//!\~french		La position relative (à l'écran ou au parent), en pixels.
-		castor::Position m_pxPosition;
+		std::optional< castor::Position > m_pxPosition;
 		//!\~english	The absolute size in pixels.
 		//!\~french		La taille absolue en pixels.
-		castor::Size m_pxSize;
+		std::optional< castor::Size > m_pxSize;
 		//!\~english	The size used to compute relative position from pixel position.
 		//!\~french		La taille utilisée pour calculer la position relative depuis la position en pixels.
 		castor::Size m_computeSize;
