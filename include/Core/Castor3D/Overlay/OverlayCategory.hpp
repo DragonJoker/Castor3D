@@ -351,15 +351,15 @@ namespace castor3d
 		 *\brief		Met à jour le scissor pour cette incrustation
 		 */
 		C3D_API void updateClientArea( OverlayRenderer const & renderer );
-
-	private:
 		/**
 		 *\~english
 		 *\return		The screen or parent's size.
 		 *\~french
 		 *\return		La taille de l'écran ou du parent.
 		 */
-		castor::Point2d doGetParentSize()const;
+		C3D_API castor::Point2d getParentSize()const;
+
+	private:
 		/**
 		 *\~english
 		 *\brief		Updates the overlay position, taking care of wanted pixel position.

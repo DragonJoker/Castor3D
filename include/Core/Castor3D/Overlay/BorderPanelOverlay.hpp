@@ -78,6 +78,15 @@ namespace castor3d
 		C3D_API castor::Point4d getAbsoluteBorderSize()const;
 		/**
 		 *\~english
+		 *\brief		Retrieves the absolute overlay borders size
+		 *\return		The size
+		 *\~french
+		 *\brief		Récupère la taille absolue des bordures de l'incrustation
+		 *\return		La taille
+		 */
+		C3D_API castor::Point4ui computePixelBorderSize()const;
+		/**
+		 *\~english
 		 *\brief		Creates the shader program used to compute the overlay's vertices.
 		 *\return		The program.
 		 *\~french
@@ -99,59 +108,34 @@ namespace castor3d
 			return m_borderChanged;
 		}
 
-		double getLeftBorderSize()const noexcept
+		double getRelativeLeftBorderSize()const noexcept
 		{
-			return m_ptBorderSize[0];
+			return m_relBorderSize->x;
 		}
 
-		double getTopBorderSize()const noexcept
+		double getRelativeTopBorderSize()const noexcept
 		{
-			return m_ptBorderSize[1];
+			return m_relBorderSize->y;
 		}
 
-		double getRightBorderSize()const noexcept
+		double getRelativeRightBorderSize()const noexcept
 		{
-			return m_ptBorderSize[2];
+			return m_relBorderSize->z;
 		}
 
-		double getBottomBorderSize()const noexcept
+		double getRelativeBottomBorderSize()const noexcept
 		{
-			return m_ptBorderSize[3];
+			return m_relBorderSize->w;
 		}
 
-		castor::Point4d const & getBorderSize()const noexcept
+		castor::Point4d const & getRelativeBorderSize()const noexcept
 		{
-			return m_ptBorderSize;
+			return m_relBorderSize;
 		}
 
 		MaterialRPtr getBorderMaterial()const noexcept
 		{
-			return m_pBorderMaterial;
-		}
-
-		int getLeftBorderPixelSize()const noexcept
-		{
-			return m_borderSize[0];
-		}
-
-		int getTopBorderPixelSize()const noexcept
-		{
-			return m_borderSize[1];
-		}
-
-		int getRightBorderPixelSize()const noexcept
-		{
-			return m_borderSize[2];
-		}
-
-		int getBottomBorderPixelSize()const noexcept
-		{
-			return m_borderSize[3];
-		}
-
-		castor::Rectangle const & getBorderPixelSize()const noexcept
-		{
-			return m_borderSize;
+			return m_borderMaterial;
 		}
 
 		BorderPosition getBorderPosition()const noexcept
@@ -178,88 +162,51 @@ namespace castor3d
 		*	Mutateurs.
 		*/
 		/**@{*/
-		void setLeftBorderSize( double size )noexcept
+		void setRelativeLeftBorderSize( double size )noexcept
 		{
-			m_ptBorderSize[0] = size;
-			m_ptBorderSize[0] = std::max( 0.0, m_ptBorderSize[0] );
+			m_relBorderSize->x = std::max( 0.0, size );
 			m_sizeChanged = true;
 			m_borderChanged = true;
 		}
 
-		void setTopBorderSize( double size )noexcept
+		void setRelativeTopBorderSize( double size )noexcept
 		{
-			m_ptBorderSize[1] = size;
-			m_ptBorderSize[1] = std::max( 0.0, m_ptBorderSize[1] );
+			m_relBorderSize->y = std::max( 0.0, size );
 			m_sizeChanged = true;
 			m_borderChanged = true;
 		}
 
-		void setRightBorderSize( double size )noexcept
+		void setRelativeRightBorderSize( double size )noexcept
 		{
-			m_ptBorderSize[2] = size;
-			m_ptBorderSize[2] = std::max( 0.0, m_ptBorderSize[2] );
+			m_relBorderSize->z = std::max( 0.0, size );
 			m_sizeChanged = true;
 			m_borderChanged = true;
 		}
 
-		void setBottomBorderSize( double size )noexcept
+		void setRelativeBottomBorderSize( double size )noexcept
 		{
-			m_ptBorderSize[3] = size;
-			m_ptBorderSize[3] = std::max( 0.0, m_ptBorderSize[3] );
+			m_relBorderSize->w = std::max( 0.0, size );
 			m_sizeChanged = true;
 			m_borderChanged = true;
 		}
 
-		void setBorderSize( castor::Point4d const & size )noexcept
+		void setRelativeBorderSize( castor::Point4d const & size )noexcept
 		{
-			m_ptBorderSize = size;
-			m_ptBorderSize[0] = std::max( 0.0, m_ptBorderSize[0] );
-			m_ptBorderSize[1] = std::max( 0.0, m_ptBorderSize[1] );
-			m_ptBorderSize[2] = std::max( 0.0, m_ptBorderSize[2] );
-			m_ptBorderSize[3] = std::max( 0.0, m_ptBorderSize[3] );
+			m_relBorderSize->x = std::max( 0.0, size->x );
+			m_relBorderSize->y = std::max( 0.0, size->y );
+			m_relBorderSize->z = std::max( 0.0, size->z );
+			m_relBorderSize->w = std::max( 0.0, size->w );
 			m_sizeChanged = true;
 			m_borderChanged = true;
 		}
 
-		void setLeftBorderPixelSize( int size )noexcept
+		void setAbsoluteBorderSize( castor::Point4ui const & size )noexcept
 		{
-			m_borderSize[0] = size;
-			m_borderSize[0] = std::max( 0, m_borderSize[0] );
-			m_sizeChanged = true;
-			m_borderChanged = true;
-		}
-
-		void setTopBorderPixelSize( int size )noexcept
-		{
-			m_borderSize[1] = size;
-			m_borderSize[1] = std::max( 0, m_borderSize[1] );
-			m_sizeChanged = true;
-			m_borderChanged = true;
-		}
-
-		void setRightBorderPixelSize( int size )noexcept
-		{
-			m_borderSize[2] = size;
-			m_borderSize[2] = std::max( 0, m_borderSize[2] );
-			m_sizeChanged = true;
-			m_borderChanged = true;
-		}
-
-		void setBottomBorderPixelSize( int size )noexcept
-		{
-			m_borderSize[3] = size;
-			m_borderSize[3] = std::max( 0, m_borderSize[3] );
-			m_sizeChanged = true;
-			m_borderChanged = true;
-		}
-
-		void setBorderPixelSize( castor::Rectangle const & size )noexcept
-		{
-			m_borderSize = size;
-			m_borderSize[0] = std::max( 0, m_borderSize[0] );
-			m_borderSize[1] = std::max( 0, m_borderSize[1] );
-			m_borderSize[2] = std::max( 0, m_borderSize[2] );
-			m_borderSize[3] = std::max( 0, m_borderSize[3] );
+			m_pxBorderSize = size;
+			( *m_pxBorderSize )->x = std::max( 0u, ( *m_pxBorderSize )->x );
+			( *m_pxBorderSize )->y = std::max( 0u, ( *m_pxBorderSize )->y );
+			( *m_pxBorderSize )->z = std::max( 0u, ( *m_pxBorderSize )->z );
+			( *m_pxBorderSize )->w = std::max( 0u, ( *m_pxBorderSize )->w );
 			m_sizeChanged = true;
 			m_borderChanged = true;
 		}
@@ -290,6 +237,10 @@ namespace castor3d
 		 */
 		void doUpdateSize( OverlayRenderer const & renderer )override;
 		/**
+		 *\copydoc		castor3d::OverlayCategory::doUpdateSize
+		 */
+		void doUpdateClientArea( castor::Point4d & clientArea )const override;
+		/**
 		 *\copydoc		castor3d::OverlayCategory::doUpdate
 		 */
 		void doUpdate( OverlayRenderer const & renderer )override;
@@ -297,13 +248,13 @@ namespace castor3d
 	private:
 		//!\~english	The border material.
 		//!\~french		Le matériau des bords.
-		MaterialRPtr m_pBorderMaterial;
-		//!\~english	The border size.
-		//!\~french		La taille des bords.
-		castor::Point4d m_ptBorderSize;
-		//!\~english	The absolute size in pixels.
-		//!\~french		La taille absolue en pixels.
-		castor::Rectangle m_borderSize;
+		MaterialRPtr m_borderMaterial;
+		//!\~english	The border size, relative to parent dimensions.
+		//!\~french		La taille des bords, relative aux dimensions du parent.
+		castor::Point4d m_relBorderSize;
+		//!\~english	The absolute border size, in pixels.
+		//!\~french		La taille absolue des bords, en pixels.
+		std::optional< castor::Point4ui > m_pxBorderSize;
 		//!\~english	The border material name.
 		//!\~french		Le nom du matériau des bords.
 		BorderPosition m_borderPosition{ BorderPosition::eInternal };

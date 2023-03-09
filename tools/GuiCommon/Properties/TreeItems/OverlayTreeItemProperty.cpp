@@ -99,8 +99,14 @@ namespace GuiCommon
 
 		addProperty( grid, PROPERTY_CATEGORY_BORDER_PANEL_OVERLAY );
 		wxArrayString choices{ make_wxArrayString( PROPERTY_OVERLAY_BORDER_POSITION_TEXTS ) };
-
-		addPropertyT( grid, PROPERTY_OVERLAY_BORDER_SIZE, overlay->getBorderPixelSize(), overlay.get(), &castor3d::BorderPanelOverlay::setBorderPixelSize );
+		
+		addProperty( grid, PROPERTY_OVERLAY_BORDER_SIZE
+			, overlay->computePixelBorderSize()
+			, [this]( wxVariant const & var )
+			{
+				auto & ov = static_cast< castor3d::BorderPanelOverlay & >( *getOverlay() );
+				ov.setAbsoluteBorderSize( Point4uiRefFromVariant( var ) );
+			} );
 
 		if ( overlay->getBorderMaterial() )
 		{

@@ -583,7 +583,7 @@ namespace CastorGui
 
 		if ( auto control = guiContext.getTop() )
 		{
-			castor::Rectangle size;
+			castor::Point4ui size;
 			params[0]->get( size );
 			control->setBackgroundBorders( size );
 		}

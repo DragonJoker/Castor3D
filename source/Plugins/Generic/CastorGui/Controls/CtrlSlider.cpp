@@ -52,7 +52,7 @@ namespace CastorGui
 		, m_value{ value }
 		, m_scrolling{ false }
 	{
-		setBackgroundBorders( castor::Rectangle{} );
+		setBackgroundBorders( castor::Point4ui{} );
 		EventHandler::connect( castor3d::MouseEventType::eMove
 			, [this]( castor3d::MouseEvent const & event )
 			{

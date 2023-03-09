@@ -45,7 +45,7 @@ namespace castor3d
 
 	void BorderPanelOverlay::setBorderMaterial( MaterialRPtr material )
 	{
-		m_pBorderMaterial = material;
+		m_borderMaterial = material;
 	}
 
 	castor::Rectangle BorderPanelOverlay::getAbsoluteBorderSize( castor::Size const & size )const
@@ -53,28 +53,43 @@ namespace castor3d
 		auto absoluteSize = getAbsoluteBorderSize();
 
 		return castor::Rectangle(
-				   int32_t( absoluteSize[0] * size.getWidth() ),
-				   int32_t( absoluteSize[1] * size.getHeight() ),
-				   int32_t( absoluteSize[2] * size.getWidth() ),
-				   int32_t( absoluteSize[3] * size.getHeight() )
+				   int32_t( absoluteSize->x * size->x ),
+				   int32_t( absoluteSize->y * size->y ),
+				   int32_t( absoluteSize->z * size->x ),
+				   int32_t( absoluteSize->w * size->y )
 			   );
 	}
 
 	castor::Point4d BorderPanelOverlay::getAbsoluteBorderSize()const
 	{
-		castor::Point4d absoluteSize = getBorderSize();
-		auto parent = getOverlay().getParent();
+		castor::Point4d absoluteSize = getRelativeBorderSize();
 
-		if ( parent )
+		if ( auto parent = getOverlay().getParent() )
 		{
 			castor::Point2d parentSize = parent->getAbsoluteSize();
-			absoluteSize[0] *= parentSize[0];
-			absoluteSize[1] *= parentSize[1];
-			absoluteSize[2] *= parentSize[0];
-			absoluteSize[3] *= parentSize[1];
+			absoluteSize->x *= parentSize->x;
+			absoluteSize->y *= parentSize->y;
+			absoluteSize->z *= parentSize->x;
+			absoluteSize->w *= parentSize->y;
 		}
 
 		return absoluteSize;
+	}
+
+	castor::Point4ui BorderPanelOverlay::computePixelBorderSize()const
+	{
+		if ( m_pxBorderSize )
+		{
+			return *m_pxBorderSize;
+		}
+
+		auto parentSize = getOverlay().getParent()
+			? getOverlay().getParent()->getAbsoluteSize( m_computeSize )
+			: m_computeSize;
+		return castor::Point4ui{ uint32_t( double( parentSize->x ) * m_relBorderSize->x )
+			, uint32_t( double( parentSize->y ) * m_relBorderSize->y )
+			, uint32_t( double( parentSize->x ) * m_relBorderSize->z )
+			, uint32_t( double( parentSize->y ) * m_relBorderSize->w ) };
 	}
 
 	ashes::PipelineShaderStageCreateInfo BorderPanelOverlay::createProgram( RenderDevice const & device )
@@ -237,50 +252,35 @@ namespace castor3d
 
 	void BorderPanelOverlay::doUpdateSize( OverlayRenderer const & renderer )
 	{
-		if ( isSizeChanged() || isChanged() || renderer.isSizeChanged() )
+		if ( m_pxBorderSize
+			&& isSizeChanged() || isChanged() || renderer.isSizeChanged() )
 		{
-			auto parent = getOverlay().getParent();
-			auto sz = renderer.getSize();
-			castor::Point2d totalSize( sz.getWidth(), sz.getHeight() );
-
-			if ( parent )
-			{
-				auto parentSize = parent->getAbsoluteSize();
-				totalSize[0] = parentSize[0] * totalSize[0];
-				totalSize[1] = parentSize[1] * totalSize[1];
-			}
-
-			auto sizes = getBorderPixelSize();
-			auto ptSizes = getBorderSize();
+			castor::Size renderSize = renderer.getSize();
+			castor::Point2d parentSize = getParentSize() * renderSize;
 			bool changed = m_borderChanged;
+			auto & pxBorderSize = *m_pxBorderSize;
+			auto relBorderSize = getRelativeBorderSize();
+			double v;
 
-			if ( sizes.left() )
-			{
-				changed = changed || ( ptSizes[0] != double( sizes.left() ) / totalSize[0] );
-				ptSizes[0] = sizes.left() / totalSize[0];
-			}
+			v = double( pxBorderSize->x ) / parentSize->x;
+			changed = changed || ( relBorderSize->x != v );
+			relBorderSize->x = v;
 
-			if ( sizes.top() )
-			{
-				changed = changed || ( ptSizes[1] != double( sizes.top() ) / totalSize[1] );
-				ptSizes[1] = sizes.top() / totalSize[1];
-			}
+			v = double( pxBorderSize->y ) / parentSize->y;
+			changed = changed || ( relBorderSize->y != v );
+			relBorderSize->y = v;
 
-			if ( sizes.right() )
-			{
-				changed = changed || ( ptSizes[2] != double( sizes.right() ) / totalSize[0] );
-				ptSizes[2] = sizes.right() / totalSize[0];
-			}
+			v = double( pxBorderSize->z ) / parentSize->x;
+			changed = changed || ( relBorderSize->z != v );
+			relBorderSize->z = v;
 
-			if ( sizes.bottom() )
-			{
-				changed = changed || ( ptSizes[3] != double( sizes.bottom() ) / totalSize[1] );
-				ptSizes[3] = sizes.bottom() / totalSize[1];
-			}
+			v = double( pxBorderSize->w ) / parentSize->y;
+			changed = changed || ( relBorderSize->w != v );
+			relBorderSize->w = v;
 
 			if ( changed )
 			{
-				setBorderSize( ptSizes );
+				setRelativeBorderSize( relBorderSize );
 			}
 		}
 	}

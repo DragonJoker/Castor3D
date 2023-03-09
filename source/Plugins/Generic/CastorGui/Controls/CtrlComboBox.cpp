@@ -161,7 +161,7 @@ namespace CastorGui
 		auto & style = getStyle();
 		CU_Require( getControlsManager() );
 		auto & manager = *getControlsManager();
-		setBackgroundBorders( castor::Rectangle( 1, 1, 1, 1 ) );
+		setBackgroundBorders( castor::Point4ui( 1, 1, 1, 1 ) );
 
 		m_expand->setPosition( castor::Position( int32_t( getSize().getWidth() - getSize().getHeight() ), 0 ) );
 		m_expand->setSize( castor::Size( getSize().getHeight(), getSize().getHeight() ) );

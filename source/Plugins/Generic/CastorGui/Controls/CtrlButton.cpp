@@ -81,7 +81,7 @@ namespace CastorGui
 				}
 			} ) }
 	{
-		setBackgroundBorders( castor::Rectangle{ 1, 1, 1, 1 } );
+		setBackgroundBorders( castor::Point4ui{ 1, 1, 1, 1 } );
 		EventHandler::connect( castor3d::MouseEventType::eEnter
 			, [this]( castor3d::MouseEvent const & event )
 			{

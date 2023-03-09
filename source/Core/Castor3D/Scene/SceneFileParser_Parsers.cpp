@@ -5059,7 +5059,7 @@ namespace castor3d
 		{
 			castor::Point4d ptSize;
 			params[0]->get( ptSize );
-			overlay->getBorderPanelOverlay()->setBorderSize( ptSize );
+			overlay->getBorderPanelOverlay()->setRelativeBorderSize( ptSize );
 		}
 		else
 		{
@@ -5075,9 +5075,9 @@ namespace castor3d
 
 		if ( overlay && overlay->getType() == OverlayType::eBorderPanel )
 		{
-			castor::Rectangle size;
+			castor::Point4ui size;
 			params[0]->get( size );
-			overlay->getBorderPanelOverlay()->setBorderPixelSize( size );
+			overlay->getBorderPanelOverlay()->setAbsoluteBorderSize( size );
 		}
 		else
 		{
