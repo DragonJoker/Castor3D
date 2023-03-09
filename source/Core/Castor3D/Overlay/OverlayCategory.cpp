@@ -52,14 +52,18 @@ namespace castor3d
 
 	castor::Position OverlayCategory::getAbsolutePosition( castor::Size const & size )const
 	{
-		// TODO: Bug here
-		castor::Point2d position = getAbsolutePosition();
-		return castor::Position{ int32_t( size.getWidth() * position[0] )
-			, int32_t( size.getHeight() * position[1] ) };
+		auto position = getAbsolutePosition();
+		return castor::Position{ int32_t( double( size.getWidth() ) * position[0] )
+			, int32_t( double( size.getHeight() ) * position[1] ) };
 	}
 
 	castor::Size OverlayCategory::getAbsoluteSize( castor::Size const & size )const
 	{
+		if ( m_pxSize )
+		{
+			return *m_pxSize;
+		}
+
 		castor::Point2d absoluteSize = getAbsoluteSize();
 		return castor::Size{ uint32_t( size.getWidth() * absoluteSize[0] )
 			, uint32_t( size.getHeight() * absoluteSize[1] ) };
@@ -135,38 +139,30 @@ namespace castor3d
 
 	castor::Size OverlayCategory::computePixelSize()const
 	{
-		auto result = getPixelSize();
-		auto absolute = getAbsoluteSize( m_computeSize );
-
-		if ( result.getWidth() == 0 )
+		if ( m_pxSize )
 		{
-			result[0] = absolute[0];
+			return *m_pxSize;
 		}
 
-		if ( result.getHeight() == 0 )
-		{
-			result[1] = absolute[1];
-		}
-
-		return result;
+		auto parentSize = getOverlay().getParent()
+			? getOverlay().getParent()->getAbsoluteSize( m_computeSize )
+			: m_computeSize;
+		return castor::Size{ uint32_t( double( parentSize->x ) * m_relSize->x )
+			, uint32_t( double( parentSize->y ) * m_relSize->y ) };
 	}
 
 	castor::Position OverlayCategory::computePixelPosition()const
 	{
-		auto result = getPixelPosition();
-		auto absolute = getAbsolutePosition( m_computeSize );
-
-		if ( result.x() == 0 )
+		if ( m_pxPosition )
 		{
-			result[0] = absolute[0];
+			return *m_pxPosition;
 		}
 
-		if ( result.y() == 0 )
-		{
-			result[1] = absolute[1];
-		}
-
-		return result;
+		auto parentSize = getOverlay().getParent()
+			? getOverlay().getParent()->getAbsoluteSize( m_computeSize )
+			: m_computeSize;
+		return castor::Position{ int32_t( double( parentSize->x ) * m_relPosition->x )
+			, int32_t( double( parentSize->y ) * m_relPosition->y ) };
 	}
 
 	void OverlayCategory::notifyPositionChanged()noexcept
@@ -193,12 +189,13 @@ namespace castor3d
 
 	void OverlayCategory::updatePosition( OverlayRenderer const & renderer )
 	{
-		if ( isPositionChanged() || renderer.isSizeChanged() )
+		if ( m_pxPosition
+			&& ( isPositionChanged() || renderer.isSizeChanged() ) )
 		{
 			castor::Size renderSize = renderer.getSize();
 			castor::Point2d parentSize = doGetParentSize() * renderSize;
 			bool changed = m_positionChanged;
-			castor::Position pxPos = getPixelPosition();
+			castor::Position pxPos = *m_pxPosition;
 			castor::Point2d relPos = getRelativePosition();
 
 			if ( pxPos.x() )
@@ -206,7 +203,6 @@ namespace castor3d
 				auto v = double( pxPos.x() ) / parentSize->x;
 				changed = changed || ( relPos->x != v );
 				relPos->x = v;
-				m_computeSize[0] = renderSize->x;
 			}
 
 			if ( pxPos.y() )
@@ -214,13 +210,14 @@ namespace castor3d
 				auto v = double( pxPos.y() ) / parentSize->y;
 				changed = changed || ( relPos->y != v );
 				relPos->y = v;
-				m_computeSize[1] = renderSize->y;
 			}
 
 			if ( changed )
 			{
 				setRelativePosition( relPos );
 			}
+
+			m_computeSize = renderSize;
 		}
 
 		doUpdatePosition( renderer );
@@ -228,12 +225,13 @@ namespace castor3d
 
 	void OverlayCategory::updateSize( OverlayRenderer const & renderer )
 	{
-		if ( isSizeChanged() || renderer.isSizeChanged() )
+		if ( m_pxSize
+			&& ( isSizeChanged() || renderer.isSizeChanged() ) )
 		{
 			castor::Size renderSize = renderer.getSize();
 			castor::Point2d parentSize = doGetParentSize() * renderSize;
 			bool changed = m_sizeChanged;
-			castor::Size pxSize = getPixelSize();
+			castor::Size pxSize = *m_pxSize;
 			castor::Point2d relSize = getRelativeSize();
 
 			if ( pxSize.getWidth() )
@@ -241,7 +239,6 @@ namespace castor3d
 				auto v = double( pxSize.getWidth() ) / parentSize->x;
 				changed = changed || ( relSize->x != v );
 				relSize->x = v;
-				m_computeSize[0] = renderSize->x;
 			}
 
 			if ( pxSize.getHeight() )
@@ -249,13 +246,14 @@ namespace castor3d
 				auto v = double( pxSize.getHeight() ) / parentSize->y;
 				changed = changed || ( relSize->y != v );
 				relSize->y = v;
-				m_computeSize[1] = renderSize->y;
 			}
 
 			if ( changed )
 			{
 				setRelativeSize( relSize );
 			}
+
+			m_computeSize = renderSize;
 		}
 
 		doUpdateSize( renderer );

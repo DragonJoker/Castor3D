@@ -197,16 +197,6 @@ namespace castor3d
 			return m_category->getRelativeSize();
 		}
 
-		castor::Position const & getPixelPosition()const noexcept
-		{
-			return m_category->getPixelPosition();
-		}
-
-		castor::Size const & getPixelSize()const noexcept
-		{
-			return m_category->getPixelSize();
-		}
-
 		OverlayType getType()const noexcept
 		{
 			return m_category->getType();

@@ -237,7 +237,7 @@ namespace castor3d
 		auto c3d_charCount = batchData.declMember< sdw::UInt >( "c3d_charCount" );
 		batchData.end();
 
-		auto processChar = [&]( shader::OverlayData const & overlay
+		auto processChar = [&]( shader::OverlayData & overlay
 			, ovrltxt::TextChar const & character
 			, sdw::Vec2 const & texDim
 			, std::function< sdw::Vec4( sdw::Vec2 const
@@ -251,27 +251,27 @@ namespace castor3d
 				, c3d_lines[overlay.textLineOffset() + word.line()] );
 			auto renderSize = writer.declLocale( "renderSize"
 				, vec2( c3d_cameraData.renderSize() ) );
-			auto parentSize = writer.declLocale( "parentSize"
+			auto ssAbsParentSize = writer.declLocale( "ssAbsParentSize"
 				, overlay.parentRect().zw() - overlay.parentRect().xy() );
-			auto overlaySize = writer.declLocale( "overlaySize"
-				, overlay.relativeSize() * parentSize );
+			auto ssAbsSize = writer.declLocale( "ssAbsSize"
+				, overlay.relativeSize() * ssAbsParentSize );
 
-			auto extent = writer.declLocale( "extent"
+			auto ssRelBounds = writer.declLocale( "ssRelBounds"
 				, vec4( line.position().x() + word.left() + character.left() + character.bearing().x()
 					, overlay.textTopOffset() + line.position().y() - character.bearing().y()
 					, 0, 0 ) );
-			extent.z() = extent.x() + character.size().x();
-			extent.w() = extent.y() + character.size().y();
-			extent /= vec4( renderSize.xy(), renderSize.xy() );
+			ssRelBounds.z() = ssRelBounds.x() + character.size().x();
+			ssRelBounds.w() = ssRelBounds.y() + character.size().y();
+			ssRelBounds /= vec4( renderSize.xy(), renderSize.xy() );
 
 			auto texUv = writer.declLocale( "texUv", vec4( 0.0_f ) );
 			auto fontUv = writer.declLocale( "fontUv", vec4( 0.0_f ) );
 
-			// check for underflow/overflow
-			IF( writer, extent.x() < overlaySize.x()
-				&& extent.y() < overlaySize.y()
-				&& extent.z() > 0.0_f
-				&& extent.w() > 0.0_f )
+			// check for full underflow/overflow
+			IF( writer, ssRelBounds.x() < ssAbsSize.x()
+				&& ssRelBounds.y() < ssAbsSize.y()
+				&& ssRelBounds.z() > 0.0_f
+				&& ssRelBounds.w() > 0.0_f )
 			{
 				//
 				// Compute Letter's Font UV.
@@ -284,20 +284,37 @@ namespace castor3d
 				//
 				// Compute Letter's Texture UV.
 				//
-				texUv = generateUvs( overlaySize, extent );
+				texUv = generateUvs( ssAbsSize, ssRelBounds );
+
+				auto ssRelPosition = writer.declLocale( "ssRelPosition"
+					, overlay.relativePosition() * ssAbsParentSize );
+				auto ssAbsCharSize = writer.declLocale( "ssAbsCharSize"
+					, ssRelBounds.zw() - ssRelBounds.xy() );
+				auto srcUv = writer.declLocale( "srcUv"
+					, texUv );
+				auto srcFontUv = writer.declLocale( "srcFontUv"
+					, fontUv );
+				overlay.cropMinMinValue( ssRelPosition.x(), ssAbsParentSize.x(), ssAbsSize.x(), ssAbsCharSize.x(), srcUv.xz(), srcFontUv.xz(), ssRelBounds.x(), texUv.x(), fontUv.x() );
+				overlay.cropMinMaxValue( ssRelPosition.y(), ssAbsParentSize.y(), ssAbsSize.y(), ssAbsCharSize.y(), srcUv.yw(), srcFontUv.wy(), ssRelBounds.y(), texUv.y(), fontUv.y() );
+				overlay.cropMaxMaxValue( ssRelPosition.x(), ssAbsParentSize.x(), ssAbsSize.x(), ssAbsCharSize.x(), srcUv.xz(), srcFontUv.xz(), ssRelBounds.z(), texUv.z(), fontUv.z() );
+				overlay.cropMaxMinValue( ssRelPosition.y(), ssAbsParentSize.y(), ssAbsSize.y(), ssAbsCharSize.y(), srcUv.yw(), srcFontUv.wy(), ssRelBounds.w(), texUv.w(), fontUv.w() );
+			}
+			ELSE
+			{
+				ssRelBounds.z() = ssRelBounds.x();
+				ssRelBounds.w() = ssRelBounds.y();
 			}
 			FI;
-
 			//
 			// Fill buffer
 			//
 			uint32_t index = 0;
-			c3d_overlaysSurfaces[offset + index].set( extent.xy(), texUv.xy(), fontUv.xy() ); ++index;
-			c3d_overlaysSurfaces[offset + index].set( extent.xw(), texUv.xw(), fontUv.xw() ); ++index;
-			c3d_overlaysSurfaces[offset + index].set( extent.zw(), texUv.zw(), fontUv.zw() ); ++index;
-			c3d_overlaysSurfaces[offset + index].set( extent.xy(), texUv.xy(), fontUv.xy() ); ++index;
-			c3d_overlaysSurfaces[offset + index].set( extent.zw(), texUv.zw(), fontUv.zw() ); ++index;
-			c3d_overlaysSurfaces[offset + index].set( extent.zy(), texUv.zy(), fontUv.zy() ); ++index;
+			c3d_overlaysSurfaces[offset + index].set( ssRelBounds.xy(), texUv.xy(), fontUv.xy() ); ++index;
+			c3d_overlaysSurfaces[offset + index].set( ssRelBounds.xw(), texUv.xw(), fontUv.xw() ); ++index;
+			c3d_overlaysSurfaces[offset + index].set( ssRelBounds.zw(), texUv.zw(), fontUv.zw() ); ++index;
+			c3d_overlaysSurfaces[offset + index].set( ssRelBounds.xy(), texUv.xy(), fontUv.xy() ); ++index;
+			c3d_overlaysSurfaces[offset + index].set( ssRelBounds.zw(), texUv.zw(), fontUv.zw() ); ++index;
+			c3d_overlaysSurfaces[offset + index].set( ssRelBounds.zy(), texUv.zy(), fontUv.zy() ); ++index;
 		};
 
 		writer.implementMain( 1u, 1u

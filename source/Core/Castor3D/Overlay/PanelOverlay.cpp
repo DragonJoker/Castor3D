@@ -58,34 +58,43 @@ namespace castor3d
 					, c3d_overlaysData[in.globalInvocationID.x()] );
 				auto offset = writer.declLocale( "offset"
 					, overlay.vertexOffset() );
-				auto renderSize = writer.declLocale( "renderSize"
-					, vec2( c3d_cameraData.renderSize() ) );
 
 				auto uv = writer.declLocale( "uv"
 					, overlay.uv() );
-				auto parentSize = writer.declLocale( "parentSize"
+				auto ssAbsParentSize = writer.declLocale( "ssAbsParentSize"
 					, overlay.parentRect().zw() - overlay.parentRect().xy() );
-				auto bounds = writer.declLocale( "bounds"
-					, vec4( vec2( 0.0_f )
-						, overlay.relativeSize() * parentSize ) );
+				auto ssAbsSize = writer.declLocale( "ssAbsSize"
+					, overlay.relativeSize() * ssAbsParentSize );
+				auto ssRelBounds = writer.declLocale( "ssRelBounds"
+					, vec4( vec2( 0.0_f ), ssAbsSize ) );
 				auto borderExtent = writer.declLocale( "borderExtent"
 					, vec4( overlay.border().xy()
 						, -overlay.border().zw() ) );
 
 				IF( writer, overlay.borderPosition() == uint32_t( BorderPosition::eInternal ) )
 				{
-					bounds += borderExtent;
+					ssRelBounds += borderExtent;
 				}
 				ELSEIF( overlay.borderPosition() == uint32_t( BorderPosition::eMiddle ) )
 				{
-					bounds += borderExtent / 2.0_f;
+					ssRelBounds += borderExtent / 2.0_f;
 				}
 				FI;
 
-				auto lt = writer.declLocale( "lt", shader::OverlaySurface{ bounds.xy(), uv.xw() } );
-				auto lb = writer.declLocale( "lb", shader::OverlaySurface{ bounds.xw(), uv.xy() } );
-				auto rt = writer.declLocale( "rt", shader::OverlaySurface{ bounds.zy(), uv.zw() } );
-				auto rb = writer.declLocale( "rb", shader::OverlaySurface{ bounds.zw(), uv.zy() } );
+				auto ssRelPosition = writer.declLocale( "ssRelPosition"
+					, overlay.relativePosition() * ssAbsParentSize );
+				auto srcUv = writer.declLocale( "srcUv"
+					, uv );
+
+				overlay.cropMinValue( ssRelPosition.x(), ssAbsParentSize.x(), ssAbsSize.x(), srcUv.xz(), ssRelBounds.x(), uv.x() );
+				overlay.cropMaxValue( ssRelPosition.y(), ssAbsParentSize.y(), ssAbsSize.y(), srcUv.yw(), ssRelBounds.y(), uv.w() );
+				overlay.cropMaxValue( ssRelPosition.x(), ssAbsParentSize.x(), ssAbsSize.x(), srcUv.xz(), ssRelBounds.z(), uv.z() );
+				overlay.cropMinValue( ssRelPosition.y(), ssAbsParentSize.y(), ssAbsSize.y(), srcUv.yw(), ssRelBounds.w(), uv.y() );
+
+				auto lt = writer.declLocale( "lt", shader::OverlaySurface{ ssRelBounds.xy(), uv.xw() } );
+				auto lb = writer.declLocale( "lb", shader::OverlaySurface{ ssRelBounds.xw(), uv.xy() } );
+				auto rt = writer.declLocale( "rt", shader::OverlaySurface{ ssRelBounds.zy(), uv.zw() } );
+				auto rb = writer.declLocale( "rb", shader::OverlaySurface{ ssRelBounds.zw(), uv.zy() } );
 
 				uint32_t index = 0;
 				c3d_overlaysSurfaces[offset + index] = lt; ++index;
