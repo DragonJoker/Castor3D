@@ -67,29 +67,31 @@ namespace castor3d
 					, overlay.relativeSize() * ssAbsParentSize );
 				auto ssRelBounds = writer.declLocale( "ssRelBounds"
 					, vec4( vec2( 0.0_f ), ssAbsSize ) );
-				auto borderExtent = writer.declLocale( "borderExtent"
+				auto ssBorderExtent = writer.declLocale( "ssBorderExtent"
 					, vec4( overlay.border().xy()
 						, -overlay.border().zw() ) );
 
 				IF( writer, overlay.borderPosition() == uint32_t( BorderPosition::eInternal ) )
 				{
-					ssRelBounds += borderExtent;
+					ssRelBounds += ssBorderExtent;
 				}
 				ELSEIF( overlay.borderPosition() == uint32_t( BorderPosition::eMiddle ) )
 				{
-					ssRelBounds += borderExtent / 2.0_f;
+					ssRelBounds += ssBorderExtent / 2.0_f;
 				}
 				FI;
 
-				auto ssRelPosition = writer.declLocale( "ssRelPosition"
+				auto ssRelOvPosition = writer.declLocale( "ssRelOvPosition"
 					, overlay.relativePosition() * ssAbsParentSize );
+				auto ssAbsOvPosition = writer.declLocale( "ssAbsOvPosition"
+					, ssRelOvPosition + overlay.parentRect().xy() );
 				auto srcUv = writer.declLocale( "srcUv"
 					, uv );
 
-				overlay.cropMinValue( ssRelPosition.x(), ssAbsParentSize.x(), ssAbsSize.x(), srcUv.xz(), ssRelBounds.x(), uv.x() );
-				overlay.cropMaxValue( ssRelPosition.y(), ssAbsParentSize.y(), ssAbsSize.y(), srcUv.yw(), ssRelBounds.y(), uv.w() );
-				overlay.cropMaxValue( ssRelPosition.x(), ssAbsParentSize.x(), ssAbsSize.x(), srcUv.xz(), ssRelBounds.z(), uv.z() );
-				overlay.cropMinValue( ssRelPosition.y(), ssAbsParentSize.y(), ssAbsSize.y(), srcUv.yw(), ssRelBounds.w(), uv.y() );
+				overlay.cropMinValue( ssAbsOvPosition.x(), ssAbsParentSize.x(), ssAbsSize.x(), overlay.renderArea().xz(), srcUv.xz(), ssRelBounds.x(), uv.x() );
+				overlay.cropMaxValue( ssAbsOvPosition.y(), ssAbsParentSize.y(), ssAbsSize.y(), overlay.renderArea().yw(), srcUv.yw(), ssRelBounds.y(), uv.w() );
+				overlay.cropMaxValue( ssAbsOvPosition.x(), ssAbsParentSize.x(), ssAbsSize.x(), overlay.renderArea().xz(), srcUv.xz(), ssRelBounds.z(), uv.z() );
+				overlay.cropMinValue( ssAbsOvPosition.y(), ssAbsParentSize.y(), ssAbsSize.y(), overlay.renderArea().yw(), srcUv.yw(), ssRelBounds.w(), uv.y() );
 
 				auto lt = writer.declLocale( "lt", shader::OverlaySurface{ ssRelBounds.xy(), uv.xw() } );
 				auto lb = writer.declLocale( "lb", shader::OverlaySurface{ ssRelBounds.xw(), uv.xy() } );

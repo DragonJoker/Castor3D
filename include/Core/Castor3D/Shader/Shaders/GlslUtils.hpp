@@ -47,6 +47,12 @@ namespace castor3d::shader
 		C3D_API sdw::Vec4 sampleMap( sdw::CombinedImage2DRgba32 const map
 			, sdw::Vec3 const texCoords );
 		C3D_API sdw::Vec4 sampleMap( sdw::CombinedImage2DRgba32 const map
+			, sdw::Vec2 const texCoords
+			, sdw::Float const lod );
+		C3D_API sdw::Vec4 sampleMap( sdw::CombinedImage2DRgba32 const map
+			, sdw::Vec3 const texCoords
+			, sdw::Float const lod );
+		C3D_API sdw::Vec4 sampleMap( sdw::CombinedImage2DRgba32 const map
 			, DerivTex const texCoords );
 		C3D_API sdw::RetVec2 transformUV( TextureConfigData const & config
 			, TextureAnimData const & anim

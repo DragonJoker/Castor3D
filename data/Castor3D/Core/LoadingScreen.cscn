@@ -34,14 +34,14 @@ loading_screen
 
 	panel_overlay "Progress"
 	{
-		pxl_size 256 56
-		pxl_position 20 176
+		pxl_size 264 64
+		pxl_position 16 176
 		material "TransparentBlack"
 
 		text_overlay "ProgressTitle"
 		{
 			pxl_size 256 16
-			pxl_position 0 0
+			pxl_position 4 0
 			material "Black"
 			font "Arial16"
 			text "Title"
@@ -50,7 +50,7 @@ loading_screen
 		border_panel_overlay "ProgressBarCont"
 		{
 			pxl_size 256 32
-			pxl_position 0 24
+			pxl_position 4 28
 			material "TransparentBlack"
 			pxl_border_size 4 4 4 4
 			border_position external

@@ -125,6 +125,8 @@ namespace castor3d
 					, vec4( vec2( 0.0_f ), ssAbsSize ) );
 				auto ssOuter = writer.declLocale( "ssOuter"
 					, ssInner );
+				auto ssRenderRegion = writer.declLocale( "ssRenderRegion"
+					, overlay.renderArea() );
 
 				auto ssBorderExtent = writer.declLocale( "ssBorderExtent"
 					, vec4( overlay.border().xy()
@@ -149,8 +151,10 @@ namespace castor3d
 					, overlay.borderInnerUV() );
 				auto outerUv = writer.declLocale( "outerUv"
 					, overlay.borderOuterUV() );
-				auto ssRelPosition = writer.declLocale( "ssRelPosition"
+				auto ssRelOvPosition = writer.declLocale( "ssRelOvPosition"
 					, overlay.relativePosition() * ssAbsParentSize );
+				auto ssAbsOvPosition = writer.declLocale( "ssAbsOvPosition"
+					, ssRelOvPosition + overlay.parentRect().xy() );
 
 				auto ssInnerX = writer.declLocale( "ssInnerX", ssInner.x() );
 				auto ssInnerY = writer.declLocale( "ssInnerY", ssInner.y() );
@@ -170,15 +174,15 @@ namespace castor3d
 				auto outerUvZ = writer.declLocale( "outerUvZ", outerUv.z() );
 				auto outerUvW = writer.declLocale( "outerUvW", outerUv.w() );
 
-				overlay.cropMinValue( ssRelPosition.x(), ssAbsParentSize.x(), ssAbsSize.x(), innerUv.xz(), ssInnerX, innerUvX );
-				overlay.cropMinValue( ssRelPosition.y(), ssAbsParentSize.y(), ssAbsSize.y(), innerUv.yw(), ssInnerY, innerUvY );
-				overlay.cropMaxValue( ssRelPosition.x(), ssAbsParentSize.x(), ssAbsSize.x(), innerUv.xz(), ssInnerZ, innerUvZ );
-				overlay.cropMaxValue( ssRelPosition.y(), ssAbsParentSize.y(), ssAbsSize.y(), innerUv.yw(), ssInnerW, innerUvW );
+				overlay.cropMinValue( ssAbsOvPosition.x(), ssAbsParentSize.x(), ssAbsSize.x(), overlay.renderArea().xz(), innerUv.xz(), ssInnerX, innerUvX );
+				overlay.cropMinValue( ssAbsOvPosition.y(), ssAbsParentSize.y(), ssAbsSize.y(), overlay.renderArea().yw(), innerUv.yw(), ssInnerY, innerUvY );
+				overlay.cropMaxValue( ssAbsOvPosition.x(), ssAbsParentSize.x(), ssAbsSize.x(), overlay.renderArea().xz(), innerUv.xz(), ssInnerZ, innerUvZ );
+				overlay.cropMaxValue( ssAbsOvPosition.y(), ssAbsParentSize.y(), ssAbsSize.y(), overlay.renderArea().yw(), innerUv.yw(), ssInnerW, innerUvW );
 
-				overlay.cropMinValue( ssRelPosition.x(), ssAbsParentSize.x(), ssAbsSize.x(), outerUv.xz(), ssOuterX, outerUvX );
-				overlay.cropMinValue( ssRelPosition.y(), ssAbsParentSize.y(), ssAbsSize.y(), outerUv.yw(), ssOuterY, outerUvY );
-				overlay.cropMaxValue( ssRelPosition.x(), ssAbsParentSize.x(), ssAbsSize.x(), outerUv.xz(), ssOuterZ, outerUvZ );
-				overlay.cropMaxValue( ssRelPosition.y(), ssAbsParentSize.y(), ssAbsSize.y(), outerUv.yw(), ssOuterW, outerUvW );
+				overlay.cropMinValue( ssAbsOvPosition.x(), ssAbsParentSize.x(), ssAbsSize.x(), overlay.renderArea().xz(), outerUv.xz(), ssOuterX, outerUvX );
+				overlay.cropMinValue( ssAbsOvPosition.y(), ssAbsParentSize.y(), ssAbsSize.y(), overlay.renderArea().yw(), outerUv.yw(), ssOuterY, outerUvY );
+				overlay.cropMaxValue( ssAbsOvPosition.x(), ssAbsParentSize.x(), ssAbsSize.x(), overlay.renderArea().xz(), outerUv.xz(), ssOuterZ, outerUvZ );
+				overlay.cropMaxValue( ssAbsOvPosition.y(), ssAbsParentSize.y(), ssAbsSize.y(), overlay.renderArea().yw(), outerUv.yw(), ssOuterW, outerUvW );
 				
 				uint32_t index = 0;
 
@@ -283,6 +287,28 @@ namespace castor3d
 				setRelativeBorderSize( relBorderSize );
 			}
 		}
+	}
+
+	void BorderPanelOverlay::doUpdateClientArea( castor::Point4d & clientArea )const
+	{
+		auto border = getAbsoluteBorderSize();
+
+		switch ( getBorderPosition() )
+		{
+		case BorderPosition::eMiddle:
+			border /= 2.0;
+			break;
+		case BorderPosition::eExternal:
+			break;
+		default:
+			border = castor::Point4d{};
+			break;
+		}
+
+		clientArea->x -= border->x;
+		clientArea->y -= border->y;
+		clientArea->z += border->z;
+		clientArea->w += border->w;
 	}
 
 	void BorderPanelOverlay::doUpdate( OverlayRenderer const & renderer )
