@@ -332,6 +332,7 @@ namespace castor3d
 	{
 		castor::Point4f uv{};
 		castor::Point4f parentRect{};
+		castor::Point4f renderArea{};
 		castor::Point2f relativePosition{};
 		castor::Point2f relativeSize{};
 		castor::Point4f border{};

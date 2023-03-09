@@ -918,14 +918,16 @@ namespace castor3d
 						, c3d_overlaysSurfaces[vertexOffset] );
 					auto renderSize = writer.declLocale( "renderSize"
 						, vec2( c3d_cameraData.renderSize() ) );
-					auto parentSize = writer.declLocale( "parentSize"
+					auto ssAbsParentSize = writer.declLocale( "ssAbsParentSize"
 						, overlay.parentRect().zw() - overlay.parentRect().xy() );
-					auto absolutePosition = writer.declLocale( "absolutePosition"
-						, overlay.relativePosition() * parentSize );
+					auto ssRelOvPosition = writer.declLocale( "ssRelOvPosition"
+						, overlay.relativePosition() * ssAbsParentSize );
+					auto ssAbsOvPosition = writer.declLocale( "ssAbsOvPosition"
+						, ssRelOvPosition + overlay.parentRect().xy() );
 
 					out.texUV = surface.texUV;
 					out.fontUV = surface.fontUV;
-					out.vtx.position = c3d_cameraData.viewToProj( vec4( renderSize * ( absolutePosition + surface.position + overlay.parentRect().xy() )
+					out.vtx.position = c3d_cameraData.viewToProj( vec4( renderSize * ( ssAbsOvPosition + surface.position )
 							, 0.0_f
 							, 1.0_f ) );
 					out.position = out.vtx.position.xy();
@@ -945,7 +947,8 @@ namespace castor3d
 				, texturesFlags
 				, ( ComponentModeFlag::eOpacity
 					| ComponentModeFlag::eColour )
-				, utils };
+				, utils
+				, true };
 			shader::Materials materials{ writer
 				, passShaders
 				, uint32_t( OverlayBindingId::eMaterials )

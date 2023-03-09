@@ -12,6 +12,23 @@ CU_ImplementCUSmartPtr( castor3d, OverlayCategory )
 
 namespace castor3d
 {
+	namespace ovrlcat
+	{
+		castor::Point4d intersect( castor::Point4d const & lhs
+			, castor::Point4d const & rhs )
+		{
+			castor::Point2d start{ std::max( lhs->x, rhs->x ), std::max( lhs->y, rhs->y ) };
+			castor::Point2d end{ std::min( lhs->z, rhs->z ), std::min( lhs->w, rhs->w ) };
+
+			if ( ( start->x > lhs->z ) || ( start->y > lhs->w ) )
+			{
+				return castor::Point4d{};
+			}
+
+			return castor::Point4d{ start->x, start->y, end->x, end->y };
+		}
+	}
+
 	OverlayCategory::OverlayCategory( OverlayType type )
 		: m_type( type )
 	{
@@ -27,7 +44,7 @@ namespace castor3d
 		{
 			updatePosition( renderer );
 			updateSize( renderer );
-			updateClientArea( renderer );
+			updateClientArea();
 
 			if ( isChanged() || isSizeChanged() || renderer.isSizeChanged() )
 			{
@@ -165,6 +182,23 @@ namespace castor3d
 			, int32_t( double( parentSize->y ) * m_relPosition->y ) };
 	}
 
+	castor::Point4d OverlayCategory::computeClientArea()const
+	{
+		auto pos = getAbsolutePosition();
+		auto dim = getAbsoluteSize();
+		castor::Point4d result = m_clientArea;
+		doUpdateClientArea( result );
+		auto overlay = &getOverlay();
+
+		while ( auto parent = overlay->getParent() )
+		{
+			result = ovrlcat::intersect( result, parent->getCategory()->getClientArea() );
+			overlay = parent;
+		}
+
+		return result;
+	}
+
 	void OverlayCategory::notifyPositionChanged()noexcept
 	{
 		if ( m_overlay )
@@ -255,7 +289,7 @@ namespace castor3d
 		doUpdateSize( renderer );
 	}
 
-	void OverlayCategory::updateClientArea( OverlayRenderer const & renderer )
+	void OverlayCategory::updateClientArea()
 	{
 		if ( isPositionChanged() || isSizeChanged() )
 		{

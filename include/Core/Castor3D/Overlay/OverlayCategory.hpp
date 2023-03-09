@@ -166,6 +166,13 @@ namespace castor3d
 		 */
 		C3D_API castor::Position computePixelPosition()const;
 		/**
+		 *\~english
+		 *\brief		Updates the scissor for this overlay
+		 *\~french
+		 *\brief		Met à jour le scissor pour cette incrustation
+		 */
+		C3D_API castor::Point4d computeClientArea()const;
+		/**
 		*\~english
 		*\name
 		*	Getters.
@@ -346,11 +353,11 @@ namespace castor3d
 		C3D_API void updateSize( OverlayRenderer const & renderer );
 		/**
 		 *\~english
-		 *\brief		Updates the scissor for this overlay
+		 *\brief		Updates the overlay size, taking care of wanted pixel size.
 		 *\~french
-		 *\brief		Met à jour le scissor pour cette incrustation
+		 *\brief		Met à jour la taille de l'incrustation, en prenant en compte la taille en pixel voulue.
 		 */
-		C3D_API void updateClientArea( OverlayRenderer const & renderer );
+		C3D_API void updateClientArea();
 		/**
 		 *\~english
 		 *\return		The screen or parent's size.
@@ -376,6 +383,15 @@ namespace castor3d
 		 *\brief		Met à jour la taille de l'incrustation, en prenant en compte la taille en pixel voulue.
 		 */
 		virtual void doUpdateSize( OverlayRenderer const & renderer )
+		{
+		}
+		/**
+		 *\~english
+		 *\brief		Updates the scissor for this overlay
+		 *\~french
+		 *\brief		Met à jour le scissor pour cette incrustation
+		 */
+		virtual void doUpdateClientArea( castor::Point4d & clientArea )const
 		{
 		}
 		/**

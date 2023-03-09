@@ -19,6 +19,7 @@ namespace castor3d::shader
 			, sdw::type::MemoryLayout::eStd430
 			, sdw::Vec4Field< "uv" >
 			, sdw::Vec4Field< "parentRect" >
+			, sdw::Vec4Field< "renderArea" >
 			, sdw::Vec2Field< "relativePosition" >
 			, sdw::Vec2Field< "relativeSize" >
 			, sdw::Vec4Field< "border" >
@@ -43,6 +44,7 @@ namespace castor3d::shader
 		auto vertexOffset()const { return getMember< "vertexOffset" >(); }
 		auto materialId()const { return getMember< "materialId" >(); }
 		auto parentRect()const { return getMember< "parentRect" >(); }
+		auto renderArea()const { return getMember< "renderArea" >(); }
 		auto relativeSize()const { return getMember< "relativeSize" >(); }
 		auto relativePosition()const { return getMember< "relativePosition" >(); }
 		auto uv()const { return getMember< "uv" >(); }
@@ -62,9 +64,10 @@ namespace castor3d::shader
 		 *\~french
 		 *\brief		Découpe une borne minimum et son UV.
 		 */
-		C3D_API void cropMinValue( sdw::Float const & relativePosition
+		C3D_API void cropMinValue( sdw::Float const & ssRelPosition
 			, sdw::Float const & ssAbsParentSize
 			, sdw::Float const & ssAbsBoundSize
+			, sdw::Vec2 const & ssCropRange
 			, sdw::Vec2 const & uvRange
 			, sdw::Float ssRelBound
 			, sdw::Float uv );
@@ -77,6 +80,7 @@ namespace castor3d::shader
 		C3D_API void cropMaxValue( sdw::Float const & ssRelPosition
 			, sdw::Float const & ssAbsParentSize
 			, sdw::Float const & ssAbsBoundSize
+			, sdw::Vec2 const & ssCropRange
 			, sdw::Vec2 const & uvRange
 			, sdw::Float ssRelBound
 			, sdw::Float uv );
@@ -90,6 +94,7 @@ namespace castor3d::shader
 			, sdw::Float const & ssAbsParentSize
 			, sdw::Float const & ssAbsBoundSize
 			, sdw::Float const & ssAbsCharSize
+			, sdw::Vec2 const & ssCropRange
 			, sdw::Vec2 const & texUvRange
 			, sdw::Vec2 const & fontUvRange
 			, sdw::Float ssRelBound
@@ -105,6 +110,7 @@ namespace castor3d::shader
 			, sdw::Float const & ssAbsParentSize
 			, sdw::Float const & ssAbsBoundSize
 			, sdw::Float const & ssAbsCharSize
+			, sdw::Vec2 const & ssCropRange
 			, sdw::Vec2 const & texUvRange
 			, sdw::Vec2 const & fontUvRange
 			, sdw::Float ssRelBound
@@ -120,6 +126,7 @@ namespace castor3d::shader
 			, sdw::Float const & ssAbsParentSize
 			, sdw::Float const & ssAbsBoundSize
 			, sdw::Float const & ssAbsCharSize
+			, sdw::Vec2 const & ssCropRange
 			, sdw::Vec2 const & texUvRange
 			, sdw::Vec2 const & fontUvRange
 			, sdw::Float ssRelBound
@@ -135,6 +142,7 @@ namespace castor3d::shader
 			, sdw::Float const & ssAbsParentSize
 			, sdw::Float const & ssAbsBoundSize
 			, sdw::Float const & ssAbsCharSize
+			, sdw::Vec2 const & ssCropRange
 			, sdw::Vec2 const & texUvRange
 			, sdw::Vec2 const & fontUvRange
 			, sdw::Float ssRelBound
@@ -147,12 +155,14 @@ namespace castor3d::shader
 			, sdw::InFloat
 			, sdw::InFloat
 			, sdw::InVec2
+			, sdw::InVec2
 			, sdw::InOutFloat
 			, sdw::InOutFloat > m_cropMinValue;
 		sdw::Function< sdw::Void
 			, sdw::InFloat
 			, sdw::InFloat
 			, sdw::InFloat
+			, sdw::InVec2
 			, sdw::InVec2
 			, sdw::InOutFloat
 			, sdw::InOutFloat > m_cropMaxValue;
@@ -161,6 +171,7 @@ namespace castor3d::shader
 			, sdw::InFloat
 			, sdw::InFloat
 			, sdw::InFloat
+			, sdw::InVec2
 			, sdw::InVec2
 			, sdw::InVec2
 			, sdw::InOutFloat
@@ -173,6 +184,7 @@ namespace castor3d::shader
 			, sdw::InFloat
 			, sdw::InVec2
 			, sdw::InVec2
+			, sdw::InVec2
 			, sdw::InOutFloat
 			, sdw::InOutFloat
 			, sdw::InOutFloat > m_cropMinMaxValue;
@@ -183,6 +195,7 @@ namespace castor3d::shader
 			, sdw::InFloat
 			, sdw::InVec2
 			, sdw::InVec2
+			, sdw::InVec2
 			, sdw::InOutFloat
 			, sdw::InOutFloat
 			, sdw::InOutFloat > m_cropMaxMinValue;
@@ -191,6 +204,7 @@ namespace castor3d::shader
 			, sdw::InFloat
 			, sdw::InFloat
 			, sdw::InFloat
+			, sdw::InVec2
 			, sdw::InVec2
 			, sdw::InVec2
 			, sdw::InOutFloat

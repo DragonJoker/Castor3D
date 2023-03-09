@@ -23,13 +23,13 @@ namespace castor3d
 			}
 
 			auto & parent = *overlay.getParent()->getCategory();
-			auto clientArea = parent.getClientArea();
-			auto parentRatio = parent.getRenderRatio( renderSize );
-			clientArea->x *= parentRatio->x;
-			clientArea->y *= parentRatio->y;
-			clientArea->z *= parentRatio->x;
-			clientArea->w *= parentRatio->y;
-			return castor::Point4f{ clientArea };
+			auto pos = parent.getAbsolutePosition();
+			auto dim = parent.getAbsoluteSize();
+			auto renderRatio = parent.getRenderRatio( renderSize );
+			return castor::Point4f{ renderRatio->x * pos->x
+				, renderRatio->y * pos->y
+				, renderRatio->x * ( pos->x + dim->x )
+				, renderRatio->y * ( pos->y + dim->y ) };
 		}
 
 		static castor::Point2d updateUbo( OverlayUboConfiguration & data
@@ -42,6 +42,7 @@ namespace castor3d
 			data.relativeSize = castor::Point2f{ overlay.getRelativeSize() * ratio };
 			data.relativePosition = castor::Point2f{ overlay.getRelativePosition() * ratio };
 			data.parentRect = getParentRect( overlay.getOverlay(), renderSize );
+			data.renderArea = castor::Point4f{ overlay.computeClientArea() * ratio };
 			data.uv = castor::Point4f{ overlay.getUV() };
 			data.materialId = pass.getId();
 			data.vertexOffset = vertexOffset;

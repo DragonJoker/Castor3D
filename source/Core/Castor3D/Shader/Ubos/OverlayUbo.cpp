@@ -2,116 +2,125 @@
 
 namespace castor3d::shader
 {
-	void OverlayData::cropMinValue( sdw::Float const & prelativePosition
-		, sdw::Float const & pparentSize
-		, sdw::Float const & pboundSize
+	void OverlayData::cropMinValue( sdw::Float const & pssAbsOvPosition
+		, sdw::Float const & pssAbsParentSize
+		, sdw::Float const & pssAbsBoundSize
+		, sdw::Vec2 const & pssCropRange
 		, sdw::Vec2 const & puvRange
-		, sdw::Float pbound
+		, sdw::Float pssRelBound
 		, sdw::Float puv )
 	{
 		if ( !m_cropMinValue )
 		{
 			m_cropMinValue = m_writer->implementFunction< sdw::Void >( "c3d_cropMinValue"
-				, [&]( sdw::Float const & relativePosition
-					, sdw::Float const & parentSize
-					, sdw::Float const & boundSize
+				, [&]( sdw::Float const & ssAbsOvPosition
+					, sdw::Float const & ssAbsParentSize
+					, sdw::Float const & ssAbsBoundSize
+					, sdw::Vec2 const & ssCropRange
 					, sdw::Vec2 const & uvRange
-					, sdw::Float bound
+					, sdw::Float ssRelBound
 					, sdw::Float uv )
 				{
-					auto relBound = m_writer->declLocale( "relBound"
-						, bound + relativePosition );
+					auto ssAbsBound = m_writer->declLocale( "ssAbsBound"
+						, ssRelBound + ssAbsOvPosition );
 					auto crop = m_writer->declLocale( "crop"
-						, vec2( relBound / boundSize
-							, ( relBound - parentSize ) / boundSize ) );
+						, vec2( ( ssAbsBound - ssCropRange.x() ) / ssAbsBoundSize
+							, ( ssAbsBound - ssCropRange.y() ) / ssAbsBoundSize ) );
 
-					IF( *m_writer, relBound > parentSize )
+					IF( *m_writer, ssAbsBound > ssCropRange.y() )
 					{
-						bound = parentSize - relativePosition;
+						ssRelBound = ssCropRange.y() - ssAbsOvPosition;
 						uv += crop.y() * ( uvRange.y() - uvRange.x() );
 						uv = clamp( uv, uvRange.x(), uvRange.y() );
 					}
-					ELSEIF( relBound < 0.0_f )
+					ELSEIF( ssAbsBound < ssCropRange.x() )
 					{
-						bound = 0.0_f - relativePosition;
+						ssRelBound = ssCropRange.x() - ssAbsOvPosition;
 						uv -= crop.x() * ( uvRange.y() - uvRange.x() );
 						uv = clamp( uv, uvRange.x(), uvRange.y() );
 					}
 					FI;
 				}
-				, sdw::InFloat{ *m_writer, "relativePosition" }
-				, sdw::InFloat{ *m_writer, "parentSize" }
-				, sdw::InFloat{ *m_writer, "boundSize" }
+				, sdw::InFloat{ *m_writer, "ssAbsOvPosition" }
+				, sdw::InFloat{ *m_writer, "ssAbsParentSize" }
+				, sdw::InFloat{ *m_writer, "ssAbsBoundSize" }
+				, sdw::InVec2{ *m_writer, "ssCropRange" }
 				, sdw::InVec2{ *m_writer, "uvRange" }
-				, sdw::InOutFloat{ *m_writer, "bound" }
+				, sdw::InOutFloat{ *m_writer, "ssRelBound" }
 				, sdw::InOutFloat{ *m_writer, "uv" } );
 		}
 
-		m_cropMinValue( prelativePosition
-			, pparentSize
-			, pboundSize
+		m_cropMinValue( pssAbsOvPosition
+			, pssAbsParentSize
+			, pssAbsBoundSize
+			, pssCropRange
 			, puvRange
-			, pbound
+			, pssRelBound
 			, puv );
 	}
 
-	void OverlayData::cropMaxValue( sdw::Float const & prelativePosition
-		, sdw::Float const & pparentSize
-		, sdw::Float const & pboundSize
+	void OverlayData::cropMaxValue( sdw::Float const & pssAbsOvPosition
+		, sdw::Float const & pssAbsParentSize
+		, sdw::Float const & pssAbsBoundSize
+		, sdw::Vec2 const & pssCropRange
 		, sdw::Vec2 const & puvRange
-		, sdw::Float pbound
+		, sdw::Float pssRelBound
 		, sdw::Float puv )
 	{
 		if ( !m_cropMaxValue )
 		{
 			m_cropMaxValue = m_writer->implementFunction< sdw::Void >( "c3d_cropMaxValue"
-				, [&]( sdw::Float const & relativePosition
-					, sdw::Float const & parentSize
-					, sdw::Float const & boundSize
+				, [&]( sdw::Float const & ssAbsOvPosition
+					, sdw::Float const & ssAbsParentSize
+					, sdw::Float const & ssAbsBoundSize
+					, sdw::Vec2 const & ssCropRange
 					, sdw::Vec2 const & uvRange
-					, sdw::Float bound
+					, sdw::Float ssRelBound
 					, sdw::Float uv )
 				{
-					auto relBound = m_writer->declLocale( "relBound"
-						, bound + relativePosition );
+					auto ssAbsBound = m_writer->declLocale( "ssAbsBound"
+						, ssRelBound + ssAbsOvPosition );
 					auto crop = m_writer->declLocale( "crop"
-						, vec2( relBound / boundSize
-							, ( relBound - parentSize ) / boundSize ) );
+						, vec2( ( ssAbsBound - ssCropRange.x() ) / ssAbsBoundSize
+							, ( ssAbsBound - ssCropRange.y() ) / ssAbsBoundSize ) );
 
-					IF( *m_writer, relBound > parentSize )
+					IF( *m_writer, ssAbsBound > ssCropRange.y() )
 					{
-						bound = parentSize - relativePosition;
+						ssRelBound = ssCropRange.y() - ssAbsOvPosition;
 						uv -= crop.y() * ( uvRange.y() - uvRange.x() );
 						uv = clamp( uv, uvRange.x(), uvRange.y() );
 					}
-					ELSEIF( relBound < 0.0_f )
+					ELSEIF( ssAbsBound < ssCropRange.x() )
 					{
-						bound = 0.0_f - relativePosition;
+						ssRelBound = ssCropRange.x() - ssAbsOvPosition;
 						uv += crop.x() * ( uvRange.y() - uvRange.x() );
 						uv = clamp( uv, uvRange.x(), uvRange.y() );
 					}
 					FI;
 				}
-				, sdw::InFloat{ *m_writer, "relativePosition" }
-				, sdw::InFloat{ *m_writer, "parentSize" }
-				, sdw::InFloat{ *m_writer, "boundSize" }
+				, sdw::InFloat{ *m_writer, "ssAbsOvPosition" }
+				, sdw::InFloat{ *m_writer, "ssAbsParentSize" }
+				, sdw::InFloat{ *m_writer, "ssAbsBoundSize" }
+				, sdw::InVec2{ *m_writer, "ssCropRange" }
 				, sdw::InVec2{ *m_writer, "uvRange" }
-				, sdw::InOutFloat{ *m_writer, "bound" }
+				, sdw::InOutFloat{ *m_writer, "ssRelBound" }
 				, sdw::InOutFloat{ *m_writer, "uv" } );
 		}
 
-		m_cropMaxValue( prelativePosition
-			, pparentSize
-			, pboundSize
+		m_cropMaxValue( pssAbsOvPosition
+			, pssAbsParentSize
+			, pssAbsBoundSize
+			, pssCropRange
 			, puvRange
-			, pbound
+			, pssRelBound
 			, puv );
 	}
 
-	void OverlayData::cropMinMinValue( sdw::Float const & pssRelPosition
+	void OverlayData::cropMinMinValue( sdw::Float const & pssAbsOvPosition
 		, sdw::Float const & pssAbsParentSize
 		, sdw::Float const & pssAbsBoundSize
 		, sdw::Float const & pssAbsCharSize
+		, sdw::Vec2 const & pssCropRange
 		, sdw::Vec2 const & ptexUvRange
 		, sdw::Vec2 const & pfontUvRange
 		, sdw::Float pssRelBound
@@ -121,33 +130,34 @@ namespace castor3d::shader
 		if ( !m_cropMinMinValue )
 		{
 			m_cropMinMinValue = m_writer->implementFunction< sdw::Void >( "c3d_cropMinMinValue"
-				, [&]( sdw::Float const & ssRelPosition
+				, [&]( sdw::Float const & ssAbsOvPosition
 					, sdw::Float const & ssAbsParentSize
 					, sdw::Float const & ssAbsBoundSize
 					, sdw::Float const & ssAbsCharSize
+					, sdw::Vec2 const & ssCropRange
 					, sdw::Vec2 const & texUvRange
 					, sdw::Vec2 const & fontUvRange
 					, sdw::Float ssRelBound
 					, sdw::Float texUv
 					, sdw::Float fontUv )
 				{
-					auto relBound = m_writer->declLocale( "relBound"
-						, ssRelBound + ssRelPosition );
+					auto ssAbsBound = m_writer->declLocale( "ssAbsBound"
+						, ssRelBound + ssAbsOvPosition );
 					auto crop = m_writer->declLocale( "crop"
-						, vec2( relBound / ssAbsCharSize
-							, ( relBound - ssAbsParentSize ) / ssAbsCharSize ) );
+						, vec2( ( ssAbsBound - ssCropRange.x() ) / ssAbsCharSize
+							, ( ssAbsBound - ssCropRange.y() ) / ssAbsCharSize ) );
 
-					IF( *m_writer, relBound > ssAbsParentSize )
+					IF( *m_writer, ssAbsBound > ssCropRange.y() )
 					{
-						ssRelBound = ssAbsParentSize - ssRelPosition;
+						ssRelBound = ssCropRange.y() - ssAbsOvPosition;
 						texUv += crop.y() * ( texUvRange.y() - texUvRange.x() );
 						fontUv += crop.y() * ( fontUvRange.y() - fontUvRange.x() );
 						texUv = clamp( texUv, texUvRange.x(), texUvRange.y() );
 						fontUv = clamp( fontUv, fontUvRange.x(), fontUvRange.y() );
 					}
-					ELSEIF( relBound < 0.0_f )
+					ELSEIF( ssAbsBound < ssCropRange.x() )
 					{
-						ssRelBound = 0.0_f - ssRelPosition;
+						ssRelBound = ssCropRange.x() - ssAbsOvPosition;
 						texUv -= crop.x() * ( texUvRange.y() - texUvRange.x() );
 						fontUv -= crop.x() * ( fontUvRange.y() - fontUvRange.x() );
 						texUv = clamp( texUv, texUvRange.x(), texUvRange.y() );
@@ -155,10 +165,11 @@ namespace castor3d::shader
 					}
 					FI;
 				}
-				, sdw::InFloat{ *m_writer, "ssRelPosition" }
+				, sdw::InFloat{ *m_writer, "ssAbsOvPosition" }
 				, sdw::InFloat{ *m_writer, "ssAbsParentSize" }
 				, sdw::InFloat{ *m_writer, "ssAbsBoundSize" }
 				, sdw::InFloat{ *m_writer, "ssAbsCharSize" }
+				, sdw::InVec2{ *m_writer, "ssCropRange" }
 				, sdw::InVec2{ *m_writer, "texUvRange" }
 				, sdw::InVec2{ *m_writer, "fontUvRange" }
 				, sdw::InOutFloat{ *m_writer, "ssRelBound" }
@@ -166,10 +177,11 @@ namespace castor3d::shader
 				, sdw::InOutFloat{ *m_writer, "fontUv" } );
 		}
 
-		m_cropMinMinValue( pssRelPosition
+		m_cropMinMinValue( pssAbsOvPosition
 			, pssAbsParentSize
 			, pssAbsBoundSize
 			, pssAbsCharSize
+			, pssCropRange
 			, ptexUvRange
 			, pfontUvRange
 			, pssRelBound
@@ -177,10 +189,11 @@ namespace castor3d::shader
 			, pfontUv );
 	};
 
-	void OverlayData::cropMinMaxValue( sdw::Float const & pssRelPosition
+	void OverlayData::cropMinMaxValue( sdw::Float const & pssAbsOvPosition
 		, sdw::Float const & pssAbsParentSize
 		, sdw::Float const & pssAbsBoundSize
 		, sdw::Float const & pssAbsCharSize
+		, sdw::Vec2 const & pssCropRange
 		, sdw::Vec2 const & ptexUvRange
 		, sdw::Vec2 const & pfontUvRange
 		, sdw::Float pssRelBound
@@ -190,33 +203,34 @@ namespace castor3d::shader
 		if ( !m_cropMinMaxValue )
 		{
 			m_cropMinMaxValue = m_writer->implementFunction< sdw::Void >( "c3d_cropMinMaxValue"
-				, [&]( sdw::Float const & ssRelPosition
+				, [&]( sdw::Float const & ssAbsOvPosition
 					, sdw::Float const & ssAbsParentSize
 					, sdw::Float const & ssAbsBoundSize
 					, sdw::Float const & ssAbsCharSize
+					, sdw::Vec2 const & ssCropRange
 					, sdw::Vec2 const & texUvRange
 					, sdw::Vec2 const & fontUvRange
 					, sdw::Float ssRelBound
 					, sdw::Float texUv
 					, sdw::Float fontUv )
 				{
-					auto relBound = m_writer->declLocale( "relBound"
-						, ssRelBound + ssRelPosition );
+					auto ssAbsBound = m_writer->declLocale( "ssAbsBound"
+						, ssRelBound + ssAbsOvPosition );
 					auto crop = m_writer->declLocale( "crop"
-						, vec2( relBound / ssAbsCharSize
-							, ( relBound - ssAbsParentSize ) / ssAbsCharSize ) );
+						, vec2( ( ssAbsBound - ssCropRange.x() ) / ssAbsCharSize
+							, ( ssAbsBound - ssCropRange.y() ) / ssAbsCharSize ) );
 
-					IF( *m_writer, relBound > ssAbsParentSize )
+					IF( *m_writer, ssAbsBound > ssCropRange.y() )
 					{
-						ssRelBound = ssAbsParentSize - ssRelPosition;
+						ssRelBound = ssCropRange.y() - ssAbsOvPosition;
 						texUv += crop.y() * ( texUvRange.y() - texUvRange.x() );
 						fontUv -= crop.y() * ( fontUvRange.y() - fontUvRange.x() );
 						texUv = clamp( texUv, texUvRange.x(), texUvRange.y() );
 						fontUv = clamp( fontUv, fontUvRange.x(), fontUvRange.y() );
 					}
-					ELSEIF( relBound < 0.0_f )
+					ELSEIF( ssAbsBound < ssCropRange.x() )
 					{
-						ssRelBound = 0.0_f - ssRelPosition;
+						ssRelBound = ssCropRange.x() - ssAbsOvPosition;
 						texUv -= crop.x() * ( texUvRange.y() - texUvRange.x() );
 						fontUv += crop.x() * ( fontUvRange.y() - fontUvRange.x() );
 						texUv = clamp( texUv, texUvRange.x(), texUvRange.y() );
@@ -224,10 +238,11 @@ namespace castor3d::shader
 					}
 					FI;
 				}
-				, sdw::InFloat{ *m_writer, "ssRelPosition" }
+				, sdw::InFloat{ *m_writer, "ssAbsOvPosition" }
 				, sdw::InFloat{ *m_writer, "ssAbsParentSize" }
 				, sdw::InFloat{ *m_writer, "ssAbsBoundSize" }
 				, sdw::InFloat{ *m_writer, "ssAbsCharSize" }
+				, sdw::InVec2{ *m_writer, "ssCropRange" }
 				, sdw::InVec2{ *m_writer, "texUvRange" }
 				, sdw::InVec2{ *m_writer, "fontUvRange" }
 				, sdw::InOutFloat{ *m_writer, "ssRelBound" }
@@ -235,10 +250,11 @@ namespace castor3d::shader
 				, sdw::InOutFloat{ *m_writer, "fontUv" } );
 		}
 
-		m_cropMinMaxValue( pssRelPosition
+		m_cropMinMaxValue( pssAbsOvPosition
 			, pssAbsParentSize
 			, pssAbsBoundSize
 			, pssAbsCharSize
+			, pssCropRange
 			, ptexUvRange
 			, pfontUvRange
 			, pssRelBound
@@ -246,10 +262,11 @@ namespace castor3d::shader
 			, pfontUv );
 	}
 
-	void OverlayData::cropMaxMinValue( sdw::Float const & pssRelPosition
+	void OverlayData::cropMaxMinValue( sdw::Float const & pssAbsOvPosition
 		, sdw::Float const & pssAbsParentSize
 		, sdw::Float const & pssAbsBoundSize
 		, sdw::Float const & pssAbsCharSize
+		, sdw::Vec2 const & pssCropRange
 		, sdw::Vec2 const & ptexUvRange
 		, sdw::Vec2 const & pfontUvRange
 		, sdw::Float pssRelBound
@@ -259,33 +276,34 @@ namespace castor3d::shader
 		if ( !m_cropMaxMinValue )
 		{
 			m_cropMaxMinValue = m_writer->implementFunction< sdw::Void >( "c3d_cropMaxMinValue"
-				, [&]( sdw::Float const & ssRelPosition
+				, [&]( sdw::Float const & ssAbsOvPosition
 					, sdw::Float const & ssAbsParentSize
 					, sdw::Float const & ssAbsBoundSize
 					, sdw::Float const & ssAbsCharSize
+					, sdw::Vec2 const & ssCropRange
 					, sdw::Vec2 const & texUvRange
 					, sdw::Vec2 const & fontUvRange
 					, sdw::Float ssRelBound
 					, sdw::Float texUv
 					, sdw::Float fontUv )
 				{
-					auto relBound = m_writer->declLocale( "relBound"
-						, ssRelBound + ssRelPosition );
+					auto ssAbsBound = m_writer->declLocale( "ssAbsBound"
+						, ssRelBound + ssAbsOvPosition );
 					auto crop = m_writer->declLocale( "crop"
-						, vec2( relBound / ssAbsCharSize
-							, ( relBound - ssAbsParentSize ) / ssAbsCharSize ) );
+						, vec2( ( ssAbsBound - ssCropRange.x() ) / ssAbsCharSize
+							, ( ssAbsBound - ssCropRange.y() ) / ssAbsCharSize ) );
 
-					IF( *m_writer, relBound > ssAbsParentSize )
+					IF( *m_writer, ssAbsBound > ssCropRange.y() )
 					{
-						ssRelBound = ssAbsParentSize - ssRelPosition;
+						ssRelBound = ssCropRange.y() - ssAbsOvPosition;
 						texUv -= crop.y() * ( texUvRange.y() - texUvRange.x() );
 						fontUv += crop.y() * ( fontUvRange.y() - fontUvRange.x() );
 						texUv = clamp( texUv, texUvRange.x(), texUvRange.y() );
 						fontUv = clamp( fontUv, fontUvRange.x(), fontUvRange.y() );
 					}
-					ELSEIF( relBound < 0.0_f )
+					ELSEIF( ssAbsBound < ssCropRange.x() )
 					{
-						ssRelBound = 0.0_f - ssRelPosition;
+						ssRelBound = ssCropRange.x() - ssAbsOvPosition;
 						texUv += crop.x() * ( texUvRange.y() - texUvRange.x() );
 						fontUv -= crop.x() * ( fontUvRange.y() - fontUvRange.x() );
 						texUv = clamp( texUv, texUvRange.x(), texUvRange.y() );
@@ -293,10 +311,11 @@ namespace castor3d::shader
 					}
 					FI;
 				}
-				, sdw::InFloat{ *m_writer, "ssRelPosition" }
+				, sdw::InFloat{ *m_writer, "ssAbsOvPosition" }
 				, sdw::InFloat{ *m_writer, "ssAbsParentSize" }
 				, sdw::InFloat{ *m_writer, "ssAbsBoundSize" }
 				, sdw::InFloat{ *m_writer, "ssAbsCharSize" }
+				, sdw::InVec2{ *m_writer, "ssCropRange" }
 				, sdw::InVec2{ *m_writer, "texUvRange" }
 				, sdw::InVec2{ *m_writer, "fontUvRange" }
 				, sdw::InOutFloat{ *m_writer, "ssRelBound" }
@@ -304,10 +323,11 @@ namespace castor3d::shader
 				, sdw::InOutFloat{ *m_writer, "fontUv" } );
 		}
 
-		m_cropMaxMinValue( pssRelPosition
+		m_cropMaxMinValue( pssAbsOvPosition
 			, pssAbsParentSize
 			, pssAbsBoundSize
 			, pssAbsCharSize
+			, pssCropRange
 			, ptexUvRange
 			, pfontUvRange
 			, pssRelBound
@@ -315,10 +335,11 @@ namespace castor3d::shader
 			, pfontUv );
 	};
 
-	void OverlayData::cropMaxMaxValue( sdw::Float const & pssRelPosition
+	void OverlayData::cropMaxMaxValue( sdw::Float const & pssAbsOvPosition
 		, sdw::Float const & pssAbsParentSize
 		, sdw::Float const & pssAbsBoundSize
 		, sdw::Float const & pssAbsCharSize
+		, sdw::Vec2 const & pssCropRange
 		, sdw::Vec2 const & ptexUvRange
 		, sdw::Vec2 const & pfontUvRange
 		, sdw::Float pssRelBound
@@ -328,33 +349,34 @@ namespace castor3d::shader
 		if ( !m_cropMaxMaxValue )
 		{
 			m_cropMaxMaxValue = m_writer->implementFunction< sdw::Void >( "c3d_cropMaxMaxValue"
-				, [&]( sdw::Float const & ssRelPosition
+				, [&]( sdw::Float const & ssAbsOvPosition
 					, sdw::Float const & ssAbsParentSize
 					, sdw::Float const & ssAbsBoundSize
 					, sdw::Float const & ssAbsCharSize
+					, sdw::Vec2 const & ssCropRange
 					, sdw::Vec2 const & texUvRange
 					, sdw::Vec2 const & fontUvRange
 					, sdw::Float ssRelBound
 					, sdw::Float texUv
 					, sdw::Float fontUv )
 				{
-					auto relBound = m_writer->declLocale( "relBound"
-						, ssRelBound + ssRelPosition );
+					auto ssAbsBound = m_writer->declLocale( "ssAbsBound"
+						, ssRelBound + ssAbsOvPosition );
 					auto crop = m_writer->declLocale( "crop"
-						, vec2( relBound / ssAbsCharSize
-							, ( relBound - ssAbsParentSize ) / ssAbsCharSize ) );
+						, vec2( ( ssAbsBound - ssCropRange.x() ) / ssAbsCharSize
+							, ( ssAbsBound - ssCropRange.y() ) / ssAbsCharSize ) );
 
-					IF( *m_writer, relBound > ssAbsParentSize )
+					IF( *m_writer, ssAbsBound > ssCropRange.y() )
 					{
-						ssRelBound = ssAbsParentSize - ssRelPosition;
+						ssRelBound = ssCropRange.y() - ssAbsOvPosition;
 						texUv -= crop.y() * ( texUvRange.y() - texUvRange.x() );
 						fontUv -= crop.y() * ( fontUvRange.y() - fontUvRange.x() );
 						texUv = clamp( texUv, texUvRange.x(), texUvRange.y() );
 						fontUv = clamp( fontUv, fontUvRange.x(), fontUvRange.y() );
 					}
-					ELSEIF( relBound < 0.0_f )
+					ELSEIF( ssAbsBound < ssCropRange.x() )
 					{
-						ssRelBound = 0.0_f - ssRelPosition;
+						ssRelBound = ssCropRange.x() - ssAbsOvPosition;
 						texUv += crop.x() * ( texUvRange.y() - texUvRange.x() );
 						fontUv += crop.x() * ( fontUvRange.y() - fontUvRange.x() );
 						texUv = clamp( texUv, texUvRange.x(), texUvRange.y() );
@@ -362,10 +384,11 @@ namespace castor3d::shader
 					}
 					FI;
 				}
-				, sdw::InFloat{ *m_writer, "ssRelPosition" }
+				, sdw::InFloat{ *m_writer, "ssAbsOvPosition" }
 				, sdw::InFloat{ *m_writer, "ssAbsParentSize" }
 				, sdw::InFloat{ *m_writer, "ssAbsBoundSize" }
 				, sdw::InFloat{ *m_writer, "ssAbsCharSize" }
+				, sdw::InVec2{ *m_writer, "ssCropRange" }
 				, sdw::InVec2{ *m_writer, "texUvRange" }
 				, sdw::InVec2{ *m_writer, "fontUvRange" }
 				, sdw::InOutFloat{ *m_writer, "ssRelBound" }
@@ -373,10 +396,11 @@ namespace castor3d::shader
 				, sdw::InOutFloat{ *m_writer, "fontUv" } );
 		}
 
-		m_cropMaxMaxValue( pssRelPosition
+		m_cropMaxMaxValue( pssAbsOvPosition
 			, pssAbsParentSize
 			, pssAbsBoundSize
 			, pssAbsCharSize
+			, pssCropRange
 			, ptexUvRange
 			, pfontUvRange
 			, pssRelBound
