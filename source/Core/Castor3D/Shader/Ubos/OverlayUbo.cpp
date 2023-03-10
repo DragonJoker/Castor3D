@@ -1,5 +1,7 @@
 #include "Castor3D/Shader/Ubos/OverlayUbo.hpp"
 
+#include <ShaderWriter/Source.hpp>
+
 namespace castor3d::shader
 {
 	void OverlayData::cropMinValue( sdw::Float const & pssAbsOvPosition

@@ -12,7 +12,8 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Math/MathModule.hpp>
 
-#include <ashespp/AshesPPPrerequisites.hpp>
+#include <ashespp/Buffer/Buffer.hpp>
+#include <ashespp/Descriptor/DescriptorSet.hpp>
 
 namespace castor3d
 {
@@ -89,21 +90,11 @@ namespace castor3d
 	*/
 	template< typename VertexT, uint32_t CountT >
 	struct OverlayVertexBufferPoolT;
-	/**
-	*\~english
-	*\brief
-	*	An overlay vertices index in the pool.
-	*\~french
-	*\brief
-	*	L'index dans le pool des sommets d'un overlay.
-	*/
-	template< typename VertexT, uint32_t CountT >
-	struct OverlayVertexBufferIndexT;
 
 	template< typename VertexT, uint32_t CountT >
 	using OverlayVertexBufferPoolPtrT = std::unique_ptr< OverlayVertexBufferPoolT< VertexT, CountT > >;
 
-	struct OverlayPipeline
+	struct OverlayDrawPipeline
 	{
 		ashes::PipelineLayoutPtr pipelineLayout;
 		ashes::GraphicsPipelinePtr pipeline;
@@ -142,18 +133,10 @@ namespace castor3d
 		uint32_t count{};
 	};
 
-	struct OverlayRenderNode
+	struct OverlayDrawNode
 	{
-		OverlayPipeline & pipeline;
+		OverlayDrawPipeline & pipeline;
 		Pass const & pass;
-	};
-
-	struct OverlayGeometryBuffers
-	{
-		GpuBufferBase * buffer{};
-		VkDeviceSize offset{};
-		VkDeviceSize range{};
-		uint32_t count{};
 	};
 
 	struct OverlayTextBufferIndex
@@ -162,6 +145,19 @@ namespace castor3d
 		uint32_t word{};
 		uint32_t line{};
 		float top{};
+	};
+
+	struct OverlayDrawData
+	{
+		Overlay const * overlay{};
+		OverlayDrawNode const * node{};
+		OverlayPipelineData const * pipelineData{};
+		uint32_t vertexOffset{};
+		uint32_t vertexCount{};
+		uint32_t overlayIndex{};
+		uint32_t pipelineIndex{};
+		OverlayTextBufferIndex textBuffer{};
+		bool secondary{};
 	};
 
 	CU_DeclareCUSmartPtr( castor3d, OverlayRenderer, C3D_API );

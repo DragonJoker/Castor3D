@@ -167,7 +167,7 @@ namespace castor
 			return *this;
 		}
 
-		auto const operator->()const noexcept
+		auto operator->()const noexcept
 		{
 			return &m_data.size;
 		}

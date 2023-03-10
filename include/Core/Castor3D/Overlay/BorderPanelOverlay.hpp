@@ -18,6 +18,14 @@ namespace castor3d
 		: public OverlayCategory
 	{
 	public:
+		enum class ComputeBindingIdx
+		{
+			eCamera,
+			eOverlays,
+			eVertex,
+		};
+
+	public:
 		/**
 		 *\~english
 		 *\brief		Constructor

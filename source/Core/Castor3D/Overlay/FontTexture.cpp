@@ -187,7 +187,6 @@ namespace castor3d
 			uint32_t offY = sizeImg.getHeight() - maxHeight;
 			auto buffer = image.getBuffer();
 			uint8_t * dstBuffer = buffer.data();
-			bool modified{};
 
 			for ( uint32_t y = 0; y < count && it != font->end(); ++y )
 			{
@@ -219,7 +218,6 @@ namespace castor3d
 					if ( ires.second )
 					{
 						m_buffer->add( glyph );
-						modified = true;
 					}
 				}
 

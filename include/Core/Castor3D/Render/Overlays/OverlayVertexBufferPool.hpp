@@ -21,7 +21,6 @@ namespace castor3d
 	template< typename VertexT, uint32_t CountT >
 	struct OverlayVertexBufferPoolT
 	{
-		using MyBufferIndex = OverlayVertexBufferIndexT< VertexT, CountT >;
 		using Quad = std::array< VertexT, CountT >;
 		static bool constexpr isPanel = std::is_same_v< VertexT, OverlayCategory::Vertex > && ( CountT == 6u );
 		static bool constexpr isBorder = std::is_same_v< VertexT, OverlayCategory::Vertex > && ( CountT == 48u );
@@ -33,20 +32,18 @@ namespace castor3d
 			, RenderDevice const & device
 			, CameraUbo const & cameraUbo
 			, ashes::DescriptorSetLayout const & descriptorLayout
-			, ashes::PipelineVertexInputStateCreateInfo const & noTexDecl
-			, ashes::PipelineVertexInputStateCreateInfo const & texDecl
 			, uint32_t count
 			, OverlayTextBufferPoolUPtr textBuf = nullptr );
 		template< typename OverlayT >
-		OverlayVertexBufferIndexT< VertexT, CountT > fill( castor::Size const & renderSize
+		void fill( castor::Size const & renderSize
 			, OverlayT const & overlay
-			, OverlayRenderNode const & node
+			, OverlayDrawData & data
 			, bool secondary
 			, FontTexture const * fontTexture );
 		void upload( ashes::CommandBuffer const & cb );
 
-		void clearDrawDescriptorSets( FontTexture const * fontTexture );
-		ashes::DescriptorSetCRefArray const & getDrawDescriptorSets( OverlayRenderNode const & node
+		void clearDrawPipelineData( FontTexture const * fontTexture );
+		OverlayPipelineData const & getDrawPipelineData( OverlayDrawPipeline const & pipeline
 			, FontTexture const * fontTexture
 			, ashes::DescriptorSet const * textDescriptorSet );
 		void fillComputeDescriptorSet( FontTexture const * fontTexture
@@ -61,8 +58,6 @@ namespace castor3d
 		std::string name;
 		ashes::BufferPtr< OverlayUboConfiguration > overlaysData;
 		castor::ArrayView< OverlayUboConfiguration > overlaysBuffer;
-		ashes::PipelineVertexInputStateCreateInfo const & noTexDeclaration;
-		ashes::PipelineVertexInputStateCreateInfo const & texDeclaration;
 		GpuBufferBase vertexBuffer;
 		uint32_t allocated{};
 		uint32_t index{};
@@ -70,7 +65,7 @@ namespace castor3d
 		OverlayTextBufferPoolUPtr textBuffer;
 
 	private:
-		using PipelineDataMap = std::map< OverlayPipeline const *, OverlayPipelineData >;
+		using PipelineDataMap = std::map< OverlayDrawPipeline const *, OverlayPipelineData >;
 		std::map< FontTexture const *, PipelineDataMap > m_pipelines;
 		std::vector< OverlayPipelineData > m_retired;
 

@@ -5,7 +5,6 @@ See LICENSE file in root folder
 #define ___C3D_OverlayRenderer_H___
 
 #include "Castor3D/Overlay/TextOverlay.hpp"
-#include "Castor3D/Render/Overlays/OverlayVertexBufferIndex.hpp"
 #include "Castor3D/Render/Overlays/OverlayVertexBufferPool.hpp"
 
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
@@ -39,20 +38,20 @@ namespace castor3d
 			uint32_t count{};
 		};
 
-		struct TextPipelineSet
+		struct TextComputePipelineDescriptor
 		{
 			ashes::DescriptorSetPtr descriptorSet;
 			uint32_t count{};
 			OverlayTextBuffer const * textBuffer{};
 		};
 
-		struct TextPipeline
+		struct TextComputePipeline
 		{
 			ashes::DescriptorSetLayoutPtr descriptorLayout{};
 			ashes::PipelineLayoutPtr pipelineLayout{};
 			ashes::PipelinePtr pipeline{};
 			ashes::DescriptorSetPoolPtr descriptorPool{};
-			std::map< FontTexture const *, TextPipelineSet > sets;
+			std::map< FontTexture const *, TextComputePipelineDescriptor > sets;
 		};
 
 	public:
@@ -125,8 +124,8 @@ namespace castor3d
 		/**@{*/
 		ashes::CommandBuffer const & getCommands()const
 		{
-			CU_Require( m_commands.commandBuffer );
-			return *m_commands.commandBuffer;
+			CU_Require( m_draw.commands.commandBuffer );
+			return *m_draw.commands.commandBuffer;
 		}
 
 		castor::Size const & getSize()const
@@ -150,71 +149,133 @@ namespace castor3d
 		using PanelVertexBufferPool = OverlayVertexBufferPoolT< OverlayCategory::Vertex, 6u >;
 		using BorderPanelVertexBufferPool = OverlayVertexBufferPoolT< OverlayCategory::Vertex, 8u * 6u >;
 		using TextVertexBufferPool = OverlayVertexBufferPoolT< TextOverlay::Vertex, MaxCharsPerOverlay >;
-		using PanelVertexBufferIndex = PanelVertexBufferPool::MyBufferIndex;
-		using BorderPanelVertexBufferIndex = BorderPanelVertexBufferPool::MyBufferIndex;
-		using TextVertexBufferIndex = TextVertexBufferPool::MyBufferIndex;
+
+		struct OverlaysCommonData
+		{
+			OverlaysCommonData( RenderDevice const & device );
+
+			ashes::DescriptorSetLayoutPtr baseDescriptorLayout;
+
+			CameraUbo cameraUbo;
+			std::unique_ptr< PanelVertexBufferPool > panelVertexBuffer;
+			std::unique_ptr< BorderPanelVertexBufferPool > borderVertexBuffer;
+			std::unique_ptr< TextVertexBufferPool > textVertexBuffer;
+		};
+
+		struct OverlaysComputeData
+		{
+			ComputePipeline panelPipeline;
+			ComputePipeline borderPipeline;
+			TextComputePipeline textPipeline;
+
+			OverlaysComputeData( RenderDevice const & device
+				, OverlaysCommonData & commonData );
+
+			void reset();
+			void registerCommands( crg::RecordContext & context
+				, VkCommandBuffer commandBuffer )const;
+
+			TextComputePipelineDescriptor & getTextPipeline( FontTexture & fontTexture );
+
+		private:
+			ComputePipeline doCreatePanelPipeline( RenderDevice const & device
+				, PanelVertexBufferPool & vertexBuffer
+				, CameraUbo const & cameraUbo );
+			ComputePipeline doCreateBorderPipeline( RenderDevice const & device
+				, BorderPanelVertexBufferPool & vertexBuffer
+				, CameraUbo const & cameraUbo );
+			TextComputePipeline doCreateTextPipeline( RenderDevice const & device );
+			ashes::DescriptorSetPtr doGetTextDescriptorSet( FontTexture const & fontTexture );
+			void doRegisterComputeBufferCommands( crg::RecordContext & context
+				, VkCommandBuffer commandBuffer
+				, OverlayRenderer::ComputePipeline const & pipeline
+				, ashes::BufferBase const & overlaysBuffer
+				, ashes::BufferBase const & vertexBuffer )const;
+			void doRegisterComputeBufferCommands( crg::RecordContext & context
+				, VkCommandBuffer commandBuffer
+				, OverlayRenderer::TextComputePipeline const & pipeline
+				, OverlayRenderer::TextComputePipelineDescriptor const & set )const;
+
+		private:
+			OverlaysCommonData & m_commonData;
+		};
+
+		struct OverlaysDrawData
+		{
+			CommandsSemaphore commands;
+			std::unique_ptr< crg::FramePassTimerBlock > timerBlock;
+			std::vector< ashes::DescriptorSetPtr > retired;
+			ashes::DescriptorSetLayoutPtr textDescriptorLayout;
+			ashes::DescriptorSetPoolPtr textDescriptorPool;
+			std::map< FontTexture const *, FontTextureDescriptorConnection > textDescriptorSets;
+
+			OverlaysDrawData( RenderDevice const & device
+				, VkCommandBufferLevel level
+				, OverlaysCommonData & commonData );
+
+			OverlayDrawNode & getPanelNode( RenderDevice const & device
+				, VkRenderPass renderPass
+				, Pass const & pass );
+			OverlayDrawNode & getTextNode( RenderDevice const & device
+				, VkRenderPass renderPass
+				, Pass const & pass
+				, TextureLayout const & texture
+				, Sampler const & sampler );
+			ashes::DescriptorSet const & createTextDescriptorSet( FontTexture & fontTexture );
+			void beginPrepare( VkRenderPass renderPass
+				, VkFramebuffer framebuffer
+				, crg::FramePassTimer & timer
+				, castor::Size const & size );
+			void endPrepare();
+
+		private:
+			OverlayDrawPipeline & doGetPipeline( RenderDevice const & device
+				, VkRenderPass renderPass
+				, Pass const & pass
+				, std::map< uint32_t, OverlayDrawPipeline > & pipelines
+				, bool text );
+			OverlayDrawPipeline doCreatePipeline( RenderDevice const & device
+				, VkRenderPass renderPass
+				, Pass const & pass
+				, ashes::PipelineShaderStageCreateInfoArray program
+				, TextureCombine const & texturesFlags
+				, bool text );
+			ashes::PipelineShaderStageCreateInfoArray doCreateOverlayProgram( RenderDevice const & device
+				, TextureCombine const & texturesFlags
+				, bool text );
+
+		private:
+			std::map< Pass const *, OverlayDrawNode > m_mapPanelNodes;
+			std::map< Pass const *, OverlayDrawNode > m_mapTextNodes;
+			std::map< uint32_t, OverlayDrawPipeline > m_panelPipelines;
+			std::map< uint32_t, OverlayDrawPipeline > m_textPipelines;
+			OverlaysCommonData & m_commonData;
+		};
 
 	private:
-		void doBeginPrepare( VkRenderPass renderPass
+		ashes::CommandBuffer & doBeginPrepare( VkRenderPass renderPass
 			, VkFramebuffer framebuffer );
 		void doEndPrepare();
-		OverlayRenderNode & doGetPanelNode( RenderDevice const & device
+		std::pair< OverlayDrawNode *, OverlayPipelineData const * > doGetDrawNodeData( RenderDevice const & device
 			, VkRenderPass renderPass
-			, Pass const & pass );
-		OverlayRenderNode & doGetTextNode( RenderDevice const & device
-			, VkRenderPass renderPass
+			, Overlay const & overlay
 			, Pass const & pass
-			, TextureLayout const & texture
-			, Sampler const & sampler );
-		ashes::DescriptorSet const & doCreateTextDescriptorSet( FontTexture & fontTexture );
-		OverlayPipeline doCreatePipeline( RenderDevice const & device
-			, VkRenderPass renderPass
-			, Pass const & pass
-			, ashes::PipelineShaderStageCreateInfoArray program
-			, TextureCombine const & texturesFlags
-			, bool text );
-		OverlayPipeline & doGetPipeline( RenderDevice const & device
-			, VkRenderPass renderPass
-			, Pass const & pass
-			, std::map< uint32_t, OverlayPipeline > & pipelines
-			, bool text );
-		ComputePipeline doCreatePanelPipeline( RenderDevice const & device );
-		ComputePipeline doCreateBorderPipeline( RenderDevice const & device );
-		TextPipeline doCreateTextPipeline( RenderDevice const & device );
-		ashes::DescriptorSetPtr doGetTextSet( FontTexture const & fontTexture );
-		TextPipelineSet & doGetComputeTextPipeline( FontTexture & fontTexture );
-		ashes::PipelineShaderStageCreateInfoArray doCreateOverlayProgram( RenderDevice const & device
-			, TextureCombine const & texturesFlags
-			, bool text );
+			, bool secondary );
+
+		void doResetCompute()
+		{
+			m_compute.reset();
+		}
 
 	private:
 		Texture const & m_target;
 		crg::FramePassTimer & m_timer;
-		std::unique_ptr< crg::FramePassTimerBlock > m_timerBlock;
-		CommandsSemaphore m_commands;
-		ashes::PipelineVertexInputStateCreateInfo m_noTexDeclaration;
-		ashes::PipelineVertexInputStateCreateInfo m_texDeclaration;
-		ashes::PipelineVertexInputStateCreateInfo m_noTexTextDeclaration;
-		ashes::PipelineVertexInputStateCreateInfo m_texTextDeclaration;
-		CameraUbo m_cameraUbo;
-		ashes::DescriptorSetLayoutPtr m_baseDescriptorLayout;
-		std::unique_ptr< PanelVertexBufferPool > m_panelVertexBuffer;
-		std::unique_ptr< BorderPanelVertexBufferPool > m_borderVertexBuffer;
-		std::unique_ptr< TextVertexBufferPool > m_textVertexBuffer;
 		castor::Size m_size;
-		std::map< Pass const *, OverlayRenderNode > m_mapPanelNodes;
-		std::map< Pass const *, OverlayRenderNode > m_mapTextNodes;
-		std::map< uint32_t, OverlayPipeline > m_panelPipelines;
-		std::map< uint32_t, OverlayPipeline > m_textPipelines;
 		castor::String m_previousCaption;
 		bool m_sizeChanged{ true };
-		std::vector< ashes::DescriptorSetPtr > m_retired;
-		ashes::DescriptorSetLayoutPtr m_textDescriptorLayout;
-		ashes::DescriptorSetPoolPtr m_textDescriptorPool;
-		std::map< FontTexture const *, FontTextureDescriptorConnection > m_textDescriptorSets;
-		ComputePipeline m_computePanelPipeline;
-		ComputePipeline m_computeBorderPipeline;
-		TextPipeline m_computeTextPipeline;
+		OverlaysCommonData m_common;
+		OverlaysDrawData m_draw;
+		OverlaysComputeData m_compute;
 	};
 }
 

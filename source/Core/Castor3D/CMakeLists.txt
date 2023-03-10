@@ -1229,7 +1229,6 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Overlays/OverlayPreparer.inl
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Overlays/OverlayRenderer.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Overlays/OverlayTextBufferPool.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Overlays/OverlayVertexBufferIndex.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Overlays/OverlayVertexBufferPool.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Overlays/OverlayVertexBufferPool.inl
 )

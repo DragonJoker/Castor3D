@@ -98,13 +98,13 @@ namespace castor3d
 		sdw::ComputeWriter writer;
 
 		C3D_Camera( writer
-			, 0u
+			, uint32_t( ComputeBindingIdx::eCamera )
 			, 0u );
 		C3D_Overlays( writer
-			, 1u
+			, uint32_t( ComputeBindingIdx::eOverlays )
 			, 0u );
 		C3D_OverlaysSurfaces( writer
-			, 2u
+			, uint32_t( ComputeBindingIdx::eVertex )
 			, 0u
 			, false
 			, true );
@@ -257,7 +257,7 @@ namespace castor3d
 	void BorderPanelOverlay::doUpdateSize( OverlayRenderer const & renderer )
 	{
 		if ( m_pxBorderSize
-			&& isSizeChanged() || isChanged() || renderer.isSizeChanged() )
+			&& ( isSizeChanged() || isChanged() || renderer.isSizeChanged() ) )
 		{
 			castor::Size renderSize = renderer.getSize();
 			castor::Point2d parentSize = getParentSize() * renderSize;

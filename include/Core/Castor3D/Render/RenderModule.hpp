@@ -13,7 +13,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
-#include <RenderGraph/FrameGraphPrerequisites.hpp>
+#include <RenderGraph/Attachment.hpp>
 #include <RenderGraph/ImageData.hpp>
 #include <RenderGraph/ImageViewData.hpp>
 
@@ -844,6 +844,12 @@ namespace castor3d
 		, VkAccessFlags dstAccessMask
 		, uint32_t srcQueueFamily
 		, uint32_t dstQueueFamily );
+	C3D_API void memoryBarrier( crg::RecordContext & context
+		, VkCommandBuffer commandBuffer
+		, ashes::BufferBase const & buffer
+		, crg::BufferSubresourceRange const & range
+		, crg::AccessState after
+		, crg::AccessState before );
 	C3D_API ashes::Image makeImage( ashes::Device const & device
 		, VkImage image
 		, crg::ImageId data );

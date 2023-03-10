@@ -37,34 +37,11 @@ namespace castor3d
 		C3D_API OverlayPreparer & operator=( OverlayPreparer && rhs )noexcept;
 		C3D_API ~OverlayPreparer()noexcept;
 
-		C3D_API void fill( Overlay const & overlay );
-		C3D_API void prepare();
+		C3D_API void registerOverlay( Overlay const & overlay );
+		C3D_API void fillDrawData();
 
 	private:
-		void visit( PanelOverlay const & overlay );
-		void visit( BorderPanelOverlay const & overlay );
-		void visit( TextOverlay const & overlay );
-
-	private:
-		struct OverlayData
-		{
-			Overlay const * overlay{};
-			OverlayRenderNode const * node{};
-			ashes::DescriptorSetCRefArray const * descriptorSets{};
-			OverlayGeometryBuffers geometryBuffers{};
-			uint32_t overlayIndex{};
-			uint32_t pipelineIndex{};
-			bool secondary{};
-		};
-
-		template< typename QuadT, typename OverlayT, typename VertexT, uint32_t CountT >
-		void doPrepareOverlayDescriptors( RenderDevice const & device
-			, OverlayT const & overlay
-			, OverlayData data
-			, OverlayVertexBufferPoolT< VertexT, CountT > & vertexBuffer
-			, FontTexture const * fontTexture
-			, bool secondary );
-		void doPrepareOverlayCommands( OverlayData const & overlay
+		void doRegisterDrawCommands( OverlayDrawData const & overlay
 			, ashes::CommandBuffer & commandBuffer );
 		void doUpdateUbo( OverlayUboConfiguration & data
 			, PanelOverlay const & overlay
@@ -88,12 +65,12 @@ namespace castor3d
 	private:
 		OverlayRenderer & m_renderer;
 		RenderDevice const & m_device;
-		using OverlayDataArray = std::vector< OverlayData >;
-		using OverlayDatasMap = std::map< OverlayPipeline const *, OverlayDataArray >;
+		using OverlayDataArray = std::vector< OverlayDrawData >;
+		using OverlayDatasMap = std::map< OverlayDrawPipeline const *, OverlayDataArray >;
 		std::map< uint32_t, OverlayDatasMap > m_levelsOverlays;
 		VkRenderPass m_renderPass;
 		VkFramebuffer m_framebuffer;
-		std::vector< OverlayData > m_overlays;
+		std::vector< OverlayDrawData > m_overlays;
 		ashes::Pipeline const * m_previousPipeline{};
 		ashes::DescriptorSetCRefArray const * m_previousDescriptorSets{};
 	};
