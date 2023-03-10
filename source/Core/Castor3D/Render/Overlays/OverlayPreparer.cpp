@@ -59,13 +59,7 @@ namespace castor3d
 		, m_renderPass{ renderPass }
 		, m_framebuffer{ framebuffer }
 	{
-		m_renderer.m_computePanelPipeline.count = 0u;
-		m_renderer.m_computeBorderPipeline.count = 0u;
-
-		for ( auto & it : m_renderer.m_computeTextPipeline.sets )
-		{
-			it.second.count = 0u;
-		}
+		m_renderer.doResetCompute();
 	}
 
 	OverlayPreparer::OverlayPreparer( OverlayPreparer && rhs )noexcept
@@ -92,20 +86,19 @@ namespace castor3d
 	{
 		if ( m_renderPass )
 		{
-			prepare();
-			m_renderer.doBeginPrepare( m_renderPass, m_framebuffer );
-			ashes::CommandBuffer & commandBuffer = *m_renderer.m_commands.commandBuffer;
+			fillDrawData();
+			auto & commandBuffer = m_renderer.doBeginPrepare( m_renderPass, m_framebuffer );
 
-			for ( auto overlayIt : m_overlays )
+			for ( auto & overlayIt : m_overlays )
 			{
-				doPrepareOverlayCommands( overlayIt, commandBuffer );
+				doRegisterDrawCommands( overlayIt, commandBuffer );
 			}
 
 			m_renderer.doEndPrepare();
 		}
 	}
 
-	void OverlayPreparer::fill( Overlay const & overlay )
+	void OverlayPreparer::registerOverlay( Overlay const & overlay )
 	{
 		if ( auto material = overlay.getMaterial() )
 		{
@@ -115,43 +108,21 @@ namespace castor3d
 			{
 				if ( !pass->isImplicit() )
 				{
-					OverlayRenderNode * node{};
-					ashes::DescriptorSetCRefArray const * descriptorSets{};
-
-					switch ( overlay.getType() )
-					{
-					case OverlayType::ePanel:
-						node = &m_renderer.doGetPanelNode( m_device, m_renderPass, *pass );
-						descriptorSets = &m_renderer.m_panelVertexBuffer->getDrawDescriptorSets( *node, nullptr, nullptr );
-						break;
-					case OverlayType::eBorderPanel:
-						node = &m_renderer.doGetPanelNode( m_device, m_renderPass, *pass );
-						descriptorSets = &m_renderer.m_panelVertexBuffer->getDrawDescriptorSets( *node, nullptr, nullptr );
-						break;
-					case OverlayType::eText:
-						{
-							auto texture = overlay.getTextOverlay()->getFontTexture();
-							node = &m_renderer.doGetTextNode( m_device, m_renderPass, *pass, *texture->getTexture(), *texture->getSampler().lock() );
-							descriptorSets = &m_renderer.m_textVertexBuffer->getDrawDescriptorSets( *node
-								, texture.get()
-								, &m_renderer.doCreateTextDescriptorSet( *texture ) );
-						}
-						break;
-					default:
-						break;
-					}
-
-					if ( node )
-					{
-						auto & overlays = pipelines.emplace( &node->pipeline, OverlayDataArray{} ).first->second;
-						overlays.emplace_back( &overlay
-							, node
-							, descriptorSets
-							, OverlayGeometryBuffers{}
-							, uint32_t{}
-							, uint32_t{}
-							, false );
-					}
+					auto [node, pipelineData] = m_renderer.doGetDrawNodeData( m_device
+						, m_renderPass
+						, overlay
+						, *pass
+						, false );
+					auto & overlays = pipelines.emplace( &node->pipeline, OverlayDataArray{} ).first->second;
+					overlays.push_back( { &overlay
+						, node
+						, pipelineData
+						, uint32_t{}
+						, uint32_t{}
+						, uint32_t{}
+						, uint32_t{}
+						, OverlayTextBufferIndex{}
+						, false } );
 				}
 			}
 		}
@@ -166,23 +137,28 @@ namespace castor3d
 				{
 					if ( !pass->isImplicit() )
 					{
-						auto node = &m_renderer.doGetPanelNode( m_device, m_renderPass, *pass );
-						auto descriptorSets = &m_renderer.m_borderVertexBuffer->getDrawDescriptorSets( *node, nullptr, nullptr );
-						auto & overlays = pipelines.emplace( &node->pipeline, OverlayDataArray{} ).first->second;
-						overlays.emplace_back( &overlay
-							, node
-							, descriptorSets
-							, OverlayGeometryBuffers{}
-							, uint32_t{}
-							, uint32_t{}
+						auto [node, pipelineData] = m_renderer.doGetDrawNodeData( m_device
+							, m_renderPass
+							, overlay
+							, *pass
 							, true );
+						auto & overlays = pipelines.emplace( &node->pipeline, OverlayDataArray{} ).first->second;
+						overlays.push_back( { &overlay
+							, node
+							, pipelineData
+							, uint32_t{}
+							, uint32_t{}
+							, uint32_t{}
+							, uint32_t{}
+							, OverlayTextBufferIndex{}
+							, true } );
 					}
 				}
 			}
 		}
 	}
 
-	void OverlayPreparer::prepare()
+	void OverlayPreparer::fillDrawData()
 	{
 		for ( auto [level, pipelines] : m_levelsOverlays )
 		{
@@ -195,63 +171,81 @@ namespace castor3d
 					switch ( overlay->getType() )
 					{
 					case OverlayType::ePanel:
-						if ( auto cat = overlay->getPanelOverlay() )
+						if ( auto panel = overlay->getPanelOverlay() )
 						{
-							doPrepareOverlayDescriptors< OverlayRenderer::PanelVertexBufferPool::Quad >( m_device
-								, *cat
-								, std::move( data )
-								, *m_renderer.m_panelVertexBuffer
-								, nullptr
-								, false );
-							++m_renderer.m_computePanelPipeline.count;
+							m_renderer.m_common.panelVertexBuffer->fill( m_renderer.getSize()
+								, *panel
+								, data
+								, false
+								, nullptr );
+							doUpdateUbo( m_renderer.m_common.panelVertexBuffer->overlaysBuffer[data.overlayIndex]
+								, *panel
+								, data.node->pass
+								, m_renderer.getSize()
+								, data.vertexOffset
+								, data.textBuffer );
 						}
 						break;
 					case OverlayType::eBorderPanel:
-						if ( auto cat = overlay->getBorderPanelOverlay() )
+						if ( auto border = overlay->getBorderPanelOverlay() )
 						{
 							if ( data.secondary )
 							{
-								doPrepareOverlayDescriptors< OverlayRenderer::BorderPanelVertexBufferPool::Quad >( m_device
-									, *cat
-									, std::move( data )
-									, *m_renderer.m_borderVertexBuffer
-									, nullptr
-									, true );
-								++m_renderer.m_computeBorderPipeline.count;
+								m_renderer.m_common.borderVertexBuffer->fill( m_renderer.getSize()
+									, *border
+									, data
+									, true
+									, nullptr );
+								doUpdateUbo( m_renderer.m_common.borderVertexBuffer->overlaysBuffer[data.overlayIndex]
+									, *border
+									, data.node->pass
+									, m_renderer.getSize()
+									, data.vertexOffset
+									, data.textBuffer );
 							}
 							else
 							{
-								doPrepareOverlayDescriptors< OverlayRenderer::PanelVertexBufferPool::Quad >( m_device
-									, *cat
-									, std::move( data )
-									, *m_renderer.m_panelVertexBuffer
-									, nullptr
-									, false );
-								++m_renderer.m_computePanelPipeline.count;
+								m_renderer.m_common.panelVertexBuffer->fill( m_renderer.getSize()
+									, *border
+									, data
+									, false
+									, nullptr );
+								doUpdateUbo( m_renderer.m_common.panelVertexBuffer->overlaysBuffer[data.overlayIndex]
+									, *border
+									, data.node->pass
+									, m_renderer.getSize()
+									, data.vertexOffset
+									, data.textBuffer );
 							}
 						}
 						break;
 					case OverlayType::eText:
-						if ( auto cat = overlay->getTextOverlay() )
+						if ( auto text = overlay->getTextOverlay() )
 						{
-							doPrepareOverlayDescriptors< OverlayRenderer::TextVertexBufferPool::Quad >( m_device
-								, *cat
-								, std::move( data )
-								, *m_renderer.m_textVertexBuffer
-								, cat->getFontTexture().get()
-								, false );
-							m_renderer.doGetComputeTextPipeline( *cat->getFontTexture() ).count += cat->getCharCount();
+							m_renderer.m_common.textVertexBuffer->fill( m_renderer.getSize()
+								, *text
+								, data
+								, false
+								, text->getFontTexture().get() );
+							doUpdateUbo( m_renderer.m_common.textVertexBuffer->overlaysBuffer[data.overlayIndex]
+								, *text
+								, data.node->pass
+								, m_renderer.getSize()
+								, data.vertexOffset
+								, data.textBuffer );
 						}
 						break;
 					default:
 						break;
 					}
+
+					m_overlays.push_back( std::move( data ) );
 				}
 			}
 		}
 	}
 
-	void OverlayPreparer::doPrepareOverlayCommands( OverlayData const & data
+	void OverlayPreparer::doRegisterDrawCommands( OverlayDrawData const & data
 		, ashes::CommandBuffer & commandBuffer )
 	{
 		if ( m_previousPipeline != data.node->pipeline.pipeline.get() )
@@ -261,10 +255,10 @@ namespace castor3d
 			m_previousDescriptorSets = nullptr;
 		}
 
-		if ( m_previousDescriptorSets != data.descriptorSets )
+		if ( m_previousDescriptorSets != &data.pipelineData->descriptorSets->all )
 		{
-			commandBuffer.bindDescriptorSets( *data.descriptorSets, *data.node->pipeline.pipelineLayout );
-			m_previousDescriptorSets = data.descriptorSets;
+			commandBuffer.bindDescriptorSets( data.pipelineData->descriptorSets->all, *data.node->pipeline.pipelineLayout );
+			m_previousDescriptorSets = &data.pipelineData->descriptorSets->all;
 		}
 
 		DrawConstants constants{ data.pipelineIndex };
@@ -273,7 +267,7 @@ namespace castor3d
 			, 0u
 			, sizeof( constants )
 			, &constants );
-		commandBuffer.draw( data.geometryBuffers.count
+		commandBuffer.draw( data.vertexCount
 			, 1u
 			, 0u
 			, 0u );

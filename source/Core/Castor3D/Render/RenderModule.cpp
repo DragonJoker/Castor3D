@@ -260,6 +260,25 @@ namespace castor3d
 			, range );
 	}
 
+	void memoryBarrier( crg::RecordContext & context
+		, VkCommandBuffer commandBuffer
+		, ashes::BufferBase const & buffer
+		, crg::BufferSubresourceRange const & range
+		, crg::AccessState after
+		, crg::AccessState before )
+	{
+		buffer.makeMemoryTransitionBarrier( before.access
+			, before.pipelineStage
+			, VK_QUEUE_FAMILY_IGNORED
+			, VK_QUEUE_FAMILY_IGNORED );
+		context.memoryBarrier( commandBuffer
+			, buffer
+			, range
+			, after.access
+			, after.pipelineStage
+			, before );
+	}
+
 	//*************************************************************************************************
 
 	uint32_t getSafeBandsSize( castor::Size const & size )

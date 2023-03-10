@@ -39,6 +39,8 @@
 #include <ashespp/Image/ImageView.hpp>
 #include <ashespp/Image/Sampler.hpp>
 
+#include <RenderGraph/RecordContext.hpp>
+
 #include <ShaderWriter/Source.hpp>
 
 CU_ImplementCUSmartPtr( castor3d, RenderTechniquePass )

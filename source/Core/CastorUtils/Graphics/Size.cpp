@@ -23,7 +23,7 @@ namespace castor
 		rhs.m_data.size.y = 0;
 	}
 
-	Size::~Size()
+	Size::~Size()noexcept
 	{
 	}
 

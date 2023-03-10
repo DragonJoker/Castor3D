@@ -147,6 +147,24 @@ namespace castor3d
 			}
 		};
 
+		static std::string makeName( PassComponentRegister const & passComponents
+			, TextureCombine const & textures )
+		{
+			auto result = std::to_string( textures.configCount );
+
+			if ( hasAny( textures, passComponents.getColourMapFlags() ) )
+			{
+				result += "Col";
+			}
+
+			if ( hasAny( textures, passComponents.getOpacityMapFlags() ) )
+			{
+				result += "Opa";
+			}
+
+			return result;
+		}
+
 		static uint32_t makeKey( PassComponentRegister const & passComponents
 			, TextureCombine const & textures
 			, bool text )
@@ -166,148 +184,6 @@ namespace castor3d
 			uint32_t result{ tex << 8 };
 			result |= uint32_t( textures.configCount );
 			return result;
-		}
-
-		static void memoryBarrier( crg::RecordContext & context
-			, VkCommandBuffer commandBuffer
-			, ashes::BufferBase const & buffer
-			, crg::BufferSubresourceRange const & range
-			, crg::AccessState after
-			, crg::AccessState before )
-		{
-			buffer.makeMemoryTransitionBarrier( before.access
-				, before.pipelineStage
-				, VK_QUEUE_FAMILY_IGNORED
-				, VK_QUEUE_FAMILY_IGNORED );
-			context.memoryBarrier( commandBuffer
-				, buffer
-				, range
-				, after.access
-				, after.pipelineStage
-				, before );
-		}
-
-		static void registerComputeBufferCommands( crg::RecordContext & context
-			, VkCommandBuffer commandBuffer
-			, OverlayRenderer::TextPipeline const & pipeline
-			, OverlayRenderer::TextPipelineSet const & set )
-		{
-			auto & textBuffer = set.textBuffer;
-			crg::BufferSubresourceRange range{ 0u, VK_WHOLE_SIZE };
-
-			memoryBarrier( context
-				, commandBuffer
-				, textBuffer->charsBuffer.buffer->getBuffer()
-				, range
-				, { VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT }
-				, { VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT } );
-			memoryBarrier( context
-				, commandBuffer
-				, textBuffer->wordsBuffer.buffer->getBuffer()
-				, range
-				, { VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT }
-				, { VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT } );
-			memoryBarrier( context
-				, commandBuffer
-				, textBuffer->linesBuffer.buffer->getBuffer()
-				, range
-				, { VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT }
-				, { VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT } );
-			context.getContext().vkCmdBindPipeline( commandBuffer
-				, VK_PIPELINE_BIND_POINT_COMPUTE
-				, *pipeline.pipeline );
-			VkDescriptorSet descriptorSet = *set.descriptorSet;
-			context.getContext().vkCmdBindDescriptorSets( commandBuffer
-				, VK_PIPELINE_BIND_POINT_COMPUTE
-				, *pipeline.pipelineLayout
-				, 0u
-				, 1u
-				, &descriptorSet
-				, 0u
-				, nullptr );
-			uint32_t batchCountX = 32u;
-			uint32_t batchCountY = 16u;
-			uint32_t batchCount = batchCountX * batchCountY;
-			std::array< uint32_t, 2u > data{ 0u, set.count };
-
-			while ( data[0] < data[1] )
-			{
-				context.getContext().vkCmdPushConstants( commandBuffer
-					, *pipeline.pipelineLayout
-					, VK_SHADER_STAGE_COMPUTE_BIT
-					, 0u
-					, sizeof( uint32_t ) * 2u
-					, data.data() );
-				context.getContext().vkCmdDispatch( commandBuffer
-					, batchCountX, batchCountY, 1u );
-				data[0] += batchCount;
-			}
-
-			memoryBarrier( context
-				, commandBuffer
-				, textBuffer->linesBuffer.buffer->getBuffer()
-				, range
-				, { VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT }
-				, { VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT } );
-			memoryBarrier( context
-				, commandBuffer
-				, textBuffer->wordsBuffer.buffer->getBuffer()
-				, range
-				, { VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT }
-				, { VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT } );
-			memoryBarrier( context
-				, commandBuffer
-				, textBuffer->charsBuffer.buffer->getBuffer()
-				, range
-				, { VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT }
-				, { VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT } );
-		}
-
-		template< typename VertexBufferT >
-		static void registerComputeBufferCommands( crg::RecordContext & context
-			, VkCommandBuffer commandBuffer
-			, OverlayRenderer::ComputePipeline const & pipeline
-			, VertexBufferT const & vertexBuffer )
-		{
-			crg::BufferSubresourceRange range{ 0u, VK_WHOLE_SIZE };
-			memoryBarrier( context
-				, commandBuffer
-				, vertexBuffer.overlaysData->getBuffer()
-				, range
-				, crg::AccessState{ VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT }
-				, crg::AccessState{ VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT } );
-			memoryBarrier( context
-				, commandBuffer
-				, vertexBuffer.vertexBuffer.getBuffer().getBuffer()
-				, range
-				, crg::AccessState{ VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT }
-				, crg::AccessState{ VK_ACCESS_SHADER_WRITE_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT } );
-			context.getContext().vkCmdBindPipeline( commandBuffer
-				, VK_PIPELINE_BIND_POINT_COMPUTE
-				, *pipeline.pipeline );
-			VkDescriptorSet descriptorSet = *pipeline.descriptorSet;
-			context.getContext().vkCmdBindDescriptorSets( commandBuffer
-				, VK_PIPELINE_BIND_POINT_COMPUTE
-				, *pipeline.pipelineLayout
-				, 0u
-				, 1u
-				, &descriptorSet
-				, 0u
-				, nullptr );
-			context.getContext().vkCmdDispatch( commandBuffer
-				, pipeline.count, 1u, 1u );
-			memoryBarrier( context
-				, commandBuffer
-				, vertexBuffer.vertexBuffer.getBuffer().getBuffer()
-				, range
-				, crg::AccessState{ VK_ACCESS_SHADER_WRITE_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT }
-				, crg::AccessState{ VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT } );
-			memoryBarrier( context
-				, commandBuffer
-				, vertexBuffer.overlaysData->getBuffer()
-				, range
-				, crg::AccessState{ VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT }
-				, crg::AccessState{ VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT } );
 		}
 
 		static ashes::DescriptorSetLayoutPtr createBaseDescriptorLayout( RenderDevice const & device )
@@ -337,160 +213,79 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	OverlayRenderer::OverlayRenderer( RenderDevice const & device
-		, Texture const & target
-		, crg::FramePassTimer & timer
-		, VkCommandBufferLevel level )
-		: OwnedBy< RenderSystem >( device.renderSystem )
-		, m_target{ target }
-		, m_timer{ timer }
-		, m_commands{ device, *device.graphicsData(), "OverlayRenderer", level }
-		, m_noTexDeclaration{ 0u
-			, ashes::VkVertexInputBindingDescriptionArray{ { 0u
-				, sizeof( OverlayCategory::Vertex )
-				, VK_VERTEX_INPUT_RATE_VERTEX } }
-			, ashes::VkVertexInputAttributeDescriptionArray{ { 0u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( OverlayCategory::Vertex, coords ) } } }
-		, m_texDeclaration{ 0u
-			, ashes::VkVertexInputBindingDescriptionArray{ { 0u
-				, sizeof( OverlayCategory::Vertex )
-				, VK_VERTEX_INPUT_RATE_VERTEX } }
-			, ashes::VkVertexInputAttributeDescriptionArray{ { 0u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( OverlayCategory::Vertex, coords ) }
-				, { 1u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( OverlayCategory::Vertex, texture ) } } }
-		, m_noTexTextDeclaration{ 0u
-			, ashes::VkVertexInputBindingDescriptionArray{ { 0u
-				, sizeof( TextOverlay::Vertex )
-				, VK_VERTEX_INPUT_RATE_VERTEX } }
-			, ashes::VkVertexInputAttributeDescriptionArray{ { 0u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( TextOverlay::Vertex, coords ) }
-				, { 2u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( TextOverlay::Vertex, text ) } } }
-		, m_texTextDeclaration{ 0u
-			, ashes::VkVertexInputBindingDescriptionArray{ { 0u
-				, sizeof( TextOverlay::Vertex )
-				, VK_VERTEX_INPUT_RATE_VERTEX } }
-			, ashes::VkVertexInputAttributeDescriptionArray{ { 0u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( TextOverlay::Vertex, coords ) }
-				, { 1u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( TextOverlay::Vertex, texture ) }
-				, { 2u, 0u, VK_FORMAT_R32G32_SFLOAT, offsetof( TextOverlay::Vertex, text ) } } }
-		, m_cameraUbo{ device }
-		, m_baseDescriptorLayout{ ovrlrend::createBaseDescriptorLayout( device ) }
-		, m_panelVertexBuffer{ std::make_unique< PanelVertexBufferPool >( *getRenderSystem()->getEngine()
+	OverlayRenderer::OverlaysCommonData::OverlaysCommonData( RenderDevice const & device )
+		: baseDescriptorLayout{ ovrlrend::createBaseDescriptorLayout( device ) }
+		, cameraUbo{ device }
+		, panelVertexBuffer{ std::make_unique< PanelVertexBufferPool >( *device.renderSystem.getEngine()
 			, "PanelOverlays"
 			, device
-			, m_cameraUbo
-			, *m_baseDescriptorLayout
-			, m_noTexDeclaration
-			, m_texDeclaration
+			, cameraUbo
+			, *baseDescriptorLayout
 			, MaxOverlaysPerBuffer ) }
-		, m_borderVertexBuffer{ std::make_unique< BorderPanelVertexBufferPool >( *getRenderSystem()->getEngine()
+		, borderVertexBuffer{ std::make_unique< BorderPanelVertexBufferPool >( *device.renderSystem.getEngine()
 			, "BorderOverlays"
 			, device
-			, m_cameraUbo
-			, *m_baseDescriptorLayout
-			, m_noTexDeclaration
-			, m_texDeclaration
+			, cameraUbo
+			, *baseDescriptorLayout
 			, MaxOverlaysPerBuffer ) }
-		, m_textVertexBuffer{ std::make_unique< TextVertexBufferPool >( *getRenderSystem()->getEngine()
+		, textVertexBuffer{ std::make_unique< TextVertexBufferPool >( *device.renderSystem.getEngine()
 			, "TextOverlays"
 			, device
-			, m_cameraUbo
-			, *m_baseDescriptorLayout
-			, m_noTexTextDeclaration
-			, m_texTextDeclaration
+			, cameraUbo
+			, *baseDescriptorLayout
 			, MaxOverlaysPerBuffer
-			, std::make_unique< OverlayTextBufferPool >( *getRenderSystem()->getEngine()
+			, std::make_unique< OverlayTextBufferPool >( *device.renderSystem.getEngine()
 				, "TextsGlyphs"
 				, device ) ) }
-		, m_size{ makeSize( m_target.getExtent() ) }
-		, m_computePanelPipeline{ doCreatePanelPipeline( device ) }
-		, m_computeBorderPipeline{ doCreateBorderPipeline( device ) }
-		, m_computeTextPipeline{ doCreateTextPipeline( device ) }
 	{
-		std::string name = "Overlays";
-
-		ashes::VkDescriptorSetLayoutBindingArray textBindings;
-		textBindings.emplace_back( makeDescriptorSetLayoutBinding( 0u
-			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		m_textDescriptorLayout = device->createDescriptorSetLayout( name + "Text"
-			, std::move( textBindings ) );
-		m_textDescriptorPool = m_textDescriptorLayout->createPool( MaxOverlaysPerBuffer );
-
-		m_cameraUbo.cpuUpdate( getSize()
-			, getRenderSystem()->getOrtho( 0.0f
-				, float( m_size.getWidth() )
-				, 0.0f
-				, float( m_size.getHeight() )
-				, -1.0f
-				, 1.0f ) );
 	}
 
-	OverlayRenderer::~OverlayRenderer()
+	//*********************************************************************************************
+
+	OverlayRenderer::OverlaysComputeData::OverlaysComputeData( RenderDevice const & device
+		, OverlaysCommonData & commonData )
+		: panelPipeline{ doCreatePanelPipeline( device, *commonData.panelVertexBuffer, commonData.cameraUbo ) }
+		, borderPipeline{ doCreateBorderPipeline( device, *commonData.borderVertexBuffer, commonData.cameraUbo ) }
+		, textPipeline{ doCreateTextPipeline( device ) }
+		, m_commonData{ commonData }
 	{
-		m_mapPanelNodes.clear();
-		m_mapTextNodes.clear();
-		m_panelPipelines.clear();
-		m_textPipelines.clear();
-		m_panelVertexBuffer.reset();
-		m_borderVertexBuffer.reset();
-		m_textVertexBuffer.reset();
-		m_commands = {};
 	}
 
-	void OverlayRenderer::update( GpuUpdater & updater )
+	void OverlayRenderer::OverlaysComputeData::reset()
 	{
-		if ( auto timerBlock = std::make_unique< crg::FramePassTimerBlock >( m_timer.start() ) )
+		panelPipeline.count = 0u;
+		borderPipeline.count = 0u;
+
+		for ( auto & it : textPipeline.sets )
 		{
-			auto size = updater.camera->getSize();
-
-			if ( m_size != size )
-			{
-				m_sizeChanged = true;
-				m_size = size;
-				m_cameraUbo.cpuUpdate( getSize()
-					, getRenderSystem()->getOrtho( 0.0f
-						, float( m_size.getWidth() )
-						, 0.0f
-						, float( m_size.getHeight() )
-						, -1.0f
-						, 1.0f ) );
-			}
+			it.second.count = 0u;
 		}
 	}
 
-	OverlayPreparer OverlayRenderer::beginPrepare( RenderDevice const & device
-		, VkRenderPass renderPass
-		, VkFramebuffer framebuffer )
-	{
-		return OverlayPreparer{ *this, device, renderPass, framebuffer };
-	}
-
-	void OverlayRenderer::upload( ashes::CommandBuffer const & cb )
-	{
-		m_panelVertexBuffer->upload( cb );
-		m_borderVertexBuffer->upload( cb );
-		m_textVertexBuffer->upload( cb );
-	}
-
-	void OverlayRenderer::registerComputeCommands( crg::RecordContext & context
+	void OverlayRenderer::OverlaysComputeData::registerCommands( crg::RecordContext & context
 		, VkCommandBuffer commandBuffer )const
 	{
-		if ( m_computePanelPipeline.count )
+		if ( panelPipeline.count )
 		{
-			ovrlrend::registerComputeBufferCommands( context
+			doRegisterComputeBufferCommands( context
 				, commandBuffer
-				, m_computePanelPipeline
-				, *m_panelVertexBuffer );
+				, panelPipeline
+				, m_commonData.panelVertexBuffer->overlaysData->getBuffer()
+				, m_commonData.panelVertexBuffer->vertexBuffer.getBuffer().getBuffer() );
 		}
 
-		if ( m_computeBorderPipeline.count )
+		if ( borderPipeline.count )
 		{
-			ovrlrend::registerComputeBufferCommands( context
+			doRegisterComputeBufferCommands( context
 				, commandBuffer
-				, m_computeBorderPipeline
-				, *m_borderVertexBuffer );
+				, borderPipeline
+				, m_commonData.borderVertexBuffer->overlaysData->getBuffer()
+				, m_commonData.borderVertexBuffer->vertexBuffer.getBuffer().getBuffer() );
 		}
 
 		bool hasTexts{};
 
-		for ( auto & it : m_computeTextPipeline.sets )
+		for ( auto & it : textPipeline.sets )
 		{
 			hasTexts = hasTexts || it.second.count > 0;
 		}
@@ -499,222 +294,74 @@ namespace castor3d
 		{
 			crg::BufferSubresourceRange range{ 0u, VK_WHOLE_SIZE };
 			// Common buffers preparation
-			ovrlrend::memoryBarrier( context
+			memoryBarrier( context
 				, commandBuffer
-				, m_textVertexBuffer->overlaysData->getBuffer()
+				, m_commonData.textVertexBuffer->overlaysData->getBuffer()
 				, range
 				, { VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT }
 				, { VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT } );
-			ovrlrend::memoryBarrier( context
+			memoryBarrier( context
 				, commandBuffer
-				, m_textVertexBuffer->vertexBuffer.getBuffer().getBuffer()
+				, m_commonData.textVertexBuffer->vertexBuffer.getBuffer().getBuffer()
 				, range
 				, { VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT }
 				, { VK_ACCESS_SHADER_WRITE_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT } );
 
-			for ( auto & it : m_computeTextPipeline.sets )
+			for ( auto & it : textPipeline.sets )
 			{
 				if ( it.second.count )
 				{
-					ovrlrend::registerComputeBufferCommands( context
+					doRegisterComputeBufferCommands( context
 						, commandBuffer
-						, m_computeTextPipeline
+						, textPipeline
 						, it.second );
 				}
 			}
 
 			// Common buffers restore
-			ovrlrend::memoryBarrier( context
+			memoryBarrier( context
 				, commandBuffer
-				, m_textVertexBuffer->vertexBuffer.getBuffer().getBuffer()
+				, m_commonData.textVertexBuffer->vertexBuffer.getBuffer().getBuffer()
 				, range
 				, { VK_ACCESS_SHADER_WRITE_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT }
 				, { VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT } );
-			ovrlrend::memoryBarrier( context
+			memoryBarrier( context
 				, commandBuffer
-				, m_textVertexBuffer->overlaysData->getBuffer()
+				, m_commonData.textVertexBuffer->overlaysData->getBuffer()
 				, range
 				, { VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT }
 				, { VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT } );
 		}
 	}
 
-	void OverlayRenderer::doBeginPrepare( VkRenderPass renderPass
-		, VkFramebuffer framebuffer )
+	OverlayRenderer::TextComputePipelineDescriptor & OverlayRenderer::OverlaysComputeData::getTextPipeline( FontTexture & fontTexture )
 	{
-		m_timerBlock = std::make_unique< crg::FramePassTimerBlock >( m_timer.start() );
-		m_retired.clear();
-		m_commands.commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT | VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT
-			, makeVkStruct< VkCommandBufferInheritanceInfo >( renderPass
-				, 0u
-				, framebuffer
-				, VK_FALSE
-				, 0u
-				, 0u ) );
-		m_commands.commandBuffer->setViewport( makeViewport( m_size ) );
-		m_commands.commandBuffer->setScissor( makeScissor( m_size ) );
-	}
+		auto it = textPipeline.sets.find( &fontTexture );
 
-	void OverlayRenderer::doEndPrepare()
-	{
-		m_commands.commandBuffer->end();
-		m_sizeChanged = false;
-		m_timerBlock = {};
-	}
-
-	OverlayRenderNode & OverlayRenderer::doGetPanelNode( RenderDevice const & device
-		, VkRenderPass renderPass
-		, Pass const & pass )
-	{
-		auto it = m_mapPanelNodes.find( &pass );
-
-		if ( it == m_mapPanelNodes.end() )
+		if ( it == textPipeline.sets.end() )
 		{
-			auto & pipeline = doGetPipeline( device, renderPass, pass, m_panelPipelines, false );
-			it = m_mapPanelNodes.insert( { &pass, OverlayRenderNode{ pipeline, pass } } ).first;
+			it = textPipeline.sets.emplace( &fontTexture
+				, TextComputePipelineDescriptor{ doGetTextDescriptorSet( fontTexture )
+					, 0u
+					, m_commonData.textVertexBuffer->getTextBuffer( fontTexture ) } ).first;
 		}
 
 		return it->second;
 	}
 
-	OverlayRenderNode & OverlayRenderer::doGetTextNode( RenderDevice const & device
-		, VkRenderPass renderPass
-		, Pass const & pass
-		, TextureLayout const & texture
-		, Sampler const & sampler )
-	{
-		auto it = m_mapTextNodes.find( &pass );
-
-		if ( it == m_mapTextNodes.end() )
-		{
-			auto & pipeline = doGetPipeline( device, renderPass, pass, m_textPipelines, true );
-			it = m_mapTextNodes.insert( { &pass, OverlayRenderNode{ pipeline, pass } } ).first;
-		}
-
-		return it->second;
-	}
-
-	ashes::DescriptorSet const & OverlayRenderer::doCreateTextDescriptorSet( FontTexture & fontTexture )
-	{
-		auto ires = m_textDescriptorSets.emplace( &fontTexture, FontTextureDescriptorConnection{} );
-		auto & descriptorConnection = ires.first->second;
-
-		if ( ires.second || !descriptorConnection.descriptorSet )
-		{
-			auto result = m_textDescriptorPool->createDescriptorSet( "TextOverlays_" + std::to_string( intptr_t( &fontTexture ) ) );
-			result->createBinding( m_textDescriptorLayout->getBinding( 0u )
-				, fontTexture.getTexture()->getDefaultView().getSampledView()
-				, fontTexture.getSampler().lock()->getSampler() );
-			result->update();
-			descriptorConnection.descriptorSet = std::move( result );
-			descriptorConnection.connection = fontTexture.onResourceChanged.connect( [this, &descriptorConnection, &fontTexture]( DoubleBufferedTextureLayout const & )
-				{
-					m_retired.emplace_back( std::move( descriptorConnection.descriptorSet ) );
-					m_textVertexBuffer->clearDrawDescriptorSets( &fontTexture );
-				} );
-		}
-
-		return *descriptorConnection.descriptorSet;
-	}
-
-	OverlayPipeline OverlayRenderer::doCreatePipeline( RenderDevice const & device
-		, VkRenderPass renderPass
-		, Pass const & pass
-		, ashes::PipelineShaderStageCreateInfoArray program
-		, TextureCombine const & texturesFlags
-		, bool text )
-	{
-		ashes::VkPipelineColorBlendAttachmentStateArray attachments{ { VK_TRUE
-			, VK_BLEND_FACTOR_SRC_ALPHA
-			, VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA
-			, VK_BLEND_OP_ADD
-			, VK_BLEND_FACTOR_SRC_ALPHA
-			, VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA
-			, VK_BLEND_OP_ADD
-			, defaultColorWriteMask } };
-		ashes::PipelineColorBlendStateCreateInfo blState{ 0u
-			, VK_FALSE
-			, VK_LOGIC_OP_COPY
-			, std::move( attachments ) };
-		std::string name = "Overlays";
-
-		auto vertexLayout = ( texturesFlags.configCount == 0u
-			? &m_noTexDeclaration
-			: &m_texDeclaration );
-		name += "_" + std::to_string( texturesFlags.configCount );
-		ashes::DescriptorSetLayoutCRefArray descriptorLayouts;
-		descriptorLayouts.push_back( *m_baseDescriptorLayout );
-		descriptorLayouts.push_back( *getOwner()->getEngine()->getTextureUnitCache().getDescriptorLayout() );
-
-		if ( text )
-		{
-			vertexLayout = ( texturesFlags.configCount == 0u
-				? &m_noTexTextDeclaration
-				: &m_texTextDeclaration );
-			name = "Text" + name;
-			descriptorLayouts.push_back( *m_textDescriptorLayout );
-		}
-
-		auto pipelineLayout = device->createPipelineLayout( name
-			, descriptorLayouts
-			, ashes::VkPushConstantRangeArray{ { VK_SHADER_STAGE_VERTEX_BIT, 0u, uint32_t( sizeof( DrawConstants ) ) } } );
-		auto pipeline = device->createPipeline( name
-			, { 0u
-				, std::move( program )
-				, ashes::PipelineVertexInputStateCreateInfo{ 0u, {}, {} }
-				, ashes::PipelineInputAssemblyStateCreateInfo{ 0u, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST }
-				, ashes::nullopt
-				, ashes::PipelineViewportStateCreateInfo{}
-				, ashes::PipelineRasterizationStateCreateInfo{}
-				, ashes::PipelineMultisampleStateCreateInfo{}
-				, ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_FALSE, VK_FALSE }
-				, std::move( blState )
-				, ashes::PipelineDynamicStateCreateInfo{ 0u, { VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR } }
-				, *pipelineLayout
-				, renderPass } );
-		return OverlayPipeline{ std::move( pipelineLayout )
-			, std::move( pipeline ) };
-	}
-
-	OverlayPipeline & OverlayRenderer::doGetPipeline( RenderDevice const & device
-		, VkRenderPass renderPass
-		, Pass const & pass
-		, std::map< uint32_t, OverlayPipeline > & pipelines
-		, bool text )
-	{
-		// Remove unwanted flags
-		auto & passComponents = device.renderSystem.getEngine()->getPassComponentsRegister();
-		auto textures = passComponents.filterTextureFlags( ComponentModeFlag::eColour | ComponentModeFlag::eOpacity
-			, pass.getTexturesMask() );
-		auto key = ovrlrend::makeKey( passComponents, textures, text );
-		auto it = pipelines.find( key );
-
-		if ( it == pipelines.end() )
-		{
-			// Since it does not exist yet, create it and initialise it
-			it = pipelines.emplace( key
-				, doCreatePipeline( device
-					, renderPass
-					, pass
-					, doCreateOverlayProgram( device, textures, text )
-					, textures
-					, text ) ).first;
-		}
-
-		return it->second;
-	}
-
-	OverlayRenderer::ComputePipeline OverlayRenderer::doCreatePanelPipeline( RenderDevice const & device )
+	OverlayRenderer::ComputePipeline OverlayRenderer::OverlaysComputeData::doCreatePanelPipeline( RenderDevice const & device
+		, PanelVertexBufferPool & vertexBuffer
+		, CameraUbo const & cameraUbo )
 	{
 		ComputePipeline result;
 		ashes::VkDescriptorSetLayoutBindingArray layoutBindings;
-		layoutBindings.emplace_back( makeDescriptorSetLayoutBinding( 0u // Camera
+		layoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( PanelOverlay::ComputeBindingIdx::eCamera )
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, VK_SHADER_STAGE_COMPUTE_BIT ) );
-		layoutBindings.emplace_back( makeDescriptorSetLayoutBinding( 1u // Overlays
+		layoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( PanelOverlay::ComputeBindingIdx::eOverlays )
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 			, VK_SHADER_STAGE_COMPUTE_BIT ) );
-		layoutBindings.emplace_back( makeDescriptorSetLayoutBinding( 2u // Output
+		layoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( PanelOverlay::ComputeBindingIdx::eVertex )
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 			, VK_SHADER_STAGE_COMPUTE_BIT ) );
 		result.descriptorLayout = device->createDescriptorSetLayout( "PanelOverlayCompute"
@@ -731,33 +378,35 @@ namespace castor3d
 			, 1u );
 		result.descriptorSet = result.descriptorPool->createDescriptorSet( "PanelOverlayCompute" );
 		ashes::WriteDescriptorSetArray setBindings;
-		m_cameraUbo.createSizedBinding( *result.descriptorSet
-			, result.descriptorLayout->getBinding( 0u ) );
-		result.descriptorSet->createBinding( result.descriptorLayout->getBinding( 1u )
-			, *m_panelVertexBuffer->overlaysData
+		cameraUbo.createSizedBinding( *result.descriptorSet
+			, result.descriptorLayout->getBinding( uint32_t( PanelOverlay::ComputeBindingIdx::eCamera ) ) );
+		result.descriptorSet->createBinding( result.descriptorLayout->getBinding( uint32_t( PanelOverlay::ComputeBindingIdx::eOverlays ) )
+			, *vertexBuffer.overlaysData
 			, 0u
-			, uint32_t( m_panelVertexBuffer->overlaysData->getCount() ) );
-		result.descriptorSet->createBinding( result.descriptorLayout->getBinding( 2u )
-			, m_panelVertexBuffer->vertexBuffer.getBuffer().getBuffer()
+			, uint32_t( vertexBuffer.overlaysData->getCount() ) );
+		result.descriptorSet->createBinding( result.descriptorLayout->getBinding( uint32_t( PanelOverlay::ComputeBindingIdx::eVertex ) )
+			, vertexBuffer.vertexBuffer.getBuffer().getBuffer()
 			, 0u
-			, uint32_t( m_panelVertexBuffer->vertexBuffer.getBuffer().getBuffer().getSize() ) );
+			, uint32_t( vertexBuffer.vertexBuffer.getBuffer().getBuffer().getSize() ) );
 		result.descriptorSet->update();
 
 		return result;
 	}
 
-	OverlayRenderer::ComputePipeline OverlayRenderer::doCreateBorderPipeline( RenderDevice const & device )
+	OverlayRenderer::ComputePipeline OverlayRenderer::OverlaysComputeData::doCreateBorderPipeline( RenderDevice const & device
+		, BorderPanelVertexBufferPool & vertexBuffer
+		, CameraUbo const & cameraUbo )
 	{
 		std::string name = "BorderOverlayCompute";
 		ComputePipeline result;
 		ashes::VkDescriptorSetLayoutBindingArray layoutBindings;
-		layoutBindings.emplace_back( makeDescriptorSetLayoutBinding( 0u // Camera
+		layoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( BorderPanelOverlay::ComputeBindingIdx::eCamera )
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, VK_SHADER_STAGE_COMPUTE_BIT ) );
-		layoutBindings.emplace_back( makeDescriptorSetLayoutBinding( 1u // Overlays
+		layoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( BorderPanelOverlay::ComputeBindingIdx::eOverlays )
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 			, VK_SHADER_STAGE_COMPUTE_BIT ) );
-		layoutBindings.emplace_back( makeDescriptorSetLayoutBinding( 2u // Output
+		layoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( BorderPanelOverlay::ComputeBindingIdx::eVertex )
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 			, VK_SHADER_STAGE_COMPUTE_BIT ) );
 		result.descriptorLayout = device->createDescriptorSetLayout( name
@@ -774,25 +423,25 @@ namespace castor3d
 			, 1u );
 		result.descriptorSet = result.descriptorPool->createDescriptorSet( name );
 		ashes::WriteDescriptorSetArray setBindings;
-		m_cameraUbo.createSizedBinding( *result.descriptorSet
-			, result.descriptorLayout->getBinding( 0u ) );
-		result.descriptorSet->createBinding( result.descriptorLayout->getBinding( 1u )
-			, *m_borderVertexBuffer->overlaysData
+		cameraUbo.createSizedBinding( *result.descriptorSet
+			, result.descriptorLayout->getBinding( uint32_t( BorderPanelOverlay::ComputeBindingIdx::eCamera ) ) );
+		result.descriptorSet->createBinding( result.descriptorLayout->getBinding( uint32_t( BorderPanelOverlay::ComputeBindingIdx::eOverlays ) )
+			, *vertexBuffer.overlaysData
 			, 0u
-			, uint32_t( m_borderVertexBuffer->overlaysData->getCount() ) );
-		result.descriptorSet->createBinding( result.descriptorLayout->getBinding( 2u )
-			, m_borderVertexBuffer->vertexBuffer.getBuffer().getBuffer()
+			, uint32_t( vertexBuffer.overlaysData->getCount() ) );
+		result.descriptorSet->createBinding( result.descriptorLayout->getBinding( uint32_t( BorderPanelOverlay::ComputeBindingIdx::eVertex ) )
+			, vertexBuffer.vertexBuffer.getBuffer().getBuffer()
 			, 0u
-			, uint32_t( m_borderVertexBuffer->vertexBuffer.getBuffer().getBuffer().getSize() ) );
+			, uint32_t( vertexBuffer.vertexBuffer.getBuffer().getBuffer().getSize() ) );
 		result.descriptorSet->update();
 
 		return result;
 	}
 
-	OverlayRenderer::TextPipeline OverlayRenderer::doCreateTextPipeline( RenderDevice const & device )
+	OverlayRenderer::TextComputePipeline OverlayRenderer::OverlaysComputeData::doCreateTextPipeline( RenderDevice const & device )
 	{
 		std::string name = "TextOverlayCompute";
-		OverlayRenderer::TextPipeline result;
+		OverlayRenderer::TextComputePipeline result;
 		ashes::VkDescriptorSetLayoutBindingArray layoutBindings;
 		layoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( TextOverlay::ComputeBindingIdx::eCamera )
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
@@ -832,51 +481,341 @@ namespace castor3d
 		return result;
 	}
 
-	ashes::DescriptorSetPtr OverlayRenderer::doGetTextSet( FontTexture const & fontTexture )
+	ashes::DescriptorSetPtr OverlayRenderer::OverlaysComputeData::doGetTextDescriptorSet( FontTexture const & fontTexture )
 	{
 		std::string name = "TextOverlayCompute-" + fontTexture.getFontName();
-		auto result = m_computeTextPipeline.descriptorPool->createDescriptorSet( name );
-		auto & descriptorLayout = *m_computeTextPipeline.descriptorLayout;
+		auto result = textPipeline.descriptorPool->createDescriptorSet( name );
+		auto & descriptorLayout = *textPipeline.descriptorLayout;
 		auto & descriptorSet = *result;
 		ashes::WriteDescriptorSetArray setBindings;
-		m_cameraUbo.createSizedBinding( descriptorSet
+		m_commonData.cameraUbo.createSizedBinding( descriptorSet
 			, descriptorLayout.getBinding( uint32_t( TextOverlay::ComputeBindingIdx::eCamera ) ) );
 		descriptorSet.createBinding( descriptorLayout.getBinding( uint32_t( TextOverlay::ComputeBindingIdx::eOverlays ) )
-			, *m_textVertexBuffer->overlaysData
+			, *m_commonData.textVertexBuffer->overlaysData
 			, 0u
-			, uint32_t( m_textVertexBuffer->overlaysData->getCount() ) );
-		m_textVertexBuffer->fillComputeDescriptorSet( &fontTexture
+			, uint32_t( m_commonData.textVertexBuffer->overlaysData->getCount() ) );
+		m_commonData.textVertexBuffer->fillComputeDescriptorSet( &fontTexture
 			, descriptorLayout
 			, descriptorSet );
 		descriptorSet.createBinding( descriptorLayout.getBinding( uint32_t( TextOverlay::ComputeBindingIdx::eVertex ) )
-			, m_textVertexBuffer->vertexBuffer.getBuffer().getBuffer()
+			, m_commonData.textVertexBuffer->vertexBuffer.getBuffer().getBuffer()
 			, 0u
-			, uint32_t( m_textVertexBuffer->vertexBuffer.getBuffer().getBuffer().getSize() ) );
+			, uint32_t( m_commonData.textVertexBuffer->vertexBuffer.getBuffer().getBuffer().getSize() ) );
 		descriptorSet.update();
 		return result;
 	}
 
-	OverlayRenderer::TextPipelineSet & OverlayRenderer::doGetComputeTextPipeline( FontTexture & fontTexture )
+	void OverlayRenderer::OverlaysComputeData::doRegisterComputeBufferCommands( crg::RecordContext & context
+		, VkCommandBuffer commandBuffer
+		, OverlayRenderer::ComputePipeline const & pipeline
+		, ashes::BufferBase const & overlaysBuffer
+		, ashes::BufferBase const & vertexBuffer )const
 	{
-		auto it = m_computeTextPipeline.sets.find( &fontTexture );
+		crg::BufferSubresourceRange range{ 0u, VK_WHOLE_SIZE };
+		memoryBarrier( context
+			, commandBuffer
+			, overlaysBuffer
+			, range
+			, crg::AccessState{ VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT }
+			, crg::AccessState{ VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT } );
+		memoryBarrier( context
+			, commandBuffer
+			, vertexBuffer
+			, range
+			, crg::AccessState{ VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT }
+			, crg::AccessState{ VK_ACCESS_SHADER_WRITE_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT } );
+		context.getContext().vkCmdBindPipeline( commandBuffer
+			, VK_PIPELINE_BIND_POINT_COMPUTE
+			, *pipeline.pipeline );
+		VkDescriptorSet descriptorSet = *pipeline.descriptorSet;
+		context.getContext().vkCmdBindDescriptorSets( commandBuffer
+			, VK_PIPELINE_BIND_POINT_COMPUTE
+			, *pipeline.pipelineLayout
+			, 0u
+			, 1u
+			, &descriptorSet
+			, 0u
+			, nullptr );
+		context.getContext().vkCmdDispatch( commandBuffer
+			, pipeline.count, 1u, 1u );
+		memoryBarrier( context
+			, commandBuffer
+			, vertexBuffer
+			, range
+			, crg::AccessState{ VK_ACCESS_SHADER_WRITE_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT }
+			, crg::AccessState{ VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT } );
+		memoryBarrier( context
+			, commandBuffer
+			, overlaysBuffer
+			, range
+			, crg::AccessState{ VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT }
+			, crg::AccessState{ VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT } );
+	}
 
-		if ( it == m_computeTextPipeline.sets.end() )
+	void OverlayRenderer::OverlaysComputeData::doRegisterComputeBufferCommands( crg::RecordContext & context
+		, VkCommandBuffer commandBuffer
+		, OverlayRenderer::TextComputePipeline const & pipeline
+		, OverlayRenderer::TextComputePipelineDescriptor const & set )const
+	{
+		auto & textBuffer = set.textBuffer;
+		crg::BufferSubresourceRange range{ 0u, VK_WHOLE_SIZE };
+
+		memoryBarrier( context
+			, commandBuffer
+			, textBuffer->charsBuffer.buffer->getBuffer()
+			, range
+			, { VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT }
+			, { VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT } );
+		memoryBarrier( context
+			, commandBuffer
+			, textBuffer->wordsBuffer.buffer->getBuffer()
+			, range
+			, { VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT }
+			, { VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT } );
+		memoryBarrier( context
+			, commandBuffer
+			, textBuffer->linesBuffer.buffer->getBuffer()
+			, range
+			, { VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT }
+			, { VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT } );
+		context.getContext().vkCmdBindPipeline( commandBuffer
+			, VK_PIPELINE_BIND_POINT_COMPUTE
+			, *pipeline.pipeline );
+		VkDescriptorSet descriptorSet = *set.descriptorSet;
+		context.getContext().vkCmdBindDescriptorSets( commandBuffer
+			, VK_PIPELINE_BIND_POINT_COMPUTE
+			, *pipeline.pipelineLayout
+			, 0u
+			, 1u
+			, &descriptorSet
+			, 0u
+			, nullptr );
+		uint32_t batchCountX = 32u;
+		uint32_t batchCountY = 16u;
+		uint32_t batchCount = batchCountX * batchCountY;
+		std::array< uint32_t, 2u > data{ 0u, set.count };
+
+		while ( data[0] < data[1] )
 		{
-			it = m_computeTextPipeline.sets.emplace( &fontTexture
-				, TextPipelineSet{ doGetTextSet( fontTexture )
+			context.getContext().vkCmdPushConstants( commandBuffer
+				, *pipeline.pipelineLayout
+				, VK_SHADER_STAGE_COMPUTE_BIT
 				, 0u
-				, m_textVertexBuffer->getTextBuffer( fontTexture ) } ).first;
+				, sizeof( uint32_t ) * 2u
+				, data.data() );
+			context.getContext().vkCmdDispatch( commandBuffer
+				, batchCountX, batchCountY, 1u );
+			data[0] += batchCount;
+		}
+
+		memoryBarrier( context
+			, commandBuffer
+			, textBuffer->linesBuffer.buffer->getBuffer()
+			, range
+			, { VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT }
+			, { VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT } );
+		memoryBarrier( context
+			, commandBuffer
+			, textBuffer->wordsBuffer.buffer->getBuffer()
+			, range
+			, { VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT }
+			, { VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT } );
+		memoryBarrier( context
+			, commandBuffer
+			, textBuffer->charsBuffer.buffer->getBuffer()
+			, range
+			, { VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT }
+			, { VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT } );
+	}
+
+	//*********************************************************************************************
+
+	OverlayRenderer::OverlaysDrawData::OverlaysDrawData( RenderDevice const & device
+		, VkCommandBufferLevel level
+		, OverlaysCommonData & commonData )
+		: commands{ device, *device.graphicsData(), "OverlayRenderer", level }
+		, m_commonData{ commonData }
+	{
+		std::string name = "Overlays";
+		ashes::VkDescriptorSetLayoutBindingArray textBindings;
+		textBindings.emplace_back( makeDescriptorSetLayoutBinding( 0u
+			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+		textDescriptorLayout = device->createDescriptorSetLayout( name + "Text"
+			, std::move( textBindings ) );
+		textDescriptorPool = textDescriptorLayout->createPool( name + "Text"
+			, MaxOverlaysPerBuffer );
+	}
+
+	OverlayDrawNode & OverlayRenderer::OverlaysDrawData::getPanelNode( RenderDevice const & device
+		, VkRenderPass renderPass
+		, Pass const & pass )
+	{
+		auto it = m_mapPanelNodes.find( &pass );
+
+		if ( it == m_mapPanelNodes.end() )
+		{
+			auto & pipeline = doGetPipeline( device, renderPass, pass, m_panelPipelines, false );
+			it = m_mapPanelNodes.insert( { &pass, OverlayDrawNode{ pipeline, pass } } ).first;
 		}
 
 		return it->second;
 	}
 
-	ashes::PipelineShaderStageCreateInfoArray OverlayRenderer::doCreateOverlayProgram( RenderDevice const & device
+	OverlayDrawNode & OverlayRenderer::OverlaysDrawData::getTextNode( RenderDevice const & device
+		, VkRenderPass renderPass
+		, Pass const & pass
+		, TextureLayout const & texture
+		, Sampler const & sampler )
+	{
+		auto it = m_mapTextNodes.find( &pass );
+
+		if ( it == m_mapTextNodes.end() )
+		{
+			auto & pipeline = doGetPipeline( device, renderPass, pass, m_textPipelines, true );
+			it = m_mapTextNodes.insert( { &pass, OverlayDrawNode{ pipeline, pass } } ).first;
+		}
+
+		return it->second;
+	}
+
+	ashes::DescriptorSet const & OverlayRenderer::OverlaysDrawData::createTextDescriptorSet( FontTexture & fontTexture )
+	{
+		auto ires = textDescriptorSets.emplace( &fontTexture, FontTextureDescriptorConnection{} );
+		auto & descriptorConnection = ires.first->second;
+
+		if ( ires.second || !descriptorConnection.descriptorSet )
+		{
+			auto result = textDescriptorPool->createDescriptorSet( "TextOverlays_" + std::to_string( intptr_t( &fontTexture ) ) );
+			result->createBinding( textDescriptorLayout->getBinding( 0u )
+				, fontTexture.getTexture()->getDefaultView().getSampledView()
+				, fontTexture.getSampler().lock()->getSampler() );
+			result->update();
+			descriptorConnection.descriptorSet = std::move( result );
+			descriptorConnection.connection = fontTexture.onResourceChanged.connect( [this, &descriptorConnection, &fontTexture]( DoubleBufferedTextureLayout const & )
+				{
+					retired.emplace_back( std::move( descriptorConnection.descriptorSet ) );
+					m_commonData.textVertexBuffer->clearDrawPipelineData( &fontTexture );
+				} );
+		}
+
+		return *descriptorConnection.descriptorSet;
+	}
+
+	void OverlayRenderer::OverlaysDrawData::beginPrepare( VkRenderPass renderPass
+		, VkFramebuffer framebuffer
+		, crg::FramePassTimer & timer
+		, castor::Size const & size )
+	{
+		timerBlock = std::make_unique< crg::FramePassTimerBlock >( timer.start() );
+		retired.clear();
+		commands.commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT | VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT
+			, makeVkStruct< VkCommandBufferInheritanceInfo >( renderPass
+				, 0u
+				, framebuffer
+				, VK_FALSE
+				, 0u
+				, 0u ) );
+		commands.commandBuffer->setViewport( makeViewport( size ) );
+		commands.commandBuffer->setScissor( makeScissor( size ) );
+	}
+
+	void OverlayRenderer::OverlaysDrawData::endPrepare()
+	{
+		commands.commandBuffer->end();
+		timerBlock = {};
+	}
+
+	OverlayDrawPipeline & OverlayRenderer::OverlaysDrawData::doGetPipeline( RenderDevice const & device
+		, VkRenderPass renderPass
+		, Pass const & pass
+		, std::map< uint32_t, OverlayDrawPipeline > & pipelines
+		, bool text )
+	{
+		// Remove unwanted flags
+		auto & passComponents = device.renderSystem.getEngine()->getPassComponentsRegister();
+		auto textures = passComponents.filterTextureFlags( ComponentModeFlag::eColour | ComponentModeFlag::eOpacity
+			, pass.getTexturesMask() );
+		auto key = ovrlrend::makeKey( passComponents, textures, text );
+		auto it = pipelines.find( key );
+
+		if ( it == pipelines.end() )
+		{
+			// Since it does not exist yet, create it and initialise it
+			it = pipelines.emplace( key
+				, doCreatePipeline( device
+					, renderPass
+					, pass
+					, doCreateOverlayProgram( device, textures, text )
+					, textures
+					, text ) ).first;
+		}
+
+		return it->second;
+	}
+
+	OverlayDrawPipeline OverlayRenderer::OverlaysDrawData::doCreatePipeline( RenderDevice const & device
+		, VkRenderPass renderPass
+		, Pass const & pass
+		, ashes::PipelineShaderStageCreateInfoArray program
+		, TextureCombine const & texturesFlags
+		, bool text )
+	{
+		auto & engine = *device.renderSystem.getEngine();
+		auto & passComponents = engine.getPassComponentsRegister();
+		ashes::VkPipelineColorBlendAttachmentStateArray attachments{ { VK_TRUE
+			, VK_BLEND_FACTOR_SRC_ALPHA
+			, VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA
+			, VK_BLEND_OP_ADD
+			, VK_BLEND_FACTOR_SRC_ALPHA
+			, VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA
+			, VK_BLEND_OP_ADD
+			, defaultColorWriteMask } };
+		ashes::PipelineColorBlendStateCreateInfo blState{ 0u
+			, VK_FALSE
+			, VK_LOGIC_OP_COPY
+			, std::move( attachments ) };
+		std::string name = "Overlays";
+
+		name += "-" + ovrlrend::makeName( passComponents, texturesFlags );
+		ashes::DescriptorSetLayoutCRefArray descriptorLayouts;
+		descriptorLayouts.push_back( *m_commonData.baseDescriptorLayout );
+		descriptorLayouts.push_back( *engine.getTextureUnitCache().getDescriptorLayout() );
+
+		if ( text )
+		{
+			name = "Text" + name;
+			descriptorLayouts.push_back( *textDescriptorLayout );
+		}
+
+		auto pipelineLayout = device->createPipelineLayout( name
+			, descriptorLayouts
+			, ashes::VkPushConstantRangeArray{ { VK_SHADER_STAGE_VERTEX_BIT, 0u, uint32_t( sizeof( DrawConstants ) ) } } );
+		auto pipeline = device->createPipeline( name
+			, { 0u
+				, std::move( program )
+				, ashes::PipelineVertexInputStateCreateInfo{ 0u, {}, {} }
+				, ashes::PipelineInputAssemblyStateCreateInfo{ 0u, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST }
+				, ashes::nullopt
+				, ashes::PipelineViewportStateCreateInfo{}
+				, ashes::PipelineRasterizationStateCreateInfo{}
+				, ashes::PipelineMultisampleStateCreateInfo{}
+				, ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_FALSE, VK_FALSE }
+				, std::move( blState )
+				, ashes::PipelineDynamicStateCreateInfo{ 0u, { VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR } }
+				, *pipelineLayout
+				, renderPass } );
+		return OverlayDrawPipeline{ std::move( pipelineLayout )
+			, std::move( pipeline ) };
+	}
+
+	ashes::PipelineShaderStageCreateInfoArray OverlayRenderer::OverlaysDrawData::doCreateOverlayProgram( RenderDevice const & device
 		, TextureCombine const & texturesFlags
 		, bool textOverlay )
 	{
 		using namespace sdw;
 		using namespace shader;
+		auto & engine = *device.renderSystem.getEngine();
 		bool hasTexture = texturesFlags.configCount != 0u;
 
 		// Vertex shader
@@ -943,7 +882,7 @@ namespace castor3d
 			FragmentWriter writer;
 
 			shader::Utils utils{ writer };
-			shader::PassShaders passShaders{ getOwner()->getEngine()->getPassComponentsRegister()
+			shader::PassShaders passShaders{ engine.getPassComponentsRegister()
 				, texturesFlags
 				, ( ComponentModeFlag::eOpacity
 					| ComponentModeFlag::eColour )
@@ -1014,6 +953,141 @@ namespace castor3d
 			makeShaderState( device, vtx ),
 			makeShaderState( device, pxl ),
 		};
+	}
+
+	//*********************************************************************************************
+
+	OverlayRenderer::OverlayRenderer( RenderDevice const & device
+		, Texture const & target
+		, crg::FramePassTimer & timer
+		, VkCommandBufferLevel level )
+		: OwnedBy< RenderSystem >( device.renderSystem )
+		, m_target{ target }
+		, m_timer{ timer }
+		, m_size{ makeSize( m_target.getExtent() ) }
+		, m_common{ device }
+		, m_draw{ device, level, m_common }
+		, m_compute{ device, m_common }
+	{
+		m_common.cameraUbo.cpuUpdate( getSize()
+			, getRenderSystem()->getOrtho( 0.0f
+				, float( m_size.getWidth() )
+				, 0.0f
+				, float( m_size.getHeight() )
+				, -1.0f
+				, 1.0f ) );
+	}
+
+	OverlayRenderer::~OverlayRenderer()
+	{
+	}
+
+	void OverlayRenderer::update( GpuUpdater & updater )
+	{
+		if ( auto timerBlock = std::make_unique< crg::FramePassTimerBlock >( m_timer.start() ) )
+		{
+			auto size = updater.camera->getSize();
+
+			if ( m_size != size )
+			{
+				m_sizeChanged = true;
+				m_size = size;
+				m_common.cameraUbo.cpuUpdate( getSize()
+					, getRenderSystem()->getOrtho( 0.0f
+						, float( m_size.getWidth() )
+						, 0.0f
+						, float( m_size.getHeight() )
+						, -1.0f
+						, 1.0f ) );
+			}
+		}
+	}
+
+	OverlayPreparer OverlayRenderer::beginPrepare( RenderDevice const & device
+		, VkRenderPass renderPass
+		, VkFramebuffer framebuffer )
+	{
+		return OverlayPreparer{ *this, device, renderPass, framebuffer };
+	}
+
+	void OverlayRenderer::upload( ashes::CommandBuffer const & cb )
+	{
+		m_common.panelVertexBuffer->upload( cb );
+		m_common.borderVertexBuffer->upload( cb );
+		m_common.textVertexBuffer->upload( cb );
+	}
+
+	void OverlayRenderer::registerComputeCommands( crg::RecordContext & context
+		, VkCommandBuffer commandBuffer )const
+	{
+		m_compute.registerCommands( context, commandBuffer );
+	}
+
+	ashes::CommandBuffer & OverlayRenderer::doBeginPrepare( VkRenderPass renderPass
+		, VkFramebuffer framebuffer )
+	{
+		m_draw.beginPrepare( renderPass, framebuffer, m_timer, m_size );
+		return *m_draw.commands.commandBuffer;
+	}
+
+	void OverlayRenderer::doEndPrepare()
+	{
+		m_draw.endPrepare();
+		m_sizeChanged = false;
+	}
+
+	std::pair< OverlayDrawNode *, OverlayPipelineData const * > OverlayRenderer::doGetDrawNodeData( RenderDevice const & device
+		, VkRenderPass renderPass
+		, Overlay const & overlay
+		, Pass const & pass
+		, bool secondary )
+	{
+		OverlayDrawNode * node{};
+		OverlayPipelineData const * pipelineData{};
+
+		switch ( overlay.getType() )
+		{
+		case OverlayType::ePanel:
+			node = &m_draw.getPanelNode( device, renderPass, pass );
+			pipelineData = &m_common.panelVertexBuffer->getDrawPipelineData( node->pipeline
+				, nullptr
+				, nullptr );
+			++m_compute.panelPipeline.count;
+			break;
+		case OverlayType::eBorderPanel:
+			if ( secondary )
+			{
+				node = &m_draw.getPanelNode( device, renderPass, pass );
+				pipelineData = &m_common.borderVertexBuffer->getDrawPipelineData( node->pipeline
+					, nullptr
+					, nullptr );
+				++m_compute.borderPipeline.count;
+			}
+			else
+			{
+				node = &m_draw.getPanelNode( device, renderPass, pass );
+				pipelineData = &m_common.panelVertexBuffer->getDrawPipelineData( node->pipeline
+					, nullptr
+					, nullptr );
+				++m_compute.panelPipeline.count;
+			}
+			break;
+		case OverlayType::eText:
+			if ( auto text = overlay.getTextOverlay() )
+			{
+				auto texture = text->getFontTexture();
+				node = &m_draw.getTextNode( device, renderPass, pass, *texture->getTexture(), *texture->getSampler().lock() );
+				pipelineData = &m_common.textVertexBuffer->getDrawPipelineData( node->pipeline
+					, texture.get()
+					, &m_draw.createTextDescriptorSet( *texture ) );
+				m_compute.getTextPipeline( *texture ).count += text->getCharCount();
+			}
+			break;
+		default:
+			break;
+		}
+
+		return { node, pipelineData };
 	}
 
 	//*********************************************************************************************

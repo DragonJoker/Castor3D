@@ -3,6 +3,8 @@ See LICENSE file in root folder
 */
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
+#include "Castor3D/Cache/TextureCache.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
 #include "Castor3D/Shader/ShaderBuffers/TextureAnimationBuffer.hpp"
 #include "Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp"
@@ -20,8 +22,6 @@ namespace castor3d
 		, RenderDevice const & device
 		, CameraUbo const & cameraUbo
 		, ashes::DescriptorSetLayout const & descriptorLayout
-		, ashes::PipelineVertexInputStateCreateInfo const & noTexDecl
-		, ashes::PipelineVertexInputStateCreateInfo const & texDecl
 		, uint32_t count
 		, OverlayTextBufferPoolUPtr textBuf )
 		: engine{ engine }
@@ -36,8 +36,6 @@ namespace castor3d
 			, name + "Data" ) }
 		, overlaysBuffer{ castor::makeArrayView( overlaysData->lock( 0u, ashes::WholeSize, 0u )
 			, overlaysData->getCount() ) }
-		, noTexDeclaration{ noTexDecl }
-		, texDeclaration{ texDecl }
 		, vertexBuffer{ device.renderSystem
 			, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
@@ -50,7 +48,7 @@ namespace castor3d
 	}
 
 	template< typename VertexT, uint32_t CountT >
-	void OverlayVertexBufferPoolT< VertexT, CountT >::clearDrawDescriptorSets( FontTexture const * fontTexture )
+	void OverlayVertexBufferPoolT< VertexT, CountT >::clearDrawPipelineData( FontTexture const * fontTexture )
 	{
 		auto it = m_pipelines.find( fontTexture );
 
@@ -66,29 +64,29 @@ namespace castor3d
 	}
 
 	template< typename VertexT, uint32_t CountT >
-	ashes::DescriptorSetCRefArray const & OverlayVertexBufferPoolT< VertexT, CountT >::getDrawDescriptorSets( OverlayRenderNode const & node
+	OverlayPipelineData const & OverlayVertexBufferPoolT< VertexT, CountT >::getDrawPipelineData( OverlayDrawPipeline const & pipeline
 		, FontTexture const * fontTexture
 		, ashes::DescriptorSet const * textDescriptorSet )
 	{
 		auto & pipelines = m_pipelines.emplace( fontTexture, PipelineDataMap{} ).first->second;
-		auto ires = pipelines.emplace( &node.pipeline, OverlayPipelineData{} );
+		auto ires = pipelines.emplace( &pipeline, OverlayPipelineData{} );
 
 		if ( ires.second )
 		{
-			auto & pipeline = ires.first->second;
-			pipeline.overlaysIDsBuffer = makeBuffer< uint32_t >( device
+			auto & pipelineData = ires.first->second;
+			pipelineData.overlaysIDsBuffer = makeBuffer< uint32_t >( device
 				, MaxPipelines
 				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 				, name + "PipelineIDs" );
-			pipeline.overlaysIDs = castor::makeArrayView( pipeline.overlaysIDsBuffer->lock( 0u, ashes::WholeSize, 0u )
-				, pipeline.overlaysIDsBuffer->getCount() );
-			pipeline.descriptorSets = std::make_unique< OverlayPipelineData::DescriptorSets >();
+			pipelineData.overlaysIDs = castor::makeArrayView( pipelineData.overlaysIDsBuffer->lock( 0u, ashes::WholeSize, 0u )
+				, pipelineData.overlaysIDsBuffer->getCount() );
+			pipelineData.descriptorSets = std::make_unique< OverlayPipelineData::DescriptorSets >();
 
-			auto & descs = *pipeline.descriptorSets;
+			auto & descs = *pipelineData.descriptorSets;
 			descs.draw = doCreateDescriptorSet( name
 				, fontTexture
-				, pipeline.overlaysIDsBuffer->getBuffer() );
+				, pipelineData.overlaysIDsBuffer->getBuffer() );
 			descs.all.push_back( *descs.draw );
 			descs.all.push_back( *device.renderSystem.getEngine()->getTextureUnitCache().getDescriptorSet() );
 
@@ -98,7 +96,7 @@ namespace castor3d
 			}
 		}
 
-		return ires.first->second.descriptorSets->all;
+		return ires.first->second;
 	}
 
 	template< typename VertexT, uint32_t CountT >
@@ -127,29 +125,24 @@ namespace castor3d
 
 	template< typename VertexT, uint32_t CountT >
 	template< typename OverlayT >
-	OverlayVertexBufferIndexT< VertexT, CountT > OverlayVertexBufferPoolT< VertexT, CountT >::fill( castor::Size const & renderSize
+	void OverlayVertexBufferPoolT< VertexT, CountT >::fill( castor::Size const & renderSize
 		, OverlayT const & overlay
-		, OverlayRenderNode const & node
+		, OverlayDrawData & data
 		, bool secondary
 		, FontTexture const * fontTexture )
 	{
 		auto & pipelines = m_pipelines.emplace( fontTexture, PipelineDataMap{} ).first->second;
-		auto it = pipelines.find( &node.pipeline );
+		auto it = pipelines.find( &data.node->pipeline );
 
 		if ( it == pipelines.end() )
 		{
-			log::warn << "Overlay render node not found" << std::endl;
+			log::error << name << ": Overlay render node not found" << std::endl;
 			CU_Failure( "Overlay render node not found" );
-			throw std::invalid_argument{ "Overlay render node" };
+			return;
 		}
 
 		auto & pipelineData = it->second;
 		auto pipelineIndex = pipelineData.count++;
-		OverlayVertexBufferIndexT< VertexT, CountT > result{ *this
-			, node
-			, pipelineData
-			, index
-			, pipelineIndex };
 		auto count = overlay.getCount( secondary );
 
 		if ( !count
@@ -157,32 +150,30 @@ namespace castor3d
 		{
 			if ( count )
 			{
+				log::error << name << ": Couldn't allocate overlay" << std::endl;
 				CU_Failure( ": Couldn't allocate overlay" );
-				log::warn << name << ": Couldn't allocate overlay";
 			}
 
-			return result;
+			return;
 		}
 
-		auto offset = allocated * sizeof( VertexT );
-		result.geometryBuffers.buffer = &vertexBuffer;
-		result.geometryBuffers.offset = offset;
-		result.geometryBuffers.range = count * sizeof( VertexT );
-		result.geometryBuffers.count = count;
+		data.overlayIndex = index;
+		data.pipelineIndex = pipelineIndex;
+		data.pipelineData = &pipelineData;
+		data.vertexOffset = uint32_t( allocated * sizeof( VertexT ) );
+		data.vertexCount = count;
+		pipelineData.overlaysIDs[pipelineIndex] = data.overlayIndex;
 
 		if constexpr ( isText )
 		{
 			if ( textBuffer && fontTexture )
 			{
-				result.textBuffer = textBuffer->fill( result.overlayIndex, fontTexture, renderSize, overlay, node, secondary );
+				data.textBuffer = textBuffer->fill( data.overlayIndex, fontTexture, overlay );
 			}
 		}
 
-		result.pipelineData.overlaysIDs[pipelineIndex] = result.overlayIndex;
 		allocated += count;
 		++index;
-
-		return result;
 	}
 
 	template< typename VertexT, uint32_t CountT >

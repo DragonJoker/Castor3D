@@ -14,7 +14,7 @@ namespace castor3d
 {
 	namespace ovrlcat
 	{
-		castor::Point4d intersect( castor::Point4d const & lhs
+		static castor::Point4d intersect( castor::Point4d const & lhs
 			, castor::Point4d const & rhs )
 		{
 			castor::Point2d start{ std::max( lhs->x, rhs->x ), std::max( lhs->y, rhs->y ) };
@@ -184,8 +184,6 @@ namespace castor3d
 
 	castor::Point4d OverlayCategory::computeClientArea()const
 	{
-		auto pos = getAbsolutePosition();
-		auto dim = getAbsoluteSize();
 		castor::Point4d result = m_clientArea;
 		doUpdateClientArea( result );
 		auto overlay = &getOverlay();

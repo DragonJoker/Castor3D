@@ -53,10 +53,7 @@ namespace castor3d
 	}
 
 	OverlayTextBufferIndex OverlayTextBuffer::fill( uint32_t overlayIndex
-		, castor::Size const & renderSize
-		, TextOverlay const & overlay
-		, OverlayRenderNode const & node
-		, bool secondary )
+		, TextOverlay const & overlay )
 	{
 		auto chars = overlay.getCharCount();
 		auto words = overlay.getWordCount();
@@ -145,10 +142,7 @@ namespace castor3d
 
 	OverlayTextBufferIndex OverlayTextBufferPool::fill( uint32_t overlayIndex
 		, FontTexture const * fontTexture
-		, castor::Size const & renderSize
-		, TextOverlay const & overlay
-		, OverlayRenderNode const & node
-		, bool secondary )
+		, TextOverlay const & overlay )
 	{
 		auto it = m_buffers.emplace( fontTexture, nullptr ).first;
 
@@ -159,7 +153,7 @@ namespace castor3d
 				, m_device );
 		}
 
-		return it->second->fill( overlayIndex, renderSize, overlay, node, secondary );
+		return it->second->fill( overlayIndex, overlay );
 	}
 
 	void OverlayTextBufferPool::upload( ashes::CommandBuffer const & cb )
