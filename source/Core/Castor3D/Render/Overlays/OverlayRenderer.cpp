@@ -167,9 +167,10 @@ namespace castor3d
 
 		static uint32_t makeKey( PassComponentRegister const & passComponents
 			, TextureCombine const & textures
-			, bool text )
+			, bool borderOverlay
+			, bool textOverlay )
 		{
-			auto tex{ uint32_t( text ? OverlayTexture::eText : OverlayTexture::eNone ) };
+			auto tex{ uint32_t( textOverlay ? OverlayTexture::eText : OverlayTexture::eNone ) };
 
 			if ( hasAny( textures, passComponents.getColourMapFlags() ) )
 			{
@@ -181,8 +182,10 @@ namespace castor3d
 				tex |= uint32_t( OverlayTexture::eOpacity );
 			}
 
-			uint32_t result{ tex << 8 };
-			result |= uint32_t( textures.configCount );
+			uint32_t result{ tex };
+			result <<= 8u;
+			result |= uint32_t( textures.configCount & 0xF );
+			result |= ( borderOverlay ? 1u : 0u );
 			return result;
 		}
 
@@ -655,8 +658,23 @@ namespace castor3d
 
 		if ( it == m_mapPanelNodes.end() )
 		{
-			auto & pipeline = doGetPipeline( device, renderPass, pass, m_panelPipelines, false );
+			auto & pipeline = doGetPipeline( device, renderPass, pass, m_panelPipelines, false, false );
 			it = m_mapPanelNodes.insert( { &pass, OverlayDrawNode{ pipeline, pass } } ).first;
+		}
+
+		return it->second;
+	}
+
+	OverlayDrawNode & OverlayRenderer::OverlaysDrawData::getBorderNode( RenderDevice const & device
+		, VkRenderPass renderPass
+		, Pass const & pass )
+	{
+		auto it = m_mapBorderNodes.find( &pass );
+
+		if ( it == m_mapBorderNodes.end() )
+		{
+			auto & pipeline = doGetPipeline( device, renderPass, pass, m_borderPipelines, true, false );
+			it = m_mapBorderNodes.insert( { &pass, OverlayDrawNode{ pipeline, pass } } ).first;
 		}
 
 		return it->second;
@@ -672,7 +690,7 @@ namespace castor3d
 
 		if ( it == m_mapTextNodes.end() )
 		{
-			auto & pipeline = doGetPipeline( device, renderPass, pass, m_textPipelines, true );
+			auto & pipeline = doGetPipeline( device, renderPass, pass, m_textPipelines, false, true );
 			it = m_mapTextNodes.insert( { &pass, OverlayDrawNode{ pipeline, pass } } ).first;
 		}
 
@@ -730,13 +748,14 @@ namespace castor3d
 		, VkRenderPass renderPass
 		, Pass const & pass
 		, std::map< uint32_t, OverlayDrawPipeline > & pipelines
-		, bool text )
+		, bool borderOverlay
+		, bool textOverlay )
 	{
 		// Remove unwanted flags
 		auto & passComponents = device.renderSystem.getEngine()->getPassComponentsRegister();
 		auto textures = passComponents.filterTextureFlags( ComponentModeFlag::eColour | ComponentModeFlag::eOpacity
 			, pass.getTexturesMask() );
-		auto key = ovrlrend::makeKey( passComponents, textures, text );
+		auto key = ovrlrend::makeKey( passComponents, textures, borderOverlay, textOverlay );
 		auto it = pipelines.find( key );
 
 		if ( it == pipelines.end() )
@@ -746,9 +765,10 @@ namespace castor3d
 				, doCreatePipeline( device
 					, renderPass
 					, pass
-					, doCreateOverlayProgram( device, textures, text )
+					, doCreateOverlayProgram( device, textures, borderOverlay, textOverlay )
 					, textures
-					, text ) ).first;
+					, borderOverlay
+					, textOverlay ) ).first;
 		}
 
 		return it->second;
@@ -759,7 +779,8 @@ namespace castor3d
 		, Pass const & pass
 		, ashes::PipelineShaderStageCreateInfoArray program
 		, TextureCombine const & texturesFlags
-		, bool text )
+		, bool borderOverlay
+		, bool textOverlay )
 	{
 		auto & engine = *device.renderSystem.getEngine();
 		auto & passComponents = engine.getPassComponentsRegister();
@@ -782,10 +803,14 @@ namespace castor3d
 		descriptorLayouts.push_back( *m_commonData.baseDescriptorLayout );
 		descriptorLayouts.push_back( *engine.getTextureUnitCache().getDescriptorLayout() );
 
-		if ( text )
+		if ( textOverlay )
 		{
 			name = "Text" + name;
 			descriptorLayouts.push_back( *textDescriptorLayout );
+		}
+		else if ( borderOverlay )
+		{
+			name = "Border" + name;
 		}
 
 		auto pipelineLayout = device->createPipelineLayout( name
@@ -811,6 +836,7 @@ namespace castor3d
 
 	ashes::PipelineShaderStageCreateInfoArray OverlayRenderer::OverlaysDrawData::doCreateOverlayProgram( RenderDevice const & device
 		, TextureCombine const & texturesFlags
+		, bool borderOverlay
 		, bool textOverlay )
 	{
 		using namespace sdw;
@@ -839,7 +865,7 @@ namespace castor3d
 				, true  /* hasTextures */ );
 
 			sdw::PushConstantBuffer pcb{ writer, "C3D_DrawData", "c3d_drawData" };
-			auto overlaySubID = pcb.declMember< sdw::UInt >( "overlaySubID" );
+			auto pipelineBaseIndex = pcb.declMember< sdw::UInt >( "pipelineBaseIndex" );
 			pcb.end();
 
 			writer.implementMainT< sdw::VoidT, shader::OverlaySurfaceT >( sdw::VertexIn{ writer }
@@ -847,12 +873,14 @@ namespace castor3d
 				, [&]( sdw::VertexIn in
 					, VertexOutT< shader::OverlaySurfaceT > out )
 				{
+					auto overlaySubID = writer.declLocale( "overlaySubID"
+						, pipelineBaseIndex + ( writer.cast< sdw::UInt >( in.drawID ) ) );
 					auto overlayID = writer.declLocale( "overlayID"
 						, c3d_overlaysIDs[overlaySubID] );
 					auto overlay = writer.declLocale( "overlay"
 						, c3d_overlaysData[overlayID] );
 					auto vertexOffset = writer.declLocale( "vertexOffset"
-						, writer.cast< sdw::UInt >( in.vertexIndex ) + overlay.vertexOffset() );
+						, writer.cast< sdw::UInt >( in.vertexIndex ) );
 					auto surface = writer.declLocale( "vertex"
 						, c3d_overlaysSurfaces[vertexOffset] );
 					auto renderSize = writer.declLocale( "renderSize"
@@ -1036,14 +1064,14 @@ namespace castor3d
 		m_sizeChanged = false;
 	}
 
-	std::pair< OverlayDrawNode *, OverlayPipelineData const * > OverlayRenderer::doGetDrawNodeData( RenderDevice const & device
+	std::pair< OverlayDrawNode *, OverlayPipelineData * > OverlayRenderer::doGetDrawNodeData( RenderDevice const & device
 		, VkRenderPass renderPass
 		, Overlay const & overlay
 		, Pass const & pass
 		, bool secondary )
 	{
 		OverlayDrawNode * node{};
-		OverlayPipelineData const * pipelineData{};
+		OverlayPipelineData * pipelineData{};
 
 		switch ( overlay.getType() )
 		{
@@ -1057,7 +1085,7 @@ namespace castor3d
 		case OverlayType::eBorderPanel:
 			if ( secondary )
 			{
-				node = &m_draw.getPanelNode( device, renderPass, pass );
+				node = &m_draw.getBorderNode( device, renderPass, pass );
 				pipelineData = &m_common.borderVertexBuffer->getDrawPipelineData( node->pipeline
 					, nullptr
 					, nullptr );

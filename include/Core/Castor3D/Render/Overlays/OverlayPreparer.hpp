@@ -41,7 +41,11 @@ namespace castor3d
 		C3D_API void fillDrawData();
 
 	private:
-		void doRegisterDrawCommands( OverlayDrawData const & overlay
+		void doRegisterDrawCommands( OverlayDrawPipeline const & pipeline
+			, ashes::DescriptorSetCRefArray const & descriptorSets
+			, ashes::BufferBase const & indirectCommands
+			, uint32_t drawCount
+			, uint32_t & offset
 			, ashes::CommandBuffer & commandBuffer );
 		void doUpdateUbo( OverlayUboConfiguration & data
 			, PanelOverlay const & overlay
@@ -66,13 +70,18 @@ namespace castor3d
 		OverlayRenderer & m_renderer;
 		RenderDevice const & m_device;
 		using OverlayDataArray = std::vector< OverlayDrawData >;
-		using OverlayDatasMap = std::map< OverlayDrawPipeline const *, OverlayDataArray >;
+		using OverlayDatasMap = std::map< OverlayPipelineData *, OverlayDataArray >;
 		std::map< uint32_t, OverlayDatasMap > m_levelsOverlays;
 		VkRenderPass m_renderPass;
 		VkFramebuffer m_framebuffer;
 		std::vector< OverlayDrawData > m_overlays;
+		OverlayPipelineData const * m_previousPipelineData{};
 		ashes::Pipeline const * m_previousPipeline{};
+		ashes::PipelineLayout const * m_previousPipelineLayout{};
 		ashes::DescriptorSetCRefArray const * m_previousDescriptorSets{};
+		uint32_t m_previousLevel{};
+		std::map< size_t, uint32_t > m_descriptorsCounts{};
+		uint32_t m_currentCount{};
 	};
 }
 
