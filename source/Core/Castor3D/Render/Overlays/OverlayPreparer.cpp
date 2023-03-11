@@ -48,6 +48,14 @@ namespace castor3d
 			data.vertexOffset = vertexOffset;
 			return ratio;
 		}
+
+		static size_t makeHash( ashes::Pipeline const * pipeline
+			, ashes::DescriptorSetCRefArray const * descriptorSets )
+		{
+			auto result = std::hash< ashes::Pipeline const * >{}( pipeline );
+			result = castor::hashCombinePtr( result, *descriptorSets );
+			return result;
+		}
 	}
 
 	OverlayPreparer::OverlayPreparer( OverlayRenderer & renderer
@@ -89,9 +97,22 @@ namespace castor3d
 			fillDrawData();
 			auto & commandBuffer = m_renderer.doBeginPrepare( m_renderPass, m_framebuffer );
 
-			for ( auto & overlayIt : m_overlays )
+			for ( auto [level, pipelines] : m_levelsOverlays )
 			{
-				doRegisterDrawCommands( overlayIt, commandBuffer );
+				for ( auto [pipelineData, overlayDatas] : pipelines )
+				{
+					if ( !overlayDatas.empty() )
+					{
+						auto & data = overlayDatas.front();
+						doRegisterDrawCommands( data.node->pipeline
+							, pipelineData->descriptorSets->all
+							, pipelineData->indirectCommandsBuffer->getBuffer()
+							, uint32_t( overlayDatas.size() )
+							, m_descriptorsCounts[ovrlprep::makeHash( data.node->pipeline.pipeline.get()
+								, &pipelineData->descriptorSets->all )]
+							, commandBuffer );;
+					}
+				}
 			}
 
 			m_renderer.doEndPrepare();
@@ -113,12 +134,11 @@ namespace castor3d
 						, overlay
 						, *pass
 						, false );
-					auto & overlays = pipelines.emplace( &node->pipeline, OverlayDataArray{} ).first->second;
+					auto & overlays = pipelines.emplace( pipelineData, OverlayDataArray{} ).first->second;
 					overlays.push_back( { &overlay
 						, node
 						, pipelineData
-						, uint32_t{}
-						, uint32_t{}
+						, nullptr
 						, uint32_t{}
 						, uint32_t{}
 						, OverlayTextBufferIndex{}
@@ -142,12 +162,11 @@ namespace castor3d
 							, overlay
 							, *pass
 							, true );
-						auto & overlays = pipelines.emplace( &node->pipeline, OverlayDataArray{} ).first->second;
+						auto & overlays = pipelines.emplace( pipelineData, OverlayDataArray{} ).first->second;
 						overlays.push_back( { &overlay
 							, node
 							, pipelineData
-							, uint32_t{}
-							, uint32_t{}
+							, nullptr
 							, uint32_t{}
 							, uint32_t{}
 							, OverlayTextBufferIndex{}
@@ -162,7 +181,7 @@ namespace castor3d
 	{
 		for ( auto [level, pipelines] : m_levelsOverlays )
 		{
-			for ( auto [pipeline, overlayDatas] : pipelines )
+			for ( auto [pipelineData, overlayDatas] : pipelines )
 			{
 				for ( auto data : overlayDatas )
 				{
@@ -173,17 +192,19 @@ namespace castor3d
 					case OverlayType::ePanel:
 						if ( auto panel = overlay->getPanelOverlay() )
 						{
-							m_renderer.m_common.panelVertexBuffer->fill( m_renderer.getSize()
+							if ( m_renderer.m_common.panelVertexBuffer->fill( m_renderer.getSize()
 								, *panel
 								, data
 								, false
-								, nullptr );
-							doUpdateUbo( m_renderer.m_common.panelVertexBuffer->overlaysBuffer[data.overlayIndex]
-								, *panel
-								, data.node->pass
-								, m_renderer.getSize()
-								, data.vertexOffset
-								, data.textBuffer );
+								, nullptr ) )
+							{
+								doUpdateUbo( m_renderer.m_common.panelVertexBuffer->overlaysBuffer[data.overlayIndex]
+									, *panel
+									, data.node->pass
+									, m_renderer.getSize()
+									, data.indirectData->firstVertex
+									, data.textBuffer );
+							}
 						}
 						break;
 					case OverlayType::eBorderPanel:
@@ -191,30 +212,31 @@ namespace castor3d
 						{
 							if ( data.secondary )
 							{
-								m_renderer.m_common.borderVertexBuffer->fill( m_renderer.getSize()
+								if ( m_renderer.m_common.borderVertexBuffer->fill( m_renderer.getSize()
 									, *border
 									, data
 									, true
-									, nullptr );
-								doUpdateUbo( m_renderer.m_common.borderVertexBuffer->overlaysBuffer[data.overlayIndex]
-									, *border
-									, data.node->pass
-									, m_renderer.getSize()
-									, data.vertexOffset
-									, data.textBuffer );
+									, nullptr ) )
+								{
+									doUpdateUbo( m_renderer.m_common.borderVertexBuffer->overlaysBuffer[data.overlayIndex]
+										, *border
+										, data.node->pass
+										, m_renderer.getSize()
+										, data.indirectData->firstVertex
+										, data.textBuffer );
+								}
 							}
-							else
+							else if ( m_renderer.m_common.panelVertexBuffer->fill( m_renderer.getSize()
+								, *border
+								, data
+								, false
+								, nullptr ) )
 							{
-								m_renderer.m_common.panelVertexBuffer->fill( m_renderer.getSize()
-									, *border
-									, data
-									, false
-									, nullptr );
 								doUpdateUbo( m_renderer.m_common.panelVertexBuffer->overlaysBuffer[data.overlayIndex]
 									, *border
 									, data.node->pass
 									, m_renderer.getSize()
-									, data.vertexOffset
+									, data.indirectData->firstVertex
 									, data.textBuffer );
 							}
 						}
@@ -222,17 +244,19 @@ namespace castor3d
 					case OverlayType::eText:
 						if ( auto text = overlay->getTextOverlay() )
 						{
-							m_renderer.m_common.textVertexBuffer->fill( m_renderer.getSize()
+							if ( m_renderer.m_common.textVertexBuffer->fill( m_renderer.getSize()
 								, *text
 								, data
 								, false
-								, text->getFontTexture().get() );
-							doUpdateUbo( m_renderer.m_common.textVertexBuffer->overlaysBuffer[data.overlayIndex]
-								, *text
-								, data.node->pass
-								, m_renderer.getSize()
-								, data.vertexOffset
-								, data.textBuffer );
+								, text->getFontTexture().get() ) )
+							{
+								doUpdateUbo( m_renderer.m_common.textVertexBuffer->overlaysBuffer[data.overlayIndex]
+									, *text
+									, data.node->pass
+									, m_renderer.getSize()
+									, data.indirectData->firstVertex
+									, data.textBuffer );
+							}
 						}
 						break;
 					default:
@@ -245,32 +269,26 @@ namespace castor3d
 		}
 	}
 
-	void OverlayPreparer::doRegisterDrawCommands( OverlayDrawData const & data
+	void OverlayPreparer::doRegisterDrawCommands( OverlayDrawPipeline const & pipeline
+		, ashes::DescriptorSetCRefArray const & descriptorSets
+		, ashes::BufferBase const & indirectCommands
+		, uint32_t drawCount
+		, uint32_t & offset
 		, ashes::CommandBuffer & commandBuffer )
 	{
-		if ( m_previousPipeline != data.node->pipeline.pipeline.get() )
-		{
-			commandBuffer.bindPipeline( *data.node->pipeline.pipeline );
-			m_previousPipeline = data.node->pipeline.pipeline.get();
-			m_previousDescriptorSets = nullptr;
-		}
-
-		if ( m_previousDescriptorSets != &data.pipelineData->descriptorSets->all )
-		{
-			commandBuffer.bindDescriptorSets( data.pipelineData->descriptorSets->all, *data.node->pipeline.pipelineLayout );
-			m_previousDescriptorSets = &data.pipelineData->descriptorSets->all;
-		}
-
-		DrawConstants constants{ data.pipelineIndex };
-		commandBuffer.pushConstants( *data.node->pipeline.pipelineLayout
+		commandBuffer.bindPipeline( *pipeline.pipeline );
+		commandBuffer.bindDescriptorSets( descriptorSets, *pipeline.pipelineLayout );
+		DrawConstants constants{ offset };
+		commandBuffer.pushConstants( *pipeline.pipelineLayout
 			, VK_SHADER_STAGE_VERTEX_BIT
 			, 0u
 			, sizeof( constants )
 			, &constants );
-		commandBuffer.draw( data.vertexCount
-			, 1u
-			, 0u
-			, 0u );
+		commandBuffer.drawIndirect( indirectCommands
+			, uint32_t( offset * sizeof( VkDrawIndirectCommand ) )
+			, drawCount
+			, sizeof( VkDrawIndirectCommand ) );
+		offset += drawCount;
 	}
 
 	void OverlayPreparer::doUpdateUbo( OverlayUboConfiguration & data
@@ -284,7 +302,7 @@ namespace castor3d
 			, static_cast< OverlayCategory const & >( overlay )
 			, pass
 			, renderSize
-			, vertexOffset / sizeof( PanelOverlay::Vertex ) );
+			, vertexOffset );
 	}
 
 	void OverlayPreparer::doUpdateUbo( OverlayUboConfiguration & data
@@ -298,7 +316,7 @@ namespace castor3d
 			, static_cast< OverlayCategory const & >( overlay )
 			, pass
 			, renderSize
-			, vertexOffset / sizeof( BorderPanelOverlay::Vertex ) );
+			, vertexOffset );
 		data.border = castor::Point4f{ overlay.getAbsoluteBorderSize() * castor::Point4d{ ratio->x, ratio->y, ratio->x, ratio->y } };
 		data.borderInnerUV = castor::Point4f{ overlay.getBorderInnerUV() };
 		data.borderOuterUV = castor::Point4f{ overlay.getBorderOuterUV() };
@@ -316,7 +334,7 @@ namespace castor3d
 			, static_cast< OverlayCategory const & >( overlay )
 			, pass
 			, renderSize
-			, vertexOffset / sizeof( TextOverlay::Vertex ) );
+			, vertexOffset );
 		data.textTexturingMode = uint32_t( overlay.getTexturingMode() );
 		data.textWordOffset = textBuffer.word;
 		data.textLineOffset = textBuffer.line;

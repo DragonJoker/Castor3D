@@ -116,12 +116,16 @@ namespace castor3d
 		OverlayPipelineData() = default;
 		~OverlayPipelineData() = default;
 
-		OverlayPipelineData( ashes::BufferPtr< uint32_t > iDsBuffer,
-			castor::ArrayView< uint32_t > ids,
-			DescriptorSetsPtr descs,
-			uint32_t c )
+		OverlayPipelineData( ashes::BufferPtr< uint32_t > iDsBuffer
+			, castor::ArrayView< uint32_t > ids
+			, ashes::BufferPtr< VkDrawIndirectCommand > indirectBuffer
+			, castor::ArrayView< VkDrawIndirectCommand > indirect
+			, DescriptorSetsPtr descs
+			, uint32_t c )
 			: overlaysIDsBuffer{ std::move( iDsBuffer ) }
 			, overlaysIDs{ std::move( ids ) }
+			, indirectCommandsBuffer{ std::move( indirectBuffer ) }
+			, indirectCommands{ std::move( indirect ) }
 			, descriptorSets{ std::move( descs ) }
 			, count{ c }
 		{
@@ -129,6 +133,8 @@ namespace castor3d
 
 		ashes::BufferPtr< uint32_t > overlaysIDsBuffer{};
 		castor::ArrayView< uint32_t > overlaysIDs{};
+		ashes::BufferPtr< VkDrawIndirectCommand > indirectCommandsBuffer{};
+		castor::ArrayView< VkDrawIndirectCommand > indirectCommands{};
 		DescriptorSetsPtr descriptorSets{};
 		uint32_t count{};
 	};
@@ -152,8 +158,7 @@ namespace castor3d
 		Overlay const * overlay{};
 		OverlayDrawNode const * node{};
 		OverlayPipelineData const * pipelineData{};
-		uint32_t vertexOffset{};
-		uint32_t vertexCount{};
+		VkDrawIndirectCommand * indirectData{};
 		uint32_t overlayIndex{};
 		uint32_t pipelineIndex{};
 		OverlayTextBufferIndex textBuffer{};

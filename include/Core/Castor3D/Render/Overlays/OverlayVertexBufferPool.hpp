@@ -35,7 +35,7 @@ namespace castor3d
 			, uint32_t count
 			, OverlayTextBufferPoolUPtr textBuf = nullptr );
 		template< typename OverlayT >
-		void fill( castor::Size const & renderSize
+		bool fill( castor::Size const & renderSize
 			, OverlayT const & overlay
 			, OverlayDrawData & data
 			, bool secondary
@@ -43,7 +43,7 @@ namespace castor3d
 		void upload( ashes::CommandBuffer const & cb );
 
 		void clearDrawPipelineData( FontTexture const * fontTexture );
-		OverlayPipelineData const & getDrawPipelineData( OverlayDrawPipeline const & pipeline
+		OverlayPipelineData & getDrawPipelineData( OverlayDrawPipeline const & pipeline
 			, FontTexture const * fontTexture
 			, ashes::DescriptorSet const * textDescriptorSet );
 		void fillComputeDescriptorSet( FontTexture const * fontTexture

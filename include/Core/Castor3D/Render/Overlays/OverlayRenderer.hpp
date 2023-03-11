@@ -216,6 +216,9 @@ namespace castor3d
 			OverlayDrawNode & getPanelNode( RenderDevice const & device
 				, VkRenderPass renderPass
 				, Pass const & pass );
+			OverlayDrawNode & getBorderNode( RenderDevice const & device
+				, VkRenderPass renderPass
+				, Pass const & pass );
 			OverlayDrawNode & getTextNode( RenderDevice const & device
 				, VkRenderPass renderPass
 				, Pass const & pass
@@ -233,21 +236,26 @@ namespace castor3d
 				, VkRenderPass renderPass
 				, Pass const & pass
 				, std::map< uint32_t, OverlayDrawPipeline > & pipelines
-				, bool text );
+				, bool borderOverlay
+				, bool textOverlay );
 			OverlayDrawPipeline doCreatePipeline( RenderDevice const & device
 				, VkRenderPass renderPass
 				, Pass const & pass
 				, ashes::PipelineShaderStageCreateInfoArray program
 				, TextureCombine const & texturesFlags
-				, bool text );
+				, bool borderOverlay
+				, bool textOverlay );
 			ashes::PipelineShaderStageCreateInfoArray doCreateOverlayProgram( RenderDevice const & device
 				, TextureCombine const & texturesFlags
-				, bool text );
+				, bool borderOverlay
+				, bool textOverlay );
 
 		private:
 			std::map< Pass const *, OverlayDrawNode > m_mapPanelNodes;
+			std::map< Pass const *, OverlayDrawNode > m_mapBorderNodes;
 			std::map< Pass const *, OverlayDrawNode > m_mapTextNodes;
 			std::map< uint32_t, OverlayDrawPipeline > m_panelPipelines;
+			std::map< uint32_t, OverlayDrawPipeline > m_borderPipelines;
 			std::map< uint32_t, OverlayDrawPipeline > m_textPipelines;
 			OverlaysCommonData & m_commonData;
 		};
@@ -256,7 +264,7 @@ namespace castor3d
 		ashes::CommandBuffer & doBeginPrepare( VkRenderPass renderPass
 			, VkFramebuffer framebuffer );
 		void doEndPrepare();
-		std::pair< OverlayDrawNode *, OverlayPipelineData const * > doGetDrawNodeData( RenderDevice const & device
+		std::pair< OverlayDrawNode *, OverlayPipelineData * > doGetDrawNodeData( RenderDevice const & device
 			, VkRenderPass renderPass
 			, Overlay const & overlay
 			, Pass const & pass
