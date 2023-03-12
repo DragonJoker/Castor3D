@@ -75,13 +75,7 @@ namespace castor3d
 		VkRenderPass m_renderPass;
 		VkFramebuffer m_framebuffer;
 		std::vector< OverlayDrawData > m_overlays;
-		OverlayPipelineData const * m_previousPipelineData{};
-		ashes::Pipeline const * m_previousPipeline{};
-		ashes::PipelineLayout const * m_previousPipelineLayout{};
-		ashes::DescriptorSetCRefArray const * m_previousDescriptorSets{};
-		uint32_t m_previousLevel{};
 		std::map< size_t, uint32_t > m_descriptorsCounts{};
-		uint32_t m_currentCount{};
 	};
 }
 

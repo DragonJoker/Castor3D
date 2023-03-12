@@ -249,9 +249,9 @@ namespace castor3d
 		 */
 		void doUpdateClientArea( castor::Point4d & clientArea )const override;
 		/**
-		 *\copydoc		castor3d::OverlayCategory::doUpdate
+		 *\copydoc		castor3d::OverlayCategory::doReset
 		 */
-		void doUpdate( OverlayRenderer const & renderer )override;
+		void doReset()override;
 
 	private:
 		//!\~english	The border material.

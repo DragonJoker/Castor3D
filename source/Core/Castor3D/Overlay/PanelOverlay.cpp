@@ -109,8 +109,4 @@ namespace castor3d
 		comp.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		return makeShaderState( device, comp );
 	}
-
-	void PanelOverlay::doUpdate( OverlayRenderer const & renderer )
-	{
-	}
 }

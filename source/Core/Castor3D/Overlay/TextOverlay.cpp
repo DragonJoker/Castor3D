@@ -398,6 +398,11 @@ namespace castor3d
 		m_textChanged = true;
 	}
 
+	void TextOverlay::doReset()
+	{
+		m_textChanged = false;
+	}
+
 	void TextOverlay::doUpdate( OverlayRenderer const & renderer )
 	{
 		FontTextureSPtr fontTexture = getFontTexture();
@@ -446,8 +451,6 @@ namespace castor3d
 			m_charsCount = uint32_t( ( m_previousCaption.size() - uint32_t( std::max( ptrdiff_t{}, count ) ) ) );
 			doPrepareText( renderer.getSize() );
 		}
-
-		m_textChanged = false;
 	}
 
 	void TextOverlay::doPrepareText( castor::Size const & rndSize )

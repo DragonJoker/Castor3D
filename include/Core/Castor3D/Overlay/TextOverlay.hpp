@@ -222,6 +222,10 @@ namespace castor3d
 			, castor::Point4i const & absolute
 			, castor::Point4f & uv ) >;
 		/**
+		 *\copydoc	castor3d::OverlayCategory::doReset
+		 */
+		void doReset()override;
+		/**
 		 *\copydoc	castor3d::OverlayCategory::doUpdate
 		 */
 		void doUpdate( OverlayRenderer const & renderer )override;
