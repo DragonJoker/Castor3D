@@ -31,12 +31,19 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Constructor
+		 *\~french
+		 *\brief		Constructeur
+		 */
+		CU_API Size()noexcept;
+		/**
+		 *\~english
+		 *\brief		Constructor
 		 *\param[in]	width, height	The dimensions
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	width, height	Les dimensions
 		 */
-		CU_API Size( uint32_t width = 0, uint32_t height = 0 )noexcept;
+		CU_API Size( uint32_t width, uint32_t height )noexcept;
 		/**
 		 *\~english
 		 *\brief		Copy Constructor

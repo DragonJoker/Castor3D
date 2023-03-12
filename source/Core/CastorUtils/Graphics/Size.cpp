@@ -2,6 +2,11 @@
 
 namespace castor
 {
+	Size::Size()noexcept
+		: Size( 0u, 0u )
+	{
+	}
+
 	Size::Size( uint32_t width, uint32_t height )noexcept
 		:	BaseType( m_data.buffer )
 	{

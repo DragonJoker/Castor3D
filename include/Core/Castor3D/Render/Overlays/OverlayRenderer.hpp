@@ -152,7 +152,7 @@ namespace castor3d
 
 		struct OverlaysCommonData
 		{
-			OverlaysCommonData( RenderDevice const & device );
+			explicit OverlaysCommonData( RenderDevice const & device );
 
 			ashes::DescriptorSetLayoutPtr baseDescriptorLayout;
 

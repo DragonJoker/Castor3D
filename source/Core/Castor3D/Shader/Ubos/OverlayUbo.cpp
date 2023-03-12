@@ -189,7 +189,7 @@ namespace castor3d::shader
 			, pssRelBound
 			, ptexUv
 			, pfontUv );
-	};
+	}
 
 	void OverlayData::cropMinMaxValue( sdw::Float const & pssAbsOvPosition
 		, sdw::Float const & pssAbsParentSize
@@ -335,7 +335,7 @@ namespace castor3d::shader
 			, pssRelBound
 			, ptexUv
 			, pfontUv );
-	};
+	}
 
 	void OverlayData::cropMaxMaxValue( sdw::Float const & pssAbsOvPosition
 		, sdw::Float const & pssAbsParentSize
