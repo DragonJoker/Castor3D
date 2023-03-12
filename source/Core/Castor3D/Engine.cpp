@@ -6,6 +6,7 @@
 #include "Castor3D/Event/Frame/FrameListener.hpp"
 #include "Castor3D/Event/Frame/CpuFunctorEvent.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
+#include "Castor3D/Gui/ControlsManager.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Pass/PassFactory.hpp"
@@ -225,6 +226,12 @@ namespace castor3d
 				, &shader::PbrLightingModel::create
 				, true } );
 		m_lightingModelId = getPassFactory().listRegisteredTypes().begin()->key;
+
+		registerParsers( ControlsManager::Name
+			, std::move( ControlsManager::createParsers( *this ) )
+			, std::move( ControlsManager::createSections() )
+			, &ControlsManager::createContext );
+		setUserInputListener( std::make_shared< ControlsManager >( *this ) );
 
 		log::info << cuT( "Castor3D - Core engine version : " ) << Version{} << std::endl;
 		log::info << m_cpuInformations << std::endl;
