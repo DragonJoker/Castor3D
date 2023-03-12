@@ -1,5 +1,17 @@
 project( GuiCommon )
 
+if ( VCPKG_BUILD OR CASTOR_FORCE_VCPKG_SUBMODULES )
+	set( ShaderWriter_DIR ${VCPKG_SHARE_DIR}/shaderwriter )
+	set( SdwModules CompilerSpirV )
+	if ( CASTOR_GUICOMMON_NEEDS_HLSL )
+		set( SdwModules ${SdwModules} CompilerHlsl )
+	endif ()
+	if ( CASTOR_C3D_NEEDS_GLSL )
+		set( SdwModules ${SdwModules} CompilerGlsl )
+	endif ()
+	find_package( ShaderWriter CONFIG REQUIRED ShaderAST ShaderWriter ${SdwModules} )
+endif ()
+
 if ( CASTOR_TOOL_CASTOR_VIEWER_RECORDS )
 	find_package( FFMPEG QUIET COMPONENTS avcodec avformat avutil swscale swresample )
 endif ()

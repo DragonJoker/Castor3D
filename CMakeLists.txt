@@ -5,6 +5,9 @@ option( CASTOR_FORCE_VCPKG_SUBMODULES "Build submodules from vcpkg instead of ex
 
 if ( CASTOR_FORCE_VCPKG_SUBMODULES )
 	list( APPEND VCPKG_MANIFEST_FEATURES "vcpkg-deps" )
+	if ( CASTOR_BUILDGRP_TOOL )
+		list( APPEND VCPKG_MANIFEST_FEATURES "tools" )
+	endif ()
 endif ()
 
 if ( VCPKG_TARGET_TRIPLET )

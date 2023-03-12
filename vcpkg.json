@@ -29,9 +29,19 @@
             "description": "Use VkFFT to compute Fast Fourier Transforms (Necessary for FFTOcean plugin).",
             "dependencies": [ "vkfft" ]
         },
+        "tools": {
+            "description": "The tools provided with the engine.",
+            "dependencies": [ "wxwidgets" ]
+        },
         "vcpkg-deps": {
             "description": "Use vcpkg's ashes/rendergraph/shaderwriter.",
-            "dependencies": [ "ashes", "rendergraph", "shaderwriter" ]
+            "dependencies": [ "ashes",
+                "rendergraph",
+                {
+                    "name": "shaderwriter",
+                    "features": [ "spirv", "glsl", "hlsl" ]
+                }
+            ]
         }
     }
 }

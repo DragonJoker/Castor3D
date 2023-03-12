@@ -4,6 +4,7 @@
   "description": "Library to write shaders directly from C++ code, supports GLSL, HLSL and SPIRV outputs.",
   "homepage": "https://github.com/DragonJoker/ShaderWriter",
   "license": "MIT",
+  "default-features": [ "spirv" ],
   "dependencies": [
     {
       "name": "vcpkg-cmake",
@@ -13,5 +14,16 @@
       "name": "vcpkg-cmake-config",
       "host": true
     }
-  ]
+  ],
+  "features": {
+    "spirv": {
+      "description": "Compiles SPIR-V exporter."
+    },
+    "glsl": {
+      "description": "Compiles GLSL exporter."
+    },
+    "hlsl": {
+      "description": "Compiles HLSL exporter."
+    }
+  }
 }
