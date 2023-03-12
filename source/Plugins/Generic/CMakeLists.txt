@@ -1,5 +1,4 @@
 option( CASTOR_BUILDGRP_GENERIC "Build Castor3D Generic plugins" ON )
-option( CASTOR_BUILD_GENERIC_CASTORGUI "Build CastorGui generic plugin" ON )
 option( CASTOR_BUILD_GENERIC_TOONMATERIAL "Build Toon Material generic plugin" ON )
 option( CASTOR_BUILD_GENERIC_WATERRENDERING "Build water rendering plugin" ON )
 option( CASTOR_BUILD_GENERIC_OCEANRENDERING "Build ocean rendering plugin" ON )
@@ -7,7 +6,6 @@ option( CASTOR_BUILD_GENERIC_FFTOCEANRENDERING "Build FFT ocean rendering plugin
 option( CASTOR_BUILD_GENERIC_ATMOSPHERESCATTERING "Build Atmosphere scattering plugin" ON )
 
 function( GenericInit )
-	set( Cgui "no (Not wanted)" PARENT_SCOPE )
 	set( Toon "no (Not wanted)" PARENT_SCOPE )
 	set( Watr "no (Not wanted)" PARENT_SCOPE )
 	set( Ocen "no (Not wanted)" PARENT_SCOPE )
@@ -43,12 +41,6 @@ function( GenericBuild )
 			${CASTOR_SOURCE_DIR}/source/Plugins/Generic
 			${CASTOR_BINARY_DIR}/source/Plugins/Generic
 		)
-
-		if( ${CASTOR_BUILD_GENERIC_CASTORGUI} )
-			set( Build ${Cgui} )
-			add_subdirectory( Plugins/Generic/CastorGui )
-			set( Cgui ${Build} PARENT_SCOPE )
-		endif()
 
 		if( ${CASTOR_BUILD_GENERIC_TOONMATERIAL} )
 			set( Build ${Toon} )
@@ -106,9 +98,6 @@ endfunction( GenericBuild )
 function( GenericSummary msg )
 	if ( ${CASTOR_BUILDGRP_GENERIC} )
 		set( msg_tmp "\n\n  Generic plugins:" )
-		if( ${CASTOR_BUILD_GENERIC_CASTORGUI} )
-			set( msg_tmp "${msg_tmp}\n    CastorGui            ${Cgui}" )
-		endif ()
 		if( ${CASTOR_BUILD_GENERIC_TOONMATERIAL} )
 			set( msg_tmp "${msg_tmp}\n    ToonMaterial         ${Toon}" )
 		endif ()
@@ -130,14 +119,6 @@ endfunction( GenericSummary )
 
 function( GenericSetup )
 	if ( ${CASTOR_BUILDGRP_GENERIC} )
-		if( ${CASTOR_BUILD_GENERIC_CASTORGUI} )
-			cpack_add_component( CastorGui
-				DISPLAY_NAME "CastorGui"
-				DESCRIPTION "Allows GUI creation using Castor3D."
-				GROUP Plugins
-				DEPENDS Castor3D
-			)
-		endif()
 		if( ${CASTOR_BUILD_GENERIC_TOONMATERIAL} )
 			cpack_add_component( ToonMaterial
 				DISPLAY_NAME "ToonMaterial"
