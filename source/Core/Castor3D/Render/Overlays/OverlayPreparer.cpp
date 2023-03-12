@@ -3,12 +3,13 @@ See LICENSE file in root folder
 */
 #include "Castor3D/Render/Overlays/OverlayPreparer.hpp"
 
+#include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Overlay/BorderPanelOverlay.hpp"
 #include "Castor3D/Overlay/PanelOverlay.hpp"
 #include "Castor3D/Overlay/TextOverlay.hpp"
 #include "Castor3D/Render/Overlays/OverlayRenderer.hpp"
 
-#include "Castor3D/Material/Pass/Pass.hpp"
+#include <CastorUtils/Miscellaneous/Hash.hpp>
 
 namespace castor3d
 {

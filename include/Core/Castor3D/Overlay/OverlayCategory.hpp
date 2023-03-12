@@ -61,6 +61,13 @@ namespace castor3d
 		C3D_API void update( OverlayRenderer const & renderer );
 		/**
 		 *\~english
+		 *\brief		Marks this cetegory as clean.
+		 *\~french
+		 *\brief		Marque cette catégorie comme propre.
+		 */
+		C3D_API void reset();
+		/**
+		 *\~english
 		 *\brief		Draws the overlay
 		 *\~french
 		 *\brief		Dessine l'incrustation
@@ -255,11 +262,6 @@ namespace castor3d
 		{
 			m_relPosition = value;
 			m_positionChanged = true;
-
-			if ( notify )
-			{
-				notifyPositionChanged();
-			}
 		}
 
 		void setRelativeSize( castor::Point2d const & value
@@ -269,11 +271,6 @@ namespace castor3d
 			m_relSize->x = std::max( 0.0, m_relSize->x );
 			m_relSize->y = std::max( 0.0, m_relSize->y );
 			m_sizeChanged = true;
-
-			if ( notify )
-			{
-				notifySizeChanged();
-			}
 		}
 
 		void setPixelPosition( castor::Position const & value
@@ -281,11 +278,6 @@ namespace castor3d
 		{
 			m_pxPosition = value;
 			m_positionChanged = true;
-
-			if ( notify )
-			{
-				notifyPositionChanged();
-			}
 		}
 
 		void setPixelSize( castor::Size const & value
@@ -293,11 +285,6 @@ namespace castor3d
 		{
 			m_pxSize = value;
 			m_sizeChanged = true;
-
-			if ( notify )
-			{
-				notifySizeChanged();
-			}
 		}
 
 		void setOverlay( Overlay * value )noexcept
@@ -323,20 +310,6 @@ namespace castor3d
 		/**@}*/
 
 	protected:
-		/**
-		 *\~english
-		 *\brief		Notifies overlay's children of a position change.
-		 *\~french
-		 *\brief		Notifie les enfants de l'incrustation d'un changement de position.
-		 */
-		C3D_API void notifyPositionChanged()noexcept;
-		/**
-		 *\~english
-		 *\brief		Notifies overlay's children of a size change.
-		 *\~french
-		 *\brief		Notifie les enfants de l'incrustation d'un changement de dimensions.
-		 */
-		C3D_API void notifySizeChanged()noexcept;
 		/**
 		 *\~english
 		 *\brief		Updates the overlay position, taking care of wanted pixel position.
@@ -396,11 +369,22 @@ namespace castor3d
 		}
 		/**
 		 *\~english
+		 *\brief		Marks this cetegory as clean.
+		 *\~french
+		 *\brief		Marque cette catégorie comme propre.
+		 */
+		virtual void doReset()
+		{
+		}
+		/**
+		 *\~english
 		 *\brief		Updates the overlay position, size...
 		 *\~french
 		 *\brief		Met à jour la position, taille...
 		 */
-		virtual void doUpdate( OverlayRenderer const & renderer ) = 0;
+		virtual void doUpdate( OverlayRenderer const & renderer )
+		{
+		}
 
 	protected:
 		//!\~english	The overlay.

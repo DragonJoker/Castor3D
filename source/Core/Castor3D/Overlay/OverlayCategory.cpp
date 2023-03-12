@@ -38,6 +38,13 @@ namespace castor3d
 	{
 	}
 
+	void OverlayCategory::reset()
+	{
+		m_positionChanged = false;
+		m_sizeChanged = false;
+		doReset();
+	}
+
 	void OverlayCategory::update( OverlayRenderer const & renderer )
 	{
 		if ( getOverlay().isVisible() )
@@ -52,8 +59,6 @@ namespace castor3d
 			}
 
 			m_computeSize = renderer.getSize();
-			m_positionChanged = false;
-			m_sizeChanged = false;
 		}
 	}
 
@@ -133,9 +138,10 @@ namespace castor3d
 		bool changed = m_sizeChanged;
 		auto parent = getOverlay().getParent();
 
-		if ( !changed && parent )
+		while ( !changed && parent )
 		{
 			changed = parent->isSizeChanged();
+			parent = parent->getParent();
 		}
 
 		return changed;
@@ -146,9 +152,10 @@ namespace castor3d
 		bool changed = m_positionChanged;
 		auto parent = getOverlay().getParent();
 
-		if ( !changed && parent )
+		while ( !changed && parent )
 		{
 			changed = parent->isPositionChanged();
+			parent = parent->getParent();
 		}
 
 		return changed;
@@ -195,28 +202,6 @@ namespace castor3d
 		}
 
 		return result;
-	}
-
-	void OverlayCategory::notifyPositionChanged()noexcept
-	{
-		if ( m_overlay )
-		{
-			for ( auto child : *m_overlay )
-			{
-				child->getCategory()->m_positionChanged = true;
-			}
-		}
-	}
-
-	void OverlayCategory::notifySizeChanged()noexcept
-	{
-		if ( m_overlay )
-		{
-			for ( auto child : *m_overlay )
-			{
-				child->getCategory()->m_sizeChanged = true;
-			}
-		}
 	}
 
 	void OverlayCategory::updatePosition( OverlayRenderer const & renderer )

@@ -34,6 +34,15 @@ namespace castor3d
 				}
 			}
 
+			for ( auto category : cache.getCategories() )
+			{
+				if ( category->getOverlay().isVisible()
+					&& category->getMaterial() )
+				{
+					category->reset();
+				}
+			}
+
 			return result;
 		}
 	}

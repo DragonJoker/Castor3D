@@ -311,7 +311,7 @@ namespace castor3d
 		clientArea->w += border->w;
 	}
 
-	void BorderPanelOverlay::doUpdate( OverlayRenderer const & renderer )
+	void BorderPanelOverlay::doReset()
 	{
 		m_borderChanged = false;
 	}
