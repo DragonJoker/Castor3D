@@ -63,6 +63,7 @@ namespace castor3d
 		eComboBox = CU_MakeSectionName( 'C', 'M', 'B', 'O' ),
 		eListBox = CU_MakeSectionName( 'L', 'S', 'B', 'X' ),
 		eEdit = CU_MakeSectionName( 'E', 'D', 'I', 'T' ),
+		eBoxLayout = CU_MakeSectionName( 'B', 'X', 'L', 'T' ),
 		eLayoutCtrl = CU_MakeSectionName( 'L', 'T', 'C', 'T' ),
 	};
 
@@ -106,6 +107,7 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserControlBorderOuterUv )
 	CU_DeclareAttributeParser( parserControlCenterUv )
 	CU_DeclareAttributeParser( parserControlVisible )
+	CU_DeclareAttributeParser( parserControlBoxLayout )
 
 	CU_DeclareAttributeParser( parserDefaultFont )
 	CU_DeclareAttributeParser( parserButtonStyle )
@@ -151,6 +153,10 @@ namespace castor3d
 
 	CU_DeclareAttributeParser( parserLayoutCtrl )
 	CU_DeclareAttributeParser( parserLayoutEnd )
+
+	CU_DeclareAttributeParser( parserBoxLayoutHorizontal )
+	CU_DeclareAttributeParser( parserBoxLayoutStaticSpacer )
+	CU_DeclareAttributeParser( parserBoxLayoutDynamicSpacer )
 
 	CU_DeclareAttributeParser( parserLayoutCtrlHAlign )
 	CU_DeclareAttributeParser( parserLayoutCtrlVAlign )

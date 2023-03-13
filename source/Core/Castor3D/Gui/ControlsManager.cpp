@@ -238,6 +238,12 @@ namespace castor3d
 		/**
 		* Layouts
 		*/
+		addParser( result, uint32_t( GUISection::eBoxLayout ), cuT( "layout_ctrl" ), &parserLayoutCtrl, { makeParameter< ParameterType::eName >() } );
+		addParser( result, uint32_t( GUISection::eBoxLayout ), cuT( "layout_staspace" ), &parserBoxLayoutStaticSpacer, { makeParameter< ParameterType::eUInt32 >() } );
+		addParser( result, uint32_t( GUISection::eBoxLayout ), cuT( "layout_dynspace" ), &parserBoxLayoutDynamicSpacer, {} );
+		addParser( result, uint32_t( GUISection::eBoxLayout ), cuT( "horizontal" ), &parserBoxLayoutHorizontal, { makeParameter< ParameterType::eBool >() } );
+		addParser( result, uint32_t( GUISection::eBoxLayout ), cuT( "}" ), &parserLayoutEnd, {} );
+
 		addParser( result, uint32_t( GUISection::eLayoutCtrl ), cuT( "horizontal_align" ), &parserLayoutCtrlHAlign, { makeParameter< ParameterType::eCheckedText, HAlign >() } );
 		addParser( result, uint32_t( GUISection::eLayoutCtrl ), cuT( "vertical_align" ), &parserLayoutCtrlVAlign, { makeParameter< ParameterType::eCheckedText, VAlign >() } );
 		addParser( result, uint32_t( GUISection::eLayoutCtrl ), cuT( "stretch" ), &parserLayoutCtrlStretch, { makeParameter< ParameterType::eBool >() } );
@@ -265,6 +271,7 @@ namespace castor3d
 			{ uint32_t( GUISection::eComboBox ), cuT( "combobox" ) },
 			{ uint32_t( GUISection::eListBox ), cuT( "listbox" ) },
 			{ uint32_t( GUISection::eEdit ), cuT( "edit" ) },
+			{ uint32_t( GUISection::eBoxLayout ), cuT( "box_layout" ) },
 			{ uint32_t( GUISection::eLayoutCtrl ), cuT( "layout_ctrl" ) },
 		};
 	}

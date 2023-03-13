@@ -663,6 +663,21 @@ namespace castor3d
 	}
 	CU_EndAttribute()
 
+	CU_ImplementAttributeParser( parserControlBoxLayout )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+
+		if ( auto control = guiContext.getTop() )
+		{
+			guiContext.layout = castor::makeUniqueDerived< Layout, LayoutBox >( static_cast< LayoutControl & >( *control ) );
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No control initialised." ) );
+		}
+	}
+	CU_EndAttributePush( GUISection::eBoxLayout )
+
 	CU_ImplementAttributeParser( parserDefaultFont )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
@@ -1306,6 +1321,53 @@ namespace castor3d
 		}
 	}
 	CU_EndAttributePop()
+
+	CU_ImplementAttributeParser( parserBoxLayoutStaticSpacer )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+
+		if ( guiContext.layout )
+		{
+			auto size = params[0]->get< uint32_t >();
+			guiContext.layout->addSpacer( size );
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No layout initialised." ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserBoxLayoutDynamicSpacer )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+
+		if ( guiContext.layout )
+		{
+			guiContext.layout->addSpacer( Spacer::Dynamic );
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No layout initialised." ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserBoxLayoutHorizontal )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+
+		if ( guiContext.layout )
+		{
+			auto & box = static_cast< LayoutBox & >( *guiContext.layout );
+			box.setHorizontal( params[0]->get< bool >() );
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No layout initialised." ) );
+		}
+	}
+	CU_EndAttribute()
 
 	CU_ImplementAttributeParser( parserLayoutCtrlHAlign )
 	{
