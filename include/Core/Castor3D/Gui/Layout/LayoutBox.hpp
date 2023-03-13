@@ -15,13 +15,16 @@ namespace castor3d
 		/**@name General */
 		//@{
 
-		/**
-		*\brief
-		*	Constructor
+		/** Constructor
+		*\param[in] container
+		*	The control affected by this layout.
 		*/
 		C3D_API explicit LayoutBox( LayoutControl & container );
 
-		void setHorizontal( bool v )
+		/** Sets the layout direction.
+		*\param[in]	horizontal	\p true for an horizontal layout.
+		*/
+		void setHorizontal( bool v )noexcept
 		{
 			m_horizontal = v;
 			markDirty();
@@ -30,13 +33,12 @@ namespace castor3d
 		//@}
 
 	private:
-		/**
-		*\copydoc	castor3d::Layout::doUpdate
+		/** @copydoc	castor3d::Layout::doUpdate
 		*/
 		void doUpdate()override;
 
 		uint32_t doComputeSeparator( uint32_t component );
-		std::pair< int32_t, uint32_t > doGetPosSize( LayoutCtrl const & control
+		std::pair< int32_t, uint32_t > doGetPosSize( Item const & item
 			, uint32_t limit
 			, uint32_t component );
 

@@ -30,9 +30,9 @@ namespace castor3d
 		int32_t advance = int32_t( borders[advanceComp] );
 		uint32_t containerFixedCompLimit = m_container.getSize()[fixedComp] - ( borders[fixedComp] + borders[fixedComp + 2u] );
 
-		for ( auto & item : m_controls )
+		for ( auto & item : m_items )
 		{
-			if ( item.type == LayoutCtrl::eSpacer )
+			if ( item.isSpacer() )
 			{
 				if ( item.spacer()->isDynamic() )
 				{
@@ -66,7 +66,7 @@ namespace castor3d
 
 					advance += int32_t( controlSizeAdvance );
 				}
-				else if ( item.flags.m_reserveSpaceIfHidden )
+				else if ( item.flags().m_reserveSpaceIfHidden )
 				{
 					advance += int32_t( controlSizeAdvance );
 				}
@@ -79,14 +79,13 @@ namespace castor3d
 		auto & borders = m_container.getBackgroundBorders();
 		uint32_t count{};
 		uint32_t maxComponentValue = m_container.getSize()[component] - ( borders[component] + borders[component + 2u] );
-		uint32_t accum{ std::accumulate( m_controls.begin()
-			, m_controls.end()
+		uint32_t accum{ std::accumulate( m_items.begin()
+			, m_items.end()
 			, uint32_t{}
-			, [component, &count]( uint32_t acc, Layout::LayoutCtrl const & lookup )
+			, [component, &count]( uint32_t acc, Layout::Item const & lookup )
 			{
-				switch ( lookup.type )
+				if ( lookup.isSpacer() )
 				{
-				case LayoutCtrl::eSpacer:
 					if ( !lookup.spacer()->isDynamic() )
 					{
 						acc = acc + lookup.spacer()->getSize();
@@ -95,14 +94,14 @@ namespace castor3d
 					{
 						++count;
 					}
-					break;
-				case LayoutCtrl::eControl:
+				}
+				else
+				{
 					if ( lookup.control()->isVisible()
-						|| lookup.flags.m_reserveSpaceIfHidden )
+						|| lookup.flags().m_reserveSpaceIfHidden )
 					{
 						acc = acc + lookup.control()->getSize()[component];
 					}
-					break;
 				}
 
 				return acc;
@@ -113,36 +112,36 @@ namespace castor3d
 			: ( maxComponentValue - accum ) / count;
 	}
 
-	std::pair< int32_t, uint32_t > LayoutBox::doGetPosSize( LayoutCtrl const & control
+	std::pair< int32_t, uint32_t > LayoutBox::doGetPosSize( Item const & item
 		, uint32_t limit
 		, uint32_t component )
 	{
-		if ( control.flags.m_expand )
+		if ( item.flags().m_expand )
 		{
 			return { 0u, limit };
 		}
 
-		auto & controlSize = control.control()->getSize();
+		auto & controlSize = item.control()->getSize();
 		auto sizeFixed = controlSize[component];
 		int32_t posFixed{};
 
 		if ( component == 0u )
 		{
-			if ( control.flags.m_hAlign != HAlign::eLeft )
+			if ( item.flags().m_hAlign != HAlign::eLeft )
 			{
 				posFixed = int32_t( limit ) - int32_t( sizeFixed );
 
-				if ( control.flags.m_hAlign == HAlign::eCenter )
+				if ( item.flags().m_hAlign == HAlign::eCenter )
 				{
 					posFixed /= 2;
 				}
 			}
 		}
-		else if ( control.flags.m_vAlign != VAlign::eTop )
+		else if ( item.flags().m_vAlign != VAlign::eTop )
 		{
 			posFixed = int32_t( limit ) - int32_t( sizeFixed );
 
-			if ( control.flags.m_vAlign == VAlign::eCenter )
+			if ( item.flags().m_vAlign == VAlign::eCenter )
 			{
 				posFixed /= 2;
 			}

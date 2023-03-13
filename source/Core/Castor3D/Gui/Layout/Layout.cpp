@@ -31,27 +31,26 @@ namespace castor3d
 	void Layout::addControl( Control & control
 		, LayoutCtrlFlags flags )
 	{
-		auto it = std::find_if( m_controls.begin()
-			, m_controls.end()
-			, [&control]( LayoutCtrl const & lookup )
+		auto it = std::find_if( m_items.begin()
+			, m_items.end()
+			, [&control]( Item const & lookup )
 			{
 				return lookup.control() == &control;
 			} );
 
-		if ( it != m_controls.end() )
+		if ( it != m_items.end() )
 		{
 			CU_Exception( "The control already exists in the layout." );
 		}
 
-		m_controls.emplace_back( control, std::move( flags ) );
+		m_items.emplace_back( control, std::move( flags ) );
 		markDirty();
 	}
 
-	void Layout::addSpacer( uint32_t size
-		, LayoutCtrlFlags flags )
+	void Layout::addSpacer( uint32_t size )
 	{
 		auto & spacer = m_spacers.emplace_back( castor::makeUnique< Spacer >( size ) );
-		m_controls.emplace_back( *spacer, std::move( flags ) );
+		m_items.emplace_back( *spacer );
 		markDirty();
 	}
 
