@@ -346,6 +346,7 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Controls/CtrlEdit.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Controls/CtrlLayoutControl.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Controls/CtrlListBox.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Controls/CtrlPanel.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Controls/CtrlSlider.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Controls/CtrlStatic.hpp
 )
@@ -356,6 +357,7 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Gui/Controls/CtrlEdit.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Gui/Controls/CtrlLayoutControl.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Gui/Controls/CtrlListBox.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Gui/Controls/CtrlPanel.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Gui/Controls/CtrlSlider.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Gui/Controls/CtrlStatic.cpp
 )
@@ -395,6 +397,7 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Theme/StyleControl.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Theme/StyleEdit.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Theme/StyleListBox.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Theme/StylePanel.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Theme/StyleSlider.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Theme/StyleStatic.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Theme/Theme.hpp

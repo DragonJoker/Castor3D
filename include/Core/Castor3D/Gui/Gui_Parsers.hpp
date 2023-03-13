@@ -24,6 +24,7 @@ namespace castor3d
 		ListBoxCtrlSPtr listbox{};
 		SliderCtrlSPtr slider{};
 		StaticCtrlSPtr staticTxt{};
+		PanelCtrlSPtr panel{};
 		LayoutControlSPtr layoutCtrl{};
 		ThemeRPtr theme{};
 		ButtonStyleRPtr buttonStyle{};
@@ -32,6 +33,7 @@ namespace castor3d
 		ListBoxStyleRPtr listboxStyle{};
 		SliderStyleRPtr sliderStyle{};
 		StaticStyleRPtr staticStyle{};
+		PanelStyleRPtr panelStyle{};
 		ControlStyleRPtr style{};
 		uint32_t flags{};
 		uint32_t ctrlId{};
@@ -57,12 +59,14 @@ namespace castor3d
 		eListStyle = CU_MakeSectionName( 'C', 'T', 'L', 'B' ),
 		eSliderStyle = CU_MakeSectionName( 'C', 'T', 'S', 'L' ),
 		eStaticStyle = CU_MakeSectionName( 'C', 'T', 'S', 'T' ),
+		ePanelStyle = CU_MakeSectionName( 'P', 'N', 'S', 'T' ),
 		eButton = CU_MakeSectionName( 'B', 'U', 'T', 'N' ),
 		eStatic = CU_MakeSectionName( 'S', 'T', 'T', 'C' ),
 		eSlider = CU_MakeSectionName( 'S', 'L', 'D', 'R' ),
 		eComboBox = CU_MakeSectionName( 'C', 'M', 'B', 'O' ),
 		eListBox = CU_MakeSectionName( 'L', 'S', 'B', 'X' ),
 		eEdit = CU_MakeSectionName( 'E', 'D', 'I', 'T' ),
+		ePanel = CU_MakeSectionName( 'P', 'A', 'N', 'L' ),
 		eBoxLayout = CU_MakeSectionName( 'B', 'X', 'L', 'T' ),
 		eLayoutCtrl = CU_MakeSectionName( 'L', 'T', 'C', 'T' ),
 	};
@@ -99,6 +103,9 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserStaticVAlign )
 	CU_DeclareAttributeParser( parserStaticCaption )
 	CU_DeclareAttributeParser( parserStaticEnd )
+	CU_DeclareAttributeParser( parserPanel )
+	CU_DeclareAttributeParser( parserPanelTheme )
+	CU_DeclareAttributeParser( parserPanelEnd )
 
 	CU_DeclareAttributeParser( parserControlPixelPosition )
 	CU_DeclareAttributeParser( parserControlPixelSize )
@@ -123,6 +130,7 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserLineStaticStyle )
 	CU_DeclareAttributeParser( parserTickStaticStyle )
 	CU_DeclareAttributeParser( parserStaticStyle )
+	CU_DeclareAttributeParser( parserPanelStyle )
 	CU_DeclareAttributeParser( parserThemeEnd )
 
 	CU_DeclareAttributeParser( parserStyleButtonFont )
@@ -146,6 +154,7 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserStyleStaticFont )
 	CU_DeclareAttributeParser( parserStyleStaticTextMaterial )
 	CU_DeclareAttributeParser( parserStyleStaticEnd )
+	CU_DeclareAttributeParser( parserStylePanelEnd )
 
 	CU_DeclareAttributeParser( parserStyleBackgroundMaterial )
 	CU_DeclareAttributeParser( parserStyleForegroundMaterial )
