@@ -15,25 +15,28 @@ namespace castor3d
 {
 	struct GuiParserContext
 	{
-		std::stack< ControlSPtr > parents;
+		std::stack< ControlSPtr > parents{};
 		Engine * engine{};
-		castor::String controlName;
-		ButtonCtrlSPtr button;
-		ComboBoxCtrlSPtr combo;
-		EditCtrlSPtr edit;
-		ListBoxCtrlSPtr listbox;
-		SliderCtrlSPtr slider;
-		StaticCtrlSPtr staticTxt;
-		ThemeRPtr theme;
-		ButtonStyleRPtr buttonStyle;
-		ComboBoxStyleRPtr comboStyle;
-		EditStyleRPtr editStyle;
-		ListBoxStyleRPtr listboxStyle;
-		SliderStyleRPtr sliderStyle;
-		StaticStyleRPtr staticStyle;
-		ControlStyleRPtr style;
+		castor::String controlName{};
+		ButtonCtrlSPtr button{};
+		ComboBoxCtrlSPtr combo{};
+		EditCtrlSPtr edit{};
+		ListBoxCtrlSPtr listbox{};
+		SliderCtrlSPtr slider{};
+		StaticCtrlSPtr staticTxt{};
+		LayoutControlSPtr layoutCtrl{};
+		ThemeRPtr theme{};
+		ButtonStyleRPtr buttonStyle{};
+		ComboBoxStyleRPtr comboStyle{};
+		EditStyleRPtr editStyle{};
+		ListBoxStyleRPtr listboxStyle{};
+		SliderStyleRPtr sliderStyle{};
+		StaticStyleRPtr staticStyle{};
+		ControlStyleRPtr style{};
 		uint32_t flags{};
 		uint32_t ctrlId{};
+		LayoutUPtr layout{};
+		LayoutCtrlFlags layoutCtrlFlags{};
 
 		C3D_API ControlRPtr getTop()const;
 		C3D_API void pop();
@@ -60,6 +63,7 @@ namespace castor3d
 		eComboBox = CU_MakeSectionName( 'C', 'M', 'B', 'O' ),
 		eListBox = CU_MakeSectionName( 'L', 'S', 'B', 'X' ),
 		eEdit = CU_MakeSectionName( 'E', 'D', 'I', 'T' ),
+		eLayoutCtrl = CU_MakeSectionName( 'L', 'T', 'C', 'T' ),
 	};
 
 	CU_DeclareAttributeParser( parserGui )
@@ -145,6 +149,14 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserStyleForegroundMaterial )
 	CU_DeclareAttributeParser( parserStyleBorderMaterial )
 
+	CU_DeclareAttributeParser( parserLayoutCtrl )
+	CU_DeclareAttributeParser( parserLayoutEnd )
+
+	CU_DeclareAttributeParser( parserLayoutCtrlHAlign )
+	CU_DeclareAttributeParser( parserLayoutCtrlVAlign )
+	CU_DeclareAttributeParser( parserLayoutCtrlStretch )
+	CU_DeclareAttributeParser( parserLayoutCtrlReserveIfHidden )
+	CU_DeclareAttributeParser( parserLayoutCtrlEnd )
 }
 
 #endif

@@ -1,6 +1,7 @@
 #include "Castor3D/Gui/Controls/CtrlControl.hpp"
 
 #include "Castor3D/Gui/ControlsManager.hpp"
+#include "Castor3D/Gui/Layout/Layout.hpp"
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/OverlayCache.hpp"
@@ -119,6 +120,8 @@ namespace castor3d
 		{
 			background->setAbsoluteBorderSize( m_borders );
 		}
+
+		doSetBackgroundBorders( m_borders );
 	}
 
 	void Control::setPosition( castor::Position const & value )

@@ -93,9 +93,18 @@ namespace castor3d
 		*\param[in] id
 		*	The control ID
 		*\return
-		*	The contro
+		*	The control.
 		*/
-		C3D_API ControlSPtr getControl( uint32_t id );
+		C3D_API ControlSPtr getControl( uint32_t id )const;
+		/**
+		*\brief
+		*	Retrieves a control.
+		*\param[in] name
+		*	The control name.
+		*\return
+		*	The control.
+		*/
+		C3D_API ControlSPtr findControl( castor::String const & name );
 
 		//@}
 

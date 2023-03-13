@@ -344,6 +344,7 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Controls/CtrlComboBox.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Controls/CtrlControl.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Controls/CtrlEdit.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Controls/CtrlLayoutControl.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Controls/CtrlListBox.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Controls/CtrlSlider.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Controls/CtrlStatic.hpp
@@ -353,6 +354,7 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Gui/Controls/CtrlComboBox.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Gui/Controls/CtrlControl.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Gui/Controls/CtrlEdit.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Gui/Controls/CtrlLayoutControl.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Gui/Controls/CtrlListBox.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Gui/Controls/CtrlSlider.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Gui/Controls/CtrlStatic.cpp
@@ -367,6 +369,23 @@ set( ${PROJECT_NAME}_HDR_FILES
 )
 source_group( "Header Files\\Gui\\Controls" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
 source_group( "Source Files\\Gui\\Controls" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
+
+set( ${PROJECT_NAME}_FOLDER_HDR_FILES
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Layout/Layout.hpp
+)
+set( ${PROJECT_NAME}_FOLDER_SRC_FILES
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Gui/Layout/Layout.cpp
+)
+set( ${PROJECT_NAME}_SRC_FILES
+	${${PROJECT_NAME}_SRC_FILES}
+	${${PROJECT_NAME}_FOLDER_SRC_FILES}
+)
+set( ${PROJECT_NAME}_HDR_FILES
+	${${PROJECT_NAME}_HDR_FILES}
+	${${PROJECT_NAME}_FOLDER_HDR_FILES}
+)
+source_group( "Header Files\\Gui\\Layout" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
+source_group( "Source Files\\Gui\\Layout" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
 
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Theme/StyleButton.hpp
