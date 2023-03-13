@@ -60,22 +60,22 @@ namespace castor3d
 		 */
 		castor::Position getAbsolutePosition()const;
 
-		/** sets the size.
+		/** Sets the size.
 		 *\param[in]	value		The new value.
 		 */
 		void setSize( castor::Size const & value );
 
-		/** sets the background borders size.
+		/** Sets the background borders size.
 		 *\param[in]	value		The new value.
 		 */
 		void setBackgroundBorders( castor::Point4ui const & value );
 
-		/** sets the caption.
+		/** Sets the caption.
 		 *\param[in]	caption	The new value
 		 */
 		void setCaption( castor::String const & caption );
 
-		/** sets the visibility
+		/** Sets the visibility
 		 *\param[in]	value		The new value.
 		 */
 		void setVisible( bool value );
@@ -207,12 +207,17 @@ namespace castor3d
 		*/
 		virtual void doDestroy() = 0;
 
-		/** sets the position
+		/** Sets the background borders size.
+		 *\param[in]	value		The new value.
+		 */
+		virtual void doSetBackgroundBorders( castor::Point4ui const & value ) {}
+
+		/** Sets the position
 		*\param[in]	value		The new value
 		*/
 		virtual void doSetPosition( castor::Position const & value ) = 0;
 
-		/** sets the size
+		/** Sets the size
 		*\param[in]	value	The new value
 		*/
 		virtual void doSetSize( castor::Size const & value ) = 0;

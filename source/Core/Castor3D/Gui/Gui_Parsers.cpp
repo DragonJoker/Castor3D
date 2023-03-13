@@ -10,6 +10,7 @@
 #include "Castor3D/Gui/Controls/CtrlListBox.hpp"
 #include "Castor3D/Gui/Controls/CtrlSlider.hpp"
 #include "Castor3D/Gui/Controls/CtrlStatic.hpp"
+#include "Castor3D/Gui/Layout/LayoutBox.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Overlay/BorderPanelOverlay.hpp"
 #include "Castor3D/Scene/SceneFileParser.hpp"
@@ -1274,4 +1275,122 @@ namespace castor3d
 		}
 	}
 	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserLayoutCtrl )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+
+		if ( guiContext.layout )
+		{
+			params[0]->get( guiContext.controlName );
+			guiContext.layoutCtrlFlags = {};
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No layout initialised." ) );
+		}
+	}
+	CU_EndAttributePush( GUISection::eLayoutCtrl )
+
+	CU_ImplementAttributeParser( parserLayoutEnd )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+
+		if ( guiContext.layout )
+		{
+			guiContext.layout->getContainer().setLayout( std::move( guiContext.layout ) );
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No layout initialised." ) );
+		}
+	}
+	CU_EndAttributePop()
+
+	CU_ImplementAttributeParser( parserLayoutCtrlHAlign )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+
+		if ( auto control = guiContext.getTop() )
+		{
+			auto value = params[0]->get< uint32_t >();
+			guiContext.layoutCtrlFlags.align( HAlign( value ) );
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No control initialised." ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserLayoutCtrlVAlign )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+
+		if ( auto control = guiContext.getTop() )
+		{
+			auto value = params[0]->get< uint32_t >();
+			guiContext.layoutCtrlFlags.align( VAlign( value ) );
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No control initialised." ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserLayoutCtrlStretch )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+
+		if ( auto control = guiContext.getTop() )
+		{
+			auto value = params[0]->get< bool >();
+			guiContext.layoutCtrlFlags.stretch( value );
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No control initialised." ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserLayoutCtrlReserveIfHidden )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+
+		if ( auto control = guiContext.getTop() )
+		{
+			auto value = params[0]->get< bool >();
+			guiContext.layoutCtrlFlags.reserveSpaceIfHidden( value );
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No control initialised." ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserLayoutCtrlEnd )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+
+		if ( guiContext.layout )
+		{
+			if ( auto control = guiparse::getControlsManager( guiContext ).findControl( guiContext.controlName ) )
+			{
+				guiContext.layout->addControl( *control
+					, std::move( guiContext.layoutCtrlFlags ) );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "Control [" ) + guiContext.controlName + cuT( "] was not found." ) );
+			}
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No layout initialised." ) );
+		}
+	}
+	CU_EndAttributePop()
 }

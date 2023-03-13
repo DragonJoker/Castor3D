@@ -24,9 +24,11 @@ namespace castor3d
 
 		static void createDefaultParsers( castor::AttributeParsers & parsers
 			, uint32_t section
-			, castor::ParserFunction endFunction )
+			, castor::ParserFunction endFunction
+			, castor::ParserFunction themeFunction )
 		{
 			using namespace castor;
+			addParser( parsers, section, cuT( "theme" ), themeFunction, { makeParameter< ParameterType::eName >() } );
 			addParser( parsers, section, cuT( "pixel_position" ), &parserControlPixelPosition, { makeParameter< ParameterType::ePosition >() } );
 			addParser( parsers, section, cuT( "pixel_size" ), &parserControlPixelSize, { makeParameter< ParameterType::eSize >() } );
 			addParser( parsers, section, cuT( "pixel_border_size" ), &parserControlPixelBorderSize, { makeParameter< ParameterType::ePoint4U >() } );
@@ -118,7 +120,7 @@ namespace castor3d
 		doRemoveControl( id );
 	}
 
-	ControlSPtr ControlsManager::getControl( uint32_t id )
+	ControlSPtr ControlsManager::getControl( uint32_t id )const
 	{
 		auto controls = doGetControlsById();
 		auto it = controls.find( id );
@@ -131,6 +133,20 @@ namespace castor3d
 		return it->second.lock();
 	}
 
+	ControlSPtr ControlsManager::findControl( castor::String const & name )
+	{
+		auto controls = doGetHandlers();
+		auto it = std::find_if( controls.begin()
+			, controls.end()
+			, [&name]( EventHandlerSPtr lookup )
+			{
+				return lookup->getName() == name;
+			} );
+		return it == controls.end()
+			? nullptr
+			: std::static_pointer_cast< Control >( *it );
+	}
+
 	castor::AttributeParsers ControlsManager::createParsers( castor3d::Engine & engine )
 	{
 		using namespace castor;
@@ -139,6 +155,9 @@ namespace castor3d
 		addParser( result, uint32_t( CSCNSection::eRoot ), cuT( "gui" ), &parserGui );
 		addParser( result, uint32_t( CSCNSection::eScene ), cuT( "gui" ), &parserGui );
 
+		/**
+		* Controls
+		*/
 		addParser( result, uint32_t( GUISection::eGUI ), cuT( "button" ), &parserButton, { makeParameter< ParameterType::eName >() } );
 		addParser( result, uint32_t( GUISection::eGUI ), cuT( "static" ), &parserStatic, { makeParameter< ParameterType::eName >() } );
 		addParser( result, uint32_t( GUISection::eGUI ), cuT( "slider" ), &parserSlider, { makeParameter< ParameterType::eName >() } );
@@ -148,34 +167,31 @@ namespace castor3d
 		addParser( result, uint32_t( GUISection::eGUI ), cuT( "theme" ), &parserTheme, { makeParameter< ParameterType::eName >() } );
 		addParser( result, uint32_t( GUISection::eGUI ), cuT( "}" ), &parserGuiEnd );
 
-		ctrlmgr::createDefaultParsers( result, uint32_t( GUISection::eButton ), &parserButtonEnd );
-		addParser( result, uint32_t( GUISection::eButton ), cuT( "theme" ), &parserButtonTheme, { makeParameter< ParameterType::eName >() } );
+		ctrlmgr::createDefaultParsers( result, uint32_t( GUISection::eButton ), &parserButtonEnd, &parserButtonTheme );
 		addParser( result, uint32_t( GUISection::eButton ), cuT( "caption" ), &parserButtonCaption, { makeParameter< ParameterType::eText >() } );
 		addParser( result, uint32_t( GUISection::eButton ), cuT( "horizontal_align" ), &parserButtonHAlign, { makeParameter< ParameterType::eCheckedText, HAlign >() } );
 		addParser( result, uint32_t( GUISection::eButton ), cuT( "vertical_align" ), &parserButtonVAlign, { makeParameter< ParameterType::eCheckedText, VAlign >() } );
 
-		ctrlmgr::createDefaultParsers( result, uint32_t( GUISection::eComboBox ), &parserComboBoxEnd );
-		addParser( result, uint32_t( GUISection::eComboBox ), cuT( "theme" ), &parserComboBoxTheme, { makeParameter< ParameterType::eName >() } );
+		ctrlmgr::createDefaultParsers( result, uint32_t( GUISection::eComboBox ), &parserComboBoxEnd, &parserComboBoxTheme );
 		addParser( result, uint32_t( GUISection::eComboBox ), cuT( "item" ), &parserComboBoxItem, { makeParameter< ParameterType::eText >() } );
 
-		ctrlmgr::createDefaultParsers( result, uint32_t( GUISection::eEdit ), &parserEditEnd );
-		addParser( result, uint32_t( GUISection::eEdit ), cuT( "theme" ), &parserEditTheme, { makeParameter< ParameterType::eName >() } );
+		ctrlmgr::createDefaultParsers( result, uint32_t( GUISection::eEdit ), &parserEditEnd, &parserEditTheme );
 		addParser( result, uint32_t( GUISection::eEdit ), cuT( "multiline" ), &parserEditMultiLine, { makeParameter< ParameterType::eBool >() } );
 		addParser( result, uint32_t( GUISection::eEdit ), cuT( "caption" ), &parserEditCaption, { makeParameter< ParameterType::eText >() } );
 
-		ctrlmgr::createDefaultParsers( result, uint32_t( GUISection::eListBox ), &parserListBoxEnd );
-		addParser( result, uint32_t( GUISection::eListBox ), cuT( "theme" ), &parserListBoxTheme, { makeParameter< ParameterType::eName >() } );
+		ctrlmgr::createDefaultParsers( result, uint32_t( GUISection::eListBox ), &parserListBoxEnd, &parserListBoxTheme );
 		addParser( result, uint32_t( GUISection::eListBox ), cuT( "item" ), &parserListBoxItem, { makeParameter< ParameterType::eText >() } );
 
-		ctrlmgr::createDefaultParsers( result, uint32_t( GUISection::eSlider ), &parserSliderEnd );
-		addParser( result, uint32_t( GUISection::eSlider ), cuT( "theme" ), &parserSliderTheme, { makeParameter< ParameterType::eName >() } );
+		ctrlmgr::createDefaultParsers( result, uint32_t( GUISection::eSlider ), &parserSliderEnd, &parserSliderTheme );
 
-		ctrlmgr::createDefaultParsers( result, uint32_t( GUISection::eStatic ), &parserStaticEnd );
-		addParser( result, uint32_t( GUISection::eStatic ), cuT( "theme" ), &parserStaticTheme, { makeParameter< ParameterType::eName >() } );
+		ctrlmgr::createDefaultParsers( result, uint32_t( GUISection::eStatic ), &parserStaticEnd, &parserStaticTheme );
 		addParser( result, uint32_t( GUISection::eStatic ), cuT( "horizontal_align" ), &parserStaticHAlign, { makeParameter< ParameterType::eCheckedText, HAlign >() } );
 		addParser( result, uint32_t( GUISection::eStatic ), cuT( "vertical_align" ), &parserStaticVAlign, { makeParameter< ParameterType::eCheckedText, VAlign >() } );
 		addParser( result, uint32_t( GUISection::eStatic ), cuT( "caption" ), &parserStaticCaption, { makeParameter< ParameterType::eText >() } );
 
+		/**
+		* Styles
+		*/
 		addParser( result, uint32_t( GUISection::eTheme ), cuT( "default_font" ), &parserDefaultFont, { makeParameter< ParameterType::eName >() } );
 		addParser( result, uint32_t( GUISection::eTheme ), cuT( "button_style" ), &parserButtonStyle );
 		addParser( result, uint32_t( GUISection::eTheme ), cuT( "static_style" ), &parserStaticStyle );
@@ -219,6 +235,15 @@ namespace castor3d
 		addParser( result, uint32_t( GUISection::eStaticStyle ), cuT( "font" ), &parserStyleStaticFont, { makeParameter< ParameterType::eName >() } );
 		addParser( result, uint32_t( GUISection::eStaticStyle ), cuT( "text_material" ), &parserStyleStaticTextMaterial, { makeParameter< ParameterType::eName >() } );
 
+		/**
+		* Layouts
+		*/
+		addParser( result, uint32_t( GUISection::eLayoutCtrl ), cuT( "horizontal_align" ), &parserLayoutCtrlHAlign, { makeParameter< ParameterType::eCheckedText, HAlign >() } );
+		addParser( result, uint32_t( GUISection::eLayoutCtrl ), cuT( "vertical_align" ), &parserLayoutCtrlVAlign, { makeParameter< ParameterType::eCheckedText, VAlign >() } );
+		addParser( result, uint32_t( GUISection::eLayoutCtrl ), cuT( "stretch" ), &parserLayoutCtrlStretch, { makeParameter< ParameterType::eBool >() } );
+		addParser( result, uint32_t( GUISection::eLayoutCtrl ), cuT( "reserve_if_hidden" ), &parserLayoutCtrlReserveIfHidden, { makeParameter< ParameterType::eBool >() } );
+		addParser( result, uint32_t( GUISection::eLayoutCtrl ), cuT( "}" ), &parserLayoutCtrlEnd, {} );
+
 		return result;
 	}
 
@@ -240,6 +265,7 @@ namespace castor3d
 			{ uint32_t( GUISection::eComboBox ), cuT( "combobox" ) },
 			{ uint32_t( GUISection::eListBox ), cuT( "listbox" ) },
 			{ uint32_t( GUISection::eEdit ), cuT( "edit" ) },
+			{ uint32_t( GUISection::eLayoutCtrl ), cuT( "layout_ctrl" ) },
 		};
 	}
 
