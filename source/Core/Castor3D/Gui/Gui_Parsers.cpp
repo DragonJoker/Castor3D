@@ -8,6 +8,7 @@
 #include "Castor3D/Gui/Controls/CtrlComboBox.hpp"
 #include "Castor3D/Gui/Controls/CtrlEdit.hpp"
 #include "Castor3D/Gui/Controls/CtrlListBox.hpp"
+#include "Castor3D/Gui/Controls/CtrlPanel.hpp"
 #include "Castor3D/Gui/Controls/CtrlSlider.hpp"
 #include "Castor3D/Gui/Controls/CtrlStatic.hpp"
 #include "Castor3D/Gui/Layout/LayoutBox.hpp"
@@ -89,6 +90,14 @@ namespace castor3d
 				control = std::make_shared< ControlT >( scene
 					, controlName
 					, theme->getStaticStyle()
+					, context.getTop()
+					, context.ctrlId++ );
+			}
+			else if constexpr ( ControlT::Type == ControlType::ePanel )
+			{
+				control = std::make_shared< ControlT >( scene
+					, controlName
+					, theme->getPanelStyle()
 					, context.getTop()
 					, context.ctrlId++ );
 			}
@@ -544,6 +553,36 @@ namespace castor3d
 	}
 	CU_EndAttributePop()
 
+	CU_ImplementAttributeParser( parserPanel )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+		params[0]->get( guiContext.controlName );
+	}
+	CU_EndAttributePush( GUISection::ePanel )
+
+	CU_ImplementAttributeParser( parserPanelTheme )
+	{
+		castor::String themeName;
+		params[0]->get( themeName );
+		auto & parsingContext = getParserContext( context );
+		auto & guiContext = guiparse::getParserContext( context );
+		guiparse::createControl( guiContext
+			, parsingContext.scene
+			, guiContext.controlName
+			, themeName
+			, guiContext.panel );
+		guiContext.layoutCtrl = guiContext.panel;
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserPanelEnd )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+		guiparse::finishControl( guiparse::getControlsManager( context ), guiContext, guiContext.panel );
+		guiContext.pop();
+	}
+	CU_EndAttributePop()
+
 	CU_ImplementAttributeParser( parserControlPixelPosition )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
@@ -820,6 +859,14 @@ namespace castor3d
 	}
 	CU_EndAttributePush( GUISection::eStaticStyle )
 
+	CU_ImplementAttributeParser( parserPanelStyle )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+		guiContext.panelStyle = guiContext.theme->createPanelStyle();
+		guiContext.style = guiContext.panelStyle;
+	}
+	CU_EndAttributePush( GUISection::ePanelStyle )
+
 	CU_ImplementAttributeParser( parserLineStaticStyle )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
@@ -840,6 +887,13 @@ namespace castor3d
 	{
 		auto & guiContext = guiparse::getParserContext( context );
 		guiContext.staticStyle = nullptr;
+	}
+	CU_EndAttributePop()
+
+	CU_ImplementAttributeParser( parserStylePanelEnd )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+		guiContext.panelStyle = nullptr;
 	}
 	CU_EndAttributePop()
 

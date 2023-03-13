@@ -22,6 +22,8 @@ namespace castor3d
 		: uint8_t
 	{
 		eNone,
+		//! PanelCtrl
+		ePanel,
 		//! StaticCtrl
 		eStatic,
 		//! EditCtrl
@@ -270,6 +272,10 @@ namespace castor3d
 	*/
 	class ListBoxCtrl;
 	/**
+	*\brief		Panel control
+	*/
+	class PanelCtrl;
+	/**
 	*\brief		Slider control
 	*/
 	class SliderCtrl;
@@ -314,6 +320,10 @@ namespace castor3d
 	*/
 	class ListBoxStyle;
 	/**
+	*\brief		Panel style.
+	*/
+	class PanelStyle;
+	/**
 	*\brief		Slider style.
 	*/
 	class SliderStyle;
@@ -352,6 +362,7 @@ namespace castor3d
 	CU_DeclareSmartPtr( ComboBoxCtrl );
 	CU_DeclareSmartPtr( EditCtrl );
 	CU_DeclareSmartPtr( ListBoxCtrl );
+	CU_DeclareSmartPtr( PanelCtrl );
 	CU_DeclareSmartPtr( SliderCtrl );
 	CU_DeclareSmartPtr( StaticCtrl );
 	CU_DeclareSmartPtr( Theme );
@@ -360,6 +371,7 @@ namespace castor3d
 	CU_DeclareSmartPtr( ComboBoxStyle );
 	CU_DeclareSmartPtr( EditStyle );
 	CU_DeclareSmartPtr( ListBoxStyle );
+	CU_DeclareSmartPtr( PanelStyle );
 	CU_DeclareSmartPtr( SliderStyle );
 	CU_DeclareSmartPtr( StaticStyle );
 

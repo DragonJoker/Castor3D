@@ -8,6 +8,7 @@ See LICENSE file in root folder
 #include "StyleComboBox.hpp"
 #include "StyleEdit.hpp"
 #include "StyleListBox.hpp"
+#include "StylePanel.hpp"
 #include "StyleSlider.hpp"
 #include "StyleStatic.hpp"
 
@@ -97,6 +98,14 @@ namespace castor3d
 			return m_staticStyle.get();
 		}
 
+		PanelStyleRPtr createPanelStyle()
+		{
+			m_panelStyle = std::make_unique< PanelStyle >( getName() + "/Panel"
+				, m_engine
+				, getDefaultFont()->getName() );
+			return m_panelStyle.get();
+		}
+
 		ButtonStyleRPtr getButtonStyle()const
 		{
 			return m_buttonStyle.get();
@@ -127,6 +136,11 @@ namespace castor3d
 			return m_staticStyle.get();
 		}
 
+		PanelStyleRPtr getPanelStyle()const
+		{
+			return m_panelStyle.get();
+		}
+
 	private:
 		Engine & m_engine;
 		castor::FontResPtr m_defaultFont;
@@ -136,6 +150,7 @@ namespace castor3d
 		ListBoxStyleUPtr m_listBoxStyle;
 		SliderStyleUPtr m_sliderStyle;
 		StaticStyleUPtr m_staticStyle;
+		PanelStyleUPtr m_panelStyle;
 	};
 }
 
