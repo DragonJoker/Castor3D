@@ -282,6 +282,14 @@ namespace castor3d
 	*/
 	class Layout;
 	/**
+	*\brief		Simple box layout, to push controls in a direction.
+	*/
+	class LayoutBox;
+	/**
+	*\brief		A space in a layout.
+	*/
+	class Spacer;
+	/**
 	 *\brief	Regroups styles for all control types.
 	*/
 	class Theme;
@@ -335,6 +343,7 @@ namespace castor3d
 	using OnSliderEventConnection = OnSliderEvent::connection;
 
 	CU_DeclareCUSmartPtr( castor3d, Layout, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, Spacer, C3D_API );
 
 	CU_DeclareSmartPtr( ControlsManager );
 	CU_DeclareSmartPtr( Control );
