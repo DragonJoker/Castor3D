@@ -289,6 +289,7 @@ namespace castor3d
 	class Layout;
 	/**
 	*\brief		Simple box layout, to push controls in a direction.
+	*\remarks	The direction can be horizontal or vertical, vertical being the default.
 	*/
 	class LayoutBox;
 	/**

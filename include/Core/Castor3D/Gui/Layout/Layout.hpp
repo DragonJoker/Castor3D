@@ -13,19 +13,30 @@ namespace castor3d
 	class Spacer
 	{
 	public:
+		//! Set the spacer size to this value to create a dynamic spacer.
 		static uint32_t constexpr Dynamic = ~( 0u );
 
 	public:
-		Spacer( uint32_t size )
+		/** Constructor
+		*\param[in] size
+		*	The spacer size.
+		*/
+		explicit Spacer( uint32_t size = Dynamic )noexcept
 			: m_size{ size }
 		{
 		}
 
+		/**
+		*\return	\p true if spacer size varies
+		*/
 		bool isDynamic()const noexcept
 		{
 			return m_size == Dynamic;
 		}
 
+		/**
+		*\return	The spacer size.
+		*/
 		uint32_t getSize()const noexcept
 		{
 			return m_size;
@@ -34,11 +45,12 @@ namespace castor3d
 	private:
 		uint32_t m_size;
 	};
+
 	class Layout
 		: public castor::Named
 	{
 	public:
-		struct LayoutCtrl
+		struct Item
 		{
 			enum Type
 			{
@@ -52,39 +64,79 @@ namespace castor3d
 				SpacerRPtr spacer;
 			};
 
-			LayoutCtrl( Control & c
-				, LayoutCtrlFlags f )
-				: type{ eControl }
-				, flags{ f }
+			/** Creates a control item.
+			*\param[in] c
+			*	The item control.
+			*\param[in] f
+			*	The item flags.
+			*/
+			Item( Control & c
+				, LayoutCtrlFlags f )noexcept
+				: m_type{ eControl }
+				, m_flags{ f }
 			{
-				value.control = &c;
+				m_value.control = &c;
 			}
 
-			LayoutCtrl( Spacer & s
-				, LayoutCtrlFlags f )
-				: type{ eSpacer }
-				, flags{ f }
+			/** Creates a spacer item.
+			*\param[in] s
+			*	The item spacer.
+			*/
+			Item( Spacer & s )noexcept
+				: m_type{ eSpacer }
+				, m_flags{}
 			{
-				value.spacer = &s;
+				m_value.spacer = &s;
 			}
 
-			auto control()const
+			/**
+			*\return	\p true if this item is a control, \p nullptr if not.
+			*/
+			auto isControl()const noexcept
 			{
-				return type == eControl
-					? value.control
+				return m_type == eControl;
+			}
+
+			/**
+			*\return	The control if this item is a control, \p nullptr if not.
+			*/
+			auto control()const noexcept
+			{
+				return isControl()
+					? m_value.control
 					: nullptr;
 			}
 
-			auto spacer()const
+			/**
+			*\return	The item flags.
+			*/
+			auto flags()const noexcept
 			{
-				return type == eSpacer
-					? value.spacer
+				return m_flags;
+			}
+
+			/**
+			*\return	\p true if this item is a spacer, \p nullptr if not.
+			*/
+			auto isSpacer()const noexcept
+			{
+				return m_type == eSpacer;
+			}
+
+			/**
+			*\return	The spacer if this item is a spacer, \p nullptr if not.
+			*/
+			auto spacer()const noexcept
+			{
+				return isSpacer()
+					? m_value.spacer
 					: nullptr;
 			}
 
-			Type type;
-			Value value;
-			LayoutCtrlFlags flags;
+		private:
+			Type m_type;
+			Value m_value;
+			LayoutCtrlFlags m_flags;
 		};
 
 	public:
@@ -96,17 +148,14 @@ namespace castor3d
 		C3D_API Layout & operator=( Layout const & )noexcept = delete;
 		C3D_API Layout( Layout && )noexcept = delete;
 		C3D_API Layout & operator=( Layout && )noexcept = delete;
-		/**
-		*\brief
-		*	Constructor
+
+		/** Constructor
 		*\param[in] typeName
 		*	The layout type name.
 		*/
 		C3D_API explicit Layout( castor::String const & typeName
 			, LayoutControl & container );
-		/**
-		*\brief
-		*	Marks the layout as dirty.
+		/** Marks the layout as dirty.
 		*/
 		C3D_API void markDirty();
 
@@ -114,23 +163,18 @@ namespace castor3d
 		/**@name Controls management */
 		//@{
 
-		/**
-		*\brief
-		*	Adds a control.
+		/** Adds a control.
 		*\param[in] control
 		*	The control.
 		*/
 		C3D_API void addControl( Control & control
 			, LayoutCtrlFlags flags = {} );
 
-		/**
-		*\brief
-		*	Adds a space.
+		/** Adds a space.
 		*\param[in] size
 		*	The space size
 		*/
-		C3D_API void addSpacer( uint32_t size = Spacer::Dynamic
-			, LayoutCtrlFlags flags = {} );
+		C3D_API void addSpacer( uint32_t size = Spacer::Dynamic );
 
 		//@}
 
@@ -140,22 +184,18 @@ namespace castor3d
 		}
 
 	protected:
-		/**
-		*\brief
-		*	Updates the layout and its controls.
+		/** Updates the layout and its controls.
 		*/
 		C3D_API void update();
 
 	private:
-		/**
-		*\brief
-		*	Updates the dependant data.
+		/** Updates the dependant data.
 		*/
 		virtual void doUpdate() = 0;
 
 	protected:
 		LayoutControl & m_container;
-		std::vector< LayoutCtrl > m_controls;
+		std::vector< Item > m_items;
 		std::vector< SpacerUPtr > m_spacers;
 		CpuFrameEvent * m_event{};
 		bool m_changed{ true };
