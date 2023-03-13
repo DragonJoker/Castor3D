@@ -101,8 +101,7 @@ namespace castor3d
 		PanelStyleRPtr createPanelStyle()
 		{
 			m_panelStyle = std::make_unique< PanelStyle >( getName() + "/Panel"
-				, m_engine
-				, getDefaultFont()->getName() );
+				, m_engine );
 			return m_panelStyle.get();
 		}
 

@@ -42,6 +42,7 @@ namespace castor3d
 			addParser( parsers, section, cuT( "combobox" ), &parserComboBox, { makeParameter< ParameterType::eName >() } );
 			addParser( parsers, section, cuT( "listbox" ), &parserListBox, { makeParameter< ParameterType::eName >() } );
 			addParser( parsers, section, cuT( "edit" ), &parserEdit, { makeParameter< ParameterType::eName >() } );
+			addParser( parsers, section, cuT( "panel" ), &parserPanel, { makeParameter< ParameterType::eName >() } );
 			addParser( parsers, section, cuT( "}" ), endFunction );
 		}
 
@@ -59,7 +60,7 @@ namespace castor3d
 			, uint32_t section )
 		{
 			using namespace castor;
-			addParser( parsers, section, cuT( "box_layout" ), &parserControlBoxLayout, {} );
+			addParser( parsers, section, cuT( "box_layout" ), &parserControlBoxLayout );
 		}
 	}
 
@@ -247,22 +248,24 @@ namespace castor3d
 		addParser( result, uint32_t( GUISection::eStaticStyle ), cuT( "font" ), &parserStyleStaticFont, { makeParameter< ParameterType::eName >() } );
 		addParser( result, uint32_t( GUISection::eStaticStyle ), cuT( "text_material" ), &parserStyleStaticTextMaterial, { makeParameter< ParameterType::eName >() } );
 
-		ctrlmgr::createDefaultStyleParsers( result, uint32_t( GUISection::ePanelStyle ), &parserStylePanelEnd );
+		addParser( result, uint32_t( GUISection::ePanelStyle ), cuT( "background_material" ), &parserStyleBackgroundMaterial, { makeParameter< ParameterType::eName >() } );
+		addParser( result, uint32_t( GUISection::ePanelStyle ), cuT( "border_material" ), &parserStyleBorderMaterial, { makeParameter< ParameterType::eName >() } );
+		addParser( result, uint32_t( GUISection::ePanelStyle ), cuT( "}" ), &parserStylePanelEnd );
 
 		/**
 		* Layouts
 		*/
 		addParser( result, uint32_t( GUISection::eBoxLayout ), cuT( "layout_ctrl" ), &parserLayoutCtrl, { makeParameter< ParameterType::eName >() } );
 		addParser( result, uint32_t( GUISection::eBoxLayout ), cuT( "layout_staspace" ), &parserBoxLayoutStaticSpacer, { makeParameter< ParameterType::eUInt32 >() } );
-		addParser( result, uint32_t( GUISection::eBoxLayout ), cuT( "layout_dynspace" ), &parserBoxLayoutDynamicSpacer, {} );
+		addParser( result, uint32_t( GUISection::eBoxLayout ), cuT( "layout_dynspace" ), &parserBoxLayoutDynamicSpacer );
 		addParser( result, uint32_t( GUISection::eBoxLayout ), cuT( "horizontal" ), &parserBoxLayoutHorizontal, { makeParameter< ParameterType::eBool >() } );
-		addParser( result, uint32_t( GUISection::eBoxLayout ), cuT( "}" ), &parserLayoutEnd, {} );
+		addParser( result, uint32_t( GUISection::eBoxLayout ), cuT( "}" ), &parserLayoutEnd );
 
 		addParser( result, uint32_t( GUISection::eLayoutCtrl ), cuT( "horizontal_align" ), &parserLayoutCtrlHAlign, { makeParameter< ParameterType::eCheckedText, HAlign >() } );
 		addParser( result, uint32_t( GUISection::eLayoutCtrl ), cuT( "vertical_align" ), &parserLayoutCtrlVAlign, { makeParameter< ParameterType::eCheckedText, VAlign >() } );
 		addParser( result, uint32_t( GUISection::eLayoutCtrl ), cuT( "stretch" ), &parserLayoutCtrlStretch, { makeParameter< ParameterType::eBool >() } );
 		addParser( result, uint32_t( GUISection::eLayoutCtrl ), cuT( "reserve_if_hidden" ), &parserLayoutCtrlReserveIfHidden, { makeParameter< ParameterType::eBool >() } );
-		addParser( result, uint32_t( GUISection::eLayoutCtrl ), cuT( "}" ), &parserLayoutCtrlEnd, {} );
+		addParser( result, uint32_t( GUISection::eLayoutCtrl ), cuT( "}" ), &parserLayoutCtrlEnd );
 
 		return result;
 	}

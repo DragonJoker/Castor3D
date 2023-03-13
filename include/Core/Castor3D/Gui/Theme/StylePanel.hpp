@@ -13,8 +13,7 @@ namespace castor3d
 	{
 	public:
 		PanelStyle( castor::String const & name
-			, Engine & engine
-			, castor::String const & fontName )
+			, Engine & engine )
 			: ControlStyle{ ControlType::ePanel
 				, name
 				, engine }
