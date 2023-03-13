@@ -173,6 +173,9 @@ namespace castor3d
 			case ControlType::eButton:
 				button = std::static_pointer_cast< ButtonCtrl >( top );
 				break;
+			case ControlType::ePanel:
+				panel = std::static_pointer_cast< PanelCtrl >( top );
+				break;
 			default:
 				CU_Failure( "Unsupported Control Type" );
 				break;
@@ -1427,14 +1430,14 @@ namespace castor3d
 	{
 		auto & guiContext = guiparse::getParserContext( context );
 
-		if ( auto control = guiContext.getTop() )
+		if ( guiContext.layout )
 		{
 			auto value = params[0]->get< uint32_t >();
 			guiContext.layoutCtrlFlags.align( HAlign( value ) );
 		}
 		else
 		{
-			CU_ParsingError( cuT( "No control initialised." ) );
+			CU_ParsingError( cuT( "No layout initialised." ) );
 		}
 	}
 	CU_EndAttribute()
@@ -1443,14 +1446,14 @@ namespace castor3d
 	{
 		auto & guiContext = guiparse::getParserContext( context );
 
-		if ( auto control = guiContext.getTop() )
+		if ( guiContext.layout )
 		{
 			auto value = params[0]->get< uint32_t >();
 			guiContext.layoutCtrlFlags.align( VAlign( value ) );
 		}
 		else
 		{
-			CU_ParsingError( cuT( "No control initialised." ) );
+			CU_ParsingError( cuT( "No layout initialised." ) );
 		}
 	}
 	CU_EndAttribute()
@@ -1459,14 +1462,14 @@ namespace castor3d
 	{
 		auto & guiContext = guiparse::getParserContext( context );
 
-		if ( auto control = guiContext.getTop() )
+		if ( guiContext.layout )
 		{
 			auto value = params[0]->get< bool >();
 			guiContext.layoutCtrlFlags.stretch( value );
 		}
 		else
 		{
-			CU_ParsingError( cuT( "No control initialised." ) );
+			CU_ParsingError( cuT( "No layout initialised." ) );
 		}
 	}
 	CU_EndAttribute()
@@ -1475,14 +1478,14 @@ namespace castor3d
 	{
 		auto & guiContext = guiparse::getParserContext( context );
 
-		if ( auto control = guiContext.getTop() )
+		if ( guiContext.layout )
 		{
 			auto value = params[0]->get< bool >();
 			guiContext.layoutCtrlFlags.reserveSpaceIfHidden( value );
 		}
 		else
 		{
-			CU_ParsingError( cuT( "No control initialised." ) );
+			CU_ParsingError( cuT( "No layout initialised." ) );
 		}
 	}
 	CU_EndAttribute()

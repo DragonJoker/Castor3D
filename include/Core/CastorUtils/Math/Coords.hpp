@@ -181,7 +181,10 @@ namespace castor
 		 */
 		inline T const & operator[]( uint32_t index )const
 		{
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wnull-dereference"
 			return m_coords[index];
+#pragma GCC diagnostic pop
 		}
 		/**
 		 *\~english
@@ -195,7 +198,10 @@ namespace castor
 		 */
 		inline T & operator[]( uint32_t index )
 		{
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wnull-dereference"
 			return m_coords[index];
+#pragma GCC diagnostic pop
 		}
 		/**
 		 *\~english
