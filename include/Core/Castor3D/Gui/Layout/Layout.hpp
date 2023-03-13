@@ -70,7 +70,7 @@ namespace castor3d
 			*\param[in] f
 			*	The item flags.
 			*/
-			Item( Control & c
+			explicit Item( Control & c
 				, LayoutCtrlFlags f )noexcept
 				: m_type{ eControl }
 				, m_flags{ f }
@@ -82,7 +82,7 @@ namespace castor3d
 			*\param[in] s
 			*	The item spacer.
 			*/
-			Item( Spacer & s )noexcept
+			explicit Item( Spacer & s )noexcept
 				: m_type{ eSpacer }
 				, m_flags{}
 			{

@@ -25,7 +25,6 @@ namespace castor3d
 		SliderCtrlSPtr slider{};
 		StaticCtrlSPtr staticTxt{};
 		PanelCtrlSPtr panel{};
-		LayoutControlSPtr layoutCtrl{};
 		ThemeRPtr theme{};
 		ButtonStyleRPtr buttonStyle{};
 		ComboBoxStyleRPtr comboStyle{};

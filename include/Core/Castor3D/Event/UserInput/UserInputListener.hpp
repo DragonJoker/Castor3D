@@ -95,86 +95,86 @@ namespace castor3d
 		
 		/**
 		 *\~english
-		 *\~brief		Registers an event raised by the handler when the mouse is moved over it.
-		 *\param[in]	handler	The handler.
+		 *\~brief		Registers a function to call when a mouse move event is raised by the given handler.
+		 *\param[in]	handler		The handler.
+		 *\param[in]	function	The function.
 		 *\~french
-		 *\~brief		Enregistre un évènement lancé par le handler si la souris se déplace sur sa surface.
-		 *\param[in]	handler	Le handler.
+		 *\~brief		Enregistre une fonction à appeler lorsqu'un évènement de déplacement de souris est lancé par le handler donné.
+		 *\param[in]	handler		Le handler.
+		 *\param[in]	function	La fonction.
 		 */
 		C3D_API void registerMouseMoveAction( castor::String const & handler
 			, OnMouseMoveActionFunction function );
 		/**
 		 *\~english
-		 *\~brief		Registers an event raised by the handler when it is clicked, if it supports clicking.
-		 *\param[in]	handler	The clicked handler.
+		 *\~brief		Registers a function to call when a mouse click event is raised by the given handler.
+		 *\param[in]	handler		The clicked handler.
+		 *\param[in]	function	The function.
 		 *\~french
-		 *\~brief		Enregistre un évènement lancé par le handler s'il est cliqué et qu'il le supporte.
-		 *\param[in]	handler	Le handler cliqué.
+		 *\~brief		Enregistre une fonction à appeler lorsqu'un évènement de clic de souris est lancé par le handler donné.
+		 *\param[in]	handler		Le handler cliqué.
+		 *\param[in]	function	La fonction.
 		 */
 		C3D_API void registerClickAction( castor::String const & handler
 			, OnClickActionFunction function );
 		/**
 		 *\~english
-		 *\~brief		Registers an event raised by the handler when one of its sub elements is selected.
-		 *\param[in]	handler	The handler.
-		 *\param[in]	index	The selection index.
+		 *\~brief		Registers a function to call when a select event is raised by the given handler.
+		 *\param[in]	handler		The handler.
+		 *\param[in]	function	The function.
 		 *\~french
-		 *\~brief		Enregistre un évènement lancé par le handler lorsqu'un de ses sous éléments est sélectionné.
-		 *\param[in]	handler	Le handler.
-		 *\param[in]	index	L'indice de la sélection.
+		 *\~brief		Enregistre une fonction à appeler lorsqu'un évènement de sélection est lancé par le handler donné.
+		 *\param[in]	handler		Le handler.
+		 *\param[in]	function	La fonction.
 		 */
 		C3D_API void registerSelectAction( castor::String const & handler
 			, OnSelectActionFunction function );
 		/**
 		 *\~english
-		 *\~brief		Registers an event raised by the handler when its caption has changed.
-		 *\param[in]	handler	The handler.
-		 *\param[in]	text	The new text.
+		 *\~brief		Registers a function to call when a text event is raised by the given handler.
+		 *\param[in]	handler		The handler.
+		 *\param[in]	function	The function.
 		 *\~french
-		 *\~brief		Enregistre un évènement lancé par le handler lorsque son texte a changé.
-		 *\param[in]	handler	Le handler.
-		 *\param[in]	text	Le nouveau texte.
+		 *\~brief		Enregistre une fonction à appeler lorsqu'un évènement de texte est lancé par le handler donné.
+		 *\param[in]	handler		Le handler.
+		 *\param[in]	function	La fonction.
 		 */
 		C3D_API void registerTextAction( castor::String const & handler
 			, OnTextActionFunction function );
 		/**
 		 *\~english
-		 *\~brief		Unregisters an event raised by the handler when the mouse is moved over it.
+		 *\~brief		Unregisters ths function to call when a mouse move event is raised by the given handler.
 		 *\param[in]	handler	The handler.
 		 *\~french
-		 *\~brief		Désnregistre un évènement lancé par le handler si la souris se déplace sur sa surface.
+		 *\~brief		Désenregistre la fonction à appeler lorsqu'un évènement de déplacement de souris est lancé par le handler donné.
 		 *\param[in]	handler	Le handler.
 		 */
 		C3D_API void unregisterMouseMoveAction( castor::String const & handler );
 		/**
 		 *\~english
-		 *\~brief		Unregisters an event raised by the handler when it is clicked, if it supports clicking.
+		 *\~brief		Unregisters ths function to call when a mouse click event is raised by the given handler.
 		 *\param[in]	handler	The clicked handler.
 		 *\~french
-		 *\~brief		Désenregistre un évènement lancé par le handler s'il est cliqué et qu'il le supporte.
+		 *\~brief		Désenregistre la fonction à appeler lorsqu'un évènement de clic de souris est lancé par le handler donné.
 		 *\param[in]	handler	Le handler cliqué.
 		 */
 		C3D_API void unregisterClickAction( castor::String const & handler );
 		/**
 		 *\~english
-		 *\~brief		Unregisters an event raised by the handler when one of its sub elements is selected.
+		 *\~brief		Unregisters ths function to call when a select event is raised by the given handler.
 		 *\param[in]	handler	The handler.
-		 *\param[in]	index	The selection index.
 		 *\~french
-		 *\~brief		Désenregistre un évènement lancé par le handler lorsqu'un de ses sous éléments est sélectionné.
+		 *\~brief		Désenregistre la fonction à appeler lorsqu'un évènement de sélection est lancé par le handler donné.
 		 *\param[in]	handler	Le handler.
-		 *\param[in]	index	L'indice de la sélection.
 		 */
 		C3D_API void unregisterSelectAction( castor::String const & handler );
 		/**
 		 *\~english
-		 *\~brief		Unregisters an event raised by the handler when its caption has changed.
+		 *\~brief		Unregisters ths function to call when a text event is raised by the given handler.
 		 *\param[in]	handler	The handler.
-		 *\param[in]	text	The new text.
 		 *\~french
-		 *\~brief		Désenregistre un évènement lancé par le handler lorsque son texte a changé.
+		 *\~brief		Désenregistre la fonction à appeler lorsqu'un évènement de texte est lancé par le handler donné.
 		 *\param[in]	handler	Le handler.
-		 *\param[in]	text	Le nouveau texte.
 		 */
 		C3D_API void unregisterTextAction( castor::String const & handler );
 		/**

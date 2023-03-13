@@ -49,6 +49,18 @@ namespace castor3d
 		eCount,
 	};
 	/**
+	*\brief	Enumeration of supported edit events
+	*/
+	enum class EditEvent
+		: uint8_t
+	{
+		//! The edit text has changed
+		eUpdated,
+		//! The return key has been hit (the edit must have EditStyle::eProcessEnter style)
+		eReturn,
+		//! The edit events count
+		eCount,
+	};
 	*\brief	Enumeration of supported listbox events
 	*/
 	enum class ListBoxEvent
@@ -81,19 +93,6 @@ namespace castor3d
 		//! Slider thumb track
 		eThumbTrack,
 		//! The slider events count
-		eCount,
-	};
-	/**
-	*\brief	Enumeration of supported edit events
-	*/
-	enum class EditEvent
-		: uint8_t
-	{
-		//! The edit text has changed
-		eUpdated,
-		//! The return key has been hit (the edit must have EditStyle::eProcessEnter style)
-		eReturn,
-		//! The edit events count
 		eCount,
 	};
 	/**

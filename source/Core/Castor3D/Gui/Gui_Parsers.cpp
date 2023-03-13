@@ -147,6 +147,7 @@ namespace castor3d
 		slider.reset();
 		staticTxt.reset();
 		combo.reset();
+		panel.reset();
 
 		if ( !parents.empty() )
 		{
@@ -574,7 +575,6 @@ namespace castor3d
 			, guiContext.controlName
 			, themeName
 			, guiContext.panel );
-		guiContext.layoutCtrl = guiContext.panel;
 	}
 	CU_EndAttribute()
 
@@ -751,6 +751,11 @@ namespace castor3d
 	{
 		auto & guiContext = guiparse::getParserContext( context );
 		guiContext.buttonStyle = nullptr;
+
+		if ( guiContext.comboStyle )
+		{
+			guiContext.style = guiContext.comboStyle;
+		}
 	}
 	CU_EndAttributePop()
 
@@ -836,6 +841,11 @@ namespace castor3d
 	{
 		auto & guiContext = guiparse::getParserContext( context );
 		guiContext.listboxStyle = nullptr;
+
+		if ( guiContext.comboStyle )
+		{
+			guiContext.style = guiContext.comboStyle;
+		}
 	}
 	CU_EndAttributePop()
 
@@ -875,6 +885,15 @@ namespace castor3d
 		auto & guiContext = guiparse::getParserContext( context );
 		guiContext.staticStyle = &guiContext.sliderStyle->getLineStyle();
 		guiContext.style = guiContext.staticStyle;
+
+		if ( guiContext.listboxStyle )
+		{
+			guiContext.style = guiContext.listboxStyle;
+		}
+		else if ( guiContext.sliderStyle )
+		{
+			guiContext.style = guiContext.sliderStyle;
+		}
 	}
 	CU_EndAttributePush( GUISection::eStaticStyle )
 
@@ -890,6 +909,15 @@ namespace castor3d
 	{
 		auto & guiContext = guiparse::getParserContext( context );
 		guiContext.staticStyle = nullptr;
+
+		if ( guiContext.listboxStyle )
+		{
+			guiContext.style = guiContext.listboxStyle;
+		}
+		else if ( guiContext.sliderStyle )
+		{
+			guiContext.style = guiContext.sliderStyle;
+		}
 	}
 	CU_EndAttributePop()
 

@@ -22,6 +22,7 @@ namespace castor3d
 		friend class ComboBoxCtrl;
 		friend class EditCtrl;
 		friend class ListBoxCtrl;
+		friend class PanelCtrl;
 		friend class SliderCtrl;
 
 	public:
@@ -140,6 +141,13 @@ namespace castor3d
 		*\param[in] control
 		*	The control.
 		*/
+		void connectEvents( ExpandablePanelCtrl & control );
+		/**
+		*\brief
+		*	Connects the manager to given control's events.
+		*\param[in] control
+		*	The control.
+		*/
 		void connectEvents( ListBoxCtrl & control );
 		/**
 		*\brief
@@ -169,6 +177,13 @@ namespace castor3d
 		*	The control.
 		*/
 		void disconnectEvents( EditCtrl & control );
+		/**
+		*\brief
+		*	Disconnects the manager from given control's events.
+		*\param[in] control
+		*	The control.
+		*/
+		void disconnectEvents( ExpandablePanelCtrl & control );
 		/**
 		*\brief
 		*	Disconnects the manager from given control's events.
@@ -240,6 +255,7 @@ namespace castor3d
 		std::map< Control const *, OnButtonEventConnection > m_onButtonClicks;
 		std::map< Control const *, OnComboEventConnection > m_onComboSelects;
 		std::map< Control const *, OnEditEventConnection > m_onEditUpdates;
+		std::map< Control const *, OnExpandablePanelEventConnection > m_onPanelExpands;
 		std::map< Control const *, OnListEventConnection > m_onListSelects;
 		std::map< Control const *, OnSliderEventConnection > m_onSliderTracks;
 		std::map< Control const *, OnSliderEventConnection > m_onSliderReleases;
