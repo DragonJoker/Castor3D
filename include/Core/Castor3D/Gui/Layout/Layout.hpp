@@ -94,8 +94,8 @@ namespace castor3d
 		C3D_API virtual ~Layout()noexcept = default;
 		C3D_API Layout( Layout const & )noexcept = delete;
 		C3D_API Layout & operator=( Layout const & )noexcept = delete;
-		C3D_API Layout( Layout && )noexcept = default;
-		C3D_API Layout & operator=( Layout && )noexcept = default;
+		C3D_API Layout( Layout && )noexcept = delete;
+		C3D_API Layout & operator=( Layout && )noexcept = delete;
 		/**
 		*\brief
 		*	Constructor
