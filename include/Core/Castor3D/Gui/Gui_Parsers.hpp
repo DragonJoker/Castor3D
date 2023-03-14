@@ -188,6 +188,11 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserLayoutCtrlVAlign )
 	CU_DeclareAttributeParser( parserLayoutCtrlStretch )
 	CU_DeclareAttributeParser( parserLayoutCtrlReserveIfHidden )
+	CU_DeclareAttributeParser( parserLayoutCtrlPadding )
+	CU_DeclareAttributeParser( parserLayoutCtrlPadLeft )
+	CU_DeclareAttributeParser( parserLayoutCtrlPadTop )
+	CU_DeclareAttributeParser( parserLayoutCtrlPadRight )
+	CU_DeclareAttributeParser( parserLayoutCtrlPadBottom )
 	CU_DeclareAttributeParser( parserLayoutCtrlEnd )
 }
 

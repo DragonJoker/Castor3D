@@ -50,12 +50,12 @@ namespace castor3d
 
 				if ( control->isVisible() )
 				{
-					auto [fixed, controlSizeFixed] = doGetPosSize( item, containerFixedCompLimit, fixedComp );
+					auto [fixed, controlSizeFixed] = doGetFixedPosSize( item, containerFixedCompLimit, fixedComp );
 					fixed += int32_t( borders[fixedComp] );
 
 					castor::Position position;
-					position[fixedComp] = fixed;
-					position[advanceComp] = advance;
+					position[fixedComp] = fixed + int32_t( item.padding( fixedComp ) );
+					position[advanceComp] = advance + int32_t( item.padding( advanceComp ) );
 					control->setPosition( position );
 
 					castor::Size size;
@@ -63,11 +63,13 @@ namespace castor3d
 					size[advanceComp] = controlSizeAdvance;
 					control->setSize( size );
 
-					advance += int32_t( controlSizeAdvance );
+					advance += int32_t( controlSizeAdvance )
+						+ int32_t( item.paddingSize( advanceComp ) );
 				}
 				else if ( item.reserveSpaceIfHidden() )
 				{
-					advance += int32_t( controlSizeAdvance );
+					advance += int32_t( controlSizeAdvance )
+						+ int32_t( item.paddingSize( advanceComp ) );
 				}
 			}
 		}
@@ -99,7 +101,7 @@ namespace castor3d
 					if ( lookup.control()->isVisible()
 						|| lookup.reserveSpaceIfHidden() )
 					{
-						acc = acc + lookup.control()->getSize()[component];
+						acc = acc + lookup.getPaddedSize()[component];
 					}
 				}
 
@@ -111,10 +113,12 @@ namespace castor3d
 			: ( maxComponentValue - accum ) / count;
 	}
 
-	std::pair< int32_t, uint32_t > LayoutBox::doGetPosSize( Item const & item
+	std::pair< int32_t, uint32_t > LayoutBox::doGetFixedPosSize( Item const & item
 		, uint32_t limit
 		, uint32_t component )
 	{
+		limit -= item.paddingSize( component );
+
 		if ( item.expand() )
 		{
 			return { 0u, limit };

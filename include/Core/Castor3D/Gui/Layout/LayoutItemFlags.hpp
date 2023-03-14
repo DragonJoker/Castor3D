@@ -64,6 +64,36 @@ namespace castor3d
 			return *this;
 		}
 
+		LayoutItemFlags & padding( castor::Point4ui v )noexcept
+		{
+			m_padding = std::move( v );
+			return *this;
+		}
+
+		LayoutItemFlags & padLeft( uint32_t v )noexcept
+		{
+			m_padding->x = v;
+			return *this;
+		}
+
+		LayoutItemFlags & padTop( uint32_t v )noexcept
+		{
+			m_padding->y = v;
+			return *this;
+		}
+
+		LayoutItemFlags & padRight( uint32_t v )noexcept
+		{
+			m_padding->z = v;
+			return *this;
+		}
+
+		LayoutItemFlags & padBottom( uint32_t v )noexcept
+		{
+			m_padding->w = v;
+			return *this;
+		}
+
 		auto hAlign()const noexcept
 		{
 			return m_hAlign;
@@ -82,6 +112,16 @@ namespace castor3d
 		auto reserveSpaceIfHidden()const noexcept
 		{
 			return m_reserveSpaceIfHidden;
+		}
+
+		uint32_t padding( uint32_t i )const noexcept
+		{
+			return m_padding[i];
+		}
+
+		uint32_t paddingSize( uint32_t i )const noexcept
+		{
+			return m_padding[i] + m_padding[i + 2u];
 		}
 
 	private:
