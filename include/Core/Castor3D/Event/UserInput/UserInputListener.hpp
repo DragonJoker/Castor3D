@@ -17,6 +17,7 @@ namespace castor3d
 		using OnMouseMoveActionFunction = std::function< void( castor::Position const & ) >;
 		using OnSelectActionFunction = std::function< void( int ) >;
 		using OnTextActionFunction = std::function< void( castor::String const & ) >;
+		using OnExpandActionFunction = std::function< void( bool ) >;
 
 	public:
 		/**@name General */
@@ -143,6 +144,18 @@ namespace castor3d
 			, OnTextActionFunction function );
 		/**
 		 *\~english
+		 *\~brief		Registers a function to call when an expand event is raised by the given handler.
+		 *\param[in]	handler		The handler.
+		 *\param[in]	function	The function.
+		 *\~french
+		 *\~brief		Enregistre une fonction à appeler lorsqu'un évènement d'expansion est lancé par le handler donné.
+		 *\param[in]	handler		Le handler.
+		 *\param[in]	function	La fonction.
+		 */
+		C3D_API void registerExpandAction( castor::String const & handler
+			, OnExpandActionFunction function );
+		/**
+		 *\~english
 		 *\~brief		Unregisters ths function to call when a mouse move event is raised by the given handler.
 		 *\param[in]	handler	The handler.
 		 *\~french
@@ -177,6 +190,15 @@ namespace castor3d
 		 *\param[in]	handler	Le handler.
 		 */
 		C3D_API void unregisterTextAction( castor::String const & handler );
+		/**
+		 *\~english
+		 *\~brief		Unregisters ths function to call when an expand event is raised by the given handler.
+		 *\param[in]	handler	The handler.
+		 *\~french
+		 *\~brief		Désenregistre la fonction à appeler lorsqu'un évènement d'expansion est lancé par le handler donné.
+		 *\param[in]	handler	Le handler.
+		 */
+		C3D_API void unregisterExpandAction( castor::String const & handler );
 		/**
 		 *\~english
 		 *\~brief		Event raised by the handler when the mouse is moved over it.
@@ -219,6 +241,18 @@ namespace castor3d
 		 */
 		C3D_API void onTextAction( castor::String const & handler
 			, castor::String const & text );
+		/**
+		 *\~english
+		 *\~brief		Event raised by the handler when its expansion has changed.
+		 *\param[in]	handler	The handler.
+		 *\param[in]	expand	The new value.
+		 *\~french
+		 *\~brief		Evènement lancé par le handler lorsque son expansion est changée.
+		 *\param[in]	handler	Le handler.
+		 *\param[in]	expand	La nouvelle valeur.
+		 */
+		C3D_API void onExpandAction( castor::String const & handler
+			, bool expand );
 		/**
 		 *\~english
 		 *\~brief		Enables handler.
@@ -461,6 +495,7 @@ namespace castor3d
 		std::map< castor::String, OnClickActionFunction > m_onClickActions;
 		std::map< castor::String, OnSelectActionFunction > m_onSelectActions;
 		std::map< castor::String, OnTextActionFunction > m_onTextActions;
+		std::map< castor::String, OnExpandActionFunction > m_onExpandActions;
 	};
 }
 

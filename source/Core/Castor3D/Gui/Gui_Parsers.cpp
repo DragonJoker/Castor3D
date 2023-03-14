@@ -7,6 +7,7 @@
 #include "Castor3D/Gui/Controls/CtrlButton.hpp"
 #include "Castor3D/Gui/Controls/CtrlComboBox.hpp"
 #include "Castor3D/Gui/Controls/CtrlEdit.hpp"
+#include "Castor3D/Gui/Controls/CtrlExpandablePanel.hpp"
 #include "Castor3D/Gui/Controls/CtrlListBox.hpp"
 #include "Castor3D/Gui/Controls/CtrlPanel.hpp"
 #include "Castor3D/Gui/Controls/CtrlSlider.hpp"
@@ -94,6 +95,13 @@ namespace castor3d
 					, theme->getPanelStyle()
 					, context.getTop() );
 			}
+			else if constexpr ( ControlT::Type == ControlType::eExpandablePanel )
+			{
+				control = std::make_shared< ControlT >( scene
+					, controlName
+					, theme->getExpandablePanelStyle()
+					, context.getTop() );
+			}
 			else
 			{
 				CU_Exception( "Unsupported control type" );
@@ -141,6 +149,7 @@ namespace castor3d
 		staticTxt.reset();
 		combo.reset();
 		panel.reset();
+		expandablePanel.reset();
 
 		if ( !parents.empty() )
 		{
@@ -169,6 +178,9 @@ namespace castor3d
 				break;
 			case ControlType::ePanel:
 				panel = std::static_pointer_cast< PanelCtrl >( top );
+				break;
+			case ControlType::eExpandablePanel:
+				expandablePanel = std::static_pointer_cast< ExpandablePanelCtrl >( top );
 				break;
 			default:
 				CU_Failure( "Unsupported Control Type" );
@@ -579,6 +591,67 @@ namespace castor3d
 	}
 	CU_EndAttributePop()
 
+	CU_ImplementAttributeParser( parserExpandablePanel )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+		params[0]->get( guiContext.controlName );
+	}
+	CU_EndAttributePush( GUISection::eExpandablePanel )
+
+	CU_ImplementAttributeParser( parserExpandablePanelTheme )
+	{
+		castor::String themeName;
+		params[0]->get( themeName );
+		auto & parsingContext = getParserContext( context );
+		auto & guiContext = guiparse::getParserContext( context );
+		guiparse::createControl( guiContext
+			, parsingContext.scene
+			, guiContext.controlName
+			, themeName
+			, guiContext.expandablePanel );
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserExpandablePanelHeader )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+		guiContext.panel = guiContext.expandablePanel->getHeader();
+		guiContext.parents.push( guiContext.panel );
+	}
+	CU_EndAttributePush( GUISection::eExpandablePanelHeader )
+
+	CU_ImplementAttributeParser( parserExpandablePanelPanel )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+		guiContext.panel = guiContext.expandablePanel->getPanel();
+		guiContext.parents.push( guiContext.panel );
+	}
+	CU_EndAttributePush( GUISection::eExpandablePanelPanel )
+
+	CU_ImplementAttributeParser( parserExpandablePanelEnd )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+		guiparse::finishControl( guiparse::getControlsManager( context ), guiContext, guiContext.expandablePanel );
+		guiContext.pop();
+	}
+	CU_EndAttributePop()
+
+	CU_ImplementAttributeParser( parserExpandablePanelHeaderEnd )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+		guiContext.parents.pop();
+		guiContext.pop();
+	}
+	CU_EndAttributePop()
+
+	CU_ImplementAttributeParser( parserExpandablePanelPanelEnd )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+		guiContext.parents.pop();
+		guiContext.pop();
+	}
+	CU_EndAttributePop()
+
 	CU_ImplementAttributeParser( parserControlPixelPosition )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
@@ -749,6 +822,10 @@ namespace castor3d
 		{
 			guiContext.style = guiContext.comboStyle;
 		}
+		else if ( guiContext.expandablePanelStyle )
+		{
+			guiContext.style = guiContext.expandablePanelStyle;
+		}
 	}
 	CU_EndAttributePop()
 
@@ -873,6 +950,14 @@ namespace castor3d
 	}
 	CU_EndAttributePush( GUISection::ePanelStyle )
 
+	CU_ImplementAttributeParser( parserExpandablePanelStyle )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+		guiContext.expandablePanelStyle = guiContext.theme->createExpandablePanelStyle();
+		guiContext.style = guiContext.expandablePanelStyle;
+	}
+	CU_EndAttributePush( GUISection::eExpandablePanelStyle )
+
 	CU_ImplementAttributeParser( parserLineStaticStyle )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
@@ -918,8 +1003,44 @@ namespace castor3d
 	{
 		auto & guiContext = guiparse::getParserContext( context );
 		guiContext.panelStyle = nullptr;
+
+		if ( guiContext.expandablePanelStyle )
+		{
+			guiContext.style = guiContext.expandablePanelStyle;
+		}
 	}
 	CU_EndAttributePop()
+
+	CU_ImplementAttributeParser( parserStyleExpandablePanelEnd )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+		guiContext.expandablePanelStyle = nullptr;
+	}
+	CU_EndAttributePop()
+
+	CU_ImplementAttributeParser( parserExpandablePanelHeaderStyle )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+		guiContext.panelStyle = &guiContext.expandablePanelStyle->getHeaderStyle();
+		guiContext.style = guiContext.panelStyle;
+	}
+	CU_EndAttributePush( GUISection::ePanelStyle )
+
+	CU_ImplementAttributeParser( parserExpandablePanelExpandStyle )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+		guiContext.buttonStyle = &guiContext.expandablePanelStyle->getExpandStyle();
+		guiContext.style = guiContext.buttonStyle;
+	}
+	CU_EndAttributePush( GUISection::eButtonStyle )
+
+	CU_ImplementAttributeParser( parserExpandablePanelPanelStyle )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+		guiContext.panelStyle = &guiContext.expandablePanelStyle->getPanelStyle();
+		guiContext.style = guiContext.panelStyle;
+	}
+	CU_EndAttributePush( GUISection::ePanelStyle )
 
 	CU_ImplementAttributeParser( parserThemeEnd )
 	{

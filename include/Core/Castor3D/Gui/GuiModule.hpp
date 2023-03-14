@@ -36,6 +36,8 @@ namespace castor3d
 		eListBox,
 		//! ButtonCtrl
 		eButton,
+		//! ExpandablePanelCtrl
+		eExpandablePanel,
 	};
 	/**
 	*\brief	Enumeration of supported combobox events
@@ -61,6 +63,20 @@ namespace castor3d
 		//! The edit events count
 		eCount,
 	};
+	/**
+	*\brief	Enumeration of supported expandable panel events
+	*/
+	enum class ExpandablePanelEvent
+		: uint8_t
+	{
+		//! Expand panel.
+		eExpand,
+		//! Retract panel, leaving only header visible.
+		eRetract,
+		//! The expandable panel events count
+		eCount,
+	};
+	/**
 	*\brief	Enumeration of supported listbox events
 	*/
 	enum class ListBoxEvent
@@ -277,6 +293,10 @@ namespace castor3d
 	*/
 	class EditCtrl;
 	/**
+	*\brief		A panel with a header, expandable and retractable.
+	*/
+	class ExpandablePanelCtrl;
+	/**
 	*\brief		ListBox control.
 	*/
 	class ListBoxCtrl;
@@ -326,6 +346,10 @@ namespace castor3d
 	*/
 	class EditStyle;
 	/**
+	*\brief		ExpandablePanel style
+	*/
+	class ExpandablePanelStyle;
+	/**
 	*\brief		ListBox style
 	*/
 	class ListBoxStyle;
@@ -354,6 +378,10 @@ namespace castor3d
 	using OnEditEvent = castor::SignalT< OnEditEventFunction >;
 	using OnEditEventConnection = OnEditEvent::connection;
 
+	using OnExpandablePanelEventFunction = std::function< void() >;
+	using OnExpandablePanelEvent = castor::SignalT< OnExpandablePanelEventFunction >;
+	using OnExpandablePanelEventConnection = OnExpandablePanelEvent::connection;
+
 	using OnListEventFunction = std::function< void( int ) >;
 	using OnListEvent = castor::SignalT< OnListEventFunction >;
 	using OnListEventConnection = OnListEvent::connection;
@@ -371,6 +399,7 @@ namespace castor3d
 	CU_DeclareSmartPtr( ButtonCtrl );
 	CU_DeclareSmartPtr( ComboBoxCtrl );
 	CU_DeclareSmartPtr( EditCtrl );
+	CU_DeclareSmartPtr( ExpandablePanelCtrl );
 	CU_DeclareSmartPtr( ListBoxCtrl );
 	CU_DeclareSmartPtr( PanelCtrl );
 	CU_DeclareSmartPtr( SliderCtrl );
@@ -380,6 +409,7 @@ namespace castor3d
 	CU_DeclareSmartPtr( ButtonStyle );
 	CU_DeclareSmartPtr( ComboBoxStyle );
 	CU_DeclareSmartPtr( EditStyle );
+	CU_DeclareSmartPtr( ExpandablePanelStyle );
 	CU_DeclareSmartPtr( ListBoxStyle );
 	CU_DeclareSmartPtr( PanelStyle );
 	CU_DeclareSmartPtr( SliderStyle );
