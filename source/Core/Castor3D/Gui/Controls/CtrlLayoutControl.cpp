@@ -47,6 +47,8 @@ namespace castor3d
 		{
 			m_layout->markDirty();
 		}
+
+		doSubSetBackgroundBorders( value );
 	}
 
 	void LayoutControl::doSetPosition( castor::Position const & value )
@@ -55,6 +57,8 @@ namespace castor3d
 		{
 			m_layout->markDirty();
 		}
+
+		doSubSetPosition( value );
 	}
 
 	void LayoutControl::doSetSize( castor::Size const & value )
@@ -63,6 +67,8 @@ namespace castor3d
 		{
 			m_layout->markDirty();
 		}
+
+		doSubSetSize( value );
 	}
 
 	void LayoutControl::doSetCaption( castor::String const & caption )
@@ -71,6 +77,8 @@ namespace castor3d
 		{
 			m_layout->markDirty();
 		}
+
+		doSubSetCaption( caption );
 	}
 
 	void LayoutControl::doSetVisible( bool value )
@@ -79,5 +87,7 @@ namespace castor3d
 		{
 			m_layout->markDirty();
 		}
+
+		doSubSetVisible( value );
 	}
 }
