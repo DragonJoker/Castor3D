@@ -99,58 +99,58 @@ namespace castor3d
 	*\brief	Combo control supported flags.
 	*/
 	enum class ComboBoxFlag
-		: uint32_t
+		: uint64_t
 	{
 		//! read only combo box
-		eReadOnly = 0x00000001,
+		eReadOnly = 0x0000000000000001,
 	};
 	CU_ImplementFlags( ComboBoxFlag )
 	/**
 	*\brief	Edit control supported flags.
 	*/
 	enum class EditFlag
-		: uint32_t
+		: uint64_t
 	{
 		//! The edit control process 'return' hit as an event and not as a newline
-		eProcessEnter = 0x00000100,
+		eProcessEnter = 0x0000000000000100,
 		//! The edit control is a multiline edit control
-		eMultiline = 0x00000200,
+		eMultiline = 0x0000000000000200,
 		//! The edit control process 'tab' hit as the tab character and not as an event
-		eProcessTab = 0x00000400,
+		eProcessTab = 0x0000000000000400,
 		//! Words are not cut
-		eWordWrap = 0x00000800,
+		eWordWrap = 0x0000000000000800,
 	};
 	CU_ImplementFlags( EditFlag )
 	/**
 	*\brief	Slider control supported flags.
 	*/
 	enum class SliderFlag
-		: uint32_t
+		: uint64_t
 	{
 		// The slider is displaye horizontally (default mode)
-		eHorizontal = 0x00010000,
+		eHorizontal = 0x0000000000010000,
 		// The slider is displaye vertically
-		eVertical = 0x000200000,
+		eVertical = 0x00000000000200000,
 	};
 	CU_ImplementFlags( SliderFlag )
 	/**
 	*\brief	Static control supported flags.
 	*/
 	enum class StaticFlag
-		: uint32_t
+		: uint64_t
 	{
 		//! The static's text is left aligned
-		eHAlignLeft = 0x01000000,
+		eHAlignLeft = 0x0000000001000000,
 		//! The static's text is horizontally centered
-		eHAlignCenter = 0x02000000,
+		eHAlignCenter = 0x0000000002000000,
 		//! The static's text is right aligned
-		eHAlignRight = 0x04000000,
+		eHAlignRight = 0x0000000004000000,
 		//! The static's text is aligned on top
-		eVAlignTop = 0x10000000,
+		eVAlignTop = 0x0000000010000000,
 		//! The static's text is vertically centered
-		eVAlignCenter = 0x20000000,
+		eVAlignCenter = 0x0000000020000000,
 		//! The static's text is aligned on bottom
-		eVAlignBottom = 0x40000000,
+		eVAlignBottom = 0x0000000040000000,
 	};
 	CU_ImplementFlags( StaticFlag )
 	/**

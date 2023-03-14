@@ -30,7 +30,7 @@ namespace castor3d
 			, ControlRPtr parent
 			, castor::Position const & position
 			, castor::Size const & size
-			, uint32_t flags = 0
+			, uint64_t flags = 0
 			, bool visible = true );
 
 		/** Sets the layout for the elements contained in this one.

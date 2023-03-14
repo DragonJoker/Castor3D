@@ -194,5 +194,14 @@ namespace castor
 #define CU_Exception( text )\
 	CU_Failure( text );\
 	throw castor::Exception{ text, __FILE__, __FUNCTION__, uint32_t( __LINE__ ) }
+/**
+*\~english
+*\brief		Macro to ease the use of castor::Exception
+*\~french
+*\brief		Macro définie pour faciliter l'utilisation de castor::Exception
+*/
+#define CU_SrcException( source, text )\
+	CU_Failure( text );\
+	throw castor::Exception{ source##": "##text, __FILE__, __FUNCTION__, uint32_t( __LINE__ ) }
 
 #endif

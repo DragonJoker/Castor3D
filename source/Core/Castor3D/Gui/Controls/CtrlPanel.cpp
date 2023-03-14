@@ -34,7 +34,7 @@ namespace castor3d
 		, ControlRPtr parent
 		, castor::Position const & position
 		, castor::Size const & size
-		, uint32_t flags
+		, uint64_t flags
 		, bool visible )
 		: LayoutControl{ Type
 			, scene
