@@ -162,6 +162,13 @@ namespace castor3d
 
 		//@}
 
+		/** \return	The always on top status of the control.
+		 */
+		bool isAlwaysOnTop()const noexcept
+		{
+			return castor::checkFlag( getFlags(), ControlFlag::eAlwaysOnTop );
+		}
+
 		/** Shows the control
 		*/
 		void show()

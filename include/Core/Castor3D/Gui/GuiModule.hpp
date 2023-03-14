@@ -154,6 +154,16 @@ namespace castor3d
 	};
 	CU_ImplementFlags( StaticFlag )
 	/**
+	*\brief	Listbox control supported flags.
+	*/
+	enum class ControlFlag
+		: uint64_t
+	{
+		//! Control is detached and appears on top of every other one.
+		eAlwaysOnTop = 0x0000000100000000,
+	};
+	CU_ImplementFlags( ControlFlag )
+	/**
 	*\brief	Enumeration of supported GUI events in ControlInfos
 	*/
 	enum class GuiEvent

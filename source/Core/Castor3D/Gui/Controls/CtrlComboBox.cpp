@@ -76,7 +76,7 @@ namespace castor3d
 			, m_selected
 			, castor::Position{ 0, int32_t( size.getHeight() ) }
 			, castor::Size{ size.getWidth() - size.getHeight(), ~( 0u ) }
-			, 0
+			, uint64_t( ControlFlag::eAlwaysOnTop )
 			, false );
 		m_choicesSelectedConnection = m_choices->connect( ListBoxEvent::eSelected
 			, [this]( int sel )

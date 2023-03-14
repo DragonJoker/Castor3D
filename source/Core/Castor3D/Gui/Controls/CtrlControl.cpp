@@ -36,7 +36,7 @@ namespace castor3d
 	{
 		OverlayRPtr parentOv{};
 
-		if ( m_parent )
+		if ( !isAlwaysOnTop() && m_parent )
 		{
 			auto bg = m_parent->getBackground();
 
@@ -65,7 +65,16 @@ namespace castor3d
 			CU_SrcException( "Control", "Couldn't create background overlay" );
 		}
 
-		overlay->setPixelPosition( getPosition() );
+		if ( isAlwaysOnTop() )
+		{
+			overlay->getCategory()->setOrder( 50000u, 0u );
+			overlay->setPixelPosition( getAbsolutePosition() );
+		}
+		else
+		{
+			overlay->setPixelPosition( getPosition() );
+		}
+
 		overlay->setPixelSize( getSize() );
 		auto panel = overlay->getBorderPanelOverlay();
 		panel->setBorderPosition( BorderPosition::eInternal );
@@ -129,7 +138,14 @@ namespace castor3d
 
 		if ( auto background = getBackground() )
 		{
-			background->setPixelPosition( m_position );
+			if ( isAlwaysOnTop() )
+			{
+				background->setPixelPosition( getAbsolutePosition() );
+			}
+			else
+			{
+				background->setPixelPosition( getPosition() );
+			}
 		}
 
 		doSetPosition( m_position );
