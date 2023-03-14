@@ -1517,6 +1517,11 @@ namespace castor3d
 
 		if ( guiContext.layout )
 		{
+			if ( auto parent = guiContext.getTop() )
+			{
+				guiContext.controlName = parent->getName() + "/" + guiContext.controlName;
+			}
+
 			if ( auto control = guiparse::getControlsManager( guiContext ).findControl( guiContext.controlName ) )
 			{
 				guiContext.layout->addControl( *control

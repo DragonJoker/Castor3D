@@ -71,7 +71,7 @@ namespace castor3d
 			} );
 
 		auto line = std::make_shared< StaticCtrl >( m_scene
-			, name + cuT( "_Line" )
+			, cuT( "Line" )
 			, &style->getLineStyle()
 			, this
 			, castor::String{}
@@ -86,7 +86,7 @@ namespace castor3d
 		m_line = line;
 
 		auto tick = std::make_shared< StaticCtrl >( m_scene
-			, name + cuT( "_Tick" )
+			, cuT( "Tick" )
 			, &style->getTickStyle()
 			, this
 			, castor::String{}
