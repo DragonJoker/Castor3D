@@ -2,6 +2,15 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
+#include "Castor3D/Gui/Theme/StyleButton.hpp"
+#include "Castor3D/Gui/Theme/StyleComboBox.hpp"
+#include "Castor3D/Gui/Theme/StyleEdit.hpp"
+#include "Castor3D/Gui/Theme/StyleExpandablePanel.hpp"
+#include "Castor3D/Gui/Theme/StyleListBox.hpp"
+#include "Castor3D/Gui/Theme/StylePanel.hpp"
+#include "Castor3D/Gui/Theme/StyleSlider.hpp"
+#include "Castor3D/Gui/Theme/StyleStatic.hpp"
+#include "Castor3D/Gui/Theme/Theme.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
@@ -13,6 +22,17 @@
 #include "Castor3D/Overlay/TextOverlay.hpp"
 
 #include <CastorUtils/Graphics/Font.hpp>
+
+CU_ImplementCUSmartPtr( castor3d, Theme )
+CU_ImplementCUSmartPtr( castor3d, ControlStyle )
+CU_ImplementCUSmartPtr( castor3d, ButtonStyle )
+CU_ImplementCUSmartPtr( castor3d, ComboBoxStyle )
+CU_ImplementCUSmartPtr( castor3d, EditStyle )
+CU_ImplementCUSmartPtr( castor3d, ExpandablePanelStyle )
+CU_ImplementCUSmartPtr( castor3d, ListBoxStyle )
+CU_ImplementCUSmartPtr( castor3d, PanelStyle )
+CU_ImplementCUSmartPtr( castor3d, SliderStyle )
+CU_ImplementCUSmartPtr( castor3d, StaticStyle )
 
 namespace castor3d
 {

@@ -13,10 +13,12 @@ namespace castor3d
 		: public ControlStyle
 	{
 	public:
+		static ControlType constexpr Type = ControlType::eComboBox;
+
 		ComboBoxStyle( castor::String const & name
 			, Engine & engine
 			, castor::String const & fontName )
-			: ControlStyle{ ControlType::eComboBox
+			: ControlStyle{ Type
 				, name
 				, engine }
 			, m_buttonStyle{ name + "/Button", engine, fontName }

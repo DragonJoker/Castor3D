@@ -14,6 +14,8 @@
 
 #include <CastorUtils/Graphics/Font.hpp>
 
+CU_ImplementCUSmartPtr( castor3d, ButtonCtrl )
+
 namespace castor3d
 {
 	ButtonCtrl::ButtonCtrl( SceneRPtr scene

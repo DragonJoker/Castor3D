@@ -14,10 +14,12 @@ namespace castor3d
 		: public ControlStyle
 	{
 	public:
+		static ControlType constexpr Type = ControlType::eSlider;
+
 		SliderStyle( castor::String const & name
 			, Engine & engine
 			, castor::String const & fontName )
-			: ControlStyle{ ControlType::eSlider
+			: ControlStyle{ Type
 				, name
 				, engine }
 			, m_lineStyle{ name + "/Tick", engine, fontName }

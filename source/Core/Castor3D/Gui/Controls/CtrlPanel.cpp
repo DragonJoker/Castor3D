@@ -11,6 +11,8 @@
 
 #include <CastorUtils/Graphics/Font.hpp>
 
+CU_ImplementCUSmartPtr( castor3d, PanelCtrl )
+
 namespace castor3d
 {
 	PanelCtrl::PanelCtrl( SceneRPtr scene

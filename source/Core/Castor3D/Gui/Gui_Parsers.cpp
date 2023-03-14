@@ -880,22 +880,6 @@ namespace castor3d
 	}
 	CU_EndAttributePush( GUISection::eComboStyle )
 
-	CU_ImplementAttributeParser( parserThemeComboButtonStyle )
-	{
-		auto & guiContext = guiparse::getParserContext( context );
-		guiContext.pushStyle( &guiContext.comboStyle->getButtonStyle()
-			, guiContext.buttonStyle );
-	}
-	CU_EndAttributePush( GUISection::eButtonStyle )
-
-	CU_ImplementAttributeParser( parserThemeComboListBoxStyle )
-	{
-		auto & guiContext = guiparse::getParserContext( context );
-		guiContext.pushStyle( &guiContext.comboStyle->getListBoxStyle()
-			, guiContext.listboxStyle );
-	}
-	CU_EndAttributePush( GUISection::eListStyle )
-
 	CU_ImplementAttributeParser( parserThemeEditStyle )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
@@ -911,30 +895,6 @@ namespace castor3d
 			, guiContext.listboxStyle );
 	}
 	CU_EndAttributePush( GUISection::eListStyle )
-
-	CU_ImplementAttributeParser( parserThemeItemStaticStyle )
-	{
-		auto & guiContext = guiparse::getParserContext( context );
-		guiContext.pushStyle( &guiContext.listboxStyle->getItemStyle()
-			, guiContext.staticStyle );
-	}
-	CU_EndAttributePush( GUISection::eStaticStyle )
-
-	CU_ImplementAttributeParser( parserThemeSelItemStaticStyle )
-	{
-		auto & guiContext = guiparse::getParserContext( context );
-		guiContext.pushStyle( &guiContext.listboxStyle->getSelectedItemStyle()
-			, guiContext.staticStyle );
-	}
-	CU_EndAttributePush( GUISection::eStaticStyle )
-
-	CU_ImplementAttributeParser( parserThemeHighItemStaticStyle )
-	{
-		auto & guiContext = guiparse::getParserContext( context );
-		guiContext.pushStyle( &guiContext.listboxStyle->getHighlightedItemStyle()
-			, guiContext.staticStyle );
-	}
-	CU_EndAttributePush( GUISection::eStaticStyle )
 
 	CU_ImplementAttributeParser( parserThemeSliderStyle )
 	{
@@ -967,46 +927,6 @@ namespace castor3d
 			, guiContext.expandablePanelStyle );
 	}
 	CU_EndAttributePush( GUISection::eExpandablePanelStyle )
-
-	CU_ImplementAttributeParser( parserThemeLineStaticStyle )
-	{
-		auto & guiContext = guiparse::getParserContext( context );
-		guiContext.pushStyle( &guiContext.sliderStyle->getLineStyle()
-			, guiContext.staticStyle );
-	}
-	CU_EndAttributePush( GUISection::eStaticStyle )
-
-	CU_ImplementAttributeParser( parserThemeTickStaticStyle )
-	{
-		auto & guiContext = guiparse::getParserContext( context );
-		guiContext.pushStyle( &guiContext.sliderStyle->getTickStyle()
-			, guiContext.staticStyle );
-	}
-	CU_EndAttributePush( GUISection::eStaticStyle )
-
-	CU_ImplementAttributeParser( parserThemeExpandablePanelHeaderStyle )
-	{
-		auto & guiContext = guiparse::getParserContext( context );
-		guiContext.pushStyle( &guiContext.expandablePanelStyle->getHeaderStyle()
-			, guiContext.panelStyle );
-	}
-	CU_EndAttributePush( GUISection::ePanelStyle )
-
-	CU_ImplementAttributeParser( parserThemeExpandablePanelExpandStyle )
-	{
-		auto & guiContext = guiparse::getParserContext( context );
-		guiContext.pushStyle( &guiContext.expandablePanelStyle->getExpandStyle()
-			, guiContext.buttonStyle );
-	}
-	CU_EndAttributePush( GUISection::eButtonStyle )
-
-	CU_ImplementAttributeParser( parserThemeExpandablePanelPanelStyle )
-	{
-		auto & guiContext = guiparse::getParserContext( context );
-		guiContext.pushStyle( &guiContext.expandablePanelStyle->getPanelStyle()
-			, guiContext.panelStyle );
-	}
-	CU_EndAttributePush( GUISection::ePanelStyle )
 
 	CU_ImplementAttributeParser( parserThemeEnd )
 	{
@@ -1299,6 +1219,22 @@ namespace castor3d
 	}
 	CU_EndAttributePop()
 
+	CU_ImplementAttributeParser( parserStyleComboButton )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+		guiContext.pushStyle( &guiContext.comboStyle->getButtonStyle()
+			, guiContext.buttonStyle );
+	}
+	CU_EndAttributePush( GUISection::eButtonStyle )
+
+	CU_ImplementAttributeParser( parserStyleComboListBox )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+		guiContext.pushStyle( &guiContext.comboStyle->getListBoxStyle()
+			, guiContext.listboxStyle );
+	}
+	CU_EndAttributePush( GUISection::eListStyle )
+
 	CU_ImplementAttributeParser( parserStyleComboBoxEnd )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
@@ -1356,12 +1292,52 @@ namespace castor3d
 	}
 	CU_EndAttributePop()
 
+	CU_ImplementAttributeParser( parserStyleListBoxItemStatic )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+		guiContext.pushStyle( &guiContext.listboxStyle->getItemStyle()
+			, guiContext.staticStyle );
+	}
+	CU_EndAttributePush( GUISection::eStaticStyle )
+
+	CU_ImplementAttributeParser( parserStyleListBoxSelItemStatic )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+		guiContext.pushStyle( &guiContext.listboxStyle->getSelectedItemStyle()
+			, guiContext.staticStyle );
+	}
+	CU_EndAttributePush( GUISection::eStaticStyle )
+
+	CU_ImplementAttributeParser( parserStyleListBoxHighItemStatic )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+		guiContext.pushStyle( &guiContext.listboxStyle->getHighlightedItemStyle()
+			, guiContext.staticStyle );
+	}
+	CU_EndAttributePush( GUISection::eStaticStyle )
+
 	CU_ImplementAttributeParser( parserStyleListBoxEnd )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
 		guiContext.popStyle();
 	}
 	CU_EndAttributePop()
+
+	CU_ImplementAttributeParser( parserStyleSliderLineStatic )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+		guiContext.pushStyle( &guiContext.sliderStyle->getLineStyle()
+			, guiContext.staticStyle );
+	}
+	CU_EndAttributePush( GUISection::eStaticStyle )
+
+	CU_ImplementAttributeParser( parserStyleSliderTickStatic )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+		guiContext.pushStyle( &guiContext.sliderStyle->getTickStyle()
+			, guiContext.staticStyle );
+	}
+	CU_EndAttributePush( GUISection::eStaticStyle )
 
 	CU_ImplementAttributeParser( parserStyleSliderEnd )
 	{
@@ -1426,6 +1402,30 @@ namespace castor3d
 		guiContext.popStyle();
 	}
 	CU_EndAttributePop()
+
+	CU_ImplementAttributeParser( parserStyleExpandablePanelHeader )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+		guiContext.pushStyle( &guiContext.expandablePanelStyle->getHeaderStyle()
+			, guiContext.panelStyle );
+	}
+	CU_EndAttributePush( GUISection::ePanelStyle )
+
+	CU_ImplementAttributeParser( parserStyleExpandablePanelExpand )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+		guiContext.pushStyle( &guiContext.expandablePanelStyle->getExpandStyle()
+			, guiContext.buttonStyle );
+	}
+	CU_EndAttributePush( GUISection::eButtonStyle )
+
+	CU_ImplementAttributeParser( parserStyleExpandablePanelPanel )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+		guiContext.pushStyle( &guiContext.expandablePanelStyle->getPanelStyle()
+			, guiContext.panelStyle );
+	}
+	CU_EndAttributePush( GUISection::ePanelStyle )
 
 	CU_ImplementAttributeParser( parserStyleExpandablePanelEnd )
 	{

@@ -12,10 +12,12 @@ namespace castor3d
 		: public ControlStyle
 	{
 	public:
+		static ControlType constexpr Type = ControlType::eStatic;
+
 		StaticStyle( castor::String const & name
 			, Engine & engine
 			, castor::String const & fontName )
-			: ControlStyle{ ControlType::eStatic
+			: ControlStyle{ Type
 				, name
 				, engine }
 			, m_fontName{ fontName }
