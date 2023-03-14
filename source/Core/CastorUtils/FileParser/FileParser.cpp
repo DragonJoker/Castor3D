@@ -239,7 +239,7 @@ namespace castor
 				auto filled = param->clone();
 				result = filled->parse( m_parser.getLogger(), params );
 
-				if ( !result )
+				if ( !result && !param->isSet() )
 				{
 					missingParam = param->getStrType();
 				}
