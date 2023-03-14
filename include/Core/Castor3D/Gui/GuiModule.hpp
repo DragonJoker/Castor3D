@@ -14,7 +14,7 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	static const uint32_t DEFAULT_HEIGHT = 25;
+	using ControlID = size_t;
 	/**
 	*\brief	Enumeration of supported controls in a OptionsPanel
 	*/

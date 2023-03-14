@@ -22,8 +22,7 @@ namespace castor3d
 		ListBoxCtrl( SceneRPtr scene
 			, castor::String const & name
 			, ListBoxStyle * style
-			, ControlRPtr parent
-			, uint32_t id );
+			, ControlRPtr parent );
 
 		/** Constructor
 		 *\param[in]	name		The control name
@@ -41,7 +40,6 @@ namespace castor3d
 			, castor::String const & name
 			, ListBoxStyle * style
 			, ControlRPtr parent
-			, uint32_t id
 			, castor::StringArray const & values
 			, int selected
 			, castor::Position const & position
@@ -68,7 +66,6 @@ namespace castor3d
 			, ControlRPtr parent
 			, castor::String const( & values )[N]
 			, int selected
-			, uint32_t id
 			, castor::Position const & position
 			, castor::Size const & size
 			, uint32_t flags = 0
@@ -78,7 +75,6 @@ namespace castor3d
 				, name
 				, style
 				, parent
-				, id
 				, position
 				, size
 				, flags
@@ -114,31 +110,28 @@ namespace castor3d
 		 */
 		void clear();
 
-		/** sets the selected item
+		/** Sets the selected item
 		 *\param[in]	index		The new value
 		 */
 		void setSelected( int index );
 
-		/** Retrieves the items
-		 *\return		The value
+		/** \return	The items.
 		 */
-		castor::StringArray const & getItems()const
+		castor::StringArray const & getItems()const noexcept
 		{
 			return m_values;
 		}
 
-		/** Retrieves the items count
-		 *\return		The value
+		/** \return	The items count.
 		 */
-		uint32_t getItemCount()const
+		uint32_t getItemCount()const noexcept
 		{
 			return uint32_t( m_values.size() );
 		}
 
-		/** Retrieves the selected item index
-		 *\return		The value
+		/** \return	The selected item index.
 		 */
-		int getSelected()const
+		int getSelected()const noexcept
 		{
 			return m_selected;
 		}
@@ -153,10 +146,9 @@ namespace castor3d
 			return m_signals[size_t( event )].connect( function );
 		}
 
-		/**
-		*\return	The listbox style
+		/** \return	The listbox style
 		*/
-		ListBoxStyle const & getStyle()const
+		ListBoxStyle const & getStyle()const noexcept
 		{
 			return static_cast< ListBoxStyle const & >( getBaseStyle() );
 		}
@@ -164,10 +156,11 @@ namespace castor3d
 		static ControlType constexpr Type{ ControlType::eListBox };
 
 	private:
-		ListBoxStyle & getStyle()
+		ListBoxStyle & getStyle()noexcept
 		{
 			return static_cast< ListBoxStyle & >( getBaseStyle() );
 		}
+
 		/** Creates a sub-control
 		 *\param[in]	value		The control label
 		 *\return		The static control.

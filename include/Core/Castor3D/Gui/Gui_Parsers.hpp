@@ -35,7 +35,6 @@ namespace castor3d
 		PanelStyleRPtr panelStyle{};
 		ControlStyleRPtr style{};
 		uint32_t flags{};
-		uint32_t ctrlId{};
 		LayoutUPtr layout{};
 		LayoutCtrlFlags layoutCtrlFlags{};
 

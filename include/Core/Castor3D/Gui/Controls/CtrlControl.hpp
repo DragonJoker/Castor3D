@@ -39,7 +39,6 @@ namespace castor3d
 			, castor::String const & name
 			, ControlStyleRPtr style
 			, ControlRPtr parent
-			, uint32_t id
 			, castor::Position const & position
 			, castor::Size const & size
 			, uint32_t flags = 0
@@ -88,7 +87,7 @@ namespace castor3d
 		/** Retrieves a control.
 		 *\param[in]	id		The control ID.
 		 */
-		ControlSPtr getChildControl( uint32_t id );
+		ControlSPtr getChildControl( ControlID id );
 
 		/** Retrieves the style
 		 *\return		The value
@@ -103,7 +102,7 @@ namespace castor3d
 		/**@name Getters */
 		//@{
 
-		uint32_t getId()const noexcept
+		ControlID getId()const noexcept
 		{
 			return m_id;
 		}
@@ -284,7 +283,7 @@ namespace castor3d
 		MaterialRPtr m_foregroundMaterial{};
 
 	private:
-		const uint32_t m_id;
+		const ControlID m_id;
 		const ControlType m_type;
 		ControlStyleRPtr m_style;
 		uint32_t m_flags;

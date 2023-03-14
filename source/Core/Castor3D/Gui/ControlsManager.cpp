@@ -123,12 +123,12 @@ namespace castor3d
 		m_changed = true;
 	}
 
-	void ControlsManager::removeControl( uint32_t id )
+	void ControlsManager::removeControl( ControlID id )
 	{
 		doRemoveControl( id );
 	}
 
-	ControlSPtr ControlsManager::getControl( uint32_t id )const
+	ControlSPtr ControlsManager::getControl( ControlID id )const
 	{
 		auto controls = doGetControlsById();
 		auto it = controls.find( id );
@@ -141,7 +141,7 @@ namespace castor3d
 		return it->second.lock();
 	}
 
-	ControlSPtr ControlsManager::findControl( castor::String const & name )
+	ControlSPtr ControlsManager::findControl( castor::String const & name )const
 	{
 		auto controls = doGetHandlers();
 		auto it = std::find_if( controls.begin()
@@ -495,12 +495,7 @@ namespace castor3d
 			} );
 	}
 
-	void ControlsManager::doFlush()
-	{
-		cleanup();
-	}
-
-	void ControlsManager::doRemoveControl( uint32_t id )
+	void ControlsManager::doRemoveControl( ControlID id )
 	{
 		EventHandler * handler;
 		{
@@ -533,10 +528,10 @@ namespace castor3d
 		return result;
 	}
 
-	std::map< uint32_t, ControlWPtr > ControlsManager::doGetControlsById()const
+	std::map< ControlID, ControlWPtr > ControlsManager::doGetControlsById()const
 	{
 		ctrlmgr::LockType lock{ castor::makeUniqueLock( m_mutexControlsById ) };
-		std::map< uint32_t, ControlWPtr > result;
+		std::map< ControlID, ControlWPtr > result;
 
 		if ( !m_controlsById.empty() )
 		{

@@ -18,16 +18,16 @@
 
 namespace castor3d
 {
+	static const uint32_t DefaultHeight = 25;
+
 	ListBoxCtrl::ListBoxCtrl( SceneRPtr scene
 		, castor::String const & name
 		, ListBoxStyle * style
-		, ControlRPtr parent
-		, uint32_t id )
+		, ControlRPtr parent )
 		: ListBoxCtrl{ scene
 			, name
 			, style
 			, parent
-			, id
 			, castor::StringArray{}
 			, -1
 			, castor::Position{}
@@ -41,7 +41,6 @@ namespace castor3d
 		, castor::String const & name
 		, ListBoxStyle * style
 		, ControlRPtr parent
-		, uint32_t id
 		, castor::StringArray const & values
 		, int selected
 		, castor::Position const & position
@@ -53,7 +52,6 @@ namespace castor3d
 			, name
 			, style
 			, parent
-			, id
 			, position
 			, size
 			, flags
@@ -222,15 +220,15 @@ namespace castor3d
 		for ( auto item : m_items )
 		{
 			item->setPosition( position );
-			item->setSize( castor::Size( getSize().getWidth(), DEFAULT_HEIGHT ) );
-			position.y() += DEFAULT_HEIGHT;
+			item->setSize( castor::Size( getSize().getWidth(), DefaultHeight ) );
+			position.y() += DefaultHeight;
 		}
 
 		auto background = getBackground();
 
 		if ( background )
 		{
-			background->setPixelSize( castor::Size( getSize().getWidth(), uint32_t( m_items.size() * DEFAULT_HEIGHT ) ) );
+			background->setPixelSize( castor::Size( getSize().getWidth(), uint32_t( m_items.size() * DefaultHeight ) ) );
 		}
 	}
 
@@ -244,7 +242,7 @@ namespace castor3d
 			, this
 			, value
 			, castor::Position{}
-			, castor::Size{ getSize().getWidth(), DEFAULT_HEIGHT }
+			, castor::Size{ getSize().getWidth(), DefaultHeight }
 			, uint32_t( StaticFlag::eVAlignCenter ) );
 		item->setCatchesMouseEvents( true );
 
@@ -283,7 +281,7 @@ namespace castor3d
 	void ListBoxCtrl::doCreate()
 	{
 		setBackgroundBorders( castor::Point4ui{ 1, 1, 1, 1 } );
-		setSize( castor::Size( getSize().getWidth(), uint32_t( m_values.size() * DEFAULT_HEIGHT ) ) );
+		setSize( castor::Size( getSize().getWidth(), uint32_t( m_values.size() * DefaultHeight ) ) );
 
 		EventHandler::connect( KeyboardEventType::ePushed
 			, [this]( KeyboardEvent const & event )

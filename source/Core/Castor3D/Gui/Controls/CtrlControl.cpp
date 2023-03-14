@@ -20,7 +20,6 @@ namespace castor3d
 		, castor::String const & name
 		, ControlStyleRPtr style
 		, ControlRPtr parent
-		, uint32_t id
 		, castor::Position const & position
 		, castor::Size const & size
 		, uint32_t flags
@@ -28,7 +27,7 @@ namespace castor3d
 		: NonClientEventHandler< Control >{ name, type != ControlType::eStatic }
 		, m_scene{ scene }
 		, m_parent{ parent }
-		, m_id{ id }
+		, m_id{ std::hash< castor::String >{}( getName() ) }
 		, m_type{ type }
 		, m_style{ style }
 		, m_flags{ flags }
@@ -50,12 +49,12 @@ namespace castor3d
 		}
 
 		auto overlay = m_scene
-			? m_scene->addNewOverlay( name
+			? m_scene->addNewOverlay( cuT( "T_Ctrl_[" ) + getName() + cuT( "]" )
 				, getEngine()
 				, OverlayType::eBorderPanel
 				, nullptr
 				, parentOv ).lock()
-			: getEngine().addNewOverlay( name
+			: getEngine().addNewOverlay( cuT( "T_Ctrl_[" ) + getName() + cuT( "]" )
 				, getEngine()
 				, OverlayType::eBorderPanel
 				, nullptr

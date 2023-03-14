@@ -18,13 +18,11 @@ namespace castor3d
 	EditCtrl::EditCtrl( SceneRPtr scene
 		, castor::String const & name
 		, EditStyleRPtr style
-		, ControlRPtr parent
-		, uint32_t id )
+		, ControlRPtr parent )
 		: EditCtrl{ scene
 			, name
 			, style
 			, parent
-			, id
 			, castor::String{}
 			, castor::Position{}
 			, castor::Size{}
@@ -37,7 +35,6 @@ namespace castor3d
 		, castor::String const & name
 		, EditStyleRPtr style
 		, ControlRPtr parent
-		, uint32_t id
 		, castor::String const & caption
 		, castor::Position const & position
 		, castor::Size const & size
@@ -48,7 +45,6 @@ namespace castor3d
 			, name
 			, style
 			, parent
-			, id
 			, position
 			, size
 			, flags
@@ -95,12 +91,12 @@ namespace castor3d
 			} );
 
 		auto text = m_scene
-			? m_scene->addNewOverlay( cuT( "T_CtrlEdit_" ) + castor::string::toString( getId() )
+			? m_scene->addNewOverlay( cuT( "T_CtrlEdit_[" ) + getName() + cuT( "]" )
 				, getEngine()
 				, OverlayType::eText
 				, nullptr
 				, &getBackground()->getOverlay() ).lock()->getTextOverlay()
-			: getEngine().addNewOverlay( cuT( "T_CtrlEdit_" ) + castor::string::toString( getId() )
+			: getEngine().addNewOverlay( cuT( "T_CtrlEdit_[" ) + getName() + cuT( "]" )
 				, getEngine()
 				, OverlayType::eText
 				, nullptr

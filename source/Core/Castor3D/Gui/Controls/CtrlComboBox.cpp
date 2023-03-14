@@ -18,13 +18,11 @@ namespace castor3d
 	ComboBoxCtrl::ComboBoxCtrl( SceneRPtr scene
 		, castor::String const & name
 		, ComboBoxStyle * style
-		, ControlRPtr parent
-		, uint32_t id )
+		, ControlRPtr parent )
 		: ComboBoxCtrl{ scene
 			, name
 			, style
 			, parent
-			, id
 			, castor::StringArray{}
 			, -1
 			, castor::Position{}
@@ -38,7 +36,6 @@ namespace castor3d
 		, castor::String const & name
 		, ComboBoxStyle * style
 		, ControlRPtr parent
-		, uint32_t id
 		, castor::StringArray const & values
 		, int selected
 		, castor::Position const & position
@@ -50,7 +47,6 @@ namespace castor3d
 			, name
 			, style
 			, parent
-			, id
 			, position
 			, size
 			, flags
@@ -62,7 +58,6 @@ namespace castor3d
 			, name + cuT( "_Expand" )
 			, &style->getButtonStyle()
 			, this
-			, getId() << 12
 			, cuT( "+" )
 			, castor::Position{ int32_t( size.getWidth() - size.getHeight() ), 0 }
 			, castor::Size{ size.getHeight(), size.getHeight() } );
@@ -77,7 +72,6 @@ namespace castor3d
 			, name + cuT( "_Choices" )
 			, &style->getListBoxStyle()
 			, this
-			, ( getId() << 12 ) + 1
 			, m_values
 			, m_selected
 			, castor::Position{ 0, int32_t( size.getHeight() ) }
@@ -91,12 +85,12 @@ namespace castor3d
 			} );
 
 		auto text = m_scene
-			? m_scene->addNewOverlay( cuT( "T_CtrlCombo_" ) + castor::string::toString( getId() )
+			? m_scene->addNewOverlay( cuT( "T_CtrlCombo_[" ) + getName() + cuT( "]" )
 				, getEngine()
 				, OverlayType::eText
 				, nullptr
 				, &getBackground()->getOverlay() ).lock()->getTextOverlay()
-			: getEngine().addNewOverlay( cuT( "T_CtrlCombo_" ) + castor::string::toString( getId() )
+			: getEngine().addNewOverlay( cuT( "T_CtrlCombo_[" ) + getName() + cuT( "]" )
 				, getEngine()
 				, OverlayType::eText
 				, nullptr
