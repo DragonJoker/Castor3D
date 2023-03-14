@@ -44,7 +44,7 @@ namespace castor3d
 			, int selected
 			, castor::Position const & position
 			, castor::Size const & size
-			, uint32_t flags = 0
+			, uint64_t flags = 0
 			, bool visible = true );
 
 		/** Constructor
@@ -68,7 +68,7 @@ namespace castor3d
 			, int selected
 			, castor::Position const & position
 			, castor::Size const & size
-			, uint32_t flags = 0
+			, uint64_t flags = 0
 			, bool visible = true )
 			: Control{ ControlType::eListBox
 				, scene

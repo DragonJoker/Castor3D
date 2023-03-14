@@ -41,7 +41,7 @@ namespace castor3d
 			, ControlRPtr parent
 			, castor::Position const & position
 			, castor::Size const & size
-			, uint32_t flags = 0
+			, uint64_t flags = 0
 			, bool visible = true );
 
 		/** Sets the style
@@ -89,15 +89,13 @@ namespace castor3d
 		 */
 		ControlSPtr getChildControl( ControlID id );
 
-		/** Retrieves the style
-		 *\return		The value
+		/** Adds a flag.
 		 */
-		void addFlag( uint32_t );
+		void addFlag( uint64_t flag );
 
-		/** Retrieves the style
-		 *\return		The value
+		/** Removes a flag.
 		 */
-		void removeFlag( uint32_t );
+		void removeFlag( uint64_t flag );
 
 		/**@name Getters */
 		//@{
@@ -112,7 +110,7 @@ namespace castor3d
 			return m_type;
 		}
 
-		uint32_t getFlags()const noexcept
+		uint64_t getFlags()const noexcept
 		{
 			return m_flags;
 		}
@@ -286,7 +284,7 @@ namespace castor3d
 		const ControlID m_id;
 		const ControlType m_type;
 		ControlStyleRPtr m_style;
-		uint32_t m_flags;
+		uint64_t  m_flags;
 		castor::Position m_position;
 		castor::Size m_size;
 		castor::Point4ui m_borders;

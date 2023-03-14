@@ -42,7 +42,7 @@ namespace castor3d
 			, castor::String const & caption
 			, castor::Position const & position
 			, castor::Size const & size
-			, uint32_t flags = 0
+			, uint64_t flags = 0
 			, bool visible = true );
 
 		/** Sets the horizontal alignment for the text.

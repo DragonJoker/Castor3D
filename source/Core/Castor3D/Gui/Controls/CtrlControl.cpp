@@ -22,7 +22,7 @@ namespace castor3d
 		, ControlRPtr parent
 		, castor::Position const & position
 		, castor::Size const & size
-		, uint32_t flags
+		, uint64_t flags
 		, bool visible )
 		: NonClientEventHandler< Control >{ name, type != ControlType::eStatic }
 		, m_scene{ scene }
@@ -42,7 +42,7 @@ namespace castor3d
 
 			if ( !bg )
 			{
-				CU_Exception( "No background set" );
+				CU_SrcException( "Control", "No background set" );
 			}
 
 			parentOv = &bg->getOverlay();
@@ -62,7 +62,7 @@ namespace castor3d
 
 		if ( !overlay )
 		{
-			CU_Exception( "No background set" );
+			CU_SrcException( "Control", "Couldn't create background overlay" );
 		}
 
 		overlay->setPixelPosition( getPosition() );
@@ -173,7 +173,7 @@ namespace castor3d
 		}
 		else
 		{
-			CU_Exception( "No background set" );
+			CU_SrcException( "Control", "No background set" );
 		}
 
 		doSetVisible( value );
@@ -195,13 +195,13 @@ namespace castor3d
 		}
 		else
 		{
-			CU_Exception( "No background set" );
+			CU_SrcException( "Control", "No background set" );
 		}
 
 		return visible;
 	}
 
-	ControlSPtr Control::getChildControl( uint32_t id )
+	ControlSPtr Control::getChildControl( ControlID id )
 	{
 		auto it = std::find_if( std::begin( m_children )
 			, std::end( m_children )
@@ -221,13 +221,13 @@ namespace castor3d
 		return it->lock();
 	}
 
-	void Control::addFlag( uint32_t flags )
+	void Control::addFlag( uint64_t flags )
 	{
 		m_flags |= flags;
 		doUpdateFlags();
 	}
 
-	void Control::removeFlag( uint32_t flags )
+	void Control::removeFlag( uint64_t flags )
 	{
 		m_flags &= ~flags;
 		doUpdateFlags();
@@ -243,7 +243,7 @@ namespace castor3d
 		}
 		else
 		{
-			CU_Exception( "No background set" );
+			CU_SrcException( "Control", "No background set" );
 		}
 
 		return result;

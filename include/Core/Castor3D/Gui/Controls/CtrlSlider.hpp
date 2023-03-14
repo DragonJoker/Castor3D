@@ -44,7 +44,7 @@ namespace castor3d
 			, castor::RangedValue< int32_t > const & value
 			, castor::Position const & position
 			, castor::Size const & size
-			, uint32_t flags = 0
+			, uint64_t flags = 0
 			, bool visible = true );
 
 		/** sets the range
