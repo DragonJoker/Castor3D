@@ -19,13 +19,11 @@ namespace castor3d
 	ButtonCtrl::ButtonCtrl( SceneRPtr scene
 		, castor::String const & name
 		, ButtonStyleRPtr style
-		, ControlRPtr parent
-		, uint32_t id )
+		, ControlRPtr parent )
 		: ButtonCtrl{ scene
 			, name
 			, style
 			, parent
-			, id
 			, castor::String{}
 			, castor::Position{}
 			, castor::Size{}
@@ -38,7 +36,6 @@ namespace castor3d
 		, castor::String const & name
 		, ButtonStyleRPtr style
 		, ControlRPtr parent
-		, uint32_t id
 		, castor::String const & caption
 		, castor::Position const & position
 		, castor::Size const & size
@@ -49,7 +46,6 @@ namespace castor3d
 			, name
 			, style
 			, parent
-			, id
 			, position
 			, size
 			, flags
@@ -104,12 +100,12 @@ namespace castor3d
 			} );
 
 		auto text = m_scene
-			? m_scene->addNewOverlay( cuT( "T_CtrlButton_" ) + castor::string::toString( getId() )
+			? m_scene->addNewOverlay( cuT( "T_CtrlButton_[" ) + getName() + cuT( "]" )
 				, getEngine()
 				, OverlayType::eText
 				, nullptr
 				, &getBackground()->getOverlay() ).lock()->getTextOverlay()
-			: getEngine().addNewOverlay( cuT( "T_CtrlButton_" ) + castor::string::toString( getId() )
+			: getEngine().addNewOverlay( cuT( "T_CtrlButton_[" ) + getName() + cuT( "]" )
 				, getEngine()
 				, OverlayType::eText
 				, nullptr

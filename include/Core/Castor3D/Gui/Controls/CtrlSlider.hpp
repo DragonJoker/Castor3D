@@ -24,8 +24,7 @@ namespace castor3d
 		SliderCtrl( SceneRPtr scene
 			, castor::String const & name
 			, SliderStyleRPtr style
-			, ControlRPtr parent
-			, uint32_t id );
+			, ControlRPtr parent );
 
 		/** Constructor
 		 *\param[in]	name		The control name
@@ -42,7 +41,6 @@ namespace castor3d
 			, castor::String const & name
 			, SliderStyleRPtr style
 			, ControlRPtr parent
-			, uint32_t id
 			, castor::RangedValue< int32_t > const & value
 			, castor::Position const & position
 			, castor::Size const & size

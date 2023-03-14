@@ -14,13 +14,11 @@ namespace castor3d
 	SliderCtrl::SliderCtrl( SceneRPtr scene
 		, castor::String const & name
 		, SliderStyleRPtr style
-		, ControlRPtr parent
-		, uint32_t id )
+		, ControlRPtr parent )
 		: SliderCtrl{ scene
 			, name
 			, style
 			, parent
-			, id
 			, castor::makeRangedValue( 0, 0, 100 )
 			, castor::Position{}
 			, castor::Size{}
@@ -33,7 +31,6 @@ namespace castor3d
 		, castor::String const & name
 		, SliderStyleRPtr style
 		, ControlRPtr parent
-		, uint32_t id
 		, castor::RangedValue< int32_t > const & value
 		, castor::Position const & position
 		, castor::Size const & size
@@ -44,7 +41,6 @@ namespace castor3d
 			, name
 			, style
 			, parent
-			, id
 			, position
 			, size
 			, flags

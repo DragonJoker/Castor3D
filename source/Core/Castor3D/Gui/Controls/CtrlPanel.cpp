@@ -13,13 +13,10 @@
 
 namespace castor3d
 {
-	uint32_t PanelCtrl::m_count = 0xFFFF0000u;
-
 	PanelCtrl::PanelCtrl( SceneRPtr scene
 		, castor::String const & name
 		, PanelStyle * style
-		, ControlRPtr parent
-		, uint32_t id )
+		, ControlRPtr parent )
 		: PanelCtrl{ scene
 			, name
 			, style
@@ -44,7 +41,6 @@ namespace castor3d
 			, name
 			, style
 			, parent
-			, m_count++
 			, position
 			, size
 			, flags

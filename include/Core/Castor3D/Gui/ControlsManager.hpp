@@ -29,9 +29,7 @@ namespace castor3d
 		/**@name General */
 		//@{
 
-		/**
-		*\brief
-		*	Constructor
+		/** Constructor
 		*\param[in] engine
 		*	The engine
 		*/
@@ -41,17 +39,15 @@ namespace castor3d
 		/**@name Style management */
 		//@{
 
-		/**
-		*\brief
-		*	Creates a theme if it doesn't exist, returns the existing one if it exists
+		/** Creates a theme if it doesn't exist, returns the existing one if it exists
 		*\param[in] name
 		*	The theme name
 		*\return
 		*	The theme.
 		*/
 		C3D_API ThemeRPtr createTheme( castor::String const & name );
-		/**
-		*\return
+
+		/** \return
 		*	The theme for given name (\p nullptr if it doesn't exist).
 		*/
 		C3D_API ThemeRPtr getTheme( castor::String const & name );
@@ -60,52 +56,45 @@ namespace castor3d
 		/**@name Controls management */
 		//@{
 
-		/**
-		*\brief
-		*	Creates the given control's overlays and binds its callbacks to appropriate events
+		/** Creates the given control's overlays and binds its callbacks to appropriate events
 		*\param[in] control
 		*	The control
 		*/
 		C3D_API void create( ControlSPtr control );
-		/**
-		*\brief
-		*	Destroys the given control's overlays and unbinds its callbacks from appropriate events.
+
+		/** Destroys the given control's overlays and unbinds its callbacks from appropriate events.
 		*\param[in] control
 		*	The control.
 		*/
 		C3D_API void destroy( ControlSPtr control );
-		/**
-		*\brief
-		*	adds a control that can an event target
+
+		/** Adds a control that can an event target
 		*\param[in] control
 		*	The control
 		*/
 		C3D_API void addControl( ControlSPtr control );
-		/**
-		*\brief
-		*	Removes a control
+
+		/** Removes a control
 		*\param[in] id
 		*	The control ID
 		*/
-		C3D_API void removeControl( uint32_t id );
-		/**
-		*\brief
-		*	Retrieves a control
+		C3D_API void removeControl( ControlID id );
+
+		/** Retrieves a control.
 		*\param[in] id
-		*	The control ID
+		*	The control ID.
 		*\return
 		*	The control.
 		*/
-		C3D_API ControlSPtr getControl( uint32_t id )const;
-		/**
-		*\brief
-		*	Retrieves a control.
+		C3D_API ControlSPtr getControl( ControlID id )const;
+
+		/** Retrieves a control.
 		*\param[in] name
 		*	The control name.
 		*\return
 		*	The control.
 		*/
-		C3D_API ControlSPtr findControl( castor::String const & name );
+		C3D_API ControlSPtr findControl( castor::String const & name )const;
 
 		//@}
 
@@ -114,133 +103,112 @@ namespace castor3d
 		C3D_API static void * createContext( castor::FileParserContext & context );
 
 	private:
-		/**
-		*\brief
-		*	Connects the manager to given control's events.
+		/** Connects the manager to given control's events.
 		*\param[in] control
 		*	The control.
 		*/
 		void connectEvents( ButtonCtrl & control );
-		/**
-		*\brief
-		*	Connects the manager to given control's events.
+
+		/** Connects the manager to given control's events.
 		*\param[in] control
 		*	The control.
 		*/
 		void connectEvents( ComboBoxCtrl & control );
-		/**
-		*\brief
-		*	Connects the manager to given control's events.
+
+		/** Connects the manager to given control's events.
 		*\param[in] control
 		*	The control.
 		*/
 		void connectEvents( EditCtrl & control );
-		/**
-		*\brief
-		*	Connects the manager to given control's events.
+
+		/** Connects the manager to given control's events.
 		*\param[in] control
 		*	The control.
 		*/
 		void connectEvents( ExpandablePanelCtrl & control );
-		/**
-		*\brief
-		*	Connects the manager to given control's events.
+
+		/** Connects the manager to given control's events.
 		*\param[in] control
 		*	The control.
 		*/
 		void connectEvents( ListBoxCtrl & control );
-		/**
-		*\brief
-		*	Connects the manager to given control's events.
+
+		/** Connects the manager to given control's events.
 		*\param[in] control
 		*	The control.
 		*/
 		void connectEvents( SliderCtrl & control );
-		/**
-		*\brief
-		*	Disconnects the manager from given control's events.
+
+		/** Disconnects the manager from given control's events.
 		*\param[in] control
 		*	The control.
 		*/
 		void disconnectEvents( ButtonCtrl & control );
-		/**
-		*\brief
-		*	Disconnects the manager from given control's events.
+
+		/** Disconnects the manager from given control's events.
 		*\param[in] control
 		*	The control.
 		*/
 		void disconnectEvents( ComboBoxCtrl & control );
-		/**
-		*\brief
-		*	Disconnects the manager from given control's events.
+
+		/** Disconnects the manager from given control's events.
 		*\param[in] control
 		*	The control.
 		*/
 		void disconnectEvents( EditCtrl & control );
-		/**
-		*\brief
-		*	Disconnects the manager from given control's events.
+
+		/** Disconnects the manager from given control's events.
 		*\param[in] control
 		*	The control.
 		*/
 		void disconnectEvents( ExpandablePanelCtrl & control );
-		/**
-		*\brief
-		*	Disconnects the manager from given control's events.
+
+		/** Disconnects the manager from given control's events.
 		*\param[in] control
 		*	The control.
 		*/
 		void disconnectEvents( ListBoxCtrl & control );
-		/**
-		*\brief
-		*	Disconnects the manager from given control's events.
+
+		/** Disconnects the manager from given control's events.
 		*\param[in] control
 		*	The control.
 		*/
 		void disconnectEvents( SliderCtrl & control );
 
 	private:
-		/**
-		 *copydoc		UserInputListener::doInitialise
+		/** \copydoc		UserInputListener::doInitialise
 		 */
 		bool doInitialise()override;
-		/**
-		 *copydoc		UserInputListener::doCleanup
+
+		/** \copydoc		UserInputListener::doCleanup
 		 */
 		void doCleanup()override;
-		/**
-		*\brief
-		*	Retrieves the first handler which can be targeted by mouse, at its position
+
+		/** Retrieves the first handler which can be targeted by mouse, at its position
 		*\param[in] position
 		*	The mouse position
 		*/
 		EventHandler * doGetMouseTargetableHandler( castor::Position const & position )const override;
-		/**
-		*\brief
-		*	Updates the z-index ordered controls array
+
+		/** Updates the z-index ordered controls array
 		*/
 		void doUpdate()const;
-		/**
-		*\brief
-		*	Removes a control
+
+		/** Removes a control
 		*\param[in] id
 		*	The control ID
 		*/
-		void doRemoveControl( uint32_t id );
-		/**
-		*\return
+		void doRemoveControl( ControlID id );
+
+		/** \return
 		*	The controls by z-index.
 		*/
 		std::vector< Control * > doGetControlsByZIndex()const;
-		/**
-		*\return
+
+		/** \return
 		*	The controls by ID.
 		*/
-		std::map< uint32_t, ControlWPtr > doGetControlsById()const;
-		/**
-		 *\copydoc		FrameListener::doFlush
-		 */
-		virtual void doFlush();
+		std::map< ControlID, ControlWPtr > doGetControlsById()const;
 
 	public:
 		C3D_API static castor::String Name;
@@ -249,13 +217,12 @@ namespace castor3d
 		mutable std::mutex m_mutexControlsByZIndex;
 		mutable std::vector< Control *  > m_controlsByZIndex;
 		mutable std::mutex m_mutexControlsById;
-		std::map< uint32_t, ControlWPtr > m_controlsById;
+		std::map< ControlID, ControlWPtr > m_controlsById;
 		bool m_changed;
 		std::map< castor::String, ThemeUPtr > m_themes;
 		std::map< Control const *, OnButtonEventConnection > m_onButtonClicks;
 		std::map< Control const *, OnComboEventConnection > m_onComboSelects;
 		std::map< Control const *, OnEditEventConnection > m_onEditUpdates;
-		std::map< Control const *, OnExpandablePanelEventConnection > m_onPanelExpands;
 		std::map< Control const *, OnListEventConnection > m_onListSelects;
 		std::map< Control const *, OnSliderEventConnection > m_onSliderTracks;
 		std::map< Control const *, OnSliderEventConnection > m_onSliderReleases;

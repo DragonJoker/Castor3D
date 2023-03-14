@@ -13,13 +13,10 @@
 
 namespace castor3d
 {
-	uint32_t StaticCtrl::m_count = 0xFF000000u;
-
 	StaticCtrl::StaticCtrl( SceneRPtr scene
 		, castor::String const & name
 		, StaticStyle * style
-		, ControlRPtr parent
-		, uint32_t id )
+		, ControlRPtr parent )
 		: StaticCtrl{ scene
 			, name
 			, style
@@ -46,7 +43,6 @@ namespace castor3d
 			, name
 			, style
 			, parent
-			, m_count++
 			, position
 			, size
 			, flags
@@ -55,12 +51,12 @@ namespace castor3d
 	{
 		setBackgroundBorders( castor::Point4ui{} );
 		auto text = m_scene
-			? m_scene->addNewOverlay( cuT( "T_CtrlStatic_" ) + castor::string::toString( getId() )
+			? m_scene->addNewOverlay( cuT( "T_CtrlStatic_[" ) + getName() + cuT( "]" )
 				, getEngine()
 				, OverlayType::eText
 				, nullptr
 				, &getBackground()->getOverlay() ).lock()->getTextOverlay()
-			: getEngine().addNewOverlay( cuT( "T_CtrlStatic_" ) + castor::string::toString( getId() )
+			: getEngine().addNewOverlay( cuT( "T_CtrlStatic_[" ) + getName() + cuT( "]" )
 				, getEngine()
 				, OverlayType::eText
 				, nullptr

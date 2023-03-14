@@ -22,8 +22,7 @@ namespace castor3d
 		StaticCtrl( SceneRPtr scene
 			, castor::String const & name
 			, StaticStyle * style
-			, ControlRPtr parent
-			, uint32_t id );
+			, ControlRPtr parent );
 
 		/** Constructor
 		 *\param[in]	name		The control name
@@ -113,7 +112,6 @@ namespace castor3d
 	private:
 		castor::String m_caption;
 		TextOverlayWPtr m_text;
-		static uint32_t m_count;
 	};
 }
 

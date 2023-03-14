@@ -20,7 +20,6 @@ namespace castor3d
 		, castor::String const & name
 		, ControlStyleRPtr style
 		, ControlRPtr parent
-		, uint32_t id
 		, castor::Position const & position
 		, castor::Size const & size
 		, uint32_t flags
@@ -30,7 +29,6 @@ namespace castor3d
 			, name
 			, style
 			, parent
-			, id
 			, position
 			, size
 			, flags

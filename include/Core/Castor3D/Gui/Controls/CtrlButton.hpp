@@ -22,8 +22,7 @@ namespace castor3d
 		ButtonCtrl( SceneRPtr scene
 			, castor::String const & name
 			, ButtonStyleRPtr style
-			, ControlRPtr parent
-			, uint32_t id );
+			, ControlRPtr parent );
 
 		/** Constructor
 		 *\param[in]	name		The control name
@@ -40,7 +39,6 @@ namespace castor3d
 			, castor::String const & name
 			, ButtonStyleRPtr style
 			, ControlRPtr parent
-			, uint32_t id
 			, castor::String const & caption
 			, castor::Position const & position
 			, castor::Size const & size

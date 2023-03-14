@@ -23,8 +23,7 @@ namespace castor3d
 		ComboBoxCtrl( SceneRPtr scene
 			, castor::String const & name
 			, ComboBoxStyle * style
-			, ControlRPtr parent
-			, uint32_t id );
+			, ControlRPtr parent );
 
 		/** Constructor
 		 *\param[in]	name		The control name
@@ -42,7 +41,6 @@ namespace castor3d
 			, castor::String const & name
 			, ComboBoxStyle * style
 			, ControlRPtr parent
-			, uint32_t id
 			, castor::StringArray const & values
 			, int selected
 			, castor::Position const & position
@@ -67,7 +65,6 @@ namespace castor3d
 			, ControlRPtr parent
 			, castor::String const( & values )[N]
 			, int selected
-			, uint32_t id
 			, castor::Position const & position
 			, castor::Size const & size
 			, uint32_t flags = 0
@@ -77,7 +74,6 @@ namespace castor3d
 				, name
 				, style
 				, parent
-				, id
 				, position
 				, size
 				, flags

@@ -22,8 +22,7 @@ namespace castor3d
 		PanelCtrl( SceneRPtr scene
 			, castor::String const & name
 			, PanelStyle * style
-			, ControlRPtr parent
-			, uint32_t id );
+			, ControlRPtr parent );
 
 		/** Constructor
 		 *\param[in]	name		The control name
@@ -73,9 +72,6 @@ namespace castor3d
 		/** @copydoc Control::doUpdateFlags
 		*/
 		void doUpdateFlags()override;
-
-	private:
-		static uint32_t m_count;
 	};
 }
 
