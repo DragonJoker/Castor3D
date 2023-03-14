@@ -42,27 +42,53 @@ namespace castor3d
 		/** Sets the background borders size.
 		 *\param[in]	value		The new value.
 		 */
-		void doSetBackgroundBorders( castor::Point4ui const & value )override;
+		void doSetBackgroundBorders( castor::Point4ui const & value )final override;
 		/** Sets the position
 		*\param[in]	value		The new value
 		*/
-		void doSetPosition( castor::Position const & value )override;
+		void doSetPosition( castor::Position const & value )final override;
 
 		/** Sets the size
 		*\param[in]	value	The new value
 		*/
-		void doSetSize( castor::Size const & value )override;
+		void doSetSize( castor::Size const & value )final override;
 
 		/** Sets the caption.
 		*\param[in]	caption	The new value
 		*/
-		void doSetCaption( castor::String const & caption )override;
+		void doSetCaption( castor::String const & caption )final override;
 
 		/** Sets the visibility
 		 *\remarks		Used for derived control specific behavious
 		 *\param[in]	value		The new value
 		 */
-		void doSetVisible( bool visible )override;
+		void doSetVisible( bool visible )final override;
+
+	private:
+		/** Sets the background borders size.
+		 *\param[in]	value		The new value.
+		 */
+		virtual void doSubSetBackgroundBorders( castor::Point4ui const & value ) {};
+		/** Sets the position
+		*\param[in]	value		The new value
+		*/
+		virtual void doSubSetPosition( castor::Position const & value ) {}
+
+		/** Sets the size
+		*\param[in]	value	The new value
+		*/
+		virtual void doSubSetSize( castor::Size const & value ) {}
+
+		/** Sets the caption.
+		*\param[in]	caption	The new value
+		*/
+		virtual void doSubSetCaption( castor::String const & caption ) {}
+
+		/** Sets the visibility
+		 *\remarks		Used for derived control specific behavious
+		 *\param[in]	value		The new value
+		 */
+		virtual void doSubSetVisible( bool visible ) {}
 
 	private:
 		LayoutUPtr m_layout;
