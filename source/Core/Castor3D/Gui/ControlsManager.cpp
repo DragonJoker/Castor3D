@@ -8,6 +8,7 @@
 #include "Castor3D/Gui/Controls/CtrlButton.hpp"
 #include "Castor3D/Gui/Controls/CtrlComboBox.hpp"
 #include "Castor3D/Gui/Controls/CtrlEdit.hpp"
+#include "Castor3D/Gui/Controls/CtrlExpandablePanel.hpp"
 #include "Castor3D/Gui/Controls/CtrlListBox.hpp"
 #include "Castor3D/Gui/Controls/CtrlSlider.hpp"
 #include "Castor3D/Gui/Controls/CtrlStatic.hpp"
@@ -67,6 +68,7 @@ namespace castor3d
 			addParser( parsers, section, cuT( "listbox" ), &parserListBox, { makeParameter< ParameterType::eName >() } );
 			addParser( parsers, section, cuT( "edit" ), &parserEdit, { makeParameter< ParameterType::eName >() } );
 			addParser( parsers, section, cuT( "panel" ), &parserPanel, { makeParameter< ParameterType::eName >() } );
+			addParser( parsers, section, cuT( "expandable_panel" ), &parserExpandablePanel, { makeParameter< ParameterType::eName >() } );
 		}
 
 		static void createGuiParsers( castor::AttributeParsers & result
@@ -174,6 +176,39 @@ namespace castor3d
 			addParser( result, uint32_t( GUISection::ePanelStyle ), cuT( "}" ), &parserStylePanelEnd );
 		}
 
+		static void createExpandablePanelParsers( castor::AttributeParsers & result )
+		{
+			using namespace castor;
+			createDefaultParsers( result, uint32_t( GUISection::eExpandablePanel ), &parserExpandablePanelEnd, &parserExpandablePanelTheme );
+			createControlsParsers( result, uint32_t( GUISection::ePanel ) );
+			createDefaultLayoutParsers( result, uint32_t( GUISection::eExpandablePanel ) );
+			addParser( result, uint32_t( GUISection::eExpandablePanel ), cuT( "header" ), &parserExpandablePanelHeader );
+			addParser( result, uint32_t( GUISection::eExpandablePanel ), cuT( "expandable" ), &parserExpandablePanelPanel );
+
+			addParser( result, uint32_t( GUISection::eExpandablePanelStyle ), cuT( "background_material" ), &parserStyleBackgroundMaterial, { makeParameter< ParameterType::eName >() } );
+			addParser( result, uint32_t( GUISection::eExpandablePanelStyle ), cuT( "border_material" ), &parserStyleBorderMaterial, { makeParameter< ParameterType::eName >() } );
+			addParser( result, uint32_t( GUISection::eExpandablePanelStyle ), cuT( "header_style" ), &parserExpandablePanelHeaderStyle );
+			addParser( result, uint32_t( GUISection::eExpandablePanelStyle ), cuT( "expand_style" ), &parserExpandablePanelExpandStyle );
+			addParser( result, uint32_t( GUISection::eExpandablePanelStyle ), cuT( "panel_style" ), &parserExpandablePanelPanelStyle );
+			addParser( result, uint32_t( GUISection::eExpandablePanelStyle ), cuT( "}" ), &parserStyleExpandablePanelEnd );
+		}
+
+		static void createExpandablePanelHeaderParsers( castor::AttributeParsers & result )
+		{
+			using namespace castor;
+			createDefaultParsers( result, uint32_t( GUISection::eExpandablePanelHeader ), &parserExpandablePanelHeaderEnd, &parserExpandablePanelTheme );
+			createControlsParsers( result, uint32_t( GUISection::eExpandablePanelHeader ) );
+			createDefaultLayoutParsers( result, uint32_t( GUISection::eExpandablePanelHeader ) );
+		}
+
+		static void createExpandablePanelPanelParsers( castor::AttributeParsers & result )
+		{
+			using namespace castor;
+			createDefaultParsers( result, uint32_t( GUISection::eExpandablePanelPanel ), &parserExpandablePanelPanelEnd, &parserExpandablePanelTheme );
+			createControlsParsers( result, uint32_t( GUISection::eExpandablePanelPanel ) );
+			createDefaultLayoutParsers( result, uint32_t( GUISection::eExpandablePanelPanel ) );
+		}
+
 		static void createThemeParsers( castor::AttributeParsers & result )
 		{
 			using namespace castor;
@@ -185,6 +220,7 @@ namespace castor3d
 			addParser( result, uint32_t( GUISection::eTheme ), cuT( "listbox_style" ), &parserListBoxStyle );
 			addParser( result, uint32_t( GUISection::eTheme ), cuT( "edit_style" ), &parserEditStyle );
 			addParser( result, uint32_t( GUISection::eTheme ), cuT( "panel_style" ), &parserPanelStyle );
+			addParser( result, uint32_t( GUISection::eTheme ), cuT( "expandable_panel_style" ), &parserExpandablePanelStyle );
 			addParser( result, uint32_t( GUISection::eTheme ), cuT( "}" ), &parserThemeEnd );
 		}
 
@@ -319,6 +355,9 @@ namespace castor3d
 		ctrlmgr::createSliderParsers( result );
 		ctrlmgr::createStaticParsers( result );
 		ctrlmgr::createPanelParsers( result );
+		ctrlmgr::createExpandablePanelParsers( result );
+		ctrlmgr::createExpandablePanelHeaderParsers( result );
+		ctrlmgr::createExpandablePanelPanelParsers( result );
 		ctrlmgr::createBoxLayoutParsers( result );
 		ctrlmgr::createLayoutCtrlParsers( result );
 
@@ -338,6 +377,7 @@ namespace castor3d
 			{ uint32_t( GUISection::eSliderStyle ), cuT( "slider_style" ) },
 			{ uint32_t( GUISection::eStaticStyle ), cuT( "static_style" ) },
 			{ uint32_t( GUISection::ePanelStyle ), cuT( "panel_style" ) },
+			{ uint32_t( GUISection::eExpandablePanelStyle ), cuT( "expandable_panel_style" ) },
 			{ uint32_t( GUISection::eButton ), cuT( "button" ) },
 			{ uint32_t( GUISection::eStatic ), cuT( "static" ) },
 			{ uint32_t( GUISection::eSlider ), cuT( "slider" ) },
@@ -345,6 +385,9 @@ namespace castor3d
 			{ uint32_t( GUISection::eListBox ), cuT( "listbox" ) },
 			{ uint32_t( GUISection::eEdit ), cuT( "edit" ) },
 			{ uint32_t( GUISection::ePanel ), cuT( "panel" ) },
+			{ uint32_t( GUISection::eExpandablePanel ), cuT( "expandable_panel" ) },
+			{ uint32_t( GUISection::eExpandablePanelHeader ), cuT( "header" ) },
+			{ uint32_t( GUISection::eExpandablePanelPanel ), cuT( "expandable" ) },
 			{ uint32_t( GUISection::eBoxLayout ), cuT( "box_layout" ) },
 			{ uint32_t( GUISection::eLayoutCtrl ), cuT( "layout_ctrl" ) },
 		};
@@ -381,6 +424,20 @@ namespace castor3d
 			, [this, &control]( castor::String const & text )
 			{
 				onTextAction( control.getName(), text );
+			} ) );
+	}
+
+	void ControlsManager::connectEvents( ExpandablePanelCtrl & control )
+	{
+		m_onPanelExpands.emplace( &control, control.connect( ExpandablePanelEvent::eExpand
+			, [this, &control]()
+			{
+				onExpandAction( control.getName(), true );
+			} ) );
+		m_onPanelRetracts.emplace( &control, control.connect( ExpandablePanelEvent::eRetract
+			, [this, &control]()
+			{
+				onExpandAction( control.getName(), false );
 			} ) );
 	}
 
@@ -434,6 +491,23 @@ namespace castor3d
 		if ( it != m_onEditUpdates.end() )
 		{
 			m_onEditUpdates.erase( it );
+		}
+	}
+
+	void ControlsManager::disconnectEvents( ExpandablePanelCtrl & control )
+	{
+		auto it = m_onPanelExpands.find( &control );
+
+		if ( it != m_onPanelExpands.end() )
+		{
+			m_onPanelExpands.erase( it );
+		}
+
+		it = m_onPanelRetracts.find( &control );
+
+		if ( it != m_onPanelRetracts.end() )
+		{
+			m_onPanelRetracts.erase( it );
 		}
 	}
 

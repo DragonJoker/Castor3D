@@ -128,6 +128,17 @@ namespace castor3d
 		}
 	}
 
+	void UserInputListener::registerExpandAction( castor::String const & handler
+		, OnExpandActionFunction function )
+	{
+		auto it = m_onExpandActions.find( handler );
+
+		if ( it == m_onExpandActions.end() )
+		{
+			m_onExpandActions.emplace( handler, function );
+		}
+	}
+
 	void UserInputListener::unregisterMouseMoveAction( castor::String const & handler )
 	{
 		auto it = m_onMouseMoveActions.find( handler );
@@ -168,6 +179,16 @@ namespace castor3d
 		}
 	}
 
+	void UserInputListener::unregisterExpandAction( castor::String const & handler )
+	{
+		auto it = m_onExpandActions.find( handler );
+
+		if ( it != m_onExpandActions.end() )
+		{
+			m_onExpandActions.erase( it );
+		}
+	}
+
 	void UserInputListener::onMouseMoveAction( castor::String const & handler )
 	{
 		auto it = m_onMouseMoveActions.find( handler );
@@ -205,6 +226,16 @@ namespace castor3d
 		if ( it != m_onTextActions.end() )
 		{
 			it->second( text );
+		}
+	}
+	void UserInputListener::onExpandAction( castor::String const & handler
+		, bool expand )
+	{
+		auto it = m_onExpandActions.find( handler );
+
+		if ( it != m_onExpandActions.end() )
+		{
+			it->second( expand );
 		}
 	}
 

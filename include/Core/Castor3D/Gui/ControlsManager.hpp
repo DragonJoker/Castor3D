@@ -24,6 +24,7 @@ namespace castor3d
 		friend class ListBoxCtrl;
 		friend class PanelCtrl;
 		friend class SliderCtrl;
+		friend class ExpandablePanelCtrl;
 
 	public:
 		/**@name General */
@@ -226,6 +227,8 @@ namespace castor3d
 		std::map< Control const *, OnListEventConnection > m_onListSelects;
 		std::map< Control const *, OnSliderEventConnection > m_onSliderTracks;
 		std::map< Control const *, OnSliderEventConnection > m_onSliderReleases;
+		std::map< Control const *, OnExpandablePanelEventConnection > m_onPanelExpands;
+		std::map< Control const *, OnExpandablePanelEventConnection > m_onPanelRetracts;
 	};
 }
 
