@@ -8,6 +8,24 @@ CU_ImplementCUSmartPtr( castor3d, Spacer )
 
 namespace castor3d
 {
+	//*************************************************************************
+
+	castor::Size Layout::Item::getPaddedSize()const noexcept
+	{
+		castor::Size result;
+
+		if ( isControl() )
+		{
+			result = control()->getSize();
+			result->x += m_flags.paddingSize( 0u );
+			result->y += m_flags.paddingSize( 1u );
+		}
+
+		return result;
+	}
+
+	//*************************************************************************
+
 	Layout::Layout( castor::String const & typeName
 		, LayoutControl & container )
 		: castor::Named{ typeName }

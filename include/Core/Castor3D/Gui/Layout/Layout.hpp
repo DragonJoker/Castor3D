@@ -134,6 +134,10 @@ namespace castor3d
 					: nullptr;
 			}
 
+			/** \return	The size including padding.
+			*/
+			castor::Size getPaddedSize()const noexcept;
+
 			/** \return	The item horizontal alignment.
 			*/
 			auto hAlign()const noexcept
@@ -160,6 +164,20 @@ namespace castor3d
 			auto reserveSpaceIfHidden()const noexcept
 			{
 				return flags().reserveSpaceIfHidden();
+			}
+
+			/** \return	The padding value at given index.
+			*/
+			uint32_t padding( uint32_t i )const noexcept
+			{
+				return flags().padding( i );
+			}
+
+			/** \return	The padding size at given index.
+			*/
+			uint32_t paddingSize( uint32_t i )const noexcept
+			{
+				return flags().paddingSize( i );
 			}
 
 		private:

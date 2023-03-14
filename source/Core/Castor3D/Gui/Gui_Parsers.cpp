@@ -1632,6 +1632,81 @@ namespace castor3d
 	}
 	CU_EndAttribute()
 
+	CU_ImplementAttributeParser( parserLayoutCtrlPadding )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+
+		if ( guiContext.layout )
+		{
+			guiContext.layoutCtrlFlags.padding( params[0]->get< castor::Point4ui >() );
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No layout initialised." ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserLayoutCtrlPadLeft )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+
+		if ( guiContext.layout )
+		{
+			guiContext.layoutCtrlFlags.padLeft( params[0]->get< uint32_t >() );
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No layout initialised." ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserLayoutCtrlPadTop )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+
+		if ( guiContext.layout )
+		{
+			guiContext.layoutCtrlFlags.padTop( params[0]->get< uint32_t >() );
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No layout initialised." ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserLayoutCtrlPadRight )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+
+		if ( guiContext.layout )
+		{
+			guiContext.layoutCtrlFlags.padRight( params[0]->get< uint32_t >() );
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No layout initialised." ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserLayoutCtrlPadBottom )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+
+		if ( guiContext.layout )
+		{
+			guiContext.layoutCtrlFlags.padBottom( params[0]->get< uint32_t >() );
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No layout initialised." ) );
+		}
+	}
+	CU_EndAttribute()
+
 	CU_ImplementAttributeParser( parserLayoutCtrlEnd )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
