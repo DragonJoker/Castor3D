@@ -51,120 +51,218 @@ namespace castor3d
 			m_defaultFont = font;
 		}
 
-		ButtonStyleRPtr createButtonStyle()
+		ButtonStyleRPtr createButtonStyle( castor::String const & name )
 		{
-			m_buttonStyle = std::make_unique< ButtonStyle >( getName() + "/Button"
+			m_buttonStyles[name] = castor::makeUnique< ButtonStyle >( getName() + cuT( "/" ) + name
 				, m_engine
 				, getDefaultFont()->getName() );
-			return m_buttonStyle.get();
+			return m_buttonStyles[name].get();
 		}
 
-		ComboBoxStyleRPtr createComboBoxStyle()
+		ComboBoxStyleRPtr createComboBoxStyle( castor::String const & name )
 		{
-			m_comboBoxStyle = std::make_unique< ComboBoxStyle >( getName() + "/ComboBox"
+			m_comboBoxStyles[name] = castor::makeUnique< ComboBoxStyle >( getName() + cuT( "/" ) + name
 				, m_engine
 				, getDefaultFont()->getName() );
-			return m_comboBoxStyle.get();
+			return m_comboBoxStyles[name].get();
 		}
 
-		EditStyleRPtr createEditStyle()
+		EditStyleRPtr createEditStyle( castor::String const & name )
 		{
-			m_editStyle = std::make_unique< EditStyle >( getName() + "/Edit"
+			m_editStyles[name] = castor::makeUnique< EditStyle >( getName() + cuT( "/" ) + name
 				, m_engine
 				, getDefaultFont()->getName() );
-			return m_editStyle.get();
+			return m_editStyles[name].get();
 		}
 
-		ListBoxStyleRPtr createListBoxStyle()
+		ListBoxStyleRPtr createListBoxStyle( castor::String const & name )
 		{
-			m_listBoxStyle = std::make_unique< ListBoxStyle >( getName() + "/ListBox"
+			m_listBoxStyles[name] = castor::makeUnique< ListBoxStyle >( getName() + cuT( "/" ) + name
 				, m_engine
 				, getDefaultFont()->getName() );
-			return m_listBoxStyle.get();
+			return m_listBoxStyles[name].get();
 		}
 
-		SliderStyleRPtr createSliderStyle()
+		SliderStyleRPtr createSliderStyle( castor::String const & name )
 		{
-			m_sliderStyle = std::make_unique< SliderStyle >( getName() + "/Slider"
+			m_sliderStyles[name] = castor::makeUnique< SliderStyle >( getName() + cuT( "/" ) + name
 				, m_engine
 				, getDefaultFont()->getName() );
-			return m_sliderStyle.get();
+			return m_sliderStyles[name].get();
 		}
 
-		StaticStyleRPtr createStaticStyle()
+		StaticStyleRPtr createStaticStyle( castor::String const & name )
 		{
-			m_staticStyle = std::make_unique< StaticStyle >( getName() + "/Static"
+			m_staticStyles[name] = castor::makeUnique< StaticStyle >( getName() + cuT( "/" ) + name
 				, m_engine
 				, getDefaultFont()->getName() );
-			return m_staticStyle.get();
+			return m_staticStyles[name].get();
 		}
 
-		PanelStyleRPtr createPanelStyle()
+		PanelStyleRPtr createPanelStyle( castor::String const & name )
 		{
-			m_panelStyle = std::make_unique< PanelStyle >( getName() + "/Panel"
+			m_panelStyles[name] = castor::makeUnique< PanelStyle >( getName() + cuT( "/" ) + name
 				, m_engine );
-			return m_panelStyle.get();
+			return m_panelStyles[name].get();
 		}
 
-		ExpandablePanelStyleRPtr createExpandablePanelStyle()
+		ExpandablePanelStyleRPtr createExpandablePanelStyle( castor::String const & name )
 		{
-			m_expandablePanelStyle = std::make_unique< ExpandablePanelStyle >( getName() + "/ExpandablePanel"
+			m_expandablePanelStyles[name] = castor::makeUnique< ExpandablePanelStyle >( getName() + cuT( "/" ) + name
 				, m_engine
 				, getDefaultFont()->getName() );
-			return m_expandablePanelStyle.get();
+			return m_expandablePanelStyles[name].get();
 		}
 
-		ButtonStyleRPtr getButtonStyle()const
+		ButtonStyleRPtr getButtonStyle( castor::String const & name )const
 		{
-			return m_buttonStyle.get();
+			auto it = m_buttonStyles.find( name );
+
+			if ( it == m_buttonStyles.end() )
+			{
+				CU_SrcException( "Theme", "Couldn't find style" );
+			}
+
+			return it->second.get();
 		}
 
-		ComboBoxStyleRPtr getComboBoxStyle()const
+		ComboBoxStyleRPtr getComboBoxStyle( castor::String const & name )const
 		{
-			return m_comboBoxStyle.get();
+			auto it = m_comboBoxStyles.find( name );
+
+			if ( it == m_comboBoxStyles.end() )
+			{
+				CU_SrcException( "Theme", "Couldn't find style" );
+			}
+
+			return it->second.get();
 		}
 
-		EditStyleRPtr getEditStyle()const
+		EditStyleRPtr getEditStyle( castor::String const & name )const
 		{
-			return m_editStyle.get();
+			auto it = m_editStyles.find( name );
+
+			if ( it == m_editStyles.end() )
+			{
+				CU_SrcException( "Theme", "Couldn't find style" );
+			}
+
+			return it->second.get();
 		}
 
-		ListBoxStyleRPtr getListBoxStyle()const
+		ListBoxStyleRPtr getListBoxStyle( castor::String const & name )const
 		{
-			return m_listBoxStyle.get();
+			auto it = m_listBoxStyles.find( name );
+
+			if ( it == m_listBoxStyles.end() )
+			{
+				CU_SrcException( "Theme", "Couldn't find style" );
+			}
+
+			return it->second.get();
 		}
 
-		SliderStyleRPtr getSliderStyle()const
+		SliderStyleRPtr getSliderStyle( castor::String const & name )const
 		{
-			return m_sliderStyle.get();
+			auto it = m_sliderStyles.find( name );
+
+			if ( it == m_sliderStyles.end() )
+			{
+				CU_SrcException( "Theme", "Couldn't find style" );
+			}
+
+			return it->second.get();
 		}
 
-		StaticStyleRPtr getStaticStyle()const
+		StaticStyleRPtr getStaticStyle( castor::String const & name )const
 		{
-			return m_staticStyle.get();
+			auto it = m_staticStyles.find( name );
+
+			if ( it == m_staticStyles.end() )
+			{
+				CU_SrcException( "Theme", "Couldn't find style" );
+			}
+
+			return it->second.get();
 		}
 
-		PanelStyleRPtr getPanelStyle()const
+		PanelStyleRPtr getPanelStyle( castor::String const & name )const
 		{
-			return m_panelStyle.get();
+			auto it = m_panelStyles.find( name );
+
+			if ( it == m_panelStyles.end() )
+			{
+				CU_SrcException( "Theme", "Couldn't find style" );
+			}
+
+			return it->second.get();
 		}
 
-		ExpandablePanelStyleRPtr getExpandablePanelStyle()const
+		ExpandablePanelStyleRPtr getExpandablePanelStyle( castor::String const & name )const
 		{
-			return m_expandablePanelStyle.get();
+			auto it = m_expandablePanelStyles.find( name );
+
+			if ( it == m_expandablePanelStyles.end() )
+			{
+				CU_SrcException( "Theme", "Couldn't find style" );
+			}
+
+			return it->second.get();
+		}
+
+		template< typename StyleT >
+		StyleT * getStyle( castor::String const & name )
+		{
+			if constexpr ( std::is_same_v< StyleT, ButtonStyle > )
+			{
+				return getButtonStyle( name );
+			}
+			else if constexpr ( std::is_same_v< StyleT, ComboBoxStyle > )
+			{
+				return getComboBoxStyle( name );
+			}
+			else if constexpr ( std::is_same_v< StyleT, EditStyle > )
+			{
+				return getEditStyle( name );
+			}
+			else if constexpr ( std::is_same_v< StyleT, ListBoxStyle > )
+			{
+				return getListBoxStyle( name );
+			}
+			else if constexpr ( std::is_same_v< StyleT, SliderStyle > )
+			{
+				return getSliderStyle( name );
+			}
+			else if constexpr ( std::is_same_v< StyleT, StaticStyle > )
+			{
+				return getStaticStyle( name );
+			}
+			else if constexpr ( std::is_same_v< StyleT, PanelStyle > )
+			{
+				return getPanelStyle( name );
+			}
+			else if constexpr ( std::is_same_v< StyleT, ExpandablePanelStyle > )
+			{
+				return getExpandablePanelStyle( name );
+			}
+			else
+			{
+				log::error << "Unsupported style type" << std::endl;
+				return nullptr;
+			}
 		}
 
 	private:
 		Engine & m_engine;
 		castor::FontResPtr m_defaultFont;
-		ButtonStyleUPtr m_buttonStyle;
-		ComboBoxStyleUPtr m_comboBoxStyle;
-		EditStyleUPtr m_editStyle;
-		ListBoxStyleUPtr m_listBoxStyle;
-		SliderStyleUPtr m_sliderStyle;
-		StaticStyleUPtr m_staticStyle;
-		PanelStyleUPtr m_panelStyle;
-		ExpandablePanelStyleUPtr m_expandablePanelStyle;
+		std::map< castor::String, ButtonStyleUPtr > m_buttonStyles;
+		std::map< castor::String, ComboBoxStyleUPtr > m_comboBoxStyles;
+		std::map< castor::String, EditStyleUPtr > m_editStyles;
+		std::map< castor::String, ListBoxStyleUPtr > m_listBoxStyles;
+		std::map< castor::String, SliderStyleUPtr > m_sliderStyles;
+		std::map< castor::String, StaticStyleUPtr > m_staticStyles;
+		std::map< castor::String, PanelStyleUPtr > m_panelStyles;
+		std::map< castor::String, ExpandablePanelStyleUPtr > m_expandablePanelStyles;
 	};
 }
 
