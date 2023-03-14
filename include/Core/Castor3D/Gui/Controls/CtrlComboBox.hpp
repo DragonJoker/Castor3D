@@ -20,7 +20,7 @@ namespace castor3d
 		 *\param[in]	parent	The parent control, if any
 		 *\param[in]	id		The control ID
 		 */
-		ComboBoxCtrl( SceneRPtr scene
+		C3D_API ComboBoxCtrl( SceneRPtr scene
 			, castor::String const & name
 			, ComboBoxStyle * style
 			, ControlRPtr parent );
@@ -37,7 +37,7 @@ namespace castor3d
 		 *\param[in]	flags		The configuration flags
 		 *\param[in]	visible		Initial visibility status
 		 */
-		ComboBoxCtrl( SceneRPtr scene
+		C3D_API ComboBoxCtrl( SceneRPtr scene
 			, castor::String const & name
 			, ComboBoxStyle * style
 			, ControlRPtr parent
@@ -86,47 +86,47 @@ namespace castor3d
 		/** Appends a new item
 		*\param[in]	value		The item
 		*/
-		void appendItem( castor::String  const & value );
+		C3D_API void appendItem( castor::String  const & value );
 
 		/** Removes an item
 		*\param[in]	value		The item index
 		*/
-		void removeItem( int value );
+		C3D_API void removeItem( int value );
 
 		/** sets an item text
 		*\param[in]	index		The item index
 		*\param[in]	text		The item text
 		*/
-		void setItemText( int index, castor::String const & text );
+		C3D_API void setItemText( int index, castor::String const & text );
 
 		/** Clears the items
 		*/
-		void clear();
+		C3D_API void clear();
 
 		/** sets the selected item
 		*\param[in]	value		The new value
 		*/
-		void setSelected( int value );
+		C3D_API void setSelected( int value );
 
 		/** Retrieves the items
 		 *\return		The value
 		*/
-		castor::StringArray const & getItems()const;
+		C3D_API castor::StringArray const & getItems()const;
 
 		/** Retrieves the items count
 		 *\return		The value
 		*/
-		uint32_t getItemCount()const;
+		C3D_API uint32_t getItemCount()const;
 
 		/** Retrieves the selected item index
 		 *\return		The value
 		*/
-		int getSelected()const;
+		C3D_API int getSelected()const;
 
 		/** sets the caption font.
 		*\param[in]	font	The new value.
 		*/
-		void setFont( castor::String const & font );
+		C3D_API void setFont( castor::String const & font );
 
 		/** Connects a function to a combobox event
 		*\param[in]	event			The event type
@@ -147,7 +147,7 @@ namespace castor3d
 			return static_cast< ComboBoxStyle const & >( getBaseStyle() );
 		}
 
-		static ControlType constexpr Type{ ControlType::eComboBox };
+		C3D_API static ControlType constexpr Type{ ControlType::eComboBox };
 
 	private:
 		ComboBoxStyle & getStyle()

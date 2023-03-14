@@ -19,7 +19,7 @@ namespace castor3d
 		 *\param[in]	parent	The parent control, if any
 		 *\param[in]	id		The control ID
 		 */
-		ListBoxCtrl( SceneRPtr scene
+		C3D_API ListBoxCtrl( SceneRPtr scene
 			, castor::String const & name
 			, ListBoxStyle * style
 			, ControlRPtr parent );
@@ -36,7 +36,7 @@ namespace castor3d
 		 *\param[in]	flags		The configuration flags
 		 *\param[in]	visible		Initial visibility status
 		 */
-		ListBoxCtrl( SceneRPtr scene
+		C3D_API ListBoxCtrl( SceneRPtr scene
 			, castor::String const & name
 			, ListBoxStyle * style
 			, ControlRPtr parent
@@ -87,33 +87,33 @@ namespace castor3d
 		/** Appends a new item
 		 *\param[in]	value		The item
 		 */
-		void appendItem( castor::String  const & value );
+		C3D_API void appendItem( castor::String  const & value );
 
 		/** Removes an item
 		 *\param[in]	index		The item index
 		 */
-		void removeItem( int index );
+		C3D_API void removeItem( int index );
 
 		/** sets an item text
 		 *\param[in]	index		The item index
 		 *\param[in]	text		The item text
 		 */
-		void setItemText( int index, castor::String const & text );
+		C3D_API void setItemText( int index, castor::String const & text );
 
 		/** Retrieves an item text
 		 *\param[in]	index		The item index
 		 *\return		The item text
 		 */
-		castor::String getItemText( int index );
+		C3D_API castor::String getItemText( int index );
 
 		/** Clears the items
 		 */
-		void clear();
+		C3D_API void clear();
 
 		/** Sets the selected item
 		 *\param[in]	index		The new value
 		 */
-		void setSelected( int index );
+		C3D_API void setSelected( int index );
 
 		/** \return	The items.
 		 */
@@ -153,7 +153,7 @@ namespace castor3d
 			return static_cast< ListBoxStyle const & >( getBaseStyle() );
 		}
 
-		static ControlType constexpr Type{ ControlType::eListBox };
+		C3D_API static ControlType constexpr Type{ ControlType::eListBox };
 
 	private:
 		ListBoxStyle & getStyle()noexcept

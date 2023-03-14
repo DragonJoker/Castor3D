@@ -15,29 +15,29 @@ namespace castor3d
 	{
 	public:
 		/** Constructor
-		 *\param[in]	name	The control name
-		 *\param[in]	style	The control style
-		 *\param[in]	parent	The parent control, if any
-		 *\param[in]	id		The control ID
-		 */
-		ExpandablePanelCtrl( SceneRPtr scene
+		*\param[in]	name	The control name
+		*\param[in]	style	The control style
+		*\param[in]	parent	The parent control, if any
+		*\param[in]	id		The control ID
+		*/
+		C3D_API ExpandablePanelCtrl( SceneRPtr scene
 			, castor::String const & name
 			, ExpandablePanelStyle * style
 			, ControlRPtr parent );
 
 		/** Constructor
-		 *\param[in]	name		The control name
-		 *\param[in]	style		The control style
-		 *\param[in]	parent		The parent control, if any
-		 *\param[in]	values		The list value
-		 *\param[in]	selected	The selected value
-		 *\param[in]	id			The control ID
-		 *\param[in]	position	The position
-		 *\param[in]	size		The size
-		 *\param[in]	flags		The configuration flags
-		 *\param[in]	visible		Initial visibility status
-		 */
-		ExpandablePanelCtrl( SceneRPtr scene
+		*\param[in]	name		The control name
+		*\param[in]	style		The control style
+		*\param[in]	parent		The parent control, if any
+		*\param[in]	values		The list value
+		*\param[in]	selected	The selected value
+		*\param[in]	id			The control ID
+		*\param[in]	position	The position
+		*\param[in]	size		The size
+		*\param[in]	flags		The configuration flags
+		*\param[in]	visible		Initial visibility status
+		*/
+		C3D_API ExpandablePanelCtrl( SceneRPtr scene
 			, castor::String const & name
 			, ExpandablePanelStyle * style
 			, ControlRPtr parent
@@ -47,10 +47,10 @@ namespace castor3d
 			, uint64_t flags = 0
 			, bool visible = true );
 
-		/** Connects a function to a combobox event
-		*\param[in]	event			The event type
-		*\param[in]	function		The function
-		 *\return		The internal function index, to be able to disconnect it
+		/** Connects a function to an event
+		*\param[in]	event		The event type
+		*\param[in]	function	The function
+		*\return	The internal function index, to be able to disconnect it
 		*/
 		OnExpandablePanelEventConnection connect( ExpandablePanelEvent event
 			, OnExpandablePanelEventFunction function )
@@ -58,8 +58,7 @@ namespace castor3d
 			return m_signals[size_t( event )].connect( function );
 		}
 
-		/**
-		*\return	The combobox style
+		/** \return	The style
 		*/
 		ExpandablePanelStyle const & getStyle()const
 		{
@@ -76,13 +75,14 @@ namespace castor3d
 			return m_panel;
 		}
 
-		static ControlType constexpr Type{ ControlType::eExpandablePanel };
+		C3D_API static ControlType constexpr Type{ ControlType::eExpandablePanel };
 
 	private:
 		ExpandablePanelStyle & getStyle()
 		{
 			return static_cast< ExpandablePanelStyle & >( getBaseStyle() );
 		}
+
 		/** @copydoc Control::doCreate
 		*/
 		void doCreate()override;

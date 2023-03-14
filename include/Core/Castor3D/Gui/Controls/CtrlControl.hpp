@@ -34,7 +34,7 @@ namespace castor3d
 		 *\param[in]	flags		The configuration flags
 		 *\param[in]	visible		Initial visibility status.
 		 */
-		Control( ControlType type
+		C3D_API Control( ControlType type
 			, SceneRPtr scene
 			, castor::String const & name
 			, ControlStyleRPtr style
@@ -47,55 +47,55 @@ namespace castor3d
 		/** Sets the style
 		 *\param[in]	value	The new value
 		 */
-		void setStyle( ControlStyleRPtr value );
+		C3D_API void setStyle( ControlStyleRPtr value );
 
 		/** Sets the position.
 		 *\param[in]	value		The new value.
 		 */
-		void setPosition( castor::Position const & value );
+		C3D_API void setPosition( castor::Position const & value );
 
 		/** Retrieves the absolute control position.
 		 *\return		The value.
 		 */
-		castor::Position getAbsolutePosition()const;
+		C3D_API castor::Position getAbsolutePosition()const;
 
 		/** Sets the size.
 		 *\param[in]	value		The new value.
 		 */
-		void setSize( castor::Size const & value );
+		C3D_API void setSize( castor::Size const & value );
 
 		/** Sets the background borders size.
 		 *\param[in]	value		The new value.
 		 */
-		void setBackgroundBorders( castor::Point4ui const & value );
+		C3D_API void setBackgroundBorders( castor::Point4ui const & value );
 
 		/** Sets the caption.
 		 *\param[in]	caption	The new value
 		 */
-		void setCaption( castor::String const & caption );
+		C3D_API void setCaption( castor::String const & caption );
 
 		/** Sets the visibility
 		 *\param[in]	value		The new value.
 		 */
-		void setVisible( bool value );
+		C3D_API void setVisible( bool value );
 
 		/** Retrieves the visibility status.
 		 *\return		The value.
 		 */
-		bool isVisible()const;
+		C3D_API bool isVisible()const;
 
 		/** Retrieves a control.
 		 *\param[in]	id		The control ID.
 		 */
-		ControlSPtr getChildControl( ControlID id );
+		C3D_API ControlSPtr getChildControl( ControlID id );
 
 		/** Adds a flag.
 		 */
-		void addFlag( uint64_t flag );
+		C3D_API void addFlag( uint64_t flag );
 
 		/** Removes a flag.
 		 */
-		void removeFlag( uint64_t flag );
+		C3D_API void removeFlag( uint64_t flag );
 
 		/**@name Getters */
 		//@{
@@ -195,16 +195,16 @@ namespace castor3d
 		/** Creates the control's overlays.
 		 *\param[in]	ctrlManager	The controls manager.
 		 */
-		void create( ControlsManagerSPtr ctrlManager );
+		C3D_API void create( ControlsManagerSPtr ctrlManager );
 
 		/** Destroys the control's overlays.
 		 */
-		void destroy();
+		C3D_API void destroy();
 
 		/** Retrieves the visibility status
 		 *\return		The value
 		*/
-		bool doIsVisible()const;
+		C3D_API bool doIsVisible()const;
 
 	private:
 		/** Creates the control's overlays and sub-controls

@@ -19,7 +19,7 @@ namespace castor3d
 		 *\param[in]	parent	The parent control, if any
 		 *\param[in]	id		The control ID
 		 */
-		ButtonCtrl( SceneRPtr scene
+		C3D_API ButtonCtrl( SceneRPtr scene
 			, castor::String const & name
 			, ButtonStyleRPtr style
 			, ControlRPtr parent );
@@ -35,7 +35,7 @@ namespace castor3d
 		 *\param[in]	flags		The configuration flags
 		 *\param[in]	visible		Initial visibility status
 		 */
-		ButtonCtrl( SceneRPtr scene
+		C3D_API ButtonCtrl( SceneRPtr scene
 			, castor::String const & name
 			, ButtonStyleRPtr style
 			, ControlRPtr parent
@@ -48,12 +48,12 @@ namespace castor3d
 		/** Sets the horizontal alignment for the text.
 		*\param[in]	align	The new value.
 		*/
-		void setHAlign( HAlign align );
+		C3D_API void setHAlign( HAlign align );
 
 		/** Sets the vertical alignment for the text.
 		*\param[in]	align	The new value.
 		*/
-		void setVAlign( VAlign align );
+		C3D_API void setVAlign( VAlign align );
 
 		/** Retrieves the caption
 		 *\return		The value
@@ -82,7 +82,7 @@ namespace castor3d
 			return static_cast< ButtonStyle const & >( getBaseStyle() );
 		}
 
-		static ControlType constexpr Type{ ControlType::eButton };
+		C3D_API static ControlType constexpr Type{ ControlType::eButton };
 
 	private:
 		ButtonStyle & getStyle()

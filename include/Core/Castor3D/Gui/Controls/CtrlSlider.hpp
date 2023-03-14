@@ -21,7 +21,7 @@ namespace castor3d
 		 *\param[in]	parent	The parent control, if any
 		 *\param[in]	id		The control ID
 		 */
-		SliderCtrl( SceneRPtr scene
+		C3D_API SliderCtrl( SceneRPtr scene
 			, castor::String const & name
 			, SliderStyleRPtr style
 			, ControlRPtr parent );
@@ -37,7 +37,7 @@ namespace castor3d
 		 *\param[in]	flags		The configuration flags
 		 *\param[in]	visible		Initial visibility status
 		 */
-		SliderCtrl( SceneRPtr scene
+		C3D_API SliderCtrl( SceneRPtr scene
 			, castor::String const & name
 			, SliderStyleRPtr style
 			, ControlRPtr parent
@@ -50,12 +50,12 @@ namespace castor3d
 		/** sets the range
 		*\param[in]	value		The new value
 		*/
-		void setRange( castor::Range< int32_t > const & value );
+		C3D_API void setRange( castor::Range< int32_t > const & value );
 
 		/** sets the caption
 		*\param[in]	value		The new value
 		*/
-		void setValue( int32_t value );
+		C3D_API void setValue( int32_t value );
 
 		/** Retrieves the range
 		 *\return		The value
@@ -92,7 +92,7 @@ namespace castor3d
 			return static_cast< SliderStyle const & >( getBaseStyle() );
 		}
 
-		static ControlType constexpr Type{ ControlType::eSlider };
+		C3D_API static ControlType constexpr Type{ ControlType::eSlider };
 
 	private:
 		SliderStyle & getStyle()
