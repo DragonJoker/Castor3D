@@ -24,7 +24,7 @@ namespace castor3d
 		, castor::Size const & size
 		, uint64_t flags
 		, bool visible )
-		: NonClientEventHandler< Control >{ name, type != ControlType::eStatic }
+		: NonClientEventHandler< Control >{ ( parent ? parent->getName() + "/" + name : name ), type != ControlType::eStatic }
 		, m_scene{ scene }
 		, m_parent{ parent }
 		, m_id{ std::hash< castor::String >{}( getName() ) }

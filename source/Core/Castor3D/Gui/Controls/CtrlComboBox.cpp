@@ -55,7 +55,7 @@ namespace castor3d
 		, m_selected{ selected }
 	{
 		m_expand = std::make_shared< ButtonCtrl >( m_scene
-			, name + cuT( "_Expand" )
+			, cuT( "Expand" )
 			, &style->getButtonStyle()
 			, this
 			, cuT( "+" )
@@ -69,7 +69,7 @@ namespace castor3d
 			} );
 
 		m_choices = std::make_shared< ListBoxCtrl >( m_scene
-			, name + cuT( "_Choices" )
+			, cuT( "Choices" )
 			, &style->getListBoxStyle()
 			, this
 			, m_values
