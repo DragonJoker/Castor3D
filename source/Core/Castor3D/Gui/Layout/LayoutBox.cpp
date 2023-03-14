@@ -46,8 +46,7 @@ namespace castor3d
 			else
 			{
 				auto control = item.control();
-				auto controlSize = control->getSize();
-				uint32_t controlSizeAdvance = controlSize[advanceComp];
+				uint32_t controlSizeAdvance = control->getSize()[advanceComp];
 
 				if ( control->isVisible() )
 				{
@@ -66,7 +65,7 @@ namespace castor3d
 
 					advance += int32_t( controlSizeAdvance );
 				}
-				else if ( item.flags().m_reserveSpaceIfHidden )
+				else if ( item.reserveSpaceIfHidden() )
 				{
 					advance += int32_t( controlSizeAdvance );
 				}
@@ -98,7 +97,7 @@ namespace castor3d
 				else
 				{
 					if ( lookup.control()->isVisible()
-						|| lookup.flags().m_reserveSpaceIfHidden )
+						|| lookup.reserveSpaceIfHidden() )
 					{
 						acc = acc + lookup.control()->getSize()[component];
 					}
@@ -116,7 +115,7 @@ namespace castor3d
 		, uint32_t limit
 		, uint32_t component )
 	{
-		if ( item.flags().m_expand )
+		if ( item.expand() )
 		{
 			return { 0u, limit };
 		}
@@ -127,21 +126,21 @@ namespace castor3d
 
 		if ( component == 0u )
 		{
-			if ( item.flags().m_hAlign != HAlign::eLeft )
+			if ( item.hAlign() != HAlign::eLeft )
 			{
 				posFixed = int32_t( limit ) - int32_t( sizeFixed );
 
-				if ( item.flags().m_hAlign == HAlign::eCenter )
+				if ( item.hAlign() == HAlign::eCenter )
 				{
 					posFixed /= 2;
 				}
 			}
 		}
-		else if ( item.flags().m_vAlign != VAlign::eTop )
+		else if ( item.vAlign() != VAlign::eTop )
 		{
 			posFixed = int32_t( limit ) - int32_t( sizeFixed );
 
-			if ( item.flags().m_vAlign == VAlign::eCenter )
+			if ( item.vAlign() == VAlign::eCenter )
 			{
 				posFixed /= 2;
 			}

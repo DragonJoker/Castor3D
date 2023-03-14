@@ -207,67 +207,7 @@ namespace castor3d
 	/**
 	*\brief	The flags for a specific control in a layout.
 	*/
-	struct LayoutCtrlFlags
-	{
-		LayoutCtrlFlags & align( HAlign v )
-		{
-			m_hAlign = v;
-			return *this;
-		}
-
-		LayoutCtrlFlags & align( VAlign v )
-		{
-			m_vAlign = v;
-			return *this;
-		}
-
-		LayoutCtrlFlags & centerHorizontal()
-		{
-			return align( HAlign::eCenter );
-		}
-
-		LayoutCtrlFlags & centerVertical()
-		{
-			return align( VAlign::eCenter );
-		}
-
-		LayoutCtrlFlags & top()
-		{
-			return align( VAlign::eTop );
-		}
-
-		LayoutCtrlFlags & bottom()
-		{
-			return align( VAlign::eBottom );
-		}
-
-		LayoutCtrlFlags & left()
-		{
-			return align( HAlign::eLeft );
-		}
-
-		LayoutCtrlFlags & right()
-		{
-			return align( HAlign::eRight );
-		}
-
-		LayoutCtrlFlags & stretch( bool v )
-		{
-			m_expand = v;
-			return *this;
-		}
-
-		LayoutCtrlFlags & reserveSpaceIfHidden( bool v )
-		{
-			m_reserveSpaceIfHidden = v;
-			return *this;
-		}
-
-		HAlign m_hAlign{};
-		VAlign m_vAlign{};
-		bool m_expand{};
-		bool m_reserveSpaceIfHidden{};
-	};
+	struct LayoutItemFlags;
 	/**
 	*\brief		Class used to to manage the controls: events and all GUI related stuff
 	*/
@@ -389,6 +329,10 @@ namespace castor3d
 	using OnSliderEventFunction = std::function< void( int ) >;
 	using OnSliderEvent = castor::SignalT< OnSliderEventFunction >;
 	using OnSliderEventConnection = OnSliderEvent::connection;
+
+	using OnControlChangedFunction = std::function< void( Control const & ) >;
+	using OnControlChanged = castor::SignalT< OnControlChangedFunction >;
+	using OnControlChangedConnection = OnControlChanged::connection;
 
 	CU_DeclareCUSmartPtr( castor3d, Layout, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, Spacer, C3D_API );
