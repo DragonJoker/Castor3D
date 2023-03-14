@@ -40,10 +40,9 @@ namespace castor3d
 		std::shared_ptr< ControlT > createControl( GuiParserContext & context
 			, SceneRPtr scene
 			, castor::String const & controlName
-			, castor::String const & themeName
+			, ThemeRPtr theme
 			, std::shared_ptr< ControlT > & control )
 		{
-			auto theme = getControlsManager( context ).getTheme( themeName );
 			CU_Require( theme != nullptr );
 
 			if constexpr ( ControlT::Type == ControlType::eButton )
@@ -51,56 +50,56 @@ namespace castor3d
 				control = std::make_shared< ControlT >( scene
 					, controlName
 					, theme->getButtonStyle()
-					, context.getTop() );
+					, context.getTopControl() );
 			}
 			else if constexpr ( ControlT::Type == ControlType::eComboBox )
 			{
 				control = std::make_shared< ControlT >( scene
 					, controlName
 					, theme->getComboBoxStyle()
-					, context.getTop() );
+					, context.getTopControl() );
 			}
 			else if constexpr ( ControlT::Type == ControlType::eEdit )
 			{
 				control = std::make_shared< ControlT >( scene
 					, controlName
 					, theme->getEditStyle()
-					, context.getTop() );
+					, context.getTopControl() );
 			}
 			else if constexpr ( ControlT::Type == ControlType::eListBox )
 			{
 				control = std::make_shared< ControlT >( scene
 					, controlName
 					, theme->getListBoxStyle()
-					, context.getTop() );
+					, context.getTopControl() );
 			}
 			else if constexpr ( ControlT::Type == ControlType::eSlider )
 			{
 				control = std::make_shared< ControlT >( scene
 					, controlName
 					, theme->getSliderStyle()
-					, context.getTop() );
+					, context.getTopControl() );
 			}
 			else if constexpr ( ControlT::Type == ControlType::eStatic )
 			{
 				control = std::make_shared< ControlT >( scene
 					, controlName
 					, theme->getStaticStyle()
-					, context.getTop() );
+					, context.getTopControl() );
 			}
 			else if constexpr ( ControlT::Type == ControlType::ePanel )
 			{
 				control = std::make_shared< ControlT >( scene
 					, controlName
 					, theme->getPanelStyle()
-					, context.getTop() );
+					, context.getTopControl() );
 			}
 			else if constexpr ( ControlT::Type == ControlType::eExpandablePanel )
 			{
 				control = std::make_shared< ControlT >( scene
 					, controlName
 					, theme->getExpandablePanelStyle()
-					, context.getTop() );
+					, context.getTopControl() );
 			}
 			else
 			{
@@ -128,7 +127,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	ControlRPtr GuiParserContext::getTop()const
+	ControlRPtr GuiParserContext::getTopControl()const
 	{
 		ControlRPtr result{};
 
@@ -140,7 +139,7 @@ namespace castor3d
 		return result;
 	}
 
-	void GuiParserContext::pop()
+	void GuiParserContext::popControl()
 	{
 		button.reset();
 		edit.reset();
@@ -189,6 +188,67 @@ namespace castor3d
 		}
 	}
 
+	ControlStyleRPtr GuiParserContext::getTopStyle()const
+	{
+		ControlStyleRPtr result{};
+
+		if ( !styles.empty() )
+		{
+			result = styles.top();
+		}
+
+		return result;
+	}
+
+	void GuiParserContext::popStyle()
+	{
+		buttonStyle = {};
+		comboStyle = {};
+		editStyle = {};
+		listboxStyle = {};
+		sliderStyle = {};
+		staticStyle = {};
+		panelStyle = {};
+		expandablePanelStyle = {};
+
+		if ( !styles.empty() )
+		{
+			styles.pop();
+			auto top = styles.top();
+
+			switch ( top->getType() )
+			{
+			case ControlType::eStatic:
+				staticStyle = &static_cast< StaticStyle & >( *top );
+				break;
+			case ControlType::eEdit:
+				editStyle = &static_cast< EditStyle & >( *top );
+				break;
+			case ControlType::eSlider:
+				sliderStyle = &static_cast< SliderStyle & >( *top );
+				break;
+			case ControlType::eComboBox:
+				comboStyle = &static_cast< ComboBoxStyle & >( *top );
+				break;
+			case ControlType::eListBox:
+				listboxStyle = &static_cast< ListBoxStyle & >( *top );
+				break;
+			case ControlType::eButton:
+				buttonStyle = &static_cast< ButtonStyle & >( *top );
+				break;
+			case ControlType::ePanel:
+				panelStyle = &static_cast< PanelStyle & >( *top );
+				break;
+			case ControlType::eExpandablePanel:
+				expandablePanelStyle = &static_cast< ExpandablePanelStyle & >( *top );
+				break;
+			default:
+				CU_Failure( "Unsupported Style Type" );
+				break;
+			}
+		}
+	}
+
 	//*********************************************************************************************
 
 	CU_ImplementAttributeParser( parserGui )
@@ -221,14 +281,13 @@ namespace castor3d
 
 	CU_ImplementAttributeParser( parserButtonTheme )
 	{
-		castor::String themeName;
-		params[0]->get( themeName );
+		auto themeName = params[0]->get< castor::String >();
 		auto & parsingContext = getParserContext( context );
 		auto & guiContext = guiparse::getParserContext( context );
 		guiparse::createControl( guiContext
 			, parsingContext.scene
 			, guiContext.controlName
-			, themeName
+			, guiparse::getControlsManager( guiContext ).getTheme( themeName )
 			, guiContext.button );
 	}
 	CU_EndAttribute()
@@ -288,7 +347,7 @@ namespace castor3d
 	{
 		auto & guiContext = guiparse::getParserContext( context );
 		guiparse::finishControl( guiparse::getControlsManager( context ), guiContext, guiContext.button );
-		guiContext.pop();
+		guiContext.popControl();
 	}
 	CU_EndAttributePop()
 
@@ -308,7 +367,7 @@ namespace castor3d
 		guiparse::createControl( guiContext
 			, parsingContext.scene
 			, guiContext.controlName
-			, themeName
+			, guiparse::getControlsManager( guiContext ).getTheme( themeName )
 			, guiContext.combo );
 	}
 	CU_EndAttribute()
@@ -335,7 +394,7 @@ namespace castor3d
 	{
 		auto & guiContext = guiparse::getParserContext( context );
 		guiparse::finishControl( guiparse::getControlsManager( context ), guiContext, guiContext.combo );
-		guiContext.pop();
+		guiContext.popControl();
 	}
 	CU_EndAttributePop()
 
@@ -355,7 +414,7 @@ namespace castor3d
 		guiparse::createControl( guiContext
 			, parsingContext.scene
 			, guiContext.controlName
-			, themeName
+			, guiparse::getControlsManager( guiContext ).getTheme( themeName )
 			, guiContext.edit );
 	}
 	CU_EndAttribute()
@@ -402,7 +461,7 @@ namespace castor3d
 	{
 		auto & guiContext = guiparse::getParserContext( context );
 		guiparse::finishControl( guiparse::getControlsManager( context ), guiContext, guiContext.edit );
-		guiContext.pop();
+		guiContext.popControl();
 	}
 	CU_EndAttributePop()
 
@@ -422,7 +481,7 @@ namespace castor3d
 		guiparse::createControl( guiContext
 			, parsingContext.scene
 			, guiContext.controlName
-			, themeName
+			, guiparse::getControlsManager( guiContext ).getTheme( themeName )
 			, guiContext.listbox );
 	}
 	CU_EndAttribute()
@@ -449,7 +508,7 @@ namespace castor3d
 	{
 		auto & guiContext = guiparse::getParserContext( context );
 		guiparse::finishControl( guiparse::getControlsManager( context ), guiContext, guiContext.listbox );
-		guiContext.pop();
+		guiContext.popControl();
 	}
 	CU_EndAttributePop()
 
@@ -469,7 +528,7 @@ namespace castor3d
 		guiparse::createControl( guiContext
 			, parsingContext.scene
 			, guiContext.controlName
-			, themeName
+			, guiparse::getControlsManager( guiContext ).getTheme( themeName )
 			, guiContext.slider );
 	}
 	CU_EndAttribute()
@@ -478,7 +537,7 @@ namespace castor3d
 	{
 		auto & guiContext = guiparse::getParserContext( context );
 		guiparse::finishControl( guiparse::getControlsManager( context ), guiContext, guiContext.slider );
-		guiContext.pop();
+		guiContext.popControl();
 	}
 	CU_EndAttributePop()
 
@@ -498,7 +557,7 @@ namespace castor3d
 		guiparse::createControl( guiContext
 			, parsingContext.scene
 			, guiContext.controlName
-			, themeName
+			, guiparse::getControlsManager( guiContext ).getTheme( themeName )
 			, guiContext.staticTxt );
 	}
 	CU_EndAttribute()
@@ -558,7 +617,7 @@ namespace castor3d
 	{
 		auto & guiContext = guiparse::getParserContext( context );
 		guiparse::finishControl( guiparse::getControlsManager( context ), guiContext, guiContext.staticTxt );
-		guiContext.pop();
+		guiContext.popControl();
 	}
 	CU_EndAttributePop()
 
@@ -578,7 +637,7 @@ namespace castor3d
 		guiparse::createControl( guiContext
 			, parsingContext.scene
 			, guiContext.controlName
-			, themeName
+			, guiparse::getControlsManager( guiContext ).getTheme( themeName )
 			, guiContext.panel );
 	}
 	CU_EndAttribute()
@@ -587,7 +646,7 @@ namespace castor3d
 	{
 		auto & guiContext = guiparse::getParserContext( context );
 		guiparse::finishControl( guiparse::getControlsManager( context ), guiContext, guiContext.panel );
-		guiContext.pop();
+		guiContext.popControl();
 	}
 	CU_EndAttributePop()
 
@@ -607,7 +666,7 @@ namespace castor3d
 		guiparse::createControl( guiContext
 			, parsingContext.scene
 			, guiContext.controlName
-			, themeName
+			, guiparse::getControlsManager( guiContext ).getTheme( themeName )
 			, guiContext.expandablePanel );
 	}
 	CU_EndAttribute()
@@ -632,7 +691,7 @@ namespace castor3d
 	{
 		auto & guiContext = guiparse::getParserContext( context );
 		guiparse::finishControl( guiparse::getControlsManager( context ), guiContext, guiContext.expandablePanel );
-		guiContext.pop();
+		guiContext.popControl();
 	}
 	CU_EndAttributePop()
 
@@ -640,7 +699,7 @@ namespace castor3d
 	{
 		auto & guiContext = guiparse::getParserContext( context );
 		guiContext.parents.pop();
-		guiContext.pop();
+		guiContext.popControl();
 	}
 	CU_EndAttributePop()
 
@@ -648,7 +707,7 @@ namespace castor3d
 	{
 		auto & guiContext = guiparse::getParserContext( context );
 		guiContext.parents.pop();
-		guiContext.pop();
+		guiContext.popControl();
 	}
 	CU_EndAttributePop()
 
@@ -656,7 +715,7 @@ namespace castor3d
 	{
 		auto & guiContext = guiparse::getParserContext( context );
 
-		if ( auto control = guiContext.getTop() )
+		if ( auto control = guiContext.getTopControl() )
 		{
 			castor::Position position;
 			params[0]->get( position );
@@ -673,7 +732,7 @@ namespace castor3d
 	{
 		auto & guiContext = guiparse::getParserContext( context );
 
-		if ( auto control = guiContext.getTop() )
+		if ( auto control = guiContext.getTopControl() )
 		{
 			castor::Size size;
 			params[0]->get( size );
@@ -690,7 +749,7 @@ namespace castor3d
 	{
 		auto & guiContext = guiparse::getParserContext( context );
 
-		if ( auto control = guiContext.getTop() )
+		if ( auto control = guiContext.getTopControl() )
 		{
 			castor::Point4ui size;
 			params[0]->get( size );
@@ -707,7 +766,7 @@ namespace castor3d
 	{
 		auto & guiContext = guiparse::getParserContext( context );
 
-		if ( auto control = guiContext.getTop() )
+		if ( auto control = guiContext.getTopControl() )
 		{
 			castor::Point4d value;
 			params[0]->get( value );
@@ -724,7 +783,7 @@ namespace castor3d
 	{
 		auto & guiContext = guiparse::getParserContext( context );
 
-		if ( auto control = guiContext.getTop() )
+		if ( auto control = guiContext.getTopControl() )
 		{
 			castor::Point4d value;
 			params[0]->get( value );
@@ -741,7 +800,7 @@ namespace castor3d
 	{
 		auto & guiContext = guiparse::getParserContext( context );
 
-		if ( auto control = guiContext.getTop() )
+		if ( auto control = guiContext.getTopControl() )
 		{
 			castor::Point4d value;
 			params[0]->get( value );
@@ -758,7 +817,7 @@ namespace castor3d
 	{
 		auto & guiContext = guiparse::getParserContext( context );
 
-		if ( auto control = guiContext.getTop() )
+		if ( auto control = guiContext.getTopControl() )
 		{
 			bool value;
 			params[0]->get( value );
@@ -775,7 +834,7 @@ namespace castor3d
 	{
 		auto & guiContext = guiparse::getParserContext( context );
 
-		if ( auto control = guiContext.getTop() )
+		if ( auto control = guiContext.getTopControl() )
 		{
 			guiContext.layout = castor::makeUniqueDerived< Layout, LayoutBox >( static_cast< LayoutControl & >( *control ) );
 		}
@@ -808,153 +867,144 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserThemeButtonStyle )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
-		guiContext.buttonStyle = guiContext.theme->createButtonStyle();
-		guiContext.style = guiContext.buttonStyle;
+		guiContext.pushStyle( guiContext.theme->createButtonStyle()
+			, guiContext.buttonStyle );
 	}
 	CU_EndAttributePush( GUISection::eButtonStyle )
 
 	CU_ImplementAttributeParser( parserThemeComboBoxStyle )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
-		guiContext.comboStyle = guiContext.theme->createComboBoxStyle();
-		guiContext.style = guiContext.comboStyle;
+		guiContext.pushStyle( guiContext.theme->createComboBoxStyle()
+			, guiContext.comboStyle );
 	}
 	CU_EndAttributePush( GUISection::eComboStyle )
 
 	CU_ImplementAttributeParser( parserThemeComboButtonStyle )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
-		guiContext.buttonStyle = &guiContext.comboStyle->getButtonStyle();
-		guiContext.style = guiContext.buttonStyle;
+		guiContext.pushStyle( &guiContext.comboStyle->getButtonStyle()
+			, guiContext.buttonStyle );
 	}
 	CU_EndAttributePush( GUISection::eButtonStyle )
 
 	CU_ImplementAttributeParser( parserThemeComboListBoxStyle )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
-		guiContext.listboxStyle = &guiContext.comboStyle->getListBoxStyle();
-		guiContext.style = guiContext.listboxStyle;
+		guiContext.pushStyle( &guiContext.comboStyle->getListBoxStyle()
+			, guiContext.listboxStyle );
 	}
 	CU_EndAttributePush( GUISection::eListStyle )
 
 	CU_ImplementAttributeParser( parserThemeEditStyle )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
-		guiContext.editStyle = guiContext.theme->createEditStyle();
-		guiContext.style = guiContext.editStyle;
+		guiContext.pushStyle( guiContext.theme->createEditStyle()
+			, guiContext.editStyle );
 	}
 	CU_EndAttributePush( GUISection::eEditStyle )
 
 	CU_ImplementAttributeParser( parserThemeListBoxStyle )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
-		guiContext.listboxStyle = guiContext.theme->createListBoxStyle();
-		guiContext.style = guiContext.listboxStyle;
+		guiContext.pushStyle( guiContext.theme->createListBoxStyle()
+			, guiContext.listboxStyle );
 	}
 	CU_EndAttributePush( GUISection::eListStyle )
 
 	CU_ImplementAttributeParser( parserThemeItemStaticStyle )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
-		guiContext.staticStyle = &guiContext.listboxStyle->getItemStyle();
-		guiContext.style = guiContext.staticStyle;
+		guiContext.pushStyle( &guiContext.listboxStyle->getItemStyle()
+			, guiContext.staticStyle );
 	}
 	CU_EndAttributePush( GUISection::eStaticStyle )
 
 	CU_ImplementAttributeParser( parserThemeSelItemStaticStyle )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
-		guiContext.staticStyle = &guiContext.listboxStyle->getSelectedItemStyle();
-		guiContext.style = guiContext.staticStyle;
+		guiContext.pushStyle( &guiContext.listboxStyle->getSelectedItemStyle()
+			, guiContext.staticStyle );
 	}
 	CU_EndAttributePush( GUISection::eStaticStyle )
 
 	CU_ImplementAttributeParser( parserThemeHighItemStaticStyle )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
-		guiContext.staticStyle = &guiContext.listboxStyle->getHighlightedItemStyle();
-		guiContext.style = guiContext.staticStyle;
+		guiContext.pushStyle( &guiContext.listboxStyle->getHighlightedItemStyle()
+			, guiContext.staticStyle );
 	}
 	CU_EndAttributePush( GUISection::eStaticStyle )
 
 	CU_ImplementAttributeParser( parserThemeSliderStyle )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
-		guiContext.sliderStyle = guiContext.theme->createSliderStyle();
-		guiContext.style = guiContext.sliderStyle;
+		guiContext.pushStyle( guiContext.theme->createSliderStyle()
+			, guiContext.sliderStyle );
 	}
 	CU_EndAttributePush( GUISection::eSliderStyle )
 
 	CU_ImplementAttributeParser( parserThemeStaticStyle )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
-		guiContext.staticStyle = guiContext.theme->createStaticStyle();
-		guiContext.style = guiContext.staticStyle;
+		guiContext.pushStyle( guiContext.theme->createStaticStyle()
+			, guiContext.staticStyle );
 	}
 	CU_EndAttributePush( GUISection::eStaticStyle )
 
 	CU_ImplementAttributeParser( parserThemePanelStyle )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
-		guiContext.panelStyle = guiContext.theme->createPanelStyle();
-		guiContext.style = guiContext.panelStyle;
+		guiContext.pushStyle( guiContext.theme->createPanelStyle()
+			, guiContext.panelStyle );
 	}
 	CU_EndAttributePush( GUISection::ePanelStyle )
 
 	CU_ImplementAttributeParser( parserThemeExpandablePanelStyle )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
-		guiContext.expandablePanelStyle = guiContext.theme->createExpandablePanelStyle();
-		guiContext.style = guiContext.expandablePanelStyle;
+		guiContext.pushStyle( guiContext.theme->createExpandablePanelStyle()
+			, guiContext.expandablePanelStyle );
 	}
 	CU_EndAttributePush( GUISection::eExpandablePanelStyle )
 
 	CU_ImplementAttributeParser( parserThemeLineStaticStyle )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
-		guiContext.staticStyle = &guiContext.sliderStyle->getLineStyle();
-		guiContext.style = guiContext.staticStyle;
-
-		if ( guiContext.listboxStyle )
-		{
-			guiContext.style = guiContext.listboxStyle;
-		}
-		else if ( guiContext.sliderStyle )
-		{
-			guiContext.style = guiContext.sliderStyle;
-		}
+		guiContext.pushStyle( &guiContext.sliderStyle->getLineStyle()
+			, guiContext.staticStyle );
 	}
 	CU_EndAttributePush( GUISection::eStaticStyle )
 
 	CU_ImplementAttributeParser( parserThemeTickStaticStyle )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
-		guiContext.staticStyle = &guiContext.sliderStyle->getTickStyle();
-		guiContext.style = guiContext.staticStyle;
+		guiContext.pushStyle( &guiContext.sliderStyle->getTickStyle()
+			, guiContext.staticStyle );
 	}
 	CU_EndAttributePush( GUISection::eStaticStyle )
 
 	CU_ImplementAttributeParser( parserThemeExpandablePanelHeaderStyle )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
-		guiContext.panelStyle = &guiContext.expandablePanelStyle->getHeaderStyle();
-		guiContext.style = guiContext.panelStyle;
+		guiContext.pushStyle( &guiContext.expandablePanelStyle->getHeaderStyle()
+			, guiContext.panelStyle );
 	}
 	CU_EndAttributePush( GUISection::ePanelStyle )
 
 	CU_ImplementAttributeParser( parserThemeExpandablePanelExpandStyle )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
-		guiContext.buttonStyle = &guiContext.expandablePanelStyle->getExpandStyle();
-		guiContext.style = guiContext.buttonStyle;
+		guiContext.pushStyle( &guiContext.expandablePanelStyle->getExpandStyle()
+			, guiContext.buttonStyle );
 	}
 	CU_EndAttributePush( GUISection::eButtonStyle )
 
 	CU_ImplementAttributeParser( parserThemeExpandablePanelPanelStyle )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
-		guiContext.panelStyle = &guiContext.expandablePanelStyle->getPanelStyle();
-		guiContext.style = guiContext.panelStyle;
+		guiContext.pushStyle( &guiContext.expandablePanelStyle->getPanelStyle()
+			, guiContext.panelStyle );
 	}
 	CU_EndAttributePush( GUISection::ePanelStyle )
 
@@ -1245,23 +1295,14 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserStyleButtonEnd )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
-		guiContext.buttonStyle = nullptr;
-
-		if ( guiContext.comboStyle )
-		{
-			guiContext.style = guiContext.comboStyle;
-		}
-		else if ( guiContext.expandablePanelStyle )
-		{
-			guiContext.style = guiContext.expandablePanelStyle;
-		}
+		guiContext.popStyle();
 	}
 	CU_EndAttributePop()
 
 	CU_ImplementAttributeParser( parserStyleComboBoxEnd )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
-		guiContext.comboStyle = nullptr;
+		guiContext.popStyle();
 	}
 	CU_EndAttributePop()
 
@@ -1311,26 +1352,21 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserStyleEditEnd )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
-		guiContext.editStyle = nullptr;
+		guiContext.popStyle();
 	}
 	CU_EndAttributePop()
 
 	CU_ImplementAttributeParser( parserStyleListBoxEnd )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
-		guiContext.listboxStyle = nullptr;
-
-		if ( guiContext.comboStyle )
-		{
-			guiContext.style = guiContext.comboStyle;
-		}
+		guiContext.popStyle();
 	}
 	CU_EndAttributePop()
 
 	CU_ImplementAttributeParser( parserStyleSliderEnd )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
-		guiContext.sliderStyle = nullptr;
+		guiContext.popStyle();
 	}
 	CU_EndAttributePop()
 
@@ -1380,35 +1416,21 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserStyleStaticEnd )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
-		guiContext.staticStyle = nullptr;
-
-		if ( guiContext.listboxStyle )
-		{
-			guiContext.style = guiContext.listboxStyle;
-		}
-		else if ( guiContext.sliderStyle )
-		{
-			guiContext.style = guiContext.sliderStyle;
-		}
+		guiContext.popStyle();
 	}
 	CU_EndAttributePop()
 
 	CU_ImplementAttributeParser( parserStylePanelEnd )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
-		guiContext.panelStyle = nullptr;
-
-		if ( guiContext.expandablePanelStyle )
-		{
-			guiContext.style = guiContext.expandablePanelStyle;
-		}
+		guiContext.popStyle();
 	}
 	CU_EndAttributePop()
 
 	CU_ImplementAttributeParser( parserStyleExpandablePanelEnd )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
-		guiContext.expandablePanelStyle = nullptr;
+		guiContext.popStyle();
 	}
 	CU_EndAttributePop()
 
@@ -1416,7 +1438,7 @@ namespace castor3d
 	{
 		auto & guiContext = guiparse::getParserContext( context );
 
-		if ( auto style = guiContext.style )
+		if ( auto style = guiContext.getTopStyle() )
 		{
 			castor::String name;
 			params[0]->get( name );
@@ -1442,7 +1464,7 @@ namespace castor3d
 	{
 		auto & guiContext = guiparse::getParserContext( context );
 
-		if ( auto style = guiContext.style )
+		if ( auto style = guiContext.getTopStyle() )
 		{
 			castor::String name;
 			params[0]->get( name );
@@ -1468,7 +1490,7 @@ namespace castor3d
 	{
 		auto & guiContext = guiparse::getParserContext( context );
 
-		if ( auto style = guiContext.style )
+		if ( auto style = guiContext.getTopStyle() )
 		{
 			castor::String name;
 			params[0]->get( name );
@@ -1713,7 +1735,7 @@ namespace castor3d
 
 		if ( guiContext.layout )
 		{
-			if ( auto parent = guiContext.getTop() )
+			if ( auto parent = guiContext.getTopControl() )
 			{
 				guiContext.controlName = parent->getName() + "/" + guiContext.controlName;
 			}
