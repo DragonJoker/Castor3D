@@ -75,6 +75,13 @@ namespace castor
 			, String & params ) = 0;
 		/**
 		 *\~english
+		 *\return			\p false if the parameter is not set.
+		 *\~french
+		 *\return			\p false si la valeur du paramètre n'est pas définie.
+		 */
+		CU_API virtual bool isSet() = 0;
+		/**
+		 *\~english
 		 *\brief		Retrieves the parameter value.
 		 *\param[out]	value	Receives the value.
 		 *\return		The value.

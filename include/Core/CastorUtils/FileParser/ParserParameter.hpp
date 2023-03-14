@@ -28,6 +28,11 @@ namespace castor
 		: public ParserParameterBase
 	{
 	public:
+		//!\~english	The parameter value type.
+		//!\~french		Le type de valeur du paramètre.
+		using ValueType = typename ParserParameterHelper< Type >::ValueType;
+
+	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -35,6 +40,17 @@ namespace castor
 		 *\brief		Constructor.
 		 */
 		ParserParameter()
+		{
+		}
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\~french
+		 *\brief		Constructor.
+		 */
+		explicit ParserParameter( ValueType rhs )
+			: m_value{ std::move( rhs ) }
+			, m_set{ true }
 		{
 		}
 		/**
@@ -64,16 +80,24 @@ namespace castor
 		bool parse( LoggerInstance & logger
 			, String & params )override
 		{
-			return ValueParser< Type >::parse( logger, params, m_value );
+			m_set = ValueParser< Type >::parse( logger, params, m_value );
+			return m_set;
+		}
+		/**
+		 *\copydoc		castor::ParserParameterBase::isSet
+		 */
+		bool isSet()override
+		{
+			return m_set;
 		}
 
 	public:
-		//!\~english	The parameter value type.
-		//!\~french		Le type de valeur du paramètre.
-		using ValueType = typename ParserParameterHelper< Type >::ValueType;
 		//!\~english	The parameter value.
 		//!\~french		La valeur du paramètre.
 		ValueType m_value{};
+		//!\~english	The parameter value.
+		//!\~french		La valeur du paramètre.
+		bool m_set{};
 	};
 	/**
 	\~english
@@ -105,6 +129,18 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Constructor.
+		 *\~french
+		 *\brief		Constructor.
+		 */
+		explicit ParserParameter( ValueType rhs )
+			: m_value{ std::move( rhs ) }
+			, m_range{ makeRange( std::numeric_limits< ValueType >::lowest(), std::numeric_limits< ValueType >::max() ) }
+			, m_set{ true }
+		{
+		}
+		/**
+		 *\~english
+		 *\brief		Constructor.
 		 *\param[in]	range	The range to parse.
 		 *\~french
 		 *\brief		Constructor.
@@ -112,6 +148,21 @@ namespace castor
 		 */
 		explicit ParserParameter( Range< ValueType > const & range )
 			: m_range{ range }
+		{
+		}
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\param[in]	range	The range to parse.
+		 *\~french
+		 *\brief		Constructor.
+		 *\param[in]	range	L'intervalle à parser.
+		 */
+		explicit ParserParameter( ValueType rhs
+			, Range< ValueType > const & range )
+			: m_value{ std::move( rhs ) }
+			, m_range{ range }
+			, m_set{ true }
 		{
 		}
 		/**
@@ -141,7 +192,15 @@ namespace castor
 		bool parse( LoggerInstance & logger
 			, String & params )override
 		{
-			return ValueParser< Type >::parse( logger, params, m_value, m_range );
+			m_set = ValueParser< Type >::parse( logger, params, m_value, m_range );
+			return m_set;
+		}
+		/**
+		 *\copydoc		castor::ParserParameterBase::isSet
+		 */
+		bool isSet()override
+		{
+			return m_set;
 		}
 
 	public:
@@ -151,6 +210,9 @@ namespace castor
 		//!\~english	The parameter value range.
 		//!\~french		L'intervalle de la valeur du paramètre.
 		Range< ValueType > m_range;
+		//!\~english	The parameter value.
+		//!\~french		La valeur du paramètre.
+		bool m_set{};
 	};
 	/**
 	\~english
@@ -171,6 +233,16 @@ namespace castor
 		 *\brief		Constructor.
 		 */
 		ParserParameter();
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\~french
+		 *\brief		Constructor.
+		 */
+		explicit ParserParameter( String rhs )
+			: ParserParameter< ParameterType::eText >{ std::move( rhs ) }
+		{
+		}
 		/**
 		 *\copydoc		castor::ParserParameterBase::getType
 		 */
@@ -216,6 +288,20 @@ namespace castor
 		 */
 		explicit ParserParameter( UInt32StrMap const & values
 			, xchar const * name = ParserParameterHelper< ParameterType::eCheckedText >::StringType );
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\~french
+		 *\brief		Constructor.
+		 */
+		explicit ParserParameter( uint32_t value
+			, UInt32StrMap const & values
+			, xchar const * name = ParserParameterHelper< ParameterType::eCheckedText >::StringType )
+			: ParserParameter< ParameterType::eUInt32 >{ std::move( value ) }
+			, m_name{ name }
+			, m_values{ values }
+		{
+		}
 		/**
 		 *\copydoc		castor::ParserParameterBase::getType
 		 */
@@ -266,6 +352,20 @@ namespace castor
 		explicit ParserParameter( UInt32StrMap const & values
 			, xchar const * name = ParserParameterHelper< ParameterType::eBitwiseOred32BitsCheckedText >::StringType );
 		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\~french
+		 *\brief		Constructor.
+		 */
+		explicit ParserParameter( uint32_t value
+			, UInt32StrMap const & values
+			, xchar const * name = ParserParameterHelper< ParameterType::eBitwiseOred32BitsCheckedText >::StringType )
+			: ParserParameter< ParameterType::eUInt32 >{ std::move( value ) }
+			, m_name{ name }
+			, m_values{ values }
+		{
+		}
+		/**
 		 *\copydoc		castor::ParserParameterBase::getType
 		 */
 		ParameterType getType()const override;
@@ -315,6 +415,20 @@ namespace castor
 		explicit ParserParameter( UInt64StrMap const & values
 			, xchar const * name = ParserParameterHelper< ParameterType::eBitwiseOred64BitsCheckedText >::StringType );
 		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\~french
+		 *\brief		Constructor.
+		 */
+		explicit ParserParameter( uint64_t value
+			, UInt64StrMap const & values
+			, xchar const * name = ParserParameterHelper< ParameterType::eBitwiseOred64BitsCheckedText >::StringType )
+			: ParserParameter< ParameterType::eUInt64 >{ std::move( value ) }
+			, m_name{ name }
+			, m_values{ values }
+		{
+		}
+		/**
 		 *\copydoc		castor::ParserParameterBase::getType
 		 */
 		ParameterType getType()const override;
@@ -352,6 +466,21 @@ namespace castor
 	ParserParameterBaseSPtr makeParameter()
 	{
 		return std::make_shared< ParserParameter< Type > >();
+	}
+	/**
+	 *\~english
+	 *\brief		Creates a parameter of given type.
+	 *\return		The created parameter.
+	 *\~french
+	 *\brief		Crée un paramètre du type donné.
+	 *\return		Le paramètre créé.
+	 */
+	template< ParameterType Type, typename ... Params >
+	ParserParameterBaseSPtr makeDefaultedParameter( typename ParserParameterHelper< Type >::ValueType defaultValue
+		, Params && ... params )
+	{
+		return std::make_shared< ParserParameter< Type > >( defaultValue
+			, std::forward< Params >( params )... );
 	}
 	/**
 	 *\~english
