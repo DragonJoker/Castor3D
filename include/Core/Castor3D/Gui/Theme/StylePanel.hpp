@@ -12,9 +12,11 @@ namespace castor3d
 		: public ControlStyle
 	{
 	public:
+		static ControlType constexpr Type = ControlType::ePanel;
+
 		PanelStyle( castor::String const & name
 			, Engine & engine )
-			: ControlStyle{ ControlType::ePanel
+			: ControlStyle{ Type
 				, name
 				, engine }
 		{

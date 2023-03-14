@@ -12,10 +12,12 @@ namespace castor3d
 		: public ControlStyle
 	{
 	public:
+		static ControlType constexpr Type = ControlType::eEdit;
+
 		EditStyle( castor::String const & name
 			, Engine & engine
 			, castor::String const & fontName )
-			: ControlStyle{ ControlType::eEdit
+			: ControlStyle{ Type
 				, name
 				, engine
 				, MouseCursor::eText }

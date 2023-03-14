@@ -14,10 +14,12 @@ namespace castor3d
 		: public ControlStyle
 	{
 	public:
+		static ControlType constexpr Type = ControlType::eExpandablePanel;
+
 		ExpandablePanelStyle( castor::String const & name
 			, Engine & engine
 			, castor::String const & fontName )
-			: ControlStyle{ ControlType::eExpandablePanel
+			: ControlStyle{ Type
 				, name
 				, engine }
 			, m_headerStyle{ name + "/Header", engine }

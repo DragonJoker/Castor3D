@@ -337,27 +337,27 @@ namespace castor3d
 	CU_DeclareCUSmartPtr( castor3d, Layout, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, Spacer, C3D_API );
 
-	CU_DeclareSmartPtr( ControlsManager );
-	CU_DeclareSmartPtr( Control );
-	CU_DeclareSmartPtr( LayoutControl );
-	CU_DeclareSmartPtr( ButtonCtrl );
-	CU_DeclareSmartPtr( ComboBoxCtrl );
-	CU_DeclareSmartPtr( EditCtrl );
-	CU_DeclareSmartPtr( ExpandablePanelCtrl );
-	CU_DeclareSmartPtr( ListBoxCtrl );
-	CU_DeclareSmartPtr( PanelCtrl );
-	CU_DeclareSmartPtr( SliderCtrl );
-	CU_DeclareSmartPtr( StaticCtrl );
-	CU_DeclareSmartPtr( Theme );
-	CU_DeclareSmartPtr( ControlStyle );
-	CU_DeclareSmartPtr( ButtonStyle );
-	CU_DeclareSmartPtr( ComboBoxStyle );
-	CU_DeclareSmartPtr( EditStyle );
-	CU_DeclareSmartPtr( ExpandablePanelStyle );
-	CU_DeclareSmartPtr( ListBoxStyle );
-	CU_DeclareSmartPtr( PanelStyle );
-	CU_DeclareSmartPtr( SliderStyle );
-	CU_DeclareSmartPtr( StaticStyle );
+	CU_DeclareCUSmartPtr( castor3d, ControlsManager, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, Control, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, LayoutControl, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, ButtonCtrl, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, ComboBoxCtrl, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, EditCtrl, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, ExpandablePanelCtrl, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, ListBoxCtrl, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, PanelCtrl, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, SliderCtrl, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, StaticCtrl, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, Theme, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, ControlStyle, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, ButtonStyle, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, ComboBoxStyle, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, EditStyle, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, ExpandablePanelStyle, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, ListBoxStyle, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, PanelStyle, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, SliderStyle, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, StaticStyle, C3D_API );
 
 	using ControlArray = std::vector< ControlSPtr >;
 

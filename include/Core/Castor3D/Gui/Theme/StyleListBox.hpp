@@ -12,10 +12,12 @@ namespace castor3d
 		: public ControlStyle
 	{
 	public:
+		static ControlType constexpr Type = ControlType::eListBox;
+
 		ListBoxStyle( castor::String const & name
 			, Engine & engine
 			, castor::String const & fontName )
-			: ControlStyle{ ControlType::eListBox
+			: ControlStyle{ Type
 				, name
 				, engine }
 			, m_itemStyle{ name + "/Item", engine, fontName }

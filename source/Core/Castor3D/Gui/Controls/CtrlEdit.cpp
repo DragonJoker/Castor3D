@@ -13,6 +13,8 @@
 
 #include <CastorUtils/Graphics/Font.hpp>
 
+CU_ImplementCUSmartPtr( castor3d, EditCtrl )
+
 namespace castor3d
 {
 	EditCtrl::EditCtrl( SceneRPtr scene

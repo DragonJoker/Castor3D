@@ -13,6 +13,8 @@
 
 #include <CastorUtils/Graphics/Font.hpp>
 
+CU_ImplementCUSmartPtr( castor3d, ComboBoxCtrl )
+
 namespace castor3d
 {
 	ComboBoxCtrl::ComboBoxCtrl( SceneRPtr scene

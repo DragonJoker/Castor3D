@@ -13,6 +13,8 @@
 #include "Castor3D/Overlay/TextOverlay.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
+CU_ImplementCUSmartPtr( castor3d, Control )
+
 namespace castor3d
 {
 	Control::Control( ControlType type
