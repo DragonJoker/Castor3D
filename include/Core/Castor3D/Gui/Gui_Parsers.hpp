@@ -17,6 +17,7 @@ namespace castor3d
 	struct GuiParserContext
 	{
 		std::stack< ControlSPtr > parents{};
+		std::stack< ControlStyleRPtr > styles{};
 		Engine * engine{};
 		castor::String controlName{};
 		ButtonCtrlSPtr button{};
@@ -36,13 +37,22 @@ namespace castor3d
 		StaticStyleRPtr staticStyle{};
 		PanelStyleRPtr panelStyle{};
 		ExpandablePanelStyleRPtr expandablePanelStyle{};
-		ControlStyleRPtr style{};
 		uint32_t flags{};
 		LayoutUPtr layout{};
 		LayoutItemFlags layoutCtrlFlags{};
 
-		C3D_API ControlRPtr getTop()const;
-		C3D_API void pop();
+		C3D_API ControlRPtr getTopControl()const;
+		C3D_API void popControl();
+		C3D_API ControlStyleRPtr getTopStyle()const;
+		C3D_API void popStyle();
+
+		template< typename StyleT >
+		void pushStyle( StyleT * style
+			, StyleT *& result )
+		{
+			styles.push( style );
+			result = style;
+		}
 	};
 
 	//! Scene file sections Enum
