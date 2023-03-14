@@ -19,7 +19,7 @@ namespace castor3d
 		 *\param[in]	parent	The parent control, if any
 		 *\param[in]	id		The control ID.
 		*/
-		StaticCtrl( SceneRPtr scene
+		C3D_API StaticCtrl( SceneRPtr scene
 			, castor::String const & name
 			, StaticStyle * style
 			, ControlRPtr parent );
@@ -34,7 +34,7 @@ namespace castor3d
 		 *\param[in]	flags		The configuration flags
 		 *\param[in]	visible		Initial visibility status
 		 */
-		StaticCtrl( SceneRPtr scene
+		C3D_API StaticCtrl( SceneRPtr scene
 			, castor::String const & name
 			, StaticStyle * style
 			, ControlRPtr parent
@@ -47,12 +47,12 @@ namespace castor3d
 		/** Sets the horizontal alignment for the text.
 		*\param[in]	value	The new value.
 		*/
-		void setHAlign( HAlign value );
+		C3D_API void setHAlign( HAlign value );
 
 		/** Sets the vertical alignment for the text.
 		*\param[in]	value	The new value.
 		*/
-		void setVAlign( VAlign value );
+		C3D_API void setVAlign( VAlign value );
 
 		/**
 		*\return	The static caption
@@ -70,7 +70,7 @@ namespace castor3d
 			return static_cast< StaticStyle const & >( getBaseStyle() );
 		}
 
-		static ControlType constexpr Type{ ControlType::eStatic };
+		C3D_API static ControlType constexpr Type{ ControlType::eStatic };
 
 	private:
 		StaticStyle & getStyle()

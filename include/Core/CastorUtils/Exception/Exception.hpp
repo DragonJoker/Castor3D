@@ -202,6 +202,6 @@ namespace castor
 */
 #define CU_SrcException( source, text )\
 	CU_Failure( text );\
-	throw castor::Exception{ source##": "##text, __FILE__, __FUNCTION__, uint32_t( __LINE__ ) }
+	throw castor::Exception{ source ": " text, __FILE__, __FUNCTION__, uint32_t( __LINE__ ) }
 
 #endif

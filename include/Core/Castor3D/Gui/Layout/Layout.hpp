@@ -136,7 +136,7 @@ namespace castor3d
 
 			/** \return	The size including padding.
 			*/
-			castor::Size getPaddedSize()const noexcept;
+			C3D_API castor::Size getPaddedSize()const noexcept;
 
 			/** \return	The item horizontal alignment.
 			*/

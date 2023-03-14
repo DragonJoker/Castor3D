@@ -19,7 +19,7 @@ namespace castor3d
 		 *\param[in]	parent	The parent control, if any
 		 *\param[in]	id		The control ID.
 		*/
-		PanelCtrl( SceneRPtr scene
+		C3D_API PanelCtrl( SceneRPtr scene
 			, castor::String const & name
 			, PanelStyle * style
 			, ControlRPtr parent );
@@ -33,7 +33,7 @@ namespace castor3d
 		 *\param[in]	flags		The configuration flags
 		 *\param[in]	visible		Initial visibility status
 		 */
-		PanelCtrl( SceneRPtr scene
+		C3D_API PanelCtrl( SceneRPtr scene
 			, castor::String const & name
 			, PanelStyle * style
 			, ControlRPtr parent
@@ -50,7 +50,7 @@ namespace castor3d
 			return static_cast< PanelStyle const & >( getBaseStyle() );
 		}
 
-		static ControlType constexpr Type{ ControlType::ePanel };
+		C3D_API static ControlType constexpr Type{ ControlType::ePanel };
 
 	private:
 		PanelStyle & getStyle()

@@ -23,7 +23,7 @@ namespace castor3d
 		 *\param[in]	flags		The configuration flags
 		 *\param[in]	visible		Initial visibility status.
 		 */
-		LayoutControl( ControlType type
+		C3D_API LayoutControl( ControlType type
 			, SceneRPtr scene
 			, castor::String const & name
 			, ControlStyleRPtr style
@@ -36,7 +36,7 @@ namespace castor3d
 		/** Sets the layout for the elements contained in this one.
 		 *\param[in]	value	The new value
 		 */
-		void setLayout( LayoutUPtr layout );
+		C3D_API void setLayout( LayoutUPtr layout );
 
 	private:
 		/** Sets the background borders size.
@@ -64,11 +64,10 @@ namespace castor3d
 		 */
 		void doSetVisible( bool visible )final override;
 
-	private:
 		/** Sets the background borders size.
 		 *\param[in]	value		The new value.
 		 */
-		virtual void doSubSetBackgroundBorders( castor::Point4ui const & value ) {};
+		virtual void doSubSetBackgroundBorders( castor::Point4ui const & value ) {}
 		/** Sets the position
 		*\param[in]	value		The new value
 		*/
