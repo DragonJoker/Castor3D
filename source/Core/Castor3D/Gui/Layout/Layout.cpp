@@ -29,7 +29,7 @@ namespace castor3d
 	}
 
 	void Layout::addControl( Control & control
-		, LayoutCtrlFlags flags )
+		, LayoutItemFlags flags )
 	{
 		auto it = std::find_if( m_items.begin()
 			, m_items.end()
@@ -40,10 +40,18 @@ namespace castor3d
 
 		if ( it != m_items.end() )
 		{
-			CU_Exception( "The control already exists in the layout." );
+			CU_SrcException( "Layout", "The control already exists in the layout." );
 		}
 
-		m_items.emplace_back( control, std::move( flags ) );
+		m_items.emplace_back( control
+			, std::move( flags )
+			, control.onChanged.connect( [this]( Control const & ctrl )
+				{
+					if ( !m_updating )
+					{
+						markDirty();
+					}
+				} ) );
 		markDirty();
 	}
 
@@ -56,6 +64,10 @@ namespace castor3d
 
 	void Layout::update()
 	{
-		doUpdate();
+		if ( !m_updating.exchange( true ) )
+		{
+			doUpdate();
+			m_updating = false;
+		}
 	}
 }

@@ -377,6 +377,7 @@ source_group( "Source Files\\Gui\\Controls" FILES ${${PROJECT_NAME}_FOLDER_SRC_F
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Layout/Layout.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Layout/LayoutBox.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Layout/LayoutItemFlags.hpp
 )
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Gui/Layout/Layout.cpp

@@ -4,9 +4,13 @@ See LICENSE file in root folder
 #ifndef ___C3D_Layout_H___
 #define ___C3D_Layout_H___
 
-#include "Castor3D/Gui/GuiModule.hpp"
+#include "Castor3D/Gui/Layout/LayoutItemFlags.hpp"
 
 #include <CastorUtils/Design/Named.hpp>
+
+#include <CastorUtils/Config/BeginExternHeaderGuard.hpp>
+#include <atomic>
+#include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
 namespace castor3d
 {
@@ -71,9 +75,11 @@ namespace castor3d
 			*	The item flags.
 			*/
 			explicit Item( Control & c
-				, LayoutCtrlFlags f )noexcept
+				, LayoutItemFlags f
+				, OnControlChangedConnection o )noexcept
 				: m_type{ eControl }
 				, m_flags{ f }
+				, m_connection{ std::move( o ) }
 			{
 				m_value.control = &c;
 			}
@@ -89,16 +95,14 @@ namespace castor3d
 				m_value.spacer = &s;
 			}
 
-			/**
-			*\return	\p true if this item is a control, \p nullptr if not.
+			/** \return	\p true if this item is a control, \p nullptr if not.
 			*/
 			auto isControl()const noexcept
 			{
 				return m_type == eControl;
 			}
 
-			/**
-			*\return	The control if this item is a control, \p nullptr if not.
+			/** \return	The control if this item is a control, \p nullptr if not.
 			*/
 			auto control()const noexcept
 			{
@@ -107,24 +111,21 @@ namespace castor3d
 					: nullptr;
 			}
 
-			/**
-			*\return	The item flags.
+			/** \return	The item flags.
 			*/
 			auto flags()const noexcept
 			{
 				return m_flags;
 			}
 
-			/**
-			*\return	\p true if this item is a spacer, \p nullptr if not.
+			/** \return	\p true if this item is a spacer, \p nullptr if not.
 			*/
 			auto isSpacer()const noexcept
 			{
 				return m_type == eSpacer;
 			}
 
-			/**
-			*\return	The spacer if this item is a spacer, \p nullptr if not.
+			/** \return	The spacer if this item is a spacer, \p nullptr if not.
 			*/
 			auto spacer()const noexcept
 			{
@@ -133,10 +134,39 @@ namespace castor3d
 					: nullptr;
 			}
 
+			/** \return	The item horizontal alignment.
+			*/
+			auto hAlign()const noexcept
+			{
+				return flags().hAlign();
+			}
+
+			/** \return	The item vertical alignment.
+			*/
+			auto vAlign()const noexcept
+			{
+				return flags().vAlign();
+			}
+
+			/** \return	The item expand status.
+			*/
+			auto expand()const noexcept
+			{
+				return flags().expand();
+			}
+
+			/** \return	The item reserve space if hidden status.
+			*/
+			auto reserveSpaceIfHidden()const noexcept
+			{
+				return flags().reserveSpaceIfHidden();
+			}
+
 		private:
 			Type m_type;
 			Value m_value;
-			LayoutCtrlFlags m_flags;
+			LayoutItemFlags m_flags;
+			OnControlChangedConnection m_connection;
 		};
 
 	public:
@@ -168,7 +198,7 @@ namespace castor3d
 		*	The control.
 		*/
 		C3D_API void addControl( Control & control
-			, LayoutCtrlFlags flags = {} );
+			, LayoutItemFlags flags = {} );
 
 		/** Adds a space.
 		*\param[in] size
@@ -198,7 +228,7 @@ namespace castor3d
 		std::vector< Item > m_items;
 		std::vector< SpacerUPtr > m_spacers;
 		CpuFrameEvent * m_event{};
-		bool m_changed{ true };
+		std::atomic_bool m_updating{ false };
 	};
 }
 

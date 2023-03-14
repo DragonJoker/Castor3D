@@ -183,6 +183,10 @@ namespace castor3d
 			setVisible( false );
 		}
 
+		/** Signal called when position, size, borders or visibility are changed.
+		*/
+		OnControlChanged onChanged;
+
 	protected:
 		ControlStyle & getBaseStyle()
 		{

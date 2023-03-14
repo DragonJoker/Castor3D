@@ -130,6 +130,7 @@ namespace castor3d
 		}
 
 		doSetBackgroundBorders( m_borders );
+		onChanged( *this );
 	}
 
 	void Control::setPosition( castor::Position const & value )
@@ -149,6 +150,7 @@ namespace castor3d
 		}
 
 		doSetPosition( m_position );
+		onChanged( *this );
 	}
 
 	castor::Position Control::getAbsolutePosition()const
@@ -174,6 +176,7 @@ namespace castor3d
 		}
 
 		doSetSize( m_size );
+		onChanged( *this );
 	}
 
 	void Control::setCaption( castor::String const & caption )
@@ -193,6 +196,7 @@ namespace castor3d
 		}
 
 		doSetVisible( value );
+		onChanged( *this );
 	}
 
 	bool Control::isVisible()const

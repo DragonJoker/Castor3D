@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_GuiParsers_H___
 
 #include "Castor3D/Gui/GuiModule.hpp"
+#include "Castor3D/Gui/Layout/LayoutItemFlags.hpp"
 
 #include <CastorUtils/FileParser/FileParser.hpp>
 #include <CastorUtils/FileParser/FileParserContext.hpp>
@@ -38,7 +39,7 @@ namespace castor3d
 		ControlStyleRPtr style{};
 		uint32_t flags{};
 		LayoutUPtr layout{};
-		LayoutCtrlFlags layoutCtrlFlags{};
+		LayoutItemFlags layoutCtrlFlags{};
 
 		C3D_API ControlRPtr getTop()const;
 		C3D_API void pop();
