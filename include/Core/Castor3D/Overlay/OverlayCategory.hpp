@@ -215,7 +215,8 @@ namespace castor3d
 
 		bool isVisible()const noexcept
 		{
-			return m_visible;
+			return m_visible
+				&& !isFullyCropped();
 		}
 
 		MaterialRPtr getMaterial()const noexcept
@@ -338,6 +339,13 @@ namespace castor3d
 		 *\return		La taille de l'écran ou du parent.
 		 */
 		C3D_API castor::Point2d getParentSize()const;
+		/**
+		 *\~english
+		 *\return		\p true if the overlay is fully cropped out.
+		 *\~french
+		 *\return		\p true si l'incrustation est complètement découpée.
+		 */
+		C3D_API bool isFullyCropped()const;
 
 	private:
 		/**
