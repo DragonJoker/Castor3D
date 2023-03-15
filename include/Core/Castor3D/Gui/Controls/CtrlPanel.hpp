@@ -39,7 +39,7 @@ namespace castor3d
 			, ControlRPtr parent
 			, castor::Position const & position
 			, castor::Size const & size
-			, uint64_t flags = 0
+			, ControlFlagType flags = 0
 			, bool visible = true );
 
 		/**

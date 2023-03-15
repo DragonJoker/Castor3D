@@ -24,7 +24,7 @@ namespace castor3d
 		, ControlRPtr parent
 		, castor::Position const & position
 		, castor::Size const & size
-		, uint64_t flags
+		, ControlFlagType flags
 		, bool visible )
 		: Control{ type
 			, scene

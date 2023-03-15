@@ -15,8 +15,9 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	using ControlID = size_t;
+	using ControlFlagType = uint64_t;
 	/**
-	*\brief	Enumeration of supported controls in a OptionsPanel
+	*\brief	Enumeration of supported control types.
 	*/
 	enum class ControlType
 		: uint8_t
@@ -40,31 +41,44 @@ namespace castor3d
 		eExpandablePanel,
 	};
 	/**
-	*\brief	Enumeration of supported combobox events
+	*\brief	Enumeration of supported control events.
+	*/
+	enum class ControlEvent
+		: uint8_t
+	{
+		//! Control dragged.
+		eDrag,
+		//! Control dropped.
+		eDrop,
+		//! The control events count.
+		eCount,
+	};
+	/**
+	*\brief	Enumeration of supported combobox events.
 	*/
 	enum class ComboBoxEvent
 		: uint8_t
 	{
-		//! Item selected
+		//! Item selected.
 		eSelected,
-		//! The combo box events count
+		//! The combo box events count.
 		eCount,
 	};
 	/**
-	*\brief	Enumeration of supported edit events
+	*\brief	Enumeration of supported edit events.
 	*/
 	enum class EditEvent
 		: uint8_t
 	{
-		//! The edit text has changed
+		//! The edit text has changed.
 		eUpdated,
-		//! The return key has been hit (the edit must have EditStyle::eProcessEnter style)
+		//! The return key has been hit (the edit must have EditStyle::eProcessEnter style).
 		eReturn,
-		//! The edit events count
+		//! The edit events count.
 		eCount,
 	};
 	/**
-	*\brief	Enumeration of supported expandable panel events
+	*\brief	Enumeration of supported expandable panel events.
 	*/
 	enum class ExpandablePanelEvent
 		: uint8_t
@@ -73,49 +87,49 @@ namespace castor3d
 		eExpand,
 		//! Retract panel, leaving only header visible.
 		eRetract,
-		//! The expandable panel events count
+		//! The expandable panel events count.
 		eCount,
 	};
 	/**
-	*\brief	Enumeration of supported listbox events
+	*\brief	Enumeration of supported listbox events.
 	*/
 	enum class ListBoxEvent
 		: uint8_t
 	{
-		//! Item selected
+		//! Item selected.
 		eSelected,
-		//! The combobox events count
+		//! The combobox events count.
 		eCount,
 	};
 	/**
-	*\brief	Enumeration of supported button events
+	*\brief	Enumeration of supported button events.
 	*/
 	enum class ButtonEvent
 		: uint8_t
 	{
-		//! Button clicked
+		//! Button clicked.
 		eClicked,
-		//! The button events count
+		//! The button events count.
 		eCount,
 	};
 	/**
-	*\brief	Enumeration of supported slider events
+	*\brief	Enumeration of supported slider events.
 	*/
 	enum class SliderEvent
 		: uint8_t
 	{
-		//! Slider thumb release
+		//! Slider thumb release.
 		eThumbRelease,
-		//! Slider thumb track
+		//! Slider thumb track.
 		eThumbTrack,
-		//! The slider events count
+		//! The slider events count.
 		eCount,
 	};
 	/**
 	*\brief	Combo control supported flags.
 	*/
 	enum class ComboBoxFlag
-		: uint64_t
+		: ControlFlagType
 	{
 		//! read only combo box
 		eReadOnly = 0x0000000000000001,
@@ -125,15 +139,15 @@ namespace castor3d
 	*\brief	Edit control supported flags.
 	*/
 	enum class EditFlag
-		: uint64_t
+		: ControlFlagType
 	{
-		//! The edit control process 'return' hit as an event and not as a newline
+		//! The edit control process 'return' hit as an event and not as a newline.
 		eProcessEnter = 0x0000000000000100,
-		//! The edit control is a multiline edit control
+		//! The edit control is a multiline edit control.
 		eMultiline = 0x0000000000000200,
-		//! The edit control process 'tab' hit as the tab character and not as an event
+		//! The edit control process 'tab' hit as the tab character and not as an event.
 		eProcessTab = 0x0000000000000400,
-		//! Words are not cut
+		//! Words are not cut.
 		eWordWrap = 0x0000000000000800,
 	};
 	CU_ImplementFlags( EditFlag )
@@ -141,11 +155,11 @@ namespace castor3d
 	*\brief	Slider control supported flags.
 	*/
 	enum class SliderFlag
-		: uint64_t
+		: ControlFlagType
 	{
-		// The slider is displaye horizontally (default mode)
+		// The slider is displaye horizontally (default mode).
 		eHorizontal = 0x0000000000010000,
-		// The slider is displaye vertically
+		// The slider is displaye vertically.
 		eVertical = 0x00000000000200000,
 	};
 	CU_ImplementFlags( SliderFlag )
@@ -153,19 +167,19 @@ namespace castor3d
 	*\brief	Static control supported flags.
 	*/
 	enum class StaticFlag
-		: uint64_t
+		: ControlFlagType
 	{
-		//! The static's text is left aligned
+		//! The static's text is left aligned.
 		eHAlignLeft = 0x0000000001000000,
-		//! The static's text is horizontally centered
+		//! The static's text is horizontally centered.
 		eHAlignCenter = 0x0000000002000000,
-		//! The static's text is right aligned
+		//! The static's text is right aligned.
 		eHAlignRight = 0x0000000004000000,
-		//! The static's text is aligned on top
+		//! The static's text is aligned on top.
 		eVAlignTop = 0x0000000010000000,
-		//! The static's text is vertically centered
+		//! The static's text is vertically centered.
 		eVAlignCenter = 0x0000000020000000,
-		//! The static's text is aligned on bottom
+		//! The static's text is aligned on bottom.
 		eVAlignBottom = 0x0000000040000000,
 	};
 	CU_ImplementFlags( StaticFlag )
@@ -173,35 +187,37 @@ namespace castor3d
 	*\brief	Listbox control supported flags.
 	*/
 	enum class ControlFlag
-		: uint64_t
+		: ControlFlagType
 	{
 		//! Control is detached and appears on top of every other one.
 		eAlwaysOnTop = 0x0000000100000000,
+		//! Control can be dragged around.
+		eDraggable = 0x0000000200000000,
 	};
 	CU_ImplementFlags( ControlFlag )
 	/**
-	*\brief	Enumeration of supported GUI events in ControlInfos
+	*\brief	Enumeration of supported GUI events in ControlInfos.
 	*/
 	enum class GuiEvent
 		: uint8_t
 	{
-		//! Event to ask the main window to show a message box
+		//! Event to ask the main window to show a message box.
 		eShowMessageBox,
-		//! Event to ask the main window to resize to the given size
+		//! Event to ask the main window to resize to the given size.
 		eResizeParent,
 	};
 	/**
-	*\brief	Mouse cursors enumeration
+	*\brief	Mouse cursors enumeration.
 	*/
 	enum class MouseCursor
 	{
-		//! The usual arrow cursor
+		//! The usual arrow cursor.
 		eArrow,
-		//! The hand cursor
+		//! The hand cursor.
 		eHand,
-		//! The text cursor
+		//! The text cursor.
 		eText,
-		//! The cursors count
+		//! The cursors count.
 		eCount,
 	};
 	/**
@@ -209,7 +225,7 @@ namespace castor3d
 	*/
 	struct LayoutItemFlags;
 	/**
-	*\brief		Class used to to manage the controls: events and all GUI related stuff
+	*\brief		Class used to to manage the controls: events and all GUI related stuff.
 	*/
 	class ControlsManager;
 	/**
@@ -229,7 +245,7 @@ namespace castor3d
 	*/
 	class ComboBoxCtrl;
 	/**
-	*\brief		Edit control
+	*\brief		Edit control.
 	*/
 	class EditCtrl;
 	/**
@@ -241,11 +257,11 @@ namespace castor3d
 	*/
 	class ListBoxCtrl;
 	/**
-	*\brief		Panel control
+	*\brief		Panel control.
 	*/
 	class PanelCtrl;
 	/**
-	*\brief		Slider control
+	*\brief		Slider control.
 	*/
 	class SliderCtrl;
 	/**
@@ -270,7 +286,7 @@ namespace castor3d
 	*/
 	class Theme;
 	/**
-	*\brief		Description of the style of a control
+	*\brief		Description of the style of a control.
 	*/
 	class ControlStyle;
 	/**
@@ -282,15 +298,15 @@ namespace castor3d
 	*/
 	class ComboBoxStyle;
 	/**
-	*\brief		Edit style
+	*\brief		Edit style.
 	*/
 	class EditStyle;
 	/**
-	*\brief		ExpandablePanel style
+	*\brief		ExpandablePanel style.
 	*/
 	class ExpandablePanelStyle;
 	/**
-	*\brief		ListBox style
+	*\brief		ListBox style.
 	*/
 	class ListBoxStyle;
 	/**
@@ -305,6 +321,10 @@ namespace castor3d
 	*\brief		Static style.
 	*/
 	class StaticStyle;
+
+	using OnControlEventFunction = std::function< void() >;
+	using OnControlEvent = castor::SignalT< OnControlEventFunction >;
+	using OnControlEventConnection = OnControlEvent::connection;
 
 	using OnButtonEventFunction = std::function< void() >;
 	using OnButtonEvent = castor::SignalT< OnButtonEventFunction >;
@@ -360,6 +380,10 @@ namespace castor3d
 	CU_DeclareCUSmartPtr( castor3d, StaticStyle, C3D_API );
 
 	using ControlArray = std::vector< ControlSPtr >;
+
+	template< typename TypeT >
+	concept ControlFlagTypeT = ( std::is_same_v< TypeT, ControlFlagType >
+		|| std::is_same_v< std::underlying_type_t< TypeT >, ControlFlagType > );
 
 	/** Sets the pass colour.
 	 *\param[in]	pass	The pass.

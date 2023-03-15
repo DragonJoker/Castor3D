@@ -41,7 +41,7 @@ namespace castor3d
 			, ControlRPtr parent
 			, castor::Position const & position
 			, castor::Size const & size
-			, uint64_t flags = 0
+			, ControlFlagType flags = 0
 			, bool visible = true );
 
 		/** Sets the style
@@ -135,11 +135,21 @@ namespace castor3d
 
 		/** Adds a flag.
 		 */
-		C3D_API void addFlag( uint64_t flag );
+		template< ControlFlagTypeT FlagTypeT >
+		void addFlag( FlagTypeT flag )
+		{
+			m_flags |= ControlFlagType( flag );
+			doUpdateFlags();
+		}
 
 		/** Removes a flag.
 		 */
-		C3D_API void removeFlag( uint64_t flag );
+		template< ControlFlagTypeT FlagTypeT >
+		void removeFlag( FlagTypeT flag )
+		{
+			m_flags &= ~ControlFlagType( flag );
+			doUpdateFlags();
+		}
 
 		/**@name Getters */
 		//@{
@@ -208,6 +218,13 @@ namespace castor3d
 			return castor::checkFlag( getFlags(), ControlFlag::eAlwaysOnTop );
 		}
 
+		/** \return	The draggable status of the control.
+		 */
+		bool isDraggable()const noexcept
+		{
+			return castor::checkFlag( getFlags(), ControlFlag::eDraggable );
+		}
+
 		/** Shows the control
 		*/
 		void show()
@@ -246,6 +263,41 @@ namespace castor3d
 		C3D_API bool doIsVisible()const;
 
 	private:
+		/** Event when mouse left button is pressed.
+		 *\param[in]	event		The mouse event.
+		 */
+		void onMouseButtonDown( MouseEvent const & event );
+
+		/** Event when mouse left button is released.
+		 *\param[in]	event		The mouse event.
+		 */
+		void onMouseButtonUp( MouseEvent const & event );
+
+		/** Event when mouse is moving over the control.
+		 *\param[in]	event		The mouse event.
+		 */
+		void onMouseMove( MouseEvent const & event );
+
+		/** Event when mouse leaves the control.
+		 *\param[in]	event		The mouse event.
+		 */
+		void onMouseLeave( MouseEvent const & event );
+
+		/** Begins dragging of the control.
+		 *\param[in]	event		The mouse event.
+		 */
+		bool beginDrag( MouseEvent const & event );
+
+		/** Drags the control.
+		 *\param[in]	event		The mouse event.
+		 */
+		void drag( MouseEvent const & event );
+
+		/** Ends dragging of the control.
+		 *\param[in]	event		The mouse event.
+		 */
+		void endDrag( MouseEvent const & event );
+
 		/** Creates the control's overlays and sub-controls
 		*/
 		virtual void doCreate() = 0;
@@ -276,7 +328,27 @@ namespace castor3d
 		/** sets the caption.
 		*\param[in]	caption	The new value
 		*/
-		virtual void doSetCaption( castor::String const & caption ){}
+		virtual void doSetCaption( castor::String const & caption ) {}
+
+		/** Event when mouse left button is pressed.
+		 *\param[in]	event		The mouse event.
+		 */
+		virtual void doOnMouseButtonDown( MouseEvent const & event ) {}
+
+		/** Event when mouse left button is released.
+		 *\param[in]	event		The mouse event.
+		 */
+		virtual void doOnMouseButtonUp( MouseEvent const & event ) {}
+
+		/** Event when mouse is moving over the control.
+		 *\param[in]	event		The mouse event.
+		 */
+		virtual void doOnMouseMove( MouseEvent const & event ) {}
+
+		/** Event when mouse leaves the control.
+		 *\param[in]	event		The mouse event.
+		 */
+		virtual void doOnMouseLeave( MouseEvent const & event ) {}
 
 		/** Tells if the control catches mouse events
 		*\remarks	A control catches mouse events when it is visible, enabled, and when it explicitly catches it (enables by default, except for static controls
@@ -331,6 +403,11 @@ namespace castor3d
 			return *bg;
 		}
 
+		bool isDragged()const noexcept
+		{
+			return m_dragged;
+		}
+
 	protected:
 		SceneRPtr m_scene{};
 		//! The parent control, if any
@@ -346,13 +423,16 @@ namespace castor3d
 		const ControlID m_id;
 		const ControlType m_type;
 		ControlStyleRPtr m_style;
-		uint64_t  m_flags;
+		ControlFlagType m_flags;
 		castor::Position m_position;
 		castor::Size m_size;
 		castor::Point4ui m_borders;
 		BorderPanelOverlayWPtr m_background;
 		std::vector< ControlWPtr > m_children;
 		ControlsManagerWPtr m_ctrlManager;
+		bool m_dragged{};
+		castor::Position m_dragStartPosition;
+		castor::Position m_dragStartMousePosition;
 	};
 }
 

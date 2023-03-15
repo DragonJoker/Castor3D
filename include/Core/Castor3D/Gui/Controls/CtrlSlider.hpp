@@ -44,7 +44,7 @@ namespace castor3d
 			, castor::RangedValue< int32_t > const & value
 			, castor::Position const & position
 			, castor::Size const & size
-			, uint64_t flags = 0
+			, ControlFlagType flags = 0
 			, bool visible = true );
 
 		/** sets the range
@@ -136,17 +136,17 @@ namespace castor3d
 		/** Event when mouse moves over the control
 		 *\param[in]	event		The mouse event
 		 */
-		void onMouseMove( MouseEvent const & event );
+		void doOnMouseMove( MouseEvent const & event )override;
 
 		/** Event when mouse leaves the control
 		 *\param[in]	event		The mouse event
 		 */
-		void onMouseLeave( MouseEvent const & event );
+		void doOnMouseLeave( MouseEvent const & event )override;
 
 		/** Event when mouse left button is released over the control
 		 *\param[in]	event		The mouse event
 		 */
-		void onMouseLButtonUp( MouseEvent const & event );
+		void doOnMouseButtonUp( MouseEvent const & event );
 
 		/** Event when mouse moves over the tick control
 		 *\param[in]	control	The tick control
@@ -159,14 +159,14 @@ namespace castor3d
 		 *\param[in]	control	The tick control
 		 *\param[in]	event		The mouse event
 		 */
-		void onTickMouseLButtonDown( ControlSPtr control
+		void onTickMouseButtonDown( ControlSPtr control
 			, MouseEvent const & event );
 
 		/** Event when mouse left button is released over the tick control
 		 *\param[in]	control	The tick control
 		 *\param[in]	event		The mouse event
 		 */
-		void onTickMouseLButtonUp( ControlSPtr control
+		void onTickMouseButtonUp( ControlSPtr control
 			, MouseEvent const & event );
 
 		/** Event when a keyboard key is pressed

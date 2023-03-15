@@ -24,7 +24,7 @@ namespace castor3d
 		, ControlRPtr parent
 		, castor::Position const & position
 		, castor::Size const & size
-		, uint64_t flags
+		, ControlFlagType flags
 		, bool visible )
 		: NonClientEventHandler< Control >{ ( parent ? parent->getName() + "/" + name : name ), type != ControlType::eStatic }
 		, m_scene{ scene }
@@ -36,6 +36,26 @@ namespace castor3d
 		, m_position{ position }
 		, m_size{ size }
 	{
+		EventHandler::connect( MouseEventType::ePushed
+			, [this]( MouseEvent const & event )
+			{
+				onMouseButtonDown( event );
+			} );
+		EventHandler::connect( MouseEventType::eReleased
+			, [this]( MouseEvent const & event )
+			{
+				onMouseButtonUp( event );
+			} );
+		EventHandler::connect( MouseEventType::eMove
+			, [this]( MouseEvent const & event )
+			{
+				onMouseMove( event );
+			} );
+		EventHandler::connect( MouseEventType::eLeave
+			, [this]( MouseEvent const & event )
+			{
+				onMouseLeave( event );
+			} );
 		OverlayRPtr parentOv{};
 
 		if ( !isAlwaysOnTop() && m_parent )
@@ -243,20 +263,77 @@ namespace castor3d
 		return doGetBackground().getIndex() + doGetBackground().getLevel() * 1000ull;
 	}
 
-	void Control::addFlag( uint64_t flags )
-	{
-		m_flags |= flags;
-		doUpdateFlags();
-	}
-
-	void Control::removeFlag( uint64_t flags )
-	{
-		m_flags &= ~flags;
-		doUpdateFlags();
-	}
-
 	bool Control::doIsVisible()const
 	{
 		return doGetBackground().isVisible();
+	}
+
+	void Control::onMouseButtonDown( MouseEvent const & event )
+	{
+		if ( !isDraggable()
+			|| event.getButton() != MouseButton::eLeft
+			|| !beginDrag( event ) )
+		{
+			doOnMouseButtonDown( event );
+		}
+	}
+
+	void Control::onMouseButtonUp( MouseEvent const & event )
+	{
+		if ( !isDraggable()
+			|| !isDragged()
+			|| event.getButton() != MouseButton::eLeft )
+		{
+			doOnMouseButtonUp( event );
+		}
+
+		endDrag( event );
+	}
+
+	void Control::onMouseMove( MouseEvent const & event )
+	{
+		doOnMouseMove( event );
+
+		if ( isDraggable() && isDragged() )
+		{
+			drag( event );
+		}
+	}
+
+	void Control::onMouseLeave( MouseEvent const & event )
+	{
+		if ( isDraggable() && isDragged() )
+		{
+			endDrag( event );
+		}
+
+		doOnMouseLeave( event );
+	}
+
+	bool Control::beginDrag( MouseEvent const & event )
+	{
+		auto result = getControlsManager()->setDraggedControl( this );
+
+		if ( result )
+		{
+			m_dragged = true;
+			m_dragStartPosition = getPosition();
+			m_dragStartMousePosition = event.getPosition();
+		}
+
+		return result;
+	}
+
+	void Control::drag( MouseEvent const & event )
+	{
+		auto diff = event.getPosition() - m_dragStartMousePosition;
+		auto newPos = m_dragStartPosition + diff;
+		setPosition( { newPos->x, newPos->y } );
+	}
+
+	void Control::endDrag( MouseEvent const & event )
+	{
+		m_dragged = false;
+		getControlsManager()->setDraggedControl( nullptr );
 	}
 }

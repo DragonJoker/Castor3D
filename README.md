@@ -32,6 +32,7 @@ The project itself is compilable on supported platforms using CMake (\ref build)
 - Shaders are writable directly from C++ code.
 - Scenes are described using a text format easily comprehensible and extensible.
 - Asynchronous (user defined) or synchronous (thread) rendering.
+- GUI primitives.
 
 ## Implemented Plug-ins
 
@@ -54,7 +55,6 @@ The project itself is compilable on supported platforms using CMake (\ref build)
 - DiamondSquareTerrain: to generate terrains inside Castor3D scenes, using diamond-quare algorithm.
 
 ### Generic
-- CastorGUI: to build GUIs inside Castor3D scenes.
 - ToonMaterial: A toon material (to be combined with DrawEdges plugin).
 - FFTOceanRendering: Ocean rendering using FFT generated surfaces.
 - OceanRendering: Basic ocean rendering, specifying waves attributes.

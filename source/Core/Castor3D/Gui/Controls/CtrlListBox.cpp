@@ -47,7 +47,7 @@ namespace castor3d
 		, int selected
 		, castor::Position const & position
 		, castor::Size const & size
-		, uint64_t flags
+		, ControlFlagType flags
 		, bool visible )
 		: Control{ Type
 			, scene

@@ -44,7 +44,7 @@ namespace castor3d
 			, castor::Position const & position
 			, castor::Size const & size
 			, uint32_t headerHeight
-			, uint64_t flags = 0
+			, ControlFlagType flags = 0
 			, bool visible = true );
 
 		/** Connects a function to an event

@@ -40,7 +40,7 @@ namespace castor3d
 		, castor::String const & caption
 		, castor::Position const & position
 		, castor::Size const & size
-		, uint64_t flags
+		, ControlFlagType flags
 		, bool visible )
 		: Control{ Type
 			, scene
@@ -59,12 +59,12 @@ namespace castor3d
 		EventHandler::connect( MouseEventType::ePushed
 			, [this]( MouseEvent const & event )
 			{
-				onMouseLButtonDown( event );
+				onMouseButtonDown( event );
 			} );
 		EventHandler::connect( MouseEventType::eReleased
 			, [this]( MouseEvent const & event )
 			{
-				onMouseLButtonUp( event );
+				onMouseButtonUp( event );
 			} );
 		EventHandler::connect( KeyboardEventType::ePushed
 			, [this]( KeyboardEvent const & event )
@@ -214,11 +214,11 @@ namespace castor3d
 		doUpdateCaption();
 	}
 
-	void EditCtrl::onMouseLButtonDown( MouseEvent const & event )
+	void EditCtrl::onMouseButtonDown( MouseEvent const & event )
 	{
 	}
 
-	void EditCtrl::onMouseLButtonUp( MouseEvent const & event )
+	void EditCtrl::onMouseButtonUp( MouseEvent const & event )
 	{
 	}
 

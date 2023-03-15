@@ -36,7 +36,7 @@ namespace castor3d
 		, castor::RangedValue< int32_t > const & value
 		, castor::Position const & position
 		, castor::Size const & size
-		, uint64_t flags
+		, ControlFlagType flags
 		, bool visible )
 		: Control{ Type
 			, scene
@@ -51,21 +51,6 @@ namespace castor3d
 		, m_scrolling{ false }
 	{
 		setBackgroundBorderSize( castor::Point4ui{} );
-		EventHandler::connect( MouseEventType::eMove
-			, [this]( MouseEvent const & event )
-			{
-				onMouseMove( event );
-			} );
-		EventHandler::connect( MouseEventType::eLeave
-			, [this]( MouseEvent const & event )
-			{
-				onMouseLeave( event );
-			} );
-		EventHandler::connect( MouseEventType::eReleased
-			, [this]( MouseEvent const & event )
-			{
-				onMouseLButtonUp( event );
-			} );
 		EventHandler::connect( KeyboardEventType::ePushed
 			, [this]( KeyboardEvent const & event )
 			{
@@ -104,12 +89,12 @@ namespace castor3d
 		tick->connectNC( MouseEventType::ePushed
 			, [this]( ControlSPtr control, MouseEvent const & event )
 			{
-				onTickMouseLButtonDown( control, event );
+				onTickMouseButtonDown( control, event );
 			} );
 		tick->connectNC( MouseEventType::eReleased
 			, [this]( ControlSPtr control, MouseEvent const & event )
 			{
-				onTickMouseLButtonUp( control, event );
+				onTickMouseButtonUp( control, event );
 			} );
 		tick->connectNC( KeyboardEventType::ePushed
 			, [this]( ControlSPtr control, KeyboardEvent const & event )
@@ -247,7 +232,7 @@ namespace castor3d
 		}
 	}
 
-	void SliderCtrl::onMouseMove( MouseEvent const & event )
+	void SliderCtrl::doOnMouseMove( MouseEvent const & event )
 	{
 		if ( m_scrolling )
 		{
@@ -256,7 +241,7 @@ namespace castor3d
 		}
 	}
 
-	void SliderCtrl::onMouseLeave( MouseEvent const & event )
+	void SliderCtrl::doOnMouseLeave( MouseEvent const & event )
 	{
 		auto controls = getControlsManager();
 
@@ -279,7 +264,7 @@ namespace castor3d
 		}
 	}
 
-	void SliderCtrl::onMouseLButtonUp( MouseEvent const & event )
+	void SliderCtrl::doOnMouseButtonUp( MouseEvent const & event )
 	{
 		if ( event.getButton() == MouseButton::eLeft )
 		{
@@ -297,10 +282,10 @@ namespace castor3d
 	void SliderCtrl::onTickMouseMove( ControlSPtr control
 		, MouseEvent const & event )
 	{
-		onMouseMove( event );
+		doOnMouseMove( event );
 	}
 
-	void SliderCtrl::onTickMouseLButtonDown( ControlSPtr control
+	void SliderCtrl::onTickMouseButtonDown( ControlSPtr control
 		, MouseEvent const & event )
 	{
 		if ( event.getButton() == MouseButton::eLeft )
@@ -311,9 +296,9 @@ namespace castor3d
 		}
 	}
 
-	void SliderCtrl::onTickMouseLButtonUp( ControlSPtr control, MouseEvent const & event )
+	void SliderCtrl::onTickMouseButtonUp( ControlSPtr control, MouseEvent const & event )
 	{
-		onMouseLButtonUp( event );
+		doOnMouseButtonUp( event );
 	}
 
 	void SliderCtrl::onKeyDown( KeyboardEvent const & event )

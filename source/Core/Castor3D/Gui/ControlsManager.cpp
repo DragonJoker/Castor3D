@@ -52,7 +52,8 @@ namespace castor3d
 				addParser( parsers, section, cuT( "style" ), styleFunction, { makeParameter< ParameterType::eName >() } );
 			}
 
-			addParser( parsers, section, cuT( "visible" ), &parserControlVisible, { makeParameter< ParameterType::eBool >() } );
+			addParser( parsers, section, cuT( "visible" ), &parserControlVisible, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
+			addParser( parsers, section, cuT( "movable" ), &parserControlMovable, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
 			addParser( parsers, section, cuT( "pixel_position" ), &parserControlPixelPosition, { makeParameter< ParameterType::ePosition >() } );
 			addParser( parsers, section, cuT( "pixel_size" ), &parserControlPixelSize, { makeParameter< ParameterType::eSize >() } );
 			addParser( parsers, section, cuT( "pixel_border_size" ), &parserControlPixelBorderSize, { makeParameter< ParameterType::ePoint4U >() } );
@@ -171,7 +172,7 @@ namespace castor3d
 				, &parserEditTheme
 				, &parserEditStyle
 				, &parserEditEnd );
-			addParser( result, uint32_t( GUISection::eEdit ), cuT( "multiline" ), &parserEditMultiLine, { makeParameter< ParameterType::eBool >() } );
+			addParser( result, uint32_t( GUISection::eEdit ), cuT( "multiline" ), &parserEditMultiLine, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
 			addParser( result, uint32_t( GUISection::eEdit ), cuT( "caption" ), &parserEditCaption, { makeParameter< ParameterType::eText >() } );
 
 			createDefaultStyleParsers( result, uint32_t( GUISection::eEditStyle ), &parserStyleEditEnd );
@@ -308,7 +309,7 @@ namespace castor3d
 			addParser( result, uint32_t( GUISection::eBoxLayout ), cuT( "layout_ctrl" ), &parserLayoutCtrl, { makeParameter< ParameterType::eName >() } );
 			addParser( result, uint32_t( GUISection::eBoxLayout ), cuT( "layout_staspace" ), &parserBoxLayoutStaticSpacer, { makeParameter< ParameterType::eUInt32 >() } );
 			addParser( result, uint32_t( GUISection::eBoxLayout ), cuT( "layout_dynspace" ), &parserBoxLayoutDynamicSpacer );
-			addParser( result, uint32_t( GUISection::eBoxLayout ), cuT( "horizontal" ), &parserBoxLayoutHorizontal, { makeParameter< ParameterType::eBool >() } );
+			addParser( result, uint32_t( GUISection::eBoxLayout ), cuT( "horizontal" ), &parserBoxLayoutHorizontal, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
 			addParser( result, uint32_t( GUISection::eBoxLayout ), cuT( "}" ), &parserLayoutEnd );
 		}
 
@@ -317,8 +318,8 @@ namespace castor3d
 			using namespace castor;
 			addParser( result, uint32_t( GUISection::eLayoutCtrl ), cuT( "horizontal_align" ), &parserLayoutCtrlHAlign, { makeParameter< ParameterType::eCheckedText, HAlign >() } );
 			addParser( result, uint32_t( GUISection::eLayoutCtrl ), cuT( "vertical_align" ), &parserLayoutCtrlVAlign, { makeParameter< ParameterType::eCheckedText, VAlign >() } );
-			addParser( result, uint32_t( GUISection::eLayoutCtrl ), cuT( "stretch" ), &parserLayoutCtrlStretch, { makeParameter< ParameterType::eBool >() } );
-			addParser( result, uint32_t( GUISection::eLayoutCtrl ), cuT( "reserve_if_hidden" ), &parserLayoutCtrlReserveIfHidden, { makeParameter< ParameterType::eBool >() } );
+			addParser( result, uint32_t( GUISection::eLayoutCtrl ), cuT( "stretch" ), &parserLayoutCtrlStretch, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
+			addParser( result, uint32_t( GUISection::eLayoutCtrl ), cuT( "reserve_if_hidden" ), &parserLayoutCtrlReserveIfHidden, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
 			addParser( result, uint32_t( GUISection::eLayoutCtrl ), cuT( "padding" ), &parserLayoutCtrlPadding, { makeParameter< ParameterType::ePoint4U >() } );
 			addParser( result, uint32_t( GUISection::eLayoutCtrl ), cuT( "pad_left" ), &parserLayoutCtrlPadLeft, { makeParameter< ParameterType::eUInt32 >() } );
 			addParser( result, uint32_t( GUISection::eLayoutCtrl ), cuT( "pad_top" ), &parserLayoutCtrlPadTop, { makeParameter< ParameterType::eUInt32 >() } );
@@ -561,6 +562,20 @@ namespace castor3d
 			: std::static_pointer_cast< Control >( *it );
 	}
 
+	bool ControlsManager::setDraggedControl( ControlRPtr control )
+	{
+		if ( m_draggedControl
+			&& m_draggedControl->isDragged()
+			&& m_draggedControl != control
+			&& control != nullptr )
+		{
+			return false;
+		}
+
+		m_draggedControl = control;
+		return true;
+	}
+
 	castor::AttributeParsers ControlsManager::createParsers( castor3d::Engine & engine )
 	{
 		using namespace castor;
@@ -783,6 +798,12 @@ namespace castor3d
 		if ( m_changed )
 		{
 			doUpdate();
+		}
+
+		if ( m_draggedControl
+			&& m_draggedControl->isDragged() )
+		{
+			return m_draggedControl;
 		}
 
 		auto controls = doGetControlsByZIndex();
