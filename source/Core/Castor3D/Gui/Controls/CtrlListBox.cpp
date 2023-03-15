@@ -62,7 +62,7 @@ namespace castor3d
 		, m_values{ values }
 		, m_selected{ selected }
 	{
-		setBackgroundBorders( castor::Point4ui{ 1, 1, 1, 1 } );
+		setBackgroundBorderSize( castor::Point4ui{ 1, 1, 1, 1 } );
 		doUpdateStyle();
 	}
 
@@ -226,12 +226,7 @@ namespace castor3d
 			position.y() += DefaultHeight;
 		}
 
-		auto background = getBackground();
-
-		if ( background )
-		{
-			background->setPixelSize( castor::Size( getSize().getWidth(), uint32_t( m_items.size() * DefaultHeight ) ) );
-		}
+		setBackgroundSize( castor::Size( getSize().getWidth(), uint32_t( m_items.size() * DefaultHeight ) ) );
 	}
 
 	StaticCtrlSPtr ListBoxCtrl::doCreateItemCtrl( castor::String const & value
@@ -282,7 +277,7 @@ namespace castor3d
 
 	void ListBoxCtrl::doCreate()
 	{
-		setBackgroundBorders( castor::Point4ui{ 1, 1, 1, 1 } );
+		setBackgroundBorderSize( castor::Point4ui{ 1, 1, 1, 1 } );
 		setSize( castor::Size( getSize().getWidth(), uint32_t( m_values.size() * DefaultHeight ) ) );
 
 		EventHandler::connect( KeyboardEventType::ePushed

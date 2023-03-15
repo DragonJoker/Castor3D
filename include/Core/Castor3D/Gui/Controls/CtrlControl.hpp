@@ -64,10 +64,50 @@ namespace castor3d
 		 */
 		C3D_API void setSize( castor::Size const & value );
 
+		/** \return
+		 *	The background overlay.
+		 */
+		C3D_API Overlay & getBackgroundOverlay();
+
+		/** Sets the background material.
+		 *\param[in]	value		The new value.
+		 */
+		C3D_API void setBackgroundMaterial( MaterialRPtr value );
+
+		/** Sets the background size.
+		 *\param[in]	value		The new value.
+		 */
+		C3D_API void setBackgroundSize( castor::Size const & value );
+
+		/** Sets the background centerUV.
+		 *\param[in]	value		The new value.
+		 */
+		C3D_API void setBackgroundUV( castor::Point4d const & value );
+
+		/** Sets the background borders position.
+		 *\param[in]	value		The new value.
+		 */
+		C3D_API void setBackgroundBorderPosition( BorderPosition value );
+
+		/** Sets the background borders material.
+		 *\param[in]	value		The new value.
+		 */
+		C3D_API void setBackgroundBorderMaterial( MaterialRPtr value );
+
 		/** Sets the background borders size.
 		 *\param[in]	value		The new value.
 		 */
-		C3D_API void setBackgroundBorders( castor::Point4ui const & value );
+		C3D_API void setBackgroundBorderSize( castor::Point4ui const & value );
+
+		/** Sets the background borders inner UV.
+		 *\param[in]	value		The new value.
+		 */
+		C3D_API void setBackgroundBorderInnerUV( castor::Point4d const & value );
+
+		/** Sets the background borders outer UV.
+		 *\param[in]	value		The new value.
+		 */
+		C3D_API void setBackgroundBorderOuterUV( castor::Point4d const & value );
 
 		/** Sets the caption.
 		 *\param[in]	caption	The new value
@@ -87,7 +127,11 @@ namespace castor3d
 		/** Retrieves a control.
 		 *\param[in]	id		The control ID.
 		 */
-		C3D_API ControlSPtr getChildControl( ControlID id );
+		C3D_API ControlSPtr getChildControl( ControlID id )const;
+
+		/** \return	The Z index for this control's background overlay.
+		 */
+		C3D_API uint64_t getZIndex()const;
 
 		/** Adds a flag.
 		 */
@@ -128,11 +172,6 @@ namespace castor3d
 		ControlRPtr getParent()const noexcept
 		{
 			return m_parent;
-		}
-
-		BorderPanelOverlaySPtr getBackground()const noexcept
-		{
-			return m_background.lock();
 		}
 
 		castor::Point4ui const & getBackgroundBorders()const noexcept
@@ -278,6 +317,18 @@ namespace castor3d
 		*/
 		virtual void doUpdateFlags()
 		{
+		}
+
+		BorderPanelOverlay & doGetBackground()const
+		{
+			auto bg = m_background.lock();
+
+			if ( !bg )
+			{
+				CU_Exception( "No background set" );
+			}
+
+			return *bg;
 		}
 
 	protected:

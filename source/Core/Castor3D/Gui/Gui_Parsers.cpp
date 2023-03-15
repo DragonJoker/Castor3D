@@ -816,7 +816,7 @@ namespace castor3d
 		{
 			castor::Point4ui size;
 			params[0]->get( size );
-			control->setBackgroundBorders( size );
+			control->setBackgroundBorderSize( size );
 		}
 		else
 		{
@@ -833,7 +833,7 @@ namespace castor3d
 		{
 			castor::Point4d value;
 			params[0]->get( value );
-			control->getBackground()->setBorderInnerUV( value );
+			control->setBackgroundBorderInnerUV( value );
 		}
 		else
 		{
@@ -850,7 +850,7 @@ namespace castor3d
 		{
 			castor::Point4d value;
 			params[0]->get( value );
-			control->getBackground()->setBorderOuterUV( value );
+			control->setBackgroundBorderOuterUV( value );
 		}
 		else
 		{
@@ -867,7 +867,7 @@ namespace castor3d
 		{
 			castor::Point4d value;
 			params[0]->get( value );
-			control->getBackground()->setUV( value );
+			control->setBackgroundUV( value );
 		}
 		else
 		{

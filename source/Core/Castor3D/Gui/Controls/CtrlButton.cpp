@@ -60,26 +60,18 @@ namespace castor3d
 				if ( penabled )
 				{
 					m_text.lock()->setMaterial( mystyle.getTextMaterial() );
-
-					if ( auto panel = getBackground() )
-					{
-						panel->setMaterial( mystyle.getBackgroundMaterial() );
-						panel->setBorderMaterial( mystyle.getForegroundMaterial() );
-					}
+					setBackgroundMaterial( mystyle.getBackgroundMaterial() );
+					setBackgroundBorderMaterial( mystyle.getForegroundMaterial() );
 				}
 				else
 				{
 					m_text.lock()->setMaterial( mystyle.getDisabledTextMaterial() );
-
-					if ( auto panel = getBackground() )
-					{
-						panel->setMaterial( mystyle.getDisabledBackgroundMaterial() );
-						panel->setBorderMaterial( mystyle.getDisabledForegroundMaterial() );
-					}
+					setBackgroundMaterial( mystyle.getDisabledBackgroundMaterial() );
+					setBackgroundBorderMaterial( mystyle.getDisabledForegroundMaterial() );
 				}
 			} ) }
 	{
-		setBackgroundBorders( castor::Point4ui{ 1, 1, 1, 1 } );
+		setBackgroundBorderSize( castor::Point4ui{ 1, 1, 1, 1 } );
 		EventHandler::connect( MouseEventType::eEnter
 			, [this]( MouseEvent const & event )
 			{
@@ -106,12 +98,12 @@ namespace castor3d
 				, getEngine()
 				, OverlayType::eText
 				, nullptr
-				, &getBackground()->getOverlay() ).lock()->getTextOverlay()
+				, &getBackgroundOverlay() ).lock()->getTextOverlay()
 			: getEngine().addNewOverlay( cuT( "T_CtrlButton_[" ) + getName() + cuT( "]" )
 				, getEngine()
 				, OverlayType::eText
 				, nullptr
-				, &getBackground()->getOverlay() ).lock()->getTextOverlay();
+				, &getBackgroundOverlay() ).lock()->getTextOverlay();
 		text->setPixelSize( getSize() );
 		text->setHAlign( HAlign::eCenter );
 		text->setVAlign( VAlign::eCenter );
@@ -150,14 +142,7 @@ namespace castor3d
 
 	void ButtonCtrl::doCreate()
 	{
-		auto bg = getBackground();
-
-		if ( !bg )
-		{
-			CU_Exception( "No background set" );
-		}
-
-		bg->setBorderPosition( BorderPosition::eInternal );
+		setBackgroundBorderPosition( BorderPosition::eInternal );
 
 		auto & style = getStyle();
 		auto text = m_text.lock();
@@ -215,24 +200,16 @@ namespace castor3d
 	{
 		auto & style = getStyle();
 		m_text.lock()->setMaterial( style.getHighlightedTextMaterial() );
-
-		if ( auto panel = getBackground() )
-		{
-			panel->setMaterial( style.getHighlightedBackgroundMaterial() );
-			panel->setBorderMaterial( style.getHighlightedForegroundMaterial() );
-		}
+		setBackgroundMaterial( style.getHighlightedBackgroundMaterial() );
+		setBackgroundBorderMaterial( style.getHighlightedForegroundMaterial() );
 	}
 
 	void ButtonCtrl::onMouseLeave( MouseEvent const & event )
 	{
 		auto & style = getStyle();
 		m_text.lock()->setMaterial( style.getTextMaterial() );
-
-		if ( auto panel = getBackground() )
-		{
-			panel->setMaterial( style.getBackgroundMaterial() );
-			panel->setBorderMaterial( style.getForegroundMaterial() );
-		}
+		setBackgroundMaterial( style.getBackgroundMaterial() );
+		setBackgroundBorderMaterial( style.getForegroundMaterial() );
 	}
 
 	void ButtonCtrl::onMouseButtonDown( MouseEvent const & event )
@@ -241,13 +218,8 @@ namespace castor3d
 		{
 			auto & style = getStyle();
 			m_text.lock()->setMaterial( style.getPushedTextMaterial() );
-
-			if ( auto panel = getBackground() )
-			{
-				panel->setMaterial( style.getPushedBackgroundMaterial() );
-				panel->setBorderMaterial( style.getPushedForegroundMaterial() );
-				panel.reset();
-			}
+			setBackgroundMaterial( style.getPushedBackgroundMaterial() );
+			setBackgroundBorderMaterial( style.getPushedForegroundMaterial() );
 		}
 	}
 
@@ -257,13 +229,8 @@ namespace castor3d
 		{
 			auto & style = getStyle();
 			m_text.lock()->setMaterial( style.getHighlightedTextMaterial() );
-
-			if ( auto panel = getBackground() )
-			{
-				panel->setMaterial( style.getHighlightedBackgroundMaterial() );
-				panel->setBorderMaterial( style.getHighlightedForegroundMaterial() );
-				panel.reset();
-			}
+			setBackgroundMaterial( style.getHighlightedBackgroundMaterial() );
+			setBackgroundBorderMaterial( style.getHighlightedForegroundMaterial() );
 
 			m_signals[size_t( ButtonEvent::eClicked )]();
 		}
