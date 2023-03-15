@@ -42,7 +42,7 @@ namespace castor3d
 			, castor::String const & caption
 			, castor::Position const & position
 			, castor::Size const & size
-			, uint64_t flags = 0
+			, ControlFlagType flags = 0
 			, bool visible = true );
 
 		/** Retrieves the caption
@@ -140,12 +140,12 @@ namespace castor3d
 		/** Event when mouse left button is pushed
 		 *\param[in]	event		The mouse event
 		 */
-		void onMouseLButtonDown( MouseEvent const & event );
+		void onMouseButtonDown( MouseEvent const & event );
 
 		/** Event when mouse left button is released
 		 *\param[in]	event		The mouse event
 		 */
-		void onMouseLButtonUp( MouseEvent const & event );
+		void onMouseButtonUp( MouseEvent const & event );
 
 		/** Event when a printable key is pressed
 		 *\param[in]	event		The mouse event

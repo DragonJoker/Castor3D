@@ -61,6 +61,9 @@ namespace castor3d
 			CU_SrcException( "Layout", "The control already exists in the layout." );
 		}
 
+		// TODO: Allow dragging elements in a layout.
+		control.removeFlag( ControlFlag::eDraggable );
+
 		m_items.emplace_back( control
 			, std::move( flags )
 			, control.onChanged.connect( [this]( Control const & ctrl )

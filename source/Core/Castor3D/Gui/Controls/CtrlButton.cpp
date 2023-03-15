@@ -41,7 +41,7 @@ namespace castor3d
 		, castor::String const & caption
 		, castor::Position const & position
 		, castor::Size const & size
-		, uint64_t flags
+		, ControlFlagType flags
 		, bool visible )
 		: Control{ Type
 			, scene
@@ -53,11 +53,11 @@ namespace castor3d
 			, flags
 			, visible }
 		, m_caption{ caption }
-		, m_onEnable{ EventHandler::onEnable.connect( [this]( bool penabled )
+		, m_onEnable{ EventHandler::onEnable.connect( [this]( bool v )
 			{
 				auto & mystyle = getStyle();
 
-				if ( penabled )
+				if ( v )
 				{
 					m_text.lock()->setMaterial( mystyle.getTextMaterial() );
 					setBackgroundMaterial( mystyle.getBackgroundMaterial() );
@@ -76,21 +76,6 @@ namespace castor3d
 			, [this]( MouseEvent const & event )
 			{
 				onMouseEnter( event );
-			} );
-		EventHandler::connect( MouseEventType::eLeave
-			, [this]( MouseEvent const & event )
-			{
-				onMouseLeave( event );
-			} );
-		EventHandler::connect( MouseEventType::ePushed
-			, [this]( MouseEvent const & event )
-			{
-				onMouseButtonDown( event );
-			} );
-		EventHandler::connect( MouseEventType::eReleased
-			, [this]( MouseEvent const & event )
-			{
-				onMouseButtonUp( event );
 			} );
 
 		auto text = m_scene
@@ -204,15 +189,7 @@ namespace castor3d
 		setBackgroundBorderMaterial( style.getHighlightedForegroundMaterial() );
 	}
 
-	void ButtonCtrl::onMouseLeave( MouseEvent const & event )
-	{
-		auto & style = getStyle();
-		m_text.lock()->setMaterial( style.getTextMaterial() );
-		setBackgroundMaterial( style.getBackgroundMaterial() );
-		setBackgroundBorderMaterial( style.getForegroundMaterial() );
-	}
-
-	void ButtonCtrl::onMouseButtonDown( MouseEvent const & event )
+	void ButtonCtrl::doOnMouseButtonDown( MouseEvent const & event )
 	{
 		if ( event.getButton() == MouseButton::eLeft )
 		{
@@ -223,7 +200,7 @@ namespace castor3d
 		}
 	}
 
-	void ButtonCtrl::onMouseButtonUp( MouseEvent const & event )
+	void ButtonCtrl::doOnMouseButtonUp( MouseEvent const & event )
 	{
 		if ( event.getButton() == MouseButton::eLeft )
 		{
@@ -234,5 +211,13 @@ namespace castor3d
 
 			m_signals[size_t( ButtonEvent::eClicked )]();
 		}
+	}
+
+	void ButtonCtrl::doOnMouseLeave( MouseEvent const & event )
+	{
+		auto & style = getStyle();
+		m_text.lock()->setMaterial( style.getTextMaterial() );
+		setBackgroundMaterial( style.getBackgroundMaterial() );
+		setBackgroundBorderMaterial( style.getForegroundMaterial() );
 	}
 }

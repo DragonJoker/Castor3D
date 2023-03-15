@@ -40,7 +40,7 @@ namespace castor3d
 		, castor::Position const & position
 		, castor::Size const & size
 		, uint32_t headerHeight
-		, uint64_t flags
+		, ControlFlagType flags
 		, bool visible )
 		: Control{ Type
 			, scene

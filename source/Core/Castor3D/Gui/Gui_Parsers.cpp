@@ -56,9 +56,7 @@ namespace castor3d
 				, controlName
 				, style
 				, guiContext.getTopControl() );
-			control->addFlag( guiContext.flags );
 			guiContext.parents.push( control );
-			guiContext.flags = 0;
 			return control;
 		}
 
@@ -439,9 +437,9 @@ namespace castor3d
 		{
 			bool value;
 			params[0]->get( value );
-			guiContext.edit->addFlag( uint32_t( EditFlag::eMultiline )/*
-				| uint32_t( EditFlag::eProcessEnter )
-				| uint32_t( EditFlag::eProcessTab )*/ );
+			guiContext.edit->addFlag( EditFlag::eMultiline/*
+				| EditFlag::eProcessEnter
+				| EditFlag::eProcessTab*/ );
 		}
 		else
 		{
@@ -900,6 +898,29 @@ namespace castor3d
 		if ( auto control = guiContext.getTopControl() )
 		{
 			guiContext.layout = castor::makeUniqueDerived< Layout, LayoutBox >( static_cast< LayoutControl & >( *control ) );
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No control initialised." ) );
+		}
+	}
+	CU_EndAttributePush( GUISection::eBoxLayout )
+
+	CU_ImplementAttributeParser( parserControlMovable )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+		auto enable = params[0]->get< bool >();
+
+		if ( auto control = guiContext.getTopControl() )
+		{
+			if ( enable )
+			{
+				control->addFlag( ControlFlag::eDraggable );
+			}
+			else
+			{
+				control->removeFlag( ControlFlag::eDraggable );
+			}
 		}
 		else
 		{

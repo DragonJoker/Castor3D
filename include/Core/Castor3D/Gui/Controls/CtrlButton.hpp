@@ -42,7 +42,7 @@ namespace castor3d
 			, castor::String const & caption
 			, castor::Position const & position
 			, castor::Size const & size
-			, uint64_t flags = 0
+			, ControlFlagType flags = 0
 			, bool visible = true );
 
 		/** Sets the horizontal alignment for the text.
@@ -122,20 +122,20 @@ namespace castor3d
 		 */
 		void onMouseEnter( MouseEvent const & event );
 
-		/** Event when mouse leaves the control
-		 *\param[in]	event		The mouse event
-		 */
-		void onMouseLeave( MouseEvent const & event );
-
 		/** Event when mouse left button is pressed.
 		 *\param[in]	event		The mouse event.
 		 */
-		void onMouseButtonDown( MouseEvent const & event );
+		void doOnMouseButtonDown( MouseEvent const & event )override;
 
 		/** Event when mouse left button is released.
 		 *\param[in]	event		The mouse event.
 		 */
-		void onMouseButtonUp( MouseEvent const & event );
+		void doOnMouseButtonUp( MouseEvent const & event )override;
+
+		/** Event when mouse leaves the control.
+		 *\param[in]	event		The mouse event.
+		 */
+		void doOnMouseLeave( MouseEvent const & event )override;
 
 		/** Creates a material with an ambient colour equal to material->colour + offset
 		 *\param[in]	material	The material.

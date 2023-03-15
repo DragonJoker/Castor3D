@@ -238,6 +238,10 @@ namespace castor3d
 		*/
 		C3D_API ControlSPtr findControl( castor::String const & name )const;
 
+		/** Sets the control that is currently dragged (only one is allowed.
+		*/
+		C3D_API bool setDraggedControl( ControlRPtr control );
+
 		//@}
 
 		C3D_API static castor::AttributeParsers createParsers( castor3d::Engine & engine );
@@ -378,6 +382,7 @@ namespace castor3d
 		std::map< castor::String, StaticStyleUPtr > m_staticStyles;
 		std::map< castor::String, PanelStyleUPtr > m_panelStyles;
 		std::map< castor::String, ExpandablePanelStyleUPtr > m_expandablePanelStyles;
+		ControlRPtr m_draggedControl{};
 	};
 }
 
