@@ -91,12 +91,12 @@ namespace castor3d
 				, getEngine()
 				, OverlayType::eText
 				, nullptr
-				, &getBackground()->getOverlay() ).lock()->getTextOverlay()
+				, &getBackgroundOverlay() ).lock()->getTextOverlay()
 			: getEngine().addNewOverlay( cuT( "T_CtrlCombo_[" ) + getName() + cuT( "]" )
 				, getEngine()
 				, OverlayType::eText
 				, nullptr
-				, &getBackground()->getOverlay() ).lock()->getTextOverlay();
+				, &getBackgroundOverlay() ).lock()->getTextOverlay();
 		text->setPixelSize( castor::Size( getSize().getWidth() - getSize().getHeight(), getSize().getHeight() ) );
 		text->setVAlign( VAlign::eCenter );
 		m_text = text;
@@ -157,7 +157,7 @@ namespace castor3d
 		auto & style = getStyle();
 		CU_Require( getControlsManager() );
 		auto & manager = *getControlsManager();
-		setBackgroundBorders( castor::Point4ui( 1, 1, 1, 1 ) );
+		setBackgroundBorderSize( castor::Point4ui( 1, 1, 1, 1 ) );
 
 		m_expand->setPosition( castor::Position( int32_t( getSize().getWidth() - getSize().getHeight() ), 0 ) );
 		m_expand->setSize( castor::Size( getSize().getHeight(), getSize().getHeight() ) );

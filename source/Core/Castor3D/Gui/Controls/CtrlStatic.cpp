@@ -51,18 +51,18 @@ namespace castor3d
 			, visible }
 		, m_caption{ caption }
 	{
-		setBackgroundBorders( castor::Point4ui{} );
+		setBackgroundBorderSize( castor::Point4ui{} );
 		auto text = m_scene
 			? m_scene->addNewOverlay( cuT( "T_CtrlStatic_[" ) + getName() + cuT( "]" )
 				, getEngine()
 				, OverlayType::eText
 				, nullptr
-				, &getBackground()->getOverlay() ).lock()->getTextOverlay()
+				, &getBackgroundOverlay() ).lock()->getTextOverlay()
 			: getEngine().addNewOverlay( cuT( "T_CtrlStatic_[" ) + getName() + cuT( "]" )
 				, getEngine()
 				, OverlayType::eText
 				, nullptr
-				, &getBackground()->getOverlay() ).lock()->getTextOverlay();
+				, &getBackgroundOverlay() ).lock()->getTextOverlay();
 		m_text = text;
 		text->setPixelSize( getSize() );
 		text->setCaption( castor::string::toU32String( m_caption ) );

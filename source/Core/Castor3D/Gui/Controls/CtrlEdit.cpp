@@ -55,7 +55,7 @@ namespace castor3d
 		, m_caretIt{ m_caption.end() }
 		, m_active{ false }
 	{
-		setBackgroundBorders( castor::Point4ui{ 1, 1, 1, 1 } );
+		setBackgroundBorderSize( castor::Point4ui{ 1, 1, 1, 1 } );
 		EventHandler::connect( MouseEventType::ePushed
 			, [this]( MouseEvent const & event )
 			{
@@ -97,12 +97,12 @@ namespace castor3d
 				, getEngine()
 				, OverlayType::eText
 				, nullptr
-				, &getBackground()->getOverlay() ).lock()->getTextOverlay()
+				, &getBackgroundOverlay() ).lock()->getTextOverlay()
 			: getEngine().addNewOverlay( cuT( "T_CtrlEdit_[" ) + getName() + cuT( "]" )
 				, getEngine()
 				, OverlayType::eText
 				, nullptr
-				, &getBackground()->getOverlay() ).lock()->getTextOverlay();
+				, &getBackgroundOverlay() ).lock()->getTextOverlay();
 		text->setPixelSize( getSize() );
 		text->setVAlign( VAlign::eCenter );
 		text->setVisible( visible );

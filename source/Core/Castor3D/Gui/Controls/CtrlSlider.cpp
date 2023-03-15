@@ -50,7 +50,7 @@ namespace castor3d
 		, m_value{ value }
 		, m_scrolling{ false }
 	{
-		setBackgroundBorders( castor::Point4ui{} );
+		setBackgroundBorderSize( castor::Point4ui{} );
 		EventHandler::connect( MouseEventType::eMove
 			, [this]( MouseEvent const & event )
 			{

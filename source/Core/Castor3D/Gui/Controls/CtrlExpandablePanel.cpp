@@ -72,7 +72,7 @@ namespace castor3d
 			, castor::Position{ 0, int32_t( m_headerHeight ) }
 			, castor::Size{ size->x, size->y - m_headerHeight } ) }
 	{
-		setBackgroundBorders( { 0u, 0u, 0u, 0u } );
+		setBackgroundBorderSize( { 0u, 0u, 0u, 0u } );
 		m_header->setVisible( visible );
 		m_expand->setVisible( visible );
 		m_panel->setVisible( visible );

@@ -818,7 +818,10 @@ namespace castor3d
 
 			for ( auto handler : handlers )
 			{
-				m_controlsByZIndex.push_back( static_cast< Control * >( handler.get() ) );
+				if ( handler )
+				{
+					m_controlsByZIndex.push_back( static_cast< Control * >( handler.get() ) );
+				}
 			}
 		}
 
@@ -826,26 +829,7 @@ namespace castor3d
 			, m_controlsByZIndex.end()
 			, []( Control * lhs, Control * rhs )
 			{
-				bool result = false;
-				auto lhsBg = lhs ? lhs->getBackground() : nullptr;
-				auto rhsBg = rhs ? rhs->getBackground() : nullptr;
-
-				if ( !lhs || !lhsBg )
-				{
-					result = true;
-				}
-				else if ( !rhs || !rhsBg )
-				{
-					result = true;
-				}
-				else
-				{
-					uint64_t a = lhsBg->getIndex() + lhsBg->getLevel() * 1000ull;
-					uint64_t b = rhsBg->getIndex() + rhsBg->getLevel() * 1000ull;
-					result = a < b;
-				}
-
-				return result;
+				return lhs->getZIndex() < rhs->getZIndex();
 			} );
 	}
 

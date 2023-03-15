@@ -40,14 +40,7 @@ namespace castor3d
 
 		if ( !isAlwaysOnTop() && m_parent )
 		{
-			auto bg = m_parent->getBackground();
-
-			if ( !bg )
-			{
-				CU_SrcException( "Control", "No background set" );
-			}
-
-			parentOv = &bg->getOverlay();
+			parentOv = &m_parent->doGetBackground().getOverlay();
 		}
 
 		auto overlay = m_scene
@@ -87,13 +80,8 @@ namespace castor3d
 	void Control::setStyle( ControlStyleRPtr value )
 	{
 		m_style = value;
-
-		if ( auto background = getBackground() )
-		{
-			background->setMaterial( m_style->getBackgroundMaterial() );
-			background->setBorderMaterial( m_style->getForegroundMaterial() );
-		}
-
+		doGetBackground().setMaterial( m_style->getBackgroundMaterial() );
+		doGetBackground().setBorderMaterial( m_style->getForegroundMaterial() );
 		doUpdateStyle();
 	}
 
@@ -107,12 +95,9 @@ namespace castor3d
 			parent->m_children.push_back( std::static_pointer_cast< Control >( shared_from_this() ) );
 		}
 
-		if ( auto background = getBackground() )
-		{
-			background->setMaterial( m_style->getBackgroundMaterial() );
-			background->setBorderMaterial( m_style->getForegroundMaterial() );
-			background->setAbsoluteBorderSize( m_borders );
-		}
+		doGetBackground().setMaterial( m_style->getBackgroundMaterial() );
+		doGetBackground().setBorderMaterial( m_style->getForegroundMaterial() );
+		doGetBackground().setAbsoluteBorderSize( m_borders );
 
 		doCreate();
 	}
@@ -122,33 +107,65 @@ namespace castor3d
 		doDestroy();
 	}
 
-	void Control::setBackgroundBorders( castor::Point4ui const & value )
+	Overlay & Control::getBackgroundOverlay()
+	{
+		return doGetBackground().getOverlay();
+	}
+
+	void Control::setBackgroundMaterial( MaterialRPtr value )
+	{
+		doGetBackground().setMaterial( value );
+	}
+
+	void Control::setBackgroundSize( castor::Size const & value )
+	{
+		doGetBackground().setPixelSize( value );
+	}
+
+	void Control::setBackgroundUV( castor::Point4d const & value )
+	{
+		doGetBackground().setUV( value );
+	}
+
+	void Control::setBackgroundBorderPosition( BorderPosition value )
+	{
+		doGetBackground().setBorderPosition( value );
+	}
+
+	void Control::setBackgroundBorderMaterial( MaterialRPtr value )
+	{
+		doGetBackground().setBorderMaterial( value );
+	}
+
+	void Control::setBackgroundBorderSize( castor::Point4ui const & value )
 	{
 		m_borders = value;
-
-		if ( auto background = getBackground() )
-		{
-			background->setAbsoluteBorderSize( m_borders );
-		}
-
+		doGetBackground().setAbsoluteBorderSize( m_borders );
 		doSetBackgroundBorders( m_borders );
 		onChanged( *this );
+	}
+
+	void Control::setBackgroundBorderInnerUV( castor::Point4d const & value )
+	{
+		doGetBackground().setBorderInnerUV( value );
+	}
+
+	void Control::setBackgroundBorderOuterUV( castor::Point4d const & value )
+	{
+		doGetBackground().setBorderOuterUV( value );
 	}
 
 	void Control::setPosition( castor::Position const & value )
 	{
 		m_position = value;
 
-		if ( auto background = getBackground() )
+		if ( isAlwaysOnTop() )
 		{
-			if ( isAlwaysOnTop() )
-			{
-				background->setPixelPosition( getAbsolutePosition() );
-			}
-			else
-			{
-				background->setPixelPosition( getPosition() );
-			}
+			doGetBackground().setPixelPosition( getAbsolutePosition() );
+		}
+		else
+		{
+			doGetBackground().setPixelPosition( getPosition() );
 		}
 
 		doSetPosition( m_position );
@@ -171,12 +188,7 @@ namespace castor3d
 	void Control::setSize( castor::Size const & value )
 	{
 		m_size = value;
-
-		if ( auto background = getBackground() )
-		{
-			background->setPixelSize( m_size );
-		}
-
+		doGetBackground().setPixelSize( m_size );
 		doSetSize( m_size );
 		onChanged( *this );
 	}
@@ -188,42 +200,25 @@ namespace castor3d
 
 	void Control::setVisible( bool value )
 	{
-		if ( auto background = getBackground() )
-		{
-			background->setVisible( value );
-		}
-		else
-		{
-			CU_SrcException( "Control", "No background set" );
-		}
-
+		doGetBackground().setVisible( value );
 		doSetVisible( value );
 		onChanged( *this );
 	}
 
 	bool Control::isVisible()const
 	{
-		bool visible = false;
+		auto visible = doGetBackground().isVisible();
+		ControlRPtr parent = getParent();
 
-		if ( auto background = getBackground() )
+		if ( visible && parent )
 		{
-			visible = background->isVisible();
-			ControlRPtr parent = getParent();
-
-			if ( visible && parent )
-			{
-				visible = parent->isVisible();
-			}
-		}
-		else
-		{
-			CU_SrcException( "Control", "No background set" );
+			visible = parent->isVisible();
 		}
 
 		return visible;
 	}
 
-	ControlSPtr Control::getChildControl( ControlID id )
+	ControlSPtr Control::getChildControl( ControlID id )const
 	{
 		auto it = std::find_if( std::begin( m_children )
 			, std::end( m_children )
@@ -243,6 +238,11 @@ namespace castor3d
 		return it->lock();
 	}
 
+	uint64_t Control::getZIndex()const
+	{
+		return doGetBackground().getIndex() + doGetBackground().getLevel() * 1000ull;
+	}
+
 	void Control::addFlag( uint64_t flags )
 	{
 		m_flags |= flags;
@@ -257,17 +257,6 @@ namespace castor3d
 
 	bool Control::doIsVisible()const
 	{
-		bool result = false;
-
-		if ( auto background = getBackground() )
-		{
-			result = background->isVisible();
-		}
-		else
-		{
-			CU_SrcException( "Control", "No background set" );
-		}
-
-		return result;
+		return doGetBackground().isVisible();
 	}
 }
