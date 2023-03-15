@@ -284,6 +284,11 @@ namespace castor3d
 
 	void ComboBoxCtrl::doSetVisible( bool visible )
 	{
+		if ( auto text = m_text.lock() )
+		{
+			text->setVisible( visible );
+		}
+
 		m_expand->setVisible( visible );
 		m_choices->hide();
 	}

@@ -340,12 +340,6 @@ namespace castor3d
 		*/
 		void doUpdate()const;
 
-		/** Removes a control
-		*\param[in] id
-		*	The control ID
-		*/
-		void doRemoveControl( ControlID id );
-
 		/** \return
 		*	The controls by z-index.
 		*/
@@ -356,6 +350,10 @@ namespace castor3d
 		*/
 		std::map< ControlID, ControlWPtr > doGetControlsById()const;
 
+		/** Marks the manager as to be updated.
+		*/
+		void doMarkDirty();
+
 	public:
 		C3D_API static castor::String Name;
 
@@ -364,7 +362,7 @@ namespace castor3d
 		mutable std::vector< Control *  > m_controlsByZIndex;
 		mutable std::mutex m_mutexControlsById;
 		std::map< ControlID, ControlWPtr > m_controlsById;
-		bool m_changed;
+		mutable std::atomic< CpuFrameEvent * > m_event{};
 		std::map< castor::String, ThemeUPtr > m_themes;
 		std::map< Control const *, OnButtonEventConnection > m_onButtonClicks;
 		std::map< Control const *, OnComboEventConnection > m_onComboSelects;

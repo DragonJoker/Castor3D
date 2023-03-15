@@ -137,15 +137,13 @@ namespace castor3d
 		 */
 		void onDeactivate( HandlerEvent const & event );
 
-		/** Event when mouse left button is pushed
-		 *\param[in]	event		The mouse event
-		 */
-		void onMouseButtonDown( MouseEvent const & event );
+		/** @copydoc Control::doOnMouseButtonDown
+		*/
+		void doOnMouseButtonDown( MouseEvent const & event )override;
 
-		/** Event when mouse left button is released
-		 *\param[in]	event		The mouse event
-		 */
-		void onMouseButtonUp( MouseEvent const & event );
+		/** @copydoc Control::doOnMouseButtonUp
+		*/
+		void doOnMouseButtonUp( MouseEvent const & event )override;
 
 		/** Event when a printable key is pressed
 		 *\param[in]	event		The mouse event

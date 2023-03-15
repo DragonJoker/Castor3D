@@ -74,17 +74,45 @@ namespace castor3d
 
 	void StaticCtrl::setHAlign( HAlign align )
 	{
-		if ( auto text = m_text.lock() )
+		removeFlag( StaticFlag::eHAlignCenter
+			| StaticFlag::eHAlignRight
+			| StaticFlag::eHAlignLeft );
+
+		switch ( align )
 		{
-			text->setHAlign( align );
+		case HAlign::eLeft:
+			addFlag( StaticFlag::eHAlignLeft );
+			break;
+		case HAlign::eCenter:
+			addFlag( StaticFlag::eHAlignCenter );
+			break;
+		case HAlign::eRight:
+			addFlag( StaticFlag::eHAlignRight );
+			break;
+		default:
+			break;
 		}
 	}
 
 	void StaticCtrl::setVAlign( VAlign align )
 	{
-		if ( auto text = m_text.lock() )
+		removeFlag( StaticFlag::eVAlignCenter
+			| StaticFlag::eVAlignTop
+			| StaticFlag::eVAlignBottom );
+
+		switch ( align )
 		{
-			text->setVAlign( align );
+		case VAlign::eTop:
+			addFlag( StaticFlag::eVAlignTop );
+			break;
+		case VAlign::eCenter:
+			addFlag( StaticFlag::eVAlignCenter );
+			break;
+		case VAlign::eBottom:
+			addFlag( StaticFlag::eVAlignBottom );
+			break;
+		default:
+			break;
 		}
 	}
 

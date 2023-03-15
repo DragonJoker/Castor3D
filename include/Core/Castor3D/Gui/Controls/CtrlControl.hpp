@@ -142,10 +142,28 @@ namespace castor3d
 			doUpdateFlags();
 		}
 
+		/** Adds a flag.
+		 */
+		template< ControlFlagTypeT FlagTypeT >
+		void addFlag( castor::FlagCombination< FlagTypeT > flag )
+		{
+			m_flags |= ControlFlagType( flag );
+			doUpdateFlags();
+		}
+
 		/** Removes a flag.
 		 */
 		template< ControlFlagTypeT FlagTypeT >
 		void removeFlag( FlagTypeT flag )
+		{
+			m_flags &= ~ControlFlagType( flag );
+			doUpdateFlags();
+		}
+
+		/** Removes a flag.
+		 */
+		template< ControlFlagTypeT FlagTypeT >
+		void removeFlag( castor::FlagCombination< FlagTypeT > flag )
 		{
 			m_flags &= ~ControlFlagType( flag );
 			doUpdateFlags();
