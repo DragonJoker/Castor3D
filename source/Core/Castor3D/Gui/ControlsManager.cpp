@@ -116,11 +116,6 @@ namespace castor3d
 			createControlsParsers( result, section );
 			createStylesParsers( result, section );
 			addParser( result, section, cuT( "theme" ), &parserTheme, { makeParameter< ParameterType::eName >() } );
-
-			if ( section == uint32_t( GUISection::eGUI ) )
-			{
-				addParser( result, section, cuT( "}" ), &parserGuiEnd );
-			}
 		}
 
 		static void createButtonParsers( castor::AttributeParsers & result )
@@ -395,7 +390,6 @@ namespace castor3d
 
 	ControlsManager::ControlsManager( Engine & engine )
 		: UserInputListener{ engine, Name }
-		, m_changed{ false }
 	{
 	}
 
@@ -527,12 +521,28 @@ namespace castor3d
 		}
 
 		m_controlsById.insert( std::make_pair( control->getId(), control ) );
-		m_changed = true;
+		doMarkDirty();
 	}
 
 	void ControlsManager::removeControl( ControlID id )
 	{
-		doRemoveControl( id );
+		EventHandler * handler;
+		{
+			ctrlmgr::LockType lock{ castor::makeUniqueLock( m_mutexControlsById ) };
+			auto it = m_controlsById.find( id );
+
+			if ( it == m_controlsById.end() )
+			{
+				CU_Exception( "This control does not exist in the manager." );
+			}
+
+			auto control = it->second.lock().get();
+			handler = control;
+			m_controlsById.erase( it );
+		}
+
+		doMarkDirty();
+		doRemoveHandler( *handler );
 	}
 
 	ControlSPtr ControlsManager::getControl( ControlID id )const
@@ -795,7 +805,7 @@ namespace castor3d
 
 	EventHandler * ControlsManager::doGetMouseTargetableHandler( castor::Position const & position )const
 	{
-		if ( m_changed )
+		if ( m_event.exchange( nullptr ) )
 		{
 			doUpdate();
 		}
@@ -854,49 +864,30 @@ namespace castor3d
 			} );
 	}
 
-	void ControlsManager::doRemoveControl( ControlID id )
-	{
-		EventHandler * handler;
-		{
-			ctrlmgr::LockType lock{ castor::makeUniqueLock( m_mutexControlsById ) };
-			auto it = m_controlsById.find( id );
-
-			if ( it == m_controlsById.end() )
-			{
-				CU_Exception( "This control does not exist in the manager." );
-			}
-
-			m_controlsById.erase( it );
-			handler = it->second.lock().get();
-		}
-
-		m_changed = true;
-		doRemoveHandler( *handler );
-	}
-
 	std::vector< Control * > ControlsManager::doGetControlsByZIndex()const
 	{
 		ctrlmgr::LockType lock{ castor::makeUniqueLock( m_mutexControlsById ) };
-		std::vector< Control * > result;
-
-		if ( !m_controlsByZIndex.empty() )
-		{
-			result = m_controlsByZIndex;
-		}
-
-		return result;
+		return m_controlsByZIndex;
 	}
 
 	std::map< ControlID, ControlWPtr > ControlsManager::doGetControlsById()const
 	{
 		ctrlmgr::LockType lock{ castor::makeUniqueLock( m_mutexControlsById ) };
-		std::map< ControlID, ControlWPtr > result;
+		return m_controlsById;
+	}
 
-		if ( !m_controlsById.empty() )
+	void ControlsManager::doMarkDirty()
+	{
+		if ( !m_event )
 		{
-			result = m_controlsById;
+			m_event = getEngine()->postEvent( makeCpuFunctorEvent( EventType::ePostRender
+				, [this]()
+				{
+					if ( m_event.exchange( nullptr ) )
+					{
+						doUpdate();
+					}
+				} ) );
 		}
-
-		return result;
 	}
 }

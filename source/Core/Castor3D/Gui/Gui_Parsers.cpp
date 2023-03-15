@@ -214,12 +214,6 @@ namespace castor3d
 	}
 	CU_EndAttributePush( GUISection::eTheme )
 
-	CU_ImplementAttributeParser( parserGuiEnd )
-	{
-		delete reinterpret_cast< GuiParserContext * >( context.unregisterUserContext( ControlsManager::Name ) );
-	}
-	CU_EndAttributePop()
-
 	CU_ImplementAttributeParser( parserButton )
 	{
 		auto & guiContext = guiparse::getParserContext( context );

@@ -227,7 +227,7 @@ namespace castor3d
 
 	bool Control::isVisible()const
 	{
-		auto visible = doGetBackground().isVisible();
+		auto visible = doIsVisible();
 		ControlRPtr parent = getParent();
 
 		if ( visible && parent )

@@ -56,16 +56,6 @@ namespace castor3d
 		, m_active{ false }
 	{
 		setBackgroundBorderSize( castor::Point4ui{ 1, 1, 1, 1 } );
-		EventHandler::connect( MouseEventType::ePushed
-			, [this]( MouseEvent const & event )
-			{
-				onMouseButtonDown( event );
-			} );
-		EventHandler::connect( MouseEventType::eReleased
-			, [this]( MouseEvent const & event )
-			{
-				onMouseButtonUp( event );
-			} );
 		EventHandler::connect( KeyboardEventType::ePushed
 			, [this]( KeyboardEvent const & event )
 			{
@@ -173,7 +163,6 @@ namespace castor3d
 		if ( auto text = m_text.lock() )
 		{
 			text->setVisible( visible );
-			text.reset();
 		}
 	}
 
@@ -214,11 +203,11 @@ namespace castor3d
 		doUpdateCaption();
 	}
 
-	void EditCtrl::onMouseButtonDown( MouseEvent const & event )
+	void EditCtrl::doOnMouseButtonDown( MouseEvent const & event )
 	{
 	}
 
-	void EditCtrl::onMouseButtonUp( MouseEvent const & event )
+	void EditCtrl::doOnMouseButtonUp( MouseEvent const & event )
 	{
 	}
 
