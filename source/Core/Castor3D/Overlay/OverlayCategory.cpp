@@ -293,4 +293,21 @@ namespace castor3d
 
 		return result;
 	}
+
+	bool OverlayCategory::isFullyCropped()const
+	{
+		if ( isPositionChanged()
+			|| isSizeChanged()
+			|| isChanged()
+			|| ( m_clientArea->w - m_clientArea->y <= 0
+				&& m_clientArea->z - m_clientArea->x <= 0 ) )
+		{
+			// As long as client area is not set, consider this overlay as uncropped.
+			return false;
+		}
+
+		auto area = computeClientArea();
+		return area->w - area->y <= 0
+			&& area->z - area->x <= 0;
+	}
 }
