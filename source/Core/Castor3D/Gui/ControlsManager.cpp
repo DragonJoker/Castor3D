@@ -885,7 +885,10 @@ namespace castor3d
 
 		for ( auto control : controls )
 		{
-			control->updateZIndex( index, result, top );
+			if ( control )
+			{
+				control->updateZIndex( index, result, top );
+			}
 		}
 
 		result.insert( result.end()
