@@ -29,10 +29,10 @@ namespace castor3d
 		: NonClientEventHandler< Control >{ ( parent ? parent->getName() + "/" + name : name ), type != ControlType::eStatic }
 		, m_scene{ scene }
 		, m_parent{ parent }
+		, m_flags{ flags }
 		, m_id{ std::hash< castor::String >{}( getName() ) }
 		, m_type{ type }
 		, m_style{ style }
-		, m_flags{ flags }
 		, m_position{ position }
 		, m_size{ size }
 	{

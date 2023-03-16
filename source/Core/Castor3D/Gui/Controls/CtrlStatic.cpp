@@ -68,13 +68,14 @@ namespace castor3d
 		text->setCaption( castor::string::toU32String( m_caption ) );
 		text->setVisible( visible );
 		text->setVAlign( VAlign::eCenter );
-		doUpdateStyle();
+
+		setStyle( style );
 		doUpdateFlags();
 	}
 
 	void StaticCtrl::setHAlign( HAlign align )
 	{
-		removeFlag( StaticFlag::eHAlignCenter
+		m_flags &= ~ControlFlagType( StaticFlag::eHAlignCenter
 			| StaticFlag::eHAlignRight
 			| StaticFlag::eHAlignLeft );
 
@@ -96,7 +97,7 @@ namespace castor3d
 
 	void StaticCtrl::setVAlign( VAlign align )
 	{
-		removeFlag( StaticFlag::eVAlignCenter
+		m_flags &= ~ControlFlagType( StaticFlag::eVAlignCenter
 			| StaticFlag::eVAlignTop
 			| StaticFlag::eVAlignBottom );
 

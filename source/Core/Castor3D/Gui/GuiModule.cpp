@@ -23,6 +23,7 @@
 
 #include <CastorUtils/Graphics/Font.hpp>
 
+CU_ImplementCUSmartPtr( castor3d, StylesHolder )
 CU_ImplementCUSmartPtr( castor3d, Theme )
 CU_ImplementCUSmartPtr( castor3d, ControlStyle )
 CU_ImplementCUSmartPtr( castor3d, ButtonStyle )

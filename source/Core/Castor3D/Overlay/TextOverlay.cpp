@@ -206,7 +206,7 @@ namespace castor3d
 
 	ashes::PipelineShaderStageCreateInfo TextOverlay::createProgram( RenderDevice const & device )
 	{
-		ShaderModule comp{ VK_SHADER_STAGE_COMPUTE_BIT, "PanelOverlayCompute" };
+		ShaderModule comp{ VK_SHADER_STAGE_COMPUTE_BIT, "TextOverlayCompute" };
 		sdw::ComputeWriter writer;
 
 		C3D_Camera( writer

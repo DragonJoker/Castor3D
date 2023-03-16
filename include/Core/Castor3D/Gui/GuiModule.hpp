@@ -284,6 +284,10 @@ namespace castor3d
 	*/
 	class Spacer;
 	/**
+	 *\brief	Creates and holds styles.
+	*/
+	class StylesHolder;
+	/**
 	 *\brief	Regroups styles for all control types.
 	*/
 	class Theme;
@@ -370,6 +374,7 @@ namespace castor3d
 	CU_DeclareCUSmartPtr( castor3d, PanelCtrl, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, SliderCtrl, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, StaticCtrl, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, StylesHolder, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, Theme, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, ControlStyle, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, ButtonStyle, C3D_API );

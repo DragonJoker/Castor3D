@@ -38,6 +38,11 @@ namespace castor3d
 		 */
 		C3D_API void setLayout( LayoutUPtr layout );
 
+		auto getLayout()const
+		{
+			return m_layout.get();
+		}
+
 	private:
 		/** Sets the background borders size.
 		 *\param[in]	value		The new value.

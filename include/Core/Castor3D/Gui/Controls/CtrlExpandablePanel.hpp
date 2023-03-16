@@ -44,6 +44,7 @@ namespace castor3d
 			, castor::Position const & position
 			, castor::Size const & size
 			, uint32_t headerHeight
+			, bool expanded
 			, ControlFlagType flags = 0
 			, bool visible = true );
 
@@ -73,6 +74,26 @@ namespace castor3d
 		auto getPanel()const
 		{
 			return m_panel;
+		}
+
+		auto getExpand()const
+		{
+			return m_expand;
+		}
+
+		void setExpandCaption( castor::String v )
+		{
+			m_expandCaption = std::move( v );
+		}
+
+		void setRetractCaption( castor::String v )
+		{
+			m_retractCaption = std::move( v );
+		}
+
+		bool isExpanded()const
+		{
+			return m_expanded;
 		}
 
 		C3D_API static ControlType constexpr Type{ ControlType::eExpandablePanel };
@@ -125,6 +146,8 @@ namespace castor3d
 
 	private:
 		uint32_t m_headerHeight;
+		castor::String m_expandCaption{ "+" };
+		castor::String m_retractCaption{ "-" };
 		PanelCtrlSPtr m_header;
 		ButtonCtrlSPtr m_expand;
 		PanelCtrlSPtr m_panel;

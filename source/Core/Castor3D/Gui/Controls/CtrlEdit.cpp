@@ -98,7 +98,7 @@ namespace castor3d
 		text->setVisible( visible );
 		m_text = text;
 
-		doUpdateStyle();
+		setStyle( style );
 		doUpdateFlags();
 	}
 

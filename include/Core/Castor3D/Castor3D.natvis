@@ -563,6 +563,23 @@
 		</Expand>
 	</Type>
 
+	<Type Name="castor3d::StylesHolder">
+		<DisplayString>StylesHolder {m_holderName}</DisplayString>
+		<Expand>
+			<Item Name="holderName">m_holderName</Item>
+			<Item Name="engine">m_engine</Item>
+			<Item Name="defaultFont">m_defaultFont</Item>
+			<Item Name="buttonStyles">m_buttonStyles</Item>
+			<Item Name="comboBoxStyles">m_comboBoxStyles</Item>
+			<Item Name="editStyles">m_editStyles</Item>
+			<Item Name="listBoxStyles">m_listBoxStyles</Item>
+			<Item Name="sliderStyles">m_sliderStyles</Item>
+			<Item Name="staticStyles">m_staticStyles</Item>
+			<Item Name="panelStyles">m_panelStyles</Item>
+			<Item Name="expandablePanelStyles">m_expandablePanelStyles</Item>
+		</Expand>
+	</Type>
+
 	<Type Name="castor3d::LayoutControl">
 		<DisplayString>LayoutCtrl {m_name} {*m_style}</DisplayString>
 		<Expand>
@@ -703,6 +720,14 @@
 		<DisplayString>PanelStyle {m_name}</DisplayString>
 		<Expand>
 			<Item Name="[base]">(castor3d::ControlStyle *)this,nd</Item>
+			<Item Name="[holder]">(castor3d::StylesHolder *)this,nd</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::Theme">
+		<DisplayString>Theme {m_name}</DisplayString>
+		<Expand>
+			<Item Name="[base]">(castor3d::StylesHolder *)this,nd</Item>
 		</Expand>
 	</Type>
 

@@ -193,6 +193,13 @@ namespace castor3d
 			return false;
 		}
 
+		bool hasAnyChange()const noexcept
+		{
+			return isChanged()
+				|| isSizeChanged()
+				|| isPositionChanged();
+		}
+
 		castor::Point4d const & getClientArea()const noexcept
 		{
 			return m_clientArea;

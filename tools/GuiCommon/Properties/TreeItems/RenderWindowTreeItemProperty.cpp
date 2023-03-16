@@ -33,7 +33,6 @@ namespace GuiCommon
 	{
 		static wxString PROPERTY_CATEGORY_DEBUG = _( "Debug" );
 		static wxString PROPERTY_SCENE_DEBUG_OVERLAYS = _( "Debug overlays" );
-		static wxString PROPERTY_SCENE_DETAILED_DEBUG = _( "Detailed" );
 
 		addProperty( grid
 			, PROPERTY_CATEGORY_DEBUG );
@@ -42,10 +41,5 @@ namespace GuiCommon
 			, m_window.getEngine()->getRenderLoop().hasDebugOverlays()
 			, &m_window.getEngine()->getRenderLoop()
 			, &castor3d::RenderLoop::showDebugOverlays );
-		addPropertyT( grid
-			, PROPERTY_SCENE_DETAILED_DEBUG
-			, m_window.getEngine()->getRenderLoop().hasDetailedDebugOverlays()
-			, &m_window.getEngine()->getRenderLoop()
-			, &castor3d::RenderLoop::enableDetailedDebugOverlays );
 	}
 }
