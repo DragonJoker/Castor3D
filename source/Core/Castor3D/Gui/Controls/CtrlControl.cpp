@@ -271,8 +271,11 @@ namespace castor3d
 
 		for ( auto child : m_children )
 		{
-			hasMovable = hasMovable
-				|| child.lock()->isMovable();
+			if ( auto control = child.lock() )
+			{
+				hasMovable = hasMovable
+					|| control->isMovable();
+			}
 		}
 
 		auto realIndex = &index;
