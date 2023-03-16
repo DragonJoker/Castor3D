@@ -325,9 +325,21 @@ namespace castor3d
 
 	void Control::onMouseButtonDown( MouseEvent const & event )
 	{
-		if ( !isMovable()
-			|| event.getButton() != MouseButton::eLeft
-			|| !beginMove( event ) )
+		bool processed{};
+
+		if ( event.getButton() == MouseButton::eLeft )
+		{
+			if ( isMovable() && beginMove( event ) )
+			{
+				processed = true;
+			}
+			else if ( isResizable() && beginResize( event ) )
+			{
+				processed = true;
+			}
+		}
+
+		if ( !processed )
 		{
 			doOnMouseButtonDown( event );
 		}
@@ -335,14 +347,26 @@ namespace castor3d
 
 	void Control::onMouseButtonUp( MouseEvent const & event )
 	{
-		if ( !isMovable()
-			|| !isMoving()
-			|| event.getButton() != MouseButton::eLeft )
+		bool processed{};
+
+		if ( event.getButton() == MouseButton::eLeft )
+		{
+			if ( isMovable() && beginMove( event ) )
+			{
+				endMove( event );
+				processed = true;
+			}
+			else if ( isResizable() && beginResize( event ) )
+			{
+				endResize( event );
+				processed = true;
+			}
+		}
+
+		if ( !processed )
 		{
 			doOnMouseButtonUp( event );
 		}
-
-		endMove( event );
 	}
 
 	void Control::onMouseMove( MouseEvent const & event )
@@ -353,27 +377,47 @@ namespace castor3d
 		{
 			move( event );
 		}
+		else if ( isResizable() && isResizing() )
+		{
+			resize( event );
+		}
 	}
 
 	void Control::onMouseLeave( MouseEvent const & event )
 	{
+		doOnMouseLeave( event );
+
 		if ( isMovable() && isMoving() )
 		{
 			endMove( event );
 		}
-
-		doOnMouseLeave( event );
+		else if ( isResizable() && isResizing() )
+		{
+			endResize( event );
+		}
 	}
+
+	static int32_t constexpr ResizeThreshold = 10;
 
 	bool Control::beginMove( MouseEvent const & event )
 	{
-		auto result = getControlsManager()->setDraggedControl( this );
-
+		auto size = getSize();
+		auto pos = event.getPosition() - getAbsolutePosition();
+		auto result = pos->x > ResizeThreshold
+			&& pos->x < int32_t( size->x ) - ResizeThreshold
+			&& pos->y > ResizeThreshold
+			&& pos->y < int32_t( size->y ) - ResizeThreshold;
+			
 		if ( result )
 		{
-			m_moving = true;
-			m_mouseStartPosition = getPosition();
-			m_mouseStartMousePosition = event.getPosition();
+			result = getControlsManager()->setMovedControl( this );
+
+			if ( result )
+			{
+				m_moving = true;
+				m_mouseStartPosition = getPosition();
+				m_mouseStartMousePosition = event.getPosition();
+			}
 		}
 
 		return result;
@@ -389,6 +433,73 @@ namespace castor3d
 	void Control::endMove( MouseEvent const & event )
 	{
 		m_moving = false;
-		getControlsManager()->setDraggedControl( nullptr );
+		getControlsManager()->setMovedControl( nullptr );
+	}
+
+	bool Control::beginResize( MouseEvent const & event )
+	{
+		auto size = getSize();
+		auto pos = event.getPosition() - getAbsolutePosition();
+		auto result = pos->x <= ResizeThreshold
+			|| pos->x >= int32_t( size->x ) - ResizeThreshold
+			|| pos->y <= ResizeThreshold
+			|| pos->y >= int32_t( size->y ) - ResizeThreshold;
+
+		if ( result )
+		{
+			result = getControlsManager()->setResizedControl( this );
+
+			if ( result )
+			{
+				m_resizing[0] = pos->x <= ResizeThreshold;
+				m_resizing[1] = pos->y <= ResizeThreshold;
+				m_resizing[2] = pos->x >= int32_t( size->x ) - ResizeThreshold;
+				m_resizing[3] = pos->y >= int32_t( size->y ) - ResizeThreshold;
+				m_mouseStartSize = getSize();
+				m_mouseStartPosition = getPosition();
+				m_mouseStartMousePosition = event.getPosition();
+			}
+		}
+
+		return result;
+	}
+
+	void Control::resize( MouseEvent const & event )
+	{
+		auto diff = event.getPosition() - m_mouseStartMousePosition;
+		castor::Point2i newPos{ m_mouseStartPosition.x(), m_mouseStartPosition.y() };
+
+		if ( m_resizing[0] )
+		{
+			newPos->x += diff->x;
+			diff->x = -diff->x;
+		}
+		else if ( !m_resizing[2] )
+		{
+			diff->x = 0;
+		}
+
+		if ( m_resizing[1] )
+		{
+			newPos->y += diff->y;
+			diff->y = -diff->y;
+		}
+		else if ( !m_resizing[3] )
+		{
+			diff->y = 0;
+		}
+
+		auto newSize = m_mouseStartSize + diff;
+		setSize( { newSize->x, newSize->y } );
+		setPosition( { newPos->x, newPos->y } );
+	}
+
+	void Control::endResize( MouseEvent const & event )
+	{
+		m_resizing[0] = false;
+		m_resizing[1] = false;
+		m_resizing[2] = false;
+		m_resizing[3] = false;
+		getControlsManager()->setResizedControl( nullptr );
 	}
 }

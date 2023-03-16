@@ -238,9 +238,13 @@ namespace castor3d
 		*/
 		C3D_API ControlSPtr findControl( castor::String const & name )const;
 
-		/** Sets the control that is currently dragged (only one is allowed.
+		/** Sets the control that is currently moved (only one at a time is allowed).
 		*/
-		C3D_API bool setDraggedControl( ControlRPtr control );
+		C3D_API bool setMovedControl( ControlRPtr control );
+
+		/** Sets the control that is currently resized (only one at a time is allowed).
+		*/
+		C3D_API bool setResizedControl( ControlRPtr control );
 
 		//@}
 
@@ -391,6 +395,7 @@ namespace castor3d
 		std::map< castor::String, PanelStyleUPtr > m_panelStyles;
 		std::map< castor::String, ExpandablePanelStyleUPtr > m_expandablePanelStyles;
 		ControlRPtr m_movedControl{};
+		ControlRPtr m_resizedControl{};
 	};
 }
 

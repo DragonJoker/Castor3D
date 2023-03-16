@@ -146,7 +146,7 @@ namespace castor3d
 		/** Event when mouse left button is released over the control
 		 *\param[in]	event		The mouse event
 		 */
-		void doOnMouseButtonUp( MouseEvent const & event );
+		void doOnMouseButtonUp( MouseEvent const & event )override;
 
 		/** Event when mouse moves over the tick control
 		 *\param[in]	control	The tick control

@@ -193,6 +193,8 @@ namespace castor3d
 		eAlwaysOnTop = 0x0000000100000000,
 		//! Control can be moved around.
 		eMovable = 0x0000000200000000,
+		//! Control can be resized.
+		eResizable = 0x0000000400000000,
 	};
 	CU_ImplementFlags( ControlFlag )
 	/**

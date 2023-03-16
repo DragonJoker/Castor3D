@@ -144,6 +144,7 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserControlVisible )
 	CU_DeclareAttributeParser( parserControlBoxLayout )
 	CU_DeclareAttributeParser( parserControlMovable )
+	CU_DeclareAttributeParser( parserControlResizable )
 
 	CU_DeclareAttributeParser( parserThemeDefaultFont )
 	CU_DeclareAttributeParser( parserThemeButtonStyle )
