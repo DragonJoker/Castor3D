@@ -22,26 +22,35 @@ namespace castor3d
 		{
 			uint32_t result{};
 			auto lock( castor::makeUniqueLock( cache ) );
+			std::vector< OverlayCategory * > categories;
+			categories.reserve( cache.getCategories().size() );
 
 			for ( auto category : cache.getCategories() )
 			{
 				if ( category->getOverlay().isVisible()
 					&& category->getMaterial() )
 				{
-					category->update( renderer );
+					categories.push_back( category.get() );
 
-					if ( category->getOverlay().isDisplayable() )
+					if ( category->hasAnyChange() || renderer.isSizeChanged() )
 					{
-						preparer.registerOverlay( category->getOverlay() );
-						++result;
+						category->update( renderer );
 					}
 				}
 			}
 
-			for ( auto category : cache.getCategories() )
+			for ( auto category : categories )
 			{
-				if ( category->getOverlay().isVisible()
-					&& category->getMaterial() )
+				if ( category->getOverlay().isDisplayable() )
+				{
+					preparer.registerOverlay( category->getOverlay() );
+					++result;
+				}
+			}
+
+			for ( auto category : categories )
+			{
+				if ( category->hasAnyChange() || renderer.isSizeChanged() )
 				{
 					category->reset();
 				}

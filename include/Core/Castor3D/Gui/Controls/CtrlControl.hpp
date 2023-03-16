@@ -470,12 +470,13 @@ namespace castor3d
 		MaterialRPtr m_backgroundMaterial{};
 		//! The foreground material
 		MaterialRPtr m_foregroundMaterial{};
+		//! The control flgas.
+		ControlFlagType m_flags;
 
 	private:
 		const ControlID m_id;
 		const ControlType m_type;
 		ControlStyleRPtr m_style;
-		ControlFlagType m_flags;
 		castor::Position m_position;
 		castor::Size m_size;
 		castor::Point4ui m_borders;

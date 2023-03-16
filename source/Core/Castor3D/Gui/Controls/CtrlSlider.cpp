@@ -103,7 +103,7 @@ namespace castor3d
 			} );
 		m_tick = tick;
 
-		doUpdateStyle();
+		setStyle( style );
 	}
 
 	void SliderCtrl::setRange( castor::Range< int32_t > const & value )

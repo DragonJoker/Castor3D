@@ -18,6 +18,7 @@ namespace castor3d
 	{
 		std::stack< ControlSPtr > parents{};
 		std::stack< ControlStyleRPtr > styles{};
+		std::stack< StylesHolderRPtr > stylesHolder{};
 		Engine * engine{};
 		castor::String controlName{};
 		ButtonCtrlSPtr button{};
@@ -42,6 +43,8 @@ namespace castor3d
 
 		C3D_API ControlRPtr getTopControl()const;
 		C3D_API void popControl();
+		C3D_API void pushStylesHolder( StylesHolder * style );
+		C3D_API void popStylesHolder( StylesHolder const * style );
 		C3D_API ControlStyleRPtr getTopStyle()const;
 		C3D_API void popStyle();
 
@@ -51,6 +54,11 @@ namespace castor3d
 		{
 			styles.push( style );
 			result = style;
+
+			if constexpr ( std::is_base_of_v< StylesHolder, StyleT > )
+			{
+				pushStylesHolder( style );
+			}
 		}
 	};
 
@@ -80,13 +88,15 @@ namespace castor3d
 		ePanel = CU_MakeSectionName( 'P', 'A', 'N', 'L' ),
 		eExpandablePanel = CU_MakeSectionName( 'X', 'P', 'N', 'L' ),
 		eExpandablePanelHeader = CU_MakeSectionName( 'X', 'P', 'H', 'D' ),
-		eExpandablePanelPanel = CU_MakeSectionName( 'X', 'P', 'P', 'L' ),
+		eExpandablePanelExpand = CU_MakeSectionName( 'X', 'P', 'X', 'p' ),
+		eExpandablePanelContent = CU_MakeSectionName( 'X', 'P', 'C', 'T' ),
 		eBoxLayout = CU_MakeSectionName( 'B', 'X', 'L', 'T' ),
 		eLayoutCtrl = CU_MakeSectionName( 'L', 'T', 'C', 'T' ),
 	};
 
 	CU_DeclareAttributeParser( parserGui )
 	CU_DeclareAttributeParser( parserTheme )
+	CU_DeclareAttributeParser( parserDefaultFont )
 
 	CU_DeclareAttributeParser( parserButton )
 	CU_DeclareAttributeParser( parserButtonTheme )
@@ -130,10 +140,14 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserExpandablePanelTheme )
 	CU_DeclareAttributeParser( parserExpandablePanelStyle )
 	CU_DeclareAttributeParser( parserExpandablePanelHeader )
-	CU_DeclareAttributeParser( parserExpandablePanelPanel )
+	CU_DeclareAttributeParser( parserExpandablePanelExpand )
+	CU_DeclareAttributeParser( parserExpandablePanelContent )
 	CU_DeclareAttributeParser( parserExpandablePanelEnd )
+	CU_DeclareAttributeParser( parserExpandablePanelExpandCaption )
+	CU_DeclareAttributeParser( parserExpandablePanelRetractCaption )
 	CU_DeclareAttributeParser( parserExpandablePanelHeaderEnd )
-	CU_DeclareAttributeParser( parserExpandablePanelPanelEnd )
+	CU_DeclareAttributeParser( parserExpandablePanelExpandEnd )
+	CU_DeclareAttributeParser( parserExpandablePanelContentEnd )
 
 	CU_DeclareAttributeParser( parserControlPixelPosition )
 	CU_DeclareAttributeParser( parserControlPixelSize )

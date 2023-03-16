@@ -136,6 +136,7 @@ namespace CastorViewer
 		GuiCommon::Recorder m_recorder;
 		int m_recordFps{ 0 };
 		wxString m_title;
+		uint32_t m_count{};
 	};
 }
 

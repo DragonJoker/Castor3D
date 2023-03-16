@@ -28,6 +28,7 @@ namespace castor3d
 			, castor::Position{}
 			, castor::Size{}
 			, 25u
+			, true
 			, 0u
 			, true }
 	{
@@ -40,6 +41,7 @@ namespace castor3d
 		, castor::Position const & position
 		, castor::Size const & size
 		, uint32_t headerHeight
+		, bool expanded
 		, ControlFlagType flags
 		, bool visible )
 		: Control{ Type
@@ -62,7 +64,7 @@ namespace castor3d
 			, cuT( "Expand" )
 			, &style->getExpandStyle()
 			, this
-			, cuT( "-" )
+			, m_retractCaption
 			, castor::Position{ int32_t( size->x - m_headerHeight ), 0 }
 			, castor::Size{ m_headerHeight, m_headerHeight } ) }
 		, m_panel{ std::make_shared< PanelCtrl >( m_scene
@@ -71,6 +73,7 @@ namespace castor3d
 			, this
 			, castor::Position{ 0, int32_t( m_headerHeight ) }
 			, castor::Size{ size->x, size->y - m_headerHeight } ) }
+		, m_expanded{ expanded }
 	{
 		setBackgroundBorderSize( { 0u, 0u, 0u, 0u } );
 		m_header->setVisible( visible );
@@ -82,7 +85,7 @@ namespace castor3d
 				doSwitchExpand();
 			} );
 
-		doUpdateStyle();
+		setStyle( style );
 	}
 
 	void ExpandablePanelCtrl::doUpdateStyle()
@@ -105,6 +108,12 @@ namespace castor3d
 		manager.create( m_panel );
 
 		manager.connectEvents( *this );
+
+		if ( !m_expanded )
+		{
+			m_expanded = true;
+			doSwitchExpand();
+		}
 	}
 
 	void ExpandablePanelCtrl::doDestroy()
@@ -169,12 +178,12 @@ namespace castor3d
 
 		if ( m_expanded )
 		{
-			m_expand->setCaption( "-" );
+			m_expand->setCaption( m_retractCaption );
 			m_signals[size_t( ExpandablePanelEvent::eExpand )]();
 		}
 		else
 		{
-			m_expand->setCaption( "+" );
+			m_expand->setCaption( m_expandCaption );
 			m_signals[size_t( ExpandablePanelEvent::eRetract )]();
 		}
 	}

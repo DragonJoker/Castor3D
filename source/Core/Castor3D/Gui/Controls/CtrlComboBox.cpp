@@ -101,7 +101,7 @@ namespace castor3d
 		text->setVAlign( VAlign::eCenter );
 		m_text = text;
 
-		doUpdateStyle();
+		setStyle( style );
 	}
 
 	void ComboBoxCtrl::appendItem( castor::String const & value )

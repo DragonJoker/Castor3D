@@ -669,6 +669,11 @@ namespace CastorViewer
 
 	void MainFrame::doSceneLoadEnd( castor3d::RenderTargetSPtr target )
 	{
+		if ( !target )
+		{
+			return;
+		}
+
 		auto size = GuiCommon::make_wxSize( target->getSize() );
 
 		if ( IsMaximized() )
@@ -769,7 +774,29 @@ namespace CastorViewer
 				}
 				else if ( !castor->isThreaded() )
 				{
-					castor->getRenderLoop().renderSyncFrame( castor::Milliseconds{ 1000 / castor->getRenderLoop().getWantedFps() } );
+					auto wanted = castor::Milliseconds{ 1000 / castor->getRenderLoop().getWantedFps() };
+					castor->getRenderLoop().renderSyncFrame( wanted );
+					auto frame = std::chrono::duration_cast< castor::Milliseconds >( wxGetApp().getCastor()->getRenderLoop().getAvgFrameTime() );
+
+					if ( frame.count() >= m_timer->GetInterval() )
+					{
+						if ( m_count++ >= 100 )
+						{
+							m_count = 0;
+							m_timer->Stop();
+							m_timer->Start( m_timer->GetInterval() * 2 );
+						}
+					}
+					else
+					{
+						m_count = 0;
+
+						if ( frame < wanted )
+						{
+							m_timer->Stop();
+							m_timer->Start( int( wanted.count() ) );
+						}
+					}
 				}
 			}
 		}
@@ -800,7 +827,7 @@ namespace CastorViewer
 		if ( wxGetApp().getCastor()
 			&& wxGetApp().getCastor()->hasRenderLoop() )
 		{
-			auto time = wxGetApp().getCastor()->getRenderLoop().getLastFrameTime();
+			auto time = std::chrono::duration_cast< castor::Microseconds >( wxGetApp().getCastor()->getRenderLoop().getAvgFrameTime() );
 
 			if ( time.count() )
 			{

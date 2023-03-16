@@ -1,0 +1,154 @@
+default_font "Arial16"
+
+theme "Debug"
+{
+	panel_style "Main"
+	{
+		background_material "TransparentBlack"
+		border_material "TransparentBlack"
+
+		expandable_panel_style "Container"
+		{
+			background_material "AlphaDarkBlue"
+			border_material "AlphaDarkBlue"
+
+			header_style
+			{
+				background_material "AlphaDarkBlue"
+				border_material "AlphaDarkBlue"
+
+				static_style "Title"
+				{
+					background_material "TransparentBlack"
+					foreground_material "White"
+					border_material "White"
+					border_material "White"
+					text_material "White"
+				}
+			}
+
+			expand_style
+			{
+				background_material "TransparentBlack"
+				foreground_material "White"
+				border_material "White"
+				text_material "White"
+				highlighted_background_material "DarkBlue"
+				highlighted_foreground_material "White"
+				highlighted_text_material "White"
+				pushed_background_material "DarkBlue"
+				pushed_foreground_material "White"
+				pushed_text_material "White"
+			}
+
+			content_style
+			{
+				background_material "TransparentBlack"
+				border_material "TransparentBlack"
+
+				panel_style "Entry"
+				{
+					background_material "TransparentBlack"
+					border_material "TransparentBlack"
+
+					static_style "Label"
+					{
+						background_material "TransparentBlack"
+						foreground_material "White"
+						border_material "White"
+						border_material "White"
+						text_material "White"
+					}
+
+					static_style "Value"
+					{
+						background_material "TransparentBlack"
+						foreground_material "White"
+						border_material "White"
+						border_material "White"
+						text_material "White"
+					}
+				}
+			}
+		}
+	}
+
+	panel_style "RenderPasses"
+	{
+		background_material "TransparentBlack"
+		border_material "TransparentBlack"
+
+		panel_style "Pass"
+		{
+			background_material "TransparentBlack"
+			border_material "TransparentBlack"
+
+			static_style "Name"
+			{
+				background_material "TransparentBlack"
+				foreground_material "White"
+				border_material "White"
+				text_material "White"
+			}
+
+			static_style "Counter"
+			{
+				background_material "TransparentBlack"
+				foreground_material "White"
+				border_material "White"
+				text_material "White"
+				font "Arial10"
+			}
+		}
+
+		expandable_panel_style "Category"
+		{
+			background_material "AlphaDarkBlue"
+			border_material "AlphaDarkBlue"
+
+			header_style
+			{
+				background_material "AlphaDarkBlue"
+				border_material "AlphaDarkBlue"
+
+				static_style "Name"
+				{
+					background_material "TransparentBlack"
+					foreground_material "White"
+					border_material "White"
+					border_material "White"
+					text_material "White"
+				}
+
+				static_style "Counter"
+				{
+					background_material "TransparentBlack"
+					foreground_material "White"
+					border_material "White"
+					text_material "White"
+					font "Arial10"
+				}
+			}
+
+			expand_style
+			{
+				background_material "TransparentBlack"
+				foreground_material "White"
+				border_material "White"
+				text_material "White"
+				highlighted_background_material "DarkBlue"
+				highlighted_foreground_material "White"
+				highlighted_text_material "White"
+				pushed_background_material "DarkBlue"
+				pushed_foreground_material "White"
+				pushed_text_material "White"
+			}
+
+			content_style
+			{
+				background_material "TransparentBlack"
+				border_material "TransparentBlack"
+			}
+		}
+	}
+}

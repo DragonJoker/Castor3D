@@ -699,4 +699,5 @@ material "TransparentBlack"
 	}
 }
 
+include "DebugOverlays.cscn"
 include "LoadingScreen.cscn"

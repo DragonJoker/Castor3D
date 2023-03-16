@@ -49,7 +49,7 @@ namespace castor3d
 			, visible }
 	{
 		setBackgroundBorderSize( castor::Point4ui{} );
-		doUpdateStyle();
+		setStyle( style );
 		doUpdateFlags();
 	}
 

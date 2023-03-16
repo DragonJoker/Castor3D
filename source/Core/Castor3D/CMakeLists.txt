@@ -992,7 +992,6 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Overlay/BorderPanelOverlay.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Overlay/DebugOverlays.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Overlay/DebugOverlays.inl
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Overlay/FontTexture.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Overlay/Overlay.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Overlay/OverlayCategory.hpp

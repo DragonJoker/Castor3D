@@ -22,7 +22,7 @@ namespace castor3d
 		: public castor::Named
 	{
 	public:
-		virtual ~ControlStyle() = default;
+		C3D_API virtual ~ControlStyle()noexcept = default;
 
 		ControlStyle( ControlType type
 			, castor::String const & name

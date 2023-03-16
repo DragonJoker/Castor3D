@@ -63,7 +63,7 @@ namespace castor3d
 		, m_selected{ selected }
 	{
 		setBackgroundBorderSize( castor::Point4ui{ 1, 1, 1, 1 } );
-		doUpdateStyle();
+		setStyle( style );
 	}
 
 	void ListBoxCtrl::appendItem( castor::String const & value )

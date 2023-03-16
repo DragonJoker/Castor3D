@@ -68,15 +68,6 @@ namespace castor3d
 		C3D_API void showDebugOverlays( bool show );
 		/**
 		 *\~english
-		 *\brief		Show or hide debug overlays.
-		 *\param[in]	show	The status.
-		 *\~french
-		 *\brief		Affiche ou cache les incrustations de débogage.
-		 *\param[in]	show	Le statut.
-		 */
-		C3D_API void enableDetailedDebugOverlays( bool enable );
-		/**
-		 *\~english
 		 *\brief		Updates the V-Sync status.
 		 *\param[in]	enable	The status.
 		 *\~french
@@ -142,13 +133,6 @@ namespace castor3d
 		 *\return		Le statut d'affichage des incrustations de débogage.
 		 */
 		C3D_API bool hasDebugOverlays()const;
-		/**
-		 *\~english
-		 *\return		The debug overlays detailed status.
-		 *\~french
-		 *\return		Le statut de détail des incrustations de débogage.
-		 */
-		C3D_API bool hasDetailedDebugOverlays()const;
 		/**
 		 *\~english
 		 *\brief		The average frame time, in nanoseconds.
