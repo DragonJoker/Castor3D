@@ -163,6 +163,7 @@ namespace castor3d
 	TextOverlay::TextOverlay()
 		: OverlayCategory{ OverlayType::eText }
 	{
+		m_displayable = false;
 	}
 
 	OverlayCategorySPtr TextOverlay::create()
@@ -451,6 +452,9 @@ namespace castor3d
 			m_charsCount = uint32_t( ( m_previousCaption.size() - uint32_t( std::max( ptrdiff_t{}, count ) ) ) );
 			doPrepareText( renderer.getSize() );
 		}
+
+		m_displayable = m_displayable
+			&& !m_currentCaption.empty();
 	}
 
 	void TextOverlay::doPrepareText( castor::Size const & rndSize )

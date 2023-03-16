@@ -128,6 +128,31 @@
     </Expand>
   </Type>
 
+  <Type Name="castor::Glyph">
+    <DisplayString>{m_character}</DisplayString>
+    <Expand>
+      <Item Name="character">m_character</Item>
+      <Item Name="bearing">m_bearing</Item>
+      <Item Name="size">m_size</Item>
+      <Item Name="advance">m_advance</Item>
+      <Item Name="bitmap">m_bitmap</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="castor::Font">
+    <DisplayString>Font {m_name} ({m_faceName} {m_height})</DisplayString>
+    <Expand>
+      <Item Name="name">m_name</Item>
+      <Item Name="pathFile">m_pathFile</Item>
+      <Item Name="loadedGlyphs">m_loadedGlyphs</Item>
+      <Item Name="maxSize">m_maxSize</Item>
+      <Item Name="maxRange">m_maxRange</Item>
+      <Item Name="faceName">m_faceName</Item>
+      <Item Name="height">m_height</Item>
+      <Item Name="glyphLoader">m_glyphLoader</Item>
+    </Expand>
+  </Type>
+
   <Type Name="castor::Matrix&lt;*, 2, *&gt;">
     <Expand>
       <Item Name="col 0">m_columns[0]</Item>

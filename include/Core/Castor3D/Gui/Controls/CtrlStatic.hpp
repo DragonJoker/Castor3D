@@ -109,6 +109,10 @@ namespace castor3d
 		*/
 		void doUpdateFlags()override;
 
+		/** @copydoc Control::doUpdateZIndex
+		*/
+		void doUpdateZIndex( uint32_t & index )override;
+
 	private:
 		castor::String m_caption;
 		TextOverlayWPtr m_text;

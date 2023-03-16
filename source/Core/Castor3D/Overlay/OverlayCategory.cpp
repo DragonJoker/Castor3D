@@ -47,19 +47,17 @@ namespace castor3d
 
 	void OverlayCategory::update( OverlayRenderer const & renderer )
 	{
-		if ( getOverlay().isVisible() )
+		updatePosition( renderer );
+		updateSize( renderer );
+		updateClientArea();
+		m_displayable = m_relSize != castor::Point2d{};
+
+		if ( isChanged() || isSizeChanged() || renderer.isSizeChanged() )
 		{
-			updatePosition( renderer );
-			updateSize( renderer );
-			updateClientArea();
-
-			if ( isChanged() || isSizeChanged() || renderer.isSizeChanged() )
-			{
-				doUpdate( renderer );
-			}
-
-			m_computeSize = renderer.getSize();
+			doUpdate( renderer );
 		}
+
+		m_computeSize = renderer.getSize();
 	}
 
 	void OverlayCategory::setMaterial( MaterialRPtr material )
@@ -215,19 +213,13 @@ namespace castor3d
 			auto & pxPos = *m_pxPosition;
 			castor::Point2d relPos = getRelativePosition();
 
-			if ( pxPos.x() )
-			{
-				auto v = double( pxPos.x() ) / parentSize->x;
-				changed = changed || ( relPos->x != v );
-				relPos->x = v;
-			}
+			auto v = double( pxPos.x() ) / parentSize->x;
+			changed = changed || ( relPos->x != v );
+			relPos->x = v;
 
-			if ( pxPos.y() )
-			{
-				auto v = double( pxPos.y() ) / parentSize->y;
-				changed = changed || ( relPos->y != v );
-				relPos->y = v;
-			}
+			v = double( pxPos.y() ) / parentSize->y;
+			changed = changed || ( relPos->y != v );
+			relPos->y = v;
 
 			if ( changed )
 			{
@@ -249,19 +241,13 @@ namespace castor3d
 			auto & pxSize = *m_pxSize;
 			castor::Point2d relSize = getRelativeSize();
 
-			if ( pxSize->x )
-			{
-				auto v = double( pxSize->x ) / parentSize->x;
-				changed = changed || ( relSize->x != v );
-				relSize->x = v;
-			}
+			auto v = double( pxSize->x ) / parentSize->x;
+			changed = changed || ( relSize->x != v );
+			relSize->x = v;
 
-			if ( pxSize->y )
-			{
-				auto v = double( pxSize->y ) / parentSize->y;
-				changed = changed || ( relSize->y != v );
-				relSize->y = v;
-			}
+			v = double( pxSize->y ) / parentSize->y;
+			changed = changed || ( relSize->y != v );
+			relSize->y = v;
 
 			if ( changed )
 			{

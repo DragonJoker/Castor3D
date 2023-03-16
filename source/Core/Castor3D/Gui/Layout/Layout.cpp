@@ -62,7 +62,7 @@ namespace castor3d
 		}
 
 		// TODO: Allow dragging elements in a layout.
-		control.removeFlag( ControlFlag::eDraggable );
+		control.removeFlag( ControlFlag::eMovable );
 
 		m_items.emplace_back( control
 			, std::move( flags )

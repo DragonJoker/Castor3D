@@ -182,6 +182,10 @@ namespace castor3d
 		*/
 		void doSetVisible( bool visible )override;
 
+		/** @copydoc Control::doUpdateZIndex
+		*/
+		void doUpdateZIndex( uint32_t & index )override;
+
 		/** Event raised when an item is selected in the choices listbox
 		*\param[in]	selected		The item index
 		*/

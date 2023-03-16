@@ -97,8 +97,8 @@ namespace castor3d
 
 	private:
 		Engine & m_engine;
-		ControlType m_type;
-		MouseCursor m_cursor;
+		ControlType m_type{};
+		MouseCursor m_cursor{};
 		MaterialRPtr m_backgroundMaterial{};
 		MaterialRPtr m_foregroundMaterial{};
 	};

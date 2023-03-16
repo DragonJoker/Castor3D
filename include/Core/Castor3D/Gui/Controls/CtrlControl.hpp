@@ -129,10 +129,6 @@ namespace castor3d
 		 */
 		C3D_API ControlSPtr getChildControl( ControlID id )const;
 
-		/** \return	The Z index for this control's background overlay.
-		 */
-		C3D_API uint64_t getZIndex()const;
-
 		/** Adds a flag.
 		 */
 		template< ControlFlagTypeT FlagTypeT >
@@ -238,9 +234,9 @@ namespace castor3d
 
 		/** \return	The draggable status of the control.
 		 */
-		bool isDraggable()const noexcept
+		bool isMovable()const noexcept
 		{
-			return castor::checkFlag( getFlags(), ControlFlag::eDraggable );
+			return castor::checkFlag( getFlags(), ControlFlag::eMovable );
 		}
 
 		/** Shows the control
@@ -281,6 +277,9 @@ namespace castor3d
 		C3D_API bool doIsVisible()const;
 
 	private:
+		void updateZIndex( uint32_t & index
+			, std::vector< Control * > & controls
+			, std::vector< Control * > & topControls );
 		/** Event when mouse left button is pressed.
 		 *\param[in]	event		The mouse event.
 		 */
@@ -304,17 +303,17 @@ namespace castor3d
 		/** Begins dragging of the control.
 		 *\param[in]	event		The mouse event.
 		 */
-		bool beginDrag( MouseEvent const & event );
+		bool beginMove( MouseEvent const & event );
 
 		/** Drags the control.
 		 *\param[in]	event		The mouse event.
 		 */
-		void drag( MouseEvent const & event );
+		void move( MouseEvent const & event );
 
 		/** Ends dragging of the control.
 		 *\param[in]	event		The mouse event.
 		 */
-		void endDrag( MouseEvent const & event );
+		void endMove( MouseEvent const & event );
 
 		/** Creates the control's overlays and sub-controls
 		*/
@@ -409,6 +408,12 @@ namespace castor3d
 		{
 		}
 
+		/** Updates the overlays Z index.
+		*/
+		virtual void doUpdateZIndex( uint32_t & index )
+		{
+		}
+
 		BorderPanelOverlay & doGetBackground()const
 		{
 			auto bg = m_background.lock();
@@ -421,9 +426,9 @@ namespace castor3d
 			return *bg;
 		}
 
-		bool isDragged()const noexcept
+		bool isMoving()const noexcept
 		{
-			return m_dragged;
+			return m_moving;
 		}
 
 	protected:
@@ -448,9 +453,9 @@ namespace castor3d
 		BorderPanelOverlayWPtr m_background;
 		std::vector< ControlWPtr > m_children;
 		ControlsManagerWPtr m_ctrlManager;
-		bool m_dragged{};
-		castor::Position m_dragStartPosition;
-		castor::Position m_dragStartMousePosition;
+		bool m_moving{};
+		castor::Position m_mouseStartPosition;
+		castor::Position m_mouseStartMousePosition;
 	};
 }
 

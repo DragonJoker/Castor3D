@@ -191,8 +191,8 @@ namespace castor3d
 	{
 		//! Control is detached and appears on top of every other one.
 		eAlwaysOnTop = 0x0000000100000000,
-		//! Control can be dragged around.
-		eDraggable = 0x0000000200000000,
+		//! Control can be moved around.
+		eMovable = 0x0000000200000000,
 	};
 	CU_ImplementFlags( ControlFlag )
 	/**

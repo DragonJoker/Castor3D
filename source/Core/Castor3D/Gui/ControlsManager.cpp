@@ -2,6 +2,7 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
+#include "Castor3D/Event/Frame/CpuFunctorEvent.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Gui/Gui_Parsers.hpp"
 #include "Castor3D/Gui/Controls/CtrlControl.hpp"
@@ -513,14 +514,21 @@ namespace castor3d
 	void ControlsManager::addControl( ControlSPtr control )
 	{
 		doAddHandler( control );
-		ctrlmgr::LockType lock{ castor::makeUniqueLock( m_mutexControlsById ) };
-
-		if ( m_controlsById.find( control->getId() ) != m_controlsById.end() )
 		{
-			CU_Exception( "A control with this ID already exists in the manager" );
-		}
+			ctrlmgr::LockType lock{ castor::makeUniqueLock( m_mutexControlsById ) };
 
-		m_controlsById.insert( std::make_pair( control->getId(), control ) );
+			if ( m_controlsById.find( control->getId() ) != m_controlsById.end() )
+			{
+				CU_Exception( "A control with this ID already exists in the manager" );
+			}
+
+			m_controlsById.insert( std::make_pair( control->getId(), control ) );
+
+			if ( !control->getParent() )
+			{
+				m_rootControls.push_back( control.get() );
+			}
+		}
 		doMarkDirty();
 	}
 
@@ -539,6 +547,18 @@ namespace castor3d
 			auto control = it->second.lock().get();
 			handler = control;
 			m_controlsById.erase( it );
+
+			if ( !control->getParent() )
+			{
+				auto rootit = std::find( m_rootControls.begin()
+					, m_rootControls.end()
+					, control );
+
+				if ( rootit != m_rootControls.end() )
+				{
+					m_rootControls.erase( rootit );
+				}
+			}
 		}
 
 		doMarkDirty();
@@ -574,15 +594,15 @@ namespace castor3d
 
 	bool ControlsManager::setDraggedControl( ControlRPtr control )
 	{
-		if ( m_draggedControl
-			&& m_draggedControl->isDragged()
-			&& m_draggedControl != control
+		if ( m_movedControl
+			&& m_movedControl->isMoving()
+			&& m_movedControl != control
 			&& control != nullptr )
 		{
 			return false;
 		}
 
-		m_draggedControl = control;
+		m_movedControl = control;
 		return true;
 	}
 
@@ -805,15 +825,10 @@ namespace castor3d
 
 	EventHandler * ControlsManager::doGetMouseTargetableHandler( castor::Position const & position )const
 	{
-		if ( m_event.exchange( nullptr ) )
+		if ( m_movedControl
+			&& m_movedControl->isMoving() )
 		{
-			doUpdate();
-		}
-
-		if ( m_draggedControl
-			&& m_draggedControl->isDragged() )
-		{
-			return m_draggedControl;
+			return m_movedControl;
 		}
 
 		auto controls = doGetControlsByZIndex();
@@ -840,33 +855,33 @@ namespace castor3d
 		return result;
 	}
 
-	void ControlsManager::doUpdate()const
+	void ControlsManager::doUpdate()
 	{
-		ctrlmgr::LockType lock{ castor::makeUniqueLock( m_mutexControlsByZIndex ) };
-		{
-			auto handlers = doGetHandlers();
-			m_controlsByZIndex.clear();
+		std::vector< Control * > result;
+		std::vector< Control * > top;
+		auto controls = doGetRootControls();
+		uint32_t index{};
 
-			for ( auto handler : handlers )
-			{
-				if ( handler )
-				{
-					m_controlsByZIndex.push_back( static_cast< Control * >( handler.get() ) );
-				}
-			}
+		for ( auto control : controls )
+		{
+			control->updateZIndex( index, result, top );
 		}
 
-		std::sort( m_controlsByZIndex.begin()
-			, m_controlsByZIndex.end()
-			, []( Control * lhs, Control * rhs )
-			{
-				return lhs->getZIndex() < rhs->getZIndex();
-			} );
+		result.insert( result.end()
+			, top.begin()
+			, top.end() );
+		doSetControlsByZIndex( std::move( result ) );
+	}
+
+	void ControlsManager::doSetControlsByZIndex( std::vector< Control * > v )
+	{
+		ctrlmgr::LockType lock{ castor::makeUniqueLock( m_mutexControlsByZIndex ) };
+		m_controlsByZIndex = std::move( v );
 	}
 
 	std::vector< Control * > ControlsManager::doGetControlsByZIndex()const
 	{
-		ctrlmgr::LockType lock{ castor::makeUniqueLock( m_mutexControlsById ) };
+		ctrlmgr::LockType lock{ castor::makeUniqueLock( m_mutexControlsByZIndex ) };
 		return m_controlsByZIndex;
 	}
 
@@ -874,6 +889,12 @@ namespace castor3d
 	{
 		ctrlmgr::LockType lock{ castor::makeUniqueLock( m_mutexControlsById ) };
 		return m_controlsById;
+	}
+
+	std::vector< Control * > ControlsManager::doGetRootControls()const
+	{
+		ctrlmgr::LockType lock{ castor::makeUniqueLock( m_mutexControlsById ) };
+		return m_rootControls;
 	}
 
 	void ControlsManager::doMarkDirty()

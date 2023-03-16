@@ -29,8 +29,12 @@ namespace castor3d
 					&& category->getMaterial() )
 				{
 					category->update( renderer );
-					preparer.registerOverlay( category->getOverlay() );
-					++result;
+
+					if ( category->getOverlay().isDisplayable() )
+					{
+						preparer.registerOverlay( category->getOverlay() );
+						++result;
+					}
 				}
 			}
 
