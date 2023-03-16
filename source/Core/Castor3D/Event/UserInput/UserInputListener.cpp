@@ -283,7 +283,6 @@ namespace castor3d
 			{
 				if ( last )
 				{
-					log::debug << position.x() << "x" << position.y() << std::endl;
 					last->pushEvent( MouseEvent( MouseEventType::eLeave, position ) );
 					last = nullptr;
 					m_lastMouseTarget = nullptr;

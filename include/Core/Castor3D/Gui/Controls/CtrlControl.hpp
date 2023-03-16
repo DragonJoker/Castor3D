@@ -232,11 +232,18 @@ namespace castor3d
 			return castor::checkFlag( getFlags(), ControlFlag::eAlwaysOnTop );
 		}
 
-		/** \return	The draggable status of the control.
+		/** \return	The movable status of the control.
 		 */
 		bool isMovable()const noexcept
 		{
 			return castor::checkFlag( getFlags(), ControlFlag::eMovable );
+		}
+
+		/** \return	The resizable status of the control.
+		 */
+		bool isResizable()const noexcept
+		{
+			return castor::checkFlag( getFlags(), ControlFlag::eResizable );
 		}
 
 		/** Shows the control
@@ -314,6 +321,21 @@ namespace castor3d
 		 *\param[in]	event		The mouse event.
 		 */
 		void endMove( MouseEvent const & event );
+
+		/** Begins dragging of the control.
+		 *\param[in]	event		The mouse event.
+		 */
+		bool beginResize( MouseEvent const & event );
+
+		/** Drags the control.
+		 *\param[in]	event		The mouse event.
+		 */
+		void resize( MouseEvent const & event );
+
+		/** Ends dragging of the control.
+		 *\param[in]	event		The mouse event.
+		 */
+		void endResize( MouseEvent const & event );
 
 		/** Creates the control's overlays and sub-controls
 		*/
@@ -431,6 +453,13 @@ namespace castor3d
 			return m_moving;
 		}
 
+		bool isResizing()const noexcept
+		{
+			return m_resizing.end() != std::find( m_resizing.begin()
+				, m_resizing.end()
+				, true );
+		}
+
 	protected:
 		SceneRPtr m_scene{};
 		//! The parent control, if any
@@ -454,8 +483,10 @@ namespace castor3d
 		std::vector< ControlWPtr > m_children;
 		ControlsManagerWPtr m_ctrlManager;
 		bool m_moving{};
-		castor::Position m_mouseStartPosition;
+		std::array< bool, 4u > m_resizing;
 		castor::Position m_mouseStartMousePosition;
+		castor::Position m_mouseStartPosition;
+		castor::Size m_mouseStartSize;
 	};
 }
 

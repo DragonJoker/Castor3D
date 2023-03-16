@@ -55,6 +55,7 @@ namespace castor3d
 
 			addParser( parsers, section, cuT( "visible" ), &parserControlVisible, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
 			addParser( parsers, section, cuT( "movable" ), &parserControlMovable, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
+			addParser( parsers, section, cuT( "resizable" ), &parserControlResizable, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
 			addParser( parsers, section, cuT( "pixel_position" ), &parserControlPixelPosition, { makeParameter< ParameterType::ePosition >() } );
 			addParser( parsers, section, cuT( "pixel_size" ), &parserControlPixelSize, { makeParameter< ParameterType::eSize >() } );
 			addParser( parsers, section, cuT( "pixel_border_size" ), &parserControlPixelBorderSize, { makeParameter< ParameterType::ePoint4U >() } );
@@ -592,7 +593,7 @@ namespace castor3d
 			: std::static_pointer_cast< Control >( *it );
 	}
 
-	bool ControlsManager::setDraggedControl( ControlRPtr control )
+	bool ControlsManager::setMovedControl( ControlRPtr control )
 	{
 		if ( m_movedControl
 			&& m_movedControl->isMoving()
@@ -603,6 +604,20 @@ namespace castor3d
 		}
 
 		m_movedControl = control;
+		return true;
+	}
+
+	bool ControlsManager::setResizedControl( ControlRPtr control )
+	{
+		if ( m_resizedControl
+			&& m_resizedControl->isResizing()
+			&& m_resizedControl != control
+			&& control != nullptr )
+		{
+			return false;
+		}
+
+		m_resizedControl = control;
 		return true;
 	}
 
@@ -829,6 +844,12 @@ namespace castor3d
 			&& m_movedControl->isMoving() )
 		{
 			return m_movedControl;
+		}
+
+		if ( m_resizedControl
+			&& m_resizedControl->isResizing() )
+		{
+			return m_resizedControl;
 		}
 
 		auto controls = doGetControlsByZIndex();

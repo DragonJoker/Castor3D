@@ -921,7 +921,30 @@ namespace castor3d
 			CU_ParsingError( cuT( "No control initialised." ) );
 		}
 	}
-	CU_EndAttributePush( GUISection::eBoxLayout )
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserControlResizable )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+		auto enable = params[0]->get< bool >();
+
+		if ( auto control = guiContext.getTopControl() )
+		{
+			if ( enable )
+			{
+				control->addFlag( ControlFlag::eResizable );
+			}
+			else
+			{
+				control->removeFlag( ControlFlag::eResizable );
+			}
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No control initialised." ) );
+		}
+	}
+	CU_EndAttribute()
 
 	CU_ImplementAttributeParser( parserThemeDefaultFont )
 	{
