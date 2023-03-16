@@ -200,4 +200,12 @@ namespace castor3d
 			}
 		}
 	}
+
+	void StaticCtrl::doUpdateZIndex( uint32_t & index )
+	{
+		if ( auto text = m_text.lock() )
+		{
+			text->setOrder( index++, 0u );
+		}
+	}
 }

@@ -220,4 +220,12 @@ namespace castor3d
 		setBackgroundMaterial( style.getBackgroundMaterial() );
 		setBackgroundBorderMaterial( style.getForegroundMaterial() );
 	}
+
+	void ButtonCtrl::doUpdateZIndex( uint32_t & index )
+	{
+		if ( auto text = m_text.lock() )
+		{
+			text->setOrder( index++, 0u );
+		}
+	}
 }

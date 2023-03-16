@@ -215,7 +215,12 @@ namespace castor3d
 
 		bool isVisible()const noexcept
 		{
-			return m_visible
+			return m_visible;
+		}
+
+		bool isDisplayable()const noexcept
+		{
+			return m_displayable
 				&& !isFullyCropped();
 		}
 
@@ -416,6 +421,9 @@ namespace castor3d
 		//!\~english	The visibility.
 		//!\~french		La visibilité.
 		bool m_visible{ true };
+		//!\~english	Tells if the overlay can be displayed (valid size, non empty test, ...).
+		//!\~french		Dit si l'incrustation peut être affichée (dimensions valides, texte non vide, ...).
+		bool m_displayable{ false };
 		//!\~english	The material used by the overlay.
 		//!\~french		Le matériau utilisé par l'incrustation.
 		MaterialRPtr m_material{};

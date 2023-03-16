@@ -338,17 +338,26 @@ namespace castor3d
 
 		/** Updates the z-index ordered controls array
 		*/
-		void doUpdate()const;
+		void doUpdate();
 
 		/** \return
 		*	The controls by z-index.
 		*/
 		std::vector< Control * > doGetControlsByZIndex()const;
 
+		/** Sets the controls by z-index.
+		*/
+		void doSetControlsByZIndex( std::vector< Control * > v );
+
 		/** \return
 		*	The controls by ID.
 		*/
 		std::map< ControlID, ControlWPtr > doGetControlsById()const;
+
+		/** \return
+		*	The controls by ID.
+		*/
+		std::vector< Control * > doGetRootControls()const;
 
 		/** Marks the manager as to be updated.
 		*/
@@ -358,10 +367,11 @@ namespace castor3d
 		C3D_API static castor::String Name;
 
 	private:
-		mutable std::mutex m_mutexControlsByZIndex;
-		mutable std::vector< Control *  > m_controlsByZIndex;
 		mutable std::mutex m_mutexControlsById;
 		std::map< ControlID, ControlWPtr > m_controlsById;
+		std::vector< Control * > m_rootControls;
+		mutable std::mutex m_mutexControlsByZIndex;
+		mutable std::vector< Control * > m_controlsByZIndex;
 		mutable std::atomic< CpuFrameEvent * > m_event{};
 		std::map< castor::String, ThemeUPtr > m_themes;
 		std::map< Control const *, OnButtonEventConnection > m_onButtonClicks;
@@ -380,7 +390,7 @@ namespace castor3d
 		std::map< castor::String, StaticStyleUPtr > m_staticStyles;
 		std::map< castor::String, PanelStyleUPtr > m_panelStyles;
 		std::map< castor::String, ExpandablePanelStyleUPtr > m_expandablePanelStyles;
-		ControlRPtr m_draggedControl{};
+		ControlRPtr m_movedControl{};
 	};
 }
 

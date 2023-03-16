@@ -293,6 +293,14 @@ namespace castor3d
 		m_choices->hide();
 	}
 
+	void ComboBoxCtrl::doUpdateZIndex( uint32_t & index )
+	{
+		if ( auto text = m_text.lock() )
+		{
+			text->setOrder( index++, 0u );
+		}
+	}
+
 	void ComboBoxCtrl::doSwitchExpand()
 	{
 		m_choices->setVisible( !m_choices->isVisible() );

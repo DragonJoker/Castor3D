@@ -1,26 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
 
-	<Type Name="ast::var::Variable">
-		<DisplayString>{{name={m_name}}}</DisplayString>
-		<Expand>
-			<Item Name="name">m_name</Item>
-			<Item Name="type">m_type</Item>
-			<Item Name="outer">m_outer</Item>
-		</Expand>
-	</Type>
-
-	<Type Name="ashes::ArrayView&lt;*&gt;">
-		<DisplayString>{{size = {m_end - m_begin}}}</DisplayString>
-		<Expand>
-			<Item Name="[size]">m_end - m_begin</Item>
-			<ArrayItems>
-				<Size>m_end - m_begin</Size>
-				<ValuePointer>m_begin</ValuePointer>
-			</ArrayItems>
-		</Expand>
-	</Type>
-
 	<Type Name="castor3d::AnimableT&lt;*&gt;">
 		<DisplayString>{m_name}</DisplayString>
 		<Expand>
@@ -72,6 +52,38 @@
 		</Expand>
 	</Type>
 
+	<Type Name="castor3d::EventHandler">
+		<DisplayString>EvtHandler {m_name}</DisplayString>
+		<Expand>
+			<Item Name="name">m_name</Item>
+			<Item Name="enabled">m_enabled</Item>
+			<Item Name="catchMouseEvents">m_catchMouseEvents</Item>
+			<Item Name="catchTabKey">m_catchTabKey</Item>
+			<Item Name="catchReturnKey">m_catchReturnKey</Item>
+			<Item Name="queue">m_queue</Item>
+			<Item Name="onEnable">onEnable</Item>
+			<Item Name="mouseSlots">m_mouseSlots</Item>
+			<Item Name="keyboardSlots">m_keyboardSlots</Item>
+			<Item Name="handlerSlots">m_handlerSlots</Item>
+			<Item Name="mouseSlotsConnections">m_mouseSlotsConnections</Item>
+			<Item Name="keyboardSlotsConnections">m_keyboardSlotsConnections</Item>
+			<Item Name="handlerSlotsConnections">m_handlerSlotsConnections</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::NonClientEventHandler&lt;*&gt;">
+		<DisplayString>NCEvtHandler {m_name}</DisplayString>
+		<Expand>
+			<Item Name="[base]">(castor3d::EventHandler *)this,nd</Item>
+			<Item Name="ncMouseSlots">m_ncMouseSlots</Item>
+			<Item Name="ncKeyboardSlots">m_ncKeyboardSlots</Item>
+			<Item Name="ncHandlerSlots">m_ncHandlerSlots</Item>
+			<Item Name="ncMouseSlotsConnections">m_ncMouseSlotsConnections</Item>
+			<Item Name="ncKeyboardSlotsConnections">m_ncKeyboardSlotsConnections</Item>
+			<Item Name="ncHandlerSlotsConnections">m_ncHandlerSlotsConnections</Item>
+		</Expand>
+	</Type>
+
 	<Type Name="castor3d::Face">
 		<DisplayString>{m_face}</DisplayString>
 		<Expand>
@@ -83,6 +95,19 @@
 		<DisplayString>{m_index[0]}, {m_index[1]}, {m_index[2]}</DisplayString>
 		<Expand>
 			<Item Name="index">m_index</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::FontTexture">
+    <DisplayString>FontTexture {m_font}[{m_id}]</DisplayString>
+		<Expand>
+			<Item Name="font">m_font</Item>
+			<Item Name="sampler">m_sampler</Item>
+			<Item Name="frontGlyphsPositions">m_frontGlyphsPositions</Item>
+			<Item Name="backGlyphsPositions">m_backGlyphsPositions</Item>
+			<Item Name="id">m_id</Item>
+			<Item Name="buffer">m_buffer</Item>
+			<Item Name="charIndices">m_charIndices</Item>
 		</Expand>
 	</Type>
 
@@ -151,11 +176,12 @@
 	</Type>
 
 	<Type Name="castor3d::Material">
-		<DisplayString>{m_name} (type={m_type}, passes={m_passes})</DisplayString>
+		<DisplayString>{m_name} (type={m_lightingModelId}, passes={m_passes})</DisplayString>
 		<Expand>
 			<Item Name="name">m_name</Item>
-			<Item Name="type">m_type</Item>
+			<Item Name="lightingModelId">m_lightingModelId</Item>
 			<Item Name="passes">m_passes</Item>
+			<Item Condition="m_renderPassInfo" Name="renderPassInfo">m_renderPassInfo</Item>
 		</Expand>
 	</Type>
 
@@ -253,22 +279,65 @@
 	</Type>
 
 	<Type Name="castor3d::OverlayCategory">
-		<DisplayString>{*m_pOverlay}</DisplayString>
+		<DisplayString>{*m_overlay}</DisplayString>
 		<Expand>
-			<Item Name="position">m_position</Item>
-			<Item Name="ptSize">m_ptSize</Item>
+			<Item Name="overlay">m_overlay</Item>
+			<Item Name="relPosition">m_relPosition</Item>
+			<Item Name="relSize">m_relSize</Item>
 			<Item Name="pxPosition">m_pxPosition</Item>
-			<Item Name="size">m_size</Item>
+			<Item Name="pxSize">m_pxSize</Item>
 			<Item Name="computeSize">m_computeSize</Item>
 			<Item Name="visible">m_visible</Item>
-			<Item Name="material">m_pMaterial</Item>
+			<Item Name="material">m_material</Item>
 			<Item Name="index">m_index</Item>
 			<Item Name="level">m_level</Item>
-			<Item Name="matName">m_strMatName</Item>
 			<Item Name="type">m_type</Item>
 			<Item Name="sizeChanged">m_sizeChanged</Item>
 			<Item Name="positionChanged">m_positionChanged</Item>
 			<Item Name="uv">m_uv</Item>
+			<Item Name="clientArea">m_clientArea</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::PanelOverlay">
+		<DisplayString>PanelOv {*m_overlay}</DisplayString>
+		<Expand>
+			<Item Name="[base]">(castor3d::OverlayCategory *)this,nd</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::BorderPanelOverlay">
+		<DisplayString>BorderPanelOv {*m_overlay}</DisplayString>
+		<Expand>
+			<Item Name="[base]">(castor3d::OverlayCategory *)this,nd</Item>
+			<Item Name="borderMaterial">m_borderMaterial</Item>
+			<Item Name="relBorderSize">m_relBorderSize</Item>
+			<Item Name="pxBorderSize">m_pxBorderSize</Item>
+			<Item Name="borderPosition">m_borderPosition</Item>
+			<Item Name="borderOuterUv">m_borderOuterUv</Item>
+			<Item Name="borderInnerUv">m_borderInnerUv</Item>
+			<Item Name="borderChanged">m_borderChanged</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::TextOverlay">
+		<DisplayString>TextOv {*m_overlay}</DisplayString>
+		<Expand>
+			<Item Name="[base]">(castor3d::OverlayCategory *)this,nd</Item>
+			<Item Name="currentCaption">m_currentCaption</Item>
+			<Item Name="previousCaption">m_previousCaption</Item>
+			<Item Name="fontTexture">m_fontTexture</Item>
+			<Item Name="wrappingMode">m_wrappingMode</Item>
+			<Item Name="lineSpacingMode">m_lineSpacingMode</Item>
+			<Item Name="texturingMode">m_texturingMode</Item>
+			<Item Name="hAlign">m_hAlign</Item>
+			<Item Name="vAlign">m_vAlign</Item>
+			<Item Name="textChanged">m_textChanged</Item>
+			<Item Name="connection">m_connection</Item>
+			<Item Name="text">m_text</Item>
+			<Item Name="charsCount">m_charsCount</Item>
+			<Item Name="words">m_words</Item>
+			<Item Name="lines">m_lines</Item>
 		</Expand>
 	</Type>
 
@@ -459,6 +528,269 @@
 			<Item Name="faces">m_faces</Item>
 			<Item Name="hasNormals">m_hasNormals</Item>
 			<Item Name="cameraPosition">m_cameraPosition</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::Control">
+		<DisplayString>Control {m_name} {*m_style}</DisplayString>
+		<Expand>
+			<Item Name="[base]">(castor3d::NonClientEventHandler&lt;castor3d::Control&gt; *)this,nd</Item>
+			<Item Name="id">m_id</Item>
+			<Item Name="name">m_name</Item>
+			<Item Name="type">m_type</Item>
+			<Item Name="style">*m_style</Item>
+			<Item Name="flags">m_flags</Item>
+			<Item Name="position">m_position</Item>
+			<Item Name="size">m_size</Item>
+			<Item Name="borders">m_borders</Item>
+			<Item Name="background">m_background</Item>
+			<Item Name="children">m_children</Item>
+			<Item Name="ctrlManager">m_ctrlManager</Item>
+			<Item Name="moving">m_moving</Item>
+			<Item Name="mouseStartPosition">m_mouseStartPosition</Item>
+			<Item Name="mouseStartMousePosition">m_mouseStartMousePosition</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::ControlStyle">
+		<DisplayString>ControlStyle {m_name}</DisplayString>
+		<Expand>
+			<Item Name="engine">m_engine</Item>
+			<Item Name="type">m_type</Item>
+			<Item Name="cursor">m_cursor</Item>
+			<Item Name="backgroundMaterial">m_backgroundMaterial</Item>
+			<Item Name="foregroundMaterial">m_foregroundMaterial</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::LayoutControl">
+		<DisplayString>LayoutCtrl {m_name} {*m_style}</DisplayString>
+		<Expand>
+			<Item Name="[base]">(castor3d::Control *)this,nd</Item>
+			<Item Name="layout">m_layout</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::ButtonCtrl">
+		<DisplayString>ButtonCtrl {m_name} {*m_style}</DisplayString>
+		<Expand>
+			<Item Name="[base]">(castor3d::Control *)this,nd</Item>
+			<Item Name="caption">m_caption</Item>
+			<Item Name="text">m_text</Item>
+			<Item Name="signals">m_signals</Item>
+			<Item Name="onEnable">m_onEnable</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::ButtonStyle">
+		<DisplayString>ButtonStyle {m_name}</DisplayString>
+		<Expand>
+			<Item Name="[base]">(castor3d::ControlStyle *)this,nd</Item>
+			<Item Name="textMaterial">m_textMaterial</Item>
+			<Item Name="highlightedTextMaterial">m_highlightedTextMaterial</Item>
+			<Item Name="highlightedBackgroundMaterial">m_highlightedBackgroundMaterial</Item>
+			<Item Name="highlightedForegroundMaterial">m_highlightedForegroundMaterial</Item>
+			<Item Name="pushedTextMaterial">m_pushedTextMaterial</Item>
+			<Item Name="pushedBackgroundMaterial">m_pushedBackgroundMaterial</Item>
+			<Item Name="pushedForegroundMaterial">m_pushedForegroundMaterial</Item>
+			<Item Name="disabledTextMaterial">m_disabledTextMaterial</Item>
+			<Item Name="disabledBackgroundMaterial">m_disabledBackgroundMaterial</Item>
+			<Item Name="disabledForegroundMaterial">m_disabledForegroundMaterial</Item>
+			<Item Name="fontName">m_fontName</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::ComboBoxCtrl">
+		<DisplayString>ComboBoxCtrl {m_name} {*m_style}</DisplayString>
+		<Expand>
+			<Item Name="[base]">(castor3d::Control *)this,nd</Item>
+			<Item Name="text">m_text</Item>
+			<Item Name="expand">m_expand</Item>
+			<Item Name="choices">m_choices</Item>
+			<Item Name="values">m_values</Item>
+			<Item Name="selected">m_selected</Item>
+			<Item Name="signals">m_signals</Item>
+			<Item Name="expandClickedConnection">m_expandClickedConnection</Item>
+			<Item Name="choicesSelectedConnection">m_choicesSelectedConnection</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::ComboBoxStyle">
+		<DisplayString>ComboBoxStyle {m_name}</DisplayString>
+		<Expand>
+			<Item Name="[base]">(castor3d::ControlStyle *)this,nd</Item>
+			<Item Name="buttonStyle">m_buttonStyle</Item>
+			<Item Name="listBoxStyle">m_listBoxStyle</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::EditCtrl">
+		<DisplayString>EditCtrl {m_name} {*m_style}</DisplayString>
+		<Expand>
+			<Item Name="[base]">(castor3d::Control *)this,nd</Item>
+			<Item Name="caption">m_caption</Item>
+			<Item Name="caretIt">m_caretIt</Item>
+			<Item Name="active">m_active</Item>
+			<Item Name="text">m_text</Item>
+			<Item Name="signals">m_signals</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::EditStyle">
+		<DisplayString>EditStyle {m_name}</DisplayString>
+		<Expand>
+			<Item Name="[base]">(castor3d::ControlStyle *)this,nd</Item>
+			<Item Name="fontName">m_fontName</Item>
+			<Item Name="textMaterial">m_textMaterial</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::ExpandablePanelCtrl">
+		<DisplayString>ExpandablePanelCtrl {m_name} {*m_style}</DisplayString>
+		<Expand>
+			<Item Name="[base]">(castor3d::Control *)this,nd</Item>
+			<Item Name="headerHeight">m_headerHeight</Item>
+			<Item Name="header">m_header</Item>
+			<Item Name="expand">m_expand</Item>
+			<Item Name="panel">m_panel</Item>
+			<Item Name="signals">m_signals</Item>
+			<Item Name="expandClickedConnection">m_expandClickedConnection</Item>
+			<Item Name="expanded">m_expanded</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::ExpandablePanelStyle">
+		<DisplayString>ExpandablePanelStyle {m_name}</DisplayString>
+		<Expand>
+			<Item Name="[base]">(castor3d::ControlStyle *)this,nd</Item>
+			<Item Name="headerStyle">m_headerStyle</Item>
+			<Item Name="expandStyle">m_expandStyle</Item>
+			<Item Name="panelStyle">m_panelStyle</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::ListBoxCtrl">
+		<DisplayString>ListBoxCtrl {m_name} {*m_style}</DisplayString>
+		<Expand>
+			<Item Name="[base]">(castor3d::Control *)this,nd</Item>
+			<Item Name="initialValues">m_initialValues</Item>
+			<Item Name="values">m_values</Item>
+			<Item Name="selected">m_selected</Item>
+			<Item Name="selectedItem">m_selectedItem</Item>
+			<Item Name="items">m_items</Item>
+			<Item Name="signals">m_signals</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::ListBoxStyle">
+		<DisplayString>ListBoxStyle {m_name}</DisplayString>
+		<Expand>
+			<Item Name="[base]">(castor3d::ControlStyle *)this,nd</Item>
+			<Item Name="itemStyle">m_itemStyle</Item>
+			<Item Name="selectedItemStyle">m_selectedItemStyle</Item>
+			<Item Name="highlightedItemStyle">m_highlightedItemStyle</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::PanelCtrl">
+		<DisplayString>PanelCtrl {m_name} {*m_style}</DisplayString>
+		<Expand>
+			<Item Name="[base]">(castor3d::LayoutControl *)this,nd</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::PanelStyle">
+		<DisplayString>PanelStyle {m_name}</DisplayString>
+		<Expand>
+			<Item Name="[base]">(castor3d::ControlStyle *)this,nd</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::SliderCtrl">
+		<DisplayString>SliderCtrl {m_name} {*m_style}</DisplayString>
+		<Expand>
+			<Item Name="[base]">(castor3d::Control *)this,nd</Item>
+			<Item Name="value">m_value</Item>
+			<Item Name="scrolling">m_scrolling</Item>
+			<Item Name="mouse">m_mouse</Item>
+			<Item Name="line">m_line</Item>
+			<Item Name="tick">m_tick</Item>
+			<Item Name="signals">m_signals</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::SliderStyle">
+		<DisplayString>SliderStyle {m_name}</DisplayString>
+		<Expand>
+			<Item Name="[base]">(castor3d::ControlStyle *)this,nd</Item>
+			<Item Name="lineStyle">m_lineStyle</Item>
+			<Item Name="tickStyle">m_tickStyle</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::StaticCtrl">
+		<DisplayString>StaticCtrl {m_name} {*m_style}</DisplayString>
+		<Expand>
+			<Item Name="[base]">(castor3d::Control *)this,nd</Item>
+			<Item Name="m_caption">m_caption</Item>
+			<Item Name="m_text">m_text</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::StaticStyle">
+		<DisplayString>StaticStyle {m_name}</DisplayString>
+		<Expand>
+			<Item Name="[base]">(castor3d::ControlStyle *)this,nd</Item>
+			<Item Name="fontName">m_fontName</Item>
+			<Item Name="textMaterial">m_textMaterial</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::Layout">
+		<DisplayString>Layout {m_container}</DisplayString>
+		<Expand>
+			<Item Name="items">m_items</Item>
+			<Item Name="spacers">m_spacers</Item>
+			<Item Name="event">m_event</Item>
+			<Item Name="updating">m_updating</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::Spacer">
+		<DisplayString Condition="m_size==castor3d::Spacer::Dynamic">DynSpacer</DisplayString>
+		<DisplayString Condition="m_size==castor3d::Spacer::Dynamic">StaSpacer {m_size}</DisplayString>
+		<Expand>
+			<Item Name="size">m_size</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::Layout::Item">
+		<DisplayString Condition="m_type==0">LayoutCtrl {*m_value.control}</DisplayString>
+		<DisplayString Condition="m_type==1">LayoutSpacer {*m_value.spacer}</DisplayString>
+		<Expand>
+			<Item Name="type">m_type</Item>
+			<Item Condition="m_type==0" Name="value">*m_value.control</Item>
+			<Item Condition="m_type==1" Name="value">*m_value.spacer</Item>
+			<Item Name="flags">m_flags</Item>
+			<Item Name="connection">m_connection</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::LayoutItemFlags">
+		<Expand>
+			<Item Name="hAlign">m_hAlign</Item>
+			<Item Name="vAlign">m_vAlign</Item>
+			<Item Name="expand">m_expand</Item>
+			<Item Name="reserveSpaceIfHidden">m_reserveSpaceIfHidden</Item>
+			<Item Name="padding">m_padding</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::BoxLayout">
+		<DisplayString>StaticCtrl {m_name}[{m_id}]</DisplayString>
+		<Expand>
+			<Item Name="[base]">(castor3d::Layout *)this,nd</Item>
+			<Item Name="horizontal">m_horizontal</Item>
 		</Expand>
 	</Type>
 

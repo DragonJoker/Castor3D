@@ -125,6 +125,18 @@ namespace castor3d
 		return result;
 	}
 
+	bool Overlay::isDisplayable()const
+	{
+		bool result = m_category->isDisplayable();
+
+		if ( result && getParent() )
+		{
+			result = getParent()->isDisplayable();
+		}
+
+		return result;
+	}
+
 	uint32_t Overlay::computeLevel()const
 	{
 		if ( !m_parent )

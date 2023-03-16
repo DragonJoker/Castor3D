@@ -258,21 +258,76 @@ namespace castor3d
 		return it->lock();
 	}
 
-	uint64_t Control::getZIndex()const
-	{
-		return doGetBackground().getIndex() + doGetBackground().getLevel() * 1000ull;
-	}
-
 	bool Control::doIsVisible()const
 	{
 		return doGetBackground().isVisible();
 	}
 
+	void Control::updateZIndex( uint32_t & index
+		, std::vector< Control * > & controls
+		, std::vector< Control * > & topControls )
+	{
+		bool hasMovable{};
+
+		for ( auto child : m_children )
+		{
+			hasMovable = hasMovable
+				|| child.lock()->isMovable();
+		}
+
+		auto realIndex = &index;
+		uint32_t zindex{};
+
+		if ( isAlwaysOnTop() )
+		{
+			zindex = 50000u + index;
+			realIndex = &zindex;
+			topControls.push_back( this );
+		}
+		else
+		{
+			controls.push_back( this );
+		}
+
+		if ( hasMovable )
+		{
+			doGetBackground().setOrder( ( *realIndex )++, 0u );
+			doUpdateZIndex( ( *realIndex ) );
+
+			for ( auto child : m_children )
+			{
+				if ( auto control = child.lock() )
+				{
+					control->updateZIndex( ( *realIndex ), controls, topControls );
+				}
+			}
+		}
+		else
+		{
+			doGetBackground().setOrder( ( *realIndex )++, 0u );
+			auto findex = *realIndex;
+			doUpdateZIndex( findex );
+			auto maxIndex = findex;
+
+			for ( auto child : m_children )
+			{
+				if ( auto control = child.lock() )
+				{
+					findex = *realIndex;
+					control->updateZIndex( findex, controls, topControls );
+					maxIndex = std::max( findex, maxIndex );
+				}
+			}
+
+			*realIndex = maxIndex;
+		}
+	}
+
 	void Control::onMouseButtonDown( MouseEvent const & event )
 	{
-		if ( !isDraggable()
+		if ( !isMovable()
 			|| event.getButton() != MouseButton::eLeft
-			|| !beginDrag( event ) )
+			|| !beginMove( event ) )
 		{
 			doOnMouseButtonDown( event );
 		}
@@ -280,60 +335,60 @@ namespace castor3d
 
 	void Control::onMouseButtonUp( MouseEvent const & event )
 	{
-		if ( !isDraggable()
-			|| !isDragged()
+		if ( !isMovable()
+			|| !isMoving()
 			|| event.getButton() != MouseButton::eLeft )
 		{
 			doOnMouseButtonUp( event );
 		}
 
-		endDrag( event );
+		endMove( event );
 	}
 
 	void Control::onMouseMove( MouseEvent const & event )
 	{
 		doOnMouseMove( event );
 
-		if ( isDraggable() && isDragged() )
+		if ( isMovable() && isMoving() )
 		{
-			drag( event );
+			move( event );
 		}
 	}
 
 	void Control::onMouseLeave( MouseEvent const & event )
 	{
-		if ( isDraggable() && isDragged() )
+		if ( isMovable() && isMoving() )
 		{
-			endDrag( event );
+			endMove( event );
 		}
 
 		doOnMouseLeave( event );
 	}
 
-	bool Control::beginDrag( MouseEvent const & event )
+	bool Control::beginMove( MouseEvent const & event )
 	{
 		auto result = getControlsManager()->setDraggedControl( this );
 
 		if ( result )
 		{
-			m_dragged = true;
-			m_dragStartPosition = getPosition();
-			m_dragStartMousePosition = event.getPosition();
+			m_moving = true;
+			m_mouseStartPosition = getPosition();
+			m_mouseStartMousePosition = event.getPosition();
 		}
 
 		return result;
 	}
 
-	void Control::drag( MouseEvent const & event )
+	void Control::move( MouseEvent const & event )
 	{
-		auto diff = event.getPosition() - m_dragStartMousePosition;
-		auto newPos = m_dragStartPosition + diff;
+		auto diff = event.getPosition() - m_mouseStartMousePosition;
+		auto newPos = m_mouseStartPosition + diff;
 		setPosition( { newPos->x, newPos->y } );
 	}
 
-	void Control::endDrag( MouseEvent const & event )
+	void Control::endMove( MouseEvent const & event )
 	{
-		m_dragged = false;
+		m_moving = false;
 		getControlsManager()->setDraggedControl( nullptr );
 	}
 }

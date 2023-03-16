@@ -127,6 +127,10 @@ namespace castor3d
 		*/
 		void doUpdateFlags()override;
 
+		/** @copydoc Control::doUpdateZIndex
+		*/
+		void doUpdateZIndex( uint32_t & index )override;
+
 		/** Event when the control is activated
 		 *\param[in]	event		The control event
 		 */

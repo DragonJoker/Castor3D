@@ -909,11 +909,11 @@ namespace castor3d
 		{
 			if ( enable )
 			{
-				control->addFlag( ControlFlag::eDraggable );
+				control->addFlag( ControlFlag::eMovable );
 			}
 			else
 			{
-				control->removeFlag( ControlFlag::eDraggable );
+				control->removeFlag( ControlFlag::eMovable );
 			}
 		}
 		else

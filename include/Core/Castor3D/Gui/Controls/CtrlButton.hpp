@@ -134,6 +134,10 @@ namespace castor3d
 		*/
 		void doOnMouseLeave( MouseEvent const & event )override;
 
+		/** @copydoc Control::doUpdateZIndex
+		*/
+		void doUpdateZIndex( uint32_t & index )override;
+
 		/** Creates a material with an ambient colour equal to material->colour + offset
 		 *\param[in]	material	The material.
 		 *\param[in]	offset		The colour offset.

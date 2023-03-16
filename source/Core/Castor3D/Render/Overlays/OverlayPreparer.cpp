@@ -105,12 +105,26 @@ namespace castor3d
 					if ( !overlayDatas.empty() )
 					{
 						auto & data = overlayDatas.front();
+						auto & count = m_descriptorsCounts[ovrlprep::makeHash( data.node->pipeline.pipeline.get(), &pipelineData->descriptorSets->all )];
+#if !defined( NDEBUG )
+						auto commands = castor::makeArrayView( pipelineData->indirectCommands.begin() + count
+							, uint32_t( overlayDatas.size() ) );
+						for ( auto & command : commands )
+						{
+							if ( command.vertexCount == 0
+								|| command.instanceCount == 0 )
+							{
+								log::error << "OverlayPreparer: "
+									<< "Level " << level
+									<< "Unexpected empty draw command" << std::endl;
+							}
+						}
+#endif
 						doRegisterDrawCommands( data.node->pipeline
 							, pipelineData->descriptorSets->all
 							, pipelineData->indirectCommandsBuffer->getBuffer()
 							, uint32_t( overlayDatas.size() )
-							, m_descriptorsCounts[ovrlprep::makeHash( data.node->pipeline.pipeline.get()
-								, &pipelineData->descriptorSets->all )]
+							, count
 							, commandBuffer );;
 					}
 				}

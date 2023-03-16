@@ -166,6 +166,14 @@ namespace castor3d
 		}
 	}
 
+	void EditCtrl::doUpdateZIndex( uint32_t & index )
+	{
+		if ( auto text = m_text.lock() )
+		{
+			text->setOrder( index++, 0u );
+		}
+	}
+
 	void EditCtrl::doUpdateFlags()
 	{
 		if ( auto text = m_text.lock() )

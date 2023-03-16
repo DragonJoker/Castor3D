@@ -86,51 +86,48 @@ namespace castor3d
 		C3D_API void addChild( OverlayRPtr overlay );
 		/**
 		 *\~english
-		 *\brief		Retrieves the childs count at given level
 		 *\param[in]	level	The wanted level
-		 *\return		The count
+		 *\return		The childs count at given level.
 		 *\~french
-		 *\brief		Récupère le compte des enfants du niveau donné
-		 *\param[in]	level	Le niveau voulu
-		 *\return		Le compte
+		 *\param[in]	level	Le niveau voulu.
+		 *\return		Le compte des enfants du niveau donné.
 		 */
 		C3D_API uint32_t getChildrenCount( uint32_t level )const;
 		/**
 		 *\~english
-		 *\brief		Retrieves the panel overlay.
-		 *\return		The category.
+		 *\return		The panel overlay.
 		 *\~french
-		 *\brief		Récupère la l'incrustation panneau.
-		 *\return		La catégorie.
+		 *\return		L'incrustation panneau.
 		 */
 		C3D_API PanelOverlaySPtr getPanelOverlay()const;
 		/**
 		 *\~english
-		 *\brief		Retrieves the border panel overlay.
-		 *\return		The category.
+		 *\return		The border panel overlay.
 		 *\~french
-		 *\brief		Récupère la l'incrustation panneau borduré.
-		 *\return		La catégorie.
+		 *\return		L'incrustation panneau borduré.
 		 */
 		C3D_API BorderPanelOverlaySPtr getBorderPanelOverlay()const;
 		/**
 		 *\~english
-		 *\brief		Retrieves the text overlay
-		 *\return		The category.
+		 *\return		The text overlay.
 		 *\~french
-		 *\brief		Récupère la l'incrustation texte
-		 *\return		La catégorie.
+		 *\return		L'incrustation texte.
 		 */
 		C3D_API TextOverlaySPtr getTextOverlay()const;
 		/**
 		 *\~english
-		 *\brief		Retrieves the visibility status
-		 *\return		The value
+		 *\return		The visibility status.
 		 *\~french
-		 *\brief		Récupère le statut de visibilité
-		 *\return		La valeur
+		 *\return		Le statut de visibilité.
 		 */
 		C3D_API bool isVisible()const;
+		/**
+		 *\~english
+		 *\return		The siplayability status.
+		 *\~french
+		 *\return		Le statut d'affichabilité.
+		 */
+		C3D_API bool isDisplayable()const;
 		/**
 		 *\~english
 		 *\return		The hierarchy level for this overlay
