@@ -651,7 +651,7 @@ namespace castor3d
 		return m_renderInfo;
 	}
 
-	uint32_t DebugOverlays::registerTimer( castor::String const & category
+	void DebugOverlays::registerTimer( castor::String const & category
 		, FramePassTimer & timer )
 	{
 		auto lock( castor::makeUniqueLock( m_mutex ) );
@@ -669,7 +669,7 @@ namespace castor3d
 
 		it->second.addTimer( timer );
 		m_dirty = true;
-		return m_queriesCount++;
+		m_queriesCount++;
 	}
 
 	void DebugOverlays::unregisterTimer( castor::String const & category
