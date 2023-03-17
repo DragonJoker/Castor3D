@@ -228,7 +228,7 @@ namespace castor3d
 		 */
 		C3D_API PostEffectSPtr getPostEffect( castor::String const & name )const;
 		C3D_API void resetSemaphore();
-		C3D_API crg::FramePass const & createVertexTransformPass();
+		C3D_API crg::FramePass const & createVertexTransformPass( crg::FramePassGroup & graph );
 		/**
 		*\~english
 		*name

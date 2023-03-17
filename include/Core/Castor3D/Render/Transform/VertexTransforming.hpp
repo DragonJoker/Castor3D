@@ -22,7 +22,7 @@ namespace castor3d
 		C3D_API VertexTransforming( Scene const & scene
 			, RenderDevice const & device );
 
-		C3D_API crg::FramePass const & createPass( crg::FrameGraph & graph
+		C3D_API crg::FramePass const & createPass( crg::FramePassGroup & graph
 			, crg::FramePass const * previousPass = nullptr );
 
 		C3D_API void registerNode( SubmeshRenderNode const & node

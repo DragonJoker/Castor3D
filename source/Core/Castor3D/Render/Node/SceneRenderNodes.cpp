@@ -531,7 +531,7 @@ namespace castor3d
 			: it->second > 0u;
 	}
 
-	crg::FramePass const & SceneRenderNodes::createVertexTransformPass( crg::FrameGraph & graph )
+	crg::FramePass const & SceneRenderNodes::createVertexTransformPass( crg::FramePassGroup & graph )
 	{
 		return m_vertexTransform->createPass( graph );
 	}

@@ -349,7 +349,7 @@ namespace ocean_fft
 		, crg::FramePassArray previousPasses )
 	{
 		auto isEnabled = std::make_shared< castor3d::IsRenderPassEnabled >();
-		auto & graph = technique.getRenderTarget().getGraph().createPassGroup( OceanFFT::Name );
+		auto & graph = technique.getGraph().createPassGroup( OceanFFT::Name );
 		auto extent = technique.getTargetExtent();
 		crg::FramePassArray passes{ previousPasses };
 

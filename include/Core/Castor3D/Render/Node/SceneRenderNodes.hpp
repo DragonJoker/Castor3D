@@ -65,7 +65,7 @@ namespace castor3d
 		C3D_API void update( GpuUpdater & updater );
 		C3D_API bool hasNodes( LightingModelID lightingModelId )const;
 
-		C3D_API crg::FramePass const & createVertexTransformPass( crg::FrameGraph & graph );
+		C3D_API crg::FramePass const & createVertexTransformPass( crg::FramePassGroup & graph );
 
 		bool hasNodes()const
 		{

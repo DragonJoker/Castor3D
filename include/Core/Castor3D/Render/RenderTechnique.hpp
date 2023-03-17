@@ -377,6 +377,11 @@ namespace castor3d
 		{
 			return *m_lastTransparentPass;
 		}
+
+		crg::FramePassGroup & getGraph()
+		{
+			return m_graph;
+		}
 		/**@}*/
 
 	public:
@@ -416,6 +421,7 @@ namespace castor3d
 		LpvGridConfigUbo m_lpvConfigUbo;
 		LayeredLpvGridConfigUbo m_llpvConfigUbo;
 		VoxelizerUbo m_vctConfigUbo;
+		crg::FramePassGroup & m_graph;
 		ShadowMapUPtr m_directionalShadowMap;
 		ShadowMapUPtr m_pointShadowMap;
 		ShadowMapUPtr m_spotShadowMap;

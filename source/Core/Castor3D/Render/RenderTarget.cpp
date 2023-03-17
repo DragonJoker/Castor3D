@@ -837,9 +837,9 @@ namespace castor3d
 		m_signalFinished.clear();
 	}
 
-	crg::FramePass const & RenderTarget::createVertexTransformPass()
+	crg::FramePass const & RenderTarget::createVertexTransformPass( crg::FramePassGroup & graph )
 	{
-		return getScene()->getRenderNodes().createVertexTransformPass( m_graph );
+		return getScene()->getRenderNodes().createVertexTransformPass( graph );
 	}
 
 	void RenderTarget::doInitialise( RenderDevice const & device

@@ -34,7 +34,7 @@ namespace castor3d
 		, bool weightedBlended )
 		: castor::OwnedBy< RenderTechnique >{ parent }
 		, m_device{ device }
-		, m_graph{ getOwner()->getRenderTarget().getGraph().createPassGroup( "Transparent" ) }
+		, m_graph{ getOwner()->getGraph().createPassGroup( "Transparent" ) }
 		, m_mippedColour{ m_device
 			, getOwner()->getResources()
 			, getOwner()->getName() + "/MippedColour"

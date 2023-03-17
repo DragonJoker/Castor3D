@@ -616,7 +616,7 @@ namespace castor3d
 						, m_programs[0].stages
 						, m_programs[1].stages )
 					, m_ssaoConfig );
-				m_device.renderSystem.getEngine()->registerTimer( graph.getName() + "/SSAO"
+				m_device.renderSystem.getEngine()->registerTimer( pass.getFullName()
 					, result->getTimer() );
 				return result;
 			} );

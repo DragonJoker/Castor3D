@@ -235,7 +235,6 @@ namespace castor3d
 
 		doRegisterGraphIO( graph, vsm, rsm, isStatic );
 
-		auto & group = graph.getDefaultGroup();
 		crg::FramePass const * previousPass{};
 		auto cascadeCount = m_scene.getDirectionalShadowCascades();
 		crg::FramePassArray resultPasses;
@@ -243,6 +242,7 @@ namespace castor3d
 		for ( uint32_t cascade = 0u; cascade < cascadeCount; ++cascade )
 		{
 			std::string debugName = shdmapdir::getPassName( cascade, vsm, rsm, isStatic );
+			auto & group = graph.createPassGroup( debugName );
 
 			if ( m_passes[m_passesIndex].cameras.size() <= cascade )
 			{
@@ -261,7 +261,7 @@ namespace castor3d
 			auto & passData = *passes.passes.back();
 			passData.ownCuller = castor::makeUniqueDerived< SceneCuller, DummyCuller >( m_scene, &camera, isStatic );
 			passData.culler = passData.ownCuller.get();
-			auto & pass = group.createPass( debugName
+			auto & pass = group.createPass( "Nodes"
 				, [&passData, this, cascade, vsm, rsm, isStatic, &camera, &cameraUbo]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & runnableGraph )
@@ -432,7 +432,7 @@ namespace castor3d
 				if ( isStatic )
 				{
 					auto & nstSmResult = getShadowPassResult( false );
-					auto & copyPass = graph.createPass( debugName + "/CopyToNonStatic"
+					auto & copyPass = group.createPass( "CopyToNonStatic"
 						, [this, isStatic, cascade]( crg::FramePass const & framePass
 							, crg::GraphContext & context
 							, crg::RunnableGraph & runnableGraph )

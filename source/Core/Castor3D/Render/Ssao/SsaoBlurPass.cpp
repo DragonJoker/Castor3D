@@ -491,7 +491,7 @@ namespace castor3d
 						, *resIt
 						, *bentResIt )
 					, m_config );
-				m_device.renderSystem.getEngine()->registerTimer( graph.getName() + "/SSAO"
+				m_device.renderSystem.getEngine()->registerTimer( pass.getFullName()
 					, result->getTimer() );
 				return result;
 			} );
