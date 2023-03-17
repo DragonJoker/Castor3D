@@ -282,7 +282,7 @@ namespace castor3d
 				resources.fence = device->createFence( VK_FENCE_CREATE_SIGNALED_BIT );
 			}
 
-			m_uploadTimer = std::make_unique< crg::FramePassTimer >( device.makeContext(), "Upload" );
+			m_uploadTimer = std::make_unique< crg::FramePassTimer >( device.makeContext(), "Buffers" );
 			getEngine()->registerTimer( "Buffers", *m_uploadTimer );
 		}
 		else if ( !data )

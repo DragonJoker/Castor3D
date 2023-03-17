@@ -676,7 +676,7 @@ namespace castor3d
 	{
 	}
 
-	crg::FramePass const & VertexTransforming::createPass( crg::FrameGraph & graph
+	crg::FramePass const & VertexTransforming::createPass( crg::FramePassGroup & graph
 		, crg::FramePass const * previousPass )
 	{
 		if ( m_boundsPass )

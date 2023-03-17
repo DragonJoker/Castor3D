@@ -29,7 +29,7 @@ namespace castor3d
 		, bool visbuffer )
 		: castor::OwnedBy< RenderTechnique >{ parent }
 		, m_device{ device }
-		, m_graph{ parent.getRenderTarget().getGraph().createPassGroup( "Prepass" ) }
+		, m_graph{ parent.getGraph().createPassGroup( "Prepass" ) }
 		, m_result{ parent.getResources()
 			, device
 			, makeSize( parent.getTargetExtent() )

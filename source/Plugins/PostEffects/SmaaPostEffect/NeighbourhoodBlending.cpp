@@ -231,7 +231,7 @@ namespace smaa
 		, m_pass{ m_graph.createPass( "NeighbourhoodBlending"
 			, [this, &device, &config, enabled, passIndex]( crg::FramePass const & pass
 				, crg::GraphContext & context
-				, crg::RunnableGraph & framePass )
+				, crg::RunnableGraph & frameGraph )
 			{
 				auto result = crg::RenderQuadBuilder{}
 					.renderPosition( {} )
@@ -240,8 +240,8 @@ namespace smaa
 					.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_stages ) )
 					.passIndex( passIndex )
 					.enabled( enabled )
-					.build( pass, context, framePass, { config.maxSubsampleIndices * 2u } );
-				device.renderSystem.getEngine()->registerTimer( framePass.getName()
+					.build( pass, context, frameGraph, { config.maxSubsampleIndices * 2u } );
+				device.renderSystem.getEngine()->registerTimer( pass.getFullName()
 					, result->getTimer() );
 				return result;
 			} ) }

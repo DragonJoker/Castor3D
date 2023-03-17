@@ -48,7 +48,7 @@ namespace castor3d
 		, bool deferred )
 		: castor::OwnedBy< RenderTechnique >{ parent }
 		, m_device{ device }
-		, m_graph{ getOwner()->getRenderTarget().getGraph().createPassGroup( "Opaque" ) }
+		, m_graph{ getOwner()->getGraph().createPassGroup( "Opaque" ) }
 		, m_opaquePassResult{ ( deferred
 			? castor::makeUnique< OpaquePassResult >( parent.getResources()
 				, m_device

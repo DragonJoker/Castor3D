@@ -219,7 +219,7 @@ namespace water
 		std::string name{ Name };
 		auto isEnabled = std::make_shared< castor3d::IsRenderPassEnabled >();
 		auto extent = technique.getTargetExtent();
-		auto & graph = technique.getRenderTarget().getGraph().createPassGroup( name );
+		auto & graph = technique.getGraph().createPassGroup( name );
 
 		auto & blitColourPass = graph.createPass( "CopyColour"
 			, [extent, &device, isEnabled]( crg::FramePass const & framePass

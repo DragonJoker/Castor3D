@@ -117,7 +117,6 @@ namespace castor3d
 
 		doRegisterGraphIO( graph, vsm, rsm, isStatic );
 
-		auto & group = graph.getDefaultGroup();
 		crg::FramePass const * previousPass{};
 		crg::FramePassArray result;
 
@@ -125,6 +124,7 @@ namespace castor3d
 		{
 			auto faceIndex = index * 6u + face;
 			std::string debugName = shdmappoint::getPassName( faceIndex, vsm, rsm, isStatic );
+			auto & group = graph.createPassGroup( debugName );
 
 			if ( m_passes[m_passesIndex].cameraUbos.size() <= faceIndex )
 			{
@@ -141,7 +141,7 @@ namespace castor3d
 			passData.frustum = castor::makeUnique< Frustum >( *passData.viewport );
 			passData.ownCuller = castor::makeUniqueDerived< SceneCuller, FrustumCuller >( m_scene, *passData.frustum, isStatic );
 			passData.culler = passData.ownCuller.get();
-			auto & pass = group.createPass( debugName
+			auto & pass = group.createPass( "Nodes"
 				, [faceIndex, &passData, this, vsm, rsm, isStatic, &cameraUbo]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & runnableGraph )
@@ -213,7 +213,7 @@ namespace castor3d
 			if ( isStatic )
 			{
 				auto & nstSmResult = getShadowPassResult( false );
-				auto & copyPass = graph.createPass( debugName + "/CopyToNonStatic"
+				auto & copyPass = group.createPass( "CopyToNonStatic"
 					, [this, isStatic, faceIndex]( crg::FramePass const & pass
 						, crg::GraphContext & context
 						, crg::RunnableGraph & runnableGraph )

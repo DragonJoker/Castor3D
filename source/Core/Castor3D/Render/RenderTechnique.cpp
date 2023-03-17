@@ -47,6 +47,7 @@
 
 #include <CastorUtils/Design/ResourceCache.hpp>
 
+#include <RenderGraph/FramePassGroup.hpp>
 #include <RenderGraph/FramePassTimer.hpp>
 
 CU_ImplementCUSmartPtr( castor3d, RenderTechnique )
@@ -246,7 +247,7 @@ namespace castor3d
 			};
 
 			stepProgressBar( progress, "Creating clear LPV commands" );
-			crg::FrameGraph result{ resources.getHandler(), name + "ClearLpv" };
+			crg::FrameGraph result{ resources.getHandler(), name + "/ClearLpv" };
 			auto & pass = result.createPass( name + "LpvClear"
 				, [progress]( crg::FramePass const & framePass
 					, crg::GraphContext & context
@@ -337,6 +338,7 @@ namespace castor3d
 		, m_lpvConfigUbo{ m_device }
 		, m_llpvConfigUbo{ m_device }
 		, m_vctConfigUbo{ m_device }
+		, m_graph{ m_renderTarget.getGraph().createPassGroup( "Technique" ) }
 #if !C3D_DebugDisableShadowMaps
 		, m_directionalShadowMap{ castor::makeUniqueDerived< ShadowMap, ShadowMapDirectional >( m_renderTarget.getResources()
 			, m_device
@@ -369,7 +371,7 @@ namespace castor3d
 		, m_prepass{ *this
 			, m_device
 			, queueData
-			, doCreateRenderPasses( progress , TechniquePassEvent::eBeforeDepth, &m_renderTarget.createVertexTransformPass() )
+			, doCreateRenderPasses( progress , TechniquePassEvent::eBeforeDepth, &m_renderTarget.createVertexTransformPass( m_graph ) )
 			, progress
 			, deferred
 			, visbuffer }
@@ -753,7 +755,7 @@ namespace castor3d
 		auto previousPasses = doCreateRenderPasses( progress
 			, TechniquePassEvent::eBeforeBackground
 			, &m_prepass.getLastPass() );
-		auto & graph = m_renderTarget.getGraph().createPassGroup( "Background" );
+		auto & graph = m_graph.createPassGroup( "Background" );
 		graph.addGroupOutput( getTargetResult().front() );
 		graph.addGroupOutput( getTargetResult().back() );
 		auto result = castor::makeUnique< BackgroundRenderer >( graph
