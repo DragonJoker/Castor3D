@@ -51,7 +51,7 @@ namespace castor3d
 			, visible }
 		, m_caption{ caption }
 	{
-		setBackgroundBorderSize( castor::Point4ui{} );
+		setBorderSize( castor::Point4ui{} );
 		auto text = m_scene
 			? m_scene->addNewOverlay( cuT( "T_CtrlStatic_[" ) + getName() + cuT( "]" )
 				, getEngine()

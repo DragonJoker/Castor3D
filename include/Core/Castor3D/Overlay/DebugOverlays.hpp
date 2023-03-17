@@ -147,7 +147,8 @@ namespace castor3d
 		}
 
 	private:
-		void doCreateDebugPanel( OverlayCache & cache );
+		void doCreateMainDebugPanel();
+		void doCreateRenderPassesDebugPanel();
 		void doCompute();
 
 	private:

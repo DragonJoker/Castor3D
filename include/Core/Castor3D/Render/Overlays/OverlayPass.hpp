@@ -85,7 +85,7 @@ namespace castor3d
 		crg::RenderPassHolder m_renderPass;
 		OverlayRendererUPtr m_renderer;
 		bool m_drawGlobal{};
-		uint32_t m_count{};
+		OverlaysCounts m_counts{};
 	};
 }
 

@@ -116,7 +116,7 @@ namespace castor3d
 			return;
 		}
 
-		countNodes( *m_transparentPass, updater.info );
+		m_transparentPass->countNodes( updater.info );
 	}
 
 	void TransparentRendering::accept( RenderTechniqueVisitor & visitor )

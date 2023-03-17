@@ -17,6 +17,8 @@ CU_ImplementCUSmartPtr( castor3d, Control )
 
 namespace castor3d
 {
+	static int32_t constexpr ResizeBorderSize = 10;
+
 	Control::Control( ControlType type
 		, SceneRPtr scene
 		, castor::String const & name
@@ -100,79 +102,17 @@ namespace castor3d
 	void Control::setStyle( ControlStyleRPtr value )
 	{
 		m_style = value;
-		doGetBackground().setMaterial( m_style->getBackgroundMaterial() );
-		doGetBackground().setBorderMaterial( m_style->getForegroundMaterial() );
+		setBackgroundMaterial( m_style->getBackgroundMaterial() );
+		setBackgroundBorderMaterial( m_style->getForegroundMaterial() );
 		doUpdateStyle();
 	}
 
-	void Control::create( ControlsManagerSPtr ctrlManager )
+	void Control::setSize( castor::Size const & value )
 	{
-		m_ctrlManager = ctrlManager;
-		ControlRPtr parent = getParent();
-
-		if ( parent )
-		{
-			parent->m_children.push_back( std::static_pointer_cast< Control >( shared_from_this() ) );
-		}
-
-		doGetBackground().setMaterial( m_style->getBackgroundMaterial() );
-		doGetBackground().setBorderMaterial( m_style->getForegroundMaterial() );
-		doGetBackground().setAbsoluteBorderSize( m_borders );
-
-		doCreate();
-	}
-
-	void Control::destroy()
-	{
-		doDestroy();
-	}
-
-	Overlay & Control::getBackgroundOverlay()
-	{
-		return doGetBackground().getOverlay();
-	}
-
-	void Control::setBackgroundMaterial( MaterialRPtr value )
-	{
-		doGetBackground().setMaterial( value );
-	}
-
-	void Control::setBackgroundSize( castor::Size const & value )
-	{
-		doGetBackground().setPixelSize( value );
-	}
-
-	void Control::setBackgroundUV( castor::Point4d const & value )
-	{
-		doGetBackground().setUV( value );
-	}
-
-	void Control::setBackgroundBorderPosition( BorderPosition value )
-	{
-		doGetBackground().setBorderPosition( value );
-	}
-
-	void Control::setBackgroundBorderMaterial( MaterialRPtr value )
-	{
-		doGetBackground().setBorderMaterial( value );
-	}
-
-	void Control::setBackgroundBorderSize( castor::Point4ui const & value )
-	{
-		m_borders = value;
-		doGetBackground().setAbsoluteBorderSize( m_borders );
-		doSetBackgroundBorders( m_borders );
+		m_size = value;
+		doGetBackground().setPixelSize( m_size );
+		doSetSize( m_size );
 		onChanged( *this );
-	}
-
-	void Control::setBackgroundBorderInnerUV( castor::Point4d const & value )
-	{
-		doGetBackground().setBorderInnerUV( value );
-	}
-
-	void Control::setBackgroundBorderOuterUV( castor::Point4d const & value )
-	{
-		doGetBackground().setBorderOuterUV( value );
 	}
 
 	void Control::setPosition( castor::Position const & value )
@@ -192,25 +132,27 @@ namespace castor3d
 		onChanged( *this );
 	}
 
-	castor::Position Control::getAbsolutePosition()const
+	void Control::setUV( castor::Point4d const & value )
 	{
-		ControlRPtr parent = getParent();
-		auto result = m_position;
-
-		if ( parent )
-		{
-			result += parent->getAbsolutePosition();
-		}
-
-		return result;
+		doGetBackground().setUV( value );
 	}
 
-	void Control::setSize( castor::Size const & value )
+	void Control::setBorderSize( castor::Point4ui const & value )
 	{
-		m_size = value;
-		doGetBackground().setPixelSize( m_size );
-		doSetSize( m_size );
+		m_borders = value;
+		doGetBackground().setAbsoluteBorderSize( m_borders );
+		doSetBackgroundBorders( m_borders );
 		onChanged( *this );
+	}
+
+	void Control::setBorderInnerUV( castor::Point4d const & value )
+	{
+		doGetBackground().setBorderInnerUV( value );
+	}
+
+	void Control::setBorderOuterUV( castor::Point4d const & value )
+	{
+		doGetBackground().setBorderOuterUV( value );
 	}
 
 	void Control::setCaption( castor::String const & caption )
@@ -223,6 +165,19 @@ namespace castor3d
 		doGetBackground().setVisible( value );
 		doSetVisible( value );
 		onChanged( *this );
+	}
+
+	castor::Position Control::getAbsolutePosition()const
+	{
+		ControlRPtr parent = getParent();
+		auto result = m_position;
+
+		if ( parent )
+		{
+			result += parent->getAbsolutePosition();
+		}
+
+		return result;
 	}
 
 	bool Control::isVisible()const
@@ -245,9 +200,9 @@ namespace castor3d
 			, [&id]( ControlWPtr lookup )
 			{
 				auto ctrl = lookup.lock();
-				return ctrl
-					? ( ctrl->getId() == id )
-					: false;
+		return ctrl
+			? ( ctrl->getId() == id )
+			: false;
 			} );
 
 		if ( it == m_children.end() )
@@ -258,32 +213,88 @@ namespace castor3d
 		return it->lock();
 	}
 
+	Overlay & Control::getBackgroundOverlay()
+	{
+		return doGetBackground().getOverlay();
+	}
+
+	void Control::setBackgroundMaterial( MaterialRPtr value )
+	{
+		if ( !m_style->isBackgroundInvisible() )
+		{
+			doGetBackground().setMaterial( value );
+		}
+	}
+
+	void Control::setBackgroundSize( castor::Size const & value )
+	{
+		doGetBackground().setPixelSize( value );
+	}
+
+	void Control::setBackgroundBorderPosition( BorderPosition value )
+	{
+		doGetBackground().setBorderPosition( value );
+	}
+
+	void Control::setBackgroundBorderMaterial( MaterialRPtr value )
+	{
+		if ( !m_style->isForegroundInvisible() )
+		{
+			doGetBackground().setBorderMaterial( value );
+		}
+	}
+
+	void Control::create( ControlsManagerSPtr ctrlManager )
+	{
+		m_ctrlManager = ctrlManager;
+		ControlRPtr parent = getParent();
+
+		if ( parent )
+		{
+			parent->m_children.push_back( std::static_pointer_cast< Control >( shared_from_this() ) );
+		}
+
+		setBackgroundMaterial( m_style->getBackgroundMaterial() );
+		setBackgroundBorderMaterial( m_style->getForegroundMaterial() );
+		doGetBackground().setAbsoluteBorderSize( m_borders );
+
+		doCreate();
+	}
+
+	void Control::destroy()
+	{
+		doDestroy();
+	}
+
 	bool Control::doIsVisible()const
 	{
 		return doGetBackground().isVisible();
+	}
+
+	void Control::adjustZIndex( uint32_t index )
+	{
+		auto level = doGetBackground().getLevel();
+		doGetBackground().setOrder( level + index, 0u );
 	}
 
 	void Control::updateZIndex( uint32_t & index
 		, std::vector< Control * > & controls
 		, std::vector< Control * > & topControls )
 	{
-		bool hasMovable{};
-
-		for ( auto child : m_children )
-		{
-			if ( auto control = child.lock() )
+		bool hasMovable = std::any_of( m_children.begin()
+			, m_children.end()
+			, []( auto const & lookup )
 			{
-				hasMovable = hasMovable
-					|| control->isMovable();
-			}
-		}
+				auto control = lookup.lock();
+				return control ? control->isMovable() : false;
+			} );
 
 		auto realIndex = &index;
 		uint32_t zindex{};
 
 		if ( isAlwaysOnTop() )
 		{
-			zindex = 50000u + index;
+			zindex = index;
 			realIndex = &zindex;
 			topControls.push_back( this );
 		}
@@ -400,16 +411,14 @@ namespace castor3d
 		}
 	}
 
-	static int32_t constexpr ResizeThreshold = 10;
-
 	bool Control::beginMove( MouseEvent const & event )
 	{
 		auto size = getSize();
 		auto pos = event.getPosition() - getAbsolutePosition();
-		auto result = pos->x > ResizeThreshold
-			&& pos->x < int32_t( size->x ) - ResizeThreshold
-			&& pos->y > ResizeThreshold
-			&& pos->y < int32_t( size->y ) - ResizeThreshold;
+		auto result = pos->x > ResizeBorderSize
+			&& pos->x < int32_t( size->x ) - ResizeBorderSize
+			&& pos->y > ResizeBorderSize
+			&& pos->y < int32_t( size->y ) - ResizeBorderSize;
 			
 		if ( result )
 		{
@@ -443,10 +452,10 @@ namespace castor3d
 	{
 		auto size = getSize();
 		auto pos = event.getPosition() - getAbsolutePosition();
-		auto result = pos->x <= ResizeThreshold
-			|| pos->x >= int32_t( size->x ) - ResizeThreshold
-			|| pos->y <= ResizeThreshold
-			|| pos->y >= int32_t( size->y ) - ResizeThreshold;
+		auto result = pos->x <= ResizeBorderSize
+			|| pos->x >= int32_t( size->x ) - ResizeBorderSize
+			|| pos->y <= ResizeBorderSize
+			|| pos->y >= int32_t( size->y ) - ResizeBorderSize;
 
 		if ( result )
 		{
@@ -454,10 +463,10 @@ namespace castor3d
 
 			if ( result )
 			{
-				m_resizing[0] = pos->x <= ResizeThreshold;
-				m_resizing[1] = pos->y <= ResizeThreshold;
-				m_resizing[2] = pos->x >= int32_t( size->x ) - ResizeThreshold;
-				m_resizing[3] = pos->y >= int32_t( size->y ) - ResizeThreshold;
+				m_resizing[0] = pos->x <= ResizeBorderSize;
+				m_resizing[1] = pos->y <= ResizeBorderSize;
+				m_resizing[2] = pos->x >= int32_t( size->x ) - ResizeBorderSize;
+				m_resizing[3] = pos->y >= int32_t( size->y ) - ResizeBorderSize;
 				m_mouseStartSize = getSize();
 				m_mouseStartPosition = getPosition();
 				m_mouseStartMousePosition = event.getPosition();

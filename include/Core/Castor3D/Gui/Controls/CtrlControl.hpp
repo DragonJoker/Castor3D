@@ -54,60 +54,30 @@ namespace castor3d
 		 */
 		C3D_API void setPosition( castor::Position const & value );
 
-		/** Retrieves the absolute control position.
-		 *\return		The value.
-		 */
-		C3D_API castor::Position getAbsolutePosition()const;
-
 		/** Sets the size.
 		 *\param[in]	value		The new value.
 		 */
 		C3D_API void setSize( castor::Size const & value );
 
-		/** \return
-		 *	The background overlay.
-		 */
-		C3D_API Overlay & getBackgroundOverlay();
-
-		/** Sets the background material.
-		 *\param[in]	value		The new value.
-		 */
-		C3D_API void setBackgroundMaterial( MaterialRPtr value );
-
-		/** Sets the background size.
-		 *\param[in]	value		The new value.
-		 */
-		C3D_API void setBackgroundSize( castor::Size const & value );
-
 		/** Sets the background centerUV.
 		 *\param[in]	value		The new value.
 		 */
-		C3D_API void setBackgroundUV( castor::Point4d const & value );
-
-		/** Sets the background borders position.
-		 *\param[in]	value		The new value.
-		 */
-		C3D_API void setBackgroundBorderPosition( BorderPosition value );
-
-		/** Sets the background borders material.
-		 *\param[in]	value		The new value.
-		 */
-		C3D_API void setBackgroundBorderMaterial( MaterialRPtr value );
+		C3D_API void setUV( castor::Point4d const & value );
 
 		/** Sets the background borders size.
 		 *\param[in]	value		The new value.
 		 */
-		C3D_API void setBackgroundBorderSize( castor::Point4ui const & value );
+		C3D_API void setBorderSize( castor::Point4ui const & value );
 
 		/** Sets the background borders inner UV.
 		 *\param[in]	value		The new value.
 		 */
-		C3D_API void setBackgroundBorderInnerUV( castor::Point4d const & value );
+		C3D_API void setBorderInnerUV( castor::Point4d const & value );
 
 		/** Sets the background borders outer UV.
 		 *\param[in]	value		The new value.
 		 */
-		C3D_API void setBackgroundBorderOuterUV( castor::Point4d const & value );
+		C3D_API void setBorderOuterUV( castor::Point4d const & value );
 
 		/** Sets the caption.
 		 *\param[in]	caption	The new value
@@ -118,6 +88,11 @@ namespace castor3d
 		 *\param[in]	value		The new value.
 		 */
 		C3D_API void setVisible( bool value );
+
+		/** Retrieves the absolute control position.
+		 *\return		The value.
+		 */
+		C3D_API castor::Position getAbsolutePosition()const;
 
 		/** Retrieves the visibility status.
 		 *\return		The value.
@@ -265,10 +240,31 @@ namespace castor3d
 		OnControlChanged onChanged;
 
 	protected:
-		ControlStyle & getBaseStyle()
-		{
-			return *m_style;
-		}
+		/** \return
+		 *	The background overlay.
+		 */
+		C3D_API Overlay & getBackgroundOverlay();
+
+		/** Sets the background material.
+		 *\param[in]	value		The new value.
+		 */
+		C3D_API void setBackgroundMaterial( MaterialRPtr value );
+
+		/** Sets the background size.
+		 *\param[in]	value		The new value.
+		 */
+		C3D_API void setBackgroundSize( castor::Size const & value );
+
+		/** Sets the background borders position.
+		 *\param[in]	value		The new value.
+		 */
+		C3D_API void setBackgroundBorderPosition( BorderPosition value );
+
+		/** Sets the background borders material.
+		 *\param[in]	value		The new value.
+		 */
+		C3D_API void setBackgroundBorderMaterial( MaterialRPtr value );
+
 		/** Creates the control's overlays.
 		 *\param[in]	ctrlManager	The controls manager.
 		 */
@@ -283,10 +279,17 @@ namespace castor3d
 		*/
 		C3D_API bool doIsVisible()const;
 
+		ControlStyle & getBaseStyle()
+		{
+			return *m_style;
+		}
+
 	private:
 		void updateZIndex( uint32_t & index
 			, std::vector< Control * > & controls
 			, std::vector< Control * > & topControls );
+		void adjustZIndex( uint32_t index );
+
 		/** Event when mouse left button is pressed.
 		 *\param[in]	event		The mouse event.
 		 */
@@ -390,12 +393,16 @@ namespace castor3d
 		virtual void doOnMouseLeave( MouseEvent const & event ) {}
 
 		/** Tells if the control catches mouse events
-		*\remarks	A control catches mouse events when it is visible, enabled, and when it explicitly catches it (enables by default, except for static controls
-		*\return	false if the mouse events don't affect the contro
+		*\remarks	A control catches mouse events when it is visible, enabled
+		*			and when it explicitly catches it (enables by default, except for static controls.
+		*			Setting both background and foreground invisible will also prevent mouse events catching.
+		*\return	\p false if the mouse events don't affect the control.
 		*/
 		bool doCatchesMouseEvents()const override
 		{
-			return isVisible();
+			return isVisible()
+				&& m_style
+				&& ( !m_style->isBackgroundInvisible() && !m_style->isForegroundInvisible() );
 		}
 
 		/** Tells if the control catches 'tab' key

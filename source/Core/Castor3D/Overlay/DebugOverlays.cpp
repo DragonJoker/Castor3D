@@ -613,19 +613,8 @@ namespace castor3d
 	DebugOverlays::DebugOverlays( Engine & engine )
 		: OwnedBy< Engine >( engine )
 	{
-		auto & manager = dbgovl::getControlsManager( engine );
-		m_passesContainer = std::make_shared< PanelCtrl >( nullptr
-			, "Debug/RenderPasses"
-			, manager.getPanelStyle( "Debug/RenderPasses" )
-			, nullptr
-			, castor::Position{ PassPanelLeft, 0 }
-			, castor::Size{ CategoryLineWidth, 600u } );
-		auto layout = castor::makeUniqueDerived< Layout, LayoutBox >( *m_passesContainer );
-		m_passesLayout = layout.get();
-		m_passesContainer->setLayout( std::move( layout ) );
-		manager.create( m_passesContainer );
-
-		m_passesContainer->setVisible( m_visible );
+		doCreateMainDebugPanel();
+		doCreateRenderPassesDebugPanel();
 	}
 
 	DebugOverlays::~DebugOverlays()
@@ -634,7 +623,6 @@ namespace castor3d
 
 	void DebugOverlays::initialise( OverlayCache & cache )
 	{
-		doCreateDebugPanel( cache );
 	}
 
 	void DebugOverlays::cleanup()
@@ -714,7 +702,7 @@ namespace castor3d
 
 	castor::Microseconds DebugOverlays::endFrame( bool first )
 	{
-		m_totalTime = m_frameTimer.getElapsed() + m_externalTime;
+		m_totalTime = m_frameTimer.getElapsed();
 
 		if ( !first )
 		{
@@ -782,63 +770,84 @@ namespace castor3d
 		m_passesContainer->setVisible( m_visible );
 	}
 
-	void DebugOverlays::doCreateDebugPanel( OverlayCache & cache )
+	void DebugOverlays::doCreateRenderPassesDebugPanel()
 	{
-		m_debugPanel = std::make_unique< MainDebugPanel >( cache.getEngine() );
+		auto & engine = *getEngine();
+		auto & manager = dbgovl::getControlsManager( engine );
+		m_passesContainer = std::make_shared< PanelCtrl >( nullptr
+			, "Debug/RenderPasses"
+			, manager.getPanelStyle( "Debug/RenderPasses" )
+			, nullptr
+			, castor::Position{ PassPanelLeft, 0 }
+		, castor::Size{ CategoryLineWidth, 600u } );
+		auto layout = castor::makeUniqueDerived< Layout, LayoutBox >( *m_passesContainer );
+		m_passesLayout = layout.get();
+		m_passesContainer->setLayout( std::move( layout ) );
+		manager.create( m_passesContainer );
+
+		m_passesContainer->setVisible( m_visible );
+	}
+
+	void DebugOverlays::doCreateMainDebugPanel()
+	{
+		m_debugPanel = std::make_unique< MainDebugPanel >( *getEngine() );
 		m_debugPanel->addTimePanel( cuT( "CpuTime" )
-			, cuT( "CPU Time:" )
+			, cuT( "CPU:" )
 			, m_cpuTime );
 		m_debugPanel->addTimePanel( cuT( "GpuClientTime" )
-			, cuT( "GPU Client Time:" )
+			, cuT( "GPU Client:" )
 			, m_gpuClientTime );
 		m_debugPanel->addTimePanel( cuT( "GpuServerTime" )
-			, cuT( "GPU Server Time:" )
+			, cuT( "GPU Server:" )
 			, m_gpuTotalTime );
 		m_debugPanel->addTimePanel( cuT( "ExternalTime" )
-			, cuT( "External Time:" )
+			, cuT( "External:" )
 			, m_externalTime );
 		m_debugPanel->addTimePanel( cuT( "TotalTime" )
-			, cuT( "Total Time:" )
+			, cuT( "Total:" )
 			, m_totalTime );
 		m_debugPanel->addTimePanel( cuT( "AverageTime" )
-			, cuT( "Average Time:" )
+			, cuT( "Average:" )
 			, m_averageTime );
 		m_debugPanel->addFpsPanel( cuT( "FPS" )
-			, cuT( "FPS:" )
+			, cuT( "Last:" )
 			, m_fps );
 		m_debugPanel->addFpsPanel( cuT( "AverageFPS" )
-			, cuT( "Average FPS:" )
+			, cuT( "Average:" )
 			, m_averageFps );
 		m_debugPanel->addCountPanel( cuT( "TotalVertexCount" )
-			, cuT( "Vertices Count:" )
+			, cuT( "Vertices:" )
 			, m_renderInfo.totalVertexCount );
 		m_debugPanel->addCountPanel( cuT( "TotalFaceCount" )
-			, cuT( "Faces Count:" )
+			, cuT( "Faces:" )
 			, m_renderInfo.totalFaceCount );
 		m_debugPanel->addCountPanel( cuT( "TotalObjectCount" )
-			, cuT( "Objects Count:" )
+			, cuT( "Objects:" )
 			, m_renderInfo.totalObjectsCount );
 		m_debugPanel->addCountPanel( cuT( "VisibleVertexCount" )
-			, cuT( "Visible Vertices Count:" )
+			, cuT( "Visible Vertices:" )
 			, m_renderInfo.visibleVertexCount );
 		m_debugPanel->addCountPanel( cuT( "VisibleFaceCount" )
-			, cuT( "Visible Faces Count:" )
+			, cuT( "Visible Faces:" )
 			, m_renderInfo.visibleFaceCount );
 		m_debugPanel->addCountPanel( cuT( "VisibleObjectCount" )
-			, cuT( "Visible Objects Count:" )
+			, cuT( "Visible Objects:" )
 			, m_renderInfo.visibleObjectsCount );
 		m_debugPanel->addCountPanel( cuT( "ParticlesCount" )
-			, cuT( "Particles Count:" )
+			, cuT( "Particles:" )
 			, m_renderInfo.particlesCount );
 		m_debugPanel->addCountPanel( cuT( "LightCount" )
-			, cuT( "Lights Count:" )
+			, cuT( "All Lights:" )
 			, m_renderInfo.totalLightsCount );
 		m_debugPanel->addCountPanel( cuT( "VisibleLightCount" )
-			, cuT( "Visible Lights Count:" )
+			, cuT( "Visible Lights:" )
 			, m_renderInfo.visibleLightsCount );
-		m_debugPanel->addCountPanel( cuT( "VisibleOverlayCount" )
-			, cuT( "Visible Overlays Count:" )
-			, m_renderInfo.visibleOverlayCount );
+		m_debugPanel->addCountPanel( cuT( "VisibleOverlaysCount" )
+			, cuT( "Visible Overlays:" )
+			, m_renderInfo.visibleOverlaysCount );
+		m_debugPanel->addCountPanel( cuT( "VisibleOverlayQuadsCount" )
+			, cuT( "Visible 2D Quads:" )
+			, m_renderInfo.visibleOverlayQuadsCount );
 		m_debugPanel->addCountPanel( cuT( "DrawCalls" )
 			, cuT( "Draw calls:" )
 			, m_renderInfo.drawCalls );

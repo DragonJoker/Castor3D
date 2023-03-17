@@ -231,6 +231,10 @@ namespace castor3d
 		 */
 		C3D_API virtual ShaderFlags getShaderFlags()const = 0;
 		/**
+		 *\copydoc	RenderNodesPass::countNodes
+		 */
+		C3D_API virtual void countNodes( RenderInfo & info )const = 0;
+		/**
 		 *\copydoc	RenderNodesPass::isPassEnabled
 		 */
 		C3D_API virtual bool isPassEnabled()const = 0;
@@ -264,6 +268,7 @@ namespace castor3d
 	protected:
 		RenderTechnique * m_parent{};
 		Scene const & m_scene;
+		uint32_t m_drawCalls{};
 	};
 
 	class RenderTechniqueNodesPass
@@ -349,6 +354,13 @@ namespace castor3d
 		C3D_API ShaderFlags getShaderFlags()const override
 		{
 			return m_shaderFlags;
+		}
+		/**
+		 *\copydoc	RenderNodesPass::countNodes
+		 */
+		C3D_API void countNodes( RenderInfo & info )const override
+		{
+			RenderNodesPass::countNodes( info );
 		}
 		/**
 		 *\copydoc	RenderNodesPass::areValidPassFlags

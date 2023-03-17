@@ -134,49 +134,31 @@ namespace castor3d
 		}
 	}
 
-	void OverlayPreparer::registerOverlay( Overlay const & overlay )
+	OverlaysCounts OverlayPreparer::registerOverlay( Overlay const & overlay )
 	{
+		OverlaysCounts counts{};
+
 		if ( auto material = overlay.getMaterial() )
 		{
-			auto & pipelines = m_levelsOverlays.emplace( overlay.getLevel(), OverlayDatasMap{} ).first->second;
+			auto size = overlay.getAbsoluteSize( m_renderer.getSize() );
 
-			for ( auto & pass : *material )
-			{
-				if ( !pass->isImplicit() )
-				{
-					auto [node, pipelineData] = m_renderer.doGetDrawNodeData( m_device
-						, m_renderPass
-						, overlay
-						, *pass
-						, false );
-					auto & overlays = pipelines.emplace( pipelineData, OverlayDataArray{} ).first->second;
-					overlays.push_back( { &overlay
-						, node
-						, pipelineData
-						, nullptr
-						, uint32_t{}
-						, uint32_t{}
-						, OverlayTextBufferIndex{}
-						, false } );
-				}
-			}
-		}
-
-		if ( overlay.getType() == OverlayType::eBorderPanel )
-		{
-			if ( auto borderMaterial = overlay.getBorderPanelOverlay()->getBorderMaterial() )
+			if ( size->x > 0 && size->y > 0 )
 			{
 				auto & pipelines = m_levelsOverlays.emplace( overlay.getLevel(), OverlayDatasMap{} ).first->second;
 
-				for ( auto & pass : *borderMaterial )
+				for ( auto & pass : *material )
 				{
 					if ( !pass->isImplicit() )
 					{
+						counts.quads += overlay.getType() == OverlayType::eText
+							? overlay.getTextOverlay()->getCharCount()
+							: 1u;
+						counts.overlays++;
 						auto [node, pipelineData] = m_renderer.doGetDrawNodeData( m_device
 							, m_renderPass
 							, overlay
 							, *pass
-							, true );
+							, false );
 						auto & overlays = pipelines.emplace( pipelineData, OverlayDataArray{} ).first->second;
 						overlays.push_back( { &overlay
 							, node
@@ -185,11 +167,49 @@ namespace castor3d
 							, uint32_t{}
 							, uint32_t{}
 							, OverlayTextBufferIndex{}
-							, true } );
+						, false } );
 					}
 				}
 			}
 		}
+
+		if ( overlay.getType() == OverlayType::eBorderPanel )
+		{
+			if ( auto borderMaterial = overlay.getBorderPanelOverlay()->getBorderMaterial() )
+			{
+				auto borderSize = overlay.getBorderPanelOverlay()->getAbsoluteBorderSize( m_renderer.getSize() );
+
+				if ( borderSize->x != 0 || borderSize->y != 0 || borderSize->z != 0 || borderSize->w != 0 )
+				{
+					auto & pipelines = m_levelsOverlays.emplace( overlay.getLevel(), OverlayDatasMap{} ).first->second;
+
+					for ( auto & pass : *borderMaterial )
+					{
+						if ( !pass->isImplicit() )
+						{
+							counts.quads += 8u;
+							counts.overlays++;
+							auto [node, pipelineData] = m_renderer.doGetDrawNodeData( m_device
+								, m_renderPass
+								, overlay
+								, *pass
+								, true );
+							auto & overlays = pipelines.emplace( pipelineData, OverlayDataArray{} ).first->second;
+							overlays.push_back( { &overlay
+								, node
+								, pipelineData
+								, nullptr
+								, uint32_t{}
+								, uint32_t{}
+								, OverlayTextBufferIndex{}
+							, true } );
+						}
+					}
+				}
+			}
+		}
+
+		return counts;
 	}
 
 	void OverlayPreparer::fillDrawData()
@@ -304,6 +324,11 @@ namespace castor3d
 			, drawCount
 			, sizeof( VkDrawIndirectCommand ) );
 		offset += drawCount;
+
+		if ( m_drawCounts )
+		{
+			++( *m_drawCounts );
+		}
 	}
 
 	void OverlayPreparer::doUpdateUbo( OverlayUboConfiguration & data

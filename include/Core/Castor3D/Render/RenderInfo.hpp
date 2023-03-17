@@ -37,9 +37,12 @@ namespace castor3d
 		//!\~english	The visible lights count.
 		//!\~french		Le nombre de lumières visibles.
 		uint32_t visibleLightsCount{ 0u };
-		//!\~english	The visible ovzrlays count.
+		//!\~english	The visible overlays count.
 		//!\~french		Le nombre d'incrustations visibles.
-		uint32_t visibleOverlayCount{ 0u };
+		uint32_t visibleOverlaysCount{ 0u };
+		//!\~english	The visible overlays quads count.
+		//!\~french		Le nombre de quads d'incrustations visibles.
+		uint32_t visibleOverlayQuadsCount{ 0u };
 		//!\~english	The draw calls count.
 		//!\~french		Le nombre d'appels aux fonctions de dessin.
 		uint32_t drawCalls{ 0u };

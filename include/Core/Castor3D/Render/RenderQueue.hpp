@@ -113,36 +113,41 @@ namespace castor3d
 		C3D_API RenderFilters getFilters()const;
 		C3D_API ashes::CommandBuffer const & initCommandBuffer();
 
-		bool isOutOfDate()const
+		bool isOutOfDate()const noexcept
 		{
 			return m_culledChanged || m_commandsChanged;
 		}
 
-		bool hasCommandBuffer()const
+		bool hasCommandBuffer()const noexcept
 		{
 			return m_pass.commandBuffer != nullptr;
 		}
 		
-		ashes::CommandBuffer const & getCommandBuffer()const
+		ashes::CommandBuffer const & getCommandBuffer()const noexcept
 		{
 			CU_Require( hasCommandBuffer() );
 			return *m_pass.commandBuffer;
 		}
 
-		QueueRenderNodes & getRenderNodes()const
+		QueueRenderNodes & getRenderNodes()const noexcept
 		{
 			CU_Require( m_renderNodes );
 			return *m_renderNodes;
 		}
 
-		SceneCuller & getCuller()const
+		SceneCuller & getCuller()const noexcept
 		{
 			return m_culler;
 		}
 
-		SceneNode const * getIgnoredNode()const
+		SceneNode const * getIgnoredNode()const noexcept
 		{
 			return m_ignoredNode;
+		}
+
+		uint32_t getDrawCallsCount()const noexcept
+		{
+			return m_drawCalls;
 		}
 		/**@}*/
 
@@ -187,6 +192,7 @@ namespace castor3d
 		bool m_commandsChanged{};
 		castor::GroupChangeTracked< ashes::Optional< VkViewport > > m_viewport;
 		castor::GroupChangeTracked< ashes::Optional< VkRect2D > > m_scissor;
+		uint32_t m_drawCalls{};
 	};
 }
 

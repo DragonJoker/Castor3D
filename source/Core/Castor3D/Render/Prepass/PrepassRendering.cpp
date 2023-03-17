@@ -94,11 +94,11 @@ namespace castor3d
 
 		if ( hasVisibility() )
 		{
-			countNodes( *m_visibilityPass, updater.info );
+			m_visibilityPass->countNodes( updater.info );
 		}
 		else
 		{
-			countNodes( *m_depthPass, updater.info );
+			m_depthPass->countNodes( updater.info );
 		}
 	}
 

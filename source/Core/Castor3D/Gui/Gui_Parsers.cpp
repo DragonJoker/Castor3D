@@ -881,7 +881,7 @@ namespace castor3d
 		{
 			castor::Point4ui size;
 			params[0]->get( size );
-			control->setBackgroundBorderSize( size );
+			control->setBorderSize( size );
 		}
 		else
 		{
@@ -898,7 +898,7 @@ namespace castor3d
 		{
 			castor::Point4d value;
 			params[0]->get( value );
-			control->setBackgroundBorderInnerUV( value );
+			control->setBorderInnerUV( value );
 		}
 		else
 		{
@@ -915,7 +915,7 @@ namespace castor3d
 		{
 			castor::Point4d value;
 			params[0]->get( value );
-			control->setBackgroundBorderOuterUV( value );
+			control->setBorderOuterUV( value );
 		}
 		else
 		{
@@ -932,7 +932,7 @@ namespace castor3d
 		{
 			castor::Point4d value;
 			params[0]->get( value );
-			control->setBackgroundUV( value );
+			control->setUV( value );
 		}
 		else
 		{
@@ -1661,24 +1661,28 @@ namespace castor3d
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserStyleBorderMaterial )
+	CU_ImplementAttributeParser( parserStyleBackgroundInvisible )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
 
 		if ( auto style = guiContext.getTopStyle() )
 		{
-			castor::String name;
-			params[0]->get( name );
-			auto material = guiContext.engine->findMaterial( name ).lock().get();
+			style->setBackgroundInvisible( params[0]->get< bool >() );
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No style initialised." ) );
+		}
+	}
+	CU_EndAttribute()
 
-			if ( material )
-			{
-				style->setForegroundMaterial( material );
-			}
-			else
-			{
-				CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
-			}
+	CU_ImplementAttributeParser( parserStyleForegroundInvisible )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+
+		if ( auto style = guiContext.getTopStyle() )
+		{
+			style->setForegroundInvisible( params[0]->get< bool >() );
 		}
 		else
 		{

@@ -48,7 +48,7 @@ namespace castor3d
 			, flags
 			, visible }
 	{
-		setBackgroundBorderSize( castor::Point4ui{} );
+		setBorderSize( castor::Point4ui{} );
 		setStyle( style );
 		doUpdateFlags();
 	}

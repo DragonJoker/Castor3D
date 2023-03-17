@@ -37,8 +37,13 @@ namespace castor3d
 		C3D_API OverlayPreparer & operator=( OverlayPreparer && rhs )noexcept;
 		C3D_API ~OverlayPreparer()noexcept;
 
-		C3D_API void registerOverlay( Overlay const & overlay );
+		C3D_API OverlaysCounts registerOverlay( Overlay const & overlay );
 		C3D_API void fillDrawData();
+
+		void setDrawCounts( uint32_t & value )
+		{
+			m_drawCounts = &value;
+		}
 
 	private:
 		void doRegisterDrawCommands( OverlayDrawPipeline const & pipeline
@@ -76,6 +81,7 @@ namespace castor3d
 		VkFramebuffer m_framebuffer;
 		std::vector< OverlayDrawData > m_overlays;
 		std::map< size_t, uint32_t > m_descriptorsCounts{};
+		uint32_t * m_drawCounts{};
 	};
 }
 

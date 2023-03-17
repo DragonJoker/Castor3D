@@ -54,6 +54,26 @@ namespace castor3d
 			m_cursor = value;
 		}
 
+		void setBackgroundInvisible( bool value )noexcept
+		{
+			m_backgroundInvisible = value;
+		}
+
+		void setForegroundInvisible( bool value )noexcept
+		{
+			m_foregroundInvisible = value;
+		}
+
+		bool isBackgroundInvisible()const noexcept
+		{
+			return m_backgroundInvisible;
+		}
+
+		bool isForegroundInvisible()const noexcept
+		{
+			return m_foregroundInvisible;
+		}
+
 		MaterialRPtr getBackgroundMaterial()const
 		{
 			return m_backgroundMaterial;
@@ -84,6 +104,11 @@ namespace castor3d
 			, float offset
 			, castor::String const & suffix )
 		{
+			if ( !material )
+			{
+				return nullptr;
+			}
+
 			auto colour = getMaterialColour( *material->getPass( 0u ) );
 			colour.red() = float( colour.red() ) + offset;
 			colour.green() = float( colour.green() ) + offset;
@@ -101,6 +126,8 @@ namespace castor3d
 		MouseCursor m_cursor{};
 		MaterialRPtr m_backgroundMaterial{};
 		MaterialRPtr m_foregroundMaterial{};
+		bool m_backgroundInvisible{};
+		bool m_foregroundInvisible{};
 	};
 }
 

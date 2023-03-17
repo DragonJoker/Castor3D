@@ -74,7 +74,7 @@ namespace castor3d
 		 *\param[in]	size	La taille de l'écran
 		 *\return		La taille
 		 */
-		C3D_API castor::Rectangle getAbsoluteBorderSize( castor::Size const & size )const;
+		C3D_API castor::Point4ui getAbsoluteBorderSize( castor::Size const & size )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the absolute overlay borders size
@@ -256,25 +256,25 @@ namespace castor3d
 	private:
 		//!\~english	The border material.
 		//!\~french		Le matériau des bords.
-		MaterialRPtr m_borderMaterial;
+		MaterialRPtr m_borderMaterial{};
 		//!\~english	The border size, relative to parent dimensions.
 		//!\~french		La taille des bords, relative aux dimensions du parent.
-		castor::Point4d m_relBorderSize;
+		castor::Point4d m_relBorderSize{};
 		//!\~english	The absolute border size, in pixels.
 		//!\~french		La taille absolue des bords, en pixels.
-		std::optional< castor::Point4ui > m_pxBorderSize;
+		std::optional< castor::Point4ui > m_pxBorderSize{};
 		//!\~english	The border material name.
 		//!\~french		Le nom du matériau des bords.
 		BorderPosition m_borderPosition{ BorderPosition::eInternal };
 		//!\~english	The UV for the outer part of the border.
 		//!\~french		Les UV de la partie extérieure de la bordure.
-		castor::Point4d m_borderOuterUv;
+		castor::Point4d m_borderOuterUv{ 0, 0, 1, 1 };
 		//!\~english	The UV for the inner part of the border.
 		//!\~french		Les UV de la partie intérieure de la bordure.
-		castor::Point4d m_borderInnerUv;
+		castor::Point4d m_borderInnerUv{ 0.33, 0.33, 0.66, 0.66 };
 		//!\~english	Tells if the border has changed, in any way.
 		//!\~french		Dit si la bordure a changé, de quelque manière que ce soit.
-		bool m_borderChanged;
+		bool m_borderChanged{ true };
 	};
 }
 

@@ -291,7 +291,7 @@ namespace castor3d
 		}
 
 		template< typename NodeT >
-		static void doParseRenderNodesCommands( NodePtrByPipelineMapT< NodeT > & inputNodes
+		static uint32_t doParseRenderNodesCommands( NodePtrByPipelineMapT< NodeT > & inputNodes
 			, ashes::CommandBuffer const & commandBuffer
 			, QueueRenderNodes & queueNodes
 			, ashes::Optional< VkViewport > const & viewport
@@ -301,6 +301,8 @@ namespace castor3d
 			, uint32_t & idxIndex
 			, uint32_t & nidxIndex )
 		{
+			uint32_t result{};
+
 			for ( auto & pipelines : inputNodes )
 			{
 				RenderPipeline const & pipeline = *pipelines.first;
@@ -322,6 +324,7 @@ namespace castor3d
 						, uint32_t( buffers.second.size() )
 						, idxIndex
 						, nidxIndex );
+					++result;
 
 					if constexpr ( VisibilityResolvePass::useCompute )
 					{
@@ -332,6 +335,8 @@ namespace castor3d
 					}
 				}
 			}
+
+			return result;
 		}
 
 #if VK_NV_mesh_shader
@@ -367,7 +372,7 @@ namespace castor3d
 		}
 
 		template< typename NodeT >
-		static void doParseRenderNodesCommands( NodePtrByPipelineMapT< NodeT > & inputNodes
+		static uint32_t doParseRenderNodesCommands( NodePtrByPipelineMapT< NodeT > & inputNodes
 			, ashes::CommandBuffer const & commandBuffer
 			, QueueRenderNodes & queueNodes
 			, ashes::Optional< VkViewport > const & viewport
@@ -379,6 +384,8 @@ namespace castor3d
 			, uint32_t & idxIndex
 			, uint32_t & nidxIndex )
 		{
+			uint32_t result{};
+
 			for ( auto & pipelineIt : inputNodes )
 			{
 				RenderPipeline const & pipeline = *pipelineIt.first;
@@ -411,6 +418,7 @@ namespace castor3d
 								, nodeIt.instanceCount
 								, mshIndex );
 							drawOffset += nodeIt.instanceCount;
+							++result;
 
 							if constexpr ( VisibilityResolvePass::useCompute )
 							{
@@ -428,6 +436,7 @@ namespace castor3d
 							, uint32_t( nodes.size() )
 							, idxIndex
 							, nidxIndex );
+						++result;
 
 						if constexpr ( VisibilityResolvePass::useCompute )
 						{
@@ -439,9 +448,11 @@ namespace castor3d
 					}
 				}
 			}
+
+			return result;
 		}
 
-		static void doParseRenderNodesCommands( ObjectNodesPtrByPipelineMapT< SubmeshRenderNode > & inputNodes
+		static uint32_t doParseRenderNodesCommands( ObjectNodesPtrByPipelineMapT< SubmeshRenderNode > & inputNodes
 			, ashes::CommandBuffer const & commandBuffer
 			, QueueRenderNodes & queueNodes
 			, ashes::Optional< VkViewport > const & viewport
@@ -453,6 +464,8 @@ namespace castor3d
 			, uint32_t & idxIndex
 			, uint32_t & nidxIndex )
 		{
+			uint32_t result{};
+
 			for ( auto & pipelineIt : inputNodes )
 			{
 				RenderPipeline const & pipeline = *pipelineIt.first;
@@ -497,6 +510,7 @@ namespace castor3d
 									, 0u
 									, node.getInstanceCount()
 									, mshIndex );
+								++result;
 							}
 							else
 							{
@@ -508,17 +522,20 @@ namespace castor3d
 									, 1u
 									, idxIndex
 									, nidxIndex );
+								++result;
 							}
 						}
 					}
 				}
 			}
+
+			return result;
 		}
 
 #else
 
 		template< typename NodeT >
-		static void doParseRenderNodesCommands( ObjectNodesPtrByPipelineMapT< NodeT > & inputNodes
+		static uint32_t doParseRenderNodesCommands( ObjectNodesPtrByPipelineMapT< NodeT > & inputNodes
 			, ashes::CommandBuffer const & commandBuffer
 			, QueueRenderNodes & queueNodes
 			, ashes::Optional< VkViewport > const & viewport
@@ -528,6 +545,8 @@ namespace castor3d
 			, uint32_t & idxIndex
 			, uint32_t & nidxIndex )
 		{
+			uint32_t result{};
+
 			for ( auto & pipelineIt : inputNodes )
 			{
 				RenderPipeline const & pipeline = *pipelineIt.second.first;
@@ -553,6 +572,7 @@ namespace castor3d
 								, 1u
 								, idxIndex
 								, nidxIndex );
+							++result;
 
 							if constexpr ( VisibilityResolvePass::useCompute )
 							{
@@ -565,6 +585,8 @@ namespace castor3d
 					}
 				}
 			}
+
+			return result;
 		}
 
 #endif
@@ -1158,11 +1180,12 @@ namespace castor3d
 		m_pipelinesNodes->unlock();
 	}
 
-	void QueueRenderNodes::prepareCommandBuffers( ashes::Optional< VkViewport > const & viewport
+	uint32_t QueueRenderNodes::prepareCommandBuffers( ashes::Optional< VkViewport > const & viewport
 		, ashes::Optional< VkRect2D > const & scissors )
 	{
 		auto & queue = *getOwner();
 		auto & rp = *queue.getOwner();
+		uint32_t result{};
 
 		ashes::CommandBuffer const & cb = queue.getCommandBuffer();
 		cb.begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT | VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT
@@ -1181,7 +1204,7 @@ namespace castor3d
 		uint32_t mshIndex{};
 		uint32_t idxIndex{};
 		uint32_t nidxIndex{};
-		queuerndnd::doParseRenderNodesCommands( m_submeshNodes
+		result += queuerndnd::doParseRenderNodesCommands( m_submeshNodes
 			, cb
 			, *this
 			, viewport
@@ -1192,7 +1215,7 @@ namespace castor3d
 			, mshIndex
 			, idxIndex
 			, nidxIndex );
-		queuerndnd::doParseRenderNodesCommands( m_instancedSubmeshNodes
+		result += queuerndnd::doParseRenderNodesCommands( m_instancedSubmeshNodes
 			, cb
 			, *this
 			, viewport
@@ -1210,7 +1233,7 @@ namespace castor3d
 		auto & submeshNIdxCommands = *m_submeshNIdxIndirectCommands;
 		uint32_t idxIndex{};
 		uint32_t nidxIndex{};
-		queuerndnd::doParseRenderNodesCommands( m_submeshNodes
+		result += queuerndnd::doParseRenderNodesCommands( m_submeshNodes
 			, cb
 			, *this
 			, viewport
@@ -1219,7 +1242,7 @@ namespace castor3d
 			, submeshNIdxCommands
 			, idxIndex
 			, nidxIndex );
-		queuerndnd::doParseRenderNodesCommands( m_instancedSubmeshNodes
+		result += queuerndnd::doParseRenderNodesCommands( m_instancedSubmeshNodes
 			, cb
 			, *this
 			, viewport
@@ -1234,7 +1257,7 @@ namespace castor3d
 		auto & billboardCommands = *m_billboardIndirectCommands;
 		idxIndex = 0u;
 		nidxIndex = 0u;
-		queuerndnd::doParseRenderNodesCommands( m_billboardNodes
+		result += queuerndnd::doParseRenderNodesCommands( m_billboardNodes
 			, cb
 			, *this
 			, viewport
@@ -1245,6 +1268,8 @@ namespace castor3d
 			, nidxIndex );
 
 		cb.end();
+
+		return result;
 	}
 
 	SubmeshRenderNode & QueueRenderNodes::createNode( Pass & pass

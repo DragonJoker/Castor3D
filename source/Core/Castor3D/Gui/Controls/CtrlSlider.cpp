@@ -50,7 +50,7 @@ namespace castor3d
 		, m_value{ value }
 		, m_scrolling{ false }
 	{
-		setBackgroundBorderSize( castor::Point4ui{} );
+		setBorderSize( castor::Point4ui{} );
 		EventHandler::connect( KeyboardEventType::ePushed
 			, [this]( KeyboardEvent const & event )
 			{

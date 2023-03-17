@@ -26,9 +26,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	C3D_API void countNodes( RenderNodesPass const & renderPass
-		, RenderInfo & info );
-
 	struct RenderNodesPassDesc
 	{
 	private:
@@ -545,6 +542,17 @@ namespace castor3d
 		C3D_API void setIgnoredNode( SceneNode const & node );
 		/**
 		 *\~english
+		 *\brief			Registers nodes counts to given RenderInfo.
+		 *\param[in,out]	info	Receives the counts.
+		 *\return
+		 *\~french
+		 *\brief			Enregistre les comptes de noeuds dans le RenderInfo donné.
+		 *\param[in,out]	info	Reçoit les comptes.
+		 *\return
+		 */
+		C3D_API void countNodes( RenderInfo & info )const;
+		/**
+		 *\~english
 		 *\brief		Creates a blend state matching given blend modes.
 		 *\param[in]	colourBlendMode	The colour blend mode.
 		 *\param[in]	alphaBlendMode	The alpha blend mode.
@@ -587,6 +595,7 @@ namespace castor3d
 		C3D_API PipelineBufferArray const & getPassPipelineNodes()const;
 		C3D_API uint32_t getPipelineNodesIndex( PipelineBaseHash const & hash
 			, ashes::BufferBase const & buffer )const;
+		C3D_API uint32_t getDrawCallsCount()const;
 
 		bool isOrderIndependent()const
 		{

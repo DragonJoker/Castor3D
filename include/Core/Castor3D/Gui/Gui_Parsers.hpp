@@ -207,7 +207,8 @@ namespace castor3d
 
 	CU_DeclareAttributeParser( parserStyleBackgroundMaterial )
 	CU_DeclareAttributeParser( parserStyleForegroundMaterial )
-	CU_DeclareAttributeParser( parserStyleBorderMaterial )
+	CU_DeclareAttributeParser( parserStyleBackgroundInvisible )
+	CU_DeclareAttributeParser( parserStyleForegroundInvisible )
 	CU_DeclareAttributeParser( parserStyleButtonStyle )
 	CU_DeclareAttributeParser( parserStyleComboBoxStyle )
 	CU_DeclareAttributeParser( parserStyleEditStyle )
