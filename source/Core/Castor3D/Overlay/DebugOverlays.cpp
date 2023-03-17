@@ -45,11 +45,6 @@ namespace castor3d
 		{
 			return static_cast< ControlsManager & >( *engine.getUserInputListener() );
 		}
-
-		static ControlsManager & getControlsManager( OverlayCache & cache )
-		{
-			return getControlsManager( cache.getEngine() );
-		}
 	}
 
 	//*********************************************************************************************
@@ -256,31 +251,33 @@ namespace castor3d
 
 	DebugOverlays::PassOverlays::PassOverlays( Engine & engine
 		, PanelCtrl & parent
-		, Layout & layout
-		, castor::String const & category
 		, castor::String const & name
+		, uint32_t leftOffset
 		, uint32_t index )
-		: m_name{ name }
+		: m_parent{ &parent }
+		, m_name{ name }
 	{
 		auto & manager = dbgovl::getControlsManager( engine );
 		auto panelStyle = manager.getStyle< PanelStyle >( "Debug/RenderPasses/Pass" );
 		auto nameStyle = panelStyle->getStyle< StaticStyle >( "Name" );
 		auto counterStyle = panelStyle->getStyle< StaticStyle >( "Counter" );
+		auto maxWidth = CategoryLineWidth - leftOffset;
 		m_panel = std::make_shared< PanelCtrl >( nullptr
-			, name
+			, m_name + "Pass"
 			, panelStyle
 			, &parent
 			, castor::Position{}
-			, castor::Size{ PassLineWidth, PanelHeight } );
+			, castor::Size{ maxWidth, PanelHeight } );
 		int32_t posX{};
+		auto nameWidth = CategoryNameWidth - leftOffset;
 		m_passName = std::make_shared< StaticCtrl >( nullptr
 			, "PassName"
 			, nameStyle
 			, m_panel.get()
-			, name
+			, m_name
 			, castor::Position{ posX, 2 }
-			, castor::Size{ PassNameWidth, PanelHeight } );
-		posX += PassNameWidth;
+			, castor::Size{ nameWidth, PanelHeight } );
+		posX += nameWidth;
 		m_cpu.name = std::make_shared< StaticCtrl >( nullptr
 			, "CPUName"
 			, counterStyle
@@ -332,11 +329,30 @@ namespace castor3d
 		manager.create( m_cpu.value );
 		manager.create( m_gpu.value );
 
-		layout.addControl( *m_panel, LayoutItemFlags{}.padLeft( CategoryLineWidth - PassLineWidth ) );
+		parent.getLayout()->addControl( *m_panel, LayoutItemFlags{}.padLeft( leftOffset ) );
 	}
 
 	DebugOverlays::PassOverlays::~PassOverlays()
 	{
+		if ( m_panel )
+		{
+			m_parent->getLayout()->removeControl( *m_panel );
+
+			m_panel->setVisible( false );
+			m_passName->setVisible( false );
+			m_cpu.name->setVisible( false );
+			m_gpu.name->setVisible( false );
+			m_cpu.value->setVisible( false );
+			m_gpu.value->setVisible( false );
+
+			auto & manager = *m_panel->getControlsManager();
+			manager.destroy( m_panel );
+			manager.destroy( m_passName );
+			manager.destroy( m_cpu.name );
+			manager.destroy( m_gpu.name );
+			manager.destroy( m_cpu.value );
+			manager.destroy( m_gpu.value );
+		}
 	}
 
 	void DebugOverlays::PassOverlays::compute()
@@ -405,38 +421,43 @@ namespace castor3d
 	//*********************************************************************************************
 
 	DebugOverlays::CategoryOverlays::CategoryOverlays()
+		: m_visible{ false }
 	{
 	}
 
 	DebugOverlays::CategoryOverlays::CategoryOverlays( castor::String const & category
 		, Engine & engine
 		, PanelCtrl & parent
-		, Layout & layout )
+		, uint32_t leftOffset
+		, bool expanded )
 		: m_engine{ &engine }
+		, m_parent{ &parent }
 		, m_categoryName{ category }
+		, m_leftOffset{ leftOffset }
+		, m_posX{ int( m_leftOffset ) }
 	{
 		auto & manager = dbgovl::getControlsManager( *m_engine );
 		auto containerStyle = manager.getStyle< ExpandablePanelStyle >( "Debug/RenderPasses/Category" );
 		auto nameStyle = containerStyle->getHeaderStyle().getStyle< StaticStyle >( "Name" );
 		auto counterStyle = containerStyle->getHeaderStyle().getStyle< StaticStyle >( "Counter" );
 		m_container = std::make_shared< ExpandablePanelCtrl >( nullptr
-			, m_categoryName
+			, m_categoryName + "Category"
 			, containerStyle
-			, &parent
+			, m_parent
 			, castor::Position{}
 			, castor::Size{ CategoryLineWidth, PanelHeight }
 			, PanelHeight
-			, false );
+			, expanded );
 		m_container->getPanel()->setLayout( castor::makeUniqueDerived< Layout, LayoutBox >( *m_container->getPanel() ) );
-		m_layout = m_container->getPanel()->getLayout();
+		auto nameWidth = CategoryNameWidth - m_leftOffset;
 		m_name = std::make_shared< StaticCtrl >( nullptr
 			, "Title"
 			, nameStyle
 			, m_container->getHeader().get()
 			, m_categoryName
 			, castor::Position{ m_posX, 2 }
-			, castor::Size{ CategoryNameWidth, PanelHeight } );
-		m_posX += CategoryNameWidth;
+			, castor::Size{ nameWidth, PanelHeight } );
+		m_posX += nameWidth;
 		m_cpu.name = std::make_shared< StaticCtrl >( nullptr
 			, "CPUName"
 			, counterStyle
@@ -489,54 +510,137 @@ namespace castor3d
 		manager.create( m_cpu.value );
 		manager.create( m_gpu.value );
 
-		layout.addControl( *m_container );
+		m_parent->getLayout()->addControl( *m_container );
 	}
 
 	DebugOverlays::CategoryOverlays::~CategoryOverlays()
 	{
-		m_passes.clear();
+		if ( m_container )
+		{
+			m_parent->getLayout()->removeControl( *m_container );
+
+			m_container->setVisible( false );
+			m_name->setVisible( false );
+			m_cpu.name->setVisible( false );
+			m_gpu.name->setVisible( false );
+			m_cpu.value->setVisible( false );
+			m_gpu.value->setVisible( false );
+
+			m_passes.clear();
+			m_categories.clear();
+
+			auto & manager = dbgovl::getControlsManager( *m_engine );
+			manager.destroy( m_cpu.value );
+			manager.destroy( m_gpu.value );
+			manager.destroy( m_cpu.name );
+			manager.destroy( m_gpu.name );
+			manager.destroy( m_name );
+			manager.destroy( m_container );
+		}
 	}
 
-	void DebugOverlays::CategoryOverlays::addTimer( FramePassTimer & timer )
+	void DebugOverlays::CategoryOverlays::addTimer( castor::String const & name
+		, castor::StringArray & categories
+		, FramePassTimer & timer )
 	{
-		auto it = std::find_if( m_passes.begin()
-			, m_passes.end()
-			, [&timer]( auto const & lookup )
-			{
-				return lookup->getName() == timer.getName();
-			} );
-
-		if ( it == m_passes.end() )
+		if ( categories.empty() )
 		{
-			auto index = uint32_t( m_passes.size() );
-			m_passes.emplace_back( std::make_unique< PassOverlays >( *m_engine
-				, *m_container->getPanel()
-				, *m_layout
-				, m_categoryName
-				, timer.getName()
-				, index ) );
-			it = std::next( m_passes.begin()
-				, ptrdiff_t( m_passes.size() - 1 ) );
-		}
+			auto it = std::find_if( m_passes.begin()
+				, m_passes.end()
+				, [&name]( auto const & lookup )
+				{
+					return lookup->getName() == name;
+				} );
 
-		( *it )->addTimer( timer );
+			if ( it == m_passes.end() )
+			{
+				auto index = uint32_t( m_passes.size() );
+				m_passes.emplace_back( std::make_unique< PassOverlays >( *m_engine
+					, *m_container->getPanel()
+					, name
+					, m_leftOffset + 5u
+					, index ) );
+				it = std::next( m_passes.begin()
+					, ptrdiff_t( m_passes.size() - 1 ) );
+			}
+
+			( *it )->addTimer( timer );
+		}
+		else
+		{
+			auto current = categories.back();
+			categories.pop_back();
+			auto it = std::find_if( m_categories.begin()
+				, m_categories.end()
+				, [&current]( auto & lookup )
+				{
+					return lookup.getName() == current;
+				} );
+
+			if ( it == m_categories.end() )
+			{
+				m_categories.emplace_back( current
+					, *m_engine
+					, *m_container->getPanel()
+					, m_leftOffset + 5u );
+				it = std::next( m_categories.begin()
+					, ptrdiff_t( m_categories.size() - 1 ) );
+			}
+
+			it->addTimer( name, categories, timer );
+		}
 	}
 
-	bool DebugOverlays::CategoryOverlays::removeTimer( FramePassTimer & timer )
+	bool DebugOverlays::CategoryOverlays::removeTimer( castor::String const & name
+		, castor::StringArray & categories
+		, FramePassTimer & timer )
 	{
-		auto it = std::find_if( m_passes.begin()
-			, m_passes.end()
-			, [&timer]( auto const & lookup )
-			{
-				return lookup->getName() == timer.getName();
-			} );
-
-		if ( it != m_passes.end() )
+		if ( categories.empty() )
 		{
-			( *it )->removeTimer( timer );
+			auto it = std::find_if( m_passes.begin()
+				, m_passes.end()
+				, [&name]( auto & lookup )
+				{
+					return lookup->getName() == name;
+				} );
+
+			if ( it != m_passes.end() )
+			{
+				if ( ( *it )->removeTimer( timer ) )
+				{
+					m_passes.erase( it );
+				}
+			}
+			else
+			{
+				log::warn << "Couldn't find pass [" << name << "]" << std::endl;
+			}
+		}
+		else
+		{
+			auto current = categories.back();
+			categories.pop_back();
+			auto it = std::find_if( m_categories.begin()
+				, m_categories.end()
+				, [&current]( auto & lookup )
+				{
+					return lookup.getName() == current;
+				} );
+
+			if ( it != m_categories.end() )
+			{
+				if ( it->removeTimer( name, categories, timer ) )
+				{
+					m_categories.erase( it );
+				}
+			}
+			else
+			{
+				log::warn << "Couldn't find category [" << current << "]" << std::endl;
+			}
 		}
 
-		return m_passes.empty();
+		return m_categories.empty() && m_passes.empty();
 	}
 
 	void DebugOverlays::CategoryOverlays::compute()
@@ -552,6 +656,13 @@ namespace castor3d
 				m_cpu.time += pass->getCpuTime();
 				m_gpu.time += pass->getGpuTime();
 			}
+		}
+
+		for ( auto & catIt : m_categories )
+		{
+			catIt.compute();
+			m_cpu.time += catIt.getCpuTime();
+			m_gpu.time += catIt.getGpuTime();
 		}
 	}
 
@@ -586,8 +697,17 @@ namespace castor3d
 				}
 			}
 
+			for ( auto & catIt : m_categories )
+			{
+				catIt.update( height );
+			}
+
 			top += height;
 			m_container->setSize( { CategoryLineWidth, height } );
+		}
+		else
+		{
+			top += PanelHeight;
 		}
 	}
 
@@ -600,12 +720,44 @@ namespace castor3d
 				pass->retrieveGpuTime();
 			}
 		}
+
+		for ( auto & catIt : m_categories )
+		{
+			catIt.retrieveGpuTime();
+		}
 	}
 
 	void DebugOverlays::CategoryOverlays::setVisible( bool visible )
 	{
 		m_parentVisible = visible;
 		m_container->setVisible( m_visible && m_parentVisible );
+	}
+
+	PanelCtrl * DebugOverlays::CategoryOverlays::getContainer()const
+	{
+		return m_container->getPanel().get();
+	}
+
+	void DebugOverlays::CategoryOverlays::dumpFrameTimes( castor::String prefix
+		, Parameters & params )const
+	{
+		if ( !prefix.empty() )
+		{
+			prefix += "/";
+		}
+
+		prefix += getName();
+
+		for ( auto & pass : m_passes )
+		{
+			params.add( prefix + pass->getName() + " GPU", pass->getGpuTime() );
+			params.add( prefix + pass->getName() + " CPU", pass->getCpuTime() );
+		}
+
+		for ( auto & cat : m_categories )
+		{
+			cat.dumpFrameTimes( prefix, params );
+		}
 	}
 
 	//*********************************************************************************************
@@ -655,49 +807,43 @@ namespace castor3d
 		, FramePassTimer & timer )
 	{
 		auto lock( castor::makeUniqueLock( m_mutex ) );
-		auto realCategory = category.substr( 0u, category.find_last_of( cuT( '/' ) ) );
-		auto ires = m_renderPasses.emplace( realCategory, CategoryOverlays{} );
-		auto it = ires.first;
+		auto words = castor::string::split( category, "/", 0xFFFFFFFF, false );
 
-		if ( ires.second )
+		if ( words.empty() )
 		{
-			it->second = CategoryOverlays{ realCategory
-				, *getEngine()
-				, *m_passesContainer
-				, *m_passesLayout };
+			return;
 		}
 
-		it->second.addTimer( timer );
+		auto last = words.back();
+		words.pop_back();
+		std::reverse( words.begin(), words.end() );
+		m_renderPasses.addTimer( last, words, timer );
 		m_dirty = true;
-		m_queriesCount++;
 	}
 
 	void DebugOverlays::unregisterTimer( castor::String const & category
 		, FramePassTimer & timer )
 	{
 		auto lock( castor::makeUniqueLock( m_mutex ) );
-		m_dirty = true;
-		auto it = m_renderPasses.find( category );
+		auto words = castor::string::split( category, "/", 0xFFFFFFFF, false );
 
-		if ( it != m_renderPasses.end() )
+		if ( words.empty() )
 		{
-			if ( it->second.removeTimer( timer ) )
-			{
-				m_renderPasses.erase( it );
-			}
+			return;
 		}
+
+		auto last = words.back();
+		words.pop_back();
+		std::reverse( words.begin(), words.end() );
+		m_renderPasses.removeTimer( last, words, timer );
+		m_dirty = true;
 	}
 
 	void DebugOverlays::dumpFrameTimes( Parameters & params )
 	{
 		auto lock( castor::makeUniqueLock( m_mutex ) );
 		params.add( "Average", m_averageTime );
-
-		for ( auto & pass : m_renderPasses )
-		{
-			params.add( pass.first + " GPU", pass.second.getGpuTime() );
-			params.add( pass.first + " CPU", pass.second.getCpuTime() );
-		}
+		m_renderPasses.dumpFrameTimes( castor::String{}, params );
 	}
 
 	castor::Microseconds DebugOverlays::endFrame( bool first )
@@ -726,13 +872,13 @@ namespace castor3d
 		{
 			auto lock( castor::makeUniqueLock( m_mutex ) );
 			uint32_t top{};
+			m_renderPasses.update( top );
 
-			for ( auto & pass : m_renderPasses )
+			if ( m_debugPanel )
 			{
-				pass.second.update( top );
+				m_debugPanel->update();
 			}
 
-			m_debugPanel->update();
 			getEngine()->getRenderSystem()->resetGpuTime();
 		}
 
@@ -749,11 +895,7 @@ namespace castor3d
 	{
 		{
 			auto lock( castor::makeUniqueLock( m_mutex ) );
-
-			for ( auto & renderPass : m_renderPasses )
-			{
-				renderPass.second.retrieveGpuTime();
-			}
+			m_renderPasses.retrieveGpuTime();
 		}
 		m_gpuTime += m_taskTimer.getElapsed();
 	}
@@ -766,8 +908,16 @@ namespace castor3d
 	void DebugOverlays::show( bool show )
 	{
 		m_visible = show;
-		m_debugPanel->setVisible( m_visible );
-		m_passesContainer->setVisible( m_visible );
+
+		if ( m_debugPanel )
+		{
+			m_debugPanel->setVisible( m_visible );
+		}
+
+		if ( m_passesContainer )
+		{
+			m_passesContainer->setVisible( m_visible );
+		}
 	}
 
 	void DebugOverlays::doCreateRenderPassesDebugPanel()
@@ -780,12 +930,16 @@ namespace castor3d
 			, nullptr
 			, castor::Position{ PassPanelLeft, 0 }
 		, castor::Size{ CategoryLineWidth, 600u } );
-		auto layout = castor::makeUniqueDerived< Layout, LayoutBox >( *m_passesContainer );
-		m_passesLayout = layout.get();
-		m_passesContainer->setLayout( std::move( layout ) );
+		m_passesContainer->setLayout( castor::makeUniqueDerived< Layout, LayoutBox >( *m_passesContainer ) );
 		manager.create( m_passesContainer );
 
 		m_passesContainer->setVisible( m_visible );
+
+		m_renderPasses = { "Render Passes"
+			, engine
+			, *m_passesContainer
+			, 0u
+			, true };
 	}
 
 	void DebugOverlays::doCreateMainDebugPanel()
@@ -860,13 +1014,9 @@ namespace castor3d
 		m_gpuClientTime = 0_ns;
 		{
 			auto lock( castor::makeUniqueLock( m_mutex ) );
-
-			for ( auto & pass : m_renderPasses )
-			{
-				pass.second.compute();
-				m_gpuTotalTime += pass.second.getGpuTime();
-				m_gpuClientTime += pass.second.getCpuTime();
-			}
+			m_renderPasses.compute();
+			m_gpuTotalTime += m_renderPasses.getGpuTime();
+			m_gpuClientTime += m_renderPasses.getCpuTime();
 		}
 	}
 
