@@ -214,9 +214,17 @@ namespace castor3d
 		/** Adds a control.
 		*\param[in] control
 		*	The control.
+		*\param[in] flags
+		*	The layout flags for the control.
 		*/
 		C3D_API void addControl( Control & control
 			, LayoutItemFlags flags = {} );
+
+		/** Removes a control.
+		*\param[in] control
+		*	The control.
+		*/
+		C3D_API void removeControl( Control & control );
 
 		/** Adds a space.
 		*\param[in] size

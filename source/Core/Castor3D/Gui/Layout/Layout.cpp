@@ -46,6 +46,25 @@ namespace castor3d
 		}
 	}
 
+	void Layout::removeControl( Control & control )
+	{
+		auto it = std::find_if( m_items.begin()
+			, m_items.end()
+			, [&control]( Item const & lookup )
+			{
+				return lookup.control() == &control;
+			} );
+
+		if ( it == m_items.end() )
+		{
+			log::warn << "Layout: The control [" << control.getName() << "] was not found in the layout." << std::endl;
+			return;
+		}
+
+		m_items.erase( it );
+		markDirty();
+	}
+
 	void Layout::addControl( Control & control
 		, LayoutItemFlags flags )
 	{

@@ -250,9 +250,8 @@ namespace castor3d
 			PassOverlays & operator=( PassOverlays && ) = delete;
 			PassOverlays( Engine & engine
 				, PanelCtrl & parent
-				, Layout & layout
-				, castor::String const & category
 				, castor::String const & name
+				, uint32_t leftOffset
 				, uint32_t index );
 			~PassOverlays();
 			void retrieveGpuTime();
@@ -277,6 +276,7 @@ namespace castor3d
 			}
 
 		private:
+			PanelCtrl * m_parent{};
 			castor::String m_name;
 			bool m_visible{ true };
 			std::map< FramePassTimer *, crg::OnFramePassDestroyConnection > m_timers;
@@ -287,6 +287,8 @@ namespace castor3d
 		};
 
 		using PassOverlaysPtr = std::unique_ptr< PassOverlays >;
+		class CategoryOverlays;
+		using CategoriesOverlays = std::vector< CategoryOverlays >;
 
 		class CategoryOverlays
 		{
@@ -307,46 +309,63 @@ namespace castor3d
 			CategoryOverlays( castor::String const & category
 				, Engine & engine
 				, PanelCtrl & parent
-				, Layout & layout );
+				, uint32_t leftOffset
+				, bool expanded = false );
 			~CategoryOverlays();
-			void addTimer( FramePassTimer & timer );
-			bool removeTimer( FramePassTimer & timer );
+			void addTimer( castor::String const & name
+				, castor::StringArray & categories
+				, FramePassTimer & timer );
+			bool removeTimer( castor::String const & name
+				, castor::StringArray & categories
+				, FramePassTimer & timer );
 			void retrieveGpuTime();
 			void compute();
 			void update( uint32_t & top );
 			void setVisible( bool visible );
+			PanelCtrl * getContainer()const;
+			void dumpFrameTimes( castor::String prefix
+				, Parameters & params )const;
 
-			uint32_t getPanelCount()const
-			{
-				return m_visibleCount;
-			}
-
-			castor::Nanoseconds getGpuTime()const
+			castor::Nanoseconds getGpuTime()const noexcept
 			{
 				return m_gpu.time;
 			}
 
-			castor::Nanoseconds getCpuTime()const
+			castor::Nanoseconds getCpuTime()const noexcept
 			{
 				return m_cpu.time;
 			}
 
+			auto & getName()const noexcept
+			{
+				return m_categoryName;
+			}
+
+			auto & getCategories()const noexcept
+			{
+				return m_categories;
+			}
+
+			auto & getCategories()noexcept
+			{
+				return m_categories;
+			}
+
 		private:
 			Engine * m_engine{};
+			PanelCtrl * m_parent{};
 			castor::String m_categoryName{};
+			uint32_t m_leftOffset{};
 			int m_posX{};
-			uint32_t m_visibleCount{};
 			bool m_visible{ true };
 			bool m_parentVisible{ true };
 			std::vector< PassOverlaysPtr > m_passes{};
+			CategoriesOverlays m_categories{};
 			ExpandablePanelCtrlSPtr m_container{};
-			LayoutRPtr m_layout{};
 			StaticCtrlSPtr m_name{};
 			TimeOverlays m_cpu{};
 			TimeOverlays m_gpu{};
 		};
-
-		using CategoryOverlaysArray = std::map< castor::String, CategoryOverlays >;
 
 	private:
 #if defined( NDEBUG )
@@ -361,18 +380,12 @@ namespace castor3d
 		static uint32_t constexpr DebugLineWidth = DebugLabelWidth + DebugValueWidth;
 		static uint32_t constexpr PassMainPanelLeft = 20u;
 		static uint32_t constexpr PassPanelLeft = DebugPanelWidth + 10u;
-		static uint32_t constexpr PassNameWidth = 230u;
 		static uint32_t constexpr CategoryNameWidth = 250u;
 		static uint32_t constexpr CpuNameWidth = 30u;
 		static uint32_t constexpr CpuValueWidth = 75u;
 		static uint32_t constexpr GpuNameWidth = 30u;
 		static uint32_t constexpr GpuValueWidth = 75u;
 		static uint32_t constexpr CategoryLineWidth = CategoryNameWidth
-			+ CpuNameWidth
-			+ CpuValueWidth
-			+ GpuNameWidth
-			+ GpuValueWidth;
-		static uint32_t constexpr PassLineWidth = PassNameWidth
 			+ CpuNameWidth
 			+ CpuValueWidth
 			+ GpuNameWidth
@@ -385,8 +398,7 @@ namespace castor3d
 		castor::PreciseTimer m_debugTimer{};
 		std::unique_ptr< MainDebugPanel > m_debugPanel;
 		PanelCtrlSPtr m_passesContainer;
-		LayoutRPtr m_passesLayout{};
-		CategoryOverlaysArray m_renderPasses;
+		CategoryOverlays m_renderPasses;
 		std::array< castor::Nanoseconds, FrameSamplesCount > m_framesTimes{};
 		uint32_t m_frameIndex{ 0 };
 		uint64_t m_frameCount{ 0 };
@@ -402,8 +414,6 @@ namespace castor3d
 		castor::Nanoseconds m_averageTime{ 0 };
 		std::locale m_timesLocale{};
 		RenderInfo m_renderInfo;
-		ashes::QueryPoolPtr m_queries;
-		uint32_t m_queriesCount{ 0u };
 		bool m_dirty{ false };
 	};
 }

@@ -466,7 +466,7 @@ namespace castor3d
 
 			if ( m_controlsById.find( control->getId() ) != m_controlsById.end() )
 			{
-				CU_Exception( "A control with this ID already exists in the manager" );
+				CU_Exception( "A control with ID " + castor::string::toString( control->getId() ) + " [" + control->getName() + "] already exists in the manager" );
 			}
 
 			m_controlsById.insert( std::make_pair( control->getId(), control ) );
