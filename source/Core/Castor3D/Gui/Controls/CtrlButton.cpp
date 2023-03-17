@@ -71,7 +71,7 @@ namespace castor3d
 				}
 			} ) }
 	{
-		setBackgroundBorderSize( castor::Point4ui{ 1, 1, 1, 1 } );
+		setBorderSize( castor::Point4ui{ 1, 1, 1, 1 } );
 		EventHandler::connect( MouseEventType::eEnter
 			, [this]( MouseEvent const & event )
 			{

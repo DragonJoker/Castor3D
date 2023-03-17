@@ -230,10 +230,7 @@ namespace castor3d
 			m_deferredRendering->update( updater );
 		}
 
-		if ( !m_visibilityResolveDesc )
-		{
-			//countNodes( *m_opaquePass, updater.info );
-		}
+		m_opaquePass->countNodes( updater.info );
 	}
 
 	void OpaqueRendering::accept( RenderTechniqueVisitor & visitor )

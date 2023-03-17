@@ -201,7 +201,7 @@ namespace castor3d
 		CU_Require( pass.commandBuffer );
 		CU_Require( m_renderNodes );
 		pass.commandBuffer->reset();
-		m_renderNodes->prepareCommandBuffers( m_viewport.value()
+		m_drawCalls = m_renderNodes->prepareCommandBuffers( m_viewport.value()
 			, m_scissor.value() );
 		getOwner()->reRecordCurrent();
 	}

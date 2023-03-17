@@ -17,9 +17,6 @@ namespace castor3d
 {
 	BorderPanelOverlay::BorderPanelOverlay()
 		: OverlayCategory( OverlayType::eBorderPanel )
-		, m_borderOuterUv( 0, 0, 1, 1 )
-		, m_borderInnerUv( 0.33, 0.33, 0.66, 0.66 )
-		, m_borderChanged( true )
 	{
 	}
 
@@ -48,16 +45,13 @@ namespace castor3d
 		m_borderMaterial = material;
 	}
 
-	castor::Rectangle BorderPanelOverlay::getAbsoluteBorderSize( castor::Size const & size )const
+	castor::Point4ui BorderPanelOverlay::getAbsoluteBorderSize( castor::Size const & size )const
 	{
 		auto absoluteSize = getAbsoluteBorderSize();
-
-		return castor::Rectangle(
-				   int32_t( absoluteSize->x * size->x ),
-				   int32_t( absoluteSize->y * size->y ),
-				   int32_t( absoluteSize->z * size->x ),
-				   int32_t( absoluteSize->w * size->y )
-			   );
+		return castor::Point4ui{ int32_t( absoluteSize->x * size->x )
+			, int32_t( absoluteSize->y * size->y )
+			, int32_t( absoluteSize->z * size->x )
+			, int32_t( absoluteSize->w * size->y ) };
 	}
 
 	castor::Point4d BorderPanelOverlay::getAbsoluteBorderSize()const

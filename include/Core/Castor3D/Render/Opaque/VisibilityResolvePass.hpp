@@ -60,15 +60,15 @@ namespace castor3d
 			, RenderNodesPassDesc const & renderPassDesc
 			, RenderTechniquePassDesc const & techniquePassDesc );
 		/**
-		 *\copydoc		castor3d::RenderTechniquePass::accept
+		 *\copydoc	castor3d::RenderTechniquePass::accept
 		 */
 		C3D_API void accept( RenderTechniqueVisitor & visitor )override;
 		/**
-		 *\copydoc		castor3d::RenderTechniquePass::update
+		 *\copydoc	castor3d::RenderTechniquePass::update
 		 */
 		C3D_API void update( CpuUpdater & updater )override;
 		/**
-		 *\copydoc		castor3d::RenderTechniquePass::createPipelineFlags
+		 *\copydoc	castor3d::RenderTechniquePass::createPipelineFlags
 		 */
 		C3D_API PipelineFlags createPipelineFlags( PassComponentCombine components
 			, BlendMode colourBlendMode
@@ -87,19 +87,23 @@ namespace castor3d
 			, uint32_t passLayerIndex
 			, GpuBufferOffsetT< castor::Point4f > const & morphTargets )const override;
 		/**
-		 *\copydoc	RenderNodesPass::areValidPassFlags
+		 *\copydoc	castor3d::RenderNodesPass::areValidPassFlags
 		 */
 		C3D_API bool areValidPassFlags( PassComponentCombine const & passFlags )const override;
 		/**
-		 *\copydoc		castor3d::RenderNodesPass::getShaderFlags
+		 *\copydoc	castor3d::RenderNodesPass::getShaderFlags
 		 */
 		C3D_API ShaderFlags getShaderFlags()const override;
 		/**
-		 *\copydoc	RenderNodesPass::isPassEnabled
+		 *\copydoc	castor3d::RenderNodesPass::countNodes
+		 */
+		C3D_API void countNodes( RenderInfo & info )const override;
+		/**
+		 *\copydoc	castor3d::RenderNodesPass::isPassEnabled
 		 */
 		C3D_API bool isPassEnabled()const override;
 		/**
-		 *\copydoc		castor3d::RenderNodesPass::getComponentsMask
+		 *\copydoc	castor3d::RenderNodesPass::getComponentsMask
 		 */
 		C3D_API static ComponentModeFlags getComponentsMask();
 

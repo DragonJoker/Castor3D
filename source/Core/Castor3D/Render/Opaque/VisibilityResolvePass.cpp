@@ -1723,6 +1723,11 @@ namespace castor3d
 			| ShaderFlag::eColour;
 	}
 
+	void VisibilityResolvePass::countNodes( RenderInfo & info )const
+	{
+		info.drawCalls += m_drawCalls;
+	}
+
 	bool VisibilityResolvePass::isPassEnabled()const
 	{
 		return m_nodesPass.isPassEnabled()
@@ -1763,6 +1768,7 @@ namespace castor3d
 	void VisibilityResolvePass::doRecordCompute( crg::RecordContext & context
 		, VkCommandBuffer commandBuffer )
 	{
+		m_drawCalls = {};
 		auto & opaqueResult = m_parent->getOpaqueResult();
 		auto size = uint32_t( m_parent->getMaterialsStarts().getCount() );
 		std::array< VkDescriptorSet, 3u > descriptorSets{ *m_inOutsDescriptorSet
@@ -1848,6 +1854,7 @@ namespace castor3d
 					, 0u
 					, nullptr );
 				context.getContext().vkCmdDispatch( commandBuffer, size / 64u, 1u, 1u );
+				++m_drawCalls;
 				first = false;
 			}
 		}
@@ -1880,6 +1887,7 @@ namespace castor3d
 					, 0u
 					, nullptr );
 				context.getContext().vkCmdDispatch( commandBuffer, size / 64u, 1u, 1u );
+				++m_drawCalls;
 				first = false;
 			}
 		}
@@ -1903,6 +1911,7 @@ namespace castor3d
 	void VisibilityResolvePass::doRecordGraphics( crg::RecordContext & context
 		, VkCommandBuffer commandBuffer )
 	{
+		m_drawCalls = {};
 		auto & opaqueResult = m_parent->getOpaqueResult();
 		std::array< VkDescriptorSet, 3u > descriptorSets{ *m_inOutsDescriptorSet
 			, VkDescriptorSet{}
@@ -1984,6 +1993,7 @@ namespace castor3d
 					, 0u
 					, nullptr );
 				context.getContext().vkCmdDraw( commandBuffer, 3u, 1u, 0u, 0u );
+				++m_drawCalls;
 
 				if ( first )
 				{
@@ -2014,6 +2024,7 @@ namespace castor3d
 					, 0u
 					, nullptr );
 				context.getContext().vkCmdDraw( commandBuffer, 3u, 1u, 0u, 0u );
+				++m_drawCalls;
 
 				if ( first )
 				{

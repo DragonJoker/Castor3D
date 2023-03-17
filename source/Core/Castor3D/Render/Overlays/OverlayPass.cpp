@@ -16,19 +16,18 @@ namespace castor3d
 {
 	namespace passovy
 	{
-		static uint32_t doParseOverlays( OverlayCache const & cache
+		static OverlaysCounts doParseOverlays( OverlayCache const & cache
 			, OverlayRenderer & renderer
 			, OverlayPreparer & preparer )
 		{
-			uint32_t result{};
+			OverlaysCounts result{};
 			auto lock( castor::makeUniqueLock( cache ) );
 			std::vector< OverlayCategory * > categories;
 			categories.reserve( cache.getCategories().size() );
 
 			for ( auto category : cache.getCategories() )
 			{
-				if ( category->getOverlay().isVisible()
-					&& category->getMaterial() )
+				if ( category->getOverlay().isVisible() )
 				{
 					categories.push_back( category.get() );
 
@@ -43,8 +42,10 @@ namespace castor3d
 			{
 				if ( category->getOverlay().isDisplayable() )
 				{
-					preparer.registerOverlay( category->getOverlay() );
-					++result;
+					auto counts = preparer.registerOverlay( category->getOverlay() );
+					result.drawCalls += counts.drawCalls;
+					result.overlays += counts.overlays;
+					result.quads += counts.quads;
 				}
 			}
 
@@ -91,28 +92,35 @@ namespace castor3d
 	{
 		resetCommandBuffer( 0u );
 		{
-			m_count = {};
+			m_counts = {};
 			auto preparer = m_renderer->beginPrepare( m_device
 				, m_renderPass.getRenderPass( 0u )
 				, m_renderPass.getFramebuffer( 0u ) );
+			preparer.setDrawCounts( m_counts.drawCalls );
 
 			if ( m_drawGlobal )
 			{
-				m_count += passovy::doParseOverlays( m_scene.getEngine()->getOverlayCache()
+				auto counts = passovy::doParseOverlays( m_scene.getEngine()->getOverlayCache()
 					, *m_renderer
 					, preparer );
+				m_counts.overlays += counts.overlays;
+				m_counts.quads += counts.quads;
 			}
 
-			m_count += passovy::doParseOverlays( m_scene.getOverlayCache()
+			auto counts = passovy::doParseOverlays( m_scene.getOverlayCache()
 				, *m_renderer
 				, preparer );
+			m_counts.overlays += counts.overlays;
+			m_counts.quads += counts.quads;
 		}
 		reRecordCurrent();
 	}
 
 	void OverlayPass::update( GpuUpdater & updater )
 	{
-		updater.info.visibleOverlayCount = m_count;
+		updater.info.visibleOverlaysCount = m_counts.overlays;
+		updater.info.visibleOverlayQuadsCount = m_counts.quads;
+		updater.info.drawCalls += m_counts.drawCalls;
 		m_renderer->update( updater );
 	}
 

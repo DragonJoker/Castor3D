@@ -97,26 +97,6 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void countNodes( RenderNodesPass const & renderPass
-		, RenderInfo & info )
-	{
-		for ( auto & node : renderPass.getCuller().getSubmeshes() )
-		{
-			if ( node.visibleOrFrontCulled )
-			{
-				++info.visibleObjectsCount;
-				info.visibleFaceCount += node.node->data.getFaceCount();
-				info.visibleVertexCount += node.node->data.getPointsCount();
-			}
-
-			++info.totalObjectsCount;
-			info.totalFaceCount += node.node->data.getFaceCount();
-			info.totalVertexCount += node.node->data.getPointsCount();
-		}
-	}
-
-	//*********************************************************************************************
-
 	RenderNodesPass::RenderNodesPass( crg::FramePass const & pass
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
@@ -174,6 +154,25 @@ namespace castor3d
 	void RenderNodesPass::setIgnoredNode( SceneNode const & node )
 	{
 		m_renderQueue->setIgnoredNode( node );
+	}
+
+	void RenderNodesPass::countNodes( RenderInfo & info )const
+	{
+		for ( auto & node : getCuller().getSubmeshes() )
+		{
+			if ( node.visibleOrFrontCulled )
+			{
+				++info.visibleObjectsCount;
+				info.visibleFaceCount += node.node->data.getFaceCount();
+				info.visibleVertexCount += node.node->data.getPointsCount();
+			}
+
+			++info.totalObjectsCount;
+			info.totalFaceCount += node.node->data.getFaceCount();
+			info.totalVertexCount += node.node->data.getPointsCount();
+		}
+
+		info.drawCalls += getDrawCallsCount();
 	}
 
 	void RenderNodesPass::update( CpuUpdater & updater )
@@ -610,6 +609,11 @@ namespace castor3d
 		}
 
 		return {};
+	}
+
+	uint32_t RenderNodesPass::getDrawCallsCount()const
+	{
+		return m_renderQueue->getDrawCallsCount();
 	}
 
 	void RenderNodesPass::initialiseAdditionalDescriptor( RenderPipeline & pipeline

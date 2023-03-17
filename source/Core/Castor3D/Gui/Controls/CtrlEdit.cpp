@@ -55,7 +55,7 @@ namespace castor3d
 		, m_caretIt{ m_caption.end() }
 		, m_active{ false }
 	{
-		setBackgroundBorderSize( castor::Point4ui{ 1, 1, 1, 1 } );
+		setBorderSize( castor::Point4ui{ 1, 1, 1, 1 } );
 		EventHandler::connect( KeyboardEventType::ePushed
 			, [this]( KeyboardEvent const & event )
 			{

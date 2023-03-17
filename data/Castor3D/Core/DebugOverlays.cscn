@@ -4,34 +4,31 @@ theme "Debug"
 {
 	panel_style "Main"
 	{
-		background_material "TransparentBlack"
-		border_material "TransparentBlack"
+		background_invisible true
+		foreground_invisible true
 
 		expandable_panel_style "Container"
 		{
 			background_material "AlphaDarkBlue"
-			border_material "AlphaDarkBlue"
+			foreground_invisible true
 
 			header_style
 			{
 				background_material "AlphaDarkBlue"
-				border_material "AlphaDarkBlue"
+				foreground_invisible true
 
 				static_style "Title"
 				{
-					background_material "TransparentBlack"
-					foreground_material "White"
-					border_material "White"
-					border_material "White"
+					background_invisible true
+					foreground_invisible true
 					text_material "White"
 				}
 			}
 
 			expand_style
 			{
-				background_material "TransparentBlack"
+				background_material "AlphaDarkBlue"
 				foreground_material "White"
-				border_material "White"
 				text_material "White"
 				highlighted_background_material "DarkBlue"
 				highlighted_foreground_material "White"
@@ -43,29 +40,25 @@ theme "Debug"
 
 			content_style
 			{
-				background_material "TransparentBlack"
-				border_material "TransparentBlack"
+				background_invisible true
+				foreground_invisible true
 
 				panel_style "Entry"
 				{
-					background_material "TransparentBlack"
-					border_material "TransparentBlack"
+					background_invisible true
+					foreground_invisible true
 
 					static_style "Label"
 					{
-						background_material "TransparentBlack"
-						foreground_material "White"
-						border_material "White"
-						border_material "White"
+						background_invisible true
+						foreground_invisible true
 						text_material "White"
 					}
 
 					static_style "Value"
 					{
-						background_material "TransparentBlack"
-						foreground_material "White"
-						border_material "White"
-						border_material "White"
+						background_invisible true
+						foreground_invisible true
 						text_material "White"
 					}
 				}
@@ -75,27 +68,25 @@ theme "Debug"
 
 	panel_style "RenderPasses"
 	{
-		background_material "TransparentBlack"
-		border_material "TransparentBlack"
+		background_invisible true
+		foreground_invisible true
 
 		panel_style "Pass"
 		{
-			background_material "TransparentBlack"
-			border_material "TransparentBlack"
+			background_invisible true
+			foreground_invisible true
 
 			static_style "Name"
 			{
-				background_material "TransparentBlack"
-				foreground_material "White"
-				border_material "White"
+				background_invisible true
+				foreground_invisible true
 				text_material "White"
 			}
 
 			static_style "Counter"
 			{
-				background_material "TransparentBlack"
-				foreground_material "White"
-				border_material "White"
+				background_invisible true
+				foreground_invisible true
 				text_material "White"
 				font "Arial10"
 			}
@@ -104,27 +95,24 @@ theme "Debug"
 		expandable_panel_style "Category"
 		{
 			background_material "AlphaDarkBlue"
-			border_material "AlphaDarkBlue"
+			foreground_invisible true
 
 			header_style
 			{
 				background_material "AlphaDarkBlue"
-				border_material "AlphaDarkBlue"
+				foreground_invisible true
 
 				static_style "Name"
 				{
-					background_material "TransparentBlack"
-					foreground_material "White"
-					border_material "White"
-					border_material "White"
+					background_invisible true
+					foreground_invisible true
 					text_material "White"
 				}
 
 				static_style "Counter"
 				{
-					background_material "TransparentBlack"
-					foreground_material "White"
-					border_material "White"
+					background_invisible true
+					foreground_invisible true
 					text_material "White"
 					font "Arial10"
 				}
@@ -132,9 +120,8 @@ theme "Debug"
 
 			expand_style
 			{
-				background_material "TransparentBlack"
+				background_material "AlphaDarkBlue"
 				foreground_material "White"
-				border_material "White"
 				text_material "White"
 				highlighted_background_material "DarkBlue"
 				highlighted_foreground_material "White"
@@ -146,8 +133,8 @@ theme "Debug"
 
 			content_style
 			{
-				background_material "TransparentBlack"
-				border_material "TransparentBlack"
+				background_invisible true
+				foreground_invisible true
 			}
 		}
 	}

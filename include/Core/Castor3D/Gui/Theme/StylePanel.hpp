@@ -203,7 +203,6 @@ namespace castor3d
 		{
 		}
 
-
 	private:
 		void doUpdateBackgroundMaterial()override
 		{

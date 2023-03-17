@@ -780,21 +780,24 @@ namespace CastorViewer
 
 					if ( frame.count() >= m_timer->GetInterval() )
 					{
-						if ( m_count++ >= 100 )
+						m_minCount = 0u;
+
+						if ( m_maxCount++ >= 100 )
 						{
-							m_count = 0;
+							m_maxCount = 0;
 							m_timer->Stop();
 							m_timer->Start( m_timer->GetInterval() * 2 );
 						}
 					}
-					else
+					else if ( frame.count() < m_timer->GetInterval() / 2 )
 					{
-						m_count = 0;
+						m_maxCount = 0u;
 
-						if ( frame < wanted )
+						if ( m_minCount++ >= 100 )
 						{
+							m_minCount = 0;
 							m_timer->Stop();
-							m_timer->Start( int( wanted.count() ) );
+							m_timer->Start( m_timer->GetInterval() / 2 );
 						}
 					}
 				}

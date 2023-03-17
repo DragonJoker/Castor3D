@@ -157,7 +157,7 @@ namespace castor3d
 		auto & style = getStyle();
 		CU_Require( getControlsManager() );
 		auto & manager = *getControlsManager();
-		setBackgroundBorderSize( castor::Point4ui( 1, 1, 1, 1 ) );
+		setBorderSize( castor::Point4ui( 1, 1, 1, 1 ) );
 
 		m_expand->setPosition( castor::Position( int32_t( getSize().getWidth() - getSize().getHeight() ), 0 ) );
 		m_expand->setSize( castor::Size( getSize().getHeight(), getSize().getHeight() ) );

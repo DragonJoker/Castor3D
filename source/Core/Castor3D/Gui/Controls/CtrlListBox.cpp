@@ -62,7 +62,7 @@ namespace castor3d
 		, m_values{ values }
 		, m_selected{ selected }
 	{
-		setBackgroundBorderSize( castor::Point4ui{ 1, 1, 1, 1 } );
+		setBorderSize( castor::Point4ui{ 1, 1, 1, 1 } );
 		setStyle( style );
 	}
 
@@ -277,7 +277,7 @@ namespace castor3d
 
 	void ListBoxCtrl::doCreate()
 	{
-		setBackgroundBorderSize( castor::Point4ui{ 1, 1, 1, 1 } );
+		setBorderSize( castor::Point4ui{ 1, 1, 1, 1 } );
 		setSize( castor::Size( getSize().getWidth(), uint32_t( m_values.size() * DefaultHeight ) ) );
 
 		EventHandler::connect( KeyboardEventType::ePushed

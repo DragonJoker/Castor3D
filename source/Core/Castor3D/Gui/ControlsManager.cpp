@@ -78,9 +78,12 @@ namespace castor3d
 			, castor::ParserFunction endFunction )
 		{
 			using namespace castor;
+			addParser( parsers, section, cuT( "background_invisible" ), &parserStyleBackgroundInvisible, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
+			addParser( parsers, section, cuT( "foreground_invisible" ), &parserStyleForegroundInvisible, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
+			addParser( parsers, section, cuT( "border_invisible" ), &parserStyleForegroundInvisible, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
 			addParser( parsers, section, cuT( "background_material" ), &parserStyleBackgroundMaterial, { makeParameter< ParameterType::eName >() } );
 			addParser( parsers, section, cuT( "foreground_material" ), &parserStyleForegroundMaterial, { makeParameter< ParameterType::eName >() } );
-			addParser( parsers, section, cuT( "border_material" ), &parserStyleBorderMaterial, { makeParameter< ParameterType::eName >() } );
+			addParser( parsers, section, cuT( "border_material" ), &parserStyleForegroundMaterial, { makeParameter< ParameterType::eName >() } );
 			addParser( parsers, section, cuT( "}" ), endFunction );
 		}
 
@@ -245,9 +248,7 @@ namespace castor3d
 			createDefaultLayoutParsers( result, uint32_t( GUISection::ePanel ) );
 
 			createStylesParsers( result, uint32_t( GUISection::ePanelStyle ) );
-			addParser( result, uint32_t( GUISection::ePanelStyle ), cuT( "background_material" ), &parserStyleBackgroundMaterial, { makeParameter< ParameterType::eName >() } );
-			addParser( result, uint32_t( GUISection::ePanelStyle ), cuT( "border_material" ), &parserStyleBorderMaterial, { makeParameter< ParameterType::eName >() } );
-			addParser( result, uint32_t( GUISection::ePanelStyle ), cuT( "}" ), &parserStylePanelEnd );
+			createDefaultStyleParsers( result, uint32_t( GUISection::ePanelStyle ), &parserStylePanelEnd );
 		}
 
 		static void createExpandablePanelParsers( castor::AttributeParsers & result )
@@ -265,12 +266,10 @@ namespace castor3d
 			addParser( result, uint32_t( GUISection::eExpandablePanel ), cuT( "expand_caption" ), &parserExpandablePanelExpandCaption );
 			addParser( result, uint32_t( GUISection::eExpandablePanel ), cuT( "retract_caption" ), &parserExpandablePanelRetractCaption );
 
-			addParser( result, uint32_t( GUISection::eExpandablePanelStyle ), cuT( "background_material" ), &parserStyleBackgroundMaterial, { makeParameter< ParameterType::eName >() } );
-			addParser( result, uint32_t( GUISection::eExpandablePanelStyle ), cuT( "border_material" ), &parserStyleBorderMaterial, { makeParameter< ParameterType::eName >() } );
+			createDefaultStyleParsers( result, uint32_t( GUISection::eExpandablePanelStyle ), &parserStyleExpandablePanelEnd );
 			addParser( result, uint32_t( GUISection::eExpandablePanelStyle ), cuT( "header_style" ), &parserStyleExpandablePanelHeader );
 			addParser( result, uint32_t( GUISection::eExpandablePanelStyle ), cuT( "expand_style" ), &parserStyleExpandablePanelExpand );
 			addParser( result, uint32_t( GUISection::eExpandablePanelStyle ), cuT( "content_style" ), &parserStyleExpandablePanelPanel );
-			addParser( result, uint32_t( GUISection::eExpandablePanelStyle ), cuT( "}" ), &parserStyleExpandablePanelEnd );
 		}
 
 		static void createExpandablePanelHeaderParsers( castor::AttributeParsers & result )
@@ -832,6 +831,8 @@ namespace castor3d
 		std::vector< Control * > result;
 		std::vector< Control * > top;
 		auto controls = doGetRootControls();
+		result.reserve( controls.size() );
+		top.reserve( controls.size() );
 		uint32_t index{};
 
 		for ( auto control : controls )
@@ -840,6 +841,11 @@ namespace castor3d
 			{
 				control->updateZIndex( index, result, top );
 			}
+		}
+
+		for ( auto control : top )
+		{
+			control->adjustZIndex( index );
 		}
 
 		result.insert( result.end()
