@@ -310,7 +310,7 @@ namespace castor3d
 		 *\param[in]	timer		Le timer à enregistrer.
 		 *\return		L'ID de la requête.
 		 */
-		C3D_API uint32_t registerTimer( castor::String const & category
+		C3D_API void registerTimer( castor::String const & category
 			, FramePassTimer & timer );
 		/**
 		 *\~english
