@@ -347,9 +347,8 @@ namespace castor3d
 		}
 
 		template< typename StyleT >
-		StyleT * getControlStyle( castor::String const & name
-			, std::map< castor::String, ThemeUPtr > const & themes
-			, StylesHolder const & styles )
+		StyleT * getThemeStyle( castor::String const & name
+			, std::map< castor::String, ThemeUPtr > const & themes )
 		{
 			StyleT * style{};
 			auto themeIt = std::find_if( themes.begin()
@@ -363,12 +362,6 @@ namespace castor3d
 
 					return style != nullptr;
 				} );
-
-			if ( !style || themeIt == themes.end() )
-			{
-				style = styles.template getStyle< StyleT >( name );
-			}
-
 			return style;
 		}
 	}
@@ -408,42 +401,82 @@ namespace castor3d
 
 	ButtonStyleRPtr ControlsManager::getButtonStyle( castor::String const & name )const
 	{
-		return ctrlmgr::getControlStyle< ButtonStyle >( name, m_themes, static_cast< StylesHolder const & >( *this ) );
+		if ( auto style = ctrlmgr::getThemeStyle< ButtonStyle >( name, m_themes ) )
+		{
+			return style;
+		}
+
+		return StylesHolder::getButtonStyle( name );
 	}
 
 	ComboBoxStyleRPtr ControlsManager::getComboBoxStyle( castor::String const & name )const
 	{
-		return ctrlmgr::getControlStyle< ComboBoxStyle >( name, m_themes, static_cast< StylesHolder const & >( *this ) );
+		if ( auto style = ctrlmgr::getThemeStyle< ComboBoxStyle >( name, m_themes ) )
+		{
+			return style;
+		}
+
+		return StylesHolder::getComboBoxStyle( name );
 	}
 
 	EditStyleRPtr ControlsManager::getEditStyle( castor::String const & name )const
 	{
-		return ctrlmgr::getControlStyle< EditStyle >( name, m_themes, static_cast< StylesHolder const & >( *this ) );
+		if ( auto style = ctrlmgr::getThemeStyle< EditStyle >( name, m_themes ) )
+		{
+			return style;
+		}
+
+		return StylesHolder::getEditStyle( name );
 	}
 
 	ExpandablePanelStyleRPtr ControlsManager::getExpandablePanelStyle( castor::String const & name )const
 	{
-		return ctrlmgr::getControlStyle< ExpandablePanelStyle >( name, m_themes, static_cast< StylesHolder const & >( *this ) );
+		if ( auto style = ctrlmgr::getThemeStyle< ExpandablePanelStyle >( name, m_themes ) )
+		{
+			return style;
+		}
+
+		return StylesHolder::getExpandablePanelStyle( name );
 	}
 
 	ListBoxStyleRPtr ControlsManager::getListBoxStyle( castor::String const & name )const
 	{
-		return ctrlmgr::getControlStyle< ListBoxStyle >( name, m_themes, static_cast< StylesHolder const & >( *this ) );
+		if ( auto style = ctrlmgr::getThemeStyle< ListBoxStyle >( name, m_themes ) )
+		{
+			return style;
+		}
+
+		return StylesHolder::getListBoxStyle( name );
 	}
 
 	PanelStyleRPtr ControlsManager::getPanelStyle( castor::String const & name )const
 	{
-		return ctrlmgr::getControlStyle< PanelStyle >( name, m_themes, static_cast< StylesHolder const & >( *this ) );
+		if ( auto style = ctrlmgr::getThemeStyle< PanelStyle >( name, m_themes ) )
+		{
+			return style;
+		}
+
+		return StylesHolder::getPanelStyle( name );
 	}
 
 	SliderStyleRPtr ControlsManager::getSliderStyle( castor::String const & name )const
 	{
-		return ctrlmgr::getControlStyle< SliderStyle >( name, m_themes, static_cast< StylesHolder const & >( *this ) );
+		if ( auto style = ctrlmgr::getThemeStyle< SliderStyle >( name, m_themes ) )
+		{
+			return style;
+		}
+
+		return StylesHolder::getSliderStyle( name );
 	}
 
 	StaticStyleRPtr ControlsManager::getStaticStyle( castor::String const & name )const
 	{
-		return ctrlmgr::getControlStyle< StaticStyle >( name, m_themes, static_cast< StylesHolder const & >( *this ) );
+		if ( auto style = ctrlmgr::getThemeStyle< StaticStyle >( name, m_themes ) )
+		{
+			return style;
+		}
+
+		return StylesHolder::getStaticStyle( name );
 	}
 
 	void ControlsManager::create( ControlSPtr control )
