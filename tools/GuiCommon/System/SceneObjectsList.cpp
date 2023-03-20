@@ -42,6 +42,7 @@
 #include <Castor3D/Gui/ControlsManager.hpp>
 #include <Castor3D/Gui/Controls/CtrlExpandablePanel.hpp>
 #include <Castor3D/Gui/Controls/CtrlPanel.hpp>
+#include <Castor3D/Gui/Theme/StylesHolder.hpp>
 #include <Castor3D/Material/Material.hpp>
 #include <Castor3D/Model/Mesh/Mesh.hpp>
 #include <Castor3D/Model/Skeleton/BoneNode.hpp>
@@ -687,11 +688,19 @@ namespace GuiCommon
 			, eBMP_STYLE_SEL
 			, new StyleTreeItemProperty{ m_propertiesHolder->isEditable(), style } );
 
-		if ( style.getType() == castor3d::ControlType::ePanel )
+		if ( isStylesHolder( style ) )
 		{
-			doAddStyles( parentId
-				, static_cast< castor3d::PanelStyle & >( style )
-				, scene );
+			castor3d::StylesHolder * holder{};
+
+			if ( style.getType() == castor3d::ControlType::ePanel )
+			{
+				holder = &static_cast< castor3d::PanelStyle & >( style );
+			}
+
+			if ( holder )
+			{
+				doAddStyles( parentId, *holder, scene );
+			}
 		}
 		else if ( style.getType() == castor3d::ControlType::eExpandablePanel )
 		{
@@ -733,15 +742,15 @@ namespace GuiCommon
 			, eBMP_CONTROL_SEL
 			, new ControlTreeItemProperty{ m_propertiesHolder->isEditable(), control, full, inLayout } );
 
-		if ( control.getType() == castor3d::ControlType::ePanel )
+		if ( isLayoutControl( control ) )
 		{
-			auto & panel = static_cast< castor3d::PanelCtrl & >( control );
+			auto & layout = static_cast< castor3d::LayoutControl & >( control );
 
-			for ( auto & sub : panel.getChildren() )
+			for ( auto & sub : layout.getChildren() )
 			{
 				if ( auto ctrl = sub.lock() )
 				{
-					doAddControl( parentId, ctrl->getName(), *ctrl, true, panel.getLayout() != nullptr );
+					doAddControl( parentId, ctrl->getName(), *ctrl, true, layout.getLayout() != nullptr );
 				}
 			}
 		}

@@ -17,6 +17,20 @@ CU_ImplementCUSmartPtr( castor3d, LayoutControl )
 
 namespace castor3d
 {
+	//************************************************************************************************
+
+	bool isLayoutControl( ControlType type )
+	{
+		return type == ControlType::ePanel;
+	}
+
+	bool isLayoutControl( Control const & control )
+	{
+		return isLayoutControl( control.getType() );
+	}
+
+	//************************************************************************************************
+
 	LayoutControl::LayoutControl( ControlType type
 		, SceneRPtr scene
 		, castor::String const & name
@@ -92,4 +106,6 @@ namespace castor3d
 
 		doSubSetVisible( value );
 	}
+
+	//************************************************************************************************
 }

@@ -1,10 +1,26 @@
 /*
 See LICENSE file in root folder
 */
+#include "Castor3D/Gui/Theme/StylesHolder.hpp"
+
 #include "Castor3D/Gui/Theme/Theme.hpp"
 
 namespace castor3d
 {
+	//************************************************************************************************
+
+	bool isStylesHolder( ControlType type )
+	{
+		return type == ControlType::ePanel;
+	}
+
+	bool isStylesHolder( ControlStyle const & style )
+	{
+		return isStylesHolder( style.getType() );
+	}
+
+	//************************************************************************************************
+
 	ButtonStyleRPtr StylesHolder::createButtonStyle( castor::String name
 		, Scene * scene )
 	{
@@ -92,4 +108,6 @@ namespace castor3d
 	{
 		return getControlStyle( name, m_expandablePanelStyles );
 	}
+
+	//************************************************************************************************
 }
