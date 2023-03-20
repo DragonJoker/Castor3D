@@ -33,6 +33,7 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextCtrlControl.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextCtrlEdit.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextCtrlExpandablePanel.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextCtrlFrame.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextCtrlLayoutControl.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextCtrlListBox.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextCtrlPanel.cpp
@@ -85,6 +86,7 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextCtrlControl.hpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextCtrlEdit.hpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextCtrlExpandablePanel.hpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextCtrlFrame.hpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextCtrlLayoutControl.hpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextCtrlListBox.hpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextCtrlPanel.hpp

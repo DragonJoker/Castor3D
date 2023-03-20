@@ -5,6 +5,7 @@
 #include "TextCtrlComboBox.hpp"
 #include "TextCtrlEdit.hpp"
 #include "TextCtrlExpandablePanel.hpp"
+#include "TextCtrlFrame.hpp"
 #include "TextCtrlListBox.hpp"
 #include "TextCtrlPanel.hpp"
 #include "TextCtrlSlider.hpp"
@@ -15,6 +16,7 @@
 #include <Castor3D/Gui/Controls/CtrlComboBox.hpp>
 #include <Castor3D/Gui/Controls/CtrlEdit.hpp>
 #include <Castor3D/Gui/Controls/CtrlExpandablePanel.hpp>
+#include <Castor3D/Gui/Controls/CtrlFrame.hpp>
 #include <Castor3D/Gui/Controls/CtrlListBox.hpp>
 #include <Castor3D/Gui/Controls/CtrlPanel.hpp>
 #include <Castor3D/Gui/Controls/CtrlSlider.hpp>
@@ -129,6 +131,12 @@ namespace castor
 			if ( auto block{ writer.beginBlock( file, cuT( "expandable_panel" ), name ) } )
 			{
 				result = writer.writeSub( file, static_cast< ExpandablePanelCtrl const & >( control ) );
+			}
+			break;
+		case ControlType::eFrame:
+			if ( auto block{ writer.beginBlock( file, cuT( "frame" ), name ) } )
+			{
+				result = writer.writeSub( file, static_cast< FrameCtrl const & >( control ) );
 			}
 			break;
 		default:

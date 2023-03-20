@@ -8,6 +8,7 @@ See LICENSE file in root folder
 #include "StyleComboBox.hpp"
 #include "StyleEdit.hpp"
 #include "StyleExpandablePanel.hpp"
+#include "StyleFrame.hpp"
 #include "StyleListBox.hpp"
 #include "StylePanel.hpp"
 #include "StyleSlider.hpp"

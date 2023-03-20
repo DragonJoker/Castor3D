@@ -12,6 +12,7 @@
 #include <Castor3D/Gui/Controls/CtrlComboBox.hpp>
 #include <Castor3D/Gui/Controls/CtrlEdit.hpp>
 #include <Castor3D/Gui/Controls/CtrlExpandablePanel.hpp>
+#include <Castor3D/Gui/Controls/CtrlFrame.hpp>
 #include <Castor3D/Gui/Controls/CtrlListBox.hpp>
 #include <Castor3D/Gui/Controls/CtrlPanel.hpp>
 #include <Castor3D/Gui/Controls/CtrlSlider.hpp>
@@ -87,6 +88,9 @@ namespace GuiCommon
 		case castor3d::ControlType::eExpandablePanel:
 			doCreateControlProperties( grid, static_cast< castor3d::ExpandablePanelCtrl & >( control ) );
 			break;
+		case castor3d::ControlType::eFrame:
+			doCreateControlProperties( grid, static_cast< castor3d::FrameCtrl & >( control ) );
+			break;
 		default:
 			CU_Failure( "Unsupported ControlType" );
 			break;
@@ -134,6 +138,26 @@ namespace GuiCommon
 
 		addPropertyT( grid, PROPERTY_EXPAND_CAPTION, control.getExpandCaption(), &control, &castor3d::ExpandablePanelCtrl::setExpandCaption );
 		addPropertyT( grid, PROPERTY_RETRACT_CAPTION, control.getRetractCaption(), &control, &castor3d::ExpandablePanelCtrl::setRetractCaption );
+	}
+
+	void ControlTreeItemProperty::doCreateControlProperties( wxPropertyGrid * grid
+		, castor3d::FrameCtrl & control )
+	{
+		static wxString PROPERTY_CAPTION = _( "Caption" );
+
+		static wxString PROPERTY_HALIGN = _( "Horiz. align." );
+		static std::array< wxString, size_t( castor3d::HAlign::eCount ) > PROPERTY_HALIGN_TEXTS{ _( "Left" ), _( "Center" ), _( "Right" ) };
+		static wxString PROPERTY_VALIGN = _( "Vertic. align." );
+		static std::array< wxString, size_t( castor3d::VAlign::eCount ) > PROPERTY_VALIGN_TEXTS{ _( "Top" ), _( "Center" ), _( "Bottom" ) };
+
+		wxArrayString haligns{ make_wxArrayString( PROPERTY_HALIGN_TEXTS ) };
+		wxString halign{ PROPERTY_HALIGN_TEXTS[size_t( control.getHeaderHAlign() )] };
+		wxArrayString valigns{ make_wxArrayString( PROPERTY_VALIGN_TEXTS ) };
+		wxString valign{ PROPERTY_VALIGN_TEXTS[size_t( control.getHeaderVAlign() )] };
+
+		addPropertyT( grid, PROPERTY_CAPTION, control.getHeaderCaption(), &control, &castor3d::FrameCtrl::setHeaderCaption );
+		addPropertyET( grid, PROPERTY_HALIGN, haligns, control.getHeaderHAlign(), &control, &castor3d::FrameCtrl::setHeaderHAlign );
+		addPropertyET( grid, PROPERTY_VALIGN, valigns, control.getHeaderVAlign(), &control, &castor3d::FrameCtrl::setHeaderVAlign );
 	}
 
 	void ControlTreeItemProperty::doCreateControlProperties( wxPropertyGrid * grid

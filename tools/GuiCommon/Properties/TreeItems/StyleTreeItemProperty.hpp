@@ -43,6 +43,7 @@ namespace GuiCommon
 		void doCreateStyleProperties( wxPropertyGrid * grid, castor3d::ComboBoxStyle & object );
 		void doCreateStyleProperties( wxPropertyGrid * grid, castor3d::EditStyle & object );
 		void doCreateStyleProperties( wxPropertyGrid * grid, castor3d::ExpandablePanelStyle & object );
+		void doCreateStyleProperties( wxPropertyGrid * grid, castor3d::FrameStyle & object );
 		void doCreateStyleProperties( wxPropertyGrid * grid, castor3d::ListBoxStyle & object );
 		void doCreateStyleProperties( wxPropertyGrid * grid, castor3d::PanelStyle & object );
 		void doCreateStyleProperties( wxPropertyGrid * grid, castor3d::SliderStyle & object );

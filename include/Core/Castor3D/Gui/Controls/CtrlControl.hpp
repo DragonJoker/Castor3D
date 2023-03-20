@@ -99,6 +99,14 @@ namespace castor3d
 		 */
 		C3D_API bool isVisible()const;
 
+		/** Retrieves the background invisibility status.
+		 *\return		\p true if the background is invisible, making the control not targetable (but it's children still are).
+		 */
+		C3D_API bool isBackgroundInvisible()const
+		{
+			return m_style->isBackgroundInvisible();
+		}
+
 		/** Retrieves a control.
 		 *\param[in]	id		The control ID.
 		 */
@@ -371,7 +379,7 @@ namespace castor3d
 		/** Sets the background borders size.
 		 *\param[in]	value		The new value.
 		 */
-		virtual void doSetBackgroundBorders( castor::Point4ui const & value ) {}
+		virtual void doSetBorderSize( castor::Point4ui const & value ) {}
 
 		/** Sets the position
 		*\param[in]	value		The new value
@@ -490,31 +498,31 @@ namespace castor3d
 	protected:
 		SceneRPtr m_scene{};
 		//! The parent control, if any
-		ControlRPtr m_parent;
+		ControlRPtr m_parent{};
 		//! The cursor when mouse is over this control
-		MouseCursor m_cursor;
+		MouseCursor m_cursor{};
 		//! The background material
 		MaterialRPtr m_backgroundMaterial{};
 		//! The foreground material
 		MaterialRPtr m_foregroundMaterial{};
 		//! The control flgas.
-		ControlFlagType m_flags;
+		ControlFlagType m_flags{};
 
 	private:
 		const ControlID m_id;
 		const ControlType m_type;
-		ControlStyleRPtr m_style;
-		castor::Position m_position;
-		castor::Size m_size;
-		castor::Point4ui m_borders;
-		BorderPanelOverlayWPtr m_background;
-		std::vector< ControlWPtr > m_children;
-		ControlsManagerWPtr m_ctrlManager;
+		ControlStyleRPtr m_style{};
+		castor::Position m_position{};
+		castor::Size m_size{};
+		castor::Point4ui m_borders{};
+		BorderPanelOverlayWPtr m_background{};
+		std::vector< ControlWPtr > m_children{};
+		ControlsManagerWPtr m_ctrlManager{};
 		bool m_moving{};
-		std::array< bool, 4u > m_resizing;
-		castor::Position m_mouseStartMousePosition;
-		castor::Position m_mouseStartPosition;
-		castor::Size m_mouseStartSize;
+		std::array< bool, 4u > m_resizing{};
+		castor::Position m_mouseStartMousePosition{};
+		castor::Position m_mouseStartPosition{};
+		castor::Size m_mouseStartSize{};
 	};
 }
 

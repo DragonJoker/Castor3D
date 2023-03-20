@@ -5,6 +5,7 @@
 #include "TextCtrlControl.hpp"
 #include "TextCtrlEdit.hpp"
 #include "TextCtrlExpandablePanel.hpp"
+#include "TextCtrlFrame.hpp"
 #include "TextCtrlListBox.hpp"
 #include "TextCtrlPanel.hpp"
 #include "TextCtrlSlider.hpp"
@@ -103,6 +104,7 @@ namespace castor
 			&& stlhdrwrtr::write( *this, m_scene, style.getComboBoxStyles(), "combobox_style", file, fontName )
 			&& stlhdrwrtr::write( *this, m_scene, style.getEditStyles(), "edit_style", file, fontName )
 			&& stlhdrwrtr::write( *this, m_scene, style.getExpandablePanelStyles(), "expandable_panel_style", file, fontName )
+			&& stlhdrwrtr::write( *this, m_scene, style.getFrameStyles(), "frame_style", file, fontName )
 			&& stlhdrwrtr::write( *this, m_scene, style.getListBoxStyles(), "listbox_style", file, fontName )
 			&& stlhdrwrtr::write( *this, m_scene, style.getPanelStyles(), "panel_style", file, fontName )
 			&& stlhdrwrtr::write( *this, m_scene, style.getSliderStyles(), "slider_style", file, fontName )

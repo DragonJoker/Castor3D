@@ -50,7 +50,8 @@ namespace castor3d
 		/** Sets the background borders size.
 		 *\param[in]	value		The new value.
 		 */
-		void doSetBackgroundBorders( castor::Point4ui const & value )final override;
+		void doSetBorderSize( castor::Point4ui const & value )final override;
+
 		/** Sets the position
 		*\param[in]	value		The new value
 		*/
@@ -75,7 +76,7 @@ namespace castor3d
 		/** Sets the background borders size.
 		 *\param[in]	value		The new value.
 		 */
-		virtual void doSubSetBackgroundBorders( castor::Point4ui const & value ) {}
+		virtual void doSubSetBorderSize( castor::Point4ui const & value ) {}
 		/** Sets the position
 		*\param[in]	value		The new value
 		*/

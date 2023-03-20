@@ -53,25 +53,28 @@ namespace castor3d
 			, Scene * scene );
 		C3D_API EditStyleRPtr createEditStyle( castor::String name
 			, Scene * scene );
+		C3D_API ExpandablePanelStyleRPtr createExpandablePanelStyle( castor::String name
+			, Scene * scene );
+		C3D_API FrameStyleRPtr createFrameStyle( castor::String name
+			, Scene * scene );
 		C3D_API ListBoxStyleRPtr createListBoxStyle( castor::String name
+			, Scene * scene );
+		C3D_API PanelStyleRPtr createPanelStyle( castor::String name
 			, Scene * scene );
 		C3D_API SliderStyleRPtr createSliderStyle( castor::String name
 			, Scene * scene );
 		C3D_API StaticStyleRPtr createStaticStyle( castor::String name
 			, Scene * scene );
-		C3D_API PanelStyleRPtr createPanelStyle( castor::String name
-			, Scene * scene );
-		C3D_API ExpandablePanelStyleRPtr createExpandablePanelStyle( castor::String name
-			, Scene * scene );
 
 		C3D_API virtual ButtonStyleRPtr getButtonStyle( castor::String const & name )const;
 		C3D_API virtual ComboBoxStyleRPtr getComboBoxStyle( castor::String const & name )const;
 		C3D_API virtual EditStyleRPtr getEditStyle( castor::String const & name )const;
+		C3D_API virtual ExpandablePanelStyleRPtr getExpandablePanelStyle( castor::String const & name )const;
+		C3D_API virtual FrameStyleRPtr getFrameStyle( castor::String const & name )const;
 		C3D_API virtual ListBoxStyleRPtr getListBoxStyle( castor::String const & name )const;
+		C3D_API virtual PanelStyleRPtr getPanelStyle( castor::String const & name )const;
 		C3D_API virtual SliderStyleRPtr getSliderStyle( castor::String const & name )const;
 		C3D_API virtual StaticStyleRPtr getStaticStyle( castor::String const & name )const;
-		C3D_API virtual PanelStyleRPtr getPanelStyle( castor::String const & name )const;
-		C3D_API virtual ExpandablePanelStyleRPtr getExpandablePanelStyle( castor::String const & name )const;
 
 		template< typename StyleT >
 		StyleT * getStyle( castor::String const & name )const
@@ -88,9 +91,21 @@ namespace castor3d
 			{
 				return getEditStyle( name );
 			}
+			else if constexpr ( std::is_same_v< StyleT, ExpandablePanelStyle > )
+			{
+				return getExpandablePanelStyle( name );
+			}
+			else if constexpr ( std::is_same_v< StyleT, FrameStyle > )
+			{
+				return getFrameStyle( name );
+			}
 			else if constexpr ( std::is_same_v< StyleT, ListBoxStyle > )
 			{
 				return getListBoxStyle( name );
+			}
+			else if constexpr ( std::is_same_v< StyleT, PanelStyle > )
+			{
+				return getPanelStyle( name );
 			}
 			else if constexpr ( std::is_same_v< StyleT, SliderStyle > )
 			{
@@ -99,14 +114,6 @@ namespace castor3d
 			else if constexpr ( std::is_same_v< StyleT, StaticStyle > )
 			{
 				return getStaticStyle( name );
-			}
-			else if constexpr ( std::is_same_v< StyleT, PanelStyle > )
-			{
-				return getPanelStyle( name );
-			}
-			else if constexpr ( std::is_same_v< StyleT, ExpandablePanelStyle > )
-			{
-				return getExpandablePanelStyle( name );
 			}
 			else
 			{
@@ -130,9 +137,24 @@ namespace castor3d
 			return m_editStyles;
 		}
 
+		auto & getExpandablePanelStyles()const noexcept
+		{
+			return m_expandablePanelStyles;
+		}
+
+		auto & getFrameStyles()const noexcept
+		{
+			return m_frameStyles;
+		}
+
 		auto & getListBoxStyles()const noexcept
 		{
 			return m_listBoxStyles;
+		}
+
+		auto & getPanelStyles()const noexcept
+		{
+			return m_panelStyles;
 		}
 
 		auto & getSliderStyles()const noexcept
@@ -143,16 +165,6 @@ namespace castor3d
 		auto & getStaticStyles()const noexcept
 		{
 			return m_staticStyles;
-		}
-
-		auto & getPanelStyles()const noexcept
-		{
-			return m_panelStyles;
-		}
-
-		auto & getExpandablePanelStyles()const noexcept
-		{
-			return m_expandablePanelStyles;
 		}
 
 	protected:
@@ -178,11 +190,12 @@ namespace castor3d
 		std::map< castor::String, ButtonStyleUPtr > m_buttonStyles;
 		std::map< castor::String, ComboBoxStyleUPtr > m_comboBoxStyles;
 		std::map< castor::String, EditStyleUPtr > m_editStyles;
+		std::map< castor::String, ExpandablePanelStyleUPtr > m_expandablePanelStyles;
+		std::map< castor::String, FrameStyleUPtr > m_frameStyles;
 		std::map< castor::String, ListBoxStyleUPtr > m_listBoxStyles;
+		std::map< castor::String, PanelStyleUPtr > m_panelStyles;
 		std::map< castor::String, SliderStyleUPtr > m_sliderStyles;
 		std::map< castor::String, StaticStyleUPtr > m_staticStyles;
-		std::map< castor::String, PanelStyleUPtr > m_panelStyles;
-		std::map< castor::String, ExpandablePanelStyleUPtr > m_expandablePanelStyles;
 	};
 }
 

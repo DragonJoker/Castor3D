@@ -57,14 +57,14 @@ namespace castor3d
 		m_layout = std::move( layout );
 	}
 
-	void LayoutControl::doSetBackgroundBorders( castor::Point4ui const & value )
+	void LayoutControl::doSetBorderSize( castor::Point4ui const & value )
 	{
 		if ( m_layout )
 		{
 			m_layout->markDirty();
 		}
 
-		doSubSetBackgroundBorders( value );
+		doSubSetBorderSize( value );
 	}
 
 	void LayoutControl::doSetPosition( castor::Position const & value )

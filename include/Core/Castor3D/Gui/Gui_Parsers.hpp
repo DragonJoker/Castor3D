@@ -29,6 +29,7 @@ namespace castor3d
 		StaticCtrlSPtr staticTxt{};
 		PanelCtrlSPtr panel{};
 		ExpandablePanelCtrlSPtr expandablePanel{};
+		FrameCtrlSPtr frame{};
 		ThemeRPtr theme{};
 		ButtonStyleRPtr buttonStyle{};
 		ComboBoxStyleRPtr comboStyle{};
@@ -38,6 +39,7 @@ namespace castor3d
 		StaticStyleRPtr staticStyle{};
 		PanelStyleRPtr panelStyle{};
 		ExpandablePanelStyleRPtr expandablePanelStyle{};
+		FrameStyleRPtr frameStyle{};
 		LayoutUPtr layout{};
 		LayoutItemFlags layoutCtrlFlags{};
 
@@ -79,6 +81,7 @@ namespace castor3d
 		eStaticStyle = CU_MakeSectionName( 'C', 'T', 'S', 'T' ),
 		ePanelStyle = CU_MakeSectionName( 'P', 'N', 'S', 'T' ),
 		eExpandablePanelStyle = CU_MakeSectionName( 'X', 'P', 'S', 'T' ),
+		eFrameStyle = CU_MakeSectionName( 'F', 'M', 'S', 'T' ),
 		eButton = CU_MakeSectionName( 'B', 'U', 'T', 'N' ),
 		eStatic = CU_MakeSectionName( 'S', 'T', 'T', 'C' ),
 		eSlider = CU_MakeSectionName( 'S', 'L', 'D', 'R' ),
@@ -90,6 +93,8 @@ namespace castor3d
 		eExpandablePanelHeader = CU_MakeSectionName( 'X', 'P', 'H', 'D' ),
 		eExpandablePanelExpand = CU_MakeSectionName( 'X', 'P', 'X', 'p' ),
 		eExpandablePanelContent = CU_MakeSectionName( 'X', 'P', 'C', 'T' ),
+		eFrame = CU_MakeSectionName( 'F', 'R', 'A', 'M' ),
+		eFrameContent = CU_MakeSectionName( 'F', 'M', 'C', 'T' ),
 		eBoxLayout = CU_MakeSectionName( 'B', 'X', 'L', 'T' ),
 		eLayoutCtrl = CU_MakeSectionName( 'L', 'T', 'C', 'T' ),
 	};
@@ -147,6 +152,16 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserExpandablePanelHeaderEnd )
 	CU_DeclareAttributeParser( parserExpandablePanelExpandEnd )
 	CU_DeclareAttributeParser( parserExpandablePanelContentEnd )
+	CU_DeclareAttributeParser( parserFrame )
+	CU_DeclareAttributeParser( parserFrameTheme )
+	CU_DeclareAttributeParser( parserFrameStyle )
+	CU_DeclareAttributeParser( parserFrameHeaderHAlign )
+	CU_DeclareAttributeParser( parserFrameHeaderVAlign )
+	CU_DeclareAttributeParser( parserFrameHeaderCaption )
+	CU_DeclareAttributeParser( parserFrameMinSize )
+	CU_DeclareAttributeParser( parserFrameContent )
+	CU_DeclareAttributeParser( parserFrameEnd )
+	CU_DeclareAttributeParser( parserFrameContentEnd )
 
 	CU_DeclareAttributeParser( parserControlPixelPosition )
 	CU_DeclareAttributeParser( parserControlPixelSize )
@@ -192,8 +207,11 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserStylePanelEnd )
 	CU_DeclareAttributeParser( parserStyleExpandablePanelHeader )
 	CU_DeclareAttributeParser( parserStyleExpandablePanelExpand )
-	CU_DeclareAttributeParser( parserStyleExpandablePanelPanel )
+	CU_DeclareAttributeParser( parserStyleExpandablePanelContent )
 	CU_DeclareAttributeParser( parserStyleExpandablePanelEnd )
+	CU_DeclareAttributeParser( parserStyleFrameHeaderFont )
+	CU_DeclareAttributeParser( parserStyleFrameHeaderTextMaterial )
+	CU_DeclareAttributeParser( parserStyleFrameEnd )
 
 	CU_DeclareAttributeParser( parserStyleBackgroundMaterial )
 	CU_DeclareAttributeParser( parserStyleForegroundMaterial )
@@ -208,6 +226,7 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserStyleStaticStyle )
 	CU_DeclareAttributeParser( parserStylePanelStyle )
 	CU_DeclareAttributeParser( parserStyleExpandablePanelStyle )
+	CU_DeclareAttributeParser( parserStyleFrameStyle )
 
 	CU_DeclareAttributeParser( parserLayoutCtrl )
 	CU_DeclareAttributeParser( parserLayoutEnd )

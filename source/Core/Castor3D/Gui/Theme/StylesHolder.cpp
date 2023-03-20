@@ -39,10 +39,28 @@ namespace castor3d
 		return createControlStyle( std::move( name ), scene, m_editStyles );
 	}
 
+	ExpandablePanelStyleRPtr StylesHolder::createExpandablePanelStyle( castor::String name
+		, Scene * scene )
+	{
+		return createControlStyle( std::move( name ), scene, m_expandablePanelStyles );
+	}
+
+	FrameStyleRPtr StylesHolder::createFrameStyle( castor::String name
+		, Scene * scene )
+	{
+		return createControlStyle( std::move( name ), scene, m_frameStyles );
+	}
+
 	ListBoxStyleRPtr StylesHolder::createListBoxStyle( castor::String name
 		, Scene * scene )
 	{
 		return createControlStyle( std::move( name ), scene, m_listBoxStyles );
+	}
+
+	PanelStyleRPtr StylesHolder::createPanelStyle( castor::String name
+		, Scene * scene )
+	{
+		return createControlStyle( std::move( name ), scene, m_panelStyles );
 	}
 
 	SliderStyleRPtr StylesHolder::createSliderStyle( castor::String name
@@ -55,18 +73,6 @@ namespace castor3d
 		, Scene * scene )
 	{
 		return createControlStyle( std::move( name ), scene, m_staticStyles );
-	}
-
-	PanelStyleRPtr StylesHolder::createPanelStyle( castor::String name
-		, Scene * scene )
-	{
-		return createControlStyle( std::move( name ), scene, m_panelStyles );
-	}
-
-	ExpandablePanelStyleRPtr StylesHolder::createExpandablePanelStyle( castor::String name
-		, Scene * scene )
-	{
-		return createControlStyle( std::move( name ), scene, m_expandablePanelStyles );
 	}
 
 	ButtonStyleRPtr StylesHolder::getButtonStyle( castor::String const & name )const
@@ -84,9 +90,24 @@ namespace castor3d
 		return getControlStyle( name, m_editStyles );
 	}
 
+	ExpandablePanelStyleRPtr StylesHolder::getExpandablePanelStyle( castor::String const & name )const
+	{
+		return getControlStyle( name, m_expandablePanelStyles );
+	}
+
+	FrameStyleRPtr StylesHolder::getFrameStyle( castor::String const & name )const
+	{
+		return getControlStyle( name, m_frameStyles );
+	}
+
 	ListBoxStyleRPtr StylesHolder::getListBoxStyle( castor::String const & name )const
 	{
 		return getControlStyle( name, m_listBoxStyles );
+	}
+
+	PanelStyleRPtr StylesHolder::getPanelStyle( castor::String const & name )const
+	{
+		return getControlStyle( name, m_panelStyles );
 	}
 
 	SliderStyleRPtr StylesHolder::getSliderStyle( castor::String const & name )const
@@ -97,16 +118,6 @@ namespace castor3d
 	StaticStyleRPtr StylesHolder::getStaticStyle( castor::String const & name )const
 	{
 		return getControlStyle( name, m_staticStyles );
-	}
-
-	PanelStyleRPtr StylesHolder::getPanelStyle( castor::String const & name )const
-	{
-		return getControlStyle( name, m_panelStyles );
-	}
-
-	ExpandablePanelStyleRPtr StylesHolder::getExpandablePanelStyle( castor::String const & name )const
-	{
-		return getControlStyle( name, m_expandablePanelStyles );
 	}
 
 	//************************************************************************************************

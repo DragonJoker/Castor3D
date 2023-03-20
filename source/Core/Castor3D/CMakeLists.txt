@@ -345,6 +345,7 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Controls/CtrlControl.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Controls/CtrlEdit.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Controls/CtrlExpandablePanel.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Controls/CtrlFrame.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Controls/CtrlLayoutControl.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Controls/CtrlListBox.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Controls/CtrlPanel.hpp
@@ -357,6 +358,7 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Gui/Controls/CtrlControl.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Gui/Controls/CtrlEdit.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Gui/Controls/CtrlExpandablePanel.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Gui/Controls/CtrlFrame.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Gui/Controls/CtrlLayoutControl.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Gui/Controls/CtrlListBox.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Gui/Controls/CtrlPanel.cpp
@@ -400,6 +402,7 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Theme/StyleControl.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Theme/StyleEdit.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Theme/StyleExpandablePanel.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Theme/StyleFrame.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Theme/StyleListBox.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Theme/StylePanel.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Theme/StyleSlider.hpp

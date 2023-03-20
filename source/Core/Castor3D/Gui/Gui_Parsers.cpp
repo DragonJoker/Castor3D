@@ -8,6 +8,7 @@
 #include "Castor3D/Gui/Controls/CtrlComboBox.hpp"
 #include "Castor3D/Gui/Controls/CtrlEdit.hpp"
 #include "Castor3D/Gui/Controls/CtrlExpandablePanel.hpp"
+#include "Castor3D/Gui/Controls/CtrlFrame.hpp"
 #include "Castor3D/Gui/Controls/CtrlListBox.hpp"
 #include "Castor3D/Gui/Controls/CtrlPanel.hpp"
 #include "Castor3D/Gui/Controls/CtrlSlider.hpp"
@@ -130,6 +131,9 @@ namespace castor3d
 			case ControlType::eExpandablePanel:
 				expandablePanel = std::static_pointer_cast< ExpandablePanelCtrl >( top );
 				break;
+			case ControlType::eFrame:
+				frame = std::static_pointer_cast< FrameCtrl >( top );
+				break;
 			default:
 				CU_Failure( "Unsupported Control Type" );
 				break;
@@ -212,6 +216,9 @@ namespace castor3d
 				break;
 			case ControlType::eExpandablePanel:
 				expandablePanelStyle = &static_cast< ExpandablePanelStyle & >( *top );
+				break;
+			case ControlType::eFrame:
+				frameStyle = &static_cast< FrameStyle & >( *top );
 				break;
 			default:
 				CU_Failure( "Unsupported Style Type" );
@@ -814,6 +821,125 @@ namespace castor3d
 	CU_EndAttributePop()
 
 	CU_ImplementAttributeParser( parserExpandablePanelContentEnd )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+		guiContext.parents.pop();
+		guiContext.popControl();
+	}
+	CU_EndAttributePop()
+
+	CU_ImplementAttributeParser( parserFrame )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+		params[0]->get( guiContext.controlName );
+	}
+	CU_EndAttributePush( GUISection::eFrame )
+
+	CU_ImplementAttributeParser( parserFrameTheme )
+	{
+		auto name = params[0]->get< castor::String >();
+		auto & parsingContext = getParserContext( context );
+		auto & guiContext = guiparse::getParserContext( context );
+		guiparse::createControl< FrameStyle >( context
+			, guiContext
+			, parsingContext.scene
+			, guiContext.controlName
+			, name + "/Frame"
+			, guiContext.frame );
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserFrameStyle )
+	{
+		auto name = params[0]->get< castor::String >();
+		auto & parsingContext = getParserContext( context );
+		auto & guiContext = guiparse::getParserContext( context );
+		guiparse::createControl< FrameStyle >( context
+			, guiContext
+			, parsingContext.scene
+			, guiContext.controlName
+			, name
+			, guiContext.frame );
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserFrameHeaderHAlign )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+
+		if ( auto control = guiContext.frame )
+		{
+			control->setHeaderHAlign( HAlign( params[0]->get< uint32_t >() ) );
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No frame control initialised." ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserFrameHeaderVAlign )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+
+		if ( auto control = guiContext.frame )
+		{
+			control->setHeaderVAlign( VAlign( params[0]->get< uint32_t >() ) );
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No frame control initialised." ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserFrameHeaderCaption )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+
+		if ( auto control = guiContext.frame )
+		{
+			control->setCaption( params[0]->get< castor::String >() );
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No frame control initialised." ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserFrameMinSize )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+
+		if ( auto control = guiContext.frame )
+		{
+			control->setMinSize( params[0]->get< castor::Size >() );
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No frame control initialised." ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserFrameContent )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+		guiContext.panel = guiContext.frame->getContent();
+		guiContext.parents.push( guiContext.panel );
+	}
+	CU_EndAttributePush( GUISection::eFrameContent )
+
+	CU_ImplementAttributeParser( parserFrameEnd )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+		guiparse::finishControl( guiparse::getControlsManager( context ), guiContext, guiContext.frame );
+		guiContext.popControl();
+	}
+	CU_EndAttributePop()
+
+	CU_ImplementAttributeParser( parserFrameContentEnd )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
 		guiContext.parents.pop();
@@ -1493,7 +1619,7 @@ namespace castor3d
 	}
 	CU_EndAttributePush( GUISection::eButtonStyle )
 
-	CU_ImplementAttributeParser( parserStyleExpandablePanelPanel )
+	CU_ImplementAttributeParser( parserStyleExpandablePanelContent )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
 		guiContext.pushStyle( &guiContext.expandablePanelStyle->getContentStyle()
@@ -1502,6 +1628,56 @@ namespace castor3d
 	CU_EndAttributePush( GUISection::ePanelStyle )
 
 	CU_ImplementAttributeParser( parserStyleExpandablePanelEnd )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+		guiContext.popStyle();
+	}
+	CU_EndAttributePop()
+
+	CU_ImplementAttributeParser( parserStyleFrameHeaderFont )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+
+		if ( auto style = guiContext.frameStyle )
+		{
+			castor::String name;
+			params[0]->get( name );
+			style->setHeaderFont( name );
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No static style initialised." ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserStyleFrameHeaderTextMaterial )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+
+		if ( auto style = guiContext.frameStyle )
+		{
+			castor::String name;
+			params[0]->get( name );
+			auto material = guiContext.engine->findMaterial( name ).lock().get();
+
+			if ( material )
+			{
+				style->setHeaderTextMaterial( material );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "Material [" + name + "] not found." ) );
+			}
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No static style initialised." ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserStyleFrameEnd )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
 		guiContext.popStyle();
@@ -1680,6 +1856,15 @@ namespace castor3d
 			, guiContext.expandablePanelStyle );
 	}
 	CU_EndAttributePush( GUISection::eExpandablePanelStyle )
+
+	CU_ImplementAttributeParser( parserStyleFrameStyle )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+		guiContext.pushStyle( guiContext.stylesHolder.top()->createFrameStyle( params[0]->get< castor::String >()
+				, getSceneParserContext( context ).scene )
+			, guiContext.frameStyle );
+	}
+	CU_EndAttributePush( GUISection::eFrameStyle )
 
 	CU_ImplementAttributeParser( parserLayoutCtrl )
 	{
