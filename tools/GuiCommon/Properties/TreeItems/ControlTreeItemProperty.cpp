@@ -24,9 +24,13 @@
 namespace GuiCommon
 {
 	ControlTreeItemProperty::ControlTreeItemProperty( bool editable
-		, castor3d::Control & control )
+		, castor3d::Control & control
+		, bool full
+		, bool inLayout )
 		: TreeItemProperty{ &control.getEngine(), editable }
 		, m_control{ control }
+		, m_full{ full }
+		, m_inLayout{ inLayout }
 	{
 		CreateTreeItemMenu();
 	}
@@ -42,9 +46,19 @@ namespace GuiCommon
 
 		auto & control = getControl();
 		addProperty( grid, PROPERTY_CATEGORY_CONTROL + wxString( control.getName() ) );
-		addPropertyT( grid, PROPERTY_CONTROL_VISIBLE, control.isVisible(), &control, &castor3d::Control::setVisible );
-		addPropertyT( grid, PROPERTY_CONTROL_POSITION, control.getPosition(), &control, &castor3d::Control::setPosition );
-		addPropertyT( grid, PROPERTY_CONTROL_SIZE, control.getSize(), &control, &castor3d::Control::setSize );
+
+		if ( m_full )
+		{
+			addPropertyT( grid, PROPERTY_CONTROL_VISIBLE, control.isVisible(), &control, &castor3d::Control::setVisible );
+
+			if ( !m_inLayout )
+			{
+				addPropertyT( grid, PROPERTY_CONTROL_POSITION, control.getPosition(), &control, &castor3d::Control::setPosition );
+			}
+
+			addPropertyT( grid, PROPERTY_CONTROL_SIZE, control.getSize(), &control, &castor3d::Control::setSize );
+		}
+
 		addPropertyT( grid, PROPERTY_CONTROL_BORDERS_SIZE, control.getBorderSize(), &control, &castor3d::Control::setBorderSize );
 
 		switch ( control.getType() )
@@ -115,6 +129,11 @@ namespace GuiCommon
 	void ControlTreeItemProperty::doCreateControlProperties( wxPropertyGrid * grid
 		, castor3d::ExpandablePanelCtrl & control )
 	{
+		static wxString PROPERTY_EXPAND_CAPTION = _( "Expand Caption" );
+		static wxString PROPERTY_RETRACT_CAPTION = _( "Retract Caption" );
+
+		addPropertyT( grid, PROPERTY_EXPAND_CAPTION, control.getExpandCaption(), &control, &castor3d::ExpandablePanelCtrl::setExpandCaption );
+		addPropertyT( grid, PROPERTY_RETRACT_CAPTION, control.getRetractCaption(), &control, &castor3d::ExpandablePanelCtrl::setRetractCaption );
 	}
 
 	void ControlTreeItemProperty::doCreateControlProperties( wxPropertyGrid * grid

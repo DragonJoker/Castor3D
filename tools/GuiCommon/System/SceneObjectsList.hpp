@@ -53,8 +53,18 @@ namespace GuiCommon
 			, castor3d::AnimatedObjectGroup & group );
 		void doAddOverlay( wxTreeItemId id
 			, castor3d::OverlayCategory & overlay );
+		void doAddStyles( wxTreeItemId id
+			, castor3d::StylesHolder & styles
+			, castor3d::SceneRPtr scene );
+		void doAddStyle( wxTreeItemId id
+			, castor::String const & name
+			, castor3d::ControlStyle & style
+			, castor3d::SceneRPtr scene );
 		void doAddControl( wxTreeItemId id
-			, castor3d::Control & control );
+			, castor::String const & name
+			, castor3d::Control & control
+			, bool full
+			, bool inLayout );
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wmissing-override"

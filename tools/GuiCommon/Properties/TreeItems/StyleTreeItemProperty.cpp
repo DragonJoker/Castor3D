@@ -32,35 +32,14 @@ namespace GuiCommon
 		static wxString PROPERTY_FOREGROUND_MATERIAL = _( "Foreground Material" );
 
 		auto & style = getStyle();
+		auto & engine = style.getEngine();
 		m_materials = getMaterialsList();
 		m_fonts = getFontsList();
 		addProperty( grid, PROPERTY_CATEGORY + wxString( style.getName() ) );
-		addProperty( grid, PROPERTY_BACKGROUND_MATERIAL, m_materials, style.getBackgroundMaterial()->getName()
-			, [this]( wxVariant const & var )
-			{
-				auto name = make_String( m_materials[size_t( var.GetLong() )] );
-				auto & st = getStyle();
-				auto & engine = st.getEngine();
-				auto material = engine.findMaterial( name ).lock().get();
-
-				if ( material )
-				{
-					st.setBackgroundMaterial( material );
-				}
-			} );
-		addProperty( grid, PROPERTY_BACKGROUND_MATERIAL, m_materials, style.getForegroundMaterial()->getName()
-			, [this]( wxVariant const & var )
-			{
-				auto name = make_String( m_materials[size_t( var.GetLong() )] );
-				auto & st = getStyle();
-				auto & engine = st.getEngine();
-				auto material = engine.findMaterial( name ).lock().get();
-
-				if ( material )
-				{
-					st.setForegroundMaterial( material );
-				}
-			} );
+		addMaterial( grid, engine, PROPERTY_BACKGROUND_MATERIAL, m_materials, style.getBackgroundMaterial()
+			, [&style]( castor3d::MaterialRPtr material ) { style.setBackgroundMaterial( material ); } );
+		addMaterial( grid, engine, PROPERTY_FOREGROUND_MATERIAL, m_materials, style.getForegroundMaterial()
+			, [&style]( castor3d::MaterialRPtr material ) { style.setForegroundMaterial( material ); } );
 
 		switch ( style.getType() )
 		{

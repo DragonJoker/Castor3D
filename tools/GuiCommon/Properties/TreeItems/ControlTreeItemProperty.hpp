@@ -24,7 +24,10 @@ namespace GuiCommon
 		 *\param[in]	editable	Dit si les propriétés sont modifiables.
 		 *\param[in]	control		Le contrôle cible.
 		 */
-		ControlTreeItemProperty( bool editable, castor3d::Control & control );
+		ControlTreeItemProperty( bool editable
+			, castor3d::Control & control
+			, bool full
+			, bool inLayout );
 
 		inline castor3d::Control & getControl()const noexcept
 		{
@@ -49,6 +52,8 @@ namespace GuiCommon
 
 	private:
 		castor3d::Control & m_control;
+		bool m_full;
+		bool m_inLayout;
 	};
 }
 

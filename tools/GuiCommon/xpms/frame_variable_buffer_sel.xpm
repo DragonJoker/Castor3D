@@ -2,8 +2,8 @@
 static const char * frame_variable_buffer_sel_xpm[] = {
 "16 16 3 1",
 " 	c None",
-".	c #F6F6F6",
-"+	c #424242",
+".	c #84F686",
+"+	c #1F4220",
 "                ",
 " .............. ",
 " .+++++.++++++. ",

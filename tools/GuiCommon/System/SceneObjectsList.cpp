@@ -19,6 +19,7 @@
 #include "GuiCommon/Properties/TreeItems/SkeletonAnimationTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/SkeletonNodeTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/SkeletonTreeItemProperty.hpp"
+#include "GuiCommon/Properties/TreeItems/StyleTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/SubmeshTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/ViewportTreeItemProperty.hpp"
 #include "GuiCommon/System/ImagesLoader.hpp"
@@ -39,6 +40,7 @@
 #include <Castor3D/Cache/OverlayCache.hpp>
 #include <Castor3D/Cache/TargetCache.hpp>
 #include <Castor3D/Gui/ControlsManager.hpp>
+#include <Castor3D/Gui/Controls/CtrlExpandablePanel.hpp>
 #include <Castor3D/Gui/Controls/CtrlPanel.hpp>
 #include <Castor3D/Material/Material.hpp>
 #include <Castor3D/Model/Mesh/Mesh.hpp>
@@ -129,6 +131,20 @@ namespace GuiCommon
 			ImagesLoader::getBitmap( eBMP_BONE_SEL ),
 			ImagesLoader::getBitmap( eBMP_BACKGROUND ),
 			ImagesLoader::getBitmap( eBMP_BACKGROUND_SEL ),
+			ImagesLoader::getBitmap( eBMP_SSAO_CONFIG ),
+			ImagesLoader::getBitmap( eBMP_SSAO_CONFIG_SEL ),
+			ImagesLoader::getBitmap( eBMP_COLLAPSE_ALL ),
+			ImagesLoader::getBitmap( eBMP_EXPAND_ALL ),
+			ImagesLoader::getBitmap( eBMP_CONTROLS ),
+			ImagesLoader::getBitmap( eBMP_CONTROLS_SEL ),
+			ImagesLoader::getBitmap( eBMP_CONTROL ),
+			ImagesLoader::getBitmap( eBMP_CONTROL_SEL ),
+			ImagesLoader::getBitmap( eBMP_STYLES ),
+			ImagesLoader::getBitmap( eBMP_STYLES_SEL ),
+			ImagesLoader::getBitmap( eBMP_STYLE ),
+			ImagesLoader::getBitmap( eBMP_STYLE_SEL ),
+			ImagesLoader::getBitmap( eBMP_THEME ),
+			ImagesLoader::getBitmap( eBMP_THEME_SEL ),
 		};
 
 		auto * imageList = new wxImageList( GC_IMG_SIZE, GC_IMG_SIZE, true );
@@ -148,27 +164,6 @@ namespace GuiCommon
 		AssignImageList( imageList );
 	}
 
-	void SceneObjectsList::doAddControl( wxTreeItemId id
-		, castor3d::Control & control )
-	{
-		auto parentId = AppendItem( id
-			, control.getName()
-			, eBMP_BORDER_PANEL_OVERLAY
-			, eBMP_BORDER_PANEL_OVERLAY_SEL
-			, new ControlTreeItemProperty{ m_propertiesHolder->isEditable(), control } );
-
-		if ( control.getType() == castor3d::ControlType::ePanel )
-		{
-			for ( auto & sub : static_cast< castor3d::PanelCtrl & >( control ).getChildren() )
-			{
-				if ( auto ctrl = sub.lock() )
-				{
-					doAddControl( parentId, *ctrl );
-				}
-			}
-		}
-	}
-
 	void SceneObjectsList::loadScene( castor3d::Engine * engine
 		, castor3d::RenderWindow & window
 		, castor3d::SceneRPtr scene )
@@ -178,24 +173,44 @@ namespace GuiCommon
 
 		if ( scene )
 		{
+			auto & controlsManager = static_cast< castor3d::ControlsManager & >( *scene->getEngine()->getUserInputListener() );
+
 			auto rootId = AddRoot( make_wxString( window.getName() )
 				, eBMP_RENDER_WINDOW
 				, eBMP_RENDER_WINDOW_SEL
 				, new RenderWindowTreeItemProperty( m_propertiesHolder->isEditable(), window ) );
 
 			auto catId = AppendItem( rootId
-				, _( "Global GUI Controls" )
-				, eBMP_BORDER_PANEL_OVERLAY
-				, eBMP_BORDER_PANEL_OVERLAY_SEL );
+				, _( "Global GUI Styles" )
+				, eBMP_STYLES
+				, eBMP_STYLES_SEL );
+			doAddStyles( catId, controlsManager, nullptr );
 
-			for ( auto & control : static_cast< castor3d::ControlsManager const & >( *scene->getEngine()->getUserInputListener() ).getRootControls() )
+			for ( auto & theme : controlsManager.getThemes() )
+			{
+				if ( theme.first != "Debug" )
+				{
+					auto themeId = AppendItem( catId
+						, theme.first
+						, eBMP_THEME
+						, eBMP_THEME_SEL );
+					doAddStyles( themeId, *theme.second, nullptr );
+				}
+			}
+
+			catId = AppendItem( rootId
+				, _( "Global GUI Controls" )
+				, eBMP_CONTROLS
+				, eBMP_CONTROLS_SEL );
+
+			for ( auto & control : controlsManager.getRootControls() )
 			{
 				if ( control
 					&& !control->hasScene()
 					&& control->getName() != "Debug/Main"
 					&& control->getName() != "Debug/RenderPasses" )
 				{
-					doAddControl( catId, *control );
+					doAddControl( catId, control->getName(), *control, true, false );
 				}
 			}
 
@@ -320,9 +335,15 @@ namespace GuiCommon
 			}
 
 			catId = AppendItem( sceneId
-				, _( "Scene GUI" )
-				, eBMP_BORDER_PANEL_OVERLAY
-				, eBMP_BORDER_PANEL_OVERLAY_SEL );
+				, _( "Scene GUI Styles" )
+				, eBMP_STYLES
+				, eBMP_STYLES_SEL );
+			doAddStyles( catId, controlsManager, scene );
+
+			catId = AppendItem( sceneId
+				, _( "Scene GUI Controls" )
+				, eBMP_CONTROLS
+				, eBMP_CONTROLS_SEL );
 
 			for ( auto & control : static_cast< castor3d::ControlsManager const & >( *scene->getEngine()->getUserInputListener() ).getRootControls() )
 			{
@@ -330,11 +351,7 @@ namespace GuiCommon
 					&& control->hasScene()
 					&& &control->getScene() == scene )
 				{
-					AppendItem( catId
-						, control->getName()
-						, eBMP_BORDER_PANEL_OVERLAY
-						, eBMP_BORDER_PANEL_OVERLAY_SEL
-						, new ControlTreeItemProperty{ m_propertiesHolder->isEditable(), *control } );
+					doAddControl( catId, control->getName(), *control, true, false );
 				}
 			}
 
@@ -605,6 +622,135 @@ namespace GuiCommon
 				CU_Failure( "Unsupported OverlayType" );
 				break;
 			}
+		}
+	}
+
+	void SceneObjectsList::doAddStyles( wxTreeItemId parentId
+		, castor3d::StylesHolder & styles
+		, castor3d::SceneRPtr scene )
+	{
+		for ( auto & sub : styles.getButtonStyles() )
+		{
+			doAddStyle( parentId, sub.first, *sub.second, scene );
+		}
+
+		for ( auto & sub : styles.getComboBoxStyles() )
+		{
+			doAddStyle( parentId, sub.first, *sub.second, scene );
+		}
+
+		for ( auto & sub : styles.getEditStyles() )
+		{
+			doAddStyle( parentId, sub.first, *sub.second, scene );
+		}
+
+		for ( auto & sub : styles.getExpandablePanelStyles() )
+		{
+			doAddStyle( parentId, sub.first, *sub.second, scene );
+		}
+
+		for ( auto & sub : styles.getListBoxStyles() )
+		{
+			doAddStyle( parentId, sub.first, *sub.second, scene );
+		}
+
+		for ( auto & sub : styles.getPanelStyles() )
+		{
+			doAddStyle( parentId, sub.first, *sub.second, scene );
+		}
+
+		for ( auto & sub : styles.getSliderStyles() )
+		{
+			doAddStyle( parentId, sub.first, *sub.second, scene );
+		}
+
+		for ( auto & sub : styles.getStaticStyles() )
+		{
+			doAddStyle( parentId, sub.first, *sub.second, scene );
+		}
+	}
+
+	void SceneObjectsList::doAddStyle( wxTreeItemId id
+		, castor::String const & name
+		, castor3d::ControlStyle & style
+		, castor3d::SceneRPtr scene )
+	{
+		if ( ( scene && !style.hasScene() )
+			|| ( style.hasScene() && scene != &style.getScene() ) )
+		{
+			return;
+		}
+
+		auto parentId = AppendItem( id
+			, name
+			, eBMP_STYLE
+			, eBMP_STYLE_SEL
+			, new StyleTreeItemProperty{ m_propertiesHolder->isEditable(), style } );
+
+		if ( style.getType() == castor3d::ControlType::ePanel )
+		{
+			doAddStyles( parentId
+				, static_cast< castor3d::PanelStyle & >( style )
+				, scene );
+		}
+		else if ( style.getType() == castor3d::ControlType::eExpandablePanel )
+		{
+			auto & expandable = static_cast< castor3d::ExpandablePanelStyle & >( style );
+			doAddStyle( parentId, "Header", expandable.getHeaderStyle(), scene );
+			doAddStyle( parentId, "Expand", expandable.getExpandStyle(), scene );
+			doAddStyle( parentId, "Content", expandable.getContentStyle(), scene );
+		}
+		else if ( style.getType() == castor3d::ControlType::eComboBox )
+		{
+			auto & combo = static_cast< castor3d::ComboBoxStyle & >( style );
+			doAddStyle( parentId, "Expand", combo.getExpandStyle(), scene );
+			doAddStyle( parentId, "Elements", combo.getElementsStyle(), scene );
+		}
+		else if ( style.getType() == castor3d::ControlType::eListBox )
+		{
+			auto & list = static_cast< castor3d::ListBoxStyle & >( style );
+			doAddStyle( parentId, "Item", list.getItemStyle(), scene );
+			doAddStyle( parentId, "Highlighted Item", list.getHighlightedItemStyle(), scene );
+			doAddStyle( parentId, "Selected Item", list.getSelectedItemStyle(), scene );
+		}
+		else if ( style.getType() == castor3d::ControlType::eSlider )
+		{
+			auto & slider = static_cast< castor3d::SliderStyle & >( style );
+			doAddStyle( parentId, "Line", slider.getLineStyle(), scene );
+			doAddStyle( parentId, "Tick", slider.getTickStyle(), scene );
+		}
+	}
+
+	void SceneObjectsList::doAddControl( wxTreeItemId id
+		, castor::String const & name
+		, castor3d::Control & control
+		, bool full
+		, bool inLayout )
+	{
+		auto parentId = AppendItem( id
+			, name
+			, eBMP_CONTROL
+			, eBMP_CONTROL_SEL
+			, new ControlTreeItemProperty{ m_propertiesHolder->isEditable(), control, full, inLayout } );
+
+		if ( control.getType() == castor3d::ControlType::ePanel )
+		{
+			auto & panel = static_cast< castor3d::PanelCtrl & >( control );
+
+			for ( auto & sub : panel.getChildren() )
+			{
+				if ( auto ctrl = sub.lock() )
+				{
+					doAddControl( parentId, ctrl->getName(), *ctrl, true, panel.getLayout() != nullptr );
+				}
+			}
+		}
+		else if ( control.getType() == castor3d::ControlType::eExpandablePanel )
+		{
+			auto & expandable = static_cast< castor3d::ExpandablePanelCtrl & >( control );
+			doAddControl( parentId, "Header", *expandable.getHeader(), false, false );
+			doAddControl( parentId, "Expand", *expandable.getExpand(), false, false );
+			doAddControl( parentId, "Content", *expandable.getContent(), false, false );
 		}
 	}
 
