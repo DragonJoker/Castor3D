@@ -39,6 +39,8 @@ namespace castor3d
 		eButton,
 		//! ExpandablePanelCtrl
 		eExpandablePanel,
+		//! FrameCtrl
+		eFrame,
 	};
 	/**
 	*\brief	Enumeration of supported control events.
@@ -255,6 +257,10 @@ namespace castor3d
 	*/
 	class ExpandablePanelCtrl;
 	/**
+	*\brief		A movable/resizable panel with an optional title bar.
+	*/
+	class FrameCtrl;
+	/**
 	*\brief		ListBox control.
 	*/
 	class ListBoxCtrl;
@@ -311,6 +317,10 @@ namespace castor3d
 	*\brief		ExpandablePanel style.
 	*/
 	class ExpandablePanelStyle;
+	/**
+	*\brief		Frame style.
+	*/
+	class FrameStyle;
 	/**
 	*\brief		ListBox style.
 	*/
@@ -370,6 +380,7 @@ namespace castor3d
 	CU_DeclareCUSmartPtr( castor3d, ComboBoxCtrl, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, EditCtrl, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, ExpandablePanelCtrl, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, FrameCtrl, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, ListBoxCtrl, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, PanelCtrl, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, SliderCtrl, C3D_API );
@@ -381,6 +392,7 @@ namespace castor3d
 	CU_DeclareCUSmartPtr( castor3d, ComboBoxStyle, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, EditStyle, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, ExpandablePanelStyle, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, FrameStyle, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, ListBoxStyle, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, PanelStyle, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, SliderStyle, C3D_API );

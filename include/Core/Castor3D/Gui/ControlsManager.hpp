@@ -22,10 +22,11 @@ namespace castor3d
 		friend class ButtonCtrl;
 		friend class ComboBoxCtrl;
 		friend class EditCtrl;
+		friend class ExpandablePanelCtrl;
+		friend class FrameCtrl;
 		friend class ListBoxCtrl;
 		friend class PanelCtrl;
 		friend class SliderCtrl;
-		friend class ExpandablePanelCtrl;
 
 	public:
 		using StylesHolder::setDefaultFont;
@@ -80,6 +81,11 @@ namespace castor3d
 		*	The expandable panel style with given name (\p nullptr if it doesn't exist).
 		*/
 		C3D_API ExpandablePanelStyleRPtr getExpandablePanelStyle( castor::String const & name )const override;
+
+		/** \return
+		*	The frame style with given name (\p nullptr if it doesn't exist).
+		*/
+		C3D_API FrameStyleRPtr getFrameStyle( castor::String const & name )const override;
 
 		/** \return
 		*	The list box style with given name (\p nullptr if it doesn't exist).

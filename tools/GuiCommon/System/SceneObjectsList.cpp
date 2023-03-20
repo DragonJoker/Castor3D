@@ -41,7 +41,9 @@
 #include <Castor3D/Cache/TargetCache.hpp>
 #include <Castor3D/Gui/ControlsManager.hpp>
 #include <Castor3D/Gui/Controls/CtrlExpandablePanel.hpp>
+#include <Castor3D/Gui/Controls/CtrlFrame.hpp>
 #include <Castor3D/Gui/Controls/CtrlPanel.hpp>
+#include <Castor3D/Gui/Controls/CtrlStatic.hpp>
 #include <Castor3D/Gui/Theme/StylesHolder.hpp>
 #include <Castor3D/Material/Material.hpp>
 #include <Castor3D/Model/Mesh/Mesh.hpp>
@@ -650,6 +652,11 @@ namespace GuiCommon
 			doAddStyle( parentId, sub.first, *sub.second, scene );
 		}
 
+		for ( auto & sub : styles.getFrameStyles() )
+		{
+			doAddStyle( parentId, sub.first, *sub.second, scene );
+		}
+
 		for ( auto & sub : styles.getListBoxStyles() )
 		{
 			doAddStyle( parentId, sub.first, *sub.second, scene );
@@ -760,6 +767,11 @@ namespace GuiCommon
 			doAddControl( parentId, "Header", *expandable.getHeader(), false, false );
 			doAddControl( parentId, "Expand", *expandable.getExpand(), false, false );
 			doAddControl( parentId, "Content", *expandable.getContent(), false, false );
+		}
+		else if ( control.getType() == castor3d::ControlType::eFrame )
+		{
+			auto & frame = static_cast< castor3d::FrameCtrl & >( control );
+			doAddControl( parentId, "Content", *frame.getContent(), false, false );
 		}
 	}
 

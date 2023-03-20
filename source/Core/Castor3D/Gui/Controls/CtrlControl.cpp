@@ -141,7 +141,7 @@ namespace castor3d
 	{
 		m_borders = value;
 		doGetBackground().setAbsoluteBorderSize( m_borders );
-		doSetBackgroundBorders( m_borders );
+		doSetBorderSize( m_borders );
 		onChanged( *this );
 	}
 

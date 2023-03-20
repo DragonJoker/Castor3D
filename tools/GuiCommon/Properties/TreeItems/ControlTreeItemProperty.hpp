@@ -45,6 +45,7 @@ namespace GuiCommon
 		void doCreateControlProperties( wxPropertyGrid * grid, castor3d::ComboBoxCtrl & object );
 		void doCreateControlProperties( wxPropertyGrid * grid, castor3d::EditCtrl & object );
 		void doCreateControlProperties( wxPropertyGrid * grid, castor3d::ExpandablePanelCtrl & object );
+		void doCreateControlProperties( wxPropertyGrid * grid, castor3d::FrameCtrl & object );
 		void doCreateControlProperties( wxPropertyGrid * grid, castor3d::ListBoxCtrl & object );
 		void doCreateControlProperties( wxPropertyGrid * grid, castor3d::PanelCtrl & object );
 		void doCreateControlProperties( wxPropertyGrid * grid, castor3d::SliderCtrl & object );

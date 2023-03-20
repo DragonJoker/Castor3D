@@ -67,6 +67,9 @@ namespace GuiCommon
 		case castor3d::ControlType::eExpandablePanel:
 			doCreateStyleProperties( grid, static_cast< castor3d::ExpandablePanelStyle & >( style ) );
 			break;
+		case castor3d::ControlType::eFrame:
+			doCreateStyleProperties( grid, static_cast< castor3d::FrameStyle & >( style ) );
+			break;
 		default:
 			CU_Failure( "Unsupported ControlType" );
 			break;
@@ -133,6 +136,23 @@ namespace GuiCommon
 	void StyleTreeItemProperty::doCreateStyleProperties( wxPropertyGrid * grid
 		, castor3d::ExpandablePanelStyle & style )
 	{
+	}
+
+	void StyleTreeItemProperty::doCreateStyleProperties( wxPropertyGrid * grid
+		, castor3d::FrameStyle & style )
+	{
+		static wxString PROPERTY_FONT = _( "Font" );
+		static wxString PROPERTY_TEXT_MATERIAL = _( "Text Material" );
+
+		auto & engine = style.getEngine();
+		addProperty( grid, PROPERTY_FONT, m_fonts, style.getHeaderFontName()
+			, [this, &style]( wxVariant const & var )
+			{
+				auto name = make_String( m_fonts[size_t( var.GetLong() )] );
+				style.setHeaderFont( name );
+			} );
+		addMaterial( grid, engine, PROPERTY_TEXT_MATERIAL, m_materials, style.getHeaderTextMaterial()
+			, [&style]( castor3d::MaterialRPtr material ) { style.setHeaderTextMaterial( material ); } );
 	}
 
 	void StyleTreeItemProperty::doCreateStyleProperties( wxPropertyGrid * grid
