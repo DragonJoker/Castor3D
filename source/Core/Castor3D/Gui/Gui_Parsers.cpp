@@ -12,6 +12,7 @@
 #include "Castor3D/Gui/Controls/CtrlPanel.hpp"
 #include "Castor3D/Gui/Controls/CtrlSlider.hpp"
 #include "Castor3D/Gui/Controls/CtrlStatic.hpp"
+#include "Castor3D/Gui/Theme/StylesHolder.hpp"
 #include "Castor3D/Gui/Layout/LayoutBox.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Overlay/BorderPanelOverlay.hpp"
@@ -175,7 +176,7 @@ namespace castor3d
 
 		if ( !styles.empty()
 			&& !stylesHolder.empty()
-			&& styles.top()->getType() == ControlType::ePanel )
+			&& isStylesHolder( *styles.top() ) )
 		{
 			popStylesHolder( &static_cast< PanelStyle const & >( *styles.top() ) );
 		}

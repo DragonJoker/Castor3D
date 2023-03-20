@@ -404,6 +404,8 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Theme/StylePanel.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Theme/StyleSlider.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Theme/StyleStatic.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Theme/StylesHolder.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Theme/StylesHolder.inl
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Theme/Theme.hpp
 )
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES

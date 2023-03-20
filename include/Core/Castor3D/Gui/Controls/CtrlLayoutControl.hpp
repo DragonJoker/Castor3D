@@ -8,6 +8,9 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	C3D_API bool isLayoutControl( ControlType type );
+	C3D_API bool isLayoutControl( Control const & control );
+
 	class LayoutControl
 		: public Control
 	{
