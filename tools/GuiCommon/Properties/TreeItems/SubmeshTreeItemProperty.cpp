@@ -46,6 +46,9 @@ namespace GuiCommon
 		static wxString PROPERTY_TOPOLOGY_TRIANGLE_STRIP_WITH_ADJACENCY = _( "Triangle Strip With Adjacency" );
 		static wxString PROPERTY_TOPOLOGY_PATCH_LIST = _( "Patch List" );
 
+		m_materials = getMaterialsList();
+		auto & engine = *m_geometry.getEngine();
+
 		wxArrayString choices;
 		choices.Add( PROPERTY_TOPOLOGY_POINT_LIST );
 		choices.Add( PROPERTY_TOPOLOGY_LINE_LIST );
@@ -61,19 +64,8 @@ namespace GuiCommon
 
 		addProperty( grid, PROPERTY_CATEGORY_SUBMESH + wxString( m_geometry.getName() ) );
 		addPropertyET( grid, PROPERTY_TOPOLOGY, choices, m_submesh.getTopology(), &m_submesh, &castor3d::Submesh::setTopology );
-		m_materials = getMaterialsList();
-		addProperty( grid, PROPERTY_SUBMESH_MATERIAL, m_materials, m_geometry.getMaterial( m_submesh )->getName()
-			, [this]( wxVariant const & var )
-			{
-				auto name = make_String( m_materials[size_t( var.GetLong() )] );
-				auto & engine = *m_submesh.getOwner()->getScene()->getEngine();
-				auto material = engine.findMaterial( name ).lock().get();
-
-				if ( material )
-				{
-					m_geometry.setMaterial( m_submesh, material );
-				}
-			} );
+		addMaterial( grid, engine, PROPERTY_SUBMESH_MATERIAL, m_materials, m_geometry.getMaterial( m_submesh )
+			, [this]( castor3d::MaterialRPtr material ) { m_geometry.setMaterial( m_submesh, material ); } );
 		addProperty( grid, PROPERTY_SUBMESH_SPHERE_BOX, m_submesh.getBoundingSphere(), EmptyHandler );
 		addProperty( grid, PROPERTY_SUBMESH_CUBE_BOX, m_submesh.getBoundingBox(), EmptyHandler );
 	}

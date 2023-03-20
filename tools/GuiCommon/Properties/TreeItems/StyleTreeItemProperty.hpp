@@ -24,7 +24,8 @@ namespace GuiCommon
 		 *\param[in]	editable	Dit si les propriétés sont modifiables.
 		 *\param[in]	style		Le style cible.
 		 */
-		StyleTreeItemProperty( bool editable, castor3d::ControlStyle & style );
+		StyleTreeItemProperty( bool editable
+			, castor3d::ControlStyle & style );
 
 		inline castor3d::ControlStyle & getStyle()const noexcept
 		{

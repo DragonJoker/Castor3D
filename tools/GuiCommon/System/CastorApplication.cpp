@@ -31,6 +31,10 @@ namespace app
 #include "GuiCommon/xpms/camera_sel.xpm"
 #include "GuiCommon/xpms/castor_transparent.xpm"
 #include "GuiCommon/xpms/collapse_all.xpm"
+#include "GuiCommon/xpms/control.xpm"
+#include "GuiCommon/xpms/control_sel.xpm"
+#include "GuiCommon/xpms/controls.xpm"
+#include "GuiCommon/xpms/controls_sel.xpm"
 #include "GuiCommon/xpms/directional.xpm"
 #include "GuiCommon/xpms/directional_sel.xpm"
 #include "GuiCommon/xpms/expand_all.xpm"
@@ -62,6 +66,10 @@ namespace app
 #include "GuiCommon/xpms/skeleton_sel.xpm"
 #include "GuiCommon/xpms/spot.xpm"
 #include "GuiCommon/xpms/spot_sel.xpm"
+#include "GuiCommon/xpms/styles.xpm"
+#include "GuiCommon/xpms/styles_sel.xpm"
+#include "GuiCommon/xpms/style.xpm"
+#include "GuiCommon/xpms/style_sel.xpm"
 #include "GuiCommon/xpms/submesh.xpm"
 #include "GuiCommon/xpms/submesh_sel.xpm"
 #include "GuiCommon/xpms/ssao_config.xpm"
@@ -70,6 +78,8 @@ namespace app
 #include "GuiCommon/xpms/text_sel.xpm"
 #include "GuiCommon/xpms/texture.xpm"
 #include "GuiCommon/xpms/texture_sel.xpm"
+#include "GuiCommon/xpms/theme.xpm"
+#include "GuiCommon/xpms/theme_sel.xpm"
 #include "GuiCommon/xpms/tone_mapping.xpm"
 #include "GuiCommon/xpms/tone_mapping_sel.xpm"
 #include "GuiCommon/xpms/viewport.xpm"
@@ -603,6 +613,16 @@ namespace GuiCommon
 		m_imagesLoader.addBitmap( eBMP_BACKGROUND_SEL, app::background_sel_xpm );
 		m_imagesLoader.addBitmap( eBMP_COLLAPSE_ALL, app::collapse_all_xpm );
 		m_imagesLoader.addBitmap( eBMP_EXPAND_ALL, app::expand_all_xpm );
+		m_imagesLoader.addBitmap( eBMP_CONTROLS, app::controls_xpm );
+		m_imagesLoader.addBitmap( eBMP_CONTROLS_SEL, app::controls_sel_xpm );
+		m_imagesLoader.addBitmap( eBMP_CONTROL, app::control_xpm );
+		m_imagesLoader.addBitmap( eBMP_CONTROL_SEL, app::control_sel_xpm );
+		m_imagesLoader.addBitmap( eBMP_STYLES, app::styles_xpm );
+		m_imagesLoader.addBitmap( eBMP_STYLES_SEL, app::styles_sel_xpm );
+		m_imagesLoader.addBitmap( eBMP_STYLE, app::style_xpm );
+		m_imagesLoader.addBitmap( eBMP_STYLE_SEL, app::style_sel_xpm );
+		m_imagesLoader.addBitmap( eBMP_THEME, app::theme_xpm );
+		m_imagesLoader.addBitmap( eBMP_THEME_SEL, app::theme_sel_xpm );
 		doLoadAppImages();
 		ImagesLoader::waitAsyncLoads();
 	}
