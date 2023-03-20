@@ -128,6 +128,7 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	Properties/TreeItems/BillboardTreeItemProperty.cpp
 	Properties/TreeItems/BoneTreeItemProperty.cpp
 	Properties/TreeItems/CameraTreeItemProperty.cpp
+	Properties/TreeItems/ControlTreeItemProperty.cpp
 	Properties/TreeItems/ExportOptionsTreeItemProperty.cpp
 	Properties/TreeItems/FrameVariableBufferTreeItemProperty.cpp
 	Properties/TreeItems/FrameVariableTreeItemProperty.cpp
@@ -146,6 +147,7 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	Properties/TreeItems/SkeletonNodeTreeItemProperty.cpp
 	Properties/TreeItems/SkeletonTreeItemProperty.cpp
 	Properties/TreeItems/SsaoConfigTreeItemProperty.cpp
+	Properties/TreeItems/StyleTreeItemProperty.cpp
 	Properties/TreeItems/SubmeshTreeItemProperty.cpp
 	Properties/TreeItems/TextureTreeItemProperty.cpp
 	Properties/TreeItems/ToneMappingTreeItemProperty.cpp
@@ -161,6 +163,7 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	Properties/TreeItems/BillboardTreeItemProperty.hpp
 	Properties/TreeItems/BoneTreeItemProperty.hpp
 	Properties/TreeItems/CameraTreeItemProperty.hpp
+	Properties/TreeItems/ControlTreeItemProperty.hpp
 	Properties/TreeItems/ExportOptionsTreeItemProperty.hpp
 	Properties/TreeItems/FrameVariableBufferTreeItemProperty.hpp
 	Properties/TreeItems/FrameVariableTreeItemProperty.hpp
@@ -179,6 +182,7 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	Properties/TreeItems/SkeletonNodeTreeItemProperty.hpp
 	Properties/TreeItems/SkeletonTreeItemProperty.hpp
 	Properties/TreeItems/SsaoConfigTreeItemProperty.hpp
+	Properties/TreeItems/StyleTreeItemProperty.hpp
 	Properties/TreeItems/SubmeshTreeItemProperty.hpp
 	Properties/TreeItems/TextureTreeItemProperty.hpp
 	Properties/TreeItems/ToneMappingTreeItemProperty.hpp

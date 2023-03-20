@@ -123,11 +123,6 @@ namespace castor3d
 		*/
 		C3D_API int getSelected()const;
 
-		/** sets the caption font.
-		*\param[in]	font	The new value.
-		*/
-		C3D_API void setFont( castor::String const & font );
-
 		/** Connects a function to a combobox event
 		*\param[in]	event			The event type
 		*\param[in]	function		The function

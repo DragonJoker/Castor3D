@@ -8,6 +8,7 @@
 #include "GuiCommon/Properties/TreeItems/BillboardTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/BoneTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/CameraTreeItemProperty.hpp"
+#include "GuiCommon/Properties/TreeItems/ControlTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/GeometryTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/LightTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/NodeTreeItemProperty.hpp"
@@ -37,6 +38,8 @@
 #include <Castor3D/Cache/ObjectCache.hpp>
 #include <Castor3D/Cache/OverlayCache.hpp>
 #include <Castor3D/Cache/TargetCache.hpp>
+#include <Castor3D/Gui/ControlsManager.hpp>
+#include <Castor3D/Gui/Controls/CtrlPanel.hpp>
 #include <Castor3D/Material/Material.hpp>
 #include <Castor3D/Model/Mesh/Mesh.hpp>
 #include <Castor3D/Model/Skeleton/BoneNode.hpp>
@@ -145,6 +148,27 @@ namespace GuiCommon
 		AssignImageList( imageList );
 	}
 
+	void SceneObjectsList::doAddControl( wxTreeItemId id
+		, castor3d::Control & control )
+	{
+		auto parentId = AppendItem( id
+			, control.getName()
+			, eBMP_BORDER_PANEL_OVERLAY
+			, eBMP_BORDER_PANEL_OVERLAY_SEL
+			, new ControlTreeItemProperty{ m_propertiesHolder->isEditable(), control } );
+
+		if ( control.getType() == castor3d::ControlType::ePanel )
+		{
+			for ( auto & sub : static_cast< castor3d::PanelCtrl & >( control ).getChildren() )
+			{
+				if ( auto ctrl = sub.lock() )
+				{
+					doAddControl( parentId, *ctrl );
+				}
+			}
+		}
+	}
+
 	void SceneObjectsList::loadScene( castor3d::Engine * engine
 		, castor3d::RenderWindow & window
 		, castor3d::SceneRPtr scene )
@@ -158,7 +182,23 @@ namespace GuiCommon
 				, eBMP_RENDER_WINDOW
 				, eBMP_RENDER_WINDOW_SEL
 				, new RenderWindowTreeItemProperty( m_propertiesHolder->isEditable(), window ) );
-			
+
+			auto catId = AppendItem( rootId
+				, _( "Global GUI Controls" )
+				, eBMP_BORDER_PANEL_OVERLAY
+				, eBMP_BORDER_PANEL_OVERLAY_SEL );
+
+			for ( auto & control : static_cast< castor3d::ControlsManager const & >( *scene->getEngine()->getUserInputListener() ).getRootControls() )
+			{
+				if ( control
+					&& !control->hasScene()
+					&& control->getName() != "Debug/Main"
+					&& control->getName() != "Debug/RenderPasses" )
+				{
+					doAddControl( catId, *control );
+				}
+			}
+
 			wxTreeItemId sceneId = AppendItem( rootId
 				, scene->getName()
 				, eBMP_SCENE
@@ -171,7 +211,7 @@ namespace GuiCommon
 				, eBMP_BACKGROUND_SEL
 				, new BackgroundTreeItemProperty( this, m_propertiesHolder->isEditable(), *scene->getBackground() ) );
 
-			auto catId = AppendItem( sceneId
+			catId = AppendItem( sceneId
 				, _( "Render Targets" )
 				, eBMP_RENDER_TARGET
 				, eBMP_RENDER_TARGET_SEL );
@@ -244,6 +284,7 @@ namespace GuiCommon
 				, _( "Overlays" )
 				, eBMP_PANEL_OVERLAY
 				, eBMP_PANEL_OVERLAY_SEL );
+
 			for ( auto overlay : scene->getOverlayCache().getCategories() )
 			{
 				switch ( overlay->getType() )
@@ -275,6 +316,25 @@ namespace GuiCommon
 				default:
 					CU_Failure( "Unsupported OverlayType" );
 					break;
+				}
+			}
+
+			catId = AppendItem( sceneId
+				, _( "Scene GUI" )
+				, eBMP_BORDER_PANEL_OVERLAY
+				, eBMP_BORDER_PANEL_OVERLAY_SEL );
+
+			for ( auto & control : static_cast< castor3d::ControlsManager const & >( *scene->getEngine()->getUserInputListener() ).getRootControls() )
+			{
+				if ( control
+					&& control->hasScene()
+					&& &control->getScene() == scene )
+				{
+					AppendItem( catId
+						, control->getName()
+						, eBMP_BORDER_PANEL_OVERLAY
+						, eBMP_BORDER_PANEL_OVERLAY_SEL
+						, new ControlTreeItemProperty{ m_propertiesHolder->isEditable(), *control } );
 				}
 			}
 
