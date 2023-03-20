@@ -86,7 +86,11 @@ namespace GuiCommon
 		/**
 		 *\return		The materials names.
 		 */
-		wxArrayString getMaterialsList();
+		wxArrayString getMaterialsList()const;
+		/**
+		 *\return		The fonts names.
+		 */
+		wxArrayString getFontsList()const;
 		/**
 		 *\brief		Creates the menu displayed for the wxTree item, available if m_editable is true
 		 */
@@ -198,6 +202,12 @@ namespace GuiCommon
 			, wxPGEditor * editor
 			, PropertyChangeHandler handler
 			, std::atomic_bool * control );
+		wxPGProperty * addMaterial( wxPropertyGrid * parent
+			, castor3d::Engine & engine
+			, wxString const & name
+			, wxArrayString const & choices
+			, castor3d::MaterialRPtr selected
+			, std::function< void( castor3d::MaterialRPtr ) > setter );
 
 		template< typename ParentT, typename ValueT, typename ControlT = bool >
 		wxPGProperty * addPropertyT( ParentT * parent
@@ -574,7 +584,6 @@ namespace GuiCommon
 				, setter
 				, castor3d::PassVisitorBase::makeControlsList( control ) );
 		}
-
 
 	private:
 		PropertyChangeHandler doGetHandler( PropertyChangeHandler handler

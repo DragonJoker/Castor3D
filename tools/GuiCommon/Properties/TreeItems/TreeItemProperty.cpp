@@ -68,7 +68,7 @@ namespace GuiCommon
 		}
 	}
 
-	wxArrayString TreeItemProperty::getMaterialsList()
+	wxArrayString TreeItemProperty::getMaterialsList()const
 	{
 		wxArrayString choices;
 
@@ -77,6 +77,24 @@ namespace GuiCommon
 			auto & cache = m_engine->getMaterialCache();
 			using LockType = std::unique_lock< castor3d::MaterialCache >;
 			LockType lock{ castor::makeUniqueLock( cache ) };
+
+			for ( auto & pair : cache )
+			{
+				choices.push_back( pair.first );
+			}
+		}
+
+		return choices;
+	}
+
+	wxArrayString TreeItemProperty::getFontsList()const
+	{
+		wxArrayString choices;
+
+		if ( m_engine )
+		{
+			auto & cache = m_engine->getFontCache();
+			auto lock( castor::makeUniqueLock( cache ) );
 
 			for ( auto & pair : cache )
 			{
@@ -207,6 +225,46 @@ namespace GuiCommon
 		prop->SetEditor( editor );
 		prop->SetClientObject( new ButtonData{ doGetHandler( handler, castor3d::PassVisitorBase::makeControlsList( control ) ) } );
 		return prop;
+	}
+	
+	wxPGProperty * TreeItemProperty::addMaterial( wxPropertyGrid * parent
+		, castor3d::Engine & engine
+		, wxString const & name
+		, wxArrayString const & choices
+		, castor3d::MaterialRPtr selected
+		, std::function< void( castor3d::MaterialRPtr ) > setter )
+	{
+		if ( selected )
+		{
+			return addProperty( parent
+				, name
+				, choices
+				, selected->getName()
+				, [&engine, &choices, setter]( wxVariant const & var )
+				{
+					auto name = make_String( choices[size_t( var.GetLong() )] );
+					auto material = engine.findMaterial( name ).lock().get();
+
+					if ( material )
+					{
+						setter( material );
+					}
+				} );
+		}
+		
+		return addProperty( parent
+			, name
+			, choices
+			, [&engine, &choices, setter]( wxVariant const & var )
+			{
+				auto name = make_String( choices[size_t( var.GetLong() )] );
+				auto material = engine.findMaterial( name ).lock().get();
+
+				if ( material )
+				{
+					setter( material );
+				}
+			} );
 	}
 
 	TreeItemProperty::PropertyChangeHandler TreeItemProperty::doGetHandler( TreeItemProperty::PropertyChangeHandler handler

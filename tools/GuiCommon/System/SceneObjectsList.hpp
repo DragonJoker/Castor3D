@@ -6,6 +6,8 @@ See LICENSE file in root folder
 
 #include "GuiCommon/GuiCommonPrerequisites.hpp"
 
+#include <Castor3D/Gui/GuiModule.hpp>
+
 #include <wx/panel.h>
 #include <wx/treectrl.h>
 
@@ -51,6 +53,8 @@ namespace GuiCommon
 			, castor3d::AnimatedObjectGroup & group );
 		void doAddOverlay( wxTreeItemId id
 			, castor3d::OverlayCategory & overlay );
+		void doAddControl( wxTreeItemId id
+			, castor3d::Control & control );
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wmissing-override"
