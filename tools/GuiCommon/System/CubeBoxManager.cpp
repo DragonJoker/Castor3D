@@ -74,10 +74,16 @@ namespace GuiCommon
 				material = scene.getEngine()->addNewMaterial( matName
 					, *scene.getEngine()
 					, scene.getDefaultLightingModel() );
-				auto pass = material.lock()->createPass();
-				pass->enableLighting( false );
-				pass->enablePicking( false );
-				pass->createComponent< castor3d::ColourComponent >()->setColour( colour );
+
+				if ( auto mat = material.lock() )
+				{
+					mat->setSerialisable( false );
+
+					auto pass = mat->createPass();
+					pass->enableLighting( false );
+					pass->enablePicking( false );
+					pass->createComponent< castor3d::ColourComponent >()->setColour( colour );
+				}
 			}
 			else
 			{

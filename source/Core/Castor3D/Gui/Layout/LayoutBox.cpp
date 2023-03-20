@@ -26,7 +26,7 @@ namespace castor3d
 		}
 
 		uint32_t controlsSep{ doComputeSeparator( advanceComp ) };
-		auto & borders = m_container.getBackgroundBorders();
+		auto & borders = m_container.getBorderSize();
 		int32_t advance = int32_t( borders[advanceComp] );
 		uint32_t containerFixedCompLimit = m_container.getSize()[fixedComp] - ( borders[fixedComp] + borders[fixedComp + 2u] );
 
@@ -77,7 +77,7 @@ namespace castor3d
 
 	uint32_t LayoutBox::doComputeSeparator( uint32_t component )
 	{
-		auto & borders = m_container.getBackgroundBorders();
+		auto & borders = m_container.getBorderSize();
 		uint32_t count{};
 		uint32_t maxComponentValue = m_container.getSize()[component] - ( borders[component] + borders[component + 2u] );
 		uint32_t accum{ std::accumulate( m_items.begin()

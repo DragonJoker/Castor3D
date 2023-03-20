@@ -54,6 +54,14 @@ namespace castor3d
 		*/
 		C3D_API void setVAlign( VAlign value );
 
+		/** \return	The horizontal alignment for the text.
+		*/
+		C3D_API HAlign getHAlign()const;
+
+		/** \return	The vertical alignment for the text.
+		*/
+		C3D_API VAlign getVAlign()const;
+
 		/**
 		*\return	The static caption
 		*/

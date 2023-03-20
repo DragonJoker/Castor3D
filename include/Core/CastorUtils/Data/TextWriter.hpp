@@ -125,6 +125,7 @@ namespace castor
 		CU_API bool writeOpt( StringStream & file, String const & name, bool value )const;
 		CU_API bool writeText( StringStream & file, String const & value )const;
 		CU_API bool writeName( StringStream & file, String const & name, String const & value )const;
+		CU_API bool writeNameOpt( StringStream & file, String const & name, String const & value, String const & comp )const;
 		CU_API bool writePath( StringStream & file, String const & name, Path const & value )const;
 		CU_API bool writeFile( StringStream & file, String const & name, Path const & source, Path const & folder, String const & subfolder )const;
 

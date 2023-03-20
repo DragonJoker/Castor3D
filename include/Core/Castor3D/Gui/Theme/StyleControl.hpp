@@ -26,9 +26,11 @@ namespace castor3d
 
 		ControlStyle( ControlType type
 			, castor::String const & name
+			, Scene * scene
 			, Engine & engine
 			, MouseCursor cursor = MouseCursor::eHand )
 			: castor::Named{ name }
+			, m_scene{ scene }
 			, m_engine{ engine }
 			, m_type{ type }
 			, m_cursor{ cursor }
@@ -49,7 +51,7 @@ namespace castor3d
 			doUpdateForegroundMaterial();
 		}
 
-		void setCursor( MouseCursor value )
+		void setCursor( MouseCursor value )noexcept
 		{
 			m_cursor = value;
 		}
@@ -74,29 +76,40 @@ namespace castor3d
 			return m_foregroundInvisible;
 		}
 
-		MaterialRPtr getBackgroundMaterial()const
+		MaterialRPtr getBackgroundMaterial()const noexcept
 		{
 			return m_backgroundMaterial;
 		}
 
-		MaterialRPtr getForegroundMaterial()const
+		MaterialRPtr getForegroundMaterial()const noexcept
 		{
 			return m_foregroundMaterial;
 		}
 
-		ControlType getType()const
+		ControlType getType()const noexcept
 		{
 			return m_type;
 		}
 
-		MouseCursor getCursor()const
+		MouseCursor getCursor()const noexcept
 		{
 			return m_cursor;
 		}
 
-		Engine & getEngine()const
+		Engine & getEngine()const noexcept
 		{
 			return m_engine;
+		}
+
+		bool hasScene()const noexcept
+		{
+			return m_scene != nullptr;
+		}
+
+		Scene & getScene()const noexcept
+		{
+			CU_Require( hasScene() );
+			return *m_scene;
 		}
 
 	protected:
@@ -113,7 +126,9 @@ namespace castor3d
 			colour.red() = float( colour.red() ) + offset;
 			colour.green() = float( colour.green() ) + offset;
 			colour.blue() = float( colour.blue() ) + offset;
-			return createMaterial( getEngine(), material->getName() + suffix, colour );
+			auto result = createMaterial( getEngine(), material->getName() + suffix, colour );
+			result->setSerialisable( false );
+			return result;
 		}
 
 	private:
@@ -121,6 +136,7 @@ namespace castor3d
 		virtual void doUpdateForegroundMaterial() = 0;
 
 	private:
+		Scene * m_scene{};
 		Engine & m_engine;
 		ControlType m_type{};
 		MouseCursor m_cursor{};

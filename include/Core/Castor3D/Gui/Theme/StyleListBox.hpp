@@ -15,14 +15,23 @@ namespace castor3d
 		static ControlType constexpr Type = ControlType::eListBox;
 
 		ListBoxStyle( castor::String const & name
+			, Scene * scene
 			, Engine & engine
 			, castor::String const & fontName )
 			: ControlStyle{ Type
 				, name
+				, scene
 				, engine }
-			, m_itemStyle{ name + "/Item", engine, fontName }
-			, m_selectedItemStyle{ name + "/SelectedItem", engine, fontName }
-			, m_highlightedItemStyle{ name + "/HighlightedItem", engine, fontName }
+			, m_itemStyle{ name + "/Item", scene, engine, fontName }
+			, m_selectedItemStyle{ name + "/SelectedItem", scene, engine, fontName }
+			, m_highlightedItemStyle{ name + "/HighlightedItem", scene, engine, fontName }
+		{
+		}
+
+		ListBoxStyle( castor::String const & name
+			, Engine & engine
+			, castor::String const & fontName )
+			: ListBoxStyle{ name, nullptr, engine, fontName }
 		{
 		}
 

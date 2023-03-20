@@ -58,7 +58,7 @@ namespace castor3d
 	{
 		m_expand = std::make_shared< ButtonCtrl >( m_scene
 			, cuT( "Expand" )
-			, &style->getButtonStyle()
+			, &style->getExpandStyle()
 			, this
 			, cuT( "+" )
 			, castor::Position{ int32_t( size.getWidth() - size.getHeight() ), 0 }
@@ -72,7 +72,7 @@ namespace castor3d
 
 		m_choices = std::make_shared< ListBoxCtrl >( m_scene
 			, cuT( "Choices" )
-			, &style->getListBoxStyle()
+			, &style->getElementsStyle()
 			, this
 			, m_values
 			, m_selected
@@ -148,8 +148,8 @@ namespace castor3d
 	void ComboBoxCtrl::doUpdateStyle()
 	{
 		auto & style = getStyle();
-		m_expand->setStyle( &style.getButtonStyle() );
-		m_choices->setStyle( &style.getListBoxStyle() );
+		m_expand->setStyle( &style.getExpandStyle() );
+		m_choices->setStyle( &style.getElementsStyle() );
 	}
 
 	void ComboBoxCtrl::doCreate()
@@ -178,12 +178,12 @@ namespace castor3d
 			} );
 
 		auto text = m_text.lock();
-		text->setMaterial( style.getButtonStyle().getTextMaterial() );
+		text->setMaterial( style.getExpandStyle().getTextMaterial() );
 		text->setPixelSize( castor::Size( getSize().getWidth() - getSize().getHeight(), getSize().getHeight() ) );
 
 		if ( !text->getFontTexture() || !text->getFontTexture()->getFont() )
 		{
-			text->setFont( style.getButtonStyle().getFontName() );
+			text->setFont( style.getExpandStyle().getFontName() );
 		}
 
 		int sel = getSelected();

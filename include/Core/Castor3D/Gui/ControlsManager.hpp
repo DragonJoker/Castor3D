@@ -48,12 +48,18 @@ namespace castor3d
 		*\return
 		*	The theme.
 		*/
-		C3D_API ThemeRPtr createTheme( castor::String const & name );
+		C3D_API ThemeRPtr createTheme( castor::String const & name
+			, Scene * scene );
 
 		/** \return
 		*	The theme for given name (\p nullptr if it doesn't exist).
 		*/
 		C3D_API ThemeRPtr getTheme( castor::String const & name )const;
+		
+		auto & getThemes()const
+		{
+			return m_themes;
+		}
 
 		/** \return
 		*	The button style with given name (\p nullptr if it doesn't exist).
@@ -146,6 +152,11 @@ namespace castor3d
 		/** Sets the control that is currently resized (only one at a time is allowed).
 		*/
 		C3D_API bool setResizedControl( ControlRPtr control );
+
+		/** \return
+		*	The root controls.
+		*/
+		C3D_API std::vector< Control * > getRootControls()const;
 
 		//@}
 
@@ -258,11 +269,6 @@ namespace castor3d
 		*	The controls by ID.
 		*/
 		std::map< ControlID, ControlWPtr > doGetControlsById()const;
-
-		/** \return
-		*	The controls by ID.
-		*/
-		std::vector< Control * > doGetRootControls()const;
 
 		/** Marks the manager as to be updated.
 		*/

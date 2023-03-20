@@ -61,24 +61,34 @@ namespace castor3d
 
 		/** \return	The style
 		*/
-		ExpandablePanelStyle const & getStyle()const
+		ExpandablePanelStyle const & getStyle()const noexcept
 		{
 			return static_cast< ExpandablePanelStyle const & >( getBaseStyle() );
 		}
 
-		auto getHeader()const
+		auto getHeader()const noexcept
 		{
 			return m_header;
 		}
 
-		auto getPanel()const
+		auto getContent()const noexcept
 		{
-			return m_panel;
+			return m_content;
 		}
 
-		auto getExpand()const
+		auto getExpand()const noexcept
 		{
 			return m_expand;
+		}
+
+		auto & getExpandCaption()const noexcept
+		{
+			return m_expandCaption;
+		}
+
+		auto & getRetractCaption()const noexcept
+		{
+			return m_retractCaption;
 		}
 
 		void setExpandCaption( castor::String v )
@@ -150,7 +160,7 @@ namespace castor3d
 		castor::String m_retractCaption{ "-" };
 		PanelCtrlSPtr m_header;
 		ButtonCtrlSPtr m_expand;
-		PanelCtrlSPtr m_panel;
+		PanelCtrlSPtr m_content;
 		OnExpandablePanelEvent m_signals[size_t( ExpandablePanelEvent::eCount )];
 		OnButtonEventConnection m_expandClickedConnection;
 		bool m_expanded{ true };

@@ -96,7 +96,6 @@ namespace castor3d
 
 	CU_DeclareAttributeParser( parserGui )
 	CU_DeclareAttributeParser( parserTheme )
-	CU_DeclareAttributeParser( parserDefaultFont )
 
 	CU_DeclareAttributeParser( parserButton )
 	CU_DeclareAttributeParser( parserButtonTheme )
@@ -160,15 +159,6 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserControlMovable )
 	CU_DeclareAttributeParser( parserControlResizable )
 
-	CU_DeclareAttributeParser( parserThemeDefaultFont )
-	CU_DeclareAttributeParser( parserThemeButtonStyle )
-	CU_DeclareAttributeParser( parserThemeComboBoxStyle )
-	CU_DeclareAttributeParser( parserThemeEditStyle )
-	CU_DeclareAttributeParser( parserThemeListBoxStyle )
-	CU_DeclareAttributeParser( parserThemeSliderStyle )
-	CU_DeclareAttributeParser( parserThemeStaticStyle )
-	CU_DeclareAttributeParser( parserThemePanelStyle )
-	CU_DeclareAttributeParser( parserThemeExpandablePanelStyle )
 	CU_DeclareAttributeParser( parserThemeEnd )
 
 	CU_DeclareAttributeParser( parserStyleButtonFont )
@@ -209,6 +199,7 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserStyleForegroundMaterial )
 	CU_DeclareAttributeParser( parserStyleBackgroundInvisible )
 	CU_DeclareAttributeParser( parserStyleForegroundInvisible )
+	CU_DeclareAttributeParser( parserStyleDefaultFont )
 	CU_DeclareAttributeParser( parserStyleButtonStyle )
 	CU_DeclareAttributeParser( parserStyleComboBoxStyle )
 	CU_DeclareAttributeParser( parserStyleEditStyle )

@@ -493,8 +493,8 @@ namespace castor3d
 		DECLARE_CACHE_VIEW_MEMBER( sampler, Sampler, EventType::ePreRender );
 		DECLARE_CU_CACHE_VIEW_MEMBER( font, Font, EventType::ePreRender );
 		bool m_changed{ false };
-		castor::RgbColour m_ambientLight;
-		castor::RgbColour m_backgroundColour;
+		castor::RgbColour m_ambientLight{ 0.0f, 0.0f, 0.0f };
+		castor::RgbColour m_backgroundColour{ 0.0f, 0.0f, 0.0f };
 		SceneBackgroundSPtr m_background;
 		LightFactorySPtr m_lightFactory;
 		Fog m_fog;

@@ -239,6 +239,16 @@ namespace castor3d
 			return m_container;
 		}
 
+		auto begin()const noexcept
+		{
+			return m_items.begin();
+		}
+
+		auto end()const noexcept
+		{
+			return m_items.end();
+		}
+
 	protected:
 		/** Updates the layout and its controls.
 		*/

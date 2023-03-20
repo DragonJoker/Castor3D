@@ -306,6 +306,16 @@ namespace castor
 		return result;
 	}
 
+	bool TextWriterBase::writeNameOpt( StringStream & file, String const & name, String const & value, String const & comp )const
+	{
+		if ( value != comp )
+		{
+			return writeName( file, name, value );
+		}
+
+		return true;
+	}
+
 	bool TextWriterBase::writePath( StringStream & file, String const & name, Path const & value )const
 	{
 		auto result = txtwrite::writeRawText( file, tabs() + name + cuT( " \"" ) + value.toGeneric() + cuT( "\"\n" ) );

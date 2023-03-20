@@ -28,10 +28,21 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextBillboardList.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextBorderPanelOverlay.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextCamera.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextCtrlButton.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextCtrlComboBox.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextCtrlControl.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextCtrlEdit.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextCtrlExpandablePanel.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextCtrlLayoutControl.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextCtrlListBox.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextCtrlPanel.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextCtrlSlider.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextCtrlStatic.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextDirectionalLight.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextFog.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextGeometry.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextHdrConfig.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextLayoutBox.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextLight.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextLpvConfig.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextMaterial.cpp
@@ -53,11 +64,13 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextSkeleton.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextSpotLight.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextSsaoConfig.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextStylesHolder.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextSubsurfaceScattering.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextTextOverlay.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextTextureConfiguration.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextTextureUnit.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextTextureView.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextTheme.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextViewport.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextVoxelSceneData.cpp
 )
@@ -67,10 +80,22 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextBillboardList.hpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextBorderPanelOverlay.hpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextCamera.hpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextCtrlButton.hpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextCtrlComboBox.hpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextCtrlControl.hpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextCtrlEdit.hpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextCtrlExpandablePanel.hpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextCtrlLayoutControl.hpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextCtrlListBox.hpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextCtrlPanel.hpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextCtrlSlider.hpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextCtrlStatic.hpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextDirectionalLight.hpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextDirectionalLight.hpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextFog.hpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextGeometry.hpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextHdrConfig.hpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextLayoutBox.hpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextLight.hpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextLpvConfig.hpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextMaterial.hpp
@@ -92,11 +117,13 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextSkeleton.hpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextSpotLight.hpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextSsaoConfig.hpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextStylesHolder.hpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextSubsurfaceScattering.hpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextTextOverlay.hpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextTextureConfiguration.hpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextTextureUnit.hpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextTextureView.hpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextTheme.hpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextViewport.hpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextVoxelSceneData.hpp
 )

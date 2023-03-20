@@ -25,12 +25,12 @@ namespace castor
 		if ( auto block{ beginBlock( file, cuT( "text_overlay" ), overlay.getOverlayName() ) } )
 		{
 			result = writeName( file, cuT( "font" ), overlay.getFontTexture()->getFontName() )
-				&& writeName( file, cuT( "text" ), castor::string::stringCast< xchar >( overlay.getCaption() ) )
-				&& write( file, cuT( "text_wrapping" ), castor3d::getName( overlay.getTextWrappingMode() ) )
-				&& write( file, cuT( "vertical_align" ), castor3d::getName( overlay.getVAlign() ) )
-				&& write( file, cuT( "horizontal_align" ), castor3d::getName( overlay.getHAlign() ) )
-				&& write( file, cuT( "texturing_mode" ), castor3d::getName( overlay.getTexturingMode() ) )
-				&& write( file, cuT( "line_spacing_mode" ), castor3d::getName( overlay.getLineSpacingMode() ) )
+				&& writeName( file, cuT( "text" ), string::stringCast< xchar >( overlay.getCaption() ) )
+				&& write( file, cuT( "text_wrapping" ), getName( overlay.getTextWrappingMode() ) )
+				&& writeOpt( file, cuT( "horizontal_align" ), getName( overlay.getHAlign() ), getName( HAlign::eLeft ) )
+				&& writeOpt( file, cuT( "vertical_align" ), getName( overlay.getVAlign() ), getName( VAlign::eTop ) )
+				&& write( file, cuT( "texturing_mode" ), getName( overlay.getTexturingMode() ) )
+				&& write( file, cuT( "line_spacing_mode" ), getName( overlay.getLineSpacingMode() ) )
 				&& writeSub< OverlayCategory >( file, overlay );
 		}
 

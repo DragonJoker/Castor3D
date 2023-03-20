@@ -72,6 +72,8 @@ namespace castor3d
 			} ) }
 	{
 		setBorderSize( castor::Point4ui{ 1, 1, 1, 1 } );
+		setHAlign( HAlign::eCenter );
+		setVAlign( VAlign::eCenter );
 		EventHandler::connect( MouseEventType::eEnter
 			, [this]( MouseEvent const & event )
 			{
@@ -90,8 +92,6 @@ namespace castor3d
 				, nullptr
 				, &getBackgroundOverlay() ).lock()->getTextOverlay();
 		text->setPixelSize( getSize() );
-		text->setHAlign( HAlign::eCenter );
-		text->setVAlign( VAlign::eCenter );
 		text->setCaption( castor::string::toU32String( m_caption ) );
 		text->setVisible( visible );
 		m_text = text;
@@ -101,18 +101,76 @@ namespace castor3d
 
 	void ButtonCtrl::setHAlign( HAlign align )
 	{
-		if ( auto text = m_text.lock() )
+		m_flags &= ~ControlFlagType( StaticFlag::eHAlignCenter
+			| StaticFlag::eHAlignRight
+			| StaticFlag::eHAlignLeft );
+
+		switch ( align )
 		{
-			text->setHAlign( align );
+		case HAlign::eLeft:
+			addFlag( StaticFlag::eHAlignLeft );
+			break;
+		case HAlign::eCenter:
+			addFlag( StaticFlag::eHAlignCenter );
+			break;
+		case HAlign::eRight:
+			addFlag( StaticFlag::eHAlignRight );
+			break;
+		default:
+			break;
 		}
 	}
 
 	void ButtonCtrl::setVAlign( VAlign align )
 	{
-		if ( auto text = m_text.lock() )
+		m_flags &= ~ControlFlagType( StaticFlag::eVAlignCenter
+			| StaticFlag::eVAlignTop
+			| StaticFlag::eVAlignBottom );
+
+		switch ( align )
 		{
-			text->setVAlign( align );
+		case VAlign::eTop:
+			addFlag( StaticFlag::eVAlignTop );
+			break;
+		case VAlign::eCenter:
+			addFlag( StaticFlag::eVAlignCenter );
+			break;
+		case VAlign::eBottom:
+			addFlag( StaticFlag::eVAlignBottom );
+			break;
+		default:
+			break;
 		}
+	}
+
+	HAlign ButtonCtrl::getHAlign()const
+	{
+		if ( castor::checkFlag( getFlags(), StaticFlag::eHAlignCenter ) )
+		{
+			return HAlign::eCenter;
+		}
+
+		if ( castor::checkFlag( getFlags(), StaticFlag::eHAlignRight ) )
+		{
+			return HAlign::eRight;
+		}
+
+		return HAlign::eLeft;
+	}
+
+	VAlign ButtonCtrl::getVAlign()const
+	{
+		if ( castor::checkFlag( getFlags(), StaticFlag::eVAlignCenter ) )
+		{
+			return VAlign::eCenter;
+		}
+
+		if ( castor::checkFlag( getFlags(), StaticFlag::eVAlignBottom ) )
+		{
+			return VAlign::eBottom;
+		}
+
+		return VAlign::eTop;
 	}
 
 	void ButtonCtrl::doUpdateStyle()
@@ -178,6 +236,15 @@ namespace castor3d
 		if ( auto text = m_text.lock() )
 		{
 			text->setVisible( visible );
+		}
+	}
+
+	void ButtonCtrl::doUpdateFlags()
+	{
+		if ( auto text = m_text.lock() )
+		{
+			text->setHAlign( getHAlign() );
+			text->setVAlign( getVAlign() );
 		}
 	}
 

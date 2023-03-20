@@ -57,11 +57,11 @@ namespace castor3d
 			{
 				addParser( parsers, section, cuT( "visible" ), &parserControlVisible, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
 				addParser( parsers, section, cuT( "pixel_position" ), &parserControlPixelPosition, { makeParameter< ParameterType::ePosition >() } );
+				addParser( parsers, section, cuT( "pixel_size" ), &parserControlPixelSize, { makeParameter< ParameterType::eSize >() } );
 				addParser( parsers, section, cuT( "movable" ), &parserControlMovable, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
 				addParser( parsers, section, cuT( "resizable" ), &parserControlResizable, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
 			}
 
-			addParser( parsers, section, cuT( "pixel_size" ), &parserControlPixelSize, { makeParameter< ParameterType::eSize >() } );
 			addParser( parsers, section, cuT( "pixel_border_size" ), &parserControlPixelBorderSize, { makeParameter< ParameterType::ePoint4U >() } );
 			addParser( parsers, section, cuT( "border_inner_uv" ), &parserControlBorderInnerUv, { makeParameter< ParameterType::ePoint4D >() } );
 			addParser( parsers, section, cuT( "border_outer_uv" ), &parserControlBorderOuterUv, { makeParameter< ParameterType::ePoint4D >() } );
@@ -112,6 +112,7 @@ namespace castor3d
 			, uint32_t section )
 		{
 			using namespace castor;
+			addParser( result, section, cuT( "default_font" ), &parserStyleDefaultFont, { makeParameter< ParameterType::eName >() } );
 			addParser( result, section, cuT( "button_style" ), &parserStyleButtonStyle, { makeParameter< ParameterType::eName >() } );
 			addParser( result, section, cuT( "static_style" ), &parserStyleStaticStyle, { makeParameter< ParameterType::eName >() } );
 			addParser( result, section, cuT( "slider_style" ), &parserStyleSliderStyle, { makeParameter< ParameterType::eName >() } );
@@ -128,7 +129,6 @@ namespace castor3d
 			using namespace castor;
 			createControlsParsers( result, section );
 			createStylesParsers( result, section );
-			addParser( result, section, cuT( "default_font" ), &parserDefaultFont, { makeParameter< ParameterType::eName >() } );
 			addParser( result, section, cuT( "theme" ), &parserTheme, { makeParameter< ParameterType::eName >() } );
 		}
 
@@ -263,8 +263,8 @@ namespace castor3d
 			addParser( result, uint32_t( GUISection::eExpandablePanel ), cuT( "header" ), &parserExpandablePanelHeader );
 			addParser( result, uint32_t( GUISection::eExpandablePanel ), cuT( "expand" ), &parserExpandablePanelExpand );
 			addParser( result, uint32_t( GUISection::eExpandablePanel ), cuT( "content" ), &parserExpandablePanelContent );
-			addParser( result, uint32_t( GUISection::eExpandablePanel ), cuT( "expand_caption" ), &parserExpandablePanelExpandCaption );
-			addParser( result, uint32_t( GUISection::eExpandablePanel ), cuT( "retract_caption" ), &parserExpandablePanelRetractCaption );
+			addParser( result, uint32_t( GUISection::eExpandablePanel ), cuT( "expand_caption" ), &parserExpandablePanelExpandCaption, { makeParameter< ParameterType::eName >() } );
+			addParser( result, uint32_t( GUISection::eExpandablePanel ), cuT( "retract_caption" ), &parserExpandablePanelRetractCaption, { makeParameter< ParameterType::eName > ( ) } );
 
 			createDefaultStyleParsers( result, uint32_t( GUISection::eExpandablePanelStyle ), &parserStyleExpandablePanelEnd );
 			addParser( result, uint32_t( GUISection::eExpandablePanelStyle ), cuT( "header_style" ), &parserStyleExpandablePanelHeader );
@@ -274,11 +274,10 @@ namespace castor3d
 
 		static void createExpandablePanelHeaderParsers( castor::AttributeParsers & result )
 		{
-			using namespace castor;
 			createDefaultParsers( result
 				, uint32_t( GUISection::eExpandablePanelHeader )
-				, ParserFunction{}
-				, ParserFunction{}
+				, nullptr
+				, nullptr
 				, &parserExpandablePanelHeaderEnd );
 			createControlsParsers( result, uint32_t( GUISection::eExpandablePanelHeader ) );
 			createDefaultLayoutParsers( result, uint32_t( GUISection::eExpandablePanelHeader ) );
@@ -286,21 +285,19 @@ namespace castor3d
 
 		static void createExpandablePanelExpandParsers( castor::AttributeParsers & result )
 		{
-			using namespace castor;
 			createDefaultParsers( result
 				, uint32_t( GUISection::eExpandablePanelExpand )
-				, ParserFunction{}
-				, ParserFunction{}
+				, nullptr
+				, nullptr
 				, &parserExpandablePanelExpandEnd );
 		}
 
 		static void createExpandablePanelContentParsers( castor::AttributeParsers & result )
 		{
-			using namespace castor;
 			createDefaultParsers( result
 				, uint32_t( GUISection::eExpandablePanelContent )
-				, ParserFunction{}
-				, ParserFunction{}
+				, nullptr
+				, nullptr
 				, &parserExpandablePanelContentEnd );
 			createControlsParsers( result, uint32_t( GUISection::eExpandablePanelContent ) );
 			createDefaultLayoutParsers( result, uint32_t( GUISection::eExpandablePanelContent ) );
@@ -309,15 +306,15 @@ namespace castor3d
 		static void createThemeParsers( castor::AttributeParsers & result )
 		{
 			using namespace castor;
-			addParser( result, uint32_t( GUISection::eTheme ), cuT( "default_font" ), &parserThemeDefaultFont, { makeParameter< ParameterType::eName >() } );
-			addParser( result, uint32_t( GUISection::eTheme ), cuT( "button_style" ), &parserThemeButtonStyle, { makeDefaultedParameter< ParameterType::eName >( "Button" ) } );
-			addParser( result, uint32_t( GUISection::eTheme ), cuT( "static_style" ), &parserThemeStaticStyle, { makeDefaultedParameter< ParameterType::eName >( "Static" ) } );
-			addParser( result, uint32_t( GUISection::eTheme ), cuT( "slider_style" ), &parserThemeSliderStyle, { makeDefaultedParameter< ParameterType::eName >( "Slider" ) } );
-			addParser( result, uint32_t( GUISection::eTheme ), cuT( "combobox_style" ), &parserThemeComboBoxStyle, { makeDefaultedParameter< ParameterType::eName >( "ComboBox" ) } );
-			addParser( result, uint32_t( GUISection::eTheme ), cuT( "listbox_style" ), &parserThemeListBoxStyle, { makeDefaultedParameter< ParameterType::eName >( "ListBox" ) } );
-			addParser( result, uint32_t( GUISection::eTheme ), cuT( "edit_style" ), &parserThemeEditStyle, { makeDefaultedParameter< ParameterType::eName >( "Edit" ) } );
-			addParser( result, uint32_t( GUISection::eTheme ), cuT( "panel_style" ), &parserThemePanelStyle, { makeDefaultedParameter< ParameterType::eName >( "Panel" ) } );
-			addParser( result, uint32_t( GUISection::eTheme ), cuT( "expandable_panel_style" ), &parserThemeExpandablePanelStyle, { makeDefaultedParameter< ParameterType::eName >( "ExpandablePanel" ) } );
+			addParser( result, uint32_t( GUISection::eTheme ), cuT( "default_font" ), &parserStyleDefaultFont, { makeParameter< ParameterType::eName >() } );
+			addParser( result, uint32_t( GUISection::eTheme ), cuT( "button_style" ), &parserStyleButtonStyle, { makeDefaultedParameter< ParameterType::eName >( "Button" ) } );
+			addParser( result, uint32_t( GUISection::eTheme ), cuT( "static_style" ), &parserStyleStaticStyle, { makeDefaultedParameter< ParameterType::eName >( "Static" ) } );
+			addParser( result, uint32_t( GUISection::eTheme ), cuT( "slider_style" ), &parserStyleSliderStyle, { makeDefaultedParameter< ParameterType::eName >( "Slider" ) } );
+			addParser( result, uint32_t( GUISection::eTheme ), cuT( "combobox_style" ), &parserStyleComboBoxStyle, { makeDefaultedParameter< ParameterType::eName >( "ComboBox" ) } );
+			addParser( result, uint32_t( GUISection::eTheme ), cuT( "listbox_style" ), &parserStyleListBoxStyle, { makeDefaultedParameter< ParameterType::eName >( "ListBox" ) } );
+			addParser( result, uint32_t( GUISection::eTheme ), cuT( "edit_style" ), &parserStyleEditStyle, { makeDefaultedParameter< ParameterType::eName >( "Edit" ) } );
+			addParser( result, uint32_t( GUISection::eTheme ), cuT( "panel_style" ), &parserStylePanelStyle, { makeDefaultedParameter< ParameterType::eName >( "Panel" ) } );
+			addParser( result, uint32_t( GUISection::eTheme ), cuT( "expandable_panel_style" ), &parserStyleExpandablePanelStyle, { makeDefaultedParameter< ParameterType::eName >( "ExpandablePanel" ) } );
 			addParser( result, uint32_t( GUISection::eTheme ), cuT( "}" ), &parserThemeEnd );
 		}
 
@@ -362,7 +359,9 @@ namespace castor3d
 
 					return style != nullptr;
 				} );
-			return style;
+			return ( themeIt != themes.end() )
+				? style
+				: nullptr;
 		}
 	}
 
@@ -374,14 +373,15 @@ namespace castor3d
 	{
 	}
 
-	ThemeRPtr ControlsManager::createTheme( castor::String const & name )
+	ThemeRPtr ControlsManager::createTheme( castor::String const & name
+		, Scene * scene )
 	{
 		auto ires = m_themes.emplace( name, nullptr );
 		auto it = ires.first;
 
 		if ( ires.second )
 		{
-			it->second = castor::makeUnique< Theme >( name, *getEngine() );
+			it->second = castor::makeUnique< Theme >( name, scene, *getEngine() );
 		}
 
 		return it->second.get();
@@ -598,6 +598,12 @@ namespace castor3d
 
 		m_resizedControl = control;
 		return true;
+	}
+
+	std::vector< Control * > ControlsManager::getRootControls()const
+	{
+		ctrlmgr::LockType lock{ castor::makeUniqueLock( m_mutexControlsById ) };
+		return m_rootControls;
 	}
 
 	castor::AttributeParsers ControlsManager::createParsers( castor3d::Engine & engine )
@@ -863,7 +869,7 @@ namespace castor3d
 	{
 		std::vector< Control * > result;
 		std::vector< Control * > top;
-		auto controls = doGetRootControls();
+		auto controls = getRootControls();
 		result.reserve( controls.size() );
 		top.reserve( controls.size() );
 		uint32_t index{};
@@ -903,12 +909,6 @@ namespace castor3d
 	{
 		ctrlmgr::LockType lock{ castor::makeUniqueLock( m_mutexControlsById ) };
 		return m_controlsById;
-	}
-
-	std::vector< Control * > ControlsManager::doGetRootControls()const
-	{
-		ctrlmgr::LockType lock{ castor::makeUniqueLock( m_mutexControlsById ) };
-		return m_rootControls;
 	}
 
 	void ControlsManager::doMarkDirty()

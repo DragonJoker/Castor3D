@@ -16,32 +16,41 @@ namespace castor3d
 		static ControlType constexpr Type = ControlType::eComboBox;
 
 		ComboBoxStyle( castor::String const & name
+			, Scene * scene
 			, Engine & engine
 			, castor::String const & fontName )
 			: ControlStyle{ Type
 				, name
+				, scene
 				, engine }
-			, m_buttonStyle{ name + "/Button", engine, fontName }
-			, m_listBoxStyle{ name + "/List", engine, fontName }
+			, m_buttonStyle{ name + "/Expand", scene, engine, fontName }
+			, m_listBoxStyle{ name + "/Elements", scene, engine, fontName }
 		{
 		}
 
-		ButtonStyle const & getButtonStyle()const
+		ComboBoxStyle( castor::String const & name
+			, Engine & engine
+			, castor::String const & fontName )
+			: ComboBoxStyle{ name, nullptr, engine, fontName }
+		{
+		}
+
+		ButtonStyle const & getExpandStyle()const
 		{
 			return m_buttonStyle;
 		}
 
-		ListBoxStyle const & getListBoxStyle()const
+		ListBoxStyle const & getElementsStyle()const
 		{
 			return m_listBoxStyle;
 		}
 
-		ButtonStyle & getButtonStyle()
+		ButtonStyle & getExpandStyle()
 		{
 			return m_buttonStyle;
 		}
 
-		ListBoxStyle & getListBoxStyle()
+		ListBoxStyle & getElementsStyle()
 		{
 			return m_listBoxStyle;
 		}
