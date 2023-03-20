@@ -30,6 +30,11 @@ namespace castor3d
 			markDirty();
 		}
 
+		bool isHorizontal()const noexcept
+		{
+			return m_horizontal;
+		}
+
 		//@}
 
 	private:

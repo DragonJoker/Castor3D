@@ -21,6 +21,7 @@ namespace castor3d
 {
 	template< typename StyleT >
 	StyleT * StylesHolder::createControlStyle( castor::String name
+		, Scene * scene
 		, std::map< castor::String, castor::UniquePtr< StyleT > > & controls )
 	{
 		auto fullName{ name };
@@ -42,12 +43,14 @@ namespace castor3d
 			{
 				it = controls.emplace( name
 					, castor::makeUnique< StyleT >( fullName
+						, scene
 						, m_engine ) ).first;
 			}
 			else
 			{
 				it = controls.emplace( name
 					, castor::makeUnique< StyleT >( fullName
+						, scene
 						, m_engine
 						, getDefaultFont()->getName() ) ).first;
 			}
@@ -87,7 +90,7 @@ namespace castor3d
 				, [&name, &style]( auto const & lookup )
 				{
 					auto header = lookup.first + "/Header/";
-					auto panel = lookup.first + "/Panel/";
+					auto panel = lookup.first + "/Content/";
 
 					if ( name.find( header ) == 0u )
 					{
@@ -95,7 +98,7 @@ namespace castor3d
 					}
 					else if ( name.find( panel ) == 0u )
 					{
-						style = lookup.second->getPanelStyle().template getStyle< StyleT >( name.substr( panel.size() ) );
+						style = lookup.second->getContentStyle().template getStyle< StyleT >( name.substr( panel.size() ) );
 					}
 
 					return style != nullptr;
@@ -120,10 +123,37 @@ namespace castor3d
 	{
 	public:
 		Theme( castor::String const & name
+			, Scene * scene
 			, Engine & engine )
 			: StylesHolder{ name, engine }
+			, m_scene{ scene }
 		{
 		}
+
+		Theme( castor::String const & name
+			, Engine & engine )
+			: Theme{ name, nullptr, engine }
+		{
+		}
+
+		auto & getName()const noexcept
+		{
+			return getHolderName();
+		}
+
+		bool hasScene()const noexcept
+		{
+			return m_scene != nullptr;
+		}
+
+		Scene & getScene()const noexcept
+		{
+			CU_Require( hasScene() );
+			return *m_scene;
+		}
+
+	private:
+		Scene * m_scene{};
 	};
 }
 

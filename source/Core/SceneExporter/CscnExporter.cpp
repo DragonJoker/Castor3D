@@ -1,5 +1,7 @@
 #include "SceneExporter/CscnExporter.hpp"
 
+#include "Text/TextCtrlLayoutControl.hpp"
+#include "Text/TextCtrlPanel.hpp"
 #include "Text/TextGeometry.hpp"
 #include "Text/TextLight.hpp"
 #include "Text/TextMaterial.hpp"
@@ -8,6 +10,8 @@
 #include "Text/TextScene.hpp"
 #include "Text/TextSceneNode.hpp"
 #include "Text/TextSkeleton.hpp"
+#include "Text/TextStylesHolder.hpp"
+#include "Text/TextTheme.hpp"
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Binary/BinaryMesh.hpp>
@@ -19,6 +23,7 @@
 #include <Castor3D/Cache/LightCache.hpp>
 #include <Castor3D/Cache/MaterialCache.hpp>
 #include <Castor3D/Cache/PluginCache.hpp>
+#include <Castor3D/Gui/ControlsManager.hpp>
 #include <Castor3D/Material/Material.hpp>
 #include <Castor3D/Material/Pass/Pass.hpp>
 #include <Castor3D/Material/Texture/TextureUnit.hpp>
@@ -40,6 +45,7 @@
 #include <Castor3D/Scene/Animation/AnimatedSceneNode.hpp>
 
 #include <CastorUtils/Design/ResourceCache.hpp>
+#include <CastorUtils/Data/Text/TextFont.hpp>
 
 namespace castor3d::exporter
 {
@@ -53,14 +59,15 @@ namespace castor3d::exporter
 		template< typename ObjType >
 		using FilterFuncT = bool ( * )( ObjType const & obj );
 
-		template< typename ObjType, typename ViewType >
+		template< typename ObjType, typename ViewType, typename ... Params >
 		bool writeView( ViewType const & view
 			, castor::String const & elemsName
 			, castor::StringStream & file
 			, FilterFuncT< ObjType > filter = []( ObjType const & )
 			{
 				return true;
-			} )
+			}
+			, Params && ... params )
 		{
 			bool result = true;
 
@@ -68,15 +75,17 @@ namespace castor3d::exporter
 			{
 				file << ( cuT( "// " ) + elemsName + cuT( "\n" ) );
 				log::info << cuT( "Scene::write - " ) << elemsName << cuT( "\n" );
-				castor::TextWriter< ObjType > writer{ castor::cuEmptyString };
+				castor::TextWriter< ObjType > writer{ castor::cuEmptyString
+					, std::forward< Params >( params )... };
 
 				for ( auto const & name : view )
 				{
-					auto elem = view.find( name ).lock();
-
-					if ( filter( *elem ) )
+					if ( auto elem = view.find( name ).lock() )
 					{
-						result = result && writer( *elem, file );
+						if ( filter( *elem ) )
+						{
+							result = result && writer( *elem, file );
+						}
 					}
 				}
 			}
@@ -84,32 +93,51 @@ namespace castor3d::exporter
 			return result;
 		}
 
-		template< typename ObjType, typename ViewType >
+		template< typename ObjType, typename ViewType, typename ... Params >
 		bool writeView( ViewType const & view
 			, castor::String const & elemsName
-			, castor::Path const & folder
-			, castor::String const & subfolder
-			, castor::StringStream & file
+			, castor::StringStream & sceneFile
+			, castor::StringStream & globalFile
 			, FilterFuncT< ObjType > filter = []( ObjType const & )
 			{
 				return true;
-			} )
+			}
+			, Params && ... params )
 		{
 			bool result = true;
+			auto & cache = view.getCache();
 
-			if ( !view.isEmpty() )
+			if ( !cache.isEmpty() )
 			{
-				file << ( cuT( "// " ) + elemsName + cuT( "\n" ) );
 				log::info << cuT( "Scene::write - " ) << elemsName << cuT( "\n" );
-				castor::TextWriter< ObjType > writer{ castor::cuEmptyString, folder, subfolder };
+				globalFile << ( cuT( "// " ) + elemsName + cuT( "\n" ) );
 
-				for ( auto const & name : view )
+				if ( !view.isEmpty() )
 				{
-					auto elem = view.find( name ).lock();
+					sceneFile << ( cuT( "// " ) + elemsName + cuT( "\n" ) );
+				}
 
-					if ( filter( *elem ) )
+				castor::TextWriter< ObjType > writer{ castor::cuEmptyString
+					, std::forward< Params >( params )... };
+				auto lock( castor::makeUniqueLock( cache ) );
+
+				for ( auto const & elemIt : cache )
+				{
+					auto name = elemIt.first;
+
+					if ( auto elem = elemIt.second )
 					{
-						result = result && writer( *elem, file );
+						if ( filter( *elem ) )
+						{
+							if ( view.has( name ) )
+							{
+								result = result && writer( *elem, sceneFile );
+							}
+							else
+							{
+								result = result && writer( *elem, globalFile );
+							}
+						}
 					}
 				}
 			}
@@ -117,14 +145,15 @@ namespace castor3d::exporter
 			return result;
 		}
 
-		template< typename ObjType, typename CacheType >
+		template< typename ObjType, typename CacheType, typename ... Params >
 		bool writeCache( CacheType const & cache
 			, castor::String const & elemsName
 			, castor::StringStream & file
 			, FilterFuncT< ObjType > filter = []( ObjType const & )
 			{
 				return true;
-			} )
+			}
+			, Params && ... params )
 		{
 			bool result = true;
 
@@ -132,14 +161,18 @@ namespace castor3d::exporter
 			{
 				file << ( cuT( "// " ) + elemsName + cuT( "\n" ) );
 				log::info << ( cuT( "Scene::write - " ) + elemsName );
-				castor::TextWriter< ObjType > writer{ castor::cuEmptyString };
+				castor::TextWriter< ObjType > writer{ castor::cuEmptyString
+					, std::forward< Params >( params )... };
 				auto lock( castor::makeUniqueLock( cache ) );
 
 				for ( auto const & elemIt : cache )
 				{
-					if ( filter( *elemIt.second ) )
+					if ( auto elem = elemIt.second.get() )
 					{
-						result = result && writer( *elemIt.second, file );
+						if ( filter( *elem ) )
+						{
+							result = result && writer( *elem, file );
+						}
 					}
 				}
 			}
@@ -168,9 +201,12 @@ namespace castor3d::exporter
 
 				for ( auto const & elemIt : cache )
 				{
-					if ( filter( *elemIt.second ) )
+					if ( auto elem = elemIt.second.get() )
 					{
-						result = result && writer( *elemIt.second, file );
+						if ( filter( *elem ) )
+						{
+							result = result && writer( *elem, file );
+						}
 					}
 				}
 			}
@@ -767,58 +803,306 @@ namespace castor3d::exporter
 
 	namespace
 	{
+		bool writeSamplers( castor::Path const & folder
+			, castor::Path const & filePath
+			, Scene const & scene
+			, castor::TextWriter< Scene >::Options & options )
+		{
+			log::info << cuT( "Scene::write - Samplers\n" );
+			castor::StringStream sceneStream;
+			castor::StringStream globalStream;
+			std::set< castor3d::SamplerSPtr > sceneSamplers;
+			std::set< castor3d::SamplerSPtr > globalSamplers;
+
+			for ( auto & materialIt : scene.getEngine()->getMaterialCache() )
+			{
+				auto materialName = materialIt.first;
+
+				if ( auto material = materialIt.second )
+				{
+					if ( scene.hasMaterial( materialName ) )
+					{
+						for ( auto & pass : *material )
+						{
+							for ( auto & unit : pass->getTextureUnits() )
+							{
+								sceneSamplers.insert( unit->getSampler().lock() );
+							}
+						}
+					}
+					else
+					{
+						for ( auto & pass : *material )
+						{
+							for ( auto & unit : pass->getTextureUnits() )
+							{
+								globalSamplers.insert( unit->getSampler().lock() );
+							}
+						}
+					}
+				}
+			}
+
+			castor::TextWriter< Sampler > writer{ castor::cuEmptyString };
+			bool result = true;
+
+			for ( auto & sampler : sceneSamplers )
+			{
+				result = result && writer( *sampler, sceneStream );
+			}
+
+			for ( auto & sampler : globalSamplers )
+			{
+				result = result && writer( *sampler, globalStream );
+			}
+
+			if ( result && !sceneStream.str().empty() )
+			{
+				options.sceneSamplersFile = cuT( "Helpers" ) / castor::Path( filePath.getFileName( false ) + cuT( "-Samplers.cscn" ) );
+				castor::TextFile file{ folder / options.sceneSamplersFile
+					, castor::File::OpenMode::eWrite };
+				result = file.writeText( "// Samplers\n" ) > 0
+					&& file.writeText( sceneStream.str() ) > 0;
+			}
+
+			if ( result && !globalStream.str().empty() )
+			{
+				options.globalSamplersFile = cuT( "Helpers" ) / castor::Path( cuT( "Global-Samplers.cscn" ) );
+				castor::TextFile file{ folder / options.globalSamplersFile
+					, castor::File::OpenMode::eWrite };
+				result = file.writeText( "// Samplers\n" ) > 0
+					&& file.writeText( globalStream.str() ) > 0;
+			}
+
+			return result;
+		}
+
 		bool writeMaterials( castor::Path const & folder
 			, castor::Path const & filePath
 			, Scene const & scene
 			, castor::TextWriter< Scene >::Options & options )
 		{
 			bool result = false;
-			castor::StringStream stream;
-			{
-				std::set< castor3d::SamplerSPtr > samplers;
-
-				for ( auto & materialName : scene.getMaterialView() )
+			castor::StringStream sceneStream;
+			castor::StringStream globalStream;
+			result = writeView< Material >( scene.getMaterialView()
+				, cuT( "Materials" )
+				, sceneStream
+				, globalStream
+				, []( Material const & object )
 				{
-					if ( auto material = scene.tryFindMaterial( materialName ).lock() )
-					{
-						for ( auto & pass : *material )
-						{
-							for ( auto & unit : pass->getTextureUnits() )
-							{
-								samplers.insert( unit->getSampler().lock() );
-							}
-						}
-					}
+					return object.isSerialisable();
 				}
+				, options.rootFolder
+				, options.subfolder );
 
-				stream << ( cuT( "// Samplers\n" ) );
-				log::info << cuT( "Scene::write - Samplers\n" );
-				castor::TextWriter< Sampler > writer{ castor::cuEmptyString };
-				result = true;
+			if ( result && !sceneStream.str().empty() )
+			{
+				options.sceneMaterialsFile = cuT( "Helpers" ) / castor::Path( filePath.getFileName( false ) + cuT( "-Materials.cscn" ) );
+				castor::TextFile file{ folder / options.sceneMaterialsFile
+					, castor::File::OpenMode::eWrite };
+				result = file.writeText( sceneStream.str() ) > 0;
+			}
 
-				for ( auto & sampler : samplers )
+			if ( result && !globalStream.str().empty() )
+			{
+				options.globalMaterialsFile = cuT( "Helpers" ) / castor::Path( cuT( "Global-Materials.cscn" ) );
+				castor::TextFile file{ folder / options.globalMaterialsFile
+					, castor::File::OpenMode::eWrite };
+				result = file.writeText( globalStream.str() ) > 0;
+			}
+
+			return result;
+		}
+
+		bool writeFonts( castor::Path const & folder
+			, castor::Path const & filePath
+			, Scene const & scene
+			, castor::TextWriter< Scene >::Options & options )
+		{
+			bool result = false;
+			castor::StringStream sceneStream;
+			castor::StringStream globalStream;
+			result = writeView< castor::Font >( scene.getFontView()
+				, cuT( "Fonts" )
+				, sceneStream
+				, globalStream
+				, []( castor::Font const & object )
 				{
-					result = result && writer( *sampler, stream );
+					return object.isSerialisable();
+				}
+				, options.rootFolder );
+
+			if ( result && !sceneStream.str().empty() )
+			{
+				options.sceneFontsFile = cuT( "Helpers" ) / castor::Path( filePath.getFileName( false ) + cuT( "-Fonts.cscn" ) );
+				castor::TextFile file{ folder / options.sceneFontsFile
+					, castor::File::OpenMode::eWrite };
+				result = file.writeText( sceneStream.str() ) > 0;
+			}
+
+			if ( result && !globalStream.str().empty() )
+			{
+				options.globalFontsFile = cuT( "Helpers" ) / castor::Path( cuT( "Global-Fonts.cscn" ) );
+				castor::TextFile file{ folder / options.globalFontsFile
+					, castor::File::OpenMode::eWrite };
+				result = file.writeText( globalStream.str() ) > 0;
+			}
+
+			return result;
+		}
+
+		bool writeGuiThemes( castor::Path const & folder
+			, castor::Path const & filePath
+			, Scene const & scene
+			, castor::TextWriter< Scene >::Options & options )
+		{
+			auto & manager = static_cast< ControlsManager const & >( *scene.getEngine()->getUserInputListener() );
+			castor::TextWriter< Theme > globalWriter{ castor::cuEmptyString, nullptr };
+			castor::TextWriter< Theme > sceneWriter{ castor::cuEmptyString, &scene };
+			castor::StringStream sceneStream;
+			castor::StringStream globalStream;
+			bool result{ true };
+
+			for ( auto & theme : manager.getThemes() )
+			{
+				if ( theme.first == "Debug" )
+				{
+					continue;
 				}
 
 				if ( result )
 				{
-					stream << ( cuT( "\n" ) );
-					result = writeView< Material >( scene.getMaterialView()
-						, cuT( "Materials" )
-						, options.rootFolder
-						, options.subfolder
-						, stream );
+					result = sceneWriter( *theme.second, sceneStream );
+				}
+
+				if ( result )
+				{
+					result = globalWriter( *theme.second, globalStream );
 				}
 			}
 
+			if ( result && !globalStream.str().empty() )
+			{
+				options.globalThemesFile = cuT( "Helpers" ) / castor::Path( cuT( "Global-GUI-Themes.cscn" ) );
+				castor::TextFile file{ folder / options.globalThemesFile
+					, castor::File::OpenMode::eWrite };
+				result = file.writeText( "// GUI Themes\n" ) > 0
+					&& file.writeText( globalStream.str() ) > 0;
+			}
+
+			if ( result && !sceneStream.str().empty() )
+			{
+				options.sceneThemesFile = cuT( "Helpers" ) / castor::Path( filePath.getFileName( false ) + cuT( "-GUI-Themes.cscn" ) );
+				castor::TextFile file{ folder / options.sceneThemesFile
+					, castor::File::OpenMode::eWrite };
+				result = file.writeText( "// GUI Themes\n" ) > 0
+					&& file.writeText( sceneStream.str() ) > 0;
+			}
+
+			return result;
+		}
+
+		bool writeGuiStyles( castor::Path const & folder
+			, castor::Path const & filePath
+			, Scene const & scene
+			, castor::TextWriter< Scene >::Options & options )
+		{
+			auto & manager = static_cast< ControlsManager const & >( *scene.getEngine()->getUserInputListener() );
+			castor::TextWriter< StylesHolder > globalWriter{ castor::cuEmptyString, nullptr, "" };
+			castor::TextWriter< StylesHolder > sceneWriter{ castor::cuEmptyString, &scene, "" };
+			castor::StringStream sceneStream;
+			castor::StringStream globalStream;
+			auto result = sceneWriter( manager, sceneStream );
+
 			if ( result )
 			{
-				options.materialsFile = cuT( "Helpers" ) / castor::Path( filePath.getFileName( false ) + cuT( "-Materials.cscn" ) );
-				castor::TextFile file{ folder / options.materialsFile
-					, castor::File::OpenMode::eWrite };
-				result = file.writeText( stream.str() ) > 0;
+				result = globalWriter( manager, globalStream );
 			}
+
+			if ( result && !globalStream.str().empty() )
+			{
+				options.globalStylesFile = cuT( "Helpers" ) / castor::Path( cuT( "Global-GUI-Styles.cscn" ) );
+				castor::TextFile file{ folder / options.globalStylesFile
+					, castor::File::OpenMode::eWrite };
+				result = file.writeText( "// GUI Styles\n" ) > 0
+					&& file.writeText( globalStream.str() ) > 0;
+			}
+
+			if ( result && !sceneStream.str().empty() )
+			{
+				options.sceneStylesFile = cuT( "Helpers" ) / castor::Path( filePath.getFileName( false ) + cuT( "-GUI-Styles.cscn" ) );
+				castor::TextFile file{ folder / options.sceneStylesFile
+					, castor::File::OpenMode::eWrite };
+				result = file.writeText( "// GUI Styles\n" ) > 0
+					&& file.writeText( sceneStream.str() ) > 0;
+			}
+
+			return result;
+		}
+
+		bool writeGuiControls( castor::Path const & folder
+			, castor::Path const & filePath
+			, Scene const & scene
+			, castor::TextWriter< Scene >::Options & options )
+		{
+			auto & manager = static_cast< ControlsManager const & >( *scene.getEngine()->getUserInputListener() );
+			castor::TextWriter< StylesHolder > writer{ castor::cuEmptyString, nullptr, "" };
+			castor::StringStream sceneStream;
+			castor::StringStream globalStream;
+			auto filter = [&scene, &sceneStream, &globalStream]( Control const & control ) -> castor::StringStream *
+			{
+				if ( control.getName() == "Debug/Main"
+					|| control.getName() == "Debug/RenderPasses" )
+				{
+					return nullptr;
+				}
+
+				if ( !control.hasScene() )
+				{
+					return &globalStream;
+				}
+
+				if ( control.hasScene()
+					&& &control.getScene() == &scene )
+				{
+					return &sceneStream;
+				}
+
+				return nullptr;
+			};
+
+			bool result = true;
+
+			for ( auto control : manager.getRootControls() )
+			{
+				if ( result )
+				{
+					if ( auto stream = filter( *control ) )
+					{
+						result = writeControl( writer, *control, *stream );
+					}
+				}
+			}
+
+			if ( result && !globalStream.str().empty() )
+			{
+				options.globalControlsFile = cuT( "Helpers" ) / castor::Path( cuT( "Global-GUI-Controls.cscn" ) );
+				castor::TextFile file{ folder / options.globalControlsFile
+					, castor::File::OpenMode::eWrite };
+				result = file.writeText( "// GUI Controls\n" ) > 0
+					&& file.writeText( globalStream.str() ) > 0;
+			}
+
+			if ( result && !sceneStream.str().empty() )
+			{
+				options.sceneControlsFile = cuT( "Helpers" ) / castor::Path( filePath.getFileName( false ) + cuT( "-GUI-Controls.cscn" ) );
+				castor::TextFile file{ folder / options.sceneControlsFile
+					, castor::File::OpenMode::eWrite };
+				result = file.writeText( "// GUI Controls\n" ) > 0
+					&& file.writeText( sceneStream.str() ) > 0;
+			}
+
 			return result;
 		}
 
@@ -1070,13 +1354,73 @@ namespace castor3d::exporter
 					auto name = filePath.getFileName();
 					stream << "// Global configuration\n";
 					stream << "materials " << scene.getDefaultLightingModelName() << "\n";
+
+					if ( !options.globalSamplersFile.empty() )
+					{
+						stream << "include \"" << options.globalSamplersFile << "\"\n";
+					}
+
+					if ( !options.globalMaterialsFile.empty() )
+					{
+						stream << "include \"" << options.globalMaterialsFile << "\"\n";
+					}
+
+					if ( !options.globalFontsFile.empty() )
+					{
+						stream << "include \"" << options.globalFontsFile << "\"\n";
+					}
+
+					if ( !options.globalThemesFile.empty() )
+					{
+						stream << "include \"" << options.globalThemesFile << "\"\n";
+					}
+
+					if ( !options.globalStylesFile.empty() )
+					{
+						stream << "include \"" << options.globalStylesFile << "\"\n";
+					}
+
+					if ( !options.globalControlsFile.empty() )
+					{
+						stream << "include \"" << options.globalControlsFile << "\"\n";
+					}
+
 					stream << "\n";
 					stream << "scene \"" << name << "\"\n";
 					stream << "{\n";
 					stream << "	// Scene configuration\n";
 					stream << "	ambient_light 1.0 1.0 1.0\n";
 					stream << "	background_colour 0.50000 0.50000 0.50000\n";
-					stream << "	include \"Helpers/" << name << "-Materials.cscn\"\n";
+
+					if ( !options.sceneSamplersFile.empty() )
+					{
+						stream << "include \"" << options.sceneSamplersFile << "\"\n";
+					}
+
+					if ( !options.sceneMaterialsFile.empty() )
+					{
+						stream << "include \"" << options.sceneMaterialsFile << "\"\n";
+					}
+
+					if ( !options.sceneFontsFile.empty() )
+					{
+						stream << "include \"" << options.sceneFontsFile << "\"\n";
+					}
+
+					if ( !options.sceneThemesFile.empty() )
+					{
+						stream << "include \"" << options.sceneThemesFile << "\"\n";
+					}
+
+					if ( !options.sceneStylesFile.empty() )
+					{
+						stream << "include \"" << options.sceneStylesFile << "\"\n";
+					}
+
+					if ( !options.sceneControlsFile.empty() )
+					{
+						stream << "include \"" << options.sceneControlsFile << "\"\n";
+					}
 
 					if ( !skl.empty() )
 					{
@@ -1195,10 +1539,18 @@ namespace castor3d::exporter
 			, filePath
 			, skeletonFolder
 			, meshFolder );
-		bool result = writeMaterials( folder
+		bool result = writeSamplers( folder
 			, filePath
 			, scene
 			, options );
+
+		if ( result )
+		{
+			result = writeMaterials( folder
+				, filePath
+				, scene
+				, options );
+		}
 
 		if ( result )
 		{
@@ -1322,13 +1674,42 @@ namespace castor3d::exporter
 
 		if ( result )
 		{
-			if ( result )
-			{
-				result = writeLights( folder
-					, filePath
-					, scene
-					, options );
-			}
+			result = writeFonts( folder
+				, filePath
+				, scene
+				, options );
+		}
+
+		if ( result )
+		{
+			result = writeGuiThemes( folder
+				, filePath
+				, scene
+				, options );
+		}
+
+		if ( result )
+		{
+			result = writeGuiStyles( folder
+				, filePath
+				, scene
+				, options );
+		}
+
+		if ( result )
+		{
+			result = writeGuiControls( folder
+				, filePath
+				, scene
+				, options );
+		}
+
+		if ( result )
+		{
+			result = writeLights( folder
+				, filePath
+				, scene
+				, options );
 
 			castor::StringStream skeletons;
 			castor::StringStream meshes;

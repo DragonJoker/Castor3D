@@ -18,8 +18,8 @@ namespace castor3d
 			: m_engine{ engine }
 			, m_holderName{ std::move( name ) }
 			, m_defaultFont{ engine.getFontCache().isEmpty()
-			? nullptr
-			: engine.getFontCache().begin()->second }
+				? nullptr
+				: engine.getFontCache().begin()->second }
 		{
 		}
 
@@ -44,85 +44,31 @@ namespace castor3d
 			m_defaultFont = font;
 		}
 
-		ButtonStyleRPtr createButtonStyle( castor::String name )
-		{
-			return createControlStyle( std::move( name ), m_buttonStyles );
-		}
+		C3D_API ButtonStyleRPtr createButtonStyle( castor::String name
+			, Scene * scene );
+		C3D_API ComboBoxStyleRPtr createComboBoxStyle( castor::String name
+			, Scene * scene );
+		C3D_API EditStyleRPtr createEditStyle( castor::String name
+			, Scene * scene );
+		C3D_API ListBoxStyleRPtr createListBoxStyle( castor::String name
+			, Scene * scene );
+		C3D_API SliderStyleRPtr createSliderStyle( castor::String name
+			, Scene * scene );
+		C3D_API StaticStyleRPtr createStaticStyle( castor::String name
+			, Scene * scene );
+		C3D_API PanelStyleRPtr createPanelStyle( castor::String name
+			, Scene * scene );
+		C3D_API ExpandablePanelStyleRPtr createExpandablePanelStyle( castor::String name
+			, Scene * scene );
 
-		ComboBoxStyleRPtr createComboBoxStyle( castor::String name )
-		{
-			return createControlStyle( std::move( name ), m_comboBoxStyles );
-		}
-
-		EditStyleRPtr createEditStyle( castor::String name )
-		{
-			return createControlStyle( std::move( name ), m_editStyles );
-		}
-
-		ListBoxStyleRPtr createListBoxStyle( castor::String name )
-		{
-			return createControlStyle( std::move( name ), m_listBoxStyles );
-		}
-
-		SliderStyleRPtr createSliderStyle( castor::String name )
-		{
-			return createControlStyle( std::move( name ), m_sliderStyles );
-		}
-
-		StaticStyleRPtr createStaticStyle( castor::String name )
-		{
-			return createControlStyle( std::move( name ), m_staticStyles );
-		}
-
-		PanelStyleRPtr createPanelStyle( castor::String name )
-		{
-			return createControlStyle( std::move( name ), m_panelStyles );
-		}
-
-		ExpandablePanelStyleRPtr createExpandablePanelStyle( castor::String name )
-		{
-			return createControlStyle( std::move( name ), m_expandablePanelStyles );
-		}
-
-		virtual ButtonStyleRPtr getButtonStyle( castor::String const & name )const
-		{
-			return getControlStyle( name, m_buttonStyles );
-		}
-
-		virtual ComboBoxStyleRPtr getComboBoxStyle( castor::String const & name )const
-		{
-			return getControlStyle( name, m_comboBoxStyles );
-		}
-
-		virtual EditStyleRPtr getEditStyle( castor::String const & name )const
-		{
-			return getControlStyle( name, m_editStyles );
-		}
-
-		virtual ListBoxStyleRPtr getListBoxStyle( castor::String const & name )const
-		{
-			return getControlStyle( name, m_listBoxStyles );
-		}
-
-		virtual SliderStyleRPtr getSliderStyle( castor::String const & name )const
-		{
-			return getControlStyle( name, m_sliderStyles );
-		}
-
-		virtual StaticStyleRPtr getStaticStyle( castor::String const & name )const
-		{
-			return getControlStyle( name, m_staticStyles );
-		}
-
-		virtual PanelStyleRPtr getPanelStyle( castor::String const & name )const
-		{
-			return getControlStyle( name, m_panelStyles );
-		}
-
-		virtual ExpandablePanelStyleRPtr getExpandablePanelStyle( castor::String const & name )const
-		{
-			return getControlStyle( name, m_expandablePanelStyles );
-		}
+		C3D_API virtual ButtonStyleRPtr getButtonStyle( castor::String const & name )const;
+		C3D_API virtual ComboBoxStyleRPtr getComboBoxStyle( castor::String const & name )const;
+		C3D_API virtual EditStyleRPtr getEditStyle( castor::String const & name )const;
+		C3D_API virtual ListBoxStyleRPtr getListBoxStyle( castor::String const & name )const;
+		C3D_API virtual SliderStyleRPtr getSliderStyle( castor::String const & name )const;
+		C3D_API virtual StaticStyleRPtr getStaticStyle( castor::String const & name )const;
+		C3D_API virtual PanelStyleRPtr getPanelStyle( castor::String const & name )const;
+		C3D_API virtual ExpandablePanelStyleRPtr getExpandablePanelStyle( castor::String const & name )const;
 
 		template< typename StyleT >
 		StyleT * getStyle( castor::String const & name )const
@@ -166,9 +112,56 @@ namespace castor3d
 			}
 		}
 
+		auto & getButtonStyles()const noexcept
+		{
+			return m_buttonStyles;
+		}
+
+		auto & getComboBoxStyles()const noexcept
+		{
+			return m_comboBoxStyles;
+		}
+
+		auto & getEditStyles()const noexcept
+		{
+			return m_editStyles;
+		}
+
+		auto & getListBoxStyles()const noexcept
+		{
+			return m_listBoxStyles;
+		}
+
+		auto & getSliderStyles()const noexcept
+		{
+			return m_sliderStyles;
+		}
+
+		auto & getStaticStyles()const noexcept
+		{
+			return m_staticStyles;
+		}
+
+		auto & getPanelStyles()const noexcept
+		{
+			return m_panelStyles;
+		}
+
+		auto & getExpandablePanelStyles()const noexcept
+		{
+			return m_expandablePanelStyles;
+		}
+
+	protected:
+		auto & getHolderName()const noexcept
+		{
+			return m_holderName;
+		}
+
 	private:
 		template< typename StyleT >
 		StyleT * createControlStyle( castor::String name
+			, Scene * scene
 			, std::map< castor::String, castor::UniquePtr< StyleT > > & controls );
 
 		template< typename StyleT >
@@ -198,7 +191,14 @@ namespace castor3d
 
 		PanelStyle( castor::String const & name
 			, Engine & engine )
-			: ControlStyle{ Type, name, engine }
+			: PanelStyle{ name, nullptr, engine }
+		{
+		}
+
+		PanelStyle( castor::String const & name
+			, Scene * scene
+			, Engine & engine )
+			: ControlStyle{ Type, name, scene, engine }
 			, StylesHolder{ name, engine }
 		{
 		}

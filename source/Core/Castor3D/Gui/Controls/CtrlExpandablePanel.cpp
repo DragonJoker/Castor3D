@@ -67,9 +67,9 @@ namespace castor3d
 			, m_retractCaption
 			, castor::Position{ int32_t( size->x - m_headerHeight ), 0 }
 			, castor::Size{ m_headerHeight, m_headerHeight } ) }
-		, m_panel{ std::make_shared< PanelCtrl >( m_scene
-			, cuT( "Panel" )
-			, &style->getPanelStyle()
+		, m_content{ std::make_shared< PanelCtrl >( m_scene
+			, cuT( "Content" )
+			, &style->getContentStyle()
 			, this
 			, castor::Position{ 0, int32_t( m_headerHeight ) }
 			, castor::Size{ size->x, size->y - m_headerHeight } ) }
@@ -78,7 +78,7 @@ namespace castor3d
 		setBorderSize( { 0u, 0u, 0u, 0u } );
 		m_header->setVisible( visible );
 		m_expand->setVisible( visible );
-		m_panel->setVisible( visible );
+		m_content->setVisible( visible );
 		m_expandClickedConnection = m_expand->connect( ButtonEvent::eClicked
 			, [this]()
 			{
@@ -93,7 +93,7 @@ namespace castor3d
 		auto & style = getStyle();
 		m_header->setStyle( &style.getHeaderStyle() );
 		m_expand->setStyle( &style.getExpandStyle() );
-		m_panel->setStyle( &style.getPanelStyle() );
+		m_content->setStyle( &style.getContentStyle() );
 	}
 
 	void ExpandablePanelCtrl::doCreate()
@@ -105,7 +105,7 @@ namespace castor3d
 		auto & manager = *getControlsManager();
 		manager.create( m_header );
 		manager.create( m_expand );
-		manager.create( m_panel );
+		manager.create( m_content );
 
 		manager.connectEvents( *this );
 
@@ -132,9 +132,9 @@ namespace castor3d
 			manager.destroy( m_header );
 		}
 
-		if ( m_panel )
+		if ( m_content )
 		{
-			manager.destroy( m_panel );
+			manager.destroy( m_content );
 		}
 	}
 
@@ -158,20 +158,20 @@ namespace castor3d
 	{
 		m_header->setVisible( visible );
 		m_expand->setVisible( visible );
-		m_panel->setVisible( m_expanded && visible );
+		m_content->setVisible( m_expanded && visible );
 	}
 
 	void ExpandablePanelCtrl::doSwitchExpand()
 	{
 		m_expanded = !m_expanded;
-		m_panel->setVisible( m_expanded && isVisible() );
+		m_content->setVisible( m_expanded && isVisible() );
 		auto maxHeight = std::max( m_header->getSize()->y, m_expand->getSize()->y );
 		auto size = getSize();
 		size->y = maxHeight;
 
 		if ( m_expanded )
 		{
-			size->y += m_panel->getSize()->y;
+			size->y += m_content->getSize()->y;
 		}
 
 		setSize( size );
@@ -198,7 +198,7 @@ namespace castor3d
 
 		if ( m_expanded )
 		{
-			m_panel->setPosition( castor::Position( 0, int32_t( maxHeight ) ) );
+			m_content->setPosition( castor::Position( 0, int32_t( maxHeight ) ) );
 		}
 	}
 
@@ -213,7 +213,7 @@ namespace castor3d
 
 		if ( m_expanded )
 		{
-			m_panel->setSize( castor::Size( size->x, size->y - maxHeight ) );
+			m_content->setSize( castor::Size( size->x, size->y - maxHeight ) );
 		}
 	}
 }

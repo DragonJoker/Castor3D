@@ -105,7 +105,7 @@ namespace castor3d
 		C3D_API bool hasEnvironmentMapping()const;
 		C3D_API bool hasSubsurfaceScattering()const;
 
-		LightingModelID getLightingModelId()const
+		LightingModelID getLightingModelId()const noexcept
 		{
 			return m_lightingModelId;
 		}
@@ -115,9 +115,14 @@ namespace castor3d
 			return uint32_t( m_passes.size() );
 		}
 
-		RenderPassRegisterInfo * getRenderPassInfo()const
+		RenderPassRegisterInfo * getRenderPassInfo()const noexcept
 		{
 			return m_renderPassInfo;
+		}
+
+		bool isSerialisable()const noexcept
+		{
+			return m_serialisable;
 		}
 		/**@}*/
 		/**
@@ -158,9 +163,14 @@ namespace castor3d
 		*	Mutateurs.
 		*/
 		/**@{*/
-		void setRenderPassInfo( RenderPassRegisterInfo * renderPassInfo )
+		void setRenderPassInfo( RenderPassRegisterInfo * renderPassInfo )noexcept
 		{
 			m_renderPassInfo = renderPassInfo;
+		}
+
+		void setSerialisable( bool v )noexcept
+		{
+			m_serialisable = v;
 		}
 		/**@}*/
 
@@ -180,6 +190,7 @@ namespace castor3d
 		LightingModelID m_lightingModelId;
 		std::map< PassSPtr, OnPassChangedConnection > m_passListeners;
 		RenderPassRegisterInfo * m_renderPassInfo{};
+		bool m_serialisable{ true };
 	};
 }
 

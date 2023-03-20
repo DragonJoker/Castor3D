@@ -213,8 +213,14 @@ namespace castor3d
 		}
 		/**@}*/
 
+		auto & getCache()const
+		{
+			return m_cache;
+		}
+
 	private:
 		ElementCacheT & m_cache;
+		mutable std::mutex m_elementsMutex;
 		std::set< ElementKeyT > m_createdElements;
 		ElementInitialiserT m_initialise;
 		ElementCleanerT m_clean;

@@ -117,6 +117,36 @@ namespace castor3d
 		}
 	}
 
+	HAlign StaticCtrl::getHAlign()const
+	{
+		if ( castor::checkFlag( getFlags(), StaticFlag::eHAlignCenter ) )
+		{
+			return HAlign::eCenter;
+		}
+
+		if ( castor::checkFlag( getFlags(), StaticFlag::eHAlignRight ) )
+		{
+			return HAlign::eRight;
+		}
+
+		return HAlign::eLeft;
+	}
+
+	VAlign StaticCtrl::getVAlign()const
+	{
+		if ( castor::checkFlag( getFlags(), StaticFlag::eVAlignCenter ) )
+		{
+			return VAlign::eCenter;
+		}
+
+		if ( castor::checkFlag( getFlags(), StaticFlag::eVAlignBottom ) )
+		{
+			return VAlign::eBottom;
+		}
+
+		return VAlign::eTop;
+	}
+
 	void StaticCtrl::doUpdateStyle()
 	{
 		auto & style = getStyle();
@@ -174,31 +204,8 @@ namespace castor3d
 	{
 		if ( auto text = m_text.lock() )
 		{
-			if ( castor::checkFlag( getFlags(), StaticFlag::eHAlignCenter ) )
-			{
-				text->setHAlign( HAlign::eCenter );
-			}
-			else if ( castor::checkFlag( getFlags(), StaticFlag::eHAlignRight ) )
-			{
-				text->setHAlign( HAlign::eRight );
-			}
-			else
-			{
-				text->setHAlign( HAlign::eLeft );
-			}
-
-			if ( castor::checkFlag( getFlags(), StaticFlag::eVAlignCenter ) )
-			{
-				text->setVAlign( VAlign::eCenter );
-			}
-			else if ( castor::checkFlag( getFlags(), StaticFlag::eVAlignBottom ) )
-			{
-				text->setVAlign( VAlign::eBottom );
-			}
-			else
-			{
-				text->setVAlign( VAlign::eTop );
-			}
+			text->setHAlign( getHAlign() );
+			text->setVAlign( getVAlign() );
 		}
 	}
 

@@ -74,6 +74,11 @@ namespace castor3d
 		*/
 		castor::String const & getModelName()const override;
 
+		castor::Path const & getImagePath()const noexcept
+		{
+			return m_2dTexturePath;
+		}
+
 	private:
 		bool doInitialise( RenderDevice const & device )override;
 		void doCleanup()override;

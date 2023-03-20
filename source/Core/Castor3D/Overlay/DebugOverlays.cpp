@@ -58,7 +58,7 @@ namespace castor3d
 		, m_v{ value }
 	{
 		auto & manager = *parent.getControlsManager();
-		auto panelStyle = manager.getStyle< PanelStyle >( "Debug/Main/Container/Panel/Entry" );
+		auto panelStyle = parent.getStyle().getStyle< PanelStyle >( "Entry" );
 		auto labelStyle = panelStyle->getStyle< StaticStyle >( "Label" );
 		auto valueStyle = panelStyle->getStyle< StaticStyle >( "Value" );
 		m_panel = std::make_shared< PanelCtrl >( nullptr
@@ -118,7 +118,7 @@ namespace castor3d
 			, castor::Size{ DebugPanelWidth, PanelHeight }
 			, PanelHeight
 			, true );
-		m_panel->getPanel()->setLayout( castor::makeUniqueDerived< Layout, LayoutBox >( *m_panel->getPanel() ) );
+		m_panel->getContent()->setLayout( castor::makeUniqueDerived< Layout, LayoutBox >( *m_panel->getContent() ) );
 		m_title = std::make_shared< StaticCtrl >( nullptr
 			, "Title"
 			, titleStyle
@@ -167,7 +167,7 @@ namespace castor3d
 		m_panels.emplace_back( name
 			, label
 			, m_engine
-			, *m_panel->getPanel()
+			, *m_panel->getContent()
 			, value );
 	}
 
@@ -448,7 +448,7 @@ namespace castor3d
 			, castor::Size{ CategoryLineWidth, PanelHeight }
 			, PanelHeight
 			, expanded );
-		m_container->getPanel()->setLayout( castor::makeUniqueDerived< Layout, LayoutBox >( *m_container->getPanel() ) );
+		m_container->getContent()->setLayout( castor::makeUniqueDerived< Layout, LayoutBox >( *m_container->getContent() ) );
 		auto nameWidth = CategoryNameWidth - m_leftOffset;
 		m_name = std::make_shared< StaticCtrl >( nullptr
 			, "Title"
@@ -556,7 +556,7 @@ namespace castor3d
 			{
 				auto index = uint32_t( m_passes.size() );
 				m_passes.emplace_back( std::make_unique< PassOverlays >( *m_engine
-					, *m_container->getPanel()
+					, *m_container->getContent()
 					, name
 					, m_leftOffset + 5u
 					, index ) );
@@ -581,7 +581,7 @@ namespace castor3d
 			{
 				m_categories.emplace_back( current
 					, *m_engine
-					, *m_container->getPanel()
+					, *m_container->getContent()
 					, m_leftOffset + 5u );
 				it = std::next( m_categories.begin()
 					, ptrdiff_t( m_categories.size() - 1 ) );
@@ -735,7 +735,7 @@ namespace castor3d
 
 	PanelCtrl * DebugOverlays::CategoryOverlays::getContainer()const
 	{
-		return m_container->getPanel().get();
+		return m_container->getContent().get();
 	}
 
 	void DebugOverlays::CategoryOverlays::dumpFrameTimes( castor::String prefix

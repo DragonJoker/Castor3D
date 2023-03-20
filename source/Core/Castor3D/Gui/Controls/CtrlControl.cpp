@@ -213,6 +213,21 @@ namespace castor3d
 		return it->lock();
 	}
 
+	castor::Point4d const & Control::getBorderInnerUV()const
+	{
+		return doGetBackground().getBorderInnerUV();
+	}
+
+	castor::Point4d const & Control::getBorderOuterUV()const
+	{
+		return doGetBackground().getBorderOuterUV();
+	}
+
+	castor::Point4d const & Control::getUV()const
+	{
+		return doGetBackground().getUV();
+	}
+
 	Overlay & Control::getBackgroundOverlay()
 	{
 		return doGetBackground().getOverlay();

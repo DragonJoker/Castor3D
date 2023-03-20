@@ -55,6 +55,14 @@ namespace castor3d
 		*/
 		C3D_API void setVAlign( VAlign align );
 
+		/** \return	The horizontal alignment for the text.
+		*/
+		C3D_API HAlign getHAlign()const;
+
+		/** \return	The vertical alignment for the text.
+		*/
+		C3D_API VAlign getVAlign()const;
+
 		/** Retrieves the caption
 		 *\return		The value
 		 */
@@ -116,6 +124,10 @@ namespace castor3d
 		/** @copydoc Control::doSetVisible
 		*/
 		void doSetVisible( bool visible )override;
+
+		/** @copydoc Control::doUpdateFlags
+		*/
+		void doUpdateFlags()override;
 
 		/** Event when mouse enters the control
 		 *\param[in]	event		The mouse event

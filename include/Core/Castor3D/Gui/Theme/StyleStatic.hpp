@@ -17,8 +17,17 @@ namespace castor3d
 		StaticStyle( castor::String const & name
 			, Engine & engine
 			, castor::String const & fontName )
+			: StaticStyle{ name, nullptr, engine, fontName }
+		{
+		}
+
+		StaticStyle( castor::String const & name
+			, Scene * scene
+			, Engine & engine
+			, castor::String const & fontName )
 			: ControlStyle{ Type
 				, name
+				, scene
 				, engine }
 			, m_fontName{ fontName }
 			, m_textMaterial{ getForegroundMaterial() }

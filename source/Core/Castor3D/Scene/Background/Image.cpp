@@ -32,7 +32,7 @@ namespace castor
 			log::info << tabs() << cuT( "Writing ImageBackground" ) << std::endl;
 			return writeFile( file
 				, "background_image"
-				, castor::Path{ background.getTexture().getDefaultView().toString() }
+				, background.getImagePath()
 				, m_folder
 				, cuT( "Textures" ) );
 		}
@@ -111,7 +111,7 @@ namespace castor3d
 				, cuT( "ImageBackground_Colour" ) );
 			texture->setSource( folder, relative, { false, false, false } );
 			m_2dTexture = texture;
-			m_2dTexturePath = castor::Path( m_2dTexture->getDefaultView().toString() );
+			m_2dTexturePath = texture->getImage().getPath();
 			notifyChanged();
 			result = true;
 		}

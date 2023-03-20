@@ -17,13 +17,22 @@ namespace castor3d
 		static ControlType constexpr Type = ControlType::eSlider;
 
 		SliderStyle( castor::String const & name
+			, Scene * scene
 			, Engine & engine
 			, castor::String const & fontName )
 			: ControlStyle{ Type
 				, name
+				, scene
 				, engine }
-			, m_lineStyle{ name + "/Tick", engine, fontName }
-			, m_tickStyle{ name + "/Line", engine, fontName }
+			, m_lineStyle{ name + "/Tick", scene, engine, fontName }
+			, m_tickStyle{ name + "/Line", scene, engine, fontName }
+		{
+		}
+
+		SliderStyle( castor::String const & name
+			, Engine & engine
+			, castor::String const & fontName )
+			: SliderStyle{ name, nullptr, engine, fontName }
 		{
 		}
 

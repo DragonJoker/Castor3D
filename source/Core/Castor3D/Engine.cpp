@@ -1057,6 +1057,24 @@ namespace castor3d
 			{
 				log::error << cuT( "Can't read Core.zip data file" ) << std::endl;
 			}
+
+			{
+				auto lock( castor::makeUniqueLock( getMaterialCache() ) );
+
+				for ( auto materialIt : getMaterialCache() )
+				{
+					materialIt.second->setSerialisable( false );
+				}
+			}
+
+			{
+				auto lock( castor::makeUniqueLock( getFontCache() ) );
+
+				for ( auto fontIt : getFontCache() )
+				{
+					fontIt.second->setSerialisable( false );
+				}
+			}
 		}
 		
 		auto & device = m_renderSystem->getRenderDevice();
@@ -1065,6 +1083,5 @@ namespace castor3d
 			, m_resources
 			, { PrefilteredBrdfMapSize, PrefilteredBrdfMapSize } );
 		m_brdf.create();
-
 	}
 }

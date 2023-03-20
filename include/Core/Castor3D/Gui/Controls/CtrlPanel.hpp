@@ -52,11 +52,12 @@ namespace castor3d
 
 		C3D_API static ControlType constexpr Type{ ControlType::ePanel };
 
-	private:
 		PanelStyle & getStyle()
 		{
 			return static_cast< PanelStyle & >( getBaseStyle() );
 		}
+
+	private:
 		/** @copydoc Control::doCreate
 		*/
 		void doCreate()override;

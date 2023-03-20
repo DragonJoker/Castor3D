@@ -143,6 +143,10 @@ namespace castor3d
 		/**@name Getters */
 		//@{
 
+		C3D_API castor::Point4d const & getBorderInnerUV()const;
+		C3D_API castor::Point4d const & getBorderOuterUV()const;
+		C3D_API castor::Point4d const & getUV()const;
+
 		ControlID getId()const noexcept
 		{
 			return m_id;
@@ -173,7 +177,7 @@ namespace castor3d
 			return m_parent;
 		}
 
-		castor::Point4ui const & getBackgroundBorders()const noexcept
+		castor::Point4ui const & getBorderSize()const noexcept
 		{
 			return m_borders;
 		}
@@ -196,6 +200,22 @@ namespace castor3d
 		ControlStyle const & getBaseStyle()const noexcept
 		{
 			return *m_style;
+		}
+
+		std::vector< ControlWPtr > const & getChildren()const noexcept
+		{
+			return m_children;
+		}
+
+		bool hasScene()const noexcept
+		{
+			return m_scene != nullptr;
+		}
+
+		Scene & getScene()const noexcept
+		{
+			CU_Require( hasScene() );
+			return *m_scene;
 		}
 
 		//@}

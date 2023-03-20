@@ -436,6 +436,16 @@ namespace castor
 		{
 		}
 
+		bool isSerialisable()const noexcept
+		{
+			return m_serialisable;
+		}
+
+		void setSerialisable( bool v )noexcept
+		{
+			m_serialisable = v;
+		}
+
 	private:
 		/**
 		 *\~english
@@ -471,6 +481,7 @@ namespace castor
 		//!\~english	The glyph loader.
 		//!\~french		Le chargeur de glyphes.
 		std::unique_ptr< SFontImpl > m_glyphLoader;
+		bool m_serialisable{ true };
 	};
 }
 

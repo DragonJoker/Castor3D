@@ -19,6 +19,7 @@ namespace castor3d
 	template< typename CacheT, EventType EventT >
 	inline void CacheViewT< CacheT, EventT >::clear()
 	{
+		auto elemsLock( castor::makeUniqueLock( m_elementsMutex ) );
 		auto lock( castor::makeUniqueLock( m_cache ) );
 
 		for ( auto name : m_createdElements )
@@ -55,6 +56,7 @@ namespace castor3d
 				m_initialise( *result.lock() );
 			}
 
+			auto elemsLock( castor::makeUniqueLock( m_elementsMutex ) );
 			m_createdElements.insert( name );
 		}
 
@@ -90,6 +92,7 @@ namespace castor3d
 				m_initialise( *result.lock() );
 			}
 
+			auto elemsLock( castor::makeUniqueLock( m_elementsMutex ) );
 			m_createdElements.insert( name );
 		}
 
@@ -113,6 +116,7 @@ namespace castor3d
 				m_initialise( *result.lock() );
 			}
 
+			auto elemsLock( castor::makeUniqueLock( m_elementsMutex ) );
 			m_createdElements.insert( name );
 		}
 
@@ -122,20 +126,21 @@ namespace castor3d
 	template< typename CacheT, EventType EventT >
 	inline bool CacheViewT< CacheT, EventT >::isEmpty()const
 	{
-		auto lock( castor::makeUniqueLock( m_cache ) );
+		auto lock( castor::makeUniqueLock( m_elementsMutex ) );
 		return m_createdElements.empty();
 	}
 
 	template< typename CacheT, EventType EventT >
 	inline bool CacheViewT< CacheT, EventT >::has( ElementKeyT const & name )const
 	{
-		auto lock( castor::makeUniqueLock( m_cache ) );
+		auto lock( castor::makeUniqueLock( m_elementsMutex ) );
 		return m_createdElements.end() != m_createdElements.find( name );
 	}
 
 	template< typename CacheT, EventType EventT >
 	inline typename CacheViewT< CacheT, EventT >::ElementObsT CacheViewT< CacheT, EventT >::tryFind( ElementKeyT const & name )const
 	{
+		auto elemsLock( castor::makeUniqueLock( m_elementsMutex ) );
 		auto lock( castor::makeUniqueLock( m_cache ) );
 		auto it = m_createdElements.find( name );
 		return it != m_createdElements.end()
@@ -159,6 +164,7 @@ namespace castor3d
 	template< typename CacheT, EventType EventT >
 	inline typename CacheViewT< CacheT, EventT >::ElementObsT CacheViewT< CacheT, EventT >::tryRemove( ElementKeyT const & name )
 	{
+		auto elemsLock( castor::makeUniqueLock( m_elementsMutex ) );
 		auto lock( castor::makeUniqueLock( m_cache ) );
 		ElementPtrT result;
 		auto it = m_createdElements.find( name );

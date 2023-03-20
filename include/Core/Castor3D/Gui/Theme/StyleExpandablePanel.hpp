@@ -17,14 +17,23 @@ namespace castor3d
 		static ControlType constexpr Type = ControlType::eExpandablePanel;
 
 		ExpandablePanelStyle( castor::String const & name
+			, Scene * scene
 			, Engine & engine
 			, castor::String const & fontName )
 			: ControlStyle{ Type
 				, name
+				, scene
 				, engine }
-			, m_headerStyle{ name + "/Header", engine }
-			, m_expandStyle{ name + "/Expand", engine, fontName }
-			, m_panelStyle{ name + "/Panel", engine }
+			, m_headerStyle{ name + "/Header", scene, engine }
+			, m_expandStyle{ name + "/Expand", scene, engine, fontName }
+			, m_contentStyle{ name + "/Content", scene, engine }
+		{
+		}
+
+		ExpandablePanelStyle( castor::String const & name
+			, Engine & engine
+			, castor::String const & fontName )
+			: ExpandablePanelStyle{ name, nullptr, engine, fontName }
 		{
 		}
 
@@ -38,9 +47,9 @@ namespace castor3d
 			return m_expandStyle;
 		}
 
-		PanelStyle const & getPanelStyle()const
+		PanelStyle const & getContentStyle()const
 		{
-			return m_panelStyle;
+			return m_contentStyle;
 		}
 
 		PanelStyle & getHeaderStyle()
@@ -53,9 +62,9 @@ namespace castor3d
 			return m_expandStyle;
 		}
 
-		PanelStyle & getPanelStyle()
+		PanelStyle & getContentStyle()
 		{
-			return m_panelStyle;
+			return m_contentStyle;
 		}
 
 	private:
@@ -70,7 +79,7 @@ namespace castor3d
 	private:
 		PanelStyle m_headerStyle;
 		ButtonStyle m_expandStyle;
-		PanelStyle m_panelStyle;
+		PanelStyle m_contentStyle;
 	};
 }
 

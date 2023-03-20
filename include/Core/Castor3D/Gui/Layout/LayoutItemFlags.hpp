@@ -114,6 +114,11 @@ namespace castor3d
 			return m_reserveSpaceIfHidden;
 		}
 
+		castor::Point4ui padding()const noexcept
+		{
+			return m_padding;
+		}
+
 		uint32_t padding( uint32_t i )const noexcept
 		{
 			return m_padding[i];

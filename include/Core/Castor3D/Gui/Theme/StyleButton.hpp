@@ -15,10 +15,12 @@ namespace castor3d
 		static ControlType constexpr Type = ControlType::eButton;
 
 		ButtonStyle( castor::String const & name
+			, Scene * scene
 			, Engine & engine
 			, castor::String const & fontName )
 			: ControlStyle{ Type
 				, name
+				, scene
 				, engine }
 			, m_textMaterial{ getForegroundMaterial() }
 			, m_highlightedTextMaterial{ doCreateMaterial( getTextMaterial(), -0.1f, "_THG" ) }
@@ -31,6 +33,13 @@ namespace castor3d
 			, m_disabledBackgroundMaterial{ doCreateMaterial( getBackgroundMaterial(), +0.2f, "_BDS" ) }
 			, m_disabledForegroundMaterial{ doCreateMaterial( getForegroundMaterial(), -0.2f, "_FDS" ) }
 			, m_fontName{ fontName }
+		{
+		}
+
+		ButtonStyle( castor::String const & name
+			, Engine & engine
+			, castor::String const & fontName )
+			: ButtonStyle{ name, nullptr, engine, fontName }
 		{
 		}
 

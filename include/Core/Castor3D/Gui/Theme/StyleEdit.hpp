@@ -15,14 +15,23 @@ namespace castor3d
 		static ControlType constexpr Type = ControlType::eEdit;
 
 		EditStyle( castor::String const & name
+			, Scene * scene
 			, Engine & engine
 			, castor::String const & fontName )
 			: ControlStyle{ Type
 				, name
+				, scene
 				, engine
 				, MouseCursor::eText }
 			, m_fontName{ fontName }
 			, m_textMaterial{ getForegroundMaterial() }
+		{
+		}
+
+		EditStyle( castor::String const & name
+			, Engine & engine
+			, castor::String const & fontName )
+			: EditStyle{ name, nullptr, engine, fontName }
 		{
 		}
 
