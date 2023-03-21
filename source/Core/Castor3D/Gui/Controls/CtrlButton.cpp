@@ -74,11 +74,6 @@ namespace castor3d
 		setBorderSize( castor::Point4ui{ 1, 1, 1, 1 } );
 		setHAlign( HAlign::eCenter );
 		setVAlign( VAlign::eCenter );
-		EventHandler::connect( MouseEventType::eEnter
-			, [this]( MouseEvent const & event )
-			{
-				onMouseEnter( event );
-			} );
 
 		auto text = m_scene
 			? m_scene->addNewOverlay( cuT( "T_CtrlButton_[" ) + getName() + cuT( "]" )
@@ -248,7 +243,7 @@ namespace castor3d
 		}
 	}
 
-	void ButtonCtrl::onMouseEnter( MouseEvent const & event )
+	void ButtonCtrl::doOnMouseEnter( MouseEvent const & event )
 	{
 		auto & style = getStyle();
 		m_text.lock()->setMaterial( style.getHighlightedTextMaterial() );

@@ -139,6 +139,11 @@ namespace castor3d
 		}
 	}
 
+	void UserInputListener::registerCursorAction( OnCursorActionFunction function )
+	{
+		m_onCursorAction = function;
+	}
+
 	void UserInputListener::unregisterMouseMoveAction( castor::String const & handler )
 	{
 		auto it = m_onMouseMoveActions.find( handler );
@@ -189,7 +194,12 @@ namespace castor3d
 		}
 	}
 
-	void UserInputListener::onMouseMoveAction( castor::String const & handler )
+	void UserInputListener::unregisterCursorAction()
+	{
+		m_onCursorAction = {};
+	}
+
+	void UserInputListener::onMouseMoveAction( castor::String const & handler )const
 	{
 		auto it = m_onMouseMoveActions.find( handler );
 
@@ -199,7 +209,7 @@ namespace castor3d
 		}
 	}
 
-	void UserInputListener::onClickAction( castor::String const & handler )
+	void UserInputListener::onClickAction( castor::String const & handler )const
 	{
 		auto it = m_onClickActions.find( handler );
 
@@ -209,7 +219,7 @@ namespace castor3d
 		}
 	}
 
-	void UserInputListener::onSelectAction( castor::String const & handler, int index )
+	void UserInputListener::onSelectAction( castor::String const & handler, int index )const
 	{
 		auto it = m_onSelectActions.find( handler );
 
@@ -219,7 +229,7 @@ namespace castor3d
 		}
 	}
 
-	void UserInputListener::onTextAction( castor::String const & handler, castor::String const & text )
+	void UserInputListener::onTextAction( castor::String const & handler, castor::String const & text )const
 	{
 		auto it = m_onTextActions.find( handler );
 
@@ -228,8 +238,9 @@ namespace castor3d
 			it->second( text );
 		}
 	}
+
 	void UserInputListener::onExpandAction( castor::String const & handler
-		, bool expand )
+		, bool expand )const
 	{
 		auto it = m_onExpandActions.find( handler );
 
@@ -237,6 +248,11 @@ namespace castor3d
 		{
 			it->second( expand );
 		}
+	}
+
+	void UserInputListener::onCursorAction( MouseCursor cursor )const
+	{
+		m_onCursorAction( cursor );
 	}
 
 	void UserInputListener::enableHandler( castor::String const & handler )

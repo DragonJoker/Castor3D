@@ -127,36 +127,35 @@ namespace CastorViewer
 		void onMenuClose( wxCommandEvent & event );
 
 	public:
-		float m_x{ 0.0f };
-		float m_y{ 0.0f };
-		float m_oldX{ 0.0f };
-		float m_oldY{ 0.0f };
-		bool m_altdown{ false };
-		bool m_mouseLeftDown{ false };
-		bool m_mouseRightDown{ false };
-		bool m_mouseMiddleDown{ false };
+		float m_x{};
+		float m_y{};
+		float m_oldX{};
+		float m_oldY{};
+		bool m_altdown{};
+		bool m_mouseLeftDown{};
+		bool m_mouseRightDown{};
+		bool m_mouseMiddleDown{};
 		bool m_resizeWindow{ true };
-		bool m_extraSpeed{ false };
-		std::atomic_bool m_movementStarted{ false };
-		std::array< wxTimer *, eTIMER_ID_COUNT > m_timers;
-		castor3d::RenderWindowPtr m_renderWindow;
-		wxCursor * m_cursorArrow;
-		wxCursor * m_cursorHand;
-		wxCursor * m_cursorNone;
+		bool m_extraSpeed{};
+		std::atomic_bool m_movementStarted{};
+		std::array< wxTimer *, eTIMER_ID_COUNT > m_timers{};
+		castor3d::RenderWindowPtr m_renderWindow{};
 
-		castor3d::SceneNodeRPtr m_lightsNode{ nullptr };
-		castor3d::SceneNodeRPtr m_currentNode{ nullptr };
+		castor3d::SceneNodeRPtr m_lightsNode{};
+		castor3d::SceneNodeRPtr m_currentNode{};
 		castor::RangedValue< float > m_camSpeed;
-		std::unique_ptr< GuiCommon::CubeBoxManager > m_cubeManager;
+		std::unique_ptr< GuiCommon::CubeBoxManager > m_cubeManager{};
 
-		std::map< castor::String, GuiCommon::NodeStatePtr > m_nodesStates;
-		GuiCommon::NodeState * m_currentState{ nullptr };
-		castor3d::GeometrySPtr m_selectedGeometry;
-		castor3d::SubmeshSPtr m_selectedSubmesh;
+		std::map< castor::String, GuiCommon::NodeStatePtr > m_nodesStates{};
+		GuiCommon::NodeState * m_currentState{};
+		castor3d::GeometrySPtr m_selectedGeometry{};
+		castor3d::SubmeshSPtr m_selectedSubmesh{};
 
 		castor3d::CameraRPtr m_camera{};
 		castor3d::SceneRPtr m_scene{};
-		castor3d::FrameListenerSPtr m_listener;
+		castor3d::FrameListenerSPtr m_listener{};
+
+		castor3d::MouseCursor m_cursor{};
 	};
 }
 

@@ -37,7 +37,13 @@ namespace castor3d
 		, m_style{ style }
 		, m_position{ position }
 		, m_size{ size }
+		, m_resizeBorderSize{ ResizeBorderSize }
 	{
+		EventHandler::connect( MouseEventType::eEnter
+			, [this]( MouseEvent const & event )
+			{
+				onMouseEnter( event );
+			} );
 		EventHandler::connect( MouseEventType::ePushed
 			, [this]( MouseEvent const & event )
 			{
@@ -213,6 +219,17 @@ namespace castor3d
 		return it->lock();
 	}
 
+	std::array< bool, 4u > Control::isInResizeRange( castor::Position const & position )const
+	{
+		auto size = getSize();
+		auto pos = position - getAbsolutePosition();
+		bool isOnW = pos->x <= int32_t( m_resizeBorderSize );
+		bool isOnE = pos->x + int32_t( m_resizeBorderSize ) >= int32_t( size->x );
+		bool isOnN = pos->y <= int32_t( m_resizeBorderSize );
+		bool isOnS = pos->y + int32_t( m_resizeBorderSize ) >= int32_t( size->y );
+		return { isOnN, isOnW, isOnS, isOnE };
+	}
+
 	castor::Point4d const & Control::getBorderInnerUV()const
 	{
 		return doGetBackground().getBorderInnerUV();
@@ -352,6 +369,11 @@ namespace castor3d
 		}
 	}
 
+	void Control::onMouseEnter( MouseEvent const & event )
+	{
+		doOnMouseEnter( event );
+	}
+
 	void Control::onMouseButtonDown( MouseEvent const & event )
 	{
 		bool processed{};
@@ -433,12 +455,8 @@ namespace castor3d
 
 	bool Control::beginMove( MouseEvent const & event )
 	{
-		auto size = getSize();
-		auto pos = event.getPosition() - getAbsolutePosition();
-		auto result = pos->x > ResizeBorderSize
-			&& pos->x < int32_t( size->x ) - ResizeBorderSize
-			&& pos->y > ResizeBorderSize
-			&& pos->y < int32_t( size->y ) - ResizeBorderSize;
+		auto [isOnN, isOnW, isOnS, isOnE] = isInResizeRange( event.getPosition() );
+		auto result = !isOnN && !isOnW && !isOnS && !isOnE;
 			
 		if ( result )
 		{
@@ -471,10 +489,8 @@ namespace castor3d
 	{
 		auto size = getSize();
 		auto pos = event.getPosition() - getAbsolutePosition();
-		auto result = pos->x <= ResizeBorderSize
-			|| pos->x >= int32_t( size->x ) - ResizeBorderSize
-			|| pos->y <= ResizeBorderSize
-			|| pos->y >= int32_t( size->y ) - ResizeBorderSize;
+		auto [isOnN, isOnW, isOnS, isOnE] = isInResizeRange( event.getPosition() );
+		auto result = isOnN || isOnW || isOnS || isOnE;
 
 		if ( result )
 		{
@@ -482,10 +498,10 @@ namespace castor3d
 
 			if ( result )
 			{
-				m_resizing[0] = pos->x <= ResizeBorderSize;
-				m_resizing[1] = pos->y <= ResizeBorderSize;
-				m_resizing[2] = pos->x >= int32_t( size->x ) - ResizeBorderSize;
-				m_resizing[3] = pos->y >= int32_t( size->y ) - ResizeBorderSize;
+				m_resizingN = isOnN;
+				m_resizingW = isOnW;
+				m_resizingS = isOnS;
+				m_resizingE = isOnE;
 				m_mouseStartSize = getSize();
 				m_mouseStartPosition = getPosition();
 				m_mouseStartMousePosition = event.getPosition();
@@ -500,22 +516,22 @@ namespace castor3d
 		auto diff = event.getPosition() - m_mouseStartMousePosition;
 		castor::Point2i newPos{ m_mouseStartPosition.x(), m_mouseStartPosition.y() };
 
-		if ( m_resizing[0] )
+		if ( m_resizingW )
 		{
 			newPos->x += diff->x;
 			diff->x = -diff->x;
 		}
-		else if ( !m_resizing[2] )
+		else if ( !m_resizingE )
 		{
 			diff->x = 0;
 		}
 
-		if ( m_resizing[1] )
+		if ( m_resizingN )
 		{
 			newPos->y += diff->y;
 			diff->y = -diff->y;
 		}
-		else if ( !m_resizing[3] )
+		else if ( !m_resizingS )
 		{
 			diff->y = 0;
 		}
@@ -556,9 +572,9 @@ namespace castor3d
 
 	void Control::endResize( MouseEvent const & event )
 	{
-		m_resizing[0] = false;
-		m_resizing[1] = false;
-		m_resizing[2] = false;
-		m_resizing[3] = false;
+		m_resizingN = false;
+		m_resizingW = false;
+		m_resizingS = false;
+		m_resizingE = false;
 	}
 }

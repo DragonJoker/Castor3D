@@ -112,6 +112,12 @@ namespace castor3d
 		 */
 		C3D_API ControlSPtr getChildControl( ControlID id )const;
 
+		/** Checks if the position is on any border (N, W, S, E).
+		 *\param[in]	The position to check for.
+		 *\return		One bool per direction.
+		 */
+		C3D_API std::array< bool, 4u > isInResizeRange( castor::Position const & position )const;
+
 		/** Adds a flag.
 		 */
 		template< ControlFlagTypeT FlagTypeT >
@@ -226,6 +232,11 @@ namespace castor3d
 			return *m_scene;
 		}
 
+		uint32_t getResizeBorderSize()const noexcept
+		{
+			return m_resizeBorderSize;
+		}
+
 		//@}
 
 		/** \return	The always on top status of the control.
@@ -317,6 +328,11 @@ namespace castor3d
 			, std::vector< Control * > & controls
 			, std::vector< Control * > & topControls );
 		void adjustZIndex( uint32_t index );
+
+		/** Event when mouse enters the control
+		 *\param[in]	event		The mouse event
+		 */
+		void onMouseEnter( MouseEvent const & event );
 
 		/** Event when mouse left button is pressed.
 		 *\param[in]	event		The mouse event.
@@ -421,6 +437,11 @@ namespace castor3d
 		*/
 		virtual void doSetCaption( castor::String const & caption ) {}
 
+		/** Event when mouse enters the control
+		 *\param[in]	event		The mouse event
+		 */
+		virtual void doOnMouseEnter( MouseEvent const & event ) {}
+
 		/** Event when mouse left button is pressed.
 		 *\param[in]	event		The mouse event.
 		 */
@@ -511,17 +532,16 @@ namespace castor3d
 
 		bool isResizing()const noexcept
 		{
-			return m_resizing.end() != std::find( m_resizing.begin()
-				, m_resizing.end()
-				, true );
+			return m_resizingN
+				|| m_resizingW
+				|| m_resizingS
+				|| m_resizingE;
 		}
 
 	protected:
 		SceneRPtr m_scene{};
 		//! The parent control, if any
 		ControlRPtr m_parent{};
-		//! The cursor when mouse is over this control
-		MouseCursor m_cursor{};
 		//! The background material
 		MaterialRPtr m_backgroundMaterial{};
 		//! The foreground material
@@ -540,10 +560,14 @@ namespace castor3d
 		std::vector< ControlWPtr > m_children{};
 		ControlsManagerWPtr m_ctrlManager{};
 		bool m_moving{};
-		std::array< bool, 4u > m_resizing{};
+		bool m_resizingN{};
+		bool m_resizingW{};
+		bool m_resizingS{};
+		bool m_resizingE{};
 		castor::Position m_mouseStartMousePosition{};
 		castor::Position m_mouseStartPosition{};
 		castor::Size m_mouseStartSize{};
+		uint32_t m_resizeBorderSize{};
 	};
 }
 

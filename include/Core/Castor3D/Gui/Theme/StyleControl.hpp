@@ -28,7 +28,7 @@ namespace castor3d
 			, castor::String const & name
 			, Scene * scene
 			, Engine & engine
-			, MouseCursor cursor = MouseCursor::eHand )
+			, MouseCursor cursor = MouseCursor::eArrow )
 			: castor::Named{ name }
 			, m_scene{ scene }
 			, m_engine{ engine }

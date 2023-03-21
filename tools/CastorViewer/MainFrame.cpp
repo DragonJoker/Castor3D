@@ -867,6 +867,13 @@ namespace CastorViewer
 			m_renderPanel->disableWindowResize();
 		}
 
+		if ( m_fpsTimer )
+		{
+			m_fpsTimer->Stop();
+			delete m_fpsTimer;
+			m_fpsTimer = nullptr;
+		}
+
 		if ( m_timer )
 		{
 			m_timer->Stop();

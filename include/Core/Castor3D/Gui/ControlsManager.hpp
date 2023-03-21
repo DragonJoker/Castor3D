@@ -19,6 +19,7 @@ namespace castor3d
 		, public UserInputListener
 		, public StylesHolder
 	{
+		friend class Control;
 		friend class ButtonCtrl;
 		friend class ComboBoxCtrl;
 		friend class EditCtrl;
@@ -151,16 +152,6 @@ namespace castor3d
 		*/
 		C3D_API ControlSPtr findControl( castor::String const & name )const;
 
-		/** Sets the control that is currently moved (only one at a time is allowed).
-		*/
-		C3D_API bool setMovedControl( ControlRPtr control
-			, MouseEvent const & event );
-
-		/** Sets the control that is currently resized (only one at a time is allowed).
-		*/
-		C3D_API bool setResizedControl( ControlRPtr control
-			, MouseEvent const & event );
-
 		/** \return
 		*	The root controls.
 		*/
@@ -173,6 +164,16 @@ namespace castor3d
 		C3D_API static void * createContext( castor::FileParserContext & context );
 
 	private:
+		/** Sets the control that is currently moved (only one at a time is allowed).
+		*/
+		bool setMovedControl( ControlRPtr control
+			, MouseEvent const & event );
+
+		/** Sets the control that is currently resized (only one at a time is allowed).
+		*/
+		bool setResizedControl( ControlRPtr control
+			, MouseEvent const & event );
+
 		/** Connects the manager to given control's events.
 		*\param[in] control
 		*	The control.
