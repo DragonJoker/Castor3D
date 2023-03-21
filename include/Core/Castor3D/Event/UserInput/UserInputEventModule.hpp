@@ -142,6 +142,39 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Mouse cursors enumeration.
+	*\~french
+	*\brief
+	*	Enumération des curseurs de souris.
+	*/
+	enum class MouseCursor
+	{
+		//!\~english	Usual arrow cursor.
+		//!\~french		Pointeur en flèche habituel.
+		eArrow,
+		//!\~english	Hand cursor.
+		//!\~french		Curseur en forme de main.
+		eHand,
+		//!\~english	Text cursor.
+		//!\~french		Curseur pour texte.
+		eText,
+		//!\~english	Arrows pointing left and right cursor.
+		//!\~french		Flèches gauche-droite.
+		eSizeWE,
+		//!\~english	Arrows pointing up and down cursor.
+		//!\~french		Flèches haut-bas.
+		eSizeNS,
+		//!\~english	Diagonal arrows pointing top-left and bottom-right cursor.
+		//!\~french		Flèches en diagonale haut-gauche vers bas-droite.
+		eSizeNWSE,
+		//!\~english	Diagonal arrows pointing top-right and bottom-left cursor.
+		//!\~french		Flèches en diagonale haut-droite vers bas-gauche.
+		eSizeNESW,
+		CU_ScopedEnumBounds( eArrow )
+	};
+	/**
+	*\~english
+	*\brief
 	*	Keyboard keys enumeration.
 	*\~french
 	*\brief

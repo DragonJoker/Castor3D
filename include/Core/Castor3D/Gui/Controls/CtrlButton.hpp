@@ -129,10 +129,9 @@ namespace castor3d
 		*/
 		void doUpdateFlags()override;
 
-		/** Event when mouse enters the control
-		 *\param[in]	event		The mouse event
-		 */
-		void onMouseEnter( MouseEvent const & event );
+		/** @copydoc Control::doOnMouseEnter
+		*/
+		void doOnMouseEnter( MouseEvent const & event )override;
 
 		/** @copydoc Control::doOnMouseButtonDown
 		*/

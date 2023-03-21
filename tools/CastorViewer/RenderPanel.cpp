@@ -89,23 +89,53 @@ namespace CastorViewer
 		, long style )
 		: wxPanel( parent, id, pos, size, style )
 		, m_timers{ panel::createTimers( this ) }
-		, m_cursorArrow{ new wxCursor( wxCURSOR_ARROW ) }
-		, m_cursorHand{ new wxCursor( wxCURSOR_HAND ) }
-		, m_cursorNone{ new wxCursor( wxCURSOR_BLANK ) }
 		, m_camSpeed( panel::DEF_CAM_SPEED, castor::Range< float >{ panel::MIN_CAM_SPEED, panel::MAX_CAM_SPEED } )
 	{
 		m_renderWindow = std::make_unique< castor3d::RenderWindow >( cuT( "RenderPanel" )
 			, *wxGetApp().getCastor()
 			, GuiCommon::makeSize( GetClientSize() )
 			, GuiCommon::makeWindowHandle( this ) );
+		auto listener = wxGetApp().getCastor()->getUserInputListener();
+		listener->registerCursorAction( [this]( castor3d::MouseCursor cursor )
+			{
+				if ( m_cursor != cursor )
+				{
+					m_cursor = cursor;
+
+					switch ( cursor )
+					{
+					case castor3d::MouseCursor::eArrow:
+						SetCursor( wxCursor{ wxCURSOR_ARROW } );
+						break;
+					case castor3d::MouseCursor::eHand:
+						SetCursor( wxCursor{ wxCURSOR_HAND } );
+						break;
+					case castor3d::MouseCursor::eText:
+						SetCursor( wxCursor{ wxCURSOR_IBEAM } );
+						break;
+					case castor3d::MouseCursor::eSizeWE:
+						SetCursor( wxCursor{ wxCURSOR_SIZEWE } );
+						break;
+					case castor3d::MouseCursor::eSizeNS:
+						SetCursor( wxCursor{ wxCURSOR_SIZENS } );
+						break;
+					case castor3d::MouseCursor::eSizeNWSE:
+						SetCursor( wxCursor{ wxCURSOR_SIZENWSE } );
+						break;
+					case castor3d::MouseCursor::eSizeNESW:
+						SetCursor( wxCursor{ wxCURSOR_SIZENESW } );
+						break;
+					default:
+						castor3d::log::error << "Unsupported MouseCursor." << std::endl;
+						SetCursor( wxCursor{ wxCURSOR_ARROW } );
+						break;
+					}
+				}
+			} );
 	}
 
 	RenderPanel::~RenderPanel()
 	{
-		delete m_cursorArrow;
-		delete m_cursorHand;
-		delete m_cursorNone;
-
 		for ( size_t i = 1; i <= size_t( eTIMER_ID_MOVEMENT ); i++ )
 		{
 			delete m_timers[i];

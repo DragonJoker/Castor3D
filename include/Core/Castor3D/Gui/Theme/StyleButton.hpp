@@ -21,7 +21,8 @@ namespace castor3d
 			: ControlStyle{ Type
 				, name
 				, scene
-				, engine }
+				, engine
+				, MouseCursor::eHand }
 			, m_textMaterial{ getForegroundMaterial() }
 			, m_highlightedTextMaterial{ doCreateMaterial( getTextMaterial(), -0.1f, "_THG" ) }
 			, m_highlightedBackgroundMaterial{ doCreateMaterial( getBackgroundMaterial(), 0.1f, "_BHG" ) }

@@ -916,10 +916,42 @@ namespace castor3d
 				&& control->getAbsolutePosition().y() <= position.y()
 				&& control->getAbsolutePosition().y() + int32_t( control->getSize().getHeight() ) > position.y() )
 			{
+				auto cursor = control->getCursor();
+
+				if ( control->isResizable() )
+				{
+					auto [isOnN, isOnW, isOnS, isOnE] = control->isInResizeRange( position );
+
+					if ( ( isOnN && isOnW )
+						|| ( isOnS && isOnE ) )
+					{
+						cursor = MouseCursor::eSizeNWSE;
+					}
+					else if ( ( isOnN && isOnE )
+						|| ( isOnS && isOnW ) )
+					{
+						cursor = MouseCursor::eSizeNESW;
+					}
+					else if ( isOnN || isOnS )
+					{
+						cursor = MouseCursor::eSizeNS;
+					}
+					else if ( isOnW || isOnE )
+					{
+						cursor = MouseCursor::eSizeWE;
+					}
+				}
+
+				onCursorAction( cursor );
 				result = control;
 			}
 
 			++it;
+		}
+
+		if ( !result )
+		{
+			onCursorAction( MouseCursor::eArrow );
 		}
 
 		return result;

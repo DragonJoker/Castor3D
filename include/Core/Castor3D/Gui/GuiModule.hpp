@@ -211,20 +211,6 @@ namespace castor3d
 		eResizeParent,
 	};
 	/**
-	*\brief	Mouse cursors enumeration.
-	*/
-	enum class MouseCursor
-	{
-		//! The usual arrow cursor.
-		eArrow,
-		//! The hand cursor.
-		eHand,
-		//! The text cursor.
-		eText,
-		//! The cursors count.
-		eCount,
-	};
-	/**
 	*\brief	The flags for a specific control in a layout.
 	*/
 	struct LayoutItemFlags;

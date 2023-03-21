@@ -18,6 +18,7 @@ namespace castor3d
 		using OnSelectActionFunction = std::function< void( int ) >;
 		using OnTextActionFunction = std::function< void( castor::String const & ) >;
 		using OnExpandActionFunction = std::function< void( bool ) >;
+		using OnCursorActionFunction = std::function< void( MouseCursor ) >;
 
 	public:
 		/**@name General */
@@ -156,6 +157,17 @@ namespace castor3d
 			, OnExpandActionFunction function );
 		/**
 		 *\~english
+		 *\~brief		Registers a function to call when a mouse cursor event is raised by the given handler.
+		 *\param[in]	handler		The handler.
+		 *\param[in]	function	The function.
+		 *\~french
+		 *\~brief		Enregistre une fonction à appeler lorsqu'un évènement de curseur de souris est lancé par le handler donné.
+		 *\param[in]	handler		Le handler.
+		 *\param[in]	function	La fonction.
+		 */
+		C3D_API void registerCursorAction( OnCursorActionFunction function );
+		/**
+		 *\~english
 		 *\~brief		Unregisters ths function to call when a mouse move event is raised by the given handler.
 		 *\param[in]	handler	The handler.
 		 *\~french
@@ -201,13 +213,22 @@ namespace castor3d
 		C3D_API void unregisterExpandAction( castor::String const & handler );
 		/**
 		 *\~english
+		 *\~brief		Unregisters ths function to call when mouse cursor event is raised by the given handler.
+		 *\param[in]	handler	The handler.
+		 *\~french
+		 *\~brief		Désenregistre la fonction à appeler lorsqu'un évènement de curseur de souris est lancé par le handler donné.
+		 *\param[in]	handler	Le handler.
+		 */
+		C3D_API void unregisterCursorAction();
+		/**
+		 *\~english
 		 *\~brief		Event raised by the handler when the mouse is moved over it.
 		 *\param[in]	handler	The handler.
 		 *\~french
 		 *\~brief		Evènement lancé par le handler si la souris est déplacée au dessus de sa surface.
 		 *\param[in]	handler	Le handler.
 		 */
-		C3D_API void onMouseMoveAction( castor::String const & handler );
+		C3D_API void onMouseMoveAction( castor::String const & handler )const;
 		/**
 		 *\~english
 		 *\~brief		Event raised by the handler when it is clicked, if it supports clicking.
@@ -216,7 +237,7 @@ namespace castor3d
 		 *\~brief		Evènement lancé par le handler s'il est cliqué et qu'il le supporte.
 		 *\param[in]	handler	Le handler cliqué.
 		 */
-		C3D_API void onClickAction( castor::String const & handler );
+		C3D_API void onClickAction( castor::String const & handler )const;
 		/**
 		 *\~english
 		 *\~brief		Event raised by the handler when one of its sub elements is selected.
@@ -228,7 +249,7 @@ namespace castor3d
 		 *\param[in]	index	L'indice de la sélection.
 		 */
 		C3D_API void onSelectAction( castor::String const & handler
-			, int index );
+			, int index )const;
 		/**
 		 *\~english
 		 *\~brief		Event raised by the handler when its caption has changed.
@@ -240,7 +261,7 @@ namespace castor3d
 		 *\param[in]	text	Le nouveau texte.
 		 */
 		C3D_API void onTextAction( castor::String const & handler
-			, castor::String const & text );
+			, castor::String const & text )const;
 		/**
 		 *\~english
 		 *\~brief		Event raised by the handler when its expansion has changed.
@@ -252,7 +273,18 @@ namespace castor3d
 		 *\param[in]	expand	La nouvelle valeur.
 		 */
 		C3D_API void onExpandAction( castor::String const & handler
-			, bool expand );
+			, bool expand )const;
+		/**
+		 *\~english
+		 *\~brief		Event raised by the handler when its mouse cursor has changed.
+		 *\param[in]	handler	The handler.
+		 *\param[in]	expand	The new value.
+		 *\~french
+		 *\~brief		Evènement lancé par le handler lorsque son cureur de souris est changé.
+		 *\param[in]	handler	Le handler.
+		 *\param[in]	expand	La nouvelle valeur.
+		 */
+		C3D_API void onCursorAction( MouseCursor cursor )const;
 		/**
 		 *\~english
 		 *\~brief		Enables handler.
@@ -496,6 +528,7 @@ namespace castor3d
 		std::map< castor::String, OnSelectActionFunction > m_onSelectActions;
 		std::map< castor::String, OnTextActionFunction > m_onTextActions;
 		std::map< castor::String, OnExpandActionFunction > m_onExpandActions;
+		OnCursorActionFunction m_onCursorAction;
 	};
 }
 
