@@ -615,6 +615,7 @@ namespace castor3d
 					addWord();
 					alignLine();
 					line = nextLine();
+					charLeft = 0.0;
 					++wordIndex;
 					word = nextWord();
 				}
