@@ -153,11 +153,13 @@ namespace castor3d
 
 		/** Sets the control that is currently moved (only one at a time is allowed).
 		*/
-		C3D_API bool setMovedControl( ControlRPtr control );
+		C3D_API bool setMovedControl( ControlRPtr control
+			, MouseEvent const & event );
 
 		/** Sets the control that is currently resized (only one at a time is allowed).
 		*/
-		C3D_API bool setResizedControl( ControlRPtr control );
+		C3D_API bool setResizedControl( ControlRPtr control
+			, MouseEvent const & event );
 
 		/** \return
 		*	The root controls.

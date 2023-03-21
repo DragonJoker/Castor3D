@@ -614,7 +614,8 @@ namespace castor3d
 			: std::static_pointer_cast< Control >( *it );
 	}
 
-	bool ControlsManager::setMovedControl( ControlRPtr control )
+	bool ControlsManager::setMovedControl( ControlRPtr control
+		, MouseEvent const & event )
 	{
 		if ( m_movedControl
 			&& m_movedControl->isMoving()
@@ -624,11 +625,17 @@ namespace castor3d
 			return false;
 		}
 
+		if ( m_movedControl )
+		{
+			m_movedControl->endMove( event );
+		}
+
 		m_movedControl = control;
 		return true;
 	}
 
-	bool ControlsManager::setResizedControl( ControlRPtr control )
+	bool ControlsManager::setResizedControl( ControlRPtr control
+		, MouseEvent const & event )
 	{
 		if ( m_resizedControl
 			&& m_resizedControl->isResizing()
@@ -636,6 +643,11 @@ namespace castor3d
 			&& control != nullptr )
 		{
 			return false;
+		}
+
+		if ( m_resizedControl )
+		{
+			m_resizedControl->endResize( event );
 		}
 
 		m_resizedControl = control;
