@@ -109,6 +109,18 @@ namespace castor3d
 		}
 	}
 
+	castor::Position FrameCtrl::doUpdatePosition( castor::Position const & value )const noexcept
+	{
+		return { std::max( 0, value.x() )
+			, std::max( 0, value.y() ) };
+	}
+
+	castor::Size FrameCtrl::doUpdateSize( castor::Size const & value )const noexcept
+	{
+		return { std::max( m_minSize->x, value->x )
+			, std::max( m_minSize->y, value->y ) };
+	}
+
 	void FrameCtrl::doSetPosition( castor::Position const & value )
 	{
 		doUpdatePositions();

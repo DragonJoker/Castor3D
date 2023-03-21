@@ -121,6 +121,14 @@ namespace castor3d
 		*/
 		void doDestroy()override;
 
+		/** @copydoc Control::doUpdatePosition
+		*/
+		castor::Position doUpdatePosition( castor::Position const & value )const noexcept override;
+
+		/** @copydoc Control::doUpdateSize
+		*/
+		castor::Size doUpdateSize( castor::Size const & value )const noexcept override;
+
 		/** @copydoc Control::doSetPosition
 		*/
 		void doSetPosition( castor::Position const & value )override;

@@ -109,7 +109,7 @@ namespace castor3d
 
 	void Control::setSize( castor::Size const & value )
 	{
-		m_size = value;
+		m_size = doUpdateSize( value );
 		doGetBackground().setPixelSize( m_size );
 		doSetSize( m_size );
 		onChanged( *this );
@@ -117,7 +117,7 @@ namespace castor3d
 
 	void Control::setPosition( castor::Position const & value )
 	{
-		m_position = value;
+		m_position = doUpdatePosition( value );
 
 		if ( isAlwaysOnTop() )
 		{
@@ -139,7 +139,7 @@ namespace castor3d
 
 	void Control::setBorderSize( castor::Point4ui const & value )
 	{
-		m_borders = value;
+		m_borders = doUpdateBorderSize( value );
 		doGetBackground().setAbsoluteBorderSize( m_borders );
 		doSetBorderSize( m_borders );
 		onChanged( *this );
@@ -516,9 +516,38 @@ namespace castor3d
 			diff->y = 0;
 		}
 
+		auto bordersWidth = int32_t( getBorderSize()->x + getBorderSize()->z );
+		auto bordersHeight = int32_t( getBorderSize()->y + getBorderSize()->w );
+
+		if ( auto background = m_background.lock() )
+		{
+			if ( background->getBorderPosition() == BorderPosition::eMiddle )
+			{
+				bordersWidth /= 2;
+				bordersHeight /= 2;
+			}
+			else if ( background->getBorderPosition() == BorderPosition::eExternal )
+			{
+				bordersWidth = 1;
+				bordersHeight = 1;
+			}
+		}
+
+		if ( diff->x <= bordersWidth - int32_t( m_mouseStartSize->x ) )
+		{
+			diff->x = bordersWidth - int32_t( m_mouseStartSize->x );
+		}
+
+		if ( diff->y <= bordersHeight - int32_t( m_mouseStartSize->y ) )
+		{
+			diff->y = bordersHeight - int32_t( m_mouseStartSize->y );
+		}
+
 		auto newSize = m_mouseStartSize + diff;
-		setSize( { newSize->x, newSize->y } );
 		setPosition( { newPos->x, newPos->y } );
+		diff = newPos - getPosition();
+		setSize( { uint32_t( newSize->x + diff->x )
+			, uint32_t( newSize->y + diff->y ) } );
 	}
 
 	void Control::endResize( MouseEvent const & event )
