@@ -380,15 +380,20 @@ namespace castor3d
 
 		if ( event.getButton() == MouseButton::eLeft )
 		{
-			if ( isMovable() && beginMove( event ) )
+			if ( isMovable() && isMoving() )
 			{
-				endMove( event );
+				getControlsManager()->setMovedControl( nullptr, event );
 				processed = true;
 			}
-			else if ( isResizable() && beginResize( event ) )
+			else if ( isResizable() && isResizing() )
 			{
-				endResize( event );
+				getControlsManager()->setResizedControl( nullptr, event );
 				processed = true;
+			}
+			else
+			{
+				getControlsManager()->setMovedControl( nullptr, event );
+				getControlsManager()->setResizedControl( nullptr, event );
 			}
 		}
 
@@ -418,11 +423,11 @@ namespace castor3d
 
 		if ( isMovable() && isMoving() )
 		{
-			endMove( event );
+			getControlsManager()->setMovedControl( nullptr, event );
 		}
 		else if ( isResizable() && isResizing() )
 		{
-			endResize( event );
+			getControlsManager()->setResizedControl( nullptr, event );
 		}
 	}
 
@@ -437,7 +442,7 @@ namespace castor3d
 			
 		if ( result )
 		{
-			result = getControlsManager()->setMovedControl( this );
+			result = getControlsManager()->setMovedControl( this, event );
 
 			if ( result )
 			{
@@ -460,7 +465,6 @@ namespace castor3d
 	void Control::endMove( MouseEvent const & event )
 	{
 		m_moving = false;
-		getControlsManager()->setMovedControl( nullptr );
 	}
 
 	bool Control::beginResize( MouseEvent const & event )
@@ -474,7 +478,7 @@ namespace castor3d
 
 		if ( result )
 		{
-			result = getControlsManager()->setResizedControl( this );
+			result = getControlsManager()->setResizedControl( this, event );
 
 			if ( result )
 			{
@@ -556,6 +560,5 @@ namespace castor3d
 		m_resizing[1] = false;
 		m_resizing[2] = false;
 		m_resizing[3] = false;
-		getControlsManager()->setResizedControl( nullptr );
 	}
 }
