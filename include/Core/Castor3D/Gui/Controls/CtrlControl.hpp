@@ -376,6 +376,27 @@ namespace castor3d
 		*/
 		virtual void doDestroy() = 0;
 
+		/** Allows child classes to modify the border size before it being set.
+		 */
+		virtual castor::Point4ui doUpdateBorderSize( castor::Point4ui const & value )const noexcept
+		{
+			return value;
+		}
+
+		/** Allows child classes to modify the position before it being set.
+		 */
+		virtual castor::Position doUpdatePosition( castor::Position const & value )const noexcept
+		{
+			return value;
+		}
+
+		/** Allows child classes to modify the size before it being set.
+		 */
+		virtual castor::Size doUpdateSize( castor::Size const & value )const noexcept
+		{
+			return value;
+		}
+
 		/** Sets the background borders size.
 		 *\param[in]	value		The new value.
 		 */
