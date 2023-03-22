@@ -274,7 +274,7 @@ namespace castor
 		m_glyphLoader->cleanup();
 	}
 
-	Font::TextMetrics Font::getTextMetrics( std::u32string const & v
+	TextMetrics Font::getTextMetrics( std::u32string const & v
 		, uint32_t maxWidth )
 	{
 		TextMetrics result;
@@ -282,10 +282,18 @@ namespace castor
 		int32_t wordLeft{};
 		int32_t totalLeft{};
 		int32_t lineTop{};
-		TextMetrics word;
+		TextLineMetrics word;
 
 		auto nextLine = [&]()
 		{
+			if ( !word.chars.empty() )
+			{
+				for ( auto & c : word.chars )
+				{
+					c -= wordLeft;
+				}
+			}
+
 			auto & line = result.lines.emplace_back();
 			line.top = uint32_t( lineTop );
 			charLeft = totalLeft - wordLeft;
@@ -299,10 +307,14 @@ namespace castor
 
 		auto finishWord = [&]()
 		{
-			if ( word.width > 0 )
+			if ( !word.chars.empty() )
 			{
-				line->yRange->x = std::min( line->yRange->x, word.yRange->x );
-				line->yRange->y = std::max( line->yRange->y, word.yRange->y );
+				line->yMin = std::min( line->yMin, word.yMin );
+				line->yMax = std::max( line->yMax, word.yMax );
+
+				line->chars.insert( line->chars.end()
+					, word.chars.begin()
+					, word.chars.end() );
 			}
 
 			word = {};
@@ -311,11 +323,17 @@ namespace castor
 
 		auto finishLine = [&]()
 		{
-			result.width = std::max( result.width, line->width );
-			result.yRange->x = std::min( result.yRange->x, line->yRange->x );
-			result.yRange->y = std::max( result.yRange->y, line->yRange->y );
+			if ( !line->chars.empty() )
+			{
+				result.yMin = std::min( result.yMin, line->yMin );
+				result.yMax = std::max( result.yMax, line->yMax );
 
-			lineTop += line->yRange->y - line->yRange->x;
+				lineTop += line->yMax - line->yMin;
+			}
+			else
+			{
+				lineTop += getHeight();
+			}
 		};
 
 		auto addChar = [&]( castor::Size const & charSize
@@ -335,8 +353,8 @@ namespace castor
 				line = nextLine();
 			}
 
-			word.yRange->x = std::min( word.yRange->x, yMin );
-			word.yRange->y = std::max( word.yRange->y, yMax );
+			word.yMin = std::min( word.yMin, yMin );
+			word.yMax = std::max( word.yMax, yMax );
 			totalLeft += advance;
 			charLeft += advance;
 			word.width += advance;
@@ -351,6 +369,7 @@ namespace castor
 				finishLine();
 				line = nextLine();
 				charLeft = 0;
+				word.chars.push_back( 0u );
 			}
 			else
 			{
@@ -369,6 +388,8 @@ namespace castor
 						, { glyph.getBearing().x(), glyph.getBearing().y() }
 						, glyph.getAdvance() );
 				}
+
+				word.chars.push_back( uint32_t( totalLeft ) );
 			}
 		}
 
@@ -378,14 +399,16 @@ namespace castor
 		if ( !result.lines.empty() )
 		{
 			// Adjust lines heights to maxHeight
-			auto & lineRange = result.yRange;
-			auto lineHeight = int32_t( lineRange->y - lineRange->x );
+			auto lineMin = result.yMin;
+			auto lineMax = result.yMax;
+			auto lineHeight = int32_t( lineMax - lineMin );
 			lineTop = 0;
 
 			for ( auto & ln : result.lines )
 			{
 				ln.top = uint32_t( lineTop );
-				ln.yRange = lineRange;
+				ln.yMin = lineMin;
+				ln.yMax = lineMax;
 				lineTop += lineHeight;
 			}
 		}

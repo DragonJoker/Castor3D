@@ -17,17 +17,7 @@ namespace castor
 		: public Named
 	{
 	public:
-		struct TextMetrics
-		{
-			uint32_t top{};
-			uint32_t width{};
-			Point2i yRange{ 100, 0 };
-			std::vector< TextMetrics > lines{};
-		};
 		/**
-		\author		Sylvain DOREMUS
-		\version	0.6.1.0
-		\date		03/01/2011
 		\~english
 		\brief		Font loader
 		\remark		Uses FreeType to load font
