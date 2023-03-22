@@ -24,7 +24,7 @@ namespace castor
 	{
 		log::info << tabs() << cuT( "Writing FrameCtrl " ) << control.getName() << std::endl;
 		auto result = writeSub< Control >( file, control )
-			&& writeName( file, "header_caption", control.getHeaderCaption() )
+			&& writeName( file, "header_caption", string::stringCast< xchar >( control.getHeaderCaption() ) )
 			&& writeOpt( file, "header_horizontal_align", getName( control.getHeaderHAlign() ), getName( HAlign::eLeft ) )
 			&& writeOpt( file, "header_vertical_align", getName( control.getHeaderVAlign() ), getName( VAlign::eTop ) );
 

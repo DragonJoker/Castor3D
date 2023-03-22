@@ -65,7 +65,7 @@ namespace castor3d
 		/** Sets the caption.
 		*\param[in]	caption	The new value
 		*/
-		void doSetCaption( castor::String const & caption )final override;
+		void doSetCaption( castor::U32String const & caption )final override;
 
 		/** Sets the visibility
 		 *\remarks		Used for derived control specific behavious
@@ -90,7 +90,7 @@ namespace castor3d
 		/** Sets the caption.
 		*\param[in]	caption	The new value
 		*/
-		virtual void doSubSetCaption( castor::String const & caption ) {}
+		virtual void doSubSetCaption( castor::U32String const & caption ) {}
 
 		/** Sets the visibility
 		 *\remarks		Used for derived control specific behavious

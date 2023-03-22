@@ -61,7 +61,7 @@ namespace castor3d
 			, cuT( "Line" )
 			, &style->getLineStyle()
 			, this
-			, castor::String{}
+			, castor::U32String{}
 			, castor::Position{}
 			, castor::Size{} );
 		line->setVisible( visible );
@@ -76,7 +76,7 @@ namespace castor3d
 			, cuT( "Tick" )
 			, &style->getTickStyle()
 			, this
-			, castor::String{}
+			, castor::U32String{}
 			, castor::Position{}
 			, castor::Size{} );
 		tick->setVisible( visible );

@@ -51,7 +51,7 @@ namespace castor3d
 			, size
 			, flags
 			, visible }
-		, m_caption{ caption }
+		, m_caption{ castor::string::toU32String( caption ) }
 		, m_caretIt{ m_caption.end() }
 		, m_active{ false }
 	{
@@ -116,6 +116,11 @@ namespace castor3d
 		doUpdateFlags();
 	}
 
+	void EditCtrl::updateCaption( castor::String const & value )
+	{
+		m_caption = castor::string::toU32String( value );
+	}
+
 	void EditCtrl::doUpdateStyle()
 	{
 		auto & style = getStyle();
@@ -164,7 +169,7 @@ namespace castor3d
 		}
 	}
 
-	void EditCtrl::doSetCaption( castor::String const & value )
+	void EditCtrl::doSetCaption( castor::U32String const & value )
 	{
 		m_caption = value;
 		m_caretIt = m_caption.end();
@@ -305,10 +310,11 @@ namespace castor3d
 
 	void EditCtrl::doAddCharAtCaret( castor::String const & c )
 	{
-		auto diff = size_t( std::distance( castor::string::utf8::const_iterator( m_caption.begin() ), m_caretIt ) );
-		m_caption = castor::String( m_caption.cbegin()
-			, m_caretIt.internal() ) + c + castor::String( m_caretIt.internal(), m_caption.cend() );
-		m_caretIt = castor::string::utf8::const_iterator( m_caption.begin() ) + diff + 1;
+		auto diff = size_t( std::distance( m_caption.cbegin(), m_caretIt ) );
+		m_caption = castor::U32String( m_caption.cbegin(), m_caretIt )
+			+ castor::string::toU32String( c )
+			+ castor::U32String( m_caretIt, m_caption.cend() );
+		m_caretIt = std::next( m_caption.cbegin(), ptrdiff_t( diff + 1 ) );
 		doUpdateCaption();
 	}
 
@@ -316,17 +322,17 @@ namespace castor3d
 	{
 		if ( m_caretIt != m_caption.end() )
 		{
-			auto diff = size_t( std::distance( castor::string::utf8::const_iterator( m_caption.begin() ), m_caretIt ) );
-			castor::String caption( m_caption.cbegin(), m_caretIt.internal() );
-			castor::string::utf8::const_iterator it = m_caretIt;
+			auto diff = size_t( std::distance( m_caption.cbegin(), m_caretIt ) );
+			castor::U32String caption( m_caption.cbegin(), m_caretIt );
+			auto it = m_caretIt;
 
 			if ( ++it != m_caption.end() )
 			{
-				caption += castor::String( it.internal(), m_caption.cend() );
+				caption += castor::U32String( it, m_caption.cend() );
 			}
 
 			m_caption = caption;
-			m_caretIt = castor::string::utf8::const_iterator( m_caption.begin() ) + diff;
+			m_caretIt = std::next( m_caption.cbegin(), ptrdiff_t( diff ) );
 			doUpdateCaption();
 		}
 	}
@@ -336,17 +342,17 @@ namespace castor3d
 		if ( m_caretIt != m_caption.begin() )
 		{
 			--m_caretIt;
-			auto diff = size_t( std::distance( castor::string::utf8::const_iterator( m_caption.begin() ), m_caretIt ) );
-			castor::String caption( m_caption.cbegin(), m_caretIt.internal() );
-			castor::string::utf8::const_iterator it = m_caretIt;
+			auto diff = size_t( std::distance( m_caption.cbegin(), m_caretIt ) );
+			castor::U32String caption( m_caption.cbegin(), m_caretIt );
+			auto it = m_caretIt;
 
 			if ( ++it != m_caption.end() )
 			{
-				caption += castor::String( it.internal(), m_caption.cend() );
+				caption += castor::U32String( it, m_caption.cend() );
 			}
 
 			m_caption = caption;
-			m_caretIt = castor::string::utf8::const_iterator( m_caption.begin() ) + diff;
+			m_caretIt = std::next( m_caption.cbegin(), ptrdiff_t( diff ) );
 			doUpdateCaption();
 		}
 	}
@@ -375,7 +381,7 @@ namespace castor3d
 				caret->setPixelSize( size );
 			}
 
-			text->setCaption( castor::string::toU32String( m_caption ) );
+			text->setCaption( m_caption );
 		}
 	}
 }

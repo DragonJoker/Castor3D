@@ -161,7 +161,7 @@ namespace castor3d
 		doGetBackground().setBorderOuterUV( value );
 	}
 
-	void Control::setCaption( castor::String const & caption )
+	void Control::setCaption( castor::U32String const & caption )
 	{
 		doSetCaption( caption );
 	}

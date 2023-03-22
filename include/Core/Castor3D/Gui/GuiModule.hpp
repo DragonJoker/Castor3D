@@ -336,7 +336,7 @@ namespace castor3d
 	using OnComboEvent = castor::SignalT< OnComboEventFunction >;
 	using OnComboEventConnection = OnComboEvent::connection;
 
-	using OnEditEventFunction = std::function< void( castor::String const & ) >;
+	using OnEditEventFunction = std::function< void( castor::U32String const & ) >;
 	using OnEditEvent = castor::SignalT< OnEditEventFunction >;
 	using OnEditEventConnection = OnEditEvent::connection;
 

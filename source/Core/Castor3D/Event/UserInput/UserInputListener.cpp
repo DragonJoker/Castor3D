@@ -229,7 +229,8 @@ namespace castor3d
 		}
 	}
 
-	void UserInputListener::onTextAction( castor::String const & handler, castor::String const & text )const
+	void UserInputListener::onTextAction( castor::String const & handler
+		, castor::U32String const & text )const
 	{
 		auto it = m_onTextActions.find( handler );
 

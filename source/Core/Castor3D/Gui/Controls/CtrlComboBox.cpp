@@ -60,7 +60,7 @@ namespace castor3d
 			, cuT( "Expand" )
 			, &style->getExpandStyle()
 			, this
-			, cuT( "+" )
+			, U"+"
 			, castor::Position{ int32_t( size.getWidth() - size.getHeight() ), 0 }
 			, castor::Size{ size.getHeight(), size.getHeight() } );
 		m_expand->setVisible( visible );

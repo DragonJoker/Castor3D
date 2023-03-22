@@ -82,7 +82,7 @@ namespace castor3d
 		/** Sets the caption.
 		 *\param[in]	caption	The new value
 		 */
-		C3D_API void setCaption( castor::String const & caption );
+		C3D_API void setCaption( castor::U32String const & caption );
 
 		/** Sets the visibility
 		 *\param[in]	value		The new value.
@@ -435,7 +435,7 @@ namespace castor3d
 		/** sets the caption.
 		*\param[in]	caption	The new value
 		*/
-		virtual void doSetCaption( castor::String const & caption ) {}
+		virtual void doSetCaption( castor::U32String const & caption ) {}
 
 		/** Event when mouse enters the control
 		 *\param[in]	event		The mouse event

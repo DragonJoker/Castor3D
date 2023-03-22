@@ -45,7 +45,7 @@ namespace castor
 	{
 		log::info << tabs() << cuT( "Writing ButtonCtrl " ) << control.getName() << std::endl;
 		return writeSub< Control >( file, control )
-			&& writeName( file, cuT( "caption" ), control.getCaption() )
+			&& writeName( file, cuT( "caption" ), string::stringCast< xchar >( control.getCaption() ) )
 			&& writeOpt( file, cuT( "horizontal_align" ), getName( control.getHAlign() ), getName( HAlign::eLeft ) )
 			&& writeOpt( file, cuT( "vertical_align" ), getName( control.getVAlign() ), getName( VAlign::eTop ) );
 	}
