@@ -88,14 +88,14 @@ namespace castor3d
 		setStyle( style );
 	}
 
-	void ExpandablePanelCtrl::setExpandCaption( castor::String v )
+	void ExpandablePanelCtrl::setExpandCaption( castor::U32String v )
 	{
-		m_expandCaption = castor::string::toU32String( v );
+		m_expandCaption = std::move( v );
 	}
 
-	void ExpandablePanelCtrl::setRetractCaption( castor::String v )
+	void ExpandablePanelCtrl::setRetractCaption( castor::U32String v )
 	{
-		m_retractCaption = castor::string::toU32String( v );
+		m_retractCaption = std::move( v );
 	}
 
 	void ExpandablePanelCtrl::doUpdateStyle()
