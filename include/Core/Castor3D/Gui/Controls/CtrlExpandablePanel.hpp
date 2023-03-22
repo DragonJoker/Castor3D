@@ -48,6 +48,9 @@ namespace castor3d
 			, ControlFlagType flags = 0
 			, bool visible = true );
 
+		C3D_API void setExpandCaption( castor::String v );
+		C3D_API void setRetractCaption( castor::String v );
+
 		/** Connects a function to an event
 		*\param[in]	event		The event type
 		*\param[in]	function	The function
@@ -89,16 +92,6 @@ namespace castor3d
 		auto & getRetractCaption()const noexcept
 		{
 			return m_retractCaption;
-		}
-
-		void setExpandCaption( castor::String v )
-		{
-			m_expandCaption = std::move( v );
-		}
-
-		void setRetractCaption( castor::String v )
-		{
-			m_retractCaption = std::move( v );
 		}
 
 		bool isExpanded()const
@@ -156,8 +149,8 @@ namespace castor3d
 
 	private:
 		uint32_t m_headerHeight;
-		castor::String m_expandCaption{ "+" };
-		castor::String m_retractCaption{ "-" };
+		castor::U32String m_expandCaption{ U"+" };
+		castor::U32String m_retractCaption{ U"-" };
 		PanelCtrlSPtr m_header;
 		ButtonCtrlSPtr m_expand;
 		PanelCtrlSPtr m_content;

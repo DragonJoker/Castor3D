@@ -45,20 +45,17 @@ namespace castor3d
 			, ControlFlagType flags = 0
 			, bool visible = true );
 
-		/** Retrieves the caption
-		 *\return		The value
-		 */
-		castor::String const & getCaption()const
-		{
-			return m_caption;
-		}
-
 		/** Updates the caption
 		 *\param[in]	value		The new value
 		 */
-		void updateCaption( castor::String const & value )
+		C3D_API void updateCaption( castor::String const & value );
+
+		/** Retrieves the caption
+		 *\return		The value
+		 */
+		castor::U32String const & getCaption()const
 		{
-			m_caption = value;
+			return m_caption;
 		}
 
 		/** Connects a function to an edit event
@@ -117,7 +114,7 @@ namespace castor3d
 
 		/** @copydoc Control::doSetCaption
 		*/
-		void doSetCaption( castor::String const & value )override;
+		void doSetCaption( castor::U32String const & value )override;
 
 		/** @copydoc Control::doSetVisible
 		*/
@@ -181,8 +178,8 @@ namespace castor3d
 		void doUpdateCaption();
 
 	private:
-		castor::String m_caption;
-		castor::string::utf8::const_iterator m_caretIt;
+		castor::U32String m_caption;
+		castor::U32String::const_iterator m_caretIt;
 		bool m_active;
 		TextOverlayWPtr m_text;
 		PanelOverlayWPtr m_caret;

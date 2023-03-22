@@ -38,7 +38,7 @@ namespace castor3d
 			, castor::String const & name
 			, StaticStyle * style
 			, ControlRPtr parent
-			, castor::String const & caption
+			, castor::U32String const & caption
 			, castor::Position const & position
 			, castor::Size const & size
 			, ControlFlagType flags = 0
@@ -65,7 +65,7 @@ namespace castor3d
 		/**
 		*\return	The static caption
 		*/
-		castor::String const & getCaption()const
+		castor::U32String const & getCaption()const
 		{
 			return m_caption;
 		}
@@ -107,7 +107,7 @@ namespace castor3d
 
 		/** @copydoc Control::doSetCaption
 		*/
-		void doSetCaption( castor::String const & value )override;
+		void doSetCaption( castor::U32String const & value )override;
 
 		/** @copydoc Control::doSetVisible
 		*/
@@ -122,7 +122,7 @@ namespace castor3d
 		void doUpdateZIndex( uint32_t & index )override;
 
 	private:
-		castor::String m_caption;
+		castor::U32String m_caption;
 		TextOverlayWPtr m_text;
 	};
 }

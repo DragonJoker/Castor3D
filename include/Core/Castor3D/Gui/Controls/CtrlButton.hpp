@@ -39,7 +39,7 @@ namespace castor3d
 			, castor::String const & name
 			, ButtonStyleRPtr style
 			, ControlRPtr parent
-			, castor::String const & caption
+			, castor::U32String const & caption
 			, castor::Position const & position
 			, castor::Size const & size
 			, ControlFlagType flags = 0
@@ -66,7 +66,7 @@ namespace castor3d
 		/** Retrieves the caption
 		 *\return		The value
 		 */
-		castor::String const & getCaption()const
+		castor::U32String const & getCaption()const
 		{
 			return m_caption;
 		}
@@ -119,7 +119,7 @@ namespace castor3d
 
 		/** @copydoc Control::doSetCaption
 		*/
-		void doSetCaption( castor::String const & caption )override;
+		void doSetCaption( castor::U32String const & caption )override;
 
 		/** @copydoc Control::doSetVisible
 		*/
@@ -158,7 +158,7 @@ namespace castor3d
 			, float offset );
 
 	private:
-		castor::String m_caption;
+		castor::U32String m_caption;
 		TextOverlayWPtr m_text;
 		OnButtonEvent m_signals[size_t( ButtonEvent::eCount )];
 		OnEnableConnection m_onEnable;

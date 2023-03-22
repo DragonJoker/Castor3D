@@ -16,7 +16,7 @@ namespace castor3d
 		using OnClickActionFunction = std::function< void() >;
 		using OnMouseMoveActionFunction = std::function< void( castor::Position const & ) >;
 		using OnSelectActionFunction = std::function< void( int ) >;
-		using OnTextActionFunction = std::function< void( castor::String const & ) >;
+		using OnTextActionFunction = std::function< void( castor::U32String const & ) >;
 		using OnExpandActionFunction = std::function< void( bool ) >;
 		using OnCursorActionFunction = std::function< void( MouseCursor ) >;
 
@@ -261,7 +261,7 @@ namespace castor3d
 		 *\param[in]	text	Le nouveau texte.
 		 */
 		C3D_API void onTextAction( castor::String const & handler
-			, castor::String const & text )const;
+			, castor::U32String const & text )const;
 		/**
 		 *\~english
 		 *\~brief		Event raised by the handler when its expansion has changed.

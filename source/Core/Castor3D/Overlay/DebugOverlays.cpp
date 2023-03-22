@@ -71,14 +71,14 @@ namespace castor3d
 			, "Label"
 			, labelStyle
 			, m_panel.get()
-			, label
+			, castor::string::toU32String( label )
 			, castor::Position{ 0, 2 }
 			, castor::Size{ DebugLabelWidth, PanelHeight } );
 		m_value = std::make_shared< StaticCtrl >( nullptr
 			, "Value"
 			, valueStyle
 			, m_panel.get()
-			, ""
+			, U""
 			, castor::Position{ DebugLabelWidth, 2 }
 			, castor::Size{ DebugValueWidth, PanelHeight } );
 
@@ -97,7 +97,7 @@ namespace castor3d
 
 	void DebugOverlays::DebugPanel::update()
 	{
-		m_value->setCaption( m_v() );
+		m_value->setCaption( castor::string::toU32String( m_v() ) );
 	}
 
 	//*********************************************************************************************
@@ -123,7 +123,7 @@ namespace castor3d
 			, "Title"
 			, titleStyle
 			, m_panel->getHeader().get()
-			, title
+			, castor::string::toU32String( title )
 			, castor::Position{ 0, 3 }
 			, castor::Size{ DebugPanelWidth - PanelHeight, PanelHeight } );
 
@@ -274,7 +274,7 @@ namespace castor3d
 			, "PassName"
 			, nameStyle
 			, m_panel.get()
-			, m_name
+			, castor::string::toU32String( m_name )
 			, castor::Position{ posX, 2 }
 			, castor::Size{ nameWidth, PanelHeight } );
 		posX += nameWidth;
@@ -282,7 +282,7 @@ namespace castor3d
 			, "CPUName"
 			, counterStyle
 			, m_panel.get()
-			, "CPU:"
+			, U"CPU:"
 			, castor::Position{ posX, 0 }
 			, castor::Size{ CpuNameWidth, PanelHeight } );
 		posX += CpuNameWidth;
@@ -290,7 +290,7 @@ namespace castor3d
 			, "CPUValue"
 			, counterStyle
 			, m_panel.get()
-			, ""
+			, U""
 			, castor::Position{ posX, 0 }
 			, castor::Size{ CpuValueWidth, PanelHeight } );
 		posX += CpuValueWidth;
@@ -298,7 +298,7 @@ namespace castor3d
 			, "GPUName"
 			, counterStyle
 			, m_panel.get()
-			, "GPU:"
+			, U"GPU:"
 			, castor::Position{ posX, 0 }
 			, castor::Size{ GpuNameWidth, PanelHeight } );
 		posX += GpuNameWidth;
@@ -306,7 +306,7 @@ namespace castor3d
 			, "GPUValue"
 			, counterStyle
 			, m_panel.get()
-			, ""
+			, U""
 			, castor::Position{ posX, 0 }
 			, castor::Size{ GpuValueWidth, PanelHeight } );
 
@@ -384,8 +384,8 @@ namespace castor3d
 			return;
 		}
 
-		m_cpu.value->setCaption( castor::string::toString( m_cpu.time ) );
-		m_gpu.value->setCaption( castor::string::toString( m_gpu.time ) );
+		m_cpu.value->setCaption( castor::string::toU32String( m_cpu.time ) );
+		m_gpu.value->setCaption( castor::string::toU32String( m_gpu.time ) );
 		top += PanelHeight;
 	}
 
@@ -454,7 +454,7 @@ namespace castor3d
 			, "Title"
 			, nameStyle
 			, m_container->getHeader().get()
-			, m_categoryName
+			, castor::string::toU32String( m_categoryName )
 			, castor::Position{ m_posX, 2 }
 			, castor::Size{ nameWidth, PanelHeight } );
 		m_posX += nameWidth;
@@ -462,7 +462,7 @@ namespace castor3d
 			, "CPUName"
 			, counterStyle
 			, m_container->getHeader().get()
-			,  "CPU:"
+			,  U"CPU:"
 			, castor::Position{ m_posX, 0 }
 			, castor::Size{ CpuNameWidth, PanelHeight } );
 		m_posX += CpuNameWidth;
@@ -470,7 +470,7 @@ namespace castor3d
 			, "CPUValue"
 			, counterStyle
 			, m_container->getHeader().get()
-			,  ""
+			,  U""
 			, castor::Position{ m_posX, 0 }
 			, castor::Size{ CpuValueWidth, PanelHeight } );
 		m_posX += CpuValueWidth;
@@ -478,7 +478,7 @@ namespace castor3d
 			, "GPUName"
 			, counterStyle
 			, m_container->getHeader().get()
-			,  "GPU:"
+			,  U"GPU:"
 			, castor::Position{ m_posX, 0 }
 			, castor::Size{ GpuNameWidth, PanelHeight } );
 		m_posX += GpuNameWidth;
@@ -486,7 +486,7 @@ namespace castor3d
 			, "GPUValue"
 			, counterStyle
 			, m_container->getHeader().get()
-			, ""
+			, U""
 			, castor::Position{ m_posX, 0 }
 			, castor::Size{ GpuValueWidth, PanelHeight } );
 		m_posX += GpuValueWidth;
@@ -682,8 +682,8 @@ namespace castor3d
 			return;
 		}
 
-		m_cpu.value->setCaption( castor::string::toString( m_cpu.time ) );
-		m_gpu.value->setCaption( castor::string::toString( m_gpu.time ) );
+		m_cpu.value->setCaption( castor::string::toU32String( m_cpu.time ) );
+		m_gpu.value->setCaption( castor::string::toU32String( m_gpu.time ) );
 
 		if ( m_container->isExpanded() )
 		{

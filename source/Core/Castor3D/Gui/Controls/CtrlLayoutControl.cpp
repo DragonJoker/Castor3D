@@ -87,7 +87,7 @@ namespace castor3d
 		doSubSetSize( value );
 	}
 
-	void LayoutControl::doSetCaption( castor::String const & caption )
+	void LayoutControl::doSetCaption( castor::U32String const & caption )
 	{
 		if ( m_layout )
 		{

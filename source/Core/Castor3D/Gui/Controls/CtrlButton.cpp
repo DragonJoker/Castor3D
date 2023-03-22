@@ -26,7 +26,7 @@ namespace castor3d
 			, name
 			, style
 			, parent
-			, castor::String{}
+			, castor::U32String{}
 			, castor::Position{}
 			, castor::Size{}
 			, 0u
@@ -38,7 +38,7 @@ namespace castor3d
 		, castor::String const & name
 		, ButtonStyleRPtr style
 		, ControlRPtr parent
-		, castor::String const & caption
+		, castor::U32String const & caption
 		, castor::Position const & position
 		, castor::Size const & size
 		, ControlFlagType flags
@@ -87,7 +87,7 @@ namespace castor3d
 				, nullptr
 				, &getBackgroundOverlay() ).lock()->getTextOverlay();
 		text->setPixelSize( getSize() );
-		text->setCaption( castor::string::toU32String( m_caption ) );
+		text->setCaption( m_caption );
 		text->setVisible( visible );
 		m_text = text;
 
@@ -216,13 +216,13 @@ namespace castor3d
 		}
 	}
 
-	void ButtonCtrl::doSetCaption( castor::String const & value )
+	void ButtonCtrl::doSetCaption( castor::U32String const & value )
 	{
 		m_caption = value;
 
 		if ( auto text = m_text.lock() )
 		{
-			text->setCaption( castor::string::toU32String( value ) );
+			text->setCaption( value );
 		}
 	}
 

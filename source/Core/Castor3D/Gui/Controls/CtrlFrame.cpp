@@ -58,7 +58,7 @@ namespace castor3d
 			, cuT( "Header" )
 			, &style->getHeaderStyle()
 			, this
-			, name
+			, castor::string::toU32String( name )
 			, castor::Position{ 0, 0 }
 			, castor::Size{ size->x - m_headerHeight, m_headerHeight } ) }
 		, m_content{ std::make_shared< PanelCtrl >( m_scene

@@ -323,7 +323,7 @@ namespace castor3d
 		{
 			castor::String text;
 			params[0]->get( text );
-			control->setCaption( text );
+			control->setCaption( castor::string::toU32String( text ) );
 		}
 		else
 		{
@@ -445,7 +445,7 @@ namespace castor3d
 		{
 			castor::String text;
 			params[0]->get( text );
-			edit->setCaption( text );
+			edit->setCaption( castor::string::toU32String( text ) );
 		}
 		else
 		{
@@ -663,7 +663,7 @@ namespace castor3d
 		{
 			castor::String text;
 			params[0]->get( text );
-			control->setCaption( text );
+			control->setCaption( castor::string::toU32String( text ) );
 		}
 		else
 		{
@@ -899,7 +899,7 @@ namespace castor3d
 
 		if ( auto control = guiContext.frame )
 		{
-			control->setCaption( params[0]->get< castor::String >() );
+			control->setCaption( castor::string::toU32String( params[0]->get< castor::String >() ) );
 		}
 		else
 		{

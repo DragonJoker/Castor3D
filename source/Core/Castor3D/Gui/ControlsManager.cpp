@@ -754,7 +754,7 @@ namespace castor3d
 	void ControlsManager::connectEvents( EditCtrl & control )
 	{
 		m_onEditUpdates.emplace( &control, control.connect( EditEvent::eUpdated
-			, [this, &control]( castor::String const & text )
+			, [this, &control]( castor::U32String const & text )
 			{
 				onTextAction( control.getName(), text );
 			} ) );

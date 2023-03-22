@@ -55,7 +55,7 @@ namespace castor3d
 			return static_cast< FrameStyle const & >( getBaseStyle() );
 		}
 
-		castor::String const & getHeaderCaption()const noexcept
+		castor::U32String const & getHeaderCaption()const noexcept
 		{
 			return m_header->getCaption();
 		}
@@ -80,7 +80,7 @@ namespace castor3d
 			m_minSize = size;
 		}
 
-		void setHeaderCaption( castor::String const & v )noexcept
+		void setHeaderCaption( castor::U32String const & v )noexcept
 		{
 			setCaption( v );
 		}
@@ -151,7 +151,7 @@ namespace castor3d
 
 		/** @copydoc Control::doSetCaption
 		*/
-		void doSetCaption( castor::String const & caption )override
+		void doSetCaption( castor::U32String const & caption )override
 		{
 			m_header->setCaption( caption );
 		}
