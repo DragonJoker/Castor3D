@@ -72,12 +72,12 @@ namespace castor3d
 		}
 
 		auto overlay = m_scene
-			? m_scene->addNewOverlay( cuT( "T_Ctrl_[" ) + getName() + cuT( "]" )
+			? m_scene->addNewOverlay( getName()
 				, getEngine()
 				, OverlayType::eBorderPanel
 				, nullptr
 				, parentOv ).lock()
-			: getEngine().addNewOverlay( cuT( "T_Ctrl_[" ) + getName() + cuT( "]" )
+			: getEngine().addNewOverlay( getName()
 				, getEngine()
 				, OverlayType::eBorderPanel
 				, nullptr
