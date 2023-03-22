@@ -554,6 +554,8 @@ namespace castor3d
 					++line->wordEnd;
 					line->charEnd = word->charEnd;
 				}
+
+				wordLeft = totalLeft;
 			};
 
 			auto addChar = [&]( castor::Point2f charSize
@@ -628,7 +630,7 @@ namespace castor3d
 						// write the word and leave space before next word.
 						addWord();
 						totalLeft += float( glyph.getAdvance() );
-						wordLeft = totalLeft;
+						wordLeft += float( glyph.getAdvance() );
 						charLeft = 0.0;
 						++wordIndex;
 						word = nextWord();

@@ -180,17 +180,14 @@ namespace castor3d
 		 */
 		void doUpdateCaption();
 
-		/** Retrieves the caption with caret
-		 *\return		The caption and the caret at good position
-		 */
-		castor::String doGetCaptionWithCaret()const;
-
 	private:
 		castor::String m_caption;
 		castor::string::utf8::const_iterator m_caretIt;
 		bool m_active;
 		TextOverlayWPtr m_text;
+		PanelOverlayWPtr m_caret;
 		OnEditEvent m_signals[size_t( EditEvent::eCount )];
+		bool m_caretVisible{};
 	};
 }
 

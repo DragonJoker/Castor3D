@@ -17,6 +17,13 @@ namespace castor
 		: public Named
 	{
 	public:
+		struct TextMetrics
+		{
+			uint32_t top{};
+			uint32_t width{};
+			Point2i yRange{ 100, 0 };
+			std::vector< TextMetrics > lines{};
+		};
 		/**
 		\author		Sylvain DOREMUS
 		\version	0.6.1.0
@@ -146,6 +153,16 @@ namespace castor
 		 *\param[in]	c	Le caractère.
 		 */
 		CU_API void loadGlyph( char32_t c );
+		/**
+		 *\~english
+		 *\brief		Loads wanted glyph.
+		 *\param[in]	c	The character.
+		 *\~french
+		 *\brief		Charge le glyphe voulu.
+		 *\param[in]	c	Le caractère.
+		 */
+		CU_API TextMetrics getTextMetrics( std::u32string const & v
+			, uint32_t maxWidth );
 		/**
 		 *\~english
 		 *\brief		Tells if the font already has load ed the wanted glyph.
