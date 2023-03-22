@@ -274,6 +274,125 @@ namespace castor
 		m_glyphLoader->cleanup();
 	}
 
+	Font::TextMetrics Font::getTextMetrics( std::u32string const & v
+		, uint32_t maxWidth )
+	{
+		TextMetrics result;
+		int32_t charLeft{};
+		int32_t wordLeft{};
+		int32_t totalLeft{};
+		int32_t lineTop{};
+		TextMetrics word;
+
+		auto nextLine = [&]()
+		{
+			auto & line = result.lines.emplace_back();
+			line.top = uint32_t( lineTop );
+			charLeft = totalLeft - wordLeft;
+			totalLeft = charLeft;
+			line.width = uint32_t( totalLeft );
+			wordLeft = 0;
+			return &line;
+		};
+
+		auto line = nextLine();
+
+		auto finishWord = [&]()
+		{
+			if ( word.width > 0 )
+			{
+				line->yRange->x = std::min( line->yRange->x, word.yRange->x );
+				line->yRange->y = std::max( line->yRange->y, word.yRange->y );
+			}
+
+			word = {};
+			wordLeft = totalLeft;
+		};
+
+		auto finishLine = [&]()
+		{
+			result.width = std::max( result.width, line->width );
+			result.yRange->x = std::min( result.yRange->x, line->yRange->x );
+			result.yRange->y = std::max( result.yRange->y, line->yRange->y );
+
+			lineTop += line->yRange->y - line->yRange->x;
+		};
+
+		auto addChar = [&]( castor::Size const & charSize
+			, castor::Point2i const & bearing
+			, int32_t advance )
+		{
+			auto xMin = bearing->x;
+			auto xMax = xMin + int32_t( charSize->x );
+			auto yMin = -bearing->y;
+			auto yMax = yMin + int32_t( charSize->y );
+
+			if ( wordLeft > 0
+				&& ( wordLeft > int32_t( maxWidth )
+					|| totalLeft + xMax > int32_t( maxWidth ) ) )
+			{
+				finishLine();
+				line = nextLine();
+			}
+
+			word.yRange->x = std::min( word.yRange->x, yMin );
+			word.yRange->y = std::max( word.yRange->y, yMax );
+			totalLeft += advance;
+			charLeft += advance;
+			word.width += advance;
+			line->width += advance;
+		};
+
+		for ( auto c : v )
+		{
+			if ( c == U'\n' )
+			{
+				finishWord();
+				finishLine();
+				line = nextLine();
+				charLeft = 0;
+			}
+			else
+			{
+				auto & glyph = getGlyphAt( c );
+
+				if ( c == U' ' || c == U'\t' )
+				{
+					totalLeft += glyph.getAdvance();
+					finishWord();
+					charLeft = 0;
+					line->width += glyph.getAdvance();
+				}
+				else
+				{
+					addChar( { glyph.getSize()->x, glyph.getSize()->y }
+						, { glyph.getBearing().x(), glyph.getBearing().y() }
+						, glyph.getAdvance() );
+				}
+			}
+		}
+
+		finishWord();
+		finishLine();
+
+		if ( !result.lines.empty() )
+		{
+			// Adjust lines heights to maxHeight
+			auto & lineRange = result.yRange;
+			auto lineHeight = int32_t( lineRange->y - lineRange->x );
+			lineTop = 0;
+
+			for ( auto & ln : result.lines )
+			{
+				ln.top = uint32_t( lineTop );
+				ln.yRange = lineRange;
+				lineTop += lineHeight;
+			}
+		}
+
+		return result;
+	}
+
 	Glyph const & Font::doLoadGlyph( char32_t c )
 	{
 		auto it = std::find_if( m_loadedGlyphs.begin()

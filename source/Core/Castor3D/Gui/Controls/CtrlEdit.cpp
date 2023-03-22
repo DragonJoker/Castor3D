@@ -98,6 +98,20 @@ namespace castor3d
 		text->setVisible( visible );
 		m_text = text;
 
+		auto caret = m_scene
+			? m_scene->addNewOverlay( getName() + cuT( "/Caret" )
+				, getEngine()
+				, OverlayType::ePanel
+				, nullptr
+				, &text->getOverlay() ).lock()->getPanelOverlay()
+			: getEngine().addNewOverlay( getName() + cuT( "/Caret" )
+				, getEngine()
+				, OverlayType::ePanel
+				, nullptr
+				, &text->getOverlay() ).lock()->getPanelOverlay();
+		caret->setVisible( false );
+		m_caret = caret;
+
 		setStyle( style );
 		doUpdateFlags();
 	}
@@ -108,16 +122,6 @@ namespace castor3d
 
 		if ( auto text = m_text.lock() )
 		{
-			text->setFont( style.getFontName() );
-			text->setMaterial( style.getTextMaterial() );
-		}
-	}
-
-	void EditCtrl::doCreate()
-	{
-		if ( auto text = m_text.lock() )
-		{
-			auto & style = getStyle();
 			text->setMaterial( style.getTextMaterial() );
 
 			if ( !text->getFontTexture() || !text->getFontTexture()->getFont() )
@@ -126,6 +130,15 @@ namespace castor3d
 			}
 		}
 
+		if ( auto caret = m_caret.lock() )
+		{
+			caret->setMaterial( style.getTextMaterial() );
+		}
+	}
+
+	void EditCtrl::doCreate()
+	{
+		doUpdateStyle();
 		doUpdateCaption();
 		getControlsManager()->connectEvents( *this );
 	}
@@ -164,6 +177,11 @@ namespace castor3d
 		{
 			text->setVisible( visible );
 		}
+
+		if ( auto caret = m_caret.lock() )
+		{
+			caret->setVisible( m_caretVisible );
+		}
 	}
 
 	void EditCtrl::doUpdateZIndex( uint32_t & index )
@@ -171,6 +189,11 @@ namespace castor3d
 		if ( auto text = m_text.lock() )
 		{
 			text->setOrder( index++, 0u );
+		}
+
+		if ( auto caret = m_caret.lock() )
+		{
+			caret->setOrder( index++, 0u );
 		}
 	}
 
@@ -180,35 +203,35 @@ namespace castor3d
 		{
 			if ( isMultiLine() )
 			{
-				text->setTextWrappingMode( TextWrappingMode::eBreak );
+				text->setTextWrappingMode( TextWrappingMode::eBreakWords );
+				text->setLineSpacingMode( TextLineSpacingMode::eMaxLineHeight );
 				text->setVAlign( VAlign::eTop );
 			}
 		}
 	}
 
-	castor::String EditCtrl::doGetCaptionWithCaret()const
-	{
-		castor::String caption{ m_caption.begin(), m_caretIt.internal() };
-		caption += cuT( '|' );
-
-		if ( m_caretIt != m_caption.end() )
-		{
-			caption += castor::String( m_caretIt.internal(), m_caption.end() );
-		}
-
-		return caption;
-	}
-
 	void EditCtrl::onActivate( HandlerEvent const & event )
 	{
 		m_active = true;
+		m_caretVisible = m_active && isVisible();
 		doUpdateCaption();
+
+		if ( auto caret = m_caret.lock() )
+		{
+			caret->setVisible( m_caretVisible );
+		}
 	}
 
 	void EditCtrl::onDeactivate( HandlerEvent const & event )
 	{
 		m_active = false;
+		m_caretVisible = false;
 		doUpdateCaption();
+
+		if ( auto caret = m_caret.lock() )
+		{
+			caret->setVisible( m_caretVisible );
+		}
 	}
 
 	void EditCtrl::doOnMouseButtonDown( MouseEvent const & event )
@@ -332,14 +355,27 @@ namespace castor3d
 	{
 		if ( auto text = m_text.lock() )
 		{
-			if ( m_active )
+			if ( auto caret = m_caret.lock() )
 			{
-				text->setCaption( castor::string::toU32String( doGetCaptionWithCaret() ) );
+				castor::Position position{ 1, 0 };
+				auto font = text->getFontTexture()->getFont();
+				castor::Size size{ 1u, font->getHeight() };
+
+				if ( !m_caption.empty() )
+				{
+					castor::String caption{ m_caption.cbegin(), m_caretIt.internal() };
+					auto metrics = font->getTextMetrics( castor::string::toU32String( caption ), getSize()->x );
+					auto & line = metrics.lines.back();
+					position.x() = int32_t( line.width );
+					position.y() = int32_t( line.top );
+					size->y = uint32_t( line.yRange->y - line.yRange->x );
+				}
+
+				caret->setPixelPosition( position );
+				caret->setPixelSize( size );
 			}
-			else
-			{
-				text->setCaption( castor::string::toU32String( m_caption ) );
-			}
+
+			text->setCaption( castor::string::toU32String( m_caption ) );
 		}
 	}
 }
