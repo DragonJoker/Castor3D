@@ -179,6 +179,7 @@ namespace castor3d
 
 	private:
 		castor::U32String m_caption;
+		castor::TextMetrics m_metrics;
 		castor::U32String::const_iterator m_caretIt;
 		bool m_active;
 		TextOverlayWPtr m_text;

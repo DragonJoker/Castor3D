@@ -189,7 +189,32 @@ namespace castor
 		bool generateMips;
 		bool layersToTiles;
 	};
-
+	/**
+	\~english
+	\brief		The metrics for a line of text.
+	\~french
+	\brief		Les métriques d'une ligne de texte.
+	*/
+	struct TextLineMetrics
+	{
+		uint32_t top{};
+		uint32_t width{};
+		int32_t yMin{ 100 };
+		int32_t yMax{};
+		std::vector< uint32_t > chars{};
+	};
+	/**
+	\~english
+	\brief		The metrics for a text.
+	\~french
+	\brief		Les métriques d'un texte.
+	*/
+	struct TextMetrics
+	{
+		int32_t yMin{ 100 };
+		int32_t yMax{};
+		std::vector< TextLineMetrics > lines{};
+	};
 	/**
 	\~english
 	\brief		The memory layout for an image.

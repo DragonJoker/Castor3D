@@ -361,20 +361,77 @@ namespace castor3d
 	{
 		if ( auto text = m_text.lock() )
 		{
+			auto fontTexture = text->getFontTexture();
+			auto font = fontTexture->getFont();
+			std::vector< char32_t > newCaption;
+
+			for ( auto c : m_caption )
+			{
+				if ( !font->hasGlyphAt( c ) )
+				{
+					newCaption.push_back( c );
+				}
+			}
+
+			if ( !newCaption.empty() )
+			{
+				for ( auto c : newCaption )
+				{
+					font->loadGlyph( c );
+				}
+
+				fontTexture->update( true );
+			}
+
+			if ( !m_caption.empty() )
+			{
+				m_metrics = font->getTextMetrics( m_caption, getSize()->x );
+			}
+			else
+			{
+				m_metrics = {};
+			}
+
 			if ( auto caret = m_caret.lock() )
 			{
 				castor::Position position{ 1, 0 };
-				auto font = text->getFontTexture()->getFont();
 				castor::Size size{ 1u, font->getHeight() };
 
 				if ( !m_caption.empty() )
 				{
-					castor::String caption{ m_caption.cbegin(), m_caretIt.internal() };
-					auto metrics = font->getTextMetrics( castor::string::toU32String( caption ), getSize()->x );
-					auto & line = metrics.lines.back();
-					position.x() = int32_t( line.width );
-					position.y() = int32_t( line.top );
-					size->y = uint32_t( line.yRange->y - line.yRange->x );
+					auto index = uint32_t( std::distance( m_caption.cbegin(), m_caretIt ) );
+					uint32_t i{};
+					auto lineIt = m_metrics.lines.begin();
+					auto charIt = lineIt->chars.begin();
+					uint32_t left{};
+					uint32_t top{};
+
+					while ( i < index )
+					{
+						if ( charIt == lineIt->chars.end() )
+						{
+							++lineIt;
+
+							if ( lineIt == m_metrics.lines.end() )
+							{
+								break;
+							}
+
+							charIt = lineIt->chars.begin();
+						}
+
+						left = *charIt;
+						top = lineIt->top;
+						++charIt;
+						++i;
+					}
+
+					if ( lineIt != m_metrics.lines.end() )
+					{
+						position.x() = int32_t( left );
+						position.y() = int32_t( top );
+						size->y = uint32_t( m_metrics.yMax - m_metrics.yMin );
+					}
 				}
 
 				caret->setPixelPosition( position );
