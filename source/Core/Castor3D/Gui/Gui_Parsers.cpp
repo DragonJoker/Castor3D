@@ -801,14 +801,14 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserExpandablePanelExpandCaption )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
-		guiContext.expandablePanel->setExpandCaption( params[0]->get< castor::String >() );
+		guiContext.expandablePanel->setExpandCaption( castor::string::toU32String( params[0]->get< castor::String >() ) );
 	}
 	CU_EndAttribute()
 
 	CU_ImplementAttributeParser( parserExpandablePanelRetractCaption )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
-		guiContext.expandablePanel->setRetractCaption( params[0]->get< castor::String >() );
+		guiContext.expandablePanel->setRetractCaption( castor::string::toU32String( params[0]->get< castor::String >() ) );
 	}
 	CU_EndAttribute()
 

@@ -48,8 +48,8 @@ namespace castor3d
 			, ControlFlagType flags = 0
 			, bool visible = true );
 
-		C3D_API void setExpandCaption( castor::String v );
-		C3D_API void setRetractCaption( castor::String v );
+		C3D_API void setExpandCaption( castor::U32String v );
+		C3D_API void setRetractCaption( castor::U32String v );
 
 		/** Connects a function to an event
 		*\param[in]	event		The event type
