@@ -53,12 +53,12 @@ namespace castor3d
 	{
 		setBorderSize( castor::Point4ui{} );
 		auto text = m_scene
-			? m_scene->addNewOverlay( cuT( "T_CtrlStatic_[" ) + getName() + cuT( "]" )
+			? m_scene->addNewOverlay( getName() + cuT( "/Text" )
 				, getEngine()
 				, OverlayType::eText
 				, nullptr
 				, &getBackgroundOverlay() ).lock()->getTextOverlay()
-			: getEngine().addNewOverlay( cuT( "T_CtrlStatic_[" ) + getName() + cuT( "]" )
+			: getEngine().addNewOverlay( getName() + cuT( "/Text" )
 				, getEngine()
 				, OverlayType::eText
 				, nullptr

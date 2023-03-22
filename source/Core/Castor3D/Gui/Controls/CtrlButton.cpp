@@ -76,12 +76,12 @@ namespace castor3d
 		setVAlign( VAlign::eCenter );
 
 		auto text = m_scene
-			? m_scene->addNewOverlay( cuT( "T_CtrlButton_[" ) + getName() + cuT( "]" )
+			? m_scene->addNewOverlay( getName() + cuT( "/Text" )
 				, getEngine()
 				, OverlayType::eText
 				, nullptr
 				, &getBackgroundOverlay() ).lock()->getTextOverlay()
-			: getEngine().addNewOverlay( cuT( "T_CtrlButton_[" ) + getName() + cuT( "]" )
+			: getEngine().addNewOverlay( getName() + cuT( "/Text" )
 				, getEngine()
 				, OverlayType::eText
 				, nullptr
