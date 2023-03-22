@@ -262,7 +262,7 @@ namespace castor3d
 				index--;
 				changed = true;
 			}
-			else if ( event.getKey() == KeyboardKey::edown )
+			else if ( event.getKey() == KeyboardKey::eDown )
 			{
 				index++;
 				changed = true;

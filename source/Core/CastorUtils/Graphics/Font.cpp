@@ -275,9 +275,11 @@ namespace castor
 	}
 
 	TextMetrics Font::getTextMetrics( std::u32string const & v
-		, uint32_t maxWidth )
+		, uint32_t maxWidth
+		, bool splitLines )
 	{
 		TextMetrics result;
+		uint32_t charIndex{};
 		int32_t charLeft{};
 		int32_t wordLeft{};
 		int32_t totalLeft{};
@@ -295,6 +297,7 @@ namespace castor
 			}
 
 			auto & line = result.lines.emplace_back();
+			line.firstCharIndex = charIndex;
 			line.top = uint32_t( lineTop );
 			charLeft = totalLeft - wordLeft;
 			totalLeft = charLeft;
@@ -345,7 +348,8 @@ namespace castor
 			auto yMin = -bearing->y;
 			auto yMax = yMin + int32_t( charSize->y );
 
-			if ( wordLeft > 0
+			if ( splitLines
+				&& wordLeft > 0
 				&& ( wordLeft > int32_t( maxWidth )
 					|| totalLeft + xMax > int32_t( maxWidth ) ) )
 			{
@@ -391,6 +395,8 @@ namespace castor
 
 				word.chars.push_back( uint32_t( totalLeft ) );
 			}
+
+			++charIndex;
 		}
 
 		finishWord();

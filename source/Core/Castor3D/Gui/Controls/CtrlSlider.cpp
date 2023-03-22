@@ -312,7 +312,7 @@ namespace castor3d
 					doUpdateTick( castor::Position( 0, -1 ) );
 					m_signals[size_t( SliderEvent::eThumbRelease )]( m_value.value() );
 				}
-				else if ( event.getKey() == KeyboardKey::edown )
+				else if ( event.getKey() == KeyboardKey::eDown )
 				{
 					doUpdateTick( castor::Position( 0, 1 ) );
 					m_signals[size_t( SliderEvent::eThumbRelease )]( m_value.value() );

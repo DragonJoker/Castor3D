@@ -201,6 +201,7 @@ namespace castor
 		uint32_t width{};
 		int32_t yMin{ 100 };
 		int32_t yMax{};
+		uint32_t firstCharIndex{};
 		std::vector< uint32_t > chars{};
 	};
 	/**

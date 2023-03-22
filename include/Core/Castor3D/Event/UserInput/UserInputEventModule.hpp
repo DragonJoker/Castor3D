@@ -212,7 +212,7 @@ namespace castor3d
 		eLeft,
 		eUp,
 		eRight,
-		edown,
+		eDown,
 		eSelect,
 		ePrint,
 		eExecute,

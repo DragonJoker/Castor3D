@@ -173,23 +173,55 @@ namespace castor3d
 		 */
 		void doDeleteCharBeforeCaret();
 
+		/** Moves the caret one line up.
+		 */
+		void doMoveCaretUp();
+
+		/** Moves the caret one line down.
+		 */
+		void doMoveCaretDown();
+
+		/** Updates the input caret indices.
+		 */
+		void doUpdateCaretIndices();
+
 		/** Updates the input caret.
 		 */
-		void doUpdateCaretPosition();
+		void doUpdateCaret();
+
+		/** Updates the text metrics.
+		 */
+		void doUpdateMetrics();
 
 		/** Updates the caption and text overlay
 		 */
 		void doUpdateCaption();
 
 	private:
+		struct Caret
+		{
+			uint32_t lineIndex{};
+			uint32_t charIndex{};
+			uint32_t captionIndex{};
+			castor::U32String::const_iterator captionIt{};
+			bool visible{};
+			PanelOverlayWPtr overlay;
+
+			template< typename SizeT >
+			void updateIndex( SizeT index
+				, castor::U32String const & caption )
+			{
+				captionIndex = uint32_t( index );
+				captionIt = std::next( caption.begin(), captionIndex );
+			}
+		};
+
 		castor::U32String m_caption;
 		castor::TextMetrics m_metrics;
-		castor::U32String::const_iterator m_caretIt;
 		bool m_active;
 		TextOverlayWPtr m_text;
-		PanelOverlayWPtr m_caret;
+		Caret m_caret;
 		OnEditEvent m_signals[size_t( EditEvent::eCount )];
-		bool m_caretVisible{};
 	};
 }
 
