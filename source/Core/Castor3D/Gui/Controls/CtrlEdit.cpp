@@ -52,9 +52,9 @@ namespace castor3d
 			, flags
 			, visible }
 		, m_caption{ castor::string::toU32String( caption ) }
-		, m_caretIt{ m_caption.end() }
 		, m_active{ false }
 	{
+		m_caret.updateIndex( m_caption.size(), m_caption );
 		setBorderSize( castor::Point4ui{ 1, 1, 1, 1 } );
 		EventHandler::connect( KeyboardEventType::ePushed
 			, [this]( KeyboardEvent const & event )
@@ -110,7 +110,7 @@ namespace castor3d
 				, nullptr
 				, &text->getOverlay() ).lock()->getPanelOverlay();
 		caret->setVisible( false );
-		m_caret = caret;
+		m_caret.overlay = caret;
 
 		setStyle( style );
 		doUpdateFlags();
@@ -135,7 +135,7 @@ namespace castor3d
 			}
 		}
 
-		if ( auto caret = m_caret.lock() )
+		if ( auto caret = m_caret.overlay.lock() )
 		{
 			caret->setMaterial( style.getTextMaterial() );
 		}
@@ -145,7 +145,7 @@ namespace castor3d
 	{
 		doUpdateStyle();
 		doUpdateCaption();
-		doUpdateCaretPosition();
+		doUpdateCaret();
 		getControlsManager()->connectEvents( *this );
 	}
 
@@ -173,9 +173,9 @@ namespace castor3d
 	void EditCtrl::doSetCaption( castor::U32String const & value )
 	{
 		m_caption = value;
-		m_caretIt = m_caption.end();
+		m_caret.updateIndex( m_caption.size(), m_caption );
 		doUpdateCaption();
-		doUpdateCaretPosition();
+		doUpdateCaret();
 	}
 
 	void EditCtrl::doSetVisible( bool visible )
@@ -185,9 +185,9 @@ namespace castor3d
 			text->setVisible( visible );
 		}
 
-		if ( auto caret = m_caret.lock() )
+		if ( auto caret = m_caret.overlay.lock() )
 		{
-			caret->setVisible( m_caretVisible );
+			caret->setVisible( m_caret.visible );
 		}
 	}
 
@@ -198,7 +198,7 @@ namespace castor3d
 			text->setOrder( index++, 0u );
 		}
 
-		if ( auto caret = m_caret.lock() )
+		if ( auto caret = m_caret.overlay.lock() )
 		{
 			caret->setOrder( index++, 0u );
 		}
@@ -220,27 +220,68 @@ namespace castor3d
 	void EditCtrl::onActivate( HandlerEvent const & event )
 	{
 		m_active = true;
-		m_caretVisible = m_active && isVisible();
+		m_caret.visible = m_active && isVisible();
 
-		if ( auto caret = m_caret.lock() )
+		if ( auto caret = m_caret.overlay.lock() )
 		{
-			caret->setVisible( m_caretVisible );
+			caret->setVisible( m_caret.visible );
 		}
 	}
 
 	void EditCtrl::onDeactivate( HandlerEvent const & event )
 	{
 		m_active = false;
-		m_caretVisible = false;
+		m_caret.visible = false;
 
-		if ( auto caret = m_caret.lock() )
+		if ( auto caret = m_caret.overlay.lock() )
 		{
-			caret->setVisible( m_caretVisible );
+			caret->setVisible( m_caret.visible );
 		}
 	}
 
 	void EditCtrl::doOnMouseButtonDown( MouseEvent const & event )
 	{
+		auto position = event.getPosition() - getAbsolutePosition();
+		uint32_t index{};
+		auto lineIt = std::find_if( m_metrics.lines.begin()
+			, m_metrics.lines.end()
+			, [&position, &index]( castor::TextLineMetrics const & lookup )
+			{
+				auto height = uint32_t( lookup.yMax - lookup.yMin );
+				auto result = lookup.top + height > uint32_t( position->y );
+
+				if ( !result )
+				{
+					index += uint32_t( lookup.chars.size() );
+				}
+
+				return result;
+			} );
+
+		if ( lineIt == m_metrics.lines.end() )
+		{
+			m_caret.updateIndex( m_caption.size(), m_caption );
+		}
+		else
+		{
+			auto it = std::find_if( lineIt->chars.begin()
+				, lineIt->chars.end()
+				, [&position, &index]( uint32_t lookup )
+				{
+					auto result = lookup > uint32_t( position->x );
+
+					if ( !result )
+					{
+						++index;
+					}
+
+					return result;
+				} );
+			m_caret.updateIndex( index, m_caption );
+		}
+
+		doUpdateCaretIndices();
+		doUpdateCaret();
 	}
 
 	void EditCtrl::doOnMouseButtonUp( MouseEvent const & event )
@@ -281,25 +322,66 @@ namespace castor3d
 				doDeleteCharAtCaret();
 				m_signals[size_t( EditEvent::eUpdated )]( m_caption );
 			}
-			else if ( code == KeyboardKey::eLeft && m_caretIt != m_caption.begin() )
+			else if ( code == KeyboardKey::eLeft && m_caret.captionIt != m_caption.begin() )
 			{
-				--m_caretIt;
-				doUpdateCaretPosition();
+				--m_caret.captionIt;
+				--m_caret.captionIndex;
+				doUpdateCaretIndices();
+				doUpdateCaret();
 			}
-			else if ( code == KeyboardKey::eRight && m_caretIt != m_caption.end() )
+			else if ( code == KeyboardKey::eRight && m_caret.captionIt != m_caption.end() )
 			{
-				++m_caretIt;
-				doUpdateCaretPosition();
+				++m_caret.captionIt;
+				++m_caret.captionIndex;
+				doUpdateCaretIndices();
+				doUpdateCaret();
 			}
-			else if ( code == KeyboardKey::eHome && m_caretIt != m_caption.begin() )
+			else if ( code == KeyboardKey::eUp )
 			{
-				m_caretIt = m_caption.begin();
-				doUpdateCaretPosition();
+				doMoveCaretUp();
+				doUpdateCaret();
 			}
-			else if ( code == KeyboardKey::eEnd && m_caretIt != m_caption.end() )
+			else if ( code == KeyboardKey::eDown )
 			{
-				m_caretIt = m_caption.end();
-				doUpdateCaretPosition();
+				doMoveCaretDown();
+				doUpdateCaret();
+			}
+			else if ( code == KeyboardKey::eHome
+				&& m_caret.captionIt != m_caption.begin() )
+			{
+				if ( event.isCtrlDown() )
+				{
+					m_caret.updateIndex( 0u, m_caption );
+				}
+				else if ( m_caret.lineIndex > 0)
+				{
+					m_caret.updateIndex( m_metrics.lines[m_caret.lineIndex].firstCharIndex + 1u
+						, m_caption );
+				}
+				else
+				{
+					m_caret.updateIndex( m_metrics.lines[m_caret.lineIndex].firstCharIndex
+						, m_caption );
+				}
+
+				doUpdateCaretIndices();
+				doUpdateCaret();
+			}
+			else if ( code == KeyboardKey::eEnd && m_caret.captionIt != m_caption.end() )
+			{
+				if ( event.isCtrlDown() )
+				{
+					m_caret.updateIndex( m_caption.size(), m_caption );
+				}
+				else
+				{
+					auto & line = m_metrics.lines[m_caret.lineIndex];
+					m_caret.updateIndex( line.firstCharIndex + line.chars.size()
+						, m_caption );
+				}
+
+				doUpdateCaretIndices();
+				doUpdateCaret();
 			}
 		}
 	}
@@ -310,22 +392,22 @@ namespace castor3d
 
 	void EditCtrl::doAddCharAtCaret( castor::String const & c )
 	{
-		auto diff = size_t( std::distance( m_caption.cbegin(), m_caretIt ) );
-		m_caption = castor::U32String( m_caption.cbegin(), m_caretIt )
+		auto diff = size_t( std::distance( m_caption.cbegin(), m_caret.captionIt ) );
+		m_caption = castor::U32String( m_caption.cbegin(), m_caret.captionIt )
 			+ castor::string::toU32String( c )
-			+ castor::U32String( m_caretIt, m_caption.cend() );
-		m_caretIt = std::next( m_caption.cbegin(), ptrdiff_t( diff + 1 ) );
+			+ castor::U32String( m_caret.captionIt, m_caption.cend() );
+		m_caret.updateIndex( diff + 1, m_caption );
 		doUpdateCaption();
-		doUpdateCaretPosition();
+		doUpdateCaret();
 	}
 
 	void EditCtrl::doDeleteCharAtCaret()
 	{
-		if ( m_caretIt != m_caption.end() )
+		if ( m_caret.captionIt != m_caption.end() )
 		{
-			auto diff = size_t( std::distance( m_caption.cbegin(), m_caretIt ) );
-			castor::U32String caption( m_caption.cbegin(), m_caretIt );
-			auto it = m_caretIt;
+			auto diff = size_t( std::distance( m_caption.cbegin(), m_caret.captionIt ) );
+			castor::U32String caption( m_caption.cbegin(), m_caret.captionIt );
+			auto it = m_caret.captionIt;
 
 			if ( ++it != m_caption.end() )
 			{
@@ -333,20 +415,20 @@ namespace castor3d
 			}
 
 			m_caption = caption;
-			m_caretIt = std::next( m_caption.cbegin(), ptrdiff_t( diff ) );
+			m_caret.updateIndex( diff, m_caption );
 			doUpdateCaption();
-			doUpdateCaretPosition();
+			doUpdateCaret();
 		}
 	}
 
 	void EditCtrl::doDeleteCharBeforeCaret()
 	{
-		if ( m_caretIt != m_caption.begin() )
+		if ( m_caret.captionIt != m_caption.begin() )
 		{
-			--m_caretIt;
-			auto diff = size_t( std::distance( m_caption.cbegin(), m_caretIt ) );
-			castor::U32String caption( m_caption.cbegin(), m_caretIt );
-			auto it = m_caretIt;
+			m_caret.updateIndex( m_caret.captionIndex - 1u, m_caption );
+			auto diff = size_t( std::distance( m_caption.cbegin(), m_caret.captionIt ) );
+			castor::U32String caption( m_caption.cbegin(), m_caret.captionIt );
+			auto it = m_caret.captionIt;
 
 			if ( ++it != m_caption.end() )
 			{
@@ -354,17 +436,96 @@ namespace castor3d
 			}
 
 			m_caption = caption;
-			m_caretIt = std::next( m_caption.cbegin(), ptrdiff_t( diff ) );
+			m_caret.updateIndex( diff, m_caption );
 			doUpdateCaption();
-			doUpdateCaretPosition();
+			doUpdateCaret();
 		}
 	}
 
-	void EditCtrl::doUpdateCaretPosition()
+	void EditCtrl::doMoveCaretUp()
+	{
+		if ( m_caret.lineIndex > 0u )
+		{
+			auto & line = m_metrics.lines[m_caret.lineIndex - 1u];
+
+			if ( line.chars.size() < m_caret.charIndex )
+			{
+				m_caret.charIndex = uint32_t( line.chars.size() );
+			}
+
+			if ( m_caret.lineIndex == 1u )
+			{
+				--m_caret.charIndex;
+			}
+
+			m_caret.updateIndex( line.firstCharIndex + m_caret.charIndex, m_caption );
+			doUpdateCaretIndices();
+		}
+		else
+		{
+			m_caret.updateIndex( 0u, m_caption );
+		}
+	}
+
+	void EditCtrl::doMoveCaretDown()
+	{
+		if ( m_caret.lineIndex < m_metrics.lines.size() - 1u )
+		{
+			auto & line = m_metrics.lines[m_caret.lineIndex + 1u];
+
+			if ( line.chars.size() < m_caret.charIndex )
+			{
+				m_caret.charIndex = uint32_t( line.chars.size() );
+			}
+
+			if ( m_caret.lineIndex == 0u )
+			{
+				++m_caret.charIndex;
+			}
+
+			m_caret.updateIndex( line.firstCharIndex + m_caret.charIndex, m_caption );
+			doUpdateCaretIndices();
+		}
+		else
+		{
+			m_caret.updateIndex( m_caption.size(), m_caption );
+		}
+	}
+
+	void EditCtrl::doUpdateCaretIndices()
+	{
+		m_caret.lineIndex = {};
+		m_caret.charIndex = {};
+
+		if ( !m_caption.empty() )
+		{
+			auto lineIt = m_metrics.lines.begin();
+			auto charIt = lineIt->chars.begin();
+			uint32_t index{};
+
+			while ( index < m_caret.captionIndex
+				&& lineIt != m_metrics.lines.end() )
+			{
+				if ( charIt == lineIt->chars.end() )
+				{
+					++lineIt;
+					++m_caret.lineIndex;
+					charIt = lineIt->chars.begin();
+					m_caret.charIndex = 0u;
+				}
+
+				++m_caret.charIndex;
+				++index;
+				++charIt;
+			}
+		}
+	}
+
+	void EditCtrl::doUpdateCaret()
 	{
 		if ( auto text = m_text.lock() )
 		{
-			if ( auto caret = m_caret.lock() )
+			if ( auto caret = m_caret.overlay.lock() )
 			{
 				auto font = text->getFontTexture()->getFont();
 				castor::Position position{ 1, 0 };
@@ -372,12 +533,12 @@ namespace castor3d
 
 				if ( !m_caption.empty() )
 				{
-					auto index = uint32_t( std::distance( m_caption.cbegin(), m_caretIt ) );
-					uint32_t i{};
+					auto index = uint32_t( std::distance( m_caption.cbegin(), m_caret.captionIt ) );
 					auto lineIt = m_metrics.lines.begin();
 					auto charIt = lineIt->chars.begin();
 					uint32_t left{};
 					uint32_t top{};
+					uint32_t i{};
 
 					while ( i < index )
 					{
@@ -413,7 +574,7 @@ namespace castor3d
 		}
 	}
 
-	void EditCtrl::doUpdateCaption()
+	void EditCtrl::doUpdateMetrics()
 	{
 		if ( auto text = m_text.lock() )
 		{
@@ -441,13 +602,22 @@ namespace castor3d
 
 			if ( !m_caption.empty() )
 			{
-				m_metrics = font->getTextMetrics( m_caption, getSize()->x );
+				m_metrics = font->getTextMetrics( m_caption, getSize()->x, isMultiLine() );
 			}
 			else
 			{
 				m_metrics = {};
 			}
+		}
+	}
 
+	void EditCtrl::doUpdateCaption()
+	{
+		doUpdateMetrics();
+		doUpdateCaretIndices();
+
+		if ( auto text = m_text.lock() )
+		{
 			text->setCaption( m_caption );
 		}
 	}

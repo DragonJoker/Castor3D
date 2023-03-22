@@ -152,7 +152,8 @@ namespace castor
 		 *\param[in]	c	Le caractère.
 		 */
 		CU_API TextMetrics getTextMetrics( std::u32string const & v
-			, uint32_t maxWidth );
+			, uint32_t maxWidth
+			, bool splitLines );
 		/**
 		 *\~english
 		 *\brief		Tells if the font already has load ed the wanted glyph.
