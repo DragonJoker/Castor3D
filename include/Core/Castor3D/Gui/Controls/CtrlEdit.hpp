@@ -173,6 +173,10 @@ namespace castor3d
 		 */
 		void doDeleteCharBeforeCaret();
 
+		/** Updates the input caret.
+		 */
+		void doUpdateCaretPosition();
+
 		/** Updates the caption and text overlay
 		 */
 		void doUpdateCaption();
