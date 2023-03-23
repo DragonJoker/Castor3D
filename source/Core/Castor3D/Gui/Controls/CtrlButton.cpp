@@ -290,4 +290,12 @@ namespace castor3d
 			text->setOrder( index++, 0u );
 		}
 	}
+
+	void ButtonCtrl::doAdjustZIndex( uint32_t offset )
+	{
+		if ( auto text = m_text.lock() )
+		{
+			text->setOrder( text->getLevel() + offset, 0u );
+		}
+	}
 }

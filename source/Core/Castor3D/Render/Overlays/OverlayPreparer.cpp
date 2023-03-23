@@ -43,7 +43,8 @@ namespace castor3d
 			data.relativeSize = castor::Point2f{ overlay.getRelativeSize() * ratio };
 			data.relativePosition = castor::Point2f{ overlay.getRelativePosition() * ratio };
 			data.parentRect = getParentRect( overlay.getOverlay(), renderSize );
-			data.renderArea = castor::Point4f{ overlay.computeClientArea() * ratio };
+			data.renderArea = castor::Point4f{ overlay.computeClientArea()
+				* castor::Point4d{ ratio->x, ratio->y, ratio->x, ratio->y } };
 			data.uv = castor::Point4f{ overlay.getUV() };
 			data.materialId = pass.getId();
 			data.vertexOffset = vertexOffset;
@@ -357,7 +358,8 @@ namespace castor3d
 			, pass
 			, renderSize
 			, vertexOffset );
-		data.border = castor::Point4f{ overlay.getAbsoluteBorderSize() * castor::Point4d{ ratio->x, ratio->y, ratio->x, ratio->y } };
+		data.border = castor::Point4f{ overlay.getAbsoluteBorderSize()
+			* castor::Point4d{ ratio->x, ratio->y, ratio->x, ratio->y } };
 		data.borderInnerUV = castor::Point4f{ overlay.getBorderInnerUV() };
 		data.borderOuterUV = castor::Point4f{ overlay.getBorderOuterUV() };
 		data.borderPosition = uint32_t( overlay.getBorderPosition() );

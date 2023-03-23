@@ -128,6 +128,10 @@ namespace castor3d
 		*/
 		void doUpdateZIndex( uint32_t & index )override;
 
+		/** @copydoc Control::doAdjustZIndex
+		*/
+		void doAdjustZIndex( uint32_t offset )override;
+
 		/** Event when the control is activated
 		 *\param[in]	event		The control event
 		 */

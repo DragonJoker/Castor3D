@@ -149,6 +149,10 @@ namespace castor3d
 		*/
 		void doUpdateZIndex( uint32_t & index )override;
 
+		/** @copydoc Control::doAdjustZIndex
+		*/
+		void doAdjustZIndex( uint32_t offset )override;
+
 		/** Creates a material with an ambient colour equal to material->colour + offset
 		 *\param[in]	material	The material.
 		 *\param[in]	offset		The colour offset.

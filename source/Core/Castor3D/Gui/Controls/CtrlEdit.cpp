@@ -204,6 +204,19 @@ namespace castor3d
 		}
 	}
 
+	void EditCtrl::doAdjustZIndex( uint32_t offset )
+	{
+		if ( auto text = m_text.lock() )
+		{
+			text->setOrder( text->getLevel() + offset, 0u );
+		}
+
+		if ( auto caret = m_caret.overlay.lock() )
+		{
+			caret->setOrder( caret->getLevel() + offset, 0u );
+		}
+	}
+
 	void EditCtrl::doUpdateFlags()
 	{
 		if ( auto text = m_text.lock() )

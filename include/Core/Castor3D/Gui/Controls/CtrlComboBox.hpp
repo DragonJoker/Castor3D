@@ -181,6 +181,10 @@ namespace castor3d
 		*/
 		void doUpdateZIndex( uint32_t & index )override;
 
+		/** @copydoc Control::doAdjustZIndex
+		*/
+		void doAdjustZIndex( uint32_t offset )override;
+
 		/** Event raised when an item is selected in the choices listbox
 		*\param[in]	selected		The item index
 		*/

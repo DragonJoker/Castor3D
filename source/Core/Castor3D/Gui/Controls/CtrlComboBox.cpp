@@ -301,6 +301,14 @@ namespace castor3d
 		}
 	}
 
+	void ComboBoxCtrl::doAdjustZIndex( uint32_t offset )
+	{
+		if ( auto text = m_text.lock() )
+		{
+			text->setOrder( text->getLevel() + offset, 0u );
+		}
+	}
+
 	void ComboBoxCtrl::doSwitchExpand()
 	{
 		m_choices->setVisible( !m_choices->isVisible() );
