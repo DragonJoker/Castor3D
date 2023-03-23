@@ -177,6 +177,14 @@ namespace castor3d
 		 */
 		void doDeleteCharBeforeCaret();
 
+		/** Moves the caret to the left.
+		 */
+		void doMoveCaretLeft( bool isCtrlDown );
+
+		/** Moves the caret to the right.
+		 */
+		void doMoveCaretRight( bool isCtrlDown );
+
 		/** Moves the caret one line up.
 		 */
 		void doMoveCaretUp();

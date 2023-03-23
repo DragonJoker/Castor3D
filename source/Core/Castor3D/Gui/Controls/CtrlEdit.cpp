@@ -103,12 +103,12 @@ namespace castor3d
 				, getEngine()
 				, OverlayType::ePanel
 				, nullptr
-				, &text->getOverlay() ).lock()->getPanelOverlay()
+				, &getBackgroundOverlay() ).lock()->getPanelOverlay()
 			: getEngine().addNewOverlay( getName() + cuT( "/Caret" )
 				, getEngine()
 				, OverlayType::ePanel
 				, nullptr
-				, &text->getOverlay() ).lock()->getPanelOverlay();
+				, &getBackgroundOverlay() ).lock()->getPanelOverlay();
 		caret->setVisible( false );
 		m_caret.overlay = caret;
 
@@ -290,7 +290,15 @@ namespace castor3d
 
 					return result;
 				} );
-			m_caret.updateIndex( index, m_caption );
+
+			if ( it != lineIt->chars.end() )
+			{
+				m_caret.updateIndex( index, m_caption );
+			}
+			else
+			{
+				m_caret.updateIndex( lineIt->firstCharIndex + lineIt->chars.size(), m_caption );
+			}
 		}
 
 		doUpdateCaretIndices();
@@ -321,40 +329,36 @@ namespace castor3d
 
 	void EditCtrl::onKeyDown( KeyboardEvent const & event )
 	{
-		if ( !event.isCtrlDown() && !event.isAltDown() )
+		if ( !event.isAltDown() )
 		{
 			auto code = event.getKey();
 
-			if ( code == KeyboardKey::eBackspace )
+			if ( !event.isCtrlDown() && code == KeyboardKey::eBackspace )
 			{
 				doDeleteCharBeforeCaret();
 				m_signals[size_t( EditEvent::eUpdated )]( m_caption );
 			}
-			else if ( code == KeyboardKey::eDelete )
+			else if ( !event.isCtrlDown() && code == KeyboardKey::eDelete )
 			{
 				doDeleteCharAtCaret();
 				m_signals[size_t( EditEvent::eUpdated )]( m_caption );
 			}
 			else if ( code == KeyboardKey::eLeft && m_caret.captionIt != m_caption.begin() )
 			{
-				--m_caret.captionIt;
-				--m_caret.captionIndex;
-				doUpdateCaretIndices();
+				doMoveCaretLeft( event.isCtrlDown() );
 				doUpdateCaret();
 			}
 			else if ( code == KeyboardKey::eRight && m_caret.captionIt != m_caption.end() )
 			{
-				++m_caret.captionIt;
-				++m_caret.captionIndex;
-				doUpdateCaretIndices();
+				doMoveCaretRight( event.isCtrlDown() );
 				doUpdateCaret();
 			}
-			else if ( code == KeyboardKey::eUp )
+			else if ( !event.isCtrlDown() && code == KeyboardKey::eUp )
 			{
 				doMoveCaretUp();
 				doUpdateCaret();
 			}
-			else if ( code == KeyboardKey::eDown )
+			else if ( !event.isCtrlDown() && code == KeyboardKey::eDown )
 			{
 				doMoveCaretDown();
 				doUpdateCaret();
@@ -380,7 +384,8 @@ namespace castor3d
 				doUpdateCaretIndices();
 				doUpdateCaret();
 			}
-			else if ( code == KeyboardKey::eEnd && m_caret.captionIt != m_caption.end() )
+			else if ( code == KeyboardKey::eEnd
+				&& m_caret.captionIt != m_caption.end() )
 			{
 				if ( event.isCtrlDown() )
 				{
@@ -453,6 +458,55 @@ namespace castor3d
 			doUpdateCaption();
 			doUpdateCaret();
 		}
+	}
+
+	void EditCtrl::doMoveCaretLeft( bool isCtrlDown )
+	{
+		if ( isCtrlDown )
+		{
+			std::u32string_view caption{ m_caption.data(), m_caret.captionIndex - 1u };
+			auto rit = caption.find_last_of( U" \n\t" );
+
+			if ( rit == castor::U32String::npos )
+			{
+				m_caret.updateIndex( 0, m_caption );
+			}
+			else
+			{
+				m_caret.updateIndex( rit, m_caption );
+			}
+		}
+		else
+		{
+			--m_caret.captionIt;
+			--m_caret.captionIndex;
+		}
+
+		doUpdateCaretIndices();
+	}
+
+	void EditCtrl::doMoveCaretRight( bool isCtrlDown )
+	{
+		if ( isCtrlDown )
+		{
+			auto it = m_caption.find_first_of( U" \n\t", m_caret.captionIndex + 1u );
+
+			if ( it == castor::U32String::npos )
+			{
+				m_caret.updateIndex( m_caption.size(), m_caption );
+			}
+			else
+			{
+				m_caret.updateIndex( it + 1u, m_caption );
+			}
+		}
+		else
+		{
+			++m_caret.captionIt;
+			++m_caret.captionIndex;
+		}
+
+		doUpdateCaretIndices();
 	}
 
 	void EditCtrl::doMoveCaretUp()
@@ -577,7 +631,8 @@ namespace castor3d
 					{
 						position.x() = int32_t( left );
 						position.y() = int32_t( top );
-						size->y = uint32_t( m_metrics.yMax - m_metrics.yMin );
+						size->y = std::max( size->y
+							, uint32_t( m_metrics.yMax - m_metrics.yMin ) );
 					}
 				}
 
