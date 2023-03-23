@@ -303,10 +303,19 @@ namespace castor3d
 		return doGetBackground().isVisible();
 	}
 
-	void Control::adjustZIndex( uint32_t index )
+	void Control::adjustZIndex( uint32_t offset )
 	{
 		auto level = doGetBackground().getLevel();
-		doGetBackground().setOrder( level + index, 0u );
+		doGetBackground().setOrder( level + offset, 0u );
+		doAdjustZIndex( offset );
+
+		for ( auto child : m_children )
+		{
+			if ( auto control = child.lock() )
+			{
+				control->adjustZIndex( offset );
+			}
+		}
 	}
 
 	void Control::updateZIndex( uint32_t & index

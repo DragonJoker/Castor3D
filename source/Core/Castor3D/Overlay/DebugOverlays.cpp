@@ -182,7 +182,8 @@ namespace castor3d
 			, manager.getStyle< PanelStyle >( "Debug/Main" )
 			, nullptr
 			, castor::Position{}
-			, castor::Size{ DebugPanelWidth, PanelHeight } );
+			, castor::Size{ DebugPanelWidth, PanelHeight }
+			, ControlFlagType( ControlFlag::eAlwaysOnTop ) );
 		m_panel->setLayout( castor::makeUniqueDerived< Layout, LayoutBox >( *m_panel ) );
 		m_times = std::make_unique< DebugPanels >( cuT( "Times" ), m_engine, *m_panel );
 		m_fps = std::make_unique< DebugPanels >( cuT( "FPS" ), m_engine, *m_panel );
@@ -929,7 +930,8 @@ namespace castor3d
 			, manager.getPanelStyle( "Debug/RenderPasses" )
 			, nullptr
 			, castor::Position{ PassPanelLeft, 0 }
-		, castor::Size{ CategoryLineWidth, 600u } );
+			, castor::Size{ CategoryLineWidth, 600u }
+			, ControlFlagType( ControlFlag::eAlwaysOnTop ) );
 		m_passesContainer->setLayout( castor::makeUniqueDerived< Layout, LayoutBox >( *m_passesContainer ) );
 		manager.create( m_passesContainer );
 

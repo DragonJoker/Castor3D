@@ -45,7 +45,7 @@ namespace castor3d
 			return std::make_shared< TextureLayout >( *engine.getRenderSystem()
 				, image
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-				, cuT( "FontTexture_" ) + fnt->getFaceName() );
+				, cuT( "FontTexture_" ) + fnt->getFaceName() + castor::string::toString( fnt->getHeight() ) );
 		}
 	}
 

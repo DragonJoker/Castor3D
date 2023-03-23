@@ -327,7 +327,7 @@ namespace castor3d
 		void updateZIndex( uint32_t & index
 			, std::vector< Control * > & controls
 			, std::vector< Control * > & topControls );
-		void adjustZIndex( uint32_t index );
+		void adjustZIndex( uint32_t offset );
 
 		/** Event when mouse enters the control
 		 *\param[in]	event		The mouse event
@@ -510,6 +510,12 @@ namespace castor3d
 		/** Updates the overlays Z index.
 		*/
 		virtual void doUpdateZIndex( uint32_t & index )
+		{
+		}
+
+		/** Adjusts the overlays Z index.
+		*/
+		virtual void doAdjustZIndex( uint32_t offset )
 		{
 		}
 

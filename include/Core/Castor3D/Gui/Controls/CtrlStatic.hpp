@@ -121,6 +121,10 @@ namespace castor3d
 		*/
 		void doUpdateZIndex( uint32_t & index )override;
 
+		/** @copydoc Control::doAdjustZIndex
+		*/
+		void doAdjustZIndex( uint32_t offset )override;
+
 	private:
 		castor::U32String m_caption;
 		TextOverlayWPtr m_text;
