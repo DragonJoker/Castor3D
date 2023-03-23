@@ -140,20 +140,17 @@ namespace castor
 				FT_ULong const cl( c32 );
 				FT_UInt const index{ FT_Get_Char_Index( m_face, cl ) };
 				CHECK_FT_ERR( FT_Load_Glyph, m_face, index, FT_LOAD_DEFAULT );
-				CHECK_FT_ERR( FT_Get_Glyph, m_face->glyph, &glyph );
-				CHECK_FT_ERR( FT_Glyph_To_Bitmap, &glyph, FT_RENDER_MODE_NORMAL, nullptr, 1 );
-				FT_BitmapGlyph const bmpGlyph = FT_BitmapGlyph( glyph );
-				FT_Bitmap const & bitmap = bmpGlyph->bitmap;
-				auto const pitch( uint32_t( std::abs( bitmap.pitch ) ) );
-				Size const size{ pitch, uint32_t( bitmap.rows ) };
-				Position const bearing{ bmpGlyph->left, bmpGlyph->top };
-				ByteArray buffer( size.getWidth() * size.getHeight() );
-				int32_t advance{ int32_t( float( glyph->advance.x ) / 65536.0 ) };
+				auto glyphSlot = m_face->glyph;
+				CHECK_FT_ERR( FT_Render_Glyph, glyphSlot, FT_RENDER_MODE_NORMAL );
+				Position const bearing{ glyphSlot->bitmap_left
+					, glyphSlot->bitmap_top };
+				Size const size{ uint32_t( glyphSlot->metrics.width / 64 )
+					, uint32_t( glyphSlot->metrics.height / 64 ) };
+				auto advance = int32_t( glyphSlot->advance.x / 64 );
 
-				if ( std::abs( advance ) < int32_t( size[0] ) )
-				{
-					advance = int32_t( size[0] ) + bearing[0];
-				}
+				FT_Bitmap const & bitmap = glyphSlot->bitmap;
+				auto const pitch( uint32_t( std::abs( bitmap.pitch ) ) );
+				ByteArray buffer( size_t( bitmap.width ) * size_t( bitmap.rows ) );
 
 				if ( bitmap.pitch < 0 )
 				{

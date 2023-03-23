@@ -497,7 +497,6 @@ namespace castor3d
 	bool Control::beginResize( MouseEvent const & event )
 	{
 		auto size = getSize();
-		auto pos = event.getPosition() - getAbsolutePosition();
 		auto [isOnN, isOnW, isOnS, isOnE] = isInResizeRange( event.getPosition() );
 		auto result = isOnN || isOnW || isOnS || isOnE;
 
