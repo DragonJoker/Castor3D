@@ -94,6 +94,11 @@ namespace castor3d
 			uint32_t charIndex{};
 			uint32_t captionIndex{};
 		};
+		struct Selection
+		{
+			CaretIndices begin{};
+			CaretIndices end{};
+		};
 
 		EditStyle & getStyle()
 		{
@@ -242,6 +247,14 @@ namespace castor3d
 		 */
 		void doClearSelection();
 
+		/** Normalises selection.
+		 */
+		Selection doGetNormalisedSelection();
+
+		/** Deletes selected text.
+		 */
+		bool doDeleteSelection( bool isCtrlDown );
+
 	private:
 		struct Caret : CaretIndices
 		{
@@ -277,8 +290,7 @@ namespace castor3d
 		Caret m_caret;
 		OnEditEvent m_signals[size_t( EditEvent::eCount )];
 		bool m_selecting{};
-		CaretIndices m_selectionBegin{};
-		CaretIndices m_selectionEnd{};
+		Selection m_selection{};
 		std::vector< PanelOverlayWPtr > m_selections{};
 	};
 }
