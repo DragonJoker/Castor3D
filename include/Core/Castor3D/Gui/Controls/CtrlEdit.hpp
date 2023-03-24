@@ -93,6 +93,27 @@ namespace castor3d
 			uint32_t lineIndex{};
 			uint32_t charIndex{};
 			uint32_t captionIndex{};
+			castor::U32String::const_iterator captionIt{};
+
+			template< typename SizeT >
+			void updateIndex( SizeT index
+				, castor::U32String const & caption )
+			{
+				captionIndex = uint32_t( index );
+				captionIt = std::next( caption.begin(), captionIndex );
+			}
+
+			void incrementIndex()
+			{
+				++captionIndex;
+				++captionIt;
+			}
+
+			void decrementIndex()
+			{
+				--captionIndex;
+				--captionIt;
+			}
 		};
 		struct Selection
 		{
@@ -153,6 +174,10 @@ namespace castor3d
 		 *\param[in]	event		The control event
 		 */
 		void onDeactivate( HandlerEvent const & event );
+
+		/** @copydoc Control::doOnMouseMove
+		*/
+		void doOnMouseMove( MouseEvent const & event )override;
 
 		/** @copydoc Control::doOnMouseButtonDown
 		*/
@@ -219,6 +244,11 @@ namespace castor3d
 		void doMoveCaretEnd( bool isShiftDown
 			, bool isCtrlDown );
 
+		/** Updates the input caret from given position.
+		 */
+		void doUpdateCaretPosition( castor::Position const & position
+			, CaretIndices & indices );
+
 		/** Updates the input caret indices.
 		 */
 		void doUpdate( CaretIndices & indices );
@@ -239,6 +269,10 @@ namespace castor3d
 		 */
 		void doUpdateCaption();
 
+		/** Begins the selection.
+		 */
+		void doBeginSelection( CaretIndices begin );
+
 		/** Updates the selection overlays.
 		 */
 		void doUpdateSelection();
@@ -255,6 +289,10 @@ namespace castor3d
 		 */
 		bool doDeleteSelection( bool isCtrlDown );
 
+		/** Select all text.
+		 */
+		void doSelectAllText();
+
 		/** Copies selected text.
 		 */
 		void doCopyText();
@@ -267,32 +305,16 @@ namespace castor3d
 		 */
 		void doPasteText();
 
+		bool hasSelection()const noexcept
+		{
+			return m_hasSelection;
+		}
+
 	private:
 		struct Caret : CaretIndices
 		{
-			castor::U32String::const_iterator captionIt{};
 			bool visible{};
 			PanelOverlayWPtr overlay;
-
-			template< typename SizeT >
-			void updateIndex( SizeT index
-				, castor::U32String const & caption )
-			{
-				captionIndex = uint32_t( index );
-				captionIt = std::next( caption.begin(), captionIndex );
-			}
-
-			void incrementIndex()
-			{
-				++captionIndex;
-				++captionIt;
-			}
-
-			void decrementIndex()
-			{
-				--captionIndex;
-				--captionIt;
-			}
 		};
 
 		castor::U32String m_caption;
@@ -301,7 +323,8 @@ namespace castor3d
 		TextOverlayWPtr m_text;
 		Caret m_caret;
 		OnEditEvent m_signals[size_t( EditEvent::eCount )];
-		bool m_selecting{};
+		bool m_hasSelection{};
+		bool m_isMouseSelecting{};
 		Selection m_selection{};
 		std::vector< PanelOverlayWPtr > m_selections{};
 	};
