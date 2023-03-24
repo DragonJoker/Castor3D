@@ -99,7 +99,7 @@ namespace castor3d
 			void updateIndex( SizeT index
 				, castor::U32String const & caption )
 			{
-				captionIndex = uint32_t( index );
+				captionIndex = std::min( uint32_t( index ), uint32_t( caption.size() ) );
 				captionIt = std::next( caption.begin(), captionIndex );
 			}
 

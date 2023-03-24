@@ -443,8 +443,16 @@ namespace castor3d
 
 		if ( edit )
 		{
-			castor::String text;
-			params[0]->get( text );
+			auto text = params[0]->get< castor::String >();
+			castor::string::replace( text, "\\?", "\?" );
+			castor::string::replace( text, "\\\\", "\\" );
+			castor::string::replace( text, "\\a", "\a" );
+			castor::string::replace( text, "\\b", "\b" );
+			castor::string::replace( text, "\\f", "\f" );
+			castor::string::replace( text, "\\n", "\n" );
+			castor::string::replace( text, "\\r", "\r" );
+			castor::string::replace( text, "\\t", "\t" );
+			castor::string::replace( text, "\\v", "\v" );
 			edit->setCaption( castor::string::toU32String( text ) );
 		}
 		else

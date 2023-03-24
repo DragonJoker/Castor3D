@@ -757,6 +757,7 @@ namespace castor3d
 		}
 		else
 		{
+			index += uint32_t( std::distance( m_metrics.lines.begin(), lineIt ) );
 			auto it = std::find_if( lineIt->chars.begin()
 				, lineIt->chars.end()
 				, [&position, &index]( uint32_t lookup )
