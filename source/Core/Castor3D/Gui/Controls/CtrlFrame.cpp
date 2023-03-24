@@ -148,7 +148,7 @@ namespace castor3d
 		auto maxHeight = m_header->getSize()->y;
 		auto & borders = getBorderSize();
 		m_header->setPosition( castor::Position( int32_t( borders->x ), int32_t( borders->y ) ) );
-		m_content->setPosition( castor::Position( 0, int32_t( borders->y + maxHeight ) ) );
+		m_content->setPosition( castor::Position( int32_t( borders->x ), int32_t( borders->y + maxHeight ) ) );
 	}
 
 	void FrameCtrl::doUpdateSizes()
@@ -157,7 +157,8 @@ namespace castor3d
 		auto & borders = getBorderSize();
 		auto headerSize = m_header->getSize()->y;
 		auto bordersWidth = ( borders->x + borders->z );
+		auto bordersHeight = ( borders->y + borders->w );
 		m_header->setSize( castor::Size( size->x - bordersWidth, headerSize ) );
-		m_content->setSize( castor::Size( size->x, size->y - ( headerSize + borders->y ) ) );
+		m_content->setSize( castor::Size( size->x - bordersWidth, size->y - ( headerSize + bordersHeight ) ) );
 	}
 }

@@ -277,6 +277,7 @@ namespace castor3d
 	void EditCtrl::onDeactivate( HandlerEvent const & event )
 	{
 		m_active = false;
+		m_isMouseSelecting = false;
 		m_caret.visible = false;
 
 		if ( auto caret = m_caret.overlay.lock() )
@@ -287,60 +288,33 @@ namespace castor3d
 
 	void EditCtrl::doOnMouseButtonDown( MouseEvent const & event )
 	{
-		auto position = event.getPosition() - getAbsolutePosition();
-		uint32_t index{};
-		auto lineIt = std::find_if( m_metrics.lines.begin()
-			, m_metrics.lines.end()
-			, [&position, &index]( castor::TextLineMetrics const & lookup )
-			{
-				auto height = uint32_t( lookup.yMax - lookup.yMin );
-				auto result = lookup.top + height > uint32_t( position->y );
-
-				if ( !result )
-				{
-					index += uint32_t( lookup.chars.size() );
-				}
-
-				return result;
-			} );
-
-		if ( lineIt == m_metrics.lines.end() )
-		{
-			m_caret.updateIndex( m_caption.size(), m_caption );
-		}
-		else
-		{
-			auto it = std::find_if( lineIt->chars.begin()
-				, lineIt->chars.end()
-				, [&position, &index]( uint32_t lookup )
-				{
-					auto result = lookup > uint32_t( position->x );
-
-					if ( !result )
-					{
-						++index;
-					}
-
-					return result;
-				} );
-
-			if ( it != lineIt->chars.end() )
-			{
-				m_caret.updateIndex( index, m_caption );
-			}
-			else
-			{
-				m_caret.updateIndex( lineIt->firstCharIndex + lineIt->chars.size(), m_caption );
-			}
-		}
-
 		doClearSelection();
+		doUpdateCaretPosition( event.getPosition(), m_caret );
+		m_isMouseSelecting = true;
+		doBeginSelection( m_caret );
 		doUpdateCaretIndices();
 		doUpdateCaret();
+		doUpdateSelection();
+	}
+
+	void EditCtrl::doOnMouseMove( MouseEvent const & event )
+	{
+		if ( m_isMouseSelecting )
+		{
+			doUpdateCaretPosition( event.getPosition(), m_caret );
+			m_selection.end = m_caret;
+			doUpdateCaretIndices();
+			doUpdateCaret();
+			doUpdateSelection();
+		}
 	}
 
 	void EditCtrl::doOnMouseButtonUp( MouseEvent const & event )
 	{
+		if ( m_isMouseSelecting )
+		{
+			m_isMouseSelecting = false;
+		}
 	}
 
 	void EditCtrl::onChar( KeyboardEvent const & event )
@@ -351,22 +325,7 @@ namespace castor3d
 			 && code <= KeyboardKey::eAsciiEnd
 			 && code != KeyboardKey::eDelete )
 		{
-			if ( code == KeyboardKey( 'c' ) && event.isCtrlDown() )
-			{
-				doCopyText();
-			}
-			else if ( code == KeyboardKey( 'v' ) && event.isCtrlDown() )
-			{
-				doPasteText();
-			}
-			else if ( code == KeyboardKey( 'x' ) && event.isCtrlDown() )
-			{
-				doCutText();
-			}
-			else
-			{
-				doAddCharAtCaret( event.getChar() );
-			}
+			doAddCharAtCaret( event.getChar() );
 		}
 		else if ( code == KeyboardKey::eReturn && isMultiLine() )
 		{
@@ -380,7 +339,11 @@ namespace castor3d
 		{
 			auto code = event.getKey();
 
-			if ( code == KeyboardKey( 'C' ) && event.isCtrlDown() )
+			if ( code == KeyboardKey( 'A' ) && event.isCtrlDown() )
+			{
+				doSelectAllText();
+			}
+			else if ( code == KeyboardKey( 'C' ) && event.isCtrlDown() )
 			{
 				doCopyText();
 			}
@@ -502,10 +465,9 @@ namespace castor3d
 			return;
 		}
 
-		if ( isShiftDown && !m_selecting )
+		if ( isShiftDown && !hasSelection() )
 		{
-			m_selecting = true;
-			m_selection.begin = m_caret;
+			doBeginSelection( m_caret );
 		}
 
 		if ( isCtrlDown )
@@ -549,10 +511,9 @@ namespace castor3d
 			return;
 		}
 
-		if ( isShiftDown && !m_selecting )
+		if ( isShiftDown && !hasSelection() )
 		{
-			m_selecting = true;
-			m_selection.begin = m_caret;
+			doBeginSelection( m_caret );
 		}
 
 		if ( isCtrlDown )
@@ -596,10 +557,9 @@ namespace castor3d
 			return;
 		}
 
-		if ( isShiftDown && !m_selecting )
+		if ( isShiftDown && !hasSelection() )
 		{
-			m_selecting = true;
-			m_selection.begin = m_caret;
+			doBeginSelection( m_caret );
 		}
 
 		if ( m_caret.lineIndex > 0u )
@@ -646,10 +606,9 @@ namespace castor3d
 			return;
 		}
 
-		if ( isShiftDown && !m_selecting )
+		if ( isShiftDown && !hasSelection() )
 		{
-			m_selecting = true;
-			m_selection.begin = m_caret;
+			doBeginSelection( m_caret );
 		}
 
 		if ( m_caret.lineIndex < m_metrics.lines.size() - 1u )
@@ -695,10 +654,9 @@ namespace castor3d
 			return;
 		}
 
-		if ( isShiftDown && !m_selecting )
+		if ( isShiftDown && !hasSelection() )
 		{
-			m_selecting = true;
-			m_selection.begin = m_caret;
+			doBeginSelection( m_caret );
 		}
 
 		if ( isCtrlDown )
@@ -738,10 +696,9 @@ namespace castor3d
 			return;
 		}
 
-		if ( isShiftDown && !m_selecting )
+		if ( isShiftDown && !hasSelection() )
 		{
-			m_selecting = true;
-			m_selection.begin = m_caret;
+			doBeginSelection( m_caret );
 		}
 
 		if ( isCtrlDown )
@@ -757,10 +714,9 @@ namespace castor3d
 
 		if ( isShiftDown )
 		{
-			if ( !m_selecting )
+			if ( !hasSelection() )
 			{
-				m_selecting = true;
-				m_selection.begin = m_caret;
+				doBeginSelection( m_caret );
 			}
 
 			m_selection.end = m_caret;
@@ -775,6 +731,57 @@ namespace castor3d
 		doUpdateSelection();
 	}
 
+	void EditCtrl::doUpdateCaretPosition( castor::Position const & pos
+		, CaretIndices & indices )
+	{
+		auto position = pos - getAbsolutePosition();
+		uint32_t index{};
+		auto lineIt = std::find_if( m_metrics.lines.begin()
+			, m_metrics.lines.end()
+			, [&position, &index]( castor::TextLineMetrics const & lookup )
+			{
+				auto height = uint32_t( lookup.yMax - lookup.yMin );
+				auto result = lookup.top + height > uint32_t( position->y );
+
+				if ( !result )
+				{
+					index += uint32_t( lookup.chars.size() );
+				}
+
+				return result;
+			} );
+
+		if ( lineIt == m_metrics.lines.end() )
+		{
+			indices.updateIndex( m_caption.size(), m_caption );
+		}
+		else
+		{
+			auto it = std::find_if( lineIt->chars.begin()
+				, lineIt->chars.end()
+				, [&position, &index]( uint32_t lookup )
+				{
+					auto result = lookup > uint32_t( position->x );
+
+					if ( !result )
+					{
+						++index;
+					}
+
+					return result;
+				} );
+
+			if ( it != lineIt->chars.end() )
+			{
+				indices.updateIndex( index, m_caption );
+			}
+			else
+			{
+				indices.updateIndex( lineIt->firstCharIndex + lineIt->chars.size(), m_caption );
+			}
+		}
+	}
+	
 	void EditCtrl::doUpdate( CaretIndices & indices )
 	{
 		indices.lineIndex = {};
@@ -808,7 +815,7 @@ namespace castor3d
 	{
 		doUpdate( m_caret );
 
-		if ( m_selecting )
+		if ( hasSelection() )
 		{
 			doUpdate( m_selection.begin );
 			doUpdate( m_selection.end );
@@ -918,9 +925,16 @@ namespace castor3d
 		}
 	}
 
+	void EditCtrl::doBeginSelection( CaretIndices begin )
+	{
+		m_hasSelection = true;
+		m_selection.begin = std::move( begin );
+		m_selection.end = m_selection.begin;
+	}
+
 	void EditCtrl::doUpdateSelection()
 	{
-		if ( !m_selecting )
+		if ( !hasSelection() )
 		{
 			doClearSelection();
 			return;
@@ -1022,7 +1036,7 @@ namespace castor3d
 
 	void EditCtrl::doClearSelection()
 	{
-		m_selecting = false;
+		m_hasSelection = false;
 		m_selection.begin = {};
 		m_selection.end = {};
 
@@ -1052,7 +1066,7 @@ namespace castor3d
 
 	bool EditCtrl::doDeleteSelection( bool isCtrlDown )
 	{
-		if ( !m_selecting
+		if ( !hasSelection()
 			|| isCtrlDown
 			|| ( m_selection.begin.lineIndex == m_selection.end.lineIndex
 				&& m_selection.begin.charIndex == m_selection.end.charIndex ) )
@@ -1070,9 +1084,20 @@ namespace castor3d
 		return true;
 	}
 
+	void EditCtrl::doSelectAllText()
+	{
+		m_caret.updateIndex( 0u, m_caption );
+		doBeginSelection( m_caret );
+		m_caret.updateIndex( m_caption.size(), m_caption );
+		m_selection.end = m_caret;
+		doUpdateCaretIndices();
+		doUpdateCaret();
+		doUpdateSelection();
+	}
+
 	void EditCtrl::doCopyText()
 	{
-		if ( !m_selecting
+		if ( !hasSelection()
 			|| ( m_selection.begin.lineIndex == m_selection.end.lineIndex
 				&& m_selection.begin.charIndex == m_selection.end.charIndex ) )
 		{
@@ -1087,7 +1112,7 @@ namespace castor3d
 
 	void EditCtrl::doCutText()
 	{
-		if ( !m_selecting
+		if ( !hasSelection()
 			|| ( m_selection.begin.lineIndex == m_selection.end.lineIndex
 				&& m_selection.begin.charIndex == m_selection.end.charIndex ) )
 		{
@@ -1107,7 +1132,7 @@ namespace castor3d
 			return;
 		}
 
-		if ( !m_selecting
+		if ( !hasSelection()
 			|| ( m_selection.begin.lineIndex == m_selection.end.lineIndex
 				&& m_selection.begin.charIndex == m_selection.end.charIndex ) )
 		{
