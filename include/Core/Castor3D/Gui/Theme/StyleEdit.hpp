@@ -25,6 +25,7 @@ namespace castor3d
 				, MouseCursor::eText }
 			, m_fontName{ fontName }
 			, m_textMaterial{ getForegroundMaterial() }
+			, m_selectionMaterial{ getEngine().findMaterial( cuT( "AlphaLightBlue" ) ).lock().get() }
 		{
 		}
 
@@ -45,6 +46,11 @@ namespace castor3d
 			m_textMaterial = material;
 		}
 
+		void setSelectionMaterial( MaterialRPtr material )
+		{
+			m_selectionMaterial = material;
+		}
+
 		castor::String const & getFontName()const
 		{
 			return m_fontName;
@@ -53,6 +59,11 @@ namespace castor3d
 		MaterialRPtr getTextMaterial()const
 		{
 			return m_textMaterial;
+		}
+
+		MaterialRPtr getSelectionMaterial()const
+		{
+			return m_selectionMaterial;
 		}
 
 	private:
@@ -67,6 +78,7 @@ namespace castor3d
 	private:
 		castor::String m_fontName{};
 		MaterialRPtr m_textMaterial{};
+		MaterialRPtr m_selectionMaterial{};
 	};
 }
 

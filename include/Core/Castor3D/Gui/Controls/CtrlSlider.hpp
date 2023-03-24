@@ -85,7 +85,7 @@ namespace castor3d
 		}
 
 		/**
-		*\return	The slider style
+		*\return	The slider style.
 		*/
 		SliderStyle const & getStyle()const
 		{

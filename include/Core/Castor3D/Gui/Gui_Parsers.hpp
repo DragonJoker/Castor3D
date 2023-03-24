@@ -193,6 +193,7 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserStyleComboBoxEnd )
 	CU_DeclareAttributeParser( parserStyleEditFont )
 	CU_DeclareAttributeParser( parserStyleEditTextMaterial )
+	CU_DeclareAttributeParser( parserStyleEditSelectionMaterial )
 	CU_DeclareAttributeParser( parserStyleEditEnd )
 	CU_DeclareAttributeParser( parserStyleListBoxItemStatic )
 	CU_DeclareAttributeParser( parserStyleListBoxSelItemStatic )

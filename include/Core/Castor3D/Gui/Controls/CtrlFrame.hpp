@@ -48,7 +48,7 @@ namespace castor3d
 			, ControlFlagType flags = 0
 			, bool visible = true );
 
-		/** \return	The style
+		/** \return	The frame style.
 		*/
 		FrameStyle const & getStyle()const noexcept
 		{

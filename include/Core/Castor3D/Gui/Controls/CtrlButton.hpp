@@ -83,7 +83,7 @@ namespace castor3d
 		}
 
 		/**
-		*\return	The button style
+		*\return	The button style.
 		*/
 		ButtonStyle const & getStyle()const
 		{

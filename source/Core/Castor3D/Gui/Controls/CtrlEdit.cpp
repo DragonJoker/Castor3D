@@ -17,6 +17,8 @@ CU_ImplementCUSmartPtr( castor3d, EditCtrl )
 
 namespace castor3d
 {
+	static uint32_t constexpr LineEndWidth = 5u;
+
 	EditCtrl::EditCtrl( SceneRPtr scene
 		, castor::String const & name
 		, EditStyleRPtr style
@@ -139,6 +141,14 @@ namespace castor3d
 		{
 			caret->setMaterial( style.getTextMaterial() );
 		}
+
+		for ( auto sel : m_selections )
+		{
+			if ( auto panel = sel.lock() )
+			{
+				panel->setMaterial( style.getSelectionMaterial() );
+			}
+		}
 	}
 
 	void EditCtrl::doCreate()
@@ -146,6 +156,7 @@ namespace castor3d
 		doUpdateStyle();
 		doUpdateCaption();
 		doUpdateCaret();
+		doUpdateSelection();
 		getControlsManager()->connectEvents( *this );
 	}
 
@@ -176,6 +187,7 @@ namespace castor3d
 		m_caret.updateIndex( m_caption.size(), m_caption );
 		doUpdateCaption();
 		doUpdateCaret();
+		doUpdateSelection();
 	}
 
 	void EditCtrl::doSetVisible( bool visible )
@@ -202,6 +214,19 @@ namespace castor3d
 		{
 			caret->setOrder( index++, 0u );
 		}
+
+		if ( !m_selections.empty() )
+		{
+			for ( auto sel : m_selections )
+			{
+				if ( auto panel = sel.lock() )
+				{
+					panel->setOrder( index, 0u );
+				}
+			}
+
+			++index;
+		}
 	}
 
 	void EditCtrl::doAdjustZIndex( uint32_t offset )
@@ -214,6 +239,14 @@ namespace castor3d
 		if ( auto caret = m_caret.overlay.lock() )
 		{
 			caret->setOrder( caret->getLevel() + offset, 0u );
+		}
+
+		for ( auto sel : m_selections )
+		{
+			if ( auto panel = sel.lock() )
+			{
+				panel->setOrder( panel->getLevel() + offset, 0u );
+			}
 		}
 	}
 
@@ -313,17 +346,15 @@ namespace castor3d
 	{
 		auto code = event.getKey();
 
-		if ( code >= KeyboardKey( 0x20 )
+		if ( code >= KeyboardKey::eSpace
 			 && code <= KeyboardKey( 0xFF )
 			 && code != KeyboardKey::eDelete )
 		{
 			doAddCharAtCaret( event.getChar() );
-			m_signals[size_t( EditEvent::eUpdated )]( m_caption );
 		}
 		else if ( code == KeyboardKey::eReturn && isMultiLine() )
 		{
 			doAddCharAtCaret( cuT( "\n" ) );
-			m_signals[size_t( EditEvent::eUpdated )]( m_caption );
 		}
 	}
 
@@ -331,75 +362,34 @@ namespace castor3d
 	{
 		if ( !event.isAltDown() )
 		{
-			auto code = event.getKey();
-
-			if ( !event.isCtrlDown() && code == KeyboardKey::eBackspace )
+			switch ( event.getKey() )
 			{
-				doDeleteCharBeforeCaret();
-				m_signals[size_t( EditEvent::eUpdated )]( m_caption );
-			}
-			else if ( !event.isCtrlDown() && code == KeyboardKey::eDelete )
-			{
-				doDeleteCharAtCaret();
-				m_signals[size_t( EditEvent::eUpdated )]( m_caption );
-			}
-			else if ( code == KeyboardKey::eLeft && m_caret.captionIt != m_caption.begin() )
-			{
-				doMoveCaretLeft( event.isCtrlDown() );
-				doUpdateCaret();
-			}
-			else if ( code == KeyboardKey::eRight && m_caret.captionIt != m_caption.end() )
-			{
-				doMoveCaretRight( event.isCtrlDown() );
-				doUpdateCaret();
-			}
-			else if ( !event.isCtrlDown() && code == KeyboardKey::eUp )
-			{
-				doMoveCaretUp();
-				doUpdateCaret();
-			}
-			else if ( !event.isCtrlDown() && code == KeyboardKey::eDown )
-			{
-				doMoveCaretDown();
-				doUpdateCaret();
-			}
-			else if ( code == KeyboardKey::eHome
-				&& m_caret.captionIt != m_caption.begin() )
-			{
-				if ( event.isCtrlDown() )
-				{
-					m_caret.updateIndex( 0u, m_caption );
-				}
-				else if ( m_caret.lineIndex > 0)
-				{
-					m_caret.updateIndex( m_metrics.lines[m_caret.lineIndex].firstCharIndex + 1u
-						, m_caption );
-				}
-				else
-				{
-					m_caret.updateIndex( m_metrics.lines[m_caret.lineIndex].firstCharIndex
-						, m_caption );
-				}
-
-				doUpdateCaretIndices();
-				doUpdateCaret();
-			}
-			else if ( code == KeyboardKey::eEnd
-				&& m_caret.captionIt != m_caption.end() )
-			{
-				if ( event.isCtrlDown() )
-				{
-					m_caret.updateIndex( m_caption.size(), m_caption );
-				}
-				else
-				{
-					auto & line = m_metrics.lines[m_caret.lineIndex];
-					m_caret.updateIndex( line.firstCharIndex + line.chars.size()
-						, m_caption );
-				}
-
-				doUpdateCaretIndices();
-				doUpdateCaret();
+			case KeyboardKey::eBackspace:
+				doDeleteCharBeforeCaret( event.isCtrlDown() );
+				break;
+			case KeyboardKey::eLeft:
+				doMoveCaretLeft( event.isShiftDown(), event.isCtrlDown() );
+				break;
+			case KeyboardKey::eUp:
+				doMoveCaretUp( event.isShiftDown(), event.isCtrlDown() );
+				break;
+			case KeyboardKey::eHome:
+				doMoveCaretHome( event.isShiftDown(), event.isCtrlDown() );
+				break;
+			case KeyboardKey::eDelete:
+				doDeleteCharAtCaret( event.isCtrlDown() );
+				break;
+			case KeyboardKey::eRight:
+				doMoveCaretRight( event.isShiftDown(), event.isCtrlDown() );
+				break;
+			case KeyboardKey::eDown:
+				doMoveCaretDown( event.isShiftDown(), event.isCtrlDown() );
+				break;
+			case KeyboardKey::eEnd:
+				doMoveCaretEnd( event.isShiftDown(), event.isCtrlDown() );
+				break;
+			default:
+				break;
 			}
 		}
 	}
@@ -417,51 +407,75 @@ namespace castor3d
 		m_caret.updateIndex( diff + 1, m_caption );
 		doUpdateCaption();
 		doUpdateCaret();
+		doUpdateSelection();
+		m_signals[size_t( EditEvent::eUpdated )]( m_caption );
 	}
 
-	void EditCtrl::doDeleteCharAtCaret()
+	void EditCtrl::doDeleteCharAtCaret( bool isCtrlDown )
 	{
-		if ( m_caret.captionIt != m_caption.end() )
+		if ( isCtrlDown
+			|| m_caret.captionIt == m_caption.end() )
 		{
-			auto diff = size_t( std::distance( m_caption.cbegin(), m_caret.captionIt ) );
-			castor::U32String caption( m_caption.cbegin(), m_caret.captionIt );
-			auto it = m_caret.captionIt;
-
-			if ( ++it != m_caption.end() )
-			{
-				caption += castor::U32String( it, m_caption.cend() );
-			}
-
-			m_caption = caption;
-			m_caret.updateIndex( diff, m_caption );
-			doUpdateCaption();
-			doUpdateCaret();
+			return;
 		}
-	}
 
-	void EditCtrl::doDeleteCharBeforeCaret()
-	{
-		if ( m_caret.captionIt != m_caption.begin() )
+		auto diff = size_t( std::distance( m_caption.cbegin(), m_caret.captionIt ) );
+		castor::U32String caption( m_caption.cbegin(), m_caret.captionIt );
+		auto it = m_caret.captionIt;
+
+		if ( ++it != m_caption.end() )
 		{
-			m_caret.updateIndex( m_caret.captionIndex - 1u, m_caption );
-			auto diff = size_t( std::distance( m_caption.cbegin(), m_caret.captionIt ) );
-			castor::U32String caption( m_caption.cbegin(), m_caret.captionIt );
-			auto it = m_caret.captionIt;
-
-			if ( ++it != m_caption.end() )
-			{
-				caption += castor::U32String( it, m_caption.cend() );
-			}
-
-			m_caption = caption;
-			m_caret.updateIndex( diff, m_caption );
-			doUpdateCaption();
-			doUpdateCaret();
+			caption += castor::U32String( it, m_caption.cend() );
 		}
+
+		m_caption = caption;
+		m_caret.updateIndex( diff, m_caption );
+		doUpdateCaption();
+		doUpdateCaret();
+		doUpdateSelection();
+		m_signals[size_t( EditEvent::eUpdated )]( m_caption );
 	}
 
-	void EditCtrl::doMoveCaretLeft( bool isCtrlDown )
+	void EditCtrl::doDeleteCharBeforeCaret( bool isCtrlDown )
 	{
+		if ( isCtrlDown
+			|| m_caret.captionIt == m_caption.begin() )
+		{
+			return;
+		}
+
+		m_caret.updateIndex( m_caret.captionIndex - 1u, m_caption );
+		auto diff = size_t( std::distance( m_caption.cbegin(), m_caret.captionIt ) );
+		castor::U32String caption( m_caption.cbegin(), m_caret.captionIt );
+		auto it = m_caret.captionIt;
+
+		if ( ++it != m_caption.end() )
+		{
+			caption += castor::U32String( it, m_caption.cend() );
+		}
+
+		m_caption = caption;
+		m_caret.updateIndex( diff, m_caption );
+		doUpdateCaption();
+		doUpdateCaret();
+		doUpdateSelection();
+		m_signals[size_t( EditEvent::eUpdated )]( m_caption );
+	}
+
+	void EditCtrl::doMoveCaretLeft( bool isShiftDown
+		, bool isCtrlDown )
+	{
+		if ( m_caret.captionIt == m_caption.begin() )
+		{
+			return;
+		}
+
+		if ( isShiftDown && !m_selecting )
+		{
+			m_selecting = true;
+			m_selectionBegin = m_caret;
+		}
+
 		if ( isCtrlDown )
 		{
 			std::u32string_view caption{ m_caption.data(), m_caret.captionIndex - 1u };
@@ -478,15 +492,37 @@ namespace castor3d
 		}
 		else
 		{
-			--m_caret.captionIt;
-			--m_caret.captionIndex;
+			m_caret.decrementIndex();
+		}
+
+		if ( isShiftDown )
+		{
+			m_selectionEnd = m_caret;
+		}
+		else
+		{
+			m_selecting = false;
 		}
 
 		doUpdateCaretIndices();
+		doUpdateCaret();
+		doUpdateSelection();
 	}
 
-	void EditCtrl::doMoveCaretRight( bool isCtrlDown )
+	void EditCtrl::doMoveCaretRight( bool isShiftDown
+		, bool isCtrlDown )
 	{
+		if ( m_caret.captionIt == m_caption.end() )
+		{
+			return;
+		}
+
+		if ( isShiftDown && !m_selecting )
+		{
+			m_selecting = true;
+			m_selectionBegin = m_caret;
+		}
+
 		if ( isCtrlDown )
 		{
 			auto it = m_caption.find_first_of( U" \n\t", m_caret.captionIndex + 1u );
@@ -502,15 +538,38 @@ namespace castor3d
 		}
 		else
 		{
-			++m_caret.captionIt;
-			++m_caret.captionIndex;
+			m_caret.incrementIndex();
+		}
+
+		if ( isShiftDown )
+		{
+			m_selectionEnd = m_caret;
+		}
+		else
+		{
+			m_selecting = false;
 		}
 
 		doUpdateCaretIndices();
+		doUpdateCaret();
+		doUpdateSelection();
 	}
 
-	void EditCtrl::doMoveCaretUp()
+	void EditCtrl::doMoveCaretUp( bool isShiftDown
+		, bool isCtrlDown )
 	{
+		if ( isCtrlDown
+			|| m_caret.captionIt == m_caption.begin() )
+		{
+			return;
+		}
+
+		if ( isShiftDown && !m_selecting )
+		{
+			m_selecting = true;
+			m_selectionBegin = m_caret;
+		}
+
 		if ( m_caret.lineIndex > 0u )
 		{
 			auto & line = m_metrics.lines[m_caret.lineIndex - 1u];
@@ -526,16 +585,41 @@ namespace castor3d
 			}
 
 			m_caret.updateIndex( line.firstCharIndex + m_caret.charIndex, m_caption );
-			doUpdateCaretIndices();
 		}
 		else
 		{
 			m_caret.updateIndex( 0u, m_caption );
 		}
+
+		if ( isShiftDown )
+		{
+			m_selectionEnd = m_caret;
+		}
+		else
+		{
+			m_selecting = false;
+		}
+
+		doUpdateCaretIndices();
+		doUpdateCaret();
+		doUpdateSelection();
 	}
 
-	void EditCtrl::doMoveCaretDown()
+	void EditCtrl::doMoveCaretDown( bool isShiftDown
+		, bool isCtrlDown )
 	{
+		if ( isCtrlDown
+			|| m_caret.captionIt == m_caption.end() )
+		{
+			return;
+		}
+
+		if ( isShiftDown && !m_selecting )
+		{
+			m_selecting = true;
+			m_selectionBegin = m_caret;
+		}
+
 		if ( m_caret.lineIndex < m_metrics.lines.size() - 1u )
 		{
 			auto & line = m_metrics.lines[m_caret.lineIndex + 1u];
@@ -551,18 +635,118 @@ namespace castor3d
 			}
 
 			m_caret.updateIndex( line.firstCharIndex + m_caret.charIndex, m_caption );
-			doUpdateCaretIndices();
 		}
 		else
 		{
 			m_caret.updateIndex( m_caption.size(), m_caption );
 		}
+
+		if ( isShiftDown )
+		{
+			m_selectionEnd = m_caret;
+		}
+		else
+		{
+			m_selecting = false;
+		}
+
+		doUpdateCaretIndices();
+		doUpdateCaret();
+		doUpdateSelection();
 	}
 
-	void EditCtrl::doUpdateCaretIndices()
+	void EditCtrl::doMoveCaretHome( bool isShiftDown
+		, bool isCtrlDown )
 	{
-		m_caret.lineIndex = {};
-		m_caret.charIndex = {};
+		if ( m_caret.captionIt == m_caption.begin() )
+		{
+			return;
+		}
+
+		if ( isShiftDown && !m_selecting )
+		{
+			m_selecting = true;
+			m_selectionBegin = m_caret;
+		}
+
+		if ( isCtrlDown )
+		{
+			m_caret.updateIndex( 0u, m_caption );
+		}
+		else if ( m_caret.lineIndex > 0 )
+		{
+			m_caret.updateIndex( m_metrics.lines[m_caret.lineIndex].firstCharIndex + 1u
+				, m_caption );
+		}
+		else
+		{
+			m_caret.updateIndex( m_metrics.lines[m_caret.lineIndex].firstCharIndex
+				, m_caption );
+		}
+
+		if ( isShiftDown )
+		{
+			m_selectionEnd = m_caret;
+		}
+		else
+		{
+			m_selecting = false;
+		}
+
+		doUpdateCaretIndices();
+		doUpdateCaret();
+		doUpdateSelection();
+	}
+
+	void EditCtrl::doMoveCaretEnd( bool isShiftDown
+		, bool isCtrlDown )
+	{
+		if ( m_caret.captionIt == m_caption.end() )
+		{
+			return;
+		}
+
+		if ( isShiftDown && !m_selecting )
+		{
+			m_selecting = true;
+			m_selectionBegin = m_caret;
+		}
+
+		if ( isCtrlDown )
+		{
+			m_caret.updateIndex( m_caption.size(), m_caption );
+		}
+		else
+		{
+			auto & line = m_metrics.lines[m_caret.lineIndex];
+			m_caret.updateIndex( line.firstCharIndex + line.chars.size()
+				, m_caption );
+		}
+
+		if ( isShiftDown )
+		{
+			if ( !m_selecting )
+			{
+				m_selecting = true;
+				m_selectionBegin = m_caret;
+			}
+
+			m_selectionEnd = m_caret;
+		}
+		else
+		{
+			m_selecting = false;
+		}
+
+		doUpdateCaretIndices();
+		doUpdateCaret();
+		doUpdateSelection();
+	}
+
+	void EditCtrl::doUpdate( CaretIndices & indices )
+	{
+		indices.lineIndex = {};
+		indices.charIndex = {};
 
 		if ( !m_caption.empty() )
 		{
@@ -570,21 +754,32 @@ namespace castor3d
 			auto charIt = lineIt->chars.begin();
 			uint32_t index{};
 
-			while ( index < m_caret.captionIndex
+			while ( index < indices.captionIndex
 				&& lineIt != m_metrics.lines.end() )
 			{
 				if ( charIt == lineIt->chars.end() )
 				{
 					++lineIt;
-					++m_caret.lineIndex;
+					++indices.lineIndex;
 					charIt = lineIt->chars.begin();
-					m_caret.charIndex = 0u;
+					indices.charIndex = 0u;
 				}
 
-				++m_caret.charIndex;
+				++indices.charIndex;
 				++index;
 				++charIt;
 			}
+		}
+	}
+
+	void EditCtrl::doUpdateCaretIndices()
+	{
+		doUpdate( m_caret );
+
+		if ( m_selecting )
+		{
+			doUpdate( m_selectionBegin );
+			doUpdate( m_selectionEnd );
 		}
 	}
 
@@ -595,7 +790,7 @@ namespace castor3d
 			if ( auto caret = m_caret.overlay.lock() )
 			{
 				auto font = text->getFontTexture()->getFont();
-				castor::Position position{ 1, 0 };
+				castor::Position position{ 0, 0 };
 				castor::Size size{ 1u, font->getHeight() };
 
 				if ( !m_caption.empty() )
@@ -631,8 +826,8 @@ namespace castor3d
 					{
 						position.x() = int32_t( left );
 						position.y() = int32_t( top );
-						size->y = std::max( size->y
-							, uint32_t( m_metrics.yMax - m_metrics.yMin ) );
+						//size->y = std::max( size->y
+						//	, uint32_t( m_metrics.yMax - m_metrics.yMin ) );
 					}
 				}
 
@@ -681,12 +876,137 @@ namespace castor3d
 
 	void EditCtrl::doUpdateCaption()
 	{
+		m_selecting = false;
 		doUpdateMetrics();
 		doUpdateCaretIndices();
 
 		if ( auto text = m_text.lock() )
 		{
 			text->setCaption( m_caption );
+		}
+	}
+
+	void EditCtrl::doUpdateSelection()
+	{
+		if ( !m_selecting )
+		{
+			doClearSelection();
+			return;
+		}
+
+		bool isReversed = m_selectionBegin.lineIndex > m_selectionEnd.lineIndex
+			|| ( m_selectionBegin.lineIndex == m_selectionEnd.lineIndex
+				&& m_selectionBegin.charIndex > m_selectionEnd.charIndex );
+		auto selBegin = isReversed
+			? m_selectionEnd
+			: m_selectionBegin;
+		auto selEnd = isReversed
+			? m_selectionBegin
+			: m_selectionEnd;
+		auto lineDiff = selEnd.lineIndex - selBegin.lineIndex;
+		auto & style = getStyle();
+
+		while ( lineDiff >= m_selections.size() )
+		{
+			auto panel = getEngine().addNewOverlay( getName() + cuT( "/Selection" ) + castor::string::toString( m_selections.size() )
+				, getEngine()
+				, OverlayType::ePanel
+				, nullptr
+				, &getBackgroundOverlay() ).lock()->getPanelOverlay();
+			panel->setMaterial( style.getSelectionMaterial() );
+			panel->setVisible( false );
+			m_selections.push_back( panel );
+		}
+
+		uint32_t selLineIndex{};
+
+		if ( lineDiff > 0 )
+		{
+			// Multiline selection.
+			// Process first and last lines separately (since they may not be fully selected).
+			if ( auto panel = m_selections[selLineIndex++].lock() )
+			{
+				// First line
+				auto & line = m_metrics.lines[selBegin.lineIndex++];
+				auto left = selBegin.charIndex == 0u
+					? 0
+					: int32_t( line.chars[selBegin.charIndex - 1u] );
+				panel->setPixelPosition( { left, int32_t( line.top ) } );
+				panel->setPixelSize( { LineEndWidth + line.chars.back() - uint32_t( left )
+					, uint32_t( m_metrics.yMax - m_metrics.yMin ) } );
+				panel->setVisible( true );
+			}
+
+			if ( auto panel = m_selections[selLineIndex++].lock() )
+			{
+				// LastLine
+				auto & line = m_metrics.lines[selEnd.lineIndex--];
+				auto right = int32_t( line.chars[selEnd.charIndex - 1u] );
+
+				panel->setPixelPosition( { 0, int32_t( line.top ) } );
+				panel->setPixelSize( { uint32_t( right )
+					, uint32_t( m_metrics.yMax - m_metrics.yMin ) } );
+				panel->setVisible( true );
+			}
+
+			// Process remaining lines
+			while ( selBegin.lineIndex <= selEnd.lineIndex )
+			{
+				if ( auto panel = m_selections[selLineIndex++].lock() )
+				{
+					auto & line = m_metrics.lines[selBegin.lineIndex];
+					panel->setPixelPosition( { 0, int32_t( line.top ) } );
+					panel->setPixelSize( { LineEndWidth + line.chars.back()
+						, uint32_t( m_metrics.yMax - m_metrics.yMin ) } );
+					panel->setVisible( true );
+				}
+
+				++selBegin.lineIndex;
+			}
+		}
+		else if ( auto panel = m_selections[selLineIndex++].lock() )
+		{
+			// Single line selection.
+			auto charDiff = selEnd.charIndex - selBegin.charIndex;
+
+			if ( charDiff > 0 )
+			{
+				auto & line = m_metrics.lines[selBegin.lineIndex];
+				auto left = selBegin.charIndex == 0u
+					? 0
+					: int32_t( line.chars[selBegin.charIndex - 1u] );
+				auto right = int32_t( line.chars[selEnd.charIndex - 1u] );
+				panel->setPixelPosition( { left, int32_t( line.top ) } );
+				panel->setPixelSize( { uint32_t( right - left )
+					, uint32_t( m_metrics.yMax - m_metrics.yMin ) } );
+				panel->setVisible( true );
+			}
+			else
+			{
+				panel->setVisible( false );
+			}
+		}
+
+		for ( auto sel : castor::makeArrayView( m_selections.begin() + selLineIndex, m_selections.end() ) )
+		{
+			if ( auto panel = sel.lock() )
+			{
+				panel->setVisible( false );
+			}
+		}
+	}
+
+	void EditCtrl::doClearSelection()
+	{
+		m_selectionBegin = {};
+		m_selectionEnd = {};
+
+		for ( auto sel : m_selections )
+		{
+			if ( auto panel = sel.lock() )
+			{
+				panel->setVisible( false );
+			}
 		}
 	}
 }

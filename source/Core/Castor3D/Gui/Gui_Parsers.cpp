@@ -1485,6 +1485,32 @@ namespace castor3d
 	}
 	CU_EndAttribute()
 
+	CU_ImplementAttributeParser( parserStyleEditSelectionMaterial )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+
+		if ( auto style = guiContext.editStyle )
+		{
+			castor::String name;
+			params[0]->get( name );
+			auto material = guiContext.engine->findMaterial( name ).lock().get();
+
+			if ( material )
+			{
+				style->setSelectionMaterial( material );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "Material not found: [" + name + "]." ) );
+			}
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No edit style initialised." ) );
+		}
+	}
+	CU_EndAttribute()
+
 	CU_ImplementAttributeParser( parserStyleEditEnd )
 	{
 		auto & guiContext = guiparse::getParserContext( context );

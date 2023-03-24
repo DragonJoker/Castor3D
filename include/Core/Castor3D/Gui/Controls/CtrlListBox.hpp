@@ -146,7 +146,7 @@ namespace castor3d
 			return m_signals[size_t( event )].connect( function );
 		}
 
-		/** \return	The listbox style
+		/** \return	The listbox style.
 		*/
 		ListBoxStyle const & getStyle()const noexcept
 		{

@@ -189,6 +189,7 @@ namespace castor3d
 			createDefaultStyleParsers( result, uint32_t( GUISection::eEditStyle ), &parserStyleEditEnd );
 			addParser( result, uint32_t( GUISection::eEditStyle ), cuT( "font" ), &parserStyleEditFont, { makeParameter< ParameterType::eName >() } );
 			addParser( result, uint32_t( GUISection::eEditStyle ), cuT( "text_material" ), &parserStyleEditTextMaterial, { makeParameter< ParameterType::eName >() } );
+			addParser( result, uint32_t( GUISection::eEditStyle ), cuT( "selection_material" ), &parserStyleEditSelectionMaterial, { makeParameter< ParameterType::eName >() } );
 		}
 
 		static void createExpandablePanelParsers( castor::AttributeParsers & result )
