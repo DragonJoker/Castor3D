@@ -344,6 +344,14 @@ namespace castor3d
 			, pass
 			, renderSize
 			, vertexOffset );
+		data.border = {};
+		data.borderInnerUV = {};
+		data.borderOuterUV = {};
+		data.borderPosition = {};
+		data.textTexturingMode = {};
+		data.textWordOffset = {};
+		data.textLineOffset = {};
+		data.textTopOffset = {};
 	}
 
 	void OverlayPreparer::doUpdateUbo( OverlayUboConfiguration & data
@@ -363,6 +371,10 @@ namespace castor3d
 		data.borderInnerUV = castor::Point4f{ overlay.getBorderInnerUV() };
 		data.borderOuterUV = castor::Point4f{ overlay.getBorderOuterUV() };
 		data.borderPosition = uint32_t( overlay.getBorderPosition() );
+		data.textTexturingMode = {};
+		data.textWordOffset = {};
+		data.textLineOffset = {};
+		data.textTopOffset = {};
 	}
 
 	void OverlayPreparer::doUpdateUbo( OverlayUboConfiguration & data
@@ -377,6 +389,10 @@ namespace castor3d
 			, pass
 			, renderSize
 			, vertexOffset );
+		data.border = {};
+		data.borderInnerUV = {};
+		data.borderOuterUV = {};
+		data.borderPosition = {};
 		data.textTexturingMode = uint32_t( overlay.getTexturingMode() );
 		data.textWordOffset = textBuffer.word;
 		data.textLineOffset = textBuffer.line;
