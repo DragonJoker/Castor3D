@@ -8,9 +8,12 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Config/BeginExternHeaderGuard.hpp>
 #include <wx/wx.h>
+#include <wx/clipbrd.h>
 #include <wx/frame.h>
 #include <wx/panel.h>
 #include <wx/timer.h>
+
+#include <future>
 #include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
 #include <GuiCommon/System/CubeBoxManager.hpp>
@@ -34,6 +37,7 @@ namespace CastorViewer
 		eTIMER_ID_MOUSE,
 		eTIMER_ID_MOVEMENT,
 		eTIMER_ID_COUNT,
+		eCLIPBOARD_CHANGE,
 	}	eTIMER_ID;
 
 	class MouseNodeEvent;
@@ -125,6 +129,7 @@ namespace CastorViewer
 		void onMouseMove( wxMouseEvent & event );
 		void onMouseWheel( wxMouseEvent & event );
 		void onMenuClose( wxCommandEvent & event );
+		void onClipboardText( wxCommandEvent & event );
 
 	public:
 		float m_x{};
@@ -156,6 +161,11 @@ namespace CastorViewer
 		castor3d::FrameListenerSPtr m_listener{};
 
 		castor3d::MouseCursor m_cursor{};
+		std::unique_ptr< wxClipboard > m_clipboard{};
+		std::atomic_bool m_setClipboardText;
+		std::promise< castor::U32String > m_clipGet{};
+		std::mutex m_mtxClipSet{};
+		castor::U32String m_clipSet{};
 	};
 }
 

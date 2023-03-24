@@ -255,6 +255,18 @@ namespace castor3d
 		 */
 		bool doDeleteSelection( bool isCtrlDown );
 
+		/** Copies selected text.
+		 */
+		void doCopyText();
+
+		/** Cuts selected text.
+		 */
+		void doCutText();
+
+		/** Pastes text at current caret position.
+		 */
+		void doPasteText();
+
 	private:
 		struct Caret : CaretIndices
 		{
