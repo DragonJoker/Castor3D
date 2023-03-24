@@ -571,7 +571,8 @@ namespace castortd
 
 		auto inputListener = wxGetApp().getCastor()->getUserInputListener();
 
-		if ( !inputListener || !inputListener->fireMouseWheel( castor::Position( 0, wheelRotation ) ) )
+		if ( !inputListener || !inputListener->fireMouseWheel( castor::Position( 0, wheelRotation )
+			, event.ControlDown(), event.AltDown(), event.ShiftDown() ) )
 		{
 			if ( wheelRotation < 0 )
 			{

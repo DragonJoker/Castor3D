@@ -339,46 +339,82 @@ namespace castor3d
 		 *\~english
 		 *\~brief		Fires a mouse move event.
 		 *\param[in]	position	The mouse position.
+		 *\param[in]	ctrl		Tells if the Ctrl key is down.
+		 *\param[in]	alt			Tells if the Alt key is down.
+		 *\param[in]	shift		Tells if the Shift key is down.
 		 *\return		\p true if the event is processed by a handler.
 		 *\~french
 		 *\~brief		Lance un évènement de déplacement de souris.
 		 *\param[in]	position	La position de la souris.
+		 *\param[in]	ctrl		Dit si la touche Ctrl est enfoncée.
+		 *\param[in]	alt			Dit si la touche Alt est enfoncée.
+		 *\param[in]	shift		Dit si la touche Shift est enfoncée.
 		 *\return		\p true si l'évènement est traité par un gestionnaire.
 		 */
-		C3D_API bool fireMouseMove( castor::Position const & position );
+		C3D_API bool fireMouseMove( castor::Position const & position
+			, bool ctrl
+			, bool alt
+			, bool shift );
 		/**
 		 *\~english
 		 *\~brief		Fires a mouse pushed event.
 		 *\param[in]	button	The mouse button.
+		 *\param[in]	ctrl	Tells if the Ctrl key is down.
+		 *\param[in]	alt		Tells if the Alt key is down.
+		 *\param[in]	shift	Tells if the Shift key is down.
 		 *\return		\p true if the event is processed by a handler.
 		 *\~french
 		 *\~brief		Lance un évènement de bouton de souris appuyé.
 		 *\param[in]	button	Le bouton de la souris.
+		 *\param[in]	ctrl	Dit si la touche Ctrl est enfoncée.
+		 *\param[in]	alt		Dit si la touche Alt est enfoncée.
+		 *\param[in]	shift	Dit si la touche Shift est enfoncée.
 		 *\return		\p true si l'évènement est traité par un gestionnaire.
 		 */
-		C3D_API bool fireMouseButtonPushed( MouseButton button );
+		C3D_API bool fireMouseButtonPushed( MouseButton button
+			, bool ctrl
+			, bool alt
+			, bool shift );
 		/**
 		 *\~english
 		 *\~brief		Fires a mouse released event.
 		 *\param[in]	button	The mouse button.
+		 *\param[in]	ctrl	Tells if the Ctrl key is down.
+		 *\param[in]	alt		Tells if the Alt key is down.
+		 *\param[in]	shift	Tells if the Shift key is down.
 		 *\return		\p true if the event is processed by a handler.
 		 *\~french
 		 *\~brief		Lance un évènement de bouton de souris relâché.
 		 *\param[in]	button	Le bouton de la souris.
+		 *\param[in]	ctrl	Dit si la touche Ctrl est enfoncée.
+		 *\param[in]	alt		Dit si la touche Alt est enfoncée.
+		 *\param[in]	shift	Dit si la touche Shift est enfoncée.
 		 *\return		\p true si l'évènement est traité par un gestionnaire.
 		 */
-		C3D_API bool fireMouseButtonReleased( MouseButton button );
+		C3D_API bool fireMouseButtonReleased( MouseButton button
+			, bool ctrl
+			, bool alt
+			, bool shift );
 		/**
 		 *\~english
 		 *\~brief		Fires a mouse wheel event.
 		 *\param[in]	offsets	The mouse wheel offsets (x and y).
+		 *\param[in]	ctrl	Tells if the Ctrl key is down.
+		 *\param[in]	alt		Tells if the Alt key is down.
+		 *\param[in]	shift	Tells if the Shift key is down.
 		 *\return		\p true if the event is processed by a handler.
 		 *\~french
 		 *\~brief		Lance un évènement de molette de souris.
 		 *\param[in]	offsets	Les déplacements de la molette (x et y).
+		 *\param[in]	ctrl	Dit si la touche Ctrl est enfoncée.
+		 *\param[in]	alt		Dit si la touche Alt est enfoncée.
+		 *\param[in]	shift	Dit si la touche Shift est enfoncée.
 		 *\return		\p true si l'évènement est traité par un gestionnaire.
 		 */
-		C3D_API bool fireMouseWheel( castor::Position const & offsets );
+		C3D_API bool fireMouseWheel( castor::Position const & offsets
+			, bool ctrl
+			, bool alt
+			, bool shift );
 
 		//@}
 		/**@name Keyboard input events */
@@ -517,21 +553,21 @@ namespace castor3d
 		 *\param[in]	position	la position de la souris.
 		 *\return		Le gestionnaire, \p nullptr si aucun.
 		 */
-		C3D_API virtual EventHandler * doGetMouseTargetableHandler( castor::Position const & position )const = 0;
-
-		/**@name General */
-		//@{
-
+		virtual EventHandler * doGetMouseTargetableHandler( castor::Position const & position )const = 0;
 		/**
 		 *copydoc		castor3d::UserInputListener::Initialise
 		 */
-		C3D_API virtual bool doInitialise() = 0;
+		virtual bool doInitialise() = 0;
 		/**
 		 *copydoc		castor3d::UserInputListener::Cleanup
 		 */
-		C3D_API virtual void doCleanup() = 0;
-
-		//@}
+		virtual void doCleanup() = 0;
+		/**
+		 *brief		Updates keyboard command keys
+		 */
+		void doUpdateCommandKeys( bool ctrl
+			, bool alt
+			, bool shift );
 
 	protected:
 		//!\~english	The mutex used to protect the handlers array.

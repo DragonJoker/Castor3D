@@ -640,7 +640,8 @@ namespace CastorViewer
 	{
 		auto inputListener = wxGetApp().getCastor()->getUserInputListener();
 
-		if ( !inputListener || !inputListener->fireKeydown( panel::doConvertKeyCode( event.GetKeyCode() ), event.ControlDown(), event.AltDown(), event.ShiftDown() ) )
+		if ( !inputListener || !inputListener->fireKeydown( panel::doConvertKeyCode( event.GetKeyCode() )
+			, event.ControlDown(), event.AltDown(), event.ShiftDown() ) )
 		{
 			switch ( event.GetKeyCode() )
 			{
@@ -698,7 +699,8 @@ namespace CastorViewer
 	{
 		auto inputListener = wxGetApp().getCastor()->getUserInputListener();
 
-		if ( !inputListener || !inputListener->fireKeyUp( panel::doConvertKeyCode( event.GetKeyCode() ), event.ControlDown(), event.AltDown(), event.ShiftDown() ) )
+		if ( !inputListener || !inputListener->fireKeyUp( panel::doConvertKeyCode( event.GetKeyCode() )
+			, event.ControlDown(), event.AltDown(), event.ShiftDown() ) )
 		{
 			switch ( event.GetKeyCode() )
 			{
@@ -792,7 +794,8 @@ namespace CastorViewer
 			wxChar key = event.GetUnicodeKey();
 			wxString tmp;
 			tmp << key;
-			inputListener->fireChar( panel::doConvertKeyCode( event.GetKeyCode() ), castor::String( tmp.mb_str( wxConvUTF8 ) ) );
+			inputListener->fireChar( panel::doConvertKeyCode( event.GetKeyCode() )
+				, castor::String( tmp.mb_str( wxConvUTF8 ) ) );
 		}
 
 		event.Skip();
@@ -831,7 +834,8 @@ namespace CastorViewer
 
 		auto inputListener = wxGetApp().getCastor()->getUserInputListener();
 
-		if ( !inputListener || !inputListener->fireMouseButtonPushed( castor3d::MouseButton::eLeft ) )
+		if ( !inputListener || !inputListener->fireMouseButtonPushed( castor3d::MouseButton::eLeft
+			, event.ControlDown(), event.AltDown(), event.ShiftDown() ) )
 		{
 			if ( m_currentState )
 			{
@@ -852,7 +856,8 @@ namespace CastorViewer
 
 		auto inputListener = wxGetApp().getCastor()->getUserInputListener();
 
-		if ( !inputListener || !inputListener->fireMouseButtonReleased( castor3d::MouseButton::eLeft ) )
+		if ( !inputListener || !inputListener->fireMouseButtonReleased( castor3d::MouseButton::eLeft
+			, event.ControlDown(), event.AltDown(), event.ShiftDown() ) )
 		{
 			doStopTimer( eTIMER_ID_MOUSE );
 		}
@@ -870,7 +875,8 @@ namespace CastorViewer
 
 		auto inputListener = wxGetApp().getCastor()->getUserInputListener();
 
-		if ( !inputListener || !inputListener->fireMouseButtonPushed( castor3d::MouseButton::eMiddle ) )
+		if ( !inputListener || !inputListener->fireMouseButtonPushed( castor3d::MouseButton::eMiddle
+			, event.ControlDown(), event.AltDown(), event.ShiftDown() ) )
 		{
 			auto x = m_oldX;
 			auto y = m_oldY;
@@ -906,7 +912,8 @@ namespace CastorViewer
 
 		if ( inputListener  )
 		{
-			inputListener->fireMouseButtonReleased( castor3d::MouseButton::eMiddle );
+			inputListener->fireMouseButtonReleased( castor3d::MouseButton::eMiddle
+				, event.ControlDown(), event.AltDown(), event.ShiftDown() );
 		}
 
 		event.Skip();
@@ -924,7 +931,8 @@ namespace CastorViewer
 
 		if ( inputListener  )
 		{
-			inputListener->fireMouseButtonPushed( castor3d::MouseButton::eRight );
+			inputListener->fireMouseButtonPushed( castor3d::MouseButton::eRight
+				, event.ControlDown(), event.AltDown(), event.ShiftDown() );
 		}
 
 		event.Skip();
@@ -942,7 +950,8 @@ namespace CastorViewer
 
 		if ( inputListener  )
 		{
-			inputListener->fireMouseButtonReleased( castor3d::MouseButton::eRight );
+			inputListener->fireMouseButtonReleased( castor3d::MouseButton::eRight
+				, event.ControlDown(), event.AltDown(), event.ShiftDown() );
 		}
 
 		event.Skip();
@@ -953,7 +962,8 @@ namespace CastorViewer
 		m_x = doTransformX( event.GetX() );
 		m_y = doTransformY( event.GetY() );
 
-		if ( !wxGetApp().getCastor()->fireMouseMove( castor::Position{ int32_t( m_x ), int32_t( m_y ) } ) )
+		if ( !wxGetApp().getCastor()->fireMouseMove( castor::Position{ int32_t( m_x ), int32_t( m_y ) }
+			, event.ControlDown(), event.AltDown(), event.ShiftDown() ) )
 		{
 			if ( m_currentState )
 			{
@@ -992,7 +1002,8 @@ namespace CastorViewer
 
 		auto inputListener = wxGetApp().getCastor()->getUserInputListener();
 
-		if ( !inputListener || !inputListener->fireMouseWheel( castor::Position( 0, wheelRotation ) ) )
+		if ( !inputListener || !inputListener->fireMouseWheel( castor::Position( 0, wheelRotation )
+			, event.ControlDown(), event.AltDown(), event.ShiftDown() ) )
 		{
 			if ( wheelRotation < 0 )
 			{

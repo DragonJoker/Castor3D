@@ -183,13 +183,22 @@ namespace castor3d
 		 *\~english
 		 *\~brief		Fires a mouse move event.
 		 *\param[in]	position	The mouse position.
+		 *\param[in]	ctrl		Tells if the Ctrl key is down.
+		 *\param[in]	alt			Tells if the Alt key is down.
+		 *\param[in]	shift		Tells if the Shift key is down.
 		 *\return		\p true if the event is processed by a handler.
 		 *\~french
 		 *\~brief		Lance un évènement de déplacement de souris.
 		 *\param[in]	position	La position de la souris.
+		 *\param[in]	ctrl		Dit si la touche Ctrl est enfoncée.
+		 *\param[in]	alt			Dit si la touche Alt est enfoncée.
+		 *\param[in]	shift		Dit si la touche Shift est enfoncée.
 		 *\return		\p true si l'évènement est traité par un gestionnaire.
 		 */
-		C3D_API bool fireMouseMove( castor::Position const & position );
+		C3D_API bool fireMouseMove( castor::Position const & position
+			, bool ctrl
+			, bool alt
+			, bool shift );
 		/**
 		 *\~english
 		 *\brief			Updates the engine, CPU wise.

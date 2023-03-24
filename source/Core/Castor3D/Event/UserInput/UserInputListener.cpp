@@ -302,9 +302,10 @@ namespace castor3d
 		}
 	}
 
-	bool UserInputListener::fireMouseMove( castor::Position const & position )
+	bool UserInputListener::fireMouseMove( castor::Position const & position, bool ctrl, bool alt, bool shift )
 	{
 		bool result = false;
+		doUpdateCommandKeys( ctrl, alt, shift );
 
 		if ( doHasHandlers() )
 		{
@@ -338,9 +339,10 @@ namespace castor3d
 		return result;
 	}
 
-	bool UserInputListener::fireMouseButtonPushed( MouseButton button )
+	bool UserInputListener::fireMouseButtonPushed( MouseButton button, bool ctrl, bool alt, bool shift )
 	{
 		bool result = false;
+		doUpdateCommandKeys( ctrl, alt, shift );
 
 		if ( doHasHandlers() )
 		{
@@ -371,9 +373,10 @@ namespace castor3d
 		return result;
 	}
 
-	bool UserInputListener::fireMouseButtonReleased( MouseButton button )
+	bool UserInputListener::fireMouseButtonReleased( MouseButton button, bool ctrl, bool alt, bool shift )
 	{
 		bool result = false;
+		doUpdateCommandKeys( ctrl, alt, shift );
 
 		if ( doHasHandlers() )
 		{
@@ -403,9 +406,10 @@ namespace castor3d
 		return result;
 	}
 
-	bool UserInputListener::fireMouseWheel( castor::Position const & offsets )
+	bool UserInputListener::fireMouseWheel( castor::Position const & offsets, bool ctrl, bool alt, bool shift )
 	{
 		bool result = false;
+		doUpdateCommandKeys( ctrl, alt, shift );
 
 		if ( doHasHandlers() )
 		{
@@ -425,6 +429,7 @@ namespace castor3d
 	bool UserInputListener::fireKeydown( KeyboardKey key, bool ctrl, bool alt, bool shift )
 	{
 		bool result = false;
+		doUpdateCommandKeys( ctrl, alt, shift );
 
 		if ( doHasHandlers() )
 		{
@@ -433,21 +438,6 @@ namespace castor3d
 			if ( active
 				&& active->isEnabled() )
 			{
-				if ( key == KeyboardKey::eControl )
-				{
-					m_keyboard.ctrl = true;
-				}
-
-				if ( key == KeyboardKey::eAlt )
-				{
-					m_keyboard.alt = true;
-				}
-
-				if ( key == KeyboardKey::eShift )
-				{
-					m_keyboard.shift = true;
-				}
-
 				active->pushEvent( KeyboardEvent( KeyboardEventType::ePushed, key, m_keyboard.ctrl, m_keyboard.alt, m_keyboard.shift ) );
 				result = true;
 			}
@@ -459,6 +449,7 @@ namespace castor3d
 	bool UserInputListener::fireKeyUp( KeyboardKey key, bool ctrl, bool alt, bool shift )
 	{
 		bool result = false;
+		doUpdateCommandKeys( ctrl, alt, shift );
 
 		if ( doHasHandlers() )
 		{
@@ -467,21 +458,6 @@ namespace castor3d
 			if ( active
 				&& active->isEnabled() )
 			{
-				if ( key == KeyboardKey::eControl )
-				{
-					m_keyboard.ctrl = false;
-				}
-
-				if ( key == KeyboardKey::eAlt )
-				{
-					m_keyboard.alt = false;
-				}
-
-				if ( key == KeyboardKey::eShift )
-				{
-					m_keyboard.shift = false;
-				}
-
 				active->pushEvent( KeyboardEvent( KeyboardEventType::eReleased, key, m_keyboard.ctrl, m_keyboard.alt, m_keyboard.shift ) );
 				result = true;
 			}
@@ -507,5 +483,14 @@ namespace castor3d
 		}
 
 		return result;
+	}
+
+	void UserInputListener::doUpdateCommandKeys( bool ctrl
+		, bool alt
+		, bool shift )
+	{
+		m_keyboard.ctrl = ctrl;
+		m_keyboard.alt = alt;
+		m_keyboard.shift = shift;
 	}
 }
