@@ -71,7 +71,7 @@ namespace castor3d
 		}
 
 		/**
-		*\return	The static style
+		*\return	The static style.
 		*/
 		StaticStyle const & getStyle()const
 		{

@@ -78,7 +78,7 @@ namespace castor3d
 		}
 
 		/**
-		*\return	The static style
+		*\return	The edit style.
 		*/
 		EditStyle const & getStyle()const
 		{
@@ -88,6 +88,13 @@ namespace castor3d
 		C3D_API static ControlType constexpr Type{ ControlType::eEdit };
 
 	private:
+		struct CaretIndices
+		{
+			uint32_t lineIndex{};
+			uint32_t charIndex{};
+			uint32_t captionIndex{};
+		};
+
 		EditStyle & getStyle()
 		{
 			return static_cast< EditStyle & >( getBaseStyle() );
@@ -171,27 +178,45 @@ namespace castor3d
 
 		/** Removes a character at caret index
 		 */
-		void doDeleteCharAtCaret();
+		void doDeleteCharAtCaret( bool isCtrlDown );
 
 		/** Removes a character before caret index (backspace)
 		 */
-		void doDeleteCharBeforeCaret();
+		void doDeleteCharBeforeCaret( bool isCtrlDown );
 
 		/** Moves the caret to the left.
 		 */
-		void doMoveCaretLeft( bool isCtrlDown );
+		void doMoveCaretLeft( bool isShiftDown
+			, bool isCtrlDown );
 
 		/** Moves the caret to the right.
 		 */
-		void doMoveCaretRight( bool isCtrlDown );
+		void doMoveCaretRight( bool isShiftDown
+			, bool isCtrlDown );
 
 		/** Moves the caret one line up.
 		 */
-		void doMoveCaretUp();
+		void doMoveCaretUp( bool isShiftDown
+			, bool isCtrlDown );
 
 		/** Moves the caret one line down.
 		 */
-		void doMoveCaretDown();
+		void doMoveCaretDown( bool isShiftDown
+			, bool isCtrlDown );
+
+		/** Moves the caret at the beginning of the line or text.
+		 */
+		void doMoveCaretHome( bool isShiftDown
+			, bool isCtrlDown );
+
+		/** Moves the caret at the end of the line or text.
+		 */
+		void doMoveCaretEnd( bool isShiftDown
+			, bool isCtrlDown );
+
+		/** Updates the input caret indices.
+		 */
+		void doUpdate( CaretIndices & indices );
 
 		/** Updates the input caret indices.
 		 */
@@ -209,12 +234,17 @@ namespace castor3d
 		 */
 		void doUpdateCaption();
 
+		/** Updates the selection overlays.
+		 */
+		void doUpdateSelection();
+
+		/** Clears selection.
+		 */
+		void doClearSelection();
+
 	private:
-		struct Caret
+		struct Caret : CaretIndices
 		{
-			uint32_t lineIndex{};
-			uint32_t charIndex{};
-			uint32_t captionIndex{};
 			castor::U32String::const_iterator captionIt{};
 			bool visible{};
 			PanelOverlayWPtr overlay;
@@ -226,6 +256,18 @@ namespace castor3d
 				captionIndex = uint32_t( index );
 				captionIt = std::next( caption.begin(), captionIndex );
 			}
+
+			void incrementIndex()
+			{
+				++captionIndex;
+				++captionIt;
+			}
+
+			void decrementIndex()
+			{
+				--captionIndex;
+				--captionIt;
+			}
 		};
 
 		castor::U32String m_caption;
@@ -234,6 +276,10 @@ namespace castor3d
 		TextOverlayWPtr m_text;
 		Caret m_caret;
 		OnEditEvent m_signals[size_t( EditEvent::eCount )];
+		bool m_selecting{};
+		CaretIndices m_selectionBegin{};
+		CaretIndices m_selectionEnd{};
+		std::vector< PanelOverlayWPtr > m_selections{};
 	};
 }
 

@@ -43,7 +43,7 @@ namespace castor3d
 			, bool visible = true );
 
 		/**
-		*\return	The static style
+		*\return	The panel style.
 		*/
 		PanelStyle const & getStyle()const
 		{

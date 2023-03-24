@@ -135,7 +135,7 @@ namespace castor3d
 		}
 
 		/**
-		*\return	The combobox style
+		*\return	The combobox style.
 		*/
 		ComboBoxStyle const & getStyle()const
 		{

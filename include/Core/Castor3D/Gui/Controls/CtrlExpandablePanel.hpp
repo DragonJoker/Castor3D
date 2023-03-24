@@ -62,7 +62,7 @@ namespace castor3d
 			return m_signals[size_t( event )].connect( function );
 		}
 
-		/** \return	The style
+		/** \return	The expandable panel style.
 		*/
 		ExpandablePanelStyle const & getStyle()const noexcept
 		{
