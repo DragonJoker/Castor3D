@@ -18,6 +18,7 @@ namespace castor3d
 		using OnSelectActionFunction = std::function< void( int ) >;
 		using OnTextActionFunction = std::function< void( castor::U32String const & ) >;
 		using OnExpandActionFunction = std::function< void( bool ) >;
+		using OnClipboardTextActionFunction = std::function< castor::U32String( bool, castor::U32String ) >;
 		using OnCursorActionFunction = std::function< void( MouseCursor ) >;
 
 	public:
@@ -158,14 +159,21 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\~brief		Registers a function to call when a mouse cursor event is raised by the given handler.
-		 *\param[in]	handler		The handler.
 		 *\param[in]	function	The function.
 		 *\~french
 		 *\~brief		Enregistre une fonction à appeler lorsqu'un évènement de curseur de souris est lancé par le handler donné.
-		 *\param[in]	handler		Le handler.
 		 *\param[in]	function	La fonction.
 		 */
 		C3D_API void registerCursorAction( OnCursorActionFunction function );
+		/**
+		 *\~english
+		 *\~brief		Registers a function to call when a clipboard event is raised by the given handler.
+		 *\param[in]	function	The function.
+		 *\~french
+		 *\~brief		Enregistre une fonction à appeler lorsqu'un évènement de presse-papier est lancé par le handler donné.
+		 *\param[in]	function	La fonction.
+		 */
+		C3D_API void registerClipboardTextAction( OnClipboardTextActionFunction function );
 		/**
 		 *\~english
 		 *\~brief		Unregisters ths function to call when a mouse move event is raised by the given handler.
@@ -213,13 +221,18 @@ namespace castor3d
 		C3D_API void unregisterExpandAction( castor::String const & handler );
 		/**
 		 *\~english
-		 *\~brief		Unregisters ths function to call when mouse cursor event is raised by the given handler.
-		 *\param[in]	handler	The handler.
+		 *\~brief		Unregisters the function to call when mouse cursor event is raised by the given handler.
 		 *\~french
 		 *\~brief		Désenregistre la fonction à appeler lorsqu'un évènement de curseur de souris est lancé par le handler donné.
-		 *\param[in]	handler	Le handler.
 		 */
 		C3D_API void unregisterCursorAction();
+		/**
+		 *\~english
+		 *\~brief		Unregisters the function to call when a clipboard event is raised by the given handler.
+		 *\~french
+		 *\~brief		Désenregistre la fonction à appeler lorsqu'un évènement de presse-papier est lancé par le handler donné.
+		 */
+		C3D_API void unregisterClipboardTextAction();
 		/**
 		 *\~english
 		 *\~brief		Event raised by the handler when the mouse is moved over it.
@@ -276,15 +289,29 @@ namespace castor3d
 			, bool expand )const;
 		/**
 		 *\~english
-		 *\~brief		Event raised by the handler when its mouse cursor has changed.
+		 *\~brief		Event raised when mouse cursor has changed.
 		 *\param[in]	handler	The handler.
 		 *\param[in]	expand	The new value.
 		 *\~french
-		 *\~brief		Evènement lancé par le handler lorsque son cureur de souris est changé.
+		 *\~brief		Evènement lorsque le cureur de souris est changé.
 		 *\param[in]	handler	Le handler.
 		 *\param[in]	expand	La nouvelle valeur.
 		 */
 		C3D_API void onCursorAction( MouseCursor cursor )const;
+		/**
+		 *\~english
+		 *\~brief		Event raised interaction with the clipboard is needed.
+		 *\param[in]	set		\p true to define the clipboard text, \p false to retrieve it.
+		 *\param[in]	text	The value to set the clipboard text to.
+		 *\return		The clipboard text.
+		 *\~french
+		 *\~brief		Evènement lancé lorsqu'une interaction avec le presse-papier est demandée.
+		 *\param[in]	set		\p true pour définir le texte du presse-papier, \p false pour le récupérer.
+		 *\param[in]	text	La valeur pour le presse-papier.
+		 *\return		Le texte du presse-papier.
+		 */
+		C3D_API castor::U32String onClipboardTextAction( bool set
+			, castor::U32String text )const;
 		/**
 		 *\~english
 		 *\~brief		Enables handler.
@@ -529,6 +556,7 @@ namespace castor3d
 		std::map< castor::String, OnTextActionFunction > m_onTextActions;
 		std::map< castor::String, OnExpandActionFunction > m_onExpandActions;
 		OnCursorActionFunction m_onCursorAction;
+		OnClipboardTextActionFunction m_onClipboardTextAction;
 	};
 }
 

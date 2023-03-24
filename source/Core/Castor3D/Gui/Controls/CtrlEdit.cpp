@@ -156,7 +156,6 @@ namespace castor3d
 		doUpdateStyle();
 		doUpdateCaption();
 		doUpdateCaret();
-		doUpdateSelection();
 		getControlsManager()->connectEvents( *this );
 	}
 
@@ -187,7 +186,6 @@ namespace castor3d
 		m_caret.updateIndex( m_caption.size(), m_caption );
 		doUpdateCaption();
 		doUpdateCaret();
-		doClearSelection();
 	}
 
 	void EditCtrl::doSetVisible( bool visible )
@@ -272,6 +270,8 @@ namespace castor3d
 		{
 			caret->setVisible( m_caret.visible );
 		}
+
+		doClearSelection();
 	}
 
 	void EditCtrl::onDeactivate( HandlerEvent const & event )
@@ -346,11 +346,26 @@ namespace castor3d
 	{
 		auto code = event.getKey();
 
-		if ( code >= KeyboardKey::eSpace
-			 && code <= KeyboardKey( 0xFF )
+		if ( code >= KeyboardKey::eAsciiBegin
+			 && code <= KeyboardKey::eAsciiEnd
 			 && code != KeyboardKey::eDelete )
 		{
-			doAddCharAtCaret( event.getChar() );
+			if ( code == KeyboardKey( 'c' ) && event.isCtrlDown() )
+			{
+				doCopyText();
+			}
+			else if ( code == KeyboardKey( 'v' ) && event.isCtrlDown() )
+			{
+				doPasteText();
+			}
+			else if ( code == KeyboardKey( 'x' ) && event.isCtrlDown() )
+			{
+				doCutText();
+			}
+			else
+			{
+				doAddCharAtCaret( event.getChar() );
+			}
 		}
 		else if ( code == KeyboardKey::eReturn && isMultiLine() )
 		{
@@ -362,34 +377,51 @@ namespace castor3d
 	{
 		if ( !event.isAltDown() )
 		{
-			switch ( event.getKey() )
+			auto code = event.getKey();
+
+			if ( code == KeyboardKey( 'C' ) && event.isCtrlDown() )
 			{
-			case KeyboardKey::eBackspace:
-				doDeleteCharBeforeCaret( event.isCtrlDown() );
-				break;
-			case KeyboardKey::eLeft:
-				doMoveCaretLeft( event.isShiftDown(), event.isCtrlDown() );
-				break;
-			case KeyboardKey::eUp:
-				doMoveCaretUp( event.isShiftDown(), event.isCtrlDown() );
-				break;
-			case KeyboardKey::eHome:
-				doMoveCaretHome( event.isShiftDown(), event.isCtrlDown() );
-				break;
-			case KeyboardKey::eDelete:
-				doDeleteCharAtCaret( event.isCtrlDown() );
-				break;
-			case KeyboardKey::eRight:
-				doMoveCaretRight( event.isShiftDown(), event.isCtrlDown() );
-				break;
-			case KeyboardKey::eDown:
-				doMoveCaretDown( event.isShiftDown(), event.isCtrlDown() );
-				break;
-			case KeyboardKey::eEnd:
-				doMoveCaretEnd( event.isShiftDown(), event.isCtrlDown() );
-				break;
-			default:
-				break;
+				doCopyText();
+			}
+			else if ( code == KeyboardKey( 'V' ) && event.isCtrlDown() )
+			{
+				doPasteText();
+			}
+			else if ( code == KeyboardKey( 'X' ) && event.isCtrlDown() )
+			{
+				doCutText();
+			}
+			else
+			{
+				switch ( code )
+				{
+				case KeyboardKey::eBackspace:
+					doDeleteCharBeforeCaret( event.isCtrlDown() );
+					break;
+				case KeyboardKey::eLeft:
+					doMoveCaretLeft( event.isShiftDown(), event.isCtrlDown() );
+					break;
+				case KeyboardKey::eUp:
+					doMoveCaretUp( event.isShiftDown(), event.isCtrlDown() );
+					break;
+				case KeyboardKey::eHome:
+					doMoveCaretHome( event.isShiftDown(), event.isCtrlDown() );
+					break;
+				case KeyboardKey::eDelete:
+					doDeleteCharAtCaret( event.isCtrlDown() );
+					break;
+				case KeyboardKey::eRight:
+					doMoveCaretRight( event.isShiftDown(), event.isCtrlDown() );
+					break;
+				case KeyboardKey::eDown:
+					doMoveCaretDown( event.isShiftDown(), event.isCtrlDown() );
+					break;
+				case KeyboardKey::eEnd:
+					doMoveCaretEnd( event.isShiftDown(), event.isCtrlDown() );
+					break;
+				default:
+					break;
+				}
 			}
 		}
 	}
@@ -407,7 +439,6 @@ namespace castor3d
 		m_caret.updateIndex( diff + 1, m_caption );
 		doUpdateCaption();
 		doUpdateCaret();
-		doUpdateSelection();
 		m_signals[size_t( EditEvent::eUpdated )]( m_caption );
 	}
 
@@ -501,7 +532,7 @@ namespace castor3d
 		}
 		else
 		{
-			m_selecting = false;
+			doClearSelection();
 		}
 
 		doUpdateCaretIndices();
@@ -547,7 +578,7 @@ namespace castor3d
 		}
 		else
 		{
-			m_selecting = false;
+			doClearSelection();
 		}
 
 		doUpdateCaretIndices();
@@ -597,7 +628,7 @@ namespace castor3d
 		}
 		else
 		{
-			m_selecting = false;
+			doClearSelection();
 		}
 
 		doUpdateCaretIndices();
@@ -647,7 +678,7 @@ namespace castor3d
 		}
 		else
 		{
-			m_selecting = false;
+			doClearSelection();
 		}
 
 		doUpdateCaretIndices();
@@ -690,7 +721,7 @@ namespace castor3d
 		}
 		else
 		{
-			m_selecting = false;
+			doClearSelection();
 		}
 
 		doUpdateCaretIndices();
@@ -735,7 +766,7 @@ namespace castor3d
 		}
 		else
 		{
-			m_selecting = false;
+			doClearSelection();
 		}
 
 		doUpdateCaretIndices();
@@ -876,7 +907,7 @@ namespace castor3d
 
 	void EditCtrl::doUpdateCaption()
 	{
-		m_selecting = false;
+		doClearSelection();
 		doUpdateMetrics();
 		doUpdateCaretIndices();
 
@@ -990,6 +1021,7 @@ namespace castor3d
 
 	void EditCtrl::doClearSelection()
 	{
+		m_selecting = false;
 		m_selection.begin = {};
 		m_selection.end = {};
 
@@ -1034,10 +1066,67 @@ namespace castor3d
 		doUpdateCaption();
 		doUpdateCaret();
 		m_signals[size_t( EditEvent::eUpdated )]( m_caption );
-
-		m_selecting = false;
-		doClearSelection();
-
 		return true;
+	}
+
+	void EditCtrl::doCopyText()
+	{
+		if ( !m_selecting
+			|| ( m_selection.begin.lineIndex == m_selection.end.lineIndex
+				&& m_selection.begin.charIndex == m_selection.end.charIndex ) )
+		{
+			return;
+		}
+
+		auto [selBegin, selEnd] = doGetNormalisedSelection();
+		getControlsManager()->onClipboardTextAction( true
+			, { m_caption.begin() + selBegin.captionIndex
+				, m_caption.begin() + selEnd.captionIndex } );
+	}
+
+	void EditCtrl::doCutText()
+	{
+		if ( !m_selecting
+			|| ( m_selection.begin.lineIndex == m_selection.end.lineIndex
+				&& m_selection.begin.charIndex == m_selection.end.charIndex ) )
+		{
+			return;
+		}
+
+		doCopyText();
+		doDeleteSelection( false );
+	}
+
+	void EditCtrl::doPasteText()
+	{
+		auto clipboard = getControlsManager()->onClipboardTextAction( false, {} );
+
+		if ( clipboard.empty() )
+		{
+			return;
+		}
+
+		if ( !m_selecting
+			|| ( m_selection.begin.lineIndex == m_selection.end.lineIndex
+				&& m_selection.begin.charIndex == m_selection.end.charIndex ) )
+		{
+			m_caption.insert( m_caret.captionIt
+				, clipboard.begin()
+				, clipboard.end() );
+			m_caret.updateIndex( m_caret.captionIndex + clipboard.size(), m_caption );
+		}
+		else
+		{
+			auto [selBegin, selEnd] = doGetNormalisedSelection();
+			m_caption.replace( m_caption.begin() + selBegin.captionIndex
+				, m_caption.begin() + selEnd.captionIndex
+				, clipboard.begin()
+				, clipboard.end() );
+			m_caret.updateIndex( selBegin.captionIndex + clipboard.size()
+				, m_caption );
+		}
+
+		doUpdateCaption();
+		doUpdateCaret();
 	}
 }

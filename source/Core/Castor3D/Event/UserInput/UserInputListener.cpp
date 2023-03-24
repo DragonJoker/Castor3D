@@ -144,6 +144,11 @@ namespace castor3d
 		m_onCursorAction = function;
 	}
 
+	void UserInputListener::registerClipboardTextAction( OnClipboardTextActionFunction function )
+	{
+		m_onClipboardTextAction = function;
+	}
+
 	void UserInputListener::unregisterMouseMoveAction( castor::String const & handler )
 	{
 		auto it = m_onMouseMoveActions.find( handler );
@@ -197,6 +202,11 @@ namespace castor3d
 	void UserInputListener::unregisterCursorAction()
 	{
 		m_onCursorAction = {};
+	}
+
+	void UserInputListener::unregisterClipboardTextAction()
+	{
+		m_onClipboardTextAction = {};
 	}
 
 	void UserInputListener::onMouseMoveAction( castor::String const & handler )const
@@ -254,6 +264,12 @@ namespace castor3d
 	void UserInputListener::onCursorAction( MouseCursor cursor )const
 	{
 		m_onCursorAction( cursor );
+	}
+
+	castor::U32String UserInputListener::onClipboardTextAction( bool set
+		, castor::U32String text )const
+	{
+		return m_onClipboardTextAction( set, std::move( text ) );
 	}
 
 	void UserInputListener::enableHandler( castor::String const & handler )

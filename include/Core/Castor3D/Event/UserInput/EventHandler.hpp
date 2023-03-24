@@ -92,7 +92,9 @@ namespace castor3d
 		 */
 		virtual ~EventHandler()
 		{
-			doSwapQueue();
+			m_mutex.lock();
+			m_queue = {};
+			m_mutex.unlock();
 		}
 		/**
 		 *\~english
@@ -108,103 +110,6 @@ namespace castor3d
 			{
 				eventPair.second();
 			}
-		}
-
-		//@}
-		/**@name Mouse events */
-		//@{
-
-		/**
-		 *\~english
-		 *\~brief		adds a mouse event to the events queue.
-		 *\param[in]	event	The mouse event.
-		 *\~french
-		 *\~brief		Ajoute un évènement de souris à la file.
-		 *\param[in]	event	L'évènement.
-		 */
-		void pushEvent( MouseEvent const & event )
-		{
-			auto mouseEvent = std::make_shared< MouseEvent >( event );
-			using LockType = std::unique_lock< std::mutex >;
-			LockType lock{ castor::makeUniqueLock( m_mutex ) };
-			m_queue.emplace_back( mouseEvent
-				, [this, mouseEvent]()
-				{
-					processMouseEvent( mouseEvent );
-				} );
-		}
-		/**
-		 *\~english
-		 *\~brief		Connects a function to a mouse event.
-		 *\param[in]	event		The event type.
-		 *\param[in]	function	The function.
-		 *\~french
-		 *\~brief		Connecte un fonction à un évènement souris.
-		 *\param[in]	event		Le type d'évènement.
-		 *\param[in]	function	La fonction.
-		 */
-		void connect( MouseEventType event
-			, ClientMouseFunction function )
-		{
-			m_mouseSlotsConnections[size_t( event )].push_back( m_mouseSlots[size_t( event )].connect( function ) );
-		}
-
-		//@}
-		/**@name Keyboard events */
-		//@{
-
-		/**
-		 *\~english
-		 *\~brief		adds a keyboard event to the events queue.
-		 *\param[in]	event	The mouse event.
-		 *\~french
-		 *\~brief		Ajoute un évènement de clavier à la file.
-		 *\param[in]	event	L'évènement.
-		 */
-		void pushEvent( KeyboardEvent const & event )
-		{
-			auto mouseEvent = std::make_shared< KeyboardEvent >( event );
-			using LockType = std::unique_lock< std::mutex >;
-			LockType lock{ castor::makeUniqueLock( m_mutex ) };
-			m_queue.emplace_back( mouseEvent
-				, [this, mouseEvent]()
-				{
-					processKeyboardEvent( mouseEvent );
-				} );
-		}
-		/**
-		 *\~english
-		 *\~brief		Connects a function to a keyboard event.
-		 *\param[in]	event		The event type.
-		 *\param[in]	function	The function.
-		 *\~french
-		 *\~brief		Connecte un fonction à un évènement clavier.
-		 *\param[in]	event		Le type d'évènement.
-		 *\param[in]	function	La fonction.
-		 */
-		void connect( KeyboardEventType event
-			, ClientKeyboardFunction function )
-		{
-			m_keyboardSlotsConnections[size_t( event )].push_back( m_keyboardSlots[size_t( event )].connect( function ) );
-		}
-		/**
-		 *\~english
-		 *\~brief		Tells if the control catches mouse events.
-		 *\remarks		A control catches mouse events when it is enabled, and when it explicitly catches it (enabled by default, except for static controls).
-		 *\return		false if the mouse events don't affect the control.
-		 */
-		bool catchesMouseEvents()const
-		{
-			return m_enabled && m_catchMouseEvents && doCatchesMouseEvents();
-		}
-		/**
-		 *\~english
-		 *\~brief		Sets if the control can catch mouse events.
-		 *\param[in]	value		The new value.
-		 */
-		void setCatchesMouseEvents( bool value )
-		{
-			m_catchMouseEvents = value;
 		}
 		/**
 		 *\~english
@@ -235,41 +140,100 @@ namespace castor3d
 		OnEnable onEnable;
 
 		//@}
+		/**@name Mouse events */
+		//@{
+
+		/**
+		 *\~english
+		 *\~brief		Adds a mouse event to the events queue.
+		 *\param[in]	event	The mouse event.
+		 *\~french
+		 *\~brief		Ajoute un évènement de souris à la file.
+		 *\param[in]	event	L'évènement.
+		 */
+		void pushEvent( MouseEvent const & event )
+		{
+			auto myEvent = std::make_shared< MouseEvent >( event );
+			using LockType = std::unique_lock< std::mutex >;
+			LockType lock{ castor::makeUniqueLock( m_mutex ) };
+			m_queue.emplace_back( myEvent
+				, [this, myEvent]()
+				{
+					processMouseEvent( myEvent );
+				} );
+		}
+		/**
+		 *\~english
+		 *\~brief		Connects a function to a mouse event.
+		 *\param[in]	event		The event type.
+		 *\param[in]	function	The function.
+		 *\~french
+		 *\~brief		Connecte un fonction à un évènement souris.
+		 *\param[in]	event		Le type d'évènement.
+		 *\param[in]	function	La fonction.
+		 */
+		void connect( MouseEventType event
+			, ClientMouseFunction function )
+		{
+			m_mouseSlotsConnections[size_t( event )].push_back( m_mouseSlots[size_t( event )].connect( function ) );
+		}
+		/**
+		 *\~english
+		 *\~brief		Tells if the control catches mouse events.
+		 *\remarks		A control catches mouse events when it is enabled, and when it explicitly catches it (enabled by default, except for static controls).
+		 *\return		false if the mouse events don't affect the control.
+		 */
+		bool catchesMouseEvents()const
+		{
+			return m_enabled && m_catchMouseEvents && doCatchesMouseEvents();
+		}
+		/**
+		 *\~english
+		 *\~brief		Sets if the control can catch mouse events.
+		 *\param[in]	value		The new value.
+		 */
+		void setCatchesMouseEvents( bool value )
+		{
+			m_catchMouseEvents = value;
+		}
+
+		//@}
 		/**@name Keyboard events */
 		//@{
 
 		/**
 		 *\~english
-		 *\~brief		adds a handler event to the events queue.
+		 *\~brief		Adds a keyboard event to the events queue.
 		 *\param[in]	event	The mouse event.
 		 *\~french
-		 *\~brief		Ajoute un évènement de gestionnaire à la file.
+		 *\~brief		Ajoute un évènement de clavier à la file.
 		 *\param[in]	event	L'évènement.
 		 */
-		void pushEvent( HandlerEvent const & event )
+		void pushEvent( KeyboardEvent const & event )
 		{
-			auto handlerEvent = std::make_shared< HandlerEvent >( event );
+			auto myEvent = std::make_shared< KeyboardEvent >( event );
 			using LockType = std::unique_lock< std::mutex >;
 			LockType lock{ castor::makeUniqueLock( m_mutex ) };
-			m_queue.emplace_back( handlerEvent
-				, [this, handlerEvent]()
+			m_queue.emplace_back( myEvent
+				, [this, myEvent]()
 				{
-					processHandlerEvent( handlerEvent );
+					processKeyboardEvent( myEvent );
 				} );
 		}
 		/**
 		 *\~english
-		 *\~brief		Connects a function to a handler event.
+		 *\~brief		Connects a function to a keyboard event.
 		 *\param[in]	event		The event type.
 		 *\param[in]	function	The function.
 		 *\~french
-		 *\~brief		Connecte un fonction à un évènement gestionnaire.
+		 *\~brief		Connecte un fonction à un évènement clavier.
 		 *\param[in]	event		Le type d'évènement.
 		 *\param[in]	function	La fonction.
 		 */
-		void connect( HandlerEventType event, ClientHandlerFunction function )
+		void connect( KeyboardEventType event
+			, ClientKeyboardFunction function )
 		{
-			m_handlerSlotsConnections[size_t( event )].push_back( m_handlerSlots[size_t( event )].connect( function ) );
+			m_keyboardSlotsConnections[size_t( event )].push_back( m_keyboardSlots[size_t( event )].connect( function ) );
 		}
 		/**
 		 *\~english
@@ -290,6 +254,44 @@ namespace castor3d
 		bool catchesReturnKey()const
 		{
 			return m_enabled && m_catchReturnKey && doCatchesReturnKey();
+		}
+
+		//@}
+		/**@name Handler events */
+		//@{
+
+		/**
+		 *\~english
+		 *\~brief		Adds a handler event to the events queue.
+		 *\param[in]	event	The mouse event.
+		 *\~french
+		 *\~brief		Ajoute un évènement de gestionnaire à la file.
+		 *\param[in]	event	L'évènement.
+		 */
+		void pushEvent( HandlerEvent const & event )
+		{
+			auto myEvent = std::make_shared< HandlerEvent >( event );
+			using LockType = std::unique_lock< std::mutex >;
+			LockType lock{ castor::makeUniqueLock( m_mutex ) };
+			m_queue.emplace_back( myEvent
+				, [this, myEvent]()
+				{
+					processHandlerEvent( myEvent );
+				} );
+		}
+		/**
+		 *\~english
+		 *\~brief		Connects a function to a handler event.
+		 *\param[in]	event		The event type.
+		 *\param[in]	function	The function.
+		 *\~french
+		 *\~brief		Connecte un fonction à un évènement gestionnaire.
+		 *\param[in]	event		Le type d'évènement.
+		 *\param[in]	function	La fonction.
+		 */
+		void connect( HandlerEventType event, ClientHandlerFunction function )
+		{
+			m_handlerSlotsConnections[size_t( event )].push_back( m_handlerSlots[size_t( event )].connect( function ) );
 		}
 
 		//@}
@@ -411,11 +413,11 @@ namespace castor3d
 		//!\~english	The keyboard events slots.
 		//!\~french		Les slots d'évènements clavier.
 		std::array< OnClientKeyboardEvent, size_t( KeyboardEventType::eCount ) > m_keyboardSlots;
-		//!\~english	The handler events slots connections.
-		//!\~french		Les connexions aux slots d'évènements de gestionnaire.
+		//!\~english	The keyboard events slots connections.
+		//!\~french		Les connexions aux slots d'évènements de clavier.
 		std::array< std::vector< OnClientKeyboardEventConnection >, size_t( KeyboardEventType::eCount ) > m_keyboardSlotsConnections;
-		//!\~english	The keyboard events slots.
-		//!\~french		Les slots d'évènements clavier.
+		//!\~english	The handler events slots.
+		//!\~french		Les slots d'évènements de gestionnaire.
 		std::array< OnClientHandlerEvent, size_t( HandlerEventType::eCount ) > m_handlerSlots;
 		//!\~english	The handler events slots connections.
 		//!\~french		Les connexions aux slots d'évènements de gestionnaire.

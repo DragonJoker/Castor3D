@@ -22,6 +22,7 @@ See LICENSE file in root folder
 #pragma warning( disable: 4996 )
 #pragma warning( disable: 5031 )
 #pragma warning( disable: 5054 )
+#pragma warning( disable: 5204 )
 #pragma warning( disable: 5214 )
 #pragma warning( disable: 5219 )
 #pragma warning( disable: 5262 )

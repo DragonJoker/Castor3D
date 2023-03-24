@@ -96,6 +96,32 @@ namespace CastorViewer
 			, GuiCommon::makeSize( GetClientSize() )
 			, GuiCommon::makeWindowHandle( this ) );
 		auto listener = wxGetApp().getCastor()->getUserInputListener();
+		listener->registerClipboardTextAction( [this]( bool set
+			, castor::U32String text )
+			{
+				m_setClipboardText = set;
+				wxMenuEvent event{ wxEVT_MENU, eCLIPBOARD_CHANGE };
+				event.SetEventObject( this );
+
+				if ( set )
+				{
+					{
+						auto lock( castor::makeUniqueLock( m_mtxClipSet ) );
+						m_clipSet = text;
+					}
+					ProcessThreadEvent( event );
+				}
+				else
+				{
+					m_clipGet = {};
+					auto f = m_clipGet.get_future();
+					ProcessThreadEvent( event );
+					f.wait();
+					text = f.get();
+				}
+
+				return text;
+			} );
 		listener->registerCursorAction( [this]( castor3d::MouseCursor cursor )
 			{
 				if ( m_cursor != cursor )
@@ -478,6 +504,7 @@ namespace CastorViewer
 		EVT_MOTION( RenderPanel::onMouseMove )
 		EVT_MOUSEWHEEL( RenderPanel::onMouseWheel )
 		EVT_MENU( wxID_EXIT, RenderPanel::onMenuClose )
+		EVT_MENU( eCLIPBOARD_CHANGE, RenderPanel::onClipboardText )
 	END_EVENT_TABLE()
 #pragma GCC diagnostic pop
 
@@ -989,5 +1016,29 @@ namespace CastorViewer
 	{
 		Close( true );
 		event.Skip();
+	}
+
+	void RenderPanel::onClipboardText( wxCommandEvent & event )
+	{
+		if ( wxTheClipboard->Open() )
+		{
+			if ( m_setClipboardText )
+			{
+				castor::U32String text;
+				{
+					auto lock( castor::makeUniqueLock( m_mtxClipSet ) );
+					text = m_clipSet;
+				}
+				wxTheClipboard->SetData( new wxTextDataObject{ GuiCommon::make_wxString( text ) } );
+			}
+			else
+			{
+				wxTextDataObject data;
+				wxTheClipboard->GetData( data );
+				m_clipGet.set_value( GuiCommon::make_U32String( data.GetText() ) );
+			}
+
+			wxTheClipboard->Close();
+		}
 	}
 }

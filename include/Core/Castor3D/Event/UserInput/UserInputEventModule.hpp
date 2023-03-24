@@ -188,6 +188,7 @@ namespace castor3d
 		eReturn = 0x0D,
 		eEscape = 0x1B,
 		eSpace = 0x20,
+		eAsciiBegin = eSpace,
 
 		// values from 0x21 to 0x7E are reserved for the standard ASCII characters
 
@@ -195,6 +196,7 @@ namespace castor3d
 
 		// values from 0x80 to 0xFF are reserved for ASCII extended characters
 
+		eAsciiEnd = 0xFF,
 		eStart = 0x100,
 		eLButton,
 		eRButton,
