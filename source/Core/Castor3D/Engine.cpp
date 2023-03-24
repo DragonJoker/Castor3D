@@ -483,15 +483,18 @@ namespace castor3d
 		return result;
 	}
 
-	bool Engine::fireMouseMove( castor::Position const & position )
+	bool Engine::fireMouseMove( castor::Position const & position
+		, bool ctrl
+		, bool alt
+		, bool shift )
 	{
 		for ( auto & listener : m_windowInputListeners )
 		{
-			listener.second->fireMouseMove( position );
+			listener.second->fireMouseMove( position, ctrl, alt, shift );
 		}
 
 		auto inputListener = getUserInputListener();
-		return inputListener && inputListener->fireMouseMove( position );
+		return inputListener && inputListener->fireMouseMove( position, ctrl, alt, shift );
 	}
 
 	void Engine::update( CpuUpdater & updater )

@@ -334,6 +334,7 @@ namespace castor3d
 			}
 		}
 
+		doClearSelection();
 		doUpdateCaretIndices();
 		doUpdateCaret();
 	}
