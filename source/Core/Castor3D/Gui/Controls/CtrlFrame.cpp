@@ -132,6 +132,12 @@ namespace castor3d
 		doUpdateSizes();
 	}
 
+	void FrameCtrl::doSetBorderSize( castor::Point4ui const & value )
+	{
+		doUpdatePositions();
+		doUpdateSizes();
+	}
+
 	bool FrameCtrl::doCatchesMouseEvents()const
 	{
 		return true;
@@ -145,20 +151,17 @@ namespace castor3d
 
 	void FrameCtrl::doUpdatePositions()
 	{
-		auto maxHeight = m_header->getSize()->y;
-		auto & borders = getBorderSize();
-		m_header->setPosition( castor::Position( int32_t( borders->x ), int32_t( borders->y ) ) );
-		m_content->setPosition( castor::Position( int32_t( borders->x ), int32_t( borders->y + maxHeight ) ) );
+		auto clientOffset = getClientOffset();
+		auto headerHeight = int32_t( m_header->getSize()->y );
+		m_header->setPosition( clientOffset );
+		m_content->setPosition( { clientOffset.x(), clientOffset.y() + headerHeight } );
 	}
 
 	void FrameCtrl::doUpdateSizes()
 	{
-		auto & size = getSize();
-		auto & borders = getBorderSize();
-		auto headerSize = m_header->getSize()->y;
-		auto bordersWidth = ( borders->x + borders->z );
-		auto bordersHeight = ( borders->y + borders->w );
-		m_header->setSize( castor::Size( size->x - bordersWidth, headerSize ) );
-		m_content->setSize( castor::Size( size->x - bordersWidth, size->y - ( headerSize + bordersHeight ) ) );
+		auto clientSize = getClientSize();
+		auto headerHeight = m_header->getSize()->y;
+		m_header->setSize( { clientSize->x, headerHeight } );
+		m_content->setSize( { clientSize->x, clientSize->y - headerHeight } );
 	}
 }

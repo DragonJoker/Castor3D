@@ -4,6 +4,15 @@
 
 namespace castor3d
 {
+	namespace boxlayt
+	{
+		uint32_t getBorderDim( castor::Point4ui const & borderSize
+			, uint32_t component )
+		{
+			return borderSize[component] + borderSize[component + 2u];
+		}
+	}
+
 	LayoutBox::LayoutBox( LayoutControl & container )
 		: Layout{ "c3d.layout.box", container }
 	{
@@ -28,7 +37,7 @@ namespace castor3d
 		uint32_t controlsSep{ doComputeSeparator( advanceComp ) };
 		auto & borders = m_container.getBorderSize();
 		int32_t advance = int32_t( borders[advanceComp] );
-		uint32_t containerFixedCompLimit = m_container.getSize()[fixedComp] - ( borders[fixedComp] + borders[fixedComp + 2u] );
+		uint32_t containerFixedCompLimit = m_container.getSize()[fixedComp] - boxlayt::getBorderDim( borders, fixedComp );
 
 		for ( auto & item : m_items )
 		{
@@ -47,6 +56,20 @@ namespace castor3d
 			{
 				auto control = item.control();
 				uint32_t controlSizeAdvance = control->getSize()[advanceComp];
+				auto borderPosition = control->getBorderPosition();
+				auto borderBegin = control->getBorderSize()[advanceComp];
+				auto borderEnd = control->getBorderSize()[advanceComp + 2u];
+
+				if ( borderPosition == BorderPosition::eMiddle )
+				{
+					borderBegin /= 2;
+					borderEnd /= 2;
+				}
+				else if ( borderPosition == BorderPosition::eInternal )
+				{
+					borderBegin = 0;
+					borderEnd = 0;
+				}
 
 				if ( control->isVisible() )
 				{
@@ -79,7 +102,7 @@ namespace castor3d
 	{
 		auto & borders = m_container.getBorderSize();
 		uint32_t count{};
-		uint32_t maxComponentValue = m_container.getSize()[component] - ( borders[component] + borders[component + 2u] );
+		uint32_t maxComponentValue = m_container.getSize()[component] - boxlayt::getBorderDim( borders, component );
 		uint32_t accum{ std::accumulate( m_items.begin()
 			, m_items.end()
 			, uint32_t{}
@@ -119,37 +142,54 @@ namespace castor3d
 	{
 		limit -= item.paddingSize( component );
 
-		if ( item.expand() )
+		auto borderPosition = item.control()->getBorderPosition();
+		auto borderBegin = item.control()->getBorderSize()[component];
+		auto borderEnd = item.control()->getBorderSize()[component + 2u];
+
+		if ( borderPosition == BorderPosition::eMiddle )
 		{
-			return { 0u, limit };
+			borderBegin /= 2;
+			borderEnd /= 2;
+		}
+		else if ( borderPosition == BorderPosition::eInternal )
+		{
+			borderBegin = 0;
+			borderEnd = 0;
 		}
 
-		auto & controlSize = item.control()->getSize();
-		auto sizeFixed = controlSize[component];
-		int32_t posFixed{};
+		auto borderSize = borderEnd + borderBegin;
+
+		if ( item.expand() )
+		{
+			return { borderBegin
+				, std::max( 0, int32_t( limit ) - int32_t( borderSize ) ) };
+		}
+
+		auto controlSize = item.control()->getSize()[component];
+		auto controlPosition = int32_t( borderBegin );
 
 		if ( component == 0u )
 		{
 			if ( item.hAlign() != HAlign::eLeft )
 			{
-				posFixed = int32_t( limit ) - int32_t( sizeFixed );
+				controlPosition = int32_t( limit ) - int32_t( controlSize );
 
 				if ( item.hAlign() == HAlign::eCenter )
 				{
-					posFixed /= 2;
+					controlPosition /= 2;
 				}
 			}
 		}
 		else if ( item.vAlign() != VAlign::eTop )
 		{
-			posFixed = int32_t( limit ) - int32_t( sizeFixed );
+			controlPosition = int32_t( limit ) - int32_t( controlSize );
 
 			if ( item.vAlign() == VAlign::eCenter )
 			{
-				posFixed /= 2;
+				controlPosition /= 2;
 			}
 		}
 
-		return { posFixed, sizeFixed };
+		return { controlPosition, controlSize };
 	}
 }

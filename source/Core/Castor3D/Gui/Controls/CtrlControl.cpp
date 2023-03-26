@@ -39,6 +39,7 @@ namespace castor3d
 		, m_size{ size }
 		, m_resizeBorderSize{ ResizeBorderSize }
 	{
+		updateClientRect();
 		EventHandler::connect( MouseEventType::eEnter
 			, [this]( MouseEvent const & event )
 			{
@@ -116,6 +117,7 @@ namespace castor3d
 	void Control::setSize( castor::Size const & value )
 	{
 		m_size = doUpdateSize( value );
+		updateClientRect();
 		doGetBackground().setPixelSize( m_size );
 		doSetSize( m_size );
 		onChanged( *this );
@@ -124,6 +126,7 @@ namespace castor3d
 	void Control::setPosition( castor::Position const & value )
 	{
 		m_position = doUpdatePosition( value );
+		updateClientRect();
 
 		if ( isAlwaysOnTop() )
 		{
@@ -146,6 +149,7 @@ namespace castor3d
 	void Control::setBorderSize( castor::Point4ui const & value )
 	{
 		m_borders = doUpdateBorderSize( value );
+		updateClientRect();
 		doGetBackground().setAbsoluteBorderSize( m_borders );
 		doSetBorderSize( m_borders );
 		onChanged( *this );
@@ -238,6 +242,11 @@ namespace castor3d
 	castor::Point4d const & Control::getBorderOuterUV()const
 	{
 		return doGetBackground().getBorderOuterUV();
+	}
+
+	BorderPosition Control::getBorderPosition()const
+	{
+		return doGetBackground().getBorderPosition();
 	}
 
 	castor::Point4d const & Control::getUV()const
@@ -584,5 +593,34 @@ namespace castor3d
 		m_resizingW = false;
 		m_resizingS = false;
 		m_resizingE = false;
+	}
+
+	void Control::updateClientRect()
+	{
+		auto & borders = getBorderSize();
+		auto bordersWidth = borders->x + borders->z;
+		auto bordersHeight = borders->y + borders->w;
+
+		if ( auto background = m_background.lock() )
+		{
+			if ( background->getBorderPosition() == BorderPosition::eMiddle )
+			{
+				bordersWidth /= 2;
+				bordersHeight /= 2;
+			}
+			else if ( background->getBorderPosition() == BorderPosition::eExternal )
+			{
+				bordersWidth = 0;
+				bordersHeight = 0;
+			}
+		}
+
+		bordersWidth /= 2;
+		bordersHeight /= 2;
+		auto & size = getSize();
+		m_clientRect = { bordersWidth
+			, bordersHeight
+			, size->x - bordersWidth
+			, size->y - bordersHeight };
 	}
 }
