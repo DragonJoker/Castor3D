@@ -64,7 +64,7 @@ namespace castor3d
 				, nullptr
 				, &getBackgroundOverlay() ).lock()->getTextOverlay();
 		m_text = text;
-		text->setPixelSize( getSize() );
+		text->setPixelSize( getClientSize() );
 		text->setCaption( m_caption );
 		text->setVisible( visible );
 		text->setVAlign( VAlign::eCenter );
@@ -170,7 +170,7 @@ namespace castor3d
 	{
 		if ( auto text = m_text.lock() )
 		{
-			text->setPixelPosition( castor::Position{} );
+			text->setPixelPosition( getClientOffset() );
 		}
 	}
 
@@ -178,7 +178,16 @@ namespace castor3d
 	{
 		if ( auto text = m_text.lock() )
 		{
-			text->setPixelSize( value );
+			text->setPixelSize( getClientSize() );
+		}
+	}
+
+	void StaticCtrl::doSetBorderSize( castor::Point4ui const & value )
+	{
+		if ( auto text = m_text.lock() )
+		{
+			text->setPixelPosition( getClientOffset() );
+			text->setPixelSize( getClientSize() );
 		}
 	}
 

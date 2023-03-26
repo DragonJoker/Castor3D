@@ -39,7 +39,8 @@ namespace castor3d
 			, uint32_t section
 			, castor::ParserFunction themeFunction
 			, castor::ParserFunction styleFunction
-			, castor::ParserFunction endFunction )
+			, castor::ParserFunction endFunction
+			, bool hasBorders = true )
 		{
 			using namespace castor;
 
@@ -62,10 +63,13 @@ namespace castor3d
 				addParser( parsers, section, cuT( "resizable" ), &parserControlResizable, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
 			}
 
-			addParser( parsers, section, cuT( "pixel_border_size" ), &parserControlPixelBorderSize, { makeParameter< ParameterType::ePoint4U >() } );
-			addParser( parsers, section, cuT( "border_inner_uv" ), &parserControlBorderInnerUv, { makeParameter< ParameterType::ePoint4D >() } );
-			addParser( parsers, section, cuT( "border_outer_uv" ), &parserControlBorderOuterUv, { makeParameter< ParameterType::ePoint4D >() } );
-			addParser( parsers, section, cuT( "center_uv" ), &parserControlCenterUv, { makeParameter< ParameterType::ePoint4D >() } );
+			if ( hasBorders )
+			{
+				addParser( parsers, section, cuT( "pixel_border_size" ), &parserControlPixelBorderSize, { makeParameter< ParameterType::ePoint4U >() } );
+				addParser( parsers, section, cuT( "border_inner_uv" ), &parserControlBorderInnerUv, { makeParameter< ParameterType::ePoint4D >() } );
+				addParser( parsers, section, cuT( "border_outer_uv" ), &parserControlBorderOuterUv, { makeParameter< ParameterType::ePoint4D >() } );
+				addParser( parsers, section, cuT( "center_uv" ), &parserControlCenterUv, { makeParameter< ParameterType::ePoint4D >() } );
+			}
 
 			if ( endFunction )
 			{
@@ -199,7 +203,8 @@ namespace castor3d
 				, uint32_t( GUISection::eExpandablePanel )
 				, &parserExpandablePanelTheme
 				, &parserExpandablePanelStyle
-				, &parserExpandablePanelEnd );
+				, &parserExpandablePanelEnd
+				, false );
 			addParser( result, uint32_t( GUISection::eExpandablePanel ), cuT( "header" ), &parserExpandablePanelHeader );
 			addParser( result, uint32_t( GUISection::eExpandablePanel ), cuT( "expand" ), &parserExpandablePanelExpand );
 			addParser( result, uint32_t( GUISection::eExpandablePanel ), cuT( "content" ), &parserExpandablePanelContent );

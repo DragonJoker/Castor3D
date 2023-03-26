@@ -61,8 +61,8 @@ namespace castor3d
 			, &style->getExpandStyle()
 			, this
 			, U"+"
-			, castor::Position{ int32_t( size.getWidth() - size.getHeight() ), 0 }
-			, castor::Size{ size.getHeight(), size.getHeight() } );
+			, castor::Position{ int32_t( size->x - size->y ), 0 }
+			, castor::Size{ size->y, size->y } );
 		m_expand->setVisible( visible );
 		m_expandClickedConnection = m_expand->connect( ButtonEvent::eClicked
 			, [this]()
@@ -76,8 +76,8 @@ namespace castor3d
 			, this
 			, m_values
 			, m_selected
-			, castor::Position{ 0, int32_t( size.getHeight() ) }
-			, castor::Size{ size.getWidth() - size.getHeight(), ~( 0u ) }
+			, castor::Position{ 0, int32_t( size->y ) }
+			, castor::Size{ size->x - size->y, ~( 0u ) }
 			, uint64_t( ControlFlag::eAlwaysOnTop )
 			, false );
 		m_choicesSelectedConnection = m_choices->connect( ListBoxEvent::eSelected
@@ -86,6 +86,7 @@ namespace castor3d
 				onSelected( sel );
 			} );
 
+		auto clientSize = getClientSize();
 		auto text = m_scene
 			? m_scene->addNewOverlay( getName() + cuT( "/Text" )
 				, getEngine()
@@ -97,7 +98,8 @@ namespace castor3d
 				, OverlayType::eText
 				, nullptr
 				, &getBackgroundOverlay() ).lock()->getTextOverlay();
-		text->setPixelSize( castor::Size( getSize().getWidth() - getSize().getHeight(), getSize().getHeight() ) );
+		text->setPixelPosition( getClientOffset() );
+		text->setPixelSize( { clientSize->x - clientSize->x, clientSize->y } );
 		text->setVAlign( VAlign::eCenter );
 		m_text = text;
 
@@ -159,11 +161,11 @@ namespace castor3d
 		auto & manager = *getControlsManager();
 		setBorderSize( castor::Point4ui( 1, 1, 1, 1 ) );
 
-		m_expand->setPosition( castor::Position( int32_t( getSize().getWidth() - getSize().getHeight() ), 0 ) );
-		m_expand->setSize( castor::Size( getSize().getHeight(), getSize().getHeight() ) );
+		m_expand->setPosition( castor::Position( int32_t( getSize()->x - getSize()->y ), 0 ) );
+		m_expand->setSize( castor::Size( getSize()->y, getSize()->y ) );
 
-		m_choices->setPosition( castor::Position( 0, int32_t( getSize().getHeight() ) ) );
-		m_choices->setSize( castor::Size( getSize().getWidth() - getSize().getHeight(), ~( 0u ) ) );
+		m_choices->setPosition( castor::Position( 0, int32_t( getSize()->y ) ) );
+		m_choices->setSize( castor::Size( getSize()->x - getSize()->y, ~( 0u ) ) );
 
 		EventHandler::connect( KeyboardEventType::ePushed
 			, [this]( KeyboardEvent const & event )
@@ -177,20 +179,25 @@ namespace castor3d
 				onNcKeyDown( control, event );
 			} );
 
-		auto text = m_text.lock();
-		text->setMaterial( style.getExpandStyle().getTextMaterial() );
-		text->setPixelSize( castor::Size( getSize().getWidth() - getSize().getHeight(), getSize().getHeight() ) );
-
-		if ( !text->getFontTexture() || !text->getFontTexture()->getFont() )
+		if ( auto text = m_text.lock() )
 		{
-			text->setFont( style.getExpandStyle().getFontName() );
-		}
+			auto clientSize = getClientSize();
+			auto clientOffset = getClientOffset();
+			text->setMaterial( style.getExpandStyle().getTextMaterial() );
+			text->setPixelSize( castor::Size( clientSize->x - clientSize->y
+				, clientSize->y ) );
 
-		int sel = getSelected();
+			if ( !text->getFontTexture() || !text->getFontTexture()->getFont() )
+			{
+				text->setFont( style.getExpandStyle().getFontName() );
+			}
 
-		if ( sel >= 0 && uint32_t( sel ) < getItemCount() )
-		{
-			text->setCaption( castor::string::toU32String( getItems()[uint32_t( sel )] ) );
+			int sel = getSelected();
+
+			if ( sel >= 0 && uint32_t( sel ) < getItemCount() )
+			{
+				text->setCaption( castor::string::toU32String( getItems()[uint32_t( sel )] ) );
+			}
 		}
 
 		manager.create( m_expand );
@@ -217,32 +224,43 @@ namespace castor3d
 
 	void ComboBoxCtrl::doSetPosition( castor::Position const & value )
 	{
-		TextOverlaySPtr text = m_text.lock();
-
-		if ( text )
+		if ( auto text = m_text.lock() )
 		{
-			//text->setPixelPosition( value );
-			text.reset();
+			auto clientOffset = getClientOffset();
+			text->setPixelPosition( clientOffset );
 		}
 
-		m_expand->setPosition( castor::Position( int32_t( getSize().getWidth() - getSize().getHeight() ), 0 ) );
-		m_choices->setPosition( castor::Position( 0, int32_t( getSize().getHeight() ) ) );
+		m_expand->setPosition( { int32_t( getSize()->x - getSize()->y ), 0 } );
+		m_choices->setPosition( { 0, int32_t( getSize()->y ) } );
 	}
 
 	void ComboBoxCtrl::doSetSize( castor::Size const & value )
 	{
-		TextOverlaySPtr text = m_text.lock();
-
-		if ( text )
+		if ( auto text = m_text.lock() )
 		{
-			text->setPixelSize( value );
-			text.reset();
+			auto clientSize = getClientSize();
+			text->setPixelSize( { clientSize->x - clientSize->x, clientSize->y } );
 		}
 
-		m_expand->setSize( castor::Size( value.getHeight(), value.getHeight() ) );
-		m_choices->setSize( castor::Size( value.getWidth() - value.getHeight(), ~( 0u ) ) );
-		m_expand->setPosition( castor::Position( int32_t( value.getWidth() - value.getHeight() ), 0 ) );
-		m_choices->setPosition( castor::Position( 0, int32_t( value.getHeight() ) ) );
+		m_expand->setSize( castor::Size( value->y, value->y ) );
+		m_choices->setSize( castor::Size( value->x - value->y, ~( 0u ) ) );
+		m_expand->setPosition( castor::Position( int32_t( value->x - value->y ), 0 ) );
+		m_choices->setPosition( castor::Position( 0, int32_t( value->y ) ) );
+	}
+
+	void ComboBoxCtrl::doSetBorderSize( castor::Point4ui const & value )
+	{
+		if ( auto text = m_text.lock() )
+		{
+			text->setPixelPosition( getClientOffset() );
+			text->setPixelSize( getClientSize() );
+		}
+
+		auto & size = getSize();
+		m_expand->setPosition( { int32_t( size->x - size->y ), 0 } );
+		m_choices->setPosition( { 0, int32_t( size->y ) } );
+		m_expand->setSize( { size->y, size->y } );
+		m_choices->setSize( { size->x - size->y, ~( 0u ) } );
 	}
 
 	bool ComboBoxCtrl::doCatchesMouseEvents()const

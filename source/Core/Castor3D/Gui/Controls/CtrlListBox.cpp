@@ -63,6 +63,7 @@ namespace castor3d
 		, m_selected{ selected }
 	{
 		setBorderSize( castor::Point4ui{ 1, 1, 1, 1 } );
+		getBackgroundOverlay().getBorderPanelOverlay()->setBorderPosition( BorderPosition::eExternal );
 		setStyle( style );
 	}
 
@@ -217,16 +218,16 @@ namespace castor3d
 
 	void ListBoxCtrl::doUpdateItems()
 	{
-		castor::Position position;
+		auto position = getClientOffset();
 
 		for ( auto item : m_items )
 		{
 			item->setPosition( position );
-			item->setSize( castor::Size( getSize().getWidth(), DefaultHeight ) );
+			item->setSize( castor::Size( getClientSize()->x, DefaultHeight ) );
 			position.y() += DefaultHeight;
 		}
 
-		setBackgroundSize( castor::Size( getSize().getWidth(), uint32_t( m_items.size() * DefaultHeight ) ) );
+		setBackgroundSize( castor::Size( getSize()->x, uint32_t( m_items.size() * DefaultHeight ) ) );
 	}
 
 	StaticCtrlSPtr ListBoxCtrl::doCreateItemCtrl( castor::String const & value
@@ -239,7 +240,7 @@ namespace castor3d
 			, this
 			, castor::string::toU32String( value )
 			, castor::Position{}
-			, castor::Size{ getSize().getWidth(), DefaultHeight }
+			, castor::Size{ getClientSize()->x, DefaultHeight }
 			, uint32_t( StaticFlag::eVAlignCenter ) );
 		item->setCatchesMouseEvents( true );
 
@@ -278,7 +279,7 @@ namespace castor3d
 	void ListBoxCtrl::doCreate()
 	{
 		setBorderSize( castor::Point4ui{ 1, 1, 1, 1 } );
-		setSize( castor::Size( getSize().getWidth(), uint32_t( m_values.size() * DefaultHeight ) ) );
+		setSize( castor::Size( getSize()->x, uint32_t( m_values.size() * DefaultHeight ) ) );
 
 		EventHandler::connect( KeyboardEventType::ePushed
 			, [this]( KeyboardEvent const & event )

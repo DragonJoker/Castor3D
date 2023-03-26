@@ -159,6 +159,7 @@ namespace castor3d
 
 		C3D_API castor::Point4d const & getBorderInnerUV()const;
 		C3D_API castor::Point4d const & getBorderOuterUV()const;
+		C3D_API BorderPosition getBorderPosition()const;
 		C3D_API castor::Point4d const & getUV()const;
 
 		ControlID getId()const noexcept
@@ -237,6 +238,22 @@ namespace castor3d
 			return m_resizeBorderSize;
 		}
 
+		castor::Point4ui const & getClientRect()const noexcept
+		{
+			return m_clientRect;
+		}
+
+		castor::Position getClientOffset()const
+		{
+			return { int32_t( m_clientRect->x )
+				, int32_t( m_clientRect->y ) };
+		}
+
+		castor::Size getClientSize()const
+		{
+			return { m_clientRect->z - m_clientRect->x
+				, m_clientRect->w - m_clientRect->y };
+		}
 		//@}
 
 		/** \return	The always on top status of the control.
@@ -383,6 +400,10 @@ namespace castor3d
 		 *\param[in]	event		The mouse event.
 		 */
 		void endResize( MouseEvent const & event );
+
+		/** Updates the area where sub-controls can be draw.
+		 */
+		void updateClientRect();
 
 		/** Creates the control's overlays and sub-controls
 		*/
@@ -574,6 +595,7 @@ namespace castor3d
 		castor::Position m_mouseStartPosition{};
 		castor::Size m_mouseStartSize{};
 		uint32_t m_resizeBorderSize{};
+		castor::Point4ui m_clientRect;
 	};
 }
 
