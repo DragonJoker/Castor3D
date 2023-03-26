@@ -18,31 +18,6 @@ namespace castor
 {
 	/**
 	\~english
-	\brief		Structure used to sort overlays by order.
-	\~french
-	\brief		Structure utilisée pour trier les incrustations par ordre.
-	*/
-	struct OverlayCategorySort
-	{
-		/**
-		 *\~english
-		 *\brief		Comparison operator.
-		 *\~french
-		 *\brief		Opérateur de comparaison.
-		 */
-		inline bool operator()( castor3d::OverlayCategorySPtr a
-			, castor3d::OverlayCategorySPtr b )const
-		{
-			return a->getLevel() < b->getLevel()
-				|| ( a->getLevel() == b->getLevel()
-					&& ( uint32_t( a->getType() ) < uint32_t( b->getType() )
-						|| ( uint32_t( a->getType() ) == uint32_t( b->getType() )
-							&& a->getIndex() < b->getIndex() ) ) );
-		}
-	};
-	using OverlayCategorySet = std::set< castor3d::OverlayCategorySPtr, OverlayCategorySort >;
-	/**
-	\~english
 	\brief		Overlay collection, with additional add and remove functions to manage Z-Index
 	\~french
 	\brief		Collection d'incrustations, avec des fonctions additionnelles d'ajout et de suppression pour gérer les Z-Index
@@ -65,6 +40,7 @@ namespace castor
 		using iterator = std::map< ElementT, ElementKeyT >::iterator;
 		using const_iterator = std::map< ElementT, ElementKeyT >::const_iterator;
 		CU_DeclareMap( ElementKeyT, castor3d::FontTextureSPtr, FontTextureStr );
+		using OverlayCategories = std::vector< castor3d::OverlayCategorySPtr >;
 
 	public:
 		/**
@@ -160,7 +136,7 @@ namespace castor
 	private:
 		castor3d::Engine & m_engine;
 		castor3d::OverlayFactory m_overlayFactory;
-		OverlayCategorySet m_overlays;
+		OverlayCategories m_overlays;
 		castor3d::Viewport m_viewport;
 		Matrix4x4f m_projection;
 		FontTextureStrMap m_fontTextures;

@@ -280,7 +280,6 @@ namespace castor
 		int32_t charLeft{};
 		int32_t wordLeft{};
 		int32_t totalLeft{};
-		int32_t lineTop{};
 		TextLineMetrics word;
 
 		auto nextLine = [&]()
@@ -295,7 +294,7 @@ namespace castor
 
 			auto & line = result.lines.emplace_back();
 			line.firstCharIndex = charIndex;
-			line.top = uint32_t( lineTop );
+			line.top = result.height;
 			charLeft = totalLeft - wordLeft;
 			totalLeft = charLeft;
 			line.width = uint32_t( totalLeft );
@@ -328,11 +327,12 @@ namespace castor
 				result.yMin = std::min( result.yMin, line->yMin );
 				result.yMax = std::max( result.yMax, line->yMax );
 
-				lineTop += line->yMax - line->yMin;
+				result.height += line->yMax - line->yMin;
+				result.width = std::max( result.width, line->width );
 			}
 			else
 			{
-				lineTop += getHeight();
+				result.height += getHeight();
 			}
 		};
 
@@ -405,14 +405,14 @@ namespace castor
 			auto lineMin = result.yMin;
 			auto lineMax = result.yMax;
 			auto lineHeight = int32_t( lineMax - lineMin );
-			lineTop = 0;
+			result.height = 0;
 
 			for ( auto & ln : result.lines )
 			{
-				ln.top = uint32_t( lineTop );
+				ln.top = uint32_t( result.height );
 				ln.yMin = lineMin;
 				ln.yMax = lineMax;
-				lineTop += lineHeight;
+				result.height += lineHeight;
 			}
 		}
 

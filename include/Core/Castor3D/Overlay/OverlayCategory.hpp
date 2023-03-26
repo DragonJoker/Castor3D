@@ -260,6 +260,28 @@ namespace castor3d
 		{
 			return m_uv;
 		}
+
+		bool hasPixelPosition()const noexcept
+		{
+			return m_pxPosition != std::nullopt;
+		}
+
+		bool hasPixelSize()const noexcept
+		{
+			return m_pxSize != std::nullopt;
+		}
+
+		castor::Position const & getPixelPosition()noexcept
+		{
+			CU_Require( hasPixelPosition() );
+			return *m_pxPosition;
+		}
+
+		castor::Size const & getPixelSize()const noexcept
+		{
+			CU_Require( hasPixelSize() );
+			return *m_pxSize;
+		}
 		/**@}*/
 		/**
 		*\~english
