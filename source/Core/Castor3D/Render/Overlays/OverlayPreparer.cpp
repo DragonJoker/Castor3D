@@ -45,7 +45,7 @@ namespace castor3d
 			data.relativeSize = castor::Point2f{ overlay.getRelativeSize() * ratio };
 			data.relativePosition = castor::Point2f{ overlay.getRelativePosition() * ratio };
 			data.parentRect = getParentRect( overlay.getOverlay(), renderSize );
-			data.renderArea = castor::Point4f{ overlay.computeClientArea()
+			data.renderArea = castor::Point4f{ overlay.computeScissorRect()
 				* castor::Point4d{ ratio->x, ratio->y, ratio->x, ratio->y } };
 			data.uv = castor::Point4f{ overlay.getUV() };
 			data.materialId = pass.getId();

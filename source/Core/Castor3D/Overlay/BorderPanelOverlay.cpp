@@ -120,7 +120,7 @@ namespace castor3d
 				auto ssOuter = writer.declLocale( "ssOuter"
 					, ssInner );
 				auto ssRenderRegion = writer.declLocale( "ssRenderRegion"
-					, overlay.renderArea() );
+					, overlay.scissorRect() );
 
 				auto ssBorderExtent = writer.declLocale( "ssBorderExtent"
 					, vec4( overlay.border().xy()
@@ -168,15 +168,15 @@ namespace castor3d
 				auto outerUvZ = writer.declLocale( "outerUvZ", outerUv.z() );
 				auto outerUvW = writer.declLocale( "outerUvW", outerUv.w() );
 
-				overlay.cropMinValue( ssAbsOvPosition.x(), ssAbsParentSize.x(), ssAbsSize.x(), overlay.renderArea().xz(), innerUv.xz(), ssInnerX, innerUvX );
-				overlay.cropMinValue( ssAbsOvPosition.y(), ssAbsParentSize.y(), ssAbsSize.y(), overlay.renderArea().yw(), innerUv.yw(), ssInnerY, innerUvY );
-				overlay.cropMaxValue( ssAbsOvPosition.x(), ssAbsParentSize.x(), ssAbsSize.x(), overlay.renderArea().xz(), innerUv.xz(), ssInnerZ, innerUvZ );
-				overlay.cropMaxValue( ssAbsOvPosition.y(), ssAbsParentSize.y(), ssAbsSize.y(), overlay.renderArea().yw(), innerUv.yw(), ssInnerW, innerUvW );
+				overlay.cropMinValue( ssAbsOvPosition.x(), ssAbsParentSize.x(), ssAbsSize.x(), overlay.scissorRect().xz(), innerUv.xz(), ssInnerX, innerUvX );
+				overlay.cropMinValue( ssAbsOvPosition.y(), ssAbsParentSize.y(), ssAbsSize.y(), overlay.scissorRect().yw(), innerUv.yw(), ssInnerY, innerUvY );
+				overlay.cropMaxValue( ssAbsOvPosition.x(), ssAbsParentSize.x(), ssAbsSize.x(), overlay.scissorRect().xz(), innerUv.xz(), ssInnerZ, innerUvZ );
+				overlay.cropMaxValue( ssAbsOvPosition.y(), ssAbsParentSize.y(), ssAbsSize.y(), overlay.scissorRect().yw(), innerUv.yw(), ssInnerW, innerUvW );
 
-				overlay.cropMinValue( ssAbsOvPosition.x(), ssAbsParentSize.x(), ssAbsSize.x(), overlay.renderArea().xz(), outerUv.xz(), ssOuterX, outerUvX );
-				overlay.cropMinValue( ssAbsOvPosition.y(), ssAbsParentSize.y(), ssAbsSize.y(), overlay.renderArea().yw(), outerUv.yw(), ssOuterY, outerUvY );
-				overlay.cropMaxValue( ssAbsOvPosition.x(), ssAbsParentSize.x(), ssAbsSize.x(), overlay.renderArea().xz(), outerUv.xz(), ssOuterZ, outerUvZ );
-				overlay.cropMaxValue( ssAbsOvPosition.y(), ssAbsParentSize.y(), ssAbsSize.y(), overlay.renderArea().yw(), outerUv.yw(), ssOuterW, outerUvW );
+				overlay.cropMinValue( ssAbsOvPosition.x(), ssAbsParentSize.x(), ssAbsSize.x(), overlay.scissorRect().xz(), outerUv.xz(), ssOuterX, outerUvX );
+				overlay.cropMinValue( ssAbsOvPosition.y(), ssAbsParentSize.y(), ssAbsSize.y(), overlay.scissorRect().yw(), outerUv.yw(), ssOuterY, outerUvY );
+				overlay.cropMaxValue( ssAbsOvPosition.x(), ssAbsParentSize.x(), ssAbsSize.x(), overlay.scissorRect().xz(), outerUv.xz(), ssOuterZ, outerUvZ );
+				overlay.cropMaxValue( ssAbsOvPosition.y(), ssAbsParentSize.y(), ssAbsSize.y(), overlay.scissorRect().yw(), outerUv.yw(), ssOuterW, outerUvW );
 				
 				uint32_t index = 0;
 
