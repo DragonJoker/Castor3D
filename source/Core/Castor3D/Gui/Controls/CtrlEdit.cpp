@@ -95,6 +95,7 @@ namespace castor3d
 				, OverlayType::eText
 				, nullptr
 				, &getBackgroundOverlay() ).lock()->getTextOverlay();
+		text->setPixelPosition( {} );
 		text->setPixelSize( getSize() );
 		text->setVAlign( VAlign::eCenter );
 		text->setVisible( visible );
@@ -105,12 +106,14 @@ namespace castor3d
 				, getEngine()
 				, OverlayType::ePanel
 				, nullptr
-				, &getBackgroundOverlay() ).lock()->getPanelOverlay()
+				, &text->getOverlay() ).lock()->getPanelOverlay()
 			: getEngine().addNewOverlay( getName() + cuT( "/Caret" )
 				, getEngine()
 				, OverlayType::ePanel
 				, nullptr
-				, &getBackgroundOverlay() ).lock()->getPanelOverlay();
+				, &text->getOverlay() ).lock()->getPanelOverlay();
+		caret->setPixelPosition( {} );
+		caret->setPixelSize( {} );
 		caret->setVisible( false );
 		m_caret.overlay = caret;
 
@@ -403,6 +406,7 @@ namespace castor3d
 		m_caret.updateIndex( diff + 1, m_caption );
 		doUpdateCaption();
 		doUpdateCaret();
+		doAdjustTextPosition();
 		m_signals[size_t( EditEvent::eUpdated )]( m_caption );
 	}
 
@@ -454,6 +458,7 @@ namespace castor3d
 		m_caret.updateIndex( diff, m_caption );
 		doUpdateCaption();
 		doUpdateCaret();
+		doAdjustTextPosition();
 		m_signals[size_t( EditEvent::eUpdated )]( m_caption );
 	}
 
@@ -501,6 +506,7 @@ namespace castor3d
 		doUpdateCaretIndices();
 		doUpdateCaret();
 		doUpdateSelection();
+		doAdjustTextPosition();
 	}
 
 	void EditCtrl::doMoveCaretRight( bool isShiftDown
@@ -546,6 +552,7 @@ namespace castor3d
 		doUpdateCaretIndices();
 		doUpdateCaret();
 		doUpdateSelection();
+		doAdjustTextPosition();
 	}
 
 	void EditCtrl::doMoveCaretUp( bool isShiftDown
@@ -595,6 +602,7 @@ namespace castor3d
 		doUpdateCaretIndices();
 		doUpdateCaret();
 		doUpdateSelection();
+		doAdjustTextPosition();
 	}
 
 	void EditCtrl::doMoveCaretDown( bool isShiftDown
@@ -644,6 +652,7 @@ namespace castor3d
 		doUpdateCaretIndices();
 		doUpdateCaret();
 		doUpdateSelection();
+		doAdjustTextPosition();
 	}
 
 	void EditCtrl::doMoveCaretHome( bool isShiftDown
@@ -686,6 +695,7 @@ namespace castor3d
 		doUpdateCaretIndices();
 		doUpdateCaret();
 		doUpdateSelection();
+		doAdjustTextPosition();
 	}
 
 	void EditCtrl::doMoveCaretEnd( bool isShiftDown
@@ -729,12 +739,20 @@ namespace castor3d
 		doUpdateCaretIndices();
 		doUpdateCaret();
 		doUpdateSelection();
+		doAdjustTextPosition();
 	}
 
 	void EditCtrl::doUpdateCaretPosition( castor::Position const & pos
 		, CaretIndices & indices )
 	{
-		auto position = pos - getAbsolutePosition();
+		auto text = m_text.lock();
+
+		if ( !text )
+		{
+			return;
+		}
+
+		auto position = pos - ( getAbsolutePosition() + text->getPixelPosition() );
 		uint32_t index{};
 		auto lineIt = std::find_if( m_metrics.lines.begin()
 			, m_metrics.lines.end()
@@ -757,18 +775,20 @@ namespace castor3d
 		}
 		else
 		{
-			index += uint32_t( std::distance( m_metrics.lines.begin(), lineIt ) );
+			uint32_t previous{};
 			auto it = std::find_if( lineIt->chars.begin()
 				, lineIt->chars.end()
-				, [&position, &index]( uint32_t lookup )
+				, [&position, &index, &previous]( uint32_t lookup )
 				{
-					auto result = lookup > uint32_t( position->x );
+					auto diff = lookup - previous;
+					auto result = lookup - ( diff / 2u ) > uint32_t( position->x );
 
 					if ( !result )
 					{
 						++index;
 					}
 
+					previous = lookup;
 					return result;
 				} );
 
@@ -905,7 +925,9 @@ namespace castor3d
 
 			if ( !m_caption.empty() )
 			{
-				m_metrics = font->getTextMetrics( m_caption, getSize()->x, isMultiLine() );
+				m_metrics = font->getTextMetrics( m_caption
+					, getSize()->x
+					, false );
 			}
 			else
 			{
@@ -923,6 +945,13 @@ namespace castor3d
 		if ( auto text = m_text.lock() )
 		{
 			text->setCaption( m_caption );
+			auto & size = text->getPixelSize();
+
+			if ( size->x < m_metrics.width
+				|| size->y < m_metrics.height )
+			{
+				text->setPixelSize( { m_metrics.width, m_metrics.height } );
+			}
 		}
 	}
 
@@ -941,6 +970,13 @@ namespace castor3d
 			return;
 		}
 
+		auto text = m_text.lock();
+
+		if ( !text )
+		{
+			return;
+		}
+
 		auto [selBegin, selEnd] = doGetNormalisedSelection();
 		auto lineDiff = selEnd.lineIndex - selBegin.lineIndex;
 		auto & style = getStyle();
@@ -951,7 +987,9 @@ namespace castor3d
 				, getEngine()
 				, OverlayType::ePanel
 				, nullptr
-				, &getBackgroundOverlay() ).lock()->getPanelOverlay();
+				, &text->getOverlay() ).lock()->getPanelOverlay();
+			panel->setPixelPosition( {} );
+			panel->setPixelSize( {} );
 			panel->setMaterial( style.getSelectionMaterial() );
 			panel->setVisible( false );
 			m_selections.push_back( panel );
@@ -1094,6 +1132,7 @@ namespace castor3d
 		doUpdateCaretIndices();
 		doUpdateCaret();
 		doUpdateSelection();
+		doAdjustTextPosition();
 	}
 
 	void EditCtrl::doCopyText()
@@ -1155,5 +1194,72 @@ namespace castor3d
 
 		doUpdateCaption();
 		doUpdateCaret();
+	}
+
+	void EditCtrl::doAdjustTextPosition()
+	{
+		if ( auto text = m_text.lock() )
+		{
+			if ( auto caret = m_caret.overlay.lock() )
+			{
+				auto size = getSize();
+				auto caretPos = caret->getPixelPosition() + castor::Position{};
+				auto caretSize = caret->getPixelSize();
+				auto position = text->getPixelPosition();
+				auto caretTextPos = caretPos + position;
+				bool isLVisible = caretTextPos->x >= 0;
+				bool isRVisible = caretTextPos->x + int32_t( caretSize->x ) < int32_t( size->x );
+				bool isTVisible = caretTextPos->y >= 0;
+				bool isBVisible = caretTextPos->y + int32_t( caretSize->y ) < int32_t( size->y );
+
+				if ( isLVisible && isRVisible && isTVisible && isBVisible )
+				{
+					// Caret is still fully visible, nothing to do.
+					return;
+				}
+
+				if ( !isLVisible || !isRVisible )
+				{
+					if ( caretTextPos->x <= 0 )
+					{
+						position.x() -= caretTextPos->x;
+					}
+					else if ( int32_t( caretSize->x ) + caretPos->x >= int32_t( size->x ) )
+					{
+						position.x() = int32_t( size->x ) - ( int32_t( caretSize->x ) + caretPos->x );
+					}
+					else if ( caretPos->x <= 0 )
+					{
+						position.x() = caretPos->x;
+					}
+					else
+					{
+						position.x() = 0;
+					}
+				}
+
+				if ( !isTVisible || !isBVisible )
+				{
+					if ( caretTextPos->y <= 0 )
+					{
+						position.y() -= caretTextPos->y;
+					}
+					else if ( int32_t( caretSize->y ) + caretPos->y >= int32_t( size->y ) )
+					{
+						position.y() = int32_t( size->y ) - ( int32_t( caretSize->y ) + caretPos->y );
+					}
+					else if ( caretPos->y <= 0 )
+					{
+						position.y() = caretPos->y;
+					}
+					else
+					{
+						position.y() = 0;
+					}
+				}
+
+				text->setPixelPosition( position );
+			}
+		}
 	}
 }

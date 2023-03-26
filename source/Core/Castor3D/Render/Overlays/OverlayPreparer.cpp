@@ -39,6 +39,8 @@ namespace castor3d
 			, castor::Size const & renderSize
 			, uint32_t vertexOffset )
 		{
+			data = {};
+
 			auto ratio = overlay.getRenderRatio( renderSize );
 			data.relativeSize = castor::Point2f{ overlay.getRelativeSize() * ratio };
 			data.relativePosition = castor::Point2f{ overlay.getRelativePosition() * ratio };
@@ -344,14 +346,6 @@ namespace castor3d
 			, pass
 			, renderSize
 			, vertexOffset );
-		data.border = {};
-		data.borderInnerUV = {};
-		data.borderOuterUV = {};
-		data.borderPosition = {};
-		data.textTexturingMode = {};
-		data.textWordOffset = {};
-		data.textLineOffset = {};
-		data.textTopOffset = {};
 	}
 
 	void OverlayPreparer::doUpdateUbo( OverlayUboConfiguration & data
@@ -371,10 +365,6 @@ namespace castor3d
 		data.borderInnerUV = castor::Point4f{ overlay.getBorderInnerUV() };
 		data.borderOuterUV = castor::Point4f{ overlay.getBorderOuterUV() };
 		data.borderPosition = uint32_t( overlay.getBorderPosition() );
-		data.textTexturingMode = {};
-		data.textWordOffset = {};
-		data.textLineOffset = {};
-		data.textTopOffset = {};
 	}
 
 	void OverlayPreparer::doUpdateUbo( OverlayUboConfiguration & data
@@ -389,10 +379,6 @@ namespace castor3d
 			, pass
 			, renderSize
 			, vertexOffset );
-		data.border = {};
-		data.borderInnerUV = {};
-		data.borderOuterUV = {};
-		data.borderPosition = {};
 		data.textTexturingMode = uint32_t( overlay.getTexturingMode() );
 		data.textWordOffset = textBuffer.word;
 		data.textLineOffset = textBuffer.line;

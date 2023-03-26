@@ -305,6 +305,10 @@ namespace castor3d
 		 */
 		void doPasteText();
 
+		/** Scrolls the text (if needed) to make the caret visible.
+		 */
+		void doAdjustTextPosition();
+
 		bool hasSelection()const noexcept
 		{
 			return m_hasSelection;

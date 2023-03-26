@@ -214,6 +214,8 @@ namespace castor
 	{
 		int32_t yMin{ 100 };
 		int32_t yMax{};
+		uint32_t width{};
+		uint32_t height{};
 		std::vector< TextLineMetrics > lines{};
 	};
 	/**

@@ -446,6 +446,7 @@ namespace castor3d
 			auto text = params[0]->get< castor::String >();
 			castor::string::replace( text, "\\?", "\?" );
 			castor::string::replace( text, "\\\\", "\\" );
+			castor::string::replace( text, "\\\"", "\"" );
 			castor::string::replace( text, "\\a", "\a" );
 			castor::string::replace( text, "\\b", "\b" );
 			castor::string::replace( text, "\\f", "\f" );

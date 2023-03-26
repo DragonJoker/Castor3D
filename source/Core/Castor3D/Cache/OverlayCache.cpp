@@ -22,16 +22,43 @@ namespace castor
 
 	void ResourceCacheT< Overlay, String, OverlayCacheTraits >::initialise( Overlay & overlay )
 	{
-		auto level = overlay.computeLevel();
+		auto it = std::find( m_overlays.begin(), m_overlays.end(), overlay.getCategory() );
 
-		if ( overlay.getParent() )
+		if ( it != m_overlays.end() )
 		{
-			overlay.getParent()->addChild( &overlay );
+			return;
+		}
+
+		auto level = overlay.computeLevel();
+		Overlay * parent{ overlay.getParent() };
+
+		if ( parent )
+		{
+			parent->addChild( &overlay );
 		}
 
 		overlay.getCategory()->setOrder( level
 			, ++m_overlayCountPerLevel[level][uint32_t( overlay.getType() )] );
-		m_overlays.insert( overlay.getCategory() );
+
+		if ( parent )
+		{
+			it = std::find( m_overlays.begin(), m_overlays.end(), parent->getCategory() );
+
+			if ( it != m_overlays.end() )
+			{
+				m_overlays.insert( std::next( it ), overlay.getCategory() );
+			}
+			else
+			{
+				initialise( *parent );
+				it = std::find( m_overlays.begin(), m_overlays.end(), parent->getCategory() );
+				m_overlays.insert( std::next( it ), overlay.getCategory() );
+			}
+		}
+		else
+		{
+			m_overlays.insert( m_overlays.begin(), overlay.getCategory() );
+		}
 	}
 
 	void ResourceCacheT< Overlay, String, OverlayCacheTraits >::cleanup( Overlay & overlay )
@@ -45,7 +72,12 @@ namespace castor
 			}
 		}
 
-		m_overlays.erase( overlay.getCategory() );
+		auto it = std::find( m_overlays.begin(), m_overlays.end(), overlay.getCategory() );
+
+		if ( it != m_overlays.end() )
+		{
+			m_overlays.erase( it );
+		}
 	}
 
 	void ResourceCacheT< Overlay, String, OverlayCacheTraits >::upload( ashes::CommandBuffer const & commandBuffer )
