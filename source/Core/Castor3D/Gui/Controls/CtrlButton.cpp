@@ -75,6 +75,9 @@ namespace castor3d
 		setHAlign( HAlign::eCenter );
 		setVAlign( VAlign::eCenter );
 
+		auto & borders = getBorderSize();
+		auto bordersWidth = ( borders->x + borders->z );
+		auto bordersHeight = ( borders->y + borders->w );
 		auto text = m_scene
 			? m_scene->addNewOverlay( getName() + cuT( "/Text" )
 				, getEngine()
@@ -86,7 +89,10 @@ namespace castor3d
 				, OverlayType::eText
 				, nullptr
 				, &getBackgroundOverlay() ).lock()->getTextOverlay();
-		text->setPixelSize( getSize() );
+		text->setPixelPosition( castor::Position{ int32_t( borders->x )
+			, int32_t( borders->y ) } );
+		text->setPixelSize( { uint32_t( std::max( 0, int32_t( getSize()->x ) - int32_t( bordersWidth ) ) )
+			, uint32_t( std::max( 0, int32_t( getSize()->y ) - int32_t( bordersHeight ) ) ) } );
 		text->setCaption( m_caption );
 		text->setVisible( visible );
 		m_text = text;
@@ -203,8 +209,9 @@ namespace castor3d
 	{
 		if ( auto text = m_text.lock() )
 		{
-			text->setPixelPosition( castor::Position{} );
-			text.reset();
+			auto & borders = getBorderSize();
+			text->setPixelPosition( castor::Position{ int32_t( borders->x )
+				, int32_t( borders->y ) } );
 		}
 	}
 
@@ -212,7 +219,25 @@ namespace castor3d
 	{
 		if ( auto text = m_text.lock() )
 		{
-			text->setPixelSize( value );
+			auto & borders = getBorderSize();
+			auto bordersWidth = ( borders->x + borders->z );
+			auto bordersHeight = ( borders->y + borders->w );
+			text->setPixelSize( { uint32_t( std::max( 0, int32_t( value->x ) - int32_t( bordersWidth ) ) )
+				, uint32_t( std::max( 0, int32_t( value->y ) - int32_t( bordersHeight ) ) ) } );
+		}
+	}
+
+	void ButtonCtrl::doSetBorderSize( castor::Point4ui const & value )
+	{
+		if ( auto text = m_text.lock() )
+		{
+			auto size = getSize();
+			auto bordersWidth = ( value->x + value->z );
+			auto bordersHeight = ( value->y + value->w );
+			text->setPixelPosition( castor::Position{ int32_t( value->x )
+				, int32_t( value->y ) } );
+			text->setPixelSize( { uint32_t( std::max( 0, int32_t( size->x ) - int32_t( bordersWidth ) ) )
+				, uint32_t( std::max( 0, int32_t( size->y ) - int32_t( bordersHeight ) ) ) } );
 		}
 	}
 

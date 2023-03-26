@@ -113,6 +113,10 @@ namespace castor3d
 		*/
 		void doSetSize( castor::Size const & value )override;
 
+		/** @copydoc Control::doSetBorderSize
+		*/
+		void doSetBorderSize( castor::Point4ui const & value )override;
+
 		/** @copydoc Control::doUpdateStyle
 		*/
 		void doUpdateStyle()override;
