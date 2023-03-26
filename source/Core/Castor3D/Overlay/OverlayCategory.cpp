@@ -187,15 +187,15 @@ namespace castor3d
 			, int32_t( double( parentSize->y ) * m_relPosition->y ) };
 	}
 
-	castor::Point4d OverlayCategory::computeClientArea()const
+	castor::Point4d OverlayCategory::computeScissorRect()const
 	{
-		castor::Point4d result = m_clientArea;
+		castor::Point4d result = m_displayRect;
 		doUpdateClientArea( result );
 		auto overlay = &getOverlay();
 
 		while ( auto parent = overlay->getParent() )
 		{
-			result = ovrlcat::intersect( result, parent->getCategory()->getClientArea() );
+			result = ovrlcat::intersect( result, parent->getCategory()->getDisplayRect() );
 			overlay = parent;
 		}
 
@@ -264,7 +264,7 @@ namespace castor3d
 		{
 			auto pos = getAbsolutePosition();
 			auto dim = getAbsoluteSize();
-			m_clientArea = { pos->x, pos->y, pos->x + dim->x, pos->y + dim->y };
+			m_displayRect = { pos->x, pos->y, pos->x + dim->x, pos->y + dim->y };
 		}
 	}
 
@@ -285,14 +285,14 @@ namespace castor3d
 		if ( isPositionChanged()
 			|| isSizeChanged()
 			|| isChanged()
-			|| ( m_clientArea->w - m_clientArea->y <= 0
-				&& m_clientArea->z - m_clientArea->x <= 0 ) )
+			|| ( m_displayRect->w - m_displayRect->y <= 0
+				&& m_displayRect->z - m_displayRect->x <= 0 ) )
 		{
 			// As long as client area is not set, consider this overlay as uncropped.
 			return false;
 		}
 
-		auto area = computeClientArea();
+		auto area = computeScissorRect();
 		return area->w - area->y <= 0
 			&& area->z - area->x <= 0;
 	}

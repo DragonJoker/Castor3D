@@ -19,7 +19,7 @@ namespace castor3d::shader
 			, sdw::type::MemoryLayout::eStd430
 			, sdw::Vec4Field< "uv" >
 			, sdw::Vec4Field< "parentRect" >
-			, sdw::Vec4Field< "renderArea" >
+			, sdw::Vec4Field< "scissorRect" >
 			, sdw::Vec2Field< "relativePosition" >
 			, sdw::Vec2Field< "relativeSize" >
 			, sdw::Vec4Field< "border" >
@@ -44,7 +44,7 @@ namespace castor3d::shader
 		auto vertexOffset()const { return getMember< "vertexOffset" >(); }
 		auto materialId()const { return getMember< "materialId" >(); }
 		auto parentRect()const { return getMember< "parentRect" >(); }
-		auto renderArea()const { return getMember< "renderArea" >(); }
+		auto scissorRect()const { return getMember< "scissorRect" >(); }
 		auto relativeSize()const { return getMember< "relativeSize" >(); }
 		auto relativePosition()const { return getMember< "relativePosition" >(); }
 		auto uv()const { return getMember< "uv" >(); }

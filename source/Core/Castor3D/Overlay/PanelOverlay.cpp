@@ -88,10 +88,10 @@ namespace castor3d
 				auto srcUv = writer.declLocale( "srcUv"
 					, uv );
 
-				overlay.cropMinValue( ssAbsOvPosition.x(), ssAbsParentSize.x(), ssAbsSize.x(), overlay.renderArea().xz(), srcUv.xz(), ssRelBounds.x(), uv.x() );
-				overlay.cropMaxValue( ssAbsOvPosition.y(), ssAbsParentSize.y(), ssAbsSize.y(), overlay.renderArea().yw(), srcUv.yw(), ssRelBounds.y(), uv.w() );
-				overlay.cropMaxValue( ssAbsOvPosition.x(), ssAbsParentSize.x(), ssAbsSize.x(), overlay.renderArea().xz(), srcUv.xz(), ssRelBounds.z(), uv.z() );
-				overlay.cropMinValue( ssAbsOvPosition.y(), ssAbsParentSize.y(), ssAbsSize.y(), overlay.renderArea().yw(), srcUv.yw(), ssRelBounds.w(), uv.y() );
+				overlay.cropMinValue( ssAbsOvPosition.x(), ssAbsParentSize.x(), ssAbsSize.x(), overlay.scissorRect().xz(), srcUv.xz(), ssRelBounds.x(), uv.x() );
+				overlay.cropMaxValue( ssAbsOvPosition.y(), ssAbsParentSize.y(), ssAbsSize.y(), overlay.scissorRect().yw(), srcUv.yw(), ssRelBounds.y(), uv.w() );
+				overlay.cropMaxValue( ssAbsOvPosition.x(), ssAbsParentSize.x(), ssAbsSize.x(), overlay.scissorRect().xz(), srcUv.xz(), ssRelBounds.z(), uv.z() );
+				overlay.cropMinValue( ssAbsOvPosition.y(), ssAbsParentSize.y(), ssAbsSize.y(), overlay.scissorRect().yw(), srcUv.yw(), ssRelBounds.w(), uv.y() );
 
 				auto lt = writer.declLocale( "lt", shader::OverlaySurface{ ssRelBounds.xy(), uv.xw() } );
 				auto lb = writer.declLocale( "lb", shader::OverlaySurface{ ssRelBounds.xw(), uv.xy() } );

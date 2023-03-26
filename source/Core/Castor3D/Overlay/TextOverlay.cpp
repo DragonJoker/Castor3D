@@ -273,10 +273,10 @@ namespace castor3d
 			auto fontUv = writer.declLocale( "fontUv", vec4( 0.0_f ) );
 
 			// check for full underflow/overflow
-			IF( writer, ssAbsOvPosition.x() + ssRelBounds.x() < overlay.renderArea().z()
-				&& ssAbsOvPosition.y() + ssRelBounds.y() < overlay.renderArea().w()
-				&& ssAbsOvPosition.x() + ssRelBounds.z() > overlay.renderArea().x()
-				&& ssAbsOvPosition.y() + ssRelBounds.w() > overlay.renderArea().y() )
+			IF( writer, ssAbsOvPosition.x() + ssRelBounds.x() < overlay.scissorRect().z()
+				&& ssAbsOvPosition.y() + ssRelBounds.y() < overlay.scissorRect().w()
+				&& ssAbsOvPosition.x() + ssRelBounds.z() > overlay.scissorRect().x()
+				&& ssAbsOvPosition.y() + ssRelBounds.w() > overlay.scissorRect().y() )
 			{
 				//
 				// Compute Letter's Font UV.
@@ -297,10 +297,10 @@ namespace castor3d
 					, texUv );
 				auto srcFontUv = writer.declLocale( "srcFontUv"
 					, fontUv );
-				overlay.cropMinMinValue( ssAbsOvPosition.x(), ssAbsParentSize.x(), ssAbsSize.x(), ssAbsCharSize.x(), overlay.renderArea().xz(), srcUv.xz(), srcFontUv.xz(), ssRelBounds.x(), texUv.x(), fontUv.x() );
-				overlay.cropMinMaxValue( ssAbsOvPosition.y(), ssAbsParentSize.y(), ssAbsSize.y(), ssAbsCharSize.y(), overlay.renderArea().yw(), srcUv.yw(), srcFontUv.wy(), ssRelBounds.y(), texUv.y(), fontUv.y() );
-				overlay.cropMaxMaxValue( ssAbsOvPosition.x(), ssAbsParentSize.x(), ssAbsSize.x(), ssAbsCharSize.x(), overlay.renderArea().xz(), srcUv.xz(), srcFontUv.xz(), ssRelBounds.z(), texUv.z(), fontUv.z() );
-				overlay.cropMaxMinValue( ssAbsOvPosition.y(), ssAbsParentSize.y(), ssAbsSize.y(), ssAbsCharSize.y(), overlay.renderArea().yw(), srcUv.yw(), srcFontUv.wy(), ssRelBounds.w(), texUv.w(), fontUv.w() );
+				overlay.cropMinMinValue( ssAbsOvPosition.x(), ssAbsParentSize.x(), ssAbsSize.x(), ssAbsCharSize.x(), overlay.scissorRect().xz(), srcUv.xz(), srcFontUv.xz(), ssRelBounds.x(), texUv.x(), fontUv.x() );
+				overlay.cropMinMaxValue( ssAbsOvPosition.y(), ssAbsParentSize.y(), ssAbsSize.y(), ssAbsCharSize.y(), overlay.scissorRect().yw(), srcUv.yw(), srcFontUv.wy(), ssRelBounds.y(), texUv.y(), fontUv.y() );
+				overlay.cropMaxMaxValue( ssAbsOvPosition.x(), ssAbsParentSize.x(), ssAbsSize.x(), ssAbsCharSize.x(), overlay.scissorRect().xz(), srcUv.xz(), srcFontUv.xz(), ssRelBounds.z(), texUv.z(), fontUv.z() );
+				overlay.cropMaxMinValue( ssAbsOvPosition.y(), ssAbsParentSize.y(), ssAbsSize.y(), ssAbsCharSize.y(), overlay.scissorRect().yw(), srcUv.yw(), srcFontUv.wy(), ssRelBounds.w(), texUv.w(), fontUv.w() );
 			}
 			ELSE
 			{

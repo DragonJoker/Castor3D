@@ -178,7 +178,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Met à jour le scissor pour cette incrustation
 		 */
-		C3D_API castor::Point4d computeClientArea()const;
+		C3D_API castor::Point4d computeScissorRect()const;
 		/**
 		*\~english
 		*\name
@@ -200,9 +200,9 @@ namespace castor3d
 				|| isPositionChanged();
 		}
 
-		castor::Point4d const & getClientArea()const noexcept
+		castor::Point4d const & getDisplayRect()const noexcept
 		{
-			return m_clientArea;
+			return m_displayRect;
 		}
 
 		castor::Point2d const & getRelativeSize()const noexcept
@@ -476,7 +476,7 @@ namespace castor3d
 		castor::Point4d m_uv{ 0.0, 0.0, 1.0, 1.0 };
 		//!\~english	The area where children can be drawn.
 		//!\~french		La zone où les enfants peuvent se dessiner.
-		castor::Point4d m_clientArea{};
+		castor::Point4d m_displayRect{};
 	};
 }
 
