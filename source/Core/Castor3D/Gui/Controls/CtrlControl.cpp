@@ -192,7 +192,7 @@ namespace castor3d
 
 	bool Control::isVisible()const
 	{
-		auto visible = doIsVisible();
+		auto visible = isBackgroundVisible();
 		ControlRPtr parent = getParent();
 
 		if ( visible && parent )
@@ -254,6 +254,11 @@ namespace castor3d
 		return doGetBackground().getUV();
 	}
 
+	bool Control::isBackgroundVisible()const
+	{
+		return doGetBackground().isVisible();
+	}
+
 	Overlay & Control::getBackgroundOverlay()
 	{
 		return doGetBackground().getOverlay();
@@ -288,11 +293,10 @@ namespace castor3d
 	void Control::create( ControlsManagerSPtr ctrlManager )
 	{
 		m_ctrlManager = ctrlManager;
-		ControlRPtr parent = getParent();
 
-		if ( parent )
+		if ( ControlRPtr parent = getParent() )
 		{
-			parent->m_children.push_back( std::static_pointer_cast< Control >( shared_from_this() ) );
+			parent->addChild( shared_from_this() );
 		}
 
 		setBackgroundMaterial( m_style->getBackgroundMaterial() );
@@ -307,9 +311,10 @@ namespace castor3d
 		doDestroy();
 	}
 
-	bool Control::doIsVisible()const
+	void Control::addChild( ControlSPtr control )
 	{
-		return doGetBackground().isVisible();
+		m_children.push_back( control );
+		doAddChild( control );
 	}
 
 	void Control::adjustZIndex( uint32_t offset )
@@ -357,13 +362,26 @@ namespace castor3d
 		{
 			doGetBackground().setOrder( ( *realIndex )++, 0u );
 			doUpdateZIndex( ( *realIndex ) );
+			std::vector< Control * > scrollbars;
 
 			for ( auto child : m_children )
 			{
 				if ( auto control = child.lock() )
 				{
-					control->updateZIndex( ( *realIndex ), controls, topControls );
+					if ( control->getType() == ControlType::eScrollBar )
+					{
+						scrollbars.push_back( control.get() );
+					}
+					else
+					{
+						control->updateZIndex( ( *realIndex ), controls, topControls );
+					}
 				}
+			}
+
+			for ( auto control : scrollbars )
+			{
+				control->updateZIndex( ( *realIndex ), controls, topControls );
 			}
 		}
 		else
@@ -371,16 +389,31 @@ namespace castor3d
 			doGetBackground().setOrder( ( *realIndex )++, 0u );
 			auto findex = *realIndex;
 			doUpdateZIndex( findex );
+			std::vector< Control * > scrollbars;
 			auto maxIndex = findex;
 
 			for ( auto child : m_children )
 			{
 				if ( auto control = child.lock() )
 				{
-					findex = *realIndex;
-					control->updateZIndex( findex, controls, topControls );
-					maxIndex = std::max( findex, maxIndex );
+					if ( control->getType() == ControlType::eScrollBar )
+					{
+						scrollbars.push_back( control.get() );
+					}
+					else
+					{
+						findex = *realIndex;
+						control->updateZIndex( findex, controls, topControls );
+						maxIndex = std::max( findex, maxIndex );
+					}
 				}
+			}
+
+			for ( auto control : scrollbars )
+			{
+				findex = maxIndex;
+				control->updateZIndex( findex, controls, topControls );
+				maxIndex = std::max( findex, maxIndex );
 			}
 
 			*realIndex = maxIndex;
@@ -618,9 +651,9 @@ namespace castor3d
 		bordersWidth /= 2;
 		bordersHeight /= 2;
 		auto & size = getSize();
-		m_clientRect = { bordersWidth
+		m_clientRect = doUpdateClientRect( { bordersWidth
 			, bordersHeight
 			, size->x - bordersWidth
-			, size->y - bordersHeight };
+			, size->y - bordersHeight } );
 	}
 }

@@ -273,7 +273,7 @@ namespace castor3d
 	{
 		auto item = doCreateItemCtrl( value, itemIndex );
 		getControlsManager()->create( item );
-		item->setVisible( doIsVisible() );
+		item->setVisible( isBackgroundVisible() );
 	}
 
 	void ListBoxCtrl::doCreate()

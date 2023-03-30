@@ -152,14 +152,14 @@ namespace castor3d
 		{
 			line->setPosition( linePosition );
 			line->setSize( lineSize );
-			line->setVisible( doIsVisible() );
+			line->setVisible( isBackgroundVisible() );
 		}
 
 		if ( auto tick = m_tick.lock() )
 		{
 			tick->setPosition( tickPosition );
 			tick->setSize( tickSize );
-			tick->setVisible( doIsVisible() );
+			tick->setVisible( isBackgroundVisible() );
 		}
 	}
 

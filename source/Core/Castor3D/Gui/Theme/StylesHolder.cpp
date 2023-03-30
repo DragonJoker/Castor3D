@@ -63,6 +63,12 @@ namespace castor3d
 		return createControlStyle( std::move( name ), scene, m_panelStyles );
 	}
 
+	ScrollBarStyleRPtr StylesHolder::createScrollBarStyle( castor::String name
+		, Scene * scene )
+	{
+		return createControlStyle( std::move( name ), scene, m_scrollBarStyles );
+	}
+
 	SliderStyleRPtr StylesHolder::createSliderStyle( castor::String name
 		, Scene * scene )
 	{
@@ -108,6 +114,11 @@ namespace castor3d
 	PanelStyleRPtr StylesHolder::getPanelStyle( castor::String const & name )const
 	{
 		return getControlStyle( name, m_panelStyles );
+	}
+
+	ScrollBarStyleRPtr StylesHolder::getScrollBarStyle( castor::String const & name )const
+	{
+		return getControlStyle( name, m_scrollBarStyles );
 	}
 
 	SliderStyleRPtr StylesHolder::getSliderStyle( castor::String const & name )const

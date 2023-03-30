@@ -1,9 +1,9 @@
 #include "Castor3D/Gui/Controls/CtrlEdit.hpp"
 
-#include "Castor3D/Gui/ControlsManager.hpp"
-
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/OverlayCache.hpp"
+#include "Castor3D/Gui/ControlsManager.hpp"
+#include "Castor3D/Gui/Controls/CtrlScrollBar.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Overlay/Overlay.hpp"
 #include "Castor3D/Overlay/BorderPanelOverlay.hpp"
@@ -53,8 +53,14 @@ namespace castor3d
 			, size
 			, flags
 			, visible }
+		, ScrollableCtrl{ static_cast< Control & >( *this )
+			, style }
 		, m_caption{ castor::string::toU32String( caption ) }
 		, m_active{ false }
+		, m_onScrollContent{ onScrollContent.connect( [this]( castor::Position const & pos )
+			{
+				doScrollContent( pos );
+			} ) }
 	{
 		m_caret.updateIndex( m_caption.size(), m_caption );
 		setBorderSize( castor::Point4ui{ 1, 1, 1, 1 } );
@@ -95,8 +101,8 @@ namespace castor3d
 				, OverlayType::eText
 				, nullptr
 				, &getBackgroundOverlay() ).lock()->getTextOverlay();
-		text->setPixelPosition( {} );
-		text->setPixelSize( getSize() );
+		text->setPixelPosition( getClientOffset() );
+		text->setPixelSize( getClientSize() );
 		text->setVAlign( VAlign::eCenter );
 		text->setVisible( visible );
 		m_text = text;
@@ -112,7 +118,7 @@ namespace castor3d
 				, OverlayType::ePanel
 				, nullptr
 				, &text->getOverlay() ).lock()->getPanelOverlay();
-		caret->setPixelPosition( {} );
+		caret->setPixelPosition( getClientOffset() );
 		caret->setPixelSize( {} );
 		caret->setVisible( false );
 		m_caret.overlay = caret;
@@ -152,6 +158,8 @@ namespace castor3d
 				panel->setMaterial( style.getSelectionMaterial() );
 			}
 		}
+
+		updateScrollBarsStyle();
 	}
 
 	void EditCtrl::doCreate()
@@ -159,28 +167,52 @@ namespace castor3d
 		doUpdateStyle();
 		doUpdateCaption();
 		doUpdateCaret();
+		createScrollBars();
 		getControlsManager()->connectEvents( *this );
 	}
 
 	void EditCtrl::doDestroy()
 	{
+		destroyScrollBars();
 		getControlsManager()->disconnectEvents( *this );
+	}
+
+	void EditCtrl::doAddChild( ControlSPtr control )
+	{
+		registerControl( *control );
+	}
+
+	castor::Point4ui EditCtrl::doUpdateClientRect( castor::Point4ui const & clientRect )
+	{
+		return updateScrollableClientRect( clientRect );
 	}
 
 	void EditCtrl::doSetPosition( castor::Position const & value )
 	{
-		if ( auto text = m_text.lock() )
-		{
-			text->setPixelPosition( castor::Position{} );
-		}
+		updateScrollBars();
 	}
 
 	void EditCtrl::doSetSize( castor::Size const & value )
 	{
-		if ( auto text = m_text.lock() )
+		// Add 1 to account for caret at line end.
+		if ( !hasVerticalScrollBar()
+			&& !hasHorizontalScrollBar() )
 		{
-			text->setPixelSize( value );
+			if ( auto text = m_text.lock() )
+			{
+				text->setPixelSize( { value->x + 1u, value->y } );
+			}
 		}
+		else
+		{
+			updateTotalSize( { m_metrics.width + 1u, m_metrics.height } );
+			updateScrollBars();
+		}
+	}
+
+	void EditCtrl::doSetBorderSize( castor::Point4ui const & value )
+	{
+		updateScrollBars();
 	}
 
 	void EditCtrl::doSetCaption( castor::U32String const & value )
@@ -202,6 +234,8 @@ namespace castor3d
 		{
 			caret->setVisible( m_caret.visible );
 		}
+
+		setScrollBarsVisible( visible );
 	}
 
 	void EditCtrl::doUpdateZIndex( uint32_t & index )
@@ -216,18 +250,24 @@ namespace castor3d
 			caret->setOrder( index++, 0u );
 		}
 
+		m_panelsZIndex = index;
+
 		if ( !m_selections.empty() )
 		{
+			uint32_t i{};
+
 			for ( auto sel : m_selections )
 			{
 				if ( auto panel = sel.lock() )
 				{
-					panel->setOrder( index, 0u );
+					panel->setOrder( index, i++ );
 				}
 			}
 
 			++index;
 		}
+
+		updateScrollZIndex( index );
 	}
 
 	void EditCtrl::doAdjustZIndex( uint32_t offset )
@@ -242,13 +282,18 @@ namespace castor3d
 			caret->setOrder( caret->getLevel() + offset, 0u );
 		}
 
+		m_panelsZIndex += offset;
+		uint32_t i{};
+
 		for ( auto sel : m_selections )
 		{
 			if ( auto panel = sel.lock() )
 			{
-				panel->setOrder( panel->getLevel() + offset, 0u );
+				panel->setOrder( panel->getLevel() + offset, i++ );
 			}
 		}
+
+		adjustScrollZIndex( offset );
 	}
 
 	void EditCtrl::doUpdateFlags()
@@ -257,11 +302,21 @@ namespace castor3d
 		{
 			if ( isMultiLine() )
 			{
-				text->setTextWrappingMode( TextWrappingMode::eBreakWords );
+				if ( castor::checkFlag( getFlags(), ScrollBarFlag::eHorizontal ) )
+				{
+					text->setTextWrappingMode( TextWrappingMode::eNone );
+				}
+				else
+				{
+					text->setTextWrappingMode( TextWrappingMode::eBreakWords );
+				}
+
 				text->setLineSpacingMode( TextLineSpacingMode::eMaxLineHeight );
 				text->setVAlign( VAlign::eTop );
 			}
 		}
+
+		checkScrollBarFlags();
 	}
 
 	void EditCtrl::onActivate( HandlerEvent const & event )
@@ -850,7 +905,7 @@ namespace castor3d
 			if ( auto caret = m_caret.overlay.lock() )
 			{
 				auto font = text->getFontTexture()->getFont();
-				castor::Position position{ 0, 0 };
+				castor::Position position{};
 				castor::Size size{ 1u, font->getHeight() };
 
 				if ( !m_caption.empty() )
@@ -884,10 +939,8 @@ namespace castor3d
 
 					if ( lineIt != m_metrics.lines.end() )
 					{
-						position.x() = int32_t( left );
-						position.y() = int32_t( top );
-						//size->y = std::max( size->y
-						//	, uint32_t( m_metrics.yMax - m_metrics.yMin ) );
+						position.x() += int32_t( left );
+						position.y() += int32_t( top );
 					}
 				}
 
@@ -926,7 +979,7 @@ namespace castor3d
 			if ( !m_caption.empty() )
 			{
 				m_metrics = font->getTextMetrics( m_caption
-					, getSize()->x
+					, getClientSize()->x
 					, false );
 			}
 			else
@@ -945,12 +998,14 @@ namespace castor3d
 		if ( auto text = m_text.lock() )
 		{
 			text->setCaption( m_caption );
-			auto & size = text->getPixelSize();
+			auto size = text->getPixelSize();
 
-			if ( size->x < m_metrics.width
-				|| size->y < m_metrics.height )
+			if ( size->x != m_metrics.width
+				|| size->y != m_metrics.height )
 			{
-				text->setPixelSize( { m_metrics.width, m_metrics.height } );
+				size = { m_metrics.width, m_metrics.height };
+				text->setPixelSize( size );
+				updateTotalSize( size );
 			}
 		}
 	}
@@ -992,10 +1047,12 @@ namespace castor3d
 			panel->setPixelSize( {} );
 			panel->setMaterial( style.getSelectionMaterial() );
 			panel->setVisible( false );
+			panel->setOrder( m_panelsZIndex, uint32_t( m_selections.size() ) );
 			m_selections.push_back( panel );
 		}
 
 		uint32_t selLineIndex{};
+		auto clientOffset = getClientOffset();
 
 		if ( lineDiff > 0 )
 		{
@@ -1005,9 +1062,9 @@ namespace castor3d
 			{
 				// First line
 				auto & line = m_metrics.lines[selBegin.lineIndex++];
-				auto left = selBegin.charIndex == 0u
+				auto left = ( selBegin.charIndex == 0u
 					? 0
-					: int32_t( line.chars[selBegin.charIndex - 1u] );
+					: int32_t( line.chars[selBegin.charIndex - 1u] ) );
 				panel->setPixelPosition( { left, int32_t( line.top ) } );
 				panel->setPixelSize( { LineEndWidth + line.chars.back() - uint32_t( left )
 					, uint32_t( m_metrics.yMax - m_metrics.yMin ) } );
@@ -1020,7 +1077,7 @@ namespace castor3d
 				auto & line = m_metrics.lines[selEnd.lineIndex--];
 				auto right = int32_t( line.chars[selEnd.charIndex - 1u] );
 
-				panel->setPixelPosition( { 0, int32_t( line.top ) } );
+				panel->setPixelPosition( { 0u, int32_t( line.top ) } );
 				panel->setPixelSize( { uint32_t( right )
 					, uint32_t( m_metrics.yMax - m_metrics.yMin ) } );
 				panel->setVisible( true );
@@ -1202,15 +1259,16 @@ namespace castor3d
 		{
 			if ( auto caret = m_caret.overlay.lock() )
 			{
-				auto size = getSize();
-				auto caretPos = caret->getPixelPosition() + castor::Position{};
+				auto clientSize = getClientSize();
+				auto clientOffset = getClientOffset();
+				auto caretPos = caret->getPixelPosition() + castor::Point2i{};
 				auto caretSize = caret->getPixelSize();
-				auto position = text->getPixelPosition();
+				auto position = text->getPixelPosition() - clientOffset;
 				auto caretTextPos = caretPos + position;
 				bool isLVisible = caretTextPos->x >= 0;
-				bool isRVisible = caretTextPos->x + int32_t( caretSize->x ) < int32_t( size->x );
+				bool isRVisible = caretTextPos->x + int32_t( caretSize->x ) < int32_t( clientSize->x );
 				bool isTVisible = caretTextPos->y >= 0;
-				bool isBVisible = caretTextPos->y + int32_t( caretSize->y ) < int32_t( size->y );
+				bool isBVisible = caretTextPos->y + int32_t( caretSize->y ) < int32_t( clientSize->y );
 
 				if ( isLVisible && isRVisible && isTVisible && isBVisible )
 				{
@@ -1222,19 +1280,19 @@ namespace castor3d
 				{
 					if ( caretTextPos->x <= 0 )
 					{
-						position.x() -= caretTextPos->x;
+						position->x -= caretTextPos->x;
 					}
-					else if ( int32_t( caretSize->x ) + caretPos->x >= int32_t( size->x ) )
+					else if ( int32_t( caretSize->x ) + caretPos->x >= int32_t( clientSize->x ) )
 					{
-						position.x() = int32_t( size->x ) - ( int32_t( caretSize->x ) + caretPos->x );
+						position->x = int32_t( clientSize->x ) - ( int32_t( caretSize->x ) + caretPos->x );
 					}
 					else if ( caretPos->x <= 0 )
 					{
-						position.x() = caretPos->x;
+						position->x = caretPos->x;
 					}
 					else
 					{
-						position.x() = 0;
+						position->x = 0;
 					}
 				}
 
@@ -1242,24 +1300,35 @@ namespace castor3d
 				{
 					if ( caretTextPos->y <= 0 )
 					{
-						position.y() -= caretTextPos->y;
+						position->y -= caretTextPos->y;
 					}
-					else if ( int32_t( caretSize->y ) + caretPos->y >= int32_t( size->y ) )
+					else if ( int32_t( caretSize->y ) + caretPos->y >= int32_t( clientSize->y ) )
 					{
-						position.y() = int32_t( size->y ) - ( int32_t( caretSize->y ) + caretPos->y );
+						position->y = int32_t( clientSize->y ) - ( int32_t( caretSize->y ) + caretPos->y );
 					}
 					else if ( caretPos->y <= 0 )
 					{
-						position.y() = caretPos->y;
+						position->y = caretPos->y;
 					}
 					else
 					{
-						position.y() = 0;
+						position->y = 0;
 					}
 				}
 
-				text->setPixelPosition( position );
+				position += clientOffset;
+				text->setPixelPosition( { position->x, position->y } );
+				updateScrollBarsThumb( { position->x, position->y } );
 			}
+		}
+	}
+
+	void EditCtrl::doScrollContent( castor::Position const & position )
+	{
+		if ( auto text = m_text.lock() )
+		{
+			auto pos = position + getClientOffset();
+			text->setPixelPosition( { pos->x, pos->y } );
 		}
 	}
 }

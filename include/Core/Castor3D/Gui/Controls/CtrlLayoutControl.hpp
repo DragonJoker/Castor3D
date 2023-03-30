@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_LayoutControl_H___
 
 #include "Castor3D/Gui/Controls/CtrlControl.hpp"
+#include "Castor3D/Gui/Controls/CtrlScrollable.hpp"
 
 namespace castor3d
 {
@@ -13,6 +14,7 @@ namespace castor3d
 
 	class LayoutControl
 		: public Control
+		, public ScrollableCtrl
 	{
 	public:
 		/** Constructor.
@@ -29,7 +31,8 @@ namespace castor3d
 		C3D_API LayoutControl( ControlType type
 			, SceneRPtr scene
 			, castor::String const & name
-			, ControlStyleRPtr style
+			, ControlStyleRPtr controlStyle
+			, ScrollableStyleRPtr scrollableStyle
 			, ControlRPtr parent
 			, castor::Position const & position
 			, castor::Size const & size
@@ -47,6 +50,38 @@ namespace castor3d
 		}
 
 	private:
+		/** @copydoc Control::doCreate
+		*/
+		void doCreate()override;
+
+		/** @copydoc Control::doDestroy
+		*/
+		void doDestroy()override;
+
+		/** @copydoc Control::doAddChild
+		 */
+		void doAddChild( ControlSPtr control )override;
+
+		/** @copydoc Control::doUpdateStyle
+		*/
+		void doUpdateStyle()override;
+
+		/** @copydoc Control::doUpdateFlags
+		*/
+		void doUpdateFlags()override;
+
+		/** @copydoc Control::doUpdateZIndex
+		*/
+		void doUpdateZIndex( uint32_t & index )override;
+
+		/** @copydoc Control::doAdjustZIndex
+		*/
+		void doAdjustZIndex( uint32_t offset )override;
+
+		/** @copydoc Control::doUpdateClientRect
+		*/
+		castor::Point4ui doUpdateClientRect( castor::Point4ui const & clientRect )final override;
+
 		/** Sets the background borders size.
 		 *\param[in]	value		The new value.
 		 */
@@ -72,6 +107,13 @@ namespace castor3d
 		 *\param[in]	value		The new value
 		 */
 		void doSetVisible( bool visible )final override;
+
+		/** @copydoc Control::doUpdateClientRect
+		*/
+		virtual castor::Point4ui doSubUpdateClientRect( castor::Point4ui const & clientRect )
+		{
+			return clientRect;
+		}
 
 		/** Sets the background borders size.
 		 *\param[in]	value		The new value.
