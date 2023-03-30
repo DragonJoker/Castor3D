@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_PanelStyle_H___
 
 #include "StyleControl.hpp"
+#include "StyleScrollable.hpp"
 #include "StylesHolder.hpp"
 
 namespace castor3d
@@ -12,6 +13,7 @@ namespace castor3d
 	class PanelStyle
 		: public ControlStyle
 		, public StylesHolder
+		, public ScrollableStyle
 	{
 	public:
 		static ControlType constexpr Type = ControlType::ePanel;

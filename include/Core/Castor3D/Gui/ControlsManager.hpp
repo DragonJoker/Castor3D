@@ -27,6 +27,7 @@ namespace castor3d
 		friend class FrameCtrl;
 		friend class ListBoxCtrl;
 		friend class PanelCtrl;
+		friend class ScrollBarCtrl;
 		friend class SliderCtrl;
 
 	public:
@@ -97,6 +98,11 @@ namespace castor3d
 		*	The panel style with given name (\p nullptr if it doesn't exist).
 		*/
 		C3D_API PanelStyleRPtr getPanelStyle( castor::String const & name )const override;
+
+		/** \return
+		*	The scrollbar style with given name (\p nullptr if it doesn't exist).
+		*/
+		C3D_API ScrollBarStyleRPtr getScrollBarStyle( castor::String const & name )const override;
 
 		/** \return
 		*	The slider style with given name (\p nullptr if it doesn't exist).
@@ -208,6 +214,12 @@ namespace castor3d
 		*\param[in] control
 		*	The control.
 		*/
+		void connectEvents( ScrollBarCtrl & control );
+
+		/** Connects the manager to given control's events.
+		*\param[in] control
+		*	The control.
+		*/
 		void connectEvents( SliderCtrl & control );
 
 		/** Disconnects the manager from given control's events.
@@ -239,6 +251,12 @@ namespace castor3d
 		*	The control.
 		*/
 		void disconnectEvents( ListBoxCtrl & control );
+
+		/** Disconnects the manager from given control's events.
+		*\param[in] control
+		*	The control.
+		*/
+		void disconnectEvents( ScrollBarCtrl & control );
 
 		/** Disconnects the manager from given control's events.
 		*\param[in] control
@@ -298,6 +316,8 @@ namespace castor3d
 		std::map< Control const *, OnComboEventConnection > m_onComboSelects;
 		std::map< Control const *, OnEditEventConnection > m_onEditUpdates;
 		std::map< Control const *, OnListEventConnection > m_onListSelects;
+		std::map< Control const *, OnScrollBarEventConnection > m_onScrollTracks;
+		std::map< Control const *, OnScrollBarEventConnection > m_onScrollReleases;
 		std::map< Control const *, OnSliderEventConnection > m_onSliderTracks;
 		std::map< Control const *, OnSliderEventConnection > m_onSliderReleases;
 		std::map< Control const *, OnExpandablePanelEventConnection > m_onPanelExpands;

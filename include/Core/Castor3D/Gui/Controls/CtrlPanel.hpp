@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Gui/Controls/CtrlLayoutControl.hpp"
 #include "Castor3D/Gui/Theme/StylePanel.hpp"
+#include "Castor3D/Gui/Theme/StyleScrollBar.hpp"
 
 namespace castor3d
 {
@@ -56,23 +57,6 @@ namespace castor3d
 		{
 			return static_cast< PanelStyle & >( getBaseStyle() );
 		}
-
-	private:
-		/** @copydoc Control::doCreate
-		*/
-		void doCreate()override;
-
-		/** @copydoc Control::doDestroy
-		*/
-		void doDestroy()override;
-
-		/** @copydoc Control::doUpdateStyle
-		*/
-		void doUpdateStyle()override;
-
-		/** @copydoc Control::doUpdateFlags
-		*/
-		void doUpdateFlags()override;
 	};
 }
 

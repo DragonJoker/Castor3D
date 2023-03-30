@@ -41,6 +41,8 @@ namespace castor3d
 		eExpandablePanel,
 		//! FrameCtrl
 		eFrame,
+		//! ScrollBarCtrl
+		eScrollBar,
 	};
 	/**
 	*\brief	Enumeration of supported control events.
@@ -128,13 +130,40 @@ namespace castor3d
 		eCount,
 	};
 	/**
+	*\brief	Enumeration of supported combobox events.
+	*/
+	enum class ScrollBarEvent
+		: uint8_t
+	{
+		//! The user has dropped the scroll thumb.
+		eThumbRelease,
+		//! The user is dragging the scroll thumb.
+		eThumbTrack,
+		//! The scrollbar events count.
+		eCount,
+	};
+	/**
+	*\brief	Listbox control supported flags.
+	*/
+	enum class ControlFlag
+		: ControlFlagType
+	{
+		//! Control is detached and appears on top of every other one.
+		eAlwaysOnTop = 0x0000000000000001,
+		//! Control can be moved around.
+		eMovable = 0x0000000000000002,
+		//! Control can be resized.
+		eResizable = 0x0000000000000004,
+	};
+	CU_ImplementFlags( ControlFlag )
+	/**
 	*\brief	Combo control supported flags.
 	*/
 	enum class ComboBoxFlag
 		: ControlFlagType
 	{
 		//! read only combo box
-		eReadOnly = 0x0000000000000001,
+		eReadOnly = 0x0000000000000100,
 	};
 	CU_ImplementFlags( ComboBoxFlag )
 	/**
@@ -144,13 +173,13 @@ namespace castor3d
 		: ControlFlagType
 	{
 		//! The edit control process 'return' hit as an event and not as a newline.
-		eProcessEnter = 0x0000000000000100,
+		eProcessEnter = 0x0000000000001000,
 		//! The edit control is a multiline edit control.
-		eMultiline = 0x0000000000000200,
+		eMultiline = 0x0000000000002000,
 		//! The edit control process 'tab' hit as the tab character and not as an event.
-		eProcessTab = 0x0000000000000400,
+		eProcessTab = 0x0000000000004000,
 		//! Words are not cut.
-		eWordWrap = 0x0000000000000800,
+		eWordWrap = 0x0000000000008000,
 	};
 	CU_ImplementFlags( EditFlag )
 	/**
@@ -159,10 +188,10 @@ namespace castor3d
 	enum class SliderFlag
 		: ControlFlagType
 	{
-		// The slider is displaye horizontally (default mode).
-		eHorizontal = 0x0000000000010000,
-		// The slider is displaye vertically.
-		eVertical = 0x00000000000200000,
+		// The slider is displayed horizontally (default mode).
+		eHorizontal = 0x0000000000100000,
+		// The slider is displayed vertically.
+		eVertical = 0x0000000000200000,
 	};
 	CU_ImplementFlags( SliderFlag )
 	/**
@@ -186,19 +215,17 @@ namespace castor3d
 	};
 	CU_ImplementFlags( StaticFlag )
 	/**
-	*\brief	Listbox control supported flags.
+	*\brief	ScrollBar control supported flags.
 	*/
-	enum class ControlFlag
+	enum class ScrollBarFlag
 		: ControlFlagType
 	{
-		//! Control is detached and appears on top of every other one.
-		eAlwaysOnTop = 0x0000000100000000,
-		//! Control can be moved around.
-		eMovable = 0x0000000200000000,
-		//! Control can be resized.
-		eResizable = 0x0000000400000000,
+		// The scrollbar is displayed horizontally (default mode).
+		eHorizontal = 0x0000000100000000,
+		// The scrollbar is displayed vertically.
+		eVertical = 0x0000000200000000,
 	};
-	CU_ImplementFlags( ControlFlag )
+	CU_ImplementFlags( ScrollBarFlag )
 	/**
 	*\brief	Enumeration of supported GUI events in ControlInfos.
 	*/
@@ -254,6 +281,14 @@ namespace castor3d
 	*\brief		Panel control.
 	*/
 	class PanelCtrl;
+	/**
+	*\brief		Holds together a control and its scrollbars.
+	*/
+	class ScrollableCtrl;
+	/**
+	*\brief		Scrollbar control.
+	*/
+	class ScrollBarCtrl;
 	/**
 	*\brief		Slider control.
 	*/
@@ -316,6 +351,14 @@ namespace castor3d
 	*/
 	class PanelStyle;
 	/**
+	*\brief		Holds scrollbars styles.
+	*/
+	class ScrollableStyle;
+	/**
+	*\brief		Scrollbar style.
+	*/
+	class ScrollBarStyle;
+	/**
 	*\brief		Slider style.
 	*/
 	class SliderStyle;
@@ -332,7 +375,7 @@ namespace castor3d
 	using OnButtonEvent = castor::SignalT< OnButtonEventFunction >;
 	using OnButtonEventConnection = OnButtonEvent::connection;
 
-	using OnComboEventFunction = std::function< void( int ) >;
+	using OnComboEventFunction = std::function< void( int32_t ) >;
 	using OnComboEvent = castor::SignalT< OnComboEventFunction >;
 	using OnComboEventConnection = OnComboEvent::connection;
 
@@ -344,13 +387,17 @@ namespace castor3d
 	using OnExpandablePanelEvent = castor::SignalT< OnExpandablePanelEventFunction >;
 	using OnExpandablePanelEventConnection = OnExpandablePanelEvent::connection;
 
-	using OnListEventFunction = std::function< void( int ) >;
+	using OnListEventFunction = std::function< void( int32_t ) >;
 	using OnListEvent = castor::SignalT< OnListEventFunction >;
 	using OnListEventConnection = OnListEvent::connection;
 
-	using OnSliderEventFunction = std::function< void( int ) >;
+	using OnSliderEventFunction = std::function< void( int32_t ) >;
 	using OnSliderEvent = castor::SignalT< OnSliderEventFunction >;
 	using OnSliderEventConnection = OnSliderEvent::connection;
+
+	using OnScrollBarEventFunction = std::function< void( int32_t ) >;
+	using OnScrollBarEvent = castor::SignalT< OnScrollBarEventFunction >;
+	using OnScrollBarEventConnection = OnScrollBarEvent::connection;
 
 	using OnControlChangedFunction = std::function< void( Control const & ) >;
 	using OnControlChanged = castor::SignalT< OnControlChangedFunction >;
@@ -369,6 +416,8 @@ namespace castor3d
 	CU_DeclareCUSmartPtr( castor3d, FrameCtrl, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, ListBoxCtrl, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, PanelCtrl, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, ScrollableCtrl, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, ScrollBarCtrl, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, SliderCtrl, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, StaticCtrl, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, StylesHolder, C3D_API );
@@ -381,6 +430,8 @@ namespace castor3d
 	CU_DeclareCUSmartPtr( castor3d, FrameStyle, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, ListBoxStyle, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, PanelStyle, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, ScrollableStyle, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, ScrollBarStyle, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, SliderStyle, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, StaticStyle, C3D_API );
 

@@ -1,9 +1,9 @@
 #include "Castor3D/Gui/Controls/CtrlPanel.hpp"
 
-#include "Castor3D/Gui/ControlsManager.hpp"
-
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/OverlayCache.hpp"
+#include "Castor3D/Gui/ControlsManager.hpp"
+#include "Castor3D/Gui/Controls/CtrlScrollBar.hpp"
 #include "Castor3D/Overlay/Overlay.hpp"
 #include "Castor3D/Overlay/BorderPanelOverlay.hpp"
 #include "Castor3D/Overlay/TextOverlay.hpp"
@@ -42,6 +42,7 @@ namespace castor3d
 			, scene
 			, name
 			, style
+			, style
 			, parent
 			, position
 			, size
@@ -50,22 +51,5 @@ namespace castor3d
 	{
 		setBorderSize( castor::Point4ui{} );
 		setStyle( style );
-		doUpdateFlags();
-	}
-
-	void PanelCtrl::doCreate()
-	{
-	}
-
-	void PanelCtrl::doDestroy()
-	{
-	}
-
-	void PanelCtrl::doUpdateStyle()
-	{
-	}
-
-	void PanelCtrl::doUpdateFlags()
-	{
 	}
 }

@@ -5,11 +5,13 @@ See LICENSE file in root folder
 #define ___C3D_EditStyle_H___
 
 #include "StyleControl.hpp"
+#include "StyleScrollable.hpp"
 
 namespace castor3d
 {
 	class EditStyle
 		: public ControlStyle
+		, public ScrollableStyle
 	{
 	public:
 		static ControlType constexpr Type = ControlType::eEdit;

@@ -30,6 +30,7 @@ namespace castor3d
 		PanelCtrlSPtr panel{};
 		ExpandablePanelCtrlSPtr expandablePanel{};
 		FrameCtrlSPtr frame{};
+		ScrollableCtrlSPtr scrollable{};
 		ThemeRPtr theme{};
 		ButtonStyleRPtr buttonStyle{};
 		ComboBoxStyleRPtr comboStyle{};
@@ -40,6 +41,8 @@ namespace castor3d
 		PanelStyleRPtr panelStyle{};
 		ExpandablePanelStyleRPtr expandablePanelStyle{};
 		FrameStyleRPtr frameStyle{};
+		ScrollBarStyleRPtr scrollBarStyle{};
+		ScrollableStyleRPtr scrollableStyle{};
 		LayoutUPtr layout{};
 		LayoutItemFlags layoutCtrlFlags{};
 
@@ -60,6 +63,11 @@ namespace castor3d
 			if constexpr ( std::is_base_of_v< StylesHolder, StyleT > )
 			{
 				pushStylesHolder( style );
+			}
+
+			if constexpr ( std::is_base_of_v< ScrollableStyle, StyleT > )
+			{
+				scrollableStyle = style;
 			}
 		}
 	};
@@ -82,6 +90,7 @@ namespace castor3d
 		ePanelStyle = CU_MakeSectionName( 'P', 'N', 'S', 'T' ),
 		eExpandablePanelStyle = CU_MakeSectionName( 'X', 'P', 'S', 'T' ),
 		eFrameStyle = CU_MakeSectionName( 'F', 'M', 'S', 'T' ),
+		eScrollBarStyle = CU_MakeSectionName( 'S', 'C', 'S', 'T' ),
 		eButton = CU_MakeSectionName( 'B', 'U', 'T', 'N' ),
 		eStatic = CU_MakeSectionName( 'S', 'T', 'T', 'C' ),
 		eSlider = CU_MakeSectionName( 'S', 'L', 'D', 'R' ),
@@ -174,6 +183,11 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserControlMovable )
 	CU_DeclareAttributeParser( parserControlResizable )
 
+	CU_DeclareAttributeParser( parserScrollableVerticalScroll )
+	CU_DeclareAttributeParser( parserScrollableHorizontalScroll )
+	CU_DeclareAttributeParser( parserScrollableVerticalScrollBarStyle )
+	CU_DeclareAttributeParser( parserScrollableHorizontalScrollBarStyle )
+
 	CU_DeclareAttributeParser( parserThemeEnd )
 
 	CU_DeclareAttributeParser( parserStyleButtonFont )
@@ -213,6 +227,11 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserStyleFrameHeaderFont )
 	CU_DeclareAttributeParser( parserStyleFrameHeaderTextMaterial )
 	CU_DeclareAttributeParser( parserStyleFrameEnd )
+	CU_DeclareAttributeParser( parserStyleScrollBarBeginButton )
+	CU_DeclareAttributeParser( parserStyleScrollBarEndButton )
+	CU_DeclareAttributeParser( parserStyleScrollBarBar )
+	CU_DeclareAttributeParser( parserStyleScrollBarThumb )
+	CU_DeclareAttributeParser( parserStyleScrollBarEnd )
 
 	CU_DeclareAttributeParser( parserStyleBackgroundMaterial )
 	CU_DeclareAttributeParser( parserStyleForegroundMaterial )
@@ -228,6 +247,7 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserStylePanelStyle )
 	CU_DeclareAttributeParser( parserStyleExpandablePanelStyle )
 	CU_DeclareAttributeParser( parserStyleFrameStyle )
+	CU_DeclareAttributeParser( parserStyleScrollBarStyle )
 
 	CU_DeclareAttributeParser( parserLayoutCtrl )
 	CU_DeclareAttributeParser( parserLayoutEnd )

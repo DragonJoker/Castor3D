@@ -1,10 +1,10 @@
 #include "Castor3D/Gui/Controls/CtrlLayoutControl.hpp"
 
-#include "Castor3D/Gui/ControlsManager.hpp"
-#include "Castor3D/Gui/Layout/Layout.hpp"
-
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/OverlayCache.hpp"
+#include "Castor3D/Gui/ControlsManager.hpp"
+#include "Castor3D/Gui/Layout/Layout.hpp"
+#include "Castor3D/Gui/Theme/StyleScrollable.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
@@ -34,7 +34,8 @@ namespace castor3d
 	LayoutControl::LayoutControl( ControlType type
 		, SceneRPtr scene
 		, castor::String const & name
-		, ControlStyleRPtr style
+		, ControlStyleRPtr controlStyle
+		, ScrollableStyleRPtr scrollableStyle
 		, ControlRPtr parent
 		, castor::Position const & position
 		, castor::Size const & size
@@ -43,18 +44,61 @@ namespace castor3d
 		: Control{ type
 			, scene
 			, name
-			, style
+			, controlStyle
 			, parent
 			, position
 			, size
 			, flags
 			, visible }
+		, ScrollableCtrl{ *this
+			, scrollableStyle }
 	{
+		doUpdateFlags();
 	}
 
 	void LayoutControl::setLayout( LayoutUPtr layout )
 	{
 		m_layout = std::move( layout );
+	}
+
+	void LayoutControl::doCreate()
+	{
+		createScrollBars();
+	}
+
+	void LayoutControl::doDestroy()
+	{
+		destroyScrollBars();
+	}
+
+	void LayoutControl::doAddChild( ControlSPtr control )
+	{
+		registerControl( *control );
+	}
+
+	void LayoutControl::doUpdateStyle()
+	{
+		updateScrollBarsStyle();
+	}
+
+	void LayoutControl::doUpdateFlags()
+	{
+		checkScrollBarFlags();
+	}
+
+	void LayoutControl::doUpdateZIndex( uint32_t & index )
+	{
+		updateScrollZIndex( index );
+	}
+
+	void LayoutControl::doAdjustZIndex( uint32_t offset )
+	{
+		adjustScrollZIndex( offset );
+	}
+
+	castor::Point4ui LayoutControl::doUpdateClientRect( castor::Point4ui const & clientRect )
+	{
+		return doSubUpdateClientRect( updateScrollableClientRect( clientRect ) );
 	}
 
 	void LayoutControl::doSetBorderSize( castor::Point4ui const & value )
@@ -65,6 +109,7 @@ namespace castor3d
 		}
 
 		doSubSetBorderSize( value );
+		updateScrollBars();
 	}
 
 	void LayoutControl::doSetPosition( castor::Position const & value )
@@ -75,6 +120,7 @@ namespace castor3d
 		}
 
 		doSubSetPosition( value );
+		updateScrollBars();
 	}
 
 	void LayoutControl::doSetSize( castor::Size const & value )
@@ -85,6 +131,7 @@ namespace castor3d
 		}
 
 		doSubSetSize( value );
+		updateScrollBars();
 	}
 
 	void LayoutControl::doSetCaption( castor::U32String const & caption )
@@ -105,6 +152,7 @@ namespace castor3d
 		}
 
 		doSubSetVisible( value );
+		setScrollBarsVisible( value );
 	}
 
 	//************************************************************************************************

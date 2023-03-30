@@ -8,6 +8,8 @@
 #include "Castor3D/Gui/Theme/StyleExpandablePanel.hpp"
 #include "Castor3D/Gui/Theme/StyleListBox.hpp"
 #include "Castor3D/Gui/Theme/StylePanel.hpp"
+#include "Castor3D/Gui/Theme/StyleScrollable.hpp"
+#include "Castor3D/Gui/Theme/StyleScrollBar.hpp"
 #include "Castor3D/Gui/Theme/StyleSlider.hpp"
 #include "Castor3D/Gui/Theme/StyleStatic.hpp"
 #include "Castor3D/Gui/Theme/Theme.hpp"
@@ -33,6 +35,8 @@ CU_ImplementCUSmartPtr( castor3d, ExpandablePanelStyle )
 CU_ImplementCUSmartPtr( castor3d, FrameStyle )
 CU_ImplementCUSmartPtr( castor3d, ListBoxStyle )
 CU_ImplementCUSmartPtr( castor3d, PanelStyle )
+CU_ImplementCUSmartPtr( castor3d, ScrollableStyle )
+CU_ImplementCUSmartPtr( castor3d, ScrollBarStyle )
 CU_ImplementCUSmartPtr( castor3d, SliderStyle )
 CU_ImplementCUSmartPtr( castor3d, StaticStyle )
 

@@ -99,6 +99,7 @@ namespace castor3d
 		combo.reset();
 		panel.reset();
 		expandablePanel.reset();
+		scrollable = nullptr;
 
 		if ( !parents.empty() )
 		{
@@ -112,6 +113,7 @@ namespace castor3d
 				break;
 			case ControlType::eEdit:
 				edit = std::static_pointer_cast< EditCtrl >( top );
+				scrollable = edit;
 				break;
 			case ControlType::eSlider:
 				slider = std::static_pointer_cast< SliderCtrl >( top );
@@ -127,6 +129,7 @@ namespace castor3d
 				break;
 			case ControlType::ePanel:
 				panel = std::static_pointer_cast< PanelCtrl >( top );
+				scrollable = panel;
 				break;
 			case ControlType::eExpandablePanel:
 				expandablePanel = std::static_pointer_cast< ExpandablePanelCtrl >( top );
@@ -177,6 +180,7 @@ namespace castor3d
 		staticStyle = {};
 		panelStyle = {};
 		expandablePanelStyle = {};
+		scrollableStyle = {};
 
 		if ( !styles.empty()
 			&& !stylesHolder.empty()
@@ -198,6 +202,7 @@ namespace castor3d
 				break;
 			case ControlType::eEdit:
 				editStyle = &static_cast< EditStyle & >( *top );
+				scrollableStyle = editStyle;
 				break;
 			case ControlType::eSlider:
 				sliderStyle = &static_cast< SliderStyle & >( *top );
@@ -213,12 +218,16 @@ namespace castor3d
 				break;
 			case ControlType::ePanel:
 				panelStyle = &static_cast< PanelStyle & >( *top );
+				scrollableStyle = panelStyle;
 				break;
 			case ControlType::eExpandablePanel:
 				expandablePanelStyle = &static_cast< ExpandablePanelStyle & >( *top );
 				break;
 			case ControlType::eFrame:
 				frameStyle = &static_cast< FrameStyle & >( *top );
+				break;
+			case ControlType::eScrollBar:
+				scrollBarStyle = &static_cast< ScrollBarStyle & >( *top );
 				break;
 			default:
 				CU_Failure( "Unsupported Style Type" );
@@ -419,6 +428,7 @@ namespace castor3d
 			, guiContext.controlName
 			, name + "/Edit"
 			, guiContext.edit );
+		guiContext.scrollable = guiContext.edit;
 	}
 	CU_EndAttribute()
 
@@ -433,6 +443,7 @@ namespace castor3d
 			, guiContext.controlName
 			, name
 			, guiContext.edit );
+		guiContext.scrollable = guiContext.edit;
 	}
 	CU_EndAttribute()
 
@@ -707,6 +718,7 @@ namespace castor3d
 			, guiContext.controlName
 			, name + "/Panel"
 			, guiContext.panel );
+		guiContext.scrollable = guiContext.panel;
 	}
 	CU_EndAttribute()
 
@@ -721,6 +733,7 @@ namespace castor3d
 			, guiContext.controlName
 			, name
 			, guiContext.panel );
+		guiContext.scrollable = guiContext.panel;
 	}
 	CU_EndAttribute()
 
@@ -787,6 +800,7 @@ namespace castor3d
 	{
 		auto & guiContext = guiparse::getParserContext( context );
 		guiContext.panel = guiContext.expandablePanel->getContent();
+		guiContext.scrollable = guiContext.panel;
 		guiContext.parents.push( guiContext.panel );
 	}
 	CU_EndAttributePush( GUISection::eExpandablePanelContent )
@@ -936,6 +950,7 @@ namespace castor3d
 	{
 		auto & guiContext = guiparse::getParserContext( context );
 		guiContext.panel = guiContext.frame->getContent();
+		guiContext.scrollable = guiContext.panel;
 		guiContext.parents.push( guiContext.panel );
 	}
 	CU_EndAttributePush( GUISection::eFrameContent )
@@ -1132,6 +1147,114 @@ namespace castor3d
 		else
 		{
 			CU_ParsingError( cuT( "No control initialised." ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserScrollableVerticalScroll )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+
+		if ( params[0]->get< bool >() )
+		{
+			if ( guiContext.edit )
+			{
+				guiContext.edit->addFlag( ScrollBarFlag::eVertical );
+			}
+			else if ( guiContext.panel )
+			{
+				guiContext.panel->addFlag( ScrollBarFlag::eVertical );
+			}
+		}
+		else
+		{
+			if ( guiContext.edit )
+			{
+				guiContext.edit->removeFlag( ScrollBarFlag::eVertical );
+			}
+			else if ( guiContext.panel )
+			{
+				guiContext.panel->removeFlag( ScrollBarFlag::eVertical );
+			}
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserScrollableHorizontalScroll )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+
+		if ( params[0]->get< bool >() )
+		{
+			if ( guiContext.edit )
+			{
+				guiContext.edit->addFlag( ScrollBarFlag::eHorizontal );
+			}
+			else if ( guiContext.panel )
+			{
+				guiContext.panel->addFlag( ScrollBarFlag::eHorizontal );
+			}
+		}
+		else
+		{
+			if ( guiContext.edit )
+			{
+				guiContext.edit->removeFlag( ScrollBarFlag::eHorizontal );
+			}
+			else if ( guiContext.panel )
+			{
+				guiContext.panel->removeFlag( ScrollBarFlag::eHorizontal );
+			}
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserScrollableVerticalScrollBarStyle )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+
+		if ( !guiContext.scrollable )
+		{
+			CU_ParsingError( "No ScrollableCtrl initialised" );
+		}
+		else
+		{
+			auto styleName = params[0]->get< castor::String >();
+			auto style = guiparse::getControlsManager( guiContext ).getScrollBarStyle( styleName );
+
+			if ( style == nullptr )
+			{
+				CU_ParsingError( "Style [" + styleName + "] was not found" );
+			}
+			else
+			{
+				guiContext.scrollable->getStyle().setVerticalStyle( *style );
+			}
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserScrollableHorizontalScrollBarStyle )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+
+		if ( !guiContext.scrollable )
+		{
+			CU_ParsingError( "No ScrollableCtrl initialised" );
+		}
+		else
+		{
+			auto styleName = params[0]->get< castor::String >();
+			auto style = guiparse::getControlsManager( guiContext ).getScrollBarStyle( styleName );
+
+			if ( style == nullptr )
+			{
+				CU_ParsingError( "Style [" + styleName + "] was not found" );
+			}
+			else
+			{
+				guiContext.scrollable->getStyle().setHorizontalStyle( *style );
+			}
 		}
 	}
 	CU_EndAttribute()
@@ -1719,6 +1842,45 @@ namespace castor3d
 	}
 	CU_EndAttributePop()
 
+	CU_ImplementAttributeParser( parserStyleScrollBarBeginButton )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+		guiContext.pushStyle( &guiContext.scrollBarStyle->getBeginStyle()
+			, guiContext.buttonStyle );
+	}
+	CU_EndAttributePush( GUISection::eButtonStyle )
+
+	CU_ImplementAttributeParser( parserStyleScrollBarEndButton )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+		guiContext.pushStyle( &guiContext.scrollBarStyle->getEndStyle()
+			, guiContext.buttonStyle );
+	}
+	CU_EndAttributePush( GUISection::eButtonStyle )
+
+	CU_ImplementAttributeParser( parserStyleScrollBarBar )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+		guiContext.pushStyle( &guiContext.scrollBarStyle->getBarStyle()
+			, guiContext.panelStyle );
+	}
+	CU_EndAttributePush( GUISection::ePanelStyle )
+
+	CU_ImplementAttributeParser( parserStyleScrollBarThumb )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+		guiContext.pushStyle( &guiContext.scrollBarStyle->getThumbStyle()
+			, guiContext.panelStyle );
+	}
+	CU_EndAttributePush( GUISection::ePanelStyle )
+
+	CU_ImplementAttributeParser( parserStyleScrollBarEnd )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+		guiContext.popStyle();
+	}
+	CU_EndAttributePop()
+
 	CU_ImplementAttributeParser( parserStyleBackgroundMaterial )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
@@ -1900,6 +2062,15 @@ namespace castor3d
 			, guiContext.frameStyle );
 	}
 	CU_EndAttributePush( GUISection::eFrameStyle )
+
+	CU_ImplementAttributeParser( parserStyleScrollBarStyle )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+		guiContext.pushStyle( guiContext.stylesHolder.top()->createScrollBarStyle( params[0]->get< castor::String >()
+			, getSceneParserContext( context ).scene )
+			, guiContext.scrollBarStyle );
+	}
+	CU_EndAttributePush( GUISection::eScrollBarStyle )
 
 	CU_ImplementAttributeParser( parserLayoutCtrl )
 	{

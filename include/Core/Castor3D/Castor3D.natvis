@@ -74,7 +74,7 @@
 	<Type Name="castor3d::NonClientEventHandler&lt;*&gt;">
 		<DisplayString>NCEvtHandler {m_name}</DisplayString>
 		<Expand>
-			<Item Name="[base]">(castor3d::EventHandler *)this,nd</Item>
+			<Item Name="[EvtHdr]">(castor3d::EventHandler *)this,nd</Item>
 			<Item Name="ncMouseSlots">m_ncMouseSlots</Item>
 			<Item Name="ncKeyboardSlots">m_ncKeyboardSlots</Item>
 			<Item Name="ncHandlerSlots">m_ncHandlerSlots</Item>
@@ -99,7 +99,7 @@
 	</Type>
 
 	<Type Name="castor3d::FontTexture">
-    <DisplayString>FontTexture {m_font}[{m_id}]</DisplayString>
+		<DisplayString>FontTexture {m_font}[{m_id}]</DisplayString>
 		<Expand>
 			<Item Name="font">m_font</Item>
 			<Item Name="sampler">m_sampler</Item>
@@ -534,7 +534,7 @@
 	<Type Name="castor3d::Control">
 		<DisplayString>Control {m_name} {*m_style}</DisplayString>
 		<Expand>
-			<Item Name="[base]">(castor3d::NonClientEventHandler&lt;castor3d::Control&gt; *)this,nd</Item>
+			<Item Name="[NCEvtHdr]">(castor3d::NonClientEventHandler&lt;castor3d::Control&gt; *)this,nd</Item>
 			<Item Name="id">m_id</Item>
 			<Item Name="name">m_name</Item>
 			<Item Name="type">m_type</Item>
@@ -563,6 +563,22 @@
 		</Expand>
 	</Type>
 
+	<Type Name="castor3d::ScrollableStyle">
+		<Expand>
+			<Item Name="vertical">m_verticalStyle</Item>
+			<Item Name="horizontal">m_horizontalStyle</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::ScrollableCtrl">
+		<Expand>
+			<Item Name="target">m_target</Item>
+			<Item Name="scrollableStyle">m_scrollableStyle</Item>
+			<Item Name="vertical">m_verticalScrollBar</Item>
+			<Item Name="horizontal">m_horizontalScrollBar</Item>
+		</Expand>
+	</Type>
+
 	<Type Name="castor3d::StylesHolder">
 		<DisplayString>StylesHolder {m_holderName}</DisplayString>
 		<Expand>
@@ -581,17 +597,17 @@
 	</Type>
 
 	<Type Name="castor3d::LayoutControl">
-		<DisplayString>LayoutCtrl {m_name} {*m_style}</DisplayString>
+		<DisplayString>LayoutCtrl {m_name}</DisplayString>
 		<Expand>
-			<Item Name="[base]">(castor3d::Control *)this,nd</Item>
+			<Item Name="[ctrl]">(castor3d::Control *)this,nd</Item>
 			<Item Name="layout">m_layout</Item>
 		</Expand>
 	</Type>
 
 	<Type Name="castor3d::ButtonCtrl">
-		<DisplayString>ButtonCtrl {m_name} {*m_style}</DisplayString>
+		<DisplayString>ButtonCtrl {m_name}</DisplayString>
 		<Expand>
-			<Item Name="[base]">(castor3d::Control *)this,nd</Item>
+			<Item Name="[ctrl]">(castor3d::Control *)this,nd</Item>
 			<Item Name="caption">m_caption</Item>
 			<Item Name="text">m_text</Item>
 			<Item Name="signals">m_signals</Item>
@@ -618,9 +634,9 @@
 	</Type>
 
 	<Type Name="castor3d::ComboBoxCtrl">
-		<DisplayString>ComboBoxCtrl {m_name} {*m_style}</DisplayString>
+		<DisplayString>ComboBoxCtrl {m_name}</DisplayString>
 		<Expand>
-			<Item Name="[base]">(castor3d::Control *)this,nd</Item>
+			<Item Name="[ctrl]">(castor3d::Control *)this,nd</Item>
 			<Item Name="text">m_text</Item>
 			<Item Name="expand">m_expand</Item>
 			<Item Name="choices">m_choices</Item>
@@ -642,13 +658,18 @@
 	</Type>
 
 	<Type Name="castor3d::EditCtrl">
-		<DisplayString>EditCtrl {m_name} {*m_style}</DisplayString>
+		<DisplayString>EditCtrl {m_name}</DisplayString>
 		<Expand>
-			<Item Name="[base]">(castor3d::Control *)this,nd</Item>
+			<Item Name="[ctrl]">(castor3d::Control *)this,nd</Item>
+			<Item Name="[scroll]">(castor3d::ScrollableCtrl *)this,nd</Item>
 			<Item Name="caption">m_caption</Item>
-			<Item Name="caretIt">m_caretIt</Item>
+			<Item Name="metrics">m_metrics</Item>
 			<Item Name="active">m_active</Item>
 			<Item Name="text">m_text</Item>
+			<Item Name="hasSelection">m_hasSelection</Item>
+			<Item Name="isMouseSelecting">m_isMouseSelecting</Item>
+			<Item Name="selection">m_selection</Item>
+			<Item Name="selections">m_selections</Item>
 			<Item Name="signals">m_signals</Item>
 		</Expand>
 	</Type>
@@ -657,15 +678,16 @@
 		<DisplayString>EditStyle {m_name}</DisplayString>
 		<Expand>
 			<Item Name="[base]">(castor3d::ControlStyle *)this,nd</Item>
+			<Item Name="[scroll]">(castor3d::ScrollableStyle *)this,nd</Item>
 			<Item Name="fontName">m_fontName</Item>
 			<Item Name="textMaterial">m_textMaterial</Item>
 		</Expand>
 	</Type>
 
 	<Type Name="castor3d::ExpandablePanelCtrl">
-		<DisplayString>ExpandablePanelCtrl {m_name} {*m_style}</DisplayString>
+		<DisplayString>ExpandablePanelCtrl {m_name}</DisplayString>
 		<Expand>
-			<Item Name="[base]">(castor3d::Control *)this,nd</Item>
+			<Item Name="[ctrl]">(castor3d::Control *)this,nd</Item>
 			<Item Name="headerHeight">m_headerHeight</Item>
 			<Item Name="header">m_header</Item>
 			<Item Name="expand">m_expand</Item>
@@ -687,9 +709,9 @@
 	</Type>
 
 	<Type Name="castor3d::ListBoxCtrl">
-		<DisplayString>ListBoxCtrl {m_name} {*m_style}</DisplayString>
+		<DisplayString>ListBoxCtrl {m_name}</DisplayString>
 		<Expand>
-			<Item Name="[base]">(castor3d::Control *)this,nd</Item>
+			<Item Name="[ctrl]">(castor3d::Control *)this,nd</Item>
 			<Item Name="initialValues">m_initialValues</Item>
 			<Item Name="values">m_values</Item>
 			<Item Name="selected">m_selected</Item>
@@ -710,9 +732,10 @@
 	</Type>
 
 	<Type Name="castor3d::PanelCtrl">
-		<DisplayString>PanelCtrl {m_name} {*m_style}</DisplayString>
+		<DisplayString>PanelCtrl {m_name}</DisplayString>
 		<Expand>
-			<Item Name="[base]">(castor3d::LayoutControl *)this,nd</Item>
+			<Item Name="[layout]">(castor3d::LayoutControl *)this,nd</Item>
+			<Item Name="[scroll]">(castor3d::ScrollableCtrl *)this,nd</Item>
 		</Expand>
 	</Type>
 
@@ -721,20 +744,47 @@
 		<Expand>
 			<Item Name="[base]">(castor3d::ControlStyle *)this,nd</Item>
 			<Item Name="[holder]">(castor3d::StylesHolder *)this,nd</Item>
+			<Item Name="[scroll]">(castor3d::ScrollableStyle *)this,nd</Item>
 		</Expand>
 	</Type>
 
 	<Type Name="castor3d::Theme">
-		<DisplayString>Theme {m_name}</DisplayString>
+		<DisplayString>Theme {getName()}</DisplayString>
 		<Expand>
-			<Item Name="[base]">(castor3d::StylesHolder *)this,nd</Item>
+			<Item Name="[holder]">(castor3d::StylesHolder *)this,nd</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::ScrollBarCtrl">
+		<DisplayString>ScrollBarCtrl {m_name}</DisplayString>
+		<Expand>
+			<Item Name="[ctrl]">(castor3d::Control *)this,nd</Item>
+			<Item Name="value">m_value</Item>
+			<Item Name="begin">*m_begin</Item>
+			<Item Name="bar">*m_bar</Item>
+			<Item Name="thumb">*m_thumb</Item>
+			<Item Name="end">*m_end</Item>
+			<Item Name="scrolling">m_scrolling</Item>
+			<Item Name="mouse">m_mouse</Item>
+			<Item Name="signals">m_signals</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::ScrollBarStyle">
+		<DisplayString>ScrollBarStyle {m_name}</DisplayString>
+		<Expand>
+			<Item Name="[base]">(castor3d::ControlStyle *)this,nd</Item>
+			<Item Name="barStyle">m_barStyle</Item>
+			<Item Name="thumbStyle">m_thumbStyle</Item>
+			<Item Name="beginStyle">m_beginStyle</Item>
+			<Item Name="endStyle">m_endStyle</Item>
 		</Expand>
 	</Type>
 
 	<Type Name="castor3d::SliderCtrl">
-		<DisplayString>SliderCtrl {m_name} {*m_style}</DisplayString>
+		<DisplayString>SliderCtrl {m_name}</DisplayString>
 		<Expand>
-			<Item Name="[base]">(castor3d::Control *)this,nd</Item>
+			<Item Name="[ctrl]">(castor3d::Control *)this,nd</Item>
 			<Item Name="value">m_value</Item>
 			<Item Name="scrolling">m_scrolling</Item>
 			<Item Name="mouse">m_mouse</Item>
@@ -754,9 +804,9 @@
 	</Type>
 
 	<Type Name="castor3d::StaticCtrl">
-		<DisplayString>StaticCtrl {m_name} {*m_style}</DisplayString>
+		<DisplayString>StaticCtrl {m_name}</DisplayString>
 		<Expand>
-			<Item Name="[base]">(castor3d::Control *)this,nd</Item>
+			<Item Name="[ctrl]">(castor3d::Control *)this,nd</Item>
 			<Item Name="m_caption">m_caption</Item>
 			<Item Name="m_text">m_text</Item>
 		</Expand>

@@ -6,7 +6,7 @@ namespace castor3d
 {
 	namespace boxlayt
 	{
-		uint32_t getBorderDim( castor::Point4ui const & borderSize
+		static uint32_t getBorderDim( castor::Point4ui const & borderSize
 			, uint32_t component )
 		{
 			return borderSize[component] + borderSize[component + 2u];
@@ -34,6 +34,7 @@ namespace castor3d
 			fixedComp = 0u;
 		}
 
+		auto scrollPosition = m_container.getScrollPosition();
 		uint32_t controlsSep{ doComputeSeparator( advanceComp ) };
 		auto & borders = m_container.getBorderSize();
 		int32_t advance = int32_t( borders[advanceComp] );
@@ -56,20 +57,6 @@ namespace castor3d
 			{
 				auto control = item.control();
 				uint32_t controlSizeAdvance = control->getSize()[advanceComp];
-				auto borderPosition = control->getBorderPosition();
-				auto borderBegin = control->getBorderSize()[advanceComp];
-				auto borderEnd = control->getBorderSize()[advanceComp + 2u];
-
-				if ( borderPosition == BorderPosition::eMiddle )
-				{
-					borderBegin /= 2;
-					borderEnd /= 2;
-				}
-				else if ( borderPosition == BorderPosition::eInternal )
-				{
-					borderBegin = 0;
-					borderEnd = 0;
-				}
 
 				if ( control->isVisible() )
 				{
@@ -77,8 +64,8 @@ namespace castor3d
 					fixed += int32_t( borders[fixedComp] );
 
 					castor::Position position;
-					position[fixedComp] = fixed + int32_t( item.padding( fixedComp ) );
-					position[advanceComp] = advance + int32_t( item.padding( advanceComp ) );
+					position[fixedComp] = fixed + int32_t( item.padding( fixedComp ) ) + scrollPosition.x();
+					position[advanceComp] = advance + int32_t( item.padding( advanceComp ) ) + scrollPosition.y();
 					control->setPosition( position );
 
 					castor::Size size;

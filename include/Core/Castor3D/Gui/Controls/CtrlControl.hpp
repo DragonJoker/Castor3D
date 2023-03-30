@@ -21,6 +21,7 @@ namespace castor3d
 		: public NonClientEventHandler< Control >
 	{
 		friend class ControlsManager;
+		friend class ScrollableCtrl;
 
 	public:
 		/** Constructor.
@@ -161,6 +162,7 @@ namespace castor3d
 		C3D_API castor::Point4d const & getBorderOuterUV()const;
 		C3D_API BorderPosition getBorderPosition()const;
 		C3D_API castor::Point4d const & getUV()const;
+		C3D_API bool isBackgroundVisible()const;
 
 		ControlID getId()const noexcept
 		{
@@ -330,10 +332,9 @@ namespace castor3d
 		 */
 		C3D_API void destroy();
 
-		/** Retrieves the visibility status
-		 *\return		The value
-		*/
-		C3D_API bool doIsVisible()const;
+		/** Adds a child control.
+		 */
+		C3D_API void addChild( ControlSPtr control );
 
 		ControlStyle & getBaseStyle()
 		{
@@ -413,6 +414,12 @@ namespace castor3d
 		*/
 		virtual void doDestroy() = 0;
 
+		/** Adds a child control.
+		 */
+		virtual void doAddChild( ControlSPtr control )
+		{
+		}
+
 		/** Allows child classes to modify the border size before it being set.
 		 */
 		virtual castor::Point4ui doUpdateBorderSize( castor::Point4ui const & value )const noexcept
@@ -432,6 +439,13 @@ namespace castor3d
 		virtual castor::Size doUpdateSize( castor::Size const & value )const noexcept
 		{
 			return value;
+		}
+
+		/** Updates the area where sub-controls can be draw.
+		 */
+		virtual castor::Point4ui doUpdateClientRect( castor::Point4ui const & clientRect )
+		{
+			return clientRect;
 		}
 
 		/** Sets the background borders size.

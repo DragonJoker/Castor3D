@@ -5,12 +5,14 @@ See LICENSE file in root folder
 #define ___C3D_EditCtrl_H___
 
 #include "Castor3D/Gui/Controls/CtrlControl.hpp"
+#include "Castor3D/Gui/Controls/CtrlScrollable.hpp"
 #include "Castor3D/Gui/Theme/StyleEdit.hpp"
 
 namespace castor3d
 {
 	class EditCtrl
 		: public Control
+		, public ScrollableCtrl
 	{
 	public:
 		/** Constructor
@@ -133,6 +135,14 @@ namespace castor3d
 		*/
 		void doDestroy()override;
 
+		/** @copydoc Control::doAddChild
+		 */
+		void doAddChild( ControlSPtr control )override;
+
+		/** @copydoc Control::doUpdateClientRect
+		*/
+		castor::Point4ui doUpdateClientRect( castor::Point4ui const & clientRect )override;
+
 		/** @copydoc Control::doSetPosition
 		*/
 		void doSetPosition( castor::Position const & value )override;
@@ -140,6 +150,10 @@ namespace castor3d
 		/** @copydoc Control::doSetSize
 		*/
 		void doSetSize( castor::Size const & value )override;
+
+		/** @copydoc Control::doSetBorderSize
+		*/
+		void doSetBorderSize( castor::Point4ui const & value )override;
 
 		/** @copydoc Control::doUpdateStyle
 		*/
@@ -309,6 +323,8 @@ namespace castor3d
 		 */
 		void doAdjustTextPosition();
 
+		void doScrollContent( castor::Position const & position );
+
 		bool hasSelection()const noexcept
 		{
 			return m_hasSelection;
@@ -331,6 +347,8 @@ namespace castor3d
 		bool m_isMouseSelecting{};
 		Selection m_selection{};
 		std::vector< PanelOverlayWPtr > m_selections{};
+		OnScrollContentConnection m_onScrollContent;
+		uint32_t m_panelsZIndex{};
 	};
 }
 
