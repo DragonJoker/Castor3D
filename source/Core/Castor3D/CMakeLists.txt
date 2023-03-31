@@ -349,6 +349,7 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Controls/CtrlLayoutControl.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Controls/CtrlListBox.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Controls/CtrlPanel.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Controls/CtrlProgress.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Controls/CtrlScrollable.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Controls/CtrlScrollBar.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Controls/CtrlSlider.hpp
@@ -364,6 +365,7 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Gui/Controls/CtrlLayoutControl.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Gui/Controls/CtrlListBox.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Gui/Controls/CtrlPanel.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Gui/Controls/CtrlProgress.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Gui/Controls/CtrlScrollable.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Gui/Controls/CtrlScrollBar.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Gui/Controls/CtrlSlider.cpp
@@ -409,6 +411,7 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Theme/StyleFrame.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Theme/StyleListBox.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Theme/StylePanel.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Theme/StyleProgress.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Theme/StyleScrollable.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Theme/StyleScrollBar.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Gui/Theme/StyleSlider.hpp

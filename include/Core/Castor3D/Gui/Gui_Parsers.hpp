@@ -28,6 +28,7 @@ namespace castor3d
 		SliderCtrlSPtr slider{};
 		StaticCtrlSPtr staticTxt{};
 		PanelCtrlSPtr panel{};
+		ProgressCtrlSPtr progress{};
 		ExpandablePanelCtrlSPtr expandablePanel{};
 		FrameCtrlSPtr frame{};
 		ScrollableCtrlSPtr scrollable{};
@@ -39,6 +40,7 @@ namespace castor3d
 		SliderStyleRPtr sliderStyle{};
 		StaticStyleRPtr staticStyle{};
 		PanelStyleRPtr panelStyle{};
+		ProgressStyleRPtr progressStyle{};
 		ExpandablePanelStyleRPtr expandablePanelStyle{};
 		FrameStyleRPtr frameStyle{};
 		ScrollBarStyleRPtr scrollBarStyle{};
@@ -88,6 +90,7 @@ namespace castor3d
 		eSliderStyle = CU_MakeSectionName( 'C', 'T', 'S', 'L' ),
 		eStaticStyle = CU_MakeSectionName( 'C', 'T', 'S', 'T' ),
 		ePanelStyle = CU_MakeSectionName( 'P', 'N', 'S', 'T' ),
+		eProgressStyle = CU_MakeSectionName( 'P', 'G', 'S', 'T' ),
 		eExpandablePanelStyle = CU_MakeSectionName( 'X', 'P', 'S', 'T' ),
 		eFrameStyle = CU_MakeSectionName( 'F', 'M', 'S', 'T' ),
 		eScrollBarStyle = CU_MakeSectionName( 'S', 'C', 'S', 'T' ),
@@ -98,6 +101,7 @@ namespace castor3d
 		eListBox = CU_MakeSectionName( 'L', 'S', 'B', 'X' ),
 		eEdit = CU_MakeSectionName( 'E', 'D', 'I', 'T' ),
 		ePanel = CU_MakeSectionName( 'P', 'A', 'N', 'L' ),
+		eProgress = CU_MakeSectionName( 'P', 'R', 'G', 'S' ),
 		eExpandablePanel = CU_MakeSectionName( 'X', 'P', 'N', 'L' ),
 		eExpandablePanelHeader = CU_MakeSectionName( 'X', 'P', 'H', 'D' ),
 		eExpandablePanelExpand = CU_MakeSectionName( 'X', 'P', 'X', 'p' ),
@@ -117,45 +121,46 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserButtonHAlign )
 	CU_DeclareAttributeParser( parserButtonVAlign )
 	CU_DeclareAttributeParser( parserButtonCaption )
-	CU_DeclareAttributeParser( parserButtonEnd )
 	CU_DeclareAttributeParser( parserComboBox )
 	CU_DeclareAttributeParser( parserComboBoxTheme )
 	CU_DeclareAttributeParser( parserComboBoxStyle )
 	CU_DeclareAttributeParser( parserComboBoxItem )
-	CU_DeclareAttributeParser( parserComboBoxEnd )
 	CU_DeclareAttributeParser( parserEdit )
 	CU_DeclareAttributeParser( parserEditTheme )
 	CU_DeclareAttributeParser( parserEditStyle )
 	CU_DeclareAttributeParser( parserEditCaption )
 	CU_DeclareAttributeParser( parserEditMultiLine )
-	CU_DeclareAttributeParser( parserEditEnd )
 	CU_DeclareAttributeParser( parserListBox )
 	CU_DeclareAttributeParser( parserListBoxTheme )
 	CU_DeclareAttributeParser( parserListBoxStyle )
 	CU_DeclareAttributeParser( parserListBoxItem )
-	CU_DeclareAttributeParser( parserListBoxEnd )
 	CU_DeclareAttributeParser( parserSlider )
 	CU_DeclareAttributeParser( parserSliderTheme )
 	CU_DeclareAttributeParser( parserSliderStyle )
-	CU_DeclareAttributeParser( parserSliderEnd )
 	CU_DeclareAttributeParser( parserStatic )
 	CU_DeclareAttributeParser( parserStaticTheme )
 	CU_DeclareAttributeParser( parserStaticStyle )
 	CU_DeclareAttributeParser( parserStaticHAlign )
 	CU_DeclareAttributeParser( parserStaticVAlign )
 	CU_DeclareAttributeParser( parserStaticCaption )
-	CU_DeclareAttributeParser( parserStaticEnd )
 	CU_DeclareAttributeParser( parserPanel )
 	CU_DeclareAttributeParser( parserPanelTheme )
 	CU_DeclareAttributeParser( parserPanelStyle )
-	CU_DeclareAttributeParser( parserPanelEnd )
+	CU_DeclareAttributeParser( parserProgress )
+	CU_DeclareAttributeParser( parserProgressTheme )
+	CU_DeclareAttributeParser( parserProgressStyle )
+	CU_DeclareAttributeParser( parserProgressContainerBorderSize )
+	CU_DeclareAttributeParser( parserProgressBarBorderSize )
+	CU_DeclareAttributeParser( parserProgressLeftToRight )
+	CU_DeclareAttributeParser( parserProgressRightToLeft )
+	CU_DeclareAttributeParser( parserProgressTopToBottom )
+	CU_DeclareAttributeParser( parserProgressBottomToTop )
 	CU_DeclareAttributeParser( parserExpandablePanel )
 	CU_DeclareAttributeParser( parserExpandablePanelTheme )
 	CU_DeclareAttributeParser( parserExpandablePanelStyle )
 	CU_DeclareAttributeParser( parserExpandablePanelHeader )
 	CU_DeclareAttributeParser( parserExpandablePanelExpand )
 	CU_DeclareAttributeParser( parserExpandablePanelContent )
-	CU_DeclareAttributeParser( parserExpandablePanelEnd )
 	CU_DeclareAttributeParser( parserExpandablePanelExpandCaption )
 	CU_DeclareAttributeParser( parserExpandablePanelRetractCaption )
 	CU_DeclareAttributeParser( parserExpandablePanelHeaderEnd )
@@ -169,7 +174,6 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserFrameHeaderCaption )
 	CU_DeclareAttributeParser( parserFrameMinSize )
 	CU_DeclareAttributeParser( parserFrameContent )
-	CU_DeclareAttributeParser( parserFrameEnd )
 	CU_DeclareAttributeParser( parserFrameContentEnd )
 
 	CU_DeclareAttributeParser( parserControlPixelPosition )
@@ -182,6 +186,7 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserControlBoxLayout )
 	CU_DeclareAttributeParser( parserControlMovable )
 	CU_DeclareAttributeParser( parserControlResizable )
+	CU_DeclareAttributeParser( parserControlEnd )
 
 	CU_DeclareAttributeParser( parserScrollableVerticalScroll )
 	CU_DeclareAttributeParser( parserScrollableHorizontalScroll )
@@ -201,37 +206,33 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserStyleButtonDisabledBackgroundMaterial )
 	CU_DeclareAttributeParser( parserStyleButtonDisabledForegroundMaterial )
 	CU_DeclareAttributeParser( parserStyleButtonDisabledTextMaterial )
-	CU_DeclareAttributeParser( parserStyleButtonEnd )
 	CU_DeclareAttributeParser( parserStyleComboButton )
 	CU_DeclareAttributeParser( parserStyleComboListBox )
-	CU_DeclareAttributeParser( parserStyleComboBoxEnd )
 	CU_DeclareAttributeParser( parserStyleEditFont )
 	CU_DeclareAttributeParser( parserStyleEditTextMaterial )
 	CU_DeclareAttributeParser( parserStyleEditSelectionMaterial )
-	CU_DeclareAttributeParser( parserStyleEditEnd )
 	CU_DeclareAttributeParser( parserStyleListBoxItemStatic )
 	CU_DeclareAttributeParser( parserStyleListBoxSelItemStatic )
 	CU_DeclareAttributeParser( parserStyleListBoxHighItemStatic )
-	CU_DeclareAttributeParser( parserStyleListBoxEnd )
 	CU_DeclareAttributeParser( parserStyleSliderLineStatic )
 	CU_DeclareAttributeParser( parserStyleSliderTickStatic )
-	CU_DeclareAttributeParser( parserStyleSliderEnd )
 	CU_DeclareAttributeParser( parserStyleStaticFont )
 	CU_DeclareAttributeParser( parserStyleStaticTextMaterial )
-	CU_DeclareAttributeParser( parserStyleStaticEnd )
-	CU_DeclareAttributeParser( parserStylePanelEnd )
+	CU_DeclareAttributeParser( parserStyleProgressTitleFont )
+	CU_DeclareAttributeParser( parserStyleProgressTitleMaterial )
+	CU_DeclareAttributeParser( parserStyleProgressContainer )
+	CU_DeclareAttributeParser( parserStyleProgressProgress )
+	CU_DeclareAttributeParser( parserStyleProgressTextFont )
+	CU_DeclareAttributeParser( parserStyleProgressTextMaterial )
 	CU_DeclareAttributeParser( parserStyleExpandablePanelHeader )
 	CU_DeclareAttributeParser( parserStyleExpandablePanelExpand )
 	CU_DeclareAttributeParser( parserStyleExpandablePanelContent )
-	CU_DeclareAttributeParser( parserStyleExpandablePanelEnd )
 	CU_DeclareAttributeParser( parserStyleFrameHeaderFont )
 	CU_DeclareAttributeParser( parserStyleFrameHeaderTextMaterial )
-	CU_DeclareAttributeParser( parserStyleFrameEnd )
 	CU_DeclareAttributeParser( parserStyleScrollBarBeginButton )
 	CU_DeclareAttributeParser( parserStyleScrollBarEndButton )
 	CU_DeclareAttributeParser( parserStyleScrollBarBar )
 	CU_DeclareAttributeParser( parserStyleScrollBarThumb )
-	CU_DeclareAttributeParser( parserStyleScrollBarEnd )
 
 	CU_DeclareAttributeParser( parserStyleBackgroundMaterial )
 	CU_DeclareAttributeParser( parserStyleForegroundMaterial )
@@ -245,9 +246,11 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserStyleSliderStyle )
 	CU_DeclareAttributeParser( parserStyleStaticStyle )
 	CU_DeclareAttributeParser( parserStylePanelStyle )
+	CU_DeclareAttributeParser( parserStyleProgressStyle )
 	CU_DeclareAttributeParser( parserStyleExpandablePanelStyle )
 	CU_DeclareAttributeParser( parserStyleFrameStyle )
 	CU_DeclareAttributeParser( parserStyleScrollBarStyle )
+	CU_DeclareAttributeParser( parserStyleEnd )
 
 	CU_DeclareAttributeParser( parserLayoutCtrl )
 	CU_DeclareAttributeParser( parserLayoutEnd )

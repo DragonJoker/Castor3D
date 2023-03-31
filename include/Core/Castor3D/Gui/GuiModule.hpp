@@ -43,6 +43,8 @@ namespace castor3d
 		eFrame,
 		//! ScrollBarCtrl
 		eScrollBar,
+		//! ProgressCtrl
+		eProgress,
 	};
 	/**
 	*\brief	Enumeration of supported control events.
@@ -227,6 +229,22 @@ namespace castor3d
 	};
 	CU_ImplementFlags( ScrollBarFlag )
 	/**
+	*\brief	Progress control supported flags.
+	*/
+	enum class ProgressFlag
+		: ControlFlagType
+	{
+		// The progress is shown from left to right (default mode).
+		eLeftRight = 0x0000001000000000,
+		// The progress is shown from right to left.
+		eRightLeft = 0x0000002000000000,
+		// The progress is shown from top to bottom.
+		eTopBottom = 0x0000004000000000,
+		// The progress is shown from bottom to top.
+		eBottomTop = 0x0000008000000000,
+	};
+	CU_ImplementFlags( ProgressFlag )
+	/**
 	*\brief	Enumeration of supported GUI events in ControlInfos.
 	*/
 	enum class GuiEvent
@@ -281,6 +299,10 @@ namespace castor3d
 	*\brief		Panel control.
 	*/
 	class PanelCtrl;
+	/**
+	*\brief		Progress control.
+	*/
+	class ProgressCtrl;
 	/**
 	*\brief		Holds together a control and its scrollbars.
 	*/
@@ -351,6 +373,10 @@ namespace castor3d
 	*/
 	class PanelStyle;
 	/**
+	*\brief		Progress style.
+	*/
+	class ProgressStyle;
+	/**
 	*\brief		Holds scrollbars styles.
 	*/
 	class ScrollableStyle;
@@ -416,6 +442,7 @@ namespace castor3d
 	CU_DeclareCUSmartPtr( castor3d, FrameCtrl, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, ListBoxCtrl, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, PanelCtrl, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, ProgressCtrl, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, ScrollableCtrl, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, ScrollBarCtrl, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, SliderCtrl, C3D_API );
@@ -430,6 +457,7 @@ namespace castor3d
 	CU_DeclareCUSmartPtr( castor3d, FrameStyle, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, ListBoxStyle, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, PanelStyle, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, ProgressStyle, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, ScrollableStyle, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, ScrollBarStyle, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, SliderStyle, C3D_API );

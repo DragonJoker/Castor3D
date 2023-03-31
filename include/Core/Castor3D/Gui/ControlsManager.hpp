@@ -100,6 +100,11 @@ namespace castor3d
 		C3D_API PanelStyleRPtr getPanelStyle( castor::String const & name )const override;
 
 		/** \return
+		*	The progress style with given name (\p nullptr if it doesn't exist).
+		*/
+		C3D_API ProgressStyleRPtr getProgressStyle( castor::String const & name )const override;
+
+		/** \return
 		*	The scrollbar style with given name (\p nullptr if it doesn't exist).
 		*/
 		C3D_API ScrollBarStyleRPtr getScrollBarStyle( castor::String const & name )const override;

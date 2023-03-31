@@ -3,6 +3,7 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Event/Frame/CpuFunctorEvent.hpp"
 #include "Castor3D/Event/Frame/FrameListener.hpp"
+#include "Castor3D/Gui/Controls/CtrlProgress.hpp"
 #include "Castor3D/Overlay/Overlay.hpp"
 #include "Castor3D/Overlay/TextOverlay.hpp"
 
@@ -15,176 +16,135 @@ namespace castor3d
 	//*********************************************************************************************
 
 	ProgressBar::ProgressBar( Engine & engine
-		, OverlayResPtr parent
-		, OverlayResPtr bar
-		, TextOverlaySPtr title
-		, TextOverlaySPtr label
-		, uint32_t max )
+		, ProgressCtrlRPtr progress )
 		: m_listener{ engine.addNewFrameListener( "C3D_ProgressBar" ).lock() }
-		, m_index{ castor::makeRangedValue( 0u, 0u, max ) }
-		, m_progress{ parent.lock().get() }
-		, m_progressBar{ bar.lock().get() }
-		, m_progressTitle{ title }
-		, m_progressLabel{ label }
+		, m_progress{ progress }
 	{
 	}
 
-	void ProgressBar::update( OverlayResPtr parent
-		, OverlayResPtr bar
-		, TextOverlaySPtr title
-		, TextOverlaySPtr label )
+	void ProgressBar::update( ProgressCtrlRPtr progress )
 	{
 		auto lock( castor::makeUniqueLock( *this ) );
-
-		if ( m_titleEvent )
-		{
-			m_titleEvent->skip();
-			m_titleEvent = nullptr;
-		}
-
-		if ( m_labelEvent )
-		{
-			m_labelEvent->skip();
-			m_labelEvent = nullptr;
-		}
-
-		if ( m_stepLabelEvent )
-		{
-			m_stepLabelEvent->skip();
-			m_stepLabelEvent = nullptr;
-		}
-
-		if ( m_stepEvent )
-		{
-			m_stepEvent->skip();
-			m_stepEvent = nullptr;
-		}
-
-		m_progress = parent.lock().get();
-		m_progressBar = bar.lock().get();
-		m_progressTitle = title;
-		m_progressLabel = label;
-		m_titleEvent = m_listener->postEvent( makeCpuFunctorEvent( EventType::ePostRender
-			, [this]()
-			{
-				if ( m_progressTitle )
-				{
-					m_progressTitle->setCaption( castor::string::toU32String( m_title ) );
-				}
-
-				m_titleEvent = nullptr;
-			} ) );
-		auto index = m_index.percent();
-		m_stepLabelEvent = m_listener->postEvent( makeCpuFunctorEvent( EventType::ePostRender
-			, [this, index]()
-			{
-				if ( m_progressLabel )
-				{
-					m_progressLabel->setCaption( castor::string::toU32String( m_label ) );
-				}
-
-				if ( m_progressBar )
-				{
-					m_progressBar->setRelativeSize( { index, 1.0f } );
-				}
-
-				m_stepLabelEvent = nullptr;
-			} ) );
+		m_progress = progress;
+		doSetTitle( castor::string::toU32String( m_title ) );
+		doSetLabel( castor::string::toU32String( m_label ) );
 	}
 
 	void ProgressBar::setTitle( castor::String const & value )
 	{
 		auto lock( castor::makeUniqueLock( *this ) );
 		m_title = value;
-
-		if ( m_titleEvent )
-		{
-			m_titleEvent->skip();
-		}
-
-		m_titleEvent = m_listener->postEvent( makeCpuFunctorEvent( EventType::ePostRender
-			, [this]()
-			{
-				if ( m_progressTitle )
-				{
-					m_progressTitle->setCaption( castor::string::toU32String( m_title ) );
-				}
-
-				m_titleEvent = nullptr;
-			} ) );
+		doSetTitle( castor::string::toU32String( m_title ) );
 	}
 
 	void ProgressBar::setLabel( castor::String const & value )
 	{
 		auto lock( castor::makeUniqueLock( *this ) );
 		m_label = value;
-
-		if ( m_labelEvent )
-		{
-			m_labelEvent->skip();
-		}
-
-		m_labelEvent = m_listener->postEvent( makeCpuFunctorEvent( EventType::ePostRender
-			, [this]()
-			{
-				if ( m_progressLabel )
-				{
-					m_progressLabel->setCaption( castor::string::toU32String( m_label ) );
-				}
-
-				m_labelEvent = nullptr;
-			} ) );
+		doSetLabel( castor::string::toU32String( m_label ) );
 	}
 
 	void ProgressBar::step( castor::String const & label )
 	{
 		auto lock( castor::makeUniqueLock( *this ) );
+		doStep();
 		m_label = label;
-		m_index = m_index + 1u;
-		auto index = m_index.percent();
-
-		if ( m_stepLabelEvent )
-		{
-			m_stepLabelEvent->skip();
-		}
-
-		m_stepLabelEvent = m_listener->postEvent( makeCpuFunctorEvent( EventType::ePostRender
-			, [this, index]()
-			{
-				if ( m_progressLabel )
-				{
-					m_progressLabel->setCaption( castor::string::toU32String( m_label ) );
-				}
-
-				if ( m_progressBar )
-				{
-					m_progressBar->setRelativeSize( { index, 1.0f } );
-				}
-
-				m_stepLabelEvent = nullptr;
-			} ) );
+		doSetLabel( castor::string::toU32String( m_label ) );
 	}
 
 	void ProgressBar::step()
 	{
 		auto lock( castor::makeUniqueLock( *this ) );
-		m_index = m_index + 1u;
-		auto index = m_index.percent();
+		doStep();
+	}
 
-		if ( m_stepEvent )
+	void ProgressBar::setRange( int32_t value )
+	{
+		if ( m_rangeEvent )
 		{
-			m_stepEvent->skip();
+			m_rangeEvent->skip();
+			m_rangeEvent = nullptr;
 		}
 
-		m_stepEvent = m_listener->postEvent( makeCpuFunctorEvent( EventType::ePostRender
-			, [this, index]()
+		m_rangeEvent = m_listener->postEvent( makeCpuFunctorEvent( EventType::ePostRender
+			, [this, value]()
 			{
-				if ( m_progressBar )
-				{
-					m_progressBar->setRelativeSize( { index, 1.0f } );
-				}
+				m_rangeEvent = nullptr;
 
-				m_stepEvent = nullptr;
+				if ( m_progress )
+				{
+					m_progress->setRange( castor::makeRange( 0, value ) );
+				}
+			} ) );
+	}
+
+	void ProgressBar::incRange( int32_t mod )
+	{
+		if ( m_progress )
+		{
+			setRange( m_progress->getRange().getMax() + mod );
+		}
+	}
+
+	int32_t ProgressBar::getIndex()const
+	{
+		if ( m_progress )
+		{
+			return m_progress->getProgress();
+		}
+
+		return 0;
+	}
+
+	void ProgressBar::doSetTitle( castor::U32String const & value )
+	{
+		if ( m_titleEvent )
+		{
+			m_titleEvent->skip();
+			m_titleEvent = nullptr;
+		}
+
+		m_titleEvent = m_listener->postEvent( makeCpuFunctorEvent( EventType::ePostRender
+			, [this, value]()
+			{
+				m_titleEvent = nullptr;
+
+				if ( m_progress )
+				{
+					m_progress->setTitle( value );
+				}
+			} ) );
+	}
+
+	void ProgressBar::doSetLabel( castor::U32String const & value )
+	{
+		if ( m_labelEvent )
+		{
+			m_labelEvent->skip();
+			m_labelEvent = nullptr;
+		}
+
+		m_labelEvent = m_listener->postEvent( makeCpuFunctorEvent( EventType::ePostRender
+			, [this, value]()
+			{
+				m_labelEvent = nullptr;
+
+				if ( m_progress )
+				{
+					m_progress->setCaption( value );
+				}
+			} ) );
+	}
+
+	void ProgressBar::doStep()
+	{
+		m_listener->postEvent( makeCpuFunctorEvent( EventType::ePostRender
+			, [this]()
+			{
+				if ( m_progress )
+				{
+					m_progress->incProgress();
+				}
 			} ) );
 	}
 
@@ -226,7 +186,7 @@ namespace castor3d
 	}
 
 	void incProgressBarRange( ProgressBar * progress
-		, uint32_t value )
+		, int32_t value )
 	{
 		if ( progress )
 		{

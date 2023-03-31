@@ -128,10 +128,16 @@ namespace castor3d
 		, uint32_t component )
 	{
 		limit -= item.paddingSize( component );
+		auto control = item.control();
 
-		auto borderPosition = item.control()->getBorderPosition();
-		auto borderBegin = item.control()->getBorderSize()[component];
-		auto borderEnd = item.control()->getBorderSize()[component + 2u];
+		if ( !control )
+		{
+			return { 0, limit };
+		}
+
+		auto borderPosition = control->getBorderPosition();
+		auto borderBegin = control->getBorderSize()[component];
+		auto borderEnd = control->getBorderSize()[component + 2u];
 
 		if ( borderPosition == BorderPosition::eMiddle )
 		{
@@ -152,7 +158,7 @@ namespace castor3d
 				, std::max( 0, int32_t( limit ) - int32_t( borderSize ) ) };
 		}
 
-		auto controlSize = item.control()->getSize()[component];
+		auto controlSize = control->getSize()[component];
 		auto controlPosition = int32_t( borderBegin );
 
 		if ( component == 0u )
