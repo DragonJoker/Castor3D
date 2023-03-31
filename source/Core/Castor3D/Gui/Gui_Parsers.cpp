@@ -11,6 +11,7 @@
 #include "Castor3D/Gui/Controls/CtrlFrame.hpp"
 #include "Castor3D/Gui/Controls/CtrlListBox.hpp"
 #include "Castor3D/Gui/Controls/CtrlPanel.hpp"
+#include "Castor3D/Gui/Controls/CtrlProgress.hpp"
 #include "Castor3D/Gui/Controls/CtrlSlider.hpp"
 #include "Castor3D/Gui/Controls/CtrlStatic.hpp"
 #include "Castor3D/Gui/Theme/StylesHolder.hpp"
@@ -98,6 +99,7 @@ namespace castor3d
 		staticTxt.reset();
 		combo.reset();
 		panel.reset();
+		progress.reset();
 		expandablePanel.reset();
 		scrollable = nullptr;
 
@@ -130,6 +132,9 @@ namespace castor3d
 			case ControlType::ePanel:
 				panel = std::static_pointer_cast< PanelCtrl >( top );
 				scrollable = panel;
+				break;
+			case ControlType::eProgress:
+				progress = std::static_pointer_cast< ProgressCtrl >( top );
 				break;
 			case ControlType::eExpandablePanel:
 				expandablePanel = std::static_pointer_cast< ExpandablePanelCtrl >( top );
@@ -179,6 +184,7 @@ namespace castor3d
 		sliderStyle = {};
 		staticStyle = {};
 		panelStyle = {};
+		progressStyle = {};
 		expandablePanelStyle = {};
 		scrollableStyle = {};
 
@@ -219,6 +225,9 @@ namespace castor3d
 			case ControlType::ePanel:
 				panelStyle = &static_cast< PanelStyle & >( *top );
 				scrollableStyle = panelStyle;
+				break;
+			case ControlType::eProgress:
+				progressStyle = &static_cast< ProgressStyle & >( *top );
 				break;
 			case ControlType::eExpandablePanel:
 				expandablePanelStyle = &static_cast< ExpandablePanelStyle & >( *top );
@@ -341,14 +350,6 @@ namespace castor3d
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserButtonEnd )
-	{
-		auto & guiContext = guiparse::getParserContext( context );
-		guiparse::finishControl( guiparse::getControlsManager( context ), guiContext, guiContext.button );
-		guiContext.popControl();
-	}
-	CU_EndAttributePop()
-
 	CU_ImplementAttributeParser( parserComboBox )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
@@ -401,14 +402,6 @@ namespace castor3d
 		}
 	}
 	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserComboBoxEnd )
-	{
-		auto & guiContext = guiparse::getParserContext( context );
-		guiparse::finishControl( guiparse::getControlsManager( context ), guiContext, guiContext.combo );
-		guiContext.popControl();
-	}
-	CU_EndAttributePop()
 
 	CU_ImplementAttributeParser( parserEdit )
 	{
@@ -494,14 +487,6 @@ namespace castor3d
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserEditEnd )
-	{
-		auto & guiContext = guiparse::getParserContext( context );
-		guiparse::finishControl( guiparse::getControlsManager( context ), guiContext, guiContext.edit );
-		guiContext.popControl();
-	}
-	CU_EndAttributePop()
-
 	CU_ImplementAttributeParser( parserListBox )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
@@ -555,14 +540,6 @@ namespace castor3d
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserListBoxEnd )
-	{
-		auto & guiContext = guiparse::getParserContext( context );
-		guiparse::finishControl( guiparse::getControlsManager( context ), guiContext, guiContext.listbox );
-		guiContext.popControl();
-	}
-	CU_EndAttributePop()
-
 	CU_ImplementAttributeParser( parserSlider )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
@@ -597,14 +574,6 @@ namespace castor3d
 			, guiContext.slider );
 	}
 	CU_EndAttribute()
-
-	CU_ImplementAttributeParser( parserSliderEnd )
-	{
-		auto & guiContext = guiparse::getParserContext( context );
-		guiparse::finishControl( guiparse::getControlsManager( context ), guiContext, guiContext.slider );
-		guiContext.popControl();
-	}
-	CU_EndAttributePop()
 
 	CU_ImplementAttributeParser( parserStatic )
 	{
@@ -692,14 +661,6 @@ namespace castor3d
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserStaticEnd )
-	{
-		auto & guiContext = guiparse::getParserContext( context );
-		guiparse::finishControl( guiparse::getControlsManager( context ), guiContext, guiContext.staticTxt );
-		guiContext.popControl();
-	}
-	CU_EndAttributePop()
-
 	CU_ImplementAttributeParser( parserPanel )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
@@ -737,13 +698,118 @@ namespace castor3d
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserPanelEnd )
+	CU_ImplementAttributeParser( parserProgress )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
-		guiparse::finishControl( guiparse::getControlsManager( context ), guiContext, guiContext.panel );
-		guiContext.popControl();
+		params[0]->get( guiContext.controlName );
 	}
-	CU_EndAttributePop()
+	CU_EndAttributePush( GUISection::eProgress )
+
+	CU_ImplementAttributeParser( parserProgressTheme )
+	{
+		auto name = params[0]->get< castor::String >();
+		auto & parsingContext = getParserContext( context );
+		auto & guiContext = guiparse::getParserContext( context );
+		guiparse::createControl< ProgressStyle >( context
+			, guiContext
+			, parsingContext.scene
+			, guiContext.controlName
+			, name + "/Progress"
+			, guiContext.progress );
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserProgressStyle )
+	{
+		auto name = params[0]->get< castor::String >();
+		auto & parsingContext = getParserContext( context );
+		auto & guiContext = guiparse::getParserContext( context );
+		guiparse::createControl< ProgressStyle >( context
+			, guiContext
+			, parsingContext.scene
+			, guiContext.controlName
+			, name
+			, guiContext.progress );
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserProgressContainerBorderSize )
+	{
+		if ( auto progress = guiparse::getParserContext( context ).progress )
+		{
+			progress->setContainerBorderSize( params[0]->get< castor::Point4ui >() );
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No progress control initialised." ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserProgressBarBorderSize )
+	{
+		if ( auto progress = guiparse::getParserContext( context ).progress )
+		{
+			progress->setBarBorderSize( params[0]->get< castor::Point4ui >() );
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No progress control initialised." ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserProgressLeftToRight )
+	{
+		if ( auto progress = guiparse::getParserContext( context ).progress )
+		{
+			progress->setLeftToRight();
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No progress control initialised." ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserProgressRightToLeft )
+	{
+		if ( auto progress = guiparse::getParserContext( context ).progress )
+		{
+			progress->setRightToLeft();
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No progress control initialised." ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserProgressTopToBottom )
+	{
+		if ( auto progress = guiparse::getParserContext( context ).progress )
+		{
+			progress->setTopToBottom();
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No progress control initialised." ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserProgressBottomToTop )
+	{
+		if ( auto progress = guiparse::getParserContext( context ).progress )
+		{
+			progress->setBottomToTop();
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No progress control initialised." ) );
+		}
+	}
+	CU_EndAttribute()
 
 	CU_ImplementAttributeParser( parserExpandablePanel )
 	{
@@ -804,14 +870,6 @@ namespace castor3d
 		guiContext.parents.push( guiContext.panel );
 	}
 	CU_EndAttributePush( GUISection::eExpandablePanelContent )
-
-	CU_ImplementAttributeParser( parserExpandablePanelEnd )
-	{
-		auto & guiContext = guiparse::getParserContext( context );
-		guiparse::finishControl( guiparse::getControlsManager( context ), guiContext, guiContext.expandablePanel );
-		guiContext.popControl();
-	}
-	CU_EndAttributePop()
 
 	CU_ImplementAttributeParser( parserExpandablePanelHeaderEnd )
 	{
@@ -954,14 +1012,6 @@ namespace castor3d
 		guiContext.parents.push( guiContext.panel );
 	}
 	CU_EndAttributePush( GUISection::eFrameContent )
-
-	CU_ImplementAttributeParser( parserFrameEnd )
-	{
-		auto & guiContext = guiparse::getParserContext( context );
-		guiparse::finishControl( guiparse::getControlsManager( context ), guiContext, guiContext.frame );
-		guiContext.popControl();
-	}
-	CU_EndAttributePop()
 
 	CU_ImplementAttributeParser( parserFrameContentEnd )
 	{
@@ -1150,6 +1200,14 @@ namespace castor3d
 		}
 	}
 	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserControlEnd )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+		guiparse::finishControl( guiparse::getControlsManager( context ), guiContext, guiContext.getTopControl()->shared_from_this() );
+		guiContext.popControl();
+	}
+	CU_EndAttributePop()
 
 	CU_ImplementAttributeParser( parserScrollableVerticalScroll )
 	{
@@ -1544,13 +1602,6 @@ namespace castor3d
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserStyleButtonEnd )
-	{
-		auto & guiContext = guiparse::getParserContext( context );
-		guiContext.popStyle();
-	}
-	CU_EndAttributePop()
-
 	CU_ImplementAttributeParser( parserStyleComboButton )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
@@ -1566,13 +1617,6 @@ namespace castor3d
 			, guiContext.listboxStyle );
 	}
 	CU_EndAttributePush( GUISection::eListStyle )
-
-	CU_ImplementAttributeParser( parserStyleComboBoxEnd )
-	{
-		auto & guiContext = guiparse::getParserContext( context );
-		guiContext.popStyle();
-	}
-	CU_EndAttributePop()
 
 	CU_ImplementAttributeParser( parserStyleEditFont )
 	{
@@ -1643,13 +1687,6 @@ namespace castor3d
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserStyleEditEnd )
-	{
-		auto & guiContext = guiparse::getParserContext( context );
-		guiContext.popStyle();
-	}
-	CU_EndAttributePop()
-
 	CU_ImplementAttributeParser( parserStyleListBoxItemStatic )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
@@ -1674,13 +1711,6 @@ namespace castor3d
 	}
 	CU_EndAttributePush( GUISection::eStaticStyle )
 
-	CU_ImplementAttributeParser( parserStyleListBoxEnd )
-	{
-		auto & guiContext = guiparse::getParserContext( context );
-		guiContext.popStyle();
-	}
-	CU_EndAttributePop()
-
 	CU_ImplementAttributeParser( parserStyleSliderLineStatic )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
@@ -1696,13 +1726,6 @@ namespace castor3d
 			, guiContext.staticStyle );
 	}
 	CU_EndAttributePush( GUISection::eStaticStyle )
-
-	CU_ImplementAttributeParser( parserStyleSliderEnd )
-	{
-		auto & guiContext = guiparse::getParserContext( context );
-		guiContext.popStyle();
-	}
-	CU_EndAttributePop()
 
 	CU_ImplementAttributeParser( parserStyleStaticFont )
 	{
@@ -1747,19 +1770,117 @@ namespace castor3d
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserStyleStaticEnd )
+	CU_ImplementAttributeParser( parserStyleProgressTitleFont )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
-		guiContext.popStyle();
-	}
-	CU_EndAttributePop()
 
-	CU_ImplementAttributeParser( parserStylePanelEnd )
+		if ( auto style = guiContext.progressStyle )
+		{
+			style->setTitleFontName( params[0]->get< castor::String >() );
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No progress style initialised." ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserStyleProgressTitleMaterial )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
-		guiContext.popStyle();
+
+		if ( auto style = guiContext.progressStyle )
+		{
+			auto name = params[0]->get< castor::String >();
+			auto material = guiContext.engine->findMaterial( name ).lock().get();
+
+			if ( material )
+			{
+				style->setTitleMaterial( material );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "Material [" + name + "] not found." ) );
+			}
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No progress style initialised." ) );
+		}
 	}
-	CU_EndAttributePop()
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserStyleProgressContainer )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+
+		if ( auto style = guiContext.progressStyle )
+		{
+			guiContext.pushStyle( &style->getContainerStyle()
+				, guiContext.panelStyle );
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No progress style initialised." ) );
+		}
+	}
+	CU_EndAttributePush( GUISection::ePanelStyle )
+
+	CU_ImplementAttributeParser( parserStyleProgressProgress )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+
+		if ( auto style = guiContext.progressStyle )
+		{
+			guiContext.pushStyle( &style->getProgressStyle()
+				, guiContext.panelStyle );
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No progress style initialised." ) );
+		}
+	}
+	CU_EndAttributePush( GUISection::ePanelStyle )
+
+	CU_ImplementAttributeParser( parserStyleProgressTextFont )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+
+		if ( auto style = guiContext.progressStyle )
+		{
+			style->setTextFontName( params[0]->get< castor::String >() );
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No progress style initialised." ) );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserStyleProgressTextMaterial )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+
+		if ( auto style = guiContext.progressStyle )
+		{
+			auto name = params[0]->get< castor::String >();
+			auto material = guiContext.engine->findMaterial( name ).lock().get();
+
+			if ( material )
+			{
+				style->setTextMaterial( material );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "Material [" + name + "] not found." ) );
+			}
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No progress style initialised." ) );
+		}
+	}
+	CU_EndAttribute()
 
 	CU_ImplementAttributeParser( parserStyleExpandablePanelHeader )
 	{
@@ -1784,13 +1905,6 @@ namespace castor3d
 			, guiContext.panelStyle );
 	}
 	CU_EndAttributePush( GUISection::ePanelStyle )
-
-	CU_ImplementAttributeParser( parserStyleExpandablePanelEnd )
-	{
-		auto & guiContext = guiparse::getParserContext( context );
-		guiContext.popStyle();
-	}
-	CU_EndAttributePop()
 
 	CU_ImplementAttributeParser( parserStyleFrameHeaderFont )
 	{
@@ -1835,13 +1949,6 @@ namespace castor3d
 	}
 	CU_EndAttribute()
 
-	CU_ImplementAttributeParser( parserStyleFrameEnd )
-	{
-		auto & guiContext = guiparse::getParserContext( context );
-		guiContext.popStyle();
-	}
-	CU_EndAttributePop()
-
 	CU_ImplementAttributeParser( parserStyleScrollBarBeginButton )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
@@ -1873,13 +1980,6 @@ namespace castor3d
 			, guiContext.panelStyle );
 	}
 	CU_EndAttributePush( GUISection::ePanelStyle )
-
-	CU_ImplementAttributeParser( parserStyleScrollBarEnd )
-	{
-		auto & guiContext = guiparse::getParserContext( context );
-		guiContext.popStyle();
-	}
-	CU_EndAttributePop()
 
 	CU_ImplementAttributeParser( parserStyleBackgroundMaterial )
 	{
@@ -2045,6 +2145,15 @@ namespace castor3d
 	}
 	CU_EndAttributePush( GUISection::ePanelStyle )
 
+	CU_ImplementAttributeParser( parserStyleProgressStyle )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+		guiContext.pushStyle( guiContext.stylesHolder.top()->createProgressStyle( params[0]->get< castor::String >()
+				, getSceneParserContext( context ).scene )
+			, guiContext.progressStyle );
+	}
+	CU_EndAttributePush( GUISection::eProgressStyle )
+
 	CU_ImplementAttributeParser( parserStyleExpandablePanelStyle )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
@@ -2071,6 +2180,13 @@ namespace castor3d
 			, guiContext.scrollBarStyle );
 	}
 	CU_EndAttributePush( GUISection::eScrollBarStyle )
+
+	CU_ImplementAttributeParser( parserStyleEnd )
+	{
+		auto & guiContext = guiparse::getParserContext( context );
+		guiContext.popStyle();
+	}
+	CU_EndAttributePop()
 
 	CU_ImplementAttributeParser( parserLayoutCtrl )
 	{

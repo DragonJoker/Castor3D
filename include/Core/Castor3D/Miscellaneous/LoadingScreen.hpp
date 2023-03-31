@@ -117,12 +117,12 @@ namespace castor3d
 			m_progressBar.step( label );
 		}
 
-		void setRange( uint32_t max )
+		void setRange( int32_t max )
 		{
 			m_progressBar.setRange( max );
 		}
 
-		void incRange( uint32_t mod )
+		void incRange( int32_t mod )
 		{
 			m_progressBar.incRange( mod );
 		}
@@ -136,7 +136,7 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		uint32_t getIndex()const
+		int32_t getIndex()const
 		{
 			return m_progressBar.getIndex();
 		}

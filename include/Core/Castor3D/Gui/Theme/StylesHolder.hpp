@@ -61,6 +61,8 @@ namespace castor3d
 			, Scene * scene );
 		C3D_API PanelStyleRPtr createPanelStyle( castor::String name
 			, Scene * scene );
+		C3D_API ProgressStyleRPtr createProgressStyle( castor::String name
+			, Scene * scene );
 		C3D_API ScrollBarStyleRPtr createScrollBarStyle( castor::String name
 			, Scene * scene );
 		C3D_API SliderStyleRPtr createSliderStyle( castor::String name
@@ -75,6 +77,7 @@ namespace castor3d
 		C3D_API virtual FrameStyleRPtr getFrameStyle( castor::String const & name )const;
 		C3D_API virtual ListBoxStyleRPtr getListBoxStyle( castor::String const & name )const;
 		C3D_API virtual PanelStyleRPtr getPanelStyle( castor::String const & name )const;
+		C3D_API virtual ProgressStyleRPtr getProgressStyle( castor::String const & name )const;
 		C3D_API virtual ScrollBarStyleRPtr getScrollBarStyle( castor::String const & name )const;
 		C3D_API virtual SliderStyleRPtr getSliderStyle( castor::String const & name )const;
 		C3D_API virtual StaticStyleRPtr getStaticStyle( castor::String const & name )const;
@@ -109,6 +112,10 @@ namespace castor3d
 			else if constexpr ( std::is_same_v< StyleT, PanelStyle > )
 			{
 				return getPanelStyle( name );
+			}
+			else if constexpr ( std::is_same_v< StyleT, ProgressStyle > )
+			{
+				return getProgressStyle( name );
 			}
 			else if constexpr ( std::is_same_v< StyleT, ScrollBarStyle > )
 			{
@@ -164,6 +171,11 @@ namespace castor3d
 			return m_panelStyles;
 		}
 
+		auto & getProgressStyles()const noexcept
+		{
+			return m_progressStyles;
+		}
+
 		auto & getScrollBarStyles()const noexcept
 		{
 			return m_scrollBarStyles;
@@ -206,6 +218,7 @@ namespace castor3d
 		std::map< castor::String, FrameStyleUPtr > m_frameStyles;
 		std::map< castor::String, ListBoxStyleUPtr > m_listBoxStyles;
 		std::map< castor::String, PanelStyleUPtr > m_panelStyles;
+		std::map< castor::String, ProgressStyleUPtr > m_progressStyles;
 		std::map< castor::String, ScrollBarStyleUPtr > m_scrollBarStyles;
 		std::map< castor::String, SliderStyleUPtr > m_sliderStyles;
 		std::map< castor::String, StaticStyleUPtr > m_staticStyles;

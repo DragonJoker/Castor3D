@@ -250,7 +250,7 @@ namespace GuiCommon
 					{
 						progress->setTitle( "Initialising: Scene" );
 						progress->setLabel( "Loading scene..." );
-						progress->setRange( preprocessed.getCount() );
+						progress->setRange( int32_t( preprocessed.getCount() ) );
 					}
 
 					auto connection = preprocessed.onAction.connect( [progress]( castor::PreprocessedFile::Action const & action )

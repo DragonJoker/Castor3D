@@ -22,6 +22,7 @@ namespace castor3d
 	{
 		friend class ControlsManager;
 		friend class ScrollableCtrl;
+		friend class ProgressCtrl;
 
 	public:
 		/** Constructor.

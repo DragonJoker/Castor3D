@@ -3,7 +3,7 @@ loading_screen
 	ambient_light 0.0 0.0 0.0
 	background_colour 1.0 1.0 1.0
 
-	material "PufiWalk2D"
+	material "C3D_PufiWalk2D"
 	{
 		pass
 		{
@@ -25,52 +25,48 @@ loading_screen
 		}
 	}
 
-	panel_overlay "PufiWalk2D"
+	progress_style "C3D_LoadingProgress"
 	{
-		pxl_size 128 128
-		pxl_position 84 20
-		material "PufiWalk2D"
+		background_invisible true
+		foreground_invisible true
+		title_font "Arial16"
+		title_material "Black"
+		text_font "Arial10"
+		text_material "Black"
+
+		container_style
+		{
+			background_material "TransparentBlack"
+			foreground_material "Black"
+		}
+
+		bar_style
+		{
+			background_material "Green"
+			foreground_invisible true
+		}
 	}
 
-	panel_overlay "Progress"
+	panel_style "C3D_LoadingPanel"
 	{
-		pxl_size 264 64
-		pxl_position 16 176
-		material "TransparentBlack"
+		background_material "C3D_PufiWalk2D"
+		foreground_invisible true
+	}
 
-		text_overlay "ProgressTitle"
-		{
-			pxl_size 256 16
-			pxl_position 4 0
-			material "Black"
-			font "Arial16"
-			text "Title"
-		}
+	panel "PufiWalk2D"
+	{
+		style "C3D_LoadingPanel"
+		pixel_size 128 128
+		pixel_position 84 20
+		pixel_border_size 0 0 0 0
+	}
 
-		border_panel_overlay "ProgressBarCont"
-		{
-			pxl_size 256 32
-			pxl_position 4 28
-			material "TransparentBlack"
-			pxl_border_size 4 4 4 4
-			border_position external
-			border_material "Black"
-
-			panel_overlay "ProgressBar"
-			{
-				size 0.0 1.0
-				position 0.0 0.0
-				material "Green"
-			}
-
-			text_overlay "ProgressLabel"
-			{
-				pxl_size 240 8
-				pxl_position 8 12
-				material "Black"
-				font "Arial8"
-				text "Label"
-			}
-		}
+	progress "C3D_Progress"
+	{
+		style "C3D_LoadingProgress"
+		pixel_size 264 64
+		pixel_position 16 176
+		container_border_size 4 4 4 4
+		bar_border_size 0 0 0 0
 	}
 }

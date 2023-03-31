@@ -11,6 +11,7 @@ See LICENSE file in root folder
 #include "StyleFrame.hpp"
 #include "StyleListBox.hpp"
 #include "StylePanel.hpp"
+#include "StyleProgress.hpp"
 #include "StyleScrollBar.hpp"
 #include "StyleSlider.hpp"
 #include "StyleStatic.hpp"

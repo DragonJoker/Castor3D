@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 #include "Castor3D/Event/Frame/FrameEventModule.hpp"
+#include "Castor3D/Gui/GuiModule.hpp"
 #include "Castor3D/Overlay/OverlayModule.hpp"
 
 #include <CastorUtils/Math/RangedValue.hpp>
@@ -16,35 +17,16 @@ namespace castor3d
 	{
 	public:
 		C3D_API ProgressBar( Engine & engine
-			, OverlayResPtr parent
-			, OverlayResPtr bar
-			, TextOverlaySPtr title
-			, TextOverlaySPtr label
-			, uint32_t max );
+			, ProgressCtrlRPtr progress );
 
-		C3D_API void update( OverlayResPtr parent
-			, OverlayResPtr bar
-			, TextOverlaySPtr title
-			, TextOverlaySPtr label );
+		C3D_API void update( ProgressCtrlRPtr progress );
 		C3D_API void setTitle( castor::String const & value );
 		C3D_API void setLabel( castor::String const & value );
 		C3D_API void step( castor::String const & label );
 		C3D_API void step();
-
-		void setRange( uint32_t max )
-		{
-			m_index.updateRange( castor::makeRange( 0u, max ) );
-		}
-
-		void incRange( uint32_t mod )
-		{
-			setRange( m_index.range().getMax() + mod );
-		}
-
-		uint32_t getIndex()const
-		{
-			return m_index.value();
-		}
+		C3D_API void setRange( int32_t max );
+		C3D_API void incRange( int32_t mod );
+		C3D_API int32_t getIndex()const;
 
 		void lock()
 		{
@@ -57,18 +39,18 @@ namespace castor3d
 		}
 
 	private:
+		void doSetTitle( castor::U32String const & value );
+		void doSetLabel( castor::U32String const & value );
+		void doStep();
+
+	private:
 		FrameListenerRes m_listener;
-		castor::RangedValue< uint32_t > m_index;
 		castor::String m_title;
 		castor::String m_label;
-		OverlayRPtr m_progress;
-		OverlayRPtr m_progressBar;
-		TextOverlaySPtr m_progressTitle;
-		TextOverlaySPtr m_progressLabel;
+		ProgressCtrlRPtr m_progress;
 		CpuFrameEvent * m_titleEvent{};
 		CpuFrameEvent * m_labelEvent{};
-		CpuFrameEvent * m_stepLabelEvent{};
-		CpuFrameEvent * m_stepEvent{};
+		CpuFrameEvent * m_rangeEvent{};
 		std::mutex m_mutex;
 	};
 
@@ -80,7 +62,7 @@ namespace castor3d
 		, castor::String const & label );
 	C3D_API void stepProgressBar( ProgressBar * progress );
 	C3D_API void incProgressBarRange( ProgressBar * progress
-		, uint32_t value );
+		, int32_t value );
 }
 
 #endif

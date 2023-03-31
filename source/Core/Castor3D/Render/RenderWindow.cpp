@@ -9,6 +9,8 @@
 #include "Castor3D/Event/Frame/CpuFunctorEvent.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Event/UserInput/UserInputListener.hpp"
+#include "Castor3D/Gui/ControlsManager.hpp"
+#include "Castor3D/Gui/Controls/CtrlProgress.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Miscellaneous/DebugName.hpp"
@@ -307,24 +309,6 @@ namespace castor3d
 
 #endif
 
-		static OverlayResPtr getOverlay( Scene const & scene, castor::String const & name )
-		{
-			return scene.tryFindOverlay( name );
-		}
-
-		static TextOverlaySPtr getTextOverlay( Scene const & scene, castor::String const & name )
-		{
-			TextOverlaySPtr result;
-			auto o = getOverlay( scene, name ).lock();
-
-			if ( o && o->getType() == OverlayType::eText )
-			{
-				result = o->getTextOverlay();
-			}
-
-			return result;
-		}
-
 		static castor::Size getScreenSize()
 		{
 			castor::Size result;
@@ -436,7 +420,8 @@ namespace castor3d
 			}
 
 			auto progress = m_progressBar.get();
-			incProgressBarRange( progress, 6u + m_renderTarget->countInitialisationSteps() );
+			incProgressBarRange( progress
+				, int32_t( 6u + m_renderTarget->countInitialisationSteps() ) );
 			getEngine()->postEvent( makeCpuFunctorEvent( EventType::ePreRender
 				, [this]()
 				{
@@ -1174,23 +1159,19 @@ namespace castor3d
 			return;
 		}
 
+		auto & manager = static_cast< ControlsManager & >( *getEngine()->getUserInputListener() );
+		auto control = manager.findControl( cuT( "C3D_Progress" ) );
+
 		if ( !m_progressBar )
 		{
 			m_progressBar = castor::makeUnique< ProgressBar >( *getEngine()
-				, rendwndw::getOverlay( *scene, cuT( "Progress" ) )
-				, rendwndw::getOverlay( *scene, cuT( "ProgressBar" ) )
-				, rendwndw::getTextOverlay( *scene, cuT( "ProgressTitle" ) )
-				, rendwndw::getTextOverlay( *scene, cuT( "ProgressLabel" ) )
-				, 1u );
+				, static_cast< ProgressCtrl * >( control.get() ) );
 			m_progressBar->setTitle( "Initialising..." );
 			m_progressBar->setLabel( "" );
 		}
 		else
 		{
-			m_progressBar->update( rendwndw::getOverlay( *scene, cuT( "Progress" ) )
-				, rendwndw::getOverlay( *scene, cuT( "ProgressBar" ) )
-				, rendwndw::getTextOverlay( *scene, cuT( "ProgressTitle" ) )
-				, rendwndw::getTextOverlay( *scene, cuT( "ProgressLabel" ) ) );
+			m_progressBar->update( static_cast< ProgressCtrl * >( control.get() ) );
 		}
 
 		m_loadingScreen = castor::makeUnique< LoadingScreen >( *m_progressBar
