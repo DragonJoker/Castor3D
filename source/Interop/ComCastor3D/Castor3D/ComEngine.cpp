@@ -12,6 +12,7 @@
 #include <Castor3D/Cache/MaterialCache.hpp>
 #include <Castor3D/Cache/PluginCache.hpp>
 #include <Castor3D/Event/Frame/CpuFunctorEvent.hpp>
+#include <Castor3D/Event/UserInput/UserInputListener.hpp>
 #include <Castor3D/Render/RenderLoop.hpp>
 #include <Castor3D/Scene/SceneFileParser.hpp>
 
@@ -455,6 +456,53 @@ namespace CastorCom
 		else
 		{
 			hr = CComError::dispatchError( E_FAIL, IID_IEngine, _T( "LoadScene" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, nullptr );
+		}
+
+		return hr;
+	}
+
+	STDMETHODIMP CEngine::RegisterGuiCallbacks( /* [in] */ IGuiCallbacks * callbacks )noexcept
+	{
+		HRESULT hr = E_POINTER;
+
+		if ( m_internal )
+		{
+			auto listener = m_internal->getUserInputListener();
+
+			if ( callbacks )
+			{
+				listener->registerClipboardTextAction( [callbacks]( bool set
+					, castor::U32String text )
+					{
+						if ( set )
+						{
+							callbacks->OnSetClipBoardText( toBstr( castor::string::stringCast< castor::xchar >( text ) ) );
+						}
+						else
+						{
+							BSTR result;
+							callbacks->OnGetClipBoardText( &result );
+							text = castor::string::toU32String( fromBstr( result ) );
+						}
+
+						return text;
+					} );
+				listener->registerCursorAction( [callbacks]( castor3d::MouseCursor cursor )
+					{
+						callbacks->OnCursorChange( eMOUSE_CURSOR( cursor ) );
+					} );
+			}
+			else
+			{
+				listener->unregisterCursorAction();
+				listener->unregisterClipboardTextAction();
+			}
+
+			hr = S_OK;
+		}
+		else
+		{
+			hr = CComError::dispatchError( E_FAIL, IID_IEngine, _T( "RegisterGuiCallbacks" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, nullptr );
 		}
 
 		return hr;

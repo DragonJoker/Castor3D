@@ -634,6 +634,22 @@ typedef enum eKEYBOARD_KEY
 	eKEYBOARD_KEY_NUMPADDIVIDE,
 }	eKEYBOARD_KEY;
 
+// eKEYBOARD_KEY
+[
+	uuid( 247EB670-043E-46EF-A227-0118412C488B ),
+	helpstring( "Castor3D mouse cursors enumeration." )
+]
+typedef enum eMOUSE_CURSOR
+{
+	eMOUSE_CURSOR_ARROW,
+	eMOUSE_CURSOR_HAND,
+	eMOUSE_CURSOR_TEXT,
+	eMOUSE_CURSOR_SIZE_WE,
+	eMOUSE_CURSOR_SIZE_NS,
+	eMOUSE_CURSOR_SIZE_NWSE,
+	eMOUSE_CURSOR_SIZE_NESW,
+}	eMOUSE_CURSOR;
+
 interface IAngle;
 interface ICastorFont;
 interface IGlyph;
@@ -660,6 +676,7 @@ interface IColourBackground;
 interface IDirectionalLight;
 interface IEngine;
 interface IGeometry;
+interface IGuiCallbacks;
 interface IImageBackground;
 interface IIndexMapping;
 interface ILight;
@@ -1363,13 +1380,13 @@ interface IRenderWindow
 	[id( 2 ), helpstring( "Initialises the render window" )] HRESULT Initialise( [in] IRenderTarget * target );
 	[id( 3 ), helpstring( "Cleans the render window up" )] HRESULT Cleanup();
 	[id( 4 ), helpstring( "Resizes the render window" )] HRESULT Resize( [in] ISize * size );
-	[id( 5 ), helpstring( "MouseMove event processing" )] HRESULT OnMouseMove( [in] IPosition * pos, [out, retval] boolean * pVal );
-	[id( 6 ), helpstring( "MouseMouseLButtondown event processing" )] HRESULT OnMouseLButtonDown( [in] IPosition * pos, [out, retval] boolean * pVal );
-	[id( 7 ), helpstring( "MouseMouseLButtonUp event processing" )] HRESULT OnMouseLButtonUp( [in] IPosition * pos, [out, retval] boolean * pVal );
-	[id( 8 ), helpstring( "MouseMouseMButtondown event processing" )] HRESULT OnMouseMButtonDown( [in] IPosition * pos, [out, retval] boolean * pVal );
-	[id( 9 ), helpstring( "MouseMouseLButtonUp event processing" )] HRESULT OnMouseMButtonUp( [in] IPosition * pos, [out, retval] boolean * pVal );
-	[id( 10 ), helpstring( "MouseMouseRButtondown event processing" )] HRESULT OnMouseRButtonDown( [in] IPosition * pos, [out, retval] boolean * pVal );
-	[id( 11 ), helpstring( "MouseMouseRButtonUp event processing" )] HRESULT OnMouseRButtonUp( [in] IPosition * pos, [out, retval] boolean * pVal );
+	[id( 5 ), helpstring( "MouseMove event processing" )] HRESULT OnMouseMove( [in] IPosition * pos, [in] boolean isCtrlDown, [in] boolean isAltDown, [in] boolean isShiftDown, [out, retval] boolean * pVal );
+	[id( 6 ), helpstring( "MouseMouseLButtondown event processing" )] HRESULT OnMouseLButtonDown( [in] IPosition * pos, [in] boolean isCtrlDown, [in] boolean isAltDown, [in] boolean isShiftDown, [out, retval] boolean * pVal );
+	[id( 7 ), helpstring( "MouseMouseLButtonUp event processing" )] HRESULT OnMouseLButtonUp( [in] IPosition * pos, [in] boolean isCtrlDown, [in] boolean isAltDown, [in] boolean isShiftDown, [out, retval] boolean * pVal );
+	[id( 8 ), helpstring( "MouseMouseMButtondown event processing" )] HRESULT OnMouseMButtonDown( [in] IPosition * pos, [in] boolean isCtrlDown, [in] boolean isAltDown, [in] boolean isShiftDown, [out, retval] boolean * pVal );
+	[id( 9 ), helpstring( "MouseMouseLButtonUp event processing" )] HRESULT OnMouseMButtonUp( [in] IPosition * pos, [in] boolean isCtrlDown, [in] boolean isAltDown, [in] boolean isShiftDown, [out, retval] boolean * pVal );
+	[id( 10 ), helpstring( "MouseMouseRButtondown event processing" )] HRESULT OnMouseRButtonDown( [in] IPosition * pos, [in] boolean isCtrlDown, [in] boolean isAltDown, [in] boolean isShiftDown, [out, retval] boolean * pVal );
+	[id( 11 ), helpstring( "MouseMouseRButtonUp event processing" )] HRESULT OnMouseRButtonUp( [in] IPosition * pos, [in] boolean isCtrlDown, [in] boolean isAltDown, [in] boolean isShiftDown, [out, retval] boolean * pVal );
 	[id( 12 ), helpstring( "KeyboardKeyDown event processing" )] HRESULT OnKeyboardKeyDown( [in] eKEYBOARD_KEY key, [in] boolean isCtrlDown, [in] boolean isAltDown, [in] boolean isShiftDown, [out, retval] boolean * pVal );
 	[id( 13 ), helpstring( "KeyboardKeyUp event processing" )] HRESULT OnKeyboardKeyUp( [in] eKEYBOARD_KEY key, [in] boolean isCtrlDown, [in] boolean isAltDown, [in] boolean isShiftDown, [out, retval] boolean * pVal );
 	[id( 14 ), helpstring( "KeyboardChar event processing" )] HRESULT OnKeyboardChar( [in] eKEYBOARD_KEY key, [in] BSTR c, [out, retval] boolean * pVal );
@@ -1718,6 +1735,19 @@ interface IOverlay
 	[id( 5 ), helpstring( "Retrieves the childs count" )] HRESULT GetChildrenCount( [in] unsigned int * pVal );
 };
 
+// IGuiCallbacks
+[
+	uuid( C354A03D-9E11-41FB-9C88-C3589C4E599A ),
+	helpstring( "Castor3D GUI callbacks interface" )
+]
+interface IGuiCallbacks
+	: IUnknown
+{
+	[id( 1 ), helpstring( "Called when a text clipboard get action is requested" )] HRESULT OnGetClipBoardText( [out, retval] BSTR * text );
+	[id( 2 ), helpstring( "Called when a text clipboard set action is requested" )] HRESULT OnSetClipBoardText( [in] BSTR text );
+	[id( 3 ), helpstring( "Called when a mouse cursor change is requested" )] HRESULT OnCursorChange( [in] eMOUSE_CURSOR cursor );
+};
+
 // IEngine
 [
 	uuid( 66132C94-BBD3-4C20-BADC-B8EB03E21E11 ),
@@ -1750,6 +1780,7 @@ interface IEngine
 	[id( 20 ), helpstring( "Pauses the render loop (threaded rendering only)" )] HRESULT PauseRendering();
 	[id( 21 ), helpstring( "Resumes the render loop (threaded rendering only)" )] HRESULT ResumeRendering();
 	[id( 22 ), helpstring( "Ends the render loop (threaded rendering only)" )] HRESULT EndRendering();
+	[id( 23 ), helpstring( "Sets callbacks for GUI global events" )] HRESULT RegisterGuiCallbacks( [in] IGuiCallbacks * callbacks );
 };
 
 // Castor3DLib

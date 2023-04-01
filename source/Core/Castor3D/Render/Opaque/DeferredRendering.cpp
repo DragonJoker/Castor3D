@@ -140,10 +140,20 @@ namespace castor3d
 	{
 		for ( auto texture = DsTexture::eMin; texture < DsTexture::eCount; texture = DsTexture( size_t( texture ) + 1u ) )
 		{
-			visitor.visit( "Opaque " + getTexName( texture )
-				, m_opaquePassResult[texture].sampledViewId
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-				, TextureFactors{}.invert( true ) );
+			if ( texture == DsTexture::eNmlOcc )
+			{
+				visitor.visit( "Opaque " + getTexName( texture )
+					, m_opaquePassResult[texture].sampledViewId
+					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+					, TextureFactors::tex2D( { 0.5, 0.5f, 0.5 }, { 0.5, 0.5, 0.5 } ).invert( true ) );
+			}
+			else
+			{
+				visitor.visit( "Opaque " + getTexName( texture )
+					, m_opaquePassResult[texture].sampledViewId
+					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+					, TextureFactors::tex2D().invert( true ) );
+			}
 		}
 
 		m_lightingPass->accept( visitor );
