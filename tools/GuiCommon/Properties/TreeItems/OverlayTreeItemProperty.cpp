@@ -96,7 +96,7 @@ namespace GuiCommon
 			, [this]( wxVariant const & var )
 			{
 				auto & ov = static_cast< castor3d::BorderPanelOverlay & >( *getOverlay() );
-				ov.setAbsoluteBorderSize( Point4uiRefFromVariant( var ) );
+				ov.setPixelBorderSize( Point4uiRefFromVariant( var ) );
 			} );
 		addMaterial( grid, engine, PROPERTY_OVERLAY_BORDER_MATERIAL, m_materials, overlay->getBorderMaterial()
 			, [&overlay]( castor3d::MaterialRPtr material ) { overlay->setBorderMaterial( material ); } );

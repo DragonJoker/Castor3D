@@ -1,4 +1,5 @@
 #include "ComCastor3D/Castor3D/ComSceneNode.hpp"
+
 #include "ComCastor3D/Castor3D/ComMovableObject.hpp"
 #include "ComCastor3D/CastorUtils/ComAngle.hpp"
 #include "ComCastor3D/CastorUtils/ComQuaternion.hpp"
@@ -71,7 +72,7 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->detach();
+			m_internal->detach( false );
 			hr = S_OK;
 		}
 		else

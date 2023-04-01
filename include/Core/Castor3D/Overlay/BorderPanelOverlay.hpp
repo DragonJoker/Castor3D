@@ -141,6 +141,41 @@ namespace castor3d
 			return m_relBorderSize;
 		}
 
+		bool hasPixelBorderSize()const noexcept
+		{
+			return m_pxBorderSize != std::nullopt;
+		}
+
+		uint32_t getPixelLeftBorderSize()const noexcept
+		{
+			CU_Require( hasPixelBorderSize() );
+			return getPixelBorderSize()->x;
+		}
+
+		uint32_t getPixelTopBorderSize()const noexcept
+		{
+			CU_Require( hasPixelBorderSize() );
+			return getPixelBorderSize()->y;
+		}
+
+		uint32_t getPixelRightBorderSize()const noexcept
+		{
+			CU_Require( hasPixelBorderSize() );
+			return getPixelBorderSize()->z;
+		}
+
+		uint32_t getPixelBottomBorderSize()const noexcept
+		{
+			CU_Require( hasPixelBorderSize() );
+			return getPixelBorderSize()->w;
+		}
+
+		castor::Point4ui const & getPixelBorderSize()const noexcept
+		{
+			CU_Require( hasPixelBorderSize() );
+			return *m_pxBorderSize;
+		}
+
 		MaterialRPtr getBorderMaterial()const noexcept
 		{
 			return m_borderMaterial;
@@ -208,13 +243,57 @@ namespace castor3d
 			m_borderChanged = true;
 		}
 
-		void setAbsoluteBorderSize( castor::Point4ui const & size )noexcept
+		void setPixelLeftBorderSize( uint32_t size )noexcept
+		{
+			if ( m_pxBorderSize == std::nullopt )
+			{
+				m_pxBorderSize = castor::Point4ui{};
+			}
+
+			( *m_pxBorderSize )->x = size;
+			m_sizeChanged = true;
+			m_borderChanged = true;
+		}
+
+		void setPixelRightBorderSize( uint32_t size )noexcept
+		{
+			if ( m_pxBorderSize == std::nullopt )
+			{
+				m_pxBorderSize = castor::Point4ui{};
+			}
+
+			( *m_pxBorderSize )->z = size;
+			m_sizeChanged = true;
+			m_borderChanged = true;
+		}
+
+		void setPixelTopBorderSize( uint32_t size )noexcept
+		{
+			if ( m_pxBorderSize == std::nullopt )
+			{
+				m_pxBorderSize = castor::Point4ui{};
+			}
+
+			( *m_pxBorderSize )->y = size;
+			m_sizeChanged = true;
+			m_borderChanged = true;
+		}
+
+		void setPixelBottomBorderSize( uint32_t size )noexcept
+		{
+			if ( m_pxBorderSize == std::nullopt )
+			{
+				m_pxBorderSize = castor::Point4ui{};
+			}
+
+			( *m_pxBorderSize )->w = size;
+			m_sizeChanged = true;
+			m_borderChanged = true;
+		}
+
+		void setPixelBorderSize( castor::Point4ui const & size )noexcept
 		{
 			m_pxBorderSize = size;
-			( *m_pxBorderSize )->x = std::max( 0u, ( *m_pxBorderSize )->x );
-			( *m_pxBorderSize )->y = std::max( 0u, ( *m_pxBorderSize )->y );
-			( *m_pxBorderSize )->z = std::max( 0u, ( *m_pxBorderSize )->z );
-			( *m_pxBorderSize )->w = std::max( 0u, ( *m_pxBorderSize )->w );
 			m_sizeChanged = true;
 			m_borderChanged = true;
 		}

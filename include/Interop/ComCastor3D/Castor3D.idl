@@ -398,44 +398,6 @@ typedef enum
 	eVIEWPORT_TYPE_COUNT,
 }	eVIEWPORT_TYPE;
 
-// eANIMATION_TYPE
-[
-	uuid( 978995A1-5187-477B-B645-66FC3265DEE5 ),
-	helpstring( "Castor3D Animable objects enumeration." )
-]
-typedef enum
-{
-	eANIMATION_TYPE_MOVABLE,
-	eANIMATION_TYPE_SKELETON,
-	eANIMATION_TYPE_MESH,
-	eANIMATION_TYPE_COUNT
-}	eANIMATION_TYPE;
-
-// eANIMATION_STATE
-[
-	uuid( 7657DCA9-7009-43A9-949D-4A6CE59682CF ),
-	helpstring( "Castor3D Animation states enumeration." )
-]
-typedef enum
-{
-	eANIMATION_STATE_PLAYING,
-	eANIMATION_STATE_STOPPED,
-	eANIMATION_STATE_PAUSED,
-	eANIMATION_STATE_COUNT
-}	eANIMATION_STATE;
-
-// eSKELETON_ANIMATION_OBJECT_TYPE
-[
-	uuid( BCBC3FF1-78EE-4147-BC16-CEC568D93E81 ),
-	helpstring( "Castor3D Skeleton animation objects enumeration." )
-]
-typedef enum
-{
-	eSKELETON_ANIMATION_OBJECT_TYPE_NODE,
-	eSKELETON_ANIMATION_OBJECT_TYPE_BONE,
-	eSKELETON_ANIMATION_OBJECT_TYPE_COUNT
-}	eSKELETON_ANIMATION_OBJECT_TYPE;
-
 // eCOMPARISON_FUNC
 [
 	uuid( 64B09ACE-F388-40FE-83BE-DB4A85BCB84E ),
@@ -533,19 +495,6 @@ typedef enum
 	eCOMPARE_OP_REF_TO_TEXTURE,
 	eCOMPARE_OP_COUNT
 }	eCOMPARE_OP;
-
-// ePASS_TYPE
-[
-	uuid( F2C5A760-E42D-466D-B6BF-1FF2EEF233B7 ),
-	helpstring( "Castor3D Pass types enumeration." )
-]
-typedef enum
-{
-	ePASS_TYPE_LEGACY,
-	ePASS_TYPE_METALLIC_ROUGHNESS,
-	ePASS_TYPE_SPECULAR_GLOSSINESS,
-	ePASS_TYPE_COUNT
-}	ePASS_TYPE;
 
 // eINDEX_MAPPING_TYPE
 [
@@ -685,55 +634,58 @@ typedef enum eKEYBOARD_KEY
 	eKEYBOARD_KEY_NUMPADDIVIDE,
 }	eKEYBOARD_KEY;
 
-interface IRgbaColour;
-interface IRgbColour;
-interface IHdrRgbaColour;
+interface IAngle;
+interface ICastorFont;
+interface IGlyph;
 interface IHdrRgbColour;
+interface IHdrRgbaColour;
+interface IImage;
+interface ILength;
+interface ILogger;
+interface IMatrix4x4;
+interface IPixelBuffer;
+interface IPosition;
+interface IQuaternion;
+interface IRect;
+interface IRgbColour;
+interface IRgbaColour;
+interface ISize;
 interface IVector2D;
 interface IVector3D;
 interface IVector4D;
-interface IAngle;
-interface ILength;
-interface IQuaternion;
-interface IMatrix4x4;
-interface IPosition;
-interface ISize;
-interface IRect;
-interface IGlyph;
-interface ICastorFont;
-interface IPixelBuffer;
-interface IImage;
-interface ILogger;
 
-interface ISubmesh;
+interface IBorderPanelOverlay;
+interface ICamera;
+interface IColourBackground;
+interface IDirectionalLight;
+interface IEngine;
+interface IGeometry;
+interface IImageBackground;
+interface IIndexMapping;
+interface ILight;
+interface ILightCategory;
+interface ILineMapping;
+interface IMaterial;
 interface IMesh;
 interface IMovableObject;
-interface ILightCategory;
-interface IDirectionalLight;
-interface IPointLight;
-interface ISpotLight;
-interface ICamera;
-interface ILight;
-interface IGeometry;
-interface ISceneNode;
+interface IOverlay;
 interface IOverlayCategory;
 interface IPanelOverlay;
-interface IBorderPanelOverlay;
+interface IPass;
+interface IPointLight;
+interface IRenderTarget;
+interface IRenderWindow;
+interface ISampler;
+interface IScene;
+interface ISceneBackground;
+interface ISceneNode;
+interface ISkyboxBackground;
+interface ISpotLight;
+interface ISubmesh;
 interface ITextOverlay;
-interface IOverlay;
-interface IAnimable;
-interface IAnimatedObject;
-interface IAnimatedObjectGroup;
-interface ITextureImage;
 interface ITextureLayout;
 interface ITextureUnit;
-interface IPass;
-interface IMaterial;
-interface IEngine;
-interface IAnimation;
-interface IBone;
-interface ISkeleton;
-interface IScene;
+interface ITriFaceMapping;
 
 // IRgbaColour
 [
@@ -1286,7 +1238,6 @@ interface IPass
 	[propput, id( 7 ), helpstring( "The pass blend alpha function" )] HRESULT BlendAlphaFunc( [in] eCOMPARISON_FUNC val );
 	[propget, id( 8 ), helpstring( "The pass alpha reference value" )] HRESULT AlphaRefValue( [out, retval] float * pVal );
 	[propput, id( 8 ), helpstring( "The pass alpha reference value" )] HRESULT AlphaRefValue( [in] float val );
-	[propget, id( 9 ), helpstring( "The pass type" )] HRESULT Type( [out, retval] UINT * pVal );
 	[propget, id( 10 ), helpstring( "Retrieves the texture units count" )] HRESULT TextureUnitCount( [out, retval] unsigned int * pVal );
 	[id( 11 ), helpstring( "Creates a texture unit" )] HRESULT CreateTextureUnit( [out, retval] ITextureUnit ** pVal );
 	[id( 12 ), helpstring( "Retrieves the texture unit at given index" )] HRESULT GetTextureUnitByIndex( [in] unsigned int index, [out, retval] ITextureUnit ** pVal );
@@ -1519,30 +1470,6 @@ interface IScene
 	[id( 22 ), helpstring( "Removes the mesh with the given name" )] HRESULT RemoveMesh( [in] IMesh * mesh );
 };
 
-// IAnimation
-[
-	uuid( 242D6D0F-1470-4F0A-A7D0-9288E1D8856C ),
-	helpstring( "Castor3D Animation interface" ),
-	dual,
-	oleautomation
-]
-interface IAnimation
-	: IDispatch
-{
-};
-
-// ISkeleton
-[
-	uuid( B9815090-EE8B-4FEB-91EE-B7D29C963B38 ),
-	helpstring( "Castor3D Skeleton interface" ),
-	dual,
-	oleautomation
-]
-interface ISkeleton
-	: IDispatch
-{
-};
-
 // IMovableObject
 [
 	uuid( C0B3C2C4-365F-4E66-9520-FD95D45CA96C ),
@@ -1714,16 +1641,14 @@ interface IOverlayCategory
 	: IDispatch
 {
 	[propget, id( 1 ), helpstring( "The overlay type" )] HRESULT Type( [out, retval] eOVERLAY_TYPE * pVal );
-	[propget, id( 2 ), helpstring( "The overlay position, relative to its parent" )] HRESULT Position( [out, retval] IVector2D ** pVal );
-	[propput, id( 2 ), helpstring( "The overlay position, relative to its parent" )] HRESULT Position( [in] IVector2D * val );
-	[propget, id( 3 ), helpstring( "The overlay size, relative to its parent" )] HRESULT Size( [out, retval] IVector2D ** pVal );
-	[propput, id( 3 ), helpstring( "The overlay size, relative to its parent" )] HRESULT Size( [in] IVector2D * val );
+	[propget, id( 2 ), helpstring( "The overlay position, relative to its parent" )] HRESULT Position( [out, retval] IPosition ** pVal );
+	[propput, id( 2 ), helpstring( "The overlay position, relative to its parent" )] HRESULT Position( [in] IPosition * val );
+	[propget, id( 3 ), helpstring( "The overlay size, relative to its parent" )] HRESULT Size( [out, retval] ISize ** pVal );
+	[propput, id( 3 ), helpstring( "The overlay size, relative to its parent" )] HRESULT Size( [in] ISize * val );
 	[propget, id( 4 ), helpstring( "The overlay visibility" )] HRESULT Visible( [out, retval] boolean * pVal );
-	[propput, id( 4 ), helpstring( "The overlay visibility" )] HRESULT Visible( [in] boolean * val );
-	[propget, id( 5 ), helpstring( "The overlay z-index" )] HRESULT ZIndex( [out, retval] int * pVal );
-	[propput, id( 5 ), helpstring( "The overlay z-index" )] HRESULT ZIndex( [in] int val );
-	[propget, id( 6 ), helpstring( "The overlay material" )] HRESULT Material( [out, retval] IMaterial ** pVal );
-	[propput, id( 6 ), helpstring( "The overlay material" )] HRESULT Material( [in] IMaterial * val );
+	[propput, id( 4 ), helpstring( "The overlay visibility" )] HRESULT Visible( [in] boolean val );
+	[propget, id( 5 ), helpstring( "The overlay material" )] HRESULT Material( [out, retval] IMaterial ** pVal );
+	[propput, id( 5 ), helpstring( "The overlay material" )] HRESULT Material( [in] IMaterial * val );
 };
 
 // IPanelOverlay
@@ -1748,14 +1673,14 @@ interface IPanelOverlay
 interface IBorderPanelOverlay
 	: IOverlayCategory
 {
-	[propget, id( 11 ), helpstring( "The bottom border width" )] HRESULT LeftBorderSize( [out, retval] float * pVal );
-	[propput, id( 11 ), helpstring( "The bottom border width" )] HRESULT LeftBorderSize( [in] float val );
-	[propget, id( 12 ), helpstring( "The right border width" )] HRESULT RightBorderSize( [out, retval] float * pVal );
-	[propput, id( 12 ), helpstring( "The right border width" )] HRESULT RightBorderSize( [in] float val );
-	[propget, id( 13 ), helpstring( "The top border width" )] HRESULT TopBorderSize( [out, retval] float * pVal );
-	[propput, id( 13 ), helpstring( "The top border width" )] HRESULT TopBorderSize( [in] float val );
-	[propget, id( 14 ), helpstring( "The bottom border width" )] HRESULT BottomBorderSize( [out, retval] float * pVal );
-	[propput, id( 14 ), helpstring( "The bottom border width" )] HRESULT BottomBorderSize( [in] float val );
+	[propget, id( 11 ), helpstring( "The bottom border width" )] HRESULT LeftBorderSize( [out, retval] unsigned int * pVal );
+	[propput, id( 11 ), helpstring( "The bottom border width" )] HRESULT LeftBorderSize( [in] unsigned int val );
+	[propget, id( 12 ), helpstring( "The right border width" )] HRESULT RightBorderSize( [out, retval] unsigned int * pVal );
+	[propput, id( 12 ), helpstring( "The right border width" )] HRESULT RightBorderSize( [in] unsigned int val );
+	[propget, id( 13 ), helpstring( "The top border width" )] HRESULT TopBorderSize( [out, retval] unsigned int * pVal );
+	[propput, id( 13 ), helpstring( "The top border width" )] HRESULT TopBorderSize( [in] unsigned int val );
+	[propget, id( 14 ), helpstring( "The bottom border width" )] HRESULT BottomBorderSize( [out, retval] unsigned int * pVal );
+	[propput, id( 14 ), helpstring( "The bottom border width" )] HRESULT BottomBorderSize( [in] unsigned int val );
 	[propget, id( 15 ), helpstring( "The border material" )] HRESULT BorderMaterial( [out, retval] IMaterial ** pVal );
 	[propput, id( 15 ), helpstring( "The border material" )] HRESULT BorderMaterial( [in] IMaterial * val );
 };
@@ -1787,77 +1712,10 @@ interface IOverlay
 	: IDispatch
 {
 	[propget, id( 1 ), helpstring( "The overlay name" )] HRESULT Name( [out, retval] BSTR * pVal );
-	[propput, id( 1 ), helpstring( "The overlay name" )] HRESULT Name( [in] BSTR val );
 	[propget, id( 2 ), helpstring( "The panel overlay category" )] HRESULT PanelOverlay( [out, retval] IPanelOverlay ** pVal );
 	[propget, id( 3 ), helpstring( "The border panel overlay category" )] HRESULT BorderPanelOverlay( [out, retval] IBorderPanelOverlay ** pVal );
 	[propget, id( 4 ), helpstring( "The text overlay category" )] HRESULT TextOverlay( [out, retval] ITextOverlay ** pVal );
-	[id( 5 ), helpstring( "Retrieves the childs count" )] HRESULT GetChildsCount( [in] unsigned int * pVal );
-	[id( 6 ), helpstring( "Adds a child" )] HRESULT AddChild( [in] IOverlay * overlay, [in] int zindex );
-};
-
-// IAnimable
-[
-	uuid( 18CB2526-98C6-4E19-932C-25264D419FFA ),
-	helpstring( "Castor3D Animable interface" ),
-	dual,
-	oleautomation
-]
-interface IAnimable
-	: IDispatch
-{
-	[id( 1 ), helpstring( "Retrieves the animation with the given name" )] HRESULT GetAnimation( [in] BSTR name, [out, retval] IAnimation ** anim );
-	[id( 2 ), helpstring( "Creates an animation" )] HRESULT CreateAnimation( [in] BSTR name, [out, retval] IAnimation ** anim );
-};
-
-// IAnimatedObject
-[
-	uuid( 6F5C61B7-507C-4C5C-9463-368776C647D1 ),
-	helpstring( "Castor3D AnimatedObject interface" ),
-	dual,
-	oleautomation
-]
-interface IAnimatedObject
-	: IDispatch
-{
-	[propget, id( 1 ), helpstring( "The animable geometry" )] HRESULT Geometry( [out, retval] IGeometry ** pVal );
-	[propput, id( 1 ), helpstring( "The animable geometry" )] HRESULT Geometry( [in] IGeometry * val );
-	[propget, id( 2 ), helpstring( "The animable mesh" )] HRESULT Mesh( [out, retval] IMesh ** pVal );
-	[propput, id( 2 ), helpstring( "The animable mesh" )] HRESULT Mesh( [in] IMesh * val );
-	[propget, id( 3 ), helpstring( "The animable skeleton" )] HRESULT Skeleton( [out, retval] ISkeleton ** pVal );
-	[propput, id( 3 ), helpstring( "The animable skeleton" )] HRESULT Skeleton( [in] ISkeleton * val );
-	[id( 4 ), helpstring( "Retrieves the animation with given name" )] HRESULT getAnimation( [in] BSTR name, [out, retval] IAnimation ** anim );
-	[id( 5 ), helpstring( "Starts all the animable animations" )] HRESULT StartAllAnimations();
-	[id( 6 ), helpstring( "Stops all the animable animations" )] HRESULT StopAllAnimations();
-	[id( 7 ), helpstring( "Pauses all the animable animations" )] HRESULT PauseAllAnimations();
-	[id( 8 ), helpstring( "Starts the animation with given name" )] HRESULT StartAnimation( [in] BSTR name );
-	[id( 9 ), helpstring( "Stops the animation with given name" )] HRESULT StopAnimation( [in] BSTR name );
-	[id( 10 ), helpstring( "Pauses the animation with given name" )] HRESULT PauseAnimation( [in] BSTR name );
-};
-
-// IAnimatedObjectGroup
-[
-	uuid( E369A7E4-0E42-42B9-B541-CD23A20FCDC1 ),
-	helpstring( "Castor3D AnimatedObjectGroup interface" ),
-	dual,
-	oleautomation
-]
-interface IAnimatedObjectGroup
-	: IDispatch
-{
-	[propget, id( 1 ), helpstring( "Retrieves the animsations count" )] HRESULT AnimationCount( [out, retval] unsigned int * pVal );
-	[propget, id( 2 ), helpstring( "Retrieves the animable objects count" )] HRESULT ObjectCount( [out, retval] unsigned int * pVal );
-	[propget, id( 3 ), helpstring( "Retrieves the scene" )] HRESULT Scene( [out, retval] IScene ** anim );
-	[id( 5 ), helpstring( "Retrieves the animable object with given name" )] HRESULT GetAnimableObject( [in] BSTR name, [out, retval] IAnimable ** obj );
-	[id( 6 ), helpstring( "Starts all the animable animations" )] HRESULT StartAllAnimations();
-	[id( 7 ), helpstring( "Stops all the animable animations" )] HRESULT StopAllAnimations();
-	[id( 8 ), helpstring( "Pauses all the animable animations" )] HRESULT PauseAllAnimations();
-	[id( 9 ), helpstring( "Starts the animation with given name" )] HRESULT StartAnimation( [in] BSTR name );
-	[id( 10 ), helpstring( "Stops the animation with given name" )] HRESULT StopAnimation( [in] BSTR name );
-	[id( 11 ), helpstring( "Pauses the animation with given name" )] HRESULT PauseAnimation( [in] BSTR name );
-	[id( 12 ), helpstring( "Creates the animable object" )] HRESULT CreateObject( [in] BSTR name, [out, retval] IAnimable ** obj );
-	[id( 13 ), helpstring( "Adds an animable object to the group" )] HRESULT AddObject( [in] IAnimable * obj, [out, retval] boolean * pVal );
-	[id( 14 ), helpstring( "Adds an animation to the group" )] HRESULT AddAnimation( [in] BSTR name );
-	[id( 15 ), helpstring( "Sets the animation loop status" )] HRESULT SetAnimationLooped( [in] BSTR name, [in] boolean val );
+	[id( 5 ), helpstring( "Retrieves the childs count" )] HRESULT GetChildrenCount( [in] unsigned int * pVal );
 };
 
 // IEngine
@@ -2292,33 +2150,6 @@ library Castor3D
 		[default] interface IOverlay;
 	};
 
-	// Animable
-	[
-		uuid( F9185125-9460-4039-A0B0-EB2295AC6AB1 )
-	]
-	coclass Animable
-	{
-		[default] interface IAnimable;
-	};
-
-	// AnimatedObject
-	[
-		uuid( F31A778F-F9E5-4619-A35B-2EE8325BF1D2 )
-	]
-	coclass AnimatedObject
-	{
-		[default] interface IAnimatedObject;
-	};
-
-	// AnimatedObjectGroup
-	[
-		uuid( 7180F914-17E1-45A1-A2AB-F195F0724AD7 )
-	]
-	coclass AnimatedObjectGroup
-	{
-		[default] interface IAnimatedObjectGroup;
-	};
-
 	// SceneBackground
 	[
 		uuid( 5CA94585-1FBC-466A-8A59-90733AD8DF1D )
@@ -2362,24 +2193,6 @@ library Castor3D
 	coclass Scene
 	{
 		[default] interface IScene;
-	};
-
-	// Animation
-	[
-		uuid( 5B26DE5C-FFE8-42AE-A07C-837D5164CAFE )
-	]
-	coclass Animation
-	{
-		[default] interface IAnimation;
-	};
-
-	// Skeleton
-	[
-		uuid( 53A552B5-8524-4DDD-987C-AC68AA87233E )
-	]
-	coclass Skeleton
-	{
-		[default] interface ISkeleton;
 	};
 
 	// RenderWindow

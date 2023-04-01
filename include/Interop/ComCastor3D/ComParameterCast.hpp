@@ -29,6 +29,7 @@ namespace CastorCom::details
 			|| areCompatibleV< SrcT, DstT, eLIGHT_TYPE, castor3d::LightType >
 			|| areCompatibleV< SrcT, DstT, eVIEWPORT_TYPE, castor3d::ViewportType >
 			|| areCompatibleV< SrcT, DstT, eKEYBOARD_KEY, castor3d::KeyboardKey >
+			|| areCompatibleV< SrcT, DstT, eOVERLAY_TYPE, castor3d::OverlayType >
 			|| areCompatibleV< SrcT, DstT, eBORDER_COLOUR, VkBorderColor >
 			|| areCompatibleV< SrcT, DstT, eFILTER_MODE, VkFilter >
 			|| areCompatibleV< SrcT, DstT, eIMAGE_TYPE, VkImageType >
@@ -83,6 +84,17 @@ namespace CastorCom::details
 	inline castor::String parameterCast< castor::String, BSTR >( BSTR const & src )
 	{
 		return fromBstr( src );
+	}
+
+	template<>
+	inline BSTR parameterCast< BSTR, castor::U32String >( castor::U32String const & src )
+	{
+		return toBstr( castor::string::stringCast< castor::xchar >( src ) );
+	}
+	template<>
+	inline castor::U32String parameterCast< castor::U32String, BSTR >( BSTR const & src )
+	{
+		return castor::string::toU32String( fromBstr( src ) );
 	}
 
 	template<>

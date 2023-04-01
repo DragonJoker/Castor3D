@@ -67,7 +67,6 @@ namespace CastorCom
 		static float getShininess( castor3d::Pass const * pass );
 		static void setShininess( castor3d::Pass * pass, float v );
 
-		COMEX_PROPERTY_GET( Type, UINT, m_internal, &castor3d::Pass::getTypeID );
 		COMEX_PROPERTY_GET( TextureUnitCount, uint32_t, m_internal, &castor3d::Pass::getTextureUnitsCount );
 
 		STDMETHOD( CreateTextureUnit )( /* [out, retval] */ ITextureUnit ** pVal );

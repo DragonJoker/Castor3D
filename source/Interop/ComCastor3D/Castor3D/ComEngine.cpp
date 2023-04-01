@@ -79,7 +79,8 @@ namespace CastorCom
 		{
 			m_internal = new castor3d::Engine{ fromBstr( appName )
 				, castor3d::Version{ ComCastor3D_VERSION_MAJOR, ComCastor3D_VERSION_MINOR, ComCastor3D_VERSION_BUILD }
-				, enableValidation == TRUE };
+				, enableValidation == TRUE
+				, true };
 			hr = S_OK;
 		}
 		else
