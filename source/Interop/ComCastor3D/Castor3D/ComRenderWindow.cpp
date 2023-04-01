@@ -73,7 +73,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CRenderWindow::OnMouseMove( /* [in] */ IPosition * pos, /* [out, retval] */ boolean * pVal )noexcept
+	STDMETHODIMP CRenderWindow::OnMouseMove( /* [in] */ IPosition * pos, /* [in] */ boolean isCtrlDown, /* [in] */ boolean isAltDown, /* [in] */ boolean isShiftDown, /* [out, retval] */ boolean * pVal )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -86,7 +86,10 @@ namespace CastorCom
 			{
 				if ( auto inputListener = m_internal->getEngine()->getUserInputListener() )
 				{
-					*pVal = inputListener->fireMouseMove( castor::Position( int32_t( m_oldX ), int32_t( m_oldY ) ), false, false, false );
+					*pVal = inputListener->fireMouseMove( castor::Position( int32_t( m_oldX ), int32_t( m_oldY ) )
+						, isCtrlDown != FALSE
+						, isAltDown != FALSE
+						, isShiftDown != FALSE );
 				}
 			}
 			catch ( castor::Exception & )
@@ -103,7 +106,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CRenderWindow::OnMouseLButtonDown( /* [in] */ IPosition * pos, /* [out, retval] */ boolean * pVal )noexcept
+	STDMETHODIMP CRenderWindow::OnMouseLButtonDown( /* [in] */ IPosition * pos, /* [in] */ boolean isCtrlDown, /* [in] */ boolean isAltDown, /* [in] */ boolean isShiftDown, /* [out, retval] */ boolean * pVal )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -116,7 +119,10 @@ namespace CastorCom
 			{
 				if ( auto inputListener = m_internal->getEngine()->getUserInputListener() )
 				{
-					*pVal = inputListener->fireMouseButtonPushed( castor3d::MouseButton::eLeft, false, false, false );
+					*pVal = inputListener->fireMouseButtonPushed( castor3d::MouseButton::eLeft
+						, isCtrlDown != FALSE
+						, isAltDown != FALSE
+						, isShiftDown != FALSE );
 				}
 			}
 			catch ( castor::Exception & )
@@ -133,7 +139,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CRenderWindow::OnMouseLButtonUp( /* [in] */ IPosition * pos, /* [out, retval] */ boolean * pVal )noexcept
+	STDMETHODIMP CRenderWindow::OnMouseLButtonUp( /* [in] */ IPosition * pos, /* [in] */ boolean isCtrlDown, /* [in] */ boolean isAltDown, /* [in] */ boolean isShiftDown, /* [out, retval] */ boolean * pVal )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -146,7 +152,10 @@ namespace CastorCom
 			{
 				if ( auto inputListener = m_internal->getEngine()->getUserInputListener() )
 				{
-					*pVal = inputListener->fireMouseButtonReleased( castor3d::MouseButton::eLeft, false, false, false );
+					*pVal = inputListener->fireMouseButtonReleased( castor3d::MouseButton::eLeft
+						, isCtrlDown != FALSE
+						, isAltDown != FALSE
+						, isShiftDown != FALSE );
 				}
 			}
 			catch ( castor::Exception & )
@@ -163,7 +172,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CRenderWindow::OnMouseMButtonDown( /* [in] */ IPosition * pos, /* [out, retval] */ boolean * pVal )noexcept
+	STDMETHODIMP CRenderWindow::OnMouseMButtonDown( /* [in] */ IPosition * pos, /* [in] */ boolean isCtrlDown, /* [in] */ boolean isAltDown, /* [in] */ boolean isShiftDown, /* [out, retval] */ boolean * pVal )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -176,7 +185,10 @@ namespace CastorCom
 			{
 				if ( auto inputListener = m_internal->getEngine()->getUserInputListener() )
 				{
-					*pVal = inputListener->fireMouseButtonPushed( castor3d::MouseButton::eMiddle, false, false, false );
+					*pVal = inputListener->fireMouseButtonPushed( castor3d::MouseButton::eMiddle
+						, isCtrlDown != FALSE
+						, isAltDown != FALSE
+						, isShiftDown != FALSE );
 				}
 			}
 			catch ( castor::Exception & )
@@ -193,7 +205,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CRenderWindow::OnMouseMButtonUp( /* [in] */ IPosition * pos, /* [out, retval] */ boolean * pVal )noexcept
+	STDMETHODIMP CRenderWindow::OnMouseMButtonUp( /* [in] */ IPosition * pos, /* [in] */ boolean isCtrlDown, /* [in] */ boolean isAltDown, /* [in] */ boolean isShiftDown, /* [out, retval] */ boolean * pVal )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -206,7 +218,10 @@ namespace CastorCom
 			{
 				if ( auto inputListener = m_internal->getEngine()->getUserInputListener() )
 				{
-					*pVal = inputListener->fireMouseButtonReleased( castor3d::MouseButton::eMiddle, false, false, false );
+					*pVal = inputListener->fireMouseButtonReleased( castor3d::MouseButton::eMiddle
+						, isCtrlDown != FALSE
+						, isAltDown != FALSE
+						, isShiftDown != FALSE );
 				}
 			}
 			catch ( castor::Exception & )
@@ -223,7 +238,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CRenderWindow::OnMouseRButtonDown( /* [in] */ IPosition * pos, /* [out, retval] */ boolean * pVal )noexcept
+	STDMETHODIMP CRenderWindow::OnMouseRButtonDown( /* [in] */ IPosition * pos, /* [in] */ boolean isCtrlDown, /* [in] */ boolean isAltDown, /* [in] */ boolean isShiftDown, /* [out, retval] */ boolean * pVal )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -236,7 +251,10 @@ namespace CastorCom
 			{
 				if ( auto inputListener = m_internal->getEngine()->getUserInputListener() )
 				{
-					*pVal = inputListener->fireMouseButtonPushed( castor3d::MouseButton::eRight, false, false, false );
+					*pVal = inputListener->fireMouseButtonPushed( castor3d::MouseButton::eRight
+						, isCtrlDown != FALSE
+						, isAltDown != FALSE
+						, isShiftDown != FALSE );
 				}
 			}
 			catch ( castor::Exception & )
@@ -253,7 +271,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CRenderWindow::OnMouseRButtonUp( /* [in] */ IPosition * pos, /* [out, retval] */ boolean * pVal )noexcept
+	STDMETHODIMP CRenderWindow::OnMouseRButtonUp( /* [in] */ IPosition * pos, /* [in] */ boolean isCtrlDown, /* [in] */ boolean isAltDown, /* [in] */ boolean isShiftDown, /* [out, retval] */ boolean * pVal )noexcept
 	{
 		HRESULT hr = E_POINTER;
 
@@ -266,7 +284,10 @@ namespace CastorCom
 			{
 				if ( auto inputListener = m_internal->getEngine()->getUserInputListener() )
 				{
-					*pVal = inputListener->fireMouseButtonReleased( castor3d::MouseButton::eRight, false, false, false );
+					*pVal = inputListener->fireMouseButtonReleased( castor3d::MouseButton::eRight
+						, isCtrlDown != FALSE
+						, isAltDown != FALSE
+						, isShiftDown != FALSE );
 				}
 			}
 			catch ( castor::Exception & )

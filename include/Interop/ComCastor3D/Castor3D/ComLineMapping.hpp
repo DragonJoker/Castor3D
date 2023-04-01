@@ -2,7 +2,7 @@
 #ifndef __COMC3D_ComLinesMapping_H__
 #define __COMC3D_ComLinesMapping_H__
 
-#include "ComCastor3D/Castor3D/ComTextureLayout.hpp"
+#include "ComCastor3D/Castor3D/ComIndexMapping.hpp"
 
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/LinesMapping.hpp>

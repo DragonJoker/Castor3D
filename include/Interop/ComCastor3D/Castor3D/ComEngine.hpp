@@ -42,8 +42,7 @@ namespace CastorCom
 		STDMETHOD( CreateSampler )( /* [in] */ BSTR name, /* [out, retval] */ ISampler ** pVal );
 		STDMETHOD( RemoveScene )( /* [in] */ BSTR name );
 		STDMETHOD( LoadScene )( /* [in] */ BSTR name, /* [out, retval] */ IRenderTarget ** pTarget );
-
-	private:
+		STDMETHOD( RegisterGuiCallbacks )( /* [in] */ IGuiCallbacks * callbacks );
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object
 	//!\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
