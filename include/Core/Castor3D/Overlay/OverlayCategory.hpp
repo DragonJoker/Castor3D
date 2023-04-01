@@ -271,7 +271,7 @@ namespace castor3d
 			return m_pxSize != std::nullopt;
 		}
 
-		castor::Position const & getPixelPosition()noexcept
+		castor::Position const & getPixelPosition()const noexcept
 		{
 			CU_Require( hasPixelPosition() );
 			return *m_pxPosition;
@@ -292,15 +292,13 @@ namespace castor3d
 		*	Mutateurs.
 		*/
 		/**@{*/
-		void setRelativePosition( castor::Point2d const & value
-			, bool notify = true )noexcept
+		void setRelativePosition( castor::Point2d const & value )noexcept
 		{
 			m_relPosition = value;
 			m_positionChanged = true;
 		}
 
-		void setRelativeSize( castor::Point2d const & value
-			, bool notify = true )noexcept
+		void setRelativeSize( castor::Point2d const & value )noexcept
 		{
 			m_relSize = value;
 			m_relSize->x = std::max( 0.0, m_relSize->x );
@@ -308,15 +306,13 @@ namespace castor3d
 			m_sizeChanged = true;
 		}
 
-		void setPixelPosition( castor::Position const & value
-			, bool notify = true )noexcept
+		void setPixelPosition( castor::Position const & value )noexcept
 		{
 			m_pxPosition = value;
 			m_positionChanged = true;
 		}
 
-		void setPixelSize( castor::Size const & value
-			, bool notify = true )noexcept
+		void setPixelSize( castor::Size const & value )noexcept
 		{
 			m_pxSize = value;
 			m_sizeChanged = true;

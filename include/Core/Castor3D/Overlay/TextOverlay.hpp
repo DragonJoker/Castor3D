@@ -101,7 +101,7 @@ namespace castor3d
 		 *\brief		Définit la police du texte
 		 *\param[in]	value	La nouvelle valeur
 		 */
-		C3D_API void setFont( castor::String const & value );
+		C3D_API void setFont( castor::String value );
 		/**
 		*\~english
 		*\name
@@ -180,9 +180,9 @@ namespace castor3d
 		*	Mutateurs.
 		*/
 		/**@{*/
-		void setCaption( std::u32string const & value )
+		void setCaption( std::u32string value )
 		{
-			m_currentCaption = value;
+			m_currentCaption = std::move( value );
 			m_textChanged = true;
 		}
 

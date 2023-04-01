@@ -169,8 +169,11 @@ namespace castor3d
 
 			for ( auto & buffer : specifics )
 			{
-				buffer.second.second->setCount( uint32_t( m_passes.size() ) );
-				buffer.second.second->upload( commandBuffer );
+				if ( auto & buf = buffer.second.second )
+				{
+					buf->setCount( uint32_t( m_passes.size() ) );
+					buf->upload( commandBuffer );
+				}
 			}
 		}
 	}

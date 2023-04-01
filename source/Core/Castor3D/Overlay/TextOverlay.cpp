@@ -367,7 +367,7 @@ namespace castor3d
 		return makeShaderState( device, comp );
 	}
 
-	void TextOverlay::setFont( castor::String const & name )
+	void TextOverlay::setFont( castor::String name )
 	{
 		// Récupération / Création de la police
 		Engine * engine = m_overlay->getEngine();

@@ -86,7 +86,7 @@ namespace CastorCom
 			{
 				if ( auto inputListener = m_internal->getEngine()->getUserInputListener() )
 				{
-					*pVal = inputListener->fireMouseMove( castor::Position( int32_t( m_oldX ), int32_t( m_oldY ) ) );
+					*pVal = inputListener->fireMouseMove( castor::Position( int32_t( m_oldX ), int32_t( m_oldY ) ), false, false, false );
 				}
 			}
 			catch ( castor::Exception & )
@@ -116,7 +116,7 @@ namespace CastorCom
 			{
 				if ( auto inputListener = m_internal->getEngine()->getUserInputListener() )
 				{
-					*pVal = inputListener->fireMouseButtonPushed( castor3d::MouseButton::eLeft );
+					*pVal = inputListener->fireMouseButtonPushed( castor3d::MouseButton::eLeft, false, false, false );
 				}
 			}
 			catch ( castor::Exception & )
@@ -146,7 +146,7 @@ namespace CastorCom
 			{
 				if ( auto inputListener = m_internal->getEngine()->getUserInputListener() )
 				{
-					*pVal = inputListener->fireMouseButtonReleased( castor3d::MouseButton::eLeft );
+					*pVal = inputListener->fireMouseButtonReleased( castor3d::MouseButton::eLeft, false, false, false );
 				}
 			}
 			catch ( castor::Exception & )
@@ -176,7 +176,7 @@ namespace CastorCom
 			{
 				if ( auto inputListener = m_internal->getEngine()->getUserInputListener() )
 				{
-					*pVal = inputListener->fireMouseButtonPushed( castor3d::MouseButton::eMiddle );
+					*pVal = inputListener->fireMouseButtonPushed( castor3d::MouseButton::eMiddle, false, false, false );
 				}
 			}
 			catch ( castor::Exception & )
@@ -206,7 +206,7 @@ namespace CastorCom
 			{
 				if ( auto inputListener = m_internal->getEngine()->getUserInputListener() )
 				{
-					*pVal = inputListener->fireMouseButtonReleased( castor3d::MouseButton::eMiddle );
+					*pVal = inputListener->fireMouseButtonReleased( castor3d::MouseButton::eMiddle, false, false, false );
 				}
 			}
 			catch ( castor::Exception & )
@@ -236,7 +236,7 @@ namespace CastorCom
 			{
 				if ( auto inputListener = m_internal->getEngine()->getUserInputListener() )
 				{
-					*pVal = inputListener->fireMouseButtonPushed( castor3d::MouseButton::eRight );
+					*pVal = inputListener->fireMouseButtonPushed( castor3d::MouseButton::eRight, false, false, false );
 				}
 			}
 			catch ( castor::Exception & )
@@ -266,7 +266,7 @@ namespace CastorCom
 			{
 				if ( auto inputListener = m_internal->getEngine()->getUserInputListener() )
 				{
-					*pVal = inputListener->fireMouseButtonReleased( castor3d::MouseButton::eRight );
+					*pVal = inputListener->fireMouseButtonReleased( castor3d::MouseButton::eRight, false, false, false );
 				}
 			}
 			catch ( castor::Exception & )

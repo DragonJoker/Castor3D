@@ -263,13 +263,18 @@ namespace castor3d
 
 	void UserInputListener::onCursorAction( MouseCursor cursor )const
 	{
-		m_onCursorAction( cursor );
+		if ( m_onCursorAction )
+		{
+			m_onCursorAction( cursor );
+		}
 	}
 
 	castor::U32String UserInputListener::onClipboardTextAction( bool set
 		, castor::U32String text )const
 	{
-		return m_onClipboardTextAction( set, std::move( text ) );
+		return m_onClipboardTextAction
+			? m_onClipboardTextAction( set, std::move( text ) )
+			: castor::U32String{};
 	}
 
 	void UserInputListener::enableHandler( castor::String const & handler )

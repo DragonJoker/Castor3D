@@ -284,22 +284,22 @@ namespace castor3d
 
 		void setRelativePosition( castor::Point2d const & position )
 		{
-			m_category->setRelativePosition( position, false );
+			m_category->setRelativePosition( position );
 		}
 
 		void setRelativeSize( castor::Point2d const & size )
 		{
-			m_category->setRelativeSize( size, false );
+			m_category->setRelativeSize( size );
 		}
 
 		void setPixelPosition( castor::Position const & position )
 		{
-			m_category->setPixelPosition( position, false );
+			m_category->setPixelPosition( position );
 		}
 
 		void setPixelSize( castor::Size const & size )
 		{
-			m_category->setPixelSize( size, false );
+			m_category->setPixelSize( size );
 		}
 
 		void rename( castor::String const & name )

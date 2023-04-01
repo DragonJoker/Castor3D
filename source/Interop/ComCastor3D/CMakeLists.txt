@@ -45,6 +45,7 @@ if ( MSVC )
 		source_group( "IDL Files" FILES ${${PROJECT_NAME}_IDL_FILES} )
 
 		set( ${PROJECT_NAME}_FOLDER_SRC_FILES
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComBorderPanelOverlay.cpp
 			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComCamera.cpp
 			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComColourBackground.cpp
 			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComDirectionalLight.cpp
@@ -57,10 +58,11 @@ if ( MSVC )
 			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComLineMapping.cpp
 			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComMaterial.cpp
 			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComMesh.cpp
-			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComMetallicRoughnessPbrPass.cpp
 			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComMovableObject.cpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComOverlay.cpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComOverlayCategory.cpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComPanelOverlay.cpp
 			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComPass.cpp
-			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComPhongPass.cpp
 			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComPointLight.cpp
 			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComRenderTarget.cpp
 			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComRenderWindow.cpp
@@ -69,14 +71,15 @@ if ( MSVC )
 			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComSceneBackground.cpp
 			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComSceneNode.cpp
 			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComSkyboxBackground.cpp
-			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComSpecularGlossinessPbrPass.cpp
 			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComSpotLight.cpp
 			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComSubmesh.cpp
+			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComTextOverlay.cpp
 			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComTextureLayout.cpp
 			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComTextureUnit.cpp
 			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComTriFaceMapping.cpp
 		)
 		set( ${PROJECT_NAME}_FOLDER_HDR_FILES
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComBorderPanelOverlay.hpp
 			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComCamera.hpp
 			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComColourBackground.hpp
 			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComDirectionalLight.hpp
@@ -89,10 +92,11 @@ if ( MSVC )
 			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComLineMapping.hpp
 			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComMaterial.hpp
 			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComMesh.hpp
-			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComMetallicRoughnessPbrPass.hpp
 			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComMovableObject.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComOverlay.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComOverlayCategory.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComPanelOverlay.hpp
 			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComPass.hpp
-			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComPhongPass.hpp
 			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComPointLight.hpp
 			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComRenderTarget.hpp
 			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComRenderWindow.hpp
@@ -101,9 +105,9 @@ if ( MSVC )
 			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComSceneBackground.hpp
 			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComSceneNode.hpp
 			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComSkyboxBackground.hpp
-			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComSpecularGlossinessPbrPass.hpp
 			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComSpotLight.hpp
 			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComSubmesh.hpp
+			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComTextOverlay.hpp
 			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComTextureLayout.hpp
 			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComTextureUnit.hpp
 			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComTriFaceMapping.hpp

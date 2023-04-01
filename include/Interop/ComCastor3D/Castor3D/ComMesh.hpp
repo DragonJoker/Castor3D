@@ -20,8 +20,6 @@ namespace CastorCom
 	{
 	public:
 		COMEX_PROPERTY_GET( SubmeshCount, unsigned int, getMesh(), &castor3d::Mesh::getSubmeshCount );
-		COMEX_PROPERTY_GET( FaceCount, unsigned int, getMesh(), &castor3d::Mesh::getFaceCount );
-		COMEX_PROPERTY_GET( VertexCount, unsigned int, getMesh(), &castor3d::Mesh::getVertexCount );
 
 		STDMETHOD( GetSubmesh )( /* [in] */ unsigned int val, /* [out, retval] */ ISubmesh ** pVal );
 		STDMETHOD( CreateSubmesh )( /* [out, retval] */ ISubmesh ** pVal );

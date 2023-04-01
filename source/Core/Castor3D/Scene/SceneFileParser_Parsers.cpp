@@ -5077,7 +5077,7 @@ namespace castor3d
 		{
 			castor::Point4ui size;
 			params[0]->get( size );
-			overlay->getBorderPanelOverlay()->setAbsoluteBorderSize( size );
+			overlay->getBorderPanelOverlay()->setPixelBorderSize( size );
 		}
 		else
 		{

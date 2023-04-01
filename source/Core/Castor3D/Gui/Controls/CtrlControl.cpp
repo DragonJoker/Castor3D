@@ -150,7 +150,7 @@ namespace castor3d
 	{
 		m_borders = doUpdateBorderSize( value );
 		updateClientRect();
-		doGetBackground().setAbsoluteBorderSize( m_borders );
+		doGetBackground().setPixelBorderSize( m_borders );
 		doSetBorderSize( m_borders );
 		onChanged( *this );
 	}
@@ -301,7 +301,7 @@ namespace castor3d
 
 		setBackgroundMaterial( m_style->getBackgroundMaterial() );
 		setBackgroundBorderMaterial( m_style->getForegroundMaterial() );
-		doGetBackground().setAbsoluteBorderSize( m_borders );
+		doGetBackground().setPixelBorderSize( m_borders );
 
 		doCreate();
 	}
