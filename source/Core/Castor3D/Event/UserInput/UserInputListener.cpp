@@ -52,6 +52,8 @@ namespace castor3d
 
 		doCleanup();
 
+		m_activeHandler = {};
+		m_lastMouseTarget = {};
 		using LockType = std::unique_lock< std::mutex >;
 		LockType lock{ castor::makeUniqueLock( m_mutexHandlers ) };
 		auto it = m_handlers.begin();
@@ -59,7 +61,7 @@ namespace castor3d
 		while ( it != m_handlers.end() )
 		{
 			auto handler = *it;
-			doRemoveHandler( *handler );
+			doRemoveHandlerNL( *handler );
 			it = m_handlers.begin();
 		}
 	}

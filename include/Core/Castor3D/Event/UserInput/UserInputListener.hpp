@@ -524,22 +524,32 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\~brief		Removes a handler.
-		 *\remarks		You *MUST* call this function when adding a handler to your lists, if you want to have it updated.
 		 *\param[in]	handler	The handler.
 		 *\~french
 		 *\~brief		Supprime un gestionnaire.
-		 *\remarks		Vous *DEVEZ* appeler cette fonction lors de l'ajout d'un gestionnaire dans vos listes, si vous voulez qu'il soit mis à jour.
 		 *\param[in]	handler	Le gestionnaire.
 		 */
-		inline void doRemoveHandler( EventHandler const & handler )
+		inline void doRemoveHandlerNL( EventHandler const & handler )
 		{
-			auto lock( castor::makeUniqueLock( m_mutexHandlers ) );
 			m_handlers.erase( std::find_if( std::begin( m_handlers )
 				, std::end( m_handlers )
 				, [&handler]( auto lookup )
 				{
 					return lookup.get() == &handler;
 				} ) );
+		}
+		/**
+		 *\~english
+		 *\~brief		Removes a handler.
+		 *\param[in]	handler	The handler.
+		 *\~french
+		 *\~brief		Supprime un gestionnaire.
+		 *\param[in]	handler	Le gestionnaire.
+		 */
+		inline void doRemoveHandler( EventHandler const & handler )
+		{
+			auto lock( castor::makeUniqueLock( m_mutexHandlers ) );
+			doRemoveHandlerNL( handler );
 		}
 
 	private:

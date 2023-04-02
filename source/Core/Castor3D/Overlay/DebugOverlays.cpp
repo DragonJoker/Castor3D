@@ -614,7 +614,7 @@ namespace castor3d
 			}
 			else
 			{
-				log::warn << "Couldn't find pass [" << name << "]" << std::endl;
+				log::warn << "DebugOverlays::removeTimer: Couldn't find pass [" << name << "]" << std::endl;
 			}
 		}
 		else
@@ -637,7 +637,7 @@ namespace castor3d
 			}
 			else
 			{
-				log::warn << "Couldn't find category [" << current << "]" << std::endl;
+				log::warn << "DebugOverlays::removeTimer: Couldn't find category [" << current << "]" << std::endl;
 			}
 		}
 

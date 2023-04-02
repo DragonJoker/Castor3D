@@ -197,6 +197,21 @@ namespace castor3d
 			return m_holderName;
 		}
 
+		void cleanupStyles()noexcept
+		{
+			m_buttonStyles.clear();
+			m_comboBoxStyles.clear();
+			m_editStyles.clear();
+			m_expandablePanelStyles.clear();
+			m_frameStyles.clear();
+			m_listBoxStyles.clear();
+			m_panelStyles.clear();
+			m_progressStyles.clear();
+			m_scrollBarStyles.clear();
+			m_sliderStyles.clear();
+			m_staticStyles.clear();
+		}
+
 	private:
 		template< typename StyleT >
 		StyleT * createControlStyle( castor::String name

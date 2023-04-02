@@ -17,51 +17,73 @@ using namespace castor3d;
 
 namespace
 {
-	void doloadPlugins( Engine & engine )
+	castor::PathArray listPluginsFiles( castor::Path const & folder )
 	{
-		PathArray arrayFiles;
-		File::listDirectoryFiles( Engine::getPluginsDirectory(), arrayFiles );
-		PathArray arrayKept;
+		static castor::String castor3DLibPrefix{ CU_LibPrefix + castor::String{ cuT( "castor3d" ) } };
+		castor::PathArray files;
+		castor::File::listDirectoryFiles( folder, files );
+		castor::PathArray result;
+		castor::String endRel = "." + castor::String{ CU_SharedLibExt };
+		castor::String endDbg = "d" + endRel;
 
 		// Exclude debug plug-in in release builds, and release plug-ins in debug builds
-		for ( auto file : arrayFiles )
+		for ( auto file : files )
 		{
+			auto fileName = file.getFileName( true );
+			bool res = castor::string::endsWith( fileName, endDbg );
 #if defined( NDEBUG )
-
-			if ( file.find( String( cuT( "d." ) ) + CU_SharedLibExt ) == String::npos )
-#else
-
-			if ( file.find( String( cuT( "d." ) ) + CU_SharedLibExt ) != String::npos )
-
+			res = castor::string::endsWith( fileName, endRel ) && !res;
 #endif
+			if ( res && fileName.find( castor3DLibPrefix ) == 0u )
 			{
-				arrayKept.push_back( file );
+				result.push_back( file );
 			}
 		}
 
+		return result;
+	}
+
+	void loadPlugins( Engine & engine )
+	{
+		castor::PathArray arrayKept = listPluginsFiles( castor3d::Engine::getPluginsDirectory() );
+
+#if !defined( NDEBUG )
+
+		// When debug is installed, plugins are installed in lib/Debug/Castor3D
+		if ( arrayKept.empty() )
+		{
+			castor::Path pathBin = castor::File::getExecutableDirectory();
+
+			while ( pathBin.getFileName() != cuT( "bin" ) )
+			{
+				pathBin = pathBin.getPath();
+			}
+
+			castor::Path pathUsr = pathBin.getPath();
+			arrayKept = listPluginsFiles( pathUsr / cuT( "lib" ) / cuT( "Castor3D" ) );
+		}
+
+#endif
+
 		if ( !arrayKept.empty() )
 		{
-			PathArray arrayFailed;
-			PathArray otherPlugins;
+			castor::PathArray arrayFailed;
 
 			for ( auto file : arrayKept )
 			{
-				if ( file.getExtension() == CU_SharedLibExt )
+				if ( !engine.getPluginCache().loadPlugin( file ) )
 				{
-					if ( !engine.getPluginCache().loadPlugin( file ) )
-					{
-						arrayFailed.push_back( file );
-					}
+					arrayFailed.push_back( file );
 				}
 			}
 
 			if ( !arrayFailed.empty() )
 			{
-				Logger::logWarning( cuT( "Some plug-ins couldn't be loaded :" ) );
+				castor::Logger::logWarning( cuT( "Some plug-ins couldn't be loaded :" ) );
 
 				for ( auto file : arrayFailed )
 				{
-					Logger::logWarning( file.getFileName() );
+					castor::Logger::logWarning( file.getFileName() );
 				}
 
 				arrayFailed.clear();
@@ -71,7 +93,7 @@ namespace
 		Logger::logInfo( cuT( "Plugins loaded" ) );
 	}
 
-	std::unique_ptr< Engine > doInitialiseCastor()
+	std::unique_ptr< Engine > initialiseCastor()
 	{
 		if ( !File::directoryExists( Engine::getEngineDirectory() ) )
 		{
@@ -82,7 +104,7 @@ namespace
 			, Version{ Castor3DTest_VERSION_MAJOR, Castor3DTest_VERSION_MINOR, Castor3DTest_VERSION_BUILD }
 			, true
 			, true );
-		doloadPlugins( *result );
+		loadPlugins( *result );
 
 		auto & renderers = result->getRenderersList();
 
@@ -118,7 +140,7 @@ int main( int argc, char const * argv[] )
 
 	Logger::setFileName( castor::File::getExecutableDirectory() / cuT( "Castor3DTests.log" ) );
 	{
-		std::unique_ptr< Engine > engine = doInitialiseCastor();
+		std::unique_ptr< Engine > engine = initialiseCastor();
 
 		// Test cases.
 		Testing::registerType( std::make_unique< Testing::BinaryExportTest >( *engine ) );

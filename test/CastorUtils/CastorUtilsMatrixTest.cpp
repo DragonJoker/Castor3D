@@ -5,6 +5,7 @@
 
 #if defined( CASTOR_USE_GLM )
 #	define GLM_FORCE_RADIANS
+#	define GLM_FORCE_DEPTH_ZERO_TO_ONE
 #	include <glm/glm.hpp>
 #	include <glm/gtc/quaternion.hpp>
 #	include <glm/gtc/matrix_transform.hpp>
@@ -217,7 +218,7 @@ namespace Testing
 
 	void CastorUtilsMatrixTest::TransformationMatrixComparison()
 	{
-		Logger::logInfo( cuT( "	Translate" ) );
+		CT_ON( cuT( "	Translate" ) );
 
 		for ( float r = 0; r < 100; r += 1 )
 		{
@@ -229,7 +230,7 @@ namespace Testing
 			CT_EQUAL( mtx, mat );
 		}
 
-		Logger::logInfo( cuT( "	Scale" ) );
+		CT_ON( cuT( "	Scale" ) );
 
 		for ( float r = 0; r < 100; r += 1 )
 		{
@@ -250,7 +251,7 @@ namespace Testing
 		float bottom = 1080.0f;
 		float near = 1.0f;
 		float far = 1000.0f;
-		Logger::logInfo( cuT( "	Ortho RH" ) );
+		CT_ON( cuT( "	Ortho RH" ) );
 		{
 			Matrix4x4f mtx( 1 );
 			matrix::ortho( mtx, left, right, bottom, top, near, far );
@@ -258,7 +259,7 @@ namespace Testing
 			mat = glm::ortho( left, right, bottom, top, near, far );
 			CT_EQUAL( mtx, mat );
 		}
-		Logger::logInfo( cuT( "	Frustum" ) );
+		CT_ON( cuT( "	Frustum" ) );
 		{
 			Matrix4x4f mtx( 1 );
 			matrix::frustum( mtx, left, right, bottom, top, near, far );
@@ -266,7 +267,7 @@ namespace Testing
 			mat = glm::frustum( left, right, bottom, top, near, far );
 			CT_EQUAL( mtx, mat );
 		}
-		Logger::logInfo( cuT( "	Perspective" ) );
+		CT_ON( cuT( "	Perspective" ) );
 		{
 			Angle fov{ 90.0_degrees };
 			float aspect = 4.0f / 3.0f;

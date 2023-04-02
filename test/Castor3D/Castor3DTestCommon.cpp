@@ -1,5 +1,7 @@
 #include "Castor3DTestCommon.hpp"
 
+#include <CastorUtils/Design/BlockGuard.hpp>
+
 #include <cmath>
 
 using namespace castor;
@@ -89,9 +91,15 @@ namespace Testing
 		TestCase::doRegisterTest( name
 			, [this, test]()
 			{
-				m_engine.initialise( 1, false );
+				auto guard = castor::makeBlockGuard( [this]()
+					{
+						m_engine.initialise( 1, false );
+					}
+					, [this]()
+					{
+						m_engine.cleanup();
+					} );
 				test();
-				m_engine.cleanup();
 			} );
 	}
 

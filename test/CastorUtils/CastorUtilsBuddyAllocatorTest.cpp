@@ -21,6 +21,7 @@ namespace Testing
 	void CastorUtilsBuddyAllocatorTest::SizeTest()
 	{
 		{
+			CT_ON( cuT( "	Block size of 1, 4 levels" ) );
 			BuddyAllocator allocator{ 4, 1 };
 			CT_EQUAL( allocator.getSize(), 16u );
 			for ( auto i = 1u; i < allocator.getSize(); ++i )
@@ -29,6 +30,7 @@ namespace Testing
 			}
 		}
 		{
+			CT_ON( cuT( "	Block size of 2, 4 levels" ) );
 			BuddyAllocator allocator{ 4, 2 };
 			CT_EQUAL( allocator.getSize(), 32u );
 			for ( auto i = 1u; i < allocator.getSize(); ++i )
@@ -37,6 +39,7 @@ namespace Testing
 			}
 		}
 		{
+			CT_ON( cuT( "	Block size of 2, 5 levels" ) );
 			BuddyAllocator allocator{ 5, 2 };
 			CT_EQUAL( allocator.getSize(), 64u );
 			for ( auto i = 1u; i < allocator.getSize(); ++i )
@@ -45,6 +48,7 @@ namespace Testing
 			}
 		}
 		{
+			CT_ON( cuT( "	Block size of 3, 5 levels" ) );
 			BuddyAllocator allocator{ 5, 3 };
 			CT_EQUAL( allocator.getSize(), 96u );
 			for ( auto i = 1u; i < allocator.getSize(); ++i )
@@ -53,14 +57,17 @@ namespace Testing
 			}
 		}
 		{
+			CT_ON( cuT( "	Block size of 8, 16 levels" ) );
 			BuddyAllocator allocator{ 16, 8 };
 			CT_EQUAL( allocator.getSize(), 524288u );
 		}
 		{
+			CT_ON( cuT( "	Block size of 128, 16 levels" ) );
 			BuddyAllocator allocator{ 16, 128 };
 			CT_EQUAL( allocator.getSize(), 8388608u );
 		}
 		{
+			CT_ON( cuT( "	Block size of 96, 20 levels" ) );
 			BuddyAllocator allocator{ 20, 96 };
 			CT_EQUAL( allocator.getSize(), 100663296u );
 		}
