@@ -19,6 +19,13 @@ vcpkg_from_github(
 file(REMOVE_RECURSE "${SOURCE_PATH}/CMake")
 file(COPY "${CMAKE_SOURCE_PATH}/" DESTINATION "${SOURCE_PATH}/CMake")
 
+vcpkg_check_features(OUT_FEATURE_OPTIONS FEATURE_OPTIONS
+    FEATURES
+        direct3d11 ASHES_BUILD_RENDERER_D3D11
+        opengl     ASHES_BUILD_RENDERER_OGL
+        vulkan     ASHES_BUILD_RENDERER_VKN
+)
+
 vcpkg_cmake_configure(
     SOURCE_PATH ${SOURCE_PATH}
     OPTIONS
@@ -27,6 +34,7 @@ vcpkg_cmake_configure(
         -DASHES_BUILD_TESTS=OFF
         -DASHES_BUILD_INFO=OFF
         -DASHES_BUILD_SAMPLES=OFF
+        ${FEATURE_OPTIONS}
 )
 
 vcpkg_cmake_install()

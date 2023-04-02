@@ -19,9 +19,9 @@ endif ()
 set( MAIN_PROJECT_NAME "Castor3D" )
 
 set( VERSION_MAJOR 0 )
-set( VERSION_MINOR 14 )
+set( VERSION_MINOR 15 )
 set( VERSION_BUILD 0 )
-set( VERSION_YEAR 2022 )
+set( VERSION_YEAR 2023 )
 
 # Setup lookup for external modules
 if ( VCPKG_TOOLCHAIN )
