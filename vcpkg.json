@@ -1,47 +1,68 @@
 {
-    "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg/master/scripts/vcpkg.schema.json",
-    "name": "castor3d",
-    "version": "0.14.0",
-    "builtin-baseline": "28324ed4b463a6cf2fc7c3164c13271f3ad4c66a",
-    "dependencies": [ "convectionkernels", "freetype", "gli", "meshoptimizer", "minizip", "zlib" ],
-    "default-features": [ "assimp", "freeimage", "glsl", "vkfft" ],
-    "vcpkg-configuration": {
-        "overlay-ports": [
-            "./data/vcpkg/ports/ashes",
-            "./data/vcpkg/ports/shaderwriter",
-            "./data/vcpkg/ports/rendergraph"
-        ]
+  "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg/master/scripts/vcpkg.schema.json",
+  "name": "castor3d",
+  "version": "0.15.0",
+  "builtin-baseline": "a2addd4bc5c837747a19a093aa1a493d4c79bdee",
+  "dependencies": [
+    "convectionkernels",
+    "freetype",
+    "gli",
+    "meshoptimizer",
+    "minizip",
+    "zlib"
+  ],
+  "default-features": [
+    "assimp",
+    "freeimage",
+    "glsl",
+    "vkfft"
+  ],
+  "vcpkg-configuration": {
+    "overlay-ports": [
+      "./data/vcpkg/ports/ashes",
+      "./data/vcpkg/ports/shaderwriter",
+      "./data/vcpkg/ports/rendergraph"
+    ]
+  },
+  "features": {
+    "assimp": {
+      "description": "Use Assimp library to import external scenes.",
+      "dependencies": [
+        "assimp"
+      ]
     },
-    "features": {
-        "assimp": {
-            "description": "Use Assimp library to import external scenes.",
-            "dependencies": [ "assimp" ]
-        },
-        "freeimage": {
-            "description": "Use FreeImage library over stb_image to import TIF, PNG or RAW images.",
-            "dependencies": [ "freeimage" ]
-        },
-        "glsl": {
-            "description": "Enable GLSL shaders import support.",
-            "dependencies": [ "glslang", "spirv-cross" ]
-        },
-        "vkfft": {
-            "description": "Use VkFFT to compute Fast Fourier Transforms (Necessary for FFTOcean plugin).",
-            "dependencies": [ "vkfft" ]
-        },
-        "tools": {
-            "description": "The tools provided with the engine.",
-            "dependencies": [ "wxwidgets" ]
-        },
-        "vcpkg-deps": {
-            "description": "Use vcpkg's ashes/rendergraph/shaderwriter.",
-            "dependencies": [ "ashes",
-                "rendergraph",
-                {
-                    "name": "shaderwriter",
-                    "features": [ "spirv", "glsl", "hlsl" ]
-                }
-            ]
+    "freeimage": {
+      "description": "Use FreeImage library over stb_image to import TIF, PNG or RAW images.",
+      "dependencies": [
+        "freeimage"
+      ]
+    },
+    "glsl": {
+      "description": "Enable GLSL shaders import support.",
+      "dependencies": [
+        "glslang",
+        "spirv-cross"
+      ]
+    },
+    "vkfft": {
+      "description": "Use VkFFT to compute Fast Fourier Transforms (Necessary for FFTOcean plugin).",
+      "dependencies": [
+        "vkfft"
+      ]
+    },
+    "vcpkg-deps": {
+      "description": "Use vcpkg's ashes/rendergraph/shaderwriter.",
+      "dependencies": [ "ashes",
+        "rendergraph",
+        {
+          "name": "shaderwriter",
+          "features": [
+            "spirv",
+            "glsl",
+            "hlsl"
+          ]
         }
+      ]
     }
+  }
 }

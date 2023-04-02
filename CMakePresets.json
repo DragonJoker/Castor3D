@@ -7,7 +7,7 @@
 	},
 	"configurePresets": [
 		{
-			"name": "default-base",
+			"name": "user-base",
 			"hidden": true,
 			"installDir": "${sourceDir}/package/Castor3D",
 			"cacheVariables": {
@@ -26,25 +26,20 @@
 				"PROJECTS_OUTPUT_DIR": "${sourceDir}",
 				"PROJECTS_UNITY_BUILD": true,
 				"PROJECTS_USE_PRECOMPILED_HEADERS": false
-			},
-			"environment": {
-				"BUILD_SDW_SPIRV": "1",
-				"BUILD_SDW_GLSL": "1",
-				"BUILD_SDW_HLSL": "1"
 			}
 		},
 		{
-			"name": "default-msvc",
-			"displayName": "Default Visual Studio Config",
-			"description": "Default build configuration using Visual Studio",
-			"inherits": "default-base",
+			"name": "user-msvc",
+			"displayName": "Castor3D User Visual Studio Config",
+			"description": "Build configuration using Visual Studio, for Castor3D users",
+			"inherits": "user-base",
 			"generator": "Visual Studio 17 2022"
 		},
 		{
-			"name": "default-ninja",
-			"displayName": "Default Ninja Config",
-			"description": "Default build configuration using Ninja",
-			"inherits": "default-base",
+			"name": "user-ninja",
+			"displayName": "Castor3D User Ninja Config",
+			"description": "Build configuration using Ninja, for Castor3D users",
+			"inherits": "user-base",
 			"generator": "Ninja"
 		},
 		{
@@ -72,8 +67,8 @@
 		},
 		{
 			"name": "dev-msvc",
-			"displayName": "Developer Visual Studio Config",
-			"description": "Developer build configuration using Visual Studio",
+			"displayName": "Castor3D Developer Visual Studio Config",
+			"description": "Build configuration using Visual Studio, for Castor3D developers",
 			"inherits": "dev-base",
 			"generator": "Visual Studio 17 2022",
 			"cacheVariables": {
@@ -82,8 +77,8 @@
 		},
 		{
 			"name": "dev-ninja",
-			"displayName": "Developer Ninja Config",
-			"description": "Developer build configuration using Ninja",
+			"displayName": "Castor3D Developer Ninja Config",
+			"description": "Build configuration using Ninja, for Castor3D developers",
 			"inherits": "dev-base",
 			"generator": "Ninja"
 		},
