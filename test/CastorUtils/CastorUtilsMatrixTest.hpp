@@ -6,6 +6,8 @@
 
 #include <CastorUtils/Math/SquareMatrix.hpp>
 #if defined( CASTOR_USE_GLM )
+#	define GLM_FORCE_RADIANS
+#	define GLM_FORCE_DEPTH_ZERO_TO_ONE
 #	include <glm/glm.hpp>
 #endif
 

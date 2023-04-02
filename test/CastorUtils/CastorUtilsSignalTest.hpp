@@ -4,11 +4,6 @@
 
 #include "CastorUtilsTestPrerequisites.hpp"
 
-#include <CastorUtils/Math/SquareMatrix.hpp>
-#if defined( CASTOR_USE_GLM )
-#	include <glm/glm.hpp>
-#endif
-
 namespace Testing
 {
 	class CastorUtilsSignalTest

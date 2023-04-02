@@ -33,6 +33,15 @@ namespace castor3d
 	{
 	}
 
+	Layout::~Layout()noexcept
+	{
+		if ( m_event )
+		{
+			m_event->skip();
+			m_event = nullptr;
+		}
+	}
+
 	void Layout::markDirty()
 	{
 		if ( !m_event )

@@ -120,8 +120,9 @@ namespace castor3d
 
 	LightsArray ObjectCacheT< Light, castor::String, LightCacheTraits >::getLights( LightType type )const
 	{
-		CU_Require( m_lightBuffer );
-		return m_lightBuffer->getLights( type );
+		return ( m_lightBuffer
+			? m_lightBuffer->getLights( type )
+			: LightsArray{} );
 	}
 
 	void ObjectCacheT< Light, castor::String, LightCacheTraits >::createPassBinding( crg::FramePass & pass

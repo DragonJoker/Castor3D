@@ -416,6 +416,11 @@ namespace castor3d
 			m_brdf.destroy();
 			m_renderLoop.reset();
 
+			if ( auto userInputs = getUserInputListener() )
+			{
+				userInputs->cleanup();
+			}
+
 			m_targetCache->clear();
 			m_samplerCache->clear();
 			m_shaderCache->clear();

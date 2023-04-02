@@ -1,5 +1,7 @@
 #include "UnitTest.hpp"
 
+#include <CastorUtils/Log/Logger.hpp>
+
 #include <CastorUtils/Config/BeginExternHeaderGuard.hpp>
 #include <sstream>
 #include <CastorUtils/Config/EndExternHeaderGuard.hpp>

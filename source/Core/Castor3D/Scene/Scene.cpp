@@ -1055,6 +1055,12 @@ namespace castor3d
 	{
 		auto & cache = getParticleSystemCache();
 		auto lock( castor::makeUniqueLock( cache ) );
+
+		if ( !m_timerParticlesGpu )
+		{
+			return;
+		}
+
 		auto count = 2u * cache.getObjectCountNoLock();
 
 		if ( m_timerParticlesGpu->getCount() < count )

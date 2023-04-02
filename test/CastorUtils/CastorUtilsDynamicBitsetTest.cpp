@@ -28,16 +28,19 @@ namespace Testing
 	void CastorUtilsDynamicBitsetTest::sizeTest()
 	{
 		{
+			CT_ON( cuT( "	Size of 8, bits unset" ) );
 			DynamicBitset bitset{ 8u };
 			CT_REQUIRE( bitset.getSize() == 8u );
 			CT_REQUIRE( bitset.getBlockCount() == 1u );
 		}
 		{
+			CT_ON( cuT( "	Size of 8, bits set" ) );
 			DynamicBitset bitset{ 8u, true };
 			CT_REQUIRE( bitset.getSize() == 8u );
 			CT_REQUIRE( bitset.getBlockCount() == 1u );
 		}
 		{
+			CT_ON( cuT( "	Size of 37, bits set" ) );
 			DynamicBitset bitset{ 37u, true };
 			CT_REQUIRE( bitset.getSize() == 37u );
 			CT_REQUIRE( bitset.getBlockCount() == 2u );
@@ -47,6 +50,7 @@ namespace Testing
 	void CastorUtilsDynamicBitsetTest::initValueTest()
 	{
 		{
+			CT_ON( cuT( "	Size of 8, bits unset" ) );
 			DynamicBitset bitset{ 8u };
 
 			for ( size_t i = 0u; i < bitset.getSize(); ++i )
@@ -58,6 +62,7 @@ namespace Testing
 			CT_EQUAL( bitset.toString(), test );
 		}
 		{
+			CT_ON( cuT( "	Size of 8, bits set" ) );
 			DynamicBitset bitset{ 8u, true };
 
 			for ( size_t i = 0u; i < bitset.getSize(); ++i )
@@ -69,6 +74,7 @@ namespace Testing
 			CT_EQUAL( bitset.toString(), test );
 		}
 		{
+			CT_ON( cuT( "	Size of 37, bits set" ) );
 			DynamicBitset bitset{ 37u, true };
 
 			for ( size_t i = 0u; i < bitset.getSize(); ++i )
@@ -80,6 +86,7 @@ namespace Testing
 			CT_EQUAL( bitset.toString(), test );
 		}
 		{
+			CT_ON( cuT( "	From string" ) );
 			String test = cuT( "011011010101010101010010101010101010110110" );
 			DynamicBitset bitset{ test };
 			CT_EQUAL( bitset.toString(), test );
@@ -90,16 +97,19 @@ namespace Testing
 	void CastorUtilsDynamicBitsetTest::leftShiftTest()
 	{
 		{
+			CT_ON( cuT( "	Shift by 5" ) );
 			DynamicBitset bitset{ cuT( "011011010101010101010010101010101010110110" ) };
 			bitset <<= 5;
 			CT_EQUAL( bitset.toString(), cuT( "101010101010101001010101010101011011000000" ) );
 		}
 		{
+			CT_ON( cuT( "	Shift by 35" ) );
 			DynamicBitset bitset{ cuT( "011011010101010101010010101010101010110110" ) };
 			bitset <<= 35;
 			CT_EQUAL( bitset.toString(), cuT( "011011000000000000000000000000000000000000" ) );
 		}
 		{
+			CT_ON( cuT( "	Shift by size" ) );
 			DynamicBitset bitset{ cuT( "011011010101010101010010101010101010110110" ) };
 			bitset <<= int( bitset.getSize() );
 			CT_EQUAL( bitset.toString(), cuT( "000000000000000000000000000000000000000000" ) );
@@ -109,16 +119,19 @@ namespace Testing
 	void CastorUtilsDynamicBitsetTest::rightShiftTest()
 	{
 		{
+			CT_ON( cuT( "	Shift by 5" ) );
 			DynamicBitset bitset{ cuT( "011011010101010101010010101010101010110110" ) };
 			bitset >>= 5;
 			CT_EQUAL( bitset.toString(), cuT( "000000110110101010101010100101010101010101" ) );
 		}
 		{
+			CT_ON( cuT( "	Shift by 35" ) );
 			DynamicBitset bitset{ cuT( "011011010101010101010010101010101010110110" ) };
 			bitset >>= 35;
 			CT_EQUAL( bitset.toString(), cuT( "000000000000000000000000000000000000110110" ) );
 		}
 		{
+			CT_ON( cuT( "	Shift by size" ) );
 			DynamicBitset bitset{ cuT( "011011010101010101010010101010101010110110" ) };
 			bitset >>= int( bitset.getSize() );
 			CT_EQUAL( bitset.toString(), cuT( "000000000000000000000000000000000000000000" ) );

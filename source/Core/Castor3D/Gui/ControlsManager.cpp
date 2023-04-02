@@ -955,12 +955,39 @@ namespace castor3d
 
 	void ControlsManager::doCleanup()
 	{
-		ctrlmgr::LockType lock{ castor::makeUniqueLock( m_mutexHandlers ) };
-
-		for ( auto handler : m_handlers )
+		for ( auto cit : m_controlsById )
 		{
-			std::static_pointer_cast< Control >( handler )->destroy();
+			if ( auto control = cit.second.lock() )
+			{
+				control->destroy();
+			}
 		}
+
+		auto lock( castor::makeUniqueLock( m_mutexControlsById ) );
+
+		m_onButtonClicks.clear();
+		m_onComboSelects.clear();
+		m_onEditUpdates.clear();
+		m_onListSelects.clear();
+		m_onScrollTracks.clear();
+		m_onScrollReleases.clear();
+		m_onSliderTracks.clear();
+		m_onSliderReleases.clear();
+		m_onPanelExpands.clear();
+		m_onPanelRetracts.clear();
+		m_themes.clear();
+
+		if ( auto event = m_event.exchange( nullptr ) )
+		{
+			event->skip();
+		}
+
+		m_controlsByZIndex.clear();
+		m_rootControls.clear();
+		m_controlsById.clear();
+		m_movedControl = {};
+		m_resizedControl = {};
+		cleanupStyles();
 	}
 
 	EventHandler * ControlsManager::doGetMouseTargetableHandler( castor::Position const & position )const

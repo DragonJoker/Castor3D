@@ -14,6 +14,7 @@
 
 #if defined( CASTOR_USE_GLM )
 #	define GLM_FORCE_RADIANS
+#	define GLM_FORCE_DEPTH_ZERO_TO_ONE
 #	pragma warning( push )
 #	pragma warning( disable:4201 )
 #	pragma warning( disable:4464 )
