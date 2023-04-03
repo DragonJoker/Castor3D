@@ -575,20 +575,20 @@ namespace castor3d
 				, m_categories.end()
 				, [&current]( auto & lookup )
 				{
-					return lookup.getName() == current;
+					return lookup->getName() == current;
 				} );
 
 			if ( it == m_categories.end() )
 			{
-				m_categories.emplace_back( current
+				m_categories.emplace_back( std::make_unique< CategoryOverlays >( current
 					, *m_engine
 					, *m_container->getContent()
-					, m_leftOffset + 5u );
+					, m_leftOffset + 5u ) );
 				it = std::next( m_categories.begin()
 					, ptrdiff_t( m_categories.size() - 1 ) );
 			}
 
-			it->addTimer( name, categories, timer );
+			( *it )->addTimer( name, categories, timer );
 		}
 	}
 
@@ -625,12 +625,12 @@ namespace castor3d
 				, m_categories.end()
 				, [&current]( auto & lookup )
 				{
-					return lookup.getName() == current;
+					return lookup->getName() == current;
 				} );
 
 			if ( it != m_categories.end() )
 			{
-				if ( it->removeTimer( name, categories, timer ) )
+				if ( ( *it )->removeTimer( name, categories, timer ) )
 				{
 					m_categories.erase( it );
 				}
@@ -661,9 +661,9 @@ namespace castor3d
 
 		for ( auto & catIt : m_categories )
 		{
-			catIt.compute();
-			m_cpu.time += catIt.getCpuTime();
-			m_gpu.time += catIt.getGpuTime();
+			catIt->compute();
+			m_cpu.time += catIt->getCpuTime();
+			m_gpu.time += catIt->getGpuTime();
 		}
 	}
 
@@ -700,7 +700,7 @@ namespace castor3d
 
 			for ( auto & catIt : m_categories )
 			{
-				catIt.update( height );
+				catIt->update( height );
 			}
 
 			top += height;
@@ -724,7 +724,7 @@ namespace castor3d
 
 		for ( auto & catIt : m_categories )
 		{
-			catIt.retrieveGpuTime();
+			catIt->retrieveGpuTime();
 		}
 	}
 
@@ -757,7 +757,7 @@ namespace castor3d
 
 		for ( auto & cat : m_categories )
 		{
-			cat.dumpFrameTimes( prefix, params );
+			cat->dumpFrameTimes( prefix, params );
 		}
 	}
 

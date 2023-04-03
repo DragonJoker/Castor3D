@@ -239,7 +239,7 @@ namespace castor3d
 			m_cleanBackground = nullptr;
 		}
 
-		m_reflectionMap.reset();
+		m_reflectionMap->cleanup();
 		m_onSceneNodeChanged.disconnect();
 		m_onGeometryChanged.disconnect();
 		m_onBillboardListChanged.disconnect();
@@ -273,6 +273,7 @@ namespace castor3d
 		m_sceneNodeCache.reset();
 
 		m_meshCache.reset();
+		m_skeletonCache.reset();
 		m_materialCacheView.reset();
 		m_samplerCacheView.reset();
 		m_overlayCache.reset();
@@ -365,18 +366,19 @@ namespace castor3d
 		m_dirtyNodes.clear();
 		m_dirtyBillboards.clear();
 		m_dirtyObjects.clear();
+
 		m_animatedObjectGroupCache->cleanup();
-		m_cameraCache->cleanup();
-		m_particleSystemCache->cleanup();
-		m_billboardCache->cleanup();
 		m_geometryCache->cleanup();
+		m_cameraCache->cleanup();
 		m_lightCache->cleanup();
-		m_reflectionMap->cleanup();
+		m_billboardCache->cleanup();
+		m_particleSystemCache->cleanup();
 		m_sceneNodeCache->cleanup();
+		m_skeletonCache->cleanup();
+		m_overlayCache->cleanup();
 
 		m_materialCacheView->clear();
 		m_samplerCacheView->clear();
-		m_overlayCache->cleanup();
 		m_fontCacheView->clear();
 
 		m_renderNodes->clear();
