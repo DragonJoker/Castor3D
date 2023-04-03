@@ -439,6 +439,7 @@ namespace castor3d
 		bool doInitialiseTechnique( RenderDevice const & device
 			, QueueData const & queueData
 			, ProgressBar * progress );
+		void doCleanupTechnique();
 		crg::FramePass const & doInitialiseCopyCommands( RenderDevice const & device
 			, castor::String const & name
 			, Texture const & source
@@ -446,7 +447,9 @@ namespace castor3d
 			, crg::FramePass const & previousPass
 			, ProgressBar * progress
 			, bool const * enabled );
+		void doCleanupCopyCommands();
 		void doInitCombineProgram( ProgressBar * progress );
+		void doCleanupCombineProgram();
 		Texture const & doUpdatePostEffects( CpuUpdater & updater
 			, PostEffectPtrArray const & effects
 			, std::vector< Texture const * > const & images )const;

@@ -288,7 +288,8 @@ namespace castor3d
 
 		using PassOverlaysPtr = std::unique_ptr< PassOverlays >;
 		class CategoryOverlays;
-		using CategoriesOverlays = std::vector< CategoryOverlays >;
+		using CategoryOverlaysPtr = std::unique_ptr< CategoryOverlays >;
+		using CategoriesOverlays = std::vector< CategoryOverlaysPtr >;
 
 		class CategoryOverlays
 		{

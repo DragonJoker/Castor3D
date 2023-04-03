@@ -450,6 +450,15 @@ namespace castor3d
 
 	RenderTarget::~RenderTarget()
 	{
+		for ( auto & texture : m_srgbObjects )
+		{
+			texture->destroy();
+		}
+
+		for ( auto & texture : m_hdrObjects )
+		{
+			texture->destroy();
+		}
 	}
 
 	uint32_t RenderTarget::countInitialisationSteps()const
@@ -521,17 +530,19 @@ namespace castor3d
 		if ( m_initialised.exchange( false ) )
 		{
 			m_signalReady.reset();
-			m_overlayPass = nullptr;
+			m_overlayPass = {};
 #if C3D_DebugTimers
 			getEngine()->unregisterTimer( cuT( "AAACPUTests" ), *m_cpuUpdateTimer );
 			m_cpuUpdateTimer.reset();
 			getEngine()->unregisterTimer( cuT( "AAAGPUTests" ), *m_gpuUpdateTimer );
 			m_gpuUpdateTimer.reset();
 #endif
-			getEngine()->unregisterTimer( getName() + cuT( "/Overlays/Overlays" ), *m_overlaysTimer );
+			getEngine()->unregisterTimer( getName() + cuT( "/Overlays" ), *m_overlaysTimer );
 			m_overlaysTimer.reset();
 			m_intermediates.clear();
 			m_runnable.reset();
+			m_combinePassSource = {};
+			m_combinePass = {};
 
 			for ( auto effect : m_srgbPostEffects )
 			{
@@ -546,24 +557,11 @@ namespace castor3d
 			}
 		}
 
-		m_renderTechnique.reset();
-
-		for ( auto & texture : m_srgbObjects )
-		{
-			texture->destroy();
-		}
-
-		for ( auto & texture : m_hdrObjects )
-		{
-			texture->destroy();
-		}
-
 		m_overlays.destroy();
 		m_velocity->destroy();
 		m_combined.destroy();
-		m_combineStages.clear();
-		m_combinePxl.shader.reset();
-		m_combineVtx.shader.reset();
+		doCleanupTechnique();
+		doCleanupCombineProgram();
 		m_culler.reset();
 		m_hdrConfigUbo.reset();
 	}
@@ -946,7 +944,7 @@ namespace castor3d
 
 		stepProgressBar( progress, "Creating overlay renderer" );
 		m_overlaysTimer = castor::makeUnique< FramePassTimer >( device.makeContext(), getName() + cuT( "/Overlays" ) );
-		getEngine()->registerTimer( getName() + cuT( "/Overlays/Overlays" ), *m_overlaysTimer );
+		getEngine()->registerTimer( getName() + cuT( "/Overlays" ), *m_overlaysTimer );
 #if C3D_DebugTimers
 		m_cpuUpdateTimer = castor::makeUnique< FramePassTimer >( device.makeContext(), cuT( "AAACPUTests" ) );
 		getEngine()->registerTimer( cuT( "AAACPUTests" ), *m_cpuUpdateTimer );
@@ -1048,6 +1046,11 @@ namespace castor3d
 		return true;
 	}
 
+	void RenderTarget::doCleanupTechnique()
+	{
+		m_renderTechnique.reset();
+	}
+
 	crg::FramePass const & RenderTarget::doInitialiseCopyCommands( RenderDevice const & device
 		, castor::String const & name
 		, Texture const & source
@@ -1078,6 +1081,10 @@ namespace castor3d
 		pass.addTransferInputView( source.targetViewId );
 		pass.addTransferOutputView( target.targetViewId );
 		return pass;
+	}
+
+	void RenderTarget::doCleanupCopyCommands()
+	{
 	}
 
 	void RenderTarget::doInitCombineProgram( ProgressBar * progress )
@@ -1159,6 +1166,13 @@ namespace castor3d
 
 		m_combineStages.push_back( makeShaderState( renderSystem.getRenderDevice(), m_combineVtx ) );
 		m_combineStages.push_back( makeShaderState( renderSystem.getRenderDevice(), m_combinePxl ) );
+	}
+
+	void RenderTarget::doCleanupCombineProgram()
+	{
+		m_combineStages.clear();
+		m_combinePxl.shader.reset();
+		m_combineVtx.shader.reset();
 	}
 
 	Texture const & RenderTarget::doUpdatePostEffects( CpuUpdater & updater

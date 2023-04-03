@@ -1487,7 +1487,7 @@ namespace castor3d
 					doWaitFrame( queueData, {} );
 					getDevice()->waitIdle();
 
-					if ( !m_initialised )
+					if ( !m_initialised || m_loading )
 					{
 						doResetSwapChain( queueData );
 
