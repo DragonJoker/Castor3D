@@ -165,8 +165,20 @@ namespace castor
 			needsComponentSwap = true;
 			break;
 		default:
-			sourceFmt = freeimgl::convertTo32Bits( fiImage );
-			needsComponentSwap = true;
+			if ( auto info = FreeImage_GetInfo( fiImage ) )
+			{
+				auto colorType = FreeImage_GetColorType( fiImage );
+
+				if ( info->bmiHeader.biBitCount == 64 && colorType == FIC_RGBALPHA )
+				{
+					sourceFmt = PixelFormat::eR16G16B16A16_UNORM;
+				}
+				else
+				{
+					sourceFmt = freeimgl::convertTo32Bits( fiImage );
+					needsComponentSwap = true;
+				}
+			}
 			break;
 		}
 
