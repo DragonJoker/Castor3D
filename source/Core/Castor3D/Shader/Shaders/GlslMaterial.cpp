@@ -76,6 +76,7 @@ namespace castor3d::shader
 				ROF;
 
 				output = result;
+				output.normal = normalize( result.normal );
 
 				if ( opaque
 					|| !output.hasMember( "transmission" ) )
