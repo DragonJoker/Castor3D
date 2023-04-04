@@ -127,6 +127,49 @@ namespace castor3d
 		doUpdateFlags();
 	}
 
+	EditCtrl::~EditCtrl()noexcept
+	{
+		uint32_t i{};
+
+		for ( auto sel : m_selections )
+		{
+			if ( m_scene )
+			{
+				m_scene->removeOverlay( getName() + cuT( "/Selection" ) + castor::string::toString( i ), true );
+			}
+			else
+			{
+				getEngine().removeOverlay( getName() + cuT( "/Selection" ) + castor::string::toString( i ), true );
+			}
+
+			++i;
+		}
+
+		if ( auto overlay = m_caret.overlay.lock() )
+		{
+			if ( m_scene )
+			{
+				m_scene->removeOverlay( getName() + cuT( "/Caret" ), true );
+			}
+			else
+			{
+				getEngine().removeOverlay( getName() + cuT( "/Caret" ), true );
+			}
+		}
+
+		if ( auto overlay = m_text.lock() )
+		{
+			if ( m_scene )
+			{
+				m_scene->removeOverlay( getName() + cuT( "/Text" ), true );
+			}
+			else
+			{
+				getEngine().removeOverlay( getName() + cuT( "/Text" ), true );
+			}
+		}
+	}
+
 	void EditCtrl::updateCaption( castor::String const & value )
 	{
 		m_caption = castor::string::toU32String( value );

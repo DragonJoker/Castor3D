@@ -16,6 +16,10 @@ namespace castor3d
 	class Overlay final
 		: public castor::OwnedBy< Engine >
 	{
+		friend class castor::ResourceCacheT< Overlay
+			, castor::String
+			, OverlayCacheTraits >;
+
 	public:
 		using iterator = OverlayPtrArray::iterator;
 		using const_iterator = OverlayPtrArray::const_iterator;
@@ -75,15 +79,6 @@ namespace castor3d
 		C3D_API Overlay( Engine & engine
 			, OverlayType type
 			, uint32_t level = 0u );
-		/**
-		 *\~english
-		 *\brief		adds a child to the overlay.
-		 *\param[in]	overlay	The overlay to add.
-		 *\~french
-		 *\brief		Ajoute un enfant à l'incrustation.
-		 *\param[in]	overlay	L'incrustation enfant.
-		 */
-		C3D_API void addChild( OverlayRPtr overlay );
 		/**
 		 *\~english
 		 *\param[in]	level	The wanted level
@@ -306,7 +301,17 @@ namespace castor3d
 		{
 			m_name = name;
 		}
+
+		void reparent( OverlayRPtr parent )
+		{
+			m_parent = parent;
+		}
 		/**@}*/
+
+	private:
+		void addChild( OverlayRPtr overlay );
+		void removeChild( OverlayRPtr overlay );
+		void clear()noexcept;
 
 	private:
 		castor::String m_name;

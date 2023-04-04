@@ -347,12 +347,12 @@ namespace castor3d
 			m_gpu.value->setVisible( false );
 
 			auto & manager = *m_panel->getControlsManager();
-			manager.destroy( m_panel );
-			manager.destroy( m_passName );
-			manager.destroy( m_cpu.name );
-			manager.destroy( m_gpu.name );
-			manager.destroy( m_cpu.value );
-			manager.destroy( m_gpu.value );
+			manager.destroy( std::move( m_gpu.name ) );
+			manager.destroy( std::move( m_gpu.value ) );
+			manager.destroy( std::move( m_cpu.name ) );
+			manager.destroy( std::move( m_cpu.value ) );
+			manager.destroy( std::move( m_passName ) );
+			manager.destroy( std::move( m_panel ) );
 		}
 	}
 
@@ -531,12 +531,12 @@ namespace castor3d
 			m_categories.clear();
 
 			auto & manager = dbgovl::getControlsManager( *m_engine );
-			manager.destroy( m_cpu.value );
-			manager.destroy( m_gpu.value );
-			manager.destroy( m_cpu.name );
-			manager.destroy( m_gpu.name );
-			manager.destroy( m_name );
-			manager.destroy( m_container );
+			manager.destroy( std::move( m_cpu.value ) );
+			manager.destroy( std::move( m_gpu.value ) );
+			manager.destroy( std::move( m_cpu.name ) );
+			manager.destroy( std::move( m_gpu.name ) );
+			manager.destroy( std::move( m_name ) );
+			manager.destroy( std::move( m_container ) );
 		}
 	}
 

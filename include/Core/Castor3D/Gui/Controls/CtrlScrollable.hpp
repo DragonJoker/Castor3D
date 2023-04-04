@@ -14,6 +14,7 @@ namespace castor3d
 	class ScrollableCtrl
 	{
 	public:
+		C3D_API virtual ~ScrollableCtrl()noexcept;
 		C3D_API castor::Position getScrollPosition()const;
 
 		ScrollableStyle & getStyle()const noexcept

@@ -83,6 +83,8 @@ namespace castor3d
 		{
 		}
 
+		C3D_API ~ComboBoxCtrl()noexcept;
+
 		/** Appends a new item
 		*\param[in]	value		The item
 		*/

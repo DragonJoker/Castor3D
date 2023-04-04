@@ -73,6 +73,21 @@ namespace castor3d
 		doUpdateFlags();
 	}
 
+	StaticCtrl::~StaticCtrl()noexcept
+	{
+		if ( auto overlay = m_text.lock() )
+		{
+			if ( m_scene )
+			{
+				m_scene->removeOverlay( getName() + cuT( "/Text" ), true );
+			}
+			else
+			{
+				getEngine().removeOverlay( getName() + cuT( "/Text" ), true );
+			}
+		}
+	}
+
 	void StaticCtrl::setHAlign( HAlign align )
 	{
 		m_flags &= ~ControlFlagType( StaticFlag::eHAlignCenter
