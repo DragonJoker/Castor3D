@@ -491,21 +491,21 @@ namespace castor
 	{
 		switch ( component )
 		{
-		case castor::PixelComponent::eRed:
+		case PixelComponent::eRed:
 			return getComponentsCount( format ) >= 1
 				&& !ashes::isDepthOrStencilFormat( VkFormat( format ) );
-		case castor::PixelComponent::eGreen:
+		case PixelComponent::eGreen:
 			return getComponentsCount( format ) >= 2
 				&& !ashes::isDepthOrStencilFormat( VkFormat( format ) );
-		case castor::PixelComponent::eBlue:
+		case PixelComponent::eBlue:
 			return getComponentsCount( format ) >= 3
 				&& !ashes::isDepthOrStencilFormat( VkFormat( format ) );
-		case castor::PixelComponent::eAlpha:
+		case PixelComponent::eAlpha:
 			return hasAlpha( format );
-		case castor::PixelComponent::eDepth:
+		case PixelComponent::eDepth:
 			return ashes::isDepthFormat( VkFormat( format ) )
 				|| ashes::isDepthStencilFormat( VkFormat( format ) );
-		case castor::PixelComponent::eStencil:
+		case PixelComponent::eStencil:
 			return ashes::isStencilFormat( VkFormat( format ) )
 				|| ashes::isDepthStencilFormat( VkFormat( format ) );
 		default:
@@ -563,6 +563,35 @@ namespace castor
 	inline constexpr bool isSRGBFormat( PixelFormat format )
 	{
 		return ashes::isSRGBFormat( VkFormat( format ) );
+	}
+
+	inline constexpr bool isRGFormat( PixelFormat format )
+	{
+		return format == PixelFormat::eR4G4_UNORM
+			|| format == PixelFormat::eR8G8_UNORM
+			|| format == PixelFormat::eR8G8_SNORM
+			|| format == PixelFormat::eR8G8_USCALED
+			|| format == PixelFormat::eR8G8_SSCALED
+			|| format == PixelFormat::eR8G8_UINT
+			|| format == PixelFormat::eR8G8_SINT
+			|| format == PixelFormat::eR8G8_SRGB
+			|| format == PixelFormat::eR16G16_UNORM
+			|| format == PixelFormat::eR16G16_SNORM
+			|| format == PixelFormat::eR16G16_USCALED
+			|| format == PixelFormat::eR16G16_SSCALED
+			|| format == PixelFormat::eR16G16_UINT
+			|| format == PixelFormat::eR16G16_SINT
+			|| format == PixelFormat::eR16G16_SFLOAT
+			|| format == PixelFormat::eR32G32_UINT
+			|| format == PixelFormat::eR32G32_SINT
+			|| format == PixelFormat::eR32G32_SFLOAT
+			|| format == PixelFormat::eR64G64_UINT
+			|| format == PixelFormat::eR64G64_SINT
+			|| format == PixelFormat::eR64G64_SFLOAT
+			|| format == PixelFormat::eBC5_UNORM_BLOCK
+			|| format == PixelFormat::eBC5_SNORM_BLOCK
+			|| format == PixelFormat::eEAC_R11G11_UNORM_BLOCK
+			|| format == PixelFormat::eEAC_R11G11_SNORM_BLOCK;
 	}
 
 	inline constexpr bool isRGBFormat( PixelFormat format )
@@ -689,64 +718,64 @@ namespace castor
 	{
 		switch ( format )
 		{
-		case castor::PixelFormat::eR8_UNORM:
-			return castor::PixelFormat::eR8_SRGB;
-		case castor::PixelFormat::eR8G8_UNORM:
-			return castor::PixelFormat::eR8G8_SRGB;
-		case castor::PixelFormat::eR8G8B8_UNORM:
-			return castor::PixelFormat::eR8G8B8_SRGB;
-		case castor::PixelFormat::eB8G8R8_UNORM:
-			return castor::PixelFormat::eB8G8R8_SRGB;
-		case castor::PixelFormat::eR8G8B8A8_UNORM:
-			return castor::PixelFormat::eR8G8B8A8_SRGB;
-		case castor::PixelFormat::eB8G8R8A8_UNORM:
-			return castor::PixelFormat::eB8G8R8A8_SRGB;
-		case castor::PixelFormat::eA8B8G8R8_UNORM:
-			return castor::PixelFormat::eA8B8G8R8_SRGB;
-		case castor::PixelFormat::eBC1_RGB_UNORM_BLOCK:
-			return castor::PixelFormat::eBC1_RGB_SRGB_BLOCK;
-		case castor::PixelFormat::eBC1_RGBA_UNORM_BLOCK:
-			return castor::PixelFormat::eBC1_RGBA_SRGB_BLOCK;
-		case castor::PixelFormat::eBC2_UNORM_BLOCK:
-			return castor::PixelFormat::eBC2_SRGB_BLOCK;
-		case castor::PixelFormat::eBC3_UNORM_BLOCK:
-			return castor::PixelFormat::eBC3_SRGB_BLOCK;
-		case castor::PixelFormat::eBC7_UNORM_BLOCK:
-			return castor::PixelFormat::eBC7_SRGB_BLOCK;
-		case castor::PixelFormat::eETC2_R8G8B8_UNORM_BLOCK:
-			return castor::PixelFormat::eETC2_R8G8B8_SRGB_BLOCK;
-		case castor::PixelFormat::eETC2_R8G8B8A1_UNORM_BLOCK:
-			return castor::PixelFormat::eETC2_R8G8B8A1_SRGB_BLOCK;
-		case castor::PixelFormat::eETC2_R8G8B8A8_UNORM_BLOCK:
-			return castor::PixelFormat::eETC2_R8G8B8A8_SRGB_BLOCK;
-		case castor::PixelFormat::eASTC_4x4_UNORM_BLOCK:
-			return castor::PixelFormat::eASTC_4x4_SRGB_BLOCK;
-		case castor::PixelFormat::eASTC_5x4_UNORM_BLOCK:
-			return castor::PixelFormat::eASTC_5x4_SRGB_BLOCK;
-		case castor::PixelFormat::eASTC_5x5_UNORM_BLOCK:
-			return castor::PixelFormat::eASTC_5x5_SRGB_BLOCK;
-		case castor::PixelFormat::eASTC_6x5_UNORM_BLOCK:
-			return castor::PixelFormat::eASTC_6x5_SRGB_BLOCK;
-		case castor::PixelFormat::eASTC_6x6_UNORM_BLOCK:
-			return castor::PixelFormat::eASTC_6x6_SRGB_BLOCK;
-		case castor::PixelFormat::eASTC_8x5_UNORM_BLOCK:
-			return castor::PixelFormat::eASTC_8x5_SRGB_BLOCK;
-		case castor::PixelFormat::eASTC_8x6_SRGB_BLOCK:
-			return castor::PixelFormat::eASTC_8x6_SRGB_BLOCK;
-		case castor::PixelFormat::eASTC_8x8_UNORM_BLOCK:
-			return castor::PixelFormat::eASTC_8x8_SRGB_BLOCK;
-		case castor::PixelFormat::eASTC_10x5_UNORM_BLOCK:
-			return castor::PixelFormat::eASTC_10x5_SRGB_BLOCK;
-		case castor::PixelFormat::eASTC_10x6_UNORM_BLOCK:
-			return castor::PixelFormat::eASTC_10x6_SRGB_BLOCK;
-		case castor::PixelFormat::eASTC_10x8_UNORM_BLOCK:
-			return castor::PixelFormat::eASTC_10x8_SRGB_BLOCK;
-		case castor::PixelFormat::eASTC_10x10_UNORM_BLOCK:
-			return castor::PixelFormat::eASTC_10x10_SRGB_BLOCK;
-		case castor::PixelFormat::eASTC_12x10_UNORM_BLOCK:
-			return castor::PixelFormat::eASTC_12x10_SRGB_BLOCK;
-		case castor::PixelFormat::eASTC_12x12_UNORM_BLOCK:
-			return castor::PixelFormat::eASTC_12x12_SRGB_BLOCK;
+		case PixelFormat::eR8_UNORM:
+			return PixelFormat::eR8_SRGB;
+		case PixelFormat::eR8G8_UNORM:
+			return PixelFormat::eR8G8_SRGB;
+		case PixelFormat::eR8G8B8_UNORM:
+			return PixelFormat::eR8G8B8_SRGB;
+		case PixelFormat::eB8G8R8_UNORM:
+			return PixelFormat::eB8G8R8_SRGB;
+		case PixelFormat::eR8G8B8A8_UNORM:
+			return PixelFormat::eR8G8B8A8_SRGB;
+		case PixelFormat::eB8G8R8A8_UNORM:
+			return PixelFormat::eB8G8R8A8_SRGB;
+		case PixelFormat::eA8B8G8R8_UNORM:
+			return PixelFormat::eA8B8G8R8_SRGB;
+		case PixelFormat::eBC1_RGB_UNORM_BLOCK:
+			return PixelFormat::eBC1_RGB_SRGB_BLOCK;
+		case PixelFormat::eBC1_RGBA_UNORM_BLOCK:
+			return PixelFormat::eBC1_RGBA_SRGB_BLOCK;
+		case PixelFormat::eBC2_UNORM_BLOCK:
+			return PixelFormat::eBC2_SRGB_BLOCK;
+		case PixelFormat::eBC3_UNORM_BLOCK:
+			return PixelFormat::eBC3_SRGB_BLOCK;
+		case PixelFormat::eBC7_UNORM_BLOCK:
+			return PixelFormat::eBC7_SRGB_BLOCK;
+		case PixelFormat::eETC2_R8G8B8_UNORM_BLOCK:
+			return PixelFormat::eETC2_R8G8B8_SRGB_BLOCK;
+		case PixelFormat::eETC2_R8G8B8A1_UNORM_BLOCK:
+			return PixelFormat::eETC2_R8G8B8A1_SRGB_BLOCK;
+		case PixelFormat::eETC2_R8G8B8A8_UNORM_BLOCK:
+			return PixelFormat::eETC2_R8G8B8A8_SRGB_BLOCK;
+		case PixelFormat::eASTC_4x4_UNORM_BLOCK:
+			return PixelFormat::eASTC_4x4_SRGB_BLOCK;
+		case PixelFormat::eASTC_5x4_UNORM_BLOCK:
+			return PixelFormat::eASTC_5x4_SRGB_BLOCK;
+		case PixelFormat::eASTC_5x5_UNORM_BLOCK:
+			return PixelFormat::eASTC_5x5_SRGB_BLOCK;
+		case PixelFormat::eASTC_6x5_UNORM_BLOCK:
+			return PixelFormat::eASTC_6x5_SRGB_BLOCK;
+		case PixelFormat::eASTC_6x6_UNORM_BLOCK:
+			return PixelFormat::eASTC_6x6_SRGB_BLOCK;
+		case PixelFormat::eASTC_8x5_UNORM_BLOCK:
+			return PixelFormat::eASTC_8x5_SRGB_BLOCK;
+		case PixelFormat::eASTC_8x6_SRGB_BLOCK:
+			return PixelFormat::eASTC_8x6_SRGB_BLOCK;
+		case PixelFormat::eASTC_8x8_UNORM_BLOCK:
+			return PixelFormat::eASTC_8x8_SRGB_BLOCK;
+		case PixelFormat::eASTC_10x5_UNORM_BLOCK:
+			return PixelFormat::eASTC_10x5_SRGB_BLOCK;
+		case PixelFormat::eASTC_10x6_UNORM_BLOCK:
+			return PixelFormat::eASTC_10x6_SRGB_BLOCK;
+		case PixelFormat::eASTC_10x8_UNORM_BLOCK:
+			return PixelFormat::eASTC_10x8_SRGB_BLOCK;
+		case PixelFormat::eASTC_10x10_UNORM_BLOCK:
+			return PixelFormat::eASTC_10x10_SRGB_BLOCK;
+		case PixelFormat::eASTC_12x10_UNORM_BLOCK:
+			return PixelFormat::eASTC_12x10_SRGB_BLOCK;
+		case PixelFormat::eASTC_12x12_UNORM_BLOCK:
+			return PixelFormat::eASTC_12x12_SRGB_BLOCK;
 		default:
 			return format;
 		}
@@ -756,64 +785,64 @@ namespace castor
 	{
 		switch ( format )
 		{
-		case castor::PixelFormat::eR8_SRGB:
-			return castor::PixelFormat::eR8_UNORM;
-		case castor::PixelFormat::eR8G8_SRGB:
-			return castor::PixelFormat::eR8G8_UNORM;
-		case castor::PixelFormat::eR8G8B8_SRGB:
-			return castor::PixelFormat::eR8G8B8_UNORM;
-		case castor::PixelFormat::eB8G8R8_SRGB:
-			return castor::PixelFormat::eB8G8R8_UNORM;
-		case castor::PixelFormat::eR8G8B8A8_SRGB:
-			return castor::PixelFormat::eR8G8B8A8_UNORM;
-		case castor::PixelFormat::eB8G8R8A8_SRGB:
-			return castor::PixelFormat::eB8G8R8A8_UNORM;
-		case castor::PixelFormat::eA8B8G8R8_SRGB:
-			return castor::PixelFormat::eA8B8G8R8_UNORM;
-		case castor::PixelFormat::eBC1_RGB_SRGB_BLOCK:
-			return castor::PixelFormat::eBC1_RGB_UNORM_BLOCK;
-		case castor::PixelFormat::eBC1_RGBA_SRGB_BLOCK:
-			return castor::PixelFormat::eBC1_RGBA_UNORM_BLOCK;
-		case castor::PixelFormat::eBC2_SRGB_BLOCK:
-			return castor::PixelFormat::eBC2_UNORM_BLOCK;
-		case castor::PixelFormat::eBC3_SRGB_BLOCK:
-			return castor::PixelFormat::eBC3_UNORM_BLOCK;
-		case castor::PixelFormat::eBC7_SRGB_BLOCK:
-			return castor::PixelFormat::eBC7_UNORM_BLOCK;
-		case castor::PixelFormat::eETC2_R8G8B8_SRGB_BLOCK:
-			return castor::PixelFormat::eETC2_R8G8B8_UNORM_BLOCK;
-		case castor::PixelFormat::eETC2_R8G8B8A1_SRGB_BLOCK:
-			return castor::PixelFormat::eETC2_R8G8B8A1_UNORM_BLOCK;
-		case castor::PixelFormat::eETC2_R8G8B8A8_SRGB_BLOCK:
-			return castor::PixelFormat::eETC2_R8G8B8A8_UNORM_BLOCK;
-		case castor::PixelFormat::eASTC_4x4_SRGB_BLOCK:
-			return castor::PixelFormat::eASTC_4x4_UNORM_BLOCK;
-		case castor::PixelFormat::eASTC_5x4_SRGB_BLOCK:
-			return castor::PixelFormat::eASTC_5x4_UNORM_BLOCK;
-		case castor::PixelFormat::eASTC_5x5_SRGB_BLOCK:
-			return castor::PixelFormat::eASTC_5x5_UNORM_BLOCK;
-		case castor::PixelFormat::eASTC_6x5_SRGB_BLOCK:
-			return castor::PixelFormat::eASTC_6x5_UNORM_BLOCK;
-		case castor::PixelFormat::eASTC_6x6_SRGB_BLOCK:
-			return castor::PixelFormat::eASTC_6x6_UNORM_BLOCK;
-		case castor::PixelFormat::eASTC_8x5_SRGB_BLOCK:
-			return castor::PixelFormat::eASTC_8x5_UNORM_BLOCK;
-		case castor::PixelFormat::eASTC_8x6_SRGB_BLOCK:
-			return castor::PixelFormat::eASTC_8x6_SRGB_BLOCK;
-		case castor::PixelFormat::eASTC_8x8_SRGB_BLOCK:
-			return castor::PixelFormat::eASTC_8x8_UNORM_BLOCK;
-		case castor::PixelFormat::eASTC_10x5_SRGB_BLOCK:
-			return castor::PixelFormat::eASTC_10x5_UNORM_BLOCK;
-		case castor::PixelFormat::eASTC_10x6_SRGB_BLOCK:
-			return castor::PixelFormat::eASTC_10x6_UNORM_BLOCK;
-		case castor::PixelFormat::eASTC_10x8_SRGB_BLOCK:
-			return castor::PixelFormat::eASTC_10x8_UNORM_BLOCK;
-		case castor::PixelFormat::eASTC_10x10_SRGB_BLOCK:
-			return castor::PixelFormat::eASTC_10x10_UNORM_BLOCK;
-		case castor::PixelFormat::eASTC_12x10_SRGB_BLOCK:
-			return castor::PixelFormat::eASTC_12x10_UNORM_BLOCK;
-		case castor::PixelFormat::eASTC_12x12_SRGB_BLOCK:
-			return castor::PixelFormat::eASTC_12x12_UNORM_BLOCK;
+		case PixelFormat::eR8_SRGB:
+			return PixelFormat::eR8_UNORM;
+		case PixelFormat::eR8G8_SRGB:
+			return PixelFormat::eR8G8_UNORM;
+		case PixelFormat::eR8G8B8_SRGB:
+			return PixelFormat::eR8G8B8_UNORM;
+		case PixelFormat::eB8G8R8_SRGB:
+			return PixelFormat::eB8G8R8_UNORM;
+		case PixelFormat::eR8G8B8A8_SRGB:
+			return PixelFormat::eR8G8B8A8_UNORM;
+		case PixelFormat::eB8G8R8A8_SRGB:
+			return PixelFormat::eB8G8R8A8_UNORM;
+		case PixelFormat::eA8B8G8R8_SRGB:
+			return PixelFormat::eA8B8G8R8_UNORM;
+		case PixelFormat::eBC1_RGB_SRGB_BLOCK:
+			return PixelFormat::eBC1_RGB_UNORM_BLOCK;
+		case PixelFormat::eBC1_RGBA_SRGB_BLOCK:
+			return PixelFormat::eBC1_RGBA_UNORM_BLOCK;
+		case PixelFormat::eBC2_SRGB_BLOCK:
+			return PixelFormat::eBC2_UNORM_BLOCK;
+		case PixelFormat::eBC3_SRGB_BLOCK:
+			return PixelFormat::eBC3_UNORM_BLOCK;
+		case PixelFormat::eBC7_SRGB_BLOCK:
+			return PixelFormat::eBC7_UNORM_BLOCK;
+		case PixelFormat::eETC2_R8G8B8_SRGB_BLOCK:
+			return PixelFormat::eETC2_R8G8B8_UNORM_BLOCK;
+		case PixelFormat::eETC2_R8G8B8A1_SRGB_BLOCK:
+			return PixelFormat::eETC2_R8G8B8A1_UNORM_BLOCK;
+		case PixelFormat::eETC2_R8G8B8A8_SRGB_BLOCK:
+			return PixelFormat::eETC2_R8G8B8A8_UNORM_BLOCK;
+		case PixelFormat::eASTC_4x4_SRGB_BLOCK:
+			return PixelFormat::eASTC_4x4_UNORM_BLOCK;
+		case PixelFormat::eASTC_5x4_SRGB_BLOCK:
+			return PixelFormat::eASTC_5x4_UNORM_BLOCK;
+		case PixelFormat::eASTC_5x5_SRGB_BLOCK:
+			return PixelFormat::eASTC_5x5_UNORM_BLOCK;
+		case PixelFormat::eASTC_6x5_SRGB_BLOCK:
+			return PixelFormat::eASTC_6x5_UNORM_BLOCK;
+		case PixelFormat::eASTC_6x6_SRGB_BLOCK:
+			return PixelFormat::eASTC_6x6_UNORM_BLOCK;
+		case PixelFormat::eASTC_8x5_SRGB_BLOCK:
+			return PixelFormat::eASTC_8x5_UNORM_BLOCK;
+		case PixelFormat::eASTC_8x6_SRGB_BLOCK:
+			return PixelFormat::eASTC_8x6_SRGB_BLOCK;
+		case PixelFormat::eASTC_8x8_SRGB_BLOCK:
+			return PixelFormat::eASTC_8x8_UNORM_BLOCK;
+		case PixelFormat::eASTC_10x5_SRGB_BLOCK:
+			return PixelFormat::eASTC_10x5_UNORM_BLOCK;
+		case PixelFormat::eASTC_10x6_SRGB_BLOCK:
+			return PixelFormat::eASTC_10x6_UNORM_BLOCK;
+		case PixelFormat::eASTC_10x8_SRGB_BLOCK:
+			return PixelFormat::eASTC_10x8_UNORM_BLOCK;
+		case PixelFormat::eASTC_10x10_SRGB_BLOCK:
+			return PixelFormat::eASTC_10x10_UNORM_BLOCK;
+		case PixelFormat::eASTC_12x10_SRGB_BLOCK:
+			return PixelFormat::eASTC_12x10_UNORM_BLOCK;
+		case PixelFormat::eASTC_12x12_SRGB_BLOCK:
+			return PixelFormat::eASTC_12x12_UNORM_BLOCK;
 		default:
 			return format;
 		}
@@ -1069,6 +1098,52 @@ namespace castor
 				return castor::PixelComponent::eRed;
 			}
 		}
+	}
+
+	inline constexpr castor::PixelComponents getComponents( PixelFormat format )
+	{
+		if ( isRGBAFormat( format )
+			|| isARGBFormat( format )
+			|| isBGRAFormat( format )
+			|| isABGRFormat( format ) )
+		{
+			return ( castor::PixelComponent::eRed
+				| castor::PixelComponent::eGreen
+				| castor::PixelComponent::eBlue
+				| castor::PixelComponent::eAlpha );
+		}
+
+		if ( isRGBFormat( format )
+			|| isBGRFormat( format ) )
+		{
+			return ( castor::PixelComponent::eRed
+				| castor::PixelComponent::eGreen
+				| castor::PixelComponent::eBlue );
+		}
+
+		if ( isRGFormat( format ) )
+		{
+			return ( castor::PixelComponent::eRed
+				| castor::PixelComponent::eGreen );
+		}
+
+		if ( ashes::isDepthStencilFormat( VkFormat( format ) ) )
+		{
+			return ( castor::PixelComponent::eDepth
+				| castor::PixelComponent::eStencil );
+		}
+
+		if ( ashes::isDepthFormat( VkFormat( format ) ) )
+		{
+			return castor::PixelComponent::eDepth;
+		}
+
+		if ( ashes::isStencilFormat( VkFormat( format ) ) )
+		{
+			return castor::PixelComponent::eStencil;
+		}
+
+		return castor::PixelComponent::eRed;
 	}
 }
 

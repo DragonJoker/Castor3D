@@ -65,13 +65,31 @@ namespace castor3d
 				rhsPixelFormat = getSRGBFormat( rhsPixelFormat );
 			}
 
-			if ( pixelFormat != rhsBuffer->getFormat() )
+			auto lhsComponentFormat = getSingleComponent( pixelFormat );
+			auto rhsComponentFormat = getSingleComponent( rhsPixelFormat );
+
+			if ( lhsComponentFormat != rhsComponentFormat )
 			{
-				if ( getBytesPerPixel( pixelFormat ) < getBytesPerPixel( rhsBuffer->getFormat() )
-					|| ( !isFloatingPoint( pixelFormat ) && isFloatingPoint( rhsBuffer->getFormat() ) )
-					)
+				if ( getBytesPerPixel( lhsComponentFormat ) < getBytesPerPixel( rhsComponentFormat )
+					|| ( !isFloatingPoint( pixelFormat ) && isFloatingPoint( rhsPixelFormat ) ) )
 				{
-					pixelFormat = rhsBuffer->getFormat();
+					pixelFormat = getPixelFormat( rhsComponentFormat
+						, getPixelComponents( lhsDstMask | rhsDstMask ) );
+					lhsBuffer = castor::PxBufferBase::createUnique( dimensions
+						, getPixelFormat( rhsComponentFormat, getComponents( lhsBuffer->getFormat() ) )
+						, lhsBuffer->getConstPtr()
+						, lhsBuffer->getFormat()
+						, lhsBuffer->getAlign() );
+				}
+				else
+				{
+					pixelFormat = getPixelFormat( lhsComponentFormat
+						, getPixelComponents( lhsDstMask | rhsDstMask ) );
+					rhsBuffer = castor::PxBufferBase::createUnique( dimensions
+						, getPixelFormat( lhsComponentFormat, getComponents( rhsBuffer->getFormat() ) )
+						, rhsBuffer->getConstPtr()
+						, rhsBuffer->getFormat()
+						, rhsBuffer->getAlign() );
 				}
 			}
 
@@ -79,7 +97,7 @@ namespace castor3d
 			auto lhsComponents = getPixelComponents( lhsSrcMask );
 			auto rhsComponents = getPixelComponents( rhsSrcMask );
 			auto result = castor::PxBufferBase::createUnique( dimensions
-				, getPixelFormat( pixelFormat, getPixelComponents( lhsDstMask | rhsDstMask ) ) );
+				, pixelFormat );
 			log::debug << cuT( "Copying LHS image components to result.\n" );
 			copyBufferComponents( lhsComponents
 				, getPixelComponents( lhsDstMask )

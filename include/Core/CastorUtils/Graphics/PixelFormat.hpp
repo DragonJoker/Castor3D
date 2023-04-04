@@ -84,6 +84,13 @@ namespace castor
 	inline constexpr bool isSRGBFormat( PixelFormat format );
 	/**
 	 *\~english
+	 *\return		\p true if format is an RG format.
+	 *\~french
+	 *\return		\p false si le format est en RG.
+	 */
+	inline constexpr bool isRGFormat( PixelFormat format );
+	/**
+	 *\~english
 	 *\return		\p true if format is an RGB format.
 	 *\~french
 	 *\return		\p false si le format est en RGB.
@@ -190,6 +197,13 @@ namespace castor
 	 */
 	inline constexpr PixelComponent getIndexComponent( uint32_t index
 		, PixelFormat format );
+	/**
+	 *\~english
+	 *\return		The PixelComponents matching the given PixelFormat.
+	 *\~french
+	 *\return		Le PixelComponents correspondant au PixelFormat donné.
+	 */
+	inline constexpr castor::PixelComponents getComponents( castor::PixelFormat format );
 
 	/**
 	 *\~english

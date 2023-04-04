@@ -65,9 +65,9 @@ namespace castor
 	template< PixelFormat PFT >
 	int16_t getR16F( uint8_t const * buffer );
 	template< PixelFormat PFT >
-	uint32_t getR32S( uint8_t const * buffer );
+	uint32_t getR32U( uint8_t const * buffer );
 	template< PixelFormat PFT >
-	int32_t getR32U( uint8_t const * buffer );
+	int32_t getR32S( uint8_t const * buffer );
 	template< PixelFormat PFT >
 	float getR32F( uint8_t const * buffer );
 	template< PixelFormat PFT >
@@ -618,6 +618,8 @@ namespace castor
 	{
 		return setS8U< PF >( pixel.ptr(), value );
 	}
+
+	castor::PixelComponents getPixelComponents( castor::PixelFormat format );
 }
 
 #include "PixelComponents.inl"
