@@ -37,7 +37,7 @@ namespace castor3d
 		 *\brief		Fonction de création utilisée par la fabrique
 		 *\return		Un overlay
 		 */
-		C3D_API static OverlayCategorySPtr create();
+		C3D_API static OverlayCategoryUPtr create();
 		/**
 		 *\copydoc	castor3d::OverlayCategory::accept
 		 */

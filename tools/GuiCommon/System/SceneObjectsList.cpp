@@ -312,7 +312,7 @@ namespace GuiCommon
 							, overlay->getOverlayName()
 							, eBMP_PANEL_OVERLAY
 							, eBMP_PANEL_OVERLAY_SEL
-							, new OverlayTreeItemProperty( m_propertiesHolder->isEditable(), overlay ) )
+							, new OverlayTreeItemProperty( m_propertiesHolder->isEditable(), *overlay ) )
 						, *overlay );
 					break;
 				case castor3d::OverlayType::eBorderPanel:
@@ -320,7 +320,7 @@ namespace GuiCommon
 							, overlay->getOverlayName()
 							, eBMP_BORDER_PANEL_OVERLAY
 							, eBMP_BORDER_PANEL_OVERLAY_SEL
-							, new OverlayTreeItemProperty( m_propertiesHolder->isEditable(), overlay ) )
+							, new OverlayTreeItemProperty( m_propertiesHolder->isEditable(), *overlay ) )
 						, *overlay );
 					break;
 				case castor3d::OverlayType::eText:
@@ -328,7 +328,7 @@ namespace GuiCommon
 							, overlay->getOverlayName()
 							, eBMP_TEXT_OVERLAY
 							, eBMP_TEXT_OVERLAY_SEL
-							, new OverlayTreeItemProperty( m_propertiesHolder->isEditable(), overlay ) )
+							, new OverlayTreeItemProperty( m_propertiesHolder->isEditable(), *overlay ) )
 						, *overlay );
 					break;
 				default:
@@ -603,7 +603,7 @@ namespace GuiCommon
 						, eBMP_PANEL_OVERLAY
 						, eBMP_PANEL_OVERLAY_SEL
 						, new OverlayTreeItemProperty( m_propertiesHolder->isEditable(), overlay->getCategory() ) )
-					, *overlay->getCategory() );
+					, overlay->getCategory() );
 				break;
 			case castor3d::OverlayType::eBorderPanel:
 				doAddOverlay( AppendItem( id
@@ -611,7 +611,7 @@ namespace GuiCommon
 						, eBMP_BORDER_PANEL_OVERLAY
 						, eBMP_BORDER_PANEL_OVERLAY_SEL
 						, new OverlayTreeItemProperty( m_propertiesHolder->isEditable(), overlay->getCategory() ) )
-					, *overlay->getCategory() );
+					, overlay->getCategory() );
 				break;
 			case castor3d::OverlayType::eText:
 				doAddOverlay( AppendItem( id
@@ -619,7 +619,7 @@ namespace GuiCommon
 						, eBMP_TEXT_OVERLAY
 						, eBMP_TEXT_OVERLAY_SEL
 						, new OverlayTreeItemProperty( m_propertiesHolder->isEditable(), overlay->getCategory() ) )
-					, *overlay->getCategory() );
+					, overlay->getCategory() );
 				break;
 			default:
 				CU_Failure( "Unsupported OverlayType" );

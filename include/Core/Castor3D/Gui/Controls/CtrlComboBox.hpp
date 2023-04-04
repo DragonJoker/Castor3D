@@ -211,7 +211,7 @@ namespace castor3d
 		void doSwitchExpand();
 
 	private:
-		TextOverlayWPtr m_text;
+		TextOverlayRPtr m_text{};
 		ButtonCtrlSPtr m_expand;
 		ListBoxCtrlSPtr m_choices;
 		castor::StringArray m_values;

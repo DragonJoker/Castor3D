@@ -12,10 +12,10 @@ namespace castortd
 {
 	namespace
 	{
-		castor3d::TextOverlaySPtr getTextOverlay( castor3d::Scene const & scene
+		castor3d::TextOverlayRPtr getTextOverlay( castor3d::Scene const & scene
 			, castor::String const & name )
 		{
-			castor3d::TextOverlaySPtr result;
+			castor3d::TextOverlayRPtr result{};
 			auto overlay = scene.findOverlay( name ).lock();
 
 			if ( overlay )
@@ -119,42 +119,42 @@ namespace castortd
 
 	void Hud::update()
 	{
-		auto text = m_lives.lock();
+		auto text = m_lives;
 
 		if ( text )
 		{
 			text->setCaption( castor::string::toU32String( m_game.getLives() ) );
 		}
 
-		text = m_ore.lock();
+		text = m_ore;
 
 		if ( text )
 		{
 			text->setCaption( castor::string::toU32String( m_game.getOre() ) );
 		}
 
-		text = m_level.lock();
+		text = m_level;
 
 		if ( text )
 		{
 			text->setCaption( castor::string::toU32String( m_game.getWave() ) );
 		}
 
-		text = m_kills.lock();
+		text = m_kills;
 
 		if ( text )
 		{
 			text->setCaption( castor::string::toU32String( m_game.getKills() ) );
 		}
 
-		text = m_enemyLife.lock();
+		text = m_enemyLife;
 
 		if ( text )
 		{
 			text->setCaption( castor::string::toU32String( m_game.getEnemiesLife() ) );
 		}
 
-		text = m_enemyBounty.lock();
+		text = m_enemyBounty;
 
 		if ( text )
 		{
@@ -165,7 +165,7 @@ namespace castortd
 
 		if ( tower )
 		{
-			text = m_towerDamage.lock();
+			text = m_towerDamage;
 
 			if ( text )
 			{
@@ -173,7 +173,7 @@ namespace castortd
 				text->setCaption( castor::string::toU32String( tower->getDamage() ) );
 			}
 
-			text = m_towerSpeed.lock();
+			text = m_towerSpeed;
 
 			if ( text )
 			{
@@ -181,7 +181,7 @@ namespace castortd
 				text->setCaption( castor::string::toU32String( tower->getSpeed() ) );
 			}
 
-			text = m_towerRange.lock();
+			text = m_towerRange;
 
 			if ( text )
 			{
@@ -191,21 +191,21 @@ namespace castortd
 		}
 		else
 		{
-			text = m_towerDamage.lock();
+			text = m_towerDamage;
 
 			if ( text )
 			{
 				text->setVisible( false );
 			}
 
-			text = m_towerSpeed.lock();
+			text = m_towerSpeed;
 
 			if ( text )
 			{
 				text->setVisible( false );
 			}
 
-			text = m_towerRange.lock();
+			text = m_towerRange;
 
 			if ( text )
 			{

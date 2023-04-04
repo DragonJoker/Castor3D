@@ -75,7 +75,7 @@ namespace castor3d
 
 	StaticCtrl::~StaticCtrl()noexcept
 	{
-		if ( auto overlay = m_text.lock() )
+		if ( auto overlay = m_text )
 		{
 			if ( m_scene )
 			{
@@ -166,7 +166,7 @@ namespace castor3d
 	{
 		auto & style = getStyle();
 
-		if ( auto text = m_text.lock() )
+		if ( auto text = m_text )
 		{
 			text->setFont( style.getFontName() );
 			text->setMaterial( style.getTextMaterial() );
@@ -183,7 +183,7 @@ namespace castor3d
 
 	void StaticCtrl::doSetPosition( castor::Position const & value )
 	{
-		if ( auto text = m_text.lock() )
+		if ( auto text = m_text )
 		{
 			text->setPixelPosition( getClientOffset() );
 		}
@@ -191,7 +191,7 @@ namespace castor3d
 
 	void StaticCtrl::doSetSize( castor::Size const & value )
 	{
-		if ( auto text = m_text.lock() )
+		if ( auto text = m_text )
 		{
 			text->setPixelSize( getClientSize() );
 		}
@@ -199,7 +199,7 @@ namespace castor3d
 
 	void StaticCtrl::doSetBorderSize( castor::Point4ui const & value )
 	{
-		if ( auto text = m_text.lock() )
+		if ( auto text = m_text )
 		{
 			text->setPixelPosition( getClientOffset() );
 			text->setPixelSize( getClientSize() );
@@ -210,7 +210,7 @@ namespace castor3d
 	{
 		m_caption = value;
 
-		if ( auto text = m_text.lock() )
+		if ( auto text = m_text )
 		{
 			text->setCaption( value );
 		}
@@ -218,7 +218,7 @@ namespace castor3d
 
 	void StaticCtrl::doSetVisible( bool visible )
 	{
-		if ( auto text = m_text.lock() )
+		if ( auto text = m_text )
 		{
 			text->setVisible( visible );
 		}
@@ -226,7 +226,7 @@ namespace castor3d
 
 	void StaticCtrl::doUpdateFlags()
 	{
-		if ( auto text = m_text.lock() )
+		if ( auto text = m_text )
 		{
 			text->setHAlign( getHAlign() );
 			text->setVAlign( getVAlign() );
@@ -235,7 +235,7 @@ namespace castor3d
 
 	void StaticCtrl::doUpdateZIndex( uint32_t & index )
 	{
-		if ( auto text = m_text.lock() )
+		if ( auto text = m_text )
 		{
 			text->setOrder( index++, 0u );
 		}
@@ -243,7 +243,7 @@ namespace castor3d
 
 	void StaticCtrl::doAdjustZIndex( uint32_t offset )
 	{
-		if ( auto text = m_text.lock() )
+		if ( auto text = m_text )
 		{
 			text->setOrder( text->getLevel() + offset, 0u );
 		}

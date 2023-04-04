@@ -146,10 +146,10 @@ namespace castor3d
 		void doUpdateProgress();
 
 	private:
-		TextOverlayWPtr m_title;
+		TextOverlayRPtr m_title{};
 		PanelCtrlSPtr m_container;
 		PanelCtrlSPtr m_progress;
-		TextOverlayWPtr m_text;
+		TextOverlayRPtr m_text{};
 		castor::RangedValue< int32_t > m_value;
 	};
 }

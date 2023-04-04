@@ -20,14 +20,14 @@ namespace castortd
 
 	private:
 		Game const & m_game;
-		castor3d::TextOverlayWPtr m_lives;
-		castor3d::TextOverlayWPtr m_ore;
-		castor3d::TextOverlayWPtr m_level;
-		castor3d::TextOverlayWPtr m_kills;
-		castor3d::TextOverlayWPtr m_enemyLife;
-		castor3d::TextOverlayWPtr m_enemyBounty;
-		castor3d::TextOverlayWPtr m_towerSpeed;
-		castor3d::TextOverlayWPtr m_towerRange;
-		castor3d::TextOverlayWPtr m_towerDamage;
+		castor3d::TextOverlayRPtr m_lives{};
+		castor3d::TextOverlayRPtr m_ore{};
+		castor3d::TextOverlayRPtr m_level{};
+		castor3d::TextOverlayRPtr m_kills{};
+		castor3d::TextOverlayRPtr m_enemyLife{};
+		castor3d::TextOverlayRPtr m_enemyBounty{};
+		castor3d::TextOverlayRPtr m_towerSpeed{};
+		castor3d::TextOverlayRPtr m_towerRange{};
+		castor3d::TextOverlayRPtr m_towerDamage{};
 	};
 }

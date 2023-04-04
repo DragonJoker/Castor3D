@@ -83,7 +83,7 @@ namespace castor3d
 
 	ProgressCtrl::~ProgressCtrl()noexcept
 	{
-		if ( auto overlay = m_text.lock() )
+		if ( auto overlay = m_text )
 		{
 			if ( m_scene )
 			{
@@ -95,7 +95,7 @@ namespace castor3d
 			}
 		}
 
-		if ( auto overlay = m_title.lock() )
+		if ( auto overlay = m_title )
 		{
 			if ( m_scene )
 			{
@@ -110,7 +110,7 @@ namespace castor3d
 
 	void ProgressCtrl::setTitle( castor::U32String value )
 	{
-		if ( auto title = m_title.lock() )
+		if ( auto title = m_title )
 		{
 			title->setCaption( value );
 		}
@@ -211,13 +211,13 @@ namespace castor3d
 		m_container->setStyle( &style.getContainerStyle() );
 		m_progress->setStyle( &style.getProgressStyle() );
 
-		if ( auto title = m_title.lock() )
+		if ( auto title = m_title )
 		{
 			title->setFont( style.getTitleFontName() );
 			title->setMaterial( style.getTitleMaterial() );
 		}
 
-		if ( auto text = m_text.lock() )
+		if ( auto text = m_text )
 		{
 			text->setFont( style.getTextFontName() );
 			text->setMaterial( style.getTextMaterial() );
@@ -228,26 +228,26 @@ namespace castor3d
 	{
 		if ( isVertical() )
 		{
-			if ( auto title = m_title.lock() )
+			if ( auto title = m_title )
 			{
 				title->setVisible( false );
 			}
 
-			if ( auto text = m_text.lock() )
+			if ( auto text = m_text )
 			{
 				text->setVisible( false );
 			}
 		}
 		else if ( isRightToLeft() )
 		{
-			if ( auto title = m_title.lock() )
+			if ( auto title = m_title )
 			{
 				title->setHAlign( HAlign::eRight );
 			}
 		}
 		else
 		{
-			if ( auto title = m_title.lock() )
+			if ( auto title = m_title )
 			{
 				title->setHAlign( HAlign::eLeft );
 			}
@@ -256,12 +256,12 @@ namespace castor3d
 
 	void ProgressCtrl::doUpdateZIndex( uint32_t & index )
 	{
-		if ( auto title = m_title.lock() )
+		if ( auto title = m_title )
 		{
 			title->setOrder( index++, 0u );
 		}
 
-		if ( auto text = m_text.lock() )
+		if ( auto text = m_text )
 		{
 			text->setOrder( index++, 0u );
 		}
@@ -269,12 +269,12 @@ namespace castor3d
 
 	void ProgressCtrl::doAdjustZIndex( uint32_t offset )
 	{
-		if ( auto title = m_title.lock() )
+		if ( auto title = m_title )
 		{
 			title->setOrder( title->getLevel() + offset, 0u );
 		}
 
-		if ( auto text = m_text.lock() )
+		if ( auto text = m_text )
 		{
 			text->setOrder( text->getLevel() + offset, 0u );
 		}
@@ -296,7 +296,7 @@ namespace castor3d
 
 	void ProgressCtrl::doSetCaption( castor::U32String const & caption )
 	{
-		if ( auto text = m_text.lock() )
+		if ( auto text = m_text )
 		{
 			text->setCaption( caption );
 		}
@@ -304,7 +304,7 @@ namespace castor3d
 
 	void ProgressCtrl::doSetVisible( bool value )
 	{
-		if ( auto title = m_title.lock() )
+		if ( auto title = m_title )
 		{
 			title->setVisible( value && !isVertical() );
 		}
@@ -319,7 +319,7 @@ namespace castor3d
 			m_progress->setVisible( value );
 		}
 
-		if ( auto text = m_text.lock() )
+		if ( auto text = m_text )
 		{
 			text->setVisible( value && !isVertical() );
 		}
@@ -334,7 +334,7 @@ namespace castor3d
 
 		if ( !isVertical() )
 		{
-			if ( auto title = m_title.lock() )
+			if ( auto title = m_title )
 			{
 				auto titleHeight = ( title->getFontTexture() && title->getFontTexture()->getFont() )
 					? title->getFontTexture()->getFont()->getHeight()
@@ -355,7 +355,7 @@ namespace castor3d
 
 			if ( !isVertical() )
 			{
-				if ( auto text = m_text.lock() )
+				if ( auto text = m_text )
 				{
 					text->setPixelPosition( m_container->getClientOffset() );
 					text->setPixelSize( m_container->getClientSize() );

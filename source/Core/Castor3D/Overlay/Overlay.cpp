@@ -78,34 +78,34 @@ namespace castor3d
 		return result;
 	}
 
-	PanelOverlaySPtr Overlay::getPanelOverlay()const
+	PanelOverlayRPtr Overlay::getPanelOverlay()const
 	{
 		if ( m_category->getType() != OverlayType::ePanel )
 		{
 			CU_Exception( "This overlay is not a panel." );
 		}
 
-		return std::static_pointer_cast< PanelOverlay >( m_category );
+		return &static_cast< PanelOverlay & >( *m_category );
 	}
 
-	BorderPanelOverlaySPtr Overlay::getBorderPanelOverlay()const
+	BorderPanelOverlayRPtr Overlay::getBorderPanelOverlay()const
 	{
 		if ( m_category->getType() != OverlayType::eBorderPanel )
 		{
 			CU_Exception( "This overlay is not a border panel." );
 		}
 
-		return std::static_pointer_cast< BorderPanelOverlay >( m_category );
+		return &static_cast< BorderPanelOverlay & >( *m_category );
 	}
 
-	TextOverlaySPtr Overlay::getTextOverlay()const
+	TextOverlayRPtr Overlay::getTextOverlay()const
 	{
 		if ( m_category->getType() != OverlayType::eText )
 		{
 			CU_Exception( "This overlay is not a text." );
 		}
 
-		return std::static_pointer_cast< TextOverlay >( m_category );
+		return &static_cast< TextOverlay & >( *m_category );
 	}
 
 	bool Overlay::isVisible()const

@@ -168,7 +168,7 @@ namespace castor3d
 
 	private:
 		castor::U32String m_caption;
-		TextOverlayWPtr m_text;
+		TextOverlayRPtr m_text{};
 		OnButtonEvent m_signals[size_t( ButtonEvent::eCount )];
 		OnEnableConnection m_onEnable;
 	};

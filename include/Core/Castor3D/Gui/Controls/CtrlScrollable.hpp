@@ -108,15 +108,15 @@ namespace castor3d
 	private:
 	private:
 		Control & m_target;
-		ScrollableStyleRPtr m_scrollableStyle;
-		ScrollBarCtrlSPtr m_verticalScrollBar;
-		ScrollBarCtrlSPtr m_horizontalScrollBar;
-		PanelOverlayWPtr m_corner;
-		std::map< ControlRPtr, ScrolledControl > m_controls;
-		OnScrollBarEventConnection m_onVerticalThumbRelease;
-		OnScrollBarEventConnection m_onHorizontalThumbRelease;
-		OnScrollBarEventConnection m_onVerticalThumbTrack;
-		OnScrollBarEventConnection m_onHorizontalThumbTrack;
+		ScrollableStyleRPtr m_scrollableStyle{};
+		ScrollBarCtrlSPtr m_verticalScrollBar{};
+		ScrollBarCtrlSPtr m_horizontalScrollBar{};
+		PanelOverlayRPtr m_corner{};
+		std::map< ControlRPtr, ScrolledControl > m_controls{};
+		OnScrollBarEventConnection m_onVerticalThumbRelease{};
+		OnScrollBarEventConnection m_onHorizontalThumbRelease{};
+		OnScrollBarEventConnection m_onVerticalThumbTrack{};
+		OnScrollBarEventConnection m_onHorizontalThumbTrack{};
 		bool m_updating{};
 	};
 }

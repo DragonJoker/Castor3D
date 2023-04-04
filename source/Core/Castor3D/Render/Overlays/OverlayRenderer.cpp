@@ -1106,7 +1106,7 @@ namespace castor3d
 				auto texture = text->getFontTexture();
 				node = &m_draw.getTextNode( device, renderPass, pass, *texture->getTexture(), *texture->getSampler().lock() );
 				pipelineData = &m_common.textVertexBuffer->getDrawPipelineData( node->pipeline
-					, texture.get()
+					, texture
 					, &m_draw.createTextDescriptorSet( *texture ) );
 				m_compute.getTextPipeline( *texture ).count += text->getCharCount();
 			}

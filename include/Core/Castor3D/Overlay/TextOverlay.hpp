@@ -60,7 +60,7 @@ namespace castor3d
 		 *\brief		Fonction de création utilisée par la fabrique
 		 *\return		Un overlay
 		 */
-		C3D_API static OverlayCategorySPtr create();
+		C3D_API static OverlayCategoryUPtr create();
 		/**
 		 *\copydoc		castor3d::OverlayCategory::accept
 		 */
@@ -121,9 +121,9 @@ namespace castor3d
 			return getFontTexture()->getFontName();
 		}
 
-		FontTextureSPtr getFontTexture()const
+		FontTextureRPtr getFontTexture()const
 		{
-			return m_fontTexture.lock();
+			return m_fontTexture;
 		}
 
 		std::u32string getCaption()const
@@ -242,7 +242,7 @@ namespace castor3d
 	private:
 		std::u32string m_currentCaption;
 		std::u32string m_previousCaption;
-		FontTextureWPtr m_fontTexture;
+		FontTextureRPtr m_fontTexture{};
 		TextWrappingMode m_wrappingMode{ TextWrappingMode::eNone };
 		TextLineSpacingMode m_lineSpacingMode{ TextLineSpacingMode::eOwnHeight };
 		HAlign m_hAlign{ HAlign::eLeft };

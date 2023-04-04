@@ -20,9 +20,9 @@ namespace castor3d
 	{
 	}
 
-	OverlayCategorySPtr BorderPanelOverlay::create()
+	OverlayCategoryUPtr BorderPanelOverlay::create()
 	{
-		return std::make_shared< BorderPanelOverlay >();
+		return castor::makeUniqueDerived< OverlayCategory, BorderPanelOverlay >();
 	}
 
 	void BorderPanelOverlay::accept( OverlayVisitor & visitor )const

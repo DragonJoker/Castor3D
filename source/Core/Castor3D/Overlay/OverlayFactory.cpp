@@ -9,7 +9,7 @@ CU_ImplementCUSmartPtr( castor3d, OverlayFactory )
 namespace castor3d
 {
 	OverlayFactory::OverlayFactory()
-		: Factory< OverlayCategory, OverlayType >()
+		: Factory< OverlayCategory, OverlayType, OverlayCategoryUPtr >()
 	{
 		registerType( OverlayType::ePanel, &PanelOverlay::create );
 		registerType( OverlayType::eBorderPanel, &BorderPanelOverlay::create );

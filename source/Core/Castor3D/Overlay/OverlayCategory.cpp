@@ -195,7 +195,7 @@ namespace castor3d
 
 		while ( auto parent = overlay->getParent() )
 		{
-			result = ovrlcat::intersect( result, parent->getCategory()->getDisplayRect() );
+			result = ovrlcat::intersect( result, parent->getCategory().getDisplayRect() );
 			overlay = parent;
 		}
 
