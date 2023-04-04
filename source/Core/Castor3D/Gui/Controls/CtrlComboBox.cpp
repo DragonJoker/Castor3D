@@ -108,7 +108,7 @@ namespace castor3d
 
 	ComboBoxCtrl::~ComboBoxCtrl()noexcept
 	{
-		if ( auto text = m_text.lock() )
+		if ( auto text = m_text )
 		{
 			if ( m_scene )
 			{
@@ -194,7 +194,7 @@ namespace castor3d
 				onNcKeyDown( control, event );
 			} );
 
-		if ( auto text = m_text.lock() )
+		if ( auto text = m_text )
 		{
 			auto clientSize = getClientSize();
 			auto clientOffset = getClientOffset();
@@ -239,7 +239,7 @@ namespace castor3d
 
 	void ComboBoxCtrl::doSetPosition( castor::Position const & value )
 	{
-		if ( auto text = m_text.lock() )
+		if ( auto text = m_text )
 		{
 			auto clientOffset = getClientOffset();
 			text->setPixelPosition( clientOffset );
@@ -251,7 +251,7 @@ namespace castor3d
 
 	void ComboBoxCtrl::doSetSize( castor::Size const & value )
 	{
-		if ( auto text = m_text.lock() )
+		if ( auto text = m_text )
 		{
 			auto clientSize = getClientSize();
 			text->setPixelSize( { clientSize->x - clientSize->x, clientSize->y } );
@@ -265,7 +265,7 @@ namespace castor3d
 
 	void ComboBoxCtrl::doSetBorderSize( castor::Point4ui const & value )
 	{
-		if ( auto text = m_text.lock() )
+		if ( auto text = m_text )
 		{
 			text->setPixelPosition( getClientOffset() );
 			text->setPixelSize( getClientSize() );
@@ -317,7 +317,7 @@ namespace castor3d
 
 	void ComboBoxCtrl::doSetVisible( bool visible )
 	{
-		if ( auto text = m_text.lock() )
+		if ( auto text = m_text )
 		{
 			text->setVisible( visible );
 		}
@@ -328,7 +328,7 @@ namespace castor3d
 
 	void ComboBoxCtrl::doUpdateZIndex( uint32_t & index )
 	{
-		if ( auto text = m_text.lock() )
+		if ( auto text = m_text )
 		{
 			text->setOrder( index++, 0u );
 		}
@@ -336,7 +336,7 @@ namespace castor3d
 
 	void ComboBoxCtrl::doAdjustZIndex( uint32_t offset )
 	{
-		if ( auto text = m_text.lock() )
+		if ( auto text = m_text )
 		{
 			text->setOrder( text->getLevel() + offset, 0u );
 		}
@@ -352,9 +352,8 @@ namespace castor3d
 		if ( selected >= 0 )
 		{
 			doSwitchExpand();
-			TextOverlaySPtr text = m_text.lock();
 
-			if ( text )
+			if ( auto text = m_text )
 			{
 				text->setCaption( castor::string::toU32String( m_choices->getItemText( selected ) ) );
 			}

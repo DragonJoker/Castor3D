@@ -19,9 +19,9 @@ namespace castor3d
 	{
 	}
 
-	OverlayCategorySPtr PanelOverlay::create()
+	OverlayCategoryUPtr PanelOverlay::create()
 	{
-		return std::make_shared< PanelOverlay >();
+		return castor::makeUniqueDerived< OverlayCategory, PanelOverlay >();
 	}
 
 	void PanelOverlay::accept( OverlayVisitor & visitor )const

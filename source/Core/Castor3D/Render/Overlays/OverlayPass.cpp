@@ -29,7 +29,7 @@ namespace castor3d
 			{
 				if ( category->getOverlay().isVisible() )
 				{
-					categories.push_back( category.get() );
+					categories.push_back( category );
 
 					if ( category->hasAnyChange() || renderer.isSizeChanged() )
 					{

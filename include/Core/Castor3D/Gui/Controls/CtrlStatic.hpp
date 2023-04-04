@@ -132,7 +132,7 @@ namespace castor3d
 
 	private:
 		castor::U32String m_caption;
-		TextOverlayWPtr m_text;
+		TextOverlayRPtr m_text{};
 	};
 }
 

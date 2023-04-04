@@ -31,7 +31,8 @@ namespace GuiCommon
 		 *\param[in]	editable	Dit si les propriétés sont modifiables
 		 *\param[in]	overlay	L'incrustation cible
 		 */
-		OverlayTreeItemProperty( bool editable, castor3d::OverlayCategorySPtr overlay );
+		OverlayTreeItemProperty( bool editable
+			, castor3d::OverlayCategory & overlay );
 		/**
 		 *\~english
 		 *\brief		Retrieves the overlay
@@ -40,23 +41,26 @@ namespace GuiCommon
 		 *\brief		Récupère l'incrustation
 		 *\return		La valeur
 		 */
-		inline castor3d::OverlayCategorySPtr getOverlay()
+		inline castor3d::OverlayCategory & getOverlay()const noexcept
 		{
-			return m_overlay.lock();
+			return m_overlay;
 		}
 
 	private:
 		/**
 		 *\copydoc GuiCommon::TreeItemProperty::doCreateProperties
 		 */
-		void doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )override;
+		void doCreateProperties( wxPGEditor * editor
+			, wxPropertyGrid * grid )override;
 
 	private:
-		void doCreateBorderPanelOverlayProperties( wxPropertyGrid * grid, castor3d::BorderPanelOverlaySPtr overlay );
-		void doCreateTextOverlayProperties( wxPropertyGrid * grid, castor3d::TextOverlaySPtr overlay );
+		void doCreateBorderPanelOverlayProperties( wxPropertyGrid * grid
+			, castor3d::BorderPanelOverlay & overlay );
+		void doCreateTextOverlayProperties( wxPropertyGrid * grid
+			, castor3d::TextOverlay & overlay );
 
 	private:
-		castor3d::OverlayCategoryWPtr m_overlay;
+		castor3d::OverlayCategory & m_overlay;
 		wxArrayString m_materials;
 	};
 }

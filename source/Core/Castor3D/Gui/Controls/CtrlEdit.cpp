@@ -133,19 +133,22 @@ namespace castor3d
 
 		for ( auto sel : m_selections )
 		{
-			if ( m_scene )
+			if ( sel )
 			{
-				m_scene->removeOverlay( getName() + cuT( "/Selection" ) + castor::string::toString( i ), true );
-			}
-			else
-			{
-				getEngine().removeOverlay( getName() + cuT( "/Selection" ) + castor::string::toString( i ), true );
+				if ( m_scene )
+				{
+					m_scene->removeOverlay( getName() + cuT( "/Selection" ) + castor::string::toString( i ), true );
+				}
+				else
+				{
+					getEngine().removeOverlay( getName() + cuT( "/Selection" ) + castor::string::toString( i ), true );
+				}
 			}
 
 			++i;
 		}
 
-		if ( auto overlay = m_caret.overlay.lock() )
+		if ( m_caret.overlay )
 		{
 			if ( m_scene )
 			{
@@ -157,7 +160,7 @@ namespace castor3d
 			}
 		}
 
-		if ( auto overlay = m_text.lock() )
+		if ( m_text )
 		{
 			if ( m_scene )
 			{
@@ -179,7 +182,7 @@ namespace castor3d
 	{
 		auto & style = getStyle();
 
-		if ( auto text = m_text.lock() )
+		if ( auto text = m_text )
 		{
 			text->setMaterial( style.getTextMaterial() );
 
@@ -189,14 +192,14 @@ namespace castor3d
 			}
 		}
 
-		if ( auto caret = m_caret.overlay.lock() )
+		if ( auto caret = m_caret.overlay )
 		{
 			caret->setMaterial( style.getTextMaterial() );
 		}
 
 		for ( auto sel : m_selections )
 		{
-			if ( auto panel = sel.lock() )
+			if ( auto panel = sel )
 			{
 				panel->setMaterial( style.getSelectionMaterial() );
 			}
@@ -241,7 +244,7 @@ namespace castor3d
 		if ( !hasVerticalScrollBar()
 			&& !hasHorizontalScrollBar() )
 		{
-			if ( auto text = m_text.lock() )
+			if ( auto text = m_text )
 			{
 				text->setPixelSize( { value->x + 1u, value->y } );
 			}
@@ -268,12 +271,12 @@ namespace castor3d
 
 	void EditCtrl::doSetVisible( bool visible )
 	{
-		if ( auto text = m_text.lock() )
+		if ( auto text = m_text )
 		{
 			text->setVisible( visible );
 		}
 
-		if ( auto caret = m_caret.overlay.lock() )
+		if ( auto caret = m_caret.overlay )
 		{
 			caret->setVisible( m_caret.visible );
 		}
@@ -283,12 +286,12 @@ namespace castor3d
 
 	void EditCtrl::doUpdateZIndex( uint32_t & index )
 	{
-		if ( auto text = m_text.lock() )
+		if ( auto text = m_text )
 		{
 			text->setOrder( index++, 0u );
 		}
 
-		if ( auto caret = m_caret.overlay.lock() )
+		if ( auto caret = m_caret.overlay )
 		{
 			caret->setOrder( index++, 0u );
 		}
@@ -301,7 +304,7 @@ namespace castor3d
 
 			for ( auto sel : m_selections )
 			{
-				if ( auto panel = sel.lock() )
+				if ( auto panel = sel )
 				{
 					panel->setOrder( index, i++ );
 				}
@@ -315,12 +318,12 @@ namespace castor3d
 
 	void EditCtrl::doAdjustZIndex( uint32_t offset )
 	{
-		if ( auto text = m_text.lock() )
+		if ( auto text = m_text )
 		{
 			text->setOrder( text->getLevel() + offset, 0u );
 		}
 
-		if ( auto caret = m_caret.overlay.lock() )
+		if ( auto caret = m_caret.overlay )
 		{
 			caret->setOrder( caret->getLevel() + offset, 0u );
 		}
@@ -330,7 +333,7 @@ namespace castor3d
 
 		for ( auto sel : m_selections )
 		{
-			if ( auto panel = sel.lock() )
+			if ( auto panel = sel )
 			{
 				panel->setOrder( panel->getLevel() + offset, i++ );
 			}
@@ -341,7 +344,7 @@ namespace castor3d
 
 	void EditCtrl::doUpdateFlags()
 	{
-		if ( auto text = m_text.lock() )
+		if ( auto text = m_text )
 		{
 			if ( isMultiLine() )
 			{
@@ -367,7 +370,7 @@ namespace castor3d
 		m_active = true;
 		m_caret.visible = m_active && isVisible();
 
-		if ( auto caret = m_caret.overlay.lock() )
+		if ( auto caret = m_caret.overlay )
 		{
 			caret->setVisible( m_caret.visible );
 		}
@@ -381,7 +384,7 @@ namespace castor3d
 		m_isMouseSelecting = false;
 		m_caret.visible = false;
 
-		if ( auto caret = m_caret.overlay.lock() )
+		if ( auto caret = m_caret.overlay )
 		{
 			caret->setVisible( m_caret.visible );
 		}
@@ -843,7 +846,7 @@ namespace castor3d
 	void EditCtrl::doUpdateCaretPosition( castor::Position const & pos
 		, CaretIndices & indices )
 	{
-		auto text = m_text.lock();
+		auto text = m_text;
 
 		if ( !text )
 		{
@@ -943,9 +946,9 @@ namespace castor3d
 
 	void EditCtrl::doUpdateCaret()
 	{
-		if ( auto text = m_text.lock() )
+		if ( auto text = m_text )
 		{
-			if ( auto caret = m_caret.overlay.lock() )
+			if ( auto caret = m_caret.overlay )
 			{
 				auto font = text->getFontTexture()->getFont();
 				castor::Position position{};
@@ -995,7 +998,7 @@ namespace castor3d
 
 	void EditCtrl::doUpdateMetrics()
 	{
-		if ( auto text = m_text.lock() )
+		if ( auto text = m_text )
 		{
 			auto fontTexture = text->getFontTexture();
 			auto font = fontTexture->getFont();
@@ -1038,7 +1041,7 @@ namespace castor3d
 		doUpdateMetrics();
 		doUpdateCaretIndices();
 
-		if ( auto text = m_text.lock() )
+		if ( auto text = m_text )
 		{
 			text->setCaption( m_caption );
 			auto size = text->getPixelSize();
@@ -1068,7 +1071,7 @@ namespace castor3d
 			return;
 		}
 
-		auto text = m_text.lock();
+		auto text = m_text;
 
 		if ( !text )
 		{
@@ -1101,7 +1104,7 @@ namespace castor3d
 		{
 			// Multiline selection.
 			// Process first and last lines separately (since they may not be fully selected).
-			if ( auto panel = m_selections[selLineIndex++].lock() )
+			if ( auto panel = m_selections[selLineIndex++] )
 			{
 				// First line
 				auto & line = m_metrics.lines[selBegin.lineIndex++];
@@ -1114,7 +1117,7 @@ namespace castor3d
 				panel->setVisible( true );
 			}
 
-			if ( auto panel = m_selections[selLineIndex++].lock() )
+			if ( auto panel = m_selections[selLineIndex++] )
 			{
 				// LastLine
 				auto & line = m_metrics.lines[selEnd.lineIndex--];
@@ -1129,7 +1132,7 @@ namespace castor3d
 			// Process remaining lines
 			while ( selBegin.lineIndex <= selEnd.lineIndex )
 			{
-				if ( auto panel = m_selections[selLineIndex++].lock() )
+				if ( auto panel = m_selections[selLineIndex++] )
 				{
 					auto & line = m_metrics.lines[selBegin.lineIndex];
 					panel->setPixelPosition( { 0, int32_t( line.top ) } );
@@ -1141,7 +1144,7 @@ namespace castor3d
 				++selBegin.lineIndex;
 			}
 		}
-		else if ( auto panel = m_selections[selLineIndex++].lock() )
+		else if ( auto panel = m_selections[selLineIndex++] )
 		{
 			// Single line selection.
 			auto charDiff = selEnd.charIndex - selBegin.charIndex;
@@ -1166,7 +1169,7 @@ namespace castor3d
 
 		for ( auto sel : castor::makeArrayView( m_selections.begin() + selLineIndex, m_selections.end() ) )
 		{
-			if ( auto panel = sel.lock() )
+			if ( auto panel = sel )
 			{
 				panel->setVisible( false );
 			}
@@ -1181,7 +1184,7 @@ namespace castor3d
 
 		for ( auto sel : m_selections )
 		{
-			if ( auto panel = sel.lock() )
+			if ( auto panel = sel )
 			{
 				panel->setVisible( false );
 			}
@@ -1298,9 +1301,9 @@ namespace castor3d
 
 	void EditCtrl::doAdjustTextPosition()
 	{
-		if ( auto text = m_text.lock() )
+		if ( auto text = m_text )
 		{
-			if ( auto caret = m_caret.overlay.lock() )
+			if ( auto caret = m_caret.overlay )
 			{
 				auto clientSize = getClientSize();
 				auto clientOffset = getClientOffset();
@@ -1368,7 +1371,7 @@ namespace castor3d
 
 	void EditCtrl::doScrollContent( castor::Position const & position )
 	{
-		if ( auto text = m_text.lock() )
+		if ( auto text = m_text )
 		{
 			auto pos = position + getClientOffset();
 			text->setPixelPosition( { pos->x, pos->y } );

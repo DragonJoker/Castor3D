@@ -335,19 +335,19 @@ namespace castor3d
 		struct Caret : CaretIndices
 		{
 			bool visible{};
-			PanelOverlayWPtr overlay;
+			PanelOverlayRPtr overlay{};
 		};
 
 		castor::U32String m_caption;
 		castor::TextMetrics m_metrics;
 		bool m_active;
-		TextOverlayWPtr m_text;
+		TextOverlayRPtr m_text{};
 		Caret m_caret;
 		OnEditEvent m_signals[size_t( EditEvent::eCount )];
 		bool m_hasSelection{};
 		bool m_isMouseSelecting{};
 		Selection m_selection{};
-		std::vector< PanelOverlayWPtr > m_selections{};
+		std::vector< PanelOverlayRPtr > m_selections{};
 		OnScrollContentConnection m_onScrollContent;
 		uint32_t m_panelsZIndex{};
 	};

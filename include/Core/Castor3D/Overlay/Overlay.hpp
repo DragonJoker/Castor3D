@@ -94,21 +94,21 @@ namespace castor3d
 		 *\~french
 		 *\return		L'incrustation panneau.
 		 */
-		C3D_API PanelOverlaySPtr getPanelOverlay()const;
+		C3D_API PanelOverlayRPtr getPanelOverlay()const;
 		/**
 		 *\~english
 		 *\return		The border panel overlay.
 		 *\~french
 		 *\return		L'incrustation panneau borduré.
 		 */
-		C3D_API BorderPanelOverlaySPtr getBorderPanelOverlay()const;
+		C3D_API BorderPanelOverlayRPtr getBorderPanelOverlay()const;
 		/**
 		 *\~english
 		 *\return		The text overlay.
 		 *\~french
 		 *\return		L'incrustation texte.
 		 */
-		C3D_API TextOverlaySPtr getTextOverlay()const;
+		C3D_API TextOverlayRPtr getTextOverlay()const;
 		/**
 		 *\~english
 		 *\return		The visibility status.
@@ -139,9 +139,9 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		OverlayCategorySPtr getCategory()const noexcept
+		OverlayCategory & getCategory()const noexcept
 		{
-			return m_category;
+			return *m_category;
 		}
 
 		castor::Position getAbsolutePosition( castor::Size const & size )const noexcept
@@ -317,7 +317,7 @@ namespace castor3d
 		castor::String m_name;
 		OverlayRPtr m_parent{};
 		OverlayPtrArray m_children;
-		OverlayCategorySPtr m_category;
+		OverlayCategoryUPtr m_category;
 		Scene * m_scene;
 		RenderSystem * m_renderSystem;
 	};

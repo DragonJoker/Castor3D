@@ -11,7 +11,9 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	class OverlayFactory
-		: public castor::Factory< OverlayCategory, OverlayType >
+		: public castor::Factory< OverlayCategory
+			, OverlayType
+			, OverlayCategoryUPtr >
 	{
 	public:
 		/**

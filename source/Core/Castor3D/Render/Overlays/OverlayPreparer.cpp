@@ -23,7 +23,7 @@ namespace castor3d
 				return castor::Point4f{ 0.0f, 0.0f, 1.0f, 1.0f };
 			}
 
-			auto & parent = *overlay.getParent()->getCategory();
+			auto & parent = overlay.getParent()->getCategory();
 			auto pos = parent.getAbsolutePosition();
 			auto dim = parent.getAbsoluteSize();
 			auto renderRatio = parent.getRenderRatio( renderSize );
@@ -286,7 +286,7 @@ namespace castor3d
 								, *text
 								, data
 								, false
-								, text->getFontTexture().get() ) )
+								, text->getFontTexture() ) )
 							{
 								doUpdateUbo( m_renderer.m_common.textVertexBuffer->overlaysBuffer[data.overlayIndex]
 									, *text

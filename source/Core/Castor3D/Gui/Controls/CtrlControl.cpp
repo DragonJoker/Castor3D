@@ -92,7 +92,7 @@ namespace castor3d
 
 		if ( isAlwaysOnTop() )
 		{
-			overlay->getCategory()->setOrder( 50000u, 0u );
+			overlay->getCategory().setOrder( 50000u, 0u );
 			overlay->setPixelPosition( getAbsolutePosition() );
 		}
 		else
@@ -109,7 +109,7 @@ namespace castor3d
 
 	Control::~Control()noexcept
 	{
-		if ( auto overlay = m_background.lock() )
+		if ( auto overlay = m_background )
 		{
 			if ( m_scene )
 			{
@@ -605,7 +605,7 @@ namespace castor3d
 		auto bordersWidth = int32_t( getBorderSize()->x + getBorderSize()->z );
 		auto bordersHeight = int32_t( getBorderSize()->y + getBorderSize()->w );
 
-		if ( auto background = m_background.lock() )
+		if ( auto background = m_background )
 		{
 			if ( background->getBorderPosition() == BorderPosition::eMiddle )
 			{
@@ -650,7 +650,7 @@ namespace castor3d
 		auto bordersWidth = borders->x + borders->z;
 		auto bordersHeight = borders->y + borders->w;
 
-		if ( auto background = m_background.lock() )
+		if ( auto background = m_background )
 		{
 			if ( background->getBorderPosition() == BorderPosition::eMiddle )
 			{

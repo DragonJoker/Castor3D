@@ -22,7 +22,7 @@ namespace castor
 
 	void ResourceCacheT< Overlay, String, OverlayCacheTraits >::initialise( Overlay & overlay )
 	{
-		auto it = std::find( m_overlays.begin(), m_overlays.end(), overlay.getCategory() );
+		auto it = std::find( m_overlays.begin(), m_overlays.end(), &overlay.getCategory() );
 
 		if ( it != m_overlays.end() )
 		{
@@ -30,28 +30,28 @@ namespace castor
 		}
 
 		auto level = overlay.computeLevel();
-		overlay.getCategory()->setOrder( level
+		overlay.getCategory().setOrder( level
 			, ++m_overlayCountPerLevel[level][uint32_t( overlay.getType() )] );
 
 		if ( auto parent = overlay.getParent() )
 		{
 			parent->addChild( &overlay );
-			it = std::find( m_overlays.begin(), m_overlays.end(), parent->getCategory() );
+			it = std::find( m_overlays.begin(), m_overlays.end(), &parent->getCategory() );
 
 			if ( it != m_overlays.end() )
 			{
-				m_overlays.insert( std::next( it ), overlay.getCategory() );
+				m_overlays.insert( std::next( it ), &overlay.getCategory() );
 			}
 			else
 			{
 				initialise( *parent );
-				it = std::find( m_overlays.begin(), m_overlays.end(), parent->getCategory() );
-				m_overlays.insert( std::next( it ), overlay.getCategory() );
+				it = std::find( m_overlays.begin(), m_overlays.end(), &parent->getCategory() );
+				m_overlays.insert( std::next( it ), &overlay.getCategory() );
 			}
 		}
 		else
 		{
-			m_overlays.insert( m_overlays.begin(), overlay.getCategory() );
+			m_overlays.insert( m_overlays.begin(), &overlay.getCategory() );
 		}
 	}
 
@@ -70,7 +70,7 @@ namespace castor
 			parent->removeChild( &overlay );
 		}
 
-		auto it = std::find( m_overlays.begin(), m_overlays.end(), overlay.getCategory() );
+		auto it = std::find( m_overlays.begin(), m_overlays.end(), &overlay.getCategory() );
 
 		if ( it != m_overlays.end() )
 		{
@@ -129,27 +129,27 @@ namespace castor
 
 		m_overlays.clear();
 
-		for ( auto it : m_fontTextures )
+		for ( auto & it : m_fontTextures )
 		{
 			m_engine.postEvent( makeGpuCleanupEvent( *it.second ) );
 		}
 	}
 
-	FontTextureSPtr ResourceCacheT< Overlay, String, OverlayCacheTraits >::getFontTexture( String const & name )
+	FontTextureRPtr ResourceCacheT< Overlay, String, OverlayCacheTraits >::getFontTexture( String const & name )
 	{
 		auto lock( makeUniqueLock( *this ) );
 		auto it = m_fontTextures.find( name );
-		FontTextureSPtr result;
+		FontTextureRPtr result{};
 
 		if ( it != m_fontTextures.end() )
 		{
-			result = it->second;
+			result = it->second.get();
 		}
 
 		return result;
 	}
 
-	FontTextureSPtr ResourceCacheT< Overlay, String, OverlayCacheTraits >::createFontTexture( castor::FontResPtr font )
+	FontTextureRPtr ResourceCacheT< Overlay, String, OverlayCacheTraits >::createFontTexture( castor::FontResPtr font )
 	{
 		auto lock( makeUniqueLock( *this ) );
 		auto fontName = font.lock()->getName();
@@ -157,16 +157,17 @@ namespace castor
 
 		if ( ires.second )
 		{
-			auto result = std::make_shared< FontTexture >( m_engine, font );
+			auto result = castor::makeUnique< FontTexture >( m_engine, font );
+			auto tmp = result.get();
 			m_engine.postEvent( makeGpuFunctorEvent( EventType::ePreRender
-				, [result]( RenderDevice const & device
+				, [tmp]( RenderDevice const & device
 					, QueueData const & queueData )
 				{
-					result->initialise( device, queueData );
+					tmp->initialise( device, queueData );
 				} ) );
-			ires.first->second = result;
+			ires.first->second = std::move( result );
 		}
 
-		return ires.first->second;
+		return ires.first->second.get();
 	}
 }

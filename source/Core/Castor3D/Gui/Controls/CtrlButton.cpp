@@ -59,13 +59,13 @@ namespace castor3d
 
 				if ( v )
 				{
-					m_text.lock()->setMaterial( mystyle.getTextMaterial() );
+					m_text->setMaterial( mystyle.getTextMaterial() );
 					setBackgroundMaterial( mystyle.getBackgroundMaterial() );
 					setBackgroundBorderMaterial( mystyle.getForegroundMaterial() );
 				}
 				else
 				{
-					m_text.lock()->setMaterial( mystyle.getDisabledTextMaterial() );
+					m_text->setMaterial( mystyle.getDisabledTextMaterial() );
 					setBackgroundMaterial( mystyle.getDisabledBackgroundMaterial() );
 					setBackgroundBorderMaterial( mystyle.getDisabledForegroundMaterial() );
 				}
@@ -100,7 +100,7 @@ namespace castor3d
 	{
 		m_onEnable = {};
 
-		if ( auto text = m_text.lock() )
+		if ( auto text = m_text )
 		{
 			if ( m_scene )
 			{
@@ -191,7 +191,7 @@ namespace castor3d
 	{
 		auto & style = getStyle();
 
-		if ( auto text = m_text.lock() )
+		if ( auto text = m_text )
 		{
 			text->setFont( style.getFontName() );
 		}
@@ -201,13 +201,15 @@ namespace castor3d
 	{
 		setBackgroundBorderPosition( BorderPosition::eInternal );
 
-		auto & style = getStyle();
-		auto text = m_text.lock();
-		text->setMaterial( style.getTextMaterial() );
-
-		if ( !text->getFontTexture() || !text->getFontTexture()->getFont() )
+		if ( auto text = m_text )
 		{
-			text->setFont( style.getFontName() );
+			auto & style = getStyle();
+			text->setMaterial( style.getTextMaterial() );
+
+			if ( !text->getFontTexture() || !text->getFontTexture()->getFont() )
+			{
+				text->setFont( style.getFontName() );
+			}
 		}
 
 		getControlsManager()->connectEvents( *this );
@@ -220,7 +222,7 @@ namespace castor3d
 
 	void ButtonCtrl::doSetPosition( castor::Position const & value )
 	{
-		if ( auto text = m_text.lock() )
+		if ( auto text = m_text )
 		{
 			text->setPixelPosition( getClientOffset() );
 		}
@@ -228,7 +230,7 @@ namespace castor3d
 
 	void ButtonCtrl::doSetSize( castor::Size const & value )
 	{
-		if ( auto text = m_text.lock() )
+		if ( auto text = m_text )
 		{
 			text->setPixelSize( getClientSize() );
 		}
@@ -236,7 +238,7 @@ namespace castor3d
 
 	void ButtonCtrl::doSetBorderSize( castor::Point4ui const & value )
 	{
-		if ( auto text = m_text.lock() )
+		if ( auto text = m_text )
 		{
 			text->setPixelPosition( getClientOffset() );
 			text->setPixelSize( getClientSize() );
@@ -247,7 +249,7 @@ namespace castor3d
 	{
 		m_caption = value;
 
-		if ( auto text = m_text.lock() )
+		if ( auto text = m_text )
 		{
 			text->setCaption( value );
 		}
@@ -255,7 +257,7 @@ namespace castor3d
 
 	void ButtonCtrl::doSetVisible( bool visible )
 	{
-		if ( auto text = m_text.lock() )
+		if ( auto text = m_text )
 		{
 			text->setVisible( visible );
 		}
@@ -263,7 +265,7 @@ namespace castor3d
 
 	void ButtonCtrl::doUpdateFlags()
 	{
-		if ( auto text = m_text.lock() )
+		if ( auto text = m_text )
 		{
 			text->setHAlign( getHAlign() );
 			text->setVAlign( getVAlign() );
@@ -273,7 +275,7 @@ namespace castor3d
 	void ButtonCtrl::doOnMouseEnter( MouseEvent const & event )
 	{
 		auto & style = getStyle();
-		m_text.lock()->setMaterial( style.getHighlightedTextMaterial() );
+		m_text->setMaterial( style.getHighlightedTextMaterial() );
 		setBackgroundMaterial( style.getHighlightedBackgroundMaterial() );
 		setBackgroundBorderMaterial( style.getHighlightedForegroundMaterial() );
 	}
@@ -283,7 +285,7 @@ namespace castor3d
 		if ( event.getButton() == MouseButton::eLeft )
 		{
 			auto & style = getStyle();
-			m_text.lock()->setMaterial( style.getPushedTextMaterial() );
+			m_text->setMaterial( style.getPushedTextMaterial() );
 			setBackgroundMaterial( style.getPushedBackgroundMaterial() );
 			setBackgroundBorderMaterial( style.getPushedForegroundMaterial() );
 		}
@@ -294,7 +296,7 @@ namespace castor3d
 		if ( event.getButton() == MouseButton::eLeft )
 		{
 			auto & style = getStyle();
-			m_text.lock()->setMaterial( style.getHighlightedTextMaterial() );
+			m_text->setMaterial( style.getHighlightedTextMaterial() );
 			setBackgroundMaterial( style.getHighlightedBackgroundMaterial() );
 			setBackgroundBorderMaterial( style.getHighlightedForegroundMaterial() );
 
@@ -305,14 +307,14 @@ namespace castor3d
 	void ButtonCtrl::doOnMouseLeave( MouseEvent const & event )
 	{
 		auto & style = getStyle();
-		m_text.lock()->setMaterial( style.getTextMaterial() );
+		m_text->setMaterial( style.getTextMaterial() );
 		setBackgroundMaterial( style.getBackgroundMaterial() );
 		setBackgroundBorderMaterial( style.getForegroundMaterial() );
 	}
 
 	void ButtonCtrl::doUpdateZIndex( uint32_t & index )
 	{
-		if ( auto text = m_text.lock() )
+		if ( auto text = m_text )
 		{
 			text->setOrder( index++, 0u );
 		}
@@ -320,7 +322,7 @@ namespace castor3d
 
 	void ButtonCtrl::doAdjustZIndex( uint32_t offset )
 	{
-		if ( auto text = m_text.lock() )
+		if ( auto text = m_text )
 		{
 			text->setOrder( text->getLevel() + offset, 0u );
 		}

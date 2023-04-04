@@ -558,7 +558,7 @@ namespace castor3d
 
 		BorderPanelOverlay & doGetBackground()const
 		{
-			auto bg = m_background.lock();
+			auto bg = m_background;
 
 			if ( !bg )
 			{
@@ -600,7 +600,7 @@ namespace castor3d
 		castor::Position m_position{};
 		castor::Size m_size{};
 		castor::Point4ui m_borders{};
-		BorderPanelOverlayWPtr m_background{};
+		BorderPanelOverlayRPtr m_background{};
 		std::vector< ControlWPtr > m_children{};
 		ControlsManagerWPtr m_ctrlManager{};
 		bool m_moving{};

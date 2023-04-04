@@ -39,8 +39,8 @@ namespace castor
 		using ElementMergerT = typename ElementCacheT::ElementMergerT;
 		using iterator = std::map< ElementT, ElementKeyT >::iterator;
 		using const_iterator = std::map< ElementT, ElementKeyT >::const_iterator;
-		CU_DeclareMap( ElementKeyT, castor3d::FontTextureSPtr, FontTextureStr );
-		using OverlayCategories = std::vector< castor3d::OverlayCategorySPtr >;
+		CU_DeclareMap( ElementKeyT, castor3d::FontTextureUPtr, FontTextureStr );
+		using OverlayCategories = std::vector< castor3d::OverlayCategoryRPtr >;
 
 	public:
 		/**
@@ -86,7 +86,7 @@ namespace castor
 		 *\param[in]	name	Le nom de la police.
 		 *\return		La FontTexture si elle exite, nullptr sinon.
 		 */
-		C3D_API castor3d::FontTextureSPtr getFontTexture( String const & name );
+		C3D_API castor3d::FontTextureRPtr getFontTexture( String const & name );
 		/**
 		 *\~english
 		 *\brief		Creates a FontTexture from a font.
@@ -97,7 +97,7 @@ namespace castor
 		 *\param[in]	font	La police.
 		 *\return		La FontTexture créée.
 		 */
-		C3D_API castor3d::FontTextureSPtr createFontTexture( castor::FontResPtr font );
+		C3D_API castor3d::FontTextureRPtr createFontTexture( castor::FontResPtr font );
 		/**
 		*\~english
 		*\name Iteration.

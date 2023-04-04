@@ -132,7 +132,7 @@ namespace castor3d
 
 		static castor::Font & getFont( TextOverlay const & overlay )
 		{
-			FontTextureSPtr fontTexture = overlay.getFontTexture();
+			auto fontTexture = overlay.getFontTexture();
 
 			if ( !fontTexture )
 			{
@@ -166,9 +166,9 @@ namespace castor3d
 		m_displayable = false;
 	}
 
-	OverlayCategorySPtr TextOverlay::create()
+	OverlayCategoryUPtr TextOverlay::create()
 	{
-		return std::make_shared< TextOverlay >();
+		return castor::makeUniqueDerived< OverlayCategory, TextOverlay >();
 	}
 
 	void TextOverlay::accept( OverlayVisitor & visitor )const
@@ -375,7 +375,7 @@ namespace castor3d
 
 		if ( auto font = fontCache.find( name ).lock() )
 		{
-			FontTextureSPtr fontTexture = engine->getOverlayCache().getFontTexture( font->getName() );
+			auto fontTexture = engine->getOverlayCache().getFontTexture( font->getName() );
 
 			if ( !fontTexture )
 			{
@@ -406,7 +406,7 @@ namespace castor3d
 
 	void TextOverlay::doUpdate( OverlayRenderer const & renderer )
 	{
-		FontTextureSPtr fontTexture = getFontTexture();
+		auto fontTexture = getFontTexture();
 
 		if ( !fontTexture )
 		{

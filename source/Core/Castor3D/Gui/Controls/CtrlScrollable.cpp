@@ -81,7 +81,7 @@ namespace castor3d
 
 	ScrollableCtrl::~ScrollableCtrl()noexcept
 	{
-		if ( auto overlay = m_corner.lock() )
+		if ( auto overlay = m_corner )
 		{
 			if ( m_target.hasScene() )
 			{
@@ -169,7 +169,7 @@ namespace castor3d
 			m_horizontalScrollBar->setStyle( &m_scrollableStyle->getHorizontalStyle() );
 		}
 
-		if ( auto corner = m_corner.lock() )
+		if ( auto corner = m_corner )
 		{
 			corner->setMaterial( m_target.getBackgroundOverlay().getMaterial() );
 		}
@@ -198,7 +198,7 @@ namespace castor3d
 
 		if ( m_verticalScrollBar && m_horizontalScrollBar )
 		{
-			if ( !m_corner.lock() )
+			if ( !m_corner )
 			{
 				auto corner = m_target.hasScene()
 					? m_target.getScene().addNewOverlay( m_target.getName() + cuT( "/Scroll/Corner" )
@@ -214,13 +214,13 @@ namespace castor3d
 				m_corner = corner;
 			}
 
-			if ( auto corner = m_corner.lock() )
+			if ( auto corner = m_corner )
 			{
 				corner->setVisible( true );
 				corner->setMaterial( m_target.getBackgroundOverlay().getMaterial() );
 			}
 		}
-		else if ( auto corner = m_corner.lock() )
+		else if ( auto corner = m_corner )
 		{
 			corner->setVisible( false );
 		}
@@ -255,7 +255,7 @@ namespace castor3d
 
 		if ( m_verticalScrollBar && m_horizontalScrollBar )
 		{
-			if ( auto corner = m_corner.lock() )
+			if ( auto corner = m_corner )
 			{
 				corner->setPixelPosition( { m_verticalScrollBar->getPosition().x()
 					, m_horizontalScrollBar->getPosition().y() } );
@@ -310,7 +310,7 @@ namespace castor3d
 		if ( m_verticalScrollBar
 			&& m_horizontalScrollBar )
 		{
-			if ( auto corner = m_corner.lock() )
+			if ( auto corner = m_corner )
 			{
 				corner->setVisible( visible );
 			}
@@ -362,7 +362,7 @@ namespace castor3d
 
 	void ScrollableCtrl::updateScrollZIndex( uint32_t & index )
 	{
-		if ( auto corner = m_corner.lock() )
+		if ( auto corner = m_corner )
 		{
 			corner->setOrder( index++, 0u );
 		}
@@ -370,7 +370,7 @@ namespace castor3d
 
 	void ScrollableCtrl::adjustScrollZIndex( uint32_t offset )
 	{
-		if ( auto corner = m_corner.lock() )
+		if ( auto corner = m_corner )
 		{
 			corner->setOrder( corner->getLevel() + offset, 0u );
 		}
