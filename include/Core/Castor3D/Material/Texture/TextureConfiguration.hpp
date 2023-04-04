@@ -175,6 +175,7 @@ namespace castor3d
 	/**@{*/
 	C3D_API TextureFlagsSet getFlags( TextureConfiguration const & config );
 	C3D_API castor::PixelComponents getPixelComponents( uint32_t mask );
+	C3D_API castor::PixelComponents getPixelComponents( castor::PixelFormat format );
 	C3D_API castor::PixelComponents getPixelComponents( TextureConfiguration const & config );
 	C3D_API void updateIndices( castor::PixelFormat format
 		, TextureConfiguration & config );

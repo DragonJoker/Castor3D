@@ -687,9 +687,9 @@ namespace castor3d
 
 					if ( flags.enableNormal() )
 					{
-						normal = derivatives.interpolate( v0.normal.xyz()
+						normal = normalize( derivatives.interpolate( v0.normal.xyz()
 							, v1.normal.xyz()
-							, v2.normal.xyz() );
+							, v2.normal.xyz() ) );
 					}
 
 					auto tangent = writer.declLocale< sdw::Vec3 >( "tangent"
@@ -698,9 +698,9 @@ namespace castor3d
 
 					if ( flags.enableTangentSpace() )
 					{
-						tangent = derivatives.interpolate( v0.tangent.xyz()
+						tangent = normalize( derivatives.interpolate( v0.tangent.xyz()
 							, v1.tangent.xyz()
-							, v2.tangent.xyz() );
+							, v2.tangent.xyz() ) );
 					}
 
 					if ( flags.enablePassMasks() )

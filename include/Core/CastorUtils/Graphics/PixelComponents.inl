@@ -32,6 +32,8 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eR4G4_UNORM >
 	{
 		using Type = uint8_t;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed
+			| PixelComponent::eGreen );
 		struct Pixel
 		{
 			uint8_t r : 4;
@@ -82,6 +84,10 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eR4G4B4A4_UNORM >
 	{
 		using Type = uint8_t;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed
+			| PixelComponent::eGreen
+			| PixelComponent::eBlue
+			| PixelComponent::eAlpha );
 		struct Pixel
 		{
 			uint16_t r : 4;
@@ -136,6 +142,10 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eB4G4R4A4_UNORM >
 	{
 		using Type = uint8_t;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed
+			| PixelComponent::eGreen
+			| PixelComponent::eBlue
+			| PixelComponent::eAlpha );
 		struct Pixel
 		{
 			uint16_t b : 4;
@@ -190,6 +200,9 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eR5G6B5_UNORM >
 	{
 		using Type = uint8_t;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed
+			| PixelComponent::eGreen
+			| PixelComponent::eBlue );
 		struct Pixel
 		{
 			uint16_t r : 5;
@@ -242,6 +255,9 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eB5G6R5_UNORM >
 	{
 		using Type = uint8_t;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed
+			| PixelComponent::eGreen
+			| PixelComponent::eBlue );
 		struct Pixel
 		{
 			uint16_t b : 5;
@@ -294,6 +310,10 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eR5G5B5A1_UNORM >
 	{
 		using Type = uint8_t;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed
+			| PixelComponent::eGreen
+			| PixelComponent::eBlue
+			| PixelComponent::eAlpha );
 		struct Pixel
 		{
 			uint16_t r : 5;
@@ -348,6 +368,10 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eB5G5R5A1_UNORM >
 	{
 		using Type = uint8_t;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed
+			| PixelComponent::eGreen
+			| PixelComponent::eBlue
+			| PixelComponent::eAlpha );
 		struct Pixel
 		{
 			uint16_t b : 5;
@@ -402,6 +426,10 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eA1R5G5B5_UNORM >
 	{
 		using Type = uint8_t;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed
+			| PixelComponent::eGreen
+			| PixelComponent::eBlue
+			| PixelComponent::eAlpha );
 		struct Pixel
 		{
 			uint16_t a : 1;
@@ -456,6 +484,7 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eR8_UNORM >
 	{
 		using Type = uint8_t;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed );
 		struct Pixel
 		{
 			int8_t r;
@@ -504,6 +533,7 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eR8_SNORM >
 	{
 		using Type = int8_t;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed );
 		struct Pixel
 		{
 			int8_t r;
@@ -587,6 +617,8 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eR8G8_UNORM >
 	{
 		using Type = uint8_t;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed
+			| PixelComponent::eGreen );
 		struct Pixel
 		{
 			uint8_t r;
@@ -637,6 +669,8 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eR8G8_SNORM >
 	{
 		using Type = int8_t;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed
+			| PixelComponent::eGreen );
 		struct Pixel
 		{
 			int8_t r;
@@ -722,6 +756,9 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eR8G8B8_UNORM >
 	{
 		using Type = uint8_t;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed
+			| PixelComponent::eGreen
+			| PixelComponent::eBlue );
 		struct Pixel
 		{
 			uint8_t r;
@@ -774,6 +811,9 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eR8G8B8_SNORM >
 	{
 		using Type = int8_t;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed
+			| PixelComponent::eGreen
+			| PixelComponent::eBlue );
 		struct Pixel
 		{
 			int8_t r;
@@ -861,6 +901,9 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eB8G8R8_UNORM >
 	{
 		using Type = uint8_t;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed
+			| PixelComponent::eGreen
+			| PixelComponent::eBlue );
 		struct Pixel
 		{
 			uint8_t b;
@@ -913,6 +956,9 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eB8G8R8_SNORM >
 	{
 		using Type = int8_t;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed
+			| PixelComponent::eGreen
+			| PixelComponent::eBlue );
 		struct Pixel
 		{
 			int8_t b;
@@ -1000,6 +1046,10 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eR8G8B8A8_UNORM >
 	{
 		using Type = uint8_t;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed
+			| PixelComponent::eGreen
+			| PixelComponent::eBlue
+			| PixelComponent::eAlpha );
 		struct Pixel
 		{
 			uint8_t r;
@@ -1054,6 +1104,10 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eR8G8B8A8_SNORM >
 	{
 		using Type = int8_t;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed
+			| PixelComponent::eGreen
+			| PixelComponent::eBlue
+			| PixelComponent::eAlpha );
 		struct Pixel
 		{
 			int8_t r;
@@ -1143,6 +1197,10 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eB8G8R8A8_UNORM >
 	{
 		using Type = uint8_t;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed
+			| PixelComponent::eGreen
+			| PixelComponent::eBlue
+			| PixelComponent::eAlpha );
 		struct Pixel
 		{
 			uint8_t b;
@@ -1197,6 +1255,10 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eB8G8R8A8_SNORM >
 	{
 		using Type = int8_t;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed
+			| PixelComponent::eGreen
+			| PixelComponent::eBlue
+			| PixelComponent::eAlpha );
 		struct Pixel
 		{
 			int8_t b;
@@ -1286,6 +1348,10 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eA8B8G8R8_UNORM >
 	{
 		using Type = uint8_t;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed
+			| PixelComponent::eGreen
+			| PixelComponent::eBlue
+			| PixelComponent::eAlpha );
 		struct Pixel
 		{
 			uint8_t a;
@@ -1340,6 +1406,10 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eA8B8G8R8_SNORM >
 	{
 		using Type = int8_t;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed
+			| PixelComponent::eGreen
+			| PixelComponent::eBlue
+			| PixelComponent::eAlpha );
 		struct Pixel
 		{
 			int8_t a;
@@ -1429,6 +1499,10 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eA2R10G10B10_UNORM >
 	{
 		using Type = uint16_t;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed
+			| PixelComponent::eGreen
+			| PixelComponent::eBlue
+			| PixelComponent::eAlpha );
 		struct Pixel
 		{
 			uint32_t a : 2;
@@ -1483,6 +1557,10 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eA2R10G10B10_SNORM >
 	{
 		using Type = int16_t;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed
+			| PixelComponent::eGreen
+			| PixelComponent::eBlue
+			| PixelComponent::eAlpha );
 		struct Pixel
 		{
 			int32_t a : 2;
@@ -1565,6 +1643,10 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eA2B10G10R10_UNORM >
 	{
 		using Type = uint16_t;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed
+			| PixelComponent::eGreen
+			| PixelComponent::eBlue
+			| PixelComponent::eAlpha );
 		struct Pixel
 		{
 			uint32_t a : 2;
@@ -1619,6 +1701,10 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eA2B10G10R10_SNORM >
 	{
 		using Type = int16_t;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed
+			| PixelComponent::eGreen
+			| PixelComponent::eBlue
+			| PixelComponent::eAlpha );
 		struct Pixel
 		{
 			int32_t a : 2;
@@ -1701,6 +1787,7 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eR16_UNORM >
 	{
 		using Type = uint16_t;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed );
 		struct Pixel
 		{
 			uint16_t r;
@@ -1749,6 +1836,7 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eR16_SNORM >
 	{
 		using Type = int16_t;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed );
 		struct Pixel
 		{
 			int16_t r;
@@ -1832,6 +1920,8 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eR16G16_UNORM >
 	{
 		using Type = uint16_t;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed
+			| PixelComponent::eGreen );
 		struct Pixel
 		{
 			uint16_t r;
@@ -1882,6 +1972,8 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eR16G16_SNORM >
 	{
 		using Type = int16_t;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed
+			| PixelComponent::eGreen );
 		struct Pixel
 		{
 			int16_t r;
@@ -1967,6 +2059,9 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eR16G16B16_UNORM >
 	{
 		using Type = uint16_t;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed
+			| PixelComponent::eGreen
+			| PixelComponent::eBlue );
 		struct Pixel
 		{
 			uint16_t r;
@@ -2019,6 +2114,9 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eR16G16B16_SNORM >
 	{
 		using Type = int16_t;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed
+			| PixelComponent::eGreen
+			| PixelComponent::eBlue );
 		struct Pixel
 		{
 			int16_t r;
@@ -2106,6 +2204,10 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eR16G16B16A16_UNORM >
 	{
 		using Type = uint16_t;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed
+			| PixelComponent::eGreen
+			| PixelComponent::eBlue
+			| PixelComponent::eAlpha );
 		struct Pixel
 		{
 			uint16_t r;
@@ -2160,6 +2262,10 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eR16G16B16A16_SNORM >
 	{
 		using Type = int16_t;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed
+			| PixelComponent::eGreen
+			| PixelComponent::eBlue
+			| PixelComponent::eAlpha );
 		struct Pixel
 		{
 			int16_t r;
@@ -2249,6 +2355,7 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eR32_UINT >
 	{
 		using Type = uint32_t;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed );
 		struct Pixel
 		{
 			uint32_t r;
@@ -2297,6 +2404,7 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eR32_SINT >
 	{
 		using Type = int32_t;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed );
 		struct Pixel
 		{
 			int32_t r;
@@ -2345,6 +2453,7 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eR32_SFLOAT >
 	{
 		using Type = float;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed );
 		struct Pixel
 		{
 			float r;
@@ -2393,6 +2502,8 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eR32G32_UINT >
 	{
 		using Type = uint32_t;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed
+			| PixelComponent::eGreen );
 		struct Pixel
 		{
 			uint32_t r;
@@ -2443,6 +2554,8 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eR32G32_SINT >
 	{
 		using Type = int32_t;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed
+			| PixelComponent::eGreen );
 		struct Pixel
 		{
 			int32_t r;
@@ -2493,6 +2606,8 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eR32G32_SFLOAT >
 	{
 		using Type = float;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed
+			| PixelComponent::eGreen );
 		struct Pixel
 		{
 			float r;
@@ -2543,6 +2658,9 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eR32G32B32_UINT >
 	{
 		using Type = uint32_t;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed
+			| PixelComponent::eGreen
+			| PixelComponent::eBlue );
 		struct Pixel
 		{
 			uint32_t r;
@@ -2595,6 +2713,9 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eR32G32B32_SINT >
 	{
 		using Type = int32_t;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed
+			| PixelComponent::eGreen
+			| PixelComponent::eBlue );
 		struct Pixel
 		{
 			int32_t r;
@@ -2647,6 +2768,9 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eR32G32B32_SFLOAT >
 	{
 		using Type = float;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed
+			| PixelComponent::eGreen
+			| PixelComponent::eBlue );
 		struct Pixel
 		{
 			float r;
@@ -2699,6 +2823,10 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eR32G32B32A32_UINT >
 	{
 		using Type = uint32_t;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed
+			| PixelComponent::eGreen
+			| PixelComponent::eBlue
+			| PixelComponent::eAlpha );
 		struct Pixel
 		{
 			uint32_t r;
@@ -2753,6 +2881,10 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eR32G32B32A32_SINT >
 	{
 		using Type = int32_t;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed
+			| PixelComponent::eGreen
+			| PixelComponent::eBlue
+			| PixelComponent::eAlpha );
 		struct Pixel
 		{
 			int32_t r;
@@ -2807,6 +2939,10 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eR32G32B32A32_SFLOAT >
 	{
 		using Type = float;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed
+			| PixelComponent::eGreen
+			| PixelComponent::eBlue
+			| PixelComponent::eAlpha );
 		struct Pixel
 		{
 			float r;
@@ -2861,6 +2997,7 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eR64_UINT >
 	{
 		using Type = uint64_t;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed );
 		struct Pixel
 		{
 			uint64_t r;
@@ -2909,6 +3046,7 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eR64_SINT >
 	{
 		using Type = int64_t;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed );
 		struct Pixel
 		{
 			int64_t r;
@@ -2957,6 +3095,7 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eR64_SFLOAT >
 	{
 		using Type = double;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed );
 		struct Pixel
 		{
 			double r;
@@ -3005,6 +3144,8 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eR64G64_UINT >
 	{
 		using Type = uint64_t;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed
+			| PixelComponent::eGreen );
 		struct Pixel
 		{
 			uint64_t r;
@@ -3055,6 +3196,8 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eR64G64_SINT >
 	{
 		using Type = int64_t;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed
+			| PixelComponent::eGreen );
 		struct Pixel
 		{
 			int64_t r;
@@ -3105,6 +3248,8 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eR64G64_SFLOAT >
 	{
 		using Type = double;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed
+			| PixelComponent::eGreen );
 		struct Pixel
 		{
 			double r;
@@ -3155,6 +3300,9 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eR64G64B64_UINT >
 	{
 		using Type = uint64_t;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed
+			| PixelComponent::eGreen
+			| PixelComponent::eBlue );
 		struct Pixel
 		{
 			uint64_t r;
@@ -3207,6 +3355,9 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eR64G64B64_SINT >
 	{
 		using Type = int64_t;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed
+			| PixelComponent::eGreen
+			| PixelComponent::eBlue );
 		struct Pixel
 		{
 			int64_t r;
@@ -3259,6 +3410,9 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eR64G64B64_SFLOAT >
 	{
 		using Type = double;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed
+			| PixelComponent::eGreen
+			| PixelComponent::eBlue );
 		struct Pixel
 		{
 			double r;
@@ -3311,6 +3465,10 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eR64G64B64A64_UINT >
 	{
 		using Type = uint64_t;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed
+			| PixelComponent::eGreen
+			| PixelComponent::eBlue
+			| PixelComponent::eAlpha );
 		struct Pixel
 		{
 			uint64_t r;
@@ -3365,6 +3523,10 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eR64G64B64A64_SINT >
 	{
 		using Type = int64_t;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed
+			| PixelComponent::eGreen
+			| PixelComponent::eBlue
+			| PixelComponent::eAlpha );
 		struct Pixel
 		{
 			int64_t r;
@@ -3419,6 +3581,10 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eR64G64B64A64_SFLOAT >
 	{
 		using Type = double;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed
+			| PixelComponent::eGreen
+			| PixelComponent::eBlue
+			| PixelComponent::eAlpha );
 		struct Pixel
 		{
 			double r;
@@ -3473,6 +3639,9 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eB10G11R11_UFLOAT >
 	{
 		using Type = float;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed
+			| PixelComponent::eGreen
+			| PixelComponent::eBlue );
 		struct Pixel
 		{
 			uint32_t b : 10;
@@ -3525,6 +3694,10 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eE5B9G9R9_UFLOAT >
 	{
 		using Type = float;
+		static PixelComponents constexpr Components = ( PixelComponent::eRed
+			| PixelComponent::eGreen
+			| PixelComponent::eBlue
+			| PixelComponent::eAlpha );
 		struct Pixel
 		{
 			uint32_t e : 5;
@@ -3578,6 +3751,7 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eD16_UNORM >
 	{
 		using Type = uint16_t;
+		static PixelComponents constexpr Components = ( PixelComponent::eDepth );
 		struct Pixel
 		{
 			uint16_t d;
@@ -3612,6 +3786,7 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eX8_D24_UNORM >
 	{
 		using Type = uint32_t;
+		static PixelComponents constexpr Components = ( PixelComponent::eDepth );
 		struct Pixel
 		{
 			uint32_t d : 24, : 8;
@@ -3646,6 +3821,7 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eD32_SFLOAT >
 	{
 		using Type = float;
+		static PixelComponents constexpr Components = ( PixelComponent::eDepth );
 		struct Pixel
 		{
 			float d;
@@ -3680,6 +3856,7 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eS8_UINT >
 	{
 		using Type = uint8_t;
+		static PixelComponents constexpr Components = ( PixelComponent::eStencil );
 		struct Pixel
 		{
 			uint8_t s;
@@ -3714,6 +3891,8 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eD16_UNORM_S8_UINT >
 	{
 		using Type = uint16_t;
+		static PixelComponents constexpr Components = ( PixelComponent::eDepth
+			| PixelComponent::eStencil );
 		struct Pixel
 		{
 			uint16_t d;
@@ -3750,6 +3929,8 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eD24_UNORM_S8_UINT >
 	{
 		using Type = uint32_t;
+		static PixelComponents constexpr Components = ( PixelComponent::eDepth
+			| PixelComponent::eStencil );
 		struct Pixel
 		{
 			uint32_t d : 24;
@@ -3786,6 +3967,8 @@ namespace castor
 	struct PixelComponentsT< PixelFormat::eD32_SFLOAT_S8_UINT >
 	{
 		using Type = float;
+		static PixelComponents constexpr Components = ( PixelComponent::eDepth
+			| PixelComponent::eStencil );
 		struct Pixel
 		{
 			uint32_t d : 24;
@@ -4899,13 +5082,13 @@ namespace castor
 	}
 
 	template< PixelFormat PFT >
-	uint32_t getR32S( uint8_t const * buffer )
+	uint32_t getR32U( uint8_t const * buffer )
 	{
 		return details::PxComponentGetter< uint32_t >::get( buffer, PixelComponentsT< PFT >::R );
 	}
 
 	template< PixelFormat PFT >
-	int32_t getR32U( uint8_t const * buffer )
+	int32_t getR32S( uint8_t const * buffer )
 	{
 		return details::PxComponentGetter< int32_t >::get( buffer, PixelComponentsT< PFT >::R );
 	}

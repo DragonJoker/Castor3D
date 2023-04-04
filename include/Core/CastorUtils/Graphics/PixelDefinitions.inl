@@ -218,8 +218,20 @@ namespace castor
 			case PixelFormat::eR8_UNORM:
 				PixelConverter< PF, PixelFormat::eR8_UNORM >()( srcBuffer, dstBuffer );
 				break;
+			case PixelFormat::eR16_UINT:
+				PixelConverter< PF, PixelFormat::eR16_UINT >()( srcBuffer, dstBuffer );
+				break;
+			case PixelFormat::eR16_SINT:
+				PixelConverter< PF, PixelFormat::eR16_SINT >()( srcBuffer, dstBuffer );
+				break;
 			case PixelFormat::eR16_SFLOAT:
 				PixelConverter< PF, PixelFormat::eR16_SFLOAT >()( srcBuffer, dstBuffer );
+				break;
+			case PixelFormat::eR32_UINT:
+				PixelConverter< PF, PixelFormat::eR32_UINT >()( srcBuffer, dstBuffer );
+				break;
+			case PixelFormat::eR32_SINT:
+				PixelConverter< PF, PixelFormat::eR32_SINT >()( srcBuffer, dstBuffer );
 				break;
 			case PixelFormat::eR32_SFLOAT:
 				PixelConverter< PF, PixelFormat::eR32_SFLOAT >()( srcBuffer, dstBuffer );
@@ -227,8 +239,20 @@ namespace castor
 			case PixelFormat::eR8G8_UNORM:
 				PixelConverter< PF, PixelFormat::eR8G8_UNORM >()( srcBuffer, dstBuffer );
 				break;
+			case PixelFormat::eR16G16_UINT:
+				PixelConverter< PF, PixelFormat::eR16G16_UINT >()( srcBuffer, dstBuffer );
+				break;
+			case PixelFormat::eR16G16_SINT:
+				PixelConverter< PF, PixelFormat::eR16G16_SINT >()( srcBuffer, dstBuffer );
+				break;
 			case PixelFormat::eR16G16_SFLOAT:
 				PixelConverter< PF, PixelFormat::eR16G16_SFLOAT >()( srcBuffer, dstBuffer );
+				break;
+			case PixelFormat::eR32G32_UINT:
+				PixelConverter< PF, PixelFormat::eR32G32_UINT >()( srcBuffer, dstBuffer );
+				break;
+			case PixelFormat::eR32G32_SINT:
+				PixelConverter< PF, PixelFormat::eR32G32_SINT >()( srcBuffer, dstBuffer );
 				break;
 			case PixelFormat::eR32G32_SFLOAT:
 				PixelConverter< PF, PixelFormat::eR32G32_SFLOAT >()( srcBuffer, dstBuffer );
@@ -263,14 +287,32 @@ namespace castor
 			case PixelFormat::eA8B8G8R8_SRGB:
 				PixelConverter< PF, PixelFormat::eA8B8G8R8_SRGB >()( srcBuffer, dstBuffer );
 				break;
+			case PixelFormat::eR16G16B16_UINT:
+				PixelConverter< PF, PixelFormat::eR16G16B16_UINT >()( srcBuffer, dstBuffer );
+				break;
+			case PixelFormat::eR16G16B16_SINT:
+				PixelConverter< PF, PixelFormat::eR16G16B16_SINT >()( srcBuffer, dstBuffer );
+				break;
 			case PixelFormat::eR16G16B16_SFLOAT:
 				PixelConverter< PF, PixelFormat::eR16G16B16_SFLOAT >()( srcBuffer, dstBuffer );
+				break;
+			case PixelFormat::eR32G32B32_SFLOAT:
+				PixelConverter< PF, PixelFormat::eR32G32B32_SFLOAT >()( srcBuffer, dstBuffer );
+				break;
+			case PixelFormat::eR16G16B16A16_UINT:
+				PixelConverter< PF, PixelFormat::eR16G16B16A16_UINT >()( srcBuffer, dstBuffer );
+				break;
+			case PixelFormat::eR16G16B16A16_SINT:
+				PixelConverter< PF, PixelFormat::eR16G16B16A16_SINT >()( srcBuffer, dstBuffer );
 				break;
 			case PixelFormat::eR16G16B16A16_SFLOAT:
 				PixelConverter< PF, PixelFormat::eR16G16B16A16_SFLOAT >()( srcBuffer, dstBuffer );
 				break;
-			case PixelFormat::eR32G32B32_SFLOAT:
-				PixelConverter< PF, PixelFormat::eR32G32B32_SFLOAT >()( srcBuffer, dstBuffer );
+			case PixelFormat::eR32G32B32A32_UINT:
+				PixelConverter< PF, PixelFormat::eR32G32B32A32_UINT >()( srcBuffer, dstBuffer );
+				break;
+			case PixelFormat::eR32G32B32A32_SINT:
+				PixelConverter< PF, PixelFormat::eR32G32B32A32_SINT >()( srcBuffer, dstBuffer );
 				break;
 			case PixelFormat::eR32G32B32A32_SFLOAT:
 				PixelConverter< PF, PixelFormat::eR32G32B32A32_SFLOAT >()( srcBuffer, dstBuffer );
@@ -401,6 +443,12 @@ namespace castor
 			case PixelFormat::eR8_UNORM:
 				BufferConverter< PF, PixelFormat::eR8_UNORM >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
+			case PixelFormat::eR16_UNORM:
+				BufferConverter< PF, PixelFormat::eR16_UNORM >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR16_SNORM:
+				BufferConverter< PF, PixelFormat::eR16_SNORM >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+				break;
 			case PixelFormat::eR16_SFLOAT:
 				BufferConverter< PF, PixelFormat::eR16_SFLOAT >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
@@ -410,8 +458,20 @@ namespace castor
 			case PixelFormat::eR8G8_UNORM:
 				BufferConverter< PF, PixelFormat::eR8G8_UNORM >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
+			case PixelFormat::eR16G16_UNORM:
+				BufferConverter< PF, PixelFormat::eR16G16_UNORM >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR16G16_SNORM:
+				BufferConverter< PF, PixelFormat::eR16G16_SNORM >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+				break;
 			case PixelFormat::eR16G16_SFLOAT:
 				BufferConverter< PF, PixelFormat::eR16G16_SFLOAT >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR32G32_UINT:
+				BufferConverter< PF, PixelFormat::eR32G32_UINT >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR32G32_SINT:
+				BufferConverter< PF, PixelFormat::eR32G32_SINT >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
 			case PixelFormat::eR32G32_SFLOAT:
 				BufferConverter< PF, PixelFormat::eR32G32_SFLOAT >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
@@ -437,6 +497,21 @@ namespace castor
 			case PixelFormat::eB8G8R8_SRGB:
 				BufferConverter< PF, PixelFormat::eB8G8R8_SRGB >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
+			case PixelFormat::eR16G16B16_UNORM:
+				BufferConverter< PF, PixelFormat::eR16G16B16_UNORM >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR16G16B16_SNORM:
+				BufferConverter< PF, PixelFormat::eR16G16B16_SNORM >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR32G32B32_UINT:
+				BufferConverter< PF, PixelFormat::eR32G32B32_UINT >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR32G32B32_SINT:
+				BufferConverter< PF, PixelFormat::eR32G32B32_SINT >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR32G32B32_SFLOAT:
+				BufferConverter< PF, PixelFormat::eR32G32B32_SFLOAT >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+				break;
 			case PixelFormat::eR8G8B8A8_UNORM:
 				BufferConverter< PF, PixelFormat::eR8G8B8A8_UNORM >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
@@ -449,14 +524,20 @@ namespace castor
 			case PixelFormat::eA8B8G8R8_SRGB:
 				BufferConverter< PF, PixelFormat::eA8B8G8R8_SRGB >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
+			case PixelFormat::eR16G16B16A16_UNORM:
+				BufferConverter< PF, PixelFormat::eR16G16B16A16_UNORM >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+				break;
+			case PixelFormat::eR16G16B16A16_SNORM:
+				BufferConverter< PF, PixelFormat::eR16G16B16A16_SNORM >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+				break;
 			case PixelFormat::eR16G16B16_SFLOAT:
 				BufferConverter< PF, PixelFormat::eR16G16B16_SFLOAT >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
 			case PixelFormat::eR16G16B16A16_SFLOAT:
 				BufferConverter< PF, PixelFormat::eR16G16B16A16_SFLOAT >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
-			case PixelFormat::eR32G32B32_SFLOAT:
-				BufferConverter< PF, PixelFormat::eR32G32B32_SFLOAT >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
+			case PixelFormat::eR32G32B32A32_UINT:
+				BufferConverter< PF, PixelFormat::eR32G32B32A32_UINT >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
 				break;
 			case PixelFormat::eR32G32B32A32_SFLOAT:
 				BufferConverter< PF, PixelFormat::eR32G32B32A32_SFLOAT >()( options, srcDimensions, dstDimensions, srcBuffer, srcSize, dstBuffer, dstSize );
