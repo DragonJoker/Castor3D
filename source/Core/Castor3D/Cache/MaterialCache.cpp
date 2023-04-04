@@ -159,18 +159,18 @@ namespace castor
 			}
 
 			m_defaultMaterial = material.get();
-			m_passBuffer = std::make_shared< PassBuffer >( m_engine
+			m_passBuffer = castor::makeUnique< PassBuffer >( m_engine
 				, device
 				, MaxMaterialsCount );
-			m_sssProfileBuffer = std::make_shared< SssProfileBuffer >( m_engine
+			m_sssProfileBuffer = castor::makeUnique< SssProfileBuffer >( m_engine
 				, device
 				, MaxSssProfilesCount );
-			m_texConfigBuffer = std::make_shared< TextureConfigurationBuffer >( m_engine
+			m_texConfigBuffer = castor::makeUnique< TextureConfigurationBuffer >( m_engine
 				, device
 				, ( device.hasBindless()
 					? device.getMaxBindlessSampled()
 					: MaxTextureConfigurationCount ) );
-			m_texAnimBuffer = std::make_shared< TextureAnimationBuffer >( m_engine
+			m_texAnimBuffer = castor::makeUnique< TextureAnimationBuffer >( m_engine
 				, device
 				, ( device.hasBindless()
 					? device.getMaxBindlessSampled()

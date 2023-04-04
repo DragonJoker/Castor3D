@@ -315,10 +315,10 @@ namespace castor
 	private:
 		castor3d::Engine & m_engine;
 		castor3d::MaterialRPtr m_defaultMaterial{};
-		castor3d::PassBufferSPtr m_passBuffer;
-		castor3d::SssProfileBufferSPtr m_sssProfileBuffer;
-		castor3d::TextureConfigurationBufferSPtr m_texConfigBuffer;
-		castor3d::TextureAnimationBufferSPtr m_texAnimBuffer;
+		castor3d::PassBufferUPtr m_passBuffer;
+		castor3d::SssProfileBufferUPtr m_sssProfileBuffer;
+		castor3d::TextureConfigurationBufferUPtr m_texConfigBuffer;
+		castor3d::TextureAnimationBufferUPtr m_texAnimBuffer;
 		std::vector< castor3d::Pass * > m_pendingPasses;
 		std::vector< castor3d::TextureUnit * > m_pendingUnits;
 		std::vector< castor3d::AnimatedTexture const * > m_pendingTextures;
