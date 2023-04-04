@@ -81,6 +81,33 @@ namespace castor3d
 		doUpdateFlags();
 	}
 
+	ProgressCtrl::~ProgressCtrl()noexcept
+	{
+		if ( auto overlay = m_text.lock() )
+		{
+			if ( m_scene )
+			{
+				m_scene->removeOverlay( getName() + cuT( "/Text" ), true );
+			}
+			else
+			{
+				getEngine().removeOverlay( getName() + cuT( "/Text" ), true );
+			}
+		}
+
+		if ( auto overlay = m_title.lock() )
+		{
+			if ( m_scene )
+			{
+				m_scene->removeOverlay( getName() + cuT( "/Title" ), true );
+			}
+			else
+			{
+				getEngine().removeOverlay( getName() + cuT( "/Title" ), true );
+			}
+		}
+	}
+
 	void ProgressCtrl::setTitle( castor::U32String value )
 	{
 		if ( auto title = m_title.lock() )

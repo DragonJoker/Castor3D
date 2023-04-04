@@ -79,6 +79,21 @@ namespace castor3d
 	{
 	}
 
+	ScrollableCtrl::~ScrollableCtrl()noexcept
+	{
+		if ( auto overlay = m_corner.lock() )
+		{
+			if ( m_target.hasScene() )
+			{
+				m_target.getScene().removeOverlay( m_target.getName() + cuT( "/Scroll/Corner" ), true );
+			}
+			else
+			{
+				m_target.getEngine().removeOverlay( m_target.getName() + cuT( "/Scroll/Corner" ), true );
+			}
+		}
+	}
+
 	castor::Position ScrollableCtrl::getScrollPosition()const
 	{
 		castor::Position result{};

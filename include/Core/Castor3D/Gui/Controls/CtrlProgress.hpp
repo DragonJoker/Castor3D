@@ -23,6 +23,7 @@ namespace castor3d
 			, castor::String const & name
 			, ProgressStyle * style
 			, ControlRPtr parent );
+		C3D_API ~ProgressCtrl()noexcept;
 
 		C3D_API void setTitle( castor::U32String value );
 		C3D_API void setRange( castor::Range< int32_t > const & value );

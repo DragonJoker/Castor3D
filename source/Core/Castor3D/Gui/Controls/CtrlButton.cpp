@@ -96,6 +96,23 @@ namespace castor3d
 		setStyle( style );
 	}
 
+	ButtonCtrl::~ButtonCtrl()noexcept
+	{
+		m_onEnable = {};
+
+		if ( auto text = m_text.lock() )
+		{
+			if ( m_scene )
+			{
+				m_scene->removeOverlay( getName() + cuT( "/Text" ), true );
+			}
+			else
+			{
+				getEngine().removeOverlay( getName() + cuT( "/Text" ), true );
+			}
+		}
+	}
+
 	void ButtonCtrl::setHAlign( HAlign align )
 	{
 		m_flags &= ~ControlFlagType( StaticFlag::eHAlignCenter

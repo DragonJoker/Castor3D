@@ -34,6 +34,7 @@ namespace castor3d
 		, m_flags{ flags }
 		, m_id{ std::hash< castor::String >{}( getName() ) }
 		, m_type{ type }
+		, m_engine{ style->getEngine() }
 		, m_style{ style }
 		, m_position{ position }
 		, m_size{ size }
@@ -104,6 +105,21 @@ namespace castor3d
 		panel->setBorderPosition( BorderPosition::eInternal );
 		panel->setVisible( visible );
 		m_background = panel;
+	}
+
+	Control::~Control()noexcept
+	{
+		if ( auto overlay = m_background.lock() )
+		{
+			if ( m_scene )
+			{
+				m_scene->removeOverlay( getName(), true );
+			}
+			else
+			{
+				getEngine().removeOverlay( getName(), true );
+			}
+		}
 	}
 
 	void Control::setStyle( ControlStyleRPtr value )

@@ -45,6 +45,7 @@ namespace castor3d
 			, castor::Size const & size
 			, ControlFlagType flags = 0
 			, bool visible = true );
+		C3D_API ~Control()noexcept;
 
 		/** Sets the style
 		 *\param[in]	value	The new value
@@ -212,7 +213,7 @@ namespace castor3d
 
 		Engine & getEngine()const noexcept
 		{
-			return m_style->getEngine();
+			return m_engine;
 		}
 
 		ControlStyle const & getBaseStyle()const noexcept
@@ -594,6 +595,7 @@ namespace castor3d
 	private:
 		const ControlID m_id;
 		const ControlType m_type;
+		Engine & m_engine;
 		ControlStyleRPtr m_style{};
 		castor::Position m_position{};
 		castor::Size m_size{};

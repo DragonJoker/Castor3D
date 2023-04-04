@@ -30,18 +30,12 @@ namespace castor
 		}
 
 		auto level = overlay.computeLevel();
-		Overlay * parent{ overlay.getParent() };
-
-		if ( parent )
-		{
-			parent->addChild( &overlay );
-		}
-
 		overlay.getCategory()->setOrder( level
 			, ++m_overlayCountPerLevel[level][uint32_t( overlay.getType() )] );
 
-		if ( parent )
+		if ( auto parent = overlay.getParent() )
 		{
+			parent->addChild( &overlay );
 			it = std::find( m_overlays.begin(), m_overlays.end(), parent->getCategory() );
 
 			if ( it != m_overlays.end() )
@@ -67,9 +61,13 @@ namespace castor
 		{
 			for ( auto child : overlay )
 			{
-				child->setRelativePosition( child->getAbsolutePosition() );
-				child->setRelativeSize( child->getAbsoluteSize() );
+				child->reparent( overlay.getParent() );
 			}
+		}
+
+		if ( auto parent = overlay.getParent() )
+		{
+			parent->removeChild( &overlay );
 		}
 
 		auto it = std::find( m_overlays.begin(), m_overlays.end(), overlay.getCategory() );
@@ -121,7 +119,15 @@ namespace castor
 	void ResourceCacheT< Overlay, String, OverlayCacheTraits >::cleanup()
 	{
 		auto lock( makeUniqueLock( *this ) );
-		doCleanupNoLock();
+
+		// Flatten hierarchy
+		for ( auto overlay : m_overlays )
+		{
+			overlay->getOverlay().reparent( nullptr );
+			overlay->getOverlay().clear();
+		}
+
+		m_overlays.clear();
 
 		for ( auto it : m_fontTextures )
 		{

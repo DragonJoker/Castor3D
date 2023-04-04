@@ -106,6 +106,21 @@ namespace castor3d
 		setStyle( style );
 	}
 
+	ComboBoxCtrl::~ComboBoxCtrl()noexcept
+	{
+		if ( auto text = m_text.lock() )
+		{
+			if ( m_scene )
+			{
+				m_scene->removeOverlay( getName() + cuT( "/Text" ), true );
+			}
+			else
+			{
+				getEngine().removeOverlay( getName() + cuT( "/Text" ), true );
+			}
+		}
+	}
+
 	void ComboBoxCtrl::appendItem( castor::String const & value )
 	{
 		m_choices->appendItem( value );

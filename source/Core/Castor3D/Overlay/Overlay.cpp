@@ -55,11 +55,6 @@ namespace castor3d
 	{
 	}
 
-	void Overlay::addChild( OverlayRPtr overlay )
-	{
-		m_children.push_back( overlay );
-	}
-
 	uint32_t Overlay::getChildrenCount( uint32_t level )const
 	{
 		uint32_t result{ 0 };
@@ -145,5 +140,34 @@ namespace castor3d
 		}
 
 		return 1u + m_parent->computeLevel();
+	}
+
+	void Overlay::addChild( OverlayRPtr overlay )
+	{
+		m_children.push_back( overlay );
+		overlay->m_parent = this;
+	}
+
+	void Overlay::removeChild( OverlayRPtr overlay )
+	{
+		auto it = std::find( m_children.begin()
+			, m_children.end()
+			, overlay );
+
+		if ( it != m_children.end() )
+		{
+			( *it )->m_parent = nullptr;
+			m_children.erase( it );
+		}
+	}
+
+	void Overlay::clear()noexcept
+	{
+		for ( auto child : m_children )
+		{
+			child->m_parent = nullptr;
+		}
+
+		m_children.clear();
 	}
 }
