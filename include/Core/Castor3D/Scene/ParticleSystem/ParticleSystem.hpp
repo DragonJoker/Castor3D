@@ -138,7 +138,7 @@ namespace castor3d
 		 *\brief		Définit le programme utilisé pour mettre à jour les particules via un compute shader.
 		 *\param[in]	program	Le programme.
 		 */
-		C3D_API void setCSUpdateProgram( ShaderProgramSPtr program );
+		C3D_API void setCSUpdateProgram( ShaderProgramRPtr program );
 		/**
 		 *\~english
 		 *\brief		Defines the workgroup sizes, as defined inside the compute shader.

@@ -36,7 +36,7 @@ namespace castor3d
 		, ashes::PipelineRasterizationStateCreateInfo rsState
 		, ashes::PipelineColorBlendStateCreateInfo blState
 		, ashes::PipelineMultisampleStateCreateInfo msState
-		, ShaderProgramSPtr program
+		, ShaderProgramRPtr program
 		, PipelineFlags const & flags )
 		: castor::OwnedBy< RenderNodesPass >{ owner }
 		, m_renderSystem{ renderSystem }

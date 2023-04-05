@@ -694,7 +694,7 @@ namespace castor3d
 		C3D_API virtual SubmeshFlags doAdjustSubmeshFlags( SubmeshFlags flags )const;
 		C3D_API virtual ProgramFlags doAdjustProgramFlags( ProgramFlags flags )const;
 		C3D_API virtual SceneFlags doAdjustSceneFlags( SceneFlags flags )const;
-		C3D_API ShaderProgramSPtr doGetProgram( PipelineFlags const & flags
+		C3D_API ShaderProgramRPtr doGetProgram( PipelineFlags const & flags
 			, VkCullModeFlags cullMode = VK_CULL_MODE_NONE );
 		C3D_API void doUpdateFlags( PipelineFlags & flags )const;
 		C3D_API void doAddShadowBindings( Scene const & scene

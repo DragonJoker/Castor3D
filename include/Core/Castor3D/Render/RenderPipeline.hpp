@@ -83,7 +83,7 @@ namespace castor3d
 			, ashes::PipelineRasterizationStateCreateInfo rsState
 			, ashes::PipelineColorBlendStateCreateInfo blState
 			, ashes::PipelineMultisampleStateCreateInfo msState
-			, ShaderProgramSPtr program
+			, ShaderProgramRPtr program
 			, PipelineFlags const & flags );
 		/**
 		*\~english
@@ -257,7 +257,7 @@ namespace castor3d
 		ashes::PipelineRasterizationStateCreateInfo m_rsState;
 		ashes::PipelineColorBlendStateCreateInfo m_blState;
 		ashes::PipelineMultisampleStateCreateInfo m_msState;
-		ShaderProgramSPtr m_program;
+		ShaderProgramRPtr m_program;
 		PipelineFlags m_flags;
 		PipelineBaseHash m_flagsHash;
 		std::vector< ashes::PipelineVertexInputStateCreateInfo > m_vertexLayouts;

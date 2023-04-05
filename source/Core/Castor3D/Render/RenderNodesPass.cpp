@@ -843,7 +843,7 @@ namespace castor3d
 		return flags;
 	}
 
-	ShaderProgramSPtr RenderNodesPass::doGetProgram( PipelineFlags const & flags
+	ShaderProgramRPtr RenderNodesPass::doGetProgram( PipelineFlags const & flags
 		, VkCullModeFlags cullMode )
 	{
 		return getEngine()->getShaderProgramCache().getAutomaticProgram( *this, flags );

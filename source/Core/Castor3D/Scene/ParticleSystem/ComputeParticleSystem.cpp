@@ -222,7 +222,7 @@ namespace castor3d
 		m_inputs.push_back( ParticleElementDeclaration{ name, ElementUsage::eUnknown, type, m_inputs.stride() } );
 	}
 
-	void ComputeParticleSystem::setUpdateProgram( ShaderProgramSPtr program )
+	void ComputeParticleSystem::setUpdateProgram( ShaderProgramRPtr program )
 	{
 		m_program = program;
 	}

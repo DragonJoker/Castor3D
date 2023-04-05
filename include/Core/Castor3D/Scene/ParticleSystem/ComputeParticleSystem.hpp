@@ -65,7 +65,7 @@ namespace castor3d
 		 *\brief		Définit le programme utilisé pour mettre à jour les particules.
 		 *\param[in]	program	Le programme shader.
 		 */
-		C3D_API void setUpdateProgram( ShaderProgramSPtr program );
+		C3D_API void setUpdateProgram( ShaderProgramRPtr program );
 		/**
 		 *\~english
 		 *\brief		Defines the workgroup sizes, as defined inside the compute shader.
@@ -116,7 +116,7 @@ namespace castor3d
 
 	protected:
 		ParticleDeclaration m_inputs;
-		ShaderProgramSPtr m_program;
+		ShaderProgramRPtr m_program;
 		UniformBufferOffsetT< Configuration > m_ubo;
 		std::array< ashes::BufferPtr< uint8_t >, 2 > m_particlesStorages;
 		ashes::BufferPtr< uint32_t > m_generatedCountBuffer;
