@@ -183,7 +183,7 @@ namespace castor3d
 			, VK_SAMPLE_COUNT_1_BIT
 			, VK_IMAGE_TILING_OPTIMAL
 			, VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT };
-		ShaderProgramSPtr shaderProgram{};
+		ShaderProgramRPtr shaderProgram{};
 		castor::PxBufferBaseUPtr buffer{};
 		castor::Path folder{};
 		castor::Path relative{};

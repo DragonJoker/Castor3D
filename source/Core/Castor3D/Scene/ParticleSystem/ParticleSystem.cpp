@@ -284,7 +284,7 @@ namespace castor3d
 		m_defaultValues[cuT ("out_") + name] = defaultValue;
 	}
 
-	void ParticleSystem::setCSUpdateProgram( ShaderProgramSPtr program )
+	void ParticleSystem::setCSUpdateProgram( ShaderProgramRPtr program )
 	{
 		m_csImpl->setUpdateProgram( program );
 	}

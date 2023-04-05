@@ -1861,7 +1861,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserParticleSystemCSShader )
 	{
 		auto & parsingContext = getParserContext( context );
-		parsingContext.shaderProgram.reset();
+		parsingContext.shaderProgram = {};
 		parsingContext.shaderStage = VkShaderStageFlagBits( 0u );
 
 		if ( !parsingContext.scene )
@@ -1878,7 +1878,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserParticleSystemEnd )
 	{
 		auto & parsingContext = getParserContext( context );
-		parsingContext.shaderProgram.reset();
+		parsingContext.shaderProgram = {};
 		parsingContext.shaderStage = VkShaderStageFlagBits( 0u );
 		
 		if ( !parsingContext.particleSystem )
@@ -4126,7 +4126,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserPassShader )
 	{
 		auto & parsingContext = getParserContext( context );
-		parsingContext.shaderProgram.reset();
+		parsingContext.shaderProgram = {};
 		parsingContext.shaderStage = VkShaderStageFlagBits( 0u );
 
 		if ( parsingContext.pass )
@@ -4652,7 +4652,7 @@ namespace castor3d
 				parsingContext.particleSystem->setCSUpdateProgram( parsingContext.shaderProgram );
 			}
 
-			parsingContext.shaderProgram.reset();
+			parsingContext.shaderProgram = {};
 		}
 	}
 	CU_EndAttributePop()
