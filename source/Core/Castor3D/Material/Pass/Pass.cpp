@@ -64,17 +64,23 @@ namespace castor3d
 
 		static bool areFormatsCompatible( VkFormat lhs, VkFormat rhs )
 		{
+			if ( ashes::isCompressedFormat( lhs )
+				|| ashes::isCompressedFormat( rhs ) )
+			{
+				return false;
+			}
+
 			if ( isSRGBFormat( convert( rhs ) ) )
 			{
 				return isSRGBFormat( getSRGBFormat( convert( lhs ) ) );
 			}
-			else if ( isSRGBFormat( convert( lhs ) ) )
+
+			if ( isSRGBFormat( convert( lhs ) ) )
 			{
 				return isSRGBFormat( getSRGBFormat( convert( rhs ) ) );
 			}
 
-			return !ashes::isCompressedFormat( lhs )
-				&& !ashes::isCompressedFormat( rhs );
+			return true;
 		}
 
 		static bool areSpacesCompatible( TextureSpaces lhs, TextureSpaces rhs )

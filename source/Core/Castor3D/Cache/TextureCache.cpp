@@ -70,7 +70,7 @@ namespace castor3d
 
 			if ( lhsComponentFormat != rhsComponentFormat )
 			{
-				if ( getBytesPerPixel( lhsComponentFormat ) < getBytesPerPixel( rhsComponentFormat )
+				if ( getBytesPerPixel( lhsComponentFormat ) > getBytesPerPixel( rhsComponentFormat )
 					|| ( !isFloatingPoint( pixelFormat ) && isFloatingPoint( rhsPixelFormat ) ) )
 				{
 					pixelFormat = getPixelFormat( rhsComponentFormat
@@ -91,6 +91,11 @@ namespace castor3d
 						, rhsBuffer->getFormat()
 						, rhsBuffer->getAlign() );
 				}
+			}
+			else
+			{
+				pixelFormat = getPixelFormat( lhsComponentFormat
+					, getPixelComponents( lhsDstMask | rhsDstMask ) );
 			}
 
 			// Merge the two buffers into one

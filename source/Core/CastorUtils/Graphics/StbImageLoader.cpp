@@ -27,6 +27,8 @@ namespace castor
 			int height = 0;
 			int channels = 0;
 			stbi_set_flip_vertically_on_load( 1u );
+			stbi_convert_iphone_png_to_rgb( 1u );
+			auto isHdr = stbi_is_hdr_from_memory( input, int( size ) ) != 0;
 			uint8_t * data = stbi_load_from_memory( input
 				, int( size )
 				, &width
@@ -36,29 +38,62 @@ namespace castor
 
 			if ( data )
 			{
-				PixelFormat format;
-
-				switch ( channels )
+				if ( channels == STBI_grey_alpha )
 				{
-				case STBI_grey:
-					format = PixelFormat::eR8_SRGB;
-					break;
-				case STBI_grey_alpha:
-					format = PixelFormat::eR8G8_SRGB;
-					break;
-				case STBI_rgb:
-					format = PixelFormat::eR8G8B8_SRGB;
-					break;
-				case STBI_rgb_alpha:
-				default:
-					format = PixelFormat::eR8G8B8A8_SRGB;
-					break;
+					result = PxBufferBase::create( { uint32_t( width ), uint32_t( height ) }
+						, isHdr ? PixelFormat::eR8G8_UNORM : PixelFormat::eR8G8_SRGB
+						, data
+						, isHdr ? PixelFormat::eR8G8_UNORM : PixelFormat::eR8G8_SRGB );
+					auto redChannel = castor::extractComponent( result
+						, PixelComponent::eRed );
+					auto alphaChannel = castor::extractComponent( result
+						, PixelComponent::eGreen );
+					result = PxBufferBase::create( { uint32_t( width ), uint32_t( height ) }
+						, isHdr ? PixelFormat::eR8G8B8A8_UNORM : PixelFormat::eR8G8B8A8_SRGB );
+					castor::copyBufferComponents( PixelComponent::eRed
+						, PixelComponent::eRed
+						, *redChannel
+						, *result );
+					castor::copyBufferComponents( PixelComponent::eRed
+						, PixelComponent::eGreen
+						, *redChannel
+						, *result );
+					castor::copyBufferComponents( PixelComponent::eRed
+						, PixelComponent::eBlue
+						, *redChannel
+						, *result );
+					castor::copyBufferComponents( PixelComponent::eAlpha
+						, PixelComponent::eAlpha
+						, *alphaChannel
+						, *result );
+				}
+				else
+				{
+					PixelFormat format;
+
+					switch ( channels )
+					{
+					case STBI_grey:
+						format = isHdr ? PixelFormat::eR8_UNORM : PixelFormat::eR8_SRGB;
+						break;
+					case STBI_grey_alpha:
+						format = isHdr ? PixelFormat::eR8G8_UNORM : PixelFormat::eR8G8_SRGB;
+						break;
+					case STBI_rgb:
+						format = isHdr ? PixelFormat::eR8G8B8_UNORM : PixelFormat::eR8G8B8_SRGB;
+						break;
+					case STBI_rgb_alpha:
+					default:
+						format = isHdr ? PixelFormat::eR8G8B8A8_UNORM : PixelFormat::eR8G8B8A8_SRGB;
+						break;
+					}
+
+					result = PxBufferBase::create( { uint32_t( width ), uint32_t( height ) }
+						, format
+						, data
+						, format );
 				}
 
-				result = PxBufferBase::create( { uint32_t( width ), uint32_t( height ) }
-					, format
-					, data
-					, format );
 				stbi_image_free( data );
 			}
 			else
@@ -86,30 +121,62 @@ namespace castor
 
 			if ( data )
 			{
-				PixelFormat format;
-
-				switch ( channels )
+				if ( channels == STBI_grey_alpha )
 				{
-				case 1:
-					format = PixelFormat::eR32_SFLOAT;
-					break;
-				case 2:
-					format = PixelFormat::eR32G32_SFLOAT;
-					break;
-				case 3:
-					format = PixelFormat::eR32G32B32_SFLOAT;
-					break;
-				case 4:
-				default:
-					format = PixelFormat::eR32G32B32A32_SFLOAT;
-					break;
+					result = PxBufferBase::create( { uint32_t( width ), uint32_t( height ) }
+						, PixelFormat::eR32G32_SFLOAT
+						, reinterpret_cast< uint8_t * >( data )
+						, PixelFormat::eR32G32_SFLOAT );
+					auto redChannel = castor::extractComponent( result
+						, PixelComponent::eRed );
+					auto alphaChannel = castor::extractComponent( result
+						, PixelComponent::eGreen );
+					result = PxBufferBase::create( { uint32_t( width ), uint32_t( height ) }
+						, PixelFormat::eR32G32B32A32_SFLOAT );
+					castor::copyBufferComponents( PixelComponent::eRed
+						, PixelComponent::eRed
+						, *redChannel
+						, *result );
+					castor::copyBufferComponents( PixelComponent::eRed
+						, PixelComponent::eGreen
+						, *redChannel
+						, *result );
+					castor::copyBufferComponents( PixelComponent::eRed
+						, PixelComponent::eBlue
+						, *redChannel
+						, *result );
+					castor::copyBufferComponents( PixelComponent::eAlpha
+						, PixelComponent::eAlpha
+						, *alphaChannel
+						, *result );
 				}
+				else
+				{
+					PixelFormat format;
 
-				result = PxBufferBase::create( Size{ uint32_t( width ), uint32_t( height ) }
-					, format
-					, reinterpret_cast< uint8_t * >( data )
-					, format );
-				stbi_image_free( data );
+					switch ( channels )
+					{
+					case 1:
+						format = PixelFormat::eR32_SFLOAT;
+						break;
+					case 2:
+						format = PixelFormat::eR32G32_SFLOAT;
+						break;
+					case 3:
+						format = PixelFormat::eR32G32B32_SFLOAT;
+						break;
+					case 4:
+					default:
+						format = PixelFormat::eR32G32B32A32_SFLOAT;
+						break;
+					}
+
+					result = PxBufferBase::create( Size{ uint32_t( width ), uint32_t( height ) }
+						, format
+						, reinterpret_cast< uint8_t * >( data )
+						, format );
+					stbi_image_free( data );
+				}
 			}
 			else
 			{

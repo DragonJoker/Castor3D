@@ -103,7 +103,8 @@ namespace c3d_assimp
 				, castor::PixelComponent::eAlpha );
 			auto data = alphaChannel->getConstPtr();
 			auto end = data + alphaChannel->getSize();
-			return std::any_of( data, end, []( uint8_t byte ){ return byte != 0x00 && byte != 0xFF; } );
+			return !std::all_of( data, end, []( uint8_t byte ) { return byte != 0x00; } )
+				|| !std::all_of( data, end, []( uint8_t byte ) { return byte != 0xFF; } );
 		}
 
 		static castor::String decodeUri( castor::String uri )

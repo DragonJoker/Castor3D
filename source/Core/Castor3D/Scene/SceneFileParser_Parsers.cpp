@@ -4191,14 +4191,14 @@ namespace castor3d
 			{
 				folder = context.file.getPath();
 				auto & engine = *parsingContext.parser->getEngine();
-				auto image = engine.tryFindImage( relative.getFileName() );
+				parsingContext.image = engine.tryFindImage( relative.getFileName() ).lock();
 
-				if ( !image.lock() )
+				if ( !parsingContext.image )
 				{
 					auto img = engine.createImage( relative.getFileName()
 						, castor::ImageCreateParams{ folder / relative
 							, { false, false, false } } );
-					image = engine.addImage( relative.getFileName(), img );
+					parsingContext.image = engine.addImage( relative.getFileName(), img ).lock();
 				}
 			}
 			else if ( !castor::File::fileExists( relative ) )
@@ -4381,6 +4381,11 @@ namespace castor3d
 			}
 			else
 			{
+				if ( parsingContext.image )
+				{
+					parsingContext.imageInfo->format = VkFormat( parsingContext.image->getPixelFormat() );
+				}
+
 				if ( parsingContext.imageInfo->mipLevels == ashes::RemainingArrayLayers )
 				{
 					parsingContext.imageInfo->mipLevels = 20;
@@ -4405,6 +4410,7 @@ namespace castor3d
 				VK_IMAGE_TILING_OPTIMAL,
 				VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT
 			};
+			parsingContext.image = {};
 			parsingContext.textureConfiguration = TextureConfiguration{};
 			parsingContext.texcoordSet = 0u;
 			parsingContext.passComponent = nullptr;
