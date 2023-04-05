@@ -187,6 +187,7 @@ namespace castor3d
 		castor::PxBufferBaseSPtr buffer{};
 		castor::Path folder{};
 		castor::Path relative{};
+		castor::ImageSPtr image{};
 		VkShaderStageFlagBits shaderStage{};
 		UniformBufferBaseUPtr uniformBuffer{};
 		OverlayRes overlay{};
