@@ -62,7 +62,7 @@ namespace castor
 	}
 
 	PreprocessedFile::PreprocessedFile( FileParser & parser
-		, FileParserContextSPtr context )
+		, FileParserContextUPtr context )
 		: m_parser{ parser }
 		, m_context{ std::move( context ) }
 	{
@@ -196,14 +196,8 @@ namespace castor
 
 		if ( m_context->sections.empty() || m_context->sections.back() != m_parser.getRootSectionId() )
 		{
-			if ( m_context.use_count() == 1 )
-			{
-				parseError( cuT( "Unexpected end of file" ) );
-			}
-			else
-			{
-				m_parser.validate( *this );
-			}
+			parseError( cuT( "Unexpected end of file" ) );
+			m_parser.validate( *this );
 		}
 		else
 		{
@@ -886,7 +880,7 @@ namespace castor
 		}
 	}
 
-	FileParserContextSPtr FileParser::doInitialiseParser( Path const & path )
+	FileParserContextUPtr FileParser::doInitialiseParser( Path const & path )
 	{
 		for ( auto & it : m_additionalParsers )
 		{
@@ -900,7 +894,7 @@ namespace castor
 			}
 		}
 
-		return std::make_shared< FileParserContext >( *this, path );
+		return castor::makeUnique< FileParserContext >( *this, path );
 	}
 
 	void FileParser::doCheckDefines( String & text )

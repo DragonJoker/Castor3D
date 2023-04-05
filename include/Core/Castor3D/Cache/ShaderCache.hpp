@@ -165,10 +165,10 @@ namespace castor3d
 	 *\brief		Crée un cache de ashes::ShaderProgram.
 	 *\param[in]	engine	Le moteur.
 	 */
-	inline std::unique_ptr< ShaderProgramCache >
+	inline castor::UniquePtr< ShaderProgramCache >
 	makeCache( Engine & engine )
 	{
-		return std::make_unique< ShaderProgramCache >( engine );
+		return castor::makeUnique< ShaderProgramCache >( engine );
 	}
 }
 
