@@ -48,6 +48,20 @@ namespace castor
 			}
 		}
 
+		static PixelFormat convertTo8Bits( FIBITMAP *& fiImage )
+		{
+			FIBITMAP * dib = FreeImage_ConvertTo8Bits( fiImage );
+			FreeImage_Unload( fiImage );
+			fiImage = dib;
+
+			if ( !fiImage )
+			{
+				CU_LoaderError( "Can't convert image to 32 bits" );
+			}
+
+			return PixelFormat::eR8_SRGB;
+		}
+
 		static PixelFormat convertTo32Bits( FIBITMAP *& fiImage )
 		{
 			FIBITMAP * dib = FreeImage_ConvertTo32Bits( fiImage );
@@ -136,16 +150,10 @@ namespace castor
 		switch ( imageType )
 		{
 		case FIT_UINT16:
-			sourceFmt = PixelFormat::eR16_UNORM;
-			break;
 		case FIT_INT16:
-			sourceFmt = PixelFormat::eR16_SNORM;
-			break;
 		case FIT_UINT32:
-			sourceFmt = PixelFormat::eR32_UINT;
-			break;
 		case FIT_INT32:
-			sourceFmt = PixelFormat::eR32_SINT;
+			sourceFmt = freeimgl::convertTo8Bits( fiImage );
 			break;
 		case FIT_FLOAT:
 			sourceFmt = PixelFormat::eR32_SFLOAT;
@@ -164,21 +172,11 @@ namespace castor
 			sourceFmt = PixelFormat::eR32G32B32A32_SFLOAT;
 			needsComponentSwap = true;
 			break;
+		case FIT_RGB16:
+		case FIT_RGBA16:
 		default:
-			if ( auto info = FreeImage_GetInfo( fiImage ) )
-			{
-				auto colorType = FreeImage_GetColorType( fiImage );
-
-				if ( info->bmiHeader.biBitCount == 64 && colorType == FIC_RGBALPHA )
-				{
-					sourceFmt = PixelFormat::eR16G16B16A16_UNORM;
-				}
-				else
-				{
-					sourceFmt = freeimgl::convertTo32Bits( fiImage );
-					needsComponentSwap = true;
-				}
-			}
+			sourceFmt = freeimgl::convertTo32Bits( fiImage );
+			needsComponentSwap = true;
 			break;
 		}
 
@@ -192,6 +190,7 @@ namespace castor
 			freeimgl::swapComponents( pixels, sourceFmt, width, height );
 		}
 #endif
+
 		buffer = PxBufferBase::create( dimensions
 			, sourceFmt
 			, pixels

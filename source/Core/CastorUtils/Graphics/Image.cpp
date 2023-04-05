@@ -115,7 +115,11 @@ namespace castor
 			: STBIR_ALPHA_CHANNEL_NONE };
 		stbir_datatype dataType{ isFloatingPoint( srcBuffer->getFormat() )
 			? STBIR_TYPE_FLOAT
-			: STBIR_TYPE_UINT8 };
+			: ( isInt32( srcBuffer->getFormat() )
+				? STBIR_TYPE_UINT32
+				: ( isInt16( srcBuffer->getFormat() )
+					? STBIR_TYPE_UINT16
+					: STBIR_TYPE_UINT8 ) ) };
 		stbir_colorspace colorSpace{ isSRGBFormat( srcBuffer->getFormat() )
 			? STBIR_COLORSPACE_SRGB
 			: STBIR_COLORSPACE_LINEAR };
