@@ -231,9 +231,9 @@ namespace castor3d
 	using ObjectDetacherT = typename ObjectCacheTraitsT< ObjT, KeyT >::ElementDetacherT;
 
 	template< typename ObjT, typename KeyT, typename TraitsT >
-	using ObjectCachePtrT = std::shared_ptr< ObjectCacheT< ObjT, KeyT, TraitsT > >;
+	using ObjectCachePtrT = castor::UniquePtr< ObjectCacheT< ObjT, KeyT, TraitsT > >;
 	template< typename CacheT, EventType EventT >
-	using CacheViewPtrT = std::shared_ptr< CacheViewT< CacheT, EventT > >;
+	using CacheViewPtrT = castor::UniquePtr< CacheViewT< CacheT, EventT > >;
 
 	class RenderTargetCache;
 	class ShaderProgramCache;
@@ -256,7 +256,7 @@ namespace castor3d
 			return *m_##memberName##Cache;\
 		}\
 	private:\
-		className##Cache##SPtr m_##memberName##Cache
+		className##Cache##UPtr m_##memberName##Cache
 
 #define DECLARE_CACHE_MEMBER( memberName, className )\
 	public:\
@@ -336,7 +336,7 @@ namespace castor3d
 		}\
 	private:\
 		castor::ConnectionT< castor::OnCacheChanged > m_on##className##Changed;\
-		className##Cache##SPtr m_##memberName##Cache
+		className##Cache##UPtr m_##memberName##Cache
 
 #define DECLARE_OBJECT_CACHE_MEMBER( memberName, className )\
 	public:\

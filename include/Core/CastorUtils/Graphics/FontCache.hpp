@@ -17,33 +17,6 @@ namespace castor
 {
 	/**
 	*\~english
-	*	Helper structure to specialise a cache behaviour.
-	*\remarks
-	*	Specialisation for castor::Font.
-	*\~french
-	*	Structure permettant de spécialiser le comportement d'un cache.
-	*\remarks
-	*	Spécialisation pour castor::Font.
-	*/
-	template<>
-	struct ResourceCacheTraitsT< Font, String >
-		: ResourceCacheTraitsBaseT< Font, String, ResourceCacheTraitsT< Font, String > >
-	{
-		using KeyT = String;
-		using Base = ResourceCacheTraitsBaseT< Font, KeyT, ResourceCacheTraitsT< Font, KeyT > >;
-		using ElementT = typename Base::ElementT;
-		using ElementPtrT = typename Base::ElementPtrT;
-
-		CU_API static const String Name;
-
-		CU_API static ElementPtrT makeElement( ResourceCacheBaseT< Font, String, ResourceCacheTraitsT< Font, String > > const & cache
-			, KeyT const & name
-			, uint32_t height
-			, Path path );
-	};
-	using FontCacheTraits = ResourceCacheTraitsT< Font, String >;
-	/**
-	*\~english
 	*	Base class for an element cache.
 	*\remarks
 	*	Specialisation for castor::Font.
@@ -81,7 +54,6 @@ namespace castor
 		PathNameMap m_paths;
 	};
 
-	using FontCache = ResourceCacheT< Font, String, FontCacheTraits >;
 	using FontRes = FontCacheTraits::ElementPtrT;
 	using FontResPtr = FontCacheTraits::ElementObsT;
 }

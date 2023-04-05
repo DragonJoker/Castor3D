@@ -9,6 +9,9 @@
 CU_ImplementExportedOwnedBy( castor3d::Scene, Scene )
 CU_ImplementCUSmartPtr( castor3d, CameraCache )
 CU_ImplementCUSmartPtr( castor3d, SceneCache )
+CU_ImplementCUSmartPtr( castor3d, MaterialCacheView )
+CU_ImplementCUSmartPtr( castor3d, SamplerCacheView )
+CU_ImplementCUSmartPtr( castor3d, FontCacheView )
 
 namespace castor3d
 {

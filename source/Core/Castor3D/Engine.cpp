@@ -199,8 +199,8 @@ namespace castor3d
 		m_sceneCache = castor::makeCache< Scene, castor::String, SceneCacheTraits >( getLogger()
 			, castor::ResourceInitialiserT< SceneCache >{}
 			, castor::ResourceCleanerT< SceneCache >{} );
-		m_targetCache = std::make_unique< RenderTargetCache >( *this );
-		m_textureCache = std::make_unique< TextureUnitCache >( *this );
+		m_targetCache = castor::makeUnique< RenderTargetCache >( *this );
+		m_textureCache = castor::makeUnique< TextureUnitCache >( *this );
 
 		if ( !castor::File::directoryExists( getEngineDirectory() ) )
 		{

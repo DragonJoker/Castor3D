@@ -6,6 +6,7 @@ See LICENSE file in root folder
 #pragma once
 
 #include "CastorUtils/CastorUtils.hpp"
+#include "CastorUtils/Data/DataModule.hpp"
 #include "CastorUtils/Design/FlagCombination.hpp"
 
 namespace castor
@@ -814,16 +815,45 @@ namespace castor
 	\brief		Unsupported format exception
 	*/
 	class UnsupportedFormatException;
+	/**
+	*\~english
+	*	Helper structure to specialise a cache behaviour.
+	*\remarks
+	*	Specialisation for castor::Font.
+	*\~french
+	*	Structure permettant de spécialiser le comportement d'un cache.
+	*\remarks
+	*	Spécialisation pour castor::Font.
+	*/
+	template<>
+	struct ResourceCacheTraitsT< Font, String >
+		: ResourceCacheTraitsBaseT< Font, String, ResourceCacheTraitsT< Font, String > >
+	{
+		using KeyT = String;
+		using Base = ResourceCacheTraitsBaseT< Font, KeyT, ResourceCacheTraitsT< Font, KeyT > >;
+		using ElementT = typename Base::ElementT;
+		using ElementPtrT = typename Base::ElementPtrT;
+
+		CU_API static const String Name;
+
+		CU_API static ElementPtrT makeElement( ResourceCacheBaseT< Font, String, ResourceCacheTraitsT< Font, String > > const & cache
+			, KeyT const & name
+			, uint32_t height
+			, Path path );
+	};
+	using FontCacheTraits = ResourceCacheTraitsT< Font, String >;
 
 	using ImageLoaderPtr = std::unique_ptr< ImageLoaderImpl >;
 	using ImageWriterPtr = std::unique_ptr< ImageWriterImpl >;
 	using PixelBuffer = PxBuffer< PixelFormat::eR8G8B8A8_UNORM >;
+	using FontCache = ResourceCacheT< Font, String, FontCacheTraits >;
 
 	CU_DeclareCUSmartPtr( castor, BoundingBox, CU_API );
 	CU_DeclareCUSmartPtr( castor, BoundingSphere, CU_API );
 	CU_DeclareCUSmartPtr( castor, Image, CU_API );
 	CU_DeclareCUSmartPtr( castor, Font, CU_API );
 	CU_DeclareCUSmartPtr( castor, PxBufferBase, CU_API );
+	CU_DeclareCUSmartPtr( castor, FontCache, CU_API );
 
 	using RgbColour = RgbColourT< ColourComponent >;
 	using RgbaColour = RgbaColourT< ColourComponent >;

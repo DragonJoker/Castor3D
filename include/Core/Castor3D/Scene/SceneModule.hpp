@@ -6,9 +6,11 @@ See LICENSE file in root folder
 
 #include "Castor3D/Event/Frame/FrameEventModule.hpp"
 #include "Castor3D/Material/MaterialModule.hpp"
+#include "Castor3D/Material/Texture/TextureModule.hpp"
 #include "Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp"
 
 #include <CastorUtils/Design/Signal.hpp>
+#include <CastorUtils/Graphics/GraphicsModule.hpp>
 
 namespace castor3d
 {
@@ -663,12 +665,18 @@ namespace castor3d
 	using GeometryResPtr = CameraCacheTraits::ElementObsT;
 	using SceneNodeRes = CameraCacheTraits::ElementPtrT;
 	using SceneNodeResPtr = CameraCacheTraits::ElementObsT;
+	using MaterialCacheView = CacheViewT< MaterialCache, EventType::ePreRender >;
+	using SamplerCacheView = CacheViewT< SamplerCache, EventType::ePreRender >;
+	using FontCacheView = CacheViewT< castor::FontCache, EventType::ePreRender >;
 
 	CU_DeclareCUSmartPtr( castor3d, SceneCache, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, BillboardListCache, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, CameraCache, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, GeometryCache, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, SceneNodeCache, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, MaterialCacheView, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, SamplerCacheView, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, FontCacheView, C3D_API );
 
 	//@}
 }

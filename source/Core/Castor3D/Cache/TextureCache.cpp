@@ -12,6 +12,8 @@
 
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
+CU_ImplementCUSmartPtr( castor3d, TextureUnitCache )
+
 namespace castor3d
 {
 	using ashes::operator==;
