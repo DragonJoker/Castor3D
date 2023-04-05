@@ -115,7 +115,7 @@ namespace castor
 
 		CU_API explicit PreprocessedFile( FileParser & parser );
 		CU_API PreprocessedFile( FileParser & parser
-			, FileParserContextSPtr context );
+			, FileParserContextUPtr context );
 
 		CU_API void addParser( Path file
 			, uint64_t line
@@ -151,7 +151,7 @@ namespace castor
 
 	private:
 		FileParser & m_parser;
-		FileParserContextSPtr m_context;
+		FileParserContextUPtr m_context;
 		std::vector< Action > m_actions;
 		Action m_popAction;
 	};
@@ -433,7 +433,7 @@ namespace castor
 		 *\brief		Initialisation spécifique.
 		 *\param[in]	path	Le chemin d'accès au fichier.
 		 */
-		CU_API FileParserContextSPtr doInitialiseParser( Path const & path );
+		CU_API FileParserContextUPtr doInitialiseParser( Path const & path );
 		/**
 		 *\~english
 		 *\brief		Specific cleanup.

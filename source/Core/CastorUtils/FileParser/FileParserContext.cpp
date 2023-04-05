@@ -2,6 +2,8 @@
 
 #include "CastorUtils/FileParser/FileParser.hpp"
 
+CU_ImplementCUSmartPtr( castor, FileParserContext )
+
 namespace castor
 {
 	FileParserContext::FileParserContext( FileParser & pparser
