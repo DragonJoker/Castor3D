@@ -78,7 +78,7 @@ namespace castor
 		, typename ... ParametersT >
 	ResourceCachePtrT< ResT, KeyT, TraitsT > makeCache( ParametersT && ... parameters )
 	{
-		return std::make_shared< ResourceCacheT< ResT, KeyT, TraitsT > >( std::forward< ParametersT >( parameters )... );
+		return castor::makeUnique< ResourceCacheT< ResT, KeyT, TraitsT > >( std::forward< ParametersT >( parameters )... );
 	}
 }
 

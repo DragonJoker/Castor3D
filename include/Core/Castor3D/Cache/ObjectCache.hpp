@@ -86,7 +86,7 @@ namespace castor3d
 		, typename ... ParametersT >
 	ObjectCachePtrT< ObjT, KeyT, TraitsT > makeObjectCache( ParametersT && ... parameters )
 	{
-		return std::make_shared< ObjectCacheT< ObjT, KeyT, TraitsT > >( std::forward< ParametersT >( parameters )... );
+		return castor::makeUnique< ObjectCacheT< ObjT, KeyT, TraitsT > >( std::forward< ParametersT >( parameters )... );
 	}
 }
 

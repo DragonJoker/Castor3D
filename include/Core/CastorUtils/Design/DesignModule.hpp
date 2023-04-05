@@ -579,7 +579,7 @@ namespace castor
 	using OnCacheChangedConnection = castor::ConnectionT< OnCacheChanged >;
 
 	template< typename ResT, typename KeyT, typename TraitsT >
-	using ResourceCachePtrT = std::shared_ptr< ResourceCacheT< ResT, KeyT, TraitsT > >;
+	using ResourceCachePtrT = UniquePtr< ResourceCacheT< ResT, KeyT, TraitsT > >;
 
 	//@}
 }

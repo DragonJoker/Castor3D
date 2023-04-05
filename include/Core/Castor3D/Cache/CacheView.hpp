@@ -237,7 +237,7 @@ namespace castor3d
 		, typename CacheViewTraitsT< CacheT >::ElementInitialiserT initialiser = {}
 		, typename CacheViewTraitsT< CacheT >::ElementCleanerT cleaner = {} )
 	{
-		return std::make_shared< CacheViewT< CacheT, EventT > >( name
+		return castor::makeUnique< CacheViewT< CacheT, EventT > >( name
 			, cache
 			, std::move( initialiser )
 			, std::move( cleaner ) );
