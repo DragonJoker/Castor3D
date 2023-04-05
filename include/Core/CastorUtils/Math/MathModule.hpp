@@ -386,8 +386,6 @@ namespace castor
 	CU_DeclareSmartPtr( Quaternion );
 	CU_DeclareSmartPtr( SphericalVertex );
 
-	CU_DeclareVector( SphericalVertexSPtr, SphericalVertexPtr );
-
 	CU_API Point3f operator*( Matrix4x4f const & lhs, Point3f const & rhs );
 	CU_API Point3f operator*( Point3f const & lhs, Matrix4x4f const & rhs );
 	CU_API Point4f operator*( Matrix4x4f const & lhs, Point4f const & rhs );

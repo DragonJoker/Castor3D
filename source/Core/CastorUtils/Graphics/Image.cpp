@@ -49,11 +49,11 @@ namespace castor
 	Image::Image( String const & name
 		, Path const & path
 		, ImageLayout layout
-		, PxBufferBaseSPtr buffer )
+		, PxBufferBaseUPtr buffer )
 		: Named{ name }
 		, m_pathFile{ path }
 		, m_buffer{ ( buffer
-			? buffer
+			? std::move( buffer )
 			: PxBufferBase::create( layout.dimensions()
 				, layout.depthLayers()
 				, layout.levels
@@ -76,17 +76,17 @@ namespace castor
 	{
 		m_pathFile = image.m_pathFile;
 		m_layout = image.m_layout;
-		m_buffer = image.m_buffer ? image.m_buffer->clone() : nullptr;
+		m_buffer = std::move( image.m_buffer ? image.m_buffer->clone() : nullptr );
 		return * this;
 	}
 
-	PxBufferBaseSPtr Image::updateLayerLayout( Size const & extent
+	PxBufferBaseUPtr Image::updateLayerLayout( Size const & extent
 		, PixelFormat format )
 	{
 		auto result = ( m_layout.extent->x != extent.getWidth()
-			|| m_layout.extent->y != extent.getHeight()
-			|| format != m_layout.format )
-			? m_buffer
+				|| m_layout.extent->y != extent.getHeight()
+				|| format != m_layout.format )
+			? std::move( m_buffer )
 			: nullptr;
 
 		if ( result )
@@ -101,71 +101,6 @@ namespace castor
 		}
 
 		return result;
-	}
-
-	PxBufferBaseSPtr Image::resample( Size const & size
-		, PxBufferBaseSPtr & buffer
-		, ImageLayout & layout )
-	{
-		auto srcBuffer = buffer;
-		auto format = srcBuffer->getFormat();
-		int channels = int( getComponentsCount( srcBuffer->getFormat() ) );
-		int alpha{ hasAlpha( srcBuffer->getFormat() )
-			? 1
-			: STBIR_ALPHA_CHANNEL_NONE };
-		stbir_datatype dataType{ isFloatingPoint( srcBuffer->getFormat() )
-			? STBIR_TYPE_FLOAT
-			: ( isInt32( srcBuffer->getFormat() )
-				? STBIR_TYPE_UINT32
-				: ( isInt16( srcBuffer->getFormat() )
-					? STBIR_TYPE_UINT16
-					: STBIR_TYPE_UINT8 ) ) };
-		stbir_colorspace colorSpace{ isSRGBFormat( srcBuffer->getFormat() )
-			? STBIR_COLORSPACE_SRGB
-			: STBIR_COLORSPACE_LINEAR };
-		auto srcLayerSize = layout.layerSize();
-		auto src = srcBuffer->getPtr();
-		auto layoutChanged = ( layout.extent->x != size.getWidth()
-			|| layout.extent->y != size.getHeight()
-			|| format != layout.format )
-			? buffer
-			: nullptr;
-
-		if ( layoutChanged )
-		{
-			layout.extent->x = size.getWidth();
-			layout.extent->y = size.getHeight();
-			layout.format = format;
-			buffer = PxBufferBase::create( { layout.extent->x, layout.extent->y }
-				, layout.depthLayers()
-				, layout.levels
-				, layout.format );
-		}
-
-		auto dstBuffer = buffer;
-		auto dstLayerSize = layout.layerSize();
-		auto dst = dstBuffer->getPtr();
-
-		for ( uint32_t layer = 0u; layer < layout.depthLayers(); ++layer )
-		{
-			auto result = stbir_resize( src, int( srcBuffer->getWidth() ), int( srcBuffer->getHeight() ), 0
-				, dst, int( dstBuffer->getWidth() ), int( dstBuffer->getHeight() ), 0
-				, dataType
-				, channels, alpha, 0
-				, STBIR_EDGE_CLAMP, STBIR_EDGE_CLAMP
-				, STBIR_FILTER_CATMULLROM, STBIR_FILTER_CATMULLROM
-				, colorSpace, nullptr );
-
-			if ( !result )
-			{
-				CU_LoaderError( "Image couldn't be resized" );
-			}
-
-			dst += dstLayerSize;
-			src += srcLayerSize;
-		}
-
-		return dstBuffer;
 	}
 
 	PxBufferBaseUPtr Image::resample( Size const & size
@@ -184,7 +119,11 @@ namespace castor
 			: STBIR_ALPHA_CHANNEL_NONE };
 		stbir_datatype dataType{ isFloatingPoint( buffer->getFormat() )
 			? STBIR_TYPE_FLOAT
-			: STBIR_TYPE_UINT8 };
+			: ( isInt32( buffer->getFormat() )
+				? STBIR_TYPE_UINT32
+				: ( isInt16( buffer->getFormat() )
+					? STBIR_TYPE_UINT16
+					: STBIR_TYPE_UINT8 ) ) };
 		stbir_colorspace colorSpace{ isSRGBFormat( buffer->getFormat() )
 			? STBIR_COLORSPACE_SRGB
 			: STBIR_COLORSPACE_LINEAR };
@@ -193,7 +132,7 @@ namespace castor
 		layout.extent->x = size.getWidth();
 		layout.extent->y = size.getHeight();
 		layout.format = format;
-		auto result = PxBufferBase::createUnique( { layout.extent->x, layout.extent->y }
+		auto result = PxBufferBase::create( { layout.extent->x, layout.extent->y }
 			, layout.depthLayers()
 			, layout.levels
 			, layout.format );
@@ -224,7 +163,10 @@ namespace castor
 
 	Image & Image::resample( Size const & size )
 	{
-		resample( size, m_buffer, m_layout );
+		m_buffer = resample( size, std::move( m_buffer ) );
+		m_layout.extent->x = m_buffer->getHeight();
+		m_layout.extent->y = m_buffer->getWidth();
+		m_layout.format = m_buffer->getFormat();
 		CU_CheckInvariants();
 		return *this;
 	}

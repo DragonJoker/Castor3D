@@ -238,9 +238,9 @@ namespace castor
 		 *\~french
 		 *\return		Un clone de ce buffer.
 		 */
-		std::shared_ptr< PxBufferBase > clone()const
+		PxBufferBaseUPtr clone()const
 		{
-			return std::make_shared< PxBufferBase >( *this );
+			return castor::makeUnique< PxBufferBase >( *this );
 		}
 		/**
 		*\~english
@@ -358,6 +358,43 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Creates a buffer with the given data.
+		 *\remarks		Interruptible version.
+		 *\param[in]	options			The convertion options.
+		 *\param[in]	interrupt		Tells if the convertion is to be interrupted.
+		 *\param[in]	size			Buffer dimensions.
+		 *\param[in]	layers			Buffer layers (or slices).
+		 *\param[in]	levels			Buffer mip levels.
+		 *\param[in]	wantedFormat	Pixels format.
+		 *\param[in]	buffer			Data buffer.
+		 *\param[in]	bufferFormat	Data buffer's pixels format.
+		 *\param[in]	bufferAlign		The alignment of the source buffer.
+		 *\return		The created buffer.
+		 *\~french
+		 *\brief		Crée un buffer avec les données voulues.
+		 *\remarks		Version interruptible.
+		 *\param[in]	options			Les options de conversion.
+		 *\param[in]	interrupt		Dit si la conversion est à interrompre.
+		 *\param[in]	size			Dimensions du buffer.
+		 *\param[in]	layers			Couches du buffer (layers ou slices).
+		 *\param[in]	levels			Niveaux de mip du buffer.
+		 *\param[in]	wantedFormat	Format des pixels du buffer.
+		 *\param[in]	buffer			Buffer de données.
+		 *\param[in]	bufferFormat	Format des pixels du buffer de données.
+		 *\param[in]	bufferAlign		L'alignement mémoire du buffer source.
+		 *\return		Le buffer créé.
+		 */
+		CU_API static PxBufferBaseUPtr create( PxBufferConvertOptions const * options
+			, std::atomic_bool const * interrupt
+			, Size const & size
+			, uint32_t layers
+			, uint32_t levels
+			, PixelFormat wantedFormat
+			, uint8_t const * buffer = nullptr
+			, PixelFormat bufferFormat = PixelFormat::eR8G8B8A8_UNORM
+			, uint32_t bufferAlign = 0u );
+		/**
+		 *\~english
+		 *\brief		Creates a buffer with the given data.
 		 *\param[in]	options			The convertion options.
 		 *\param[in]	size			Buffer dimensions.
 		 *\param[in]	layers			Buffer layers (or slices).
@@ -379,14 +416,25 @@ namespace castor
 		 *\param[in]	bufferAlign		L'alignement mémoire du buffer source.
 		 *\return		Le buffer créé.
 		 */
-		CU_API static PxBufferBaseSPtr create( PxBufferConvertOptions const * options
+		CU_API static PxBufferBaseUPtr create( PxBufferConvertOptions const * options
 			, Size const & size
 			, uint32_t layers
 			, uint32_t levels
 			, PixelFormat wantedFormat
 			, uint8_t const * buffer = nullptr
 			, PixelFormat bufferFormat = PixelFormat::eR8G8B8A8_UNORM
-			, uint32_t bufferAlign = 0u );
+			, uint32_t bufferAlign = 0u )
+		{
+			return create( options
+				, nullptr
+				, size
+				, layers
+				, levels
+				, wantedFormat
+				, buffer
+				, bufferFormat
+				, bufferAlign );
+		}
 		/**
 		 *\~english
 		 *\brief		Creates a buffer with the given data.
@@ -409,7 +457,7 @@ namespace castor
 		 *\param[in]	bufferAlign		L'alignement mémoire du buffer source.
 		 *\return		Le buffer créé.
 		 */
-		CU_API static PxBufferBaseSPtr create( Size const & size
+		CU_API static PxBufferBaseUPtr create( Size const & size
 			, uint32_t layers
 			, uint32_t levels
 			, PixelFormat wantedFormat
@@ -421,6 +469,46 @@ namespace castor
 				, size
 				, layers
 				, levels
+				, wantedFormat
+				, buffer
+				, bufferFormat
+				, bufferAlign );
+		}
+		/**
+		 *\~english
+		 *\brief		Creates a buffer with the given data.
+		 *\param[in]	options			The convertion options.
+		 *\param[in]	interrupt		Tells if the convertion is to be interrupted.
+		 *\param[in]	size			Buffer dimensions.
+		 *\param[in]	wantedFormat	Pixels format.
+		 *\param[in]	buffer			Data buffer.
+		 *\param[in]	bufferFormat	Data buffer's pixels format.
+		 *\param[in]	bufferAlign		The alignment of the source buffer.
+		 *\return		The created buffer.
+		 *\~french
+		 *\brief		Crée un buffer avec les données voulues.
+		 *\param[in]	options			Les options de conversion.
+		 *\param[in]	interrupt		Dit si la conversion est à interrompre.
+		 *\param[in]	size			Dimensions du buffer.
+		 *\param[in]	wantedFormat	Format des pixels du buffer.
+		 *\param[in]	buffer			Buffer de données.
+		 *\param[in]	bufferFormat	Format des pixels du buffer de données.
+		 *\param[in]	bufferAlign		L'alignement mémoire du buffer source.
+		 *\return		Le buffer créé.
+		 */
+		CU_API static PxBufferBaseUPtr create( PxBufferConvertOptions const * options
+			, std::atomic_bool const * interrupt
+			, Size const & size
+			, PixelFormat wantedFormat
+			, uint8_t const * buffer = nullptr
+			, PixelFormat bufferFormat = PixelFormat::eR8G8B8A8_UNORM
+			, uint32_t bufferAlign = 0u )
+		{
+			return create( options
+				, interrupt
+				, size
+				, 1u
+				, 1u
 				, wantedFormat
 				, buffer
 				, bufferFormat
@@ -446,7 +534,7 @@ namespace castor
 		 *\param[in]	bufferAlign		L'alignement mémoire du buffer source.
 		 *\return		Le buffer créé.
 		 */
-		CU_API static PxBufferBaseSPtr create( PxBufferConvertOptions const * options
+		CU_API static PxBufferBaseUPtr create( PxBufferConvertOptions const * options
 			, Size const & size
 			, PixelFormat wantedFormat
 			, uint8_t const * buffer = nullptr
@@ -480,244 +568,13 @@ namespace castor
 		 *\param[in]	bufferAlign		L'alignement mémoire du buffer source.
 		 *\return		Le buffer créé.
 		 */
-		CU_API static PxBufferBaseSPtr create( Size const & size
+		CU_API static PxBufferBaseUPtr create( Size const & size
 			, PixelFormat wantedFormat
 			, uint8_t const * buffer = nullptr
 			, PixelFormat bufferFormat = PixelFormat::eR8G8B8A8_UNORM
 			, uint32_t bufferAlign = 0u )
 		{
 			return create( nullptr
-				, size
-				, 1u
-				, 1u
-				, wantedFormat
-				, buffer
-				, bufferFormat
-				, bufferAlign );
-		}
-		/**
-		 *\~english
-		 *\brief		Creates a buffer with the given data.
-		 *\remarks		Interruptible version.
-		 *\param[in]	options			The convertion options.
-		 *\param[in]	interrupt		Tells if the convertion is to be interrupted.
-		 *\param[in]	size			Buffer dimensions.
-		 *\param[in]	layers			Buffer layers (or slices).
-		 *\param[in]	levels			Buffer mip levels.
-		 *\param[in]	wantedFormat	Pixels format.
-		 *\param[in]	buffer			Data buffer.
-		 *\param[in]	bufferFormat	Data buffer's pixels format.
-		 *\param[in]	bufferAlign		The alignment of the source buffer.
-		 *\return		The created buffer.
-		 *\~french
-		 *\brief		Crée un buffer avec les données voulues.
-		 *\remarks		Version interruptible.
-		 *\param[in]	options			Les options de conversion.
-		 *\param[in]	interrupt		Dit si la conversion est à interrompre.
-		 *\param[in]	size			Dimensions du buffer.
-		 *\param[in]	layers			Couches du buffer (layers ou slices).
-		 *\param[in]	levels			Niveaux de mip du buffer.
-		 *\param[in]	wantedFormat	Format des pixels du buffer.
-		 *\param[in]	buffer			Buffer de données.
-		 *\param[in]	bufferFormat	Format des pixels du buffer de données.
-		 *\param[in]	bufferAlign		L'alignement mémoire du buffer source.
-		 *\return		Le buffer créé.
-		 */
-		CU_API static PxBufferBaseUPtr createUnique( PxBufferConvertOptions const * options
-			, std::atomic_bool const * interrupt
-			, Size const & size
-			, uint32_t layers
-			, uint32_t levels
-			, PixelFormat wantedFormat
-			, uint8_t const * buffer = nullptr
-			, PixelFormat bufferFormat = PixelFormat::eR8G8B8A8_UNORM
-			, uint32_t bufferAlign = 0u );
-		/**
-		 *\~english
-		 *\brief		Creates a buffer with the given data.
-		 *\param[in]	options			The convertion options.
-		 *\param[in]	size			Buffer dimensions.
-		 *\param[in]	layers			Buffer layers (or slices).
-		 *\param[in]	levels			Buffer mip levels.
-		 *\param[in]	wantedFormat	Pixels format.
-		 *\param[in]	buffer			Data buffer.
-		 *\param[in]	bufferFormat	Data buffer's pixels format.
-		 *\param[in]	bufferAlign		The alignment of the source buffer.
-		 *\return		The created buffer.
-		 *\~french
-		 *\brief		Crée un buffer avec les données voulues.
-		 *\param[in]	options			Les options de conversion.
-		 *\param[in]	size			Dimensions du buffer.
-		 *\param[in]	layers			Couches du buffer (layers ou slices).
-		 *\param[in]	levels			Niveaux de mip du buffer.
-		 *\param[in]	wantedFormat	Format des pixels du buffer.
-		 *\param[in]	buffer			Buffer de données.
-		 *\param[in]	bufferFormat	Format des pixels du buffer de données.
-		 *\param[in]	bufferAlign		L'alignement mémoire du buffer source.
-		 *\return		Le buffer créé.
-		 */
-		CU_API static PxBufferBaseUPtr createUnique( PxBufferConvertOptions const * options
-			, Size const & size
-			, uint32_t layers
-			, uint32_t levels
-			, PixelFormat wantedFormat
-			, uint8_t const * buffer = nullptr
-			, PixelFormat bufferFormat = PixelFormat::eR8G8B8A8_UNORM
-			, uint32_t bufferAlign = 0u )
-		{
-			return createUnique( options
-				, nullptr
-				, size
-				, layers
-				, levels
-				, wantedFormat
-				, buffer
-				, bufferFormat
-				, bufferAlign );
-		}
-		/**
-		 *\~english
-		 *\brief		Creates a buffer with the given data.
-		 *\param[in]	size			Buffer dimensions.
-		 *\param[in]	layers			Buffer layers (or slices).
-		 *\param[in]	levels			Buffer mip levels.
-		 *\param[in]	wantedFormat	Pixels format.
-		 *\param[in]	buffer			Data buffer.
-		 *\param[in]	bufferFormat	Data buffer's pixels format.
-		 *\param[in]	bufferAlign		The alignment of the source buffer.
-		 *\return		The created buffer.
-		 *\~french
-		 *\brief		Crée un buffer avec les données voulues.
-		 *\param[in]	size			Dimensions du buffer.
-		 *\param[in]	layers			Couches du buffer (layers ou slices).
-		 *\param[in]	levels			Niveaux de mip du buffer.
-		 *\param[in]	wantedFormat	Format des pixels du buffer.
-		 *\param[in]	buffer			Buffer de données.
-		 *\param[in]	bufferFormat	Format des pixels du buffer de données.
-		 *\param[in]	bufferAlign		L'alignement mémoire du buffer source.
-		 *\return		Le buffer créé.
-		 */
-		CU_API static PxBufferBaseUPtr createUnique( Size const & size
-			, uint32_t layers
-			, uint32_t levels
-			, PixelFormat wantedFormat
-			, uint8_t const * buffer = nullptr
-			, PixelFormat bufferFormat = PixelFormat::eR8G8B8A8_UNORM
-			, uint32_t bufferAlign = 0u )
-		{
-			return createUnique( nullptr
-				, nullptr
-				, size
-				, layers
-				, levels
-				, wantedFormat
-				, buffer
-				, bufferFormat
-				, bufferAlign );
-		}
-		/**
-		 *\~english
-		 *\brief		Creates a buffer with the given data.
-		 *\param[in]	options			The convertion options.
-		 *\param[in]	interrupt		Tells if the convertion is to be interrupted.
-		 *\param[in]	size			Buffer dimensions.
-		 *\param[in]	wantedFormat	Pixels format.
-		 *\param[in]	buffer			Data buffer.
-		 *\param[in]	bufferFormat	Data buffer's pixels format.
-		 *\param[in]	bufferAlign		The alignment of the source buffer.
-		 *\return		The created buffer.
-		 *\~french
-		 *\brief		Crée un buffer avec les données voulues.
-		 *\param[in]	options			Les options de conversion.
-		 *\param[in]	interrupt		Dit si la conversion est à interrompre.
-		 *\param[in]	size			Dimensions du buffer.
-		 *\param[in]	wantedFormat	Format des pixels du buffer.
-		 *\param[in]	buffer			Buffer de données.
-		 *\param[in]	bufferFormat	Format des pixels du buffer de données.
-		 *\param[in]	bufferAlign		L'alignement mémoire du buffer source.
-		 *\return		Le buffer créé.
-		 */
-		CU_API static PxBufferBaseUPtr createUnique( PxBufferConvertOptions const * options
-			, std::atomic_bool const * interrupt
-			, Size const & size
-			, PixelFormat wantedFormat
-			, uint8_t const * buffer = nullptr
-			, PixelFormat bufferFormat = PixelFormat::eR8G8B8A8_UNORM
-			, uint32_t bufferAlign = 0u )
-		{
-			return createUnique( options
-				, interrupt
-				, size
-				, 1u
-				, 1u
-				, wantedFormat
-				, buffer
-				, bufferFormat
-				, bufferAlign );
-		}
-		/**
-		 *\~english
-		 *\brief		Creates a buffer with the given data.
-		 *\param[in]	options			The convertion options.
-		 *\param[in]	size			Buffer dimensions.
-		 *\param[in]	wantedFormat	Pixels format.
-		 *\param[in]	buffer			Data buffer.
-		 *\param[in]	bufferFormat	Data buffer's pixels format.
-		 *\param[in]	bufferAlign		The alignment of the source buffer.
-		 *\return		The created buffer.
-		 *\~french
-		 *\brief		Crée un buffer avec les données voulues.
-		 *\param[in]	options			Les options de conversion.
-		 *\param[in]	size			Dimensions du buffer.
-		 *\param[in]	wantedFormat	Format des pixels du buffer.
-		 *\param[in]	buffer			Buffer de données.
-		 *\param[in]	bufferFormat	Format des pixels du buffer de données.
-		 *\param[in]	bufferAlign		L'alignement mémoire du buffer source.
-		 *\return		Le buffer créé.
-		 */
-		CU_API static PxBufferBaseUPtr createUnique( PxBufferConvertOptions const * options
-			, Size const & size
-			, PixelFormat wantedFormat
-			, uint8_t const * buffer = nullptr
-			, PixelFormat bufferFormat = PixelFormat::eR8G8B8A8_UNORM
-			, uint32_t bufferAlign = 0u )
-		{
-			return createUnique( options
-				, nullptr
-				, size
-				, 1u
-				, 1u
-				, wantedFormat
-				, buffer
-				, bufferFormat
-				, bufferAlign );
-		}
-		/**
-		 *\~english
-		 *\brief		Creates a buffer with the given data.
-		 *\param[in]	size			Buffer dimensions.
-		 *\param[in]	wantedFormat	Pixels format.
-		 *\param[in]	buffer			Data buffer.
-		 *\param[in]	bufferFormat	Data buffer's pixels format.
-		 *\param[in]	bufferAlign		The alignment of the source buffer.
-		 *\return		The created buffer.
-		 *\~french
-		 *\brief		Crée un buffer avec les données voulues.
-		 *\param[in]	size			Dimensions du buffer.
-		 *\param[in]	wantedFormat	Format des pixels du buffer.
-		 *\param[in]	buffer			Buffer de données.
-		 *\param[in]	bufferFormat	Format des pixels du buffer de données.
-		 *\param[in]	bufferAlign		L'alignement mémoire du buffer source.
-		 *\return		Le buffer créé.
-		 */
-		CU_API static PxBufferBaseUPtr createUnique( Size const & size
-			, PixelFormat wantedFormat
-			, uint8_t const * buffer = nullptr
-			, PixelFormat bufferFormat = PixelFormat::eR8G8B8A8_UNORM
-			, uint32_t bufferAlign = 0u )
-		{
-			return createUnique( nullptr
-				, nullptr
 				, size
 				, 1u
 				, 1u

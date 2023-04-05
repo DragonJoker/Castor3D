@@ -36,7 +36,7 @@ namespace castor
 	ImageLayout DataImageLoader::load( String const & imageFormat
 		, uint8_t const * input
 		, uint32_t size
-		, PxBufferBaseSPtr & outbuffer )const
+		, PxBufferBaseUPtr & outbuffer )const
 	{
 		auto format = getFormatByName( imageFormat );
 		auto bitsize = getBytesPerPixel( format );

@@ -34,7 +34,7 @@ namespace castor
 	ImageLayout XpmImageLoader::load( String const & CU_UnusedParam( imageFormat )
 		, uint8_t const * input
 		, uint32_t size
-		, PxBufferBaseSPtr & outbuffer )const
+		, PxBufferBaseUPtr & outbuffer )const
 	{
 		auto data = reinterpret_cast< char * const * >( input );
 		uint32_t coloursCount = 0;
@@ -95,8 +95,9 @@ namespace castor
 			} );
 
 		// Parse image
-		auto pixels = std::static_pointer_cast< PxBuffer< PixelFormat::eR8G8B8_UNORM > >( PxBufferBase::create( imgSize, PixelFormat::eR8G8B8_UNORM ) );
-		auto buffer = pixels->begin();
+		auto ppixels = PxBufferBase::create( imgSize, PixelFormat::eR8G8B8_UNORM );
+		auto & pixels = static_cast< PxBuffer< PixelFormat::eR8G8B8_UNORM > & >( *ppixels );
+		auto buffer = pixels.begin();
 
 		for ( auto it = &data[1 + coloursCount]; it != &data[1 + coloursCount + h]; ++it )
 		{
@@ -110,10 +111,10 @@ namespace castor
 			}
 		}
 
-		outbuffer = PxBufferBase::create( pixels->getDimensions()
-			, pixels->getFormat()
-			, pixels->getConstPtr()
-			, pixels->getFormat() );
+		outbuffer = PxBufferBase::create( pixels.getDimensions()
+			, pixels.getFormat()
+			, pixels.getConstPtr()
+			, pixels.getFormat() );
 		return ImageLayout{ ImageLayout::e2D, *outbuffer };
 	}
 }

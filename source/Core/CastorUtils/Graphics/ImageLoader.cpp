@@ -29,7 +29,7 @@ namespace castor
 				return image;
 			}
 
-			auto buffer = image.getPixels();
+			auto buffer = image.getPixels()->clone();
 			auto path = image.getPath();
 			auto name = image.getName();
 			auto layout = image.getLayout();
@@ -69,7 +69,7 @@ namespace castor
 		, uint8_t const * data
 		, uint32_t size )const
 	{
-		PxBufferBaseSPtr buffer;
+		PxBufferBaseUPtr buffer;
 		auto layout = load( imageFormat, data, size, buffer );
 		return Image{ name, imagePath, layout, std::move( buffer ) };
 	}

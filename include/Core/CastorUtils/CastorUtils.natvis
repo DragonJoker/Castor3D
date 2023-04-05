@@ -205,6 +205,7 @@
     <Expand>
       <Item Name="name">m_name</Item>
       <Item Name="buffer">m_buffer</Item>
+      <Item Name="layout">m_layout</Item>
       <Item Name="file">m_pathFile</Item>
     </Expand>
   </Type>
@@ -219,6 +220,7 @@
       <Item Name="layers">m_layers</Item>
       <Item Name="levels">m_levels</Item>
       <Item Name="align">m_align</Item>
+      <Item Name="tiles">m_tiles</Item>
     </Expand>
   </Type>
 

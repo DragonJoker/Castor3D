@@ -101,15 +101,14 @@ namespace castor3d
 			auto image = std::make_unique< ashes::Image >( *device, result.image, result.imageId.data->info );
 			auto imagePath = Engine::getEngineDirectory() / cuT( "Core" ) / cuT( "brdf.png" );
 			castor::ImageResPtr created;
-			castor::ImageResPtr img = engine.tryAddImage( cuT( "BRDF" )
+			auto img = engine.tryAddImage( cuT( "BRDF" )
 				, true
 				, created
-				, castor::ImageCreateParams{ imagePath, { false, false, false } } );
-			auto buffer = img.lock()->getPixels();
-			buffer = castor::PxBufferBase::create( buffer->getDimensions()
+				, castor::ImageCreateParams{ imagePath, { false, false, false } } ).lock();
+			auto buffer = castor::PxBufferBase::create( img->getPixels()->getDimensions()
 				, castor::PixelFormat::eR8G8B8A8_UNORM
-				, buffer->getConstPtr()
-				, buffer->getFormat() );
+				, img->getPixels()->getConstPtr()
+				, img->getPixels()->getFormat() );
 			auto view = image->createView( VK_IMAGE_VIEW_TYPE_2D, result.getFormat() );
 			auto staging = device->createStagingTexture( VK_FORMAT_R8G8B8A8_UNORM
 				, makeExtent2D( buffer->getDimensions() ) );

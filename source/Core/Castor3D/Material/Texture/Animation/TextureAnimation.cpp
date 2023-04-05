@@ -53,8 +53,6 @@ namespace castor3d
 					++tile;
 				}
 			}
-
-			
 		}
 	}
 

@@ -179,11 +179,11 @@ namespace GuiCommon
 			{
 				auto buffer = m_loader->load( name
 					, make_Path( filename.GetFullPath() )
-					, {} ).getPixels();
+					, {} ).getPixels()->clone();
 
 				if ( castor::isCompressed( buffer->getFormat() ) )
 				{
-					buffer = castor::decompressBuffer( buffer );
+					buffer = castor::decompressBuffer( buffer.get() );
 				}
 
 				if ( buffer->getFormat() != castor::PixelFormat::eR8G8B8A8_UNORM )

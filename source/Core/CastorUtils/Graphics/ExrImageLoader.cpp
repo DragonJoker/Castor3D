@@ -15,7 +15,7 @@ namespace castor
 
 	namespace exrl
 	{
-		static PxBufferBaseSPtr doLoad32BitsPerChannel( uint8_t const * input
+		static PxBufferBaseUPtr doLoad32BitsPerChannel( uint8_t const * input
 			, uint32_t size )
 		{
 			const char * error{ nullptr };
@@ -35,14 +35,10 @@ namespace castor
 				CU_LoaderError( String( cuT( "Can't load image:\n" ) ) + msg );
 			}
 
-			PxBufferBaseSPtr result;
-
-			PixelFormat format;
-			format = PixelFormat::eR32G32B32A32_SFLOAT;
-			result = PxBufferBase::create( Size{ uint32_t( w ), uint32_t( h ) }
-				, format
+			auto result = PxBufferBase::create( Size{ uint32_t( w ), uint32_t( h ) }
+				, PixelFormat::eR32G32B32A32_SFLOAT
 				, reinterpret_cast< uint8_t * >( data )
-				, format );
+				, PixelFormat::eR32G32B32A32_SFLOAT );
 			result->flip();
 			free( data );
 
@@ -75,7 +71,7 @@ namespace castor
 	ImageLayout ExrImageLoader::load( String const & imageFormat
 		, uint8_t const * data
 		, uint32_t size
-		, PxBufferBaseSPtr & buffer )const
+		, PxBufferBaseUPtr & buffer )const
 	{
 		if ( string::upperCase( imageFormat ).find( cuT( "EXR" ) ) != String::npos )
 		{

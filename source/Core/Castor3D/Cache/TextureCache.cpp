@@ -75,7 +75,7 @@ namespace castor3d
 				{
 					pixelFormat = getPixelFormat( rhsComponentFormat
 						, getPixelComponents( lhsDstMask | rhsDstMask ) );
-					lhsBuffer = castor::PxBufferBase::createUnique( dimensions
+					lhsBuffer = castor::PxBufferBase::create( dimensions
 						, getPixelFormat( rhsComponentFormat, getComponents( lhsBuffer->getFormat() ) )
 						, lhsBuffer->getConstPtr()
 						, lhsBuffer->getFormat()
@@ -85,7 +85,7 @@ namespace castor3d
 				{
 					pixelFormat = getPixelFormat( lhsComponentFormat
 						, getPixelComponents( lhsDstMask | rhsDstMask ) );
-					rhsBuffer = castor::PxBufferBase::createUnique( dimensions
+					rhsBuffer = castor::PxBufferBase::create( dimensions
 						, getPixelFormat( lhsComponentFormat, getComponents( rhsBuffer->getFormat() ) )
 						, rhsBuffer->getConstPtr()
 						, rhsBuffer->getFormat()
@@ -101,7 +101,7 @@ namespace castor3d
 			// Merge the two buffers into one
 			auto lhsComponents = getPixelComponents( lhsSrcMask );
 			auto rhsComponents = getPixelComponents( rhsSrcMask );
-			auto result = castor::PxBufferBase::createUnique( dimensions
+			auto result = castor::PxBufferBase::create( dimensions
 				, pixelFormat );
 			log::debug << cuT( "Copying LHS image components to result.\n" );
 			copyBufferComponents( lhsComponents
@@ -149,7 +149,7 @@ namespace castor3d
 			if ( buffer->getFormat() != dstFormat )
 			{
 				auto flipped = buffer->isFlipped();
-				buffer = castor::PxBufferBase::createUnique( buffer->getDimensions()
+				buffer = castor::PxBufferBase::create( buffer->getDimensions()
 					, buffer->getLayers()
 					, buffer->getLevels()
 					, dstFormat
@@ -193,7 +193,7 @@ namespace castor3d
 			auto format = ( ( isSRGBFormat( image.getPixels()->getFormat() ) && allowSRGB )
 				? image.getPixels()->getFormat()
 				: getNonSRGBFormat( image.getPixels()->getFormat() ) );
-			auto buffer = castor::PxBufferBase::createUnique( image.getPixels()->getDimensions()
+			auto buffer = castor::PxBufferBase::create( image.getPixels()->getDimensions()
 				, image.getPixels()->getLayers()
 				, image.getPixels()->getLevels()
 				, format
@@ -283,7 +283,7 @@ namespace castor3d
 				&& allowCompression )
 			{
 				log::debug << ( name + cuT( " - Compressing result.\n" ) );
-				buffer = castor::PxBufferBase::createUnique( &loader.getOptions()
+				buffer = castor::PxBufferBase::create( &loader.getOptions()
 					, &interrupted
 					, buffer->getDimensions()
 					, compressedFormat

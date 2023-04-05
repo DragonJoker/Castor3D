@@ -180,17 +180,23 @@ namespace GuiCommon
 		}
 	}
 
-	void createBitmapFromBuffer( castor::PxBufferBaseSPtr buffer, bool flip, wxBitmap & bitmap )
+	void createBitmapFromBuffer( castor::PxBufferBaseRPtr buffer, bool flip, wxBitmap & bitmap )
 	{
+		castor::PxBufferBaseUPtr buf;
+
 		if ( buffer->getFormat() != castor::PixelFormat::eR8G8B8A8_UNORM )
 		{
-			buffer = castor::PxBufferBase::create( buffer->getDimensions()
+			buf = castor::PxBufferBase::create( buffer->getDimensions()
 				, castor::PixelFormat::eR8G8B8A8_UNORM
 				, buffer->getConstPtr()
 				, buffer->getFormat() );
 		}
+		else
+		{
+			buf = buffer->clone();
+		}
 
-		createBitmapFromBuffer( buffer->getConstPtr(), buffer->getWidth(), buffer->getHeight(), flip, bitmap );
+		createBitmapFromBuffer( buf->getConstPtr(), buf->getWidth(), buf->getHeight(), flip, bitmap );
 	}
 
 	void createBitmapFromBuffer( castor3d::TextureUnitSPtr unit, bool flip, wxBitmap & bitmap )

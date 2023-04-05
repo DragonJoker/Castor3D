@@ -171,11 +171,11 @@ namespace test_launcher
 			}
 		}
 
-		void doCreateBitmapFromBuffer( castor::PxBufferBaseSPtr input
+		void doCreateBitmapFromBuffer( castor::PxBufferBaseRPtr input
 			, bool flip
 			, wxBitmap & output )
 		{
-			castor::PxBufferBaseSPtr buffer;
+			castor::PxBufferBaseUPtr buffer{};
 
 			if ( input->getFormat() != castor::PixelFormat::eR8G8B8A8_UNORM )
 			{
@@ -186,7 +186,7 @@ namespace test_launcher
 			}
 			else
 			{
-				buffer = input;
+				buffer = input->clone();
 			}
 
 			doCreateBitmapFromBuffer( buffer->getConstPtr()
