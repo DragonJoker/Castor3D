@@ -40,22 +40,22 @@ namespace castor
 
 				switch ( channels )
 				{
-				case 1:
+				case STBI_grey:
 					format = PixelFormat::eR8_SRGB;
 					break;
-				case 2:
+				case STBI_grey_alpha:
 					format = PixelFormat::eR8G8_SRGB;
 					break;
-				case 3:
+				case STBI_rgb:
 					format = PixelFormat::eR8G8B8_SRGB;
 					break;
-				case 4:
+				case STBI_rgb_alpha:
 				default:
 					format = PixelFormat::eR8G8B8A8_SRGB;
 					break;
 				}
 
-				result = PxBufferBase::create( Size{ uint32_t( width ), uint32_t( height ) }
+				result = PxBufferBase::create( { uint32_t( width ), uint32_t( height ) }
 					, format
 					, data
 					, format );

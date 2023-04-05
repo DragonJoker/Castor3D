@@ -57,6 +57,39 @@ namespace castor
 	inline constexpr PixelFormat getSingleComponent( PixelFormat format );
 	/**
 	 *\~english
+	 *\return		\p true if the given pixel format is a int8 one.
+	 *\~french
+	 *\return		\p true si le format donné est un format en int8.
+	 */
+	inline constexpr bool isInt8( PixelFormat format );
+	inline constexpr bool isInt8( VkFormat format )
+	{
+		return isInt8( PixelFormat( format ) );
+	}
+	/**
+	 *\~english
+	 *\return		\p true if the given pixel format is a int16 one.
+	 *\~french
+	 *\return		\p true si le format donné est un format en int16.
+	 */
+	inline constexpr bool isInt16( PixelFormat format );
+	inline constexpr bool isInt16( VkFormat format )
+	{
+		return isInt16( PixelFormat( format ) );
+	}
+	/**
+	 *\~english
+	 *\return		\p true if the given pixel format is a int32 one.
+	 *\~french
+	 *\return		\p true si le format donné est un format en int32.
+	 */
+	inline constexpr bool isInt32( PixelFormat format );
+	inline constexpr bool isInt32( VkFormat format )
+	{
+		return isInt32( PixelFormat( format ) );
+	}
+	/**
+	 *\~english
 	 *\return		\p true if the given pixel format is a floating point one.
 	 *\~french
 	 *\return		\p true si le format donné est un format en nombres flottants.

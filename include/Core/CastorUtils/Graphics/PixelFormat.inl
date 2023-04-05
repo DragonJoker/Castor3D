@@ -532,6 +532,99 @@ namespace castor
 		return result;
 	}
 
+	inline constexpr bool isInt8( PixelFormat format )
+	{
+		return format == PixelFormat::eR8_UNORM
+			|| format == PixelFormat::eR8_SNORM
+			|| format == PixelFormat::eR8_USCALED
+			|| format == PixelFormat::eR8_SSCALED
+			|| format == PixelFormat::eR8_UINT
+			|| format == PixelFormat::eR8_SINT
+			|| format == PixelFormat::eR8_SRGB
+			|| format == PixelFormat::eR8_UNORM
+			|| format == PixelFormat::eR8G8_SNORM
+			|| format == PixelFormat::eR8G8_USCALED
+			|| format == PixelFormat::eR8G8_SSCALED
+			|| format == PixelFormat::eR8G8_UINT
+			|| format == PixelFormat::eR8G8_SINT
+			|| format == PixelFormat::eR8G8_SRGB
+			|| format == PixelFormat::eR8G8B8_UNORM
+			|| format == PixelFormat::eR8G8B8_SNORM
+			|| format == PixelFormat::eR8G8B8_USCALED
+			|| format == PixelFormat::eR8G8B8_SSCALED
+			|| format == PixelFormat::eR8G8B8_UINT
+			|| format == PixelFormat::eR8G8B8_SINT
+			|| format == PixelFormat::eR8G8B8_SRGB
+			|| format == PixelFormat::eB8G8R8_UNORM
+			|| format == PixelFormat::eB8G8R8_SNORM
+			|| format == PixelFormat::eB8G8R8_USCALED
+			|| format == PixelFormat::eB8G8R8_SSCALED
+			|| format == PixelFormat::eB8G8R8_UINT
+			|| format == PixelFormat::eB8G8R8_SINT
+			|| format == PixelFormat::eB8G8R8_SRGB
+			|| format == PixelFormat::eR8G8B8A8_UNORM
+			|| format == PixelFormat::eR8G8B8A8_SNORM
+			|| format == PixelFormat::eR8G8B8A8_USCALED
+			|| format == PixelFormat::eR8G8B8A8_SSCALED
+			|| format == PixelFormat::eR8G8B8A8_UINT
+			|| format == PixelFormat::eR8G8B8A8_SINT
+			|| format == PixelFormat::eR8G8B8A8_SRGB
+			|| format == PixelFormat::eB8G8R8A8_UNORM
+			|| format == PixelFormat::eB8G8R8A8_SNORM
+			|| format == PixelFormat::eB8G8R8A8_USCALED
+			|| format == PixelFormat::eB8G8R8A8_SSCALED
+			|| format == PixelFormat::eB8G8R8A8_UINT
+			|| format == PixelFormat::eB8G8R8A8_SINT
+			|| format == PixelFormat::eB8G8R8A8_SRGB
+			|| format == PixelFormat::eA8B8G8R8_UNORM
+			|| format == PixelFormat::eA8B8G8R8_SNORM
+			|| format == PixelFormat::eA8B8G8R8_USCALED
+			|| format == PixelFormat::eA8B8G8R8_SSCALED
+			|| format == PixelFormat::eA8B8G8R8_UINT
+			|| format == PixelFormat::eA8B8G8R8_SINT
+			|| format == PixelFormat::eA8B8G8R8_SRGB;
+	}
+
+	inline constexpr bool isInt16( PixelFormat format )
+	{
+		return format == PixelFormat::eR16_UNORM
+			|| format == PixelFormat::eR16_SNORM
+			|| format == PixelFormat::eR16_USCALED
+			|| format == PixelFormat::eR16_SSCALED
+			|| format == PixelFormat::eR16_UINT
+			|| format == PixelFormat::eR16_SINT
+			|| format == PixelFormat::eR16_UNORM
+			|| format == PixelFormat::eR16G16_SNORM
+			|| format == PixelFormat::eR16G16_USCALED
+			|| format == PixelFormat::eR16G16_SSCALED
+			|| format == PixelFormat::eR16G16_UINT
+			|| format == PixelFormat::eR16G16_SINT
+			|| format == PixelFormat::eR16G16B16_UNORM
+			|| format == PixelFormat::eR16G16B16_SNORM
+			|| format == PixelFormat::eR16G16B16_USCALED
+			|| format == PixelFormat::eR16G16B16_SSCALED
+			|| format == PixelFormat::eR16G16B16_UINT
+			|| format == PixelFormat::eR16G16B16_SINT
+			|| format == PixelFormat::eR16G16B16A16_UNORM
+			|| format == PixelFormat::eR16G16B16A16_SNORM
+			|| format == PixelFormat::eR16G16B16A16_USCALED
+			|| format == PixelFormat::eR16G16B16A16_SSCALED
+			|| format == PixelFormat::eR16G16B16A16_UINT
+			|| format == PixelFormat::eR16G16B16A16_SINT;
+	}
+
+	inline constexpr bool isInt32( PixelFormat format )
+	{
+		return format == PixelFormat::eR32_UINT
+			|| format == PixelFormat::eR32_SINT
+			|| format == PixelFormat::eR32G32_UINT
+			|| format == PixelFormat::eR32G32_SINT
+			|| format == PixelFormat::eR32G32B32_UINT
+			|| format == PixelFormat::eR32G32B32_SINT
+			|| format == PixelFormat::eR32G32B32A32_UINT
+			|| format == PixelFormat::eR32G32B32A32_SINT;
+	}
+
 	inline constexpr bool isFloatingPoint( PixelFormat format )
 	{
 		return format == PixelFormat::eR16G16B16A16_SFLOAT
