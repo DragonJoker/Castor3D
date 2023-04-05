@@ -198,30 +198,30 @@ namespace castor
 		}
 	}
 
-	PxBufferBaseSPtr extractComponent( PxBufferBaseSPtr src
+	PxBufferBaseUPtr extractComponent( PxBufferBaseRPtr src
 		, PixelComponent component )
 	{
-		src = decompressBuffer( src );
-		auto result = PxBufferBase::create( src->getDimensions()
-			, getSingleComponent( src->getFormat() ) );
-		pfext::copyComponent( *src
+		auto decomp = decompressBuffer( src );
+		auto result = PxBufferBase::create( decomp->getDimensions()
+			, getSingleComponent( decomp->getFormat() ) );
+		pfext::copyComponent( *decomp
 			, component
 			, *result
 			, PixelComponent::eRed );
 		return result;
 	}
 
-	PxBufferBaseSPtr extractComponents( PxBufferBaseSPtr src
+	PxBufferBaseUPtr extractComponents( PxBufferBaseRPtr src
 		, PixelComponents components )
 	{
-		src = decompressBuffer( src );
-		auto result = PxBufferBase::create( src->getDimensions()
-			, getPixelFormat( src->getFormat(), components ) );
+		auto decomp = decompressBuffer( src );
+		auto result = PxBufferBase::create( decomp->getDimensions()
+			, getPixelFormat( decomp->getFormat(), components ) );
 		auto dstIndex = 0u;
 
 		for ( auto component : components )
 		{
-			pfext::copyComponent( *src
+			pfext::copyComponent( *decomp
 				, component
 				, *result
 				, getIndexComponent( dstIndex, result->getFormat() ) );

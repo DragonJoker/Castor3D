@@ -18,7 +18,7 @@ namespace GuiCommon
 			virtual bool StartRecord( castor::Size const & size, int wantedFPS ) = 0;
 			virtual bool IsRecording() = 0;
 			virtual bool UpdateTime() = 0;
-			virtual bool RecordFrame( castor::PxBufferBaseSPtr buffer ) = 0;
+			virtual bool RecordFrame( castor::PxBufferBaseRPtr buffer ) = 0;
 			virtual void StopRecord() = 0;
 		};
 
@@ -47,7 +47,7 @@ namespace GuiCommon
 			return m_impl->UpdateTime();
 		}
 
-		inline bool RecordFrame( castor::PxBufferBaseSPtr buffer )
+		inline bool RecordFrame( castor::PxBufferBaseRPtr buffer )
 		{
 			return m_impl->RecordFrame( buffer );
 		}

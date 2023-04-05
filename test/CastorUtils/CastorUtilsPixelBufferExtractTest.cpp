@@ -101,7 +101,7 @@ namespace
 	}
 
 	template< PixelFormat PfT >
-	PxBufferBaseSPtr createPixelBufferT()
+	PxBufferBaseUPtr createPixelBufferT()
 	{
 		auto data = createPixelDataT< PfT >();
 		return PxBufferBase::create( { 4u, 4u }
@@ -115,8 +115,8 @@ namespace
 		, PixelComponents components )
 	{
 		CT_WHEN_EX( test, "components == " + getName( components ) );
-		PxBufferBaseSPtr src = createPixelBufferT< PfT >();
-		PxBufferBaseSPtr buffer = extractComponents( src, components );
+		PxBufferBaseUPtr src = createPixelBufferT< PfT >();
+		PxBufferBaseUPtr buffer = extractComponents( src.get(), components );
 		auto srcData = src->getConstPtr();
 		auto dstData = buffer->getConstPtr();
 		auto constexpr componentFormat = singleComponentV< PfT >;

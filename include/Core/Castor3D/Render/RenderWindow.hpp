@@ -431,9 +431,9 @@ namespace castor3d
 			return m_skip;
 		}
 
-		castor::PxBufferBaseSPtr getSavedFrame()const
+		castor::PxBufferBaseRPtr getSavedFrame()const
 		{
-			return m_saveBuffer;
+			return m_saveBuffer.get();
 		}
 
 		ashes::Surface const & getSurface()const
@@ -565,7 +565,7 @@ namespace castor3d
 		mutable std::atomic_bool m_initialised{ false };
 		mutable std::atomic_bool m_skip{ false };
 		std::atomic_bool m_loading;
-		castor::PxBufferBaseSPtr m_saveBuffer;
+		castor::PxBufferBaseUPtr m_saveBuffer;
 		PickingSPtr m_picking;
 		castor::Position m_mousePosition;
 		Texture3DTo2DUPtr m_texture3Dto2D;

@@ -500,6 +500,7 @@ namespace castor
 		, m_size{ rhs.m_size }
 		, m_layers{ rhs.m_layers }
 		, m_levels{ rhs.m_levels }
+		, m_tiles{ rhs.m_tiles }
 		, m_buffer{ 0 }
 	{
 		initialise( rhs.getConstPtr(), rhs.getFormat(), rhs.getAlign() );
@@ -516,6 +517,7 @@ namespace castor
 		m_format = rhs.m_format;
 		m_layers = rhs.m_layers;
 		m_levels = rhs.m_levels;
+		m_tiles = rhs.m_tiles;
 		initialise( rhs.m_buffer.data(), rhs.m_format );
 		return * this;
 	}
@@ -619,6 +621,7 @@ namespace castor
 		std::swap( m_size, pixelBuffer.m_size );
 		std::swap( m_layers, pixelBuffer.m_layers );
 		std::swap( m_levels, pixelBuffer.m_levels );
+		std::swap( m_tiles, pixelBuffer.m_tiles );
 		std::swap( m_buffer, pixelBuffer.m_buffer );
 	}
 
@@ -779,27 +782,7 @@ namespace castor
 			+ ptrdiff_t( pxbb::getDataAt( VkFormat( m_format ), x, y, index, level, m_levels, m_align, *this ) );
 	}
 
-	PxBufferBaseSPtr PxBufferBase::create( PxBufferConvertOptions const * options
-		, Size const & size
-		, uint32_t layers
-		, uint32_t levels
-		, PixelFormat wantedFormat
-		, uint8_t const * buffer
-		, PixelFormat bufferFormat
-		, uint32_t bufferAlign )
-	{
-		return std::make_shared< PxBufferBase >( options
-			, nullptr
-			, size
-			, wantedFormat
-			, layers
-			, levels
-			, buffer
-			, bufferFormat
-			, bufferAlign );
-	}
-
-	PxBufferBaseUPtr PxBufferBase::createUnique( PxBufferConvertOptions const * options
+	PxBufferBaseUPtr PxBufferBase::create( PxBufferConvertOptions const * options
 		, std::atomic_bool const * interrupt
 		, Size const & size
 		, uint32_t layers

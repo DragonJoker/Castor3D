@@ -523,10 +523,11 @@ namespace castor3d
 			return stream.str();
 		}
 
-		static castor::PxBufferBaseSPtr adaptBuffer( castor::PxBufferBaseSPtr buffer
+		static castor::PxBufferBaseUPtr adaptBuffer( castor::PxBufferBaseRPtr buffer
 			, uint32_t mipLevels )
 		{
 			auto dstFormat = buffer->getFormat();
+			auto result = buffer->clone();
 
 			switch ( dstFormat )
 			{
@@ -553,26 +554,26 @@ namespace castor3d
 				break;
 			}
 
-			if ( buffer->getFormat() != dstFormat )
+			if ( result->getFormat() != dstFormat )
 			{
-				auto flipped = buffer->isFlipped();
-				buffer = castor::PxBufferBase::create( buffer->getDimensions()
-					, buffer->getLayers()
-					, buffer->getLevels()
+				auto flipped = result->isFlipped();
+				result = castor::PxBufferBase::create( result->getDimensions()
+					, result->getLayers()
+					, result->getLevels()
 					, dstFormat
-					, buffer->getConstPtr()
-					, buffer->getFormat()
-					, buffer->getAlign() );
+					, result->getConstPtr()
+					, result->getFormat()
+					, result->getAlign() );
 
 				if ( flipped )
 				{
-					buffer->flip();
+					result->flip();
 				}
 			}
 
-			buffer->update( buffer->getLayers()
+			result->update( result->getLayers()
 				, mipLevels );
-			return buffer;
+			return result;
 		}
 
 		static castor::Image getFileImage( Engine & engine
@@ -1200,35 +1201,39 @@ namespace castor3d
 		m_static = true;
 	}
 
-	void TextureLayout::setSource( castor::PxBufferBaseSPtr buffer
+	void TextureLayout::setSource( castor::PxBufferBaseUPtr buffer
 		, uint32_t bufferOrigLevels
 		, bool isStatic )
 	{
-		buffer = texlayt::adaptBuffer( buffer, buffer->getLevels() );
-		m_image = { m_image.getName(), castor::ImageLayout{ *buffer }, buffer };
+		buffer = texlayt::adaptBuffer( buffer.get(), buffer->getLevels() );
+		auto layout = castor::ImageLayout{ *buffer };
+		m_image = { m_image.getName(), layout, std::move( buffer ) };
 		doUpdateCreateInfo( m_image.getLayout() );
 		doUpdateMips( false, bufferOrigLevels );
 		m_static = isStatic;
 	}
 
-	void TextureLayout::setSource( castor::PxBufferBaseSPtr buffer
+	void TextureLayout::setSource( castor::PxBufferBaseUPtr buffer
 		, bool isStatic )
 	{
-		setSource( buffer
+		setSource( std::move( buffer )
 			, m_image.getPixels()->getLevels()
 			, isStatic );
 	}
 
 	void TextureLayout::setLayerSource( uint32_t index
-		, castor::PxBufferBaseSPtr buffer
+		, castor::PxBufferBaseUPtr buffer
 		, uint32_t bufferOrigLevels )
 	{
-		buffer = texlayt::adaptBuffer( buffer, buffer->getLevels() );
-		castor::Image srcImage{ texlayt::getBufferName( *buffer ), castor::ImageLayout{ *buffer }, buffer };
+		buffer = texlayt::adaptBuffer( buffer.get(), buffer->getLevels() );
+		auto layout = castor::ImageLayout{ *buffer };
+		auto name = texlayt::getBufferName( *buffer );
+		auto layerBuffer = buffer.get();
+		castor::Image srcImage{ name, layout, std::move( buffer ) };
 		auto & srcLayout = srcImage.getLayout();
 		doUpdateFromFirstImage( 0u, srcLayout );
 		auto & dstLayout = m_image.getLayout();
-		auto src = srcLayout.buffer( *buffer );
+		auto src = srcLayout.buffer( *layerBuffer );
 		auto dst = dstLayout.layerBuffer( m_image.getPxBuffer(), index );
 		CU_Require( src.size() == dst.size() );
 		std::memcpy( dst.data(), src.data(), std::min( src.size(), dst.size() ) );
@@ -1238,10 +1243,10 @@ namespace castor3d
 	}
 
 	void TextureLayout::setLayerSource( uint32_t index
-		, castor::PxBufferBaseSPtr buffer )
+		, castor::PxBufferBaseUPtr buffer )
 	{
 		setLayerSource( index
-			, buffer
+			, std::move( buffer )
 			, m_image.getPixels()->getLevels() );
 	}
 
@@ -1259,7 +1264,7 @@ namespace castor3d
 			, srcMips
 			, { config.allowCompression, config.generateMips, false } );
 		setLayerSource( index
-			, image.getPixels()
+			, image.getPixels()->clone()
 			, srcMips );
 	}
 
@@ -1277,14 +1282,17 @@ namespace castor3d
 
 	void TextureLayout::setLayerMipSource( uint32_t index
 		, uint32_t level
-		, castor::PxBufferBaseSPtr buffer )
+		, castor::PxBufferBaseUPtr buffer )
 	{
-		buffer = texlayt::adaptBuffer( buffer, 1u );
-		castor::Image srcImage{ texlayt::getBufferName( *buffer ), castor::ImageLayout{ *buffer }, buffer };
+		buffer = texlayt::adaptBuffer( buffer.get(), 1u );
+		auto layout = castor::ImageLayout{ *buffer };
+		auto name = texlayt::getBufferName( *buffer );
+		auto mipBuffer = buffer.get();
+		castor::Image srcImage{ name, layout, std::move( buffer ) };
 		auto & srcLayout = srcImage.getLayout();
 		auto & dstLayout = m_image.getLayout();
 		doUpdateFromFirstImage( level, srcLayout );
-		auto src = srcLayout.buffer( *buffer );
+		auto src = srcLayout.buffer( *mipBuffer );
 		auto dst = dstLayout.layerMipBuffer( m_image.getPxBuffer(), index, level );
 		CU_Require( src.size() == dst.size() );
 		std::memcpy( dst.data(), src.data(), std::min( src.size(), dst.size() ) );
@@ -1309,7 +1317,7 @@ namespace castor3d
 			, { config.allowCompression, false, false } );
 		setLayerMipSource( index
 			, level
-			, image.getPixels() );
+			, image.getPixels()->clone() );
 	}
 
 	void TextureLayout::setLayerMipSource( uint32_t index
@@ -1327,10 +1335,10 @@ namespace castor3d
 
 	void TextureLayout::setLayerCubeFaceSource( uint32_t layer
 		, CubeMapFace face
-		, castor::PxBufferBaseSPtr buffer )
+		, castor::PxBufferBaseUPtr buffer )
 	{
 		setLayerSource( layer * 6u + uint32_t( face )
-			, buffer );
+			, std::move( buffer ) );
 	}
 
 	void TextureLayout::setLayerCubeFaceSource( uint32_t layer
@@ -1358,11 +1366,11 @@ namespace castor3d
 	void TextureLayout::setLayerCubeFaceMipSource( uint32_t layer
 		, CubeMapFace face
 		, uint32_t level
-		, castor::PxBufferBaseSPtr buffer )
+		, castor::PxBufferBaseUPtr buffer )
 	{
 		setLayerMipSource( layer * 6u + uint32_t( face )
 			, level
-			, buffer );
+			, std::move( buffer ) );
 	}
 
 	void TextureLayout::setLayerCubeFaceMipSource( uint32_t layer

@@ -298,10 +298,10 @@ namespace castor3d
 		 *\~french
 		 *\brief		Définit la source de tout le layout.
 		 */
-		C3D_API void setSource( castor::PxBufferBaseSPtr buffer
+		C3D_API void setSource( castor::PxBufferBaseUPtr buffer
 			, uint32_t bufferOrigLevels
 			, bool isStatic = false );
-		C3D_API void setSource( castor::PxBufferBaseSPtr buffer
+		C3D_API void setSource( castor::PxBufferBaseUPtr buffer
 			, bool isStatic = false );
 		C3D_API void setSource( castor::Path const & folder
 			, castor::Path const & relative
@@ -364,10 +364,10 @@ namespace castor3d
 		 *\brief		Définit la source pour tous les mip levels une couche du layout.
 		 */
 		C3D_API void setLayerSource( uint32_t index
-			, castor::PxBufferBaseSPtr buffer
+			, castor::PxBufferBaseUPtr buffer
 			, uint32_t bufferOrigLevels );
 		C3D_API void setLayerSource( uint32_t index
-			, castor::PxBufferBaseSPtr buffer );
+			, castor::PxBufferBaseUPtr buffer );
 		C3D_API void setLayerSource( uint32_t index
 			, castor::Path const & folder
 			, castor::Path const & relative
@@ -439,7 +439,7 @@ namespace castor3d
 		 */
 		C3D_API void setLayerMipSource( uint32_t index
 			, uint32_t level
-			, castor::PxBufferBaseSPtr buffer );
+			, castor::PxBufferBaseUPtr buffer );
 		C3D_API void setLayerMipSource( uint32_t index
 			, uint32_t level
 			, castor::Path const & folder
@@ -586,7 +586,7 @@ namespace castor3d
 		 */
 		C3D_API void setLayerCubeFaceSource( uint32_t layer
 			, CubeMapFace face
-			, castor::PxBufferBaseSPtr buffer );
+			, castor::PxBufferBaseUPtr buffer );
 		C3D_API void setLayerCubeFaceSource( uint32_t layer
 			, CubeMapFace face
 			, castor::Path const & folder
@@ -629,7 +629,7 @@ namespace castor3d
 		C3D_API void setLayerCubeFaceMipSource( uint32_t layer
 			, CubeMapFace face
 			, uint32_t level
-			, castor::PxBufferBaseSPtr buffer );
+			, castor::PxBufferBaseUPtr buffer );
 		C3D_API void setLayerCubeFaceMipSource( uint32_t layer
 			, CubeMapFace face
 			, uint32_t level

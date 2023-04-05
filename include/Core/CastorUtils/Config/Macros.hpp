@@ -172,41 +172,31 @@ See LICENSE file in root folder
 	using Point##count##name = Point< type, count >;\
 	CU_DeclareSmartPtr( Point##count##name );\
 	CU_DeclareVector( Point##count##name, Point##count##name );\
-	CU_DeclareList( Point##count##name, Point##count##name );\
-	CU_DeclareVector( Point##count##name##SPtr, Point##count##name##Ptr );\
-	CU_DeclareList( Point##count##name##SPtr, Point##count##name##Ptr )
+	CU_DeclareList( Point##count##name, Point##count##name )
 
 #define CU_DeclareCoord( type, count, name )\
 	using Coords##count##name = Coords< type, count >;\
 	CU_DeclareSmartPtr( Coords##count##name );\
 	CU_DeclareVector( Coords##count##name, Coords##count##name );\
-	CU_DeclareList( Coords##count##name, Coords##count##name );\
-	CU_DeclareVector( Coords##count##name##SPtr, Coords##count##name##Ptr );\
-	CU_DeclareList( Coords##count##name##SPtr, Coords##count##name##Ptr )
+	CU_DeclareList( Coords##count##name, Coords##count##name )
 
 #define CU_DeclareConstCoord( type, count, name )\
 	using ConstCoords##count##name = Coords< type const, count >;\
 	CU_DeclareSmartPtr( ConstCoords##count##name );\
 	CU_DeclareVector( ConstCoords##count##name, ConstCoords##count##name );\
-	CU_DeclareList( ConstCoords##count##name, ConstCoords##count##name );\
-	CU_DeclareVector( ConstCoords##count##name##SPtr, ConstCoords##count##name##Ptr );\
-	CU_DeclareList( ConstCoords##count##name##SPtr, ConstCoords##count##name##Ptr )
+	CU_DeclareList( ConstCoords##count##name, ConstCoords##count##name )
 
 #define CU_DeclareMtx( type, rows, cols, name )\
 	using Matrix##rows##x##cols##name = Matrix< type, rows, cols >;\
 	CU_DeclareSmartPtr( Matrix##rows##x##cols##name );\
 	CU_DeclareVector( Matrix##rows##x##cols##name, Matrix##rows##x##cols##name );\
-	CU_DeclareList( Matrix##rows##x##cols##name, Matrix##rows##x##cols##name );\
-	CU_DeclareVector( Matrix##rows##x##cols##name##SPtr, Matrix##rows##x##cols##name##Ptr );\
-	CU_DeclareList( Matrix##rows##x##cols##name##SPtr, Matrix##rows##x##cols##name##Ptr )
+	CU_DeclareList( Matrix##rows##x##cols##name, Matrix##rows##x##cols##name )
 
 #define CU_DeclareSqMtx( type, count, name )\
 	using Matrix##count##x##count##name = SquareMatrix< type, count >;\
 	CU_DeclareSmartPtr( Matrix##count##x##count##name );\
 	CU_DeclareVector( Matrix##count##x##count##name, Matrix##count##x##count##name );\
-	CU_DeclareList( Matrix##count##x##count##name, Matrix##count##x##count##name );\
-	CU_DeclareVector( Matrix##count##x##count##name##SPtr, Matrix##count##x##count##name##Ptr );\
-	CU_DeclareList( Matrix##count##x##count##name##SPtr, Matrix##count##x##count##name##Ptr )
+	CU_DeclareList( Matrix##count##x##count##name, Matrix##count##x##count##name )
 
 #if !defined CU_UnusedParam
 #	define CU_UnusedParam( x )

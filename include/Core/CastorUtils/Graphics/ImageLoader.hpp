@@ -35,7 +35,7 @@ namespace castor
 		CU_API virtual ImageLayout load( String const & imageFormat
 			, uint8_t const * data
 			, uint32_t size
-			, PxBufferBaseSPtr & buffer )const = 0;
+			, PxBufferBaseUPtr & buffer )const = 0;
 		/**
 		 *\~english
 		 *\brief		Loads an image file data.

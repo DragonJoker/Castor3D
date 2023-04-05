@@ -244,15 +244,16 @@ namespace
 	template< PixelFormat PFDst, PixelFormat PFSrc >
 	struct BufferConverter
 	{
-		void operator()( std::shared_ptr< PxBuffer< PFSrc > > source )
+		void operator()( PxBuffer< PFSrc > & source )
 		{
-			std::shared_ptr< PxBuffer< PFDst > > dest = std::static_pointer_cast< PxBuffer< PFDst > >( PxBufferBase::create( source->getDimensions()
+			auto destination = PxBufferBase::create( source.getDimensions()
 				, PixelFormat( PFDst )
-				, source->getPtr()
-				, PFSrc ) );
+				, source.getPtr()
+				, PFSrc );
+			auto dest = static_cast< PxBuffer< PFDst > & >( *destination );
 			auto stream = castor::makeStringStream();
 			stream.width( 20 );
-			stream << "Converted buffer : " << *dest;
+			stream << "Converted buffer : " << dest;
 			Logger::logTrace( stream );
 		}
 	};
@@ -261,15 +262,14 @@ namespace
 	struct BufferConverter< PFSrc, PFSrc >
 	{
 		using PixelBuffer = PxBuffer< PFSrc >;
-		using PixelBufferPtr = std::shared_ptr< PixelBuffer >;
 
-		void operator()( PixelBufferPtr source )
+		void operator()( PixelBuffer & source )
 		{
 		}
 	};
 
 	template< PixelFormat PFDst, PixelFormat PFSrc >
-	void convertBuffer( std::shared_ptr< PxBuffer< PFSrc > > source )
+	void convertBuffer( PxBuffer< PFSrc > & source )
 	{
 		BufferConverter< PFDst, PFSrc >()( source );
 	}
@@ -297,13 +297,14 @@ namespace
 				setB8U( pixel, value++ );
 			}
 
-			auto source = std::static_pointer_cast< PxBuffer< PFSrc > >( PxBufferBase::create( size
+			auto src = PxBufferBase::create( size
 				, PFSrc
 				, buffer.data()
-				, PFSrc ) );
+				, PFSrc );
+			auto & source = static_cast< PxBuffer< PFSrc > & >( *src );
 			auto stream = castor::makeStringStream();
 			stream.width( 20 );
-			stream << "Source buffer : " << *source;
+			stream << "Source buffer : " << source;
 			Logger::logTrace( stream );
 			convertBuffer< PixelFormat::eR8_UNORM >( source );
 			convertBuffer< PixelFormat::eR32_SFLOAT >( source );
@@ -341,13 +342,14 @@ namespace
 				stencil++;
 			}
 
-			auto source = std::static_pointer_cast< PxBuffer< PFSrc > >( PxBufferBase::create( size
+			auto src = PxBufferBase::create( size
 				, PFSrc
 				, buffer.data()
-				, PFSrc ) );
+				, PFSrc );
+			auto & source = static_cast< PxBuffer< PFSrc > & >( *src );
 			auto stream = castor::makeStringStream();
 			stream.width( 20 );
-			stream << "Source buffer : " << *source;
+			stream << "Source buffer : " << source;
 			Logger::logTrace( stream );
 			convertBuffer< PixelFormat::eD16_UNORM >( source );
 			convertBuffer< PixelFormat::eX8_D24_UNORM >( source );
@@ -378,13 +380,14 @@ namespace
 				stencil++;
 			}
 
-			auto source = std::static_pointer_cast< PxBuffer< PFSrc > >( PxBufferBase::create( size
+			auto src = PxBufferBase::create( size
 				, PFSrc
 				, buffer.data()
-				, PFSrc ) );
+				, PFSrc );
+			auto & source = static_cast< PxBuffer< PFSrc > & >( *src );
 			auto stream = castor::makeStringStream();
 			stream.width( 20 );
-			stream << "Source buffer : " << *source;
+			stream << "Source buffer : " << source;
 			Logger::logTrace( stream );
 			convertBuffer< PixelFormat::eD16_UNORM >( source );
 			convertBuffer< PixelFormat::eX8_D24_UNORM >( source );
@@ -413,13 +416,14 @@ namespace
 				setS8U( pixel, value++ );
 			}
 
-			auto source = std::static_pointer_cast< PxBuffer< PFSrc > >( PxBufferBase::create( size
+			auto src = PxBufferBase::create( size
 				, PFSrc
 				, buffer.data()
-				, PFSrc ) );
+				, PFSrc );
+			auto & source = static_cast< PxBuffer< PFSrc > & >( *src );
 			auto stream = castor::makeStringStream();
 			stream.width( 20 );
-			stream << "Source buffer : " << *source;
+			stream << "Source buffer : " << source;
 			Logger::logTrace( stream );
 			convertBuffer< PixelFormat::eD24_UNORM_S8_UINT >( source );
 			convertBuffer< PixelFormat::eS8_UINT >( source );

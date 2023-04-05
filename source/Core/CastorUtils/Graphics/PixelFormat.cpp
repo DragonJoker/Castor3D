@@ -788,9 +788,9 @@ namespace castor
 		}
 	}
 
-	PxBufferBaseSPtr decompressBuffer( PxBufferBaseSPtr src )
+	PxBufferBaseUPtr decompressBuffer( PxBufferBaseRPtr src )
 	{
-		PxBufferBaseSPtr result = src;
+		auto result = src->clone();
 
 		if ( isCompressed( src->getFormat() ) )
 		{
@@ -846,7 +846,7 @@ namespace castor
 
 					if ( !r )
 					{
-						return src;
+						return src->clone();
 					}
 
 					uint32_t blockSize = 8u;

@@ -132,7 +132,7 @@ namespace GuiCommon
 				return result;
 			}
 
-			bool RecordFrame( castor::PxBufferBaseSPtr buffer )override
+			bool RecordFrame( castor::PxBufferBaseRPtr buffer )override
 			{
 				doRecordFrame( buffer );
 				m_saved = clock::now();
@@ -143,7 +143,7 @@ namespace GuiCommon
 		protected:
 			virtual bool doStartRecord( castor::Size const & size, wxString const & name ) = 0;
 			virtual bool doUpdateTime( uint64_t uiTimeDiff ) = 0;
-			virtual void doRecordFrame( castor::PxBufferBaseSPtr buffer ) = 0;
+			virtual void doRecordFrame( castor::PxBufferBaseRPtr buffer ) = 0;
 
 		protected:
 			time_point m_saved;
@@ -423,7 +423,7 @@ namespace GuiCommon
 				return true;
 			}
 
-			void doRecordFrame( castor::PxBufferBaseSPtr inbuffer )override
+			void doRecordFrame( castor::PxBufferBaseRPtr inbuffer )override
 			{
 				if ( IsRecording() )
 				{
@@ -491,7 +491,7 @@ namespace GuiCommon
 				return false;
 			}
 
-			bool RecordFrame( castor::PxBufferBaseSPtr )override
+			bool RecordFrame( castor::PxBufferBaseRPtr )override
 			{
 				return true;
 			}

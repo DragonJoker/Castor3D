@@ -23,7 +23,7 @@ namespace castor
 		};
 
 	public:
-		static PxBufferBaseSPtr generate( uint32_t imgSize )
+		static PxBufferBaseUPtr generate( uint32_t imgSize )
 		{
 			const uint32_t samples = 4096; // 128x128
 
@@ -48,6 +48,8 @@ namespace castor
 				pixel->B = 255;
 				pixel->A = 255;
 			}
+
+			return buffer;
 		}
 	};
 }

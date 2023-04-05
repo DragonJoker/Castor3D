@@ -19,10 +19,10 @@ namespace castor
 
 	namespace stbil
 	{
-		static PxBufferBaseSPtr doLoad8BitsPerChannel( uint8_t const * input
+		static PxBufferBaseUPtr doLoad8BitsPerChannel( uint8_t const * input
 			, uint32_t size )
 		{
-			PxBufferBaseSPtr result;
+			PxBufferBaseUPtr result;
 			int width = 0;
 			int height = 0;
 			int channels = 0;
@@ -44,9 +44,9 @@ namespace castor
 						, isHdr ? PixelFormat::eR8G8_UNORM : PixelFormat::eR8G8_SRGB
 						, data
 						, isHdr ? PixelFormat::eR8G8_UNORM : PixelFormat::eR8G8_SRGB );
-					auto redChannel = castor::extractComponent( result
+					auto redChannel = castor::extractComponent( result.get()
 						, PixelComponent::eRed );
-					auto alphaChannel = castor::extractComponent( result
+					auto alphaChannel = castor::extractComponent( result.get()
 						, PixelComponent::eGreen );
 					result = PxBufferBase::create( { uint32_t( width ), uint32_t( height ) }
 						, isHdr ? PixelFormat::eR8G8B8A8_UNORM : PixelFormat::eR8G8B8A8_SRGB );
@@ -104,10 +104,10 @@ namespace castor
 			return result;
 		}
 
-		static PxBufferBaseSPtr doLoad32BitsPerChannel( uint8_t const * input
+		static PxBufferBaseUPtr doLoad32BitsPerChannel( uint8_t const * input
 			, uint32_t size )
 		{
-			PxBufferBaseSPtr result;
+			PxBufferBaseUPtr result;
 			int width = 0;
 			int height = 0;
 			int channels = 0;
@@ -127,9 +127,9 @@ namespace castor
 						, PixelFormat::eR32G32_SFLOAT
 						, reinterpret_cast< uint8_t * >( data )
 						, PixelFormat::eR32G32_SFLOAT );
-					auto redChannel = castor::extractComponent( result
+					auto redChannel = castor::extractComponent( result.get()
 						, PixelComponent::eRed );
-					auto alphaChannel = castor::extractComponent( result
+					auto alphaChannel = castor::extractComponent( result.get()
 						, PixelComponent::eGreen );
 					result = PxBufferBase::create( { uint32_t( width ), uint32_t( height ) }
 						, PixelFormat::eR32G32B32A32_SFLOAT );
@@ -226,7 +226,7 @@ namespace castor
 	ImageLayout StbImageLoader::load( String const & imageFormat
 		, uint8_t const * data
 		, uint32_t size
-		, PxBufferBaseSPtr & buffer )const
+		, PxBufferBaseUPtr & buffer )const
 	{
 		if ( string::upperCase( imageFormat ).find( cuT( "HDR" ) ) != String::npos )
 		{

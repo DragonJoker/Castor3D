@@ -110,7 +110,7 @@ namespace castor
 	ImageLayout GliImageLoader::load( String const & imageFormat
 		, uint8_t const * data
 		, uint32_t size
-		, PxBufferBaseSPtr & buffer )const
+		, PxBufferBaseUPtr & buffer )const
 	{
 		gli::texture texture;
 		bool flipped = false;

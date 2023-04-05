@@ -385,7 +385,7 @@ namespace castor
 	 *\param[in]	src	Le tampon de pixels compressé.
 	 *\return		Le tampon de pixels décompressé.
 	 */
-	CU_API PxBufferBaseSPtr decompressBuffer( PxBufferBaseSPtr src );
+	CU_API PxBufferBaseUPtr decompressBuffer( PxBufferBaseRPtr src );
 	/**
 	 *\~english
 	 *\brief		Extracts pixel component values from a source buffer holding alpha and puts it in a destination buffer.
@@ -398,7 +398,7 @@ namespace castor
 	 *\param[in]	component	La composante à extraire
 	 *\return		Le tampon contenant la composante extraite, au format castor::PixelFormat::eR8, \p nullptr si la source n'avait pas la coposante voulue.
 	 */
-	CU_API PxBufferBaseSPtr extractComponent( PxBufferBaseSPtr src
+	CU_API PxBufferBaseUPtr extractComponent( PxBufferBaseRPtr src
 		, PixelComponent component );
 	/**
 	 *\~english
@@ -412,7 +412,7 @@ namespace castor
 	 *\param[in]	component	La composante à extraire
 	 *\return		Le tampon contenant la composante extraite, au format castor::PixelFormat::eR8, \p nullptr si la source n'avait pas la coposante voulue.
 	 */
-	CU_API PxBufferBaseSPtr extractComponents( PxBufferBaseSPtr src
+	CU_API PxBufferBaseUPtr extractComponents( PxBufferBaseRPtr src
 		, PixelComponents component );
 	/**
 	 *\~english

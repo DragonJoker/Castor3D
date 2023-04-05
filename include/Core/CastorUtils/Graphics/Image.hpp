@@ -45,7 +45,7 @@ namespace castor
 		CU_API Image( String const & name
 			, Path const & path
 			, ImageLayout layout
-			, PxBufferBaseSPtr buffer = nullptr );
+			, PxBufferBaseUPtr buffer = nullptr );
 		template< PixelFormat PFSrc, PixelFormat PFDst >
 		Image( String const & name
 			, Path const & path
@@ -84,7 +84,7 @@ namespace castor
 
 		Image( String const & name
 			, ImageLayout layout
-			, PxBufferBaseSPtr buffer )
+			, PxBufferBaseUPtr buffer )
 			: Image{ name, {}, layout, std::move( buffer ) }
 		{
 		}
@@ -104,7 +104,7 @@ namespace castor
 		 *\name		Modification.
 		 */
 		//@{
-		CU_API PxBufferBaseSPtr updateLayerLayout( Size const & extent
+		CU_API PxBufferBaseUPtr updateLayerLayout( Size const & extent
 			, PixelFormat format );
 		//@}
 		/**
@@ -135,9 +135,6 @@ namespace castor
 			result.resample( size );
 			return result;
 		}
-		CU_API static PxBufferBaseSPtr resample( Size const & size
-			, PxBufferBaseSPtr & buffer
-			, ImageLayout & layout );
 		CU_API static PxBufferBaseUPtr resample( Size const & size
 			, PxBufferBaseUPtr buffer );
 		/**
@@ -340,9 +337,9 @@ namespace castor
 			return *m_buffer;
 		}
 
-		PxBufferBaseSPtr getPixels()const
+		PxBufferBaseRPtr getPixels()const
 		{
-			return m_buffer;
+			return m_buffer.get();
 		}
 
 		ImageLayout const & getLayout()const
@@ -371,7 +368,7 @@ namespace castor
 
 	private:
 		Path m_pathFile;
-		PxBufferBaseSPtr m_buffer;
+		PxBufferBaseUPtr m_buffer;
 		ImageLayout m_layout;
 	};
 }

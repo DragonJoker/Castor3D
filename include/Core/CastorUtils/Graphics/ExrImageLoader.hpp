@@ -26,7 +26,7 @@ namespace castor
 		CU_API ImageLayout load( String const & imageFormat
 			, uint8_t const * data
 			, uint32_t size
-			, PxBufferBaseSPtr & buffer )const override;
+			, PxBufferBaseUPtr & buffer )const override;
 	};
 }
 

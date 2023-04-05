@@ -123,7 +123,7 @@ namespace castor
 	ImageLayout FreeImageLoader::load( String const & CU_UnusedParam( imageFormat )
 		, uint8_t const * data
 		, uint32_t size
-		, PxBufferBaseSPtr & buffer )const
+		, PxBufferBaseUPtr & buffer )const
 	{
 #if C3D_UseFreeImage
 
