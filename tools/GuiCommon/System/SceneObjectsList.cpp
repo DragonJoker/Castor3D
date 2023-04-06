@@ -370,14 +370,14 @@ namespace GuiCommon
 		m_scene = {};
 	}
 
-	void SceneObjectsList::select( castor3d::GeometrySPtr geometry
-		, castor3d::SubmeshSPtr submesh )
+	void SceneObjectsList::select( castor3d::GeometryRPtr geometry
+		, castor3d::SubmeshRPtr submesh )
 	{
-		auto itg = m_ids.find( geometry.get() );
+		auto itg = m_ids.find( geometry );
 
 		if ( itg != m_ids.end() )
 		{
-			auto its = itg->second.find( submesh.get() );
+			auto its = itg->second.find( submesh );
 
 			if ( its != itg->second.end() )
 			{

@@ -21,10 +21,10 @@ namespace CastorViewer
 			, float dz );
 
 	protected:
-		castor3d::SceneNodeWPtr m_node;
-		float m_dx;
-		float m_dy;
-		float m_dz;
+		castor3d::SceneNodeRPtr m_node{};
+		float m_dx{};
+		float m_dy{};
+		float m_dz{};
 	};
 }
 

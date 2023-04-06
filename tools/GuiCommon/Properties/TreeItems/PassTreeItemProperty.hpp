@@ -49,9 +49,9 @@ namespace GuiCommon
 		 *\brief		Récupère la gàomàtrie
 		 *\return		La valeur
 		 */
-		inline castor3d::PassSPtr getPass()
+		inline castor3d::PassRPtr getPass()
 		{
-			return m_pass.lock();
+			return m_pass;
 		}
 
 	private:
@@ -61,7 +61,7 @@ namespace GuiCommon
 		void doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )override;
 
 	private:
-		castor3d::PassWPtr m_pass;
+		castor3d::PassRPtr m_pass{};
 		castor3d::Scene & m_scene;
 		wxWindow * m_parent;
 	};

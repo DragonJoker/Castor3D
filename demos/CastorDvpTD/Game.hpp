@@ -44,9 +44,9 @@ namespace castortd
 		void upgradeTowerDamage( Tower & tower );
 		bool canAfford( uint32_t price );
 
-		TowerPtr getSelectedTower()const
+		Tower * getSelectedTower()const
 		{
-			return m_selectedTower.lock();
+			return m_selectedTower;
 		}
 
 		float getCellHeight()const
@@ -189,7 +189,7 @@ namespace castortd
 		bool m_started{ false };
 		bool m_paused{ false };
 		bool m_ended{ false };
-		TowerWPtr m_selectedTower;
-		castor3d::GeometrySPtr m_lastMapCube;
+		TowerRPtr m_selectedTower{};
+		castor3d::GeometryRPtr m_lastMapCube{};
 	};
 }

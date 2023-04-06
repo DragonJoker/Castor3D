@@ -323,7 +323,7 @@ namespace castor
 		 *\param[in]	name	Le nom d'élément.
 		 *\param[in]	cleanup	\p true si l'évènement doit être nettoyé.
 		 */
-		void remove( ElementKeyT const & name
+		ElementPtrT remove( ElementKeyT const & name
 			, bool cleanup = false )
 		{
 			auto lock( castor::makeUniqueLock( *this ) );
@@ -333,6 +333,8 @@ namespace castor
 			{
 				this->reportUnknown( name );
 			}
+
+			return result;
 		}
 		/**
 		 *\~english
@@ -344,7 +346,7 @@ namespace castor
 		 *\param[in]	name	Le nom d'élément.
 		 *\param[in]	cleanup	\p true si l'évènement doit être nettoyé.
 		 */
-		void removeNoLock( ElementKeyT const & name
+		ElementPtrT removeNoLock( ElementKeyT const & name
 			, bool cleanup = false )
 		{
 			auto result = this->doTryRemoveNoLock( name, cleanup );
@@ -353,6 +355,8 @@ namespace castor
 			{
 				this->reportUnknown( name );
 			}
+
+			return result;
 		}
 		/**
 		 *\~english

@@ -7,7 +7,7 @@ namespace CastorViewer
 		, float dy
 		, float dz )
 		: CpuFrameEvent( castor3d::EventType::ePostRender )
-		, m_node( node )
+		, m_node( node.get() )
 		, m_dx( dx )
 		, m_dy( dy )
 		, m_dz( dz )

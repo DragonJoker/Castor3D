@@ -305,7 +305,7 @@ namespace castor3d
 
 	void Control::create( ControlsManagerSPtr ctrlManager )
 	{
-		m_ctrlManager = ctrlManager;
+		m_ctrlManager = ctrlManager.get();
 
 		if ( auto parent = getParent() )
 		{

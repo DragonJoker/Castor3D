@@ -14,7 +14,7 @@ namespace GuiCommon
 
 	AnimatedObjectTreeItemProperty::AnimatedObjectTreeItemProperty( castor3d::Engine * engine, bool editable, castor3d::AnimatedObjectSPtr object )
 		: TreeItemProperty( engine, editable )
-		, m_object( object )
+		, m_object( object.get() )
 	{
 		PROPERTY_CATEGORY_ANIMATED_OBJECT = _( "Animated Object: " );
 

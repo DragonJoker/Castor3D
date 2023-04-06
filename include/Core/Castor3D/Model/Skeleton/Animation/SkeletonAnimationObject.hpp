@@ -110,9 +110,9 @@ namespace castor3d
 		 *\~french
 		 *\return		L'objet parent.
 		 */
-		SkeletonAnimationObjectSPtr getParent()const
+		SkeletonAnimationObjectRPtr getParent()const
 		{
-			return m_parent.lock();
+			return m_parent;
 		}
 
 	protected:
@@ -127,7 +127,7 @@ namespace castor3d
 		SkeletonAnimationObjectPtrArray m_children;
 		//!\~english	The parent object.
 		//!\~french		L'objet parent.
-		SkeletonAnimationObjectWPtr m_parent;
+		SkeletonAnimationObjectRPtr m_parent{};
 		//!\~english	The bounding box.
 		//!\~french		La bounding box.
 		castor::BoundingBox m_boundingBox;

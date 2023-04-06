@@ -59,7 +59,7 @@ namespace CastorViewer
 		bool initialise( GuiCommon::SplashScreen & splashScreen );
 		void loadScene( wxString const & fileName = wxEmptyString );
 		void toggleFullScreen( bool fullscreen );
-		void select( castor3d::GeometrySPtr geometry, castor3d::SubmeshSPtr submesh );
+		void select( castor3d::GeometryRPtr geometry, castor3d::SubmeshRPtr submesh );
 
 	private:
 		void doInitialiseTimers();
@@ -125,8 +125,8 @@ namespace CastorViewer
 #endif
 		GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsList > * m_sceneObjects{ nullptr };
 		castor3d::SceneRPtr m_mainScene{};
-		castor3d::CameraWPtr m_mainCamera;
-		castor3d::SceneNodeWPtr m_sceneNode;
+		castor3d::CameraRPtr m_mainCamera{};
+		castor3d::SceneNodeRPtr m_sceneNode{};
 		castor::Path m_filePath;
 		wxString m_currentPerspective;
 		wxString m_fullScreenPerspective;

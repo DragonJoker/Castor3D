@@ -175,15 +175,15 @@ namespace CastorViewer
 	{
 		castor::Logger::logInfo( cuT( "Cleaning up RenderPanel." ) );
 		doStopMovement();
-		m_selectedSubmesh.reset();
-		m_selectedGeometry.reset();
+		m_selectedSubmesh = {};
+		m_selectedGeometry = {};
 		m_currentState = nullptr;
 		m_nodesStates.clear();
 		m_camera = {};
 		m_scene = {};
 		m_currentNode = nullptr;
 		m_lightsNode = nullptr;
-		m_listener.reset();
+		m_listener = {};
 		m_cubeManager.reset();
 		wxGetApp().getCastor()->postEvent( makeCpuCleanupEvent( *m_renderWindow ) );
 		castor::Logger::logInfo( cuT( "RenderPanel cleaned up." ) );
@@ -411,7 +411,7 @@ namespace CastorViewer
 		auto oldSubmesh = m_selectedSubmesh;
 		auto oldGeometry = m_selectedGeometry;
 
-		if ( oldGeometry != geometry )
+		if ( oldGeometry != geometry.get() )
 		{
 			m_selectedSubmesh = nullptr;
 
@@ -425,14 +425,14 @@ namespace CastorViewer
 				m_cubeManager->displayObject( *geometry, *submesh );
 			}
 
-			m_selectedGeometry = geometry;
+			m_selectedGeometry = geometry.get();
 		}
 
-		if ( oldSubmesh != submesh )
+		if ( oldSubmesh != submesh.get() )
 		{
 			if ( submesh )
 			{
-				m_selectedSubmesh = submesh;
+				m_selectedSubmesh = submesh.get();
 				wxGetApp().getMainFrame()->select( m_selectedGeometry, m_selectedSubmesh );
 			}
 		}

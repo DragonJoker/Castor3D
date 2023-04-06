@@ -201,9 +201,9 @@ namespace castor3d
 			return m_borders;
 		}
 
-		ControlsManagerSPtr getControlsManager()const noexcept
+		ControlsManagerRPtr getControlsManager()const noexcept
 		{
-			return m_ctrlManager.lock();
+			return m_ctrlManager;
 		}
 
 		MouseCursor getCursor()const noexcept
@@ -612,7 +612,7 @@ namespace castor3d
 		castor::Point4ui m_borders{};
 		BorderPanelOverlayRPtr m_background{};
 		std::vector< ControlRPtr > m_children{};
-		ControlsManagerWPtr m_ctrlManager{};
+		ControlsManagerRPtr m_ctrlManager{};
 		bool m_moving{};
 		bool m_resizingN{};
 		bool m_resizingW{};

@@ -210,7 +210,7 @@ namespace CastorViewer
 		}
 	}
 
-	void MainFrame::select( castor3d::GeometrySPtr geometry, castor3d::SubmeshSPtr submesh )
+	void MainFrame::select( castor3d::GeometryRPtr geometry, castor3d::SubmeshRPtr submesh )
 	{
 		if ( m_sceneObjects && m_sceneObjects->getList() )
 		{
@@ -490,8 +490,8 @@ namespace CastorViewer
 			auto engine = wxGetApp().getCastor();
 
 			m_sceneObjects->getList()->unloadScene();
-			m_mainCamera.reset();
-			m_sceneNode.reset();
+			m_mainCamera = {};
+			m_sceneNode = {};
 
 			if ( engine->isThreaded() )
 			{

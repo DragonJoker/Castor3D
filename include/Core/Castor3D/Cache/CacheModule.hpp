@@ -280,10 +280,10 @@ namespace castor3d
 		{\
 			return m_##memberName##Cache->add( key, element, initialise );\
 		}\
-		void remove##className( className##Cache::ElementKeyT const & key\
+		className##Cache::ElementPtrT remove##className( className##Cache::ElementKeyT const & key\
 			, bool cleanup = false )\
 		{\
-			m_##memberName##Cache->remove( key, cleanup );\
+			return m_##memberName##Cache->remove( key, cleanup );\
 		}\
 		className##Cache::ElementObsT find##className( className##Cache::ElementKeyT const & key )const\
 		{\
@@ -317,10 +317,10 @@ namespace castor3d
 			return m_##memberName##Cache->create( key\
 				, std::forward< ParametersT >( parameters )... );\
 		}\
-		void remove##className( className##Cache::ElementKeyT const & key\
+		className##Cache::ElementPtrT remove##className( className##Cache::ElementKeyT const & key\
 			, bool cleanup = false )\
 		{\
-			m_##memberName##Cache->remove( key, cleanup );\
+			return m_##memberName##Cache->remove( key, cleanup );\
 		}\
 		className##Cache::ElementObsT find##className( className##Cache::ElementKeyT const & key )const\
 		{\
@@ -382,9 +382,9 @@ namespace castor3d
 		{\
 			return m_##memberName##CacheView->add( key, element, initialise );\
 		}\
-		void remove##className( className##Cache::ElementKeyT const & key )\
+		className##Cache::ElementObsT remove##className( className##Cache::ElementKeyT const & key )\
 		{\
-			m_##memberName##CacheView->remove( key );\
+			return m_##memberName##CacheView->remove( key );\
 		}\
 		className##Cache::ElementObsT find##className( className##Cache::ElementKeyT const & key )const\
 		{\
@@ -424,9 +424,9 @@ namespace castor3d
 		{\
 			return m_##memberName##CacheView->add( key, element, initialise );\
 		}\
-		void remove##className( castor::className##Cache::ElementKeyT const & key )\
+		castor::className##Cache::ElementObsT remove##className( castor::className##Cache::ElementKeyT const & key )\
 		{\
-			m_##memberName##CacheView->remove( key );\
+			return m_##memberName##CacheView->remove( key );\
 		}\
 		castor::className##Cache::ElementObsT find##className( castor::className##Cache::ElementKeyT const & key )const\
 		{\
