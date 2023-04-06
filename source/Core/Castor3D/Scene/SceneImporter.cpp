@@ -206,10 +206,10 @@ namespace castor3d
 		return result;
 	}
 
-	std::map< castor::String, SceneNodeSPtr > SceneImporter::doImportNodes( Scene & scene )
+	std::map< castor::String, SceneNodeRPtr > SceneImporter::doImportNodes( Scene & scene )
 	{
 		Parameters emptyParams;
-		std::map< castor::String, SceneNodeSPtr > result;
+		std::map< castor::String, SceneNodeRPtr > result;
 
 		if ( auto nodeImporter = m_file->createSceneNodeImporter() )
 		{
@@ -223,7 +223,7 @@ namespace castor3d
 						, m_file
 						, emptyParams ) )
 					{
-						result.emplace( name, node );
+						result.emplace( name, node.get() );
 						scene.addSceneNode( name, node, true );
 					}
 				}
@@ -259,7 +259,7 @@ namespace castor3d
 
 	void SceneImporter::doCreateGeometries( Scene & scene
 		, std::map< castor::String, MeshResPtr > const & meshes
-		, std::map< castor::String, SceneNodeSPtr > const & nodes )
+		, std::map< castor::String, SceneNodeRPtr > const & nodes )
 	{
 		for ( auto geom : m_file->listGeometries() )
 		{
@@ -267,11 +267,10 @@ namespace castor3d
 			CU_Require( meshIt != meshes.end() );
 			auto nodeIt = nodes.find( geom.node );
 			CU_Require( nodeIt != nodes.end() );
-			auto geometry = scene.createGeometry( geom.name
+			scene.addGeometry( scene.createGeometry( geom.name
 				, scene
 				, *nodeIt->second
-				, meshIt->second );
-			scene.addGeometry( geometry );
+				, meshIt->second ) );
 		}
 	}
 
@@ -352,7 +351,7 @@ namespace castor3d
 	{
 		for ( auto & animIt : anims )
 		{
-			for ( auto geometry : scene.getGeometryCache() )
+			for ( auto & geometry : scene.getGeometryCache() )
 			{
 				auto & mesh = *geometry.second->getMesh().lock();
 				auto nodeIt = std::find( animIt.second.nodes.begin()
@@ -401,14 +400,14 @@ namespace castor3d
 
 	void SceneImporter::doTransformScene( Scene & scene
 		, Parameters const & parameters
-		, std::map< castor::String, SceneNodeSPtr > const & nodes )
+		, std::map< castor::String, SceneNodeRPtr > const & nodes )
 	{
 		castor::Point3f scale{ 1.0f, 1.0f, 1.0f };
 		castor::Quaternion orientation{ castor::Quaternion::identity() };
 
 		if ( parseImportParameters( parameters, scale, orientation ) )
 		{
-			auto transformNode = scene.addNewSceneNode( m_file->getName() + "TransformNode" ).lock();
+			auto transformNode = scene.addNewSceneNode( m_file->getName() + "TransformNode" );
 			transformNode->setScale( scale );
 			transformNode->setOrientation( orientation );
 			transformNode->attachTo( *scene.getObjectRootNode() );
@@ -431,9 +430,7 @@ namespace castor3d
 		if ( parameters.get( cuT( "center_camera" ), centerCamera )
 			&& !centerCamera.empty() )
 		{
-			auto cam = scene.getCameraCache().tryFind( centerCamera );
-
-			if ( auto camera = cam.lock() )
+			if ( auto camera = scene.getCameraCache().tryFind( centerCamera ) )
 			{
 				scene.getSceneNodeCache().forEach( []( SceneNode & node )
 					{

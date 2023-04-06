@@ -144,7 +144,7 @@ namespace castor3d
 			stride += uint32_t( getSize( attribute.m_dataType ) );
 		}
 
-		m_particlesBillboard = std::make_unique< BillboardBase >( *getScene()
+		m_particlesBillboard = castor::makeUnique< BillboardBase >( *getScene()
 			, getScene()->getObjectRootNode()
 			, std::make_unique< ashes::PipelineVertexInputStateCreateInfo >( 0u
 				, bindings

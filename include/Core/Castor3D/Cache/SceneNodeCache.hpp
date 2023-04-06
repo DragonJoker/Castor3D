@@ -56,9 +56,6 @@ namespace castor3d
 		 *\param[in]	detach			Le détacheur d'objet (d'un noeud de scène).
 		 */
 		C3D_API ObjectCacheT( Scene & scene
-			, SceneNodeRPtr rootNode
-			, SceneNodeRPtr rootCameraNode
-			, SceneNodeRPtr rootObjectNode
 			, ElementInitialiserT initialise
 			, ElementCleanerT clean
 			, ElementMergerT merge

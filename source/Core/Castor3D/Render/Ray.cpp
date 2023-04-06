@@ -274,7 +274,7 @@ namespace castor3d
 		return result;
 	}
 
-	castor::Intersection Ray::intersects( GeometrySPtr geometry
+	castor::Intersection Ray::intersects( GeometryRPtr geometry
 		, Face & nearestFace
 		, SubmeshSPtr & nearestSubmesh
 		, float & distance )const

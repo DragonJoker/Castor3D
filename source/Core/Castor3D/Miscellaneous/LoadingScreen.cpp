@@ -80,10 +80,10 @@ namespace castor3d
 				, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT );
 		}
 
-		static CameraSPtr createCamera( Scene & scene
+		static CameraRPtr createCamera( Scene & scene
 			, castor::Size const & size )
 		{
-			CameraSPtr result;
+			CameraRPtr result{};
 
 			if ( scene.getCameraCache().isEmpty() )
 			{
@@ -97,15 +97,17 @@ namespace castor3d
 					, farZ );
 				viewport.resize( size );
 				viewport.update();
-				result = std::make_shared< Camera >( LoadingScreen::SceneName
+				auto camera = castor::makeUnique< Camera >( LoadingScreen::SceneName
 					, scene
 					, *scene.getCameraRootNode()
 					, std::move( viewport ) );
+				result = scene.addCamera( LoadingScreen::SceneName
+					, camera );
 				result->update();
 			}
 			else
 			{
-				result = scene.getCameraCache().begin()->second;
+				result = scene.getCameraCache().begin()->second.get();
 			}
 
 			return result;
@@ -302,7 +304,7 @@ namespace castor3d
 		m_runnable.reset();
 		m_backgroundRenderer.reset();
 		m_culler.reset();
-		m_camera.reset();
+		m_camera = {};
 		m_depth.destroy();
 		m_colour.destroy();
 	}
@@ -324,7 +326,7 @@ namespace castor3d
 			auto oldCamera = updater.camera;
 			auto oldScene = updater.scene;
 			auto oldSafeBanded = updater.isSafeBanded;
-			updater.camera = m_camera.get();
+			updater.camera = m_camera;
 			updater.scene = m_scene;
 			updater.isSafeBanded = false;
 
@@ -353,7 +355,7 @@ namespace castor3d
 		{
 			auto oldCamera = updater.camera;
 			auto oldScene = updater.scene;
-			updater.camera = m_camera.get();
+			updater.camera = m_camera;
 			updater.scene = m_scene;
 
 			m_scene->update( updater );

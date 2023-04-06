@@ -523,6 +523,11 @@ namespace castor3d
 	{
 		if ( m_initialised.exchange( false ) )
 		{
+			for ( auto & unit : m_loaded )
+			{
+				unit.second->cleanup();
+			}
+
 			m_bindlessTexSet.reset();
 			m_bindlessTexPool.reset();
 			m_bindlessTexLayout.reset();
@@ -592,6 +597,11 @@ namespace castor3d
 
 		m_loaded.clear();
 		m_loading.clear();
+		m_dirtyWrites.clear();
+		m_units.clear();
+		m_datas.clear();
+		m_pendingUnits.clear();
+		m_texturesCombines.clear();
 	}
 
 	TextureUnitSPtr TextureUnitCache::getTexture( TextureUnitData & unitData )

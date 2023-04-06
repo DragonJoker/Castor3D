@@ -133,11 +133,11 @@ namespace castor3d
 
 			if ( m_merge )
 			{
-				for ( auto it : *this )
+				for ( auto & it : *this )
 				{
 					m_merge( *this
 						, destination.m_resources
-						, it.second
+						, std::move( it.second )
 						, destination.m_rootCameraNode
 						, destination.m_rootObjectNode );
 				}

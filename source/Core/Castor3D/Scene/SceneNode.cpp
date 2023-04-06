@@ -8,6 +8,8 @@
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Animation/SceneNodeAnimation.hpp"
 
+CU_ImplementCUSmartPtr( castor3d, SceneNode )
+
 namespace castor3d
 {
 	uint64_t SceneNode::Count = 0;

@@ -3,6 +3,8 @@
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
 
+CU_ImplementCUSmartPtr( castor3d, MovableObject )
+
 namespace castor3d
 {
 	MovableObject::MovableObject( castor::String const & name

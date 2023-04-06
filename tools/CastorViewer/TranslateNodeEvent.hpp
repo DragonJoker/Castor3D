@@ -12,7 +12,7 @@ namespace CastorViewer
 		: public MouseNodeEvent
 	{
 	public:
-		TranslateNodeEvent( castor3d::SceneNodeSPtr node
+		TranslateNodeEvent( castor3d::SceneNodeRPtr node
 			, float dx
 			, float dy
 			, float dz );

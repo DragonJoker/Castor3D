@@ -119,9 +119,21 @@
 		</Expand>
 	</Type>
 
+	<Type Name="castor3d::MovableObject">
+		<DisplayString>{m_name}</DisplayString>
+		<Expand>
+			<Item Name="name">m_name</Item>
+			<Item Name="scene">m_owner</Item>
+			<Item Name="type">m_type</Item>
+			<Item Name="sceneNode">m_sceneNode</Item>
+			<Item Name="notifyIndex">m_notifyIndex</Item>
+		</Expand>
+	</Type>
+
 	<Type Name="castor3d::Geometry">
 		<DisplayString>{m_name}({m_meshName})</DisplayString>
 		<Expand>
+			<Item Name="[movable]">(castor3d::MovableObject *)this,nd</Item>
 			<Item Name="ids">m_ids</Item>
 			<Item Name="mesh">m_mesh</Item>
 			<Item Name="meshName">m_meshName</Item>

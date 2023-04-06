@@ -13,6 +13,7 @@ CU_ImplementCUSmartPtr( castor3d, MaterialCacheView )
 CU_ImplementCUSmartPtr( castor3d, SamplerCacheView )
 CU_ImplementCUSmartPtr( castor3d, FontCacheView )
 
+
 namespace castor3d
 {
 	const castor::String PtrCacheTraitsT< Scene, castor::String >::Name = cuT( "Scene" );

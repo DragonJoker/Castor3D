@@ -1497,7 +1497,7 @@ namespace castor3d::exporter
 					{
 						if ( !scene.getCameraCache().isEmpty() )
 						{
-							auto camera = scene.getCameraCache().begin()->second;
+							auto camera = scene.getCameraCache().begin()->second.get();
 							printRenderWindow( scene.getName()
 								, camera->getName()
 								, stream );

@@ -11,66 +11,66 @@ namespace Testing
 {
 	namespace details
 	{
-		std::map< castor::String, SceneNodeSPtr > sortNodes( Scene const & scene )
+		std::map< castor::String, SceneNodeRPtr > sortNodes( Scene const & scene )
 		{
-			std::map< castor::String, SceneNodeSPtr > result;
+			std::map< castor::String, SceneNodeRPtr > result;
 			auto lock = castor::makeUniqueLock( scene.getSceneNodeCache() );
 
-			for ( auto it : scene.getSceneNodeCache() )
+			for ( auto & it : scene.getSceneNodeCache() )
 			{
-				result.emplace( it.first, it.second );
+				result.emplace( it.first, it.second.get() );
 			}
 
 			return result;
 		}
 
-		std::map< castor::String, GeometrySPtr > sortGeometries( Scene const & scene )
+		std::map< castor::String, GeometryRPtr > sortGeometries( Scene const & scene )
 		{
-			std::map< castor::String, GeometrySPtr > result;
+			std::map< castor::String, GeometryRPtr > result;
 			auto lock = castor::makeUniqueLock( scene.getGeometryCache() );
 
-			for ( auto it : scene.getGeometryCache() )
+			for ( auto & it : scene.getGeometryCache() )
 			{
-				result.emplace( it.first, it.second );
+				result.emplace( it.first, it.second.get() );
 			}
 
 			return result;
 		}
 
-		std::map< castor::String, LightSPtr > sortLights( Scene const & scene )
+		std::map< castor::String, LightRPtr > sortLights( Scene const & scene )
 		{
-			std::map< castor::String, LightSPtr > result;
+			std::map< castor::String, LightRPtr > result;
 			auto lock = castor::makeUniqueLock( scene.getLightCache() );
 
-			for ( auto it : scene.getLightCache() )
+			for ( auto & it : scene.getLightCache() )
 			{
-				result.emplace( it.first, it.second );
+				result.emplace( it.first, it.second.get() );
 			}
 
 			return result;
 		}
 
-		std::map< castor::String, CameraSPtr > sortCameras( Scene const & scene )
+		std::map< castor::String, CameraRPtr > sortCameras( Scene const & scene )
 		{
-			std::map< castor::String, CameraSPtr > result;
+			std::map< castor::String, CameraRPtr > result;
 			auto lock = castor::makeUniqueLock( scene.getCameraCache() );
 
-			for ( auto it : scene.getCameraCache() )
+			for ( auto & it : scene.getCameraCache() )
 			{
-				result.emplace( it.first, it.second );
+				result.emplace( it.first, it.second.get() );
 			}
 
 			return result;
 		}
 
-		std::map< castor::String, AnimatedObjectGroupSPtr > sortAnimatedGroups( Scene const & scene )
+		std::map< castor::String, AnimatedObjectGroupRPtr > sortAnimatedGroups( Scene const & scene )
 		{
-			std::map< castor::String, AnimatedObjectGroupSPtr > result;
+			std::map< castor::String, AnimatedObjectGroupRPtr > result;
 			auto lock = castor::makeUniqueLock( scene.getAnimatedObjectGroupCache() );
 
-			for ( auto it : scene.getAnimatedObjectGroupCache() )
+			for ( auto & it : scene.getAnimatedObjectGroupCache() )
 			{
-				result.emplace( it.first, it.second );
+				result.emplace( it.first, it.second.get() );
 			}
 
 			return result;

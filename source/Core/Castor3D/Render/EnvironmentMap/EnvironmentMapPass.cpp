@@ -26,7 +26,7 @@ namespace castor3d
 {
 	namespace envpass
 	{
-		static CameraSPtr doCreateCamera( SceneNode & node
+		static CameraUPtr doCreateCamera( SceneNode & node
 			, VkExtent3D const & size )
 		{
 			float const aspect = float( size.width ) / float( size.height );
@@ -39,7 +39,7 @@ namespace castor3d
 				, farZ );
 			viewport.resize( { size.width, size.height } );
 			viewport.update();
-			auto camera = std::make_shared< Camera >( cuT( "EnvironmentMap_" ) + node.getName()
+			auto camera = castor::makeUnique< Camera >( cuT( "EnvironmentMap_" ) + node.getName()
 				, *node.getScene()
 				, node
 				, std::move( viewport ) );
@@ -51,7 +51,7 @@ namespace castor3d
 	EnvironmentMapPass::EnvironmentMapPass( crg::FrameGraph & graph
 		, RenderDevice const & device
 		, EnvironmentMap & environmentMap
-		, SceneNodeSPtr faceNode
+		, SceneNodeUPtr faceNode
 		, uint32_t index
 		, CubeMapFace face
 		, SceneBackground & background )
@@ -60,7 +60,7 @@ namespace castor3d
 		, m_device{ device }
 		, m_graph{ graph.createPassGroup( getName() ) }
 		, m_background{ background }
-		, m_node{ faceNode }
+		, m_node{ std::move( faceNode ) }
 		, m_index{ index }
 		, m_face{ face }
 		, m_camera{ envpass::doCreateCamera( *faceNode, getOwner()->getSize() ) }

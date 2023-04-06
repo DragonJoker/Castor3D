@@ -5,6 +5,8 @@
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
 
+CU_ImplementCUSmartPtr( castor3d, Camera )
+
 namespace castor3d
 {
 	Camera::Camera( castor::String const & name

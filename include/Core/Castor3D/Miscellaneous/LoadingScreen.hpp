@@ -209,7 +209,7 @@ namespace castor3d
 		SceneBackground & m_background;
 		VkRenderPass m_renderPass;
 		castor::Size m_renderSize;
-		CameraSPtr m_camera;
+		CameraRPtr m_camera;
 		SceneCullerUPtr m_culler;
 		Texture m_colour;
 		Texture m_depth;

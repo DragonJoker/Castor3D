@@ -74,7 +74,7 @@ namespace castor3d
 		struct AllPasses
 		{
 			std::vector< std::unique_ptr< CameraUbo > > cameraUbos;
-			std::vector< CameraSPtr > cameras;
+			std::vector< CameraUPtr > cameras;
 			Passes staticNodes;
 			Passes otherNodes;
 		};

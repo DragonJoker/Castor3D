@@ -28,33 +28,33 @@ namespace c3d_assimp
 
 		auto & aiLight = *it->second;
 		auto & scene = *light.getScene();
-		castor3d::SceneNodeSPtr node;
+		castor3d::SceneNodeRPtr node{};
 		castor3d::log::info << cuT( "  Light found: [" ) << name << cuT( "]" ) << std::endl;
 
 		if ( scene.hasSceneNode( name ) )
 		{
-			node = scene.findSceneNode( name ).lock();
+			node = scene.findSceneNode( name );
 		}
 		else
 		{
-			node = scene.createSceneNode( name, scene );
+			auto ownNode = scene.createSceneNode( name, scene );
 
 			if ( aiLight.mType == aiLightSource_DIRECTIONAL
 				|| aiLight.mType == aiLightSource_SPOT )
 			{
 				auto direction = castor::point::getNormalised( castor::Point3f{ aiLight.mDirection.x, aiLight.mDirection.y, aiLight.mDirection.z } );
 				auto up = castor::point::getNormalised( castor::Point3f{ aiLight.mUp.x, aiLight.mUp.y, aiLight.mUp.z } );
-				node->setOrientation( castor::Quaternion::fromMatrix( fromAssimp( direction, up ) ) );
+				ownNode->setOrientation( castor::Quaternion::fromMatrix( fromAssimp( direction, up ) ) );
 			}
 
 			if ( aiLight.mType != aiLightSource_DIRECTIONAL )
 			{
 				auto position = castor::Point3f{ aiLight.mPosition.x, aiLight.mPosition.y, aiLight.mPosition.z };
-				node->setPosition( position );
+				ownNode->setPosition( position );
 			}
 
-			node->attachTo( *scene.getObjectRootNode() );
-			node = scene.addSceneNode( name, node ).lock();
+			ownNode->attachTo( *scene.getObjectRootNode() );
+			node = scene.addSceneNode( name, ownNode );
 		}
 
 		switch ( aiLight.mType )

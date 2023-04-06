@@ -350,41 +350,22 @@ namespace castor3d
 	*/
 	struct ShadowConfig;
 
-	CU_DeclareSmartPtr( BillboardBase );
-	CU_DeclareSmartPtr( BillboardList );
-	CU_DeclareSmartPtr( Camera );
-	CU_DeclareSmartPtr( Geometry );
-	CU_DeclareSmartPtr( MovableObject );
-	CU_DeclareSmartPtr( SceneFileContext );
-	CU_DeclareSmartPtr( SceneFileParser );
-	CU_DeclareSmartPtr( SceneImporter );
-	CU_DeclareSmartPtr( SceneNode );
-	CU_DeclareSmartPtr( SceneNodeImporter );
-	CU_DeclareSmartPtr( SceneImporter );
-	CU_DeclareSmartPtr( SceneNodeImporter );
-
+	CU_DeclareCUSmartPtr( castor3d, BillboardBase, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, BillboardList, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, Camera, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, Geometry, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, MovableObject, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, SceneFileContext, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, SceneFileParser, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, SceneNode, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, Scene, C3D_API );
+	CU_DeclareSmartPtr( SceneImporter );
+	CU_DeclareSmartPtr( SceneNodeImporter );
 
-	//! Camera pointer array
-	CU_DeclareVector( CameraSPtr, CameraPtr );
-	//! Geometry pointer array
-	CU_DeclareVector( GeometrySPtr, GeometryPtr );
 	//! SceneNode pointer array.
-	CU_DeclareVector( SceneNodeSPtr, SceneNodePtr );
-	//! BillboardList pointer array.
-	CU_DeclareVector( BillboardListSPtr, BillboardList );
-	//! Camera pointer map, sorted by name
-	CU_DeclareMap( castor::String, CameraSPtr, CameraPtrStr );
-	//! MovableObject pointer map, sorted by name.
-	CU_DeclareMap( castor::String, MovableObjectSPtr, MovableObjectPtrStr );
-	//! Geometry pointer map, sorted by name.
-	CU_DeclareMap( castor::String, GeometrySPtr, GeometryPtrStr );
+	CU_DeclareVector( SceneNodeRPtr, SceneNodePtr );
 	//! Scene pointer map, sorted by name.
 	CU_DeclareMap( castor::String, SceneRPtr, ScenePtrStr );
-	//! SceneNode pointer map, sorted by name.
-	CU_DeclareMap( castor::String, SceneNodeSPtr, SceneNodePtrStr );
-	//! BillboardList pointer map, sorted by name.
-	CU_DeclareMap( castor::String, BillboardListSPtr, BillboardListStr );
 
 	using OnSceneChangedFunction = std::function< void( Scene const & ) >;
 	using OnSceneChanged = castor::SignalT< OnSceneChangedFunction >;
@@ -481,8 +462,8 @@ namespace castor3d
 	{
 		using ElementT = ObjT;
 		using ElementKeyT = KeyT;
-		using ElementPtrT = std::shared_ptr< ElementT >;
-		using ElementObsT = std::weak_ptr< ElementT >;
+		using ElementPtrT = castor::UniquePtr< ElementT >;
+		using ElementObsT = ElementT *;
 		using ElementContT = std::unordered_map< KeyT, ElementPtrT >;
 		using ElementCacheT = ObjectCacheBaseT< ElementT, KeyT >;
 
@@ -505,31 +486,31 @@ namespace castor3d
 			, ElementKeyT const & key
 			, ParametersT && ... params )
 		{
-			return std::make_shared< ElementT >( key
+			return castor::makeUnique< ElementT >( key
 				, std::forward< ParametersT >( params )... );
 		}
 
 		static ElementObsT makeElementObs( ElementPtrT const & element )
 		{
-			return ElementObsT{ element };
+			return element.get();
 		}
 
 		static bool areElementsEqual( ElementObsT const & lhs
 			, ElementObsT const & rhs )
 		{
-			return lhs.lock() == rhs.lock();
+			return lhs == rhs;
 		}
 
 		static bool areElementsEqual( ElementObsT const & lhs
 			, ElementPtrT const & rhs )
 		{
-			return lhs.lock() == rhs;
+			return lhs == rhs.get();
 		}
 
 		static bool areElementsEqual( ElementPtrT const & lhs
 			, ElementObsT const & rhs )
 		{
-			return lhs == rhs.lock();
+			return lhs.get() == rhs;
 		}
 
 		static bool areElementsEqual( ElementPtrT const & lhs
@@ -540,7 +521,7 @@ namespace castor3d
 
 		static bool isElementObsNull( ElementObsT const & element )
 		{
-			return element.lock() == nullptr;
+			return element == nullptr;
 		}
 	};
 	/**

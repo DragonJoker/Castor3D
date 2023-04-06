@@ -91,8 +91,8 @@ namespace CastorViewer
 		float doTransformY( int y );
 		int doTransformX( float x );
 		int doTransformY( float y );
-		void doUpdateSelectedGeometry( castor3d::GeometrySPtr geometry
-			, castor3d::SubmeshSPtr submesh );
+		void doUpdateSelectedGeometry( castor3d::GeometryRPtr geometry
+			, castor3d::SubmeshRPtr submesh );
 		GuiCommon::NodeState & doAddNodeState( castor3d::SceneNodeRPtr node
 			, bool camera );
 		void doUpdateMaxSpeed( float factor );

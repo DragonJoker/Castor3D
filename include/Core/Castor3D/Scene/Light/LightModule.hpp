@@ -121,7 +121,7 @@ namespace castor3d
 	*/
 	class SpotLight;
 
-	CU_DeclareSmartPtr( Light );
+	CU_DeclareCUSmartPtr( castor3d, Light, C3D_API );
 	CU_DeclareSmartPtr( LightFactory );
 	CU_DeclareSmartPtr( LightCategory );
 	CU_DeclareSmartPtr( LightImporter );

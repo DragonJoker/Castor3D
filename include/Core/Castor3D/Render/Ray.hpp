@@ -147,7 +147,7 @@ namespace castor3d
 		 *\param[out]	distance		Reçoit la distance.
 		 *\return		\p castor::Intersection::eIn ou \p castor::Intersection::eOut.
 		 */
-		C3D_API castor::Intersection intersects( GeometrySPtr geometry
+		C3D_API castor::Intersection intersects( GeometryRPtr geometry
 			, Face & nearestFace
 			, SubmeshSPtr & nearestSubmesh
 			, float & distance )const;

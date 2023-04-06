@@ -320,17 +320,17 @@ namespace castor3d
 
 		SceneNodeRPtr getRootNode()const
 		{
-			return m_rootNode.get();
+			return m_rootNode;
 		}
 
 		SceneNodeRPtr getCameraRootNode()const
 		{
-			return m_rootCameraNode.get();
+			return m_rootCameraNode;
 		}
 
 		SceneNodeRPtr getObjectRootNode()const
 		{
-			return m_rootObjectNode.get();
+			return m_rootObjectNode;
 		}
 
 		castor::RgbColour const & getAmbientLight()const
@@ -438,9 +438,11 @@ namespace castor3d
 			m_ambientLight = value;
 		}
 
-		void addGeometry( GeometryCache::ElementPtrT element )
+		GeometryCache::ElementObsT addGeometry( GeometryCache::ElementPtrT element )
 		{
-			m_geometryCache->add( element );
+			auto result = element.get();
+			m_geometryCache->add( std::move( element ) );
+			return result;
 		}
 		/**@}*/
 
@@ -476,11 +478,11 @@ namespace castor3d
 		std::vector< SceneNode * > m_dirtyNodes;
 		std::vector< BillboardBase * > m_dirtyBillboards;
 		std::vector< MovableObject * > m_dirtyObjects;
-		SceneNodeSPtr m_rootNode;
-		SceneNodeSPtr m_rootCameraNode;
-		SceneNodeSPtr m_rootObjectNode;
-		DECLARE_OBJECT_CACHE_MEMBER_MIN( geometry, Geometry );
 		DECLARE_OBJECT_CACHE_MEMBER( sceneNode, SceneNode );
+		SceneNodeRPtr m_rootNode;
+		SceneNodeRPtr m_rootCameraNode;
+		SceneNodeRPtr m_rootObjectNode;
+		DECLARE_OBJECT_CACHE_MEMBER_MIN( geometry, Geometry );
 		DECLARE_OBJECT_CACHE_MEMBER( camera, Camera );
 		DECLARE_OBJECT_CACHE_MEMBER( light, Light );
 		DECLARE_OBJECT_CACHE_MEMBER( billboard, BillboardList );
