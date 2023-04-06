@@ -892,7 +892,7 @@ namespace castor3d
 		m_renderMutex.unlock();
 	}
 
-	GeometrySPtr RenderWindow::getPickedGeometry()const
+	GeometryRPtr RenderWindow::getPickedGeometry()const
 	{
 		auto sel = m_picking->getPickedGeometry();
 
@@ -902,10 +902,10 @@ namespace castor3d
 		}
 
 		auto geometry = sel->getScene()->findGeometry( sel->getName() );
-		return geometry.lock();
+		return geometry;
 	}
 
-	SubmeshSPtr RenderWindow::getPickedSubmesh()const
+	SubmeshRPtr RenderWindow::getPickedSubmesh()const
 	{
 		auto sel = m_picking->getPickedSubmesh();
 
@@ -914,7 +914,7 @@ namespace castor3d
 			return nullptr;
 		}
 
-		return sel->getOwner()->getSubmesh( sel->getId() );
+		return sel->getOwner()->getSubmesh( sel->getId() ).get();
 	}
 
 	uint32_t RenderWindow::getPickedFace()const

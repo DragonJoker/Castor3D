@@ -174,9 +174,9 @@ namespace castor3d
 		 *\~french
 		 *\return		Les billboards.
 		 */
-		inline BillboardBaseSPtr getBillboards()const
+		inline BillboardBaseRPtr getBillboards()const
 		{
-			return m_particlesBillboard;
+			return m_particlesBillboard.get();
 		}
 		/**
 		 *\~english
@@ -231,7 +231,7 @@ namespace castor3d
 		ParticleDeclaration m_inputs;
 		//!\~english	The billboards containing the particles.
 		//!\~french		Les billboards contenant les particules.
-		BillboardBaseSPtr m_particlesBillboard;
+		BillboardBaseUPtr m_particlesBillboard;
 		//!\~english	The billboards dimensions.
 		//!\~french		Les dimensions des billboards.
 		castor::Point2f m_dimensions;

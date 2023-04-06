@@ -52,7 +52,7 @@ namespace castor3d
 		C3D_API EnvironmentMapPass( crg::FrameGraph & graph
 			, RenderDevice const & device
 			, EnvironmentMap & environmentMap
-			, SceneNodeSPtr faceNode
+			, SceneNodeUPtr faceNode
 			, uint32_t index
 			, CubeMapFace face
 			, SceneBackground & background );
@@ -110,10 +110,10 @@ namespace castor3d
 		RenderDevice const & m_device;
 		crg::FramePassGroup & m_graph;
 		SceneBackground & m_background;
-		SceneNodeSPtr m_node;
+		SceneNodeUPtr m_node;
 		uint32_t m_index;
 		CubeMapFace m_face;
-		CameraSPtr m_camera;
+		CameraUPtr m_camera;
 		SceneNode const * m_currentNode{};
 		SceneCullerUPtr m_culler;
 		CameraUbo m_cameraUbo;

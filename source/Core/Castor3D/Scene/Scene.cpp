@@ -99,42 +99,45 @@ namespace castor3d
 		: castor::OwnedBy< Engine >{ engine }
 		, castor::Named{ name }
 		, m_resources{ engine.getGraphResourceHandler() }
-		, m_rootNode{ std::make_shared< SceneNode >( RootNode, *this ) }
-		, m_rootCameraNode{ std::make_shared< SceneNode >( CameraRootNode, *this ) }
-		, m_rootObjectNode{ std::make_shared< SceneNode >( ObjectRootNode, *this ) }
+		, m_sceneNodeCache{ makeObjectCache< SceneNode, castor::String, SceneNodeCacheTraits >( *this
+			, castor::DummyFunctorT< SceneNodeCache >{}
+			, castor::DummyFunctorT< SceneNodeCache >{}
+			, SceneNodeMergerT< SceneNodeCache >{ getName() }
+			, SceneNodeAttacherT< SceneNodeCache >{}
+			, SceneNodeDetacherT< SceneNodeCache >{} ) }
+		, m_rootNode{ m_sceneNodeCache->find( RootNode ) }
+		, m_rootCameraNode{ m_sceneNodeCache->find( CameraRootNode ) }
+		, m_rootObjectNode{ m_sceneNodeCache->find( ObjectRootNode ) }
 		, m_background{ std::make_shared< ColourBackground >( engine, *this ) }
 		, m_lightFactory{ std::make_shared< LightFactory >() }
 		, m_listener{ engine.addNewFrameListener( cuT( "Scene_" ) + name + castor::string::toString( intptr_t( this ) ) ).lock().get() }
 		, m_renderNodes{ castor::makeUnique< SceneRenderNodes >( *this ) }
 	{
-		m_rootCameraNode->attachTo( *m_rootNode );
-		m_rootObjectNode->attachTo( *m_rootNode );
-
-		m_billboardCache = makeObjectCache< BillboardList, castor::String, BillboardListCacheTraits >( *this
-			, m_rootNode.get()
-			, m_rootCameraNode.get()
-			, m_rootObjectNode.get() );
+				m_billboardCache = makeObjectCache< BillboardList, castor::String, BillboardListCacheTraits >( *this
+					, m_rootNode
+					, m_rootCameraNode
+					, m_rootObjectNode );
 		m_cameraCache = makeObjectCache< Camera, castor::String, CameraCacheTraits >( *this
-			, m_rootNode.get()
-			, m_rootCameraNode.get()
-			, m_rootObjectNode.get()
+			, m_rootNode
+			, m_rootCameraNode
+			, m_rootObjectNode
 			, castor::DummyFunctorT< CameraCache >{}
 			, castor::DummyFunctorT< CameraCache >{}
 			, MovableMergerT< CameraCache >{ getName() }
 			, MovableAttacherT< CameraCache >{}
 			, MovableDetacherT< CameraCache >{} );
 		m_geometryCache = makeObjectCache< Geometry, castor::String, GeometryCacheTraits >( *this
-			, m_rootNode.get()
-			, m_rootCameraNode.get()
-			, m_rootObjectNode.get() );
+			, m_rootNode
+			, m_rootCameraNode
+			, m_rootObjectNode );
 		m_lightCache = makeObjectCache< Light, castor::String, LightCacheTraits >( *this
-			, m_rootNode.get()
-			, m_rootCameraNode.get()
-			, m_rootObjectNode.get() );
+			, m_rootNode
+			, m_rootCameraNode
+			, m_rootObjectNode );
 		m_particleSystemCache = makeObjectCache< ParticleSystem, castor::String, ParticleSystemCacheTraits >( *this
-			, m_rootNode.get()
-			, m_rootCameraNode.get()
-			, m_rootObjectNode.get()
+			, m_rootNode
+			, m_rootCameraNode
+			, m_rootObjectNode
 			, [this]( ParticleSystem & element )
 			{
 				auto & nodes = getRenderNodes();
@@ -157,15 +160,6 @@ namespace castor3d
 			, MovableMergerT< ParticleSystemCache >{ getName() }
 			, MovableAttacherT< ParticleSystemCache >{}
 			, MovableDetacherT< ParticleSystemCache >{} );
-		m_sceneNodeCache = makeObjectCache< SceneNode, castor::String, SceneNodeCacheTraits >( *this
-			, m_rootNode.get()
-			, m_rootCameraNode.get()
-			, m_rootObjectNode.get()
-			, castor::DummyFunctorT< SceneNodeCache >{}
-			, castor::DummyFunctorT< SceneNodeCache >{}
-			, SceneNodeMergerT< SceneNodeCache >{ getName() }
-			, SceneNodeAttacherT< SceneNodeCache >{}
-			, SceneNodeDetacherT< SceneNodeCache >{} );
 		m_animatedObjectGroupCache = castor::makeCache< AnimatedObjectGroup, castor::String, AnimatedObjectGroupCacheTraits >( *this );
 		m_meshCache = castor::makeCache< Mesh, castor::String, MeshCacheTraits >( getLogger( engine )
 			, CpuEventInitialiserT< MeshCache >{ getListener() }
@@ -216,12 +210,6 @@ namespace castor3d
 				element.cleanup();
 			} );
 
-		auto node = m_rootNode;
-		m_sceneNodeCache->add( RootNode, node, false );
-		node = m_rootObjectNode;
-		m_sceneNodeCache->add( ObjectRootNode, node, false );
-		node = m_rootCameraNode;
-		m_sceneNodeCache->add( CameraRootNode, node, false );
 		m_animatedObjectGroupCache->add( cuT( "C3D_Textures" ), *this );
 		auto & device = engine.getRenderSystem()->getRenderDevice();
 		auto data = device.graphicsData();
@@ -258,20 +246,6 @@ namespace castor3d
 		m_geometryCache.reset();
 		m_lightCache.reset();
 
-		if ( m_rootCameraNode )
-		{
-			m_rootCameraNode->detach( true );
-			m_rootCameraNode.reset();
-		}
-
-		if ( m_rootObjectNode )
-		{
-			m_rootObjectNode->detach( true );
-			m_rootObjectNode.reset();
-		}
-
-		m_sceneNodeCache.reset();
-
 		m_meshCache.reset();
 		m_skeletonCache.reset();
 		m_materialCacheView.reset();
@@ -279,12 +253,25 @@ namespace castor3d
 		m_overlayCache.reset();
 		m_fontCacheView.reset();
 
+		if ( m_rootCameraNode )
+		{
+			m_rootCameraNode->detach( true );
+			m_rootCameraNode = {};
+		}
+
+		if ( m_rootObjectNode )
+		{
+			m_rootObjectNode->detach( true );
+			m_rootObjectNode = {};
+		}
+
 		if ( m_rootNode )
 		{
 			m_rootNode->detach( true );
+			m_rootNode = {};
 		}
 
-		m_rootNode.reset();
+		m_sceneNodeCache.reset();
 	}
 
 	void Scene::initialise()
@@ -506,7 +493,7 @@ namespace castor3d
 		using LockType = std::unique_lock< GeometryCache >;
 		LockType lock{ castor::makeUniqueLock( *m_geometryCache ) };
 
-		for ( auto pair : *m_geometryCache )
+		for ( auto & pair : *m_geometryCache )
 		{
 			auto mesh = pair.second->getMesh().lock();
 
@@ -525,7 +512,7 @@ namespace castor3d
 		using LockType = std::unique_lock< GeometryCache >;
 		LockType lock{ castor::makeUniqueLock( *m_geometryCache ) };
 
-		for ( auto pair : *m_geometryCache )
+		for ( auto & pair : *m_geometryCache )
 		{
 			auto mesh = pair.second->getMesh().lock();
 

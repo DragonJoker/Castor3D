@@ -27,28 +27,28 @@ namespace GuiCommon
 		void hideObject( castor3d::Geometry const & object );
 
 	private:
-		castor3d::SceneNodeSPtr doAddBB( castor3d::MeshResPtr bbMesh
+		castor3d::SceneNodeRPtr doAddBB( castor3d::MeshResPtr bbMesh
 			, castor::String const & name
 			, castor3d::SceneNode & parent
 			, castor::BoundingBox const & bb );
 		void doRemoveBB( castor::String const & name
-			, castor3d::SceneNodeSPtr bbNode );
+			, castor3d::SceneNodeRPtr bbNode );
 		void onSceneUpdate( castor3d::Scene const & scene );
 
 	private:
 		castor3d::Scene & m_scene;
-		castor3d::MeshResPtr m_obbMesh;
-		castor3d::MeshResPtr m_obbSubmesh;
-		castor3d::MeshResPtr m_obbSelectedSubmesh;
-		castor3d::MeshResPtr m_obbBone;
-		castor3d::MeshResPtr m_aabbMesh;
-		castor3d::Geometry const * m_object{ nullptr };
-		castor3d::Submesh const * m_submesh{ nullptr };
-		castor3d::SceneNodeSPtr m_obbNode;
+		castor3d::MeshResPtr m_obbMesh{};
+		castor3d::MeshResPtr m_obbSubmesh{};
+		castor3d::MeshResPtr m_obbSelectedSubmesh{};
+		castor3d::MeshResPtr m_obbBone{};
+		castor3d::MeshResPtr m_aabbMesh{};
+		castor3d::Geometry const * m_object{};
+		castor3d::Submesh const * m_submesh{};
+		castor3d::SceneNodeRPtr m_obbNode{};
 		castor3d::SceneNodePtrArray m_obbSubmeshNodes;
-		castor3d::SceneNodeSPtr m_obbSelectedSubmeshNode;
+		castor3d::SceneNodeRPtr m_obbSelectedSubmeshNode{};
 		castor3d::SceneNodePtrArray m_obbBoneNodes;
-		castor3d::SceneNodeSPtr m_aabbNode;
+		castor3d::SceneNodeRPtr m_aabbNode{};
 		castor3d::OnSceneUpdateConnection m_sceneConnection;
 	};
 }

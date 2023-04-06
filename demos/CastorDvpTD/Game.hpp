@@ -99,7 +99,7 @@ namespace castortd
 			return m_scene;
 		}
 
-		castor3d::SceneNodeSPtr getMapNode()const
+		castor3d::SceneNodeRPtr getMapNode()const
 		{
 			return m_mapNode;
 		}
@@ -157,8 +157,8 @@ namespace castortd
 		Hud m_hud;
 		Path m_path;
 		castor::Point3f m_cellDimensions;
-		castor3d::SceneNodeSPtr m_mapNode;
-		castor3d::SceneNodeSPtr m_targetNode;
+		castor3d::SceneNodeRPtr m_mapNode;
+		castor3d::SceneNodeRPtr m_targetNode;
 		castor3d::MeshResPtr m_mapCubeMesh;
 		castor3d::MaterialResPtr m_mapCubeMaterial;
 		castor3d::MeshResPtr m_shortRangeTowerMesh;

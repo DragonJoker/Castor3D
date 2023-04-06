@@ -441,18 +441,21 @@ int main( int argc, char * argv[] )
 							auto cameraNode = scene.createSceneNode( "MainCameraNode", scene );
 							cameraNode->setPosition( convert::getCameraPosition( scene.getBoundingBox(), farPlane ) );
 							cameraNode->attachTo( *scene.getCameraRootNode() );
-							cameraNode = scene.addSceneNode( "MainCameraNode", cameraNode ).lock();
-							castor3d::Viewport viewport{ *scene.getEngine() };
-							viewport.setPerspective( 45.0_degrees
-								, 1.7778f
-								, std::max( 0.1f, farPlane / 1000.0f )
-								, std::min( farPlane, 1000.0f ) );
-							auto camera = scene.createCamera( "MainCamera"
-								, scene
-								, *cameraNode
-								, viewport );
-							camera->attachTo( *cameraNode );
-							scene.addCamera( "MainCamera", camera, false );
+
+							if ( auto camNode = scene.addSceneNode( "MainCameraNode", cameraNode ) )
+							{
+								castor3d::Viewport viewport{ *scene.getEngine() };
+								viewport.setPerspective( 45.0_degrees
+									, 1.7778f
+									, std::max( 0.1f, farPlane / 1000.0f )
+									, std::min( farPlane, 1000.0f ) );
+								auto camera = scene.createCamera( "MainCamera"
+									, scene
+									, *camNode
+									, viewport );
+								camera->attachTo( *camNode );
+								scene.addCamera( "MainCamera", camera, false );
+							}
 						}
 
 						if ( scene.getLightCache().isEmpty() )
@@ -460,16 +463,19 @@ int main( int argc, char * argv[] )
 							auto lightNode = scene.createSceneNode( "LightNode", scene );
 							lightNode->setOrientation( castor::Quaternion::fromAxisAngle( castor::Point3f{ 1.0, 0.0, 0.0 }, 90.0_degrees ) );
 							lightNode->attachTo( *scene.getObjectRootNode() );
-							lightNode = scene.addSceneNode( "LightNode", lightNode ).lock();
-							auto light = scene.createLight( "SunLight"
-								, scene
-								, *lightNode
-								, scene.getLightsFactory()
-								, castor3d::LightType::eDirectional );
-							light->setColour( castor::RgbColour::fromComponents( 1.0f, 1.0f, 1.0f ) );
-							light->setIntensity( { 8.0f, 10.0f } );
-							light->attachTo( *lightNode );
-							scene.addLight( "SunLight", light, false );
+
+							if ( auto lgtNode = scene.addSceneNode( "LightNode", lightNode ) )
+							{
+								auto light = scene.createLight( "SunLight"
+									, scene
+									, *lgtNode
+									, scene.getLightsFactory()
+									, castor3d::LightType::eDirectional );
+								light->setColour( castor::RgbColour::fromComponents( 1.0f, 1.0f, 1.0f ) );
+								light->setIntensity( { 8.0f, 10.0f } );
+								light->attachTo( *lgtNode );
+								scene.addLight( "SunLight", light, false );
+							}
 						}
 
 						castor3d::exporter::CscnSceneExporter exporter{ options.options };

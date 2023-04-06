@@ -59,7 +59,6 @@ namespace castor3d
 		}
 
 	private:
-		CameraSPtr m_camera;
 		crg::ImageId m_blurIntermediate;
 		crg::ImageViewId m_blurIntermediateView;
 		ShadowType m_shadowType{ ShadowType::eRaw };

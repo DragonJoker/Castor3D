@@ -4,7 +4,7 @@
 
 namespace CastorViewer
 {
-	TranslateNodeEvent::TranslateNodeEvent( castor3d::SceneNodeSPtr node
+	TranslateNodeEvent::TranslateNodeEvent( castor3d::SceneNodeRPtr node
 		, float dx
 		, float dy
 		, float dz )

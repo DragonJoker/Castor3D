@@ -28,11 +28,10 @@ namespace c3d_assimp
 		}
 
 		castor3d::log::info << cuT( "  SceneNode found: [" ) << name << cuT( "]" ) << std::endl;
-		auto parent = node.getScene()->tryFindSceneNode( it->parent );
 
-		if ( parent.lock() )
+		if ( auto parent = node.getScene()->tryFindSceneNode( it->parent ) )
 		{
-			node.attachTo( *parent.lock() );
+			node.attachTo( *parent );
 		}
 		else
 		{

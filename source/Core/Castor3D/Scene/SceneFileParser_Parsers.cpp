@@ -600,7 +600,7 @@ namespace castor3d
 			{
 				castor::String name;
 
-				if ( auto camera = parsingContext.renderTarget->getScene()->findCamera( params[0]->get( name ) ).lock() )
+				if ( auto camera = parsingContext.renderTarget->getScene()->findCamera( params[0]->get( name ) ) )
 				{
 					parsingContext.renderTarget->setCamera( *camera );
 				}
@@ -1138,7 +1138,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserSceneLight )
 	{
 		auto & parsingContext = getParserContext( context );
-		parsingContext.light.reset();
+		parsingContext.light = {};
 		parsingContext.strName.clear();
 
 		if ( !parsingContext.scene )
@@ -1191,7 +1191,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserSceneObject )
 	{
 		auto & parsingContext = getParserContext( context );
-		parsingContext.geometry.reset();
+		parsingContext.geometry = {};
 		castor::String name;
 
 		if ( !parsingContext.scene )
@@ -1201,8 +1201,9 @@ namespace castor3d
 		else if ( !params.empty() )
 		{
 			params[0]->get( name );
-			parsingContext.geometry = parsingContext.scene->createGeometry( name
+			parsingContext.ownGeometry = parsingContext.scene->createGeometry( name
 				, *parsingContext.scene );
+			parsingContext.geometry = parsingContext.ownGeometry.get();
 		}
 	}
 	CU_EndAttributePush( CSCNSection::eObject )
@@ -1243,7 +1244,8 @@ namespace castor3d
 		{
 			castor::String name;
 			params[0]->get( name );
-			parsingContext.billboards = std::make_shared< BillboardList >( name, *parsingContext.scene );
+			parsingContext.ownBillboards = castor::makeUnique< BillboardList >( name, *parsingContext.scene );
+			parsingContext.billboards = parsingContext.ownBillboards.get();
 		}
 	}
 	CU_EndAttributePush( CSCNSection::eBillboard )
@@ -1729,9 +1731,9 @@ namespace castor3d
 			castor::String value;
 			params[0]->get( value );
 
-			if ( auto node = parsingContext.scene->tryFindSceneNode( value ).lock() )
+			if ( auto node = parsingContext.scene->tryFindSceneNode( value ) )
 			{
-				parsingContext.parentNode = node.get();
+				parsingContext.parentNode = node;
 			}
 			else
 			{
@@ -1834,7 +1836,7 @@ namespace castor3d
 				parsingContext.material = parsingContext.parser->getEngine()->getMaterialCache().getDefaultMaterial();
 			}
 
-			parsingContext.particleSystem = parsingContext.scene->tryFindParticleSystem( parsingContext.strName ).lock();
+			parsingContext.particleSystem = parsingContext.scene->tryFindParticleSystem( parsingContext.strName );
 
 			if ( !parsingContext.particleSystem )
 			{
@@ -1846,10 +1848,11 @@ namespace castor3d
 				}
 
 				parsingContext.parentNode = nullptr;
-				parsingContext.particleSystem = std::make_shared< ParticleSystem >( parsingContext.strName
+				parsingContext.ownParticleSystem = parsingContext.scene->createParticleSystem( parsingContext.strName
 					, *parsingContext.scene
 					, *node
 					, parsingContext.particleCount );
+				parsingContext.particleSystem = parsingContext.ownParticleSystem.get();
 			}
 
 			parsingContext.particleSystem->setMaterial( parsingContext.material );
@@ -1888,10 +1891,15 @@ namespace castor3d
 		else
 		{
 			parsingContext.parentNode = nullptr;
-			parsingContext.scene->addParticleSystem( parsingContext.particleSystem->getName()
-				, parsingContext.particleSystem
-				, true );
-			parsingContext.particleSystem.reset();
+
+			if ( parsingContext.ownParticleSystem )
+			{
+				parsingContext.scene->addParticleSystem( parsingContext.particleSystem->getName()
+					, parsingContext.ownParticleSystem
+					, true );
+			}
+
+			parsingContext.particleSystem = {};
 		}
 	}
 	CU_EndAttributePop()
@@ -1968,9 +1976,9 @@ namespace castor3d
 		{
 			castor::String name;
 
-			if ( auto parent = parsingContext.scene->findSceneNode( params[0]->get( name ) ).lock() )
+			if ( auto parent = parsingContext.scene->findSceneNode( params[0]->get( name ) ) )
 			{
-				parsingContext.parentNode = parent.get();
+				parsingContext.parentNode = parent;
 
 				if ( parsingContext.light )
 				{
@@ -1998,10 +2006,15 @@ namespace castor3d
 		else
 		{
 			parsingContext.parentNode = nullptr;
-			parsingContext.scene->addLight( parsingContext.light->getName()
-				, parsingContext.light
-				, true );
-			parsingContext.light.reset();
+
+			if ( parsingContext.ownLight )
+			{
+				parsingContext.scene->addLight( parsingContext.light->getName()
+					, parsingContext.ownLight
+					, true );
+			}
+
+			parsingContext.light = {};
 		}
 	}
 	CU_EndAttributePop()
@@ -2019,7 +2032,7 @@ namespace castor3d
 			uint32_t uiType;
 			params[0]->get( uiType );
 			parsingContext.lightType = LightType( uiType );
-			parsingContext.light = parsingContext.scene->tryFindLight( parsingContext.strName ).lock();
+			parsingContext.light = parsingContext.scene->tryFindLight( parsingContext.strName );
 
 			if ( !parsingContext.light )
 			{
@@ -2031,11 +2044,12 @@ namespace castor3d
 				}
 
 				parsingContext.parentNode = nullptr;
-				parsingContext.light = std::make_shared< Light >( parsingContext.strName
+				parsingContext.ownLight = parsingContext.scene->createLight( parsingContext.strName
 					, *parsingContext.scene
 					, *node
 					, parsingContext.scene->getLightsFactory()
 					, parsingContext.lightType );
+				parsingContext.light = parsingContext.ownLight.get();
 			}
 		}
 	}
@@ -2654,7 +2668,7 @@ namespace castor3d
 			}
 			else
 			{
-				parent = parsingContext.scene->findSceneNode( name ).lock().get();
+				parent = parsingContext.scene->findSceneNode( name );
 			}
 
 			if ( parent )
@@ -2752,7 +2766,7 @@ namespace castor3d
 			, nodeConfig.isStatic );
 
 		auto name = sceneNode->getName();
-		auto node = parsingContext.scene->addSceneNode( name, sceneNode ).lock();
+		auto node = parsingContext.scene->addSceneNode( name, sceneNode );
 		sceneNode.reset();
 
 		if ( !nodeConfig.isStatic )
@@ -2808,7 +2822,7 @@ namespace castor3d
 			}
 			else
 			{
-				parent = parsingContext.scene->findSceneNode( name ).lock().get();
+				parent = parsingContext.scene->findSceneNode( name );
 			}
 
 			if ( parent )
@@ -2922,7 +2936,13 @@ namespace castor3d
 	{
 		auto & parsingContext = getParserContext( context );
 		parsingContext.parentNode = nullptr;
-		parsingContext.scene->addGeometry( std::move( parsingContext.geometry ) );
+
+		if ( parsingContext.ownGeometry )
+		{
+			parsingContext.scene->addGeometry( std::move( parsingContext.ownGeometry ) );
+		}
+
+		parsingContext.geometry = nullptr;
 	}
 	CU_EndAttributePop()
 
@@ -5327,7 +5347,7 @@ namespace castor3d
 	{
 		auto & parsingContext = getParserContext( context );
 		castor::String name;
-		SceneNodeRPtr parent = parsingContext.scene->findSceneNode( params[0]->get( name ) ).lock().get();
+		SceneNodeRPtr parent = parsingContext.scene->findSceneNode( params[0]->get( name ) );
 
 		if ( parent )
 		{
@@ -5399,7 +5419,7 @@ namespace castor3d
 			auto camera = parsingContext.scene->addNewCamera( parsingContext.strName
 				, *parsingContext.scene
 				, *node
-				, std::move( *parsingContext.viewport ) ).lock();
+				, std::move( *parsingContext.viewport ) );
 			camera->setGamma( parsingContext.point2f[0] );
 			camera->setExposure( parsingContext.point2f[1] );
 			parsingContext.viewport.reset();
@@ -5513,7 +5533,7 @@ namespace castor3d
 			castor::String name;
 			params[0]->get( name );
 
-			if ( auto parent = parsingContext.scene->findSceneNode( name ).lock() )
+			if ( auto parent = parsingContext.scene->findSceneNode( name ) )
 			{
 				parent->attachObject( *parsingContext.billboards );
 			}
@@ -5616,10 +5636,15 @@ namespace castor3d
 	{
 		auto & parsingContext = getParserContext( context );
 		parsingContext.parentNode = nullptr;
-		parsingContext.scene->addBillboardList( parsingContext.billboards->getName()
-			, parsingContext.billboards 
-			, true );
-		parsingContext.billboards.reset();
+
+		if ( parsingContext.ownBillboards )
+		{
+			parsingContext.scene->addBillboardList( parsingContext.billboards->getName()
+				, parsingContext.ownBillboards
+				, true );
+		}
+
+		parsingContext.billboards = {};
 	}
 	CU_EndAttributePop()
 
@@ -5640,9 +5665,7 @@ namespace castor3d
 
 		if ( parsingContext.animGroup )
 		{
-			GeometrySPtr geometry = parsingContext.scene->findGeometry( name ).lock();
-
-			if ( geometry )
+			if ( auto geometry = parsingContext.scene->findGeometry( name ) )
 			{
 				auto node = geometry->getParent();
 
@@ -5652,9 +5675,7 @@ namespace castor3d
 						, node->getName() );
 				}
 
-				auto mesh = geometry->getMesh().lock();
-
-				if ( mesh )
+				if ( auto mesh = geometry->getMesh().lock() )
 				{
 					if ( mesh->hasAnimation() )
 					{
@@ -5663,9 +5684,7 @@ namespace castor3d
 							, geometry->getName() );
 					}
 
-					auto skeleton = mesh->getSkeleton();
-
-					if ( skeleton )
+					if ( auto skeleton = mesh->getSkeleton() )
 					{
 						if ( skeleton->hasAnimation() )
 						{
@@ -5679,9 +5698,7 @@ namespace castor3d
 			}
 			else
 			{
-				SceneNodeSPtr node = parsingContext.scene->findSceneNode( name ).lock();
-
-				if ( node )
+				if ( auto node = parsingContext.scene->findSceneNode( name ) )
 				{
 					if ( node->hasAnimation() )
 					{
@@ -5710,13 +5727,9 @@ namespace castor3d
 
 		if ( parsingContext.animGroup )
 		{
-			GeometrySPtr geometry = parsingContext.scene->findGeometry( name ).lock();
-
-			if ( geometry )
+			if ( auto geometry = parsingContext.scene->findGeometry( name ) )
 			{
-				auto mesh = geometry->getMesh().lock();
-
-				if ( mesh )
+				if ( auto mesh = geometry->getMesh().lock() )
 				{
 					if ( mesh->hasAnimation() )
 					{
@@ -5750,17 +5763,11 @@ namespace castor3d
 
 		if ( parsingContext.animGroup )
 		{
-			GeometrySPtr geometry = parsingContext.scene->findGeometry( name ).lock();
-
-			if ( geometry )
+			if ( auto geometry = parsingContext.scene->findGeometry( name ) )
 			{
-				auto mesh = geometry->getMesh().lock();
-
-				if ( mesh )
+				if ( auto mesh = geometry->getMesh().lock() )
 				{
-					auto skeleton = mesh->getSkeleton();
-
-					if ( skeleton )
+					if ( auto skeleton = mesh->getSkeleton() )
 					{
 						if ( skeleton->hasAnimation() )
 						{
@@ -5800,9 +5807,7 @@ namespace castor3d
 
 		if ( parsingContext.animGroup )
 		{
-			SceneNodeSPtr node = parsingContext.scene->findSceneNode( name ).lock();
-
-			if ( node )
+			if ( auto node = parsingContext.scene->findSceneNode( name ) )
 			{
 				if ( node->hasAnimation() )
 				{

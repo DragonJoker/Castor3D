@@ -153,13 +153,14 @@ namespace castor3d
 		bool inWindow{};
 		SceneNodeConfig nodeConfig{};
 		SceneNodeRPtr parentNode{};
-		GeometrySPtr geometry{};
+		GeometryUPtr ownGeometry{};
+		GeometryRPtr geometry{};
 		SkeletonRPtr skeleton{};
 		MeshResPtr mesh{};
 		MeshRes ownMesh{};
 		SubmeshSPtr submesh{};
-		LightSPtr light{};
-		CameraSPtr camera{};
+		LightUPtr ownLight{};
+		LightRPtr light{};
 		castor::PixelFormat pixelFormat{};
 		MaterialRPtr material{};
 		MaterialRes ownMaterial{};
@@ -192,7 +193,8 @@ namespace castor3d
 		UniformBufferBaseUPtr uniformBuffer{};
 		OverlayRes overlay{};
 		std::vector< OverlayRes > parentOverlays{};
-		BillboardListSPtr billboards{};
+		BillboardListUPtr ownBillboards{};
+		BillboardListRPtr billboards{};
 		int face1{ -1 };
 		int face2{ -1 };
 		LightType lightType{ LightType::eCount };
@@ -220,7 +222,8 @@ namespace castor3d
 		TextureAnimationUPtr textureAnimation{};
 		MeshAnimationUPtr morphAnimation{};
 		SceneBackgroundSPtr background{};
-		ParticleSystemSPtr particleSystem{};
+		ParticleSystemUPtr ownParticleSystem{};
+		ParticleSystemRPtr particleSystem{};
 		SsaoConfig ssaoConfig{};
 		SubsurfaceScatteringUPtr subsurfaceScattering{};
 		std::shared_ptr< SkyboxBackground > skybox{};

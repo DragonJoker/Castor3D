@@ -78,7 +78,7 @@ namespace atmosphere_scattering
 			auto & atmosphereContext = parser::getParserContext( context );
 			castor::String name;
 
-			if ( auto node = parsingContext.scene->findSceneNode( params[0]->get( name ) ).lock() )
+			if ( auto node = parsingContext.scene->findSceneNode( params[0]->get( name ) ) )
 			{
 				atmosphereContext.background->setSunNode( *node );
 			}
@@ -102,7 +102,7 @@ namespace atmosphere_scattering
 			auto & atmosphereContext = parser::getParserContext( context );
 			castor::String name;
 
-			if ( auto node = parsingContext.scene->findSceneNode( params[0]->get( name ) ).lock() )
+			if ( auto node = parsingContext.scene->findSceneNode( params[0]->get( name ) ) )
 			{
 				atmosphereContext.background->setPlanetNode( *node );
 			}

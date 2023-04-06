@@ -9,6 +9,9 @@
 #include "Castor3D/Render/Node/SceneRenderNodes.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
+CU_ImplementCUSmartPtr( castor3d, BillboardBase )
+CU_ImplementCUSmartPtr( castor3d, BillboardList )
+
 namespace castor3d
 {
 	//*************************************************************************************************

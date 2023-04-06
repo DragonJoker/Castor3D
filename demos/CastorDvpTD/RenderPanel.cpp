@@ -88,14 +88,14 @@ namespace castortd
 
 			if ( scene )
 			{
-				m_marker = scene->findSceneNode( cuT( "MapMouse" ) ).lock().get();
+				m_marker = scene->findSceneNode( cuT( "MapMouse" ) );
 				m_marker->setVisible( false );
 
 				m_listener = m_renderWindow->getListener();
 
 				using LockType = std::unique_lock< castor3d::CameraCache >;
 				LockType lock{ castor::makeUniqueLock( scene->getCameraCache() ) };
-				auto camera = scene->getCameraCache().begin()->second;
+				auto camera = scene->getCameraCache().begin()->second.get();
 				m_renderWindow->addPickingScene( *scene );
 				m_cameraState = std::make_unique< GuiCommon::NodeState >( scene->getListener(), camera->getParent(), true );
 				m_timers[size_t( TimerID::eMouse )]->Start( 30 );
@@ -135,11 +135,11 @@ namespace castortd
 		return result;
 	}
 
-	void RenderPanel::doUpdateSelectedGeometry( castor3d::GeometrySPtr geometry )
+	void RenderPanel::doUpdateSelectedGeometry( castor3d::GeometryRPtr geometry )
 	{
 		auto curGeometry = m_selectedGeometry;
 
-		if ( geometry.get() != curGeometry )
+		if ( geometry != curGeometry )
 		{
 			bool freeCell = false;
 
@@ -197,7 +197,7 @@ namespace castortd
 						break;
 					}
 
-					m_selectedGeometry = geometry.get();
+					m_selectedGeometry = geometry;
 				}
 			}
 

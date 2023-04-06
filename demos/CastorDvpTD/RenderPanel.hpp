@@ -42,7 +42,7 @@ namespace castortd
 		float doTransformY( int y );
 		int doTransformX( float x );
 		int doTransformY( float y );
-		void doUpdateSelectedGeometry( castor3d::GeometrySPtr geometry );
+		void doUpdateSelectedGeometry( castor3d::GeometryRPtr geometry );
 		void doUpgradeTowerDamage();
 		void doUpgradeTowerSpeed();
 		void doUpgradeTowerRange();

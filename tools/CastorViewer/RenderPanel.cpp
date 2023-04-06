@@ -204,11 +204,11 @@ namespace CastorViewer
 			{
 				if ( scene->hasSceneNode( cuT( "PointLightsNode" ) ) )
 				{
-					m_lightsNode = scene->findSceneNode( cuT( "PointLightsNode" ) ).lock().get();
+					m_lightsNode = scene->findSceneNode( cuT( "PointLightsNode" ) );
 				}
 				else if ( scene->hasSceneNode( cuT( "LightNode" ) ) )
 				{
-					m_lightsNode = scene->findSceneNode( cuT( "LightNode" ) ).lock().get();
+					m_lightsNode = scene->findSceneNode( cuT( "LightNode" ) );
 				}
 
 				auto cameraNode = camera->getParent();
@@ -405,13 +405,13 @@ namespace CastorViewer
 		return result;
 	}
 
-	void RenderPanel::doUpdateSelectedGeometry( castor3d::GeometrySPtr geometry
-		, castor3d::SubmeshSPtr submesh )
+	void RenderPanel::doUpdateSelectedGeometry( castor3d::GeometryRPtr geometry
+		, castor3d::SubmeshRPtr submesh )
 	{
 		auto oldSubmesh = m_selectedSubmesh;
 		auto oldGeometry = m_selectedGeometry;
 
-		if ( oldGeometry != geometry.get() )
+		if ( oldGeometry != geometry )
 		{
 			m_selectedSubmesh = nullptr;
 
@@ -425,14 +425,14 @@ namespace CastorViewer
 				m_cubeManager->displayObject( *geometry, *submesh );
 			}
 
-			m_selectedGeometry = geometry.get();
+			m_selectedGeometry = geometry;
 		}
 
-		if ( oldSubmesh != submesh.get() )
+		if ( oldSubmesh != submesh )
 		{
 			if ( submesh )
 			{
-				m_selectedSubmesh = submesh.get();
+				m_selectedSubmesh = submesh;
 				wxGetApp().getMainFrame()->select( m_selectedGeometry, m_selectedSubmesh );
 			}
 		}

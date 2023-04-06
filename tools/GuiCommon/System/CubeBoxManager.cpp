@@ -120,8 +120,8 @@ namespace GuiCommon
 		m_obbBone = {};
 		m_obbSelectedSubmesh = {};
 		m_obbSubmesh = {};
-		m_aabbNode.reset();
-		m_obbNode.reset();
+		m_aabbNode = {};
+		m_obbNode = {};
 	}
 
 	void CubeBoxManager::displayObject( castor3d::Geometry const & object
@@ -200,42 +200,42 @@ namespace GuiCommon
 				m_obbBoneNodes.clear();
 				m_obbSubmeshNodes.clear();
 				m_obbSelectedSubmeshNode = nullptr;
-				m_obbNode.reset();
-				m_aabbNode.reset();
+				m_obbNode = {};
+				m_aabbNode = {};
 				m_object = nullptr;
 				m_submesh = nullptr;
 			} ) );
 	}
 
-	castor3d::SceneNodeSPtr CubeBoxManager::doAddBB( castor3d::MeshResPtr bbMesh
+	castor3d::SceneNodeRPtr CubeBoxManager::doAddBB( castor3d::MeshResPtr bbMesh
 		, castor::String const & nameSpec
 		, castor3d::SceneNode & parent
 		, castor::BoundingBox const & bb )
 	{
-		castor3d::SceneNodeSPtr result;
+		castor3d::SceneNodeRPtr result;
 		auto name = m_object->getName() + cuT( "-" ) + nameSpec;
 
 		if ( !m_scene.hasSceneNode( name ) )
 		{
-			result = m_scene.addNewSceneNode( name ).lock();
+			result = m_scene.addNewSceneNode( name );
 			result->setSerialisable( false );
 		}
 		else
 		{
-			result = m_scene.findSceneNode( name ).lock();
+			result = m_scene.findSceneNode( name );
 		}
 
-		castor3d::GeometrySPtr ownGeometry;
-		castor3d::GeometrySPtr geometry;
+		castor3d::GeometryUPtr ownGeometry;
+		castor3d::GeometryRPtr geometry;
 
 		if ( !m_scene.hasGeometry( name ) )
 		{
-			ownGeometry = std::make_shared< castor3d::Geometry >( name, m_scene, *result, bbMesh );
-			geometry = ownGeometry;
+			ownGeometry = castor::makeUnique< castor3d::Geometry >( name, m_scene, *result, bbMesh );
+			geometry = ownGeometry.get();
 		}
 		else
 		{
-			geometry = m_scene.findGeometry( name ).lock();
+			geometry = m_scene.findGeometry( name );
 		}
 
 		geometry->setShadowCaster( false );
@@ -259,7 +259,7 @@ namespace GuiCommon
 	}
 
 	void CubeBoxManager::doRemoveBB( castor::String const & nameSpec
-		, castor3d::SceneNodeSPtr bbNode )
+		, castor3d::SceneNodeRPtr bbNode )
 	{
 		bbNode->setVisible( false );
 	}

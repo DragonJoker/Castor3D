@@ -94,14 +94,14 @@ namespace castor3d
 			};
 
 			auto & scene = background.getScene();
-			std::array< SceneNodeSPtr, size_t( CubeMapFace::eCount ) > nodes
+			std::array< SceneNodeUPtr, size_t( CubeMapFace::eCount ) > nodes
 			{
-				std::make_shared< SceneNode >( "C3D_Env" + scene.getName() + cuT( "PosX" ), scene ),
-				std::make_shared< SceneNode >( "C3D_Env" + scene.getName() + cuT( "NegX" ), scene ),
-				std::make_shared< SceneNode >( "C3D_Env" + scene.getName() + cuT( "PosY" ), scene ),
-				std::make_shared< SceneNode >( "C3D_Env" + scene.getName() + cuT( "NegY" ), scene ),
-				std::make_shared< SceneNode >( "C3D_Env" + scene.getName() + cuT( "PosZ" ), scene ),
-				std::make_shared< SceneNode >( "C3D_Env" + scene.getName() + cuT( "NegZ" ), scene ),
+				castor::makeUnique< SceneNode >( "C3D_Env" + scene.getName() + cuT( "PosX" ), scene ),
+				castor::makeUnique< SceneNode >( "C3D_Env" + scene.getName() + cuT( "NegX" ), scene ),
+				castor::makeUnique< SceneNode >( "C3D_Env" + scene.getName() + cuT( "PosY" ), scene ),
+				castor::makeUnique< SceneNode >( "C3D_Env" + scene.getName() + cuT( "NegY" ), scene ),
+				castor::makeUnique< SceneNode >( "C3D_Env" + scene.getName() + cuT( "PosZ" ), scene ),
+				castor::makeUnique< SceneNode >( "C3D_Env" + scene.getName() + cuT( "NegZ" ), scene ),
 			};
 
 			auto i = 0u;
@@ -113,12 +113,12 @@ namespace castor3d
 				++i;
 			}
 
-			return { std::make_unique< EnvironmentMapPass >( graph, device, map, nodes[0], index, CubeMapFace::ePositiveX, background )
-				, std::make_unique< EnvironmentMapPass >( graph, device, map, nodes[1], index, CubeMapFace::eNegativeX, background )
-				, std::make_unique< EnvironmentMapPass >( graph, device, map, nodes[2], index, CubeMapFace::ePositiveY, background )
-				, std::make_unique< EnvironmentMapPass >( graph, device, map, nodes[3], index, CubeMapFace::eNegativeY, background )
-				, std::make_unique< EnvironmentMapPass >( graph, device, map, nodes[4], index, CubeMapFace::ePositiveZ, background )
-				, std::make_unique< EnvironmentMapPass >( graph, device, map, nodes[5], index, CubeMapFace::eNegativeZ, background ) };
+			return { std::make_unique< EnvironmentMapPass >( graph, device, map, std::move( nodes[0] ), index, CubeMapFace::ePositiveX, background )
+				, std::make_unique< EnvironmentMapPass >( graph, device, map, std::move( nodes[1] ), index, CubeMapFace::eNegativeX, background )
+				, std::make_unique< EnvironmentMapPass >( graph, device, map, std::move( nodes[2] ), index, CubeMapFace::ePositiveY, background )
+				, std::make_unique< EnvironmentMapPass >( graph, device, map, std::move( nodes[3] ), index, CubeMapFace::eNegativeY, background )
+				, std::make_unique< EnvironmentMapPass >( graph, device, map, std::move( nodes[4] ), index, CubeMapFace::ePositiveZ, background )
+				, std::make_unique< EnvironmentMapPass >( graph, device, map, std::move( nodes[5] ), index, CubeMapFace::eNegativeZ, background ) };
 		}
 
 		static std::vector< ashes::ImageView > createViews( Texture const & envMap
