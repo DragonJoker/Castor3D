@@ -48,6 +48,8 @@ namespace castor3d
 			, ControlFlagType flags = 0
 			, bool visible = true );
 
+		C3D_API ~FrameCtrl()noexcept;
+
 		/** \return	The frame style.
 		*/
 		FrameStyle const & getStyle()const noexcept
@@ -170,8 +172,8 @@ namespace castor3d
 
 	private:
 		uint32_t m_headerHeight;
-		StaticCtrlSPtr m_header;
-		PanelCtrlSPtr m_content;
+		StaticCtrlRPtr m_header;
+		PanelCtrlRPtr m_content;
 		castor::Size m_minSize;
 	};
 }

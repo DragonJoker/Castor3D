@@ -115,9 +115,9 @@ namespace castor3d
 			}
 
 		private:
-			EventHandler * doGetMouseTargetableHandler( castor::Position const & position )const override
+			EventHandlerRPtr doGetMouseTargetableHandler( castor::Position const & position )const override
 			{
-				return m_window->getEventHandler().get();
+				return m_handler;
 			}
 
 			/**@name General */
@@ -128,7 +128,7 @@ namespace castor3d
 			 */
 			bool doInitialise()override
 			{
-				doAddHandler( m_window->getEventHandler() );
+				m_handler = doAddHandler( castor::makeUniqueDerived< EventHandler, EvtHandler >( *m_window ) );
 				return true;
 			}
 			/**
@@ -136,11 +136,12 @@ namespace castor3d
 			 */
 			void doCleanup()override
 			{
-				doRemoveHandler( *m_window->getEventHandler() );
+				doRemoveHandler( *m_handler );
 			}
 
 		private:
 			RenderWindow * m_window;
+			EventHandlerRPtr m_handler{};
 		};
 
 	public:
@@ -448,9 +449,9 @@ namespace castor3d
 			return *m_progressBar;
 		}
 
-		EventHandlerSPtr getEventHandler()
+		EventHandlerRPtr getEventHandler()
 		{
-			return m_evtHandler;
+			return m_evtHandler.get();
 		}
 		/**@}*/
 		/**
@@ -534,7 +535,7 @@ namespace castor3d
 
 	private:
 		static uint32_t s_nbRenderWindows;
-		std::shared_ptr< EvtHandler > m_evtHandler;
+		std::unique_ptr< EvtHandler > m_evtHandler;
 		uint32_t m_index{};
 		RenderDevice & m_device;
 		ashes::SurfacePtr m_surface;

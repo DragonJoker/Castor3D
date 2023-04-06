@@ -54,25 +54,25 @@ namespace castor3d
 			, flags
 			, visible }
 		, m_headerHeight{ headerHeight }
-		, m_header{ std::make_shared< PanelCtrl >( m_scene
+		, m_header{ getEngine().getControlsManager()->registerControlT( castor::makeUnique< PanelCtrl >( m_scene
 			, cuT( "Header" )
 			, &style->getHeaderStyle()
 			, this
 			, castor::Position{ 0, 0 }
-			, castor::Size{ size->x - m_headerHeight, m_headerHeight } ) }
-		, m_expand{ std::make_shared< ButtonCtrl >( m_scene
+			, castor::Size{ size->x - m_headerHeight, m_headerHeight } ) ) }
+		, m_expand{ getEngine().getControlsManager()->registerControlT( castor::makeUnique< ButtonCtrl >( m_scene
 			, cuT( "Expand" )
 			, &style->getExpandStyle()
 			, this
 			, m_retractCaption
 			, castor::Position{ int32_t( size->x - m_headerHeight ), 0 }
-			, castor::Size{ m_headerHeight, m_headerHeight } ) }
-		, m_content{ std::make_shared< PanelCtrl >( m_scene
+			, castor::Size{ m_headerHeight, m_headerHeight } ) ) }
+		, m_content{ getEngine().getControlsManager()->registerControlT( castor::makeUnique< PanelCtrl >( m_scene
 			, cuT( "Content" )
 			, &style->getContentStyle()
 			, this
 			, castor::Position{ 0, int32_t( m_headerHeight ) }
-			, castor::Size{ size->x, size->y - m_headerHeight } ) }
+			, castor::Size{ size->x, size->y - m_headerHeight } ) ) }
 		, m_expanded{ expanded }
 	{
 		setBorderSize( { 0u, 0u, 0u, 0u } );
@@ -86,6 +86,14 @@ namespace castor3d
 			} );
 
 		setStyle( style );
+	}
+
+	ExpandablePanelCtrl::~ExpandablePanelCtrl()noexcept
+	{
+		auto & manager = *getEngine().getControlsManager();
+		manager.unregisterControl( *m_content );
+		manager.unregisterControl( *m_expand );
+		manager.unregisterControl( *m_header );
 	}
 
 	void ExpandablePanelCtrl::setExpandCaption( castor::U32String v )

@@ -67,6 +67,10 @@ namespace castor3d
 
 		/** Updates total scrollable content dimensions.
 		*/
+		C3D_API void unregisterControl( Control & control );
+
+		/** Updates total scrollable content dimensions.
+		*/
 		C3D_API void updateTotalSize( castor::Size const & size );
 
 		/** @copydoc Control::doUpdateZIndex
@@ -109,8 +113,8 @@ namespace castor3d
 	private:
 		Control & m_target;
 		ScrollableStyleRPtr m_scrollableStyle{};
-		ScrollBarCtrlSPtr m_verticalScrollBar{};
-		ScrollBarCtrlSPtr m_horizontalScrollBar{};
+		ScrollBarCtrlRPtr m_verticalScrollBar{};
+		ScrollBarCtrlRPtr m_horizontalScrollBar{};
 		PanelOverlayRPtr m_corner{};
 		std::map< ControlRPtr, ScrolledControl > m_controls{};
 		OnScrollBarEventConnection m_onVerticalThumbRelease{};

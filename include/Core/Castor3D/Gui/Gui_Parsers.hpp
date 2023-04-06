@@ -16,22 +16,22 @@ namespace castor3d
 {
 	struct GuiParserContext
 	{
-		std::stack< ControlSPtr > parents{};
+		std::stack< ControlRPtr > parents{};
 		std::stack< ControlStyleRPtr > styles{};
 		std::stack< StylesHolderRPtr > stylesHolder{};
 		Engine * engine{};
 		castor::String controlName{};
-		ButtonCtrlSPtr button{};
-		ComboBoxCtrlSPtr combo{};
-		EditCtrlSPtr edit{};
-		ListBoxCtrlSPtr listbox{};
-		SliderCtrlSPtr slider{};
-		StaticCtrlSPtr staticTxt{};
-		PanelCtrlSPtr panel{};
-		ProgressCtrlSPtr progress{};
-		ExpandablePanelCtrlSPtr expandablePanel{};
-		FrameCtrlSPtr frame{};
-		ScrollableCtrlSPtr scrollable{};
+		ButtonCtrlRPtr button{};
+		ComboBoxCtrlRPtr combo{};
+		EditCtrlRPtr edit{};
+		ListBoxCtrlRPtr listbox{};
+		SliderCtrlRPtr slider{};
+		StaticCtrlRPtr staticTxt{};
+		PanelCtrlRPtr panel{};
+		ProgressCtrlRPtr progress{};
+		ExpandablePanelCtrlRPtr expandablePanel{};
+		FrameCtrlRPtr frame{};
+		ScrollableCtrlRPtr scrollable{};
 		ThemeRPtr theme{};
 		ButtonStyleRPtr buttonStyle{};
 		ComboBoxStyleRPtr comboStyle{};

@@ -411,12 +411,12 @@ namespace castor3d
 	*/
 	class UserInputListener;
 
-	CU_DeclareSmartPtr( EventHandler );
-	CU_DeclareSmartPtr( UserInputEvent );
-	CU_DeclareSmartPtr( KeyboardEvent );
-	CU_DeclareSmartPtr( MouseEvent );
-	CU_DeclareSmartPtr( HandlerEvent );
-	CU_DeclareSmartPtr( UserInputListener );
+	CU_DeclareCUSmartPtr( castor3d, EventHandler, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, UserInputEvent, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, KeyboardEvent, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, MouseEvent, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, HandlerEvent, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, UserInputListener, C3D_API );
 
 	template< class Derived > class NonClientEventHandler;
 

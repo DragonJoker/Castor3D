@@ -123,23 +123,41 @@ namespace castor3d
 		/**@name Controls management */
 		//@{
 
+		/** Adds a control that still needs to be created.
+		*\param[in] control
+		*	The control
+		*/
+		C3D_API ControlRPtr registerControl( ControlUPtr control );
+
+		template< typename ControlT >
+		ControlT * registerControlT( castor::UniquePtr< ControlT > control )
+		{
+			return &static_cast< ControlT & >( *registerControl( castor::ptrCast< Control >( control ) ) );
+		}
+
+		/** Removes a control that has been destroyed.
+		*\param[in] control
+		*	The control
+		*/
+		C3D_API void unregisterControl( Control & control );
+
 		/** Creates the given control's overlays and binds its callbacks to appropriate events
 		*\param[in] control
 		*	The control
 		*/
-		C3D_API void create( ControlSPtr control );
+		C3D_API void create( ControlRPtr control );
 
 		/** Destroys the given control's overlays and unbinds its callbacks from appropriate events.
 		*\param[in] control
 		*	The control.
 		*/
-		C3D_API void destroy( ControlSPtr control );
+		C3D_API void destroy( ControlRPtr control );
 
 		/** Adds a control that can an event target
 		*\param[in] control
 		*	The control
 		*/
-		C3D_API void addControl( ControlSPtr control );
+		C3D_API void addControl( ControlRPtr control );
 
 		/** Removes a control
 		*\param[in] id
@@ -153,7 +171,7 @@ namespace castor3d
 		*\return
 		*	The control.
 		*/
-		C3D_API ControlSPtr getControl( ControlID id )const;
+		C3D_API ControlRPtr getControl( ControlID id )const;
 
 		/** Retrieves a control.
 		*\param[in] name
@@ -161,12 +179,12 @@ namespace castor3d
 		*\return
 		*	The control.
 		*/
-		C3D_API ControlSPtr findControl( castor::String const & name )const;
+		C3D_API ControlRPtr findControl( castor::String const & name )const;
 
 		/** \return
 		*	The root controls.
 		*/
-		C3D_API std::vector< Control * > getRootControls()const;
+		C3D_API std::vector< ControlRPtr > getRootControls()const;
 
 		//@}
 
@@ -282,7 +300,7 @@ namespace castor3d
 		*\param[in] position
 		*	The mouse position
 		*/
-		EventHandler * doGetMouseTargetableHandler( castor::Position const & position )const override;
+		EventHandlerRPtr doGetMouseTargetableHandler( castor::Position const & position )const override;
 
 		/** Updates the z-index ordered controls array
 		*/
@@ -291,16 +309,16 @@ namespace castor3d
 		/** \return
 		*	The controls by z-index.
 		*/
-		std::vector< Control * > doGetControlsByZIndex()const;
+		std::vector< ControlRPtr > doGetControlsByZIndex()const;
 
 		/** Sets the controls by z-index.
 		*/
-		void doSetControlsByZIndex( std::vector< Control * > v );
+		void doSetControlsByZIndex( std::vector< ControlRPtr > v );
 
 		/** \return
 		*	The controls by ID.
 		*/
-		std::map< ControlID, ControlWPtr > doGetControlsById()const;
+		std::map< ControlID, ControlRPtr > doGetControlsById()const;
 
 		/** Marks the manager as to be updated.
 		*/
@@ -311,10 +329,10 @@ namespace castor3d
 
 	private:
 		mutable std::mutex m_mutexControlsById;
-		std::map< ControlID, ControlWPtr > m_controlsById;
-		std::vector< Control * > m_rootControls;
+		std::map< ControlID, ControlRPtr > m_controlsById;
+		std::vector< ControlRPtr > m_rootControls;
 		mutable std::mutex m_mutexControlsByZIndex;
-		mutable std::vector< Control * > m_controlsByZIndex;
+		mutable std::vector< ControlRPtr > m_controlsByZIndex;
 		mutable std::atomic< CpuFrameEvent * > m_event{};
 		std::map< castor::String, ThemeUPtr > m_themes;
 		std::map< Control const *, OnButtonEventConnection > m_onButtonClicks;

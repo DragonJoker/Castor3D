@@ -57,6 +57,7 @@ namespace castor3d
 		, m_scrolling{ false }
 	{
 		CU_Require( isScrollableControl( *parent ) );
+		auto & manager = *getEngine().getControlsManager();
 		setBorderSize( castor::Point4ui{} );
 		EventHandler::connect( KeyboardEventType::ePushed
 			, [this]( KeyboardEvent const & event )
@@ -64,13 +65,13 @@ namespace castor3d
 				onKeyDown( event );
 			} );
 
-		m_begin = std::make_shared< ButtonCtrl >( m_scene
+		m_begin = manager.registerControlT( castor::makeUnique< ButtonCtrl >( m_scene
 			, cuT( "Begin" )
 			, &style->getBeginStyle()
 			, this
 			, U"-"
 			, castor::Position{}
-			, castor::Size{} );
+			, castor::Size{} ) );
 		m_begin->setVisible( visible );
 		m_onBeginClick = m_begin->connect( ButtonEvent::eClicked
 			, [this]()
@@ -78,13 +79,13 @@ namespace castor3d
 				doScroll( -1 );
 			} );
 
-		m_end = std::make_shared< ButtonCtrl >( m_scene
+		m_end = manager.registerControlT( castor::makeUnique< ButtonCtrl >( m_scene
 			, cuT( "End" )
 			, &style->getEndStyle()
 			, this
 			, U"+"
 			, castor::Position{}
-			, castor::Size{} );
+			, castor::Size{} ) );
 		m_end->setVisible( visible );
 		m_onEndClick = m_end->connect( ButtonEvent::eClicked
 			, [this]()
@@ -92,52 +93,57 @@ namespace castor3d
 				doScroll( 1 );
 			} );
 
-		auto bar = std::make_shared< PanelCtrl >( m_scene
+		m_bar = manager.registerControlT( castor::makeUnique< PanelCtrl >( m_scene
 			, cuT( "Line" )
 			, &style->getBarStyle()
 			, this
 			, castor::Position{}
-			, castor::Size{} );
-		bar->setVisible( visible );
-		bar->connectNC( KeyboardEventType::ePushed
-			, [this]( ControlSPtr control, KeyboardEvent const & event )
+			, castor::Size{} ) );
+		m_bar->setVisible( visible );
+		m_bar->connectNC( KeyboardEventType::ePushed
+			, [this]( ControlRPtr control, KeyboardEvent const & event )
 			{
 				onNcKeyDown( control, event );
 			} );
-		m_bar = bar;
 
-		auto thumb = std::make_shared< PanelCtrl >( m_scene
+		m_thumb = manager.registerControlT( castor::makeUnique< PanelCtrl >( m_scene
 			, cuT( "Thumb" )
 			, &style->getThumbStyle()
-			, bar.get()
+			, m_bar
 			, castor::Position{}
-			, castor::Size{} );
-		thumb->setBorderSize( { 1u, 1u, 1u, 1u } );
-		thumb->setVisible( visible );
-		thumb->setCatchesMouseEvents( true );
-		thumb->connectNC( MouseEventType::eMove
-			, [this]( ControlSPtr control, MouseEvent const & event )
+			, castor::Size{} ) );
+		m_thumb->setBorderSize( { 1u, 1u, 1u, 1u } );
+		m_thumb->setVisible( visible );
+		m_thumb->setCatchesMouseEvents( true );
+		m_thumb->connectNC( MouseEventType::eMove
+			, [this]( ControlRPtr control, MouseEvent const & event )
 			{
 				onThumbMouseMove( control, event );
 			} );
-		thumb->connectNC( MouseEventType::ePushed
-			, [this]( ControlSPtr control, MouseEvent const & event )
+		m_thumb->connectNC( MouseEventType::ePushed
+			, [this]( ControlRPtr control, MouseEvent const & event )
 			{
 				onThumbMouseButtonDown( control, event );
 			} );
-		thumb->connectNC( MouseEventType::eReleased
-			, [this]( ControlSPtr control, MouseEvent const & event )
+		m_thumb->connectNC( MouseEventType::eReleased
+			, [this]( ControlRPtr control, MouseEvent const & event )
 			{
 				onThumbMouseButtonUp( control, event );
 			} );
-		thumb->connectNC( KeyboardEventType::ePushed
-			, [this]( ControlSPtr control, KeyboardEvent const & event )
+		m_thumb->connectNC( KeyboardEventType::ePushed
+			, [this]( ControlRPtr control, KeyboardEvent const & event )
 			{
 				onNcKeyDown( control, event );
 			} );
-		m_thumb = thumb;
 
 		setStyle( style );
+	}
+
+	ScrollBarCtrl::~ScrollBarCtrl()noexcept
+	{
+		auto & manager = *getEngine().getControlsManager();
+		manager.unregisterControl( *m_thumb );
+		manager.unregisterControl( *m_bar );
 	}
 
 	void ScrollBarCtrl::setRange( castor::Range< uint32_t > const & value )
@@ -257,8 +263,8 @@ namespace castor3d
 
 		if ( m_scrolling
 			&& focusedControl != this
-			&& focusedControl != m_thumb.get()
-			&& focusedControl != m_bar.get() )
+			&& focusedControl != m_thumb
+			&& focusedControl != m_bar )
 		{
 			doMoveMouse( event.getPosition() );
 			m_signals[size_t( ScrollBarEvent::eThumbRelease )]( int32_t( m_value.value() ) );
@@ -274,13 +280,13 @@ namespace castor3d
 	{
 	}
 
-	void ScrollBarCtrl::onThumbMouseMove( ControlSPtr control
+	void ScrollBarCtrl::onThumbMouseMove( ControlRPtr control
 		, MouseEvent const & event )
 	{
 		doOnMouseMove( event );
 	}
 
-	void ScrollBarCtrl::onThumbMouseButtonDown( ControlSPtr control
+	void ScrollBarCtrl::onThumbMouseButtonDown( ControlRPtr control
 		, MouseEvent const & event )
 	{
 		if ( event.getButton() == MouseButton::eLeft )
@@ -290,7 +296,7 @@ namespace castor3d
 		}
 	}
 
-	void ScrollBarCtrl::onThumbMouseButtonUp( ControlSPtr control, MouseEvent const & event )
+	void ScrollBarCtrl::onThumbMouseButtonUp( ControlRPtr control, MouseEvent const & event )
 	{
 		doOnMouseButtonUp( event );
 	}
@@ -310,7 +316,7 @@ namespace castor3d
 		}
 	}
 
-	void ScrollBarCtrl::onNcKeyDown( ControlSPtr control
+	void ScrollBarCtrl::onNcKeyDown( ControlRPtr control
 		, KeyboardEvent const & event )
 	{
 		onKeyDown( event );

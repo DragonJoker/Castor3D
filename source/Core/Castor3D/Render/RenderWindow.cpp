@@ -334,7 +334,7 @@ namespace castor3d
 		, ashes::WindowHandle handle )
 		: OwnedBy< Engine >{ engine }
 		, castor::Named{ name }
-		, m_evtHandler{ std::make_shared< EvtHandler >( *this ) }
+		, m_evtHandler{ std::make_unique< EvtHandler >( *this ) }
 		, m_index{ s_nbRenderWindows++ }
 		, m_device{ engine.getRenderSystem()->getRenderDevice() }
 		, m_surface{ m_device.renderSystem.getInstance().createSurface( m_device.renderSystem.getPhysicalDevice()
@@ -1165,13 +1165,13 @@ namespace castor3d
 		if ( !m_progressBar )
 		{
 			m_progressBar = castor::makeUnique< ProgressBar >( *getEngine()
-				, static_cast< ProgressCtrl * >( control.get() ) );
+				, static_cast< ProgressCtrl * >( control ) );
 			m_progressBar->setTitle( "Initialising..." );
 			m_progressBar->setLabel( "" );
 		}
 		else
 		{
-			m_progressBar->update( static_cast< ProgressCtrl * >( control.get() ) );
+			m_progressBar->update( static_cast< ProgressCtrl * >( control ) );
 		}
 
 		m_loadingScreen = castor::makeUnique< LoadingScreen >( *m_progressBar

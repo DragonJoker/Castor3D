@@ -116,7 +116,7 @@ namespace castor3d
 
 	protected:
 		ParticleDeclaration m_inputs;
-		ShaderProgramRPtr m_program;
+		ShaderProgramRPtr m_program{};
 		UniformBufferOffsetT< Configuration > m_ubo;
 		std::array< ashes::BufferPtr< uint8_t >, 2 > m_particlesStorages;
 		ashes::BufferPtr< uint32_t > m_generatedCountBuffer;

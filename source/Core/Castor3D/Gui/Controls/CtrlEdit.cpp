@@ -223,9 +223,14 @@ namespace castor3d
 		getControlsManager()->disconnectEvents( *this );
 	}
 
-	void EditCtrl::doAddChild( ControlSPtr control )
+	void EditCtrl::doAddChild( ControlRPtr control )
 	{
 		registerControl( *control );
+	}
+
+	void EditCtrl::doRemoveChild( ControlRPtr control )
+	{
+		unregisterControl( *control );
 	}
 
 	castor::Point4ui EditCtrl::doUpdateClientRect( castor::Point4ui const & clientRect )

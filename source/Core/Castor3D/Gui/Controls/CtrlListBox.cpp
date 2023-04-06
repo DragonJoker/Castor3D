@@ -67,6 +67,16 @@ namespace castor3d
 		setStyle( style );
 	}
 
+	ListBoxCtrl::~ListBoxCtrl()noexcept
+	{
+		auto & manager = *getEngine().getControlsManager();
+
+		for ( auto item : m_items )
+		{
+			manager.unregisterControl( *item );
+		}
+	}
+
 	void ListBoxCtrl::appendItem( castor::String const & value )
 	{
 		m_values.push_back( value );
@@ -81,7 +91,6 @@ namespace castor3d
 				{
 					getControlsManager()->create( item );
 				} ) );
-
 			doUpdateItems();
 		}
 		else
@@ -104,7 +113,7 @@ namespace castor3d
 				}
 				else if ( value == m_selected )
 				{
-					m_selectedItem.reset();
+					m_selectedItem = {};
 					m_selected = -1;
 				}
 
@@ -164,7 +173,7 @@ namespace castor3d
 	{
 		m_values.clear();
 		m_items.clear();
-		m_selectedItem.reset();
+		m_selectedItem = {};
 		m_selected = -1;
 	}
 
@@ -180,7 +189,7 @@ namespace castor3d
 			if ( item )
 			{
 				item->setStyle( &style.getItemStyle() );
-				m_selectedItem.reset();
+				m_selectedItem = {};
 			}
 		}
 
@@ -230,37 +239,38 @@ namespace castor3d
 		setBackgroundSize( castor::Size( getSize()->x, uint32_t( m_items.size() * DefaultHeight ) ) );
 	}
 
-	StaticCtrlSPtr ListBoxCtrl::doCreateItemCtrl( castor::String const & value
+	StaticCtrlRPtr ListBoxCtrl::doCreateItemCtrl( castor::String const & value
 		, uint32_t itemIndex )
 	{
 		auto & style = getStyle();
-		auto item = std::make_shared< StaticCtrl >( m_scene
+		auto & manager = *getEngine().getControlsManager();
+		auto item = manager.registerControlT( castor::makeUnique< StaticCtrl >( m_scene
 			, getName() + cuT( "_Item" ) + castor::string::toString( itemIndex )
 			, &style.getItemStyle()
 			, this
 			, castor::string::toU32String( value )
 			, castor::Position{}
 			, castor::Size{ getClientSize()->x, DefaultHeight }
-			, uint32_t( StaticFlag::eVAlignCenter ) );
+			, uint32_t( StaticFlag::eVAlignCenter ) ) );
 		item->setCatchesMouseEvents( true );
 
 		item->connectNC( MouseEventType::eEnter
-			, [this]( ControlSPtr control, MouseEvent const & event )
+			, [this]( ControlRPtr control, MouseEvent const & event )
 			{
 				onItemMouseEnter( control, event );
 			} );
 		item->connectNC( MouseEventType::eLeave
-			, [this]( ControlSPtr control, MouseEvent const & event )
+			, [this]( ControlRPtr control, MouseEvent const & event )
 			{
 				onItemMouseLeave( control, event );
 			} );
 		item->connectNC( MouseEventType::eReleased
-			, [this]( ControlSPtr control, MouseEvent const & event )
+			, [this]( ControlRPtr control, MouseEvent const & event )
 			{
 				onItemMouseLButtonUp( control, event );
 			} );
 		item->connectNC( KeyboardEventType::ePushed
-			, [this]( ControlSPtr control, KeyboardEvent const & event )
+			, [this]( ControlRPtr control, KeyboardEvent const & event )
 			{
 				onItemKeyDown( control, event );
 			} );
@@ -312,7 +322,7 @@ namespace castor3d
 		}
 
 		m_items.clear();
-		m_selectedItem.reset();
+		m_selectedItem = {};
 	}
 
 	void ListBoxCtrl::doSetPosition( castor::Position const & value )
@@ -333,19 +343,19 @@ namespace castor3d
 		}
 	}
 
-	void ListBoxCtrl::onItemMouseEnter( ControlSPtr control
+	void ListBoxCtrl::onItemMouseEnter( ControlRPtr control
 		, MouseEvent const & event )
 	{
 		auto & style = getStyle();
 		control->setStyle( &style.getHighlightedItemStyle() );
 	}
 
-	void ListBoxCtrl::onItemMouseLeave( ControlSPtr control
+	void ListBoxCtrl::onItemMouseLeave( ControlRPtr control
 		, MouseEvent const & event )
 	{
 		auto & style = getStyle();
 
-		if ( m_selectedItem.lock() == control )
+		if ( m_selectedItem == control )
 		{
 			control->setStyle( &style.getSelectedItemStyle() );
 		}
@@ -355,16 +365,16 @@ namespace castor3d
 		}
 	}
 
-	void ListBoxCtrl::onItemMouseLButtonUp( ControlSPtr control
+	void ListBoxCtrl::onItemMouseLButtonUp( ControlRPtr control
 		, MouseEvent const & event )
 	{
 		if ( event.getButton() == MouseButton::eLeft )
 		{
-			if ( m_selectedItem.lock() != control )
+			if ( m_selectedItem != control )
 			{
 				auto it = std::find_if( m_items.begin()
 					, m_items.end()
-					, [&control]( StaticCtrlSPtr const & lookup )
+					, [&control]( StaticCtrlRPtr const & lookup )
 					{
 						return lookup == control;
 					} );
@@ -409,7 +419,7 @@ namespace castor3d
 		}
 	}
 
-	void ListBoxCtrl::onItemKeyDown( ControlSPtr control
+	void ListBoxCtrl::onItemKeyDown( ControlRPtr control
 		, KeyboardEvent const & event )
 	{
 		onKeyDown( event );

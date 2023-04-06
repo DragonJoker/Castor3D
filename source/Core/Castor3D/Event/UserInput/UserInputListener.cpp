@@ -11,6 +11,8 @@
 
 #include <CastorUtils/Design/ResourceCache.hpp>
 
+CU_ImplementCUSmartPtr( castor3d, UserInputListener )
+
 namespace castor3d
 {
 	UserInputListener::UserInputListener( Engine & engine, castor::String const & name )
@@ -60,8 +62,8 @@ namespace castor3d
 
 		while ( it != m_handlers.end() )
 		{
-			auto handler = *it;
-			doRemoveHandlerNL( *handler );
+			auto & handler = **it;
+			doRemoveHandlerNL( handler );
 			it = m_handlers.begin();
 		}
 	}
@@ -283,7 +285,7 @@ namespace castor3d
 	{
 		auto it = std::find_if( m_handlers.begin()
 			, m_handlers.end()
-			, [&handler]( EventHandlerSPtr const & lookup )
+			, [&handler]( EventHandlerUPtr const & lookup )
 			{
 				return lookup->getName() == handler;
 			} );
@@ -298,7 +300,7 @@ namespace castor3d
 	{
 		auto it = std::find_if( m_handlers.begin()
 			, m_handlers.end()
-			, [&handler]( EventHandlerSPtr const & lookup )
+			, [&handler]( EventHandlerUPtr const & lookup )
 			{
 				return lookup->getName() == handler;
 			} );

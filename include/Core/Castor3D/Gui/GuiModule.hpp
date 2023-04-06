@@ -463,7 +463,7 @@ namespace castor3d
 	CU_DeclareCUSmartPtr( castor3d, SliderStyle, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, StaticStyle, C3D_API );
 
-	using ControlArray = std::vector< ControlSPtr >;
+	using ControlArray = std::vector< ControlRPtr >;
 
 	template< typename TypeT >
 	concept ControlFlagTypeT = ( std::is_same_v< TypeT, ControlFlagType >

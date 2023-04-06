@@ -54,25 +54,32 @@ namespace castor3d
 			, flags | ControlFlag::eMovable | ControlFlag::eResizable
 			, visible }
 		, m_headerHeight{ headerHeight }
-		, m_header{ std::make_shared< StaticCtrl >( m_scene
+		, m_header{ getEngine().getControlsManager()->registerControlT( castor::makeUnique< StaticCtrl >( m_scene
 			, cuT( "Header" )
 			, &style->getHeaderStyle()
 			, this
 			, castor::string::toU32String( name )
 			, castor::Position{ 0, 0 }
-			, castor::Size{ size->x - m_headerHeight, m_headerHeight } ) }
-		, m_content{ std::make_shared< PanelCtrl >( m_scene
+			, castor::Size{ size->x - m_headerHeight, m_headerHeight } ) ) }
+		, m_content{ getEngine().getControlsManager()->registerControlT( castor::makeUnique< PanelCtrl >( m_scene
 			, cuT( "Content" )
 			, &style->getContentStyle()
 			, this
 			, castor::Position{ 0, int32_t( m_headerHeight ) }
-			, castor::Size{ size->x, size->y - m_headerHeight } ) }
+			, castor::Size{ size->x, size->y - m_headerHeight } ) ) }
 	{
 		setBorderSize( { 0u, 0u, 0u, 0u } );
 		m_header->setVisible( visible );
 		m_header->setBorderSize( { 0u, 0u, 0u, 1u } );
 		m_content->setVisible( visible );
 		setStyle( style );
+	}
+
+	FrameCtrl::~FrameCtrl()noexcept
+	{
+		auto & manager = *getEngine().getControlsManager();
+		manager.unregisterControl( *m_content );
+		manager.unregisterControl( *m_header );
 	}
 
 	void FrameCtrl::doUpdateStyle()

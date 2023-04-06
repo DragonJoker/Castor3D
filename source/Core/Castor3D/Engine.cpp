@@ -661,6 +661,13 @@ namespace castor3d
 			: nullptr;
 	}
 
+	ControlsManager * Engine::getControlsManager()const
+	{
+		return m_userInputListener
+			? &static_cast< ControlsManager & >( *m_userInputListener )
+			: nullptr;
+	}
+
 	castor::RgbaColour Engine::getNextRainbowColour()const
 	{
 		static float currentColourHue{ 0.0f };

@@ -118,12 +118,12 @@ namespace water
 					, VK_IMAGE_VIEW_TYPE_2D
 					, img.data->info.format
 					, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, image.getLevels(), 0u, 1u } } );
-				auto buffer = image.getPixels();
 
 				engine.postEvent( castor3d::makeGpuFunctorEvent( castor3d::EventType::ePreRender
-					, [format, dim, buffer, &img, &view, &result, &runnable]( castor3d::RenderDevice const & device
+					, [format, dim, image, &img, &view, &result, &runnable]( castor3d::RenderDevice const & device
 						, castor3d::QueueData const & queue )
 					{
+						auto buffer = image.getPixels();
 						auto staging = device->createStagingTexture( VkFormat( format )
 							, VkExtent2D{ dim.getWidth(), dim.getHeight() }
 							, buffer->getLevels() );
