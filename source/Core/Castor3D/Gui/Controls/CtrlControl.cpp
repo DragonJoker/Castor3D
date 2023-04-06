@@ -219,16 +219,13 @@ namespace castor3d
 		return visible;
 	}
 
-	ControlSPtr Control::getChildControl( ControlID id )const
+	ControlRPtr Control::getChildControl( ControlID id )const
 	{
 		auto it = std::find_if( std::begin( m_children )
 			, std::end( m_children )
-			, [&id]( ControlWPtr lookup )
+			, [&id]( ControlRPtr lookup )
 			{
-				auto ctrl = lookup.lock();
-		return ctrl
-			? ( ctrl->getId() == id )
-			: false;
+				return lookup ? ( lookup->getId() == id ) : false;
 			} );
 
 		if ( it == m_children.end() )
@@ -236,7 +233,7 @@ namespace castor3d
 			return nullptr;
 		}
 
-		return it->lock();
+		return *it;
 	}
 
 	std::array< bool, 4u > Control::isInResizeRange( castor::Position const & position )const
@@ -310,9 +307,9 @@ namespace castor3d
 	{
 		m_ctrlManager = ctrlManager;
 
-		if ( ControlRPtr parent = getParent() )
+		if ( auto parent = getParent() )
 		{
-			parent->addChild( shared_from_this() );
+			parent->addChild( this );
 		}
 
 		setBackgroundMaterial( m_style->getBackgroundMaterial() );
@@ -325,12 +322,28 @@ namespace castor3d
 	void Control::destroy()
 	{
 		doDestroy();
+
+		if ( auto parent = getParent() )
+		{
+			parent->removeChild( this );
+		}
 	}
 
-	void Control::addChild( ControlSPtr control )
+	void Control::addChild( ControlRPtr control )
 	{
 		m_children.push_back( control );
 		doAddChild( control );
+	}
+
+	void Control::removeChild( ControlRPtr control )
+	{
+		auto it = std::find( m_children.begin(), m_children.end(), control );
+
+		if ( it != m_children.end() )
+		{
+			doRemoveChild( control );
+			m_children.erase( it );
+		}
 	}
 
 	void Control::adjustZIndex( uint32_t offset )
@@ -339,9 +352,9 @@ namespace castor3d
 		doGetBackground().setOrder( level + offset, 0u );
 		doAdjustZIndex( offset );
 
-		for ( auto child : m_children )
+		for ( auto control : m_children )
 		{
-			if ( auto control = child.lock() )
+			if ( control )
 			{
 				control->adjustZIndex( offset );
 			}
@@ -356,8 +369,7 @@ namespace castor3d
 			, m_children.end()
 			, []( auto const & lookup )
 			{
-				auto control = lookup.lock();
-				return control ? control->isMovable() : false;
+				return lookup ? lookup->isMovable() : false;
 			} );
 
 		auto realIndex = &index;
@@ -380,13 +392,13 @@ namespace castor3d
 			doUpdateZIndex( ( *realIndex ) );
 			std::vector< Control * > scrollbars;
 
-			for ( auto child : m_children )
+			for ( auto control : m_children )
 			{
-				if ( auto control = child.lock() )
+				if ( control )
 				{
 					if ( control->getType() == ControlType::eScrollBar )
 					{
-						scrollbars.push_back( control.get() );
+						scrollbars.push_back( control );
 					}
 					else
 					{
@@ -408,13 +420,13 @@ namespace castor3d
 			std::vector< Control * > scrollbars;
 			auto maxIndex = findex;
 
-			for ( auto child : m_children )
+			for ( auto control : m_children )
 			{
-				if ( auto control = child.lock() )
+				if ( control )
 				{
 					if ( control->getType() == ControlType::eScrollBar )
 					{
-						scrollbars.push_back( control.get() );
+						scrollbars.push_back( control );
 					}
 					else
 					{

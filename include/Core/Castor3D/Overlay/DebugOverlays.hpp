@@ -157,23 +157,23 @@ namespace castor3d
 		public:
 			DebugPanel( DebugPanel const & ) = delete;
 			DebugPanel & operator=( DebugPanel const & ) = delete;
-			DebugPanel( DebugPanel && ) = default;
-			DebugPanel & operator=( DebugPanel && ) = delete;
+			DebugPanel & operator=( DebugPanel && )noexcept = delete;
 			DebugPanel( castor::String const & name
 				, castor::String const & label
 				, Engine & engine
 				, PanelCtrl & parent
 				, std::function< castor::String() > value );
-			~DebugPanel();
+			DebugPanel( DebugPanel && rhs )noexcept;
+			~DebugPanel()noexcept;
 
 			void update();
 
 		protected:
 			Engine & m_engine;
 			std::function< castor::String() > m_v;
-			PanelCtrlSPtr m_panel;
-			StaticCtrlSPtr m_label;
-			StaticCtrlSPtr m_value;
+			PanelCtrlRPtr m_panel;
+			StaticCtrlRPtr m_label;
+			StaticCtrlRPtr m_value;
 		};
 
 		class DebugPanels
@@ -183,12 +183,12 @@ namespace castor3d
 		public:
 			DebugPanels( DebugPanels const & ) = delete;
 			DebugPanels & operator=( DebugPanels const & ) = delete;
-			DebugPanels( DebugPanels && ) = default;
-			DebugPanels & operator=( DebugPanels && ) = delete;
+			DebugPanels & operator=( DebugPanels && )noexcept = delete;
 			DebugPanels( castor::String const & title
 				, Engine & engine
 				, PanelCtrl & parent );
-			~DebugPanels();
+			DebugPanels( DebugPanels && rhs )noexcept;
+			~DebugPanels()noexcept;
 
 			void update();
 			uint32_t updatePosition( uint32_t y );
@@ -198,8 +198,8 @@ namespace castor3d
 
 		private:
 			Engine & m_engine;
-			ExpandablePanelCtrlSPtr m_panel;
-			StaticCtrlSPtr m_title;
+			ExpandablePanelCtrlRPtr m_panel;
+			StaticCtrlRPtr m_title;
 			DebugPanelArray m_panels;
 		};
 
@@ -209,7 +209,7 @@ namespace castor3d
 		{
 		public:
 			explicit MainDebugPanel( Engine & engine );
-			~MainDebugPanel();
+			~MainDebugPanel()noexcept;
 			void update();
 			void setVisible( bool visible );
 			void addTimePanel( castor::String const & name
@@ -227,7 +227,7 @@ namespace castor3d
 
 		private:
 			Engine & m_engine;
-			PanelCtrlSPtr m_panel;
+			PanelCtrlRPtr m_panel;
 			DebugPanelsPtr m_times;
 			DebugPanelsPtr m_fps;
 			DebugPanelsPtr m_counts;
@@ -239,21 +239,21 @@ namespace castor3d
 			struct TimeOverlays
 			{
 				castor::Nanoseconds time{ 0_ns };
-				StaticCtrlSPtr name;
-				StaticCtrlSPtr value;
+				StaticCtrlRPtr name;
+				StaticCtrlRPtr value;
 			};
 
 		public:
 			PassOverlays( PassOverlays const & ) = delete;
 			PassOverlays & operator=( PassOverlays const & ) = delete;
-			PassOverlays( PassOverlays && ) = default;
-			PassOverlays & operator=( PassOverlays && ) = delete;
+			PassOverlays & operator=( PassOverlays && )noexcept = delete;
 			PassOverlays( Engine & engine
 				, PanelCtrl & parent
 				, castor::String const & name
 				, uint32_t leftOffset
 				, uint32_t index );
-			~PassOverlays();
+			PassOverlays( PassOverlays && rhs )noexcept;
+			~PassOverlays()noexcept;
 			void retrieveGpuTime();
 			void compute();
 			void update( uint32_t & top );
@@ -280,8 +280,8 @@ namespace castor3d
 			castor::String m_name;
 			bool m_visible{ true };
 			std::map< FramePassTimer *, crg::OnFramePassDestroyConnection > m_timers;
-			PanelCtrlSPtr m_panel;
-			StaticCtrlSPtr m_passName;
+			PanelCtrlRPtr m_panel;
+			StaticCtrlRPtr m_passName;
 			TimeOverlays m_cpu;
 			TimeOverlays m_gpu;
 		};
@@ -297,22 +297,22 @@ namespace castor3d
 			struct TimeOverlays
 			{
 				castor::Nanoseconds time{ 0_ns };
-				StaticCtrlSPtr name;
-				StaticCtrlSPtr value;
+				StaticCtrlRPtr name;
+				StaticCtrlRPtr value;
 			};
 
 		public:
 			CategoryOverlays( CategoryOverlays const & ) = delete;
 			CategoryOverlays & operator=( CategoryOverlays const & ) = delete;
-			CategoryOverlays( CategoryOverlays && ) = default;
-			CategoryOverlays & operator=( CategoryOverlays && ) = default;
 			CategoryOverlays();
 			CategoryOverlays( castor::String const & category
 				, Engine & engine
 				, PanelCtrl & parent
 				, uint32_t leftOffset
 				, bool expanded = false );
-			~CategoryOverlays();
+			CategoryOverlays & operator=( CategoryOverlays && rhs )noexcept;
+			CategoryOverlays( CategoryOverlays && rhs )noexcept;
+			~CategoryOverlays()noexcept;
 			void addTimer( castor::String const & name
 				, castor::StringArray & categories
 				, FramePassTimer & timer );
@@ -362,8 +362,8 @@ namespace castor3d
 			bool m_parentVisible{ true };
 			std::vector< PassOverlaysPtr > m_passes{};
 			CategoriesOverlays m_categories{};
-			ExpandablePanelCtrlSPtr m_container{};
-			StaticCtrlSPtr m_name{};
+			ExpandablePanelCtrlRPtr m_container{};
+			StaticCtrlRPtr m_name{};
 			TimeOverlays m_cpu{};
 			TimeOverlays m_gpu{};
 		};
@@ -398,7 +398,7 @@ namespace castor3d
 		castor::PreciseTimer m_frameTimer{};
 		castor::PreciseTimer m_debugTimer{};
 		std::unique_ptr< MainDebugPanel > m_debugPanel;
-		PanelCtrlSPtr m_passesContainer;
+		PanelCtrlRPtr m_passesContainer;
 		CategoryOverlays m_renderPasses;
 		std::array< castor::Nanoseconds, FrameSamplesCount > m_framesTimes{};
 		uint32_t m_frameIndex{ 0 };

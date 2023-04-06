@@ -84,6 +84,8 @@ namespace castor3d
 		{
 		}
 
+		C3D_API ~ListBoxCtrl()noexcept;
+
 		/** Appends a new item
 		 *\param[in]	value		The item
 		 */
@@ -165,7 +167,7 @@ namespace castor3d
 		 *\param[in]	value		The control label
 		 *\return		The static control.
 		 */
-		StaticCtrlSPtr doCreateItemCtrl( castor::String const & value
+		StaticCtrlRPtr doCreateItemCtrl( castor::String const & value
 			, uint32_t itemIndex );
 
 		/** Creates a sub-control, and it's Castor3D counterpart.
@@ -206,24 +208,24 @@ namespace castor3d
 		 *\param[in]	control	The item
 		 *\param[in]	event		The mouse event
 		 */
-		void onItemMouseEnter( ControlSPtr control, MouseEvent const & event );
+		void onItemMouseEnter( ControlRPtr control, MouseEvent const & event );
 
 		/** Event when mouse leaves an item
 		 *\param[in]	control	The item
 		 *\param[in]	event		The mouse event
 		 */
-		void onItemMouseLeave( ControlSPtr control, MouseEvent const & event );
+		void onItemMouseLeave( ControlRPtr control, MouseEvent const & event );
 
 		/** Event when mouse left button is released on an item
 		 *\param[in]	control	The item
 		 *\param[in]	event		The mouse event
 		 */
-		void onItemMouseLButtonUp( ControlSPtr control, MouseEvent const & event );
+		void onItemMouseLButtonUp( ControlRPtr control, MouseEvent const & event );
 
 		/** Event when a keyboard key is pressed on the active tick or line control
 		 *\param[in]	event		The keyboard event
 		 */
-		void onItemKeyDown( ControlSPtr control, KeyboardEvent const & event );
+		void onItemKeyDown( ControlRPtr control, KeyboardEvent const & event );
 
 		/** Event when a keyboard key is pressed
 		 *\param[in]	event		The keyboard event
@@ -237,9 +239,9 @@ namespace castor3d
 	private:
 		castor::StringArray m_initialValues;
 		castor::StringArray m_values;
-		int m_selected;
-		StaticCtrlWPtr m_selectedItem;
-		std::vector< StaticCtrlSPtr > m_items;
+		int m_selected{};
+		StaticCtrlRPtr m_selectedItem{};
+		std::vector< StaticCtrlRPtr > m_items;
 		OnListEvent m_signals[size_t( ListBoxEvent::eCount )];
 	};
 }

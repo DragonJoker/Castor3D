@@ -48,6 +48,8 @@ namespace castor3d
 			, ControlFlagType flags = 0
 			, bool visible = true );
 
+		C3D_API ~ExpandablePanelCtrl()noexcept;
+
 		C3D_API void setExpandCaption( castor::U32String v );
 		C3D_API void setRetractCaption( castor::U32String v );
 
@@ -151,9 +153,9 @@ namespace castor3d
 		uint32_t m_headerHeight;
 		castor::U32String m_expandCaption{ U"+" };
 		castor::U32String m_retractCaption{ U"-" };
-		PanelCtrlSPtr m_header;
-		ButtonCtrlSPtr m_expand;
-		PanelCtrlSPtr m_content;
+		PanelCtrlRPtr m_header;
+		ButtonCtrlRPtr m_expand;
+		PanelCtrlRPtr m_content;
 		OnExpandablePanelEvent m_signals[size_t( ExpandablePanelEvent::eCount )];
 		OnButtonEventConnection m_expandClickedConnection;
 		bool m_expanded{ true };

@@ -113,7 +113,7 @@ namespace castor3d
 		/** Retrieves a control.
 		 *\param[in]	id		The control ID.
 		 */
-		C3D_API ControlSPtr getChildControl( ControlID id )const;
+		C3D_API ControlRPtr getChildControl( ControlID id )const;
 
 		/** Checks if the position is on any border (N, W, S, E).
 		 *\param[in]	The position to check for.
@@ -221,7 +221,7 @@ namespace castor3d
 			return *m_style;
 		}
 
-		std::vector< ControlWPtr > const & getChildren()const noexcept
+		std::vector< ControlRPtr > const & getChildren()const noexcept
 		{
 			return m_children;
 		}
@@ -336,7 +336,11 @@ namespace castor3d
 
 		/** Adds a child control.
 		 */
-		C3D_API void addChild( ControlSPtr control );
+		C3D_API void addChild( ControlRPtr control );
+
+		/** Removes a child control.
+		 */
+		C3D_API void removeChild( ControlRPtr control );
 
 		ControlStyle & getBaseStyle()
 		{
@@ -418,7 +422,13 @@ namespace castor3d
 
 		/** Adds a child control.
 		 */
-		virtual void doAddChild( ControlSPtr control )
+		virtual void doAddChild( ControlRPtr control )
+		{
+		}
+
+		/** Removes a child control.
+		 */
+		virtual void doRemoveChild( ControlRPtr control )
 		{
 		}
 
@@ -601,7 +611,7 @@ namespace castor3d
 		castor::Size m_size{};
 		castor::Point4ui m_borders{};
 		BorderPanelOverlayRPtr m_background{};
-		std::vector< ControlWPtr > m_children{};
+		std::vector< ControlRPtr > m_children{};
 		ControlsManagerWPtr m_ctrlManager{};
 		bool m_moving{};
 		bool m_resizingN{};

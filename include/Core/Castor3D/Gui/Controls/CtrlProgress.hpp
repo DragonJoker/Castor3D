@@ -147,8 +147,8 @@ namespace castor3d
 
 	private:
 		TextOverlayRPtr m_title{};
-		PanelCtrlSPtr m_container;
-		PanelCtrlSPtr m_progress;
+		PanelCtrlRPtr m_container{};
+		PanelCtrlRPtr m_progress{};
 		TextOverlayRPtr m_text{};
 		castor::RangedValue< int32_t > m_value;
 	};

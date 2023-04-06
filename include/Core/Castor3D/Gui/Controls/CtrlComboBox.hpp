@@ -204,7 +204,7 @@ namespace castor3d
 		/** Event when a keyboard key is pressed on the active tick or line control
 		*\param[in]	event		The keyboard event
 		*/
-		void onNcKeyDown( ControlSPtr control, KeyboardEvent const & event );
+		void onNcKeyDown( ControlRPtr control, KeyboardEvent const & event );
 
 		/** Switch the combobox list
 		*/
@@ -212,8 +212,8 @@ namespace castor3d
 
 	private:
 		TextOverlayRPtr m_text{};
-		ButtonCtrlSPtr m_expand;
-		ListBoxCtrlSPtr m_choices;
+		ButtonCtrlRPtr m_expand;
+		ListBoxCtrlRPtr m_choices;
 		castor::StringArray m_values;
 		int m_selected;
 		OnComboEvent m_signals[size_t( ComboBoxEvent::eCount )];

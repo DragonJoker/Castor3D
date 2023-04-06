@@ -262,7 +262,7 @@ namespace castor3d
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, cuT( "SkyboxBackgroundEquirectangular" ) );
 		texture->setSource( folder, relative, { false, false, false } );
-		setCrossTexture( std::move( texture ) );
+		setEquiTexture( std::move( texture ), size );
 	}
 
 	void SkyboxBackground::setEquiTexture( TextureLayoutUPtr texture

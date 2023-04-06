@@ -47,6 +47,8 @@ namespace castor3d
 			, ControlFlagType flags = 0
 			, bool visible = true );
 
+		C3D_API ~SliderCtrl()noexcept;
+
 		/** sets the range
 		*\param[in]	value		The new value
 		*/
@@ -152,21 +154,21 @@ namespace castor3d
 		 *\param[in]	control	The tick control
 		 *\param[in]	event		The mouse event
 		 */
-		void onTickMouseMove( ControlSPtr control
+		void onTickMouseMove( ControlRPtr control
 			, MouseEvent const & event );
 
 		/** Event when mouse left button is released over the tick control
 		 *\param[in]	control	The tick control
 		 *\param[in]	event		The mouse event
 		 */
-		void onTickMouseButtonDown( ControlSPtr control
+		void onTickMouseButtonDown( ControlRPtr control
 			, MouseEvent const & event );
 
 		/** Event when mouse left button is released over the tick control
 		 *\param[in]	control	The tick control
 		 *\param[in]	event		The mouse event
 		 */
-		void onTickMouseButtonUp( ControlSPtr control
+		void onTickMouseButtonUp( ControlRPtr control
 			, MouseEvent const & event );
 
 		/** Event when a keyboard key is pressed
@@ -177,7 +179,7 @@ namespace castor3d
 		/** Event when a keyboard key is pressed on the active tick or line control
 		 *\param[in]	event		The keyboard event
 		 */
-		void onNcKeyDown( ControlSPtr control
+		void onNcKeyDown( ControlRPtr control
 			, KeyboardEvent const & event );
 
 		/** Updates the tick position
@@ -192,10 +194,10 @@ namespace castor3d
 
 	private:
 		castor::RangedValue< int32_t > m_value;
-		bool m_scrolling;
-		castor::Position m_mouse;
-		StaticCtrlWPtr m_line;
-		StaticCtrlWPtr m_tick;
+		bool m_scrolling{};
+		castor::Position m_mouse{};
+		StaticCtrlRPtr m_line{};
+		StaticCtrlRPtr m_tick{};
 		OnSliderEvent m_signals[size_t( SliderEvent::eCount )];
 	};
 }

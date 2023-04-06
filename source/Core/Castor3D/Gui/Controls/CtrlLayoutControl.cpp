@@ -71,9 +71,14 @@ namespace castor3d
 		destroyScrollBars();
 	}
 
-	void LayoutControl::doAddChild( ControlSPtr control )
+	void LayoutControl::doAddChild( ControlRPtr control )
 	{
 		registerControl( *control );
+	}
+
+	void LayoutControl::doRemoveChild( ControlRPtr control )
+	{
+		unregisterControl( *control );
 	}
 
 	void LayoutControl::doUpdateStyle()

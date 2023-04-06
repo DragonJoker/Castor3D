@@ -15,6 +15,7 @@ See LICENSE file in root folder
 #include "Castor3D/Cache/TextureCache.hpp"
 #include "Castor3D/Event/Frame/FrameEventModule.hpp"
 #include "Castor3D/Event/UserInput/UserInputEventModule.hpp"
+#include "Castor3D/Gui/GuiModule.hpp"
 #include "Castor3D/Material/MaterialModule.hpp"
 #include "Castor3D/Material/Pass/PassModule.hpp"
 #include "Castor3D/Material/Pass/Component/ComponentModule.hpp"
@@ -682,6 +683,7 @@ namespace castor3d
 		C3D_API bool hasMeshShaders()const;
 		C3D_API uint32_t getMaxPassTypeCount()const;
 		C3D_API RenderDevice * getRenderDevice()const;
+		C3D_API ControlsManager * getControlsManager()const;
 
 		castor::String const & getAppName()const noexcept
 		{

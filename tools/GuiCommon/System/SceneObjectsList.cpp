@@ -753,9 +753,9 @@ namespace GuiCommon
 		{
 			auto & layout = static_cast< castor3d::LayoutControl & >( control );
 
-			for ( auto & sub : layout.getChildren() )
+			for ( auto ctrl : layout.getChildren() )
 			{
-				if ( auto ctrl = sub.lock() )
+				if ( ctrl )
 				{
 					doAddControl( parentId, ctrl->getName(), *ctrl, true, layout.getLayout() != nullptr );
 				}

@@ -23,7 +23,7 @@ namespace castor3d
 		 *\param[in]	handler	Un gestionnaire.
 		 */
 		HandlerEvent( HandlerEventType type
-			, EventHandler * handler )
+			, EventHandlerRPtr handler )
 			: UserInputEvent{ UserInputEventType::eHandler }
 			, m_handlerEventType{ type }
 			, m_handler{ handler }
@@ -45,7 +45,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le gestionnaire.
 		 */
-		EventHandler * getHandler()const
+		EventHandlerRPtr getHandler()const
 		{
 			return m_handler;
 		}
@@ -56,7 +56,7 @@ namespace castor3d
 		HandlerEventType const m_handlerEventType;
 		//!\~english	The handler.
 		//!\~french		Le gestionnaire.
-		EventHandler * const m_handler;
+		EventHandlerRPtr const m_handler;
 	};
 }
 

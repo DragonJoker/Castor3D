@@ -48,16 +48,17 @@ namespace castor3d
 		title->setPixelSize( getClientSize() );
 		title->setVisible( true );
 
-		m_container = std::make_shared< PanelCtrl >( m_scene
+		auto & manager = *getEngine().getControlsManager();
+		m_container = manager.registerControlT( castor::makeUnique< PanelCtrl >( m_scene
 			, cuT( "Container" )
 			, &style->getContainerStyle()
-			, this );
+			, this ) );
 		m_container->setVisible( true );
 
-		m_progress = std::make_shared< PanelCtrl >( m_scene
+		m_progress = manager.registerControlT( castor::makeUnique< PanelCtrl >( m_scene
 			, cuT( "Progress" )
 			, &style->getProgressStyle()
-			, m_container.get() );
+			, m_container ) );
 		m_progress->setVisible( true );
 
 		auto text = m_scene
@@ -94,6 +95,10 @@ namespace castor3d
 				getEngine().removeOverlay( getName() + cuT( "/Text" ), true );
 			}
 		}
+
+		auto & manager = *getEngine().getControlsManager();
+		manager.unregisterControl( *m_progress );
+		manager.unregisterControl( *m_container );
 
 		if ( auto overlay = m_title )
 		{

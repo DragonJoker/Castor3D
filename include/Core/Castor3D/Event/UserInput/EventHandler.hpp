@@ -451,27 +451,26 @@ namespace castor3d
 	*/
 	template< class Derived >
 	class NonClientEventHandler
-		: public std::enable_shared_from_this< Derived >
-		, public EventHandler
+		: public EventHandler
 	{
 	protected:
 		using EventHandlerFunction = EventHandler::EventHandlerFunction;
 		using EventQueue = EventHandler::EventQueue;
 
 	public:
-		CU_DeclareSmartPtr( Derived );
+		using DerivedPtr = Derived *;
 		using ClientMouseFunction = EventHandler::ClientMouseFunction;
 		using ClientKeyboardFunction = EventHandler::ClientKeyboardFunction;
 		using ClientHandlerFunction = EventHandler::ClientHandlerFunction;
 		//!\~english	Catcher definition for non client mouse events.
 		//!\~french		Définition d'une fonction de traitement d'évènement non client de souris.
-		using NonClientMouseFunction = std::function< void( DerivedSPtr, MouseEvent const & ) >;
+		using NonClientMouseFunction = std::function< void( DerivedPtr, MouseEvent const & ) >;
 		//!\~english	Catcher definition for non client keyboard events.
 		//!\~french		Définition d'une fonction de traitement d'évènement non client de clavier.
-		using NonClientKeyboardFunction = std::function< void( DerivedSPtr, KeyboardEvent const & ) >;
+		using NonClientKeyboardFunction = std::function< void( DerivedPtr, KeyboardEvent const & ) >;
 		//!\~english	Catcher definition for non client handler events.
 		//!\~french		Définition d'une fonction de traitement d'évènement non client de gestionnaire.
-		using NonClientHandlerFunction = std::function< void( DerivedSPtr, HandlerEvent const & ) >;
+		using NonClientHandlerFunction = std::function< void( DerivedPtr, HandlerEvent const & ) >;
 		//!\~english	Non client mouse event signal definition.
 		//!\~french		Définition d'un signal d'évènement non client de souris.
 		using OnNonClientMouseEvent = castor::SignalT< NonClientMouseFunction >;
@@ -556,17 +555,17 @@ namespace castor3d
 	private:
 		void doProcessMouseEvent( MouseEventSPtr event )override
 		{
-			m_ncMouseSlots[size_t( event->getMouseEventType() )]( this->shared_from_this(), *event );
+			m_ncMouseSlots[size_t( event->getMouseEventType() )]( static_cast< Derived * >( this ), *event );
 		}
 
 		void doProcessKeyboardEvent( KeyboardEventSPtr event )override
 		{
-			m_ncKeyboardSlots[size_t( event->getKeyboardEventType() )]( this->shared_from_this(), *event );
+			m_ncKeyboardSlots[size_t( event->getKeyboardEventType() )]( static_cast< Derived * >( this ), *event );
 		}
 
 		void doProcessHandlerEvent( HandlerEventSPtr event )override
 		{
-			m_ncHandlerSlots[size_t( event->getHandlerEventType() )]( this->shared_from_this(), *event );
+			m_ncHandlerSlots[size_t( event->getHandlerEventType() )]( static_cast< Derived * >( this ), *event );
 		}
 
 	protected:

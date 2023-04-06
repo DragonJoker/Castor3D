@@ -39,13 +39,13 @@ namespace castor
 	{
 		auto result = TextWriter< Control >{ tabs(), m_customStyle }( control, file );
 
-		for ( auto & child : control.getChildren() )
+		for ( auto ctrl : control.getChildren() )
 		{
 			if ( result )
 			{
 				result = false;
 
-				if ( auto ctrl = child.lock() )
+				if ( ctrl )
 				{
 					result = writeControl( *this, *ctrl, file, control.getName() + "/" );
 				}

@@ -40,14 +40,15 @@ namespace castor3d
 		}
 
 		template< typename StyleT, typename ControlT >
-		std::shared_ptr< ControlT > createControl( castor::FileParserContext & context
+		ControlT * createControl( castor::FileParserContext & context
 			, GuiParserContext & guiContext
 			, SceneRPtr scene
 			, castor::String const & controlName
 			, castor::String const & styleName
-			, std::shared_ptr< ControlT > & control )
+			, ControlT *& control )
 		{
-			auto style = guiparse::getControlsManager( guiContext ).template getStyle< StyleT >( styleName );
+			auto & manager = guiparse::getControlsManager( guiContext );
+			auto style = manager.template getStyle< StyleT >( styleName );
 
 			if ( style == nullptr )
 			{
@@ -55,18 +56,18 @@ namespace castor3d
 				return nullptr;
 			}
 
-			control = std::make_shared< ControlT >( scene
+			control = manager.registerControlT( castor::makeUnique< ControlT >( scene
 				, controlName
 				, style
-				, guiContext.getTopControl() );
+				, guiContext.getTopControl() ) );
 			guiContext.parents.push( control );
 			return control;
 		}
 
-		template< typename T >
+		template< typename ControlT >
 		void finishControl( ControlsManager & manager
 			, GuiParserContext & context
-			, std::shared_ptr< T > control )
+			, ControlT * control )
 		{
 			if ( control )
 			{
@@ -84,7 +85,7 @@ namespace castor3d
 
 		if ( !parents.empty() )
 		{
-			result = parents.top().get();
+			result = parents.top();
 		}
 
 		return result;
@@ -92,55 +93,55 @@ namespace castor3d
 
 	void GuiParserContext::popControl()
 	{
-		button.reset();
-		edit.reset();
-		listbox.reset();
-		slider.reset();
-		staticTxt.reset();
-		combo.reset();
-		panel.reset();
-		progress.reset();
-		expandablePanel.reset();
+		button = nullptr;
+		edit = nullptr;
+		listbox = nullptr;
+		slider = nullptr;
+		staticTxt = nullptr;
+		combo = nullptr;
+		panel = nullptr;
+		progress = nullptr;
+		expandablePanel = nullptr;
 		scrollable = nullptr;
 
 		if ( !parents.empty() )
 		{
-			ControlSPtr top;
+			ControlRPtr top;
 			top = parents.top();
 
 			switch ( top->getType() )
 			{
 			case ControlType::eStatic:
-				staticTxt = std::static_pointer_cast< StaticCtrl >( top );
+				staticTxt = &static_cast< StaticCtrl & >( *top );
 				break;
 			case ControlType::eEdit:
-				edit = std::static_pointer_cast< EditCtrl >( top );
+				edit = &static_cast< EditCtrl & >( *top );
 				scrollable = edit;
 				break;
 			case ControlType::eSlider:
-				slider = std::static_pointer_cast< SliderCtrl >( top );
+				slider = &static_cast< SliderCtrl & >( *top );
 				break;
 			case ControlType::eComboBox:
-				combo = std::static_pointer_cast< ComboBoxCtrl >( top );
+				combo = &static_cast< ComboBoxCtrl & >( *top );
 				break;
 			case ControlType::eListBox:
-				listbox = std::static_pointer_cast< ListBoxCtrl >( top );
+				listbox = &static_cast< ListBoxCtrl & >( *top );
 				break;
 			case ControlType::eButton:
-				button = std::static_pointer_cast< ButtonCtrl >( top );
+				button = &static_cast< ButtonCtrl & >( *top );
 				break;
 			case ControlType::ePanel:
-				panel = std::static_pointer_cast< PanelCtrl >( top );
+				panel = &static_cast< PanelCtrl & >( *top );
 				scrollable = panel;
 				break;
 			case ControlType::eProgress:
-				progress = std::static_pointer_cast< ProgressCtrl >( top );
+				progress = &static_cast< ProgressCtrl & >( *top );
 				break;
 			case ControlType::eExpandablePanel:
-				expandablePanel = std::static_pointer_cast< ExpandablePanelCtrl >( top );
+				expandablePanel = &static_cast< ExpandablePanelCtrl & >( *top );
 				break;
 			case ControlType::eFrame:
-				frame = std::static_pointer_cast< FrameCtrl >( top );
+				frame = &static_cast< FrameCtrl & >( *top );
 				break;
 			default:
 				CU_Failure( "Unsupported Control Type" );
@@ -388,9 +389,8 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserComboBoxItem )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
-		ComboBoxCtrlSPtr combo = guiContext.combo;
 
-		if ( combo )
+		if ( auto combo = guiContext.combo )
 		{
 			castor::String text;
 			params[0]->get( text );
@@ -443,9 +443,8 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserEditCaption )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
-		EditCtrlSPtr edit = guiContext.edit;
 
-		if ( edit )
+		if ( auto edit = guiContext.edit )
 		{
 			auto text = params[0]->get< castor::String >();
 			castor::string::replace( text, "\\?", "\?" );
@@ -470,9 +469,8 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserEditMultiLine )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
-		EditCtrlSPtr edit = guiContext.edit;
 
-		if ( edit )
+		if ( auto edit = guiContext.edit )
 		{
 			bool value;
 			params[0]->get( value );
@@ -525,9 +523,8 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserListBoxItem )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
-		ListBoxCtrlSPtr listbox = guiContext.listbox;
 
-		if ( listbox )
+		if ( auto listbox = guiContext.listbox )
 		{
 			castor::String text;
 			params[0]->get( text );
@@ -1204,7 +1201,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserControlEnd )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
-		guiparse::finishControl( guiparse::getControlsManager( context ), guiContext, guiContext.getTopControl()->shared_from_this() );
+		guiparse::finishControl( guiparse::getControlsManager( context ), guiContext, guiContext.getTopControl() );
 		guiContext.popControl();
 	}
 	CU_EndAttributePop()

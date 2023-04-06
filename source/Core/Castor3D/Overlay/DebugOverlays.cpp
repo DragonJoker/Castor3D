@@ -61,38 +61,68 @@ namespace castor3d
 		auto panelStyle = parent.getStyle().getStyle< PanelStyle >( "Entry" );
 		auto labelStyle = panelStyle->getStyle< StaticStyle >( "Label" );
 		auto valueStyle = panelStyle->getStyle< StaticStyle >( "Value" );
-		m_panel = std::make_shared< PanelCtrl >( nullptr
+		m_panel = manager.registerControlT( castor::makeUnique< PanelCtrl >( nullptr
 			, name
 			, panelStyle
 			, &parent
 			, castor::Position{}
-			, castor::Size{ DebugLineWidth, PanelHeight } );
-		m_label = std::make_shared< StaticCtrl >( nullptr
+			, castor::Size{ DebugLineWidth, PanelHeight } ) );
+		m_label = manager.registerControlT( castor::makeUnique< StaticCtrl >( nullptr
 			, "Label"
 			, labelStyle
-			, m_panel.get()
+			, m_panel
 			, castor::string::toU32String( label )
 			, castor::Position{ 0, 2 }
-			, castor::Size{ DebugLabelWidth, PanelHeight } );
-		m_value = std::make_shared< StaticCtrl >( nullptr
+			, castor::Size{ DebugLabelWidth, PanelHeight } ) );
+		m_value = manager.registerControlT( castor::makeUnique< StaticCtrl >( nullptr
 			, "Value"
 			, valueStyle
-			, m_panel.get()
+			, m_panel
 			, U""
 			, castor::Position{ DebugLabelWidth, 2 }
-			, castor::Size{ DebugValueWidth, PanelHeight } );
+			, castor::Size{ DebugValueWidth, PanelHeight } ) );
 
+		manager.create( m_panel );
 		manager.create( m_label );
 		manager.create( m_value );
-		manager.create( m_panel );
 
 		parent.getLayout()->addControl( *m_panel
 			, LayoutItemFlags{}
 				.padLeft( DebugPanelWidth - DebugLineWidth ) );
 	}
 
-	DebugOverlays::DebugPanel::~DebugPanel()
+	DebugOverlays::DebugPanel::DebugPanel( DebugPanel && rhs )noexcept
+		: m_engine{ rhs.m_engine }
+		, m_v{ std::move( rhs.m_v ) }
+		, m_panel{ std::move( rhs.m_panel ) }
+		, m_label{ std::move( rhs.m_label ) }
+		, m_value{ std::move( rhs.m_value ) }
 	{
+		rhs.m_panel = {};
+		rhs.m_label = {};
+		rhs.m_value = {};
+	}
+
+	DebugOverlays::DebugPanel::~DebugPanel()noexcept
+	{
+		if ( m_panel )
+		{
+			auto & layout = *static_cast< LayoutControl & >( *m_panel->getParent() ).getLayout();
+			layout.removeControl( *m_panel );
+
+			auto & manager = *m_engine.getControlsManager();
+			manager.destroy( m_label );
+			manager.destroy( m_value );
+			manager.destroy( m_panel );
+
+			manager.unregisterControl( *m_label );
+			manager.unregisterControl( *m_value );
+			manager.unregisterControl( *m_panel );
+
+			m_panel = {};
+			m_label = {};
+			m_value = {};
+		}
 	}
 
 	void DebugOverlays::DebugPanel::update()
@@ -110,33 +140,60 @@ namespace castor3d
 		auto & manager = dbgovl::getControlsManager( m_engine );
 		auto containerStyle = manager.getStyle< ExpandablePanelStyle >( "Debug/Main/Container" );
 		auto titleStyle = containerStyle->getHeaderStyle().getStyle< StaticStyle >( "Title" );
-		m_panel = std::make_shared< ExpandablePanelCtrl >( nullptr
+		m_panel = manager.registerControlT( castor::makeUnique< ExpandablePanelCtrl >( nullptr
 			, title
 			, containerStyle
 			, &parent
 			, castor::Position{}
 			, castor::Size{ DebugPanelWidth, PanelHeight }
 			, PanelHeight
-			, true );
+			, true ) );
 		m_panel->getContent()->setLayout( castor::makeUniqueDerived< Layout, LayoutBox >( *m_panel->getContent() ) );
-		m_title = std::make_shared< StaticCtrl >( nullptr
+		m_title = manager.registerControlT( castor::makeUnique< StaticCtrl >( nullptr
 			, "Title"
 			, titleStyle
-			, m_panel->getHeader().get()
+			, m_panel->getHeader()
 			, castor::string::toU32String( title )
 			, castor::Position{ 0, 3 }
-			, castor::Size{ DebugPanelWidth - PanelHeight, PanelHeight } );
+			, castor::Size{ DebugPanelWidth - PanelHeight, PanelHeight } ) );
 
 		m_title->setHAlign( HAlign::eCenter );
 
-		manager.create( m_title );
 		manager.create( m_panel );
+		manager.create( m_title );
 
 		parent.getLayout()->addControl( *m_panel );
 	}
 
-	DebugOverlays::DebugPanels::~DebugPanels()
+	DebugOverlays::DebugPanels::DebugPanels( DebugPanels && rhs )noexcept
+		: m_engine{ rhs.m_engine }
+		, m_panel{ std::move( rhs.m_panel ) }
+		, m_title{ std::move( rhs.m_title ) }
+		, m_panels{ std::move( rhs.m_panels ) }
 	{
+		rhs.m_panel = {};
+		rhs.m_title = {};
+	}
+
+	DebugOverlays::DebugPanels::~DebugPanels()noexcept
+	{
+		m_panels.clear();
+
+		if ( m_panel )
+		{
+			auto & layout = *static_cast< LayoutControl & >( *m_panel->getParent() ).getLayout();
+			layout.removeControl( *m_panel );
+
+			auto & manager = *m_engine.getControlsManager();
+			manager.destroy( m_title );
+			manager.destroy( m_panel );
+
+			manager.unregisterControl( *m_title );
+			manager.unregisterControl( *m_panel );
+
+			m_panel = {};
+			m_title = {};
+		}
 	}
 
 	void DebugOverlays::DebugPanels::update()
@@ -177,22 +234,33 @@ namespace castor3d
 		: m_engine{ engine }
 	{
 		auto & manager = dbgovl::getControlsManager( m_engine );
-		m_panel = std::make_shared< PanelCtrl >( nullptr
+		m_panel = manager.registerControlT( castor::makeUnique< PanelCtrl >( nullptr
 			, cuT( "Debug/Main" )
 			, manager.getStyle< PanelStyle >( "Debug/Main" )
 			, nullptr
 			, castor::Position{}
 			, castor::Size{ DebugPanelWidth, PanelHeight }
-			, ControlFlagType( ControlFlag::eAlwaysOnTop ) );
+			, ControlFlagType( ControlFlag::eAlwaysOnTop ) ) );
 		m_panel->setLayout( castor::makeUniqueDerived< Layout, LayoutBox >( *m_panel ) );
+		manager.create( m_panel );
+
 		m_times = std::make_unique< DebugPanels >( cuT( "Times" ), m_engine, *m_panel );
 		m_fps = std::make_unique< DebugPanels >( cuT( "FPS" ), m_engine, *m_panel );
 		m_counts = std::make_unique< DebugPanels >( cuT( "Counts" ), m_engine, *m_panel );
-		manager.create( m_panel );
 	}
 
-	DebugOverlays::MainDebugPanel::~MainDebugPanel()
+	DebugOverlays::MainDebugPanel::~MainDebugPanel()noexcept
 	{
+		m_counts.reset();
+		m_fps.reset();
+		m_times.reset();
+
+		auto & manager = *m_engine.getControlsManager();
+		manager.destroy( m_panel );
+
+		manager.unregisterControl( *m_panel );
+
+		m_panel = {};
 	}
 
 	void DebugOverlays::MainDebugPanel::update()
@@ -263,53 +331,53 @@ namespace castor3d
 		auto nameStyle = panelStyle->getStyle< StaticStyle >( "Name" );
 		auto counterStyle = panelStyle->getStyle< StaticStyle >( "Counter" );
 		auto maxWidth = CategoryLineWidth - leftOffset;
-		m_panel = std::make_shared< PanelCtrl >( nullptr
+		m_panel = manager.registerControlT( castor::makeUnique< PanelCtrl >( nullptr
 			, m_name + "Pass"
 			, panelStyle
-			, &parent
+			, m_parent
 			, castor::Position{}
-			, castor::Size{ maxWidth, PanelHeight } );
+			, castor::Size{ maxWidth, PanelHeight } ) );
 		int32_t posX{};
 		auto nameWidth = CategoryNameWidth - leftOffset;
-		m_passName = std::make_shared< StaticCtrl >( nullptr
+		m_passName = manager.registerControlT( castor::makeUnique< StaticCtrl >( nullptr
 			, "PassName"
 			, nameStyle
-			, m_panel.get()
+			, m_panel
 			, castor::string::toU32String( m_name )
 			, castor::Position{ posX, 2 }
-			, castor::Size{ nameWidth, PanelHeight } );
+			, castor::Size{ nameWidth, PanelHeight } ) );
 		posX += nameWidth;
-		m_cpu.name = std::make_shared< StaticCtrl >( nullptr
+		m_cpu.name = manager.registerControlT( castor::makeUnique< StaticCtrl >( nullptr
 			, "CPUName"
 			, counterStyle
-			, m_panel.get()
+			, m_panel
 			, U"CPU:"
 			, castor::Position{ posX, 0 }
-			, castor::Size{ CpuNameWidth, PanelHeight } );
+			, castor::Size{ CpuNameWidth, PanelHeight } ) );
 		posX += CpuNameWidth;
-		m_cpu.value = std::make_shared< StaticCtrl >( nullptr
+		m_cpu.value = manager.registerControlT( castor::makeUnique< StaticCtrl >( nullptr
 			, "CPUValue"
 			, counterStyle
-			, m_panel.get()
+			, m_panel
 			, U""
 			, castor::Position{ posX, 0 }
-			, castor::Size{ CpuValueWidth, PanelHeight } );
+			, castor::Size{ CpuValueWidth, PanelHeight } ) );
 		posX += CpuValueWidth;
-		m_gpu.name = std::make_shared< StaticCtrl >( nullptr
+		m_gpu.name = manager.registerControlT( castor::makeUnique< StaticCtrl >( nullptr
 			, "GPUName"
 			, counterStyle
-			, m_panel.get()
+			, m_panel
 			, U"GPU:"
 			, castor::Position{ posX, 0 }
-			, castor::Size{ GpuNameWidth, PanelHeight } );
+			, castor::Size{ GpuNameWidth, PanelHeight } ) );
 		posX += GpuNameWidth;
-		m_gpu.value = std::make_shared< StaticCtrl >( nullptr
+		m_gpu.value = manager.registerControlT( castor::makeUnique< StaticCtrl >( nullptr
 			, "GPUValue"
 			, counterStyle
-			, m_panel.get()
+			, m_panel
 			, U""
 			, castor::Position{ posX, 0 }
-			, castor::Size{ GpuValueWidth, PanelHeight } );
+			, castor::Size{ GpuValueWidth, PanelHeight } ) );
 
 		m_cpu.name->setVAlign( VAlign::eCenter );
 		m_gpu.name->setVAlign( VAlign::eCenter );
@@ -330,10 +398,30 @@ namespace castor3d
 		manager.create( m_cpu.value );
 		manager.create( m_gpu.value );
 
-		parent.getLayout()->addControl( *m_panel, LayoutItemFlags{}.padLeft( leftOffset ) );
+		m_parent->getLayout()->addControl( *m_panel, LayoutItemFlags{}.padLeft( leftOffset ) );
 	}
 
-	DebugOverlays::PassOverlays::~PassOverlays()
+	DebugOverlays::PassOverlays::PassOverlays( PassOverlays && rhs )noexcept
+		: m_parent{ std::move( rhs.m_parent ) }
+		, m_name{ std::move( rhs.m_name ) }
+		, m_visible{ std::move( rhs.m_visible ) }
+		, m_timers{ std::move( rhs.m_timers ) }
+		, m_panel{ std::move( rhs.m_panel ) }
+		, m_passName{ std::move( rhs.m_passName ) }
+		, m_cpu{ std::move( rhs.m_cpu ) }
+		, m_gpu{ std::move( rhs.m_gpu ) }
+	{
+		rhs.m_parent = {};
+		rhs.m_visible = {};
+		rhs.m_panel = {};
+		rhs.m_passName = {};
+		rhs.m_cpu.name = {};
+		rhs.m_cpu.value = {};
+		rhs.m_gpu.name = {};
+		rhs.m_gpu.value = {};
+	}
+
+	DebugOverlays::PassOverlays::~PassOverlays()noexcept
 	{
 		if ( m_panel )
 		{
@@ -347,12 +435,26 @@ namespace castor3d
 			m_gpu.value->setVisible( false );
 
 			auto & manager = *m_panel->getControlsManager();
-			manager.destroy( std::move( m_gpu.name ) );
-			manager.destroy( std::move( m_gpu.value ) );
-			manager.destroy( std::move( m_cpu.name ) );
-			manager.destroy( std::move( m_cpu.value ) );
-			manager.destroy( std::move( m_passName ) );
-			manager.destroy( std::move( m_panel ) );
+			manager.destroy( m_gpu.name );
+			manager.destroy( m_gpu.value );
+			manager.destroy( m_cpu.name );
+			manager.destroy( m_cpu.value );
+			manager.destroy( m_passName );
+			manager.destroy( m_panel );
+
+			manager.unregisterControl( *m_gpu.name );
+			manager.unregisterControl( *m_gpu.value );
+			manager.unregisterControl( *m_cpu.name );
+			manager.unregisterControl( *m_cpu.value );
+			manager.unregisterControl( *m_passName );
+			manager.unregisterControl( *m_panel );
+
+			m_gpu.name = {};
+			m_gpu.value = {};
+			m_cpu.name = {};
+			m_cpu.value = {};
+			m_passName = {};
+			m_panel = {};
 		}
 	}
 
@@ -441,55 +543,55 @@ namespace castor3d
 		auto containerStyle = manager.getStyle< ExpandablePanelStyle >( "Debug/RenderPasses/Category" );
 		auto nameStyle = containerStyle->getHeaderStyle().getStyle< StaticStyle >( "Name" );
 		auto counterStyle = containerStyle->getHeaderStyle().getStyle< StaticStyle >( "Counter" );
-		m_container = std::make_shared< ExpandablePanelCtrl >( nullptr
-			, m_categoryName + "Category"
+		m_container = manager.registerControlT( castor::makeUnique< ExpandablePanelCtrl >( nullptr
+			, m_categoryName
 			, containerStyle
 			, m_parent
 			, castor::Position{}
 			, castor::Size{ CategoryLineWidth, PanelHeight }
 			, PanelHeight
-			, expanded );
+			, expanded ) );
 		m_container->getContent()->setLayout( castor::makeUniqueDerived< Layout, LayoutBox >( *m_container->getContent() ) );
 		auto nameWidth = CategoryNameWidth - m_leftOffset;
-		m_name = std::make_shared< StaticCtrl >( nullptr
+		m_name = manager.registerControlT( castor::makeUnique< StaticCtrl >( nullptr
 			, "Title"
 			, nameStyle
-			, m_container->getHeader().get()
+			, m_container->getHeader()
 			, castor::string::toU32String( m_categoryName )
 			, castor::Position{ m_posX, 2 }
-			, castor::Size{ nameWidth, PanelHeight } );
+			, castor::Size{ nameWidth, PanelHeight } ) );
 		m_posX += nameWidth;
-		m_cpu.name = std::make_shared< StaticCtrl >( nullptr
+		m_cpu.name = manager.registerControlT( castor::makeUnique< StaticCtrl >( nullptr
 			, "CPUName"
 			, counterStyle
-			, m_container->getHeader().get()
+			, m_container->getHeader()
 			,  U"CPU:"
 			, castor::Position{ m_posX, 0 }
-			, castor::Size{ CpuNameWidth, PanelHeight } );
+			, castor::Size{ CpuNameWidth, PanelHeight } ) );
 		m_posX += CpuNameWidth;
-		m_cpu.value = std::make_shared< StaticCtrl >( nullptr
+		m_cpu.value = manager.registerControlT( castor::makeUnique< StaticCtrl >( nullptr
 			, "CPUValue"
 			, counterStyle
-			, m_container->getHeader().get()
+			, m_container->getHeader()
 			,  U""
 			, castor::Position{ m_posX, 0 }
-			, castor::Size{ CpuValueWidth, PanelHeight } );
+			, castor::Size{ CpuValueWidth, PanelHeight } ) );
 		m_posX += CpuValueWidth;
-		m_gpu.name = std::make_shared< StaticCtrl >( nullptr
+		m_gpu.name = manager.registerControlT( castor::makeUnique< StaticCtrl >( nullptr
 			, "GPUName"
 			, counterStyle
-			, m_container->getHeader().get()
+			, m_container->getHeader()
 			,  U"GPU:"
 			, castor::Position{ m_posX, 0 }
-			, castor::Size{ GpuNameWidth, PanelHeight } );
+			, castor::Size{ GpuNameWidth, PanelHeight } ) );
 		m_posX += GpuNameWidth;
-		m_gpu.value = std::make_shared< StaticCtrl >( nullptr
+		m_gpu.value = manager.registerControlT( castor::makeUnique< StaticCtrl >( nullptr
 			, "GPUValue"
 			, counterStyle
-			, m_container->getHeader().get()
+			, m_container->getHeader()
 			, U""
 			, castor::Position{ m_posX, 0 }
-			, castor::Size{ GpuValueWidth, PanelHeight } );
+			, castor::Size{ GpuValueWidth, PanelHeight } ) );
 		m_posX += GpuValueWidth;
 
 		m_cpu.name->setVAlign( VAlign::eCenter );
@@ -514,7 +616,68 @@ namespace castor3d
 		m_parent->getLayout()->addControl( *m_container );
 	}
 
-	DebugOverlays::CategoryOverlays::~CategoryOverlays()
+	DebugOverlays::CategoryOverlays & DebugOverlays::CategoryOverlays::operator=( CategoryOverlays && rhs )noexcept
+	{
+		m_engine = std::move( rhs.m_engine );
+		m_parent = std::move( rhs.m_parent );
+		m_categoryName = std::move( rhs.m_categoryName );
+		m_leftOffset = std::move( rhs.m_leftOffset );
+		m_posX = std::move( rhs.m_posX );
+		m_visible = std::move( rhs.m_visible );
+		m_parentVisible = std::move( rhs.m_parentVisible );
+		m_passes = std::move( rhs.m_passes );
+		m_categories = std::move( rhs.m_categories );
+		m_container = std::move( rhs.m_container );
+		m_name = std::move( rhs.m_name );
+		m_cpu = std::move( rhs.m_cpu );
+		m_gpu = std::move( rhs.m_gpu );
+
+		rhs.m_engine = {};
+		rhs.m_parent = {};
+		rhs.m_leftOffset = {};
+		rhs.m_posX = {};
+		rhs.m_visible = {};
+		rhs.m_parentVisible = {};
+		rhs.m_container = {};
+		rhs.m_name = {};
+		rhs.m_cpu.name = {};
+		rhs.m_cpu.value = {};
+		rhs.m_gpu.name = {};
+		rhs.m_gpu.value = {};
+
+		return *this;
+	}
+
+	DebugOverlays::CategoryOverlays::CategoryOverlays( CategoryOverlays && rhs )noexcept
+		: m_engine{ std::move( rhs.m_engine ) }
+		, m_parent{ std::move( rhs.m_parent ) }
+		, m_categoryName{ std::move( rhs.m_categoryName ) }
+		, m_leftOffset{ std::move( rhs.m_leftOffset ) }
+		, m_posX{ std::move( rhs.m_posX ) }
+		, m_visible{ std::move( rhs.m_visible ) }
+		, m_parentVisible{ std::move( rhs.m_parentVisible ) }
+		, m_passes{ std::move( rhs.m_passes ) }
+		, m_categories{ std::move( rhs.m_categories ) }
+		, m_container{ std::move( rhs.m_container ) }
+		, m_name{ std::move( rhs.m_name ) }
+		, m_cpu{ std::move( rhs.m_cpu ) }
+		, m_gpu{ std::move( rhs.m_gpu ) }
+	{
+		rhs.m_engine = {};
+		rhs.m_parent = {};
+		rhs.m_leftOffset = {};
+		rhs.m_posX = {};
+		rhs.m_visible = {};
+		rhs.m_parentVisible = {};
+		rhs.m_container = {};
+		rhs.m_name = {};
+		rhs.m_cpu.name = {};
+		rhs.m_cpu.value = {};
+		rhs.m_gpu.name = {};
+		rhs.m_gpu.value = {};
+	}
+
+	DebugOverlays::CategoryOverlays::~CategoryOverlays()noexcept
 	{
 		if ( m_container )
 		{
@@ -531,12 +694,26 @@ namespace castor3d
 			m_categories.clear();
 
 			auto & manager = dbgovl::getControlsManager( *m_engine );
-			manager.destroy( std::move( m_cpu.value ) );
-			manager.destroy( std::move( m_gpu.value ) );
-			manager.destroy( std::move( m_cpu.name ) );
-			manager.destroy( std::move( m_gpu.name ) );
-			manager.destroy( std::move( m_name ) );
-			manager.destroy( std::move( m_container ) );
+			manager.destroy( m_cpu.value );
+			manager.destroy( m_gpu.value );
+			manager.destroy( m_cpu.name );
+			manager.destroy( m_gpu.name );
+			manager.destroy( m_name );
+			manager.destroy( m_container );
+
+			manager.unregisterControl( *m_cpu.value );
+			manager.unregisterControl( *m_gpu.value );
+			manager.unregisterControl( *m_cpu.name );
+			manager.unregisterControl( *m_gpu.name );
+			manager.unregisterControl( *m_name );
+			manager.unregisterControl( *m_container );
+
+			m_cpu.value = {};
+			m_gpu.value = {};
+			m_cpu.name = {};
+			m_gpu.name = {};
+			m_name = {};
+			m_container = {};
 		}
 	}
 
@@ -609,6 +786,7 @@ namespace castor3d
 			{
 				if ( ( *it )->removeTimer( timer ) )
 				{
+					auto pass = std::move( *it );
 					m_passes.erase( it );
 				}
 			}
@@ -632,6 +810,7 @@ namespace castor3d
 			{
 				if ( ( *it )->removeTimer( name, categories, timer ) )
 				{
+					auto category = std::move( *it );
 					m_categories.erase( it );
 				}
 			}
@@ -736,7 +915,7 @@ namespace castor3d
 
 	PanelCtrl * DebugOverlays::CategoryOverlays::getContainer()const
 	{
-		return m_container->getContent().get();
+		return m_container->getContent();
 	}
 
 	void DebugOverlays::CategoryOverlays::dumpFrameTimes( castor::String prefix
@@ -925,19 +1104,19 @@ namespace castor3d
 	{
 		auto & engine = *getEngine();
 		auto & manager = dbgovl::getControlsManager( engine );
-		m_passesContainer = std::make_shared< PanelCtrl >( nullptr
+		m_passesContainer = manager.registerControlT( castor::makeUnique< PanelCtrl >( nullptr
 			, "Debug/RenderPasses"
 			, manager.getPanelStyle( "Debug/RenderPasses" )
 			, nullptr
 			, castor::Position{ PassPanelLeft, 0 }
 			, castor::Size{ CategoryLineWidth, 600u }
-			, ControlFlagType( ControlFlag::eAlwaysOnTop ) );
+			, ControlFlagType( ControlFlag::eAlwaysOnTop ) ) );
 		m_passesContainer->setLayout( castor::makeUniqueDerived< Layout, LayoutBox >( *m_passesContainer ) );
 		manager.create( m_passesContainer );
 
 		m_passesContainer->setVisible( m_visible );
 
-		m_renderPasses = { "Render Passes"
+		m_renderPasses = { "Passes"
 			, engine
 			, *m_passesContainer
 			, 0u

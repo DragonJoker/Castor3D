@@ -56,13 +56,13 @@ namespace castor3d
 		, m_values{ values }
 		, m_selected{ selected }
 	{
-		m_expand = std::make_shared< ButtonCtrl >( m_scene
+		m_expand = getEngine().getControlsManager()->registerControlT( castor::makeUnique< ButtonCtrl >( m_scene
 			, cuT( "Expand" )
 			, &style->getExpandStyle()
 			, this
 			, U"+"
 			, castor::Position{ int32_t( size->x - size->y ), 0 }
-			, castor::Size{ size->y, size->y } );
+			, castor::Size{ size->y, size->y } ) );
 		m_expand->setVisible( visible );
 		m_expandClickedConnection = m_expand->connect( ButtonEvent::eClicked
 			, [this]()
@@ -70,7 +70,7 @@ namespace castor3d
 				doSwitchExpand();
 			} );
 
-		m_choices = std::make_shared< ListBoxCtrl >( m_scene
+		m_choices = getEngine().getControlsManager()->registerControlT( castor::makeUnique< ListBoxCtrl >( m_scene
 			, cuT( "Choices" )
 			, &style->getElementsStyle()
 			, this
@@ -79,7 +79,7 @@ namespace castor3d
 			, castor::Position{ 0, int32_t( size->y ) }
 			, castor::Size{ size->x - size->y, ~( 0u ) }
 			, uint64_t( ControlFlag::eAlwaysOnTop )
-			, false );
+			, false ) );
 		m_choicesSelectedConnection = m_choices->connect( ListBoxEvent::eSelected
 			, [this]( int sel )
 			{
@@ -119,6 +119,10 @@ namespace castor3d
 				getEngine().removeOverlay( getName() + cuT( "/Text" ), true );
 			}
 		}
+
+		auto & manager = *getEngine().getControlsManager();
+		manager.unregisterControl( *m_choices );
+		manager.unregisterControl( *m_expand );
 	}
 
 	void ComboBoxCtrl::appendItem( castor::String const & value )
@@ -188,7 +192,7 @@ namespace castor3d
 				onKeyDown( event );
 			} );
 		NonClientEventHandler::connectNC( KeyboardEventType::ePushed
-			, [this]( ControlSPtr control
+			, [this]( ControlRPtr control
 				, KeyboardEvent const & event )
 			{
 				onNcKeyDown( control, event );
@@ -310,7 +314,7 @@ namespace castor3d
 		}
 	}
 
-	void ComboBoxCtrl::onNcKeyDown( ControlSPtr control, KeyboardEvent const & event )
+	void ComboBoxCtrl::onNcKeyDown( ControlRPtr control, KeyboardEvent const & event )
 	{
 		onKeyDown( event );
 	}

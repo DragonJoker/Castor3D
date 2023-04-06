@@ -50,6 +50,7 @@ namespace castor3d
 		, m_value{ value }
 		, m_scrolling{ false }
 	{
+		auto & manager = *getEngine().getControlsManager();
 		setBorderSize( castor::Point4ui{} );
 		EventHandler::connect( KeyboardEventType::ePushed
 			, [this]( KeyboardEvent const & event )
@@ -57,53 +58,58 @@ namespace castor3d
 				onKeyDown( event );
 			} );
 
-		auto line = std::make_shared< StaticCtrl >( m_scene
+		m_line = manager.registerControlT( castor::makeUnique< StaticCtrl >( m_scene
 			, cuT( "Line" )
 			, &style->getLineStyle()
 			, this
 			, castor::U32String{}
 			, castor::Position{}
-			, castor::Size{} );
-		line->setVisible( visible );
-		line->connectNC( KeyboardEventType::ePushed
-			, [this]( ControlSPtr control, KeyboardEvent const & event )
+			, castor::Size{} ) );
+		m_line->setVisible( visible );
+		m_line->connectNC( KeyboardEventType::ePushed
+			, [this]( ControlRPtr control, KeyboardEvent const & event )
 			{
 				onNcKeyDown( control, event );
 			} );
-		m_line = line;
 
-		auto tick = std::make_shared< StaticCtrl >( m_scene
+		m_tick = manager.registerControlT( castor::makeUnique< StaticCtrl >( m_scene
 			, cuT( "Tick" )
 			, &style->getTickStyle()
 			, this
 			, castor::U32String{}
 			, castor::Position{}
-			, castor::Size{} );
-		tick->setVisible( visible );
-		tick->setCatchesMouseEvents( true );
-		tick->connectNC( MouseEventType::eMove
-			, [this]( ControlSPtr control, MouseEvent const & event )
+			, castor::Size{} ) );
+		m_tick->setVisible( visible );
+		m_tick->setCatchesMouseEvents( true );
+		m_tick->connectNC( MouseEventType::eMove
+			, [this]( ControlRPtr control, MouseEvent const & event )
 			{
 				onTickMouseMove( control, event );
 			} );
-		tick->connectNC( MouseEventType::ePushed
-			, [this]( ControlSPtr control, MouseEvent const & event )
+		m_tick->connectNC( MouseEventType::ePushed
+			, [this]( ControlRPtr control, MouseEvent const & event )
 			{
 				onTickMouseButtonDown( control, event );
 			} );
-		tick->connectNC( MouseEventType::eReleased
-			, [this]( ControlSPtr control, MouseEvent const & event )
+		m_tick->connectNC( MouseEventType::eReleased
+			, [this]( ControlRPtr control, MouseEvent const & event )
 			{
 				onTickMouseButtonUp( control, event );
 			} );
-		tick->connectNC( KeyboardEventType::ePushed
-			, [this]( ControlSPtr control, KeyboardEvent const & event )
+		m_tick->connectNC( KeyboardEventType::ePushed
+			, [this]( ControlRPtr control, KeyboardEvent const & event )
 			{
 				onNcKeyDown( control, event );
 			} );
-		m_tick = tick;
 
 		setStyle( style );
+	}
+
+	SliderCtrl::~SliderCtrl()noexcept
+	{
+		auto & manager = *getEngine().getControlsManager();
+		manager.unregisterControl( *m_tick );
+		manager.unregisterControl( *m_line );
 	}
 
 	void SliderCtrl::setRange( castor::Range< int32_t > const & value )
@@ -148,14 +154,14 @@ namespace castor3d
 			tickPosition.y() = int32_t( tickSize.getHeight() / 2 );
 		}
 
-		if ( auto line = m_line.lock() )
+		if ( auto line = m_line )
 		{
 			line->setPosition( linePosition );
 			line->setSize( lineSize );
 			line->setVisible( isBackgroundVisible() );
 		}
 
-		if ( auto tick = m_tick.lock() )
+		if ( auto tick = m_tick )
 		{
 			tick->setPosition( tickPosition );
 			tick->setSize( tickSize );
@@ -167,12 +173,12 @@ namespace castor3d
 	{
 		auto & style = getStyle();
 
-		if ( auto line = m_line.lock() )
+		if ( auto line = m_line )
 		{
 			line->setStyle( &style.getLineStyle() );
 		}
 
-		if ( auto tick = m_tick.lock() )
+		if ( auto tick = m_tick )
 		{
 			tick->setStyle( &style.getTickStyle() );
 		}
@@ -182,11 +188,8 @@ namespace castor3d
 	{
 		CU_Require( getControlsManager() );
 		auto & manager = *getControlsManager();
-		StaticCtrlSPtr line = m_line.lock();
-		manager.create( line );
-
-		StaticCtrlSPtr tick = m_tick.lock();
-		manager.create( tick );
+		manager.create( m_line );
+		manager.create( m_tick );
 		doUpdateLineAndTick();
 		
 		manager.connectEvents( *this );
@@ -197,16 +200,8 @@ namespace castor3d
 		CU_Require( getControlsManager() );
 		auto & manager = *getControlsManager();
 		manager.disconnectEvents( *this );
-
-		if ( auto line = m_line.lock() )
-		{
-			manager.destroy( line );
-		}
-
-		if ( auto tick = m_tick.lock() )
-		{
-			manager.destroy( tick );
-		}
+		manager.destroy( m_line );
+		manager.destroy( m_tick );
 	}
 
 	void SliderCtrl::doSetPosition( castor::Position const & value )
@@ -221,12 +216,12 @@ namespace castor3d
 
 	void SliderCtrl::doSetVisible( bool value )
 	{
-		if ( auto line = m_line.lock() )
+		if ( auto line = m_line )
 		{
 			line->setVisible( value );
 		}
 
-		if ( auto tick = m_tick.lock() )
+		if ( auto tick = m_tick )
 		{
 			tick->setVisible( value );
 		}
@@ -254,8 +249,8 @@ namespace castor3d
 
 		if ( m_scrolling
 				&& focusedControl != this
-				&& focusedControl != m_tick.lock().get()
-				&& focusedControl != m_line.lock().get()
+				&& focusedControl != m_tick
+				&& focusedControl != m_line
 		   )
 		{
 			doMoveMouse( event.getPosition() );
@@ -270,7 +265,7 @@ namespace castor3d
 		{
 			if ( !m_scrolling )
 			{
-				m_mouse = m_tick.lock()->getPosition();
+				m_mouse = m_tick->getPosition();
 			}
 
 			doMoveMouse( event.getPosition() );
@@ -279,13 +274,13 @@ namespace castor3d
 		}
 	}
 
-	void SliderCtrl::onTickMouseMove( ControlSPtr control
+	void SliderCtrl::onTickMouseMove( ControlRPtr control
 		, MouseEvent const & event )
 	{
 		doOnMouseMove( event );
 	}
 
-	void SliderCtrl::onTickMouseButtonDown( ControlSPtr control
+	void SliderCtrl::onTickMouseButtonDown( ControlRPtr control
 		, MouseEvent const & event )
 	{
 		if ( event.getButton() == MouseButton::eLeft )
@@ -296,7 +291,7 @@ namespace castor3d
 		}
 	}
 
-	void SliderCtrl::onTickMouseButtonUp( ControlSPtr control, MouseEvent const & event )
+	void SliderCtrl::onTickMouseButtonUp( ControlRPtr control, MouseEvent const & event )
 	{
 		doOnMouseButtonUp( event );
 	}
@@ -334,7 +329,7 @@ namespace castor3d
 		}
 	}
 
-	void SliderCtrl::onNcKeyDown( ControlSPtr control
+	void SliderCtrl::onNcKeyDown( ControlRPtr control
 		, KeyboardEvent const & event )
 	{
 		onKeyDown( event );
@@ -353,12 +348,12 @@ namespace castor3d
 			realDelta.y() = 0;
 		}
 
-		if ( auto tick = m_tick.lock() )
+		if ( auto tick = m_tick )
 		{
 			castor::Point2i position = tick->getPosition() + realDelta;
 			double tickValue = 0;
 
-			if ( auto line = m_line.lock() )
+			if ( auto line = m_line )
 			{
 				auto size = line->getSize();
 

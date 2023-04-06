@@ -110,8 +110,8 @@ namespace castor3d
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, cuT( "ImageBackground_Colour" ) );
 			texture->setSource( folder, relative, { false, false, false } );
-			m_2dTexture = std::move( texture );
 			m_2dTexturePath = texture->getImage().getPath();
+			m_2dTexture = std::move( texture );
 			notifyChanged();
 			result = true;
 		}

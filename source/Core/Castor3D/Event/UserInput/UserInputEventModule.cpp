@@ -1,5 +1,17 @@
 #include "Castor3D/Event/UserInput/UserInputEventModule.hpp"
 
+#include "Castor3D/Event/UserInput/EventHandler.hpp"
+#include "Castor3D/Event/UserInput/HandlerEvent.hpp"
+#include "Castor3D/Event/UserInput/KeyboardEvent.hpp"
+#include "Castor3D/Event/UserInput/MouseEvent.hpp"
+#include "Castor3D/Event/UserInput/UserInputEvent.hpp"
+
+CU_ImplementCUSmartPtr( castor3d, EventHandler )
+CU_ImplementCUSmartPtr( castor3d, HandlerEvent )
+CU_ImplementCUSmartPtr( castor3d, KeyboardEvent )
+CU_ImplementCUSmartPtr( castor3d, MouseEvent )
+CU_ImplementCUSmartPtr( castor3d, UserInputEvent )
+
 namespace castor3d
 {
 	castor::String getName( UserInputEventType value )

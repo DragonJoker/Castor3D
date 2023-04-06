@@ -28,22 +28,23 @@ namespace castor3d
 			, ScrollBarStyle & ( ScrollableStyle::* get )()const noexcept
 			, uint32_t rangeMax
 			, castor::Size dim
-			, ScrollBarCtrlSPtr & scrollBar )
+			, ScrollBarCtrlRPtr & scrollBar )
 		{
 			if ( castor::checkFlag( control.getFlags(), flag ) )
 			{
 				if ( !scrollBar )
 				{
 					CU_Require( style && ( style->*has )() );
+					auto & manager = *control.getEngine().getControlsManager();
 					auto scene = control.hasScene() ? &control.getScene() : nullptr;
-					scrollBar = std::make_shared< ScrollBarCtrl >( scene
+					scrollBar = manager.registerControlT( castor::makeUnique< ScrollBarCtrl >( scene
 						, "Scroll/" + prefix
 						, &( style->*get )()
 						, &control
 						, castor::makeRangedValue( 0.0f, 0.0f, float( rangeMax ) )
 						, castor::Position{}
 						, std::move( dim )
-						, ControlFlagType( flag ) );
+						, ControlFlagType( flag ) ) );
 				}
 
 				scrollBar->setVisible( control.isBackgroundVisible() );
@@ -91,6 +92,18 @@ namespace castor3d
 			{
 				m_target.getEngine().removeOverlay( m_target.getName() + cuT( "/Scroll/Corner" ), true );
 			}
+		}
+
+		auto & manager = *m_target.getEngine().getControlsManager();
+
+		if ( m_verticalScrollBar )
+		{
+			manager.unregisterControl( *m_verticalScrollBar );
+		}
+
+		if ( m_horizontalScrollBar )
+		{
+			manager.unregisterControl( *m_horizontalScrollBar );
 		}
 	}
 
@@ -325,8 +338,8 @@ namespace castor3d
 			return;
 		}
 
-		if ( &control != m_verticalScrollBar.get()
-			&& &control != m_horizontalScrollBar.get() )
+		if ( &control != m_verticalScrollBar
+			&& &control != m_horizontalScrollBar )
 		{
 			m_controls.emplace( &control
 				, ScrolledControl{ control.onChanged.connect( [this, &control]( Control const & ctrl )
@@ -340,6 +353,27 @@ namespace castor3d
 					, control.getPosition() } );
 			doUpdateControlPosition( control );
 			doUpdateScrollableContent();
+		}
+	}
+
+	void ScrollableCtrl::unregisterControl( Control & control )
+	{
+		if ( !m_verticalScrollBar
+			&& !m_horizontalScrollBar )
+		{
+			return;
+		}
+
+		if ( &control != m_verticalScrollBar
+			&& &control != m_horizontalScrollBar )
+		{
+			auto it = m_controls.find( &control );
+
+			if ( it != m_controls.end() )
+			{
+				m_controls.erase( it );
+				doUpdateScrollableContent();
+			}
 		}
 	}
 

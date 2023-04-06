@@ -60,7 +60,11 @@ namespace castor3d
 
 		/** @copydoc Control::doAddChild
 		 */
-		void doAddChild( ControlSPtr control )override;
+		void doAddChild( ControlRPtr control )override;
+
+		/** @copydoc Control::doRemoveChild
+		 */
+		void doRemoveChild( ControlRPtr control )override;
 
 		/** @copydoc Control::doUpdateStyle
 		*/

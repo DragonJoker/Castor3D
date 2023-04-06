@@ -53,6 +53,12 @@ namespace castor
 	{
 		return UniquePtr< TypeT >( new TypeT( std::forward< ParamsT >( params )... ) );
 	}
+
+	template< typename TypeU, typename TypeT >
+	UniquePtr< TypeU > ptrCast( UniquePtr< TypeT > & ptr )
+	{
+		return UniquePtr< TypeU >( &static_cast< TypeU & >( *ptr.release() ) );
+	}
 }
 
 #define CU_DeclareCUSmartPtr( nmspc, class_name, expdecl )\
