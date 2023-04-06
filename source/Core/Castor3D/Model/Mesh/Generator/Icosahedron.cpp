@@ -18,9 +18,9 @@ namespace castor3d
 	{
 	}
 
-	MeshGeneratorSPtr Icosahedron::create()
+	MeshGeneratorUPtr Icosahedron::create()
 	{
-		return std::make_shared< Icosahedron >();
+		return std::make_unique< Icosahedron >();
 	}
 
 	void Icosahedron::doGenerate( Mesh & mesh, Parameters const & parameters )

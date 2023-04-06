@@ -21,9 +21,9 @@ namespace castor3d
 	{
 	}
 
-	MeshGeneratorSPtr MeshGenerator::create()
+	MeshGeneratorUPtr MeshGenerator::create()
 	{
-		return std::make_shared< MeshGenerator >( cuT( "custom" ) );
+		return std::make_unique< MeshGenerator >( cuT( "custom" ) );
 	}
 
 	void MeshGenerator::generate( Mesh & mesh, Parameters const & parameters )

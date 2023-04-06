@@ -24,7 +24,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::MeshGenerator::create
 		 */
-		C3D_API static MeshGeneratorSPtr create();
+		C3D_API static MeshGeneratorUPtr create();
 
 	private:
 		C3D_API virtual void doGenerate( Mesh & mesh

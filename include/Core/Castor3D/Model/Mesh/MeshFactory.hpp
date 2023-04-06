@@ -11,7 +11,7 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	class MeshFactory
-		: public castor::Factory< MeshGenerator, castor::String >
+		: public castor::Factory< MeshGenerator, castor::String, std::unique_ptr< MeshGenerator > >
 	{
 	public:
 		/**

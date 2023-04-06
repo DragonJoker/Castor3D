@@ -15,7 +15,7 @@ CU_ImplementCUSmartPtr( castor3d, MeshFactory )
 namespace castor3d
 {
 	MeshFactory::MeshFactory()
-		: Factory< MeshGenerator, castor::String >{}
+		: Factory < MeshGenerator, castor::String, std::unique_ptr< MeshGenerator > > {}
 	{
 		registerType( cuT( "cone" ), Cone::create );
 		registerType( cuT( "cube" ), Cube::create );

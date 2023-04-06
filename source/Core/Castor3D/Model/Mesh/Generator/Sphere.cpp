@@ -16,9 +16,9 @@ namespace castor3d
 	{
 	}
 
-	MeshGeneratorSPtr Sphere::create()
+	MeshGeneratorUPtr Sphere::create()
 	{
-		return std::make_shared< Sphere >();
+		return std::make_unique< Sphere >();
 	}
 
 	void Sphere::doGenerate( Mesh & mesh, Parameters const & parameters )

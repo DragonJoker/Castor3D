@@ -13,9 +13,9 @@ namespace castor3d
 	{
 	}
 
-	MeshGeneratorSPtr Projection::create()
+	MeshGeneratorUPtr Projection::create()
 	{
-		return std::make_shared< Projection >();
+		return std::make_unique< Projection >();
 	}
 
 	void Projection::setPoints( Pattern< castor::Point3f > const & pattern

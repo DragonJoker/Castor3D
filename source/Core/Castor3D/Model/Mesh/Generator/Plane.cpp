@@ -12,9 +12,9 @@ namespace castor3d
 	{
 	}
 
-	MeshGeneratorSPtr Plane::create()
+	MeshGeneratorUPtr Plane::create()
 	{
-		return std::make_shared< Plane >();
+		return std::make_unique< Plane >();
 	}
 
 	void Plane::doGenerate( Mesh & mesh, Parameters const & parameters )

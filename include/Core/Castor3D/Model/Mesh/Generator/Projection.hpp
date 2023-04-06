@@ -23,7 +23,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::MeshGenerator::create
 		 */
-		C3D_API static MeshGeneratorSPtr create();
+		C3D_API static MeshGeneratorUPtr create();
 		/**
 		 *\~english
 		 *\brief		Defines the pattern used to build the projection.
