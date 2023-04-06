@@ -213,7 +213,7 @@ namespace castor3d
 		*\param[in] size
 		*	Les dimensions voulues pour la skybox.
 		*/
-		C3D_API void setEquiTexture( TextureLayoutSPtr texture
+		C3D_API void setEquiTexture( TextureLayoutUPtr texture
 			, uint32_t size );
 		/**
 		*\~english
@@ -281,7 +281,7 @@ namespace castor3d
 		*\param[in] texture
 		*	La texture.
 		*/
-		C3D_API void setCrossTexture( TextureLayoutSPtr texture );
+		C3D_API void setCrossTexture( TextureLayoutUPtr texture );
 		/**
 		*\copydoc	castor3d::SceneBackground::accept
 		*/
@@ -329,7 +329,7 @@ namespace castor3d
 		*	Mutateurs.
 		*/
 		/**@{*/
-		void setTexture( TextureLayoutSPtr texture )
+		void setTexture( TextureLayoutUPtr texture )
 		{
 			m_texture = std::move( texture );
 		}
@@ -357,12 +357,12 @@ namespace castor3d
 			, QueueData const & queueData );
 
 	private:
-		std::array< TextureLayoutSPtr, 6u > m_layerTexture;
+		std::array< TextureLayoutUPtr, 6u > m_layerTexture;
 		std::array< castor::Path, 6u > m_layerTexturePath;
-		TextureLayoutSPtr m_equiTexture;
+		TextureLayoutUPtr m_equiTexture;
 		castor::Path m_equiTexturePath;
 		castor::Size m_equiSize;
-		TextureLayoutSPtr m_crossTexture;
+		TextureLayoutUPtr m_crossTexture;
 		castor::Path m_crossTexturePath;
 	};
 }

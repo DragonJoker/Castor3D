@@ -96,7 +96,7 @@ namespace castor3d
 			, QueueData const & queueData
 			, ashes::RenderPass const & renderPass
 			, castor::Size const & size
-			, TextureLayoutSPtr colourTexture );
+			, TextureLayoutUPtr colourTexture );
 		/**
 		 *\~english
 		 *\brief		Initialises the surface.
@@ -119,7 +119,7 @@ namespace castor3d
 			, QueueData const & queueData
 			, ashes::RenderPass const & renderPass
 			, castor::Size const & size
-			, TextureLayoutSPtr colourTexture
+			, TextureLayoutUPtr colourTexture
 			, VkFormat depthFormat );
 		/**
 		 *\~english
@@ -144,7 +144,7 @@ namespace castor3d
 			, ashes::RenderPass const & renderPass
 			, castor::Size const & size
 			, VkFormat colourFormat
-			, TextureLayoutSPtr depthTexture );
+			, TextureLayoutUPtr depthTexture );
 		/**
 		 *\~english
 		 *\brief		Initialises the surface.
@@ -167,8 +167,8 @@ namespace castor3d
 			, QueueData const & queueData
 			, ashes::RenderPass const & renderPass
 			, castor::Size const & size
-			, TextureLayoutSPtr colourTexture
-			, TextureLayoutSPtr depthTexture );
+			, TextureLayoutUPtr colourTexture
+			, TextureLayoutUPtr depthTexture );
 		/**
 		 *\~english
 		 *\brief		Cleans up the surface.
@@ -184,10 +184,10 @@ namespace castor3d
 		ashes::FrameBufferPtr frameBuffer;
 		//!\~english	The surface colour texture.
 		//!\~french		La texture couleur de la surface.
-		TextureLayoutSPtr colourTexture;
+		TextureLayoutUPtr colourTexture;
 		//!\~english	The surface depth texture.
 		//!\~french		La texture profondeur de la surface.
-		TextureLayoutSPtr depthTexture;
+		TextureLayoutUPtr depthTexture;
 		//!\~english	The surface depth view.
 		//!\~french		La vue profondeur de la surface.
 		ashes::ImageView depthView;

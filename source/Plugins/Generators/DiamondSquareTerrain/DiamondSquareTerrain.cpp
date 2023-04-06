@@ -56,9 +56,9 @@ namespace diamond_square_terrain
 	{
 	}
 
-	castor3d::MeshGeneratorSPtr Generator::create()
+	castor3d::MeshGeneratorUPtr Generator::create()
 	{
-		return std::make_shared< Generator >();
+		return std::make_unique< Generator >();
 	}
 
 	void Generator::doGenerate( castor3d::Mesh & mesh

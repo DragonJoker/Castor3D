@@ -77,7 +77,7 @@ namespace castor3d
 
 	MaterialRPtr createMaterial( Engine & engine
 		, castor::String const & name
-		, TextureLayoutSPtr texture )
+		, TextureLayoutUPtr texture )
 	{
 		auto & cache = engine.getMaterialCache();
 		MaterialResPtr created;
@@ -109,7 +109,7 @@ namespace castor3d
 		}
 
 		TextureUnitSPtr unit = pass->getTextureUnit( 0 );
-		unit->setTexture( texture );
+		unit->setTexture( std::move( texture ) );
 		return result.lock().get();
 	}
 }

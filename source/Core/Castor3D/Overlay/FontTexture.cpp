@@ -20,7 +20,7 @@ namespace castor3d
 
 	namespace fonttex
 	{
-		static TextureLayoutSPtr createTexture( Engine & engine, castor::FontResPtr font )
+		static TextureLayoutUPtr createTexture( Engine & engine, castor::FontResPtr font )
 		{
 			auto fnt = font.lock();
 
@@ -42,7 +42,7 @@ namespace castor3d
 				, VK_SAMPLE_COUNT_1_BIT
 				, VK_IMAGE_TILING_OPTIMAL
 				, VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT };
-			return std::make_shared< TextureLayout >( *engine.getRenderSystem()
+			return castor::makeUnique< TextureLayout >( *engine.getRenderSystem()
 				, image
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, cuT( "FontTexture_" ) + fnt->getFaceName() + castor::string::toString( fnt->getHeight() ) );

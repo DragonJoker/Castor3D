@@ -152,7 +152,7 @@ namespace castor3d
 		, castor::String const & name )
 		: SceneBackground{ engine, scene, name + cuT( "Skybox" ), cuT( "skybox" ), true }
 	{
-		m_texture = std::make_shared< TextureLayout >( *engine.getRenderSystem()
+		m_texture = castor::makeUnique< TextureLayout >( *getScene().getEngine()->getRenderSystem()
 			, skybox::doGetImageCreate( VK_FORMAT_R8G8B8A8_UNORM, { 16u, 16u }, false )
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, cuT( "SkyboxBackground_Colour" )
@@ -233,13 +233,13 @@ namespace castor3d
 			, ( VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
 				| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) };
-		auto texture = std::make_shared< TextureLayout >( *getScene().getEngine()->getRenderSystem()
+		auto texture = castor::makeUnique< TextureLayout >( *getScene().getEngine()->getRenderSystem()
 			, std::move( image )
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, cuT( "SkyboxBackground" ) + castor3d::getName( face ) );
 		texture->setSource( folder, relative, { false, false, false } );
 		m_layerTexturePath[size_t( face )] = texture->getImage().getPath();
-		m_layerTexture[size_t( face )] = texture;
+		m_layerTexture[size_t( face )] = std::move( texture );
 		notifyChanged();
 	}
 
@@ -257,19 +257,19 @@ namespace castor3d
 			, VK_IMAGE_TILING_OPTIMAL
 			, ( VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) };
-		auto texture = std::make_shared< TextureLayout >( *getScene().getEngine()->getRenderSystem()
+		auto texture = castor::makeUnique< TextureLayout >( *getScene().getEngine()->getRenderSystem()
 			, std::move( image )
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, cuT( "SkyboxBackgroundEquirectangular" ) );
 		texture->setSource( folder, relative, { false, false, false } );
-		setEquiTexture( texture, size );
+		setCrossTexture( std::move( texture ) );
 	}
 
-	void SkyboxBackground::setEquiTexture( TextureLayoutSPtr texture
+	void SkyboxBackground::setEquiTexture( TextureLayoutUPtr texture
 		, uint32_t size )
 	{
 		m_equiTexturePath = texture->getImage().getPath();
-		m_equiTexture = texture;
+		m_equiTexture = std::move( texture );
 		m_equiSize.set( size, size );
 		notifyChanged();
 	}
@@ -294,18 +294,18 @@ namespace castor3d
 			, ( VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
 				| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) };
-		auto texture = std::make_shared< TextureLayout >( *getScene().getEngine()->getRenderSystem()
+		auto texture = castor::makeUnique< TextureLayout >( *getScene().getEngine()->getRenderSystem()
 			, image
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, cuT( "SkyboxBackgroundCross" ) );
 		texture->setSource( folder, relative, { false, false, false } );
-		setCrossTexture( texture );
+		setCrossTexture( std::move( texture ) );
 	}
 
-	void SkyboxBackground::setCrossTexture( TextureLayoutSPtr texture )
+	void SkyboxBackground::setCrossTexture( TextureLayoutUPtr texture )
 	{
 		m_crossTexturePath = texture->getImage().getPath();
-		m_crossTexture = texture;
+		m_crossTexture = std::move( texture );
 		notifyChanged();
 	}
 
@@ -424,7 +424,7 @@ namespace castor3d
 				| VK_IMAGE_USAGE_TRANSFER_DST_BIT
 				| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT ) };
 		m_textureId.create();
-		m_texture = std::make_shared< TextureLayout >( device.renderSystem
+		m_texture = castor::makeUnique< TextureLayout >( device.renderSystem
 			, m_textureId.image
 			, m_textureId.wholeViewId );
 
@@ -497,7 +497,7 @@ namespace castor3d
 					| VK_IMAGE_USAGE_TRANSFER_DST_BIT
 					| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT ) };
 			m_textureId.create();
-			m_texture = std::make_shared< TextureLayout >( device.renderSystem
+			m_texture = castor::makeUnique< TextureLayout >( device.renderSystem
 				, m_textureId.image
 				, m_textureId.wholeViewId );
 
@@ -532,7 +532,7 @@ namespace castor3d
 				| VK_IMAGE_USAGE_TRANSFER_DST_BIT
 				| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT ) };
 		m_textureId.create();
-		m_texture = std::make_shared< TextureLayout >( device.renderSystem
+		m_texture = castor::makeUnique< TextureLayout >( device.renderSystem
 			, m_textureId.image
 			, m_textureId.wholeViewId );
 

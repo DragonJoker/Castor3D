@@ -81,7 +81,7 @@ namespace castor3d
 		 *\brief		Définit la texture.
 		 *\param[in]	texture	La texture.
 		 */
-		C3D_API void setTexture( TextureLayoutSPtr texture );
+		C3D_API void setTexture( TextureLayoutUPtr texture );
 		/**
 		*\~english
 		*name
@@ -138,9 +138,9 @@ namespace castor3d
 		C3D_API bool isTransformAnimated()const;
 		C3D_API bool isTileAnimated()const;
 		
-		TextureLayoutSPtr getTexture()const
+		TextureLayoutRPtr getTexture()const
 		{
-			return m_texture;
+			return m_texture.get();
 		}
 
 		TextureConfiguration const & getConfiguration()const
@@ -270,7 +270,7 @@ namespace castor3d
 		TextureConfiguration m_configuration;
 		TextureTransform m_transform;
 		castor::Matrix4x4f m_transformations;
-		TextureLayoutSPtr m_texture;
+		TextureLayoutUPtr m_texture;
 		RenderTargetRPtr m_renderTarget{};
 		SamplerResPtr m_sampler;
 		SamplerRes m_ownSampler;

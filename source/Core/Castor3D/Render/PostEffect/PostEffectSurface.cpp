@@ -11,7 +11,7 @@ namespace castor3d
 {
 	namespace postfxsfc
 	{
-		static TextureLayoutSPtr doCreateTexture( RenderSystem & renderSystem
+		static TextureLayoutUPtr doCreateTexture( RenderSystem & renderSystem
 			, castor::Size const & size
 			, VkFormat format
 			, uint32_t mipLevels
@@ -51,7 +51,7 @@ namespace castor3d
 				image->usage |= VK_IMAGE_USAGE_TRANSFER_DST_BIT;
 			}
 
-			return std::make_shared< TextureLayout >( renderSystem
+			return castor::makeUnique< TextureLayout >( renderSystem
 				, image
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, std::move( name ) );
@@ -114,13 +114,13 @@ namespace castor3d
 		, QueueData const & queueData
 		, ashes::RenderPass const & renderPass
 		, castor::Size const & newSize
-		, TextureLayoutSPtr newColourTexture )
+		, TextureLayoutUPtr newColourTexture )
 	{
 		return initialise( device
 			, queueData
 			, renderPass
 			, newSize
-			, newColourTexture
+			, std::move( newColourTexture )
 			, nullptr );
 	}
 
@@ -128,14 +128,14 @@ namespace castor3d
 		, QueueData const & queueData
 		, ashes::RenderPass const & renderPass
 		, castor::Size const & newSize
-		, TextureLayoutSPtr newColourTexture
+		, TextureLayoutUPtr newColourTexture
 		, VkFormat depthFormat )
 	{
 		return initialise( device
 			, queueData
 			, renderPass
 			, newSize
-			, newColourTexture
+			, std::move( newColourTexture )
 			, postfxsfc::doCreateTexture( *getEngine()->getRenderSystem()
 				, newSize
 				, depthFormat
@@ -149,7 +149,7 @@ namespace castor3d
 		, ashes::RenderPass const & renderPass
 		, castor::Size const & newSize
 		, VkFormat colourFormat
-		, TextureLayoutSPtr newDepthTexture )
+		, TextureLayoutUPtr newDepthTexture )
 	{
 		return initialise( device
 			, queueData
@@ -161,29 +161,29 @@ namespace castor3d
 				, 1u
 				, false
 				, m_debugName + cuT( "_Colour" ) )
-			, newDepthTexture );
+			, std::move( newDepthTexture ) );
 	}
 
 	bool PostEffectSurface::initialise( RenderDevice const & device
 		, QueueData const & queueData
 		, ashes::RenderPass const & renderPass
 		, castor::Size const & newSize
-		, TextureLayoutSPtr newColourTexture
-		, TextureLayoutSPtr newDepthTexture )
+		, TextureLayoutUPtr newColourTexture
+		, TextureLayoutUPtr newDepthTexture )
 	{
 		size = newSize;
 		ashes::ImageViewCRefArray attaches;
 
 		if ( newColourTexture )
 		{
-			colourTexture = newColourTexture;
+			colourTexture = std::move( newColourTexture );
 			colourTexture->initialise( device, queueData );
 			attaches.emplace_back( colourTexture->getDefaultView().getTargetView() );
 		}
 
 		if ( newDepthTexture )
 		{
-			depthTexture = newDepthTexture;
+			depthTexture = std::move( newDepthTexture );
 			depthTexture->initialise( device, queueData );
 			auto & texture = depthTexture->getTexture();
 			auto format = texture.getFormat();

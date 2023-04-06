@@ -494,7 +494,7 @@ namespace castor3d
 	 *\param[in]	texture	The material texture.
 	 *\return		The created material.
 	*/
-	MaterialRPtr createMaterial( Engine & engine, castor::String const & name, TextureLayoutSPtr texture );
+	MaterialRPtr createMaterial( Engine & engine, castor::String const & name, TextureLayoutUPtr texture );
 }
 
 #endif

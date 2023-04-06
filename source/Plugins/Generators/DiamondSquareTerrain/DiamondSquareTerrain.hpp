@@ -19,7 +19,7 @@ namespace diamond_square_terrain
 		/**
 		*\copydoc		castor3d::MeshGenerator::create
 		*/
-		static castor3d::MeshGeneratorSPtr create();
+		static castor3d::MeshGeneratorUPtr create();
 
 		void setBiomes( Biomes biomes )
 		{
