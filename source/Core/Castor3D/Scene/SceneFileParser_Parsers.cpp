@@ -4373,7 +4373,7 @@ namespace castor3d
 						, std::move( parsingContext.textureConfiguration )
 						, parsingContext.texcoordSet }
 					, std::move( parsingContext.textureAnimation ) );
-				parsingContext.textureRenderTarget.reset();
+				parsingContext.textureRenderTarget = {};
 			}
 			else if ( parsingContext.folder.empty() && parsingContext.relative.empty() )
 			{

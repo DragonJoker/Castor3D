@@ -18,17 +18,18 @@ namespace castor3d
 	{
 	}
 
-	RenderTargetSPtr RenderTargetCache::add( TargetType type
+	RenderTargetRPtr RenderTargetCache::add( TargetType type
 		, castor::Size const & size
 		, castor::PixelFormat pixelFormat )
 	{
 		cachetgt::LockType lock{ castor::makeUniqueLock( *this ) };
-		RenderTargetSPtr result = std::make_shared< RenderTarget >( *getEngine()
+		auto result = castor::makeUnique< RenderTarget >( *getEngine()
 			, type
 			, size
 			, pixelFormat );
-		m_renderTargets[size_t( type )].push_back( result );
-		return result;
+		auto ret = result.get();
+		m_renderTargets[size_t( type )].push_back( std::move( result ) );
+		return ret;
 	}
 
 	void RenderTargetCache::remove( RenderTargetRPtr target )
@@ -38,23 +39,10 @@ namespace castor3d
 			, ptrdiff_t( target->getTargetType() ) );
 		auto it = std::find_if( v->begin()
 			, v->end()
-			, [&target]( RenderTargetSPtr lookup )
+			, [&target]( RenderTargetUPtr const & lookup )
 			{
 				return target == lookup.get();
 			} );
-
-		if ( it != v->end() )
-		{
-			v->erase( it );
-		}
-	}
-
-	void RenderTargetCache::remove( RenderTargetSPtr target )
-	{
-		cachetgt::LockType lock{ castor::makeUniqueLock( *this ) };
-		auto v = std::next( m_renderTargets.begin()
-			, ptrdiff_t( target->getTargetType() ) );
-		auto it = std::find( v->begin(), v->end(), target );
 
 		if ( it != v->end() )
 		{
@@ -66,7 +54,7 @@ namespace castor3d
 	{
 		cachetgt::LockType lock{ castor::makeUniqueLock( *this ) };
 
-		for ( auto target : m_renderTargets[size_t( TargetType::eTexture )] )
+		for ( auto & target : m_renderTargets[size_t( TargetType::eTexture )] )
 		{
 			target->update( updater );
 		}
@@ -76,7 +64,7 @@ namespace castor3d
 	{
 		cachetgt::LockType lock{ castor::makeUniqueLock( *this ) };
 
-		for ( auto target : m_renderTargets[size_t( TargetType::eTexture )] )
+		for ( auto & target : m_renderTargets[size_t( TargetType::eTexture )] )
 		{
 			target->update( updater );
 		}
@@ -86,7 +74,7 @@ namespace castor3d
 	{
 		cachetgt::LockType lock{ castor::makeUniqueLock( *this ) };
 
-		for ( auto target : m_renderTargets[size_t( TargetType::eTexture )] )
+		for ( auto & target : m_renderTargets[size_t( TargetType::eTexture )] )
 		{
 			target->upload( cb );
 		}
@@ -100,7 +88,7 @@ namespace castor3d
 		cachetgt::LockType lock{ castor::makeUniqueLock( *this ) };
 		crg::SemaphoreWaitArray result;
 
-		for ( auto target : m_renderTargets[size_t( TargetType::eTexture )] )
+		for ( auto & target : m_renderTargets[size_t( TargetType::eTexture )] )
 		{
 			auto toWait = target->render( device, info, queue, signalsToWait );
 			result.insert( result.end()

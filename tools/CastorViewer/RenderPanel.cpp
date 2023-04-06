@@ -189,7 +189,7 @@ namespace CastorViewer
 		castor::Logger::logInfo( cuT( "RenderPanel cleaned up." ) );
 	}
 
-	void RenderPanel::setTarget( castor3d::RenderTargetSPtr target )
+	void RenderPanel::setTarget( castor3d::RenderTargetRPtr target )
 	{
 		m_listener = m_renderWindow->getListener();
 		m_renderWindow->initialise( *target );

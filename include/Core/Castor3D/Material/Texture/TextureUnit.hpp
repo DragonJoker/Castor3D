@@ -158,9 +158,9 @@ namespace castor3d
 			return m_texture != nullptr;
 		}
 
-		RenderTargetSPtr getRenderTarget()const
+		RenderTargetRPtr getRenderTarget()const
 		{
-			return m_renderTarget.lock();
+			return m_renderTarget;
 		}
 
 		ashes::WriteDescriptorSet getDescriptor()const
@@ -228,7 +228,7 @@ namespace castor3d
 			, castor::Point3f const & scale );
 		C3D_API void setTexcoordSet( uint32_t value );
 
-		void setRenderTarget( RenderTargetSPtr value )
+		void setRenderTarget( RenderTargetRPtr value )
 		{
 			m_renderTarget = value;
 		}
@@ -271,7 +271,7 @@ namespace castor3d
 		TextureTransform m_transform;
 		castor::Matrix4x4f m_transformations;
 		TextureLayoutSPtr m_texture;
-		RenderTargetWPtr m_renderTarget;
+		RenderTargetRPtr m_renderTarget{};
 		SamplerResPtr m_sampler;
 		SamplerRes m_ownSampler;
 		ashes::WriteDescriptorSet m_descriptor;

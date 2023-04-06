@@ -667,7 +667,7 @@ namespace CastorViewer
 #endif
 	}
 
-	void MainFrame::doSceneLoadEnd( castor3d::RenderTargetSPtr target )
+	void MainFrame::doSceneLoadEnd( castor3d::RenderTargetRPtr target )
 	{
 		if ( !target )
 		{
@@ -1096,7 +1096,7 @@ namespace CastorViewer
 
 		if ( rawTarget )
 		{
-			doSceneLoadEnd( rawTarget->shared_from_this() );
+			doSceneLoadEnd( rawTarget );
 		}
 	}
 }

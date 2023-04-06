@@ -18,7 +18,7 @@ namespace castor3d
 	class RenderTargetCache
 		: public castor::OwnedBy< Engine >
 	{
-		CU_DeclareVector( RenderTargetSPtr, RenderTarget );
+		CU_DeclareVector( RenderTargetUPtr, RenderTarget );
 		CU_DeclareArray( RenderTargetArray, TargetType::eCount, TargetType );
 
 	public:
@@ -52,7 +52,7 @@ namespace castor3d
 		 *\param[in]	pixelFormat	Le format des pixels de la cible de rendu.
 		 *\return		La cible de rendu
 		 */
-		C3D_API RenderTargetSPtr add( TargetType type
+		C3D_API RenderTargetRPtr add( TargetType type
 			, castor::Size const & size
 			, castor::PixelFormat pixelFormat );
 		/**
@@ -64,15 +64,6 @@ namespace castor3d
 		 *\param[in]	target	La cible de rendu
 		 */
 		C3D_API void remove( RenderTargetRPtr target );
-		/**
-		 *\~english
-		 *\brief		Removes a render target from the render loop
-		 *\param[in]	target	The render target
-		 *\~french
-		 *\brief		Enlève une cible de rendu de la boucle de rendu
-		 *\param[in]	target	La cible de rendu
-		 */
-		C3D_API void remove( RenderTargetSPtr target );
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, CPU wise.

@@ -58,7 +58,7 @@ namespace CastorViewer
 		~RenderPanel()override;
 
 		void reset();
-		void setTarget( castor3d::RenderTargetSPtr target );
+		void setTarget( castor3d::RenderTargetRPtr target );
 		void onKeyUp( wxKeyEvent & event );
 
 		inline castor3d::RenderWindow & getRenderWindow()const
