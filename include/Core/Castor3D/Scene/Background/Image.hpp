@@ -96,7 +96,7 @@ namespace castor3d
 			, QueueData const & queueData );
 
 	private:
-		TextureLayoutSPtr m_2dTexture;
+		TextureLayoutUPtr m_2dTexture;
 		castor::Path m_2dTexturePath;
 		float m_ratio;
 	};

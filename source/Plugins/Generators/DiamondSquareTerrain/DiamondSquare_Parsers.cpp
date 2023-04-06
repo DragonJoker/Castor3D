@@ -27,14 +27,15 @@ namespace diamond_square_terrain
 		auto & parsingContext = castor3d::getSceneParserContext( context );
 		auto & pluginContext = parser::getParserContext( context );
 		auto & factory = parsingContext.scene->getEngine()->getMeshFactory();
-		auto generator = std::static_pointer_cast< Generator >( factory.create( Generator::Type ) );
+		auto generator = factory.create( Generator::Type );
+		auto & dsgen = static_cast< Generator & >( *generator );
 		std::sort( pluginContext.biomes.begin()
 			, pluginContext.biomes.end()
 			, []( Biome const & lhs, Biome const & rhs )
 			{
 				return lhs.heightRange.getMin() < rhs.heightRange.getMin();
 			} );
-		generator->setBiomes( pluginContext.biomes );
+		dsgen.setBiomes( pluginContext.biomes );
 		generator->generate( *parsingContext.mesh.lock()
 			, pluginContext.parameters );
 	}

@@ -436,7 +436,7 @@ namespace castor3d
 		bool m_hdr{ true };
 		bool m_srgb{ false };
 		Texture m_textureId;
-		TextureLayoutSPtr m_texture;
+		TextureLayoutUPtr m_texture;
 		SamplerResPtr m_sampler;
 		std::unique_ptr< IblTextures > m_ibl;
 		bool m_hasIBLSupport;

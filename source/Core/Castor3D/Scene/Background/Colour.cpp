@@ -50,7 +50,7 @@ namespace castor3d
 			, VK_FORMAT_R32G32B32A32_SFLOAT
 			, VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT };
 		m_textureId.create();
-		m_texture = std::make_shared< TextureLayout >( *engine.getRenderSystem()
+		m_texture = castor::makeUnique< TextureLayout >( *engine.getRenderSystem()
 			, m_textureId.image
 			, m_textureId.wholeViewId );
 	}

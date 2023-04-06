@@ -816,7 +816,7 @@ namespace atmosphere_scattering
 		m_transmittance.create();
 		m_multiScatter.create();
 		m_textureId.create();
-		m_texture = std::make_shared< castor3d::TextureLayout >( device.renderSystem
+		m_texture = castor::makeUnique< castor3d::TextureLayout >( device.renderSystem
 			, m_textureId.image
 			, m_textureId.wholeViewId );
 		m_hdr = true;

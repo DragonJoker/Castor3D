@@ -80,9 +80,9 @@ namespace castor3d
 		}
 	}
 
-	void TextureUnit::setTexture( TextureLayoutSPtr texture )
+	void TextureUnit::setTexture( TextureLayoutUPtr texture )
 	{
-		m_texture = texture;
+		m_texture = std::move( texture );
 		m_changed = true;
 
 		if ( m_texture )
@@ -149,7 +149,7 @@ namespace castor3d
 				std::this_thread::sleep_for( 5_ms );
 			}
 
-			m_texture = std::make_shared< TextureLayout >( device.renderSystem
+			m_texture = castor::makeUnique< TextureLayout >( device.renderSystem
 				, m_renderTarget->getTexture().image
 				, m_renderTarget->getTexture().wholeViewId );
 			result = true;

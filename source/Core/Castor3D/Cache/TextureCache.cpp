@@ -270,7 +270,7 @@ namespace castor3d
 			return getImageBuffer( *img, allowSRGB, engine.getMaxImageSize() );
 		}
 
-		static TextureLayoutSPtr getTextureLayout( Engine & engine
+		static TextureLayoutUPtr getTextureLayout( Engine & engine
 			, castor::PxBufferBaseUPtr buffer
 			, castor::String const & name
 			, bool allowCompression
@@ -765,10 +765,10 @@ namespace castor3d
 				{
 					if ( !data.interrupted )
 					{
-						data.unit->setSampler( data.data->sourceInfo.sampler() );
-						data.unit->setTexture( data.layout );
-						auto config = data.data->passConfig.config;
 						auto tiles = data.layout->getImage().getPixels()->getTiles();
+						data.unit->setSampler( data.data->sourceInfo.sampler() );
+						data.unit->setTexture( std::move( data.layout ) );
+						auto config = data.data->passConfig.config;
 
 						if ( config.tileSet->z <= 1 && tiles->x >= 1 )
 						{

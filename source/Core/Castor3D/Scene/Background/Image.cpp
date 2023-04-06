@@ -79,7 +79,7 @@ namespace castor3d
 		, castor::String const & name )
 		: SceneBackground{ engine, scene, name + cuT( "Image" ), cuT( "image" ), false }
 	{
-		m_texture = std::make_shared< TextureLayout >( *engine.getRenderSystem()
+		m_texture = castor::makeUnique< TextureLayout >( *engine.getRenderSystem()
 			, bgimage::doGetImageCreate( VK_FORMAT_R8G8B8A8_UNORM, { 16u, 16u }, false )
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, cuT( "ImageBackground_Dummy" ) );
@@ -105,12 +105,12 @@ namespace castor3d
 					| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
 					| VK_IMAGE_USAGE_TRANSFER_DST_BIT ),
 			};
-			auto texture = std::make_shared< TextureLayout >( *getEngine()->getRenderSystem()
+			auto texture = castor::makeUnique< TextureLayout >( *getEngine()->getRenderSystem()
 				, image
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, cuT( "ImageBackground_Colour" ) );
 			texture->setSource( folder, relative, { false, false, false } );
-			m_2dTexture = texture;
+			m_2dTexture = std::move( texture );
 			m_2dTexturePath = texture->getImage().getPath();
 			notifyChanged();
 			result = true;
@@ -248,7 +248,7 @@ namespace castor3d
 					| VK_IMAGE_USAGE_TRANSFER_DST_BIT
 					| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT ) };
 			m_textureId.create();
-			m_texture = std::make_shared< TextureLayout >( device.renderSystem
+			m_texture = castor::makeUnique< TextureLayout >( device.renderSystem
 				, m_textureId.image
 				, m_textureId.wholeViewId );
 

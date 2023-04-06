@@ -165,11 +165,11 @@ namespace castor3d
 		}
 	};
 
-	C3D_API TextureLayoutSPtr createTextureLayout( Engine const & engine
+	C3D_API TextureLayoutUPtr createTextureLayout( Engine const & engine
 		, castor::Path const & relative
 		, castor::Path const & folder
 		, castor::ImageLoaderConfig config = { true, true, true } );
-	C3D_API TextureLayoutSPtr createTextureLayout( Engine const & engine
+	C3D_API TextureLayoutUPtr createTextureLayout( Engine const & engine
 		, castor::String const & name
 		, castor::PxBufferBaseUPtr buffer
 		, bool isStatic = false );

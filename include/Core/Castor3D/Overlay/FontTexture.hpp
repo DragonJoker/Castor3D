@@ -141,7 +141,7 @@ namespace castor3d
 			, bool front ) = 0;
 		C3D_API virtual void swapResources() = 0;
 	};
-	using DoubleBufferedTextureLayout = DoubleBufferedResourceT< TextureLayout, std::shared_ptr >;
+	using DoubleBufferedTextureLayout = DoubleBufferedResourceT< TextureLayout, castor::UniquePtr >;
 
 	class FontTexture
 		: public DoubleBufferedTextureLayout
@@ -239,9 +239,9 @@ namespace castor3d
 			return *m_buffer;
 		}
 
-		TextureLayoutSPtr getTexture()const
+		TextureLayoutRPtr getTexture()const
 		{
-			return getResource();
+			return getResource().get();
 		}
 
 		SamplerResPtr getSampler()const

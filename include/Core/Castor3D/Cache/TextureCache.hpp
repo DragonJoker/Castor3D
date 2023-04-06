@@ -32,7 +32,7 @@ namespace castor3d
 			}
 
 			TextureUnitData * data;
-			TextureLayoutSPtr layout{};
+			TextureLayoutUPtr layout{};
 			TextureUnit * unit{};
 			std::atomic_bool interrupted{ false };
 		};
