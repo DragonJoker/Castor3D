@@ -187,12 +187,12 @@ namespace castor3d
 		m_listenerCache = castor::makeCache< FrameListener, castor::String, FrameListenerCacheTraits >( getLogger()
 			, castor::DummyFunctorT< FrameListenerCache >{}
 			, listenerClean );
-		m_defaultListener = m_listenerCache->add( eng::defaultName );
+		m_defaultListener = m_listenerCache->add( eng::defaultName ).lock().get();
 
 		m_shaderCache = makeCache( *this );
 		m_samplerCache = castor::makeCache< Sampler, castor::String, SamplerCacheTraits >( getLogger()
-			, GpuEventInitialiserT< SamplerCache >{ *m_defaultListener.lock() }
-			, CpuEventCleanerT< SamplerCache >{ *m_defaultListener.lock() } );
+			, GpuEventInitialiserT< SamplerCache >{ *m_defaultListener }
+			, CpuEventCleanerT< SamplerCache >{ *m_defaultListener } );
 		m_materialCache = castor::makeCache< Material, castor::String, MaterialCacheTraits >( *this );
 		m_pluginCache = castor::makeCache< Plugin, castor::String, PluginCacheTraits >( *this );
 		m_overlayCache = castor::makeCache< Overlay, castor::String, OverlayCacheTraits >( *this );
@@ -455,9 +455,8 @@ namespace castor3d
 	CpuFrameEvent * Engine::postEvent( CpuFrameEventUPtr event )
 	{
 		CpuFrameEvent * result = nullptr;
-		FrameListenerSPtr listener = m_defaultListener.lock();
 
-		if ( listener )
+		if ( auto listener = m_defaultListener )
 		{
 			result = event.get();
 			listener->postEvent( std::move( event ) );
@@ -476,9 +475,8 @@ namespace castor3d
 	GpuFrameEvent * Engine::postEvent( GpuFrameEventUPtr event )
 	{
 		GpuFrameEvent * result = nullptr;
-		FrameListenerSPtr listener = m_defaultListener.lock();
 
-		if ( listener )
+		if ( auto listener = m_defaultListener )
 		{
 			result = event.get();
 			listener->postEvent( std::move( event ) );

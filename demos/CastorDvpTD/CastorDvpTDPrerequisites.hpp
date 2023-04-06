@@ -28,7 +28,7 @@ namespace castortd
 
 	using EnemyPtr = std::shared_ptr< Enemy >;
 	using TowerPtr = std::shared_ptr< Tower >;
-	using TowerWPtr = std::weak_ptr< Tower >;
+	using TowerRPtr = Tower *;
 
 	using TowerArray = std::vector< TowerPtr >;
 	using EnemyArray = std::vector< EnemyPtr >;

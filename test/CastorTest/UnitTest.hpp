@@ -241,7 +241,7 @@ namespace Testing
 		static std::string get( ValueT const * value )
 		{
 			std::stringstream stream;
-			stream << ( value ? toString( *value ) : std::string{ "null_rptr" } );
+			stream << ( value ? toString( *value ) : std::string{ "null_crptr" } );
 			return stream.str();
 		}
 	};
@@ -263,7 +263,7 @@ namespace Testing
 		static std::string get( std::unique_ptr< ValueT > const & value )
 		{
 			std::stringstream stream;
-			stream << ( value ? toString( *value ) : std::string{ "null_sptr" } );
+			stream << ( value ? toString( *value ) : std::string{ "null_uptr" } );
 			return stream.str();
 		}
 	};

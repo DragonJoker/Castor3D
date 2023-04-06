@@ -350,14 +350,14 @@ namespace castor3d
 
 		FrameListener const & getListener()const
 		{
-			CU_Require( !m_listener.expired() );
-			return *m_listener.lock();
+			CU_Require( m_listener );
+			return *m_listener;
 		}
 
 		FrameListener & getListener()
 		{
-			CU_Require( !m_listener.expired() );
-			return *m_listener.lock();
+			CU_Require( m_listener );
+			return *m_listener;
 		}
 
 		bool isInitialised()const
@@ -498,7 +498,7 @@ namespace castor3d
 		SceneBackgroundSPtr m_background;
 		LightFactorySPtr m_lightFactory;
 		Fog m_fog;
-		FrameListenerWPtr m_listener;
+		FrameListenerRPtr m_listener{};
 		std::unique_ptr< EnvironmentMap > m_reflectionMap;
 		bool m_needsSubsurfaceScattering{ false };
 		bool m_hasOpaqueObjects{ false };

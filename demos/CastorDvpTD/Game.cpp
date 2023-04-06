@@ -155,7 +155,7 @@ namespace castortd
 		m_lives = game::InitialLives;
 		m_ore = game::InitialOre;
 		m_kills = 0u;
-		m_selectedTower.reset();
+		m_selectedTower = {};
 		m_paused = false;
 		m_ended = false;
 
@@ -458,7 +458,7 @@ namespace castortd
 			if ( it != m_towers.end() )
 			{
 				result = *it;
-				m_selectedTower = result;
+				m_selectedTower = result.get();
 			}
 		}
 
@@ -649,7 +649,7 @@ namespace castortd
 		}
 
 		m_scene.addGeometry( geometry );
-		m_lastMapCube = geometry;
+		m_lastMapCube = geometry.get();
 		cell.m_state = Cell::State::Empty;
 	}
 

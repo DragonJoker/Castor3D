@@ -1075,7 +1075,7 @@ namespace castor3d
 		DECLARE_CACHE_MEMBER( overlay, Overlay );
 		DECLARE_CACHE_MEMBER( scene, Scene );
 		DECLARE_CACHE_MEMBER( listener, FrameListener );
-		FrameListenerWPtr m_defaultListener;
+		FrameListenerRPtr m_defaultListener{};
 		std::map< castor::String, RenderWindow * > m_renderWindows;
 		std::map< RenderWindow const *, UserInputListenerSPtr > m_windowInputListeners;
 		UserInputListenerSPtr m_userInputListener;

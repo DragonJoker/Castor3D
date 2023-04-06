@@ -30,8 +30,8 @@ namespace GuiCommon
 			, castor3d::RenderWindow & window
 			, castor3d::SceneRPtr scene );
 		void unloadScene();
-		void select( castor3d::GeometrySPtr geometry
-			, castor3d::SubmeshSPtr submesh );
+		void select( castor3d::GeometryRPtr geometry
+			, castor3d::SubmeshRPtr submesh );
 
 	protected:
 		void doAddSubmesh( castor3d::GeometryRPtr geometry

@@ -42,9 +42,9 @@ namespace GuiCommon
 		 *\brief		Récupère l'AnimatedObject.
 		 *\return		La valeur.
 		 */
-		inline castor3d::AnimatedObjectSPtr getObject()
+		inline castor3d::AnimatedObjectRPtr getObject()
 		{
-			return m_object.lock();
+			return m_object;
 		}
 
 	private:
@@ -54,7 +54,7 @@ namespace GuiCommon
 		void doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )override;
 
 	private:
-		castor3d::AnimatedObjectWPtr m_object;
+		castor3d::AnimatedObjectRPtr m_object{};
 	};
 }
 

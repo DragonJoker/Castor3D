@@ -179,11 +179,15 @@ namespace castor3d
 	}
 
 	template< typename CacheT, EventType EventT >
-	inline void CacheViewT< CacheT, EventT >::remove( ElementKeyT const & name )
+	inline typename CacheViewT< CacheT, EventT >::ElementObsT CacheViewT< CacheT, EventT >::remove( ElementKeyT const & name )
 	{
-		if ( ElementCacheTraitsT::isElementObsNull( tryRemove( name ) ) )
+		auto result = tryRemove( name );
+
+		if ( ElementCacheTraitsT::isElementObsNull( result ) )
 		{
 			m_cache.reportUnknown( name );
 		}
+
+		return result;
 	}
 }

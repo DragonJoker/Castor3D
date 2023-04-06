@@ -24,16 +24,14 @@ namespace CastorViewer
 
 	void RotateNodeEvent::doApply()
 	{
-		castor3d::SceneNodeSPtr node = m_node.lock();
-
-		if ( node && ( rotevt::isNonZero( m_dx ) || rotevt::isNonZero( m_dy ) || rotevt::isNonZero( m_dz ) ) )
+		if ( m_node && ( rotevt::isNonZero( m_dx ) || rotevt::isNonZero( m_dy ) || rotevt::isNonZero( m_dz ) ) )
 		{
 			auto x = castor::Quaternion::fromAxisAngle( castor::Point3f{ 1.0, 0.0, 0.0 }, castor::Angle::fromDegrees( m_dx ) );
 			auto y = castor::Quaternion::fromAxisAngle( castor::Point3f{ 0.0, 1.0, 0.0 }, castor::Angle::fromDegrees( m_dy ) );
 			auto z = castor::Quaternion::fromAxisAngle( castor::Point3f{ 0.0, 0.0, 1.0 }, castor::Angle::fromDegrees( m_dz ) );
-			node->rotate( x );
-			node->rotate( y );
-			node->rotate( z );
+			m_node->rotate( x );
+			m_node->rotate( y );
+			m_node->rotate( z );
 		}
 
 		m_dx = 0;

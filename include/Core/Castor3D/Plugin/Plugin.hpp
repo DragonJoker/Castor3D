@@ -120,7 +120,7 @@ namespace castor3d
 		PluginType m_type;
 		//!\~english	The plug-in library.
 		//!\~french		La bibliothèque du plug-in.
-		castor::DynamicLibraryWPtr m_library;
+		castor::DynamicLibraryRPtr m_library{};
 	};
 }
 

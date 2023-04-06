@@ -681,7 +681,7 @@ namespace GuiCommon
 		, castor3d::Scene & scene
 		, wxWindow * parent )
 		: TreeItemProperty{ pass->getOwner()->getEngine(), editable }
-		, m_pass{ pass }
+		, m_pass{ pass.get() }
 		, m_scene{ scene }
 		, m_parent{ parent }
 	{
@@ -694,16 +694,14 @@ namespace GuiCommon
 		static wxString PROPERTY_PASS_SHADER = _( "Shader" );
 		static wxString PROPERTY_PASS_EDIT_SHADER = _( "View Shaders..." );
 
-		castor3d::PassSPtr pass = getPass();
-
-		if ( pass )
+		if ( auto pass = getPass() )
 		{
 			addProperty( grid, PROPERTY_CATEGORY_PASS + wxString( pass->getOwner()->getName() ) );
 			PassTreeGatherer::submit( *pass, this, grid );
 			addProperty( grid, PROPERTY_PASS_SHADER, editor
 				, [this]( wxVariant const & var )
 				{
-					castor3d::PassSPtr lpass = getPass();
+					auto lpass = getPass();
 					ShaderSources sources = PassShaderGatherer::submit( *lpass, m_scene );
 					ShaderDialog * editor = new ShaderDialog{ lpass->getOwner()->getEngine()
 						, std::move( sources )

@@ -62,7 +62,7 @@ namespace castor
 						, PixelComponent::eBlue
 						, *redChannel
 						, *result );
-					castor::copyBufferComponents( PixelComponent::eAlpha
+					castor::copyBufferComponents( PixelComponent::eRed
 						, PixelComponent::eAlpha
 						, *alphaChannel
 						, *result );
@@ -145,7 +145,7 @@ namespace castor
 						, PixelComponent::eBlue
 						, *redChannel
 						, *result );
-					castor::copyBufferComponents( PixelComponent::eAlpha
+					castor::copyBufferComponents( PixelComponent::eRed
 						, PixelComponent::eAlpha
 						, *alphaChannel
 						, *result );

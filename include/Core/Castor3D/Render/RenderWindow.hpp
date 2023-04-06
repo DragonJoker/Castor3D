@@ -402,9 +402,9 @@ namespace castor3d
 			return m_index;
 		}
 
-		FrameListenerSPtr getListener()const
+		FrameListenerRPtr getListener()const
 		{
-			return m_listener.lock();
+			return m_listener;
 		}
 
 		RenderDevice const & getDevice()const
@@ -557,7 +557,7 @@ namespace castor3d
 		ashes::PipelineShaderStageCreateInfoArray m_program;
 		RenderQuadUPtr m_renderQuad;
 		RenderTargetRPtr m_renderTarget{};
-		FrameListenerWPtr m_listener;
+		FrameListenerRPtr m_listener{};
 		bool m_vsync{ false };
 		bool m_fullscreen{ false };
 		castor::Size m_size;

@@ -161,9 +161,7 @@ namespace castortd
 			text->setCaption( castor::string::toU32String( m_game.getEnemiesBounty() ) );
 		}
 
-		TowerPtr tower = m_game.getSelectedTower();
-
-		if ( tower )
+		if ( auto tower = m_game.getSelectedTower() )
 		{
 			text = m_towerDamage;
 

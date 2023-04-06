@@ -153,12 +153,12 @@ namespace CastorViewer
 
 		std::map< castor::String, GuiCommon::NodeStatePtr > m_nodesStates{};
 		GuiCommon::NodeState * m_currentState{};
-		castor3d::GeometrySPtr m_selectedGeometry{};
-		castor3d::SubmeshSPtr m_selectedSubmesh{};
+		castor3d::GeometryRPtr m_selectedGeometry{};
+		castor3d::SubmeshRPtr m_selectedSubmesh{};
 
 		castor3d::CameraRPtr m_camera{};
 		castor3d::SceneRPtr m_scene{};
-		castor3d::FrameListenerSPtr m_listener{};
+		castor3d::FrameListenerRPtr m_listener{};
 
 		castor3d::MouseCursor m_cursor{};
 		std::unique_ptr< wxClipboard > m_clipboard{};

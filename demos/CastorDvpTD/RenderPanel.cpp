@@ -88,7 +88,7 @@ namespace castortd
 
 			if ( scene )
 			{
-				m_marker = scene->findSceneNode( cuT( "MapMouse" ) ).lock();
+				m_marker = scene->findSceneNode( cuT( "MapMouse" ) ).lock().get();
 				m_marker->setVisible( false );
 
 				m_listener = m_renderWindow->getListener();
@@ -103,7 +103,7 @@ namespace castortd
 		}
 		else if ( m_listener )
 		{
-			m_listener.reset();
+			m_listener = {};
 		}
 	}
 
@@ -137,15 +137,15 @@ namespace castortd
 
 	void RenderPanel::doUpdateSelectedGeometry( castor3d::GeometrySPtr geometry )
 	{
-		auto curGeometry = m_selectedGeometry.lock();
+		auto curGeometry = m_selectedGeometry;
 
-		if ( geometry != curGeometry )
+		if ( geometry.get() != curGeometry )
 		{
 			bool freeCell = false;
 
 			if ( !geometry || geometry->getName() == cuT( "MapBase" ) )
 			{
-				m_selectedGeometry.reset();
+				m_selectedGeometry = {};
 			}
 			else
 			{
@@ -197,7 +197,7 @@ namespace castortd
 						break;
 					}
 
-					m_selectedGeometry = geometry;
+					m_selectedGeometry = geometry.get();
 				}
 			}
 
@@ -530,7 +530,7 @@ namespace castortd
 
 			PopupMenu( &menu, event.GetPosition() );
 		}
-		else if ( !m_selectedGeometry.expired() )
+		else if ( m_selectedGeometry )
 		{
 			wxMenu menu;
 			menu.Append( int( panel::MenuID::eNewLRTower ), wxString( "Nouvelle Tour Longue Distance (" ) << m_longRange.getTowerCost() << wxT( ")" ) );

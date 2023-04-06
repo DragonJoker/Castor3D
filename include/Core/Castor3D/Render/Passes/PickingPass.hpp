@@ -113,7 +113,7 @@ namespace castor3d
 		C3D_API static uint32_t const UboBindingPoint;
 
 	private:
-		std::map< castor::String, GeometryWPtr > m_pickable;
+		std::map< castor::String, GeometryRPtr > m_pickable{};
 	};
 }
 
