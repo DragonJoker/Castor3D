@@ -234,12 +234,12 @@ namespace GuiCommon
 		}
 	}
 
-	castor3d::RenderTargetSPtr loadScene( castor3d::Engine & engine
+	castor3d::RenderTargetRPtr loadScene( castor3d::Engine & engine
 		, castor::String const & appName
 		, castor::Path const & fileName
 		, castor3d::ProgressBar * progress )
 	{
-		castor3d::RenderTargetSPtr result;
+		castor3d::RenderTargetRPtr result{};
 
 		if ( castor::File::fileExists( fileName ) )
 		{
@@ -300,7 +300,7 @@ namespace GuiCommon
 				{
 					auto target = loadScene( engine, appName, fileName, progress );
 					auto event = new wxThreadEvent{ wxEVT_THREAD, eventID };
-					auto var = new wxVariant{ target.get() };
+					auto var = new wxVariant{ target };
 					event->SetEventObject( var );
 					window->GetEventHandler()->QueueEvent( event );
 				}

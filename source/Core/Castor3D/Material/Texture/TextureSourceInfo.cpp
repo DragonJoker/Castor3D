@@ -33,7 +33,7 @@ namespace castor3d
 	}
 
 	TextureSourceInfo::TextureSourceInfo( SamplerRes sampler
-		, RenderTargetSPtr renderTarget )
+		, RenderTargetRPtr renderTarget )
 		: m_sampler{ std::move( sampler ) }
 		, m_renderTarget{ std::move( renderTarget ) }
 	{

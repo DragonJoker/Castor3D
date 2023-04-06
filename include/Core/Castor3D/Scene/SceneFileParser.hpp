@@ -168,8 +168,8 @@ namespace castor3d
 		SamplerResPtr sampler{};
 		SamplerRes ownSampler{};
 		TargetType targetType{};
-		RenderTargetSPtr renderTarget{};
 		RenderTargetSPtr textureRenderTarget{};
+		RenderTargetRPtr renderTarget{};
 		PassSPtr pass{};
 		PassComponent * passComponent{};
 		bool createPass{ true };

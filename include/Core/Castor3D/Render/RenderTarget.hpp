@@ -38,8 +38,7 @@ namespace castor3d
 	};
 
 	class RenderTarget
-		: public std::enable_shared_from_this< RenderTarget >
-		, public castor::OwnedBy< Engine >
+		: public castor::OwnedBy< Engine >
 	{
 		using OnInitialisedFunc = std::function< void( RenderTarget const &, QueueData const & ) >;
 		using OnInitialised = castor::SignalT< OnInitialisedFunc >;

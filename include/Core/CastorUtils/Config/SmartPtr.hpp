@@ -45,13 +45,13 @@ namespace castor
 	template< typename TypeT, typename TypeU, typename ... ParamsT >
 	UniquePtr< TypeT > makeUniqueDerived( ParamsT && ... params )
 	{
-		return UniquePtr< TypeT >( new TypeU{ std::forward< ParamsT >( params )... } );
+		return UniquePtr< TypeT >( new TypeU( std::forward< ParamsT >( params )... ) );
 	}
 
 	template< typename TypeT, typename ... ParamsT >
 	UniquePtr< TypeT > makeUnique( ParamsT && ... params )
 	{
-		return UniquePtr< TypeT >( new TypeT{ std::forward< ParamsT >( params )... } );
+		return UniquePtr< TypeT >( new TypeT( std::forward< ParamsT >( params )... ) );
 	}
 }
 

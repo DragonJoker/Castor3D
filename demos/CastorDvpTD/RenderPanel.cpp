@@ -71,7 +71,7 @@ namespace castortd
 		m_renderWindow->cleanup();
 	}
 
-	void RenderPanel::setRenderTarget( castor3d::RenderTargetSPtr target )
+	void RenderPanel::setRenderTarget( castor3d::RenderTargetRPtr target )
 	{
 		if ( target )
 		{

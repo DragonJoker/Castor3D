@@ -72,7 +72,7 @@ namespace castor3d
 			cleanup();
 		}
 
-		auto renderTarget = m_renderTarget.lock();
+		auto renderTarget = m_renderTarget;
 
 		if ( renderTarget )
 		{
@@ -131,17 +131,15 @@ namespace castor3d
 			return m_initialised;
 		}
 
-		RenderTargetSPtr target = m_renderTarget.lock();
 		bool result = false;
-
 		auto sampler = getSampler().lock();
 		CU_Require( sampler );
 		sampler->initialise( device );
 
-		if ( target )
+		if ( m_renderTarget )
 		{
 			std::atomic_bool isInitialised = false;
-			target->initialise( [&isInitialised]( RenderTarget const & rt, QueueData const & queue )
+			m_renderTarget->initialise( [&isInitialised]( RenderTarget const & rt, QueueData const & queue )
 				{
 					isInitialised = true;
 				} );
@@ -152,10 +150,10 @@ namespace castor3d
 			}
 
 			m_texture = std::make_shared< TextureLayout >( device.renderSystem
-				, target->getTexture().image
-				, target->getTexture().wholeViewId );
+				, m_renderTarget->getTexture().image
+				, m_renderTarget->getTexture().wholeViewId );
 			result = true;
-			m_name = cuT( "RT_" ) + castor::string::toString( target->getIndex() );
+			m_name = cuT( "RT_" ) + castor::string::toString( m_renderTarget->getIndex() );
 		}
 		else if ( m_texture )
 		{
@@ -223,11 +221,9 @@ namespace castor3d
 				m_texture->cleanup();
 			}
 
-			RenderTargetSPtr target = m_renderTarget.lock();
-
-			if ( target )
+			if ( m_renderTarget )
 			{
-				target->cleanup( device );
+				m_renderTarget->cleanup( device );
 			}
 		}
 	}
@@ -240,11 +236,9 @@ namespace castor3d
 
 	castor::String TextureUnit::toString()const
 	{
-		auto renderTarget = m_renderTarget.lock();
-
-		if ( renderTarget )
+		if ( m_renderTarget )
 		{
-			return cuT( "RT_" ) + castor::string::toString( renderTarget->getIndex() );
+			return cuT( "RT_" ) + castor::string::toString( m_renderTarget->getIndex() );
 		}
 
 		CU_Require( m_texture );
@@ -276,12 +270,11 @@ namespace castor3d
 
 	void TextureUnit::setConfiguration( TextureConfiguration value )
 	{
-		RenderTargetSPtr target = m_renderTarget.lock();
 		auto format = castor::PixelFormat::eR8G8B8A8_UNORM;
 
-		if ( target )
+		if ( m_renderTarget )
 		{
-			format = castor::PixelFormat( target->getPixelFormat() );
+			format = castor::PixelFormat( m_renderTarget->getPixelFormat() );
 		}
 		else if ( m_texture )
 		{

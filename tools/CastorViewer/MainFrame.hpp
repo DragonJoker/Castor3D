@@ -74,7 +74,7 @@ namespace CastorViewer
 		bool doStartRecord();
 		void doRecordFrame();
 		void doStopRecord();
-		void doSceneLoadEnd( castor3d::RenderTargetSPtr target );
+		void doSceneLoadEnd( castor3d::RenderTargetRPtr target );
 
 	private:
 #pragma clang diagnostic push

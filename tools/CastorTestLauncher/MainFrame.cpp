@@ -42,10 +42,10 @@ namespace test_launcher
 {
 	namespace
 	{
-		castor3d::RenderTargetSPtr doLoadScene( castor3d::Engine & engine
+		castor3d::RenderTargetRPtr doLoadScene( castor3d::Engine & engine
 			, castor::Path const & fileName )
 		{
-			castor3d::RenderTargetSPtr result;
+			castor3d::RenderTargetRPtr result{};
 
 			if ( castor::File::fileExists( fileName ) )
 			{

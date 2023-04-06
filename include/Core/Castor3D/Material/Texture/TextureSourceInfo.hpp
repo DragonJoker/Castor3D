@@ -27,7 +27,7 @@ namespace castor3d
 			, castor::ByteArray data
 			, castor::ImageLoaderConfig loadConfig = { true, true, true } );
 		C3D_API TextureSourceInfo( SamplerRes sampler
-			, RenderTargetSPtr renderTarget );
+			, RenderTargetRPtr renderTarget );
 		C3D_API TextureSourceInfo( SamplerRes sampler
 			, ashes::ImageCreateInfo const & createInfo );
 
@@ -56,7 +56,7 @@ namespace castor3d
 			return m_createInfo->format != VK_FORMAT_UNDEFINED;
 		}
 
-		RenderTargetSPtr renderTarget()const
+		RenderTargetRPtr renderTarget()const
 		{
 			CU_Require( isRenderTarget() );
 			return m_renderTarget;
@@ -135,7 +135,7 @@ namespace castor3d
 	private:
 		SamplerRes m_sampler{};
 		// Render target mode.
-		RenderTargetSPtr m_renderTarget{};
+		RenderTargetRPtr m_renderTarget{};
 		// Image file mode.
 		castor::Path m_folder{};
 		castor::Path m_relative{};

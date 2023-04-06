@@ -37,7 +37,7 @@ namespace castor3d
 	struct RenderWindowDesc
 	{
 		castor::String name;
-		RenderTargetSPtr renderTarget;
+		RenderTargetRPtr renderTarget{};
 		bool enableVSync{};
 		bool fullscreen{};
 	};

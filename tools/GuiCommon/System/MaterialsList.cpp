@@ -180,9 +180,8 @@ namespace GuiCommon
 			, new TextureTreeItemProperty{ editable
 				, pass
 				, texture } );
-		castor3d::RenderTargetSPtr target = texture->getRenderTarget();
 
-		if ( target )
+		if ( auto target = texture->getRenderTarget() )
 		{
 			appendRenderTarget( treeCtrl
 				, editable
