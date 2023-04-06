@@ -16,9 +16,9 @@ namespace castor3d
 	{
 	}
 
-	MeshGeneratorSPtr Cylinder::create()
+	MeshGeneratorUPtr Cylinder::create()
 	{
-		return std::make_shared< Cylinder >();
+		return std::make_unique< Cylinder >();
 	}
 
 	void Cylinder::doGenerate( Mesh & mesh, Parameters const & parameters )

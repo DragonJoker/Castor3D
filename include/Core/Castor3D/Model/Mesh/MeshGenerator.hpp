@@ -36,7 +36,7 @@ namespace castor3d
 		 *\brief		Fonction de création, utilisée par la Factory
 		 *\return		Un cylindre
 		 */
-		static MeshGeneratorSPtr create();
+		static MeshGeneratorUPtr create();
 		/**
 		 *\~english
 		 *\brief		Generates the mesh.

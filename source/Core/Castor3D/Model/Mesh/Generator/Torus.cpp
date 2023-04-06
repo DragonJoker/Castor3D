@@ -17,9 +17,9 @@ namespace castor3d
 	{
 	}
 
-	MeshGeneratorSPtr Torus::create()
+	MeshGeneratorUPtr Torus::create()
 	{
-		return std::make_shared< Torus >();
+		return std::make_unique< Torus >();
 	}
 
 	void Torus::doGenerate( Mesh & mesh, Parameters const & parameters )
