@@ -187,7 +187,7 @@ namespace castor3d
 		m_listenerCache = castor::makeCache< FrameListener, castor::String, FrameListenerCacheTraits >( getLogger()
 			, castor::DummyFunctorT< FrameListenerCache >{}
 			, listenerClean );
-		m_defaultListener = m_listenerCache->add( eng::defaultName ).lock().get();
+		m_defaultListener = m_listenerCache->add( eng::defaultName );
 
 		m_shaderCache = makeCache( *this );
 		m_samplerCache = castor::makeCache< Sampler, castor::String, SamplerCacheTraits >( getLogger()

@@ -78,12 +78,12 @@ namespace castor3d
 				, getEngine()
 				, OverlayType::eBorderPanel
 				, nullptr
-				, parentOv ).lock()
+				, parentOv )
 			: getEngine().addNewOverlay( getName()
 				, getEngine()
 				, OverlayType::eBorderPanel
 				, nullptr
-				, parentOv ).lock();
+				, parentOv );
 
 		if ( !overlay )
 		{

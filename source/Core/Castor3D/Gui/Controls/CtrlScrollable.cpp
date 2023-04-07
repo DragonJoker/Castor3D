@@ -218,12 +218,12 @@ namespace castor3d
 						, m_target.getEngine()
 						, OverlayType::ePanel
 						, nullptr
-						, &m_target.getBackgroundOverlay() ).lock()->getPanelOverlay()
+						, &m_target.getBackgroundOverlay() )->getPanelOverlay()
 					: m_target.getEngine().addNewOverlay( m_target.getName() + cuT( "/Scroll/Corner" )
 						, m_target.getEngine()
 						, OverlayType::ePanel
 						, nullptr
-						, &m_target.getBackgroundOverlay() ).lock()->getPanelOverlay();
+						, &m_target.getBackgroundOverlay() )->getPanelOverlay();
 				m_corner = corner;
 			}
 

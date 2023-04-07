@@ -16,9 +16,8 @@ namespace castortd
 			, castor::String const & name )
 		{
 			castor3d::TextOverlayRPtr result{};
-			auto overlay = scene.findOverlay( name ).lock();
 
-			if ( overlay )
+			if ( auto overlay = scene.findOverlay( name ) )
 			{
 				result = overlay->getTextOverlay();
 			}
@@ -44,74 +43,74 @@ namespace castortd
 	void Hud::initialise()
 	{
 		auto & scene = m_game.getScene();
-		scene.findOverlay( cuT( "TitlePanel" ) ).lock()->setVisible( true );
-		scene.findOverlay( cuT( "HUDResources" ) ).lock()->setVisible( false );
-		scene.findOverlay( cuT( "HUDScore" ) ).lock()->setVisible( false );
-		scene.findOverlay( cuT( "HUDDetails" ) ).lock()->setVisible( false );
-		scene.findOverlay( cuT( "HUDPause" ) ).lock()->setVisible( false );
-		scene.findOverlay( cuT( "GameEndPanel" ) ).lock()->setVisible( false );
-		scene.findOverlay( cuT( "HelpPanel" ) ).lock()->setVisible( false );
+		scene.findOverlay( cuT( "TitlePanel" ) )->setVisible( true );
+		scene.findOverlay( cuT( "HUDResources" ) )->setVisible( false );
+		scene.findOverlay( cuT( "HUDScore" ) )->setVisible( false );
+		scene.findOverlay( cuT( "HUDDetails" ) )->setVisible( false );
+		scene.findOverlay( cuT( "HUDPause" ) )->setVisible( false );
+		scene.findOverlay( cuT( "GameEndPanel" ) )->setVisible( false );
+		scene.findOverlay( cuT( "HelpPanel" ) )->setVisible( false );
 	}
 
 	void Hud::start()
 	{
 		auto & scene = m_game.getScene();
-		scene.findOverlay( cuT( "TitlePanel" ) ).lock()->setVisible( false );
-		scene.findOverlay( cuT( "HUDResources" ) ).lock()->setVisible( true );
-		scene.findOverlay( cuT( "HUDScore" ) ).lock()->setVisible( true );
-		scene.findOverlay( cuT( "HUDDetails" ) ).lock()->setVisible( true );
-		scene.findOverlay( cuT( "HUDPause" ) ).lock()->setVisible( false );
-		scene.findOverlay( cuT( "GameEndPanel" ) ).lock()->setVisible( false );
-		scene.findOverlay( cuT( "HelpPanel" ) ).lock()->setVisible( false );
+		scene.findOverlay( cuT( "TitlePanel" ) )->setVisible( false );
+		scene.findOverlay( cuT( "HUDResources" ) )->setVisible( true );
+		scene.findOverlay( cuT( "HUDScore" ) )->setVisible( true );
+		scene.findOverlay( cuT( "HUDDetails" ) )->setVisible( true );
+		scene.findOverlay( cuT( "HUDPause" ) )->setVisible( false );
+		scene.findOverlay( cuT( "GameEndPanel" ) )->setVisible( false );
+		scene.findOverlay( cuT( "HelpPanel" ) )->setVisible( false );
 		update();
 	}
 
 	void Hud::pause()
 	{
 		auto & scene = m_game.getScene();
-		scene.findOverlay( cuT( "TitlePanel" ) ).lock()->setVisible( false );
-		scene.findOverlay( cuT( "HUDResources" ) ).lock()->setVisible( false );
-		scene.findOverlay( cuT( "HUDScore" ) ).lock()->setVisible( false );
-		scene.findOverlay( cuT( "HUDDetails" ) ).lock()->setVisible( false );
-		scene.findOverlay( cuT( "HUDPause" ) ).lock()->setVisible( true );
-		scene.findOverlay( cuT( "GameEndPanel" ) ).lock()->setVisible( false );
-		scene.findOverlay( cuT( "HelpPanel" ) ).lock()->setVisible( false );
+		scene.findOverlay( cuT( "TitlePanel" ) )->setVisible( false );
+		scene.findOverlay( cuT( "HUDResources" ) )->setVisible( false );
+		scene.findOverlay( cuT( "HUDScore" ) )->setVisible( false );
+		scene.findOverlay( cuT( "HUDDetails" ) )->setVisible( false );
+		scene.findOverlay( cuT( "HUDPause" ) )->setVisible( true );
+		scene.findOverlay( cuT( "GameEndPanel" ) )->setVisible( false );
+		scene.findOverlay( cuT( "HelpPanel" ) )->setVisible( false );
 	}
 
 	void Hud::resume()
 	{
 		auto & scene = m_game.getScene();
-		scene.findOverlay( cuT( "TitlePanel" ) ).lock()->setVisible( false );
-		scene.findOverlay( cuT( "HUDResources" ) ).lock()->setVisible( true );
-		scene.findOverlay( cuT( "HUDScore" ) ).lock()->setVisible( true );
-		scene.findOverlay( cuT( "HUDDetails" ) ).lock()->setVisible( true );
-		scene.findOverlay( cuT( "HUDPause" ) ).lock()->setVisible( false );
-		scene.findOverlay( cuT( "GameEndPanel" ) ).lock()->setVisible( false );
-		scene.findOverlay( cuT( "HelpPanel" ) ).lock()->setVisible( false );
+		scene.findOverlay( cuT( "TitlePanel" ) )->setVisible( false );
+		scene.findOverlay( cuT( "HUDResources" ) )->setVisible( true );
+		scene.findOverlay( cuT( "HUDScore" ) )->setVisible( true );
+		scene.findOverlay( cuT( "HUDDetails" ) )->setVisible( true );
+		scene.findOverlay( cuT( "HUDPause" ) )->setVisible( false );
+		scene.findOverlay( cuT( "GameEndPanel" ) )->setVisible( false );
+		scene.findOverlay( cuT( "HelpPanel" ) )->setVisible( false );
 	}
 
 	void Hud::Help()
 	{
 		auto & scene = m_game.getScene();
-		scene.findOverlay( cuT( "TitlePanel" ) ).lock()->setVisible( false );
-		scene.findOverlay( cuT( "HUDResources" ) ).lock()->setVisible( false );
-		scene.findOverlay( cuT( "HUDScore" ) ).lock()->setVisible( false );
-		scene.findOverlay( cuT( "HUDDetails" ) ).lock()->setVisible( false );
-		scene.findOverlay( cuT( "HUDPause" ) ).lock()->setVisible( false );
-		scene.findOverlay( cuT( "GameEndPanel" ) ).lock()->setVisible( false );
-		scene.findOverlay( cuT( "HelpPanel" ) ).lock()->setVisible( true );
+		scene.findOverlay( cuT( "TitlePanel" ) )->setVisible( false );
+		scene.findOverlay( cuT( "HUDResources" ) )->setVisible( false );
+		scene.findOverlay( cuT( "HUDScore" ) )->setVisible( false );
+		scene.findOverlay( cuT( "HUDDetails" ) )->setVisible( false );
+		scene.findOverlay( cuT( "HUDPause" ) )->setVisible( false );
+		scene.findOverlay( cuT( "GameEndPanel" ) )->setVisible( false );
+		scene.findOverlay( cuT( "HelpPanel" ) )->setVisible( true );
 	}
 
 	void Hud::GameOver()
 	{
 		auto & scene = m_game.getScene();
-		scene.findOverlay( cuT( "TitlePanel" ) ).lock()->setVisible( false );
-		scene.findOverlay( cuT( "HUDResources" ) ).lock()->setVisible( false );
-		scene.findOverlay( cuT( "HUDScore" ) ).lock()->setVisible( false );
-		scene.findOverlay( cuT( "HUDDetails" ) ).lock()->setVisible( false );
-		scene.findOverlay( cuT( "HUDPause" ) ).lock()->setVisible( false );
-		scene.findOverlay( cuT( "GameEndPanel" ) ).lock()->setVisible( true );
-		scene.findOverlay( cuT( "HelpPanel" ) ).lock()->setVisible( false );
+		scene.findOverlay( cuT( "TitlePanel" ) )->setVisible( false );
+		scene.findOverlay( cuT( "HUDResources" ) )->setVisible( false );
+		scene.findOverlay( cuT( "HUDScore" ) )->setVisible( false );
+		scene.findOverlay( cuT( "HUDDetails" ) )->setVisible( false );
+		scene.findOverlay( cuT( "HUDPause" ) )->setVisible( false );
+		scene.findOverlay( cuT( "GameEndPanel" ) )->setVisible( true );
+		scene.findOverlay( cuT( "HelpPanel" ) )->setVisible( false );
 
 		getTextOverlay( m_game.getScene(), cuT( "ResultLevelValue" ) )->setCaption( castor::string::toU32String( m_game.getWave() ) );
 		getTextOverlay( m_game.getScene(), cuT( "ResultKillsValue" ) )->setCaption( castor::string::toU32String( m_game.getKills() ) );

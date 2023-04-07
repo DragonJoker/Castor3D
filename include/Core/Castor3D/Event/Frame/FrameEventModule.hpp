@@ -114,8 +114,6 @@ namespace castor3d
 
 	CU_DeclareVector( CpuFrameEventUPtr, CpuFrameEventPtr );
 	CU_DeclareVector( GpuFrameEventUPtr, GpuFrameEventPtr );
-
-	CU_DeclareMap( castor::String, FrameListenerSPtr, FrameListenerPtrStr );
 	/**
 	*\~english
 	*	Helper structure to specialise a cache behaviour.

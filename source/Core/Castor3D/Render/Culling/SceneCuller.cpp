@@ -44,7 +44,7 @@ namespace castor3d
 		using LockType = std::unique_lock< AnimatedObjectGroupCache const >;
 		LockType lock{ castor::makeUniqueLock( cache ) };
 
-		for ( auto group : cache )
+		for ( auto & group : cache )
 		{
 			if ( !result )
 			{

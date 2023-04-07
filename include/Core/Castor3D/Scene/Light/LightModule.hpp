@@ -133,15 +133,9 @@ namespace castor3d
 	CU_DeclareSmartPtr( LightFactory );
 
 	//! Array of lights
-	CU_DeclareVector( LightSPtr, LightPtr );
-	//! Array of lights
 	CU_DeclareVector( LightRPtr, Lights );
 	//! Array to non owning light pointers
 	CU_DeclareVector( LightRPtr, LightsRef );
-	//! Map of lights, sorted by name
-	CU_DeclareMap( castor::String, LightSPtr, LightPtrStr );
-	//! Map of lights, sorted by index
-	CU_DeclareMap( int, LightSPtr, LightPtrInt );
 	//! Array of lights per light type.
 	using LightsMap = std::array< LightsArray, size_t( LightType::eCount ) >;
 

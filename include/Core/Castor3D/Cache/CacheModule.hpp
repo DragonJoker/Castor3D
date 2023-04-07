@@ -24,8 +24,8 @@ namespace castor3d
 	{
 		using ElementT = ResT;
 		using ElementKeyT = KeyT;
-		using ElementPtrT = std::shared_ptr< ElementT >;
-		using ElementObsT = std::weak_ptr< ElementT >;
+		using ElementPtrT = castor::UniquePtr< ElementT >;
+		using ElementObsT = ElementT *;
 		using ElementContT = std::unordered_map< ElementKeyT, ElementPtrT >;
 		using ElementCacheT = castor::ResourceCacheBaseT< ElementT, ElementKeyT, PtrCacheTraitsT< ElementT, ElementKeyT > >;
 
@@ -40,31 +40,31 @@ namespace castor3d
 			, ElementKeyT const & key
 			, ParametersT && ... params )
 		{
-			return std::make_shared< ElementT >( key
+			return castor::makeUnique< ElementT >( key
 				, std::forward< ParametersT >( params )... );
 		}
 
 		static ElementObsT makeElementObs( ElementPtrT const & element )
 		{
-			return ElementObsT{ element };
+			return element.get();
 		}
 
 		static bool areElementsEqual( ElementObsT const & lhs
 			, ElementObsT const & rhs )
 		{
-			return lhs.lock() == rhs.lock();
+			return lhs == rhs;
 		}
 
 		static bool areElementsEqual( ElementObsT const & lhs
 			, ElementPtrT const & rhs )
 		{
-			return lhs.lock() == rhs;
+			return lhs == rhs.get();
 		}
 
 		static bool areElementsEqual( ElementPtrT const & lhs
 			, ElementObsT const & rhs )
 		{
-			return lhs == rhs.lock();
+			return lhs.get() == rhs;
 		}
 
 		static bool areElementsEqual( ElementPtrT const & lhs
@@ -75,7 +75,7 @@ namespace castor3d
 
 		static bool isElementObsNull( ElementObsT const & element )
 		{
-			return element.lock() == nullptr;
+			return element == nullptr;
 		}
 	};
 

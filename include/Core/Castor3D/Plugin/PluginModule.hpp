@@ -131,15 +131,6 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Render technique plug-in class
-	*\~french
-	*\brief
-	*	Classe de plug-in de techniques de rendu
-	*/
-	class TechniquePlugin;
-	/**
-	*\~english
-	*\brief
 	*	Tone mapping plug-in class.
 	*\~french
 	*\brief
@@ -147,14 +138,16 @@ namespace castor3d
 	*/
 	class ToneMappingPlugin;
 
-	CU_DeclareSmartPtr( Plugin );
-	CU_DeclareSmartPtr( ImporterPlugin );
-	CU_DeclareSmartPtr( DividerPlugin );
-	CU_DeclareSmartPtr( GenericPlugin );
-	CU_DeclareSmartPtr( PostFxPlugin );
-	CU_DeclareSmartPtr( ParticlePlugin );
+	CU_DeclareCUSmartPtr( castor3d, Plugin, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, ImporterPlugin, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, DividerPlugin, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, GeneratorPlugin, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, GenericPlugin, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, PostFxPlugin, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, ParticlePlugin, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, ToneMappingPlugin, C3D_API );
 
-	CU_DeclareMap( castor::String, PluginSPtr, PluginStr );
+	CU_DeclareMap( castor::String, PluginUPtr, PluginStr );
 	CU_DeclareArray( PluginStrMap, PluginType::eCount, PluginStrMap );
 	CU_DeclareMap( castor::Path, castor::DynamicLibrarySPtr, DynamicLibraryPtrPath );
 	CU_DeclareArray( DynamicLibraryPtrPathMap, PluginType::eCount, DynamicLibraryPtrPathMap );

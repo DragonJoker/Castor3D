@@ -2,6 +2,8 @@
 
 #include <CastorUtils/Miscellaneous/DynamicLibrary.hpp>
 
+CU_ImplementCUSmartPtr( castor3d, DividerPlugin )
+
 namespace castor3d
 {
 	DividerPlugin::DividerPlugin( castor::DynamicLibrarySPtr library, Engine * engine )

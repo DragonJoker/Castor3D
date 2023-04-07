@@ -37,12 +37,12 @@ namespace castor3d
 				, getEngine()
 				, OverlayType::eText
 				, nullptr
-				, &getBackgroundOverlay() ).lock()->getTextOverlay()
+				, &getBackgroundOverlay() )->getTextOverlay()
 			: getEngine().addNewOverlay( getName() + cuT( "/Title" )
 				, getEngine()
 				, OverlayType::eText
 				, nullptr
-				, &getBackgroundOverlay() ).lock()->getTextOverlay();
+				, &getBackgroundOverlay() )->getTextOverlay();
 		m_title = title;
 		title->setVAlign( VAlign::eTop );
 		title->setPixelSize( getClientSize() );
@@ -66,12 +66,12 @@ namespace castor3d
 				, getEngine()
 				, OverlayType::eText
 				, nullptr
-				, &m_container->getBackgroundOverlay() ).lock()->getTextOverlay()
+				, &m_container->getBackgroundOverlay() )->getTextOverlay()
 			: getEngine().addNewOverlay( getName() + cuT( "/Text" )
 				, getEngine()
 				, OverlayType::eText
 				, nullptr
-				, &m_container->getBackgroundOverlay() ).lock()->getTextOverlay();
+				, &m_container->getBackgroundOverlay() )->getTextOverlay();
 		m_text = text;
 		text->setPixelSize( getClientSize() );
 		text->setVisible( true );

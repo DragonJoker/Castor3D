@@ -68,7 +68,7 @@ namespace castor
 		 *\param[in]	pathFolder	Un chemin optionnel, pour y trouver le plug-in
 		 *\return		Le plug-in chargé, \p nullptr si non trouvé (nom incorrect ou non trouvé dans le chemin donné ou le chemin principal)
 		 */
-		C3D_API ElementPtrT loadPlugin( String const & pluginName
+		C3D_API ElementObsT loadPlugin( String const & pluginName
 			, Path const & pathFolder )noexcept;
 		/**
 		 *\~english
@@ -80,7 +80,7 @@ namespace castor
 		 *\param[in]	fileFullPath	Le chemin du plug-in
 		 *\return		Le plug-in chargé, \p nullptr si le chemin était incorrect ou s'il ne représentait pas un plug-in valide
 		 */
-		C3D_API ElementPtrT loadPlugin( Path const & fileFullPath )noexcept;
+		C3D_API ElementObsT loadPlugin( Path const & fileFullPath )noexcept;
 		/**
 		 *\~english
 		 *\brief		Retrieves the plug-ins of given type
@@ -91,7 +91,7 @@ namespace castor
 		 *\param[in]	type	Le type de plu-ins
 		 *\return		\p nullptr si non trouvé
 		 */
-		C3D_API castor3d::PluginStrMap getPlugins( castor3d::PluginType type );
+		C3D_API std::map< castor::String, castor3d::PluginRPtr > getPlugins( castor3d::PluginType type );
 		/**
 		 *\~english
 		 *\brief		Loads all the plug-ins located in working folder
@@ -103,7 +103,7 @@ namespace castor
 		C3D_API void loadAllPlugins( Path const & folder );
 
 	private:
-		ElementPtrT doloadPlugin( Path const & pathFile );
+		ElementObsT doloadPlugin( Path const & pathFile );
 
 	private:
 		castor3d::Engine & m_engine;

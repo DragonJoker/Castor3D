@@ -371,8 +371,8 @@ namespace castor3d
 					|| skelIt != animIt.second.skeletons.end() )
 				{
 					auto animGroup = ( scene.hasAnimatedObjectGroup( geometry.first )
-						? scene.findAnimatedObjectGroup( geometry.first ).lock()
-						: scene.addNewAnimatedObjectGroup( geometry.first, scene ).lock() );
+						? scene.findAnimatedObjectGroup( geometry.first )
+						: scene.addNewAnimatedObjectGroup( geometry.first, scene ) );
 
 					if ( animGroup->addAnimation( animIt.first ) )
 					{

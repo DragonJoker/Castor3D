@@ -110,7 +110,7 @@ namespace castor3d
 		, m_rootObjectNode{ m_sceneNodeCache->find( ObjectRootNode ) }
 		, m_background{ std::make_shared< ColourBackground >( engine, *this ) }
 		, m_lightFactory{ std::make_shared< LightFactory >() }
-		, m_listener{ engine.addNewFrameListener( cuT( "Scene_" ) + name + castor::string::toString( intptr_t( this ) ) ).lock().get() }
+		, m_listener{ engine.addNewFrameListener( cuT( "Scene_" ) + name + castor::string::toString( intptr_t( this ) ) ) }
 		, m_renderNodes{ castor::makeUnique< SceneRenderNodes >( *this ) }
 	{
 				m_billboardCache = makeObjectCache< BillboardList, castor::String, BillboardListCacheTraits >( *this
@@ -651,7 +651,7 @@ namespace castor3d
 		, Pass & pass )
 	{
 		auto & cache = getAnimatedObjectGroupCache();
-		auto group = cache.find( cuT( "C3D_Textures" ) ).lock();
+		auto group = cache.find( cuT( "C3D_Textures" ) );
 		return group->addObject( sourceInfo, config, pass );
 	}
 

@@ -2,6 +2,8 @@
 
 #include <CastorUtils/Miscellaneous/DynamicLibrary.hpp>
 
+CU_ImplementCUSmartPtr( castor3d, PostFxPlugin )
+
 namespace castor3d
 {
 	PostFxPlugin::PostFxPlugin( castor::DynamicLibrarySPtr library, Engine * engine )
