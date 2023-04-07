@@ -603,7 +603,7 @@ namespace castor3d
 		std::vector< EventHandlerUPtr > m_handlers;
 		//!\~english	The associated frame listener.
 		//!\~french		Le frame listener associé.
-		FrameListenerSPtr m_frameListener;
+		FrameListenerRPtr m_frameListener;
 
 	private:
 		MouseState m_mouse;

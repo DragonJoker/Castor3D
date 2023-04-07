@@ -80,12 +80,12 @@ namespace castor3d
 				, getEngine()
 				, OverlayType::eText
 				, nullptr
-				, &getBackgroundOverlay() ).lock()->getTextOverlay()
+				, &getBackgroundOverlay() )->getTextOverlay()
 			: getEngine().addNewOverlay( getName() + cuT( "/Text" )
 				, getEngine()
 				, OverlayType::eText
 				, nullptr
-				, &getBackgroundOverlay() ).lock()->getTextOverlay();
+				, &getBackgroundOverlay() )->getTextOverlay();
 
 		text->setPixelPosition( getClientOffset() );
 		text->setPixelSize( getClientSize() );

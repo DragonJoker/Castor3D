@@ -95,12 +95,12 @@ namespace castor3d
 				, getEngine()
 				, OverlayType::eText
 				, nullptr
-				, &getBackgroundOverlay() ).lock()->getTextOverlay()
+				, &getBackgroundOverlay() )->getTextOverlay()
 			: getEngine().addNewOverlay( getName() + cuT( "/Text" )
 				, getEngine()
 				, OverlayType::eText
 				, nullptr
-				, &getBackgroundOverlay() ).lock()->getTextOverlay();
+				, &getBackgroundOverlay() )->getTextOverlay();
 		text->setPixelPosition( getClientOffset() );
 		text->setPixelSize( getClientSize() );
 		text->setVAlign( VAlign::eCenter );
@@ -112,12 +112,12 @@ namespace castor3d
 				, getEngine()
 				, OverlayType::ePanel
 				, nullptr
-				, &text->getOverlay() ).lock()->getPanelOverlay()
+				, &text->getOverlay() )->getPanelOverlay()
 			: getEngine().addNewOverlay( getName() + cuT( "/Caret" )
 				, getEngine()
 				, OverlayType::ePanel
 				, nullptr
-				, &text->getOverlay() ).lock()->getPanelOverlay();
+				, &text->getOverlay() )->getPanelOverlay();
 		caret->setPixelPosition( getClientOffset() );
 		caret->setPixelSize( {} );
 		caret->setVisible( false );
@@ -1093,7 +1093,7 @@ namespace castor3d
 				, getEngine()
 				, OverlayType::ePanel
 				, nullptr
-				, &text->getOverlay() ).lock()->getPanelOverlay();
+				, &text->getOverlay() )->getPanelOverlay();
 			panel->setPixelPosition( {} );
 			panel->setPixelSize( {} );
 			panel->setMaterial( style.getSelectionMaterial() );

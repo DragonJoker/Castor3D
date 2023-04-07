@@ -344,7 +344,7 @@ namespace castor3d
 		, m_commandBufferPool{ m_device->createCommandPool( m_device.getGraphicsQueueFamilyIndex()
 			, VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT ) }
 		, m_resources{ engine.getGraphResourceHandler() }
-		, m_listener{ getEngine()->addNewFrameListener( getName() + castor::string::toString( m_index ) ).lock().get() }
+		, m_listener{ getEngine()->addNewFrameListener( getName() + castor::string::toString( m_index ) ) }
 		, m_size{ size }
 		, m_loading{ engine.isThreaded() }
 		, m_configUbo{ m_device.uboPool->getBuffer< Configuration >( 0u ) }

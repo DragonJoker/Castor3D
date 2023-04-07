@@ -13,6 +13,8 @@
 #include "Castor3D/Scene/Animation/AnimatedTexture.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
 
+CU_ImplementCUSmartPtr( castor3d, AnimatedObjectGroup )
+
 namespace castor3d
 {
 	namespace anmobjgrp

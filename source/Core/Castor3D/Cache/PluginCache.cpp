@@ -62,10 +62,10 @@ namespace castor
 		}
 	}
 
-	PluginSPtr ResourceCacheT< Plugin, String, PluginCacheTraits >::loadPlugin( String const & pluginName, Path const & pathFolder )noexcept
+	PluginRPtr ResourceCacheT< Plugin, String, PluginCacheTraits >::loadPlugin( String const & pluginName, Path const & pathFolder )noexcept
 	{
 		Path strFilePath{ CU_SharedLibPrefix + pluginName + cuT( "." ) + CU_SharedLibExt };
-		PluginSPtr result;
+		PluginRPtr result{};
 
 		try
 		{
@@ -98,9 +98,9 @@ namespace castor
 		return result;
 	}
 
-	PluginSPtr ResourceCacheT< Plugin, String, PluginCacheTraits >::loadPlugin( Path const & fileFullPath )noexcept
+	PluginRPtr ResourceCacheT< Plugin, String, PluginCacheTraits >::loadPlugin( Path const & fileFullPath )noexcept
 	{
-		PluginSPtr result;
+		PluginRPtr result{};
 
 		try
 		{
@@ -126,10 +126,17 @@ namespace castor
 		return result;
 	}
 
-	PluginStrMap ResourceCacheT< Plugin, String, PluginCacheTraits >::getPlugins( PluginType type )
+	std::map< castor::String, PluginRPtr > ResourceCacheT< Plugin, String, PluginCacheTraits >::getPlugins( PluginType type )
 	{
 		auto lock( makeUniqueLock( m_mutexLoadedPlugins ) );
-		return m_loadedPlugins[size_t( type )];
+		std::map< castor::String, PluginRPtr > result;
+
+		for ( auto & it : m_loadedPlugins[size_t( type )] )
+		{
+			result.emplace( it.first, it.second.get() );
+		}
+
+		return result;
 	}
 
 	void ResourceCacheT< Plugin, String, PluginCacheTraits >::loadAllPlugins( Path const & folder )
@@ -156,9 +163,9 @@ namespace castor
 		}
 	}
 
-	PluginSPtr ResourceCacheT< Plugin, String, PluginCacheTraits >::doloadPlugin( Path const & pathFile )
+	PluginRPtr ResourceCacheT< Plugin, String, PluginCacheTraits >::doloadPlugin( Path const & pathFile )
 	{
-		PluginSPtr result;
+		PluginRPtr result{};
 		auto lockTypes( makeUniqueLock( m_mutexLoadedPluginTypes ) );
 		auto it = m_loadedPluginTypes.find( pathFile );
 
@@ -180,35 +187,36 @@ namespace castor
 
 			PluginType type{ PluginType::eCount };
 			pfnGetType( &type );
+			PluginUPtr plugin;
 
 			switch ( type )
 			{
 			case PluginType::eDivider:
-				result = std::make_shared< DividerPlugin >( library, &m_engine );
+				plugin = castor::makeUniqueDerived< Plugin, DividerPlugin >( library, &m_engine );
 				break;
 
 			case PluginType::eImporter:
-				result = std::make_shared< ImporterPlugin >( library, &m_engine );
+				plugin = castor::makeUniqueDerived< Plugin, ImporterPlugin >( library, &m_engine );
 				break;
 
 			case PluginType::eGeneric:
-				result = std::make_shared< GenericPlugin >( library, &m_engine );
+				plugin = castor::makeUniqueDerived< Plugin, GenericPlugin >( library, &m_engine );
 				break;
 
 			case PluginType::eToneMapping:
-				result = std::make_shared< ToneMappingPlugin >( library, &m_engine );
+				plugin = castor::makeUniqueDerived< Plugin, ToneMappingPlugin >( library, &m_engine );
 				break;
 
 			case PluginType::ePostEffect:
-				result = std::make_shared< PostFxPlugin >( library, &m_engine );
+				plugin = castor::makeUniqueDerived< Plugin, PostFxPlugin >( library, &m_engine );
 				break;
 
 			case PluginType::eParticle:
-				result = std::make_shared< ParticlePlugin >( library, &m_engine );
+				plugin = castor::makeUniqueDerived< Plugin, ParticlePlugin >( library, &m_engine );
 				break;
 
 			case PluginType::eGenerator:
-				result = std::make_shared< GeneratorPlugin >( library, &m_engine );
+				plugin = castor::makeUniqueDerived< Plugin, GeneratorPlugin >( library, &m_engine );
 				break;
 
 			default:
@@ -220,7 +228,7 @@ namespace castor
 			}
 
 			Version toCheck( 0, 0 );
-			result->getRequiredVersion( toCheck );
+			plugin->getRequiredVersion( toCheck );
 			Version version = m_engine.getVersion();
 
 			if ( toCheck <= version )
@@ -228,7 +236,7 @@ namespace castor
 				m_loadedPluginTypes.insert( std::make_pair( pathFile, type ) );
 				{
 					auto lockPlugins( makeUniqueLock( m_mutexLoadedPlugins ) );
-					m_loadedPlugins[size_t( type )].insert( std::make_pair( pathFile, result ) );
+					result = m_loadedPlugins[size_t( type )].emplace( pathFile, std::move( plugin ) ).first->second.get();
 				}
 				{
 					auto lockLibraries( makeUniqueLock( m_mutexLibraries ) );
@@ -245,7 +253,7 @@ namespace castor
 		{
 			PluginType type = it->second;
 			auto lockPlugins( makeUniqueLock( m_mutexLoadedPlugins ) );
-			result = m_loadedPlugins[size_t( type )].find( pathFile )->second;
+			result = m_loadedPlugins[size_t( type )].find( pathFile )->second.get();
 		}
 
 		return result;

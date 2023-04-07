@@ -2,6 +2,8 @@
 
 #include <CastorUtils/Miscellaneous/DynamicLibrary.hpp>
 
+CU_ImplementCUSmartPtr( castor3d, ImporterPlugin )
+
 namespace castor3d
 {
 	ImporterPlugin::ImporterPlugin( castor::DynamicLibrarySPtr library, Engine * engine )

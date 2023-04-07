@@ -17,7 +17,7 @@ namespace castor3d
 
 	ProgressBar::ProgressBar( Engine & engine
 		, ProgressCtrlRPtr progress )
-		: m_listener{ engine.addNewFrameListener( "C3D_ProgressBar" ).lock() }
+		: m_listener{ engine.addNewFrameListener( "C3D_ProgressBar" ) }
 		, m_progress{ progress }
 	{
 	}

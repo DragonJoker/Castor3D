@@ -211,7 +211,7 @@ namespace castor
 		std::vector< AnimatedObject * > result;
 		auto lock( castor::makeUniqueLock( *this ) );
 
-		for ( auto it : *this )
+		for ( auto & it : *this )
 		{
 			if ( auto animObject = it.second->findObject( name ) )
 			{

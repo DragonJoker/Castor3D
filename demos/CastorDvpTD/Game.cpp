@@ -689,7 +689,7 @@ namespace castortd
 			, *node
 			, mesh );
 		auto animGroup = m_scene.addNewAnimatedObjectGroup( name
-			, m_scene ).lock();
+			, m_scene );
 		castor::Milliseconds time{ 0 };
 
 		if ( node->hasAnimation() )

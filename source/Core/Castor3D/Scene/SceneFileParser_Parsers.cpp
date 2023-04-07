@@ -366,15 +366,16 @@ namespace castor3d
 		{
 			castor::String name;
 			parsingContext.parentOverlays.push_back( parsingContext.overlay );
-			auto parent = parsingContext.parentOverlays.back().get();
-			parsingContext.overlay = parsingContext.parser->getEngine()->tryFindOverlay( params[0]->get( name ) ).lock();
+			auto parent = parsingContext.parentOverlays.back();
+			parsingContext.overlay = parsingContext.parser->getEngine()->tryFindOverlay( params[0]->get( name ) );
 
 			if ( !parsingContext.overlay )
 			{
-				parsingContext.overlay = std::make_shared< Overlay >( *parsingContext.parser->getEngine()
+				parsingContext.ownOverlay = castor::makeUnique< Overlay >( *parsingContext.parser->getEngine()
 					, OverlayType::ePanel
 					, nullptr
 					, parent );
+				parsingContext.overlay = parsingContext.ownOverlay.get();
 				parsingContext.overlay->rename( name );
 			}
 
@@ -395,15 +396,16 @@ namespace castor3d
 		{
 			castor::String name;
 			parsingContext.parentOverlays.push_back( parsingContext.overlay );
-			auto parent = parsingContext.parentOverlays.back().get();
-			parsingContext.overlay = parsingContext.parser->getEngine()->tryFindOverlay( params[0]->get( name ) ).lock();
+			auto parent = parsingContext.parentOverlays.back();
+			parsingContext.overlay = parsingContext.parser->getEngine()->tryFindOverlay( params[0]->get( name ) );
 
 			if ( !parsingContext.overlay )
 			{
-				parsingContext.overlay = std::make_shared< Overlay >( *parsingContext.parser->getEngine()
+				parsingContext.ownOverlay = castor::makeUnique< Overlay >( *parsingContext.parser->getEngine()
 					, OverlayType::eBorderPanel
 					, nullptr
 					, parent );
+				parsingContext.overlay = parsingContext.ownOverlay.get();
 				parsingContext.overlay->rename( name );
 			}
 
@@ -424,15 +426,16 @@ namespace castor3d
 		{
 			castor::String name;
 			parsingContext.parentOverlays.push_back( parsingContext.overlay );
-			auto parent = parsingContext.parentOverlays.back().get();
-			parsingContext.overlay = parsingContext.parser->getEngine()->tryFindOverlay( params[0]->get( name ) ).lock();
+			auto parent = parsingContext.parentOverlays.back();
+			parsingContext.overlay = parsingContext.parser->getEngine()->tryFindOverlay( params[0]->get( name ) );
 
 			if ( !parsingContext.overlay )
 			{
-				parsingContext.overlay = std::make_shared< Overlay >( *parsingContext.parser->getEngine()
+				parsingContext.ownOverlay = castor::makeUnique< Overlay >( *parsingContext.parser->getEngine()
 					, OverlayType::eText
 					, nullptr
 					, parent );
+				parsingContext.overlay = parsingContext.ownOverlay.get();
 				parsingContext.overlay->rename( name );
 			}
 
@@ -1262,7 +1265,7 @@ namespace castor3d
 		{
 			castor::String name;
 			params[0]->get( name );
-			parsingContext.animGroup = parsingContext.scene->addNewAnimatedObjectGroup( name, *parsingContext.scene ).lock();
+			parsingContext.animGroup = parsingContext.scene->addNewAnimatedObjectGroup( name, *parsingContext.scene );
 		}
 	}
 	CU_EndAttributePush( CSCNSection::eAnimGroup )
@@ -1279,15 +1282,16 @@ namespace castor3d
 		{
 			castor::String name;
 			parsingContext.parentOverlays.push_back( parsingContext.overlay );
-			auto parent = parsingContext.parentOverlays.back().get();
-			parsingContext.overlay = parsingContext.scene->tryFindOverlay( params[0]->get( name ) ).lock();
+			auto parent = parsingContext.parentOverlays.back();
+			parsingContext.overlay = parsingContext.scene->tryFindOverlay( params[0]->get( name ) );
 
 			if ( !parsingContext.overlay )
 			{
-				parsingContext.overlay = std::make_shared< Overlay >( *parsingContext.parser->getEngine()
+				parsingContext.ownOverlay = castor::makeUnique< Overlay >( *parsingContext.parser->getEngine()
 					, OverlayType::ePanel
 					, parsingContext.scene
 					, parent );
+				parsingContext.overlay = parsingContext.ownOverlay.get();
 				parsingContext.overlay->rename( name );
 			}
 
@@ -1308,15 +1312,16 @@ namespace castor3d
 		{
 			castor::String name;
 			parsingContext.parentOverlays.push_back( parsingContext.overlay );
-			auto parent = parsingContext.parentOverlays.back().get();
-			parsingContext.overlay = parsingContext.scene->tryFindOverlay( params[0]->get( name ) ).lock();
+			auto parent = parsingContext.parentOverlays.back();
+			parsingContext.overlay = parsingContext.scene->tryFindOverlay( params[0]->get( name ) );
 
 			if ( !parsingContext.overlay )
 			{
-				parsingContext.overlay = std::make_shared< Overlay >( *parsingContext.parser->getEngine()
+				parsingContext.ownOverlay = castor::makeUnique< Overlay >( *parsingContext.parser->getEngine()
 					, OverlayType::eBorderPanel
 					, parsingContext.scene
 					, parent );
+				parsingContext.overlay = parsingContext.ownOverlay.get();
 				parsingContext.overlay->rename( name );
 			}
 
@@ -1337,15 +1342,16 @@ namespace castor3d
 		{
 			castor::String name;
 			parsingContext.parentOverlays.push_back( parsingContext.overlay );
-			auto parent = parsingContext.parentOverlays.back().get();
-			parsingContext.overlay = parsingContext.scene->tryFindOverlay( params[0]->get( name ) ).lock();
+			auto parent = parsingContext.parentOverlays.back();
+			parsingContext.overlay = parsingContext.scene->tryFindOverlay( params[0]->get( name ) );
 
 			if ( !parsingContext.overlay )
 			{
-				parsingContext.overlay = std::make_shared< Overlay >( *parsingContext.parser->getEngine()
+				parsingContext.ownOverlay = castor::makeUnique< Overlay >( *parsingContext.parser->getEngine()
 					, OverlayType::eText
 					, parsingContext.scene
 					, parent );
+				parsingContext.overlay = parsingContext.ownOverlay.get();
 				parsingContext.overlay->rename( name );
 			}
 
@@ -4952,17 +4958,18 @@ namespace castor3d
 		auto & parsingContext = getParserContext( context );
 		castor::String name;
 		parsingContext.parentOverlays.push_back( parsingContext.overlay );
-		auto parent = parsingContext.parentOverlays.back().get();
+		auto parent = parsingContext.parentOverlays.back();
 		parsingContext.overlay = parsingContext.scene
-			? parsingContext.scene->tryFindOverlay( params[0]->get( name ) ).lock()
-			: parsingContext.parser->getEngine()->tryFindOverlay( params[0]->get( name ) ).lock();
+			? parsingContext.scene->tryFindOverlay( params[0]->get( name ) )
+			: parsingContext.parser->getEngine()->tryFindOverlay( params[0]->get( name ) );
 
 		if ( !parsingContext.overlay )
 		{
-			parsingContext.overlay = std::make_shared< Overlay >( *parsingContext.parser->getEngine()
+			parsingContext.ownOverlay = castor::makeUnique< Overlay >( *parsingContext.parser->getEngine()
 				, OverlayType::ePanel
 				, parent ? parent->getScene() : parsingContext.scene
 				, parent );
+			parsingContext.overlay = parsingContext.ownOverlay.get();
 			parsingContext.overlay->rename( name );
 		}
 
@@ -4975,17 +4982,18 @@ namespace castor3d
 		auto & parsingContext = getParserContext( context );
 		castor::String name;
 		parsingContext.parentOverlays.push_back( parsingContext.overlay );
-		auto parent = parsingContext.parentOverlays.back().get();
+		auto parent = parsingContext.parentOverlays.back();
 		parsingContext.overlay = parsingContext.scene
-			? parsingContext.scene->tryFindOverlay( params[0]->get( name ) ).lock()
-			: parsingContext.parser->getEngine()->tryFindOverlay( params[0]->get( name ) ).lock();
+			? parsingContext.scene->tryFindOverlay( params[0]->get( name ) )
+			: parsingContext.parser->getEngine()->tryFindOverlay( params[0]->get( name ) );
 
 		if ( !parsingContext.overlay )
 		{
-			parsingContext.overlay = std::make_shared< Overlay >( *parsingContext.parser->getEngine()
+			parsingContext.ownOverlay = castor::makeUnique< Overlay >( *parsingContext.parser->getEngine()
 				, OverlayType::eBorderPanel
 				, parent ? parent->getScene() : parsingContext.scene
 				, parent );
+			parsingContext.overlay = parsingContext.ownOverlay.get();
 			parsingContext.overlay->rename( name );
 		}
 
@@ -4998,17 +5006,18 @@ namespace castor3d
 		auto & parsingContext = getParserContext( context );
 		castor::String name;
 		parsingContext.parentOverlays.push_back( parsingContext.overlay );
-		auto parent = parsingContext.parentOverlays.back().get();
+		auto parent = parsingContext.parentOverlays.back();
 		parsingContext.overlay = parsingContext.scene
-			? parsingContext.scene->tryFindOverlay( params[0]->get( name ) ).lock()
-			: parsingContext.parser->getEngine()->tryFindOverlay( params[0]->get( name ) ).lock();
+			? parsingContext.scene->tryFindOverlay( params[0]->get( name ) )
+			: parsingContext.parser->getEngine()->tryFindOverlay( params[0]->get( name ) );
 
 		if ( !parsingContext.overlay )
 		{
-			parsingContext.overlay = std::make_shared< Overlay >( *parsingContext.parser->getEngine()
+			parsingContext.ownOverlay = castor::makeUnique< Overlay >( *parsingContext.parser->getEngine()
 				, OverlayType::eText
 				, parent ? parent->getScene() : parsingContext.scene
 				, parent );
+			parsingContext.overlay = parsingContext.ownOverlay.get();
 			parsingContext.overlay->rename( name );
 		}
 
@@ -5039,17 +5048,20 @@ namespace castor3d
 			parsingContext.overlay->setVisible( true );
 		}
 
-		if ( parsingContext.scene )
+		if ( parsingContext.ownOverlay )
 		{
-			parsingContext.scene->addOverlay( parsingContext.overlay->getName()
-				, parsingContext.overlay
-				, true );
-		}
-		else
-		{
-			parsingContext.parser->getEngine()->addOverlay( parsingContext.overlay->getName()
-				, parsingContext.overlay
-				, true );
+			if ( parsingContext.scene )
+			{
+				parsingContext.scene->addOverlay( parsingContext.overlay->getName()
+					, parsingContext.ownOverlay
+					, true );
+			}
+			else
+			{
+				parsingContext.parser->getEngine()->addOverlay( parsingContext.overlay->getName()
+					, parsingContext.ownOverlay
+					, true );
+			}
 		}
 
 		CU_Require( !parsingContext.parentOverlays.empty() );
@@ -5886,7 +5898,7 @@ namespace castor3d
 			CU_ParsingError( cuT( "No animated object group initialised" ) );
 		}
 
-		parsingContext.animGroup.reset();
+		parsingContext.animGroup = {};
 	}
 	CU_EndAttributePop()
 

@@ -191,8 +191,9 @@ namespace castor3d
 		castor::ImageSPtr image{};
 		VkShaderStageFlagBits shaderStage{};
 		UniformBufferBaseUPtr uniformBuffer{};
-		OverlayRes overlay{};
-		std::vector< OverlayRes > parentOverlays{};
+		OverlayRPtr overlay{};
+		OverlayUPtr ownOverlay{};
+		std::vector< OverlayResPtr > parentOverlays{};
 		BillboardListUPtr ownBillboards{};
 		BillboardListRPtr billboards{};
 		int face1{ -1 };
@@ -214,7 +215,7 @@ namespace castor3d
 		FloatArray vertexTan{};
 		FloatArray vertexTex{};
 		UInt32Array faces{};
-		AnimatedObjectGroupSPtr animGroup{};
+		AnimatedObjectGroupRPtr animGroup{};
 		AnimatedObjectSPtr animSkeleton{};
 		AnimatedObjectSPtr animMesh{};
 		AnimatedObjectSPtr animNode{};

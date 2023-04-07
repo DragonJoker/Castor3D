@@ -91,7 +91,7 @@ namespace
 
 			for ( auto it : engine->getPluginCache().getPlugins( castor3d::PluginType::eImporter ) )
 			{
-				auto const importer = std::static_pointer_cast< castor3d::ImporterPlugin >( it.second );
+				auto const importer = &static_cast< castor3d::ImporterPlugin & >( *it.second );
 
 				if ( importer->getName() != c3d_assimp::AssimpImporterFile::Name )
 				{

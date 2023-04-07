@@ -111,8 +111,9 @@ namespace castor3d
 	using Animable = AnimableT< Engine >;
 	using Animation = AnimationT< Engine >;
 
+	CU_DeclareCUSmartPtr( castor3d, AnimatedObjectGroup, C3D_API );
+
 	CU_DeclareSmartPtr( Animable );
-	CU_DeclareSmartPtr( AnimatedObjectGroup );
 	CU_DeclareSmartPtr( AnimatedMesh );
 	CU_DeclareSmartPtr( AnimatedObject );
 	CU_DeclareSmartPtr( AnimatedSceneNode );
@@ -121,8 +122,6 @@ namespace castor3d
 	CU_DeclareSmartPtr( Animation );
 	CU_DeclareSmartPtr( AnimationInstance );
 
-	//! AnimatedObjectGroup pointer map, sorted by name.
-	CU_DeclareMap( castor::String, AnimatedObjectGroupSPtr, AnimatedObjectGroupPtrStr );
 	//! AnimatedObject pointer map, sorted by name.
 	CU_DeclareMap( castor::String, AnimatedObjectSPtr, AnimatedObjectPtrStr );
 	//! Animation pointer map, sorted by name.

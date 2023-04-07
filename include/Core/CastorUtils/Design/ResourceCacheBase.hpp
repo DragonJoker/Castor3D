@@ -482,7 +482,7 @@ namespace castor
 			{
 				for ( auto & it : *this )
 				{
-					m_merge( *this, destination.m_resources, it.second );
+					m_merge( *this, destination.m_resources, std::move( it.second ) );
 				}
 			}
 

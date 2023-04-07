@@ -44,7 +44,7 @@ namespace castor3d
 		void doStep();
 
 	private:
-		FrameListenerRes m_listener;
+		FrameListenerRPtr m_listener;
 		castor::String m_title;
 		castor::String m_label;
 		ProgressCtrlRPtr m_progress;

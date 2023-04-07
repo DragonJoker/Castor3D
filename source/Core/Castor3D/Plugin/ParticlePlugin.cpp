@@ -2,6 +2,8 @@
 
 #include <CastorUtils/Miscellaneous/DynamicLibrary.hpp>
 
+CU_ImplementCUSmartPtr( castor3d, ParticlePlugin )
+
 namespace castor3d
 {
 	ParticlePlugin::ParticlePlugin( castor::DynamicLibrarySPtr library, Engine * engine )
