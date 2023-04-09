@@ -46,9 +46,6 @@ namespace castor3d
 	*/
 	class ToneMapping;
 	/**
-	\author 	Sylvain DOREMUS
-	\version	0.11.0
-	\date		16/05/2018
 	\~english
 	\brief		Post effect visitor base class.
 	\~french
@@ -56,7 +53,7 @@ namespace castor3d
 	*/
 	class ToneMappingVisitor;
 
-	CU_DeclareSmartPtr( ToneMapping );
+	CU_DeclareCUSmartPtr( castor3d, ToneMapping, C3D_API );
 	/**
 	*\~english
 	*\brief

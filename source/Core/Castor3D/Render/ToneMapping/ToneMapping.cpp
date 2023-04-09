@@ -18,6 +18,8 @@
 
 #include <ShaderWriter/Source.hpp>
 
+CU_ImplementCUSmartPtr( castor3d, ToneMapping )
+
 namespace castor3d
 {
 	namespace rendtonmap

@@ -321,10 +321,10 @@ namespace castor3d
 			return m_srgbPostEffects;
 		}
 
-		ToneMappingSPtr getToneMapping()const
+		ToneMappingRPtr getToneMapping()const
 		{
 			CU_Require( m_toneMapping );
-			return m_toneMapping;
+			return m_toneMapping.get();
 		}
 
 		crg::SemaphoreWaitArray const & getSemaphore()const
@@ -479,7 +479,7 @@ namespace castor3d
 		Parameters m_techniqueParameters;
 		PostEffectArray m_hdrPostEffects;
 		castor::String m_toneMappingName{ cuT( "linear" ) };
-		ToneMappingSPtr m_toneMapping;
+		ToneMappingUPtr m_toneMapping;
 		PostEffectArray m_srgbPostEffects;
 		FramePassTimerUPtr m_overlaysTimer;
 		FramePassTimerUPtr m_cpuUpdateTimer;
