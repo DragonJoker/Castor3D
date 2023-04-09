@@ -36,7 +36,7 @@ namespace film_grain
 			, castor3d::RenderSystem & renderSystem
 			, castor3d::Parameters const & params );
 		~PostEffect()override;
-		static castor3d::PostEffectSPtr create( castor3d::RenderTarget & renderTarget
+		static castor3d::PostEffectUPtr create( castor3d::RenderTarget & renderTarget
 			, castor3d::RenderSystem & renderSystem
 			, castor3d::Parameters const & params );
 		/**

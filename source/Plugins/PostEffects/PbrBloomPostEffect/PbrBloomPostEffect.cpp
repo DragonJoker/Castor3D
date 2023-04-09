@@ -35,11 +35,11 @@ namespace PbrBloom
 		setParameters( params );
 	}
 
-	castor3d::PostEffectSPtr PostEffect::create( castor3d::RenderTarget & renderTarget
+	castor3d::PostEffectUPtr PostEffect::create( castor3d::RenderTarget & renderTarget
 		, castor3d::RenderSystem & renderSystem
 		, castor3d::Parameters const & params )
 	{
-		return std::make_shared< PostEffect >( renderTarget
+		return castor::makeUniqueDerived< castor3d::PostEffect, PostEffect >( renderTarget
 			, renderSystem
 			, params );
 	}

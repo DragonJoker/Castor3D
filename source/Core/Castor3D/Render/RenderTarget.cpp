@@ -421,7 +421,7 @@ namespace castor3d
 
 		for ( auto entry : engine.getPostEffectFactory().listRegisteredTypes() )
 		{
-			PostEffectSPtr effect = engine.getPostEffectFactory().create( entry.key
+			auto effect = engine.getPostEffectFactory().create( entry.key
 				, *this
 				, *engine.getRenderSystem()
 				, Parameters{} );
@@ -429,11 +429,11 @@ namespace castor3d
 
 			if ( effect->isAfterToneMapping() )
 			{
-				m_srgbPostEffects.push_back( effect );
+				m_srgbPostEffects.push_back( std::move( effect ) );
 			}
 			else
 			{
-				m_hdrPostEffects.push_back( effect );
+				m_hdrPostEffects.push_back( std::move( effect ) );
 			}
 		}
 
@@ -544,14 +544,14 @@ namespace castor3d
 			m_combinePassSource = {};
 			m_combinePass = {};
 
-			for ( auto effect : m_srgbPostEffects )
+			for ( auto & effect : m_srgbPostEffects )
 			{
 				effect->cleanup( device );
 			}
 
 			m_toneMapping.reset();
 
-			for ( auto effect : m_hdrPostEffects )
+			for ( auto & effect : m_hdrPostEffects )
 			{
 				effect->cleanup( device );
 			}
@@ -621,12 +621,12 @@ namespace castor3d
 		m_renderTechnique->update( updater );
 		m_overlayPass->update( updater );
 
-		for ( auto effect : m_hdrPostEffects )
+		for ( auto & effect : m_hdrPostEffects )
 		{
 			effect->update( updater );
 		}
 
-		for ( auto effect : m_srgbPostEffects )
+		for ( auto & effect : m_srgbPostEffects )
 		{
 			effect->update( updater );
 		}
@@ -738,30 +738,30 @@ namespace castor3d
 		}
 	}
 
-	PostEffectSPtr RenderTarget::getPostEffect( castor::String const & name )const
+	PostEffectRPtr RenderTarget::getPostEffect( castor::String const & name )const
 	{
 		auto it = std::find_if( m_srgbPostEffects.begin()
 			, m_srgbPostEffects.end()
-			, [&name]( PostEffectSPtr lookup )
+			, [&name]( PostEffectUPtr const & lookup )
 			{
 				return lookup->getName() == name;
 			} );
 
 		if ( it != m_srgbPostEffects.end() )
 		{
-			return *it;
+			return it->get();
 		}
 
 		it = std::find_if( m_hdrPostEffects.begin()
 			, m_hdrPostEffects.end()
-			, [&name]( PostEffectSPtr lookup )
+			, [&name]( PostEffectUPtr const & lookup )
 			{
 				return lookup->getName() == name;
 			} );
 
 		if ( it != m_hdrPostEffects.end() )
 		{
-			return *it;
+			return it->get();
 		}
 
 		return nullptr;
@@ -862,7 +862,7 @@ namespace castor3d
 
 		if ( !m_hdrPostEffects.empty() )
 		{
-			for ( auto effect : m_hdrPostEffects )
+			for ( auto & effect : m_hdrPostEffects )
 			{
 				if ( result )
 				{
@@ -901,7 +901,7 @@ namespace castor3d
 
 		if ( !m_srgbPostEffects.empty() )
 		{
-			for ( auto effect : m_srgbPostEffects )
+			for ( auto & effect : m_srgbPostEffects )
 			{
 				if ( result )
 				{
@@ -1176,13 +1176,13 @@ namespace castor3d
 	}
 
 	Texture const & RenderTarget::doUpdatePostEffects( CpuUpdater & updater
-		, PostEffectPtrArray const & effects
+		, PostEffectArray const & effects
 		, std::vector< Texture const * > const & images )const
 	{
 		Texture const * src = images.front();
 		Texture const * dst = images.back();
 
-		for ( auto effect : effects )
+		for ( auto & effect : effects )
 		{
 			if ( effect->update( updater, *src ) )
 			{

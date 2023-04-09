@@ -138,11 +138,11 @@ namespace motion_blur
 		getRenderSystem()->getRenderDevice().uboPool->putBuffer( m_ubo );
 	}
 
-	castor3d::PostEffectSPtr PostEffect::create( castor3d::RenderTarget & renderTarget
+	castor3d::PostEffectUPtr PostEffect::create( castor3d::RenderTarget & renderTarget
 		, castor3d::RenderSystem & renderSystem
 		, castor3d::Parameters const & params )
 	{
-		return std::make_shared< PostEffect >( renderTarget, renderSystem, params );
+		return castor::makeUniqueDerived< castor3d::PostEffect, PostEffect >( renderTarget, renderSystem, params );
 	}
 
 	void PostEffect::accept( castor3d::PipelineVisitorBase & visitor )
