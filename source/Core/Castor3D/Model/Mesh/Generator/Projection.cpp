@@ -35,7 +35,7 @@ namespace castor3d
 	//	m_depth = dimensions[0];
 	//	uint32_t nbElem = m_pattern.getSize();
 	//	real totalDistance = 0.0;
-	//	SubmeshSPtr submesh;
+	//	SubmeshRPtr submesh{};
 	//	real distanceToOrigin = 0.0;
 	//	Point3f currentUV;
 	//	Point3f previousUV;

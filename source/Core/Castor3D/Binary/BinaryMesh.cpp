@@ -15,7 +15,7 @@ namespace castor3d
 	{
 		bool result = true;
 
-		for ( auto submesh : obj )
+		for ( auto & submesh : obj )
 		{
 			result = result && BinaryWriter< Submesh >{}.write( *submesh, m_chunk );
 		}
@@ -31,7 +31,7 @@ namespace castor3d
 	bool BinaryParser< Mesh >::doParse( Mesh & obj )
 	{
 		bool result = true;
-		SubmeshSPtr submesh;
+		SubmeshUPtr submesh{};
 		BinaryChunk chunk;
 
 		while ( result && doGetSubChunk( chunk ) )
@@ -39,13 +39,13 @@ namespace castor3d
 			switch ( chunk.getChunkType() )
 			{
 			case ChunkType::eSubmesh:
-				submesh = std::make_shared< Submesh >( obj, obj.getSubmeshCount() );
+				submesh = castor::makeUnique< Submesh >( obj, obj.getSubmeshCount() );
 				result = createBinaryParser< Submesh >().parse( *submesh, chunk );
 				checkError( result, "Couldn't parse submesh." );
 
 				if ( result )
 				{
-					obj.m_submeshes.push_back( submesh );
+					obj.m_submeshes.push_back( std::move( submesh ) );
 				}
 
 				break;
@@ -61,7 +61,6 @@ namespace castor3d
 	bool BinaryParser< Mesh >::doParse_v1_2( Mesh & obj )
 	{
 		bool result = true;
-		SubmeshSPtr submesh;
 		SkeletonRPtr skeleton;
 		BinaryChunk chunk;
 

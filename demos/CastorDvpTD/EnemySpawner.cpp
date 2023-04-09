@@ -67,7 +67,7 @@ namespace castortd
 				, *node
 				, game.getEnemyMesh() );
 
-			for ( auto submesh : *geometry->getMesh().lock() )
+			for ( auto & submesh : *geometry->getMesh().lock() )
 			{
 				geometry->setMaterial( *submesh, game.getEnemyMaterial() );
 			}

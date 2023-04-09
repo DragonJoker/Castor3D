@@ -345,7 +345,7 @@ namespace castortd
 			node->setPosition( origin );
 			node->attachTo( *m_mapNode );
 
-			for ( auto submesh : *geometry->getMesh().lock() )
+			for ( auto & submesh : *geometry->getMesh().lock() )
 			{
 				geometry->setMaterial( *submesh, m_bulletMaterial.lock().get() );
 			}
@@ -378,7 +378,7 @@ namespace castortd
 			node->setPosition( origin );
 			node->attachTo( *m_mapNode );
 
-			for ( auto submesh : *geometry->getMesh().lock() )
+			for ( auto & submesh : *geometry->getMesh().lock() )
 			{
 				geometry->setMaterial( *submesh, m_boulderMaterial.lock().get() );
 			}
@@ -643,7 +643,7 @@ namespace castortd
 		node->setPosition( convert( castor::Point2i{ cell.m_x, cell.m_y } ) + castor::Point3f{ 0, m_cellDimensions[1] / 2, 0 } );
 		node->attachTo( *m_mapNode );
 
-		for ( auto submesh : *geometry->getMesh().lock() )
+		for ( auto & submesh : *geometry->getMesh().lock() )
 		{
 			geometry->setMaterial( *submesh, m_mapCubeMaterial.lock().get() );
 		}

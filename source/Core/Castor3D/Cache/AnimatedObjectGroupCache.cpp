@@ -275,7 +275,7 @@ namespace castor
 						, [this, &pgroup, &mesh]( RenderDevice const & device
 							, QueueData const & queueData )
 						{
-							for ( auto submesh : mesh.getMesh() )
+							for ( auto & submesh : mesh.getMesh() )
 							{
 								if ( submesh->getMorphTargetsCount() )
 								{
@@ -295,7 +295,7 @@ namespace castor
 						, [this, &mesh]( RenderDevice const & device
 							, QueueData const & queueData )
 						{
-							for ( auto submesh : mesh.getMesh() )
+							for ( auto & submesh : mesh.getMesh() )
 							{
 								if ( submesh->getMorphTargetsCount() )
 								{
@@ -360,7 +360,7 @@ namespace castor
 					switch ( pair.second->getKind() )
 					{
 					case AnimationType::eMesh:
-						for ( auto submesh : static_cast< AnimatedMesh const & >( *pair.second ).getMesh() )
+						for ( auto & submesh : static_cast< AnimatedMesh const & >( *pair.second ).getMesh() )
 						{
 							doRemoveEntry( device
 								, static_cast< AnimatedMesh const & >( *pair.second )

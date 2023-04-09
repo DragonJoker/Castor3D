@@ -51,15 +51,6 @@ namespace castor
 				it.clear();
 			}
 		}
-
-		{
-			auto lock( makeUniqueLock( m_mutexLibraries ) );
-
-			for ( auto & it : m_libraries )
-			{
-				it.clear();
-			}
-		}
 	}
 
 	PluginRPtr ResourceCacheT< Plugin, String, PluginCacheTraits >::loadPlugin( String const & pluginName, Path const & pathFolder )noexcept
@@ -176,7 +167,7 @@ namespace castor
 				CU_Exception( string::stringCast< char >( cuT( "File [" ) + pathFile + cuT( "] does not exist" ) ) );
 			}
 
-			DynamicLibrarySPtr library{ std::make_shared< DynamicLibrary >( pathFile ) };
+			DynamicLibraryUPtr library{ castor::makeUnique< DynamicLibrary >( pathFile ) };
 			Plugin::PGetTypeFunction pfnGetType;
 
 			if ( !library->getFunction( pfnGetType, cacheplgn::getTypeFunctionABIName ) )
@@ -192,31 +183,31 @@ namespace castor
 			switch ( type )
 			{
 			case PluginType::eDivider:
-				plugin = castor::makeUniqueDerived< Plugin, DividerPlugin >( library, &m_engine );
+				plugin = castor::makeUniqueDerived< Plugin, DividerPlugin >( std::move( library ), &m_engine );
 				break;
 
 			case PluginType::eImporter:
-				plugin = castor::makeUniqueDerived< Plugin, ImporterPlugin >( library, &m_engine );
+				plugin = castor::makeUniqueDerived< Plugin, ImporterPlugin >( std::move( library ), &m_engine );
 				break;
 
 			case PluginType::eGeneric:
-				plugin = castor::makeUniqueDerived< Plugin, GenericPlugin >( library, &m_engine );
+				plugin = castor::makeUniqueDerived< Plugin, GenericPlugin >( std::move( library ), &m_engine );
 				break;
 
 			case PluginType::eToneMapping:
-				plugin = castor::makeUniqueDerived< Plugin, ToneMappingPlugin >( library, &m_engine );
+				plugin = castor::makeUniqueDerived< Plugin, ToneMappingPlugin >( std::move( library ), &m_engine );
 				break;
 
 			case PluginType::ePostEffect:
-				plugin = castor::makeUniqueDerived< Plugin, PostFxPlugin >( library, &m_engine );
+				plugin = castor::makeUniqueDerived< Plugin, PostFxPlugin >( std::move( library ), &m_engine );
 				break;
 
 			case PluginType::eParticle:
-				plugin = castor::makeUniqueDerived< Plugin, ParticlePlugin >( library, &m_engine );
+				plugin = castor::makeUniqueDerived< Plugin, ParticlePlugin >( std::move( library ), &m_engine );
 				break;
 
 			case PluginType::eGenerator:
-				plugin = castor::makeUniqueDerived< Plugin, GeneratorPlugin >( library, &m_engine );
+				plugin = castor::makeUniqueDerived< Plugin, GeneratorPlugin >( std::move( library ), &m_engine );
 				break;
 
 			default:
@@ -237,10 +228,6 @@ namespace castor
 				{
 					auto lockPlugins( makeUniqueLock( m_mutexLoadedPlugins ) );
 					result = m_loadedPlugins[size_t( type )].emplace( pathFile, std::move( plugin ) ).first->second.get();
-				}
-				{
-					auto lockLibraries( makeUniqueLock( m_mutexLibraries ) );
-					m_libraries[size_t( type )].insert( std::make_pair( pathFile, library ) );
 				}
 				log::info << cuT( "Plug-in [" ) << result->getName() << cuT( "] - Required engine version : " ) << toCheck << cuT( ", loaded" ) << std::endl;
 			}

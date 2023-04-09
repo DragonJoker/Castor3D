@@ -352,11 +352,10 @@ namespace castor3d
 		castor::BoundingBox boundingBox{};
 	};
 
-	CU_DeclareSmartPtr( Submesh );
+	CU_DeclareCUSmartPtr( castor3d, Submesh, C3D_API );
 
 	//! Submesh pointer array
-	CU_DeclareVector( SubmeshSPtr, SubmeshPtr );
-	CU_DeclareMap( castor::String, SubmeshSPtr, SubmeshPtrStr );
+	CU_DeclareVector( SubmeshUPtr, SubmeshPtr );
 	CU_DeclareMap( Submesh const *, castor::BoundingBox, SubmeshBoundingBox );
 	CU_DeclareMap( Submesh const *, castor::BoundingSphere, SubmeshBoundingSphere );
 	CU_DeclareMap( uint32_t, std::vector< float >, SubmeshTargetWeight );

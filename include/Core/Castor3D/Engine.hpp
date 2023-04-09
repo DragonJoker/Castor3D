@@ -715,9 +715,9 @@ namespace castor3d
 			return m_fontCache;
 		}
 
-		UserInputListenerSPtr getUserInputListener()noexcept
+		UserInputListenerRPtr getUserInputListener()noexcept
 		{
-			return m_userInputListener;
+			return m_userInputListener.get();
 		}
 
 		RenderSystem * getRenderSystem()const noexcept
@@ -906,9 +906,15 @@ namespace castor3d
 		/**@{*/
 		C3D_API void setLoadingScene( SceneUPtr scene );
 
-		void setUserInputListener( UserInputListenerSPtr listener )noexcept
+		void setUserInputListener( UserInputListenerUPtr listener )noexcept
 		{
-			m_userInputListener = listener;
+			m_userInputListener = std::move( listener );
+		}
+
+		template< typename ListenerT >
+		void setUserInputListenerT( castor::UniquePtr< ListenerT > listener )noexcept
+		{
+			m_userInputListener = castor::ptrCast< UserInputListener >( listener );
 		}
 
 		void setDefaultLightingModel( LightingModelID value )noexcept
@@ -1077,8 +1083,8 @@ namespace castor3d
 		DECLARE_CACHE_MEMBER( listener, FrameListener );
 		FrameListenerRPtr m_defaultListener{};
 		std::map< castor::String, RenderWindow * > m_renderWindows;
-		std::map< RenderWindow const *, UserInputListenerSPtr > m_windowInputListeners;
-		UserInputListenerSPtr m_userInputListener;
+		std::map< RenderWindow const *, UserInputListenerUPtr > m_windowInputListeners;
+		UserInputListenerUPtr m_userInputListener;
 		DECLARE_CACHE_MEMBER_MIN( target, RenderTarget );
 		DECLARE_CACHE_MEMBER_MIN( texture, TextureUnit );
 		castor::FontCache m_fontCache;

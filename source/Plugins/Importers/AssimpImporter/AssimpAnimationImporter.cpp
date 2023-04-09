@@ -140,7 +140,7 @@ namespace c3d_assimp
 		auto name = animation.getName();
 		auto & mesh = static_cast< castor3d::Mesh const & >( *animation.getAnimable() );
 
-		for ( auto submesh : mesh )
+		for ( auto & submesh : mesh )
 		{
 			auto index = submesh->getId();
 			auto & animations = file.getMeshesAnimations( mesh, index );

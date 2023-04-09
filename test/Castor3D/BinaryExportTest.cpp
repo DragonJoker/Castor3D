@@ -150,7 +150,7 @@ namespace Testing
 			}
 		}
 
-		for ( auto submesh : *dst )
+		for ( auto & submesh : *dst )
 		{
 			submesh->initialise( device );
 		}

@@ -230,7 +230,7 @@ namespace castor3d
 			, std::move( ControlsManager::createParsers( *this ) )
 			, std::move( ControlsManager::createSections() )
 			, &ControlsManager::createContext );
-		setUserInputListener( std::make_shared< ControlsManager >( *this ) );
+		setUserInputListenerT( castor::makeUnique< ControlsManager >( *this ) );
 
 		log::info << cuT( "Castor3D - Core engine version : " ) << Version{} << std::endl;
 		log::info << m_cpuInformations << std::endl;
@@ -962,9 +962,9 @@ namespace castor3d
 		m_renderWindows.emplace( window.getName(), &window );
 #endif
 		m_windowInputListeners.emplace( &window
-			, std::make_shared< RenderWindow::InputListener >( *this, window ) );
-		auto listener = m_windowInputListeners.find( &window )->second;
-		log::trace << "Created InputListener [0x" << std::hex << listener.get() << "] - " << window.getName() << std::endl;
+			, castor::makeUniqueDerived< UserInputListener, RenderWindow::InputListener >( *this, window ) );
+		auto listener = m_windowInputListeners.find( &window )->second.get();
+		log::trace << "Created InputListener [0x" << std::hex << listener << "] - " << window.getName() << std::endl;
 	}
 
 	void Engine::unregisterWindow( RenderWindow const & window )
@@ -973,16 +973,15 @@ namespace castor3d
 
 		if ( it != m_windowInputListeners.end() )
 		{
-			auto listener = m_windowInputListeners.find( &window )->second;
+			auto listener = m_windowInputListeners.find( &window )->second.get();
 			listener->cleanup();
-			auto plistener = listener.get();
 			auto pwindow = &window;
-			log::trace << "Removing InputListener [0x" << std::hex << plistener << "]" << std::endl;
+			log::trace << "Removing InputListener [0x" << std::hex << listener << "]" << std::endl;
 			listener->getFrameListener().postEvent( makeCpuFunctorEvent( EventType::ePostRender
-				, [this, plistener, pwindow]()
+				, [this, listener, pwindow]()
 				{
 					m_windowInputListeners.erase( pwindow );
-					log::trace << "Removed InputListener [0x" << std::hex << plistener << "]" << std::endl;
+					log::trace << "Removed InputListener [0x" << std::hex << listener << "]" << std::endl;
 				} ) );
 		}
 

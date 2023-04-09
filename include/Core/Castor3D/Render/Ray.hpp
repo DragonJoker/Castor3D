@@ -149,7 +149,7 @@ namespace castor3d
 		 */
 		C3D_API castor::Intersection intersects( GeometryRPtr geometry
 			, Face & nearestFace
-			, SubmeshSPtr & nearestSubmesh
+			, SubmeshRPtr & nearestSubmesh
 			, float & distance )const;
 		/**
 		 *\~english

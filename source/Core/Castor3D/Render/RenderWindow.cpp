@@ -905,16 +905,9 @@ namespace castor3d
 		return geometry;
 	}
 
-	SubmeshRPtr RenderWindow::getPickedSubmesh()const
+	Submesh const * RenderWindow::getPickedSubmesh()const
 	{
-		auto sel = m_picking->getPickedSubmesh();
-
-		if ( !sel )
-		{
-			return nullptr;
-		}
-
-		return sel->getOwner()->getSubmesh( sel->getId() ).get();
+		return m_picking->getPickedSubmesh();
 	}
 
 	uint32_t RenderWindow::getPickedFace()const

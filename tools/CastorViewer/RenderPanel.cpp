@@ -406,7 +406,7 @@ namespace CastorViewer
 	}
 
 	void RenderPanel::doUpdateSelectedGeometry( castor3d::GeometryRPtr geometry
-		, castor3d::SubmeshRPtr submesh )
+		, castor3d::Submesh const * submesh )
 	{
 		auto oldSubmesh = m_selectedSubmesh;
 		auto oldGeometry = m_selectedGeometry;

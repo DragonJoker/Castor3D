@@ -158,7 +158,7 @@ namespace castor3d
 		SkeletonRPtr skeleton{};
 		MeshResPtr mesh{};
 		MeshRes ownMesh{};
-		SubmeshSPtr submesh{};
+		SubmeshRPtr submesh{};
 		LightUPtr ownLight{};
 		LightRPtr light{};
 		castor::PixelFormat pixelFormat{};

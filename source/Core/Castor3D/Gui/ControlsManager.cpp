@@ -618,7 +618,7 @@ namespace castor3d
 	void ControlsManager::create( ControlRPtr control )
 	{
 		addControl( control );
-		control->create( shared_from_this() );
+		control->create( *this );
 	}
 
 	void ControlsManager::destroy( ControlRPtr control )

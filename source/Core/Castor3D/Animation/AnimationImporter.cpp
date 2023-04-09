@@ -24,7 +24,7 @@ namespace castor3d
 		{
 			auto mesh = static_cast< Mesh * >( animation.getAnimable() );
 
-			for ( auto submesh : *mesh )
+			for ( auto & submesh : *mesh )
 			{
 				if ( auto component = submesh->getComponent< MorphComponent >() )
 				{

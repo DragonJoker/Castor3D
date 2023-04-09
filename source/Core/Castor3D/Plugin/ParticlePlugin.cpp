@@ -6,8 +6,8 @@ CU_ImplementCUSmartPtr( castor3d, ParticlePlugin )
 
 namespace castor3d
 {
-	ParticlePlugin::ParticlePlugin( castor::DynamicLibrarySPtr library, Engine * engine )
-		: Plugin( PluginType::eParticle, library, *engine )
+	ParticlePlugin::ParticlePlugin( castor::DynamicLibraryUPtr library, Engine * engine )
+		: Plugin( PluginType::eParticle, std::move( library ), *engine )
 	{
 		load();
 	}

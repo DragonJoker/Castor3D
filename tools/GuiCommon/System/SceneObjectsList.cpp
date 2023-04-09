@@ -371,7 +371,7 @@ namespace GuiCommon
 	}
 
 	void SceneObjectsList::select( castor3d::GeometryRPtr geometry
-		, castor3d::SubmeshRPtr submesh )
+		, castor3d::Submesh const * submesh )
 	{
 		auto itg = m_ids.find( geometry );
 
@@ -408,7 +408,7 @@ namespace GuiCommon
 		{
 			int count = 0;
 
-			for ( auto submesh : *mesh )
+			for ( auto & submesh : *mesh )
 			{
 				wxString name = _( "Submesh " );
 				name << count++;

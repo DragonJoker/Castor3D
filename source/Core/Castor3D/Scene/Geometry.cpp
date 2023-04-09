@@ -60,7 +60,7 @@ namespace castor3d
 		doUpdateContainers();
 		bool hasEnvironmentMapping = std::any_of( mesh.lock()->begin()
 			, mesh.lock()->end()
-			, []( SubmeshSPtr const & submesh )
+			, []( SubmeshUPtr const & submesh )
 			{
 				return submesh->getDefaultMaterial()
 					? submesh->getDefaultMaterial()->hasEnvironmentMapping()
@@ -275,7 +275,7 @@ namespace castor3d
 		{
 			m_meshName = mesh->getName();
 
-			for ( auto submesh : *mesh )
+			for ( auto & submesh : *mesh )
 			{
 				CU_Require( &submesh->getParent() == mesh.get() );
 				auto material = submesh->getDefaultMaterial();

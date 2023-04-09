@@ -17,7 +17,7 @@ namespace castor3d
 		static void transformMesh( castor::Matrix4x4f const & transform
 			, Mesh & mesh )
 		{
-			for ( auto submesh : mesh )
+			for ( auto & submesh : mesh )
 			{
 				for ( auto & vertex : submesh->getPositions() )
 				{
@@ -97,7 +97,7 @@ namespace castor3d
 		}
 		else
 		{
-			for ( auto submesh : mesh )
+			for ( auto & submesh : mesh )
 			{
 				submesh->instantiate( nullptr, {}, submesh->getDefaultMaterial(), false );
 			}
