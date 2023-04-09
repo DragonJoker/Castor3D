@@ -62,11 +62,11 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::clone
 		 */
-		SubmeshComponentSPtr clone( Submesh & submesh )const override
+		SubmeshComponentUPtr clone( Submesh & submesh )const override
 		{
-			auto result = std::make_shared< BaseDataComponentT >( submesh );
+			auto result = castor::makeUnique< BaseDataComponentT >( submesh );
 			result->m_data = m_data;
-			return std::static_pointer_cast< SubmeshComponent >( result );
+			return castor::ptrRefCast< SubmeshComponent >( result );
 		}
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::getSubmeshFlags

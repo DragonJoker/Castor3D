@@ -131,7 +131,7 @@ namespace castor3d
 		template< typename ControlT >
 		ControlT * registerControlT( castor::UniquePtr< ControlT > control )
 		{
-			return &static_cast< ControlT & >( *registerControl( castor::ptrCast< Control >( control ) ) );
+			return &static_cast< ControlT & >( *registerControl( castor::ptrRefCast< Control >( control ) ) );
 		}
 
 		/** Removes a control that has been destroyed.

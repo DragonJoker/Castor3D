@@ -55,7 +55,13 @@ namespace castor
 	}
 
 	template< typename TypeU, typename TypeT >
-	UniquePtr< TypeU > ptrCast( UniquePtr< TypeT > & ptr )
+	UniquePtr< TypeU > ptrCast( UniquePtr< TypeT > ptr )
+	{
+		return UniquePtr< TypeU >( &static_cast< TypeU & >( *ptr.release() ) );
+	}
+
+	template< typename TypeU, typename TypeT >
+	UniquePtr< TypeU > ptrRefCast( UniquePtr< TypeT > & ptr )
 	{
 		return UniquePtr< TypeU >( &static_cast< TypeU & >( *ptr.release() ) );
 	}
@@ -110,5 +116,29 @@ namespace nmspc\
 	using class_name_t##UPtrT = castor::UniquePtr< class_name_t< InstT > >;\
 	template< typename InstT >\
 	using class_name_t##RPtrT = class_name_t< InstT > *
+
+#define CU_DeclareCUEnumTemplateSmartPtr( nmspc, class_name_t, enum_name_t )\
+}\
+namespace castor\
+{\
+	template< enum_name_t EnumT >\
+	struct Deleter< nmspc::class_name_t< EnumT > >\
+	{\
+		void operator()( nmspc::class_name_t< EnumT > * pointer )noexcept\
+		{\
+			delete pointer;\
+		}\
+	};\
+}\
+namespace nmspc\
+{\
+	template< enum_name_t EnumT >\
+	using class_name_t##SPtrT = std::shared_ptr< class_name_t< EnumT > >;\
+	template< enum_name_t EnumT >\
+	using class_name_t##WPtrT = std::weak_ptr< class_name_t< EnumT > >;\
+	template< enum_name_t EnumT >\
+	using class_name_t##UPtrT = castor::UniquePtr< class_name_t< EnumT > >;\
+	template< enum_name_t EnumT >\
+	using class_name_t##RPtrT = class_name_t< EnumT > *
 
 #endif

@@ -914,7 +914,7 @@ namespace castor3d
 		template< typename ListenerT >
 		void setUserInputListenerT( castor::UniquePtr< ListenerT > listener )noexcept
 		{
-			m_userInputListener = castor::ptrCast< UserInputListener >( listener );
+			m_userInputListener = castor::ptrRefCast< UserInputListener >( listener );
 		}
 
 		void setDefaultLightingModel( LightingModelID value )noexcept

@@ -15,6 +15,8 @@
 
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
+CU_ImplementCUSmartPtr( castor3d, SkinComponent )
+
 namespace castor3d
 {
 	castor::String const SkinComponent::Name = cuT( "bones" );
@@ -35,11 +37,11 @@ namespace castor3d
 		return getOwner()->getParent().getSkeleton();
 	}
 
-	SubmeshComponentSPtr SkinComponent::clone( Submesh & submesh )const
+	SubmeshComponentUPtr SkinComponent::clone( Submesh & submesh )const
 	{
-		auto result = std::make_shared< SkinComponent >( submesh );
+		auto result = castor::makeUnique< SkinComponent >( submesh );
 		result->m_bones = m_bones;
-		return std::static_pointer_cast< SubmeshComponent >( result );
+		return castor::ptrRefCast< SubmeshComponent >( result );
 	}
 
 	void SkinComponent::addDatas( std::vector< VertexBoneData > const & boneData )

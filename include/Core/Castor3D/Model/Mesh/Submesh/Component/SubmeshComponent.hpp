@@ -129,7 +129,7 @@ namespace castor3d
 		 *\return			Clone ce composant dans le submesh donné.
 		 *\param[in,out]	submesh	Reçoit le composant cloné.
 		 */
-		C3D_API virtual SubmeshComponentSPtr clone( Submesh & submesh )const = 0;
+		C3D_API virtual SubmeshComponentUPtr clone( Submesh & submesh )const = 0;
 		/**
 		 *\~english
 		 *\return		The component type name.

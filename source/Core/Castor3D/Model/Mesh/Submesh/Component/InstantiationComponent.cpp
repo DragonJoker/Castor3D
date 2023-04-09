@@ -15,6 +15,8 @@
 
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
+CU_ImplementCUSmartPtr( castor3d, InstantiationComponent )
+
 namespace castor3d
 {
 	//*********************************************************************************************
@@ -201,10 +203,10 @@ namespace castor3d
 		}
 	}
 
-	SubmeshComponentSPtr InstantiationComponent::clone( Submesh & submesh )const
+	SubmeshComponentUPtr InstantiationComponent::clone( Submesh & submesh )const
 	{
-		auto result = std::make_shared< InstantiationComponent >( submesh, m_threshold );
-		return std::static_pointer_cast< SubmeshComponent >( result );
+		auto result = castor::makeUnique< InstantiationComponent >( submesh, m_threshold );
+		return castor::ptrRefCast< SubmeshComponent >( result );
 	}
 
 	ProgramFlags InstantiationComponent::getProgramFlags( Material const & material )const

@@ -12,6 +12,8 @@
 
 //*************************************************************************************************
 
+CU_ImplementCUSmartPtr( castor3d, LinesMapping )
+
 namespace castor3d
 {
 	namespace smshcompline
@@ -81,12 +83,12 @@ namespace castor3d
 	{
 	}
 
-	SubmeshComponentSPtr LinesMapping::clone( Submesh & submesh )const
+	SubmeshComponentUPtr LinesMapping::clone( Submesh & submesh )const
 	{
-		auto result = std::make_shared< LinesMapping >( submesh );
+		auto result = castor::makeUnique< LinesMapping >( submesh );
 		result->m_lines = m_lines;
 		result->m_cameraPosition = m_cameraPosition;
-		return std::static_pointer_cast< SubmeshComponent >( result );
+		return castor::ptrRefCast< SubmeshComponent >( result );
 	}
 
 	uint32_t LinesMapping::getCount()const

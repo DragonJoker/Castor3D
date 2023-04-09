@@ -10,22 +10,25 @@ namespace castor3d
 	//*********************************************************************************************
 
 	template< typename T >
-	inline void SubmeshComponentAdder< T >::add( std::shared_ptr< T > component
+	inline void SubmeshComponentAdder< T >::add( castor::UniquePtr< T > component
 		, Submesh & submesh )
 	{
 		if constexpr ( std::is_base_of_v< IndexMapping, T > )
 		{
-			submesh.setIndexMapping( component );
+			submesh.setIndexMapping( castor::ptrRefCast< IndexMapping >( component ) );
 		}
 		else
 		{
-			submesh.m_components.emplace( component->getID(), component );
+			auto id = component->getID();
+			auto comp = component.get();
+			submesh.m_components.emplace( id
+				, castor::ptrRefCast< SubmeshComponent >( component ) );
 
 			if constexpr ( std::is_same_v< InstantiationComponent, T > )
 			{
-				if ( submesh.m_instantiation != component )
+				if ( submesh.m_instantiation != comp )
 				{
-					submesh.m_instantiation = component;
+					submesh.m_instantiation = comp;
 				}
 			}
 		}
@@ -110,19 +113,20 @@ namespace castor3d
 		m_dirty = true;
 	}
 
-	inline void Submesh::setIndexMapping( IndexMappingSPtr mapping )
+	inline void Submesh::setIndexMapping( IndexMappingUPtr mapping )
 	{
 		if ( m_indexMapping
-			&& m_indexMapping != mapping )
+			&& m_indexMapping != mapping.get() )
 		{
 			m_components.erase( m_indexMapping->getID() );
 		}
 
-		m_indexMapping = mapping;
-		m_components.emplace( mapping->getID(), mapping );
+		m_indexMapping = mapping.get();
+		auto id = mapping->getID();
+		m_components.emplace( id, castor::ptrRefCast< SubmeshComponent >( mapping ) );
 	}
 
-	inline IndexMappingSPtr Submesh::getIndexMapping()const
+	inline IndexMappingRPtr Submesh::getIndexMapping()const
 	{
 		return m_indexMapping;
 	}
@@ -139,28 +143,30 @@ namespace castor3d
 	}
 
 	template< typename ComponentT, typename ... ParamsT >
-	inline std::shared_ptr< ComponentT > Submesh::createComponent( ParamsT && ... params )
+	inline ComponentT * Submesh::createComponent( ParamsT && ... params )
 	{
-		auto component = std::make_shared< ComponentT >( *this
+		auto component = castor::makeUnique< ComponentT >( *this
 			, std::forward< ParamsT >( params )... );
-		addComponent( component );
-		return component;
+		auto result = component.get();
+		addComponent( std::move( component ) );
+		return result;
 	}
 
-	inline void Submesh::addComponent( SubmeshComponentSPtr component )
+	inline void Submesh::addComponent( SubmeshComponentUPtr component )
 	{
-		m_components.emplace( component->getID(), component );
+		auto id = component->getID();
+		m_components.emplace( id, std::move( component ) );
 	}
 
 	template< typename T >
-	inline void Submesh::addComponent( std::shared_ptr< T > component )
+	inline void Submesh::addComponent( castor::UniquePtr< T > component )
 	{
-		SubmeshComponentAdder< T >::add( component, *this );
+		SubmeshComponentAdder< T >::add( std::move( component ), *this );
 	}
 
-	inline SubmeshComponentSPtr Submesh::getComponent( castor::String const & name )const
+	inline SubmeshComponentRPtr Submesh::getComponent( castor::String const & name )const
 	{
-		SubmeshComponentSPtr result;
+		SubmeshComponentRPtr result{};
 		auto it = std::find_if( m_components.begin()
 			, m_components.end()
 			, [&name]( SubmeshComponentIDMap::value_type const & lookup )
@@ -170,16 +176,16 @@ namespace castor3d
 
 		if ( it != m_components.end() )
 		{
-			result = it->second;
+			result = it->second.get();
 		}
 
 		return result;
 	}
 
 	template< typename T >
-	inline std::shared_ptr< T > Submesh::getComponent()const
+	inline T * Submesh::getComponent()const
 	{
-		return std::static_pointer_cast< T >( getComponent( T::Name ) );
+		return &static_cast< T & >( *getComponent( T::Name ) );
 	}
 
 	inline InstantiationComponent & Submesh::getInstantiation()
