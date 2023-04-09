@@ -89,7 +89,7 @@ namespace castor3d
 		 *	Fonctions de gestion de textures.
 		 */
 		/**@{*/
-		C3D_API TextureUnitSPtr getTexture( TextureUnitData & unitData );
+		C3D_API TextureUnitRPtr getTexture( TextureUnitData & unitData );
 		C3D_API TextureUnitData & getSourceData( TextureSourceInfo const & sourceInfo
 			, PassTextureConfig const & config
 			, AnimationUPtr animation );
@@ -146,7 +146,7 @@ namespace castor3d
 		std::unordered_set< Pass * > m_dirty;
 		castor::CheckedMutex m_loadMtx;
 		std::vector< std::unique_ptr< ThreadData > > m_loading;
-		std::unordered_map< size_t, TextureUnitSPtr > m_loaded;
+		std::unordered_map< size_t, TextureUnitUPtr > m_loaded;
 		ashes::DescriptorSetLayoutPtr m_bindlessTexLayout;
 		ashes::DescriptorPoolPtr m_bindlessTexPool;
 		ashes::DescriptorSetPtr m_bindlessTexSet;

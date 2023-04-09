@@ -342,7 +342,7 @@ namespace castor3d
 		return getPassComponentsRegister().getTextureCombineID( m_textureCombine );
 	}
 
-	TextureUnitSPtr Pass::getTextureUnit( uint32_t index )const
+	TextureUnitRPtr Pass::getTextureUnit( uint32_t index )const
 	{
 		CU_Require( index < m_textureUnits.size() );
 		return m_textureUnits[index];
@@ -539,7 +539,7 @@ namespace castor3d
 				it = remaining.begin();
 			}
 
-			TextureUnitPtrArray newUnits;
+			Pass::UnitArray newUnits;
 
 			// Then add the other ones.
 			for ( auto & source : sources )
@@ -858,7 +858,7 @@ namespace castor3d
 		return false;
 	}
 
-	TextureUnitPtrArray Pass::getTextureUnits()const
+	Pass::UnitArray Pass::getTextureUnits()const
 	{
 		return m_textureUnits;
 	}
@@ -1001,8 +1001,8 @@ namespace castor3d
 	}
 
 	void Pass::doAddUnit( TextureUnitData & unitData
-		, TextureUnitSPtr unit
-		, TextureUnitPtrArray & result )
+		, TextureUnitRPtr unit
+		, Pass::UnitArray & result )
 	{
 		if ( unitData.animation && !unit->hasAnimation() )
 		{
@@ -1014,7 +1014,7 @@ namespace castor3d
 
 		auto it = std::find_if( result.begin()
 			, result.end()
-			, [&unitData]( TextureUnitSPtr lookup )
+			, [&unitData]( TextureUnitRPtr lookup )
 			{
 				return shallowEqual( unitData.passConfig.config, lookup->getConfiguration() );
 			} );

@@ -180,55 +180,51 @@ namespace GuiCommon
 		}
 	}
 
-	void createBitmapFromBuffer( castor::PxBufferBaseRPtr buffer, bool flip, wxBitmap & bitmap )
+	void createBitmapFromBuffer( castor::PxBufferBase const & buffer, bool flip, wxBitmap & bitmap )
 	{
-		castor::PxBufferBaseUPtr buf;
-
-		if ( buffer->getFormat() != castor::PixelFormat::eR8G8B8A8_UNORM )
+		if ( buffer.getFormat() != castor::PixelFormat::eR8G8B8A8_UNORM )
 		{
-			buf = castor::PxBufferBase::create( buffer->getDimensions()
+			auto buf = castor::PxBufferBase::create( buffer.getDimensions()
 				, castor::PixelFormat::eR8G8B8A8_UNORM
-				, buffer->getConstPtr()
-				, buffer->getFormat() );
+				, buffer.getConstPtr()
+				, buffer.getFormat() );
+			createBitmapFromBuffer( *buf, flip, bitmap );
 		}
 		else
 		{
-			buf = buffer->clone();
+			createBitmapFromBuffer( buffer.getConstPtr(), buffer.getWidth(), buffer.getHeight(), flip, bitmap );
 		}
 
-		createBitmapFromBuffer( buf->getConstPtr(), buf->getWidth(), buf->getHeight(), flip, bitmap );
 	}
 
-	void createBitmapFromBuffer( castor3d::TextureUnitSPtr unit, bool flip, wxBitmap & bitmap )
+	void createBitmapFromBuffer( castor3d::TextureUnit const & unit, bool flip, wxBitmap & bitmap )
 	{
-		if ( unit->getTexture()->getDefaultView().hasBuffer() )
+		if ( unit.getTexture()->getDefaultView().hasBuffer() )
 		{
-			createBitmapFromBuffer( unit->getTexture()->getImage().getPixels(), flip, bitmap );
+			createBitmapFromBuffer( *unit.getTexture()->getImage().getPixels(), flip, bitmap );
 		}
 		else
 		{
-			castor::Path path{ unit->getTexture()->getDefaultView().toString() };
+			castor::Path path{ unit.getTexture()->getDefaultView().toString() };
 
 			if ( !path.empty() )
 			{
-				wxImageHandler * pHandler = wxImage::FindHandler( path.getExtension(), wxBITMAP_TYPE_ANY );
-
-				if ( pHandler )
+				if ( auto handler = wxImage::FindHandler( path.getExtension(), wxBITMAP_TYPE_ANY ) )
 				{
 					wxImage image;
 
-					if ( image.LoadFile( path, pHandler->GetType() ) && image.IsOk() )
+					if ( image.LoadFile( path, handler->GetType() ) && image.IsOk() )
 					{
 						bitmap = wxBitmap( image );
 					}
 					else
 					{
-						castor::Logger::logWarning( cuT( "CreateBitmapFromBuffer encountered a problem loading file [" ) + path + cuT( "]" ) );
+						castor::Logger::logWarning( cuT( "createBitmapFromBuffer encountered a problem loading file [" ) + path + cuT( "]" ) );
 					}
 				}
 				else
 				{
-					castor::Logger::logWarning( cuT( "CreateBitmapFromBuffer encountered a problem loading file [" ) + path + cuT( "] : Unsupported format" ) );
+					castor::Logger::logWarning( cuT( "createBitmapFromBuffer encountered a problem loading file [" ) + path + cuT( "] : Unsupported format" ) );
 				}
 			}
 		}

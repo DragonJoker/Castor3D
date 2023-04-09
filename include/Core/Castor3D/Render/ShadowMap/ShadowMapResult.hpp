@@ -20,9 +20,6 @@ namespace castor3d
 			, VkImageCreateFlags createFlags
 			, castor::Size const & size
 			, uint32_t layerCount );
-
-	private:
-		TextureUnitArray m_owned;
 	};
 }
 

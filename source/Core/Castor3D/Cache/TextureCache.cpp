@@ -331,9 +331,9 @@ namespace castor3d
 
 		static bool findUnit( Engine & engine
 			, castor::CheckedMutex & loadMtx
-			, std::unordered_map< size_t, TextureUnitSPtr > & loaded
+			, std::unordered_map< size_t, TextureUnitUPtr > & loaded
 			, TextureUnitData & data
-			, TextureUnitSPtr & result )
+			, TextureUnitRPtr & result )
 		{
 			auto hash = makeHash( data.sourceInfo, data.passConfig );
 			auto lock( makeUniqueLock( loadMtx ) );
@@ -342,7 +342,7 @@ namespace castor3d
 
 			if ( ires.second )
 			{
-				it->second = std::make_shared< TextureUnit >( engine, data );
+				it->second = castor::makeUnique< TextureUnit >( engine, data );
 				it->second->setConfiguration( data.passConfig.config );
 			}
 			else
@@ -367,7 +367,7 @@ namespace castor3d
 				}
 			}
 
-			result = it->second;
+			result = it->second.get();
 			return !ires.second;
 		}
 
@@ -604,9 +604,9 @@ namespace castor3d
 		m_texturesCombines.clear();
 	}
 
-	TextureUnitSPtr TextureUnitCache::getTexture( TextureUnitData & unitData )
+	TextureUnitRPtr TextureUnitCache::getTexture( TextureUnitData & unitData )
 	{
-		TextureUnitSPtr result{};
+		TextureUnitRPtr result{};
 
 		if ( !cachetex::findUnit( *getEngine(), m_loadMtx, m_loaded, unitData, result ) )
 		{

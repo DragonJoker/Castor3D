@@ -108,7 +108,7 @@ namespace castor3d
 			//pass->addTextureUnit( unit );
 		}
 
-		TextureUnitSPtr unit = pass->getTextureUnit( 0 );
+		auto unit = pass->getTextureUnit( 0 );
 		unit->setTexture( std::move( texture ) );
 		return result.lock().get();
 	}

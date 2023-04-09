@@ -159,8 +159,8 @@ namespace GuiCommon
 				, editable
 				, passId
 				, ++unitIndex
-				, unit
 				, pass
+				, *unit
 				, iconOffset );
 		}
 	}
@@ -170,7 +170,7 @@ namespace GuiCommon
 		, wxTreeItemId id
 		, uint32_t index
 		, castor3d::Pass & pass
-		, castor3d::TextureUnitSPtr texture
+		, castor3d::TextureUnit & texture
 		, uint32_t iconOffset )
 	{
 		wxTreeItemId unitId = treeCtrl->AppendItem( id
@@ -181,7 +181,7 @@ namespace GuiCommon
 				, pass
 				, texture } );
 
-		if ( auto target = texture->getRenderTarget() )
+		if ( auto target = texture.getRenderTarget() )
 		{
 			appendRenderTarget( treeCtrl
 				, editable
