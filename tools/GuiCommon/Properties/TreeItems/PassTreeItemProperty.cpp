@@ -677,11 +677,11 @@ namespace GuiCommon
 	}
 
 	PassTreeItemProperty::PassTreeItemProperty( bool editable
-		, castor3d::PassSPtr pass
+		, castor3d::Pass & pass
 		, castor3d::Scene & scene
 		, wxWindow * parent )
-		: TreeItemProperty{ pass->getOwner()->getEngine(), editable }
-		, m_pass{ pass.get() }
+		: TreeItemProperty{ pass.getOwner()->getEngine(), editable }
+		, m_pass{ &pass }
 		, m_scene{ scene }
 		, m_parent{ parent }
 	{

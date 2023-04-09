@@ -4179,7 +4179,7 @@ namespace castor3d
 		else
 		{
 			parsingContext.pass->prepareTextures();
-			parsingContext.pass.reset();
+			parsingContext.pass = {};
 			parsingContext.passComponent = nullptr;
 		}
 	}

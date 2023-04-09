@@ -171,7 +171,7 @@ namespace castor3d
 		TargetType targetType{};
 		RenderTargetRPtr renderTarget{};
 		RenderTargetRPtr textureRenderTarget{};
-		PassSPtr pass{};
+		PassRPtr pass{};
 		PassComponent * passComponent{};
 		bool createPass{ true };
 		uint32_t unitIndex{};
@@ -295,7 +295,7 @@ namespace castor3d
 	ComponentT & getPassComponent( SceneFileContext & parsingContext )
 	{
 		if ( !parsingContext.passComponent
-			|| parsingContext.passComponent->getOwner() != parsingContext.pass.get()
+			|| parsingContext.passComponent->getOwner() != parsingContext.pass
 			|| getPassComponentType( *parsingContext.passComponent ) != ComponentT::TypeName )
 		{
 			if ( parsingContext.pass->template hasComponent< ComponentT >() )

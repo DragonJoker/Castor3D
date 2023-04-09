@@ -41,6 +41,8 @@
 
 #include <algorithm>
 
+CU_ImplementCUSmartPtr( castor3d, Pass )
+
 namespace castor3d
 {
 	//*********************************************************************************************
@@ -184,7 +186,47 @@ namespace castor3d
 		createComponent< PickableComponent >();
 	}
 
-	Pass::~Pass()
+	Pass::Pass( Material & parent
+		, Pass const & rhs )
+		: Pass{ parent, rhs.getLightingModelId() }
+	{
+		m_implicit = rhs.m_implicit;
+		m_automaticShader = rhs.m_automaticShader;
+		m_renderPassInfo = rhs.m_renderPassInfo;
+
+		for ( auto & component : rhs.m_components )
+		{
+			addComponent( component.second->clone( *this ) );
+		}
+
+		for ( auto & source : rhs.m_sources )
+		{
+			auto it = rhs.m_animations.find( source.first );
+
+			if ( it != rhs.m_animations.end()
+				&& it->second )
+			{
+				auto & srcAnim = static_cast< TextureAnimation const & >( *it->second );
+				auto clonedAnim = std::make_unique< TextureAnimation >( *srcAnim.getEngine()
+					, srcAnim.getName() );
+				clonedAnim->setRotateSpeed( srcAnim.getRotateSpeed() );
+				clonedAnim->setScaleSpeed( srcAnim.getScaleSpeed() );
+				clonedAnim->setTranslateSpeed( srcAnim.getTranslateSpeed() );
+				registerTexture( source.first
+					, source.second
+					, std::move( clonedAnim ) );
+			}
+			else
+			{
+				registerTexture( source.first
+					, source.second );
+			}
+		}
+
+		prepareTextures();
+	}
+
+	Pass::~Pass()noexcept
 	{
 		CU_Assert( getId() == 0u, "Did you forget to call Pass::cleanup ?" );
 	}
@@ -639,46 +681,6 @@ namespace castor3d
 		}
 
 		getPassComponentsRegister().fillBuffer( *this, buffer );
-	}
-
-	PassSPtr Pass::clone( Material & material )const
-	{
-		auto result = std::make_unique< Pass >( material, getLightingModelId() );
-		result->m_implicit = m_implicit;
-		result->m_automaticShader = m_automaticShader;
-		result->m_renderPassInfo = m_renderPassInfo;
-
-		for ( auto & component : m_components )
-		{
-			result->addComponent( component.second->clone( *result ) );
-		}
-
-		for ( auto & source : m_sources )
-		{
-			auto it = m_animations.find( source.first );
-
-			if ( it != m_animations.end()
-				&& it->second )
-			{
-				auto & srcAnim = static_cast< TextureAnimation const & >( *it->second );
-				auto clonedAnim = std::make_unique< TextureAnimation >( *srcAnim.getEngine()
-					, srcAnim.getName() );
-				clonedAnim->setRotateSpeed( srcAnim.getRotateSpeed() );
-				clonedAnim->setScaleSpeed( srcAnim.getScaleSpeed() );
-				clonedAnim->setTranslateSpeed( srcAnim.getTranslateSpeed() );
-				result->registerTexture( source.first
-					, source.second
-					, std::move( clonedAnim ) );
-			}
-			else
-			{
-				result->registerTexture( source.first
-					, source.second );
-			}
-		}
-
-		result->prepareTextures();
-		return result;
 	}
 
 	bool Pass::writeText( castor::String const & tabs

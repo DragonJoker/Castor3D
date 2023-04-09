@@ -47,8 +47,10 @@ namespace castor3d
 
 		C3D_API void registerType( LightingModelID lightingModelId
 			, PassRegisterInfo info );
-		C3D_API PassSPtr create( LightingModelID lightingModelId
-			, Material & parent )const;
+		C3D_API PassUPtr create( Material & parent
+			, LightingModelID lightingModelId )const;
+		C3D_API PassUPtr create( Material & parent
+			, Pass const & rhs )const;
 
 		C3D_API LightingModelID getNameId( castor::String const & passType )const;
 		C3D_API castor::String getIdName( LightingModelID lightingModelId )const;

@@ -1,6 +1,7 @@
 #include "Castor3D/Material/Pass/PassFactory.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 
 CU_ImplementCUSmartPtr( castor3d, PassFactory )
@@ -31,10 +32,16 @@ namespace castor3d
 		}
 	}
 
-	PassSPtr PassFactory::create( LightingModelID lightingModelId
-		, Material & parent )const
+	PassUPtr PassFactory::create( Material & parent
+		, LightingModelID lightingModelId )const
 	{
 		return create( lightingModelId, lightingModelId, parent );
+	}
+
+	PassUPtr PassFactory::create( Material & parent
+		, Pass const & rhs )const
+	{
+		return castor::makeUnique< Pass >( parent, rhs );
 	}
 
 	LightingModelID PassFactory::getNameId( castor::String const & passType )const

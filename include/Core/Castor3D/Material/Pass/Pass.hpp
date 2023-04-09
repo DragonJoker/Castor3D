@@ -52,11 +52,23 @@ namespace castor3d
 			, LightingModelID lightingModelId );
 		/**
 		 *\~english
+		 *\brief		Copy constructor.
+		 *\param[in]	parent	The parent material.
+		 *\param[in]	rhs		The pass top copy.
+		 *\~french
+		 *\brief		Constructeur par copie.
+		 *\param[in]	parent	Le matériau parent.
+		 *\param[in]	rhs		La passe à copier.
+		 */
+		C3D_API Pass( Material & parent
+			, Pass const & rhs );
+		/**
+		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API ~Pass();
+		C3D_API ~Pass()noexcept;
 		/**
 		 *\~english
 		 *\brief		Initialises the pass and all it's dependencies.
@@ -283,15 +295,6 @@ namespace castor3d
 		 */
 		C3D_API void fillBuffer( PassBuffer & buffer
 			, uint16_t passTypeIndex )const;
-		/**
-		 *\~english
-		 *\brief		Clones this pass.
-		 *\return		The clone.
-		 *\~french
-		 *\brief		Clone cette pass.
-		 *\return		Le clone.
-		 */
-		C3D_API PassSPtr clone( Material & material )const;
 		/**
 		 *\~english
 		 *\brief			Writes the component content to text.

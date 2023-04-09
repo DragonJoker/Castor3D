@@ -38,7 +38,7 @@ namespace GuiCommon
 		 *\param[in]	scene		La scène.
 		 */
 		PassTreeItemProperty( bool editable
-			, castor3d::PassSPtr pass
+			, castor3d::Pass & pass
 			, castor3d::Scene & scene
 			, wxWindow * parent );
 		/**

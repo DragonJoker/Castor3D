@@ -123,14 +123,14 @@ namespace GuiCommon
 			, new MaterialTreeItemProperty( editable, *material ) );
 		uint32_t passIndex = 0;
 
-		for ( auto pass : *material )
+		for ( auto & pass : *material )
 		{
 			doAddPass( treeCtrl
 				, scene
 				, editable
 				, materialId
 				, ++passIndex
-				, pass
+				, *pass
 				, iconOffset );
 		}
 	}
@@ -140,7 +140,7 @@ namespace GuiCommon
 		, bool editable
 		, wxTreeItemId id
 		, uint32_t index
-		, castor3d::PassSPtr pass
+		, castor3d::Pass & pass
 		, uint32_t iconOffset )
 	{
 		wxTreeItemId passId = treeCtrl->AppendItem( id
@@ -153,14 +153,14 @@ namespace GuiCommon
 				, treeCtrl ) );
 		uint32_t unitIndex = 0;
 
-		for ( auto unit : *pass )
+		for ( auto unit : pass )
 		{
 			doAddTexture( treeCtrl
 				, editable
 				, passId
 				, ++unitIndex
-				, *pass
 				, unit
+				, pass
 				, iconOffset );
 		}
 	}
