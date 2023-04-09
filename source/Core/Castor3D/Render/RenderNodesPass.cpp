@@ -67,6 +67,9 @@
 #include <RenderGraph/FramePassGroup.hpp>
 #include <RenderGraph/GraphContext.hpp>
 
+CU_ImplementSmartPtr( castor3d, RenderNodesPass )
+CU_ImplementSmartPtr( castor3d, IsRenderPassEnabled )
+
 namespace castor3d
 {
 	//*********************************************************************************************

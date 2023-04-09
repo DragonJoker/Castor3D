@@ -12,7 +12,7 @@
 
 #include <CastorUtils/Graphics/Image.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, TextureView )
+CU_ImplementSmartPtr( castor3d, TextureView )
 
 namespace castor3d
 {

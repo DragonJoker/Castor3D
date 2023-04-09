@@ -43,8 +43,8 @@ namespace CastorViewer
 	class MouseNodeEvent;
 	class TranslateNodeEvent;
 
-	CU_DeclareCUSmartPtr( CastorViewer, MouseNodeEvent, );
-	CU_DeclareCUSmartPtr( CastorViewer, TranslateNodeEvent, );
+	CU_DeclareSmartPtr( CastorViewer, MouseNodeEvent, );
+	CU_DeclareSmartPtr( CastorViewer, TranslateNodeEvent, );
 
 	class RenderPanel
 		: public wxPanel

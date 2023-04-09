@@ -28,6 +28,8 @@
 
 #include <RenderGraph/RunnableGraph.hpp>
 
+CU_ImplementSmartPtr( castor3d, EnvironmentMap )
+
 namespace castor3d
 {
 	namespace envmap
@@ -113,12 +115,12 @@ namespace castor3d
 				++i;
 			}
 
-			return { std::make_unique< EnvironmentMapPass >( graph, device, map, std::move( nodes[0] ), index, CubeMapFace::ePositiveX, background )
-				, std::make_unique< EnvironmentMapPass >( graph, device, map, std::move( nodes[1] ), index, CubeMapFace::eNegativeX, background )
-				, std::make_unique< EnvironmentMapPass >( graph, device, map, std::move( nodes[2] ), index, CubeMapFace::ePositiveY, background )
-				, std::make_unique< EnvironmentMapPass >( graph, device, map, std::move( nodes[3] ), index, CubeMapFace::eNegativeY, background )
-				, std::make_unique< EnvironmentMapPass >( graph, device, map, std::move( nodes[4] ), index, CubeMapFace::ePositiveZ, background )
-				, std::make_unique< EnvironmentMapPass >( graph, device, map, std::move( nodes[5] ), index, CubeMapFace::eNegativeZ, background ) };
+			return { castor::makeUnique< EnvironmentMapPass >( graph, device, map, std::move( nodes[0] ), index, CubeMapFace::ePositiveX, background )
+				, castor::makeUnique< EnvironmentMapPass >( graph, device, map, std::move( nodes[1] ), index, CubeMapFace::eNegativeX, background )
+				, castor::makeUnique< EnvironmentMapPass >( graph, device, map, std::move( nodes[2] ), index, CubeMapFace::ePositiveY, background )
+				, castor::makeUnique< EnvironmentMapPass >( graph, device, map, std::move( nodes[3] ), index, CubeMapFace::eNegativeY, background )
+				, castor::makeUnique< EnvironmentMapPass >( graph, device, map, std::move( nodes[4] ), index, CubeMapFace::ePositiveZ, background )
+				, castor::makeUnique< EnvironmentMapPass >( graph, device, map, std::move( nodes[5] ), index, CubeMapFace::eNegativeZ, background ) };
 		}
 
 		static std::vector< ashes::ImageView > createViews( Texture const & envMap
@@ -197,6 +199,7 @@ namespace castor3d
 			} ) }
 	{
 		m_environmentMap.create();
+		m_depthBuffer.create();
 		m_environmentMapViews = envmap::createViews( m_environmentMap, m_image );
 		auto commandBuffer = queueData.commandPool->createCommandBuffer( "Env" + scene.getName() + "InitialiseViews" );
 		commandBuffer->begin();
@@ -226,6 +229,7 @@ namespace castor3d
 		m_passes.clear();
 		m_environmentMapViews.clear();
 		m_image.reset();
+		m_depthBuffer.destroy();
 		m_environmentMap.destroy();
 		m_graphs.clear();
 		m_sortedNodes.clear();

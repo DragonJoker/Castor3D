@@ -165,8 +165,8 @@ namespace castor3d
 		bool secondary{};
 	};
 
-	CU_DeclareCUSmartPtr( castor3d, OverlayRenderer, C3D_API );
-	CU_DeclareSmartPtr( OverlayTextBufferPool );
+	CU_DeclareSmartPtr( castor3d, OverlayRenderer, C3D_API );
+	CU_DeclareSmartPtr( castor3d, OverlayTextBufferPool, C3D_API );
 
 	struct OverlaysCounts
 	{

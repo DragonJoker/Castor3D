@@ -5,7 +5,7 @@
 #include "CastorUtils/Log/Logger.hpp"
 #include "CastorUtils/Miscellaneous/StringUtils.hpp"
 
-CU_ImplementCUSmartPtr( castor, FontCache )
+CU_ImplementSmartPtr( castor, FontCache )
 
 namespace castor
 {

@@ -33,7 +33,7 @@
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 #include <CastorUtils/Multithreading/MultithreadingModule.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, SceneRenderNodes )
+CU_ImplementSmartPtr( castor3d, SceneRenderNodes )
 
 namespace castor3d
 {

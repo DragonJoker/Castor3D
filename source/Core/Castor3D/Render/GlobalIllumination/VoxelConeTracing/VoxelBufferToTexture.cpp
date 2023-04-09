@@ -22,7 +22,7 @@
 #include <RenderGraph/GraphContext.hpp>
 #include <RenderGraph/RunnableGraph.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, VoxelBufferToTexture )
+CU_ImplementSmartPtr( castor3d, VoxelBufferToTexture )
 
 namespace castor3d
 {

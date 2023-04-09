@@ -20,7 +20,7 @@
 
 #include <ShaderAST/Shader.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, ShadowMapPass )
+CU_ImplementSmartPtr( castor3d, ShadowMapPass )
 
 namespace castor3d
 {

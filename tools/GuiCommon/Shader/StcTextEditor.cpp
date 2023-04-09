@@ -220,7 +220,7 @@ namespace GuiCommon
 	{
 		wxString result;
 
-		for ( auto currInfo : m_context )
+		for ( auto & currInfo : m_context )
 		{
 			if ( result.empty() )
 			{
@@ -256,7 +256,7 @@ namespace GuiCommon
 
 		auto it = std::find_if( m_context.begin()
 			, m_context.end()
-			, [&name]( LanguageInfoPtr lookup )
+			, [&name]( LanguageInfoUPtr const & lookup )
 			{
 				return lookup->name.c_str() == name;
 			} );
@@ -273,7 +273,7 @@ namespace GuiCommon
 		}
 		else
 		{
-			m_language = *it;
+			m_language = it->get();
 
 			if ( m_language->isCLike )
 			{

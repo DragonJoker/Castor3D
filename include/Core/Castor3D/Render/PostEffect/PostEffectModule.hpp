@@ -45,7 +45,7 @@ namespace castor3d
 	*/
 	struct PostEffectSurface;
 
-	CU_DeclareCUSmartPtr( castor3d, PostEffect, C3D_API );
+	CU_DeclareSmartPtr( castor3d, PostEffect, C3D_API );
 	/**
 	*\~english
 	*\brief

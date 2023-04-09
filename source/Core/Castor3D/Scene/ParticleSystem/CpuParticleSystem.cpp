@@ -8,7 +8,7 @@
 #include "Castor3D/Scene/ParticleSystem/ParticleUpdater.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleSystem.hpp"
 
-CU_ImplementCUSmartPtr( castor3d, CpuParticleSystem )
+CU_ImplementSmartPtr( castor3d, CpuParticleSystem )
 
 namespace castor3d
 {

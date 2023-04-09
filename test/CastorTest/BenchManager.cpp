@@ -6,8 +6,8 @@
 
 namespace Testing
 {
-	std::vector< BenchCaseUPtr > BenchManager::m_benchs;
-	std::vector< TestCaseUPtr > BenchManager::m_cases;
+	std::vector< BenchCasePtr > BenchManager::m_benchs;
+	std::vector< TestCasePtr > BenchManager::m_cases;
 
 	BenchManager::BenchManager()
 	{
@@ -19,12 +19,12 @@ namespace Testing
 		m_cases.clear();
 	}
 
-	void BenchManager::registerType( BenchCaseUPtr bench )
+	void BenchManager::registerType( BenchCasePtr bench )
 	{
 		m_benchs.push_back( std::move( bench ) );
 	}
 
-	void BenchManager::registerType( TestCaseUPtr test )
+	void BenchManager::registerType( TestCasePtr test )
 	{
 		test->registerTests();
 		m_cases.push_back( std::move( test ) );
@@ -120,13 +120,13 @@ namespace Testing
 
 	//*************************************************************************************************
 
-	bool registerType( BenchCaseUPtr bench )
+	bool registerType( BenchCasePtr bench )
 	{
 		BenchManager::registerType( std::move( bench ) );
 		return true;
 	}
 
-	bool registerType( TestCaseUPtr test )
+	bool registerType( TestCasePtr test )
 	{
 		BenchManager::registerType( std::move( test ) );
 		return true;

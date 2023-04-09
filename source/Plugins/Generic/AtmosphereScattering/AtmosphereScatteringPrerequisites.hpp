@@ -26,6 +26,8 @@ namespace atmosphere_scattering
 	struct CloudsData;
 	struct WeatherData;
 
+	CU_DeclareSmartPtr( atmosphere_scattering, AtmosphereBackground, );
+
 	template< template< typename DataT > typename WrapperT >
 	struct AtmosphereScatteringConfigT;
 	using AtmosphereScatteringConfig = AtmosphereScatteringConfigT< crg::RawTypeT >;

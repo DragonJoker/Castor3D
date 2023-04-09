@@ -9,7 +9,7 @@
 
 #include <CastorUtils/Design/ResourceCache.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, ProgressBar )
+CU_ImplementSmartPtr( castor3d, ProgressBar )
 
 namespace castor3d
 {

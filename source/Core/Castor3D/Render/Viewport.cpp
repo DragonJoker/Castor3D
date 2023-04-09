@@ -3,7 +3,7 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 
-CU_ImplementCUSmartPtr( castor3d, Viewport )
+CU_ImplementSmartPtr( castor3d, Viewport )
 
 namespace castor3d
 {

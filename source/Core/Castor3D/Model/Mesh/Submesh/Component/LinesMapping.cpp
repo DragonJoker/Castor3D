@@ -12,7 +12,7 @@
 
 //*************************************************************************************************
 
-CU_ImplementCUSmartPtr( castor3d, LinesMapping )
+CU_ImplementSmartPtr( castor3d, LinesMapping )
 
 namespace castor3d
 {

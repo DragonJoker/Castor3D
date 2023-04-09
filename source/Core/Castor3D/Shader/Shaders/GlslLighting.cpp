@@ -20,7 +20,7 @@
 #include <ShaderAST/Expr/ExprComma.hpp>
 #include <ShaderWriter/Source.hpp>
 
-CU_ImplementCUSmartPtr( castor3d::shader, LightingModel )
+CU_ImplementSmartPtr( castor3d::shader, LightingModel )
 
 namespace castor3d::shader
 {

@@ -11,7 +11,7 @@
 #include "stb_image_resize.h"
 #include "CastorUtils/Config/EndExternHeaderGuard.hpp"
 
-CU_ImplementCUSmartPtr( castor, Image )
+CU_ImplementSmartPtr( castor, Image )
 
 namespace castor
 {
@@ -76,7 +76,7 @@ namespace castor
 	{
 		m_pathFile = image.m_pathFile;
 		m_layout = image.m_layout;
-		m_buffer = std::move( image.m_buffer ? image.m_buffer->clone() : nullptr );
+		m_buffer = image.m_buffer ? image.m_buffer->clone() : nullptr;
 		return * this;
 	}
 

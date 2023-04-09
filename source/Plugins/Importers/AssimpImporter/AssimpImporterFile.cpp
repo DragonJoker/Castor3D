@@ -634,7 +634,7 @@ namespace c3d_assimp
 
 	castor3d::MaterialImporterUPtr AssimpImporterFile::createMaterialImporter()
 	{
-		return std::make_unique< AssimpMaterialImporter >( *getOwner() );
+		return castor::makeUniqueDerived< castor3d::MaterialImporter, AssimpMaterialImporter >( *getOwner() );
 	}
 
 	castor3d::AnimationImporterUPtr AssimpImporterFile::createAnimationImporter()
@@ -644,22 +644,22 @@ namespace c3d_assimp
 
 	castor3d::SkeletonImporterUPtr AssimpImporterFile::createSkeletonImporter()
 	{
-		return std::make_unique< AssimpSkeletonImporter >( *getOwner() );
+		return castor::makeUniqueDerived< castor3d::SkeletonImporter, AssimpSkeletonImporter >( *getOwner() );
 	}
 
 	castor3d::MeshImporterUPtr AssimpImporterFile::createMeshImporter()
 	{
-		return std::make_unique< AssimpMeshImporter >( *getOwner() );
+		return castor::makeUniqueDerived< castor3d::MeshImporter, AssimpMeshImporter >( *getOwner() );
 	}
 
 	castor3d::SceneNodeImporterUPtr AssimpImporterFile::createSceneNodeImporter()
 	{
-		return std::make_unique< AssimpSceneNodeImporter >( *getOwner() );
+		return castor::makeUniqueDerived< castor3d::SceneNodeImporter, AssimpSceneNodeImporter >( *getOwner() );
 	}
 
 	castor3d::LightImporterUPtr AssimpImporterFile::createLightImporter()
 	{
-		return std::make_unique< AssimpLightImporter >( *getOwner() );
+		return castor::makeUniqueDerived< castor3d::LightImporter, AssimpLightImporter >( *getOwner() );
 	}
 
 	castor3d::ImporterFileUPtr AssimpImporterFile::create( castor3d::Engine & engine
@@ -667,7 +667,7 @@ namespace c3d_assimp
 		, castor::Path const & path
 		, castor3d::Parameters const & parameters )
 	{
-		return std::make_unique< AssimpImporterFile >( engine, scene, path, parameters );
+		return castor::makeUniqueDerived< castor3d::ImporterFile, AssimpImporterFile >( engine, scene, path, parameters );
 	}
 
 	void AssimpImporterFile::doPrelistMaterials()

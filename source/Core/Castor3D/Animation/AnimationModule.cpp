@@ -2,7 +2,7 @@
 
 #include "Castor3D/Animation/AnimationKeyFrame.hpp"
 
-CU_ImplementCUSmartPtr( castor3d, AnimationKeyFrame )
+CU_ImplementSmartPtr( castor3d, AnimationKeyFrame )
 
 namespace castor3d
 {

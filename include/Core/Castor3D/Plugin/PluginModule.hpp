@@ -138,14 +138,14 @@ namespace castor3d
 	*/
 	class ToneMappingPlugin;
 
-	CU_DeclareCUSmartPtr( castor3d, Plugin, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, ImporterPlugin, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, DividerPlugin, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, GeneratorPlugin, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, GenericPlugin, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, PostFxPlugin, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, ParticlePlugin, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, ToneMappingPlugin, C3D_API );
+	CU_DeclareSmartPtr( castor3d, Plugin, C3D_API );
+	CU_DeclareSmartPtr( castor3d, ImporterPlugin, C3D_API );
+	CU_DeclareSmartPtr( castor3d, DividerPlugin, C3D_API );
+	CU_DeclareSmartPtr( castor3d, GeneratorPlugin, C3D_API );
+	CU_DeclareSmartPtr( castor3d, GenericPlugin, C3D_API );
+	CU_DeclareSmartPtr( castor3d, PostFxPlugin, C3D_API );
+	CU_DeclareSmartPtr( castor3d, ParticlePlugin, C3D_API );
+	CU_DeclareSmartPtr( castor3d, ToneMappingPlugin, C3D_API );
 
 	CU_DeclareMap( castor::String, PluginUPtr, PluginStr );
 	CU_DeclareArray( PluginStrMap, PluginType::eCount, PluginStrMap );
@@ -181,7 +181,7 @@ namespace castor3d
 	using PluginRes = PluginCacheTraits::ElementPtrT;
 	using PluginResPtr = PluginCacheTraits::ElementObsT;
 
-	CU_DeclareCUSmartPtr( castor3d, PluginCache, C3D_API );
+	CU_DeclareSmartPtr( castor3d, PluginCache, C3D_API );
 
 	//@}
 }

@@ -350,17 +350,17 @@ namespace castor3d
 	*/
 	struct ShadowConfig;
 
-	CU_DeclareCUSmartPtr( castor3d, BillboardBase, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, BillboardList, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, Camera, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, Geometry, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, MovableObject, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, SceneFileContext, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, SceneFileParser, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, SceneNode, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, Scene, C3D_API );
-	CU_DeclareSmartPtr( SceneImporter );
-	CU_DeclareSmartPtr( SceneNodeImporter );
+	CU_DeclareSmartPtr( castor3d, BillboardBase, C3D_API );
+	CU_DeclareSmartPtr( castor3d, BillboardList, C3D_API );
+	CU_DeclareSmartPtr( castor3d, Camera, C3D_API );
+	CU_DeclareSmartPtr( castor3d, Geometry, C3D_API );
+	CU_DeclareSmartPtr( castor3d, MovableObject, C3D_API );
+	CU_DeclareSmartPtr( castor3d, SceneFileContext, C3D_API );
+	CU_DeclareSmartPtr( castor3d, SceneFileParser, C3D_API );
+	CU_DeclareSmartPtr( castor3d, SceneNode, C3D_API );
+	CU_DeclareSmartPtr( castor3d, Scene, C3D_API );
+	CU_DeclareSmartPtr( castor3d, SceneImporter, C3D_API );
+	CU_DeclareSmartPtr( castor3d, SceneNodeImporter, C3D_API );
 
 	//! SceneNode pointer array.
 	CU_DeclareVector( SceneNodeRPtr, SceneNodePtr );
@@ -650,14 +650,14 @@ namespace castor3d
 	using SamplerCacheView = CacheViewT< SamplerCache, EventType::ePreRender >;
 	using FontCacheView = CacheViewT< castor::FontCache, EventType::ePreRender >;
 
-	CU_DeclareCUSmartPtr( castor3d, SceneCache, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, BillboardListCache, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, CameraCache, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, GeometryCache, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, SceneNodeCache, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, MaterialCacheView, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, SamplerCacheView, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, FontCacheView, C3D_API );
+	CU_DeclareSmartPtr( castor3d, SceneCache, C3D_API );
+	CU_DeclareSmartPtr( castor3d, BillboardListCache, C3D_API );
+	CU_DeclareSmartPtr( castor3d, CameraCache, C3D_API );
+	CU_DeclareSmartPtr( castor3d, GeometryCache, C3D_API );
+	CU_DeclareSmartPtr( castor3d, SceneNodeCache, C3D_API );
+	CU_DeclareSmartPtr( castor3d, MaterialCacheView, C3D_API );
+	CU_DeclareSmartPtr( castor3d, SamplerCacheView, C3D_API );
+	CU_DeclareSmartPtr( castor3d, FontCacheView, C3D_API );
 
 	//@}
 }

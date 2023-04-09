@@ -213,12 +213,12 @@ namespace castor3d
 	*/
 	class TextureView;
 
-	CU_DeclareCUSmartPtr( castor3d, Sampler, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, TextureLayout, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, TextureSource, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, TextureUnit, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, TextureView, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, TextureUnitData, C3D_API );
+	CU_DeclareSmartPtr( castor3d, Sampler, C3D_API );
+	CU_DeclareSmartPtr( castor3d, TextureLayout, C3D_API );
+	CU_DeclareSmartPtr( castor3d, TextureSource, C3D_API );
+	CU_DeclareSmartPtr( castor3d, TextureUnit, C3D_API );
+	CU_DeclareSmartPtr( castor3d, TextureView, C3D_API );
+	CU_DeclareSmartPtr( castor3d, TextureUnitData, C3D_API );
 
 	//! TextureUnit array
 	CU_DeclareVector( TextureUnit, TextureUnit );
@@ -265,7 +265,7 @@ namespace castor3d
 	using SamplerPtr = SamplerCacheTraits::ElementPtrT;
 	using SamplerObs = SamplerCacheTraits::ElementObsT;
 
-	CU_DeclareCUSmartPtr( castor3d, SamplerCache, C3D_API );
+	CU_DeclareSmartPtr( castor3d, SamplerCache, C3D_API );
 
 	struct TextureSourceInfoHasher
 	{

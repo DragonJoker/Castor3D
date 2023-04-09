@@ -848,12 +848,12 @@ namespace castor
 	using PixelBuffer = PxBuffer< PixelFormat::eR8G8B8A8_UNORM >;
 	using FontCache = ResourceCacheT< Font, String, FontCacheTraits >;
 
-	CU_DeclareCUSmartPtr( castor, BoundingBox, CU_API );
-	CU_DeclareCUSmartPtr( castor, BoundingSphere, CU_API );
-	CU_DeclareCUSmartPtr( castor, Image, CU_API );
-	CU_DeclareCUSmartPtr( castor, Font, CU_API );
-	CU_DeclareCUSmartPtr( castor, PxBufferBase, CU_API );
-	CU_DeclareCUSmartPtr( castor, FontCache, CU_API );
+	CU_DeclareSmartPtr( castor, BoundingBox, CU_API );
+	CU_DeclareSmartPtr( castor, BoundingSphere, CU_API );
+	CU_DeclareSmartPtr( castor, Image, CU_API );
+	CU_DeclareSmartPtr( castor, Font, CU_API );
+	CU_DeclareSmartPtr( castor, PxBufferBase, CU_API );
+	CU_DeclareSmartPtr( castor, FontCache, CU_API );
 
 	using RgbColour = RgbColourT< ColourComponent >;
 	using RgbaColour = RgbaColourT< ColourComponent >;

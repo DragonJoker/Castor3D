@@ -26,7 +26,7 @@
 
 #include <ShaderWriter/Source.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, LoadingScreen )
+CU_ImplementSmartPtr( castor3d, LoadingScreen )
 
 namespace castor3d
 {

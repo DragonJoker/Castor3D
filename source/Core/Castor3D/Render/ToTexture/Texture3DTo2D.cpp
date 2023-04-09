@@ -38,7 +38,7 @@
 
 #include <algorithm>
 
-CU_ImplementCUSmartPtr( castor3d, Texture3DTo2D )
+CU_ImplementSmartPtr( castor3d, Texture3DTo2D )
 
 #define UBO_GRID( Writer, Binding )\
 	auto ubo = Writer.declUniformBuffer<>( "ubo", Binding, 0u );\

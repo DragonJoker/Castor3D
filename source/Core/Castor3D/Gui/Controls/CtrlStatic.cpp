@@ -11,7 +11,7 @@
 
 #include <CastorUtils/Graphics/Font.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, StaticCtrl )
+CU_ImplementSmartPtr( castor3d, StaticCtrl )
 
 namespace castor3d
 {
@@ -75,7 +75,7 @@ namespace castor3d
 
 	StaticCtrl::~StaticCtrl()noexcept
 	{
-		if ( auto overlay = m_text )
+		if ( m_text )
 		{
 			if ( m_scene )
 			{

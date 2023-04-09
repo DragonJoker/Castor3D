@@ -4,6 +4,8 @@
 
 #include "CastorTestPrerequisites.hpp"
 
+#include <CastorUtils/Config/SmartPtr.hpp>
+
 #include <array>
 #include <list>
 #include <map>
@@ -261,6 +263,17 @@ namespace Testing
 	struct Stringifier< std::unique_ptr< ValueT > >
 	{
 		static std::string get( std::unique_ptr< ValueT > const & value )
+		{
+			std::stringstream stream;
+			stream << ( value ? toString( *value ) : std::string{ "null_uptr" } );
+			return stream.str();
+		}
+	};
+
+	template< typename ValueT >
+	struct Stringifier< castor::UniquePtr< ValueT > >
+	{
+		static std::string get( castor::UniquePtr< ValueT > const & value )
 		{
 			std::stringstream stream;
 			stream << ( value ? toString( *value ) : std::string{ "null_uptr" } );

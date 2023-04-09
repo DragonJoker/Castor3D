@@ -22,7 +22,7 @@
 
 #include <random>
 
-CU_ImplementCUSmartPtr( castor3d, ComputeParticleSystem )
+CU_ImplementSmartPtr( castor3d, ComputeParticleSystem )
 
 namespace castor3d
 {

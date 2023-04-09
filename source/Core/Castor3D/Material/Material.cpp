@@ -7,7 +7,7 @@
 #include "Castor3D/Material/Pass/PassFactory.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 
-CU_ImplementCUSmartPtr( castor3d, Material )
+CU_ImplementSmartPtr( castor3d, Material )
 
 namespace castor3d
 {

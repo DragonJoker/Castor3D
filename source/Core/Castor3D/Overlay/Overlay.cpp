@@ -7,7 +7,7 @@
 #include "Castor3D/Overlay/TextOverlay.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
-CU_ImplementCUSmartPtr( castor3d, Overlay )
+CU_ImplementSmartPtr( castor3d, Overlay )
 
 namespace castor3d
 {

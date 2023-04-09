@@ -253,7 +253,7 @@ namespace castor3d
 		, std::string name
 		, ashes::QueueShare sharingMode = {} )
 	{
-		return std::make_unique< UniformBufferT< DataT > >( renderSystem
+		return castor::makeUnique< UniformBufferT< DataT > >( renderSystem
 			, uint32_t( count )
 			, usage
 			, flags

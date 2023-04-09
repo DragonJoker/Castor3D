@@ -1,13 +1,14 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___Castor_Macros___
-#define ___Castor_Macros___
+#ifndef ___CU_Macros_HPP___
+#define ___CU_Macros_HPP___
 
 #include "CastorUtils/Config/BeginExternHeaderGuard.hpp"
 #include "CastorUtils/config.hpp"
 #include "CastorUtils/Config/PlatformConfig.hpp"
 #include "CastorUtils/Config/CompilerConfig.hpp"
+#include "CastorUtils/Config/SmartPtr.hpp"
 #include "CastorUtils/Config/EndExternHeaderGuard.hpp"
 
 #if !defined( __FUNCTION__ )
@@ -49,22 +50,6 @@ See LICENSE file in root folder
 #		define cvsnprintf( buf, sz, cnt, fmt, arg ) vsnprintf( buf, cnt, fmt, arg )
 #	endif
 #endif
-
-#include "CastorUtils/Config/BeginExternHeaderGuard.hpp"
-#include <memory>
-#include "CastorUtils/Config/EndExternHeaderGuard.hpp"
-
-#define CU_DeclareSmartPtr( class_name )\
-	using class_name##SPtr = std::shared_ptr< class_name >;\
-	using class_name##WPtr = std::weak_ptr< class_name >;\
-	using class_name##UPtr = std::unique_ptr< class_name >;\
-	using class_name##RPtr = class_name *
-
-#define CU_DeclareTemplateSmartPtr( class_name )\
-	template< typename T > using class_name##SPtrT = std::shared_ptr< class_name##T< T > >;\
-	template< typename T > using class_name##WPtrT = std::weak_ptr< class_name##T< T > >;\
-	template< typename T > using class_name##UPtrT = std::unique_ptr< class_name##T< T > >;\
-	template< typename T > using class_name##RPtrT = class_name##T< T > *
 
 #include <map>
 
@@ -163,38 +148,28 @@ See LICENSE file in root folder
 	using name##ListConstIt = typename name##List::const_iterator;\
 	using name##ListConstRIt = typename name##List::const_reverse_iterator
 
-#define CU_DeclareCollection( elem, key, name )\
-	using name##Collection = castor::Collection< elem, key >;\
-	using name##CollectionIt = name##Collection::TObjPtrMapIt;\
-	using name##CollectionConstIt = name##Collection::TObjPtrMapConstIt
-
 #define CU_DeclarePoint( type, count, name )\
 	using Point##count##name = Point< type, count >;\
-	CU_DeclareSmartPtr( Point##count##name );\
 	CU_DeclareVector( Point##count##name, Point##count##name );\
 	CU_DeclareList( Point##count##name, Point##count##name )
 
 #define CU_DeclareCoord( type, count, name )\
 	using Coords##count##name = Coords< type, count >;\
-	CU_DeclareSmartPtr( Coords##count##name );\
 	CU_DeclareVector( Coords##count##name, Coords##count##name );\
 	CU_DeclareList( Coords##count##name, Coords##count##name )
 
 #define CU_DeclareConstCoord( type, count, name )\
 	using ConstCoords##count##name = Coords< type const, count >;\
-	CU_DeclareSmartPtr( ConstCoords##count##name );\
 	CU_DeclareVector( ConstCoords##count##name, ConstCoords##count##name );\
 	CU_DeclareList( ConstCoords##count##name, ConstCoords##count##name )
 
 #define CU_DeclareMtx( type, rows, cols, name )\
 	using Matrix##rows##x##cols##name = Matrix< type, rows, cols >;\
-	CU_DeclareSmartPtr( Matrix##rows##x##cols##name );\
 	CU_DeclareVector( Matrix##rows##x##cols##name, Matrix##rows##x##cols##name );\
 	CU_DeclareList( Matrix##rows##x##cols##name, Matrix##rows##x##cols##name )
 
 #define CU_DeclareSqMtx( type, count, name )\
 	using Matrix##count##x##count##name = SquareMatrix< type, count >;\
-	CU_DeclareSmartPtr( Matrix##count##x##count##name );\
 	CU_DeclareVector( Matrix##count##x##count##name, Matrix##count##x##count##name );\
 	CU_DeclareList( Matrix##count##x##count##name, Matrix##count##x##count##name )
 

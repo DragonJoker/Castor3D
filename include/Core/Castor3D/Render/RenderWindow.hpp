@@ -567,7 +567,7 @@ namespace castor3d
 		mutable std::atomic_bool m_skip{ false };
 		std::atomic_bool m_loading;
 		castor::PxBufferBaseUPtr m_saveBuffer;
-		PickingSPtr m_picking;
+		PickingUPtr m_picking;
 		castor::Position m_mousePosition;
 		Texture3DTo2DUPtr m_texture3Dto2D;
 		IntermediateView m_tex3DTo2DIntermediate;

@@ -23,7 +23,7 @@
 
 #include <ashespp/RenderPass/FrameBuffer.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, DeferredRendering )
+CU_ImplementSmartPtr( castor3d, DeferredRendering )
 
 namespace castor3d
 {

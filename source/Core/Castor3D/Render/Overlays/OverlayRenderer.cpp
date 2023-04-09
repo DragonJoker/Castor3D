@@ -39,7 +39,7 @@ See LICENSE file in root folder
 
 #include <ShaderWriter/Source.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, OverlayRenderer )
+CU_ImplementSmartPtr( castor3d, OverlayRenderer )
 
 #pragma GCC diagnostic ignored "-Wclass-memaccess"
 
@@ -237,7 +237,7 @@ namespace castor3d
 			, cameraUbo
 			, *baseDescriptorLayout
 			, MaxOverlaysPerBuffer
-			, std::make_unique< OverlayTextBufferPool >( *device.renderSystem.getEngine()
+			, castor::makeUnique< OverlayTextBufferPool >( *device.renderSystem.getEngine()
 				, "TextsGlyphs"
 				, device ) ) }
 	{

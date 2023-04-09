@@ -15,7 +15,7 @@
 
 //*************************************************************************************************
 
-CU_ImplementCUSmartPtr( castor3d, TriFaceMapping )
+CU_ImplementSmartPtr( castor3d, TriFaceMapping )
 
 namespace castor3d
 {

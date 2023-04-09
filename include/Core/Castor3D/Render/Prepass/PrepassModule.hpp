@@ -81,10 +81,10 @@ namespace castor3d
 	*/
 	class VisibilityPass;
 
-	CU_DeclareCUSmartPtr( castor3d, DepthPass, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, PrepassRendering, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, PrepassResult, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, VisibilityPass, C3D_API );
+	CU_DeclareSmartPtr( castor3d, DepthPass, C3D_API );
+	CU_DeclareSmartPtr( castor3d, PrepassRendering, C3D_API );
+	CU_DeclareSmartPtr( castor3d, PrepassResult, C3D_API );
+	CU_DeclareSmartPtr( castor3d, VisibilityPass, C3D_API );
 
 	//@}
 	//@}

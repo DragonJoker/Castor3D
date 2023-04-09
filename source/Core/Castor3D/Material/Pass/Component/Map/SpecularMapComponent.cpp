@@ -20,6 +20,8 @@
 
 //*************************************************************************************************
 
+CU_ImplementSmartPtr( castor3d, SpecularMapComponent )
+
 namespace castor
 {
 	template<>
@@ -158,7 +160,7 @@ namespace castor3d
 	void SpecularMapComponent::Plugin::createMapComponent( Pass & pass
 		, std::vector< PassComponentUPtr > & result )const
 	{
-		result.push_back( std::make_unique< SpecularMapComponent >( pass ) );
+		result.push_back( castor::makeUniqueDerived< PassComponent, SpecularMapComponent >( pass ) );
 	}
 
 	bool SpecularMapComponent::Plugin::doWriteTextureConfig( TextureConfiguration const & configuration
@@ -199,7 +201,7 @@ namespace castor3d
 
 	PassComponentUPtr SpecularMapComponent::doClone( Pass & pass )const
 	{
-		return std::make_unique< SpecularMapComponent >( pass );
+		return castor::makeUniqueDerived< PassComponent, SpecularMapComponent >( pass );
 	}
 
 	void SpecularMapComponent::doFillConfig( TextureConfiguration & configuration

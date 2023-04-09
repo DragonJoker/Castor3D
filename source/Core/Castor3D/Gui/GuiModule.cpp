@@ -26,21 +26,21 @@
 
 #include <CastorUtils/Graphics/Font.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, StylesHolder )
-CU_ImplementCUSmartPtr( castor3d, Theme )
-CU_ImplementCUSmartPtr( castor3d, ControlStyle )
-CU_ImplementCUSmartPtr( castor3d, ButtonStyle )
-CU_ImplementCUSmartPtr( castor3d, ComboBoxStyle )
-CU_ImplementCUSmartPtr( castor3d, EditStyle )
-CU_ImplementCUSmartPtr( castor3d, ExpandablePanelStyle )
-CU_ImplementCUSmartPtr( castor3d, FrameStyle )
-CU_ImplementCUSmartPtr( castor3d, ListBoxStyle )
-CU_ImplementCUSmartPtr( castor3d, PanelStyle )
-CU_ImplementCUSmartPtr( castor3d, ProgressStyle )
-CU_ImplementCUSmartPtr( castor3d, ScrollableStyle )
-CU_ImplementCUSmartPtr( castor3d, ScrollBarStyle )
-CU_ImplementCUSmartPtr( castor3d, SliderStyle )
-CU_ImplementCUSmartPtr( castor3d, StaticStyle )
+CU_ImplementSmartPtr( castor3d, StylesHolder )
+CU_ImplementSmartPtr( castor3d, Theme )
+CU_ImplementSmartPtr( castor3d, ControlStyle )
+CU_ImplementSmartPtr( castor3d, ButtonStyle )
+CU_ImplementSmartPtr( castor3d, ComboBoxStyle )
+CU_ImplementSmartPtr( castor3d, EditStyle )
+CU_ImplementSmartPtr( castor3d, ExpandablePanelStyle )
+CU_ImplementSmartPtr( castor3d, FrameStyle )
+CU_ImplementSmartPtr( castor3d, ListBoxStyle )
+CU_ImplementSmartPtr( castor3d, PanelStyle )
+CU_ImplementSmartPtr( castor3d, ProgressStyle )
+CU_ImplementSmartPtr( castor3d, ScrollableStyle )
+CU_ImplementSmartPtr( castor3d, ScrollBarStyle )
+CU_ImplementSmartPtr( castor3d, SliderStyle )
+CU_ImplementSmartPtr( castor3d, StaticStyle )
 
 namespace castor3d
 {

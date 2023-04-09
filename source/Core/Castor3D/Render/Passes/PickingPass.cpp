@@ -46,7 +46,7 @@
 
 #include <ShaderWriter/Source.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, PickingPass )
+CU_ImplementSmartPtr( castor3d, PickingPass )
 
 namespace castor3d
 {

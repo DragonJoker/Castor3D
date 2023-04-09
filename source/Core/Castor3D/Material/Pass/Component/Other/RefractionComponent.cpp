@@ -10,6 +10,8 @@
 
 #include <CastorUtils/FileParser/ParserParameter.hpp>
 
+CU_ImplementSmartPtr( castor3d, RefractionComponent )
+
 namespace castor
 {
 	template<>
@@ -167,9 +169,9 @@ namespace castor3d
 
 	PassComponentUPtr RefractionComponent::doClone( Pass & pass )const
 	{
-		auto result = std::make_unique< RefractionComponent >( pass );
+		auto result = castor::makeUnique< RefractionComponent >( pass );
 		result->setData( getData() );
-		return result;
+		return castor::ptrRefCast< PassComponent >( result );
 	}
 
 	bool RefractionComponent::doWriteText( castor::String const & tabs

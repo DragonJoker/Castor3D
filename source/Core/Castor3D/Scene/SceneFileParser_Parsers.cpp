@@ -365,21 +365,21 @@ namespace castor3d
 		else
 		{
 			castor::String name;
-			parsingContext.parentOverlays.push_back( parsingContext.overlay );
-			auto parent = parsingContext.parentOverlays.back();
-			parsingContext.overlay = parsingContext.parser->getEngine()->tryFindOverlay( params[0]->get( name ) );
+			parsingContext.parentOverlays.push_back( std::move( parsingContext.overlay ) );
+			auto & parent = parsingContext.parentOverlays.back();
+			parsingContext.overlay.rptr = parsingContext.parser->getEngine()->tryFindOverlay( params[0]->get( name ) );
 
-			if ( !parsingContext.overlay )
+			if ( !parsingContext.overlay.rptr )
 			{
-				parsingContext.ownOverlay = castor::makeUnique< Overlay >( *parsingContext.parser->getEngine()
+				parsingContext.overlay.uptr = castor::makeUnique< Overlay >( *parsingContext.parser->getEngine()
 					, OverlayType::ePanel
 					, nullptr
-					, parent );
-				parsingContext.overlay = parsingContext.ownOverlay.get();
-				parsingContext.overlay->rename( name );
+					, parent.rptr );
+				parsingContext.overlay.rptr = parsingContext.overlay.uptr.get();
+				parsingContext.overlay.rptr->rename( name );
 			}
 
-			parsingContext.overlay->setVisible( false );
+			parsingContext.overlay.rptr->setVisible( false );
 		}
 	}
 	CU_EndAttributePush( CSCNSection::ePanelOverlay )
@@ -395,21 +395,21 @@ namespace castor3d
 		else
 		{
 			castor::String name;
-			parsingContext.parentOverlays.push_back( parsingContext.overlay );
-			auto parent = parsingContext.parentOverlays.back();
-			parsingContext.overlay = parsingContext.parser->getEngine()->tryFindOverlay( params[0]->get( name ) );
+			parsingContext.parentOverlays.push_back( std::move( parsingContext.overlay ) );
+			auto & parent = parsingContext.parentOverlays.back();
+			parsingContext.overlay.rptr = parsingContext.parser->getEngine()->tryFindOverlay( params[0]->get( name ) );
 
-			if ( !parsingContext.overlay )
+			if ( !parsingContext.overlay.rptr )
 			{
-				parsingContext.ownOverlay = castor::makeUnique< Overlay >( *parsingContext.parser->getEngine()
+				parsingContext.overlay.uptr = castor::makeUnique< Overlay >( *parsingContext.parser->getEngine()
 					, OverlayType::eBorderPanel
 					, nullptr
-					, parent );
-				parsingContext.overlay = parsingContext.ownOverlay.get();
-				parsingContext.overlay->rename( name );
+					, parent.rptr );
+				parsingContext.overlay.rptr = parsingContext.overlay.uptr.get();
+				parsingContext.overlay.rptr->rename( name );
 			}
 
-			parsingContext.overlay->setVisible( false );
+			parsingContext.overlay.rptr->setVisible( false );
 		}
 	}
 	CU_EndAttributePush( CSCNSection::eBorderPanelOverlay )
@@ -425,21 +425,21 @@ namespace castor3d
 		else
 		{
 			castor::String name;
-			parsingContext.parentOverlays.push_back( parsingContext.overlay );
-			auto parent = parsingContext.parentOverlays.back();
-			parsingContext.overlay = parsingContext.parser->getEngine()->tryFindOverlay( params[0]->get( name ) );
+			parsingContext.parentOverlays.push_back( std::move( parsingContext.overlay ) );
+			auto & parent = parsingContext.parentOverlays.back();
+			parsingContext.overlay.rptr = parsingContext.parser->getEngine()->tryFindOverlay( params[0]->get( name ) );
 
-			if ( !parsingContext.overlay )
+			if ( !parsingContext.overlay.rptr )
 			{
-				parsingContext.ownOverlay = castor::makeUnique< Overlay >( *parsingContext.parser->getEngine()
+				parsingContext.overlay.uptr = castor::makeUnique< Overlay >( *parsingContext.parser->getEngine()
 					, OverlayType::eText
 					, nullptr
-					, parent );
-				parsingContext.overlay = parsingContext.ownOverlay.get();
-				parsingContext.overlay->rename( name );
+					, parent.rptr );
+				parsingContext.overlay.rptr = parsingContext.overlay.uptr.get();
+				parsingContext.overlay.rptr->rename( name );
 			}
 
-			parsingContext.overlay->setVisible( false );
+			parsingContext.overlay.rptr->setVisible( false );
 		}
 	}
 	CU_EndAttributePush( CSCNSection::eTextOverlay )
@@ -1095,11 +1095,11 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			auto imgBackground = std::make_shared< ImageBackground >( *parsingContext.parser->getEngine()
+			auto imgBackground = castor::makeUnique< ImageBackground >( *parsingContext.parser->getEngine()
 				, *parsingContext.scene );
 			castor::Path path;
 			imgBackground->loadImage( context.file.getPath(), params[0]->get( path ) );
-			parsingContext.scene->setBackground( imgBackground );
+			parsingContext.scene->setBackground( castor::ptrRefCast< SceneBackground >( imgBackground ) );
 			parsingContext.skybox.reset();
 		}
 	}
@@ -1281,21 +1281,21 @@ namespace castor3d
 		else if ( !params.empty() )
 		{
 			castor::String name;
-			parsingContext.parentOverlays.push_back( parsingContext.overlay );
-			auto parent = parsingContext.parentOverlays.back();
-			parsingContext.overlay = parsingContext.scene->tryFindOverlay( params[0]->get( name ) );
+			parsingContext.parentOverlays.push_back( std::move( parsingContext.overlay ) );
+			auto & parent = parsingContext.parentOverlays.back();
+			parsingContext.overlay.rptr = parsingContext.scene->tryFindOverlay( params[0]->get( name ) );
 
-			if ( !parsingContext.overlay )
+			if ( !parsingContext.overlay.rptr )
 			{
-				parsingContext.ownOverlay = castor::makeUnique< Overlay >( *parsingContext.parser->getEngine()
+				parsingContext.overlay.uptr = castor::makeUnique< Overlay >( *parsingContext.parser->getEngine()
 					, OverlayType::ePanel
 					, parsingContext.scene
-					, parent );
-				parsingContext.overlay = parsingContext.ownOverlay.get();
-				parsingContext.overlay->rename( name );
+					, parent.rptr );
+				parsingContext.overlay.rptr = parsingContext.overlay.uptr.get();
+				parsingContext.overlay.rptr->rename( name );
 			}
 
-			parsingContext.overlay->setVisible( false );
+			parsingContext.overlay.rptr->setVisible( false );
 		}
 	}
 	CU_EndAttributePush( CSCNSection::ePanelOverlay )
@@ -1311,21 +1311,21 @@ namespace castor3d
 		else if ( !params.empty() )
 		{
 			castor::String name;
-			parsingContext.parentOverlays.push_back( parsingContext.overlay );
-			auto parent = parsingContext.parentOverlays.back();
-			parsingContext.overlay = parsingContext.scene->tryFindOverlay( params[0]->get( name ) );
+			parsingContext.parentOverlays.push_back( std::move( parsingContext.overlay ) );
+			auto & parent = parsingContext.parentOverlays.back();
+			parsingContext.overlay.rptr = parsingContext.scene->tryFindOverlay( params[0]->get( name ) );
 
-			if ( !parsingContext.overlay )
+			if ( !parsingContext.overlay.rptr )
 			{
-				parsingContext.ownOverlay = castor::makeUnique< Overlay >( *parsingContext.parser->getEngine()
+				parsingContext.overlay.uptr = castor::makeUnique< Overlay >( *parsingContext.parser->getEngine()
 					, OverlayType::eBorderPanel
 					, parsingContext.scene
-					, parent );
-				parsingContext.overlay = parsingContext.ownOverlay.get();
-				parsingContext.overlay->rename( name );
+					, parent.rptr );
+				parsingContext.overlay.rptr = parsingContext.overlay.uptr.get();
+				parsingContext.overlay.rptr->rename( name );
 			}
 
-			parsingContext.overlay->setVisible( false );
+			parsingContext.overlay.rptr->setVisible( false );
 		}
 	}
 	CU_EndAttributePush( CSCNSection::eBorderPanelOverlay )
@@ -1341,21 +1341,21 @@ namespace castor3d
 		else if ( !params.empty() )
 		{
 			castor::String name;
-			parsingContext.parentOverlays.push_back( parsingContext.overlay );
-			auto parent = parsingContext.parentOverlays.back();
-			parsingContext.overlay = parsingContext.scene->tryFindOverlay( params[0]->get( name ) );
+			parsingContext.parentOverlays.push_back( std::move( parsingContext.overlay ) );
+			auto & parent = parsingContext.parentOverlays.back();
+			parsingContext.overlay.rptr = parsingContext.scene->tryFindOverlay( params[0]->get( name ) );
 
-			if ( !parsingContext.overlay )
+			if ( !parsingContext.overlay.rptr )
 			{
-				parsingContext.ownOverlay = castor::makeUnique< Overlay >( *parsingContext.parser->getEngine()
+				parsingContext.overlay.uptr = castor::makeUnique< Overlay >( *parsingContext.parser->getEngine()
 					, OverlayType::eText
 					, parsingContext.scene
-					, parent );
-				parsingContext.overlay = parsingContext.ownOverlay.get();
-				parsingContext.overlay->rename( name );
+					, parent.rptr );
+				parsingContext.overlay.rptr = parsingContext.overlay.uptr.get();
+				parsingContext.overlay.rptr->rename( name );
 			}
 
-			parsingContext.overlay->setVisible( false );
+			parsingContext.overlay.rptr->setVisible( false );
 		}
 	}
 	CU_EndAttributePush( CSCNSection::eTextOverlay )
@@ -1370,7 +1370,7 @@ namespace castor3d
 		}
 		else
 		{
-			parsingContext.skybox = std::make_shared< SkyboxBackground >( *parsingContext.parser->getEngine()
+			parsingContext.skybox = castor::makeUnique< SkyboxBackground >( *parsingContext.parser->getEngine()
 					, *parsingContext.scene );
 		}
 	}
@@ -4868,11 +4868,11 @@ namespace castor3d
 	{
 		auto & parsingContext = getParserContext( context );
 
-		if ( parsingContext.overlay )
+		if ( parsingContext.overlay.rptr )
 		{
 			castor::Point2d ptPosition;
 			params[0]->get( ptPosition );
-			parsingContext.overlay->setRelativePosition( ptPosition );
+			parsingContext.overlay.rptr->setRelativePosition( ptPosition );
 		}
 		else
 		{
@@ -4885,11 +4885,11 @@ namespace castor3d
 	{
 		auto & parsingContext = getParserContext( context );
 
-		if ( parsingContext.overlay )
+		if ( parsingContext.overlay.rptr )
 		{
 			castor::Point2d ptSize;
 			params[0]->get( ptSize );
-			parsingContext.overlay->setRelativeSize( ptSize );
+			parsingContext.overlay.rptr->setRelativeSize( ptSize );
 		}
 		else
 		{
@@ -4902,11 +4902,11 @@ namespace castor3d
 	{
 		auto & parsingContext = getParserContext( context );
 
-		if ( parsingContext.overlay )
+		if ( parsingContext.overlay.rptr )
 		{
 			castor::Size size;
 			params[0]->get( size );
-			parsingContext.overlay->setPixelSize( size );
+			parsingContext.overlay.rptr->setPixelSize( size );
 		}
 		else
 		{
@@ -4919,11 +4919,11 @@ namespace castor3d
 	{
 		auto & parsingContext = getParserContext( context );
 
-		if ( parsingContext.overlay )
+		if ( parsingContext.overlay.rptr )
 		{
 			castor::Position position;
 			params[0]->get( position );
-			parsingContext.overlay->setPixelPosition( position );
+			parsingContext.overlay.rptr->setPixelPosition( position );
 		}
 		else
 		{
@@ -4936,11 +4936,11 @@ namespace castor3d
 	{
 		auto & parsingContext = getParserContext( context );
 
-		if ( parsingContext.overlay )
+		if ( parsingContext.overlay.rptr )
 		{
 			castor::String name;
 			params[0]->get( name );
-			parsingContext.overlay->setMaterial( parsingContext.parser->getEngine()->findMaterial( name ) );
+			parsingContext.overlay.rptr->setMaterial( parsingContext.parser->getEngine()->findMaterial( name ) );
 		}
 		else
 		{
@@ -4953,23 +4953,23 @@ namespace castor3d
 	{
 		auto & parsingContext = getParserContext( context );
 		castor::String name;
-		parsingContext.parentOverlays.push_back( parsingContext.overlay );
-		auto parent = parsingContext.parentOverlays.back();
-		parsingContext.overlay = parsingContext.scene
+		parsingContext.parentOverlays.push_back( std::move( parsingContext.overlay ) );
+		auto & parent = parsingContext.parentOverlays.back();
+		parsingContext.overlay.rptr = parsingContext.scene
 			? parsingContext.scene->tryFindOverlay( params[0]->get( name ) )
 			: parsingContext.parser->getEngine()->tryFindOverlay( params[0]->get( name ) );
 
-		if ( !parsingContext.overlay )
+		if ( !parsingContext.overlay.rptr )
 		{
-			parsingContext.ownOverlay = castor::makeUnique< Overlay >( *parsingContext.parser->getEngine()
+			parsingContext.overlay.uptr = castor::makeUnique< Overlay >( *parsingContext.parser->getEngine()
 				, OverlayType::ePanel
-				, parent ? parent->getScene() : parsingContext.scene
-				, parent );
-			parsingContext.overlay = parsingContext.ownOverlay.get();
-			parsingContext.overlay->rename( name );
+				, parent.rptr ? parent.rptr->getScene() : parsingContext.scene
+				, parent.rptr );
+			parsingContext.overlay.rptr = parsingContext.overlay.uptr.get();
+			parsingContext.overlay.rptr->rename( name );
 		}
 
-		parsingContext.overlay->setVisible( false );
+		parsingContext.overlay.rptr->setVisible( false );
 	}
 	CU_EndAttributePush( CSCNSection::ePanelOverlay )
 
@@ -4977,23 +4977,23 @@ namespace castor3d
 	{
 		auto & parsingContext = getParserContext( context );
 		castor::String name;
-		parsingContext.parentOverlays.push_back( parsingContext.overlay );
-		auto parent = parsingContext.parentOverlays.back();
-		parsingContext.overlay = parsingContext.scene
+		parsingContext.parentOverlays.push_back( std::move( parsingContext.overlay ) );
+		auto & parent = parsingContext.parentOverlays.back();
+		parsingContext.overlay.rptr = parsingContext.scene
 			? parsingContext.scene->tryFindOverlay( params[0]->get( name ) )
 			: parsingContext.parser->getEngine()->tryFindOverlay( params[0]->get( name ) );
 
-		if ( !parsingContext.overlay )
+		if ( !parsingContext.overlay.rptr )
 		{
-			parsingContext.ownOverlay = castor::makeUnique< Overlay >( *parsingContext.parser->getEngine()
+			parsingContext.overlay.uptr = castor::makeUnique< Overlay >( *parsingContext.parser->getEngine()
 				, OverlayType::eBorderPanel
-				, parent ? parent->getScene() : parsingContext.scene
-				, parent );
-			parsingContext.overlay = parsingContext.ownOverlay.get();
-			parsingContext.overlay->rename( name );
+				, parent.rptr ? parent.rptr->getScene() : parsingContext.scene
+				, parent.rptr );
+			parsingContext.overlay.rptr = parsingContext.overlay.uptr.get();
+			parsingContext.overlay.rptr->rename( name );
 		}
 
-		parsingContext.overlay->setVisible( false );
+		parsingContext.overlay.rptr->setVisible( false );
 	}
 	CU_EndAttributePush( CSCNSection::eBorderPanelOverlay )
 
@@ -5001,23 +5001,23 @@ namespace castor3d
 	{
 		auto & parsingContext = getParserContext( context );
 		castor::String name;
-		parsingContext.parentOverlays.push_back( parsingContext.overlay );
-		auto parent = parsingContext.parentOverlays.back();
-		parsingContext.overlay = parsingContext.scene
+		parsingContext.parentOverlays.push_back( std::move( parsingContext.overlay ) );
+		auto & parent = parsingContext.parentOverlays.back();
+		parsingContext.overlay.rptr = parsingContext.scene
 			? parsingContext.scene->tryFindOverlay( params[0]->get( name ) )
 			: parsingContext.parser->getEngine()->tryFindOverlay( params[0]->get( name ) );
 
-		if ( !parsingContext.overlay )
+		if ( !parsingContext.overlay.rptr )
 		{
-			parsingContext.ownOverlay = castor::makeUnique< Overlay >( *parsingContext.parser->getEngine()
+			parsingContext.overlay.uptr = castor::makeUnique< Overlay >( *parsingContext.parser->getEngine()
 				, OverlayType::eText
-				, parent ? parent->getScene() : parsingContext.scene
-				, parent );
-			parsingContext.overlay = parsingContext.ownOverlay.get();
-			parsingContext.overlay->rename( name );
+				, parent.rptr ? parent.rptr->getScene() : parsingContext.scene
+				, parent.rptr );
+			parsingContext.overlay.rptr = parsingContext.overlay.uptr.get();
+			parsingContext.overlay.rptr->rename( name );
 		}
 
-		parsingContext.overlay->setVisible( false );
+		parsingContext.overlay.rptr->setVisible( false );
 	}
 	CU_EndAttributePush( CSCNSection::eTextOverlay )
 
@@ -5025,43 +5025,43 @@ namespace castor3d
 	{
 		auto & parsingContext = getParserContext( context );
 
-		if ( parsingContext.overlay->getType() == OverlayType::eText )
+		if ( parsingContext.overlay.rptr->getType() == OverlayType::eText )
 		{
-			auto textOverlay = parsingContext.overlay->getTextOverlay();
+			auto textOverlay = parsingContext.overlay.rptr->getTextOverlay();
 
 			if ( textOverlay->getFontTexture() )
 			{
-				parsingContext.overlay->setVisible( true );
+				parsingContext.overlay.rptr->setVisible( true );
 			}
 			else
 			{
-				parsingContext.overlay->setVisible( false );
+				parsingContext.overlay.rptr->setVisible( false );
 				CU_ParsingError( cuT( "TextOverlay's font has not been set, it will not be rendered" ) );
 			}
 		}
 		else
 		{
-			parsingContext.overlay->setVisible( true );
+			parsingContext.overlay.rptr->setVisible( true );
 		}
 
-		if ( parsingContext.ownOverlay )
+		if ( parsingContext.overlay.uptr )
 		{
 			if ( parsingContext.scene )
 			{
-				parsingContext.scene->addOverlay( parsingContext.overlay->getName()
-					, parsingContext.ownOverlay
+				parsingContext.scene->addOverlay( parsingContext.overlay.rptr->getName()
+					, parsingContext.overlay.uptr
 					, true );
 			}
 			else
 			{
-				parsingContext.parser->getEngine()->addOverlay( parsingContext.overlay->getName()
-					, parsingContext.ownOverlay
+				parsingContext.parser->getEngine()->addOverlay( parsingContext.overlay.rptr->getName()
+					, parsingContext.overlay.uptr
 					, true );
 			}
 		}
 
 		CU_Require( !parsingContext.parentOverlays.empty() );
-		parsingContext.overlay = parsingContext.parentOverlays.back();
+		parsingContext.overlay = std::move( parsingContext.parentOverlays.back() );
 		parsingContext.parentOverlays.pop_back();
 	}
 	CU_EndAttributePop()
@@ -5069,7 +5069,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserPanelOverlayUvs )
 	{
 		auto & parsingContext = getParserContext( context );
-		auto overlay = parsingContext.overlay;
+		auto overlay = parsingContext.overlay.rptr;
 
 		if ( overlay && overlay->getType() == OverlayType::ePanel )
 		{
@@ -5087,7 +5087,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserBorderPanelOverlaySizes )
 	{
 		auto & parsingContext = getParserContext( context );
-		auto overlay = parsingContext.overlay;
+		auto overlay = parsingContext.overlay.rptr;
 
 		if ( overlay && overlay->getType() == OverlayType::eBorderPanel )
 		{
@@ -5105,7 +5105,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserBorderPanelOverlayPixelSizes )
 	{
 		auto & parsingContext = getParserContext( context );
-		auto overlay = parsingContext.overlay;
+		auto overlay = parsingContext.overlay.rptr;
 
 		if ( overlay && overlay->getType() == OverlayType::eBorderPanel )
 		{
@@ -5123,7 +5123,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserBorderPanelOverlayMaterial )
 	{
 		auto & parsingContext = getParserContext( context );
-		auto overlay = parsingContext.overlay;
+		auto overlay = parsingContext.overlay.rptr;
 
 		if ( overlay && overlay->getType() == OverlayType::eBorderPanel )
 		{
@@ -5141,7 +5141,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserBorderPanelOverlayPosition )
 	{
 		auto & parsingContext = getParserContext( context );
-		auto overlay = parsingContext.overlay;
+		auto overlay = parsingContext.overlay.rptr;
 
 		if ( overlay && overlay->getType() == OverlayType::eBorderPanel )
 		{
@@ -5159,7 +5159,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserBorderPanelOverlayCenterUvs )
 	{
 		auto & parsingContext = getParserContext( context );
-		auto overlay = parsingContext.overlay;
+		auto overlay = parsingContext.overlay.rptr;
 
 		if ( overlay && overlay->getType() == OverlayType::eBorderPanel )
 		{
@@ -5177,7 +5177,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserBorderPanelOverlayOuterUvs )
 	{
 		auto & parsingContext = getParserContext( context );
-		auto overlay = parsingContext.overlay;
+		auto overlay = parsingContext.overlay.rptr;
 
 		if ( overlay && overlay->getType() == OverlayType::eBorderPanel )
 		{
@@ -5195,7 +5195,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserBorderPanelOverlayInnerUvs )
 	{
 		auto & parsingContext = getParserContext( context );
-		auto overlay = parsingContext.overlay;
+		auto overlay = parsingContext.overlay.rptr;
 
 		if ( overlay && overlay->getType() == OverlayType::eBorderPanel )
 		{
@@ -5213,7 +5213,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserTextOverlayFont )
 	{
 		auto & parsingContext = getParserContext( context );
-		auto overlay = parsingContext.overlay;
+		auto overlay = parsingContext.overlay.rptr;
 
 		if ( overlay && overlay->getType() == OverlayType::eText )
 		{
@@ -5240,7 +5240,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserTextOverlayTextWrapping )
 	{
 		auto & parsingContext = getParserContext( context );
-		auto overlay = parsingContext.overlay;
+		auto overlay = parsingContext.overlay.rptr;
 
 		if ( overlay && overlay->getType() == OverlayType::eText )
 		{
@@ -5259,7 +5259,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserTextOverlayVerticalAlign )
 	{
 		auto & parsingContext = getParserContext( context );
-		auto overlay = parsingContext.overlay;
+		auto overlay = parsingContext.overlay.rptr;
 
 		if ( overlay && overlay->getType() == OverlayType::eText )
 		{
@@ -5278,7 +5278,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserTextOverlayHorizontalAlign )
 	{
 		auto & parsingContext = getParserContext( context );
-		auto overlay = parsingContext.overlay;
+		auto overlay = parsingContext.overlay.rptr;
 
 		if ( overlay && overlay->getType() == OverlayType::eText )
 		{
@@ -5297,7 +5297,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserTextOverlayTexturingMode )
 	{
 		auto & parsingContext = getParserContext( context );
-		auto overlay = parsingContext.overlay;
+		auto overlay = parsingContext.overlay.rptr;
 
 		if ( overlay && overlay->getType() == OverlayType::eText )
 		{
@@ -5316,7 +5316,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserTextOverlayLineSpacingMode )
 	{
 		auto & parsingContext = getParserContext( context );
-		auto overlay = parsingContext.overlay;
+		auto overlay = parsingContext.overlay.rptr;
 
 		if ( overlay && overlay->getType() == OverlayType::eText )
 		{
@@ -5335,7 +5335,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserTextOverlayText )
 	{
 		auto & parsingContext = getParserContext( context );
-		auto overlay = parsingContext.overlay;
+		auto overlay = parsingContext.overlay.rptr;
 		castor::String strParams;
 		params[0]->get( strParams );
 
@@ -5384,7 +5384,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserCameraViewport )
 	{
 		auto & parsingContext = getParserContext( context );
-		parsingContext.viewport = std::make_shared< Viewport >( *parsingContext.parser->getEngine() );
+		parsingContext.viewport = castor::makeUnique< Viewport >( *parsingContext.parser->getEngine() );
 		parsingContext.viewport->setPerspective( 0.0_degrees, 1, 0, 1 );
 	}
 	CU_EndAttributePush( CSCNSection::eViewport )
@@ -5427,10 +5427,9 @@ namespace castor3d
 			auto camera = parsingContext.scene->addNewCamera( parsingContext.strName
 				, *parsingContext.scene
 				, *node
-				, std::move( *parsingContext.viewport ) );
+				, std::move( *parsingContext.viewport.release() ) );
 			camera->setGamma( parsingContext.point2f[0] );
 			camera->setExposure( parsingContext.point2f[1] );
-			parsingContext.viewport.reset();
 		}
 	}
 	CU_EndAttributePop()
@@ -6163,7 +6162,7 @@ namespace castor3d
 
 		if ( parsingContext.skybox )
 		{
-			parsingContext.scene->setBackground( std::move( parsingContext.skybox ) );
+			parsingContext.scene->setBackground( castor::ptrRefCast< SceneBackground >( parsingContext.skybox ) );
 		}
 		else
 		{

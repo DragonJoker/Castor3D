@@ -13,7 +13,7 @@
 
 #include <CastorUtils/Graphics/Font.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, ExpandablePanelCtrl )
+CU_ImplementSmartPtr( castor3d, ExpandablePanelCtrl )
 
 namespace castor3d
 {

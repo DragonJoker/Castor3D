@@ -5,7 +5,7 @@
 #include "Castor3D/Material/Pass/Component/Lighting/SubsurfaceScatteringComponent.hpp"
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
-CU_ImplementCUSmartPtr( castor3d, SssProfileBuffer )
+CU_ImplementSmartPtr( castor3d, SssProfileBuffer )
 
 namespace castor3d
 {

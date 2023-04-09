@@ -30,7 +30,7 @@ namespace water
 			, crg::ImageViewIdArray targetDepth
 			, castor3d::RenderNodesPassDesc const & renderPassDesc
 			, castor3d::RenderTechniquePassDesc const & techniquePassDesc
-			, std::shared_ptr< castor3d::IsRenderPassEnabled > isEnabled );
+			, castor3d::IsRenderPassEnabledUPtr isEnabled );
 		~WaterRenderPass()override;
 		static crg::FramePassArray create( castor3d::RenderDevice const & device
 			, castor3d::RenderTechnique & technique
@@ -79,7 +79,7 @@ namespace water
 		castor3d::ShaderPtr doGetPixelShaderSource( castor3d::PipelineFlags const & flags )const override;
 
 	private:
-		std::shared_ptr< castor3d::IsRenderPassEnabled > m_isEnabled;
+		castor3d::IsRenderPassEnabledUPtr m_isEnabled;
 		WaterUboConfiguration m_configuration;
 		ashes::SamplerPtr m_linearWrapSampler;
 		ashes::SamplerPtr m_pointClampSampler;

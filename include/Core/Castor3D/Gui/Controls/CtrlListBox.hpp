@@ -84,7 +84,7 @@ namespace castor3d
 		{
 		}
 
-		C3D_API ~ListBoxCtrl()noexcept;
+		C3D_API ~ListBoxCtrl()noexcept override;
 
 		/** Appends a new item
 		 *\param[in]	value		The item

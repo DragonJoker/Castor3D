@@ -48,7 +48,7 @@ namespace castor3d
 			, ControlFlagType flags = 0
 			, bool visible = true );
 
-		C3D_API ~ExpandablePanelCtrl()noexcept;
+		C3D_API ~ExpandablePanelCtrl()noexcept override;
 
 		C3D_API void setExpandCaption( castor::U32String v );
 		C3D_API void setRetractCaption( castor::U32String v );

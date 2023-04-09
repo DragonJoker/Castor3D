@@ -228,7 +228,7 @@ namespace castor3d
 		, castor::Point3f const & attenuation
 		, float max );
 
-	CU_DeclareCUSmartPtr( castor3d, SubsurfaceScatteringPass, C3D_API );
+	CU_DeclareSmartPtr( castor3d, SubsurfaceScatteringPass, C3D_API );
 
 	//@}
 	//@}

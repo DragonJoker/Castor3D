@@ -21,7 +21,7 @@
 #include <RenderGraph/FrameGraph.hpp>
 #include <RenderGraph/RunnablePasses/RenderQuad.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, GaussianBlur )
+CU_ImplementSmartPtr( castor3d, GaussianBlur )
 
 namespace castor3d
 {

@@ -6,6 +6,8 @@
 
 #pragma GCC diagnostic ignored "-Wuseless-cast"
 
+CU_ImplementSmartPtr( castor3d, Torus )
+
 namespace castor3d
 {
 	Torus::Torus()
@@ -19,7 +21,7 @@ namespace castor3d
 
 	MeshGeneratorUPtr Torus::create()
 	{
-		return std::make_unique< Torus >();
+		return castor::makeUniqueDerived< MeshGenerator, Torus >();
 	}
 
 	void Torus::doGenerate( Mesh & mesh, Parameters const & parameters )

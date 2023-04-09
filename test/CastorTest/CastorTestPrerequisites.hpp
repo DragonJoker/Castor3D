@@ -38,13 +38,9 @@ namespace Testing
 	class TestCase;
 	class BenchManager;
 
-	using BenchCaseSPtr = std::shared_ptr< BenchCase >;
-	using BenchCaseWPtr = std::weak_ptr< BenchCase >;
-	using BenchCaseUPtr = std::unique_ptr< BenchCase >;
+	using BenchCasePtr = std::unique_ptr< BenchCase >;
 
-	using TestCaseSPtr = std::shared_ptr< TestCase >;
-	using TestCaseWPtr = std::weak_ptr< TestCase >;
-	using TestCaseUPtr = std::unique_ptr< TestCase >;
+	using TestCasePtr = std::unique_ptr< TestCase >;
 }
 
 #endif

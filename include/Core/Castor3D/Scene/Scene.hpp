@@ -121,7 +121,7 @@ namespace castor3d
 		 *\brief		Définit le fond de la scène.
 		 *\param[in]	value	La nouvelle valeur.
 		 */
-		C3D_API void setBackground( SceneBackgroundSPtr value );
+		C3D_API void setBackground( SceneBackgroundUPtr value );
 		/**
 		 *\~english
 		 *\brief		Merges the content of the given scene to this scene
@@ -308,9 +308,9 @@ namespace castor3d
 			return m_boundingBox;
 		}
 
-		SceneBackgroundSPtr getBackground()const
+		SceneBackgroundRPtr getBackground()const
 		{
-			return m_background;
+			return m_background.get();
 		}
 
 		castor::RgbColour const & getBackgroundColour()const
@@ -497,11 +497,11 @@ namespace castor3d
 		bool m_changed{ false };
 		castor::RgbColour m_ambientLight{ 0.0f, 0.0f, 0.0f };
 		castor::RgbColour m_backgroundColour{ 0.0f, 0.0f, 0.0f };
-		SceneBackgroundSPtr m_background;
-		LightFactorySPtr m_lightFactory;
+		SceneBackgroundUPtr m_background;
+		LightFactoryUPtr m_lightFactory;
 		Fog m_fog;
 		FrameListenerRPtr m_listener{};
-		std::unique_ptr< EnvironmentMap > m_reflectionMap;
+		EnvironmentMapUPtr m_reflectionMap;
 		bool m_needsSubsurfaceScattering{ false };
 		bool m_hasOpaqueObjects{ false };
 		bool m_hasTransparentObjects{ false };

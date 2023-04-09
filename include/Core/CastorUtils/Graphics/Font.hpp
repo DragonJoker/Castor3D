@@ -6,7 +6,6 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Data/BinaryLoader.hpp"
 #include "CastorUtils/Data/TextWriter.hpp"
-#include "CastorUtils/Design/Collection.hpp"
 #include "CastorUtils/Design/Named.hpp"
 #include "CastorUtils/Graphics/Glyph.hpp"
 #include "CastorUtils/Math/Point.hpp"

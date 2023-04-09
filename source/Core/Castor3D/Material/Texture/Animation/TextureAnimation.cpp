@@ -5,7 +5,7 @@
 #include "Castor3D/Material/Texture/Animation/TextureAnimationKeyFrame.hpp"
 #include "Castor3D/Scene/Animation/AnimatedTexture.hpp"
 
-CU_ImplementCUSmartPtr( castor3d, TextureAnimation )
+CU_ImplementSmartPtr( castor3d, TextureAnimation )
 
 namespace castor3d
 {

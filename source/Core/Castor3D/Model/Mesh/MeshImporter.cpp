@@ -10,6 +10,8 @@
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneImporter.hpp"
 
+CU_ImplementSmartPtr( castor3d, MeshImporter )
+
 namespace castor3d
 {
 	namespace meshimp

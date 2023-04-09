@@ -42,7 +42,7 @@ namespace ocean_fft
 		, OceanUbo const & ubo
 		, ashes::BufferBase const & input
 		, ashes::BufferBase const & output
-		, std::shared_ptr< castor3d::IsRenderPassEnabled > isEnabled )
+		, castor3d::IsRenderPassEnabledRPtr isEnabled )
 	{
 		auto & result = graph.createPass( "GenerateFrequency" + name
 			, [&device, extent, isEnabled]( crg::FramePass const & framePass
@@ -85,7 +85,7 @@ namespace ocean_fft
 			, FFTConfig const & pfftConfig
 			, ashes::Buffer< cfloat > const & distribution
 			, FFTMode mode
-			, std::shared_ptr< castor3d::IsRenderPassEnabled > isEnabled )
+			, castor3d::IsRenderPassEnabledRPtr isEnabled )
 			: fftConfig{ pfftConfig }
 			, frequency{ castor3d::makeBuffer< cfloat >( fftConfig.device
 					, dimensions.width * dimensions.height
@@ -153,7 +153,7 @@ namespace ocean_fft
 			, crg::FramePassGroup & graph
 			, crg::FramePassArray previousPasses
 			, OceanUbo const & ubo
-			, std::shared_ptr< castor3d::IsRenderPassEnabled > isEnabled );
+			, castor3d::IsRenderPassEnabledRPtr isEnabled );
 		~OceanFFT();
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept

@@ -121,9 +121,9 @@ namespace castor3d
 			return m_category->getBoundingBox();
 		}
 
-		LightCategorySPtr getCategory()const
+		LightCategoryRPtr getCategory()const
 		{
-			return m_category;
+			return m_category.get();
 		}
 
 		bool isShadowProducer()const
@@ -408,7 +408,7 @@ namespace castor3d
 		std::atomic_bool m_currentShadowCaster{ false };
 		bool m_dirty{ true };
 		ShadowConfig m_shadows;
-		LightCategorySPtr m_category;
+		LightCategoryUPtr m_category;
 		ShadowMapRPtr m_shadowMap{ nullptr };
 		uint32_t m_shadowMapIndex{ 0u };
 		std::atomic< GlobalIlluminationType > m_currentGlobalIllumination{ GlobalIlluminationType::eNone };

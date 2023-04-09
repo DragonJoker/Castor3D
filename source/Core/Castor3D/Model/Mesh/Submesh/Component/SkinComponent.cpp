@@ -15,7 +15,7 @@
 
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, SkinComponent )
+CU_ImplementSmartPtr( castor3d, SkinComponent )
 
 namespace castor3d
 {

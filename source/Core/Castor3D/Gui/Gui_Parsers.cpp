@@ -474,7 +474,7 @@ namespace castor3d
 		{
 			bool value;
 			params[0]->get( value );
-			guiContext.edit->addFlag( EditFlag::eMultiline/*
+			edit->addFlag( EditFlag::eMultiline/*
 				| EditFlag::eProcessEnter
 				| EditFlag::eProcessTab*/ );
 		}

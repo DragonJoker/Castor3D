@@ -6,7 +6,7 @@
 
 #include <algorithm>
 
-CU_ImplementCUSmartPtr( castor3d, PoolUniformBuffer )
+CU_ImplementSmartPtr( castor3d, PoolUniformBuffer )
 
 namespace castor3d
 {

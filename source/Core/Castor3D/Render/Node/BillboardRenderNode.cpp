@@ -2,7 +2,7 @@
 
 #include "Castor3D/Scene/BillboardList.hpp"
 
-CU_ImplementCUSmartPtr( castor3d, BillboardRenderNode )
+CU_ImplementSmartPtr( castor3d, BillboardRenderNode )
 
 namespace castor3d
 {

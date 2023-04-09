@@ -189,16 +189,17 @@ namespace castor3d
 	*/
 	using ColoursComponent = BaseDataComponentT< SubmeshFlag::eColours >;
 
-	CU_DeclareCUSmartPtr( castor3d, IndexMapping, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, InstantiationComponent, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, LinesMapping, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, MeshletComponent, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, MorphComponent, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, PassMasksComponent, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, SkinComponent, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, SubmeshComponent, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, TriFaceMapping, C3D_API );
-	CU_DeclareCUEnumTemplateSmartPtr( castor3d, BaseDataComponentT, castor3d::SubmeshFlag );
+	CU_DeclareSmartPtr( castor3d, IndexMapping, C3D_API );
+	CU_DeclareSmartPtr( castor3d, InstantiationComponent, C3D_API );
+	CU_DeclareSmartPtr( castor3d, LinesMapping, C3D_API );
+	CU_DeclareSmartPtr( castor3d, MeshletComponent, C3D_API );
+	CU_DeclareSmartPtr( castor3d, MorphComponent, C3D_API );
+	CU_DeclareSmartPtr( castor3d, PassMasksComponent, C3D_API );
+	CU_DeclareSmartPtr( castor3d, SkinComponent, C3D_API );
+	CU_DeclareSmartPtr( castor3d, SubmeshComponent, C3D_API );
+	CU_DeclareSmartPtr( castor3d, TriFaceMapping, C3D_API );
+
+	CU_DeclareEnumTemplateSmartPtr( castor3d, BaseDataComponent, castor3d::SubmeshFlag );
 
 	//! Face array
 	CU_DeclareVector( Face, Face );

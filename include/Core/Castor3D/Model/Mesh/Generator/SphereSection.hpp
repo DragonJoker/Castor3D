@@ -4,6 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_SphereSection_H___
 #define ___C3D_SphereSection_H___
 
+#include "Castor3D/Model/Mesh/Generator/MeshGeneratorModule.hpp"
 #include "Castor3D/Model/Mesh/MeshGenerator.hpp"
 
 #include <CastorUtils/Math/Angle.hpp>

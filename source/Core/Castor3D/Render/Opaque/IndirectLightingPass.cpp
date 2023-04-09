@@ -32,7 +32,7 @@
 
 #include <ShaderWriter/Source.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, IndirectLightingPass )
+CU_ImplementSmartPtr( castor3d, IndirectLightingPass )
 
 namespace castor3d
 {

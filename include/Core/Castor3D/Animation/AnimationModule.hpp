@@ -170,11 +170,12 @@ namespace castor3d
 	template< typename DataT >
 	using InterpolatorPtr = std::unique_ptr< Interpolator< DataT > >;
 
-	CU_DeclareCUSmartPtr( castor3d, AnimationKeyFrame, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, AnimationImporter, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, AnimationImporterFactory, C3D_API );
-	CU_DeclareCUTemplateSmartPtr( castor3d, AnimationT );
-	CU_DeclareCUTemplateSmartPtr( castor3d, AnimationInstanceT );
+	CU_DeclareSmartPtr( castor3d, AnimationKeyFrame, C3D_API );
+	CU_DeclareSmartPtr( castor3d, AnimationImporter, C3D_API );
+	CU_DeclareSmartPtr( castor3d, AnimationImporterFactory, C3D_API );
+
+	CU_DeclareTemplateSmartPtr( castor3d, Animation );
+	CU_DeclareTemplateSmartPtr( castor3d, AnimationInstance );
 
 	using AnimationKeyFrameArray = std::vector< AnimationKeyFrameUPtr >;
 	//@}

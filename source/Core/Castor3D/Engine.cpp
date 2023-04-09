@@ -55,6 +55,8 @@
 
 #include <string_view>
 
+CU_ImplementSmartPtr( castor3d, Engine )
+
 namespace castor3d
 {
 	//*********************************************************************************************

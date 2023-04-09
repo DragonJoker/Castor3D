@@ -5,6 +5,8 @@
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
 
+CU_ImplementSmartPtr( castor3d, SceneNodeImporter )
+
 namespace castor3d
 {
 	SceneNodeImporter::SceneNodeImporter( Engine & engine )

@@ -4,7 +4,7 @@
   "description": "Drop-in replacement to Vulkan's shared library, allowing the use of OpenGL or Direct3D11 in addition to Vulkan.",
   "homepage": "https://github.com/DragonJoker/Ashes",
   "license": "MIT",
-  "supports": "!ios & !android & !x86 & !uwp & !arm32 & !static",
+  "supports": "!ios & !android & !x86 & !uwp & !arm32",
   "dependencies": [
     "opengl",
     "spirv-cross",

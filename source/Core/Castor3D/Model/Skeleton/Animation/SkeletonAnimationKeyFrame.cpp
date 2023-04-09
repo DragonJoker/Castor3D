@@ -6,7 +6,7 @@
 #include <CastorUtils/Math/SquareMatrix.hpp>
 #include <CastorUtils/Math/Quaternion.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, SkeletonAnimationKeyFrame )
+CU_ImplementSmartPtr( castor3d, SkeletonAnimationKeyFrame )
 
 namespace castor3d
 {

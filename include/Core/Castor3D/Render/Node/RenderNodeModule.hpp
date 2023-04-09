@@ -69,10 +69,10 @@ namespace castor3d
 	*/
 	struct SceneRenderNodes;
 
-	CU_DeclareCUSmartPtr( castor3d, BillboardRenderNode, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, SubmeshRenderNode, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, QueueRenderNodes, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, SceneRenderNodes, C3D_API );
+	CU_DeclareSmartPtr( castor3d, BillboardRenderNode, C3D_API );
+	CU_DeclareSmartPtr( castor3d, SubmeshRenderNode, C3D_API );
+	CU_DeclareSmartPtr( castor3d, QueueRenderNodes, C3D_API );
+	CU_DeclareSmartPtr( castor3d, SceneRenderNodes, C3D_API );
 
 	using PipelineBuffer = std::pair< PipelineBaseHash, ashes::BufferBase const * >;
 

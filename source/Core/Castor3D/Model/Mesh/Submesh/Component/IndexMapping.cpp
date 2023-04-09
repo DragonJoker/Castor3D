@@ -1,6 +1,6 @@
 #include "Castor3D/Model/Mesh/Submesh/Component/IndexMapping.hpp"
 
-CU_ImplementCUSmartPtr( castor3d, IndexMapping )
+CU_ImplementSmartPtr( castor3d, IndexMapping )
 
 namespace castor3d
 {

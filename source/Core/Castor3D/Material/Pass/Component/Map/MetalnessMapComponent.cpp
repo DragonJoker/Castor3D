@@ -17,6 +17,8 @@
 
 #include <CastorUtils/FileParser/ParserParameter.hpp>
 
+CU_ImplementSmartPtr( castor3d, MetalnessMapComponent )
+
 namespace castor
 {
 	template<>
@@ -156,7 +158,7 @@ namespace castor3d
 	void MetalnessMapComponent::Plugin::createMapComponent( Pass & pass
 		, std::vector< PassComponentUPtr > & result )const
 	{
-		result.push_back( std::make_unique< MetalnessMapComponent >( pass ) );
+		result.push_back( castor::makeUniqueDerived< PassComponent, MetalnessMapComponent >( pass ) );
 	}
 
 	bool MetalnessMapComponent::Plugin::doWriteTextureConfig( TextureConfiguration const & configuration
@@ -196,7 +198,7 @@ namespace castor3d
 
 	PassComponentUPtr MetalnessMapComponent::doClone( Pass & pass )const
 	{
-		return std::make_unique< MetalnessMapComponent >( pass );
+		return castor::makeUniqueDerived< PassComponent, MetalnessMapComponent >( pass );
 	}
 
 	void MetalnessMapComponent::doFillConfig( TextureConfiguration & configuration

@@ -7,7 +7,7 @@
 #include "Castor3D/Scene/Animation/SceneNode/SceneNodeAnimationInstance.hpp"
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
-CU_ImplementCUSmartPtr( castor3d, AnimatedSceneNode )
+CU_ImplementSmartPtr( castor3d, AnimatedSceneNode )
 
 namespace castor3d
 {

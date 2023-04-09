@@ -2,6 +2,8 @@
 
 #include "Castor3D/Material/Pass/PassVisitor.hpp"
 
+CU_ImplementSmartPtr( castor3d, SubsurfaceScattering )
+
 namespace castor3d
 {
 	void SubsurfaceScattering::accept( PassVisitorBase & vis )

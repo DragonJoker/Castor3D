@@ -8,6 +8,8 @@
 #include "Castor3D/Scene/Animation/AnimatedMesh.hpp"
 #include "Castor3D/Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp"
 
+CU_ImplementSmartPtr( castor3d, MeshAnimationInstance )
+
 namespace castor3d
 {
 	//*************************************************************************************************

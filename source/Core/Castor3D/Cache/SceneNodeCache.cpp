@@ -3,7 +3,7 @@
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
-CU_ImplementCUSmartPtr( castor3d, SceneNodeCache )
+CU_ImplementSmartPtr( castor3d, SceneNodeCache )
 
 namespace castor3d
 {

@@ -2,6 +2,8 @@
 
 #include "GuiCommon/Shader/StyleInfo.hpp"
 
+CU_ImplementSmartPtr( GuiCommon, LanguageInfo )
+
 namespace GuiCommon
 {
 	static wxColour const CommentColour{ wxT( "FOREST GREEN" ) };

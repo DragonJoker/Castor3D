@@ -173,6 +173,8 @@ namespace toon
 			, castor::String const & subfolder
 			, castor::StringStream & file )const override;
 	};
+
+	CU_DeclareSmartPtr( toon, EdgesComponent, C3D_ToonMaterial_API );
 }
 
 #endif

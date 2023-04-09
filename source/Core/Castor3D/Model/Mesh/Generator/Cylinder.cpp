@@ -6,6 +6,8 @@
 
 #pragma GCC diagnostic ignored "-Wuseless-cast"
 
+CU_ImplementSmartPtr( castor3d, Cylinder )
+
 namespace castor3d
 {
 	Cylinder::Cylinder()
@@ -18,7 +20,7 @@ namespace castor3d
 
 	MeshGeneratorUPtr Cylinder::create()
 	{
-		return std::make_unique< Cylinder >();
+		return castor::makeUniqueDerived< MeshGenerator, Cylinder >();
 	}
 
 	void Cylinder::doGenerate( Mesh & mesh, Parameters const & parameters )

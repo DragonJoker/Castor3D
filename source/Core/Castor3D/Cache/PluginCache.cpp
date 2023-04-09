@@ -14,7 +14,7 @@
 
 #include <CastorUtils/Miscellaneous/DynamicLibrary.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, PluginCache )
+CU_ImplementSmartPtr( castor3d, PluginCache )
 
 namespace castor3d
 {

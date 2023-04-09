@@ -2,7 +2,7 @@
 
 #include "Castor3D/Render/RenderDevice.hpp"
 
-CU_ImplementCUSmartPtr( castor3d, StagingData )
+CU_ImplementSmartPtr( castor3d, StagingData )
 
 namespace castor3d
 {

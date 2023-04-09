@@ -13,8 +13,8 @@
 
 #define C3D_PrintParsers 0
 
-CU_ImplementCUSmartPtr( castor3d, SceneFileContext )
-CU_ImplementCUSmartPtr( castor3d, SceneFileParser )
+CU_ImplementSmartPtr( castor3d, SceneFileContext )
+CU_ImplementSmartPtr( castor3d, SceneFileParser )
 
 namespace castor3d
 {

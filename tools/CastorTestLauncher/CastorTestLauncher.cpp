@@ -182,14 +182,14 @@ namespace test_launcher
 		return result;
 	}
 
-	castor3d::EngineSPtr CastorTestLauncher::doInitialiseCastor()
+	castor3d::EngineUPtr CastorTestLauncher::doInitialiseCastor()
 	{
 		if ( !castor::File::directoryExists( castor3d::Engine::getEngineDirectory() ) )
 		{
 			castor::File::directoryCreate( castor3d::Engine::getEngineDirectory() );
 		}
 
-		castor3d::EngineSPtr castor = std::make_shared< castor3d::Engine >( cuT( "CastorTestLauncher" )
+		auto castor = castor::makeUnique< castor3d::Engine >( cuT( "CastorTestLauncher" )
 			, castor3d::Version{ CastorTestLauncher_VERSION_MAJOR, CastorTestLauncher_VERSION_MINOR, CastorTestLauncher_VERSION_BUILD }
 			, m_config.validate
 			, !m_config.disableRandom

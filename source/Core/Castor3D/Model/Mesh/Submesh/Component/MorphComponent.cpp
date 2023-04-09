@@ -16,7 +16,7 @@
 
 #include <ashespp/Buffer/VertexBuffer.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, MorphComponent )
+CU_ImplementSmartPtr( castor3d, MorphComponent )
 
 namespace castor3d
 {

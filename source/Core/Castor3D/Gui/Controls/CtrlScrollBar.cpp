@@ -14,7 +14,7 @@
 
 #include <CastorUtils/Graphics/Font.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, ScrollBarCtrl )
+CU_ImplementSmartPtr( castor3d, ScrollBarCtrl )
 
 namespace castor3d
 {

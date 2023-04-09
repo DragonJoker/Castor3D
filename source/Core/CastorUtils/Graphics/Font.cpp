@@ -7,7 +7,7 @@ FT_BEGIN_HEADER
 #	include FT_GLYPH_H
 FT_END_HEADER
 
-CU_ImplementCUSmartPtr( castor, Font )
+CU_ImplementSmartPtr( castor, Font )
 
 namespace castor
 {

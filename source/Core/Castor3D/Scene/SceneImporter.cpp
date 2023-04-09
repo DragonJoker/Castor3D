@@ -20,6 +20,8 @@
 #include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Scene/Light/LightImporter.hpp"
 
+CU_ImplementSmartPtr( castor3d, SceneImporter )
+
 namespace castor3d
 {
 	//*********************************************************************************************

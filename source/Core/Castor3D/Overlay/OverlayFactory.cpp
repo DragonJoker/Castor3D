@@ -4,7 +4,7 @@
 #include "Castor3D/Overlay/BorderPanelOverlay.hpp"
 #include "Castor3D/Overlay/TextOverlay.hpp"
 
-CU_ImplementCUSmartPtr( castor3d, OverlayFactory )
+CU_ImplementSmartPtr( castor3d, OverlayFactory )
 
 namespace castor3d
 {

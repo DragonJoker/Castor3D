@@ -7,11 +7,11 @@
 #include "Castor3D/Scene/SceneNode.hpp"
 
 CU_ImplementExportedOwnedBy( castor3d::Scene, Scene )
-CU_ImplementCUSmartPtr( castor3d, CameraCache )
-CU_ImplementCUSmartPtr( castor3d, SceneCache )
-CU_ImplementCUSmartPtr( castor3d, MaterialCacheView )
-CU_ImplementCUSmartPtr( castor3d, SamplerCacheView )
-CU_ImplementCUSmartPtr( castor3d, FontCacheView )
+CU_ImplementSmartPtr( castor3d, CameraCache )
+CU_ImplementSmartPtr( castor3d, SceneCache )
+CU_ImplementSmartPtr( castor3d, MaterialCacheView )
+CU_ImplementSmartPtr( castor3d, SamplerCacheView )
+CU_ImplementSmartPtr( castor3d, FontCacheView )
 
 
 namespace castor3d

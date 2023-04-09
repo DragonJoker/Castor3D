@@ -3,10 +3,10 @@
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp"
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumes.hpp"
 
-CU_ImplementCUSmartPtr( castor3d, LightPropagationVolumes )
-CU_ImplementCUSmartPtr( castor3d, LightPropagationVolumesG )
-CU_ImplementCUSmartPtr( castor3d, LayeredLightPropagationVolumes )
-CU_ImplementCUSmartPtr( castor3d, LayeredLightPropagationVolumesG )
+CU_ImplementSmartPtr( castor3d, LightPropagationVolumes )
+CU_ImplementSmartPtr( castor3d, LightPropagationVolumesG )
+CU_ImplementSmartPtr( castor3d, LayeredLightPropagationVolumes )
+CU_ImplementSmartPtr( castor3d, LayeredLightPropagationVolumesG )
 
 namespace castor3d
 {

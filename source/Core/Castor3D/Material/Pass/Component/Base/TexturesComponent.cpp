@@ -12,6 +12,8 @@
 #include <CastorUtils/FileParser/ParserParameter.hpp>
 #include <CastorUtils/Data/Text/TextRgbColour.hpp>
 
+CU_ImplementSmartPtr( castor3d, TexturesComponent )
+
 namespace castor3d
 {
 	//*********************************************************************************************
@@ -292,7 +294,7 @@ namespace castor3d
 
 	PassComponentUPtr TexturesComponent::doClone( Pass & pass )const
 	{
-		return std::make_unique< TexturesComponent >( pass );
+		return castor::makeUniqueDerived< PassComponent, TexturesComponent >( pass );
 	}
 
 	void TexturesComponent::doFillBuffer( PassBuffer & buffer )const

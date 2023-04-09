@@ -2,7 +2,7 @@
 
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 
-CU_ImplementCUSmartPtr( castor3d, MeshAnimation )
+CU_ImplementSmartPtr( castor3d, MeshAnimation )
 
 namespace castor3d
 {

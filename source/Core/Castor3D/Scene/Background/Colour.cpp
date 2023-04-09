@@ -19,6 +19,8 @@
 #include <ashespp/Image/StagingTexture.hpp>
 #include <ashespp/RenderPass/FrameBuffer.hpp>
 
+CU_ImplementSmartPtr( castor3d, ColourBackground )
+
 namespace castor3d
 {
 	//************************************************************************************************

@@ -29,7 +29,7 @@ namespace atmosphere_scattering
 	{
 		auto & parsingContext = castor3d::getSceneParserContext( context );
 		auto & atmosphereContext = parser::getParserContext( context );
-		atmosphereContext.background = std::make_unique< AtmosphereBackground >( *parsingContext.parser->getEngine()
+		atmosphereContext.background = castor::makeUnique< AtmosphereBackground >( *parsingContext.parser->getEngine()
 			, *parsingContext.scene );
 	}
 	CU_EndAttributePush( AtmosphereSection::eRoot )
@@ -61,7 +61,7 @@ namespace atmosphere_scattering
 			atmosphereContext.background->loadPerlinWorley( atmosphereContext.perlinWorleyDim );
 			atmosphereContext.background->loadCurl( atmosphereContext.curlDim );
 			atmosphereContext.background->loadWeather( atmosphereContext.weatherDim );
-			parsingContext.scene->setBackground( std::move( atmosphereContext.background ) );
+			parsingContext.scene->setBackground( castor::ptrRefCast< castor3d::SceneBackground >( atmosphereContext.background ) );
 		}
 	}
 	CU_EndAttributePop()

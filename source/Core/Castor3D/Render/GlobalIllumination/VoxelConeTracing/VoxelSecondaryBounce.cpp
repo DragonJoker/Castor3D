@@ -27,7 +27,7 @@
 #include <RenderGraph/GraphContext.hpp>
 #include <RenderGraph/RunnableGraph.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, VoxelSecondaryBounce )
+CU_ImplementSmartPtr( castor3d, VoxelSecondaryBounce )
 
 namespace castor3d
 {

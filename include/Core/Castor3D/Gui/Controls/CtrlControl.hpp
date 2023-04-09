@@ -45,7 +45,7 @@ namespace castor3d
 			, castor::Size const & size
 			, ControlFlagType flags = 0
 			, bool visible = true );
-		C3D_API ~Control()noexcept;
+		C3D_API ~Control()noexcept override;
 
 		/** Sets the style
 		 *\param[in]	value	The new value

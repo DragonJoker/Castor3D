@@ -12,7 +12,7 @@
 
 #include <CastorUtils/Graphics/Font.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, ProgressCtrl )
+CU_ImplementSmartPtr( castor3d, ProgressCtrl )
 
 namespace castor3d
 {
@@ -84,7 +84,7 @@ namespace castor3d
 
 	ProgressCtrl::~ProgressCtrl()noexcept
 	{
-		if ( auto overlay = m_text )
+		if ( m_text )
 		{
 			if ( m_scene )
 			{
@@ -100,7 +100,7 @@ namespace castor3d
 		manager.unregisterControl( *m_progress );
 		manager.unregisterControl( *m_container );
 
-		if ( auto overlay = m_title )
+		if ( m_title )
 		{
 			if ( m_scene )
 			{

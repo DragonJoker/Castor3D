@@ -12,6 +12,8 @@
 #include <CastorUtils/FileParser/ParserParameter.hpp>
 #include <CastorUtils/Data/Text/TextRgbColour.hpp>
 
+CU_ImplementSmartPtr( castor3d, AlphaTestComponent )
+
 namespace castor
 {
 	template<>
@@ -220,9 +222,9 @@ namespace castor3d
 
 	PassComponentUPtr AlphaTestComponent::doClone( Pass & pass )const
 	{
-		auto result = std::make_unique< AlphaTestComponent >( pass );
+		auto result = castor::makeUnique< AlphaTestComponent >( pass );
 		result->setData( getData() );
-		return result;
+		return castor::ptrRefCast< PassComponent >( result );
 	}
 
 	bool AlphaTestComponent::doWriteText( castor::String const & tabs

@@ -31,7 +31,7 @@
 #include <RenderGraph/RunnablePasses/BufferCopy.hpp>
 #include <RenderGraph/RunnablePasses/GenerateMipmaps.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, Voxelizer )
+CU_ImplementSmartPtr( castor3d, Voxelizer )
 
 namespace castor3d
 {

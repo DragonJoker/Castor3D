@@ -83,7 +83,7 @@ namespace castor3d
 		{
 		}
 
-		C3D_API ~ComboBoxCtrl()noexcept;
+		C3D_API ~ComboBoxCtrl()noexcept override;
 
 		/** Appends a new item
 		*\param[in]	value		The item

@@ -41,7 +41,7 @@
 
 #include <algorithm>
 
-CU_ImplementCUSmartPtr( castor3d, Pass )
+CU_ImplementSmartPtr( castor3d, Pass )
 
 namespace castor3d
 {

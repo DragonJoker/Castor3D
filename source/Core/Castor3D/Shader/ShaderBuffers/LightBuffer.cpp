@@ -7,7 +7,7 @@
 #include "Castor3D/Scene/Light/SpotLight.hpp"
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
-CU_ImplementCUSmartPtr( castor3d, LightBuffer )
+CU_ImplementSmartPtr( castor3d, LightBuffer )
 
 namespace castor3d
 {

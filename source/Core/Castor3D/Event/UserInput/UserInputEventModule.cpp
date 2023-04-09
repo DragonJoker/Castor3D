@@ -6,11 +6,7 @@
 #include "Castor3D/Event/UserInput/MouseEvent.hpp"
 #include "Castor3D/Event/UserInput/UserInputEvent.hpp"
 
-CU_ImplementCUSmartPtr( castor3d, EventHandler )
-CU_ImplementCUSmartPtr( castor3d, HandlerEvent )
-CU_ImplementCUSmartPtr( castor3d, KeyboardEvent )
-CU_ImplementCUSmartPtr( castor3d, MouseEvent )
-CU_ImplementCUSmartPtr( castor3d, UserInputEvent )
+CU_ImplementSmartPtr( castor3d, EventHandler )
 
 namespace castor3d
 {

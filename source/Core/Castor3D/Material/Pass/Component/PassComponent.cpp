@@ -12,7 +12,8 @@
 #include <ShaderWriter/BaseTypes/CombinedImage.hpp>
 #include <ShaderWriter/Intrinsics/Intrinsics.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, PassComponentPlugin )
+CU_ImplementSmartPtr( castor3d, PassComponent )
+CU_ImplementSmartPtr( castor3d, PassComponentPlugin )
 
 namespace castor3d
 {

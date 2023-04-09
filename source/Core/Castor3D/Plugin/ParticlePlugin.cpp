@@ -2,7 +2,7 @@
 
 #include <CastorUtils/Miscellaneous/DynamicLibrary.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, ParticlePlugin )
+CU_ImplementSmartPtr( castor3d, ParticlePlugin )
 
 namespace castor3d
 {

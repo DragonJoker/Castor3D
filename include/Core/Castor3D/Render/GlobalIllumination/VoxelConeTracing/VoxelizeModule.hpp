@@ -62,10 +62,10 @@ namespace castor3d
 	*/
 	class VoxelSceneData;
 
-	CU_DeclareCUSmartPtr( castor3d, VoxelBufferToTexture, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, VoxelizePass, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, VoxelSecondaryBounce, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, Voxelizer, C3D_API );
+	CU_DeclareSmartPtr( castor3d, VoxelBufferToTexture, C3D_API );
+	CU_DeclareSmartPtr( castor3d, VoxelizePass, C3D_API );
+	CU_DeclareSmartPtr( castor3d, VoxelSecondaryBounce, C3D_API );
+	CU_DeclareSmartPtr( castor3d, Voxelizer, C3D_API );
 
 	struct Voxel
 	{

@@ -1,7 +1,7 @@
 #include "Castor3D/Material/Pass/PassModule.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 
-CU_ImplementCUSmartPtr( castor3d, RenderPassRegisterInfo )
+CU_ImplementSmartPtr( castor3d, RenderPassRegisterInfo )
 
 namespace castor3d
 {

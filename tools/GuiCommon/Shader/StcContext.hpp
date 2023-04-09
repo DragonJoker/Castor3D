@@ -31,29 +31,29 @@ namespace GuiCommon
 			return m_languages.size();
 		}
 
-		inline LanguageInfoPtrArrayIt begin()
+		inline LanguageInfoArrayIt begin()
 		{
 			return m_languages.begin();
 		}
 
-		inline LanguageInfoPtrArrayConstIt begin()const
+		inline LanguageInfoArrayConstIt begin()const
 		{
 			return m_languages.begin();
 		}
 
-		inline LanguageInfoPtrArrayIt end()
+		inline LanguageInfoArrayIt end()
 		{
 			return m_languages.end();
 		}
 
-		inline LanguageInfoPtrArrayConstIt end()const
+		inline LanguageInfoArrayConstIt end()const
 		{
 			return m_languages.end();
 		}
 
-		inline void push_back( LanguageInfoPtr language )
+		inline void push_back( LanguageInfoUPtr language )
 		{
-			m_languages.push_back( language );
+			m_languages.push_back( std::move( language ) );
 		}
 
 	public:
@@ -72,7 +72,7 @@ namespace GuiCommon
 		wxString fontName;
 
 	private:
-		LanguageInfoPtrArray m_languages;
+		LanguageInfoArray m_languages;
 	};
 }
 

@@ -188,15 +188,15 @@ namespace castor3d
 	*/
 	class StencilPass;
 
-	CU_DeclareCUSmartPtr( castor3d, BackgroundRenderer, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, CombinePass, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, DownscalePass, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, GaussianBlur, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, LineariseDepthPass, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, PickingPass, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, RenderQuad, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, RenderGrid, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, StencilPass, C3D_API );
+	CU_DeclareSmartPtr( castor3d, BackgroundRenderer, C3D_API );
+	CU_DeclareSmartPtr( castor3d, CombinePass, C3D_API );
+	CU_DeclareSmartPtr( castor3d, DownscalePass, C3D_API );
+	CU_DeclareSmartPtr( castor3d, GaussianBlur, C3D_API );
+	CU_DeclareSmartPtr( castor3d, LineariseDepthPass, C3D_API );
+	CU_DeclareSmartPtr( castor3d, PickingPass, C3D_API );
+	CU_DeclareSmartPtr( castor3d, RenderQuad, C3D_API );
+	CU_DeclareSmartPtr( castor3d, RenderGrid, C3D_API );
+	CU_DeclareSmartPtr( castor3d, StencilPass, C3D_API );
 
 	CU_DeclareVector( CommandsSemaphore, CommandsSemaphore );
 

@@ -3,8 +3,8 @@
 #include "Castor3D/Event/Frame/CpuFunctorEvent.hpp"
 #include "Castor3D/Gui/Controls/CtrlLayoutControl.hpp"
 
-CU_ImplementCUSmartPtr( castor3d, Layout )
-CU_ImplementCUSmartPtr( castor3d, Spacer )
+CU_ImplementSmartPtr( castor3d, Layout )
+CU_ImplementSmartPtr( castor3d, Spacer )
 
 namespace castor3d
 {

@@ -29,6 +29,8 @@
 
 #include <RenderGraph/ResourceHandler.hpp>
 
+CU_ImplementSmartPtr( castor3d, IblTextures )
+
 namespace castor3d
 {
 	namespace ibltex

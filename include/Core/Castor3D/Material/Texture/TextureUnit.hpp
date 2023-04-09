@@ -21,10 +21,21 @@ namespace castor3d
 {
 	struct TextureUnitData
 	{
+		explicit TextureUnitData( TextureSourceInfo psourceInfo
+			, PassTextureConfig ppassConfig = {}
+			, TextureAnimationUPtr panimation = {}
+			, castor::PxBufferBaseUPtr pbuffer = {} )
+			: sourceInfo{ std::move( psourceInfo ) }
+			, passConfig{ std::move( ppassConfig ) }
+			, animation{ std::move( panimation ) }
+			, buffer{ std::move( pbuffer ) }
+		{
+		}
+
 		TextureSourceInfo sourceInfo;
-		PassTextureConfig passConfig{};
-		TextureAnimationUPtr animation{};
-		castor::PxBufferBaseUPtr buffer{};
+		PassTextureConfig passConfig;
+		TextureAnimationUPtr animation;
+		castor::PxBufferBaseUPtr buffer;
 	};
 
 	class TextureUnit

@@ -13,7 +13,7 @@
 #include "Castor3D/Scene/Animation/AnimatedTexture.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
 
-CU_ImplementCUSmartPtr( castor3d, AnimatedObjectGroup )
+CU_ImplementSmartPtr( castor3d, AnimatedObjectGroup )
 
 namespace castor3d
 {
@@ -135,7 +135,7 @@ namespace castor3d
 			{
 				m_objects.emplace( name, std::move( object ) );
 
-				switch ( object->getKind() )
+				switch ( obj->getKind() )
 				{
 				case AnimationType::eSceneNode:
 					onSceneNodeAdded( *this, static_cast< AnimatedSceneNode & >( *obj ) );

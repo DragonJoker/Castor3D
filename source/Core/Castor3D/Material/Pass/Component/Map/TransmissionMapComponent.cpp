@@ -15,6 +15,8 @@
 
 #include <CastorUtils/FileParser/ParserParameter.hpp>
 
+CU_ImplementSmartPtr( castor3d, TransmissionMapComponent )
+
 namespace castor
 {
 	template<>
@@ -160,7 +162,7 @@ namespace castor3d
 	void TransmissionMapComponent::Plugin::createMapComponent( Pass & pass
 		, std::vector< PassComponentUPtr > & result )const
 	{
-		result.push_back( std::make_unique< TransmissionMapComponent >( pass ) );
+		result.push_back( castor::makeUniqueDerived< PassComponent, TransmissionMapComponent >( pass ) );
 	}
 
 	bool TransmissionMapComponent::Plugin::doWriteTextureConfig( TextureConfiguration const & configuration
@@ -186,7 +188,7 @@ namespace castor3d
 
 	PassComponentUPtr TransmissionMapComponent::doClone( Pass & pass )const
 	{
-		return std::make_unique< TransmissionMapComponent >( pass );
+		return castor::makeUniqueDerived< PassComponent, TransmissionMapComponent >( pass );
 	}
 
 	void TransmissionMapComponent::doFillConfig( TextureConfiguration & configuration

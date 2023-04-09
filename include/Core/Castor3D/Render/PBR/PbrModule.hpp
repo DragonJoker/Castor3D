@@ -50,7 +50,7 @@ namespace castor3d
 	*/
 	class RadianceComputer;
 
-	CU_DeclareSmartPtr( IblTextures );
+	CU_DeclareSmartPtr( castor3d, IblTextures, C3D_API );
 
 	//@}
 	//@}

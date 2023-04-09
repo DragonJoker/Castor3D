@@ -78,12 +78,12 @@ namespace castor3d
 	using GpuDataBufferOffsetModifySignal = castor::SignalT< GpuDataBufferOffsetModifyFunc >;
 	using GpuDataBufferOffsetModifyConnection = castor::ConnectionT< GpuDataBufferOffsetModifySignal >;
 
-	CU_DeclareCUSmartPtr( castor3d, FontGlyphBuffer, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, LightBuffer, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, PassBuffer, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, SssProfileBuffer, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, TextureConfigurationBuffer, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, TextureAnimationBuffer, C3D_API );
+	CU_DeclareSmartPtr( castor3d, FontGlyphBuffer, C3D_API );
+	CU_DeclareSmartPtr( castor3d, LightBuffer, C3D_API );
+	CU_DeclareSmartPtr( castor3d, PassBuffer, C3D_API );
+	CU_DeclareSmartPtr( castor3d, SssProfileBuffer, C3D_API );
+	CU_DeclareSmartPtr( castor3d, TextureConfigurationBuffer, C3D_API );
+	CU_DeclareSmartPtr( castor3d, TextureAnimationBuffer, C3D_API );
 
 	struct ShaderBufferTypes
 	{

@@ -26,7 +26,7 @@
 
 #include <RenderGraph/FrameGraph.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, SsaoBlurPass )
+CU_ImplementSmartPtr( castor3d, SsaoBlurPass )
 
 namespace castor3d
 {

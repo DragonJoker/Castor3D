@@ -3,7 +3,7 @@
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 
-CU_ImplementCUSmartPtr( castor3d, SamplerCache )
+CU_ImplementSmartPtr( castor3d, SamplerCache )
 
 namespace castor3d
 {

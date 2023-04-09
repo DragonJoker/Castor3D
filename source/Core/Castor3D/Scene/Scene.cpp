@@ -45,7 +45,7 @@
 #include <CastorUtils/Graphics/Font.hpp>
 #include <CastorUtils/Graphics/FontCache.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, Scene )
+CU_ImplementSmartPtr( castor3d, Scene )
 
 namespace castor3d
 {
@@ -108,8 +108,8 @@ namespace castor3d
 		, m_rootNode{ m_sceneNodeCache->find( RootNode ) }
 		, m_rootCameraNode{ m_sceneNodeCache->find( CameraRootNode ) }
 		, m_rootObjectNode{ m_sceneNodeCache->find( ObjectRootNode ) }
-		, m_background{ std::make_shared< ColourBackground >( engine, *this ) }
-		, m_lightFactory{ std::make_shared< LightFactory >() }
+		, m_background{ castor::makeUniqueDerived< SceneBackground, ColourBackground >( engine, *this ) }
+		, m_lightFactory{ castor::makeUnique< LightFactory >() }
 		, m_listener{ engine.addNewFrameListener( cuT( "Scene_" ) + name + castor::string::toString( intptr_t( this ) ) ) }
 		, m_renderNodes{ castor::makeUnique< SceneRenderNodes >( *this ) }
 	{
@@ -213,7 +213,7 @@ namespace castor3d
 		m_animatedObjectGroupCache->add( cuT( "C3D_Textures" ), *this );
 		auto & device = engine.getRenderSystem()->getRenderDevice();
 		auto data = device.graphicsData();
-		m_reflectionMap = std::make_unique< EnvironmentMap >( m_resources
+		m_reflectionMap = castor::makeUnique< EnvironmentMap >( m_resources
 			, device
 			, *data
 			, *this );
@@ -370,7 +370,6 @@ namespace castor3d
 
 		m_renderNodes->clear();
 
-		// These ones, being ResourceCache, need to be cleared in destructor only
 		m_meshCache->cleanup();
 
 		if ( m_cleanBackground )
@@ -467,7 +466,7 @@ namespace castor3d
 			} );
 	}
 
-	void Scene::setBackground( SceneBackgroundSPtr value )
+	void Scene::setBackground( SceneBackgroundUPtr value )
 	{
 		m_background = std::move( value );
 		m_background->initialise( getEngine()->getRenderSystem()->getRenderDevice() );

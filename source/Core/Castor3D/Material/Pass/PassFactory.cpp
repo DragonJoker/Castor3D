@@ -4,7 +4,7 @@
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 
-CU_ImplementCUSmartPtr( castor3d, PassFactory )
+CU_ImplementSmartPtr( castor3d, PassFactory )
 
 namespace castor3d
 {

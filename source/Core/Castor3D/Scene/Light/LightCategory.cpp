@@ -7,6 +7,8 @@
 
 #include <ShaderWriter/Source.hpp>
 
+CU_ImplementSmartPtr( castor3d, LightCategory )
+
 namespace castor3d
 {
 	LightCategory::LightCategory( LightType lightType, Light & light )

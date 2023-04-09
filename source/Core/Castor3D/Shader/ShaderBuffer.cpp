@@ -8,7 +8,7 @@
 
 #include <RenderGraph/FramePass.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, ShaderBuffer )
+CU_ImplementSmartPtr( castor3d, ShaderBuffer )
 
 namespace castor3d
 {

@@ -28,7 +28,7 @@
 #include <CastorUtils/FileParser/ParserParameter.hpp>
 #include <CastorUtils/Graphics/FontCache.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, ControlsManager )
+CU_ImplementSmartPtr( castor3d, ControlsManager )
 
 namespace castor3d
 {

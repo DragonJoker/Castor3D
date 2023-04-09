@@ -15,7 +15,7 @@
 
 #include <RenderGraph/FramePassGroup.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, BackgroundRenderer )
+CU_ImplementSmartPtr( castor3d, BackgroundRenderer )
 
 namespace castor3d
 {

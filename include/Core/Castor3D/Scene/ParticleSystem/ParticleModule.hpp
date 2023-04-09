@@ -170,7 +170,7 @@ namespace castor3d
 	*/
 	class ParticleUpdater;
 
-	CU_DeclareCUSmartPtr( castor3d, CpuParticleSystem, C3D_API );
+	CU_DeclareSmartPtr( castor3d, CpuParticleSystem, C3D_API );
 	/**
 	*\~english
 	*\brief
@@ -187,13 +187,13 @@ namespace castor3d
 	template< ParticleFormat Type >
 	struct ElementTyper;
 	
-	CU_DeclareCUSmartPtr( castor3d, ComputeParticleSystem, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, ParticleElementDeclaration, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, ParticleEmitter, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, ParticleSystem, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, ParticleSystemImpl, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, ParticleUpdater, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, ParticleFactory, C3D_API );
+	CU_DeclareSmartPtr( castor3d, ComputeParticleSystem, C3D_API );
+	CU_DeclareSmartPtr( castor3d, ParticleElementDeclaration, C3D_API );
+	CU_DeclareSmartPtr( castor3d, ParticleEmitter, C3D_API );
+	CU_DeclareSmartPtr( castor3d, ParticleSystem, C3D_API );
+	CU_DeclareSmartPtr( castor3d, ParticleSystemImpl, C3D_API );
+	CU_DeclareSmartPtr( castor3d, ParticleUpdater, C3D_API );
+	CU_DeclareSmartPtr( castor3d, ParticleFactory, C3D_API );
 
 	CU_DeclareVector( Particle, Particle );
 	CU_DeclareVector( ParticleEmitterUPtr, ParticleEmitter );
@@ -229,7 +229,7 @@ namespace castor3d
 	using ParticleSystemRes = CameraCacheTraits::ElementPtrT;
 	using ParticleSystemResPtr = CameraCacheTraits::ElementObsT;
 
-	CU_DeclareCUSmartPtr( castor3d, ParticleSystemCache, C3D_API );
+	CU_DeclareSmartPtr( castor3d, ParticleSystemCache, C3D_API );
 
 	//@}
 	//@}

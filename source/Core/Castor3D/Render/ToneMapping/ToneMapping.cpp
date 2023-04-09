@@ -18,7 +18,7 @@
 
 #include <ShaderWriter/Source.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, ToneMapping )
+CU_ImplementSmartPtr( castor3d, ToneMapping )
 
 namespace castor3d
 {

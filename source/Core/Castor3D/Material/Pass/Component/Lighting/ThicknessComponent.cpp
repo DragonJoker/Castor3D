@@ -13,6 +13,8 @@
 #include <CastorUtils/FileParser/ParserParameter.hpp>
 #include <CastorUtils/Data/Text/TextRgbColour.hpp>
 
+CU_ImplementSmartPtr( castor3d, ThicknessComponent )
+
 namespace castor
 {
 	template<>
@@ -172,9 +174,9 @@ namespace castor3d
 
 	PassComponentUPtr ThicknessComponent::doClone( Pass & pass )const
 	{
-		auto result = std::make_unique< ThicknessComponent >( pass );
+		auto result = castor::makeUnique< ThicknessComponent >( pass );
 		result->setData( getData() );
-		return result;
+		return castor::ptrRefCast< PassComponent >( result );
 	}
 
 	bool ThicknessComponent::doWriteText( castor::String const & tabs

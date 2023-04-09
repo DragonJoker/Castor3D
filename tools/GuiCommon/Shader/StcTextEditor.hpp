@@ -115,7 +115,7 @@ namespace GuiCommon
 			m_filename = filename;
 		}
 
-		inline LanguageInfoPtr getLanguageInfo()
+		inline LanguageInfoRPtr getLanguageInfo()
 		{
 			return m_language;
 		}
@@ -166,7 +166,7 @@ namespace GuiCommon
 	private:
 		wxString m_filename;
 		wxString m_currentWord;
-		LanguageInfoPtr m_language;
+		LanguageInfoRPtr m_language{};
 		StcContext & m_context;
 		int m_lineNrID;
 		int m_lineNrMargin;

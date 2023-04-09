@@ -41,10 +41,9 @@ namespace castor3d
 	*/
 	class Texture3DTo2D;
 
-	CU_DeclareSmartPtr( EquirectangularToCube );
-	CU_DeclareSmartPtr( RenderCube );
-
-	CU_DeclareCUSmartPtr( castor3d, Texture3DTo2D, C3D_API );
+	CU_DeclareSmartPtr( castor3d, EquirectangularToCube, C3D_API );
+	CU_DeclareSmartPtr( castor3d, RenderCube, C3D_API );
+	CU_DeclareSmartPtr( castor3d, Texture3DTo2D, C3D_API );
 
 	//@}
 	//@}

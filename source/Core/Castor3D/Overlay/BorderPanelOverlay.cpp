@@ -11,7 +11,7 @@
 
 #include <ShaderWriter/Source.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, BorderPanelOverlay )
+CU_ImplementSmartPtr( castor3d, BorderPanelOverlay )
 
 namespace castor3d
 {

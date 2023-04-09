@@ -4,7 +4,7 @@
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 
-CU_ImplementCUSmartPtr( castor3d, PrepassResult )
+CU_ImplementSmartPtr( castor3d, PrepassResult )
 
 namespace castor3d
 {

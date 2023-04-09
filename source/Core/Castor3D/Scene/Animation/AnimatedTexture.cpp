@@ -10,7 +10,7 @@
 #include "Castor3D/Scene/Animation/Texture/TextureAnimationInstance.hpp"
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
-CU_ImplementCUSmartPtr( castor3d, AnimatedTexture )
+CU_ImplementSmartPtr( castor3d, AnimatedTexture )
 
 namespace castor3d
 {

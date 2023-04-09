@@ -29,8 +29,8 @@ namespace castor3d
 	class TextureAnimation;
 	class TextureAnimationKeyFrame;
 
-	CU_DeclareCUSmartPtr( castor3d, TextureAnimation, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, TextureAnimationKeyFrame, C3D_API );
+	CU_DeclareSmartPtr( castor3d, TextureAnimation, C3D_API );
+	CU_DeclareSmartPtr( castor3d, TextureAnimationKeyFrame, C3D_API );
 
 	using TextureRotateSpeed = castor::SpeedT< castor::Angle, castor::Seconds >;
 	using TextureTranslateSpeed = castor::SpeedT< castor::Point2f, castor::Seconds >;

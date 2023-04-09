@@ -20,7 +20,7 @@
 #include <RenderGraph/RunnablePasses/GenerateMipmaps.hpp>
 #include <RenderGraph/RunnablePasses/ImageCopy.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, TransparentRendering )
+CU_ImplementSmartPtr( castor3d, TransparentRendering )
 
 namespace castor3d
 {

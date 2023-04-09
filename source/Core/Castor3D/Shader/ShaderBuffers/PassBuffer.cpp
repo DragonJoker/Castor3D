@@ -9,7 +9,7 @@
 
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, PassBuffer )
+CU_ImplementSmartPtr( castor3d, PassBuffer )
 
 namespace castor3d
 {

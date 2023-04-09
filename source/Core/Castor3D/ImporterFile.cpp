@@ -3,7 +3,8 @@
 #include "Castor3D/Binary/CmshImporter.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
-CU_ImplementCUSmartPtr( castor3d, ImporterFileFactory )
+CU_ImplementSmartPtr( castor3d, ImporterFile )
+CU_ImplementSmartPtr( castor3d, ImporterFileFactory )
 
 namespace castor3d
 {

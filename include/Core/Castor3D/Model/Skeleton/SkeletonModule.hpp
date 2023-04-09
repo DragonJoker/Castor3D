@@ -118,13 +118,12 @@ namespace castor3d
 	using SkeletonRes = SkeletonCacheTraits::ElementPtrT;
 	using SkeletonResPtr = SkeletonCacheTraits::ElementObsT;
 
-	CU_DeclareSmartPtr( SkeletonImporter );
-
-	CU_DeclareCUSmartPtr( castor3d, BoneNode, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, SkeletonNode, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, Skeleton, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, SkeletonCache, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, SkeletonImporterFactory, C3D_API );
+	CU_DeclareSmartPtr( castor3d, BoneNode, C3D_API );
+	CU_DeclareSmartPtr( castor3d, SkeletonNode, C3D_API );
+	CU_DeclareSmartPtr( castor3d, Skeleton, C3D_API );
+	CU_DeclareSmartPtr( castor3d, SkeletonCache, C3D_API );
+	CU_DeclareSmartPtr( castor3d, SkeletonImporter, C3D_API );
+	CU_DeclareSmartPtr( castor3d, SkeletonImporterFactory, C3D_API );
 
 	//! Skinned vertex data array
 	CU_DeclareVector( VertexBoneData, VertexBoneData );

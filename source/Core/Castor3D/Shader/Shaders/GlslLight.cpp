@@ -15,6 +15,8 @@
 
 #include <ShaderWriter/Source.hpp>
 
+CU_ImplementSmartPtr( castor3d::shader, LightsBuffer )
+
 namespace castor3d::shader
 {
 	//*********************************************************************************************
@@ -250,9 +252,9 @@ namespace castor3d::shader
 		, m_brdf{ brdf }
 		, m_utils{ utils }
 		, m_enableVolumetric{ enableVolumetric }
-		, m_shadowModel{ std::make_shared< Shadow >( shadowOptions, m_writer ) }
+		, m_shadowModel{ castor::makeUnique< Shadow >( shadowOptions, m_writer ) }
 		, m_sssTransmittance{ ( sssProfiles
-			? std::make_shared< SssTransmittance >( m_writer
+			? castor::makeUnique< SssTransmittance >( m_writer
 				, std::move( shadowOptions )
 				, *sssProfiles )
 			: nullptr ) }
@@ -283,7 +285,7 @@ namespace castor3d::shader
 			, enableVolumetric }
 	{
 		m_shadowModel->declare( shadowMapBinding, shadowMapSet );
-		m_lightsBuffer = std::make_unique< LightsBuffer >( m_writer
+		m_lightsBuffer = castor::makeUnique< LightsBuffer >( m_writer
 			, lightsBufBinding
 			, lightsBufSet );
 	}
@@ -328,7 +330,7 @@ namespace castor3d::shader
 			break;
 		}
 
-		m_lightsBuffer = std::make_unique< LightsBuffer >( m_writer
+		m_lightsBuffer = castor::makeUnique< LightsBuffer >( m_writer
 			, lightsBufBinding
 			, lightsBufSet );
 	}

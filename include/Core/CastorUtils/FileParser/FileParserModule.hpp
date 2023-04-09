@@ -171,8 +171,10 @@ namespace castor
 	*/
 	class PreprocessedFile;
 
-	CU_DeclareCUSmartPtr( castor, FileParserContext, CU_API );
-	CU_DeclareCUSmartPtr( castor, ParserParameterBase, CU_API );
+	CU_DeclareSmartPtr( castor, FileParserContext, CU_API );
+
+	using ParserParameterBaseSPtr = std::shared_ptr< ParserParameterBase >;
+
 	CU_DeclareVector( ParserParameterBaseSPtr, ParserParameter );
 	/**
 	 *\~english

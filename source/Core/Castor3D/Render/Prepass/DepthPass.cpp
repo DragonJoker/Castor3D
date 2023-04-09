@@ -32,7 +32,7 @@
 
 #include <ShaderWriter/Source.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, DepthPass )
+CU_ImplementSmartPtr( castor3d, DepthPass )
 
 namespace castor3d
 {

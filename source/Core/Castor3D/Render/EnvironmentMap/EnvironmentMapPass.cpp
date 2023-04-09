@@ -22,6 +22,8 @@
 #include <RenderGraph/RunnablePasses/GenerateMipmaps.hpp>
 #include <RenderGraph/RunnableGraph.hpp>
 
+CU_ImplementSmartPtr( castor3d, EnvironmentMapPass )
+
 namespace castor3d
 {
 	namespace envpass
@@ -63,7 +65,7 @@ namespace castor3d
 		, m_node{ std::move( faceNode ) }
 		, m_index{ index }
 		, m_face{ face }
-		, m_camera{ envpass::doCreateCamera( *faceNode, getOwner()->getSize() ) }
+		, m_camera{ envpass::doCreateCamera( *m_node, getOwner()->getSize() ) }
 		, m_culler{ castor::makeUniqueDerived< SceneCuller, FrustumCuller >( *m_camera ) }
 		, m_cameraUbo{ m_device }
 		, m_hdrConfigUbo{ m_device }

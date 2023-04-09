@@ -2,7 +2,7 @@
 
 #include "Castor3D/Scene/SceneNode.hpp"
 
-CU_ImplementCUSmartPtr( castor3d, SceneNodeAnimation )
+CU_ImplementSmartPtr( castor3d, SceneNodeAnimation )
 
 namespace castor3d
 {

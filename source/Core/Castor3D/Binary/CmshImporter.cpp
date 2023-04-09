@@ -164,12 +164,12 @@ namespace castor3d
 
 	SkeletonImporterUPtr CmshImporterFile::createSkeletonImporter()
 	{
-		return std::make_unique< CmshSkeletonImporter >( *getOwner() );
+		return castor::makeUniqueDerived< SkeletonImporter, CmshSkeletonImporter >( *getOwner() );
 	}
 
 	MeshImporterUPtr CmshImporterFile::createMeshImporter()
 	{
-		return std::make_unique< CmshMeshImporter >( *getOwner() );
+		return castor::makeUniqueDerived< MeshImporter, CmshMeshImporter >( *getOwner() );
 	}
 
 	SceneNodeImporterUPtr CmshImporterFile::createSceneNodeImporter()
@@ -201,7 +201,7 @@ namespace castor3d
 
 	MeshImporterUPtr CmshMeshImporter::create( Engine & engine )
 	{
-		return std::make_unique< CmshMeshImporter >( engine );
+		return castor::makeUniqueDerived< MeshImporter, CmshMeshImporter >( engine );
 	}
 
 	bool CmshMeshImporter::doImportMesh( Mesh & mesh )
@@ -221,7 +221,7 @@ namespace castor3d
 
 	SkeletonImporterUPtr CmshSkeletonImporter::create( Engine & engine )
 	{
-		return std::make_unique< CmshSkeletonImporter >( engine );
+		return castor::makeUniqueDerived< SkeletonImporter, CmshSkeletonImporter >( engine );
 	}
 
 	bool CmshSkeletonImporter::doImportSkeleton( Skeleton & skeleton )

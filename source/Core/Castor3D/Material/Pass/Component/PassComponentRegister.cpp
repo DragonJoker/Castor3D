@@ -53,7 +53,7 @@
 #include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 
-CU_ImplementCUSmartPtr( castor3d, PassComponentRegister )
+CU_ImplementSmartPtr( castor3d, PassComponentRegister )
 
 namespace castor3d
 {

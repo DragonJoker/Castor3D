@@ -7,7 +7,7 @@
 #include "Castor3D/Scene/Light/PointLight.hpp"
 #include "Castor3D/Scene/Light/SpotLight.hpp"
 
-CU_ImplementCUSmartPtr( castor3d, Light )
+CU_ImplementSmartPtr( castor3d, Light )
 
 namespace castor3d
 {

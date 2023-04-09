@@ -15,6 +15,8 @@
 
 #include <CastorUtils/FileParser/ParserParameter.hpp>
 
+CU_ImplementSmartPtr( castor3d, SheenMapComponent )
+
 namespace castor
 {
 	template<>
@@ -159,7 +161,7 @@ namespace castor3d
 	void SheenMapComponent::Plugin::createMapComponent( Pass & pass
 		, std::vector< PassComponentUPtr > & result )const
 	{
-		result.push_back( std::make_unique< SheenMapComponent >( pass ) );
+		result.push_back( castor::makeUniqueDerived< PassComponent, SheenMapComponent >( pass ) );
 	}
 
 	bool SheenMapComponent::Plugin::doWriteTextureConfig( TextureConfiguration const & configuration
@@ -185,7 +187,7 @@ namespace castor3d
 
 	PassComponentUPtr SheenMapComponent::doClone( Pass & pass )const
 	{
-		return std::make_unique< SheenMapComponent >( pass );
+		return castor::makeUniqueDerived< PassComponent, SheenMapComponent >( pass );
 	}
 
 	void SheenMapComponent::doFillConfig( TextureConfiguration & configuration

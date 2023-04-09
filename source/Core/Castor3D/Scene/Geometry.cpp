@@ -8,7 +8,7 @@
 #include "Castor3D/Render/Node/SceneRenderNodes.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
-CU_ImplementCUSmartPtr( castor3d, Geometry )
+CU_ImplementSmartPtr( castor3d, Geometry )
 
 namespace castor3d
 {
@@ -77,7 +77,12 @@ namespace castor3d
 		if ( auto mesh = getMesh() )
 		{
 			auto lock( castor::makeUniqueLock( m_mutex ) );
-			CU_Require( submesh.getId() < mesh->getSubmeshCount() );
+
+			if ( submesh.getId() < mesh->getSubmeshCount() )
+			{
+				CU_Failure( "Geometry::setMaterial" );
+			}
+
 			bool changed = false;
 			MaterialObs oldMaterial{};
 			auto itSubMat = m_submeshesMaterials.find( &submesh );
@@ -95,7 +100,7 @@ namespace castor3d
 			else if ( material )
 			{
 				oldMaterial = submesh.getDefaultMaterial();
-				CU_Require( &submesh.getParent() == mesh.get() );
+				CU_Require( &submesh.getParent() == mesh );
 				m_submeshesMaterials.emplace( &submesh, material );
 				changed = true;
 			}
@@ -275,7 +280,7 @@ namespace castor3d
 
 			for ( auto & submesh : *mesh )
 			{
-				CU_Require( &submesh->getParent() == mesh.get() );
+				CU_Require( &submesh->getParent() == mesh );
 				auto material = submesh->getDefaultMaterial();
 				m_submeshesMaterials.emplace( submesh.get(), material );
 				m_submeshesBoxes.emplace( submesh.get(), submesh->getBoundingBox() );

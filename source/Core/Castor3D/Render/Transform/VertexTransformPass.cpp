@@ -16,7 +16,7 @@
 #include <ashespp/Pipeline/ComputePipeline.hpp>
 #include <ashespp/Pipeline/PipelineLayout.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, VertexTransformPass )
+CU_ImplementSmartPtr( castor3d, VertexTransformPass )
 
 namespace castor3d
 {

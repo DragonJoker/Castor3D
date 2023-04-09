@@ -13,6 +13,8 @@
 #include <ShaderWriter/Source.hpp>
 #include <ShaderWriter/CompositeTypes/ArrayStorageBuffer.hpp>
 
+CU_ImplementSmartPtr( castor3d::shader, Material )
+
 namespace castor3d::shader
 {
 	//*********************************************************************************************

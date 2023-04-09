@@ -15,7 +15,7 @@
 
 #pragma GCC diagnostic ignored "-Wuseless-cast"
 
-CU_ImplementCUSmartPtr( castor3d, LpvLightConfigUbo )
+CU_ImplementSmartPtr( castor3d, LpvLightConfigUbo )
 
 namespace castor3d
 {

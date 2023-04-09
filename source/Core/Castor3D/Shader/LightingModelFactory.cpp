@@ -5,7 +5,7 @@
 
 #include <CastorUtils/Exception/Exception.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, LightingModelFactory )
+CU_ImplementSmartPtr( castor3d, LightingModelFactory )
 
 namespace castor3d
 {

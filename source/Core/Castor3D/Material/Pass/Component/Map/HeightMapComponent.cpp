@@ -17,6 +17,8 @@
 
 #include <CastorUtils/FileParser/ParserParameter.hpp>
 
+CU_ImplementSmartPtr( castor3d, HeightMapComponent )
+
 namespace castor
 {
 	template<>
@@ -543,7 +545,7 @@ namespace castor3d
 	void HeightMapComponent::Plugin::createMapComponent( Pass & pass
 		, std::vector< PassComponentUPtr > & result )const
 	{
-		result.push_back( std::make_unique< HeightMapComponent >( pass ) );
+		result.push_back( castor::makeUniqueDerived< PassComponent, HeightMapComponent >( pass ) );
 	}
 
 	bool HeightMapComponent::Plugin::hasTexcoordModif( PassComponentRegister const & passComponents
@@ -577,7 +579,7 @@ namespace castor3d
 
 	PassComponentUPtr HeightMapComponent::doClone( Pass & pass )const
 	{
-		return std::make_unique< HeightMapComponent >( pass );
+		return castor::makeUniqueDerived< PassComponent, HeightMapComponent >( pass );
 	}
 
 	void HeightMapComponent::doFillConfig( TextureConfiguration & configuration

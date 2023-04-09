@@ -920,6 +920,7 @@ namespace castor3d
 
 		RenderNodesPass const * m_pass;
 	};
+	CU_DeclareSmartPtr( castor3d, IsRenderPassEnabled, C3D_API );
 }
 
 #endif

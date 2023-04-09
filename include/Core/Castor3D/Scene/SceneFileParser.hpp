@@ -194,16 +194,20 @@ namespace castor3d
 		castor::ImageRPtr image{};
 		VkShaderStageFlagBits shaderStage{};
 		UniformBufferBaseUPtr uniformBuffer{};
-		OverlayRPtr overlay{};
-		OverlayUPtr ownOverlay{};
-		std::vector< OverlayResPtr > parentOverlays{};
+		struct OverlayPtr
+		{
+			OverlayUPtr uptr{};
+			OverlayRPtr rptr{};
+		};
+		OverlayPtr overlay;
+		std::vector< OverlayPtr > parentOverlays{};
 		BillboardListUPtr ownBillboards{};
 		BillboardListRPtr billboards{};
 		int face1{ -1 };
 		int face2{ -1 };
 		LightType lightType{ LightType::eCount };
 		VkPrimitiveTopology primitiveType{ VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST };
-		ViewportSPtr viewport{};
+		ViewportUPtr viewport{};
 		castor::String strName{};
 		castor::String strName2{};
 		castor::Path path{};
@@ -225,12 +229,12 @@ namespace castor3d
 		AnimatedObjectRPtr animTexture{};
 		TextureAnimationUPtr textureAnimation{};
 		MeshAnimationUPtr morphAnimation{};
-		SceneBackgroundSPtr background{};
+		SceneBackgroundUPtr background{};
 		ParticleSystemUPtr ownParticleSystem{};
 		ParticleSystemRPtr particleSystem{};
 		SsaoConfig ssaoConfig{};
 		SubsurfaceScatteringUPtr subsurfaceScattering{};
-		std::shared_ptr< SkyboxBackground > skybox{};
+		SkyboxBackgroundUPtr skybox{};
 		TextureConfiguration textureConfiguration{};
 		TextureTransform textureTransform{};
 		uint32_t texcoordSet{};

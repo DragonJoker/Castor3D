@@ -33,7 +33,7 @@ namespace atmosphere_scattering
 		WeatherConfig weather{};
 		CloudsConfig clouds{};
 		DensityProfileLayer * densityLayer{};
-		std::unique_ptr< AtmosphereBackground > background;
+		AtmosphereBackgroundUPtr background;
 	};
 
 	enum class AtmosphereSection

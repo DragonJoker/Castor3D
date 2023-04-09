@@ -1,6 +1,6 @@
 #include "Castor3D/Model/Mesh/Submesh/Component/SubmeshComponent.hpp"
 
-CU_ImplementCUSmartPtr( castor3d, SubmeshComponent )
+CU_ImplementSmartPtr( castor3d, SubmeshComponent )
 
 namespace castor3d
 {

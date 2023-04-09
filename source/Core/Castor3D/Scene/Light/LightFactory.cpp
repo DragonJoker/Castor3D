@@ -4,6 +4,8 @@
 #include "Castor3D/Scene/Light/PointLight.hpp"
 #include "Castor3D/Scene/Light/SpotLight.hpp"
 
+CU_ImplementSmartPtr( castor3d, LightFactory )
+
 namespace castor3d
 {
 	LightFactory::LightFactory()

@@ -15,7 +15,7 @@
 
 #pragma GCC diagnostic ignored "-Wmissing-field-initializers"
 
-CU_ImplementCUSmartPtr( castor3d, RenderDevice )
+CU_ImplementSmartPtr( castor3d, RenderDevice )
 
 namespace castor3d
 {

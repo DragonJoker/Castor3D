@@ -16,6 +16,8 @@
 #include <CastorUtils/FileParser/ParserParameter.hpp>
 #include <CastorUtils/Data/Text/TextRgbColour.hpp>
 
+CU_ImplementSmartPtr( castor3d, ColourMapComponent )
+
 namespace castor
 {
 	template<>
@@ -204,7 +206,7 @@ namespace castor3d
 	void ColourMapComponent::Plugin::createMapComponent( Pass & pass
 		, std::vector< PassComponentUPtr > & result )const
 	{
-		result.push_back( std::make_unique< ColourMapComponent >( pass ) );
+		result.push_back( castor::makeUniqueDerived< PassComponent, ColourMapComponent >( pass ) );
 	}
 
 	//*********************************************************************************************
@@ -222,7 +224,7 @@ namespace castor3d
 
 	PassComponentUPtr ColourMapComponent::doClone( Pass & pass )const
 	{
-		return std::make_unique< ColourMapComponent >( pass );
+		return castor::makeUniqueDerived< PassComponent, ColourMapComponent >( pass );
 	}
 
 	void ColourMapComponent::doFillConfig( TextureConfiguration & configuration

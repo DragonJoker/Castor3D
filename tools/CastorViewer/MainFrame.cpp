@@ -989,7 +989,7 @@ namespace CastorViewer
 		castor3d::exporter::ExportOptions options;
 		GuiCommon::PropertiesDialog dialog{ this
 			, _( "Export" )
-			, std::make_unique< GuiCommon::ExportOptionsTreeItemProperty >( true, options ) };
+			, castor::makeUniqueDerived< GuiCommon::TreeItemProperty, GuiCommon::ExportOptionsTreeItemProperty >( true, options ) };
 
 		if ( dialog.ShowModal() == wxID_CANCEL )
 		{

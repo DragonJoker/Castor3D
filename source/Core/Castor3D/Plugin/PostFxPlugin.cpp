@@ -2,7 +2,7 @@
 
 #include <CastorUtils/Miscellaneous/DynamicLibrary.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, PostFxPlugin )
+CU_ImplementSmartPtr( castor3d, PostFxPlugin )
 
 namespace castor3d
 {

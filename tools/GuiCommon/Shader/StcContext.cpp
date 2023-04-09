@@ -7,7 +7,7 @@ namespace GuiCommon
 {
 	StcContext::StcContext()
 	{
-		m_languages.push_back( std::make_shared< LanguageInfo >() );
+		m_languages.push_back( castor::makeUnique< LanguageInfo >() );
 	}
 
 	void StcContext::parseFile( wxString const & fileName )

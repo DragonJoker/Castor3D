@@ -12,7 +12,7 @@
 
 #include <ShaderWriter/Source.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, LpvGridConfigUbo )
+CU_ImplementSmartPtr( castor3d, LpvGridConfigUbo )
 
 namespace castor3d
 {

@@ -26,6 +26,8 @@
 
 //*************************************************************************************************
 
+CU_ImplementSmartPtr( atmosphere_scattering, AtmosphereBackground )
+
 namespace castor
 {
 	using namespace castor3d;

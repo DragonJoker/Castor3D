@@ -16,7 +16,7 @@
 #include <RenderGraph/FramePass.hpp>
 #include <RenderGraph/FramePassTimer.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, PrepassRendering )
+CU_ImplementSmartPtr( castor3d, PrepassRendering )
 
 namespace castor3d
 {

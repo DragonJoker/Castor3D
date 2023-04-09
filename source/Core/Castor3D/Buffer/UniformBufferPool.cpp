@@ -7,7 +7,7 @@
 #include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/Core/Device.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, UniformBufferPool )
+CU_ImplementSmartPtr( castor3d, UniformBufferPool )
 
 namespace castor3d
 {
